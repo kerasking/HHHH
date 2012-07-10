@@ -1,0 +1,9 @@
+*.suo
+*.user
+*.ncb
+debug/
+Debug/
+release/
+Release/
+MID/
+Debug.win32/
