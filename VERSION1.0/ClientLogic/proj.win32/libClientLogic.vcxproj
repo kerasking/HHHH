@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Battle\inc\Battle.h" />
+    <ClInclude Include="..\Battle\inc\BattleMgr.h" />
+    <ClInclude Include="..\Battle\inc\BattleSkill.h" />
+    <ClInclude Include="..\Battle\inc\BattleUtil.h" />
+    <ClInclude Include="..\Battle\inc\Fighter.h" />
+    <ClInclude Include="..\Battle\inc\Hurt.h" />
+    <ClInclude Include="..\Battle\inc\NDEraseInOutEffect.h" />
+    <ClInclude Include="..\Battle\inc\StatusDialog.h" />
+    <ClInclude Include="..\BeforeGame\inc\NDBeforeGameMgr.h" />
+    <ClInclude Include="..\Chat\inc\ChatManager.h" />
+    <ClInclude Include="..\Common\inc\EnumDef.h" />
+    <ClInclude Include="..\Common\inc\globaldef.h" />
+    <ClInclude Include="..\Common\inc\NDLocalization.h" />
+    <ClInclude Include="..\Common\inc\NDLocalXmlString.h" />
+    <ClInclude Include="..\Common\inc\NDMsgDefine.h" />
+    <ClInclude Include="..\Common\inc\NDUtility.h" />
+    <ClInclude Include="..\Common\inc\TableDef.h" />
+    <ClInclude Include="..\Drama\inc\Drama.h" />
+    <ClInclude Include="..\Drama\inc\DramaCommand.h" />
+    <ClInclude Include="..\Drama\inc\DramaCommandBase.h" />
+    <ClInclude Include="..\Drama\inc\DramaDef.h" />
+    <ClInclude Include="..\Drama\inc\DramaScene.h" />
+    <ClInclude Include="..\Drama\inc\DramaTransitionScene.h" />
+    <ClInclude Include="..\Drama\inc\DramaUI.h" />
+    <ClInclude Include="..\GameData\inc\GameData.h" />
+    <ClInclude Include="..\GameData\inc\GameDataBase.h" />
+    <ClInclude Include="..\GameScene\inc\SMBattleScene.h" />
+    <ClInclude Include="..\GameScene\inc\SMGameScene.h" />
+    <ClInclude Include="..\GameScene\inc\SMLoginScene.h" />
+    <ClInclude Include="..\GameScene\inc\WorldMapScene.h" />
+    <ClInclude Include="..\Item\inc\ItemImage.h" />
+    <ClInclude Include="..\Item\inc\ItemUtil.h" />
+    <ClInclude Include="..\Map&amp;Role\inc\AnimationList.h" />
+    <ClInclude Include="..\Map&amp;Role\inc\AutoPathTip.h" />
+    <ClInclude Include="..\Map&amp;Role\inc\NDBaseRole.h" />
+    <ClInclude Include="..\Map&amp;Role\inc\NDManualRole.h" />
+    <ClInclude Include="..\Map&amp;Role\inc\NDMapLayerLogic.h" />
+    <ClInclude Include="..\Map&amp;Role\inc\NDMapMgr.h" />
+    <ClInclude Include="..\Map&amp;Role\inc\NDMonster.h" />
+    <ClInclude Include="..\Map&amp;Role\inc\NDNpc.h" />
+    <ClInclude Include="..\Map&amp;Role\inc\NDPlayer.h" />
+    <ClInclude Include="..\Script\Inc\ScriptCommon.h" />
+    <ClInclude Include="..\Script\Inc\ScriptDataBase.h" />
+    <ClInclude Include="..\Script\Inc\ScriptDrama.h" />
+    <ClInclude Include="..\Script\Inc\ScriptGameLogic.h" />
+    <ClInclude Include="..\Script\Inc\ScriptGlobalEvent.h" />
+    <ClInclude Include="..\Script\Inc\ScriptNetMsg.h" />
+    <ClInclude Include="..\Script\Inc\ScriptTask.h" />
+    <ClInclude Include="..\Script\Inc\ScriptTimer.h" />
+    <ClInclude Include="..\Script\Inc\ScriptUI.h" />
+    <ClInclude Include="..\UICommon\inc\NDUILoad.h" />
+    <ClInclude Include="..\UICommon\inc\UIEquipItem.h" />
+    <ClInclude Include="..\UICommon\inc\UIItemButton.h" />
+    <ClInclude Include="..\UICommon\inc\UINpcDlg.h" />
+    <ClInclude Include="..\UICommon\inc\UIRoleNode.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Battle\src\Battle.cpp" />
+    <ClCompile Include="..\Battle\src\BattleMgr.cpp" />
+    <ClCompile Include="..\Battle\src\BattleSkill.cpp" />
+    <ClCompile Include="..\Battle\src\BattleUtil.cpp" />
+    <ClCompile Include="..\Battle\src\Fighter.cpp" />
+    <ClCompile Include="..\Battle\src\Hurt.cpp" />
+    <ClCompile Include="..\Battle\src\NDEraseInOutEffect.cpp" />
+    <ClCompile Include="..\Battle\src\StatusDialog.cpp" />
+    <ClCompile Include="..\BeforeGame\src\NDBeforeGameMgr.cpp" />
+    <ClCompile Include="..\Chat\src\ChatManager.cpp" />
+    <ClCompile Include="..\Common\src\NDLocalXmlString.cpp" />
+    <ClCompile Include="..\Common\src\NDUtility.cpp" />
+    <ClCompile Include="..\Drama\src\Drama.cpp" />
+    <ClCompile Include="..\Drama\src\DramaCommand.cpp" />
+    <ClCompile Include="..\Drama\src\DramaCommandBase.cpp" />
+    <ClCompile Include="..\Drama\src\DramaScene.cpp" />
+    <ClCompile Include="..\Drama\src\DramaTransitionScene.cpp" />
+    <ClCompile Include="..\Drama\src\DramaUI.cpp" />
+    <ClCompile Include="..\GameData\src\GameData.cpp" />
+    <ClCompile Include="..\GameData\src\GameDataBase.cpp" />
+    <ClCompile Include="..\GameScene\src\SMBattleScene.cpp" />
+    <ClCompile Include="..\GameScene\src\SMGameScene.cpp" />
+    <ClCompile Include="..\GameScene\src\SMLoginScene.cpp" />
+    <ClCompile Include="..\GameScene\src\WorldMapScene.cpp" />
+    <ClCompile Include="..\Item\src\ItemImage.cpp" />
+    <ClCompile Include="..\Item\src\ItemUtil.cpp" />
+    <ClCompile Include="..\Map&amp;Role\src\AnimationList.cpp" />
+    <ClCompile Include="..\Map&amp;Role\src\AutoPathTip.cpp" />
+    <ClCompile Include="..\Map&amp;Role\src\NDBaseRole.cpp" />
+    <ClCompile Include="..\Map&amp;Role\src\NDManualRole.cpp" />
+    <ClCompile Include="..\Map&amp;Role\src\NDMapLayerLogic.cpp" />
+    <ClCompile Include="..\Map&amp;Role\src\NDMapMgr.cpp" />
+    <ClCompile Include="..\Map&amp;Role\src\NDMonster.cpp" />
+    <ClCompile Include="..\Map&amp;Role\src\NDNpc.cpp" />
+    <ClCompile Include="..\Map&amp;Role\src\NDPlayer.cpp" />
+    <ClCompile Include="..\Script\Src\ScriptCommon.cpp" />
+    <ClCompile Include="..\Script\Src\ScriptDataBase.cpp" />
+    <ClCompile Include="..\Script\Src\ScriptDrama.cpp" />
+    <ClCompile Include="..\Script\Src\ScriptGameData.cpp" />
+    <ClCompile Include="..\Script\Src\ScriptGameLogic.cpp" />
+    <ClCompile Include="..\Script\Src\ScriptGlobalEvent.cpp" />
+    <ClCompile Include="..\Script\Src\ScriptNetMsg.cpp" />
+    <ClCompile Include="..\Script\Src\ScriptTask.cpp" />
+    <ClCompile Include="..\Script\Src\ScriptTimer.cpp" />
+    <ClCompile Include="..\Script\Src\ScriptUI.cpp" />
+    <ClCompile Include="..\UICommon\src\NDUILoad.cpp" />
+    <ClCompile Include="..\UICommon\src\UIEquipItem.cpp" />
+    <ClCompile Include="..\UICommon\src\UIItemButton.cpp" />
+    <ClCompile Include="..\UICommon\src\UINpcDlg.cpp" />
+    <ClCompile Include="..\UICommon\src\UIRoleNode.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{329B4513-B212-473A-986F-6DA70966C96E}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>libClientLogic</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions);_WINDOWS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)ClientEngine/Utility/inc;$(SolutionDir)ClientEngine/UI/import/inc;$(SolutionDir)ClientEngine/UI/Platform;$(SolutionDir)ClientEngine/UI/inc;$(SolutionDir)ClientEngine/Script/inc;$(SolutionDir)ClientEngine/MapData/inc;$(SolutionDir)ClientEngine/Graphic/inc;$(SolutionDir)ClientEngine/System/inc;$(SolutionDir)ClientEngine/Framework/inc;$(SolutionDir)cocos2d-x\cocos2dx\include;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\OGLES;$(SolutionDir)cocos2d-x\cocos2dx\platform;$(SolutionDir)cocos2d-x\cocos2dx\;$(SolutionDir)LuaPlus;../Battle/inc/;../BeforeGame/inc/;../Chat/inc/;../Common/inc/;../Drama/inc/;../GameData/inc/;../GameScene/inc/;../Iteminc/;../Map&amp;Role/inc/;../Script/inc/;../UICommon/inc/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

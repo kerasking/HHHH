@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{291566ED-9B58-4403-8EA0-ABFCE1CD9B5E}</ProjectGuid>
+    <RootNamespace>libClientEngine</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration).win32\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../Utility/inc;../UI/import/inc;../UI/Platform;../UI/inc;../Script/inc;../MapData/inc;../Graphic/inc;../System/inc;../Framework/inc;$(SolutionDir)cocos2d-x\cocos2dx\include;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\OGLES;$(SolutionDir)cocos2d-x\cocos2dx\platform;$(SolutionDir)cocos2d-x\cocos2dx\;$(SolutionDir)LuaPlus;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions);_WINDOWS</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>libcocos2d.lib;libLuaPlus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Framework\inc\NDBaseDirector.h" />
+    <ClInclude Include="..\Framework\inc\NDBaseLayer.h" />
+    <ClInclude Include="..\Framework\inc\NDBaseNode.h" />
+    <ClInclude Include="..\Framework\inc\NDCommonProtocol.h" />
+    <ClInclude Include="..\Framework\inc\NDDirector.h" />
+    <ClInclude Include="..\Framework\inc\NDLayer.h" />
+    <ClInclude Include="..\Framework\inc\NDLightEffect.h" />
+    <ClInclude Include="..\Framework\inc\NDMapLayer.h" />
+    <ClInclude Include="..\Framework\inc\NDNode.h" />
+    <ClInclude Include="..\Framework\inc\NDObject.h" />
+    <ClInclude Include="..\Framework\inc\NDScene.h" />
+    <ClInclude Include="..\Framework\inc\NDSprite.h" />
+    <ClInclude Include="..\Graphic\inc\CCTexture2DExt.h" />
+    <ClInclude Include="..\Graphic\inc\CCTextureCacheExt.h" />
+    <ClInclude Include="..\Graphic\inc\NDAnimation.h" />
+    <ClInclude Include="..\Graphic\inc\NDAnimationGroup.h" />
+    <ClInclude Include="..\Graphic\inc\NDAnimationGroupPool.h" />
+    <ClInclude Include="..\Graphic\inc\NDColorPool.h" />
+    <ClInclude Include="..\Graphic\inc\NDCombinePicture.h" />
+    <ClInclude Include="..\Graphic\inc\NDFrame.h" />
+    <ClInclude Include="..\Graphic\inc\NDPicture.h" />
+    <ClInclude Include="..\Graphic\inc\NDTextureMonitor.h" />
+    <ClInclude Include="..\Graphic\inc\NDTile.h" />
+    <ClInclude Include="..\Graphic\inc\UIImageCombiner.h" />
+    <ClInclude Include="..\Graphic\inc\UIImageExt.h" />
+    <ClInclude Include="..\MapData\inc\NDMapData.h" />
+    <ClInclude Include="..\MapData\inc\NDWorldMapData.h" />
+    <ClInclude Include="..\Script\inc\LuaPlusHelper.h" />
+    <ClInclude Include="..\Script\inc\LuaStateMgr.h" />
+    <ClInclude Include="..\Script\inc\ScriptDefine.h" />
+    <ClInclude Include="..\Script\inc\ScriptInc.h" />
+    <ClInclude Include="..\Script\inc\ScriptMgr.h" />
+    <ClInclude Include="..\System\inc\AStar.h" />
+    <ClInclude Include="..\System\inc\cocos2dExt.h" />
+    <ClInclude Include="..\System\inc\JavaMethod.h" />
+    <ClInclude Include="..\System\inc\NDAutoPath.h" />
+    <ClInclude Include="..\System\inc\NDDictionary.h" />
+    <ClInclude Include="..\System\inc\NDPath.h" />
+    <ClInclude Include="..\System\inc\NDTimer.h" />
+    <ClInclude Include="..\System\inc\NDTouch.h" />
+    <ClInclude Include="..\UI\import\inc\IniFile.h" />
+    <ClInclude Include="..\UI\import\inc\NDTargetEvent.h" />
+    <ClInclude Include="..\UI\import\inc\UIData.h" />
+    <ClInclude Include="..\UI\inc\HyperLinkLabel.h" />
+    <ClInclude Include="..\UI\inc\NDTextNode.h" />
+    <ClInclude Include="..\UI\inc\NDUIBaseGraphics.h" />
+    <ClInclude Include="..\UI\inc\NDUIButton.h" />
+    <ClInclude Include="..\UI\inc\NDUIImage.h" />
+    <ClInclude Include="..\UI\inc\NDUILabel.h" />
+    <ClInclude Include="..\UI\inc\NDUILayer.h" />
+    <ClInclude Include="..\UI\inc\NDUINode.h" />
+    <ClInclude Include="..\UI\inc\NDUIOptionButton.h" />
+    <ClInclude Include="..\UI\inc\NDUIScrollText.h" />
+    <ClInclude Include="..\UI\inc\NDUISynLayer.h" />
+    <ClInclude Include="..\UI\inc\UICheckBox.h" />
+    <ClInclude Include="..\UI\inc\UIDialog.h" />
+    <ClInclude Include="..\UI\inc\UIEdit.h" />
+    <ClInclude Include="..\UI\inc\UIExp.h" />
+    <ClInclude Include="..\UI\inc\UIHyperlink.h" />
+    <ClInclude Include="..\UI\inc\UIItemButton.h" />
+    <ClInclude Include="..\UI\inc\UIMovableLayer.h" />
+    <ClInclude Include="..\UI\inc\UIRadioButton.h" />
+    <ClInclude Include="..\UI\inc\UIScroll.h" />
+    <ClInclude Include="..\UI\inc\UIScrollContainer.h" />
+    <ClInclude Include="..\UI\inc\UIScrollView.h" />
+    <ClInclude Include="..\UI\inc\UISpriteNode.h" />
+    <ClInclude Include="..\UI\Platform\AntroidInput.h" />
+    <ClInclude Include="..\UI\Platform\CommonInput.h" />
+    <ClInclude Include="..\UI\Platform\IphoneInput.h" />
+    <ClInclude Include="..\Utility\inc\AutoLink.h" />
+    <ClInclude Include="..\Utility\inc\define.h" />
+    <ClInclude Include="..\Utility\inc\Des.h" />
+    <ClInclude Include="..\Utility\inc\MD5checksum.h" />
+    <ClInclude Include="..\Utility\inc\NDConstant.h" />
+    <ClInclude Include="..\Utility\inc\NDString.h" />
+    <ClInclude Include="..\Utility\inc\TQString.h" />
+    <ClInclude Include="..\Utility\inc\platform.h" />
+    <ClInclude Include="..\Utility\inc\Singleton.h" />
+    <ClInclude Include="..\Utility\inc\Utility.h" />
+    <ClInclude Include="..\Utility\inc\WjcDes.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Framework\src\NDBaseDirector.cpp" />
+    <ClCompile Include="..\Framework\src\NDBaseLayer.cpp" />
+    <ClCompile Include="..\Framework\src\NDBaseNode.cpp" />
+    <ClCompile Include="..\Framework\src\NDCommonProtocol.cpp" />
+    <ClCompile Include="..\Framework\src\NDDirector.cpp" />
+    <ClCompile Include="..\Framework\src\NDLayer.cpp" />
+    <ClCompile Include="..\Framework\src\NDLightEffect.cpp" />
+    <ClCompile Include="..\Framework\src\NDMapLayer.cpp" />
+    <ClCompile Include="..\Framework\src\NDNode.cpp" />
+    <ClCompile Include="..\Framework\src\NDObject.cpp" />
+    <ClCompile Include="..\Framework\src\NDScene.cpp" />
+    <ClCompile Include="..\Framework\src\NDSprite.cpp" />
+    <ClCompile Include="..\Graphic\src\CCTexture2DExt.cpp" />
+    <ClCompile Include="..\Graphic\src\CCTextureCacheExt.cpp" />
+    <ClCompile Include="..\Graphic\src\NDAnimation.cpp" />
+    <ClCompile Include="..\Graphic\src\NDAnimationGroup.cpp" />
+    <ClCompile Include="..\Graphic\src\NDAnimationGroupPool.cpp" />
+    <ClCompile Include="..\Graphic\src\NDColorPool.cpp" />
+    <ClCompile Include="..\Graphic\src\NDCombinePicture.cpp" />
+    <ClCompile Include="..\Graphic\src\NDFrame.cpp" />
+    <ClCompile Include="..\Graphic\src\NDPicture.cpp" />
+    <ClCompile Include="..\Graphic\src\NDTextureMonitor.cpp" />
+    <ClCompile Include="..\Graphic\src\NDTile.cpp" />
+    <ClCompile Include="..\Graphic\src\UIImageCombiner.cpp" />
+    <ClCompile Include="..\Graphic\src\UIImageExt.cpp" />
+    <ClCompile Include="..\MapData\src\NDMapData.cpp" />
+    <ClCompile Include="..\MapData\src\NDWorldMapData.cpp" />
+    <ClCompile Include="..\Script\src\LuaStateMgr.cpp" />
+    <ClCompile Include="..\Script\src\ScriptMgr.cpp" />
+    <ClCompile Include="..\System\src\AStar.cpp" />
+    <ClCompile Include="..\System\src\cocos2dExt.cpp" />
+    <ClCompile Include="..\System\src\JavaMethod.cpp" />
+    <ClCompile Include="..\System\src\NDAutoPath.cpp" />
+    <ClCompile Include="..\System\src\NDDictionary.cpp" />
+    <ClCompile Include="..\System\src\NDPath.cpp" />
+    <ClCompile Include="..\System\src\NDTimer.cpp" />
+    <ClCompile Include="..\System\src\NDTouch.cpp" />
+    <ClCompile Include="..\UI\import\src\IniFile.cpp" />
+    <ClCompile Include="..\UI\import\src\UIData.cpp" />
+    <ClCompile Include="..\UI\Platform\AntroidInput.cpp" />
+    <ClCompile Include="..\UI\Platform\IphoneInput.cpp" />
+    <ClCompile Include="..\UI\src\HyperLinkLabel.cpp" />
+    <ClCompile Include="..\UI\src\NDTextNode.cpp" />
+    <ClCompile Include="..\UI\src\NDUIBaseGraphics.cpp" />
+    <ClCompile Include="..\UI\src\NDUIButton.cpp" />
+    <ClCompile Include="..\UI\src\NDUIImage.cpp" />
+    <ClCompile Include="..\UI\src\NDUILabel.cpp" />
+    <ClCompile Include="..\UI\src\NDUILayer.cpp" />
+    <ClCompile Include="..\UI\src\NDUINode.cpp" />
+    <ClCompile Include="..\UI\src\NDUIOptionButton.cpp" />
+    <ClCompile Include="..\UI\src\NDUIScrollText.cpp" />
+    <ClCompile Include="..\UI\src\NDUISynLayer.cpp" />
+    <ClCompile Include="..\UI\src\UICheckBox.cpp" />
+    <ClCompile Include="..\UI\src\UIDialog.cpp" />
+    <ClCompile Include="..\UI\src\UIEdit.cpp" />
+    <ClCompile Include="..\UI\src\UIExp.cpp" />
+    <ClCompile Include="..\UI\src\UIHyperlink.cpp" />
+    <ClCompile Include="..\UI\src\UIMovableLayer.cpp" />
+    <ClCompile Include="..\UI\src\UIRadioButton.cpp" />
+    <ClCompile Include="..\UI\src\UIScroll.cpp" />
+    <ClCompile Include="..\UI\src\UIScrollContainer.cpp" />
+    <ClCompile Include="..\UI\src\UIScrollView.cpp" />
+    <ClCompile Include="..\UI\src\UISpriteNode.cpp" />
+    <ClCompile Include="..\Utility\src\Des.cpp" />
+    <ClCompile Include="..\Utility\src\MD5checksum.cpp" />
+    <ClCompile Include="..\Utility\src\NDString.cpp" />
+    <ClCompile Include="..\Utility\src\TQString.cpp" />
+    <ClCompile Include="..\Utility\src\platform.cpp" />
+    <ClCompile Include="..\Utility\src\WjcDes.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

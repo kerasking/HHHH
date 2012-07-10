@@ -1,0 +1,28 @@
+//
+// Prefix header for all source files of the 'DragonDrive' target in the 'DragonDrive' project
+//
+
+#ifdef __OBJC__
+	#import <Foundation/Foundation.h>
+	#import <UIKit/UIKit.h>
+
+#define byte_WORLDCHAT (1)
+#define byte_MAPCHAT (1)
+#define byte_TEAMCHAT (1)
+#define byte_BANGCHAT (1)
+
+#ifdef DEBUG
+	#define DataFilePath @"/SMYS/"
+	#define NDAsssert(e) assert(e)
+#else
+	#define DataFilePath @"/var/mobile/SMYS/"
+	#define NDAsssert(e)
+#endif
+
+#if ND_LOGOUT_INFO == 1
+	#define NDLog(...) NSLog(__VA_ARGS__)
+#else
+	#define NDLog(...) do {} while (0)
+#endif
+
+#endif

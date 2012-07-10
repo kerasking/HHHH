@@ -1,0 +1,1 @@
+/* *  CCTexture2DExt.h *  SMYS * *  Created by jhzheng on 12-3-30. *  Copyright 2012 __MyCompanyName__. All rights reserved. * */#import "CCTexture2D.h"@interface CCTexture2D (MemoryMonitor)- (void) OnLoadImageBegin;- (void) OnLoadImageEnd;- (void) OnUnLoadImageBegin;- (void) OnUnLoadImageEnd;@end

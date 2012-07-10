@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Script">
+      <UniqueIdentifier>{4faf9341-7f8c-45b9-bf64-4945c8356f37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\inc">
+      <UniqueIdentifier>{79ae1623-836f-4c25-8416-740d617057d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\src">
+      <UniqueIdentifier>{fd1c2742-99cb-45ee-a112-72a08efe86c8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Script\Inc\ScriptCommon.h">
+      <Filter>Script\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Script\Inc\ScriptDataBase.h">
+      <Filter>Script\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Script\Inc\ScriptDrama.h">
+      <Filter>Script\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Script\Inc\ScriptGameLogic.h">
+      <Filter>Script\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Script\Inc\ScriptGlobalEvent.h">
+      <Filter>Script\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Script\Inc\ScriptNetMsg.h">
+      <Filter>Script\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Script\Inc\ScriptTask.h">
+      <Filter>Script\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Script\Inc\ScriptTimer.h">
+      <Filter>Script\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Script\Inc\ScriptUI.h">
+      <Filter>Script\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SMYSAppDelegate.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Script\Src\ScriptCommon.cpp">
+      <Filter>Script\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Script\Src\ScriptDataBase.cpp">
+      <Filter>Script\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Script\Src\ScriptDrama.cpp">
+      <Filter>Script\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Script\Src\ScriptGameData.cpp">
+      <Filter>Script\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Script\Src\ScriptGameLogic.cpp">
+      <Filter>Script\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Script\Src\ScriptGlobalEvent.cpp">
+      <Filter>Script\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Script\Src\ScriptNetMsg.cpp">
+      <Filter>Script\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Script\Src\ScriptTask.cpp">
+      <Filter>Script\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Script\Src\ScriptTimer.cpp">
+      <Filter>Script\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Script\Src\ScriptUI.cpp">
+      <Filter>Script\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\SMYSAppDelegate.cpp" />
+  </ItemGroup>
+</Project>

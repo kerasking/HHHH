@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libClientEngine", "ClientEngine\proj.win32\libClientEngine.vcproj", "{291566ED-9B58-4403-8EA0-ABFCE1CD9B5E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libLuaPlus", "LuaPlus\proj.win32\libLuaPlus.vcproj", "{11D35E67-AE09-4886-9B92-D41E86F6BD19}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "smys_win32", "SMYS_CLIENT\proj.win32\smys_win32.vcproj", "{5750DA89-15EC-43E2-946A-CA5902818BB7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libcocos2d", "cocos2d-x\cocos2dx\proj.win32\cocos2d-win32.vcproj", "{98A51BA8-FC3A-415B-AC8F-8C7BD464E93E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libClientLogic", "ClientLogic\proj.win32\libClientLogic.vcproj", "{65ACACA8-12E1-4F03-AB45-BA55A91BFD21}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetWork", "NetWork\proj.win32\NetWork.vcproj", "{002C555C-6FEA-4895-8DC0-901024CFB458}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{291566ED-9B58-4403-8EA0-ABFCE1CD9B5E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{291566ED-9B58-4403-8EA0-ABFCE1CD9B5E}.Debug|Win32.Build.0 = Debug|Win32
+		{291566ED-9B58-4403-8EA0-ABFCE1CD9B5E}.Release|Win32.ActiveCfg = Release|Win32
+		{291566ED-9B58-4403-8EA0-ABFCE1CD9B5E}.Release|Win32.Build.0 = Release|Win32
+		{11D35E67-AE09-4886-9B92-D41E86F6BD19}.Debug|Win32.ActiveCfg = Debug|Win32
+		{11D35E67-AE09-4886-9B92-D41E86F6BD19}.Debug|Win32.Build.0 = Debug|Win32
+		{11D35E67-AE09-4886-9B92-D41E86F6BD19}.Release|Win32.ActiveCfg = Release|Win32
+		{11D35E67-AE09-4886-9B92-D41E86F6BD19}.Release|Win32.Build.0 = Release|Win32
+		{5750DA89-15EC-43E2-946A-CA5902818BB7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5750DA89-15EC-43E2-946A-CA5902818BB7}.Debug|Win32.Build.0 = Debug|Win32
+		{5750DA89-15EC-43E2-946A-CA5902818BB7}.Release|Win32.ActiveCfg = Release|Win32
+		{5750DA89-15EC-43E2-946A-CA5902818BB7}.Release|Win32.Build.0 = Release|Win32
+		{98A51BA8-FC3A-415B-AC8F-8C7BD464E93E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{98A51BA8-FC3A-415B-AC8F-8C7BD464E93E}.Debug|Win32.Build.0 = Debug|Win32
+		{98A51BA8-FC3A-415B-AC8F-8C7BD464E93E}.Release|Win32.ActiveCfg = Release|Win32
+		{98A51BA8-FC3A-415B-AC8F-8C7BD464E93E}.Release|Win32.Build.0 = Release|Win32
+		{65ACACA8-12E1-4F03-AB45-BA55A91BFD21}.Debug|Win32.ActiveCfg = Debug|Win32
+		{65ACACA8-12E1-4F03-AB45-BA55A91BFD21}.Debug|Win32.Build.0 = Debug|Win32
+		{65ACACA8-12E1-4F03-AB45-BA55A91BFD21}.Release|Win32.ActiveCfg = Release|Win32
+		{65ACACA8-12E1-4F03-AB45-BA55A91BFD21}.Release|Win32.Build.0 = Release|Win32
+		{002C555C-6FEA-4895-8DC0-901024CFB458}.Debug|Win32.ActiveCfg = Debug|Win32
+		{002C555C-6FEA-4895-8DC0-901024CFB458}.Debug|Win32.Build.0 = Debug|Win32
+		{002C555C-6FEA-4895-8DC0-901024CFB458}.Release|Win32.ActiveCfg = Release|Win32
+		{002C555C-6FEA-4895-8DC0-901024CFB458}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

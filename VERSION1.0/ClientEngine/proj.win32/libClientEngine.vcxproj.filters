@@ -1,0 +1,531 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{97d5c29a-ce4b-4f41-bff1-0b006758ffda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\inc">
+      <UniqueIdentifier>{6dec8361-5ee4-4a09-be1b-82bf6a9a9c37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\src">
+      <UniqueIdentifier>{b3b91195-7877-492c-b41d-1b237776df16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphic">
+      <UniqueIdentifier>{8c248dec-8f94-442a-a198-7310340ed69e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphic\inc">
+      <UniqueIdentifier>{203827ec-052a-49e9-8b7d-b8d51b633de6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphic\src">
+      <UniqueIdentifier>{69ed0ebe-e9a6-4a65-a7aa-924bf1ea75a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapData">
+      <UniqueIdentifier>{780bad41-4d3d-4a66-a68b-85ffe2faab05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapData\inc">
+      <UniqueIdentifier>{7caed4d2-ce5b-42b3-a0f8-00808d55840d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapData\src">
+      <UniqueIdentifier>{c4818873-e60e-4de3-83e2-e114239fd958}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{31c79835-cd57-4721-9235-bcd6bc0a1092}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\inc">
+      <UniqueIdentifier>{6790ee07-e87d-4fb3-8f46-8d6543dea475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\src">
+      <UniqueIdentifier>{4b6bed3c-5a80-49b3-9671-5ea63e354af6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{f8f13211-7e75-4c3f-8bc0-655770e98618}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\import">
+      <UniqueIdentifier>{a8cccc8a-f639-4aac-86a9-6b22137dbe87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\import\inc">
+      <UniqueIdentifier>{9b90b6ad-2134-4325-9a87-681eb624b46f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\import\src">
+      <UniqueIdentifier>{d55edf12-9c45-4ba7-a5f5-3009139251df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\inc">
+      <UniqueIdentifier>{7cadb722-4a1f-4f31-b8ad-92935f8916df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\src">
+      <UniqueIdentifier>{05453b62-f000-40ef-b964-a0555633206f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Platform">
+      <UniqueIdentifier>{3bffb9f7-8393-4c41-9c37-cd4d0d41af54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{60cad730-5abe-41b3-90f8-06956ca580e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\inc">
+      <UniqueIdentifier>{30f657ef-e462-4a91-90dd-8825b6737af0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\src">
+      <UniqueIdentifier>{e287b780-6b07-4962-9961-fd34fc53a151}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script">
+      <UniqueIdentifier>{eecd9c53-651c-4b30-be5d-fb26a7d22d4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script\inc">
+      <UniqueIdentifier>{fabfbda5-d889-4fce-b566-5b98ef2fbd72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script\src">
+      <UniqueIdentifier>{3a404f13-8bdb-4a5f-8702-67735448f9ca}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Framework\inc\NDBaseDirector.h">
+      <Filter>Framework\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\inc\NDBaseLayer.h">
+      <Filter>Framework\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\inc\NDBaseNode.h">
+      <Filter>Framework\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\inc\NDCommonProtocol.h">
+      <Filter>Framework\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\inc\NDDirector.h">
+      <Filter>Framework\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\inc\NDLayer.h">
+      <Filter>Framework\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\inc\NDLightEffect.h">
+      <Filter>Framework\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\inc\NDMapLayer.h">
+      <Filter>Framework\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\inc\NDNode.h">
+      <Filter>Framework\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\inc\NDObject.h">
+      <Filter>Framework\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\inc\NDScene.h">
+      <Filter>Framework\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\inc\NDSprite.h">
+      <Filter>Framework\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphic\inc\CCTexture2DExt.h">
+      <Filter>Graphic\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphic\inc\CCTextureCacheExt.h">
+      <Filter>Graphic\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphic\inc\NDAnimation.h">
+      <Filter>Graphic\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphic\inc\NDAnimationGroup.h">
+      <Filter>Graphic\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphic\inc\NDAnimationGroupPool.h">
+      <Filter>Graphic\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphic\inc\NDColorPool.h">
+      <Filter>Graphic\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphic\inc\NDFrame.h">
+      <Filter>Graphic\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphic\inc\NDPicture.h">
+      <Filter>Graphic\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphic\inc\NDTextureMonitor.h">
+      <Filter>Graphic\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphic\inc\NDTile.h">
+      <Filter>Graphic\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphic\inc\UIImageCombiner.h">
+      <Filter>Graphic\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphic\inc\UIImageExt.h">
+      <Filter>Graphic\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MapData\inc\NDMapData.h">
+      <Filter>MapData\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MapData\inc\NDWorldMapData.h">
+      <Filter>MapData\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\System\inc\AStar.h">
+      <Filter>System\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\System\inc\cocos2dExt.h">
+      <Filter>System\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\System\inc\JavaMethod.h">
+      <Filter>System\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\System\inc\NDAutoPath.h">
+      <Filter>System\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\System\inc\NDDictionary.h">
+      <Filter>System\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\System\inc\NDPath.h">
+      <Filter>System\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\System\inc\NDTimer.h">
+      <Filter>System\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\System\inc\NDTouch.h">
+      <Filter>System\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\import\inc\NDTargetEvent.h">
+      <Filter>UI\import\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\import\inc\UIData.h">
+      <Filter>UI\import\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\UISpriteNode.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\NDTextNode.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\NDUIBaseGraphics.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\NDUIButton.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\NDUIImage.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\NDUILabel.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\NDUILayer.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\NDUINode.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\NDUIScrollText.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\NDUISynLayer.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\UICheckBox.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\UIDialog.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\UIEdit.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\UIExp.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\UIHyperlink.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\UIItemButton.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\UIMovableLayer.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\UIRadioButton.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\UIScroll.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\UIScrollContainer.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\UIScrollView.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\Platform\AntroidInput.h">
+      <Filter>UI\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\Platform\CommonInput.h">
+      <Filter>UI\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\Platform\IphoneInput.h">
+      <Filter>UI\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Script\inc\LuaPlusHelper.h">
+      <Filter>script\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Script\inc\LuaStateMgr.h">
+      <Filter>script\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Script\inc\ScriptDefine.h">
+      <Filter>script\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Script\inc\ScriptInc.h">
+      <Filter>script\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Script\inc\ScriptMgr.h">
+      <Filter>script\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\HyperLinkLabel.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphic\inc\NDCombinePicture.h">
+      <Filter>Graphic\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\inc\AutoLink.h">
+      <Filter>Utility\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\inc\define.h">
+      <Filter>Utility\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\inc\Des.h">
+      <Filter>Utility\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\inc\MD5checksum.h">
+      <Filter>Utility\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\inc\Singleton.h">
+      <Filter>Utility\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\inc\WjcDes.h">
+      <Filter>Utility\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\inc\platform.h">
+      <Filter>Utility\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\inc\Utility.h">
+      <Filter>Utility\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\inc\NDUIOptionButton.h">
+      <Filter>UI\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UI\import\inc\IniFile.h">
+      <Filter>UI\import\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\inc\NDConstant.h">
+      <Filter>Utility\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\inc\TQString.h">
+      <Filter>Utility\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\inc\NDString.h">
+      <Filter>Utility\inc</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Framework\src\NDBaseDirector.cpp">
+      <Filter>Framework\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\src\NDBaseLayer.cpp">
+      <Filter>Framework\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\src\NDBaseNode.cpp">
+      <Filter>Framework\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\src\NDCommonProtocol.cpp">
+      <Filter>Framework\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\src\NDDirector.cpp">
+      <Filter>Framework\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\src\NDLayer.cpp">
+      <Filter>Framework\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\src\NDLightEffect.cpp">
+      <Filter>Framework\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\src\NDMapLayer.cpp">
+      <Filter>Framework\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\src\NDNode.cpp">
+      <Filter>Framework\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\src\NDObject.cpp">
+      <Filter>Framework\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\src\NDScene.cpp">
+      <Filter>Framework\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\src\NDSprite.cpp">
+      <Filter>Framework\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphic\src\CCTexture2DExt.cpp">
+      <Filter>Graphic\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphic\src\CCTextureCacheExt.cpp">
+      <Filter>Graphic\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphic\src\NDAnimation.cpp">
+      <Filter>Graphic\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphic\src\NDAnimationGroup.cpp">
+      <Filter>Graphic\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphic\src\NDAnimationGroupPool.cpp">
+      <Filter>Graphic\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphic\src\NDColorPool.cpp">
+      <Filter>Graphic\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphic\src\NDFrame.cpp">
+      <Filter>Graphic\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphic\src\NDPicture.cpp">
+      <Filter>Graphic\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphic\src\NDTextureMonitor.cpp">
+      <Filter>Graphic\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphic\src\NDTile.cpp">
+      <Filter>Graphic\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphic\src\UIImageCombiner.cpp">
+      <Filter>Graphic\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphic\src\UIImageExt.cpp">
+      <Filter>Graphic\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MapData\src\NDMapData.cpp">
+      <Filter>MapData\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MapData\src\NDWorldMapData.cpp">
+      <Filter>MapData\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\System\src\AStar.cpp">
+      <Filter>System\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\System\src\cocos2dExt.cpp">
+      <Filter>System\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\System\src\JavaMethod.cpp">
+      <Filter>System\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\System\src\NDAutoPath.cpp">
+      <Filter>System\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\System\src\NDDictionary.cpp">
+      <Filter>System\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\System\src\NDPath.cpp">
+      <Filter>System\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\System\src\NDTimer.cpp">
+      <Filter>System\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\System\src\NDTouch.cpp">
+      <Filter>System\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\import\src\UIData.cpp">
+      <Filter>UI\import\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\UISpriteNode.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\NDTextNode.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\NDUIBaseGraphics.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\NDUIButton.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\NDUIImage.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\NDUILabel.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\NDUILayer.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\NDUINode.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\NDUIScrollText.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\NDUISynLayer.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\UICheckBox.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\UIDialog.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\UIEdit.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\UIExp.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\UIHyperlink.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\UIMovableLayer.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\UIRadioButton.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\UIScroll.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\UIScrollContainer.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\UIScrollView.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\Platform\AntroidInput.cpp">
+      <Filter>UI\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\Platform\IphoneInput.cpp">
+      <Filter>UI\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\HyperLinkLabel.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphic\src\NDCombinePicture.cpp">
+      <Filter>Graphic\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Utility\src\Des.cpp">
+      <Filter>Utility\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Utility\src\MD5checksum.cpp">
+      <Filter>Utility\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Utility\src\WjcDes.cpp">
+      <Filter>Utility\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Utility\src\platform.cpp">
+      <Filter>Utility\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Script\src\LuaStateMgr.cpp">
+      <Filter>script\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Script\src\ScriptMgr.cpp">
+      <Filter>script\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\src\NDUIOptionButton.cpp">
+      <Filter>UI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UI\import\src\IniFile.cpp">
+      <Filter>UI\import\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Utility\src\TQString.cpp">
+      <Filter>Utility\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Utility\src\NDString.cpp">
+      <Filter>Utility\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
