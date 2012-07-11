@@ -8,11 +8,11 @@
  *
  */
 
-#import "NDNetMsg.h"
-#import "NDMsgDefine.h"
-#import "NDTransData.h"
-#import "BeatHeart.h"
-#import "ScriptNetMsg.h"
+#include "NDNetMsg.h"
+#include "NDMsgDefine.h"
+#include "NDTransData.h"
+#include "BeatHeart.h"
+#include "ScriptNetMsg.h"
 
 using namespace NDEngine;
 

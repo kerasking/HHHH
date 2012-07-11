@@ -15,6 +15,7 @@
 bool IsPointInside(CGPoint pt, CGRect rect);
 int GetNumBits(int num);
 bool VerifyUnsignedNum(const std::string strnum);
+std::string getStringTime(long nSeconds);
 
 std::string changeToChineseSign(std::string old);
 

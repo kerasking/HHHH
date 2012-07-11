@@ -19,6 +19,8 @@
 #include "NDDirector.h"
 //#include "ManualRoleEquipScene.h"
 #include "NDUISynLayer.h"
+#include "SuitTypeObj.h"
+#include "ManualRoleEquipScene.h"
 #include <sstream>
 
 Item::Item()
@@ -2341,7 +2343,7 @@ NDEngine::NDUIDialog* Item::makeItemDialog(std::vector<std::string>& vec_str)
 	
 	
 	if(getSuitData()>0&&iItemType / 10000000==0){ 
-		name << "【" << NDCommonCString("tao") << "】";
+		name << "[" << NDCommonCString("tao") << "]";
 	}
 	
 	//int color=ItemType.getItemColor(itemType); todo

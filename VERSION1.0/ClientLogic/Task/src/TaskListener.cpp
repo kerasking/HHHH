@@ -27,7 +27,7 @@
 //#include "GameUIRequest.h"
 #include "NDMapMgr.h"
 #include "ChatRecordManager.h"
-#import "NDWorldMapData.h"
+#include "NDWorldMapData.h"
 #include "NewPlayerTask.h"
 #include "PlayerNpcListLayers.h"
 #include "TaskInfoScene.h"

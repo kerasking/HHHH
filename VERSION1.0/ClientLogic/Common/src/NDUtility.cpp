@@ -636,3 +636,8 @@ NDLANGUAGE GetLocalLanguage()
 // 	
 // 	return localNdLunguage;
 }
+
+std::string getStringTime( long nSeconds )
+{
+	return string("");
+}
