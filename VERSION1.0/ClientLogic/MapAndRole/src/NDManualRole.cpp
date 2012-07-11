@@ -1953,7 +1953,7 @@ subnode->AddChild(lable); \
 			SetLableName(names, iX+8*fScale-iNameW, iY-LABLESIZE*fScale, isEnemy);
 			std::stringstream ss; ss << synName << " [" << synRankStr << "]";
 			int iSynNameW = getStringSizeMutiLine(ss.str().c_str(), LABLESIZE, sizewin).width/2;
-			ccColor4B color = INTCOLORTOCCC4(0xffffff);
+			cocos2d::ccColor4B color = INTCOLORTOCCC4(0xffffff);
 			if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)))
 			{
 				color = INTCOLORTOCCC4(0x00ff00);
@@ -1989,7 +1989,7 @@ subnode->AddChild(lable); \
 #undef DrawLable
 	}
 	
-	void NDManualRole::SetLable(LableType eLableType, int x, int y, std::string text, cocos2d::ccColor4B color1, cocos2d::ccColor4B color2)
+	void NDManualRole::SetLable(LableType eLableType, int x, int y, std::string text, cocos2d::cocos2d::ccColor4B color1, cocos2d::cocos2d::ccColor4B color2)
 	{
 		if (!subnode) 
 		{
@@ -2048,7 +2048,7 @@ subnode->AddChild(lable); \
 				SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0x760387), INTCOLORTOCCC4(0x003300));
 			}
 			*/
-			ccColor4B color = ccc4(255, 255, 255, 255);
+			cocos2d::ccColor4B color = ccc4(255, 255, 255, 255);
 			if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)))
 			{
 				color	= ccc4(243, 144, 27, 255);

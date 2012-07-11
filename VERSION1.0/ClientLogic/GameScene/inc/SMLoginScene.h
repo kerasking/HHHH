@@ -30,7 +30,7 @@
 //#include "FarmMgr.h"
 //#include "BattleFieldMgr.h"
 //#include "NDCrashUpload.h"
-#include "UpdateFactory.h"
+//#include "UpdateFactory.h"
 
 #define ID_LOADING_PROCESS (90)
 
@@ -38,8 +38,7 @@ class CSMLoginScene :
 public NDScene,
 public NDUIButtonDelegate,
 public NDUITargetDelegate,
-public ITimerCallback,
-public IUpdateEvent
+public ITimerCallback
 {
 	DECLARE_CLASS(CSMLoginScene)
 	
@@ -54,10 +53,10 @@ public:
     
 public:
     //interface of IUpdateEvent
-	virtual void OnDownloadEvent(DWORD dwSizeFile,DWORD dwSideDownLoaded);
-	virtual void OnUnCompress(int nFileNum,int nFileIndex,const char* pszFileName);
-	virtual void CompleteUpdate(ERROR_CODE emErrCode);
-	virtual void OnError(ERROR_CODE emErrCode,const char* pszErrMsg);
+// 	virtual void OnDownloadEvent(DWORD dwSizeFile,DWORD dwSideDownLoaded);
+// 	virtual void OnUnCompress(int nFileNum,int nFileIndex,const char* pszFileName);
+// 	virtual void CompleteUpdate(ERROR_CODE emErrCode);
+// 	virtual void OnError(ERROR_CODE emErrCode,const char* pszErrMsg);
     
 private:
     void OnTimer(OBJID idTag);

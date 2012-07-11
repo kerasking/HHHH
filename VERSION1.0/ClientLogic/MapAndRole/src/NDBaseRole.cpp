@@ -23,6 +23,7 @@
 #include "GameScene.h"
 #include "NDUtility.h"
 #include "define.h"
+#include "NDRidePet.h"
 
 using namespace NDEngine;
 

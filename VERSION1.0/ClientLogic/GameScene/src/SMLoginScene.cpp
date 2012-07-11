@@ -83,44 +83,44 @@ CSMLoginScene::Initialization()
 }
 
 ////////////////////////////////////////////////////////////
-void 
-CSMLoginScene::OnTimer(OBJID idTag)
-{
-    if (idTag != ONTIMER_TAG_LOGIN) {
-        return;
-    }
-    
-    if(m_bUpdOk){
-        ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
-        m_bUpdOk = false;
-    }
-}
-
-//interface of IUpdateEvent
-////////////////////////////////////////////////////////////
-void 
-CSMLoginScene::OnDownloadEvent(DWORD dwSizeFile,DWORD dwSideDownLoaded)
-{
-    printf("OnDownloadEvent");
-}
-////////////////////////////////////////////////////////////
-void 
-CSMLoginScene::OnUnCompress(int nFileNum,int nFileIndex,const char* pszFileName)
-{
-    printf("OnUnCompress");
-}
-////////////////////////////////////////////////////////////
-void 
-CSMLoginScene::CompleteUpdate(ERROR_CODE emErrCode)
-{
-    printf("CompleteUpdate");
-}
-////////////////////////////////////////////////////////////
-void 
-CSMLoginScene::OnError(ERROR_CODE emErrCode,const char* pszErrMsg)
-{
-    printf("OnError");
-}
+// void 
+// CSMLoginScene::OnTimer(OBJID idTag)
+// {
+//     if (idTag != ONTIMER_TAG_LOGIN) {
+//         return;
+//     }
+//     
+//     if(m_bUpdOk){
+//         ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
+//         m_bUpdOk = false;
+//     }
+// }
+// 
+// //interface of IUpdateEvent
+// ////////////////////////////////////////////////////////////
+// void 
+// CSMLoginScene::OnDownloadEvent(DWORD dwSizeFile,DWORD dwSideDownLoaded)
+// {
+//     printf("OnDownloadEvent");
+// }
+// ////////////////////////////////////////////////////////////
+// void 
+// CSMLoginScene::OnUnCompress(int nFileNum,int nFileIndex,const char* pszFileName)
+// {
+//     printf("OnUnCompress");
+// }
+// ////////////////////////////////////////////////////////////
+// void 
+// CSMLoginScene::CompleteUpdate(ERROR_CODE emErrCode)
+// {
+//     printf("CompleteUpdate");
+// }
+// ////////////////////////////////////////////////////////////
+// void 
+// CSMLoginScene::OnError(ERROR_CODE emErrCode,const char* pszErrMsg)
+// {
+//     printf("OnError");
+// }
 
 
 ////////////////////////////////////////////////////////////

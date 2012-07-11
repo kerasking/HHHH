@@ -13,7 +13,7 @@
 #include "NDScene.h"
 #include "NDUIMenuLayer.h"
 #include "ImageNumber.h"
-#import "GameRoleNode.h"
+#include "GameRoleNode.h"
 #include "NDUIDialog.h"
 #include "NDCommonControl.h"
 #include "NDScrollLayer.h"
@@ -30,6 +30,8 @@ namespace NDEngine
 	class NDUIImage;
 	class NDPlayer;
 	
+	using namespace cocos2d;
+
 	class NDUIStateBar : public NDUILayer
 	{
 	public:
@@ -201,18 +203,11 @@ namespace NDEngine
 			};
 			struct point_state 
 			{
-				
-				int iPoint;		//玩家分配了多少点		|
-				int iFix;		//固定多少点			|
-				int iAdd;		//其它(装备，状态)附加的点数
-				point_state()
-				{
-					iPoint = 0; iFix = 0; iAdd = 0;
-				}
+				int a;
 			};
 			_stru_point()
 			{
-				iTotal = 0; iAlloc= 0;
+				iTotal = 0; iAlloc = 0;
 			}
 			
 			bool IsAlloc(enumPointState ePS)
@@ -259,23 +254,23 @@ namespace NDEngine
 				return true;
 			}
 
-			int iTotal; //可分配点数
-			int iAlloc; //已分配点数
+			int iTotal; ///< 可分配点数
+			int iAlloc; ///< 已分配点数
 			point_state m_psProperty[ps_end];
 		};
 	private:
-		NDPicture *m_picBasic, *m_picBasicDown; NDUIButton *m_btnBasic;				//基本
-		NDPicture *m_picDetail, *m_picDetailDown; NDUIButton *m_btnDetail;			//详细
-		NDPicture *m_picAdvance, *m_picAdvanceDown; NDUIButton *m_btnAdvance;		//高级
+		NDPicture *m_picBasic, *m_picBasicDown; NDUIButton *m_btnBasic;				///< 基本
+		NDPicture *m_picDetail, *m_picDetailDown; NDUIButton *m_btnDetail;			///< 详细
+		NDPicture *m_picAdvance, *m_picAdvanceDown; NDUIButton *m_btnAdvance;		///< 高级
 		
-		NDUILayer		*m_frameRole;								//角色frame
+		NDUILayer		*m_frameRole;								///< 角色frame
 		NDUILabel		*m_lbName, *m_lbLevel, *m_lbNone, *m_lbJunXian;
 		NDUILabel		*m_lbHP, *m_lbMP, *m_lbExp;
 
 		NDUILayer		*m_layerRole;
 		NDStateBar		*m_stateBarHP, *m_stateBarMP, *m_stateBarExp;
 		
-		NDPicture		*m_picPropDot;								//可分配点数
+		NDPicture		*m_picPropDot;								///< 可分配点数
 		NDUIImage		*m_imagePropDot;
 		
 		NDPicture		*m_picMinus;

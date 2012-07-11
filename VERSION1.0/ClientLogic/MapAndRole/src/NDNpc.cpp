@@ -320,7 +320,7 @@ int NDNpc::GetType()
 	return m_iType;
 }
 
-void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text, ccColor4B color1, ccColor4B color2)
+void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text, cocos2d::ccColor4B color1, cocos2d::ccColor4B color2)
 {
 	if (!subnode) 
 	{

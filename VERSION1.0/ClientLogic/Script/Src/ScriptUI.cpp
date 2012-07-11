@@ -1276,18 +1276,18 @@ void CloseLoadBar()
 	
 #pragma mark 图片操作导出
 	// 颜色结构导出
-	ETSTRUCTBEGIN(ccColor4B)
-	ETSTRUCTPROP("r",								&ccColor4B::r)
-	ETSTRUCTPROP("g",								&ccColor4B::g)
-	ETSTRUCTPROP("b",								&ccColor4B::b)
-	ETSTRUCTPROP("a",								&ccColor4B::a)
-	ETSTRUCTEND(ccColor4B)
+	ETSTRUCTBEGIN(cocos2d::ccColor4B)
+	ETSTRUCTPROP("r",								&cocos2d::ccColor4B::r)
+	ETSTRUCTPROP("g",								&cocos2d::ccColor4B::g)
+	ETSTRUCTPROP("b",								&cocos2d::ccColor4B::b)
+	ETSTRUCTPROP("a",								&cocos2d::ccColor4B::a)
+	ETSTRUCTEND(cocos2d::ccColor4B)
 	
-	ETSTRUCTBEGIN(ccColor3B)
-	ETSTRUCTPROP("r",								&ccColor3B::r)
-	ETSTRUCTPROP("g",								&ccColor3B::g)
-	ETSTRUCTPROP("b",								&ccColor3B::b)
-	ETSTRUCTEND(ccColor3B)
+	ETSTRUCTBEGIN(cocos2d::cocos2d::ccColor3B)
+	ETSTRUCTPROP("r",								&cocos2d::cocos2d::ccColor3B::r)
+	ETSTRUCTPROP("g",								&cocos2d::cocos2d::ccColor3B::g)
+	ETSTRUCTPROP("b",								&cocos2d::cocos2d::ccColor3B::b)
+	ETSTRUCTEND(cocos2d::cocos2d::ccColor3B)
 	
 	// 图片池导出
 	ETCLASSBEGIN(NDPicturePool)

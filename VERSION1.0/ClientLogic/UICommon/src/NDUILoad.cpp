@@ -315,7 +315,7 @@ bool NDUILoad::Load(
 			case MY_CONTROL_TYPE_EQUIP_BUTTON:
 			{
 				ControlHelp<MY_CONTROL_TYPE_EQUIP_BUTTON> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)(help.Create(uiInfo, sizeOffset));
 			}
 				break;
 			case MY_CONTROL_TYPE_RADIO_BUTTON:
