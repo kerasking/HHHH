@@ -3,7 +3,7 @@
 //  Example
 //
 //  Created by jhzheng on 10-12-14.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 (ÍøÁú)DeNA. All rights reserved.
 //
 
 #include <UIKit/UIKit.h>

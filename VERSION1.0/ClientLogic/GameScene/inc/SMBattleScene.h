@@ -3,7 +3,7 @@
 //  SMYS
 //
 //  Created by cl on 12-2-29.
-//  Copyright 2012 __MyCompanyName__. All rights reserved.
+//  Copyright 2012 (ÍøÁú)DeNA. All rights reserved.
 //
 
 #ifndef _SM_BATTLE_SCENE_H_ZJH_

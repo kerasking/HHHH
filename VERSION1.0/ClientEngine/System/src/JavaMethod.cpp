@@ -3,7 +3,7 @@
 //  cocotest
 //
 //  Created by xiezhenghai on 10-11-24.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 (ÍøÁú)DeNA. All rights reserved.
 //
 
 #include "JavaMethod.h"

@@ -3,7 +3,7 @@
 //  DragonDrive
 //
 //  Created by xiezhenghai on 11-4-1.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 (ÍøÁú)DeNA. All rights reserved.
 //
 
 #include "UIImageCombiner.h"

@@ -3,7 +3,7 @@
 //  DragonDrive
 //
 //  Created by xiezhenghai on 11-1-8.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 (网龙)DeNA. All rights reserved.
 //
 //	－－介绍－－
 //	NDPicture是专门针对本地图片的操作

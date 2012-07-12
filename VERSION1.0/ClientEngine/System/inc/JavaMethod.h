@@ -3,7 +3,7 @@
 //  cocotest
 //
 //  Created by xiezhenghai on 10-11-24.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 (网龙)DeNA. All rights reserved.
 //
 
 #ifndef _JAVA_METHOD_H_

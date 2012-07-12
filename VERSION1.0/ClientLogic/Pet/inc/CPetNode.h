@@ -3,7 +3,7 @@
  *  DragonDrive
  *
  *  Created by jhzheng on 12-1-14.
- *  Copyright 2012 __MyCompanyName__. All rights reserved.
+ *  Copyright 2012 (网龙)DeNA. All rights reserved.
  *
  */
 

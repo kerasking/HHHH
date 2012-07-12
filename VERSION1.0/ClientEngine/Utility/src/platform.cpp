@@ -3,7 +3,7 @@
  *  SMYS
  *
  *  Created by jhzheng on 12-5-07.
- *  Copyright 2012 __MyCompanyName__. All rights reserved.
+ *  Copyright 2012 (ÍøÁú)DeNA. All rights reserved.
  *
  */
 

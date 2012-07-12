@@ -3,7 +3,7 @@
 //  DragonDrive
 //
 //  Created by cl on 12-4-20.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 (ÍøÁú)DeNA. All rights reserved.
 //
 
 

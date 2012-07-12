@@ -3,7 +3,7 @@
 //  DragonDrive
 //
 //  Created by xiezhenghai on 11-1-13.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 (网龙)DeNA. All rights reserved.
 //
 //	介绍
 //	基础图形节点

@@ -3,7 +3,7 @@
 //  MapData
 //
 //  Created by jhzheng on 11-1-15.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 (ÍøÁú)DeNA. All rights reserved.
 //
 
 #ifndef __CIRCLE_BUFFER_H_520A8DC3_71AC_4263_A247_7608021C01AB__ 

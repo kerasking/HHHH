@@ -3,7 +3,7 @@
 //  SMYS
 //
 //  Created by user on 12-3-21.
-//  Copyright 2012Äê __MyCompanyName__. All rights reserved.
+//  Copyright 2012Äê (ÍøÁú)DeNA. All rights reserved.
 //
 
 #include "SMLoginScene.h"

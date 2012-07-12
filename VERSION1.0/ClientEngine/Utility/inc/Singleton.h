@@ -3,7 +3,7 @@
  *  DragonDrive
  *
  *  Created by wq on 11/26/10.
- *  Copyright 2010 __MyCompanyName__. All rights reserved.
+ *  Copyright 2010 (ÍøÁú)DeNA. All rights reserved.
  *
  */
 

@@ -3,7 +3,7 @@
 //  DragonDrive
 //
 //  Created by jhzheng on 10-12-31.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 (ÍøÁú)DeNA. All rights reserved.
 //
 
 #ifndef __ND_MONSTER_H

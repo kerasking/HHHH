@@ -3,7 +3,7 @@
 //  DragonDrive
 //
 //  Created by xiezhenghai on 10-12-7.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 (网龙)DeNA. All rights reserved.
 //
 //	－－介绍－－
 //	游戏框架基础类
