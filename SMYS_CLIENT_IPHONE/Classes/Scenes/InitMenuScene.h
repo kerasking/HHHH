@@ -1,12 +1,3 @@
-/*
- *  InitMenuScene.h
- *  DragonDrive
- *
- *  Created by jhzheng on 11-1-10.
- *  Copyright 2011 __MyCompanyName__. All rights reserved.
- *
- */
-
 #ifndef _INIT_MENU_SCENE_H_
 #define _INIT_MENU_SCENE_H_
 
@@ -36,13 +27,13 @@ class InitMenuScene : public NDScene,
 	enum ChooseType
 	{
 		ctBegin			= 0,
-		//ctQuickRegister = ctBegin,	// 快速注册 
-		ctQuickGame = ctBegin,		// 快速游戏
-		ctLogin,					// 登录游戏
-		ctRegister,					// 注册账号
-		ctGameSetting,				// 游戏设置
-		ctGameHelp,					// 游戏帮助
-		ctQuit,						// 退出游戏
+
+		ctQuickGame = ctBegin,
+		ctLogin,
+		ctRegister,
+		ctGameSetting,
+		ctGameHelp,
+		ctQuit,
 		ctEnd,
 	};
 	
@@ -56,7 +47,7 @@ public:
 	void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex); override
 	void OnDialogClose(NDUIDialog* dialog); override
 	void OnTimer(OBJID tag); override
-	// iType = 1 快速注册 , =2 快速游戏
+
 	void FastGameOrRegisterTip(int iType);
 
 private:
@@ -77,7 +68,6 @@ private:
 private:
 	NDUILayer* m_Layer;
 	
-	//NDUILabel	*m_lbFree, *m_lbVersion, *m_lbCopyRight;
 	NDUIButton	*m_btnLeft, *m_btnRight, *m_btnChoose[ctEnd]; 
 	NDPicture* m_leftArrowImage, *m_leftArrowHightlightImage;
 	NDPicture* m_rightArrowImage, *m_rightArrowHightlightImage;

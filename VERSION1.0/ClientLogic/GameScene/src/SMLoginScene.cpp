@@ -11,7 +11,8 @@
 #include "ScriptGlobalEvent.h"
 #include "ScriptInc.h"
 #include <iconv.h>
-
+#include "NDConstant.h"
+#include "GameApp.h"
 
 IMPLEMENT_CLASS(CSMLoginScene, NDScene)
 ////////////////////////////////////////////////////////////

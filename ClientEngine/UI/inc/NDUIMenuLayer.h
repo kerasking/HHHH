@@ -12,7 +12,10 @@
 #include "NDUILayer.h"
 #include "NDUIButton.h"
 
-#import "CCTexture2D.h"
+#include "CCTexture2D.h"
+#include <cocos2d.h>
+
+using namespace cocos2d;
 
 namespace NDEngine
 {
@@ -44,7 +47,7 @@ namespace NDEngine
 		
 		void ShowOkBtn();
 	private:
-		NSMutableArray *m_tiles;
+		CCMutableArray<NDTile*> *m_tiles;
 		NDPicture* m_picCancel;
 		NDPicture* m_picOk;
 		NDUIButton	   *m_btnCancel;

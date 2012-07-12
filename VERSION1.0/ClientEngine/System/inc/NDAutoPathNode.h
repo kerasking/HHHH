@@ -6,8 +6,8 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "NDCompare.h"
+#include <Foundation/Foundation.h>
+#include "NDCompare.h"
 #include <list>
 
 @interface NDPathNode : NSObject <NDCompare>

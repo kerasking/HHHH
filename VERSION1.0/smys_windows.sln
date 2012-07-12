@@ -18,6 +18,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetWork", "NetWork\proj.win
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TinyXML", "TinyXML\TinyXML.vcproj", "{98887397-9BCD-4BA6-B391-E1B83A6A009A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testReader", "testReader\testReader.vcproj", "{7BE50837-1230-44F4-AB43-D55C836DA9FA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{98887397-9BCD-4BA6-B391-E1B83A6A009A} = {98887397-9BCD-4BA6-B391-E1B83A6A009A}
+		{291566ED-9B58-4403-8EA0-ABFCE1CD9B5E} = {291566ED-9B58-4403-8EA0-ABFCE1CD9B5E}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -52,6 +58,10 @@ Global
 		{98887397-9BCD-4BA6-B391-E1B83A6A009A}.Debug|Win32.Build.0 = Debug|Win32
 		{98887397-9BCD-4BA6-B391-E1B83A6A009A}.Release|Win32.ActiveCfg = Release|Win32
 		{98887397-9BCD-4BA6-B391-E1B83A6A009A}.Release|Win32.Build.0 = Release|Win32
+		{7BE50837-1230-44F4-AB43-D55C836DA9FA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7BE50837-1230-44F4-AB43-D55C836DA9FA}.Debug|Win32.Build.0 = Debug|Win32
+		{7BE50837-1230-44F4-AB43-D55C836DA9FA}.Release|Win32.ActiveCfg = Release|Win32
+		{7BE50837-1230-44F4-AB43-D55C836DA9FA}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

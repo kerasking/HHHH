@@ -7,7 +7,7 @@
  *
  */
 
-#include "NDBeforeGameMgr.h"
+//#include "NDBeforeGameMgr.h"
 #include "NDDataTransThread.h"
 #include "NDMsgDefine.h"
 #include "NDMapMgr.h"
@@ -28,7 +28,7 @@
 //#include "RobotScene.h"
 #include "..\..\..\SMYS_CLIENT_IPHONE\Classes\Scenes\UpdateScene.h"
 #include "XMLReader.h"
-#include "cpLog.h"
+//#include "cpLog.h"
 #include "NDUtility.h"
 #include <sstream>
 

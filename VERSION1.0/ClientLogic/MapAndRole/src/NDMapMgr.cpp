@@ -81,7 +81,7 @@
 #include "SyndicateStorage.h"
 #include "SyndicateApprove.h"
 #include "SyndicateMbrList.h"
-#include "cpLog.h"
+//#include "cpLog.h"
 #include "NDSprite.h"
 #include "GameUIPetAttrib.h"
 #include "AuctionSearchLayer.h"

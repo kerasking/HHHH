@@ -190,9 +190,12 @@ namespace NDEngine
 		void UpdatePorpAlloc();
 		void UpdateSlideBar(int eProp);
 	public:
-		struct _stru_point 
+
+		class _stru_point 
 		{
-			enum  enumPointState
+		public:
+
+			typedef enum
 			{
 				ps_begin   = 0,
 				ps_liliang = ps_begin,
@@ -200,24 +203,43 @@ namespace NDEngine
 				ps_minjie,
 				ps_zhili,
 				ps_end,
-			};
-			struct point_state 
+			}enumPointState;
+
+			typedef struct __tagpoint_state  
 			{
-				int a;
-			};
+				__tagpoint_state()
+				{
+					iPoint = 0;
+					iFix = 0;
+					iAdd = 0;
+				}
+
+				int iPoint;
+				int iFix;
+				int iAdd;
+			}point_state,*point_statePtr;
+
 			_stru_point()
 			{
 				iTotal = 0; 
 				iAlloc = 0;
 			}
-			
+
+			~_stru_point()
+			{
+				iTotal = 0; 
+				iAlloc = 0;
+			}
+
+			point_state m_psProperty[ps_end];
+
 			bool IsAlloc(enumPointState ePS)
 			{
 				if (ePS < ps_begin || ePS >= ps_end) return false;
-				
+
 				return m_psProperty[ePS].iPoint > 0;
 			}
-			
+
 			int GetPoint(enumPointState ePS)
 			{
 				if (ePS < ps_begin || ePS >= ps_end) 
@@ -237,28 +259,30 @@ namespace NDEngine
 				{
 					iPoint += m_psProperty[i].iPoint;
 				}
+
 				return iPoint == iAlloc;
 			}
-			
+
 			bool SetAllocPoint(enumPointState ePS, int point)
 			{
 				if (ePS < ps_begin || ePS >= ps_end) return false;
-				
-				int tmp = point-m_psProperty[ePS].iPoint;
-				
+
+				int tmp = point - m_psProperty[ePS].iPoint;
+
 				if (iAlloc+tmp > iTotal) return false;
-				
+
 				iAlloc += tmp;
-				
+
 				m_psProperty[ePS].iPoint = point;
-				
+
 				return true;
 			}
 
-			int iTotal; ///< 可分配点数
-			int iAlloc; ///< 已分配点数
-			point_state m_psProperty[ps_end];
+		protected:
+			int iAlloc;
+			int iTotal;
 		};
+
 	private:
 		NDPicture *m_picBasic, *m_picBasicDown; NDUIButton *m_btnBasic;				///< 基本
 		NDPicture *m_picDetail, *m_picDetailDown; NDUIButton *m_btnDetail;			///< 详细

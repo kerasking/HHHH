@@ -1,38 +1,3 @@
-//
-//  NDUILayer.h
-//  DragonDrive
-//
-//  Created by jhzheng on 10-12-21.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
-//	介绍
-//	控件容器
-
-// 容器规则简单描述
-/*
-	原先规则
-	1.  touch begin 分发 touch down(true) 事件 产生 touchNode
-	2.  touch moved 分发 touch down(false) 事件 且不分发touchEndEvent事件 
-	3.  touch end（在产生touch move的前提下）分发  touch down(false) 事件  遍历子控件的各种响应事件
-
-	增加规则
-	1. 长按事件
-		touch begin 开始时设置定时器 
-		touch end 定时已结束 (先分发长按事件,若未处理则分发响应事件)
-		具体实现:
-			a.定时器规则 出现touch move取消定时器规则
-	2. 拖进与拖出事件(限于层内部子结点)
-		拖进 touch end 响应
-		拖出  touch begin 响应 touch move 在自己区域以外 
-		具体实现:
-			a.层内部必需出现 touch move(不在自己区域内时)同时分发拖出回调 置存在拖出标志
-			b.拖进时必需要有拖出标志
-			c.信息传递
-	3. 层滚动事件(左或右,上或下)
-		触摸过程,所有的控件都没有被处理, 且产生了touch move事件,左右上下判断(touch begin 与 touch end x与y变化大小)
-		具体实现:
- */
-
 #ifndef _ND_UI_LAYER_H
 #define _ND_UI_LAYER_H
 
@@ -43,7 +8,7 @@
 #include "NDPicture.h"
 #include "NDTimer.h"
 
-#import "CCTexture2D.h"
+#include "CCTexture2D.h"
 
 namespace NDEngine 
 {

@@ -97,7 +97,7 @@ CGSize CSMGameScene::GetSize()
 
 cocos2d::CCArray* CSMGameScene::GetSwitchs()
 {
-	return this->m_mapLayer->GetMapData().switchs;
+	return this->m_mapLayer->GetMapData()->getSwitchs();
 }
 
 void CSMGameScene::OnButtonClick(NDUIButton* button)

@@ -3,8 +3,8 @@
 
 #include <stdarg.h>
 #include "KData.h"
-#include "KNetworkAddress.h"
-#include "KUdpStack.h"
+//#include "KNetworkAddress.h"
+//#include "KUdpStack.h"
 
 
 #define SIZE_PER_LOGFILE 6291456
