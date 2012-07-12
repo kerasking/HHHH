@@ -398,7 +398,7 @@ std::vector<int> Item::getItemType(int iType)
 	std::vector<int> res;
 	for (int i=0; i<8; i++)
 	{
-		res.push_back(iType/int(::pow(10, 7-i))%10);
+		res.push_back(iType/int(pow(10, 7-i))%10);
 	}
 	return res;
 }
@@ -2461,7 +2461,7 @@ void sendQueryDesc(int itemID)
 {
 	NDTransData bao(_MSG_QUERY_DESC);
 	bao << itemID;
-	SEND_DATA(bao);
+//	SEND_DATA(bao);
 	ShowProgressBar;
 }
 

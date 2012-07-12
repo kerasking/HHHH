@@ -13,7 +13,7 @@
 #include <vector>
 #include <string>
 
-@class NDIphoneCustomView;
+class NDIphoneCustomView;
 
 namespace NDEngine
 {

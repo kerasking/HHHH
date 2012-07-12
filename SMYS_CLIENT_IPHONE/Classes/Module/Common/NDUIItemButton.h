@@ -51,9 +51,9 @@ public:
 	
 	bool IsShowItemOnly() { return m_ShowItemOnly; }
 private:
-	Item* m_pItem;			// 有空时改成存ID
+	Item* m_pItem;
 	NDPicture* m_picItem;
-	NDUILayer* m_colorLayer; // 物品品质背景色
+	NDUILayer* m_colorLayer;
 	NDUILayer* m_backDackLayer;
 	NDPicture* m_picColor;
 	NDPicture* m_picDefaultItem;
