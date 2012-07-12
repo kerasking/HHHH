@@ -11,6 +11,7 @@
 #include <libxml/xmlwriter.h>
 #include <map>
 #include <vector>
+#include <tinyxml.h>
 
 using namespace cocos2d;
 using namespace std;

@@ -19,17 +19,18 @@
 #include "NDTextNode.h"
 
 using namespace NDEngine;
+using namespace cocos2d;
 
 typedef enum{
-	ChatTypeAll,		//全部
-	ChatTypeTip,		//小贴士
-	ChatTypeImportant,	//重要提示
-	ChatTypeWorld,		//世
-	ChatTypeSection,	//区
-	ChatTypeQueue,		//队
-	ChatTypeArmy,		//军
-	ChatTypeSecret,		//密
-	ChatTypeSystem		//系
+	ChatTypeAll,
+	ChatTypeTip,
+	ChatTypeImportant,
+	ChatTypeWorld,
+	ChatTypeSection,
+	ChatTypeQueue,
+	ChatTypeArmy,
+	ChatTypeSecret,
+	ChatTypeSystem
 }ChatType;
 
 /*

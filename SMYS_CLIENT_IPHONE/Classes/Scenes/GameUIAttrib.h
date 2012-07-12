@@ -207,7 +207,8 @@ namespace NDEngine
 			};
 			_stru_point()
 			{
-				iTotal = 0; iAlloc = 0;
+				iTotal = 0; 
+				iAlloc = 0;
 			}
 			
 			bool IsAlloc(enumPointState ePS)
@@ -227,7 +228,7 @@ namespace NDEngine
 			}
 			int GetMinPoint(enumPointState ePS)
 			{
-				return this->iAlloc-m_psProperty[ePS].iPoint;
+				return this->iAlloc - m_psProperty[ePS].iPoint;
 			}
 			bool VerifyAllocPoint()
 			{
@@ -279,8 +280,10 @@ namespace NDEngine
 		// 0 normal, 1 focus
 		NDPropAllocLayer *m_pointFrame[_stru_point::ps_end];
 		NDUIButton		*m_btnPointTxt[_stru_point::ps_end];
-		NDUIButton		*m_btnPointMinus[_stru_point::ps_end]; NDPicture *m_picPointMinus[_stru_point::ps_end][2];
-		NDUIButton		*m_btnPointPlus[_stru_point::ps_end];  NDPicture *m_picPointPlus[_stru_point::ps_end][2];
+		NDUIButton		*m_btnPointMinus[_stru_point::ps_end]; 
+		NDPicture *m_picPointMinus[_stru_point::ps_end][2];
+		NDUIButton		*m_btnPointPlus[_stru_point::ps_end];  
+		NDPicture *m_picPointPlus[_stru_point::ps_end][2];
 		NDUIButton		*m_btnPointCur[_stru_point::ps_end];
 		NDUIButton		*m_btnPointTotal[_stru_point::ps_end];
 		_stru_point m_struPoint;

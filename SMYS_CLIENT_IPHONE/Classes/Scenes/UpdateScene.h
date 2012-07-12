@@ -13,7 +13,7 @@
 #include "NDUIProgressBar.h"
 #include "NDUILayer.h"
 #include "NDUILabel.h"
-#include "DownloadPackage.h"
+//#include "DownloadPackage.h"
 #include "InstallSelf.h"
 #include "NDTimer.h"
 #include "NDUIDialog.h"
@@ -29,15 +29,19 @@
 
 using namespace NDEngine;
 
-class UpdateScene : public NDScene, public DownloadPackageDelegate, public ITimerCallback, public NDUIDialogDelegate
+class UpdateScene : 
+	public NDScene, 
+	//public DownloadPackageDelegate,
+	public ITimerCallback,
+	public NDUIDialogDelegate
 {
 	DECLARE_CLASS(UpdateScene)
 	UpdateScene();
 	~UpdateScene();
 public:
 	void Initialization(const char* updateUrl, const char* title); hide
-	void ReflashPercent(DownloadPackage* downer, int percent, int pos, int filelen); override
-	void DidDownloadStatus(DownloadPackage* downer, DownloadStatus status); override
+// 	void ReflashPercent(DownloadPackage* downer, int percent, int pos, int filelen); override
+// 	void DidDownloadStatus(DownloadPackage* downer, DownloadStatus status); override
 	void OnTimer(OBJID tag); override
 	void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex); override
 private:
