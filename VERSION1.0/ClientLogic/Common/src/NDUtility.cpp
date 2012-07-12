@@ -363,7 +363,7 @@ std::string GetUpdateUrl()
 std::string platformString()
 {
 	// todo(zjh)
-	return ""
+	return string("");
 	//return [[[UIDevice currentDevice] platformString] UTF8String];
 }
 

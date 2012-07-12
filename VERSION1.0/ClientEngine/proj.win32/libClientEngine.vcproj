@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)LuaPlus&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\OGLES&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\pthread&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\include&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\&quot;;../UI/import/inc;../UI/inc;../System/inc;../MapData/inc;../Graphic/inc;../Framework/inc;../Utility/inc;../Script/inc;../Common/inc;../DataTrans/inc"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)LuaPlus&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\OGLES&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\pthread&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\include&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\&quot;;../UI/import/inc;../UI/inc;../System/inc;../MapData/inc;../Graphic/inc;../Framework/inc;../Utility/inc;../Script/inc;../Common/inc;../DataTrans/inc;&quot;D:\work\test2\dhsgclient-x\VERSION1.0\cocos2d-x\cocos2dx\platform\third_party\win32\libxml2&quot;;&quot;D:\work\test2\dhsgclient-x\cocos2d-x\cocos2dx\platform\third_party\win32\iconv&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -808,6 +808,10 @@
 					RelativePath="..\Utility\inc\WjcDes.h"
 					>
 				</File>
+				<File
+					RelativePath="..\Utility\inc\XMLReader.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -830,6 +834,10 @@
 				</File>
 				<File
 					RelativePath="..\Utility\src\WjcDes.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Utility\src\XMLReader.cpp"
 					>
 				</File>
 			</Filter>
