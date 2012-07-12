@@ -396,9 +396,9 @@ std::string Item::getItemDesc()
 std::vector<int> Item::getItemType(int iType)
 {
 	std::vector<int> res;
-	for (int i=0; i<8; i++)
+	for (int i = 0; i < 8; i++)
 	{
-		res.push_back(iType/int(pow(10, 7-i))%10);
+		res.push_back(iType / int(pow( (double)(10, 7 - i) )) % 10);
 	}
 	return res;
 }

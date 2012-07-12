@@ -14,6 +14,7 @@
 #include <vector>
 
 using namespace NDEngine;
+using namespace cocos2d;
 
 // 简要描述
 // 1.拼接N个NDPicture对象

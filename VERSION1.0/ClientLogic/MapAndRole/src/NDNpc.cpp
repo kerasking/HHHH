@@ -90,7 +90,7 @@ NDNpc::~NDNpc()
 }
 
 void NDNpc::Initialization(int lookface)
-{	
+{
 	sex = lookface / 100000000 % 10;
 	model = lookface / 1000 % 100;
 	//lookface = 2000000;
