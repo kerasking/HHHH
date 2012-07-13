@@ -28,6 +28,7 @@
 #include "CPet.h"
 #include "SMGameScene.h"
 #include "DramaScene.h"
+#include "NDDataPersist.h"
 
 /* 玩家寻路八个方向值,无效的方向值-1
 	7  0  4
@@ -1256,7 +1257,7 @@ namespace NDEngine
 		{
 			if (!m_picGraveStone)
 			{
-				m_picGraveStone = NDPicturePool::DefaultPool()->AddPicture(GetImgPath("s124.png"));
+				m_picGraveStone = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("s124.png"));
 			}
 			
 			if (m_picGraveStone)
@@ -1385,7 +1386,7 @@ namespace NDEngine
 		NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 		
 		if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) 
-			&& !NDDataPersist::IsGameSettingOn(GS_SHOW_OTHER_PLAYER)
+			//&& !NDDataPersist::IsGameSettingOn(GS_SHOW_OTHER_PLAYER)  ///<临时性注释 郭浩
 			&& (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading)))) 
 		{
 			return;
@@ -1618,7 +1619,7 @@ namespace NDEngine
 			if (bSet) {
 				al.sitAction(this);
 				if (!m_picVendor) {
-					m_picVendor = NDPicturePool::DefaultPool()->AddPicture(GetImgPath("vendor.png"));
+					m_picVendor = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("vendor.png"));
 				}
 			} else {
 				if (this->m_picVendor) {
@@ -1635,7 +1636,7 @@ namespace NDEngine
 		{
 			if (bSet) {
 				if (!m_picBattle) {
-					m_picBattle = NDPicturePool::DefaultPool()->AddPicture(GetImgPath("battle.png"));
+					m_picBattle = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("battle.png"));
 				}
 			} else {
 				if (this->m_picBattle) {
@@ -1676,11 +1677,16 @@ namespace NDEngine
 	
 	void NDManualRole::setSafeProtected(bool isSafeProtected)
 	{
-		this->isSafeProtected = isSafeProtected;
-		if (this->isSafeProtected)
-		{
-			beginProtectedTime = [NSDate timeIntervalSinceReferenceDate];
-		}
+	/***
+	* 临时性注释 郭浩
+	* begin
+	*/
+
+// 		this->isSafeProtected = isSafeProtected;
+// 		if (this->isSafeProtected)
+// 		{
+// 			beginProtectedTime = [NSDate timeIntervalSinceReferenceDate];
+// 		}
 	}
 	
 	void NDManualRole::updateFlagOfQiZhi()
@@ -1956,7 +1962,8 @@ subnode->AddChild(lable); \
 #undef DrawLable
 	}
 	
-	void NDManualRole::SetLable(LableType eLableType, int x, int y, std::string text, cocos2d::cocos2d::ccColor4B color1, cocos2d::cocos2d::ccColor4B color2)
+	void NDManualRole::SetLable(LableType eLableType, 
+		int x, int y, std::string text, cocos2d::ccColor4B color1, cocos2d::ccColor4B color2)
 	{
 		if (!subnode) 
 		{
@@ -2371,7 +2378,7 @@ subnode->AddChild(lable); \
 	void NDManualRole::ResetShowPet()
 	{
 		ShowPetInfo emptyShowPetInfo;
-		SetShowPet(emptyShowPetInfo);
+		//SetShowPet(emptyShowPetInfo); ///<临时性注释 郭浩
 	}
 	
 	std::string NDManualRole::GetPeerageName(int nPeerage)
@@ -2491,4 +2498,3 @@ subnode->AddChild(lable); \
 		return false;
 	}
 }
-

@@ -1,12 +1,3 @@
-/*
- *  NDMapMgr.h
- *  DragonDrive
- *
- *  Created by wq on 10-12-28.
- *  Copyright 2010 (网龙)DeNA. All rights reserved.
- *
- */
-
 #include "Singleton.h"
 #include "define.h"
 #include <vector>
@@ -14,13 +5,7 @@
 #include <map>
 #include "NDMapLayer.h"
 #include "NDNetMsg.h"
-//#include "LifeSkill.h"
-//#include "GatherPoint.h"
-//#include "GameUIRequest.h"
 #include "GlobalDialog.h"
-//#include "FriendElement.h"
-//#include "FormulaMaterialData.h"
-//#include "NDUICustomView.h"
 #include "NDTimer.h"
 #include "SMBattleScene.h"
 #include "EnumDef.h"
@@ -42,14 +27,12 @@ namespace NDEngine
 	class NDScene;
 	enum 
 	{
-		// battlelistener
 		REHEARSE_APPLY = 0, // 申请
 		REHEARSE_ACCEPT = 1, // 接受
 		REHEARSE_REFUSE = 2, // 拒绝
 		REHEARSE_LOGOUT = 3, // 战斗内离线
 		REHEARSE_LOGIN = 4, // 战斗内断线重连
 		
-		// baselistener
 		_SEE_USER_INFO = 0, // 查看玩家信息
 		SEE_EQUIP_INFO = 1, // 查看玩家装备
 		SEE_PET_INFO = 3, // 查看玩家宠物

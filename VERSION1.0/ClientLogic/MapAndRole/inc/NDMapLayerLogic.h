@@ -25,6 +25,7 @@ namespace NDEngine
 	public:
 		void DidFinishLaunching(); override
 		
+		bool isAutoFight();
 		bool TouchBegin(NDTouch* touch); override
 		bool TouchEnd(NDTouch* touch); override
 		void TouchCancelled(NDTouch* touch); override

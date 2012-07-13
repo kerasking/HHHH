@@ -13,6 +13,7 @@
 #include "NDSprite.h"
 #include "EnumDef.h"
 #include "NDPath.h"
+#include "NDRidePet.h"
 
 namespace NDEngine
 {

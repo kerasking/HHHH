@@ -21,8 +21,8 @@
 #include "NDUtility.h"
 #include "XMLReader.h"
 #include "UpdateScene.h"
-#include "cpLog.h"
-#include "SimpleAudioEngine_objc.h"
+//#include "cpLog.h"
+//#include "SimpleAudioEngine_objc.h"
 #include "NDPath.h"
 
 #include "UIChatText.h"
@@ -38,7 +38,7 @@ IMPLEMENT_CLASS(NDMapLayerLogic, NDMapLayer)
 
 NDMapLayerLogic::NDMapLayerLogic()
 {
-	m_doubleTimeStamp = [NSDate timeIntervalSinceReferenceDate];
+	//m_doubleTimeStamp = [NSDate timeIntervalSinceReferenceDate];  ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	
 	m_timer.SetTimer(this, TAG_MAP_UPDTAE, 0.01f);
 	
@@ -73,12 +73,20 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 
 	m_posTouch = touch->GetLocation();
 	CGPoint touchPoint=this->ConvertToMapPoint(m_posTouch);
-	if(isTouchTreasureBox(touchPoint))
-	{
-		NDLog("touch treasureBox");
-		this->OpenTreasureBox();
-		return false;
-	}
+
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* begin
+	*/
+// 	if(isTouchTreasureBox(touchPoint))
+// 	{
+// 		NDLog("touch treasureBox");
+// 		this->OpenTreasureBox();
+// 		return false;
+// 	}
+	/**
+	* end
+	*/
 	//if ( NDPlayer::defaultHero().ClickPoint(touchPoint, false) )
 //	{
 //		m_timer.SetTimer(this, TAG_MAP_LONGTOUCH, LONG_TOUCH_INTERVAL);
@@ -156,7 +164,7 @@ void NDMapLayerLogic::OnTimer(OBJID tag)
 	if (tag == TAG_MAP_UPDTAE)
 	{
 		double oldTimeStamp = m_doubleTimeStamp;
-		m_doubleTimeStamp = [NSDate timeIntervalSinceReferenceDate];
+		//m_doubleTimeStamp = [NSDate timeIntervalSinceReferenceDate]; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		Update( (unsigned long)( (m_doubleTimeStamp - oldTimeStamp)*1000 ) );
 	}
 	else if (tag == TAG_MAP_LONGTOUCH)
@@ -200,4 +208,11 @@ void NDMapLayerLogic::SetPathing(bool bPathing)
 bool NDMapLayerLogic::IsPathing()
 {
 	return m_bPathing;
+}
+
+override
+
+bool NDEngine::NDMapLayerLogic::isAutoFight()
+{
+	return true;
 }
