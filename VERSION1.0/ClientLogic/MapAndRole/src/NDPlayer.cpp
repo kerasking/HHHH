@@ -346,7 +346,7 @@ namespace NDEngine
 							
 							NDTransData bao(_MSG_BOOTH);
 							bao << Byte(BOOTH_QUEST) << otherplayer->m_id << int(0);
-							SEND_DATA(bao);
+							// SEND_DATA(bao);
 						}
 						
 						QuickInteraction::RefreshOptions();
@@ -880,16 +880,16 @@ namespace NDEngine
 		this->stopMoving();
 		ScriptGlobalEvent::OnEvent(GE_SWITCH, iPassIndex);
 		/*
-		NDTransData SEND_DATA;
+		NDTransData // SEND_DATA;
 		
-		SEND_DATA.WriteShort(_MSG_POSITION);
-		SEND_DATA.WriteInt(m_id);
-		SEND_DATA.WriteShort(iSwitchCellX);
-		SEND_DATA.WriteShort(iSwitchCellY);
-		SEND_DATA.WriteInt(iPassIndex);
-		SEND_DATA.WriteInt(_POSITION_MAPCHANGE);
+		// SEND_DATA.WriteShort(_MSG_POSITION);
+		// SEND_DATA.WriteInt(m_id);
+		// SEND_DATA.WriteShort(iSwitchCellX);
+		// SEND_DATA.WriteShort(iSwitchCellY);
+		// SEND_DATA.WriteInt(iPassIndex);
+		// SEND_DATA.WriteInt(_POSITION_MAPCHANGE);
 		
-		NDDataTransThread::DefaultThread()->GetSocket()->Send(&SEND_DATA);
+		NDDataTransThread::DefaultThread()->GetSocket()->Send(&// SEND_DATA);
 		
 		isLoadingMap = true;
 		
@@ -1048,7 +1048,7 @@ namespace NDEngine
 		bao << (unsigned char)0; // btturn
 		bao << (unsigned char)1; // datacount
 		bao << int(role->m_id);
-		SEND_DATA(bao);
+		// SEND_DATA(bao);
 		
 		m_bRequireDacoity = true;
 		
@@ -1088,7 +1088,7 @@ namespace NDEngine
 		bao << (unsigned char)0; // btturn
 		bao << (unsigned char)1; // datacount
 		bao << int(role->m_id);
-		SEND_DATA(bao);
+		// SEND_DATA(bao);
 		
 		m_bRequireBattleField = true;
 		

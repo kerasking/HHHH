@@ -2461,7 +2461,7 @@ void sendQueryDesc(int itemID)
 {
 	NDTransData bao(_MSG_QUERY_DESC);
 	bao << itemID;
-//	SEND_DATA(bao);
+//	// SEND_DATA(bao);
 	ShowProgressBar;
 }
 

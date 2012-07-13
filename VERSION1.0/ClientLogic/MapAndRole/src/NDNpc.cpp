@@ -587,3 +587,9 @@ void NDNpc::ShowHightLight(bool bShow)
 	
 	this->SetHightLight(bShow);
 }
+
+override
+bool NDEngine::NDNpc::IsActionOnRing()
+{
+	return true;
+}

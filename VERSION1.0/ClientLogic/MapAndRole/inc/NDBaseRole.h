@@ -12,10 +12,11 @@
 
 #include "NDSprite.h"
 #include "EnumDef.h"
+#include "NDPath.h"
 
 namespace NDEngine
 {
-	#define RING_IMAGE		(GetImgPath("ui_ring.png"))
+	#define RING_IMAGE		(NDPath::GetImgPath("ui_ring.png"))
 	#define SHADOW_IMAGE	(GetImgPath("shadow.png"))
 	#define BIG_SHADOW_IMAGE (GetImgPath("shadowBig.png"))
 	
@@ -39,9 +40,11 @@ namespace NDEngine
 		//以下方法供逻辑层使用－－－begin
 		//......
 		//－－－end
-		bool OnDrawBegin(bool bDraw); override
-		void OnDrawEnd(bool bDraw); override
-		void OnBeforeNodeRemoveFromParent(NDNode* node, bool bCleanUp); override
+
+		///< 临时性注释 --郭浩
+ 		bool OnDrawBegin(bool bDraw); override
+// 		void OnDrawEnd(bool bDraw); override
+// 		void OnBeforeNodeRemoveFromParent(NDNode* node, bool bCleanUp); override
 		
 		CGPoint GetScreenPoint();
 		void DirectRight(bool bRight);
@@ -50,8 +53,10 @@ namespace NDEngine
 		virtual void Update(unsigned long ulDiff){}
 		virtual void SetAction(bool bMove);
 		virtual bool AssuredRidePet();
+		NDRidePet* GetRidePet();
 		virtual void setMoveActionWithRidePet();
 		virtual void setStandActionWithRidePet();
+		virtual void updateRidePetEffect();
 		
 		virtual void drawEffects(bool bDraw);
 		

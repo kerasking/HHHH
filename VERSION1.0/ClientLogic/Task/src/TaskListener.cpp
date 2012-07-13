@@ -695,7 +695,7 @@ void dealWithFreshmanTask(Task* task) {
 void sendTaskFinishMsg(int taskId) {
 	NDTransData bao(_MSG_COMPLETE_TASK);
 	bao << taskId;
-	SEND_DATA(bao);
+	// SEND_DATA(bao);
 }
 
 void dealBackData_MSG_TASK_ITEM_OPT(NDTransData *data)

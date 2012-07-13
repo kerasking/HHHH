@@ -590,7 +590,7 @@ void Battle::OnButtonClick(NDUIButton* button)
 	//			ShowProgressBar;
 	//			NDTransData bao(_MSG_BATTLEACT);
 	//			bao << BATTLE_ACT_LEAVE << Byte(0) << Byte(0);
-	//			SEND_DATA(bao);
+	//			// SEND_DATA(bao);
 	//			return;
 	//		}
 	//		

@@ -37,6 +37,7 @@ namespace NDEngine
 		void Init(); override				
 		bool OnDrawBegin(bool bDraw); override
 		void OnDrawEnd(bool bDraw); override
+		bool IsActionOnRing();
 		
 	public:
 		//以下方法供逻辑层使用－－－begin

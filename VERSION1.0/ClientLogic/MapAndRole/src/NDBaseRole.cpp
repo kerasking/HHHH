@@ -270,18 +270,19 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 	return true;
 }
 
-void NDBaseRole::OnDrawEnd(bool bDraw)
-{
-}
-
-void NDBaseRole::OnBeforeNodeRemoveFromParent(NDNode* node, bool bCleanUp)
-{
-	if (node == m_talkBox) 
-	{
-		m_talkBox = NULL;
-	}
-	// ÆäËü²Ù×÷.....
-}
+///< ÁÙÊ±ÐÔ×¢ÊÍ --¹ùºÆ
+// void NDBaseRole::OnDrawEnd(bool bDraw)
+// {
+// }
+// 
+// void NDBaseRole::OnBeforeNodeRemoveFromParent(NDNode* node, bool bCleanUp)
+// {
+// 	if (node == m_talkBox) 
+// 	{
+// 		m_talkBox = NULL;
+// 	}
+// 	// ÆäËü²Ù×÷.....
+// }
 
 CGPoint NDBaseRole::GetScreenPoint()
 {
@@ -449,10 +450,10 @@ void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 //	SetEquipment(armor, 0);//ÐØ¼×
 	
 	//Load Animation Group
-	int model_id=lookface/1000000;
+	int model_id=lookface / 1000000;
 //	if (sex % 2 == SpriteSexMale) 
-	NSString* aniPath = [NSString stringWithUTF8String:NDPath::GetAnimationPath().c_str()];
-	Initialization([[NSString stringWithFormat:@"%@model_%d.spr",aniPath,model_id] UTF8String] );
+	//NSString* aniPath = [NSString stringWithUTF8String:NDPath::GetAnimationPath().c_str()];  ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+//	Initialization([[NSString stringWithFormat:@"%@model_%d.spr",aniPath,model_id] UTF8String] ); ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 //	else 
 //		Initialization(MANUELROLE_HUMAN_FEMALE);
 	
@@ -465,122 +466,126 @@ void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 
 void NDBaseRole::SetEquipment(int equipmentId, int quality)
 {
-	if (equipmentId <= 0 ) 
-		return;
-	
-	NSString* imagePath = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
-	
-	if (equipmentId >= 200 && equipmentId < 10000) //ÎäÆ÷
-	{
-		if ((equipmentId >= 1000 && equipmentId < 1200) || (equipmentId >= 1600 && equipmentId < 1800) || (equipmentId >= 2800 && equipmentId < 3000)) 
-		{
-			if (this->GetRightHandWeaponImage() == NULL) 
-			{
-				this->SetWeaponType(ONE_HAND_WEAPON);
-				this->SetRightHandWeaponImage([[NSString stringWithFormat:@"%@%d.png", imagePath, equipmentId] UTF8String]);
-				this->SetWeaponQuality(quality);
-			}
-			else 
-			{				
-				this->SetSecWeaponType(ONE_HAND_WEAPON);
-				this->SetLeftHandWeaponImage([[NSString stringWithFormat:@"%@%d.png", imagePath, equipmentId] UTF8String]);
-				this->SetSecWeaponQuality(quality);
-			}			
-		}
-		else if ((equipmentId >= 1200 && equipmentId < 1400) || (equipmentId >= 1800 && equipmentId < 2000))
-		{
-			this->SetWeaponType(TWO_HAND_WEAPON);
-			this->SetDoubleHandWeaponImage([[NSString stringWithFormat:@"%@%d.png", imagePath, equipmentId] UTF8String]);
-			this->SetWeaponQuality(quality);
-		}
-		else if (equipmentId >= 2200 && equipmentId < 2400)
-		{
-			this->SetWeaponType(TWO_HAND_WAND);
-			this->SetDoubleHandWandImage([[NSString stringWithFormat:@"%@%d.png", imagePath, equipmentId] UTF8String]);
-			this->SetWeaponQuality(quality);
-		}
-		else if (equipmentId >= 2400 && equipmentId < 2600)
-		{
-			this->SetWeaponType(TWO_HAND_BOW);
-			this->SetDoubleHandBowImage([[NSString stringWithFormat:@"%@%d.png", imagePath, equipmentId] UTF8String]);
-			this->SetWeaponQuality(quality);
-		}
-		else if (equipmentId >= 2600 && equipmentId < 2800)
-		{
-			this->SetWeaponType(TWO_HAND_SPEAR);
-			this->SetDoubleHandSpearImage([[NSString stringWithFormat:@"%@%d.png", imagePath, equipmentId] UTF8String]);
-			this->SetWeaponQuality(quality);
-		}
-		else if (equipmentId >= 5000 && equipmentId < 5200)
-		{
-			this->SetSecWeaponType(SEC_SHIELD);
-			this->SetShieldImage([[NSString stringWithFormat:@"%@%d.png", imagePath, equipmentId] UTF8String]);
-			this->SetSecWeaponQuality(quality);
-		}		
-	}
-	else if (equipmentId >= 10000 && equipmentId < 11800) //·À¾ß
-	{
-		if (equipmentId > 10000 && equipmentId < 10200) 
-		{
-			hair = equipmentId;
-			this->SetHairImageWithEquipmentId(equipmentId);
-		}
-		else if (equipmentId >= 10200 && equipmentId < 10400)
-		{
-			// do nothing
-		}
-		else if (equipmentId >= 10400 && equipmentId < 10600)
-		{
-			expresstion = equipmentId;
-			this->SetExpressionImageWithEquipmentId(equipmentId);
-		}
-		else if (equipmentId >= 10600 && equipmentId < 11200)
-		{
-			cap = equipmentId;
-			this->SetCapImageWithEquipmentId(equipmentId);
-			this->SetCapQuality(quality);
-		}
-		else if (equipmentId >= 11200 && equipmentId < 11800)
-		{
-			armor = equipmentId;
-			this->SetArmorImageWithEquipmentId(equipmentId);
-			this->SetArmorQuality(quality);
-		}
-	}
-	else if (equipmentId >= 20000 && equipmentId < 30000 || equipmentId > 100000) //Æï³è
-	{
-		SAFE_DELETE_NODE(ridepet);
-		ridepet = new NDRidePet;
-		ridepet->Initialization(equipmentId);
-		ridepet->quality = quality;
-		ridepet->SetPositionEx(this->GetPosition());
-		
-		if (this->IsKindOfClass(RUNTIME_CLASS(NDManualRole))) 
-		{
-//			if (this->GetParent() && this->GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	*/
+//	if (equipmentId <= 0 ) 
+//		return;
+//	
+//	NSString* imagePath = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+//	CCString* imagePath = new CCString("");
+//	
+//	if (equipmentId >= 200 && equipmentId < 10000) //ÎäÆ÷
+//	{
+//		if ((equipmentId >= 1000 && equipmentId < 1200) || (equipmentId >= 1600 && equipmentId < 1800) || (equipmentId >= 2800 && equipmentId < 3000)) 
+//		{
+//			if (this->GetRightHandWeaponImage() == NULL) 
 //			{
-//				this->SetAction(false);
+//				this->SetWeaponType(ONE_HAND_WEAPON);
+//				this->SetRightHandWeaponImage([[NSString stringWithFormat:@"%@%d.png", imagePath, equipmentId] UTF8String]);
+//				this->SetWeaponQuality(quality);
 //			}
-			
-			ridepet->SetOwner(this);
-		}
-		
-		/*
-		if (this->IsKindOfClass(RUNTIME_CLASS(NDNpc))) 
-		{
-			NDRidePet *ridepet = ((NDNpc*)this)->GetRidePet();
-			ridepet->Initialization(equipmentId);
-			ridepet->quality = quality;
-			ridepet->SetPositionEx(this->GetPosition());
-		}
-		*/
-	}
-	else if (equipmentId >= 30000 && equipmentId < 40000) //Åû·ç
-	{
-		cloak = equipmentId;
-		this->SetCloakImageWithEquipmentId(equipmentId);
-		this->SetCloakQuality(quality);
-	}	
+//			else 
+//			{				
+//				this->SetSecWeaponType(ONE_HAND_WEAPON);
+//				this->SetLeftHandWeaponImage([[NSString stringWithFormat:@"%@%d.png", imagePath, equipmentId] UTF8String]);
+//				this->SetSecWeaponQuality(quality);
+//			}			
+//		}
+//		else if ((equipmentId >= 1200 && equipmentId < 1400) || (equipmentId >= 1800 && equipmentId < 2000))
+//		{
+//			this->SetWeaponType(TWO_HAND_WEAPON);
+//			this->SetDoubleHandWeaponImage([[NSString stringWithFormat:@"%@%d.png", imagePath, equipmentId] UTF8String]);
+//			this->SetWeaponQuality(quality);
+//		}
+//		else if (equipmentId >= 2200 && equipmentId < 2400)
+//		{
+//			this->SetWeaponType(TWO_HAND_WAND);
+//			this->SetDoubleHandWandImage([[NSString stringWithFormat:@"%@%d.png", imagePath, equipmentId] UTF8String]);
+//			this->SetWeaponQuality(quality);
+//		}
+//		else if (equipmentId >= 2400 && equipmentId < 2600)
+//		{
+//			this->SetWeaponType(TWO_HAND_BOW);
+//			this->SetDoubleHandBowImage([[NSString stringWithFormat:@"%@%d.png", imagePath, equipmentId] UTF8String]);
+//			this->SetWeaponQuality(quality);
+//		}
+//		else if (equipmentId >= 2600 && equipmentId < 2800)
+//		{
+//			this->SetWeaponType(TWO_HAND_SPEAR);
+//			this->SetDoubleHandSpearImage([[NSString stringWithFormat:@"%@%d.png", imagePath, equipmentId] UTF8String]);
+//			this->SetWeaponQuality(quality);
+//		}
+//		else if (equipmentId >= 5000 && equipmentId < 5200)
+//		{
+//			this->SetSecWeaponType(SEC_SHIELD);
+//			this->SetShieldImage([[NSString stringWithFormat:@"%@%d.png", imagePath, equipmentId] UTF8String]);
+//			this->SetSecWeaponQuality(quality);
+//		}		
+//	}
+//	else if (equipmentId >= 10000 && equipmentId < 11800) //·À¾ß
+//	{
+//		if (equipmentId > 10000 && equipmentId < 10200) 
+//		{
+//			hair = equipmentId;
+//			this->SetHairImageWithEquipmentId(equipmentId);
+//		}
+//		else if (equipmentId >= 10200 && equipmentId < 10400)
+//		{
+//			// do nothing
+//		}
+//		else if (equipmentId >= 10400 && equipmentId < 10600)
+//		{
+//			expresstion = equipmentId;
+//			this->SetExpressionImageWithEquipmentId(equipmentId);
+//		}
+//		else if (equipmentId >= 10600 && equipmentId < 11200)
+//		{
+//			cap = equipmentId;
+//			this->SetCapImageWithEquipmentId(equipmentId);
+//			this->SetCapQuality(quality);
+//		}
+//		else if (equipmentId >= 11200 && equipmentId < 11800)
+//		{
+//			armor = equipmentId;
+//			this->SetArmorImageWithEquipmentId(equipmentId);
+//			this->SetArmorQuality(quality);
+//		}
+//	}
+//	else if (equipmentId >= 20000 && equipmentId < 30000 || equipmentId > 100000) //Æï³è
+//	{
+//		SAFE_DELETE_NODE(ridepet);
+//		ridepet = new NDRidePet;
+//		ridepet->Initialization(equipmentId);
+//		ridepet->quality = quality;
+//		ridepet->SetPositionEx(this->GetPosition());
+//		
+//		if (this->IsKindOfClass(RUNTIME_CLASS(NDManualRole))) 
+//		{
+////			if (this->GetParent() && this->GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+////			{
+////				this->SetAction(false);
+////			}
+//			
+//			ridepet->SetOwner(this);
+//		}
+//		
+//		/*
+//		if (this->IsKindOfClass(RUNTIME_CLASS(NDNpc))) 
+//		{
+//			NDRidePet *ridepet = ((NDNpc*)this)->GetRidePet();
+//			ridepet->Initialization(equipmentId);
+//			ridepet->quality = quality;
+//			ridepet->SetPositionEx(this->GetPosition());
+//		}
+//		*/
+//	}
+//	else if (equipmentId >= 30000 && equipmentId < 40000) //Åû·ç
+//	{
+//		cloak = equipmentId;
+//		this->SetCloakImageWithEquipmentId(equipmentId);
+//		this->SetCloakQuality(quality);
+//	}	
 }
 
 /*
@@ -719,36 +724,47 @@ void NDBaseRole::SetHairImageWithEquipmentId(int equipmentId)
 {
 	if (equipmentId >= 10000 && equipmentId < 10400) 
 	{
-		NSString* hairImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
-		hairImageName = [NSString stringWithFormat:@"%@%d", hairImageName, equipmentId];
-		if (sex % 2 == SpriteSexMale) 
-		{
-			hairImageName = [NSString stringWithFormat:@"%@_1", hairImageName];
-		}
-		else 
-		{
-			hairImageName = [NSString stringWithFormat:@"%@_2", hairImageName];
-		}
-		hairImageName = [NSString stringWithFormat:@"%@.png", hairImageName];
-		this->SetHairImage([hairImageName UTF8String], this->hairColor);
+		/**
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		*/
+// 		NSString* hairImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		hairImageName = [NSString stringWithFormat:@"%@%d", hairImageName, equipmentId];
+// 		if (sex % 2 == SpriteSexMale) 
+// 		{
+// 			hairImageName = [NSString stringWithFormat:@"%@_1", hairImageName];
+// 		}
+// 		else 
+// 		{
+// 			hairImageName = [NSString stringWithFormat:@"%@_2", hairImageName];
+// 		}
+// 		hairImageName = [NSString stringWithFormat:@"%@.png", hairImageName];
+// 		this->SetHairImage([hairImageName UTF8String], this->hairColor);
 	}	
 }
 
 void NDBaseRole::SetFaceImageWithEquipmentId(int equipmentId)
 {
-	NSString* faceImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
-	faceImageName = [NSString stringWithFormat:@"%@skin.png", faceImageName];	
-	//faceImageName = [NSString stringWithFormat:@"%@skin@%d.png", faceImageName, skinColor];
-	this->SetFaceImage([faceImageName UTF8String]);
+	/**
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	*/
+
+// 	NSString* faceImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 	faceImageName = [NSString stringWithFormat:@"%@skin.png", faceImageName];	
+// 	//faceImageName = [NSString stringWithFormat:@"%@skin@%d.png", faceImageName, skinColor];
+// 	this->SetFaceImage([faceImageName UTF8String]);
 }
 
 void NDBaseRole::SetExpressionImageWithEquipmentId(int equipmentId)
 {
 	if (equipmentId >= 10400 && equipmentId < 10600) 
 	{
-		NSString* expressionImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
-		expressionImageName = [NSString stringWithFormat:@"%@%d.png", expressionImageName, equipmentId];	
-		this->SetExpressionImage([expressionImageName UTF8String]);
+		/**
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		*/
+		
+// 		NSString* expressionImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		expressionImageName = [NSString stringWithFormat:@"%@%d.png", expressionImageName, equipmentId];	
+// 		this->SetExpressionImage([expressionImageName UTF8String]);
 	}
 }
 
@@ -756,9 +772,18 @@ void NDBaseRole::SetCapImageWithEquipmentId(int equipmentId)
 {
 	if (equipmentId >= 10600 && equipmentId < 11200) 
 	{
-		NSString* capImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
-		capImageName = [NSString stringWithFormat:@"%@%d.png", capImageName, equipmentId];	
-		this->SetCapImage([capImageName UTF8String]);
+		/**
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* begin
+		*/
+// 		NSString* capImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		capImageName = [NSString stringWithFormat:@"%@%d.png", capImageName, equipmentId];	
+// 		this->SetCapImage([capImageName UTF8String]);
+
+		/**
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* end
+		*/
 	}
 }
 
@@ -766,9 +791,18 @@ void NDBaseRole::SetArmorImageWithEquipmentId(int equipmentId)
 {
 	if (equipmentId >= 11200 && equipmentId < 11800) 
 	{
-		NSString* armorImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
-		armorImageName = [NSString stringWithFormat:@"%@%d.png", armorImageName, equipmentId];	
-		this->SetArmorImage([armorImageName UTF8String]);
+		/**
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* begin
+		*/
+// 		NSString* armorImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		armorImageName = [NSString stringWithFormat:@"%@%d.png", armorImageName, equipmentId];	
+// 		this->SetArmorImage([armorImageName UTF8String]);
+	
+		/**
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* end
+		*/
 	}
 }
 
@@ -784,41 +818,56 @@ void NDBaseRole::SetCloakImageWithEquipmentId(int equipmentId)
 	 */
 	if (equipmentId >= 30000 && equipmentId < 40000)
 	{
-		NSString* cloakName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
-		cloakName = [NSString stringWithFormat:@"%@%d.png", cloakName, equipmentId+7];	
-		this->SetCloakImage([cloakName UTF8String]);
-		
-		
-		NSString* leftShoulderName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
-		leftShoulderName = [NSString stringWithFormat:@"%@%d.png", leftShoulderName, equipmentId+1];	
-		this->SetLeftShoulderImage([leftShoulderName UTF8String]);
-		
-		NSString* rightShoulderName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
-		rightShoulderName = [NSString stringWithFormat:@"%@%d.png", rightShoulderName, equipmentId+2];	
-		this->SetRightShoulderImage([rightShoulderName UTF8String]);
-		
-		NSString* skirtStandName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
-		skirtStandName = [NSString stringWithFormat:@"%@%d.png", skirtStandName, equipmentId+3];	
-		this->SetSkirtStandImage([skirtStandName UTF8String]);
-		
-		NSString* skirtWalkName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
-		skirtWalkName = [NSString stringWithFormat:@"%@%d.png", skirtWalkName, equipmentId+4];	
-		this->SetSkirtWalkImage([skirtWalkName UTF8String]);
-		
-		NSString* skirtSitName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
-		skirtSitName = [NSString stringWithFormat:@"%@%d.png", skirtSitName, equipmentId+5];	
-		this->SetSkirtSitImage([skirtSitName UTF8String]);
-		
-		NSString* skirtLiftLegName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
-		skirtLiftLegName = [NSString stringWithFormat:@"%@%d.png", skirtLiftLegName, equipmentId+6];	
-		this->SetSkirtLiftLegImage([skirtLiftLegName UTF8String]);
+		/**
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* begin
+		*/
+
+// 		NSString* cloakName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		cloakName = [NSString stringWithFormat:@"%@%d.png", cloakName, equipmentId+7];	
+// 		this->SetCloakImage([cloakName UTF8String]);
+// 		
+// 		
+// 		NSString* leftShoulderName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		leftShoulderName = [NSString stringWithFormat:@"%@%d.png", leftShoulderName, equipmentId+1];	
+// 		this->SetLeftShoulderImage([leftShoulderName UTF8String]);
+// 		
+// 		NSString* rightShoulderName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		rightShoulderName = [NSString stringWithFormat:@"%@%d.png", rightShoulderName, equipmentId+2];	
+// 		this->SetRightShoulderImage([rightShoulderName UTF8String]);
+// 		
+// 		NSString* skirtStandName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		skirtStandName = [NSString stringWithFormat:@"%@%d.png", skirtStandName, equipmentId+3];	
+// 		this->SetSkirtStandImage([skirtStandName UTF8String]);
+// 		
+// 		NSString* skirtWalkName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		skirtWalkName = [NSString stringWithFormat:@"%@%d.png", skirtWalkName, equipmentId+4];	
+// 		this->SetSkirtWalkImage([skirtWalkName UTF8String]);
+// 		
+// 		NSString* skirtSitName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		skirtSitName = [NSString stringWithFormat:@"%@%d.png", skirtSitName, equipmentId+5];	
+// 		this->SetSkirtSitImage([skirtSitName UTF8String]);
+// 		
+// 		NSString* skirtLiftLegName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		skirtLiftLegName = [NSString stringWithFormat:@"%@%d.png", skirtLiftLegName, equipmentId+6];	
+// 		this->SetSkirtLiftLegImage([skirtLiftLegName UTF8String]);
+
+		/**
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* end
+		*/
 	}
 }
 
 void NDBaseRole::DrawHead(const CGPoint& pos)
 {
-	[this->m_aniGroup setRuningSprite:this];
-	[this->m_aniGroup drawHeadAt:pos];
+	/**
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* begin
+	*/
+
+// 	[this->m_aniGroup setRuningSprite:this];
+// 	[this->m_aniGroup drawHeadAt:pos];
 }
 
 void NDBaseRole::SetWeaponType(int weaponType)
@@ -908,19 +957,23 @@ void NDBaseRole::SetHair(int style, int color)
 			break;
 	}
 	this->hairColor = color;
-	
-	NSString* hairImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
-	hairImageName = [NSString stringWithFormat:@"%@%d", hairImageName, this->hair];
-	if (this->sex % 2 == SpriteSexMale) 
-	{
-		hairImageName = [NSString stringWithFormat:@"%@_1", hairImageName];
-	}
-	else 
-	{
-		hairImageName = [NSString stringWithFormat:@"%@_2", hairImageName];
-	}
-	hairImageName = [NSString stringWithFormat:@"%@.png", hairImageName];
-	this->SetHairImage([hairImageName UTF8String], this->hairColor);
+
+	/**
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* begin
+	*/
+// 	NSString* hairImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 	hairImageName = [NSString stringWithFormat:@"%@%d", hairImageName, this->hair];
+// 	if (this->sex % 2 == SpriteSexMale) 
+// 	{
+// 		hairImageName = [NSString stringWithFormat:@"%@_1", hairImageName];
+// 	}
+// 	else 
+// 	{
+// 		hairImageName = [NSString stringWithFormat:@"%@_2", hairImageName];
+// 	}
+// 	hairImageName = [NSString stringWithFormat:@"%@.png", hairImageName];
+// 	this->SetHairImage([hairImageName UTF8String], this->hairColor);
 }
 
 void NDBaseRole::SetMaxLife(int nMaxLife)
@@ -1139,7 +1192,8 @@ void NDBaseRole::SetNormalAniGroup(int lookface)
 	}
 
 
-	Initialization( tq::CString("%smodel_%d%s", NDEngine::NDPath::GetAnimationPath().c_str(), lookface/100, ".spr") );
+	Initialization( tq::CString("%smodel_%d%s", 
+		NDEngine::NDPath::GetAnimationPath().c_str(), lookface/100, ".spr") );
 
 	m_faceRight = true;
 	SetCurrentAnimation(MANUELROLE_STAND, m_faceRight);

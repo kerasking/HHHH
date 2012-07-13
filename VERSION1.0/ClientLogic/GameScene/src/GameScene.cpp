@@ -831,20 +831,20 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 		{ // "邀请组队"
 			NDTransData bao(_MSG_TEAM);
 			bao << (unsigned short)MSG_TEAM_INVITE << player.m_id << role->m_id;
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 		}
 		else if ( str == "加入队伍")
 		{ // "加入队伍"
 			NDTransData bao(_MSG_TEAM);
 			bao << (unsigned short)MSG_TEAM_JOIN << player.m_id << role->m_id;
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 			
 		}
 		else if ( str == "邀请组队")
 		{ // "邀请组队"
 			NDTransData bao(_MSG_TEAM);
 			bao << (unsigned short)MSG_TEAM_INVITE << player.m_id << role->m_id;
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 		}
 		else if ( str == "交易")
 		{ // "交易"
@@ -878,19 +878,19 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 		{ // "查看宠物"
 			NDTransData bao(_MSG_SEE);
 			bao << (unsigned char)3 << role->m_id;
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 		}
 		else if ( str == "拜师")
 		{ // "拜师"
 			NDTransData bao(_MSG_TUTOR);
 			bao << (unsigned char)1 << role->m_id;
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 		}
 		else if ( str == "收徒")
 		{ // "收徒"
 			NDTransData bao(_MSG_TUTOR);
 			bao << (unsigned char)4 << role->m_id;
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 		}
 		else if ( str == "查看摆摊" )
 		{
@@ -899,7 +899,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 			
 			NDTransData bao(_MSG_BOOTH);
 			bao << Byte(BOOTH_QUEST) << role->m_id << int(0);
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 		}
 
 		m_tlInteractive->SetVisible(false);
@@ -962,7 +962,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 //			{
 //				NDTransData bao(_MSG_SHOP_CENTER);
 //				bao << (unsigned char)0;
-//				SEND_DATA(bao);
+//				// SEND_DATA(bao);
 //				ShowProgressBar;
 //			} 
 //			else 
@@ -1002,13 +1002,13 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 		{
 			ShowProgressBar;
 			NDTransData bao(_MSG_BILLBOARD_QUERY);
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 		}
 		else if (strCurSel == "活动")
 		{
 			ShowProgressBar;
 			NDTransData bao(_MSG_ACTIVITY);
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 		}
 		else if (strCurSel == "客服")
 		{
@@ -1193,7 +1193,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 		else if (strCurSel == "卡死复位")
 		{
 			NDTransData bao(_MSG_RESET_POSITION);
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 			
 			ShowProgressBar;
 		}
@@ -1233,7 +1233,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 		else if (strCurSel == "客服声明")
 		{
 			NDTransData bao(_MSG_CUSTOMER_SERVICE);
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 		}
 		else if (strCurSel == "公告查看")
 		{
@@ -1312,7 +1312,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 			
 			bao << NDPlayer::defaultHero().m_id << int(0);
 			
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 		}
 		else if (strCurSel == "邀请入队")
 		{
@@ -1381,7 +1381,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 			m_stackUIMenu.clear();
 			NDTransData bao(_MSG_TEAM);
 			bao << (unsigned short)MSG_TEAM_LEAVE << NDPlayer::defaultHero().m_id << int(0);
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 		}
 		else if (strCurSel == "显示成员")
 		{
@@ -1428,7 +1428,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 			m_stackUIMenu.clear();
 			NDTransData bao(_MSG_TEAM);
 			bao << (unsigned short)MSG_TEAM_DISMISS << NDPlayer::defaultHero().m_id << int(0);
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 		}
 		else if (strCurSel == "提升队长")
 		{
@@ -1468,14 +1468,14 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 		{
 			NDTransData bao(_MSG_SHOPINFO);
 			bao << int(99998) << (unsigned char)0;
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 			ShowProgressBar;
 			//map_vip_item& items = ItemMgrObj.GetVipStore();
 //			if (items.empty()) 
 //			{
 //				NDTransData bao(_MSG_SHOP_CENTER);
 //				bao << (unsigned char)0;
-//				SEND_DATA(bao);
+//				// SEND_DATA(bao);
 //				ShowProgressBar;
 //			} 
 //			else 
@@ -1489,7 +1489,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 		{
 			NDTransData bao(_MSG_ENTER_HAMLET);
 			bao << (unsigned char)2 << int(0);
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 		} 
 		else if (strCurSel == "远程进入")
 		{
@@ -1547,7 +1547,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 				NDTransData bao(_MSG_TEAM);
 				bao << (unsigned short)MSG_TEAM_INVITE << NDPlayer::defaultHero().m_id
 					<< role->m_id;
-				SEND_DATA(bao);
+				// SEND_DATA(bao);
 			}
 		}
 		m_tlInvitePlayers->SetVisible(false);
@@ -1566,7 +1566,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 				NDTransData bao(_MSG_TEAM);
 				bao << (unsigned short)MSG_TEAM_KICK << NDPlayer::defaultHero().m_id
 				<< role->m_id;
-				SEND_DATA(bao);
+				// SEND_DATA(bao);
 			}
 		}
 		m_tlKickPlayers->SetVisible(false);
@@ -1585,7 +1585,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 				NDTransData bao(_MSG_TEAM);
 				bao << (unsigned short)MSG_TEAM_CHGLEADER << NDPlayer::defaultHero().m_id
 				<< role->m_id;
-				SEND_DATA(bao);
+				// SEND_DATA(bao);
 			}
 		}
 		m_tlTiShengPlayers->SetVisible(false);
@@ -1596,7 +1596,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, 
 		int iTag = cell->GetTag();
 		NDTransData bao(_MSG_BILLBOARD);
 		bao << iTag << int(-1);
-		SEND_DATA(bao);
+		// SEND_DATA(bao);
 		m_tlPaiHang->SetVisible(false);
 		SetUIShow(false);
 		ShowProgressBar;
@@ -1970,7 +1970,7 @@ void GameScene::OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex
 	{
 		NDTransData  bao(_MSG_ENTER_HAMLET);
 		bao << (unsigned char)1 << int(0);
-		SEND_DATA(bao);
+		// SEND_DATA(bao);
 		dialog->Close();
 		return;
 	}
@@ -2027,7 +2027,7 @@ void GameScene::OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex
 			NDTransData bao(_MSG_TASK_ITEM_OPT);
 			bao << (Byte)this->m_curSelTaskAwardItemIndex;
 			
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 			
 			for (VEC_ITEM_IT it = this->m_vTaskAwardItem.begin(); it != m_vTaskAwardItem.end(); it++) {
 				SAFE_DELETE(*it);
@@ -2044,7 +2044,7 @@ void GameScene::OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex
 		dialog->Close();
 		if (buttonIndex == 1) {
 			NDTransData bao(_MSG_DELETEROLE);
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 			//ShowProgressBar;
 			quitGame();
 		}
@@ -2550,7 +2550,7 @@ bool GameScene::OnCustomViewConfirm(NDUICustomView* customView)
 				} else {
 					NDTransData bao(_MSG_GM_MAIL);
 					bao.WriteUnicodeString(text);
-					SEND_DATA(bao);
+					// SEND_DATA(bao);
 				}
 			}
 		}
@@ -2583,7 +2583,7 @@ bool GameScene::OnCustomViewConfirm(NDUICustomView* customView)
 			bao.WriteUnicodeString(mgr.GetUserName());
 			bao.WriteUnicodeString(oldPwd);
 			bao.WriteUnicodeString(newPwd1);
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 		}
 			break;
 		default:
@@ -2834,7 +2834,7 @@ void GameScene::ShowShopAndRecharge()
 	{
 		NDTransData bao(_MSG_SHOP_CENTER);
 		bao << (unsigned char)0;
-		SEND_DATA(bao);
+		// SEND_DATA(bao);
 		ShowProgressBar;
 	}
 	else

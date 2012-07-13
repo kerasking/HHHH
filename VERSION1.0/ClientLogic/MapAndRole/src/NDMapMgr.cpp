@@ -2683,7 +2683,7 @@ namespace NDEngine
 					ShowProgressBar;
 					NDTransData bao(_MSG_AUCTION);
 					bao << Byte(AUCTION_USER) << 0 << 1;
-					SEND_DATA(bao);
+					// SEND_DATA(bao);
 				}
 					break;
 				case 1: // 搜索物品
@@ -2738,7 +2738,7 @@ namespace NDEngine
 	//		
 	//		NDTransData bao(_MSG_GIFT);
 	//		bao.WriteUnicodeString(stramount);
-	//		SEND_DATA(bao);
+	//		// SEND_DATA(bao);
 	//	}
 	//	else if (iTag == eCVOP_Wish) 
 	//	{
@@ -2752,7 +2752,7 @@ namespace NDEngine
 	//		NDTransData bao(_MSG_WISH);
 	//		bao << (unsigned char)2 << (unsigned char)0;
 	//		bao.WriteUnicodeString(stramount);
-	//		SEND_DATA(bao);
+	//		// SEND_DATA(bao);
 	//	}
 	//	else if (iTag == eCVOP_FarmName ||
 	//			 iTag == eCVOP_FarmWelcomeName ||
@@ -2763,14 +2763,14 @@ namespace NDEngine
 	//		bao << (unsigned char)para;
 	//		if (iTag == eCVOP_FarmHarmletName) bao << int(m_iCurDlgNpcID);
 	//		bao.WriteUnicodeString(stramount);
-	//		SEND_DATA(bao);
+	//		// SEND_DATA(bao);
 	//	}
 	//	else if (iTag == eCVOP_FarmBuildingName)
 	//	{
 	//		NDTransData bao(_MSG_SET_FARM_ENTITY_NAME);
 	//		bao << int(m_iCurDlgNpcID);
 	//		bao.WriteUnicodeString(stramount);
-	//		SEND_DATA(bao);
+	//		// SEND_DATA(bao);
 	//	}
 	//	
 	//	return true;
@@ -5836,7 +5836,7 @@ namespace NDEngine
 		NDTransData bao(_MSG_POSITION);
 		bao << player.m_id << (unsigned short)0 << (unsigned short)0 
 		<< mapId << (unsigned short)_WORD_MAPCHANGE << int(0);
-		SEND_DATA(bao);
+		// SEND_DATA(bao);
 	}
 	
 	void NDMapMgr::throughMap(int mapX, int mapY, int mapId)
@@ -5853,7 +5853,7 @@ namespace NDEngine
 		NDTransData bao(_MSG_POSITION);
 		bao << player.m_id << (unsigned short)mapX << (unsigned short)mapY
 		<< mapId << (unsigned short)_POSITION_TRANS_FLY << int(0);
-		SEND_DATA(bao);
+		// SEND_DATA(bao);
 	}
 	
 	void NDMapMgr::NavigateTo(int mapX, int mapY, int mapId)
@@ -6402,7 +6402,7 @@ namespace NDEngine
 						{
 							NDTransData bao(_MSG_SHOPINFO);
 							bao << int(npc->m_id) << (unsigned char)0;
-							SEND_DATA(bao); 
+							// SEND_DATA(bao); 
 							ShowProgressBar;
 						}
 						else
@@ -6430,7 +6430,7 @@ namespace NDEngine
 						{
 							NDTransData bao(_MSG_ITEMKEEPER);
 							bao << int(0) << (unsigned char)MSG_STORAGE_ITEM_QUERY << iNPCID;
-							SEND_DATA(bao);
+							// SEND_DATA(bao);
 							ShowProgressBar;
 						} else {
 							NDDirector::DefaultDirector()->PushScene(GameStorageScene::Scene());
@@ -6529,7 +6529,7 @@ namespace NDEngine
 						if (it == m_mapNpcSkillStore.end()) { // 没有存，就请求
 							NDTransData bao(_MSG_MAGIC_GOODS);
 							bao << idCurNpc;
-							SEND_DATA(bao);
+							// SEND_DATA(bao);
 							ShowProgressBar;
 						} else {
 							LearnSkillUILayer::Show(it->second);
@@ -7070,7 +7070,7 @@ namespace NDEngine
 		
 		NDTransData bao(_MSG_BATTLEACT);
 		bao << (unsigned char)pkType << (unsigned char)0 << (unsigned char)1 << int(role.m_id);
-		SEND_DATA(bao);
+		// SEND_DATA(bao);
 	}
 	
 	void trade(int n, int action)
@@ -7078,7 +7078,7 @@ namespace NDEngine
 		NDTransData bao(_MSG_TRADE);
 		bao << n;// 交易对象ID 物品ID 交易银两 4个字节
 		bao << (unsigned char)action;
-		SEND_DATA(bao);
+		// SEND_DATA(bao);
 	}
 	
 	bool NDMapMgr::isFriendAdded(string& name)
@@ -7108,7 +7108,7 @@ namespace NDEngine
 				bao << (Byte)_FRIEND_APPLY
 				<< (Byte)1;
 				bao.WriteUnicodeString(name);
-				SEND_DATA(bao);
+				// SEND_DATA(bao);
 			}
 		}
 	}
@@ -7130,7 +7130,7 @@ namespace NDEngine
 		
 		NDTransData bao(_MSG_REHEARSE);
 		bao << (unsigned char)btAction << int(idTarget);
-		SEND_DATA(bao);
+		// SEND_DATA(bao);
 	}
 	
 	void sendQueryPlayer(int roleId, int btAction) 
@@ -7138,14 +7138,14 @@ namespace NDEngine
 		ShowProgressBar;
 		NDTransData bao(_MSG_SEE);
 		bao << (unsigned char)btAction << int(roleId);
-		SEND_DATA(bao);
+		// SEND_DATA(bao);
 	}
 	
 	void sendTeamAction(int senderID, int action)
 	{
 		NDTransData bao(_MSG_TEAM);
 		bao << (unsigned short)action << int(NDPlayer::defaultHero().m_id) << int(senderID);
-		SEND_DATA(bao);
+		// SEND_DATA(bao);
 	}
 	
 	void sendChargeInfo(int iID) 
@@ -7153,7 +7153,7 @@ namespace NDEngine
 		NDTransData bao(MB_MSG_RECHARGE);
 		bao << int(iID);
 		bao.WriteUnicodeString(loadPackInfo(STRPARAM));
-		SEND_DATA(bao);
+		// SEND_DATA(bao);
 		
 		ShowProgressBar;
 	}
@@ -7165,7 +7165,7 @@ namespace NDEngine
 		<< playerId 
 		<< (unsigned short)usType 
 		<< (unsigned short)usData;
-		SEND_DATA(bao);
+		// SEND_DATA(bao);
 		
 		//ShowProgressBar;
 	}
@@ -7332,7 +7332,7 @@ namespace NDEngine
 			bao << int(0); // uid 填0即可
 			bao << ::time(NULL);
 			bao.WriteUnicodeString(ss.str());
-			SEND_DATA(bao);
+			// SEND_DATA(bao);
 			
 			[[NDCrashUpload Shared] ResetDataTransBefore];
 			

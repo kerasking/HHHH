@@ -1457,27 +1457,27 @@ EnhancedObj* ItemMgr::QueryEnhancedType(int idEnhancedType)
 // 			NSString *type = [NSString stringWithFormat:@"%s", NDPath::GetResPath("enhancedtype.ini")];
 // 			NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:type]; ///<临时注释掉 --郭浩
 			
-			if (stream)
-			{
-				[stream open];
-				
-				EnhancedObj* pType = new EnhancedObj;
-				
-				[stream setProperty:[NSNumber numberWithInt:itIndex->second] forKey:NSStreamFileCurrentOffsetKey];
-				
-				pType->idType = [stream readInt];
-				pType->addpoint = [stream readShort];
-				pType->percent = [stream readByte];
-				pType->req_item = [stream readInt];
-				pType->req_num = [stream readByte];
-				pType->req_money = [stream readInt];
-				
-				m_mapEnhancedType[idEnhancedType] = pType;
-				
-				[stream close];
-				
-				return pType;
-			}
+// 			if (stream)
+// 			{
+// 				[stream open];
+// 				
+// 				EnhancedObj* pType = new EnhancedObj;
+// 				
+// 				[stream setProperty:[NSNumber numberWithInt:itIndex->second] forKey:NSStreamFileCurrentOffsetKey];
+// 				
+// 				pType->idType = [stream readInt];
+// 				pType->addpoint = [stream readShort];
+// 				pType->percent = [stream readByte];
+// 				pType->req_item = [stream readInt];
+// 				pType->req_num = [stream readByte];
+// 				pType->req_money = [stream readInt];
+// 				
+// 				m_mapEnhancedType[idEnhancedType] = pType;
+// 				
+// 				[stream close];
+// 				
+// 				return pType;
+// 			}
 		}
 	}
 	
@@ -1494,67 +1494,68 @@ NDItemType* ItemMgr::QueryItemType(OBJID idItemType)
 		if (itIndex != m_mapItemTypeIndex.end())
 		{
 			//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResourcePath().c_str()];
-			NSString *itemtype = [NSString stringWithFormat:@"%s", NDPath::GetResPath("itemtype.ini")];
-			NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:itemtype];
-			
-			if (stream)
-			{
-				[stream open];
-				
-				NDItemType* pItemType = new NDItemType();
-				
-				[stream setProperty:[NSNumber numberWithInt:itIndex->second] forKey:NSStreamFileCurrentOffsetKey];
-				
-				pItemType->m_data.m_id = [stream readInt];
-				pItemType->m_name = [[stream readUTF8String] UTF8String];
-				pItemType->m_data.m_level = [stream readByte];
-				pItemType->m_data.m_req_profession = [stream readInt];
-				pItemType->m_data.m_req_level = [stream readShort];
-				pItemType->m_data.m_req_sex = [stream readShort];
-				pItemType->m_data.m_req_phy = [stream readShort];
-				pItemType->m_data.m_req_dex = [stream readShort];
-				pItemType->m_data.m_req_mag = [stream readShort];
-				pItemType->m_data.m_req_def = [stream readShort];
-				pItemType->m_data.m_price = [stream readInt];
-				pItemType->m_data.m_emoney = [stream readInt];
-				pItemType->m_data.m_save_time = [stream readInt];
-				pItemType->m_data.m_life = [stream readShort];
-				pItemType->m_data.m_mana = [stream readInt];
-				pItemType->m_data.m_amount_limit = [stream readShort];
-				pItemType->m_data.m_hard_hitrate = [stream readShort];
-				pItemType->m_data.m_mana_limit = [stream readShort];
-				pItemType->m_data.m_atk_point_add = [stream readShort];
-				pItemType->m_data.m_def_point_add = [stream readShort];
-				pItemType->m_data.m_mag_point_add = [stream readShort];
-				pItemType->m_data.m_dex_point_add = [stream readShort];
-				pItemType->m_data.m_atk = [stream readShort];
-				pItemType->m_data.m_mag_atk = [stream readShort];
-				pItemType->m_data.m_def = [stream readShort];
-				pItemType->m_data.m_mag_def = [stream readShort];
-				pItemType->m_data.m_hitrate = [stream readShort];
-				pItemType->m_data.m_atk_speed = [stream readShort];
-				pItemType->m_data.m_dodge = [stream readShort];
-				pItemType->m_data.m_monopoly = [stream readShort];
-				pItemType->m_data.m_lookface = [stream readInt];
-				pItemType->m_data.m_iconIndex = [stream readInt];
-				pItemType->m_data.m_holeNum = [stream readByte];
-				pItemType->m_data.m_suitData = [stream readInt];				
-				pItemType->m_des = [[stream readUTF8String] UTF8String];
-				pItemType->m_data.m_idUplev = [stream readInt];
-				pItemType->m_data.m_enhancedId = [stream readInt];
-				pItemType->m_data.m_enhancedStatus = [stream readInt];
-				pItemType->m_data.m_recycle_time = [stream readInt];
-				
-				if (pItemType->m_des.length() < 4) { // 1个汉字以下不显示
-					pItemType->m_des.clear();
-				}
-				
-				m_mapItemType[idItemType] = pItemType;
-				
-				[stream close];
-				
-				return pItemType;
-			}
+			///< 临时性注释，郭浩 begin.
+// 			NSString *itemtype = [NSString stringWithFormat:@"%s", NDPath::GetResPath("itemtype.ini")];
+// 			NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:itemtype];
+// 			
+// 			if (stream)
+// 			{
+// 				[stream open];
+// 				
+// 				NDItemType* pItemType = new NDItemType();
+// 				
+// 				[stream setProperty:[NSNumber numberWithInt:itIndex->second] forKey:NSStreamFileCurrentOffsetKey];
+// 				
+// 				pItemType->m_data.m_id = [stream readInt];
+// 				pItemType->m_name = [[stream readUTF8String] UTF8String];
+// 				pItemType->m_data.m_level = [stream readByte];
+// 				pItemType->m_data.m_req_profession = [stream readInt];
+// 				pItemType->m_data.m_req_level = [stream readShort];
+// 				pItemType->m_data.m_req_sex = [stream readShort];
+// 				pItemType->m_data.m_req_phy = [stream readShort];
+// 				pItemType->m_data.m_req_dex = [stream readShort];
+// 				pItemType->m_data.m_req_mag = [stream readShort];
+// 				pItemType->m_data.m_req_def = [stream readShort];
+// 				pItemType->m_data.m_price = [stream readInt];
+// 				pItemType->m_data.m_emoney = [stream readInt];
+// 				pItemType->m_data.m_save_time = [stream readInt];
+// 				pItemType->m_data.m_life = [stream readShort];
+// 				pItemType->m_data.m_mana = [stream readInt];
+// 				pItemType->m_data.m_amount_limit = [stream readShort];
+// 				pItemType->m_data.m_hard_hitrate = [stream readShort];
+// 				pItemType->m_data.m_mana_limit = [stream readShort];
+// 				pItemType->m_data.m_atk_point_add = [stream readShort];
+// 				pItemType->m_data.m_def_point_add = [stream readShort];
+// 				pItemType->m_data.m_mag_point_add = [stream readShort];
+// 				pItemType->m_data.m_dex_point_add = [stream readShort];
+// 				pItemType->m_data.m_atk = [stream readShort];
+// 				pItemType->m_data.m_mag_atk = [stream readShort];
+// 				pItemType->m_data.m_def = [stream readShort];
+// 				pItemType->m_data.m_mag_def = [stream readShort];
+// 				pItemType->m_data.m_hitrate = [stream readShort];
+// 				pItemType->m_data.m_atk_speed = [stream readShort];
+// 				pItemType->m_data.m_dodge = [stream readShort];
+// 				pItemType->m_data.m_monopoly = [stream readShort];
+// 				pItemType->m_data.m_lookface = [stream readInt];
+// 				pItemType->m_data.m_iconIndex = [stream readInt];
+// 				pItemType->m_data.m_holeNum = [stream readByte];
+// 				pItemType->m_data.m_suitData = [stream readInt];				
+// 				pItemType->m_des = [[stream readUTF8String] UTF8String];
+// 				pItemType->m_data.m_idUplev = [stream readInt];
+// 				pItemType->m_data.m_enhancedId = [stream readInt];
+// 				pItemType->m_data.m_enhancedStatus = [stream readInt];
+// 				pItemType->m_data.m_recycle_time = [stream readInt];
+// 				
+// 				if (pItemType->m_des.length() < 4) { // 1个汉字以下不显示
+// 					pItemType->m_des.clear();
+// 				}
+// 				
+// 				m_mapItemType[idItemType] = pItemType;
+// 				
+// 				[stream close];
+// 				
+// 				return pItemType;
+// 			}   ///临时性注释 郭浩 end
 		}
 	}
 	
@@ -1564,79 +1565,89 @@ NDItemType* ItemMgr::QueryItemType(OBJID idItemType)
 void ItemMgr::LoadItemTypeIndex()
 {
 	//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResourcePath().c_str()];
-	NSString *itemtypeTable = [NSString stringWithFormat:@"%s", NDPath::GetResPath("itemtypeTable.ini")];
-	NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:itemtypeTable];
-	
-	if (stream)
-	{
-		[stream open];
-		
-		int size = [stream readInt];
-		
-		for (int i = 0; i < size; i++)
-		{
-			OBJID idItemType = [stream readInt];
-			int index = [stream readInt];
-			m_mapItemTypeIndex.insert(MAP_ITEMTYPE_INDEX::value_type(idItemType, index));
-		}
-		
-		[stream close];
-	}
+
+
+	/***
+	* 临时性注释，到函数尾部 --郭浩
+	*/
+
+// 	NSString *itemtypeTable = [NSString stringWithFormat:@"%s", NDPath::GetResPath("itemtypeTable.ini")];
+// 	NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:itemtypeTable];
+// 
+// 	if (stream)
+// 	{
+// 		[stream open];
+// 
+// 		int size = [stream readInt];
+// 
+// 		for (int i = 0; i < size; i++)
+// 		{
+// 			OBJID idItemType = [stream readInt];
+// 			int index = [stream readInt];
+// 			m_mapItemTypeIndex.insert(MAP_ITEMTYPE_INDEX::value_type(idItemType, index));
+// 		}
+// 
+// 		[stream close];
+// 	}
 }
 
 void ItemMgr::LoadEnhancedTypeIndex()
 {
 	//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResourcePath().c_str()];
-	NSString *itemtypeTable = [NSString stringWithFormat:@"%s", NDPath::GetResPath("enhancedtypeTable.ini")];
-	NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:itemtypeTable];
-	
-	if (stream)
-	{
-		[stream open];
-		
-		int size = [stream readInt];
-		
-		for (int i = 0; i < size; i++)
-		{
-			OBJID idType = [stream readInt];
-			int index = [stream readInt];
-			m_mapEnhancedTypeIndex.insert(MAP_ENHANCEDTYPE_INDEX::value_type(idType, index));
-		}
-		
-		[stream close];
-	}
+
+	/***
+	* 临时性注释，到函数尾部 --郭浩
+	*/
+// 	NSString *itemtypeTable = [NSString stringWithFormat:@"%s", NDPath::GetResPath("enhancedtypeTable.ini")];
+// 	NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:itemtypeTable];
+// 
+// 	if (stream)
+// 	{
+// 		[stream open];
+// 
+// 		int size = [stream readInt];
+// 
+// 		for (int i = 0; i < size; i++)
+// 		{
+// 			OBJID idType = [stream readInt];
+// 			int index = [stream readInt];
+// 			m_mapEnhancedTypeIndex.insert(MAP_ENHANCEDTYPE_INDEX::value_type(idType, index));
+// 		}
+// 
+// 		[stream close];
+// 	}
 }
 
 void ItemMgr::LoadItemAddtion()
 {
 	//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResourcePath().c_str()];
-	NSString *itemAdditionTable = [NSString stringWithFormat:@"%s", NDPath::GetResPath("addition.ini")];
-	NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:itemAdditionTable];
-	
-	if (stream)
-	{
-		[stream open];
-		
-		while ( [stream hasBytesAvailable] ) 
-		{
-			int tempAddLevel = 0;
-			
-			int readLen = [stream read:(uint8_t *)(&tempAddLevel) maxLength:1];
-			
-			if ( !readLen ) 
-			{
-				break;
-			}
-			
-			//int tempAddLevel = [stream readByte];
-			
-			int tempPercent = [stream readShort];
-			
-			m_mapItemAddtion.insert(map_item_addtion_pair(tempAddLevel, tempPercent));
-		}
-		
-		[stream close];
-	}
+// 	NSString *itemAdditionTable = [NSString stringWithFormat:@"%s", NDPath::GetResPath("addition.ini")];
+// 	NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:itemAdditionTable];
+// 	
+// 	if (stream)
+// 	{
+// 		[stream open];
+// 		
+// 		while ( [stream hasBytesAvailable] ) 
+// 		{
+// 			int tempAddLevel = 0;
+// 			
+// 			int readLen = [stream read:(uint8_t *)(&tempAddLevel) maxLength:1];
+// 			
+// 			if ( !readLen ) 
+// 			{
+// 				break;
+// 			}
+// 			
+// 			//int tempAddLevel = [stream readByte];
+// 			
+// 			int tempPercent = [stream readShort];
+// 			
+// 			m_mapItemAddtion.insert(map_item_addtion_pair(tempAddLevel, tempPercent));
+// 		}
+// 		
+// 		[stream close];
+// 	}
 }
 
 int ItemMgr::QueryPercentByLevel(int level)
@@ -2317,21 +2328,21 @@ void sendItemUse(Item& item) {
 	NDTransData bao(_MSG_ITEM);
 	bao << (int)item.iID << (unsigned char)(Item::ITEM_USE);
 	
-	SEND_DATA(bao);
+//	// SEND_DATA(bao);
 }
 
 void sendDropItem(Item& item) {
 	ShowProgressBar;
 	NDTransData bao(_MSG_ITEM);
 	bao << (int)item.iID << (unsigned char)Item::ITEM_DROP;
-	SEND_DATA(bao);
+	// SEND_DATA(bao);
 }
-						 
+
 void sendItemRepair(int itemID, int action) {
 	ShowProgressBar;
 	NDTransData bao(_MSG_ITEM);
 	bao << itemID << (unsigned char)action;
-	SEND_DATA(bao);
+	// SEND_DATA(bao);
 }
 
 int GetItemPos(Item& item)

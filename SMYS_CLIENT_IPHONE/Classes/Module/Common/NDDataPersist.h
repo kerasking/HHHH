@@ -88,9 +88,13 @@ public:
 	void SaveGameSetting();
 	void SaveLoginData();
 	
-	void SetData(uint index, NSString* key, const char* data);
-	const char* GetData(uint index, NSString* type);
-	
+	/***
+	* 临时性注释 郭浩 begin
+	*/
+// 	void SetData(uint index, NSString* key, const char* data);
+// 	const char* GetData(uint index, NSString* type);
+	///< end
+
 	void AddAcount(const char* account, const char* pwd);
 	void GetAccount(VEC_ACCOUNT& vAccount);
 	void SaveAccountList();
