@@ -18,7 +18,7 @@
 #undef DataFilePath
 #endif
 
-NSString* DataFilePath();
+const char* DataFilePath();
 
 #define kDataFileName [NSString stringWithFormat:@"%@data.plist", DataFilePath()]
 

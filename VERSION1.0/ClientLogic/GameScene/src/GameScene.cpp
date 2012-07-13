@@ -22,7 +22,7 @@
 #include "CGPointExtension.h"
 #include "GameSettingScene.h"
 #include "NDMiniMap.h"
-#include "NDDataPersist.h"
+//#include "NDDataPersist.h"
 #include "NDMapMgr.h"
 #include "NDUISynLayer.h"
 #include "NDDataTransThread.h"

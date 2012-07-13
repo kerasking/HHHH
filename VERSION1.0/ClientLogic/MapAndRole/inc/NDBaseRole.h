@@ -17,8 +17,8 @@
 namespace NDEngine
 {
 	#define RING_IMAGE		(NDPath::GetImgPath("ui_ring.png"))
-	#define SHADOW_IMAGE	(GetImgPath("shadow.png"))
-	#define BIG_SHADOW_IMAGE (GetImgPath("shadowBig.png"))
+	#define SHADOW_IMAGE	(NDPath::GetImgPath("shadow.png"))
+	#define BIG_SHADOW_IMAGE (NDPath::GetImgPath("shadowBig.png"))
 	
 	#define CAMP_NEUTRAL	0
 	#define CAMP_TANG		1

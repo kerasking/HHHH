@@ -1137,7 +1137,7 @@ void NDBaseRole::SafeAddEffect(NDSprite*& sprite, std::string file)
 	if (sprite == NULL && !file.empty())
 	{
 		sprite = new NDSprite;
-		sprite->Initialization(GetAniPath(file.c_str()));
+		sprite->Initialization(NDPath::GetAniPath(file.c_str()));
 		sprite->SetCurrentAnimation(0, false);
 	}
 }

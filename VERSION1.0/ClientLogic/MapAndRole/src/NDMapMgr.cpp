@@ -72,7 +72,7 @@
 #include "SyndicateInviteList.h"
 #include "SyndicateElectionList.h"
 #include "Chat.h"
-#include "NDDataPersist.h"
+//#include "NDDataPersist.h"
 #include "SyndicateVoteList.h"
 #include "SyndicateNote.h"
 #include "EquipUpgradeScene.h"

@@ -20,7 +20,7 @@
 #include "NDAutoPath.h"
 #include "NDUtility.h"
 #include "GameScene.h"
-#include "NDDataPersist.h"
+//#include "NDDataPersist.h"
 #include "NDUtility.h"
 #include "Battle.h"
 #include "GameSceneLoading.h"
@@ -120,180 +120,130 @@ namespace NDEngine
 	
 	void NDManualRole::Update(unsigned long ulDiff)
 	{
-		if (isSafeProtected) 
-		{
-			int intervalTime = [NSDate timeIntervalSinceReferenceDate] - beginProtectedTime;
-			if (intervalTime > BEGIN_PROTECTED_TIME)
-			{
-				setSafeProtected(false);
-			}
-		}
-		
-		if (bUpdateDiff)
-		{
-			static unsigned long ulCount = 0;
-			if (ulCount >= 250)
-			{
-				ulCount = 0;
-				bUpdateDiff = false;
-			}
-			else 
-			{
-				ulCount += ulDiff;
-				return;
-			}
-		}
-		
-		updateFlagOfQiZhi();
-		
-		if (!isTeamLeader() && isTeamMember()) 
-		{
-			return;
-		}
-		
-		if (isTeamLeader() && CheckToLastPos()) 
-		{
-			if (m_dequeWalk.empty()) 
-			{
-				return;
-			}
-			
-			SetTeamToLastPos();
-			return;
-		}
-		
-		if ( !m_moving )
-		{
-			if ( m_dequeWalk.size() )
-			{
-				std::vector<CGPoint> vec_pos;
-				deque<int>::iterator it = m_dequeWalk.begin();
-				CGPoint posCur = GetPosition();
-				
-				for (; it != m_dequeWalk.end(); it++) 
-				{
-					int dir = *it;
-					//int dir = m_dequeWalk.front();
-					
-					posCur.x -= DISPLAY_POS_X_OFFSET;
-					posCur.y -= DISPLAY_POS_Y_OFFSET;
-					
-					if ( int(posCur.x) % MAP_UNITSIZE != 0 || int(posCur.y) % MAP_UNITSIZE != 0)
-					{
-						//continue;
-						return;
-					}
-					
-					int usOldRecordX	= (posCur.x)/MAP_UNITSIZE;
-					int usOldRecordY	= (posCur.y)/MAP_UNITSIZE;
-					int usRecordX		= usOldRecordX;
-					int usRecordY		= usOldRecordY;
-					
-					if ( !this->GetXYByDir(usOldRecordX, usOldRecordY, dir, usRecordX, usRecordY) )
-					{
-						continue;
-					}
-					
-					
-					if (it == m_dequeWalk.begin()) 
-					{
-						if (IsDirFaceRight(dir))
-						{
-							m_faceRight = true;
-							m_reverse = true;
-						}
-						else
-						{
-							m_faceRight = false;
-							m_reverse = false;
-						}
-					}
-					
-					posCur = ccp(usRecordX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, usRecordY*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
-					
-					vec_pos.push_back(posCur);
-					
-					//m_dequeWalk.pop_front();
-				}
-				m_dequeWalk.clear();
-				
-				if (!vec_pos.empty()) 
-				{
-					SetAction(true);
-					if (isTeamLeader()) 
-					{
-						teamMemberAction(true);
-					}
-					this->WalkToPosition(vec_pos, SpriteSpeedStep4, false);
-				}
-				
+				/***
+				* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+				* begin
+				*/
+// 		
+// 		if (isSafeProtected) 
+// 		{
+// 			int intervalTime = [NSDate timeIntervalSinceReferenceDate] - beginProtectedTime;
+// 			if (intervalTime > BEGIN_PROTECTED_TIME)
+// 			{
+// 				setSafeProtected(false);
+// 			}
+// 		}
+// 
+// 		if (bUpdateDiff)
+// 		{
+// 			static unsigned long ulCount = 0;
+// 			if (ulCount >= 250)
+// 			{
+// 				ulCount = 0;
+// 				bUpdateDiff = false;
+// 			}
+// 			else 
+// 			{
+// 				ulCount += ulDiff;
+// 				return;
+// 			}
+// 		}
+// 
+// 		updateFlagOfQiZhi();
+// 
+// 		if (!isTeamLeader() && isTeamMember()) 
+// 		{
+// 			return;
+// 		}
+// 
+// 		if (isTeamLeader() && CheckToLastPos()) 
+// 		{
+// 			if (m_dequeWalk.empty()) 
+// 			{
+// 				return;
+// 			}
+// 
+// 			SetTeamToLastPos();
+// 			return;
+// 		}
+// 
+// 		if ( !m_moving )
+// 		{
+// 			if ( m_dequeWalk.size() )
+// 			{
+// 				std::vector<CGPoint> vec_pos;
+// 				deque<int>::iterator it = m_dequeWalk.begin();
+// 				CGPoint posCur = GetPosition();
+// 
+// 				for (; it != m_dequeWalk.end(); it++) 
+// 				{
+// 					int dir = *it;
+// 					//int dir = m_dequeWalk.front();
+// 
+// 					posCur.x -= DISPLAY_POS_X_OFFSET;
+// 					posCur.y -= DISPLAY_POS_Y_OFFSET;
+// 
+// 					if ( int(posCur.x) % MAP_UNITSIZE != 0 || int(posCur.y) % MAP_UNITSIZE != 0)
+// 					{
+// 						//continue;
+// 						return;
+// 					}
+// 
+// 					int usOldRecordX	= (posCur.x)/MAP_UNITSIZE;
+// 					int usOldRecordY	= (posCur.y)/MAP_UNITSIZE;
+// 					int usRecordX		= usOldRecordX;
+// 					int usRecordY		= usOldRecordY;
+// 
+// 					if ( !this->GetXYByDir(usOldRecordX, usOldRecordY, dir, usRecordX, usRecordY) )
+// 					{
+// 						continue;
+// 					}
+// 
+// 
+// 					if (it == m_dequeWalk.begin()) 
+// 					{
+// 						if (IsDirFaceRight(dir))
+// 						{
+// 							m_faceRight = true;
+// 							m_reverse = true;
+// 						}
+// 						else
+// 						{
+// 							m_faceRight = false;
+// 							m_reverse = false;
+// 						}
+// 					}
+// 
+// 					posCur = ccp(usRecordX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, usRecordY*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
+// 
+// 					vec_pos.push_back(posCur);
+// 
+// 					//m_dequeWalk.pop_front();
+// 				}
+// 				m_dequeWalk.clear();
+// 
+// 				if (!vec_pos.empty()) 
+// 				{
+// 					SetAction(true);
+// 					if (isTeamLeader()) 
+// 					{
+// 						teamMemberAction(true);
+// 					}
+// 					this->WalkToPosition(vec_pos, SpriteSpeedStep4, false);
+// 				}
 
-				
-				//int dir = m_dequeWalk.front();
-//				
-//				CGPoint pos;
-//				pos.x = GetPosition().x-DISPLAY_POS_X_OFFSET;
-//				pos.y = GetPosition().y-DISPLAY_POS_Y_OFFSET;
-//				
-//				if ( int(pos.x) % 16 != 0 || int(pos.y) % 16 != 0)
-//				{
-//					return;
-//				}
-//				
-//				int usRecordX = (pos.x)/16;
-//				int usRecordY = (pos.y)/16;
-//				
-//				switch(dir)
-//				{
-//					case 0:
-//						usRecordY--;
-//						break;
-//					case 1:
-//						usRecordY++;
-//						break;
-//					case 2:
-//						usRecordX--;
-//						m_faceRight = false;
-//						m_reverse = false;
-//						break;
-//					case 3:
-//						usRecordX++;
-//						m_faceRight = true;
-//						m_reverse = true;
-//						break;
-//					default:
-//						return;
-//				}
-//				
-//				m_dequeWalk.pop_front();
-//			
-//				SetAction(true);
-//				if (isTeamLeader()) 
-//				{
-//					teamMemberAction(true);
-//				}
-//				
-//				std::vector<CGPoint> vec_pos;
-//				CGPoint pos = ccp(usRecordX*16+DISPLAY_POS_X_OFFSET, usRecordY*16+DISPLAY_POS_Y_OFFSET);
-//				vec_pos.push_back(pos);
-//				
-//				if (!m_dequeWalk.empty())
-//				{
-//					deque<int>::iterator it = m_dequeWalk.begin();
-//					
-//				}
-//												
-//				this->WalkToPosition(vec_pos, speed, false);
-//				this->Walk(ccp(usRecordX*16+DISPLAY_POS_X_OFFSET, usRecordY*16+DISPLAY_POS_Y_OFFSET), SpriteSpeedStep4);
-			}
-			else 
-			{
-				SetAction(false);
-				if (isTeamLeader()) 
-				{
-					teamMemberAction(false);
-				}
-			}
+// 			}
+// 			else 
+// 			{
+// 				SetAction(false);
+// 				if (isTeamLeader()) 
+// 				{
+// 					teamMemberAction(false);
+// 				}
+// 			}
+			/***
+			*end
+			*/
 		}
 	}
 	
@@ -389,8 +339,16 @@ namespace NDEngine
 //		if (sex % 2 == SpriteSexMale) 
 		int model_id=lookface/1000000;
 		//	if (sex % 2 == SpriteSexMale) 
-		NSString* aniPath = [NSString stringWithUTF8String:NDPath::GetAnimationPath().c_str()];
-		NDSprite::Initialization([[NSString stringWithFormat:@"%@model_%d.spr",aniPath,model_id] UTF8String] );
+
+		/***
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		*/
+// 		NSString* aniPath = [NSString stringWithUTF8String:NDPath::GetAnimationPath().c_str()];
+// 		NDSprite::Initialization([[NSString stringWithFormat:@"%@model_%d.spr",aniPath,model_id] UTF8String] );
+		/***
+		* end
+		*/
+
 //		else 
 //			NDSprite::Initialization(MANUELROLE_HUMAN_FEMALE);
 		
@@ -433,10 +391,19 @@ namespace NDEngine
 	
 	void NDManualRole::OnMoving(bool bLastPos)
 	{
-		if (ridepet)
-		{
-			ridepet->OnMoving(bLastPos);
-		}
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* begin
+*/
+
+		//if (ridepet)
+		//{
+		//	ridepet->OnMoving(bLastPos);
+		//}
+
+/***
+* @end
+*/
 		
 		//if (isTeamLeader()) 
 //		{
