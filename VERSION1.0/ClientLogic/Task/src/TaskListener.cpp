@@ -657,7 +657,7 @@ void dealBackData_MSG_DOING_TASK_LIST(NDTransData *data)
 	{
 		Item *item = (*it);
 		if (item) {
-			updateTaskItemData(*item, false);
+			//updateTaskItemData(*item, false);
 		}
 		
 	}

@@ -19,7 +19,7 @@ std::string getStringTime(long nSeconds);
 
 std::string changeToChineseSign(std::string old);
 
-void showDialog(const char* title, const char* content);
+void showDialog(const char* title,const char* content);
 void showDialog(const char* content);
 
 void quitGame(bool bTipNet=false);

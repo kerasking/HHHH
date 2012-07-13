@@ -44,6 +44,7 @@
 
 #include "ScriptGlobalEvent.h"
 #include "GameStorageScene.h"
+#include "NDUtility.h"
 
 using std::stringstream;
 using namespace NDEngine;
@@ -349,7 +350,7 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 						}
 						
 						GameStorageAddItem(eGameStorage_Bag, *item);
-						updateTaskItemData(*item, true);
+						//updateTaskItemData(*item, true);
 						int nItemTypeUseInScript = item->iItemType;
 						ScriptGlobalEvent::OnEvent(GE_ITEM_UPDATE, nItemTypeUseInScript);
 					} else 
@@ -359,7 +360,7 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 						if (pos == Item::eEP_End) 
 						{
 							SAFE_DELETE(item);
-							NDLog("装备列表位置有问题");
+							NDLog("嘻嘻哈哈");
 						}
 						else 
 						{
@@ -477,7 +478,7 @@ void ItemMgr::processItemAttrib(NDTransData* data, int len)
 			if ( HasItemByType(ITEM_BAG, itemID, itemBag) )
 			{
 				itemBag->iAmount = amount;
-				updateTaskItemData(*itemBag, true); // 更新任务物品
+				//updateTaskItemData(*itemBag, true); // 更新任务物品
 				//bolProed = true;
 				
 				int nItemTypeUseInScript = itemBag->iItemType;
@@ -753,7 +754,7 @@ void ItemMgr::processItemDel(NDTransData* data, int len)
 		if ( HasItemByType(ITEM_BAG, *it, itemBag))
 		{
 			DelItem(ITEM_BAG, *it);
-			updateTaskItemData(*itemBag, true);
+			//updateTaskItemData(*itemBag, true);
 			//其它操作
 		}
 		
@@ -894,10 +895,10 @@ void ItemMgr::processStone(NDTransData* data, int len)
 		}
 		
 		NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
-		if (scene && scene->IsKindOfClass(RUNTIME_CLASS(GameInlayScene)))
-		{
-			 NDDirector::DefaultDirector()->PopScene();
-		}
+// 		if (scene && scene->IsKindOfClass(RUNTIME_CLASS(GameInlayScene)))
+// 		{
+// 			 NDDirector::DefaultDirector()->PopScene();
+// 		}	///<临时性的注释掉 --郭浩
 		
 		NewPlayerBagLayer* bagscene = NewPlayerBagLayer::GetInstance();
 		if (bagscene) 
@@ -1184,7 +1185,7 @@ void ItemMgr::processShopCenter(NDTransData* data, int len)
 	int itemNum = data->ReadByte();
 	std::vector<int> idList;
 	std::stringstream sb; sb << "flag" << flag;
-	sb << (" 物品ID列表为");
+//	sb << ("物品ID列表为");
 	
 	for (int i = 0; i < itemNum; i++) {
 		int goodsType = data->ReadByte();
@@ -1453,8 +1454,8 @@ EnhancedObj* ItemMgr::QueryEnhancedType(int idEnhancedType)
 		if (itIndex != m_mapEnhancedTypeIndex.end())
 		{
 			//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResourcePath().c_str()];
-			NSString *type = [NSString stringWithFormat:@"%s", NDPath::GetResPath("enhancedtype.ini")];
-			NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:type];
+// 			NSString *type = [NSString stringWithFormat:@"%s", NDPath::GetResPath("enhancedtype.ini")];
+// 			NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:type]; ///<临时注释掉 --郭浩
 			
 			if (stream)
 			{

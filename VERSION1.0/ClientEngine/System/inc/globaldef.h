@@ -60,7 +60,7 @@ typedef std::map<OBJID, OBJID>	ID_MAP;
 #include "NDLocalization.h"
 #include "ScriptInc.h"
 
-#define NDLog(str, ...) ScriptMgrObj.DebugOutPut(str, __VA_ARGS__);
+#define NDLog(str, ...)  
 
 //#include "NDUtility.h"
 //#include "NDMsgDefine.h"
