@@ -1,6 +1,7 @@
 *.suo
 *.user
 *.ncb
+*.bak
 debug/
 Debug/
 release/

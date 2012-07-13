@@ -1,12 +1,3 @@
-/*
- *  NewGamePlayerBag.h
- *  DragonDrive
- *
- *  Created by jhzheng on 11-8-12.
- *  Copyright 2011 __MyCompanyName__. All rights reserved.
- *
- */
-
 #ifndef _NEW_GAME_PLAYER_BAG_H_
 #define _NEW_GAME_PLAYER_BAG_H_
 
@@ -119,13 +110,10 @@ public:
 	NewPlayerBagLayer();
 	~NewPlayerBagLayer();
 	
-	//static NewPlayerBagLayer* Scene();
 	void Initialization(int iShowType = NEW_SHOW_EQUIP_NORMAL); override
 	void OnClickPage(NewGameItemBag* itembag, int iPage); override
-	/**bFocus,表示该事件发生前该Cell是否处于Focus状态*/
 	bool OnClickCell(NewGameItemBag* itembag, int iPage, int iCellIndex, Item* item, bool bFocused); override
 	void OnButtonClick(NDUIButton* button); override
-	//void OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);  override
 	void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex); override
 	void OnDialogClose(NDUIDialog* dialog); override
 	bool OnCustomViewConfirm(NDUICustomView* customView); override
@@ -143,7 +131,7 @@ public:
 	void AddItemToBag(Item* item);
 	void UpdateBag();
 	void UpdateMoney();
-	/**外部可调用,移植过来的,只做更新当前界面物品显示内容*/
+
 	void updateCurItem();
 	static std::string getEquipPositionInfo(int index);
 	

@@ -20,6 +20,7 @@
 #include "NDSprite.h"
 #include "NDCommonControl.h"
 #include "GameUIAttrib.h"
+#include "NDUIEdit.h"
 #include "NewGameUIPetAttrib.h"
 
 using namespace NDEngine;

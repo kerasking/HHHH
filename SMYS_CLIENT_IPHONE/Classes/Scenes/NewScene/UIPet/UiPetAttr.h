@@ -98,16 +98,18 @@ namespace NDEngine
 			struct point_state 
 			{
 				
-				int iPoint;		//玩家分配了多少点
-				int iFix;		//固定多少点
+				int iPoint;
+				int iFix;
 				point_state()
 				{
-					iPoint = 0; iFix = 0;
+					iPoint = 0;
+					iFix = 0;
 				}
 			};
 			_stru_point()
 			{
-				iTotal = 0; iAlloc= 0;
+				iTotal = 0;
+				iAlloc= 0;
 			}
 			bool IsAlloc(enumPointState ePS)
 			{
@@ -151,8 +153,10 @@ namespace NDEngine
 				return true;
 			}
 			void reset() { memset(this, 0, sizeof(*this)); }
-			int iTotal; //可分配点数
-			int iAlloc; //已分配点数
+			
+			int iTotal;
+			int iAlloc;
+
 			point_state m_psProperty[ps_end];
 		};
 		

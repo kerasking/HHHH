@@ -43,6 +43,7 @@
 #include "PlayerInfoScene.h"
 
 #include "ScriptGlobalEvent.h"
+#include "GameStorageScene.h"
 
 using std::stringstream;
 using namespace NDEngine;
