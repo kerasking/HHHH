@@ -50,7 +50,6 @@
 using namespace NDEngine;
 
 
-#pragma mark 通过节点获取某节点的子节点
 
 NDUINode*							
 GetUiNode(NDNode* pNode, int tag)
@@ -287,7 +286,6 @@ GetEquipButton(NDNode* pNode, int tag)
 	return (CUIEquipItem*)equipBtn; 
 }
 
-#pragma mark 通过tag列表获取子结点
 
 //通过tag列表获取节点
 NDNode* RecursiveNode(NDNode* pParentNode, LuaObject& tagTable)
@@ -608,7 +606,6 @@ RecursivUISprite(NDNode* pParentNode, LuaObject tagTable)
 }
 
 
-#pragma mark 通过tag列表获取父结点
 //通过tag列表获取节点
 NDNode* PRecursiveNode(NDNode* pChildNode, unsigned int nRecuriveCount)
 {
@@ -885,7 +882,6 @@ PRecursiveUISprite(NDNode* pParentNode, unsigned int nRecuriveCount)
 	return (CUISpriteNode*)pResultNode; 
 }
 
-#pragma mark 节点类型转换
 NDUINode*							
 ConverToUiNode(NDNode* pNode)
 {
@@ -1112,7 +1108,6 @@ ConverToSprite(NDNode* pNode)
 	return (CUISpriteNode*)pNode;  
 }
 
-#pragma mark 其它ui通用函数
 
 CGSize GetStringSize(const char* str, unsigned int fontsize)
 {
@@ -1181,7 +1176,6 @@ void CloseLoadBar()
 	CloseProgressBar;
 }
 	
-#pragma mark ui脚本导出加载
 	
 	void ScriptObjectUI::OnLoad()
 	{
@@ -1274,7 +1268,6 @@ void CloseLoadBar()
 		ETCFUNC("ConverToSprite", ConverToSprite);
 	}
 	
-#pragma mark 图片操作导出
 	// 颜色结构导出
 	ETSTRUCTBEGIN(cocos2d::ccColor4B)
 	ETSTRUCTPROP("r",								&cocos2d::ccColor4B::r)
@@ -1311,9 +1304,7 @@ void CloseLoadBar()
 	ETMEMBERFUNC("IsGrayState",						&NDPicture::IsGrayState)
 	ETCLASSEND(NDPicture)
 	
-#pragma mark UI导出
 	
-#pragma mark UI结构导出
 	// 大小结构导出
 	ETSTRUCTBEGIN(CGSize)
 	ETSTRUCTPROP("w",								&CGSize::width)
@@ -1332,14 +1323,12 @@ void CloseLoadBar()
 	ETSTRUCTPROP("size",							&CGRect::size)
 	ETSTRUCTEND(CGRect)
 	
-#pragma mark UI加载导出
 	ETCLASSBEGIN(NDUILoad)
 	ETCONSTRUCT("createNDUILoad")
 	ETDESTRUCT("Free")
 	ETMEMBERFUNC("Load",							(bool (NDUILoad::*)(const char*, NDUINode *, LuaObject, CGFloat, CGFloat))&NDUILoad::LoadLua)
 	ETCLASSEND(NDUILoad)
 	
-#pragma mark 节点类导出"NDNode.h"
 	// 节点类导出
 	ETCLASSBEGIN(NDNode)
 	ETCONSTRUCT("createNDNode")
@@ -1367,7 +1356,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("SetDestroyNotify",				&NDNode::SetDestroyNotify)
 	ETCLASSEND(NDNode)
 	
-#pragma mark 导演类导出"NDDirector.h"
 	// 导演类导出
 	ETCLASSBEGIN(NDDirector)
 	ETCFUNC("DefaultDirector",						&NDDirector::DefaultDirector)
@@ -1381,13 +1369,11 @@ void CloseLoadBar()
 	ETMEMBERFUNC("GetScaleFactor",					&NDDirector::GetScaleFactor)
 	ETCLASSEND(NDDirector)
 	
-#pragma mark 场景类导出"NDScene.h"
 	// 场景类导出
 	ETSUBCLASSBEGIN(NDScene, NDNode)
 	ETCFUNC("Scene",								&NDScene::Scene)
 	ETCLASSEND(NDScene)
 	
-#pragma mark  UI基类导出"NDUINode.h"
 	// UI基类导出
 	ETSUBCLASSBEGIN(NDUINode, NDNode)
 	ETCONSTRUCT("createNDUINode")
@@ -1403,7 +1389,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("SetLuaDelegate",					&NDUINode::SetLuaDelegate)
 	ETCLASSEND(NDUINode)
 	
-#pragma mark 层类导出"NDUILayer.h"
 	// 层类导出
 	ETSUBCLASSBEGIN(NDUILayer, NDUINode)
 	ETCONSTRUCT("createNDUILayer")
@@ -1417,7 +1402,6 @@ void CloseLoadBar()
 	ETCLASSEND(NDUILayer)
 	
 
-#pragma mark 按钮类导出"NDUIButton.h"
 	// 按钮类导出
 	ETSUBCLASSBEGIN(NDUIButton, NDUINode)
 	ETCONSTRUCT("createNDUIButton")
@@ -1452,14 +1436,12 @@ void CloseLoadBar()
 	ETMEMBERFUNC("GetImageCopy",					&NDUIButton::GetImageCopy)
 	ETCLASSEND(NDUIButton)
 	
-#pragma mark 图片类导出"NDUIImage.h"
 	ETSUBCLASSBEGIN(NDUIImage, NDUINode)
 	ETCONSTRUCT("createNDUIImage")
 	ETDESTRUCT("Free")
 	ETMEMBERFUNC("SetPicture",						&NDUIImage::SetPictureLua)
 	ETCLASSEND(NDUIImage)
 	
-#pragma mark 标签类导出“NDUILabel”
 	ETSUBCLASSBEGIN(NDUILabel, NDUINode)
 	ETCONSTRUCT("createNDUILabel")
 	ETDESTRUCT("Free")
@@ -1476,7 +1458,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("SetFontBoderColer",				&NDUILabel::SetFontBoderColer)
 	ETCLASSEND(NDUILabel)
 	
-#pragma mark 标签类导出"NDUIDialog.h"
 	ETSUBCLASSBEGIN(NDUIDialog, NDUILayer)
 	ETCONSTRUCT("createNDUIDialog")
 	ETDESTRUCT("Free")
@@ -1493,7 +1474,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("Show10",							&NDUIDialog::Show10)
 	ETCLASSEND(NDUIDialog)
 	
-#pragma mark 聊天文本结点类导出“UIChatText.h”
 	ETSUBCLASSBEGIN(CUIChatText,NDUINode)
 	ETCONSTRUCT("createUIChatText")
 	ETDESTRUCT("Free")
@@ -1503,7 +1483,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("GetContentHeight",				&CUIChatText::GetContentHeight)	
 	ETCLASSEND(CUIChatText)
 	
-#pragma mark 可移动层导出"UIMovableLayer.h"
 	ETSUBCLASSBEGIN(CUIMovableLayer, NDUILayer)
 	ETCONSTRUCT("createUIMovableLayer")
 	ETDESTRUCT("Free")
@@ -1511,7 +1490,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("SetMovableViewer",				&CUIMovableLayer::SetMovableViewer)
 	ETCLASSEND(CUIMovableLayer)
 	
-#pragma mark 滚动类导出"UIScroll.h"
 	ETSUBCLASSBEGIN(CUIScroll, CUIMovableLayer)
 	ETCONSTRUCT("createUIScroll")
 	ETDESTRUCT("Free")
@@ -1524,7 +1502,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("SetContainer",					&CUIScroll::SetContainer)
 	ETCLASSEND(CUIScroll)
 	
-#pragma mark 滚动容器导出"UIScrollContainer.h"
 	ETSUBCLASSBEGIN(CUIScrollContainer, NDUILayer)
 	ETCONSTRUCT("createUIScrollContainer")
 	ETDESTRUCT("Free")
@@ -1535,7 +1512,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("SetBottomReserveDistance",		&CUIScrollContainer::SetBottomReserveDistance)
 	ETCLASSEND(CUIScrollContainer)
 	
-#pragma mark 滚动视图导出"UIScrollView.h"
 	ETSUBCLASSBEGIN(CUIScrollView, CUIScroll)
 	ETCONSTRUCT("createUIScrollView")
 	ETDESTRUCT("Free")
@@ -1571,7 +1547,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("EnableScrollBar",				&CUIScrollViewContainer::EnableScrollBar)
 	ETCLASSEND(CUIScrollViewContainer)
 	
-#pragma mark 角色UI节点导出"UIRoleNode.h"
 	ETSUBCLASSBEGIN(CUIRoleNode, NDUINode)
 	ETCONSTRUCT("createUIRoleNode")
 	ETDESTRUCT("Free")
@@ -1580,7 +1555,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("SetEquip",					&CUIRoleNode::SetEquip)
 	ETCLASSEND(CUIRoleNode)
 	
-#pragma mark 超链接文本导出"UIHyperLink.h"
 	ETSUBCLASSBEGIN(CUIHyperlinkText, NDUINode)
 	ETCONSTRUCT("createUIHyperLink")
 	ETDESTRUCT("Free")
@@ -1592,7 +1566,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("EnableLine",						&CUIHyperlinkText::EnableLine)
 	ETCLASSEND(CUIHyperlinkText)
 	
-#pragma mark 超链接按钮导出"UIHyperLink.h"
 	ETSUBCLASSBEGIN(CUIHyperlinkButton, NDUIButton)
 	ETCONSTRUCT("createUIHyperlinkButton")
 	ETDESTRUCT("Free")
@@ -1604,7 +1577,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("EnableLine",						&CUIHyperlinkButton::EnableLine)
 	ETCLASSEND(CUIHyperlinkButton)
 	
-#pragma mark 物品按钮 "UIItemButton.h"
 	ETSUBCLASSBEGIN(CUIItemButton, NDUIButton)
 	ETCONSTRUCT("createUIItemButton")
 	ETDESTRUCT("Free")
@@ -1623,7 +1595,6 @@ void CloseLoadBar()
 	ETDESTRUCT("Free")
 	ETCLASSEND(CUIEquipItem)
 	
-#pragma mark Check按钮 "UICheckBox.h"
 	ETSUBCLASSBEGIN(CUICheckBox, NDUINode)
 	ETCONSTRUCT("createUICheckBox")
 	ETDESTRUCT("Free")
@@ -1636,7 +1607,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("SetTextFontSize",					&CUICheckBox::SetTextFontSize)
 	ETCLASSEND(CUICheckBox)
 	
-#pragma mark 复选按钮及复选组(配合使用)
 	ETSUBCLASSBEGIN(CUIRadioButton, CUICheckBox)
 	ETCONSTRUCT("createUIRadioButton")
 	ETDESTRUCT("Free")
@@ -1654,7 +1624,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("GetSelectedIndex",				&CUIRadioGroup::GetSelectedIndex)
 	ETCLASSEND(CUIRadioGroup)
 	
-#pragma mark 经验条 "UIExp.h"
 	ETSUBCLASSBEGIN(CUIExp, NDUINode)
 	ETCONSTRUCT("createUIExp")
 	ETDESTRUCT("Free")
@@ -1669,7 +1638,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("SetTextFontSize",					&CUIExp::SetTextFontSize)
 	ETCLASSEND(CUIExp)
 	
-#pragma mark 动画控件 "UISpriteNode.h"
 	ETSUBCLASSBEGIN(CUISpriteNode, NDUINode)
 	ETCONSTRUCT("createUISpriteNode")
 	ETDESTRUCT("Free")
@@ -1679,7 +1647,6 @@ void CloseLoadBar()
 	ETMEMBERFUNC("SetPlayFrameRange",				&CUISpriteNode::SetPlayFrameRange)
 	ETCLASSEND(CUISpriteNode)
 	
-#pragma mark 编辑框控件 "UIEdit.h"
 	ETSUBCLASSBEGIN(CUIEdit, NDUINode)
 	ETCONSTRUCT("createUIEdit")
 	ETDESTRUCT("Free")

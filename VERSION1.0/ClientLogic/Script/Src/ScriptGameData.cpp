@@ -13,7 +13,6 @@
 
 using namespace NDEngine;
 
-#pragma mark 获取ID列表
 int GetGameDataIdList(LuaState* state)
 {
 	lua_State* L = state->GetCState();
@@ -60,7 +59,6 @@ int GetGameDataIdList(LuaState* state)
 	return 1;
 }
 
-#pragma mark 获取角色基本数据
 
 double GetRoleBasicDataN(int nRoleId, int dataIndex)
 {
@@ -101,7 +99,6 @@ int GetRoleBasicDataBig(LuaState* state)
 	return 2;
 }
 
-#pragma mark 设置角色基本数据
 void SetRoleBasicDataN(int nRoleId, int dataIndex, double ulVal)
 {
 	return SRDBasic(nRoleId, dataIndex, ulVal);

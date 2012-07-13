@@ -385,7 +385,6 @@ bool CGlobalDialog::OnDialogTimeOut(NDUIDialog* dialog)
 	return false;
 }
 
-#pragma mark 游戏退出对话框(附倒计时关闭功能)
 
 #define TAG_TIMER_QUIT (16314)
 

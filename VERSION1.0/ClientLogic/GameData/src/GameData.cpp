@@ -74,7 +74,6 @@ void NDScriptGameData::LogOutMemory()
 	//printf("\n*************cur game data size [%d] kbyte, [%d] mbyte", nTotal / 1024, nTotal / 1024 / 1024);
 }
 
-#pragma mark 打印游戏数据
 
 void NDScriptGameData::LogOut(VecScriptGameData& vSGD)
 {
@@ -154,7 +153,6 @@ void NDScriptGameData::LogOut(eScriptData esd, unsigned int nKey, eRoleData e, i
 	}
 }
 
-#pragma mark 角色数据id列表管理
 bool 
 NDScriptGameData::GetRoleDataIdList(eScriptData esd, unsigned int nKey, eRoleData e, int nRoleId, eIDList eList, ID_VEC& idVec)
 {
@@ -457,7 +455,6 @@ NDScriptGameData::LogOutRoleDataIdList(eScriptData esd, unsigned int nKey, eRole
 	}
 }
 
-#pragma mark 获取id列表
 bool 
 NDScriptGameData::GetDataIdList(eScriptData esd, unsigned int nKey, eRoleData e, ID_VEC& idVec)
 {
@@ -495,7 +492,6 @@ NDScriptGameData::GetDataIdList(eScriptData esd, unsigned int nKey, eRoleData e,
 	return true;
 }
 
-#pragma mark 脚本数据接口
 int				
 NDScriptGameData::GetIntData(eScriptData esd, unsigned int nKey, eRoleData e, int nId, unsigned short index)
 {
@@ -658,7 +654,6 @@ NDScriptGameData::DelAllData()
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma mark 角色基础数据接口
 int				
 NDScriptGameData::GetRoleBasicIntData(unsigned int nKey, unsigned short index)
 {
@@ -691,7 +686,6 @@ NDScriptGameData::DelRoleData(unsigned int nKey)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma mark 角色技能数据接口
 
 int				
 NDScriptGameData::GetRoleSkillIntData(unsigned int nKey, int nId, unsigned short index)
@@ -731,7 +725,6 @@ NDScriptGameData::DelRoleSkillData(unsigned int nKey)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma mark 角色状态数据接口
 int				
 NDScriptGameData::GetRoleStateIntData(unsigned int nKey, int nId, unsigned short index)
 {
@@ -770,7 +763,6 @@ NDScriptGameData::DelRoleStateData(unsigned int nKey)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma mark 角色物品数据接口
 
 int				
 NDScriptGameData::GetRoleItemIntData(unsigned int nKey, int nId, unsigned short index)
@@ -810,7 +802,6 @@ NDScriptGameData::DelRoleItemData(unsigned int nKey)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma mark 角色宠物数据接口
 
 int				
 NDScriptGameData::GetRolePetIntData(unsigned int nKey, int nId, unsigned short index)
@@ -850,7 +841,6 @@ NDScriptGameData::DelRolePetData(unsigned int nKey)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma mark 角色任务数据接口
 
 int				
 NDScriptGameData::GetRoleTaskIntData(unsigned int nKey, int nId, unsigned short index)
@@ -890,7 +880,6 @@ NDScriptGameData::DelRoleTaskData(unsigned int nKey)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma mark 内部接口
 
 NDScriptGameData::NDScriptGameData()
 {

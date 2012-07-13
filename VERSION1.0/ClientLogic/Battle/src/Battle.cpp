@@ -5489,7 +5489,6 @@ void Battle::RefreshItemBar()
 	//	m_fighterBottom->refresh(speedbarBottom);
 }
 
-#pragma mark ¿ì½ÝÀ¸
 // Battle::speed bar
 void Battle::InitSpeedBar()
 {

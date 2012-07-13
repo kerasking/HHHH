@@ -104,7 +104,6 @@ private:
 	//NDTimer m_timer;
 };
 
-#pragma mark 游戏退出对话框
 class GameQuitDialog : public NDUIDialog
 {
 	DECLARE_CLASS(GameQuitDialog)

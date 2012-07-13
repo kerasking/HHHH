@@ -268,7 +268,6 @@ namespace NDEngine
 		
 		pool.RegMsg(_MSG_PET_SKILL, this);
 		
-#pragma mark 军团消息
 		pool.RegMsg(_MSG_MBR_LIST, this);
 		pool.RegMsg(_MSG_APPLY_LIST, this);
 		pool.RegMsg(_MSG_SYN_ANNOUNCE, this);
@@ -286,7 +285,6 @@ namespace NDEngine
 		pool.RegMsg(_MSG_LETTER_INFO, this);
 		pool.RegMsg(_MSG_LETTER_REQUEST, this);
 		
-#pragma mark 拍卖消息
 		pool.RegMsg(_MSG_AUCTION, this);
 		pool.RegMsg(_MSG_AUCTIONINFO, this);
 		
@@ -1333,7 +1331,6 @@ namespace NDEngine
 				/*OBJID idPet = */data->ReadInt();
 				int btAnswer = data->ReadByte();
 				if (btAnswer == 1) {// 修改宠物属性
-#pragma mark todo 宠物属性更新
 					//NewGameUIPetAttrib* petattr = NewGameUIPetAttrib::GetInstance();
 					//					if (petattr)
 					//						petattr->UpdateGameUIPetAttrib();
@@ -2779,7 +2776,6 @@ namespace NDEngine
 	//	return true;
 	//}
 	//
-#pragma mark 交易消息处理
 	void NDMapMgr::processTrade(NDTransData& data)
 	{
 		this->m_idTradeRole = data.ReadInt(); // 4个字节

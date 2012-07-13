@@ -163,7 +163,6 @@ public:
 	}
 	int GetPlayerBagNum(){ return  m_iBags; }
 	
-#pragma mark 其他玩家物品
 	void RemoveOtherItems();
 	Item* QueryOtherItem(int idItem);
 	VEC_ITEM& GetOtherItem() { return m_vOtherItems;}

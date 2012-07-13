@@ -21,7 +21,6 @@ using namespace LuaPlus;
 
 using namespace NDEngine;
 
-#pragma mark npc交互对话框与数据单例
 class ScriptNpcDlgData : 
 public TSingleton<ScriptNpcDlgData>
 {
@@ -122,7 +121,6 @@ private:
 	CAutoLink<CUINpcDlg>		m_dlg;
 };
 
-#pragma mark npc与任务脚本接口
 
 void OpenNpcDlg(int nNpcId)
 {

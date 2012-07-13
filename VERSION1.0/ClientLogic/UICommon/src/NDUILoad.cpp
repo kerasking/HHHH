@@ -13,7 +13,6 @@
 #include "NDDirector.h"
 
 
-#pragma mark º”‘ÿui
 
 IMPLEMENT_CLASS(NDUILoad, NDObject)
 

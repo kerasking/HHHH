@@ -209,7 +209,6 @@ namespace NDEngine {
 	};	
 	/////////////////////////////////////////////////////////////////////////
 	
-#pragma mark ½Å±¾µ¼³ö
 	bool LoadDataBaseTable(const char* inifilename, const char* indexfilename)
 	{	
 		return ScriptDBObj.LoadTable(inifilename, indexfilename);

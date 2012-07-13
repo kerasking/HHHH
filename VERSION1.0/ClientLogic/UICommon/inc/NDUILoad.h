@@ -11,7 +11,6 @@
 
 #include "NDUINode.h"
 
-#pragma mark º”‘ÿui
 
 using namespace NDEngine;
 
