@@ -384,61 +384,71 @@ bool NDNpc::IsPointInside(CGPoint point)
 
 bool NDNpc::getNearestPoint(CGPoint srcPoint, CGPoint& dstPoint)
 {
-	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
-	if (!scene) return false;
-	NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
-	if (!layer) return false;
-	NDMapData* mapdata = layer->GetMapData();
-	if (!mapdata) return false;
-	
-	int resX = 0, resY = 0;
-	
-	int srcY = int((srcPoint.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), srcX = int((srcPoint.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
-	
-	int maxDis = mapdata->getColumns()*mapdata->getColumns() + mapdata->getRows()*mapdata->getRows();
-	
-	int nArrayX[4] = {0, -1, 0, 1};
-	int nArrayY[4] = {1, 0, -1, 0};
-	
-	{
-		for(int i = 0; i < 4; ++i)
-		{
-			int newX = col + nArrayX[i];
-			int newY = row + nArrayY[i];
-			if(newX < 0)
-				continue;
-			if(newX < 0)
-				continue;
-			if(newX > int([mapdata columns]))
-				continue;
-			if(newY > int([mapdata rows]))
-				continue;
-			
-			if (![mapdata canPassByRow:newY andColumn:newX])
-				continue;
-			
-			int cacl = (newX-srcX) * (newX-srcX) + (newY-srcY) * (newY-srcY);
-			
-			if (cacl < maxDis)
-			{
-				maxDis = cacl;
-				
-				resX = newX;
-				
-				resY = newY;
-			}
-		}	
-	}
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* begin
+	*/
 
-	if (resX == 0 && resY == 0)
-	{
-		resX = this->GetPosition().x;
-		resY = this->GetPosition().y;
-	}
-	
-	dstPoint = CGPointMake(resX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, resY*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET);
-	
-	return true;
+// 	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
+// 	if (!scene) return false;
+// 	NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
+// 	if (!layer) return false;
+// 	NDMapData* mapdata = layer->GetMapData();
+// 	if (!mapdata) return false;
+// 	
+// 	int resX = 0, resY = 0;
+// 	
+// 	int srcY = int((srcPoint.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), srcX = int((srcPoint.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
+// 	
+// 	int maxDis = mapdata->getColumns()*mapdata->getColumns() + mapdata->getRows()*mapdata->getRows();
+// 	
+// 	int nArrayX[4] = {0, -1, 0, 1};
+// 	int nArrayY[4] = {1, 0, -1, 0};
+// 	
+// 	{
+// 		for(int i = 0; i < 4; ++i)
+// 		{
+// 			int newX = col + nArrayX[i];
+// 			int newY = row + nArrayY[i];
+// 			if(newX < 0)
+// 				continue;
+// 			if(newX < 0)
+// 				continue;
+// 			if(newX > int([mapdata columns]))
+// 				continue;
+// 			if(newY > int([mapdata rows]))
+// 				continue;
+// 			
+// 			if (![mapdata canPassByRow:newY andColumn:newX])
+// 				continue;
+// 			
+// 			int cacl = (newX-srcX) * (newX-srcX) + (newY-srcY) * (newY-srcY);
+// 			
+// 			if (cacl < maxDis)
+// 			{
+// 				maxDis = cacl;
+// 				
+// 				resX = newX;
+// 				
+// 				resY = newY;
+// 			}
+// 		}	
+// 	}
+// 
+// 	if (resX == 0 && resY == 0)
+// 	{
+// 		resX = this->GetPosition().x;
+// 		resY = this->GetPosition().y;
+// 	}
+// 	
+// 	dstPoint = CGPointMake(resX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, resY*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET);
+
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* end
+	*/
+
+ 	return true;
 }
 
 void NDNpc::RefreshTaskState()
