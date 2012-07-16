@@ -93,7 +93,7 @@ void quitGame(bool bTipNet/*=false*/)
 	Battle::ResetLastTurnBattleAction();
 	DramaObj.QuitGame();
 	/*BeatHeartMgrObj.Stop();*/
-	NDMapMgrObj.quitGame();
+	//NDMapMgrObj.quitGame(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	
 	BattleMgrObj.ReleaseAllBattleSkill();
 	

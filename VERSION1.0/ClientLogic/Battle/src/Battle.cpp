@@ -330,21 +330,29 @@ Battle::~Battle()
 	GameScene* gameScene = (GameScene*)director->GetRunningScene();
 
 	
-	
-	NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(gameScene);
-	if (mapLayer) {
-		//		mapLayer->SetScreenCenter(m_orignalPos);
-		//mapLayer->SetBattleBackground(false);
-		mapLayer->replaceMapData(sceneMapId, sceneCenterX, sceneCenterY);
-		ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",1);
-		int theId=NDMapMgrObj.GetMotherMapID();
-		if(theId/100000000==9){
-			ScriptMgrObj.excuteLuaFunc("showDynMapUI", "",0);
-		}else{
-			ScriptMgrObj.excuteLuaFunc("showCityMapUI", "",0);
-		}
-		//		mapLayer->AddChild(&(NDPlayer::defaultHero()));
-	}
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ begin
+	*/
+// 	NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(gameScene);
+// 	if (mapLayer) {
+// 		//		mapLayer->SetScreenCenter(m_orignalPos);
+// 		//mapLayer->SetBattleBackground(false);
+// 		mapLayer->replaceMapData(sceneMapId, sceneCenterX, sceneCenterY);
+// 		ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",1);
+// 		int theId=NDMapMgrObj.GetMotherMapID();
+// 		if(theId/100000000==9){
+// 			ScriptMgrObj.excuteLuaFunc("showDynMapUI", "",0);
+// 		}else{
+// 			ScriptMgrObj.excuteLuaFunc("showCityMapUI", "",0);
+// 		}
+// 		//		mapLayer->AddChild(&(NDPlayer::defaultHero()));
+// 	}
+
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* end
+	*/
+
 	gameScene->OnBattleEnd();
 	//	if (m_btnLeave) {
 	//		this->RemoveChild(m_btnLeave, false);
@@ -2322,16 +2330,26 @@ void Battle::setBattleMap(int mapId,int posX,int posY){
 	//	NDMapMgrObj.ClearNpc();
 	//	NDMapMgrObj.ClearMonster();
 	//	NDMapMgrObj.ClearGP();
-	NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
-	if(mapLayer){
-		this->sceneMapId = mapLayer->GetMapIndex();
-		this->sceneCenterX = mapLayer->GetScreenCenter().x;
-		this->sceneCenterY = mapLayer->GetScreenCenter().y;
-		//mapLayer->SetBattleBackground(true);
-		mapLayer->replaceMapData(mapId, posX, posY);
+
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* begin
+	*/
+	// 	NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
+// 	if(mapLayer){
+// 		this->sceneMapId = mapLayer->GetMapIndex();
+// 		this->sceneCenterX = mapLayer->GetScreenCenter().x;
+// 		this->sceneCenterY = mapLayer->GetScreenCenter().y;
+// 		//mapLayer->SetBattleBackground(true);
+// 		mapLayer->replaceMapData(mapId, posX, posY);
 
 		//mapLayer->SetNeedShowBackground(false);
-	}
+	//}
+
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* end
+	***/
 	
 //	return NDMapMgrObj.loadBattleSceneByMapID(mapId,posX*MAP_UNITSIZE,posY*MAP_UNITSIZE);
 	
@@ -3386,9 +3404,12 @@ void Battle::clearActionFighterStatus() {
 
 void Battle::FinishBattle()
 {
-	NDMapMgrObj.BattleEnd(BattleMgrObj.GetBattleReward()->battleResult);
-	//m_timer.SetTimer(this, TIMER_BACKTOGAME, 1);
-	BattleMgrObj.quitBattle();
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	*/
+// 	NDMapMgrObj.BattleEnd(BattleMgrObj.GetBattleReward()->battleResult);
+// 	//m_timer.SetTimer(this, TIMER_BACKTOGAME, 1);
+// 	BattleMgrObj.quitBattle();
 }
 
 void Battle::ShowPas()

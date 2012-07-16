@@ -181,39 +181,44 @@ void BattleMgr::OnTimer(OBJID tag)
 
 bool BattleMgr::process(MSGID msgID, NDEngine::NDTransData* bao, int len)
 {
-	switch (msgID)
-	{
-		case _MSG_BATTLE:
-			this->processBattleStart(*bao);
-			break;
-		case _MSG_CONTROLPOINT:
-			this->processControlPoint(*bao);
-			break;
-		case _MSG_EFFECT:
-			this->processBattleEffect(*bao);
-			break;
-		case _MSG_BATTLEEND:
-			this->processBattleEnd(*bao);
-			break;
-		case _MSG_SKILLINFO:
-			this->processSkillInfo(*bao, len);
-			break;
-		case _MSG_BATTLE_SKILL_LIST:
-			this->processBattleSkillList(*bao, len);
-			break;
-		case _MSG_PLAYER_RECON:
-		{
-			NDMapMgrObj.processPlayer(bao, len);
-		}
-			break;
-		case _MSG_PLAYER_EXT_RECON:
-		{
-			NDMapMgrObj.processPlayerExt(bao, len);
-		}
-			break;
-		default:
-			break;
-	}
+	/***
+	* 临时性注释 郭浩
+	* all
+	*/
+
+// 	switch (msgID)
+// 	{
+// 		case _MSG_BATTLE:
+// 			this->processBattleStart(*bao);
+// 			break;
+// 		case _MSG_CONTROLPOINT:
+// 			this->processControlPoint(*bao);
+// 			break;
+// 		case _MSG_EFFECT:
+// 			this->processBattleEffect(*bao);
+// 			break;
+// 		case _MSG_BATTLEEND:
+// 			this->processBattleEnd(*bao);
+// 			break;
+// 		case _MSG_SKILLINFO:
+// 			this->processSkillInfo(*bao, len);
+// 			break;
+// 		case _MSG_BATTLE_SKILL_LIST:
+// 			this->processBattleSkillList(*bao, len);
+// 			break;
+// 		case _MSG_PLAYER_RECON:
+// 		{
+// 			NDMapMgrObj.processPlayer(bao, len);
+// 		}
+// 			break;
+// 		case _MSG_PLAYER_EXT_RECON:
+// 		{
+// 			NDMapMgrObj.processPlayerExt(bao, len);
+// 		}
+// 			break;
+// 		default:
+// 			break;
+// 	}
 	return true;
 }
 
@@ -358,14 +363,19 @@ void BattleMgr::closeUI()
 
 void BattleMgr::showBattleScene()
 {
-	if(m_battle)
-	{
-		m_battle->setBattleMap(battleMapId, battleX*MAP_UNITSIZE,battleY*MAP_UNITSIZE);
-		NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
-		mapLayer->GetParent()->AddChild(m_battle);
-		// 进入战斗,地图逻辑处理
-		NDMapMgrObj.BattleStart();
-	}
+	/***
+	* 临时性注释 郭浩
+	* all
+	*/
+
+// 	if(m_battle)
+// 	{
+// 		m_battle->setBattleMap(battleMapId, battleX*MAP_UNITSIZE,battleY*MAP_UNITSIZE);
+// 		NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
+// 		mapLayer->GetParent()->AddChild(m_battle);
+// 		// 进入战斗,地图逻辑处理
+// 		NDMapMgrObj.BattleStart();
+// 	}
 }
 
 void BattleMgr::restartLastBattle()
@@ -399,7 +409,7 @@ void BattleMgr::restartLastBattle()
 
 	ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",0);
 	NDDirector* director = NDDirector::DefaultDirector();
-	NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
+	//NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene()); ///< 临时性注释 郭浩
 	//mapLayer->showSwitchSprite(SWITCH_TO_BATTLE);
 	//mapLayer->SetBattleBackground(true);
 	RestoreActionList();
@@ -456,7 +466,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		//		this->closeUI();
 	}
 	
-	NDMapMgr& mapMgr = NDMapMgrObj;
+	//NDMapMgr& mapMgr = NDMapMgrObj; ///< 临时性注释 郭浩
 	
 	//	if (btAction == BATTLE_STAGE_START || btAction == BATTLE_STAGE_WATCH) // 进入战斗
 	//	{
@@ -609,7 +619,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 			ScriptMgrObj.excuteLuaFunc("CloseMainUI", "",0);
 		}
 		NDDirector* director = NDDirector::DefaultDirector();
-		NDMapLayer* mapLayer = mapMgr.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
+		//NDMapLayer* mapLayer = mapMgr.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene()); ///<临时性注释 郭浩
 		
 		//mapLayer->SetBattleBackground(true);
 		
@@ -1040,11 +1050,21 @@ void BattleMgr::quitBattle(bool bEraseOut/*=true*/)
 //			}
 //		}
 		m_battle = NULL;
-		
-		if (NDMapMgrObj.isMonsterClear()&&battleType==BATTLE_TYPE_MONSTER){
-			NDLog("dynmap cleared");
-			ScriptMgrObj.excuteLuaFunc("OnBattleFinish","AffixBossFunc",NDMapMgrObj.GetMotherMapID(), 1);
-		}
+
+		/***
+		* 临时性注释 郭浩
+		* begin
+		*/
+
+// 		if (NDMapMgrObj.isMonsterClear()&&battleType==BATTLE_TYPE_MONSTER){
+// 			NDLog("dynmap cleared");
+// 			ScriptMgrObj.excuteLuaFunc("OnBattleFinish","AffixBossFunc",NDMapMgrObj.GetMotherMapID(), 1);
+// 		}
+
+		/***
+		* 临时性注释 郭浩
+		* end
+		*/
 		
 		NDPlayer::defaultHero().SetLocked(false);
 //		GameScene* gs = (GameScene*)NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene));

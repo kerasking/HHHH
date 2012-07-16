@@ -1104,79 +1104,90 @@ void ItemMgr::processItemKeeper(NDTransData* data, int len)
 	int action = data->ReadInt();
 	data->ReadInt();
 	NDPlayer& player = NDPlayer::defaultHero();
-	switch (action) {
-		case MSG_STORAGE_MONEY_SAVE:
-			if (value >= 0) {
-				player.iStorgeMoney += value;
-				GameStorageUpdateMoney();
-			}
-			break;
-		case MSG_STORAGE_MONEY_DRAW:
-			if (value >= 0) {
-				player.iStorgeMoney -= value;
-				GameStorageUpdateMoney();
-			}
-			break;
-		case MSG_STORAGE_MONEY_QUERY:
-			player.iStorgeMoney = value;
-			GameStorageUpdateMoney();
-			break;
-		case MSG_STORAGE_ITEM_IN:
-		{
-			Item *itemI = NULL;
-			// 将物品从背包中移除 已经在ITEM协议中移除了 并放入了T.storageItemList
-			for (int i = 0; i < int(m_vecStorage.size()); i++) {
-				Item *item = m_vecStorage[i];
-				if (item->iID == value) {
-					//itemI = item;
-					GameStorageDelItem(eGameStorage_Bag, *item);
-					//Storage.instance.bagItemPanel.dellAnItem(itemI);
-					break;
-				}
-			}
-			CloseProgressBar;
-			break;
-		}
-		case MSG_STORAGE_ITEM_OUT:
-		{
-			Item *itemI = NULL;
-			// 将物品从仓库中移除
-			for (int i = 0; i < int(m_vecStorage.size()); i++) {
-				Item *item = m_vecStorage[i];
-				if (item->iID == value) {
-					//itemI = item;
-					GameStorageDelItem(eGameStorage_Storage, *item);
-					//EquipUIScreen.removeItemFromItemViews(
-//														  Storage.instance.storageItemPanel.getItemViews(),
-//														  itemI);
-					m_vecStorage.erase(m_vecStorage.begin()+i);
-					DelItem(ITEM_STORAGE, value, true);
-					break;
-				}
-			}
-			CloseProgressBar;
-			break;
-		}
-		case MSG_STORAGE_ITEM_QUERY:
-			NDDirector::DefaultDirector()->PushScene(GameStorageScene::Scene());
-			break;
-		case MSG_STORAGE_EMONEY_SAVE:
-			if (value >= 0) {
-				player.iStorgeEmoney += value;
-				GameStorageUpdateMoney();
-			}
-			break;
-		case MSG_STORAGE_EMONEY_DRAW:
-			if (value >= 0) {
-				player.iStorgeEmoney -= value;
-				GameStorageUpdateMoney();
-			}
-			break;
-		case MSG_STORAGE_EMONEY_QUERY:
-			player.iStorgeEmoney = value;
-			NDDirector::DefaultDirector()->PushScene(GameStorageScene::Scene());
-			break;
-	}
+
+	/***
+	* 临时性注释 郭浩
+	* begin
+	*/
+
+// 	switch (action) {
+// 		case MSG_STORAGE_MONEY_SAVE:
+// 			if (value >= 0) {
+// 				player.iStorgeMoney += value;
+// 				GameStorageUpdateMoney();
+// 			}
+// 			break;
+// 		case MSG_STORAGE_MONEY_DRAW:
+// 			if (value >= 0) {
+// 				player.iStorgeMoney -= value;
+// 				GameStorageUpdateMoney();
+// 			}
+// 			break;
+// 		case MSG_STORAGE_MONEY_QUERY:
+// 			player.iStorgeMoney = value;
+// 			GameStorageUpdateMoney();
+// 			break;
+// 		case MSG_STORAGE_ITEM_IN:
+// 		{
+// 			Item *itemI = NULL;
+// 			// 将物品从背包中移除 已经在ITEM协议中移除了 并放入了T.storageItemList
+// 			for (int i = 0; i < int(m_vecStorage.size()); i++) {
+// 				Item *item = m_vecStorage[i];
+// 				if (item->iID == value) {
+// 					//itemI = item;
+// 					GameStorageDelItem(eGameStorage_Bag, *item);
+// 					//Storage.instance.bagItemPanel.dellAnItem(itemI);
+// 					break;
+// 				}
+// 			}
+// 			CloseProgressBar;
+// 			break;
+// 		}
+// 		case MSG_STORAGE_ITEM_OUT:
+// 		{
+// 			Item *itemI = NULL;
+// 			// 将物品从仓库中移除
+// 			for (int i = 0; i < int(m_vecStorage.size()); i++) {
+// 				Item *item = m_vecStorage[i];
+// 				if (item->iID == value) {
+// 					//itemI = item;
+// 					GameStorageDelItem(eGameStorage_Storage, *item);
+// 					//EquipUIScreen.removeItemFromItemViews(
+// //														  Storage.instance.storageItemPanel.getItemViews(),
+// //														  itemI);
+// 					m_vecStorage.erase(m_vecStorage.begin()+i);
+// 					DelItem(ITEM_STORAGE, value, true);
+// 					break;
+// 				}
+// 			}
+// 			CloseProgressBar;
+// 			break;
+// 		}
+// 		case MSG_STORAGE_ITEM_QUERY:
+// 			NDDirector::DefaultDirector()->PushScene(GameStorageScene::Scene());
+// 			break;
+// 		case MSG_STORAGE_EMONEY_SAVE:
+// 			if (value >= 0) {
+// 				player.iStorgeEmoney += value;
+// 				GameStorageUpdateMoney();
+// 			}
+// 			break;
+// 		case MSG_STORAGE_EMONEY_DRAW:
+// 			if (value >= 0) {
+// 				player.iStorgeEmoney -= value;
+// 				GameStorageUpdateMoney();
+// 			}
+// 			break;
+// 		case MSG_STORAGE_EMONEY_QUERY:
+// 			player.iStorgeEmoney = value;
+// 			NDDirector::DefaultDirector()->PushScene(GameStorageScene::Scene());
+// 			break;
+// 	}
+
+	/***
+	* 临时性注释 郭浩
+	* end
+	*/
 }
 
 void ItemMgr::processShopCenter(NDTransData* data, int len)

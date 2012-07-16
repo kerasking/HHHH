@@ -310,7 +310,7 @@ void WorldMapLayer::OnTimer(OBJID tag)
 		SetMove(false);
 		// todo move
 		printf("\n到达地图[%d]", GetTargetMapId());
-		NDMapMgrObj.WorldMapSwitch(GetTargetMapId());
+//		NDMapMgrObj.WorldMapSwitch(GetTargetMapId()); ///< 临时性注释 郭浩
 		return;
 	}
 	

@@ -85,13 +85,23 @@ void AddSubAniGroup(NDSubAniGroupEx& group)
 	if (!scene) {
 		return;
 	}
+
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* begin
+	*/
 	
-	NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(scene);
-	if (!layer)
-	{
-		return;
-	}	
-	
+// 	NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(scene);
+// 	if (!layer)
+// 	{
+// 		return;
+// 	}	
+
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* end
+	*/
+
 	NDLightEffect* lightEffect = new NDLightEffect();
 	
 	std::string sprFullPath = NDPath::GetAnimationPath();
@@ -108,11 +118,11 @@ void AddSubAniGroup(NDSubAniGroupEx& group)
 	}
 	else if (group.type== SUB_ANI_TYPE_SCREEN_CENTER) 
 	{
-		lightEffect->SetPosition(ccpAdd(layer->GetScreenCenter(), ccp(group.coordW, group.coordH)));
+		//lightEffect->SetPosition(ccpAdd(layer->GetScreenCenter(), ccp(group.coordW, group.coordH))); ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	}
 
 	
-	layer->AddChild(lightEffect);
+//	layer->AddChild(lightEffect); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 }
 
 

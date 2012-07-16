@@ -59,13 +59,23 @@ void NDMapLayerLogic::DidFinishLaunching()
 
 bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 {
-	if (this->isAutoFight()){
-		NDMonster* boss = NDMapMgrObj.GetBoss();
-		if (boss!=NULL)
-		{
-			return false;
-		}
-	}
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* begin
+	*/
+
+// 	if (this->isAutoFight()){
+// 		NDMonster* boss = NDMapMgrObj.GetBoss();
+// 		if (boss!=NULL)
+// 		{
+// 			return false;
+// 		}
+// 	}
+
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* end
+	*/
 	
 	SetPathing(false);
 	
@@ -148,7 +158,7 @@ bool NDMapLayerLogic::TouchMoved(NDTouch* touch)
 
 void NDMapLayerLogic::Update(unsigned long ulDiff)
 {
-	NDMapMgrObj.Update(ulDiff);
+	// NDMapMgrObj.Update(ulDiff); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 }
 
 void NDMapLayerLogic::OnTimer(OBJID tag)
