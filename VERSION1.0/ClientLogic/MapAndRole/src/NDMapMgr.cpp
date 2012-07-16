@@ -7,7 +7,7 @@
  *
  */
 
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 #include "NDTransData.h"
 #include "NDMapLayer.h"
 #include "NDDirector.h"

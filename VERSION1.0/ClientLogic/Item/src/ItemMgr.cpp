@@ -9,7 +9,7 @@
 
 #include "ItemMgr.h"
 #include "NDPlayer.h"
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" 临时性注释 郭浩
 #include "NDItemType.h"
 #include "NDPath.h"
 #include "define.h"

@@ -18,7 +18,7 @@
 #include "NDPlayer.h"
 #include "NDUtility.h"
 #include "CCPointExtension.h"
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 #include "GameScene.h"
 #include "NDMapLayer.h"
 #include "SMGameScene.h"

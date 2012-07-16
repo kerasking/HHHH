@@ -19,7 +19,7 @@
 #include "NDUILoad.h"
 #include "UIExp.h"
 #include <Define.h>
-//#include "NDMapMgr.h"
+/////< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 #include "BattleMgr.h"
 #include "NDColorPool.h"
 //#include "NDDataPersist.h"

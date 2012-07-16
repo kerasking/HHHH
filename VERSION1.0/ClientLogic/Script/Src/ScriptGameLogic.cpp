@@ -14,7 +14,7 @@
 #include "CCPointExtension.h"
 #include "ItemMgr.h"
 #include "Chat.h"
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 #include "ScriptGameData.h"
 #include "NewChatScene.h"
 #include "NDMapLayer.h"

@@ -25,6 +25,7 @@ namespace NDEngine
 	class NDTransData;
 	class NDManualRole;
 	class NDScene;
+
 	enum 
 	{
 		REHEARSE_APPLY = 0, // 申请
@@ -32,7 +33,7 @@ namespace NDEngine
 		REHEARSE_REFUSE = 2, // 拒绝
 		REHEARSE_LOGOUT = 3, // 战斗内离线
 		REHEARSE_LOGIN = 4, // 战斗内断线重连
-		
+
 		_SEE_USER_INFO = 0, // 查看玩家信息
 		SEE_EQUIP_INFO = 1, // 查看玩家装备
 		SEE_PET_INFO = 3, // 查看玩家宠物

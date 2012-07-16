@@ -15,7 +15,7 @@
 #include "CCPointExtension.h"
 #include "CCDrawingPrimitives.h"
 #include "Battle.h"
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 #include "NDPath.h"
 #include "NDUISynLayer.h"
 #include "BattleMgr.h"

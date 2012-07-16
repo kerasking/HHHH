@@ -19,7 +19,7 @@
 #include "NDDataTransThread.h"
 #include "BattleUtil.h"
 #include "NDMapLayer.h"
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 
 #include "ItemMgr.h"
 #include <sstream>

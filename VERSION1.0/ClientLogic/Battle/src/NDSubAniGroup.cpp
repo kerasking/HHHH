@@ -6,7 +6,7 @@
 #include "Fighter.h"
 #include "GameScene.h"
 #include "Battle.h"
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 #include "NDPath.h"
 
 using namespace NDEngine;

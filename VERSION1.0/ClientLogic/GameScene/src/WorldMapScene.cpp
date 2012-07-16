@@ -12,7 +12,7 @@
 #include "NDDirector.h"
 //#include "ItemMgr.h"
 #include "NDPlayer.h"
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 #include "GameScene.h"
 #include "NDUIImage.h"
 #include "NDPath.h"

@@ -12,7 +12,7 @@
 #include "NDMapLayer.h"
 #include "NDUILayer.h"
 #include "NDDirector.h"
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 #include "NDPlayer.h"
 #include "NDDirector.h"
 #include "NDConstant.h"

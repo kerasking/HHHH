@@ -23,7 +23,7 @@
 #include "GameSettingScene.h"
 #include "NDMiniMap.h"
 //#include "NDDataPersist.h"
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" 临时性注释 郭浩
 #include "NDUISynLayer.h"
 #include "NDDataTransThread.h"
 #include "NDNpc.h"

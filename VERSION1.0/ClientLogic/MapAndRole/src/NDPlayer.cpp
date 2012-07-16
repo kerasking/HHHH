@@ -17,7 +17,7 @@
 #include "ItemMgr.h"
 #include "NDItemType.h"
 #include "CCPointExtension.h"
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 #include "NDNpc.h"
 #include "NDUISynLayer.h"
 #include "NDAutoPath.h"
@@ -29,7 +29,7 @@
 #include "HarvestEvent.h"
 #include "DirectKey.h"
 #include "AutoPathTip.h"
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 #include "QuickInteraction.h"
 #include "NDString.h"
 

@@ -13,7 +13,7 @@
 #include "Battle.h"
 #include "NDUISynLayer.h"
 
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 #include "NDDirector.h"
 #include "BattleUtil.h"
 #include <sstream>

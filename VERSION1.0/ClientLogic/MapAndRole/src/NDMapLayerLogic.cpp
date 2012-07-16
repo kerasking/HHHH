@@ -15,7 +15,7 @@
 #include "NDDataTransThread.h"
 #include "NDScene.h"
 #include "NDDirector.h"
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 #include "GameScene.h"
 #include "NDTransData.h"
 #include "NDUtility.h"

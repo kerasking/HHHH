@@ -14,7 +14,7 @@
 #include "EnumDef.h"
 #include "NDPicture.h"
 #include "NDMapLayer.h"
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 #include "NDDirector.h"
 #include "NDPlayer.h"
 #include "NDAutoPath.h"

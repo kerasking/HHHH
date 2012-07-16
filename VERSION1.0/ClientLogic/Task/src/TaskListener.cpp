@@ -25,7 +25,7 @@
 #include "Chat.h"
 #include "NpcTaskList.h"
 //#include "GameUIRequest.h"
-#include "NDMapMgr.h"
+///< #include "NDMapMgr.h" 临时性注释 郭浩
 #include "ChatRecordManager.h"
 #include "NDWorldMapData.h"
 #include "NewPlayerTask.h"
