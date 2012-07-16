@@ -14,7 +14,7 @@
 #include "NDUIMenuLayer.h"
 #include "NDUITableLayer.h"
 #include "SocialElement.h"
-#include "NDMapMgr.h"
+//#include "NDMapMgr.h" ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 #include "NDUIDialog.h"
 
 using namespace NDEngine;

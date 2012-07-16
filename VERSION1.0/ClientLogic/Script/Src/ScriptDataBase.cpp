@@ -234,9 +234,9 @@ namespace NDEngine {
 		}
 		
 		std::string indexFilePath		= 
-			GetResPath((std::string("DBData/") + indexfilename + ".ini").c_str());
+			NDPath::GetResPath((std::string("DBData/") + indexfilename + ".ini").c_str());
 		std::string tableFilePath		= 
-			GetResPath((std::string("DBData/") + inifilename + ".ini").c_str());
+			NDPath::GetResPath((std::string("DBData/") + inifilename + ".ini").c_str());
 		
 		FILE *fTable	= fopen(tableFilePath.c_str(), "rb");
 		if (!fTable)

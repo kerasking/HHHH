@@ -208,7 +208,7 @@ void NDNpc::OnDrawEnd(bool bDraw)
 		{
 			if (m_picBattle == NULL)
 			{
-				m_picBattle = NDPicturePool::DefaultPool()->AddPicture(GetImgPath("battle.png"));
+				m_picBattle = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("battle.png"));
 				CGSize sizeBattle = m_picBattle->GetSize();
 				m_picBattle->DrawInRect(CGRectMake(npcpos.x-16, GetPosition().y-64+NDDirector::DefaultDirector()->GetWinSize().height-sizemap.height, sizeBattle.width, sizeBattle.height));
 			}

@@ -242,10 +242,11 @@ namespace NDEngine
 // 					teamMemberAction(false);
 // 				}
 // 			}
-			/***
-			*end
-			*/
-		}
+		//}	
+		/***
+		*end
+		*/
+		
 	}
 	
 	void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)

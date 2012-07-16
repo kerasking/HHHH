@@ -65,8 +65,8 @@
 #include "PetSkillScene.h"
 #include "SyndicateRegList.h"
 #include "SyndicateInfoLayer.h"
-#include "EmailData.h"
-#include "EmailListener.h"
+//#include "EmailData.h"
+//#include "EmailListener.h"
 #include "SyndicateCommon.h"
 #include "SyndicateList.h"
 #include "SyndicateInviteList.h"
@@ -1321,7 +1321,6 @@ namespace NDEngine
 		}
 	}
 	
-#pragma mark 1. 处理消息入口
 	bool NDMapMgr::process(MSGID msgID, NDTransData* data, int len)
 	{
 		switch (msgID) 

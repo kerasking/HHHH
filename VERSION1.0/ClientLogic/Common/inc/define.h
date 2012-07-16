@@ -20,6 +20,8 @@
 
 #define ShowProgressBar (NDUISynLayer::Show())
 #define CloseProgressBar (NDUISynLayer::Close())
+#define srandom(x) rand()
+#define random(x) rand()
 
 /**
 * 添加类似objective-c 下的常用变量或者宏

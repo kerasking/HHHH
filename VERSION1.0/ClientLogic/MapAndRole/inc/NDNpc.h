@@ -81,6 +81,13 @@ namespace NDEngine
 		int row;
 		int look;
 		int model;
+
+		bool m_bActionOnRing;
+		bool m_bDirectOnTalk;
+		bool m_bFarmNpc;
+		bool m_bUnpassTurn;
+
+		NDSprite* m_sprUpdate;
 		
 	private:
 		 NPC_STATE npcState;

@@ -177,15 +177,24 @@ using namespace NDEngine;
 
 		self_move_rectw = size*2*MAP_UNITSIZE;
 		self_move_rectH = size*2*MAP_UNITSIZE;
-		NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
-		NDMapData  *mapdata = NULL;
-		if (layer) {
-			mapdata=layer->GetMapData();
-			if (mapdata){
-				self_move_rectH = mapdata->getRows()*MAP_UNITSIZE;
-			}
-		}
 
+		
+		/***
+		* 临时性注释 郭浩
+		* begin
+		*/
+		// 		NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
+// 		NDMapData  *mapdata = NULL;
+// 		if (layer) {
+// 			mapdata=layer->GetMapData();
+// 			if (mapdata){
+// 				self_move_rectH = mapdata->getRows()*MAP_UNITSIZE;
+// 			}
+//		}
+		/***
+		* 临时性注释 郭浩
+		* end
+		*/
 		
 		
 		selfMoveRectX = point.x - self_move_rectw / 2;
@@ -331,11 +340,21 @@ using namespace NDEngine;
 		{
 			return;
 		}
+
+		/***
+		* 临时性注释 郭浩
+		* begin
+		*/
 		
-		if (NDMapMgrObj.GetBattleMonster() == this)
-		{
-			return;
-		}
+// 		if (NDMapMgrObj.GetBattleMonster() == this)
+// 		{
+// 			return;
+// 		}
+
+		/***
+		* 临时性注释 郭浩
+		* end
+		*/
 		
 		if (isFrozen) 
 		{
@@ -447,77 +466,84 @@ using namespace NDEngine;
 		int xDirect = dir_invalid;// -1表无方向
 		int yDirect = dir_invalid; // -1表无方向
 		
-		NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
-		NDMapData  *mapdata = NULL;
-		if (!layer || !( mapdata = layer->GetMapData() )) 
-		{
-			//NDLog("getRandomAIDirect 地图层或地图数据为空");
-			return dir_invalid;
-		}
-		
-		if (monsterCol < roleCol) 
-		{
-			if ( !mapdata->canPassByRow(monsterRow, monsterCol + 1) ) 
-			{ // 该方向不能走
-				xDirect = dir_invalid;
-			} else {
-				xDirect = dir_right;
-			}
-			//m_faceRight=false;
-		} 
-		else if (monsterCol > roleCol) 
-		{
-			if ( !mapdata->canPassByRow(monsterRow, monsterCol - 1))
-			{// 该方向不能走
-				xDirect = dir_invalid;
-			} else 
-			{
-				xDirect = dir_left;
-			}
-			//m_faceRight=false;
-		}
-		
-		if (monsterRow < roleRow) 
-		{
-			if ( !mapdata->canPassByRow(monsterRow + 1, monsterCol) )
-			{// 该方向不能走
-				yDirect = dir_invalid;
-			} else 
-			{
-				yDirect = dir_down;
-			}
-		} 
-		else if (monsterRow > roleRow) 
-		{
-			if ( !mapdata->canPassByRow(monsterRow - 1 ,monsterCol) )
-			{// 该方向不能走
-				yDirect = dir_invalid;
-			} else 
-			{
-				yDirect = dir_up;
-			}
-		}
-		
-		if (xDirect == dir_invalid) 
-		{
-			return yDirect;
-		} 
-		else if (yDirect == dir_invalid) 
-		{
-			return xDirect;
-		} 
-		else 
-		{
-			srandom(time(NULL));
-			int n = abs(random() % 2);
-			if (n == 0) 
-			{
-				return xDirect;
-			} else 
-			{
-				return yDirect;
-			}
-		}
+//		NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene()); ///< 临时性注释 郭浩
+
+		/***
+		* 临时性注释 郭浩
+		* begin
+		*/
+// 		NDMapData  *mapdata = NULL;
+// 		if (!layer || !( mapdata = layer->GetMapData() )) 
+// 		{
+// 			//NDLog("getRandomAIDirect 地图层或地图数据为空");
+// 			return dir_invalid;
+// 		}
+// 		
+// 		if (monsterCol < roleCol) 
+// 		{
+// 			if ( !mapdata->canPassByRow(monsterRow, monsterCol + 1) ) 
+// 			{ // 该方向不能走
+// 				xDirect = dir_invalid;
+// 			} else {
+// 				xDirect = dir_right;
+// 			}
+// 			//m_faceRight=false;
+// 		} 
+// 		else if (monsterCol > roleCol) 
+// 		{
+// 			if ( !mapdata->canPassByRow(monsterRow, monsterCol - 1))
+// 			{// 该方向不能走
+// 				xDirect = dir_invalid;
+// 			} else 
+// 			{
+// 				xDirect = dir_left;
+// 			}
+// 			//m_faceRight=false;
+// 		}
+// 		
+// 		if (monsterRow < roleRow) 
+// 		{
+// 			if ( !mapdata->canPassByRow(monsterRow + 1, monsterCol) )
+// 			{// 该方向不能走
+// 				yDirect = dir_invalid;
+// 			} else 
+// 			{
+// 				yDirect = dir_down;
+// 			}
+// 		} 
+// 		else if (monsterRow > roleRow) 
+// 		{
+// 			if ( !mapdata->canPassByRow(monsterRow - 1 ,monsterCol) )
+// 			{// 该方向不能走
+// 				yDirect = dir_invalid;
+// 			} else 
+// 			{
+// 				yDirect = dir_up;
+// 			}
+// 		}
+// 		
+// 		if (xDirect == dir_invalid) 
+// 		{
+// 			return yDirect;
+// 		} 
+// 		else if (yDirect == dir_invalid) 
+// 		{
+// 			return xDirect;
+// 		} 
+// 		else 
+// 		{
+// 			srandom(time(NULL));
+// 			int n = abs(random() % 2);
+// 			if (n == 0) 
+// 			{
+// 				return xDirect;
+// 			} else 
+// 			{
+// 				return yDirect;
+// 			}
+// 		}
+
+		return 0; ///< add by 郭浩
 	}
 
 	void NDMonster::randomMonsterUseAI()
@@ -582,7 +608,7 @@ using namespace NDEngine;
 		isFrozen = f;
 		if (f) 
 		{
-			frozenTime = time();
+			frozenTime = time(0);
 		}
 	}
 
@@ -629,106 +655,126 @@ using namespace NDEngine;
 		
 		//NSString *s1 = [NSString stringWithUTF8String:this->m_name.c_str()];
 		//NDLog("%@",s1);
+
+		/***
+		* 临时性注释 郭浩
+		* begin
+		*/
 		
-		NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
-		NDMapData  *mapdata = NULL;
-		if (!layer || !( mapdata = layer->GetMapData() )) 
-		{
-			//NDLog("directLogic 地图层或地图数据为空");
-			return;
-		}
-		
-		CGPoint pos; pos.x = x; pos.y = y;
-		
-		switch (moveDirect) 
-		{
-			case dir_up: 
-			{ // 上
-				if ( (y - EVERY_MOVE_DISTANCE) >= selfMoveRectY && mapdata->canPassByRow(row - 1, col)
-				{
-					pos.y -= EVERY_MOVE_DISTANCE;
-				} 
-				else 
-				{
-					SetCurrentAnimation(MONSTER_MAP_STAND, m_faceRight);
-				}
-				break;
-			}
-			case dir_down: 
-			{ // 下
-				if ((y + BASE_BOTTOM_WH + EVERY_MOVE_DISTANCE) <= selfMoveRectY + self_move_rectH && mapdata->canPassByRow(row + 1 ,col) ) 
-				{
-					pos.y += EVERY_MOVE_DISTANCE;
-					
-				} 
-				else 
-				{
-					SetCurrentAnimation(MONSTER_MAP_STAND, m_faceRight);
-				}
-				break;
-			}
-			case dir_left: 
-			{ // 左
-				if ( (x - EVERY_MOVE_DISTANCE) >= selfMoveRectX && mapdata->canPassByRow(row ,col - 1) ) 
-				{
-					pos.x -= EVERY_MOVE_DISTANCE;
-					
-				} 
-				else 
-				{
-					SetCurrentAnimation(MONSTER_MAP_STAND, m_faceRight);
-				}
-				break;
-			}
-			case dir_right:
-			{ // 右
-				if ( (x + BASE_BOTTOM_WH + EVERY_MOVE_DISTANCE) <= selfMoveRectX + self_move_rectw && mapdata->canPassByRow(row ,col + 1) )
-				{
-					pos.x += EVERY_MOVE_DISTANCE;
-					
-				} 
-				else 
-				{
-					SetCurrentAnimation(MONSTER_MAP_STAND, m_faceRight);
-				}
-				break;
-			}
-		}
-		
-		if (pos.x != x || pos.y != y) 
-		{
-			WalkToPosition(pos);
-		}
-		
-		curMoveCount++;
-		if (curMoveCount >= EVERY_MOVE_COUNT) 
-		{
-			curMoveCount = 0;
-			curCount++;
-			
-			if (isAiUseful && isUseAI()) 
-			{
-				randomMonsterUseAI();
-			}
-		}
-		if (curCount >= moveCount) 
-		{
-			curCount = 0;
-			moveDirect = -1;
-			isAiUseful = true;
-		}
+// 		NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
+// 		NDMapData  *mapdata = NULL;
+// 		if (!layer || !( mapdata = layer->GetMapData() )) 
+// 		{
+// 			//NDLog("directLogic 地图层或地图数据为空");
+// 			return;
+// 		}
+// 		
+// 		CGPoint pos; pos.x = x; pos.y = y;
+// 		
+// 		switch (moveDirect) 
+// 		{
+// 			case dir_up: 
+// 			{ // 上
+// 				if ( (y - EVERY_MOVE_DISTANCE) >= selfMoveRectY && mapdata->canPassByRow(row - 1, col)
+// 				{
+// 					pos.y -= EVERY_MOVE_DISTANCE;
+// 				} 
+// 				else 
+// 				{
+// 					SetCurrentAnimation(MONSTER_MAP_STAND, m_faceRight);
+// 				}
+// 				break;
+// 			}
+// 			case dir_down: 
+// 			{ // 下
+// 				if ((y + BASE_BOTTOM_WH + EVERY_MOVE_DISTANCE) <= selfMoveRectY + self_move_rectH && mapdata->canPassByRow(row + 1 ,col) ) 
+// 				{
+// 					pos.y += EVERY_MOVE_DISTANCE;
+// 					
+// 				} 
+// 				else 
+// 				{
+// 					SetCurrentAnimation(MONSTER_MAP_STAND, m_faceRight);
+// 				}
+// 				break;
+// 			}
+// 			case dir_left: 
+// 			{ // 左
+// 				if ( (x - EVERY_MOVE_DISTANCE) >= selfMoveRectX && mapdata->canPassByRow(row ,col - 1) ) 
+// 				{
+// 					pos.x -= EVERY_MOVE_DISTANCE;
+// 					
+// 				} 
+// 				else 
+// 				{
+// 					SetCurrentAnimation(MONSTER_MAP_STAND, m_faceRight);
+// 				}
+// 				break;
+// 			}
+// 			case dir_right:
+// 			{ // 右
+// 				if ( (x + BASE_BOTTOM_WH + EVERY_MOVE_DISTANCE) <= selfMoveRectX + self_move_rectw && mapdata->canPassByRow(row ,col + 1) )
+// 				{
+// 					pos.x += EVERY_MOVE_DISTANCE;
+// 					
+// 				} 
+// 				else 
+// 				{
+// 					SetCurrentAnimation(MONSTER_MAP_STAND, m_faceRight);
+// 				}
+// 				break;
+// 			}
+// 		}
+// 		
+// 		if (pos.x != x || pos.y != y) 
+// 		{
+// 			WalkToPosition(pos);
+// 		}
+// 		
+// 		curMoveCount++;
+// 		if (curMoveCount >= EVERY_MOVE_COUNT) 
+// 		{
+// 			curMoveCount = 0;
+// 			curCount++;
+// 			
+// 			if (isAiUseful && isUseAI()) 
+// 			{
+// 				randomMonsterUseAI();
+// 			}
+// 		}
+// 		if (curCount >= moveCount) 
+// 		{
+// 			curCount = 0;
+// 			moveDirect = -1;
+// 			isAiUseful = true;
+// 		}
+	/***
+	* 临时性注释 郭浩
+	* end
+	*/
+
 	}
 
 	void NDMonster::LogicDraw()
 	{
 		if (!GetParent()) 
 		{
-			NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
-			if (layer) 
-			{
-				layer->AddChild(this);
-				// 其它操作
-			}
+			/***
+			* 临时性注释 郭浩
+			* begin
+			*/
+			
+			// 			NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
+// 			if (layer) 
+// 			{
+// 				layer->AddChild(this);
+// 				// 其它操作
+// 			}
+
+			/***
+			* 临时性注释 郭浩
+			* end
+			*/
 		}
 	}
 
@@ -897,7 +943,7 @@ using namespace NDEngine;
 		}
 		
 		NDDataTransThread::DefaultThread()->GetSocket()->Send(&bao);
-		NDMapMgrObj.SetBattleMonster(this);
+//		NDMapMgrObj.SetBattleMonster(this); ///< 临时性注释 郭浩
 		NDPlayer::defaultHero().stopMoving(true);
 	}
 	
@@ -1104,11 +1150,21 @@ using namespace NDEngine;
 				
 				//Load Animation Group
 				CC_SAFE_DELETE(m_aniGroup);
-				if (sex % 2 == SpriteSexMale)
-					m_aniGroup = [[NDAnimationGroupPool defaultPool] addObjectWithSpr:[NSString stringWithUTF8String:MANUELROLE_HUMAN_MALE]];
-				else
-					m_aniGroup = [[NDAnimationGroupPool defaultPool] addObjectWithSpr:[NSString stringWithUTF8String:MANUELROLE_HUMAN_FEMALE]];
-				
+
+				/***
+				* 临时性注释 郭浩
+				* begin
+				*/
+// 				if (sex % 2 == SpriteSexMale)
+// 					m_aniGroup = [[NDAnimationGroupPool defaultPool] addObjectWithSpr:[NSString stringWithUTF8String:MANUELROLE_HUMAN_MALE]];
+// 				else
+// 					m_aniGroup = [[NDAnimationGroupPool defaultPool] addObjectWithSpr:[NSString stringWithUTF8String:MANUELROLE_HUMAN_FEMALE]];
+
+				/***
+				* 临时性注释 郭浩
+				* end
+				*/
+
 				m_faceRight = direct == 2;
 				SetFaceImageWithEquipmentId(m_faceRight);
 				SetCurrentAnimation(MANUELROLE_STAND, m_faceRight);

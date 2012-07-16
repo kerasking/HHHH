@@ -15,7 +15,7 @@
 #include "NDUITableLayer.h"
 #include "SocialElement.h"
 #include "NDOptLayer.h"
-#include "NDMapMgr.h"
+//#include "NDMapMgr.h"
 #include "NDUIDialog.h"
 
 using namespace NDEngine;
@@ -28,8 +28,17 @@ public NDUIDialogDelegate
 {
 	DECLARE_CLASS(LearnSkillUILayer)
 public:
-	static void Show(VEC_BATTLE_SKILL& vSkills);
-	static void RefreshSkillList();
+
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* begin
+	*/
+// 	static void Show(VEC_BATTLE_SKILL& vSkills);
+// 	static void RefreshSkillList();
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* end
+	*/
 	
 private:
 	static LearnSkillUILayer* s_instance;
@@ -41,14 +50,15 @@ public:
 	void OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);
 	void OnButtonClick(NDUIButton* button);
 	void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex);
-	void Initialization(VEC_BATTLE_SKILL& vSkills);
+	//void Initialization(VEC_BATTLE_SKILL& vSkills); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	
 private:
 	NDUITableLayer* m_tlMain;
 	SocialElement* m_curSelEle;
-	VEC_BATTLE_SKILL* m_pVecSkills;
-	VEC_SOCIAL_ELEMENT m_vSkillElement;
-	
+
+// 	VEC_BATTLE_SKILL* m_pVecSkills; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+// 	VEC_SOCIAL_ELEMENT m_vSkillElement; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+
 private:
 	void refreshMainList();
 	void releaseSkillElement();

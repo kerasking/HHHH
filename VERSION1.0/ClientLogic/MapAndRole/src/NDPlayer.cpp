@@ -56,7 +56,7 @@ namespace NDEngine
 	
 	NDMapLayer* M_GetMapLayer()
 	{
-		return NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene)));
+		//return NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene))); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	}
 
 	static NDPlayer* g_defaultHero = NULL;

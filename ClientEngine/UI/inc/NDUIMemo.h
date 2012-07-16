@@ -14,7 +14,7 @@
 #include "NDUIOptionButton.h"
 #include "NDPicture.h"
 
-#import "CCTexture2D.h"
+#include "CCTexture2D.h"
 
 namespace NDEngine
 {

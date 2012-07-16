@@ -9,7 +9,7 @@
  
  #pragma once
 
-#include "Script/ScriptInc.h"
+#include "ScriptInc.h"
 
 class ScriptObjectCommon : public NDEngine::ScriptObject
 {
