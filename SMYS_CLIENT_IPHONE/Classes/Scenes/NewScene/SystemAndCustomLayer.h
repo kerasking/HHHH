@@ -51,10 +51,10 @@ private:
 	
 	NDUIButton *m_btnCommit;
 	
-	NDQuestionDataPlist m_dataplist;
+//	NDQuestionDataPlist m_dataplist; ///< 临时性注释 郭浩
 };
 
-#pragma mark 客服密码
+
 class CustomPassword : 
 public NDUILayer,
 public NDUIButtonDelegate,
@@ -93,7 +93,7 @@ private:
 	int m_iCurInput;
 };
 
-#pragma mark 客服声明
+
 class CustomDeclaration :
 public NDUILayer,
 public NDUILayerDelegate
