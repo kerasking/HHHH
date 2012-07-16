@@ -16,6 +16,7 @@
 #include "NDUITableLayer.h"
 #include "NDDataPersist.h"
 #include "NDUIDefaultButton.h"
+#include "NDDataPersist.h"
 
 class CustomFeedBack : 
 public NDUILayer,
@@ -123,7 +124,6 @@ private:
 	static std::string s_DeclareData;
 };
 
-#pragma mark 客服公告
 class CustomGongGao :
 public CustomDeclaration
 {
@@ -131,8 +131,6 @@ public CustomDeclaration
 	
 	void Initialization(); hide
 };
-
-#pragma mark 客服活动
 
 class CustomActivity :
 public NDUILayer,
@@ -174,7 +172,6 @@ private:
 	NDUITableLayer *m_tlDate;
 };
 
-#pragma mark 系统设置
 class SystemSetting : 
 public NDUILayer, 
 public NDUIButtonDelegate, 
@@ -194,7 +191,7 @@ private:
 	
 	void InitOption(CGPoint pos, VEC_OPT_STRING vOption, CommonOptionButton*& btn, const char* text);
 private:
-	NDDataPersist m_gameSettingData;
+//	NDDataPersist m_gameSettingData;		///< 临时性注释 郭浩
 	//CommonOptionButton* m_headPicOpt;		// 头像显示
 	//CommonOptionButton* m_miniMapOpt;	    // 缩略地图
 	CommonOptionButton* m_showObjLevel;	// 显示品质
@@ -204,7 +201,7 @@ private:
 	CommonOptionButton* m_areaChatOpt;	// 区域聊天
 	CommonOptionButton* m_directKeyOpt;   // 方向键
 	
-	NDUILayer* m_page1, /**m_page2*/;
+//	NDUILayer* m_page1, /**m_page2*/; ///< 临时性注释 郭浩
 	
 	//NDUIButton		*m_btnPrevPage, *m_btnNextPage;	
 	//NDUILayer		*m_pageControl;
