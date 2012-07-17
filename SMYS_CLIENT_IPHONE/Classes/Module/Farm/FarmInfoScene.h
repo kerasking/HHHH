@@ -21,7 +21,6 @@ using namespace NDEngine;
 
 struct FarmResource;
 
-#pragma mark 属性cell
 class NDFarmPropCell : 
 public NDUINode,
 public ITimerCallback
@@ -53,7 +52,7 @@ private:
 	NDTimer *m_timer;
 	
 	unsigned long m_restime, m_totaltime;
-	NSTimeInterval m_begintime;
+//	NSTimeInterval m_begintime; ///< 临时性注释 郭浩
 	std::string m_strFinish;
 	bool m_bFinish;
 	float m_fPercent;
@@ -62,7 +61,7 @@ public:
 	int iParam;
 };
 
-#pragma mark 新的农场动态
+
 class FarmInfoLayer :
 public NDUILayer
 {

@@ -81,8 +81,8 @@ const int TAG_CV_CHANG_PWD = 2;
 const unsigned int TAG_UPDATE_FORCE = 333;
 const unsigned int TAG_UPDATE_NOT_FORCE = 444;
 
-const char* MENU_SYNDICATE[6] = { "军团应征", "军团排行", "邀请函", "军团管理", "投票箱", "职位竞选" };
-const char* MENU_SYN_MANAGE[9] = { "军团公告", "军团信息", "军团仓库", "军团成员", "军团升级", "军团邀请", "人员审核", "辞职", "离开军团" };
+const char* MENU_SYNDICATE[6] = {"1","2","3","4","5","6"};
+const char* MENU_SYN_MANAGE[9] = {"1","2","3","4","5","6","7","8","9"};
 
 IMPLEMENT_CLASS(MapUILayer, NDUILayer)
 

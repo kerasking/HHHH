@@ -17,6 +17,7 @@
 #include "NDLayer.h"
 #include "Fighter.h"
 #include "NDUIButton.h"
+#include "NDBattlePet.h"
 
 using namespace NDEngine;
 
