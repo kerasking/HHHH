@@ -81,8 +81,8 @@ const int TAG_CV_CHANG_PWD = 2;
 const unsigned int TAG_UPDATE_FORCE = 333;
 const unsigned int TAG_UPDATE_NOT_FORCE = 444;
 
-const char* MENU_SYNDICATE[6] = {"1","2","3","4","5","6"};
-const char* MENU_SYN_MANAGE[9] = {"1","2","3","4","5","6","7","8","9"};
+const char* MENU_SYNDICATE[6] = {"1","2","3","4","5","6"};					///< 临时性修改 郭浩 字符串乱码
+const char* MENU_SYN_MANAGE[9] = {"1","2","3","4","5","6","7","8","9"};		///< 临时性修改 郭浩 字符串乱码
 
 IMPLEMENT_CLASS(MapUILayer, NDUILayer)
 
@@ -108,17 +108,21 @@ enum MENU_TYPE {
 	MT_DUI_WU = 1,
 };
 
+/***
+* 临时性修改 郭浩
+* @warning 这些字符串是编译不过的……
+*/
 static std::string interactive_str[interactive_end] =
 {
-	"玩家信息",
-	"查看装备",
-	"邀请组队",
-	"交易",
-	"添加好友",
-	"私聊",
-	"PK",
-	"比武",
-	"查看宠物",
+	"1",
+	"1",
+	"1",
+	"1",
+	"1",
+	"1",
+	"1",
+	"1",
+	"1",
 };
 
 using namespace NDEngine;
@@ -217,51 +221,51 @@ GameScene::GameScene()
 	m_hccOPItem = NULL;
 	
 	m_picMap = new NDPicture();
-	m_picMap->Initialization(GetImgPath("ui_map.png"));
+	m_picMap->Initialization(NDPath::GetImgPath("ui_map.png"));
 	m_btnMap = NULL;
 	
 	m_picTarget = new NDPicture();
-	m_picTarget->Initialization(GetImgPath("ui_target.png"));
+	m_picTarget->Initialization(NDPath::GetImgPath("ui_target.png"));
 	m_btnTarget = NULL;
 	
 	m_picInterative = new NDPicture();
-	m_picInterative->Initialization(GetImgPath("ui_interective.png"));
+	m_picInterative->Initialization(NDPath::GetImgPath("ui_interective.png"));
 	m_btnInterative = NULL;
 	
 	m_hccOPMenu = NULL;
 	
 	m_picTeam = new NDPicture();
-	m_picTeam->Initialization(GetImgPath("ui_team.png"));
+	m_picTeam->Initialization(NDPath::GetImgPath("ui_team.png"));
 	m_btnTeam = NULL;
 	
 	m_picSocial = new NDPicture();
-	m_picSocial->Initialization(GetImgPath("ui_social.png"));
+	m_picSocial->Initialization(NDPath::GetImgPath("ui_social.png"));
 	m_btnSocial = NULL;
 	
 	m_picTalk = new NDPicture();
-	m_picTalk->Initialization(GetImgPath("ui_talk.png"));
+	m_picTalk->Initialization(NDPath::GetImgPath("ui_talk.png"));
 	m_btnTalk = NULL;
 	
 	m_picTask = new NDPicture();
-	m_picTask->Initialization(GetImgPath("ui_task.png"));
+	m_picTask->Initialization(NDPath::GetImgPath("ui_task.png"));
 	m_btnTask = NULL;
 	
 	m_picBag = new NDPicture();
-	m_picBag->Initialization(GetImgPath("ui_bag.png"));
+	m_picBag->Initialization(NDPath::GetImgPath("ui_bag.png"));
 	m_btnBag = NULL;
 	
 	m_picStore = new NDPicture();
-	m_picStore->Initialization(GetImgPath("ui_store.png"));
+	m_picStore->Initialization(NDPath::GetImgPath("ui_store.png"));
 	m_btnStore = NULL;
 	
 	m_picMenu = new NDPicture();
-	m_picMenu->Initialization(GetImgPath("ui_menu.png"));
+	m_picMenu->Initialization(NDPath::GetImgPath("ui_menu.png"));
 	m_btnMenu = NULL;
 	
 	m_tlShare = NULL;
 	
-	m_anilayerRequest = NULL;
-	m_anilayerMail = NULL;
+	//m_anilayerRequest = NULL;		///< 临时性注释 郭浩
+	//m_anilayerMail = NULL;		///< 临时性注释 郭浩
 	
 	//m_dlgNPC = NULL;
 	m_dlgTaskAwardItemTag = ID_NONE;

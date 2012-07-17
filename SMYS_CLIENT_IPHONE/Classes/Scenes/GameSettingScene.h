@@ -14,6 +14,7 @@
 #include "NDUIMenuLayer.h"
 #include "NDDataPersist.h"
 #include "NDUIOptionButton.h"
+#include "..\..\..\VERSION1.0\ClientEngine\UI\inc\NDUILayer.h"
 
 using namespace NDEngine;
 

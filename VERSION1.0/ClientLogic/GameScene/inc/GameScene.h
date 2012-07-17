@@ -29,6 +29,7 @@
 #include <deque>
 //#include "DirectKey.h"
 #include "NDDirector.h"
+#include "PlayerHead.h"
 
 class QuickItem;
 
@@ -231,14 +232,17 @@ private:
 	UserStateLayer* m_userState;
 	//DirectKey *m_directKey;
 	
+	PlayerHeadInMap* m_playerHead;
+	PlayerHeadInMap* m_targetHead;
+
 	bool m_bQuickInterationShow;
 	NDPicture* m_picQuickInteration; NDUIButton* m_btnQuickInterationShrink;
 	QuickInteraction* m_quickInteration;
 	
 	QuickItem *m_quickItem;
-	
+
 	QuickFunc *m_quickFunc;
-	
+
 	QuickTeam *m_quickTeam;
 	
 	bool m_bHeadShow;

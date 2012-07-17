@@ -120,7 +120,28 @@ namespace NDEngine
 
 		bool OnScriptUiEvent(NDUINode* uinode, int targetEvent);
 
-		template<typename T>		bool OnScriptUiEvent(NDUINode* uinode, int targetEvent, T param)		{			if (!uinode)			{				return false;			}			LuaObject funcObj;			if (!uinode->GetLuaDelegate(funcObj)				|| !funcObj.IsFunction())			{				return false;			}			LuaFunction<bool> luaUiEventCallBack = funcObj;			bool bRet = luaUiEventCallBack(uinode, targetEvent, param);			return bRet;		}
+		template<typename T>
+		bool OnScriptUiEvent(NDUINode* uinode, int targetEvent, T param)
+		{
+			if (!uinode)
+			{
+				return false;
+			}
+
+			LuaObject funcObj;
+
+			if (!uinode->GetLuaDelegate(funcObj)
+				|| !funcObj.IsFunction())
+			{
+				return false;
+			}
+
+			LuaFunction<bool> luaUiEventCallBack = funcObj;
+
+			bool bRet = luaUiEventCallBack(uinode, targetEvent, param);
+
+			return bRet;
+		}
 		
 		/*
 		void registerLuaClickFunction(const char* szFunc);
