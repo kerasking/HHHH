@@ -13,6 +13,7 @@
 #include "NDTransData.h"
 #include "BeatHeart.h"
 #include "ScriptNetMsg.h"
+#include "globaldef.h"
 
 using namespace NDEngine;
 

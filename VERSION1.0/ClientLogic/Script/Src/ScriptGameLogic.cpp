@@ -66,11 +66,13 @@ void PlayerStopMove()
 unsigned long GetMapId()
 {
 	//return NDMapMgrObj.GetMotherMapID(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	return 0;
 }
 	
 int GetCurrentMonsterRound()
 {
 	//return NDMapMgrObj.GetCurrentMonsterRound(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	return 0;
 }
 	
 int GetPlayerLookface()

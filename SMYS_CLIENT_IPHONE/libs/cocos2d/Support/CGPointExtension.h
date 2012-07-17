@@ -52,7 +52,8 @@
 #endif
 
 #include <math.h>
-#include <objc/objc.h>
+//#include <objc/objc.h>
+#include "../../../../VERSION1.0/cocos2d-x/cocos2dx/include/CCGeometry.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -162,7 +163,7 @@ ccpRPerp(const CGPoint v)
 static inline CGPoint
 ccpProject(const CGPoint v1, const CGPoint v2)
 {
-	return ccpMult(v2, ccpDot(v1, v2)/ccpDot(v2, v2));
+	return ccpMult(v2, ccpDot(v1, v2) / ccpDot(v2, v2));
 }
 
 /** Rotates two points.
@@ -172,7 +173,7 @@ ccpProject(const CGPoint v1, const CGPoint v2)
 static inline CGPoint
 ccpRotate(const CGPoint v1, const CGPoint v2)
 {
-	return ccp(v1.x*v2.x - v1.y*v2.y, v1.x*v2.y + v1.y*v2.x);
+	return ccp(v1.x * v2.x - v1.y * v2.y, v1.x * v2.y + v1.y * v2.x);
 }
 
 /** Unrotates two points.

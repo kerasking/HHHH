@@ -31,7 +31,7 @@ public:
 	
 private:
 	NDUIMenuLayer *m_menuLayer;
-	NDDataPersist m_gameSettingData;
+	//NDDataPersist m_gameSettingData;
 	//NDUIOptionButton* m_headPicOpt;		// 头像显示
 	//NDUIOptionButton* m_miniMapOpt;	    // 缩略地图
 	NDUIOptionButton* m_showObjLevel;	// 显示品质
@@ -40,7 +40,7 @@ private:
 	NDUIOptionButton* m_teamChatOpt;	// 队伍聊天
 	NDUIOptionButton* m_areaChatOpt;	// 区域聊天
 	NDUIOptionButton* m_directKeyOpt;   // 方向键
-	
+
 	NDUILayer* m_page1, /**m_page2*/;
 	
 	//NDUIButton		*m_btnPrevPage, *m_btnNextPage;	

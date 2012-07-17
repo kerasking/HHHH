@@ -122,7 +122,7 @@
 #include "NewEquipRepair.h"
 //#include "Performance.h"
 #include "TreasureHunt.h"
-#include "NDCrashUpload.h"
+//#include "NDCrashUpload.h"
 #include "BattleFieldScene.h"
 #include "NewVipStoreScene.h"
 #include "NewRecharge.h"

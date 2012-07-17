@@ -535,58 +535,68 @@ void dealBackData_MSG_TASKINFO(NDTransData *data)
 			task->finishMapId = finishMapId;
 			
 			task->setFinishWhereNpc(data->ReadUnicodeString());
-			
-			std::string strMapInfo;
-			PlaceNode *placeNode = [[NDWorldMapData SharedData] getPlaceNodeWithMapId:task->finishMapId];
-			if (placeNode) 
-			{
-				strMapInfo = [placeNode.name UTF8String];
-			}
-			
-			if (task->finishMapId == 21005) 
-			{
-				strMapInfo = NDCommonCString("MingYueCun");
-			}
-			
-			if (strMapInfo.empty()) 
-			{
-				NSInputStream *stream  = 
-					[NSInputStream inputStreamWithFileAtPath:
-					 [NSString stringWithUTF8String:
-					  NDPath::GetMapPath([[NSString stringWithFormat:@"map_%d.map", task->finishMapId] UTF8String])
-					 ]];
-				
-				if (stream) 
-				{
-					[stream open];
-					
-					strMapInfo = [[stream readUTF8String] UTF8String];
-					
-					[stream close];
-				}
-			}
-			
-			if (!strMapInfo.empty() )
-			{
-				unsigned short finishNpc_X = 0, finishNpc_Y = 0;
-				(*data) >> finishNpc_X >> finishNpc_Y;
-				task->setFinishWhere(strMapInfo, finishNpc_X, finishNpc_Y);
-			}
-			
-			
-			//task.startMapId = startNpc.mapId;
-			//task.setStartWhereNpc(startNpc.name);
-			//task.setStartWhere(startNpc.mapName, startNpc.getCol(), startNpc.getRow());
-			
-			//			String   strMapName = strMapInfo[0];
-			//			task.setFinishWhere(strMapName, in.readShort(), in.readShort());
-			
-			//			if (TaskListScreen.instance != null) {
-			//				TaskListScreen.instance.setTempTask(task);
-			//			}
-			NewPlayerTask::ShowTaskYiJieDetail(task);
-			//GameUIShowTaskDialog(task);
-			return;
+			/***
+			* 临时性注释 郭浩
+			* bein
+			*/	
+			//std::string strMapInfo;
+			//PlaceNode *placeNode = [[NDWorldMapData SharedData] getPlaceNodeWithMapId:task->finishMapId];
+			//if (placeNode) 
+			//{
+			//	strMapInfo = [placeNode.name UTF8String];
+			//}
+			//
+			//if (task->finishMapId == 21005) 
+			//{
+			//	strMapInfo = NDCommonCString("MingYueCun");
+			//}
+			//
+			//if (strMapInfo.empty()) 
+			//{
+
+// 				NSInputStream *stream  = 
+// 					[NSInputStream inputStreamWithFileAtPath:
+// 					 [NSString stringWithUTF8String:
+// 					  NDPath::GetMapPath([[NSString stringWithFormat:@"map_%d.map", task->finishMapId] UTF8String])
+// 					 ]];
+// 				
+// 				if (stream) 
+// 				{
+// 					[stream open];
+// 					
+// 					strMapInfo = [[stream readUTF8String] UTF8String];
+// 					
+// 					[stream close];
+// 				}
+
+			//}
+			//
+			//if (!strMapInfo.empty() )
+			//{
+			//	unsigned short finishNpc_X = 0, finishNpc_Y = 0;
+			//	(*data) >> finishNpc_X >> finishNpc_Y;
+			//	task->setFinishWhere(strMapInfo, finishNpc_X, finishNpc_Y);
+			//}
+			//
+			//
+			////task.startMapId = startNpc.mapId;
+			////task.setStartWhereNpc(startNpc.name);
+			////task.setStartWhere(startNpc.mapName, startNpc.getCol(), startNpc.getRow());
+			//
+			////			String   strMapName = strMapInfo[0];
+			////			task.setFinishWhere(strMapName, in.readShort(), in.readShort());
+			//
+			////			if (TaskListScreen.instance != null) {
+			////				TaskListScreen.instance.setTempTask(task);
+			////			}
+			//NewPlayerTask::ShowTaskYiJieDetail(task);
+			////GameUIShowTaskDialog(task);
+			//return;
+
+			/***
+			* 临时性注释 郭浩
+			* end
+			*/
 	}
 	
 	GameUIRefreshTask();

@@ -13,6 +13,7 @@
 #include "NDMsgDefine.h"
 #include "EnumDef.h"
 #include "NDConstant.h"
+#include "NDLocalization.h"
 
 using namespace NDEngine;
 

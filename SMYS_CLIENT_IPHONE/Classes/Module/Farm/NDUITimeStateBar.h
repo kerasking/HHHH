@@ -41,7 +41,7 @@ private:
 	NDTimer *m_timer;
 	
 	unsigned long m_restime, m_totaltime;
-	NSTimeInterval m_begintime;
+	//NSTimeInterval m_begintime;
 	std::string m_strFinish;
 	bool m_bFinish;
 	ccColor4B m_stateFinishColor, m_slideFinishColor;

@@ -44,11 +44,12 @@
 #include "UIEdit.h"
 #include "UISpriteNode.h"
 #include "UIChatText.h"
+#include "NDConstant.h"
 //...
 // smys end
 
 using namespace NDEngine;
-
+using namespace cocos2d;
 
 
 NDUINode*							
@@ -1188,11 +1189,20 @@ void CloseLoadBar()
 		ETCFUNC("GetScrollLayer",	GetScrollLayer)
 		ETCFUNC("GetHScrollLayer",	GetHScrollLayer)
 		ETCFUNC("GetScrollViewContainer",	GetScrollViewContainer)
-		ETCFUNC("CGSizeMake",		CGSizeMake)
-		ETCFUNC("CGPointMake",		CGPointMake)
-		ETCFUNC("CGRectMake",		CGRectMake)
-		ETCFUNC("ccc4",				ccc4);
-		ETCFUNC("ccc3",				ccc3);
+/***
+* 临时性注释 郭浩
+* begin
+*/
+		
+		//		ETCFUNC("CGSizeMake",		CGSizeMake)
+//		ETCFUNC("CGPointMake",		CGPointMake)
+//		ETCFUNC("CGRectMake",		CGRectMake)
+/***
+* 临时性注释 郭浩
+* end
+*/
+// 		ETCFUNC("ccc4",				ccc4); ///< 临时性注释 郭浩
+// 		ETCFUNC("ccc3",				ccc3); ///< 临时性注释 郭浩
 		ETCFUNC("ShowLoadBar",		ShowLoadBar);
 		ETCFUNC("CloseLoadBar",		CloseLoadBar);
 		ETCFUNC("GetSMGameScene",	GetSMGameScene);
@@ -1269,18 +1279,18 @@ void CloseLoadBar()
 	}
 	
 	// 颜色结构导出
-	ETSTRUCTBEGIN(cocos2d::ccColor4B)
-	ETSTRUCTPROP("r",								&cocos2d::ccColor4B::r)
-	ETSTRUCTPROP("g",								&cocos2d::ccColor4B::g)
-	ETSTRUCTPROP("b",								&cocos2d::ccColor4B::b)
-	ETSTRUCTPROP("a",								&cocos2d::ccColor4B::a)
-	ETSTRUCTEND(cocos2d::ccColor4B)
+	ETSTRUCTBEGIN(ccColor4B)
+	ETSTRUCTPROP("r",								&ccColor4B::r)
+	ETSTRUCTPROP("g",								&ccColor4B::g)
+	ETSTRUCTPROP("b",								&ccColor4B::b)
+	ETSTRUCTPROP("a",								&ccColor4B::a)
+	ETSTRUCTEND(ccColor4B)
 	
-	ETSTRUCTBEGIN(cocos2d::cocos2d::ccColor3B)
-	ETSTRUCTPROP("r",								&cocos2d::cocos2d::ccColor3B::r)
-	ETSTRUCTPROP("g",								&cocos2d::cocos2d::ccColor3B::g)
-	ETSTRUCTPROP("b",								&cocos2d::cocos2d::ccColor3B::b)
-	ETSTRUCTEND(cocos2d::cocos2d::ccColor3B)
+	ETSTRUCTBEGIN(ccColor3B)
+	ETSTRUCTPROP("r",								&ccColor3B::r)
+	ETSTRUCTPROP("g",								&ccColor3B::g)
+	ETSTRUCTPROP("b",								&ccColor3B::b)
+	ETSTRUCTEND(ccColor3B)
 	
 	// 图片池导出
 	ETCLASSBEGIN(NDPicturePool)
@@ -1630,14 +1640,14 @@ void CloseLoadBar()
 	ETMEMBERFUNC("Init",							(void (CUIExp::*)(const char*, const char*))&CUIExp::Initialization)
 	ETMEMBERFUNC("SetProcess",						&CUIExp::SetProcess)
 	ETMEMBERFUNC("SetTotal",						&CUIExp::SetTotal)
-    ETMEMBERFUNC("SetStyle",                        &CUIExp::SetStyle)
+	ETMEMBERFUNC("SetStyle",                        &CUIExp::SetStyle)
 	ETMEMBERFUNC("GetProcess",						&CUIExp::GetProcess)
 	ETMEMBERFUNC("GetTotal",						&CUIExp::GetTotal)
 	ETMEMBERFUNC("SetText",							&CUIExp::SetText)
 	ETMEMBERFUNC("SetTextFontColor",				&CUIExp::SetTextFontColor)
 	ETMEMBERFUNC("SetTextFontSize",					&CUIExp::SetTextFontSize)
 	ETCLASSEND(CUIExp)
-	
+
 	ETSUBCLASSBEGIN(CUISpriteNode, NDUINode)
 	ETCONSTRUCT("createUISpriteNode")
 	ETDESTRUCT("Free")
@@ -1646,7 +1656,7 @@ void CloseLoadBar()
 	ETMEMBERFUNC("SetAnimation",					&CUISpriteNode::SetAnimation)
 	ETMEMBERFUNC("SetPlayFrameRange",				&CUISpriteNode::SetPlayFrameRange)
 	ETCLASSEND(CUISpriteNode)
-	
+
 	ETSUBCLASSBEGIN(CUIEdit, NDUINode)
 	ETCONSTRUCT("createUIEdit")
 	ETDESTRUCT("Free")
@@ -1665,6 +1675,3 @@ void CloseLoadBar()
 	ETMEMBERFUNC("IsTextLessMinLen",				&CUIEdit::IsTextLessMinLen)
 	ETMEMBERFUNC("IsTextLessMinLen",				&CUIEdit::IsTextMoreMaxLen)
 	ETCLASSEND(CUIEdit)
-	
-	
-}

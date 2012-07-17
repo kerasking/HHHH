@@ -11,8 +11,12 @@
 #include "NDDirector.h"
 #include "CCPointExtension.h"
 #include "NDUtility.h"
+#include "NDConstant.h"
+#include "CCGeometry.h"
 
 IMPLEMENT_CLASS(CUIRoleNode, NDUINode)
+
+using namespace cocos2d;
 
 CUIRoleNode::CUIRoleNode()
 {

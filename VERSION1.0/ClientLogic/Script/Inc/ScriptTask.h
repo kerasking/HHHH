@@ -8,6 +8,7 @@
  */
 
 #pragma once
+#include "ScriptMgr.h"
 
 class ScriptObjectTask : public NDEngine::ScriptObject
 {

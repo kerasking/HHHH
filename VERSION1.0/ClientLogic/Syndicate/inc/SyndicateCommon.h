@@ -12,6 +12,9 @@
 
 #include "define.h"
 #include "basedefine.h"
+#include <string>
+
+using namespace std;
 
 enum SYNDICATE_ACTION {
 	APPLY_SYN = 0, // 申请加入帮派,需要尾随帮派id

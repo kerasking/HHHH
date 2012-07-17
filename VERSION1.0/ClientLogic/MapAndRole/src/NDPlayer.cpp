@@ -57,6 +57,8 @@ namespace NDEngine
 	NDMapLayer* M_GetMapLayer()
 	{
 		//return NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene))); ///< 临时性注释 郭浩
+
+		return 0; ///< 临时性的加上，到时候要去掉 郭浩
 	}
 
 	static NDPlayer* g_defaultHero = NULL;
@@ -279,6 +281,8 @@ namespace NDEngine
 // 			
 // 			npc->ShowHightLight(false);
 // 		}
+
+		return true;
 		
 	}
 	
