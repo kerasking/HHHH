@@ -1,3 +1,5 @@
+#include "NewGameUIPetAttrib.h"
+#include "ScriptMgr.h"
 /*
  *  ScriptGlobalEvent.h
  *  SMYS

@@ -11,7 +11,7 @@
 #ifndef _SCRIPT_DRAMA_ZJH_
 #define _SCRIPT_DRAMA_ZJH_
 
-#include "Script/ScriptInc.h"
+#include "ScriptInc.h"
 
 class ScriptObjectDrama : public NDEngine::ScriptObject
 {

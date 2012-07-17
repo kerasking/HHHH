@@ -7,6 +7,7 @@
  *
  */
 #pragma once
+#include "NewGameUIPetAttrib.h"
 
 unsigned long GetPlayerId();
 unsigned long GetMapId();

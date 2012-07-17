@@ -13,6 +13,7 @@
 #include "NDUtility.h"
 #include <stdio.h>
 #include <sstream>
+#include "NDPath.h"
 
 namespace NDEngine {
 	

@@ -10,7 +10,7 @@
 #ifndef _ND_CRASH_UPLOAD_H_
 #define _ND_CRASH_UPLOAD_H_
 
-#import <Foundation/Foundation.h>
+#include <Foundation/Foundation.h>
 #include "SKPSMTPMessage.h"
 
 @interface NDCrashUpload : NSObject <SKPSMTPMessageDelegate>

@@ -48,7 +48,7 @@ int DoFile(LuaState* state)
 	
 	if (str.IsString())
 	{
-		state->DoFile(GetScriptPath(str.GetString()));
+		//state->DoFile(GetScriptPath(str.GetString())); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	}
 	
 	return 0;

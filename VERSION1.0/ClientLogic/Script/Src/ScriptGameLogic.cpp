@@ -36,16 +36,21 @@ void QuitGame()
 	
 void CreatePlayer(int lookface, int x, int y, int userid, std::string name)
 {
-	NSLog(@"%@", [NSString stringWithUTF8String:name.c_str()]);
-	NDPlayer::pugeHero();
-	NDPlayer& player = NDPlayer::defaultHero(lookface, true);
-	player.InitRoleLookFace(lookface);
-		
-	player.stopMoving();
-	player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
-	player.SetServerPositon(x, y);
-	player.m_id = userid;
-	player.m_name = "王增";
+	/***
+	* 临时性注释 郭浩
+	* all
+	*/
+
+// 	NSLog(@"%@", [NSString stringWithUTF8String:name.c_str()]);
+// 	NDPlayer::pugeHero();
+// 	NDPlayer& player = NDPlayer::defaultHero(lookface, true);
+// 	player.InitRoleLookFace(lookface);
+// 		
+// 	player.stopMoving();
+// 	player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+// 	player.SetServerPositon(x, y);
+// 	player.m_id = userid;
+// 	player.m_name = "王增";
 }
 	
 unsigned long GetPlayerId()
@@ -60,12 +65,12 @@ void PlayerStopMove()
 	
 unsigned long GetMapId()
 {
-	return NDMapMgrObj.GetMotherMapID();
+	//return NDMapMgrObj.GetMotherMapID(); ///< 临时性注释 郭浩
 }
 	
 int GetCurrentMonsterRound()
 {
-	return NDMapMgrObj.GetCurrentMonsterRound();
+	//return NDMapMgrObj.GetCurrentMonsterRound(); ///< 临时性注释 郭浩
 }
 	
 int GetPlayerLookface()
@@ -104,23 +109,27 @@ void SysChat(const char* text)
 	
 void NavigateTo(int nMapId, int nMapX, int nMapY)
 {
-	NDMapMgrObj.NavigateTo(nMapX, nMapY, nMapId);
+	//NDMapMgrObj.NavigateTo(nMapX, nMapY, nMapId); ///< 临时性注释 郭浩
 }
 	
 void NavigateToNpc(int nNpcId)
 {
-	NDMapMgrObj.NavigateToNpc(nNpcId);
+	// NDMapMgrObj.NavigateToNpc(nNpcId); ///< 临时性注释 郭浩
 }
 	
 void ShowChat()
 {
 	NewChatScene::DefaultManager()->Show();
 }
-	
-int GetCurrentTime()
-{
-	return (int)([[NSDate date] timeIntervalSince1970] / 1000);
-}
+
+/***
+* 临时性注释 郭浩
+* this function
+*/
+//int GetCurrentTime()
+//{
+	//return (int)([[NSDate date] timeIntervalSince1970] / 1000);
+//}
 	
 const char* GetSMImgPath(const char* name)
 {
@@ -132,7 +141,7 @@ const char* GetSMImgPath(const char* name)
 	std::string str = "Res00/";
 	str += name;
 		
-	return GetImgPath(str.c_str());
+	return NDPath::GetImgPath(str.c_str());
 }
 	
 const char* GetSMResPath(const char* name)
@@ -142,23 +151,30 @@ const char* GetSMResPath(const char* name)
 		return "";
 	}
 		
-	return GetResPath(name);
+	return NDPath::GetResPath(name);
 }
 	
 NDMapLayer* GetMapLayer()
 {
-	NDScene* scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
-	if(!scene)
-	{
-		return NULL;
-	}
-	NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
-	if(!layer)
-	{
-		return NULL;
-	}
-		
-	return layer;
+	/***
+	* 临时性注释 郭浩
+	* all
+	*/
+
+// 	NDScene* scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
+// 	if(!scene)
+// 	{
+// 		return NULL;
+// 	}
+// 	NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
+// 	if(!layer)
+// 	{
+// 		return NULL;
+// 	}
+// 		
+// 	return layer;
+
+	return 0;
 }
 	
 void AddChatInfoRecord(std::string speaker,std::string text,int content_id,int type)
@@ -312,7 +328,7 @@ void ScriptObjectGameLogic::OnLoad()
 	ETCFUNC("WorldMapGoto", WorldMapGoto);
     ETCFUNC("GetRandomWords", &CSMLoginScene::GetRandomWords);
 	ETCFUNC("CloseBattle",CloseBattle);
-	ETCFUNC("GetCurrentTime",GetCurrentTime);
+	//ETCFUNC("GetCurrentTime",GetCurrentTime); ///< 临时性注释 郭浩
     /*登陆部分*/
     ETCFUNC("FastRegister", FastRegister);
     ETCFUNC("GetFastAccount", GetFastAccount);
@@ -330,10 +346,10 @@ void ScriptObjectGameLogic::OnLoad()
 }
 	
 //地图层接口导出
-ETCLASSBEGIN(NDMapLayer)
-ETMEMBERFUNC("setStartRoadBlockTimer",						&NDMapLayer::setStartRoadBlockTimer)
-ETMEMBERFUNC("setAutoBossFight",						&NDMapLayer::setAutoBossFight)	
-ETMEMBERFUNC("IsBattleBackground",						&NDMapLayer::IsBattleBackground)	
-ETMEMBERFUNC("ShowTreasureBox",							&NDMapLayer::ShowTreasureBox)
-ETCLASSEND(NDMapLayer)
+// ETCLASSBEGIN(NDMapLayer)
+// ETMEMBERFUNC("setStartRoadBlockTimer",						&NDMapLayer::setStartRoadBlockTimer)
+// ETMEMBERFUNC("setAutoBossFight",						&NDMapLayer::setAutoBossFight)	
+// ETMEMBERFUNC("IsBattleBackground",						&NDMapLayer::IsBattleBackground)	
+// ETMEMBERFUNC("ShowTreasureBox",							&NDMapLayer::ShowTreasureBox)
+// ETCLASSEND(NDMapLayer)
 

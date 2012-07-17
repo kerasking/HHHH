@@ -11,6 +11,7 @@
 
 #include "NDMsgDefine.h"
 #include "NDTransData.h"
+#include "ScriptMgr.h"
 
 class ScriptNetMsg : public NDEngine::ScriptObject
 {

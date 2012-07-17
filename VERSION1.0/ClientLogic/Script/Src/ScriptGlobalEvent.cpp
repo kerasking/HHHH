@@ -9,7 +9,7 @@
 
 #include "ScriptGlobalEvent.h"
 #include "ScriptInc.h"
-#include <multimap.h>
+//#include <multimap.h> ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 
 using namespace NDEngine;
 using namespace LuaPlus;

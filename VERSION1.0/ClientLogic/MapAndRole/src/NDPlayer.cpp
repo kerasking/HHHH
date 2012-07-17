@@ -1001,30 +1001,34 @@ namespace NDEngine
 	void NDPlayer::processSwitch()
 	{
 		// 遍历所有切屏点
-		
-		CSMGameScene* scene = (CSMGameScene*)NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
-		
-		if (!scene) return;
-		
-		NDMapLayer *maplayer = NDMapMgrObj.getMapLayerOfScene(scene);
-		
-		if (!maplayer) return;
-		
-		NDMapData *mapdata = maplayer->GetMapData();
-		
-		if (mapdata && mapdata.switchs)
-		{
-			cocos2d::CCArray	*switchs = mapdata.switchs;
-			
-			for (int i = 0; i < (int)[switchs count]; i++)
-			{
-				NDMapSwitch *mapswitch = [switchs objectAtIndex:i];
-				
-				if (!mapswitch) continue;
-				if (DirectSwitch(mapswitch.x, mapswitch.y, mapswitch.passIndex)) 
-					break;
-			}
-		}
+
+/***
+* 临时性注释 郭浩
+* all
+*/
+// 		CSMGameScene* scene = (CSMGameScene*)NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
+// 		
+// 		if (!scene) return;
+// 		
+// 		NDMapLayer *maplayer = NDMapMgrObj.getMapLayerOfScene(scene);
+// 		
+// 		if (!maplayer) return;
+// 		
+// 		NDMapData *mapdata = maplayer->GetMapData();
+// 		
+// 		if (mapdata && mapdata.switchs)
+// 		{
+// 			cocos2d::CCArray	*switchs = mapdata.switchs;
+// 			
+// 			for (int i = 0; i < (int)[switchs count]; i++)
+// 			{
+// 				NDMapSwitch *mapswitch = [switchs objectAtIndex:i];
+// 				
+// 				if (!mapswitch) continue;
+// 				if (DirectSwitch(mapswitch.x, mapswitch.y, mapswitch.passIndex)) 
+// 					break;
+// 			}
+// 		}
 	}
 	
 	bool NDPlayer::isRoleCanMove()
@@ -1075,9 +1079,12 @@ namespace NDEngine
 			return;
 		}
 		
-		DirectKey* dk = ((GameScene*)scene)->GetDirectKey();
+		DirectKey* dk = 0;//((GameScene*)scene)->GetDirectKey(); ///< 临时性注释 郭浩 加上 = 0;
 		
-		if (!dk) return;
+		if (!dk)
+		{
+			return;
+		}
 		
 		dk_vec_pos vpos;
 		
@@ -1090,85 +1097,94 @@ namespace NDEngine
 	
 	void NDPlayer::HandleStateDacoity()
 	{
-		if (this->IsInState(USERSTATE_FIGHTING) 
-			|| this->IsInState(USERSTATE_DEAD)
-			|| this->IsInState(USERSTATE_PVE)
-			|| (isTeamMember() && !isTeamLeader())
-			|| this->IsInState(USERSTATE_BATTLEFIELD)
-			) 
-		{
-			return;
-		}
-		
-		NDMapMgr& mapmgr = NDMapMgrObj;
-		
-		if (!(mapmgr.canPk())) 
-		{
-			return;
-		}
-		
-		NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
-		if (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
-		{
-			return;
-		}
-		
-		//与其它玩家碰撞检测
-		NDManualRole* role = mapmgr.NearestDacoityManualrole(*this, DACOITY_JUDGE_DISTANCE);
-		
-		if (!role) return;
-		
-		//发送战斗消息
-		NDTransData bao(_MSG_BATTLEACT);
-		bao << (unsigned char)BATTLE_ACT_USER_COLLIDE; // Action值
-		bao << (unsigned char)0; // btturn
-		bao << (unsigned char)1; // datacount
-		bao << int(role->m_id);
-		// SEND_DATA(bao);
-		
-		m_bRequireDacoity = true;
-		
-		m_iDacoityStep = 0;
+		/***
+		* 临时性注释 郭浩
+		* all
+		*/
+		//if (this->IsInState(USERSTATE_FIGHTING) 
+		//	|| this->IsInState(USERSTATE_DEAD)
+		//	|| this->IsInState(USERSTATE_PVE)
+		//	|| (isTeamMember() && !isTeamLeader())
+		//	|| this->IsInState(USERSTATE_BATTLEFIELD)
+		//	) 
+		//{
+		//	return;
+		//}
+		//
+		//NDMapMgr& mapmgr = NDMapMgrObj;
+		//
+		//if (!(mapmgr.canPk())) 
+		//{
+		//	return;
+		//}
+		//
+		//NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
+		//if (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
+		//{
+		//	return;
+		//}
+		//
+		////与其它玩家碰撞检测
+		//NDManualRole* role = mapmgr.NearestDacoityManualrole(*this, DACOITY_JUDGE_DISTANCE);
+		//
+		//if (!role) return;
+		//
+		////发送战斗消息
+		//NDTransData bao(_MSG_BATTLEACT);
+		//bao << (unsigned char)BATTLE_ACT_USER_COLLIDE; // Action值
+		//bao << (unsigned char)0; // btturn
+		//bao << (unsigned char)1; // datacount
+		//bao << int(role->m_id);
+		//// SEND_DATA(bao);
+		//
+		//m_bRequireDacoity = true;
+		//
+		//m_iDacoityStep = 0;
 	}
 	
 	void NDPlayer::HandleStateBattleField()
 	{
-		if (!this->IsInState(USERSTATE_BATTLEFIELD) ||
-		    this->IsInState(USERSTATE_BF_WAIT_RELIVE)
-			) 
-		{
-			return;
-		}
-		
-		NDMapMgr& mapmgr = NDMapMgrObj;
-		
-//		if (!(mapmgr.canPk())) 
+		/***
+		* 临时性注释 郭浩
+		* all
+		*/
+
+//		if (!this->IsInState(USERSTATE_BATTLEFIELD) ||
+//		    this->IsInState(USERSTATE_BF_WAIT_RELIVE)
+//			) 
 //		{
 //			return;
 //		}
-		
-		NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
-		if (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
-		{
-			return;
-		}
-		
-		//与其它玩家碰撞检测
-		NDManualRole* role = mapmgr.NearestBattleFieldManualrole(*this, BATTLEFIELD_DISTANCE);
-		
-		if (!role) return;
-		
-		//发送战斗消息
-		NDTransData bao(_MSG_BATTLEACT);
-		bao << (unsigned char)BATTLE_ACT_USER_COLLIDE; // Action值
-		bao << (unsigned char)0; // btturn
-		bao << (unsigned char)1; // datacount
-		bao << int(role->m_id);
-		// SEND_DATA(bao);
-		
-		m_bRequireBattleField = true;
-		
-		m_iBattleFieldStep = 0;
+//		
+//		NDMapMgr& mapmgr = NDMapMgrObj;
+//		
+////		if (!(mapmgr.canPk())) 
+////		{
+////			return;
+////		}
+//		
+//		NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
+//		if (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
+//		{
+//			return;
+//		}
+//		
+//		//与其它玩家碰撞检测
+//		NDManualRole* role = mapmgr.NearestBattleFieldManualrole(*this, BATTLEFIELD_DISTANCE);
+//		
+//		if (!role) return;
+//		
+//		//发送战斗消息
+//		NDTransData bao(_MSG_BATTLEACT);
+//		bao << (unsigned char)BATTLE_ACT_USER_COLLIDE; // Action值
+//		bao << (unsigned char)0; // btturn
+//		bao << (unsigned char)1; // datacount
+//		bao << int(role->m_id);
+//		// SEND_DATA(bao);
+//		
+//		m_bRequireBattleField = true;
+//		
+//		m_iBattleFieldStep = 0;
 	}
 	
 	void NDPlayer::BattleStart()
@@ -1187,28 +1203,38 @@ namespace NDEngine
 	
 	bool NDPlayer::canUnpackRidePet()
 	{
-		NDMapMgr& mgr = NDMapMgrObj;
-		
-		NDMapLayer * maplayer = mgr.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene)));
-		
-		if (maplayer && IsInState(USERSTATE_FLY) && mgr.canFly())
-		{
-			NDMapData *mapdata = maplayer->GetMapData();
-			
-			if (!mapdata || !mapdata.switchs || int([mapdata.switchs count]) == 0)
-			{
-				return true;
-			}
-			
-			NDMapSwitch* mapswitch = [mapdata.switchs objectAtIndex:0];
-			
-			if (!mapswitch) return true;
-			
-			// 不能自动寻路到切屏点 todo
-			CGPoint from = ccp(serverCol*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, serverRow*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
-			CGPoint to = ccp(mapswitch.x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, mapswitch.y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
-			return NDAutoPath::sharedAutoPath()->autoFindPath(from, to , maplayer,IsInState(USERSTATE_SPEED_UP) ? SpriteSpeedStep8 : SpriteSpeedStep4, false);
-		}
+		/***
+		* 临时性注释 郭浩
+		* begin
+		*/
+
+// 		NDMapMgr& mgr = NDMapMgrObj;
+// 		
+// 		NDMapLayer * maplayer = mgr.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene)));
+// 		
+// 		if (maplayer && IsInState(USERSTATE_FLY) && mgr.canFly())
+// 		{
+// 			NDMapData *mapdata = maplayer->GetMapData();
+// 			
+// 			if (!mapdata || !mapdata.switchs || int([mapdata.switchs count]) == 0)
+// 			{
+// 				return true;
+// 			}
+// 			
+// 			NDMapSwitch* mapswitch = [mapdata.switchs objectAtIndex:0];
+// 			
+// 			if (!mapswitch) return true;
+// 			
+// 			// 不能自动寻路到切屏点 todo
+// 			CGPoint from = ccp(serverCol*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, serverRow*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
+// 			CGPoint to = ccp(mapswitch.x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, mapswitch.y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
+// 			return NDAutoPath::sharedAutoPath()->autoFindPath(from, to , maplayer,IsInState(USERSTATE_SPEED_UP) ? SpriteSpeedStep8 : SpriteSpeedStep4, false);
+// 		}
+
+		/***
+		* 临时性注释 郭浩
+		* end
+		*/
 		
 		return true;
 	}
@@ -1218,7 +1244,7 @@ namespace NDEngine
 	{
 		if (!IsFocusNpcValid()) return NULL;
 		
-		return NDMapMgrObj.GetNpcByID(m_iFocusNpcID);
+		//return NDMapMgrObj.GetNpcByID(m_iFocusNpcID); ///< 临时性注释 郭浩
 	}
 	
 	int NDPlayer::GetFocusNpcID()

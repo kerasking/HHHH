@@ -224,91 +224,91 @@ bool NDUILoad::Load(
 			case MY_CONTROL_TYPE_UNKNOWN:
 			{
 				ControlHelp<MY_CONTROL_TYPE_UNKNOWN> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_PICTURE:
 			{
 				ControlHelp<MY_CONTROL_TYPE_PICTURE> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_BUTTON:
 			{
 				ControlHelp<MY_CONTROL_TYPE_BUTTON> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_CHECK_BUTTON:
 			{
 				ControlHelp<MY_CONTROL_TYPE_CHECK_BUTTON> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_TEXT:
 			{
 				ControlHelp<MY_CONTROL_TYPE_TEXT> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_LIST:
 			{
 				ControlHelp<MY_CONTROL_TYPE_LIST> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_PROGRESS:
 			{
 				ControlHelp<MY_CONTROL_TYPE_PROGRESS> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_SLIDER:
 			{
 				ControlHelp<MY_CONTROL_TYPE_SLIDER> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_BACK:
 			{
 				ControlHelp<MY_CONTROL_TYPE_BACK> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_TABLE:
 			{
 				ControlHelp<MY_CONTROL_TYPE_TABLE> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_UITEXT:
 			{
 				ControlHelp<MY_CONTROL_TYPE_UITEXT> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_HYPER_TEXT:
 			{
 				ControlHelp<MY_CONTROL_TYPE_HYPER_TEXT> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_HYPER_TEXT_BUTTON:
 			{
 				ControlHelp<MY_CONTROL_TYPE_HYPER_TEXT_BUTTON> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_LIST_M:
 			{
 				ControlHelp<MY_CONTROL_TYPE_LIST_M> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_ITEM_BUTTON:
 			{
 				ControlHelp<MY_CONTROL_TYPE_ITEM_BUTTON> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_EQUIP_BUTTON:
@@ -320,25 +320,25 @@ bool NDUILoad::Load(
 			case MY_CONTROL_TYPE_RADIO_BUTTON:
 			{
 				ControlHelp<MY_CONTROL_TYPE_RADIO_BUTTON> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_EXP:
 			{
 				ControlHelp<MY_CONTROL_TYPE_EXP> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_EDIT:
 			{
 				ControlHelp<MY_CONTROL_TYPE_EDIT> help;
-				node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_SPRITE:
 			{
 				ControlHelp<MY_CONTROL_TYPE_SPRITE> help;
-				node = help.Create(uiInfo, sizeOffset);
+				(NDUINode*)node = help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			default:
