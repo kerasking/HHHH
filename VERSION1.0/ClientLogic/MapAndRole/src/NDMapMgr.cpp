@@ -120,7 +120,7 @@
 #include "PetInfoScene.h"
 #include "NewChatScene.h"
 #include "NewEquipRepair.h"
-#include "Performance.h"
+//#include "Performance.h"
 #include "TreasureHunt.h"
 #include "NDCrashUpload.h"
 #include "BattleFieldScene.h"

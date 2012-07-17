@@ -724,25 +724,35 @@ namespace NDEngine
 		}
 		return result;
 	}
-	
-	HyperLinkLabel* NDUITextBuilder::CreateLinkLabel(const char* text, unsigned int fontSize, ccColor4B color, int idItem/* = 0*/)
-	{
-		HyperLinkLabel* result = NULL;
-		if (text) 
-		{
-			CGSize textSize = getStringSize(text, fontSize);
-			result = new HyperLinkLabel();
-			result->Initialization();
-			result->SetRenderTimes(1);
-			result->SetText(text);
-			result->SetTag(idItem);
-			result->SetFontSize(fontSize);
-			result->SetFontColor(color);
-			result->SetFrameRect(CGRectMake(0, 0, textSize.width, textSize.height));
-			result->SetIsLink(true);
-		}
-		return result;
-	}
+
+
+	/***
+	* ÁÙÊ±ĞÔ×¢ÊÍ ¹ùºÆ
+	* begin
+	*/
+// 	HyperLinkLabel* NDUITextBuilder::CreateLinkLabel(const char* text, unsigned int fontSize, ccColor4B color, int idItem/* = 0*/)
+// 	{
+// 		HyperLinkLabel* result = NULL;
+// 		if (text) 
+// 		{
+// 			CGSize textSize = getStringSize(text, fontSize);
+// 			result = new HyperLinkLabel();
+// 			result->Initialization();
+// 			result->SetRenderTimes(1);
+// 			result->SetText(text);
+// 			result->SetTag(idItem);
+// 			result->SetFontSize(fontSize);
+// 			result->SetFontColor(color);
+// 			result->SetFrameRect(CGRectMake(0, 0, textSize.width, textSize.height));
+// 			result->SetIsLink(true);
+// 		}
+// 		return result;
+// 	}
+
+	/***
+	* ÁÙÊ±ĞÔ×¢ÊÍ ¹ùºÆ
+	* end
+	*/
 }
 	
 

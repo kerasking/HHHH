@@ -10,7 +10,7 @@
 #include "HyperLinkLabel.h"
 #include "NDUIBaseGraphics.h"
 
-IMPLEMENT_CLASS(HyperLinkLabel, NDUILabel)
+//IMPLEMENT_CLASS(HyperLinkLabel, NDUILabel)
 
 void HyperLinkLabel::draw()
 {
