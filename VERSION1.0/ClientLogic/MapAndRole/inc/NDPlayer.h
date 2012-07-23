@@ -16,6 +16,7 @@
 #include "NDTimer.h"
 //#include "GatherPoint.h"
 #include "BattleUtil.h"
+#include "NDBattlePet.h"
 
 using namespace std;
 
@@ -46,7 +47,7 @@ namespace NDEngine
 		void Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive=false); override
 
 		void SetPosition(CGPoint newPosition); override
-		
+		NDBattlePet* GetShowPet();
 		void Update(unsigned long ulDiff); override
 		//”√”⁄ªÊ÷∆
 		//void SetPositionEx(CGPoint newPosition);

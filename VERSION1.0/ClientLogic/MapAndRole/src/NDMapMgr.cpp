@@ -129,7 +129,7 @@
 #include "CPet.h"
 #include "PlayerInfoScene.h"
 #include "AutoPathTip.h"
-#include "SimpleAudioEngine_objc.h"
+//#include "SimpleAudioEngine_objc.h"
 
 // smys begin
 #include "SMGameScene.h"

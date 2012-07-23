@@ -30,6 +30,8 @@
 //#include "DirectKey.h"
 #include "NDDirector.h"
 #include "PlayerHead.h"
+#include "GameUIRootOperation.h"
+#include "DirectKey.h"
 
 class QuickItem;
 
@@ -96,6 +98,7 @@ public:
 	void Initialization(int mapID); hide 
 	void OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section); override
 	void OnButtonClick(NDUIButton* button); override
+	bool OnClickHControlContainer(NDUIHControlContainer* hcontrolcontainer);
 	//bool OnClickHControlContainer(NDUIHControlContainer* hcontrolcontainer); override
 	//void OnClickNDUIAniLayer(NDUIAniLayer* anilayer);
 	void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex); override
@@ -126,7 +129,7 @@ public:
 		ret: true->成功,false->失败
 	**/
 	bool HideTLShare();
-	
+	DirectKey* const GetDirectKey();
 	void ShowMiniMap(bool bShow);
 	void ShowPlayerHead(bool bShow);
 	void ShowPetHead(bool bShow);
@@ -233,7 +236,10 @@ private:
 	//DirectKey *m_directKey;
 	
 	PlayerHeadInMap* m_playerHead;
-	PlayerHeadInMap* m_targetHead;
+	TargetHeadInMap* m_targetHead;
+	DirectKey* m_directKey;
+	NDUIHControlContainer* m_hccOPItem;
+	PlayerHeadInMap* m_petHead;
 
 	bool m_bQuickInterationShow;
 	NDPicture* m_picQuickInteration; NDUIButton* m_btnQuickInterationShrink;

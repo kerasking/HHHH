@@ -107,7 +107,8 @@ private:
 };
 
 // 绘制宠物头像
-class PetHead : public NDLayer {
+class PetHead : public NDLayer 
+{
 	DECLARE_CLASS(PetHead)
 public:
 	PetHead();

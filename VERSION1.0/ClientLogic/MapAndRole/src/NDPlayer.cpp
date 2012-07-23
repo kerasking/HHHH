@@ -1284,4 +1284,11 @@ namespace NDEngine
 	{
 		return m_nLookface;
 	}
+
+	override
+		NDBattlePet* NDPlayer::GetShowPet()
+	{
+		return 0;
+	}
+
 }

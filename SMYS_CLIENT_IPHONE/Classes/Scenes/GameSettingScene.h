@@ -42,7 +42,7 @@ private:
 	NDUIOptionButton* m_areaChatOpt;	// 区域聊天
 	NDUIOptionButton* m_directKeyOpt;   // 方向键
 
-	NDUILayer* m_page1, /**m_page2*/;
+	NDEngine::NDUILayer* m_page1;
 	
 	//NDUIButton		*m_btnPrevPage, *m_btnNextPage;	
 	//NDUILayer		*m_pageControl;
