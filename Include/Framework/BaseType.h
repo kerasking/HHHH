@@ -277,9 +277,9 @@ struct FONT_INFO
 
 
 
-#ifndef OBJID
-typedef unsigned int OBJID;
-#endif 
+// #ifndef OBJID
+// typedef unsigned int OBJID;
+// #endif 
 
 #define _UINT64 UINT64
 #define _INT64 INT64

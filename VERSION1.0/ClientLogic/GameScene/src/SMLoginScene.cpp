@@ -63,18 +63,30 @@ CSMLoginScene::Initialization()
     pProcess->SetStyle(1);
    // while (!m_bUpdOk) {
         //¸üÐÂ×ÊÔ´´æ·ÅÄ¿Â¼
-        std::string strPath = CGameApp::sharedInstance().GetAppPath();
-        strPath.append("/RES/");
-        
-        bool bInit = CUpdateFactory::sharedInstance().Init("http://192.168.64.140:5898","smys",strPath.c_str(),this);
-        if(!bInit){
-            return ;
-        }
-    
-    if(!CUpdateFactory::sharedInstance().CheckVersion()){
-        CUpdateFactory::sharedInstance().Update();
-    }
+
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* begin
+*/
+	//     std::string strPath = CGameApp::sharedInstance().GetAppPath();
+//     strPath.append("/RES/");
+//     
+//     bool bInit = CUpdateFactory::sharedInstance().
+// 		Init("http://192.168.64.140:5898","smys",strPath.c_str(),this);
+//     if(!bInit)
+// 	{
+//         return ;
+//     }
+//     
+//     if(!CUpdateFactory::sharedInstance().CheckVersion())
+// 	{
+//         CUpdateFactory::sharedInstance().Update();
+//     }
   //  }
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* end
+*/
     /*
     if(m_pClientUpd){
         int nVersion = m_pClientUpd->CheckClientVersion();
@@ -200,11 +212,20 @@ int InitGameInstance()
 	}
 #endif
 	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];		
+//	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	
 #ifndef DEBUG
-	if (![[NDCrashUpload Shared] EnableCrashCatch])
-		NSLog(@"EnableCrashCatch failed!");
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* begin
+	*/
+	
+	// 	if (![[NDCrashUpload Shared] EnableCrashCatch])
+// 		NSLog(@"EnableCrashCatch failed!");
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* end
+	*/
 #endif
 	
 	// »ñÈ¡±¾µØ»¯ÓïÑÔ
@@ -214,9 +235,9 @@ int InitGameInstance()
 	
 	//NDEngine::NDMapMgr dataObj;
 	BattleMgr battleMgr;
-	ItemMgr itemMgr;
+	//ItemMgr itemMgr; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	NDColorPool colorPool;
-	NDDataPersist::LoadGameSetting();
+	//NDDataPersist::LoadGameSetting(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	//NDFarmMgrObj;
 	//BattleFieldMgrObj;
 	

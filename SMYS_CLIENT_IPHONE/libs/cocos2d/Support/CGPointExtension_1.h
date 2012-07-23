@@ -53,7 +53,6 @@
 
 #include <math.h>
 //#include <objc/objc.h>
-#include "../../../../VERSION1.0/cocos2d-x/cocos2dx/include/CCGeometry.h"
 
 #ifdef __cplusplus
 extern "C" {

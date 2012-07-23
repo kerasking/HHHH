@@ -10,7 +10,8 @@
 #include "CPetNode.h"
 #include "NDDirector.h"
 #include "CPet.h"
-#include "CGPointExtension.h"
+//#include "CGPointExtension.h"
+#include "CCGeometry.h"
 
 IMPLEMENT_CLASS(CPetNode, NDUILayer)
 
@@ -80,5 +81,5 @@ void CPetNode::refeshPosition()
 	
 	iH = iH < 7 ? iH + 15 : iH;
 	
-	m_role->SetPositionEx(ccp(m_pos.x, m_pos.y+iH));
+	m_role->SetPositionEx(cocos2d::CCPoint(m_pos.x, m_pos.y+iH));
 }

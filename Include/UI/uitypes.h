@@ -567,7 +567,7 @@ namespace UITypes
 	typedef unsigned char       BYTE;
 	typedef unsigned short      WORD;
 	typedef unsigned int       DWORD;
-	typedef unsigned int OBJID;
+//	typedef unsigned int OBJID;
 	typedef long long           I64;
 	typedef unsigned long long  UI64;
 	typedef long long           INT64;

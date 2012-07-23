@@ -4,7 +4,7 @@ Copyright(c) 1999-2012, TQ Digital Entertainment, All Rights Reserved
 */
 #if !defined __GAMEAPP__HEADER__
 #define __GAMEAPP__HEADER__
-#include "C3Primitive.h"
+//#include "C3Primitive.h"
 #include "FrameworkTypes.h"
 #include "Log.h"
 

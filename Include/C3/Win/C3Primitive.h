@@ -96,8 +96,8 @@ enum
 	_COLOR_YELLOW	=	0xFFFFFF00,
 };
 
-typedef unsigned int OBJID;
-const OBJID	ID_NONE = 0;
+//typedef unsigned int OBJID;
+//const int ID_NONE = 0;
 
 typedef struct 
 {

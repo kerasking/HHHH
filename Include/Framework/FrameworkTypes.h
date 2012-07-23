@@ -5,7 +5,7 @@ Copyright(c) 1999-2012, TQ Digital Entertainment, All Rights Reserved
 #ifndef __FRAMEWORKTYPES__H
 #define __FRAMEWORKTYPES__H
 #include "BaseType.h"
-#include "C3Primitive.h"
+//#include "C3Primitive.h"
 #include "uitypes.h"
 
 #define UNUSED_PARAM(unsedparam)

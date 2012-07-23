@@ -19,7 +19,7 @@
 #include "NDUIFrame.h"
 #include "WorldMapScene.h"
 #include "NDUIButton.h"
-#include "CGPointExtension.h"
+//#include "CGPointExtension.h"
 #include "GameSettingScene.h"
 #include "NDMiniMap.h"
 //#include "NDDataPersist.h"
