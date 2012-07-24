@@ -197,5 +197,5 @@ public:
 
 private:
 	UIINFO m_info;
-	CIniFile ini;
+//	CIniFile ini;	///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 };

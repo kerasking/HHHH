@@ -922,6 +922,14 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\Utility\src\ImageNumber.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\Utility\inc\ImageNumber.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

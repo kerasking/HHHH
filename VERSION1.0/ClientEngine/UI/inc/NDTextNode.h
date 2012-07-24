@@ -100,7 +100,7 @@ namespace NDEngine
 		NDUIImage* CreateFaceImage(const char* strIndex);		
 		//获取标签
 		NDUILabel* CreateLabel(const char* text, unsigned int fontSize, cocos2d::ccColor4B color, int idItem = 0);
-		HyperLinkLabel* CreateLinkLabel(const char* text, unsigned int fontSize, cocos2d::ccColor4B color, int idItem = 0);
+		//HyperLinkLabel* CreateLinkLabel(const char* text, unsigned int fontSize, cocos2d::ccColor4B color, int idItem = 0); ///< 临时性注释 郭浩
 	private:
 		int m_idItem;
 	};	

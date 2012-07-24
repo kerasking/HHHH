@@ -287,11 +287,11 @@ namespace NDEngine
 				{
 					if (bHpyerLink)
 					{
-						textNodeList.push_back(TextNode(brk, CreateLinkLabel("]", fontSize, clr, m_idItem), true));
+						//textNodeList.push_back(TextNode(brk, CreateLinkLabel("]", fontSize, clr, m_idItem), true)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 					}
 					else
 					{
-						textNodeList.push_back(TextNode(brk, CreateLabel("]", fontSize, clr, m_idItem), true));
+						//textNodeList.push_back(TextNode(brk, CreateLabel("]", fontSize, clr, m_idItem), true)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 					}
 				}
 				rule = BuildRuleNone;
@@ -321,11 +321,11 @@ namespace NDEngine
 				{
 					if (bHpyerLink)
 					{
-						textNodeList.push_back(TextNode(brk, CreateLinkLabel("[", fontSize, clr, m_idItem), true));
+						//textNodeList.push_back(TextNode(brk, CreateLinkLabel("[", fontSize, clr, m_idItem), true)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 					}
 					else
 					{
-						textNodeList.push_back(TextNode(brk, CreateLabel("[", fontSize, clr, m_idItem), true));
+						//textNodeList.push_back(TextNode(brk, CreateLabel("[", fontSize, clr, m_idItem), true)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 					}
 				}
 				continue;
@@ -346,21 +346,21 @@ namespace NDEngine
 			if (rule == BuildRuleItem) {
 				if (bHpyerLink)
 				{
-					textNodeList.push_back(TextNode(brk, CreateLinkLabel(word, fontSize, clr, m_idItem), true));
+					//textNodeList.push_back(TextNode(brk, CreateLinkLabel(word, fontSize, clr, m_idItem), true)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 				}
 				else
 				{
-					textNodeList.push_back(TextNode(brk, CreateLabel(word, fontSize, clr, m_idItem), true));
+					//textNodeList.push_back(TextNode(brk, CreateLabel(word, fontSize, clr, m_idItem), true)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 				}
 			} else 
 			{
 				if (bHpyerLink)
 				{
-					textNodeList.push_back(TextNode(brk, CreateLinkLabel(word, fontSize, clr)));
+					//textNodeList.push_back(TextNode(brk, CreateLinkLabel(word, fontSize, clr))); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 				}
 				else
 				{
-					textNodeList.push_back(TextNode(brk, CreateLabel(word, fontSize, clr)));
+					//textNodeList.push_back(TextNode(brk, CreateLabel(word, fontSize, clr))); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 				}
 				
 			}

@@ -55,7 +55,7 @@ public:
 	
 	void AddHarvestEvent(int iItemIcon, int iNum);
 	
-	void OnTimer(OBJID tag);// override
+	//void OnTimer(OBJID tag);// override ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	
 private:
 	//void CloseTime();

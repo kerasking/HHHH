@@ -21,15 +21,23 @@ namespace NDEngine
 	void NDUISectionTitleDelegate::OnSectionTitleClick(NDUISectionTitle* sectionTitle)
 	{
 	}
-	
-	void NDUITableLayerDelegate::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section)
-	{
-	}
-	
-	void NDUITableLayerDelegate::OnTableLayerCellFocused(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section)
-	{
-	}
-	
+
+/***
+* 临时性注释 郭浩
+* begin
+*/
+// 	void NDUITableLayerDelegate::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section)
+// 	{
+// 	}
+// 	
+// 	void NDUITableLayerDelegate::OnTableLayerCellFocused(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section)
+// 	{
+// 	}
+// 
+/***
+* 临时性注释 郭浩
+* end
+*/
 	void NDUIVerticalScrollBarDelegate::OnVerticalScrollBarUpClick(NDUIVerticalScrollBar* scrollBar)
 	{
 	}

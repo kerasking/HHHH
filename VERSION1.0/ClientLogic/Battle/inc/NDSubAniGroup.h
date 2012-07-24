@@ -65,7 +65,7 @@ namespace NDEngine
 	// 作用：播放子动画
 	// 参数：key: 用于获取子动画的 frameRecord; sag:子动画信息
 	// 返回值：子动画是否播放完成
-	bool DrawSubAnimation(NDNode* layer, NDSubAniGroup& sag);
+	//bool DrawSubAnimation(NDNode* layer, NDSubAniGroup& sag);
 
 	void AddSubAniGroup(NDSubAniGroupEx& group);
 

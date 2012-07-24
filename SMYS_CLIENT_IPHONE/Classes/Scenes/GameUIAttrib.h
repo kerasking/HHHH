@@ -320,8 +320,8 @@ namespace NDEngine
 		NDUITableLayer	*m_tableLayerAdvance;
 		
 
-		ImageNumber *m_imageNumTotalPoint, *m_imageNUmAllocPoint;
-		ImageNumber *m_imageNumMoney, *m_imageNumEMoney;
+// 		ImageNumber *m_imageNumTotalPoint, *m_imageNUmAllocPoint;
+// 		ImageNumber *m_imageNumMoney, *m_imageNumEMoney;
 		
 		GameRoleNode	*m_GameRoleNode;
 		

@@ -88,9 +88,9 @@ protected:
 	PlayerHead() {}
 	
 private:
-	ImageNumber* m_imgNumHp; // 玩家hp
-	ImageNumber* m_imgNumMp; // 玩家mp
-	ImageNumber* m_imgNumPlayerLevel;
+// 	ImageNumber* m_imgNumHp; // 玩家hp
+// 	ImageNumber* m_imgNumMp; // 玩家mp
+// 	ImageNumber* m_imgNumPlayerLevel;
 	
 	NDUIImage* m_imgHp;
 	NDUIImage* m_imgMp;
@@ -162,7 +162,7 @@ private:
 	
 	bool m_bHasBattlepet;
 	
-	ImageNumber* m_imgNumPlayerLevel;
+//	ImageNumber* m_imgNumPlayerLevel; ///< 临时性注释 郭浩
 	
 	NDUIImage* m_imgHp;
 	NDUIImage* m_imgMp;
@@ -202,7 +202,7 @@ protected:
 	
 private:
 	// npc 不显示等级
-	ImageNumber* m_imgNumPlayerLevel;
+//	ImageNumber* m_imgNumPlayerLevel; ///< 临时性注释 郭浩
 	
 	// npc 血蓝全满
 	NDUILayer* m_imgHp;
@@ -247,7 +247,7 @@ private:
 	
 	NDUILabel		*m_lbName;
 	
-	ImageNumber		*m_imgNumPlayerLevel;
+//	ImageNumber		*m_imgNumPlayerLevel; ///< 临时性注释 郭浩
 	
 	int				m_iTeamID;
 	int				m_iIndexInTeam;

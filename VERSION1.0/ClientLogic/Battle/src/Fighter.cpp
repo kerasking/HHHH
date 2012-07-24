@@ -82,7 +82,7 @@ Fighter::Fighter(const FIGHTER_INFO& fInfo)
 	m_bShowName=false;
 	lb_skillName=NULL;
 	lb_FighterName=NULL;
-	m_imgHurtNum = NULL;
+//	m_imgHurtNum = NULL; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	m_imgBaoJi = NULL;
 	m_imgBoji = NULL;
 	this->skillAtkType = ATKTYPE_NEAR;
@@ -124,7 +124,7 @@ Fighter::~Fighter()
 		}
 	}
 	
-	CC_SAFE_DELETE(m_imgHurtNum);
+//	CC_SAFE_DELETE(m_imgHurtNum); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	CC_SAFE_DELETE(m_imgBaoJi);
 	CC_SAFE_DELETE(m_imgBoji);
 }
@@ -414,7 +414,7 @@ void Fighter::drawStatusAniGroup() {
 			if (!role) {
 				continue;
 			}
-			NDEngine::DrawSubAnimation(role, *((*it)->m_aniGroup));
+		//	NDEngine::DrawSubAnimation(role, *((*it)->m_aniGroup)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		}
 	}
 }
@@ -586,34 +586,45 @@ void Fighter::hurted(int num)
 }
 
 void Fighter::setCurrentHP(int hp) {
-	if (hp <= 0) {
+	if (hp <= 0) 
+	{
 		m_info.nLife = 0;
-	} else if (hp > m_info.nLifeMax) {
+	} 
+	else if (hp > m_info.nLifeMax) 
+	{
 		m_info.nLife = m_info.nLifeMax;
-	} else {
+	} 
+	else
+	{
 		m_info.nLife = hp;
 	}
 	
 	int currentId=BattleMgrObj.GetBattle()->GetCurrentShowFighterId();
 	if(currentId==m_info.idObj)
 	{
-		ScriptMgrObj.excuteLuaFunc("UpdateHp","FighterInfo",m_info.nLife,m_info.nLifeMax);
+		//ScriptMgrObj.excuteLuaFunc("UpdateHp","FighterInfo",m_info.nLife,m_info.nLifeMax); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	}
 }
 
-void Fighter::setCurrentMP(int mp) {
-	if (mp <= 0) {
+void Fighter::setCurrentMP(int mp) 
+{
+	if (mp <= 0) 
+	{
 		m_info.nMana = 0;
-	} else if (mp > m_info.nManaMax) {
+	} 
+	else if (mp > m_info.nManaMax)
+	{
 		m_info.nMana = m_info.nManaMax;
-	} else {
+	} 
+	else
+	{
 		m_info.nMana = mp;
 	}
 	
 	int currentId=BattleMgrObj.GetBattle()->GetCurrentShowFighterId();
 	if(currentId==m_info.idObj)
 	{
-		ScriptMgrObj.excuteLuaFunc("UpdateMp","FighterInfo",m_info.nMana,m_info.nManaMax);
+		//ScriptMgrObj.excuteLuaFunc("UpdateMp","FighterInfo",m_info.nMana,m_info.nManaMax); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	}
 }
 
@@ -779,58 +790,85 @@ void Fighter::drawHurtNumber()
 			// ³õÊ¼»¯È¥ÑªÌáÊ¾
 			if (hn.getHurtNumberY() > 0) {
 				
-				m_imgHurtNum = new ImageNumber;
-				m_imgHurtNum->Initialization();
+				//m_imgHurtNum = new ImageNumber; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+				//m_imgHurtNum->Initialization(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 				
-				if (m_bHardAtk) {
+				if (m_bHardAtk)
+				{
 					NDPicture* picBaoJi = this->m_parent->GetBaoJiPic();
 					m_imgBaoJi = new NDUIImage;
 					m_imgBaoJi->Initialization();
 					m_imgBaoJi->SetPicture(picBaoJi);
 					this->m_parent->AddChild(m_imgBaoJi);
 					
-					m_imgHurtNum->SetBigRedNumber(hn.getHurtNum(), false);
+					//m_imgHurtNum->SetBigRedNumber(hn.getHurtNum(), false); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 					
-				} else {
-					if (hn.getHurtNum() > 0) { // ¼ÓÑª
-						m_imgHurtNum->SetBigGreenNumber(hn.getHurtNum(), false);
-					} else { // È¥Ñª
-						m_imgHurtNum->SetBigRedNumber(hn.getHurtNum(), false);
-					}
+				}
+				else
+				{
+
+					/***
+					* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+					* begin
+					*/
+// 					if (hn.getHurtNum() > 0)
+// 					{ // ¼ÓÑª
+// 						m_imgHurtNum->SetBigGreenNumber(hn.getHurtNum(), false);
+// 					}
+// 					else
+// 					{ // È¥Ñª
+// 						m_imgHurtNum->SetBigRedNumber(hn.getHurtNum(), false);
+// 					}
+					/***
+					* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+					* end
+					*/
 				}
 				
-				this->m_parent->AddChild(m_imgHurtNum);
+			//	this->m_parent->AddChild(m_imgHurtNum); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 			}
 		}
 		
-		if (hn.getHurtNumberY() > 0) {
-			
-			if (m_bHardAtk) {
-				NDPicture* picBaoJi = this->m_parent->GetBaoJiPic();
-				int bjW = picBaoJi->GetSize().width;
-				int bjH = picBaoJi->GetSize().height;
-				if (m_imgBaoJi) {
-					m_imgBaoJi->SetFrameRect(CGRectMake(this->x - (bjW >> 1),
-									    y - m_role->GetHeight() - bjH - hn.getHurtNumberY(),
-									    bjW,
-									    bjH));
-				}
-				if (m_imgHurtNum) {
-					m_imgHurtNum->SetFrameRect(CGRectMake(this->x - (w >> 1),
-									      this->y - m_role->GetHeight() - hn.getHurtNumberY() - bjH * 13 / 20,
-									      m_imgHurtNum->GetNumberSize().width,
-									      m_imgHurtNum->GetNumberSize().height));
-				}
-				
-			} else {
-				if (m_imgHurtNum) {
-					m_imgHurtNum->SetFrameRect(CGRectMake(this->x - (w >> 1),
-									      this->y - m_role->GetHeight() - hn.getHurtNumberY(),
-									      m_imgHurtNum->GetNumberSize().width,
-									      m_imgHurtNum->GetNumberSize().height));
-				}
-			}
-
+		if (hn.getHurtNumberY() > 0)
+		{
+		/***
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		*/
+			//if (m_bHardAtk)
+			//{
+			//	NDPicture* picBaoJi = this->m_parent->GetBaoJiPic();
+			//	int bjW = picBaoJi->GetSize().width;
+			//	int bjH = picBaoJi->GetSize().height;
+			//	if (m_imgBaoJi)
+			//	{
+			//		m_imgBaoJi->SetFrameRect(CGRectMake(this->x - (bjW >> 1),
+			//						    y - m_role->GetHeight() - bjH - hn.getHurtNumberY(),
+			//						    bjW,
+			//						    bjH));
+			//	}
+			//	if (m_imgHurtNum)
+			//	{
+			//		m_imgHurtNum->SetFrameRect(CGRectMake(this->x - (w >> 1),
+			//						      this->y - m_role->GetHeight() - hn.getHurtNumberY() - bjH * 13 / 20,
+			//						      m_imgHurtNum->GetNumberSize().width,
+			//						      m_imgHurtNum->GetNumberSize().height));
+			//	}
+			//	
+			//} 
+			//else 
+			//{
+			//	if (m_imgHurtNum) 
+			//	{
+			//		m_imgHurtNum->SetFrameRect(CGRectMake(this->x - (w >> 1),
+			//						      this->y - m_role->GetHeight() - hn.getHurtNumberY(),
+			//						      m_imgHurtNum->GetNumberSize().width,
+			//						      m_imgHurtNum->GetNumberSize().height));
+			//	}
+			//}
+			/***
+			* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			* end
+			*/
 			
 			hn.timeLost();
 			bEraseHurtNum = hn.isDisappear();
@@ -838,17 +876,28 @@ void Fighter::drawHurtNumber()
 		}
 	}
 
-	if (bEraseHurtNum) {
+	if (bEraseHurtNum) 
+	{
 		m_vHurtNum.erase(m_vHurtNum.begin());
 		// É¾³ýÈ¥ÑªÌáÊ¾
-		if (m_imgBaoJi) {
+		if (m_imgBaoJi) 
+		{
 			m_imgBaoJi->RemoveFromParent(false);
 			CC_SAFE_DELETE(m_imgBaoJi);
 		}
-		if (m_imgHurtNum) {
-			m_imgHurtNum->RemoveFromParent(false);
-			CC_SAFE_DELETE(m_imgHurtNum);
-		}
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* begin
+*/
+// 		if (m_imgHurtNum)
+// 		{
+// 			m_imgHurtNum->RemoveFromParent(false);
+// 			CC_SAFE_DELETE(m_imgHurtNum);
+// 		}
+		/***
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* end
+		*/
 	}
 }
 

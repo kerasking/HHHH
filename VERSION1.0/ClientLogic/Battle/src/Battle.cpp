@@ -2388,7 +2388,7 @@ void Battle::drawSubAniGroup()
 //			continue;
 //		}
 		//NDLog("draw subanigroup");
-		it->bComplete = NDEngine::DrawSubAnimation(role, *it);
+//		it->bComplete = NDEngine::DrawSubAnimation(role, *it); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		if (it->bComplete) {
 			NDLog("subanigroup complete");
 			bErase = true;
@@ -3431,7 +3431,7 @@ void Battle::ShowPas()
 	
 	if(this->currentShowFighter>0)
 	{
-		ScriptMgrObj.excuteLuaFunc("CloseFighterInfo","FighterInfo",0);
+		//ScriptMgrObj.excuteLuaFunc("CloseFighterInfo","FighterInfo",0); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	}
 	BattleMgrObj.showBattleResult();
 	//	if (isPasClear() && AllFighterActionOK()) {

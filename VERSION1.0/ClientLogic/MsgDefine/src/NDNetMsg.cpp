@@ -54,7 +54,7 @@ bool NDNetMsgPool::Process(NDTransData* data)
 	
 	if (nMsgID != _MSG_GAME_QUIT) 
 	{
-		BeatHeartMgrObj.HadServerMsgArrive();
+//		BeatHeartMgrObj.HadServerMsgArrive(); ///< 临时性注释 郭浩
 	}
 		
 	return Process(nMsgID, data, nMsgLen-6);;

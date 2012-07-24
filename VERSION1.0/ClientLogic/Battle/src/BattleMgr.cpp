@@ -407,7 +407,7 @@ void BattleMgr::restartLastBattle()
 	}
 	
 
-	ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",0);
+//	ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",0); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	NDDirector* director = NDDirector::DefaultDirector();
 	//NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene()); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	//mapLayer->showSwitchSprite(SWITCH_TO_BATTLE);
@@ -612,11 +612,11 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		this->battleMapId=map_id;
 		this->battleX=posX;
 		this->battleY=posY;
-		ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",0);
+//		ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",0); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		
 		if(btBattleType!=BATTLE_TYPE_SPORTS)
 		{
-			ScriptMgrObj.excuteLuaFunc("CloseMainUI", "",0);
+			//ScriptMgrObj.excuteLuaFunc("CloseMainUI", "",0); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		}
 		NDDirector* director = NDDirector::DefaultDirector();
 		//NDMapLayer* mapLayer = mapMgr.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene()); ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
@@ -952,39 +952,72 @@ void BattleMgr::showBattleResult()
 			if(battleType==BATTLE_TYPE_MONSTER)
 			{
 				NDLog("type:%d",m_battle->GetBattleType());
-				ScriptMgrObj.excuteLuaFunc("LoadUI", "MonsterRewardUI",0);
-				ScriptMgrObj.excuteLuaFunc("SetRewardExp", "MonsterRewardUI",battleReward->exp);
+				/***
+				* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+				* begin
+				*/
+// 				ScriptMgrObj.excuteLuaFunc("LoadUI", "MonsterRewardUI",0);
+// 				ScriptMgrObj.excuteLuaFunc("SetRewardExp", "MonsterRewardUI",battleReward->exp);
+				/***
+				* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+				* end
+				*/
 				
 				for(int i=0;i<5;i++)
 				{
 					if(battleReward->itemtype[i]!=0)
 					{
 						NDLog("addRewardItem:%d",battleReward->itemtype[i]);
-						ScriptMgrObj.excuteLuaFunc("addRewardItem", "MonsterRewardUI",i+1,battleReward->itemtype[i],battleReward->item_amount[i]);
+					//	ScriptMgrObj.excuteLuaFunc("addRewardItem", "MonsterRewardUI",i+1,battleReward->itemtype[i],battleReward->item_amount[i]); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 						
 					}
 				}
-			}else if(battleType==BATTLE_TYPE_SPORTS||battleType==BATTLE_TYPE_BOSS){
-				NDLog("result,sports");
-				ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
-				ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI",battle_result,battleReward->money,battleReward->repute);
-			}else if(battleType==BATTLE_TYPE_PLAYBACK){
-				ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
-				ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI",battle_result,0,0);
 			}
-		}else if(battle_result == BATTLE_COMPLETE_LOSE)
+			/***
+			* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			* begin
+			*/
+// 			else if(battleType==BATTLE_TYPE_SPORTS||battleType==BATTLE_TYPE_BOSS)
+// 			{
+// 				NDLog("result,sports");
+// 				ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
+// 				ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI",battle_result,battleReward->money,battleReward->repute);
+// 			}
+// 			else if(battleType==BATTLE_TYPE_PLAYBACK)
+// 			{
+// 				ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
+// 				ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI",battle_result,0,0);
+// 			}
+			/***
+			* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			* end
+			*/
+		}
+		else if(battle_result == BATTLE_COMPLETE_LOSE)
 		{
-			if(battleType==BATTLE_TYPE_MONSTER)
-			{
-				ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
-				ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI",battle_result,battleReward->money,battleReward->repute);
-			}else if(battleType==BATTLE_TYPE_SPORTS||battleType==BATTLE_TYPE_BOSS){
-				ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
-				ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI",battle_result,battleReward->money,battleReward->repute);
-			}else if(battleType==BATTLE_TYPE_PLAYBACK){
-				ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
-				ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI",battle_result,0,0);
-			}
+			/***
+			* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			* begin
+			*/
+// 			if(battleType==BATTLE_TYPE_MONSTER)
+// 			{
+// 				ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
+// 				ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI",battle_result,battleReward->money,battleReward->repute);
+// 			}
+// 			else if(battleType==BATTLE_TYPE_SPORTS||battleType==BATTLE_TYPE_BOSS)
+// 			{
+// 				ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
+// 				ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI",battle_result,battleReward->money,battleReward->repute);
+// 			}
+// 			else if(battleType==BATTLE_TYPE_PLAYBACK)
+// 			{
+// 				ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
+// 				ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI",battle_result,0,0);
+// 			}
+			/***
+			* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			* end
+			*/
 		}
 	}
 }

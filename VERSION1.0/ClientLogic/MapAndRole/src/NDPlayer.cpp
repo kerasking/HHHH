@@ -717,7 +717,7 @@ namespace NDEngine
 	void NDPlayer::OnDrawEnd(bool bDraw)
 	{
 		NDManualRole::OnDrawEnd(bDraw);
-		HarvestEventMgrObj.OnTimer(0);
+	//	HarvestEventMgrObj.OnTimer(0); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	}
 	
 	void NDPlayer::CaclEquipEffect()

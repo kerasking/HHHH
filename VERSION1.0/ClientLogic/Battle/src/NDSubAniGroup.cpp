@@ -11,67 +11,71 @@
 
 using namespace NDEngine;
 
-bool DrawSubAnimation(NDNode* layer, NDSubAniGroup& sag)
-{
-	//NDNode* layer = this->GetParent();
-	
-	if (!layer)
-	{
-		return true;
-	}
-	
-	NDFrameRunRecord* record = sag.frameRec;
-	
-	if (!record) 
-	{
-		return true;
-	}
-	
-	NDAnimationGroup *aniGroup = sag.aniGroup;
-	
-	if(!aniGroup) {
-		return true;
-	}
-	
-	CGPoint pos = aniGroup->getPosition();
-	aniGroup->setRunningMapSize(layer->GetContentSize());
-	
-	NDAnimation* ani = NULL;
-	if (aniGroup->getAnimations()->count() > 0) {
-		ani = (NDAnimation*)aniGroup->getAnimations()->objectAtIndex(0);
-	}
-	
-	if (!ani) {
-		return true;
-	}
-	
-	CGPoint posTarget = ccp(0, 0);
-	if (aniGroup->getType() == SUB_ANI_TYPE_NONE) {
-		aniGroup->setReverse(sag.fighter->m_info.group == BATTLE_GROUP_DEFENCE ? false : true);
-		int coordx = 0;
-		
-		if (aniGroup->getReverse()) {// 向右释放技能
-			coordx += (240 - (aniGroup->getPosition().x + ani->getW())) * 2;
-		}
-		
-		posTarget.x = pos.x + ani->getW() / 2 + coordx + 20;
-		posTarget.y = pos.y + ani->getH() / 2 + 45;
-		//aniGroup.draw(g, pos.x + aniGroup.getWidth() / 2 + coordx, pos.y + aniGroup.getHeight() + coordy, 0, 0);
-	} else if (aniGroup->getType() == SUB_ANI_TYPE_TARGET || aniGroup->getType() == SUB_ANI_TYPE_SELF) {
-		posTarget.x = sag.fighter->getX();
-		posTarget.y = sag.fighter->getY();
-		//aniGroup.draw(g, sag.fighter.getX(), sag.fighter.getY(), 0, 0);
-	}
-	
-	// 子动画播放位置设置
-	aniGroup->setPosition(posTarget);
-	
-	ani->runWithRunFrameRecord(record,true,1.0f);//layer->getScale());
-	
-	aniGroup->setPosition(pos);
-	
-	return record->getCurrentFrameIndex() != 0 && record->getNextFrameIndex() == 0;
-}
+// bool DrawSubAnimation(NDNode* layer, NDSubAniGroup& sag)
+// {
+// 	//NDNode* layer = this->GetParent();
+// 	
+// 	if (!layer)
+// 	{
+// 		return true;
+// 	}
+// 	
+// 	NDFrameRunRecord* record = sag.frameRec;
+// 	
+// 	if (!record) 
+// 	{
+// 		return true;
+// 	}
+// 	
+// 	NDAnimationGroup *aniGroup = sag.aniGroup;
+// 	
+// 	if(!aniGroup) {
+// 		return true;
+// 	}
+// 	
+// 	CGPoint pos = aniGroup->getPosition();
+// 	aniGroup->setRunningMapSize(layer->GetContentSize());
+// 	
+// 	NDAnimation* ani = NULL;
+// 	if (aniGroup->getAnimations()->count() > 0) {
+// 		ani = (NDAnimation*)aniGroup->getAnimations()->objectAtIndex(0);
+// 	}
+// 	
+// 	if (!ani) {
+// 		return true;
+// 	}
+// 	
+// 	CGPoint posTarget = ccp(0, 0);
+// 	if (aniGroup->getType() == SUB_ANI_TYPE_NONE) 
+// 	{
+// 		aniGroup->setReverse(sag.fighter->m_info.group == BATTLE_GROUP_DEFENCE ? false : true);
+// 		int coordx = 0;
+// 		
+// 		if (aniGroup->getReverse()) 
+// 		{// 向右释放技能
+// 			coordx += (240 - (aniGroup->getPosition().x + ani->getW())) * 2;
+// 		}
+// 		
+// 		posTarget.x = pos.x + ani->getW() / 2 + coordx + 20;
+// 		posTarget.y = pos.y + ani->getH() / 2 + 45;
+// 		//aniGroup.draw(g, pos.x + aniGroup.getWidth() / 2 + coordx, pos.y + aniGroup.getHeight() + coordy, 0, 0);
+// 	} 
+// 	else if (aniGroup->getType() == SUB_ANI_TYPE_TARGET || aniGroup->getType() == SUB_ANI_TYPE_SELF) 
+// 	{
+// 		posTarget.x = sag.fighter->getX();
+// 		posTarget.y = sag.fighter->getY();
+// 		//aniGroup.draw(g, sag.fighter.getX(), sag.fighter.getY(), 0, 0);
+// 	}
+// 	
+// 	// 子动画播放位置设置
+// 	aniGroup->setPosition(posTarget);
+// 	
+// 	ani->runWithRunFrameRecord(record,true,1.0f);//layer->getScale());
+// 	
+// 	aniGroup->setPosition(pos);
+// 	
+// 	return record->getCurrentFrameIndex() != 0 && record->getNextFrameIndex() == 0;
+// }
 
 
 void AddSubAniGroup(NDSubAniGroupEx& group)

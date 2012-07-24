@@ -94,8 +94,16 @@ namespace NDEngine
 	class NDUITableLayerDelegate
 	{
 	public:
-		virtual void OnTableLayerCellFocused(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);
-		virtual void OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);
+		/***
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* begin
+		*/
+		//virtual void OnTableLayerCellFocused(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);
+		//virtual void OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);
+		/***
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* end
+		*/
 	};
 	
 	class NDUITableLayer : public NDUILayer, public NDUISectionTitleDelegate, public NDUIVerticalScrollBarDelegate

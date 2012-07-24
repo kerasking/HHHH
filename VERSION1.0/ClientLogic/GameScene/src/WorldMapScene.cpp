@@ -248,11 +248,19 @@ bool WorldMapLayer::IsInFilterList(int nMapId)
 		}
 	}
 	
-	if (!ScriptMgrObj.excuteLuaFunc("IsMapCanOpen", "AffixBossFunc"))
-	{
-		return true;
-	}
-	
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* begin
+*/
+// 	if (!ScriptMgrObj.excuteLuaFunc("IsMapCanOpen", "AffixBossFunc"))
+// 	{
+// 		return true;
+// 	}
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* end
+*/
+
 	return false;
 }
 

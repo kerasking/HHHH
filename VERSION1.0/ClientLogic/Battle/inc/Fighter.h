@@ -458,7 +458,7 @@ private:
 	ATKTYPE skillAtkType;
 	bool willBeAtk;
 	
-	ImageNumber* m_imgHurtNum;
+	//ImageNumber* m_imgHurtNum; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	NDUIImage* m_imgBaoJi;
 	NDUIImage* m_imgActionWord;
 	NDUIImage* m_imgBoji;
