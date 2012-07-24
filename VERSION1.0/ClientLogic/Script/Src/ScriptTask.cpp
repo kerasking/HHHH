@@ -170,11 +170,11 @@ void OnDealTask(int nTaskId)
 	bool bRet = script.IsLuaFuncExist(ssTaskFunc.str().c_str(), "TASK");
 	if (bRet)
 	{
-		script.excuteLuaFunc(ssTaskFunc.str().c_str(), "TASK", nTaskId);
+		//script.excuteLuaFunc(ssTaskFunc.str().c_str(), "TASK", nTaskId); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	}
 	else 
 	{
-		script.excuteLuaFunc("TASK_FUNCTION_COMMON", "TASK", nTaskId);
+		//script.excuteLuaFunc("TASK_FUNCTION_COMMON", "TASK", nTaskId); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	}
 }
 

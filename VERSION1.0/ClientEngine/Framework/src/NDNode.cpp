@@ -50,7 +50,7 @@ namespace NDEngine
 		
 		m_ccNode = new NDBaseNode();
 		NDBaseNode *ndBaseNode = (NDBaseNode *)m_ccNode;
-		ndBaseNode->setNDNode(this);		
+		//ndBaseNode->setNDNode(this);		
 	}
 	
 	void NDNode::draw()

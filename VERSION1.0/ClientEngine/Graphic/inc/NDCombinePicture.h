@@ -52,7 +52,7 @@ public:
 	
 	CGSize GetSize();
 	
-	void DrawInRect(CGRect rect);
+	//void DrawInRect(CGRect rect);
 	
 private:
 	

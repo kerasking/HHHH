@@ -300,7 +300,7 @@ void NDNpc::SetNpcState(NPC_STATE state)
 	
 	if (!m_picState)
 	{
-		m_picState = ScriptMgrObj.excuteLuaFunc<NDPicture*>("GetNpcFuncPic", "NPC", this->m_id);
+		//m_picState = ScriptMgrObj.excuteLuaFunc<NDPicture*>("GetNpcFuncPic", "NPC", this->m_id); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	}
 }
 

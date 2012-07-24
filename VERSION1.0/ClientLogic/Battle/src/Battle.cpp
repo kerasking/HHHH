@@ -2081,46 +2081,55 @@ Fighter* Battle::GetTouchedFighter(VEC_FIGHTER& fighterList, CGPoint pt)
 
 bool Battle::TouchEnd(NDTouch* touch)
 {
-	if (m_dlgStatus) {
-		this->CloseStatusDlg();
-	}
-	
-	if (touch && touch->GetLocation().x > 0.0001f && touch->GetLocation().y > 0.0001f) {
-		if (NDUILayer::TouchEnd(touch)) {
-			return false;
-		}
-	}
-	
-	Fighter* f = this->GetTouchedFighter(this->GetOurSideList(), touch->GetLocation());
-	if(!f){
-		f=this->GetTouchedFighter(this->GetEnemySideList(), touch->GetLocation());
-	}
-	
-	if(f)
-	{
-		NDLog("touch fighter");
-		if(this->currentShowFighter>0)
-		{
-			ScriptMgrObj.excuteLuaFunc("CloseFighterInfo","FighterInfo",0);
-		}
-		this->currentShowFighter=f->m_info.idObj;
-		
-		int idType=f->m_info.idType;
-		int skillId=-1;
-		if(f->m_info.fighterType==FIGHTER_TYPE_PET)
-		{
-			skillId=ScriptDBObj.GetN("pet_config",idType,DB_PET_CONFIG_SKILL);
-		}else if(f->m_info.fighterType==FIGHTER_TYPE_MONSTER)
-		{
-			skillId=ScriptDBObj.GetN("monstertype",idType,DB_MONSTERTYPE_SKILL);
-		}
-		std::string skillName=ScriptDBObj.GetS("skill_config",skillId,DB_SKILL_CONFIG_NAME);
-		ScriptMgrObj.excuteLuaFunc("LoadUI", "FighterInfo",f->getOriginX(),f->getOriginY());
-		ScriptMgrObj.excuteLuaFunc<bool>("SetFighterInfo","FighterInfo",f->GetRole()->m_name,skillName);
-		ScriptMgrObj.excuteLuaFunc("UpdateHp","FighterInfo",f->m_info.nLife,f->m_info.nLifeMax);
-		ScriptMgrObj.excuteLuaFunc("UpdateMp","FighterInfo",f->m_info.nMana,f->m_info.nManaMax);
-	}
-	
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* begin
+*/
+// 	if (m_dlgStatus)
+// 	{
+// 		this->CloseStatusDlg();
+// 	}
+// 	
+// 	if (touch && touch->GetLocation().x > 0.0001f && touch->GetLocation().y > 0.0001f) {
+// 		if (NDUILayer::TouchEnd(touch)) {
+// 			return false;
+// 		}
+// 	}
+// 	
+// 	Fighter* f = this->GetTouchedFighter(this->GetOurSideList(), touch->GetLocation());
+// 	if(!f){
+// 		f=this->GetTouchedFighter(this->GetEnemySideList(), touch->GetLocation());
+// 	}
+// 	
+// 	if(f)
+// 	{
+// 		NDLog("touch fighter");
+// 		if(this->currentShowFighter>0)
+// 		{
+// 			ScriptMgrObj.excuteLuaFunc("CloseFighterInfo","FighterInfo",0);
+// 		}
+// 		this->currentShowFighter=f->m_info.idObj;
+// 		
+// 		int idType=f->m_info.idType;
+// 		int skillId=-1;
+// 		if(f->m_info.fighterType==FIGHTER_TYPE_PET)
+// 		{
+// 			skillId=ScriptDBObj.GetN("pet_config",idType,DB_PET_CONFIG_SKILL);
+// 		}else if(f->m_info.fighterType==FIGHTER_TYPE_MONSTER)
+// 		{
+// 			skillId=ScriptDBObj.GetN("monstertype",idType,DB_MONSTERTYPE_SKILL);
+// 		}
+// 		std::string skillName=ScriptDBObj.GetS("skill_config",skillId,DB_SKILL_CONFIG_NAME);
+// 		ScriptMgrObj.excuteLuaFunc("LoadUI", "FighterInfo",f->getOriginX(),f->getOriginY());
+// 		ScriptMgrObj.excuteLuaFunc<bool>("SetFighterInfo","FighterInfo",f->GetRole()->m_name,skillName);
+// 		ScriptMgrObj.excuteLuaFunc("UpdateHp","FighterInfo",f->m_info.nLife,f->m_info.nLifeMax);
+// 		ScriptMgrObj.excuteLuaFunc("UpdateMp","FighterInfo",f->m_info.nMana,f->m_info.nManaMax);
+// 	}
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* end
+*/
+
 //	switch (m_battleStatus)
 //	{
 //		case BS_CHOOSE_VIEW_FIGHTER_STATUS:

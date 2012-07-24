@@ -2816,18 +2816,31 @@ void GameScene::ShrinkQuickInteraction()
 
 void GameScene::OnTimer(OBJID tag)
 {
-	if (1 == tag) {
-		for (MAP_POS_TEXT_IT it = s_mapPosText.begin(); it != s_mapPosText.end();) {
-			if (it->second->OnTimer()) {
-				m_userState->RemovePosText(it->second);
-				SAFE_DELETE(it->second);
-				s_mapPosText.erase(it++);
-			} else {
-				it++;
-			}
-		}
-	}
-	
+	/***
+	* 临时性注释 郭浩
+	* begin
+	*/
+// 	if (1 == tag) 
+// 	{
+// 		for (MAP_POS_TEXT_IT it = s_mapPosText.begin(); it != s_mapPosText.end();) 
+// 		{
+// 			if (it->second->OnTimer()) 
+// 			{
+// 				m_userState->RemovePosText(it->second);
+// 				SAFE_DELETE(it->second);
+// 				s_mapPosText.erase(it++);
+// 			}
+// 			else
+// 			{
+// 				it++;
+// 			}
+// 		}
+// 	}
+	/***
+	* 临时性注释 郭浩
+	* end
+	*/
+
 	// test
 	if (2 == tag)
 	{

@@ -207,12 +207,21 @@ namespace NDEngine
 		bool bRet = script.IsLuaFuncExist(ssNpcFunc.str().c_str(), "NPC");
 		if (bRet)
 		{
-			bRet = script.excuteLuaFunc(ssNpcFunc.str().c_str(), "NPC", idNpc);
-			script.excuteLuaFunc("AttachTask", "NPC", idNpc);
+
+			/***
+			* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			* begin
+			*/
+			// 			bRet = script.excuteLuaFunc(ssNpcFunc.str().c_str(), "NPC", idNpc);
+// 			script.excuteLuaFunc("AttachTask", "NPC", idNpc);
+			/***
+			* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			* end
+			*/
 		}
 		else 
 		{
-			bRet = script.excuteLuaFunc("NPC_CLICK_COMMON", "NPC", idNpc);
+			//bRet = script.excuteLuaFunc("NPC_CLICK_COMMON", "NPC", idNpc); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		}
 		
 		return;

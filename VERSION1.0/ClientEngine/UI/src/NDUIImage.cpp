@@ -76,7 +76,7 @@ namespace NDEngine
 		if (this->IsVisibled()) 
 		{
 			if (m_pic) m_pic->DrawInRect(this->GetScreenRect());
-			else if (m_combinePic) m_combinePic->DrawInRect(this->GetScreenRect());
+			//else if (m_combinePic) m_combinePic->DrawInRect(this->GetScreenRect()); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		}		
 
 	}

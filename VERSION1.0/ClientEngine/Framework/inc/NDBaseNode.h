@@ -15,7 +15,7 @@
 
 class NDBaseNode : public cocos2d::CCNode 
 {
-	CC_PROPERTY(NDEngine::NDNode*, m_ndNode, NDNode)
+	//CC_PROPERTY(NDEngine::NDNode*, m_ndNode, NDNode) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 
 public:
 	NDBaseNode(void);

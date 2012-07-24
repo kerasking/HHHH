@@ -13,15 +13,19 @@
 using namespace NDEngine;
 
 NDBaseNode::NDBaseNode(void)
-: m_ndNode(NULL)
+//: m_ndNode(NULL) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 {
 }
 
 void NDBaseNode::draw(void)
 {
-	if (m_ndNode && m_ndNode->DrawEnabled()) 
-	{
-		NDDirector::DefaultDirector()->ResumeViewRect(m_ndNode);
-		m_ndNode->draw();
-	}	
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* all
+	*/
+// 	if (m_ndNode && m_ndNode->DrawEnabled()) 
+// 	{
+// 		NDDirector::DefaultDirector()->ResumeViewRect(m_ndNode);
+// 		m_ndNode->draw();
+// 	}	
 }

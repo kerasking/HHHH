@@ -12,6 +12,9 @@
 
 #include "basedefine.h"
 #include <map>
+#include <cocos2d.h>
+
+using namespace cocos2d;
 
 class ITimerCallback
 {
@@ -19,7 +22,16 @@ public:
 	virtual void OnTimer(OBJID tag) = 0;
 };
 
-class Timer;
+class Timer : public CCObject
+{
+	//CC_PROPERTY(int, m_nTag, Tag)
+	//CC_PROPERTY(ITimerCallback*, m_TimerCallback, TimerCallback)
+
+public:
+	Timer();
+	void onTimer(ccTime elapsed);
+};
+
 class NDTimer
 {
 public:

@@ -4,6 +4,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libClientEngine", "ClientEngine\proj.win32\libClientEngine.vcproj", "{291566ED-9B58-4403-8EA0-ABFCE1CD9B5E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{98887397-9BCD-4BA6-B391-E1B83A6A009A} = {98887397-9BCD-4BA6-B391-E1B83A6A009A}
+		{98A51BA8-FC3A-415B-AC8F-8C7BD464E93E} = {98A51BA8-FC3A-415B-AC8F-8C7BD464E93E}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libLuaPlus", "LuaPlus\proj.win32\libLuaPlus.vcproj", "{11D35E67-AE09-4886-9B92-D41E86F6BD19}"
@@ -14,6 +15,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libcocos2d", "cocos2d-x\coc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libClientLogic", "ClientLogic\proj.win32\libClientLogic.vcproj", "{65ACACA8-12E1-4F03-AB45-BA55A91BFD21}"
 	ProjectSection(ProjectDependencies) = postProject
+		{98A51BA8-FC3A-415B-AC8F-8C7BD464E93E} = {98A51BA8-FC3A-415B-AC8F-8C7BD464E93E}
 		{291566ED-9B58-4403-8EA0-ABFCE1CD9B5E} = {291566ED-9B58-4403-8EA0-ABFCE1CD9B5E}
 	EndProjectSection
 EndProject
@@ -24,6 +26,12 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testReader", "testReader\testReader.vcproj", "{7BE50837-1230-44F4-AB43-D55C836DA9FA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{98887397-9BCD-4BA6-B391-E1B83A6A009A} = {98887397-9BCD-4BA6-B391-E1B83A6A009A}
+		{291566ED-9B58-4403-8EA0-ABFCE1CD9B5E} = {291566ED-9B58-4403-8EA0-ABFCE1CD9B5E}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClientLancher", "ClientLancher\proj.win32\ClientLancher.vcproj", "{A14F9395-563B-4B76-8730-DCB0BF9B2FB1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{65ACACA8-12E1-4F03-AB45-BA55A91BFD21} = {65ACACA8-12E1-4F03-AB45-BA55A91BFD21}
 		{291566ED-9B58-4403-8EA0-ABFCE1CD9B5E} = {291566ED-9B58-4403-8EA0-ABFCE1CD9B5E}
 	EndProjectSection
 EndProject
@@ -65,6 +73,10 @@ Global
 		{7BE50837-1230-44F4-AB43-D55C836DA9FA}.Debug|Win32.Build.0 = Debug|Win32
 		{7BE50837-1230-44F4-AB43-D55C836DA9FA}.Release|Win32.ActiveCfg = Release|Win32
 		{7BE50837-1230-44F4-AB43-D55C836DA9FA}.Release|Win32.Build.0 = Release|Win32
+		{A14F9395-563B-4B76-8730-DCB0BF9B2FB1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A14F9395-563B-4B76-8730-DCB0BF9B2FB1}.Debug|Win32.Build.0 = Debug|Win32
+		{A14F9395-563B-4B76-8730-DCB0BF9B2FB1}.Release|Win32.ActiveCfg = Release|Win32
+		{A14F9395-563B-4B76-8730-DCB0BF9B2FB1}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -363,7 +363,7 @@ namespace NDEngine
 							m_picBG->DrawInRect(scrRect);					
 					}
 					else if (m_combinePicBG)
-						m_combinePicBG->DrawInRect(scrRect);
+						return;//m_combinePicBG->DrawInRect(scrRect); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 					else
 						DrawRecttangle(scrRect, m_backgroundColor);
 					
@@ -503,7 +503,7 @@ namespace NDEngine
 					{
 						if (m_picTouchBG) m_picTouchBG->DrawInRect(scrRect);
 						
-						if (m_combinePicTouchBG) m_combinePicTouchBG->DrawInRect(scrRect);
+						//if (m_combinePicTouchBG) m_combinePicTouchBG->DrawInRect(scrRect); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 						
 						if (m_touchDownStatus == TouchDownImage) 
 						{
@@ -524,13 +524,21 @@ namespace NDEngine
 							{
 								if (m_touchDownImgUseCustomRect) 
 								{
-									m_combinepicTouchDownImg->DrawInRect(CGRectMake(scrRect.origin.x + m_touchDownImgCustomRect.origin.x, 
-																			scrRect.origin.y + m_touchDownImgCustomRect.origin.y, 
-																			m_touchDownImgCustomRect.size.width, m_touchDownImgCustomRect.size.height));
+									/***
+									* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+									* begin
+									*/
+									// 									m_combinepicTouchDownImg->DrawInRect(CGRectMake(scrRect.origin.x + m_touchDownImgCustomRect.origin.x, 
+// 																			scrRect.origin.y + m_touchDownImgCustomRect.origin.y, 
+// 																			m_touchDownImgCustomRect.size.width, m_touchDownImgCustomRect.size.height));
+									/***
+									* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+									* end
+									*/
 								}
 								else 
 								{
-									m_combinepicTouchDownImg->DrawInRect(scrRect);
+									//m_combinepicTouchDownImg->DrawInRect(scrRect); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 								}
 							}
 							
@@ -540,7 +548,8 @@ namespace NDEngine
 							if (m_image) 
 								m_image->SetColor(m_touchDownColor);
 							else if (m_combinepicImg)
-								m_combinepicImg->SetColor(m_touchDownColor);
+								return;
+								//m_combinepicImg->SetColor(m_touchDownColor); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 							else							
 								DrawRecttangle(scrRect, m_touchDownColor);
 						}						
@@ -552,7 +561,7 @@ namespace NDEngine
 						if (!m_touched || NULL == m_touchDownImage) 
 						{
 							if (m_image) m_image->SetColor(m_normalImageColor);							
-							else if (m_combinepicImg) m_combinepicImg->SetColor(ccc4(255, 255, 255, 255));
+							//else if (m_combinepicImg) m_combinepicImg->SetColor(ccc4(255, 255, 255, 255)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 						}	
 						
 						if (m_touchDownStatus != TouchDownImage || !m_touched || NULL == m_touchDownImage) 
@@ -571,7 +580,7 @@ namespace NDEngine
 									rect.size.height	+= 10 * fScale;
 								}
 								if (m_image) m_image->DrawInRect(rect);
-								else if (m_combinepicImg) m_combinepicImg->DrawInRect(rect);
+								//else if (m_combinepicImg) m_combinepicImg->DrawInRect(rect); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 							}
 							else 
 							{
@@ -586,7 +595,7 @@ namespace NDEngine
 								}
 								
 								if (m_image) m_image->DrawInRect(rect);
-								else if (m_combinepicImg) m_combinepicImg->DrawInRect(rect);
+								//else if (m_combinepicImg) m_combinepicImg->DrawInRect(rect); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 							}
 						}						
 					}

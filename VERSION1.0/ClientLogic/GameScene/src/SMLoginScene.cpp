@@ -96,18 +96,18 @@ CSMLoginScene::Initialization()
 }
 
 ////////////////////////////////////////////////////////////
-// void 
-// CSMLoginScene::OnTimer(OBJID idTag)
-// {
-//     if (idTag != ONTIMER_TAG_LOGIN) {
-//         return;
-//     }
-//     
-//     if(m_bUpdOk){
-//         ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
-//         m_bUpdOk = false;
-//     }
-// }
+ void 
+ CSMLoginScene::OnTimer(OBJID idTag)
+ {
+     //if (idTag != ONTIMER_TAG_LOGIN) {
+     //    return;
+     //}
+     //
+     //if(m_bUpdOk){
+     //    ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
+     //    m_bUpdOk = false;
+     //}
+ }
 // 
 // //interface of IUpdateEvent
 // ////////////////////////////////////////////////////////////

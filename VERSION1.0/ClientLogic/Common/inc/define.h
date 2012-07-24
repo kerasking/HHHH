@@ -28,6 +28,9 @@
 * @author ¹ùºÆ
 */
 
+#pragma warning(disable:4006)
+#pragma warning(disable:4221)
+
 #ifndef YES
 #define YES true
 #endif
