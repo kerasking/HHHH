@@ -139,7 +139,7 @@ private:
 	
 	static QuickInteraction* s_instance;
 	
-	CAutoLink<NDUIMaskLayer> m_layerMask;
+//	CAutoLink<NDUIMaskLayer> m_layerMask; ///< 临时性注释 郭浩
 	
 	NDUIChildrenEventLayer* m_firstLayer;
 private:

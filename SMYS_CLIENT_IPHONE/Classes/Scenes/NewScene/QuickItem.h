@@ -144,7 +144,7 @@ private:
 	
 	unsigned int	m_uiCurPage;
 	
-	CAutoLink<NDUIMaskLayer> m_layerMask;
+//	CAutoLink<NDUIMaskLayer> m_layerMask; ///< 临时性注释 郭浩
 };
 
 #endif // _QUICK_ITEM_H_

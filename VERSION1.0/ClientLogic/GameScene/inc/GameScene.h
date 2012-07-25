@@ -37,7 +37,7 @@ class QuickItem;
 
 class QuickInteraction;
 
-class QuickFunc;
+//class QuickFunc; ///< 临时性注释 郭浩
 
 class QuickTeam;
 
@@ -129,7 +129,7 @@ public:
 		ret: true->成功,false->失败
 	**/
 	bool HideTLShare();
-	DirectKey* const GetDirectKey();
+	//DirectKey* const GetDirectKey(); ///< 临时性注释 郭浩
 	void ShowMiniMap(bool bShow);
 	void ShowPlayerHead(bool bShow);
 	void ShowPetHead(bool bShow);
@@ -237,7 +237,7 @@ private:
 	
 	PlayerHeadInMap* m_playerHead;
 	TargetHeadInMap* m_targetHead;
-	DirectKey* m_directKey;
+//	DirectKey* m_directKey; ///< 临时性注释 郭浩
 	NDUIHControlContainer* m_hccOPItem;
 	PlayerHeadInMap* m_petHead;
 
@@ -247,7 +247,7 @@ private:
 	
 	QuickItem *m_quickItem;
 
-	QuickFunc *m_quickFunc;
+	//QuickFunc *m_quickFunc; ///< 临时性注释 郭浩
 
 	QuickTeam *m_quickTeam;
 	

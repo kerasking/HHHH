@@ -74,44 +74,50 @@ private:
 	static BattleFieldScene* s_BFScene;
 };
 
-#pragma mark 战场内死亡
-
-class BattleFieldRelive : 
-public NDUILayer,
-public NDUIButtonDelegate
-{
-	DECLARE_CLASS(BattleFieldRelive)
-	
-	static void Show(int time = 0);
-	
-	static void SetTimeCount(int time);
-	
-	static void Hide();
-public:
-	~BattleFieldRelive();
-	
-	void Initialization(); override
-	
-	void OnTimer(OBJID tag); override 
-	
-	void SetTime(int time);
-	
-	void OnButtonClick(NDUIButton* button);
-	
-private:
-	BattleFieldRelive();
-
-	void ShowMask(bool show);
-	
-private:
-	NDUILayer				*m_layerMask;
-	NDUILabel				*m_lbTime;
-	NDUIButton				*m_btnRelive, *m_btnReliveInCurPlace;
-	NDTimer					m_timer;
-	int						m_iCurTime;
-	
-	static BattleFieldRelive* s_instance;
-	static int s_time;		
-};
+/***
+* 临时性注释 郭浩
+* begin
+*/
+// class BattleFieldRelive : 
+// public NDUILayer,
+// public NDUIButtonDelegate
+// {
+// 	DECLARE_CLASS(BattleFieldRelive)
+// 	
+// 	static void Show(int time = 0);
+// 	
+// 	static void SetTimeCount(int time);
+// 	
+// 	static void Hide();
+// public:
+// 	~BattleFieldRelive();
+// 	
+// 	void Initialization(); override
+// 	
+// 	void OnTimer(OBJID tag); override 
+// 	
+// 	void SetTime(int time);
+// 	
+// 	void OnButtonClick(NDUIButton* button);
+// 	
+// private:
+// 	BattleFieldRelive();
+// 
+// 	void ShowMask(bool show);
+// 	
+// private:
+// 	NDUILayer				*m_layerMask;
+// 	NDUILabel				*m_lbTime;
+// 	NDUIButton				*m_btnRelive, *m_btnReliveInCurPlace;
+// 	NDTimer					m_timer;
+// 	int						m_iCurTime;
+// 	
+// 	static BattleFieldRelive* s_instance;
+// 	static int s_time;		
+// };
+/***
+* 临时性注释 郭浩
+* end
+*/
 
 #endif // _BATTLE_FIELD_SCENE_H_

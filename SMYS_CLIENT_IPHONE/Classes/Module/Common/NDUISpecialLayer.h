@@ -53,20 +53,28 @@ public:
 
 ////////////////////////////////////////////////
 //蒙板层
-class NDUIMaskLayer : public NDUILayer
-{
-	DECLARE_CLASS(NDUIMaskLayer)
-	
-public:
-	NDUIMaskLayer();
-	~NDUIMaskLayer();
 
-	void Initialization(); override
-	
-	DECLARE_AUTOLINK(NDUIMaskLayer)
-	INTERFACE_AUTOLINK(NDUIMaskLayer)
-};
-
+/***
+* 临时性注释 郭浩
+* begin
+*/
+// class NDUIMaskLayer : public NDUILayer
+// {
+// 	DECLARE_CLASS(NDUIMaskLayer)
+// 	
+// public:
+// 	NDUIMaskLayer();
+// 	~NDUIMaskLayer();
+// 
+// 	void Initialization(); override
+// 	
+// 	DECLARE_AUTOLINK(NDUIMaskLayer)
+// 	INTERFACE_AUTOLINK(NDUIMaskLayer)
+// };
+/***
+* 临时性注释 郭浩
+* end
+*/
 
 
 #endif // _ND_UI_SPECIAL_LAYER_H_

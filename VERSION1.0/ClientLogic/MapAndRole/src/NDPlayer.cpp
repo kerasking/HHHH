@@ -1092,12 +1092,21 @@ namespace NDEngine
 			return;
 		}
 		
-		DirectKey* dk = 0;//((GameScene*)scene)->GetDirectKey(); ///< 临时性注释 郭浩 加上 = 0;
+		/***
+		* 临时性注释 郭浩
+		* begin
+		*/
+//		DirectKey* dk = ((GameScene*)scene)->GetDirectKey();
 		
-		if (!dk)
-		{
-			return;
-		}
+// 		if (!dk)
+// 		{
+// 			return;
+// 		}
+
+		/***
+		* 临时性注释 郭浩
+		* end
+		*/
 		
 		dk_vec_pos vpos;
 		

@@ -305,11 +305,11 @@ GameScene::GameScene()
 	m_uiLayer = NULL;
 
 	m_dlgFarm = NULL;
-	m_directKey = NULL;
+//	m_directKey = NULL; ///< 临时性注释 郭浩
 	
 	m_quickItem = NULL;
 	
-	m_quickFunc = NULL;
+//	m_quickFunc = NULL; ///< 临时性注释 郭浩
 	
 	m_quickTeam = NULL;
 }
@@ -400,26 +400,44 @@ void GameScene::OnBattleBegin()
 	std::vector<NDNode*> vDel;
 	
 	std::vector<NDNode*>::iterator it = this->m_childrenList.begin();
-	for (; it != this->m_childrenList.end(); it++) {
-		if ((*it)->IsKindOfClass(RUNTIME_CLASS(NDMapLayerLogic)) ||
-		    (*it)->IsKindOfClass(RUNTIME_CLASS(TextControl)) ||
-		    (*it)->IsKindOfClass(RUNTIME_CLASS(NDUIScrollText)) ||
-			(*it)->IsKindOfClass(RUNTIME_CLASS(TalkBox)) ||
-			(*it)->IsKindOfClass(RUNTIME_CLASS(NDUIDirectKeyTop))|| 
-			(*it)->IsKindOfClass(RUNTIME_CLASS(BattleFieldRelive)) ||
-			(*it)->IsKindOfClass(RUNTIME_CLASS(NDUIMaskLayer)) ) {
-			if ((*it)->IsKindOfClass(RUNTIME_CLASS(TalkBox))) ((NDUINode*)(*it))->SetVisible(false);
-			continue;
-		} else {
-			vDel.push_back(*it);
-		}
-	}
+
+	/***
+	* 临时性注释 郭浩
+	* begin
+	*/
+	//for (; it != this->m_childrenList.end(); it++) 
+	//{
+	//	if ((*it)->IsKindOfClass(RUNTIME_CLASS(NDMapLayerLogic)) ||
+	//	    (*it)->IsKindOfClass(RUNTIME_CLASS(TextControl)) ||
+	//	    (*it)->IsKindOfClass(RUNTIME_CLASS(NDUIScrollText)) ||
+	//		(*it)->IsKindOfClass(RUNTIME_CLASS(TalkBox)) ||
+			//(*it)->IsKindOfClass(RUNTIME_CLASS(NDUIDirectKeyTop)) ||
+			//(*it)->IsKindOfClass(RUNTIME_CLASS(BattleFieldRelive)) ||
+			//(*it)->IsKindOfClass(RUNTIME_CLASS(NDUIMaskLayer)) )
+	//		)
+	//	{
+	//		if ((*it)->IsKindOfClass(RUNTIME_CLASS(TalkBox))) ((NDUINode*)(*it))->SetVisible(false);
+	//			continue;
+	//	} 
+	//	else 
+	//	{
+	//		vDel.push_back(*it);
+	//	}
+	//}
+	/***
+	* 临时性注释 郭浩
+	* end
+	*/
 	
-	for (it = vDel.begin(); it != vDel.end(); it++) {
-		if ((*it)->IsKindOfClass(RUNTIME_CLASS(NDUIDialog))) {
+	for (it = vDel.begin(); it != vDel.end(); it++)
+	{
+		if ((*it)->IsKindOfClass(RUNTIME_CLASS(NDUIDialog)))
+		{
 			if (!(*it)->IsKindOfClass(RUNTIME_CLASS(GameQuitDialog)))
 				((NDUIDialog*)(*it))->Close();
-		} else {
+		} 
+		else 
+		{
 			(*it)->RemoveFromParent(true);
 		}
 	}
@@ -729,9 +747,9 @@ layer->AddChild(btn); \
 	layer->AddChild(m_btnQuickInterationShrink);
 	this->AddUIChild(layer);
 	
-	m_quickFunc = new QuickFunc;
-	m_quickFunc->Initialization(true);
-	this->AddUIChild(m_quickFunc);
+//	m_quickFunc = new QuickFunc; ///< 临时性注释 郭浩
+//	m_quickFunc->Initialization(true); ///< 临时性注释 郭浩
+//	this->AddUIChild(m_quickFunc); ///< 临时性注释 郭浩
 	
 	TeamRefreh(false);
 }
@@ -803,21 +821,30 @@ void GameScene::ShowPlayerHead(bool bShow)
 
 void GameScene::ShowDirectKey(bool bShow)
 {
-	if (bShow) 
-	{
-		if (!m_directKey) 
-		{
-			m_directKey = new DirectKey();
-			m_directKey->Initialization();
-		}
-		
-		if (m_directKey->GetParent() == NULL) 
-		{
-			this->AddUIChild(m_directKey);
-			
-			m_directKey->ShowFinish(this);
-		}
-	}
+	/***
+	* 临时性注释 郭浩
+	* begin
+	*/
+// 	if (bShow) 
+// 	{
+// 		if (!m_directKey) 
+// 		{
+// 			m_directKey = new DirectKey();
+// 			m_directKey->Initialization();
+// 		}
+// 		
+// 		if (m_directKey->GetParent() == NULL) 
+// 		{
+// 			this->AddUIChild(m_directKey);
+// 			
+// 			m_directKey->ShowFinish(this);
+// 		}
+// 	}
+/***
+* 临时性注释 郭浩
+* end
+*/
+
 //	else 
 //	{
 //		SAFE_DELETE_NODE(m_directKey);
@@ -2776,10 +2803,18 @@ void GameScene::processVersionMsg(const char* version, int flag, const char* url
 	dlg->Show(NDCommonCString("VersionUpdate"), version, NDCommonCString("Cancel"), NDCommonCString("Ok"), NULL);
 }
 
-DirectKey* const GameScene::GetDirectKey()
-{
-	return m_directKey;
-}
+/***
+* 临时性注释 郭浩
+* begin
+*/
+// DirectKey* const GameScene::GetDirectKey()
+// {
+// 	return m_directKey;
+// }
+/***
+* 临时性注释 郭浩
+* end
+*/
 
 void GameScene::HandleRootMenuAfterSceneLoad()
 {
@@ -3040,9 +3075,9 @@ void GameScene::TeamRefreh(bool newJoin)
 
 void GameScene::ShowTaskFinish(bool show, std::string tip)
 {
-	if (!m_quickFunc) return;
+//	if (!m_quickFunc) return; ///< 临时性注释 郭浩
 	
-	m_quickFunc->ShowTaskTip(show, tip);
+//	m_quickFunc->ShowTaskTip(show, tip); ///< 临时性注释 郭浩
 }
 
 //////////////////////////////////
