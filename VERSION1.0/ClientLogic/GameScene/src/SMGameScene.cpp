@@ -31,7 +31,7 @@ CSMGameScene* CSMGameScene::Scene()
 
 CSMGameScene::CSMGameScene()
 {
-	m_miniMap	= NULL;	
+//	m_miniMap	= NULL;	 ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	m_mapLayer	= NULL;
 }
 
@@ -74,20 +74,29 @@ void CSMGameScene::Initialization(int mapID)
 
 void CSMGameScene::ShowMiniMap(bool bShow)
 {
-	if (bShow) {
-		if (!this->m_miniMap) {
-			m_miniMap = new NDMiniMap();
-			m_miniMap->Initialization();
-			m_miniMap->SetGameScene(this);
-			m_miniMap->SetFrameRect(CGRectMake(308.0f, 0.0f, 172.0f, 84.0f));
-			this->AddChild(m_miniMap);
-		}
-	} else {
-		if (this->m_miniMap) {
-			this->RemoveChild(m_miniMap, true);
-			m_miniMap = NULL;
-		}
-	}
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* all
+	*/
+// 	if (bShow) 
+// 	{
+// 		if (!this->m_miniMap)
+// 		{
+// 			m_miniMap = new NDMiniMap();
+// 			m_miniMap->Initialization();
+// 			m_miniMap->SetGameScene(this);
+// 			m_miniMap->SetFrameRect(CGRectMake(308.0f, 0.0f, 172.0f, 84.0f));
+// 			this->AddChild(m_miniMap);
+// 		}
+// 	} 
+// 	else
+// 	{
+// 		if (this->m_miniMap)
+// 		{
+// 			this->RemoveChild(m_miniMap, true);
+// 			m_miniMap = NULL;
+// 		}
+// 	}
 }
 
 CGSize CSMGameScene::GetSize()

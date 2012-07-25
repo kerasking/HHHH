@@ -1193,7 +1193,8 @@ namespace NDEngine
 	
 	bool NDManualRole::AssuredRidePet()
 	{
-		return ridepet != NULL && ridepet->canRide()&& !isTransformed();
+//		return ridepet != NULL && ridepet->canRide()&& !isTransformed(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		return true;
 	}
 	
 	void NDManualRole::SetPosition(CGPoint newPosition)
@@ -1365,10 +1366,18 @@ namespace NDEngine
 			ShowShadow(true, ridepet != NULL );
 		}
 
-		if (scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
-		{
-			ShowShadow(false);
-		}
+		/***
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* begin
+		*/
+// 		if (scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
+// 		{
+// 			ShowShadow(false);
+// 		}
+		/***
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* end
+		*/
 
 		if ( node->IsKindOfClass(RUNTIME_CLASS(Battle)) )
 		{
@@ -1454,14 +1463,23 @@ namespace NDEngine
 		}
 		
 		NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
-		
-		if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) 
-			//&& !NDDataPersist::IsGameSettingOn(GS_SHOW_OTHER_PLAYER)  ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-			&& (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading)))) 
-		{
-			return;
-		}
-		
+
+		/***
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* begin
+		*/
+// 		if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) 
+// 			//&& !NDDataPersist::IsGameSettingOn(GS_SHOW_OTHER_PLAYER)  ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+// 			&& (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading)))) 
+// 		{
+// 			return;
+// 		}
+// 		
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* end
+*/
+
 		//»­Æï³è
 		if (AssuredRidePet() && ridepet->iType == TYPE_RIDE_FLY)
 		{

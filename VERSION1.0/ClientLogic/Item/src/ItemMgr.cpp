@@ -717,7 +717,7 @@ void ItemMgr::processItemAttrib(NDTransData* data, int len)
 	
 	setEquipState();
 	
-	PetSkillCompose::refresh();
+//	PetSkillCompose::refresh(); ///* 临时性注释 郭浩
 }
 
 void ItemMgr::processItemDel(NDTransData* data, int len)
@@ -780,7 +780,7 @@ void ItemMgr::processItemDel(NDTransData* data, int len)
 		setEquipState();
 	}
 	
-	PetSkillCompose::refresh();
+//	PetSkillCompose::refresh(); ///< 临时性注释 郭浩
 }
 
 void ItemMgr::processItem(NDTransData* data, int len)
@@ -1007,12 +1007,20 @@ void ItemMgr::processQueryDesc(NDTransData* data, int len)
 		}
 		*/
 	}
-	else if (scene && scene->IsKindOfClass(RUNTIME_CLASS(PetSkillCompose))) 
-	{
-		data->ReadInt();
-		std::string str = data->ReadUnicodeString();
-		GlobalShowDlg(NDCommonCString("SkillView"), str);
-	}
+	/***
+	* 临时性注释 郭浩
+	* begin
+	*/
+// 	else if (scene && scene->IsKindOfClass(RUNTIME_CLASS(PetSkillCompose))) 
+// 	{
+// 		data->ReadInt();
+// 		std::string str = data->ReadUnicodeString();
+// 		GlobalShowDlg(NDCommonCString("SkillView"), str);
+// 	}
+	/***
+	* 临时性注释 郭浩
+	* end
+	*/
 	else if (VendorUILayer::isUILayerShown() ||
 		 VendorBuyUILayer::isUILayerShown() ||
 		 NewTradeLayer::isUILayerShown())
@@ -1242,40 +1250,44 @@ void ItemMgr::processShopCenter(NDTransData* data, int len)
 
 void ItemMgr::processEquipSetCfg(NDTransData* data, int len)
 {
-	int btAmount = data->ReadByte();
-	for (int i = 0; i < btAmount; i++) {
-		SuitTypeObj suitTypeObj;
-		suitTypeObj.iID = data->ReadInt();
-		suitTypeObj.name = data->ReadUnicodeString();		
-		suitTypeObj.equip_id_1=data->ReadInt();
-		suitTypeObj.equip_name_1=data->ReadUnicodeString();
-		suitTypeObj.equip_id_2=data->ReadInt();
-		suitTypeObj.equip_name_2=data->ReadUnicodeString();
-		suitTypeObj.equip_id_3=data->ReadInt();
-		suitTypeObj.equip_name_3=data->ReadUnicodeString();
-		suitTypeObj.equip_id_4=data->ReadInt();
-		suitTypeObj.equip_name_4=data->ReadUnicodeString();
-		suitTypeObj.equip_id_5=data->ReadInt();
-		suitTypeObj.equip_name_5=data->ReadUnicodeString();
-		suitTypeObj.equip_id_6=data->ReadInt();
-		suitTypeObj.equip_name_6=data->ReadUnicodeString();
-		suitTypeObj.equip_id_7=data->ReadInt();
-		suitTypeObj.equip_name_7=data->ReadUnicodeString();
-		suitTypeObj.equip_set_1_num=data->ReadByte();
-		suitTypeObj.equip_set_1_des=data->ReadUnicodeString();
-		suitTypeObj.equip_set_2_num=data->ReadByte();
-		suitTypeObj.equip_set_2_des=data->ReadUnicodeString();
-		suitTypeObj.equip_set_3_num=data->ReadByte();
-		suitTypeObj.equip_set_3_des=data->ReadUnicodeString();
-		suitTypeObj.isUpData=true;
-		// 以服务端为准,存储或更新内存数据
-		std::map<int, SuitTypeObj>::iterator it = SuitTypeObj::SuitTypeObjs.find(suitTypeObj.iID);
-		if (it != SuitTypeObj::SuitTypeObjs.end()) 
-		{
-			SuitTypeObj::SuitTypeObjs.erase(it);
-		}
-		SuitTypeObj::SuitTypeObjs.insert(std::map<int, SuitTypeObj>::value_type(suitTypeObj.iID, suitTypeObj));
-	}
+	/***
+	* 临时性注释 郭浩
+	* all
+	*/
+// 	int btAmount = data->ReadByte();
+// 	for (int i = 0; i < btAmount; i++) {
+// 		SuitTypeObj suitTypeObj;
+// 		suitTypeObj.iID = data->ReadInt();
+// 		suitTypeObj.name = data->ReadUnicodeString();		
+// 		suitTypeObj.equip_id_1=data->ReadInt();
+// 		suitTypeObj.equip_name_1=data->ReadUnicodeString();
+// 		suitTypeObj.equip_id_2=data->ReadInt();
+// 		suitTypeObj.equip_name_2=data->ReadUnicodeString();
+// 		suitTypeObj.equip_id_3=data->ReadInt();
+// 		suitTypeObj.equip_name_3=data->ReadUnicodeString();
+// 		suitTypeObj.equip_id_4=data->ReadInt();
+// 		suitTypeObj.equip_name_4=data->ReadUnicodeString();
+// 		suitTypeObj.equip_id_5=data->ReadInt();
+// 		suitTypeObj.equip_name_5=data->ReadUnicodeString();
+// 		suitTypeObj.equip_id_6=data->ReadInt();
+// 		suitTypeObj.equip_name_6=data->ReadUnicodeString();
+// 		suitTypeObj.equip_id_7=data->ReadInt();
+// 		suitTypeObj.equip_name_7=data->ReadUnicodeString();
+// 		suitTypeObj.equip_set_1_num=data->ReadByte();
+// 		suitTypeObj.equip_set_1_des=data->ReadUnicodeString();
+// 		suitTypeObj.equip_set_2_num=data->ReadByte();
+// 		suitTypeObj.equip_set_2_des=data->ReadUnicodeString();
+// 		suitTypeObj.equip_set_3_num=data->ReadByte();
+// 		suitTypeObj.equip_set_3_des=data->ReadUnicodeString();
+// 		suitTypeObj.isUpData=true;
+// 		// 以服务端为准,存储或更新内存数据
+// 		std::map<int, SuitTypeObj>::iterator it = SuitTypeObj::SuitTypeObjs.find(suitTypeObj.iID);
+// 		if (it != SuitTypeObj::SuitTypeObjs.end()) 
+// 		{
+// 			SuitTypeObj::SuitTypeObjs.erase(it);
+// 		}
+// 		SuitTypeObj::SuitTypeObjs.insert(std::map<int, SuitTypeObj>::value_type(suitTypeObj.iID, suitTypeObj));
+// 	}
 }
 
 void ItemMgr::processEquipBind(NDTransData* data, int len)
@@ -1311,21 +1323,27 @@ void ItemMgr::processEquipBind(NDTransData* data, int len)
 
 void ItemMgr::processShopCenterGoodsType(NDTransData& data)
 {
-	int btAmount = data.ReadByte();
-	
-	for (int i = 0; i < btAmount; i++) 
-	{
-		int btGoodsType = data.ReadByte();
-		
-		std::string strGoodsName = data.ReadUnicodeString();
-		
-		m_mapVipDesc[btGoodsType] = strGoodsName;
-		
-		NDLog("系统商场类型[%d],名字[%@]", btGoodsType, [NSString stringWithUTF8String:strGoodsName.c_str()]);
-	}
-	
+	/***
+	* 临时性注释 郭浩
+	*/
+// 	int btAmount = data.ReadByte();
+// 	
+// 	for (int i = 0; i < btAmount; i++) 
+// 	{
+// 		int btGoodsType = data.ReadByte();
+// 		
+// 		std::string strGoodsName = data.ReadUnicodeString();
+// 		
+// 		m_mapVipDesc[btGoodsType] = strGoodsName;
+// 		
+// 		NDLog("系统商场类型[%d],名字[%@]", btGoodsType, [NSString stringWithUTF8String:strGoodsName.c_str()]);
+// 	}
+	/***
+	* 临时性注释 郭浩
+	* end
+	*/
 
-	NDDirector::DefaultDirector()->PushScene(NewVipStoreScene::Scene());
+	//NDDirector::DefaultDirector()->PushScene(NewVipStoreScene::Scene()); ///< 临时性注释 郭浩
 	
 	CloseProgressBar;
 
@@ -2092,11 +2110,20 @@ bool ItemMgr::DelItem(int iType, int iItemID, bool bClear/*=true*/)
 				{
 					uiPet->PetBagDelItem(iItemID);
 				}
-				
-				EquipForgeScene* forge = EquipForgeScene::GetCurInstance();
-				if (forge) {
-					forge->processDelItem(iItemID);
-				}
+
+				/***
+				* 临时性注释 郭浩
+				* begin
+				*/
+// 				EquipForgeScene* forge = EquipForgeScene::GetCurInstance();
+// 				if (forge)
+// 				{
+// 					forge->processDelItem(iItemID);
+// 				}
+				/***
+				* 临时性注释 郭浩
+				* end
+				*/
 				
 				if (bClear) 
 				{
@@ -2120,7 +2147,7 @@ bool ItemMgr::DelItem(int iType, int iItemID, bool bClear/*=true*/)
 			}
 		}
 		
-		PetSkillCompose::refresh();
+//		PetSkillCompose::refresh(); ///< 临时性注释 郭浩
 	}
 	else if (iType ==ITEM_STORAGE)
 	{//仓库

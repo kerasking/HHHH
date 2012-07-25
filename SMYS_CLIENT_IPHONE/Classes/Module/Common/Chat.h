@@ -82,7 +82,7 @@ class Chat : public NDObject, public ITimerCallback, public NDDirectorDelegate
 	~Chat();
 public:
 	//单例对象指针
-	static Chat* DefaultChat();
+	//static Chat* DefaultChat(); ///< 临时性注释 郭浩
 	//设置最多同时显示聊天记录数
 	void SetRecordCount(unsigned int count);
 	//设置每条记录的显示时长，单位：秒

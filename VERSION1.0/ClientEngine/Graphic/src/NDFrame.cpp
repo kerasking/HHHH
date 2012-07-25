@@ -29,7 +29,7 @@ NDFrameRunRecord::NDFrameRunRecord()
 : m_nNextFrameIndex(0)
 , m_nCurrentFrameIndex(0)
 , m_nRunCount(0)
-, m_bIsCompleted(false)
+//, m_bIsCompleted(false) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 , m_nRepeatTimes(0)
 , m_nStartFrame(0)
 , m_nEndFrame(0)
@@ -118,7 +118,7 @@ void NDFrameRunRecord::NextFrame(int nTotalFrames)
 		m_nNextFrameIndex = 0;
 		if (m_nRepeatTimes == 0) 
 		{
-			m_bIsCompleted = true;
+	//		m_bIsCompleted = true; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		}
 		
 	}
@@ -280,9 +280,9 @@ void NDFrame::run(float scale)
 			continue;
 		}
 		
-		TILE_REVERSE_ROTATION reverseRotation = this->tileReverseRotationWithReverse(animation->getReverse(), frameTile->getRotation());
-		tile->setReverse(reverseRotation.reverse);
-		tile->setRotation(reverseRotation.rotation);
+	//	TILE_REVERSE_ROTATION reverseRotation = this->tileReverseRotationWithReverse(true, frameTile->getRotation()); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ Ô­ getReverse()
+		//tile->setReverse(reverseRotation.reverse); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	//	tile->setRotation(reverseRotation.rotation);
 		
 		NDEngine::NDSprite *sprite = (NDEngine::NDSprite *)animationGroup->getRuningSprite();
 		
@@ -305,22 +305,30 @@ void NDFrame::run(float scale)
 		{
 			y -= (animation->getBottomY() - animation->getY())*scale;
 		}
-		y = y + frameTile->getY()*scale - animation->getY()*scale;		
-		if (animation->getReverse()) 
-		{
-			int tileW = this->getTileW(record->getW(), record->getH(), reverseRotation.rotation);
-//			if (reverseRotation.rotation == NDRotationEnumRotation90 || reverseRotation.rotation == NDRotationEnumRotation270) 
-//			{
-//				tileW = record.h;
-//			}
-			int newX = animation->getMidX() + (animation->getMidX() - frameTile->getX() - tileW);
-			x = x + newX*scale - animation->getX()*scale;			
-		}
-		else 
-		{			
-			x = x + frameTile->getX()*scale - animation->getX()*scale;
-		}
-		
+		y = y + frameTile->getY()*scale - animation->getY()*scale;
+		/***
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* begin
+		*/
+//		if (animation->getReverse()) 
+//		{
+//			int tileW = this->getTileW(record->getW(), record->getH(), reverseRotation.rotation);
+////			if (reverseRotation.rotation == NDRotationEnumRotation90 || reverseRotation.rotation == NDRotationEnumRotation270) 
+////			{
+////				tileW = record.h;
+////			}
+//			int newX = animation->getMidX() + (animation->getMidX() - frameTile->getX() - tileW);
+//			x = x + newX*scale - animation->getX()*scale;			
+//		}
+
+// 		else 
+// 		{			
+// 			x = x + frameTile->getX()*scale - animation->getX()*scale;
+// 		}
+		/***
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* end
+		*/
 		tile->setDrawRect(CGRectMake(x, y, tile->getCutRect().size.width*scale, tile->getCutRect().size.height*scale));
 		
 		tile->setMapSize(animationGroup->getRunningMapSize());

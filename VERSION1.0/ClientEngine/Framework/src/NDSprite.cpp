@@ -172,7 +172,7 @@ namespace NDEngine
 			m_aniGroup->setRunningMapSize(node->GetContentSize());
 			m_aniGroup->setPosition(m_position);
 	
-			m_currentAnimation->setReverse(m_reverse);
+//			m_currentAnimation->setReverse(m_reverse); ///< ÁÙÊ±ĞÔ×¢ÊÍ ¹ùºÆ
 			
 			bool oldTitleHightLight = IsTileHightLight();
 			TileSetHightLight(m_bHightLight);
@@ -316,7 +316,8 @@ namespace NDEngine
 	
 	bool NDSprite::IsAnimationComplete()
 	{
-		return m_currentAnimation == NULL ? true : m_frameRunRecord->getIsCompleted();
+//		return m_currentAnimation == NULL ? true : m_frameRunRecord->getIsCompleted(); ///< ÁÙÊ±ĞÔ×¢ÊÍ ¹ùºÆ
+		return false;
 	}
 	
 	int NDSprite::GetCurFrameIndex()

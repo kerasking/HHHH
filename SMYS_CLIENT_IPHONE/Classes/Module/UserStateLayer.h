@@ -41,33 +41,37 @@ private:
 	bool pharsePosTextColor(int clrIndex, ccColor4B& color);
 };
 
-class UserStateLayer :
-public NDLayer
-{
-	DECLARE_CLASS(UserStateLayer)
-public:
-	UserStateLayer();
-	~UserStateLayer();
-	
-	void Initialization();
-	
-	//void AddStateLabel(int idState, string& str); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	//void RemoveStateLabel(int idState);
-	
-	void AddPosText(PosText* pt);
-	void RemovePosText(PosText* pt);
-	
-	void draw();
-	
-private:
-	typedef map<int, NDUILabel*> MAP_STATE_LABEL;
-	typedef MAP_STATE_LABEL::iterator MAP_STATE_LABEL_IT;
-	
-	typedef map<int, vector<NDUILayer*> > MAP_POS_TEXT_LABEL;
-	typedef MAP_POS_TEXT_LABEL::iterator MAP_POS_TEXT_LABEL_IT;
-	
-	MAP_STATE_LABEL m_mapLabel;
-	MAP_POS_TEXT_LABEL m_mapPosTextLabel;
-};
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* this class
+*/
+// class UserStateLayer :
+// public NDLayer
+// {
+// 	DECLARE_CLASS(UserStateLayer)
+// public:
+// 	UserStateLayer();
+// 	~UserStateLayer();
+// 	
+// 	void Initialization();
+// 	
+// 	//void AddStateLabel(int idState, string& str); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+// 	//void RemoveStateLabel(int idState);
+// 	
+// 	void AddPosText(PosText* pt);
+// 	void RemovePosText(PosText* pt);
+// 	
+// 	void draw();
+// 	
+// private:
+// 	typedef map<int, NDUILabel*> MAP_STATE_LABEL;
+// 	typedef MAP_STATE_LABEL::iterator MAP_STATE_LABEL_IT;
+// 	
+// 	typedef map<int, vector<NDUILayer*> > MAP_POS_TEXT_LABEL;
+// 	typedef MAP_POS_TEXT_LABEL::iterator MAP_POS_TEXT_LABEL_IT;
+// 	
+// 	MAP_STATE_LABEL m_mapLabel;
+// 	MAP_POS_TEXT_LABEL m_mapPosTextLabel;
+// };
 
 #endif

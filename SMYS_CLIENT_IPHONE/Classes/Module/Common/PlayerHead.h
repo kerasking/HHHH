@@ -183,42 +183,44 @@ private:
 	SHOW_STATUS m_showStatus;
 };
 
+/***
+* 临时性注释 郭浩
+* this class
+*/
+// class TargetHeadInMap : public NDUILayer
+// {
+// 	DECLARE_CLASS(TargetHeadInMap)
+// public:
+// 	TargetHeadInMap();
+// 	~TargetHeadInMap();
+// 	
+// 	void Initialization(); override
+// 	void draw(); override
+// 	
+// 	bool TouchEnd(NDTouch* touch);
+// 	
+// 	//void SetRole(NDBaseRole* role); ///< 临时性注释 郭浩
+// 	
+// protected:
+// 	
+// private:
+// 	// npc 不显示等级
+// //	ImageNumber* m_imgNumPlayerLevel; ///< 临时性注释 郭浩
+// 	
+// 	// npc 血蓝全满
+// 	NDUILayer* m_imgHp;
+// 	NDUILayer* m_imgMp;
+// 	
+// 	// 目标id
+// 	int m_idRole;
+// 	// 是npc还是玩家
+// 	bool m_bNpc;
+// 	// 玩家及人形npc显示头像
+// 	TargetHeadNode* m_head;
+// 	// 其余用统一的资源显示
+// 	NDUIImage* m_imgHead;
+// };
 
-class TargetHeadInMap : public NDUILayer
-{
-	DECLARE_CLASS(TargetHeadInMap)
-public:
-	TargetHeadInMap();
-	~TargetHeadInMap();
-	
-	void Initialization(); override
-	void draw(); override
-	
-	bool TouchEnd(NDTouch* touch);
-	
-	//void SetRole(NDBaseRole* role); ///< 临时性注释 郭浩
-	
-protected:
-	
-private:
-	// npc 不显示等级
-//	ImageNumber* m_imgNumPlayerLevel; ///< 临时性注释 郭浩
-	
-	// npc 血蓝全满
-	NDUILayer* m_imgHp;
-	NDUILayer* m_imgMp;
-	
-	// 目标id
-	int m_idRole;
-	// 是npc还是玩家
-	bool m_bNpc;
-	// 玩家及人形npc显示头像
-	TargetHeadNode* m_head;
-	// 其余用统一的资源显示
-	NDUIImage* m_imgHead;
-};
-
-#pragma mark 队伍角色按钮
 class TeamRoleButton : public NDUIButton
 {
 	DECLARE_CLASS(TeamRoleButton)

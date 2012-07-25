@@ -70,7 +70,7 @@ namespace NDEngine
 			NDAnimation *ani = (NDAnimation *)m_aniGroup->getAnimations()->objectAtIndex(m_lightId);			
 			m_aniGroup->setRunningMapSize(mapSize);
 			m_aniGroup->setPosition(m_position);			
-			ani->setReverse(m_reverse);
+//			ani->setReverse(m_reverse); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 			ani->runWithRunFrameRecord(m_frameRunRecord, true);
 			m_aniGroup->setRuningSprite(oldSprite);
 		}
@@ -84,18 +84,26 @@ namespace NDEngine
 		NDLayer* layer = (NDLayer*)this->GetParent();
 		if (layer) 
 		{
-			if (m_frameRunRecord->getIsCompleted()) 
-			{
-				this->RemoveFromParent(true);
-				return;
-			}
+			/***
+			* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			* begin
+			*/
+// 			if (m_frameRunRecord->getIsCompleted()) 
+// 			{
+// 				this->RemoveFromParent(true);
+// 				return;
+// 			}
+			/***
+			* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			* end
+			*/
 			
 			if (m_aniGroup->getAnimations()->count() > m_lightId) 
 			{				
 				NDAnimation *ani = (NDAnimation *)m_aniGroup->getAnimations()->objectAtIndex(m_lightId);		
 				m_aniGroup->setRunningMapSize(layer->GetContentSize());
 				m_aniGroup->setPosition(m_position);			
-				ani->setReverse(m_reverse);
+//				ani->setReverse(m_reverse); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 				ani->runWithRunFrameRecord(m_frameRunRecord, true);
 			}
 			else 

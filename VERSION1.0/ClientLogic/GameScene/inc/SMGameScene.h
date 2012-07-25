@@ -14,7 +14,7 @@
 #include "NDUIButton.h"
 #include "NDMapLayerLogic.h"
 
-class NDMiniMap;
+//class NDMiniMap; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 class CSMGameScene :
 public NDScene,
 public NDUIButtonDelegate
@@ -33,7 +33,7 @@ public:
 	
 	cocos2d::CCArray* GetSwitchs();
 private:
-	NDMiniMap *m_miniMap;
+	//NDMiniMap *m_miniMap; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	NDMapLayerLogic *m_mapLayer;
 	
 public:

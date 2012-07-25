@@ -1689,191 +1689,249 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 		sb << (getInlayPos());
 		sb << ("\n");
 	}
-	
-	if(itemtype->m_data.m_suitData!=0&&type==0){
-		SuitTypeObj* Obj=SuitTypeObj::findSuitType(itemtype->m_data.m_suitData);
-		if(Obj!=NULL){
-			SuitTypeObj& suitTypeObj = *Obj;
-			int suitData=itemtype->m_data.m_suitData;
-			Item *item;
-			int allAmount=0;
-			int hasAmount=0;
-			if(suitTypeObj.equip_id_1!=0){
-				allAmount++;
-				item=findItemByItemType(suitTypeObj.equip_id_1);
-				if(item!=NULL&&item->getSuitData()==suitData&&item->iAmount>0){
-					hasAmount++;
-				}
-				
-			}
-			if(suitTypeObj.equip_id_2!=0){
-				allAmount++;
-				item=findItemByItemType(suitTypeObj.equip_id_2);
-				if(item!=NULL&&item->getSuitData()==suitData&&item->iAmount>0){
-					hasAmount++;
-				}
-			}
-			if(suitTypeObj.equip_id_3!=0){
-				allAmount++;
-				item=findItemByItemType(suitTypeObj.equip_id_3);
-				if(item!=NULL&&item->getSuitData()==suitData&&item->iAmount>0){
-					hasAmount++;
-				}
-			}
-			if(suitTypeObj.equip_id_4!=0){
-				allAmount++;
-				item=findItemByItemType(suitTypeObj.equip_id_4);
-				if(item!=NULL&&item->getSuitData()==suitData&&item->iAmount>0){
-					hasAmount++;
-				}
-			}
-			if(suitTypeObj.equip_id_5!=0){
-				allAmount++;
-				item=findItemByItemType(suitTypeObj.equip_id_5);
-				if(item!=NULL&&item->getSuitData()==suitData&&item->iAmount>0){
-					hasAmount++;
-				}
-			}
-			if(suitTypeObj.equip_id_6!=0){
-				allAmount++;
-				item=findItemByItemType(suitTypeObj.equip_id_6);
-				if(item!=NULL&&item->getSuitData()==suitData&&item->iAmount>0){
-					hasAmount++;
-				}
-			}
-			if(suitTypeObj.equip_id_7!=0){
-				allAmount++;
-				item=findItemByItemType(suitTypeObj.equip_id_7);
-				if(item!=NULL&&item->getSuitData()==suitData&&item->iAmount>0){
-					hasAmount++;
-				}
-			}
-			
-			
-			if(!suitTypeObj.name.empty()){
-				if(bolShowColor){
-					sb << " <c" << color << suitTypeObj.name << "(" << hasAmount << "/" << allAmount << ")" << "/e \n";
-				}else{
-					sb << suitTypeObj.name << "("<< hasAmount << "/" << allAmount << ")" << "\n";
-				}
-			}
-			if(!suitTypeObj.equip_name_1.empty()){
-				item=findItemByItemType(suitTypeObj.equip_id_1);
-				if(item!=NULL&&item->getSuitData()==suitData&&bolShowColor&&item->iAmount>0){
-					sb << "   <c199900" << suitTypeObj.equip_name_1 << "/e \n";
-				}else{
-					sb << "   " << suitTypeObj.equip_name_1 << "\n";
-				}
-			}
-			if(!suitTypeObj.equip_name_2.empty()){
-				item=findItemByItemType(suitTypeObj.equip_id_2);
-				if(item!=NULL&&item->getSuitData()==suitData&&bolShowColor&&item->iAmount>0){
-					sb << "   <c199900" << suitTypeObj.equip_name_2 << "/e \n";
-				}else{
-					sb << "   " << suitTypeObj.equip_name_2 << "\n";
-				}
-			}
-			if(!suitTypeObj.equip_name_3.empty()){
-				item=findItemByItemType(suitTypeObj.equip_id_3);
-				if(item!=NULL&&item->getSuitData()==suitData&&bolShowColor&&item->iAmount>0){
-					sb << "   <c199900" << suitTypeObj.equip_name_3 << "/e \n";
-				}else{
-					sb << "   " << suitTypeObj.equip_name_3 << "\n";
-				}
-			}
-			if(!suitTypeObj.equip_name_4.empty()){
-				item=findItemByItemType(suitTypeObj.equip_id_4);
-				if(item!=NULL&&item->getSuitData()==suitData&&bolShowColor&&item->iAmount>0){
-					sb << "   <c199900" << suitTypeObj.equip_name_4 << "/e \n";
-				}else{
-					sb << "   " << suitTypeObj.equip_name_4 << "\n";
-				}
-			}
-			if(!suitTypeObj.equip_name_5.empty()){
-				item=findItemByItemType(suitTypeObj.equip_id_5);
-				if(item!=NULL&&item->getSuitData()==suitData&&bolShowColor&&item->iAmount>0){
-					sb << "   <c199900" << suitTypeObj.equip_name_5 << "/e \n";
-				}else{
-					sb << "   " << suitTypeObj.equip_name_5 << "\n";
-				}
-			}
-			if(!suitTypeObj.equip_name_6.empty()){
-				item=findItemByItemType(suitTypeObj.equip_id_6);
-				if(item!=NULL&&item->getSuitData()==suitData&&bolShowColor&&item->iAmount>0){
-					sb << "   <c199900" << suitTypeObj.equip_name_6 << "/e \n";
-				}else{
-					sb << "   " << suitTypeObj.equip_name_6 << "\n";
-				}
-			}
-			if(!suitTypeObj.equip_name_7.empty()){
-				item=findItemByItemType(suitTypeObj.equip_id_7);
-				if(item!=NULL&&item->getSuitData()==suitData&&bolShowColor&&item->iAmount>0){
-					sb << "   <c199900" << suitTypeObj.equip_name_7 << "/e \n";
-				}else{
-					sb << "   " << suitTypeObj.equip_name_7 << "\n";
-				}
-			}
-			
-			if(hasAmount>=suitTypeObj.equip_set_1_num&&bolShowColor){
-				sb << " <c199900" << NDCommonCString("TaoZhuang") << "(" << suitTypeObj.equip_set_1_num << ")" << suitTypeObj.equip_set_1_des << "/e \n";
-			}else{
-				sb << " " << NDCommonCString("TaoZhuang") << "(" << int(suitTypeObj.equip_set_1_num) << ")" << suitTypeObj.equip_set_1_des << "\n";
-			}
-			
-			if(hasAmount>=suitTypeObj.equip_set_2_num&&bolShowColor){
-				sb << " <c199900" << NDCommonCString("TaoZhuang") << "(" << int(suitTypeObj.equip_set_2_num) << ")" << suitTypeObj.equip_set_2_des << "/e \n";
-			}else{
-				sb << " " << NDCommonCString("TaoZhuang") << "(" << int(suitTypeObj.equip_set_2_num) << ")" << suitTypeObj.equip_set_2_des << " \n";
-			}
-			if(hasAmount>=suitTypeObj.equip_set_3_num&&bolShowColor){
-				sb << " <c199900" << NDCommonCString("TaoZhuang") << "(" << int(suitTypeObj.equip_set_3_num) << ")" << suitTypeObj.equip_set_3_des << "/e \n";
-			}else{
-				sb << " " << NDCommonCString("TaoZhuang") << "(" << int(suitTypeObj.equip_set_3_num) << ")" << suitTypeObj.equip_set_3_des << "\n";
-			}	
-		}
-	}
-	
-	// 锻造描述
-	if (type == 0 && itemtype->m_data.m_enhancedStatus != 0) {
-		sb << ("\n ");
-		SuitTypeObj* suitTypeObj = SuitTypeObj::findSuitType(itemtype->m_data.m_enhancedStatus);
-		if (suitTypeObj) {
-			if (bolShowColor) {
-				sb << "<c199900" << NDCommonCString("DuanZhaoAttach") << "：/e \n";
-			} else {
-				sb << NDCommonCString("DuanZhaoAttach") << "\n";
-			}
-			
-			if(suitTypeObj->equip_set_1_num!=0){
-				if (iAddition >= suitTypeObj->equip_set_1_num
-					&& bolShowColor) {
-					sb << " <c199900+" << (int)suitTypeObj->equip_set_1_num
-							  << ":" << suitTypeObj->equip_set_1_des << "/e \n";
-				} else {
-					sb << " +" << (int)suitTypeObj->equip_set_1_num << ":" << suitTypeObj->equip_set_1_des << "\n";
-				}
-			}
-			if(suitTypeObj->equip_set_2_num!=0){
-				if (iAddition >= suitTypeObj->equip_set_2_num
-					&& bolShowColor) {
-					sb << " <c199900+" << (int)suitTypeObj->equip_set_2_num
-							  << ":" << suitTypeObj->equip_set_2_des << "/e \n";
-				} else {
-					sb << " +" << (int)suitTypeObj->equip_set_2_num << ":" << suitTypeObj->equip_set_2_des << "\n";
-				}
-			}
-			if(suitTypeObj->equip_set_3_num!=0){
-				if (iAddition >= suitTypeObj->equip_set_3_num
-					&& bolShowColor) {
-					sb << " <c199900+" << (int)suitTypeObj->equip_set_3_num
-							  << ":" << suitTypeObj->equip_set_3_des << "/e \n";
-				} else {
-					sb << " +" << (int)suitTypeObj->equip_set_3_num << ":" << suitTypeObj->equip_set_3_des << "\n";
-				}
-			}
-		}
-	}
-	
+	/***
+	* 临时性注释 郭浩
+	* begin
+	*/
+// 	if(itemtype->m_data.m_suitData != 0 && type == 0)
+// 	{
+// 		SuitTypeObj* Obj=SuitTypeObj::findSuitType(itemtype->m_data.m_suitData);
+// 		if(Obj!=NULL)
+// 		{
+// 			SuitTypeObj& suitTypeObj = *Obj;
+// 			int suitData=itemtype->m_data.m_suitData;
+// 			Item *item;
+// 			int allAmount=0;
+// 			int hasAmount=0;
+// 			if(suitTypeObj.equip_id_1!=0)
+// 			{
+// 				allAmount++;
+// 				item=findItemByItemType(suitTypeObj.equip_id_1);
+// 				if(item!=NULL&&item->getSuitData()==suitData&&item->iAmount>0)
+// 				{
+// 					hasAmount++;
+// 				}
+// 				
+// 			}
+// 			if(suitTypeObj.equip_id_2!=0)
+// 			{
+// 				allAmount++;
+// 				item=findItemByItemType(suitTypeObj.equip_id_2);
+// 				if(item!=NULL&&item->getSuitData()==suitData&&item->iAmount>0)
+// 				{
+// 					hasAmount++;
+// 				}
+// 			}
+// 			if(suitTypeObj.equip_id_3!=0)
+// 			{
+// 				allAmount++;
+// 				item=findItemByItemType(suitTypeObj.equip_id_3);
+// 				if(item!=NULL&&item->getSuitData()==suitData&&item->iAmount>0)
+// 				{
+// 					hasAmount++;
+// 				}
+// 			}
+// 			if(suitTypeObj.equip_id_4!=0)
+// 			{
+// 				allAmount++;
+// 				item=findItemByItemType(suitTypeObj.equip_id_4);
+// 				if(item!=NULL&&item->getSuitData()==suitData&&item->iAmount>0)
+// 				{
+// 					hasAmount++;
+// 				}
+// 			}
+// 			if(suitTypeObj.equip_id_5!=0)
+// 			{
+// 				allAmount++;
+// 				item=findItemByItemType(suitTypeObj.equip_id_5);
+// 				if(item!=NULL&&item->getSuitData()==suitData&&item->iAmount>0)
+// 				{
+// 					hasAmount++;
+// 				}
+// 			}
+// 			if(suitTypeObj.equip_id_6!=0)
+// 			{
+// 				allAmount++;
+// 				item=findItemByItemType(suitTypeObj.equip_id_6);
+// 				if(item!=NULL&&item->getSuitData()==suitData&&item->iAmount>0)
+// 				{
+// 					hasAmount++;
+// 				}
+// 			}
+// 			if(suitTypeObj.equip_id_7!=0)
+// 			{
+// 				allAmount++;
+// 				item=findItemByItemType(suitTypeObj.equip_id_7);
+// 				if(item!=NULL&&item->getSuitData()==suitData&&item->iAmount>0)
+// 				{
+// 					hasAmount++;
+// 				}
+// 			}
+// 			
+// 			
+// 			if(!suitTypeObj.name.empty())
+// 			{
+// 				if(bolShowColor)
+// 				{
+// 					sb << " <c" << color << suitTypeObj.name << "(" << hasAmount << "/" << allAmount << ")" << "/e \n";
+// 				}
+// 				else
+// 				{
+// 					sb << suitTypeObj.name << "("<< hasAmount << "/" << allAmount << ")" << "\n";
+// 				}
+// 			}
+// 			if(!suitTypeObj.equip_name_1.empty())
+// 			{
+// 				item=findItemByItemType(suitTypeObj.equip_id_1);
+// 
+// 				if(item != NULL && item->getSuitData() == suitData && bolShowColor && item->iAmount > 0)
+// 				{
+// 					sb << "   <c199900" << suitTypeObj.equip_name_1 << "/e \n";
+// 				}
+// 				else
+// 				{
+// 					sb << "   " << suitTypeObj.equip_name_1 << "\n";
+// 				}
+// 			}
+// 			if(!suitTypeObj.equip_name_2.empty())
+// 			{
+// 				item=findItemByItemType(suitTypeObj.equip_id_2);
+// 				if(item!=NULL&&item->getSuitData()==suitData&&bolShowColor&&item->iAmount>0)
+// 				{
+// 					sb << "   <c199900" << suitTypeObj.equip_name_2 << "/e \n";
+// 				}
+// 				else
+// 				{
+// 					sb << "   " << suitTypeObj.equip_name_2 << "\n";
+// 				}
+// 			}
+// 			if(!suitTypeObj.equip_name_3.empty())
+// 			{
+// 				item=findItemByItemType(suitTypeObj.equip_id_3);
+// 				if(item!=NULL&&item->getSuitData()==suitData&&bolShowColor&&item->iAmount>0)
+// 				{
+// 					sb << "   <c199900" << suitTypeObj.equip_name_3 << "/e \n";
+// 				}
+// 				else
+// 				{
+// 					sb << "   " << suitTypeObj.equip_name_3 << "\n";
+// 				}
+// 			}
+// 			if(!suitTypeObj.equip_name_4.empty())
+// 			{
+// 				item=findItemByItemType(suitTypeObj.equip_id_4);
+// 				if(item!=NULL&&item->getSuitData()==suitData&&bolShowColor&&item->iAmount>0)
+// 				{
+// 					sb << "   <c199900" << suitTypeObj.equip_name_4 << "/e \n";
+// 				}
+// 				else
+// 				{
+// 					sb << "   " << suitTypeObj.equip_name_4 << "\n";
+// 				}
+// 			}
+// 			if(!suitTypeObj.equip_name_5.empty())
+// 			{
+// 				item=findItemByItemType(suitTypeObj.equip_id_5);
+// 				if(item!=NULL&&item->getSuitData()==suitData&&bolShowColor&&item->iAmount>0)
+// 				{
+// 					sb << "   <c199900" << suitTypeObj.equip_name_5 << "/e \n";
+// 				}
+// 				else
+// 				{
+// 					sb << "   " << suitTypeObj.equip_name_5 << "\n";
+// 				}
+// 			}
+// 			if(!suitTypeObj.equip_name_6.empty())
+// 			{
+// 				item=findItemByItemType(suitTypeObj.equip_id_6);
+// 				if(item!=NULL&&item->getSuitData()==suitData&&bolShowColor&&item->iAmount>0)
+// 				{
+// 					sb << "   <c199900" << suitTypeObj.equip_name_6 << "/e \n";
+// 				}
+// 				else
+// 				{
+// 					sb << "   " << suitTypeObj.equip_name_6 << "\n";
+// 				}
+// 			}
+// 			if(!suitTypeObj.equip_name_7.empty())
+// 			{
+// 				item=findItemByItemType(suitTypeObj.equip_id_7);
+// 				if(item!=NULL&&item->getSuitData()==suitData&&bolShowColor&&item->iAmount>0)
+// 				{
+// 					sb << "   <c199900" << suitTypeObj.equip_name_7 << "/e \n";
+// 				}
+// 				else
+// 				{
+// 					sb << "   " << suitTypeObj.equip_name_7 << "\n";
+// 				}
+// 			}
+// 			
+// 			if(hasAmount>=suitTypeObj.equip_set_1_num&&bolShowColor)
+// 			{
+// 				sb << " <c199900" << NDCommonCString("TaoZhuang") << "(" << suitTypeObj.equip_set_1_num << ")" << suitTypeObj.equip_set_1_des << "/e \n";
+// 			}
+// 			else
+// 			{
+// 				sb << " " << NDCommonCString("TaoZhuang") << "(" << int(suitTypeObj.equip_set_1_num) << ")" << suitTypeObj.equip_set_1_des << "\n";
+// 			}
+// 			
+// 			if(hasAmount>=suitTypeObj.equip_set_2_num&&bolShowColor){
+// 				sb << " <c199900" << NDCommonCString("TaoZhuang") << "(" << int(suitTypeObj.equip_set_2_num) << ")" << suitTypeObj.equip_set_2_des << "/e \n";
+// 			}else{
+// 				sb << " " << NDCommonCString("TaoZhuang") << "(" << int(suitTypeObj.equip_set_2_num) << ")" << suitTypeObj.equip_set_2_des << " \n";
+// 			}
+// 			if(hasAmount>=suitTypeObj.equip_set_3_num&&bolShowColor){
+// 				sb << " <c199900" << NDCommonCString("TaoZhuang") << "(" << int(suitTypeObj.equip_set_3_num) << ")" << suitTypeObj.equip_set_3_des << "/e \n";
+// 			}else{
+// 				sb << " " << NDCommonCString("TaoZhuang") << "(" << int(suitTypeObj.equip_set_3_num) << ")" << suitTypeObj.equip_set_3_des << "\n";
+// 			}	
+// 		}
+// 	}
+// 	
+// 	// 锻造描述
+// 	if (type == 0 && itemtype->m_data.m_enhancedStatus != 0) {
+// 		sb << ("\n ");
+// 		SuitTypeObj* suitTypeObj = SuitTypeObj::findSuitType(itemtype->m_data.m_enhancedStatus);
+// 		if (suitTypeObj) {
+// 			if (bolShowColor) {
+// 				sb << "<c199900" << NDCommonCString("DuanZhaoAttach") << "：/e \n";
+// 			} else {
+// 				sb << NDCommonCString("DuanZhaoAttach") << "\n";
+// 			}
+// 			
+// 			if(suitTypeObj->equip_set_1_num!=0){
+// 				if (iAddition >= suitTypeObj->equip_set_1_num
+// 					&& bolShowColor) {
+// 					sb << " <c199900+" << (int)suitTypeObj->equip_set_1_num
+// 							  << ":" << suitTypeObj->equip_set_1_des << "/e \n";
+// 				} else {
+// 					sb << " +" << (int)suitTypeObj->equip_set_1_num << ":" << suitTypeObj->equip_set_1_des << "\n";
+// 				}
+// 			}
+// 			if(suitTypeObj->equip_set_2_num!=0){
+// 				if (iAddition >= suitTypeObj->equip_set_2_num
+// 					&& bolShowColor) {
+// 					sb << " <c199900+" << (int)suitTypeObj->equip_set_2_num
+// 							  << ":" << suitTypeObj->equip_set_2_des << "/e \n";
+// 				} else {
+// 					sb << " +" << (int)suitTypeObj->equip_set_2_num << ":" << suitTypeObj->equip_set_2_des << "\n";
+// 				}
+// 			}
+// 			if(suitTypeObj->equip_set_3_num!=0){
+// 				if (iAddition >= suitTypeObj->equip_set_3_num
+// 					&& bolShowColor) {
+// 					sb << " <c199900+" << (int)suitTypeObj->equip_set_3_num
+// 							  << ":" << suitTypeObj->equip_set_3_des << "/e \n";
+// 				} else {
+// 					sb << " +" << (int)suitTypeObj->equip_set_3_num << ":" << suitTypeObj->equip_set_3_des << "\n";
+// 				}
+// 			}
+// 		}
+// 	}
+	/***
+	* 临时性注释 郭浩
+	* end
+	*/
 	return std::string(sb.str().c_str());
 }
 
@@ -2417,13 +2475,19 @@ int Item::getIdRule(int nItemType, int rule) {
 
 Item* Item::findItemByItemType(int idItem)
 {
-	NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
-	if (scene && scene->IsKindOfClass(RUNTIME_CLASS(ManualRoleEquipScene))) 
-	{
-		return ((ManualRoleEquipScene*)scene)->GetSuitItem(idItem);
-	}
-	
-	return ItemMgrObj.GetSuitItem(idItem);
+	/***
+	* 临时性注释 郭浩
+	* all
+	*/
+// 	NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
+// 	if (scene && scene->IsKindOfClass(RUNTIME_CLASS(ManualRoleEquipScene))) 
+// 	{
+// 		return ((ManualRoleEquipScene*)scene)->GetSuitItem(idItem);
+// 	}
+// 	
+// 	return ItemMgrObj.GetSuitItem(idItem);
+
+	return 0;
 }
 
 bool Item::IsPetUseItem()

@@ -30,7 +30,7 @@ NDTileTableRecord::NDTileTableRecord()
 NDAnimationGroup::NDAnimationGroup()
 : m_nType(0)
 , m_nIdentifer(0)
-, m_bReverse(0)
+//, m_bReverse(0) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 , m_Animations(NULL)
 , m_Images(NULL)
 , m_TileTable(NULL)
@@ -79,11 +79,11 @@ void NDAnimationGroup::initWithSprFile(const char* sprFile)
 
 void NDAnimationGroup::setReverse(bool newReverse)
 {
-	m_bReverse = newReverse;
+//	m_bReverse = newReverse; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	for (int i = 0; i < (int)m_Animations->count(); i++) 
 	{
 		NDAnimation *animation = (NDAnimation *)m_Animations->objectAtIndex(i);
-		animation->setReverse(newReverse);
+//		animation->setReverse(newReverse); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	}
 }
 
@@ -130,7 +130,7 @@ void NDAnimationGroup::decodeSprFile(FILE* stream)
 		animation->setMidX(op.readShort(stream));
 		animation->setBottomY(op.readShort(stream));
 		animation->setType(op.readByte(stream));
-		animation->setReverse(false);
+//		animation->setReverse(false); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		animation->setBelongAnimationGroup(this);
 		
 		int frameSize = op.readByte(stream);		

@@ -30,7 +30,7 @@ class NDAnimation : public cocos2d::CCObject
 	CC_PROPERTY(int, m_nMidX, MidX)
 	CC_PROPERTY(int, m_nBottomY, BottomY)
 	CC_PROPERTY(int, m_nType, Type)
-	CC_PROPERTY(bool, m_bReverse, Reverse)
+//	CC_PROPERTY(bool, m_bReverse, Reverse) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	CC_PROPERTY(NDAnimationGroup*, m_BelongAnimationGroup, BelongAnimationGroup)
 	CC_PROPERTY(int, m_nCurIndexInAniGroup, CurIndexInAniGroup)
 

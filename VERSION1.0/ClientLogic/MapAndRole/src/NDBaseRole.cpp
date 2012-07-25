@@ -320,7 +320,8 @@ void NDBaseRole::SetAction(bool bMove)
 
 bool NDBaseRole::AssuredRidePet()
 {
-	return ridepet != NULL && ridepet->canRide();
+//	return ridepet != NULL && ridepet->canRide(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	return true;
 }
 
 void NDBaseRole::setMoveActionWithRidePet()

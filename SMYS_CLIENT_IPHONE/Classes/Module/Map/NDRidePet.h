@@ -53,7 +53,7 @@ namespace NDEngine
 		bool IsOwnerPlayer();		
 		//－－－end
 		
-		bool canRide();
+		//bool canRide(); ///< 临时性注释 郭浩
 	public:
 		int iType;
 		int quality;

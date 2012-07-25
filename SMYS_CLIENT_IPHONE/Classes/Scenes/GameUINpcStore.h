@@ -171,14 +171,18 @@ private:
 };
 
 //////////////////////////////////////////
-class GameNpcStoreScene : public NDScene
-{
-	DECLARE_CLASS(GameNpcStoreScene)
-public:
-	GameNpcStoreScene();
-	~GameNpcStoreScene();
-	static GameNpcStoreScene* Scene(int iNPCID=0);
-	void Initialization(int iNPCID=0); override
-};
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* this class
+*/
+// class GameNpcStoreScene : public NDScene
+// {
+// 	DECLARE_CLASS(GameNpcStoreScene)
+// public:
+// 	GameNpcStoreScene();
+// 	~GameNpcStoreScene();
+// 	static GameNpcStoreScene* Scene(int iNPCID=0);
+// 	void Initialization(int iNPCID=0); override
+// };
 
 #endif // _GAME_UI_NPC_STORE_H_

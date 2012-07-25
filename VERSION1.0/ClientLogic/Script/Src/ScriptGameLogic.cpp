@@ -106,7 +106,7 @@ void SysChat(const char* text)
 	{
 		return;
 	}
-	Chat::DefaultChat()->AddMessage(ChatTypeSystem, text);
+//	Chat::DefaultChat()->AddMessage(ChatTypeSystem, text); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 }
 	
 void NavigateTo(int nMapId, int nMapX, int nMapY)

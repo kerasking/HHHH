@@ -19,7 +19,7 @@ class NDFrameRunRecord : public cocos2d::CCObject
 	CC_PROPERTY(int, m_nNextFrameIndex, NextFrameIndex)
 	CC_PROPERTY(int, m_nCurrentFrameIndex, CurrentFrameIndex)
 	CC_PROPERTY(int, m_nRunCount, RunCount)
-	CC_PROPERTY(bool, m_bIsCompleted, IsCompleted)
+//	CC_PROPERTY(bool, m_bIsCompleted, IsCompleted)
 	CC_PROPERTY(int, m_nRepeatTimes, RepeatTimes)
 
 public:

@@ -41,9 +41,9 @@ class QuickInteraction;
 
 class QuickTeam;
 
-class UserStateLayer;
+//class UserStateLayer; ///< 临时性注释 郭浩
 class Task;
-class NDMiniMap;
+//class NDMiniMap; ///< 临时性注释 郭浩
 using namespace NDEngine;
 
 
@@ -228,15 +228,24 @@ private:
 	NDUITableLayer *m_tlTiShengPlayers;
 	NDUITableLayer *m_tlPaiHang;
 	NDUITableLayer *m_tlMarriage;
-	NDMiniMap *m_miniMap;
+	//NDMiniMap *m_miniMap; ///< 临时性注释 郭浩
+
+	/***
+	* 临时性注释 郭浩
+	* begin
+	*/
 	//PlayerHeadInMap* m_playerHead;
 	//PlayerHeadInMap* m_petHead;
 	//TargetHeadInMap* m_targetHead;
-	UserStateLayer* m_userState;
+//	UserStateLayer* m_userState;
 	//DirectKey *m_directKey;
+	/***
+	* 临时性注释 郭浩
+	* end
+	*/
 	
 	PlayerHeadInMap* m_playerHead;
-	TargetHeadInMap* m_targetHead;
+//	TargetHeadInMap* m_targetHead; ///< 临时性注释 郭浩
 //	DirectKey* m_directKey; ///< 临时性注释 郭浩
 	NDUIHControlContainer* m_hccOPItem;
 	PlayerHeadInMap* m_petHead;

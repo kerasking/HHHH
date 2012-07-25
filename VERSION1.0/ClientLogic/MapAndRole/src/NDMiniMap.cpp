@@ -262,256 +262,260 @@ void Radar::drawSwitchMapPoint()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
-IMPLEMENT_CLASS(NDMiniMap, NDUIChildrenEventLayer)
-
-NDMiniMap* NDMiniMap::s_instance = NULL;
-
-NDMiniMap::NDMiniMap() : m_role(NDPlayer::defaultHero())
-{	
-	this->x = 0;
-	this->y = 0;
-	this->timeCount = 0;
-	this->scrollX = 0;
-	this->scrollY = 0;
-	
-	this->MINI_W = 480 / SCALE_X;
-	this->MINI_H = 640 / SCALE_Y;
-	
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-	this->startX = winSize.width - MINI_W - OFFSET_X - 42;
-	this->startY = OFFSET_Y;
-	
-	//CGRect miniMapRect = CGRectMake(80.0f, startY, MINI_W + DARK_WH, MINI_H + DARK_WH);
-	
-	s_instance = this;
-	
-	m_status = SS_SHOW;
-}
-
-NDMiniMap::~NDMiniMap()
-{
-	s_instance = NULL;
-}
-
-void NDMiniMap::OnButtonClick(NDUIButton* button)
-{
-	if (button == m_btnMap) {
-		// 打开世界地图界面
-		if (scene) {
-			//this->scene->PushWorldMapScene();
-		}
-	} else if (button == m_btnShrink) {
-		switch (m_status) {
-			case SS_SHOW:
-			case SS_EXTENDING:
-				this->m_status = SS_SHRINKING;
-				break;
-			case SS_HIDE:
-			case SS_SHRINKING:
-				this->m_status = SS_EXTENDING;
-				break;
-			default:
-				break;
-		}
-	}
-}
-
-void NDMiniMap::Initialization()
-{
-	NDUIChildrenEventLayer::Initialization();
-	
-	NDUIImage* imgRadar = new NDUIImage;
-	imgRadar->Initialization();
-	imgRadar->SetPicture(NDPicturePool::DefaultPool()->AddPicture(GetImgPathBattleUI("radar.png"), false), true);
-	imgRadar->SetFrameRect(CGRectMake(0, 0, 172, 66));
-	this->AddChild(imgRadar);
-	
-	m_btnMap = new NDUIButton;
-	m_btnMap->Initialization();
-	m_btnMap->SetFrameRect(CGRectMake(0.0f, 0.0f, 106.0f, 51.0f));
-	m_btnMap->SetImage(NDPicturePool::DefaultPool()->AddPicture(GetImgPathBattleUI("show_map.png"), false), true, CGRectMake(4, 4, 30, 30), true);
-	m_btnMap->SetDelegate(this);
-	this->AddChild(m_btnMap);
-	
-	NDUIRecttangle* rectBg = new NDUIRecttangle();
-	rectBg->Initialization();
-	rectBg->SetFrameRect(CGRectMake(110.0f, 6.0f, MINI_W + DARK_WH, MINI_H + DARK_WH));
-	rectBg->SetColor(ccc4(125, 125, 125, 125));
-	this->AddChild(rectBg);
-	
-	NDUIPolygon* border = new NDUIPolygon();
-	border->Initialization();
-	border->SetFrameRect(CGRectMake(110.0f, 6.0f, MINI_W + DARK_WH, MINI_H + DARK_WH));
-	border->SetLineWidth(1);
-	border->SetColor(ccc3(0, 0, 0));
-	this->AddChild(border);
-	
-	m_lbMapName = new NDUILabel;
-	m_lbMapName->Initialization();
-	m_lbMapName->SetFontSize(13);
-	m_lbMapName->SetFontColor(ccc4(255, 255, 255, 255));
-	m_lbMapName->SetFrameRect(CGRectMake(36.0f, 15.0f, 480.0f, 17.0f));
-	this->AddChild(m_lbMapName);
-	
-	m_lbServerName = new NDUILabel;
-	m_lbServerName->Initialization();
-	m_lbServerName->SetFontSize(13);
-	m_lbServerName->SetFontColor(ccc4(255, 55, 0, 255));
-	m_lbServerName->SetText(NDBeforeGameMgrObj.GetServerDisplayName().c_str());
-	m_lbServerName->SetFrameRect(CGRectMake(36.0f, 31.0f, 80.0f, 17.0f));
-	this->AddChild(m_lbServerName);
-	
-	m_radar = new Radar;
-	m_radar->Initialization();
-	m_radar->SetFrameRect(CGRectMake(111.0f, 7.0f, MINI_W, MINI_H));
-	this->AddChild(m_radar);
-	
-	NDUIRecttangle* rectCoordBg = new NDUIRecttangle();
-	rectCoordBg->Initialization();
-	rectCoordBg->SetFrameRect(CGRectMake(111.0f, 42.0f, MINI_W + 1.0f, 16.0f));
-	rectCoordBg->SetColor(ccc4(50, 50, 50, 125));
-	this->AddChild(rectCoordBg);
-	
-	m_lbCoord = new NDUILabel;
-	m_lbCoord->Initialization();
-	m_lbCoord->SetFontSize(13);
-	m_lbCoord->SetFontColor(ccc4(255, 255, 255, 255));
-	m_lbCoord->SetFrameRect(CGRectMake(117.0f, 42.0f, 50.0f, 17.0f));
-	this->AddChild(m_lbCoord);
-	
-	m_btnShrink = new NDUIButton;
-	m_btnShrink->Initialization();
-	m_btnShrink->SetImage(NDPicturePool::DefaultPool()->AddPicture(GetImgPathBattleUI("shrink_map.png"), false), false, CGRectMake(0, 0, 0, 0), true);
-	m_btnShrink->SetFrameRect(CGRectMake(86.0f, 46.0f, 41.0f, 41.0f));
-	m_btnShrink->SetDelegate(this);
-	this->AddChild(m_btnShrink);
-}
-
-void NDMiniMap::draw()
-{
-	this->mapLogin();
-	
-	NDUILayer::draw();
-}
-
-const CGPoint PT_BTN_SHRINK_SHOW = CGPointMake(394.0f, 46.0f);
-const CGPoint PT_BTN_SHRINK_HIDE = CGPointMake(442.0f, -6.0f);
-
-const float SHRINK_STEP_X = 11.0f;
-const float SHRINK_STEP_Y = 9.8f;
-
-void NDMiniMap::mapLogin()
-{
-	if (m_status == SS_SHRINKING) {
-		CGRect rtFrame = this->GetFrameRect();
-		CGRect rtBtnShrink = m_btnShrink->GetScreenRect();
-		bool bOk = true;
-		// x轴
-		if (rtBtnShrink.origin.x + SHRINK_STEP_X >= PT_BTN_SHRINK_HIDE.x) {
-			rtFrame.origin.x += (PT_BTN_SHRINK_HIDE.x - rtBtnShrink.origin.x);
-		} else {
-			rtFrame.origin.x += SHRINK_STEP_X;
-			bOk = false;
-		}
-		// y轴
-		if (rtBtnShrink.origin.y - SHRINK_STEP_Y <= PT_BTN_SHRINK_HIDE.y) {
-			rtFrame.origin.y -= (rtBtnShrink.origin.y - PT_BTN_SHRINK_HIDE.y);
-		} else {
-			rtFrame.origin.y -= SHRINK_STEP_Y;
-			bOk = false;
-		}
-		
-		if (bOk) {
-			m_status = SS_HIDE;
-		}
-		
-		this->SetFrameRect(rtFrame);
-		
-	} else if (m_status == SS_EXTENDING) {
-		CGRect rtFrame = this->GetFrameRect();
-		
-		CGRect rtBtnShrink = m_btnShrink->GetScreenRect();
-		bool bOk = true;
-		// x轴
-		if (rtBtnShrink.origin.x - SHRINK_STEP_X <= PT_BTN_SHRINK_SHOW.x) {
-			rtFrame.origin.x -= (rtBtnShrink.origin.x - PT_BTN_SHRINK_SHOW.x);
-		} else {
-			rtFrame.origin.x -= SHRINK_STEP_X;
-			bOk = false;
-		}
-		// y轴
-		if (rtBtnShrink.origin.y + SHRINK_STEP_Y >= PT_BTN_SHRINK_SHOW.y) {
-			rtFrame.origin.y += (PT_BTN_SHRINK_SHOW.y - rtBtnShrink.origin.y);
-		} else {
-			rtFrame.origin.y += SHRINK_STEP_Y;
-			bOk = false;
-		}
-		
-		if (bOk) {
-			m_status = SS_SHOW;
-		}
-		
-		this->SetFrameRect(rtFrame);
-	}
-	
-	CGSize size = this->scene->GetSize();
-	if (size.width > 480) {
-		this->MINI_W = 480 / SCALE_X;
-	} else {
-		this->MINI_W = size.width / SCALE_X;
-	}
-	if (size.height > 640) {
-		this->MINI_H = 640 / SCALE_Y;
-	} else {
-		this->MINI_H = size.height / SCALE_Y;
-	}
-	
-	CGPoint pos = this->m_role.GetPosition();
-	this->scrollX = pos.x / SCALE_X - (MINI_W >> 1);
-	this->scrollY = pos.y / SCALE_Y - (MINI_H >> 1);
-	
-
-//	if (21005 == NDMapMgrObj.GetMapID()) 
-//	{
-//		this->m_lbMapName->SetText(NDCommonCString("MingYueLing"));
-//	}
-//	else
-//	{
-	SetMapName(NDMapMgrObj.mapName);
-//	}
-	
-	stringstream ss;
-	ss << "[" << (int)pos.x / MAP_UNITSIZE << "," << (int)pos.y / MAP_UNITSIZE << "]";
-	this->m_lbCoord->SetText(ss.str().c_str());
-	
-	if (scrollX < 0) {
-		scrollX = 0;
-	} else if (scrollX + MINI_W > size.width / SCALE_X) {
-		scrollX = size.width / SCALE_X - MINI_W;
-	}
-	if (scrollY < 0) {
-		scrollY = 0;
-	} else if (scrollY + MINI_H > size.height / SCALE_Y) {
-		scrollY = size.height / SCALE_Y - MINI_H;
-	}
-}
-
-void NDMiniMap::SetMapName(std::string name)
-{
-	if (m_lbMapName) {
-		//if (name.size() > max_mapname_len)
-//		{
-//			std::string str = name.substr(0, max_mapname_len+1);
-//			str += '\n';
-//			NSString *strin = [NSString stringWithUTF8String:str.c_str()];
-//			m_lbMapName->SetText(str.c_str());
-//		}
-//		else
-			m_lbMapName->SetText(name.c_str());
-	}
-}
-
-NDMiniMap* NDMiniMap::GetInstance()
-{
-	return s_instance;
-}
+/***
+* 临时性注释 郭浩
+* this class
+*/
+// IMPLEMENT_CLASS(NDMiniMap, NDUIChildrenEventLayer)
+// 
+// NDMiniMap* NDMiniMap::s_instance = NULL;
+// 
+// NDMiniMap::NDMiniMap() : m_role(NDPlayer::defaultHero())
+// {	
+// 	this->x = 0;
+// 	this->y = 0;
+// 	this->timeCount = 0;
+// 	this->scrollX = 0;
+// 	this->scrollY = 0;
+// 	
+// 	this->MINI_W = 480 / SCALE_X;
+// 	this->MINI_H = 640 / SCALE_Y;
+// 	
+// 	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 	this->startX = winSize.width - MINI_W - OFFSET_X - 42;
+// 	this->startY = OFFSET_Y;
+// 	
+// 	//CGRect miniMapRect = CGRectMake(80.0f, startY, MINI_W + DARK_WH, MINI_H + DARK_WH);
+// 	
+// 	s_instance = this;
+// 	
+// 	m_status = SS_SHOW;
+// }
+// 
+// NDMiniMap::~NDMiniMap()
+// {
+// 	s_instance = NULL;
+// }
+// 
+// void NDMiniMap::OnButtonClick(NDUIButton* button)
+// {
+// 	if (button == m_btnMap) {
+// 		// 打开世界地图界面
+// 		if (scene) {
+// 			//this->scene->PushWorldMapScene();
+// 		}
+// 	} else if (button == m_btnShrink) {
+// 		switch (m_status) {
+// 			case SS_SHOW:
+// 			case SS_EXTENDING:
+// 				this->m_status = SS_SHRINKING;
+// 				break;
+// 			case SS_HIDE:
+// 			case SS_SHRINKING:
+// 				this->m_status = SS_EXTENDING;
+// 				break;
+// 			default:
+// 				break;
+// 		}
+// 	}
+// }
+// 
+// void NDMiniMap::Initialization()
+// {
+// 	NDUIChildrenEventLayer::Initialization();
+// 	
+// 	NDUIImage* imgRadar = new NDUIImage;
+// 	imgRadar->Initialization();
+// 	imgRadar->SetPicture(NDPicturePool::DefaultPool()->AddPicture(GetImgPathBattleUI("radar.png"), false), true);
+// 	imgRadar->SetFrameRect(CGRectMake(0, 0, 172, 66));
+// 	this->AddChild(imgRadar);
+// 	
+// 	m_btnMap = new NDUIButton;
+// 	m_btnMap->Initialization();
+// 	m_btnMap->SetFrameRect(CGRectMake(0.0f, 0.0f, 106.0f, 51.0f));
+// 	m_btnMap->SetImage(NDPicturePool::DefaultPool()->AddPicture(GetImgPathBattleUI("show_map.png"), false), true, CGRectMake(4, 4, 30, 30), true);
+// 	m_btnMap->SetDelegate(this);
+// 	this->AddChild(m_btnMap);
+// 	
+// 	NDUIRecttangle* rectBg = new NDUIRecttangle();
+// 	rectBg->Initialization();
+// 	rectBg->SetFrameRect(CGRectMake(110.0f, 6.0f, MINI_W + DARK_WH, MINI_H + DARK_WH));
+// 	rectBg->SetColor(ccc4(125, 125, 125, 125));
+// 	this->AddChild(rectBg);
+// 	
+// 	NDUIPolygon* border = new NDUIPolygon();
+// 	border->Initialization();
+// 	border->SetFrameRect(CGRectMake(110.0f, 6.0f, MINI_W + DARK_WH, MINI_H + DARK_WH));
+// 	border->SetLineWidth(1);
+// 	border->SetColor(ccc3(0, 0, 0));
+// 	this->AddChild(border);
+// 	
+// 	m_lbMapName = new NDUILabel;
+// 	m_lbMapName->Initialization();
+// 	m_lbMapName->SetFontSize(13);
+// 	m_lbMapName->SetFontColor(ccc4(255, 255, 255, 255));
+// 	m_lbMapName->SetFrameRect(CGRectMake(36.0f, 15.0f, 480.0f, 17.0f));
+// 	this->AddChild(m_lbMapName);
+// 	
+// 	m_lbServerName = new NDUILabel;
+// 	m_lbServerName->Initialization();
+// 	m_lbServerName->SetFontSize(13);
+// 	m_lbServerName->SetFontColor(ccc4(255, 55, 0, 255));
+// 	m_lbServerName->SetText(NDBeforeGameMgrObj.GetServerDisplayName().c_str());
+// 	m_lbServerName->SetFrameRect(CGRectMake(36.0f, 31.0f, 80.0f, 17.0f));
+// 	this->AddChild(m_lbServerName);
+// 	
+// 	m_radar = new Radar;
+// 	m_radar->Initialization();
+// 	m_radar->SetFrameRect(CGRectMake(111.0f, 7.0f, MINI_W, MINI_H));
+// 	this->AddChild(m_radar);
+// 	
+// 	NDUIRecttangle* rectCoordBg = new NDUIRecttangle();
+// 	rectCoordBg->Initialization();
+// 	rectCoordBg->SetFrameRect(CGRectMake(111.0f, 42.0f, MINI_W + 1.0f, 16.0f));
+// 	rectCoordBg->SetColor(ccc4(50, 50, 50, 125));
+// 	this->AddChild(rectCoordBg);
+// 	
+// 	m_lbCoord = new NDUILabel;
+// 	m_lbCoord->Initialization();
+// 	m_lbCoord->SetFontSize(13);
+// 	m_lbCoord->SetFontColor(ccc4(255, 255, 255, 255));
+// 	m_lbCoord->SetFrameRect(CGRectMake(117.0f, 42.0f, 50.0f, 17.0f));
+// 	this->AddChild(m_lbCoord);
+// 	
+// 	m_btnShrink = new NDUIButton;
+// 	m_btnShrink->Initialization();
+// 	m_btnShrink->SetImage(NDPicturePool::DefaultPool()->AddPicture(GetImgPathBattleUI("shrink_map.png"), false), false, CGRectMake(0, 0, 0, 0), true);
+// 	m_btnShrink->SetFrameRect(CGRectMake(86.0f, 46.0f, 41.0f, 41.0f));
+// 	m_btnShrink->SetDelegate(this);
+// 	this->AddChild(m_btnShrink);
+// }
+// 
+// void NDMiniMap::draw()
+// {
+// 	this->mapLogin();
+// 	
+// 	NDUILayer::draw();
+// }
+// 
+// const CGPoint PT_BTN_SHRINK_SHOW = CGPointMake(394.0f, 46.0f);
+// const CGPoint PT_BTN_SHRINK_HIDE = CGPointMake(442.0f, -6.0f);
+// 
+// const float SHRINK_STEP_X = 11.0f;
+// const float SHRINK_STEP_Y = 9.8f;
+// 
+// void NDMiniMap::mapLogin()
+// {
+// 	if (m_status == SS_SHRINKING) {
+// 		CGRect rtFrame = this->GetFrameRect();
+// 		CGRect rtBtnShrink = m_btnShrink->GetScreenRect();
+// 		bool bOk = true;
+// 		// x轴
+// 		if (rtBtnShrink.origin.x + SHRINK_STEP_X >= PT_BTN_SHRINK_HIDE.x) {
+// 			rtFrame.origin.x += (PT_BTN_SHRINK_HIDE.x - rtBtnShrink.origin.x);
+// 		} else {
+// 			rtFrame.origin.x += SHRINK_STEP_X;
+// 			bOk = false;
+// 		}
+// 		// y轴
+// 		if (rtBtnShrink.origin.y - SHRINK_STEP_Y <= PT_BTN_SHRINK_HIDE.y) {
+// 			rtFrame.origin.y -= (rtBtnShrink.origin.y - PT_BTN_SHRINK_HIDE.y);
+// 		} else {
+// 			rtFrame.origin.y -= SHRINK_STEP_Y;
+// 			bOk = false;
+// 		}
+// 		
+// 		if (bOk) {
+// 			m_status = SS_HIDE;
+// 		}
+// 		
+// 		this->SetFrameRect(rtFrame);
+// 		
+// 	} else if (m_status == SS_EXTENDING) {
+// 		CGRect rtFrame = this->GetFrameRect();
+// 		
+// 		CGRect rtBtnShrink = m_btnShrink->GetScreenRect();
+// 		bool bOk = true;
+// 		// x轴
+// 		if (rtBtnShrink.origin.x - SHRINK_STEP_X <= PT_BTN_SHRINK_SHOW.x) {
+// 			rtFrame.origin.x -= (rtBtnShrink.origin.x - PT_BTN_SHRINK_SHOW.x);
+// 		} else {
+// 			rtFrame.origin.x -= SHRINK_STEP_X;
+// 			bOk = false;
+// 		}
+// 		// y轴
+// 		if (rtBtnShrink.origin.y + SHRINK_STEP_Y >= PT_BTN_SHRINK_SHOW.y) {
+// 			rtFrame.origin.y += (PT_BTN_SHRINK_SHOW.y - rtBtnShrink.origin.y);
+// 		} else {
+// 			rtFrame.origin.y += SHRINK_STEP_Y;
+// 			bOk = false;
+// 		}
+// 		
+// 		if (bOk) {
+// 			m_status = SS_SHOW;
+// 		}
+// 		
+// 		this->SetFrameRect(rtFrame);
+// 	}
+// 	
+// 	CGSize size = this->scene->GetSize();
+// 	if (size.width > 480) {
+// 		this->MINI_W = 480 / SCALE_X;
+// 	} else {
+// 		this->MINI_W = size.width / SCALE_X;
+// 	}
+// 	if (size.height > 640) {
+// 		this->MINI_H = 640 / SCALE_Y;
+// 	} else {
+// 		this->MINI_H = size.height / SCALE_Y;
+// 	}
+// 	
+// 	CGPoint pos = this->m_role.GetPosition();
+// 	this->scrollX = pos.x / SCALE_X - (MINI_W >> 1);
+// 	this->scrollY = pos.y / SCALE_Y - (MINI_H >> 1);
+// 	
+// 
+// //	if (21005 == NDMapMgrObj.GetMapID()) 
+// //	{
+// //		this->m_lbMapName->SetText(NDCommonCString("MingYueLing"));
+// //	}
+// //	else
+// //	{
+// 	SetMapName(NDMapMgrObj.mapName);
+// //	}
+// 	
+// 	stringstream ss;
+// 	ss << "[" << (int)pos.x / MAP_UNITSIZE << "," << (int)pos.y / MAP_UNITSIZE << "]";
+// 	this->m_lbCoord->SetText(ss.str().c_str());
+// 	
+// 	if (scrollX < 0) {
+// 		scrollX = 0;
+// 	} else if (scrollX + MINI_W > size.width / SCALE_X) {
+// 		scrollX = size.width / SCALE_X - MINI_W;
+// 	}
+// 	if (scrollY < 0) {
+// 		scrollY = 0;
+// 	} else if (scrollY + MINI_H > size.height / SCALE_Y) {
+// 		scrollY = size.height / SCALE_Y - MINI_H;
+// 	}
+// }
+// 
+// void NDMiniMap::SetMapName(std::string name)
+// {
+// 	if (m_lbMapName) {
+// 		//if (name.size() > max_mapname_len)
+// //		{
+// //			std::string str = name.substr(0, max_mapname_len+1);
+// //			str += '\n';
+// //			NSString *strin = [NSString stringWithUTF8String:str.c_str()];
+// //			m_lbMapName->SetText(str.c_str());
+// //		}
+// //		else
+// 			m_lbMapName->SetText(name.c_str());
+// 	}
+// }
+// 
+// NDMiniMap* NDMiniMap::GetInstance()
+// {
+// 	return s_instance;
+// }

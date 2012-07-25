@@ -187,22 +187,26 @@ GameScene* GameScene::GetCurGameScene()
 
 void GameScene::SetTargetHead(NDBaseRole* target)
 {
-	if (m_targetHead) 
-	{
-		if (!target)
-		{
-			m_targetHead->RemoveFromParent(false);
-		} 
-		else
-		{
-			//m_targetHead->SetRole(target); ///< 临时性注释 郭浩
-
-			if (m_targetHead->GetParent() == NULL) 
-			{
-				this->AddUIChild(m_targetHead);
-			}
-		}
-	}
+/***
+* 临时性注释 郭浩
+* all
+*/
+// 	if (m_targetHead) 
+// 	{
+// 		if (!target)
+// 		{
+// 			m_targetHead->RemoveFromParent(false);
+// 		} 
+// 		else
+// 		{
+// 			//m_targetHead->SetRole(target); ///< 临时性注释 郭浩
+// 
+// 			if (m_targetHead->GetParent() == NULL) 
+// 			{
+// 				this->AddUIChild(m_targetHead);
+// 			}
+// 		}
+// 	}
 }
 
 void GameScene::RefreshQuickInterationBar(NDBaseRole* target)
@@ -218,13 +222,13 @@ GameScene::GameScene()
 {
 	s_curGameScene = this;
 	
-	m_userState = NULL;
+//	m_userState = NULL; ///< 临时性注释 郭浩
 	m_playerHead = NULL;
-	m_targetHead = NULL;
+//	m_targetHead = NULL; ///< 临时性注释 郭浩
 	m_petHead = NULL;
 	m_tlRelieve = NULL;
 	m_relieveLayer = NULL;
-	m_miniMap = NULL;
+//	m_miniMap = NULL; ///< 临时性注释 郭浩
 	maplayer = NULL;
 	
 	m_hccOPItem = NULL;
@@ -319,10 +323,19 @@ GameScene::~GameScene()
 	if (s_curGameScene == this) {
 		s_curGameScene = NULL;
 	}
-	
-	if (m_targetHead && m_targetHead->GetParent() == NULL) {
-		SAFE_DELETE(m_targetHead);
-	}
+
+	/***
+	* 临时性注释 郭浩
+	* begin
+	*/
+// 	if (m_targetHead && m_targetHead->GetParent() == NULL)
+// 	{
+// 		SAFE_DELETE(m_targetHead);
+// 	}
+	/***
+	* 临时性注释 郭浩
+	* end
+	*/
 	
 	BattleMgrObj.quitBattle(false);
 	SAFE_DELETE(m_picMap);
@@ -669,11 +682,19 @@ layer->AddChild(btn); \
 	//this->ShowPlayerHead(NDDataPersist::IsGameSettingOn(GS_SHOW_HEAD));
 	this->ShowMiniMap(true);
 	this->ShowPlayerHead(true);
-	
-	m_userState = new UserStateLayer;
-	m_userState->Initialization();
-	this->AddUIChild(m_userState, 2);
-	
+
+	/***
+	* 临时性注释 郭浩
+	* begin
+	*/
+// 	m_userState = new UserStateLayer;
+// 	m_userState->Initialization();
+// 	this->AddUIChild(m_userState, 2);
+	/***
+	* 临时性注释 郭浩
+	* end
+	*/
+
 	NDUILayer* layer = new NDUILayer;
 	layer->Initialization();
 	layer->SetFrameRect(CGRectMake(0, 0, 36, 42));
@@ -694,11 +715,19 @@ layer->AddChild(btn); \
 	m_btnHeadShow->SetDelegate(this);
 	layer->AddChild(m_btnHeadShow);
 	this->AddUIChild(layer, 1);
-	
-	m_targetHead = new TargetHeadInMap;
-	m_targetHead->Initialization();
-	m_targetHead->SetFrameRect(CGRectMake(210.0f, 0.0f, 87.0f, 40.0f));
-	
+
+	/***
+	* 临时性注释 郭浩
+	* begin
+	*/
+// 	m_targetHead = new TargetHeadInMap;
+// 	m_targetHead->Initialization();
+// 	m_targetHead->SetFrameRect(CGRectMake(210.0f, 0.0f, 87.0f, 40.0f));
+	/***
+	* 临时性注释 郭浩
+	* end
+	*/
+
 	NDUIImage* imgShrinkBg = new NDUIImage;
 	imgShrinkBg->Initialization();
 	imgShrinkBg->SetPicture(NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathBattleUI("bar_shrink.png"), false));
@@ -710,15 +739,23 @@ layer->AddChild(btn); \
 	imgShrinkBg->SetPicture(NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathBattleUI("bar_shrink.png"), false));
 	imgShrinkBg->SetFrameRect(CGRectMake(winsize.width-66.5-31, 284, 62, 36));
 	this->AddUIChild(imgShrinkBg);
-	
-	m_bQuickInterationShow = true;
-	
-	m_quickInteration = new QuickInteraction;
-	m_quickInteration->Initialization();
-	//m_quickInteration->SetBackgroundColor(ccc4(255, 0, 255, 255));
-	m_quickInteration->SetFrameRect(CGRectMake(66.5, 247.0f, 347, 75.0f));
-	this->AddUIChild(m_quickInteration);
-	
+
+	/***
+	* 临时性注释 郭浩
+	* begin
+	*/
+// 	m_bQuickInterationShow = true;
+// 	
+// 	m_quickInteration = new QuickInteraction;
+// 	m_quickInteration->Initialization();
+// 	//m_quickInteration->SetBackgroundColor(ccc4(255, 0, 255, 255));
+// 	m_quickInteration->SetFrameRect(CGRectMake(66.5, 247.0f, 347, 75.0f));
+// 	this->AddUIChild(m_quickInteration);
+	/***
+	* 临时性注释 郭浩
+	* end
+	*/
+
 	layer = new NDUILayer;
 	layer->Initialization();
 	layer->SetFrameRect(CGRectMake(35.5, 284, 62, 36));
@@ -728,14 +765,23 @@ layer->AddChild(btn); \
 	imgQuickInterationShrink->SetPicture(NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathBattleUI("bottom_shrink.png"), false), true);
 	imgQuickInterationShrink->SetFrameRect(CGRectMake(14, 14, 34, 22));
 	layer->AddChild(imgQuickInterationShrink);
+
+	/***
+	* 临时性注释 郭浩
+	* begin
+	*/
+// 	m_quickItem = new QuickItem;
+// 	m_quickItem->Initialization();
+// 	m_quickItem->SetFrameRect(CGRectMake(66.5, 244.0f, 400.0f, 78.0f));
+// 	this->AddUIChild(m_quickItem);
+//	RefreshQuickItem();
+	/***
+	* 临时性注释 郭浩
+	* end
+	*/
+
 	
-	m_quickItem = new QuickItem;
-	m_quickItem->Initialization();
-	m_quickItem->SetFrameRect(CGRectMake(66.5, 244.0f, 400.0f, 78.0f));
-	this->AddUIChild(m_quickItem);
-	
-	RefreshQuickItem();
-	m_quickItem->SetShrink(true);
+//	m_quickItem->SetShrink(true); ///< 临时性注释 郭浩
 	
 	m_btnQuickInterationShrink = new NDUIButton;
 	m_btnQuickInterationShrink->Initialization();
@@ -766,16 +812,19 @@ cocos2d::CCArray* GameScene::GetSwitchs()
 
 void GameScene::SetMiniMapVisible(bool bVisible)
 {
-	if (m_miniMap) {
+// 	if (m_miniMap)
+// 	{
 		//this->m_miniMap->EnableDraw(bVisible);
-	}
+//	}
 	
 	// 同时也设置头像
-	if (m_playerHead) {
+	if (m_playerHead)
+	{
 		//this->m_playerHead->EnableDraw(bVisible);
 	}
 	
-	if (m_petHead) {
+	if (m_petHead)
+	{
 		//this->m_petHead->EnableDraw(bVisible);
 	}
 }
@@ -855,20 +904,29 @@ const CGRect RECT_MINI_MAP = CGRectMake(308.0f, 0.0f, 172.0f, 84.0f);
 
 void GameScene::ShowMiniMap(bool bShow)
 {
-	if (bShow) {
-		if (!this->m_miniMap) {
-			m_miniMap = new NDMiniMap();
-			m_miniMap->Initialization();
-			//m_miniMap->SetGameScene(this);
-			m_miniMap->SetFrameRect(RECT_MINI_MAP);
-			this->AddUIChild(m_miniMap);
-		}
-	} else {
-		if (this->m_miniMap) {
-			this->m_uiLayer->RemoveChild(m_miniMap, true);
-			m_miniMap = NULL;
-		}
-	}
+	/***
+	* 临时性注释 郭浩
+	* this function
+	*/
+// 	if (bShow) 
+// 	{
+// 		if (!this->m_miniMap) 
+// 		{
+// 			m_miniMap = new NDMiniMap();
+// 			m_miniMap->Initialization();
+// 			//m_miniMap->SetGameScene(this);
+// 			m_miniMap->SetFrameRect(RECT_MINI_MAP);
+// 			this->AddUIChild(m_miniMap);
+// 		}
+// 	} 
+// 	else
+// 	{
+// 		if (this->m_miniMap) 
+// 		{
+// 			this->m_uiLayer->RemoveChild(m_miniMap, true);
+// 			m_miniMap = NULL;
+// 		}
+// 	}
 }
 
 void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section)
@@ -2599,11 +2657,19 @@ void GameScene::ShowUIPaiHang()
 void GameScene::ShowShop(int iNPCID /*= 0*/)
 {
 	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
-	if (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameNpcStoreScene)))
-	{
-		NDDirector::DefaultDirector()->PushScene(GameNpcStoreScene::Scene(iNPCID));
-		return;
-	}
+/***
+* 临时性注释 郭浩
+* begin
+*/
+	// 	if (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameNpcStoreScene)))
+// 	{
+// 		NDDirector::DefaultDirector()->PushScene(GameNpcStoreScene::Scene(iNPCID));
+// 		return;
+// 	}
+	/***
+	* 临时性注释 郭浩
+	* end
+	*/
 	
 	NDNode *node = scene->GetChild(UILAYER_NPCSHOP_TAG);
 	if (!node) 
@@ -2847,22 +2913,31 @@ void GameScene::HandleRootMenuAfterSceneLoad()
 
 void GameScene::RefreshQuickItem()
 {
-	if (m_quickItem) 
-	{
-		m_quickItem->Refresh();
-	}
+	/***
+	* 临时性注释 郭浩
+	* all
+	*/
+// 	if (m_quickItem) 
+// 	{
+// 		m_quickItem->Refresh();
+// 	}
 }
 
 void GameScene::ShrinkQuickInteraction()
 {
-	if (m_quickInteration)
-	{
-		m_quickInteration->SetShrink(true);
-		m_bQuickInterationShow = false;
-		if (m_picQuickInteration) {
-			m_picQuickInteration->Rotation(m_bQuickInterationShow ? PictureRotation90 : PictureRotation270);
-		}
-	}
+	/***
+	* 临时性注释 郭浩
+	* all
+	*/
+// 	if (m_quickInteration)
+// 	{
+// 		m_quickInteration->SetShrink(true);
+// 		m_bQuickInterationShow = false;
+// 		if (m_picQuickInteration)
+// 		{
+// 			m_picQuickInteration->Rotation(m_bQuickInterationShow ? PictureRotation90 : PictureRotation270);
+// 		}
+// 	}
 }
 
 void GameScene::OnTimer(OBJID tag)
@@ -2915,7 +2990,8 @@ void GameScene::processMsgPosText(NDTransData& data)
 				s_mapPosText.erase(it);
 			}
 			
-			if (s_mapPosText.count(idPosText) == 0) {
+			if (s_mapPosText.count(idPosText) == 0) 
+			{
 				int direction = data.ReadByte();
 				int posX = data.ReadByte();
 				int posY = data.ReadByte();
@@ -2927,46 +3003,50 @@ void GameScene::processMsgPosText(NDTransData& data)
 				string str = data.ReadUnicodeString();
 				PosText* pt = new PosText(idPosText, direction, posX, posY, showSec, showClr, num, str, showBackColor);
 				s_mapPosText[idPosText] = pt;
-				m_userState->AddPosText(pt);
+//				m_userState->AddPosText(pt); ///< 临时性注释 郭浩
 			}
 		}
 			break;
 		case 1: // 更新数字和文字
 		{
 			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
-			if (it != s_mapPosText.end()) {
+			if (it != s_mapPosText.end()) 
+			{
 				PosText* pt = it->second;
 				pt->m_num = data.ReadInt();
 				pt->m_str = data.ReadUnicodeString();;
-				m_userState->AddPosText(pt);
+				//m_userState->AddPosText(pt); ///< 临时性注释 郭浩
 			}
 		}
 			break;
 		case 2: // 更新数字
 		{
 			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
-			if (it != s_mapPosText.end()) {
+			if (it != s_mapPosText.end()) 
+			{
 				PosText* pt = it->second;
 				pt->m_num = data.ReadInt();
-				m_userState->AddPosText(pt);
+			//	m_userState->AddPosText(pt); ///< 临时性注释 郭浩
 			}
 		}
 			break;
 		case 3: // 更新文字
 		{
 			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
-			if (it != s_mapPosText.end()) {
+			if (it != s_mapPosText.end()) 
+			{
 				PosText* pt = it->second;
 				pt->m_str = data.ReadUnicodeString();
-				m_userState->AddPosText(pt);
+			//	m_userState->AddPosText(pt); ///< 临时性注释 郭浩
 			}
 		}
 			break;
 		case 4: // 删除
 		{
 			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
-			if (it != s_mapPosText.end()) {
-				m_userState->RemovePosText(it->second);
+			if (it != s_mapPosText.end())
+			{
+	//			m_userState->RemovePosText(it->second); ///< 临时性注释 郭浩
 				SAFE_DELETE(it->second);
 				s_mapPosText.erase(it);
 			}
@@ -2990,7 +3070,7 @@ void GameScene::ShowShopAndRecharge()
 	}
 	else
 	{
-		NDDirector::DefaultDirector()->PushScene(NewVipStoreScene::Scene());
+		//NDDirector::DefaultDirector()->PushScene(NewVipStoreScene::Scene()); ///< 临时性注释 郭浩
 	}
 }
 
@@ -3010,8 +3090,12 @@ void GameScene::ShowMarriageList(vec_marriage& vMarriage)
 
 void GameScene::ShrinkQuickItem()
 {
-	if (m_quickItem)
-		m_quickItem->SetShrink(true);
+	/***
+	* 临时性注释 郭浩
+	* all
+	*/
+// 	if (m_quickItem)
+// 		m_quickItem->SetShrink(true);
 }
 
 void GameScene::TeamRefreh(bool newJoin)

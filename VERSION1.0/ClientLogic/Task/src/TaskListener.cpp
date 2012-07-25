@@ -359,7 +359,7 @@ void showChatForTask(Task& task, TaskData& taskElement) {
 	sb << "(" << taskElement.getMCurCount() << "/" << taskElement.getMSumCount() << ")";
 	
 	std::stringstream chat; chat << sb.str();
-	Chat::DefaultChat()->AddMessage(ChatTypeSystem, chat.str().c_str());
+//	Chat::DefaultChat()->AddMessage(ChatTypeSystem, chat.str().c_str()); ///< 临时性注释 郭浩
 	//Chat::DefaultChat()->AddMessage(chat.str().c_str());
 	//if (GameScreen.getInstance() != null) {
 //		GameScreen.getInstance().initNewChat(new ChatRecordManager(5, "系统", sb.toString()));
@@ -769,7 +769,7 @@ void updateTaskMonsterData(int monId, bool isShow) { // 打怪完调用
 									sb << task->taskTitle;
 									sb << "(" << NDCommonCString("finish") << ")";
 									std::stringstream chat; chat << sb.str();
-									Chat::DefaultChat()->AddMessage(ChatTypeSystem, chat.str().c_str());
+//									Chat::DefaultChat()->AddMessage(ChatTypeSystem, chat.str().c_str()); ///< 临时性注释 郭浩
 									//Chat::DefaultChat()->AddMessage(chat.str().c_str());
 									//if (GameScreen.getInstance() != null) { 
 //										GameScreen.getInstance().initNewChat(new ChatRecordManager(5, "系统", sb.toString()));
@@ -855,7 +855,7 @@ void updateTaskDataByType(int nType, int nData, bool isShow)
 								sb << task->taskTitle;
 								sb << "(" << NDCommonCString("finish") << ")";
 								std::stringstream chat; chat << sb.str();
-								Chat::DefaultChat()->AddMessage(ChatTypeSystem, chat.str().c_str());
+	//							Chat::DefaultChat()->AddMessage(ChatTypeSystem, chat.str().c_str()); ///< 临时性注释 郭浩
 							}								
 						}
 					}

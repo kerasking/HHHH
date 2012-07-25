@@ -71,72 +71,77 @@ private:
 	void drawMiniQuest(int npcState, int x, int y);
 };
 
-class NDMiniMap : public NDUIChildrenEventLayer,
-public NDUIButtonDelegate
-{
-	DECLARE_CLASS(NDMiniMap)
-	
-	enum SHRINK_STATUS {
-		SS_HIDE,
-		SS_SHOW,
-		SS_SHRINKING,
-		SS_EXTENDING,
-	};
-	
-public:
-	NDMiniMap();
-	~NDMiniMap();
-	
-	void Initialization();
-	
-	void draw(); override
-	
-	void OnButtonClick(NDUIButton* button);
-	
-	void SetGameScene(CSMGameScene* gs) { 
-		this->scene = gs;
-		if (m_radar) {
-			m_radar->SetGameScene(gs);
-		}
-	}
-	
-	void SetMapName(std::string name);
-	
-	static NDMiniMap* GetInstance();
-	
-private:
-	int startX;
-	int startY;
-	int x;
-	int y;
-	int timeCount;
-	int scrollX;
-	int scrollY;
-	
-	int MINI_W;
-	int MINI_H;
-	
-	Radar* m_radar;
-	
-	CSMGameScene* scene;
-	
-	NDPlayer& m_role;
-	
-	//NDPicture* m_miniTaskPic;
-	
-	NDUILabel* m_lbMapName;
-	NDUILabel* m_lbServerName;
-	NDUILabel* m_lbCoord;
-	
-	NDUIButton* m_btnMap;
-	NDUIButton* m_btnShrink;
-
-	SHRINK_STATUS m_status;
-	
-	static NDMiniMap* s_instance;
-	
-private:
-	void mapLogin();
-};
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* this class
+*/
+// class NDMiniMap : public NDUIChildrenEventLayer,
+// public NDUIButtonDelegate
+// {
+// 	DECLARE_CLASS(NDMiniMap)
+// 	
+// 	enum SHRINK_STATUS 
+//  {
+// 		SS_HIDE,
+// 		SS_SHOW,
+// 		SS_SHRINKING,
+// 		SS_EXTENDING,
+// 	};
+// 	
+// public:
+// 	NDMiniMap();
+// 	~NDMiniMap();
+// 	
+// 	void Initialization();
+// 	
+// 	void draw(); override
+// 	
+// 	void OnButtonClick(NDUIButton* button);
+// 	
+// 	void SetGameScene(CSMGameScene* gs) { 
+// 		this->scene = gs;
+// 		if (m_radar) {
+// 			m_radar->SetGameScene(gs);
+// 		}
+// 	}
+// 	
+// 	void SetMapName(std::string name);
+// 	
+// 	static NDMiniMap* GetInstance();
+// 	
+// private:
+// 	int startX;
+// 	int startY;
+// 	int x;
+// 	int y;
+// 	int timeCount;
+// 	int scrollX;
+// 	int scrollY;
+// 	
+// 	int MINI_W;
+// 	int MINI_H;
+// 	
+// 	Radar* m_radar;
+// 	
+// 	CSMGameScene* scene;
+// 	
+// 	NDPlayer& m_role;
+// 	
+// 	//NDPicture* m_miniTaskPic;
+// 	
+// 	NDUILabel* m_lbMapName;
+// 	NDUILabel* m_lbServerName;
+// 	NDUILabel* m_lbCoord;
+// 	
+// 	NDUIButton* m_btnMap;
+// 	NDUIButton* m_btnShrink;
+// 
+// 	SHRINK_STATUS m_status;
+// 	
+// 	static NDMiniMap* s_instance;
+// 	
+// private:
+// 	void mapLogin();
+// };
 
 #endif

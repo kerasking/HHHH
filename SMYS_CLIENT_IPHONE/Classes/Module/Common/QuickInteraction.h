@@ -44,110 +44,112 @@ enum QUICK_INTERACTION {
 
 typedef vector<QUICK_INTERACTION> VEC_QUICK_INTERACTION;
 
-class QuickInteraction : 
-public NDUIChildrenEventLayer,
-public NDUIButtonDelegate,
-public NDUIDialogDelegate
-{
-	DECLARE_CLASS(QuickInteraction)
-	
-	enum SHRINK_STATUS {
-		SS_HIDE,
-		SS_SHOW,
-		SS_SHRINKING,
-		SS_EXTENDING,
-	};
-	
-public:
-	static void RefreshOptions();
-	QuickInteraction();
-	~QuickInteraction();
-	
-	void Initialization(); override
-	
-	void OnBattleBegin(); override
-	
-	void draw();
-	
-	void OnButtonClick(NDUIButton* button);
-	
-	void SetShrink(bool bShrink);
-	
-	// 根据当前目标刷新快捷互动栏操作选项
-	//void Refresh(NDBaseRole* target); ///< 临时性注释 郭浩
-	
-	void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex); override
-	
-	void OnDialogClose(NDUIDialog* dialog); override
-	
-	bool OnButtonDragOut(NDUIButton* button, CGPoint beginTouch, CGPoint moveTouch, bool longTouch); override
-	
-	bool OnButtonDragOutComplete(NDUIButton* button, CGPoint endTouch, bool outOfRange); override
-	
-	bool OnButtonDragIn(NDUIButton* desButton, NDUINode *uiSrcNode, bool longTouch); override
-	
-	bool OnButtonDragOver(NDUIButton* overButton, bool inRange); override
-	
-	bool OnButtonLongClick(NDUIButton* button); override
-	
-	bool OnButtonLongTouch(NDUIButton* button); override
-	
-	void OnButtonDown(NDUIButton* button); override
-	
-	void OnButtonUp(NDUIButton* button); override
-private:
-	typedef vector<NDUIButton*> VEC_BTNS;
-	
-	SHRINK_STATUS m_status;
-	
-	NDUIButton* m_btnSwitch;
-	
-	NDUIButton* m_btnPlayerBag;
-	
-	NDUIButton* m_btnSystem;
-	
-	NDUIButton* m_btnMainUiBack;// 回主界面 //m_btnTrade; 
-	
-	NDUIButton* m_btnMail;
-	
-	NDUIButton* m_btnMainUiReset; //  卡死复位//m_btnPK;　　　
-	
-	NDUIButton* m_btnViewInfo;
-	
-	NDUIButton* m_btnPrivateTalk;
-	
-	NDUIChildrenEventLayer* m_secondBarLayer;
-	
-	NDUIDialog* m_dlgQueryVipShop, *m_dlgQueryTreasureHunt;
-	
-	VEC_BTNS m_vSecondBarBtns;
-	
-	NDPicture* m_picEmptyBtn;
-	NDPicture* m_picInviteTeam, *m_picJoinTeam, *m_picLeftTeam;
-	NDPicture* m_picCloseTeam, *m_picOpenTeam, *m_picKickOutTeam;
-	NDPicture* m_picDismissTeam, *m_picAssignTeamLeader;
-	NDPicture* m_picAddFriend, *m_picReherse, *m_picWatchBattle;
-	NDPicture* m_picInviteSyn, *m_picBaiShi, *m_picShouTu;
-	NDPicture* m_picShowVendor;
-	NDPicture* m_picTrade, *m_picPk;
-	
-	NDPicture* m_picSysSet, *m_picSysBackToMenu, *m_picSysReset;
-	
-	VEC_QUICK_INTERACTION m_vOpts;
-	
-	size_t m_secondBarShowIndex;
-	
-	static QuickInteraction* s_instance;
-	
-//	CAutoLink<NDUIMaskLayer> m_layerMask; ///< 临时性注释 郭浩
-	
-	NDUIChildrenEventLayer* m_firstLayer;
-private:
-	void SetBtnImgByOpt(NDUIButton* btn, QUICK_INTERACTION qi);
-	void DealTreasureHunt();
-	void ShowMask(bool show, NDPicture* pic=NULL);
-	void RefreshSystem();
-	void ResetSecondBar();
-};
+
+// class QuickInteraction : 
+// public NDUIChildrenEventLayer,
+// public NDUIButtonDelegate,
+// public NDUIDialogDelegate
+// {
+// 	DECLARE_CLASS(QuickInteraction)
+// 	
+// 	enum SHRINK_STATUS 
+// 	{
+// 		SS_HIDE,
+// 		SS_SHOW,
+// 		SS_SHRINKING,
+// 		SS_EXTENDING,
+// 	};
+// 	
+// public:
+// 	static void RefreshOptions();
+// 	QuickInteraction();
+// 	~QuickInteraction();
+// 	
+// 	void Initialization(); override
+// 	
+// 	void OnBattleBegin(); override
+// 	
+// 	void draw();
+// 	
+// 	void OnButtonClick(NDUIButton* button);
+// 	
+// 	void SetShrink(bool bShrink);
+// 	
+// 	// 根据当前目标刷新快捷互动栏操作选项
+// 	//void Refresh(NDBaseRole* target); ///< 临时性注释 郭浩
+// 	
+// 	void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex); override
+// 	
+// 	void OnDialogClose(NDUIDialog* dialog); override
+// 	
+// 	bool OnButtonDragOut(NDUIButton* button, CGPoint beginTouch, CGPoint moveTouch, bool longTouch); override
+// 	
+// 	bool OnButtonDragOutComplete(NDUIButton* button, CGPoint endTouch, bool outOfRange); override
+// 	
+// 	bool OnButtonDragIn(NDUIButton* desButton, NDUINode *uiSrcNode, bool longTouch); override
+// 	
+// 	bool OnButtonDragOver(NDUIButton* overButton, bool inRange); override
+// 	
+// 	bool OnButtonLongClick(NDUIButton* button); override
+// 	
+// 	bool OnButtonLongTouch(NDUIButton* button); override
+// 	
+// 	void OnButtonDown(NDUIButton* button); override
+// 	
+// 	void OnButtonUp(NDUIButton* button); override
+// private:
+// 	typedef vector<NDUIButton*> VEC_BTNS;
+// 	
+// 	SHRINK_STATUS m_status;
+// 	
+// 	NDUIButton* m_btnSwitch;
+// 	
+// 	NDUIButton* m_btnPlayerBag;
+// 	
+// 	NDUIButton* m_btnSystem;
+// 	
+// 	NDUIButton* m_btnMainUiBack;// 回主界面 //m_btnTrade; 
+// 	
+// 	NDUIButton* m_btnMail;
+// 	
+// 	NDUIButton* m_btnMainUiReset; //  卡死复位//m_btnPK;　　　
+// 	
+// 	NDUIButton* m_btnViewInfo;
+// 	
+// 	NDUIButton* m_btnPrivateTalk;
+// 	
+// 	NDUIChildrenEventLayer* m_secondBarLayer;
+// 	
+// 	NDUIDialog* m_dlgQueryVipShop, *m_dlgQueryTreasureHunt;
+// 	
+// 	VEC_BTNS m_vSecondBarBtns;
+// 	
+// 	NDPicture* m_picEmptyBtn;
+// 	NDPicture* m_picInviteTeam, *m_picJoinTeam, *m_picLeftTeam;
+// 	NDPicture* m_picCloseTeam, *m_picOpenTeam, *m_picKickOutTeam;
+// 	NDPicture* m_picDismissTeam, *m_picAssignTeamLeader;
+// 	NDPicture* m_picAddFriend, *m_picReherse, *m_picWatchBattle;
+// 	NDPicture* m_picInviteSyn, *m_picBaiShi, *m_picShouTu;
+// 	NDPicture* m_picShowVendor;
+// 	NDPicture* m_picTrade, *m_picPk;
+// 	
+// 	NDPicture* m_picSysSet, *m_picSysBackToMenu, *m_picSysReset;
+// 	
+// 	VEC_QUICK_INTERACTION m_vOpts;
+// 	
+// 	size_t m_secondBarShowIndex;
+// 	
+// 	static QuickInteraction* s_instance;
+// 	
+// //	CAutoLink<NDUIMaskLayer> m_layerMask; ///< 临时性注释 郭浩
+// 	
+// 	NDUIChildrenEventLayer* m_firstLayer;
+// private:
+// 	void SetBtnImgByOpt(NDUIButton* btn, QUICK_INTERACTION qi);
+// 	void DealTreasureHunt();
+// 	void ShowMask(bool show, NDPicture* pic=NULL);
+// 	void RefreshSystem();
+// 	void ResetSecondBar();
+// };
 
 #endif
