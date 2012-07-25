@@ -143,12 +143,12 @@ GameScene* GameScene::Scene()
 
 void GameScene::AddUserState(int idState, string& str)
 {
-	this->m_userState->AddStateLabel(idState, str);
+	//this->m_userState->AddStateLabel(idState, str); ///< 临时性注释 郭浩
 }
 
 void GameScene::DelUserState(int idState)
 {
-	this->m_userState->RemoveStateLabel(idState);
+//	this->m_userState->RemoveStateLabel(idState);
 }
 
 void GameScene::SetUIShow(bool bShow)
@@ -187,12 +187,18 @@ GameScene* GameScene::GetCurGameScene()
 
 void GameScene::SetTargetHead(NDBaseRole* target)
 {
-	if (m_targetHead) {
-		if (!target) {
+	if (m_targetHead) 
+	{
+		if (!target)
+		{
 			m_targetHead->RemoveFromParent(false);
-		} else {
-			m_targetHead->SetRole(target);
-			if (m_targetHead->GetParent() == NULL) {
+		} 
+		else
+		{
+			//m_targetHead->SetRole(target); ///< 临时性注释 郭浩
+
+			if (m_targetHead->GetParent() == NULL) 
+			{
 				this->AddUIChild(m_targetHead);
 			}
 		}
@@ -201,8 +207,10 @@ void GameScene::SetTargetHead(NDBaseRole* target)
 
 void GameScene::RefreshQuickInterationBar(NDBaseRole* target)
 {
-	if (m_quickInteration) {
-		m_quickInteration->Refresh(target);
+	if (m_quickInteration) 
+	{
+		//m_quickInteration->Refresh(target); ///< 临时性注释 郭浩
+		return;
 	}
 }
 
@@ -415,15 +423,23 @@ void GameScene::OnBattleBegin()
 			(*it)->RemoveFromParent(true);
 		}
 	}
-	
-	if (m_directKey)
-		m_directKey->OnBattleBegin();
-		
-	if (m_quickFunc)
-		m_quickFunc->OnBattleBegin();
-		
-	if (m_quickInteration)
-		m_quickInteration->OnBattleBegin();
+
+	/***
+	* 临时性注释 郭浩
+	* begin
+	*/
+// 	if (m_directKey)
+// 		m_directKey->OnBattleBegin();
+// 		
+// 	if (m_quickFunc)
+// 		m_quickFunc->OnBattleBegin();
+// 		
+// 	if (m_quickInteration)
+// 		m_quickInteration->OnBattleBegin();
+	/***
+	* 临时性注释 郭浩
+	* end
+	*/
 }
 
 void GameScene::Initialization(int mapID)

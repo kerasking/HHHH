@@ -51,8 +51,8 @@ public:
 	
 	void Initialization();
 	
-	void AddStateLabel(int idState, string& str);
-	void RemoveStateLabel(int idState);
+	//void AddStateLabel(int idState, string& str); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	//void RemoveStateLabel(int idState);
 	
 	void AddPosText(PosText* pt);
 	void RemovePosText(PosText* pt);

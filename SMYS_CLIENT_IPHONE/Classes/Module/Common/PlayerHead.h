@@ -196,7 +196,7 @@ public:
 	
 	bool TouchEnd(NDTouch* touch);
 	
-	void SetRole(NDBaseRole* role);
+	//void SetRole(NDBaseRole* role); ///< 临时性注释 郭浩
 	
 protected:
 	

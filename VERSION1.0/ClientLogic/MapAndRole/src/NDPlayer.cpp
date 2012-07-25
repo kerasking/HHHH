@@ -1101,7 +1101,7 @@ namespace NDEngine
 		
 		dk_vec_pos vpos;
 		
-		if (!dk->GetPosList(vpos)) return;
+//		if (!dk->GetPosList(vpos)) return; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		
 		//dk->ClearPosList();
 		

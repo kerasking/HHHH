@@ -74,7 +74,7 @@ public:
 	void SetShrink(bool bShrink);
 	
 	// 根据当前目标刷新快捷互动栏操作选项
-	void Refresh(NDBaseRole* target);
+	//void Refresh(NDBaseRole* target); ///< 临时性注释 郭浩
 	
 	void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex); override
 	

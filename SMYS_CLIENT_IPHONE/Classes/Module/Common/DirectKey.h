@@ -69,7 +69,7 @@ public:
 	void OnButtonClick(NDUIButton* button);
 	void OnBeforeNodeRemoveFromParent(NDNode* node, bool bCleanUp); override
 	
-	bool GetPosList(dk_vec_pos& vpos);
+	//bool GetPosList(dk_vec_pos& vpos); ///< 临时性注释 郭浩
 	void ClearPosList();
 	
 	void ShowFinish(NDScene* scene);

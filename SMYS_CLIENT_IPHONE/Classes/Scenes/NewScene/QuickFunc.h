@@ -28,7 +28,7 @@ public:
 	
 	void Initialization(bool bShrink=false); override
 	
-	void OnBattleBegin();
+	//void OnBattleBegin();
 	
 	void OnNDUISpeedBarEvent(NDUISpeedBar* speedbar, const SpeedBarCellInfo& info, bool focused); override
 	
