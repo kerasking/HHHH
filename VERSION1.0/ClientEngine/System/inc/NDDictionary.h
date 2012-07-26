@@ -14,7 +14,7 @@
 
 class DictionaryObject : public cocos2d::CCObject
 {
-	CC_PROPERTY(NDEngine::NDObject*, m_NdObject, NdObject)
+	CC_SYNTHESIZE(NDEngine::NDObject*, m_NdObject, NdObject)
 public:
 	DictionaryObject();
 	~DictionaryObject();

@@ -16,11 +16,11 @@
 
 class NDFrameRunRecord : public cocos2d::CCObject
 {
-	CC_PROPERTY(int, m_nNextFrameIndex, NextFrameIndex)
-	CC_PROPERTY(int, m_nCurrentFrameIndex, CurrentFrameIndex)
-	CC_PROPERTY(int, m_nRunCount, RunCount)
+	CC_SYNTHESIZE(int, m_nNextFrameIndex, NextFrameIndex)
+	CC_SYNTHESIZE(int, m_nCurrentFrameIndex, CurrentFrameIndex)
+	CC_SYNTHESIZE(int, m_nRunCount, RunCount)
 //	CC_PROPERTY(bool, m_bIsCompleted, IsCompleted)
-	CC_PROPERTY(int, m_nRepeatTimes, RepeatTimes)
+	CC_SYNTHESIZE(int, m_nRepeatTimes, RepeatTimes)
 
 public:
 	NDFrameRunRecord();
@@ -37,10 +37,10 @@ private:
 //动画中所使用到的瓦片
 class NDFrameTile : public cocos2d::CCObject
 {
-	CC_PROPERTY(int, m_nX, X)
-	CC_PROPERTY(int, m_nY, Y)
-	CC_PROPERTY(int, m_nRotation, Rotation)
-	CC_PROPERTY(int, m_nTableIndex, TableIndex)
+	CC_SYNTHESIZE(int, m_nX, X)
+	CC_SYNTHESIZE(int, m_nY, Y)
+	CC_SYNTHESIZE(int, m_nRotation, Rotation)
+	CC_SYNTHESIZE(int, m_nTableIndex, TableIndex)
 
 public:
 	NDFrameTile();
@@ -58,8 +58,8 @@ class NDAnimation;
 class NDAnimationGroup;
 class NDFrame : public cocos2d::CCObject
 {
-	CC_PROPERTY(int, m_nEnduration, Enduration)
-	CC_PROPERTY(NDAnimation*, m_BelongAnimation, BelongAnimation)
+	CC_SYNTHESIZE(int, m_nEnduration, Enduration)
+	CC_SYNTHESIZE(NDAnimation*, m_BelongAnimation, BelongAnimation)
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDAnimationGroup*>*, m_SubAnimationGroups, SubAnimationGroups)
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDFrameTile*>*, m_FrameTiles, FrameTiles)
 

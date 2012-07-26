@@ -47,11 +47,11 @@ bool IsTileHightLight();
 class NDTile : public cocos2d::CCObject 
 {
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCTexture2D*, m_Texture, Texture)
-	CC_PROPERTY(CGRect, m_CutRect, CutRect)
-	CC_PROPERTY(CGRect, m_DrawRect, DrawRect)
+	CC_SYNTHESIZE(CGRect, m_CutRect, CutRect)
+	CC_SYNTHESIZE(CGRect, m_DrawRect, DrawRect)
 //	CC_PROPERTY(bool, m_bReverse, Reverse) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	CC_PROPERTY(NDRotationEnum, m_Rotation, Rotation)
-	CC_PROPERTY(CGSize, m_MapSize, MapSize)
+	CC_SYNTHESIZE(NDRotationEnum, m_Rotation, Rotation)
+	CC_SYNTHESIZE(CGSize, m_MapSize, MapSize)
 
 public:
 	NDTile();

@@ -36,12 +36,12 @@ class NDMapData;
 //ÇÐÆÁµã
 class NDMapSwitch : public cocos2d::CCObject
 {
-	CC_PROPERTY(int, m_nX, X)
-	CC_PROPERTY(int, m_nY, Y)
-	CC_PROPERTY(int, m_nMapIndex, MapIndex)
-	CC_PROPERTY(int, m_nPassIndex, PassIndex)
-	CC_PROPERTY(std::string, m_NameDesMap, NameDesMap)
-	CC_PROPERTY(std::string, m_DescDesMap, DescDesMap)
+	CC_SYNTHESIZE(int, m_nX, X)
+	CC_SYNTHESIZE(int, m_nY, Y)
+	CC_SYNTHESIZE(int, m_nMapIndex, MapIndex)
+	CC_SYNTHESIZE(int, m_nPassIndex, PassIndex)
+	CC_SYNTHESIZE(std::string, m_NameDesMap, NameDesMap)
+	CC_SYNTHESIZE(std::string, m_DescDesMap, DescDesMap)
 
 public:
 	NDMapSwitch();
@@ -59,7 +59,7 @@ private:
 //²¼¾°
 class NDSceneTile : public NDTile
 {
-	CC_PROPERTY(int, m_nOrderID, OrderID)
+	CC_SYNTHESIZE(int, m_nOrderID, OrderID)
 
 public:
 	NDSceneTile();
@@ -69,9 +69,9 @@ public:
 //Ë¢¹ÖÇø
 class NDMapMonsterRange : public cocos2d::CCObject
 {
-	CC_PROPERTY(int, m_nTypeId, TypeId)
-	CC_PROPERTY(int, m_nColumn, Column)
-	CC_PROPERTY(int, m_nRow, Row)
+	CC_SYNTHESIZE(int, m_nTypeId, TypeId)
+	CC_SYNTHESIZE(int, m_nColumn, Column)
+	CC_SYNTHESIZE(int, m_nRow, Row)
 //	CC_PROPERTY(bool, m_bBoss, Boss) ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 
 public:
@@ -84,21 +84,21 @@ class NDMapData : public cocos2d::CCObject
 {
 	
 public:
-	CC_PROPERTY(std::string, m_Name, Name)
-	CC_PROPERTY_READONLY(int, m_nLayerCount, LayerCount)
-	CC_PROPERTY_READONLY(unsigned int, m_nColumns, Columns)
-	CC_PROPERTY_READONLY(unsigned int, m_nRows, Rows)
-	CC_PROPERTY_READONLY(int, m_nUnitSize, UnitSize)
-	CC_PROPERTY(unsigned int, m_nRoadBlockX, RoadBlockX)
-	CC_PROPERTY(unsigned int, m_nRoadBlockY, RoadBlockY)
+	CC_SYNTHESIZE(std::string, m_Name, Name)
+	CC_SYNTHESIZE(int, m_nLayerCount, LayerCount)
+	CC_SYNTHESIZE(unsigned int, m_nColumns, Columns)
+	CC_SYNTHESIZE(unsigned int, m_nRows, Rows)
+	CC_SYNTHESIZE(int, m_nUnitSize, UnitSize)
+	CC_SYNTHESIZE(unsigned int, m_nRoadBlockX, RoadBlockX)
+	CC_SYNTHESIZE(unsigned int, m_nRoadBlockY, RoadBlockY)
 	
 	//CC_PROPERTY_READONLY(CCArray<CustomCCTexture2D*>*, m_MapTiles, MapTiles)
-	CC_PROPERTY_READONLY(std::vector<bool>*, m_Obstacles, Obstacles)
-	CC_PROPERTY_READONLY(cocos2d::CCArray*/*<NDSceneTile*>**/, m_SceneTiles, SceneTiles)
-	CC_PROPERTY_READONLY(cocos2d::CCArray*/*<NDSceneTile*>**/, m_BgTiles, BgTiles)
-	CC_PROPERTY_READONLY(cocos2d::CCArray*/*<NDMapSwitch*>**/, m_Switchs, Switchs)
+	CC_SYNTHESIZE(std::vector<bool>*, m_Obstacles, Obstacles)
+	CC_SYNTHESIZE(cocos2d::CCArray*/*<NDSceneTile*>**/, m_SceneTiles, SceneTiles)
+	CC_SYNTHESIZE(cocos2d::CCArray*/*<NDSceneTile*>**/, m_BgTiles, BgTiles)
+	CC_SYNTHESIZE(cocos2d::CCArray*/*<NDMapSwitch*>**/, m_Switchs, Switchs)
 //	CC_PROPERTY_READONLY(cocos2d::CCArray*/*<NDAnimationGroup*>**/, m_AnimationGroups, AnimationGroups)
-	CC_PROPERTY_READONLY(cocos2d::CCArray*/*<anigroup_param*>**/, m_AniGroupParams, AniGroupParams)
+	CC_SYNTHESIZE(cocos2d::CCArray*/*<anigroup_param*>**/, m_AniGroupParams, AniGroupParams)
 
 public:
 	NDMapData();

@@ -449,4 +449,3 @@ PlaceNode * NDWorldMapData::getPlaceNodeWithMapId(int mapId)
 	}
 	return result;
 }
-

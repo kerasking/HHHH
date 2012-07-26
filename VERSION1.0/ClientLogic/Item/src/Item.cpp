@@ -478,26 +478,37 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem, int whichStore
 	tempInt1 = item1.vecStone.size();
 	tempInt2 = item2.vecStone.size();
 	sb << NDCommonCString("XiangQian") << "： +" << tempInt1 << "->";
-	if (tempInt1 == tempInt2) {
+	if (tempInt1 == tempInt2) 
+	{
 		sb << "+" << tempInt2;
-	} else if (tempInt1 < tempInt2) {
+	} 
+	else if (tempInt1 < tempInt2) 
+	{
 		stringstream ss; ss << "+" << tempInt2;
 		sb << getAdd(ss.str());
-	} else {
+	} 
+	else
+	{
 		stringstream ss; ss << "+" << tempInt2;
 		sb << (getSub(ss.str()));
 	}
+
 	sb << ("\n");
 	
 	tempInt1 = item1.iAddition;
 	tempInt2 = item2.iAddition;
 	sb << NDCommonCString("QiangHua") << "： +" << tempInt1 << "->";
-	if (tempInt1 == tempInt2) {
+	if (tempInt1 == tempInt2) 
+	{
 		sb << "+" << tempInt2;
-	} else if (tempInt1 < tempInt2) {
+	} 
+	else if (tempInt1 < tempInt2) 
+	{
 		stringstream ss; ss << "+" << tempInt2;
 		sb << (getAdd(ss.str()));
-	} else {
+	} 
+	else 
+	{
 		stringstream ss; ss << "+" << tempInt2;
 		sb << (getSub(ss.str()));
 	}

@@ -1142,5 +1142,5 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 			break;
 	}*/
 	
-	return tex;	
+	return tex;
 }

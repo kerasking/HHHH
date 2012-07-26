@@ -23,16 +23,16 @@ class NDAnimationGroup;
 class NDAnimation : public cocos2d::CCObject 
 {
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDFrame*>*, m_Frames, Frames)
-	CC_PROPERTY(int, m_nX, X)
-	CC_PROPERTY(int, m_nY, Y)
-	CC_PROPERTY(int, m_nW, W)
-	CC_PROPERTY(int, m_nH, H)
-	CC_PROPERTY(int, m_nMidX, MidX)
-	CC_PROPERTY(int, m_nBottomY, BottomY)
-	CC_PROPERTY(int, m_nType, Type)
+	CC_SYNTHESIZE(int, m_nX, X)
+	CC_SYNTHESIZE(int, m_nY, Y)
+	CC_SYNTHESIZE(int, m_nW, W)
+	CC_SYNTHESIZE(int, m_nH, H)
+	CC_SYNTHESIZE(int, m_nMidX, MidX)
+	CC_SYNTHESIZE(int, m_nBottomY, BottomY)
+	CC_SYNTHESIZE(int, m_nType, Type)
 //	CC_PROPERTY(bool, m_bReverse, Reverse) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	CC_PROPERTY(NDAnimationGroup*, m_BelongAnimationGroup, BelongAnimationGroup)
-	CC_PROPERTY(int, m_nCurIndexInAniGroup, CurIndexInAniGroup)
+	CC_SYNTHESIZE(NDAnimationGroup*, m_BelongAnimationGroup, BelongAnimationGroup)
+	CC_SYNTHESIZE(int, m_nCurIndexInAniGroup, CurIndexInAniGroup)
 
 public:
 	NDAnimation();
