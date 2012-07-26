@@ -49,7 +49,7 @@ class NDTile : public cocos2d::CCObject
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCTexture2D*, m_Texture, Texture)
 	CC_PROPERTY(CGRect, m_CutRect, CutRect)
 	CC_PROPERTY(CGRect, m_DrawRect, DrawRect)
-	CC_PROPERTY(bool, m_bReverse, Reverse)
+//	CC_PROPERTY(bool, m_bReverse, Reverse) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	CC_PROPERTY(NDRotationEnum, m_Rotation, Rotation)
 	CC_PROPERTY(CGSize, m_MapSize, MapSize)
 

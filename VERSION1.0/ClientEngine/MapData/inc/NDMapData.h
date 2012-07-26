@@ -72,7 +72,7 @@ class NDMapMonsterRange : public cocos2d::CCObject
 	CC_PROPERTY(int, m_nTypeId, TypeId)
 	CC_PROPERTY(int, m_nColumn, Column)
 	CC_PROPERTY(int, m_nRow, Row)
-	CC_PROPERTY(bool, m_bBoss, Boss)
+//	CC_PROPERTY(bool, m_bBoss, Boss) ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 
 public:
 	NDMapMonsterRange();
@@ -97,7 +97,7 @@ public:
 	CC_PROPERTY_READONLY(cocos2d::CCArray*/*<NDSceneTile*>**/, m_SceneTiles, SceneTiles)
 	CC_PROPERTY_READONLY(cocos2d::CCArray*/*<NDSceneTile*>**/, m_BgTiles, BgTiles)
 	CC_PROPERTY_READONLY(cocos2d::CCArray*/*<NDMapSwitch*>**/, m_Switchs, Switchs)
-	CC_PROPERTY_READONLY(cocos2d::CCArray*/*<NDAnimationGroup*>**/, m_AnimationGroups, AnimationGroups)
+//	CC_PROPERTY_READONLY(cocos2d::CCArray*/*<NDAnimationGroup*>**/, m_AnimationGroups, AnimationGroups)
 	CC_PROPERTY_READONLY(cocos2d::CCArray*/*<anigroup_param*>**/, m_AniGroupParams, AniGroupParams)
 
 public:

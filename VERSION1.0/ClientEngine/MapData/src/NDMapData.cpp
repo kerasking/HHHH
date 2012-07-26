@@ -318,7 +318,7 @@ NDMapMonsterRange::NDMapMonsterRange()
 : m_nTypeId(0)
 , m_nColumn(0)
 , m_nRow(0)
-, m_bBoss(false)
+//, m_bBoss(false) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 {
 }
 
@@ -334,7 +334,7 @@ NDMapData::NDMapData()
 , m_SceneTiles(NULL)
 , m_BgTiles(NULL)
 , m_Switchs(NULL)
-, m_AnimationGroups(NULL)
+//, m_AnimationGroups(NULL) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 , m_AniGroupParams(NULL)
 {
 }
@@ -346,7 +346,7 @@ NDMapData::~NDMapData()
 	CC_SAFE_RELEASE(m_SceneTiles);
 	CC_SAFE_RELEASE(m_BgTiles);
 	CC_SAFE_RELEASE(m_Switchs);
-	CC_SAFE_RELEASE(m_AnimationGroups);
+//	CC_SAFE_RELEASE(m_AnimationGroups); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	CC_SAFE_RELEASE(m_AniGroupParams);
 	MapTexturePool::defaultPool()->release();
 }
@@ -523,7 +523,7 @@ void NDMapData::decode(FILE* stream)
 		tile->setMapSize(CGSizeMake(m_nColumns*TileWidth, m_nRows*TileHeight));
 		tile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
 		tile->setDrawRect(CGRectMake(x, y, picWidth, picHeight));
-		tile->setReverse(reverse);	
+//		tile->setReverse(reverse);	 ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		
 		tile->make();
 		
@@ -578,7 +578,7 @@ void NDMapData::decode(FILE* stream)
 		tile->setMapSize(CGSizeMake(m_nColumns*TileWidth, m_nRows*TileHeight));
 		tile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
 		tile->setDrawRect(CGRectMake(x, y, picWidth, picHeight));
-		tile->setReverse(reverse);
+//		tile->setReverse(reverse); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		
 		tile->make();
 		
@@ -586,8 +586,8 @@ void NDMapData::decode(FILE* stream)
 		tile->release();
 	}
 	//<-------------------¶¯»­
-	m_AnimationGroups = CCArray::array();
-	m_AnimationGroups->retain();
+//	m_AnimationGroups = CCArray::array(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+//	m_AnimationGroups->retain(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	m_AniGroupParams  = CCArray::array();
 	m_AniGroupParams->retain();
 	int aniGroupCount = op.readShort(stream);
@@ -596,7 +596,7 @@ void NDMapData::decode(FILE* stream)
 		int identifer = op.readShort(stream);			//¶¯»­id
 		NDAnimationGroup *aniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSceneAnimationId(identifer);
 		if (!aniGroup) continue;
-		m_AnimationGroups->addObject(aniGroup);
+//		m_AnimationGroups->addObject(aniGroup); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		aniGroup->release();
 
 		int x = op.readShort(stream);		//x×ø±ê

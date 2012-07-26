@@ -277,7 +277,7 @@ void NDWorldMapData::decode(FILE* stream)
 		tile->setMapSize(CGSizeMake(m_nColumns*TileWidth, m_nRows*TileHeight));
 		tile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
 		tile->setDrawRect(CGRectMake(x, y, picWidth, picHeight));
-		tile->setReverse(reverse);	
+//		tile->setReverse(reverse);	 ///< ÁÙÊ±ĞÔ×¢ÊÍ ¹ùºÆ
 
 		tile->make();
 
@@ -332,7 +332,7 @@ void NDWorldMapData::decode(FILE* stream)
 		tile->setMapSize(CGSizeMake(m_nColumns*TileWidth, m_nRows*TileHeight));
 		tile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
 		tile->setDrawRect(CGRectMake(x, y, picWidth, picHeight));
-		tile->setReverse(reverse);
+//		tile->setReverse(reverse); ///< ÁÙÊ±ĞÔ×¢ÊÍ ¹ùºÆ
 
 		tile->make();
 

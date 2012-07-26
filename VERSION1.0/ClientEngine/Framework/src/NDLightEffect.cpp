@@ -55,7 +55,7 @@ namespace NDEngine
 	{
 		if (m_aniGroup)
 		{
-			NDAnimation *ani = (NDAnimation *)m_aniGroup->getAnimations()->objectAtIndex(m_lightId);
+			NDAnimation *ani = 0;///(NDAnimation *)m_aniGroup->getAnimations()->objectAtIndex(m_lightId); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 			if (ani) 
 				ani->SlowDown(mutli);
 		}
@@ -63,11 +63,11 @@ namespace NDEngine
 	
 	void NDLightEffect::Run(CGSize mapSize, bool draw/*=true*/)
 	{		
-		if (m_aniGroup->getAnimations()->count() > m_lightId) 
+		if (0/* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ m_aniGroup->getAnimations()->count()*/ > m_lightId) 
 		{	
 			void *oldSprite = m_aniGroup->getRuningSprite();
 			m_aniGroup->setRuningSprite(NULL);			
-			NDAnimation *ani = (NDAnimation *)m_aniGroup->getAnimations()->objectAtIndex(m_lightId);			
+			NDAnimation *ani = 0;//(NDAnimation *)m_aniGroup->getAnimations()->objectAtIndex(m_lightId);  ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 			m_aniGroup->setRunningMapSize(mapSize);
 			m_aniGroup->setPosition(m_position);			
 //			ani->setReverse(m_reverse); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
@@ -98,9 +98,9 @@ namespace NDEngine
 			* end
 			*/
 			
-			if (m_aniGroup->getAnimations()->count() > m_lightId) 
+			if (0/*ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ m_aniGroup->getAnimations()->count()*/ > m_lightId) 
 			{				
-				NDAnimation *ani = (NDAnimation *)m_aniGroup->getAnimations()->objectAtIndex(m_lightId);		
+				NDAnimation *ani = 0;//(NDAnimation *)m_aniGroup->getAnimations()->objectAtIndex(m_lightId); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 				m_aniGroup->setRunningMapSize(layer->GetContentSize());
 				m_aniGroup->setPosition(m_position);			
 //				ani->setReverse(m_reverse); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ

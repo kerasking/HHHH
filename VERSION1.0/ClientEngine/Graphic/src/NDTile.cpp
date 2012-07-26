@@ -24,7 +24,7 @@ bool IsTileHightLight()
 
 NDTile::NDTile()
 : m_Texture(NULL)
-, m_bReverse(false)
+//, m_bReverse(false) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 , m_Rotation(NDRotationEnumRotation0)
 , m_vertices(NULL)
 , m_coordinates(NULL)
@@ -49,7 +49,7 @@ void NDTile::makeTex(float* pData)
 	//<-------------------ÎÆÀí×ø±ê
 	float *pc = pData;
 	//BOOL re=NO;
-	if (m_bReverse) 
+	if (true)  ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ Ô­ getReverse
 	{
 		*pc++ = (m_CutRect.origin.x + m_CutRect.size.width) / m_Texture->getPixelsWide();
 		*pc++ = (m_CutRect.origin.y + m_CutRect.size.height) / m_Texture->getPixelsHigh();
@@ -488,7 +488,7 @@ void NDTile::drawSubRect(CGRect rect)
 	float yb = m_CutRect.origin.y + m_CutRect.size.height * (rect.size.height + rect.origin.y);
 	
 	//BOOL re=NO;
-	if (m_bReverse) 
+	if (true)  ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ Ô­ m_bReverse
 	{
 		*pc++ = xr / m_Texture->getPixelsWide();
 		*pc++ = yb / m_Texture->getPixelsHigh();

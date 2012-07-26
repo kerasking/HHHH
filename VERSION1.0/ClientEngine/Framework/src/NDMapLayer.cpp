@@ -643,7 +643,7 @@ namespace NDEngine
 		
 		unsigned int orderCount = m_orders->count(),
 				   sceneTileCount = m_mapData->getSceneTiles()->count(),
-				   aniGroupCount = m_mapData->getAnimationGroups()->count(),
+				   aniGroupCount = 0,//m_mapData->getAnimationGroups()->count(), ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 				   switchCount = m_mapData->getSwitchs()->count();
 	
 		//PerformanceTestPerFrameBeginName(" NDMapLayer::DrawScenesAndAnimations");
@@ -685,19 +685,19 @@ namespace NDEngine
 				//PerformanceTestPerFrameBeginName("µØ±í¶¯»­");
 				index -= sceneTileCount;
 				
-				NDAnimationGroup* aniGroup = (NDAnimationGroup* )m_mapData->getAnimationGroups()->objectAtIndex(index);
+				NDAnimationGroup* aniGroup = 0;//(NDAnimationGroup* )m_mapData->getAnimationGroups()->objectAtIndex(index); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 				CCMutableArray<NDFrameRunRecord*>* frameRunRecordList = m_frameRunRecordsOfMapAniGroups->getObjectAtIndex(index);
 				
 				aniGroup->setReverse(this->GetMapDataAniParamReverse(index));
 				aniGroup->setPosition(this->GetMapDataAniParamPos(index));
 				aniGroup->setRunningMapSize(this->GetMapDataAniParamMapSize(index));
 				
-				unsigned int aniCount = aniGroup->getAnimations()->count();
+				unsigned int aniCount = 0;//aniGroup->getAnimations()->count(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 				
 				for (unsigned int j = 0; j < aniCount; j++) 
 				{
 					NDFrameRunRecord *frameRunRecord = frameRunRecordList->getObjectAtIndex(j);
-					NDAnimation *animation = (NDAnimation *)aniGroup->getAnimations()->objectAtIndex(j);
+					NDAnimation *animation = 0;//(NDAnimation *)aniGroup->getAnimations()->objectAtIndex(j); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 					
 					if (this->isMapRectIntersectScreen(animation->getRect())) 
 					{					
@@ -713,7 +713,7 @@ namespace NDEngine
 			else if (index < sceneTileCount + aniGroupCount + switchCount)//ÇÐÆÁµã
 			{
 				//PerformanceTestPerFrameBeginName("ÇÐÆÁµã");
-				index -= m_mapData->getSceneTiles()->count() + m_mapData->getAnimationGroups()->count();
+				index -= m_mapData->getSceneTiles()->count() + 0;//m_mapData->getAnimationGroups()->count(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 				
 				NDMapSwitch *mapSwitch = (NDMapSwitch *)m_mapData->getSwitchs()->objectAtIndex(index);
 				NDFrameRunRecord *frameRunRecord = m_frameRunRecordsOfMapSwitch->getObjectAtIndex(index);
@@ -726,9 +726,9 @@ namespace NDEngine
 
 				m_switchAniGroup->setRunningMapSize(this->GetContentSize());
 				
-				if (m_switchAniGroup->getAnimations()->count() > 0) 
+				if (0 /*ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ m_switchAniGroup->getAnimations()->count()*/ > 0) 
 				{
-					NDAnimation *animation = (NDAnimation *)m_switchAniGroup->getAnimations()->objectAtIndex(0);
+					NDAnimation *animation = 0;//(NDAnimation *)m_switchAniGroup->getAnimations()->objectAtIndex(0); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 					if (this->isMapRectIntersectScreen(animation->getRect())) 
 					{					
 						animation->runWithRunFrameRecord(frameRunRecord, true);
@@ -1237,7 +1237,7 @@ namespace NDEngine
 				
 				MAP_ORDER *dict = new MAP_ORDER;
 				
-				(*dict)["index"]	= i + m_mapData->getSceneTiles()->count() + m_mapData->getAnimationGroups()->count() + m_mapData->getSwitchs()->count();
+				(*dict)["index"]	= i + m_mapData->getSceneTiles()->count() + 0 + m_mapData->getSwitchs()->count();///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ Ô­£ºm_mapData->getAnimationGroups()->count()
 				(*dict)["orderId"]	= sprite->GetOrder();
 				//[dict setObject:[NSNumber numberWithInt:i + [m_mapData.sceneTiles count]+ [m_mapData.animationGroups count] + [m_mapData.switchs count]] forKey:@"index"];
 				//[dict setObject:[NSNumber numberWithInt:sprite->GetOrder()] forKey:@"orderId"];
@@ -1299,7 +1299,7 @@ namespace NDEngine
 				
 				MAP_ORDER *dict = new MAP_ORDER;
 
-				(*dict)["index"]	= it->first + m_mapData->getSceneTiles()->count() + m_mapData->getAnimationGroups()->count() + m_mapData->getSwitchs()->count();
+				(*dict)["index"]	= it->first + m_mapData->getSceneTiles()->count() + 0 + m_mapData->getSwitchs()->count();///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ m_mapData->getAnimationGroups()->count()
 				(*dict)["orderId"]	= sprite->GetOrder();
 
 				//NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
@@ -1368,7 +1368,7 @@ namespace NDEngine
 		}
 		for (int i = 0; i < (int)m_mapData->getSwitchs()->count(); i++) 
 		{		
-			if (m_switchAniGroup->getAnimations()->count() > 0) 
+			if (/* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ m_switchAniGroup->getAnimations()->count()*/0 > 0) 
 			{
 				//NDAnimation *animation = [m_switchAniGroup.animations objectAtIndex:0];
 				NDMapSwitch *mapSwitch = (NDMapSwitch *)m_mapData->getSwitchs()->objectAtIndex(i);
@@ -1492,13 +1492,13 @@ namespace NDEngine
 	
 	void NDMapLayer::MakeFrameRunRecords()
 	{
-		for (int i = 0; i < (int)m_mapData->getAnimationGroups()->count(); i++) 
+		for (int i = 0; i < 0;/* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ (int)m_mapData->getAnimationGroups()->count();*/ i++) 
 		{
-			NDAnimationGroup *aniGroup = (NDAnimationGroup *)m_mapData->getAnimationGroups()->objectAtIndex(i);
+			NDAnimationGroup *aniGroup = 0;//(NDAnimationGroup *)m_mapData->getAnimationGroups()->objectAtIndex(i); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 			
 			cocos2d::CCMutableArray<NDFrameRunRecord*>*runFrameRecordList = new cocos2d::CCMutableArray<NDFrameRunRecord*>();
 			
-			for (int j = 0; j < (int)aniGroup->getAnimations()->count(); j++) 
+			for (int j = 0; j < 0;/*ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ (int)aniGroup->getAnimations()->count();*/ j++) 
 			{
 				NDFrameRunRecord *frameRunRecord = new NDFrameRunRecord;
 				runFrameRecordList->addObject(frameRunRecord);

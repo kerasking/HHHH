@@ -270,7 +270,7 @@ void NDFrame::run(float scale)
 	for (int i = 0; i < (int)m_FrameTiles->count(); i++) 
 	{
 		NDFrameTile *frameTile = m_FrameTiles->getObjectAtIndex(i);
-		NDTileTableRecord *record = (NDTileTableRecord *)animationGroup->getTileTable()->objectAtIndex(frameTile->getTableIndex());
+		NDTileTableRecord *record = 0;//(NDTileTableRecord *)animationGroup->getTileTable()->objectAtIndex(frameTile->getTableIndex()); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		
 		NDTile *tile = m_tiles->getObjectAtIndex(i);
 		

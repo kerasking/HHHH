@@ -105,7 +105,7 @@ void WorldMapLayer::Initialization(int nMapId)
 			tile->setTexture(node->getTexture());
 			tile->setCutRect(CGRectMake(0, 0, node->getTexture()->getContentSizeInPixels().width, node->getTexture()->getContentSizeInPixels().height));
 			tile->setDrawRect(CGRectMake(node->getX(), node->getY(), node->getTexture()->getContentSizeInPixels().width, node->getTexture()->getContentSizeInPixels().height));
-			tile->setReverse((bool)NO);
+//			tile->setReverse((bool)NO); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 			tile->setRotation(NDRotationEnumRotation0);
 			tile->setMapSize(CGSizeMake(m_mapData->getMapSize().width, m_mapData->getMapSize().height));
 			tile->make();
@@ -118,7 +118,7 @@ void WorldMapLayer::Initialization(int nMapId)
 			tile->setTexture(tex);
 			tile->setCutRect(CGRectMake(0, 0, tile->getTexture()->getContentSizeInPixels().width, tile->getTexture()->getContentSizeInPixels().height));
 			tile->setDrawRect(CGRectMake(node->getX(), node->getY(), tile->getTexture()->getContentSizeInPixels().width, tile->getTexture()->getContentSizeInPixels().height));
-			tile->setReverse(NO);
+//			tile->setReverse(NO); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 			tile->setRotation(NDRotationEnumRotation0);
 			tile->setMapSize(CGSizeMake(m_mapData->getMapSize().width, m_mapData->getMapSize().height));
 			tile->make();

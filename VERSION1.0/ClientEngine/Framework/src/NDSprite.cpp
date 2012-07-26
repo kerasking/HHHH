@@ -90,7 +90,7 @@ namespace NDEngine
 		//NDLog("animationIndex%d",animationIndex);
 		if (m_aniGroup) 
 		{
-			if (animationIndex < 0 || animationIndex >= (int)m_aniGroup->getAnimations()->count()) 
+			if (animationIndex < 0 || animationIndex >= 0)//(int)m_aniGroup->getAnimations()->count()) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 			{
 				return;
 			}
@@ -102,7 +102,7 @@ namespace NDEngine
 			    m_currentAnimation->getType() == ANIMATION_TYPE_ONCE_START ||
 			    this->m_currentAnimation->getCurIndexInAniGroup() != animationIndex) 
 			{
-				m_currentAnimation = (NDAnimation*)m_aniGroup->getAnimations()->objectAtIndex(animationIndex);
+				m_currentAnimation = 0;//(NDAnimation*)m_aniGroup->getAnimations()->objectAtIndex(animationIndex); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 				m_currentAnimation->setCurIndexInAniGroup(animationIndex);
 				CC_SAFE_RELEASE_NULL(m_frameRunRecord);
 				m_frameRunRecord->release();

@@ -31,26 +31,26 @@ NDAnimationGroup::NDAnimationGroup()
 : m_nType(0)
 , m_nIdentifer(0)
 //, m_bReverse(0) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-, m_Animations(NULL)
+//, m_Animations(NULL) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 , m_Images(NULL)
-, m_TileTable(NULL)
+//, m_TileTable(NULL) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 , m_RuningSprite(NULL)
 , m_UnpassPoint(NULL)
 {
 	m_Position			= CGPointMake(0, 0);
 	m_RunningMapSize	= CGSizeMake(0, 0);
-	m_Animations		= CCArray::array();
-	m_TileTable			= CCArray::array();
+//	m_Animations		= CCArray::array(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	//m_TileTable			= CCArray::array(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	m_Images			= new vector<std::string>();
 
-	m_Animations->retain();
-	m_TileTable->retain();
+//	m_Animations->retain(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	//m_TileTable->retain(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 }
 
 NDAnimationGroup::~NDAnimationGroup()
 {
-	CC_SAFE_RELEASE(m_Animations);
-	CC_SAFE_RELEASE(m_TileTable);
+//	CC_SAFE_RELEASE(m_Animations); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+//	CC_SAFE_RELEASE(m_TileTable); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	CC_SAFE_DELETE(m_Images);
 	CC_SAFE_DELETE(m_UnpassPoint);
 }
@@ -80,9 +80,9 @@ void NDAnimationGroup::initWithSprFile(const char* sprFile)
 void NDAnimationGroup::setReverse(bool newReverse)
 {
 //	m_bReverse = newReverse; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	for (int i = 0; i < (int)m_Animations->count(); i++) 
+	for (int i = 0; i < 0;/*(int)m_Animations->count();*/ i++) 
 	{
-		NDAnimation *animation = (NDAnimation *)m_Animations->objectAtIndex(i);
+		NDAnimation *animation = 0;//(NDAnimation *)m_Animations->objectAtIndex(i); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 //		animation->setReverse(newReverse); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	}
 }
@@ -100,7 +100,7 @@ void NDAnimationGroup::decodeSprtFile(FILE* stream)
 		record->setW(op.readShort(stream));
 		record->setH(op.readShort(stream));
 		record->setReplace(op.readByte(stream));
-		m_TileTable->addObject(record);
+//		m_TileTable->addObject(record); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		record->release();	
 	}
 }
@@ -181,7 +181,7 @@ void NDAnimationGroup::decodeSprFile(FILE* stream)
 			
 		}
 		
-		m_Animations->addObject(animation);
+//		m_Animations->addObject(animation); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		animation->release();
 	}
 	
@@ -202,7 +202,7 @@ void NDAnimationGroup::decodeSprFile(FILE* stream)
 
 void NDAnimationGroup::drawHeadAt(CGPoint pos)
 {
-	NDAnimation* firstAni = (NDAnimation*)m_Animations->objectAtIndex(0);
+	NDAnimation* firstAni = 0;//(NDAnimation*)m_Animations->objectAtIndex(0); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	NDFrame* firstFrame = firstAni->getFrames()->getObjectAtIndex(0);
 	firstFrame->drawHeadAt(pos);
 }
