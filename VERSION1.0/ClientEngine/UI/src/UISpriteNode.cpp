@@ -38,7 +38,15 @@ void CUISpriteNode::Initialization()
 	m_pSpriteParentNode->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
 }
 
-/////////////////////////////////////////////////////////void CUISpriteNode::SetPosition(int nPosX, int nPosY){	CGPoint point;	point.x = nPosX;	point.y = nPosY;	m_pSprite->SetPosition(point);}
+/////////////////////////////////////////////////////////
+void 
+CUISpriteNode::SetPosition(int nPosX, int nPosY)
+{
+	CGPoint point;
+	point.x = nPosX;
+	point.y = nPosY;
+	m_pSprite->SetPosition(point);
+}
 
 void CUISpriteNode::ChangeSprite(const char* sprfile)
 {

@@ -930,6 +930,14 @@
 			RelativePath="..\Utility\inc\ImageNumber.h"
 			>
 		</File>
+		<File
+			RelativePath="..\Utility\src\NDDataSource.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\Utility\inc\NDDataSource.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

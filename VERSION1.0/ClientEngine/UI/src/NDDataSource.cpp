@@ -120,77 +120,86 @@ namespace NDEngine
 	
 	
 	////////////////////////
-	IMPLEMENT_CLASS(NDDataSource, NDObject)
 	
-	NDDataSource::NDDataSource()
-	{
-	}
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* begin
+	*/
+	//IMPLEMENT_CLASS(NDDataSource, NDObject)
 	
-	NDDataSource::~NDDataSource()
-	{
-		this->Clear();
-	}	
+	//NDDataSource::NDDataSource()
+	//{
+	//}
+	//
+	//NDDataSource::~NDDataSource()
+	//{
+	//	this->Clear();
+	//}	
 
-	void NDDataSource::AddSection(NDSection* section)
-	{
-		m_sections.push_back(section);
-	}
-	
-	void NDDataSource::InsertSection(unsigned int index, NDSection* section)
-	{
-		if (index >= m_sections.size())
-		{
-			m_sections.push_back(section);
-		}
-		else 
-		{
-			std::vector<NDSection*>::iterator iter = m_sections.begin();
-			for (unsigned int i = 0; i < index; i++, iter++);
-			m_sections.insert(iter, section);
-		}
-	}
-	
-	void NDDataSource::RemoveSection(unsigned int index)
-	{
-		if (index < m_sections.size())		 
-		{
-			std::vector<NDSection*>::iterator iter = m_sections.begin();
-			for (unsigned int i = 0; i < index; i++, iter++);
-			NDSection* section = (NDSection*)*iter;			
-			delete section;
-			m_sections.erase(iter);
-		}
-	}
-	
-	NDSection* NDDataSource::Section(unsigned int index)	
-	{
-		return m_sections.at(index);
-	}
-	
-	void NDDataSource::Clear()
-	{
-		if (!m_sections.empty()) 
-		{
-			while (m_sections.begin() != m_sections.end()) 
-			{
-				NDSection* section = (NDSection*)m_sections.back();				
-				delete section;
-				m_sections.pop_back();
-			}
-		}
-	}
-	
-	unsigned int NDDataSource::Count()
-	{
-		return m_sections.size();
-	}
-	
-	NDDataSource* NDDataSource::Copy()
-	{
-		NDDataSource* dataSource = new NDDataSource();
-		
-		dataSource->m_sections = m_sections;
-		
-		return dataSource;
-	}
+	//void NDDataSource::AddSection(NDSection* section)
+	//{
+	//	m_sections.push_back(section);
+	//}
+	//
+	//void NDDataSource::InsertSection(unsigned int index, NDSection* section)
+	//{
+	//	if (index >= m_sections.size())
+	//	{
+	//		m_sections.push_back(section);
+	//	}
+	//	else 
+	//	{
+	//		std::vector<NDSection*>::iterator iter = m_sections.begin();
+	//		for (unsigned int i = 0; i < index; i++, iter++);
+	//		m_sections.insert(iter, section);
+	//	}
+	//}
+	//
+	//void NDDataSource::RemoveSection(unsigned int index)
+	//{
+	//	if (index < m_sections.size())		 
+	//	{
+	//		std::vector<NDSection*>::iterator iter = m_sections.begin();
+	//		for (unsigned int i = 0; i < index; i++, iter++);
+	//		NDSection* section = (NDSection*)*iter;			
+	//		delete section;
+	//		m_sections.erase(iter);
+	//	}
+	//}
+	//
+	//NDSection* NDDataSource::Section(unsigned int index)	
+	//{
+	//	return m_sections.at(index);
+	//}
+	//
+	//void NDDataSource::Clear()
+	//{
+	//	if (!m_sections.empty()) 
+	//	{
+	//		while (m_sections.begin() != m_sections.end()) 
+	//		{
+	//			NDSection* section = (NDSection*)m_sections.back();				
+	//			delete section;
+	//			m_sections.pop_back();
+	//		}
+	//	}
+	//}
+	//
+	//unsigned int NDDataSource::Count()
+	//{
+	//	return m_sections.size();
+	//}
+	//
+	//NDDataSource* NDDataSource::Copy()
+	//{
+	//	NDDataSource* dataSource = new NDDataSource();
+	//	
+	//	dataSource->m_sections = m_sections;
+	//	
+	//	return dataSource;
+	//}
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* end
+	*/
 }

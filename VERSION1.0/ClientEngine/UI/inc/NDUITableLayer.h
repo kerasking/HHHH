@@ -12,7 +12,7 @@
 #include "NDUILayer.h"
 #include <vector>
 #include <string>
-#include "NDDataSource.h"
+#include "..\..\Utility\inc\NDDataSource.h"
 #include "NDUILabel.h"
 #include "NDUIBaseGraphics.h"
 #include "NDPicture.h"

@@ -224,7 +224,24 @@ namespace NDEngine
 
 	bool NDUINode::OnScriptUiEvent(NDUINode* uinode, int targetEvent)
 	{
-		if (!uinode)		{			return false;		}		LuaObject funcObj;		if (!uinode->GetLuaDelegate(funcObj)			|| !funcObj.IsFunction())		{			return false;		}		LuaFunction<bool> luaUiEventCallBack = funcObj;		bool bRet = luaUiEventCallBack(uinode, targetEvent);		return bRet;
+		if (!uinode)
+		{
+			return false;
+		}
+
+		LuaObject funcObj;
+
+		if (!uinode->GetLuaDelegate(funcObj)
+			|| !funcObj.IsFunction())
+		{
+			return false;
+		}
+
+		LuaFunction<bool> luaUiEventCallBack = funcObj;
+
+		bool bRet = luaUiEventCallBack(uinode, targetEvent);
+
+		return bRet;
 	}
 
 }
