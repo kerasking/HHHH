@@ -20,112 +20,112 @@
 namespace NDEngine
 {	
 //		分区类，一个数据集合有一个或者多个分区组成
-	class NDSection : public NDObject
-	{
-		DECLARE_CLASS(NDSection)
-		NDSection();
-		~NDSection();
-		
-	public:
+//	class NDSection : public NDObject
+//	{
+//		DECLARE_CLASS(NDSection)
+//		NDSection();
+//		~NDSection();
 //		
-//		函数：SetTitle
-//		作用：设置区的标题
-//		参数：title标题
-//		返回值：无
-		void SetTitle(const char* title){ m_title = title; }
+//	public:
+////		
+////		函数：SetTitle
+////		作用：设置区的标题
+////		参数：title标题
+////		返回值：无
+//		void SetTitle(const char* title){ m_title = title; }
+////		
+////		函数：GetTitle
+////		作用：获取分区的标题
+////		参数：无
+////		返回值：标题
+//		std::string GetTitle(){ return m_title; }
+////		
+////		函数：SetColumnCount
+////		作用：设置分区的列数
+////		参数：columnCount列数
+////		返回值：无
+//		void SetColumnCount(unsigned int columnCount);
+////		
+////		函数：GetColumnCount
+////		作用：获取分区的列数
+////		参数：无
+////		返回值：列数
+//		unsigned int GetColumnCount(){ return m_columnCount; }
+////		
+////		函数：SetRowHeight
+////		作用：设置每一行的高度
+////		参数：rowHeight高度
+////		返回值：无
+//		void SetRowHeight(unsigned int rowHeight){ m_rowHeight = rowHeight; }
+////		
+////		函数：GetRowHeight
+////		作用：获取每一行的高度
+////		参数：无
+////		返回值：高度
+//		unsigned int GetRowHeight(){ return m_rowHeight; }
 //		
-//		函数：GetTitle
-//		作用：获取分区的标题
-//		参数：无
-//		返回值：标题
-		std::string GetTitle(){ return m_title; }
-//		
-//		函数：SetColumnCount
-//		作用：设置分区的列数
-//		参数：columnCount列数
-//		返回值：无
-		void SetColumnCount(unsigned int columnCount);
-//		
-//		函数：GetColumnCount
-//		作用：获取分区的列数
-//		参数：无
-//		返回值：列数
-		unsigned int GetColumnCount(){ return m_columnCount; }
-//		
-//		函数：SetRowHeight
-//		作用：设置每一行的高度
-//		参数：rowHeight高度
-//		返回值：无
-		void SetRowHeight(unsigned int rowHeight){ m_rowHeight = rowHeight; }
-//		
-//		函数：GetRowHeight
-//		作用：获取每一行的高度
-//		参数：无
-//		返回值：高度
-		unsigned int GetRowHeight(){ return m_rowHeight; }
-		
-		void UseCellHeight(bool useCellHeight){ m_useCellHeight = useCellHeight; }
-		bool IsUseCellHeight(){ return m_useCellHeight; }
-//		
-//		函数：SetFocusOnCell
-//		作用：设置焦点于某一单元格
-//		参数：单元格索引
-//		返回值：无
-		void SetFocusOnCell(unsigned int cellIndex){ m_focusCellIndex = cellIndex; }
-//		
-//		函数：GetFocusCellIndex
-//		作用：获取焦点所在的单元格索引
-//		参数：无
-//		返回值：单元格索引
-		unsigned int GetFocusCellIndex(){ return m_focusCellIndex; }
-//		
-//		函数：AddCell
-//		作用：添加单元格
-//		参数：cell单元格对象指针
-//		返回值：无
-		void AddCell(NDUINode* cell);
-//		
-//		函数：InsertCell
-//		作用：在第几个索引位置插入单元格
-//		参数：index单元格索引，cell单元格
-//		返回值：无
-		void InsertCell(unsigned int index, NDUINode* cell);
-//		
-//		函数：RemoveCell
-//		作用：删除单元格
-//		参数：index单元格索引
-//		返回值：无
-		void RemoveCell(unsigned int index); overload
-//		
-//		函数：RemoveCell
-//		作用：删除单元格
-//		参数：index单元格索引
-//		返回值：无
-		void RemoveCell(NDUINode* cell); overload
-//		
-//		函数：Cell
-//		作用：获取单元格
-//		参数：index单元格索引
-//		返回值：单元格
-		NDUINode* Cell(unsigned int index);		
-//		
-//		函数：Clear
-//		作用：清空单元格
-//		参数：无
-//		返回值：无
-		void Clear();
-//		
-//		函数：Count
-//		作用：获取单元格数量
-//		参数：无
-//		返回值：单元格数量
-		unsigned int Count();		
-	private:
-		std::vector<NDUINode*> m_cells;
-		std::string m_title;
-		unsigned int m_columnCount, m_rowHeight, m_focusCellIndex;
-		bool m_useCellHeight;
-	};
+//		void UseCellHeight(bool useCellHeight){ m_useCellHeight = useCellHeight; }
+//		bool IsUseCellHeight(){ return m_useCellHeight; }
+////		
+////		函数：SetFocusOnCell
+////		作用：设置焦点于某一单元格
+////		参数：单元格索引
+////		返回值：无
+//		void SetFocusOnCell(unsigned int cellIndex){ m_focusCellIndex = cellIndex; }
+////		
+////		函数：GetFocusCellIndex
+////		作用：获取焦点所在的单元格索引
+////		参数：无
+////		返回值：单元格索引
+//		unsigned int GetFocusCellIndex(){ return m_focusCellIndex; }
+////		
+////		函数：AddCell
+////		作用：添加单元格
+////		参数：cell单元格对象指针
+////		返回值：无
+//		void AddCell(NDUINode* cell);
+////		
+////		函数：InsertCell
+////		作用：在第几个索引位置插入单元格
+////		参数：index单元格索引，cell单元格
+////		返回值：无
+//		void InsertCell(unsigned int index, NDUINode* cell);
+////		
+////		函数：RemoveCell
+////		作用：删除单元格
+////		参数：index单元格索引
+////		返回值：无
+//		void RemoveCell(unsigned int index); overload
+////		
+////		函数：RemoveCell
+////		作用：删除单元格
+////		参数：index单元格索引
+////		返回值：无
+//		void RemoveCell(NDUINode* cell); overload
+////		
+////		函数：Cell
+////		作用：获取单元格
+////		参数：index单元格索引
+////		返回值：单元格
+//		NDUINode* Cell(unsigned int index);		
+////		
+////		函数：Clear
+////		作用：清空单元格
+////		参数：无
+////		返回值：无
+//		void Clear();
+////		
+////		函数：Count
+////		作用：获取单元格数量
+////		参数：无
+////		返回值：单元格数量
+//		unsigned int Count();		
+//	private:
+//		std::vector<NDUINode*> m_cells;
+//		std::string m_title;
+//		unsigned int m_columnCount, m_rowHeight, m_focusCellIndex;
+//		bool m_useCellHeight;
+//	};
 	
 /***
 * 临时性注释 郭浩

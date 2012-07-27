@@ -1109,9 +1109,12 @@ void NDBaseRole::drawEffects(bool bDraw)
 
 void NDBaseRole::updateRidePetEffect()
 {
-	if (AssuredRidePet() && ridepet->quality > 8) {
+	if (AssuredRidePet() && ridepet->quality > 8) 
+	{
 		SafeAddEffect(effectRidePetAniGroup, "effect_3001.spr");
-	} else {
+	} 
+	else 
+	{
 		SafeClearEffect(effectRidePetAniGroup);
 	}
 }

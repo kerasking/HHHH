@@ -106,7 +106,10 @@ namespace NDEngine
 		*/
 	};
 	
-	class NDUITableLayer : public NDUILayer, public NDUISectionTitleDelegate, public NDUIVerticalScrollBarDelegate
+	class NDUITableLayer: 
+		public NDUILayer, 
+		public NDUISectionTitleDelegate,
+		public NDUIVerticalScrollBarDelegate
 	{
 		DECLARE_CLASS(NDUITableLayer)
 		NDUITableLayer();

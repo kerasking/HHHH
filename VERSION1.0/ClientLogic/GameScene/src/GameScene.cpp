@@ -75,6 +75,7 @@
 
 #include <sstream>
 #include "NDPicture.h"
+#include "..\..\ClientEngine\Utility\inc\NDDataSource.h"
 
 const int TAG_CV_SEND_QUESTION = 1;
 const int TAG_CV_CHANG_PWD = 2;
@@ -2016,8 +2017,10 @@ void GameScene::onClickTeam()
 
 void GameScene::ShowRelieve(bool bShow)
 {
-	if (bShow) {
-		if (this->m_relieveLayer) {
+	if (bShow)
+	{
+		if (this->m_relieveLayer) 
+		{
 			return;
 		}
 		

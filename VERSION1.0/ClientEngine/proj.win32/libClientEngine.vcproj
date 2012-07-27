@@ -935,7 +935,23 @@
 			>
 		</File>
 		<File
+			RelativePath="..\TempClass\NDDataSource.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\TempClass\NDDataSource.h"
+			>
+		</File>
+		<File
 			RelativePath="..\Utility\inc\NDDataSource.h"
+			>
+		</File>
+		<File
+			RelativePath="..\Utility\src\NDRidePet.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\Utility\inc\NDRidePet.h"
 			>
 		</File>
 	</Files>
