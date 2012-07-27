@@ -119,12 +119,12 @@ class ChatRecordManager : public NDScene,
 	ChatRecordManager();
 	~ChatRecordManager();
 public:
-	static ChatRecordManager* DefaultManager();
-	void Show();
-	void Close();
-	void Hide();
+	static ChatRecordManager* DefaultManager() {return 0;}
+	void Show(){}
+	void Close(){}
+	void Hide(){}
 	
-	void AddMessage(ChatType type, const char* msg);
+	void AddMessage(ChatType type, const char* msg){}
 	
 	void SetErrorMessage(const char* msg);
 public:

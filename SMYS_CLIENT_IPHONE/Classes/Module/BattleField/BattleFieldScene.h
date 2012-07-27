@@ -40,7 +40,7 @@ public:
 	
 	static BattleFieldScene* Scene();
 	
-	static void UpdateShop();
+	static void UpdateShop(){}
 	
 	void Initialization(); override
 	

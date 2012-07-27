@@ -39,6 +39,7 @@ class ScriptMgr : public TSingleton<ScriptMgr>
 	typedef vec_script_object::iterator				vec_script_object_it;
 	
 public:
+
 	ScriptMgr();
 	~ScriptMgr();
 

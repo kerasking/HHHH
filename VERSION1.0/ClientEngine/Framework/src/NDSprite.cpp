@@ -855,6 +855,11 @@ namespace NDEngine
 		NDFrame *frame = m_currentAnimation->getFrames()->getObjectAtIndex(m_frameRunRecord->getCurrentFrameIndex());
 		return frame;
 	}
+
+	cocos2d::CCTexture2D* NDSprite::getColorTexture( int imageIndex, NDAnimationGroup* animationGroup )
+	{
+		return 0;
+	}
 }
 
 

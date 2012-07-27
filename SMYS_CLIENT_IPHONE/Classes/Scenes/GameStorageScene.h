@@ -28,7 +28,7 @@ enum
 };
 
 // iType->0(仓库), 1(背包)
-void GameStorageAddItem(int iType, Item& item);
+void GameStorageAddItem(int iType, Item& item){}
 
 // iType->0(仓库), 1(背包)
 void GameStorageDelItem(int iType, Item& item);
@@ -53,8 +53,8 @@ public NDScene,
 public NDUIButtonDelegate,
 //public NDUITableLayerDelegate, ///< 临时性注释 郭浩
 public NDUICustomViewDelegate,
-public NDUIDialogDelegate,
-public NDUIVerticalScrollBarDelegate
+public NDUIDialogDelegate
+//public NDUIVerticalScrollBarDelegate ///< 临时性注释 郭浩
 {
 	DECLARE_CLASS( GameStorageScene)
 public:

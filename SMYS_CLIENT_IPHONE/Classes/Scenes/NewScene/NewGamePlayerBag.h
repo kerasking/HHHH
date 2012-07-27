@@ -127,23 +127,23 @@ public:
 	bool OnButtonDragIn(NDUIButton* desButton, NDUINode *uiSrcNode, bool longTouch); override
 	
 	void UpdateBagNum(int iNum) { if (m_itembagPlayer) m_itembagPlayer->SetPageCount(iNum); } 
-	void UpdateEquipList();
-	void AddItemToBag(Item* item);
-	void UpdateBag();
-	void UpdateMoney();
+	void UpdateEquipList(){}
+	void AddItemToBag(Item* item){}
+	void UpdateBag(){}
+	void UpdateMoney(){}
 
-	void updateCurItem();
+	void updateCurItem(){}
 	static std::string getEquipPositionInfo(int index);
 	
-	void DelBagItem(int iItemID);
+	void DelBagItem(int iItemID){}
 	
-	void UpdateItem(int iItemID);
+	void UpdateItem(int iItemID){}
 	
 	static int getComparePosition(Item* item);
 	
-	void SetVisible(bool visible); override
+	void SetVisible(bool visible);
 	
-	static NewPlayerBagLayer* GetInstance();
+	static NewPlayerBagLayer* GetInstance() {return 0;}
 	
 	static int GetIconIndexByEquipPos(int pos);
 private:

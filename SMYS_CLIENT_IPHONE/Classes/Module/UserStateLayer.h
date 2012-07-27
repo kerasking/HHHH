@@ -17,29 +17,33 @@
 
 using namespace NDEngine;
 
-struct PosText
-{
-	PosText(int idPosText, int dir, int posX, int posY, int showSec, int clrIndex, int num, string& str, int clrBackIndex=-1);
-	~PosText();
-	
-	bool OnTimer();
-	
-	int m_id;
-	int m_dir;
-	int m_posX;
-	int m_posY;
-	int m_showSec;
-	ccColor4B m_clr;
-	int m_num;
-	string m_str;
-	
-	bool m_bConstant;
-	bool m_bShowBackColor;
-	ccColor4B m_clrBack;
-	
-private:
-	bool pharsePosTextColor(int clrIndex, ccColor4B& color);
-};
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* this struct
+*/
+// struct PosText
+// {
+// 	PosText(int idPosText, int dir, int posX, int posY, int showSec, int clrIndex, int num, string& str, int clrBackIndex=-1);
+// 	~PosText();
+// 	
+// 	bool OnTimer();
+// 	
+// 	int m_id;
+// 	int m_dir;
+// 	int m_posX;
+// 	int m_posY;
+// 	int m_showSec;
+// 	ccColor4B m_clr;
+// 	int m_num;
+// 	string m_str;
+// 	
+// 	bool m_bConstant;
+// 	bool m_bShowBackColor;
+// 	ccColor4B m_clrBack;
+// 	
+// private:
+// 	bool pharsePosTextColor(int clrIndex, ccColor4B& color);
+// };
 
 /***
 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ

@@ -599,7 +599,7 @@ void dealBackData_MSG_TASKINFO(NDTransData *data)
 			*/
 	}
 	
-	GameUIRefreshTask();
+	//GameUIRefreshTask(); ///< 临时性注释 郭浩
 	
 	TaskInfoScene::refreshTask();
 	

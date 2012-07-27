@@ -88,4 +88,9 @@ private:
 	Auction_Item* getAuctionItem(int itemID);
 };
 
+bool AuctionUILayer::processItemDescQuery( NDTransData& data )
+{
+	return true;
+}
+
 #endif

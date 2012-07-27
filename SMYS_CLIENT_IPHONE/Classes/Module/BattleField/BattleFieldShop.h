@@ -18,7 +18,6 @@
 
 using namespace NDEngine;
 
-#pragma mark 战场商店信息
 class BattleFieldShopInfo :
 public NDUILayer,
 public NDUIButtonDelegate
@@ -93,9 +92,6 @@ private:
 	int GetMedalCount(int medalItemType);
 };
 
-
-#pragma mark 战场商店
-
 class BattleFieldShop :
 public NDCommonLayer
 {
@@ -104,12 +100,9 @@ public:
 	BattleFieldShop();
 	~BattleFieldShop();
 	
-	void Initialization(); override
-	
-	void UpdateShopInfo();
+	void Initialization(){}
+	void UpdateShopInfo(){}
 };
-
-#pragma mark 商城商品-新
 
 class ShopUIItem : public NDUIButton
 {
@@ -136,8 +129,6 @@ protected:
 	NDUIItemButton		*m_btnItem;
 };
 
-#pragma mark 战场商城商品-新
-
 class BFShopUIItem : public ShopUIItem
 {
 	DECLARE_CLASS(BFShopUIItem)
@@ -160,7 +151,6 @@ private:
 	bool GetBattleFieldItemInfo(int bfItemType, BFItemInfo& bfItemInfo);
 };
 
-#pragma mark 战场商店信息-新
 class BattleFieldShopInfoNew :
 public NDUILayer,
 public NDUIButtonDelegate

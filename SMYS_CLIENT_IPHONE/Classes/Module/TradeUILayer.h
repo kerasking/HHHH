@@ -13,7 +13,8 @@
 
 using namespace NDEngine;
 
-enum {
+enum 
+{
 	ITEM_ROW = 2,
 	ITEM_COL = 4,
 };
@@ -56,7 +57,7 @@ public:
 	
 	static void SendTrade(int data, Byte action);
 	static void processTrade(NDManualRole* tradeRole, int nData, int action);
-	static bool isUILayerShown();
+	static bool isUILayerShown() {return true;} ///< 临时性更改 郭浩
 	static void Close();
 private:
 	void AddTradeItem();

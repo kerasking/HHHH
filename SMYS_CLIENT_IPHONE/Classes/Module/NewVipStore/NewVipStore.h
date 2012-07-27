@@ -108,12 +108,10 @@ public:
 	VipShop();
 	~VipShop();
 	
-	void Initialization(); override
+	void Initialization(){}
 	
-	void UpdateShopInfo();
+	void UpdateShopInfo(){}
 };
-
-#pragma mark 系统商城商品-新
 
 class SystemShopUIItem : public ShopUIItem
 {

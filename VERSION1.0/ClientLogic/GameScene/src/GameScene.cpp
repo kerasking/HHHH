@@ -224,9 +224,9 @@ GameScene::GameScene()
 	s_curGameScene = this;
 	
 //	m_userState = NULL; ///< 临时性注释 郭浩
-	m_playerHead = NULL;
+//	m_playerHead = NULL; ///< 临时性注释 郭浩
 //	m_targetHead = NULL; ///< 临时性注释 郭浩
-	m_petHead = NULL;
+//	m_petHead = NULL; ///< 临时性注释 郭浩
 	m_tlRelieve = NULL;
 	m_relieveLayer = NULL;
 //	m_miniMap = NULL; ///< 临时性注释 郭浩
@@ -827,15 +827,15 @@ void GameScene::SetMiniMapVisible(bool bVisible)
 //	}
 	
 	// 同时也设置头像
-	if (m_playerHead)
-	{
+//	if (m_playerHead)
+//	{
 		//this->m_playerHead->EnableDraw(bVisible);
-	}
+//	}
 	
-	if (m_petHead)
-	{
+//	if (m_petHead)
+//	{
 		//this->m_petHead->EnableDraw(bVisible);
-	}
+//	}
 }
 
 void GameScene::ShowPetHead(bool bShow)
@@ -899,7 +899,7 @@ void GameScene::ShowDirectKey(bool bShow)
 	* 临时性注释 郭浩
 	* begin
 	*/
-// 	if (bShow) 
+// 	if (bShow)
 // 	{
 // 		if (!m_directKey) 
 // 		{
@@ -3036,44 +3036,68 @@ void GameScene::processMsgPosText(NDTransData& data)
 				int showBackColor = data.ReadByte();
 				int num = data.ReadInt();
 				string str = data.ReadUnicodeString();
-				PosText* pt = new PosText(idPosText, direction, posX, posY, showSec, showClr, num, str, showBackColor);
-				s_mapPosText[idPosText] = pt;
+	//			PosText* pt = new PosText(idPosText, direction, posX, posY, showSec, showClr, num, str, showBackColor); ///< 临时性注释 郭浩
+	//			s_mapPosText[idPosText] = pt; ///< 临时性注释 郭浩
 //				m_userState->AddPosText(pt); ///< 临时性注释 郭浩
 			}
 		}
 			break;
 		case 1: // 更新数字和文字
-		{
-			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
-			if (it != s_mapPosText.end()) 
-			{
-				PosText* pt = it->second;
-				pt->m_num = data.ReadInt();
-				pt->m_str = data.ReadUnicodeString();;
-				//m_userState->AddPosText(pt); ///< 临时性注释 郭浩
-			}
+		{ 
+			/***
+			* 临时性注释 郭浩
+			* begin
+			*/
+// 			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
+// 			if (it != s_mapPosText.end()) 
+// 			{
+// 				PosText* pt = it->second;
+// 				pt->m_num = data.ReadInt();
+// 				pt->m_str = data.ReadUnicodeString();;
+// 				//m_userState->AddPosText(pt); ///< 临时性注释 郭浩
+// 			}
+			/***
+			* 临时性注释 郭浩
+			* end
+			*/
 		}
 			break;
 		case 2: // 更新数字
 		{
-			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
-			if (it != s_mapPosText.end()) 
-			{
-				PosText* pt = it->second;
-				pt->m_num = data.ReadInt();
-			//	m_userState->AddPosText(pt); ///< 临时性注释 郭浩
-			}
+			/***
+			* 临时性注释 郭浩
+			* begin
+			*/
+// 			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
+// 			if (it != s_mapPosText.end()) 
+// 			{
+// 				PosText* pt = it->second;
+// 				pt->m_num = data.ReadInt();
+// 			//	m_userState->AddPosText(pt); ///< 临时性注释 郭浩
+// 			}
+			/***
+			* 临时性注释 郭浩
+			* end
+			*/
 		}
 			break;
 		case 3: // 更新文字
 		{
-			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
-			if (it != s_mapPosText.end()) 
-			{
-				PosText* pt = it->second;
-				pt->m_str = data.ReadUnicodeString();
-			//	m_userState->AddPosText(pt); ///< 临时性注释 郭浩
-			}
+			/***
+			* 临时性注释 郭浩
+			* begin
+			*/
+// 			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
+// 			if (it != s_mapPosText.end()) 
+// 			{
+// 				PosText* pt = it->second;
+// 				pt->m_str = data.ReadUnicodeString();
+// 			//	m_userState->AddPosText(pt); ///< 临时性注释 郭浩
+// 			}
+			/***
+			* 临时性注释 郭浩
+			* end
+			*/
 		}
 			break;
 		case 4: // 删除

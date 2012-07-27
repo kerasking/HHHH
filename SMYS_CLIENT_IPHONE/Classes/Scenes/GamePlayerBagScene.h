@@ -71,7 +71,7 @@ public:
 	
 	void DelBagItem(int iItemID) { if (m_itembagPlayer) m_itembagPlayer->DelItem(iItemID); } 
 	
-	static int getComparePosition(Item* item);
+	static int getComparePosition(Item* item){return 0;}
 private:
 	void ResetTopTLLayer(bool bResetInfo);
 	void InitEquipItemList(int iEquipPos, Item* item);

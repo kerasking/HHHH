@@ -71,7 +71,7 @@ public NDScene,
 public NDUIDialogDelegate,
 public StoreTabLayerDelegate,
 public StoreItemLayerDelegate,
-public NDUIVerticalScrollBarDelegate,
+//public NDUIVerticalScrollBarDelegate, ///< 临时性注释 郭浩
 public NDUIButtonDelegate,
 public NDUICustomViewDelegate
 {

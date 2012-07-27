@@ -109,7 +109,7 @@ public NDUIButtonDelegate
 {
 	DECLARE_CLASS(NpcListLayer)
 public:
-	static void processTaskList(NDTransData& data);
+	static void processTaskList(NDTransData& data){}
 	static void refreshNpcTaskInfo();
 	
 	NpcListLayer();

@@ -348,3 +348,8 @@ void ScriptMgr::LoadRegClassFuncs()
 	
 	vRegClassFunc.clear();
 }
+
+int NDEngine::ScriptMgr::excuteLuaFuncRetN( const char* funcname, const char* modulename )
+{
+	return 0;
+}

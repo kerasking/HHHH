@@ -36,9 +36,9 @@ private:
 
 class Task;
 
-void GameUIRefreshTask();
-void GameUIRefreshAcceptTask();
-void GameUIShowTaskDialog(Task* task); 
+//void GameUIRefreshTask(){} ///< 临时性注释 郭浩
+//void GameUIRefreshAcceptTask(); ///< 临时性注释 郭浩
+//void GameUIShowTaskDialog(Task* task); ///< 临时性注释 郭浩
 
 class GameUITaskList : 
 public NDUIMenuLayer,

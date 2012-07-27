@@ -63,7 +63,7 @@ class NDSceneTile : public NDTile
 
 public:
 	NDSceneTile();
-	~NDSceneTile();
+	~NDSceneTile(){}
 };
 
 //Ë¢¹ÖÇø

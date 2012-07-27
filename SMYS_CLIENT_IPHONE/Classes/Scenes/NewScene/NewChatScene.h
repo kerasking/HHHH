@@ -84,12 +84,12 @@ public CommonTextInputDelegate
 {
 	DECLARE_CLASS(NewChatScene)
 public:
-	static NewChatScene* DefaultManager();
+	static NewChatScene* DefaultManager() {return 0;}
 	
 	NewChatScene();
 	~NewChatScene();
 	
-	void Show();
+	void Show(){}
 	
 	void OnButtonClick(NDUIButton* button);
 	

@@ -121,7 +121,7 @@ namespace NDEngine
 			if (ret)
 			{
 				pthread_t pid;
-				if (pthread_create(&pid, NULL, execThread, this) != 0)
+				if (0)//pthread_create(&pid, NULL, execThread, this) != 0)
 				{
 					cocos2d::CCLog( "create thread error, maybe memory not enough!" );
 				}

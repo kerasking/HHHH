@@ -769,9 +769,17 @@ void ItemMgr::processItemDel(NDTransData* data, int len)
 		if ( HasItemByType(ITEM_SOLD, *it, itemSold))
 		{
 			DelItem(ITEM_SOLD, *it);
-			NpcStoreUpdateBag();
-			NpcStoreUpdateSlod();
-			NpcStoreUpdateMoney();
+/***
+* 临时性注释 郭浩
+* begin
+*/
+// 			NpcStoreUpdateBag();
+// 			NpcStoreUpdateSlod();
+// 			NpcStoreUpdateMoney();
+			/***
+			* 临时性注释 郭浩
+			* end
+			*/
 		}
 	}
 	
@@ -871,7 +879,8 @@ void ItemMgr::processItem(NDTransData* data, int len)
 void ItemMgr::processStone(NDTransData* data, int len)
 {
 	unsigned char n = 0; (*data) >> n;
-	if (n == Item::LIFESKILL_INLAY) {
+	if (n == Item::LIFESKILL_INLAY)
+	{
 		int idItem = 0; (*data) >> idItem;
 		int idStoneType = 0; (*data) >> idStoneType;
 		
@@ -904,9 +913,11 @@ void ItemMgr::processStone(NDTransData* data, int len)
 		if (bagscene) 
 			bagscene->updateCurItem();
 		
-		showDialog("", NDCommonCString("XianQiangSucess"));
-	} else if (n == Item::LIFESKILL_DIGOUT) {
-		showDialog("", NDCommonCString("WaChuSucess"));
+		//showDialog("", NDCommonCString("XianQiangSucess")); ///< 临时性注释 郭浩 
+	}
+	else if (n == Item::LIFESKILL_DIGOUT) 
+	{
+		//showDialog("", NDCommonCString("WaChuSucess")); ///< 临时性注释 郭浩
 		
 		int idItem = 0; (*data) >> idItem;
 		
@@ -1029,12 +1040,14 @@ void ItemMgr::processQueryDesc(NDTransData* data, int len)
 		std::string strContent = data->ReadUnicodeString();
 		
 		Item *item = this->QueryOtherItem(idItem);
-		if (!item) {
+		if (!item)
+		{
 			HasItemByType(ITEM_BAG, idItem, item);
 		}
 		
-		if (item) {
-			showDialog(item->getItemNameWithAdd().c_str(), strContent.c_str());
+		if (item) 
+		{
+		//	showDialog(item->getItemNameWithAdd().c_str(), strContent.c_str()); ///< 临时性注释 郭浩
 		}
 	}
 	else
@@ -2336,10 +2349,19 @@ bool ItemMgr::ChangeItemPosSold(OBJID idItem, int nPos)
 		}
 	}
 	
-	if (pItem) {
-		NpcStoreUpdateBag();
-		NpcStoreUpdateSlod();
-		NpcStoreUpdateMoney();
+	if (pItem)
+	{
+		/***
+		* 临时性注释 郭浩
+		* begin
+		*/
+// 		NpcStoreUpdateBag();
+// 		NpcStoreUpdateSlod();
+// 		NpcStoreUpdateMoney();
+		/***
+		* 临时性注释 郭浩
+		* end
+		*/
 		return true;
 	}
 

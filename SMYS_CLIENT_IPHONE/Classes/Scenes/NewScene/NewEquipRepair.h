@@ -57,7 +57,7 @@ private:
 	NDUIButton		*m_btnAll;
 	unsigned int	m_uiCurPage;
 public:
-	static void refreshAmount();
+	static void refreshAmount(){}
 };
 
 class NewEquipRepairScene :

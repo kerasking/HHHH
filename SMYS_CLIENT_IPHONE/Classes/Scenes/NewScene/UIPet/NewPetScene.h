@@ -60,9 +60,9 @@ public:
 	~CUIPet();
 	bool Init(OBJID idUser, OBJID idFocusPet, bool bEnable = true);
 	void UpdateUI(OBJID idPet);				// 不含背包更新
-	void PetBagAddItem(OBJID idItem);
-	void PetBagDelItem(OBJID idItem);
-	void PetBagItemCount(OBJID idItem);
+	void PetBagAddItem(OBJID idItem){}
+	void PetBagDelItem(OBJID idItem){}
+	void PetBagItemCount(OBJID idItem){}
 	void UpdateSkillItemDesc(OBJID idItem, std::string& strDesc);
 	
 	virtual void SetVisible(bool bVisible);

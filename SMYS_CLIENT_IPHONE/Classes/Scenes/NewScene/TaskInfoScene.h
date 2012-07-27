@@ -25,7 +25,7 @@ public NDCommonScene
 	
 public:
 	
-	static void refreshTask();
+	static void refreshTask(){}
 	
 	static TaskInfoScene* Scene();
 	

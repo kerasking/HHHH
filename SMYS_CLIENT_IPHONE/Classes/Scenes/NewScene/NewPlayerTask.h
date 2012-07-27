@@ -149,10 +149,10 @@ public TabLayerDelegate
 {
 	DECLARE_CLASS(NewPlayerTask)
 public:
-	static void processTaskAcceptalbe(NDTransData& data);
-	static void refreshTaskYiJie();
-	static void ShowTaskYiJieDetail(Task* task);
-	static Task* QueryAcceptableTask(int idTask);
+	static void processTaskAcceptalbe(NDTransData& data){}
+	static void refreshTaskYiJie(){}
+	static void ShowTaskYiJieDetail(Task* task){}
+	static Task* QueryAcceptableTask(int idTask){return 0;}
 	
 	NewPlayerTask();
 	~NewPlayerTask();

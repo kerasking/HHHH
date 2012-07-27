@@ -47,7 +47,7 @@ public:
 	static void Show(NDTransData& data);
 	static void Close();
 	static void RemoveItem(int idItem);
-	static bool isUILayerShown();
+	static bool isUILayerShown(){return true;} ///< 临时性更改 郭浩
 	static void UpdateMoney();
 	
 	void InnerUpdateMoney();

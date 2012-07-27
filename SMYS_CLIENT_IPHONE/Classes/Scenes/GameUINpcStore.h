@@ -23,9 +23,9 @@
 
 using namespace NDEngine;
 
-void NpcStoreUpdateMoney();
-void NpcStoreUpdateBag();
-void NpcStoreUpdateSlod();
+//void NpcStoreUpdateMoney(){} ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+//void NpcStoreUpdateBag(){} ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+//void NpcStoreUpdateSlod(){} ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 
 /////////////////////////////////////////////////////
 
@@ -57,7 +57,7 @@ class GameUINpcStore :
 public NDUIMenuLayer,
 public NDUIButtonDelegate,
 public NDUIDialogDelegate,
-public NDUIVerticalScrollBarDelegate,
+//public NDUIVerticalScrollBarDelegate, ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 public NDUICustomViewDelegate
 {
 	DECLARE_CLASS(GameUINpcStore)
@@ -78,10 +78,10 @@ public:
 	bool OnCustomViewConfirm(NDUICustomView* customView); override
 	
 	
-	void UpdateBag();
-	void UpdateStore();
+	void UpdateBag(){}
+	void UpdateStore(){}
 	void UpdateSold();
-	void UpdateMoney();
+	void UpdateMoney(){}
 private:
 	void UpdateNpcData();
 	void OnSelItem(int iType, int iIndex);

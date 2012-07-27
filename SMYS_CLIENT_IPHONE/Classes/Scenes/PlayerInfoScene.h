@@ -28,7 +28,7 @@ public:
 	
 	static PlayerInfoScene* Scene();
 	
-	static CUIPet* QueryPetScene();
+	static CUIPet* QueryPetScene() {return 0;}
 	
 	void Initialization(); override
 	

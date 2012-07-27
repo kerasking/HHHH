@@ -132,56 +132,60 @@ private:
 	void drawInBattle();
 };
 
-class PlayerHeadInMap : public NDUILayer
-{
-	DECLARE_CLASS(PlayerHeadInMap)
-public:
-	PlayerHeadInMap(NDPlayer* role);
-	PlayerHeadInMap(NDBattlePet *battlepet);
-	void ChangeBattlePet(NDBattlePet *battlepet);
-	~PlayerHeadInMap();
-	
-	void Initialization();
-	void draw(); override
-	
-	void SetShrink(bool bShrink);
-	
-	bool TouchEnd(NDTouch* touch);
-	
-protected:
-	PlayerHeadInMap() {}
-	
-private:
-	
-	enum SHOW_STATUS {
-		SS_SHOW,
-		SS_SHRINKING,
-		SS_EXTENDING,
-		SS_HIDE,
-	};
-	
-	bool m_bHasBattlepet;
-	
-//	ImageNumber* m_imgNumPlayerLevel; ///< 临时性注释 郭浩
-	
-	NDUIImage* m_imgHp;
-	NDUIImage* m_imgMp;
-	NDUILayer* m_imgExp;
-	
-	NDPlayer* m_role;
-	
-	CAutoLink<NDBattlePet> m_battlepet;
-	
-	HeadNode* m_head;
-	
-	CGRect m_rectBase;
-	
-	CGRect m_rectHide;
-	
-	CGPoint m_ptHeadNode;
-	
-	SHOW_STATUS m_showStatus;
-};
+/***
+* 临时性注释 郭浩
+* this class
+*/
+// class PlayerHeadInMap : public NDUILayer
+// {
+// 	DECLARE_CLASS(PlayerHeadInMap)
+// public:
+// 	PlayerHeadInMap(NDPlayer* role);
+// 	PlayerHeadInMap(NDBattlePet *battlepet);
+// 	void ChangeBattlePet(NDBattlePet *battlepet);
+// 	~PlayerHeadInMap();
+// 	
+// 	void Initialization();
+// 	void draw(); override
+// 	
+// 	void SetShrink(bool bShrink);
+// 	
+// 	bool TouchEnd(NDTouch* touch);
+// 	
+// protected:
+// 	PlayerHeadInMap() {}
+// 	
+// private:
+// 	
+// 	enum SHOW_STATUS {
+// 		SS_SHOW,
+// 		SS_SHRINKING,
+// 		SS_EXTENDING,
+// 		SS_HIDE,
+// 	};
+// 	
+// 	bool m_bHasBattlepet;
+// 	
+// //	ImageNumber* m_imgNumPlayerLevel; ///< 临时性注释 郭浩
+// 	
+// 	NDUIImage* m_imgHp;
+// 	NDUIImage* m_imgMp;
+// 	NDUILayer* m_imgExp;
+// 	
+// 	NDPlayer* m_role;
+// 	
+// 	CAutoLink<NDBattlePet> m_battlepet;
+// 	
+// 	HeadNode* m_head;
+// 	
+// 	CGRect m_rectBase;
+// 	
+// 	CGRect m_rectHide;
+// 	
+// 	CGPoint m_ptHeadNode;
+// 	
+// 	SHOW_STATUS m_showStatus;
+// };
 
 /***
 * 临时性注释 郭浩
