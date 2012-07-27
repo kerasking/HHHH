@@ -216,7 +216,7 @@ typedef std::pair<CoolDownID, CoolDownData>		CoolDownRecord_Pair;
 
 class Battle : public NDUILayer,
 //public ITimerCallback,
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate, ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 public NDUIDialogDelegate,
 //public NDUISpeedBarDelegate,
 public NDUIButtonDelegate
@@ -266,6 +266,7 @@ public:
 	virtual bool TouchEnd(NDTouch* touch); override
 	void draw(); override
 	void drawSubAniGroup();
+	void OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);
 	
 	void AddFighter(Fighter* f);
 	
@@ -292,7 +293,7 @@ public:
 	
 	virtual void OnTimer(OBJID tag);
 	
-	virtual void OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);
+//	virtual void OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);
 //	
 //	virtual void OnTableLayerCellFocused(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);
 	

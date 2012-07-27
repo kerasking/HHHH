@@ -14,7 +14,7 @@
 #include "NDUILabel.h"
 #include "NDPicture.h"
 #include "NDTextNode.h"
-#include "NDUITableLayer.h"
+//#include "NDUITableLayer.h"
 //#include "NDUIMemo.h"
 #include <vector>
 #include <string>

@@ -39,7 +39,7 @@ class GamePlayerBagScene :
 public NDScene, 
 public GameItemBagDelegate, 
 public NDUIButtonDelegate,
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate, ///< 临时性注释 郭浩
 public NDUIDialogDelegate,
 public NDUICustomViewDelegate
 {

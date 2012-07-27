@@ -28,8 +28,8 @@ using namespace NDEngine;
 class CUIPetPart : 
 public NDUILayer, 
 public NDUIEditDelegate,
-public NDUICustomViewDelegate,
-public NDUITableLayerDelegate
+public NDUICustomViewDelegate
+//public NDUITableLayerDelegate ///< 临时性注释 郭浩
 {
 	friend class AttrInfo;
 public:

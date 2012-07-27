@@ -111,7 +111,7 @@ typedef struct {
 //对于所有的记录进行管理
 class ChatRecordManager : public NDScene, 
 	public NDUIButtonDelegate, 
-	public NDUITableLayerDelegate, 
+//	public NDUITableLayerDelegate,  ///< 临时性注释 郭浩
 	public NDUIDialogDelegate,
 	public ITimerCallback
 {

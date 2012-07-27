@@ -42,7 +42,7 @@ void GameUIShowTaskDialog(Task* task);
 
 class GameUITaskList : 
 public NDUIMenuLayer,
-public NDUITableLayerDelegate, 
+//public NDUITableLayerDelegate,  ///< 临时性注释 郭浩
 public NDUIDialogDelegate,
 public NDUIButtonDelegate,
 public StoreTabLayerDelegate

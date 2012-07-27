@@ -19,9 +19,6 @@
 
 namespace NDEngine
 {	
-
-#pragma mark 加载ui统一回调
-	
 	class NDUINode;
 	
 	class NDSection;

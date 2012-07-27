@@ -89,15 +89,22 @@ void QuickTalkCell::Initialization(const char* pszText, const CGSize& size)
 void QuickTalkCell::draw()
 {
 	NDNode* parentNode = this->GetParent();
-	if (parentNode && parentNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer))) {
+
+	if (parentNode && parentNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer))) 
+	{
 		NDUILayer* uiLayer = (NDUILayer*)parentNode;
-		if (uiLayer->GetFocus() == this) { // 当前处于焦点,绘制焦点色
-			DrawRecttangle(this->GetScreenRect(), m_clrFocus);
+
+		if (uiLayer->GetFocus() == this) 
+		{ // 当前处于焦点,绘制焦点色
+			//DrawRecttangle(this->GetScreenRect(), m_clrFocus); ///< 临时性注释 郭浩
 			m_lbText->SetFontColor(m_clrFocusText);
-		} else {
+		} 
+		else 
+		{
 			m_lbText->SetFontColor(m_clrText);
 		}
 	}
+
 	NDUINode::draw();
 }
 

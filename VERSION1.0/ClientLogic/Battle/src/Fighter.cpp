@@ -953,8 +953,17 @@ void Fighter::drawHPMP()
 	
 //	DrawRecttangle(CGRectMake(drawx, drawy, w, h), ccc4(247, 227, 231, 255));
 //	DrawRecttangle(CGRectMake(drawx + 1, drawy + 1, w - 2, h - 2), ccc4(57, 0, 41, 255));
-	DrawRecttangle(CGRectMake(drawx + 2, drawy + 2, w - 4, h - 4), ccc4(148, 65, 74, 255));
-	DrawRecttangle(CGRectMake(drawx + 2, drawy + 2, lifew, h - 4), ccc4(237, 83, 15, 255));
+
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* begin
+*/
+// 	DrawRecttangle(CGRectMake(drawx + 2, drawy + 2, w - 4, h - 4), ccc4(148, 65, 74, 255));
+// 	DrawRecttangle(CGRectMake(drawx + 2, drawy + 2, lifew, h - 4), ccc4(237, 83, 15, 255));
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* end
+*/
 }
 
 void Fighter::clearFighterStatus() {

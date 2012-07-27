@@ -367,22 +367,28 @@ std::string platformString()
 	//return [[[UIDevice currentDevice] platformString] UTF8String];
 }
 
-void drawRectBar2(int x, int y, int color, int num1, int num2, int width) {
+void drawRectBar2(int x, int y, int color, int num1, int num2, int width) 
+{
 	int curColor = 0x0B2212;
-	DrawPolygon(CGRectMake(x, y, width + 1, 5), INTCOLORTOCCC4(curColor), 1);
+//	DrawPolygon(CGRectMake(x, y, width + 1, 5), INTCOLORTOCCC4(curColor), 1); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	
-	if (num2 <= 0) {
+	if (num2 <= 0) 
+	{
 		return;
 	}
 	
 	int width1 = width * num1 / num2;
-	if (num1 > num2) {
+	if (num1 > num2) 
+	{
 		width1 = width;
 	}
-	if (width1 == 0) {
+
+	if (width1 == 0)
+	{
 		return;
 	}
-	DrawRecttangle(CGRectMake(x, y, width1, 4), INTCOLORTOCCC4(color));
+
+	//DrawRecttangle(CGRectMake(x, y, width1, 4), INTCOLORTOCCC4(color)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 }
 
 CGRect getNewNumCut(unsigned int num, bool hightlight)
@@ -413,7 +419,7 @@ uint TimeConvert(TIME_TYPE type /*=TIME_MILLISECOND*/, time_t long_time)
 			struct tm *pTime;
 			pTime = ::localtime( &long_time ); /* Convert to local time. */
 			
-			dwTime	=	pTime->tm_year%100*100000000 +
+			dwTime = pTime->tm_year % 100 * 100000000 +
 			(pTime->tm_mon+1)*1000000 +
 			pTime->tm_mday*10000 +
 			pTime->tm_hour*100 + 

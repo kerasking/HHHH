@@ -69,42 +69,42 @@ private:
 };
 
 // 绘制玩家头像
-class PlayerHead : public NDLayer
-{
-	DECLARE_CLASS(PlayerHead)
-public:
-	PlayerHead(NDManualRole* role);
-	~PlayerHead();
-	
-	// 战斗内使用传入玩家fighter
-	void Initialization(bool bBattle);
-	void draw(); override
-	
-	void SetBattlePlayer(Fighter* player) {
-		this->m_player = player;
-	}
-	
-protected:
-	PlayerHead() {}
-	
-private:
-// 	ImageNumber* m_imgNumHp; // 玩家hp
-// 	ImageNumber* m_imgNumMp; // 玩家mp
-// 	ImageNumber* m_imgNumPlayerLevel;
-	
-	NDUIImage* m_imgHp;
-	NDUIImage* m_imgMp;
-	
-	Fighter* m_player;
-	
-	bool m_bBattle;
-	NDManualRole* m_role;
-	
-private:
-	
-	void drawInMap();
-	void drawInBattle();
-};
+// class PlayerHead : public NDLayer
+// {
+// 	DECLARE_CLASS(PlayerHead)
+// public:
+// 	PlayerHead(NDManualRole* role);
+// 	~PlayerHead();
+// 	
+// 	// 战斗内使用传入玩家fighter
+// 	void Initialization(bool bBattle);
+// 	void draw(); override
+// 	
+// 	void SetBattlePlayer(Fighter* player) {
+// 		this->m_player = player;
+// 	}
+// 	
+// protected:
+// 	PlayerHead() {}
+// 	
+// private:
+// // 	ImageNumber* m_imgNumHp; // 玩家hp
+// // 	ImageNumber* m_imgNumMp; // 玩家mp
+// // 	ImageNumber* m_imgNumPlayerLevel;
+// 	
+// 	NDUIImage* m_imgHp;
+// 	NDUIImage* m_imgMp;
+// 	
+// 	Fighter* m_player;
+// 	
+// 	bool m_bBattle;
+// 	NDManualRole* m_role;
+// 	
+// private:
+// 	
+// 	void drawInMap();
+// 	void drawInBattle();
+// };
 
 // 绘制宠物头像
 class PetHead : public NDLayer 

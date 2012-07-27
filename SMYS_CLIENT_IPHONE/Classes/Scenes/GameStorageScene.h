@@ -51,7 +51,7 @@ class NDUITopLayerEx;
 class  GameStorageScene :
 public NDScene,
 public NDUIButtonDelegate,
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate, ///< 临时性注释 郭浩
 public NDUICustomViewDelegate,
 public NDUIDialogDelegate,
 public NDUIVerticalScrollBarDelegate

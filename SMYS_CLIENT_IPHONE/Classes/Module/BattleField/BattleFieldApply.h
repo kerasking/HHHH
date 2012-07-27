@@ -18,8 +18,6 @@
 
 using namespace NDEngine;
 
-#pragma mark 战场报名列表Cell
-
 class BFApplyCell : public NDUINode
 {
 	DECLARE_CLASS(BFApplyCell)
@@ -44,12 +42,10 @@ private:
 	NDPicture			*m_picBg, *m_picFocus;
 };
 
-#pragma mark 战场报名信息
-
 class BattleFieldApplyInfo :
 public NDUILayer,
-public NDUIButtonDelegate,
-public NDUITableLayerDelegate
+public NDUIButtonDelegate
+// public NDUITableLayerDelegate ///< 临时性注释 郭浩
 {
 	DECLARE_CLASS(BattleFieldApplyInfo)
 	
@@ -103,8 +99,7 @@ private:
 	
 	// 刷新定时器标签
 	void RefreshTimeOutLabel();
-	
-#pragma mark 报名状态
+
 	// 处理报名状态 (包括与原状作比较若状态不一样则切换状态,非报名状态重新设置倒计时以及主动请求报名信息定时器)
 	void DealApplyState(BFApplyInfo& bfApplyInfo, bool forceSwitch=false);
 	
@@ -117,8 +112,6 @@ private:
 	// 获取保存的报名状态
 	bool hasApply();
 };
-
-#pragma mark 战场报名
 
 typedef struct _tagApplyInstance
 {
@@ -161,8 +154,6 @@ private:
 private:
 	BattleFieldApplyInfo* GetBfApplyIns(int bfType);
 };
-
-#pragma mark 战场背景
 
 typedef struct _tagBFBackStory
 {

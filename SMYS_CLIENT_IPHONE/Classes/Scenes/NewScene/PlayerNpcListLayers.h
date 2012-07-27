@@ -82,8 +82,8 @@ private:
 };
 
 class NpcTaskLayer :
-public NDUILayer,
-public NDUITableLayerDelegate
+public NDUILayer
+//public NDUITableLayerDelegate ///< 临时性注释 郭浩
 {
 	DECLARE_CLASS(NpcTaskLayer)
 public:

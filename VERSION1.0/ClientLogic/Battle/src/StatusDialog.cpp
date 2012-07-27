@@ -17,6 +17,7 @@
 #include "Battle.h"
 #include <sstream>
 #include "NDPath.h"
+#include "NDUIBaseGraphics.h"
 
 const float DIALOG_WIDTH = 200.0f;
 const float MAX_DIALOG_HEIGHT = 220.0f;
@@ -199,46 +200,53 @@ void StatusDialog::draw()
 	
 	if (this->IsVisibled())
 	{
-		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + 2), 
-			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + 2), 
-			 ccc4(41, 65, 33, 255), 1);
-		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + 3), 
-			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + 3), 
-			 ccc4(57, 105, 90, 255), 1);
-		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + 4), 
-			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + 4), 
-			 ccc4(82, 125, 115, 255), 1);
-		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + 5), 
-			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + 5), 
-			 ccc4(82, 117, 82, 255), 1);
-		
-		//bottom frame
-		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + scrRect.size.height - 2), 
-			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + scrRect.size.height - 2), 
-			 ccc4(41, 65, 33, 255), 1);
-		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + scrRect.size.height - 3), 
-			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + scrRect.size.height - 3), 
-			 ccc4(57, 105, 90, 255), 1);
-		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + scrRect.size.height - 4), 
-			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + scrRect.size.height - 4), 
-			 ccc4(82, 125, 115, 255), 1);
-		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + scrRect.size.height - 5), 
-			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + scrRect.size.height - 5), 
-			 ccc4(82, 117, 82, 255), 1);
-		
-		//left frame
-		DrawLine(ccp(scrRect.origin.x + 13, scrRect.origin.y + 16), 
-			 ccp(scrRect.origin.x + 13, scrRect.origin.y + scrRect.size.height - 16), 
-			 ccc4(115, 121, 90, 255), 8);
-		
-		//right frame
-		DrawLine(ccp(scrRect.origin.x + scrRect.size.width - 13, scrRect.origin.y + 16), 
-			 ccp(scrRect.origin.x + scrRect.size.width - 13, scrRect.origin.y + scrRect.size.height - 16), 
-			 ccc4(115, 121, 90, 255), 8);
-		
-		//background
-		DrawRecttangle(CGRectMake(scrRect.origin.x + 17, scrRect.origin.y + 5, scrRect.size.width - 34, scrRect.size.height - 10), ccc4(196, 201, 181, 255));
-		
+		/***
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* begin
+		*/
+// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + 2), 
+// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + 2), 
+// 			 ccc4(41, 65, 33, 255), 1);
+// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + 3), 
+// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + 3), 
+// 			 ccc4(57, 105, 90, 255), 1);
+// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + 4), 
+// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + 4), 
+// 			 ccc4(82, 125, 115, 255), 1);
+// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + 5), 
+// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + 5), 
+// 			 ccc4(82, 117, 82, 255), 1);
+// 		
+// 		//bottom frame
+// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + scrRect.size.height - 2), 
+// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + scrRect.size.height - 2), 
+// 			 ccc4(41, 65, 33, 255), 1);
+// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + scrRect.size.height - 3), 
+// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + scrRect.size.height - 3), 
+// 			 ccc4(57, 105, 90, 255), 1);
+// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + scrRect.size.height - 4), 
+// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + scrRect.size.height - 4), 
+// 			 ccc4(82, 125, 115, 255), 1);
+// 		DrawLine(ccp(scrRect.origin.x + 30, scrRect.origin.y + scrRect.size.height - 5), 
+// 			 ccp(scrRect.origin.x + scrRect.size.width - 30, scrRect.origin.y + scrRect.size.height - 5), 
+// 			 ccc4(82, 117, 82, 255), 1);
+// 		
+// 		//left frame
+// 		DrawLine(ccp(scrRect.origin.x + 13, scrRect.origin.y + 16), 
+// 			 ccp(scrRect.origin.x + 13, scrRect.origin.y + scrRect.size.height - 16), 
+// 			 ccc4(115, 121, 90, 255), 8);
+// 		
+// 		//right frame
+// 		DrawLine(ccp(scrRect.origin.x + scrRect.size.width - 13, scrRect.origin.y + 16), 
+// 			 ccp(scrRect.origin.x + scrRect.size.width - 13, scrRect.origin.y + scrRect.size.height - 16), 
+// 			 ccc4(115, 121, 90, 255), 8);
+// 		
+// 		//background
+// 		DrawRecttangle(CGRectMake(scrRect.origin.x + 17, scrRect.origin.y + 5, scrRect.size.width - 34, scrRect.size.height - 10), ccc4(196, 201, 181, 255));
+/***
+* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+* end
+*/
 		
 		m_picLeftTop->DrawInRect(CGRectMake(scrRect.origin.x+7, 
 						    scrRect.origin.y, 

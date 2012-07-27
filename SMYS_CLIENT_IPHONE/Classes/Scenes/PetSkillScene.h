@@ -22,7 +22,7 @@ void PetSkillSceneUpdate();
 
 class PetSkillScene : 
 public NDScene, 
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate, ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 public NDUIDialogDelegate,
 public NDUIButtonDelegate
 {

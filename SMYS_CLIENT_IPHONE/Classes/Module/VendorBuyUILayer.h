@@ -26,8 +26,8 @@ using namespace NDEngine;
 
 class VendorBuyUILayer :
 public NDUIMenuLayer,
-public NDUIButtonDelegate,
-public NDUITableLayerDelegate
+public NDUIButtonDelegate
+//public NDUITableLayerDelegate ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 {
 	DECLARE_CLASS(VendorBuyUILayer)
 	

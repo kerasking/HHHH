@@ -79,7 +79,7 @@ typedef vec_marriage::iterator			vec_marriage_it;
 
 class GameScene : 
 public NDScene, 
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate, ///< 临时性注释 郭浩
 public NDUIButtonDelegate,
 //public NDUIHControlContainerDelegate,
 //public NDUIAniLayerDelegate,
@@ -244,11 +244,11 @@ private:
 	* end
 	*/
 	
-	PlayerHeadInMap* m_playerHead;
+	//PlayerHeadInMap* m_playerHead; ///< 临时性注释 郭浩
 //	TargetHeadInMap* m_targetHead; ///< 临时性注释 郭浩
 //	DirectKey* m_directKey; ///< 临时性注释 郭浩
 	NDUIHControlContainer* m_hccOPItem;
-	PlayerHeadInMap* m_petHead;
+	//PlayerHeadInMap* m_petHead; ///< 临时性注释 郭浩
 
 	bool m_bQuickInterationShow;
 	NDPicture* m_picQuickInteration; NDUIButton* m_btnQuickInterationShrink;

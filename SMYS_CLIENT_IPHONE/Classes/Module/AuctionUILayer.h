@@ -30,7 +30,7 @@ typedef VEC_AUCTION_ITEM::iterator VEC_AUCTION_ITEM_IT;
 class AuctionUILayer :
 public NDUIMenuLayer,
 public NDUIButtonDelegate,
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate, ///< 临时性注释 郭浩
 public IPageButtonDelegate,
 public NDUICustomViewDelegate,
 public GameItemBagDelegate,

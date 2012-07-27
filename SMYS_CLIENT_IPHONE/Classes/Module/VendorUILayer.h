@@ -28,7 +28,7 @@ class VendorUILayer :
 public NDUIMenuLayer,
 public NDUIButtonDelegate,
 public GameItemBagDelegate,
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate,
 public NDUICustomViewDelegate
 {
 	DECLARE_CLASS(VendorUILayer)

@@ -31,7 +31,7 @@ enum
 
 class LifeSkillScene :
 public NDScene,
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate, ///< 临时性注释 郭浩
 public NDUIButtonDelegate,
 public FormulaInfoDialogDelegate,
 public NDUICustomViewDelegate,

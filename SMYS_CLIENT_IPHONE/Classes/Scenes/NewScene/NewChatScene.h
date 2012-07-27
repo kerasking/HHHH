@@ -78,7 +78,7 @@ private:
 class NewChatScene
 : public NDScene,
 public NDUIButtonDelegate,
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate, ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 public NDUIDialogDelegate,
 public CommonTextInputDelegate
 {

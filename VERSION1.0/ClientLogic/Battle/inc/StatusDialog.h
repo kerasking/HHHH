@@ -21,19 +21,20 @@ using namespace NDEngine;
 
 class Fighter;
 class StatusDialog :
-public NDUILayer, 
-public NDUITableLayerDelegate
+public NDUILayer
+//public NDUITableLayerDelegate ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 {
 	DECLARE_CLASS(StatusDialog)
 public:
 	StatusDialog();
 	~StatusDialog();
 	
-	void OnTableLayerCellFocused(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);
+//	void OnTableLayerCellFocused(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);
 	void Initialization(Fighter* f);
 	void draw();
 	
 	virtual bool TouchEnd(NDTouch* touch);
+	void OnTableLayerCellFocused(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);
 	
 private:
 	NDPicture* m_picLeftTop;		

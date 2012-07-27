@@ -63,7 +63,7 @@ private:
 class TutorUILayer :
 public NDUILayer,
 public NDUIButtonDelegate,
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate,
 public NDUIDialogDelegate
 {
 	friend class TutorInfo;

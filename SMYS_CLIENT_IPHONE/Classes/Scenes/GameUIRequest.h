@@ -66,7 +66,7 @@
 class GameUIRequest : 
 public NDUIMenuLayer,
 public NDUIButtonDelegate,
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate ///< 临时性注释 郭浩
 public NDUIDialogDelegate
 {
 	DECLARE_CLASS(GameUIRequest)
@@ -126,8 +126,8 @@ private:
 };
 
 class NewGameUIRequest : 
-public NDUILayer,
-public NDUITableLayerDelegate
+public NDUILayer
+//public NDUITableLayerDelegate ///< 临时性注释 郭浩
 {
 	DECLARE_CLASS(NewGameUIRequest)
 	

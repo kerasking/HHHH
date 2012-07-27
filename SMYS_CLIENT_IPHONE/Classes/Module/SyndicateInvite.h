@@ -20,8 +20,8 @@ using namespace NDEngine;
 
 class SyndicateInvite : 
 public NDUILayer,
-public NDUIEditDelegate,
-public NDUITableLayerDelegate
+public NDUIEditDelegate
+//public NDUITableLayerDelegate ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 {
 	DECLARE_CLASS(SyndicateInvite)
 	SyndicateInvite();

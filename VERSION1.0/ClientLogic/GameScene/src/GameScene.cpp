@@ -608,13 +608,21 @@ layer->AddChild(btn); \
 	m_anilayerMail->SetDelegate(this);
 	this->AddUIChild(m_anilayerMail);
 	*/
-	
-	m_tlShare = new NDUITableLayer;
-	m_tlShare->Initialization();
-	m_tlShare->VisibleSectionTitles(false);
-	m_tlShare->SetDelegate(this);
-	m_tlShare->SetVisible(false);
-	this->AddUIChild(m_tlShare);
+
+/***
+* 临时性注释 郭浩
+* begin
+*/
+// 	m_tlShare = new NDUITableLayer;
+// 	m_tlShare->Initialization();
+// 	m_tlShare->VisibleSectionTitles(false);
+// 	m_tlShare->SetDelegate(this);
+// 	m_tlShare->SetVisible(false);
+// 	this->AddUIChild(m_tlShare);
+/***
+* 临时性注释 郭浩
+* end
+*/
 	
 	m_tlInvitePlayers = new NDUITableLayer;
 	m_tlInvitePlayers->Initialization();
@@ -832,41 +840,57 @@ void GameScene::SetMiniMapVisible(bool bVisible)
 
 void GameScene::ShowPetHead(bool bShow)
 {
-	NDBattlePet* battlepet = (NDBattlePet*)NDPlayer::defaultHero().GetShowPet();
-	
-	if (bShow && battlepet) {
-		if (!m_petHead)
-		{
-			m_petHead = new PlayerHeadInMap(battlepet);
-			m_petHead->Initialization();
-			this->AddUIChild(m_petHead, 0);
-		}
-		else
-		{
-			m_petHead->ChangeBattlePet(battlepet);
-		}
-	}
-	else if (this->m_petHead) {
-		m_petHead->RemoveFromParent(true);
-		m_petHead = NULL;
-	}
+	/***
+	* 临时性注释 郭浩
+	* all
+	*/
+// 	NDBattlePet* battlepet = (NDBattlePet*)NDPlayer::defaultHero().GetShowPet();
+// 	
+// 	if (bShow && battlepet)
+// 	{
+// 		if (!m_petHead)
+// 		{
+// 			m_petHead = new PlayerHeadInMap(battlepet);
+// 			m_petHead->Initialization();
+// 			this->AddUIChild(m_petHead, 0);
+// 		}
+// 		else
+// 		{
+// 			m_petHead->ChangeBattlePet(battlepet);
+// 		}
+// 	}
+// 	else if (this->m_petHead) 
+// 	{
+// 		m_petHead->RemoveFromParent(true);
+// 		m_petHead = NULL;
+// 	}
 }
 
 void GameScene::ShowPlayerHead(bool bShow)
 {
-	if (bShow) {
-		if (!this->m_playerHead) {
-			m_playerHead = new PlayerHeadInMap(&NDPlayer::defaultHero());
-			m_playerHead->Initialization();
-			this->AddUIChild(m_playerHead);
-		}
-	} else {
-		if (this->m_playerHead) {
-			this->m_uiLayer->RemoveChild(m_playerHead, true);
-			m_playerHead = NULL;
-		}
-	}
-	this->ShowPetHead(bShow);
+	/***
+	* 临时性注释 郭浩
+	* all
+	*/
+// 	if (bShow)
+// 	{
+// 		if (!this->m_playerHead)
+// 		{
+// 			m_playerHead = new PlayerHeadInMap(&NDPlayer::defaultHero());
+// 			m_playerHead->Initialization();
+// 			this->AddUIChild(m_playerHead);
+// 		}
+// 	} 
+// 	else
+// 	{
+// 		if (this->m_playerHead) 
+// 		{
+// 			this->m_uiLayer->RemoveChild(m_playerHead, true);
+// 			m_playerHead = NULL;
+// 		}
+// 	}
+// 
+// 	this->ShowPetHead(bShow);
 }
 
 void GameScene::ShowDirectKey(bool bShow)

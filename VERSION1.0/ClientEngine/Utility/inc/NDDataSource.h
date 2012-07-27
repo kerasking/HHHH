@@ -5,15 +5,17 @@
 #ifndef NDDATASOURCE_H
 #define NDDATASOURCE_H
 
-#include "..\..\ui\inc\NDDataSource.h"
-
-using namespace NDEngine;
+#include "NDObject.h"
+#include <vector>
+#include <string>
+#include "NDUINode.h"
 
 namespace NDEngine
 {
 	class NDDataSource
 	{
 	public:
+
 		NDDataSource();
 		virtual ~NDDataSource();
 
@@ -63,7 +65,8 @@ namespace NDEngine
 	private:
 	};
 
-	class NDSection : public NDObject
+	class NDSection:
+		public NDObject
 	{
 		DECLARE_CLASS(NDSection)
 

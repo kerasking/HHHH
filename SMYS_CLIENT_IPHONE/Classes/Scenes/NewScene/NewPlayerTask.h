@@ -143,7 +143,7 @@ private:
 
 class NewPlayerTask : 
 public NDUILayer,
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate, ///< 临时性注释 郭浩
 public NDUIButtonDelegate,
 public TabLayerDelegate
 {
@@ -199,11 +199,9 @@ private:
 	static void ClearAccpetTaskList();
 };
 
-#pragma mark  日常任务
-
 class DailyTask :
 public NDUILayer,
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate, ///< 临时性注释 郭浩
 public NDUIButtonDelegate,
 public NDUITargetDelegate,
 public NDUIDialogDelegate

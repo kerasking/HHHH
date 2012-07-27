@@ -1,10 +1,3 @@
-//
-//  NDUILabel.h
-//  DragonDrive
-//
-//  Created by xiezhenghai on 10-12-29.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
 #ifndef __NDUILabel_H
 #define __NDUILabel_H
 

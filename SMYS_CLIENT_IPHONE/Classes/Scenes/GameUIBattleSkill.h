@@ -22,7 +22,7 @@ class SocialElement;
 
 class GameUIBattleSkill : 
 public NDUIMenuLayer,
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate, ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 public NDUIButtonDelegate
 {
 	DECLARE_CLASS(GameUIBattleSkill)

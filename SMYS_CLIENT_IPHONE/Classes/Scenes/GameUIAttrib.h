@@ -137,8 +137,8 @@ namespace NDEngine
 	public NDUILayer, 
 	public NDUIButtonDelegate, 
 	public NDUIDialogDelegate,
-	public NDPropSlideBarDelegate,
-	public NDUITableLayerDelegate
+	public NDPropSlideBarDelegate
+	//public NDUITableLayerDelegate ///< 临时性注释 郭浩
 	{
 		friend class AttrInfo;
 	public:

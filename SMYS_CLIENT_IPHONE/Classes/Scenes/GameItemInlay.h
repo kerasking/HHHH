@@ -21,7 +21,10 @@
 
 using namespace NDEngine;
 
-class GameInlayScene : public NDScene, public NDUIButtonDelegate, public NDUITableLayerDelegate
+class GameInlayScene : 
+	public NDScene, 
+	public NDUIButtonDelegate
+	//public NDUITableLayerDelegate ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 {
 public:
 	DECLARE_CLASS(GameInlayScene)

@@ -29,7 +29,7 @@ enum
 class GoodFriendUILayer :
 public NDUIMenuLayer,
 public NDUIButtonDelegate,
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate, ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 public NDUICustomViewDelegate,
 public IPageButtonDelegate
 {

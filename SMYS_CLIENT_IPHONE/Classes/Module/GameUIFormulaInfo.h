@@ -81,7 +81,7 @@ public:
 
 class FormulaInfoDialog : 
 public NDUILayer, 
-public NDUITableLayerDelegate,
+//public NDUITableLayerDelegate, ///< 临时性注释 郭浩
 public FormulaInfoDelegate
 {
 	DECLARE_CLASS(FormulaInfoDialog)

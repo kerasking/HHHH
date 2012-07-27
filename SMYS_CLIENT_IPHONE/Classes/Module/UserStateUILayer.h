@@ -44,8 +44,8 @@ typedef MAP_USER_STATE::iterator MAP_USER_STATE_IT;
 
 class UserStateUILayer :
 public NDUIMenuLayer,
-public NDUIButtonDelegate,
-public NDUITableLayerDelegate
+public NDUIButtonDelegate
+//public NDUITableLayerDelegate ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 {
 	DECLARE_CLASS(UserStateUILayer)
 public:
