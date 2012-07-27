@@ -38,7 +38,7 @@
 #include "GameUIPlayerList.h"
 #include "GameUIRequest.h"
 #include "GoodFriendUILayer.h"
-#include "GameUIPaiHang.h"
+//#include "GameUIPaiHang.h" ///< 临时性注释 郭浩
 #include "TutorUILayer.h"
 #include "GameUINpcStore.h"
 #include "UserStateUILayer.h"
@@ -2642,14 +2642,22 @@ void GameScene::ShowUIPaiHang()
 	NDNode *node = scene->GetChild(UILAYER_PAIHANG_TAG);
 	if (!node) 
 	{
-		GameUIPaiHang *paihang = new GameUIPaiHang;
-		paihang->Initialization();
-		scene->AddChild(paihang, UILAYER_Z, UILAYER_PAIHANG_TAG);
+		/***
+		* 临时性注释 郭浩
+		* begin
+		*/
+// 		GameUIPaiHang *paihang = new GameUIPaiHang;
+// 		paihang->Initialization();
+// 		scene->AddChild(paihang, UILAYER_Z, UILAYER_PAIHANG_TAG);
+		/***
+		* 临时性注释 郭浩
+		* end
+		*/
 		//CloseProgressBar;
 	}
 	else
 	{
-		((GameUIPaiHang*)node)->UpdateMainUI();
+		//((GameUIPaiHang*)node)->UpdateMainUI(); ///< 临时性注释 郭浩
 	}
 	((GameScene*)scene)->SetUIShow(true);
 }

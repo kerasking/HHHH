@@ -253,59 +253,66 @@ void WorldMapGoto(int nMapId, LuaObject tFilter)
     
 void FastRegister()
 {
-    NDBeforeGameMgrObj.FastGameOrRegister(1);
+//    NDBeforeGameMgrObj.FastGameOrRegister(1); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 }
     
 ////////////////////////////////////////////////
 std::string GetFastAccount()
 {
-    return NDBeforeGameMgrObj.GetUserName();
+//    return NDBeforeGameMgrObj.GetUserName(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	return std::string("");
 }
 ////////////////////////////////////////////////
 std::string GetFastPwd()
 {
-    return NDBeforeGameMgrObj.GetPassWord();
+//    return NDBeforeGameMgrObj.GetPassWord(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	return std::string("");
 }
     
 ///////////////////////////////////////////////
 bool SwichKeyToServer(const char* pszIp, int nPort, const char* pszAccountName, const char* pszPwd, const char* pszServerName)
 {
-    return NDBeforeGameMgrObj.SwichKeyToServer(pszIp,nPort,pszAccountName,pszPwd,pszServerName);
+//    return NDBeforeGameMgrObj.SwichKeyToServer(pszIp,nPort,pszAccountName,pszPwd,pszServerName); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	return true;
 }
     
 ///////////////////////////////////////////////
 void SetRole(unsigned long ulLookFace, const char* pszRoleName, int nProfession)
 {
-    NDBeforeGameMgrObj.SetRole(ulLookFace, pszRoleName, nProfession);
+//    NDBeforeGameMgrObj.SetRole(ulLookFace, pszRoleName, nProfession);///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 }
     
 ///////////////////////////////////////////////
 bool LoginByLastData(void)
 {
-    return NDBeforeGameMgrObj.LoginByLastData();
+//    return NDBeforeGameMgrObj.LoginByLastData();///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	return true;
 }
     
 //////////////////////////////////////////////
 int GetAccountListNum(void)
 {
-    return NDBeforeGameMgrObj.GetAccountListNum();
+//    return NDBeforeGameMgrObj.GetAccountListNum();///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	return 0;
 }
     
 //////////////////////////////////////////////
 const char* GetRecAccountNameByIdx(int idx)
 {
-    return NDBeforeGameMgrObj.GetRecAccountNameByIdx(idx);
+//    return NDBeforeGameMgrObj.GetRecAccountNameByIdx(idx);///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	return 0;
 }
     
 //////////////////////////////////////////////
 const char* GetRecAccountPwdByIdx(int idx)
 {
-    return NDBeforeGameMgrObj.GetRecAccountPwdByIdx(idx);
+//    return NDBeforeGameMgrObj.GetRecAccountPwdByIdx(idx);///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	return 0;
 }
     
 void    CreateRole(const char* pszName, Byte nProfession, int nLookFace, const char* pszAccountName)
 {
-    return NDBeforeGameMgrObj.CreateRole(pszName,nProfession, nLookFace, pszAccountName);
+ //   return NDBeforeGameMgrObj.CreateRole(pszName,nProfession, nLookFace, pszAccountName);///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 }
     
 ///////////////////////////////////////////////

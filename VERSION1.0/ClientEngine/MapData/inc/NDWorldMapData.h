@@ -21,8 +21,8 @@ class PlaceNode : public cocos2d::CCObject
 	CC_SYNTHESIZE(int, m_nRDir, RDir)
 	CC_SYNTHESIZE(int, m_nTDir, TDir)
 	CC_SYNTHESIZE(int, m_nBDir, BDir)
-	CC_PROPERTY(std::string, m_Name, Name)
-	CC_PROPERTY(std::string, m_Description, Description)
+	CC_SYNTHESIZE(std::string, m_Name, Name)
+	CC_SYNTHESIZE(std::string, m_Description, Description)
 
 public:
 	PlaceNode();
