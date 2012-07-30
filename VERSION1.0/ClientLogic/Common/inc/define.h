@@ -39,6 +39,10 @@
 #define NO false
 #endif
 
+#ifndef nil
+	#define nil 0
+#endif
+
 typedef unsigned int UInt32;
 typedef unsigned short UInt16;
 typedef unsigned char UInt8;

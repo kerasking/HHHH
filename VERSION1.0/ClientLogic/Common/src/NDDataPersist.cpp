@@ -14,10 +14,20 @@
 
 NSString* DataFilePath()
 {
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex:0]; 
-	return [[documentsDirectory stringByAppendingPathComponent:@"/DragonDrive"] 
-								stringByAppendingPathComponent:@"/DragonDrive_" ];
+	/***
+	* 临时性注释 郭浩
+	* begin
+	*/
+// 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+// 	NSString *documentsDirectory = [paths objectAtIndex:0]; 
+// 	return [[documentsDirectory stringByAppendingPathComponent:@"/DragonDrive"] 
+// 								stringByAppendingPathComponent:@"/DragonDrive_" ];
+	/***
+	* 临时性注释
+	* end
+	*/
+
+	return CCString("");
 }
 
 
@@ -114,17 +124,24 @@ NDDataPersist::NDDataPersist()
 
 NDDataPersist::~NDDataPersist()
 {
-	[dataArray release];
-	[accountList release];
-	[accountDeviceList release];
+// 	[dataArray release];
+// 	[accountList release];
+// 	[accountDeviceList release];
 }
 
 bool NDDataPersist::NeedEncodeForKey(NSString* key)
 {
-	if ([key isEqual:kLastServerIP] || [key isEqual:kLastServerPort] || [key isEqual:kLastAccountName] || [key isEqual:kLastAccountPwd])
+	if (key->isEqual(kLastServerIP) ||
+		key->isEqual(kLastServerPort) ||
+		key->isEqual(kLastAccountName) ||
+		key->isEqual(kLastAccountPwd))
+	{
 		return true;
-	else 
+	}
+	else
+	{
 		return false;
+	}
 }
 
 void NDDataPersist::SetData(uint index, NSString* key, const char* data)
@@ -149,12 +166,13 @@ void NDDataPersist::SetData(uint index, NSString* key, const char* data)
 
 const char* NDDataPersist::GetData(uint index, NSString* key)
 {
-	static char decData[1024];
+	static char decData[1024] = {0};
 	memset(decData, 0x00, sizeof(decData));
 	
-	NSMutableDictionary *dic = this->LoadDataDiction(index);
+	CCMutableDictionary<const char*>* dic = LoadDataDiction(index);
 	NDAsssert(dic != nil);
-	NSString *nsStr= [dic objectForKey:key];
+	NSString* nsStr = dic->objectForKey(key);
+
 	if (nsStr == nil) // 键值对不存在, 加入
 	{ 
 		SetData(index, key, "");
@@ -164,12 +182,13 @@ const char* NDDataPersist::GetData(uint index, NSString* key)
 	{
 		if (NeedEncodeForKey(key)) 
 		{			
-			simpleDecode((const unsigned char*)[nsStr UTF8String], (unsigned char*)decData);
+			//simpleDecode((const unsigned char*)[nsStr UTF8String], (unsigned char*)decData);
+			simpleDecode((const unsigned char*)nsStr->toStdString().c_str(),(unsigned char*)decData);
 			return decData;
 		}
 		else 
 		{
-			return [nsStr UTF8String];
+			return nsStr->toStdString().c_str();
 		}
 	}	
 }
@@ -184,24 +203,26 @@ void NDDataPersist::SaveLoginData()
 	this->SaveData();
 }
 
-CCArray* NDDataPersist::LoadDataDiction(unsigned int index)
+CCMutableDictionary<const char*>* NDDataPersist::LoadDataDiction(unsigned int index)
 {
 	NDAsssert(dataArray != nil);
 	
-	NSMutableDictionary* dic = nil;
+	CCMutableDictionary<const char*>* dic = nil;
 	
-	if ([dataArray count] > index)
+	if (dataArray->count() > index)
 	{
-		dic = (NSMutableDictionary*)[dataArray objectAtIndex:index];
+		dic = (CCMutableDictionary<const char*>*)dataArray->objectAtIndex(index);
 	}
 	
 	if (dic == nil)
 	{ // 数据不存在,初始化
-		for (uint i = [dataArray count]; i <= index; i++) 
+		for (unsigned int i = dataArray->count(); i <= index; i++) 
 		{
-			dic = [[NSMutableDictionary alloc] init];
-			[dataArray insertObject:dic atIndex:i];
-			[dic release];
+			dic = new CCMutableDictionary<const char*>;
+			dataArray->insertObject(dic);
+			SAFE_DELETE(dic);
+// 			[dataArray insertObject:dic atIndex:i];
+// 			[dic release];
 		}
 	}
 	
@@ -210,26 +231,28 @@ CCArray* NDDataPersist::LoadDataDiction(unsigned int index)
 
 void NDDataPersist::LoadData()
 {
-	NSString *filePath = this->GetDataPath();
-	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
-	{ 
-		dataArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
-		const char* pszGameSetting = this->GetData(kGameSettingData, kGameSetting);
-
-		if (pszGameSetting) 
-		{ // 已经存储
-			NDDataPersist::s_gameSetting = atoi(pszGameSetting);
-		}
-	}
-	else
-	{
-		dataArray = [[NSMutableArray alloc] init];
-	}
+// 	NSString *filePath = this->GetDataPath();
+// 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+// 	{ 
+// 		dataArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
+// 		const char* pszGameSetting = this->GetData(kGameSettingData, kGameSetting);
+// 
+// 		if (pszGameSetting) 
+// 		{ // 已经存储
+// 			NDDataPersist::s_gameSetting = atoi(pszGameSetting);
+// 		}
+// 	}
+// 	else
+// 	{
+// 		dataArray = [[NSMutableArray alloc] init];
+// 	}
 }
 
 NSString* NDDataPersist::GetDataPath()
 {
-	NSString* dir = [kDataFileName stringByDeletingLastPathComponent] ;
+//	NSString* dir = [kDataFileName stringByDeletingLastPathComponent];
+	NSString* dir = new NSString("");
+
 	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
 	{
 		if (!KDirectory::createDir([dir UTF8String]))
@@ -281,10 +304,12 @@ void NDDataPersist::AddAcount(const char* account, const char* pwd)
 		unsigned char encAccount[1024] = {0x00};
 		simpleEncode((const unsigned char*)account, encAccount);
 		
-		NSMutableArray *accountNode = [[NSMutableArray alloc] init];		
-		[accountNode addObject:[NSString stringWithUTF8String:(const char*)encAccount]];
+		CCMutableArray *accountNode = new CCMutableArray;
+
+		accountNode->addObject(NSString((const char*)encAccount));
+		//[accountNode addObject:[NSString stringWithUTF8String:(const char*)encAccount]];
 		
-		if (pwd) 
+		if (pwd)
 		{
 			unsigned char encPwd[1024] = {0x00};
 			simpleEncode((const unsigned char*)pwd, encPwd);
@@ -293,8 +318,8 @@ void NDDataPersist::AddAcount(const char* account, const char* pwd)
 		
 		for (NSUInteger i = 0; i < [accountList count]; i++) 
 		{
-			NSArray *tmpAccountNode = [accountList objectAtIndex:i];
-			NSString *tmpAccount = [tmpAccountNode objectAtIndex:0];
+			CCArray* tmpAccountNode = accountList->objectAtIndex(i);
+			NSString *tmpAccount = tmpAccountNode->objectAtIndex(0);
 			if ([tmpAccount isEqual:[NSString stringWithUTF8String:(const char*)encAccount]]) 
 			{
 				[accountList removeObject:tmpAccountNode];

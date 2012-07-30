@@ -31,14 +31,14 @@
 //#define kDataFileName [NSString stringWithFormat:@"%@data.plist", DataFilePath()]
 //
 //// 上次登录信息
-//#define kLoginData 0
-//#define kLastServerName @"LastServerName"
-//#define kLastServerIP @"LastServerIP"
-//#define kLastServerPort @"LastServerPort"
-//#define kLastAccountName @"LastAccountName"
-//#define kLastAccountPwd @"LastAccountPwd"
-//#define kLastServerSendName @"LastServerSendName"
-//#define kLinkType @"LinkType"
+#define kLoginData 0
+#define kLastServerName "LastServerName"
+#define kLastServerIP "LastServerIP"
+#define kLastServerPort "LastServerPort"
+#define kLastAccountName "LastAccountName"
+#define kLastAccountPwd "LastAccountPwd"
+#define kLastServerSendName "LastServerSendName"
+#define kLinkType "LinkType"
 //
 //// 游戏设置
 //#define kGameSettingData 1
@@ -46,10 +46,10 @@
 //
 //#ifdef CPLOG
 //
-//// cpLog配置信息
-//#define kCpLogData 2
-//#define kCpLogServerIP @"CpLogServerIP"
-//#define kCpLogServerPort @"CpLogServerPort"
+// cpLog配置信息
+#define kCpLogData 2
+#define kCpLogServerIP "CpLogServerIP"
+#define kCpLogServerPort "CpLogServerPort"
 //
 //#endif
 //
@@ -98,12 +98,8 @@ public:
 	void SaveGameSetting();
 	void SaveLoginData();
 	
-	/***
-	* 临时性注释 郭浩 begin
-	*/
-// 	void SetData(uint index, NSString* key, const char* data);
-// 	const char* GetData(uint index, NSString* type);
-	///< end
+ 	void SetData(uint index, NSString* key, const char* data);
+ 	const char* GetData(uint index, NSString* type);
 
 	void AddAcount(const char* account, const char* pwd);
 	void GetAccount(VEC_ACCOUNT& vAccount);
@@ -128,7 +124,7 @@ private:
 	NSString* GetDataPath();
 	
 	// 获取配置信息
-	CCArray* LoadDataDiction(unsigned int index);
+	CCMutableDictionary<const char*>* LoadDataDiction(unsigned int index);
 	
 	void LoadAccountList();
 	NSString* GetAccountListPath();
