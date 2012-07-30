@@ -2,7 +2,7 @@
 #define __KT_DIRECTORY_H
 
 #include <sys/types.h>
-#include <dirent.h>
+//#include <dirent.h>
 #include <vector>
 #include "KData.h"
 #include "KFile.h"

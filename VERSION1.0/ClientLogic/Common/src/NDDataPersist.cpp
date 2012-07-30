@@ -14,7 +14,7 @@
 
 NSString* DataFilePath()
 {
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0]; 
 	return [[documentsDirectory stringByAppendingPathComponent:@"/DragonDrive"] 
 								stringByAppendingPathComponent:@"/DragonDrive_" ];
@@ -184,18 +184,21 @@ void NDDataPersist::SaveLoginData()
 	this->SaveData();
 }
 
-NSMutableDictionary* NDDataPersist::LoadDataDiction(uint index)
+CCArray* NDDataPersist::LoadDataDiction(unsigned int index)
 {
 	NDAsssert(dataArray != nil);
 	
 	NSMutableDictionary* dic = nil;
 	
-	if ([dataArray count] > index) {
+	if ([dataArray count] > index)
+	{
 		dic = (NSMutableDictionary*)[dataArray objectAtIndex:index];
 	}
 	
-	if (dic == nil) { // 数据不存在,初始化
-		for (uint i = [dataArray count]; i <= index; i++) {
+	if (dic == nil)
+	{ // 数据不存在,初始化
+		for (uint i = [dataArray count]; i <= index; i++) 
+		{
 			dic = [[NSMutableDictionary alloc] init];
 			[dataArray insertObject:dic atIndex:i];
 			[dic release];
@@ -212,7 +215,9 @@ void NDDataPersist::LoadData()
 	{ 
 		dataArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
 		const char* pszGameSetting = this->GetData(kGameSettingData, kGameSetting);
-		if (pszGameSetting) { // 已经存储
+
+		if (pszGameSetting) 
+		{ // 已经存储
 			NDDataPersist::s_gameSetting = atoi(pszGameSetting);
 		}
 	}

@@ -59,6 +59,7 @@
 using std::string;
 using std::pair;
 using std::vector;
+using namespace cocos2d;
 
 typedef pair<string, string> PAIR_ACCOUNT;
 typedef vector<PAIR_ACCOUNT> VEC_ACCOUNT;
@@ -127,7 +128,7 @@ private:
 	NSString* GetDataPath();
 	
 	// 获取配置信息
-	CCArray* LoadDataDiction(uint index);
+	CCArray* LoadDataDiction(unsigned int index);
 	
 	void LoadAccountList();
 	NSString* GetAccountListPath();
