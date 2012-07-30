@@ -11,11 +11,15 @@
  *
  */
 
-//#ifndef __ND_DATA_PERSIST_H__
-//#define __ND_DATA_PERSIST_H__
-//
-//#include <string>
-//#include <vector>
+#ifndef NDDATAPERSIST_H
+#define NDDATAPERSIST_H
+
+#include <string>
+#include <vector>
+
+#include <cocos2d.h>
+#include "define.h"
+
 //#include "Singleton.h"
 //
 //#ifdef DataFilePath
@@ -51,28 +55,29 @@
 //
 //#define kFavoriteAccountListFileName [NSString stringWithFormat:@"%@accountList.plist", DataFilePath()]
 //#define kFavoriteAccountDeviceListFileName [NSString stringWithFormat:@"%@accountDeviceList.plist", DataFilePath()]
-//
-//using std::string;
-//using std::pair;
-//using std::vector;
-//
-//typedef pair<string, string> PAIR_ACCOUNT;
-//typedef vector<PAIR_ACCOUNT> VEC_ACCOUNT;
-//typedef VEC_ACCOUNT::iterator VEC_ACCOUNT_IT;
-//typedef VEC_ACCOUNT::reverse_iterator VEC_ACCOUNT_REVERSE_IT;
-//
-//enum GAME_SETTING {
-//	GS_SHOW_HEAD = 0x01,
-//	GS_SHOW_MINI_MAP = 0x02,
-//	GS_SHOW_WORLD_CHAT = 0x04,
-//	GS_SHOW_SYN_CHAT = 0x08,
-//	GS_SHOW_TEAM_CHAT = 0x10,
-//	GS_SHOW_AREA_CHAT = 0x20,
-//	GS_SHOW_NAME = 0x40,
-//	GS_SHOW_OTHER_PLAYER = 0x80,
-//	GS_SHOW_DIRECT_KEY = 0x100,
-//};
-//
+
+using std::string;
+using std::pair;
+using std::vector;
+
+typedef pair<string, string> PAIR_ACCOUNT;
+typedef vector<PAIR_ACCOUNT> VEC_ACCOUNT;
+typedef VEC_ACCOUNT::iterator VEC_ACCOUNT_IT;
+typedef VEC_ACCOUNT::reverse_iterator VEC_ACCOUNT_REVERSE_IT;
+
+enum GAME_SETTING 
+{
+	GS_SHOW_HEAD = 0x01,
+	GS_SHOW_MINI_MAP = 0x02,
+	GS_SHOW_WORLD_CHAT = 0x04,
+	GS_SHOW_SYN_CHAT = 0x08,
+	GS_SHOW_TEAM_CHAT = 0x10,
+	GS_SHOW_AREA_CHAT = 0x20,
+	GS_SHOW_NAME = 0x40,
+	GS_SHOW_OTHER_PLAYER = 0x80,
+	GS_SHOW_DIRECT_KEY = 0x100,
+};
+
 //void simpleDecode(const unsigned char *src, unsigned char *dest);
 //void simpleEncode(const unsigned char *src, unsigned char *dest);
 //
@@ -109,11 +114,11 @@ public:
 	
 private:
 	// 上次登录帐号，密码及服务器地址, 游戏设置
-	NSMutableArray *dataArray;
+	CCArray *dataArray;
 	// 常用帐号列表
-	NSMutableArray *accountList;
+	CCArray *accountList;
 	
-	NSMutableArray *accountDeviceList;
+	CCArray *accountDeviceList;
 	
 	static int s_gameSetting;
 	
@@ -122,7 +127,7 @@ private:
 	NSString* GetDataPath();
 	
 	// 获取配置信息
-	NSMutableDictionary* LoadDataDiction(uint index);
+	CCArray* LoadDataDiction(uint index);
 	
 	void LoadAccountList();
 	NSString* GetAccountListPath();
@@ -276,4 +281,4 @@ private:
 //	void IncPlayerQuestCount(int playerId);
 //};
 //
-//#endif
+#endif

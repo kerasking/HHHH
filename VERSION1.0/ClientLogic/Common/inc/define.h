@@ -39,9 +39,11 @@
 #define NO false
 #endif
 
-typedef unsigned int UInt32 ;
-typedef unsigned short UInt16 ;
-typedef unsigned char UInt8 ;
+typedef unsigned int UInt32;
+typedef unsigned short UInt16;
+typedef unsigned char UInt8;
+
+#define NSString cocos2d::CCString
 
 #define SAFE_DELETE(pObject)\
 do \

@@ -51,10 +51,13 @@ CSMLoginScene::Initialization()
 	m_layer->Initialization();
 	m_layer->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
 	this->AddChild(m_layer);
+
     NDUILoad ui;
+
 	ui.Load("Loading.ini", m_layer, this, CGSizeMake(0, 37));
     CUIExp* pProcess = (CUIExp*)m_layer->GetChild(ID_LOADING_PROCESS);
-    if (!pProcess) {
+    if (!pProcess) 
+	{
         return;
     }
     
@@ -237,7 +240,7 @@ int InitGameInstance()
 	BattleMgr battleMgr;
 	//ItemMgr itemMgr; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	NDColorPool colorPool;
-	//NDDataPersist::LoadGameSetting(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	NDDataPersist::LoadGameSetting(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	//NDFarmMgrObj;
 	//BattleFieldMgrObj;
 	

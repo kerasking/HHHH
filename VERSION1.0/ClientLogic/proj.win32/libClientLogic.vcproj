@@ -869,6 +869,14 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\Common\src\NDDataPersist.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\Common\inc\NDDataPersist.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
