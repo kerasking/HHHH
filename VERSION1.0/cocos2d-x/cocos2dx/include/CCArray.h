@@ -87,6 +87,8 @@ public:
 	/** Returns a Boolean value that indicates whether object is present in array. */
     bool containsObject(CCObject* object);
 
+	bool writeToFile(CCString* path,bool bUseAuxiliaryFile);
+
     // Adding Objects
 
 	/** Add a certain object */
@@ -125,6 +127,7 @@ public:
     void reduceMemoryFootprint();
 
 public:
+
     ccArray* data;
 
 private:

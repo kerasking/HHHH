@@ -41,11 +41,13 @@
 #define NO false
 #endif
 
+#define NSUInteger int
+
 #ifndef nil
 	#define nil 0
 #endif
 
-typedef CCObject base,*id;
+typedef cocos2d::CCObject base,*id;
 typedef unsigned int UInt32;
 typedef unsigned short UInt16;
 typedef unsigned char UInt8;

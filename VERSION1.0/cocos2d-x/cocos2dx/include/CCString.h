@@ -27,6 +27,7 @@ THE SOFTWARE.
 #include <stdlib.h>
 #include "CCObject.h"
 #include "CCFileUtils.h"
+#include "..\platform\third_party\win32\iconv\iconv.h"
 
 namespace cocos2d {
 
@@ -44,9 +45,54 @@ namespace cocos2d {
 		}
 		virtual ~CCString(){ m_sString.clear(); }
 
-		const unsigned char* UTF8String()
+		/***
+		* @brief 返回转换成UTF8格式的字符
+		*
+		* @return const unsigned char* 返回UTF8指针
+		* @retval 0 空指针即为无法转换
+		* @author (DeNA)郭浩
+		* @date 20120731
+		*/
+		const char* UTF8String()
 		{
+			iconv_t pConvert = 0;
+			const char* pszInbuffer = m_sString.c_str();
+			char* pszOutBuffer = new char[2048];
 
+			memset(pszOutBuffer,0,sizeof(char) * 2048);
+
+			int nStatus = 0;
+			size_t sizOutBuffer = 2048;
+			size_t sizInBuffer = m_sString.length();
+			const char* pszInPtr = pszInbuffer;
+			size_t sizInSize = sizInBuffer;
+			char* pszOutPtr = pszOutBuffer;
+			size_t sizOutSize = sizOutBuffer;
+
+			pConvert = iconv_open("UTF-8","GB2312");
+
+			iconv(pConvert,0,0,0,0);
+
+			while (0 < sizInSize)
+			{
+				size_t sizRes = iconv(pConvert,(const char**)&pszInPtr,
+					&sizInSize,&pszOutPtr,&sizOutSize);
+
+				if (pszOutPtr != pszOutBuffer)
+				{
+					strncpy(pszOutBuffer,pszOutBuffer,sizOutSize);
+				}
+
+				if ((size_t)-1 == sizRes)
+				{
+					int nOne = 1;
+					iconvctl(pConvert,ICONV_SET_DISCARD_ILSEQ,&nOne);
+				}
+			}
+
+			iconv_close(pConvert);
+
+			return pszOutBuffer;
 		}
 		
 		int toInt()
@@ -104,6 +150,62 @@ namespace cocos2d {
             } while (false);
             return pszRet;
         }
+
+		/***
+		* @brief 根据UTF-8字符，转换成GB2312进行存储。
+		*
+		* @param pszUTF8 要传入的UTF8字符。
+		* @return CCString* 返回CCString类的指针
+		* @retval 0 空指针即为pszUTF8这个参数是有问题
+		* @author (DeNA)郭浩
+		* @date 20120731
+		*/
+		static CCString* stringWithUTF8String(const char* pszUTF8)
+		{
+			if (0 == pszUTF8 || !*pszUTF8)
+			{
+				return 0;
+			}
+
+			iconv_t pConvert = 0;
+			const char* pszInbuffer = pszUTF8;
+			char* pszOutBuffer = new char[2048];
+
+			memset(pszOutBuffer,0,sizeof(char) * 2048);
+
+			int nStatus = 0;
+			size_t sizOutBuffer = 2048;
+			size_t sizInBuffer = strlen(pszUTF8);
+			const char* pszInPtr = pszInbuffer;
+			size_t sizInSize = sizInBuffer;
+			char* pszOutPtr = pszOutBuffer;
+			size_t sizOutSize = sizOutBuffer;
+
+			pConvert = iconv_open("GB2312","UTF-8");
+
+			iconv(pConvert,0,0,0,0);
+
+			while (0 < sizInSize)
+			{
+				size_t sizRes = iconv(pConvert,(const char**)&pszInPtr,
+					&sizInSize,&pszOutPtr,&sizOutSize);
+
+				if (pszOutPtr != pszOutBuffer)
+				{
+					strncpy(pszOutBuffer,pszOutBuffer,sizOutSize);
+				}
+
+				if ((size_t)-1 == sizRes)
+				{
+					int nOne = 1;
+					iconvctl(pConvert,ICONV_SET_DISCARD_ILSEQ,&nOne);
+				}
+			}
+
+			iconv_close(pConvert);
+
+			return new CCString(pszOutBuffer);
+		}
 
 		/***
 		* @brief 为了符合Objective-C语言上NSString的一些结构，所以对CCString

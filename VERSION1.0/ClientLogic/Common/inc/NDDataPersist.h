@@ -98,8 +98,8 @@ public:
 	void SaveGameSetting();
 	void SaveLoginData();
 	
- 	void SetData(uint index, NSString* key, const char* data);
- 	const char* GetData(uint index, NSString* type);
+ 	void SetData(unsigned int index, NSString* key, const char* data);
+ 	const char* GetData(unsigned int index, NSString* type);
 
 	void AddAcount(const char* account, const char* pwd);
 	void GetAccount(VEC_ACCOUNT& vAccount);

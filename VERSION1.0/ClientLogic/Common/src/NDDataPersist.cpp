@@ -27,7 +27,7 @@ NSString* DataFilePath()
 	* end
 	*/
 
-	return CCString("");
+	return new CCString("");
 }
 
 
@@ -144,9 +144,9 @@ bool NDDataPersist::NeedEncodeForKey(NSString* key)
 	}
 }
 
-void NDDataPersist::SetData(uint index, NSString* key, const char* data)
+void NDDataPersist::SetData(unsigned int index, NSString* key, const char* data)
 {
-	NSMutableDictionary *dic = this->LoadDataDiction(index);
+	CCMutableDictionary<const char*>* dic = LoadDataDiction(index);
 	NDAsssert(dic != nil);
 	if (data) 
 	{
@@ -156,15 +156,17 @@ void NDDataPersist::SetData(uint index, NSString* key, const char* data)
 		{
 			unsigned char encData[1024] = {0x00};
 			simpleEncode((const unsigned char*)data, encData);
-			nsObj = [NSString stringWithUTF8String:(const char*)encData];
+			nsObj = NSString::stringWithUTF8String((const char*)encData);
+			//nsObj = [NSString stringWithUTF8String:(const char*)encData];
 		}
 		
-		[dic setObject:nsObj forKey:key];
+		//[dic setObject:nsObj forKey:key];
+		dic->setObject(nsObj,key);
 	}
 	
 }
 
-const char* NDDataPersist::GetData(uint index, NSString* key)
+const char* NDDataPersist::GetData(unsigned int index, NSString* key)
 {
 	static char decData[1024] = {0};
 	memset(decData, 0x00, sizeof(decData));
@@ -183,7 +185,7 @@ const char* NDDataPersist::GetData(uint index, NSString* key)
 		if (NeedEncodeForKey(key)) 
 		{			
 			//simpleDecode((const unsigned char*)[nsStr UTF8String], (unsigned char*)decData);
-			simpleDecode((const unsigned char*)nsStr->toStdString().c_str(),(unsigned char*)decData);
+			simpleDecode((const unsigned char*)nsStr->UTF8String(),(unsigned char*)decData);
 			return decData;
 		}
 		else 
@@ -462,11 +464,17 @@ void NDDataPersist::AddAccountDevice(const char* account)
 		
 		for (NSUInteger i = 0; i < [accountList count]; i++) 
 		{
-			NSString* tmpAccountNode = (NSString*)[accountList objectAtIndex:i];
-			if ([tmpAccountNode isEqual:[NSString stringWithUTF8String:(const char*)encAccount]]) 
+			NSString* tmpAccountNode = (NSString*)accountList->objectAtIndex(i);
+
+			if (tmpAccountNode->isEqual(NSString::stringWithUTF8String((const char*)encAccount)))
 			{
 				return;
 			}
+
+// 			if ([tmpAccountNode isEqual:[NSString stringWithUTF8String:(const char*)encAccount]]) 
+// 			{
+// 				return;
+// 			}
 		}
 		
 		[accountDeviceList addObject:[NSString stringWithUTF8String:(const char*)encAccount]];
@@ -501,14 +509,17 @@ bool NDDataPersist::HasAccountDevice(const char* account)
 
 void NDDataPersist::SaveAccountDeviceList()
 {
-	[accountDeviceList writeToFile:this->GetAccountDeviceListPath() atomically:YES];
+	//[accountDeviceList writeToFile:this->GetAccountDeviceListPath() atomically:YES];
 }
 
 void NDDataPersist::SetGameSetting(GAME_SETTING type, bool bOn)
 {
-	if (bOn) {
+	if (bOn) 
+	{
 		s_gameSetting |= type;
-	} else {
+	} 
+	else
+	{
 		s_gameSetting &= ~type;
 	}
 }
@@ -522,9 +533,15 @@ void NDDataPersist::SaveGameSetting()
 {
 	NSString* strGameSetting = NSString::stringWithFormat("%d",s_gameSetting);
 
-	NSString* strGameSetting = [NSString stringWithFormat:@"%d", s_gameSetting];
-	this->SetData(kGameSettingData, kGameSetting, [strGameSetting UTF8String]);
-	this->SaveData();
+	SetData(kGameSettingData,kGameSetting,strGameSetting->UTF8String());
+	SaveData();
+
+	/***
+	* 以下为旧代码 郭浩
+	*/
+// 	NSString* strGameSetting = [NSString stringWithFormat:@"%d", s_gameSetting];
+// 	this->SetData(kGameSettingData, kGameSetting, [strGameSetting UTF8String]);
+// 	this->SaveData();
 }
 
 ///////////////////////////////////////
@@ -533,793 +550,793 @@ void NDDataPersist::SaveGameSetting()
 const NSUInteger max_player_save_count = 5;
 const NSUInteger max_mail_save_count = 20;
 
-NDEmailDataPersist* NDEmailDataPersist::s_intance = NULL;
-
-NDEmailDataPersist::NDEmailDataPersist()
-{
-	NDAsssert(s_intance == NULL);
-	LoadEmailData();
-}
-
-NDEmailDataPersist::~NDEmailDataPersist()
-{
-	SaveEmailData();
-	
-	if (emailArray) 
-	{
-		[emailArray release];
-		emailArray = nil;
-	}
-}
-
-NDEmailDataPersist& NDEmailDataPersist::DefaultInstance()
-{
-	if (s_intance == NULL) 
-	{
-		s_intance =  new NDEmailDataPersist;
-	}
-	
-	return *s_intance;
-}
-
-void NDEmailDataPersist::Destroy()
-{
-	if (s_intance != NULL) 
-	{
-		delete s_intance;
-		s_intance = NULL;
-	}
-}
-
-string NDEmailDataPersist::GetEmailState(int playerid,string mail)
-{
-	if (mail.empty()) 
-	{
-		return "";
-	}
-	
-	NSMutableDictionary *dic = this->LoadMailDiction();
-	NDAsssert(dic != nil);
-	
-	NSString *strPlayer= [NSString stringWithFormat:@"%d", playerid];
-	NSMutableDictionary *playermail = [dic objectForKey:strPlayer];
-	if (playermail == nil) {
-		return "";
-	}
-	
-	NSString *nsStr= [playermail objectForKey:[NSString stringWithUTF8String:mail.c_str()]];
-	if (nsStr == nil) {
-		return "";
-	}
-	
-	return [nsStr UTF8String];
-}
-
-void NDEmailDataPersist::AddEmail(int playerid,string mail, string state)
-{
-	if (mail.empty()) 
-	{
-		return;
-	}
-	
-	NSMutableDictionary *dic = this->LoadMailDiction();
-	NDAsssert(dic != nil);
-	
-	NSString *strPlayer= [NSString stringWithFormat:@"%d", playerid];
-	NSMutableDictionary *playermail = [dic objectForKey:strPlayer];
-	if (playermail == nil) {
-		if ([dic count] > max_player_save_count) {
-			NSEnumerator *enumerator;
-			enumerator = [dic keyEnumerator];
-			id key;
-			while ((key = [enumerator nextObject]) != nil) {
-				
-				[dic removeObjectForKey:key];
-				break;
-			}
-			
-		}
-		playermail = [[NSMutableDictionary alloc] init];
-		[dic setObject:playermail forKey:strPlayer];
-		[playermail release];
-	}
-	
-	if ([playermail count] > max_mail_save_count) {
-		NSEnumerator *enumerator;
-		enumerator = [playermail keyEnumerator];
-		id key;
-		while ((key = [enumerator nextObject]) != nil) {
-			
-			[playermail removeObjectForKey:key];
-			break;
-		}
-		
-	}
-	
-	[playermail setObject:[NSString stringWithUTF8String:state.c_str()]
-				forKey:[NSString stringWithUTF8String:mail.c_str()]];
-
-}
-
-void NDEmailDataPersist::DelEmail(int playerid,string mail)
-{
-	if (mail.empty()) 
-	{
-		return;
-	}
-	
-	NSMutableDictionary *dic = this->LoadMailDiction();
-	NDAsssert(dic != nil);
-	
-	NSString *strPlayer= [NSString stringWithFormat:@"%d", playerid];
-	NSMutableDictionary *playermail = [dic objectForKey:strPlayer];
-	if (playermail == nil) {
-		return;
-	}
-	
-	[playermail removeObjectForKey:[NSString stringWithUTF8String:mail.c_str()]];
-}
-
-void NDEmailDataPersist::LoadEmailData()
-{
-	NSString* filePath = GetEmailPath();
-	if (!filePath) 
-	{
-		emailArray = [[NSMutableArray alloc] init];
-		return;
-	}
-	
-	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
-	{ 
-		emailArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
-	}
-	else
-	{
-		emailArray = [[NSMutableArray alloc] init];
-	}
-	
-}
-
-void NDEmailDataPersist::SaveEmailData()
-{
-	NSString* filePath = GetEmailPath();
-	if (filePath) 
-	{
-		[emailArray writeToFile:filePath atomically:YES];
-	}
-	
-	[emailArray release];
-	emailArray = nil;
-}
-
-NSString* NDEmailDataPersist::GetEmailPath()
-{
-	NSString* dir = [kEmailFileName stringByDeletingLastPathComponent] ;
-	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
-	{
-		if (!KDirectory::createDir([dir UTF8String]))
-		{
-			return nil;
-		}
-	}
-	return kEmailFileName;
-//	if (!file) 
+//NDEmailDataPersist* NDEmailDataPersist::s_intance = NULL;
+//
+//NDEmailDataPersist::NDEmailDataPersist()
+//{
+//	NDAsssert(s_intance == NULL);
+//	LoadEmailData();
+//}
+//
+//NDEmailDataPersist::~NDEmailDataPersist()
+//{
+//	SaveEmailData();
+//	
+//	if (emailArray) 
 //	{
-//		return nil;
+//		[emailArray release];
+//		emailArray = nil;
+//	}
+//}
+//
+//NDEmailDataPersist& NDEmailDataPersist::DefaultInstance()
+//{
+//	if (s_intance == NULL) 
+//	{
+//		s_intance =  new NDEmailDataPersist;
 //	}
 //	
-//	NSArray *paths = NSSearchPathForDirectoriesInDomains( 
-//														 NSDocumentDirectory, NSUserDomainMask, YES); 
-//	NSString *documentsDirectory = [paths objectAtIndex:0]; 
-//	return [documentsDirectory stringByAppendingPathComponent:file];
-}
-
-NSMutableDictionary* NDEmailDataPersist::LoadMailDiction()
-{
-	NDAsssert(emailArray != nil);
-	
-	NSMutableDictionary* dic = nil;
-	
-	if ([emailArray count] > 0) {
-		NDAsssert([emailArray count] == 1);
-		dic = (NSMutableDictionary*)[emailArray objectAtIndex:0];
-	}
-	
-	if (dic == nil) { // 数据不存在,初始化
-			dic = [[NSMutableDictionary alloc] init];
-			[emailArray addObject:dic];
-			[dic release];
-	}
-	
-	return dic;
-}
+//	return *s_intance;
+//}
+//
+//void NDEmailDataPersist::Destroy()
+//{
+//	if (s_intance != NULL) 
+//	{
+//		delete s_intance;
+//		s_intance = NULL;
+//	}
+//}
+//
+//string NDEmailDataPersist::GetEmailState(int playerid,string mail)
+//{
+//	if (mail.empty()) 
+//	{
+//		return "";
+//	}
+//	
+//	NSMutableDictionary *dic = this->LoadMailDiction();
+//	NDAsssert(dic != nil);
+//	
+//	NSString *strPlayer= [NSString stringWithFormat:@"%d", playerid];
+//	NSMutableDictionary *playermail = [dic objectForKey:strPlayer];
+//	if (playermail == nil) {
+//		return "";
+//	}
+//	
+//	NSString *nsStr= [playermail objectForKey:[NSString stringWithUTF8String:mail.c_str()]];
+//	if (nsStr == nil) {
+//		return "";
+//	}
+//	
+//	return [nsStr UTF8String];
+//}
+//
+//void NDEmailDataPersist::AddEmail(int playerid,string mail, string state)
+//{
+//	if (mail.empty()) 
+//	{
+//		return;
+//	}
+//	
+//	NSMutableDictionary *dic = this->LoadMailDiction();
+//	NDAsssert(dic != nil);
+//	
+//	NSString *strPlayer= [NSString stringWithFormat:@"%d", playerid];
+//	NSMutableDictionary *playermail = [dic objectForKey:strPlayer];
+//	if (playermail == nil) {
+//		if ([dic count] > max_player_save_count) {
+//			NSEnumerator *enumerator;
+//			enumerator = [dic keyEnumerator];
+//			id key;
+//			while ((key = [enumerator nextObject]) != nil) {
+//				
+//				[dic removeObjectForKey:key];
+//				break;
+//			}
+//			
+//		}
+//		playermail = [[NSMutableDictionary alloc] init];
+//		[dic setObject:playermail forKey:strPlayer];
+//		[playermail release];
+//	}
+//	
+//	if ([playermail count] > max_mail_save_count) {
+//		NSEnumerator *enumerator;
+//		enumerator = [playermail keyEnumerator];
+//		id key;
+//		while ((key = [enumerator nextObject]) != nil) {
+//			
+//			[playermail removeObjectForKey:key];
+//			break;
+//		}
+//		
+//	}
+//	
+//	[playermail setObject:[NSString stringWithUTF8String:state.c_str()]
+//				forKey:[NSString stringWithUTF8String:mail.c_str()]];
+//
+//}
+//
+//void NDEmailDataPersist::DelEmail(int playerid,string mail)
+//{
+//	if (mail.empty()) 
+//	{
+//		return;
+//	}
+//	
+//	NSMutableDictionary *dic = this->LoadMailDiction();
+//	NDAsssert(dic != nil);
+//	
+//	NSString *strPlayer= [NSString stringWithFormat:@"%d", playerid];
+//	NSMutableDictionary *playermail = [dic objectForKey:strPlayer];
+//	if (playermail == nil) {
+//		return;
+//	}
+//	
+//	[playermail removeObjectForKey:[NSString stringWithUTF8String:mail.c_str()]];
+//}
+//
+//void NDEmailDataPersist::LoadEmailData()
+//{
+//	NSString* filePath = GetEmailPath();
+//	if (!filePath) 
+//	{
+//		emailArray = [[NSMutableArray alloc] init];
+//		return;
+//	}
+//	
+//	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+//	{ 
+//		emailArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
+//	}
+//	else
+//	{
+//		emailArray = [[NSMutableArray alloc] init];
+//	}
+//	
+//}
+//
+//void NDEmailDataPersist::SaveEmailData()
+//{
+//	NSString* filePath = GetEmailPath();
+//	if (filePath) 
+//	{
+//		[emailArray writeToFile:filePath atomically:YES];
+//	}
+//	
+//	[emailArray release];
+//	emailArray = nil;
+//}
+//
+//NSString* NDEmailDataPersist::GetEmailPath()
+//{
+//	NSString* dir = [kEmailFileName stringByDeletingLastPathComponent] ;
+//	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
+//	{
+//		if (!KDirectory::createDir([dir UTF8String]))
+//		{
+//			return nil;
+//		}
+//	}
+//	return kEmailFileName;
+////	if (!file) 
+////	{
+////		return nil;
+////	}
+////	
+////	NSArray *paths = NSSearchPathForDirectoriesInDomains( 
+////														 NSDocumentDirectory, NSUserDomainMask, YES); 
+////	NSString *documentsDirectory = [paths objectAtIndex:0]; 
+////	return [documentsDirectory stringByAppendingPathComponent:file];
+//}
+//
+//NSMutableDictionary* NDEmailDataPersist::LoadMailDiction()
+//{
+//	NDAsssert(emailArray != nil);
+//	
+//	NSMutableDictionary* dic = nil;
+//	
+//	if ([emailArray count] > 0) {
+//		NDAsssert([emailArray count] == 1);
+//		dic = (NSMutableDictionary*)[emailArray objectAtIndex:0];
+//	}
+//	
+//	if (dic == nil) { // 数据不存在,初始化
+//			dic = [[NSMutableDictionary alloc] init];
+//			[emailArray addObject:dic];
+//			[dic release];
+//	}
+//	
+//	return dic;
+//}
 
 //quick talk data
 
-NDQuickTalkDataPersist::NDQuickTalkDataPersist()
-{
-	this->LoadQuickTalkData();
-}
-
-NDQuickTalkDataPersist::~NDQuickTalkDataPersist()
-{
-	this->SaveQuickTalkData();
-	[quickTalkArray release];
-}
-
-NDQuickTalkDataPersist& NDQuickTalkDataPersist::DefaultInstance()
-{
-	static NDQuickTalkDataPersist obj;
-	return obj;
-}
-
-void NDQuickTalkDataPersist::GetAllQuickTalkString(int idPlayer, vector<string>& vMsg)
-{
-	NSMutableDictionary* dic = this->LoadQuickTalkDiction();
-	NDAsssert(nil != dic);
-	
-	NSString *strPlayer= [NSString stringWithFormat:@"%d", idPlayer];
-	NSMutableArray *arrMsg = [dic objectForKey:strPlayer];
-	
-	// 没有该玩家的快捷聊天记录，新建
-	if (arrMsg == nil) {
-		if ([dic count] >= QT_MAX_PLAYER_SAVE_NUM) {
-			NSEnumerator *enumerator;
-			enumerator = [dic keyEnumerator];
-			id key;
-			while ((key = [enumerator nextObject]) != nil) {
-				[dic removeObjectForKey:key];
-				break;
-			}
-		}
-		
-		arrMsg = [[NSMutableArray alloc] initWithObjects:
-				  kSysQuickTalk1, kSysQuickTalk2, kSysQuickTalk3, kSysQuickTalk4, kSysQuickTalk5, 
-				  @"", @"", @"", @"", @"", 
-				  nil];
-		
-		[dic setObject:arrMsg forKey:strPlayer];
-		[arrMsg release];
-		
-		this->SaveQuickTalkData();
-	}
-	
-	for (NSUInteger i = 0; i < [arrMsg count]; i++) {
-		NSString* msg = (NSString*)[arrMsg objectAtIndex:i];
-		vMsg.push_back(string([msg UTF8String]));
-	}
-}
-
-string NDQuickTalkDataPersist::GetQuickTalkString(int idPlayer, uint uIdx)
-{
-	NSMutableDictionary* dic = this->LoadQuickTalkDiction();
-	NDAsssert(nil != dic);
-	
-	NSString *strPlayer= [NSString stringWithFormat:@"%d", idPlayer];
-	NSMutableArray *arrMsg = [dic objectForKey:strPlayer];
-	
-	string str;
-	
-	if (uIdx < [arrMsg count]) {
-		str = [(NSString*)[arrMsg objectAtIndex:uIdx] UTF8String];
-	}
-	
-	return str;
-}
-
-void NDQuickTalkDataPersist::SetQuickTalkString(int idPlayer, uint uIdx, const string& msg)
-{
-	NSMutableDictionary* dic = this->LoadQuickTalkDiction();
-	NDAsssert(nil != dic);
-	
-	NSString *strPlayer= [NSString stringWithFormat:@"%d", idPlayer];
-	NSMutableArray *arrMsg = [dic objectForKey:strPlayer];
-	if (uIdx < [arrMsg count]) {
-		[arrMsg replaceObjectAtIndex:uIdx withObject:[NSString stringWithUTF8String:msg.c_str()]];
-		this->SaveQuickTalkData();
-	}
-}
-
-void NDQuickTalkDataPersist::LoadQuickTalkData()
-{
-	NSString* filePath = this->GetQuickTalkPath();
-	if (!filePath) 
-	{
-		quickTalkArray = [[NSMutableArray alloc] init];
-		return;
-	}
-	
-	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
-	{ 
-		quickTalkArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
-	}
-	else
-	{
-		quickTalkArray = [[NSMutableArray alloc] init];
-	}
-}
-
-void NDQuickTalkDataPersist::SaveQuickTalkData()
-{
-	NSString* filePath = this->GetQuickTalkPath();
-	if (filePath) 
-	{
-		[quickTalkArray writeToFile:filePath atomically:YES];
-	}
-}
-
-NSString* NDQuickTalkDataPersist::GetQuickTalkPath()
-{
-	NSString* dir = [kQuickTalkFileName stringByDeletingLastPathComponent] ;
-	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
-	{
-		if (!KDirectory::createDir([dir UTF8String]))
-		{
-			return nil;
-		}
-	}
-	return kQuickTalkFileName;
-}
-
-NSMutableDictionary* NDQuickTalkDataPersist::LoadQuickTalkDiction()
-{
-	NSMutableDictionary* dic = nil;
-	
-	if ([quickTalkArray count] > 0) {
-		NDAsssert([quickTalkArray count] == 1);
-		dic = (NSMutableDictionary*)[quickTalkArray objectAtIndex:0];
-	}
-	
-	if (dic == nil) { // 数据不存在,初始化
-		dic = [[NSMutableDictionary alloc] init];
-		[quickTalkArray addObject:dic];
-		[dic release];
-	}
-	
-	return dic;
-}
-
-// 物品栏配置
-// 循环位移，用于物品id加密
-unsigned int _rotl(unsigned int value, int shift) {
-	if ((shift &= 31) == 0) {
-		return value;
-	}
-	return (value << shift) | (value >> (32 - shift));
-}
-
-unsigned int _rotr(unsigned int value, int shift) {
-	if ((shift &= 31) == 0) {
-		return value;
-	}
-	return (value >> shift) | (value << (32 - shift));
-}
-
-NDItemBarDataPersist::NDItemBarDataPersist()
-{
-	this->LoadData();
-}
-
-NDItemBarDataPersist::~NDItemBarDataPersist()
-{
-	this->SaveData();
-	[itemBarArray release];
-}
-
-NDItemBarDataPersist& NDItemBarDataPersist::DefaultInstance()
-{
-	static NDItemBarDataPersist obj;
-	return obj;
-}
-
-void NDItemBarDataPersist::GetItemBarConfigInBattle(int idPlayer, vector<ItemBarCellInfo>& vCellInfo)
-{
-	NSMutableDictionary* dic = this->LoadDictionInBattle();
-	NDAsssert(nil != dic);
-	
-	NSString *strPlayer= [NSString stringWithFormat:@"%d", idPlayer];
-	NSMutableArray *arr = [dic objectForKey:strPlayer];
-	
-	// 没有该玩家的物品栏记录，新建
-	if (arr == nil) {
-		if ([dic count] >= IB_MAX_PLAYER_SAVE_NUM) {
-			NSEnumerator *enumerator;
-			enumerator = [dic keyEnumerator];
-			id key;
-			while ((key = [enumerator nextObject]) != nil) {
-				[dic removeObjectForKey:key];
-				break;
-			}
-		}
-		
-		arr = [[NSMutableArray alloc] init];
-		
-		for (NSUInteger i = 0; i < IB_MAX_ITEM_NUM; i++) {
-			[arr addObject:[NSNumber numberWithInt:0]];
-		}
-		
-		[dic setObject:arr forKey:strPlayer];
-		[arr release];
-		
-		this->SaveData();
-	}
-	
-	for (NSUInteger i = 0; i < [arr count]; i++) {
-		NSNumber* num = (NSNumber*)[arr objectAtIndex:i];
-		int idItemType = _rotl([num unsignedIntValue], kIDShift);
-		if (idItemType >= 0) {
-			vCellInfo.push_back(ItemBarCellInfo(idItemType, i));
-		}
-	}
-}
-
-void NDItemBarDataPersist::GetItemBarConfigOutBattle(int idPlayer, vector<ItemBarCellInfo>& vCellInfo)
-{
-	NSMutableDictionary* dic = this->LoadDictionOutBattle();
-	NDAsssert(nil != dic);
-	
-	NSString *strPlayer= [NSString stringWithFormat:@"%d", idPlayer];
-	NSMutableArray *arr = [dic objectForKey:strPlayer];
-	
-	// 没有该玩家的物品栏记录，新建
-	if (arr == nil) {
-		if ([dic count] >= IB_MAX_PLAYER_SAVE_NUM) {
-			NSEnumerator *enumerator;
-			enumerator = [dic keyEnumerator];
-			id key;
-			while ((key = [enumerator nextObject]) != nil) {
-				[dic removeObjectForKey:key];
-				break;
-			}
-		}
-		
-		arr = [[NSMutableArray alloc] init];
-		
-		for (NSUInteger i = 0; i < IB_MAX_ITEM_NUM_OUT_BATTLE; i++) {
-			[arr addObject:[NSNumber numberWithInt:0]];
-		}
-		
-		[dic setObject:arr forKey:strPlayer];
-		[arr release];
-		
-		this->SaveData();
-	}
-	
-	if ([arr count] < IB_MAX_ITEM_NUM_OUT_BATTLE)
-	{
-		NSUInteger i = [arr count];
-		for (; i < IB_MAX_ITEM_NUM_OUT_BATTLE; i++) {
-			[arr addObject:[NSNumber numberWithInt:0]];
-		}
-		
-		this->SaveData();
-	}
-	
-	for (NSUInteger i = 0; i < [arr count]; i++) {
-		NSNumber* num = (NSNumber*)[arr objectAtIndex:i];
-		int idItemType = _rotl([num unsignedIntValue], kIDShift);
-		if (idItemType >= 0) {
-			vCellInfo.push_back(ItemBarCellInfo(idItemType, i));
-		}
-	}
-}
-
-void NDItemBarDataPersist::SetItemAtIndexInBattle(int idPlayer, uint uIdx, int idItemtype)
-{
-	NSMutableDictionary* dic = this->LoadDictionInBattle();
-	NDAsssert(nil != dic);
-	
-	NSString *strPlayer= [NSString stringWithFormat:@"%d", idPlayer];
-	NSMutableArray *arr = [dic objectForKey:strPlayer];
-	
-	if (uIdx < [arr count]) {
-		[arr replaceObjectAtIndex:uIdx withObject:[NSNumber numberWithInt:_rotr(idItemtype, kIDShift)]];
-		this->SaveData();
-	}
-}
-
-void NDItemBarDataPersist::SetItemAtIndexOutBattle(int idPlayer, uint uIdx, int idItemtype)
-{
-	NSMutableDictionary* dic = this->LoadDictionOutBattle();
-	NDAsssert(nil != dic);
-	
-	NSString *strPlayer= [NSString stringWithFormat:@"%d", idPlayer];
-	NSMutableArray *arr = [dic objectForKey:strPlayer];
-	
-	if (uIdx < [arr count]) {
-		[arr replaceObjectAtIndex:uIdx withObject:[NSNumber numberWithInt:_rotr(idItemtype, kIDShift)]];
-		this->SaveData();
-	}
-}
-
-void NDItemBarDataPersist::LoadData()
-{
-	NSString* filePath = this->GetPath();
-	if (!filePath) 
-	{
-		itemBarArray = [[NSMutableArray alloc] init];
-		return;
-	}
-	
-	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
-	{ 
-		itemBarArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
-	}
-	else
-	{
-		itemBarArray = [[NSMutableArray alloc] init];
-	}
-}
-
-void NDItemBarDataPersist::SaveData()
-{
-	NSString* filePath = this->GetPath();
-	if (filePath) 
-	{
-		[itemBarArray writeToFile:filePath atomically:YES];
-	}
-}
-
-NSString* NDItemBarDataPersist::GetPath()
-{
-	NSString* dir = [kItemBarFileName stringByDeletingLastPathComponent];
-	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
-	{
-		if (!KDirectory::createDir([dir UTF8String]))
-		{
-			return nil;
-		}
-	}
-	return kItemBarFileName;
-}
-
-NSMutableDictionary* NDItemBarDataPersist::LoadDictionOutBattle()
-{
-	NSMutableDictionary* dic = nil;
-	
-	if ([itemBarArray count] > 0) {
-		dic = (NSMutableDictionary*)[itemBarArray objectAtIndex:0];
-	}
-	
-	if (dic == nil) { // 数据不存在,初始化
-		dic = [[NSMutableDictionary alloc] init];
-		[itemBarArray addObject:dic];
-		[dic release];
-	}
-	
-	return dic;
-}
-
-NSMutableDictionary* NDItemBarDataPersist::LoadDictionInBattle()
-{
-	this->LoadDictionOutBattle();
-	
-	NSMutableDictionary* dic = nil;
-	
-	if ([itemBarArray count] > 1) {
-		dic = (NSMutableDictionary*)[itemBarArray objectAtIndex:1];
-	}
-	
-	if (dic == nil) { // 数据不存在,初始化
-		NDAsssert([itemBarArray count] == 1);
-		dic = [[NSMutableDictionary alloc] init];
-		[itemBarArray addObject:dic];
-		[dic release];
-	}
-	
-	return dic;
-}
-
-
-#pragma mark plist 基本操作
-//通过LoadMailDiction调用获取数据字典,数据字典可加入object-c数据对象,数据保存与加载在构造与析构中自动完成
-
-NDDataPlistBasic::NDDataPlistBasic(string filename)
-{
-	dataArray = nil;
-	
-	m_filename = filename;
-	
-	LoadData();
-}
-
-NDDataPlistBasic::~NDDataPlistBasic()
-{
-	SaveData();
-	
-	[dataArray release];
-	dataArray = nil;
-}
-
-NSString* NDDataPlistBasic::GetPath(string filename)
-{
-	NSString* name = [NSString stringWithFormat:@"%@%s.plist", DataFilePath(), filename.c_str()];
-	NSString* dir = [name stringByDeletingLastPathComponent] ;
-	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
-	{
-		if (!KDirectory::createDir([dir UTF8String]))
-		{
-			return nil;
-		}
-	}
-	
-	return name;
-}
-
-void NDDataPlistBasic::LoadData()
-{
-	NSString* filePath = GetPath(m_filename);
-	if (!filePath) 
-	{
-		dataArray = [[NSMutableArray alloc] init];
-		return;
-	}
-	
-	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
-	{ 
-		dataArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
-	}
-	else
-	{
-		dataArray = [[NSMutableArray alloc] init];
-	}
-}
-
-void NDDataPlistBasic::SaveData()
-{
-	NSString* filePath = GetPath(m_filename);
-	if (filePath && dataArray) 
-	{
-		[dataArray writeToFile:filePath atomically:YES];
-	}
-}
-
-NSMutableDictionary* NDDataPlistBasic::LoadMailDiction()
-{
-	NDAsssert(dataArray != nil);
-	
-	NSMutableDictionary* dic = nil;
-	
-	if ([dataArray count] > 0) {
-		NDAsssert([dataArray count] == 1);
-		dic = (NSMutableDictionary*)[dataArray objectAtIndex:0];
-	}
-	
-	if (dic == nil) { // 数据不存在,初始化
-		dic = [[NSMutableDictionary alloc] init];
-		[dataArray addObject:dic];
-		[dic release];
-	}
-	
-	return dic;
-}
-
-
-#pragma mark 玩家提交bug
-// NDQuestionDataPlist负责保存玩家提问数据(玩家每天最多提10个问题)
-#define MAX_QUEST_BUG_COUNT_PER_DAY (10)
-#define PER_DAY_SECOND (3600 * 24)
-
-NDQuestionDataPlist::NDQuestionDataPlist() : 
-NDDataPlistBasic("questbug")
-{
-}
-
-NDQuestionDataPlist::~NDQuestionDataPlist()
-{
-}
-
-bool NDQuestionDataPlist::CanPlayerQuestCurrentDay(int playerId)
-{
-	return !IsOverCount(GetPlayerCurQuestCount(playerId));
-}
-
-void NDQuestionDataPlist::AddPlayerQuest(int playerId)
-{
-	IncPlayerQuestCount(playerId);
-}
-
-int NDQuestionDataPlist::GetPlayerCurTime(int playerId)
-{
-	NSMutableArray* quest = GetQuestData(playerId);
-	
-	if (quest == nil) return 0;
-	
-	NSNumber *num = [quest objectAtIndex:0];
-	
-	if (!num) return 0;
-	
-	return [num floatValue];
-}
-
-bool NDQuestionDataPlist::IsOverTime(double time)
-{
-	double cur = [NSDate timeIntervalSinceReferenceDate];
-	if ( int(cur - time) > PER_DAY_SECOND)
-		return true;
-		
-	return false;
-}
-
-int NDQuestionDataPlist::GetPlayerCurQuestCount(int playerId)
-{
-	NSMutableArray* quest = GetQuestData(playerId);
-	
-	if (quest == nil) return 0;
-	
-	NSNumber *num = [quest objectAtIndex:1];
-	
-	if (!num) return 0;
-	
-	return [num intValue];
-}
-
-bool NDQuestionDataPlist::IsOverCount(int count)
-{
-	if (count >= MAX_QUEST_BUG_COUNT_PER_DAY)
-		return true;
-		
-	return false;
-}
-
-NSMutableArray* NDQuestionDataPlist::GetQuestData(int playerId)
-{
-	NSMutableDictionary *dic = this->LoadMailDiction();
-	NDAsssert(dic != nil);
-	
-	NSString *strPlayer= [NSString stringWithFormat:@"%d", playerId];
-	NSMutableArray *playerQuest = [dic objectForKey:strPlayer];
-	
-	if (playerQuest == nil) {
-		NSMutableArray *quest = [[NSMutableArray alloc] init];
-		[quest addObject:[NSNumber numberWithDouble:[NSDate timeIntervalSinceReferenceDate]]];
-		[quest addObject:[NSNumber numberWithInt:0]];
-		
-		[dic setObject:quest forKey:strPlayer];
-		
-		[quest release];
-	}
-	
-	playerQuest = [dic objectForKey:strPlayer];
-	
-	NSNumber *num = [playerQuest objectAtIndex:0];
-	
-	if (IsOverTime([num doubleValue]))
-	{
-		ResetPlayerQuest(playerId);
-	}
-	
-	return [dic objectForKey:strPlayer];
-}
-
-void NDQuestionDataPlist::ResetPlayerQuest(int playerId)
-{
-	NSMutableDictionary *dic = this->LoadMailDiction();
-	NDAsssert(dic != nil);
-	
-	NSString *strPlayer= [NSString stringWithFormat:@"%d", playerId];
-	NSMutableArray *playerQuest = [dic objectForKey:strPlayer];
-	
-	if (playerQuest != nil) {
-		[dic removeObjectForKey:strPlayer];
-		
-		GetQuestData(playerId);
-	}
-}
-
-void NDQuestionDataPlist::IncPlayerQuestCount(int playerId)
-{
-	NSMutableArray* quest = GetQuestData(playerId);
-	
-	if (quest == nil) return;
-	
-	NSNumber *num = [quest objectAtIndex:1];
-	
-	if (num == nil)
-		return;
-	
-	[quest replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:[num intValue]+1]];
-	
-	this->SaveData();
-}
-
+//NDQuickTalkDataPersist::NDQuickTalkDataPersist()
+//{
+//	this->LoadQuickTalkData();
+//}
+//
+//NDQuickTalkDataPersist::~NDQuickTalkDataPersist()
+//{
+//	this->SaveQuickTalkData();
+//	[quickTalkArray release];
+//}
+//
+//NDQuickTalkDataPersist& NDQuickTalkDataPersist::DefaultInstance()
+//{
+//	static NDQuickTalkDataPersist obj;
+//	return obj;
+//}
+//
+//void NDQuickTalkDataPersist::GetAllQuickTalkString(int idPlayer, vector<string>& vMsg)
+//{
+//	NSMutableDictionary* dic = this->LoadQuickTalkDiction();
+//	NDAsssert(nil != dic);
+//	
+//	NSString *strPlayer= [NSString stringWithFormat:@"%d", idPlayer];
+//	NSMutableArray *arrMsg = [dic objectForKey:strPlayer];
+//	
+//	// 没有该玩家的快捷聊天记录，新建
+//	if (arrMsg == nil) {
+//		if ([dic count] >= QT_MAX_PLAYER_SAVE_NUM) {
+//			NSEnumerator *enumerator;
+//			enumerator = [dic keyEnumerator];
+//			id key;
+//			while ((key = [enumerator nextObject]) != nil) {
+//				[dic removeObjectForKey:key];
+//				break;
+//			}
+//		}
+//		
+//		arrMsg = [[NSMutableArray alloc] initWithObjects:
+//				  kSysQuickTalk1, kSysQuickTalk2, kSysQuickTalk3, kSysQuickTalk4, kSysQuickTalk5, 
+//				  @"", @"", @"", @"", @"", 
+//				  nil];
+//		
+//		[dic setObject:arrMsg forKey:strPlayer];
+//		[arrMsg release];
+//		
+//		this->SaveQuickTalkData();
+//	}
+//	
+//	for (NSUInteger i = 0; i < [arrMsg count]; i++) {
+//		NSString* msg = (NSString*)[arrMsg objectAtIndex:i];
+//		vMsg.push_back(string([msg UTF8String]));
+//	}
+//}
+//
+//string NDQuickTalkDataPersist::GetQuickTalkString(int idPlayer, uint uIdx)
+//{
+//	NSMutableDictionary* dic = this->LoadQuickTalkDiction();
+//	NDAsssert(nil != dic);
+//	
+//	NSString *strPlayer= [NSString stringWithFormat:@"%d", idPlayer];
+//	NSMutableArray *arrMsg = [dic objectForKey:strPlayer];
+//	
+//	string str;
+//	
+//	if (uIdx < [arrMsg count]) {
+//		str = [(NSString*)[arrMsg objectAtIndex:uIdx] UTF8String];
+//	}
+//	
+//	return str;
+//}
+//
+//void NDQuickTalkDataPersist::SetQuickTalkString(int idPlayer, uint uIdx, const string& msg)
+//{
+//	NSMutableDictionary* dic = this->LoadQuickTalkDiction();
+//	NDAsssert(nil != dic);
+//	
+//	NSString *strPlayer= [NSString stringWithFormat:@"%d", idPlayer];
+//	NSMutableArray *arrMsg = [dic objectForKey:strPlayer];
+//	if (uIdx < [arrMsg count]) {
+//		[arrMsg replaceObjectAtIndex:uIdx withObject:[NSString stringWithUTF8String:msg.c_str()]];
+//		this->SaveQuickTalkData();
+//	}
+//}
+//
+//void NDQuickTalkDataPersist::LoadQuickTalkData()
+//{
+//	NSString* filePath = this->GetQuickTalkPath();
+//	if (!filePath) 
+//	{
+//		quickTalkArray = [[NSMutableArray alloc] init];
+//		return;
+//	}
+//	
+//	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+//	{ 
+//		quickTalkArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
+//	}
+//	else
+//	{
+//		quickTalkArray = [[NSMutableArray alloc] init];
+//	}
+//}
+//
+//void NDQuickTalkDataPersist::SaveQuickTalkData()
+//{
+//	NSString* filePath = this->GetQuickTalkPath();
+//	if (filePath) 
+//	{
+//		[quickTalkArray writeToFile:filePath atomically:YES];
+//	}
+//}
+//
+//NSString* NDQuickTalkDataPersist::GetQuickTalkPath()
+//{
+//	NSString* dir = [kQuickTalkFileName stringByDeletingLastPathComponent] ;
+//	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
+//	{
+//		if (!KDirectory::createDir([dir UTF8String]))
+//		{
+//			return nil;
+//		}
+//	}
+//	return kQuickTalkFileName;
+//}
+//
+//NSMutableDictionary* NDQuickTalkDataPersist::LoadQuickTalkDiction()
+//{
+//	NSMutableDictionary* dic = nil;
+//	
+//	if ([quickTalkArray count] > 0) {
+//		NDAsssert([quickTalkArray count] == 1);
+//		dic = (NSMutableDictionary*)[quickTalkArray objectAtIndex:0];
+//	}
+//	
+//	if (dic == nil) { // 数据不存在,初始化
+//		dic = [[NSMutableDictionary alloc] init];
+//		[quickTalkArray addObject:dic];
+//		[dic release];
+//	}
+//	
+//	return dic;
+//}
+//
+//// 物品栏配置
+//// 循环位移，用于物品id加密
+//unsigned int _rotl(unsigned int value, int shift) {
+//	if ((shift &= 31) == 0) {
+//		return value;
+//	}
+//	return (value << shift) | (value >> (32 - shift));
+//}
+//
+//unsigned int _rotr(unsigned int value, int shift) {
+//	if ((shift &= 31) == 0) {
+//		return value;
+//	}
+//	return (value >> shift) | (value << (32 - shift));
+//}
+//
+//NDItemBarDataPersist::NDItemBarDataPersist()
+//{
+//	this->LoadData();
+//}
+//
+//NDItemBarDataPersist::~NDItemBarDataPersist()
+//{
+//	this->SaveData();
+//	[itemBarArray release];
+//}
+//
+//NDItemBarDataPersist& NDItemBarDataPersist::DefaultInstance()
+//{
+//	static NDItemBarDataPersist obj;
+//	return obj;
+//}
+//
+//void NDItemBarDataPersist::GetItemBarConfigInBattle(int idPlayer, vector<ItemBarCellInfo>& vCellInfo)
+//{
+//	NSMutableDictionary* dic = this->LoadDictionInBattle();
+//	NDAsssert(nil != dic);
+//	
+//	NSString *strPlayer= [NSString stringWithFormat:@"%d", idPlayer];
+//	NSMutableArray *arr = [dic objectForKey:strPlayer];
+//	
+//	// 没有该玩家的物品栏记录，新建
+//	if (arr == nil) {
+//		if ([dic count] >= IB_MAX_PLAYER_SAVE_NUM) {
+//			NSEnumerator *enumerator;
+//			enumerator = [dic keyEnumerator];
+//			id key;
+//			while ((key = [enumerator nextObject]) != nil) {
+//				[dic removeObjectForKey:key];
+//				break;
+//			}
+//		}
+//		
+//		arr = [[NSMutableArray alloc] init];
+//		
+//		for (NSUInteger i = 0; i < IB_MAX_ITEM_NUM; i++) {
+//			[arr addObject:[NSNumber numberWithInt:0]];
+//		}
+//		
+//		[dic setObject:arr forKey:strPlayer];
+//		[arr release];
+//		
+//		this->SaveData();
+//	}
+//	
+//	for (NSUInteger i = 0; i < [arr count]; i++) {
+//		NSNumber* num = (NSNumber*)[arr objectAtIndex:i];
+//		int idItemType = _rotl([num unsignedIntValue], kIDShift);
+//		if (idItemType >= 0) {
+//			vCellInfo.push_back(ItemBarCellInfo(idItemType, i));
+//		}
+//	}
+//}
+//
+//void NDItemBarDataPersist::GetItemBarConfigOutBattle(int idPlayer, vector<ItemBarCellInfo>& vCellInfo)
+//{
+//	NSMutableDictionary* dic = this->LoadDictionOutBattle();
+//	NDAsssert(nil != dic);
+//	
+//	NSString *strPlayer= [NSString stringWithFormat:@"%d", idPlayer];
+//	NSMutableArray *arr = [dic objectForKey:strPlayer];
+//	
+//	// 没有该玩家的物品栏记录，新建
+//	if (arr == nil) {
+//		if ([dic count] >= IB_MAX_PLAYER_SAVE_NUM) {
+//			NSEnumerator *enumerator;
+//			enumerator = [dic keyEnumerator];
+//			id key;
+//			while ((key = [enumerator nextObject]) != nil) {
+//				[dic removeObjectForKey:key];
+//				break;
+//			}
+//		}
+//		
+//		arr = [[NSMutableArray alloc] init];
+//		
+//		for (NSUInteger i = 0; i < IB_MAX_ITEM_NUM_OUT_BATTLE; i++) {
+//			[arr addObject:[NSNumber numberWithInt:0]];
+//		}
+//		
+//		[dic setObject:arr forKey:strPlayer];
+//		[arr release];
+//		
+//		this->SaveData();
+//	}
+//	
+//	if ([arr count] < IB_MAX_ITEM_NUM_OUT_BATTLE)
+//	{
+//		NSUInteger i = [arr count];
+//		for (; i < IB_MAX_ITEM_NUM_OUT_BATTLE; i++) {
+//			[arr addObject:[NSNumber numberWithInt:0]];
+//		}
+//		
+//		this->SaveData();
+//	}
+//	
+//	for (NSUInteger i = 0; i < [arr count]; i++) {
+//		NSNumber* num = (NSNumber*)[arr objectAtIndex:i];
+//		int idItemType = _rotl([num unsignedIntValue], kIDShift);
+//		if (idItemType >= 0) {
+//			vCellInfo.push_back(ItemBarCellInfo(idItemType, i));
+//		}
+//	}
+//}
+//
+//void NDItemBarDataPersist::SetItemAtIndexInBattle(int idPlayer, uint uIdx, int idItemtype)
+//{
+//	NSMutableDictionary* dic = this->LoadDictionInBattle();
+//	NDAsssert(nil != dic);
+//	
+//	NSString *strPlayer= [NSString stringWithFormat:@"%d", idPlayer];
+//	NSMutableArray *arr = [dic objectForKey:strPlayer];
+//	
+//	if (uIdx < [arr count]) {
+//		[arr replaceObjectAtIndex:uIdx withObject:[NSNumber numberWithInt:_rotr(idItemtype, kIDShift)]];
+//		this->SaveData();
+//	}
+//}
+//
+//void NDItemBarDataPersist::SetItemAtIndexOutBattle(int idPlayer, uint uIdx, int idItemtype)
+//{
+//	NSMutableDictionary* dic = this->LoadDictionOutBattle();
+//	NDAsssert(nil != dic);
+//	
+//	NSString *strPlayer= [NSString stringWithFormat:@"%d", idPlayer];
+//	NSMutableArray *arr = [dic objectForKey:strPlayer];
+//	
+//	if (uIdx < [arr count]) {
+//		[arr replaceObjectAtIndex:uIdx withObject:[NSNumber numberWithInt:_rotr(idItemtype, kIDShift)]];
+//		this->SaveData();
+//	}
+//}
+//
+//void NDItemBarDataPersist::LoadData()
+//{
+//	NSString* filePath = this->GetPath();
+//	if (!filePath) 
+//	{
+//		itemBarArray = [[NSMutableArray alloc] init];
+//		return;
+//	}
+//	
+//	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+//	{ 
+//		itemBarArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
+//	}
+//	else
+//	{
+//		itemBarArray = [[NSMutableArray alloc] init];
+//	}
+//}
+//
+//void NDItemBarDataPersist::SaveData()
+//{
+//	NSString* filePath = this->GetPath();
+//	if (filePath) 
+//	{
+//		[itemBarArray writeToFile:filePath atomically:YES];
+//	}
+//}
+//
+//NSString* NDItemBarDataPersist::GetPath()
+//{
+//	NSString* dir = [kItemBarFileName stringByDeletingLastPathComponent];
+//	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
+//	{
+//		if (!KDirectory::createDir([dir UTF8String]))
+//		{
+//			return nil;
+//		}
+//	}
+//	return kItemBarFileName;
+//}
+//
+//NSMutableDictionary* NDItemBarDataPersist::LoadDictionOutBattle()
+//{
+//	NSMutableDictionary* dic = nil;
+//	
+//	if ([itemBarArray count] > 0) {
+//		dic = (NSMutableDictionary*)[itemBarArray objectAtIndex:0];
+//	}
+//	
+//	if (dic == nil) { // 数据不存在,初始化
+//		dic = [[NSMutableDictionary alloc] init];
+//		[itemBarArray addObject:dic];
+//		[dic release];
+//	}
+//	
+//	return dic;
+//}
+//
+//NSMutableDictionary* NDItemBarDataPersist::LoadDictionInBattle()
+//{
+//	this->LoadDictionOutBattle();
+//	
+//	NSMutableDictionary* dic = nil;
+//	
+//	if ([itemBarArray count] > 1) {
+//		dic = (NSMutableDictionary*)[itemBarArray objectAtIndex:1];
+//	}
+//	
+//	if (dic == nil) { // 数据不存在,初始化
+//		NDAsssert([itemBarArray count] == 1);
+//		dic = [[NSMutableDictionary alloc] init];
+//		[itemBarArray addObject:dic];
+//		[dic release];
+//	}
+//	
+//	return dic;
+//}
+//
+//
+//#pragma mark plist 基本操作
+////通过LoadMailDiction调用获取数据字典,数据字典可加入object-c数据对象,数据保存与加载在构造与析构中自动完成
+//
+//NDDataPlistBasic::NDDataPlistBasic(string filename)
+//{
+//	dataArray = nil;
+//	
+//	m_filename = filename;
+//	
+//	LoadData();
+//}
+//
+//NDDataPlistBasic::~NDDataPlistBasic()
+//{
+//	SaveData();
+//	
+//	[dataArray release];
+//	dataArray = nil;
+//}
+//
+//NSString* NDDataPlistBasic::GetPath(string filename)
+//{
+//	NSString* name = [NSString stringWithFormat:@"%@%s.plist", DataFilePath(), filename.c_str()];
+//	NSString* dir = [name stringByDeletingLastPathComponent] ;
+//	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
+//	{
+//		if (!KDirectory::createDir([dir UTF8String]))
+//		{
+//			return nil;
+//		}
+//	}
+//	
+//	return name;
+//}
+//
+//void NDDataPlistBasic::LoadData()
+//{
+//	NSString* filePath = GetPath(m_filename);
+//	if (!filePath) 
+//	{
+//		dataArray = [[NSMutableArray alloc] init];
+//		return;
+//	}
+//	
+//	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+//	{ 
+//		dataArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
+//	}
+//	else
+//	{
+//		dataArray = [[NSMutableArray alloc] init];
+//	}
+//}
+//
+//void NDDataPlistBasic::SaveData()
+//{
+//	NSString* filePath = GetPath(m_filename);
+//	if (filePath && dataArray) 
+//	{
+//		[dataArray writeToFile:filePath atomically:YES];
+//	}
+//}
+//
+//NSMutableDictionary* NDDataPlistBasic::LoadMailDiction()
+//{
+//	NDAsssert(dataArray != nil);
+//	
+//	NSMutableDictionary* dic = nil;
+//	
+//	if ([dataArray count] > 0) {
+//		NDAsssert([dataArray count] == 1);
+//		dic = (NSMutableDictionary*)[dataArray objectAtIndex:0];
+//	}
+//	
+//	if (dic == nil) { // 数据不存在,初始化
+//		dic = [[NSMutableDictionary alloc] init];
+//		[dataArray addObject:dic];
+//		[dic release];
+//	}
+//	
+//	return dic;
+//}
+//
+//
+//#pragma mark 玩家提交bug
+//// NDQuestionDataPlist负责保存玩家提问数据(玩家每天最多提10个问题)
+//#define MAX_QUEST_BUG_COUNT_PER_DAY (10)
+//#define PER_DAY_SECOND (3600 * 24)
+//
+//NDQuestionDataPlist::NDQuestionDataPlist() : 
+//NDDataPlistBasic("questbug")
+//{
+//}
+//
+//NDQuestionDataPlist::~NDQuestionDataPlist()
+//{
+//}
+//
+//bool NDQuestionDataPlist::CanPlayerQuestCurrentDay(int playerId)
+//{
+//	return !IsOverCount(GetPlayerCurQuestCount(playerId));
+//}
+//
+//void NDQuestionDataPlist::AddPlayerQuest(int playerId)
+//{
+//	IncPlayerQuestCount(playerId);
+//}
+//
+//int NDQuestionDataPlist::GetPlayerCurTime(int playerId)
+//{
+//	NSMutableArray* quest = GetQuestData(playerId);
+//	
+//	if (quest == nil) return 0;
+//	
+//	NSNumber *num = [quest objectAtIndex:0];
+//	
+//	if (!num) return 0;
+//	
+//	return [num floatValue];
+//}
+//
+//bool NDQuestionDataPlist::IsOverTime(double time)
+//{
+//	double cur = [NSDate timeIntervalSinceReferenceDate];
+//	if ( int(cur - time) > PER_DAY_SECOND)
+//		return true;
+//		
+//	return false;
+//}
+//
+//int NDQuestionDataPlist::GetPlayerCurQuestCount(int playerId)
+//{
+//	NSMutableArray* quest = GetQuestData(playerId);
+//	
+//	if (quest == nil) return 0;
+//	
+//	NSNumber *num = [quest objectAtIndex:1];
+//	
+//	if (!num) return 0;
+//	
+//	return [num intValue];
+//}
+//
+//bool NDQuestionDataPlist::IsOverCount(int count)
+//{
+//	if (count >= MAX_QUEST_BUG_COUNT_PER_DAY)
+//		return true;
+//		
+//	return false;
+//}
+//
+//NSMutableArray* NDQuestionDataPlist::GetQuestData(int playerId)
+//{
+//	NSMutableDictionary *dic = this->LoadMailDiction();
+//	NDAsssert(dic != nil);
+//	
+//	NSString *strPlayer= [NSString stringWithFormat:@"%d", playerId];
+//	NSMutableArray *playerQuest = [dic objectForKey:strPlayer];
+//	
+//	if (playerQuest == nil) {
+//		NSMutableArray *quest = [[NSMutableArray alloc] init];
+//		[quest addObject:[NSNumber numberWithDouble:[NSDate timeIntervalSinceReferenceDate]]];
+//		[quest addObject:[NSNumber numberWithInt:0]];
+//		
+//		[dic setObject:quest forKey:strPlayer];
+//		
+//		[quest release];
+//	}
+//	
+//	playerQuest = [dic objectForKey:strPlayer];
+//	
+//	NSNumber *num = [playerQuest objectAtIndex:0];
+//	
+//	if (IsOverTime([num doubleValue]))
+//	{
+//		ResetPlayerQuest(playerId);
+//	}
+//	
+//	return [dic objectForKey:strPlayer];
+//}
+//
+//void NDQuestionDataPlist::ResetPlayerQuest(int playerId)
+//{
+//	NSMutableDictionary *dic = this->LoadMailDiction();
+//	NDAsssert(dic != nil);
+//	
+//	NSString *strPlayer= [NSString stringWithFormat:@"%d", playerId];
+//	NSMutableArray *playerQuest = [dic objectForKey:strPlayer];
+//	
+//	if (playerQuest != nil) {
+//		[dic removeObjectForKey:strPlayer];
+//		
+//		GetQuestData(playerId);
+//	}
+//}
+//
+//void NDQuestionDataPlist::IncPlayerQuestCount(int playerId)
+//{
+//	NSMutableArray* quest = GetQuestData(playerId);
+//	
+//	if (quest == nil) return;
+//	
+//	NSNumber *num = [quest objectAtIndex:1];
+//	
+//	if (num == nil)
+//		return;
+//	
+//	[quest replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:[num intValue]+1]];
+//	
+//	this->SaveData();
+//}
+//
