@@ -43,6 +43,11 @@ namespace cocos2d {
 			m_sString = str;
 		}
 		virtual ~CCString(){ m_sString.clear(); }
+
+		const unsigned char* UTF8String()
+		{
+
+		}
 		
 		int toInt()
 		{
@@ -100,10 +105,20 @@ namespace cocos2d {
             return pszRet;
         }
 
+		/***
+		* @brief 为了符合Objective-C语言上NSString的一些结构，所以对CCString
+		*		 进行类NSString化扩展。
+		*
+		* @param pszFormat 动态参数。
+		* @return CCString* 返回CCString类的指针
+		* @retval 0 空指针即为动态参数中有空值
+		* @author (DeNA)郭浩
+		* @date 20120731
+		* @warning 一定要析构掉获得的指针，否则会造成内存泄露
+		*/
 		static CCString* stringWithFormat(const char* pszFormat,...)
 		{
 			char szBuf[255] = {0};
-
 			va_list kAp = 0;
 
 			va_start(kAp, pszFormat);

@@ -520,6 +520,8 @@ bool NDDataPersist::IsGameSettingOn(GAME_SETTING type)
 
 void NDDataPersist::SaveGameSetting()
 {
+	NSString* strGameSetting = NSString::stringWithFormat("%d",s_gameSetting);
+
 	NSString* strGameSetting = [NSString stringWithFormat:@"%d", s_gameSetting];
 	this->SetData(kGameSettingData, kGameSetting, [strGameSetting UTF8String]);
 	this->SaveData();
