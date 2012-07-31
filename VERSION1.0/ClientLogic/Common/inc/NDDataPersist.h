@@ -28,7 +28,7 @@
 //
 //const char* DataFilePath();
 //
-//#define kDataFileName [NSString stringWithFormat:@"%@data.plist", DataFilePath()]
+#define kDataFileName new NSString("")//[NSString stringWithFormat:@"%@data.plist", DataFilePath()]
 //
 //// 上次登录信息
 #define kLoginData 0

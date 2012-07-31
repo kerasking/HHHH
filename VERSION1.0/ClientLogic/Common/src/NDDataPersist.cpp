@@ -178,7 +178,7 @@ const char* NDDataPersist::GetData(uint index, NSString* key)
 		SetData(index, key, "");
 		return decData;
 	}
-	else 
+	else
 	{
 		if (NeedEncodeForKey(key)) 
 		{			
@@ -253,14 +253,15 @@ NSString* NDDataPersist::GetDataPath()
 //	NSString* dir = [kDataFileName stringByDeletingLastPathComponent];
 	NSString* dir = new NSString("");
 
-	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
+	if (!KDirectory::isDirectoryExist(dir->toStdString().c_str())) 
 	{
-		if (!KDirectory::createDir([dir UTF8String]))
+		if (!KDirectory::createDir(dir->toStdString().c_str()))
 		{
 			return nil;
 		}
 	}
-	return kDataFileName;
+	
+	return NSSTkDataFileName;
 //	NSArray *paths = NSSearchPathForDirectoriesInDomains( 
 //							     NSDocumentDirectory, NSUserDomainMask, YES); 
 //	NSString *documentsDirectory = [paths objectAtIndex:0]; 
@@ -269,32 +270,38 @@ NSString* NDDataPersist::GetDataPath()
 
 NSString* NDDataPersist::GetAccountListPath()
 {
-	NSString* dir = [kFavoriteAccountListFileName stringByDeletingLastPathComponent] ;
-	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
-	{
-		if (!KDirectory::createDir([dir UTF8String]))
-		{
-			return nil;
-		}
-	}
-	return kFavoriteAccountListFileName;
+// 	NSString* dir = [kFavoriteAccountListFileName stringByDeletingLastPathComponent] ;
+// 	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
+// 	{
+// 		if (!KDirectory::createDir([dir UTF8String]))
+// 		{
+// 			return nil;
+// 		}
+// 	}
+// 	return kFavoriteAccountListFileName;
 	//	NSArray *paths = NSSearchPathForDirectoriesInDomains( 
 	//							     NSDocumentDirectory, NSUserDomainMask, YES);
 	//	NSString *documentsDirectory = [paths objectAtIndex:0];
 	//	return [documentsDirectory stringByAppendingPathComponent:kFavoriteAccountListFileName];
+
+	return new NSString("");
 }
 
 void NDDataPersist::LoadAccountList()
 {
-	NSString *filePath = this->GetAccountListPath();
-	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
-	{ 
-		accountList = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
-	}
-	else
-	{
-		accountList = [[NSMutableArray alloc] init];
-	}	
+	/***
+	* 临时性注释 郭浩
+	* all
+	*/
+// 	NSString *filePath = this->GetAccountListPath();
+// 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+// 	{ 
+// 		accountList = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
+// 	}
+// 	else
+// 	{
+// 		accountList = [[NSMutableArray alloc] init];
+// 	}	
 }
 
 void NDDataPersist::AddAcount(const char* account, const char* pwd)
@@ -313,28 +320,38 @@ void NDDataPersist::AddAcount(const char* account, const char* pwd)
 		{
 			unsigned char encPwd[1024] = {0x00};
 			simpleEncode((const unsigned char*)pwd, encPwd);
-			[accountNode addObject:[NSString stringWithUTF8String:(const char*)encPwd]];
+			//[accountNode addObject:[NSString stringWithUTF8String:(const char*)encPwd]];
+
+			accountNode->addObject(NSString((const char*)encPwd));
 		}
 		
-		for (NSUInteger i = 0; i < [accountList count]; i++) 
+		for (int i = 0; i < accountList->count(); i++) 
 		{
 			CCArray* tmpAccountNode = accountList->objectAtIndex(i);
 			NSString *tmpAccount = tmpAccountNode->objectAtIndex(0);
-			if ([tmpAccount isEqual:[NSString stringWithUTF8String:(const char*)encAccount]]) 
+
+			if (tmpAccount->isEqual(NSString((const char*) encAccount)))
 			{
-				[accountList removeObject:tmpAccountNode];
-				break;
+				accountList->removeObject(tmpAccount);
 			}
+
+// 			if ([tmpAccount isEqual:[NSString stringWithUTF8String:(const char*)encAccount]]) 
+// 			{
+// 				[accountList removeObject:tmpAccountNode];
+// 				break;
+// 			}
 		}
 		
-		if ([accountList count] >= MAX_ACCOUNT) 
+		if (accountList->count() >= MAX_ACCOUNT) 
 		{
-			[accountList removeObjectAtIndex:0];
+			//[accountList removeObjectAtIndex:0];
+			accountList->removeObjectAtIndex(0);
 		}
 		
-		[accountList addObject:accountNode];
+		accountList->addObject(accountNode);
+		//[accountList addObject:accountNode];
 		
-		[accountNode release];
+		accountNode->release();
 	}	
 }
 
@@ -342,25 +359,50 @@ void NDDataPersist::GetAccount(VEC_ACCOUNT& vAccount)
 {
 	vAccount.clear();
 	
-	NSEnumerator *enumerator;
-	enumerator = [accountList objectEnumerator];
+// 	NSEnumerator *enumerator;
+// 	enumerator = [accountList objectEnumerator];
 	
-	id account;
-	while ((account = [enumerator nextObject]) != nil)
+	CCArray* account = 0;
+
+	for (int i = 0;i < accountList->count();i++)
 	{
-		string acc = [(NSString*)[(NSArray*)account objectAtIndex:0] UTF8String];
-		string pwd;
-		if ([account count] > 1) 
+		account = accountList->objectAtIndex(i);
+		string acc = ((NSString*)(account->objectAtIndex(0)))->toStdString();
+		string pwd = "";
+
+		if (account->count() > 1)
 		{
-			pwd = [(NSString*)[(NSArray*)account objectAtIndex:1] UTF8String];
+			pwd = ((NSString*)(account->objectAtIndex(1)))->toStdString();
 		}
-		
+
 		unsigned char decAcc[1024] = {0x00};
 		unsigned char decPwd[1024] = {0x00};
+
 		simpleDecode((const unsigned char*)acc.c_str(), decAcc);
 		simpleDecode((const unsigned char*)pwd.c_str(), decPwd);
+
 		vAccount.push_back(PAIR_ACCOUNT((const char*)decAcc, (const char*)decPwd));
 	}
+
+	/***
+	* objective-c的旧代码
+	* 已被替换 郭浩
+	*/
+// 	while ((account = accountList->) != nil)
+// 	{
+// 		string acc = [(NSString*)[(NSArray*)account objectAtIndex:0] UTF8String];
+// 		string pwd;
+// 		if ([account count] > 1) 
+// 		{
+// 			pwd = [(NSString*)[(NSArray*)account objectAtIndex:1] UTF8String];
+// 		}
+// 		
+// 		unsigned char decAcc[1024] = {0x00};
+// 		unsigned char decPwd[1024] = {0x00};
+// 		simpleDecode((const unsigned char*)acc.c_str(), decAcc);
+// 		simpleDecode((const unsigned char*)pwd.c_str(), decPwd);
+// 		vAccount.push_back(PAIR_ACCOUNT((const char*)decAcc, (const char*)decPwd));
+// 	}
 }
 
 void NDDataPersist::SaveAccountList()
@@ -370,15 +412,28 @@ void NDDataPersist::SaveAccountList()
 
 NSString* NDDataPersist::GetAccountDeviceListPath()
 {
-	NSString* dir = [kFavoriteAccountDeviceListFileName stringByDeletingLastPathComponent] ;
-	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
-	{
-		if (!KDirectory::createDir([dir UTF8String]))
-		{
-			return nil;
-		}
-	}
-	return kFavoriteAccountDeviceListFileName;
+/***
+* 临时性注释 郭浩
+* begin
+*/
+
+	// 	NSString* dir = [kFavoriteAccountDeviceListFileName stringByDeletingLastPathComponent];
+	// 
+	// 	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
+	// 	{
+	// 		if (!KDirectory::createDir([dir UTF8String]))
+	// 		{
+	// 			return nil;
+	// 		}
+	// 	}
+	// 	return kFavoriteAccountDeviceListFileName;
+
+/***
+* 临时性注释 郭浩
+* end
+*/
+	return 0;
+
 	//	NSArray *paths = NSSearchPathForDirectoriesInDomains( 
 	//							     NSDocumentDirectory, NSUserDomainMask, YES);
 	//	NSString *documentsDirectory = [paths objectAtIndex:0];

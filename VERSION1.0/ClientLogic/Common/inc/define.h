@@ -12,6 +12,8 @@
 
 //typedef unsigned int OBJID;
 
+#include "CCObject.h"
+
 #define SEND_DATA(bao) do{\
 	NDSocket* skt = NDEngine::NDDataTransThread::DefaultThread()->GetSocket();\
 	if (skt)\
@@ -43,6 +45,7 @@
 	#define nil 0
 #endif
 
+typedef CCObject base,*id;
 typedef unsigned int UInt32;
 typedef unsigned short UInt16;
 typedef unsigned char UInt8;

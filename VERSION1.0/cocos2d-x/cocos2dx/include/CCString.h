@@ -99,6 +99,26 @@ namespace cocos2d {
             } while (false);
             return pszRet;
         }
+
+		static CCString* stringWithFormat(const char* pszFormat,...)
+		{
+			char szBuf[255] = {0};
+
+			va_list kAp = 0;
+
+			va_start(kAp, pszFormat);
+			vsnprintf_s(szBuf, 255, 255, pszFormat, kAp);
+			va_end(kAp);
+
+			if (!*szBuf)
+			{
+				return 0;
+			}
+
+			CCString* pstrString = new CCString(szBuf);
+
+			return pstrString;
+		}
 	};
 }// namespace cocos2d
 #endif //__CCSTRING_H__
