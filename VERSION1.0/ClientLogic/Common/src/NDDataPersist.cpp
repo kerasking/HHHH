@@ -131,10 +131,10 @@ NDDataPersist::~NDDataPersist()
 
 bool NDDataPersist::NeedEncodeForKey(NSString* key)
 {
-	if (key->isEqual(kLastServerIP) ||
-		key->isEqual(kLastServerPort) ||
-		key->isEqual(kLastAccountName) ||
-		key->isEqual(kLastAccountPwd))
+	if (key->isEqual(&kLastServerIP) ||
+		key->isEqual(&kLastServerPort) ||
+		key->isEqual(&kLastAccountName) ||
+		key->isEqual(&kLastAccountPwd))
 	{
 		return true;
 	}
@@ -150,7 +150,8 @@ void NDDataPersist::SetData(unsigned int index, NSString* key, const char* data)
 	NDAsssert(dic != nil);
 	if (data) 
 	{
-		NSString *nsObj = [NSString stringWithUTF8String:data];
+//		NSString *nsObj = [NSString stringWithUTF8String:data];
+		NSString* nsObj = NSString::stringWithUTF8String(data);
 		
 		if (NeedEncodeForKey(key)) 
 		{
@@ -161,7 +162,7 @@ void NDDataPersist::SetData(unsigned int index, NSString* key, const char* data)
 		}
 		
 		//[dic setObject:nsObj forKey:key];
-		dic->setObject(nsObj,key);
+		dic->setObject(nsObj,key->toStdString().c_str());
 	}
 	
 }
@@ -173,7 +174,7 @@ const char* NDDataPersist::GetData(unsigned int index, NSString* key)
 	
 	CCMutableDictionary<const char*>* dic = LoadDataDiction(index);
 	NDAsssert(dic != nil);
-	NSString* nsStr = dic->objectForKey(key);
+	NSString* nsStr = (NSString*)dic->objectForKey(key->toStdString().c_str());
 
 	if (nsStr == nil) // 键值对不存在, 加入
 	{ 
@@ -197,7 +198,8 @@ const char* NDDataPersist::GetData(unsigned int index, NSString* key)
 
 void NDDataPersist::SaveData()
 {
-	[dataArray writeToFile:this->GetDataPath() atomically:YES];
+//	[dataArray writeToFile:this->GetDataPath() atomically:YES];
+	dataArray->writeToFile(GetDataPath(),YES);
 }
 
 void NDDataPersist::SaveLoginData()
@@ -221,7 +223,7 @@ CCMutableDictionary<const char*>* NDDataPersist::LoadDataDiction(unsigned int in
 		for (unsigned int i = dataArray->count(); i <= index; i++) 
 		{
 			dic = new CCMutableDictionary<const char*>;
-			dataArray->insertObject(dic);
+			dataArray->insertObject(dic,i);
 			SAFE_DELETE(dic);
 // 			[dataArray insertObject:dic atIndex:i];
 // 			[dic release];
@@ -263,7 +265,7 @@ NSString* NDDataPersist::GetDataPath()
 		}
 	}
 	
-	return NSSTkDataFileName;
+	return pkDataFileName;
 //	NSArray *paths = NSSearchPathForDirectoriesInDomains( 
 //							     NSDocumentDirectory, NSUserDomainMask, YES); 
 //	NSString *documentsDirectory = [paths objectAtIndex:0]; 
@@ -313,9 +315,9 @@ void NDDataPersist::AddAcount(const char* account, const char* pwd)
 		unsigned char encAccount[1024] = {0x00};
 		simpleEncode((const unsigned char*)account, encAccount);
 		
-		CCMutableArray *accountNode = new CCMutableArray;
+		CCMutableArray<CCObject*>* accountNode = new CCMutableArray<CCObject*>;
 
-		accountNode->addObject(NSString((const char*)encAccount));
+		accountNode->addObject(&NSString((const char*)encAccount));
 		//[accountNode addObject:[NSString stringWithUTF8String:(const char*)encAccount]];
 		
 		if (pwd)
@@ -324,15 +326,15 @@ void NDDataPersist::AddAcount(const char* account, const char* pwd)
 			simpleEncode((const unsigned char*)pwd, encPwd);
 			//[accountNode addObject:[NSString stringWithUTF8String:(const char*)encPwd]];
 
-			accountNode->addObject(NSString((const char*)encPwd));
+			accountNode->addObject(&NSString((const char*)encPwd));
 		}
 		
 		for (int i = 0; i < accountList->count(); i++) 
 		{
-			CCArray* tmpAccountNode = accountList->objectAtIndex(i);
-			NSString *tmpAccount = tmpAccountNode->objectAtIndex(0);
+			CCArray* tmpAccountNode = (CCArray*)accountList->objectAtIndex(i);
+			NSString *tmpAccount = (NSString*)tmpAccountNode->objectAtIndex(0);
 
-			if (tmpAccount->isEqual(NSString((const char*) encAccount)))
+			if (tmpAccount->isEqual(new NSString((const char*) encAccount)))
 			{
 				accountList->removeObject(tmpAccount);
 			}
@@ -368,7 +370,7 @@ void NDDataPersist::GetAccount(VEC_ACCOUNT& vAccount)
 
 	for (int i = 0;i < accountList->count();i++)
 	{
-		account = accountList->objectAtIndex(i);
+		account = (CCArray*)accountList->objectAtIndex(i);
 		string acc = ((NSString*)(account->objectAtIndex(0)))->toStdString();
 		string pwd = "";
 
@@ -409,7 +411,8 @@ void NDDataPersist::GetAccount(VEC_ACCOUNT& vAccount)
 
 void NDDataPersist::SaveAccountList()
 {
-	[accountList writeToFile:this->GetAccountListPath() atomically:YES];
+//	[accountList writeToFile:this->GetAccountListPath() atomically:YES];
+	accountList->writeToFile(GetAccountListPath(),YES);
 }
 
 NSString* NDDataPersist::GetAccountDeviceListPath()
@@ -444,15 +447,20 @@ NSString* NDDataPersist::GetAccountDeviceListPath()
 
 void NDDataPersist::LoadAccountDeviceList()
 {
-	NSString *filePath = this->GetAccountDeviceListPath();
-	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
-	{ 
-		accountDeviceList = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
-	}
-	else
-	{
-		accountDeviceList = [[NSMutableArray alloc] init];
-	}	
+	NSString* filePath = GetAccountDeviceListPath();
+
+	/***
+	* 以下为旧代码 郭浩
+	*/
+// 	NSString *filePath = this->GetAccountDeviceListPath();
+// 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+// 	{ 
+// 		accountDeviceList = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
+// 	}
+// 	else
+// 	{
+// 		accountDeviceList = [[NSMutableArray alloc] init];
+// 	}	
 }
 
 void NDDataPersist::AddAccountDevice(const char* account)
@@ -462,7 +470,7 @@ void NDDataPersist::AddAccountDevice(const char* account)
 		unsigned char encAccount[1024] = {0x00};
 		simpleEncode((const unsigned char*)account, encAccount);
 		
-		for (NSUInteger i = 0; i < [accountList count]; i++) 
+		for (NSUInteger i = 0; i < accountList->count(); i++) 
 		{
 			NSString* tmpAccountNode = (NSString*)accountList->objectAtIndex(i);
 
@@ -477,32 +485,56 @@ void NDDataPersist::AddAccountDevice(const char* account)
 // 			}
 		}
 		
-		[accountDeviceList addObject:[NSString stringWithUTF8String:(const char*)encAccount]];
+		//[accountDeviceList addObject:[NSString stringWithUTF8String:(const char*)encAccount]];
+		accountDeviceList->addObject(NSString::stringWithUTF8String((const char*)encAccount));
 	}	
 }
 
 bool NDDataPersist::HasAccountDevice(const char* account)
 {
-	if (!account) return true;
-	
-	NSEnumerator *enumerator;
-	enumerator = [accountDeviceList objectEnumerator];
-	
-	NSString* tmpAccountNode = [NSString stringWithUTF8String:account];
-	
-	id object;
-	while ((object = [enumerator nextObject]) != nil)
+	/***
+	* 旧代码 郭浩
+	*/
+
+	if (!account)
 	{
-		string acc = [(NSString*)object UTF8String];
-		
-		unsigned char decAcc[1024] = {0x00};
-		simpleDecode((const unsigned char*)acc.c_str(), decAcc);
-		
-		if ([tmpAccountNode isEqual:[NSString stringWithUTF8String:(const char*)decAcc]]) 
+		return true;
+	}
+	
+	NSString* tmpAccountNode = NSString::stringWithUTF8String(account);
+
+// 	NSEnumerator *enumerator;
+// 	enumerator = [accountDeviceList objectEnumerator];
+// 	
+// 	NSString* tmpAccountNode = [NSString stringWithUTF8String:account];
+	
+	id object = 0;
+
+	for (int i = 0;i < accountDeviceList->count();i++)
+	{
+		string acc = ((NSString*)object)->UTF8String();
+		unsigned char decAcc[1024] = {0};
+
+		simpleDecode((const unsigned char*)acc.c_str(),decAcc);
+
+		if (tmpAccountNode->isEqual(NSString::stringWithUTF8String((const char*)decAcc)))
 		{
 			return true;
 		}
 	}
+
+// 	while ((object = [enumerator nextObject]) != nil)
+// 	{
+// 		string acc = [(NSString*)object UTF8String];
+// 		
+// 		unsigned char decAcc[1024] = {0x00};
+// 		simpleDecode((const unsigned char*)acc.c_str(), decAcc);
+// 		
+// 		if ([tmpAccountNode isEqual:[NSString stringWithUTF8String:(const char*)decAcc]]) 
+// 		{
+// 			return true;
+// 		}
+// 	}
 	
 	return false;
 }
@@ -533,7 +565,8 @@ void NDDataPersist::SaveGameSetting()
 {
 	NSString* strGameSetting = NSString::stringWithFormat("%d",s_gameSetting);
 
-	SetData(kGameSettingData,kGameSetting,strGameSetting->UTF8String());
+	NSString* strTemp = new NSString(kGameSetting);
+	SetData(kGameSettingData,strTemp,strGameSetting->UTF8String());
 	SaveData();
 
 	/***

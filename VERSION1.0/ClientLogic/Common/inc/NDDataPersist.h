@@ -28,21 +28,21 @@
 //
 //const char* DataFilePath();
 //
-#define kDataFileName new NSString("")//[NSString stringWithFormat:@"%@data.plist", DataFilePath()]
+#define pkDataFileName NSString::stringWithFormat("%sdata.plist", DataFilePath()->toStdString().c_str())
 //
 //// 上次登录信息
 #define kLoginData 0
-#define kLastServerName "LastServerName"
-#define kLastServerIP "LastServerIP"
-#define kLastServerPort "LastServerPort"
-#define kLastAccountName "LastAccountName"
-#define kLastAccountPwd "LastAccountPwd"
-#define kLastServerSendName "LastServerSendName"
-#define kLinkType "LinkType"
+const static NSString kLastServerName("LastServerName");
+const static NSString kLastServerIP("LastServerIP");
+const static NSString kLastServerPort("LastServerPort");
+const static NSString kLastAccountName("LastAccountName");
+const static NSString kLastAccountPwd("LastAccountPwd");
+const static NSString kLastServerSendName("LastServerSendName");
+const static NSString kLinkType("LinkType");
 //
 //// 游戏设置
-//#define kGameSettingData 1
-//#define kGameSetting @"GameSetting"
+#define kGameSettingData 1
+const static NSString kGameSetting("GameSetting");
 //
 //#ifdef CPLOG
 //
@@ -114,11 +114,11 @@ private:
 	CCArray *dataArray;
 	// 常用帐号列表
 	CCArray *accountList;
-	
+
 	CCArray *accountDeviceList;
-	
+
 	static int s_gameSetting;
-	
+
 private:
 	void LoadData();
 	NSString* GetDataPath();

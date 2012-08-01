@@ -76,14 +76,16 @@ enum {
 using namespace std;
 using namespace NDEngine;
 
-enum BATTLE_COMPLETE {
+enum BATTLE_COMPLETE
+{
 	BATTLE_COMPLETE_LOSE = 0,
 	BATTLE_COMPLETE_WIN = 1,
 	BATTLE_COMPLETE_NO = 2,
 	BATTLE_COMPLETE_END = 3,
 };
 
-class HighlightTipStatusBar : public NDUINode {
+class HighlightTipStatusBar : public NDUINode 
+{
 	DECLARE_CLASS(HighlightTipStatusBar)
 public:
 	HighlightTipStatusBar() {
