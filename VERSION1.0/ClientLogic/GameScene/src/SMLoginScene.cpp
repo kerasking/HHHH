@@ -13,6 +13,7 @@
 //#include <iconv.h>
 #include "NDConstant.h"
 #include "GameApp.h"
+#include "NDDataPersist.h"
 
 IMPLEMENT_CLASS(CSMLoginScene, NDScene)
 ////////////////////////////////////////////////////////////
@@ -240,7 +241,7 @@ int InitGameInstance()
 	BattleMgr battleMgr;
 	//ItemMgr itemMgr; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	NDColorPool colorPool;
-	void LoadGameSetting(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	NDDataPersist::LoadGameSetting(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	//NDFarmMgrObj;
 	//BattleFieldMgrObj;
 	

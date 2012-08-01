@@ -43,7 +43,30 @@ namespace cocos2d {
 		{
 			m_sString = str;
 		}
+
 		virtual ~CCString(){ m_sString.clear(); }
+
+		/***
+		* @brief 去除路径中最后一个"\"之后的所有的东西，包括斜杠本身。
+		*
+		* @return CCString* 返回CCString类的指针
+		* @author (DeNA)郭浩
+		* @date 20120731
+		*/
+		CCString* stringByDeletingLastPathComponent()
+		{
+			int nPos = -1;
+			string strSubString = "";
+
+			if (-1 == (nPos = m_sString.find_last_of('\\')))
+			{
+				return new CCString(m_sString.c_str());
+			}
+
+			strSubString = m_sString.substr(0,nPos);
+
+			return new CCString(strSubString.c_str());
+		}
 
 		/***
 		* @brief 返回转换成UTF8格式的字符

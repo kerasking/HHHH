@@ -28,7 +28,7 @@
 //
 //const char* DataFilePath();
 //
-#define pkDataFileName NSString::stringWithFormat("%sdata.plist", DataFilePath()->toStdString().c_str())
+#define pkDataFileName NSString::stringWithFormat("%s\\data.plist", DataFilePath()->toStdString().c_str())
 //
 //// 上次登录信息
 #define kLoginData 0
@@ -111,7 +111,7 @@ public:
 	
 private:
 	// 上次登录帐号，密码及服务器地址, 游戏设置
-	CCArray *dataArray;
+	CCMutableArray<CCObject*> *dataArray;
 	// 常用帐号列表
 	CCArray *accountList;
 

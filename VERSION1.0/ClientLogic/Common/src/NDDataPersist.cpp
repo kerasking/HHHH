@@ -11,6 +11,7 @@
 #include "KDirectory.h"
 #include "define.h"
 #include "ItemMgr.h"
+#include <direct.h>
 
 NSString* DataFilePath()
 {
@@ -27,7 +28,11 @@ NSString* DataFilePath()
 	* end
 	*/
 
-	return new CCString("");
+	char szTempPath[MAX_PATH] = {0};
+
+	getcwd(szTempPath,MAX_PATH);
+
+	return new CCString("szTempPath");
 }
 
 
@@ -124,6 +129,9 @@ NDDataPersist::NDDataPersist()
 
 NDDataPersist::~NDDataPersist()
 {
+	dataArray->release();
+	accountList->release();
+	accountDeviceList->release();
 // 	[dataArray release];
 // 	[accountList release];
 // 	[accountDeviceList release];
@@ -199,7 +207,7 @@ const char* NDDataPersist::GetData(unsigned int index, NSString* key)
 void NDDataPersist::SaveData()
 {
 //	[dataArray writeToFile:this->GetDataPath() atomically:YES];
-	dataArray->writeToFile(GetDataPath(),YES);
+	//dataArray->writeToFile(GetDataPath(),YES);
 }
 
 void NDDataPersist::SaveLoginData()
@@ -215,7 +223,7 @@ CCMutableDictionary<const char*>* NDDataPersist::LoadDataDiction(unsigned int in
 	
 	if (dataArray->count() > index)
 	{
-		dic = (CCMutableDictionary<const char*>*)dataArray->objectAtIndex(index);
+		dic = (CCMutableDictionary<const char*>*)dataArray->getObjectAtIndex(index);
 	}
 	
 	if (dic == nil)
@@ -223,7 +231,7 @@ CCMutableDictionary<const char*>* NDDataPersist::LoadDataDiction(unsigned int in
 		for (unsigned int i = dataArray->count(); i <= index; i++) 
 		{
 			dic = new CCMutableDictionary<const char*>;
-			dataArray->insertObject(dic,i);
+			dataArray->insertObjectAtIndex(dic,i);
 			SAFE_DELETE(dic);
 // 			[dataArray insertObject:dic atIndex:i];
 // 			[dic release];
@@ -235,7 +243,7 @@ CCMutableDictionary<const char*>* NDDataPersist::LoadDataDiction(unsigned int in
 
 void NDDataPersist::LoadData()
 {
-// 	NSString *filePath = this->GetDataPath();
+ 	NSString *filePath = this->GetDataPath();
 // 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
 // 	{ 
 // 		dataArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
@@ -250,21 +258,25 @@ void NDDataPersist::LoadData()
 // 	{
 // 		dataArray = [[NSMutableArray alloc] init];
 // 	}
+
+	dataArray = new CCMutableArray<CCObject*>;
 }
 
 NSString* NDDataPersist::GetDataPath()
 {
 //	NSString* dir = [kDataFileName stringByDeletingLastPathComponent];
-	NSString* dir = new NSString("");
 
-	if (!KDirectory::isDirectoryExist(dir->toStdString().c_str())) 
-	{
-		if (!KDirectory::createDir(dir->toStdString().c_str()))
-		{
-			return nil;
-		}
-	}
-	
+	// 	NSString* dir = new NSString("");
+	// 
+	// 	if (!KDirectory::isDirectoryExist(dir->toStdString().c_str())) 
+	// 	{
+	// 		if (!KDirectory::createDir(dir->toStdString().c_str()))
+	// 		{
+	// 			return nil;
+	// 		}
+	// 	}
+
+
 	return pkDataFileName;
 //	NSArray *paths = NSSearchPathForDirectoriesInDomains( 
 //							     NSDocumentDirectory, NSUserDomainMask, YES); 
