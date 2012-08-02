@@ -12,6 +12,7 @@
 #include "define.h"
 #include "ItemMgr.h"
 #include <direct.h>
+#include "..\..\TinyXML\inc\tinyxml.h"
 
 NSString* DataFilePath()
 {

@@ -41,6 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="./inc"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -104,6 +105,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="./inc"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -143,34 +145,38 @@
 	<References>
 	</References>
 	<Files>
-		<File
-			RelativePath=".\ReadMe.txt"
+		<Filter
+			Name="Head Files"
 			>
-		</File>
-		<File
-			RelativePath=".\tinystr.cpp"
+			<File
+				RelativePath=".\inc\tinystr.h"
+				>
+			</File>
+			<File
+				RelativePath=".\inc\tinyxml.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Cpp Files"
 			>
-		</File>
-		<File
-			RelativePath=".\tinystr.h"
-			>
-		</File>
-		<File
-			RelativePath=".\tinyxml.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\tinyxml.h"
-			>
-		</File>
-		<File
-			RelativePath=".\tinyxmlerror.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\tinyxmlparser.cpp"
-			>
-		</File>
+			<File
+				RelativePath=".\src\tinystr.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\tinyxml.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\tinyxmlerror.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\tinyxmlparser.cpp"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

@@ -64,7 +64,7 @@ do \
 	}\
 } while (false)
 
-#define SafeDeleteArray(pObject)\
+#define SAFE_DELETE_ARRAY(pObject)\
 do \
 {\
 	if (0 != pObject)\

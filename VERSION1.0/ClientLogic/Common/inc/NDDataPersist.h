@@ -85,10 +85,12 @@ enum GAME_SETTING
 class NDDataPersist
 {
 public:
+
 	static void LoadGameSetting();
 	static bool IsGameSettingOn(GAME_SETTING type);
 	
 public:
+
 	NDDataPersist();
 	~NDDataPersist();
 	
