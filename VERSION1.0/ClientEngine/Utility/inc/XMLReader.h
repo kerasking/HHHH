@@ -8,7 +8,7 @@
 #include <cocos2d.h>
 #include <map>
 #include <vector>
-#include "..\..\TinyXML\inc\tinyxml.h"
+#include <string>
 
 using namespace cocos2d;
 using namespace std;
@@ -17,7 +17,7 @@ class XMLReader
 {
 public:
 
-	typedef map<const char*,const char*> FileData,*FileDataPtr;
+	typedef map<string,string> FileData,*FileDataPtr;
 
 	XMLReader();
 	virtual ~XMLReader();
@@ -26,7 +26,7 @@ public:
 	bool initWithData(const char* pszData,int nSize);
 	void* getObjectWithPath(string strPath,int* pnIndexArray,int nArraySize);
 
-	XMLReader::FileDataPtr getArrayWithContentsOfFile();
+	XMLReader::FileDataPtr getMapWithContentsOfFile();
 
 protected:
 
