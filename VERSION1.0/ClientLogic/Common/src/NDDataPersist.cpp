@@ -13,6 +13,7 @@
 #include "ItemMgr.h"
 #include <direct.h>
 #include "..\..\TinyXML\inc\tinyxml.h"
+#include "XMLReader.h"
 
 NSString* DataFilePath()
 {
@@ -193,7 +194,7 @@ const char* NDDataPersist::GetData(unsigned int index, NSString* key)
 	else
 	{
 		if (NeedEncodeForKey(key)) 
-		{			
+		{
 			//simpleDecode((const unsigned char*)[nsStr UTF8String], (unsigned char*)decData);
 			simpleDecode((const unsigned char*)nsStr->UTF8String(),(unsigned char*)decData);
 			return decData;
@@ -245,6 +246,38 @@ CCMutableDictionary<const char*>* NDDataPersist::LoadDataDiction(unsigned int in
 void NDDataPersist::LoadData()
 {
  	NSString *filePath = this->GetDataPath();
+
+	XMLReader kReader;
+	dataArray = new CCMutableArray<CCObject*>;
+	
+	if (!kReader.initWithFile(filePath->toStdString().c_str()))
+	{
+		return;
+	}
+
+	XMLReader::FileDataPtr pkMap = kReader.getMapWithContentsOfFile();
+
+	if (0 == pkMap)
+	{
+		return;
+	}
+	
+	for (XMLReader::FileData::iterator it = pkMap->begin();
+		it != pkMap->end();it++)
+	{
+		CCMutableDictionary<CCObject*,CCObject*>* pkDic = 
+			new CCMutableDictionary<CCObject*,CCObject*>;
+		string strKey = "";
+		string strString = "";
+		
+		strKey = it->first;
+		strString = it->second;
+
+		pkDic->setObject(new CCString(strKey.c_str()),new CCString(strString.c_str()));
+
+		dataArray->addObject(pkDic);
+	}
+
 // 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
 // 	{ 
 // 		dataArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
@@ -259,8 +292,6 @@ void NDDataPersist::LoadData()
 // 	{
 // 		dataArray = [[NSMutableArray alloc] init];
 // 	}
-
-	dataArray = new CCMutableArray<CCObject*>;
 }
 
 NSString* NDDataPersist::GetDataPath()

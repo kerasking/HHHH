@@ -15,7 +15,7 @@ XMLReader::~XMLReader()
 
 XMLReader::FileDataPtr XMLReader::getMapWithContentsOfFile()
 {
-	return 0;
+	return m_pkFileDataMap;
 }
 
 bool XMLReader::initWithFile( const char* pszFilename )

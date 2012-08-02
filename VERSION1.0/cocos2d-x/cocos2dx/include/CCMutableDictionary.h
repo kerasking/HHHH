@@ -49,6 +49,7 @@ protected:
 	CCObjectMapIter m_MapIter;
 
 public:
+
 	CCMutableDictionary(void)
 	{
 		m_bBegin = false;
