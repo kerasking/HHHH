@@ -74,4 +74,14 @@ do \
 	}\
 } while (false)
 
+#define SAFE_RELEASE(pObject)\
+do \
+{\
+	if (0 != pObject)\
+	{\
+		pObject->release();\
+		pObject = 0;\
+	}\
+} while (false)
+
 #endif // __DEFINE_H__

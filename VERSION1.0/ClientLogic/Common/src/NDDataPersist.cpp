@@ -122,7 +122,10 @@ void NDDataPersist::LoadGameSetting()
 	gs.SaveGameSetting();
 }
 
-NDDataPersist::NDDataPersist()
+NDDataPersist::NDDataPersist():
+accountList(0),
+dataArray(0),
+accountDeviceList(0)
 {
 	this->LoadData();
 	this->LoadAccountList();
@@ -131,9 +134,10 @@ NDDataPersist::NDDataPersist()
 
 NDDataPersist::~NDDataPersist()
 {
-	dataArray->release();
-	accountList->release();
-	accountDeviceList->release();
+	SAFE_RELEASE(dataArray);
+	SAFE_RELEASE(accountList);
+	SAFE_RELEASE(accountDeviceList);
+
 // 	[dataArray release];
 // 	[accountList release];
 // 	[accountDeviceList release];
