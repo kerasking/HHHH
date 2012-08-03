@@ -23,7 +23,6 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "CCEGLView.h"
-
 #include "EGL/egl.h"
 #include "gles/gl.h"
 
@@ -203,7 +202,7 @@ CCEGLView::~CCEGLView()
 {
 }
 
-bool CCEGLView::Create(LPCTSTR pTitle, int w, int h)
+bool CCEGLView::Create(const wchar_t* pTitle, int w, int h)
 {
 	bool bRet = false;
 	do 
@@ -211,7 +210,7 @@ bool CCEGLView::Create(LPCTSTR pTitle, int w, int h)
 		CC_BREAK_IF(m_hWnd);
 
 		HINSTANCE hInstance = GetModuleHandle( NULL );
-		WNDCLASS  wc = {0};		// Windows Class Structure
+		WNDCLASS wc = {0};		// Windows Class Structure
 
 		// Redraw On Size, And Own DC For Window.
 		wc.style          = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;  
@@ -232,7 +231,7 @@ bool CCEGLView::Create(LPCTSTR pTitle, int w, int h)
 		GetWindowRect(GetDesktopWindow(), &rcDesktop);
 
 		// create window
-		m_hWnd = CreateWindowEx(
+		m_hWnd = CreateWindowExW(
 			WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,	// Extended Style For The Window
 			kWindowClassName,									// Class Name
 			pTitle,												// Window Title

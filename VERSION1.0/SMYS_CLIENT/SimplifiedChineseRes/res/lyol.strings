@@ -1,1 +1,2633 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><!-- 使用:　定义为通用的字串所有文件都能访问, 定义为文件的字串仅该文件能访问--><!-- 通用　字串定义开始-->	<key>Common_tip</key>	<string>提示</string>	<key>Common_haode</key>	<string>好的</string>	<key>Common_year</key>	<string>年</string>	<key>Common_month</key>	<string>月</string>	<key>Common_day</key>	<string>日</string>	<key>Common_hour</key>	<string>时</string>	<key>Common_minute</key>	<string>分</string>	<key>Common_second</key>	<string>秒</string>	<key>Common_error</key>	<string>错误</string>	<key>Common_NumberRequireTip</key>	<string>请输入0~9数字</string>	<key>Common_wu</key>	<string>无</string>	<key>Common_CampTang</key>	<string>唐军</string>	<key>Common_CampSui</key>	<string>隋军</string>	<key>Common_CampTuJue</key>	<string>突厥军</string>	<key>Common_Ok</key>	<string>确定</string>	<key>Common_Cancel</key>	<string>取消</string>	<key>Common_ConnectFailTip</key>	<string>连接超时,请稍候重试</string>	<key>Common_buy</key>	<string>购买</string>	<key>Common_BuyCountError</key>	<string>购买数量不对</string>	<key>Common_LevelRequire</key>	<string>等级需求</string>	<key>Common_Ji</key>	<string>级</string>	<key>Common_NormalPrice</key>	<string>原价</string>	<key>Common_CurPrice</key>	<string>现价</string>	<key>Common_price</key>	<string>价格</string>	<key>Common_FirstPageTip</key>	<string>已经是第一页!</string>	<key>Common_LastPageTip</key>	<string>已经是最后一页!</string>	<key>Common_relive</key>	<string>复活</string>	<key>Common_ReliveInPlace</key>	<string>原地复活</string>	<key>Common_level</key>	<string>等级</string>	<key>Common_apply</key>	<string>报名</string>	<key>Common_finish</key>	<string>完成</string>	<key>Common_ChengShou</key>	<string>成熟</string>	<key>Common_return</key>	<string>返回</string>	<key>Common_LiuYang</key>	<string>留言</string>	<key>Common_ChaKang</key>	<string>查看</string>	<key>Common_del</key>	<string>删除</string>	<key>Common_build</key>	<string>建设</string>	<key>Common_up</key>	<string>升级</string>	<key>Common_require</key>	<string>需求</string>	<key>Common_name</key>	<string>名字</string>	<key>Common_WenXinTip</key>	<string>温馨提示</string>	<key>Common_close</key>	<string>关闭</string>	<key>Common_RestSpace</key>	<string>剩余空间</string>	<key>Common_ShouHuo</key>	<string>收获</string>	<key>Common_confirm</key>	<string>确认</string>	<key>Common_ZhongZhi</key>	<string>种植</string>	<key>Common_ShiFei</key>	<string>施肥</string>	<key>Common_YangZhi</key>	<string>养殖</string>	<key>Common_WeiSiLiao</key>	<string>喂饲料</string>	<key>Common_JiaSuUp</key>	<string>加速升级</string>		<key>Common_ShuanShouDao</key>	<string>双手刀</string>	<key>Common_ShuanShouJian</key>	<string>双手剑</string>	<key>Common_ShuanShouZhang</key>	<string>双手杖</string>	<key>Common_ShuanShouGong</key>	<string>双手弓</string>	<key>Common_DangShouDao</key>	<string>单手刀</string>	<key>Common_DangShouJian</key>	<string>单手剑</string>	<key>Common_BiShou</key>	<string>匕首</string>	<key>Common_TouKui</key>	<string>头盔</string>		<key>Common_JianJia</key>	<string>肩甲</string>	<key>Common_XiongJia</key>	<string>胸甲</string>	<key>Common_HuWang</key>	<string>护腕</string>	<key>Common_PiFeng</key>	<string>披风</string>		<key>Common_HuTui</key>	<string>护腿</string>	<key>Common_XieZhi</key>	<string>鞋子</string>	<key>Common_XiangLiang</key>	<string>项链</string>	<key>Common_ErHuan</key>	<string>耳环</string>		<key>Common_HuiJi</key>	<string>徽记</string>	<key>Common_JieZhi</key>	<string>戒指</string>	<key>Common_ZhangChong</key>	<string>战宠</string>	<key>Common_QiChong</key>	<string>骑宠</string>		<key>Common_HuiHuLei</key>	<string>恢复类</string>	<key>Common_KuangShi</key>	<string>矿石</string>	<key>Common_JuangZhou</key>	<string>卷轴</string>	<key>Common_TeShuXiaoHaoPing</key>	<string>特殊消耗品</string>		<key>Common_BaoShi</key>	<string>宝石</string>	<key>Common_PeiFang</key>	<string>配方</string>	<key>Common_QuestItem</key>	<string>任务物品</string>		<key>Common_chuchao</key>	<string>粗糙</string>	<key>Common_jiaocha</key>	<string>较差</string>	<key>Common_putong</key>	<string>普通</string>	<key>Common_jingzhi</key>	<string>精致</string>	<key>Common_xiyou</key>	<string>稀有</string>	<key>Common_sishi</key>	<string>史诗</string>	<key>Common_chuanshuo</key>	<string>传说</string>	<key>Common_youxiu</key>	<string>优秀</string>	<key>Common_wangmei</key>	<string>完美</string>		<key>Common_all</key>	<string>全部</string>		<key>Common_LvlRange1</key>	<string>1-10级</string>	<key>Common_LvlRange2</key>	<string>11-20级</string>	<key>Common_LvlRange3</key>	<string>21-30级</string>	<key>Common_LvlRange4</key>	<string>31-40级</string>	<key>Common_LvlRange5</key>	<string>41-50级</string>	<key>Common_LvlRange6</key>	<string>50级以上</string>		<key>Common_money</key>	<string>银两</string>	<key>Common_emoney</key>	<string>元宝</string>	<key>Common_ZhongLei</key>	<string>种类</string>	<key>Common_PingZhi</key>	<string>品质</string>	<key>Common_MoneyType</key>	<string>货币类型</string>	<key>Common_ZhuiJia</key>	<string>追加</string>	<key>Common_ShangJia</key>	<string>上架</string>	<key>Common_XiaJia</key>	<string>下架</string>	<key>Common_SelectMoneyType</key>	<string>请选择货币类型</string>		<key>Common_QiPaiPrice</key>	<string>起拍价</string>	<key>Common_YiKouPrice</key>	<string>一口价</string>		<key>Common_unlimit</key>	<string>不限</string>		<key>Common_TiLi</key>	<string>体力</string>		<key>Common_amount</key>	<string>数量</string>		<key>Common_deadline</key>	<string>到期时间</string>		<key>Common_yongjiu</key>	<string>永久</string>		<key>Common_yi</key>	<string>已</string>		<key>Common_accept</key>	<string>接收</string>		<key>Common_JuShou</key>	<string>拒收</string>		<key>Common_tuihui</key>	<string>退回</string>		<key>Common_hadread</key>	<string>已读</string>	<key>Common_noread</key>	<string>未读</string>		<key>Common_system</key>	<string>系统</string>	<key>Common_player</key>	<string>玩家</string>		<key>Common_YourFriend</key>	<string>您的好友</string>		<key>Common_friend</key>	<string>好友</string>	<key>Common_SystemInfo</key>	<string>系统信息</string>		<key>Common_OperateExcept</key>	<string>操作异常</string>		<key>Common_timber</key>	<string>木材</string>	<key>Common_StoneTimber</key>	<string>石材</string>	<key>Common_paint</key>	<string>油漆</string>	<key>Common_WuJing</key>	<string>乌金</string>	<key>Common_TotalContribute</key>	<string>总贡献</string>	<key>Common_PrivateChat</key>	<string>私聊</string>	<key>Common_TakeOffice</key>	<string>任职</string>	<key>Common_add</key>	<string>添加</string>	<key>Common_ShangRang</key>	<string>禅让</string>	<key>Common_dismiss</key>	<string>开除</string>		<key>Common_JunTuanZhang</key>	<string>军团长</string>		<key>Common_FuTuanZhang</key>	<string>副团长</string>		<key>Common_YuanLao</key>	<string>元老</string>		<key>Common_TangZhu</key>	<string>堂主</string>	<key>Common_MengZhu</key>	<string>门主</string>	<key>Common_TuangYuan</key>	<string>团员</string>		<key>Common_UpCondition</key>	<string>升级条件</string>		<key>Common_PostElection</key>	<string>职位竞选</string>		<key>Common_JunTuanMember</key>	<string>军团成员</string>		<key>Common_ShenMengMengZhu</key>	<string>生门门主</string>	<key>Common_ShangMengMengZhu</key>	<string>伤门门主</string>	<key>Common_XiuMengMengZhu</key>	<string>休门门主</string>	<key>Common_DuMengMengZhu</key>	<string>杜门门主</string>	<key>Common_JingMengMengZhu</key>	<string>景门门主</string>	<key>Common_ShiMengMengZhu</key>	<string>死门门主</string>	<key>Common_jinMengMengZhu</key>	<string>惊门门主</string>	<key>Common_KaiMengMengZhu</key>	<string>开门门主</string>	<key>Common_TianLongTangZhu</key>	<string>天龙堂主</string>	<key>Common_QingMuTangZhu</key>	<string>青木堂主</string>	<key>Common_ChiHuoTangZhu</key>	<string>赤火堂主</string>	<key>Common_XiJingTangZhu</key>	<string>西金堂主</string>	<key>Common_XuanShuiTangZhu</key>	<string>玄水堂主</string>	<key>Common_HuanTuTangZhu</key>	<string>黄土堂主</string>	<key>Common_XuangWuYuanLao</key>	<string>玄武元老</string>	<key>Common_QingLongYuanLao</key>	<string>青龙元老</string>	<key>Common_BaiHuYuanLao</key>	<string>白虎元老</string>	<key>Common_ZhuQueYuanLao</key>	<string>朱雀元老</string>		<key>Common_ConfirmTip</key>	<string>是否确定?</string>		<key>Common_camp</key>	<string>阵营</string>		<key>Common_InfoChangKang</key>	<string>信息查看</string>		<key>Common_ApplyJoin</key>	<string>申请加入</string>		<key>Common_JunTuanPaiHanBang</key>	<string>军团排行榜</string>		<key>Common_ContributeDu</key>	<string>贡献度</string>		<key>Common_JunTuanInviteHang</key>	<string>军团邀请函</string>		<key>Common_AgreeJoin</key>	<string>同意加入</string>		<key>Common_RejectJoin</key>	<string>拒绝加入</string>		<key>Common_ViewJunTuiInfo</key>	<string>查看军团资料</string>	<key>Common_InviteYourJunTuan</key>	<string>邀请您的军团</string>	<key>Common_NameErr</key>	<string>名字错误</string>		<key>Common_InputPlayerName</key>	<string>请输入玩家名字</string>	<key>Common_InputInvitePlayerName</key>	<string>请输入要邀请的玩家姓名</string>	<key>Common_learn</key>	<string>学习</string>		<key>Common_skill</key>	<string>技能</string>	<key>Common_PositiveSkill</key>	<string>主动技能</string>	<key>Common_NegativeSkill</key>	<string>被动技能</string>	<key>Common_hadlearn</key>	<string>已学</string>	<key>Common_nolearn</key>	<string>未学</string>		<key>Common_forget</key>	<string>遗忘</string>		<key>Common_SkillForget</key>	<string>技能遗忘</string>	<key>Common_DianHua</key>	<string>点化</string>	<key>Common_CanWuSkill</key>	<string>参悟技能</string>	<key>Common_XinFaDianFa</key>	<string>心法点化</string>	<key>Common_LingQiConsume</key>	<string>灵气消耗</string>	<key>Common_ViewDetail</key>	<string>查看详细</string>	<key>Common_YiChu</key>	<string>移除</string>	<key>Common_PaticularState</key>	<string>特殊状态</string>	<key>Common_state</key>	<string>状态</string>	<key>Common_ViewZiLiao</key>	<string>查看资料</string>	<key>Common_ViewEquip</key>	<string>查看装备</string>	<key>Common_DelFriend</key>	<string>删除好友</string>	<key>Common_AddFriend</key>	<string>添加好友</string>	<key>Common_SendMail</key>	<string>发送邮件</string>	<key>Common_FriendList</key>	<string>好友列表</string>	<key>Common_InputFriendName</key>	<string>请输入好友姓名:</string>	<key>Common_SetMailRecver</key>	<string>设为收件人</string>		<key>Common_online</key>	<string>在线</string>	<key>Common_NotOnline</key>	<string>不在线</string>	<key>Common_offline</key>	<string>离线</string>	<key>Common_ChuShi</key>	<string>出师</string>	<key>Common_normal</key>	<string>正常</string>	<key>Common_sex</key>	<string>性</string>	<key>Common_bie</key>	<string>别</string>	<key>Common_JunTuanName</key>	<string>军团名称</string>	<key>Common_JunTuanPost</key>	<string>军团职位</string>	<key>Common_JunXian</key>	<string>军衔</string>		<key>Common_EquipInfo</key>	<string>装备信息</string>	<key>Common_DismissRelation</key>	<string>解除关系</string>	<key>Common_DismissRelationTip</key>	<string>解除师徒关系后,将不能恢复,请三思确认要断绝关系？</string>	<key>Common_PangShi</key>	<string>判师</string>	<key>Common_QuZhu</key>	<string>驱逐</string>	<key>Common_XunLu</key>	<string>寻路</string>	<key>Common_XunLuJuanZhouTip</key>	<string>由于所在地图不同,需要消耗一个传送卷轴,是否继续?</string>	<key>Common_mail</key>	<string>邮件</string>	<key>Common_YourMaster</key>	<string>您的师傅</string>	<key>Common_OnlineTip</key>	<string>上线了!</string>	<key>Common_OfflineTip</key>	<string>下线了!</string>	<key>Common_YourTuDi</key>	<string>您的徒弟</string>	<key>Common_LeaveGameTip</key>	<string>离开了龙御OL的世界</string>	<key>Common_BaiShi</key>	<string>拜师</string>	<key>Common_MingShiTongXunLu</key>	<string>名师通讯录</string>	<key>Common_TradeMoney</key>	<string>交易金额</string>	<key>Common_TradeAmount</key>	<string>交易数量</string>	<key>Common_TradeItemTip</key>	<string>该物品不能交易</string>	<key>Common_TradeSucess</key>	<string>交易成功</string>	<key>Common_TradeFail</key>	<string>交易失败</string>	<key>Common_trade</key>	<string>交易</string>	<key>Common_TaskNpc</key>	<string>任务NPC:</string>	<key>Common_TaskDest</key>	<string>任务目的地点:</string>	<key>Common_empty</key>	<string>空</string>	<key>Common_exp</key>	<string>经验</string>	<key>Common_dian</key>	<string>点</string>	<key>Common_CountryRepute</key>	<string>国家声望</string>	<key>Common_CampRepute</key>	<string>阵营声望</string>	<key>Common_HonurVal</key>	<string>荣誉值</string>	<key>Common_TaskAward</key>	<string>任务奖励</string>	<key>Common_MingYueCun</key>	<string>明月村</string>	<key>Common_LianYao</key>	<string>炼药</string>	<key>Common_BaoShiHeCheng</key>	<string>宝石合成</string>	<key>Common_PeiFangList</key>	<string>配方列表</string>	<key>Common_HeCheng</key>	<string>合成</string>	<key>Common_InputAmount</key>	<string>请输入数量</string>	<key>Common_OperateFailCantZero</key>	<string>操作失败, 数值不能为0</string>	<key>Common_UseMaterial</key>	<string>使用材料</string>	<key>Common_ZhiZhuo</key>	<string>制作</string>	<key>Common_OperateFail</key>	<string>操作失败</string>	<key>Common_BagFullTip</key>	<string>背包栏已满,请及时清理背包</string>	<key>Common_NeedMaterial</key>	<string>所需材料</string>	<key>Common_GenItem</key>	<string>生成物品</string>	<key>Common_CaoYao</key>	<string>草药</string>	<key>Common_BaoShiYuanShi</key>	<string>宝石原石</string>	<key>Common_CantRepeatUse</key>	<string>不能重复使用</string>	<key>Common_InputAmountMaxTen</key>	<string>请输入数量，最多10个</string>	<key>Common_MaterialLanFull</key>	<string>材料栏已满！</string>	<key>Common_ItemNot</key>	<string>该物品不是</string>	<key>Common_material</key>	<string>材料</string>	<key>Common_OperateFailSmallTen</key>	<string>操作失败, 您的输入不能大于10</string>	<key>Common_OperateFailOverAmount</key>	<string>操作失败, 超过该物品的数量</string>	<key>Common_OperateFailMaterialFull</key>	<string>操作失败, 材料栏已满！</string>	<key>Common_XieXia</key>	<string>卸下</string>	<key>Common_select</key>	<string>选择</string>	<key>Common_MaterialNeedThree</key>	<string>材料不够,您必须提供3种材料</string>	<key>Common_MoneyTrade</key>	<string>银两交易</string>	<key>Common_EMoneyTrade</key>	<string>元宝交易</string>	<key>Common_detail</key>	<string>详细</string>	<key>Common_InputNumRange</key>	<string>请输入 0 ~ 200000000 的数字</string>	<key>Common_NoSellItem</key>	<string>没有卖出物品</string>	<key>Common_SelNoneItem</key>	<string>您没有选择任何物品!</string>	<key>Common_QuXia</key>	<string>取下</string>	<key>Common_SaleByMoney</key>	<string>出售价格(银两)</string>	<key>Common_SaleByEMoney</key>	<string>出售价格(元宝)</string>	<key>Common_ViewBoothItem</key>	<string>查看别人摆摊物品</string>	<key>Common_CantFindItem</key>	<string>找不到该物品</string>	<key>Common_XianQiangSucess</key>	<string>镶嵌成功</string>	<key>Common_WaChuSucess</key>	<string>挖除成功</string>	<key>Common_BuyStorageSucc</key>	<string>购买仓库成功.</string>	<key>Common_BuyBagSucc</key>	<string>购买背包成功.</string>	<key>Common_SkillView</key>	<string>技能查看</string>	<key>Common_TipInfo</key>	<string>提示信息</string>	<key>Common_BindSucc</key>	<string>绑定成功</string>	<key>Common_DeBindSucc</key>	<string>解除绑定成功</string>	<key>Common_NaiJiuDu</key>	<string>耐久度</string>	<key>Common_XiangQian</key>	<string>镶嵌</string>	<key>Common_QiangHua</key>	<string>强化</string>	<key>Common_ValidDate</key>	<string>有效期</string>	<key>Common_Liliang</key>	<string>力量</string>	<key>Common_TiZhi</key>	<string>体质</string>	<key>Common_ZhiLi</key>	<string>智力</string>	<key>Common_MingJie</key>	<string>敏捷</string>	<key>Common_Dodge</key>	<string>闪避</string>	<key>Common_PhyHit</key>	<string>物理命中</string>	<key>Common_PhyAtk</key>	<string>物理攻击</string>	<key>Common_MagicHurt</key>	<string>魔法伤害</string>	<key>Common_CriticalHit</key>	<string>暴击</string>	<key>Common_MagicCriticalHit</key>	<string>魔法暴击</string>	<key>Common_PhyDef</key>	<string>物理防御</string>	<key>Common_MagicDef</key>	<string>魔法抗性</string>	<key>Common_AtkSpeed</key>	<string>攻击速度</string>	<key>Common_life</key>	<string>生命</string>	<key>Common_magic</key>	<string>法力</string>	<key>Common_MaxNaiJiuDu</key>	<string>最大耐久度</string>	<key>Common_type</key>	<string>类型</string>	<key>Common_LongGun</key>	<string>长枪</string>	<key>Common_Gung</key>	<string>棍</string>	<key>Common_HuShouGou</key>	<string>护手勾</string>	<key>Common_DunPai</key>	<string>盾牌</string>	<key>Common_FuShouFaQi</key>	<string>副手法器</string>	<key>Common_FaBao</key>	<string>法宝</string>	<key>Common_PhyCriticalHit</key>	<string>物理暴击</string>	<key>Common_ChuShouSpeed</key>	<string>出手速度</string>	<key>Common_LifeZhuiJia</key>	<string>生命值追加</string>	<key>Common_MagicZhuiJia</key>	<string>魔法值追加</string>	<key>Common_pet</key>	<string>宠物</string>	<key>Common_book</key>	<string>书籍</string>	<key>Common_ParticularItem</key>	<string>特殊物品</string>	<key>Common_TouXiang</key>	<string>头像</string>	<key>Common_YaoCai</key>	<string>药材</string>	<key>Common_other</key>	<string>其他</string>	<key>Common_UseLevel</key>	<string>使用等级</string>	<key>Common_hadbind</key>	<string>已绑定</string>	<key>Common_SexReq</key>	<string>性别要求</string>	<key>Common_LiLiangReq</key>	<string>力量要求</string>	<key>Common_TiZhiReq</key>	<string>体质要求</string>	<key>Common_MingJieReq</key>	<string>敏捷要求</string>	<key>Common_ZhiLiReq</key>	<string>智力要求</string>		<key>Common_male</key>	<string>男</string>	<key>Common_female</key>	<string>女</string>	<key>Common_NaiJiu</key>	<string>耐久</string>		<key>Common_LifePlus</key>	<string>生命: +</string>	<key>Common_MagicPlus</key>	<string>法力: +</string>	<key>Common_MagicAtk</key>	<string>魔法攻击</string>	<key>Common_MagDef</key>	<string>魔法防御</string>	<key>Common_PhyCriticalPlus</key>	<string>物理暴击: +</string>	<key>Common_MagicCriticalPlus</key>	<string>法术暴击: +</string>	<key>Common_LiLiangPlus</key>	<string>力量: +</string>	<key>Common_TiZhiPlus</key>	<string>体质: +</string>	<key>Common_MingJiePlus</key>	<string>敏捷: +</string>	<key>Common_ZhiLiPlus</key>	<string>智力: +</string>	<key>Common_PhyAtkPlus</key>	<string>物理攻击: +</string>	<key>Common_PhyDefPlus</key>	<string>物理防御: +</string>	<key>Common_MagicAtkPlus</key>	<string>法术攻击: +</string>	<key>Common_MagicDefPlus</key>	<string>法术防御: +</string>	<key>Common_HitPlus</key>	<string>命中: +</string>	<key>Common_AtkSpeedPlus</key>	<string>攻击速度: +</string>	<key>Common_DodgePlus</key>	<string>闪避: +</string>	<key>Common_ShouMing</key>	<string>寿命</string>		<key>Common_CantTrade</key>	<string>不可交易</string>	<key>Common_CantMail</key>	<string>不可邮寄</string>	<key>Common_CantStorage</key>	<string>不可存仓</string>	<key>Common_DieCantDiaoLuo</key>	<string>死亡不掉落</string>	<key>Common_CantSale</key>	<string>不可出售</string>	<key>Common_CantUse</key>	<string>不可使用</string>	<key>Common_CantDrop</key>	<string>不可丢弃</string>	<key>Common_CantDuanZhao</key>	<string>不可锻造</string>	<key>Common_limit</key>	<string>限制</string>	<key>Common_RecycleBySys</key>	<string>被系统自动回收</string>		<key>Common_XiaoShi</key>	<string>小时</string>		<key>Common_ShuoMing</key>	<string>说明</string>		<key>Common_XiangQianPos</key>	<string>镶嵌部位</string>		<key>Common_TaoZhuang</key>	<string>套装</string>		<key>Common_DuanZhaoAttach</key>	<string>锻造附加</string>		<key>Common_WuQi</key>	<string>武器</string>		<key>Common_FangJu</key>	<string>防具</string>		<key>Common_tao</key>	<string>套</string>		<key>Common_JianBang</key>	<string>肩膀</string>	<key>Common_RollPage</key>	<string>翻页</string>		<key>Common_ItemSpeedBarSet</key>	<string>物品快捷栏设置</string>		<key>Common_BoothCantSortBag</key>	<string>摆摊时不能整理背包</string>		<key>Common_KaiTongBag</key>	<string>要开通背包</string>	<key>Common_NeedSpend</key>	<string>需要花费</string>		<key>Common_farm</key>	<string>农田</string>	<key>Common_muchang</key>	<string>牧场</string>	<key>Common_FengZhong</key>	<string>分钟</string>	<key>Common_MengPaiHao</key>	<string>门牌号</string>	<key>Common_QiangYi</key>	<string>迁移</string>		<key>Common_InputContent</key>	<string>请输入内容</string>	<key>Common_world</key>	<string>世界</string>	<key>Common_faction</key>	<string>帮派</string>	<key>Common_section</key>	<string>区域</string>	<key>Common_team</key>	<string>队伍</string>	<key>Common_JunTuan</key>	<string>军团</string>	<key>Common_send</key>	<string>发送</string>	<key>Common_InputExpress</key>	<string>插入表情</string>	<key>Common_InputItem</key>	<string>插入物品</string>	<key>Common_YouHasnotJunTuan</key>	<string>您没有加入任何军团</string>	<key>Common_YouHasnotJunTeam</key>	<string>您没有加入任何队伍</string>	<key>Common_PlayerName</key>	<string>玩家名</string>	<key>Common_SelFriend</key>	<string>选择好友</string>		<key>Common_QuickChatBeQuick</key>	<string>快点吧！我等得花儿都谢了~</string>	<key>Common_QuickChatGood</key>	<string>太好了！</string>	<key>Common_QuickChatFlee</key>	<string>逃跑吧～</string>	<key>Common_QuickChatJiaYou</key>	<string>大家加油！</string>	<key>Common_QuickChatYun</key>	<string>我晕@_@</string>	<key>Common_YouHaveNewChat</key>	<string>您有新的私聊</string>	<key>Common_SendMsg</key>	<string>发送消息</string>	<key>Common_ChatSet</key>	<string>聊天设置</string>	<key>Common_CopyName</key>	<string>复制名字</string>	<key>Common_JiaWeiFriend</key>	<string>加为好友</string>	<key>Common_InviteTeam</key>	<string>邀请组队</string>		<key>Common_NetErr</key>	<string>通讯出错</string>	<key>Common_NetExceptFirst</key>	<string>网络异常，重试连接第1次!</string>	<key>Common_NetExceptSecond</key>	<string>网络异常，重试连接第2次!</string>	<key>Common_NetExceptErr</key>	<string>非常抱歉，与服务器断开链接，请回到游戏初始菜单重新登录。</string>	<key>Common_AutoPathTipGo</key>	<string>系: 目的地变更, 目前正在前往</string>	<key>Common_AutoPathTipGo2</key>	<string>系: 您正在前往</string>	<key>Common_AutoPathTipTo</key>	<string>系: 您已到达目的地</string>	<key>Common_AutoPathTipBreak</key>	<string>系: 中断导航</string>	<key>Common_catch</key>	<string>捕捉</string>	<key>Common_flee</key>	<string>逃跑</string>	<key>Common_def</key>	<string>防御</string>	<key>Common_attack</key>	<string>攻击</string>		<key>Common_BoothNotFly</key>	<string>不能在飞行状态下摆摊</string>	<key>Common_BoothNot</key>	<string>您不能在这里摆摊</string>	<key>Common_XunBaoTip</key>	<string>友情提示:下线前您可以开启寻宝功能,能获得离线收益.(离线寻宝可以帮您不在线时收集经验、装备和各种宝物)</string>	<key>Common_StartXunBao</key>	<string>开始寻宝</string>	<key>Common_BackToMenu</key>	<string>回主界面</string>	<key>Common_TeamReqTip</key>	<string>组队请求已经发送,等待对方回应!</string>	<key>Common_MapCantXunBao</key>	<string>此地图不能进行寻宝,请到野外进行</string>	<key>Common_XunBaoHuoLiZero</key>	<string>对不起,您的活力值为0,不能进行寻宝,您可以通过商城道具补充或是通过在线礼包获得活力值</string>	<key>Common_MallBuy</key>	<string>商城购买</string>	<key>Common_CheckNet</key>	<string>请检查网络</string>	<key>Common_RegisterFail</key>	<string>注册失败</string>	<key>Common_RenZhengFail</key>	<string>认证失败</string>	<key>Common_RenZhengFailNoneRet</key>	<string>无返回信息,认证失败</string>	<key>Common_ConnectFailNoneRet</key>	<string>无返回信息,连接失败</string>	<key>Common_ConnectFail</key>	<string>连接失败</string>	<key>Common_ServerTimeOut</key>	<string>服务器超时</string>	<key>Common_ServerPlayerUpMax</key>	<string>服务器已达到人数上限!</string>	<key>Common_LoginTip</key>	<string>登录提示</string>	<key>Common_WaitServerDeal</key>	<string>服务器正在处理,请稍候</string>	<key>Common_quit</key>	<string>退出</string>	<key>Common_ContinueWait</key>	<string>继续等待</string>	<key>Common_RoleCreateFail</key>	<string>角色创建失败!</string>	<key>Common_RoleCreateFailUnknown</key>	<string>创建角色未知的问题！</string>	<key>Common_PlayerNameExist</key>	<string>人物名已存在!</string>	<key>Common_PlayerNameInvalid</key>	<string>人物名不合法!</string>	<key>Common_LoginQueueTip</key>	<string>您正在登录队列中，请耐心等待！</string>	<key>Common_UpdateErr</key>	<string>更新出错!</string>	<key>Common_ViewState</key>	<string>查看状态</string>	<key>Common_BattleRes</key>	<string>战斗结果</string>	<key>Common_DaoJiShi</key>	<string>倒计时</string>	<key>Common_HuiHe</key>	<string>回合</string>	<key>Common_BagFullCantCatch</key>	<string>您的背包已满,不能捕捉!</string>	<key>Common_CantCatch</key>	<string>不能捕捉!</string>	<key>Common_DestCantCatch</key>	<string>该目标不可捕捉!</string>	<key>Common_wait</key>	<string>等待</string>		<key>Common_BattleSucc</key>	<string>战斗胜利！</string>	<key>Common_BattleFail</key>	<string>战斗失败！</string>	<key>Common_BattlePing</key>	<string>平分秋色！</string>	<key>Common_BattleEnd</key>	<string>战斗结束</string>	<key>Common_BattleShouGong</key>	<string>打完收工！</string>	<key>Common_CatchSucc</key>	<string>系统: 捕捉成功</string>	<key>Common_CatchFail</key>	<string>系统: 捕捉失败</string>	<key>Common_get</key>	<string>获得</string>	<key>Common_repute</key>	<string>声望</string>	<key>Common_honur</key>	<string>荣誉</string>	<key>Common_item</key>	<string>物品</string>	<key>Common_BagFull</key>	<string>您的背包已满！</string>	<key>Common_honest</key>	<string>忠诚</string>	<key>Common_sunsi</key>	<string>损失</string>	<key>Common_ren</key>	<string>人</string>	<key>Common_JianLei</key>	<string>剑类</string>	<key>Common_DaoLei</key>	<string>刀类</string>	<key>Common_GongLei</key>	<string>弓类</string>	<key>Common_BiShouLei</key>	<string>匕首类</string>	<key>Common_GunLei</key>	<string>枪类</string>	<key>Common_ZhangLei</key>	<string>杖类</string>		<key>Common_DiFang</key>	<string>敌方</string>	<key>Common_ZhiJi</key>	<string>自己</string>	<key>Common_YouFang</key>	<string>友方</string>		<key>Common_target</key>	<string>目标</string>		<key>Common_ConsumeMp</key>	<string>消耗MP</string>		<key>Common_hurt</key>	<string>伤害</string>		<key>Common_speed</key>	<string>速度</string>		<key>Common_CoolTurn</key>	<string>冷却回合</string>		<key>Common_BattleNoLimit</key>	<string>(本次战斗不受限制)</string>	<key>Common_effect</key>	<string>效果</string>	<key>Common_ChiXuTurn</key>	<string>持续回合</string>	<key>Common_YingSheng</key>	<string>隐身</string>	<key>Common_leave</key>	<string>离开</string>	<key>Common_yuanqi</key>	<string>元气</string>	<key>Common_jingsheng</key>	<string>精神</string>	<key>Common_NoOpen</key>	<string>暂未开放</string>	<key>Common_LianJiSec</key>	<string>练级区域</string>	<key>Common_SwitcGo</key>	<string>切屏点,前往:</string>	<key>Common_GatherOrNot</key>	<string>您是否要采集脚下的</string>	<key>Common_gather</key>	<string>采集</string>	<key>Common_gathering</key>	<string>正在采集中..</string>	<key>Common_RenameSucc</key>	<string>改名成功.</string>	<key>Common_SysTip</key>	<string>系统提示</string>	<key>Common_WaChuBaoShiSucc</key>	<string>挖除宝石成功</string>	<key>Common_object</key>	<string>对象</string>	<key>Common_NewExpVal</key>	<string>新的经验值：</string>	<key>Common_NewLev</key>	<string>新的等级：</string>	<key>Common_NewRestDian</key>	<string>新的剩余点数：</string>	<key>Common_UpTip</key>	<string>恭喜您升级了！！！</string>	<key>Common_UpTip20</key>	<string>恭喜阁下达到了20级别,具备了良师的潜质,培养徒弟不但可以桃李满天下,还可以获取丰厚的奖励!</string>	<key>Common_CountryStorage</key>	<string>国家仓库</string>	<key>Common_TangCampStorage</key>	<string>唐军阵营仓库</string>	<key>Common_SuiCampStorage</key>	<string>隋军阵营仓库</string>	<key>Common_TuCampStorage</key>	<string>突厥阵营仓库</string>	<key>Common_WishRen</key>	<string>许愿人</string>	<key>Common_WishContent</key>	<string>愿望内容</string>	<key>Common_XuLieHaoLen</key>	<string>序列号长度必须为</string>	<key>Common_wei</key>	<string>位</string>	<key>Common_FailInputWish</key>	<string>失败,请输入您要许下的愿望</string>	<key>Common_ReqTrade</key>	<string>请求交易,是否同意?</string>	<key>Common_agree</key>	<string>同意</string>	<key>Common_reject</key>	<string>拒绝</string>	<key>Common_YouNotOnBang</key>	<string>您没有上榜</string>	<key>Common_YouMingCi</key>	<string>您排名第</string>	<key>Common_PaiMing</key>	<string>排名</string>	<key>Common_deng</key>	<string>等</string>	<key>Common_val</key>	<string>值</string>	<key>Common_PlayerXingMing</key>	<string>玩家姓名</string>	<key>Common_tuan</key>	<string>团</string>	<key>Common_pei</key>	<string>配</string>	<key>Common_ou</key>	<string>偶</string>	<key>Common_jun</key>	<string>军</string>	<key>Common_EquipUpFail</key>	<string>很抱歉您装备升级失败了</string>	<key>Common_EquipUpSucess</key>	<string>恭喜您的装备升级成功</string>	<key>Common_QiangHuaFail</key>	<string>很抱歉您装备强化失败了</string>	<key>Common_QiangHuaSucess</key>	<string>恭喜您的装备强化成功</string>	<key>Common_KaiDongFail</key>	<string>很遗憾，您的装备爆掉了</string>	<key>Common_KaiDonSucess</key>	<string>恭喜您的装备开洞成功</string>	<key>Common_OperateSucess</key>	<string>操作成功</string>	<key>Common_LearnedTip</key>	<string>恭喜你学到了</string>	<key>Common_MakedTip</key>	<string>恭喜你成功制出了</string>	<key>Common_SkillValueUpTip</key>	<string>该技能熟练度提升了</string>	<key>Common_GatheredTip</key>	<string>恭喜您采集到了</string>	<key>Common_RejectRefraseTip</key>	<string>拒绝了你的比武请求</string>	<key>Common_CreateTeamSucess</key>	<string>建队成功</string>	<key>Common_PositiveJoinTeam</key>	<string>别人可以主动加入队伍了</string>	<key>Common_CantPositiveJoinTeam</key>	<string>别人不能主动加入队伍了</string>	<key>Common_BeFriendTip</key>	<string>与你歃血为盟，结为好友</string>	<key>Common_logined</key>	<string>已登录</string>	<key>Common_DeFriendTip</key>	<string>已与你断绝了好友关系，从此不相往来。</string>	<key>Common_RejectFriendTip</key>	<string>拒绝了你提出的结交好友的请求。</string>	<key>Common_YouHaveNew</key>	<string>您有一条新的</string>	<key>Common_OpenRequestList</key>	<string>请打开请求列表查看</string>	<key>Common_ShopEnjoy</key>	<string>您在本商店可享受</string>	<key>Common_discount</key>	<string>折扣</string>	<key>Common_ApplyDivorce</key>	<string>您真的确定要申请离婚?</string>	<key>Common_divorce</key>	<string>离婚</string>	<key>Common_NotFindObject</key>	<string>没有找到对象！</string>	<key>Common_FindHandsome</key>	<string>找个帅哥向您求婚吧</string>	<key>Common_PaiMaiHang</key>	<string>拍卖行</string>	<key>Common_MyPaiMai</key>	<string>我的拍卖</string>	<key>Common_SearchItem</key>	<string>搜索物品</string>	<key>Common_PaiMaiHangWelcome</key>	<string>欢迎惠顾龙御OL全新的拍卖所,这里是购物者的天堂,同样也是商人们的乌托邦,只是...嘿嘿亲们成交后,我们会向卖方收取一定的佣金喔.</string>	<key>Common_InputSeq</key>	<string>请输入序列号</string>	<key>Common_NoLianJingSkillTip</key>	<string>大侠你还木有学习炼金技能呢!赶紧去初级炼金技能npc那里学习吧.</string>	<key>Common_NoBaoShiSkillTip</key>	<string>大侠你还木有学习宝石合成技能呢!赶紧去初级宝石合成npc那里学习吧.</string>	<key>Common_InputWishTip</key>	<string>请输入许愿内容, 内容文字不得超过40个汉字</string>	<key>Common_ModifyWishTip</key>	<string>修改愿望后，之前所许下的愿望将会被新的愿望所覆盖</string>	<key>Common_EquipPet</key>	<string>请先装备宠物</string>	<key>Common_FarmRename</key>	<string>庄园改名</string>	<key>Common_ModifyWelcome</key>	<string>修改欢迎词</string>	<key>Common_ModifyBuildingName</key>	<string>修改建筑名称</string>	<key>Common_ModifyCunluoName</key>	<string>修改村落名称</string>	<key>Common_XiaoMei</key>	<string>小姑娘</string>	<key>Common_DaJie</key>	<string>大姐姐</string>	<key>Common_XiaoXiongDi</key>	<string>小兄弟</string>	<key>Common_DaGG</key>	<string>大哥哥</string>	<key>Common_ShaoXia</key>	<string>少侠</string>	<key>Common_NvXia</key>	<string>女侠</string>	<key>Common_DieCantPk</key>	<string>死亡，还未复活，不能进行比武或者PK</string>	<key>Common_LvlWei</key>	<string>的等级为</string>	<key>Common_LowTenCantPk</key>	<string>等级低于10不能进行PK</string>	<key>Common_LowTenCantRefrase</key>	<string>等级低于10不能进行比武</string>		<key>Common_ProtecedCantPkOrRefrase</key>	<string>处于保护状态，不能进行比武或者PK</string>	<key>Common_BoothCantPkOrRefrase</key>	<string>处于摆摊状态，不能进行比武或者PK</string>	<key>Common_DePkCantPkOrRefrase</key>	<string>处于免PK状态，不能进行比武或者PK</string>	<key>Common_TeamCantPkOrRefrase</key>	<string>你们是队友，不能进行比武或者PK</string>	<key>Common_AddFail</key>	<string>添加失败</string>	<key>Common_NoToFriendTip</key>	<string>该玩家已经是你的好友，无需继续结交。</string>	<key>Common_SelfToFriendTip</key>	<string>您不能添加自己为好友。</string>	<key>Common_disagree</key>	<string>不同意</string>	<key>Common_DivorceReq</key>	<string>决定与您离婚,您是否同意?</string>	<key>Common_MarryReq</key>	<string>求婚</string>	<key>Common_MarryReqTip</key>	<string>单膝跪地轻轻地握住你的手，拿出光彩夺目的婚戒，深情道亲爱的戴上这枚今生戒，让我的爱一直围绕着你，呵护着，永远永远。</string>	<key>Common_NingYu</key>	<string>您于</string>	<key>Common_XunBaoConsume</key>	<string>此次寻宝消耗</string>	<key>Common_activity</key>	<string>活力</string>	<key>Common_remain</key>	<string>剩余</string>	<key>Common_jiang</key>	<string>件</string>	<key>Common_LingQi</key>	<string>灵气</string>	<key>Common_coin</key>	<string>银币</string>	<key>Common_XunBao</key>	<string>寻宝</string>	<key>Common_XunBaoRateTip</key>	<string>提升人物装备或使用道具能提升寻宝效率</string>	<key>Common_XunBaoBagFullTip</key>	<string>由于背包空间不足放弃了部分物品</string>	<key>Common_SucessBugReportTip</key>	<string>成功提交异常日志, 非常感谢您对龙御OL的支持!</string>	<key>Common_FailBugReportTip</key>	<string>提交异常日志失败, 仍然感谢您对龙御OL的支持!</string>	<key>Common_MingYueLing</key>	<string>明月岭</string>	<key>Common_WoYaoTiWen</key>	<string>我要提问 : </string>	<key>Common_InputMax50</key>	<string>最多输入50个汉字</string>	<key>Common_FrequentOperate</key>	<string>您的操作太频繁了</string>	<key>Common_InputCurPW12</key>	<string>请输入当前密码 : ( 12位以内 )</string>	<key>Common_InputRepeatPW12</key>	<string>请再次输入密码 : ( 7-12位 )</string>	<key>Common_InputNewPW12</key>	<string>请输入新密码 : ( 7-12位 )</string>	<key>Common_InputOldPW12</key>	<string>请输入12位以内的旧密码</string>	<key>Common_OnlyAllowAlphaNum</key>	<string>只允许输入英文和数字,请重新输入.</string>	<key>Common_InputPW12</key>	<string>请输入7~12位密码.</string>	<key>Common_TwoInputPWTip</key>	<string>2次输入的密码不同,请重新输入.</string>	<key>Common_XinQiYi</key>	<string>星期一</string>	<key>Common_XinQiEr</key>	<string>星期二</string>	<key>Common_XinQiShang</key>	<string>星期三</string>	<key>Common_XinQiShi</key>	<string>星期四</string>	<key>Common_XinQiWu</key>	<string>星期五</string>	<key>Common_XinQiLiu</key>	<string>星期六</string>	<key>Common_XinQiTian</key>	<string>星期日</string>	<key>Common_high</key>	<string>高</string>	<key>Common_mid</key>	<string>中</string>	<key>Common_low</key>	<string>低</string>	<key>Common_AppearPingZhi</key>	<string>显示品质</string>	<key>Common_open</key>	<string>开启</string>	<key>Common_JunTuanChat</key>	<string>军团聊天</string>	<key>Common_TeamChat</key>	<string>队伍聊天</string>	<key>Common_WorldChat</key>	<string>世界聊天</string>	<key>Common_SectionChat</key>	<string>区域聊天</string>	<key>Common_set</key>	<string>设置</string>	<key>Common_GongGao</key>	<string>公告</string>	<key>Common_active</key>	<string>活动</string>	<key>Common_declare</key>	<string>声明</string>	<key>Common_password</key>	<string>密码</string>	<key>Common_feedback</key>	<string>反馈</string>	<key>Common_ImmedInfo</key>	<string>即时信息</string>	<key>Common_help</key>	<string>帮助</string>	<key>Common_JunTuanList</key>	<string>军团列表</string>	<key>Common_donate</key>	<string>捐献</string>	<key>Common_member</key>	<string>成员</string>	<key>Common_vote</key>	<string>投票</string>	<key>Common_shenghe</key>	<string>审核</string>	<key>Common_jingxuan</key>	<string>竞选</string>	<key>Common_LiLiangAttrTip</key>	<string>大幅提升物理攻击,少量影响生命和魔法</string>	<key>Common_TiZhiAttrTip</key>	<string>大幅提升生命上限,少量影响物理防御和法术防御</string>	<key>Common_MingJieAttrTip</key>	<string>提升速度,命中,闪避能力</string>	<key>Common_ZhiLiAttrTip</key>	<string>大幅提升法术攻击,少量影响生命和魔法</string>	<key>Common_BindState</key>	<string>绑定状态</string>	<key>Common_XingGe</key>	<string>性格</string>	<key>Common_ChuShiLvl</key>	<string>初始等级</string>	<key>Common_HonestVal</key>	<string>忠诚度</string>	<key>Common_SkillCao</key>	<string>技能槽</string>	<key>Common_ChuShiLiLiang</key>	<string>初始力量</string>	<key>Common_ChuShiTiZhi</key>	<string>初始体质</string>	<key>Common_ChuShiMingJie</key>	<string>初始敏捷</string>	<key>Common_ChuShiZhiLi</key>	<string>初始智力</string>	<key>Common_PhyAtkVal</key>	<string>物理攻击力</string>	<key>Common_MagicAtkVal</key>	<string>法术攻击力</string>	<key>Common_DuoShang</key>	<string>躲闪</string>	<key>Common_hit</key>	<string>命中</string>	<key>Common_FaShuDef</key>	<string>法术防御</string>	<key>Common_ZhuRen</key>	<string>主人</string>	<key>Common_ModifyAttrTip</key>	<string>是否确认属性点分配,此次修改后可分配属性点剩余</string>	<key>Common_InputNewPetName</key>	<string>请输入新的宠物名</string>	<key>Common_WeiBind</key>	<string>未绑定</string>	<key>Common_LuMang</key>	<string>鲁莽</string>	<key>Common_LengJing</key>	<string>冷静</string>	<key>Common_TaoQi</key>	<string>淘气</string>	<key>Common_HangHou</key>	<string>憨厚</string>	<key>Common_DangXiao</key>	<string>胆小</string>	<key>Common_CanAllocAttr</key>	<string>可分配属性点数 :</string>	<key>Common_commit</key>	<string>提交</string>	<key>Common_modify</key>	<string>(修改)</string>	<key>Common_ChengZhangZiZhi</key>	<string>成长资质</string>	<key>Common_QiXueZiZhi</key>	<string>气血资质</string>	<key>Common_FaLiZiZhi</key>	<string>法力资质</string>	<key>Common_WuGongZiZhi</key>	<string>物攻资质</string>	<key>Common_WuFangZiZhi</key>	<string>物防资质</string>	<key>Common_FaGongZiZhi</key>	<string>法攻资质</string>	<key>Common_FaFangZiZhi</key>	<string>法防资质</string>	<key>Common_SpeedZiZhi</key>	<string>速度资质</string>	<key>Common_property</key>	<string>属性</string>	<key>Common_notopen</key>	<string>未开启</string>	<key>Common_OpenPetSkillTip</key>	<string>开启宠物技能槽要消耗</string>	<key>Common_TianGongFu</key>	<string>天工符</string>	<key>Common_ReqLvl</key>	<string>需求等级</string>	<key>Common_RepairCurEquip</key>	<string>修理当前装备</string>	<key>Common_RepairAllEquip</key>	<string>修理全部已装备物品</string>	<key>Common_ItemAmountInvalidReinput</key>	<string>物品数量不合法, 请重新输入</string>	<key>Common_MakeSureUse</key>	<string>确定要使用</string>	<key>Common_ma</key>	<string>吗</string>	<key>Common_MakeSureLearn</key>	<string>确定要学习</string>	<key>Common_compare</key>	<string>比较</string>	<key>Common_ForeverBindTip</key>	<string>物品将被永久绑定，只可以自己使用、丢弃或者向商店出售。请确认是否绑定？</string>	<key>Common_CurAmount</key>	<string>当前数量</string>	<key>Common_InputCaiFengAmount</key>	<string>请输入要拆分的数量</string>	<key>Common_CantEquip</key>	<string>该物品不能装备</string>	<key>Common_HuJian</key>	<string>护肩</string>	<key>Common_YiFu</key>	<string>衣服</string>	<key>Common_FuShou</key>	<string>副手</string>	<key>Common_ZhuoQi</key>	<string>坐骑</string>	<key>Common_RepairFee</key>	<string>修理费</string>	<key>Common_NoNeedRepair</key>	<string>(不需要修理)</string>	<key>Common_CantRepair</key>	<string>(不可修理)</string>	<key>Common_current</key>	<string>目前</string>	<key>Common_NoUpToEquip</key>	<string>未满足装备需求条件</string>	<key>Common_MingJieXuQiu</key>	<string>敏捷需求</string>	<key>Common_ZhiLiXuQiu</key>	<string>智力需求</string>	<key>Common_TiZhiXuQiu</key>	<string>体质需求</string>	<key>Common_LiLiangXuQiu</key>	<string>力量需求</string>	<key>Common_QiChongCantRepaire</key>	<string>骑宠不能修理</string>	<key>Common_EquipNoNeedRepair</key>	<string>该装备无需修理</string>	<key>Common_RepairEquipFee</key>	<string>修理该装备的费用是</string>	<key>Common_CantRepairEquipMoney</key>	<string>你身上的银两不够,无法修理该装备</string>	<key>Common_AllEquipNoNeedRepair</key>	<string>你身上的所有装备都无需修理</string>	<key>Common_AllEquipRepairFee</key>	<string>修理所有装备的费用是</string>	<key>Common_CantRepairAllEquipMoney</key>	<string>你身上的银两不够,无法修理全部</string>	<key>Common_RepairAllEquipMoney</key>	<string>修理身上所有装备物品需要</string>	<key>Common_RepairAllEquipMoneyTip</key>	<string>银两，是否修理全部？</string>	<key>Common_drop</key>	<string>丢弃</string>	<key>Common_DropTip</key>	<string>丢弃的物品将无法取回，确认丢弃？</string>	<key>Common_use</key>	<string>使用</string>	<key>Common_JiHuo</key>	<string>激活</string>	<key>Common_bind</key>	<string>绑定</string>	<key>Common_caifeng</key>	<string>拆分</string>	<key>Common_DaoHang</key>	<string>导航</string>	<key>Common_DaoHangTip</key>	<string>导航说明:该NPC在本地图范围内，点击确认直接导航到该地点</string>	<key>Common_ChuanSong</key>	<string>传送</string>	<key>Common_ChuanSongTip</key>	<string>传送说明:点击确认直接传送到该地点,此操作将消耗一个传送卷轴</string>	<key>Common_TaskAwardKuo</key>	<string>[任务奖励]</string>	<key>Common_AwardAllItem</key>	<string>奖励以下所有物品</string>	<key>Common_AwardOneItem</key>	<string>奖励以下物品的其中一件</string>	<key>Common_AcceptTaskKuo</key>	<string>[接受任务]</string>	<key>Common_TaskTargetKuo</key>	<string>[任务目标]</string>	<key>Common_DetailInfoKuo</key>	<string>[详细信息]</string>	<key>Common_JiaoTaskKuo</key>	<string>[交任务]</string>	<key>Common_PlayerOrNpcList</key>	<string>玩家/NPC列表</string>	<key>Common_YiJieGuo</key>	<string>[已接]</string>	<key>Common_WeiJieGuo</key>	<string>[未接]</string>	<key>Common_GoTo</key>	<string>前往</string>	<key>Common_CantAutoPathBooth</key>	<string>您正处于摆摊状态中，暂时无法使用自动导航功能！</string>	<key>Common_CantAutoPathTeam</key>	<string>您不是队长，暂时无法使用自动导航功能！</string>	<key>Common_CantAutoPathBiao</key>	<string>您正在跑镖中，暂时无法使用自动导航功能！</string>	<key>Common_PlayerLeavedSec</key>	<string>该玩家已离开该区域</string>	<key>Common_ViewPlayerInfo</key>	<string>查看玩家信息</string>	<key>Common_ViewPetInfo</key>	<string>查看宠物信息</string>	<key>Common_PlayerInfo</key>	<string>玩家信息</string>	<key>Common_CompareEquipWithSelf</key>	<string>与身上装备比较</string>	<key>Common_ShouLianVal</key>	<string>熟练度</string>	<key>Common_FullLvl</key>	<string>满级</string>	<key>Common_ConsumeJuanZhouTip</key>	<string>由于所在地图不同,需要消耗一个传送卷轴,是否继续?</string>	<key>Common_RejectFail</key>	<string>拒收失败</string>	<key>Common_SystemMainNotReject</key>	<string>系统邮件不允许拒收</string>	<key>Common_SysGongGao</key>	<string>系统公告</string>	<key>Common_DelFail</key>	<string>删除失败</string>	<key>Common_SystemMainNotDel</key>	<string>系统公告邮件不能删除</string>	<key>Common_MailWithAttachNotDel</key>	<string>您的邮件中带有附件,不能直接删除</string>	<key>Common_RecvFail</key>	<string>接收失败</string>	<key>Common_MoneyNotEnough</key>	<string>您身上的银两不足.</string>	<key>Common_EMoneyNotEnough</key>	<string>您身上的元宝不足.</string>	<key>Common_FeeItemTip</key>	<string>此物品为收费物品,是否支付</string>	<key>Common_MailSender</key>	<string>发件人</string>	<key>Common_AttachNotRecvGuo</key>	<string>[附件未接收]</string>	<key>Common_YiJieShou</key>	<string>已接收</string>	<key>Common_YiJuShou</key>	<string>已拒收</string>	<key>Common_YiTuiHui</key>	<string>已退回</string>	<key>Common_attach</key>	<string>附件</string>	<key>Common_ZhengSong</key>	<string>赠送 : </string>	<key>Common_ShouFei</key>	<string>收费 : </string>	<key>Common_JiaFriend</key>	<string>加好友</string>	<key>Common_ShouQu</key>	<string>收取</string>	<key>Common_reply</key>	<string>回复</string>	<key>Common_MailFeeTip</key>	<string>每封邮件需收取手续费100银两。是否确定要发送邮件给玩家 </string>	<key>Common_reciever</key>	<string>收件人 : </string>	<key>Common_MailContent</key>	<string>邮件内容 : </string>	<key>Common_AttachMaoHao</key>	<string>附件 : </string>	<key>Common_RecvNameLenLong</key>	<string>收件人名字太长!</string>	<key>Common_ContentLen110</key>	<string>内容长度不能超过110个汉字</string>	<key>Common_FailAmount</key>	<string>失败, 请填入正确的数量</string>	<key>Common_FailEquipAmount</key>	<string>失败, 装备的附件数量只能是1</string>	<key>Common_BagItemAmountTip</key>	<string>你背包中的该物品数量仅有</string>	<key>Common_BagItemAmountTip2</key>	<string>个,请重新输入</string>	<key>Common_BagMoneyAmountTip</key>	<string>你背包中的银两数仅有</string>	<key>Common_BagMoneyAmountTip2</key>	<string>,请重新输入</string>	<key>Common_FailSontMoney</key>	<string>失败, 请填入正确的赠送金额</string>	<key>Common_FailSontEMoney</key>	<string>失败, 请填入正确的赠送元宝</string>	<key>Common_BagEMoneyAmountTip</key>	<string>你背包中的元宝数仅有</string>	<key>Common_FailFeeMoney</key>	<string>失败, 请填入正确的收费金额</string>	<key>Common_fail</key>	<string>失败</string>	<key>Common_NotEmptyRecvName</key>	<string>收件人不能为空</string>	<key>Common_NotEmptyMailContent</key>	<string>邮件内容不能为空</string>	<key>Common_NotEmptyAttachAmount</key>	<string>请填入附件物品数量</string>	<key>Common_NotEmptyFeeNotAttach</key>	<string>不能发送没附件只收费的邮件</string>	<key>Common_bag</key>	<string>背包</string>	<key>Common_task</key>	<string>任务</string>	<key>Common_ZhuanYuan</key>	<string>庄园</string>	<key>Common_equip</key>	<string>装备</string>	<key>Common_DuanZhao</key>	<string>锻造</string>	<key>Common_FuZhu</key>	<string>辅助</string>	<key>Common_NeedConsume</key>	<string>需消耗：</string>	<key>Common_DuanZhaoConsume</key>	<string>此次锻造将消耗</string>	<key>Common_StartDuanZhao</key>	<string>现在开始锻造吗？</string>	<key>Common_DuanZhaoFailNotAppear</key>	<string>锻造失败装备不会消失</string>	<key>Common_EquipCantDuanZhao</key>	<string>该装备已不可锻造.</string>	<key>Common_FaShuAtk</key>	<string>法术攻击</string>	<key>Common_ChatContent</key>	<string>聊天内容</string>	<key>Common_PingBi</key>	<string>屏蔽</string>	<key>Common_stop</key>	<string>停止</string>	<key>Common_express</key>	<string>表情</string>	<key>Common_ZhongHe</key>	<string>综 合</string>	<key>Common_QuYu</key>	<string>区 域</string>	<key>Common_DuiWu</key>	<string>队 伍</string>	<key>Common_JunSpaceTuan</key>	<string>军 团</string>	<key>Common_PrivateSpaceChat</key>	<string>私 聊</string>	<key>Common_XiTong</key>	<string>系 统</string>	<key>Common_refresh</key>	<string>刷新</string>	<key>Common_InputPrivateChatName</key>	<string>请输入要私聊的玩家名字!</string>	<key>Common_EquipWieXiu</key>	<string>装备维修</string>	<key>Common_XunBaoSuccRate</key>	<string>寻宝成功率</string>	<key>Common_EquipJiaCheng</key>	<string>装备加成</string>	<key>Common_CurActiveXunBao</key>	<string>当前活力可寻宝</string>	<key>Common_lucky</key>	<string>幸运</string>	<key>Common_expert</key>	<string>专家</string>	<key>Common_QuLing</key>	<string>聚灵</string>	<key>Common_XunBaoEffectRate</key>	<string>寻宝效率提高</string>	<key>Common_XunBaoLvl</key>	<string>跨级寻宝能力</string>	<key>Common_GetLinQiAndCoin</key>	<string>能获得灵气和银币</string>	<key>Common_StartXunBaoTip</key>	<string>开始寻宝后，你会自动下线，进入离线寻宝模式，并且开始消耗活力值。当你再次上线时，寻宝自动结束。</string>	<key>Common_XunBaoOrNot</key>	<string>是否开始寻宝？</string>	<key>Common_ZhuYiShiXiang</key>	<string>注意事项</string>	<key>Common_InputRechargeCardNum</key>	<string>请输入充值卡卡号:</string>	<key>Common_InputRechargeCardPW</key>	<string>请输入充值卡密码:</string>	<key>Common_CardOrPWNotEmpty</key>	<string>卡号或密码不能为空</string>	<key>Common_InputPhoneNum</key>	<string>请输入手机号码(11位): </string>	<key>Common_PhoneNumNotEmpty</key>	<string>手机号码不能为空</string>	<key>Common_ShortMsg</key>	<string>短信</string>	<key>Common_RechargeGongGao</key>	<string>充值公告</string>	<key>Common_PayChannel</key>	<string>支付通道</string>	<key>Common_PersonalInfo</key>	<string>个人信息</string>	<key>Common_TotalPay</key>	<string>总充值金额: </string>	<key>Common_RechargeRecord</key>	<string>充值记录</string>	<key>Common_date</key>	<string>日期</string>	<key>Common_JingEr</key>	<string>金额</string>	<key>Common_recharge</key>	<string>充值</string>	<key>Common_query</key>	<string>查询</string>	<key>Common_ReadingGameInfo</key>	<string>正在读取游戏信息...</string>	<key>Common_ConnectingServer</key>	<string>正在连接服务器,请稍候...</string>	<key>Common_shop</key>	<string>商店</string>	<key>Common_InputAmount100</key>	<string>请输入个数: (一次购买不超过100个)</string>	<key>Common_ShopSaleTip</key>	<string>你要卖的装备品质为</string>	<key>Common_ShopSaleTip2</key>	<string>卖出的装备将无法买回，是否确定要卖出？</string>	<key>Common_ShopBuy100</key>	<string>一次最多购买100个,请重新输入</string>	<key>Common_PriviewEquip</key>	<string>预览装备</string>	<key>Common_CancelPriview</key>	<string>取消预览</string>	<key>Common_MaiDiao</key>	<string>卖掉</string>	<key>Common_EnterMap</key>	<string>进入地图</string>	<key>Common_UseJuanZhouTip</key>	<string>点击确认使用一个城镇传送卷轴</string>	<key>Common_OnlyTeamleaderCanChangeMap</key>	<string>对不起,组队状态下,只有队长能切换地图.</string>	<key>Common_ConnectServerErr</key>	<string>服务器连接失败,请检查网络.</string>	<key>Common_SysSetting</key>	<string>系统设置</string>	<key>Common_DirectKey</key>	<string>方向键盘</string>	<key>Common_FastGame</key>	<string>快速游戏</string>	<key>Common_LoginGame</key>	<string>登录游戏</string>	<key>Common_RegisterAccount</key>	<string>注册账号</string>	<key>Common_GameSetting</key>	<string>游戏设置</string>	<key>Common_GameHelp</key>	<string>游戏帮助</string>	<key>Common_QuitGame</key>	<string>退出游戏</string>	<key>Common_ConnectErr</key>	<string>网络连接失败，请检查网络配置</string>	<key>Common_CrashReportTip</key>	<string>上次使用时程序出现异常,准备提交异常日志,将产生</string>	<key>Common_CrashReportTip2</key>	<string>流量,非常感谢您对龙御OL的支持!</string>	<key>Common_UserName</key>	<string>用户名:</string>	<key>Common_AccountName</key>	<string>账号:</string>	<key>Common_UserPW</key>	<string>密码:</string>	<key>Common_GetUserNameSucc</key>	<string>获取用户名成功</string>	<key>Common_game</key>	<string>游戏</string>	<key>Common_fast</key>	<string>快速</string>	<key>Common_login</key>	<string>登录</string>	<key>Common_register</key>	<string>注册</string>	<key>Common_account</key>	<string>账号</string>	<key>Common_CreateRoleDao</key>	<string>刀: 刚劲有力,攻击平稳,速度较慢,适合于力量强大,体质健壮的豪侠人士,常常能在关键时刻扭转局面后发制人。</string>	<key>Common_CreateRoleJian</key>	<string>剑: 柔中带刚, 速度中等, 出招幽雅, 剑光闪耀灵气十足, 为古今文人侠士所衷爱, 适合身手敏捷, 悟性高超的龙御剑客。</string>	<key>Common_CreateRoleZhang</key>	<string>杖: 外形独特,貌不惊人却蕴涵玄机,智力高超的得道之人用之犹如神助。</string>	<key>Common_CreateRoleBiShou</key>	<string>匕首: 贴身近战神器,进攻犀利,速度超群,配合高敏高爆,总能先发制人,毙敌于瞬息之间。</string>	<key>Common_CreateRoleGong</key>	<string>弓: 远程杀手,战斗中能给自己较好的保护,一个合格的弓箭手总能在合适的时机决定攻击和撤退。</string>	<key>Common_InputNickName</key>	<string>请输入昵称</string>	<key>Common_RoleNameCantEmpty</key>	<string>角色名字不能为空</string>	<key>Common_SelServer</key>	<string>请先选择服务器</string>	<key>Common_PWCantEmpty</key>	<string>密码不能为空</string>	<key>Common_GameIntroduce</key>	<string>游戏介绍</string>	<key>Common_MenuShuoMing</key>	<string>菜单说明</string>	<key>Common_OperateShuoMing</key>	<string>操作说明</string>	<key>Common_PrevPage</key>	<string>上一页</string>	<key>Common_NextPage</key>	<string>下一页</string>	<key>Common_FaShuKangXing</key>	<string>法术抗性</string>	<key>Common_LingQiVal</key>	<string>灵气值</string>	<key>Common_ChuShouShunXun</key>	<string>决定其在战斗中的出手顺序。</string>	<key>Common_WuLiShangHaiTip</key>	<string>角色能造成的物理伤害值，可通过力量属性大幅提升物理攻击，伤害受对方防御值影响。</string>	<key>Common_FaShuAtkTip</key>	<string>使用法术时的法术攻击，可通过智力属性大幅提升法术攻击，杀伤力大，受对方抗性值影响。</string>	<key>Common_DeHurtPhyAtk</key>	<string>降低受到物理攻击时的伤害。</string>	<key>Common_DeHurtMagicAtk</key>	<string>降低受到法术攻击时的伤害。</string>	<key>Common_PhyAtkHitRate</key>	<string>物理攻击的准确率，减少未击中的概率。</string>	<key>Common_AddDodgeRate</key>	<string>增加该值能提高躲避对方物理攻击的概率。</string>	<key>Common_RateHurt175</key>	<string>有一定几率给敌方造成１７５%的伤害。</string>	<key>Common_BattleGetSkillDot</key>	<string>学习技能等行为需要消耗的点数，能通过战斗任务等途径获得。</string>	<key>Common_JiFeng</key>	<string>积分</string>	<key>Common_PKVal</key>	<string>PK值</string>	<key>Common_lover</key>	<string>伴侣</string>	<key>Common_ChangeAnJiFengAution</key>	<string>长安拍卖行积分。</string>	<key>Common_RoleCamp</key>	<string>角色所在阵营。</string>	<key>Common_RoleJunTuan</key>	<string>角色所在的军团。</string>	<key>Common_RoleJunTuanBank</key>	<string>角色在军团中的职位。</string>	<key>Common_RoleHonurVal</key>	<string>角色荣誉值对等角色军衔，角逐全服唯一统帅头衔。</string>	<key>Common_CountryReputeTip</key>	<string>国家声望达到一定值，可购买声望商店特殊物品。</string>	<key>Common_PersonalReputeTip</key>	<string>个人阵营声望值，可兑换荣誉。</string>	<key>Common_KillPlayerTip</key>	<string>击倒玩家所累积的善恶值。</string>	<key>Common_LiLiangTip</key>	<string>提升物理攻击力同时增加HP值</string>	<key>Common_TiZhiTip</key>	<string>提升物理防御同时增加大幅增加HP值</string>	<key>Common_MingJieTip</key>	<string>提升攻击速度和少量提升物理攻击及闪避能力</string>	<key>Common_ZhiLiTip</key>	<string>提升法术攻击力和魔法防御力同时大幅增加MP值</string>	<key>Common_ZhongLi</key>	<string>中立</string>	<key>Common_tang</key>	<string>唐</string>	<key>Common_campJiang</key>	<string>犍</string>	<key>Common_TuJue</key>	<string>突厥</string>	<key>Common_WaJun</key>	<string>瓦军</string>	<key>Common_WangJun</key>	<string>王军</string>	<key>Common_PetName</key>	<string>宠物名</string>	<key>Common_AllocProp</key>	<string>可分配属性:</string>	<key>Common_AccountPWNeedRange6To15</key>	<string>【说明】您的账号与密码必须由字母或数字组成(账号6-15位,</string>	<key>Common_Use91Login</key>	<string>密码7-12位,使用91通行证直接登录游戏</string>	<key>Common_UseNameInvalid</key>	<string>用户名不合法</string>	<key>Common_PWInvalid</key>	<string>密码不合法</string>	<key>Common_AccountNeedRange6To15</key>	<string>请输入账号(只能由数字或字母组成，6-15位)</string>	<key>Common_PWNeedRange7To12</key>	<string>请输入密码(只能由数字或字母组成，7-12位)</string>	<key>Common_YouHavetReliveItem</key>	<string>您没有复活道具</string>	<key>Common_ReliveInCity</key>	<string>回城复活</string>	<key>Common_ReliveUseItem</key>	<string>使用道具复活</string>	<key>Common_GetAward</key>	<string>领取奖励</string>	<key>Common_VersionUpdate</key>	<string>检查到更新版本</string>	<key>Common_RequestErr</key>	<string>请求出错</string>	<key>Common_FriendAddGuo</key>	<string>【好友添加】</string>	<key>Common_TeamInviteGuo</key>	<string>【组队邀请】</string>	<key>Common_RefraseReqGuo</key>	<string>【比武请求】</string>	<key>Common_MasterReqGuo</key>	<string>【拜师信息】</string>	<key>Common_TutorReqGuo</key>	<string>【收徒信息】</string>	<key>Common_JunTuanInviteGuo</key>	<string>【军团邀请】</string>	<key>Common_NewMailGuo</key>	<string>【新邮件】</string>	<key>Common_NewChatGuo</key>	<string>【新私聊】</string>	<key>Common_WantAddFriend</key>	<string>想添加你为好友</string>	<key>Common_WantAddTeam</key>	<string>邀请你加入他的队伍</string>	<key>Common_WantRefrase</key>	<string>想找你切磋</string>	<key>Common_WantMaster</key>	<string>拜您为师</string>	<key>Common_WantTutor</key>	<string>想收你为徒</string>	<key>Common_WantJoinJunTuan</key>	<string>邀请你加入军团</string>	<key>Common_RequestInvalid</key>	<string>该请求已失效！</string>	<key>Common_InputMoneyMax</key>	<string>请输入银两数量最多(</string>	<key>Common_InputEMoneyMax</key>	<string>请输入元宝数量最多(</string>	<key>Common_ItemCantInStorage</key>	<string>该物品不能放入仓库.</string>	<key>Common_StorageFull</key>	<string>仓库已满</string>	<key>Common_InputItemAmount</key>	<string>请输入物品数量:</string>	<key>Common_NumInvalid</key>	<string>数值不合法</string>	<key>Common_MoneyBuZhu</key>	<string>银两不足</string>	<key>Common_EMoneyBuZhu</key>	<string>元宝不足</string>	<key>Common_FangRuBag</key>	<string>放入背包</string>	<key>Common_ViewXianQing</key>	<string>查看详情</string>	<key>Common_QuChu</key>	<string>取出</string>	<key>Common_FangRuStorage</key>	<string>放入仓库</string>	<key>Common_storage</key>	<string>存储</string>	<key>Common_YaoKaiTong</key>	<string>要开通</string>	<key>Common_CangKu</key>	<string>仓库</string>	<key>Common_EquipUpLev</key>	<string>装备升级</string>	<key>Common_FangRuEquip</key>	<string>放入装备</string>	<key>Common_UpLevEquip</key>	<string>升级后装备</string>	<key>Common_NeedOneTianKuiStone</key>	<string>需要1个天魁石</string>	<key>Common_NeedOneTianMoStone</key>	<string>需要1个玄魔石</string>	<key>Common_NeedOneTianRangStone</key>	<string>需要1个天斓石</string>	<key>Common_UseTianKuiStoneTip</key>	<string>改良装备品质需要消耗1个天魁石，该操作将有可能失败，是否确定改良？</string>	<key>Common_NeedTianKuiStoneTip</key>	<string>改良装备品质需要天魁石，可以从商城购买或者打怪掉落</string>	<key>Common_UseTianMoStoneTip</key>	<string>装备强化需要消耗1个玄魔石，该操作将有可能失败，是否确定强化？</string>	<key>Common_NeedTianMoStoneTip</key>	<string>装备强化需要玄魔石，可以从商城购买或者打怪掉落</string>	<key>Common_CantQiangHua</key>	<string>该装备没有可强化的属性</string>	<key>Common_UseTianRangStoneTip</key>	<string>升级装备需要消耗1个天斓石，该操作将有可能失败，是否确定升级？</string>	<key>Common_NeedTianRangStoneTip</key>	<string>您没有升级所需要的天斓石</string>	<key>Common_FangRuEquipFirst</key>	<string>请先放入装备</string>	<key>Common_FangRu</key>	<string>放入</string>	<key>Common_EquipCantUp</key>	<string>您提交的装备无法升级</string>	<key>Common_DoNotFangRuZhaWu</key>	<string>请勿放入装备以外的杂物</string>	<key>Common_ItemCantQiangHua</key>	<string>该物品不可强化</string>	<key>Common_BaoLiuBaoShi</key>	<string>保留宝石</string>	<key>Common_NotFindXiangQiangBaoShi</key>	<string>没发现有镶嵌宝石.</string>	<key>Common_EquipHole</key>	<string>装备开洞</string>	<key>Common_ItemCantHole</key>	<string>该物品不能开洞</string>	<key>Common_EquipHoleMax</key>	<string>该装备洞数已达最大！</string>	<key>Common_NotHaveYueGuang</key>	<string>对不起,您没有月光宝锥.</string>	<key>Common_YueGuangBaoZhuiNotEnoughAmount</key>	<string>对不起,您的月光宝锥数量不够.</string>	<key>Common_OpenHole</key>	<string>开洞</string>	<key>Common_HoleUpToMax</key>	<string>该装备洞数已达最大</string>	<key>Common_need</key>	<string>需要</string>	<key>Common_GeYueGuanBaoZhui</key>	<string>个月光宝锥</string>	<key>Common_suo</key>	<string>锁</string>	<key>Common_SkillCompose</key>	<string>技能合成</string>	<key>Common_SuoDing</key>	<string>锁定</string>	<key>Common_CancelSuoDing</key>	<string>取消锁定</string>	<key>Common_PetLearnNewSkillTip</key>	<string>宠物学习新的技能可能遗忘原有的技能，请慎重选择!</string>	<key>Common_PetLearnNewSkillTip2</key>	<string>注：使用锁灵符锁定的技能，合成时可避免被遗忘!</string>	<key>Common_SuoLingFu</key>	<string>锁灵符</string>	<key>Common_BuZhu</key>	<string>不足</string>	<key>Common_HeChengFail</key>	<string>合成失败，您宠物当前技能槽已满，请扩充技能槽后再次技能合成</string>	<key>Common_GuanZhang</key>	<string>观战</string>	<key>Common_ViewWish</key>	<string>查看愿望</string>		<key>Common_CompeteList</key>	<string>参赛名单</string>	<key>Common_CompeteBattleList</key>	<string>比赛对阵列表</string>	<key>Common_DuiZhangPlayer</key>	<string>对战玩家</string>	<key>Common_WishPool</key>	<string>许愿池</string>	<key>Common_WishPoolWish</key>	<string>许愿池的愿望</string>	<key>Common_time</key>	<string>时间</string>	<key>Common_PlayerMingZhi</key>	<string>玩家名字</string>	<key>Common_InputDonateMoney</key>	<string>请输入你要捐献的银两数：</string>	<key>Common_InputDonateEMoney</key>	<string>请输入你要捐献的元宝数：</string>	<key>Common_InputInvalid</key>	<string>输入不合法</string>	<key>Common_Mutiply100</key>	<string>请输入100的倍数！</string>	<key>Common_RestMoneyNotEnough</key>	<string>您所剩银两不足</string>	<key>Common_RestEMoneyNotEnough</key>	<string>您所剩元宝不足</string>	<key>Common_DonotEmpty</key>	<string>不能为空</string>	<key>Common_QuHui</key>	<string>取回</string>	<key>Common_DonateList</key>	<string>捐献清单</string>	<key>Common_one</key>	<string>一</string>	<key>Common_two</key>	<string>二</string>	<key>Common_three</key>	<string>三</string>	<key>Common_four</key>	<string>四</string>	<key>Common_five</key>	<string>五</string>	<key>Common_six</key>	<string>六</string>	<key>Common_seven</key>	<string>日</string>	<key>Common_NotXiangQiangBaoShi</key>	<string>没有可镶嵌的宝石</string>	<key>Common_InputWholeInfo</key>	<string>请输入完整的信息!</string>	<key>Common_PhoneNumErr</key>	<string>手机号码位数错了!</string>	<key>Common_FindBackTip</key>	<string>输入账号后,选择发送短信验证码,在验证码中输入收到的短信验证码,提交后,密码将通过短信发送到您所绑定的手机上,短信验证码30分钟有效,一天最多可以申请一次密码找回</string>	<key>Common_InputAccount</key>	<string>请输入账号!</string>	<key>Common_AccountCantEmpty</key>	<string>账号不能为空!</string>	<key>Common_VerifyCodeCantEmpty</key>	<string>验证码不能为空!</string>	<key>Common_ge</key>	<string>个</string>	<key>Common_ApplyList</key>	<string>报名列表</string>	<key>Common_RenShuMaoHao</key>	<string>人数: </string>	<key>Common_AttachGuo</key>	<string>(附件)</string>	<key>Common_JuQing</key>	<string>剧情</string>	<key>Common_daily</key>	<string>日常</string>	<key>Common_grow</key>	<string>成长</string>	<key>Common_DailyTaskRefreshTip</key>	<string>每天自动刷新一次日常任务，主动刷新任务将需要支付10元宝，你确定刷新？</string>	<key>Common_le</key>	<string>了</string>	<key>Common_warring</key>	<string>警告</string>	<key>Common_CantUnEquip</key>	<string>不能在飞行区域卸下飞行坐骑</string>	<key>Common_decoration</key>	<string>勋章</string>		<key>Common_Peerage0</key>	<string>平民</string>	<key>Common_Peerage1</key>	<string>男爵</string>	<key>Common_Peerage2</key>	<string>子爵</string>	<key>Common_Peerage3</key>	<string>伯爵</string>	<key>Common_Peerage4</key>	<string>侯爵</string>	<key>Common_Peerage5</key>	<string>公爵</string>	<key>Common_Peerage6</key>	<string>郡侯</string>	<key>Common_Peerage7</key>	<string>郡公</string>	<key>Common_Peerage8</key>	<string>国公</string>	<key>Common_Peerage9</key>	<string>郡王</string>	<key>Common_Peerage10</key>	<string>亲王</string>	<key>Common_Peerage11</key>	<string>帝王</string>		<key>Common_VipExplain1</key>	<string>VIP1:%s1.免费开通所有背包%s2.活力上限提升120点，每日登陆额外获得200点活力值</string>	<key>Common_VipExplain2</key>	<string>VIP2:%s1.战斗后自动恢复血量,每恢复一点扣除1个银两%s2.离线寻宝经验和金钱收益加成30%%%s3.提供丢弃或卖掉的物品的回购功能</string>	<key>Common_VipExplain3</key>	<string>VIP3:%s1.宠物背包扩展为6格（初始5格）,最多可同时出战两只宠物%s2.战斗后自动恢复魔法值,每恢复一点扣除2个银两</string>	<key>Common_VipExplain4</key>	<string>VIP4:%s1.宠物背包扩展为7格（初始5格）, 最多可同时出战三只宠物%s2.战斗后自动修理装备</string>	<key>Common_VipExplain5</key>	<string>VIP5:%s1.宠物背包扩展为8格（初始5格）, 最多可同时出战四只宠物%s2.开通远程出售功能</string>	<key>Common_VipExplain6</key>	<string>VIP6:%s1.宠物背包扩展为9格（初始5格）, 最多可同时出战五只宠物%s2.离线寻宝经验和金钱收益加成50%</string>	<key>Common_VipExplain7</key>	<string>VIP7:%s1.宠物分享离线寻宝经验%s2.宠物背包扩展为10格（初始5格）, 最多可同时出战六只宠物</string>	<key>Common_VipExplain8</key>	<string>VIP8:%s1.宠物背包扩展为12格（初始5格）, 最多可同时出战7只宠物%s2.离线寻宝经验和金钱收益加成100%%%s3.宠物分享离线寻宝经验加成30%%</string>	<key>Common_VipExplain9</key>	<string>VIP9:%s1.宠物背包扩展为13格（初始5格）, 最多可同时出战8只宠物%s2.宠物分享离线寻宝经验加成50%%</string>	<key>Common_VipExplain10</key>	<string>VIP10:%s1.宠物背包扩展为15格（初始5格）,最多可同时出战9只宠物%s2.宠物分享离线寻宝经验加成100%%</string>	<key>Common_RemoteSale</key>	<string>出售</string>	<key>Common_RemoteSaleTip</key>	<string>是否确定卖出该物品</string>	<key>Common_RemoteSaleVip</key>	<string>只有VIP5级以上才可使用远程出售功能，您当前的VIP等级为%d。</string>	<key>Common_MainPet</key>	<string>主将</string>	<key>Common_PetRest</key>	<string>休息</string>	<key>Common_PetFighter</key>	<string>出战</string>	<key>Common_PetIn</key>	<string>收回</string>	<key>Common_PetOut</key>	<string>遛宠</string>	<key>Common_PetDrop</key>	<string>丢弃</string>	<key>Common_PetDisboard</key>	<string>卸下</string>	<key>Common_PetShow</key>	<string>展示</string>		<key>Common_PetSkillLock</key>	<string>锁定</string>	<key>Common_PetSkillUnlock</key>	<string>解锁</string>	<key>Common_PetSkillLearn</key>	<string>学习</string>	<key>Common_PetSkillCanLearn</key>	<string>可学技能</string>	<key>Common_PetSkillLearned</key>	<string>已学技能</string>	<key>Common_PetSkillLocked</key>	<string>已锁定</string>	<key>Common_PetSkillTip1</key>	<string>您的宝物不足，需要%s*%d，价值%d元宝，是否直接购买并使用？按确认提交，按关闭取消。</string>	<key>Common_PetSkillTip2</key>	<string>消耗%s*%d，按确认提交，按关闭取消。</string>	<key>Common_PetSkillTip3</key>	<string>您已经学会的技能未全部锁定，学习新的技能有一定几率会覆盖旧的技能，您确定继续么？</string>		<key>Common_PetTip1</key>	<string>1. 宠物喂食:%s直接将宠物用品拖到宠物身上即可完成使用。</string>	<key>Common_PetTip2</key>	<string>2. 主将任命:%s当一只宠物出战时自动任命为主将，多只宠物出战时您可以自主任命其中某一只为主将，任命为主将的宠物在战斗中受控制，其他的出战宠物将随机释放技能和普通攻击。</string>	<key>Common_PetTip3</key>	<string>3. 出战:%s根据vip等级不同，可以出战的宠物数量不同，选择出战的宠物才有可能在战斗中出现。</string>	<key>Common_PetTip4</key>	<string>4. 遛宠:%s设定了遛宠的宠物才会出现在您身边，您可以选择任何一只宠物进行遛宠，同时只能遛一只宠物。</string>	<key>Common_PetTip5</key>	<string>5. 宠物选择:%s装备了多只宠物时，可以点击宠物名字两边的箭号来切换当前显示的宠物。</string>	<key>Common_PetTip6</key>	<string>6. 展示功能:%s点击展示,可以将您的宠物发送到您当前选定的聊天频道中供人欣赏。</string>	<key>Common_PetTip7</key>	<string>7. 卸下:%s取出后的宠物会变成一个物品存放在背包中，可以用于装备和邮寄。</string>	<key>Common_PetDropTip</key>	<string>是否确定丢弃这只宠物?</string><!-- 通用　字串定义结束--><!-- ================================================== --><!-- 文件NDItemType.mm　字串定义开始-->	<key>NDItemType.mm_fashi</key>	<string>法师</string>	<key>NDItemType.mm_chike</key>	<string>刺客</string>	<key>NDItemType.mm_zhangshi</key>	<string>战士</string>	<key>NDItemType.mm_nottrade</key>	<string>不可交易</string>	<key>NDItemType.mm_notstorge</key>	<string>不可存储</string><!-- 文件NDItemType.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件NDMapData.mm　字串定义开始-->	<key>NDMapData.mm_notopen</key>	<string>暂未开放</string>	<key>NDMapData.mm_lianjiquyu</key>	<string>练级区域</string>	<key>NDMapData.mm_minyuecun</key>	<string>明月村</string>	<key>NDMapData.mm_xinshou</key>	<string>新手出生地</string><!-- 文件NDMapData.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件NDIphoneEdit.mm　字串定义开始-->	<key>NDIphoneEdit.mm_InputSmallLimit</key>	<string>输入的最少字符数不可小于</string>	<key>NDIphoneEdit.mm_InputBigLimit</key>	<string>输入的字符数不可超过</string>	<key>NDIphoneEdit.mm_ge</key>	<string>个</string><!-- 文件NDIphoneEdit.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件BattleFieldMgr.mm　字串定义开始-->	<key>BattleFieldMgr.mm_NinSucessBaoMing</key>	<string>您成功报名了</string>	<key>BattleFieldMgr.mm_NinBaoMing</key>	<string>您报名</string>	<key>BattleFieldMgr.mm_fail</key>	<string>失败了</string>	<key>BattleFieldMgr.mm_NinSucessCancelBaoMing</key>	<string>您成功取消了报名</string>	<key>BattleFieldMgr.mm_NinCancelBaoMing</key>	<string>您取消报名</string>	<key>BattleFieldMgr.mm_BFConfirm</key>	<string>战场确认</string>	<key>BattleFieldMgr.mm_OnceEnterBF</key>	<string>立刻进入战场</string>	<key>BattleFieldMgr.mm_LaterEnterBF</key>	<string>稍后进入战场</string><!-- 文件BattleFieldMgr.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件BattleFieldApply.mm　字串定义开始-->	<key>BattleFieldApply.mm_BFRule</key>	<string>战场规则</string>	<key>BattleFieldApply.mm_AfterBFStart</key>	<string>后战斗开始</string>	<key>BattleFieldApply.mm_CancelApply</key>	<string>取消报名</string><!-- 文件BattleFieldApply.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件FarmInfoScene.mm　字串定义开始-->	<key>FarmInfoScene.mm_CurRes</key>	<string>当前资源</string>	<key>FarmInfoScene.mm_MaintainRes</key>	<string>维护资源</string>	<key>FarmInfoScene.mm_FarmDongTai</key>	<string>庄园动态</string>	<key>FarmInfoScene.mm_FarmTip</key>	<string>阁下是否要取消建设，取消将只返还部分资源，是否继续</string>	<key>FarmInfoScene.mm_FarmTip2</key>	<string>阁下真的要取消，是否继续</string><!-- 文件FarmInfoScene.mm　字串定义结束--><!-- ================================================== -->	<!-- ================================================== --><!-- 文件FarmMessage.mm　字串定义开始-->	<key>FarmMessage.mm_VisitRecord</key>	<string>访问记录</string>	<key>FarmMessage.mm_TouQieRecord</key>	<string>偷窃记录</string>	<key>FarmMessage.mm_FarmLiuYang</key>	<string>庄园留言</string>	<key>FarmMessage.mm_FarmMax50Char</key>	<string>内容(最多输入50个字符)</string>	<key>FarmMessage.mm_FarmMax50CharFail</key>	<string>失败, 留言不能超过50个字</string><!-- 文件FarmMessage.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件FarmMgr.mm　字串定义开始-->	<key>FarmMgr.mm_EmptySpaceList</key>	<string>空地列表</string>	<key>FarmMgr.mm_ChengShouTime</key>	<string>成熟时间</string>	<key>FarmMgr.mm_ZhongZhiTip</key>	<string>阁下的种子不足，请到庄园商店中购买</string>	<key>FarmMgr.mm_ShiFeiTip</key>	<string>阁下的肥料不足，请到商城中购买</string>	<key>FarmMgr.mm_YangZhiTip</key>	<string>阁下的幼崽不足，请到庄园商店中购买</string>	<key>FarmMgr.mm_WeiSiLiaoTip</key>	<string>阁下的饲料不足，请到商城中购买</string>	<key>FarmMgr.mm_JiaSuUpTip</key>	<string>阁下的加速材料不足，请到商城中购买</string><!-- 文件FarmMgr.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件FarmStorage.mm　字串定义开始-->	<key>FarmStorage.mm_StorageManage</key>	<string>仓库管理</string>	<key>FarmStorage.mm_StorageWuZi</key>	<string>存取物资</string>	<key>FarmStorage.mm_StorageWuZiLimit</key>	<string>保存存储上限</string><!-- 文件FarmStorage.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件HamletListScene.mm　字串定义开始-->	<key>HamletListScene.mm_CunLuoList</key>	<string>村落列表</string>	<key>HamletListScene.mm_CunLuoName</key>	<string>村落名称</string>	<key>HamletListScene.mm_RuZhuQingKuan</key>	<string>入住情况</string>	<key>HamletListScene.mm_FixMove</key>	<string>定点迁移</string>	<key>HamletListScene.mm_RandomMove</key>	<string>随机迁移</string><!-- 文件HamletListScene.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件RanchProductDlg.mm　字串定义开始-->	<key>RanchProductDlg.mm_WeiSiLiao</key>	<string>喂饲料</string>	<key>RanchProductDlg.mm_CancelYangZhi</key>	<string>取消养殖</string>	<key>RanchProductDlg.mm_ConfirmCancelYangZhi</key>	<string>确认取消养殖？</string><!-- 文件RanchProductDlg.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件AuctionSearchLayer.mm　字串定义开始-->	<key>AuctionSearchLayer.mm_tenup</key>	<string>10以上</string>	<key>AuctionSearchLayer.mm_searchbyname</key>	<string>按物品名字搜索</string>	<key>AuctionSearchLayer.mm_InputQueryItemName</key>	<string>请输入要查询物品的完整名称</string><!-- 文件AuctionSearchLayer.mm　字串定义结束-->	<!-- ================================================== --><!-- 文件AuctionUILayer.mm　字串定义开始-->		<key>AuctionUILayer.mm_ChuJiaJingPai</key>	<string>出价竞拍</string>	<key>AuctionUILayer.mm_ChuJiaSucess</key>	<string>出价成功</string>	<key>AuctionUILayer.mm_ShanJiaTip</key>	<string>上架成功, 可通过我的拍卖进行查询，拍卖期限为两天。</string>	<key>AuctionUILayer.mm_PaiTip</key>	<string>祝贺你成功拍得此物品！</string>		<key>AuctionUILayer.mm_QiPaiPrice</key>	<string>起拍价(银两)</string>	<key>AuctionUILayer.mm_YiKouPrice</key>	<string>一口价(银两)</string>	<key>AuctionUILayer.mm_QiPaiEPrice</key>	<string>起拍价(元宝)</string>	<key>AuctionUILayer.mm_YiKouEPrice</key>	<string>一口价(元宝)</string>	<key>AuctionUILayer.mm_InputPaiPrice</key>	<string>输入竞拍价</string>	<key>AuctionUILayer.mm_ReinputTip1</key>	<string>请重新输入起拍价,0表示不限,上限为1999999999</string>	<key>AuctionUILayer.mm_ReinputTip2</key>	<string>请重新输入一口价,0表示不限,上限为2000000000</string>	<key>AuctionUILayer.mm_YiKouTip</key>	<string>请重新输入一口价,0表示不限,上限为2000000000</string>	<key>AuctionUILayer.mm_InputPriceError</key>	<string>您输入的价格无效,请重新输入</string>	<key>AuctionUILayer.mm_InputMoneyError</key>	<string>您没有那么多钱,请重新输入</string>	<key>AuctionUILayer.mm_PaiMaiHang</key>	<string>拍卖行</string>	<key>AuctionUILayer.mm_ItemPaiError</key>	<string>该物品不可拍卖</string><!-- 文件AuctionUILayer.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件Auction_Item.mm　字串定义开始-->	<key>Auction_Item.mm_NewPaiPrice</key>	<string>最新出价:</string>	<key>Auction_Item.mm_ChuPaiPrice</key>	<string>出价者:</string><!-- 文件Auction_Item.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件EmailListener.mm　字串定义开始-->	<key>EmailListener.mm_SendMailToYou</key>	<string>给您发了一封邮件,请查收.</string>	<key>EmailListener.mm_AcceptAttachSucess</key>	<string>接收附件成功</string>	<key>EmailListener.mm_AcceptAttachFail</key>	<string>接收附件失败</string>	<key>EmailListener.mm_AcceptAttachFailMoney</key>	<string>接收附件失败,银两不足</string>	<key>EmailListener.mm_AcceptAttachFailEMoney</key>	<string>接收附件失败,元宝不足</string>	<key>EmailListener.mm_AcceptAttachFailBag</key>	<string>接收附件失败,背包已满</string>	<key>EmailListener.mm_RejectSucess</key>	<string>拒收成功</string>	<key>EmailListener.mm_RejectFail</key>	<string>拒收失败</string>		<key>EmailListener.mm_DelMailSucess</key>	<string>删除邮件成功</string>	<key>EmailListener.mm_DelMailFail</key>	<string>删除邮件失败</string>	<key>EmailListener.mm_DelMailFailAttach</key>	<string>删除邮件失败,有附件时禁止删除</string>	<key>EmailListener.mm_SysMailErr</key>	<string>系统邮件不允许拒收</string><!-- 文件EmailListener.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件SynInfoUILayer.mm　字串定义开始-->	<key>SynInfoUILayer.mm_ConfirmResign</key>	<string>请您确认是否要辞掉当前官职?</string>	<key>SynInfoUILayer.mm_Resign</key>	<string>确认辞职</string>	<key>SynInfoUILayer.mm_ConfirmLeave</key>	<string>大侠您确定要离开本军团?</string>	<key>SynInfoUILayer.mm_InputBrocast</key>	<string>请输入军团公告:</string><!-- 文件SynInfoUILayer.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件SynMbrListUILayer.mm　字串定义开始-->	<key>SynMbrListUILayer.mm_AppointPost</key>	<string>任命职位</string>	<key>SynMbrListUILayer.mm_ConfirmShanRang</key>	<string>您确定要禅让军团长职位给玩家 </string>	<key>SynMbrListUILayer.mm_ma</key>	<string> 吗?</string>		<key>SynMbrListUILayer.mm_ConfirmDismiss</key>	<string>您确定要将玩家 </string>		<key>SynMbrListUILayer.mm_ConfirmDismiss2</key>	<string> 踢出军团?</string><!-- 文件SynMbrListUILayer.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件SynElectionUILayer.mm　字串定义开始-->	<key>SynElectionUILayer.mm_ConfirmElec</key>	<string>您是否确定要竞选职位 </string><!-- 文件SynElectionUILayer.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件CreateSynDialog.mm　字串定义开始-->	<key>CreateSynDialog.mm_JunTuanNameErr</key>	<string>军团名字错误</string>	<key>CreateSynDialog.mm_InputJunTuanName</key>	<string>请输入军团名字</string>	<key>CreateSynDialog.mm_CampErr</key>	<string>阵营错误</string>	<key>CreateSynDialog.mm_SelCamp</key>	<string>请先选择军团阵营</string>	<key>CreateSynDialog.mm_ConfirmNameJunTuan</key>	<string>确定要将你的军团命名为</string>	<key>CreateSynDialog.mm_ConfirmNameJunTuan2</key>	<string>吗?一旦创建成功将无法更改</string><!-- 文件CreateSynDialog.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件SyndicateRegList.mm　字串定义开始-->	<key>SyndicateRegList.mm_join</key>	<string>应征加入</string>	<key>SyndicateRegList.mm_title</key>	<string>应征军团列表</string><!-- 文件SyndicateRegList.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件ChatRecordManager.mm　字串定义开始-->	<key>ChatRecordManager.mm_si</key>	<string>世</string>	<key>ChatRecordManager.mm_qu</key>	<string>区</string>	<key>ChatRecordManager.mm_dui</key>	<string>队</string>	<key>ChatRecordManager.mm_jun</key>	<string>军</string>	<key>ChatRecordManager.mm_mi</key>	<string>密</string>	<key>ChatRecordManager.mm_xi</key>	<string>系</string><!-- 文件ChatRecordManager.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件PlayerSkillInfo.mm　字串定义开始-->	<key>PlayerSkillInfo.mm_KongTiShi</key>	<string>主动技能在装备技能栏和已学技能栏之间拖动可以完成装配和卸装，可以使用[%s]开启新的装备位，未装备的技能在战斗中无法使用！</string>	<key>PlayerSkillInfo.mm_KaiQiShuoMin</key>	<string>当前开启技能格子需要[%s]%d个。</string>	<key>PlayerSkillInfo.mm_BaoWuBuZhu</key>	<string>您的宝物不足。</string>	<key>PlayerSkillInfo.mm_GouMaiShiYong</key>	<string>您的宝物不足，还需要[%s]*%d，是否花费%d元宝直接购买并使用？</string>	<key>PlayerSkillInfo.mm_EquipSkill</key>	<string>装备技能</string>	<key>PlayerSkillInfo.mm_LearnedSkill</key>	<string>已学技能</string><!-- 文件PlayerSkillInfo.mm　字串定义结束--><!-- ================================================== --><!-- ================================================== --><!-- 文件GameUINpcStore.mm　字串定义开始-->	<key>GameUINpcStore.mm_ShopBotton</key>	<string>买卖</string>	<key>GameUINpcStore.mm_BuyBackBotton</key>	<string>购回</string>	<key>GameUINpcStore.mm_BuyBackDlgBtn</key>	<string>买回</string>	<!-- 文件PlayerSkillInfo.mm　字串定义结束--><!-- ================================================== --></dict></plist>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+<!-- 使用:　定义为通用的字串所有文件都能访问, 定义为文件的字串仅该文件能访问-->
+
+<!-- 通用　字串定义开始-->
+	<key>Common_tip</key>
+	<string>提示</string>
+	<key>Common_haode</key>
+	<string>好的</string>
+	<key>Common_year</key>
+	<string>年</string>
+	<key>Common_month</key>
+	<string>月</string>
+	<key>Common_day</key>
+	<string>日</string>
+	<key>Common_hour</key>
+	<string>时</string>
+	<key>Common_minute</key>
+	<string>分</string>
+	<key>Common_second</key>
+	<string>秒</string>
+	<key>Common_error</key>
+	<string>错误</string>
+	<key>Common_NumberRequireTip</key>
+	<string>请输入0~9数字</string>
+	<key>Common_wu</key>
+	<string>无</string>
+	<key>Common_CampTang</key>
+	<string>唐军</string>
+	<key>Common_CampSui</key>
+	<string>隋军</string>
+	<key>Common_CampTuJue</key>
+	<string>突厥军</string>
+	<key>Common_Ok</key>
+	<string>确定</string>
+	<key>Common_Cancel</key>
+	<string>取消</string>
+	<key>Common_ConnectFailTip</key>
+	<string>连接超时,请稍候重试</string>
+	<key>Common_buy</key>
+	<string>购买</string>
+	<key>Common_BuyCountError</key>
+	<string>购买数量不对</string>
+	<key>Common_LevelRequire</key>
+	<string>等级需求</string>
+	<key>Common_Ji</key>
+	<string>级</string>
+	<key>Common_NormalPrice</key>
+	<string>原价</string>
+	<key>Common_CurPrice</key>
+	<string>现价</string>
+	<key>Common_price</key>
+	<string>价格</string>
+	<key>Common_FirstPageTip</key>
+	<string>已经是第一页!</string>
+	<key>Common_LastPageTip</key>
+	<string>已经是最后一页!</string>
+	<key>Common_relive</key>
+	<string>复活</string>
+	<key>Common_ReliveInPlace</key>
+	<string>原地复活</string>
+	<key>Common_level</key>
+	<string>等级</string>
+	<key>Common_apply</key>
+	<string>报名</string>
+	<key>Common_finish</key>
+	<string>完成</string>
+	<key>Common_ChengShou</key>
+	<string>成熟</string>
+	<key>Common_return</key>
+	<string>返回</string>
+	<key>Common_LiuYang</key>
+	<string>留言</string>
+	<key>Common_ChaKang</key>
+	<string>查看</string>
+	<key>Common_del</key>
+	<string>删除</string>
+	<key>Common_build</key>
+	<string>建设</string>
+	<key>Common_up</key>
+	<string>升级</string>
+	<key>Common_require</key>
+	<string>需求</string>
+	<key>Common_name</key>
+	<string>名字</string>
+	<key>Common_WenXinTip</key>
+	<string>温馨提示</string>
+	<key>Common_close</key>
+	<string>关闭</string>
+	<key>Common_RestSpace</key>
+	<string>剩余空间</string>
+	<key>Common_ShouHuo</key>
+	<string>收获</string>
+	<key>Common_confirm</key>
+	<string>确认</string>
+	<key>Common_ZhongZhi</key>
+	<string>种植</string>
+	<key>Common_ShiFei</key>
+	<string>施肥</string>
+	<key>Common_YangZhi</key>
+	<string>养殖</string>
+	<key>Common_WeiSiLiao</key>
+	<string>喂饲料</string>
+	<key>Common_JiaSuUp</key>
+	<string>加速升级</string>
+	
+	<key>Common_ShuanShouDao</key>
+	<string>双手刀</string>
+	<key>Common_ShuanShouJian</key>
+	<string>双手剑</string>
+	<key>Common_ShuanShouZhang</key>
+	<string>双手杖</string>
+	<key>Common_ShuanShouGong</key>
+	<string>双手弓</string>
+	<key>Common_DangShouDao</key>
+	<string>单手刀</string>
+	<key>Common_DangShouJian</key>
+	<string>单手剑</string>
+	<key>Common_BiShou</key>
+	<string>匕首</string>
+	<key>Common_TouKui</key>
+	<string>头盔</string>
+	
+	<key>Common_JianJia</key>
+	<string>肩甲</string>
+	<key>Common_XiongJia</key>
+	<string>胸甲</string>
+	<key>Common_HuWang</key>
+	<string>护腕</string>
+	<key>Common_PiFeng</key>
+	<string>披风</string>
+	
+	<key>Common_HuTui</key>
+	<string>护腿</string>
+	<key>Common_XieZhi</key>
+	<string>鞋子</string>
+	<key>Common_XiangLiang</key>
+	<string>项链</string>
+	<key>Common_ErHuan</key>
+	<string>耳环</string>
+	
+	<key>Common_HuiJi</key>
+	<string>徽记</string>
+	<key>Common_JieZhi</key>
+	<string>戒指</string>
+	<key>Common_ZhangChong</key>
+	<string>战宠</string>
+	<key>Common_QiChong</key>
+	<string>骑宠</string>
+	
+	<key>Common_HuiHuLei</key>
+	<string>恢复类</string>
+	<key>Common_KuangShi</key>
+	<string>矿石</string>
+	<key>Common_JuangZhou</key>
+	<string>卷轴</string>
+	<key>Common_TeShuXiaoHaoPing</key>
+	<string>特殊消耗品</string>
+	
+	<key>Common_BaoShi</key>
+	<string>宝石</string>
+	<key>Common_PeiFang</key>
+	<string>配方</string>
+	<key>Common_QuestItem</key>
+	<string>任务物品</string>
+	
+	<key>Common_chuchao</key>
+	<string>粗糙</string>
+	<key>Common_jiaocha</key>
+	<string>较差</string>
+	<key>Common_putong</key>
+	<string>普通</string>
+	<key>Common_jingzhi</key>
+	<string>精致</string>
+	<key>Common_xiyou</key>
+	<string>稀有</string>
+	<key>Common_sishi</key>
+	<string>史诗</string>
+	<key>Common_chuanshuo</key>
+	<string>传说</string>
+	<key>Common_youxiu</key>
+	<string>优秀</string>
+	<key>Common_wangmei</key>
+	<string>完美</string>
+	
+	<key>Common_all</key>
+	<string>全部</string>
+	
+	<key>Common_LvlRange1</key>
+	<string>1-10级</string>
+	<key>Common_LvlRange2</key>
+	<string>11-20级</string>
+	<key>Common_LvlRange3</key>
+	<string>21-30级</string>
+	<key>Common_LvlRange4</key>
+	<string>31-40级</string>
+	<key>Common_LvlRange5</key>
+	<string>41-50级</string>
+	<key>Common_LvlRange6</key>
+	<string>50级以上</string>
+	
+	<key>Common_money</key>
+	<string>银两</string>
+	<key>Common_emoney</key>
+	<string>元宝</string>
+	<key>Common_ZhongLei</key>
+	<string>种类</string>
+	<key>Common_PingZhi</key>
+	<string>品质</string>
+	<key>Common_MoneyType</key>
+	<string>货币类型</string>
+	<key>Common_ZhuiJia</key>
+	<string>追加</string>
+	<key>Common_ShangJia</key>
+	<string>上架</string>
+	<key>Common_XiaJia</key>
+	<string>下架</string>
+	<key>Common_SelectMoneyType</key>
+	<string>请选择货币类型</string>
+	
+	<key>Common_QiPaiPrice</key>
+	<string>起拍价</string>
+	<key>Common_YiKouPrice</key>
+	<string>一口价</string>
+	
+	<key>Common_unlimit</key>
+	<string>不限</string>
+	
+	<key>Common_TiLi</key>
+	<string>体力</string>
+	
+	<key>Common_amount</key>
+	<string>数量</string>
+	
+	<key>Common_deadline</key>
+	<string>到期时间</string>
+	
+	<key>Common_yongjiu</key>
+	<string>永久</string>
+	
+	<key>Common_yi</key>
+	<string>已</string>
+	
+	<key>Common_accept</key>
+	<string>接收</string>
+	
+	<key>Common_JuShou</key>
+	<string>拒收</string>
+	
+	<key>Common_tuihui</key>
+	<string>退回</string>
+	
+	<key>Common_hadread</key>
+	<string>已读</string>
+	<key>Common_noread</key>
+	<string>未读</string>
+	
+	<key>Common_system</key>
+	<string>系统</string>
+	<key>Common_player</key>
+	<string>玩家</string>
+	
+	<key>Common_YourFriend</key>
+	<string>您的好友</string>
+	
+	<key>Common_friend</key>
+	<string>好友</string>
+	<key>Common_SystemInfo</key>
+	<string>系统信息</string>
+	
+	<key>Common_OperateExcept</key>
+	<string>操作异常</string>
+	
+	<key>Common_timber</key>
+	<string>木材</string>
+	<key>Common_StoneTimber</key>
+	<string>石材</string>
+	<key>Common_paint</key>
+	<string>油漆</string>
+	<key>Common_WuJing</key>
+	<string>乌金</string>
+	<key>Common_TotalContribute</key>
+	<string>总贡献</string>
+	<key>Common_PrivateChat</key>
+	<string>私聊</string>
+	<key>Common_TakeOffice</key>
+	<string>任职</string>
+	<key>Common_add</key>
+	<string>添加</string>
+	<key>Common_ShangRang</key>
+	<string>禅让</string>
+	<key>Common_dismiss</key>
+	<string>开除</string>
+	
+	<key>Common_JunTuanZhang</key>
+	<string>军团长</string>
+	
+	<key>Common_FuTuanZhang</key>
+	<string>副团长</string>
+	
+	<key>Common_YuanLao</key>
+	<string>元老</string>
+	
+	<key>Common_TangZhu</key>
+	<string>堂主</string>
+	<key>Common_MengZhu</key>
+	<string>门主</string>
+	<key>Common_TuangYuan</key>
+	<string>团员</string>
+	
+	<key>Common_UpCondition</key>
+	<string>升级条件</string>
+	
+	<key>Common_PostElection</key>
+	<string>职位竞选</string>
+	
+	<key>Common_JunTuanMember</key>
+	<string>军团成员</string>
+	
+	<key>Common_ShenMengMengZhu</key>
+	<string>生门门主</string>
+	<key>Common_ShangMengMengZhu</key>
+	<string>伤门门主</string>
+	<key>Common_XiuMengMengZhu</key>
+	<string>休门门主</string>
+	<key>Common_DuMengMengZhu</key>
+	<string>杜门门主</string>
+	<key>Common_JingMengMengZhu</key>
+	<string>景门门主</string>
+	<key>Common_ShiMengMengZhu</key>
+	<string>死门门主</string>
+	<key>Common_jinMengMengZhu</key>
+	<string>惊门门主</string>
+	<key>Common_KaiMengMengZhu</key>
+	<string>开门门主</string>
+	<key>Common_TianLongTangZhu</key>
+	<string>天龙堂主</string>
+	<key>Common_QingMuTangZhu</key>
+	<string>青木堂主</string>
+	<key>Common_ChiHuoTangZhu</key>
+	<string>赤火堂主</string>
+	<key>Common_XiJingTangZhu</key>
+	<string>西金堂主</string>
+	<key>Common_XuanShuiTangZhu</key>
+	<string>玄水堂主</string>
+	<key>Common_HuanTuTangZhu</key>
+	<string>黄土堂主</string>
+	<key>Common_XuangWuYuanLao</key>
+	<string>玄武元老</string>
+	<key>Common_QingLongYuanLao</key>
+	<string>青龙元老</string>
+	<key>Common_BaiHuYuanLao</key>
+	<string>白虎元老</string>
+	<key>Common_ZhuQueYuanLao</key>
+	<string>朱雀元老</string>
+	
+	<key>Common_ConfirmTip</key>
+	<string>是否确定?</string>
+	
+	<key>Common_camp</key>
+	<string>阵营</string>
+	
+	<key>Common_InfoChangKang</key>
+	<string>信息查看</string>
+	
+	<key>Common_ApplyJoin</key>
+	<string>申请加入</string>
+	
+	<key>Common_JunTuanPaiHanBang</key>
+	<string>军团排行榜</string>
+	
+	<key>Common_ContributeDu</key>
+	<string>贡献度</string>
+	
+	<key>Common_JunTuanInviteHang</key>
+	<string>军团邀请函</string>
+	
+	<key>Common_AgreeJoin</key>
+	<string>同意加入</string>
+	
+	<key>Common_RejectJoin</key>
+	<string>拒绝加入</string>
+	
+	<key>Common_ViewJunTuiInfo</key>
+	<string>查看军团资料</string>
+	<key>Common_InviteYourJunTuan</key>
+	<string>邀请您的军团</string>
+	<key>Common_NameErr</key>
+	<string>名字错误</string>
+	
+	<key>Common_InputPlayerName</key>
+	<string>请输入玩家名字</string>
+	<key>Common_InputInvitePlayerName</key>
+	<string>请输入要邀请的玩家姓名</string>
+	<key>Common_learn</key>
+	<string>学习</string>
+	
+	<key>Common_skill</key>
+	<string>技能</string>
+	<key>Common_PositiveSkill</key>
+	<string>主动技能</string>
+	<key>Common_NegativeSkill</key>
+	<string>被动技能</string>
+	<key>Common_hadlearn</key>
+	<string>已学</string>
+	<key>Common_nolearn</key>
+	<string>未学</string>
+	
+	<key>Common_forget</key>
+	<string>遗忘</string>
+	
+	<key>Common_SkillForget</key>
+	<string>技能遗忘</string>
+	<key>Common_DianHua</key>
+	<string>点化</string>
+	<key>Common_CanWuSkill</key>
+	<string>参悟技能</string>
+	<key>Common_XinFaDianFa</key>
+	<string>心法点化</string>
+	<key>Common_LingQiConsume</key>
+	<string>灵气消耗</string>
+	<key>Common_ViewDetail</key>
+	<string>查看详细</string>
+	<key>Common_YiChu</key>
+	<string>移除</string>
+	<key>Common_PaticularState</key>
+	<string>特殊状态</string>
+	<key>Common_state</key>
+	<string>状态</string>
+	<key>Common_ViewZiLiao</key>
+	<string>查看资料</string>
+	<key>Common_ViewEquip</key>
+	<string>查看装备</string>
+	<key>Common_DelFriend</key>
+	<string>删除好友</string>
+	<key>Common_AddFriend</key>
+	<string>添加好友</string>
+	<key>Common_SendMail</key>
+	<string>发送邮件</string>
+	<key>Common_FriendList</key>
+	<string>好友列表</string>
+	<key>Common_InputFriendName</key>
+	<string>请输入好友姓名:</string>
+	<key>Common_SetMailRecver</key>
+	<string>设为收件人</string>
+	
+	<key>Common_online</key>
+	<string>在线</string>
+	<key>Common_NotOnline</key>
+	<string>不在线</string>
+	<key>Common_offline</key>
+	<string>离线</string>
+	<key>Common_ChuShi</key>
+	<string>出师</string>
+	<key>Common_normal</key>
+	<string>正常</string>
+	<key>Common_sex</key>
+	<string>性</string>
+	<key>Common_bie</key>
+	<string>别</string>
+	<key>Common_JunTuanName</key>
+	<string>军团名称</string>
+	<key>Common_JunTuanPost</key>
+	<string>军团职位</string>
+	<key>Common_JunXian</key>
+	<string>军衔</string>
+	
+	<key>Common_EquipInfo</key>
+	<string>装备信息</string>
+	<key>Common_DismissRelation</key>
+	<string>解除关系</string>
+	<key>Common_DismissRelationTip</key>
+	<string>解除师徒关系后,将不能恢复,请三思确认要断绝关系？</string>
+	<key>Common_PangShi</key>
+	<string>判师</string>
+	<key>Common_QuZhu</key>
+	<string>驱逐</string>
+	<key>Common_XunLu</key>
+	<string>寻路</string>
+	<key>Common_XunLuJuanZhouTip</key>
+	<string>由于所在地图不同,需要消耗一个传送卷轴,是否继续?</string>
+	<key>Common_mail</key>
+	<string>邮件</string>
+	<key>Common_YourMaster</key>
+	<string>您的师傅</string>
+	<key>Common_OnlineTip</key>
+	<string>上线了!</string>
+	<key>Common_OfflineTip</key>
+	<string>下线了!</string>
+	<key>Common_YourTuDi</key>
+	<string>您的徒弟</string>
+	<key>Common_LeaveGameTip</key>
+	<string>离开了龙御OL的世界</string>
+	<key>Common_BaiShi</key>
+	<string>拜师</string>
+	<key>Common_MingShiTongXunLu</key>
+	<string>名师通讯录</string>
+	<key>Common_TradeMoney</key>
+	<string>交易金额</string>
+	<key>Common_TradeAmount</key>
+	<string>交易数量</string>
+	<key>Common_TradeItemTip</key>
+	<string>该物品不能交易</string>
+	<key>Common_TradeSucess</key>
+	<string>交易成功</string>
+	<key>Common_TradeFail</key>
+	<string>交易失败</string>
+	<key>Common_trade</key>
+	<string>交易</string>
+	<key>Common_TaskNpc</key>
+	<string>任务NPC:</string>
+	<key>Common_TaskDest</key>
+	<string>任务目的地点:</string>
+	<key>Common_empty</key>
+	<string>空</string>
+	<key>Common_exp</key>
+	<string>经验</string>
+	<key>Common_dian</key>
+	<string>点</string>
+	<key>Common_CountryRepute</key>
+	<string>国家声望</string>
+	<key>Common_CampRepute</key>
+	<string>阵营声望</string>
+	<key>Common_HonurVal</key>
+	<string>荣誉值</string>
+	<key>Common_TaskAward</key>
+	<string>任务奖励</string>
+	<key>Common_MingYueCun</key>
+	<string>明月村</string>
+	<key>Common_LianYao</key>
+	<string>炼药</string>
+	<key>Common_BaoShiHeCheng</key>
+	<string>宝石合成</string>
+	<key>Common_PeiFangList</key>
+	<string>配方列表</string>
+	<key>Common_HeCheng</key>
+	<string>合成</string>
+	<key>Common_InputAmount</key>
+	<string>请输入数量</string>
+	<key>Common_OperateFailCantZero</key>
+	<string>操作失败, 数值不能为0</string>
+	<key>Common_UseMaterial</key>
+	<string>使用材料</string>
+	<key>Common_ZhiZhuo</key>
+	<string>制作</string>
+	<key>Common_OperateFail</key>
+	<string>操作失败</string>
+	<key>Common_BagFullTip</key>
+	<string>背包栏已满,请及时清理背包</string>
+	<key>Common_NeedMaterial</key>
+	<string>所需材料</string>
+	<key>Common_GenItem</key>
+	<string>生成物品</string>
+	<key>Common_CaoYao</key>
+	<string>草药</string>
+	<key>Common_BaoShiYuanShi</key>
+	<string>宝石原石</string>
+	<key>Common_CantRepeatUse</key>
+	<string>不能重复使用</string>
+	<key>Common_InputAmountMaxTen</key>
+	<string>请输入数量，最多10个</string>
+	<key>Common_MaterialLanFull</key>
+	<string>材料栏已满！</string>
+	<key>Common_ItemNot</key>
+	<string>该物品不是</string>
+	<key>Common_material</key>
+	<string>材料</string>
+	<key>Common_OperateFailSmallTen</key>
+	<string>操作失败, 您的输入不能大于10</string>
+	<key>Common_OperateFailOverAmount</key>
+	<string>操作失败, 超过该物品的数量</string>
+	<key>Common_OperateFailMaterialFull</key>
+	<string>操作失败, 材料栏已满！</string>
+	<key>Common_XieXia</key>
+	<string>卸下</string>
+	<key>Common_select</key>
+	<string>选择</string>
+	<key>Common_MaterialNeedThree</key>
+	<string>材料不够,您必须提供3种材料</string>
+	<key>Common_MoneyTrade</key>
+	<string>银两交易</string>
+	<key>Common_EMoneyTrade</key>
+	<string>元宝交易</string>
+	<key>Common_detail</key>
+	<string>详细</string>
+	<key>Common_InputNumRange</key>
+	<string>请输入 0 ~ 200000000 的数字</string>
+	<key>Common_NoSellItem</key>
+	<string>没有卖出物品</string>
+	<key>Common_SelNoneItem</key>
+	<string>您没有选择任何物品!</string>
+	<key>Common_QuXia</key>
+	<string>取下</string>
+	<key>Common_SaleByMoney</key>
+	<string>出售价格(银两)</string>
+	<key>Common_SaleByEMoney</key>
+	<string>出售价格(元宝)</string>
+	<key>Common_ViewBoothItem</key>
+	<string>查看别人摆摊物品</string>
+	<key>Common_CantFindItem</key>
+	<string>找不到该物品</string>
+	<key>Common_XianQiangSucess</key>
+	<string>镶嵌成功</string>
+	<key>Common_WaChuSucess</key>
+	<string>挖除成功</string>
+	<key>Common_BuyStorageSucc</key>
+	<string>购买仓库成功.</string>
+	<key>Common_BuyBagSucc</key>
+	<string>购买背包成功.</string>
+	<key>Common_SkillView</key>
+	<string>技能查看</string>
+	<key>Common_TipInfo</key>
+	<string>提示信息</string>
+	<key>Common_BindSucc</key>
+	<string>绑定成功</string>
+	<key>Common_DeBindSucc</key>
+	<string>解除绑定成功</string>
+	<key>Common_NaiJiuDu</key>
+	<string>耐久度</string>
+	<key>Common_XiangQian</key>
+	<string>镶嵌</string>
+	<key>Common_QiangHua</key>
+	<string>强化</string>
+	<key>Common_ValidDate</key>
+	<string>有效期</string>
+	<key>Common_Liliang</key>
+	<string>力量</string>
+	<key>Common_TiZhi</key>
+	<string>体质</string>
+	<key>Common_ZhiLi</key>
+	<string>智力</string>
+	<key>Common_MingJie</key>
+	<string>敏捷</string>
+	<key>Common_Dodge</key>
+	<string>闪避</string>
+	<key>Common_PhyHit</key>
+	<string>物理命中</string>
+	<key>Common_PhyAtk</key>
+	<string>物理攻击</string>
+	<key>Common_MagicHurt</key>
+	<string>魔法伤害</string>
+	<key>Common_CriticalHit</key>
+	<string>暴击</string>
+	<key>Common_MagicCriticalHit</key>
+	<string>魔法暴击</string>
+	<key>Common_PhyDef</key>
+	<string>物理防御</string>
+	<key>Common_MagicDef</key>
+	<string>魔法抗性</string>
+	<key>Common_AtkSpeed</key>
+	<string>攻击速度</string>
+	<key>Common_life</key>
+	<string>生命</string>
+	<key>Common_magic</key>
+	<string>法力</string>
+	<key>Common_MaxNaiJiuDu</key>
+	<string>最大耐久度</string>
+	<key>Common_type</key>
+	<string>类型</string>
+	<key>Common_LongGun</key>
+	<string>长枪</string>
+	<key>Common_Gung</key>
+	<string>棍</string>
+	<key>Common_HuShouGou</key>
+	<string>护手勾</string>
+	<key>Common_DunPai</key>
+	<string>盾牌</string>
+	<key>Common_FuShouFaQi</key>
+	<string>副手法器</string>
+	<key>Common_FaBao</key>
+	<string>法宝</string>
+	<key>Common_PhyCriticalHit</key>
+	<string>物理暴击</string>
+	<key>Common_ChuShouSpeed</key>
+	<string>出手速度</string>
+	<key>Common_LifeZhuiJia</key>
+	<string>生命值追加</string>
+	<key>Common_MagicZhuiJia</key>
+	<string>魔法值追加</string>
+	<key>Common_pet</key>
+	<string>宠物</string>
+	<key>Common_book</key>
+	<string>书籍</string>
+	<key>Common_ParticularItem</key>
+	<string>特殊物品</string>
+	<key>Common_TouXiang</key>
+	<string>头像</string>
+	<key>Common_YaoCai</key>
+	<string>药材</string>
+	<key>Common_other</key>
+	<string>其他</string>
+	<key>Common_UseLevel</key>
+	<string>使用等级</string>
+	<key>Common_hadbind</key>
+	<string>已绑定</string>
+	<key>Common_SexReq</key>
+	<string>性别要求</string>
+	<key>Common_LiLiangReq</key>
+	<string>力量要求</string>
+	<key>Common_TiZhiReq</key>
+	<string>体质要求</string>
+	<key>Common_MingJieReq</key>
+	<string>敏捷要求</string>
+	<key>Common_ZhiLiReq</key>
+	<string>智力要求</string>
+	
+	<key>Common_male</key>
+	<string>男</string>
+	<key>Common_female</key>
+	<string>女</string>
+	<key>Common_NaiJiu</key>
+	<string>耐久</string>
+	
+	<key>Common_LifePlus</key>
+	<string>生命: +</string>
+	<key>Common_MagicPlus</key>
+	<string>法力: +</string>
+	<key>Common_MagicAtk</key>
+	<string>魔法攻击</string>
+	<key>Common_MagDef</key>
+	<string>魔法防御</string>
+	<key>Common_PhyCriticalPlus</key>
+	<string>物理暴击: +</string>
+	<key>Common_MagicCriticalPlus</key>
+	<string>法术暴击: +</string>
+	<key>Common_LiLiangPlus</key>
+	<string>力量: +</string>
+	<key>Common_TiZhiPlus</key>
+	<string>体质: +</string>
+	<key>Common_MingJiePlus</key>
+	<string>敏捷: +</string>
+	<key>Common_ZhiLiPlus</key>
+	<string>智力: +</string>
+	<key>Common_PhyAtkPlus</key>
+	<string>物理攻击: +</string>
+	<key>Common_PhyDefPlus</key>
+	<string>物理防御: +</string>
+	<key>Common_MagicAtkPlus</key>
+	<string>法术攻击: +</string>
+	<key>Common_MagicDefPlus</key>
+	<string>法术防御: +</string>
+	<key>Common_HitPlus</key>
+	<string>命中: +</string>
+	<key>Common_AtkSpeedPlus</key>
+	<string>攻击速度: +</string>
+	<key>Common_DodgePlus</key>
+	<string>闪避: +</string>
+	<key>Common_ShouMing</key>
+	<string>寿命</string>
+	
+	<key>Common_CantTrade</key>
+	<string>不可交易</string>
+	<key>Common_CantMail</key>
+	<string>不可邮寄</string>
+	<key>Common_CantStorage</key>
+	<string>不可存仓</string>
+	<key>Common_DieCantDiaoLuo</key>
+	<string>死亡不掉落</string>
+	<key>Common_CantSale</key>
+	<string>不可出售</string>
+	<key>Common_CantUse</key>
+	<string>不可使用</string>
+	<key>Common_CantDrop</key>
+	<string>不可丢弃</string>
+	<key>Common_CantDuanZhao</key>
+	<string>不可锻造</string>
+	<key>Common_limit</key>
+	<string>限制</string>
+	<key>Common_RecycleBySys</key>
+	<string>被系统自动回收</string>
+	
+	<key>Common_XiaoShi</key>
+	<string>小时</string>
+	
+	<key>Common_ShuoMing</key>
+	<string>说明</string>
+	
+	<key>Common_XiangQianPos</key>
+	<string>镶嵌部位</string>
+	
+	<key>Common_TaoZhuang</key>
+	<string>套装</string>
+	
+	<key>Common_DuanZhaoAttach</key>
+	<string>锻造附加</string>
+	
+	<key>Common_WuQi</key>
+	<string>武器</string>
+	
+	<key>Common_FangJu</key>
+	<string>防具</string>
+	
+	<key>Common_tao</key>
+	<string>套</string>
+	
+	<key>Common_JianBang</key>
+	<string>肩膀</string>
+	<key>Common_RollPage</key>
+	<string>翻页</string>
+	
+	<key>Common_ItemSpeedBarSet</key>
+	<string>物品快捷栏设置</string>
+	
+	<key>Common_BoothCantSortBag</key>
+	<string>摆摊时不能整理背包</string>
+	
+	<key>Common_KaiTongBag</key>
+	<string>要开通背包</string>
+	<key>Common_NeedSpend</key>
+	<string>需要花费</string>
+	
+	<key>Common_farm</key>
+	<string>农田</string>
+	<key>Common_muchang</key>
+	<string>牧场</string>
+	<key>Common_FengZhong</key>
+	<string>分钟</string>
+	<key>Common_MengPaiHao</key>
+	<string>门牌号</string>
+	<key>Common_QiangYi</key>
+	<string>迁移</string>
+	
+	<key>Common_InputContent</key>
+	<string>请输入内容</string>
+	<key>Common_world</key>
+	<string>世界</string>
+	<key>Common_faction</key>
+	<string>帮派</string>
+	<key>Common_section</key>
+	<string>区域</string>
+	<key>Common_team</key>
+	<string>队伍</string>
+	<key>Common_JunTuan</key>
+	<string>军团</string>
+	<key>Common_send</key>
+	<string>发送</string>
+	<key>Common_InputExpress</key>
+	<string>插入表情</string>
+	<key>Common_InputItem</key>
+	<string>插入物品</string>
+	<key>Common_YouHasnotJunTuan</key>
+	<string>您没有加入任何军团</string>
+	<key>Common_YouHasnotJunTeam</key>
+	<string>您没有加入任何队伍</string>
+	<key>Common_PlayerName</key>
+	<string>玩家名</string>
+	<key>Common_SelFriend</key>
+	<string>选择好友</string>
+	
+	<key>Common_QuickChatBeQuick</key>
+	<string>快点吧！我等得花儿都谢了~</string>
+	<key>Common_QuickChatGood</key>
+	<string>太好了！</string>
+	<key>Common_QuickChatFlee</key>
+	<string>逃跑吧～</string>
+	<key>Common_QuickChatJiaYou</key>
+	<string>大家加油！</string>
+	<key>Common_QuickChatYun</key>
+	<string>我晕@_@</string>
+	<key>Common_YouHaveNewChat</key>
+	<string>您有新的私聊</string>
+	<key>Common_SendMsg</key>
+	<string>发送消息</string>
+	<key>Common_ChatSet</key>
+	<string>聊天设置</string>
+	<key>Common_CopyName</key>
+	<string>复制名字</string>
+	<key>Common_JiaWeiFriend</key>
+	<string>加为好友</string>
+	<key>Common_InviteTeam</key>
+	<string>邀请组队</string>
+	
+	<key>Common_NetErr</key>
+	<string>通讯出错</string>
+	<key>Common_NetExceptFirst</key>
+	<string>网络异常，重试连接第1次!</string>
+	<key>Common_NetExceptSecond</key>
+	<string>网络异常，重试连接第2次!</string>
+	<key>Common_NetExceptErr</key>
+	<string>非常抱歉，与服务器断开链接，请回到游戏初始菜单重新登录。</string>
+	<key>Common_AutoPathTipGo</key>
+	<string>系: 目的地变更, 目前正在前往</string>
+	<key>Common_AutoPathTipGo2</key>
+	<string>系: 您正在前往</string>
+	<key>Common_AutoPathTipTo</key>
+	<string>系: 您已到达目的地</string>
+	<key>Common_AutoPathTipBreak</key>
+	<string>系: 中断导航</string>
+	<key>Common_catch</key>
+	<string>捕捉</string>
+	<key>Common_flee</key>
+	<string>逃跑</string>
+	<key>Common_def</key>
+	<string>防御</string>
+	<key>Common_attack</key>
+	<string>攻击</string>
+	
+	<key>Common_BoothNotFly</key>
+	<string>不能在飞行状态下摆摊</string>
+	<key>Common_BoothNot</key>
+	<string>您不能在这里摆摊</string>
+	<key>Common_XunBaoTip</key>
+	<string>友情提示:下线前您可以开启寻宝功能,能获得离线收益.(离线寻宝可以帮您不在线时收集经验、装备和各种宝物)</string>
+	<key>Common_StartXunBao</key>
+	<string>开始寻宝</string>
+	<key>Common_BackToMenu</key>
+	<string>回主界面</string>
+	<key>Common_TeamReqTip</key>
+	<string>组队请求已经发送,等待对方回应!</string>
+	<key>Common_MapCantXunBao</key>
+	<string>此地图不能进行寻宝,请到野外进行</string>
+	<key>Common_XunBaoHuoLiZero</key>
+	<string>对不起,您的活力值为0,不能进行寻宝,您可以通过商城道具补充或是通过在线礼包获得活力值</string>
+	<key>Common_MallBuy</key>
+	<string>商城购买</string>
+	<key>Common_CheckNet</key>
+	<string>请检查网络</string>
+	<key>Common_RegisterFail</key>
+	<string>注册失败</string>
+	<key>Common_RenZhengFail</key>
+	<string>认证失败</string>
+	<key>Common_RenZhengFailNoneRet</key>
+	<string>无返回信息,认证失败</string>
+	<key>Common_ConnectFailNoneRet</key>
+	<string>无返回信息,连接失败</string>
+	<key>Common_ConnectFail</key>
+	<string>连接失败</string>
+	<key>Common_ServerTimeOut</key>
+	<string>服务器超时</string>
+	<key>Common_ServerPlayerUpMax</key>
+	<string>服务器已达到人数上限!</string>
+	<key>Common_LoginTip</key>
+	<string>登录提示</string>
+	<key>Common_WaitServerDeal</key>
+	<string>服务器正在处理,请稍候</string>
+	<key>Common_quit</key>
+	<string>退出</string>
+	<key>Common_ContinueWait</key>
+	<string>继续等待</string>
+	<key>Common_RoleCreateFail</key>
+	<string>角色创建失败!</string>
+	<key>Common_RoleCreateFailUnknown</key>
+	<string>创建角色未知的问题！</string>
+	<key>Common_PlayerNameExist</key>
+	<string>人物名已存在!</string>
+	<key>Common_PlayerNameInvalid</key>
+	<string>人物名不合法!</string>
+	<key>Common_LoginQueueTip</key>
+	<string>您正在登录队列中，请耐心等待！</string>
+	<key>Common_UpdateErr</key>
+	<string>更新出错!</string>
+	<key>Common_ViewState</key>
+	<string>查看状态</string>
+	<key>Common_BattleRes</key>
+	<string>战斗结果</string>
+	<key>Common_DaoJiShi</key>
+	<string>倒计时</string>
+	<key>Common_HuiHe</key>
+	<string>回合</string>
+	<key>Common_BagFullCantCatch</key>
+	<string>您的背包已满,不能捕捉!</string>
+	<key>Common_CantCatch</key>
+	<string>不能捕捉!</string>
+	<key>Common_DestCantCatch</key>
+	<string>该目标不可捕捉!</string>
+	<key>Common_wait</key>
+	<string>等待</string>
+	
+	<key>Common_BattleSucc</key>
+	<string>战斗胜利！</string>
+	<key>Common_BattleFail</key>
+	<string>战斗失败！</string>
+	<key>Common_BattlePing</key>
+	<string>平分秋色！</string>
+	<key>Common_BattleEnd</key>
+	<string>战斗结束</string>
+	<key>Common_BattleShouGong</key>
+	<string>打完收工！</string>
+	<key>Common_CatchSucc</key>
+	<string>系统: 捕捉成功</string>
+	<key>Common_CatchFail</key>
+	<string>系统: 捕捉失败</string>
+	<key>Common_get</key>
+	<string>获得</string>
+	<key>Common_repute</key>
+	<string>声望</string>
+	<key>Common_honur</key>
+	<string>荣誉</string>
+	<key>Common_item</key>
+	<string>物品</string>
+	<key>Common_BagFull</key>
+	<string>您的背包已满！</string>
+	<key>Common_honest</key>
+	<string>忠诚</string>
+	<key>Common_sunsi</key>
+	<string>损失</string>
+	<key>Common_ren</key>
+	<string>人</string>
+	<key>Common_JianLei</key>
+	<string>剑类</string>
+	<key>Common_DaoLei</key>
+	<string>刀类</string>
+	<key>Common_GongLei</key>
+	<string>弓类</string>
+	<key>Common_BiShouLei</key>
+	<string>匕首类</string>
+	<key>Common_GunLei</key>
+	<string>枪类</string>
+	<key>Common_ZhangLei</key>
+	<string>杖类</string>
+	
+	<key>Common_DiFang</key>
+	<string>敌方</string>
+	<key>Common_ZhiJi</key>
+	<string>自己</string>
+	<key>Common_YouFang</key>
+	<string>友方</string>
+	
+	<key>Common_target</key>
+	<string>目标</string>
+	
+	<key>Common_ConsumeMp</key>
+	<string>消耗MP</string>
+	
+	<key>Common_hurt</key>
+	<string>伤害</string>
+	
+	<key>Common_speed</key>
+	<string>速度</string>
+	
+	<key>Common_CoolTurn</key>
+	<string>冷却回合</string>
+	
+	<key>Common_BattleNoLimit</key>
+	<string>(本次战斗不受限制)</string>
+	<key>Common_effect</key>
+	<string>效果</string>
+	<key>Common_ChiXuTurn</key>
+	<string>持续回合</string>
+	<key>Common_YingSheng</key>
+	<string>隐身</string>
+	<key>Common_leave</key>
+	<string>离开</string>
+	<key>Common_yuanqi</key>
+	<string>元气</string>
+	<key>Common_jingsheng</key>
+	<string>精神</string>
+	<key>Common_NoOpen</key>
+	<string>暂未开放</string>
+	<key>Common_LianJiSec</key>
+	<string>练级区域</string>
+	<key>Common_SwitcGo</key>
+	<string>切屏点,前往:</string>
+	<key>Common_GatherOrNot</key>
+	<string>您是否要采集脚下的</string>
+	<key>Common_gather</key>
+	<string>采集</string>
+	<key>Common_gathering</key>
+	<string>正在采集中..</string>
+	<key>Common_RenameSucc</key>
+	<string>改名成功.</string>
+	<key>Common_SysTip</key>
+	<string>系统提示</string>
+	<key>Common_WaChuBaoShiSucc</key>
+	<string>挖除宝石成功</string>
+	<key>Common_object</key>
+	<string>对象</string>
+	<key>Common_NewExpVal</key>
+	<string>新的经验值：</string>
+	<key>Common_NewLev</key>
+	<string>新的等级：</string>
+	<key>Common_NewRestDian</key>
+	<string>新的剩余点数：</string>
+	<key>Common_UpTip</key>
+	<string>恭喜您升级了！！！</string>
+	<key>Common_UpTip20</key>
+	<string>恭喜阁下达到了20级别,具备了良师的潜质,培养徒弟不但可以桃李满天下,还可以获取丰厚的奖励!</string>
+	<key>Common_CountryStorage</key>
+	<string>国家仓库</string>
+	<key>Common_TangCampStorage</key>
+	<string>唐军阵营仓库</string>
+	<key>Common_SuiCampStorage</key>
+	<string>隋军阵营仓库</string>
+	<key>Common_TuCampStorage</key>
+	<string>突厥阵营仓库</string>
+	<key>Common_WishRen</key>
+	<string>许愿人</string>
+	<key>Common_WishContent</key>
+	<string>愿望内容</string>
+	<key>Common_XuLieHaoLen</key>
+	<string>序列号长度必须为</string>
+	<key>Common_wei</key>
+	<string>位</string>
+	<key>Common_FailInputWish</key>
+	<string>失败,请输入您要许下的愿望</string>
+	<key>Common_ReqTrade</key>
+	<string>请求交易,是否同意?</string>
+	<key>Common_agree</key>
+	<string>同意</string>
+	<key>Common_reject</key>
+	<string>拒绝</string>
+	<key>Common_YouNotOnBang</key>
+	<string>您没有上榜</string>
+	<key>Common_YouMingCi</key>
+	<string>您排名第</string>
+	<key>Common_PaiMing</key>
+	<string>排名</string>
+	<key>Common_deng</key>
+	<string>等</string>
+	<key>Common_val</key>
+	<string>值</string>
+	<key>Common_PlayerXingMing</key>
+	<string>玩家姓名</string>
+	<key>Common_tuan</key>
+	<string>团</string>
+	<key>Common_pei</key>
+	<string>配</string>
+	<key>Common_ou</key>
+	<string>偶</string>
+	<key>Common_jun</key>
+	<string>军</string>
+	<key>Common_EquipUpFail</key>
+	<string>很抱歉您装备升级失败了</string>
+	<key>Common_EquipUpSucess</key>
+	<string>恭喜您的装备升级成功</string>
+	<key>Common_QiangHuaFail</key>
+	<string>很抱歉您装备强化失败了</string>
+	<key>Common_QiangHuaSucess</key>
+	<string>恭喜您的装备强化成功</string>
+	<key>Common_KaiDongFail</key>
+	<string>很遗憾，您的装备爆掉了</string>
+	<key>Common_KaiDonSucess</key>
+	<string>恭喜您的装备开洞成功</string>
+	<key>Common_OperateSucess</key>
+	<string>操作成功</string>
+	<key>Common_LearnedTip</key>
+	<string>恭喜你学到了</string>
+	<key>Common_MakedTip</key>
+	<string>恭喜你成功制出了</string>
+	<key>Common_SkillValueUpTip</key>
+	<string>该技能熟练度提升了</string>
+	<key>Common_GatheredTip</key>
+	<string>恭喜您采集到了</string>
+	<key>Common_RejectRefraseTip</key>
+	<string>拒绝了你的比武请求</string>
+	<key>Common_CreateTeamSucess</key>
+	<string>建队成功</string>
+	<key>Common_PositiveJoinTeam</key>
+	<string>别人可以主动加入队伍了</string>
+	<key>Common_CantPositiveJoinTeam</key>
+	<string>别人不能主动加入队伍了</string>
+	<key>Common_BeFriendTip</key>
+	<string>与你歃血为盟，结为好友</string>
+	<key>Common_logined</key>
+	<string>已登录</string>
+	<key>Common_DeFriendTip</key>
+	<string>已与你断绝了好友关系，从此不相往来。</string>
+	<key>Common_RejectFriendTip</key>
+	<string>拒绝了你提出的结交好友的请求。</string>
+	<key>Common_YouHaveNew</key>
+	<string>您有一条新的</string>
+	<key>Common_OpenRequestList</key>
+	<string>请打开请求列表查看</string>
+	<key>Common_ShopEnjoy</key>
+	<string>您在本商店可享受</string>
+	<key>Common_discount</key>
+	<string>折扣</string>
+	<key>Common_ApplyDivorce</key>
+	<string>您真的确定要申请离婚?</string>
+	<key>Common_divorce</key>
+	<string>离婚</string>
+	<key>Common_NotFindObject</key>
+	<string>没有找到对象！</string>
+	<key>Common_FindHandsome</key>
+	<string>找个帅哥向您求婚吧</string>
+	<key>Common_PaiMaiHang</key>
+	<string>拍卖行</string>
+	<key>Common_MyPaiMai</key>
+	<string>我的拍卖</string>
+	<key>Common_SearchItem</key>
+	<string>搜索物品</string>
+	<key>Common_PaiMaiHangWelcome</key>
+	<string>欢迎惠顾龙御OL全新的拍卖所,这里是购物者的天堂,同样也是商人们的乌托邦,只是...嘿嘿亲们成交后,我们会向卖方收取一定的佣金喔.</string>
+	<key>Common_InputSeq</key>
+	<string>请输入序列号</string>
+	<key>Common_NoLianJingSkillTip</key>
+	<string>大侠你还木有学习炼金技能呢!赶紧去初级炼金技能npc那里学习吧.</string>
+	<key>Common_NoBaoShiSkillTip</key>
+	<string>大侠你还木有学习宝石合成技能呢!赶紧去初级宝石合成npc那里学习吧.</string>
+	<key>Common_InputWishTip</key>
+	<string>请输入许愿内容, 内容文字不得超过40个汉字</string>
+	<key>Common_ModifyWishTip</key>
+	<string>修改愿望后，之前所许下的愿望将会被新的愿望所覆盖</string>
+	<key>Common_EquipPet</key>
+	<string>请先装备宠物</string>
+	<key>Common_FarmRename</key>
+	<string>庄园改名</string>
+	<key>Common_ModifyWelcome</key>
+	<string>修改欢迎词</string>
+	<key>Common_ModifyBuildingName</key>
+	<string>修改建筑名称</string>
+	<key>Common_ModifyCunluoName</key>
+	<string>修改村落名称</string>
+	<key>Common_XiaoMei</key>
+	<string>小姑娘</string>
+	<key>Common_DaJie</key>
+	<string>大姐姐</string>
+	<key>Common_XiaoXiongDi</key>
+	<string>小兄弟</string>
+	<key>Common_DaGG</key>
+	<string>大哥哥</string>
+	<key>Common_ShaoXia</key>
+	<string>少侠</string>
+	<key>Common_NvXia</key>
+	<string>女侠</string>
+	<key>Common_DieCantPk</key>
+	<string>死亡，还未复活，不能进行比武或者PK</string>
+	<key>Common_LvlWei</key>
+	<string>的等级为</string>
+	<key>Common_LowTenCantPk</key>
+	<string>等级低于10不能进行PK</string>
+	<key>Common_LowTenCantRefrase</key>
+	<string>等级低于10不能进行比武</string>
+	
+	<key>Common_ProtecedCantPkOrRefrase</key>
+	<string>处于保护状态，不能进行比武或者PK</string>
+	<key>Common_BoothCantPkOrRefrase</key>
+	<string>处于摆摊状态，不能进行比武或者PK</string>
+	<key>Common_DePkCantPkOrRefrase</key>
+	<string>处于免PK状态，不能进行比武或者PK</string>
+	<key>Common_TeamCantPkOrRefrase</key>
+	<string>你们是队友，不能进行比武或者PK</string>
+	<key>Common_AddFail</key>
+	<string>添加失败</string>
+	<key>Common_NoToFriendTip</key>
+	<string>该玩家已经是你的好友，无需继续结交。</string>
+	<key>Common_SelfToFriendTip</key>
+	<string>您不能添加自己为好友。</string>
+	<key>Common_disagree</key>
+	<string>不同意</string>
+	<key>Common_DivorceReq</key>
+	<string>决定与您离婚,您是否同意?</string>
+	<key>Common_MarryReq</key>
+	<string>求婚</string>
+	<key>Common_MarryReqTip</key>
+	<string>单膝跪地轻轻地握住你的手，拿出光彩夺目的婚戒，深情道亲爱的戴上这枚今生戒，让我的爱一直围绕着你，呵护着，永远永远。</string>
+	<key>Common_NingYu</key>
+	<string>您于</string>
+	<key>Common_XunBaoConsume</key>
+	<string>此次寻宝消耗</string>
+	<key>Common_activity</key>
+	<string>活力</string>
+	<key>Common_remain</key>
+	<string>剩余</string>
+	<key>Common_jiang</key>
+	<string>件</string>
+	<key>Common_LingQi</key>
+	<string>灵气</string>
+	<key>Common_coin</key>
+	<string>银币</string>
+	<key>Common_XunBao</key>
+	<string>寻宝</string>
+	<key>Common_XunBaoRateTip</key>
+	<string>提升人物装备或使用道具能提升寻宝效率</string>
+	<key>Common_XunBaoBagFullTip</key>
+	<string>由于背包空间不足放弃了部分物品</string>
+	<key>Common_SucessBugReportTip</key>
+	<string>成功提交异常日志, 非常感谢您对龙御OL的支持!</string>
+	<key>Common_FailBugReportTip</key>
+	<string>提交异常日志失败, 仍然感谢您对龙御OL的支持!</string>
+	<key>Common_MingYueLing</key>
+	<string>明月岭</string>
+	<key>Common_WoYaoTiWen</key>
+	<string>我要提问 : </string>
+	<key>Common_InputMax50</key>
+	<string>最多输入50个汉字</string>
+	<key>Common_FrequentOperate</key>
+	<string>您的操作太频繁了</string>
+	<key>Common_InputCurPW12</key>
+	<string>请输入当前密码 : ( 12位以内 )</string>
+	<key>Common_InputRepeatPW12</key>
+	<string>请再次输入密码 : ( 7-12位 )</string>
+	<key>Common_InputNewPW12</key>
+	<string>请输入新密码 : ( 7-12位 )</string>
+	<key>Common_InputOldPW12</key>
+	<string>请输入12位以内的旧密码</string>
+	<key>Common_OnlyAllowAlphaNum</key>
+	<string>只允许输入英文和数字,请重新输入.</string>
+	<key>Common_InputPW12</key>
+	<string>请输入7~12位密码.</string>
+	<key>Common_TwoInputPWTip</key>
+	<string>2次输入的密码不同,请重新输入.</string>
+	<key>Common_XinQiYi</key>
+	<string>星期一</string>
+	<key>Common_XinQiEr</key>
+	<string>星期二</string>
+	<key>Common_XinQiShang</key>
+	<string>星期三</string>
+	<key>Common_XinQiShi</key>
+	<string>星期四</string>
+	<key>Common_XinQiWu</key>
+	<string>星期五</string>
+	<key>Common_XinQiLiu</key>
+	<string>星期六</string>
+	<key>Common_XinQiTian</key>
+	<string>星期日</string>
+	<key>Common_high</key>
+	<string>高</string>
+	<key>Common_mid</key>
+	<string>中</string>
+	<key>Common_low</key>
+	<string>低</string>
+	<key>Common_AppearPingZhi</key>
+	<string>显示品质</string>
+	<key>Common_open</key>
+	<string>开启</string>
+	<key>Common_JunTuanChat</key>
+	<string>军团聊天</string>
+	<key>Common_TeamChat</key>
+	<string>队伍聊天</string>
+	<key>Common_WorldChat</key>
+	<string>世界聊天</string>
+	<key>Common_SectionChat</key>
+	<string>区域聊天</string>
+	<key>Common_set</key>
+	<string>设置</string>
+	<key>Common_GongGao</key>
+	<string>公告</string>
+	<key>Common_active</key>
+	<string>活动</string>
+	<key>Common_declare</key>
+	<string>声明</string>
+	<key>Common_password</key>
+	<string>密码</string>
+	<key>Common_feedback</key>
+	<string>反馈</string>
+	<key>Common_ImmedInfo</key>
+	<string>即时信息</string>
+	<key>Common_help</key>
+	<string>帮助</string>
+	<key>Common_JunTuanList</key>
+	<string>军团列表</string>
+	<key>Common_donate</key>
+	<string>捐献</string>
+	<key>Common_member</key>
+	<string>成员</string>
+	<key>Common_vote</key>
+	<string>投票</string>
+	<key>Common_shenghe</key>
+	<string>审核</string>
+	<key>Common_jingxuan</key>
+	<string>竞选</string>
+	<key>Common_LiLiangAttrTip</key>
+	<string>大幅提升物理攻击,少量影响生命和魔法</string>
+	<key>Common_TiZhiAttrTip</key>
+	<string>大幅提升生命上限,少量影响物理防御和法术防御</string>
+	<key>Common_MingJieAttrTip</key>
+	<string>提升速度,命中,闪避能力</string>
+	<key>Common_ZhiLiAttrTip</key>
+	<string>大幅提升法术攻击,少量影响生命和魔法</string>
+	<key>Common_BindState</key>
+	<string>绑定状态</string>
+	<key>Common_XingGe</key>
+	<string>性格</string>
+	<key>Common_ChuShiLvl</key>
+	<string>初始等级</string>
+	<key>Common_HonestVal</key>
+	<string>忠诚度</string>
+	<key>Common_SkillCao</key>
+	<string>技能槽</string>
+	<key>Common_ChuShiLiLiang</key>
+	<string>初始力量</string>
+	<key>Common_ChuShiTiZhi</key>
+	<string>初始体质</string>
+	<key>Common_ChuShiMingJie</key>
+	<string>初始敏捷</string>
+	<key>Common_ChuShiZhiLi</key>
+	<string>初始智力</string>
+	<key>Common_PhyAtkVal</key>
+	<string>物理攻击力</string>
+	<key>Common_MagicAtkVal</key>
+	<string>法术攻击力</string>
+	<key>Common_DuoShang</key>
+	<string>躲闪</string>
+	<key>Common_hit</key>
+	<string>命中</string>
+	<key>Common_FaShuDef</key>
+	<string>法术防御</string>
+	<key>Common_ZhuRen</key>
+	<string>主人</string>
+	<key>Common_ModifyAttrTip</key>
+	<string>是否确认属性点分配,此次修改后可分配属性点剩余</string>
+	<key>Common_InputNewPetName</key>
+	<string>请输入新的宠物名</string>
+	<key>Common_WeiBind</key>
+	<string>未绑定</string>
+	<key>Common_LuMang</key>
+	<string>鲁莽</string>
+	<key>Common_LengJing</key>
+	<string>冷静</string>
+	<key>Common_TaoQi</key>
+	<string>淘气</string>
+	<key>Common_HangHou</key>
+	<string>憨厚</string>
+	<key>Common_DangXiao</key>
+	<string>胆小</string>
+	<key>Common_CanAllocAttr</key>
+	<string>可分配属性点数 :</string>
+	<key>Common_commit</key>
+	<string>提交</string>
+	<key>Common_modify</key>
+	<string>(修改)</string>
+	<key>Common_ChengZhangZiZhi</key>
+	<string>成长资质</string>
+	<key>Common_QiXueZiZhi</key>
+	<string>气血资质</string>
+	<key>Common_FaLiZiZhi</key>
+	<string>法力资质</string>
+	<key>Common_WuGongZiZhi</key>
+	<string>物攻资质</string>
+	<key>Common_WuFangZiZhi</key>
+	<string>物防资质</string>
+	<key>Common_FaGongZiZhi</key>
+	<string>法攻资质</string>
+	<key>Common_FaFangZiZhi</key>
+	<string>法防资质</string>
+	<key>Common_SpeedZiZhi</key>
+	<string>速度资质</string>
+	<key>Common_property</key>
+	<string>属性</string>
+	<key>Common_notopen</key>
+	<string>未开启</string>
+	<key>Common_OpenPetSkillTip</key>
+	<string>开启宠物技能槽要消耗</string>
+	<key>Common_TianGongFu</key>
+	<string>天工符</string>
+	<key>Common_ReqLvl</key>
+	<string>需求等级</string>
+	<key>Common_RepairCurEquip</key>
+	<string>修理当前装备</string>
+	<key>Common_RepairAllEquip</key>
+	<string>修理全部已装备物品</string>
+	<key>Common_ItemAmountInvalidReinput</key>
+	<string>物品数量不合法, 请重新输入</string>
+	<key>Common_MakeSureUse</key>
+	<string>确定要使用</string>
+	<key>Common_ma</key>
+	<string>吗</string>
+	<key>Common_MakeSureLearn</key>
+	<string>确定要学习</string>
+	<key>Common_compare</key>
+	<string>比较</string>
+	<key>Common_ForeverBindTip</key>
+	<string>物品将被永久绑定，只可以自己使用、丢弃或者向商店出售。请确认是否绑定？</string>
+	<key>Common_CurAmount</key>
+	<string>当前数量</string>
+	<key>Common_InputCaiFengAmount</key>
+	<string>请输入要拆分的数量</string>
+	<key>Common_CantEquip</key>
+	<string>该物品不能装备</string>
+	<key>Common_HuJian</key>
+	<string>护肩</string>
+	<key>Common_YiFu</key>
+	<string>衣服</string>
+	<key>Common_FuShou</key>
+	<string>副手</string>
+	<key>Common_ZhuoQi</key>
+	<string>坐骑</string>
+	<key>Common_RepairFee</key>
+	<string>修理费</string>
+	<key>Common_NoNeedRepair</key>
+	<string>(不需要修理)</string>
+	<key>Common_CantRepair</key>
+	<string>(不可修理)</string>
+	<key>Common_current</key>
+	<string>目前</string>
+	<key>Common_NoUpToEquip</key>
+	<string>未满足装备需求条件</string>
+	<key>Common_MingJieXuQiu</key>
+	<string>敏捷需求</string>
+	<key>Common_ZhiLiXuQiu</key>
+	<string>智力需求</string>
+	<key>Common_TiZhiXuQiu</key>
+	<string>体质需求</string>
+	<key>Common_LiLiangXuQiu</key>
+	<string>力量需求</string>
+	<key>Common_QiChongCantRepaire</key>
+	<string>骑宠不能修理</string>
+	<key>Common_EquipNoNeedRepair</key>
+	<string>该装备无需修理</string>
+	<key>Common_RepairEquipFee</key>
+	<string>修理该装备的费用是</string>
+	<key>Common_CantRepairEquipMoney</key>
+	<string>你身上的银两不够,无法修理该装备</string>
+	<key>Common_AllEquipNoNeedRepair</key>
+	<string>你身上的所有装备都无需修理</string>
+	<key>Common_AllEquipRepairFee</key>
+	<string>修理所有装备的费用是</string>
+	<key>Common_CantRepairAllEquipMoney</key>
+	<string>你身上的银两不够,无法修理全部</string>
+	<key>Common_RepairAllEquipMoney</key>
+	<string>修理身上所有装备物品需要</string>
+	<key>Common_RepairAllEquipMoneyTip</key>
+	<string>银两，是否修理全部？</string>
+	<key>Common_drop</key>
+	<string>丢弃</string>
+	<key>Common_DropTip</key>
+	<string>丢弃的物品将无法取回，确认丢弃？</string>
+	<key>Common_use</key>
+	<string>使用</string>
+	<key>Common_JiHuo</key>
+	<string>激活</string>
+	<key>Common_bind</key>
+	<string>绑定</string>
+	<key>Common_caifeng</key>
+	<string>拆分</string>
+	<key>Common_DaoHang</key>
+	<string>导航</string>
+	<key>Common_DaoHangTip</key>
+	<string>导航说明:该NPC在本地图范围内，点击确认直接导航到该地点</string>
+	<key>Common_ChuanSong</key>
+	<string>传送</string>
+	<key>Common_ChuanSongTip</key>
+	<string>传送说明:点击确认直接传送到该地点,此操作将消耗一个传送卷轴</string>
+	<key>Common_TaskAwardKuo</key>
+	<string>[任务奖励]</string>
+	<key>Common_AwardAllItem</key>
+	<string>奖励以下所有物品</string>
+	<key>Common_AwardOneItem</key>
+	<string>奖励以下物品的其中一件</string>
+	<key>Common_AcceptTaskKuo</key>
+	<string>[接受任务]</string>
+	<key>Common_TaskTargetKuo</key>
+	<string>[任务目标]</string>
+	<key>Common_DetailInfoKuo</key>
+	<string>[详细信息]</string>
+	<key>Common_JiaoTaskKuo</key>
+	<string>[交任务]</string>
+	<key>Common_PlayerOrNpcList</key>
+	<string>玩家/NPC列表</string>
+	<key>Common_YiJieGuo</key>
+	<string>[已接]</string>
+	<key>Common_WeiJieGuo</key>
+	<string>[未接]</string>
+	<key>Common_GoTo</key>
+	<string>前往</string>
+	<key>Common_CantAutoPathBooth</key>
+	<string>您正处于摆摊状态中，暂时无法使用自动导航功能！</string>
+	<key>Common_CantAutoPathTeam</key>
+	<string>您不是队长，暂时无法使用自动导航功能！</string>
+	<key>Common_CantAutoPathBiao</key>
+	<string>您正在跑镖中，暂时无法使用自动导航功能！</string>
+	<key>Common_PlayerLeavedSec</key>
+	<string>该玩家已离开该区域</string>
+	<key>Common_ViewPlayerInfo</key>
+	<string>查看玩家信息</string>
+	<key>Common_ViewPetInfo</key>
+	<string>查看宠物信息</string>
+	<key>Common_PlayerInfo</key>
+	<string>玩家信息</string>
+	<key>Common_CompareEquipWithSelf</key>
+	<string>与身上装备比较</string>
+	<key>Common_ShouLianVal</key>
+	<string>熟练度</string>
+	<key>Common_FullLvl</key>
+	<string>满级</string>
+	<key>Common_ConsumeJuanZhouTip</key>
+	<string>由于所在地图不同,需要消耗一个传送卷轴,是否继续?</string>
+	<key>Common_RejectFail</key>
+	<string>拒收失败</string>
+	<key>Common_SystemMainNotReject</key>
+	<string>系统邮件不允许拒收</string>
+	<key>Common_SysGongGao</key>
+	<string>系统公告</string>
+	<key>Common_DelFail</key>
+	<string>删除失败</string>
+	<key>Common_SystemMainNotDel</key>
+	<string>系统公告邮件不能删除</string>
+	<key>Common_MailWithAttachNotDel</key>
+	<string>您的邮件中带有附件,不能直接删除</string>
+	<key>Common_RecvFail</key>
+	<string>接收失败</string>
+	<key>Common_MoneyNotEnough</key>
+	<string>您身上的银两不足.</string>
+	<key>Common_EMoneyNotEnough</key>
+	<string>您身上的元宝不足.</string>
+	<key>Common_FeeItemTip</key>
+	<string>此物品为收费物品,是否支付</string>
+	<key>Common_MailSender</key>
+	<string>发件人</string>
+	<key>Common_AttachNotRecvGuo</key>
+	<string>[附件未接收]</string>
+	<key>Common_YiJieShou</key>
+	<string>已接收</string>
+	<key>Common_YiJuShou</key>
+	<string>已拒收</string>
+	<key>Common_YiTuiHui</key>
+	<string>已退回</string>
+	<key>Common_attach</key>
+	<string>附件</string>
+	<key>Common_ZhengSong</key>
+	<string>赠送 : </string>
+	<key>Common_ShouFei</key>
+	<string>收费 : </string>
+	<key>Common_JiaFriend</key>
+	<string>加好友</string>
+	<key>Common_ShouQu</key>
+	<string>收取</string>
+	<key>Common_reply</key>
+	<string>回复</string>
+	<key>Common_MailFeeTip</key>
+	<string>每封邮件需收取手续费100银两。是否确定要发送邮件给玩家 </string>
+	<key>Common_reciever</key>
+	<string>收件人 : </string>
+	<key>Common_MailContent</key>
+	<string>邮件内容 : </string>
+	<key>Common_AttachMaoHao</key>
+	<string>附件 : </string>
+	<key>Common_RecvNameLenLong</key>
+	<string>收件人名字太长!</string>
+	<key>Common_ContentLen110</key>
+	<string>内容长度不能超过110个汉字</string>
+	<key>Common_FailAmount</key>
+	<string>失败, 请填入正确的数量</string>
+	<key>Common_FailEquipAmount</key>
+	<string>失败, 装备的附件数量只能是1</string>
+	<key>Common_BagItemAmountTip</key>
+	<string>你背包中的该物品数量仅有</string>
+	<key>Common_BagItemAmountTip2</key>
+	<string>个,请重新输入</string>
+	<key>Common_BagMoneyAmountTip</key>
+	<string>你背包中的银两数仅有</string>
+	<key>Common_BagMoneyAmountTip2</key>
+	<string>,请重新输入</string>
+	<key>Common_FailSontMoney</key>
+	<string>失败, 请填入正确的赠送金额</string>
+	<key>Common_FailSontEMoney</key>
+	<string>失败, 请填入正确的赠送元宝</string>
+	<key>Common_BagEMoneyAmountTip</key>
+	<string>你背包中的元宝数仅有</string>
+	<key>Common_FailFeeMoney</key>
+	<string>失败, 请填入正确的收费金额</string>
+	<key>Common_fail</key>
+	<string>失败</string>
+	<key>Common_NotEmptyRecvName</key>
+	<string>收件人不能为空</string>
+	<key>Common_NotEmptyMailContent</key>
+	<string>邮件内容不能为空</string>
+	<key>Common_NotEmptyAttachAmount</key>
+	<string>请填入附件物品数量</string>
+	<key>Common_NotEmptyFeeNotAttach</key>
+	<string>不能发送没附件只收费的邮件</string>
+	<key>Common_bag</key>
+	<string>背包</string>
+	<key>Common_task</key>
+	<string>任务</string>
+	<key>Common_ZhuanYuan</key>
+	<string>庄园</string>
+	<key>Common_equip</key>
+	<string>装备</string>
+	<key>Common_DuanZhao</key>
+	<string>锻造</string>
+	<key>Common_FuZhu</key>
+	<string>辅助</string>
+	<key>Common_NeedConsume</key>
+	<string>需消耗：</string>
+	<key>Common_DuanZhaoConsume</key>
+	<string>此次锻造将消耗</string>
+	<key>Common_StartDuanZhao</key>
+	<string>现在开始锻造吗？</string>
+	<key>Common_DuanZhaoFailNotAppear</key>
+	<string>锻造失败装备不会消失</string>
+	<key>Common_EquipCantDuanZhao</key>
+	<string>该装备已不可锻造.</string>
+	<key>Common_FaShuAtk</key>
+	<string>法术攻击</string>
+	<key>Common_ChatContent</key>
+	<string>聊天内容</string>
+	<key>Common_PingBi</key>
+	<string>屏蔽</string>
+	<key>Common_stop</key>
+	<string>停止</string>
+	<key>Common_express</key>
+	<string>表情</string>
+	<key>Common_ZhongHe</key>
+	<string>综 合</string>
+	<key>Common_QuYu</key>
+	<string>区 域</string>
+	<key>Common_DuiWu</key>
+	<string>队 伍</string>
+	<key>Common_JunSpaceTuan</key>
+	<string>军 团</string>
+	<key>Common_PrivateSpaceChat</key>
+	<string>私 聊</string>
+	<key>Common_XiTong</key>
+	<string>系 统</string>
+	<key>Common_refresh</key>
+	<string>刷新</string>
+	<key>Common_InputPrivateChatName</key>
+	<string>请输入要私聊的玩家名字!</string>
+	<key>Common_EquipWieXiu</key>
+	<string>装备维修</string>
+	<key>Common_XunBaoSuccRate</key>
+	<string>寻宝成功率</string>
+	<key>Common_EquipJiaCheng</key>
+	<string>装备加成</string>
+	<key>Common_CurActiveXunBao</key>
+	<string>当前活力可寻宝</string>
+	<key>Common_lucky</key>
+	<string>幸运</string>
+	<key>Common_expert</key>
+	<string>专家</string>
+	<key>Common_QuLing</key>
+	<string>聚灵</string>
+	<key>Common_XunBaoEffectRate</key>
+	<string>寻宝效率提高</string>
+	<key>Common_XunBaoLvl</key>
+	<string>跨级寻宝能力</string>
+	<key>Common_GetLinQiAndCoin</key>
+	<string>能获得灵气和银币</string>
+	<key>Common_StartXunBaoTip</key>
+	<string>开始寻宝后，你会自动下线，进入离线寻宝模式，并且开始消耗活力值。当你再次上线时，寻宝自动结束。</string>
+	<key>Common_XunBaoOrNot</key>
+	<string>是否开始寻宝？</string>
+	<key>Common_ZhuYiShiXiang</key>
+	<string>注意事项</string>
+	<key>Common_InputRechargeCardNum</key>
+	<string>请输入充值卡卡号:</string>
+	<key>Common_InputRechargeCardPW</key>
+	<string>请输入充值卡密码:</string>
+	<key>Common_CardOrPWNotEmpty</key>
+	<string>卡号或密码不能为空</string>
+	<key>Common_InputPhoneNum</key>
+	<string>请输入手机号码(11位): </string>
+	<key>Common_PhoneNumNotEmpty</key>
+	<string>手机号码不能为空</string>
+	<key>Common_ShortMsg</key>
+	<string>短信</string>
+	<key>Common_RechargeGongGao</key>
+	<string>充值公告</string>
+	<key>Common_PayChannel</key>
+	<string>支付通道</string>
+	<key>Common_PersonalInfo</key>
+	<string>个人信息</string>
+	<key>Common_TotalPay</key>
+	<string>总充值金额: </string>
+	<key>Common_RechargeRecord</key>
+	<string>充值记录</string>
+	<key>Common_date</key>
+	<string>日期</string>
+	<key>Common_JingEr</key>
+	<string>金额</string>
+	<key>Common_recharge</key>
+	<string>充值</string>
+	<key>Common_query</key>
+	<string>查询</string>
+	<key>Common_ReadingGameInfo</key>
+	<string>正在读取游戏信息...</string>
+	<key>Common_ConnectingServer</key>
+	<string>正在连接服务器,请稍候...</string>
+	<key>Common_shop</key>
+	<string>商店</string>
+	<key>Common_InputAmount100</key>
+	<string>请输入个数: (一次购买不超过100个)</string>
+	<key>Common_ShopSaleTip</key>
+	<string>你要卖的装备品质为</string>
+	<key>Common_ShopSaleTip2</key>
+	<string>卖出的装备将无法买回，是否确定要卖出？</string>
+	<key>Common_ShopBuy100</key>
+	<string>一次最多购买100个,请重新输入</string>
+	<key>Common_PriviewEquip</key>
+	<string>预览装备</string>
+	<key>Common_CancelPriview</key>
+	<string>取消预览</string>
+	<key>Common_MaiDiao</key>
+	<string>卖掉</string>
+	<key>Common_EnterMap</key>
+	<string>进入地图</string>
+	<key>Common_UseJuanZhouTip</key>
+	<string>点击确认使用一个城镇传送卷轴</string>
+	<key>Common_OnlyTeamleaderCanChangeMap</key>
+	<string>对不起,组队状态下,只有队长能切换地图.</string>
+	<key>Common_ConnectServerErr</key>
+	<string>服务器连接失败,请检查网络.</string>
+	<key>Common_SysSetting</key>
+	<string>系统设置</string>
+	<key>Common_DirectKey</key>
+	<string>方向键盘</string>
+	<key>Common_FastGame</key>
+	<string>快速游戏</string>
+	<key>Common_LoginGame</key>
+	<string>登录游戏</string>
+	<key>Common_RegisterAccount</key>
+	<string>注册账号</string>
+	<key>Common_GameSetting</key>
+	<string>游戏设置</string>
+	<key>Common_GameHelp</key>
+	<string>游戏帮助</string>
+	<key>Common_QuitGame</key>
+	<string>退出游戏</string>
+	<key>Common_ConnectErr</key>
+	<string>网络连接失败，请检查网络配置</string>
+	<key>Common_CrashReportTip</key>
+	<string>上次使用时程序出现异常,准备提交异常日志,将产生</string>
+	<key>Common_CrashReportTip2</key>
+	<string>流量,非常感谢您对龙御OL的支持!</string>
+	<key>Common_UserName</key>
+	<string>用户名:</string>
+	<key>Common_AccountName</key>
+	<string>账号:</string>
+	<key>Common_UserPW</key>
+	<string>密码:</string>
+	<key>Common_GetUserNameSucc</key>
+	<string>获取用户名成功</string>
+	<key>Common_game</key>
+	<string>游戏</string>
+	<key>Common_fast</key>
+	<string>快速</string>
+	<key>Common_login</key>
+	<string>登录</string>
+	<key>Common_register</key>
+	<string>注册</string>
+	<key>Common_account</key>
+	<string>账号</string>
+	<key>Common_CreateRoleDao</key>
+	<string>刀: 刚劲有力,攻击平稳,速度较慢,适合于力量强大,体质健壮的豪侠人士,常常能在关键时刻扭转局面后发制人。</string>
+	<key>Common_CreateRoleJian</key>
+	<string>剑: 柔中带刚, 速度中等, 出招幽雅, 剑光闪耀灵气十足, 为古今文人侠士所衷爱, 适合身手敏捷, 悟性高超的龙御剑客。</string>
+	<key>Common_CreateRoleZhang</key>
+	<string>杖: 外形独特,貌不惊人却蕴涵玄机,智力高超的得道之人用之犹如神助。</string>
+	<key>Common_CreateRoleBiShou</key>
+	<string>匕首: 贴身近战神器,进攻犀利,速度超群,配合高敏高爆,总能先发制人,毙敌于瞬息之间。</string>
+	<key>Common_CreateRoleGong</key>
+	<string>弓: 远程杀手,战斗中能给自己较好的保护,一个合格的弓箭手总能在合适的时机决定攻击和撤退。</string>
+	<key>Common_InputNickName</key>
+	<string>请输入昵称</string>
+	<key>Common_RoleNameCantEmpty</key>
+	<string>角色名字不能为空</string>
+	<key>Common_SelServer</key>
+	<string>请先选择服务器</string>
+	<key>Common_PWCantEmpty</key>
+	<string>密码不能为空</string>
+	<key>Common_GameIntroduce</key>
+	<string>游戏介绍</string>
+	<key>Common_MenuShuoMing</key>
+	<string>菜单说明</string>
+	<key>Common_OperateShuoMing</key>
+	<string>操作说明</string>
+	<key>Common_PrevPage</key>
+	<string>上一页</string>
+	<key>Common_NextPage</key>
+	<string>下一页</string>
+	<key>Common_FaShuKangXing</key>
+	<string>法术抗性</string>
+	<key>Common_LingQiVal</key>
+	<string>灵气值</string>
+	<key>Common_ChuShouShunXun</key>
+	<string>决定其在战斗中的出手顺序。</string>
+	<key>Common_WuLiShangHaiTip</key>
+	<string>角色能造成的物理伤害值，可通过力量属性大幅提升物理攻击，伤害受对方防御值影响。</string>
+	<key>Common_FaShuAtkTip</key>
+	<string>使用法术时的法术攻击，可通过智力属性大幅提升法术攻击，杀伤力大，受对方抗性值影响。</string>
+	<key>Common_DeHurtPhyAtk</key>
+	<string>降低受到物理攻击时的伤害。</string>
+	<key>Common_DeHurtMagicAtk</key>
+	<string>降低受到法术攻击时的伤害。</string>
+	<key>Common_PhyAtkHitRate</key>
+	<string>物理攻击的准确率，减少未击中的概率。</string>
+	<key>Common_AddDodgeRate</key>
+	<string>增加该值能提高躲避对方物理攻击的概率。</string>
+	<key>Common_RateHurt175</key>
+	<string>有一定几率给敌方造成１７５%的伤害。</string>
+	<key>Common_BattleGetSkillDot</key>
+	<string>学习技能等行为需要消耗的点数，能通过战斗任务等途径获得。</string>
+	<key>Common_JiFeng</key>
+	<string>积分</string>
+	<key>Common_PKVal</key>
+	<string>PK值</string>
+	<key>Common_lover</key>
+	<string>伴侣</string>
+	<key>Common_ChangeAnJiFengAution</key>
+	<string>长安拍卖行积分。</string>
+	<key>Common_RoleCamp</key>
+	<string>角色所在阵营。</string>
+	<key>Common_RoleJunTuan</key>
+	<string>角色所在的军团。</string>
+	<key>Common_RoleJunTuanBank</key>
+	<string>角色在军团中的职位。</string>
+	<key>Common_RoleHonurVal</key>
+	<string>角色荣誉值对等角色军衔，角逐全服唯一统帅头衔。</string>
+	<key>Common_CountryReputeTip</key>
+	<string>国家声望达到一定值，可购买声望商店特殊物品。</string>
+	<key>Common_PersonalReputeTip</key>
+	<string>个人阵营声望值，可兑换荣誉。</string>
+	<key>Common_KillPlayerTip</key>
+	<string>击倒玩家所累积的善恶值。</string>
+	<key>Common_LiLiangTip</key>
+	<string>提升物理攻击力同时增加HP值</string>
+	<key>Common_TiZhiTip</key>
+	<string>提升物理防御同时增加大幅增加HP值</string>
+	<key>Common_MingJieTip</key>
+	<string>提升攻击速度和少量提升物理攻击及闪避能力</string>
+	<key>Common_ZhiLiTip</key>
+	<string>提升法术攻击力和魔法防御力同时大幅增加MP值</string>
+	<key>Common_ZhongLi</key>
+	<string>中立</string>
+	<key>Common_tang</key>
+	<string>唐</string>
+	<key>Common_campJiang</key>
+	<string>犍</string>
+	<key>Common_TuJue</key>
+	<string>突厥</string>
+	<key>Common_WaJun</key>
+	<string>瓦军</string>
+	<key>Common_WangJun</key>
+	<string>王军</string>
+	<key>Common_PetName</key>
+	<string>宠物名</string>
+	<key>Common_AllocProp</key>
+	<string>可分配属性:</string>
+	<key>Common_AccountPWNeedRange6To15</key>
+	<string>【说明】您的账号与密码必须由字母或数字组成(账号6-15位,</string>
+	<key>Common_Use91Login</key>
+	<string>密码7-12位,使用91通行证直接登录游戏</string>
+	<key>Common_UseNameInvalid</key>
+	<string>用户名不合法</string>
+	<key>Common_PWInvalid</key>
+	<string>密码不合法</string>
+	<key>Common_AccountNeedRange6To15</key>
+	<string>请输入账号(只能由数字或字母组成，6-15位)</string>
+	<key>Common_PWNeedRange7To12</key>
+	<string>请输入密码(只能由数字或字母组成，7-12位)</string>
+	<key>Common_YouHavetReliveItem</key>
+	<string>您没有复活道具</string>
+	<key>Common_ReliveInCity</key>
+	<string>回城复活</string>
+	<key>Common_ReliveUseItem</key>
+	<string>使用道具复活</string>
+	<key>Common_GetAward</key>
+	<string>领取奖励</string>
+	<key>Common_VersionUpdate</key>
+	<string>检查到更新版本</string>
+	<key>Common_RequestErr</key>
+	<string>请求出错</string>
+	<key>Common_FriendAddGuo</key>
+	<string>【好友添加】</string>
+	<key>Common_TeamInviteGuo</key>
+	<string>【组队邀请】</string>
+	<key>Common_RefraseReqGuo</key>
+	<string>【比武请求】</string>
+	<key>Common_MasterReqGuo</key>
+	<string>【拜师信息】</string>
+	<key>Common_TutorReqGuo</key>
+	<string>【收徒信息】</string>
+	<key>Common_JunTuanInviteGuo</key>
+	<string>【军团邀请】</string>
+	<key>Common_NewMailGuo</key>
+	<string>【新邮件】</string>
+	<key>Common_NewChatGuo</key>
+	<string>【新私聊】</string>
+	<key>Common_WantAddFriend</key>
+	<string>想添加你为好友</string>
+	<key>Common_WantAddTeam</key>
+	<string>邀请你加入他的队伍</string>
+	<key>Common_WantRefrase</key>
+	<string>想找你切磋</string>
+	<key>Common_WantMaster</key>
+	<string>拜您为师</string>
+	<key>Common_WantTutor</key>
+	<string>想收你为徒</string>
+	<key>Common_WantJoinJunTuan</key>
+	<string>邀请你加入军团</string>
+	<key>Common_RequestInvalid</key>
+	<string>该请求已失效！</string>
+	<key>Common_InputMoneyMax</key>
+	<string>请输入银两数量最多(</string>
+	<key>Common_InputEMoneyMax</key>
+	<string>请输入元宝数量最多(</string>
+	<key>Common_ItemCantInStorage</key>
+	<string>该物品不能放入仓库.</string>
+	<key>Common_StorageFull</key>
+	<string>仓库已满</string>
+	<key>Common_InputItemAmount</key>
+	<string>请输入物品数量:</string>
+	<key>Common_NumInvalid</key>
+	<string>数值不合法</string>
+	<key>Common_MoneyBuZhu</key>
+	<string>银两不足</string>
+	<key>Common_EMoneyBuZhu</key>
+	<string>元宝不足</string>
+	<key>Common_FangRuBag</key>
+	<string>放入背包</string>
+	<key>Common_ViewXianQing</key>
+	<string>查看详情</string>
+	<key>Common_QuChu</key>
+	<string>取出</string>
+	<key>Common_FangRuStorage</key>
+	<string>放入仓库</string>
+	<key>Common_storage</key>
+	<string>存储</string>
+	<key>Common_YaoKaiTong</key>
+	<string>要开通</string>
+	<key>Common_CangKu</key>
+	<string>仓库</string>
+	<key>Common_EquipUpLev</key>
+	<string>装备升级</string>
+	<key>Common_FangRuEquip</key>
+	<string>放入装备</string>
+	<key>Common_UpLevEquip</key>
+	<string>升级后装备</string>
+	<key>Common_NeedOneTianKuiStone</key>
+	<string>需要1个天魁石</string>
+	<key>Common_NeedOneTianMoStone</key>
+	<string>需要1个玄魔石</string>
+	<key>Common_NeedOneTianRangStone</key>
+	<string>需要1个天斓石</string>
+	<key>Common_UseTianKuiStoneTip</key>
+	<string>改良装备品质需要消耗1个天魁石，该操作将有可能失败，是否确定改良？</string>
+	<key>Common_NeedTianKuiStoneTip</key>
+	<string>改良装备品质需要天魁石，可以从商城购买或者打怪掉落</string>
+	<key>Common_UseTianMoStoneTip</key>
+	<string>装备强化需要消耗1个玄魔石，该操作将有可能失败，是否确定强化？</string>
+	<key>Common_NeedTianMoStoneTip</key>
+	<string>装备强化需要玄魔石，可以从商城购买或者打怪掉落</string>
+	<key>Common_CantQiangHua</key>
+	<string>该装备没有可强化的属性</string>
+	<key>Common_UseTianRangStoneTip</key>
+	<string>升级装备需要消耗1个天斓石，该操作将有可能失败，是否确定升级？</string>
+	<key>Common_NeedTianRangStoneTip</key>
+	<string>您没有升级所需要的天斓石</string>
+	<key>Common_FangRuEquipFirst</key>
+	<string>请先放入装备</string>
+	<key>Common_FangRu</key>
+	<string>放入</string>
+	<key>Common_EquipCantUp</key>
+	<string>您提交的装备无法升级</string>
+	<key>Common_DoNotFangRuZhaWu</key>
+	<string>请勿放入装备以外的杂物</string>
+	<key>Common_ItemCantQiangHua</key>
+	<string>该物品不可强化</string>
+	<key>Common_BaoLiuBaoShi</key>
+	<string>保留宝石</string>
+	<key>Common_NotFindXiangQiangBaoShi</key>
+	<string>没发现有镶嵌宝石.</string>
+	<key>Common_EquipHole</key>
+	<string>装备开洞</string>
+	<key>Common_ItemCantHole</key>
+	<string>该物品不能开洞</string>
+	<key>Common_EquipHoleMax</key>
+	<string>该装备洞数已达最大！</string>
+	<key>Common_NotHaveYueGuang</key>
+	<string>对不起,您没有月光宝锥.</string>
+	<key>Common_YueGuangBaoZhuiNotEnoughAmount</key>
+	<string>对不起,您的月光宝锥数量不够.</string>
+	<key>Common_OpenHole</key>
+	<string>开洞</string>
+	<key>Common_HoleUpToMax</key>
+	<string>该装备洞数已达最大</string>
+	<key>Common_need</key>
+	<string>需要</string>
+	<key>Common_GeYueGuanBaoZhui</key>
+	<string>个月光宝锥</string>
+	<key>Common_suo</key>
+	<string>锁</string>
+	<key>Common_SkillCompose</key>
+	<string>技能合成</string>
+	<key>Common_SuoDing</key>
+	<string>锁定</string>
+	<key>Common_CancelSuoDing</key>
+	<string>取消锁定</string>
+	<key>Common_PetLearnNewSkillTip</key>
+	<string>宠物学习新的技能可能遗忘原有的技能，请慎重选择!</string>
+	<key>Common_PetLearnNewSkillTip2</key>
+	<string>注：使用锁灵符锁定的技能，合成时可避免被遗忘!</string>
+	<key>Common_SuoLingFu</key>
+	<string>锁灵符</string>
+	<key>Common_BuZhu</key>
+	<string>不足</string>
+	<key>Common_HeChengFail</key>
+	<string>合成失败，您宠物当前技能槽已满，请扩充技能槽后再次技能合成</string>
+	<key>Common_GuanZhang</key>
+	<string>观战</string>
+	<key>Common_ViewWish</key>
+	<string>查看愿望</string>
+	
+	<key>Common_CompeteList</key>
+	<string>参赛名单</string>
+	<key>Common_CompeteBattleList</key>
+	<string>比赛对阵列表</string>
+	<key>Common_DuiZhangPlayer</key>
+	<string>对战玩家</string>
+	<key>Common_WishPool</key>
+	<string>许愿池</string>
+	<key>Common_WishPoolWish</key>
+	<string>许愿池的愿望</string>
+	<key>Common_time</key>
+	<string>时间</string>
+	<key>Common_PlayerMingZhi</key>
+	<string>玩家名字</string>
+	<key>Common_InputDonateMoney</key>
+	<string>请输入你要捐献的银两数：</string>
+	<key>Common_InputDonateEMoney</key>
+	<string>请输入你要捐献的元宝数：</string>
+	<key>Common_InputInvalid</key>
+	<string>输入不合法</string>
+	<key>Common_Mutiply100</key>
+	<string>请输入100的倍数！</string>
+	<key>Common_RestMoneyNotEnough</key>
+	<string>您所剩银两不足</string>
+	<key>Common_RestEMoneyNotEnough</key>
+	<string>您所剩元宝不足</string>
+	<key>Common_DonotEmpty</key>
+	<string>不能为空</string>
+	<key>Common_QuHui</key>
+	<string>取回</string>
+	<key>Common_DonateList</key>
+	<string>捐献清单</string>
+	<key>Common_one</key>
+	<string>一</string>
+	<key>Common_two</key>
+	<string>二</string>
+	<key>Common_three</key>
+	<string>三</string>
+	<key>Common_four</key>
+	<string>四</string>
+	<key>Common_five</key>
+	<string>五</string>
+	<key>Common_six</key>
+	<string>六</string>
+	<key>Common_seven</key>
+	<string>日</string>
+	<key>Common_NotXiangQiangBaoShi</key>
+	<string>没有可镶嵌的宝石</string>
+	<key>Common_InputWholeInfo</key>
+	<string>请输入完整的信息!</string>
+	<key>Common_PhoneNumErr</key>
+	<string>手机号码位数错了!</string>
+	<key>Common_FindBackTip</key>
+	<string>输入账号后,选择发送短信验证码,在验证码中输入收到的短信验证码,提交后,密码将通过短信发送到您所绑定的手机上,短信验证码30分钟有效,一天最多可以申请一次密码找回</string>
+	<key>Common_InputAccount</key>
+	<string>请输入账号!</string>
+	<key>Common_AccountCantEmpty</key>
+	<string>账号不能为空!</string>
+	<key>Common_VerifyCodeCantEmpty</key>
+	<string>验证码不能为空!</string>
+	<key>Common_ge</key>
+	<string>个</string>
+	<key>Common_ApplyList</key>
+	<string>报名列表</string>
+	<key>Common_RenShuMaoHao</key>
+	<string>人数: </string>
+	<key>Common_AttachGuo</key>
+	<string>(附件)</string>
+	<key>Common_JuQing</key>
+	<string>剧情</string>
+	<key>Common_daily</key>
+	<string>日常</string>
+	<key>Common_grow</key>
+	<string>成长</string>
+	<key>Common_DailyTaskRefreshTip</key>
+	<string>每天自动刷新一次日常任务，主动刷新任务将需要支付10元宝，你确定刷新？</string>
+	<key>Common_le</key>
+	<string>了</string>
+	<key>Common_warring</key>
+	<string>警告</string>
+	<key>Common_CantUnEquip</key>
+	<string>不能在飞行区域卸下飞行坐骑</string>
+	<key>Common_decoration</key>
+	<string>勋章</string>
+	
+	<key>Common_Peerage0</key>
+	<string>平民</string>
+	<key>Common_Peerage1</key>
+	<string>男爵</string>
+	<key>Common_Peerage2</key>
+	<string>子爵</string>
+	<key>Common_Peerage3</key>
+	<string>伯爵</string>
+	<key>Common_Peerage4</key>
+	<string>侯爵</string>
+	<key>Common_Peerage5</key>
+	<string>公爵</string>
+	<key>Common_Peerage6</key>
+	<string>郡侯</string>
+	<key>Common_Peerage7</key>
+	<string>郡公</string>
+	<key>Common_Peerage8</key>
+	<string>国公</string>
+	<key>Common_Peerage9</key>
+	<string>郡王</string>
+	<key>Common_Peerage10</key>
+	<string>亲王</string>
+	<key>Common_Peerage11</key>
+	<string>帝王</string>
+	
+	<key>Common_VipExplain1</key>
+	<string>VIP1:%s1.免费开通所有背包%s2.活力上限提升120点，每日登陆额外获得200点活力值</string>
+	<key>Common_VipExplain2</key>
+	<string>VIP2:%s1.战斗后自动恢复血量,每恢复一点扣除1个银两%s2.离线寻宝经验和金钱收益加成30%%%s3.提供丢弃或卖掉的物品的回购功能</string>
+	<key>Common_VipExplain3</key>
+	<string>VIP3:%s1.宠物背包扩展为6格（初始5格）,最多可同时出战两只宠物%s2.战斗后自动恢复魔法值,每恢复一点扣除2个银两</string>
+	<key>Common_VipExplain4</key>
+	<string>VIP4:%s1.宠物背包扩展为7格（初始5格）, 最多可同时出战三只宠物%s2.战斗后自动修理装备</string>
+	<key>Common_VipExplain5</key>
+	<string>VIP5:%s1.宠物背包扩展为8格（初始5格）, 最多可同时出战四只宠物%s2.开通远程出售功能</string>
+	<key>Common_VipExplain6</key>
+	<string>VIP6:%s1.宠物背包扩展为9格（初始5格）, 最多可同时出战五只宠物%s2.离线寻宝经验和金钱收益加成50%</string>
+	<key>Common_VipExplain7</key>
+	<string>VIP7:%s1.宠物分享离线寻宝经验%s2.宠物背包扩展为10格（初始5格）, 最多可同时出战六只宠物</string>
+	<key>Common_VipExplain8</key>
+	<string>VIP8:%s1.宠物背包扩展为12格（初始5格）, 最多可同时出战7只宠物%s2.离线寻宝经验和金钱收益加成100%%%s3.宠物分享离线寻宝经验加成30%%</string>
+	<key>Common_VipExplain9</key>
+	<string>VIP9:%s1.宠物背包扩展为13格（初始5格）, 最多可同时出战8只宠物%s2.宠物分享离线寻宝经验加成50%%</string>
+	<key>Common_VipExplain10</key>
+	<string>VIP10:%s1.宠物背包扩展为15格（初始5格）,最多可同时出战9只宠物%s2.宠物分享离线寻宝经验加成100%%</string>
+
+	<key>Common_RemoteSale</key>
+	<string>出售</string>
+	<key>Common_RemoteSaleTip</key>
+	<string>是否确定卖出该物品</string>
+	<key>Common_RemoteSaleVip</key>
+	<string>只有VIP5级以上才可使用远程出售功能，您当前的VIP等级为%d。</string>
+
+	<key>Common_MainPet</key>
+	<string>主将</string>
+	<key>Common_PetRest</key>
+	<string>休息</string>
+	<key>Common_PetFighter</key>
+	<string>出战</string>
+	<key>Common_PetIn</key>
+	<string>收回</string>
+	<key>Common_PetOut</key>
+	<string>遛宠</string>
+	<key>Common_PetDrop</key>
+	<string>丢弃</string>
+	<key>Common_PetDisboard</key>
+	<string>卸下</string>
+	<key>Common_PetShow</key>
+	<string>展示</string>
+	
+	<key>Common_PetSkillLock</key>
+	<string>锁定</string>
+	<key>Common_PetSkillUnlock</key>
+	<string>解锁</string>
+	<key>Common_PetSkillLearn</key>
+	<string>学习</string>
+	<key>Common_PetSkillCanLearn</key>
+	<string>可学技能</string>
+	<key>Common_PetSkillLearned</key>
+	<string>已学技能</string>
+	<key>Common_PetSkillLocked</key>
+	<string>已锁定</string>
+	<key>Common_PetSkillTip1</key>
+	<string>您的宝物不足，需要%s*%d，价值%d元宝，是否直接购买并使用？按确认提交，按关闭取消。</string>
+	<key>Common_PetSkillTip2</key>
+	<string>消耗%s*%d，按确认提交，按关闭取消。</string>
+	<key>Common_PetSkillTip3</key>
+	<string>您已经学会的技能未全部锁定，学习新的技能有一定几率会覆盖旧的技能，您确定继续么？</string>
+	
+	<key>Common_PetTip1</key>
+	<string>1. 宠物喂食:%s直接将宠物用品拖到宠物身上即可完成使用。</string>
+	<key>Common_PetTip2</key>
+	<string>2. 主将任命:%s当一只宠物出战时自动任命为主将，多只宠物出战时您可以自主任命其中某一只为主将，任命为主将的宠物在战斗中受控制，其他的出战宠物将随机释放技能和普通攻击。</string>
+	<key>Common_PetTip3</key>
+	<string>3. 出战:%s根据vip等级不同，可以出战的宠物数量不同，选择出战的宠物才有可能在战斗中出现。</string>
+	<key>Common_PetTip4</key>
+	<string>4. 遛宠:%s设定了遛宠的宠物才会出现在您身边，您可以选择任何一只宠物进行遛宠，同时只能遛一只宠物。</string>
+	<key>Common_PetTip5</key>
+	<string>5. 宠物选择:%s装备了多只宠物时，可以点击宠物名字两边的箭号来切换当前显示的宠物。</string>
+	<key>Common_PetTip6</key>
+	<string>6. 展示功能:%s点击展示,可以将您的宠物发送到您当前选定的聊天频道中供人欣赏。</string>
+	<key>Common_PetTip7</key>
+	<string>7. 卸下:%s取出后的宠物会变成一个物品存放在背包中，可以用于装备和邮寄。</string>
+	<key>Common_PetDropTip</key>
+	<string>是否确定丢弃这只宠物?</string>
+<!-- 通用　字串定义结束-->
+
+<!-- ================================================== -->
+<!-- 文件NDItemType.mm　字串定义开始-->
+	<key>NDItemType.mm_fashi</key>
+	<string>法师</string>
+	<key>NDItemType.mm_chike</key>
+	<string>刺客</string>
+	<key>NDItemType.mm_zhangshi</key>
+	<string>战士</string>
+	<key>NDItemType.mm_nottrade</key>
+	<string>不可交易</string>
+	<key>NDItemType.mm_notstorge</key>
+	<string>不可存储</string>
+<!-- 文件NDItemType.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件NDMapData.mm　字串定义开始-->
+	<key>NDMapData.mm_notopen</key>
+	<string>暂未开放</string>
+	<key>NDMapData.mm_lianjiquyu</key>
+	<string>练级区域</string>
+	<key>NDMapData.mm_minyuecun</key>
+	<string>明月村</string>
+	<key>NDMapData.mm_xinshou</key>
+	<string>新手出生地</string>
+<!-- 文件NDMapData.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件NDIphoneEdit.mm　字串定义开始-->
+	<key>NDIphoneEdit.mm_InputSmallLimit</key>
+	<string>输入的最少字符数不可小于</string>
+	<key>NDIphoneEdit.mm_InputBigLimit</key>
+	<string>输入的字符数不可超过</string>
+	<key>NDIphoneEdit.mm_ge</key>
+	<string>个</string>
+<!-- 文件NDIphoneEdit.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件BattleFieldMgr.mm　字串定义开始-->
+	<key>BattleFieldMgr.mm_NinSucessBaoMing</key>
+	<string>您成功报名了</string>
+	<key>BattleFieldMgr.mm_NinBaoMing</key>
+	<string>您报名</string>
+	<key>BattleFieldMgr.mm_fail</key>
+	<string>失败了</string>
+	<key>BattleFieldMgr.mm_NinSucessCancelBaoMing</key>
+	<string>您成功取消了报名</string>
+	<key>BattleFieldMgr.mm_NinCancelBaoMing</key>
+	<string>您取消报名</string>
+	<key>BattleFieldMgr.mm_BFConfirm</key>
+	<string>战场确认</string>
+	<key>BattleFieldMgr.mm_OnceEnterBF</key>
+	<string>立刻进入战场</string>
+	<key>BattleFieldMgr.mm_LaterEnterBF</key>
+	<string>稍后进入战场</string>
+<!-- 文件BattleFieldMgr.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件BattleFieldApply.mm　字串定义开始-->
+	<key>BattleFieldApply.mm_BFRule</key>
+	<string>战场规则</string>
+	<key>BattleFieldApply.mm_AfterBFStart</key>
+	<string>后战斗开始</string>
+	<key>BattleFieldApply.mm_CancelApply</key>
+	<string>取消报名</string>
+<!-- 文件BattleFieldApply.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件FarmInfoScene.mm　字串定义开始-->
+	<key>FarmInfoScene.mm_CurRes</key>
+	<string>当前资源</string>
+	<key>FarmInfoScene.mm_MaintainRes</key>
+	<string>维护资源</string>
+	<key>FarmInfoScene.mm_FarmDongTai</key>
+	<string>庄园动态</string>
+	<key>FarmInfoScene.mm_FarmTip</key>
+	<string>阁下是否要取消建设，取消将只返还部分资源，是否继续</string>
+	<key>FarmInfoScene.mm_FarmTip2</key>
+	<string>阁下真的要取消，是否继续</string>
+<!-- 文件FarmInfoScene.mm　字串定义结束-->
+<!-- ================================================== -->	
+
+<!-- ================================================== -->
+<!-- 文件FarmMessage.mm　字串定义开始-->
+	<key>FarmMessage.mm_VisitRecord</key>
+	<string>访问记录</string>
+	<key>FarmMessage.mm_TouQieRecord</key>
+	<string>偷窃记录</string>
+	<key>FarmMessage.mm_FarmLiuYang</key>
+	<string>庄园留言</string>
+	<key>FarmMessage.mm_FarmMax50Char</key>
+	<string>内容(最多输入50个字符)</string>
+	<key>FarmMessage.mm_FarmMax50CharFail</key>
+	<string>失败, 留言不能超过50个字</string>
+<!-- 文件FarmMessage.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件FarmMgr.mm　字串定义开始-->
+	<key>FarmMgr.mm_EmptySpaceList</key>
+	<string>空地列表</string>
+	<key>FarmMgr.mm_ChengShouTime</key>
+	<string>成熟时间</string>
+	<key>FarmMgr.mm_ZhongZhiTip</key>
+	<string>阁下的种子不足，请到庄园商店中购买</string>
+	<key>FarmMgr.mm_ShiFeiTip</key>
+	<string>阁下的肥料不足，请到商城中购买</string>
+	<key>FarmMgr.mm_YangZhiTip</key>
+	<string>阁下的幼崽不足，请到庄园商店中购买</string>
+	<key>FarmMgr.mm_WeiSiLiaoTip</key>
+	<string>阁下的饲料不足，请到商城中购买</string>
+	<key>FarmMgr.mm_JiaSuUpTip</key>
+	<string>阁下的加速材料不足，请到商城中购买</string>
+<!-- 文件FarmMgr.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件FarmStorage.mm　字串定义开始-->
+	<key>FarmStorage.mm_StorageManage</key>
+	<string>仓库管理</string>
+	<key>FarmStorage.mm_StorageWuZi</key>
+	<string>存取物资</string>
+	<key>FarmStorage.mm_StorageWuZiLimit</key>
+	<string>保存存储上限</string>
+<!-- 文件FarmStorage.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件HamletListScene.mm　字串定义开始-->
+	<key>HamletListScene.mm_CunLuoList</key>
+	<string>村落列表</string>
+	<key>HamletListScene.mm_CunLuoName</key>
+	<string>村落名称</string>
+	<key>HamletListScene.mm_RuZhuQingKuan</key>
+	<string>入住情况</string>
+	<key>HamletListScene.mm_FixMove</key>
+	<string>定点迁移</string>
+	<key>HamletListScene.mm_RandomMove</key>
+	<string>随机迁移</string>
+<!-- 文件HamletListScene.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件RanchProductDlg.mm　字串定义开始-->
+	<key>RanchProductDlg.mm_WeiSiLiao</key>
+	<string>喂饲料</string>
+	<key>RanchProductDlg.mm_CancelYangZhi</key>
+	<string>取消养殖</string>
+	<key>RanchProductDlg.mm_ConfirmCancelYangZhi</key>
+	<string>确认取消养殖？</string>
+<!-- 文件RanchProductDlg.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件AuctionSearchLayer.mm　字串定义开始-->
+	<key>AuctionSearchLayer.mm_tenup</key>
+	<string>10以上</string>
+	<key>AuctionSearchLayer.mm_searchbyname</key>
+	<string>按物品名字搜索</string>
+	<key>AuctionSearchLayer.mm_InputQueryItemName</key>
+	<string>请输入要查询物品的完整名称</string>
+<!-- 文件AuctionSearchLayer.mm　字串定义结束-->	
+
+<!-- ================================================== -->
+<!-- 文件AuctionUILayer.mm　字串定义开始-->	
+	<key>AuctionUILayer.mm_ChuJiaJingPai</key>
+	<string>出价竞拍</string>
+	<key>AuctionUILayer.mm_ChuJiaSucess</key>
+	<string>出价成功</string>
+	<key>AuctionUILayer.mm_ShanJiaTip</key>
+	<string>上架成功, 可通过我的拍卖进行查询，拍卖期限为两天。</string>
+	<key>AuctionUILayer.mm_PaiTip</key>
+	<string>祝贺你成功拍得此物品！</string>
+	
+	<key>AuctionUILayer.mm_QiPaiPrice</key>
+	<string>起拍价(银两)</string>
+	<key>AuctionUILayer.mm_YiKouPrice</key>
+	<string>一口价(银两)</string>
+	<key>AuctionUILayer.mm_QiPaiEPrice</key>
+	<string>起拍价(元宝)</string>
+	<key>AuctionUILayer.mm_YiKouEPrice</key>
+	<string>一口价(元宝)</string>
+	<key>AuctionUILayer.mm_InputPaiPrice</key>
+	<string>输入竞拍价</string>
+	<key>AuctionUILayer.mm_ReinputTip1</key>
+	<string>请重新输入起拍价,0表示不限,上限为1999999999</string>
+	<key>AuctionUILayer.mm_ReinputTip2</key>
+	<string>请重新输入一口价,0表示不限,上限为2000000000</string>
+	<key>AuctionUILayer.mm_YiKouTip</key>
+	<string>请重新输入一口价,0表示不限,上限为2000000000</string>
+	<key>AuctionUILayer.mm_InputPriceError</key>
+	<string>您输入的价格无效,请重新输入</string>
+	<key>AuctionUILayer.mm_InputMoneyError</key>
+	<string>您没有那么多钱,请重新输入</string>
+	<key>AuctionUILayer.mm_PaiMaiHang</key>
+	<string>拍卖行</string>
+	<key>AuctionUILayer.mm_ItemPaiError</key>
+	<string>该物品不可拍卖</string>
+<!-- 文件AuctionUILayer.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件Auction_Item.mm　字串定义开始-->
+	<key>Auction_Item.mm_NewPaiPrice</key>
+	<string>最新出价:</string>
+	<key>Auction_Item.mm_ChuPaiPrice</key>
+	<string>出价者:</string>
+<!-- 文件Auction_Item.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件EmailListener.mm　字串定义开始-->
+	<key>EmailListener.mm_SendMailToYou</key>
+	<string>给您发了一封邮件,请查收.</string>
+	<key>EmailListener.mm_AcceptAttachSucess</key>
+	<string>接收附件成功</string>
+	<key>EmailListener.mm_AcceptAttachFail</key>
+	<string>接收附件失败</string>
+	<key>EmailListener.mm_AcceptAttachFailMoney</key>
+	<string>接收附件失败,银两不足</string>
+	<key>EmailListener.mm_AcceptAttachFailEMoney</key>
+	<string>接收附件失败,元宝不足</string>
+	<key>EmailListener.mm_AcceptAttachFailBag</key>
+	<string>接收附件失败,背包已满</string>
+	<key>EmailListener.mm_RejectSucess</key>
+	<string>拒收成功</string>
+	<key>EmailListener.mm_RejectFail</key>
+	<string>拒收失败</string>
+	
+	<key>EmailListener.mm_DelMailSucess</key>
+	<string>删除邮件成功</string>
+	<key>EmailListener.mm_DelMailFail</key>
+	<string>删除邮件失败</string>
+	<key>EmailListener.mm_DelMailFailAttach</key>
+	<string>删除邮件失败,有附件时禁止删除</string>
+	<key>EmailListener.mm_SysMailErr</key>
+	<string>系统邮件不允许拒收</string>
+<!-- 文件EmailListener.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件SynInfoUILayer.mm　字串定义开始-->
+	<key>SynInfoUILayer.mm_ConfirmResign</key>
+	<string>请您确认是否要辞掉当前官职?</string>
+	<key>SynInfoUILayer.mm_Resign</key>
+	<string>确认辞职</string>
+	<key>SynInfoUILayer.mm_ConfirmLeave</key>
+	<string>大侠您确定要离开本军团?</string>
+	<key>SynInfoUILayer.mm_InputBrocast</key>
+	<string>请输入军团公告:</string>
+<!-- 文件SynInfoUILayer.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件SynMbrListUILayer.mm　字串定义开始-->
+	<key>SynMbrListUILayer.mm_AppointPost</key>
+	<string>任命职位</string>
+	<key>SynMbrListUILayer.mm_ConfirmShanRang</key>
+	<string>您确定要禅让军团长职位给玩家 </string>
+	<key>SynMbrListUILayer.mm_ma</key>
+	<string> 吗?</string>
+	
+	<key>SynMbrListUILayer.mm_ConfirmDismiss</key>
+	<string>您确定要将玩家 </string>
+	
+	<key>SynMbrListUILayer.mm_ConfirmDismiss2</key>
+	<string> 踢出军团?</string>
+<!-- 文件SynMbrListUILayer.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件SynElectionUILayer.mm　字串定义开始-->
+	<key>SynElectionUILayer.mm_ConfirmElec</key>
+	<string>您是否确定要竞选职位 </string>
+<!-- 文件SynElectionUILayer.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件CreateSynDialog.mm　字串定义开始-->
+	<key>CreateSynDialog.mm_JunTuanNameErr</key>
+	<string>军团名字错误</string>
+	<key>CreateSynDialog.mm_InputJunTuanName</key>
+	<string>请输入军团名字</string>
+	<key>CreateSynDialog.mm_CampErr</key>
+	<string>阵营错误</string>
+	<key>CreateSynDialog.mm_SelCamp</key>
+	<string>请先选择军团阵营</string>
+	<key>CreateSynDialog.mm_ConfirmNameJunTuan</key>
+	<string>确定要将你的军团命名为</string>
+	<key>CreateSynDialog.mm_ConfirmNameJunTuan2</key>
+	<string>吗?一旦创建成功将无法更改</string>
+<!-- 文件CreateSynDialog.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件SyndicateRegList.mm　字串定义开始-->
+	<key>SyndicateRegList.mm_join</key>
+	<string>应征加入</string>
+	<key>SyndicateRegList.mm_title</key>
+	<string>应征军团列表</string>
+<!-- 文件SyndicateRegList.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件ChatRecordManager.mm　字串定义开始-->
+	<key>ChatRecordManager.mm_si</key>
+	<string>世</string>
+	<key>ChatRecordManager.mm_qu</key>
+	<string>区</string>
+	<key>ChatRecordManager.mm_dui</key>
+	<string>队</string>
+	<key>ChatRecordManager.mm_jun</key>
+	<string>军</string>
+	<key>ChatRecordManager.mm_mi</key>
+	<string>密</string>
+	<key>ChatRecordManager.mm_xi</key>
+	<string>系</string>
+<!-- 文件ChatRecordManager.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件PlayerSkillInfo.mm　字串定义开始-->
+	<key>PlayerSkillInfo.mm_KongTiShi</key>
+	<string>主动技能在装备技能栏和已学技能栏之间拖动可以完成装配和卸装，可以使用[%s]开启新的装备位，未装备的技能在战斗中无法使用！</string>
+	<key>PlayerSkillInfo.mm_KaiQiShuoMin</key>
+	<string>当前开启技能格子需要[%s]%d个。</string>
+	<key>PlayerSkillInfo.mm_BaoWuBuZhu</key>
+	<string>您的宝物不足。</string>
+	<key>PlayerSkillInfo.mm_GouMaiShiYong</key>
+	<string>您的宝物不足，还需要[%s]*%d，是否花费%d元宝直接购买并使用？</string>
+	<key>PlayerSkillInfo.mm_EquipSkill</key>
+	<string>装备技能</string>
+	<key>PlayerSkillInfo.mm_LearnedSkill</key>
+	<string>已学技能</string>
+<!-- 文件PlayerSkillInfo.mm　字串定义结束-->
+<!-- ================================================== -->
+
+<!-- ================================================== -->
+<!-- 文件GameUINpcStore.mm　字串定义开始-->
+	<key>GameUINpcStore.mm_ShopBotton</key>
+	<string>买卖</string>
+	<key>GameUINpcStore.mm_BuyBackBotton</key>
+	<string>购回</string>
+	<key>GameUINpcStore.mm_BuyBackDlgBtn</key>
+	<string>买回</string>
+	<!-- 文件PlayerSkillInfo.mm　字串定义结束-->
+<!-- ================================================== -->
+
+</dict>
+</plist>

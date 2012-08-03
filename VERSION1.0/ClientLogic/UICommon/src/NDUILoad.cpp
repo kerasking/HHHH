@@ -137,8 +137,9 @@ bool NDUILoad::Load(
 	}
 	
 	CUIData uiData;
+	const char* pszTemp = NDPath::GetUIConfigPath(uiname);
 	
-	if ( !uiData.openUiFile(NDPath::GetUIConfigPath(uiname)) )
+	if ( !uiData.openUiFile(pszTemp) )
 	{
 		NDAsssert(0);
 		

@@ -22,8 +22,7 @@ namespace NDEngine
 		~NDPath();
 		
 	public:
-		//ÒÔÏÂ·½·¨¹©Âß¼­²ãÊ¹ÓÃ£­£­£­begin
-		//......
+
 		static std::string GetResourcePath();
 		static std::string GetImagePath();
 		static std::string GetMapPath();
@@ -54,6 +53,14 @@ namespace NDEngine
         static const char* GetScriptPath(const char* filename);
         static std::string GetAppResFilePath(const char* filename);
         static std::string GetResourceFilePath(const char* filename);
+
+	protected:
+
+		static std::string NDPath_ResPath;
+		static std::string NDPath_ImgPath;
+		static std::string NDPath_MapPath;
+		static std::string NDPath_AniPath;
+		static std::string NDPath_SoundPath;
 	};
 }
 

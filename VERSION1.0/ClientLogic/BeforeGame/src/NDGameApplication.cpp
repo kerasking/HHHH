@@ -1,6 +1,8 @@
 #include "NDGameApplication.h"
 #include "NDDirector.h"
 #include "SMLoginScene.h"
+#include "../../../cocos2d-x/cocos2dx/platform/CCEGLView_platform.h"
+#include "NDPath.h"
 
 namespace NDEngine
 {
@@ -15,9 +17,10 @@ namespace NDEngine
 
 			// Initialize OpenGLView instance, that release by CCDirector when application terminate.
 			// The HelloWorld is designed as HVGA.
+			NDPath::SetResPath("../../SMYS_CLIENT_IPHONE/SimplifiedChineseRes/res/");
 			CCEGLView * pMainWnd = new CCEGLView();
 			CC_BREAK_IF(! pMainWnd
-				|| ! pMainWnd->Create(TEXT("cocos2d: Hello World"), 480, 320));
+				|| ! pMainWnd->Create(L"cocos2d: Hello World", 480, 320));
 
 #endif  // CC_PLATFORM_WIN32
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

@@ -12,15 +12,39 @@
 
 namespace NDEngine
 {
-	static std::string NDPath_ResPath = "";
-	static std::string NDPath_ImgPath = "";
-	static std::string NDPath_MapPath = "";
-	static std::string NDPath_AniPath = "";
-	static std::string NDPath_SoundPath = "";
+	std::string NDPath::NDPath_ResPath = "../../SMYS_CLIENT_IPHONE/SimplifiedChineseRes/res/";
+	std::string NDPath::NDPath_ImgPath = "";
+	std::string NDPath::NDPath_MapPath = "";
+	std::string NDPath::NDPath_AniPath = "";
+	std::string NDPath::NDPath_SoundPath = "";
 	IMPLEMENT_CLASS(NDPath, NDObject)
+
+	string ReplaceString( const string& inStr, const char* pSrc, const char* pReplace )
+	{
+		string str = inStr;
+		string::size_type stStart = 0;
+		string::iterator iter = str.begin();
+		while( iter != str.end() )
+		{
+			// 从指定位置 查找下一个要替换的字符串的起始位置。
+			string::size_type st = str.find( pSrc, stStart );
+			if ( st == str.npos )
+			{
+				break;
+			}
+			iter = iter + st - stStart;
+			// 将目标字符串全部替换。
+			str.replace( iter, iter + strlen( pSrc ), pReplace );
+			iter = iter + strlen( pReplace );
+			// 替换的字符串下一个字符的位置
+			stStart = st + strlen( pReplace );
+		}
+		return str;
+	}
 	
 	NDPath::NDPath()
 	{
+		
 	}
 	NDPath::~NDPath()
 	{
@@ -142,13 +166,24 @@ namespace NDEngine
 
     const char* NDPath::GetImgPath(const char* filename)
     {
-		return std::string(GetResPath()+"image/"+filename).c_str();
+		//return std::string(GetResPath()+"image/"+filename).c_str();
+
+		string strRes = std::string(GetResPath()+"image/"+filename);
+		char* pszTemp = new char[255];
+		memset(pszTemp,0,sizeof(char) * 255);
+		strcpy(pszTemp,strRes.c_str());
+		return pszTemp;
     }
 	
     
     const char* NDPath::GetImgPathBattleUI(const char* fileName)
 	{
-		return std::string(GetResPath()+"image/battle_ui/"+fileName).c_str();
+		string strRes = std::string(GetResPath()+"image/battle_ui/"+fileName);
+		char* pszTemp = new char[255];
+		memset(pszTemp,0,sizeof(char) * 255);
+		strcpy(pszTemp,strRes.c_str());
+		return pszTemp;
+		//return std::string(GetResPath()+"image/battle_ui/"+fileName).c_str();
     }
     
     
@@ -160,12 +195,22 @@ namespace NDEngine
     // 新界面资源统一放在 res/image/ui_new
     const char* NDPath::GetImgPathNew(const char* fileName)
 	{
-		return std::string(GetResPath()+"image/ui_new/"+fileName).c_str();
+		string strRes = std::string(GetResPath()+"image/ui_new/"+fileName);
+		char* pszTemp = new char[255];
+		memset(pszTemp,0,sizeof(char) * 255);
+		strcpy(pszTemp,strRes.c_str());
+		return pszTemp;
+		//return std::string(GetResPath()+"image/ui_new/"+fileName).c_str();
     }
     // 新界面高分辨率资源统一放在 res/image/ui_new/advance
     const char* NDPath::GetImgPathNewAdvance(const char* fileName)
 	{
-		return std::string(GetResPath()+"image/ui_new/advance/"+fileName).c_str();
+		string strRes = std::string(GetResPath()+"image/ui_new/advance/"+fileName);
+		char* pszTemp = new char[255];
+		memset(pszTemp,0,sizeof(char) * 255);
+		strcpy(pszTemp,strRes.c_str());
+		return pszTemp;
+	//	return std::string(GetResPath()+"image/ui_new/advance/"+fileName).c_str();
     }
     
     const char* NDPath::GetMapPath(const char* fileName)
@@ -175,7 +220,11 @@ namespace NDEngine
     
     const char* NDPath::GetUIConfigPath(const char* filename)
 	{
-		return std::string(GetResPath()+"UI/"+filename).c_str();
+		string strRes = std::string(GetResPath()+"UI/"+filename);
+		char* pszTemp = new char[255];
+		memset(pszTemp,0,sizeof(char) * 255);
+		strcpy(pszTemp,strRes.c_str());
+		return pszTemp;
     }
     
     const char* NDPath::GetUIImgPath(const char* uiFileNameWithPath)
@@ -184,23 +233,57 @@ namespace NDEngine
 		return std::string(GetResourcePath()+"TraditionalChineseRes/"+uiFileNameWithPath).c_str();
 #else
 
-		return std::string(GetResourcePath()+"SimplifiedChineseRes/"+uiFileNameWithPath).c_str();
+		//return std::string(GetResourcePath()+"SimplifiedChineseRes/"+uiFileNameWithPath).c_str();GetResPath()+
+
+		string strRes = std::string(string("SimplifiedChineseRes/") + uiFileNameWithPath);
+		NDString* pstrString = new NDString(strRes);
+
+		//strRes = ReplaceString(strRes,"/","\\");
+
+		char* pszTemp = new char[255];
+		memset(pszTemp,0,sizeof(char) * 255);
+		strcpy(pszTemp,pstrString->getData());
+
+		for (unsigned int i = 0;i < strlen(pszTemp);i++)
+		{
+			if (pszTemp[i] == '/')
+			{
+				pszTemp[i] = '\\';
+			}
+		}
+
+		return pszTemp;
 #endif        
     }
     
     
     const char* NDPath::GetResPath(const char* fileName)
 	{
-		return std::string(GetResPath()+fileName).c_str();
+		string strRes = std::string(GetResPath() + fileName);
+		char* pszTemp = new char[255];
+		memset(pszTemp,0,sizeof(char) * 255);
+		strcpy(pszTemp,strRes.c_str());
+		return pszTemp;
+		//return std::string(GetResPath()+fileName).c_str();
     }
     
     const char* NDPath::GetSMImgPath(const char* fileName)
 	{
-		return std::string(GetResPath()+"image/Res00/"+fileName).c_str();
+		string strRes = std::string(GetResPath()+"image/Res00/"+ fileName);
+		char* pszTemp = new char[255];
+		memset(pszTemp,0,sizeof(char) * 255);
+		strcpy(pszTemp,strRes.c_str());
+		return pszTemp;
+	//	return std::string(GetResPath()+"image/Res00/"+fileName).c_str();
     }
     
     const char* NDPath::GetScriptPath(const char* filename)
 	{
-		return std::string(GetResPath()+"Script/"+filename).c_str();
+		string strRes = std::string(GetResPath()+"Script/" + filename);
+		char* pszTemp = new char[255];
+		memset(pszTemp,0,sizeof(char) * 255);
+		strcpy(pszTemp,strRes.c_str());
+		return pszTemp;
+		//return std::string(GetResPath()+"Script/"+filename).c_str();
     }
 }
