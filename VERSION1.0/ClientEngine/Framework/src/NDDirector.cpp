@@ -61,6 +61,8 @@ namespace NDEngine
 	
 	void NDDirector::Initialization()
 	{	
+		m_director->setOpenGLView(&CCEGLView::sharedOpenGLView());
+
 		m_director->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
 		
 		CC_GLVIEW *view = m_director->getOpenGLView();

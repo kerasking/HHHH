@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)LuaPlus&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\OGLES&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\pthread&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\include&quot;;../Battle/inc;../BeforeGame/inc;../Chat/inc;../Common/inc;../Drama/inc;../GameData/inc;../GameScene/inc;../Item/inc;../MapAndRole/inc;../Script/inc;../UICommon/inc;../MsgDefine/inc;../Syndicate/inc;../Task/inc;../Pet/inc;../../ClientEngine/System/inc;../../ClientEngine/UI/inc;../../ClientEngine/Framework/inc;../../ClientEngine/MapData/inc;../../ClientEngine/Graphic/inc;../../ClientEngine/Utility/inc;../../ClientEngine/Script/inc;../../ClientEngine/DataTrans/inc;../../ClientEngine/UI/import/inc;..\..\..\ClientEngine\UI\inc;..\..\..\SMYS_CLIENT_IPHONE\libs\cocos2d\Support;..\..\..\Include\Framework;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module\Update;..\..\..\SMYS_CLIENT_IPHONE\libs\KUtil;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module\Item;..\..\..\SMYS_CLIENT_IPHONE\Classes\Scenes;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module\Map;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module\Common;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module;..\..\..\SMYS_CLIENT_IPHONE\Classes\Scenes\NewScene;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module\BattleField;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module\NewVipStore;..\..\..\SMYS_CLIENT_IPHONE\Classes\Scenes\NewScene\UIPet;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module\Farm;..\..\..\VERSION1.0\ClientEngine\UI\Platform;..\..\..\Include\C3\Win;..\..\..\Include\UI;..\..\..\VERSION1.0\ClientEngine\TempClass"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)LuaPlus&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\OGLES&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\pthread&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\include&quot;;../Battle/inc;../BeforeGame/inc;../Chat/inc;../Common/inc;../Drama/inc;../GameData/inc;../GameScene/inc;../Item/inc;../MapAndRole/inc;../Script/inc;../UICommon/inc;../MsgDefine/inc;../Syndicate/inc;../Task/inc;../Pet/inc;../../ClientEngine/System/inc;../../ClientEngine/UI/inc;../../ClientEngine/Framework/inc;../../ClientEngine/MapData/inc;../../ClientEngine/Graphic/inc;../../ClientEngine/Utility/inc;../../ClientEngine/Script/inc;../../ClientEngine/DataTrans/inc;../../ClientEngine/UI/import/inc;..\..\..\ClientEngine\UI\inc;..\..\..\SMYS_CLIENT_IPHONE\libs\cocos2d\Support;..\..\..\Include\Framework;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module\Update;..\..\..\SMYS_CLIENT_IPHONE\libs\KUtil;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module\Item;..\..\..\SMYS_CLIENT_IPHONE\Classes\Scenes;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module\Map;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module\Common;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module;..\..\..\SMYS_CLIENT_IPHONE\Classes\Scenes\NewScene;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module\BattleField;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module\NewVipStore;..\..\..\SMYS_CLIENT_IPHONE\Classes\Scenes\NewScene\UIPet;..\..\..\SMYS_CLIENT_IPHONE\Classes\Module\Farm;..\..\..\VERSION1.0\ClientEngine\UI\Platform;..\..\..\Include\C3\Win;..\..\..\Include\UI;..\..\..\VERSION1.0\ClientEngine\TempClass;..\..\..\VERSION1.0\ClientLogic\BeforeGame\inc"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -875,6 +875,14 @@
 		</File>
 		<File
 			RelativePath="..\Common\inc\NDDataPersist.h"
+			>
+		</File>
+		<File
+			RelativePath="..\BeforeGame\src\NDGameApplication.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\BeforeGame\inc\NDGameApplication.h"
 			>
 		</File>
 	</Files>

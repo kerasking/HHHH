@@ -6,7 +6,7 @@
 #include "GameApp.h"
 #include "CCString.h"
 #include "XMLReader.h"
-#include "NDDirector.h"
+#include <NDGameApplication.h>
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -18,8 +18,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine
 
 	InitGameInstance();
 
-	NDDirector* pkDirector = NDDirector::DefaultDirector();
-	pkDirector->Initialization();
+	NDGameApplication kApp;
 
 	return CCApplication::sharedApplication().run();
 }

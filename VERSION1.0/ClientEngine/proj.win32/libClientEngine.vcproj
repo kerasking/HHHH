@@ -437,10 +437,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\System\inc\NDGameApplication.h"
-					>
-				</File>
-				<File
 					RelativePath="..\System\inc\NDLocalization.h"
 					>
 				</File>
@@ -498,10 +494,6 @@
 				</File>
 				<File
 					RelativePath="..\System\src\NDDictionary.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\System\src\NDGameApplication.cpp"
 					>
 				</File>
 				<File
@@ -936,10 +928,6 @@
 		</File>
 		<File
 			RelativePath="..\Utility\inc\ImageNumber.h"
-			>
-		</File>
-		<File
-			RelativePath="..\TempClass\NDDataSource.cpp"
 			>
 		</File>
 		<File

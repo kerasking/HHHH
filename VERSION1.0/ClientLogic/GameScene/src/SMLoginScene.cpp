@@ -103,6 +103,11 @@ CSMLoginScene::Initialization()
  void 
  CSMLoginScene::OnTimer(OBJID idTag)
  {
+	 if (ONTIMER_TAG_LOGIN != idTag)
+	 {
+		 return;
+	 }
+
      //if (idTag != ONTIMER_TAG_LOGIN) {
      //    return;
      //}

@@ -211,7 +211,7 @@ bool CCEGLView::Create(LPCTSTR pTitle, int w, int h)
 		CC_BREAK_IF(m_hWnd);
 
 		HINSTANCE hInstance = GetModuleHandle( NULL );
-		WNDCLASS  wc;		// Windows Class Structure
+		WNDCLASS  wc = {0};		// Windows Class Structure
 
 		// Redraw On Size, And Own DC For Window.
 		wc.style          = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;  
