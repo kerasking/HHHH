@@ -148,20 +148,20 @@ namespace NDEngine {
 	#define ETCLASSEND(classname) \
 	return true;} \
 	bool bool##classname = ScriptMgrObj.AddRegClassFunc(&(ETClassBegin##classname));
-	
-	
+
+
 	#define ETSTRUCTBEGIN(structname) \
 	bool ETStructBegin##structname(){ \
 	LuaClass<structname>  LuaClassTmp(LuaStateMgrObj.GetState()); \
 	LuaClassTmp.createStruct(#structname);
-		
+
 	#define ETSTRUCTPROP(nameinlua, propaddr) \
 	LuaClassTmp.prop(nameinlua, propaddr);
-		
+
 	#define ETSTRUCTEND(structname) \
 	return true;} \
 	bool bool##structname = ScriptMgrObj.AddRegClassFunc(&(ETStructBegin##structname));
-	
+
 #endif
 	
 }

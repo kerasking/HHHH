@@ -155,7 +155,6 @@ void ScriptMgr::Load()
 		m_strLogFilePath,
 		time(NULL));
 	m_fDebugOutPut = fopen(filename, "a");
-
 	LoadRegClassFuncs();
 	
 	for(vec_script_object_it it = m_vScriptObject.begin();
