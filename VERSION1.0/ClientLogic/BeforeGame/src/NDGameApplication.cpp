@@ -90,9 +90,17 @@ namespace NDEngine
 	bool NDGameApplication::applicationDidFinishLaunching()
 	{
 		NDDirector* pkDirector = NDDirector::DefaultDirector();
+		ScriptMgr* pkScriptManager = ScriptMgr::GetSingletonPtr();
+
+		if (!pkScriptManager)
+		{
+			return false;
+		}
 
 		pkDirector->Initialization();
 		pkDirector->RunScene(CSMLoginScene::Scene());
+
+		pkScriptManager->Load();
 
 		return true;
 	}

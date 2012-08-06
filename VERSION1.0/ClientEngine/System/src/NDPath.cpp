@@ -235,7 +235,7 @@ namespace NDEngine
 
 		//return std::string(GetResourcePath()+"SimplifiedChineseRes/"+uiFileNameWithPath).c_str();GetResPath()+
 
-		string strRes = std::string(string("SimplifiedChineseRes/") + uiFileNameWithPath);
+		string strRes = std::string(string("SimplifiedChineseRes") + uiFileNameWithPath);
 		NDString* pstrString = new NDString(strRes);
 
 		//strRes = ReplaceString(strRes,"/","\\");
