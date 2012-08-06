@@ -2,6 +2,7 @@
 *.user
 *.ncb
 *.bak
+*.sdf
 debug/
 Debug/
 release/
