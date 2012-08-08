@@ -62,8 +62,8 @@ bool RegisterGlobalEventHandler(int nEvent, const char* funcname, LuaObject func
 
 void ScriptGlobalEvent::OnLoad()
 {
-// 	ETCFUNC("RegisterGlobalEventHandler", RegisterGlobalEventHandler)
-// 	ETCFUNC("PrintString",PrintString)
+ 	ETCFUNC("RegisterGlobalEventHandler", RegisterGlobalEventHandler)
+ 	ETCFUNC("PrintString",PrintString)
 }
 
 void ScriptGlobalEvent::OnEvent(GLOBALEVENT eEvent, int param1, int param2, int param3)

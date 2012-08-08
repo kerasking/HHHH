@@ -51,9 +51,9 @@ LuaStateOwner& LuaStateMgr::GetState()
 {
 	if (ms_pkLuaState ==  NULL)
 	{
-		ms_pkLuaState = new LuaStateOwner(true);
+		ms_pkLuaState = new LuaStateOwner(false);
 		
-		//ms_pkLuaState->SetExceptInfoOutHandler(&exceptOutPut);
+		(*ms_pkLuaState)->SetExceptInfoOutHandler(&exceptOutPut);
 	}
 	
 	return *ms_pkLuaState;

@@ -23,7 +23,7 @@ namespace NDEngine
 			NDPath::SetResPath("../../SMYS_CLIENT_IPHONE/SimplifiedChineseRes/res/");
 			CCEGLView * pMainWnd = new CCEGLView();
 			CC_BREAK_IF(! pMainWnd
-				|| ! pMainWnd->Create(L"cocos2d: Hello World", 480, 320));
+				|| ! pMainWnd->Create(L"´ó»°Áú½«", 480, 320));
 
 #endif  // CC_PLATFORM_WIN32
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -93,12 +93,7 @@ namespace NDEngine
 	bool NDGameApplication::applicationDidFinishLaunching()
 	{
 		NDDirector* pkDirector = NDDirector::DefaultDirector();
-		ScriptMgr* pkScriptManager = ScriptMgr::GetSingletonPtr();
-
-		if (!pkScriptManager)
-		{
-			return false;
-		}
+		ScriptMgr kScriptManager = ScriptMgr::GetSingleton();
 
 		pkDirector->Initialization();
 		pkDirector->RunScene(CSMLoginScene::Scene());
@@ -111,7 +106,7 @@ namespace NDEngine
 		pkCommon->OnLoad();
 		pkGlobalEvent->OnLoad();
 
-		pkScriptManager->Load();
+		kScriptManager.Load();
 
 		return true;
 	}

@@ -78,16 +78,16 @@ int BitwiseAnd(int x, int y)
 
 void ScriptObjectCommon::OnLoad()
 {
-// 	ETLUAFUNC("LuaLogInfo", LuaLogInfo);
-// 	
-// 	ETLUAFUNC("LuaLogError", LuaLogError);
-// 	
-// 	ETLUAFUNC("DoFile", DoFile);
-// 	
-// 	ETCFUNC("LeftShift", LeftShift)
-// 	
-// 	ETCFUNC("RightShift", RightShift)
-// 	
-// 	ETCFUNC("BitwiseAnd", BitwiseAnd)
-    //ETCFUNC("GetRandomWords", GetRandomWords);
+	ETLUAFUNC("LuaLogInfo", LuaLogInfo);
+    	
+    	ETLUAFUNC("LuaLogError", LuaLogError);
+    	
+    	ETLUAFUNC("DoFile", DoFile);
+    	
+    	ETCFUNC("LeftShift", LeftShift)
+    	
+    	ETCFUNC("RightShift", RightShift)
+    	
+    	ETCFUNC("BitwiseAnd", BitwiseAnd)
+        //ETCFUNC("GetRandomWords", GetRandomWords);
 }
