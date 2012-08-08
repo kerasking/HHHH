@@ -155,7 +155,7 @@ name		args	description
 OP_MOVE,/*	A B	R(A) := R(B)					*/
 OP_LOADK,/*	A Bx	R(A) := Kst(Bx)					*/
 OP_LOADBOOL,/*	A B C	R(A) := (Bool)B; if (C) pc++			*/
-OP_LOADNIL,/*	A B	R(A) := ... := R(B) := NULL			*/
+OP_LOADNIL,/*	A B	R(A) := ... := R(B) := nil			*/
 OP_GETUPVAL,/*	A B	R(A) := UpValue[B]				*/
 
 OP_GETGLOBAL,/*	A Bx	R(A) := Gbl[Kst(Bx)]				*/
@@ -199,7 +199,7 @@ OP_FORLOOP,/*	A sBx	R(A)+=R(A+2);
 OP_FORPREP,/*	A sBx	R(A)-=R(A+2); pc+=sBx				*/
 
 OP_TFORLOOP,/*	A C	R(A+3), ... ,R(A+2+C) := R(A)(R(A+1), R(A+2)); 
-                        if R(A+3) ~= NULL then R(A+2)=R(A+3) else pc++	*/ 
+                        if R(A+3) ~= nil then R(A+2)=R(A+3) else pc++	*/ 
 OP_SETLIST,/*	A B C	R(A)[(C-1)*FPF+i] := R(A+i), 1 <= i <= B	*/
 
 OP_CLOSE,/*	A 	close all variables in the stack up to (>=) R(A)*/

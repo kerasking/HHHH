@@ -1,10 +1,7 @@
 #pragma once
 
-#include "LuaPlus.h"
+#include "luaplus.h"
 #include <string>
-#include <typeinfo>
-
-using namespace LuaPlus;
 
 class LuaConvert
 {
@@ -31,7 +28,7 @@ public:
 	}
 	operator const wchar_t* ()
 	{
-		return (const wchar_t*)refobj.GetWString();
+		return refobj.GetWString();
 	}
 	operator std::string()
 	{
@@ -39,15 +36,11 @@ public:
 	}
 	operator std::wstring()
 	{
-		return std::wstring((const wchar_t*)refobj.GetWString());
+		return std::wstring(refobj.GetWString());
 	}
 	operator void* ()
 	{
 		return refobj.GetUserData();
-	}
-	operator bool()
-	{
-		return refobj.GetBoolean();
 	}
 	template<typename T>
 		operator T* ()
@@ -68,104 +61,66 @@ class LuaConstructor
 {
 private:
 
-// 	static	int ConstructorHelper(LuaState* state, Object* pObj)
-// 	{
-// 		std::string metaname("MetaClass_");
-// 	#ifdef __APPLE__
-// 		metaname += typeid(Object).name();
-// 	#else
-// 		metaname += typeid(Object).raw_name();
-// 	#endif
-// 
-// 		LuaObject obj = state->BoxPointer(pObj);
-// 		obj.SetMetaTable(state->GetRegistry()[metaname.c_str()]);
-// 		obj.Push();
-// 		return 1;
-// 	}
-
-public:
-	static int ConstructorStruct(LuaState* state)
+	static	int ConstructorHelper(LuaState* state, Object* pObj)
 	{
 		std::string metaname("MetaClass_");
-#ifdef __APPLE__
-		metaname += typeid(Object).name();
-#else
 		metaname += typeid(Object).raw_name();
-#endif
-		
-		LuaObject obj = state->NewUserData(sizeof(Object)); ///< ´Ë´¦½øÐÐ³¢ÊÔÐÔÐÞ¸Ä ¹ùºÆ
-		obj.SetMetaTable(state->GetRegistry()[metaname.c_str()]);
-		//obj.Push();	///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+
+		LuaObject obj = state->BoxPointer(pObj);
+		obj.SetMetaTable(state->GetGlobal(metaname.c_str()));
+		obj.Push();
 		return 1;
 	}
 
+public:
+
 	static	int Constructor(LuaState* state)
 	{
-		return 0;//ConstructorHelper(state, new Object());  ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		return ConstructorHelper(state, new Object());
 	}
 
 	template<typename A1>
 		static	int Constructor(LuaState* state)
 	{
-		LuaObject	obj1 = LuaObject(state, 1);
-		LuaConvert	a1(obj1);
-		
-		return 0;//ConstructorHelper(state, new Object((A1)a1) ); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		LuaConvert a1 = LuaObject(state, 1);
+		return ConstructorHelper(state, new Object((A1)a1) );
 	}
 
 	template<typename A1, typename A2>
 		static	int Constructor(LuaState* state)
 	{
-		LuaObject	obj1 = LuaObject(state, 1);
-		LuaObject	obj2 = LuaObject(state, 2);
-		LuaConvert	a1(obj1);
-		LuaConvert	a2(obj2);
-		
-		return 0;//ConstructorHelper(state, new Object((A1)a1, (A2)a2) ); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		LuaConvert a1 = LuaObject(state, 1);
+		LuaConvert a2 = LuaObject(state, 2);
+		return ConstructorHelper(state, new Object((A1)a1, (A2)a2) );
 	}
 
 	template<typename A1, typename A2, typename A3>
 		static	int Constructor(LuaState* state)
 	{
-		LuaObject	obj1 = LuaObject(state, 1);
-		LuaObject	obj2 = LuaObject(state, 2);
-		LuaObject	obj3 = LuaObject(state, 3);
-		LuaConvert	a1(obj1);
-		LuaConvert	a2(obj2);
-		LuaConvert	a3(obj3);
-		
+		LuaConvert a1 = LuaObject(state, 1);
+		LuaConvert a2 = LuaObject(state, 2);
+		LuaConvert a3 = LuaObject(state, 3);
 		return ConstructorHelper(state, new Object((A1)a1, (A2)a2, (A3)a3) );
 	}
 
 	template<typename A1, typename A2, typename A3, typename A4>
 		static	int Constructor(LuaState* state)
 	{
-		LuaObject	obj1 = LuaObject(state, 1);
-		LuaObject	obj2 = LuaObject(state, 2);
-		LuaObject	obj3 = LuaObject(state, 3);
-		LuaObject	obj4 = LuaObject(state, 4);
-		LuaConvert	a1(obj1);
-		LuaConvert	a2(obj2);
-		LuaConvert	a3(obj3);
-		LuaConvert	a4(obj4);
-		
+		LuaConvert a1 = LuaObject(state, 1);
+		LuaConvert a2 = LuaObject(state, 2);
+		LuaConvert a3 = LuaObject(state, 3);
+		LuaConvert a4 = LuaObject(state, 4);
 		return ConstructorHelper(state, new Object((A1)a1, (A2)a2, (A3)a3, (A4)a4) );
 	}
 
 	template<typename A1, typename A2, typename A3, typename A4, typename A5>
 		static	int Constructor(LuaState* state)
 	{
-		LuaObject	obj1 = LuaObject(state, 1);
-		LuaObject	obj2 = LuaObject(state, 2);
-		LuaObject	obj3 = LuaObject(state, 3);
-		LuaObject	obj4 = LuaObject(state, 4);
-		LuaObject	obj5 = LuaObject(state, 5);
-		LuaConvert	a1(obj1);
-		LuaConvert	a2(obj2);
-		LuaConvert	a3(obj3);
-		LuaConvert	a4(obj4);
-		LuaConvert	a5(obj5);
-		
+		LuaConvert a1 = LuaObject(state, 1);
+		LuaConvert a2 = LuaObject(state, 2);
+		LuaConvert a3 = LuaObject(state, 3);
+		LuaConvert a4 = LuaObject(state, 4);
+		LuaConvert a5 = LuaObject(state, 5);
 		return ConstructorHelper(state, new Object((A1)a1, (A2)a2, (A3)a3, (A4)a4, (A5)a5) );
 	}
 
@@ -178,7 +133,7 @@ public:
 		LuaObject meta = state->GetGlobal("MetaClass_Nil");
 		if(meta.IsNil())
 		{
-			meta = state->GetRegistry().CreateTable("MetaClass_Nil");
+			meta = state->GetGlobals().CreateTable("MetaClass_Nil");
 		}
 
 		o.SetMetaTable(meta);
@@ -193,20 +148,13 @@ public:
 	LuaClass(LuaState* state)
 	{
 		luaGlobals = state->GetGlobals();
-		
+
+
 		std::string metaname("MetaClass_");
-	#ifdef __APPLE__
-		metaname += typeid(Object).name();
-	#else
 		metaname += typeid(Object).raw_name();
-	#endif
-		
-		metaTableObj = state->GetRegistry()[metaname.c_str()];
-		if (metaTableObj.IsNil())
-		{
-			metaTableObj = state->GetRegistry().CreateTable(metaname.c_str());
-			metaTableObj.SetObject("__index", metaTableObj);
-		}
+
+		metaTableObj = luaGlobals.CreateTable(metaname.c_str());
+		metaTableObj.SetObject("__index", metaTableObj);
 		//metaTableObj.Register("__gc", &Destructor);
 		//metaTableObj.Register("Free", &Destructor);
 	}
@@ -227,78 +175,36 @@ public:
 	template<typename A1>
 		inline LuaClass& create(const char* name)
 	{
-	#if BAD
-		luaGlobals.Register(name, LuaConstructor<Object>Constructor<A1>);
-	#else
-		luaGlobals.Register(name, LuaConstructor<Object>::template Constructor<A1>);
-	#endif
+		luaGlobals.Register(name, LuaConstructor<Object>::Constructor<A1>);
 		return *this;
 	}
 	template<typename A1, typename A2>
 		inline LuaClass& create(const char* name)
 	{
-	#if BAD
 		luaGlobals.Register(name, LuaConstructor<Object>::Constructor<A1, A2>);
-	#else
-		luaGlobals.Register(name, LuaConstructor<Object>::template Constructor<A1, A2>);
-	#endif
 		return *this;
 	}
 	template<typename A1, typename A2, typename A3>
 		inline LuaClass& create(const char* name)
 	{
-	#if BAD
 		luaGlobals.Register(name, LuaConstructor<Object>::Constructor<A1, A2, A3>);
-	#else
-		luaGlobals.Register(name, LuaConstructor<Object>::template Constructor<A1, A2, A3>);
-	#endif
 		return *this;
 	}
 	template<typename A1, typename A2, typename A3, typename A4>
 		inline LuaClass& create(const char* name)
 	{
-	#if BAD
 		luaGlobals.Register(name, LuaConstructor<Object>::Constructor<A1, A2, A3, A4>);
-	#else
-		luaGlobals.Register(name, LuaConstructor<Object>::template Constructor<A1, A2, A3, A4>);
-	#endif
 		return *this;
 	}
 	template<typename A1, typename A2, typename A3, typename A4, typename A5>
 		inline LuaClass& create(const char* name)
 	{
-	#if BAD
 		luaGlobals.Register(name, LuaConstructor<Object>::Constructor<A1, A2, A3, A4, A5>);
-	#else
-		luaGlobals.Register(name, LuaConstructor<Object>::template Constructor<A1, A2, A3, A4, A5>);
-
-	#endif
 		return *this;
 	}
 	inline LuaClass& destroy(const char* name)
 	{
 		metaTableObj.Register(name, LuaConstructor<Object>::Destructor);
-		return *this;
-	}
-	
-	template<typename Obj, typename VarType>
-	inline LuaClass& prop(const char* name, VarType Obj::* var)
-	{
-		static bool support = false;
-		if (!support)
-		{
-//			LPCD::MetaTable_IntegratePropertySupport(metaTableObj); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-			support = true;
-		}
-		
-//		LPCD::PropertyCreate(metaTableObj, name, var); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		
-		return *this;
-	}
-	
-	inline LuaClass& createStruct(const char* name)
-	{
-		luaGlobals.Register(name, LuaConstructor<Object>::ConstructorStruct);
 		return *this;
 	}
 

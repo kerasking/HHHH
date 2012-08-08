@@ -647,7 +647,7 @@ static void add_value (MatchState *ms, luaL_Buffer *b, const char *s,
       return;
     }
   }
-  if (!lua_toboolean(L, -1)) {  /* NULL or false? */
+  if (!lua_toboolean(L, -1)) {  /* nil or false? */
     lua_pop(L, 1);
     lua_pushlstring(L, s, e - s);  /* keep original text */
   }

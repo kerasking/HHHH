@@ -82,7 +82,7 @@ LUAPLUS_INLINE int LuaStackObject::GetType() const
 
 
 /**
-	\return Returns true if the object is NULL.
+	\return Returns true if the object is nil.
 **/
 LUAPLUS_INLINE bool LuaStackObject::IsNil() const					{  return lua_isnil( GetCState(), m_stackIndex );  }
 
@@ -257,9 +257,9 @@ LUAPLUS_INLINE LuaStackObject LuaStackObject::CreateTable(int index, int narray,
 }
 
 /**
-	Assigns the table key [name] to NULL.
+	Assigns the table key [name] to nil.
 
-	@param name The name of the object to make NULL.
+	@param name The name of the object to make nil.
 **/
 LUAPLUS_INLINE void LuaStackObject::SetNil( const char* name )
 {
@@ -269,9 +269,9 @@ LUAPLUS_INLINE void LuaStackObject::SetNil( const char* name )
 }
 
 /**
-	Assigns the table key [index] to NULL.
+	Assigns the table key [index] to nil.
 
-	@param key The index of the object to make NULL.
+	@param key The index of the object to make nil.
 **/
 LUAPLUS_INLINE void LuaStackObject::SetNil( int index )
 {

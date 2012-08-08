@@ -12,7 +12,7 @@
 
 namespace NDEngine
 {
-	std::string NDPath::NDPath_ResPath = "../../SMYS_CLIENT_IPHONE/SimplifiedChineseRes/res/";
+	std::string NDPath::NDPath_ResPath = "./SimplifiedChineseRes/res/";
 	std::string NDPath::NDPath_ImgPath = "";
 	std::string NDPath::NDPath_MapPath = "";
 	std::string NDPath::NDPath_AniPath = "";
@@ -279,7 +279,7 @@ namespace NDEngine
     
     const char* NDPath::GetScriptPath(const char* filename)
 	{
-		string strRes = std::string(GetResPath()+"Script/" + filename);
+		string strRes = std::string(std::string("./SimplifiedChineseRes/res/") + "Script/" + filename);
 		char* pszTemp = new char[255];
 		memset(pszTemp,0,sizeof(char) * 255);
 		strcpy(pszTemp,strRes.c_str());

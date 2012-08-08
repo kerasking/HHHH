@@ -34,6 +34,7 @@ class ScriptGlobalEvent : public NDEngine::ScriptObject
 {
 public:
 	virtual void OnLoad();
+
 	static void OnEvent(GLOBALEVENT eEvent, int param1=0, int param2=0, int param3=0);
 };
 

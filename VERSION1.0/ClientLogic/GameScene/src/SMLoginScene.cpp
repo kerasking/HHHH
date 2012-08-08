@@ -246,7 +246,7 @@ int InitGameInstance()
 	BattleMgr battleMgr;
 	//ItemMgr itemMgr; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	NDColorPool colorPool;
-	NDDataPersist::LoadGameSetting(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+//	NDDataPersist::LoadGameSetting(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	//NDFarmMgrObj;
 	//BattleFieldMgrObj;
 	

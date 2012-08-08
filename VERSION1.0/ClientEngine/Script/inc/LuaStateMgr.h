@@ -28,7 +28,7 @@ namespace NDEngine {
 		
 		static LuaStateMgr& GetSingle();
 		
-		LuaState* GetState();
+		LuaStateOwner& GetState();
 		
 		void SetExceptOutput(FUNCEXCEPTOUTPUT handler)
 		{

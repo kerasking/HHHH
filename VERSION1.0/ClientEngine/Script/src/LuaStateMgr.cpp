@@ -11,7 +11,7 @@
 
 using namespace NDEngine;
 
-static LuaState* ms_pkLuaState = NULL;
+static LuaStateOwner* ms_pkLuaState = NULL;
 
 static LuaStateMgr* mgr = NULL;
 
@@ -47,14 +47,14 @@ LuaStateMgr& LuaStateMgr::GetSingle()
 	return *mgr;
 }
 
-LuaState* LuaStateMgr::GetState()
+LuaStateOwner& LuaStateMgr::GetState()
 {
 	if (ms_pkLuaState ==  NULL)
 	{
-		ms_pkLuaState = LuaState::Create(true);
+		ms_pkLuaState = new LuaStateOwner(true);
 		
-		ms_pkLuaState->SetExceptInfoOutHandler(&exceptOutPut);
+		//ms_pkLuaState->SetExceptInfoOutHandler(&exceptOutPut);
 	}
 	
-	return ms_pkLuaState;
+	return *ms_pkLuaState;
 }

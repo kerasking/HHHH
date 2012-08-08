@@ -3,6 +3,9 @@
 #include "SMLoginScene.h"
 #include "../../../cocos2d-x/cocos2dx/platform/CCEGLView_platform.h"
 #include "NDPath.h"
+#include "GameData.h"
+#include "ScriptCommon.h"
+#include "ScriptGlobalEvent.h"
 
 namespace NDEngine
 {
@@ -99,6 +102,14 @@ namespace NDEngine
 
 		pkDirector->Initialization();
 		pkDirector->RunScene(CSMLoginScene::Scene());
+
+		NDScriptGameData* pkData = new NDScriptGameData;
+		ScriptGlobalEvent* pkGlobalEvent = new ScriptGlobalEvent;
+		ScriptObjectCommon* pkCommon = new ScriptObjectCommon;
+
+		pkData->Load();
+		pkCommon->OnLoad();
+		pkGlobalEvent->OnLoad();
 
 		pkScriptManager->Load();
 

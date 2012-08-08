@@ -301,7 +301,7 @@ static int checkint (lua_State *L, int topop) {
 static void getsizes (lua_State *L) {
   lua_getfield(L, LUA_REGISTRYINDEX, "LUA_SIZES");
   if (lua_isnil(L, -1)) {  /* no `size' table? */
-    lua_pop(L, 1);  /* remove NULL */
+    lua_pop(L, 1);  /* remove nil */
     lua_newtable(L);  /* create it */
     lua_pushvalue(L, -1);  /* `size' will be its own metatable */
     lua_setmetatable(L, -2);
@@ -378,7 +378,7 @@ LUALIB_API const char *luaL_findtable (lua_State *L, int idx,
     lua_pushlstring(L, fname, e - fname);
     lua_rawget(L, -2);
     if (lua_isnil(L, -1)) {  /* no such field? */
-      lua_pop(L, 1);  /* remove this NULL */
+      lua_pop(L, 1);  /* remove this nil */
       lua_createtable(L, 0, (*e == '.' ? 1 : szhint)); /* new table for field */
       lua_pushlstring(L, fname, e - fname);
       lua_pushvalue(L, -2);
@@ -501,7 +501,7 @@ LUALIB_API int luaL_ref (lua_State *L, int t) {
   t = abs_index(L, t);
   if (lua_isnil(L, -1)) {
     lua_pop(L, 1);  /* remove from stack */
-    return LUA_REFNIL;  /* `NULL' has a unique fixed reference */
+    return LUA_REFNIL;  /* `nil' has a unique fixed reference */
   }
   lua_rawgeti(L, t, FREELIST_REF);  /* get first free element */
   ref = (int)lua_tointeger(L, -1);  /* ref = t[FREELIST_REF] */

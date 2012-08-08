@@ -205,8 +205,8 @@ static int LS_ALERT( lua_State* L )
 {
 	const char* err = lua_tostring(L, 1);
 #ifdef WIN32
-	OutputDebugStringA(err);
-    OutputDebugStringA("\n");
+	OutputDebugString(err);
+    OutputDebugString("\n");
 #else // !WIN32
 	puts(err);
 #endif // WIN32

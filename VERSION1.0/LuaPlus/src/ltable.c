@@ -165,14 +165,14 @@ int luaH_findindex (lua_State *L, Table *t, StkId key) {
 int luaH_next (lua_State *L, Table *t, StkId key) {
   int i = luaH_findindex(L, t, key);  /* find original element */
   for (i++; i < t->sizearray; i++) {  /* try first array part */
-    if (!ttisnil(&t->array[i])) {  /* a non-NULL value? */
+    if (!ttisnil(&t->array[i])) {  /* a non-nil value? */
       setnvalue(key, cast_num(i+1));
       setobj2s(L, key+1, &t->array[i]);
       return 1;
     }
   }
   for (i -= t->sizearray; i < sizenode(t); i++) {  /* then hash part */
-    if (!ttisnil(gval(gnode(t, i)))) {  /* a non-NULL value? */
+    if (!ttisnil(gval(gnode(t, i)))) {  /* a non-nil value? */
       setobj2s(L, key, key2tval(gnode(t, i)));
       setobj2s(L, key+1, gval(gnode(t, i)));
       return 1;
@@ -511,7 +511,7 @@ TValue *luaH_set (lua_State *L, Table *t, const TValue *key) {
   if (p != luaO_nilobject)
     return cast(TValue *, p);
   else {
-    if (ttisnil(key)) luaG_runerror(L, "table index is NULL");
+    if (ttisnil(key)) luaG_runerror(L, "table index is nil");
     else if (ttisnumber(key) && luai_numisnan(nvalue(key)))
       luaG_runerror(L, "table index is NaN");
     return newkey(L, t, key);
@@ -581,7 +581,7 @@ static int unbound_search (Table *t, unsigned int j) {
 
 /*
 ** Try to find a boundary in table `t'. A `boundary' is an integer index
-** such that t[i] is non-NULL and t[i+1] is NULL (and 0 if t[1] is NULL).
+** such that t[i] is non-nil and t[i+1] is nil (and 0 if t[1] is nil).
 */
 int luaH_getn (Table *t) {
   unsigned int j = t->sizearray;

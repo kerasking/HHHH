@@ -57,14 +57,14 @@ LUAPLUS_API bool LuaPlusH_next(LuaState* state, LuaObject* table, LuaObject* key
 	Table* t = hvalue(table->GetTObject());
 	int i = luaH_findindex(*state, t, key->GetTObject());  /* find original element */
     for (i++; i < t->sizearray; i++) {  /* try first array part */
-      if (!ttisnil(&t->array[i])) {  /* a non-NULL value? */
+      if (!ttisnil(&t->array[i])) {  /* a non-nil value? */
         key->AssignInteger(state, i + 1);
         value->AssignTObject(state, &t->array[i]);
         return true;
 	  }
 	}
     for (i -= t->sizearray; i < sizenode(t); i++) {  /* then hash part */
-      if (!ttisnil(gval(gnode(t, i)))) {  /* a non-NULL value? */
+      if (!ttisnil(gval(gnode(t, i)))) {  /* a non-nil value? */
         key->AssignTObject(state, key2tval(gnode(t, i)));
         value->AssignTObject(state, gval(gnode(t, i)));
         return true;

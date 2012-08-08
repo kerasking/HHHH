@@ -18,6 +18,18 @@ typedef std::multimap<GLOBALEVENT, LuaObject>::const_iterator	GLOBALEVENTCIT;
 typedef std::multimap<GLOBALEVENT, LuaObject>::value_type		GLOBALEVENTVT;
 std::multimap<GLOBALEVENT, LuaObject> mapGlobalEventHandler;
 
+bool PrintString(const char* pszString)
+{
+	if (0 == pszString || !*pszString)
+	{
+		return false;
+	}
+	
+	CCLog(pszString);
+
+	return true;
+}
+
 bool RegisterGlobalEventHandler(int nEvent, const char* funcname, LuaObject func)
 {
 	if (nEvent < GLOBALEVENT_BEGIN || nEvent >= GLOBALEVENT_END)
@@ -50,7 +62,8 @@ bool RegisterGlobalEventHandler(int nEvent, const char* funcname, LuaObject func
 
 void ScriptGlobalEvent::OnLoad()
 {
-	ETCFUNC("RegisterGlobalEventHandler", RegisterGlobalEventHandler)
+// 	ETCFUNC("RegisterGlobalEventHandler", RegisterGlobalEventHandler)
+// 	ETCFUNC("PrintString",PrintString)
 }
 
 void ScriptGlobalEvent::OnEvent(GLOBALEVENT eEvent, int param1, int param2, int param3)

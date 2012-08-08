@@ -1294,7 +1294,7 @@ void CloseLoadBar()
 	
 	// 图片池导出
 	ETCLASSBEGIN(NDPicturePool)
-	ETCFUNC("DefaultPicPool",						&NDPicturePool::DefaultPool)
+//	ETCFUNC("DefaultPicPool",						&NDPicturePool::DefaultPool)
 	ETMEMBERFUNC("AddPicture",						(NDPicture* (NDPicturePool::*)(const char*, bool))&NDPicturePool::AddPicture)
 	ETMEMBERFUNC("AddPictureEx",					(NDPicture* (NDPicturePool::*)(const char*, int, int, bool))&NDPicturePool::AddPicture)
 	ETCLASSEND(NDPicturePool)
@@ -1368,7 +1368,7 @@ void CloseLoadBar()
 	
 	// 导演类导出
 	ETCLASSBEGIN(NDDirector)
-	ETCFUNC("DefaultDirector",						&NDDirector::DefaultDirector)
+//	ETCFUNC("DefaultDirector",						&NDDirector::DefaultDirector)  ///<临时性注释 郭浩
 	ETMEMBERFUNC("PushScene",						&NDDirector::PushScene)
 	ETMEMBERFUNC("PopScene",						(bool (NDDirector::*)(bool))&NDDirector::PopScene)
 	ETMEMBERFUNC("GetRunningScene",					&NDDirector::GetRunningScene)
@@ -1381,7 +1381,7 @@ void CloseLoadBar()
 	
 	// 场景类导出
 	ETSUBCLASSBEGIN(NDScene, NDNode)
-	ETCFUNC("Scene",								&NDScene::Scene)
+	//ETCFUNC("Scene",								&NDScene::Scene)  ///<临时性注释 郭浩
 	ETCLASSEND(NDScene)
 	
 	// UI基类导出

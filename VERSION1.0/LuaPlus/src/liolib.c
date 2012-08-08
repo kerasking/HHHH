@@ -353,7 +353,7 @@ static int g_read (lua_State *L, FILE *f, int first) {
     return pushresult(L, 0, NULL);
   if (!success) {
     lua_pop(L, 1);  /* remove last result */
-    lua_pushnil(L);  /* push NULL instead */
+    lua_pushnil(L);  /* push nil instead */
   }
   return n - first;
 }

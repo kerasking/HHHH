@@ -101,7 +101,7 @@ void ScriptFunctionsRegister( LuaState* state )
 #endif // _DEBUG
 
 	char modulePath[MAX_PATH];
-	GetModuleFileNameA(GetModuleHandleA(luaplusdllName), modulePath, _MAX_PATH);
+	GetModuleFileName(GetModuleHandle(luaplusdllName), modulePath, _MAX_PATH);
 	char* slashPtr = strrchr( modulePath, '\\' );
 	slashPtr++;
 	*slashPtr = 0;
@@ -196,7 +196,7 @@ void ScriptFunctionsRegister( LuaState* state )
 	end
 
 	return function ()
-		return file:read() or (assert(file:close()) and NULL), i
+		return file:read() or (assert(file:close()) and nil), i
 	end
 end
 

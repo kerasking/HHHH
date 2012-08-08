@@ -856,7 +856,7 @@ LuaObject LuaObject::GetByName(const char* key)
 	TValue str;
 	setnilvalue2n(L, &str);
 
-	// It's safe to assume that if name is not in the hash table, this function can return NULL.
+	// It's safe to assume that if name is not in the hash table, this function can return nil.
 	size_t l = strlen(key);
 	GCObject *o;
 	unsigned int h = (unsigned int)l;  /* seed */
@@ -952,7 +952,7 @@ LuaObject LuaObject::operator[](const char* name)
 	TValue str;
 	setnilvalue2n(L, &str);
 
-	// It's safe to assume that if name is not in the hash table, this function can return NULL.
+	// It's safe to assume that if name is not in the hash table, this function can return nil.
 	size_t l = strlen(name);
 	GCObject *o;
 	unsigned int h = (unsigned int)l;  /* seed */

@@ -343,7 +343,7 @@ static int ll_loadlib (lua_State *L) {
     lua_pushnil(L);
     lua_insert(L, -2);
     lua_pushstring(L, (stat == ERRLIB) ?  LIB_FAIL : "init");
-    return 3;  /* return NULL, error message, and where */
+    return 3;  /* return nil, error message, and where */
   }
 }
 
@@ -508,7 +508,7 @@ static int ll_require (lua_State *L) {
   lua_setfield(L, 2, name);  /* _LOADED[name] = sentinel */
   lua_pushstring(L, name);  /* pass name as argument to module */
   lua_call(L, 1, 1);  /* run loaded module */
-  if (!lua_isnil(L, -1))  /* non-NULL return? */
+  if (!lua_isnil(L, -1))  /* non-nil return? */
     lua_setfield(L, 2, name);  /* _LOADED[name] = returned value */
   lua_getfield(L, 2, name);
   if (lua_touserdata(L, -1) == sentinel) {   /* module did not set a value? */

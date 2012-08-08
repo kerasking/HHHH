@@ -118,7 +118,7 @@ void luaV_gettable (lua_State *L, const TValue *t, TValue *key, StkId val) {
     if (ttistable(t)) {  /* `t' is a table? */
       Table *h = hvalue(t);
       const TValue *res = luaH_get(h, key); /* do a primitive get */
-      if (!ttisnil(res) ||  /* result is no NULL? */
+      if (!ttisnil(res) ||  /* result is no nil? */
           (tm = fasttm(L, h->metatable, TM_INDEX)) == NULL) { /* or no TM? */
         setobj2s(L, val, res);
         return;
@@ -144,7 +144,7 @@ void luaV_settable (lua_State *L, const TValue *t, TValue *key, StkId val) {
     if (ttistable(t)) {  /* `t' is a table? */
       Table *h = hvalue(t);
       TValue *oldval = luaH_set(L, h, key); /* do a primitive set */
-      if (!ttisnil(oldval) ||  /* result is no NULL? */
+      if (!ttisnil(oldval) ||  /* result is no nil? */
           (tm = fasttm(L, h->metatable, TM_NEWINDEX)) == NULL) { /* or no TM? */
         setobj2t(L, oldval, val);
         luaC_barriert(L, h, val);

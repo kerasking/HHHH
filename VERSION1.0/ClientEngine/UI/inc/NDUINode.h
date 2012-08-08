@@ -135,9 +135,9 @@ namespace NDEngine
 
 			LuaFunction<bool> luaUiEventCallBack = funcObj;
 
-			bool bRet = luaUiEventCallBack(uinode, targetEvent, param);
+			//bool bRet = luaUiEventCallBack(uinode, targetEvent, param); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 
-			return bRet;
+			return true;//bRet;///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		}
 		
 		/*

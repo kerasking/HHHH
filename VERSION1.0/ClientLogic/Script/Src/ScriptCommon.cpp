@@ -10,6 +10,7 @@
 #include "ScriptCommon.h"
 #include "ScriptInc.h"
 #include <sstream>
+#include "NDPath.h"
 
 using namespace LuaPlus;
 
@@ -43,15 +44,17 @@ int LuaLogError(LuaState* state)
 
 int DoFile(LuaState* state)
 {
+	int nRet = -1;
 	LuaStack args(state);
 	LuaObject str = args[1];
 	
 	if (str.IsString())
 	{
-		//state->DoFile(GetScriptPath(str.GetString())); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		const char* pszPath = NDPath::GetScriptPath(str.GetString());
+		nRet = state->DoFile(pszPath);
 	}
-	
-	return 0;
+
+	return nRet;
 }
 	
 int LeftShift(int x, int y)
@@ -75,16 +78,16 @@ int BitwiseAnd(int x, int y)
 
 void ScriptObjectCommon::OnLoad()
 {
-	ETLUAFUNC("LuaLogInfo", LuaLogInfo);
-	
-	ETLUAFUNC("LuaLogError", LuaLogError);
-	
-	ETLUAFUNC("DoFile", DoFile);
-	
-	ETCFUNC("LeftShift", LeftShift)
-	
-	ETCFUNC("RightShift", RightShift)
-	
-	ETCFUNC("BitwiseAnd", BitwiseAnd)
+// 	ETLUAFUNC("LuaLogInfo", LuaLogInfo);
+// 	
+// 	ETLUAFUNC("LuaLogError", LuaLogError);
+// 	
+// 	ETLUAFUNC("DoFile", DoFile);
+// 	
+// 	ETCFUNC("LeftShift", LeftShift)
+// 	
+// 	ETCFUNC("RightShift", RightShift)
+// 	
+// 	ETCFUNC("BitwiseAnd", BitwiseAnd)
     //ETCFUNC("GetRandomWords", GetRandomWords);
 }

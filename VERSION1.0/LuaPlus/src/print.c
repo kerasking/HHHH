@@ -56,7 +56,7 @@ static void PrintConstant(const Proto* f, int i)
  switch (ttype(o))
  {
   case LUA_TNIL:
-	printf("NULL");
+	printf("nil");
 	break;
   case LUA_TBOOLEAN:
 	printf(bvalue(o) ? "true" : "false");

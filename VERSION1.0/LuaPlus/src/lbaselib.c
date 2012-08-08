@@ -129,7 +129,7 @@ static int luaB_setmetatable (lua_State *L) {
   int t = lua_type(L, 2);
   luaL_checktype(L, 1, LUA_TTABLE);
   luaL_argcheck(L, t == LUA_TNIL || t == LUA_TTABLE, 2,
-                    "NULL or table expected");
+                    "nil or table expected");
   if (luaL_getmetafield(L, 1, "__metatable"))
     luaL_error(L, "cannot change a protected metatable");
   lua_settop(L, 2);
@@ -293,7 +293,7 @@ static int load_aux (lua_State *L, int status) {
   else {
     lua_pushnil(L);
     lua_insert(L, -2);  /* put before error message */
-    return 2;  /* return NULL plus error message */
+    return 2;  /* return nil plus error message */
   }
 }
 
@@ -449,7 +449,7 @@ static int luaB_tostring (lua_State *L) {
 		lua_pushstring(L, (lua_toboolean(L, 1) ? "true" : "false"));
 		break;
 	case LUA_TNIL:
-		lua_pushliteral(L, "NULL");
+		lua_pushliteral(L, "nil");
 		break;
 	default:
 		lua_pushfstring(L, "%s: %p", luaL_typename(L, 1), lua_topointer(L, 1));
@@ -495,7 +495,7 @@ static int luaB_towstring (lua_State *L) {
 		strcpy(buff, (lua_toboolean(L, 1) ? "true" : "false"));
 		break;
 	case LUA_TNIL:
-		strcpy(buff, "NULL");
+		strcpy(buff, "nil");
 		break;
 	default:
 		sprintf(buff, "%s: %p", luaL_typename(L, 1), lua_topointer(L, 1));

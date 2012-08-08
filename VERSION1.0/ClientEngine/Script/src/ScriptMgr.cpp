@@ -10,6 +10,7 @@
 #include "ScriptMgr.h"
 #include "LuaStateMgr.h"
 #include <time.h>
+#include <string>
 // #include "ScriptCommon.h"
 // #include "ScriptGameData.h"
 // #include "ScriptNetMsg.h"
@@ -22,10 +23,12 @@
 // #include "ScriptDrama.h"
 
 
+using namespace std;
 //#include "NDDataPersist.h"
 
 #include "src/lstate.h"
 //#include "NDTextureMonitor.h"
+#include "NDPath.h"
 
 
 using namespace NDEngine;
@@ -122,7 +125,7 @@ void ScriptMgr::update()
  	static unsigned int frameCount = 0;
 	if ((++frameCount % 20) == 0) 
 	{
-		LuaStateMgrObj.GetState()->GC(LUA_GCCOLLECT, 0);
+		//LuaStateMgrObj.GetState()->GC(LUA_GCCOLLECT, 0);
 	}
 }	
 // 	if (++frameCount % 120 == 0) // 120帧打印一次lua当前使用的内存总量
@@ -148,48 +151,53 @@ void ScriptMgr::update()
 
 void ScriptMgr::Load()
 {
-	char filename[256];
-	memset(filename, 0, sizeof(filename));
+	char szFileName[256] = {0};
 
-	_snprintf(filename, sizeof(filename), "%slog%ld.txt", 
+	_snprintf(szFileName, sizeof(szFileName), "%slog%ld.txt", 
 		m_strLogFilePath,
 		time(NULL));
-	m_fDebugOutPut = fopen(filename, "a");
-	LoadRegClassFuncs();
-	
-	for(vec_script_object_it it = m_vScriptObject.begin();
-		it != m_vScriptObject.end();
-		it++)
-	{
-		(*it)->OnLoad();
-	}
 
-	/*
-	ScriptCommonLoad();
+	m_fDebugOutPut = fopen(szFileName, "a");
+	LoadRegClassFuncs();
+
+	//for(vec_script_object_it it = m_vScriptObject.begin();
+	//	it != m_vScriptObject.end();
+	//	it++)
+	//{
+	//	(*it)->OnLoad();
+	//}
+
 	
-	ScriptGlobalEvent::Load();
-	
-	ScriptTimerMgrObj.Load();
-	
-	ScriptUiLoad();
-	
-	ScriptNetMsg::Load();
-	
-	ScriptGameDataObj.Load();
-	
-	ScriptDBObj.Load();
-	
-	ScriptTaskLoad();
-	
-	ScriptGameLogicLoad();
-	
-	ScriptDramaLoad();
-	*/
-	
+	//ScriptCommonLoad();
+	//
+	//ScriptGlobalEvent::Load();
+	//
+	//ScriptTimerMgrObj.Load();
+	//
+	//ScriptUiLoad();
+	//
+	//ScriptNetMsg::Load();
+	//
+	//ScriptGameDataObj.Load();
+	//
+	//ScriptDBObj.Load();
+	//
+	//ScriptTaskLoad();
+	//
+	//ScriptGameLogicLoad();
+	//
+	//ScriptDramaLoad();
+
+
 	LuaStateMgrObj.SetExceptOutput(&luaExceptLoadOutPut);
-	
+
 	// make sure load lua file last;
-	LuaStateMgrObj.GetState()->DoFile((m_strScriptFilePath + "entry.lua").c_str());
+	string strPath = string(NDPath::GetScriptPath("entry.lua"));
+
+	if (0 != LuaStateMgrObj.GetState()->DoFile(strPath.c_str()))
+	{
+		return;
+	}
 	
 	LuaStateMgrObj.SetExceptOutput(&luaExceptRunTimeOutPut);
 }
@@ -339,7 +347,7 @@ bool ScriptMgr::IsLuaFuncExist(const char* funcname, const char* modulename)
 void ScriptMgr::LoadRegClassFuncs()
 {
 	vec_regclass_func_it it = vRegClassFunc.begin();
-	
+
 	for (; it != vRegClassFunc.end(); it++) 
 	{
 		(*it)();

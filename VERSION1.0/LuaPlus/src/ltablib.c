@@ -31,7 +31,7 @@ static int foreachi (lua_State *L) {
     lua_call(L, 2, 1);
     if (!lua_isnil(L, -1))
       return 1;
-    lua_pop(L, 1);  /* remove NULL result */
+    lua_pop(L, 1);  /* remove nil result */
   }
   return 0;
 }
@@ -127,7 +127,7 @@ static int tremove (lua_State *L) {
     lua_rawseti(L, 1, pos);  /* t[pos] = t[pos+1] */
   }
   lua_pushnil(L);
-  lua_rawseti(L, 1, e);  /* t[e] = NULL */
+  lua_rawseti(L, 1, e);  /* t[e] = nil */
   return 1;
 }
 

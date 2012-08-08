@@ -46,7 +46,7 @@ public:
 		va_end(arglist);
 
 #if defined(WIN32) || defined(_XBOX)
-		OutputDebugStringA(message);
+		OutputDebugString(message);
 #else // !WIN32
 		puts(message);
 #endif // WIN32
@@ -376,7 +376,7 @@ bool LuaState::DumpObject(LuaStateOutFile& file, LuaObject& key, LuaObject& valu
 	bool alreadyDumpedKey = (flags & 0xF0000000) != 0;
 	flags &= ~0xF0000000;
 
-	// If the value is NULL, don't write it.
+	// If the value is nil, don't write it.
 	if (value.IsNil())
 		return false;
 
@@ -579,7 +579,7 @@ bool LuaState::DumpObject(LuaStateOutFile& file, LuaObject& key, LuaObject& valu
 				if (keys.GetHeadPosition() != NULL)
 				{
 					// If we wrote a sequential list, the value we're about to write
-					// is not NULL, and we haven't written the semicolon to separate
+					// is not nil, and we haven't written the semicolon to separate
 					// the sequential table entries from the keyed table entries...
 					if (hasSequential  &&  indentLevel != -1)
 					{
@@ -643,7 +643,7 @@ bool LuaState::DumpObject(LuaStateOutFile& file, LuaObject& key, LuaObject& valu
 					}
 
 					// If we wrote a sequential list, the value we're about to write
-					// is not NULL, and we haven't written the semicolon to separate
+					// is not nil, and we haven't written the semicolon to separate
 					// the sequential table entries from the keyed table entries...
 					if (hasSequential  &&  !value.IsNil()  &&  !wroteSemi)
 					{
@@ -730,7 +730,7 @@ bool LuaState::DumpObject(LuaStateOutFile& file, const char* name, LuaObject& va
 {
 	// Yes, this is hack-ish.
 
-	// If the value is NULL, don't write it.
+	// If the value is nil, don't write it.
 	if (value.IsNil())
 		return false;
 
@@ -847,7 +847,7 @@ bool LuaState::DumpObject(const char* filename, const char* name, LuaObject& val
 
 	// Yes, this is hack-ish.
 
-	// If the value is NULL, don't write it.
+	// If the value is nil, don't write it.
 	if (value.IsNil())
 		return false;
 

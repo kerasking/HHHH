@@ -14,10 +14,10 @@
 #include <string.h>
 #include <assert.h>
 
-#include "src/lua.h"
+#include "lua.h"
 
-#include "src/lauxlib.h"
-#include "src/lualib.h"
+#include "lauxlib.h"
+#include "lualib.h"
 
 #include <wctype.h>
 #include <wchar.h>

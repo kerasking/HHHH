@@ -244,7 +244,7 @@ static int FatalError( lua_State* state )
 	const char* err = lua_tostring(state, 1);
 #ifdef WIN32
 	if (err)
-		OutputDebugStringA(err);
+		OutputDebugString(err);
 #else // !WIN32
 	if (err)
 		puts(err);

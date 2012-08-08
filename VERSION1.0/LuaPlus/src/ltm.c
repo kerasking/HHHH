@@ -21,7 +21,7 @@
 NAMESPACE_LUA_BEGIN
 
 const char *const luaT_typenames[] = {
-  "NULL", "boolean", "userdata", "number",
+  "nil", "boolean", "userdata", "number",
   "string", "table", "function", "userdata", "thread",
   "wstring",
   "proto", "upval"
