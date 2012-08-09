@@ -128,12 +128,15 @@ void CUIExp::draw()
 	{
 		if (m_unProcess <= m_unTotal && 0 != m_unTotal)
 		{
-            if(m_nStyle == 0){
+            if(m_nStyle == 0)
+			{
                 std::stringstream ss;
                 ss << m_strText.c_str() << m_unProcess << "/" << m_unTotal;
                 //tq::CString str("%s%u/%u", m_strText.c_str(), m_unProcess, m_unTotal);
                 m_lbText->SetText(ss.str().c_str());
-            }else{
+            }
+			else
+			{
                 std::stringstream ss;
                 ss << m_strText.c_str() << m_unProcess/m_unTotal << "%";
                 //tq::CString str("%s%u/%u", m_strText.c_str(), m_unProcess, m_unTotal);

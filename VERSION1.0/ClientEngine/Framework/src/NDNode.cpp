@@ -8,8 +8,8 @@
 
 #include "NDNode.h"
 #include "NDBaseNode.h"
+#include <cocos2d.h>
 #include "CCPointExtension.h"
-#include "CCDrawingPrimitives.h"
 
 using namespace cocos2d;
 
@@ -168,17 +168,25 @@ namespace NDEngine
 	
 	void NDNode::AddChild(NDNode* node, int z, int tag)
 	{
+		CCMenuItemImage* pkItem = CCMenuItemImage::itemFromNormalImage("avatar1.png",
+			"avatar2.png",m_ccNode,menu_selector(NDNode::TestCallBack));
+		CCMenu* pkMenu = CCMenu::menuWithItem(pkItem);
+
+		pkItem->setPosition(ccp(100,100));
+		pkMenu->setPosition(ccp(100,100));
+
+		m_ccNode->addChild(pkMenu,3);
+
 		NDAsssert(m_ccNode != NULL && node != NULL && node->m_ccNode != NULL);
 		NDAsssert(node != this);
-		
+
 		CCNode *ccNode = node->m_ccNode;
-		
+
 		node->SetParent(this);
-		
+
 		m_ccNode->addChild(ccNode, z, tag);
-		
+
 		m_childrenList.push_back(node);
-		
 	}
 	
 	void NDNode::RemoveChild(NDNode* node, bool bCleanUp)
@@ -432,9 +440,9 @@ namespace NDEngine
 		
 		return bDeal;
 	}
+
+	void NDNode::TestCallBack( CCObject* pSender )
+	{
+		CCLog("≤‚ ‘");
+	}
 }
-
-
-
-
-

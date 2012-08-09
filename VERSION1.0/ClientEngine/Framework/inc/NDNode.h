@@ -21,6 +21,7 @@
 
 #include "ccTypes.h"
 #include "CCNode.h"
+#include "CCObject.h"
 
 #define DECLARE_AUTOLINK(class_name) \
 private: CAutoLink<class_name> m_autolink##class_name;
@@ -30,6 +31,8 @@ public: CAutoLink<class_name> QueryLink() { return  m_autolink##class_name; }
 
 #define INIT_AUTOLINK(class_name) \
 m_autolink##class_name.Init(this)
+
+using namespace cocos2d;
 
 namespace NDEngine
 {
@@ -110,6 +113,8 @@ namespace NDEngine
 		void SetParam2(int nParam2);
 		int GetParam1();
 		int GetParam2();
+
+		void TestCallBack(CCObject* pSender);	///< 测试用，用完要删除 郭浩
 		
 	protected:
 		int m_nParam1;

@@ -54,21 +54,21 @@ namespace NDEngine
 		CGSize GetSize();
 
 		NDPicture* Copy();
-		
+
 		bool SetGrayState(bool gray);
-		
+
 		bool IsGrayState();
 		
 	public:	
 		cocos2d::CCTexture2D *GetTexture();
-	
+
 		void SetTexture(cocos2d::CCTexture2D* tex);
 	private:
 		cocos2d::CCTexture2D *m_texture;
 		CGRect m_cutRect;
 		bool m_reverse, m_bAdvance;
 		PictureRotation m_rotation;
-		
+
 		// ±ä»Ò
 		bool m_canGray;
 		bool m_stateGray;

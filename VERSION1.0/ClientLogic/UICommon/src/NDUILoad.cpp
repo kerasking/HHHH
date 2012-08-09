@@ -132,7 +132,7 @@ bool NDUILoad::Load(
 	if (!uiname || !parent)
 	{
 		NDAsssert(0);
-		
+
 		return false;
 	}
 	
