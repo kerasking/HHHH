@@ -121,16 +121,19 @@ string QuickTalkCell::GetText()
 IMPLEMENT_CLASS(HighlightTipStatusBar, NDUINode)
 IMPLEMENT_CLASS(HighlightTip, NDUILayer)
 
-HighlightTip::HighlightTip() {
+HighlightTip::HighlightTip()
+{
 	m_picBubble = NULL;
 	m_hpBar = NULL;
 	m_mpBar = NULL;
 }
-HighlightTip::~HighlightTip() {
+HighlightTip::~HighlightTip()
+{
 	CC_SAFE_DELETE(m_picBubble);
 }
 
-void HighlightTip::Initialization() {
+void HighlightTip::Initialization()
+{
 	NDUILayer::Initialization();
 	
 	m_picBubble = new NDPicture;
@@ -177,7 +180,8 @@ void HighlightTip::Initialization() {
 	this->EnableEvent(false);
 }
 
-void HighlightTip::SetFighter(Fighter* f) {
+void HighlightTip::SetFighter(Fighter* f)
+{
 	if (!f) {
 		return;
 	}
@@ -188,12 +192,16 @@ void HighlightTip::SetFighter(Fighter* f) {
 	CGRect rect = CGRectMake(pt.x, pt.y, m_picBubble->GetSize().width, m_picBubble->GetSize().height);
 	
 	rect.origin.x -= rect.size.width / 2;
-	if (rect.origin.x < 0) {
+
+	if (rect.origin.x < 0)
+	{
 		rect.origin.x = 0;
 	}
 	
 	rect.origin.y = rect.origin.y - role->GetHeight() - rect.size.height;
-	if (rect.origin.y < 0) {
+
+	if (rect.origin.y < 0)
+	{
 		rect.origin.y = 0;
 	}
 	
@@ -208,6 +216,7 @@ void HighlightTip::SetFighter(Fighter* f) {
 	m_imgNumMp->SetSmallRedTwoNumber(f->m_info.nMana, f->m_info.nManaMax);
 	
 	NDUILabel* name = (NDUILabel*)this->GetChild(TAG_NAME);
+
 	if (!name)
 	{
 		name = new NDUILabel;
@@ -223,10 +232,12 @@ void HighlightTip::SetFighter(Fighter* f) {
 	//	}
 	name->SetText(ss.str().c_str());
 	CGSize sizeName = getStringSize(ss.str().c_str(), 15);
-	name->SetFrameRect(CGRectMake((rect.size.width - sizeName.width) / 2, 0, sizeName.width, sizeName.height));
+	name->SetFrameRect(CGRectMake((rect.size.width - sizeName.width) / 2,
+		0, sizeName.width, sizeName.height));
 }
 
-enum {
+enum
+{
 	MAX_TURN = 30,	// 最大回合数
 	AUTO_COUNT = 0,	// 自动倒计时时间
 	
@@ -402,22 +413,32 @@ Battle::~Battle()
 		fighter->GetRole()->RemoveFromParent(false);
 	}
 	
-	for (VEC_SUB_ANI_GROUP_IT it = this->m_vSubAniGroup.begin(); it != m_vSubAniGroup.end(); it++) {
+	for (VEC_SUB_ANI_GROUP_IT it = this->m_vSubAniGroup.begin();
+		it != m_vSubAniGroup.end(); it++)
+	{
 		it->frameRec->release();
 	}
 	
 	NDPlayer& player = NDPlayer::defaultHero();
-	if (player.IsInState(USERSTATE_DEAD)) {
+
+	if (player.IsInState(USERSTATE_DEAD))
+	{
 		NDScene* gameScene = NDDirector::DefaultDirector()->GetRunningScene();
-		if (gameScene && gameScene->IsKindOfClass(RUNTIME_CLASS(GameScene))) {
+		if (gameScene && gameScene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
+		{
 			((GameScene*)gameScene)->ShowRelieve(true);
 		}
-	} else {
+	}
+	else
+	{
 		// 使用自动恢复药
-		if (player.life < player.maxLife || player.mana < player.maxMana) {
+		if (player.life < player.maxLife || player.mana < player.maxMana)
+		{
 			ItemMgr& items = ItemMgrObj;
 			Item* recover = items.GetBagItemByType(IT_RECOVER);
-			if (recover && recover->active) {
+
+			if (recover && recover->active)
+			{
 				sendItemUse(*recover);
 			}
 		}
@@ -428,14 +449,16 @@ Battle::~Battle()
 	//	BattleFieldRelive::Show();
 	//}
 	//
-	if (this->m_rewardContent.size() > 2) {
+	if (this->m_rewardContent.size() > 2)
+	{
 		GlobalShowDlg(NDCommonCString("BattleRes"), m_rewardContent.c_str(), 3.0f);
 	}
 }
 
 void Battle::OnDialogClose(NDUIDialog* dialog)
 {
-	if (m_dlgBattleResult == dialog) {
+	if (m_dlgBattleResult == dialog)
+	{
 		// 点击释放dialog
 		m_dlgBattleResult->SetDelegate(NULL);
 		m_dlgBattleResult = NULL;
@@ -489,7 +512,8 @@ void Battle::AddFighter(Fighter* f)
 	{
 		role->m_faceRight = false;
 		m_vAttaker.push_back(f);
-	} else
+	}
+	else
 	{
 		role->m_faceRight = true;
 		m_vDefencer.push_back(f);
@@ -523,7 +547,8 @@ void Battle::CloseViewStatus()
 	//		m_dlgHint = NULL;
 	//	}
 	
-	if (m_dlgStatus) {
+	if (m_dlgStatus)
+	{
 		m_dlgStatus->RemoveFromParent(true);
 		m_dlgStatus = NULL;
 	}

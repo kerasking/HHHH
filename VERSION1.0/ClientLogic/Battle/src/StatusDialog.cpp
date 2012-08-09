@@ -121,19 +121,23 @@ void StatusDialog::Initialization(Fighter* f)
 							  CGSizeMake(DIALOG_WIDTH, 40), 
 							  ccc4(0, 0, 0, 255),
 							  true);
-	m_memo->SetFrameRect(CGRectMake(scrRect.origin.x + 20, scrRect.origin.y + nHeight + 5, DIALOG_WIDTH - 40, 40));		
+
+	m_memo->SetFrameRect(CGRectMake(scrRect.origin.x + 20,
+		scrRect.origin.y + nHeight + 5, DIALOG_WIDTH - 40, 40));		
 	this->AddChild(m_memo);
 	nHeight += 45;
 	
 	// ÓÐÌØÊâ×´Ì¬
 	VEC_FIGHTER_STATUS& vStatus = f->getFighterStatus();
-	if (vStatus.size() > 0) {
+	if (vStatus.size() > 0)
+	{
 		
 		NDUILabel* lbStatus = new NDUILabel();
 		lbStatus->Initialization();
 		lbStatus->SetTextAlignment(LabelTextAlignmentCenter);
 		lbStatus->SetText(NDCommonCString("state"));
-		lbStatus->SetFrameRect(CGRectMake(scrRect.origin.x, scrRect.origin.y + nHeight, DIALOG_WIDTH, 20));
+		lbStatus->SetFrameRect(CGRectMake(scrRect.origin.x,
+			scrRect.origin.y + nHeight, DIALOG_WIDTH, 20));
 		this->AddChild(lbStatus);
 		nHeight += 20;
 		
@@ -184,12 +188,17 @@ void StatusDialog::Initialization(Fighter* f)
 //			nTableHeight += 30;
 //		}
 		
-		nTableHeight = nTableHeight > MAX_DIALOG_HEIGHT - nHeight - 5 ? MAX_DIALOG_HEIGHT - nHeight - 5 : nTableHeight;
-		m_table->SetFrameRect(CGRectMake(scrRect.origin.x + 20, scrRect.origin.y + nHeight + 5, DIALOG_WIDTH - 40, nTableHeight));
+		nTableHeight = nTableHeight > MAX_DIALOG_HEIGHT - nHeight - 5 ?
+			MAX_DIALOG_HEIGHT - nHeight - 5 : nTableHeight;
+
+		m_table->SetFrameRect(CGRectMake(scrRect.origin.x +
+			20, scrRect.origin.y + nHeight + 5,
+			DIALOG_WIDTH - 40, nTableHeight));
 		nHeight += nTableHeight + 20;
 	}
 	
-	if (nHeight < MAX_DIALOG_HEIGHT) {
+	if (nHeight < MAX_DIALOG_HEIGHT)
+	{
 		scrRect.size.height = nHeight;
 	}
 }
@@ -270,7 +279,9 @@ void StatusDialog::draw()
 bool StatusDialog::TouchEnd(NDTouch* touch)
 {
 	Battle* parent = (Battle*)this->GetParent();
-	if (parent) {
+
+	if (parent) 
+	{
 		parent->CloseStatusDlg();
 	}
 	return true;
