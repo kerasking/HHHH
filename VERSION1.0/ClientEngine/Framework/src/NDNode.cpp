@@ -50,7 +50,7 @@ namespace NDEngine
 		
 		m_ccNode = new NDBaseNode();
 		NDBaseNode *ndBaseNode = (NDBaseNode *)m_ccNode;
-		//ndBaseNode->setNDNode(this);		
+		ndBaseNode->setNDNode(this);		
 	}
 	
 	void NDNode::draw()
@@ -200,14 +200,14 @@ namespace NDEngine
 			if (ndNode->m_ccNode == node->m_ccNode)
 			{
 				LuaObject funcObj;
-				
+
 				if (ndNode && ndNode->GetDestroyNotify(funcObj)
 					|| funcObj.IsFunction())
 				{
 					LuaFunction<void> luaDestroyEventCallBack = funcObj;
 					luaDestroyEventCallBack(ndNode, bCleanUp);
 				}
-				
+
 				NDNodeDelegate* delegate = dynamic_cast<NDNodeDelegate*> (ndNode->GetDelegate());
 				
 				if (delegate) 
@@ -254,9 +254,9 @@ namespace NDEngine
 					LuaFunction<void> luaDestroyEventCallBack = funcObj;
 					luaDestroyEventCallBack(node, bCleanUp);
 				}
-				
+
 				NDNodeDelegate* delegate = dynamic_cast<NDNodeDelegate*> (node->GetDelegate());
-				
+
 				if (delegate) 
 				{
 					delegate->OnBeforeNodeRemoveFromParent(node, bCleanUp);
@@ -280,11 +280,11 @@ namespace NDEngine
 			}
 		}
 	}
-	
+
 	void NDNode::RemoveFromParent(bool bCleanUp)
 	{
 		NDAsssert(this->m_ccNode != NULL);
-		
+
 		if (this->m_parent) 
 		{
 			m_parent->RemoveChild(this, bCleanUp);

@@ -71,7 +71,7 @@ namespace NDEngine
 #endif
 		m_director->enableRetinaDisplay(true);
 		m_director->setAnimationInterval(1.0f / 5000);
-		
+
 		CCTexture2D::setDefaultAlphaPixelFormat(kTexture2DPixelFormat_RGBA8888);	
 		
 		//#if ND_DEBUG_STATE == 1

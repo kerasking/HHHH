@@ -27,7 +27,7 @@ CSMLoginScene* CSMLoginScene::Scene()
 
 ////////////////////////////////////////////////////////////
 CSMLoginScene::CSMLoginScene()
-:m_bUpdOk(false)
+:m_bUpdOk(true)
 {
 	//m_miniMap	= NULL;	
 	//m_mapLayer	= NULL;
@@ -92,7 +92,8 @@ CSMLoginScene::Initialization()
 * end
 */
     /*
-    if(m_pClientUpd){
+    if(m_pClientUpd)
+	{
         int nVersion = m_pClientUpd->CheckClientVersion();
         m_pClientUpd->StartUpdate(nVersion);  
     }*/
@@ -112,10 +113,11 @@ CSMLoginScene::Initialization()
      //    return;
      //}
      //
-     //if(m_bUpdOk){
-     //    ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
-     //    m_bUpdOk = false;
-     //}
+     if(m_bUpdOk)
+	 {
+         ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
+         m_bUpdOk = false;
+     }
  }
 // 
 // //interface of IUpdateEvent
@@ -151,15 +153,16 @@ CSMLoginScene::GetRandomWords(int nNum)
 {
     //std::string strBuf;
     srand((unsigned)time(NULL));
-    unsigned char Name[64]={0};
-    for(int n=0; n<nNum; n++){
-        Name[n]=0xA0+16+rand()%(0xF7-0xB0);//高字节.如果一级汉字是0xA1-0xA9 特殊符号
-        int iRan = 0xFD-0xA1;
-        if(Name[n]==0xD7)
+    unsigned char Name[64] = {0};
+    for(int n = 0; n < nNum; n++)
+	{
+        Name[n] = 0xA0 + 16 + rand() % (0xF7 - 0xB0);//高字节.如果一级汉字是0xA1-0xA9 特殊符号
+        int iRan = 0xFD - 0xA1;
+        if(Name[n] == 0xD7)
         {
-            iRan=0xFA-0xA1;
+            iRan = 0xFA - 0xA1;
         }
-        Name[n+1]=0xA1+rand()%iRan;//低字节
+        Name[n + 1] = 0xA1 + rand() % iRan;//低字节
     }
     
     //char tmp[128]={0};
@@ -167,9 +170,10 @@ CSMLoginScene::GetRandomWords(int nNum)
     
     setlocale(LC_CTYPE, "UTF-8");
     
-    wchar_t c;
+    wchar_t c = 0;
     std::wstring wStr;
-    for (int i = 0; i < 64; i += 2) {
+    for (int i = 0; i < 64; i += 2) 
+	{
         c = ((Name[i] & 0xff) | ((Name[i + 1] & 0xff) << 8));
         wStr += c;
     }
@@ -185,7 +189,8 @@ int
 CSMLoginScene::OnProcess(int nPercent)
 {
     CUIExp* pProcess = (CUIExp*)m_layer->GetChild(ID_LOADING_PROCESS);
-    if (!pProcess) {
+    if (!pProcess) 
+	{
         return 0;
     }
     

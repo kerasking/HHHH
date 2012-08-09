@@ -19,13 +19,15 @@ namespace NDEngine
 		DECLARE_CLASS(NDUIImage)
 		NDUIImage();
 		~NDUIImage();
+
 	public:
+
 		void SetPicture(NDPicture* pic, bool clearPicOnFree = false);
 		NDPicture* GetPicture() { return m_pic;}
 		void SetPictureLua(NDPicture* pic);
 		CGSize GetPicSize();
 		void SetCombinePicture(NDCombinePicture* pic, bool clearPicOnFree = false);
-		void draw(); override
+		virtual void draw();
 	private:
 		NDPicture* m_pic;
 		NDCombinePicture *m_combinePic;

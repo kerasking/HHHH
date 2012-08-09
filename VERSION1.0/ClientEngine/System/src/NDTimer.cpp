@@ -18,14 +18,10 @@ Timer::Timer()
 
 void Timer::onTimer(ccTime elapsed)
 {
-	/***
-	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	* all
-	*/
-// 	if (m_TimerCallback)
-// 	{
-// 		m_TimerCallback->OnTimer(m_nTag);
-// 	}
+ 	if (m_TimerCallback)
+ 	{
+ 		m_TimerCallback->OnTimer(m_nTag);
+ 	}
 }
 
 NDTimer::NDTimer()
@@ -57,8 +53,8 @@ void NDTimer::SetTimer(ITimerCallback* timerCallback, OBJID tag, float interval)
 		{
 			CCScheduler *sch = CCScheduler::sharedScheduler();
 			Timer *timer = new Timer;
-			//timer->setTag(tag);
-			//timer->setTimerCallback(timerCallback);
+			timer->setTag(tag);
+			timer->setTimerCallback(timerCallback);
 			sch->scheduleSelector(schedule_selector(Timer::onTimer), timer, interval, false);
 			m_mapTimer[cbImp] = timer;
 		}

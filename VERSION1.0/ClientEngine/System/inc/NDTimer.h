@@ -24,8 +24,8 @@ public:
 
 class Timer : public CCObject
 {
-	//CC_PROPERTY(int, m_nTag, Tag)
-	//CC_PROPERTY(ITimerCallback*, m_TimerCallback, TimerCallback)
+	CC_SYNTHESIZE(int, m_nTag, Tag)
+	CC_SYNTHESIZE(ITimerCallback*, m_TimerCallback, TimerCallback)
 
 public:
 	Timer();
