@@ -9,7 +9,7 @@
 
 #include "UIEdit.h"
 #include "NDTargetEvent.h"
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	#include "IphoneInput.h"
 #endif
 

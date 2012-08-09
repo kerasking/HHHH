@@ -11,21 +11,22 @@
 #define _UI_EDIT_H_ZJH_
 
 #include "NDPicture.h"
-#include "CommonInput.h"
 #include "NDUINode.h"
+#include "..\..\UI\Platform\CommonInput.h"
 
 using namespace NDEngine;
 
-class CUIEdit :
-public NDUINode,
-public CInputBase
+class CUIEdit:
+	public NDUINode,
+	public CInputBase
 {
 	DECLARE_CLASS(CUIEdit)
 	CUIEdit();
 	~CUIEdit();
-	
+
 public:
-	void Initialization(); override
+
+	void Initialization();
 	
 	void SetText(const char* pszText);
 	const char* GetText();
@@ -46,8 +47,9 @@ public:
 	
 	bool IsTextLessMinLen();
 	bool IsTextMoreMaxLen();
-	
+
 private:
+
 	NDPicture*					m_picImage;
 	NDPicture*					m_picFocusImage;
 	IPlatformInput*				m_pPlatformInput;
@@ -57,15 +59,18 @@ private:
 	bool						m_bPassword;
 	bool						m_bEnableAjdustView;
 	bool						m_bRecacl;
-	
+
 private:
+
 	void InitInput();
 	
 protected:
+
 	void draw(); override
 	void SetVisible(bool visible); override
 	
 protected:
+
 	bool OnInputReturn(CInputBase* base); override
 	bool OnInputTextChange(CInputBase* base, const char* inputString); override
     void OnInputFinish(CInputBase* base); override

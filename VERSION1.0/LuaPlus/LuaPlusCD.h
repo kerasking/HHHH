@@ -97,10 +97,10 @@ namespace LPCD
 		lua_pop(L, 1);
 		
 		lua_boxpointer(L, classptr);
-		
+
 		//lua_getglobal(L, metaname.c_str());
 		lua_getfield(L, LUA_REGISTRYINDEX, metaname.c_str());
-		
+
 		lua_setmetatable(L, -2);
 		
 		return;

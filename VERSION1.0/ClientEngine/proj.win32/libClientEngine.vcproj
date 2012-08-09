@@ -751,6 +751,10 @@
 						RelativePath="..\UI\import\inc\UIData.h"
 						>
 					</File>
+					<File
+						RelativePath="..\UI\inc\UIEdit.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="src"
@@ -765,6 +769,10 @@
 					</File>
 					<File
 						RelativePath="..\UI\import\src\UIData.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\UI\src\UIEdit.cpp"
 						>
 					</File>
 				</Filter>
