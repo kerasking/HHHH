@@ -6,6 +6,7 @@
 #include "GameData.h"
 #include "ScriptCommon.h"
 #include "ScriptGlobalEvent.h"
+#include "ScriptUI.h"
 
 namespace NDEngine
 {
@@ -101,12 +102,16 @@ namespace NDEngine
 		NDScriptGameData* pkData = new NDScriptGameData;
 		ScriptGlobalEvent* pkGlobalEvent = new ScriptGlobalEvent;
 		ScriptObjectCommon* pkCommon = new ScriptObjectCommon;
+		ScriptObjectUI* pkScriptUI = new ScriptObjectUI;
 
 		pkData->Load();
 		pkCommon->OnLoad();
 		pkGlobalEvent->OnLoad();
+		pkScriptUI->OnLoad();
 
 		kScriptManager.Load();
+
+		ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
 
 		return true;
 	}

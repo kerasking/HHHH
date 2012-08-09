@@ -50,10 +50,18 @@ bool RegisterGlobalEventHandler(int nEvent, const char* funcname, LuaObject func
 			  funcname);
 		return false;
 	}
-    
-    ScriptMgrObj.DebugOutPut("reg global envent [%d][%s] sucess!", 
-                             nEvent,
-                             funcname);
+
+	/***
+	* 临时性注释 郭浩
+	* begin
+	* 这里会宕掉
+	*/
+//     ScriptMgrObj.DebugOutPut("reg global envent [%d][%s] sucess!", 
+//                              nEvent,
+//                              funcname);
+	/***
+	* end
+	*/
 	
 	mapGlobalEventHandler.insert(GLOBALEVENTVT(GLOBALEVENT(nEvent), func));
 	
@@ -70,7 +78,7 @@ void ScriptGlobalEvent::OnEvent(GLOBALEVENT eEvent, int param1, int param2, int 
 {
 	std::pair<GLOBALEVENTCIT, GLOBALEVENTCIT> range;
 	range = mapGlobalEventHandler.equal_range(eEvent);
-	
+
 	for (GLOBALEVENTCIT i = range.first; i != range.second; i++) 
 	{
 		LuaObject fun = i->second;

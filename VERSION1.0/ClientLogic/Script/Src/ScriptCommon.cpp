@@ -13,7 +13,6 @@
 #include "NDPath.h"
 
 using namespace LuaPlus;
-
 using namespace NDEngine;
 
 int LuaLogInfo(LuaState* state)
@@ -25,7 +24,7 @@ int LuaLogInfo(LuaState* state)
 	{
 		ScriptMgrObj.DebugOutPut("%s", str.GetString());
 	}
-	
+
 	return 0;
 }
 
@@ -38,7 +37,7 @@ int LuaLogError(LuaState* state)
 	{
 		ScriptMgrObj.DebugOutPut("Error:%s", str.GetString());
 	}
-	
+
 	return 0;
 }
 
@@ -56,22 +55,22 @@ int DoFile(LuaState* state)
 
 	return nRet;
 }
-	
+
 int LeftShift(int x, int y)
 {
 	return x<<y;
 }	
-	
+
 int RightShift(int x, int y)
 {
 	return x>>y;
 }
-	
+
 int BitwiseAnd(int x, int y)
 {
 	return x&y;
 }
-    
+
 ////////////////////////////////////////////////////////////
 //std::string g_strTmpWords;
 ////////////////////////////////////////////////////////////
