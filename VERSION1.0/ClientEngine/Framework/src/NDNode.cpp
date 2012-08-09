@@ -310,6 +310,11 @@ namespace NDEngine
 	
 	NDNode* NDNode::GetChild(int tag)
 	{
+		if (87 == tag)
+		{
+			CCLog("’“µΩ87");
+		}
+		
 		std::vector<NDNode*>::iterator iter;
 		for (iter = m_childrenList.begin(); iter != m_childrenList.end(); iter++) 
 		{

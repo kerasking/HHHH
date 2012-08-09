@@ -15,7 +15,7 @@
 
 class NDBaseNode : public cocos2d::CCNode 
 {
-	CC_SYNTHESIZE(NDEngine::NDNode*, m_ndNode, NDNode) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	CC_SYNTHESIZE(NDEngine::NDNode*, m_ndNode, NDNode)
 
 public:
 	NDBaseNode(void);

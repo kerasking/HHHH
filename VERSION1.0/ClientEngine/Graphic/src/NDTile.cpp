@@ -511,7 +511,7 @@ void NDTile::drawSubRect(CGRect rect)
 		*pc++ = coordinates[5];			
 	}
 	
-	float vertices[12];
+	float vertices[12] = {0.0f};
 	
 	CGRect drawRect;
 	drawRect.origin.x		= m_DrawRect.origin.x + rect.origin.x * m_DrawRect.size.width;

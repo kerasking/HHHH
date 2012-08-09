@@ -62,8 +62,10 @@ bool RegisterGlobalEventHandler(int nEvent, const char* funcname, LuaObject func
 	/***
 	* end
 	*/
+
+	GLOBALEVENT eEvent = (GLOBALEVENT)nEvent;
 	
-	mapGlobalEventHandler.insert(GLOBALEVENTVT(GLOBALEVENT(nEvent), func));
+	mapGlobalEventHandler.insert(GLOBALEVENTVT(eEvent, func));
 	
 	return true;
 }
