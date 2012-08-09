@@ -58,17 +58,17 @@ int DoFile(LuaState* state)
 
 int LeftShift(int x, int y)
 {
-	return x<<y;
+	return x << y;
 }	
 
 int RightShift(int x, int y)
 {
-	return x>>y;
+	return x >> y;
 }
 
 int BitwiseAnd(int x, int y)
 {
-	return x&y;
+	return x & y;
 }
 
 ////////////////////////////////////////////////////////////
@@ -78,15 +78,10 @@ int BitwiseAnd(int x, int y)
 void ScriptObjectCommon::OnLoad()
 {
 	ETLUAFUNC("LuaLogInfo", LuaLogInfo);
-    	
-    	ETLUAFUNC("LuaLogError", LuaLogError);
-    	
-    	ETLUAFUNC("DoFile", DoFile);
-    	
-    	ETCFUNC("LeftShift", LeftShift)
-    	
-    	ETCFUNC("RightShift", RightShift)
-    	
-    	ETCFUNC("BitwiseAnd", BitwiseAnd)
+	ETLUAFUNC("LuaLogError", LuaLogError);
+	ETLUAFUNC("DoFile", DoFile);
+	ETCFUNC("LeftShift", LeftShift)
+	ETCFUNC("RightShift", RightShift)
+	ETCFUNC("BitwiseAnd", BitwiseAnd)
         //ETCFUNC("GetRandomWords", GetRandomWords);
 }

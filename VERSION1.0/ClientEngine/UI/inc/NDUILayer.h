@@ -75,13 +75,13 @@ namespace NDEngine
 		void Initialization(); override
 
 		void SetBackgroundImage(const char* imageFile);	
-		
+
 		void SetBackgroundImage(NDPicture *pic, bool bClearOnFree = false);
-		
+
 		void SetBackgroundImageLua(NDPicture *pic);
-		
+
 		void SetBackgroundFocusImage(NDPicture *pic, bool bClearOnFree = false);
-		
+
 		void SetBackgroundFocusImageLua(NDPicture *pic);
 
 		void SetBackgroundColor(cocos2d::ccColor4B color);

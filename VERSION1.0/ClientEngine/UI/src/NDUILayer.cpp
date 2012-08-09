@@ -103,7 +103,7 @@ namespace NDEngine
 		layer->setIsTouchEnabled(true);
 		
 		this->SetFrameRect(CGRectZero);
-	}	
+	}
 	void NDUILayer::SetTouchEnabled(bool bEnabled)
 	{
 		NDAsssert(m_ccNode != NULL);

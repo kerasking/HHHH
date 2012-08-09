@@ -76,7 +76,8 @@ unsigned int CIDFactory::GetID()
 			NDLog("id factory roll");
 			//roll
 			m_uiCurID = 1;
-		}else
+		}
+		else
 		{
 			m_uiCurID++;
 		}
