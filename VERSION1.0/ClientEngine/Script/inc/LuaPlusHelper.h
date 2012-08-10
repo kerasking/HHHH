@@ -68,20 +68,20 @@ class LuaConstructor
 {
 private:
 
-// 	static	int ConstructorHelper(LuaState* state, Object* pObj)
-// 	{
-// 		std::string metaname("MetaClass_");
-// 	#ifdef __APPLE__
-// 		metaname += typeid(Object).name();
-// 	#else
-// 		metaname += typeid(Object).raw_name();
-// 	#endif
-// 
-// 		LuaObject obj = state->BoxPointer(pObj);
-// 		obj.SetMetaTable(state->GetRegistry()[metaname.c_str()]);
-// 		obj.Push();
-// 		return 1;
-// 	}
+ 	static	int ConstructorHelper(LuaState* state, Object* pObj)
+ 	{
+ 		std::string metaname("MetaClass_");
+ 	#ifdef __APPLE__
+ 		metaname += typeid(Object).name();
+ 	#else
+ 		metaname += typeid(Object).raw_name();
+ 	#endif
+ 
+ 		LuaObject obj = state->BoxPointer(pObj);
+ 		obj.SetMetaTable(state->GetRegistry()[metaname.c_str()]);
+ 		obj.Push();
+ 		return 1;
+ 	}
 
 public:
 	static int ConstructorStruct(LuaState* state)
@@ -95,13 +95,13 @@ public:
 		
 		LuaObject obj = state->NewUserData(sizeof(Object)); ///< ´Ë´¦½øÐÐ³¢ÊÔÐÔÐÞ¸Ä ¹ùºÆ
 		obj.SetMetaTable(state->GetRegistry()[metaname.c_str()]);
-		//obj.Push();	///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		obj.Push();	///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		return 1;
 	}
 
 	static	int Constructor(LuaState* state)
 	{
-		return 0;//ConstructorHelper(state, new Object());  ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		return ConstructorHelper(state, new Object());  ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	}
 
 	template<typename A1>
@@ -110,7 +110,7 @@ public:
 		LuaObject	obj1 = LuaObject(state, 1);
 		LuaConvert	a1(obj1);
 		
-		return 0;//ConstructorHelper(state, new Object((A1)a1) ); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		return ConstructorHelper(state, new Object((A1)a1) ); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	}
 
 	template<typename A1, typename A2>
@@ -121,7 +121,7 @@ public:
 		LuaConvert	a1(obj1);
 		LuaConvert	a2(obj2);
 		
-		return 0;//ConstructorHelper(state, new Object((A1)a1, (A2)a2) ); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		return ConstructorHelper(state, new Object((A1)a1, (A2)a2) ); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	}
 
 	template<typename A1, typename A2, typename A3>
@@ -287,11 +287,11 @@ public:
 		static bool support = false;
 		if (!support)
 		{
-//			LPCD::MetaTable_IntegratePropertySupport(metaTableObj); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			LPCD::MetaTable_IntegratePropertySupport(metaTableObj); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 			support = true;
 		}
 		
-//		LPCD::PropertyCreate(metaTableObj, name, var); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		LPCD::PropertyCreate(metaTableObj, name, var); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		
 		return *this;
 	}

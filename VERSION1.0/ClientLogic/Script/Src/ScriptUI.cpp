@@ -1201,7 +1201,7 @@ void CloseLoadBar()
 * 临时性注释 郭浩
 * end
 */
-// 		ETCFUNC("ccc4",				ccc4); ///< 临时性注释 郭浩
+ 		ETCFUNC("ccc4",				ccc4); ///< 临时性注释 郭浩
 // 		ETCFUNC("ccc3",				ccc3); ///< 临时性注释 郭浩
 		ETCFUNC("ShowLoadBar",		ShowLoadBar);
 		ETCFUNC("CloseLoadBar",		CloseLoadBar);

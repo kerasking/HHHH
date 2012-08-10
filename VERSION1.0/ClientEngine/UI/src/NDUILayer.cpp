@@ -233,6 +233,10 @@ namespace NDEngine
 			}
 			else
 			{
+				ccColor4B kColor = {0};
+				kColor.r = 255;
+				kColor.a = 255;
+				m_backgroudColor = kColor;
 				DrawRecttangle(scrRect, m_backgroudColor);
 				
 				if (m_backgroudTexture) 

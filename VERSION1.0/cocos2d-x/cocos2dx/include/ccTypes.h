@@ -92,7 +92,8 @@ ccc4f(const GLubyte r, const GLubyte g, const GLubyte b, const GLubyte o)
 /** RGBA color composed of 4 floats
 @since v0.8
 */
-typedef struct _ccColor4F {
+typedef struct _ccColor4F
+{
 	GLfloat r;
 	GLfloat g;
 	GLfloat b;

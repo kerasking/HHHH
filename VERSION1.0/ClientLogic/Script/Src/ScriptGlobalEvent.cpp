@@ -10,6 +10,10 @@
 #include "ScriptGlobalEvent.h"
 #include "ScriptInc.h"
 //#include <multimap.h> ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+#include "NDDirector.h"
+#include "NDConstant.h"
+#include "NDUIImage.h"
+#include "NDPicture.h"
 
 using namespace NDEngine;
 using namespace LuaPlus;
@@ -91,4 +95,15 @@ void ScriptGlobalEvent::OnEvent(GLOBALEVENT eEvent, int param1, int param2, int 
 		LuaFunction<void> luaFunc(fun);
 		luaFunc(param1, param2, param3);
 	}
+
+// 	NDScene* pkScene = NDDirector::DefaultDirector()->GetSceneByTag(SMLOGINSCENE_TAG);
+// 	pkScene->RemoveAllChildren(true);
+// 
+// 	NDPicture* pkPic = new NDPicture;
+// 	NDUIImage* pkImage = new NDUIImage;
+// 
+// 	pkPic->Initialization("8.png");
+// 	pkImage->SetPicture(pkPic);
+// 
+// 	pkScene->AddChild(pkImage);
 }

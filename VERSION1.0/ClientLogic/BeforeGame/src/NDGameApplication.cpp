@@ -7,6 +7,7 @@
 #include "ScriptCommon.h"
 #include "ScriptGlobalEvent.h"
 #include "ScriptUI.h"
+#include "ScriptGameLogic.h"
 
 namespace NDEngine
 {
@@ -99,12 +100,14 @@ namespace NDEngine
 		pkDirector->Initialization();
 		pkDirector->RunScene(CSMLoginScene::Scene());
 
+		ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
 		NDScriptGameData* pkData = new NDScriptGameData;
 		ScriptGlobalEvent* pkGlobalEvent = new ScriptGlobalEvent;
 		ScriptObjectCommon* pkCommon = new ScriptObjectCommon;
 		ScriptObjectUI* pkScriptUI = new ScriptObjectUI;
 
 		pkData->Load();
+		pkLogic->OnLoad();
 		pkCommon->OnLoad();
 		pkGlobalEvent->OnLoad();
 		pkScriptUI->OnLoad();
