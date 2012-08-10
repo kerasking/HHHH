@@ -25,7 +25,7 @@ namespace NDEngine
 			NDPath::SetResPath("../../SMYS_CLIENT_IPHONE/SimplifiedChineseRes/res/");
 			CCEGLView * pMainWnd = new CCEGLView();
 			CC_BREAK_IF(! pMainWnd
-				|| ! pMainWnd->Create(L"大话龙将", 480, 320));
+				|| ! pMainWnd->Create(L"大话龙将", 960,640));
 
 #endif  // CC_PLATFORM_WIN32
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
