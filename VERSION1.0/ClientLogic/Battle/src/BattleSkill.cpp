@@ -14,7 +14,8 @@
 
 using namespace std;
 
-BattleSkill::BattleSkill() {
+BattleSkill::BattleSkill()
+{
 	type = SKILL_TYPE_NONE;// 技能类型
 	
 	lvRequire = 0;

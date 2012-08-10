@@ -168,15 +168,6 @@ namespace NDEngine
 	
 	void NDNode::AddChild(NDNode* node, int z, int tag)
 	{
-		CCMenuItemImage* pkItem = CCMenuItemImage::itemFromNormalImage("avatar1.png",
-			"avatar2.png",m_ccNode,menu_selector(NDNode::TestCallBack));
-		CCMenu* pkMenu = CCMenu::menuWithItem(pkItem);
-
-		pkItem->setPosition(ccp(100,100));
-		pkMenu->setPosition(ccp(100,100));
-
-		m_ccNode->addChild(pkMenu,3);
-
 		NDAsssert(m_ccNode != NULL && node != NULL && node->m_ccNode != NULL);
 		NDAsssert(node != this);
 
