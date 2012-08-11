@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName).win32"
-			IntermediateDirectory="$(ConfigurationName).win32"
+			OutputDirectory="..\..\..\Bin\$(ConfigurationName)"
+			IntermediateDirectory="..\..\..\Obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			>
@@ -61,19 +61,19 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
-				CommandLine="if not exist &quot;$(OutDir)&quot; mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.*&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+				CommandLine="if not exist &quot;..\..\..\Lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;if not exist &quot;..\..\..\Bin\$(ConfigurationName)&quot; mkdir &quot;..\..\..\Bin\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.lib&quot; &quot;..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.dll&quot; &quot;..\..\..\Bin\$(ConfigurationName)&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libEGL.lib libgles_cm.lib libxml2.lib libzlib.lib libpng.lib libjpeg.lib libiconv.lib pthreadVCE2.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\Lib\$(ConfigurationName)&quot;"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames=" "
 				GenerateDebugInformation="true"
 				SubSystem="2"
-				ImportLibrary="$(TargetDir)$(TargetName).lib"
+				ImportLibrary="..\..\..\Lib\$(ConfigurationName)\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -101,8 +101,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName).win32"
-			IntermediateDirectory="$(ConfigurationName).win32"
+			OutputDirectory="..\..\..\Bin\$(ConfigurationName)"
+			IntermediateDirectory="..\..\..\Obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			>
@@ -141,20 +141,20 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
-				CommandLine="if not exist &quot;$(OutDir)&quot; mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.*&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+				CommandLine="if not exist &quot;..\..\..\Lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;if not exist &quot;..\..\..\Bin\$(ConfigurationName)&quot; mkdir &quot;..\..\..\Bin\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.lib&quot; &quot;..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.dll&quot; &quot;..\..\..\Bin\$(ConfigurationName)&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libEGL.lib libgles_cm.lib libxml2.lib libzlib.lib libpng.lib libjpeg.lib libiconv.lib pthreadVCE2.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\Lib\$(ConfigurationName)&quot;"
 				IgnoreDefaultLibraryNames=" "
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				ImportLibrary="$(TargetDir)$(TargetName).lib"
+				ImportLibrary="..\..\..\Lib\$(ConfigurationName)\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
