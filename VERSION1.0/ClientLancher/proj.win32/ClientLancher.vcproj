@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcocos2d.lib LuaPlus.lib libClientEngine.lib libClientLogic.lib libiconv.lib libcurl_imp.lib libjpeg.lib TinyXML.lib libzlib.lib libEGL.lib libgles_cm.lib opengl32.lib"
+				AdditionalDependencies="libcocos2d.lib libLuaPlus.lib libClientEngine.lib libClientLogic.lib libiconv.lib libcurl_imp.lib libjpeg.lib TinyXML.lib libzlib.lib libEGL.lib libgles_cm.lib opengl32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(SolutionDir)$(ConfigurationName).win32"
 				GenerateDebugInformation="true"

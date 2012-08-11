@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="libcocos2d.lib LuaPlus.lib"
+				AdditionalDependencies="libcocos2d.lib libLuaPlus.lib"
 				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;"
 			/>
 			<Tool
