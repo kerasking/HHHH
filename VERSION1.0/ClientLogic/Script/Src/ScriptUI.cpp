@@ -107,8 +107,7 @@ GetButton(NDNode* pNode, int tag)
 	return (NDUIButton*)btn;
 }
 
-NDUILayer*							
-GetUiLayer(NDNode* pNode, int tag)
+NDUILayer* GetUiLayer(NDNode* pNode, int tag)
 {
 	if (!pNode)
 	{
@@ -1201,8 +1200,8 @@ void CloseLoadBar()
 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 * end
 */
- 		ETCFUNC("ccc4",				ccc4); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-// 		ETCFUNC("ccc3",				ccc3); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+ 		ETCFUNC("ccc4",				ccc4);
+		ETCFUNC("ccc3",				ccc3);
 		ETCFUNC("ShowLoadBar",		ShowLoadBar);
 		ETCFUNC("CloseLoadBar",		CloseLoadBar);
 		ETCFUNC("GetSMGameScene",	GetSMGameScene);
