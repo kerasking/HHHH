@@ -273,7 +273,9 @@ bool CCTexture2D::initWithImage(CCImage * uiImage, ccResolutionType resolution)
 	// always load premultiplied images
 	return initPremultipliedATextureWithImage(uiImage, POTWide, POTHigh);
 }
-bool CCTexture2D::initPremultipliedATextureWithImage(CCImage *image, unsigned int POTWide, unsigned int POTHigh)
+bool CCTexture2D::initPremultipliedATextureWithImage(CCImage *image,
+													 unsigned int POTWide,
+													 unsigned int POTHigh)
 {
 	unsigned char*			data = NULL;
 	unsigned char*			tempData =NULL;
@@ -308,7 +310,8 @@ bool CCTexture2D::initPremultipliedATextureWithImage(CCImage *image, unsigned in
 
 	imageSize = CCSizeMake((float)(image->getWidth()), (float)(image->getHeight()));
 
-	switch(pixelFormat) {          
+	switch(pixelFormat)
+	{          
 		case kCCTexture2DPixelFormat_RGBA8888:
 		case kCCTexture2DPixelFormat_RGBA4444:
 		case kCCTexture2DPixelFormat_RGB5A1:
@@ -367,7 +370,8 @@ bool CCTexture2D::initPremultipliedATextureWithImage(CCImage *image, unsigned in
 
 	// Repack the pixel data into the right format
 
-	if(pixelFormat == kCCTexture2DPixelFormat_RGB565) {
+	if(pixelFormat == kCCTexture2DPixelFormat_RGB565) 
+	{
 		//Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRRGGGGGGBBBBB"
 		tempData = new unsigned char[POTHigh * POTWide * 2];
 		inPixel32 = (unsigned int*)data;
@@ -385,7 +389,8 @@ bool CCTexture2D::initPremultipliedATextureWithImage(CCImage *image, unsigned in
 		delete [] data;
 		data = tempData;
 	}
-	else if (pixelFormat == kCCTexture2DPixelFormat_RGBA4444) {
+	else if (pixelFormat == kCCTexture2DPixelFormat_RGBA4444)
+	{
 		//Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRGGGGBBBBAAAA"
 		tempData = new unsigned char[POTHigh * POTWide * 2];
 		inPixel32 = (unsigned int*)data;
@@ -404,7 +409,8 @@ bool CCTexture2D::initPremultipliedATextureWithImage(CCImage *image, unsigned in
 		delete [] data;
 		data = tempData;
 	}
-	else if (pixelFormat == kCCTexture2DPixelFormat_RGB5A1) {
+	else if (pixelFormat == kCCTexture2DPixelFormat_RGB5A1)
+	{
 		//Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRRGGGGGBBBBBA"
 		tempData = new unsigned char[POTHigh * POTWide * 2];
 		inPixel32 = (unsigned int*)data;

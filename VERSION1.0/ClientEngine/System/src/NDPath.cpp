@@ -59,7 +59,8 @@ namespace NDEngine
 	
 	std::string NDPath::GetResPath()
 	{
-		return NDPath_ResPath;
+		std::string strPath = "./SimplifiedChineseRes/res/";
+		return strPath;
 // #ifdef TRADITION
 // 		NSString *path = [NSString stringWithFormat:@"%@/TraditionalChineseRes/res/", [[NSBundle mainBundle] resourcePath]];
 // #else

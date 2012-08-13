@@ -11,16 +11,8 @@ namespace NDEngine
 {
 	IMPLEMENT_CLASS(NDScene, NDNode)
 	
-	
-	NDScene::NDScene()
-	{	
-		
-	}
-	
-	NDScene::~NDScene()
-	{
-		
-	}
+	NDScene::NDScene(){}
+	NDScene::~NDScene(){}
 	
 	NDScene* NDScene::Scene()
 	{
