@@ -19,7 +19,6 @@ IMPLEMENT_CLASS(NDCombinePicture, NDObject)
 NDCombinePicture::NDCombinePicture()
 {
 	m_rectLast = CGRectZero;
-	
 	m_sizeMax = CGSizeZero;
 }
 
@@ -78,7 +77,9 @@ void NDCombinePicture::DrawInRect(CGRect rect)
 	}
 }
 
-CGPoint NDCombinePicture::caclNext(CGPoint origin, CombintPictureAligment aligment, CGSize originSize, CGSize selfSize)
+CGPoint NDCombinePicture::caclNext(CGPoint origin,
+								   CombintPictureAligment aligment,
+								   CGSize originSize, CGSize selfSize)
 {
 	CGPoint res = origin;
 	
@@ -136,4 +137,3 @@ void NDCombinePicture::Clear()
 	
 	m_vecCombinePic.clear();
 }
-

@@ -38,10 +38,16 @@ namespace cocos2d {
  */
 //implementation CCMotionStreak
 
-CCMotionStreak * CCMotionStreak::streakWithFade(float fade, float seg, const char *imagePath, float width, float length, const ccColor4B& color)
+CCMotionStreak * CCMotionStreak::streakWithFade(float fade,
+												float seg, 
+												const char *imagePath,
+												float width,
+												float length,
+												const ccColor4B& color)
 {
 	CCMotionStreak *pRet = new CCMotionStreak();
-	if(pRet && pRet->initWithFade(fade, seg, imagePath, width, length, color))
+	if(pRet && pRet->initWithFade(fade, seg, imagePath,
+		width, length, color))
 	{
 		pRet->autorelease();
 		return pRet;
@@ -50,7 +56,10 @@ CCMotionStreak * CCMotionStreak::streakWithFade(float fade, float seg, const cha
 	return NULL;
 }
 
-bool CCMotionStreak::initWithFade(float fade, float seg, const char *imagePath, float width, float length, const ccColor4B& color)
+bool CCMotionStreak::initWithFade(float fade, float seg,
+								  const char *imagePath,
+								  float width, float length, 
+								  const ccColor4B& color)
 {
 	m_fSegThreshold = seg;
 	m_fWidth = width;

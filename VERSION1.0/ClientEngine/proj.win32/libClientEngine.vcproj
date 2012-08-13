@@ -285,6 +285,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Graphic\inc\NDCombinePicture.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Graphic\inc\NDFrame.h"
 					>
 				</File>
@@ -334,6 +338,10 @@
 				</File>
 				<File
 					RelativePath="..\Graphic\src\NDColorPool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Graphic\src\NDCombinePicture.cpp"
 					>
 				</File>
 				<File

@@ -137,11 +137,11 @@ namespace NDEngine
 	{
 		NDUINode::Initialization();
 		
-		//m_title = new NDUILabel();
-//		m_title->Initialization();
-//		m_title->SetFontSize(FONT_SIZE);
-//		m_title->SetTextAlignment(LabelTextAlignmentCenter);
-//		this->AddChild(m_title);
+		m_title = new NDUILabel();
+		m_title->Initialization();
+		m_title->SetFontSize(FONT_SIZE);
+		m_title->SetTextAlignment(LabelTextAlignmentCenter);
+		this->AddChild(m_title);
 	}
 	
 	void NDUIButton::SetImageLua(NDPicture* pic)
@@ -203,7 +203,8 @@ namespace NDEngine
 		m_clearDownPicOnFree = clearPicOnFree;
 	}
 	
-	void NDUIButton::SetTouchDownCombineImage(NDCombinePicture* combinepic, bool useCustomRect, CGRect customRect, bool clearPicOnFree)
+	void NDUIButton::SetTouchDownCombineImage(NDCombinePicture* combinepic, 
+		bool useCustomRect, CGRect customRect, bool clearPicOnFree)
 	{
 		if (m_clearDownPicOnFree) 
 		{
@@ -262,7 +263,9 @@ namespace NDEngine
 		this->SetFocusImage(pic, false, CGRectZero, true);
 	}
 	
-	void NDUIButton::SetFocusImage(NDPicture *pic, bool useCustomRect/*= false*/, CGRect customRect/*= CGRectZero*/, bool clearPicOnFree/* = false*/)
+	void NDUIButton::SetFocusImage(NDPicture *pic, 
+		bool useCustomRect/*= false*/, CGRect customRect/*= CGRectZero*/, 
+		bool clearPicOnFree/* = false*/)
 	{
 		if (m_ClearFocusImageOnFree && m_focusImage)
 			delete m_focusImage;
@@ -273,9 +276,10 @@ namespace NDEngine
 		m_ClearFocusImageOnFree		= clearPicOnFree;
 	}
 	
-	void NDUIButton::SetTitle(const char* title, bool bAutoScroll/*=true*/, bool bForce/*=false*/, unsigned int leftWidth/*=0*/, unsigned int rightWidth/*=0*/)
+	void NDUIButton::SetTitle(const char* title, bool bAutoScroll/*=true*/,
+		bool bForce/*=false*/, unsigned int leftWidth/*=0*/, unsigned int rightWidth/*=0*/)
 	{
-		//m_title->SetText(title);
+		m_title->SetText(title);
 		m_strTitle = title;
 		
 		std::string::size_type pos;
@@ -295,7 +299,7 @@ namespace NDEngine
 	void NDUIButton::SetTitleLua(const char* title)
 	{	
 		//NSString *str = [NSString stringWithCString:title];
-		return this->SetTitle(title);
+		SetTitle(title);
 	}
 	
 	std::string NDUIButton::GetTitle()
@@ -306,7 +310,7 @@ namespace NDEngine
 	
 	void NDUIButton::SetFontSize(unsigned int fontSize)
 	{
-		//m_title->SetFontSize(fontSize);
+		m_title->SetFontSize(fontSize);
 		m_uiTitleFontSize = fontSize;
 		m_bNeedSetTitle = true;
 	}
@@ -321,7 +325,7 @@ namespace NDEngine
 	void NDUIButton::SetFrameRect(CGRect rect)
 	{
 		NDUINode::SetFrameRect(rect);
-		//m_title->SetFrameRect(CGRectMake(0, 0, rect.size.width, rect.size.height));
+		m_title->SetFrameRect(CGRectMake(0, 0, rect.size.width, rect.size.height));
 	}
 	
 	void NDUIButton::draw()
@@ -363,7 +367,7 @@ namespace NDEngine
 							m_picBG->DrawInRect(scrRect);					
 					}
 					else if (m_combinePicBG)
-						return;//m_combinePicBG->DrawInRect(scrRect); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+						m_combinePicBG->DrawInRect(scrRect);
 					else
 						DrawRecttangle(scrRect, m_backgroundColor);
 					
@@ -503,7 +507,7 @@ namespace NDEngine
 					{
 						if (m_picTouchBG) m_picTouchBG->DrawInRect(scrRect);
 						
-						//if (m_combinePicTouchBG) m_combinePicTouchBG->DrawInRect(scrRect); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+						if (m_combinePicTouchBG) m_combinePicTouchBG->DrawInRect(scrRect);
 						
 						if (m_touchDownStatus == TouchDownImage) 
 						{
@@ -524,21 +528,13 @@ namespace NDEngine
 							{
 								if (m_touchDownImgUseCustomRect) 
 								{
-									/***
-									* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-									* begin
-									*/
-									// 									m_combinepicTouchDownImg->DrawInRect(CGRectMake(scrRect.origin.x + m_touchDownImgCustomRect.origin.x, 
-// 																			scrRect.origin.y + m_touchDownImgCustomRect.origin.y, 
-// 																			m_touchDownImgCustomRect.size.width, m_touchDownImgCustomRect.size.height));
-									/***
-									* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-									* end
-									*/
+ 									m_combinepicTouchDownImg->DrawInRect(CGRectMake(scrRect.origin.x + m_touchDownImgCustomRect.origin.x, 
+										scrRect.origin.y + m_touchDownImgCustomRect.origin.y, 
+										m_touchDownImgCustomRect.size.width, m_touchDownImgCustomRect.size.height));
 								}
 								else 
 								{
-									//m_combinepicTouchDownImg->DrawInRect(scrRect); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+									m_combinepicTouchDownImg->DrawInRect(scrRect);
 								}
 							}
 							
@@ -548,8 +544,7 @@ namespace NDEngine
 							if (m_image) 
 								m_image->SetColor(m_touchDownColor);
 							else if (m_combinepicImg)
-								return;
-								//m_combinepicImg->SetColor(m_touchDownColor); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+								m_combinepicImg->SetColor(m_touchDownColor);
 							else							
 								DrawRecttangle(scrRect, m_touchDownColor);
 						}						
@@ -561,7 +556,7 @@ namespace NDEngine
 						if (!m_touched || NULL == m_touchDownImage) 
 						{
 							if (m_image) m_image->SetColor(m_normalImageColor);							
-							//else if (m_combinepicImg) m_combinepicImg->SetColor(ccc4(255, 255, 255, 255)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+							else if (m_combinepicImg) m_combinepicImg->SetColor(ccc4(255, 255, 255, 255));
 						}	
 						
 						if (m_touchDownStatus != TouchDownImage || !m_touched || NULL == m_touchDownImage) 
@@ -580,7 +575,7 @@ namespace NDEngine
 									rect.size.height	+= 10 * fScale;
 								}
 								if (m_image) m_image->DrawInRect(rect);
-								//else if (m_combinepicImg) m_combinepicImg->DrawInRect(rect); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+								else if (m_combinepicImg) m_combinepicImg->DrawInRect(rect);
 							}
 							else 
 							{
@@ -595,7 +590,7 @@ namespace NDEngine
 								}
 								
 								if (m_image) m_image->DrawInRect(rect);
-								//else if (m_combinepicImg) m_combinepicImg->DrawInRect(rect); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+								else if (m_combinepicImg) m_combinepicImg->DrawInRect(rect);
 							}
 						}						
 					}
@@ -763,7 +758,9 @@ namespace NDEngine
 		this->SetBackgroundPicture(pic, touchPic, false, CGRectZero, true);
 	}
 	
-	void NDUIButton::SetBackgroundPicture(NDPicture *pic, NDPicture *touchPic /*= NULL*/, bool useCustomRect/* = false*/, CGRect customRect/* = CGRectZero*/, bool clearPicOnFree/* = false*/)
+	void NDUIButton::SetBackgroundPicture(NDPicture *pic, 
+		NDPicture *touchPic /*= NULL*/, bool useCustomRect/* = false*/, 
+		CGRect customRect/* = CGRectZero*/, bool clearPicOnFree/* = false*/)
 	{
 		if (m_bClearBgOnFree)
 		{
@@ -777,13 +774,14 @@ namespace NDEngine
 		m_backgroundCustomRect = customRect;
 		
 		m_picBG = pic;
-		
+
 		m_picTouchBG = touchPic;
-		
+
 		m_bClearBgOnFree = clearPicOnFree;
 	}
 	
-	void NDUIButton::SetBackgroundCombinePic(NDCombinePicture *combinepic, NDCombinePicture *touchCombinePic/* = NULL*/, bool clearPicOnFree/* = false*/)
+	void NDUIButton::SetBackgroundCombinePic(NDCombinePicture *combinepic,
+		NDCombinePicture *touchCombinePic/* = NULL*/, bool clearPicOnFree/* = false*/)
 	{
 		/*
 		if (m_bClearBgOnFree)

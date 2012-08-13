@@ -67,10 +67,13 @@ CCTexture2D::CCTexture2D()
 , m_uPixelsHigh(0)
 , m_uName(0)
 , m_fMaxS(0.0)
+, m_pszName(0)
 , m_fMaxT(0.0)
 , m_bHasPremultipliedAlpha(false)
 , m_bPVRHaveAlphaPremultiplied(true)
 {
+	m_pszName = new char[255];
+	memset(m_pszName,0,sizeof(char) * 255);
 }
 
 CCTexture2D::~CCTexture2D()
@@ -78,6 +81,11 @@ CCTexture2D::~CCTexture2D()
 #if CC_ENABLE_CACHE_TEXTTURE_DATA
     VolatileTexture::removeTexture(this);
 #endif
+
+	if (m_pszName)
+	{
+		delete [] m_pszName;
+	}
 
 	CCLOGINFO("cocos2d: deallocing CCTexture2D %u.", m_uName);
 	if(m_uName)
@@ -477,6 +485,13 @@ bool CCTexture2D::initWithString(const char *text, const CCSize& dimensions, CCT
     VolatileTexture::addStringTexture(this, text, dimensions, alignment, fontName, fontSize);
 #endif
 
+	if (0 == text || !*text)
+	{
+		return false;
+	}
+
+	strcpy(m_pszName,text);
+
 	CCImage image;
     CCImage::ETextAlign eAlign = (CCTextAlignmentCenter == alignment) ? CCImage::kAlignCenter
         : (CCTextAlignmentLeft == alignment) ? CCImage::kAlignLeft : CCImage::kAlignRight;
@@ -706,6 +721,11 @@ unsigned int CCTexture2D::bitsPerPixelForFormat()
 			break;
 	}
 	return ret;
+}
+
+const char* CCTexture2D::GetName() const
+{
+	return m_pszName;
 }
 
 }//namespace   cocos2d 

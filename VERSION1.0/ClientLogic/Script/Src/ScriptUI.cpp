@@ -89,8 +89,7 @@ GetLabel(NDNode* pNode, int tag)
 	return (NDUILabel*)lb;
 }
 
-NDUIButton*							
-GetButton(NDNode* pNode, int tag)
+NDUIButton* GetButton(NDNode* pNode, int tag)
 {
 	if (!pNode)
 	{
@@ -124,8 +123,7 @@ NDUILayer* GetUiLayer(NDNode* pNode, int tag)
 	return (NDUILayer*)layer;
 }
 
-NDUITableLayer*						
-GetTableLayer(NDNode* pNode, int tag)
+NDUITableLayer*	GetTableLayer(NDNode* pNode, int tag)
 {
 	if (!pNode)
 	{
@@ -142,8 +140,7 @@ GetTableLayer(NDNode* pNode, int tag)
 	return (NDUITableLayer*)tl;
 }
 
-NDUIImage*							
-GetImage(NDNode* pNode, int tag)
+NDUIImage* GetImage(NDNode* pNode, int tag)
 {	
 	if (!pNode)
 	{
@@ -160,8 +157,7 @@ GetImage(NDNode* pNode, int tag)
 	return (NDUIImage*)img;
 }
 
-NDUIContainerScrollLayer*			
-GetScrollLayer(NDNode* pNode, int tag)
+NDUIContainerScrollLayer* GetScrollLayer(NDNode* pNode, int tag)
 {
 	if (!pNode)
 	{
@@ -178,8 +174,7 @@ GetScrollLayer(NDNode* pNode, int tag)
 	return (NDUIContainerScrollLayer*)sl;
 }
 
-NDUIContainerHScrollLayer*			
-GetHScrollLayer(NDNode* pNode, int tag)
+NDUIContainerHScrollLayer* GetHScrollLayer(NDNode* pNode, int tag)
 {
 	if (!pNode)
 	{
@@ -196,8 +191,7 @@ GetHScrollLayer(NDNode* pNode, int tag)
 	return (NDUIContainerHScrollLayer*)hsl;
 }
 
-CUIScrollViewContainer*			
-GetScrollViewContainer(NDNode* pNode, int tag)
+CUIScrollViewContainer* GetScrollViewContainer(NDNode* pNode, int tag)
 {
 	if (!pNode)
 	{

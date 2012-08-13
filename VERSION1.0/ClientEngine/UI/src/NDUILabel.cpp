@@ -11,6 +11,7 @@
 #include "NDDirector.h"
 #include "ccMacros.h"
 #include "basedefine.h"
+#include "NDUIBaseGraphics.h"
 
 using namespace cocos2d;
 
@@ -108,7 +109,6 @@ namespace NDEngine
 		}
 		
 		m_fontSize = fontSize;	
-		
 	}
 	
 	void NDUILabel::SetTextAlignment(int alignment)
@@ -161,7 +161,9 @@ namespace NDEngine
 			
 			m_cutRect = CGRectZero;
 			m_cutRect.size.width = m_texture->getContentSizeInPixels().width;
-			m_cutRect.size.height = thisRect.size.height < m_texture->getContentSizeInPixels().height ? thisRect.size.height: m_texture->getContentSizeInPixels().height;
+			m_cutRect.size.height = thisRect.size.height <
+				m_texture->getContentSizeInPixels().height ?
+				thisRect.size.height: m_texture->getContentSizeInPixels().height;
 			
 			m_coordinates[0] = m_cutRect.origin.x / m_texture->getPixelsWide();
 			m_coordinates[1] = (m_cutRect.origin.y + m_cutRect.size.height) / m_texture->getPixelsHigh();
@@ -217,7 +219,9 @@ namespace NDEngine
 			if (m_hasFontBoderColor) 
 			{
 				for (int i = 0; i < 12; i++) 
-					m_verticesBoder[i] = m_vertices[i]+((i%3 == 2) ? 0.0f : 1.0f);
+				{
+					m_verticesBoder[i] = m_vertices[i] + ((i % 3 == 2) ? 0.0f : 1.0f);
+				}
 			}
 		}
 	}
@@ -248,10 +252,9 @@ namespace NDEngine
 			
 			if (m_texture) 
 			{
+				const char* pszTemp = m_texture->GetName();
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				
 				glBindTexture(GL_TEXTURE_2D, m_texture->getName());
-				
 				glTexCoordPointer(2, GL_FLOAT, 0, m_coordinates);
 				
 				if (m_hasFontBoderColor) 
@@ -270,11 +273,10 @@ namespace NDEngine
 				}								
 				
 				glBlendFunc( CC_BLEND_SRC, CC_BLEND_DST);
-			}	
-			
+			}
 			
 			// use to debug
-			/*
+			
 			CGRect scrRect = this->GetScreenRect();
 			
 			DrawLine(scrRect.origin, 
@@ -292,7 +294,7 @@ namespace NDEngine
 			DrawLine(ccpAdd(scrRect.origin, ccp(0, scrRect.size.height)),
 					 scrRect.origin,
 					 ccc4(0, 0, 0, 255), 1);
-			*/
+			
 		}		
 	}
 	
