@@ -28,17 +28,17 @@ namespace NDEngine
 	
 	NDUIButton::NDUIButton()
 	{
-		m_image = NULL;		
+		m_image = NULL;
 		m_touchDownImage = NULL;
 		m_rimImageLT = NULL;
 		m_rimImageRT = NULL;
 		m_rimImageLB = NULL;
 		m_rimImageRB = NULL;
 		m_focusImage = NULL;
-		
+
 		m_touchDownStatus = TouchDownNone,
 		m_focusStatus = FocusNone;
-		
+
 		//m_touchDownColor = ccc4(125, 125, 125, 125);
 		m_touchDownColor = ccc4(255, 255, 255, 255);
 		m_focusColor = ccc4(253, 253, 253, 0);
@@ -141,7 +141,7 @@ namespace NDEngine
 		m_title->Initialization();
 		m_title->SetFontSize(FONT_SIZE);
 		m_title->SetTextAlignment(LabelTextAlignmentCenter);
-		this->AddChild(m_title);
+		//this->AddChild(m_title,500);
 	}
 	
 	void NDUIButton::SetImageLua(NDPicture* pic)
@@ -319,7 +319,6 @@ namespace NDEngine
 	{
 		//return m_title->GetFontSize();
 		return m_uiTitleFontSize;
-		
 	}
 	
 	void NDUIButton::SetFrameRect(CGRect rect)
@@ -331,7 +330,7 @@ namespace NDEngine
 	void NDUIButton::draw()
 	{
 		NDUINode::draw();
-		
+
 		if (this->IsVisibled()) 
 		{
 			if (m_bNeedSetTitle) 
@@ -592,6 +591,7 @@ namespace NDEngine
 								if (m_image) 
 								{
 									m_image->DrawInRect(rect);
+									m_title->draw();
 								}
 								else if (m_combinepicImg)
 								{
@@ -663,7 +663,6 @@ namespace NDEngine
 			}
 			
 		}
-		
 	}
 	
 	
@@ -836,7 +835,8 @@ namespace NDEngine
 			m_scrtTitle->SetFontColor(m_colorTitle);
 			m_scrtTitle->SetScrollType(ScrollTextFromRightToLeft);
 			m_scrtTitle->SetScrollTextSpeed(60);
-			m_scrtTitle->SetFrameRect(CGRectMake(5, (rect.size.height-m_uiTitleFontSize)/2, rect.size.width, rect.size.height));
+			m_scrtTitle->SetFrameRect(CGRectMake(5, (rect.size.height-m_uiTitleFontSize) / 2, 
+				rect.size.width, rect.size.height));
 			m_scrtTitle->SetTouchEnabled(false);
 			// start pos
 			m_scrtTitle->SetStartPos(CGPointMake(5.0f, 0.0f));
@@ -845,7 +845,7 @@ namespace NDEngine
 			
 			m_bScrollTitle = true;
 		}
-		else 
+		else
 		{
 			SAFE_DELETE_NODE(m_scrtTitle);
 			SAFE_DELETE_NODE(m_title);
@@ -855,7 +855,9 @@ namespace NDEngine
 			m_title->SetText(m_strTitle.c_str());
 			m_title->SetFontColor(m_colorTitle);
 			m_title->SetTextAlignment(LabelTextAlignmentCenter);
-			m_title->SetFrameRect(CGRectMake(0+m_uiTitleLeftWidth, 0, rect.size.width-m_uiTitleLeftWidth-m_uiTitleRightWidth, rect.size.height));
+			m_title->SetFrameRect(CGRectMake(0 + m_uiTitleLeftWidth, 0, 
+				rect.size.width - m_uiTitleLeftWidth - m_uiTitleRightWidth,
+				rect.size.height));
 			this->AddChild(m_title);
 			
 			m_bScrollTitle = false;
@@ -928,8 +930,9 @@ namespace NDEngine
 			iStartX = 0;
 		}
 		
-		m_lbTitle1->SetFrameRect(CGRectMake(iStartX, (rect.size.height-size1.height)/2, size1.width, size1.height));
-		
-		m_lbTitle2->SetFrameRect(CGRectMake(iStartX+size1.width+m_uiTwoTitleInter, (rect.size.height-size2.height)/2, size2.width, size2.height));
+		m_lbTitle1->SetFrameRect(CGRectMake(iStartX, (rect.size.height - size1.height) / 2,
+			size1.width, size1.height));
+		m_lbTitle2->SetFrameRect(CGRectMake(iStartX+size1.width+m_uiTwoTitleInter,
+			(rect.size.height-size2.height)/2, size2.width, size2.height));
 	}
 }

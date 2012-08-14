@@ -121,7 +121,9 @@ namespace NDEngine
 				m_pageArrow->SetOptions(options);
 			}
 			else 
+			{
 				m_pageArrow->EnableDraw(false);
+			}
 		}		
 		
 		return uiNode;

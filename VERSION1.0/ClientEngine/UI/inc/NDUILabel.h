@@ -48,7 +48,7 @@ namespace NDEngine
 //		参数：fontColor颜色值rgba
 //		返回值：
 		void SetFontColor(cocos2d::ccColor4B fontColor);
-//		
+
 //		函数：GetFontColor
 //		作用：获取标签的字体颜色
 //		参数：无
@@ -84,7 +84,7 @@ namespace NDEngine
 //		参数：times渲染次数
 //		返回值：无
 		void SetRenderTimes(unsigned int times){ m_renderTimes = times; }
-//		
+
 //		函数：GetRenderTimes
 //		作用：获取标签的渲染次数
 //		参数：无
@@ -116,7 +116,7 @@ namespace NDEngine
 		bool m_hasFontBoderColor;
 		cocos2d::ccColor4B m_colorFontBoder;
 		
-		cocos2d::CCTexture2D *m_texture;
+		cocos2d::CCTexture2D* m_texture;
 		GLfloat m_vertices[12], m_verticesBoder[12];
 		GLfloat m_coordinates[8];
 		GLbyte m_colors[16], m_colorsBorder[16];

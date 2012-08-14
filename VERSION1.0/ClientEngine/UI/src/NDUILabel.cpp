@@ -50,25 +50,29 @@ namespace NDEngine
 	void NDUILabel::SetText(const char* text)
 	{
 		if (0 == strcmp(text, m_text.c_str())) 
+		{
 			return;
+		}
 		
 		m_needMakeTex = true;
 		m_needMakeCoo = true;
 		m_needMakeVer = true;
-		
-		m_text = text;		
+
+		m_text = text;
 	}
 	
 	void NDUILabel::OnFrameRectChange(CGRect srcRect, CGRect dstRect)
 	{
 		CGRect thisRect = this->GetFrameRect();		
-		if (srcRect.size.width != dstRect.size.width || srcRect.size.height != dstRect.size.height)
+		if (srcRect.size.width != dstRect.size.width ||
+			srcRect.size.height != dstRect.size.height)
 		{
 			m_needMakeTex = true;
 			m_needMakeCoo = true;
 			m_needMakeVer = true;
 		}
-		else if (srcRect.origin.x != dstRect.origin.x || srcRect.origin.y != dstRect.origin.y)
+		else if (srcRect.origin.x != dstRect.origin.x ||
+			srcRect.origin.y != dstRect.origin.y)
 		{
 			m_needMakeVer = true;
 		}
@@ -109,7 +113,7 @@ namespace NDEngine
 			m_needMakeVer = true;
 		}
 		
-		m_fontSize = fontSize;	
+		m_fontSize = fontSize;
 	}
 	
 	void NDUILabel::SetTextAlignment(int alignment)
@@ -165,10 +169,10 @@ namespace NDEngine
 			CGRect thisRect = this->GetFrameRect();	
 			
 			m_cutRect = CGRectZero;
-			m_cutRect.size.width = m_texture->getContentSizeInPixels().width + 70;
+			m_cutRect.size.width = m_texture->getContentSizeInPixels().width;
 			m_cutRect.size.height = thisRect.size.height <
 				m_texture->getContentSizeInPixels().height ?
-				thisRect.size.height + 70: m_texture->getContentSizeInPixels().height + 70;
+				thisRect.size.height: m_texture->getContentSizeInPixels().height;
 			
 			m_coordinates[0] = m_cutRect.origin.x / m_texture->getPixelsWide();
 			m_coordinates[1] = (m_cutRect.origin.y + m_cutRect.size.height) / m_texture->getPixelsHigh();
@@ -178,9 +182,9 @@ namespace NDEngine
 			m_coordinates[5] = m_cutRect.origin.y / m_texture->getPixelsHigh();
 			m_coordinates[6] = m_coordinates[2];
 			m_coordinates[7] = m_coordinates[5];
-		}		
+		}
 	}
-	
+
 	void NDUILabel::MakeVertices()
 	{
 		if (m_texture) 
@@ -201,7 +205,7 @@ namespace NDEngine
 				drawRect.origin.x = scrRect.origin.x + (scrRect.size.width - m_cutRect.size.width) / 2;
 				drawRect.origin.y = scrRect.origin.y + (scrRect.size.height - m_cutRect.size.height) / 2;
 			}
-			else 
+			else
 			{
 				drawRect.origin.x = scrRect.origin.x + scrRect.size.width - m_cutRect.size.width;	
 				//drawRect.origin.y = scrRect.origin.y + scrRect.size.height - m_cutRect.size.height;
@@ -261,7 +265,7 @@ namespace NDEngine
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				glBindTexture(GL_TEXTURE_2D, m_texture->getName());
 				glTexCoordPointer(2, GL_FLOAT, 0, m_coordinates);
-				
+
 				if (m_hasFontBoderColor) 
 				{
 					glVertexPointer(3, GL_FLOAT, 0, m_verticesBoder);
@@ -271,12 +275,12 @@ namespace NDEngine
 
 				glVertexPointer(3, GL_FLOAT, 0, m_vertices);
 				glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_colors);
-				
+
 				for (uint i = 0; i < m_renderTimes; i++) 
 				{
 					glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-				}								
-				
+				}
+
 				glBlendFunc( CC_BLEND_SRC, CC_BLEND_DST);
 			}
 			
@@ -284,23 +288,23 @@ namespace NDEngine
 			
 			CGRect scrRect = this->GetScreenRect();
 			
-			DrawLine(scrRect.origin, 
-					 ccpAdd(scrRect.origin, ccp(scrRect.size.width, 0)),
-					 ccc4(255, 0, 0, 255), 1);
-					
-			DrawLine(ccpAdd(scrRect.origin, ccp(scrRect.size.width, 0)),
-					 ccpAdd(scrRect.origin, ccp(scrRect.size.width, scrRect.size.height)),
-					 ccc4(255, 0, 0, 255), 1);
-					 
-			DrawLine(ccpAdd(scrRect.origin, ccp(scrRect.size.width, scrRect.size.height)),
-					 ccpAdd(scrRect.origin, ccp(0, scrRect.size.height)),
-					 ccc4(255, 0, 0, 255), 1);
-					 
-			DrawLine(ccpAdd(scrRect.origin, ccp(0, scrRect.size.height)),
-					 scrRect.origin,
-					 ccc4(255, 0, 0, 255), 1);
+// 			DrawLine(scrRect.origin, 
+// 					 ccpAdd(scrRect.origin, ccp(scrRect.size.width, 0)),
+// 					 ccc4(255, 0, 0, 255), 1);
+// 					
+// 			DrawLine(ccpAdd(scrRect.origin, ccp(scrRect.size.width, 0)),
+// 					 ccpAdd(scrRect.origin, ccp(scrRect.size.width, scrRect.size.height)),
+// 					 ccc4(255, 0, 0, 255), 1);
+// 
+// 			DrawLine(ccpAdd(scrRect.origin, ccp(scrRect.size.width, scrRect.size.height)),
+// 					 ccpAdd(scrRect.origin, ccp(0, scrRect.size.height)),
+// 					 ccc4(255, 0, 0, 255), 1);
+// 					 
+// 			DrawLine(ccpAdd(scrRect.origin, ccp(0, scrRect.size.height)),
+// 					 scrRect.origin,
+// 					 ccc4(255, 0, 0, 255), 1);
 			
-		}		
+		}
 	}
 	
 	void NDUILabel::SetFontBoderColer(ccColor4B fontColor)
@@ -311,26 +315,24 @@ namespace NDEngine
 		
 		m_needMakeVer = true;
 		
-		m_colorsBorder[0] = fontColor.r; 
+		m_colorsBorder[0] = fontColor.r;
 		m_colorsBorder[1] = fontColor.g;
 		m_colorsBorder[2] = fontColor.b;
 		m_colorsBorder[3] = fontColor.a;
 		
-		m_colorsBorder[4] = fontColor.r; 
+		m_colorsBorder[4] = fontColor.r;
 		m_colorsBorder[5] = fontColor.g;
 		m_colorsBorder[6] = fontColor.b;
 		m_colorsBorder[7] = fontColor.a;
 		
-		m_colorsBorder[8] = fontColor.r; 
+		m_colorsBorder[8] = fontColor.r;
 		m_colorsBorder[9] = fontColor.g;
 		m_colorsBorder[10] = fontColor.b;
 		m_colorsBorder[11] = fontColor.a;
 		
-		m_colorsBorder[12] = fontColor.r; 
+		m_colorsBorder[12] = fontColor.r;
 		m_colorsBorder[13] = fontColor.g;
 		m_colorsBorder[14] = fontColor.b;
 		m_colorsBorder[15] = fontColor.a;
 	}
 }
-
-

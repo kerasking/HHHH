@@ -45,6 +45,7 @@
 #include "UISpriteNode.h"
 #include "UIChatText.h"
 #include "NDConstant.h"
+#include "uitypes.h"
 //...
 // smys end
 
@@ -71,14 +72,13 @@ GetUiNode(NDNode* pNode, int tag)
 }
 
 
-NDUILabel*							
-GetLabel(NDNode* pNode, int tag)
+NDUILabel* GetLabel(NDNode* pNode, int tag)
 {
 	if (!pNode)
 	{
 		return NULL;
 	}
-	
+
 	NDNode *lb = pNode->GetChild(tag);
 	
 	if (!lb || !lb->IsKindOfClass(RUNTIME_CLASS(NDUILabel)))

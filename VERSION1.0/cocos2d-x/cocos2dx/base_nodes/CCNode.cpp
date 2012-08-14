@@ -35,6 +35,9 @@ THE SOFTWARE.
 #include "CCTouch.h"
 #include "CCActionManager.h"
 #include "CCScriptSupport.h"
+#include <vector>
+#include <functional>
+#include <algorithm>
 
 #if CC_COCOSNODE_RENDER_SUBPIXEL
 #define RENDER_IN_SUBPIXEL
@@ -796,9 +799,11 @@ void CCNode::visit()
 	{
 		// draw children zOrder < 0
         ccArray *arrayData = m_pChildren->data;
+
         for( ; i < arrayData->num; i++ )
         {
             pNode = (CCNode*) arrayData->arr[i];
+			int nZ = pNode->getZOrder();
 
 			if ( pNode) 
 			{
