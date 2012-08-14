@@ -588,19 +588,26 @@ namespace NDEngine
 									rect.size.width		+= 10 * fScale;
 									rect.size.height	+= 10 * fScale;
 								}
-								
-								if (m_image) m_image->DrawInRect(rect);
-								else if (m_combinepicImg) m_combinepicImg->DrawInRect(rect);
+
+								if (m_image) 
+								{
+									m_image->DrawInRect(rect);
+								}
+								else if (m_combinepicImg)
+								{
+									m_combinepicImg->DrawInRect(rect);
+								}
 							}
-						}						
+						}
 					}
 					else 
 					{
 						if (m_framed) 
 						{
 							DrawPolygon(scrRect, ccc4(16, 56, 66, 255), 2);
-							DrawPolygon(CGRectMake(scrRect.origin.x + 3, scrRect.origin.y + 3, scrRect.size.width - 6, scrRect.size.height - 6), 
-											  ccc4(134, 39, 0, 255), 1);						
+							DrawPolygon(CGRectMake(scrRect.origin.x + 3,
+								scrRect.origin.y + 3,scrRect.size.width - 6,
+								scrRect.size.height - 6), ccc4(134, 39, 0, 255), 1);	
 							//×óÉÏ½Ç
 							DrawLine(ccp(scrRect.origin.x + 3, scrRect.origin.y + 8), 
 										   ccp(scrRect.origin.x + 8, scrRect.origin.y + 3), 

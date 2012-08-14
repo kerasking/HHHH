@@ -269,14 +269,16 @@ namespace NDEngine
 		CGRect m_backgroundCustomRect;
 		CGRect m_customRect, m_touchDownImgCustomRect, m_customFocusImageRect;
 		
-		typedef enum{
+		typedef enum
+		{
 			TouchDownNone,
 			TouchDownImage,
 			TouchDownColor
 		}TouchDownStatus;
 		TouchDownStatus m_touchDownStatus;
 		
-		typedef enum{
+		typedef enum
+		{
 			FocusNone,
 			FocusColor,
 			FocusRimImage,

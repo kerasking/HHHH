@@ -12,6 +12,7 @@
 #include "ccMacros.h"
 #include "basedefine.h"
 #include "NDUIBaseGraphics.h"
+#include "CCString.h"
 
 using namespace cocos2d;
 
@@ -139,8 +140,10 @@ namespace NDEngine
 			return;
 		}
 
+		CCString* strString = new CCString(m_text.c_str());
+
 		m_texture = new CCTexture2D;
-		m_texture->initWithString(m_text.c_str(),
+		m_texture->initWithString(strString->UTF8String(),
 					CGSizeMake(thisRect.size.width, thisRect.size.height),
 					CCTextAlignmentLeft,
 					FONT_NAME,
@@ -150,7 +153,9 @@ namespace NDEngine
 // 											 dimensions:dim 
 // 											  alignment:UITextAlignmentLeft
 // 											   fontName:FONT_NAME 
-// 											   fontSize:m_fontSize];			
+// 											   fontSize:m_fontSize];
+
+		delete strString;
 	}
 	
 	void NDUILabel::MakeCoordinates()
@@ -160,10 +165,10 @@ namespace NDEngine
 			CGRect thisRect = this->GetFrameRect();	
 			
 			m_cutRect = CGRectZero;
-			m_cutRect.size.width = m_texture->getContentSizeInPixels().width;
+			m_cutRect.size.width = m_texture->getContentSizeInPixels().width + 70;
 			m_cutRect.size.height = thisRect.size.height <
 				m_texture->getContentSizeInPixels().height ?
-				thisRect.size.height: m_texture->getContentSizeInPixels().height;
+				thisRect.size.height + 70: m_texture->getContentSizeInPixels().height + 70;
 			
 			m_coordinates[0] = m_cutRect.origin.x / m_texture->getPixelsWide();
 			m_coordinates[1] = (m_cutRect.origin.y + m_cutRect.size.height) / m_texture->getPixelsHigh();
@@ -263,7 +268,7 @@ namespace NDEngine
 					glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_colorsBorder);
 					glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 				}
-				
+
 				glVertexPointer(3, GL_FLOAT, 0, m_vertices);
 				glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_colors);
 				
@@ -281,19 +286,19 @@ namespace NDEngine
 			
 			DrawLine(scrRect.origin, 
 					 ccpAdd(scrRect.origin, ccp(scrRect.size.width, 0)),
-					 ccc4(0, 0, 0, 255), 1);
+					 ccc4(255, 0, 0, 255), 1);
 					
 			DrawLine(ccpAdd(scrRect.origin, ccp(scrRect.size.width, 0)),
 					 ccpAdd(scrRect.origin, ccp(scrRect.size.width, scrRect.size.height)),
-					 ccc4(0, 0, 0, 255), 1);
+					 ccc4(255, 0, 0, 255), 1);
 					 
 			DrawLine(ccpAdd(scrRect.origin, ccp(scrRect.size.width, scrRect.size.height)),
 					 ccpAdd(scrRect.origin, ccp(0, scrRect.size.height)),
-					 ccc4(0, 0, 0, 255), 1);
+					 ccc4(255, 0, 0, 255), 1);
 					 
 			DrawLine(ccpAdd(scrRect.origin, ccp(0, scrRect.size.height)),
 					 scrRect.origin,
-					 ccc4(0, 0, 0, 255), 1);
+					 ccc4(255, 0, 0, 255), 1);
 			
 		}		
 	}
