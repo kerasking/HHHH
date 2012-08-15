@@ -48,8 +48,8 @@ namespace NDEngine
 	void NDLayer::SetTouchEnabled(bool bEnabled)
 	{
 		NDAsssert(m_ccNode != NULL);
-		
-		NDBaseLayer *layer = (NDBaseLayer *)m_ccNode;
+
+		NDBaseLayer *layer = (NDBaseLayer*)m_ccNode;
 		layer->setIsTouchEnabled(bEnabled);
 	}
 	

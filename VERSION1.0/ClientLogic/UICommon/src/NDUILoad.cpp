@@ -164,7 +164,7 @@ bool NDUILoad::Load(
 		FilterStringName(uiInfo);
 		
 #ifdef TRADITION		
-//		if (IsTraditionalChinese()) 
+//		if (IsTraditionalChinese())
 //		{
 			uiInfo.strText = uiInfo.strTextTradition;
 //		}
@@ -461,7 +461,7 @@ bool NDUILoad::LoadLua(
 		}
 		
 		NDUINode* node = NULL;
-		
+
 		switch (uiInfo.nType) 
 		{
 			case MY_CONTROL_TYPE_UNKNOWN:

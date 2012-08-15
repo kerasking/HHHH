@@ -27,7 +27,7 @@ private:
 	CAutoLink<NDUILayer>	_ndUILayerNode;
 	CAutoLink<NDLayer>		_ndLayerNode;
 	NDTouch					*m_ndTouch;
-	//bool					m_press;
+	bool					m_press;
 
 public:
 	void SetUILayer(NDUILayer* uilayer); 

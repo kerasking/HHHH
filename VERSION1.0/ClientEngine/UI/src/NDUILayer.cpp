@@ -38,7 +38,10 @@ using namespace cocos2d;
 namespace NDEngine
 {
 	IMPLEMENT_CLASS(NDUILayer, NDUINode)
-	
+
+	bool NDUILayer::m_pressing = false;
+	NDUILayer* NDUILayer::m_layerPress = 0;
+
 	NDUILayer::NDUILayer()
 	{
 		INIT_AUTOLINK(NDUILayer);
@@ -294,21 +297,20 @@ namespace NDEngine
 
 		if (TouchEnd(touch))
 		{
-			//EndDispatchEvent();
+			EndDispatchEvent();
 			
 			return;
 		}
 			
-		//if (m_pressing)
-		//{
+		if (m_pressing)
+		{
 			if (m_enableMove && m_touchMoved && m_layerMoved) 
 			{
 				DispatchLayerMoveEvent(m_beginTouch, touch);
 			}
-		//	}
-		//}
+		}
 		
-		//EndDispatchEvent();
+		EndDispatchEvent();
 	} 
 	
 	void NDUILayer::UITouchCancelled(NDTouch* touch)
@@ -620,10 +622,15 @@ namespace NDEngine
 					if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer))) 
 					{
 						NDUILayer* uiLayer = (NDUILayer*)uiNode;
+
 						if (uiLayer->DispatchTouchEndEvent(beginTouch, endTouch))
+						{
 							return true;
+						}
 						else 
+						{
 							continue;
+						}
 					}
 					
 					//onclick event......
@@ -647,6 +654,7 @@ namespace NDEngine
 						}
 						
 						NDUIButtonDelegate* delegate = dynamic_cast<NDUIButtonDelegate*> (uiNode->GetDelegate());
+
 						if (delegate) 
 						{
 							delegate->OnButtonClick((NDUIButton*)uiNode);
@@ -1535,6 +1543,18 @@ namespace NDEngine
 	CGRect NDUILayer::RectAdd(CGRect rect, int value)
 	{
 		return CGRectMake(rect.origin.x - value, rect.origin.y - value, rect.size.width + 2 * value, rect.size.height + 2 * value);
+	}
+
+	void NDUILayer::EndDispatchEvent()
+	{
+		m_pressing = false;
+		m_layerPress = 0;
+	}
+
+	void NDUILayer::StartDispatchEvent()
+	{
+		m_pressing = true;
+		m_layerPress = this;
 	}
 	/*
 	void NDUILayer::AfterEditClickEvent(NDUIEdit* edit)

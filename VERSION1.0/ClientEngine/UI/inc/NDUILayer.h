@@ -160,7 +160,10 @@ namespace NDEngine
 	public:
 		void SetScrollEnabled(bool bEnabled);
 		
-		void OnTimer(OBJID tag); override
+		void OnTimer(OBJID tag);
+
+		void StartDispatchEvent();
+		void EndDispatchEvent();
 	
 		virtual bool DispatchLongTouchClickEvent(CGPoint beginTouch, CGPoint endTouch);
 		
@@ -206,8 +209,8 @@ namespace NDEngine
 		
 		bool m_bDispatchLongTouchEvent;
 	private:
-// 		static bool m_pressing;
-// 		static NDUILayer *m_layerPress;
+		static bool m_pressing;
+ 		static NDUILayer* m_layerPress;
 // 		bool canDispatchEvent();
 // 		void StartDispatchEvent();
 // 		void EndDispatchEvent();

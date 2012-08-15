@@ -19,7 +19,7 @@ using namespace cocos2d;
 NDBaseLayer::NDBaseLayer()
 {
 	m_ndTouch = new NDTouch();
-	//m_press = false;
+	m_press = false;
 }
 
 NDBaseLayer::~NDBaseLayer()
@@ -39,7 +39,7 @@ void NDBaseLayer::SetUILayer(NDUILayer* uilayer)
 
 void NDBaseLayer::SetLayer(NDLayer* layer)
 {
-	if (!layer) 
+	if (!layer)
 	{
 		_ndLayerNode.Clear();
 		return;
@@ -78,13 +78,22 @@ bool NDBaseLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	//{
 	//	return NO;
 	//}
+
+	if (_ndUILayerNode) 
+	{
+		_ndUILayerNode->UITouchEnd(m_ndTouch);
+	}
+	else if (_ndLayerNode) 
+	{
+		_ndLayerNode->TouchEnd(m_ndTouch);
+	}
 	
 	if (_ndUILayerNode) 
 	{
 		if (_ndUILayerNode->UITouchBegin(m_ndTouch))
 		{
 			//g_NDBaseLayerPress = true;
-			//m_press = true;
+			m_press = true;
 			return true;
 		}
 	}
@@ -93,10 +102,11 @@ bool NDBaseLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 		if (_ndLayerNode->TouchBegin(m_ndTouch))
 		{
 			//g_NDBaseLayerPress = true;
-			//m_press = true;
+			m_press = true;
 			return true;
 		}
 	}
+
 	return false;	
 }
 
@@ -106,7 +116,7 @@ void NDBaseLayer::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 	
 	//g_NDBaseLayerPress = false;
 	
-	//m_press = false;
+	m_press = false;
 	
 	if (_ndUILayerNode) 
 	{
@@ -124,7 +134,7 @@ void NDBaseLayer::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 	
 	//g_NDBaseLayerPress = false;
 	
-	//m_press = false;
+	m_press = false;
 	
 	if (_ndUILayerNode) 
 	{
