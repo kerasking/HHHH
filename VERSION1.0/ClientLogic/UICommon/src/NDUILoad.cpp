@@ -376,9 +376,10 @@ bool NDUILoad::LoadLua(
 		return false;
 	}
 	
-	CUIData  uiData;
+	CUIData uiData;
+	const char* pszPath = NDPath::GetUIConfigPath(uiname);
 	
-	if ( !uiData.openUiFile(NDPath::GetUIConfigPath(uiname)) )
+	if ( !uiData.openUiFile(pszPath) )
 	{
 		NDAsssert(0);
 		
@@ -389,7 +390,7 @@ bool NDUILoad::LoadLua(
 	
 	int nCtrlAmount = uiData.GetCtrlAmount();
 	
-	for(int i=0; i<nCtrlAmount; i++)
+	for(int i = 0; i < nCtrlAmount; i++)
 	{
 		std::string str = uiData.getCtrlName(i);
 		
@@ -598,7 +599,9 @@ bool NDUILoad::LoadLua(
 		parent->AddChild(node);
 		
 		if (luaDelegate.IsFunction())
+		{
 			node->SetLuaDelegate(luaDelegate);
+		}
 	}
 	
 	return true;

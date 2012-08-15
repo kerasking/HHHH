@@ -13,10 +13,7 @@
 #include "CCDrawingPrimitives.h"
 
 namespace NDEngine
-{
-
-#pragma mark 加载ui统一回调
-	
+{	
 	NDUITargetDelegate::NDUITargetDelegate()
 	{
 		INIT_AUTOLINK(NDUITargetDelegate);
@@ -31,7 +28,8 @@ namespace NDEngine
 		return false;
 	}
 	
-	bool NDUITargetDelegate::OnTargetTableEvent(NDUINode* uinode, NDUINode* cell, unsigned int cellIndex, NDSection *section)
+	bool NDUITargetDelegate::OnTargetTableEvent(NDUINode* uinode, NDUINode* cell, 
+		unsigned int cellIndex, NDSection *section)
 	{
 		return false;
 	}
@@ -243,5 +241,4 @@ namespace NDEngine
 
 		return bRet;
 	}
-
 }

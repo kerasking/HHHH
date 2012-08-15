@@ -41,7 +41,8 @@ namespace NDEngine
 		return pObject;
 	}
 	
-	NDRuntimeClass NDObject::classNDObject = {(char*)"NDObject", sizeof(NDObject), NDObject::CreateObject, NULL, NULL};
+	NDRuntimeClass NDObject::classNDObject = {(char*)"NDObject",
+		sizeof(NDObject), NDObject::CreateObject, NULL, NULL};
 	
 	NDObject::NDObject()
 	{
