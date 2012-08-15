@@ -23,12 +23,14 @@ class NDFrameRunRecord : public cocos2d::CCObject
 	CC_SYNTHESIZE(int, m_nRepeatTimes, RepeatTimes)
 
 public:
+
 	NDFrameRunRecord();
 
 	void SetPlayRange(int nStartFrame, int nEndFrame);
 	void NextFrame(int nTotalFrames);
 
 private:
+
 	int m_nStartFrame, m_nEndFrame;
 	BOOL m_bSetPlayRange;
 };

@@ -350,10 +350,14 @@ namespace NDEngine
 			{
 				bCutSucess = true;
 				m_cutRect.origin = rect.origin;
-				m_cutRect.size = CGSizeMake(m_texture->getContentSizeInPixels().width - rect.origin.x, m_texture->getContentSizeInPixels().height-rect.origin.y);
+				m_cutRect.size = CGSizeMake(m_texture->getContentSizeInPixels().width - rect.origin.x,
+					m_texture->getContentSizeInPixels().height-rect.origin.y);
 			}
 			
-			if (bCutSucess) this->SetCoorinates();
+			if (bCutSucess)
+			{
+				this->SetCoorinates();
+			}
 		}		
 	}
 	
@@ -393,7 +397,9 @@ namespace NDEngine
 			pic->m_textureGray = m_textureGray;
 		}
 		else
+		{
 			pic->m_textureGray = NULL;
+		}
 		
 		return pic;		
 	}
