@@ -43,7 +43,7 @@ function p.LoadUI()
         LoadingProcess:SetProcess(0);
         LoadingProcess:SetTotal(100);
     end
-	
+
 	p.OnConstruct();
 	layer:SetDestroyNotify(p.OnDeConstruct);
 	

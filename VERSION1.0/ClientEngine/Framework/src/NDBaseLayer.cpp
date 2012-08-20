@@ -67,7 +67,7 @@ void NDBaseLayer::registerWithTouchDispatcher(void)
 		node = node->GetParent();
 	}
 	
-	CCTouchDispatcher::sharedDispatcher()->addTargetedDelegate(this, iPriority, true);
+	CCTouchDispatcher::sharedDispatcher()->addTargetedDelegate(this, 0, true);
 }
 
 bool NDBaseLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
@@ -79,15 +79,6 @@ bool NDBaseLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	//	return NO;
 	//}
 
-	if (_ndUILayerNode) 
-	{
-		_ndUILayerNode->UITouchEnd(m_ndTouch);
-	}
-	else if (_ndLayerNode) 
-	{
-		_ndLayerNode->TouchEnd(m_ndTouch);
-	}
-	
 	if (_ndUILayerNode) 
 	{
 		if (_ndUILayerNode->UITouchBegin(m_ndTouch))
@@ -110,23 +101,23 @@ bool NDBaseLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	return false;	
 }
 
-void NDBaseLayer::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
-{
-	m_ndTouch->Initialization(pTouch);
-	
-	//g_NDBaseLayerPress = false;
-	
-	m_press = false;
-	
-	if (_ndUILayerNode) 
-	{
-		return _ndUILayerNode->UITouchEnd(m_ndTouch);
-	}
-	else if (_ndLayerNode) 
-	{
-		return _ndLayerNode->TouchEnd(m_ndTouch);
-	}
-}
+ void NDBaseLayer::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
+ {
+ 	m_ndTouch->Initialization(pTouch);
+ 	
+ 	//g_NDBaseLayerPress = false;
+ 	
+ 	m_press = false;
+ 	
+ 	if (_ndUILayerNode) 
+ 	{
+ 		return _ndUILayerNode->UITouchEnd(m_ndTouch);
+ 	}
+ 	else if (_ndLayerNode)
+ 	{
+ 		return _ndLayerNode->TouchEnd(m_ndTouch);
+ 	}
+ }
 
 void NDBaseLayer::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 {
@@ -149,7 +140,7 @@ void NDBaseLayer::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 void NDBaseLayer::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 {
 	m_ndTouch->Initialization(pTouch);
-	if (_ndUILayerNode) 
+	if (_ndUILayerNode)
 	{
 		return _ndUILayerNode->UITouchMoved(m_ndTouch);
 	}
