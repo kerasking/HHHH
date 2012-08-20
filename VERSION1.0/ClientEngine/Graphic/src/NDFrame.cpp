@@ -260,7 +260,8 @@ void NDFrame::run()
 
 void NDFrame::run(float scale)
 {
-	if (m_needInitTitles) {
+	if (m_needInitTitles)
+	{
 		this->initTiles();
 	}
 	
@@ -311,6 +312,7 @@ void NDFrame::run(float scale)
 		{
 			y -= (animation->getBottomY() - animation->getY()) * scale;
 		}
+
 		y = y + frameTile->getY() * scale - animation->getY() * scale;
 		/***
 		* аый╠птв╒йм ╧Ы╨ф

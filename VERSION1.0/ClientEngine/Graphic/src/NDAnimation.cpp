@@ -53,7 +53,8 @@ CGRect NDAnimation::getRect()
 	return CGRectZero;
 }
 
-void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord, bool needDraw, float drawScale)
+void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord,
+										bool needDraw, float drawScale)
 {
 	if (m_Frames->count()) 
 	{		
@@ -129,7 +130,8 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord, bool n
 	}
 }
 
-void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord, bool needDraw)
+void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord,
+										bool needDraw)
 {	
 	this->runWithRunFrameRecord(runFrameRecord, needDraw, 1.0f);
 }

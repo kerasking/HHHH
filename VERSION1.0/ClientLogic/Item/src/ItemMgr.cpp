@@ -163,7 +163,8 @@ void ItemMgr::quitGame()
 /*处理感兴趣的网络消息*/
 bool ItemMgr::process(MSGID msgID, NDTransData* data, int len)
 {
-	switch (msgID) {
+	switch (msgID)
+	{
 		case _MSG_ITEMINFO:
 			processItemInfo(data,len);
 			break;
@@ -219,8 +220,11 @@ bool ItemMgr::process(MSGID msgID, NDTransData* data, int len)
 
 Item* ItemMgr::QueryOtherItem(int idItem)
 {
-	for (VEC_ITEM_IT it = this->m_vOtherItems.begin(); it != this->m_vOtherItems.end(); it++) {
-		if ((*it)->iID == idItem) {
+	for (VEC_ITEM_IT it = this->m_vOtherItems.begin();
+		it != this->m_vOtherItems.end(); it++)
+	{
+		if ((*it)->iID == idItem)
+		{
 			return *it;
 		}
 	}
@@ -229,7 +233,9 @@ Item* ItemMgr::QueryOtherItem(int idItem)
 
 void ItemMgr::RemoveOtherItems()
 {
-	for (VEC_ITEM_IT it = this->m_vOtherItems.begin(); it != this->m_vOtherItems.end(); it++) {
+	for (VEC_ITEM_IT it = this->m_vOtherItems.begin();
+		it != this->m_vOtherItems.end(); it++)
+	{
 		SAFE_DELETE(*it);
 	}
 	
