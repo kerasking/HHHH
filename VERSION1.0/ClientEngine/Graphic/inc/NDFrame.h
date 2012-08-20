@@ -19,7 +19,7 @@ class NDFrameRunRecord : public cocos2d::CCObject
 	CC_SYNTHESIZE(int, m_nNextFrameIndex, NextFrameIndex)
 	CC_SYNTHESIZE(int, m_nCurrentFrameIndex, CurrentFrameIndex)
 	CC_SYNTHESIZE(int, m_nRunCount, RunCount)
-//	CC_PROPERTY(bool, m_bIsCompleted, IsCompleted)
+	CC_SYNTHESIZE(bool, m_bIsCompleted, IsCompleted)
 	CC_SYNTHESIZE(int, m_nRepeatTimes, RepeatTimes)
 
 public:

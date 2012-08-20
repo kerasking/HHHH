@@ -29,7 +29,7 @@ NDFrameRunRecord::NDFrameRunRecord()
 : m_nNextFrameIndex(0)
 , m_nCurrentFrameIndex(0)
 , m_nRunCount(0)
-//, m_bIsCompleted(false) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+, m_bIsCompleted(false)
 , m_nRepeatTimes(0)
 , m_nStartFrame(0)
 , m_nEndFrame(0)
@@ -118,7 +118,7 @@ void NDFrameRunRecord::NextFrame(int nTotalFrames)
 		m_nNextFrameIndex = 0;
 		if (m_nRepeatTimes == 0) 
 		{
-	//		m_bIsCompleted = true; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			m_bIsCompleted = true;
 		}
 		
 	}
@@ -291,7 +291,8 @@ void NDFrame::run(float scale)
 			record->getReplace() <= REPLACEABLE_SKIRT_LIFT_LEG) 
 		{
 			tile->setCutRect(CGRectMake(0, 0, tile->getTexture()->getMaxS() * tile->getTexture()->getPixelsWide(), tile->getTexture()->getMaxT() * tile->getTexture()->getPixelsHigh()));
-		}else 
+		}
+		else 
 		{
 			tile->setCutRect(CGRectMake(record->getX(), record->getY(), record->getW(), record->getH()));
 		}
@@ -301,6 +302,7 @@ void NDFrame::run(float scale)
 		{
 			x -= (animation->getMidX() - animation->getX())*scale;
 		}
+
 		if (animation->getBottomY() != 0) 
 		{
 			y -= (animation->getBottomY() - animation->getY())*scale;
@@ -330,11 +332,8 @@ void NDFrame::run(float scale)
 		* end
 		*/
 		tile->setDrawRect(CGRectMake(x, y, tile->getCutRect().size.width*scale, tile->getCutRect().size.height*scale));
-		
 		tile->setMapSize(animationGroup->getRunningMapSize());
-		
 		tile->make();
-		
 		tile->draw();
 	}
 }
@@ -392,435 +391,580 @@ TILE_REVERSE_ROTATION NDFrame::tileReverseRotationWithReverse(bool reverse, int 
 {
 	//reverse = true;
 	static TILE_REVERSE_ROTATION reverseRotaionResult;
-	switch (rota) {
+	switch (rota)
+	{
 		case 0:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation0;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation0;
 			}
 			break;
 		case 1:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation345;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation15;
 			}
 			break;
 		case 2:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation330;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation30;
 			}
 			break;
 		case 3:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation315;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation45;
 			}
 			break;
 		case 4:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation300;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation60;;
 			}
 			break;
 		case 5:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation285;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation75;
 			}
 			break;
 		case 6:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation270;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation90;
 			}
 			break;
 		case 7:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation255;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation105;
 			}
 			break;
 		case 8:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation240;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation120;
 			}
 			break;
 		case 9:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation225;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation135;
 			}
 			break;
 		case 10:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation210;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation150;
 			}
 			break;
 		case 11:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation195;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation165;
 			}
 			break;
 		case 12:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation180;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation180;
 			}
 			break;
 		case 13:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation165;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation195;
 			}
 			break;
 		case 14:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation150;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation210;
 			}
 			break;
 		case 15:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation135;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation225;
 			}
 			break;
 		case 16:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation120;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation240;
 			}
 			break;
 		case 17:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation105;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation255;
 			}
 			break;
 		case 18:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation90;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation270;
 			}
 			break;
 		case 19:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation75;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation285;
 			}
 			break;
 		case 20:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation60;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation300;
 			}
 			break;
 		case 21:
-			if (reverse) {
+			if (reverse) 
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation45;
-			} else {
+			} 
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation315;
 			}
 			break;
 		case 22:
-			if (reverse) {
+			if (reverse) 
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation30;
-			} else {
+			} 
+			else 
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation330;
 			}
 			break;
 		case 23:
-			if (reverse) {
+			if (reverse) 
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation15;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation345;
 			}
 			break;
 		case 24:
-			if (reverse) {
+			if (reverse) 
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation0;
-			} else {
+			}
+			else 
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation0;
 			}
 			break;
 		case 25:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation15;
-			} else {
+			} 
+			else 
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation345;
 			}
 			break;
 		case 26:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation30;
-			} else {
+			} 
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation330;
 			}
 			break;
 		case 27:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation45;
-			} else {
+			} 
+			else 
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation315;
 			}
 			break;
 		case 28:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation60;
-			} else {
+			} 
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation300;
 			}
 			break;
 		case 29:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation75;
-			} else {
+			} 
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation285;
 			}
 			break;
 		case 30:
-			if (reverse) {
+			if (reverse) 
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation90;
-			} else {
+			} 
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation270;
 			}
 			break;
 		case 31:
-			if (reverse) {
+			if (reverse) 
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation105;
-			} else {
+			} 
+			else 
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation255;
 			}
 			break;
 		case 32:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation120;
-			} else {
+			} 
+			else 
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation240;
 			}
 			break;
 		case 33:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation135;
-			} else {
+			} 
+			else 
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation225;
 			}
 			break;
 		case 34:
-			if (reverse) {
+			if (reverse) 
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation150;
-			} else {
+			} 
+			else 
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation210;
 			}
 			break;
 		case 35:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation165;
-			} else {
+			} 
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation195;
 			}
 			break;
 		case 36:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation180;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation180;
 			}
 			break;
 		case 37:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation195;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation165;
 			}
 			break;
 		case 38:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation210;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation150;
 			}
 			break;
 		case 39:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation225;
-			} else {
+			} 
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation135;
 			}
 			break;
 		case 40:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation240;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation120;
 			}
 			break;
 		case 41:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation255;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation105;
 			}
 			break;
 		case 42:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation270;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation90;
 			}
 			break;
 		case 43:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation285;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation75;
 			}
 			break;
 		case 44:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation300;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation60;
 			}
 			break;
 		case 45:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation315;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation45;
 			}
 			break;
 		case 46:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation330;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation30;
 			}
 			break;
 		case 47:
-			if (reverse) {
+			if (reverse)
+			{
 				reverseRotaionResult.reverse = false;
 				reverseRotaionResult.rotation = NDRotationEnumRotation345;
-			} else {
+			}
+			else
+			{
 				reverseRotaionResult.reverse = true;
 				reverseRotaionResult.rotation = NDRotationEnumRotation15;
 			}

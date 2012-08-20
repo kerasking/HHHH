@@ -54,7 +54,8 @@ namespace NDEngine
 		if( CC_CONTENT_SCALE_FACTOR() == 1 )
 		{
 
-		}else
+		}
+		else
 		{
 			m_location.x=m_location.x*2;
 			m_location.y=m_location.y*2;
