@@ -290,7 +290,11 @@ void NDFrame::run(float scale)
 			record->getReplace() >= REPLACEABLE_LEFT_SHOULDER &&
 			record->getReplace() <= REPLACEABLE_SKIRT_LIFT_LEG) 
 		{
-			tile->setCutRect(CGRectMake(0, 0, tile->getTexture()->getMaxS() * tile->getTexture()->getPixelsWide(), tile->getTexture()->getMaxT() * tile->getTexture()->getPixelsHigh()));
+			tile->setCutRect(CGRectMake(0, 0, 
+				tile->getTexture()->getMaxS() * 
+				tile->getTexture()->getPixelsWide(),
+				tile->getTexture()->getMaxT() * 
+				tile->getTexture()->getPixelsHigh()));
 		}
 		else 
 		{
@@ -300,14 +304,14 @@ void NDFrame::run(float scale)
 		GLfloat x = animationGroup->getPosition().x, y = animationGroup->getPosition().y;
 		if (animation->getMidX() != 0) 
 		{
-			x -= (animation->getMidX() - animation->getX())*scale;
+			x -= (animation->getMidX() - animation->getX()) * scale;
 		}
 
 		if (animation->getBottomY() != 0) 
 		{
-			y -= (animation->getBottomY() - animation->getY())*scale;
+			y -= (animation->getBottomY() - animation->getY()) * scale;
 		}
-		y = y + frameTile->getY()*scale - animation->getY()*scale;
+		y = y + frameTile->getY() * scale - animation->getY() * scale;
 		/***
 		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		* begin
@@ -331,7 +335,8 @@ void NDFrame::run(float scale)
 		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		* end
 		*/
-		tile->setDrawRect(CGRectMake(x, y, tile->getCutRect().size.width*scale, tile->getCutRect().size.height*scale));
+		tile->setDrawRect(CGRectMake(x, y, tile->getCutRect().size.width * scale,
+			tile->getCutRect().size.height * scale));
 		tile->setMapSize(animationGroup->getRunningMapSize());
 		tile->make();
 		tile->draw();

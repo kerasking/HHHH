@@ -35,7 +35,8 @@ void NDCombinePicture::AddPicture(NDPicture* pic, CombintPictureAligment aligmen
 	
 	rectDraw.size = pic->GetSize();
 	
-	m_rectLast.origin = rectDraw.origin = caclNext(m_rectLast.origin, aligment, m_rectLast.size, rectDraw.size);
+	m_rectLast.origin = rectDraw.origin = caclNext(m_rectLast.origin,
+		aligment, m_rectLast.size, rectDraw.size);
 	
 	m_rectLast.size = rectDraw.size;
 	
