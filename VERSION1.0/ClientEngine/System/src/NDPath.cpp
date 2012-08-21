@@ -13,7 +13,7 @@
 namespace NDEngine
 {
 	std::string NDPath::NDPath_ResPath = "./SimplifiedChineseRes/res/";
-	std::string NDPath::NDPath_ImgPath = "";
+	std::string NDPath::NDPath_ImgPath = "./SimplifiedChineseRes/res/map/";
 	std::string NDPath::NDPath_MapPath = "";
 	std::string NDPath::NDPath_AniPath = "";
 	std::string NDPath::NDPath_SoundPath = "";
@@ -88,7 +88,7 @@ namespace NDEngine
 	
 	std::string NDPath::GetMapPath()
 	{
-		return NDPath_MapPath;
+		return "./SimplifiedChineseRes/res/map/";
 // 	#ifdef TRADITION
 // 		NSString *path = [NSString stringWithFormat:@"%@/TraditionalChineseRes/res/map/", [[NSBundle mainBundle] resourcePath]];
 // 	#else

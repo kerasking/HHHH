@@ -27,19 +27,22 @@
 #define blockTimerTag	(5)
 #define titleTimerTag	(6)
 
-enum MAP_SWITCH_TYPE {
+enum MAP_SWITCH_TYPE
+{
 	SWITCH_NONE = 0,
 	SWITCH_TO_BATTLE,
 	SWITCH_BACK_FROM_BATTLE,
 };
 
-enum BOX_STATUS{
+enum BOX_STATUS
+{
 	BOX_NONE=0,
 	BOX_SHOWING,
 	BOX_CLOSE,
 	BOX_OPENING,
 	BOX_OPENED,
 };
+
 namespace NDEngine 
 {
 	class NDMapLayer : public NDUILayer//NDLayer,public ITimerCallback
@@ -145,7 +148,8 @@ namespace NDEngine
 		//bool isTouchTreasureBox(CGPoint touchPoint);
 	//		void setRoadBlock(int x,int y){roadBlockX=x;roadBlockY=y;}
 	public:
-		void PlayNDSprite(const char* pszSpriteFile, int nPosx, int nPosy, int nAnimationNo, int nPlayTimes);
+		void PlayNDSprite(const char* pszSpriteFile, int nPosx,
+			int nPosy, int nAnimationNo, int nPlayTimes);
 	private:
 		void MakeOrders();
 		void MakeOrdersOfMapscenesAndMapanimations();
@@ -167,7 +171,9 @@ namespace NDEngine
 		void ScrollVertical(int y, CGRect newRect);
 		void ScrollHorizontal(int x, CGRect newRect);
 		void RefreshBoxAnimation();
+
 	private:
+
 		CGPoint m_screenCenter;
 		cocos2d::CCArray*/*<MAP_ORDER*>*/m_orders;
 		cocos2d::CCArray*/*<MAP_ORDER*>*/m_ordersOfMapscenesAndMapanimations;
@@ -193,6 +199,7 @@ namespace NDEngine
 		CGPoint m_ptCamarkSplit;
 		NDNode		*subnode; 
 		BOX_STATUS box_status;
+
 		typedef enum
 		{
 			IntersectionAreaLT,
@@ -201,7 +208,9 @@ namespace NDEngine
 			IntersectionAreaRB,
 			IntersectionAreaNone
 		}IntersectionArea;
-		void RectIntersectionRect(CGRect rect1, CGRect rect2, CGRect& intersectionRect, IntersectionArea& intersectionArea);
+
+		void RectIntersectionRect(CGRect rect1, CGRect rect2, CGRect& intersectionRect,
+			IntersectionArea& intersectionArea);
 		IntersectionArea m_areaCamarkSplit;
 		
 		int m_mapIndex;
@@ -212,6 +221,7 @@ namespace NDEngine
 		NDLightEffect* m_leRoadSign;
 
 	private:
+
 		bool GetMapDataAniParamReverse(int nIndex);
 		CGPoint GetMapDataAniParamPos(int nIndex);
 		CGSize GetMapDataAniParamMapSize(int nIndex);

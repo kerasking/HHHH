@@ -52,6 +52,14 @@ typedef unsigned int UInt32;
 typedef unsigned short UInt16;
 typedef unsigned char UInt8;
 
+typedef enum
+{
+	MainSceneBegin = 10010,
+	BottomSpeedBar,
+	PlayerAttr,
+	PlayerBackBag
+}NMAINSCENECHILDTAG;
+
 #define NSString cocos2d::CCString
 
 #define SAFE_DELETE(pObject)\

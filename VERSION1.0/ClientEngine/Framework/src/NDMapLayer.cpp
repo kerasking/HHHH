@@ -161,9 +161,13 @@ namespace NDEngine
 
 		m_mapData = new NDMapData;
 		m_mapData->initWithFile(mapFile);
+
 		if (m_mapData) 
 		{
-			this->SetContentSize(CGSizeMake(m_mapData->getColumns() * m_mapData->getUnitSize(), m_mapData->getRows() * m_mapData->getUnitSize()));
+			this->SetContentSize(CGSizeMake(m_mapData->getColumns() *
+				m_mapData->getUnitSize(),
+				m_mapData->getRows() *
+				m_mapData->getUnitSize()));
 			
 			this->MakeOrdersOfMapscenesAndMapanimations();
 			this->MakeFrameRunRecords();
@@ -198,7 +202,10 @@ namespace NDEngine
 		m_mapData->initWithFile(mapFile);
 		if (m_mapData) 
 		{
-			this->SetContentSize(CGSizeMake(m_mapData->getColumns() * m_mapData->getUnitSize(), m_mapData->getRows() * m_mapData->getUnitSize()));
+			this->SetContentSize(CGSizeMake(m_mapData->getColumns() *
+				m_mapData->getUnitSize(),
+				m_mapData->getRows() *
+				m_mapData->getUnitSize()));
 			
 			this->MakeOrdersOfMapscenesAndMapanimations();
 			this->MakeFrameRunRecords();

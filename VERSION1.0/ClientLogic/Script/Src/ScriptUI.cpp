@@ -1292,7 +1292,7 @@ void ScriptObjectUI::OnLoad()
 	
 	// 图片池导出
 	ETCLASSBEGIN(NDPicturePool)
-//	ETCFUNC("DefaultPicPool",						&NDPicturePool::DefaultPool)
+	ETCFUNC("DefaultPicPool",						&NDPicturePool::DefaultPool)
 	ETMEMBERFUNC("AddPicture",						(NDPicture* (NDPicturePool::*)(const char*, bool))&NDPicturePool::AddPicture)
 	ETMEMBERFUNC("AddPictureEx",					(NDPicture* (NDPicturePool::*)(const char*, int, int, bool))&NDPicturePool::AddPicture)
 	ETCLASSEND(NDPicturePool)
@@ -1366,7 +1366,7 @@ void ScriptObjectUI::OnLoad()
 	
 	// 导演类导出
 	ETCLASSBEGIN(NDDirector)
-//	ETCFUNC("DefaultDirector",						&NDDirector::DefaultDirector)  ///<临时性注释 郭浩
+	ETCFUNC("DefaultDirector",						&NDDirector::DefaultDirector)  ///<临时性注释 郭浩
 	ETMEMBERFUNC("PushScene",						&NDDirector::PushScene)
 	ETMEMBERFUNC("PopScene",						(bool (NDDirector::*)(bool))&NDDirector::PopScene)
 	ETMEMBERFUNC("GetRunningScene",					&NDDirector::GetRunningScene)
