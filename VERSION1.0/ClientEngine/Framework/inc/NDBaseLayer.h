@@ -20,16 +20,19 @@ using namespace NDEngine;
 class NDBaseLayer : public cocos2d::CCLayer 
 {
 public:
+
 	NDBaseLayer();
 	~NDBaseLayer();
 
 private:
+
 	CAutoLink<NDUILayer>	_ndUILayerNode;
 	CAutoLink<NDLayer>		_ndLayerNode;
 	NDTouch					*m_ndTouch;
 	bool					m_press;
 
 public:
+
 	void SetUILayer(NDUILayer* uilayer); 
 	void SetLayer(NDLayer* layer);
 

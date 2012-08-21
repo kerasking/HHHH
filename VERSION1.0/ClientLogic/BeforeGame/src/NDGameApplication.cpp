@@ -8,6 +8,7 @@
 #include "ScriptGlobalEvent.h"
 #include "ScriptUI.h"
 #include "ScriptGameLogic.h"
+#include "SMGameScene.h"
 
 namespace NDEngine
 {
@@ -98,7 +99,7 @@ namespace NDEngine
 		ScriptMgr kScriptManager = ScriptMgr::GetSingleton();
 
 		pkDirector->Initialization();
-		pkDirector->RunScene(CSMLoginScene::Scene());
+		pkDirector->RunScene(CSMGameScene::Scene());
 
 		ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
 		NDScriptGameData* pkData = new NDScriptGameData;

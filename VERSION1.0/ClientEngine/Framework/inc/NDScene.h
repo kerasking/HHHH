@@ -19,12 +19,13 @@ namespace NDEngine
 	{
 		DECLARE_CLASS(NDScene)
 	public:
+
 		NDScene();
 		~NDScene();
 		
 	public:
+
 		static NDScene* Scene();
-			
 	};
 }
 
