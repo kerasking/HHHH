@@ -84,13 +84,19 @@ int	GetItemCount(int nItemType)
 {
 	int count = 0;
 	VEC_ITEM& vec_item = ItemMgrObj.GetPlayerBagItems();
+
 	for_vec(vec_item, VEC_ITEM_IT)
 	{
 		Item *item = (*it);
-		if (item->iItemType == nItemType) {
-			if (item->isEquip()) {
+
+		if (item->iItemType == nItemType)
+		{
+			if (item->isEquip())
+			{
 				count++;
-			} else {
+			}
+			else
+			{
 				count += item->iAmount;
 			}
 		}
@@ -239,6 +245,7 @@ void WorldMapGoto(int nMapId, LuaObject tFilter)
 			for (int i = 1; i <= nTableCount; i++) 
 			{
 				LuaObject tag = tFilter[i];
+
 				if (tag.IsInteger())
 				{
 					vId.push_back(tag.GetInteger());
@@ -314,6 +321,11 @@ void    CreateRole(const char* pszName, Byte nProfession, int nLookFace, const c
 {
  //   return NDBeforeGameMgrObj.CreateRole(pszName,nProfession, nLookFace, pszAccountName);///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 }
+
+const char* GetImagePathNew(const char* pszPath)
+{
+	return NDPath::GetImgPathNew(pszPath);
+}
     
 ///////////////////////////////////////////////
 void ScriptObjectGameLogic::OnLoad()
@@ -321,7 +333,7 @@ void ScriptObjectGameLogic::OnLoad()
 	ETCFUNC("QuitGame", QuitGame);
 	ETCFUNC("CreatePlayer", CreatePlayer);
 	ETCFUNC("PlayerStopMove", PlayerStopMove);
-	ETCFUNC("NDPath::GetImgPathNew", NDPath::GetImgPathNew);
+	ETCFUNC("GetImgPathNew",GetImagePathNew);
 	ETCFUNC("GetPlayerId", GetPlayerId);
 	ETCFUNC("SysChat", SysChat);
 	ETCFUNC("NavigateTo", NavigateTo);

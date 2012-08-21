@@ -103,9 +103,9 @@ namespace NDEngine
 		
 		static void PurgeDefaultPool();
 
-		NDPicture* AddPicture(const char* imageFile, bool gray=false);
+		NDPicture* AddPicture(const char* imageFile, bool gray = false);
 		NDPicture* AddPicture(const char* imageFile, int hrizontalPixel,
-			int verticalPixel=0, bool gray=false);
+			int verticalPixel = 0, bool gray = false);
 
 		void RemovePicture(const char* imageFile);
 		
