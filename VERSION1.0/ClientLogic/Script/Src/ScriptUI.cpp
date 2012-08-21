@@ -46,12 +46,12 @@
 #include "UIChatText.h"
 #include "NDConstant.h"
 #include "uitypes.h"
+#include "..\..\..\ClientEngine\Utility\inc\platform.h"
 //...
 // smys end
 
 using namespace NDEngine;
 using namespace cocos2d;
-
 
 NDUINode*							
 GetUiNode(NDNode* pNode, int tag)
@@ -1169,107 +1169,112 @@ void CloseLoadBar()
 {
 	CloseProgressBar;
 }
+
+CCRect RectMake(float x,float y,float width,float height)
+{
+	return CCRect((x), (y), (width), (height));
+}
+
+CCPoint PointMake(float x,float y)
+{
+	return CCPoint((x), (y));
+}
+
+CCSize SizeMake(float width,float height)
+{
+	return CCSize((width), (height));
+}
 	
+void ScriptObjectUI::OnLoad()
+{
+	ETCFUNC("GetUiNode",		GetUiNode)
+	ETCFUNC("GetLabel",			GetLabel)
+	ETCFUNC("GetButton",		GetButton)
+	ETCFUNC("GetUiLayer",		GetUiLayer)
+	ETCFUNC("GetTableLayer",	GetTableLayer)
+	ETCFUNC("GetImage",			GetImage)
+	ETCFUNC("GetScrollLayer",	GetScrollLayer)
+	ETCFUNC("GetHScrollLayer",	GetHScrollLayer)
+	ETCFUNC("GetScrollViewContainer",	GetScrollViewContainer)		
+	ETCFUNC("CGSizeMake",		SizeMake)
+	ETCFUNC("CGPointMake",		PointMake)
+	ETCFUNC("CGRectMake",		RectMake)
+	ETCFUNC("ccc4",				ccc4);
+	ETCFUNC("ccc3",				ccc3);
+	ETCFUNC("ShowLoadBar",		ShowLoadBar);
+	ETCFUNC("CloseLoadBar",		CloseLoadBar);
+	ETCFUNC("GetSMGameScene",	GetSMGameScene);
+    ETCFUNC("GetSMLoginScene",	GetSMLoginScene);
+	ETCFUNC("GetWinSize",		GetWinSize);
+	ETCFUNC("RectZero",			RectZero);
+	ETCFUNC("SizeZero",			SizeZero);
+	ETCFUNC("GetStringSize",		GetStringSize);
+	ETCFUNC("GetHyperLinkTextSize", GetHyperLinkTextSize);
+	ETCFUNC("GetHyperLinkText",	GetHyperLinkText);
+	ETCFUNC("GetHyperLinkButton", GetHyperLinkButton);
+	ETCFUNC("GetItemButton", GetItemButton);
+	ETCFUNC("GetEquipButton", GetEquipButton);
 	
-	void ScriptObjectUI::OnLoad()
-	{
-		ETCFUNC("GetUiNode",		GetUiNode)
-		ETCFUNC("GetLabel",			GetLabel)
-		ETCFUNC("GetButton",		GetButton)
-		ETCFUNC("GetUiLayer",		GetUiLayer)
-		ETCFUNC("GetTableLayer",	GetTableLayer)
-		ETCFUNC("GetImage",			GetImage)
-		ETCFUNC("GetScrollLayer",	GetScrollLayer)
-		ETCFUNC("GetHScrollLayer",	GetHScrollLayer)
-		ETCFUNC("GetScrollViewContainer",	GetScrollViewContainer)
-/***
-* 临时性注释 郭浩
-* begin
-*/
-		
-		//		ETCFUNC("CGSizeMake",		CGSizeMake)
-//		ETCFUNC("CGPointMake",		CGPointMake)
-//		ETCFUNC("CGRectMake",		CGRectMake)
-/***
-* 临时性注释 郭浩
-* end
-*/
- 		ETCFUNC("ccc4",				ccc4);
-		ETCFUNC("ccc3",				ccc3);
-		ETCFUNC("ShowLoadBar",		ShowLoadBar);
-		ETCFUNC("CloseLoadBar",		CloseLoadBar);
-		ETCFUNC("GetSMGameScene",	GetSMGameScene);
-        ETCFUNC("GetSMLoginScene",	GetSMLoginScene);
-		ETCFUNC("GetWinSize",		GetWinSize);
-		ETCFUNC("RectZero",			RectZero);
-		ETCFUNC("SizeZero",			SizeZero);
-		ETCFUNC("GetStringSize",		GetStringSize);
-		ETCFUNC("GetHyperLinkTextSize", GetHyperLinkTextSize);
-		ETCFUNC("GetHyperLinkText",	GetHyperLinkText);
-		ETCFUNC("GetHyperLinkButton", GetHyperLinkButton);
-		ETCFUNC("GetItemButton", GetItemButton);
-		ETCFUNC("GetEquipButton", GetEquipButton);
-		
-		ETCFUNC("CreateColorLabel", CreateColorLabel);
-		
-		ETCFUNC("RecursiveUINode", RecursiveUINode);
-		ETCFUNC("RecursiveLabel", RecursiveLabel);
-		ETCFUNC("RecursiveButton", RecursiveButton);
-		ETCFUNC("RecursiveUILayer", RecursiveUILayer);
-		ETCFUNC("RecursiveImage", RecursiveImage);
-		ETCFUNC("RecursiveScroll", RecursiveScroll);
-		ETCFUNC("RecursiveScrollContainer", RecursiveScrollContainer);
-		ETCFUNC("RecursiveSVC", RecursiveSVC);
-		ETCFUNC("RecursiveSV", RecursiveSV);
-		ETCFUNC("RecursiveHyperText", RecursiveHyperText);
-		ETCFUNC("RecursiveHyperBtn", RecursiveHyperBtn);
-		ETCFUNC("RecursiveItemBtn", RecursiveItemBtn);
-		ETCFUNC("RecursiveEquipBtn", RecursiveEquipBtn);
-		ETCFUNC("RecursiveCheckBox", RecursiveCheckBox);
-		ETCFUNC("RecursiveRadioBtn", RecursiveRadioBtn);
-		ETCFUNC("RecursiveRadioGroup", RecursiveRadioGroup);
-		ETCFUNC("RecursivUIExp", RecursivUIExp);
-		ETCFUNC("RecursivUIEdit", RecursivUIEdit);
-		ETCFUNC("RecursivUISprite", RecursivUISprite);
-		
-		ETCFUNC("PRecursiveUINode", PRecursiveUINode);
-		ETCFUNC("PRecursiveLabel", PRecursiveLabel);
-		ETCFUNC("PRecursiveButton", PRecursiveButton);
-		ETCFUNC("PRecursiveUILayer", PRecursiveUILayer);
-		ETCFUNC("PRecursiveImage", PRecursiveImage);
-		ETCFUNC("PRecursiveSVC", PRecursiveSVC);
-		ETCFUNC("PRecursiveSV", PRecursiveSV);
-		ETCFUNC("PRecursiveHyperText", PRecursiveHyperText);
-		ETCFUNC("PRecursiveHyperBtn", PRecursiveHyperBtn);
-		ETCFUNC("PRecursiveItemBtn", PRecursiveItemBtn);
-		ETCFUNC("PRecursiveEquipBtn", PRecursiveEquipBtn);
-		
-		ETCFUNC("PRecursiveCheckBox", PRecursiveCheckBox);
-		ETCFUNC("PRecursiveRadioBtn", PRecursiveRadioBtn);
-		ETCFUNC("PRecursiveRadioGroup", PRecursiveRadioGroup);
-		ETCFUNC("PRecursiveUIExp", PRecursiveUIExp);
-		ETCFUNC("PRecursiveUIEdit", PRecursiveUIEdit);
-		ETCFUNC("PRecursiveUISprite", PRecursiveUISprite);
-		
-		ETCFUNC("ConverToUiNode", ConverToUiNode);
-		ETCFUNC("ConverToLabel", ConverToLabel);
-		ETCFUNC("ConverToButton", ConverToButton);
-		ETCFUNC("ConverToUiLayer", ConverToUiLayer);
-		ETCFUNC("ConverToTableLayer", ConverToTableLayer);
-		ETCFUNC("ConverToImage", ConverToImage);
-		ETCFUNC("ConverToSVC", ConverToSVC);
-		ETCFUNC("ConverToSV", ConverToSV);
-		ETCFUNC("ConverToHLT", ConverToHLT);
-		ETCFUNC("ConverToHLB", ConverToHLB);
-		ETCFUNC("ConverToItemButton", ConverToItemButton);
-		ETCFUNC("ConverToEquipBtn", ConverToEquipBtn);
-		
-		ETCFUNC("ConverToCheckBox", ConverToCheckBox);
-		ETCFUNC("ConverToRadioBtn", ConverToRadioBtn);
-		ETCFUNC("ConverToRadioGroup", ConverToRadioGroup);
-        ETCFUNC("ConverToEdit", ConverToEdit);
-		ETCFUNC("ConverToSprite", ConverToSprite);
-	}
+	ETCFUNC("CreateColorLabel", CreateColorLabel);
+	
+	ETCFUNC("RecursiveUINode", RecursiveUINode);
+	ETCFUNC("RecursiveLabel", RecursiveLabel);
+	ETCFUNC("RecursiveButton", RecursiveButton);
+	ETCFUNC("RecursiveUILayer", RecursiveUILayer);
+	ETCFUNC("RecursiveImage", RecursiveImage);
+	ETCFUNC("RecursiveScroll", RecursiveScroll);
+	ETCFUNC("RecursiveScrollContainer", RecursiveScrollContainer);
+	ETCFUNC("RecursiveSVC", RecursiveSVC);
+	ETCFUNC("RecursiveSV", RecursiveSV);
+	ETCFUNC("RecursiveHyperText", RecursiveHyperText);
+	ETCFUNC("RecursiveHyperBtn", RecursiveHyperBtn);
+	ETCFUNC("RecursiveItemBtn", RecursiveItemBtn);
+	ETCFUNC("RecursiveEquipBtn", RecursiveEquipBtn);
+	ETCFUNC("RecursiveCheckBox", RecursiveCheckBox);
+	ETCFUNC("RecursiveRadioBtn", RecursiveRadioBtn);
+	ETCFUNC("RecursiveRadioGroup", RecursiveRadioGroup);
+	ETCFUNC("RecursivUIExp", RecursivUIExp);
+	ETCFUNC("RecursivUIEdit", RecursivUIEdit);
+	ETCFUNC("RecursivUISprite", RecursivUISprite);
+	
+	ETCFUNC("PRecursiveUINode", PRecursiveUINode);
+	ETCFUNC("PRecursiveLabel", PRecursiveLabel);
+	ETCFUNC("PRecursiveButton", PRecursiveButton);
+	ETCFUNC("PRecursiveUILayer", PRecursiveUILayer);
+	ETCFUNC("PRecursiveImage", PRecursiveImage);
+	ETCFUNC("PRecursiveSVC", PRecursiveSVC);
+	ETCFUNC("PRecursiveSV", PRecursiveSV);
+	ETCFUNC("PRecursiveHyperText", PRecursiveHyperText);
+	ETCFUNC("PRecursiveHyperBtn", PRecursiveHyperBtn);
+	ETCFUNC("PRecursiveItemBtn", PRecursiveItemBtn);
+	ETCFUNC("PRecursiveEquipBtn", PRecursiveEquipBtn);
+	
+	ETCFUNC("PRecursiveCheckBox", PRecursiveCheckBox);
+	ETCFUNC("PRecursiveRadioBtn", PRecursiveRadioBtn);
+	ETCFUNC("PRecursiveRadioGroup", PRecursiveRadioGroup);
+	ETCFUNC("PRecursiveUIExp", PRecursiveUIExp);
+	ETCFUNC("PRecursiveUIEdit", PRecursiveUIEdit);
+	ETCFUNC("PRecursiveUISprite", PRecursiveUISprite);
+	
+	ETCFUNC("ConverToUiNode", ConverToUiNode);
+	ETCFUNC("ConverToLabel", ConverToLabel);
+	ETCFUNC("ConverToButton", ConverToButton);
+	ETCFUNC("ConverToUiLayer", ConverToUiLayer);
+	ETCFUNC("ConverToTableLayer", ConverToTableLayer);
+	ETCFUNC("ConverToImage", ConverToImage);
+	ETCFUNC("ConverToSVC", ConverToSVC);
+	ETCFUNC("ConverToSV", ConverToSV);
+	ETCFUNC("ConverToHLT", ConverToHLT);
+	ETCFUNC("ConverToHLB", ConverToHLB);
+	ETCFUNC("ConverToItemButton", ConverToItemButton);
+	ETCFUNC("ConverToEquipBtn", ConverToEquipBtn);
+	
+	ETCFUNC("ConverToCheckBox", ConverToCheckBox);
+	ETCFUNC("ConverToRadioBtn", ConverToRadioBtn);
+	ETCFUNC("ConverToRadioGroup", ConverToRadioGroup);
+    ETCFUNC("ConverToEdit", ConverToEdit);
+	ETCFUNC("ConverToSprite", ConverToSprite);
+}
 	
 	// 颜色结构导出
 	ETSTRUCTBEGIN(ccColor4B)

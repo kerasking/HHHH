@@ -114,7 +114,7 @@ namespace NDEngine
 
 		kScriptManager.Load();
 
-		ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
+		ScriptGlobalEvent::OnEvent(GE_GENERATE_GAMESCENE);
 
 		return true;
 	}

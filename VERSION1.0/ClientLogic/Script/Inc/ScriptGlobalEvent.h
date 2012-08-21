@@ -1,5 +1,3 @@
-#include "NewGameUIPetAttrib.h"
-#include "ScriptMgr.h"
 /*
  *  ScriptGlobalEvent.h
  *  SMYS
@@ -8,6 +6,9 @@
  *  Copyright 2012 (ÍøÁú)DeNA. All rights reserved.
  *
  */
+
+#include "NewGameUIPetAttrib.h"
+#include "ScriptMgr.h"
 
 #ifndef _SCRIPT_GLOBAL_EVENT_H_ZJH_
 #define _SCRIPT_GLOBAL_EVENT_H_ZJH_
@@ -29,13 +30,13 @@ typedef enum
 	GE_QUITGAME							= GLOBALEVENT_BEGIN + 7,
 	GLOBALEVENT_END,
 }GLOBALEVENT;
-	
+
 class ScriptGlobalEvent : public NDEngine::ScriptObject
 {
 public:
 	virtual void OnLoad();
 
-	static void OnEvent(GLOBALEVENT eEvent, int param1=0, int param2=0, int param3=0);
+	static void OnEvent(GLOBALEVENT eEvent, int param1 = 0, int param2 = 0, int param3 = 0);
 };
 
 #endif // _SCRIPT_GLOBAL_EVENT_H_ZJH_

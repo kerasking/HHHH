@@ -24,30 +24,31 @@ NAMESPACE_LUA_BEGIN
 
 static void PrintString(const TString* ts)
 {
- const char* s=getstr(ts);
- int n=ts->tsv.len;
- int i;
- putchar('"');
- for (i=0; i<n; i++)
- {
-  int c=s[i];
-  switch (c)
-  {
-   case '"': printf("\\\""); break;
-   case '\a': printf("\\a"); break;
-   case '\b': printf("\\b"); break;
-   case '\f': printf("\\f"); break;
-   case '\n': printf("\\n"); break;
-   case '\r': printf("\\r"); break;
-   case '\t': printf("\\t"); break;
-   case '\v': printf("\\v"); break;
-   default:	if (isprint((unsigned char)c))
-   			putchar(c);
-		else
-			printf("\\%03u",(unsigned char)c);
-  }
- }
- putchar('"');
+	const char* s = getstr(ts);
+	int n = ts->tsv.len;
+	int i;
+	putchar('"');
+	for (i = 0; i<n; i++)
+	{
+		int c = s[i];
+		switch (c)
+		{
+		case '"': printf("\\\""); break;
+		case '\a': printf("\\a"); break;
+		case '\b': printf("\\b"); break;
+		case '\f': printf("\\f"); break;
+		case '\n': printf("\\n"); break;
+		case '\r': printf("\\r"); break;
+		case '\t': printf("\\t"); break;
+		case '\v': printf("\\v"); break;
+		default:	
+			if (isprint((unsigned char)c))
+				putchar(c);
+			else
+				printf("\\%03u",(unsigned char)c);
+		}
+	}
+	putchar('"');
 }
 
 static void PrintConstant(const Proto* f, int i)
