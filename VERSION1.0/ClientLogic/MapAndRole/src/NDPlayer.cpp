@@ -520,8 +520,8 @@ namespace NDEngine
 			int(toPos.y) / MAP_UNITSIZE * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
 		
 		CGPoint posCur = GetPosition();
-		if ( ((int)posCur.x-DISPLAY_POS_X_OFFSET) % MAP_UNITSIZE != 0 || 
-			 ((int)posCur.y-DISPLAY_POS_Y_OFFSET) % MAP_UNITSIZE != 0)
+		if ( ((int)posCur.x - DISPLAY_POS_X_OFFSET) % MAP_UNITSIZE != 0 || 
+			 ((int)posCur.y - DISPLAY_POS_Y_OFFSET) % MAP_UNITSIZE != 0)
 		{ // Cell没走完,又设置新的目标
 			m_targetPos = pos;
 		}
@@ -778,11 +778,15 @@ namespace NDEngine
 			
 			eAtkSpd += itemtype->m_data.m_atk_speed + item->getInlayAtk_speed();
 			
-			eAtk += item->getAdditionResult(itemtype->m_data.m_enhancedId, item->iAddition, itemtype->m_data.m_atk) + item->getInlayAtk();
-			eDef += item->getAdditionResult(itemtype->m_data.m_enhancedId, item->iAddition, itemtype->m_data.m_def) + item->getInlayDef();
+			eAtk += item->getAdditionResult(itemtype->m_data.m_enhancedId, item->iAddition,
+				itemtype->m_data.m_atk) + item->getInlayAtk();
+			eDef += item->getAdditionResult(itemtype->m_data.m_enhancedId, item->iAddition,
+				itemtype->m_data.m_def) + item->getInlayDef();
 			eHardAtk += itemtype->m_data.m_hard_hitrate + item->getInlayHard_hitrate();
-			eSkillAtk += item->getAdditionResult(itemtype->m_data.m_enhancedId, item->iAddition, itemtype->m_data.m_mag_atk) + item->getInlayMag_atk();
-			eSkillDef += item->getAdditionResult(itemtype->m_data.m_enhancedId, item->iAddition, itemtype->m_data.m_mag_def) + item->getInlayMag_def();
+			eSkillAtk += item->getAdditionResult(itemtype->m_data.m_enhancedId, item->iAddition,
+				itemtype->m_data.m_mag_atk) + item->getInlayMag_atk();
+			eSkillDef += item->getAdditionResult(itemtype->m_data.m_enhancedId, item->iAddition,
+				itemtype->m_data.m_mag_def) + item->getInlayMag_def();
 			eSkillHard += itemtype->m_data.m_mana_limit + item->getInlayMana_limit();
 			eDodge += itemtype->m_data.m_dodge + item->getInlayDodge();
 			ePhyHit += itemtype->m_data.m_hitrate + item->getInlayHitrate(); // 物理命中

@@ -46,7 +46,8 @@ namespace NDEngine
 		static std::string PINZHI(int i)
 		{
 			std::string res = "";
-			switch (i) {
+			switch (i)
+			{
 				case 0:
 					res = NDCommonCString("chuchao");
 					break;
@@ -156,7 +157,9 @@ namespace NDEngine
 	static std::string getItemStrColor(int i);
 		
 	public:
-		struct {
+
+		struct
+		{
 			int m_id;
 			Byte m_level;
 			int m_req_profession;
