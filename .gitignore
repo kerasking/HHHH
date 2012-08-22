@@ -2,6 +2,7 @@
 *.user
 *.ncb
 *.bak
+*.old
 *.sdf
 debug/
 Debug/

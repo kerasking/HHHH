@@ -163,11 +163,16 @@ void GameScene::SetUIShow(bool bShow)
 		{
 			player.stopMoving();
 		}
-	} else {
-		if (!m_stackUIMenu.empty()) {
+	}
+	else
+	{
+		if (!m_stackUIMenu.empty())
+		{
 			int menuType = m_stackUIMenu.front();
 			m_stackUIMenu.pop_front();
-			switch (menuType) {
+
+			switch (menuType)
+			{
 				case MT_DUI_WU:
 					this->onClickTeam();
 					break;
@@ -448,7 +453,9 @@ void GameScene::OnBattleBegin()
 		if ((*it)->IsKindOfClass(RUNTIME_CLASS(NDUIDialog)))
 		{
 			if (!(*it)->IsKindOfClass(RUNTIME_CLASS(GameQuitDialog)))
+			{
 				((NDUIDialog*)(*it))->Close();
+			}
 		} 
 		else 
 		{
@@ -954,7 +961,8 @@ void GameScene::ShowMiniMap(bool bShow)
 // 	}
 }
 
-void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section)
+void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
+										 unsigned int cellIndex, NDSection* section)
 {
 	/***
 	* 临时性注释 郭浩

@@ -1,4 +1,0 @@
-
-class CCParticleSystemPoint : public CCParticleSystem {
-    static CCParticleSystemPoint* particleWithFile(char *plistFile);
-};

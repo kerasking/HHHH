@@ -45,7 +45,8 @@ bool NDNetMsgPool::Process(NDTransData* data)
 	int nMsgLen = data->GetSize();
 	
 	
-	if (nMsgLen<6) {
+	if (nMsgLen<6)
+	{
 		return false;
 	}
 	
@@ -112,9 +113,12 @@ bool NDNetMsgPool::RegMsg(MSGID msgID, NDMsgObject* msgObj)
 	REG_MSG(NDServerCode::_MSG_MONSTER_INFO, NDMapMgrPtr)
 	*/
 	
-	map_class_callback_it it = m_mapCallBack.find(msgID);						
+	map_class_callback_it it = m_mapCallBack.find(msgID);	
+
 	if (it != m_mapCallBack.end() || !(msgObj))								
+	{
 		return false;
+	}
 	
 	m_mapCallBack.insert(map_class_callback_pair(msgID,(NDMsgObject*)(msgObj)));	
 	
@@ -125,7 +129,3 @@ void NDNetMsgPool::UnRegMsg(MSGID msgID)
 {
 	m_mapCallBack.erase(msgID);
 }
-
-
-
-

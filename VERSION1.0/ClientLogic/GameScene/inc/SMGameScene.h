@@ -15,9 +15,9 @@
 #include "NDMapLayerLogic.h"
 
 //class NDMiniMap; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-class CSMGameScene :
-public NDScene,
-public NDUIButtonDelegate
+class CSMGameScene:
+	public NDScene,
+	public NDUIButtonDelegate
 {
 	DECLARE_CLASS(CSMGameScene)
 	
@@ -27,6 +27,7 @@ public NDUIButtonDelegate
 	static CSMGameScene* Scene();
 	
 public:
+
 	void Initialization(int mapID); override
 	void ShowMiniMap(bool bShow);
 	CGSize GetSize();
