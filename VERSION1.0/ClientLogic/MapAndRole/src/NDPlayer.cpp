@@ -201,6 +201,7 @@ namespace NDEngine
 			g_defaultHero->Initialization(lookface, false);
 			g_defaultHero->SetLookface(lookface);
 		}
+
 		return *g_defaultHero;
 	}
 	
