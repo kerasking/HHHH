@@ -2089,8 +2089,11 @@ void GameScene::ShowRelieve(bool bShow)
 		dataSource->AddSection(section);
 		m_tlRelieve->SetDataSource(dataSource);
 		SetUIShow(true);
-	} else {
-		if (this->m_relieveLayer) {
+	} 
+	else
+	{
+		if (this->m_relieveLayer)
+		{
 			this->RemoveChild(this->m_relieveLayer, true);
 			this->m_relieveLayer = NULL;
 			this->m_tlRelieve = NULL;
@@ -2104,7 +2107,8 @@ void GameScene::PushWorldMapScene()
 	//NDDirector::DefaultDirector()->PushScene(WorldMapScene::Scene(maplayer->GetMapIndex()));
 }
 
-void GameScene::ShowPaiHang(const std::vector<std::string>& vec_str, const std::vector<int>& vec_id)
+void GameScene::ShowPaiHang(const std::vector<std::string>& vec_str,
+							const std::vector<int>& vec_id)
 {
 	InitContent(m_tlPaiHang, vec_str, vec_id);
 }
@@ -2512,8 +2516,12 @@ std::string GameScene::GetTLShareSelText(NDUINode* uinode)
 void GameScene::ReShowTaskAwardItemOpt()
 {
 	std::vector<std::string> strOP;
-	for (VEC_ITEM_IT it = this->m_vTaskAwardItem.begin(); it != this->m_vTaskAwardItem.end(); it++) {
-		if (!*it) {
+
+	for (VEC_ITEM_IT it = this->m_vTaskAwardItem.begin();
+		it != this->m_vTaskAwardItem.end(); it++)
+	{
+		if (!*it)
+		{
 			continue;
 		}
 		
@@ -2521,10 +2529,15 @@ void GameScene::ReShowTaskAwardItemOpt()
 		stringstream sb;
 		sb << tempItem.getItemName();
 		
-		if (tempItem.isEquip()) { // 如果是装备类的将当前的耐久值改为最大值
+		if (tempItem.isEquip())
+		{ 
+			// 如果是装备类的将当前的耐久值改为最大值
 			tempItem.iAmount = tempItem.getAmount_limit();
-		} else {
-			if (tempItem.iAmount > 1) {
+		}
+		else
+		{
+			if (tempItem.iAmount > 1)
+			{
 				sb << " x" << tempItem.iAmount;
 			}
 		}
@@ -2539,17 +2552,22 @@ void GameScene::ShowTaskAwardItemOpt(Task* task)
 {
 	NDAsssert(task != NULL);
 	
-	if (task->award_item1 != 0) {
+	if (task->award_item1 != 0)
+	{
 		Item *item = new Item(task->award_item1);
 		item->iAmount = task->award_num1;
 		this->m_vTaskAwardItem.push_back(item);
 	}
-	if (task->award_item2 != 0) {
+
+	if (task->award_item2 != 0)
+	{
 		Item *item = new Item(task->award_item2);
 		item->iAmount = task->award_num2;
 		this->m_vTaskAwardItem.push_back(item);
 	}
-	if (task->award_item3 != 0) {
+
+	if (task->award_item3 != 0)
+	{
 		Item *item = new Item(task->award_item3);
 		item->iAmount = task->award_num3;
 		this->m_vTaskAwardItem.push_back(item);
@@ -2739,7 +2757,8 @@ void GameScene::onClickSyndicate()
 	
 	vOpts.push_back(MENU_SYNDICATE[1]);
 	
-	switch (role.getSynRank()) {
+	switch (role.getSynRank())
+	{
 		case SYNRANK_NONE:
 		{
 			vOpts.push_back(MENU_SYNDICATE[0]);
@@ -2760,6 +2779,7 @@ void GameScene::onClickSyndicate()
 		}
 			break;
 	}
+
 	InitTLShareContent(vOpts);
 }
 
@@ -2826,17 +2846,25 @@ void GameScene::onClickSyndicate()
 
 bool GameScene::checkNewPwd(const string& pwd)
 {
-	if (pwd.empty()) {
+	if (pwd.empty())
+	{
 		return false;
 	}
 	
-	char c;
-	for (size_t i = 0; i < pwd.size(); i++) {
+	char c = 0;
+
+	for (size_t i = 0; i < pwd.size(); i++)
+	{
 		c = pwd.at(i);
-		if (!(((c >= '0') && (c <= '9')) || ((c >= 'a') && (c <= 'z')) || ((c >= 'A') && (c <= 'Z')))) {
+
+		if (!(((c >= '0') && (c <= '9')) ||
+			((c >= 'a') && (c <= 'z')) ||
+			((c >= 'A') && (c <= 'Z'))))
+		{
 			return false;
 		}
 	}
+
 	return true;
 }
 
@@ -2899,6 +2927,7 @@ void GameScene::processVersionMsg(const char* version, int flag, const char* url
 	NDUIDialog* dlg = new NDUIDialog();
 	dlg->Initialization();
 	dlg->SetDelegate(this);
+
 	if (flag != 0) 
 	{
 		//强制更新		
@@ -2909,7 +2938,10 @@ void GameScene::processVersionMsg(const char* version, int flag, const char* url
 		//普通更新
 		dlg->SetTag(TAG_UPDATE_NOT_FORCE);
 	}
-	dlg->Show(NDCommonCString("VersionUpdate"), version, NDCommonCString("Cancel"), NDCommonCString("Ok"), NULL);
+
+	dlg->Show(NDCommonCString("VersionUpdate"), 
+		version, NDCommonCString("Cancel"),
+		NDCommonCString("Ok"), NULL);
 }
 
 /***
@@ -3022,7 +3054,8 @@ void GameScene::processMsgPosText(NDTransData& data)
 	int action = data.ReadByte();
 	int idPosText = data.ReadByte();
 	
-	switch (action) {
+	switch (action)
+	{
 		case 0: // 新建
 		{
 			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
@@ -3128,6 +3161,7 @@ void GameScene::ShowShopAndRecharge()
 {
 	//InitTLShareContent("商城", "充值", NULL);
 	map_vip_item& items = ItemMgrObj.GetVipStore();
+
 	if (items.empty()) 
 	{
 		NDTransData bao(_MSG_SHOP_CENTER);
@@ -3249,7 +3283,9 @@ GameSceneReleaseHelper::~GameSceneReleaseHelper()
 	NDDirector::DefaultDirector()->RemoveDelegate(this);
 }
 
-void GameSceneReleaseHelper::BeforeDirectorPopScene(NDDirector* director, NDScene* scene, bool cleanScene)
+void GameSceneReleaseHelper::BeforeDirectorPopScene(NDDirector* director,
+													NDScene* scene,
+													bool cleanScene)
 {
 	if (scene->IsKindOfClass(RUNTIME_CLASS(GameScene))) 
 	{
@@ -3259,7 +3295,8 @@ void GameSceneReleaseHelper::BeforeDirectorPopScene(NDDirector* director, NDScen
 	}
 }
 
-void GameSceneReleaseHelper::AfterDirectorPopScene(NDDirector* director, bool cleanScene)
+void GameSceneReleaseHelper::AfterDirectorPopScene(NDDirector* director,
+												   bool cleanScene)
 {
 	if (m_bGameSceneRelease) 
 	{

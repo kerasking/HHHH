@@ -188,7 +188,8 @@ namespace NDEngine
 	}
 	
 	
-	NDPlayer& NDPlayer::defaultHero(int lookface/* = 0*/, bool bSetLookFace/*=false*/)
+	NDPlayer& NDPlayer::defaultHero(int lookface/* = 0*/,
+		bool bSetLookFace/*=false*/)
 	{
 		if (m_bFirstUse)
 		{
@@ -217,6 +218,7 @@ namespace NDEngine
 		std::stringstream ssNpcFunc; 
 		ssNpcFunc << "NPC_CLICK_" << idNpc;
 		bool bRet = script.IsLuaFuncExist(ssNpcFunc.str().c_str(), "NPC");
+
 		if (bRet)
 		{
 

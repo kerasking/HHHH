@@ -78,14 +78,14 @@ typedef vec_marriage::iterator			vec_marriage_it;
 
 
 class GameScene : 
-public NDScene, 
-//public NDUITableLayerDelegate, ///< 临时性注释 郭浩
-public NDUIButtonDelegate,
-//public NDUIHControlContainerDelegate,
-//public NDUIAniLayerDelegate,
-public NDUIDialogDelegate,
-//public NDUICustomViewDelegate,
-public ITimerCallback
+	public NDScene, 
+	//public NDUITableLayerDelegate, ///< 临时性注释 郭浩
+	public NDUIButtonDelegate,
+	//public NDUIHControlContainerDelegate,
+	//public NDUIAniLayerDelegate,
+	public NDUIDialogDelegate,
+	//public NDUICustomViewDelegate,
+	public ITimerCallback
 {
 	DECLARE_CLASS(GameScene)
 public:
