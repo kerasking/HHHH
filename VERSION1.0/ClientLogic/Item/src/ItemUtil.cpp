@@ -14,12 +14,14 @@
 
 unsigned int GetItemInfoN(unsigned int nItemId, unsigned int  nIndex)
 {
-	return ScriptGameDataObj.GetData<unsigned long>(eItemInfo, nItemId, eRoleDataBasic, 0, nIndex);
+	return ScriptGameDataObj.GetData<unsigned long>(eItemInfo, nItemId,
+		eRoleDataBasic, 0, nIndex);
 }
 
 const char* GetItemInfoS(unsigned int nItemId, unsigned int  nIndex)
 {
-	return ScriptGameDataObj.GetData<std::string>(eItemInfo, nItemId, eRoleDataBasic, 0, nIndex).c_str();
+	return ScriptGameDataObj.GetData<std::string>(eItemInfo, nItemId,
+		eRoleDataBasic, 0, nIndex).c_str();
 }
 
 unsigned int GetItemDBN(unsigned int nItemType, unsigned int  nIndex)

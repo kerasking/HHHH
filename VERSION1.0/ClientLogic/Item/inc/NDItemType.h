@@ -132,7 +132,8 @@ namespace NDEngine
 		static std::string PETLEVEL(int i)
 		{
 			std::string res = "";
-			switch (i) {
+			switch (i)
+			{
 				case 0:
 					res = NDCommonCString("putong");
 					break;
