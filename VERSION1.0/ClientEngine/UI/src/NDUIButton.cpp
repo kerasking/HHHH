@@ -109,6 +109,7 @@ namespace NDEngine
 		delete m_rimImageRT;
 		delete m_rimImageRB;
 		delete m_rimImageLB;
+
 		if (m_clearUpPicOnFree) 
 		{
 			delete m_image;
@@ -123,7 +124,9 @@ namespace NDEngine
 		//if (m_spriteArrow) delete m_spriteArrow;
 		
 		if (m_ClearFocusImageOnFree && m_focusImage)
+		{
 			delete m_focusImage;
+		}
 			
 		if (m_bClearBgOnFree)
 		{

@@ -175,8 +175,8 @@ namespace NDEngine
 	private:
 
 		CGPoint m_screenCenter;
-		cocos2d::CCArray*/*<MAP_ORDER*>*/m_orders;
-		cocos2d::CCArray*/*<MAP_ORDER*>*/m_ordersOfMapscenesAndMapanimations;
+		cocos2d::CCArray* m_pkOrders;
+		cocos2d::CCArray* m_pkOrdersOfMapscenesAndMapanimations;
 		NDMapData *m_mapData;
 		cocos2d::CCMutableArray< cocos2d::CCMutableArray<NDFrameRunRecord*>* > *m_frameRunRecordsOfMapAniGroups;
 		cocos2d::CCMutableArray< NDFrameRunRecord* > *m_frameRunRecordsOfMapSwitch;

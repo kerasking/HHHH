@@ -198,8 +198,16 @@ namespace NDEngine
 		float GetScaleFactor();
 		
 		void DisibleScissor();
+
 	private:
-		typedef enum { eTransitionSceneNone, eTransitionSceneReplace, eTransitionScenePush, eTransitionScenePop, } TransitionSceneType;
+
+		typedef enum 
+		{
+			eTransitionSceneNone,
+			eTransitionSceneReplace,
+			eTransitionScenePush,
+			eTransitionScenePop
+		} TransitionSceneType;
 		
 		void SetTransitionScene(NDScene *scene, TransitionSceneType type);
 		

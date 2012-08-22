@@ -82,7 +82,7 @@ class anigroup_param : public cocos2d::CCObject, public std::map<std::string, in
 
 class NDMapData : public cocos2d::CCObject 
 {
-	
+
 public:
 	CC_SYNTHESIZE(std::string, m_Name, Name)
 	CC_SYNTHESIZE(int, m_nLayerCount, LayerCount)

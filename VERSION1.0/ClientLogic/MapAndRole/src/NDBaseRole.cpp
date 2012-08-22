@@ -65,9 +65,13 @@ NDBaseRole::NDBaseRole()
 	subnode->SetContentSize(NDDirector::DefaultDirector()->GetWinSize());
 	
 	m_posScreen = CGPointZero;	
-	m_picRing = NULL; m_picShadow = NULL; m_picShadowBig = NULL;
-	m_iShadowOffsetX = 0; m_iShadowOffsetY = 10;
-	m_bBigShadow = false; m_bShowShadow = true;
+	m_picRing = NULL;
+	m_picShadow = NULL;
+	m_picShadowBig = NULL;
+	m_iShadowOffsetX = 0;
+	m_iShadowOffsetY = 10;
+	m_bBigShadow = false;
+	m_bShowShadow = true;
 	
 	m_id = 0;
 	
@@ -138,7 +142,8 @@ CGRect NDBaseRole::GetFocusRect()
 	
 	CGSize sizeRing = m_picRing->GetSize();
 	
-	return CGRectMake(point.x-8-13, point.y-16-5, sizeRing.width, sizeRing.height);
+	return CGRectMake(point.x - 8 - 13, point.y - 16 - 5,
+		sizeRing.width, sizeRing.height);
 }
 
 void NDBaseRole::DirectRight(bool bRight)
@@ -164,7 +169,9 @@ void NDBaseRole::DirectRight(bool bRight)
 int NDBaseRole::getFlagId(int index)
 {
 	int iid = -1;
-	switch (index) {
+
+	switch (index)
+	{
 		case CAMP_NEUTRAL : iid = -1;break;
 		case CAMP_SUI: iid = FLAG_SUI_DYNASTY_1;break;
 		case CAMP_TANG: iid = FLAG_TAN_DYNASTY_1;break;
@@ -172,6 +179,7 @@ int NDBaseRole::getFlagId(int index)
 		case CAMP_FOR_ESCORT : iid = FLAG_ESCORT_1;break;//ïÚÆì
 		case 5:iid = FLAG_TEAM_1;break; //¶ÓÎé
 	}
+
 	return iid;
 }
 
@@ -214,6 +222,7 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 {
 	NDNode *node = this->GetParent();
 	CGSize sizemap;
+
 	if (node )
 	{
 		
@@ -223,7 +232,8 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 			NDMapLayer *layer = (NDMapLayer*)node;
 			CGPoint screen = layer->GetScreenCenter();
 			CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-			m_posScreen = ccpSub(this->GetPosition(), ccpSub(screen, CGPointMake(winSize.width / 2, winSize.height / 2)));
+			m_posScreen = ccpSub(this->GetPosition(), ccpSub(screen, 
+				CGPointMake(winSize.width / 2, winSize.height / 2)));
 		}
 		else 
 		{
@@ -232,7 +242,8 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 				
 		sizemap = node->GetContentSize();
 	}
-	else	{
+	else
+	{
 		return true;
 	}
 	
@@ -673,6 +684,7 @@ int NDBaseRole::getEquipmentLookFace(int lookface, int type)
 		case 2: 
 		{//ÐØ¼×
 			int index =  lookface / 10 % 100;
+
 			if (index == 99) 
 			{
 				return 0;
@@ -691,10 +703,12 @@ int NDBaseRole::getEquipmentLookFace(int lookface, int type)
 				{
 					nID = 11300 + index - 9;
 				}
-				else {
+				else
+				{
 					nID = 11400 + index - 14;
 				}
-			}else 
+			}
+			else 
 			{ //Åû·ç
 				nID = (index - 50)*8 + 30000;
 			}
@@ -711,10 +725,12 @@ void NDBaseRole::defaultDeal()
 		if (sex % 2 == SpriteSexMale) 
 		{
 			expresstion = 10400;
-		} else 
+		}
+		else 
 		{
 			expresstion = 10401;
 		}
+
 		SetExpressionImageWithEquipmentId(expresstion);
 	}
 }
@@ -1100,7 +1116,8 @@ void NDBaseRole::addTalkMsg(std::string msg,int timeForTalkMsg)
 
 void NDBaseRole::drawEffects(bool bDraw)
 {
-	if (effectRidePetAniGroup != NULL && effectRidePetAniGroup->GetParent()) 
+	if (effectRidePetAniGroup != NULL &&
+		effectRidePetAniGroup->GetParent()) 
 	{
 		effectRidePetAniGroup->SetPosition(GetPosition());
 		effectRidePetAniGroup->RunAnimation(bDraw);
@@ -1184,20 +1201,24 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 	}
 	
 	CGSize sizeShadow = pic->GetSize();
+
 	int x = m_position.x - DISPLAY_POS_X_OFFSET;
 	int y = m_position.y - DISPLAY_POS_Y_OFFSET;
-	pic->DrawInRect(CGRectMake(x + m_iShadowOffsetX, y+m_iShadowOffsetY+NDDirector::DefaultDirector()->GetWinSize().height-parentsize.height, sizeShadow.width, sizeShadow.height));
+
+	pic->DrawInRect(CGRectMake(x + m_iShadowOffsetX,
+		y + m_iShadowOffsetY + NDDirector::DefaultDirector()->GetWinSize().height -
+		parentsize.height, sizeShadow.width, sizeShadow.height));
 }
 
 void NDBaseRole::SetNormalAniGroup(int lookface)
 {
-	if (lookface <= 0) {
+	if (lookface <= 0)
+	{
 		return;
 	}
 
-
 	Initialization( tq::CString("%smodel_%d%s", 
-		NDEngine::NDPath::GetAnimationPath().c_str(), lookface/100, ".spr") );
+		NDEngine::NDPath::GetAnimationPath().c_str(), lookface / 100, ".spr") );
 
 	m_faceRight = true;
 	SetCurrentAnimation(MANUELROLE_STAND, m_faceRight);

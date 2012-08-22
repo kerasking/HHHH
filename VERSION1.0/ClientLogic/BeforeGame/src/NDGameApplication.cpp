@@ -103,7 +103,7 @@ namespace NDEngine
 		ScriptMgr kScriptManager = ScriptMgr::GetSingleton();
 
 		pkDirector->Initialization();
-		pkDirector->RunScene(CSMGameScene::Scene());
+		pkDirector->RunScene(GameScene::Scene());
 
 		ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
 		NDScriptGameData* pkData = new NDScriptGameData;

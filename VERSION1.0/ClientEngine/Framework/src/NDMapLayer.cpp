@@ -85,10 +85,10 @@ namespace NDEngine
 		m_lbTime = NULL;
 		m_lbTitle = NULL;
 		m_lbTitleBg = NULL;
-		m_orders = CCArray::array();
-		m_orders->retain();
-		m_ordersOfMapscenesAndMapanimations = CCArray::array();
-		m_ordersOfMapscenesAndMapanimations->retain();
+		m_pkOrders = CCArray::array();
+		m_pkOrders->retain();
+		m_pkOrdersOfMapscenesAndMapanimations = CCArray::array();
+		m_pkOrdersOfMapscenesAndMapanimations->retain();
 		m_frameRunRecordsOfMapAniGroups = new CCMutableArray< CCMutableArray<NDFrameRunRecord*>* >();
 		m_frameRunRecordsOfMapSwitch = new CCMutableArray< NDFrameRunRecord* >();
 		this->m_bBattleBackground = false;
@@ -112,16 +112,16 @@ namespace NDEngine
 	
 	NDMapLayer::~NDMapLayer()
 	{
-		CC_SAFE_RELEASE(m_orders);
-		CC_SAFE_RELEASE(m_ordersOfMapscenesAndMapanimations);
+		CC_SAFE_RELEASE(m_pkOrders);
+		CC_SAFE_RELEASE(m_pkOrdersOfMapscenesAndMapanimations);
 		CC_SAFE_RELEASE(m_frameRunRecordsOfMapAniGroups);
 		CC_SAFE_RELEASE(m_frameRunRecordsOfMapSwitch);
 		//CC_SAFE_RELEASE(m_texMap);
 		CC_SAFE_RELEASE(m_mapData);
 		CC_SAFE_RELEASE(m_switchAniGroup);
-		CC_SAFE_RELEASE(m_orders);
-		CC_SAFE_RELEASE(m_orders);
-		CC_SAFE_RELEASE(m_orders);
+		CC_SAFE_RELEASE(m_pkOrders);
+		CC_SAFE_RELEASE(m_pkOrders);
+		CC_SAFE_RELEASE(m_pkOrders);
 		
 		delete m_picMap;
 		CC_SAFE_DELETE(subnode);
@@ -148,10 +148,10 @@ namespace NDEngine
 	void NDMapLayer::replaceMapData(int mapId,int center_x,int center_y)
 	{
 		CC_SAFE_RELEASE(m_mapData);
-		CC_SAFE_RELEASE(m_orders);
+		CC_SAFE_RELEASE(m_pkOrders);
 	
-		m_orders  = CCArray::array();
-		m_orders->retain();
+		m_pkOrders  = CCArray::array();
+		m_pkOrders->retain();
 		//CC_SAFE_RELEASE(m_texMap);
 
 		delete m_picMap;
@@ -248,15 +248,19 @@ namespace NDEngine
 	
 	void NDMapLayer::refreshTitle()
 	{
-		if(m_lbTitle&&m_lbTitleBg)
+		if(m_lbTitle && m_lbTitleBg)
 		{
-			if(showTitle){
-				if(titleAlpha<255){
-                    if(m_lbTitle&&m_lbTitleBg){
-                        int x=NDDirector::DefaultDirector()->GetWinSize().width/2-150;
-                        int y=60;
+			if(showTitle)
+			{
+				if(titleAlpha < 255)
+				{
+                    if(m_lbTitle && m_lbTitleBg)
+					{
+                        int x = NDDirector::DefaultDirector()->GetWinSize().width / 2 - 150;
+                        int y = 60;
                         //NDLog("x:%d,y:%d",x,y);
-                        m_lbTitleBg->SetFrameRect(CGRectMake(NDDirector::DefaultDirector()->GetWinSize().width/2-210, y, 420, 60));
+                        m_lbTitleBg->SetFrameRect(CGRectMake(NDDirector::DefaultDirector()->
+							GetWinSize().width / 2 - 210, y, 420, 60));
                         //m_lbTitleBg->draw();
                         m_lbTitle->SetFrameRect(CGRectMake(x, y, 300, 60));
                     
@@ -269,20 +273,25 @@ namespace NDEngine
                         
                         p2->SetColor(ccc4(titleAlpha,titleAlpha,titleAlpha,titleAlpha));
                         
-                        titleAlpha+=5;
+                        titleAlpha += 5;
                     }
-				}else if(!m_ndTitleTimer) {
+				}
+				else if(!m_ndTitleTimer)
+				{
 					this->m_ndTitleTimer = new NDTimer;
 					this->m_ndTitleTimer->SetTimer(this, titleTimerTag, 3.0f);
-
 				}
-			}else {
-				if(titleAlpha>=0){
-                    if(m_lbTitle&&m_lbTitleBg){
-                        int x=NDDirector::DefaultDirector()->GetWinSize().width/2-150;
-                        int y=60;
+			}
+			else
+			{
+				if(titleAlpha >= 0)
+				{
+                    if(m_lbTitle && m_lbTitleBg)
+					{
+                        int x = NDDirector::DefaultDirector()->GetWinSize().width / 2 - 150;
+                        int y = 60;
                         //NDLog("x:%d,y:%d",x,y);
-                        m_lbTitleBg->SetFrameRect(CGRectMake(NDDirector::DefaultDirector()->GetWinSize().width/2-210, y, 420, 60));
+                        m_lbTitleBg->SetFrameRect(CGRectMake(NDDirector::DefaultDirector()->GetWinSize().width / 2 - 210, y, 420, 60));
                         //m_lbTitleBg->draw();
                         m_lbTitle->SetFrameRect(CGRectMake(x, y, 300, 60));
                         
@@ -295,13 +304,15 @@ namespace NDEngine
                         
                         p2->SetColor(ccc4(titleAlpha,titleAlpha,titleAlpha,titleAlpha));
                         
-                        titleAlpha-=15;
+                        titleAlpha -= 15;
                     }
-				}else{
+				}
+				else
+				{
                     m_lbTitle->RemoveFromParent(true);
                     m_lbTitleBg->RemoveFromParent(true);
-                    m_lbTitle=NULL;
-                    m_lbTitleBg=NULL;
+                    m_lbTitle = NULL;
+                    m_lbTitleBg = NULL;
                 }
 			}
 
@@ -345,11 +356,12 @@ namespace NDEngine
 		{
 			m_lbTitle = new NDUIImage;
 			m_lbTitle->Initialization();
-			NDPicture* picture= NDPicturePool::DefaultPool()->AddPicture(tq::CString("%smap_title.png", NDEngine::NDPath::GetImagePath().c_str()));
+			NDPicture* picture= NDPicturePool::DefaultPool()->
+				AddPicture(tq::CString("%smap_title.png", NDEngine::NDPath::GetImagePath().c_str()));
 			//picture->SetColor(ccc4(0, 0, 0,0));
-			int col=name_col;
-			int row=name_row;
-			picture->Cut(CGRectMake(col*300,row*60,300,60));
+			int col = name_col;
+			int row = name_row;
+			picture->Cut(CGRectMake(col * 300,row * 60,300,60));
 			m_lbTitle->SetPicture(picture, true);
 		}
 		
@@ -357,7 +369,8 @@ namespace NDEngine
 		{
 			m_lbTitleBg = new NDUIImage;
 			m_lbTitleBg->Initialization();
-			NDPicture* bg = NDPicturePool::DefaultPool()->AddPicture(tq::CString("%map_title_bg.png", NDEngine::NDPath::GetImagePath().c_str()));
+			NDPicture* bg = NDPicturePool::DefaultPool()->
+				AddPicture(tq::CString("%map_title_bg.png", NDEngine::NDPath::GetImagePath().c_str()));
 			m_lbTitleBg->SetPicture(bg, true);
 		}
 		
@@ -386,11 +399,15 @@ namespace NDEngine
 		pSprite->SetCurrentAnimation(0, false);        
 		bool bSet = this->isMapRectIntersectScreen(pSprite->GetSpriteRect());
 		pSprite->BeforeRunAnimation(bSet);
+
 		if(bSet)
 		{
-			while (nPlayTimes>0) {
+			while (nPlayTimes>0)
+			{
 				pSprite->RunAnimation(pSprite->DrawEnabled());
-				if (pSprite->IsAnimationComplete()) {
+
+				if (pSprite->IsAnimationComplete())
+				{
 					nPlayTimes--;
 				}
 			}
@@ -434,13 +451,16 @@ namespace NDEngine
 	{
 		if(m_TreasureBox)
 		{
-			if(box_status==BOX_SHOWING){
+			if(box_status == BOX_SHOWING)
+			{
 				if (m_TreasureBox->IsAnimationComplete())
 				{
 					m_TreasureBox->SetCurrentAnimation(1, false);
-					box_status=BOX_CLOSE;
+					box_status = BOX_CLOSE;
 				}
-			}else if(box_status==BOX_OPENING){
+			}
+			else if(box_status == BOX_OPENING)
+			{
 				if (m_TreasureBox->IsAnimationComplete())
 				{
 					m_TreasureBox->SetCurrentAnimation(3, false);
@@ -507,7 +527,7 @@ namespace NDEngine
 
 				}
 
-				int mi=this->roadBlockTimeCount / 60;
+				int mi = this->roadBlockTimeCount / 60;
 				tq::CString str_mi;
 
 				if(mi < 10)
@@ -522,7 +542,7 @@ namespace NDEngine
 				int se = this->roadBlockTimeCount % 60;
 				tq::CString str_se;
 
-				if(se<10)
+				if(se < 10)
 				{
 					str_se.Format("0%d",se);
 				}
@@ -659,7 +679,7 @@ namespace NDEngine
 	{	
 		this->MakeOrders();
 		
-		unsigned int orderCount = m_orders->count(),
+		unsigned int orderCount = m_pkOrders->count(),
 				   sceneTileCount = m_mapData->getSceneTiles()->count(),
 				   aniGroupCount = 0,//m_mapData->getAnimationGroups()->count(), ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 				   switchCount = m_mapData->getSwitchs()->count();
@@ -670,7 +690,7 @@ namespace NDEngine
 		{
 			//PerformanceTestPerFrameBeginName(" NDMapLayer::DrawScenesAndAnimations inner");
 			
-			MAP_ORDER *dict = (MAP_ORDER *)m_orders->objectAtIndex(i);
+			MAP_ORDER *dict = (MAP_ORDER *)m_pkOrders->objectAtIndex(i);
 			unsigned int index = 0;
 			if (dict)
 			{
@@ -1230,8 +1250,8 @@ namespace NDEngine
 	
 	void NDMapLayer::MakeOrders()
 	{
-		m_orders->removeAllObjects();
-		m_orders->addObjectsFromArray(m_ordersOfMapscenesAndMapanimations);
+		m_pkOrders->removeAllObjects();
+		m_pkOrders->addObjectsFromArray(m_pkOrdersOfMapscenesAndMapanimations);
 		const std::vector<NDNode*>& cld = this->GetChildren();
 		std::map<int, NDNode*> mapDrawlast;
 		//std::map<unsigned int, NDManualRole*> mapRoleCell;
@@ -1252,7 +1272,7 @@ namespace NDEngine
 			{
 				NDSprite* sprite = (NDSprite*)node;
 				
-				int index = this->InsertIndex(sprite->GetOrder(), m_orders);	
+				int index = this->InsertIndex(sprite->GetOrder(), m_pkOrders);	
 				
 				MAP_ORDER *dict = new MAP_ORDER;
 				
@@ -1261,7 +1281,7 @@ namespace NDEngine
 				//[dict setObject:[NSNumber numberWithInt:i + [m_mapData.sceneTiles count]+ [m_mapData.animationGroups count] + [m_mapData.switchs count]] forKey:@"index"];
 				//[dict setObject:[NSNumber numberWithInt:sprite->GetOrder()] forKey:@"orderId"];
 				
-				m_orders->insertObject(dict, index);
+				m_pkOrders->insertObject(dict, index);
 				dict->release();
 				
 			}
@@ -1304,7 +1324,7 @@ namespace NDEngine
 		CCArray*flySpriteOrder = CCArray::array();
 		flySpriteOrder->retain();
 		
-		unsigned int orderCount = int(m_orders->count());
+		unsigned int orderCount = int(m_pkOrders->count());
 		
 		if (orderCount > 0) orderCount -= 1;
 		
@@ -1329,14 +1349,14 @@ namespace NDEngine
 				if (it != mapDrawlast.begin()) 
 				{
 					unsigned index = this->InsertIndex(sprite->GetOrder(), flySpriteOrder);	
-					m_orders->insertObject(dict, index+orderCount);
+					m_pkOrders->insertObject(dict, index+orderCount);
 					flySpriteOrder->insertObject(dict, index);
 				}
 				else
 				{
 					flySpriteOrder->addObject(dict);
 					
-					m_orders->addObject(dict);
+					m_pkOrders->addObject(dict);
 				}
 				
 				dict->release();
@@ -1348,7 +1368,7 @@ namespace NDEngine
 	
 	void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 	{	
-		m_ordersOfMapscenesAndMapanimations->removeAllObjects();
+		m_pkOrdersOfMapscenesAndMapanimations->removeAllObjects();
 		for (int i = 0; i < (int)m_mapData->getSceneTiles()->count(); i++) 
 		{
 			NDSceneTile *sceneTile = (NDSceneTile *)m_mapData->getSceneTiles()->objectAtIndex(i);
@@ -1365,7 +1385,7 @@ namespace NDEngine
 			//[dict setObject:[NSNumber numberWithInt:i] forKey:@"index"];
 			//[dict setObject:[NSNumber numberWithInt:orderId] forKey:@"orderId"];
 			
-			m_ordersOfMapscenesAndMapanimations->addObject(dict);
+			m_pkOrdersOfMapscenesAndMapanimations->addObject(dict);
 			dict->release();
 		}
 		for (int i = 0; i < (int)m_mapData->getAniGroupParams()->count(); i++) 
@@ -1382,7 +1402,7 @@ namespace NDEngine
 			//[dict setObject:[NSNumber numberWithInt:i + [m_mapData.sceneTiles count]] forKey:@"index"];
 			//[dict setObject:[NSNumber numberWithInt:orderId] forKey:@"orderId"];
 			
-			m_ordersOfMapscenesAndMapanimations->addObject(dict);
+			m_pkOrdersOfMapscenesAndMapanimations->addObject(dict);
 			dict->release();
 		}
 		for (int i = 0; i < (int)m_mapData->getSwitchs()->count(); i++) 
@@ -1404,12 +1424,12 @@ namespace NDEngine
 				//[dict setObject:[NSNumber numberWithInt:i + [m_mapData.sceneTiles count] + [m_mapData.aniGroupParams count]] forKey:@"index"];
 				//[dict setObject:[NSNumber numberWithInt:orderId] forKey:@"orderId"];
 				
-				m_ordersOfMapscenesAndMapanimations->addObject(dict);
+				m_pkOrdersOfMapscenesAndMapanimations->addObject(dict);
 				dict->release();
 			}		
 		}
 		
-		this->QuickSort(m_ordersOfMapscenesAndMapanimations, 0, m_ordersOfMapscenesAndMapanimations->count() - 1);
+		this->QuickSort(m_pkOrdersOfMapscenesAndMapanimations, 0, m_pkOrdersOfMapscenesAndMapanimations->count() - 1);
 	}
 	
 	int NDMapLayer::InsertIndex(int order, cocos2d::CCArray*/*<MAP_ORDER*>*/inArray)

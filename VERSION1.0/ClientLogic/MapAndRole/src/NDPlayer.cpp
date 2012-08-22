@@ -215,7 +215,7 @@ namespace NDEngine
 	{
 		// 转到脚本处理
 		ScriptMgr& script = ScriptMgr::GetSingleton();
-		std::stringstream ssNpcFunc; 
+		std::stringstream ssNpcFunc;
 		ssNpcFunc << "NPC_CLICK_" << idNpc;
 		bool bRet = script.IsLuaFuncExist(ssNpcFunc.str().c_str(), "NPC");
 

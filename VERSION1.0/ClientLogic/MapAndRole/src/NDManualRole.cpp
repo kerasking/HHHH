@@ -339,7 +339,7 @@ namespace NDEngine
 		direct = 2;
 		
 //		if (sex % 2 == SpriteSexMale) 
-		int model_id=lookface/1000000;
+		int model_id = lookface / 1000000;
 		//	if (sex % 2 == SpriteSexMale) 
 
 		/***
@@ -353,9 +353,9 @@ namespace NDEngine
 
 //		else 
 //			NDSprite::Initialization(MANUELROLE_HUMAN_FEMALE);
-		
+
 		m_faceRight = direct == 2;
-		
+
 		this->SetCurrentAnimation(MANUELROLE_STAND, m_faceRight);
 		
 		//defaultDeal();
