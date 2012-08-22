@@ -62,9 +62,10 @@ namespace NDEngine
 	{
 		DECLARE_CLASS(NDSprite)
 	public:
+
 		NDSprite();			
 		~NDSprite();
-		
+
 	public:
 //		
 //		º¯Êý£ºInitialization
