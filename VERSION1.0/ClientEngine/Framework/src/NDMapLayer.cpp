@@ -496,7 +496,7 @@ namespace NDEngine
 //			if(m_TreasureBox){
 //				m_TreasureBox->RunAnimation(true);
 //			}
-			if (this->roadBlockTimeCount>0&&!m_bBattleBackground) 
+			if (this->roadBlockTimeCount > 0 && !m_bBattleBackground) 
 			{
 				//NDLog("showTime");
 				if(!m_lbTime)
@@ -506,40 +506,50 @@ namespace NDEngine
 					m_lbTime->SetFontSize(15);
 
 				}
-				int mi=this->roadBlockTimeCount/60;
+
+				int mi=this->roadBlockTimeCount / 60;
 				tq::CString str_mi;
-				if(mi<10)
+
+				if(mi < 10)
 				{
 					str_mi.Format("0%d",mi);
-				}else {
+				}
+				else
+				{
 					str_mi.Format("%d",mi);
 				}
 
-				int se=this->roadBlockTimeCount%60;
+				int se = this->roadBlockTimeCount % 60;
 				tq::CString str_se;
+
 				if(se<10)
 				{
 					str_se.Format("0%d",se);
-				}else {
+				}
+				else
+				{
 					str_se.Format("%d",se);
 				}
+
 				tq::CString str_time("%s:%s",str_mi,str_se);
 				m_lbTime->SetText(str_time);
 
 				CGSize size = getStringSize(str_time, 30);
-				if (!m_lbTime->GetParent()&&subnode) 
+
+				if (!m_lbTime->GetParent() && subnode)
 				{
 					subnode->AddChild(m_lbTime);
 				}
 				
 				m_lbTime->SetFontColor(ccc4(255,0,0,255));
 				m_lbTime->SetFontSize(30);
-				int x=m_screenCenter.x-(size.width)/2;
-				int y=m_screenCenter.y - GetContentSize().height-(size.height)/2+NDDirector::DefaultDirector()->GetWinSize().height;
+
+				int x = m_screenCenter.x - (size.width) / 2;
+				int y = m_screenCenter.y - GetContentSize().height - (size.height) / 2 +
+					NDDirector::DefaultDirector()->GetWinSize().height;
 				//NDLog("x:%d,y:%d",x,y);
-				m_lbTime->SetFrameRect(CGRectMake(x, y, size.width, size.height+5));
+				m_lbTime->SetFrameRect(CGRectMake(x, y, size.width, size.height + 5));
 				m_lbTime->draw();
-				
 			}
 			
 			if (m_leRoadSign)
@@ -624,7 +634,8 @@ namespace NDEngine
 	void NDMapLayer::DrawBgs()
 	{
 		CGSize winSize			= NDDirector::DefaultDirector()->GetWinSize();
-		CGRect scrRect			= CGRectMake(m_screenCenter.x - winSize.width / 2, m_screenCenter.y - winSize.height / 2, winSize.width, winSize.height);
+		CGRect scrRect			= CGRectMake(m_screenCenter.x - winSize.width / 2,
+			m_screenCenter.y - winSize.height / 2, winSize.width, winSize.height);
 		
 		unsigned int orderCount = m_mapData->getBgTiles()->count();
 		for (unsigned int i = 0; i < orderCount; i++) 
@@ -727,7 +738,8 @@ namespace NDEngine
 				
 				m_switchAniGroup->setReverse(false);
 				
-				CGPoint pos = ccp(mapSwitch->getX() * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET, mapSwitch->getY() * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
+				CGPoint pos = ccp(mapSwitch->getX() * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+					mapSwitch->getY() * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
 				
 				m_switchAniGroup->setPosition(pos);
 

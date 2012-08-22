@@ -250,7 +250,8 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 {	
 	NewPlayerBagLayer* bagscene = NewPlayerBagLayer::GetInstance();
 	
-	GameScene* gamescene = (GameScene*)(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene)));
+	GameScene* gamescene = (GameScene*)(NDDirector::DefaultDirector()->
+		GetScene(RUNTIME_CLASS(GameScene)));
 	
 	unsigned char itemCount = 0; (*data) >> itemCount; // 接收的物品个数
 	

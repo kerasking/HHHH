@@ -37,7 +37,8 @@ namespace NDEngine
 	NDPicture::~NDPicture()
 	{
 		CC_SAFE_RELEASE(m_texture);
-		if (m_canGray) {
+		if (m_canGray)
+		{
 			CC_SAFE_RELEASE(m_textureGray);
 		}
 	}
@@ -66,7 +67,8 @@ namespace NDEngine
 		}
 		*/
 		
-		m_cutRect = CGRectMake(0, 0, m_texture->getContentSizeInPixels().width, m_texture->getContentSizeInPixels().height);
+		m_cutRect = CGRectMake(0, 0, m_texture->getContentSizeInPixels().width,
+			m_texture->getContentSizeInPixels().height);
 		this->SetCoorinates();		
 		this->SetColor(ccc4(255, 255, 255, 255));
 		

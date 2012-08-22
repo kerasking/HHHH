@@ -65,7 +65,8 @@ namespace NDEngine
 		int GetType();
 		
 		enum  LableType{ eLableName, eLabelDataStr, };
-		void SetLable(LableType eLableType, int x, int y, std::string text, cocos2d::ccColor4B color1, cocos2d::ccColor4B color2);
+		void SetLable(LableType eLableType, int x, int y, std::string text,
+			cocos2d::ccColor4B color1, cocos2d::ccColor4B color2);
 		
 		bool IsRoleNpc() {
 			return this->m_bRoleNpc;

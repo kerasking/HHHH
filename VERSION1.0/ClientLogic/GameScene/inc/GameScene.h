@@ -50,7 +50,8 @@ using namespace NDEngine;
 ///////////////////////////////////////////////
 
 // 战斗中无需删除的layer都添加到这个层上
-class MapUILayer : public NDUILayer {
+class MapUILayer : public NDUILayer
+{
 	DECLARE_CLASS(MapUILayer)
 };
 

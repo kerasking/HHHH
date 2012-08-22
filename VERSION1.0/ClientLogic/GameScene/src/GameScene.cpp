@@ -138,7 +138,8 @@ bool GameScene::bRidePetBroken = false;
 
 GameScene* GameScene::Scene()
 {	
-	GameScene* scene = new GameScene();	
+	GameScene* scene = new GameScene();
+	scene->Initialization(1);
 	return scene;
 }
 
@@ -240,45 +241,45 @@ GameScene::GameScene()
 	m_hccOPItem = NULL;
 	
 	m_picMap = new NDPicture();
-	m_picMap->Initialization(NDPath::GetImgPath("ui_map.png"));
+	m_picMap->Initialization(NDPath::GetFullImagepath("ui_map.png"));
 	m_btnMap = NULL;
 	
 	m_picTarget = new NDPicture();
-	m_picTarget->Initialization(NDPath::GetImgPath("ui_target.png"));
+	m_picTarget->Initialization(NDPath::GetFullImagepath("ui_target.png"));
 	m_btnTarget = NULL;
 	
 	m_picInterative = new NDPicture();
-	m_picInterative->Initialization(NDPath::GetImgPath("ui_interective.png"));
+	m_picInterative->Initialization(NDPath::GetFullImagepath("ui_interective.png"));
 	m_btnInterative = NULL;
 	
 	//m_hccOPMenu = NULL;		///< 临时性注释 郭浩
 	
 	m_picTeam = new NDPicture();
-	m_picTeam->Initialization(NDPath::GetImgPath("ui_team.png"));
+	m_picTeam->Initialization(NDPath::GetFullImagepath("ui_team.png"));
 	m_btnTeam = NULL;
 	
 	m_picSocial = new NDPicture();
-	m_picSocial->Initialization(NDPath::GetImgPath("ui_social.png"));
+	m_picSocial->Initialization(NDPath::GetFullImagepath("ui_social.png"));
 	m_btnSocial = NULL;
 	
 	m_picTalk = new NDPicture();
-	m_picTalk->Initialization(NDPath::GetImgPath("ui_talk.png"));
+	m_picTalk->Initialization(NDPath::GetFullImagepath("ui_talk.png"));
 	m_btnTalk = NULL;
 	
 	m_picTask = new NDPicture();
-	m_picTask->Initialization(NDPath::GetImgPath("ui_task.png"));
+	m_picTask->Initialization(NDPath::GetFullImagepath("ui_task.png"));
 	m_btnTask = NULL;
 	
 	m_picBag = new NDPicture();
-	m_picBag->Initialization(NDPath::GetImgPath("ui_bag.png"));
+	m_picBag->Initialization(NDPath::GetFullImagepath("ui_bag.png"));
 	m_btnBag = NULL;
 	
 	m_picStore = new NDPicture();
-	m_picStore->Initialization(NDPath::GetImgPath("ui_store.png"));
+	m_picStore->Initialization(NDPath::GetFullImagepath("ui_store.png"));
 	m_btnStore = NULL;
 	
 	m_picMenu = new NDPicture();
-	m_picMenu->Initialization(NDPath::GetImgPath("ui_menu.png"));
+	m_picMenu->Initialization(NDPath::GetFullImagepath("ui_menu.png"));
 	m_btnMenu = NULL;
 	
 	m_tlShare = NULL;
@@ -326,7 +327,8 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-	if (s_curGameScene == this) {
+	if (s_curGameScene == this)
+	{
 		s_curGameScene = NULL;
 	}
 

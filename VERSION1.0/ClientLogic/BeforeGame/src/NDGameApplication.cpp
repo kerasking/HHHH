@@ -9,6 +9,10 @@
 #include "ScriptUI.h"
 #include "ScriptGameLogic.h"
 #include "SMGameScene.h"
+#include "GameScene.h"
+#include "ScriptTimer.h"
+#include "NDPlayer.h"
+#include "CCPointExtension.h"
 
 namespace NDEngine
 {
@@ -106,8 +110,10 @@ namespace NDEngine
 		ScriptGlobalEvent* pkGlobalEvent = new ScriptGlobalEvent;
 		ScriptObjectCommon* pkCommon = new ScriptObjectCommon;
 		ScriptObjectUI* pkScriptUI = new ScriptObjectUI;
+		ScriptTimerMgr* pkTimerManager = new ScriptTimerMgr;
 
 		pkData->Load();
+		pkTimerManager->OnLoad();
 		pkLogic->OnLoad();
 		pkCommon->OnLoad();
 		pkGlobalEvent->OnLoad();
@@ -116,6 +122,17 @@ namespace NDEngine
 		kScriptManager.Load();
 
 		ScriptGlobalEvent::OnEvent(GE_GENERATE_GAMESCENE);
+
+		NDPlayer::pugeHero();
+		NDPlayer& player = NDPlayer::defaultHero();
+
+		int x = 100;
+		int y = 100;
+
+	  	player.SetPositionEx(ccp(x * 32 + 16, y * 32 + 16));
+	  	player.SetServerPositon(x, y);
+		player.m_id = 1;
+		player.m_name = "ÍõÔö";
 
 		return true;
 	}

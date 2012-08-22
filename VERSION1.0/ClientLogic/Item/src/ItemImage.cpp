@@ -32,7 +32,8 @@ ItemImage::~ItemImage()
 {
 }
 
-NDPicture*  ItemImage::GetItemPicByType(int iItemType, bool gray, bool smallicon/*=false*/)
+NDPicture*  ItemImage::GetItemPicByType(int iItemType, bool gray,
+										bool smallicon/*=false*/)
 {
 	int iIconIndex = -1;
 	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
@@ -142,7 +143,8 @@ NDPicture* ItemImage::GetPinZhiPic(int iItemType, bool smallicon/*=false*/)
 
 }
 
-NDPicture* ItemImage::GetItemByIconIndex(int iIconIndex, bool gray/*=false*/, bool smallicon/*=false*/)
+NDPicture* ItemImage::GetItemByIconIndex(int iIconIndex, bool gray/*=false*/,
+										 bool smallicon/*=false*/)
 {
 	if (iIconIndex > 0)
 	{

@@ -85,7 +85,16 @@ namespace NDEngine
 // 		
 // 		return std::string([path UTF8String]);
 	}
-	
+
+	const char* NDPath::GetFullImagepath( const char* pszFileName )
+	{
+		string strRes = std::string(std::string("SimplifiedChineseRes\\res\\") + "image\\" + pszFileName);
+		char* pszTemp = new char[255];
+		memset(pszTemp,0,sizeof(char) * 255);
+		strcpy(pszTemp,strRes.c_str());
+		return pszTemp;
+	}
+
 	std::string NDPath::GetMapPath()
 	{
 		return "./SimplifiedChineseRes/res/map/";

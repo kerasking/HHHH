@@ -41,16 +41,15 @@ void CreatePlayer(int lookface, int x, int y, int userid, std::string name)
 	* all
 	*/
 
-// 	NSLog(@"%@", [NSString stringWithUTF8String:name.c_str()]);
-// 	NDPlayer::pugeHero();
-// 	NDPlayer& player = NDPlayer::defaultHero(lookface, true);
-// 	player.InitRoleLookFace(lookface);
-// 		
-// 	player.stopMoving();
-// 	player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
-// 	player.SetServerPositon(x, y);
-// 	player.m_id = userid;
-// 	player.m_name = "王增";
+	NDPlayer::pugeHero();
+	NDPlayer& player = NDPlayer::defaultHero(lookface, true);
+	player.InitRoleLookFace(lookface);
+		
+ 	player.stopMoving();
+//  	player.SetPositionEx(ccp(x * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET, y * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+//  	player.SetServerPositon(x, y);
+ 	player.m_id = userid;
+ 	player.m_name = "王增";
 }
 	
 unsigned long GetPlayerId()
