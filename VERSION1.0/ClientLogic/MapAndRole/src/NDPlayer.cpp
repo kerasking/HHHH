@@ -128,10 +128,21 @@ namespace NDEngine
 		iSkillPoint = 0;
 		
 		// 装备直接属性增加值
-		eAtkSpd= 0; eAtk= 0; eDef= 0; eHardAtk= 0; eSkillAtk= 0; eSkillDef= 0;
-		eSkillHard= 0; eDodge= 0; ePhyHit= 0;
+		eAtkSpd = 0;
+		eAtk = 0;
+		eDef = 0;
+		eHardAtk = 0;
+		eSkillAtk = 0;
+		eSkillDef = 0;
+		eSkillHard = 0;
+		eDodge = 0;
+		ePhyHit = 0;
 		
-		iTmpPhyPoint= 0; iTmpDexPoint= 0; iTmpMagPoint= 0; iTmpDefPoint= 0; iTmpRestPoint= 0;
+		iTmpPhyPoint = 0;
+		iTmpDexPoint = 0;
+		iTmpMagPoint = 0;
+		iTmpDefPoint = 0;
+		iTmpRestPoint = 0;
 		
 		beginProtectedTime = 0;
 		
@@ -162,7 +173,7 @@ namespace NDEngine
 		
 		m_nMaxSlot = 0;
 		
-		m_nVipLev	= 0;
+		m_nVipLev = 0;
 		
 		m_nLookface = 0;
 		
@@ -471,9 +482,14 @@ namespace NDEngine
 	Task* NDPlayer::GetPlayerTask(int idTask)
 	{
 		Task* task = NULL;
-		for (vec_task_it it = m_vPlayerTask.begin(); it != m_vPlayerTask.end(); it++) {
+
+		for (vec_task_it it = m_vPlayerTask.begin();
+			it != m_vPlayerTask.end(); it++)
+		{
 			task = *it;
-			if (task->taskId == idTask) {
+
+			if (task->taskId == idTask)
+			{
 				return task;
 			}
 		}
@@ -484,7 +500,10 @@ namespace NDEngine
 	int NDPlayer::GetOrder()
 	{		
 		if (ridepet) 
+		{
 			return ridepet->GetOrder() + 1;
+		}
+
 		return NDManualRole::GetOrder();
 		
 	}
@@ -493,14 +512,15 @@ namespace NDEngine
 	{
 		if ( !isRoleCanMove() ) return;
 		
-		CGPoint pos = CGPointMake(int(toPos.x)/MAP_UNITSIZE*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, int(toPos.y)/MAP_UNITSIZE*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
+		CGPoint pos = CGPointMake(int(toPos.x) /
+			MAP_UNITSIZE * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+			int(toPos.y) / MAP_UNITSIZE * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
 		
 		CGPoint posCur = GetPosition();
 		if ( ((int)posCur.x-DISPLAY_POS_X_OFFSET) % MAP_UNITSIZE != 0 || 
 			 ((int)posCur.y-DISPLAY_POS_Y_OFFSET) % MAP_UNITSIZE != 0)
 		{ // Cell没走完,又设置新的目标
 			m_targetPos = pos;
-		
 		}
 		else 
 		{
@@ -513,10 +533,10 @@ namespace NDEngine
 	
 	void NDPlayer::SetPosition(CGPoint newPosition)
 	{
-		int nNewCol = (newPosition.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE;
-		int nNewRow = (newPosition.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE;
-		int nOldCol = (GetPosition().x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE;
-		int nOldRow = (GetPosition().y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE;
+		int nNewCol = (newPosition.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
+		int nNewRow = (newPosition.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
+		int nOldCol = (GetPosition().x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
+		int nOldRow = (GetPosition().y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
 		
 		NDManualRole::SetPosition(newPosition);	
 		
@@ -537,6 +557,7 @@ namespace NDEngine
 				( nNewRow != nOldRow ? (nNewRow > nOldRow ? 1 : 0 ) : -1 );
 				*/
 				int dir = this->GetPathDir(nOldCol, nOldRow, nNewCol, nNewRow);
+
 				if ( dir != -1 ) 
 				{
 					/***

@@ -60,119 +60,142 @@ static int triow_to_upper(int source)
 /* FIXME: Add EBNF for hex-floats */
 static double triow_to_double(const lua_WChar *source, lua_WChar **endp)
 {
-  int isNegative = 0;
-  int isExponentNegative = 0;
-  double integer = 0.0;
-  double fraction = 0.0;
-  unsigned long exponent = 0;
-  double base;
-  double fracdiv = 1.0;
-  double value = 0.0;
+	int isNegative = 0;
+	int isExponentNegative = 0;
+	double integer = 0.0;
+	double fraction = 0.0;
+	unsigned long exponent = 0;
+	double base = 0.0f;
+	double fracdiv = 1.0;
+	double value = 0.0;
 
-  /* First try hex-floats */
-  if ((source[0] == '0') && ((source[1] == 'x') || (source[1] == 'X')))
-    {
-      base = 16.0;
-      source += 2;
-      while (isxdigit((int)*source))
+	/* First try hex-floats */
+	if ((source[0] == '0') && ((source[1] == 'x') || (source[1] == 'X')))
 	{
-	  integer *= base;
-	  integer += (isdigit((int)*source)
-		      ? (*source - '0')
-		      : 10 + (triow_to_upper((int)*source) - 'A'));
-	  source++;
-	}
-      if (*source == '.')
-	{
-	  source++;
-	  while (isxdigit((int)*source))
-	    {
-	      fracdiv /= base;
-	      fraction += fracdiv * (isdigit((int)*source)
-				     ? (*source - '0')
-				     : 10 + (triow_to_upper((int)*source) - 'A'));
-	      source++;
-	    }
-	  if ((*source == 'p') || (*source == 'P'))
-	    {
-	      source++;
-	      if ((*source == '+') || (*source == '-'))
+		base = 16.0;
+		source += 2;
+
+		while (isxdigit((int)*source))
 		{
-		  isExponentNegative = (*source == '-');
-		  source++;
+			integer *= base;
+			integer += (isdigit((int)*source) ? (*source - '0') :
+				10 + (triow_to_upper((int)*source) - 'A'));
+			source++;
 		}
-	      while (isdigit((int)*source))
+
+		if (*source == '.')
 		{
-		  exponent *= 10;
-		  exponent += (*source - '0');
-		  source++;
+			source++;
+
+			while (isxdigit((int)*source))
+			{
+				fracdiv /= base;
+				fraction += fracdiv * (isdigit((int)*source)
+					? (*source - '0')
+					: 10 + (triow_to_upper((int)*source) - 'A'));
+				source++;
+			}
+
+			if ((*source == 'p') || (*source == 'P'))
+			{
+				source++;
+
+				if ((*source == '+') || (*source == '-'))
+				{
+					isExponentNegative = (*source == '-');
+					source++;
+				}
+
+				while (isdigit((int)*source))
+				{
+					exponent *= 10;
+					exponent += (*source - '0');
+					source++;
+				}
+			}
 		}
-	    }
+		/* For later use with exponent */
+		base = 2.0;
 	}
-      /* For later use with exponent */
-      base = 2.0;
-    }
-  else /* Then try normal decimal floats */
-    {
-      base = 10.0;
-      isNegative = (*source == '-');
-      /* Skip sign */
-      if ((*source == '+') || (*source == '-'))
-	source++;
-
-      /* Integer part */
-      while (isdigit((int)*source))
+	else /* Then try normal decimal floats */
 	{
-	  integer *= base;
-	  integer += (*source - '0');
-	  source++;
-	}
+		base = 10.0;
+		isNegative = (*source == '-');
+		/* Skip sign */
+		if ((*source == '+') || (*source == '-'))
+		{
+			source++;
+		}
 
-      if (*source == '.')
-	{
-	  source++; /* skip decimal point */
-	  while (isdigit((int)*source))
-	    {
-	      fracdiv /= base;
-	      fraction += (*source - '0') * fracdiv;
-	      source++;
-	    }
-	}
-      if ((*source == 'e')
-	  || (*source == 'E')
+		/* Integer part */
+		while (isdigit((int)*source))
+		{
+			integer *= base;
+			integer += (*source - '0');
+			source++;
+		}
+
+		if (*source == '.')
+		{
+			source++; /* skip decimal point */
+
+			while (isdigit((int)*source))
+			{
+				fracdiv /= base;
+				fraction += (*source - '0') * fracdiv;
+				source++;
+			}
+		}
+		if ((*source == 'e')
+			|| (*source == 'E')
 #if TRIO_MICROSOFT
-	  || (*source == 'd')
-	  || (*source == 'D')
+			|| (*source == 'd')
+			|| (*source == 'D')
 #endif
-	  )
-	{
-	  source++; /* Skip exponential indicator */
-	  isExponentNegative = (*source == '-');
-	  if ((*source == '+') || (*source == '-'))
-	    source++;
-	  while (isdigit((int)*source))
-	    {
-	      exponent *= (int)base;
-	      exponent += (*source - '0');
-	      source++;
-	    }
-	}
-    }
-  
-  value = integer + fraction;
-  if (exponent != 0)
-    {
-      if (isExponentNegative)
-	value /= pow(base, (double)exponent);
-      else
-	value *= pow(base, (double)exponent);
-    }
-  if (isNegative)
-    value = -value;
+			)
+		{
+			source++; /* Skip exponential indicator */
+			isExponentNegative = (*source == '-');
 
-  if (endp)
-    *endp = (lua_WChar *)source;
-  return value;
+			if ((*source == '+') || (*source == '-'))
+			{
+				source++;
+			}
+
+			while (isdigit((int)*source))
+			{
+				exponent *= (int)base;
+				exponent += (*source - '0');
+				source++;
+			}
+		}
+	}
+
+	value = integer + fraction;
+
+	if (exponent != 0)
+	{
+		if (isExponentNegative)
+		{
+			value /= pow(base, (double)exponent);
+		}
+		else
+		{
+			value *= pow(base, (double)exponent);
+		}
+	}
+
+	if (isNegative)
+	{
+		value = -value;
+	}
+
+	if (endp)
+	{
+		*endp = (lua_WChar *)source;
+	}
+
+	return value;
 }
 
 
