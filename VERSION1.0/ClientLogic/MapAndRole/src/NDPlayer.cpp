@@ -161,7 +161,9 @@ namespace NDEngine
 		
 		m_bRequireDacoity = false;
 		
-		m_iDacoityStep = m_iBattleFieldStep = 0;
+		m_iDacoityStep = 0;
+
+		m_iBattleFieldStep = 0;
 		
 		InvalidNPC();
 		
@@ -177,7 +179,7 @@ namespace NDEngine
 		
 		m_nLookface = 0;
 		
-		m_bLocked=false;
+		m_bLocked = false;
 	}
 	
 	NDPlayer::~NDPlayer()
@@ -511,7 +513,8 @@ namespace NDEngine
 		
 	}
 	
-	void NDPlayer::Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
+	void NDPlayer::Walk(CGPoint toPos, SpriteSpeed speed,
+		bool mustArrive/*=false*/)
 	{
 		if ( !isRoleCanMove() ) return;
 		

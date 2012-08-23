@@ -314,9 +314,7 @@ namespace NDEngine
 		int GetHeight();
 		
 		cocos2d::CCTexture2D* getColorTexture(int imageIndex, NDAnimationGroup* animationGroup);
-		
 		cocos2d::CCTexture2D* getNpcLookfaceTexture(int imageIndex, NDAnimationGroup* animationGroup);
-		
 		cocos2d::CCTexture2D* getArmorImageByCloak(){ return cloak == -1 ? GetArmorImage() : NULL; }
 		
 		bool IsCloakEmpty(){ return cloak == -1 ? true : false; }
@@ -341,6 +339,7 @@ namespace NDEngine
 		void SetSprite(NDPicture* pic);
 		
 	protected:
+
 		std::string m_hairImage, m_faceImage, m_expressionImage, m_capImage, m_armorImage, m_rightHandWeaponImage, m_leftHandWeaponImage,
 		m_doubleHandWeaponImage, m_dualSwordImage, m_dualKnifeImage, m_doubleHandWandImage, m_doubleHandBowImage, m_shieldImage, 
 		m_faqiImage, m_cloakImage, m_doubleHandSpearImage;		

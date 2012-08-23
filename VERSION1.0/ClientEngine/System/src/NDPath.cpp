@@ -119,7 +119,7 @@ namespace NDEngine
 	
 	std::string NDPath::GetAnimationPath()
 	{
-		return NDPath_AniPath;
+		return string("./SimplifiedChineseRes/res/animation/");
 // 	#ifdef TRADITION
 // 		NSString *path = [NSString stringWithFormat:@"%@/TraditionalChineseRes/res/animation/", [[NSBundle mainBundle] resourcePath]] ;
 // 	#else

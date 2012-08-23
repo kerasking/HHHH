@@ -342,11 +342,10 @@ namespace NDEngine
 		int model_id = lookface / 1000000;
 		//	if (sex % 2 == SpriteSexMale)
 
-		CCString* pString = CCString::stringWithFormat("%smodel_%d.spr",aniPath,model_id);
-		NSString* aniPath = new CCString(NDPath::GetAnimationPath().c_str());
-		NDSprite::Initialization()
- 		//NDSprite::Initialization([[NSString stringWithFormat:@"%@model_%d.spr",aniPath,model_id] UTF8String] );
-
+		NSString *aniPath = new CCString(NDPath::GetAnimationPath().c_str());
+		CCString *pString = CCString::stringWithFormat("%smodel_%d.spr",
+			aniPath->toStdString().c_str(),model_id);
+		NDSprite::Initialization(pString->toStdString().c_str());
 //		else 
 //			NDSprite::Initialization(MANUELROLE_HUMAN_FEMALE);
 
