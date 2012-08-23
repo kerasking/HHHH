@@ -59,6 +59,7 @@ public:
 	void drawHeadAt(CGPoint pos);
 
 private:
+
 	int _orderId;
 
 	//NDEngine::NDSprite* m_RunningSprite;

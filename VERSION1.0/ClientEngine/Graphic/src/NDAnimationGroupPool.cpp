@@ -58,7 +58,7 @@ NDAnimationGroup* NDAnimationGroupPool::addObjectWithSpr(const char*sprFile)
 		{
 			m_animationGroups->setObject(group, sprFile);
 			//[group release];
-		}		
+		}
 	}
 	else 
 	{
@@ -71,14 +71,16 @@ NDAnimationGroup* NDAnimationGroupPool::addObjectWithSpr(const char*sprFile)
 NDAnimationGroup* NDAnimationGroupPool::addObjectWithModelId(int ModelId)
 {	
 	char sprFile[256] = {0};
-	sprintf(sprFile, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(), ModelId);
+	sprintf(sprFile, "%smodel_%d.spr", 
+		NDPath::GetAnimationPath().c_str(), ModelId);
 	return this->addObjectWithSpr(sprFile);
 }
 
 NDAnimationGroup* NDAnimationGroupPool::addObjectWithSceneAnimationId(int SceneAnimationId)
 {	
 	char sprFile[256] = {0};
-	sprintf(sprFile, "%sscene_ani_%d.spr", NDPath::GetAnimationPath().c_str(), SceneAnimationId);
+	sprintf(sprFile, "%sscene_ani_%d.spr", 
+		NDPath::GetAnimationPath().c_str(), SceneAnimationId);
 	return this->addObjectWithSpr(sprFile);
 }
 
@@ -90,7 +92,8 @@ void NDAnimationGroupPool::removeObjectWithSpr(const char* sprFile)
 void NDAnimationGroupPool::removeObjectWithSceneAnimationId(int SceneAnimationId)
 {
 	char sprFile[256] = {0};
-	sprintf(sprFile, "%sscene_ani_%d.spr", NDPath::GetAnimationPath().c_str(), SceneAnimationId);
+	sprintf(sprFile, "%sscene_ani_%d.spr",
+		NDPath::GetAnimationPath().c_str(), SceneAnimationId);
 	this->removeObjectWithSpr(sprFile);
 }
 

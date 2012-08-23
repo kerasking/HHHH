@@ -30,27 +30,27 @@ NDTileTableRecord::NDTileTableRecord()
 NDAnimationGroup::NDAnimationGroup()
 : m_nType(0)
 , m_nIdentifer(0)
-//, m_bReverse(0) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-//, m_Animations(NULL) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+, m_bReverse(false)
+, m_Animations(NULL)
 , m_Images(NULL)
-//, m_TileTable(NULL) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+, m_TileTable(NULL)
 , m_RuningSprite(NULL)
 , m_UnpassPoint(NULL)
 {
 	m_Position			= CGPointMake(0, 0);
 	m_RunningMapSize	= CGSizeMake(0, 0);
-//	m_Animations		= CCArray::array(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	//m_TileTable			= CCArray::array(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	m_Animations		= CCArray::array();
+	m_TileTable			= CCArray::array();
 	m_Images			= new vector<std::string>();
 
-//	m_Animations->retain(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	//m_TileTable->retain(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	m_Animations->retain();
+	m_TileTable->retain();
 }
 
 NDAnimationGroup::~NDAnimationGroup()
 {
-//	CC_SAFE_RELEASE(m_Animations); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-//	CC_SAFE_RELEASE(m_TileTable); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	CC_SAFE_RELEASE(m_Animations);
+	CC_SAFE_RELEASE(m_TileTable);
 	CC_SAFE_DELETE(m_Images);
 	CC_SAFE_DELETE(m_UnpassPoint);
 }

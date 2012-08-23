@@ -24,8 +24,6 @@
 using namespace cocos2d;
 using namespace NDEngine;
 
-
-
 namespace NDEngine
 {
 	IMPLEMENT_CLASS(NDSprite, NDNode)
@@ -88,9 +86,10 @@ namespace NDEngine
 	void NDSprite::SetCurrentAnimation(int animationIndex, bool reverse)
 	{
 		//NDLog("animationIndex%d",animationIndex);
-		if (m_aniGroup) 
+		if (m_aniGroup)
 		{
-			if (animationIndex < 0 || animationIndex >= (int)m_aniGroup->getAnimations()->count())// ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			if (animationIndex < 0 ||
+				animationIndex >= (int)m_aniGroup->getAnimations()->count())
 			{
 				return;
 			}
@@ -102,7 +101,7 @@ namespace NDEngine
 			    m_currentAnimation->getType() == ANIMATION_TYPE_ONCE_START ||
 			    this->m_currentAnimation->getCurIndexInAniGroup() != animationIndex) 
 			{
-				m_currentAnimation = 0;//(NDAnimation*)m_aniGroup->getAnimations()->objectAtIndex(animationIndex); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+				m_currentAnimation = (NDAnimation*)m_aniGroup->getAnimations()->objectAtIndex(animationIndex);
 				m_currentAnimation->setCurIndexInAniGroup(animationIndex);
 				CC_SAFE_RELEASE_NULL(m_frameRunRecord);
 				m_frameRunRecord->release();
@@ -156,7 +155,7 @@ namespace NDEngine
 						
 						this->SetPosition(pos);
 					}
-					else 
+					else
 					{
 						this->OnMoveEnd();
 						m_moving = false;

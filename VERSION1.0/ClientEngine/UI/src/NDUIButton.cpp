@@ -168,7 +168,8 @@ namespace NDEngine
 		m_clearUpPicOnFree = clearPicOnFree;
 	}
 	
-	void NDUIButton::SetCombineImage(NDCombinePicture* combinepic, bool useCustomRect, CGRect customRect, bool clearPicOnFree)
+	void NDUIButton::SetCombineImage(NDCombinePicture* combinepic, 
+		bool useCustomRect, CGRect customRect, bool clearPicOnFree)
 	{
 		if (m_clearUpPicOnFree) 
 		{
@@ -189,7 +190,8 @@ namespace NDEngine
 		this->SetTouchDownImage(pic, false, CGRectZero, true);
 	}
 	
-	void NDUIButton::SetTouchDownImage(NDPicture* pic, bool useCustomRect, CGRect customRect, bool clearPicOnFree)
+	void NDUIButton::SetTouchDownImage(NDPicture* pic, bool useCustomRect,
+		CGRect customRect, bool clearPicOnFree)
 	{
 		if (m_clearDownPicOnFree) 
 		{

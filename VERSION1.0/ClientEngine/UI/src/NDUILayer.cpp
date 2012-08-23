@@ -301,7 +301,7 @@ namespace NDEngine
 			
 			return;
 		}
-			
+
 		if (m_pressing)
 		{
 			if (m_enableMove && m_touchMoved && m_layerMoved) 
@@ -341,7 +341,8 @@ namespace NDEngine
 		m_dispatchTouchEndEvent = true;
 		m_beginTouch = touch->GetLocation();		
 		
-		if (CGRectContainsPoint(this->GetScreenRect(), m_beginTouch) && this->IsVisibled() && this->EventEnabled()) 
+		if (CGRectContainsPoint(this->GetScreenRect(), m_beginTouch) &&
+			this->IsVisibled() && this->EventEnabled()) 
 		{
 			this->DispatchTouchBeginEvent(m_beginTouch);
 			printf("\nbegin x[%.1f]y[%.1f]", m_beginTouch.x, m_beginTouch.y);
@@ -362,15 +363,17 @@ namespace NDEngine
 	{	
 		m_endTouch = touch->GetLocation();
 		
-		
 		if (m_dragOverNode)
 		{
 			if (m_dragOverNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
 			{
-				NDUIButtonDelegate* delegate = dynamic_cast<NDUIButtonDelegate*> (m_dragOverNode->GetDelegate());
+				NDUIButtonDelegate* delegate = dynamic_cast<NDUIButtonDelegate*>
+					(m_dragOverNode->GetDelegate());
 				
 				if (delegate)
+				{
 					delegate->OnButtonDragOver((NDUIButton*)m_dragOverNode, false);	
+				}
 			}
 		}
 		
@@ -379,7 +382,6 @@ namespace NDEngine
 			DispatchLongTouchEvent(m_beginTouch, false);
 			m_bDispatchLongTouchEvent = false;
 		}
-		
 		
 		// ³¤°´
 		if (m_longTouch && !m_dragOutFlag && !m_layerMoved) 
