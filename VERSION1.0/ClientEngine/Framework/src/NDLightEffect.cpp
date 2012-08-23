@@ -63,16 +63,16 @@ namespace NDEngine
 	
 	void NDLightEffect::Run(CGSize mapSize, bool draw/*=true*/)
 	{		
-		if (0/* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ m_aniGroup->getAnimations()->count()*/ > m_lightId) 
+		if (m_aniGroup->getAnimations()->count() > m_lightId) 
 		{	
 			void *oldSprite = m_aniGroup->getRuningSprite();
 			m_aniGroup->setRuningSprite(NULL);			
-			NDAnimation *ani = 0;//(NDAnimation *)m_aniGroup->getAnimations()->objectAtIndex(m_lightId);  ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			NDAnimation *ani = (NDAnimation *)m_aniGroup->getAnimations()->objectAtIndex(m_lightId);
 			m_aniGroup->setRunningMapSize(mapSize);
 			m_aniGroup->setPosition(m_position);			
-//			ani->setReverse(m_reverse); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			ani->setReverse(m_reverse);
 			ani->runWithRunFrameRecord(m_frameRunRecord, true);
-			m_aniGroup->setRuningSprite(oldSprite);
+			m_aniGroup->setRuningSprite((NDSprite*)oldSprite);
 		}
 	}
 	

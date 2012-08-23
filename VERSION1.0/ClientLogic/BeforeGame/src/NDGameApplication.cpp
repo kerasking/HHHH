@@ -13,6 +13,7 @@
 #include "ScriptTimer.h"
 #include "NDPlayer.h"
 #include "CCPointExtension.h"
+#include "NDConstant.h"
 
 namespace NDEngine
 {
@@ -124,15 +125,27 @@ namespace NDEngine
 		ScriptGlobalEvent::OnEvent(GE_GENERATE_GAMESCENE);
 
 		NDPlayer::pugeHero();
-		NDPlayer& player = NDPlayer::defaultHero();
+		NDPlayer& kPlayer = NDPlayer::defaultHero();
 
 		int x = 100;
 		int y = 100;
 
-	  	player.SetPositionEx(ccp(x * 32 + 16, y * 32 + 16));
-	  	player.SetServerPositon(x, y);
-		player.m_id = 1;
-		player.m_name = "王增";
+	  	kPlayer.SetPositionEx(ccp(x * 32 + 16, y * 32 + 16));
+	  	kPlayer.SetServerPositon(x, y);
+		kPlayer.m_id = 1;
+		kPlayer.m_name = "王增";
+		kPlayer.SetLoadMapComplete();
+
+		NDScene* pkScene = pkDirector->GetRunningScene();
+		NDNode* pkNode = pkScene->GetChild(MAPLAYER_TAG);
+
+		if (!pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+		{
+			CCLog("不对");
+		}
+
+		NDMapLayer* pkLayer = (NDMapLayer*)pkNode;
+		pkLayer->AddChild(&kPlayer,10,1000);
 
 		return true;
 	}

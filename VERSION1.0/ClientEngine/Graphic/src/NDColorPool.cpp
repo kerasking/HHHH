@@ -9,20 +9,16 @@
 
 #include "NDColorPool.h"
 
-NDColorPool::NDColorPool()
-{
-	
-}
+NDColorPool::NDColorPool(){}
+NDColorPool::~NDColorPool(){}
 
-NDColorPool::~NDColorPool()
-{
-	
-}
-
-bool NDColorPool::GetColorFromPool(const char* colorFile, uint colorIndex, VEC_COLOR_ARRAY& colorArray)
+bool NDColorPool::GetColorFromPool(const char* colorFile, 
+								   uint colorIndex,
+								   VEC_COLOR_ARRAY& colorArray)
 {
 	PAIR_COLOR_KEY key(colorFile, colorIndex);
 	MAP_COLOR_IT it = this->m_mapColors.find(key);
+
 	if (it != this->m_mapColors.end())
 	{
 		colorArray = it->second;

@@ -25,6 +25,7 @@ namespace NDEngine
 	//－－模仿mfc动态识别－－
 	//......
 	class NDObject;
+
 	struct NDRuntimeClass
 	{
 		char*	className;

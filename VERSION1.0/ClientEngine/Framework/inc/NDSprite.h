@@ -63,7 +63,7 @@ namespace NDEngine
 		DECLARE_CLASS(NDSprite)
 	public:
 
-		NDSprite();			
+		NDSprite();
 		~NDSprite();
 
 	public:
@@ -72,7 +72,7 @@ namespace NDEngine
 //		作用：初始化精灵，必须被显示或隐式调用
 //		参数：sprFile动画文件，每一个精灵需要与一个动画文件绑定
 //		返回值：无
-		void Initialization(const char* sprFile); hide
+		void Initialization(const char* sprFile);
 //		
 //		函数：OnDrawBegin
 //		作用：该方法在精灵绘制之前被框架调用

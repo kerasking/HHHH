@@ -79,12 +79,17 @@ void NDAnimationGroup::initWithSprFile(const char* sprFile)
 
 void NDAnimationGroup::setReverse(bool newReverse)
 {
-//	m_bReverse = newReverse; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	for (int i = 0; i < 0;/*(int)m_Animations->count();*/ i++) 
+	m_bReverse = newReverse;
+	for (int i = 0; i < (int)m_Animations->count(); i++) 
 	{
-		NDAnimation *animation = 0;//(NDAnimation *)m_Animations->objectAtIndex(i); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-//		animation->setReverse(newReverse); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		NDAnimation *animation = (NDAnimation *)m_Animations->objectAtIndex(i);
+		animation->setReverse(newReverse);
 	}
+}
+
+bool NDAnimationGroup::getReverse()
+{
+	return m_bReverse;
 }
 
 void NDAnimationGroup::decodeSprtFile(FILE* stream)
@@ -130,7 +135,7 @@ void NDAnimationGroup::decodeSprFile(FILE* stream)
 		animation->setMidX(op.readShort(stream));
 		animation->setBottomY(op.readShort(stream));
 		animation->setType(op.readByte(stream));
-//		animation->setReverse(false); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		animation->setReverse(false);
 		animation->setBelongAnimationGroup(this);
 		
 		int frameSize = op.readByte(stream);		
@@ -141,10 +146,14 @@ void NDAnimationGroup::decodeSprFile(FILE* stream)
 			frame->setBelongAnimation(animation);
 			// read music, do not deal now
 			int sound_num=op.readShort(stream);
-			for(int n=0;n<sound_num;n++){
+
+			for(int n=0;n<sound_num;n++)
+			{
 				op.readUTF8String(stream);
 			}
+
 			int sagSize = op.readByte(stream);
+
 			for (int k = 0; k < sagSize; k++) 
 			{				
 				std::string animationPath = NDEngine::NDPath::GetAnimationPath();
@@ -189,11 +198,15 @@ void NDAnimationGroup::decodeSprFile(FILE* stream)
 	std::string judge = op.readUTF8StringNoExcept(stream);
 	if (judge == "¡ö") 
 	{
-		if (!m_UnpassPoint) {
+		if (!m_UnpassPoint)
+		{
 			m_UnpassPoint = new std::vector<int>;
 		}
+
 		int size= op.readByte(stream);
-		for (int i = 0; i < size; i++) {
+
+		for (int i = 0; i < size; i++)
+		{
 			m_UnpassPoint->push_back(op.readByte(stream));
 			m_UnpassPoint->push_back(op.readByte(stream));
 		}

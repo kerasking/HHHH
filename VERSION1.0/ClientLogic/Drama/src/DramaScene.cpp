@@ -420,7 +420,7 @@ bool DramaScene::AddNodeToMap(NDNode* node)
 		return false;
 	}
 	
-	m_layerMap->AddChild(node);
+	m_layerMap->AddChild(node,0,0);
 	
 	return true;
 }

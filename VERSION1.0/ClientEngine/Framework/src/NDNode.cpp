@@ -30,7 +30,7 @@ namespace NDEngine
 	NDNode::~NDNode()
 	{
 		this->RemoveAllChildren(true);
-		if (m_parent) 
+		if (m_parent)
 		{
 			this->RemoveFromParent(false);
 		}
@@ -39,7 +39,7 @@ namespace NDEngine
 	
 	NDNode* NDNode::Node()
 	{
-		NDNode *node = new NDNode();
+		NDNode* node = new NDNode();
 		node->Initialization();
 		return node;
 	}
@@ -50,13 +50,10 @@ namespace NDEngine
 		
 		m_ccNode = new NDBaseNode();
 		NDBaseNode *ndBaseNode = (NDBaseNode *)m_ccNode;
-		ndBaseNode->setNDNode(this);		
+		ndBaseNode->setNDNode(this);
 	}
 	
-	void NDNode::draw()
-	{
-		
-	}
+	void NDNode::draw(){}
 	
 	NDNode* NDNode::GetParent()
 	{
@@ -65,7 +62,7 @@ namespace NDEngine
 	
 	void NDNode::SetParent(NDNode* node)
 	{
-		m_parent = node;		
+		m_parent = node;
 	}
 	
 	const std::vector<NDNode*>& NDNode::GetChildren()
@@ -91,6 +88,7 @@ namespace NDEngine
 			}
 			
 			NDNodeDelegate* delegate = dynamic_cast<NDNodeDelegate*> (node->GetDelegate());
+
 			if (delegate) 
 			{
 				delegate->OnBeforeNodeRemoveFromParent(node, bCleanUp);
@@ -110,7 +108,7 @@ namespace NDEngine
 			if (bCleanUp) 
 			{
 				delete node;
-			}			
+			}
 		}
 	}
 	
@@ -147,10 +145,17 @@ namespace NDEngine
 		NDAsssert(m_ccNode != NULL);
 		
 		m_ccNode->setTag(tag);
-	}	
+	}
 	
 	void NDNode::AddChild(NDNode* node)
 	{
+		const char* pszTemp = GetRuntimeClass()->className;
+
+		if (0 == strcmp("NDMapLayer",pszTemp))
+		{
+			CCLog("ºðºð¹þ¹þ");
+		}
+
 		CCNode *ccNode = node->m_ccNode;
 		int z = ccNode->getZOrder();
 		int tag = ccNode->getTag();
@@ -170,6 +175,11 @@ namespace NDEngine
 	{
 		NDAsssert(m_ccNode != NULL && node != NULL && node->m_ccNode != NULL);
 		NDAsssert(node != this);
+
+		if (0 == strcmp(node->GetRuntimeClass()->className,"NDPlayer"))
+		{
+			int a = 0;
+		}
 
 		CCNode *ccNode = node->m_ccNode;
 
@@ -220,7 +230,7 @@ namespace NDEngine
 				if (bCleanUp) 
 				{
 					delete ndNode;
-				}			
+				}
 				
 				break;
 			}
@@ -254,7 +264,7 @@ namespace NDEngine
 				}
 				
 				m_childrenList.erase(iter);
-				node->SetParent(NULL);				
+				node->SetParent(NULL);
 				
 				
 				if (delegate) 
@@ -264,8 +274,10 @@ namespace NDEngine
 				
 				m_ccNode->removeChildByTag(tag, bCleanUp);
 				
-				if (bCleanUp) 
-					delete node;				
+				if (bCleanUp)
+				{
+					delete node;
+				}
 				
 				break;
 			}
@@ -279,7 +291,7 @@ namespace NDEngine
 		if (this->m_parent) 
 		{
 			m_parent->RemoveChild(this, bCleanUp);
-		}		
+		}
 	}
 	
 	bool NDNode::ContainChild(NDNode* node)
@@ -293,7 +305,7 @@ namespace NDEngine
 			if (ndNode == node) 
 			{
 				return true;
-			}	
+			}
 		}
 		
 		return false;
@@ -313,7 +325,7 @@ namespace NDEngine
 			if (node->m_ccNode->getTag() == tag) 
 			{
 				return node;
-			}		
+			}
 		}
 		return NULL;
 	}	
@@ -340,7 +352,7 @@ namespace NDEngine
 		for (iter = m_childrenList.begin(); iter != m_childrenList.end(); iter++) 
 		{
 			NDNode* node = (NDNode*)*iter;
-			node->EnableDraw(m_drawEnabled);		
+			node->EnableDraw(m_drawEnabled);
 		}
 	}
 	

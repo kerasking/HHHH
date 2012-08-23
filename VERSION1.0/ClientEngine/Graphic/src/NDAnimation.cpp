@@ -23,7 +23,7 @@ NDAnimation::NDAnimation()
 , m_nMidX(0)
 , m_nBottomY(0)
 , m_nType(0)
-//, m_bReverse(false) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+, m_bReverse(false)
 , m_BelongAnimationGroup(NULL)
 , m_nCurIndexInAniGroup(-1)
 {

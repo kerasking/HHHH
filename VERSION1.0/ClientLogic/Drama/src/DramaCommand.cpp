@@ -17,14 +17,14 @@
 ///////////////////////////////////////////////
 DramaScene* GetDramaScene()
 {
-	NDDirector* director	= NDDirector::DefaultDirector();
+	NDDirector* director = NDDirector::DefaultDirector();
 	
 	if (!director)
 	{
 		return NULL;
 	}
 	
-	NDScene* scene			= director->GetScene(RUNTIME_CLASS(DramaScene));
+	NDScene* scene = director->GetScene(RUNTIME_CLASS(DramaScene));
 	
 	if (!scene)
 	{
@@ -47,7 +47,9 @@ void DramaCommandDlg::InitWithClose(bool bLeft)
 	m_param.u3.bLeft		= bLeft;
 }
 
-void DramaCommandDlg::InitWithSetFigure(bool bLeft, std::string filename, bool bReverse)
+void DramaCommandDlg::InitWithSetFigure(bool bLeft,
+										std::string filename,
+										bool bReverse)
 {
 	m_param.type			= DCT_SETDLGFIG;
 	m_param.str				= filename;
@@ -55,7 +57,10 @@ void DramaCommandDlg::InitWithSetFigure(bool bLeft, std::string filename, bool b
 	m_param.u1.bReverse		= bReverse;
 }
 
-void DramaCommandDlg::InitWithSetTitle(bool bLeft, std::string title, int nFontSize, int nFontColor)
+void DramaCommandDlg::InitWithSetTitle(bool bLeft,
+									   std::string title, 
+									   int nFontSize, 
+									   int nFontColor)
 {
 	m_param.type			= DCT_SETDLGTITLE;
 	m_param.str				= title;
@@ -65,7 +70,10 @@ void DramaCommandDlg::InitWithSetTitle(bool bLeft, std::string title, int nFontS
 	m_param.nKey			= 0;
 }
 
-void DramaCommandDlg::InitWithSetTitleBySpriteKey(bool bLeft, int nKey, int nFontSize, int nFontColor)
+void DramaCommandDlg::InitWithSetTitleBySpriteKey(bool bLeft, 
+												  int nKey,
+												  int nFontSize, 
+												  int nFontColor)
 {
 	m_param.type			= DCT_SETDLGTITLE;
 	m_param.u3.bLeft		= bLeft;
@@ -74,7 +82,10 @@ void DramaCommandDlg::InitWithSetTitleBySpriteKey(bool bLeft, int nKey, int nFon
 	m_param.nKey			= nKey;
 }
 
-void DramaCommandDlg::InitWithSetContent(bool bLeft, std::string content, int nFontSize, int nFontColor)
+void DramaCommandDlg::InitWithSetContent(bool bLeft, 
+										 std::string content, 
+										 int nFontSize,
+										 int nFontColor)
 {
 	m_param.type			= DCT_SETDLGCONTENT;
 	m_param.str				= content;
@@ -110,22 +121,26 @@ void DramaCommandDlg::excute()
 	}
 	else if (DCT_SETDLGFIG == m_param.type)
 	{
-		dramaScene->SetChatFigure(m_param.u3.bLeft, m_param.str, m_param.u1.bReverse);
+		dramaScene->SetChatFigure(m_param.u3.bLeft,
+			m_param.str, m_param.u1.bReverse);
 	}
 	else if (DCT_SETDLGTITLE == m_param.type)
 	{
 		if ( 0 == m_param.nKey )
 		{
-			dramaScene->SetChatTitle(m_param.u3.bLeft, m_param.str, m_param.u2.nFontSize, m_param.u1.nFontColor);
+			dramaScene->SetChatTitle(m_param.u3.bLeft,
+				m_param.str, m_param.u2.nFontSize, m_param.u1.nFontColor);
 		}
 		else
 		{
-			dramaScene->SetChatTitleBySpriteKey(m_param.u3.bLeft,  m_param.nKey, m_param.u2.nFontSize, m_param.u1.nFontColor);
+			dramaScene->SetChatTitleBySpriteKey(m_param.u3.bLeft,
+				m_param.nKey, m_param.u2.nFontSize, m_param.u1.nFontColor);
 		}
 	}
 	else if (DCT_SETDLGCONTENT == m_param.type)
 	{
-		dramaScene->SetChatContent(m_param.u3.bLeft, m_param.str, m_param.u2.nFontSize, m_param.u1.nFontColor);
+		dramaScene->SetChatContent(m_param.u3.bLeft, m_param.str, 
+			m_param.u2.nFontSize, m_param.u1.nFontColor);
 	}
 	else if (DCT_SHOWTIPDLG == m_param.type)
 	{
@@ -134,7 +149,10 @@ void DramaCommandDlg::excute()
 }
 
 ///////////////////////////////////////////////
-void DramaCommandSprite::InitWithAdd(int nLookFace, int nType, bool faceRight, std::string name)
+void DramaCommandSprite::InitWithAdd(int nLookFace, 
+									 int nType,
+									 bool faceRight,
+									 std::string name)
 {
 	m_param.nKey						= AllocKey();
 	m_param.type						= DCT_ADDSPRITE;
@@ -240,7 +258,7 @@ void DramaCommandSprite::ExcuteAddSprite()
 	
 	if (sprite && sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)))
 	{
-		((NDBaseRole*)sprite)->m_name	= m_param.str;
+		((NDBaseRole*)sprite)->m_name = m_param.str;
 	}
 }
 
@@ -298,10 +316,12 @@ void DramaCommandSprite::ExcuteSetAnimation()
 	}
 	
 	NDSprite* sprite = dramaScene->GetSprite(m_param.u3.nTargetKey);
+
 	if (!sprite)
 	{
 		return;
 	}
+
 	sprite->SetCurrentAnimation(m_param.u1.nAniIndex, sprite->IsReverse());
 }
 
@@ -492,6 +512,7 @@ void DramaCommandScene::ExcuteLoadEraseScene()
 	DramaTransitionScene* scene = new DramaTransitionScene;
 	scene->Init();
 	scene->SetText(m_param.str, m_param.u2.nFontSize, m_param.u1.nFontColor);
+
 	if (! dramaScene->PushScene(m_param.nKey, scene) )
 	{
 		delete scene;

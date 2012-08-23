@@ -15,7 +15,11 @@
 //#include "NDSprite.h"
 
 //using namespace NDEngine;
-//class NDEngine::NDSprite;
+
+namespace NDEngine
+{
+	class NDSprite;
+}
 
 class NDTileTableRecord : public cocos2d::CCObject
 {
@@ -36,25 +40,23 @@ class NDAnimationGroup : public cocos2d::CCObject
 	CC_SYNTHESIZE(int, m_nIdentifer, Identifer)
 	CC_SYNTHESIZE(CGPoint, m_Position, Position)
 	CC_SYNTHESIZE(CGSize, m_RunningMapSize, RunningMapSize)
-	//CC_PROPERTY(NDEngine::NDSprite*, m_RuningSprite, RuningSprite)
-	CC_SYNTHESIZE(void*, m_RuningSprite, RuningSprite)
+	CC_SYNTHESIZE(NDEngine::NDSprite*, m_RuningSprite, RuningSprite)
+	//CC_SYNTHESIZE(void*, m_RuningSprite, RuningSprite)
 	
-//	CC_PROPERTY_READONLY(bool, m_bReverse, Reverse) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-//	CC_PROPERTY_READONLY(cocos2d::CCArray*/*<NDAnimation*>*/, m_Animations, Animations) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	//CC_PROPERTY_READONLY(cocos2d::CCArray*/*<NDTileTableRecord*>*/, m_TileTable, TileTable)
+	CC_PROPERTY(bool, m_bReverse, Reverse)
+	CC_SYNTHESIZE(cocos2d::CCArray*, m_Animations, Animations)
+	CC_SYNTHESIZE(cocos2d::CCArray*, m_TileTable, TileTable)
 	CC_SYNTHESIZE(std::vector<std::string>*, m_Images, Images)
 	CC_SYNTHESIZE(std::vector<int>*, m_UnpassPoint, UnpassPoint)
 
 public:
-	NDAnimationGroup();
 
+	NDAnimationGroup();
 	~NDAnimationGroup();
 
 	void initWithSprFile(const char* sprFile);
 
 	void drawHeadAt(CGPoint pos);
-
-	void setReverse(bool newReverse);
 
 private:
 	int _orderId;

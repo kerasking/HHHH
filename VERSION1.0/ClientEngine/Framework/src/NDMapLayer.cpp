@@ -560,7 +560,7 @@ namespace NDEngine
 				{
 					subnode->AddChild(m_lbTime);
 				}
-				
+
 				m_lbTime->SetFontColor(ccc4(255,0,0,255));
 				m_lbTime->SetFontSize(30);
 
@@ -811,7 +811,7 @@ namespace NDEngine
 					
 					sprite->BeforeRunAnimation(bSet);
 					
-					if (bSet)
+					if (true)//bSet)
 					{
 						sprite->RunAnimation(sprite->DrawEnabled());						
 					}
@@ -1258,6 +1258,7 @@ namespace NDEngine
 		for (int i = 0; i < (int)cld.size(); i++) 
 		{
  			NDNode *node = cld.at(i);
+			CCLog(node->GetRuntimeClass()->className);
 // 			if (node->IsKindOfClass(RUNTIME_CLASS(NDManualRole))) 
 // 			{
 // 				NDManualRole* role = (NDManualRole*)node;
@@ -1613,8 +1614,9 @@ namespace NDEngine
 
 	CGSize NDMapLayer::GetMapDataAniParamMapSize(int nIndex)
 	{
-		anigroup_param *dictAniGroupParam = (anigroup_param *)m_mapData->getAniGroupParams()->objectAtIndex(nIndex);
-		CGSize size		= CGSizeZero;	
+		anigroup_param *dictAniGroupParam = (anigroup_param *)m_mapData->
+			getAniGroupParams()->objectAtIndex(nIndex);
+		CGSize size	= CGSizeZero;
 		if (dictAniGroupParam)
 		{
 			std::map<std::string, int>::iterator it = dictAniGroupParam->find("mapSizeW");
@@ -1633,7 +1635,9 @@ namespace NDEngine
 
 	int NDMapLayer::GetMapDataAniParamOrderId(int nIndex)
 	{
-		anigroup_param *dictAniGroupParam = (anigroup_param *)m_mapData->getAniGroupParams()->objectAtIndex(nIndex);
+		anigroup_param *dictAniGroupParam = (anigroup_param *)m_mapData->
+			getAniGroupParams()->objectAtIndex(nIndex);
+
 		int nOrderId	= 0;
 		if (dictAniGroupParam)
 		{
@@ -1659,6 +1663,11 @@ namespace NDEngine
 			}
 		}
 		return nOrderId;
+	}
+
+	void NDMapLayer::AddChild( NDNode* node, int z, int tag )
+	{
+		NDNode::AddChild(node,z,tag);
 	}
 }
 

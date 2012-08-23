@@ -29,7 +29,10 @@ NDCombinePicture::~NDCombinePicture()
 
 void NDCombinePicture::AddPicture(NDPicture* pic, CombintPictureAligment aligment)
 {
-	if (!pic) return;
+	if (!pic)
+	{
+		return;
+	}
 	
 	CGRect rectDraw = CGRectZero;
 	

@@ -90,7 +90,7 @@ namespace NDEngine
 		//NDLog("animationIndex%d",animationIndex);
 		if (m_aniGroup) 
 		{
-			if (animationIndex < 0 || animationIndex >= 0)//(int)m_aniGroup->getAnimations()->count()) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			if (animationIndex < 0 || animationIndex >= (int)m_aniGroup->getAnimations()->count())// ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 			{
 				return;
 			}
@@ -109,7 +109,8 @@ namespace NDEngine
 				m_frameRunRecord = new NDFrameRunRecord;	
 			}
 			
-			this->SetContentSize(CGSizeMake(m_currentAnimation->getW(), m_currentAnimation->getH()));
+			this->SetContentSize(CGSizeMake(m_currentAnimation->getW(),
+				m_currentAnimation->getH()));
 		}	
 	}
 	
@@ -178,7 +179,12 @@ namespace NDEngine
 			TileSetHightLight(m_bHightLight);
 			
 			bool bRet = OnDrawBegin(bDraw);
-			if (bRet) m_currentAnimation->runWithRunFrameRecord(m_frameRunRecord, bDraw, scale);				
+
+			if (bRet)
+			{
+				m_currentAnimation->runWithRunFrameRecord(m_frameRunRecord, bDraw, scale);
+			}
+
 			OnDrawEnd(bDraw);
 			
 			TileSetHightLight(oldTitleHightLight);
@@ -195,6 +201,7 @@ namespace NDEngine
 			{
 				CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 				NDNode* layer = this->GetParent();
+
 				if (layer->IsKindOfClass(RUNTIME_CLASS(NDMapLayer))) 
 				{
 					bool bRet = OnDrawBegin(bDraw);
@@ -202,8 +209,12 @@ namespace NDEngine
 					{
 						CGSize sizemap = layer->GetContentSize();
 						CGSize size = m_picSprite->GetSize();
-						m_picSprite->DrawInRect(CGRectMake(GetPosition().x, GetPosition().y+winsize.height-sizemap.height, size.width, size.height));
+
+						m_picSprite->DrawInRect(CGRectMake(GetPosition().x, 
+							GetPosition().y + winsize.height - sizemap.height,
+							size.width, size.height));
 					}
+
 					OnDrawEnd(bDraw);
 				}
 			}
@@ -216,7 +227,9 @@ namespace NDEngine
 		this->m_position = CGPointMake(newPosition.x, newPosition.y);
 	}
 	
-	void NDSprite::MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed, bool moveMap, bool ignoreMask/*=false*/, bool mustArrive/*=false*/)
+	void NDSprite::MoveToPosition(std::vector<CGPoint> toPos,
+		SpriteSpeed speed, bool moveMap, 
+		bool ignoreMask/*=false*/, bool mustArrive/*=false*/)
 	{
 		int iSize = toPos.size();
 		if (iSize == 0) 

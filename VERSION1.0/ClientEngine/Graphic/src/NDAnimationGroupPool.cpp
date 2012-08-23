@@ -31,7 +31,9 @@ NDAnimationGroupPool::~NDAnimationGroupPool()
 NDAnimationGroupPool* NDAnimationGroupPool::defaultPool()
 {
 	if (!NDAnimationGroupPool_DefaultPool)
+	{
 		NDAnimationGroupPool_DefaultPool = new NDAnimationGroupPool;
+	}
 	
 	return NDAnimationGroupPool_DefaultPool;
 }
@@ -46,10 +48,12 @@ NDAnimationGroup* NDAnimationGroupPool::addObjectWithSpr(const char*sprFile)
 	NDAnimationGroup *group = NULL;
 	
 	group = m_animationGroups->objectForKey(sprFile);
+
 	if (!group) 
 	{
 		group = new NDAnimationGroup;
 		group->initWithSprFile(sprFile);
+
 		if (group) 
 		{
 			m_animationGroups->setObject(group, sprFile);
@@ -113,6 +117,7 @@ void NDAnimationGroupPool::Recyle()
 		std::string	key = allKeys[i];
 
 		NDAnimationGroup *anigroup = m_animationGroups->objectForKey(key);
+
 		if (NULL == anigroup)
 		{
 			continue;

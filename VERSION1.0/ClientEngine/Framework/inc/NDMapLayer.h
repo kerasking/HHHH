@@ -54,18 +54,20 @@ namespace NDEngine
 		NDMapLayer();
 		~NDMapLayer();
 	public:
+
+		virtual void AddChild(NDNode* node, int z, int tag);
 //		
 //		函数：Initialization(const char* mapFile)
 //		作用：初始化地图
 //		参数：mapFile地图文件
 //		返回值：无
-		void Initialization(const char* mapFile); hide overload
+		void Initialization(const char* mapFile);
 //		
 //		函数：Initialization(int mapIndex)
 //		作用：初始化地图
 //		参数：mapIndex地图索引号
 //		返回值：无
-		void Initialization(int mapIndex); hide overload
+		void Initialization(int mapIndex);
 		
 		int GetMapIndex();
 //		
@@ -178,7 +180,8 @@ namespace NDEngine
 		cocos2d::CCArray* m_pkOrders;
 		cocos2d::CCArray* m_pkOrdersOfMapscenesAndMapanimations;
 		NDMapData *m_mapData;
-		cocos2d::CCMutableArray< cocos2d::CCMutableArray<NDFrameRunRecord*>* > *m_frameRunRecordsOfMapAniGroups;
+		cocos2d::CCMutableArray< cocos2d::CCMutableArray<NDFrameRunRecord*>* >
+			*m_frameRunRecordsOfMapAniGroups;
 		cocos2d::CCMutableArray< NDFrameRunRecord* > *m_frameRunRecordsOfMapSwitch;
 		NDAnimationGroup *m_switchAniGroup;
 		NDSprite *m_TreasureBox;

@@ -30,7 +30,7 @@ class NDAnimation : public cocos2d::CCObject
 	CC_SYNTHESIZE(int, m_nMidX, MidX)
 	CC_SYNTHESIZE(int, m_nBottomY, BottomY)
 	CC_SYNTHESIZE(int, m_nType, Type)
-//	CC_PROPERTY(bool, m_bReverse, Reverse) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	CC_SYNTHESIZE(bool, m_bReverse, Reverse)
 	CC_SYNTHESIZE(NDAnimationGroup*, m_BelongAnimationGroup, BelongAnimationGroup)
 	CC_SYNTHESIZE(int, m_nCurIndexInAniGroup, CurIndexInAniGroup)
 

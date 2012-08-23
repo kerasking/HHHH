@@ -221,8 +221,6 @@ bool NDMapLayerLogic::IsPathing()
 	return m_bPathing;
 }
 
-override
-
 bool NDEngine::NDMapLayerLogic::isAutoFight()
 {
 	return true;

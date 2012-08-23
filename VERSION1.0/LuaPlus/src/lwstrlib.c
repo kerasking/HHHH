@@ -858,19 +858,23 @@ static void translate_single_to_wide(const char* str, lua_WChar* wstr)
 }
 
 
-static void luaI_addquotedbinary (lua_State *L, luaL_Buffer *b, int arg) {
-  size_t l;
-  if (lua_type(L, arg) == LUA_TWSTRING)
-  {
-	  const lua_WChar *s = luaL_checklwstring(L, arg, &l);
-	  luaL_addwchar(b, 'L');
-	  luaL_addwchar(b, '"');
-	  while (l--) {
-		switch (*s) {
-		  case '"':  case '\\':
-			luaL_addwchar(b, '\\');
-			luaL_addwchar(b, *s);
-			break;
+static void luaI_addquotedbinary (lua_State *L, luaL_Buffer *b, int arg)
+{
+	size_t l = 0;
+
+	if (lua_type(L, arg) == LUA_TWSTRING)
+	{
+		const lua_WChar *s = luaL_checklwstring(L, arg, &l);
+		luaL_addwchar(b, 'L');
+		luaL_addwchar(b, '"');
+		while (l--)
+		{
+			switch (*s)
+			{
+			case '"':  case '\\':
+				luaL_addwchar(b, '\\');
+				luaL_addwchar(b, *s);
+				break;
 			case '\a':		luaL_addwchar(b, '\\');  luaL_addwchar(b, 'a');		break;
 			case '\b':		luaL_addwchar(b, '\\');  luaL_addwchar(b, 'b');		break;
 			case '\f':		luaL_addwchar(b, '\\');  luaL_addwchar(b, 'f');		break;
@@ -885,27 +889,31 @@ static void luaI_addquotedbinary (lua_State *L, luaL_Buffer *b, int arg) {
 				}
 				else
 				{
-					char str[10];
-					lua_WChar wstr[10];
+					char str[10] = {0};
+					lua_WChar wstr[10] = {0};
+
 					sprintf(str, "\\x%04x", (unsigned long)*s);
 					translate_single_to_wide(str, wstr);
 					luaL_addwstring(b, wstr);
 				}
+			}
+			s++;
 		}
-		s++;
-	  }
-	  luaL_addwchar(b, '"');
-  }
-  else
-  {
-	  const char *s = luaL_checklstring(L, arg, &l);
-	  luaL_addwchar(b, '"');
-	  while (l--) {
-		switch (*s) {
-		  case '"':  case '\\':
-			luaL_addwchar(b, '\\');
-			luaL_addwchar(b, *s);
-			break;
+		luaL_addwchar(b, '"');
+	}
+	else
+	{
+		const char *s = luaL_checklstring(L, arg, &l);
+		luaL_addwchar(b, '"');
+
+		while (l--)
+		{
+			switch (*s)
+			{
+			case '"':  case '\\':
+				luaL_addwchar(b, '\\');
+				luaL_addwchar(b, *s);
+				break;
 			case '\a':		luaL_addwchar(b, '\\');  luaL_addwchar(b, 'a');		break;
 			case '\b':		luaL_addwchar(b, '\\');  luaL_addwchar(b, 'b');		break;
 			case '\f':		luaL_addwchar(b, '\\');  luaL_addwchar(b, 'f');		break;
@@ -920,39 +928,72 @@ static void luaI_addquotedbinary (lua_State *L, luaL_Buffer *b, int arg) {
 				}
 				else
 				{
-					char str[10];
-					lua_WChar wstr[10];
+					char str[10] = {0};
+					lua_WChar wstr[10] = {0};
+
 					sprintf(str, "\\x%02x", (unsigned int)*s);
 					translate_single_to_wide(str, wstr);
 					luaL_addwstring(b, wstr);
 				}
+			}
+
+			s++;
 		}
-		s++;
-	  }
-	  luaL_addwchar(b, '"');
-  }
+		luaL_addwchar(b, '"');
+	}
 }
 
+static const lua_WChar *scanformat (lua_State *L, const lua_WChar *strfrmt, lua_WChar *form)
+{
+	const lua_WChar* p = strfrmt;
 
-static const lua_WChar *scanformat (lua_State *L, const lua_WChar *strfrmt, lua_WChar *form) {
-  const lua_WChar *p = strfrmt;
-  while (lua_WChar_chr(wFLAGS, *p)) p++;  /* skip flags */
-  if ((size_t)(p - strfrmt) >= sizeof(FLAGS))
-    luaL_error(L, "invalid format (repeated flags)");
-  if (iswdigit(*p)) p++;  /* skip width */
-  if (iswdigit(*p)) p++;  /* (2 digits at most) */
-  if (*p == '.') {
-    p++;
-    if (iswdigit(*p)) p++;  /* skip precision */
-    if (iswdigit(*p)) p++;  /* (2 digits at most) */
-  }
-  if (iswdigit(*p))
-    luaL_error(L, "invalid format (width or precision too long)");
-  *(form++) = '%';
-  lua_WChar_ncpy(form, strfrmt, p - strfrmt + 1);
-  form += p - strfrmt + 1;
-  *form = '\0';
-  return p;
+	while (lua_WChar_chr(wFLAGS, *p))
+	{
+		/* skip flags */
+		p++;
+	}
+
+	if ((size_t)(p - strfrmt) >= sizeof(FLAGS))
+	{
+		luaL_error(L, "invalid format (repeated flags)");
+	}
+
+	if (iswdigit(*p))
+	{
+		p++;  /* skip width */
+	}
+
+	if (iswdigit(*p))
+	{
+		p++;  /* (2 digits at most) */
+	}
+
+	if (*p == '.')
+	{
+		p++;
+
+		if (iswdigit(*p))
+		{
+			p++;  /* skip precision */
+		}
+
+		if (iswdigit(*p))
+		{
+			p++;  /* (2 digits at most) */
+		}
+	}
+
+	if (iswdigit(*p))
+	{
+		luaL_error(L, "invalid format (width or precision too long)");
+	}
+
+	*(form++) = '%';
+	lua_WChar_ncpy(form, strfrmt, p - strfrmt + 1);
+	form += p - strfrmt + 1;
+	*form = '\0';
+
+	return p;
 }
 
 
@@ -972,250 +1013,302 @@ static lua_WChar wLUA_INTFRMLEN[] = { 'l', 0 };
 
 #endif
 
-static void addintlen (lua_WChar *form) {
-  size_t l = lua_WChar_len(form);
-  lua_WChar spec = form[l - 1];
-  lua_WChar_ncpy(form + l - 1, wLUA_INTFRMLEN, l);
-  form[l + sizeof(LUA_INTFRMLEN) - 2] = spec;
-  form[l + sizeof(LUA_INTFRMLEN) - 1] = '\0';
+static void addintlen (lua_WChar *form)
+{
+	size_t l = lua_WChar_len(form);
+	lua_WChar spec = form[l - 1];
+	lua_WChar_ncpy(form + l - 1, wLUA_INTFRMLEN, l);
+	form[l + sizeof(LUA_INTFRMLEN) - 2] = spec;
+	form[l + sizeof(LUA_INTFRMLEN) - 1] = '\0';
 }
 
 
-int wstr_format_helper (luaL_Buffer* b, lua_State *L, int arg) {
-  size_t sfl;
-  const lua_WChar *strfrmt = luaL_checklwstring(L, arg, &sfl);
-  const lua_WChar *strfrmt_end = strfrmt+sfl;
-  luaL_wbuffinit(L, b);
-  while (strfrmt < strfrmt_end) {
-    if (*strfrmt != L_ESC)
-      luaL_addwchar(b, *strfrmt++);
-    else if (*++strfrmt == L_ESC)
-      luaL_addwchar(b, *strfrmt++);  /* %% */
-    else { /* format item */
-      lua_WChar form[MAX_FORMAT];  /* to store the format (`%...') */
-      lua_WChar buff[MAX_ITEM];  /* to store the formatted item */
-      char _form[MAX_FORMAT];
-      char _buff[MAX_ITEM];
-      if (iswdigit(*strfrmt) && *(strfrmt+1) == '$')
-        return luaL_error(L, "obsolete `format' option (d$)");
-      arg++;
-      strfrmt = scanformat(L, strfrmt, form);
-      switch (*strfrmt++) {
-        case 'c': {
-          translate_wide_to_single(form, _form);
-          sprintf(_buff, _form, luaL_checkint(L, arg));
-          translate_single_to_wide(_buff, buff);
-          break;
-        }
-        case 'd':  case 'i': {
-          addintlen(form);
-          translate_wide_to_single(form, _form);
-          sprintf(_buff, _form, (LUA_INTFRM_T)luaL_checknumber(L, arg));
-          translate_single_to_wide(_buff, buff);
-          break;
-        }
-        case 'o':  case 'u':  case 'x':  case 'X': {
-          //?? How should this be for integers?
-          translate_wide_to_single(form, _form);
-          sprintf(_buff, _form, (unsigned LUA_INTFRM_T)luaL_checknumber(L, arg));
-          translate_single_to_wide(_buff, buff);
-          break;
-        }
-        case 'e':  case 'E': case 'f':
-        case 'g': case 'G': {
-          translate_wide_to_single(form, _form);
-          sprintf(_buff, _form, luaL_checknumber(L, arg));
-          translate_single_to_wide(_buff, buff);
-          break;
-        }
-        case 'q': {
-          luaI_addquoted(L, b, arg);
-          continue;  /* skip the 'addsize' at the end */
-        }
-        case 's': {
-          size_t l;
-          const lua_WChar *s = luaL_checklwstring(L, arg, &l);  (void)s;
-          if (!lua_WChar_chr(form, '.') && l >= 100) {
-            /* no precision and string is too long to be formatted;
-               keep original string */
-            lua_pushvalue(L, arg);
-            luaL_addvalue(b);
-            continue;  /* skip the `addsize' at the end */
-          }
-          else {
-            assert(0);
-//			swprintf((wchar_t*)buff, (wchar_t*)form, s);
-            break;
-          }
-        }
-        case 'b':
-		{
-		  buff[1] = buff[2] = buff[3] = buff[4] = buff[5] = buff[6] = buff[7] = buff[8] = 0;
-		  switch (*strfrmt++)
-		  {
-		  case 'b': {
-            unsigned int num = (unsigned int)luaL_checkint(L, arg);
-		    buff[0] = (unsigned char)num;
-            luaL_addlwstring(b, buff, 1);
-			break;
-          }
-		  case 'd': {
-            unsigned int num = (unsigned int)luaL_checkint(L, arg);
-		    *(unsigned int*)(&buff) = num;
-            luaL_addlwstring(b, buff, 4);
-			break;
-          }
-		  case 'w': {
-            unsigned int num = (unsigned int)luaL_checkint(L, arg);
-			*(unsigned short*)(&buff) = (unsigned short)num;
-            luaL_addlwstring(b, buff, 2);
-			break;
-          }
-		  case 'f': {
-            float numF = (float)luaL_checknumber(L, arg);
-			*(float*)(&buff) = numF;
-            luaL_addlwstring(b, buff, 4);
-			break;
-          }
-		  case 'F': {
-            double numD = (double)luaL_checknumber(L, arg);
-			*(double*)(&buff) = numD;
-            luaL_addlwstring(b, buff, 8);
-			break;
-          }
+int wstr_format_helper (luaL_Buffer* b, lua_State *L, int arg)
+{
+	size_t sfl = 0;
+	const lua_WChar *strfrmt = luaL_checklwstring(L, arg, &sfl);
+	const lua_WChar *strfrmt_end = strfrmt+sfl;
+	luaL_wbuffinit(L, b);
 
-		  default:
-			  break;
-		  }
-		  buff[0] = 0;
-
-		  break;
-		}
-      }
-      luaL_addlwstring(b, buff, lua_WChar_len(buff));
-    }
-  }
-  return 1;
-}
-
-
-static int str_format (lua_State *L) {
-  int arg = 1;
-  luaL_Buffer b;
-  wstr_format_helper(&b, L, arg);
-  luaL_pushresult(&b);
-  return 1;
-}
-
-
-static int str_lualex(lua_State *L) {
-  size_t l = 0;
-  const lua_WChar *str = luaL_checklwstring(L, 1, &l);
-  int isWide = luaL_checkint(L, 2) != 0;
-  size_t i;
-  luaL_Buffer b;
-  luaL_wbuffinit(L, &b);
-
-  for (i = 0; i < l; ++i)
-  {
-//	int needUnicodeZero = 1;
-
-    switch (str[i])
+	while (strfrmt < strfrmt_end)
 	{
-      case '\\':
-		++i;
-        switch (str[i]) {
-          case 'a': luaL_addwchar(&b, '\a'); break;
-          case 'b': luaL_addwchar(&b, '\b'); break;
-          case 'f': luaL_addwchar(&b, '\f'); break;
-          case 'n': luaL_addwchar(&b, '\n'); break;
-          case 'r': luaL_addwchar(&b, '\r'); break;
-          case 't': luaL_addwchar(&b, '\t'); break;
-          case 'v': luaL_addwchar(&b, '\v'); break;
-          case 'x': {
-			  int ch;
-			  ++i;
-			  ch = tolower(str[i]);
-              if (!isdigit(ch) && !(ch >= 'a' && ch <= 'f') )
-			  {
-				  --i;
-				  luaL_addwchar(&b, 'x');
-			  }
-			  else {  /* \xxx */
-				  size_t start = i;
-				  int c = 0;
-				  size_t numDigits = isWide ? 4 : 2;
-				  do {
-					  ch = towlower(str[i]);
-					  if (iswdigit((wint_t)ch))
-					    c = 16*c + (ch-'0');
-					  else if (ch >= 'a' && ch <= 'f')
-						c = 16*c + (ch-'a') + 10;
-					  ++i;
-					  ch = towlower(str[i]);
-				  } while (i - start < numDigits && (iswdigit((wint_t)ch) || (ch >= 'a' && ch <= 'f')));
-				  luaL_addwchar(&b, c);
-				  --i;
-//				  needUnicodeZero = 0;
-			  }
-			  break;
-          }
-          default: {
-            if (!iswdigit(str[i]))
-				luaL_addwchar(&b, str[i]);
-            else {  /* \xxx */
-              int c = 0;
-              int count = 0;
-              do {
-                c = 10*c + (str[i]-'0');
-				++i;
-              } while (++count<3 && iswdigit(str[i]));
-              luaL_addwchar(&b, c);
-            }
-          }
-        }
-        break;
-      default:
-		  luaL_addwchar(&b, str[i]);
-    }
-  }
+		if (*strfrmt != L_ESC)
+		{
+			luaL_addwchar(b, *strfrmt++);
+		}
+		else if (*++strfrmt == L_ESC)
+		{
+			luaL_addwchar(b, *strfrmt++);
+		}/* %% */
+		else
+		{ /* format item */
+			lua_WChar form[MAX_FORMAT]= {0};  /* to store the format (`%...') */
+			lua_WChar buff[MAX_ITEM] = {0};  /* to store the formatted item */
+			char _form[MAX_FORMAT] = {0};
+			char _buff[MAX_ITEM] = {0};
 
-  luaL_pushresult(&b);
-  return 1;
+			if (iswdigit(*strfrmt) && *(strfrmt+1) == '$')
+			{
+				return luaL_error(L, "obsolete `format' option (d$)");
+			}
+
+			arg++;
+			strfrmt = scanformat(L, strfrmt, form);
+
+			switch (*strfrmt++)
+			{
+			case 'c':
+				{
+					translate_wide_to_single(form, _form);
+					sprintf(_buff, _form, luaL_checkint(L, arg));
+					translate_single_to_wide(_buff, buff);
+					break;
+				}
+			case 'd':  case 'i':
+				{
+					addintlen(form);
+					translate_wide_to_single(form, _form);
+					sprintf(_buff, _form, (LUA_INTFRM_T)luaL_checknumber(L, arg));
+					translate_single_to_wide(_buff, buff);
+					break;
+				}
+			case 'o':  case 'u':  case 'x':  case 'X':
+				{//?? How should this be for integers?
+					translate_wide_to_single(form, _form);
+					sprintf(_buff, _form, (unsigned LUA_INTFRM_T)luaL_checknumber(L, arg));
+					translate_single_to_wide(_buff, buff);
+					break;
+				}
+			case 'e':  case 'E': case 'f':
+			case 'g': case 'G':
+				{
+					translate_wide_to_single(form, _form);
+					sprintf(_buff, _form, luaL_checknumber(L, arg));
+					translate_single_to_wide(_buff, buff);
+					break;
+				}
+			case 'q':
+				{
+					luaI_addquoted(L, b, arg);
+					continue;  /* skip the 'addsize' at the end */
+				}
+			case 's':
+				{
+					size_t l = 0;
+					const lua_WChar *s = luaL_checklwstring(L, arg, &l);
+					(void)s;
+
+					if (!lua_WChar_chr(form, '.') && l >= 100)
+					{
+						/* no precision and string is too long to be formatted;
+						keep original string */
+						lua_pushvalue(L, arg);
+						luaL_addvalue(b);
+						continue;  /* skip the `addsize' at the end */
+					}
+					else
+					{
+						assert(0);
+						//			swprintf((wchar_t*)buff, (wchar_t*)form, s);
+						break;
+					}
+				}
+			case 'b':
+				{
+					buff[1] = buff[2] = buff[3] = buff[4] = buff[5] = buff[6] = buff[7] = buff[8] = 0;
+
+					switch (*strfrmt++)
+					{
+					case 'b':
+						{
+							unsigned int num = (unsigned int)luaL_checkint(L, arg);
+							buff[0] = (unsigned char)num;
+							luaL_addlwstring(b, buff, 1);
+							break;
+						}
+					case 'd':
+						{
+							unsigned int num = (unsigned int)luaL_checkint(L, arg);
+							*(unsigned int*)(&buff) = num;
+							luaL_addlwstring(b, buff, 4);
+							break;
+						}
+					case 'w':
+						{
+							unsigned int num = (unsigned int)luaL_checkint(L, arg);
+							*(unsigned short*)(&buff) = (unsigned short)num;
+							luaL_addlwstring(b, buff, 2);
+							break;
+						}
+					case 'f':
+						{
+							float numF = (float)luaL_checknumber(L, arg);
+							*(float*)(&buff) = numF;
+							luaL_addlwstring(b, buff, 4);
+							break;
+						}
+					case 'F':
+						{
+							double numD = (double)luaL_checknumber(L, arg);
+							*(double*)(&buff) = numD;
+							luaL_addlwstring(b, buff, 8);
+							break;
+						}
+
+					default:
+					break;
+				}
+
+				buff[0] = 0;
+
+				break;
+			}
+		}
+
+		luaL_addlwstring(b, buff, lua_WChar_len(buff));
+	}
+}
+return 1;
+}
+
+static int str_format (lua_State *L)
+{
+	int arg = 1;
+	luaL_Buffer b;
+	wstr_format_helper(&b, L, arg);
+	luaL_pushresult(&b);
+	return 1;
 }
 
 
+static int str_lualex(lua_State *L)
+{
+	size_t l = 0;
+	const lua_WChar *str = luaL_checklwstring(L, 1, &l);
+	int isWide = luaL_checkint(L, 2) != 0;
+	size_t i = 0;
+	luaL_Buffer b = {0};
+	luaL_wbuffinit(L, &b);
 
-static const luaL_Reg strlib[] = {
-  {"byte", str_byte},
-  {"char", str_char},
-  {"find", str_find},
-  {"format", str_format},
-  {"gfind", gfind_nodef},
-  {"gmatch", gmatch},
-  {"gsub", str_gsub},
-  {"len", str_len},
-  {"lower", str_lower},
-  {"match", str_match},
-  {"rep", str_rep},
-  {"reverse", str_reverse},
-  {"sub", str_sub},
-  {"upper", str_upper},
-  {"lualex", str_lualex},
-  {NULL, NULL}
+	for (i = 0; i < l; ++i)
+	{
+		//	int needUnicodeZero = 1;
+
+		switch (str[i])
+		{
+		case '\\':
+			++i;
+			switch (str[i])
+			{
+			case 'a': luaL_addwchar(&b, '\a'); break;
+			case 'b': luaL_addwchar(&b, '\b'); break;
+			case 'f': luaL_addwchar(&b, '\f'); break;
+			case 'n': luaL_addwchar(&b, '\n'); break;
+			case 'r': luaL_addwchar(&b, '\r'); break;
+			case 't': luaL_addwchar(&b, '\t'); break;
+			case 'v': luaL_addwchar(&b, '\v'); break;
+			case 'x':
+				{
+					int ch = 0;
+					++i;
+					ch = tolower(str[i]);
+
+					if (!isdigit(ch) && !(ch >= 'a' && ch <= 'f') )
+					{
+						--i;
+						luaL_addwchar(&b, 'x');
+					}
+					else
+					{  /* \xxx */
+						size_t start = i;
+						int c = 0;
+						size_t numDigits = isWide ? 4 : 2;
+
+						do
+						{
+							ch = towlower(str[i]);
+
+							if (iswdigit((wint_t)ch))
+							{
+								c = 16 * c + (ch-'0');
+							}
+							else if (ch >= 'a' && ch <= 'f')
+							{
+								c = 16 * c + (ch - 'a') + 10;
+							}
+
+							++i;
+							ch = towlower(str[i]);
+						} while (i - start < numDigits && (iswdigit((wint_t)ch) || (ch >= 'a' && ch <= 'f')));
+						luaL_addwchar(&b, c);
+						--i;
+						//				  needUnicodeZero = 0;
+					}
+					break;
+				}
+			default:
+				{
+					if (!iswdigit(str[i]))
+					{
+						luaL_addwchar(&b, str[i]);
+					}
+					else
+					{  /* \xxx */
+						int c = 0;
+						int count = 0;
+
+						do
+						{
+							c = 10*c + (str[i]-'0');
+							++i;
+						} while (++count<3 && iswdigit(str[i]));
+
+						luaL_addwchar(&b, c);
+					}
+				}
+			}
+			break;
+		default:
+			luaL_addwchar(&b, str[i]);
+		}
+	}
+
+	luaL_pushresult(&b);
+	return 1;
+}
+
+static const luaL_Reg strlib[] = 
+{
+	{"byte", str_byte},
+	{"char", str_char},
+	{"find", str_find},
+	{"format", str_format},
+	{"gfind", gfind_nodef},
+	{"gmatch", gmatch},
+	{"gsub", str_gsub},
+	{"len", str_len},
+	{"lower", str_lower},
+	{"match", str_match},
+	{"rep", str_rep},
+	{"reverse", str_reverse},
+	{"sub", str_sub},
+	{"upper", str_upper},
+	{"lualex", str_lualex},
+	{NULL, NULL}
 };
 
 
-static void createmetatable (lua_State *L) {
-  lua_WChar emptyString[] = { 0 };
-  lua_createtable(L, 0, 1);  /* create metatable for strings */
-  lua_pushwstring(L, emptyString);  /* dummy string */
-  lua_pushvalue(L, -2);
-  lua_setmetatable(L, -2);  /* set string metatable */
-  lua_pop(L, 1);  /* pop dummy string */
-  lua_pushvalue(L, -2);  /* string library... */
-  lua_setfield(L, -2, "__index");  /* ...is the __index metamethod */
-  lua_pop(L, 1);  /* pop metatable */
+static void createmetatable (lua_State *L)
+{
+	lua_WChar emptyString[] = { 0 };
+	lua_createtable(L, 0, 1);  /* create metatable for strings */
+	lua_pushwstring(L, emptyString);  /* dummy string */
+	lua_pushvalue(L, -2);
+	lua_setmetatable(L, -2);  /* set string metatable */
+	lua_pop(L, 1);  /* pop dummy string */
+	lua_pushvalue(L, -2);  /* string library... */
+	lua_setfield(L, -2, "__index");  /* ...is the __index metamethod */
+	lua_pop(L, 1);  /* pop metatable */
 }
 
 
