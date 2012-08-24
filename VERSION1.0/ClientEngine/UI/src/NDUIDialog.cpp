@@ -93,7 +93,8 @@ namespace NDEngine
 			btn->SetDelegate(this);
 			btn->SetFontColor(COLOR_OPTION_FULLSCR);
 			btn->CloseFrame();
-			btn->SetTouchDownImage(pool.AddPicture(NDPath::GetImgPathNew("dlgfull_btn_click.png")), false, CGRectZero, true);
+			btn->SetTouchDownImage(pool.AddPicture(NDPath::GetImgPathNew("dlgfull_btn_click.png")),
+				false, CGRectZero, true);
 			this->AddChild(btn);
 			
 			if ((unsigned int)i < ortherButtons.size()) 
@@ -114,7 +115,8 @@ namespace NDEngine
 		return "";
 	}
 	
-	void NDUIDialog::Show(const char* title, const char* text, const char* cancleButton, const std::vector<std::string>& ortherButtons)
+	void NDUIDialog::Show(const char* title, const char* text,
+		const char* cancleButton, const std::vector<std::string>& ortherButtons)
 	{		
 		if (this->GetParent()) 
 		{
