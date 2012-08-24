@@ -20,6 +20,7 @@
 #include "NDDirector.h"
 #include "NDLightEffect.h"
 #include "Utility.h"
+#include "..\ClientLogic\Common\inc\define.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -105,7 +106,7 @@ namespace NDEngine
 					getAnimations()->objectAtIndex(animationIndex);
 				m_currentAnimation->setCurIndexInAniGroup(animationIndex);
 				CC_SAFE_RELEASE_NULL(m_frameRunRecord);
-				m_frameRunRecord->release();
+				SAFE_RELEASE(m_frameRunRecord);
 				m_frameRunRecord = new NDFrameRunRecord;	
 			}
 			
@@ -126,7 +127,9 @@ namespace NDEngine
 					if (m_movePathIndex < iPoints)
 					{
 						if (m_movePathIndex == 0)
+						{
 							this->OnMoveBegin();
+						}
 						else 
 						{
 							this->OnMoving(m_movePathIndex == iPoints - 1);
@@ -182,7 +185,8 @@ namespace NDEngine
 
 			if (bRet)
 			{
-				m_currentAnimation->runWithRunFrameRecord(m_frameRunRecord, bDraw, scale);
+				m_currentAnimation->runWithRunFrameRecord(m_frameRunRecord,
+					bDraw, scale);
 			}
 
 			OnDrawEnd(bDraw);
@@ -318,14 +322,16 @@ namespace NDEngine
 		return m_position.y + 16;
 	}
 	
-	void NDSprite::SetSprite(NDPicture* pic)
+	void NDSprite::SetSprite(NDPicture* pkPicture)
 	{
-		m_picSprite = pic;
-		if (pic)
+		m_picSprite = pkPicture;
+
+		if (pkPicture)
 		{
 			CGPoint point = this->GetPosition();
-			CGSize size = pic->GetSize();
-			m_rectSprite = CGRectMake(point.x, point.y, size.width, size.height);
+			CGSize size = pkPicture->GetSize();
+			m_rectSprite = CGRectMake(point.x, point.y,
+				size.width, size.height);
 		}
 	}
 	
@@ -629,7 +635,8 @@ namespace NDEngine
 		{
 			return NULL;
 		}
-		return CCTextureCache::sharedTextureCache()->addImage(m_leftHandWeaponImage.c_str());
+		return CCTextureCache::sharedTextureCache()->
+			addImage(m_leftHandWeaponImage.c_str());
 	}
 	
 	CCTexture2D	*NDSprite::GetDoubleHandWeaponImage()
@@ -638,7 +645,8 @@ namespace NDEngine
 		{
 			return NULL;
 		}
-		return CCTextureCache::sharedTextureCache()->addImage(m_doubleHandWeaponImage.c_str());
+		return CCTextureCache::sharedTextureCache()->
+			addImage(m_doubleHandWeaponImage.c_str());
 	}
 	
 	CCTexture2D	*NDSprite::GetDualSwordImage()
@@ -647,7 +655,8 @@ namespace NDEngine
 		{
 			return NULL;
 		}
-		return CCTextureCache::sharedTextureCache()->addImage(m_dualSwordImage.c_str());
+		return CCTextureCache::sharedTextureCache()->
+			addImage(m_dualSwordImage.c_str());
 	}
 	
 	CCTexture2D	*NDSprite::GetDualKnifeImage()
@@ -656,7 +665,8 @@ namespace NDEngine
 		{
 			return NULL;
 		}
-		return CCTextureCache::sharedTextureCache()->addImage(m_dualKnifeImage.c_str());
+		return CCTextureCache::sharedTextureCache()->
+			addImage(m_dualKnifeImage.c_str());
 	}
 	
 	CCTexture2D	*NDSprite::GetDoubleHandWandImage()
@@ -665,7 +675,8 @@ namespace NDEngine
 		{
 			return NULL;
 		}
-		return CCTextureCache::sharedTextureCache()->addImage(m_doubleHandWandImage.c_str());
+		return CCTextureCache::sharedTextureCache()->
+			addImage(m_doubleHandWandImage.c_str());
 	}
 	
 	CCTexture2D	*NDSprite::GetDoubleHandBowImage()
@@ -674,7 +685,8 @@ namespace NDEngine
 		{
 			return NULL;
 		}
-		return CCTextureCache::sharedTextureCache()->addImage(m_doubleHandBowImage.c_str());
+		return CCTextureCache::sharedTextureCache()->
+			addImage(m_doubleHandBowImage.c_str());
 	}
 	
 	CCTexture2D	*NDSprite::GetShieldImage()
@@ -683,7 +695,8 @@ namespace NDEngine
 		{
 			return NULL;
 		}
-		return CCTextureCache::sharedTextureCache()->addImage(m_shieldImage.c_str());
+		return CCTextureCache::sharedTextureCache()->
+			addImage(m_shieldImage.c_str());
 	}
 	
 	CCTexture2D	*NDSprite::GetFaqiImage()
@@ -692,14 +705,16 @@ namespace NDEngine
 		{
 			return NULL;
 		}
-		return CCTextureCache::sharedTextureCache()->addImage(m_faqiImage.c_str());
+		return CCTextureCache::sharedTextureCache()->
+			addImage(m_faqiImage.c_str());
 	}
 	
 	CCTexture2D *NDSprite::GetCloakImage()
 	{
 		if (!m_cloakImage.empty()) 
 		{
-			return CCTextureCache::sharedTextureCache()->addImage(m_cloakImage.c_str());		
+			return CCTextureCache::sharedTextureCache()->
+				addImage(m_cloakImage.c_str());		
 		}
 		return NULL;
 	}
@@ -708,7 +723,8 @@ namespace NDEngine
 	{
 		if (!m_leftShoulderImage.empty()) 
 		{
-			return CCTextureCache::sharedTextureCache()->addImage(m_leftShoulderImage.c_str());			
+			return CCTextureCache::sharedTextureCache()->
+				addImage(m_leftShoulderImage.c_str());			
 		}
 		return NULL;
 		
@@ -718,7 +734,8 @@ namespace NDEngine
 	{
 		if (!m_rightShoulderImage.empty()) 
 		{
-			return CCTextureCache::sharedTextureCache()->addImage(m_rightShoulderImage.c_str());			
+			return CCTextureCache::sharedTextureCache()->
+				addImage(m_rightShoulderImage.c_str());			
 		}
 		return NULL;
 	}
@@ -727,7 +744,8 @@ namespace NDEngine
 	{
 		if (!m_skirtStandImage.empty()) 
 		{
-			return CCTextureCache::sharedTextureCache()->addImage(m_skirtStandImage.c_str());			
+			return CCTextureCache::sharedTextureCache()->
+				addImage(m_skirtStandImage.c_str());			
 		}
 		return NULL;
 	}
@@ -736,7 +754,8 @@ namespace NDEngine
 	{
 		if (!m_skirtWalkImage.empty()) 
 		{
-			return CCTextureCache::sharedTextureCache()->addImage(m_skirtWalkImage.c_str());			
+			return CCTextureCache::sharedTextureCache()->
+				addImage(m_skirtWalkImage.c_str());			
 		}
 		return NULL;
 		
@@ -746,7 +765,8 @@ namespace NDEngine
 	{
 		if (!m_skirtSitImage.empty()) 
 		{
-			return CCTextureCache::sharedTextureCache()->addImage(m_skirtSitImage.c_str());			
+			return CCTextureCache::sharedTextureCache()->
+				addImage(m_skirtSitImage.c_str());			
 		}
 		return NULL;
 	}
@@ -755,7 +775,8 @@ namespace NDEngine
 	{
 		if (!m_skirtLiftLegImage.empty()) 
 		{
-			return CCTextureCache::sharedTextureCache()->addImage(m_skirtLiftLegImage.c_str());			
+			return CCTextureCache::sharedTextureCache()->
+				addImage(m_skirtLiftLegImage.c_str());			
 		}
 		return NULL;		
 	}
@@ -766,7 +787,8 @@ namespace NDEngine
 		{
 			return NULL;
 		}
-		return CCTextureCache::sharedTextureCache()->addImage(m_doubleHandSpearImage.c_str());
+		return CCTextureCache::sharedTextureCache()->
+			addImage(m_doubleHandSpearImage.c_str());
 	}
 	
 // 	CCTexture2D* NDSprite::getColorTexture(int imageIndex, NDAnimationGroup* animationGroup)
@@ -806,7 +828,8 @@ namespace NDEngine
 		std::vector<std::string>* vImg = animationGroup->getImages();
 		if (npcLookface == -1 && vImg && vImg->size() > imageIndex)  //·ÇÆÕÍ¨NPC 
 		{
-			tex = CCTextureCache::sharedTextureCache()->addImage((*vImg)[imageIndex].c_str());
+			tex = CCTextureCache::sharedTextureCache()->
+				addImage((*vImg)[imageIndex].c_str());
 		}
 		return tex;
 	}
