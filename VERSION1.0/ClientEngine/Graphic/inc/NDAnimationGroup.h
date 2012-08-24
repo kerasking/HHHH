@@ -41,7 +41,6 @@ class NDAnimationGroup : public cocos2d::CCObject
 	CC_SYNTHESIZE(CGPoint, m_Position, Position)
 	CC_SYNTHESIZE(CGSize, m_RunningMapSize, RunningMapSize)
 	CC_SYNTHESIZE(NDEngine::NDSprite*, m_RuningSprite, RuningSprite)
-	//CC_SYNTHESIZE(void*, m_RuningSprite, RuningSprite)
 	
 	CC_PROPERTY(bool, m_bReverse, Reverse)
 	CC_SYNTHESIZE(cocos2d::CCArray*, m_Animations, Animations)

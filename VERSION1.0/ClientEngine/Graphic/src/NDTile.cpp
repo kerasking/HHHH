@@ -24,7 +24,7 @@ bool IsTileHightLight()
 
 NDTile::NDTile()
 : m_Texture(NULL)
-//, m_bReverse(false) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+, m_bReverse(false)
 , m_Rotation(NDRotationEnumRotation0)
 , m_vertices(NULL)
 , m_coordinates(NULL)
@@ -49,7 +49,7 @@ void NDTile::makeTex(float* pData)
 	//<-------------------ÎÆÀí×ø±ê
 	float *pc = pData;
 	//BOOL re=NO;
-	if (true)  ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ Ô­ getReverse
+	if (getReverse())
 	{
 		*pc++ = (m_CutRect.origin.x + m_CutRect.size.width) / m_Texture->getPixelsWide();
 		*pc++ = (m_CutRect.origin.y + m_CutRect.size.height) / m_Texture->getPixelsHigh();
@@ -78,7 +78,8 @@ void NDTile::makeVetex(float* pData, CGRect rect)
 	//--------------->ÆÁÄ»×ø±ê
 	float *pv = pData;
 	//int r=NDRotationEnumRotation15;
-	switch(m_Rotation){
+	switch(m_Rotation)
+	{
 		case NDRotationEnumRotation0:
 			*pv++		=	rect.origin.x;
 			*pv++		=	m_MapSize.height - rect.origin.y - rect.size.height;
@@ -488,7 +489,7 @@ void NDTile::drawSubRect(CGRect rect)
 	float yb = m_CutRect.origin.y + m_CutRect.size.height * (rect.size.height + rect.origin.y);
 	
 	//BOOL re=NO;
-	if (true)  ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ Ô­ m_bReverse
+	if (getReverse())
 	{
 		*pc++ = xr / m_Texture->getPixelsWide();
 		*pc++ = yb / m_Texture->getPixelsHigh();

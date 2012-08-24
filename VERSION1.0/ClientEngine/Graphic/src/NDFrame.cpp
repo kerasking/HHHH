@@ -271,18 +271,22 @@ void NDFrame::run(float scale)
 	for (int i = 0; i < (int)m_FrameTiles->count(); i++) 
 	{
 		NDFrameTile *frameTile = m_FrameTiles->getObjectAtIndex(i);
-		NDTileTableRecord *record = 0;//(NDTileTableRecord *)animationGroup->getTileTable()->objectAtIndex(frameTile->getTableIndex()); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		NDTileTableRecord *record = (NDTileTableRecord *)animationGroup->
+			getTileTable()->objectAtIndex(frameTile->getTableIndex());
 		
 		NDTile *tile = m_tiles->getObjectAtIndex(i);
 		
-		tile->setTexture(this->getTileTextureWithImageIndex(record->getImageIndex(), record->getReplace()));
+		tile->setTexture(getTileTextureWithImageIndex(record->getImageIndex(),
+			record->getReplace()));
+
 		if (tile->getTexture() == NULL) 
 		{
 			continue;
 		}
 		
-	//	TILE_REVERSE_ROTATION reverseRotation = this->tileReverseRotationWithReverse(true, frameTile->getRotation()); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ Ô­ getReverse()
-		//tile->setReverse(reverseRotation.reverse); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		TILE_REVERSE_ROTATION reverseRotation = 
+			tileReverseRotationWithReverse(true,frameTile->getRotation());
+		tile->setReverse(reverseRotation.reverse);
 	//	tile->setRotation(reverseRotation.rotation);
 		
 		NDEngine::NDSprite *sprite = (NDEngine::NDSprite *)animationGroup->getRuningSprite();
@@ -299,10 +303,12 @@ void NDFrame::run(float scale)
 		}
 		else 
 		{
-			tile->setCutRect(CGRectMake(record->getX(), record->getY(), record->getW(), record->getH()));
+			tile->setCutRect(CGRectMake(record->getX(),
+				record->getY(), record->getW(), record->getH()));
 		}
 		
-		GLfloat x = animationGroup->getPosition().x, y = animationGroup->getPosition().y;
+		GLfloat x = animationGroup->getPosition().x;
+		GLfloat y = animationGroup->getPosition().y;
 		if (animation->getMidX() != 0) 
 		{
 			x -= (animation->getMidX() - animation->getX()) * scale;
@@ -314,29 +320,23 @@ void NDFrame::run(float scale)
 		}
 
 		y = y + frameTile->getY() * scale - animation->getY() * scale;
-		/***
-		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		* begin
-		*/
-//		if (animation->getReverse()) 
-//		{
-//			int tileW = this->getTileW(record->getW(), record->getH(), reverseRotation.rotation);
-////			if (reverseRotation.rotation == NDRotationEnumRotation90 || reverseRotation.rotation == NDRotationEnumRotation270) 
-////			{
-////				tileW = record.h;
-////			}
-//			int newX = animation->getMidX() + (animation->getMidX() - frameTile->getX() - tileW);
-//			x = x + newX*scale - animation->getX()*scale;			
-//		}
 
-// 		else 
-// 		{			
-// 			x = x + frameTile->getX()*scale - animation->getX()*scale;
-// 		}
-		/***
-		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		* end
-		*/
+		if (animation->getReverse()) 
+		{
+			int tileW = this->getTileW(record->getW(), record->getH(), reverseRotation.rotation);
+//			if (reverseRotation.rotation == NDRotationEnumRotation90 || reverseRotation.rotation == NDRotationEnumRotation270) 
+//			{
+//				tileW = record.h;
+//			}
+			int newX = animation->getMidX() + (animation->getMidX() - frameTile->getX() - tileW);
+			x = x + newX*scale - animation->getX()*scale;			
+		}
+
+ 		else 
+ 		{			
+ 			x = x + frameTile->getX()*scale - animation->getX()*scale;
+ 		}
+
 		tile->setDrawRect(CGRectMake(x, y, tile->getCutRect().size.width * scale,
 			tile->getCutRect().size.height * scale));
 		tile->setMapSize(animationGroup->getRunningMapSize());
@@ -354,37 +354,37 @@ float NDFrame::getTileW(int w, int h, NDRotationEnum rotation)
 			return w;
 		case NDRotationEnumRotation15:
 		case NDRotationEnumRotation195:
-			return SIN15*h+COS15*w;
+			return SIN15 * h + COS15 * w;
 		case NDRotationEnumRotation30:
 		case NDRotationEnumRotation210:
-			return SIN30*h+COS30*w;
+			return SIN30 * h + COS30 * w;
 		case NDRotationEnumRotation45:
 		case NDRotationEnumRotation225:
-			return SIN45*h+COS45*w;
+			return SIN45 * h + COS45 * w;
 		case NDRotationEnumRotation60:
 		case NDRotationEnumRotation240:
-			return SIN60*h+COS60*w;
+			return SIN60 * h + COS60 * w;
 		case NDRotationEnumRotation75:
 		case NDRotationEnumRotation255:
-			return SIN75*h+COS75*w;
+			return SIN75 * h + COS75 * w;
 		case NDRotationEnumRotation90:
 		case NDRotationEnumRotation270:
 			return h;
 		case NDRotationEnumRotation105:
 		case NDRotationEnumRotation285:
-			return COS15*h+SIN15*w;
+			return COS15 * h + SIN15 * w;
 		case NDRotationEnumRotation120:
 		case NDRotationEnumRotation300:
-			return COS30*h+SIN30*w;
+			return COS30 * h + SIN30 * w;
 		case NDRotationEnumRotation135:
 		case NDRotationEnumRotation315:
-			return COS45*h+SIN45*w;
+			return COS45 * h + SIN45 * w;
 		case NDRotationEnumRotation150:
 		case NDRotationEnumRotation330:
-			return COS60*h+SIN60*w;
+			return COS60 * h + SIN60 * w;
 		case NDRotationEnumRotation165:
 		case NDRotationEnumRotation345:
-			return COS75*h+SIN75*w;
+			return COS75 * h + SIN75 * w;
 		case NDRotationEnumRotation360:
 			return w;
 		default:
@@ -996,22 +996,26 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 			return tex;
 		}
 		
-		if (sprite->IsNonRole()) {
+		if (sprite->IsNonRole())
+		{
 			std::vector<std::string>* vImg = animationGroup->getImages();
+
 			if (vImg && vImg->size() > imageIndex)
 			{
 				tex = CCTextureCache::sharedTextureCache()->addImage((*vImg)[imageIndex].c_str());
 			}
 		}
 		
-		if (tex) {
+		if (tex)
+		{
 			return tex;
 		}
 	}
 	std::vector<std::string>* vImg = animationGroup->getImages();
 	if (vImg && vImg->size() > imageIndex)
 	{
-		tex = CCTextureCache::sharedTextureCache()->addImage((*vImg)[imageIndex].c_str());
+		tex = CCTextureCache::sharedTextureCache()->
+			addImage((*vImg)[imageIndex].c_str());
 	}
 	//tex = CCTextureCache::sharedTextureCache()->addImage(animationGroup->getImages()->getObjectAtIndex(imageIndex);
 	/*switch (replace) 

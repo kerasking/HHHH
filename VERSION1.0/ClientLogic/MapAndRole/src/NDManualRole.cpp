@@ -1414,11 +1414,20 @@ namespace NDEngine
 			}
 		}
 		
+
 		//»­Æï³è
-		if (AssuredRidePet() && ridepet->iType != TYPE_RIDE_FLY)
-		{
-			ridepet->RunAnimation(bDraw);
-		}
+		/***
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* begin
+		*/
+// 		if (AssuredRidePet() && ridepet->iType != TYPE_RIDE_FLY)
+// 		{
+// 			ridepet->RunAnimation(bDraw);
+// 		}
+		/***
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* end
+		*/
 		
 		// ÈËÎï±äÐÎ¶¯»­
 		if (aniGroupTransformed)
@@ -1459,28 +1468,28 @@ namespace NDEngine
 		
 		NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 
+
 		/***
 		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		* begin
 		*/
-// 		if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) 
-// 			//&& !NDDataPersist::IsGameSettingOn(GS_SHOW_OTHER_PLAYER)  ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-// 			&& (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading)))) 
-// 		{
-// 			return;
-// 		}
-// 		
-/***
-* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-* end
-*/
+//  		if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) 
+//  			&& !NDDataPersist::IsGameSettingOn(GS_SHOW_OTHER_PLAYER)
+//  			&& (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading)))) 
+//  		{
+//  			return;
+//  		}
+//  		
 
 		//»­Æï³è
-		if (AssuredRidePet() && ridepet->iType == TYPE_RIDE_FLY)
-		{
-			ridepet->RunAnimation(bDraw);
-		}
-		
+		//if (AssuredRidePet() && ridepet->iType == TYPE_RIDE_FLY)
+		//{
+		//	ridepet->RunAnimation(bDraw);
+		//}
+		/***
+		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		* end
+		*/
 		NDBaseRole::OnDrawEnd(bDraw);
 		
 		if (this->IsInState(USERSTATE_NUM_ONE)) 

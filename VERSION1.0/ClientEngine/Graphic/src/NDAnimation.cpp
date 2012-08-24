@@ -63,7 +63,8 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord,
 			return;
 		}
 		
-		if (runFrameRecord->getNextFrameIndex() != 0 && runFrameRecord->getCurrentFrameIndex() == 0) 
+		if (runFrameRecord->getNextFrameIndex() != 0 &&
+			runFrameRecord->getCurrentFrameIndex() == 0) 
 		{
 			if (m_nType == ANIMATION_TYPE_ONCE_END) 
 			{

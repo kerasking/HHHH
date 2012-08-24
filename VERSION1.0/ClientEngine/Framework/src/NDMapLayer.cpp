@@ -233,7 +233,7 @@ namespace NDEngine
 		tq::CString mapFile("%smap_%d.map", NDPath::GetMapPath().c_str(), mapIndex);
 		m_mapIndex = mapIndex;
 		this->Initialization((const char*)mapFile);	
-		titleAlpha=0;
+		titleAlpha = 0;
 	}
 	
 	int NDMapLayer::GetMapIndex()

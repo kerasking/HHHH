@@ -175,7 +175,7 @@ namespace NDEngine
 			m_aniGroup->setRuningSprite(this);
 			m_aniGroup->setRunningMapSize(node->GetContentSize());
 			m_aniGroup->setPosition(m_position);
-	
+
 			m_currentAnimation->setReverse(m_reverse);
 			
 			bool oldTitleHightLight = IsTileHightLight();
@@ -275,7 +275,7 @@ namespace NDEngine
 					if (!pointlist.empty()) 
 					{
 						m_pointList.insert(m_pointList.end(), pointlist.begin(), pointlist.end());
-						from = m_pointList[m_pointList.size()-1];
+						from = m_pointList[m_pointList.size() - 1];
 					}
 				}
 				
@@ -870,7 +870,7 @@ namespace NDEngine
 		if (count == 0)
 			return false;
 			
-		pos = m_pointList[count-1];
+		pos = m_pointList[count - 1];
 		
 		return true;
 	}
@@ -890,16 +890,35 @@ namespace NDEngine
 
 	NDFrame* NDSprite::GetCurrentFrame()
 	{
-		NDFrame *frame = m_currentAnimation->getFrames()->getObjectAtIndex(m_frameRunRecord->getCurrentFrameIndex());
+		NDFrame *frame = m_currentAnimation->getFrames()->
+			getObjectAtIndex(m_frameRunRecord->getCurrentFrameIndex());
 		return frame;
 	}
 
-	cocos2d::CCTexture2D* NDSprite::getColorTexture( int imageIndex, NDAnimationGroup* animationGroup )
+	cocos2d::CCTexture2D* NDSprite::getColorTexture( int imageIndex,
+		NDAnimationGroup* animationGroup )
 	{
-		return 0;
+		CCTexture2D* pkTex = 0;
+		NDPicture* pkPic = 0;
+
+		if (animationGroup && 1 != colorInfo)
+		{
+			if (0 == colorInfoImage.length())
+			{
+				std::vector<std::string>* pkVector = animationGroup->getImages();
+				colorInfoImage = (*pkVector)[imageIndex];
+			}
+
+			pkPic = NDPicturePool::DefaultPool()->AddPicture(colorInfoImage.c_str());
+
+			if (0 == pkPic)
+			{
+				return 0;
+			}
+
+			pkTex = pkPic->GetTexture();
+		}
+
+		return pkTex;
 	}
 }
-
-
-
-

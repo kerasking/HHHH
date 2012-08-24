@@ -231,7 +231,9 @@ bool CCTexture2D::initWithData(const void *data, CCTexture2DPixelFormat pixelFor
 char * CCTexture2D::description(void)
 {
 	char *ret = new char[100];
-	sprintf(ret, "<CCTexture2D | Name = %u | Dimensions = %u x %u | Coordinates = (%.2f, %.2f)>", m_uName, m_uPixelsWide, m_uPixelsHigh, m_fMaxS, m_fMaxT);
+	memset(ret,0,sizeof(char) * 100);
+	sprintf(ret, "<CCTexture2D | Name = %u | Dimensions = %u x %u | Coordinates = (%.2f, %.2f)>",
+		m_uName, m_uPixelsWide, m_uPixelsHigh, m_fMaxS, m_fMaxT);
 	return ret;
 }
 
@@ -271,7 +273,8 @@ bool CCTexture2D::initWithImage(CCImage * uiImage, ccResolutionType resolution)
 	unsigned maxTextureSize = conf->getMaxTextureSize();
 	if( POTHigh > maxTextureSize || POTWide > maxTextureSize ) 
 	{
-		CCLOG("cocos2d: WARNING: Image (%u x %u) is bigger than the supported %u x %u", POTWide, POTHigh, maxTextureSize, maxTextureSize);
+		CCLOG("cocos2d: WARNING: Image (%u x %u) is bigger than the supported %u x %u",
+			POTWide, POTHigh, maxTextureSize, maxTextureSize);
 		this->release();
 		return NULL;
 	}

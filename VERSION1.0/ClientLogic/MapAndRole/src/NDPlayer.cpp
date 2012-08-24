@@ -556,7 +556,8 @@ namespace NDEngine
 		{
 			if (nOldCol == 0 && nOldRow == 0) 
 			{
-			}else 
+			}
+			else 
 			{
 				/*
 				int dir = nNewCol != nOldCol ? ( nNewCol > nOldCol ? 3 : 2 ) :

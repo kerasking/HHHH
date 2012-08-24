@@ -261,7 +261,7 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 		}
 	}
 	
-	updateRidePetEffect();
+//	updateRidePetEffect(); ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	
 	if (effectRidePetAniGroup)
 	{
