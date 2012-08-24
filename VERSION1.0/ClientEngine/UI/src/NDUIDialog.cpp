@@ -36,15 +36,10 @@ namespace NDEngine
 		INIT_AUTOLINK(NDUIDialog);
 		
 		m_contentScroll		= NULL;
-		
 		m_lbTitle			= NULL;
-		
 		m_bFullScreen		= false;
-		
 		m_btnClose			= NULL;
-		
 		m_lbTime			= NULL;
-		
 		m_iCurTime			= 0;
 		
 		memset(m_btnOptions, 0, sizeof(m_btnOptions));

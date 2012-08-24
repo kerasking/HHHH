@@ -101,7 +101,8 @@ namespace NDEngine
 			    m_currentAnimation->getType() == ANIMATION_TYPE_ONCE_START ||
 			    this->m_currentAnimation->getCurIndexInAniGroup() != animationIndex) 
 			{
-				m_currentAnimation = (NDAnimation*)m_aniGroup->getAnimations()->objectAtIndex(animationIndex);
+				m_currentAnimation = (NDAnimation*)m_aniGroup->
+					getAnimations()->objectAtIndex(animationIndex);
 				m_currentAnimation->setCurIndexInAniGroup(animationIndex);
 				CC_SAFE_RELEASE_NULL(m_frameRunRecord);
 				m_frameRunRecord->release();
@@ -172,7 +173,7 @@ namespace NDEngine
 			m_aniGroup->setRunningMapSize(node->GetContentSize());
 			m_aniGroup->setPosition(m_position);
 	
-//			m_currentAnimation->setReverse(m_reverse); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+			m_currentAnimation->setReverse(m_reverse);
 			
 			bool oldTitleHightLight = IsTileHightLight();
 			TileSetHightLight(m_bHightLight);
@@ -196,7 +197,7 @@ namespace NDEngine
 		}
 		else if(m_picSprite)
 		{
-			if (this->GetParent()) 
+			if (GetParent()) 
 			{
 				CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 				NDNode* layer = this->GetParent();
@@ -204,6 +205,7 @@ namespace NDEngine
 				if (layer->IsKindOfClass(RUNTIME_CLASS(NDMapLayer))) 
 				{
 					bool bRet = OnDrawBegin(bDraw);
+
 					if (bDraw && bRet)
 					{
 						CGSize sizemap = layer->GetContentSize();
@@ -258,11 +260,12 @@ namespace NDEngine
 				m_pointList.clear();
 				
 				CGPoint from = m_position;
-				for (int i =0; i < iSize; i++) 
+				for (int i = 0; i < iSize; i++) 
 				{
 					CGPoint to = toPos[i];
 					std::vector<CGPoint> pointlist;
-					NDAutoPath::sharedAutoPath()->autoFindPath(from, to, (NDMapLayer*)layer, m_iSpeed, mustArrive, ignoreMask);
+					NDAutoPath::sharedAutoPath()->autoFindPath(from, to,
+						(NDMapLayer*)layer, m_iSpeed, mustArrive, ignoreMask);
 					pointlist = NDAutoPath::sharedAutoPath()->getPathPointVetor();
 					
 					if (!pointlist.empty()) 
