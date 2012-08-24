@@ -96,6 +96,7 @@ void NDAnimationGroup::decodeSprtFile(FILE* stream)
 {
 	FileOp op;
 	int count = op.readByte(stream);
+
 	for (int i = 0; i < count; i++) 
 	{
 		NDTileTableRecord *record = new NDTileTableRecord;
@@ -105,7 +106,7 @@ void NDAnimationGroup::decodeSprtFile(FILE* stream)
 		record->setW(op.readShort(stream));
 		record->setH(op.readShort(stream));
 		record->setReplace(op.readByte(stream));
-//		m_TileTable->addObject(record); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		m_TileTable->addObject(record);
 		record->release();	
 	}
 }
@@ -147,7 +148,7 @@ void NDAnimationGroup::decodeSprFile(FILE* stream)
 			// read music, do not deal now
 			int sound_num=op.readShort(stream);
 
-			for(int n=0;n<sound_num;n++)
+			for(int n = 0;n < sound_num;n++)
 			{
 				op.readUTF8String(stream);
 			}
@@ -158,7 +159,7 @@ void NDAnimationGroup::decodeSprFile(FILE* stream)
 			{				
 				std::string animationPath = NDEngine::NDPath::GetAnimationPath();
 				std::string sprFile = animationPath + op.readUTF8String(stream);
-				NDAnimationGroup *sag = new NDAnimationGroup; 
+				NDAnimationGroup* sag = new NDAnimationGroup; 
 				sag->initWithSprFile(sprFile.c_str());
 				sag->setType(op.readByte(stream));
 				sag->setIdentifer(op.readInt(stream));
@@ -190,7 +191,7 @@ void NDAnimationGroup::decodeSprFile(FILE* stream)
 			
 		}
 		
-//		m_Animations->addObject(animation); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		m_Animations->addObject(animation);
 		animation->release();
 	}
 	

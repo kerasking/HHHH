@@ -27,8 +27,7 @@ typedef struct _TAGDLGOPION
 typedef std::vector<DLGOPION>		VEC_DLG_OPTION;
 typedef VEC_DLG_OPTION::iterator	VEC_DLG_OPTION_IT;
 
-class CUIDlgOptBtn :
-public NDUIButton
+class CUIDlgOptBtn:public NDUIButton
 {
 	DECLARE_CLASS(CUIDlgOptBtn)
 	CUIDlgOptBtn();

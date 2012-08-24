@@ -84,19 +84,11 @@ namespace NDEngine
 		NDLayer* layer = (NDLayer*)this->GetParent();
 		if (layer) 
 		{
-			/***
-			* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-			* begin
-			*/
-// 			if (m_frameRunRecord->getIsCompleted()) 
-// 			{
-// 				this->RemoveFromParent(true);
-// 				return;
-// 			}
-			/***
-			* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-			* end
-			*/
+ 			if (m_frameRunRecord->getIsCompleted()) 
+ 			{
+ 				this->RemoveFromParent(true);
+ 				return;
+ 			}
 			
 			if (0/*ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ m_aniGroup->getAnimations()->count()*/ > m_lightId) 
 			{				
