@@ -760,40 +760,68 @@ namespace NDEngine
 	NDString::inflate( int size, const NDString &fillval, bool before )
 	{
 		if ( (int)buf.length() >= size ) 
+		{
 			return;
+		}
 		NDString dtVal;
 		int iInflateSize = size - buf.length();
-		for( unsigned int i=0; i<iInflateSize/fillval.length(); i++ )
+
+		for( unsigned int i = 0; i < iInflateSize / fillval.length(); i++ )
 		{
 			dtVal += fillval;
 		}
-		if ( iInflateSize%fillval.length() > 0 )
-			dtVal += fillval.substr( 0, iInflateSize%fillval.length() );
+
+		if ( iInflateSize % fillval.length() > 0 )
+		{
+			dtVal += fillval.substr( 0, iInflateSize % fillval.length() );
+		}
+
 		if ( before )
+		{
 			operator =( dtVal + *this );
+		}
 		else
+		{
 			operator =( *this + dtVal );
+		}
 	}
 	
 	bool NDString::tobcd( char fillch )
 	{
-		int len;
+		int len = 0;
+
 		if ( buf.size() % 2 > 0 )
+		{
 			len = buf.size() + 1;
+		}
 		else
+		{
 			len = buf.size();
-		int bcdLen = len>>1;
+		}
+
+		int bcdLen = len >> 1;
 		char* buff = new char[ len ];
 		char* buff1 = new char[ bcdLen ];
+
+		memset(buff,0,sizeof(char) * len);
+		memset(buff1,0,sizeof(char) * bcdLen);
 		memcpy( buff, buf.c_str(), buf.size() );
+
 		if ( len != (int)buf.size() )
+		{
 			buff[ len-1 ] = fillch;
-		bool bRet;
+		}
+
+		bool bRet = false;
+
 		if ( bRet = ascBcd( buff, (unsigned char*)buff1, bcdLen ) )
 		{
 			buf.assign( buff1, bcdLen );
 		}
-		delete[] buff;	delete[] buff1;
+
+		delete[] buff;
+		delete[] buff1;
+
 		return bRet;
 	}
 	

@@ -909,6 +909,22 @@ namespace NDEngine
 				colorInfoImage = (*pkVector)[imageIndex];
 			}
 
+			int nPos = colorInfoImage.find_first_of("./");
+
+			if (-1 != nPos)
+			{
+				colorInfoImage = colorInfoImage.substr(nPos + 2,colorInfoImage.length());
+			}
+
+			for (std::string::iterator it = colorInfoImage.begin();
+				it != colorInfoImage.end();it++)
+			{
+				if (*it == '/')
+				{
+					*it = '\\';
+				}
+			}
+
 			pkPic = NDPicturePool::DefaultPool()->AddPicture(colorInfoImage.c_str());
 
 			if (0 == pkPic)
