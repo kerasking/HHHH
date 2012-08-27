@@ -92,13 +92,13 @@ public:
 	CC_SYNTHESIZE(unsigned int, m_nRoadBlockX, RoadBlockX)
 	CC_SYNTHESIZE(unsigned int, m_nRoadBlockY, RoadBlockY)
 	
-	//CC_PROPERTY_READONLY(CCArray<CustomCCTexture2D*>*, m_MapTiles, MapTiles)
+	//CC_SYNTHESIZE_READONLY(CCArray<CustomCCTexture2D*>*, m_MapTiles, MapTiles)
 	CC_SYNTHESIZE(std::vector<bool>*, m_Obstacles, Obstacles)
 	CC_SYNTHESIZE(cocos2d::CCArray*/*<NDSceneTile*>**/, m_SceneTiles, SceneTiles)
 	CC_SYNTHESIZE(cocos2d::CCArray*/*<NDSceneTile*>**/, m_BgTiles, BgTiles)
 	CC_SYNTHESIZE(cocos2d::CCArray*/*<NDMapSwitch*>**/, m_Switchs, Switchs)
-//	CC_PROPERTY_READONLY(cocos2d::CCArray*/*<NDAnimationGroup*>**/, m_AnimationGroups, AnimationGroups)
-	CC_SYNTHESIZE(cocos2d::CCArray*/*<anigroup_param*>**/, m_AniGroupParams, AniGroupParams)
+	CC_SYNTHESIZE_READONLY(cocos2d::CCArray*, m_AnimationGroups, AnimationGroups)
+	CC_SYNTHESIZE(cocos2d::CCArray*, m_AniGroupParams, AniGroupParams)
 
 public:
 	NDMapData();

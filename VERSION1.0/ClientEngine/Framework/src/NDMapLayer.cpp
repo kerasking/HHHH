@@ -681,7 +681,7 @@ namespace NDEngine
 		
 		unsigned int orderCount = m_pkOrders->count(),
 				   sceneTileCount = m_mapData->getSceneTiles()->count(),
-				   aniGroupCount = 0,//m_mapData->getAnimationGroups()->count(), ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+				   aniGroupCount = m_mapData->getAnimationGroups()->count(),
 				   switchCount = m_mapData->getSwitchs()->count();
 	
 		//PerformanceTestPerFrameBeginName(" NDMapLayer::DrawScenesAndAnimations");

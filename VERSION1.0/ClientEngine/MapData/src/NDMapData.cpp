@@ -334,7 +334,7 @@ NDMapData::NDMapData()
 , m_SceneTiles(NULL)
 , m_BgTiles(NULL)
 , m_Switchs(NULL)
-//, m_AnimationGroups(NULL) ///< 临时性注释 郭浩
+, m_AnimationGroups(NULL) ///< 临时性注释 郭浩
 , m_AniGroupParams(NULL)
 {
 }
@@ -346,7 +346,7 @@ NDMapData::~NDMapData()
 	CC_SAFE_RELEASE(m_SceneTiles);
 	CC_SAFE_RELEASE(m_BgTiles);
 	CC_SAFE_RELEASE(m_Switchs);
-//	CC_SAFE_RELEASE(m_AnimationGroups); ///< 临时性注释 郭浩
+	CC_SAFE_RELEASE(m_AnimationGroups); ///< 临时性注释 郭浩
 	CC_SAFE_RELEASE(m_AniGroupParams);
 	MapTexturePool::defaultPool()->release();
 }
@@ -410,7 +410,9 @@ void NDMapData::decode(FILE* stream)
 	//------------------->瓦片	
 	//m_MapTiles = new CCArray<CustomCCTexture2D*>();
 	for ( int lay = 0; lay < m_nLayerCount; lay++) 
+	{
 		for (uint r = 0; r < m_nRows; r++) 
+		{
 			for (uint c = 0; c < m_nColumns; c++)
 			{					
 				int imageIndex		= op.readByte(stream) - 1;	//资源下标
@@ -418,27 +420,29 @@ void NDMapData::decode(FILE* stream)
 					imageIndex = 0;
 				int	tileIndex		= op.readByte(stream);		//图块下标
 				bool reverse		= op.readByte(stream) == 1;	//翻转
-				
+
 				if (imageIndex == -1)
 				{
 					imageIndex = 0;
 					//continue;
 				}
-				
+
 				if(_tileImages.size() > imageIndex)
 				{
 					std::string imageName	=_tileImages[imageIndex];
-					
-// 					CustomCCTexture2D *tile = new CustomCCTexture2D();
-// 					tile->setTexture(MapTexturePool::defaultPool()->addImage(imageName.c_str(), true));	//[[CCTextureCache sharedTextureCache] addImage:imageName keepData:true]; 
-// 					int PicParts	= tile->getTexture()->getPixelsWide() * tile->getTexture()->getMaxS() / TileWidth;
-// 					tile->setCutRect(CGRectMake(TileWidth*(tileIndex%PicParts), TileHeight*(tileIndex/PicParts), TileWidth, TileHeight));
-// 					tile->setDrawRect(CGRectMake(TileWidth*c, TileHeight*r, TileWidth, TileHeight));
-// 					tile->setHorizontalReverse(reverse);				
-// 					m_MapTiles->addObject(tile);
-// 					tile->release();			
+
+					// 					CustomCCTexture2D *tile = new CustomCCTexture2D();
+					// 					tile->setTexture(MapTexturePool::defaultPool()->addImage(imageName.c_str(), true));	//[[CCTextureCache sharedTextureCache] addImage:imageName keepData:true]; 
+					// 					int PicParts	= tile->getTexture()->getPixelsWide() * tile->getTexture()->getMaxS() / TileWidth;
+					// 					tile->setCutRect(CGRectMake(TileWidth*(tileIndex%PicParts), TileHeight*(tileIndex/PicParts), TileWidth, TileHeight));
+					// 					tile->setDrawRect(CGRectMake(TileWidth*c, TileHeight*r, TileWidth, TileHeight));
+					// 					tile->setHorizontalReverse(reverse);				
+					// 					m_MapTiles->addObject(tile);
+					// 					tile->release();			
 				}
 			}
+		}
+	}
 	//<-------------------通行
 	m_Obstacles = new std::vector<bool>();
 	for (unsigned int i = 0; i < m_nColumns*m_nRows; i++)
@@ -501,6 +505,7 @@ void NDMapData::decode(FILE* stream)
 	m_BgTiles = CCArray::array();
 	m_BgTiles->retain();
 	int bgCount = op.readShort(stream);
+
 	for (int i = 0; i < bgCount; i++) 
 	{		
 		int resourceIndex	= op.readByte(stream);										//资源下标
@@ -534,6 +539,7 @@ void NDMapData::decode(FILE* stream)
 	std::vector<std::string> _sceneImages;
 	std::vector<int> _sceneOrders;
 	int sceneImageCount = op.readShort(stream);
+
 	for (int i = 0; i < sceneImageCount; i++) 
 	{
 		int idx = op.readShort(stream);
@@ -586,17 +592,18 @@ void NDMapData::decode(FILE* stream)
 		tile->release();
 	}
 	//<-------------------动画
-//	m_AnimationGroups = CCArray::array(); ///< 临时性注释 郭浩
-//	m_AnimationGroups->retain(); ///< 临时性注释 郭浩
+	m_AnimationGroups = CCArray::array();
+	m_AnimationGroups->retain();
 	m_AniGroupParams  = CCArray::array();
 	m_AniGroupParams->retain();
 	int aniGroupCount = op.readShort(stream);
 	for (int i = 0; i < aniGroupCount; i++) 
 	{			
 		int identifer = op.readShort(stream);			//动画id
-		NDAnimationGroup *aniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSceneAnimationId(identifer);
+		NDAnimationGroup *aniGroup = NDAnimationGroupPool::defaultPool()->
+			addObjectWithSceneAnimationId(identifer);
 		if (!aniGroup) continue;
-//		m_AnimationGroups->addObject(aniGroup); ///< 临时性注释 郭浩
+		m_AnimationGroups->addObject(aniGroup); ///< 临时性注释 郭浩
 		aniGroup->release();
 
 		int x = op.readShort(stream);		//x坐标
@@ -670,8 +677,8 @@ bool NDMapData::canPassByRow(unsigned int row, unsigned int column)
 
 void NDMapData::setRoadBlock(int x, int y)
 {
-	m_nRoadBlockX=x;
-	m_nRoadBlockY=y;
+	m_nRoadBlockX = x;
+	m_nRoadBlockY = y;
 }
 
 NDSceneTile * NDMapData::getBackGroundTile(unsigned int index)
@@ -679,7 +686,8 @@ NDSceneTile * NDMapData::getBackGroundTile(unsigned int index)
 	if (index>=m_BgTiles->count()) 
 	{
 		return NULL;
-	}else
+	}
+	else
 	{	
 		return (NDSceneTile *)m_BgTiles->objectAtIndex(index);
 	}
