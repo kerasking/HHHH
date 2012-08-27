@@ -85,7 +85,6 @@ namespace NDEngine
 	synSelfContribute(0),
 	synSelfContributeMoney(0),
 	idCurMap(0)
-	//pkPoint(0)
 	{
 		phyAdd = 0;
 		
@@ -840,7 +839,8 @@ namespace NDEngine
 	
 	void NDPlayer::SetFocusRole(NDBaseRole *baserole)
 	{
-		CSMGameScene* gs = (CSMGameScene*)NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
+		CSMGameScene* gs = (CSMGameScene*)NDDirector::DefaultDirector()->
+			GetSceneByTag(SMGAMESCENE_TAG);
 		/*if (gs) {
 			gs->SetTargetHead(baserole);
 			gs->RefreshQuickInterationBar(baserole);
@@ -925,40 +925,52 @@ namespace NDEngine
 	
 	void NDPlayer::AddSkill(OBJID idSkill)
 	{
-		BattleMgr& bm = BattleMgrObj;
-		BattleSkill* skill = bm.GetBattleSkill(idSkill);
-		if (!skill) {
+		BattleMgr& kBattleMgr = BattleMgrObj;
+		BattleSkill* pkSkill = kBattleMgr.GetBattleSkill(idSkill);
+
+		if (!pkSkill)
+		{
 			return;
 		}
 		
-		if (skill->getType() == SKILL_TYPE_ATTACK) {
-				this->m_setActSkill.insert(idSkill);
-		} else if (skill->getType() == SKILL_TYPE_PASSIVE) {
-				this->m_setPasSkill.insert(idSkill);
+		if (pkSkill->getType() == SKILL_TYPE_ATTACK)
+		{
+			this->m_setActSkill.insert(idSkill);
 		}
-		
+		else if(pkSkill->getType() == SKILL_TYPE_PASSIVE)
+		{
+			this->m_setPasSkill.insert(idSkill);
+		}
 	}
 	
 	void NDPlayer::DelSkill(OBJID idSkill)
 	{
-		if (this->m_setActSkill.count(idSkill) > 0) {
+		if (this->m_setActSkill.count(idSkill) > 0)
+		{
 			this->m_setActSkill.erase(idSkill);
-		} else {
+		}
+		else
+		{
 			this->m_setPasSkill.erase(idSkill);
 		}
 	}
 	
-	SET_BATTLE_SKILL_LIST& NDPlayer::GetSkillList(SKILL_TYPE type) {
-		if (type == SKILL_TYPE_ATTACK) {
+	SET_BATTLE_SKILL_LIST& NDPlayer::GetSkillList(SKILL_TYPE type)
+	{
+		if (type == SKILL_TYPE_ATTACK)
+		{
 			return this->m_setActSkill;
-		} else {
+		}
+		else
+		{
 			return this->m_setPasSkill;
 		}
 	}
 	
 	bool NDPlayer::IsBattleSkillLearned(OBJID idSkill)
 	{
-		return this->m_setActSkill.count(idSkill) > 0 || this->m_setPasSkill.count(idSkill) > 0;
+		return this->m_setActSkill.count(idSkill) > 0 ||
+			this->m_setPasSkill.count(idSkill) > 0;
 	}
 	
 	//bool NDPlayer::doGatherPointCollides(GatherPoint *se)
@@ -998,7 +1010,10 @@ namespace NDEngine
 	bool NDPlayer::DirectSwitch(int iSwitchCellX, int iSwitchCellY, int iPassIndex)
 	{
 		if (!CanSwitch(iSwitchCellX, iSwitchCellY))
+		{
 			return false;
+		}
+
 		AutoPathTipObj.Stop();
 		this->stopMoving();
 		ScriptGlobalEvent::OnEvent(GE_SWITCH, iPassIndex);
@@ -1115,8 +1130,9 @@ namespace NDEngine
 	
 	void NDPlayer::HandleDirectKey()
 	{
-		NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
-		if (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameScene))) 
+		NDScene *pkScene = NDDirector::DefaultDirector()->GetRunningScene();
+
+		if (!pkScene || !pkScene->IsKindOfClass(RUNTIME_CLASS(GameScene))) 
 		{
 			return;
 		}
@@ -1142,13 +1158,13 @@ namespace NDEngine
 		* end
 		*/
 		
-		dk_vec_pos vpos;
+		dk_vec_pos kPosVector;
 		
 //		if (!dk->GetPosList(vpos)) return; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		
 		//dk->ClearPosList();
 		
-		this->WalkToPosition(vpos, SpriteSpeedStep4, true);
+		this->WalkToPosition(kPosVector, SpriteSpeedStep4, true);
 	}
 	
 	void NDPlayer::HandleStateDacoity()

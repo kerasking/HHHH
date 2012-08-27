@@ -230,7 +230,7 @@ namespace NDEngine
 	
 	void NDMapLayer::Initialization(int mapIndex)
 	{
-		tq::CString strMapFile("%smap_%d.map", NDPath::GetMapPath().c_str(), mapIndex);
+		tq::CString strMapFile("%smap_%d.map", NDPath::GetFullMapPath().c_str(), mapIndex);
 		m_mapIndex = mapIndex;
 		this->Initialization((const char*)strMapFile);	
 		titleAlpha = 0;

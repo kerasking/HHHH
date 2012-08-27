@@ -15,7 +15,7 @@ using namespace cocos2d;
 
 
 NDAnimation::NDAnimation()
-: m_Frames(NULL)
+: m_pkFrames(NULL)
 , m_nX(0)
 , m_nY(0)
 , m_nW(0)
@@ -27,38 +27,43 @@ NDAnimation::NDAnimation()
 , m_BelongAnimationGroup(NULL)
 , m_nCurIndexInAniGroup(-1)
 {
-	m_Frames = new cocos2d::CCMutableArray<NDFrame*>();
+	m_pkFrames = new cocos2d::CCMutableArray<NDFrame*>();
 }
 
 NDAnimation::~NDAnimation()
 {
-	CC_SAFE_RELEASE(m_Frames);
+	CC_SAFE_RELEASE(m_pkFrames);
 }
 
 CGRect NDAnimation::getRect()
 {
 	if (m_BelongAnimationGroup) 
 	{
-		int px = m_BelongAnimationGroup->getPosition().x, py = m_BelongAnimationGroup->getPosition().y;
+		int nPosX = m_BelongAnimationGroup->getPosition().x;
+		int nPosY = m_BelongAnimationGroup->getPosition().y;
+
 		if (m_nMidX != 0) 
 		{
-			px -= m_nMidX - m_nX; 
+			nPosX -= m_nMidX - m_nX; 
 		}
+
 		if (m_nBottomY != 0) 
 		{
-			py -= m_nBottomY - m_nY;
+			nPosY -= m_nBottomY - m_nY;
 		}
-		return CGRectMake(px, py, m_nW, m_nH);
+
+		return CGRectMake(nPosX, nPosY, m_nW, m_nH);
 	}
+
 	return CGRectZero;
 }
 
 void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord,
 										bool needDraw, float drawScale)
 {
-	if (m_Frames->count()) 
+	if (m_pkFrames->count()) 
 	{		
-		if (runFrameRecord->getCurrentFrameIndex() >= (int)m_Frames->count()) 
+		if (runFrameRecord->getCurrentFrameIndex() >= (int)m_pkFrames->count()) 
 		{
 			return;
 		}
@@ -68,7 +73,7 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord,
 		{
 			if (m_nType == ANIMATION_TYPE_ONCE_END) 
 			{
-				NDFrame* frame = m_Frames->getLastObject();
+				NDFrame* frame = m_pkFrames->getLastObject();
 				if (needDraw) 
 				{
 					frame->run(drawScale);
@@ -77,7 +82,7 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord,
 			}
 			else if (m_nType == ANIMATION_TYPE_ONCE_START)
 			{
-				NDFrame* frame = m_Frames->getObjectAtIndex(0);
+				NDFrame* frame = m_pkFrames->getObjectAtIndex(0);
 				if (needDraw) 
 				{
 					frame->run(drawScale);
@@ -87,16 +92,16 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord,
 		}
 		
 		//获取动画的当前帧
-		NDFrame *frame = m_Frames->getObjectAtIndex(runFrameRecord->getCurrentFrameIndex());
+		NDFrame *pkFrame = m_pkFrames->getObjectAtIndex(runFrameRecord->getCurrentFrameIndex());
 		
 		//判断是否允许跑下一帧，如果允许则跑下一帧，否则还是跑当前帧
-		if (frame->enableRunNextFrame(runFrameRecord)) 
+		if (pkFrame->enableRunNextFrame(runFrameRecord)) 
 		{
 			//runFrameRecord.isCompleted = NO;	
 			//取下一帧
-			frame =  m_Frames->getObjectAtIndex(runFrameRecord->getNextFrameIndex());
+			pkFrame =  m_pkFrames->getObjectAtIndex(runFrameRecord->getNextFrameIndex());
 			
-			runFrameRecord->NextFrame((int)m_Frames->count());
+			runFrameRecord->NextFrame((int)m_pkFrames->count());
 			/*
 			//当前帧的索引值改变
 			if (++runFrameRecord.currentFrameIndex == (int)[_frames count]) 
@@ -126,7 +131,7 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord,
 		if (needDraw) 
 		{
 			//跑一帧
-			frame->run(drawScale);
+			pkFrame->run(drawScale);
 		}
 	}
 }
@@ -139,11 +144,11 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord,
 
 void NDAnimation::SlowDown(unsigned int multi)
 {
-	if (m_Frames->count()) 
+	if (m_pkFrames->count()) 
 	{
-		for (unsigned int i=0; i < m_Frames->count(); i++) 
+		for (unsigned int i=0; i < m_pkFrames->count(); i++) 
 		{
-			NDFrame *frame = m_Frames->getObjectAtIndex(i);
+			NDFrame *frame = m_pkFrames->getObjectAtIndex(i);
 			frame->setEnduration(frame->getEnduration()*multi);
 		}
 	}

@@ -296,4 +296,9 @@ namespace NDEngine
 		return pszTemp;
 		//return std::string(GetResPath()+"Script/"+filename).c_str();
     }
+
+	std::string NDPath::GetFullMapPath()
+	{
+		return std::string("SimplifiedChineseRes/res/map/");
+	}
 }

@@ -339,8 +339,7 @@ namespace NDEngine
 	
 	bool NDSprite::IsAnimationComplete()
 	{
-//		return m_currentAnimation == NULL ? true : m_frameRunRecord->getIsCompleted(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		return false;
+		return m_currentAnimation == NULL ? true : m_frameRunRecord->getIsCompleted();
 	}
 	
 	int NDSprite::GetCurFrameIndex()
@@ -870,7 +869,9 @@ namespace NDEngine
 		size_t count = m_pointList.size();
 		
 		if (count == 0)
+		{
 			return false;
+		}
 			
 		pos = m_pointList[count - 1];
 		

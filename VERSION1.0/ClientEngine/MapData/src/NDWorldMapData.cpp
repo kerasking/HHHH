@@ -198,7 +198,9 @@ void NDWorldMapData::decode(FILE* stream)
 	m_MapTiles = CCArray::array();
 	m_MapTiles->retain();
 	for ( int lay = 0; lay < m_nLayerCount; lay++) 
+	{
 		for (uint r = 0; r < m_nRows; r++) 
+		{
 			for (uint c = 0; c < m_nColumns; c++)
 			{					
 				int imageIndex		= op.readByte(stream) - 1;	//资源下标
@@ -219,15 +221,20 @@ void NDWorldMapData::decode(FILE* stream)
 
 					NDTile *tile = new NDTile();
 					tile->setMapSize(m_MapSize);
-					tile->setTexture(MapTexturePool::defaultPool()->addImage(imageName.c_str(), true));	//[[CCTextureCache sharedTextureCache] addImage:imageName keepData:true]; 
-					int PicParts	= tile->getTexture()->getPixelsWide() * tile->getTexture()->getMaxS() / TileWidth;
-					tile->setCutRect(CGRectMake(TileWidth*(tileIndex%PicParts), TileHeight*(tileIndex/PicParts), TileWidth, TileHeight));
-					tile->setDrawRect(CGRectMake(TileWidth*c, TileHeight*r, TileWidth, TileHeight));
+					tile->setTexture(MapTexturePool::defaultPool()->addImage(imageName.c_str(), true));
+					int PicParts	= tile->getTexture()->getPixelsWide() *
+						tile->getTexture()->getMaxS() / TileWidth;
+					tile->setCutRect(CGRectMake(TileWidth * (tileIndex % PicParts),
+						TileHeight*(tileIndex / PicParts), TileWidth, TileHeight));
+					tile->setDrawRect(CGRectMake(TileWidth * c, TileHeight * r,
+						TileWidth, TileHeight));
 					//tile->setHorizontalReverse(reverse);				
 					m_MapTiles->addObject(tile);
 					tile->release();			
 				}
 			}
+		}
+	}
 	//<---------------------使用到的背景资源
 	std::vector<std::string> _bgImages;
 	std::vector<int>_bgOrders;

@@ -22,7 +22,7 @@ class NDFrameRunRecord;
 class NDAnimationGroup;
 class NDAnimation : public cocos2d::CCObject 
 {
-	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDFrame*>*, m_Frames, Frames)
+	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDFrame*>*, m_pkFrames, Frames)
 	CC_SYNTHESIZE(int, m_nX, X)
 	CC_SYNTHESIZE(int, m_nY, Y)
 	CC_SYNTHESIZE(int, m_nW, W)

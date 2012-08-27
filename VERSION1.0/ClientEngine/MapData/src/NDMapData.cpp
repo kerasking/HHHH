@@ -583,7 +583,27 @@ void NDMapData::decode(FILE* stream)
 		
 		NDSceneTile	*tile = new NDSceneTile;
 		tile->setOrderID(_sceneOrders[resourceIndex] + y);
-		tile->setTexture(CCTextureCache::sharedTextureCache()->addImage(_sceneImages[resourceIndex].c_str()));
+
+		std::string strImagePath = _sceneImages[resourceIndex];
+
+		int nPos = strImagePath.find_first_of("./");
+
+		if (0 == nPos)
+		{
+			strImagePath = strImagePath.substr(nPos + 2,strImagePath.length());
+		}
+
+		for (std::string::iterator it = strImagePath.begin();
+			it != strImagePath.end();it++)
+		{
+			if (*it == '/')
+			{
+				*it = '\\';
+			}
+		}
+
+		tile->setTexture(CCTextureCache::sharedTextureCache()->addImage(strImagePath.c_str()));
+
 		int picWidth	= tile->getTexture()->getPixelsWide() * tile->getTexture()->getMaxS(); 
 		int picHeight	= tile->getTexture()->getPixelsHigh() * tile->getTexture()->getMaxT();
 		

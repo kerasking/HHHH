@@ -44,11 +44,11 @@ namespace NDEngine
 		// 逻辑接口
 		static NDPlayer& defaultHero(int lookface = 0, bool bSetLookFace = false);
 		static void pugeHero();
-		void Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive=false); override
+		void Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive=false);
 
-		void SetPosition(CGPoint newPosition); override
+		void SetPosition(CGPoint newPosition);
 		NDBattlePet* GetShowPet();
-		void Update(unsigned long ulDiff); override
+		void Update(unsigned long ulDiff);
 		//用于绘制
 		//void SetPositionEx(CGPoint newPosition);
 	public:
@@ -57,24 +57,24 @@ namespace NDEngine
 		bool DealClickPointInSideNpc(CGPoint point);
 		bool CancelClickPointInSideNpc();
 		
-		void stopMoving(bool bResetPos=true, bool bResetTeamPos=true); hide
+		void stopMoving(bool bResetPos=true, bool bResetTeamPos=true);
 		
 		//勿用
-		void OnMoving(bool bLastPos); override
+		void OnMoving(bool bLastPos);
 		void OnMoveBegin();
-		void OnMoveEnd(); override
+		void OnMoveEnd();
 		
-		void OnDrawEnd(bool bDraw); override
+		void OnDrawEnd(bool bDraw);
 		
 		void SetLoadMapComplete(){ isLoadingMap = false; }
 		
 		void CaclEquipEffect();
 		
-		int GetOrder(); override
+		int GetOrder();
 		
-		void OnDialogClose(NDUIDialog* dialog); override
-		void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex); override
-		void OnTimer(OBJID tag); override
+		void OnDialogClose(NDUIDialog* dialog);
+		void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex);
+		void OnTimer(OBJID tag);
 	
 		void NextFocusTarget();
 		void UpdateFocus();
@@ -166,7 +166,11 @@ namespace NDEngine
 		eSkillHard, eDodge, ePhyHit;// 装备直接属性增加值
 		
 		// 属性相关,属性界面更改属性缓存
-		int iTmpPhyPoint, iTmpDexPoint, iTmpMagPoint, iTmpDefPoint, iTmpRestPoint;
+		int iTmpPhyPoint;
+		int iTmpDexPoint;
+		int iTmpMagPoint;
+		int iTmpDefPoint;
+		int iTmpRestPoint;
 		
 		// 特殊状态附加属性
 		/** 力量附加 */
@@ -231,7 +235,8 @@ namespace NDEngine
 		NDUIDialog *m_dlgGather;
 		bool m_bRequireDacoity;
 		bool m_bRequireBattleField;
-		int m_iDacoityStep, m_iBattleFieldStep;
+		int m_iDacoityStep;
+		int m_iBattleFieldStep;
 		int m_iFocusNpcID;
 		bool m_bLocked;
 		SET_BATTLE_SKILL_LIST m_setActSkill;
