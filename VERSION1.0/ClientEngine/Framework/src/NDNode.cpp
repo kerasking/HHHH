@@ -439,7 +439,7 @@ namespace NDEngine
 			
 			p->OnClick(object);
 			
-			bDeal	= true;
+			bDeal = true;
 		}
 		
 		return bDeal;

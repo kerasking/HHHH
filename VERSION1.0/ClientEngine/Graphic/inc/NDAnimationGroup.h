@@ -65,8 +65,8 @@ private:
 	void* m_RunningSprite;
 
 private:
-	void decodeSprtFile(FILE* stream);
-	void decodeSprFile(FILE* stream);
+	void decodeSprtFile(FILE* pkStream);
+	void decodeSprFile(FILE* pkStream);
 };
 
 #endif
