@@ -96,20 +96,23 @@ bool NDAnimationGroup::getReverse()
 
 void NDAnimationGroup::decodeSprtFile(FILE* pkStream)
 {
-	FileOp op;
-	int count = op.readByte(pkStream);
+	FileOp kFileOp;
+	int count = kFileOp.readByte(pkStream);
 
 	for (int i = 0; i < count; i++) 
 	{
-		NDTileTableRecord *record = new NDTileTableRecord;
-		record->setImageIndex(op.readByte(pkStream));
-		record->setX(op.readShort(pkStream));
-		record->setY(op.readShort(pkStream));
-		record->setW(op.readShort(pkStream));
-		record->setH(op.readShort(pkStream));
-		record->setReplace(op.readByte(pkStream));
-		m_TileTable->addObject(record);
-		record->release();	
+ 		NDTileTableRecord *pkRecord = new NDTileTableRecord;
+ 		pkRecord->setImageIndex(kFileOp.readByte(pkStream));
+ 		pkRecord->setX(kFileOp.readShort(pkStream));
+ 		pkRecord->setY(kFileOp.readShort(pkStream));
+ 		pkRecord->setW(kFileOp.readShort(pkStream));
+ 		pkRecord->setH(kFileOp.readShort(pkStream));
+
+		//kFileOp.readByte(pkStream);
+
+ 		pkRecord->setReplace(kFileOp.readByte(pkStream));
+ 		m_TileTable->addObject(pkRecord);
+ 		pkRecord->release();	
 	}
 }
 
@@ -119,8 +122,8 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 {
 	FileOp kFileOp;
 	//动画用到的图片数目		
-	int imageCount = kFileOp.readByte(pkStream);
-	for (int i = 0; i < imageCount; i++) 
+	int nImageCount = kFileOp.readByte(pkStream);
+	for (int i = 0; i < nImageCount; i++) 
 	{
 		std::string imageName = kFileOp.readUTF8String(pkStream);
 		std::string image = NDEngine::NDPath::GetImagePath() + imageName;
@@ -144,11 +147,11 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 		int frameSize = kFileOp.readByte(pkStream);		
 		for (int j = 0; j < frameSize; j++) 
 		{
-			NDFrame *frame = new NDFrame;
-			frame->setEnduration(kFileOp.readShort(pkStream));
-			frame->setBelongAnimation(pkAnimation);
+			NDFrame* pkFrame = new NDFrame;
+			pkFrame->setEnduration(kFileOp.readShort(pkStream));
+			pkFrame->setBelongAnimation(pkAnimation);
 			// read music, do not deal now
-			int sound_num=kFileOp.readShort(pkStream);
+			int sound_num = kFileOp.readShort(pkStream);
 
 			for(int n = 0;n < sound_num;n++)
 			{
@@ -170,26 +173,26 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 				pkSag->setPosition(CGPointMake(xx, yy));
 				pkSag->setReverse(kFileOp.readByte(pkStream));
 				
-				frame->getSubAnimationGroups()->addObject(pkSag);
+				pkFrame->getSubAnimationGroups()->addObject(pkSag);
 				pkSag->release();
 			}
 			
 			int tileSize = kFileOp.readByte(pkStream);
 			for (int k = 0; k < tileSize; k++) 
 			{				
-				NDFrameTile *frameTile = new NDFrameTile;
+				NDFrameTile* pkFrameTile = new NDFrameTile;
 				
-				frameTile->setX(kFileOp.readShort(pkStream));
-				frameTile->setY(kFileOp.readShort(pkStream));
-				frameTile->setRotation(kFileOp.readShort(pkStream));
-				frameTile->setTableIndex(kFileOp.readShort(pkStream));
+				pkFrameTile->setX(kFileOp.readShort(pkStream));
+				pkFrameTile->setY(kFileOp.readShort(pkStream));
+				pkFrameTile->setRotation(kFileOp.readShort(pkStream));
+				pkFrameTile->setTableIndex(kFileOp.readShort(pkStream));
 				
-				frame->getFrameTiles()->addObject(frameTile);
-				frameTile->release();
+				pkFrame->getFrameTiles()->addObject(pkFrameTile);
+				pkFrameTile->release();
 			}
 			
-			pkAnimation->getFrames()->addObject(frame);
-			frame->release();
+			pkAnimation->getFrames()->addObject(pkFrame);
+			pkFrame->release();
 			
 		}
 		

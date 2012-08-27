@@ -145,14 +145,14 @@ NDFrame::NDFrame()
 {
 	m_SubAnimationGroups	= new CCMutableArray<NDAnimationGroup*>();
 	m_FrameTiles			= new CCMutableArray<NDFrameTile*>();
-	m_tiles					= new CCMutableArray<NDTile*>(); 
+	m_pkTiles					= new CCMutableArray<NDTile*>(); 
 }
 
 NDFrame::~NDFrame()
 {
 	CC_SAFE_RELEASE(m_SubAnimationGroups);
 	CC_SAFE_RELEASE(m_FrameTiles);
-	CC_SAFE_RELEASE(m_tiles);
+	CC_SAFE_RELEASE(m_pkTiles);
 }
 
 bool NDFrame::enableRunNextFrame(NDFrameRunRecord* frameRunRecord)
@@ -174,7 +174,7 @@ void NDFrame::initTiles()
 		for (int i = 0; i < (int)m_FrameTiles->count(); i++) 
 		{
 			NDTile *tile = new NDTile;
-			m_tiles->addObject(tile);
+			m_pkTiles->addObject(tile);
 			tile->release();
 		}
 	}
@@ -185,71 +185,80 @@ void NDFrame::initTiles()
 void NDFrame::drawHeadAt(CGPoint pos)
 {
 	//todo(zjh)
-// 	int faceX = 5;
-// 	int faceY = 8;
-// 	int coordX = 0;
-// 	int coordY = 0;
-// 	
-// 	NDAnimation *animation = m_BelongAnimation;
-// 	NDAnimationGroup *animationGroup = animation->getBelongAnimationGroup();
-// 	
-// 	if (m_needInitTitles) 
-// 	{
-// 		this->run();
-// 	}
-// 	
-// 	// ¼ÆËãÁ³²¿Æ«ÒÆ
-// 	for (unsigned int i = 0; i < m_FrameTiles->count(); i++) 
-// 	{
-// 		NDFrameTile *frameTile = m_FrameTiles->getObjectAtIndex(i);
-// 		NDTileTableRecord *record = (NDTileTableRecord *)animationGroup->getTileTable()->objectAtIndex(frameTile->getTableIndex());
-// 		if (record->getReplace() == REPLACEABLE_FACE && record->getX() == 0 && record->getY() == 0) {
-// 			coordX = (frameTile->getX() - animation->getX()) - faceX;
-// 			coordY = (frameTile->getY() - animation->getY()) - faceY;
-// 			break;
-// 		}
-// 	}	
-// 	
-// 	for (unsigned i = 0; i < m_FrameTiles->count(); i++) {
-// 		NDFrameTile *frameTile = m_FrameTiles->getObjectAtIndex(i);
-// 		NDTileTableRecord *record = (NDTileTableRecord *)animationGroup->getTileTable()->objectAtIndex(frameTile->getTableIndex());
-// 		
-// 		int fx = frameTile->getX();
-// 		int fy = frameTile->getY();
-// 		
-// 		int clipw = record->getW();
-// 		int replace = record->getReplace();
-// 		
-// 		if (replace == REPLACEABLE_FACE ||
-// 		    replace == REPLACEABLE_HAIR ||
-// 		    replace == REPLACEABLE_EXPRESSION) 
-// 		{
-// 			NDTile *tile = m_tiles->getObjectAtIndex(i);
-// 			
-// 			if (!tile) {
-// 				continue;
-// 			}
-// 			
-// 			tile->setTexture(this->getTileTextureWithImageIndex(record->getImageIndex(), record->getReplace()));
-// 			if (tile->getTexture() == NULL) 
-// 			{
-// 				continue;
-// 			}			
-// 			
-// 			int xx = pos.x + (animation->getMidX() + (animation->getMidX() - fx - clipw) - animation->getX()) - coordX;
-// 			int yy = pos.y + (fy - animation->getY()) - coordY;
-// 			
-// 			tile->setReverse(true);
-// 			
-// 			tile->setDrawRect(CGRectMake(xx, yy, record->getW(), record->getH()));
-// 			
-// 			tile->setMapSize(CGSizeMake(480.0f, 320.0f));
-// 			
-// 			tile->make();
-// 			
-// 			tile->draw();
-// 		}
-// 	}
+ 	int faceX = 5;
+ 	int faceY = 8;
+ 	int coordX = 0;
+ 	int coordY = 0;
+ 	
+ 	NDAnimation* pkAnimation = m_BelongAnimation;
+ 	NDAnimationGroup* pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
+ 	
+ 	if (m_needInitTitles) 
+ 	{
+ 		this->run();
+ 	}
+ 	
+ 	// ¼ÆËãÁ³²¿Æ«ÒÆ
+ 	for (unsigned int i = 0; i < m_FrameTiles->count(); i++) 
+ 	{
+ 		NDFrameTile* pkFrameTile = m_FrameTiles->getObjectAtIndex(i);
+
+ 		NDTileTableRecord* pkRecord = (NDTileTableRecord *)pkAnimationGroup->
+			getTileTable()->objectAtIndex(pkFrameTile->getTableIndex());
+
+ 		if (pkRecord->getReplace() == REPLACEABLE_FACE &&
+			pkRecord->getX() == 0 && pkRecord->getY() == 0)
+		{
+ 			coordX = (pkFrameTile->getX() - pkAnimation->getX()) - faceX;
+ 			coordY = (pkFrameTile->getY() - pkAnimation->getY()) - faceY;
+ 			break;
+ 		}
+ 	}	
+ 	
+ 	for (unsigned i = 0; i < m_FrameTiles->count(); i++)
+	{
+ 		NDFrameTile* pkFrameTile = m_FrameTiles->getObjectAtIndex(i);
+ 		NDTileTableRecord* pkRecord = (NDTileTableRecord *)pkAnimationGroup->
+			getTileTable()->objectAtIndex(pkFrameTile->getTableIndex());
+ 		
+ 		int fx = pkFrameTile->getX();
+ 		int fy = pkFrameTile->getY();
+ 		
+ 		int clipw = pkRecord->getW();
+ 		int replace = pkRecord->getReplace();
+ 		
+ 		if (replace == REPLACEABLE_FACE ||
+ 		    replace == REPLACEABLE_HAIR ||
+ 		    replace == REPLACEABLE_EXPRESSION) 
+ 		{
+ 			NDTile* pkTile = m_pkTiles->getObjectAtIndex(i);
+ 			
+ 			if (!pkTile)
+			{
+ 				continue;
+ 			}
+ 			
+ 			pkTile->setTexture(this->getTileTextureWithImageIndex(pkRecord->getImageIndex(),
+				pkRecord->getReplace()));
+
+ 			if (pkTile->getTexture() == NULL)
+ 			{
+ 				continue;
+ 			}			
+ 			
+ 			int xx = pos.x + (pkAnimation->getMidX() +
+				(pkAnimation->getMidX() - fx - clipw)
+				- pkAnimation->getX()) - coordX;
+
+ 			int yy = pos.y + (fy - pkAnimation->getY()) - coordY;
+ 			
+ 			pkTile->setReverse(true);
+ 			pkTile->setDrawRect(CGRectMake(xx, yy, pkRecord->getW(), pkRecord->getH()));
+ 			pkTile->setMapSize(CGSizeMake(480.0f, 320.0f));
+ 			pkTile->make();
+ 			pkTile->draw();
+ 		}
+ 	}
 	 
 }
 
@@ -265,83 +274,83 @@ void NDFrame::run(float scale)
 		this->initTiles();
 	}
 	
-	NDAnimation *animation = m_BelongAnimation;
-	NDAnimationGroup *animationGroup = animation->getBelongAnimationGroup();
+	NDAnimation *pkAnimation = m_BelongAnimation;
+	NDAnimationGroup *pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
 	
 	for (int i = 0; i < (int)m_FrameTiles->count(); i++) 
 	{
-		NDFrameTile *frameTile = m_FrameTiles->getObjectAtIndex(i);
-		NDTileTableRecord *record = (NDTileTableRecord *)animationGroup->
-			getTileTable()->objectAtIndex(frameTile->getTableIndex());
+		NDFrameTile* pkFrameTile = m_FrameTiles->getObjectAtIndex(i);
+		NDTileTableRecord *record = (NDTileTableRecord *)pkAnimationGroup->
+			getTileTable()->objectAtIndex(pkFrameTile->getTableIndex());
 		
-		NDTile *tile = m_tiles->getObjectAtIndex(i);
+		NDTile *pkTile = m_pkTiles->getObjectAtIndex(i);
 		
-		tile->setTexture(getTileTextureWithImageIndex(record->getImageIndex(),
+		pkTile->setTexture(getTileTextureWithImageIndex(record->getImageIndex(),
 			record->getReplace()));
 
-		if (tile->getTexture() == NULL) 
+		if (pkTile->getTexture() == NULL) 
 		{
 			continue;
 		}
 		
 		TILE_REVERSE_ROTATION reverseRotation = 
-			tileReverseRotationWithReverse(true,frameTile->getRotation());
-		tile->setReverse(reverseRotation.reverse);
+			tileReverseRotationWithReverse(true,pkFrameTile->getRotation());
+		pkTile->setReverse(reverseRotation.reverse);
 	//	tile->setRotation(reverseRotation.rotation);
 		
-		NDEngine::NDSprite *sprite = (NDEngine::NDSprite *)animationGroup->getRuningSprite();
+		NDEngine::NDSprite *sprite = (NDEngine::NDSprite *)pkAnimationGroup->getRuningSprite();
 		
 		if (sprite && !sprite->IsCloakEmpty() &&
 			record->getReplace() >= REPLACEABLE_LEFT_SHOULDER &&
 			record->getReplace() <= REPLACEABLE_SKIRT_LIFT_LEG) 
 		{
-			tile->setCutRect(CGRectMake(0, 0, 
-				tile->getTexture()->getMaxS() * 
-				tile->getTexture()->getPixelsWide(),
-				tile->getTexture()->getMaxT() * 
-				tile->getTexture()->getPixelsHigh()));
+			pkTile->setCutRect(CGRectMake(0, 0, 
+				pkTile->getTexture()->getMaxS() * 
+				pkTile->getTexture()->getPixelsWide(),
+				pkTile->getTexture()->getMaxT() * 
+				pkTile->getTexture()->getPixelsHigh()));
 		}
 		else 
 		{
-			tile->setCutRect(CGRectMake(record->getX(),
+			pkTile->setCutRect(CGRectMake(record->getX(),
 				record->getY(), record->getW(), record->getH()));
 		}
 		
-		GLfloat x = animationGroup->getPosition().x;
-		GLfloat y = animationGroup->getPosition().y;
-		if (animation->getMidX() != 0) 
+		GLfloat x = pkAnimationGroup->getPosition().x;
+		GLfloat y = pkAnimationGroup->getPosition().y;
+		if (pkAnimation->getMidX() != 0) 
 		{
-			x -= (animation->getMidX() - animation->getX()) * scale;
+			x -= (pkAnimation->getMidX() - pkAnimation->getX()) * scale;
 		}
 
-		if (animation->getBottomY() != 0) 
+		if (pkAnimation->getBottomY() != 0) 
 		{
-			y -= (animation->getBottomY() - animation->getY()) * scale;
+			y -= (pkAnimation->getBottomY() - pkAnimation->getY()) * scale;
 		}
 
-		y = y + frameTile->getY() * scale - animation->getY() * scale;
+		y = y + pkFrameTile->getY() * scale - pkAnimation->getY() * scale;
 
-		if (animation->getReverse()) 
+		if (pkAnimation->getReverse()) 
 		{
 			int tileW = this->getTileW(record->getW(), record->getH(), reverseRotation.rotation);
 //			if (reverseRotation.rotation == NDRotationEnumRotation90 || reverseRotation.rotation == NDRotationEnumRotation270) 
 //			{
 //				tileW = record.h;
 //			}
-			int newX = animation->getMidX() + (animation->getMidX() - frameTile->getX() - tileW);
-			x = x + newX*scale - animation->getX()*scale;			
+			int newX = pkAnimation->getMidX() + (pkAnimation->getMidX() - pkFrameTile->getX() - tileW);
+			x = x + newX*scale - pkAnimation->getX()*scale;			
 		}
 
  		else 
  		{			
- 			x = x + frameTile->getX()*scale - animation->getX()*scale;
+ 			x = x + pkFrameTile->getX()*scale - pkAnimation->getX()*scale;
  		}
 
-		tile->setDrawRect(CGRectMake(x, y, tile->getCutRect().size.width * scale,
-			tile->getCutRect().size.height * scale));
-		tile->setMapSize(animationGroup->getRunningMapSize());
-		tile->make();
-		tile->draw();
+		pkTile->setDrawRect(CGRectMake(x, y, pkTile->getCutRect().size.width * scale,
+			pkTile->getCutRect().size.height * scale));
+		pkTile->setMapSize(pkAnimationGroup->getRunningMapSize());
+		pkTile->make();
+		pkTile->draw();
 	}
 }
 

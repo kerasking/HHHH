@@ -878,13 +878,8 @@ void NDBaseRole::SetCloakImageWithEquipmentId(int equipmentId)
 
 void NDBaseRole::DrawHead(const CGPoint& pos)
 {
-	/**
-	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	* begin
-	*/
-
-// 	[this->m_aniGroup setRuningSprite:this];
-// 	[this->m_aniGroup drawHeadAt:pos];
+	m_aniGroup->setRuningSprite(this);
+	m_aniGroup->drawHeadAt(pos);
 }
 
 void NDBaseRole::SetWeaponType(int weaponType)

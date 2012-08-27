@@ -82,7 +82,7 @@ public:
 private:
 	int						m_count;
 	bool					m_needInitTitles;
-	cocos2d::CCMutableArray<NDTile*>* m_tiles;
+	cocos2d::CCMutableArray<NDTile*>* m_pkTiles;
 
 private:
 	TILE_REVERSE_ROTATION tileReverseRotationWithReverse(bool reverse, int rota);

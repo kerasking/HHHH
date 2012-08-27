@@ -80,7 +80,7 @@ namespace NDEngine
 	
 	void NDSprite::Initialization(const char* sprFile)
 	{
-		NDNode::Initialization();	
+		NDNode::Initialization();
 		m_aniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(sprFile);		
 	}
 	

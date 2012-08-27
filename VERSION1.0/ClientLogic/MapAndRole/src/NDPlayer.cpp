@@ -313,6 +313,8 @@ namespace NDEngine
 	
 	bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 	{
+		CCLog("Clicked");
+
 		/***
 		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		**/
