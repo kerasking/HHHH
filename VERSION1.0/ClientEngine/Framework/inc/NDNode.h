@@ -113,8 +113,6 @@ namespace NDEngine
 		void SetParam2(int nParam2);
 		int GetParam1();
 		int GetParam2();
-
-		void TestCallBack(CCObject* pSender);	///< 测试用，用完要删除 郭浩
 		
 	protected:
 		int m_nParam1;

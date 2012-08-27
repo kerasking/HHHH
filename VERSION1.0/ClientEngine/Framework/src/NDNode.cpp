@@ -443,9 +443,4 @@ namespace NDEngine
 		
 		return bDeal;
 	}
-
-	void NDNode::TestCallBack( CCObject* pSender )
-	{
-		CCLog("≤‚ ‘");
-	}
 }
