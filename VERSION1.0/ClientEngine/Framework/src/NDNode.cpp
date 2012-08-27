@@ -151,11 +151,6 @@ namespace NDEngine
 	{
 		const char* pszTemp = GetRuntimeClass()->className;
 
-		if (0 == strcmp("NDMapLayer",pszTemp))
-		{
-			CCLog("ºğºğ¹ş¹ş");
-		}
-
 		CCNode *ccNode = node->m_ccNode;
 		int z = ccNode->getZOrder();
 		int tag = ccNode->getTag();

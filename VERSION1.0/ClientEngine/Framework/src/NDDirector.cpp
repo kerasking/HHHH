@@ -65,7 +65,7 @@ namespace NDEngine
 
 		m_director->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
 		
-		CC_GLVIEW *view = m_director->getOpenGLView();
+		CC_GLVIEW* view = m_director->getOpenGLView();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		//view->setMultipleTouchEnabled(false);
 #endif
@@ -89,9 +89,11 @@ namespace NDEngine
 	void NDDirector::RemoveDelegate(NDObject* receiver)
 	{
 		std::vector<NDObject*>::iterator iter;
+
 		for (iter = m_delegates.begin(); iter != m_delegates.end(); iter++) 
 		{
 			NDObject* obj = (NDObject*)*iter;
+
 			if (obj == receiver) 
 			{
 				m_delegates.erase(iter);
@@ -396,6 +398,7 @@ namespace NDEngine
 		{
 			NDObject* obj = (NDObject*)*iter;
 			NDDirectorDelegate* delegate = dynamic_cast<NDDirectorDelegate*> (obj);
+
 			if (delegate) 
 			{
 				delegate->AfterDirectorPopScene(this, cleanScene);
