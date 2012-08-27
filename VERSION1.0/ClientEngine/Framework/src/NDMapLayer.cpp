@@ -230,9 +230,9 @@ namespace NDEngine
 	
 	void NDMapLayer::Initialization(int mapIndex)
 	{
-		tq::CString mapFile("%smap_%d.map", NDPath::GetMapPath().c_str(), mapIndex);
+		tq::CString strMapFile("%smap_%d.map", NDPath::GetMapPath().c_str(), mapIndex);
 		m_mapIndex = mapIndex;
-		this->Initialization((const char*)mapFile);	
+		this->Initialization((const char*)strMapFile);	
 		titleAlpha = 0;
 	}
 	
@@ -291,7 +291,8 @@ namespace NDEngine
                         int x = NDDirector::DefaultDirector()->GetWinSize().width / 2 - 150;
                         int y = 60;
                         //NDLog("x:%d,y:%d",x,y);
-                        m_lbTitleBg->SetFrameRect(CGRectMake(NDDirector::DefaultDirector()->GetWinSize().width / 2 - 210, y, 420, 60));
+                        m_lbTitleBg->SetFrameRect(CGRectMake(NDDirector::DefaultDirector()->
+							GetWinSize().width / 2 - 210, y, 420, 60));
                         //m_lbTitleBg->draw();
                         m_lbTitle->SetFrameRect(CGRectMake(x, y, 300, 60));
                         
@@ -690,12 +691,12 @@ namespace NDEngine
 		{
 			//PerformanceTestPerFrameBeginName(" NDMapLayer::DrawScenesAndAnimations inner");
 			
-			MAP_ORDER *dict = (MAP_ORDER *)m_pkOrders->objectAtIndex(i);
+			MAP_ORDER* pkDict = (MAP_ORDER *)m_pkOrders->objectAtIndex(i);
 			unsigned int index = 0;
-			if (dict)
+			if (pkDict)
 			{
-				std::map<std::string, int>::iterator it = dict->find("index");
-				if (it != dict->end())
+				std::map<std::string, int>::iterator it = pkDict->find("index");
+				if (it != pkDict->end())
 				{
 					index = it->second;
 				}
@@ -723,27 +724,28 @@ namespace NDEngine
 				//PerformanceTestPerFrameBeginName("µØ±í¶¯»­");
 				index -= uiSceneTileCount;
 				
-				NDAnimationGroup* aniGroup = 0;//(NDAnimationGroup* )m_mapData->getAnimationGroups()->objectAtIndex(index); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+				NDAnimationGroup* aniGroup = (NDAnimationGroup* )m_mapData->getAnimationGroups()->objectAtIndex(index);
 				CCMutableArray<NDFrameRunRecord*>* frameRunRecordList = m_frameRunRecordsOfMapAniGroups->getObjectAtIndex(index);
 				
 				aniGroup->setReverse(this->GetMapDataAniParamReverse(index));
 				aniGroup->setPosition(this->GetMapDataAniParamPos(index));
 				aniGroup->setRunningMapSize(this->GetMapDataAniParamMapSize(index));
 				
-				unsigned int aniCount = 0;//aniGroup->getAnimations()->count(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+				unsigned int aniCount = aniGroup->getAnimations()->count();
 				
 				for (unsigned int j = 0; j < aniCount; j++) 
 				{
 					NDFrameRunRecord *frameRunRecord = frameRunRecordList->getObjectAtIndex(j);
-					NDAnimation *animation = 0;//(NDAnimation *)aniGroup->getAnimations()->objectAtIndex(j); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+					NDAnimation *pkAnimation = (NDAnimation *)aniGroup->
+						getAnimations()->objectAtIndex(j);
 					
-					if (this->isMapRectIntersectScreen(animation->getRect())) 
+					if (this->isMapRectIntersectScreen(pkAnimation->getRect())) 
 					{					
-						animation->runWithRunFrameRecord(frameRunRecord, true);
+						pkAnimation->runWithRunFrameRecord(frameRunRecord, true);
 					}
 					else 
 					{
-						animation->runWithRunFrameRecord(frameRunRecord, false);
+						pkAnimation->runWithRunFrameRecord(frameRunRecord, false);
 					}
 				}	
 				//PerformanceTestPerFrameEndName("µØ±í¶¯»­");	
@@ -751,7 +753,7 @@ namespace NDEngine
 			else if (index < uiSceneTileCount + aniGroupCount + switchCount)//ÇÐÆÁµã
 			{
 				//PerformanceTestPerFrameBeginName("ÇÐÆÁµã");
-				index -= m_mapData->getSceneTiles()->count() + 0;//m_mapData->getAnimationGroups()->count(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+				index -= m_mapData->getSceneTiles()->count() + m_mapData->getAnimationGroups()->count();
 				
 				NDMapSwitch *mapSwitch = (NDMapSwitch *)m_mapData->getSwitchs()->objectAtIndex(index);
 				NDFrameRunRecord *frameRunRecord = m_frameRunRecordsOfMapSwitch->getObjectAtIndex(index);
@@ -765,9 +767,9 @@ namespace NDEngine
 
 				m_switchAniGroup->setRunningMapSize(this->GetContentSize());
 				
-				if (0 /*ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ m_switchAniGroup->getAnimations()->count()*/ > 0) 
+				if (m_switchAniGroup->getAnimations()->count() > 0) 
 				{
-					NDAnimation *animation = 0;//(NDAnimation *)m_switchAniGroup->getAnimations()->objectAtIndex(0); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+					NDAnimation *animation = (NDAnimation *)m_switchAniGroup->getAnimations()->objectAtIndex(0);
 					if (this->isMapRectIntersectScreen(animation->getRect())) 
 					{					
 						animation->runWithRunFrameRecord(frameRunRecord, true);
@@ -849,19 +851,24 @@ namespace NDEngine
 	CGPoint NDMapLayer::ConvertToMapPoint(CGPoint screenPoint)
 	{
 		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-		return ccpAdd(ccpSub(screenPoint, CGPointMake(winSize.width / 2, winSize.height / 2)), m_screenCenter);
+		return ccpAdd(ccpSub(screenPoint, CGPointMake(winSize.width / 2,
+			winSize.height / 2)), m_screenCenter);
 	}
 	
 	bool NDMapLayer::isMapPointInScreen(CGPoint mapPoint)
 	{
 		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-		return CGRectContainsPoint(CGRectMake(m_screenCenter.x - winSize.width / 2, m_screenCenter.y - winSize.height / 2, winSize.width, winSize.height), mapPoint);
+		return CGRectContainsPoint(CGRectMake(m_screenCenter.x - winSize.width / 2,
+			m_screenCenter.y - winSize.height / 2,
+			winSize.width, winSize.height), mapPoint);
 	}
 	
 	bool NDMapLayer::isMapRectIntersectScreen(CGRect mapRect)
 	{
 		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-		CGRect scrRect = CGRectMake(m_screenCenter.x - winSize.width / 2, m_screenCenter.y - winSize.height / 2, winSize.width, winSize.height);
+		CGRect scrRect = CGRectMake(m_screenCenter.x - winSize.width / 2,
+			m_screenCenter.y - winSize.height / 2,
+			winSize.width, winSize.height);
 		return CGRectIntersectsRect(scrRect, mapRect);
 	}
 	

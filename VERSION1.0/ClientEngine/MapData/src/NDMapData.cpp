@@ -390,15 +390,16 @@ void NDMapData::decode(FILE* stream)
 	m_nRows = kFileOp.readByte(stream);
 	//<-------------------使用到的图块资源
 	std::vector<std::string> _tileImages;
-	int tileImageCount = kFileOp.readShort(stream);	
-	for (int i = 0; i < tileImageCount; i++) 
+	int nTileImageCount = kFileOp.readShort(stream);
+
+	for (int i = 0; i < nTileImageCount; i++) 
 	{
 		int idx = kFileOp.readShort(stream);
 		char pszImageName[256] = {0};
 		sprintf(pszImageName, "%st%d.png", NDEngine::NDPath::GetImagePath().c_str(), idx);
-		FILE* f = fopen(pszImageName, "rt");
+		FILE* pkFile = fopen(pszImageName, "rt");
 
-		if (f ) 
+		if (pkFile ) 
 		{
 			_tileImages.push_back(pszImageName);
 		}
@@ -710,14 +711,14 @@ void NDMapData::moveBackGround(int x, int y)
 
 	for(int i = 0; i < 2; i++)
 	{
-		NDSceneTile* pTile = this->getBackGroundTile(i);
+		NDSceneTile* pkTile = this->getBackGroundTile(i);
 
-		if(pTile)
+		if(pkTile)
 		{
-			CGRect rect = pTile->getDrawRect();
+			CGRect rect = pkTile->getDrawRect();
 			rect.origin.x -= -x / 3;
-			pTile->setDrawRect(rect);
-			pTile->make();
+			pkTile->setDrawRect(rect);
+			pkTile->make();
 		}
 	}	
 	
