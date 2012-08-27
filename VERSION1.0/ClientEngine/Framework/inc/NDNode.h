@@ -121,8 +121,8 @@ namespace NDEngine
 		cocos2d::CCNode *m_ccNode;		
 		
 	protected:	
-		std::vector<NDNode*> m_childrenList;
-		NDNode* m_parent;
+		std::vector<NDNode*> m_pkChildrenList;
+		NDNode* m_pkParent;
 		bool m_drawEnabled;	
 
 		void SetParent(NDNode* node);

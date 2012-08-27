@@ -75,7 +75,7 @@ namespace NDEngine
 		CCTexture2D::setDefaultAlphaPixelFormat(kTexture2DPixelFormat_RGBA8888);	
 		
 		//#if ND_DEBUG_STATE == 1
-			m_director->setDisplayFPS(true);
+		m_director->setDisplayFPS(true);
 		//#else
 			//m_director.displayFPS = NO;
 		//#endif

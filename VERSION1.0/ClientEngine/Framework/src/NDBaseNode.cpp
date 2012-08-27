@@ -19,7 +19,7 @@ m_ndNode(NULL)
 
 void NDBaseNode::draw(void)
 {
- 	if (m_ndNode && m_ndNode->DrawEnabled()) 
+ 	if (m_ndNode && m_ndNode->DrawEnabled())
  	{
  		NDDirector::DefaultDirector()->ResumeViewRect(m_ndNode);
  		m_ndNode->draw();

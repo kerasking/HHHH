@@ -420,7 +420,7 @@ void GameScene::OnBattleBegin()
 	
 	std::vector<NDNode*> vDel;
 	
-	std::vector<NDNode*>::iterator it = this->m_childrenList.begin();
+	std::vector<NDNode*>::iterator it = this->m_pkChildrenList.begin();
 
 	/***
 	* 临时性注释 郭浩

@@ -660,10 +660,10 @@ namespace NDEngine
 		unsigned int orderCount = m_mapData->getBgTiles()->count();
 		for (unsigned int i = 0; i < orderCount; i++) 
 		{
-			NDTile *tile = (NDTile*)m_mapData->getBgTiles()->objectAtIndex(i);
-			if(tile && CGRectIntersectsRect(scrRect, tile->getDrawRect()))
+			NDTile* pkTile = (NDTile*)m_mapData->getBgTiles()->objectAtIndex(i);
+			if(pkTile && CGRectIntersectsRect(scrRect, pkTile->getDrawRect()))
 			{
-				tile->draw();
+				draw();
 // 				CGRect intersectRect	= CGRectZero;
 // 				CGRect drawRect			= CGRectZero;
 // 				if(GetIntersectRect(scrRect, tile.drawRect, intersectRect) &&
@@ -680,7 +680,7 @@ namespace NDEngine
 		this->MakeOrders();
 		
 		unsigned int orderCount = m_pkOrders->count(),
-				   sceneTileCount = m_mapData->getSceneTiles()->count(),
+				   uiSceneTileCount = m_mapData->getSceneTiles()->count(),
 				   aniGroupCount = m_mapData->getAnimationGroups()->count(),
 				   switchCount = m_mapData->getSwitchs()->count();
 	
@@ -701,7 +701,7 @@ namespace NDEngine
 				}
 			}	
 			
-			if (index < sceneTileCount) //布景
+			if (index < uiSceneTileCount) //布景
 			{
 				//PerformanceTestPerFrameBeginName("布景");
 				NDTile *tile = (NDTile *)m_mapData->getSceneTiles()->objectAtIndex(index);
@@ -718,10 +718,10 @@ namespace NDEngine
 // 			{
 // 				continue;
 // 			}
-			else if (index < sceneTileCount + aniGroupCount)//地表动画
+			else if (index < uiSceneTileCount + aniGroupCount)//地表动画
 			{
 				//PerformanceTestPerFrameBeginName("地表动画");
-				index -= sceneTileCount;
+				index -= uiSceneTileCount;
 				
 				NDAnimationGroup* aniGroup = 0;//(NDAnimationGroup* )m_mapData->getAnimationGroups()->objectAtIndex(index); ///< 临时性注释 郭浩
 				CCMutableArray<NDFrameRunRecord*>* frameRunRecordList = m_frameRunRecordsOfMapAniGroups->getObjectAtIndex(index);
@@ -748,7 +748,7 @@ namespace NDEngine
 				}	
 				//PerformanceTestPerFrameEndName("地表动画");	
 			}		
-			else if (index < sceneTileCount + aniGroupCount + switchCount)//切屏点
+			else if (index < uiSceneTileCount + aniGroupCount + switchCount)//切屏点
 			{
 				//PerformanceTestPerFrameBeginName("切屏点");
 				index -= m_mapData->getSceneTiles()->count() + 0;//m_mapData->getAnimationGroups()->count(); ///< 临时性注释 郭浩
@@ -783,7 +783,7 @@ namespace NDEngine
 			else //精灵
 			{
 				//PerformanceTestPerFrameBeginName("精灵");
-				index -= sceneTileCount + aniGroupCount + switchCount;
+				index -= uiSceneTileCount + aniGroupCount + switchCount;
 				
 				if (index < 0 || index >= this->GetChildren().size()) 
 					continue;

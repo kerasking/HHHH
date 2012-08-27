@@ -71,7 +71,6 @@ int FileOp::readInt(FILE* f)
 			((unsigned int)intBuf[2] << 8) +
 			((unsigned int)intBuf[3]);
 	return unData;
-
 }
 
 std::string FileOp::readUTF8String(FILE* f)
@@ -91,15 +90,15 @@ std::string FileOp::readUTF8String(FILE* f)
 		return "";
 	}
 
-	unsigned char tmp[4096] = {0};
-	size_t read = fread(&tmp, 1, strlen, f);
+	unsigned char pszTemp[4096] = {0};
+	size_t read = fread(&pszTemp, 1, strlen, f);
 	if (read != strlen)
 	{
 		NDAsssert(0);
 		return "";
 	}
 
-	return (char*)&tmp;
+	return (char*)&pszTemp;
 }
 
 std::string FileOp::readUTF8StringNoExcept(FILE* f)
