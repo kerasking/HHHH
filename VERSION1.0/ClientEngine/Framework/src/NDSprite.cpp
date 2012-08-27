@@ -169,6 +169,8 @@ namespace NDEngine
 			}
 			
 			NDNode* node = this->GetParent();
+
+			SetPosition(ccp(500,500));
 			
 			if (!node) return;
 			

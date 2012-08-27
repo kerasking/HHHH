@@ -1298,8 +1298,10 @@ namespace NDEngine
 		CGPoint pos = GetPosition();
 		
 		// 摆摊先处理
-		if (this->IsInState(USERSTATE_BOOTH)) { // 摆摊不画骑宠
-			if (this->m_picVendor) {
+		if (this->IsInState(USERSTATE_BOOTH))
+		{ // 摆摊不画骑宠
+			if (this->m_picVendor)
+			{
 				CGSize sizemap;
 				if (node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 				{
@@ -1308,10 +1310,13 @@ namespace NDEngine
 					NDMapLayer *layer = (NDMapLayer*)node;
 					CGPoint screen = layer->GetScreenCenter();
 					CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-					m_posScreen = ccpSub(this->GetPosition(), ccpSub(screen, CGPointMake(winSize.width / 2, winSize.height / 2)));
+					m_posScreen = ccpSub(this->GetPosition(), ccpSub(screen,
+						CGPointMake(winSize.width / 2, winSize.height / 2)));
 					
 					sizemap = layer->GetContentSize();
-					this->m_picVendor->DrawInRect(CGRectMake(pos.x-13-8, pos.y-10+320-sizemap.height, szVendor.width, szVendor.height));
+					this->m_picVendor->DrawInRect(CGRectMake(pos.x - 13 - 8,
+						pos.y - 10 + 320 - sizemap.height,
+						szVendor.width, szVendor.height));
 				}
 			}
 			
@@ -1334,7 +1339,10 @@ namespace NDEngine
 					NDMapLayer *layer = (NDMapLayer*)node;
 					sizemap = layer->GetContentSize();
 					CGSize sizeGraveStone = m_picGraveStone->GetSize();
-					CGRect rect = CGRectMake(pos.x-13-8, pos.y-10+320-sizemap.height, sizeGraveStone.width, sizeGraveStone.height);
+					CGRect rect = CGRectMake(pos.x - 13 - 8,
+						pos.y - 10 + 320 - sizemap.height,
+						sizeGraveStone.width, sizeGraveStone.height);
+
 					m_picGraveStone->DrawInRect(rect);
 					
 					return false;
@@ -1402,7 +1410,6 @@ namespace NDEngine
 		
 		
 		NDBaseRole::OnDrawBegin(bDraw);
-
 		
 		if (ridepet)
 		{
@@ -1434,8 +1441,8 @@ namespace NDEngine
 		{
 			bDraw = !this->IsInState(USERSTATE_STEALTH);
 			this->aniGroupTransformed->SetPosition(pos);
-			//aniGroupTransformed->SetCurrentAnimation(m_moving ? MONSTER_MAP_MOVE : MONSTER_MAP_STAND, !this->m_faceRight);
-//			aniGroupTransformed->SetSpriteDir(this->m_faceRight ? 2 : 0);
+			aniGroupTransformed->SetCurrentAnimation(m_moving ? MONSTER_MAP_MOVE : MONSTER_MAP_STAND, !this->m_faceRight);
+			aniGroupTransformed->SetSpriteDir(this->m_faceRight ? 2 : 0);
 			aniGroupTransformed->RunAnimation(bDraw);
 		}
 		
@@ -1513,7 +1520,7 @@ namespace NDEngine
 		if (effectArmorAniGroup != NULL && effectArmorAniGroup->GetParent() && !isTransformed()) 
 		{
 			CGPoint pos = GetPosition();
-			pos.y += 6-getGravityY()+effectArmorAniGroup->GetHeight();
+			pos.y += 6 - getGravityY() + effectArmorAniGroup->GetHeight();
 			effectArmorAniGroup->SetPosition(pos);
 			effectArmorAniGroup->RunAnimation(bDraw);
 		}
@@ -1550,7 +1557,8 @@ namespace NDEngine
 		
 		if (bResetPos) 
 		{
-			NDManualRole::SetPosition(ccp(serverCol*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, serverRow*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+			NDManualRole::SetPosition(ccp(serverCol * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+				serverRow * MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
 		}
 		
 		SetAction(false);
@@ -1708,30 +1716,47 @@ namespace NDEngine
 		AnimationList& al = AnimationListObj;
 		if (nState == USERSTATE_BOOTH) 
 		{
-			if (bSet) {
+			if (bSet)
+			{
 				al.sitAction(this);
-				if (!m_picVendor) {
-					m_picVendor = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("vendor.png"));
+
+				if (!m_picVendor)
+				{
+					m_picVendor = NDPicturePool::DefaultPool()->
+						AddPicture(NDPath::GetImgPath("vendor.png"));
 				}
-			} else {
-				if (this->m_picVendor) {
+			}
+			else
+			{
+				if (this->m_picVendor)
+				{
 					SAFE_DELETE(m_picVendor);
 				}
-				if (this->ridepet) {
+
+				if (this->ridepet)
+				{
 					al.ridePetStandAction(TYPE_MANUALROLE, this, this->m_faceRight);
-				} else {
+				}
+				else
+				{
 					al.standAction(TYPE_MANUALROLE, this, this->m_faceRight);
 				}
 			}
 		}
 		else if (nState == USERSTATE_FIGHTING) 
 		{
-			if (bSet) {
-				if (!m_picBattle) {
-					m_picBattle = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("battle.png"));
+			if (bSet)
+			{
+				if (!m_picBattle)
+				{
+					m_picBattle = NDPicturePool::DefaultPool()->
+						AddPicture(NDPath::GetImgPath("battle.png"));
 				}
-			} else {
-				if (this->m_picBattle) {
+			}
+			else
+			{
+				if (this->m_picBattle)
+				{
 					SAFE_DELETE(m_picBattle);
 				}
 			}
@@ -1741,14 +1766,21 @@ namespace NDEngine
 	void NDManualRole::SetState(int nState)
 	{
 		this->state = nState;
-		if (this->IsInState(USERSTATE_BOOTH)) {
+
+		if (this->IsInState(USERSTATE_BOOTH))
+		{
 			this->UpdateState(USERSTATE_BOOTH, true);
-		} else if (this->IsInState(USERSTATE_DEAD)) {
+		}
+		else if(this->IsInState(USERSTATE_DEAD))
+		{
 			// todo 死亡状态，如果是玩家自己要停止正常游戏逻辑
-		}else if (this->IsInState(USERSTATE_FIGHTING))
+		}
+		else if (this->IsInState(USERSTATE_FIGHTING))
 		{
 			NDPlayer& player = NDPlayer::defaultHero();
-			if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) && (!this->isTeamMember() || this->teamId != player.teamId)) 
+
+			if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) &&
+				(!this->isTeamMember() || this->teamId != player.teamId)) 
 			{
 				this->UpdateState(USERSTATE_FIGHTING, true);
 			}
@@ -1764,7 +1796,8 @@ namespace NDEngine
 	// 正负状态
 	bool NDManualRole::IsInDacoity()
 	{
-		return IsInState(USERSTATE_BATTLE_POSITIVE) || IsInState(USERSTATE_BATTLE_NEGATIVE);
+		return IsInState(USERSTATE_BATTLE_POSITIVE) ||
+			IsInState(USERSTATE_BATTLE_NEGATIVE);
 	}
 	
 	void NDManualRole::setSafeProtected(bool isSafeProtected)
@@ -1834,14 +1867,18 @@ namespace NDEngine
 	
 	void NDManualRole::updateTransform(int idLookface)
 	{
-		if (idLookface != this->idTransformTo) {
+		if (idLookface != this->idTransformTo)
+		{
 			this->idTransformTo = idLookface;
-			if (aniGroupTransformed) {
+
+			if (aniGroupTransformed)
+			{
 				aniGroupTransformed->RemoveFromParent(true);
 				aniGroupTransformed = NULL;
 			}
 			
-			if (this->idTransformTo != 0) {
+			if (this->idTransformTo != 0)
+			{
 				this->aniGroupTransformed = new NDMonster;
 				this->aniGroupTransformed->SetNormalAniGroup(idLookface);
 				this->subnode->AddChild(aniGroupTransformed);
@@ -1859,7 +1896,8 @@ namespace NDEngine
 		CGPoint pos = GetPosition();
 		
 		if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer))
-			&& this->GetParent() && !this->GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer))) 
+			&& this->GetParent() && !this->GetParent()->
+			IsKindOfClass(RUNTIME_CLASS(NDMapLayer))) 
 		{
 			pos = ((NDPlayer*)this)->GetBackupPosition();
 		}
@@ -1896,7 +1934,8 @@ namespace NDEngine
 		CGPoint pos = GetPosition();
 		
 		if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer))
-			&& this->GetParent() && !this->GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer))) 
+			&& this->GetParent() && !this->GetParent()->
+			IsKindOfClass(RUNTIME_CLASS(NDMapLayer))) 
 		{
 			pos = ((NDPlayer*)this)->GetBackupPosition();
 		}
@@ -1955,19 +1994,19 @@ namespace NDEngine
 	void NDManualRole::ShowNameLabel(bool bDraw)
 	{
 #define InitNameLable(lable) \
-do \
-{ \
-if (!lable) \
-{ \
-lable = new NDUILabel; \
-lable->Initialization(); \
-lable->SetFontSize(LABLESIZE); \
-} \
-if (!lable->GetParent() && subnode) \
-{ \
-subnode->AddChild(lable); \
-} \
-} while (0)
+		do \
+		{ \
+			if (!lable) \
+			{ \
+				lable = new NDUILabel; \
+				lable->Initialization(); \
+				lable->SetFontSize(LABLESIZE); \
+			} \
+			if (!lable->GetParent() && subnode) \
+			{ \
+				subnode->AddChild(lable); \
+			} \
+		} while (0)
 
 #define DrawLable(lable, bDraw) do { if (bDraw && lable) lable->draw(); }while(0)
 		
@@ -2106,15 +2145,22 @@ subnode->AddChild(lable); \
 		sizemap = subnode->GetContentSize();
 		CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
 		float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
-		lable[1]->SetFrameRect(CGRectMake(x+1, y+sizewin.height+1-sizemap.height, sizewin.width, (LABLESIZE+5)*fScale));
-		lable[0]->SetFrameRect(CGRectMake(x, y+sizewin.height-sizemap.height, sizewin.width, (LABLESIZE+5)*fScale));
+
+		lable[1]->SetFrameRect(CGRectMake(x + 1, y + sizewin.height + 1 - sizemap.height,
+			sizewin.width, (LABLESIZE + 5) * fScale));
+
+		lable[0]->SetFrameRect(CGRectMake(x, y + sizewin.height - sizemap.height,
+			sizewin.width, (LABLESIZE + 5) * fScale));
 	}
 	
 	void NDManualRole::SetLableName(std::string text, int x, int y, bool isEnemy)
 	{
-		if (isEnemy) {
+		if (isEnemy)
+		{
 			SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xFF0000), INTCOLORTOCCC4(0x003300));
-		}else {
+		}
+		else
+		{
 			/*
 			if (pkPoint < 1) {// 白色
 				SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xffffff), INTCOLORTOCCC4(0x003300));
@@ -2156,8 +2202,10 @@ subnode->AddChild(lable); \
 	
 	void NDManualRole::refreshEquipmentEffectData()
 	{
-		if (!isTransformed()) {
-		    if (this->m_armorQuality > 8 || this->m_cloakQuality > 8) {
+		if (!isTransformed())
+		{
+		    if (this->m_armorQuality > 8 || this->m_cloakQuality > 8)
+			{
 				SafeAddEffect(effectArmorAniGroup, "effect_4001.spr");
 		    }
 			else 
@@ -2165,7 +2213,9 @@ subnode->AddChild(lable); \
 				SafeClearEffect(effectArmorAniGroup);
 			}
 
-		} else {
+		}
+		else
+		{
 			SafeClearEffect(effectArmorAniGroup);
 		}
 	}
@@ -2188,8 +2238,10 @@ subnode->AddChild(lable); \
 		
 		if (this == &player) return;
 		
-		if ( (player.IsInState(USERSTATE_BATTLE_POSITIVE) && this->IsInState(USERSTATE_BATTLE_NEGATIVE)) ||
-			 (player.IsInState(USERSTATE_BATTLE_NEGATIVE) && this->IsInState(USERSTATE_BATTLE_POSITIVE))
+		if ( (player.IsInState(USERSTATE_BATTLE_POSITIVE) &&
+			this->IsInState(USERSTATE_BATTLE_NEGATIVE)) ||
+			 (player.IsInState(USERSTATE_BATTLE_NEGATIVE) &&
+			 this->IsInState(USERSTATE_BATTLE_POSITIVE))
 			 ) 
 		{
 			SafeAddEffect(effectDacoityAniGroup, "effect_101.spr");
@@ -2217,17 +2269,33 @@ subnode->AddChild(lable); \
 	// 判断传入的角色绘制的优先级是否比自己高
 	bool NDManualRole::IsHighPriorDrawLvl(NDManualRole* otherRole)
 	{
-		if (!otherRole) return false;
+		if (!otherRole)
+		{
+			return false;
+		}
 		
 		NDPlayer& player = NDPlayer::defaultHero();
 		
-		if (otherRole->m_id == player.m_id) return true;
+		if (otherRole->m_id == player.m_id)
+		{
+			return true;
+		}
 		
-		if (player.m_id == m_id) return false;
+		if (player.m_id == m_id)
+		{
+			return false;
+		}
 		
-		if (isTeamMember() && player.teamId == teamId) return false;
+		if (isTeamMember() && player.teamId == teamId)
+		{
+			return false;
+		}
 		
-		if (otherRole->isTeamMember() && player.teamId == otherRole->teamId) return true;
+		if (otherRole->isTeamMember() &&
+			player.teamId == otherRole->teamId)
+		{
+			return true;
+		}
 		
 		return false;
 	}
@@ -2317,11 +2385,11 @@ subnode->AddChild(lable); \
 			{
 				if (isTransformed())
 				{
-					ty = m_position.y - DISPLAY_POS_Y_OFFSET-aniGroupTransformed->getGravityY() + 46;
+					ty = m_position.y - DISPLAY_POS_Y_OFFSET - aniGroupTransformed->getGravityY() + 46;
 				}
 				else
 				{
-					ty = m_position.y - DISPLAY_POS_Y_OFFSET- getGravityY() + 46;
+					ty = m_position.y - DISPLAY_POS_Y_OFFSET - getGravityY() + 46;
 				}
 				
 				if (isEffectTurn(serverEffect.severEffectId / 10000 % 10)) 
@@ -2336,7 +2404,7 @@ subnode->AddChild(lable); \
 				
 				bool gravity = (serverEffect.severEffectId / 1000000 % 10) == 1;
 				
-				ty = m_position.y - DISPLAY_POS_Y_OFFSET- (gravity ? getGravityY() : 0) + 46+32;
+				ty = m_position.y - DISPLAY_POS_Y_OFFSET - (gravity ? getGravityY() : 0) + 46 + 32;
 			}
 			
 			if (serverEffect.effect)
@@ -2372,13 +2440,17 @@ subnode->AddChild(lable); \
 		for_vec(m_serverEffectBack, std::vector<ServerEffect>::iterator)
 		{
 			if ( (*it).bQiZhi )
+			{
 				return true;
+			}
 		}
 		
 		for_vec(m_serverEffectFront, std::vector<ServerEffect>::iterator)
 		{
 			if ( (*it).bQiZhi )
+			{
 				return true;
+			}
 		}
 		
 		return false;
@@ -2386,8 +2458,9 @@ subnode->AddChild(lable); \
 	
 	CGRect NDManualRole::GetFocusRect() override
 	{
-		int tx = m_position.x-DISPLAY_POS_X_OFFSET-4, ty = 0;
-		int w = 24, h = 0;
+		int tx = m_position.x-DISPLAY_POS_X_OFFSET - 4, ty = 0;
+		int w = 24;
+		int h = 0;
 		
 		if (IsInGraveStoneState() && m_picGraveStone)
 		{
@@ -2488,7 +2561,9 @@ subnode->AddChild(lable); \
 	std::string NDManualRole::GetPeerageName(int nPeerage)
 	{
 		if (nPeerage < 0 || nPeerage > 11)
+		{
 			return "";
+		}
 			
 		std::stringstream ss;
 		ss << "Peerage" << nPeerage;
@@ -2497,16 +2572,20 @@ subnode->AddChild(lable); \
 //		strKey.Format("Peerage%d", nPeerage);
 		//const char* pStr = NDCommonCString(strKey.getData());
 		const char* pStr = NDCommonCString(ss.str().c_str());
-		if (pStr) {
+
+		if (pStr)
+		{
 			return pStr;
 		}
+
 		return "";
 	}
 	
 	unsigned int NDManualRole::GetPeerageColor(int nPeerage)
 	{
 		unsigned int unClr = 0xffffff;
-		switch (nPeerage) {
+		switch (nPeerage)
+		{
 			case 9:
 				unClr = 0xe36c0a;
 				break;
@@ -2519,6 +2598,7 @@ subnode->AddChild(lable); \
 			default:
 				break;
 		}
+
 		return unClr;
 	}
 	
@@ -2552,7 +2632,8 @@ subnode->AddChild(lable); \
 			return false;
 		}
 		
-		switch (dir) {
+		switch (dir)
+		{
 			case 0:
 				newX = oldX;
 				newY = oldY - 1;
