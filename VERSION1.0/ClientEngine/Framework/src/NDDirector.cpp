@@ -102,9 +102,13 @@ namespace NDEngine
 	
 	void NDDirector::TransitionAnimateComplete()
 	{
-		if (!m_TransitionSceneWait) return;
+		if (!m_TransitionSceneWait)
+		{
+			return;
+		}
 		
-		switch (m_TransitionSceneType) {
+		switch (m_TransitionSceneType)
+		{
 			case eTransitionSceneReplace:
 				ReplaceScene(m_TransitionSceneWait);
 				break;
@@ -141,7 +145,8 @@ namespace NDEngine
 	
 	void NDDirector::EnableDispatchEvent(bool enable)
 	{
-		CCTouchDispatcher::sharedDispatcher()->setDispatchEvents(enable ? true : false);
+		CCTouchDispatcher::sharedDispatcher()->
+			setDispatchEvents(enable ? true : false);
 	}
 	
 	void NDDirector::RunScene(NDScene* scene)
@@ -283,9 +288,12 @@ namespace NDEngine
 	
 	NDScene* NDDirector::GetScene(const NDRuntimeClass* runtimeClass)
 	{
-		for (size_t i = 0; i < m_scenesStack.size(); i++) {
+		for (size_t i = 0; i < m_scenesStack.size(); i++)
+		{
 			NDScene* scene = m_scenesStack.at(i);
-			if (scene->IsKindOfClass(runtimeClass)) {
+
+			if (scene->IsKindOfClass(runtimeClass))
+			{
 				return scene;
 			}
 		}
@@ -298,6 +306,7 @@ namespace NDEngine
 		{
 			return m_scenesStack.back();
 		}
+
 		return NULL;	
 	}
 	
@@ -313,9 +322,11 @@ namespace NDEngine
 	
 	void NDDirector::SetViewRect(CGRect rect, NDNode* node)
 	{
-		if (m_TransitionSceneWait) {
+		if (m_TransitionSceneWait)
+		{
 			return;
 		}
+
 		CGSize winSize = m_director->getWinSizeInPixels();
 		
 		glEnable(GL_SCISSOR_TEST);
@@ -365,10 +376,12 @@ namespace NDEngine
 	void NDDirector::BeforeDirectorPopScene(NDScene* scene, bool cleanScene)
 	{
 		std::vector<NDObject*>::iterator iter;
+
 		for (iter = m_delegates.begin(); iter != m_delegates.end(); iter++) 
 		{
 			NDObject* obj = (NDObject*)*iter;
 			NDDirectorDelegate* delegate = dynamic_cast<NDDirectorDelegate*> (obj);
+
 			if (delegate) 
 			{
 				delegate->BeforeDirectorPopScene(this, scene, cleanScene);
@@ -393,10 +406,12 @@ namespace NDEngine
 	void NDDirector::BeforeDirectorPushScene(NDScene* scene)
 	{
 		std::vector<NDObject*>::iterator iter;
+
 		for (iter = m_delegates.begin(); iter != m_delegates.end(); iter++) 
 		{
 			NDObject* obj = (NDObject*)*iter;
 			NDDirectorDelegate* delegate = dynamic_cast<NDDirectorDelegate*> (obj);
+
 			if (delegate) 
 			{
 				delegate->BeforeDirectorPushScene(this, scene);
@@ -407,10 +422,12 @@ namespace NDEngine
 	void NDDirector::AfterDirectorPushScene(NDScene* scene)
 	{
 		std::vector<NDObject*>::iterator iter;
+
 		for (iter = m_delegates.begin(); iter != m_delegates.end(); iter++) 
 		{
 			NDObject* obj = (NDObject*)*iter;
 			NDDirectorDelegate* delegate = dynamic_cast<NDDirectorDelegate*> (obj);
+
 			if (delegate) 
 			{
 				delegate->AfterDirectorPushScene(this, scene);
@@ -420,9 +437,11 @@ namespace NDEngine
 	
 	NDScene* NDDirector::GetSceneByTag(int nSceneTag)
 	{
-		for (size_t i = 0; i < m_scenesStack.size(); i++) {
+		for (size_t i = 0; i < m_scenesStack.size(); i++)
+		{
 			NDScene* scene = m_scenesStack.at(i);
-			if (scene->GetTag() == nSceneTag) {
+			if (scene->GetTag() == nSceneTag)
+			{
 				return scene;
 			}
 		}

@@ -42,13 +42,9 @@ namespace NDEngine
 		void SetTouchEnabled(bool bEnabled);
 
 		virtual bool TouchBegin(NDTouch* touch);
-
 		virtual void TouchEnd(NDTouch* touch);
-
 		virtual void TouchCancelled(NDTouch* touch);
-
 		virtual void TouchMoved(NDTouch* touch);
-		
 		virtual bool TouchDoubleClick(NDTouch* touch);
 		
 		DECLARE_AUTOLINK(NDLayer)

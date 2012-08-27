@@ -17,15 +17,15 @@ using namespace cocos2d;
 static NDAnimationGroupPool *NDAnimationGroupPool_DefaultPool = NULL;
 
 NDAnimationGroupPool::NDAnimationGroupPool()
-: m_animationGroups(NULL)
+: m_pkAnimationGroups(NULL)
 {
 	NDAsssert(NDAnimationGroupPool_DefaultPool == NULL);
-	m_animationGroups = new CCMutableDictionary<std::string, NDAnimationGroup*>();
+	m_pkAnimationGroups = new CCMutableDictionary<std::string, NDAnimationGroup*>();
 }
 
 NDAnimationGroupPool::~NDAnimationGroupPool()
 {
-	CC_SAFE_RELEASE(m_animationGroups);
+	CC_SAFE_RELEASE(m_pkAnimationGroups);
 }
 
 NDAnimationGroupPool* NDAnimationGroupPool::defaultPool()
@@ -47,7 +47,7 @@ NDAnimationGroup* NDAnimationGroupPool::addObjectWithSpr(const char*sprFile)
 {
 	NDAnimationGroup *group = NULL;
 	
-	group = m_animationGroups->objectForKey(sprFile);
+	group = m_pkAnimationGroups->objectForKey(sprFile);
 
 	if (!group) 
 	{
@@ -56,7 +56,7 @@ NDAnimationGroup* NDAnimationGroupPool::addObjectWithSpr(const char*sprFile)
 
 		if (group) 
 		{
-			m_animationGroups->setObject(group, sprFile);
+			m_pkAnimationGroups->setObject(group, sprFile);
 			//[group release];
 		}
 	}
@@ -86,7 +86,7 @@ NDAnimationGroup* NDAnimationGroupPool::addObjectWithSceneAnimationId(int SceneA
 
 void NDAnimationGroupPool::removeObjectWithSpr(const char* sprFile)
 {
-	m_animationGroups->removeObjectForKey(sprFile);
+	m_pkAnimationGroups->removeObjectForKey(sprFile);
 }
 
 void NDAnimationGroupPool::removeObjectWithSceneAnimationId(int SceneAnimationId)
@@ -99,12 +99,12 @@ void NDAnimationGroupPool::removeObjectWithSceneAnimationId(int SceneAnimationId
 
 void NDAnimationGroupPool::Recyle()
 {
-	if (NULL == m_animationGroups)
+	if (NULL == m_pkAnimationGroups)
 	{
 		return;
 	}
 	
-	std::vector<std::string> allKeys = m_animationGroups->allKeys();
+	std::vector<std::string> allKeys = m_pkAnimationGroups->allKeys();
 	
 	if (allKeys.empty())
 	{
@@ -119,7 +119,7 @@ void NDAnimationGroupPool::Recyle()
 	{
 		std::string	key = allKeys[i];
 
-		NDAnimationGroup *anigroup = m_animationGroups->objectForKey(key);
+		NDAnimationGroup *anigroup = m_pkAnimationGroups->objectForKey(key);
 
 		if (NULL == anigroup)
 		{
@@ -134,7 +134,7 @@ void NDAnimationGroupPool::Recyle()
 
 	for (unsigned int i = 0; i < recyle.size(); i++)
 	{
-		m_animationGroups->removeObjectForKey(recyle[i]);
+		m_pkAnimationGroups->removeObjectForKey(recyle[i]);
 	}
 
 	//[pool release];
