@@ -70,7 +70,7 @@ namespace NDEngine
 		//view->setMultipleTouchEnabled(false);
 #endif
 		m_director->enableRetinaDisplay(true);
-		m_director->setAnimationInterval(1.0f / 5000);
+		m_director->setAnimationInterval(1.0f / 24.0f);
 
 		CCTexture2D::setDefaultAlphaPixelFormat(kTexture2DPixelFormat_RGBA8888);	
 		

@@ -674,7 +674,8 @@ namespace NDEngine
 		return pic->Copy();		
 	}
 	
-	NDPicture* NDPicturePool::AddPicture(const char* imageFile, int hrizontalPixel, int verticalPixel/*=0*/, bool gray/*=false*/)
+	NDPicture* NDPicturePool::AddPicture(const char* imageFile,
+		int hrizontalPixel, int verticalPixel/*=0*/, bool gray/*=false*/)
 	{
 		NDAsssert(imageFile != NULL);
 		

@@ -913,7 +913,7 @@ namespace NDEngine
 
 			int nPos = colorInfoImage.find_first_of("./");
 
-			if (-1 != nPos)
+			if (0 == nPos)
 			{
 				colorInfoImage = colorInfoImage.substr(nPos + 2,colorInfoImage.length());
 			}

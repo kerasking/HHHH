@@ -49,7 +49,8 @@ public:
 
 	void SetLabel(NDMapData* mapdata); 
 	void SetLabelNew(NDMapData* mapdata);
-	void SetLableByType(int eLableType, int x, int y, const char* text, cocos2d::ccColor4B color1, cocos2d::ccColor4B color2, CGSize sizeParent);
+	void SetLableByType(int eLableType, int x, int y, const char* text,
+		cocos2d::ccColor4B color1, cocos2d::ccColor4B color2, CGSize sizeParent);
 	void draw();
 
 private:

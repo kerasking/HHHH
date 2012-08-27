@@ -334,7 +334,7 @@ NDMapData::NDMapData()
 , m_SceneTiles(NULL)
 , m_BgTiles(NULL)
 , m_Switchs(NULL)
-, m_AnimationGroups(NULL) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+, m_AnimationGroups(NULL)
 , m_AniGroupParams(NULL)
 {
 }
@@ -346,7 +346,7 @@ NDMapData::~NDMapData()
 	CC_SAFE_RELEASE(m_SceneTiles);
 	CC_SAFE_RELEASE(m_BgTiles);
 	CC_SAFE_RELEASE(m_Switchs);
-	CC_SAFE_RELEASE(m_AnimationGroups); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	CC_SAFE_RELEASE(m_AnimationGroups);
 	CC_SAFE_RELEASE(m_AniGroupParams);
 	MapTexturePool::defaultPool()->release();
 }
@@ -397,6 +397,7 @@ void NDMapData::decode(FILE* stream)
 		char imageName[256] = {0};
 		sprintf(imageName, "%st%d.png", NDEngine::NDPath::GetImagePath().c_str(), idx);
 		FILE* f = fopen(imageName, "rt");
+
 		if (f ) 
 		{
 			_tileImages.push_back(imageName);
@@ -416,8 +417,12 @@ void NDMapData::decode(FILE* stream)
 			for (uint c = 0; c < m_nColumns; c++)
 			{					
 				int imageIndex		= op.readByte(stream) - 1;	//×ÊÔ´ÏÂ±ê
+
 				if (imageIndex == -1) 
+				{
 					imageIndex = 0;
+				}
+
 				int	tileIndex		= op.readByte(stream);		//Í¼¿éÏÂ±ê
 				bool reverse		= op.readByte(stream) == 1;	//·­×ª
 
@@ -528,7 +533,7 @@ void NDMapData::decode(FILE* stream)
 		tile->setMapSize(CGSizeMake(m_nColumns*TileWidth, m_nRows*TileHeight));
 		tile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
 		tile->setDrawRect(CGRectMake(x, y, picWidth, picHeight));
-//		tile->setReverse(reverse);	 ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		tile->setReverse(reverse);
 		
 		tile->make();
 		
@@ -584,7 +589,7 @@ void NDMapData::decode(FILE* stream)
 		tile->setMapSize(CGSizeMake(m_nColumns*TileWidth, m_nRows*TileHeight));
 		tile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
 		tile->setDrawRect(CGRectMake(x, y, picWidth, picHeight));
-//		tile->setReverse(reverse); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		tile->setReverse(reverse);
 		
 		tile->make();
 		
@@ -597,13 +602,14 @@ void NDMapData::decode(FILE* stream)
 	m_AniGroupParams  = CCArray::array();
 	m_AniGroupParams->retain();
 	int aniGroupCount = op.readShort(stream);
+
 	for (int i = 0; i < aniGroupCount; i++) 
 	{			
 		int identifer = op.readShort(stream);			//¶¯»­id
 		NDAnimationGroup *aniGroup = NDAnimationGroupPool::defaultPool()->
 			addObjectWithSceneAnimationId(identifer);
 		if (!aniGroup) continue;
-		m_AnimationGroups->addObject(aniGroup); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		m_AnimationGroups->addObject(aniGroup);
 		aniGroup->release();
 
 		int x = op.readShort(stream);		//x×ø±ê
@@ -697,15 +703,19 @@ NDSceneTile * NDMapData::getBackGroundTile(unsigned int index)
 
 void NDMapData::moveBackGround(int x, int y)
 {
-	if(x ==0)
+	if(0 == x)
+	{
 		return;
-	for(int i= 0; i< 2; i++)
+	}
+
+	for(int i = 0; i < 2; i++)
 	{
 		NDSceneTile* pTile = this->getBackGroundTile(i);
+
 		if(pTile)
 		{
 			CGRect rect = pTile->getDrawRect();
-			rect.origin.x -= -x/3;
+			rect.origin.x -= -x / 3;
 			pTile->setDrawRect(rect);
 			pTile->make();
 		}
@@ -766,7 +776,7 @@ void NDMapData::removeObstacleCell(unsigned int row, unsigned int column)
 		return;
 	}
 	
-	int nIndex = row*m_nColumns+column;
+	int nIndex = row * m_nColumns+column;
 	if (m_Obstacles->size() > nIndex)
 	{
 		(*m_Obstacles)[nIndex] = true;
