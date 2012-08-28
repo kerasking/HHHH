@@ -288,23 +288,34 @@ void NDMapSwitch::SetLableByType(int eLableType, int x, int y, const char* text,
 	lable[1]->SetFontSize(15);
 	
 	CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
-	lable[1]->SetFrameRect(CGRectMake(x+1, y+sizewin.height+1-sizeParent.height, sizewin.width, 20 * fScaleFactor));
-	lable[0]->SetFrameRect(CGRectMake(x, y+sizewin.height-sizeParent.height, sizewin.width, 20 * fScaleFactor));
+
+	lable[1]->SetFrameRect(CGRectMake(x + 1,
+		y+sizewin.height + 1 - sizeParent.height,
+		sizewin.width, 20 * fScaleFactor));
+	lable[0]->SetFrameRect(CGRectMake(x,
+		y + sizewin.height - sizeParent.height,
+		sizewin.width, 20 * fScaleFactor));
 }
 
 void NDMapSwitch::draw()
 {
-	if (_lbName[1]) {
+	if (_lbName[1])
+	{
 		_lbName[1]->draw();
 	}
-	if (_lbName[0]) {
+
+	if (_lbName[0])
+	{
 		_lbName[0]->draw();
 	}
 	
-	if (_lbDes[1]) {
+	if (_lbDes[1])
+	{
 		_lbDes[1]->draw();
 	}
-	if (_lbDes[0]) {
+
+	if (_lbDes[0])
+	{
 		_lbDes[0]->draw();
 	}
 }
@@ -331,8 +342,8 @@ NDMapData::NDMapData()
 , m_nRoadBlockY(-1)
 //, m_MapTiles(NULL)
 , m_pkObstacles(NULL)
-, m_SceneTiles(NULL)
-, m_BgTiles(NULL)
+, m_pkSceneTiles(NULL)
+, m_pkBackgroundTiles(NULL)
 , m_Switchs(NULL)
 , m_AnimationGroups(NULL)
 , m_AniGroupParams(NULL)
@@ -343,8 +354,8 @@ NDMapData::~NDMapData()
 {
 	//CC_SAFE_RELEASE(m_MapTiles);
 	CC_SAFE_DELETE(m_pkObstacles);
-	CC_SAFE_RELEASE(m_SceneTiles);
-	CC_SAFE_RELEASE(m_BgTiles);
+	CC_SAFE_RELEASE(m_pkSceneTiles);
+	CC_SAFE_RELEASE(m_pkBackgroundTiles);
 	CC_SAFE_RELEASE(m_Switchs);
 	CC_SAFE_RELEASE(m_AnimationGroups);
 	CC_SAFE_RELEASE(m_AniGroupParams);
@@ -451,7 +462,7 @@ void NDMapData::decode(FILE* stream)
 	}
 	//<-------------------通行
 	m_pkObstacles = new std::vector<bool>();
-	for (unsigned int i = 0; i < m_nColumns*m_nRows; i++)
+	for (unsigned int i = 0; i < m_nColumns * m_nRows; i++)
 	{
 		m_pkObstacles->push_back(true);
 	}
@@ -461,7 +472,7 @@ void NDMapData::decode(FILE* stream)
 	{		
 		int	rowIndex	= kFileOp.readByte(stream);
 		int columnIndex	= kFileOp.readByte(stream);
-		int nIndex		= rowIndex*m_nColumns+columnIndex;
+		int nIndex		= rowIndex * m_nColumns+columnIndex;
 		if (m_pkObstacles->size() > nIndex)
 		{
 			(*m_pkObstacles)[nIndex]	= false;
@@ -485,7 +496,7 @@ void NDMapData::decode(FILE* stream)
 		/*[mapSwitch release];*/
 	}
 	//<---------------------使用到的背景资源
-	std::vector<std::string> _bgImages;
+	std::vector<std::string> kBackGroundImages;
 	std::vector<int>_bgOrders;
 	int bgImageCount = kFileOp.readShort(stream);
 	for (int i = 0; i < bgImageCount; i++) 
@@ -496,78 +507,79 @@ void NDMapData::decode(FILE* stream)
 		FILE* f = fopen(imageName, "rt");
 		if (f )  
 		{
-			_bgImages.push_back(imageName);
+			kBackGroundImages.push_back(imageName);
 		}
 		else 
 		{
 			//NDLog("背景资源%@没有找到!!!", imageName);
-			_bgImages.push_back(imageName);
+			kBackGroundImages.push_back(imageName);
 		}
 		
 		int v = kFileOp.readShort(stream);
 		_bgOrders.push_back(v);
 	}
 	//---------------------->背景
-	m_BgTiles = CCArray::array();
-	m_BgTiles->retain();
+	m_pkBackgroundTiles = CCArray::array();
+	m_pkBackgroundTiles->retain();
 	int bgCount = kFileOp.readShort(stream);
 
 	for (int i = 0; i < bgCount; i++) 
 	{		
-		int resourceIndex	= kFileOp.readByte(stream);										//资源下标
-		int	x				= kFileOp.readShort(stream);	//x坐标
-		int y				= kFileOp.readShort(stream);	//y坐标
-		bool reverse		= kFileOp.readByte(stream) > 0;									//翻转
+		int nResourceIndex	= kFileOp.readByte(stream);										//资源下标
+		int	nX				= kFileOp.readShort(stream);	//x坐标
+		int nY				= kFileOp.readShort(stream);	//y坐标
+		bool nReverse		= kFileOp.readByte(stream) > 0;									//翻转
 		
-		if (_bgImages.size() <= resourceIndex || _bgOrders.size() <= resourceIndex)
+		if (kBackGroundImages.size() <= nResourceIndex ||
+			_bgOrders.size() <= nResourceIndex)
 		{
 			continue;
 		}
 		
-		std::string imageName		= _bgImages [resourceIndex];
-		NDSceneTile	*tile = new NDSceneTile;
-		tile->setOrderID(_bgOrders[resourceIndex] + y);
-		tile->setTexture(CCTextureCache::sharedTextureCache()->addImage(imageName.c_str()));
-		int picWidth	= tile->getTexture()->getPixelsWide() * tile->getTexture()->getMaxS(); 
-		int picHeight	= tile->getTexture()->getPixelsHigh() * tile->getTexture()->getMaxT();
+		std::string imageName		= kBackGroundImages [nResourceIndex];
+		NDSceneTile* pkTile = new NDSceneTile;
+		pkTile->setOrderID(_bgOrders[nResourceIndex] + nY);
+		pkTile->setTexture(CCTextureCache::sharedTextureCache()->addImage(imageName.c_str()));
+		int picWidth	= pkTile->getTexture()->getPixelsWide() * pkTile->getTexture()->getMaxS(); 
+		int picHeight	= pkTile->getTexture()->getPixelsHigh() * pkTile->getTexture()->getMaxT();
 		
-		tile->setMapSize(CGSizeMake(m_nColumns*TileWidth, m_nRows*TileHeight));
-		tile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
-		tile->setDrawRect(CGRectMake(x, y, picWidth, picHeight));
-		tile->setReverse(reverse);
+		pkTile->setMapSize(CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
+		pkTile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
+		pkTile->setDrawRect(CGRectMake(nX, nY, picWidth, picHeight));
+		pkTile->setReverse(nReverse);
 		
-		tile->make();
+		pkTile->make();
 		
-		m_BgTiles->addObject(tile);
-		tile->release();
+		m_pkBackgroundTiles->addObject(pkTile);
+		pkTile->release();
 	}
 	//<-------------------使用到的布景资源
-	std::vector<std::string> _sceneImages;
-	std::vector<int> _sceneOrders;
-	int sceneImageCount = kFileOp.readShort(stream);
+	std::vector<std::string> kSceneImages;
+	std::vector<int> kSceneOrders;
+	int nSceneImageCount = kFileOp.readShort(stream);
 
-	for (int i = 0; i < sceneImageCount; i++) 
+	for (int i = 0; i < nSceneImageCount; i++) 
 	{
-		int idx = kFileOp.readShort(stream);
-		char imageName[256] = {0};
-		sprintf(imageName, "%s%d.png", NDEngine::NDPath::GetImagePath().c_str(), idx);
-		FILE* f = fopen(imageName, "rt");
-		if (f )  
+		int nIDx = kFileOp.readShort(stream);
+		char szImageName[256] = {0};
+		sprintf(szImageName, "%s%d.png", NDEngine::NDPath::GetImagePath().c_str(), nIDx);
+		FILE* pkFile = fopen(szImageName, "rt");
+		if (pkFile )  
 		{
-			_sceneImages.push_back(imageName);
+			kSceneImages.push_back(szImageName);
 		}
 		else 
 		{
 			//NDLog("布景资源%@没有找到!!!", imageName);
-			_sceneImages.push_back(imageName);
+			kSceneImages.push_back(szImageName);
 		}
 		
 		int v = kFileOp.readShort(stream);
-		_sceneOrders.push_back(v);
+		kSceneOrders.push_back(v);
 	}
 	//------------------->布景
-	m_SceneTiles = CCArray::array();
-	m_SceneTiles->retain();
+	m_pkSceneTiles = CCArray::array();
+	m_pkSceneTiles->retain();
 	int sceneCount = kFileOp.readShort(stream);
 	for (int i = 0; i < sceneCount; i++) 
 	{		
@@ -576,15 +588,15 @@ void NDMapData::decode(FILE* stream)
 		int y				= kFileOp.readShort(stream);	//y坐标
 		BOOL reverse		= kFileOp.readByte(stream) > 0;									//翻转
 		
-		if (_sceneImages.size() <= resourceIndex || _sceneOrders.size() <= resourceIndex)
+		if (kSceneImages.size() <= resourceIndex || kSceneOrders.size() <= resourceIndex)
 		{
 			continue;
 		}
 		
-		NDSceneTile	*tile = new NDSceneTile;
-		tile->setOrderID(_sceneOrders[resourceIndex] + y);
+		NDSceneTile* pkTile = new NDSceneTile;
+		pkTile->setOrderID(kSceneOrders[resourceIndex] + y);
 
-		std::string strImagePath = _sceneImages[resourceIndex];
+		std::string strImagePath = kSceneImages[resourceIndex];
 
 		int nPos = strImagePath.find_first_of("./");
 
@@ -602,20 +614,20 @@ void NDMapData::decode(FILE* stream)
 			}
 		}
 
-		tile->setTexture(CCTextureCache::sharedTextureCache()->addImage(strImagePath.c_str()));
+		pkTile->setTexture(CCTextureCache::sharedTextureCache()->addImage(strImagePath.c_str()));
 
-		int picWidth	= tile->getTexture()->getPixelsWide() * tile->getTexture()->getMaxS(); 
-		int picHeight	= tile->getTexture()->getPixelsHigh() * tile->getTexture()->getMaxT();
+		int picWidth	= pkTile->getTexture()->getPixelsWide() * pkTile->getTexture()->getMaxS(); 
+		int picHeight	= pkTile->getTexture()->getPixelsHigh() * pkTile->getTexture()->getMaxT();
 		
-		tile->setMapSize(CGSizeMake(m_nColumns*TileWidth, m_nRows*TileHeight));
-		tile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
-		tile->setDrawRect(CGRectMake(x, y, picWidth, picHeight));
-		tile->setReverse(reverse);
+		pkTile->setMapSize(CGSizeMake(m_nColumns*TileWidth, m_nRows*TileHeight));
+		pkTile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
+		pkTile->setDrawRect(CGRectMake(x, y, picWidth, picHeight));
+		pkTile->setReverse(reverse);
 		
-		tile->make();
+		pkTile->make();
 		
-		m_SceneTiles->addObject(tile);
-		tile->release();
+		m_pkSceneTiles->addObject(pkTile);
+		pkTile->release();
 	}
 	//<-------------------动画
 	m_AnimationGroups = CCArray::array();
@@ -711,13 +723,13 @@ void NDMapData::setRoadBlock(int x, int y)
 
 NDSceneTile * NDMapData::getBackGroundTile(unsigned int index)
 {
-	if (index>=m_BgTiles->count()) 
+	if (index>=m_pkBackgroundTiles->count()) 
 	{
 		return NULL;
 	}
 	else
 	{	
-		return (NDSceneTile *)m_BgTiles->objectAtIndex(index);
+		return (NDSceneTile *)m_pkBackgroundTiles->objectAtIndex(index);
 	}
 
 	return NULL;

@@ -61,11 +61,11 @@ public:
 	void draw();
 	void drawSubRect(CGRect rect);
 	void makeTex(float* pData);
-	void makeVetex(float* pData, CGRect rect);
+	void makeVetex(float* pData, CGRect kRect);
 
 private:
-	float *m_vertices;
-	float *m_coordinates;
+	float* m_pfVertices;
+	float* m_pfCoordinates;
 };
 
 #endif

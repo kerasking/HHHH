@@ -692,44 +692,46 @@ namespace NDEngine
 			//PerformanceTestPerFrameBeginName(" NDMapLayer::DrawScenesAndAnimations inner");
 			
 			MAP_ORDER* pkDict = (MAP_ORDER *)m_pkOrders->objectAtIndex(i);
-			unsigned int index = 0;
+			unsigned int uiIndex = 0;
 			if (pkDict)
 			{
 				std::map<std::string, int>::iterator it = pkDict->find("index");
 				if (it != pkDict->end())
 				{
-					index = it->second;
+					uiIndex = it->second;
 				}
 			}	
 			
-			if (index < uiSceneTileCount) //布景
+			if (uiIndex < uiSceneTileCount) //布景
 			{
 				//PerformanceTestPerFrameBeginName("布景");
-				NDTile *tile = (NDTile *)m_pkMapData->getSceneTiles()->objectAtIndex(index);
-				if (tile) 
+				NDTile *pkTile = (NDTile *)m_pkMapData->getSceneTiles()->objectAtIndex(uiIndex);
+				if (pkTile) 
 				{
-					if (this->isMapRectIntersectScreen(tile->getDrawRect())) 
+					if (true)//this->isMapRectIntersectScreen(pkTile->getDrawRect())) 
 					{
-						tile->draw();
-					}				
+						pkTile->draw();
+					}
 				}
-				//PerformanceTestPerFrameEndName("布景");		
+				//PerformanceTestPerFrameEndName("布景");
 			}
 // 			else if (m_bBattleBackground) // 战斗状态，不绘制其他地表元素
 // 			{
 // 				continue;
 // 			}
-			else if (index < uiSceneTileCount + aniGroupCount)//地表动画
+			else if (uiIndex < uiSceneTileCount + aniGroupCount)//地表动画
 			{
 				//PerformanceTestPerFrameBeginName("地表动画");
-				index -= uiSceneTileCount;
+				uiIndex -= uiSceneTileCount;
 				
-				NDAnimationGroup* aniGroup = (NDAnimationGroup* )m_pkMapData->getAnimationGroups()->objectAtIndex(index);
-				CCMutableArray<NDFrameRunRecord*>* frameRunRecordList = m_pkFrameRunRecordsOfMapAniGroups->getObjectAtIndex(index);
+				NDAnimationGroup* aniGroup = (NDAnimationGroup* )m_pkMapData->
+					getAnimationGroups()->objectAtIndex(uiIndex);
+				CCMutableArray<NDFrameRunRecord*>* frameRunRecordList =
+					m_pkFrameRunRecordsOfMapAniGroups->getObjectAtIndex(uiIndex);
 				
-				aniGroup->setReverse(this->GetMapDataAniParamReverse(index));
-				aniGroup->setPosition(this->GetMapDataAniParamPos(index));
-				aniGroup->setRunningMapSize(this->GetMapDataAniParamMapSize(index));
+				aniGroup->setReverse(this->GetMapDataAniParamReverse(uiIndex));
+				aniGroup->setPosition(this->GetMapDataAniParamPos(uiIndex));
+				aniGroup->setRunningMapSize(this->GetMapDataAniParamMapSize(uiIndex));
 				
 				unsigned int aniCount = aniGroup->getAnimations()->count();
 				
@@ -750,13 +752,13 @@ namespace NDEngine
 				}	
 				//PerformanceTestPerFrameEndName("地表动画");	
 			}		
-			else if (index < uiSceneTileCount + aniGroupCount + switchCount)//切屏点
+			else if (uiIndex < uiSceneTileCount + aniGroupCount + switchCount)//切屏点
 			{
 				//PerformanceTestPerFrameBeginName("切屏点");
-				index -= m_pkMapData->getSceneTiles()->count() + m_pkMapData->getAnimationGroups()->count();
+				uiIndex -= m_pkMapData->getSceneTiles()->count() + m_pkMapData->getAnimationGroups()->count();
 				
-				NDMapSwitch *mapSwitch = (NDMapSwitch *)m_pkMapData->getSwitchs()->objectAtIndex(index);
-				NDFrameRunRecord *frameRunRecord = m_frameRunRecordsOfMapSwitch->getObjectAtIndex(index);
+				NDMapSwitch *mapSwitch = (NDMapSwitch *)m_pkMapData->getSwitchs()->objectAtIndex(uiIndex);
+				NDFrameRunRecord *frameRunRecord = m_frameRunRecordsOfMapSwitch->getObjectAtIndex(uiIndex);
 				
 				m_switchAniGroup->setReverse(false);
 				
@@ -785,12 +787,12 @@ namespace NDEngine
 			else //精灵
 			{
 				//PerformanceTestPerFrameBeginName("精灵");
-				index -= uiSceneTileCount + aniGroupCount + switchCount;
+				uiIndex -= uiSceneTileCount + aniGroupCount + switchCount;
 				
-				if (index < 0 || index >= this->GetChildren().size()) 
+				if (uiIndex < 0 || uiIndex >= this->GetChildren().size()) 
 					continue;
 				
-				NDNode* node = this->GetChildren().at(index);
+				NDNode* node = this->GetChildren().at(uiIndex);
 				if (node->IsKindOfClass(RUNTIME_CLASS(NDSprite))) 
 				{
 					NDSprite* sprite = (NDSprite*)node;

@@ -95,8 +95,8 @@ public:
 	
 	//CC_SYNTHESIZE_READONLY(CCArray<CustomCCTexture2D*>*, m_MapTiles, MapTiles)
 	CC_SYNTHESIZE(std::vector<bool>*, m_pkObstacles, Obstacles)
-	CC_SYNTHESIZE(cocos2d::CCArray*, m_SceneTiles, SceneTiles)
-	CC_SYNTHESIZE(cocos2d::CCArray*, m_BgTiles, BgTiles)
+	CC_SYNTHESIZE(cocos2d::CCArray*, m_pkSceneTiles, SceneTiles)
+	CC_SYNTHESIZE(cocos2d::CCArray*, m_pkBackgroundTiles, BgTiles)
 	CC_SYNTHESIZE(cocos2d::CCArray*, m_Switchs, Switchs)
 	CC_SYNTHESIZE_READONLY(cocos2d::CCArray*, m_AnimationGroups, AnimationGroups)
 	CC_SYNTHESIZE(cocos2d::CCArray*, m_AniGroupParams, AniGroupParams)
