@@ -259,13 +259,13 @@ void NDTile::makeVetex(float* pData, CGRect kRect)
 			*pv++		=	m_MapSize.height - kRect.origin.y; 
 			*pv++		=	0;
 			*pv++		=	kRect.origin.x;
-			*pv++		=	m_MapSize.height - kRect.origin.y-COS75*kRect.size.width;
+			*pv++		=	m_MapSize.height - kRect.origin.y - COS75 * kRect.size.width;
 			*pv++		=	0;
-			*pv++		=	pData[0]+COS75*kRect.size.height;
-			*pv++		=	pData[1]-SIN75*kRect.size.height;
+			*pv++		=	pData[0] + COS75 * kRect.size.height;
+			*pv++		=	pData[1] - SIN75 * kRect.size.height;
 			*pv++		=	0;
-			*pv++		=	kRect.origin.x+COS75*kRect.size.height;
-			*pv++		=	pData[4]-SIN75*kRect.size.height;
+			*pv++		=	kRect.origin.x + COS75 * kRect.size.height;
+			*pv++		=	pData[4] - SIN75 * kRect.size.height;
 			*pv++		=	0;	
 			break;
 		case NDRotationEnumRotation180:
@@ -283,70 +283,70 @@ void NDTile::makeVetex(float* pData, CGRect kRect)
 			*pv++		=	0;
 			break;
 		case NDRotationEnumRotation195:
-			*pv++		=	kRect.origin.x+COS15*kRect.size.width+SIN15*kRect.size.height;
-			*pv++		=	m_MapSize.height - kRect.origin.y-SIN15*kRect.size.width;
+			*pv++		=	kRect.origin.x + COS15 * kRect.size.width + SIN15 * kRect.size.height;
+			*pv++		=	m_MapSize.height - kRect.origin.y - SIN15 * kRect.size.width;
 			*pv++		=	0;
-			*pv++		=	kRect.origin.x+SIN15*kRect.size.height;
+			*pv++		=	kRect.origin.x + SIN15 * kRect.size.height;
 			*pv++		=	m_MapSize.height - kRect.origin.y;
 			*pv++		=	0;
-			*pv++		=	kRect.origin.x+COS15*kRect.size.width;
-			*pv++		=	pData[1]-COS15*kRect.size.height;
+			*pv++		=	kRect.origin.x + COS15 * kRect.size.width;
+			*pv++		=	pData[1] - COS15 * kRect.size.height;
 			*pv++		=	0;
 			*pv++		=	kRect.origin.x;
-			*pv++		=	m_MapSize.height - kRect.origin.y-COS15*kRect.size.height;
+			*pv++		=	m_MapSize.height - kRect.origin.y - COS15 * kRect.size.height;
 			*pv++		=	0;
 			break;
 		case NDRotationEnumRotation210:
-			*pv++		=	kRect.origin.x+COS30*kRect.size.width+SIN30*kRect.size.height;
-			*pv++		=	m_MapSize.height - kRect.origin.y-SIN30*kRect.size.width;
+			*pv++		=	kRect.origin.x + COS30 * kRect.size.width + SIN30 * kRect.size.height;
+			*pv++		=	m_MapSize.height - kRect.origin.y - SIN30*kRect.size.width;
 			*pv++		=	0;
-			*pv++		=	kRect.origin.x+SIN30*kRect.size.height;
+			*pv++		=	kRect.origin.x + SIN30 * kRect.size.height;
 			*pv++		=	m_MapSize.height - kRect.origin.y;
 			*pv++		=	0;
-			*pv++		=	kRect.origin.x+COS30*kRect.size.width;
-			*pv++		=	pData[1]-COS30*kRect.size.height;
+			*pv++		=	kRect.origin.x + COS30 * kRect.size.width;
+			*pv++		=	pData[1] - COS30 * kRect.size.height;
 			*pv++		=	0;
 			*pv++		=	kRect.origin.x;
-			*pv++		=	m_MapSize.height - kRect.origin.y-COS30*kRect.size.height;
+			*pv++		=	m_MapSize.height - kRect.origin.y - COS30 * kRect.size.height;
 			*pv++		=	0;
 			break;
 		case NDRotationEnumRotation225:
-			*pv++		=	kRect.origin.x+COS45*kRect.size.width+SIN45*kRect.size.height;
-			*pv++		=	m_MapSize.height - kRect.origin.y-SIN45*kRect.size.width;
+			*pv++		=	kRect.origin.x + COS45 * kRect.size.width + SIN45 * kRect.size.height;
+			*pv++		=	m_MapSize.height - kRect.origin.y - SIN45 * kRect.size.width;
 			*pv++		=	0;
-			*pv++		=	kRect.origin.x+SIN45*kRect.size.height;
+			*pv++		=	kRect.origin.x + SIN45 * kRect.size.height;
 			*pv++		=	m_MapSize.height - kRect.origin.y;
 			*pv++		=	0;
-			*pv++		=	kRect.origin.x+COS45*kRect.size.width;
-			*pv++		=	pData[1]-COS45*kRect.size.height;
+			*pv++		=	kRect.origin.x + COS45 * kRect.size.width;
+			*pv++		=	pData[1] - COS45 * kRect.size.height;
 			*pv++		=	0;
 			*pv++		=	kRect.origin.x;
-			*pv++		=	m_MapSize.height - kRect.origin.y-COS45*kRect.size.height;
+			*pv++		=	m_MapSize.height - kRect.origin.y - COS45 * kRect.size.height;
 			*pv++		=	0;
 			break;
 		case NDRotationEnumRotation240:
-			*pv++		=	kRect.origin.x+COS60*kRect.size.width+SIN60*kRect.size.height;
-			*pv++		=	m_MapSize.height - kRect.origin.y-SIN60*kRect.size.width;
+			*pv++		=	kRect.origin.x + COS60 * kRect.size.width + SIN60 * kRect.size.height;
+			*pv++		=	m_MapSize.height - kRect.origin.y - SIN60 * kRect.size.width;
 			*pv++		=	0;
-			*pv++		=	kRect.origin.x+SIN60*kRect.size.height;
+			*pv++		=	kRect.origin.x + SIN60 * kRect.size.height;
 			*pv++		=	m_MapSize.height - kRect.origin.y;
 			*pv++		=	0;
-			*pv++		=	kRect.origin.x+COS60*kRect.size.width;
-			*pv++		=	pData[1]-COS60*kRect.size.height;
+			*pv++		=	kRect.origin.x + COS60 * kRect.size.width;
+			*pv++		=	pData[1] - COS60 * kRect.size.height;
 			*pv++		=	0;
 			*pv++		=	kRect.origin.x;
-			*pv++		=	m_MapSize.height - kRect.origin.y-COS60*kRect.size.height;
+			*pv++		=	m_MapSize.height - kRect.origin.y - COS60 * kRect.size.height;
 			*pv++		=	0;
 			break;
 		case NDRotationEnumRotation255:
-			*pv++		=	kRect.origin.x+COS75*kRect.size.width+SIN75*kRect.size.height;
-			*pv++		=	m_MapSize.height - kRect.origin.y-SIN75*kRect.size.width;
+			*pv++		=	kRect.origin.x + COS75 * kRect.size.width + SIN75 * kRect.size.height;
+			*pv++		=	m_MapSize.height - kRect.origin.y - SIN75 * kRect.size.width;
 			*pv++		=	0;
-			*pv++		=	kRect.origin.x+SIN75*kRect.size.height;
+			*pv++		=	kRect.origin.x + SIN75 * kRect.size.height;
 			*pv++		=	m_MapSize.height - kRect.origin.y;
 			*pv++		=	0;
-			*pv++		=	kRect.origin.x+COS75*kRect.size.width;
-			*pv++		=	pData[1]-COS75*kRect.size.height;
+			*pv++		=	kRect.origin.x + COS75 * kRect.size.width;
+			*pv++		=	pData[1] - COS75 * kRect.size.height;
 			*pv++		=	0;
 			*pv++		=	kRect.origin.x;
 			*pv++		=	m_MapSize.height - kRect.origin.y - COS75 * kRect.size.height;
@@ -444,7 +444,7 @@ void NDTile::makeVetex(float* pData, CGRect kRect)
 
 void NDTile::make()
 {
-	m_DrawRect = CCRect(500,500,500,500);///< 临时性修改 郭浩
+	//m_DrawRect = CCRect(0,0,960,680);///< 临时性修改 郭浩
 	this->makeTex(m_pfCoordinates);
 	this->makeVetex(m_pfVertices, m_DrawRect);	
 }

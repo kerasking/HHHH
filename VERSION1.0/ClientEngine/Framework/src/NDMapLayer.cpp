@@ -733,21 +733,21 @@ namespace NDEngine
 				aniGroup->setPosition(this->GetMapDataAniParamPos(uiIndex));
 				aniGroup->setRunningMapSize(this->GetMapDataAniParamMapSize(uiIndex));
 				
-				unsigned int aniCount = aniGroup->getAnimations()->count();
+				unsigned int uiAniCount = aniGroup->getAnimations()->count();
 				
-				for (unsigned int j = 0; j < aniCount; j++) 
+				for (unsigned int j = 0; j < uiAniCount; j++) 
 				{
-					NDFrameRunRecord *frameRunRecord = frameRunRecordList->getObjectAtIndex(j);
+					NDFrameRunRecord *pkFrameRunRecord = frameRunRecordList->getObjectAtIndex(j);
 					NDAnimation *pkAnimation = (NDAnimation *)aniGroup->
 						getAnimations()->objectAtIndex(j);
 					
 					if (this->isMapRectIntersectScreen(pkAnimation->getRect())) 
 					{					
-						pkAnimation->runWithRunFrameRecord(frameRunRecord, true);
+						pkAnimation->runWithRunFrameRecord(pkFrameRunRecord, true);
 					}
 					else 
 					{
-						pkAnimation->runWithRunFrameRecord(frameRunRecord, false);
+						pkAnimation->runWithRunFrameRecord(pkFrameRunRecord, false);
 					}
 				}	
 				//PerformanceTestPerFrameEndName("地表动画");	
@@ -755,7 +755,8 @@ namespace NDEngine
 			else if (uiIndex < uiSceneTileCount + aniGroupCount + switchCount)//切屏点
 			{
 				//PerformanceTestPerFrameBeginName("切屏点");
-				uiIndex -= m_pkMapData->getSceneTiles()->count() + m_pkMapData->getAnimationGroups()->count();
+				uiIndex -= m_pkMapData->getSceneTiles()->count() + m_pkMapData->
+					getAnimationGroups()->count();
 				
 				NDMapSwitch *mapSwitch = (NDMapSwitch *)m_pkMapData->getSwitchs()->objectAtIndex(uiIndex);
 				NDFrameRunRecord *frameRunRecord = m_frameRunRecordsOfMapSwitch->getObjectAtIndex(uiIndex);
@@ -771,10 +772,12 @@ namespace NDEngine
 				
 				if (m_switchAniGroup->getAnimations()->count() > 0) 
 				{
-					NDAnimation *animation = (NDAnimation *)m_switchAniGroup->getAnimations()->objectAtIndex(0);
-					if (this->isMapRectIntersectScreen(animation->getRect())) 
+					NDAnimation *pkAnimation = (NDAnimation *)m_switchAniGroup->
+						getAnimations()->objectAtIndex(0);
+
+					if (this->isMapRectIntersectScreen(pkAnimation->getRect())) 
 					{					
-						animation->runWithRunFrameRecord(frameRunRecord, true);
+						pkAnimation->runWithRunFrameRecord(frameRunRecord, true);
 						mapSwitch->draw();
 					}
 					else 
@@ -879,14 +882,24 @@ namespace NDEngine
 		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 		
 		if (p.x > 0)
+		{
 			p.x = 0;
+		}
+
 		if (p.x < winSize.width - this->GetContentSize().width)
+		{
 			p.x = winSize.width - this->GetContentSize().width;
+		}
 		
 		if (p.y > 0) 
+		{
 			p.y = 0;
+		}
+
 		if (p.y < winSize.height - this->GetContentSize().height) 
+		{
 			p.y = winSize.height - this->GetContentSize().height;
+		}
 		
 		this->m_ccNode->setPositionInPixels(p);
 	}
@@ -934,7 +947,8 @@ namespace NDEngine
 		
 		m_kScreenCenter = p;
 		//NDLog("center:%f,%f",p.x,p.y);
-		this->SetPosition(CGPointMake(winSize.width / 2 - p.x, winSize.height / 2 + p.y - height));
+		this->SetPosition(CGPointMake(winSize.width / 2 - p.x,
+			winSize.height / 2 + p.y - height));
 		
 		return bOverBoder;
 	}	
@@ -951,9 +965,11 @@ namespace NDEngine
 	
 	void NDMapLayer::setStartRoadBlockTimer(int time,int x,int y)
 	{
-		if(!m_ndBlockTimer){
+		if(!m_ndBlockTimer)
+		{
 			this->m_ndBlockTimer = new NDTimer;
 		}
+
 		this->m_ndBlockTimer->SetTimer(this, blockTimerTag, 1.0f);
 		this->m_nRoadBlockTimeCount=time;
 		
