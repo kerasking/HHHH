@@ -29,7 +29,7 @@ using namespace NDEngine;
 
 IMPLEMENT_CLASS(NDBaseRole, NDSprite)
 
-bool NDBaseRole::s_bGameSceneRelease = false;
+bool NDBaseRole::ms_bGameSceneRelease = false;
 
 NDBaseRole::NDBaseRole()
 {
@@ -48,26 +48,26 @@ NDBaseRole::NDBaseRole()
 	cap = -1;
 	armor = -1;
 	
-	life = 0;
-	maxLife = 0;
-	mana = 0;
-	maxMana = 0;
-	level = 0;
-	camp = CAMP_TYPE_NONE;
+	m_nLife = 0;
+	m_nMaxLife = 0;
+	m_nMana = 0;
+	m_nMaxMana = 0;
+	m_nLevel = 0;
+	m_eCamp = CAMP_TYPE_NONE;
 	
 	m_faceRight = true;
 	
-	ridepet = NULL;
+	m_pkRidePet = NULL;
 	
 	m_bFocus = false;
 	
-	subnode = NDNode::Node();
-	subnode->SetContentSize(NDDirector::DefaultDirector()->GetWinSize());
+	m_pkSubNode = NDNode::Node();
+	m_pkSubNode->SetContentSize(NDDirector::DefaultDirector()->GetWinSize());
 	
 	m_posScreen = CGPointZero;	
 	m_picRing = NULL;
-	m_picShadow = NULL;
-	m_picShadowBig = NULL;
+	m_pkPicShadow = NULL;
+	m_pkPicShadowBig = NULL;
 	m_iShadowOffsetX = 0;
 	m_iShadowOffsetY = 10;
 	m_bBigShadow = false;
@@ -75,21 +75,21 @@ NDBaseRole::NDBaseRole()
 	
 	m_id = 0;
 	
-	effectFlagAniGroup = NULL;
+	m_pkEffectFlagAniGroup = NULL;
 	
 	//m_talkBox = NULL;
 	
 	this->SetDelegate(this);
 	
-	effectRidePetAniGroup = NULL;
+	m_pkEffectRidePetAniGroup = NULL;
 }
 
 NDBaseRole::~NDBaseRole()
 {
-	SAFE_DELETE(subnode);
+	SAFE_DELETE(m_pkSubNode);
 	SAFE_DELETE(m_picRing);
-	SAFE_DELETE(m_picShadow);
-	SAFE_DELETE(m_picShadowBig);
+	SAFE_DELETE(m_pkPicShadow);
+	SAFE_DELETE(m_pkPicShadowBig);
 	//if (ridepet)
 //	{
 //		delete ridepet;
@@ -126,9 +126,9 @@ CGRect NDBaseRole::GetFocusRect()
 	
 	CGPoint point;
 	
-	if (ridepet)
+	if (m_pkRidePet)
 	{
-		point = ridepet->GetPosition();
+		point = m_pkRidePet->GetPosition();
 	}
 	else
 	{
@@ -151,17 +151,17 @@ void NDBaseRole::DirectRight(bool bRight)
 	if (bRight) 
 	{
 		this->SetSpriteDir(1);
-		if (ridepet) 
+		if (m_pkRidePet) 
 		{
-			ridepet->SetSpriteDir(1);
+			m_pkRidePet->SetSpriteDir(1);
 		}
 	}
 	else 
 	{
 		this->SetSpriteDir(2);
-		if (ridepet) 
+		if (m_pkRidePet) 
 		{
-			ridepet->SetSpriteDir(2);
+			m_pkRidePet->SetSpriteDir(2);
 		}
 	}
 }
@@ -206,7 +206,7 @@ void NDBaseRole::DrawRingImage(bool bDraw)
 		{
 			NDLayer *layer = (NDLayer*)this->GetParent();
 			CGSize sizemap = layer->GetContentSize();
-			if (!ridepet)
+			if (!m_pkRidePet)
 			{
 				//m_picRing->DrawInRect(CGRectMake(GetPosition().x-13-8, GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
 			}
@@ -247,27 +247,27 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 		return true;
 	}
 	
-	subnode->SetContentSize(sizemap);
+	m_pkSubNode->SetContentSize(sizemap);
 	
 	HandleShadow(sizemap);
 	
 	DrawRingImage(bDraw);
 	
-	if (effectFlagAniGroup)
+	if (m_pkEffectFlagAniGroup)
 	{
-		if (!effectFlagAniGroup->GetParent())
+		if (!m_pkEffectFlagAniGroup->GetParent())
 		{
-			subnode->AddChild(effectFlagAniGroup);
+			m_pkSubNode->AddChild(m_pkEffectFlagAniGroup);
 		}
 	}
 	
 //	updateRidePetEffect(); ///<临时性注释 郭浩
 	
-	if (effectRidePetAniGroup)
+	if (m_pkEffectRidePetAniGroup)
 	{
-		if (!effectRidePetAniGroup->GetParent())
+		if (!m_pkEffectRidePetAniGroup->GetParent())
 		{
-			subnode->AddChild(effectRidePetAniGroup);
+			m_pkSubNode->AddChild(m_pkEffectRidePetAniGroup);
 		}
 	}
 	
@@ -337,13 +337,13 @@ bool NDBaseRole::AssuredRidePet()
 
 void NDBaseRole::setMoveActionWithRidePet()
 {
-	if (!ridepet) 
+	if (!m_pkRidePet) 
 	{
 		return;
 	}
 	
-	AnimationListObj.moveAction(TYPE_RIDEPET, ridepet, m_faceRight);// 骑宠移动
-	switch (ridepet->iType)
+	AnimationListObj.moveAction(TYPE_RIDEPET, m_pkRidePet, m_faceRight);// 骑宠移动
+	switch (m_pkRidePet->iType)
 	{
 		case TYPE_RIDE:// 人物骑在骑宠上移动
 			AnimationListObj.ridePetMoveAction(TYPE_MANUALROLE, this, m_faceRight);
@@ -352,7 +352,7 @@ void NDBaseRole::setMoveActionWithRidePet()
 			AnimationListObj.standPetMoveAction(TYPE_MANUALROLE, this, m_faceRight);
 			break;
 		case TYPE_RIDE_BIRD:
-			AnimationListObj.moveAction(TYPE_RIDEPET, ridepet, 1 -m_faceRight);
+			AnimationListObj.moveAction(TYPE_RIDEPET, m_pkRidePet, 1 -m_faceRight);
 			AnimationListObj.setAction(TYPE_MANUALROLE, this, m_faceRight, MANUELROLE_RIDE_BIRD_WALK);
 			break;
 		case TYPE_RIDE_FLY:
@@ -369,12 +369,12 @@ void NDBaseRole::setMoveActionWithRidePet()
 
 void NDBaseRole::setStandActionWithRidePet()
 {
-	if (!ridepet) 
+	if (!m_pkRidePet) 
 	{
 		return;
 	}
 	
-	AnimationListObj.standAction(TYPE_RIDEPET, ridepet, m_faceRight);
+	AnimationListObj.standAction(TYPE_RIDEPET, m_pkRidePet, m_faceRight);
 	
 	// 装备界面、属性界面、战斗中，人要站立状态
 	//if (EquipUIScreen.instance == null
@@ -385,7 +385,7 @@ void NDBaseRole::setStandActionWithRidePet()
 //	* null
 //	*/) 
 //	{
-		switch (ridepet->iType)
+		switch (m_pkRidePet->iType)
 		{
 			case TYPE_RIDE:
 				AnimationListObj.ridePetStandAction(TYPE_MANUALROLE, this, m_faceRight);
@@ -394,7 +394,7 @@ void NDBaseRole::setStandActionWithRidePet()
 				AnimationListObj.standPetStandAction(TYPE_MANUALROLE, this, m_faceRight);
 				break;
 			case TYPE_RIDE_BIRD:
-				AnimationListObj.standAction(TYPE_RIDEPET, ridepet, 1 - m_faceRight);
+				AnimationListObj.standAction(TYPE_RIDEPET, m_pkRidePet, 1 - m_faceRight);
 				AnimationListObj.setAction(TYPE_MANUALROLE, this, m_faceRight, MANUELROLE_RIDE_BIRD_STAND);
 				break;
 			case TYPE_RIDE_FLY:
@@ -431,7 +431,7 @@ void NDBaseRole::InitRoleLookFace(int lookface)
 void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 {
 	this->m_name = name;
-	level = lev;
+	m_nLevel = lev;
 	//m_id = 0; // 用户id
 //	sex = lookface / 100000000 % 10; // 人物性别，1-男性，2-女性；
 //	direct = lookface % 10;
@@ -676,7 +676,8 @@ int NDBaseRole::getEquipmentLookFace(int lookface, int type)
 			{
 				nID = 10750 + index - 26;
 			}
-			else {
+			else
+			{
 				nID = 10800 + index - 28;
 			};
 			break;
@@ -990,28 +991,29 @@ void NDBaseRole::SetHair(int style, int color)
 
 void NDBaseRole::SetMaxLife(int nMaxLife)
 {
-	this->maxLife = nMaxLife;
-	if (this->life > nMaxLife)
+	this->m_nMaxLife = nMaxLife;
+
+	if (this->m_nLife > nMaxLife)
 	{
-		this->life = nMaxLife;
+		this->m_nLife = nMaxLife;
 	}
 }
 
 void NDBaseRole::SetMaxMana(int nMaxMana)
 {
-	this->maxMana = nMaxMana;
-	if (this->mana > nMaxMana)
+	this->m_nMaxMana = nMaxMana;
+	if (this->m_nMaxMana > nMaxMana)
 	{
-		this->mana = nMaxMana;
+		this->m_nMaxMana = nMaxMana;
 	}
 }
 
 void NDBaseRole::SetCamp(CAMP_TYPE btCamp)
 {
-	this->camp = btCamp;
+	this->m_eCamp = btCamp;
 	if (btCamp == CAMP_TYPE_NONE)
 	{
-		this->rank.clear();
+		this->m_strRank.clear();
 	}
 }
 
@@ -1022,11 +1024,11 @@ void NDBaseRole::SetPositionEx(CGPoint newPosition)
 
 NDRidePet* NDBaseRole::GetRidePet()
 {
-	if (ridepet == NULL) 
+	if (m_pkRidePet == NULL) 
 	{
-		ridepet = new NDRidePet;
+		m_pkRidePet = new NDRidePet;
 	}
-	return ridepet;
+	return m_pkRidePet;
 }
 
 void NDBaseRole::unpackEquip(int iEquipPos)
@@ -1073,7 +1075,7 @@ void NDBaseRole::unpackEquip(int iEquipPos)
 			this->cloak = -1;
 			break;
 		case Item::eEP_Ride:
-			SAFE_DELETE_NODE(ridepet);
+			SAFE_DELETE_NODE(m_pkRidePet);
 			break;
 		default:
 			break;
@@ -1111,23 +1113,23 @@ void NDBaseRole::addTalkMsg(std::string msg,int timeForTalkMsg)
 
 void NDBaseRole::drawEffects(bool bDraw)
 {
-	if (effectRidePetAniGroup != NULL &&
-		effectRidePetAniGroup->GetParent()) 
+	if (m_pkEffectRidePetAniGroup != NULL &&
+		m_pkEffectRidePetAniGroup->GetParent()) 
 	{
-		effectRidePetAniGroup->SetPosition(GetPosition());
-		effectRidePetAniGroup->RunAnimation(bDraw);
+		m_pkEffectRidePetAniGroup->SetPosition(GetPosition());
+		m_pkEffectRidePetAniGroup->RunAnimation(bDraw);
 	}
 }
 
 void NDBaseRole::updateRidePetEffect()
 {
-	if (AssuredRidePet() && ridepet->quality > 8) 
+	if (AssuredRidePet() && m_pkRidePet->quality > 8) 
 	{
-		SafeAddEffect(effectRidePetAniGroup, "effect_3001.spr");
+		SafeAddEffect(m_pkEffectRidePetAniGroup, "effect_3001.spr");
 	} 
 	else 
 	{
-		SafeClearEffect(effectRidePetAniGroup);
+		SafeClearEffect(m_pkEffectRidePetAniGroup);
 	}
 }
 
@@ -1180,19 +1182,19 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 	NDPicture *pic = NULL;
 	if (!m_bBigShadow)
 	{
-		if (m_picShadow == NULL)
+		if (m_pkPicShadow == NULL)
 		{
-			m_picShadow = NDPicturePool::DefaultPool()->AddPicture(SHADOW_IMAGE);
+			m_pkPicShadow = NDPicturePool::DefaultPool()->AddPicture(SHADOW_IMAGE);
 		}
-		pic = m_picShadow;
+		pic = m_pkPicShadow;
 	}
 	else
 	{
-		if (m_picShadowBig == NULL)
+		if (m_pkPicShadowBig == NULL)
 		{
-			m_picShadowBig = NDPicturePool::DefaultPool()->AddPicture(BIG_SHADOW_IMAGE);
+			m_pkPicShadowBig = NDPicturePool::DefaultPool()->AddPicture(BIG_SHADOW_IMAGE);
 		}
-		pic = m_picShadowBig; 
+		pic = m_pkPicShadowBig; 
 	}
 	
 	CGSize sizeShadow = pic->GetSize();

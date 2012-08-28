@@ -34,15 +34,15 @@ namespace NDEngine
 	public:
 		NDNpc();
 		~NDNpc();
-		void Init(); override				
-		bool OnDrawBegin(bool bDraw); override
-		void OnDrawEnd(bool bDraw); override
+		void Init();				
+		bool OnDrawBegin(bool bDraw);
+		void OnDrawEnd(bool bDraw);
 		bool IsActionOnRing();
 		
 	public:
 		//以下方法供逻辑层使用－－－begin
 		//......	
-		void Initialization(int lookface); hide
+		void Initialization(int lookface);
 		
 		void WalkToPosition(CGPoint toPos);
 		//－－－end
@@ -53,7 +53,7 @@ namespace NDEngine
 		void SetNpcState(NPC_STATE state);
 		
 		NPC_STATE GetNpcState() const {
-			return this->npcState;
+			return this->m_eNPCState;
 		}
 		
 		void SetStatus(int status);
@@ -68,7 +68,8 @@ namespace NDEngine
 		void SetLable(LableType eLableType, int x, int y, std::string text,
 			cocos2d::ccColor4B color1, cocos2d::ccColor4B color2);
 		
-		bool IsRoleNpc() {
+		bool IsRoleNpc()
+		{
 			return this->m_bRoleNpc;
 		}
 		
@@ -78,10 +79,6 @@ namespace NDEngine
 		
 		void ShowHightLight(bool bShow);
 	public:
-		int col;
-		int row;
-		int look;
-		int model;
 
 		bool m_bActionOnRing;
 		bool m_bDirectOnTalk;
@@ -91,16 +88,18 @@ namespace NDEngine
 		NDSprite* m_sprUpdate;
 		
 	private:
-		 NPC_STATE npcState;
+		 NPC_STATE m_eNPCState;
 	public:
 		// 骑宠相关
 		//NDRidePet	*ridepet;
-		std::string dataStr;
-		std::string talkStr;
+		std::string m_strData;
+		std::string m_strTalk;
 
 	private:
-		NDUILabel *m_lbName[2], *m_lbDataStr[2];
-		NDPicture *m_picBattle, *m_picState;
+		NDUILabel* m_lbName[2];
+		NDUILabel* m_lbDataStr[2];
+		NDPicture* m_picBattle;
+		NDPicture* m_picState;
 		int m_iStatus;
 		// role型 npc
 		bool m_bRoleNpc;

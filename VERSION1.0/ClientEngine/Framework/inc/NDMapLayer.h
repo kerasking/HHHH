@@ -176,12 +176,12 @@ namespace NDEngine
 
 	private:
 
-		CGPoint m_screenCenter;
+		CGPoint m_kScreenCenter;
 		cocos2d::CCArray* m_pkOrders;
 		cocos2d::CCArray* m_pkOrdersOfMapscenesAndMapanimations;
-		NDMapData *m_mapData;
+		NDMapData *m_pkMapData;
 		cocos2d::CCMutableArray< cocos2d::CCMutableArray<NDFrameRunRecord*>* >
-			*m_frameRunRecordsOfMapAniGroups;
+			*m_pkFrameRunRecordsOfMapAniGroups;
 		cocos2d::CCMutableArray< NDFrameRunRecord* > *m_frameRunRecordsOfMapSwitch;
 		NDAnimationGroup *m_switchAniGroup;
 		NDSprite *m_TreasureBox;
@@ -193,15 +193,15 @@ namespace NDEngine
 		bool m_bNeedShow;
 		NDTimer* m_ndBlockTimer;
 		NDTimer* m_ndTitleTimer;
-		int roadBlockTimeCount;
+		int m_nRoadBlockTimeCount;
 		//bool isAutoBossFight;
 		//CCColorLayer* m_battleBgColor;
-		int titleAlpha;
+		int m_nTitleAlpha;
 		//cocos2d::CCTexture2D *m_texMap;
-		NDPicture *m_picMap;
-		CGPoint m_ptCamarkSplit;
-		NDNode		*subnode; 
-		BOX_STATUS box_status;
+		NDPicture* m_pkPicMap;
+		CGPoint m_kCamarkSplit;
+		NDNode* m_pkSubNode; 
+		BOX_STATUS m_eBoxStatus;
 
 		typedef enum
 		{
@@ -216,12 +216,12 @@ namespace NDEngine
 			IntersectionArea& intersectionArea);
 		IntersectionArea m_areaCamarkSplit;
 		
-		int m_mapIndex;
+		int m_nMapIndex;
 		
-		bool showTitle;
+		bool m_bShowTitle;
 		//MAP_SWITCH_TYPE switch_type;
 		
-		NDLightEffect* m_leRoadSign;
+		NDLightEffect* m_pkRoadSignLightEffect;
 
 	private:
 

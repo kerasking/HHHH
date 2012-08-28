@@ -505,9 +505,9 @@ namespace NDEngine
 	
 	int NDPlayer::GetOrder()
 	{		
-		if (ridepet) 
+		if (m_pkRidePet) 
 		{
-			return ridepet->GetOrder() + 1;
+			return m_pkRidePet->GetOrder() + 1;
 		}
 
 		return NDManualRole::GetOrder();

@@ -637,18 +637,19 @@ void NDMapData::decode(FILE* stream)
 		int y = kFileOp.readShort(stream);		//y坐标
 		int aniOrder = y + kFileOp.readShort(stream);	//排序重心
 		
-		anigroup_param* dict = new anigroup_param;
-		dict->insert(std::make_pair("reverse", 0));
-		dict->insert(std::make_pair("positionX", x));
-		dict->insert(std::make_pair("positionY", y));
-		dict->insert(std::make_pair("mapSizeW", m_nColumns * m_nUnitSize));
-		dict->insert(std::make_pair("mapSizeH", m_nRows * m_nUnitSize));
-		dict->insert(std::make_pair("orderId", aniOrder));
-		dict->insert(std::make_pair("reverse", 0));
-		dict->insert(std::make_pair("reverse", 0));
+		anigroup_param* pkDict = new anigroup_param;
+
+		pkDict->insert(std::make_pair("reverse", 0));
+		pkDict->insert(std::make_pair("positionX", x));
+		pkDict->insert(std::make_pair("positionY", y));
+		pkDict->insert(std::make_pair("mapSizeW", m_nColumns * m_nUnitSize));
+		pkDict->insert(std::make_pair("mapSizeH", m_nRows * m_nUnitSize));
+		pkDict->insert(std::make_pair("orderId", aniOrder));
+		pkDict->insert(std::make_pair("reverse", 0));
+		pkDict->insert(std::make_pair("reverse", 0));
 		
-		m_AniGroupParams->addObject(dict);
-		dict->release();	
+		m_AniGroupParams->addObject(pkDict);
+		pkDict->release();	
 	}
 	//------------------->刷怪区
 // 	NSMutableArray	*_monsterRanges = [[NSMutableArray alloc] init];

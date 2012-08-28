@@ -98,7 +98,7 @@ namespace NDEngine
 		void Update(unsigned long ulDiff); override
 		
 		void SetType(int type);
-		int GetType(){return monsterCatogary;}
+		int GetType(){return m_nMonsterCatogary;}
 		
 		//　精英怪处理
 		void ElementMonsterDeal();
@@ -137,21 +137,22 @@ namespace NDEngine
 	public:
 		int state;						//怪物状态
 	private:
-		int attackArea;					//怪物攻击范围
-		int nType;						//怪物类型
+		int m_nAttackArea;					//怪物攻击范围
+		int m_nType;						//怪物类型
 		CGSize m_moveSize;
-		int figure;// 体型：0-小只，1-大只。
+		int m_nFigure;// 体型：0-小只，1-大只。
 		NDSprite *bossRing;				//精英怪光环
 		NDUILabel *m_lbName;
-		bool isHunt;
-		int original_x,original_y;
+		bool m_bIsHunt;
+		int m_nOriginal_x;
+		int m_nOriginal_y;
 	public:
-		int moveDirect;
-		bool isAiUseful; // AI算法是否遇到掩码无法走动,是的话用普通走法
+		int m_nMoveDirect;
+		bool m_bIsAIUseful; // AI算法是否遇到掩码无法走动,是的话用普通走法
 		bool m_bRoleMonster;
 		
-		bool isAutoAttack; // 怪物主动攻击
-		int monsterCatogary;
+		bool m_bIsAutoAttack; // 怪物主动攻击
+		int m_nMonsterCatogary;
 		
 		int self_move_rectw; 
 		int self_move_rectH;// 怪物活动范围we
@@ -163,7 +164,7 @@ namespace NDEngine
 		
 		long deadTime, frozenTime; // 怪物死亡时间,精英怪冻结
 	private:
-		int moveCount; // 有基数计算得出的步数
+		int m_nMoveCount; // 有基数计算得出的步数
 		
 		int stop_time_count; // 每次怪走完路后会固定停顿一定时间
 		

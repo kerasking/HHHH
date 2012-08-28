@@ -290,7 +290,7 @@ std::string setTaskInfo(std::string taskStr, Task& task, int index, std::vector<
 			else if (task_array[0] == "gold" && task_array.size() >= 2) {
 				TaskData *taskElement = new TaskData();
 				taskElement->setMSumCount(atoi(task_array[1].c_str()));
-				taskElement->setMCurCount(NDPlayer::defaultHero().money);
+				taskElement->setMCurCount(NDPlayer::defaultHero().m_nMoney);
 				taskElement->setElementName(NDCommonCString("money"));
 				taskElement->setMShowType(0);
 				taskElement->setMType(TaskData::TASK_GOLD);

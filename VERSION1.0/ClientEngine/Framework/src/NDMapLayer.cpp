@@ -76,12 +76,12 @@ namespace NDEngine
 	
 	NDMapLayer::NDMapLayer()
 	{
-		m_mapData = NULL;
-		m_mapIndex = -1;
-		m_picMap = NULL;
+		m_pkMapData = NULL;
+		m_nMapIndex = -1;
+		m_pkPicMap = NULL;
 		//m_texMap = NULL;
 		m_switchAniGroup = NULL;
-		m_mapData = NULL;
+		m_pkMapData = NULL;
 		m_lbTime = NULL;
 		m_lbTitle = NULL;
 		m_lbTitleBg = NULL;
@@ -89,7 +89,7 @@ namespace NDEngine
 		m_pkOrders->retain();
 		m_pkOrdersOfMapscenesAndMapanimations = CCArray::array();
 		m_pkOrdersOfMapscenesAndMapanimations->retain();
-		m_frameRunRecordsOfMapAniGroups = new CCMutableArray< CCMutableArray<NDFrameRunRecord*>* >();
+		m_pkFrameRunRecordsOfMapAniGroups = new CCMutableArray< CCMutableArray<NDFrameRunRecord*>* >();
 		m_frameRunRecordsOfMapSwitch = new CCMutableArray< NDFrameRunRecord* >();
 		this->m_bBattleBackground = false;
 		this->m_bNeedShow = true;
@@ -97,34 +97,34 @@ namespace NDEngine
 		this->m_ndTitleTimer = NULL;
 		//this->switchSpriteNode=NULL;
 		//this->isAutoBossFight = false;
-		roadBlockTimeCount=0;
-		titleAlpha=0;
-		subnode = NDNode::Node();
-		subnode->SetContentSize(NDDirector::DefaultDirector()->GetWinSize());
+		m_nRoadBlockTimeCount=0;
+		m_nTitleAlpha=0;
+		m_pkSubNode = NDNode::Node();
+		m_pkSubNode->SetContentSize(NDDirector::DefaultDirector()->GetWinSize());
 //		m_blockTimerTag=-1;
 //		m_titleTimerTag=-1;
-		showTitle=false;
+		m_bShowTitle=false;
 		//switch_type=SWITCH_NONE;
 		m_TreasureBox=NULL;
-		box_status=BOX_NONE;
-		m_leRoadSign = NULL;
+		m_eBoxStatus=BOX_NONE;
+		m_pkRoadSignLightEffect = NULL;
 	}
 	
 	NDMapLayer::~NDMapLayer()
 	{
 		CC_SAFE_RELEASE(m_pkOrders);
 		CC_SAFE_RELEASE(m_pkOrdersOfMapscenesAndMapanimations);
-		CC_SAFE_RELEASE(m_frameRunRecordsOfMapAniGroups);
+		CC_SAFE_RELEASE(m_pkFrameRunRecordsOfMapAniGroups);
 		CC_SAFE_RELEASE(m_frameRunRecordsOfMapSwitch);
 		//CC_SAFE_RELEASE(m_texMap);
-		CC_SAFE_RELEASE(m_mapData);
+		CC_SAFE_RELEASE(m_pkMapData);
 		CC_SAFE_RELEASE(m_switchAniGroup);
 		CC_SAFE_RELEASE(m_pkOrders);
 		CC_SAFE_RELEASE(m_pkOrders);
 		CC_SAFE_RELEASE(m_pkOrders);
 		
-		delete m_picMap;
-		CC_SAFE_DELETE(subnode);
+		delete m_pkPicMap;
+		CC_SAFE_DELETE(m_pkSubNode);
 		if(m_ndBlockTimer)
 		{
 			m_ndBlockTimer->KillTimer(this,blockTimerTag);
@@ -142,38 +142,38 @@ namespace NDEngine
 // 			SAFE_DELETE(m_TreasureBox);
 // 		}
 		
-		CC_SAFE_DELETE(m_leRoadSign);
+		CC_SAFE_DELETE(m_pkRoadSignLightEffect);
 	}
 	
 	void NDMapLayer::replaceMapData(int mapId,int center_x,int center_y)
 	{
-		CC_SAFE_RELEASE(m_mapData);
+		CC_SAFE_RELEASE(m_pkMapData);
 		CC_SAFE_RELEASE(m_pkOrders);
 	
 		m_pkOrders  = CCArray::array();
 		m_pkOrders->retain();
 		//CC_SAFE_RELEASE(m_texMap);
 
-		delete m_picMap;
+		delete m_pkPicMap;
 		
-		char mapFile[256] = {0};
-		sprintf(mapFile, "%smap_%d.map", NDPath::GetMapPath().c_str(), mapId);
+		char pszMapFile[256] = {0};
+		sprintf(pszMapFile, "%smap_%d.map", NDPath::GetMapPath().c_str(), mapId);
 
-		m_mapData = new NDMapData;
-		m_mapData->initWithFile(mapFile);
+		m_pkMapData = new NDMapData;
+		m_pkMapData->initWithFile(pszMapFile);
 
-		if (m_mapData) 
+		if (m_pkMapData) 
 		{
-			this->SetContentSize(CGSizeMake(m_mapData->getColumns() *
-				m_mapData->getUnitSize(),
-				m_mapData->getRows() *
-				m_mapData->getUnitSize()));
+			this->SetContentSize(CGSizeMake(m_pkMapData->getColumns() *
+				m_pkMapData->getUnitSize(),
+				m_pkMapData->getRows() *
+				m_pkMapData->getUnitSize()));
 			
 			this->MakeOrdersOfMapscenesAndMapanimations();
 			this->MakeFrameRunRecords();
 						
 			CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-			m_screenCenter = ccp(winSize.width / 2, this->GetContentSize().height - winSize.height / 2);
+			m_kScreenCenter = ccp(winSize.width / 2, this->GetContentSize().height - winSize.height / 2);
 			this->m_ccNode->setPosition(0, 0);	
 			
 			/*
@@ -198,21 +198,21 @@ namespace NDEngine
 		
 		m_switchAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithModelId(8);
 		
-		m_mapData = new NDMapData;
-		m_mapData->initWithFile(mapFile);
-		if (m_mapData) 
+		m_pkMapData = new NDMapData;
+		m_pkMapData->initWithFile(mapFile);
+		if (m_pkMapData) 
 		{
-			this->SetContentSize(CGSizeMake(m_mapData->getColumns() *
-				m_mapData->getUnitSize(),
-				m_mapData->getRows() *
-				m_mapData->getUnitSize()));
+			this->SetContentSize(CGSizeMake(m_pkMapData->getColumns() *
+				m_pkMapData->getUnitSize(),
+				m_pkMapData->getRows() *
+				m_pkMapData->getUnitSize()));
 			
 			this->MakeOrdersOfMapscenesAndMapanimations();
 			this->MakeFrameRunRecords();
 			
 			
 			CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-			m_screenCenter = ccp(winSize.width / 2, this->GetContentSize().height - winSize.height / 2);
+			m_kScreenCenter = ccp(winSize.width / 2, this->GetContentSize().height - winSize.height / 2);
 			this->m_ccNode->setPosition(0, 0);	
 			
 			/*
@@ -231,14 +231,14 @@ namespace NDEngine
 	void NDMapLayer::Initialization(int mapIndex)
 	{
 		tq::CString strMapFile("%smap_%d.map", NDPath::GetFullMapPath().c_str(), mapIndex);
-		m_mapIndex = mapIndex;
+		m_nMapIndex = mapIndex;
 		this->Initialization((const char*)strMapFile);	
-		titleAlpha = 0;
+		m_nTitleAlpha = 0;
 	}
 	
 	int NDMapLayer::GetMapIndex()
 	{
-		return m_mapIndex;
+		return m_nMapIndex;
 	}
 	
 	void NDMapLayer::DidFinishLaunching()
@@ -250,9 +250,9 @@ namespace NDEngine
 	{
 		if(m_lbTitle && m_lbTitleBg)
 		{
-			if(showTitle)
+			if(m_bShowTitle)
 			{
-				if(titleAlpha < 255)
+				if(m_nTitleAlpha < 255)
 				{
                     if(m_lbTitle && m_lbTitleBg)
 					{
@@ -265,15 +265,15 @@ namespace NDEngine
                         m_lbTitle->SetFrameRect(CGRectMake(x, y, 300, 60));
                     
 
-                        NDPicture* p1 = m_lbTitle->GetPicture();
+                        NDPicture* pkPicture1 = m_lbTitle->GetPicture();
                         
-                        p1->SetColor(ccc4(titleAlpha,titleAlpha,titleAlpha,titleAlpha));
+                        pkPicture1->SetColor(ccc4(m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha));
                         
-                        NDPicture* p2 = m_lbTitleBg->GetPicture();
+                        NDPicture* pkPicture2 = m_lbTitleBg->GetPicture();
                         
-                        p2->SetColor(ccc4(titleAlpha,titleAlpha,titleAlpha,titleAlpha));
+                        pkPicture2->SetColor(ccc4(m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha));
                         
-                        titleAlpha += 5;
+                        m_nTitleAlpha += 5;
                     }
 				}
 				else if(!m_ndTitleTimer)
@@ -284,28 +284,28 @@ namespace NDEngine
 			}
 			else
 			{
-				if(titleAlpha >= 0)
+				if(m_nTitleAlpha >= 0)
 				{
                     if(m_lbTitle && m_lbTitleBg)
 					{
-                        int x = NDDirector::DefaultDirector()->GetWinSize().width / 2 - 150;
-                        int y = 60;
+                        int nX = NDDirector::DefaultDirector()->GetWinSize().width / 2 - 150;
+                        int nY = 60;
                         //NDLog("x:%d,y:%d",x,y);
                         m_lbTitleBg->SetFrameRect(CGRectMake(NDDirector::DefaultDirector()->
-							GetWinSize().width / 2 - 210, y, 420, 60));
+							GetWinSize().width / 2 - 210, nY, 420, 60));
                         //m_lbTitleBg->draw();
-                        m_lbTitle->SetFrameRect(CGRectMake(x, y, 300, 60));
+                        m_lbTitle->SetFrameRect(CGRectMake(nX, nY, 300, 60));
                         
                         
                         NDPicture* p1 = m_lbTitle->GetPicture();
                         
-                        p1->SetColor(ccc4(titleAlpha,titleAlpha,titleAlpha,titleAlpha));
+                        p1->SetColor(ccc4(m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha));
                         
                         NDPicture* p2 = m_lbTitleBg->GetPicture();
                         
-                        p2->SetColor(ccc4(titleAlpha,titleAlpha,titleAlpha,titleAlpha));
+                        p2->SetColor(ccc4(m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha));
                         
-                        titleAlpha -= 15;
+                        m_nTitleAlpha -= 15;
                     }
 				}
 				else
@@ -351,8 +351,8 @@ namespace NDEngine
 	*/
 	void NDMapLayer::ShowTitle(int name_row,int name_col)
 	{
-		showTitle=true;
-		titleAlpha=0;
+		m_bShowTitle=true;
+		m_nTitleAlpha=0;
 		if(!m_lbTitle)
 		{
 			m_lbTitle = new NDUIImage;
@@ -452,20 +452,20 @@ namespace NDEngine
 	{
 		if(m_TreasureBox)
 		{
-			if(box_status == BOX_SHOWING)
+			if(m_eBoxStatus == BOX_SHOWING)
 			{
 				if (m_TreasureBox->IsAnimationComplete())
 				{
 					m_TreasureBox->SetCurrentAnimation(1, false);
-					box_status = BOX_CLOSE;
+					m_eBoxStatus = BOX_CLOSE;
 				}
 			}
-			else if(box_status == BOX_OPENING)
+			else if(m_eBoxStatus == BOX_OPENING)
 			{
 				if (m_TreasureBox->IsAnimationComplete())
 				{
 					m_TreasureBox->SetCurrentAnimation(3, false);
-					box_status=BOX_OPENED;
+					m_eBoxStatus=BOX_OPENED;
 				}
 			}
 		}
@@ -475,7 +475,7 @@ namespace NDEngine
 	{
 		//PerformanceTestName("地图层draw");
 		
-		if (m_mapData && m_bNeedShow) 
+		if (m_pkMapData && m_bNeedShow) 
 		{
 			//COCOS2D场景渲染时颜色数组默认被设置启用
 			//在此要关闭
@@ -517,7 +517,7 @@ namespace NDEngine
 //			if(m_TreasureBox){
 //				m_TreasureBox->RunAnimation(true);
 //			}
-			if (this->roadBlockTimeCount > 0 && !m_bBattleBackground) 
+			if (this->m_nRoadBlockTimeCount > 0 && !m_bBattleBackground) 
 			{
 				//NDLog("showTime");
 				if(!m_lbTime)
@@ -528,7 +528,7 @@ namespace NDEngine
 
 				}
 
-				int mi = this->roadBlockTimeCount / 60;
+				int mi = this->m_nRoadBlockTimeCount / 60;
 				tq::CString str_mi;
 
 				if(mi < 10)
@@ -540,7 +540,7 @@ namespace NDEngine
 					str_mi.Format("%d",mi);
 				}
 
-				int se = this->roadBlockTimeCount % 60;
+				int se = this->m_nRoadBlockTimeCount % 60;
 				tq::CString str_se;
 
 				if(se < 10)
@@ -557,25 +557,25 @@ namespace NDEngine
 
 				CGSize size = getStringSize(str_time, 30);
 
-				if (!m_lbTime->GetParent() && subnode)
+				if (!m_lbTime->GetParent() && m_pkSubNode)
 				{
-					subnode->AddChild(m_lbTime);
+					m_pkSubNode->AddChild(m_lbTime);
 				}
 
 				m_lbTime->SetFontColor(ccc4(255,0,0,255));
 				m_lbTime->SetFontSize(30);
 
-				int x = m_screenCenter.x - (size.width) / 2;
-				int y = m_screenCenter.y - GetContentSize().height - (size.height) / 2 +
+				int x = m_kScreenCenter.x - (size.width) / 2;
+				int y = m_kScreenCenter.y - GetContentSize().height - (size.height) / 2 +
 					NDDirector::DefaultDirector()->GetWinSize().height;
 				//NDLog("x:%d,y:%d",x,y);
 				m_lbTime->SetFrameRect(CGRectMake(x, y, size.width, size.height + 5));
 				m_lbTime->draw();
 			}
 			
-			if (m_leRoadSign)
+			if (m_pkRoadSignLightEffect)
 			{
-				m_leRoadSign->Run(this->GetContentSize());
+				m_pkRoadSignLightEffect->Run(this->GetContentSize());
 			}
 		}	
 		
@@ -602,7 +602,7 @@ namespace NDEngine
 		
 		m_frameRunRecordsOfMapSwitch = new cocos2d::CCMutableArray< NDFrameRunRecord* >();
 		
-		for (int i = 0; i < (int)m_mapData->getSwitchs()->count(); i++) 
+		for (int i = 0; i < (int)m_pkMapData->getSwitchs()->count(); i++) 
 		{
 			NDFrameRunRecord *frameRunRecord = new NDFrameRunRecord;
 			m_frameRunRecordsOfMapSwitch->addObject(frameRunRecord);
@@ -655,13 +655,13 @@ namespace NDEngine
 	void NDMapLayer::DrawBgs()
 	{
 		CGSize winSize			= NDDirector::DefaultDirector()->GetWinSize();
-		CGRect scrRect			= CGRectMake(m_screenCenter.x - winSize.width / 2,
-			m_screenCenter.y - winSize.height / 2, winSize.width, winSize.height);
+		CGRect scrRect			= CGRectMake(m_kScreenCenter.x - winSize.width / 2,
+			m_kScreenCenter.y - winSize.height / 2, winSize.width, winSize.height);
 		
-		unsigned int orderCount = m_mapData->getBgTiles()->count();
+		unsigned int orderCount = m_pkMapData->getBgTiles()->count();
 		for (unsigned int i = 0; i < orderCount; i++) 
 		{
-			NDTile* pkTile = (NDTile*)m_mapData->getBgTiles()->objectAtIndex(i);
+			NDTile* pkTile = (NDTile*)m_pkMapData->getBgTiles()->objectAtIndex(i);
 			if(pkTile && CGRectIntersectsRect(scrRect, pkTile->getDrawRect()))
 			{
 				draw();
@@ -681,9 +681,9 @@ namespace NDEngine
 		this->MakeOrders();
 		
 		unsigned int orderCount = m_pkOrders->count(),
-				   uiSceneTileCount = m_mapData->getSceneTiles()->count(),
-				   aniGroupCount = m_mapData->getAnimationGroups()->count(),
-				   switchCount = m_mapData->getSwitchs()->count();
+				   uiSceneTileCount = m_pkMapData->getSceneTiles()->count(),
+				   aniGroupCount = m_pkMapData->getAnimationGroups()->count(),
+				   switchCount = m_pkMapData->getSwitchs()->count();
 	
 		//PerformanceTestPerFrameBeginName(" NDMapLayer::DrawScenesAndAnimations");
 		
@@ -705,7 +705,7 @@ namespace NDEngine
 			if (index < uiSceneTileCount) //布景
 			{
 				//PerformanceTestPerFrameBeginName("布景");
-				NDTile *tile = (NDTile *)m_mapData->getSceneTiles()->objectAtIndex(index);
+				NDTile *tile = (NDTile *)m_pkMapData->getSceneTiles()->objectAtIndex(index);
 				if (tile) 
 				{
 					if (this->isMapRectIntersectScreen(tile->getDrawRect())) 
@@ -724,8 +724,8 @@ namespace NDEngine
 				//PerformanceTestPerFrameBeginName("地表动画");
 				index -= uiSceneTileCount;
 				
-				NDAnimationGroup* aniGroup = (NDAnimationGroup* )m_mapData->getAnimationGroups()->objectAtIndex(index);
-				CCMutableArray<NDFrameRunRecord*>* frameRunRecordList = m_frameRunRecordsOfMapAniGroups->getObjectAtIndex(index);
+				NDAnimationGroup* aniGroup = (NDAnimationGroup* )m_pkMapData->getAnimationGroups()->objectAtIndex(index);
+				CCMutableArray<NDFrameRunRecord*>* frameRunRecordList = m_pkFrameRunRecordsOfMapAniGroups->getObjectAtIndex(index);
 				
 				aniGroup->setReverse(this->GetMapDataAniParamReverse(index));
 				aniGroup->setPosition(this->GetMapDataAniParamPos(index));
@@ -753,9 +753,9 @@ namespace NDEngine
 			else if (index < uiSceneTileCount + aniGroupCount + switchCount)//切屏点
 			{
 				//PerformanceTestPerFrameBeginName("切屏点");
-				index -= m_mapData->getSceneTiles()->count() + m_mapData->getAnimationGroups()->count();
+				index -= m_pkMapData->getSceneTiles()->count() + m_pkMapData->getAnimationGroups()->count();
 				
-				NDMapSwitch *mapSwitch = (NDMapSwitch *)m_mapData->getSwitchs()->objectAtIndex(index);
+				NDMapSwitch *mapSwitch = (NDMapSwitch *)m_pkMapData->getSwitchs()->objectAtIndex(index);
 				NDFrameRunRecord *frameRunRecord = m_frameRunRecordsOfMapSwitch->getObjectAtIndex(index);
 				
 				m_switchAniGroup->setReverse(false);
@@ -852,22 +852,22 @@ namespace NDEngine
 	{
 		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 		return ccpAdd(ccpSub(screenPoint, CGPointMake(winSize.width / 2,
-			winSize.height / 2)), m_screenCenter);
+			winSize.height / 2)), m_kScreenCenter);
 	}
 	
 	bool NDMapLayer::isMapPointInScreen(CGPoint mapPoint)
 	{
 		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-		return CGRectContainsPoint(CGRectMake(m_screenCenter.x - winSize.width / 2,
-			m_screenCenter.y - winSize.height / 2,
+		return CGRectContainsPoint(CGRectMake(m_kScreenCenter.x - winSize.width / 2,
+			m_kScreenCenter.y - winSize.height / 2,
 			winSize.width, winSize.height), mapPoint);
 	}
 	
 	bool NDMapLayer::isMapRectIntersectScreen(CGRect mapRect)
 	{
 		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-		CGRect scrRect = CGRectMake(m_screenCenter.x - winSize.width / 2,
-			m_screenCenter.y - winSize.height / 2,
+		CGRect scrRect = CGRectMake(m_kScreenCenter.x - winSize.width / 2,
+			m_kScreenCenter.y - winSize.height / 2,
 			winSize.width, winSize.height);
 		return CGRectIntersectsRect(scrRect, mapRect);
 	}
@@ -926,11 +926,11 @@ namespace NDEngine
 		//this->ReflashMapTexture(m_screenCenter, p);
 		
 		//modify yay
-		CGPoint backOff = ccpSub(p,m_screenCenter);
-		m_mapData->moveBackGround(backOff.x, backOff.y);	
+		CGPoint backOff = ccpSub(p,m_kScreenCenter);
+		m_pkMapData->moveBackGround(backOff.x, backOff.y);	
 		//[m_mapData moveBackGround:backOff.x,backOff.y];
 		
-		m_screenCenter = p;
+		m_kScreenCenter = p;
 		//NDLog("center:%f,%f",p.x,p.y);
 		this->SetPosition(CGPointMake(winSize.width / 2 - p.x, winSize.height / 2 + p.y - height));
 		
@@ -939,12 +939,12 @@ namespace NDEngine
 	
 	CGPoint NDMapLayer::GetScreenCenter()
 	{
-		return m_screenCenter;
+		return m_kScreenCenter;
 	}
 	
 	NDMapData *NDMapLayer::GetMapData()
 	{
-		return m_mapData;
+		return m_pkMapData;
 	}
 	
 	void NDMapLayer::setStartRoadBlockTimer(int time,int x,int y)
@@ -953,11 +953,11 @@ namespace NDEngine
 			this->m_ndBlockTimer = new NDTimer;
 		}
 		this->m_ndBlockTimer->SetTimer(this, blockTimerTag, 1.0f);
-		this->roadBlockTimeCount=time;
+		this->m_nRoadBlockTimeCount=time;
 		
-		if(m_mapData)
+		if(m_pkMapData)
 		{
-			m_mapData->setRoadBlock(x, y);
+			m_pkMapData->setRoadBlock(x, y);
 		}
 	}
 	/*
@@ -988,12 +988,12 @@ namespace NDEngine
 	{
 		if(tag==blockTimerTag)
 		{
-			this->roadBlockTimeCount--;
+			this->m_nRoadBlockTimeCount--;
 			//NDLog("tag:%d,count:%d",tag,this->roadBlockTimeCount);
-			if(this->roadBlockTimeCount<=0)
+			if(this->m_nRoadBlockTimeCount<=0)
 			{
-				this->m_mapData->setRoadBlock(-1, -1);
-				this->roadBlockTimeCount=0;
+				this->m_pkMapData->setRoadBlock(-1, -1);
+				this->m_nRoadBlockTimeCount=0;
 				this->m_ndBlockTimer->KillTimer(this, blockTimerTag);
 				this->m_ndBlockTimer=NULL;
 				
@@ -1284,7 +1284,7 @@ namespace NDEngine
 				
 				MAP_ORDER *dict = new MAP_ORDER;
 				
-				(*dict)["index"]	= i + m_mapData->getSceneTiles()->count() + 0 + m_mapData->getSwitchs()->count();///< 临时性注释 郭浩 原：m_mapData->getAnimationGroups()->count()
+				(*dict)["index"]	= i + m_pkMapData->getSceneTiles()->count() + 0 + m_pkMapData->getSwitchs()->count();///< 临时性注释 郭浩 原：m_mapData->getAnimationGroups()->count()
 				(*dict)["orderId"]	= sprite->GetOrder();
 				//[dict setObject:[NSNumber numberWithInt:i + [m_mapData.sceneTiles count]+ [m_mapData.animationGroups count] + [m_mapData.switchs count]] forKey:@"index"];
 				//[dict setObject:[NSNumber numberWithInt:sprite->GetOrder()] forKey:@"orderId"];
@@ -1346,7 +1346,7 @@ namespace NDEngine
 				
 				MAP_ORDER *dict = new MAP_ORDER;
 
-				(*dict)["index"]	= it->first + m_mapData->getSceneTiles()->count() + 0 + m_mapData->getSwitchs()->count();///< 临时性注释 郭浩 m_mapData->getAnimationGroups()->count()
+				(*dict)["index"]	= it->first + m_pkMapData->getSceneTiles()->count() + 0 + m_pkMapData->getSwitchs()->count();///< 临时性注释 郭浩 m_mapData->getAnimationGroups()->count()
 				(*dict)["orderId"]	= sprite->GetOrder();
 
 				//NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
@@ -1377,9 +1377,9 @@ namespace NDEngine
 	void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 	{	
 		m_pkOrdersOfMapscenesAndMapanimations->removeAllObjects();
-		for (int i = 0; i < (int)m_mapData->getSceneTiles()->count(); i++) 
+		for (int i = 0; i < (int)m_pkMapData->getSceneTiles()->count(); i++) 
 		{
-			NDSceneTile *sceneTile = (NDSceneTile *)m_mapData->getSceneTiles()->objectAtIndex(i);
+			NDSceneTile *sceneTile = (NDSceneTile *)m_pkMapData->getSceneTiles()->objectAtIndex(i);
 			
 			int orderId = sceneTile->getOrderID();
 
@@ -1396,14 +1396,14 @@ namespace NDEngine
 			m_pkOrdersOfMapscenesAndMapanimations->addObject(dict);
 			dict->release();
 		}
-		for (int i = 0; i < (int)m_mapData->getAniGroupParams()->count(); i++) 
+		for (int i = 0; i < (int)m_pkMapData->getAniGroupParams()->count(); i++) 
 		{		
 			//NSDictionary *dictAniGroupParam = [m_mapData.aniGroupParams objectAtIndex:i];
 			int orderId = this->GetMapDataAniParamOrderId(i);
 			
 			MAP_ORDER *dict = new MAP_ORDER;
 
-			(*dict)["index"]	= i + m_mapData->getSceneTiles()->count();
+			(*dict)["index"]	= i + m_pkMapData->getSceneTiles()->count();
 			(*dict)["orderId"]	= orderId;
 
 			//NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
@@ -1413,19 +1413,19 @@ namespace NDEngine
 			m_pkOrdersOfMapscenesAndMapanimations->addObject(dict);
 			dict->release();
 		}
-		for (int i = 0; i < (int)m_mapData->getSwitchs()->count(); i++) 
+		for (int i = 0; i < (int)m_pkMapData->getSwitchs()->count(); i++) 
 		{		
 			if (/* 临时性注释 郭浩 m_switchAniGroup->getAnimations()->count()*/0 > 0) 
 			{
 				//NDAnimation *animation = [m_switchAniGroup.animations objectAtIndex:0];
-				NDMapSwitch *mapSwitch = (NDMapSwitch *)m_mapData->getSwitchs()->objectAtIndex(i);
+				NDMapSwitch *mapSwitch = (NDMapSwitch *)m_pkMapData->getSwitchs()->objectAtIndex(i);
 				//int orderId = mapSwitch.y * m_mapData.unitSize; 
 				
-				int orderId = mapSwitch->getY() * m_mapData->getUnitSize() ;//+ 32 ; 
+				int orderId = mapSwitch->getY() * m_pkMapData->getUnitSize() ;//+ 32 ; 
 				
 				MAP_ORDER *dict = new MAP_ORDER;
 
-				(*dict)["index"]	= i + m_mapData->getSceneTiles()->count() + m_mapData->getAniGroupParams()->count();
+				(*dict)["index"]	= i + m_pkMapData->getSceneTiles()->count() + m_pkMapData->getAniGroupParams()->count();
 				(*dict)["orderId"]	= orderId;
 
 				//NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
@@ -1552,11 +1552,11 @@ namespace NDEngine
 				frameRunRecord->release();
 			}
 			
-			m_frameRunRecordsOfMapAniGroups->addObject(runFrameRecordList);
+			m_pkFrameRunRecordsOfMapAniGroups->addObject(runFrameRecordList);
 			runFrameRecordList->release();
 		}
 		
-		for (int i = 0; i < (int)m_mapData->getSwitchs()->count(); i++) 
+		for (int i = 0; i < (int)m_pkMapData->getSwitchs()->count(); i++) 
 		{
 			NDFrameRunRecord *frameRunRecord = new NDFrameRunRecord;
 			m_frameRunRecordsOfMapSwitch->addObject(frameRunRecord);
@@ -1568,24 +1568,24 @@ namespace NDEngine
 	{
 		if (!bShow)
 		{
-			CC_SAFE_DELETE(m_leRoadSign);
+			CC_SAFE_DELETE(m_pkRoadSignLightEffect);
 			
 			return;
 		}
 		
-		if (!m_leRoadSign)
+		if (!m_pkRoadSignLightEffect)
 		{
-			m_leRoadSign = new NDLightEffect;
-			m_leRoadSign->Initialization(tq::CString("%sbutton.spr", NDPath::GetAnimationPath().c_str()));
-			m_leRoadSign->SetLightId(0, false);
+			m_pkRoadSignLightEffect = new NDLightEffect;
+			m_pkRoadSignLightEffect->Initialization(tq::CString("%sbutton.spr", NDPath::GetAnimationPath().c_str()));
+			m_pkRoadSignLightEffect->SetLightId(0, false);
 		}
 		
-		m_leRoadSign->SetPosition(ccp(nX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, nY*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+		m_pkRoadSignLightEffect->SetPosition(ccp(nX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, nY*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
 	}
 
 	bool NDMapLayer::GetMapDataAniParamReverse(int nIndex)
 	{
-		anigroup_param *dictAniGroupParam = (anigroup_param *)m_mapData->getAniGroupParams()->objectAtIndex(nIndex);
+		anigroup_param *dictAniGroupParam = (anigroup_param *)m_pkMapData->getAniGroupParams()->objectAtIndex(nIndex);
 		bool bReverse	= false;
 		if (dictAniGroupParam)
 		{
@@ -1601,7 +1601,7 @@ namespace NDEngine
 
 	CGPoint NDMapLayer::GetMapDataAniParamPos(int nIndex)
 	{
-		anigroup_param *dictAniGroupParam = (anigroup_param *)m_mapData->getAniGroupParams()->objectAtIndex(nIndex);
+		anigroup_param *dictAniGroupParam = (anigroup_param *)m_pkMapData->getAniGroupParams()->objectAtIndex(nIndex);
 		CGPoint pos		= CGPointZero;	
 		if (dictAniGroupParam)
 		{
@@ -1621,7 +1621,7 @@ namespace NDEngine
 
 	CGSize NDMapLayer::GetMapDataAniParamMapSize(int nIndex)
 	{
-		anigroup_param *dictAniGroupParam = (anigroup_param *)m_mapData->
+		anigroup_param *dictAniGroupParam = (anigroup_param *)m_pkMapData->
 			getAniGroupParams()->objectAtIndex(nIndex);
 		CGSize size	= CGSizeZero;
 		if (dictAniGroupParam)
@@ -1642,7 +1642,7 @@ namespace NDEngine
 
 	int NDMapLayer::GetMapDataAniParamOrderId(int nIndex)
 	{
-		anigroup_param *dictAniGroupParam = (anigroup_param *)m_mapData->
+		anigroup_param *dictAniGroupParam = (anigroup_param *)m_pkMapData->
 			getAniGroupParams()->objectAtIndex(nIndex);
 
 		int nOrderId	= 0;

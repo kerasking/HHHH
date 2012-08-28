@@ -123,13 +123,13 @@ namespace NDEngine
 		int GetCloakQuality();
 		
 		void SetMaxLife(int nMaxLife);
-		int GetMaxLife() const { return this->maxLife; }
+		int GetMaxLife() const { return this->m_nMaxLife; }
 		
 		void SetMaxMana(int nMaxMana);
-		int GetMaxMana() const { return this->maxMana; }
+		int GetMaxMana() const { return this->m_nMaxMana; }
 		
 		void SetCamp(CAMP_TYPE btCamp);
-		CAMP_TYPE GetCamp() const { return this->camp; }
+		CAMP_TYPE GetCamp() const { return this->m_eCamp; }
 		
 		void SetFocus(bool bFocus) { m_bFocus = bFocus; }
 		bool IsFocus() { return m_bFocus; }
@@ -165,32 +165,35 @@ namespace NDEngine
 		int armor;
 	
 		/*基本角色信息*/
-		int life;				//生命值
-		int maxLife;			//最大生命值
-		int mana;				//魔法
-		int maxMana;			//最大魔法值
-		int level;				//等级
+		int m_nLife;				//生命值
+		int m_nMaxLife;			//最大生命值
+		int m_nMana;				//魔法
+		int m_nMaxMana;			//最大魔法值
+		int m_nLevel;				//等级
 		
-		CAMP_TYPE camp;			//阵营
+		CAMP_TYPE m_eCamp;			//阵营
 		std::string m_name;
-		std::string rank;		// 军衔
+		std::string m_strRank;		// 军衔
 	public:
 		// 骑宠相关
-		NDRidePet	*ridepet;
+		NDRidePet*	m_pkRidePet;
 	private:
 		bool		m_bFocus;
 	public:
-		NDNode		*subnode; // 角色对象的其它动画节点都挂在这个节点上
+		NDNode*     m_pkSubNode; // 角色对象的其它动画节点都挂在这个节点上
 		CGPoint		m_posScreen;
 	protected:
 		NDPicture	*m_picRing;
-		NDSprite	*effectFlagAniGroup;
-		NDSprite	*effectRidePetAniGroup;
-		NDPicture	*m_picShadow, *m_picShadowBig;
-		int m_iShadowOffsetX, m_iShadowOffsetY;
-		bool m_bShowShadow, m_bBigShadow;
+		NDSprite	*m_pkEffectFlagAniGroup;
+		NDSprite	*m_pkEffectRidePetAniGroup;
+		NDPicture*	m_pkPicShadow;
+		NDPicture*	m_pkPicShadowBig;
+		int m_iShadowOffsetX;
+		int m_iShadowOffsetY;
+		bool m_bShowShadow;
+		bool m_bBigShadow;
 	public:
-		static bool s_bGameSceneRelease;
+		static bool ms_bGameSceneRelease;
 	};
 	
 }

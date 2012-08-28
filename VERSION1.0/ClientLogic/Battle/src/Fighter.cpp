@@ -267,10 +267,10 @@ void Fighter::reStoreAttr()
 	m_bShowName=false;
 	
 	m_info.nLife=m_info.original_life;
-	GetRole()->life=m_info.nLife;
-	GetRole()->maxLife=m_info.nLifeMax;
-	GetRole()->mana=m_info.nMana;
-	GetRole()->maxMana=m_info.nManaMax;
+	GetRole()->m_nLife=m_info.nLife;
+	GetRole()->m_nMaxLife=m_info.nLifeMax;
+	GetRole()->m_nMana=m_info.nMana;
+	GetRole()->m_nMaxMana=m_info.nManaMax;
 }
 
 void Fighter::LoadEudemon()
@@ -304,7 +304,7 @@ void Fighter::LoadRole(int nLookFace,int lev,const string& name){
 	role->InitRoleLookFace(nLookFace);
 	m_role=role;
 	m_role->m_name=name;
-	m_role->level=lev;
+	m_role->m_nLevel=lev;
 	role->SetNonRole(false);
 }
 
@@ -316,7 +316,7 @@ void Fighter::LoadMonster(int nLookFace, int lev, const string& name)
 //	if(nLookFace/100000000%10>0&&nLookFace/100000000%10<=2){//人物
 		NDManualRole *role = new NDManualRole;
 		role->Initialization(nLookFace, true);
-		role->dwLookFace = nLookFace;
+		role->m_dwLookFace = nLookFace;
 		m_role=role;
 		m_lookfaceType=LOOKFACE_MANUAL;
 //	}else if (NDMonster::isRoleMonster(nLookFace)) {//人形怪
@@ -336,7 +336,7 @@ void Fighter::LoadMonster(int nLookFace, int lev, const string& name)
 	
 	fighter_name=name;
 	m_role->m_name = name;
-	m_role->level = lev;
+	m_role->m_nLevel = lev;
 	
 	//this->m_info.bRoleMonster = role->m_bRoleMonster;
 }

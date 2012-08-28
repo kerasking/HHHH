@@ -135,8 +135,8 @@ namespace NDEngine
 		void AddWalkDir(int dir);
 		
 		// 队伍相关接口
-		bool isTeamMember(){ return teamId != 0; }
-		bool isTeamLeader(){ return teamId == m_id; }
+		bool isTeamMember(){ return m_nTeamID != 0; }
+		bool isTeamLeader(){ return m_nTeamID == m_id; }
 		void teamSetServerDir(int dir);
 		void teamSetServerPosition(int iCol, int iRow);
 		
@@ -152,14 +152,14 @@ namespace NDEngine
 		// 军团相关
 		void setSynRank(int rank) {
 			this->synRank = rank;
-			this->synRankStr = getRankStr(synRank);
+			this->m_strSynRank = getRankStr(synRank);
 		}
 		
 		int getSynRank() const {
 			return this->synRank;
 		}
 		
-		void TeamSetToLastPos(bool bSet) { bToLastPos = bSet; }
+		void TeamSetToLastPos(bool bSet) { m_bToLastPos = bSet; }
 		
 		void playerLevelUp();
 		
@@ -218,44 +218,44 @@ namespace NDEngine
 		void teamMemberWalkResetPosition();
 		void teamMemberAction(bool bAction);
 		void teamMemberStopMoving(bool bResetPos);
-		bool TeamIsToLastPos() { return bToLastPos; }
+		bool TeamIsToLastPos() { return m_bToLastPos; }
 
 	public:
 		void SetTeamToLastPos();
 	public:
-		int state;								// 状态
-		int money;								// 银两
-		int	dwLookFace;							// 创建人物的时候有6种外观可供选择外观
-		int iProfesstion;						//玩家的职业
-		int pkPoint;							// pk值
+		int m_nState;								// 状态
+		int m_nMoney;								// 银两
+		int	m_dwLookFace;							// 创建人物的时候有6种外观可供选择外观
+		int m_nProfesstion;						//玩家的职业
+		int m_nPKPoint;							// pk值
 		
-		string synName;							// 帮派名字
-		string synRankStr;						// 官职名字
+		string m_strSynName;							// 帮派名字
+		string m_strSynRank;						// 官职名字
 		
-		string rank;
+		string m_strRank;
 		int		m_nRank;
 		
-		bool levelup;
+		bool m_bLevelUp;
 		
-		int exp; // 经验值
-		int restPoint; // 剩余点数
+		int m_nExp; // 经验值
+		int m_nRestPoint; // 剩余点数
 		
-		int teamId; // 队伍id
+		int m_nTeamID; // 队伍id
 		
 		/* 伴侣id**/
-		int marriageID;
+		int m_nMarriageID;
 		
 		/* 伴侣名字**/
 		std::string loverName;
 		
-		int marriageState;
+		int m_nMarriageState;
 		
 		// 骑宠相关
 		//NDRidePet	*ridepet;
 		
-		int campOutOfTeam;
+		int m_nCampOutOfTeam;
 		
-		bool bClear;
+		bool m_bClear;
 		
 		NDMonster* aniGroupTransformed;
 		
@@ -269,7 +269,7 @@ namespace NDEngine
 		ShowPetInfo	m_infoShowPet;
 		
 		deque<int>	m_dequeWalk;
-		bool		bUpdateDiff;
+		bool		m_bUpdateDiff;
 		int idTransformTo;
 		NDPicture* m_picVendor;
 		NDPicture* m_picBattle;
@@ -286,7 +286,7 @@ namespace NDEngine
 	public:
 		CGPoint m_oldPos;
 	protected:
-		bool bToLastPos;
+		bool m_bToLastPos;
 		
 		NDUILabel *m_lbName[2];
 		NDUILabel *m_lbSynName[2];

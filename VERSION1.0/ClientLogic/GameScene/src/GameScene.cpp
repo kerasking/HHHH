@@ -3279,7 +3279,7 @@ void GameSceneReleaseHelper::BeforeDirectorPopScene(NDDirector* director,
 	{
 		m_bGameSceneRelease = true;
 		
-		NDManualRole::s_bGameSceneRelease = true;
+		NDManualRole::ms_bGameSceneRelease = true;
 	}
 }
 
@@ -3288,7 +3288,7 @@ void GameSceneReleaseHelper::AfterDirectorPopScene(NDDirector* director,
 {
 	if (m_bGameSceneRelease) 
 	{
-		NDManualRole::s_bGameSceneRelease = false;
+		NDManualRole::ms_bGameSceneRelease = false;
 		
 		m_bGameSceneRelease = false;
 	}

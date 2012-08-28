@@ -51,32 +51,32 @@ namespace NDEngine
 	IMPLEMENT_CLASS(NDManualRole, NDBaseRole)
 	
 	NDManualRole::NDManualRole() :
-	state(0)
+	m_nState(0)
 	{
 		aniGroupTransformed = NULL;
 		idTransformTo = 0;
-		money = 0;								// 银两
-		dwLookFace = 0;							// 创建人物的时候有6种外观可供选择外观
-		iProfesstion = 0;						//玩家的职业
+		m_nMoney = 0;								// 银两
+		m_dwLookFace = 0;							// 创建人物的时候有6种外观可供选择外观
+		m_nProfesstion = 0;						//玩家的职业
 		synRank = SYNRANK_NONE;				// 帮派级别
-		pkPoint = 0;							// pk值
+		m_nPKPoint = 0;							// pk值
 		
 		//m_pBattlePetShow = NULL;
 		//ridepet = NULL;f
 		
-		bUpdateDiff = false;
+		m_bUpdateDiff = false;
 		
 		//m_picRing = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
 		//CGSize size = m_picRing->GetSize();
 		//m_picRing->Cut(CGRectMake(0, 0, size.width, size.height));
 		
-		teamId = 0;
+		m_nTeamID = 0;
 		
 		isSafeProtected = false;
 		
-		campOutOfTeam = -1;
+		m_nCampOutOfTeam = -1;
 		
-		bClear = false;
+		m_bClear = false;
 		
 		m_oldPos = CGPointZero;
 		
@@ -86,12 +86,12 @@ namespace NDEngine
 		m_picBattle = NULL;
 		m_picGraveStone = NULL;
 		
-		levelup = false;
+		m_bLevelUp = false;
 		
-		exp = 0;
-		restPoint = 0;
+		m_nExp = 0;
+		m_nRestPoint = 0;
 		
-		bToLastPos = false;
+		m_bToLastPos = false;
 		
 		memset(m_lbName, 0, sizeof(m_lbName));
 		memset(m_lbSynName, 0, sizeof(m_lbSynName));
@@ -104,7 +104,7 @@ namespace NDEngine
 		
 		m_posBackup = CGPointZero;
 		
-		marriageID = 0;
+		m_nMarriageID = 0;
 		
 //		marriageState = _MARRIAGE_MATE_LOGOUT; ///< 临时性注释 郭浩
 		
@@ -463,10 +463,10 @@ namespace NDEngine
 			m_pBattlePetShow->WalkToPosition(vec_toPos[0]);
 		}*/
 		
-		if (ridepet) 
+		if (m_pkRidePet) 
 		{
-			ridepet->m_faceRight = m_faceRight;
-			ridepet->WalkToPosition(vec_toPos[0]);
+			m_pkRidePet->m_faceRight = m_faceRight;
+			m_pkRidePet->WalkToPosition(vec_toPos[0]);
 		}
 		
 		SetAction(true);
@@ -1043,9 +1043,9 @@ namespace NDEngine
 			m_pBattlePetShow->OnMoveEnd();
 		}*/
 		
-		if (ridepet) 
+		if (m_pkRidePet) 
 		{
-			ridepet->OnMoveEnd();
+			m_pkRidePet->OnMoveEnd();
 //			this->setStandActionWithRidePet();
 		}
 		
@@ -1240,9 +1240,9 @@ namespace NDEngine
 			m_pBattlePetShow->SetPosition(newPosition);
 		}*/
 		
-		if (ridepet) 
+		if (m_pkRidePet) 
 		{
-			ridepet->SetSpriteDir(!this->m_faceRight ? 2 : 0);
+			m_pkRidePet->SetSpriteDir(!this->m_faceRight ? 2 : 0);
 			//if (isTeamLeader() || !isTeamMember()) 
 //			{
 //				this->setMoveActionWithRidePet();
@@ -1255,9 +1255,9 @@ namespace NDEngine
 	
 	void NDManualRole::OnMoveTurning(bool bXTurnigToY, bool bInc)
 	{
-		if (ridepet) 
+		if (m_pkRidePet) 
 		{
-			ridepet->OnMoveTurning(bXTurnigToY, bInc);
+			m_pkRidePet->OnMoveTurning(bXTurnigToY, bInc);
 		}
 	}
 	
@@ -1365,8 +1365,8 @@ namespace NDEngine
 		}
 		else 
 		{
-			SetShadowOffset(ridepet ? -8 : 0, 10);
-			ShowShadow(true, ridepet != NULL );
+			SetShadowOffset(m_pkRidePet ? -8 : 0, 10);
+			ShowShadow(true, m_pkRidePet != NULL );
 		}
 
 		/***
@@ -1396,7 +1396,7 @@ namespace NDEngine
 		{
 			if (!effectFeedPetAniGroup->GetParent())
 			{
-				subnode->AddChild(effectFeedPetAniGroup);
+				m_pkSubNode->AddChild(effectFeedPetAniGroup);
 			}
 		}
 		
@@ -1404,20 +1404,20 @@ namespace NDEngine
 		{
 			if (!effectArmorAniGroup->GetParent())
 			{
-				subnode->AddChild(effectArmorAniGroup);
+				m_pkSubNode->AddChild(effectArmorAniGroup);
 			}
 		}
 		
 		
 		NDBaseRole::OnDrawBegin(bDraw);
 		
-		if (ridepet)
+		if (m_pkRidePet)
 		{
-			ridepet->SetPosition(pos);
+			m_pkRidePet->SetPosition(pos);
 			
-			if (!ridepet->GetParent())
+			if (!m_pkRidePet->GetParent())
 			{
-				subnode->AddChild(ridepet);
+				m_pkSubNode->AddChild(m_pkRidePet);
 			}
 		}
 		
@@ -1588,7 +1588,7 @@ namespace NDEngine
 		
 		bool hasServerEffectFlag = IsServerEffectHasQiZhi();
 		
-		if (!hasServerEffectFlag && effectFlagAniGroup != NULL && effectFlagAniGroup->GetParent()) 
+		if (!hasServerEffectFlag && m_pkEffectFlagAniGroup != NULL && m_pkEffectFlagAniGroup->GetParent()) 
 		{
 			CGPoint pos = GetPosition();
 			int ty = 0;
@@ -1605,9 +1605,9 @@ namespace NDEngine
 				tx = pos.x-DISPLAY_POS_X_OFFSET + 12;
 			}
 			
-			effectFlagAniGroup->SetSpriteDir(m_faceRight ? 0 : 2);
-			effectFlagAniGroup->SetPosition(ccp(tx, ty));
-			effectFlagAniGroup->RunAnimation(bDraw);
+			m_pkEffectFlagAniGroup->SetSpriteDir(m_faceRight ? 0 : 2);
+			m_pkEffectFlagAniGroup->SetPosition(ccp(tx, ty));
+			m_pkEffectFlagAniGroup->RunAnimation(bDraw);
 		}
 		
 		/*if (effectFeedPetAniGroup != NULL && effectFeedPetAniGroup->GetParent() && m_pBattlePetShow && !bTransform) 
@@ -1688,7 +1688,7 @@ namespace NDEngine
 	{
 		if (m_dequeWalk.size() == 0)
 		{
-			bUpdateDiff = true;
+			m_bUpdateDiff = true;
 		}
 		m_dequeWalk.push_back(dir);
 	}
@@ -1706,11 +1706,11 @@ namespace NDEngine
 	{
 		if (bSet)
 		{
-			this->state |= nState;
+			this->m_nState |= nState;
 		}
 		else
 		{
-			this->state &= ~nState;
+			this->m_nState &= ~nState;
 		}
 		
 		AnimationList& al = AnimationListObj;
@@ -1733,7 +1733,7 @@ namespace NDEngine
 					SAFE_DELETE(m_picVendor);
 				}
 
-				if (this->ridepet)
+				if (this->m_pkRidePet)
 				{
 					al.ridePetStandAction(TYPE_MANUALROLE, this, this->m_faceRight);
 				}
@@ -1765,7 +1765,7 @@ namespace NDEngine
 	
 	void NDManualRole::SetState(int nState)
 	{
-		this->state = nState;
+		this->m_nState = nState;
 
 		if (this->IsInState(USERSTATE_BOOTH))
 		{
@@ -1780,7 +1780,7 @@ namespace NDEngine
 			NDPlayer& player = NDPlayer::defaultHero();
 
 			if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) &&
-				(!this->isTeamMember() || this->teamId != player.teamId)) 
+				(!this->isTeamMember() || this->m_nTeamID != player.m_nTeamID)) 
 			{
 				this->UpdateState(USERSTATE_FIGHTING, true);
 			}
@@ -1790,7 +1790,7 @@ namespace NDEngine
 	
 	bool NDManualRole::IsInState(int iState)
 	{
-		return this->state & iState;
+		return this->m_nState & iState;
 	}
 	
 	// 正负状态
@@ -1832,7 +1832,7 @@ namespace NDEngine
 		
 		if (iid != -1) 
 		{
-			if (effectFlagAniGroup == NULL) 
+			if (m_pkEffectFlagAniGroup == NULL) 
 			{
 				/*
 				effectFlagAniGroup = new NDSprite;
@@ -1843,22 +1843,22 @@ namespace NDEngine
 		}
 		else 
 		{
-			if (campOutOfTeam != -1)
+			if (m_nCampOutOfTeam != -1)
 			{
-				SetCamp((CAMP_TYPE)campOutOfTeam);
-				campOutOfTeam = -1;
+				SetCamp((CAMP_TYPE)m_nCampOutOfTeam);
+				m_nCampOutOfTeam = -1;
 			}
-			if (effectFlagAniGroup) 
+			if (m_pkEffectFlagAniGroup) 
 			{
-				if (effectFlagAniGroup->GetParent()) 
+				if (m_pkEffectFlagAniGroup->GetParent()) 
 				{
-					effectFlagAniGroup->RemoveFromParent(true);
-					effectFlagAniGroup = NULL;
+					m_pkEffectFlagAniGroup->RemoveFromParent(true);
+					m_pkEffectFlagAniGroup = NULL;
 				}
 				else 
 				{
-					delete effectFlagAniGroup;
-					effectFlagAniGroup = NULL;
+					delete m_pkEffectFlagAniGroup;
+					m_pkEffectFlagAniGroup = NULL;
 				}
 				
 			}
@@ -1881,7 +1881,7 @@ namespace NDEngine
 			{
 				this->aniGroupTransformed = new NDMonster;
 				this->aniGroupTransformed->SetNormalAniGroup(idLookface);
-				this->subnode->AddChild(aniGroupTransformed);
+				this->m_pkSubNode->AddChild(aniGroupTransformed);
 			}
 		}
 	}
@@ -2002,9 +2002,9 @@ namespace NDEngine
 				lable->Initialization(); \
 				lable->SetFontSize(LABLESIZE); \
 			} \
-			if (!lable->GetParent() && subnode) \
+			if (!lable->GetParent() && m_pkSubNode) \
 			{ \
-				subnode->AddChild(lable); \
+				m_pkSubNode->AddChild(lable); \
 			} \
 		} while (0)
 
@@ -2028,12 +2028,12 @@ namespace NDEngine
 		if (IsInState(USERSTATE_CAMP)) {
 			isEnemy = (GetCamp() != CAMP_NEUTRAL && player.GetCamp() != CAMP_NEUTRAL
 					   && player.GetCamp() != GetCamp());
-			names += rank;
+			names += m_strRank;
 		}
 		
 		if (player.IsInState(USERSTATE_BATTLEFIELD) && 
 			this->IsInState(USERSTATE_BATTLEFIELD)  && 
-			player.camp != this->camp)
+			player.m_eCamp != this->m_eCamp)
 		{
 			isEnemy = true;
 		}
@@ -2059,7 +2059,7 @@ namespace NDEngine
 		*/
 			
 		
-		if (!synName.empty()) 
+		if (!m_strSynName.empty()) 
 		{
 			InitNameLable(m_lbName[0]);InitNameLable(m_lbName[1]);
 			InitNameLable(m_lbPeerage[0]);InitNameLable(m_lbPeerage[1]);
@@ -2067,7 +2067,7 @@ namespace NDEngine
 			
 			
 			SetLableName(names, iX+8*fScale-iNameW, iY-LABLESIZE*fScale, isEnemy);
-			std::stringstream ss; ss << synName << " [" << synRankStr << "]";
+			std::stringstream ss; ss << m_strSynName << " [" << m_strSynRank << "]";
 			int iSynNameW = getStringSizeMutiLine(ss.str().c_str(), LABLESIZE, sizewin).width/2;
 			cocos2d::ccColor4B color = INTCOLORTOCCC4(0xffffff);
 			if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)))
@@ -2108,7 +2108,7 @@ namespace NDEngine
 	void NDManualRole::SetLable(LableType eLableType, 
 		int x, int y, std::string text, cocos2d::ccColor4B color1, cocos2d::ccColor4B color2)
 	{
-		if (!subnode) 
+		if (!m_pkSubNode) 
 		{
 			return;
 		}
@@ -2142,7 +2142,7 @@ namespace NDEngine
 		lable[1]->SetFontColor(color2);
 		
 		CGSize sizemap;
-		sizemap = subnode->GetContentSize();
+		sizemap = m_pkSubNode->GetContentSize();
 		CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
 		float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
 
@@ -2232,7 +2232,7 @@ namespace NDEngine
 	
 	void NDManualRole::HandleEffectDacoity()
 	{
-		if (!subnode) return;
+		if (!m_pkSubNode) return;
 		
 		NDPlayer& player = NDPlayer::defaultHero();
 		
@@ -2255,7 +2255,7 @@ namespace NDEngine
 		{
 			if (!effectDacoityAniGroup->GetParent())
 			{
-				subnode->AddChild(effectDacoityAniGroup);
+				m_pkSubNode->AddChild(effectDacoityAniGroup);
 			}
 		}
 		
@@ -2286,13 +2286,13 @@ namespace NDEngine
 			return false;
 		}
 		
-		if (isTeamMember() && player.teamId == teamId)
+		if (isTeamMember() && player.m_nTeamID == m_nTeamID)
 		{
 			return false;
 		}
 		
 		if (otherRole->isTeamMember() &&
-			player.teamId == otherRole->teamId)
+			player.m_nTeamID == otherRole->m_nTeamID)
 		{
 			return true;
 		}

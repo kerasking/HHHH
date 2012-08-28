@@ -96,7 +96,7 @@ void StatusDialog::Initialization(Fighter* f)
 	
 	stringstream ssTitle;
 	ssTitle << f->GetRole()->m_name << "("
-	<< f->GetRole()->level << NDCommonCString("Ji") << ")";
+	<< f->GetRole()->m_nLevel << NDCommonCString("Ji") << ")";
 	
 	if(f->m_info.fighterType==Fighter_TYPE_RARE_MONSTER){
 		ssTitle << "¡¾" << NDCommonCString("xiyou") << "¡¿";

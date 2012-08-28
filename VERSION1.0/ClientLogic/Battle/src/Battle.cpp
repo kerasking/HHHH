@@ -225,7 +225,7 @@ void HighlightTip::SetFighter(Fighter* f)
 		name->SetTag(TAG_NAME);
 		this->AddChild(name);
 	}
-	std::stringstream ss; ss << role->m_name << "Lv" << role->level;
+	std::stringstream ss; ss << role->m_name << "Lv" << role->m_nLevel;
 	//	if (f->m_info.fighterType == Fighter_TYPE_RARE_MONSTER)
 	//	{
 	//		ss << "【" << NDCommonCString("xiyou") << "】"; 
@@ -432,7 +432,7 @@ Battle::~Battle()
 	else
 	{
 		// 使用自动恢复药
-		if (player.life < player.maxLife || player.mana < player.maxMana)
+		if (player.m_nLife < player.m_nMaxLife || player.m_nMana < player.m_nMaxMana)
 		{
 			ItemMgr& items = ItemMgrObj;
 			Item* recover = items.GetBagItemByType(IT_RECOVER);
@@ -1902,7 +1902,7 @@ void Battle::HighlightFighter(Fighter* f)
 		name->SetTag(TAG_NAME);
 		this->AddChild(name);
 	}
-	std::stringstream ss; ss << role->m_name << "Lv" << role->level;
+	std::stringstream ss; ss << role->m_name << "Lv" << role->m_nLevel;
 	//	if (f->m_info.fighterType == Fighter_TYPE_RARE_MONSTER)
 	//	{
 	//		ss << "【" << NDCommonCString("xiyou") << "】"; 

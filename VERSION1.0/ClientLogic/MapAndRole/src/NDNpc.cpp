@@ -44,9 +44,9 @@ lable->Initialization(); \
 lable->SetFontSize(12); \
 lable->SetRenderTimes(3); \
 } \
-if (!lable->GetParent() && subnode) \
+if (!lable->GetParent() && m_pkSubNode) \
 { \
-subnode->AddChild(lable); \
+m_pkSubNode->AddChild(lable); \
 } \
 } while (0)
 
@@ -57,7 +57,7 @@ IMPLEMENT_CLASS(NDNpc, NDBaseRole)
 
 
 NDNpc::NDNpc() :
-npcState(NPC_STATE_NO_MARK)
+m_eNPCState(NPC_STATE_NO_MARK)
 {
 	m_bRoleNpc = false;
 	//ridepet = NULL;
@@ -129,15 +129,15 @@ bool NDNpc::OnDrawBegin(bool bDraw)
 
 	NDBaseRole::OnDrawBegin(bDraw);
 	
-	subnode->SetContentSize(sizemap);
+	m_pkSubNode->SetContentSize(sizemap);
 	
-	if (ridepet)
+	if (m_pkRidePet)
 	{
-		ridepet->SetPosition(GetPosition());
+		m_pkRidePet->SetPosition(GetPosition());
 		
-		if (!ridepet->GetParent())
+		if (!m_pkRidePet->GetParent())
 		{
-			subnode->AddChild(ridepet);
+			m_pkSubNode->AddChild(m_pkRidePet);
 		}
 	}
 	
@@ -173,7 +173,8 @@ void NDNpc::OnDrawEnd(bool bDraw)
 	CGSize size		= getStringSize(m_name.c_str(), 12);
 	
 	int showX = npcpos.x;
-	int showY = npcpos.y - size.height - (m_currentAnimation ? (m_currentAnimation->getBottomY()-m_currentAnimation->getY()): 0);
+	int showY = npcpos.y - size.height - (m_currentAnimation ?
+		(m_currentAnimation->getBottomY()-m_currentAnimation->getY()): 0);
 	
 //	if (collides)
 //	{
@@ -204,21 +205,27 @@ void NDNpc::OnDrawEnd(bool bDraw)
 			//showY -= 5 * fScaleFactor;
 		}
 		
-		if ( (npcState & NPC_STATE_BATTLE) > 0) 
+		if ( (m_eNPCState & NPC_STATE_BATTLE) > 0) 
 		{
 			if (m_picBattle == NULL)
 			{
 				m_picBattle = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("battle.png"));
 				CGSize sizeBattle = m_picBattle->GetSize();
-				m_picBattle->DrawInRect(CGRectMake(npcpos.x-16, GetPosition().y-64+NDDirector::DefaultDirector()->GetWinSize().height-sizemap.height, sizeBattle.width, sizeBattle.height));
+				m_picBattle->DrawInRect(CGRectMake(npcpos.x - 16,
+					GetPosition().y - 64 + NDDirector::DefaultDirector()->GetWinSize().height
+					- sizemap.height, sizeBattle.width, sizeBattle.height));
 			}
-		}else 
+		}
+		else 
 		{
 			if (m_picState != NULL) 
 			{
 				CGSize sizeState = m_picState->GetSize();
-				CGRect rect = CGRectMake(npcpos.x-sizeState.width / 2, showY+NDDirector::DefaultDirector()->GetWinSize().height-sizemap.height - sizeState.height, sizeState.width, sizeState.height);
-				m_rectState = CGRectMake(npcpos.x-sizeState.width / 2, showY - sizeState.height, sizeState.width, sizeState.height);
+				CGRect rect = CGRectMake(npcpos.x - sizeState.width / 2,
+					showY + NDDirector::DefaultDirector()->GetWinSize().height
+					- sizemap.height - sizeState.height, sizeState.width, sizeState.height);
+				m_rectState = CGRectMake(npcpos.x - sizeState.width / 2,
+					showY - sizeState.height, sizeState.width, sizeState.height);
 				m_picState->DrawInRect(rect);
 			}
 		}
@@ -270,7 +277,7 @@ void NDNpc::SetExpresstionImage(int nExpresstion)
 
 void NDNpc::SetNpcState(NPC_STATE state)
 {
-	if (state == this->npcState)
+	if (state == this->m_eNPCState)
 	{
 		return;
 	}
@@ -279,21 +286,21 @@ void NDNpc::SetNpcState(NPC_STATE state)
 	{
 		CC_SAFE_DELETE(m_picState);
 	}
-	this->npcState = state;
+	this->m_eNPCState = state;
 	
-	if ( (npcState & QUEST_CANNOT_ACCEPT) > 0)
+	if ( (m_eNPCState & QUEST_CANNOT_ACCEPT) > 0)
 	{
 		//m_picState = NDPicturePool::DefaultPool()->AddPicture(GetImgPath("task_state_1.png"));
 	} 
-	else if ( (npcState & QUEST_CAN_ACCEPT) > 0) 
+	else if ( (m_eNPCState & QUEST_CAN_ACCEPT) > 0) 
 	{
 		m_picState = NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("mark_submit.png"));
 	} 
-	else if ( (npcState & QUEST_NOT_FINISH) > 0)
+	else if ( (m_eNPCState & QUEST_NOT_FINISH) > 0)
 	{
 		m_picState = NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("mark_task_accepted.png"));
 	} 
-	else if ( (npcState & QUEST_FINISH) > 0)
+	else if ( (m_eNPCState & QUEST_FINISH) > 0)
 	{
 		m_picState = NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("mark_task_accept.png"));
 	}
@@ -322,7 +329,7 @@ int NDNpc::GetType()
 
 void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text, cocos2d::ccColor4B color1, cocos2d::ccColor4B color2)
 {
-	if (!subnode) 
+	if (!m_pkSubNode) 
 	{
 		return;
 	}
@@ -354,21 +361,29 @@ void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text, cocos
 	//lable[1]->SetFontBoderColer(color2);
 	
 	CGSize sizemap;
-	sizemap = subnode->GetContentSize();
+	sizemap = m_pkSubNode->GetContentSize();
 	CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
 	float fScaleFactor	= NDDirector::DefaultDirector()->GetScaleFactor();
 	CGSize size = getStringSize(text.c_str(), 12);
-	lable[1]->SetFrameRect(CGRectMake(x-(size.width/2)+1, y+NDDirector::DefaultDirector()->GetWinSize().height-sizemap.height, sizewin.width, 20 * fScaleFactor));
-	lable[0]->SetFrameRect(CGRectMake(x-(size.width/2), y+NDDirector::DefaultDirector()->GetWinSize().height-sizemap.height, sizewin.width, 20 * fScaleFactor));
+	lable[1]->SetFrameRect(CGRectMake(x - (size.width / 2) + 1,
+		y + NDDirector::DefaultDirector()->GetWinSize().height -
+		sizemap.height, sizewin.width, 20 * fScaleFactor));
+	lable[0]->SetFrameRect(CGRectMake(x - (size.width / 2),
+		y + NDDirector::DefaultDirector()->GetWinSize().height -
+		sizemap.height, sizewin.width, 20 * fScaleFactor));
 }
 
 bool NDNpc::IsPointInside(CGPoint point)
 {
 	if (m_currentAnimation)
 	{
-		CGRect rect = CGRectMake(this->m_position.x-this->GetWidth()/2,this->m_position.y-this->GetHeight(),this->GetWidth(),this->GetHeight());
-		if (CGRectContainsPoint(rect, point))
+		CGRect kRect = CGRectMake(this->m_position.x - this->GetWidth() / 2,
+			this->m_position.y - this->GetHeight(),this->GetWidth(),this->GetHeight());
+
+		if (CGRectContainsPoint(kRect, point))
+		{
 			return true;
+		}
 	}
 	
 	if (m_picState)
@@ -522,7 +537,8 @@ int NDNpc::GetDataBaseData(int nIndex)
 	{
 		return 0;
 	}
-	return ScriptGameDataObj.GetData<unsigned long long>(eScriptDataDataBase, nKey, eRoleDataPet, this->m_id, nIndex);
+	return ScriptGameDataObj.GetData<unsigned long long>(eScriptDataDataBase,
+		nKey, eRoleDataPet, this->m_id, nIndex);
 }
 
 bool NDNpc::GetTaskList(ID_VEC& idVec)
@@ -598,7 +614,6 @@ void NDNpc::ShowHightLight(bool bShow)
 	this->SetHightLight(bShow);
 }
 
-override
 bool NDEngine::NDNpc::IsActionOnRing()
 {
 	return true;

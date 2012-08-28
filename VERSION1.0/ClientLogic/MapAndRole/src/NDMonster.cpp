@@ -45,7 +45,7 @@ using namespace NDEngine;
 		self_move_rectw = NORMAL_MOVE_RECTW;
 		self_move_rectH = NORMAL_MOVE_RECTH;
 		bossRing = NULL;
-		isAutoAttack = true;
+		m_bIsAutoAttack = true;
 		
 		stop_time_count = 0;
 		
@@ -61,7 +61,7 @@ using namespace NDEngine;
 		
 		frozenTime = time(NULL);
 		
-		attackArea = 0;
+		m_nAttackArea = 0;
 		
 		monsterInit();
 		
@@ -73,7 +73,7 @@ using namespace NDEngine;
 		
 		bClear = false;
 		
-		figure = 0;
+		m_nFigure = 0;
 		
 		m_lbName = NULL;
 		
@@ -81,11 +81,11 @@ using namespace NDEngine;
 		
 		m_bCanBattle = true;
 		
-		original_x=0;
-		original_y=0;
+		m_nOriginal_x=0;
+		m_nOriginal_y=0;
 		
 		m_timeBossProtect = 0.0f;
-		isHunt=false;
+		m_bIsHunt=false;
 	}
 	
 	NDMonster::~NDMonster()
@@ -100,12 +100,12 @@ using namespace NDEngine;
 		m_name=ScriptDBObj.GetS("monstertype", idType, DB_MONSTERTYPE_NAME);
 		
 		
-		nType = idType;
+		m_nType = idType;
 		
 
-		camp = CAMP_TYPE_NONE;
-		level = ScriptDBObj.GetN("monstertype", idType,DB_MONSTERTYPE_LEVEL);
-		attackArea = ScriptDBObj.GetN("monstertype", idType,DB_MONSTERTYPE_ATK_AREA);
+		m_eCamp = CAMP_TYPE_NONE;
+		m_nLevel = ScriptDBObj.GetN("monstertype", idType,DB_MONSTERTYPE_LEVEL);
+		m_nAttackArea = ScriptDBObj.GetN("monstertype", idType,DB_MONSTERTYPE_ATK_AREA);
 		int lookface = ScriptDBObj.GetN("monstertype", idType,DB_MONSTERTYPE_LOOKFACE);
 		//lookface=100000000;
 		int aiType=ScriptDBObj.GetN("monstertype", idType,DB_MONSTERTYPE_AI_TYPE);
@@ -115,7 +115,7 @@ using namespace NDEngine;
 //			turnFace = true;
 //		}
 		m_bRoleMonster = true;
-		InitNonRoleData(m_name, lookface, level);
+		InitNonRoleData(m_name, lookface, m_nLevel);
 //		if ( sex >= 3 ) // isRoleMonster
 //		{
 //			m_bRoleMonster = true;
@@ -130,7 +130,7 @@ using namespace NDEngine;
 
 //		if (m_id > 0) 
 //		{ //boss
-//			monsterCatogary = MONSTER_BOSS;
+//			m_nMonsterCatogary = MONSTER_BOSS;
 //			self_move_rectw = BOSS_MOVE_RECTW;
 //			self_move_rectH = BOSS_MOVE_RECTH;
 //			
@@ -138,7 +138,7 @@ using namespace NDEngine;
 //		}
 //		else 
 //		{
-		monsterCatogary = MONSTER_NORMAL;
+		m_nMonsterCatogary = MONSTER_NORMAL;
 		self_move_rectw = NORMAL_MOVE_RECTW;
 		self_move_rectH = NORMAL_MOVE_RECTH;
 //		}
@@ -151,26 +151,29 @@ using namespace NDEngine;
 		m_faceRight = random() % 2;
 	
 		if (aiType == 1 )
-			isAutoAttack = true;
+		{
+			m_bIsAutoAttack = true;
+		}
 		
 		if (isUseAI()) 
 		{
-			isHunt=true;
+			m_bIsHunt = true;
 			randomMonsterUseAI();
-		} else 
+		}
+		else 
 		{
-			isHunt=false;
+			m_bIsHunt = false;
 			randomMonsterNotAI();
 		}
 	}
 
 	void NDMonster::setOriginalPosition(int o_x,int o_y){
-		original_x=o_x;
-		original_y=o_y;
+		m_nOriginal_x=o_x;
+		m_nOriginal_y=o_y;
 	}
 
 	void NDMonster::restorePosition(){
-		this->SetPosition(ccp(original_x,original_y));
+		this->SetPosition(ccp(m_nOriginal_x,m_nOriginal_y));
 	}
 
 	void NDMonster::SetMoveRect(CGPoint point,int size){
@@ -222,7 +225,7 @@ using namespace NDEngine;
 		m_id = idNpc;
 		
 		
-		monsterCatogary = MONSTER_Farm;
+		m_nMonsterCatogary = MONSTER_Farm;
 		self_move_rectw = BOSS_MOVE_RECTW;
 		self_move_rectH = BOSS_MOVE_RECTH;
 
@@ -241,7 +244,7 @@ using namespace NDEngine;
 
 	void NDMonster::SetType(int type)
 	{
-		monsterCatogary = type;
+		m_nMonsterCatogary = type;
 		if (type==MONSTER_NORMAL) 
 		{ //boss
 
@@ -252,7 +255,7 @@ using namespace NDEngine;
 	
 	bool NDMonster::OnDrawBegin(bool bDraw)
 	{
-		if (figure == 0) 
+		if (m_nFigure == 0) 
 		{
 			SetShadowOffset(0, 10);
 			ShowShadow(true);
@@ -272,14 +275,14 @@ using namespace NDEngine;
 		}
 		
 		
-		if (bossRing && subnode)
+		if (bossRing && m_pkSubNode)
 		{
 			if (!bossRing->GetParent())
 			{
-				subnode->AddChild(bossRing);
+				m_pkSubNode->AddChild(bossRing);
 			}
 			
-			if (monsterCatogary == MONSTER_BOSS) 
+			if (m_nMonsterCatogary == MONSTER_BOSS) 
 			{
 				int iX = m_position.x;
 				int iY = m_position.y-DISPLAY_POS_Y_OFFSET;
@@ -368,7 +371,7 @@ using namespace NDEngine;
 		{
 			case MONSTER_STATE_DEAD: 
 			{
-//				if (!(monsterCatogary == MONSTER_BOSS))
+//				if (!(m_nMonsterCatogary == MONSTER_BOSS))
 //				{ // 如果是精英怪直接不画就好
 //					long intervalTime = [NSDate timeIntervalSinceReferenceDate] - deadTime;
 //					if ( intervalTime > REFRESH_TIME ) 
@@ -418,11 +421,13 @@ using namespace NDEngine;
 	{
 		//if (GameScreen.role.isTeamLeader() || GameScreen.role.teamId == 0) {
 			// 玩家非保护状态,普通攻击怪,并且只有当玩家等级大于怪物等级7级,怪物才不会有AI视野
-			//if (isAutoAttack && !GameScreen.role.isSafeProtected() && monsterCatogary == MONSTER_NORMAL && !(level - GameScreen.role.getLevel() <= LEVEL_GRAY)) {
-		if (monsterCatogary == MONSTER_Farm) {
+			//if (isAutoAttack && !GameScreen.role.isSafeProtected() && m_nMonsterCatogary == MONSTER_NORMAL && !(level - GameScreen.role.getLevel() <= LEVEL_GRAY)) {
+		if (m_nMonsterCatogary == MONSTER_Farm)
+		{
 			return false;
 		}
-		if ( isAutoAttack && monsterCatogary == MONSTER_NORMAL ) 
+
+		if ( m_bIsAutoAttack && m_nMonsterCatogary == MONSTER_NORMAL ) 
 		{		
 				int monsterRow = GetPosition().y / MAP_UNITSIZE;
 				int monsterCol = GetPosition().x / MAP_UNITSIZE;
@@ -441,7 +446,8 @@ using namespace NDEngine;
 //						return false;
 //					} else 
 //					{
-					if (roleX>(selfMoveRectX + self_move_rectw/2-16)&&roleX<(selfMoveRectX + self_move_rectw/2+16))
+					if (roleX > (selfMoveRectX + self_move_rectw / 2 - 16) &&
+						roleX < (selfMoveRectX + self_move_rectw / 2 + 16))
 					{
 						NDPlayer::defaultHero().SetLocked(true);
 						NDPlayer::defaultHero().stopMoving();
@@ -554,15 +560,16 @@ using namespace NDEngine;
 		//NDLog("monster ai direct:%d",m);
 		if (m == dir_invalid) 
 		{// -1表示无路径可走,防止掩码,那么按普通的随机走路
-			isAiUseful = false;
-			moveDirect =  (random()% 4 + random() % 4) % 4;
-			moveCount = random() % MOVE_MIN + random() % MOVE_MIN;
-			stop_time_count = random() % ((moveCount + 1) * 10);
-		} else 
+			m_bIsAIUseful = false;
+			m_nMoveDirect =  (random()% 4 + random() % 4) % 4;
+			m_nMoveCount = random() % MOVE_MIN + random() % MOVE_MIN;
+			stop_time_count = random() % ((m_nMoveCount + 1) * 10);
+		}
+		else 
 		{
-			isAiUseful = true;
-			moveDirect = m;
-			moveCount = 1;
+			m_bIsAIUseful = true;
+			m_nMoveDirect = m;
+			m_nMoveCount = 1;
 			stop_time_count = 0;
 		}
 		curMoveCount = 0;
@@ -573,9 +580,9 @@ using namespace NDEngine;
 	void NDMonster::randomMonsterNotAI()
 	{
 		curStopCount = 0;
-		moveDirect =  (random()% 4 + random() % 4) % 4;
-		moveCount = random() % MOVE_MIN + random() % MOVE_MIN;
-		stop_time_count = random() % ((moveCount + 1) * 10);
+		m_nMoveDirect =  (random()% 4 + random() % 4) % 4;
+		m_nMoveCount = random() % MOVE_MIN + random() % MOVE_MIN;
+		stop_time_count = random() % ((m_nMoveCount + 1) * 10);
 		curMoveCount = 0;
 		//setAnigroupFace();
 		SetCurrentAnimation(MONSTER_MAP_MOVE, m_faceRight);
@@ -583,7 +590,7 @@ using namespace NDEngine;
 
 	void NDMonster::setAnigroupFace() 
 	{
-		switch (moveDirect) 
+		switch (m_nMoveDirect) 
 		{
 			case dir_left: 
 			{
@@ -620,7 +627,7 @@ using namespace NDEngine;
 
 	void NDMonster::runLogic()
 	{
-		if (moveDirect == dir_invalid) 
+		if (m_nMoveDirect == dir_invalid) 
 		{
 			if (curStopCount >= stop_time_count) 
 			{
@@ -811,7 +818,7 @@ using namespace NDEngine;
 			return;
 		}
 			
-		if (monsterCatogary == MONSTER_BOSS 
+		if (m_nMonsterCatogary == MONSTER_BOSS 
 			&& time(NULL) - m_timeBossProtect < BOSS_PROTECT_TIME) 
 		{
 			isMonsterCollide = false;
@@ -819,7 +826,7 @@ using namespace NDEngine;
 		}
 		
 		if (player.IsInState(USERSTATE_BATTLEFIELD)
-			&& this->camp == player.camp)
+			&& this->m_eCamp == player.m_eCamp)
 		{
 			isMonsterCollide = false;
 			return;
@@ -833,16 +840,16 @@ using namespace NDEngine;
 		}
 		
 
-		int scope = attackArea * 32;
+		int m_nScope = m_nAttackArea * 32;
 
 		CGRect rectRole = CGRectMake(NDPlayer::defaultHero().GetPosition().x-32,
 									 NDPlayer::defaultHero().GetPosition().y-32, 
 									 64,
 									 64);
-		CGRect rectMonster = CGRectMake(GetPosition().x-scope,
-										GetPosition().y-scope,
-										getCollideW()+scope*2,
-										getCollideH()+scope*2);
+		CGRect rectMonster = CGRectMake(GetPosition().x - m_nScope,
+										GetPosition().y - m_nScope,
+										getCollideW() + m_nScope * 2,
+										getCollideH() + m_nScope * 2);
 		
 		bool collides = CGRectIntersectsRect(rectRole, rectMonster);
 		
@@ -852,7 +859,7 @@ using namespace NDEngine;
 			
 			//setWaitingBattle(true);
 			
-//			if ( monsterCatogary != MONSTER_GUARD )
+//			if ( m_nMonsterCatogary != MONSTER_GUARD )
 //			{
 				sendBattleAction();
 //			} else 
@@ -875,7 +882,7 @@ using namespace NDEngine;
 
 	int NDMonster::getCollideW() 
 	{
-		switch (monsterCatogary) 
+		switch (m_nMonsterCatogary) 
 		{
 			case MONSTER_NORMAL: 
 			{// 普通怪
@@ -891,7 +898,7 @@ using namespace NDEngine;
 
 	int NDMonster::getCollideH()
 	{
-		switch (monsterCatogary) 
+		switch (m_nMonsterCatogary) 
 		{
 			case MONSTER_NORMAL:
 			{// 普通怪
@@ -911,7 +918,7 @@ using namespace NDEngine;
 		
 		NDTransData bao(_MSG_BATTLEACT);
 		
-		switch (monsterCatogary)
+		switch (m_nMonsterCatogary)
 		{
 			case MONSTER_NORMAL: 
 			{
@@ -956,7 +963,7 @@ using namespace NDEngine;
 //			bossRing->SetCurrentAnimation(0, false);
 		}
 		
-		monsterCatogary = MONSTER_BOSS;
+		m_nMonsterCatogary = MONSTER_BOSS;
 	}
 
 	void NDMonster::setMonsterStateFromBattle(int result)
@@ -971,7 +978,7 @@ using namespace NDEngine;
 			case BATTLE_COMPLETE_LOSE:
 			case BATTLE_COMPLETE_NO:
 			{// 玩家打平或战斗失败
-				if (monsterCatogary == MONSTER_BOSS)
+				if (m_nMonsterCatogary == MONSTER_BOSS)
 				{
 					//setMonsterFrozen(true);
 					LogicDraw();
@@ -993,7 +1000,7 @@ using namespace NDEngine;
 	
 	void NDMonster::endBattle()
 	{
-		if (monsterCatogary == MONSTER_BOSS) 
+		if (m_nMonsterCatogary == MONSTER_BOSS) 
 		{
 			m_timeBossProtect = time(NULL);
 		}
@@ -1012,7 +1019,7 @@ using namespace NDEngine;
 			case MONSTER_STATE_NORMAL: 
 			{
 				isMonsterCollide = false;
-				if (monsterCatogary == MONSTER_BOSS && this->GetParent() == NULL) 
+				if (m_nMonsterCatogary == MONSTER_BOSS && this->GetParent() == NULL) 
 				{
 					LogicDraw();
 				}
@@ -1032,7 +1039,7 @@ using namespace NDEngine;
 	
 	void NDMonster::drawName(bool bDraw)
 	{
-		if (!subnode) 
+		if (!m_pkSubNode) 
 		{
 			return;
 		}
@@ -1043,20 +1050,20 @@ using namespace NDEngine;
 		CGRect rect2 = CGRectMake(m_position.x-DISPLAY_POS_X_OFFSET, m_position.y-DISPLAY_POS_Y_OFFSET, 16, 16);
 		//if (CGRectIntersectsRect(rect1, rect2)) { // 显示区域内的怪物名字
 			int iColor = 0;
-			if (level - player.level <= LEVEL_GRAY) {
+			if (m_nLevel - player.m_nLevel <= LEVEL_GRAY) {
 				iColor = 0x555555;
-			} else if (level - player.level <= LEVEL_GREEN) {
+			} else if (m_nLevel - player.m_nLevel <= LEVEL_GREEN) {
 				iColor = 0x2cf611;
-			} else if (level - player.level <= LEVEL_YELLOW) {
+			} else if (m_nLevel - player.m_nLevel <= LEVEL_YELLOW) {
 				iColor = 0xffff00;
-			} else if (level - player.level <= LEVEL_ORANGE) {
+			} else if (m_nLevel - player.m_nLevel <= LEVEL_ORANGE) {
 				iColor = 0xffff00;
 			} else { // 太高级用红色显示
 				iColor = 0xf4031f;
 			}
-			if (camp != CAMP_NEUTRAL && camp == player.GetCamp()) {
+			if (m_eCamp != CAMP_NEUTRAL && m_eCamp == player.GetCamp()) {
 				iColor = 0xffffff;
-			} else if (camp != CAMP_NEUTRAL && camp != player.GetCamp()) {
+			} else if (m_eCamp != CAMP_NEUTRAL && m_eCamp != player.GetCamp()) {
 				iColor = 0xff0000;
 			}
 			
@@ -1070,7 +1077,7 @@ using namespace NDEngine;
 			
 			CGSize size = getStringSize(m_name.c_str(), 12);
 			CGSize sizemap;
-			sizemap = subnode->GetContentSize();
+			sizemap = m_pkSubNode->GetContentSize();
 			
 			if (!m_lbName) 
 			{
@@ -1080,9 +1087,9 @@ using namespace NDEngine;
 				m_lbName->SetText(m_name.c_str());
 			}
 			
-			if (!m_lbName->GetParent() && subnode) 
+			if (!m_lbName->GetParent() && m_pkSubNode) 
 			{
-				subnode->AddChild(m_lbName);
+				m_pkSubNode->AddChild(m_lbName);
 			}
 			
 			m_lbName->SetFontColor(INTCOLORTOCCC4(iColor));
@@ -1134,7 +1141,7 @@ using namespace NDEngine;
 				int flagOrRidePet = lookface / 10000000 % 10;
 				if (flagOrRidePet > 0) {
 					if (flagOrRidePet < 5) {
-						camp = CAMP_TYPE(flagOrRidePet);
+						m_eCamp = CAMP_TYPE(flagOrRidePet);
 					}else {				
 						int id = (flagOrRidePet + 1995)*10;
 						SetEquipment(id,0);
@@ -1175,7 +1182,8 @@ using namespace NDEngine;
 		else 
 		{
 			{ // SetNormalAniGroup
-				if (lookface <= 0) {
+				if (lookface <= 0)
+				{
 					return;
 				}
 				

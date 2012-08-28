@@ -577,10 +577,10 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 //			//				string name = bao.ReadUnicodeString();
 //			fighter->LoadMonster(idlookface, level, strName);
 //		}
-		fighter->GetRole()->life=nLife;
-		fighter->GetRole()->maxLife=nLifeMax;
-		fighter->GetRole()->mana=nMana;
-		fighter->GetRole()->maxMana=nManaMax;
+		fighter->GetRole()->m_nLife=nLife;
+		fighter->GetRole()->m_nMaxLife=nLifeMax;
+		fighter->GetRole()->m_nMana=nMana;
+		fighter->GetRole()->m_nMaxMana=nManaMax;
 		
 		// 服务端下发的状态
 		//			for (int j = 0; j < statusNum; j++) {
