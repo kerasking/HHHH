@@ -148,7 +148,7 @@ using namespace NDEngine;
 		
 		srandom(time(NULL));
 		
-		m_faceRight = random() % 2;
+		m_bFaceRight = random() % 2;
 	
 		if (aiType == 1 )
 		{
@@ -222,7 +222,7 @@ using namespace NDEngine;
 			SetNonRole(true);
 		}
 		
-		m_id = idNpc;
+		m_nID = idNpc;
 		
 		
 		m_nMonsterCatogary = MONSTER_Farm;
@@ -304,9 +304,9 @@ using namespace NDEngine;
 			if (layer->IsKindOfClass(RUNTIME_CLASS(NDMapLayer))) 
 			{
 				m_pointList.clear();
-				m_moveMap = moveMap;
-				m_moving  = true;
-				m_movePathIndex = 0;
+				m_bMoveMap = moveMap;
+				m_bIsMoving  = true;
+				m_nMovePathIndex = 0;
 				m_pointList.push_back(toPos);
 			}		
 		}
@@ -317,22 +317,22 @@ using namespace NDEngine;
 		if (this->GetPosition().x > toPos.x) 
 		{
 			if (!turnFace) 
-				m_reverse = m_faceRight = true;		
+				m_bReverse = m_bFaceRight = true;		
 			else
-				m_reverse = m_faceRight = false;		
+				m_bReverse = m_bFaceRight = false;		
 		}
 		else 
 		{
 			if (!turnFace)
-				m_reverse = m_faceRight = false;
+				m_bReverse = m_bFaceRight = false;
 			else
-				m_reverse = m_faceRight = true;
+				m_bReverse = m_bFaceRight = true;
 		}
 		
 //		if (this->m_bRoleMonster) {
 		//NDLog("faceRight:%d",m_faceRight);
-		m_faceRight = !m_faceRight;
-		m_reverse = !m_reverse;
+		m_bFaceRight = !m_bFaceRight;
+		m_bReverse = !m_bReverse;
 //		}
 		this->MoveToPosition(toPos, SpriteSpeedStep4, false);
 	}
@@ -574,7 +574,7 @@ using namespace NDEngine;
 		}
 		curMoveCount = 0;
 		//setAnigroupFace();
-		SetCurrentAnimation(MONSTER_MAP_MOVE, m_faceRight);
+		SetCurrentAnimation(MONSTER_MAP_MOVE, m_bFaceRight);
 	}
 
 	void NDMonster::randomMonsterNotAI()
@@ -585,7 +585,7 @@ using namespace NDEngine;
 		stop_time_count = random() % ((m_nMoveCount + 1) * 10);
 		curMoveCount = 0;
 		//setAnigroupFace();
-		SetCurrentAnimation(MONSTER_MAP_MOVE, m_faceRight);
+		SetCurrentAnimation(MONSTER_MAP_MOVE, m_bFaceRight);
 	}
 
 	void NDMonster::setAnigroupFace() 
@@ -594,19 +594,19 @@ using namespace NDEngine;
 		{
 			case dir_left: 
 			{
-				m_faceRight = false;
+				m_bFaceRight = false;
 				break;
 			}
 			case dir_right: 
 			{
-				m_faceRight = true;
+				m_bFaceRight = true;
 				break;
 			}
 		}
 		
 //		if (this->m_bRoleMonster) {
-			m_faceRight = !m_faceRight;
-			m_reverse = !m_reverse;
+			m_bFaceRight = !m_bFaceRight;
+			m_bReverse = !m_bReverse;
 //		}
 	}
 	
@@ -643,7 +643,7 @@ using namespace NDEngine;
 			else 
 			{
 				curStopCount++;
-				SetCurrentAnimation(MONSTER_MAP_STAND, m_faceRight);
+				SetCurrentAnimation(MONSTER_MAP_STAND, m_bFaceRight);
 			}
 			
 		} 
@@ -925,7 +925,7 @@ using namespace NDEngine;
 				bao << (unsigned char)BATTLE_ACT_CREATE; // Action值
 				bao << (unsigned char)0; // btturn
 				bao << (unsigned char)1; // datacount
-				bao << m_id; // 怪物类型Id
+				bao << m_nID; // 怪物类型Id
 				break;
 			}
 			case MONSTER_ELITE: 
@@ -933,7 +933,7 @@ using namespace NDEngine;
 				bao << (unsigned char)BATTLE_ACT_CREATE_ELITE; // Action值
 				bao << (unsigned char)0; // btturn
 				bao << (unsigned char)1; // datacount
-				bao << m_id; // 怪物类型Id
+				bao << m_nID; // 怪物类型Id
 				break;
 			}
 			case MONSTER_BOSS: 
@@ -941,7 +941,7 @@ using namespace NDEngine;
 				bao << (unsigned char)BATTLE_ACT_CREATE_BOSS; // Action值
 				bao << (unsigned char)0; // btturn
 				bao << (unsigned char)1; // datacount
-				bao << m_id; // 怪物Id
+				bao << m_nID; // 怪物Id
 				break;
 			}
 			default:
@@ -1156,7 +1156,7 @@ using namespace NDEngine;
 				SetEquipment(armor, 0);//胸甲
 				
 				//Load Animation Group
-				CC_SAFE_DELETE(m_aniGroup);
+				CC_SAFE_DELETE(m_pkAniGroup);
 
 				/***
 				* 临时性注释 郭浩
@@ -1172,9 +1172,9 @@ using namespace NDEngine;
 				* end
 				*/
 
-				m_faceRight = direct == 2;
-				SetFaceImageWithEquipmentId(m_faceRight);
-				SetCurrentAnimation(MANUELROLE_STAND, m_faceRight);
+				m_bFaceRight = direct == 2;
+				SetFaceImageWithEquipmentId(m_bFaceRight);
+				SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 				
 				defaultDeal();
 			}
@@ -1187,9 +1187,9 @@ using namespace NDEngine;
 					return;
 				}
 				
-				colorInfo = lookface / 100000 % 10;
+				m_nColorInfo = lookface / 100000 % 10;
 				
-				if (colorInfo == 0)	colorInfo = -1;
+				if (m_nColorInfo == 0)	m_nColorInfo = -1;
 				
 //				if (m_aniGroup) 
 //				{
@@ -1200,8 +1200,8 @@ using namespace NDEngine;
 //							  [NSString stringWithFormat:@"%@%d%s", [NSString stringWithUTF8String:NDPath::GetAnimationPath().c_str()], (lookface % 100000) / 10, ".spr"]
 //							  ];
 				
-				m_faceRight = lookface % 10 == 2;
-				SetCurrentAnimation(MANUELROLE_STAND, m_faceRight);
+				m_bFaceRight = lookface % 10 == 2;
+				SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 			}
 		}
 		

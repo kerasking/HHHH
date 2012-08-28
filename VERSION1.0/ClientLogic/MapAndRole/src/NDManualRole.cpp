@@ -349,9 +349,9 @@ namespace NDEngine
 //		else 
 //			NDSprite::Initialization(MANUELROLE_HUMAN_FEMALE);
 
-		m_faceRight = direct == 2;
+		m_bFaceRight = direct == 2;
 
-		this->SetCurrentAnimation(MANUELROLE_STAND, m_faceRight);
+		this->SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 		
 		//defaultDeal();
 	}
@@ -417,11 +417,11 @@ namespace NDEngine
 		
 		if (this->GetPosition().x > vec_toPos[0].x) 
 		{
-			m_faceRight = false;		
+			m_bFaceRight = false;		
 		}
 		else 
 		{
-			m_faceRight = true;
+			m_bFaceRight = true;
 		}
 		
 		if (isTeamLeader() || !isTeamMember()) 
@@ -442,7 +442,7 @@ namespace NDEngine
 			}
 		}
 		
-		if (!m_moving) 
+		if (!m_bIsMoving) 
 		{
 			SetAction(false);
 			return;
@@ -465,7 +465,7 @@ namespace NDEngine
 		
 		if (m_pkRidePet) 
 		{
-			m_pkRidePet->m_faceRight = m_faceRight;
+			m_pkRidePet->m_bFaceRight = m_bFaceRight;
 			m_pkRidePet->WalkToPosition(vec_toPos[0]);
 		}
 		
@@ -1149,11 +1149,11 @@ namespace NDEngine
 			{// 人物普通移动
 				if (isTransformed())
 				{
-					AnimationListObj.moveAction(TYPE_MANUALROLE, aniGroupTransformed, 1 - m_faceRight);
+					AnimationListObj.moveAction(TYPE_MANUALROLE, aniGroupTransformed, 1 - m_bFaceRight);
 				}
 				else 
 				{
-					AnimationListObj.moveAction(TYPE_MANUALROLE, this, m_faceRight);
+					AnimationListObj.moveAction(TYPE_MANUALROLE, this, m_bFaceRight);
 				}
 			}
 		} 
@@ -1175,11 +1175,11 @@ namespace NDEngine
 			{
 				if (isTransformed())
 				{
-					AnimationListObj.standAction(TYPE_MANUALROLE, aniGroupTransformed, 1 - m_faceRight);
+					AnimationListObj.standAction(TYPE_MANUALROLE, aniGroupTransformed, 1 - m_bFaceRight);
 				} 
 				else
 				{
-					AnimationListObj.standAction(TYPE_MANUALROLE, this, m_faceRight);
+					AnimationListObj.standAction(TYPE_MANUALROLE, this, m_bFaceRight);
 				}
 			}
 		}
@@ -1218,14 +1218,14 @@ namespace NDEngine
 		{
 			if (nNewCol < nOldCol) 
 			{
-				m_faceRight = false;
-				m_reverse = false;
+				m_bFaceRight = false;
+				m_bReverse = false;
 				
 			}
 			else if (nNewCol > nOldCol)
 			{
-				m_faceRight = true;
-				m_reverse = true;
+				m_bFaceRight = true;
+				m_bReverse = true;
 			}
 		}
 		
@@ -1242,7 +1242,7 @@ namespace NDEngine
 		
 		if (m_pkRidePet) 
 		{
-			m_pkRidePet->SetSpriteDir(!this->m_faceRight ? 2 : 0);
+			m_pkRidePet->SetSpriteDir(!this->m_bFaceRight ? 2 : 0);
 			//if (isTeamLeader() || !isTeamMember()) 
 //			{
 //				this->setMoveActionWithRidePet();
@@ -1441,8 +1441,8 @@ namespace NDEngine
 		{
 			bDraw = !this->IsInState(USERSTATE_STEALTH);
 			this->aniGroupTransformed->SetPosition(pos);
-			aniGroupTransformed->SetCurrentAnimation(m_moving ? MONSTER_MAP_MOVE : MONSTER_MAP_STAND, !this->m_faceRight);
-			aniGroupTransformed->SetSpriteDir(this->m_faceRight ? 2 : 0);
+			aniGroupTransformed->SetCurrentAnimation(m_bIsMoving ? MONSTER_MAP_MOVE : MONSTER_MAP_STAND, !this->m_bFaceRight);
+			aniGroupTransformed->SetSpriteDir(this->m_bFaceRight ? 2 : 0);
 			aniGroupTransformed->RunAnimation(bDraw);
 		}
 		
@@ -1600,12 +1600,12 @@ namespace NDEngine
 			}
 			int tx = pos.x-DISPLAY_POS_X_OFFSET + 4;
 			//if (getFace() == AnimationList.FACE_LEFT) {
-			if ( !m_faceRight)
+			if ( !m_bFaceRight)
 			{
 				tx = pos.x-DISPLAY_POS_X_OFFSET + 12;
 			}
 			
-			m_pkEffectFlagAniGroup->SetSpriteDir(m_faceRight ? 0 : 2);
+			m_pkEffectFlagAniGroup->SetSpriteDir(m_bFaceRight ? 0 : 2);
 			m_pkEffectFlagAniGroup->SetPosition(ccp(tx, ty));
 			m_pkEffectFlagAniGroup->RunAnimation(bDraw);
 		}
@@ -1735,11 +1735,11 @@ namespace NDEngine
 
 				if (this->m_pkRidePet)
 				{
-					al.ridePetStandAction(TYPE_MANUALROLE, this, this->m_faceRight);
+					al.ridePetStandAction(TYPE_MANUALROLE, this, this->m_bFaceRight);
 				}
 				else
 				{
-					al.standAction(TYPE_MANUALROLE, this, this->m_faceRight);
+					al.standAction(TYPE_MANUALROLE, this, this->m_bFaceRight);
 				}
 			}
 		}
@@ -2276,12 +2276,12 @@ namespace NDEngine
 		
 		NDPlayer& player = NDPlayer::defaultHero();
 		
-		if (otherRole->m_id == player.m_id)
+		if (otherRole->m_nID == player.m_nID)
 		{
 			return true;
 		}
 		
-		if (player.m_id == m_id)
+		if (player.m_nID == m_nID)
 		{
 			return false;
 		}
@@ -2359,8 +2359,8 @@ namespace NDEngine
 	
 	bool NDManualRole::isEffectTurn(int effectTurn)
 	{
-		return ( (!m_faceRight && effectTurn == 0) ||
-				 (m_faceRight && effectTurn != 0) 
+		return ( (!m_bFaceRight && effectTurn == 0) ||
+				 (m_bFaceRight && effectTurn != 0) 
 				);
 	}
 	
@@ -2399,7 +2399,7 @@ namespace NDEngine
 			}
 			else
 			{
-				tx = m_position.x+(m_faceRight ? 0 : 2);
+				tx = m_position.x+(m_bFaceRight ? 0 : 2);
 				//ty = m_position.y + 8;// + (ridepet ? -8 : 0);
 				
 				bool gravity = (serverEffect.severEffectId / 1000000 % 10) == 1;

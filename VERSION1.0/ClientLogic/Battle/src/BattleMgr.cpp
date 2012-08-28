@@ -272,7 +272,7 @@ void BattleMgr::processSkillInfo(NDTransData& data, int len)
 					//					if (pet) {
 					//						pet->AddSkill(idSkill);
 					//					}
-					PetMgrObj.AddSkill(player.m_id, idPet, idSkill);
+					PetMgrObj.AddSkill(player.m_nID, idPet, idSkill);
 					
 					//CUIPet *uiPet = PlayerInfoScene::QueryPetScene();
 					//
@@ -318,7 +318,7 @@ void BattleMgr::processSkillInfo(NDTransData& data, int len)
 				//				if (pet) {
 				//					pet->AddSkill(idSkill);
 				//				}
-				PetMgrObj.AddSkill(player.m_id, idPet, idSkill);
+				PetMgrObj.AddSkill(player.m_nID, idPet, idSkill);
 			}
 		} else if (btAction == 3 || btAction == 4) {
 			int idNextLevelSkill = data.ReadInt();

@@ -147,7 +147,7 @@ namespace NDEngine
 		
 		void DrawRingImage(bool bDraw);
 	public: 
-		int m_id;
+		int m_nID;
 		
 	public:
 		/**精灵的各个属性*/

@@ -48,13 +48,13 @@ void CreatePlayer(int lookface, int x, int y, int userid, std::string name)
  	player.stopMoving();
 //  	player.SetPositionEx(ccp(x * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET, y * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
 //  	player.SetServerPositon(x, y);
- 	player.m_id = userid;
+ 	player.m_nID = userid;
  	player.m_name = "ÍõÔö";
 }
 	
 unsigned long GetPlayerId()
 {
-	return NDPlayer::defaultHero().m_id;
+	return NDPlayer::defaultHero().m_nID;
 }
 	
 void PlayerStopMove()

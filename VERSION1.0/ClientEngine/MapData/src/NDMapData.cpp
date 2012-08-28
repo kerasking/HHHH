@@ -588,7 +588,8 @@ void NDMapData::decode(FILE* stream)
 		int y				= kFileOp.readShort(stream);	//y×ø±ê
 		BOOL reverse		= kFileOp.readByte(stream) > 0;									//·­×ª
 		
-		if (kSceneImages.size() <= resourceIndex || kSceneOrders.size() <= resourceIndex)
+		if (kSceneImages.size() <= resourceIndex ||
+			kSceneOrders.size() <= resourceIndex)
 		{
 			continue;
 		}
@@ -619,7 +620,7 @@ void NDMapData::decode(FILE* stream)
 		int picWidth	= pkTile->getTexture()->getPixelsWide() * pkTile->getTexture()->getMaxS(); 
 		int picHeight	= pkTile->getTexture()->getPixelsHigh() * pkTile->getTexture()->getMaxT();
 		
-		pkTile->setMapSize(CGSizeMake(m_nColumns*TileWidth, m_nRows*TileHeight));
+		pkTile->setMapSize(CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
 		pkTile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
 		pkTile->setDrawRect(CGRectMake(x, y, picWidth, picHeight));
 		pkTile->setReverse(reverse);

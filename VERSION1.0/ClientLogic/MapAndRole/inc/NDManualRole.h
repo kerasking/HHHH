@@ -136,7 +136,7 @@ namespace NDEngine
 		
 		// 队伍相关接口
 		bool isTeamMember(){ return m_nTeamID != 0; }
-		bool isTeamLeader(){ return m_nTeamID == m_id; }
+		bool isTeamLeader(){ return m_nTeamID == m_nID; }
 		void teamSetServerDir(int dir);
 		void teamSetServerPosition(int iCol, int iRow);
 		

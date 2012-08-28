@@ -265,17 +265,17 @@ namespace NDEngine
 //		返回值：无
 		virtual void SetSkirtLiftLegImage(const char* imageFile);
 		
-		void SetMoveMap(bool bSet) { m_moveMap = bSet; }
+		void SetMoveMap(bool bSet) { m_bMoveMap = bSet; }
 		
 		void SetPointList(std::vector<CGPoint>& vec_point){ m_pointList = vec_point; StartMoving(); }
 		
-		void StartMoving(){ m_moving = true; m_movePathIndex = 0; }
+		void StartMoving(){ m_bIsMoving = true; m_nMovePathIndex = 0; }
 		
 		void SetNonRole(bool bNonRole) { this->m_bNonRole = bNonRole; }
 		
 		bool IsNonRole() { return this->m_bNonRole; }
 		
-		bool isMoving(){ return m_moving; }
+		bool isMoving(){ return m_bIsMoving; }
 		
 		void SetPlayFrameRange(int nStartFrame, int nEndFrame);
 		
@@ -315,22 +315,22 @@ namespace NDEngine
 		
 		cocos2d::CCTexture2D* getColorTexture(int imageIndex, NDAnimationGroup* animationGroup);
 		cocos2d::CCTexture2D* getNpcLookfaceTexture(int imageIndex, NDAnimationGroup* animationGroup);
-		cocos2d::CCTexture2D* getArmorImageByCloak(){ return cloak == -1 ? GetArmorImage() : NULL; }
+		cocos2d::CCTexture2D* getArmorImageByCloak(){ return m_nCloak == -1 ? GetArmorImage() : NULL; }
 		
-		bool IsCloakEmpty(){ return cloak == -1 ? true : false; }
+		bool IsCloakEmpty(){ return m_nCloak == -1 ? true : false; }
 		
 		virtual void BeforeRunAnimation(bool bDraw) {}
 		void RunAnimation(bool bDraw);
 		CGRect GetSpriteRect();		
 		void SetCurrentAnimation(int animationIndex, bool reverse);
 		
-		void SetSpriteDir(int dir){ dir == 2 ? (m_faceRight = m_reverse = false) : (m_faceRight = m_reverse = true);}
+		void SetSpriteDir(int dir){ dir == 2 ? (m_bFaceRight = m_bReverse = false) : (m_bFaceRight = m_bReverse = true);}
 		int getGravityY();
 		int getGravityX();
-		void SetScale(float s){scale = s;}
-		float GetScale(){return scale;}
+		void SetScale(float s){m_fScale = s;}
+		float GetScale(){return m_fScale;}
 		bool GetLastPointOfPath(CGPoint& pos);
-		bool IsReverse() { return m_reverse; }
+		bool IsReverse() { return m_bReverse; }
 	protected:
 		void MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed, bool moveMap, bool ignoreMask=false, bool mustArrive=false);
 		virtual void OnMoveBegin();
@@ -349,29 +349,29 @@ namespace NDEngine
 		
 		int m_weaponType, m_secWeaponType, m_weaponQuality, m_secWeaponQuality, m_capQuality, m_armorQuality, m_cloakQuality;
 		CGPoint m_position;		
-		NDAnimation *m_currentAnimation;
-		NDFrameRunRecord *m_frameRunRecord;
-		NDAnimationGroup *m_aniGroup;
-		bool m_reverse;
-		bool m_moveMap;
-		bool m_moving;
-		int m_movePathIndex;
+		NDAnimation *m_pkCurrentAnimation;
+		NDFrameRunRecord *m_pkFrameRunRecord;
+		NDAnimationGroup *m_pkAniGroup;
+		bool m_bReverse;
+		bool m_bMoveMap;
+		bool m_bIsMoving;
+		int m_nMovePathIndex;
 		
-		int npcLookface;
-		int colorInfo;
-		int cloak;
+		int m_nNPCLookface;
+		int m_nColorInfo;
+		int m_nCloak;
 		
 		std::vector<CGPoint> m_pointList;
 		int m_iSpeed;
-		CGPoint m_targetPos;
+		CGPoint m_kTargetPos;
 		
 		bool m_bNonRole;
-		float scale;
+		float m_fScale;
 	public:
-		bool m_faceRight;		// 精灵面部朝向
+		bool m_bFaceRight;		// 精灵面部朝向
 	private:
 		NDPicture *m_picSprite;
-		CGRect m_rectSprite;
+		CGRect m_kRectSprite;
 		bool m_bHightLight;
 	};
 }

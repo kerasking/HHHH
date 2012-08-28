@@ -444,7 +444,7 @@ void NDTile::makeVetex(float* pData, CGRect kRect)
 
 void NDTile::make()
 {
-	//m_DrawRect = CCRect(0,0,960,680);///< 临时性修改 郭浩
+	m_DrawRect = CCRect(0,-240,960,640);///< 临时性修改 郭浩
 	this->makeTex(m_pfCoordinates);
 	this->makeVetex(m_pfVertices, m_DrawRect);	
 }

@@ -1004,23 +1004,25 @@ namespace NDEngine
 	*/
 	void NDMapLayer::OnTimer(OBJID tag)
 	{
-		if(tag==blockTimerTag)
+		if(blockTimerTag == tag)
 		{
 			this->m_nRoadBlockTimeCount--;
 			//NDLog("tag:%d,count:%d",tag,this->roadBlockTimeCount);
-			if(this->m_nRoadBlockTimeCount<=0)
+			if(m_nRoadBlockTimeCount<=0)
 			{
-				this->m_pkMapData->setRoadBlock(-1, -1);
-				this->m_nRoadBlockTimeCount=0;
-				this->m_ndBlockTimer->KillTimer(this, blockTimerTag);
-				this->m_ndBlockTimer=NULL;
+				m_pkMapData->setRoadBlock(-1, -1);
+				m_nRoadBlockTimeCount=0;
+				m_ndBlockTimer->KillTimer(this, blockTimerTag);
+				m_ndBlockTimer=NULL;
 				
 				/*if(this->isAutoBossFight)
 				{
 					this->walkToBoss();
 				}*/
 			}
-		}else if(tag==titleTimerTag){
+		}
+		else if (tag==titleTimerTag)
+		{
 			this->m_ndTitleTimer->KillTimer(this, titleTimerTag);
 			this->m_ndTitleTimer=NULL;
 			//todo(zjh)
@@ -1277,12 +1279,12 @@ namespace NDEngine
 	{
 		m_pkOrders->removeAllObjects();
 		m_pkOrders->addObjectsFromArray(m_pkOrdersOfMapscenesAndMapanimations);
-		const std::vector<NDNode*>& cld = this->GetChildren();
-		std::map<int, NDNode*> mapDrawlast;
+		const std::vector<NDNode*>& kCLD = this->GetChildren();
+		std::map<int, NDNode*> kMapDrawlast;
 		//std::map<unsigned int, NDManualRole*> mapRoleCell;
-		for (int i = 0; i < (int)cld.size(); i++) 
+		for (int i = 0; i < (int)kCLD.size(); i++) 
 		{
- 			NDNode *node = cld.at(i);
+ 			NDNode *node = kCLD.at(i);
 			CCLog(node->GetRuntimeClass()->className);
 // 			if (node->IsKindOfClass(RUNTIME_CLASS(NDManualRole))) 
 // 			{
@@ -1296,19 +1298,23 @@ namespace NDEngine
 			
 			if (node->IsKindOfClass(RUNTIME_CLASS(NDSprite))) 
 			{
-				NDSprite* sprite = (NDSprite*)node;
+				NDSprite* pkSprite = (NDSprite*)node;
 				
-				int index = this->InsertIndex(sprite->GetOrder(), m_pkOrders);	
+				int nIndex = this->InsertIndex(pkSprite->GetOrder(), m_pkOrders);	
 				
-				MAP_ORDER *dict = new MAP_ORDER;
+				MAP_ORDER* pkDict = new MAP_ORDER;
 				
-				(*dict)["index"]	= i + m_pkMapData->getSceneTiles()->count() + 0 + m_pkMapData->getSwitchs()->count();///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ Ô­£ºm_mapData->getAnimationGroups()->count()
-				(*dict)["orderId"]	= sprite->GetOrder();
+				(*pkDict)["index"] = i + m_pkMapData->getSceneTiles()->count() +
+					m_pkMapData->getAnimationGroups()->count() +
+					m_pkMapData->getSwitchs()->count();
+
+				(*pkDict)["orderId"] = pkSprite->GetOrder();
+
 				//[dict setObject:[NSNumber numberWithInt:i + [m_mapData.sceneTiles count]+ [m_mapData.animationGroups count] + [m_mapData.switchs count]] forKey:@"index"];
 				//[dict setObject:[NSNumber numberWithInt:sprite->GetOrder()] forKey:@"orderId"];
 				
-				m_pkOrders->insertObject(dict, index);
-				dict->release();
+				m_pkOrders->insertObject(pkDict, nIndex);
+				pkDict->release();
 				
 			}
 		}
@@ -1345,16 +1351,17 @@ namespace NDEngine
 // 			}
 // 		}
 		
-		if (mapDrawlast.size() == 0) return;
+		if (kMapDrawlast.size() == 0) return;
 		
 		CCArray*flySpriteOrder = CCArray::array();
 		flySpriteOrder->retain();
 		
-		unsigned int orderCount = int(m_pkOrders->count());
+		unsigned int uiOrderCount = int(m_pkOrders->count());
 		
-		if (orderCount > 0) orderCount -= 1;
+		if (uiOrderCount > 0) uiOrderCount -= 1;
 		
-		for (std::map<int, NDNode*>::iterator it = mapDrawlast.begin(); it != mapDrawlast.end(); it++) 
+		for (std::map<int, NDNode*>::iterator it = kMapDrawlast.begin();
+			it != kMapDrawlast.end(); it++) 
 		{
 			NDNode *node = it->second;
 			
@@ -1372,10 +1379,10 @@ namespace NDEngine
 				//[dict setObject:[NSNumber numberWithInt:it->first + [m_mapData.sceneTiles count] + [m_mapData.animationGroups count] + [m_mapData.switchs count]] forKey:@"index"];
 				//[dict setObject:[NSNumber numberWithInt:sprite->GetOrder()] forKey:@"orderId"];
 				
-				if (it != mapDrawlast.begin()) 
+				if (it != kMapDrawlast.begin()) 
 				{
 					unsigned index = this->InsertIndex(sprite->GetOrder(), flySpriteOrder);	
-					m_pkOrders->insertObject(dict, index+orderCount);
+					m_pkOrders->insertObject(dict, index+uiOrderCount);
 					flySpriteOrder->insertObject(dict, index);
 				}
 				else

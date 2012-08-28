@@ -60,7 +60,7 @@ void AutoPathTip::Arrive()
 	NDNpc* npc = player.GetFocusNpc();
 	if (npc && npc->GetType() != 6) 
 	{
-		player.SendNpcInteractionMessage(npc->m_id);
+		player.SendNpcInteractionMessage(npc->m_nID);
 //		if (npc->IsDirectOnTalk()) 
 //		{
 			//npc³¯ÏòĞŞ¸Ä	

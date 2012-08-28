@@ -193,7 +193,9 @@ void ScriptObjectTask::OnLoad()
 
 int ScriptGetTaskState(int nTaskId)
 {
-	int nRoleId = NDPlayer::defaultHero().m_id;
-	unsigned long ulVal = ScriptGameDataObj.GetData<unsigned long long>(eScriptDataRole, nRoleId, eRoleDataTask, nTaskId, 2);
+	int nRoleId = NDPlayer::defaultHero().m_nID;
+	unsigned long ulVal = ScriptGameDataObj.GetData<unsigned long long>
+		(eScriptDataRole, nRoleId, eRoleDataTask, nTaskId, 2);
+
 	return ulVal;
 }

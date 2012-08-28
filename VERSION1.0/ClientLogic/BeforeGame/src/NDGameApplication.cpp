@@ -132,7 +132,7 @@ namespace NDEngine
 
 	  	kPlayer.SetPositionEx(ccp(x * 32 + 16, y * 32 + 16));
 	  	kPlayer.SetServerPositon(x, y);
-		kPlayer.m_id = 1;
+		kPlayer.m_nID = 1;
 		kPlayer.m_name = "ÍõÔö";
 		kPlayer.SetLoadMapComplete();
 
@@ -145,7 +145,7 @@ namespace NDEngine
 		}
 
 		NDMapLayer* pkLayer = (NDMapLayer*)pkNode;
-		pkLayer->AddChild(&kPlayer,10,1000);
+		pkLayer->AddChild(&kPlayer,111,1000);
 
 		return true;
 	}

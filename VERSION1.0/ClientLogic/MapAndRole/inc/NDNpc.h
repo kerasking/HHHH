@@ -42,7 +42,7 @@ namespace NDEngine
 	public:
 		//以下方法供逻辑层使用－－－begin
 		//......	
-		void Initialization(int lookface);
+		void Initialization(int nLookface);
 		
 		void WalkToPosition(CGPoint toPos);
 		//－－－end
@@ -52,7 +52,8 @@ namespace NDEngine
 		// 设置npc任务提示
 		void SetNpcState(NPC_STATE state);
 		
-		NPC_STATE GetNpcState() const {
+		NPC_STATE GetNpcState() const
+		{
 			return this->m_eNPCState;
 		}
 		
@@ -85,7 +86,7 @@ namespace NDEngine
 		bool m_bFarmNpc;
 		bool m_bUnpassTurn;
 
-		NDSprite* m_sprUpdate;
+		NDSprite* m_pkUpdate;
 		
 	private:
 		 NPC_STATE m_eNPCState;
@@ -96,10 +97,11 @@ namespace NDEngine
 		std::string m_strTalk;
 
 	private:
-		NDUILabel* m_lbName[2];
-		NDUILabel* m_lbDataStr[2];
-		NDPicture* m_picBattle;
-		NDPicture* m_picState;
+
+		NDUILabel *m_pkNameLabel[2];
+		NDUILabel *m_pkDataStrLebel[2];
+		NDPicture *m_pkPicBattle;
+		NDPicture *m_pkPicState;
 		int m_iStatus;
 		// role型 npc
 		bool m_bRoleNpc;

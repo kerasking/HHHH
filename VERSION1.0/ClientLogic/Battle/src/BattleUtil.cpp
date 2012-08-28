@@ -298,7 +298,7 @@ void moveBackAction(Fighter& f) {
 	//		default:
 	//			break;
 	//	}
-	role->SetCurrentAnimation(action, role->m_faceRight);
+	role->SetCurrentAnimation(action, role->m_bFaceRight);
 }
 
 void hurtAction(Fighter& f) {
@@ -426,7 +426,7 @@ void catchPetAction(Fighter& f) {
 	NDBaseRole *role = f.GetRole();
 	
 	if (f.m_info.fighterType == FIGHTER_TYPE_PET) {
-		role->SetCurrentAnimation(MANUELROLE_CATCH_PET, role->m_faceRight);
+		role->SetCurrentAnimation(MANUELROLE_CATCH_PET, role->m_bFaceRight);
 	}
 }
 

@@ -332,7 +332,7 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 		{ // 增加的是背包中的物品
 			// 其他玩家物品
 			NDPlayer& role = NDPlayer::defaultHero();
-			if (role.m_id != item->iOwnerID)
+			if (role.m_nID != item->iOwnerID)
 			{ // 其他玩家物品
 				this->m_vOtherItems.push_back(item);
 			}

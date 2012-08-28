@@ -83,7 +83,7 @@ private:
 public:
 	int taskId;
 	
-	std::string taskTitle;
+	std::string m_strTaskTitle;
 	
 	std::string startNpcName, startMapName;
 	

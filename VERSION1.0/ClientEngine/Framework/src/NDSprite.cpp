@@ -31,30 +31,30 @@ namespace NDEngine
 	
 	NDSprite::NDSprite()
 	{
-		m_aniGroup = NULL;
-		m_currentAnimation = NULL;
-		m_frameRunRecord = NULL;
-		m_reverse = false;
-		m_moveMap = false;
-		m_moving  = false;
-		m_movePathIndex = 0;
+		m_pkAniGroup = NULL;
+		m_pkCurrentAnimation = NULL;
+		m_pkFrameRunRecord = NULL;
+		m_bReverse = false;
+		m_bMoveMap = false;
+		m_bIsMoving = false;
+		m_nMovePathIndex = 0;
 
 //		NDLog("init pos");
 		m_position.x = 0;
 		m_position.y = 0;
 		
-		cloak = -1;
-		colorInfo = -1;
-		npcLookface = -1;
+		m_nCloak = -1;
+		m_nColorInfo = -1;
+		m_nNPCLookface = -1;
 		
 		m_iSpeed = 4;
-		m_targetPos  = CGPointZero;
+		m_kTargetPos  = CGPointZero;
 		
-		m_aniGroup = NULL;
+		m_pkAniGroup = NULL;
 		
 		m_picSprite = NULL;
 		
-		m_rectSprite = CGRectZero;
+		m_kRectSprite = CGRectZero;
 		
 		m_bNonRole = false;
 		
@@ -66,76 +66,76 @@ namespace NDEngine
 		
 		m_weaponType = m_secWeaponType = m_weaponQuality = m_secWeaponQuality = m_capQuality = m_armorQuality = m_cloakQuality = 0;
 		
-		m_faceRight = true;
-		scale = 1.0f;
+		m_bFaceRight = true;
+		m_fScale = 1.0f;
 		
 		m_bHightLight = false;
 	}
 	
 	NDSprite::~NDSprite()
 	{	
-		CC_SAFE_RELEASE(m_aniGroup);
-		CC_SAFE_RELEASE(m_frameRunRecord);
+		CC_SAFE_RELEASE(m_pkAniGroup);
+		CC_SAFE_RELEASE(m_pkFrameRunRecord);
 	}
 	
 	void NDSprite::Initialization(const char* sprFile)
 	{
 		NDNode::Initialization();
-		m_aniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(sprFile);		
+		m_pkAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(sprFile);		
 	}
 	
 	void NDSprite::SetCurrentAnimation(int animationIndex, bool reverse)
 	{
 		//NDLog("animationIndex%d",animationIndex);
-		if (m_aniGroup)
+		if (m_pkAniGroup)
 		{
 			if (animationIndex < 0 ||
-				animationIndex >= (int)m_aniGroup->getAnimations()->count())
+				animationIndex >= (int)m_pkAniGroup->getAnimations()->count())
 			{
 				return;
 			}
 		
-			m_reverse = reverse;
+			m_bReverse = reverse;
 			
-			if (m_currentAnimation == NULL ||
-			    m_currentAnimation->getType() == ANIMATION_TYPE_ONCE_END ||
-			    m_currentAnimation->getType() == ANIMATION_TYPE_ONCE_START ||
-			    this->m_currentAnimation->getCurIndexInAniGroup() != animationIndex) 
+			if (m_pkCurrentAnimation == NULL ||
+			    m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_END ||
+			    m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_START ||
+			    this->m_pkCurrentAnimation->getCurIndexInAniGroup() != animationIndex) 
 			{
-				m_currentAnimation = (NDAnimation*)m_aniGroup->
+				m_pkCurrentAnimation = (NDAnimation*)m_pkAniGroup->
 					getAnimations()->objectAtIndex(animationIndex);
-				m_currentAnimation->setCurIndexInAniGroup(animationIndex);
-				CC_SAFE_RELEASE_NULL(m_frameRunRecord);
-				SAFE_RELEASE(m_frameRunRecord);
-				m_frameRunRecord = new NDFrameRunRecord;	
+				m_pkCurrentAnimation->setCurIndexInAniGroup(animationIndex);
+				CC_SAFE_RELEASE_NULL(m_pkFrameRunRecord);
+				SAFE_RELEASE(m_pkFrameRunRecord);
+				m_pkFrameRunRecord = new NDFrameRunRecord;	
 			}
 			
-			this->SetContentSize(CGSizeMake(m_currentAnimation->getW(),
-				m_currentAnimation->getH()));
+			this->SetContentSize(CGSizeMake(m_pkCurrentAnimation->getW(),
+				m_pkCurrentAnimation->getH()));
 		}	
 	}
 	
 	void NDSprite::RunAnimation(bool bDraw)
 	{
-		if (m_frameRunRecord && m_aniGroup && m_currentAnimation) 
+		if (m_pkFrameRunRecord && m_pkAniGroup && m_pkCurrentAnimation) 
 		{
-			if (m_moving) 
+			if (m_bIsMoving) 
 			{	
 				//else 
 //				{
 					int iPoints = m_pointList.size();
-					if (m_movePathIndex < iPoints)
+					if (m_nMovePathIndex < iPoints)
 					{
-						if (m_movePathIndex == 0)
+						if (m_nMovePathIndex == 0)
 						{
 							this->OnMoveBegin();
 						}
 						else 
 						{
-							this->OnMoving(m_movePathIndex == iPoints - 1);
+							this->OnMoving(m_nMovePathIndex == iPoints - 1);
 						}
 						
-						CGPoint pos = m_pointList.at(m_movePathIndex++);
+						CGPoint pos = m_pointList.at(m_nMovePathIndex++);
 //						if (m_movePathIndex < (int)m_pointList.size() && m_movePathIndex > 2)
 //						{
 //							CGPoint prePos = this->GetPosition();
@@ -162,7 +162,7 @@ namespace NDEngine
 					else
 					{
 						this->OnMoveEnd();
-						m_moving = false;
+						m_bIsMoving = false;
 					}
 			//	}
 				
@@ -170,15 +170,15 @@ namespace NDEngine
 			
 			NDNode* node = this->GetParent();
 
-			SetPosition(ccp(500,500));
+			SetPosition(ccp(500,200));
 			
 			if (!node) return;
 			
-			m_aniGroup->setRuningSprite(this);
-			m_aniGroup->setRunningMapSize(node->GetContentSize());
-			m_aniGroup->setPosition(m_position);
+			m_pkAniGroup->setRuningSprite(this);
+			m_pkAniGroup->setRunningMapSize(node->GetContentSize());
+			m_pkAniGroup->setPosition(m_position);
 
-			m_currentAnimation->setReverse(m_reverse);
+			m_pkCurrentAnimation->setReverse(m_bReverse);
 			
 			bool oldTitleHightLight = IsTileHightLight();
 			TileSetHightLight(m_bHightLight);
@@ -187,15 +187,15 @@ namespace NDEngine
 
 			if (bRet)
 			{
-				m_currentAnimation->runWithRunFrameRecord(m_frameRunRecord,
-					bDraw, scale);
+				m_pkCurrentAnimation->runWithRunFrameRecord(m_pkFrameRunRecord,
+					bDraw, m_fScale);
 			}
 
 			OnDrawEnd(bDraw);
 			
 			TileSetHightLight(oldTitleHightLight);
 			
-			if (m_moveMap && node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer))) 
+			if (m_bMoveMap && node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer))) 
 			{
 				NDMapLayer* mapLayer = (NDMapLayer*)node;
 				mapLayer->SetScreenCenter(m_position);			
@@ -249,8 +249,8 @@ namespace NDEngine
 			NDNode* layer = this->GetParent();
 			if (layer->IsKindOfClass(RUNTIME_CLASS(NDMapLayer))) 
 			{
-				m_moveMap = moveMap;
-				m_moving  = true;
+				m_bMoveMap = moveMap;
+				m_bIsMoving  = true;
 				m_iSpeed = speed;
 			
 				//CGPoint pos = GetPosition();
@@ -262,7 +262,7 @@ namespace NDEngine
 //				}
 				
 				
-				m_movePathIndex = 0;
+				m_nMovePathIndex = 0;
 				m_pointList.clear();
 				
 				CGPoint from = m_position;
@@ -283,7 +283,7 @@ namespace NDEngine
 				
 				if (m_pointList.empty())
 				{
-					m_moving  = false; 
+					m_bIsMoving  = false; 
 				}
 				
 				//m_pointList = NDAutoPath::sharedAutoPath()->getPathPointVetor();
@@ -314,9 +314,9 @@ namespace NDEngine
 	
 	void NDSprite::stopMoving()
 	{ 
-		m_moving = false; 
+		m_bIsMoving = false; 
 		m_pointList.clear();
-		m_movePathIndex = 0;
+		m_nMovePathIndex = 0;
 	}
 	
 	int NDSprite::GetOrder()
@@ -332,32 +332,32 @@ namespace NDEngine
 		{
 			CGPoint point = this->GetPosition();
 			CGSize size = pkPicture->GetSize();
-			m_rectSprite = CGRectMake(point.x, point.y,
+			m_kRectSprite = CGRectMake(point.x, point.y,
 				size.width, size.height);
 		}
 	}
 	
 	bool NDSprite::IsAnimationComplete()
 	{
-		return m_currentAnimation == NULL ? true : m_frameRunRecord->getIsCompleted();
+		return m_pkCurrentAnimation == NULL ? true : m_pkFrameRunRecord->getIsCompleted();
 	}
 	
 	int NDSprite::GetCurFrameIndex()
 	{
-		return m_frameRunRecord == NULL ? 0 : m_frameRunRecord->getCurrentFrameIndex();
+		return m_pkFrameRunRecord == NULL ? 0 : m_pkFrameRunRecord->getCurrentFrameIndex();
 	}
 	
 	CGRect NDSprite::GetSpriteRect()
 	{
-		if (m_currentAnimation) 
+		if (m_pkCurrentAnimation) 
 		{
-			m_aniGroup->setPosition(m_position);
-			return m_currentAnimation->getRect();
+			m_pkAniGroup->setPosition(m_position);
+			return m_pkCurrentAnimation->getRect();
 		}
 		
 		if (m_picSprite)
 		{
-			return m_rectSprite;
+			return m_kRectSprite;
 		}
 		return CGRectZero;
 	}
@@ -827,7 +827,7 @@ namespace NDEngine
 			return NULL;
 		}
 		std::vector<std::string>* vImg = animationGroup->getImages();
-		if (npcLookface == -1 && vImg && vImg->size() > imageIndex)  //非普通NPC 
+		if (m_nNPCLookface == -1 && vImg && vImg->size() > imageIndex)  //非普通NPC 
 		{
 			tex = CCTextureCache::sharedTextureCache()->
 				addImage((*vImg)[imageIndex].c_str());
@@ -837,31 +837,31 @@ namespace NDEngine
 	
 	int NDSprite::GetHeight()
 	{
-		return m_currentAnimation->getH();
+		return m_pkCurrentAnimation->getH();
 	}
 	
 	int NDSprite::GetWidth()
 	{
-		return m_currentAnimation->getW();
+		return m_pkCurrentAnimation->getW();
 	}
 	
 	int NDSprite::getGravityY()
 	{
-		if (m_currentAnimation == NULL || 0 == m_currentAnimation->getBottomY()) 
+		if (m_pkCurrentAnimation == NULL || 0 == m_pkCurrentAnimation->getBottomY()) 
 		{
 			return 0;
 		}
 		
-		return m_currentAnimation->getBottomY() - m_currentAnimation->getY();
+		return m_pkCurrentAnimation->getBottomY() - m_pkCurrentAnimation->getY();
 	}
 	
 	int NDSprite::getGravityX()
 	{
-		if (m_currentAnimation == NULL || 0 == m_currentAnimation->getMidX()) 
+		if (m_pkCurrentAnimation == NULL || 0 == m_pkCurrentAnimation->getMidX()) 
 		{
 			return 0;
 		}
-		return m_currentAnimation->getMidX() - m_currentAnimation->getX();
+		return m_pkCurrentAnimation->getMidX() - m_pkCurrentAnimation->getX();
 	}
 	
 	bool NDSprite::GetLastPointOfPath(CGPoint& pos)
@@ -880,9 +880,9 @@ namespace NDEngine
 	
 	void NDSprite::SetPlayFrameRange(int nStartFrame, int nEndFrame)
 	{
-		if (m_frameRunRecord)
+		if (m_pkFrameRunRecord)
 		{
-			m_frameRunRecord->SetPlayRange(nStartFrame, nEndFrame);
+			m_pkFrameRunRecord->SetPlayRange(nStartFrame, nEndFrame);
 		}
 	}
 	
@@ -893,8 +893,8 @@ namespace NDEngine
 
 	NDFrame* NDSprite::GetCurrentFrame()
 	{
-		NDFrame *frame = m_currentAnimation->getFrames()->
-			getObjectAtIndex(m_frameRunRecord->getCurrentFrameIndex());
+		NDFrame *frame = m_pkCurrentAnimation->getFrames()->
+			getObjectAtIndex(m_pkFrameRunRecord->getCurrentFrameIndex());
 		return frame;
 	}
 
@@ -904,7 +904,7 @@ namespace NDEngine
 		CCTexture2D* pkTex = 0;
 		NDPicture* pkPic = 0;
 
-		if (animationGroup && 1 != colorInfo)
+		if (animationGroup && 1 != m_nColorInfo)
 		{
 			if (0 == colorInfoImage.length())
 			{

@@ -66,7 +66,7 @@ namespace NDEngine
 		
 		void OnDrawEnd(bool bDraw);
 		
-		void SetLoadMapComplete(){ isLoadingMap = false; }
+		void SetLoadMapComplete(){ m_bIsLoadingMap = false; }
 		
 		void CaclEquipEffect();
 		
@@ -131,22 +131,23 @@ namespace NDEngine
 		// 勿用
 		static bool m_bFirstUse;
 	private:
-		bool isLoadingMap;
+		bool m_bIsLoadingMap;
 		
 		
 	public:
-		int eMoney; // 元宝	 
-		int phyPoint;// 力量  --basic
-		int dexPoint; // 敏捷 --basic
-		int magPoint; // 魔法 --basic
-		int defPoint; // 体质 --basic
-		int lvUpExp; // 下次升级所需EXP
-		int sp;
+
+		int m_nEMoney; // 元宝
+		int m_nPhyPoint;// 力量  --basic
+		int m_nDexPoint; // 敏捷 --basic
+		int m_nMagPoint; // 魔法 --basic
+		int m_nDefPoint; // 体质 --basic
+		int m_nLevelUpExp; // 下次升级所需EXP
+		int m_nSP;
 		/** 声望: 国家, 阵营; 荣誉 */
 		int swGuojia;
 		int swCamp;
-		int honour;
-		int expendHonour; // 已消耗荣誉值
+		int m_nHonour;
+		int m_nExpendHonour; // 已消耗荣誉值
 		
 		int synMoney; // 帮派银两
 		int synContribute; // 帮派帮贡

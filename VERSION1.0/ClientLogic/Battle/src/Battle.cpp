@@ -510,12 +510,12 @@ void Battle::AddFighter(Fighter* f)
 	
 	if (BATTLE_GROUP_DEFENCE == group)
 	{
-		role->m_faceRight = false;
+		role->m_bFaceRight = false;
 		m_vAttaker.push_back(f);
 	}
 	else
 	{
-		role->m_faceRight = true;
+		role->m_bFaceRight = true;
 		m_vDefencer.push_back(f);
 	}
 	f->setPosition(m_teamAmout);
@@ -2567,7 +2567,7 @@ Fighter* Battle::GetMainUser()
 		{
 			for (VEC_FIGHTER_IT it = m_vAttaker.begin(); it != m_vAttaker.end(); it++)
 			{
-				if ((*it)->m_info.idObj == player.m_id)
+				if ((*it)->m_info.idObj == player.m_nID)
 				{
 					m_mainFighter = (*it);
 				}
@@ -2577,7 +2577,7 @@ Fighter* Battle::GetMainUser()
 		{
 			for (VEC_FIGHTER_IT it = m_vDefencer.begin(); it != m_vDefencer.end(); it++)
 			{
-				if ((*it)->m_info.idObj == player.m_id)
+				if ((*it)->m_info.idObj == player.m_nID)
 				{
 					m_mainFighter = (*it);
 				}
@@ -4076,7 +4076,7 @@ void Battle::fleeSuccess(Fighter& theActor) {
 			fleeSuccessAction(theActor);
 		}
 		if (theActor.GetRole()->IsAnimationComplete()) {
-			if (theActor.m_info.idObj == NDPlayer::defaultHero().m_id) {// 如果是自己逃跑了或者死了
+			if (theActor.m_info.idObj == NDPlayer::defaultHero().m_nID) {// 如果是自己逃跑了或者死了
 				// ，就观战
 				this->watchBattle = true;
 				//				this->m_imgWhoAmI->RemoveFromParent(true);
@@ -4672,7 +4672,7 @@ void Battle::fighterSomeActionChangeToWait(VEC_FIGHTER& fighterList) {
 		}
 		if (f.isDieOK()) { //死亡过程
 			if (f.GetRole()->IsAnimationComplete()) {
-				if (f.m_info.idObj == NDPlayer::defaultHero().m_id) {// 如果是自己死了
+				if (f.m_info.idObj == NDPlayer::defaultHero().m_nID) {// 如果是自己死了
 					// ，就观战
 					this->watchBattle = true;
 				}
@@ -5339,7 +5339,7 @@ void Battle::TurnStartPet()
 void Battle::RefreshSkillBarPet()
 {
 	// 获取宠物技能
-	PetInfo* petInfo = PetMgrObj.GetMainPet(NDPlayer::defaultHero().m_id);
+	PetInfo* petInfo = PetMgrObj.GetMainPet(NDPlayer::defaultHero().m_nID);
 	if (petInfo) return;
 	
 	//SET_BATTLE_SKILL_LIST& petSkillList = PetMgrObj.GetSkillList(SKILL_TYPE_ATTACK, petInfo->data.int_PET_ID);
@@ -6051,7 +6051,7 @@ bool Battle::OnRoleDisapper(int iRoleID)
 	{
 		Fighter* f = *it;
 		
-		if (f->GetRole() && f->GetRole()->m_id == iRoleID) 
+		if (f->GetRole() && f->GetRole()->m_nID == iRoleID) 
 		{
 			
 			size_t idx = this->m_actionFighterPoint;
@@ -6083,7 +6083,7 @@ bool Battle::OnRoleDisapper(int iRoleID)
 	
 	for (it = m_vAttaker.begin(); it != m_vAttaker.end(); it++) {
 		Fighter* f = *it;
-		if (f->GetRole() && f->GetRole()->m_id == iRoleID) {
+		if (f->GetRole() && f->GetRole()->m_nID == iRoleID) {
 			CC_SAFE_DELETE(*it);
 			m_vAttaker.erase(it);
 			return true;
@@ -6092,14 +6092,14 @@ bool Battle::OnRoleDisapper(int iRoleID)
 	
 	for (it = m_vDefencer.begin(); it != m_vDefencer.end(); it++) {
 		Fighter* f = *it;
-		if (f->GetRole() && f->GetRole()->m_id == iRoleID) {
+		if (f->GetRole() && f->GetRole()->m_nID == iRoleID) {
 			CC_SAFE_DELETE(*it);
 			m_vDefencer.erase(it);
 			return true;
 		}
 	}
 	
-	if (this->m_mainFighter && this->m_mainFighter->GetRole() && this->m_mainFighter->GetRole()->m_id == iRoleID)
+	if (this->m_mainFighter && this->m_mainFighter->GetRole() && this->m_mainFighter->GetRole()->m_nID == iRoleID)
 	{
 		this->m_mainFighter = NULL;
 		ret =true;

@@ -55,7 +55,7 @@ NDBaseRole::NDBaseRole()
 	m_nLevel = 0;
 	m_eCamp = CAMP_TYPE_NONE;
 	
-	m_faceRight = true;
+	m_bFaceRight = true;
 	
 	m_pkRidePet = NULL;
 	
@@ -73,7 +73,7 @@ NDBaseRole::NDBaseRole()
 	m_bBigShadow = false;
 	m_bShowShadow = true;
 	
-	m_id = 0;
+	m_nID = 0;
 	
 	m_pkEffectFlagAniGroup = NULL;
 	
@@ -313,7 +313,7 @@ void NDBaseRole::SetAction(bool bMove)
 		} 
 		else 
 		{// 人物普通移动
-			AnimationListObj.moveAction(TYPE_MANUALROLE, this, m_faceRight);
+			AnimationListObj.moveAction(TYPE_MANUALROLE, this, m_bFaceRight);
 		}
 	} 
 	else 
@@ -324,7 +324,7 @@ void NDBaseRole::SetAction(bool bMove)
 		} 
 		else 
 		{
-			AnimationListObj.standAction(TYPE_MANUALROLE, this, m_faceRight);
+			AnimationListObj.standAction(TYPE_MANUALROLE, this, m_bFaceRight);
 		}
 	}
 }
@@ -342,27 +342,27 @@ void NDBaseRole::setMoveActionWithRidePet()
 		return;
 	}
 	
-	AnimationListObj.moveAction(TYPE_RIDEPET, m_pkRidePet, m_faceRight);// 骑宠移动
+	AnimationListObj.moveAction(TYPE_RIDEPET, m_pkRidePet, m_bFaceRight);// 骑宠移动
 	switch (m_pkRidePet->iType)
 	{
 		case TYPE_RIDE:// 人物骑在骑宠上移动
-			AnimationListObj.ridePetMoveAction(TYPE_MANUALROLE, this, m_faceRight);
+			AnimationListObj.ridePetMoveAction(TYPE_MANUALROLE, this, m_bFaceRight);
 			break;
 		case TYPE_STAND:// 人物站在骑宠上移动
-			AnimationListObj.standPetMoveAction(TYPE_MANUALROLE, this, m_faceRight);
+			AnimationListObj.standPetMoveAction(TYPE_MANUALROLE, this, m_bFaceRight);
 			break;
 		case TYPE_RIDE_BIRD:
-			AnimationListObj.moveAction(TYPE_RIDEPET, m_pkRidePet, 1 -m_faceRight);
-			AnimationListObj.setAction(TYPE_MANUALROLE, this, m_faceRight, MANUELROLE_RIDE_BIRD_WALK);
+			AnimationListObj.moveAction(TYPE_RIDEPET, m_pkRidePet, 1 -m_bFaceRight);
+			AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight, MANUELROLE_RIDE_BIRD_WALK);
 			break;
 		case TYPE_RIDE_FLY:
-			AnimationListObj.setAction(TYPE_MANUALROLE, this, m_faceRight, MANUELROLE_FLY_PET_WALK);
+			AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight, MANUELROLE_FLY_PET_WALK);
 			break;
 		case TYPE_RIDE_YFSH:
-			AnimationListObj.setAction(TYPE_MANUALROLE, this, m_faceRight, MANUELROLE_FLY_PET_WALK);
+			AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight, MANUELROLE_FLY_PET_WALK);
 			break;
 		case TYPE_RIDE_QL:
-			AnimationListObj.setAction(TYPE_MANUALROLE, this, m_faceRight, MANUELROLE_RIDE_QL);
+			AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight, MANUELROLE_RIDE_QL);
 			break;
 	}
 }
@@ -374,7 +374,7 @@ void NDBaseRole::setStandActionWithRidePet()
 		return;
 	}
 	
-	AnimationListObj.standAction(TYPE_RIDEPET, m_pkRidePet, m_faceRight);
+	AnimationListObj.standAction(TYPE_RIDEPET, m_pkRidePet, m_bFaceRight);
 	
 	// 装备界面、属性界面、战斗中，人要站立状态
 	//if (EquipUIScreen.instance == null
@@ -388,23 +388,23 @@ void NDBaseRole::setStandActionWithRidePet()
 		switch (m_pkRidePet->iType)
 		{
 			case TYPE_RIDE:
-				AnimationListObj.ridePetStandAction(TYPE_MANUALROLE, this, m_faceRight);
+				AnimationListObj.ridePetStandAction(TYPE_MANUALROLE, this, m_bFaceRight);
 				break;
 			case TYPE_STAND:
-				AnimationListObj.standPetStandAction(TYPE_MANUALROLE, this, m_faceRight);
+				AnimationListObj.standPetStandAction(TYPE_MANUALROLE, this, m_bFaceRight);
 				break;
 			case TYPE_RIDE_BIRD:
-				AnimationListObj.standAction(TYPE_RIDEPET, m_pkRidePet, 1 - m_faceRight);
-				AnimationListObj.setAction(TYPE_MANUALROLE, this, m_faceRight, MANUELROLE_RIDE_BIRD_STAND);
+				AnimationListObj.standAction(TYPE_RIDEPET, m_pkRidePet, 1 - m_bFaceRight);
+				AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight, MANUELROLE_RIDE_BIRD_STAND);
 				break;
 			case TYPE_RIDE_FLY:
-				AnimationListObj.setAction(TYPE_MANUALROLE, this, m_faceRight, MANUELROLE_FLY_PET_STAND);
+				AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight, MANUELROLE_FLY_PET_STAND);
 				break;
 			case TYPE_RIDE_YFSH:
-				AnimationListObj.setAction(TYPE_MANUALROLE, this, m_faceRight,MANUELROLE_FLY_PET_WALK);
+				AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,MANUELROLE_FLY_PET_WALK);
 				break;
 			case TYPE_RIDE_QL:
-				AnimationListObj.setAction(TYPE_MANUALROLE, this, m_faceRight,MANUELROLE_RIDE_QL);
+				AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,MANUELROLE_RIDE_QL);
 				break;
 		 }
 //	} 
@@ -469,9 +469,9 @@ void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 //	else 
 //		Initialization(MANUELROLE_HUMAN_FEMALE);
 	
-	m_faceRight = direct == 2;
-	SetFaceImageWithEquipmentId(m_faceRight);
-	SetCurrentAnimation(MANUELROLE_STAND, m_faceRight);
+	m_bFaceRight = direct == 2;
+	SetFaceImageWithEquipmentId(m_bFaceRight);
+	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 	
 	defaultDeal();
 }
@@ -879,8 +879,8 @@ void NDBaseRole::SetCloakImageWithEquipmentId(int equipmentId)
 
 void NDBaseRole::DrawHead(const CGPoint& pos)
 {
-	m_aniGroup->setRuningSprite(this);
-	m_aniGroup->drawHeadAt(pos);
+	m_pkAniGroup->setRuningSprite(this);
+	m_pkAniGroup->drawHeadAt(pos);
 }
 
 void NDBaseRole::SetWeaponType(int weaponType)
@@ -1072,7 +1072,7 @@ void NDBaseRole::unpackEquip(int iEquipPos)
 			this->SetSkirtSitImage("");
 			this->SetSkirtLiftLegImage("");
 			this->SetCloakQuality(0);
-			this->cloak = -1;
+			this->m_nCloak = -1;
 			break;
 		case Item::eEP_Ride:
 			SAFE_DELETE_NODE(m_pkRidePet);
@@ -1092,8 +1092,8 @@ void NDBaseRole::unpakcAllEquip()
 
 void NDBaseRole::addTalkMsg(std::string msg,int timeForTalkMsg)
 {
-	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
-	if (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameScene))) 
+	NDScene *pkScene = NDDirector::DefaultDirector()->GetRunningScene();
+	if (!pkScene || !pkScene->IsKindOfClass(RUNTIME_CLASS(GameScene))) 
 	{
 		return;
 	}
@@ -1217,6 +1217,6 @@ void NDBaseRole::SetNormalAniGroup(int lookface)
 	Initialization( tq::CString("%smodel_%d%s", 
 		NDEngine::NDPath::GetAnimationPath().c_str(), lookface / 100, ".spr") );
 
-	m_faceRight = true;
-	SetCurrentAnimation(MANUELROLE_STAND, m_faceRight);
+	m_bFaceRight = true;
+	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 }

@@ -18,7 +18,7 @@ bool Task::BEGIN_FRESHMAN_TASK = false;
 Task::Task() 
 {
 	taskId = 0;
-	taskTitle = NDCommonCString("empty");
+	m_strTaskTitle = NDCommonCString("empty");
 	Init();
 }
 
@@ -26,7 +26,7 @@ Task::Task(int id, std::string title)
 {
 	
 	taskId = id;
-	taskTitle = title;
+	m_strTaskTitle = title;
 	Init();
 }
 
@@ -141,7 +141,7 @@ bool Task::checkIsFinished()
 
 std::string Task::getTaskTitle()
 {
-	return taskTitle;
+	return m_strTaskTitle;
 }
 
 bool Task::isDailyTask()

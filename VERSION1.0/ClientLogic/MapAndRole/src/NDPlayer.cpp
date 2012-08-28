@@ -69,16 +69,16 @@ namespace NDEngine
 	
 	NDPlayer::NDPlayer() :
 	//money(0),
-	eMoney(0),
-	phyPoint(0),
-	dexPoint(0),
-	magPoint(0),
-	defPoint(0),
-	lvUpExp(0),
-	sp(0),
+	m_nEMoney(0),
+	m_nPhyPoint(0),
+	m_nDexPoint(0),
+	m_nMagPoint(0),
+	m_nDefPoint(0),
+	m_nLevelUpExp(0),
+	m_nSP(0),
 	swGuojia(0),
 	swCamp(0),
-	honour(0),
+	m_nHonour(0),
 	//synRank(-1),
 	synMoney(0),
 	synContribute(0),
@@ -170,7 +170,7 @@ namespace NDEngine
 		
 		activityValueMax = 0;
 		
-		expendHonour = 0;
+		m_nExpendHonour = 0;
 		
 		m_nMaxSlot = 0;
 		
@@ -517,9 +517,12 @@ namespace NDEngine
 	void NDPlayer::Walk(CGPoint toPos, SpriteSpeed speed,
 		bool mustArrive/*=false*/)
 	{
-		if ( !isRoleCanMove() ) return;
+		if ( !isRoleCanMove() )
+		{
+			return;
+		}
 		
-		CGPoint pos = CGPointMake(int(toPos.x) /
+		CGPoint kPos = CGPointMake(int(toPos.x) /
 			MAP_UNITSIZE * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
 			int(toPos.y) / MAP_UNITSIZE * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
 		
@@ -527,11 +530,11 @@ namespace NDEngine
 		if ( ((int)posCur.x - DISPLAY_POS_X_OFFSET) % MAP_UNITSIZE != 0 || 
 			 ((int)posCur.y - DISPLAY_POS_Y_OFFSET) % MAP_UNITSIZE != 0)
 		{ // Cell没走完,又设置新的目标
-			m_targetPos = pos;
+			m_kTargetPos = kPos;
 		}
 		else 
 		{
-			std::vector<CGPoint> vec_pos; vec_pos.push_back(pos);
+			std::vector<CGPoint> vec_pos; vec_pos.push_back(kPos);
 			this->WalkToPosition(vec_pos, speed, true, mustArrive);
 		}
 
@@ -855,7 +858,7 @@ namespace NDEngine
 		if (baserole->IsKindOfClass(RUNTIME_CLASS(NDNpc)))
 		{
 			ResetFocusRole();
-			m_iFocusNpcID = baserole->m_id;
+			m_iFocusNpcID = baserole->m_nID;
 			baserole->SetFocus(true);
 			return;
 		}
@@ -1340,7 +1343,7 @@ namespace NDEngine
 //			return 0;
 //			
 //		return honour - expendHonour;
-		return expendHonour;
+		return m_nExpendHonour;
 	}
 	
 	void NDPlayer::SetLookface(int nLookface)
