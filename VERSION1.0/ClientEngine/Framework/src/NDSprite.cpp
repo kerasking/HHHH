@@ -168,14 +168,17 @@ namespace NDEngine
 				
 			}
 			
-			NDNode* node = this->GetParent();
+			NDNode* pkNode = this->GetParent();
 
 			SetPosition(ccp(500,200));
 			
-			if (!node) return;
+			if (!pkNode)
+			{
+				return;
+			}
 			
 			m_pkAniGroup->setRuningSprite(this);
-			m_pkAniGroup->setRunningMapSize(node->GetContentSize());
+			m_pkAniGroup->setRunningMapSize(pkNode->GetContentSize());
 			m_pkAniGroup->setPosition(m_position);
 
 			m_pkCurrentAnimation->setReverse(m_bReverse);
@@ -195,9 +198,9 @@ namespace NDEngine
 			
 			TileSetHightLight(oldTitleHightLight);
 			
-			if (m_bMoveMap && node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer))) 
+			if (m_bMoveMap && pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer))) 
 			{
-				NDMapLayer* mapLayer = (NDMapLayer*)node;
+				NDMapLayer* mapLayer = (NDMapLayer*)pkNode;
 				mapLayer->SetScreenCenter(m_position);			
 			}
 		}

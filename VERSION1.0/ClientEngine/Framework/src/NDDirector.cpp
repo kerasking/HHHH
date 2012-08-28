@@ -29,7 +29,7 @@ namespace NDEngine
 		NDAsssert(NDDirector_defaultDirector == NULL);
 		
 		//CC_DIRECTOR_INIT();
-		m_director = CCDirector::sharedDirector();
+		m_pkDirector = CCDirector::sharedDirector();
 		m_setViewRectNode = NULL;
 		m_resetViewRect = false;
 		
@@ -45,7 +45,7 @@ namespace NDEngine
 			delete m_TransitionSceneWait;
 		}
 		
-		m_director->release();
+		m_pkDirector->release();
 		NDDirector_defaultDirector = NULL;
 	}
 	
@@ -61,21 +61,21 @@ namespace NDEngine
 	
 	void NDDirector::Initialization()
 	{	
-		m_director->setOpenGLView(&CCEGLView::sharedOpenGLView());
+		m_pkDirector->setOpenGLView(&CCEGLView::sharedOpenGLView());
 
-		m_director->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
+		m_pkDirector->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
 		
-		CC_GLVIEW* view = m_director->getOpenGLView();
+		CC_GLVIEW* view = m_pkDirector->getOpenGLView();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		//view->setMultipleTouchEnabled(false);
 #endif
-		m_director->enableRetinaDisplay(true);
-		m_director->setAnimationInterval(1.0f / 24.0f);
+		m_pkDirector->enableRetinaDisplay(true);
+		m_pkDirector->setAnimationInterval(1.0f / 24.0f);
 
 		CCTexture2D::setDefaultAlphaPixelFormat(kTexture2DPixelFormat_RGBA8888);	
 		
 		//#if ND_DEBUG_STATE == 1
-		m_director->setDisplayFPS(true);
+		m_pkDirector->setDisplayFPS(true);
 		//#else
 			//m_director.displayFPS = NO;
 		//#endif
@@ -154,7 +154,7 @@ namespace NDEngine
 	void NDDirector::RunScene(NDScene* scene)
 	{		
 		m_scenesStack.push_back(scene);		
-		m_director->runWithScene((CCScene *)scene->m_ccNode);
+		m_pkDirector->runWithScene((CCScene *)scene->m_ccNode);
 	}
 	
 	void NDDirector::ReplaceScene(NDScene* scene, bool bAnimate/*=false*/)
@@ -181,7 +181,7 @@ namespace NDEngine
 		
 		m_scenesStack.push_back(scene);
 		
-		m_director->replaceScene((CCScene *)scene->m_ccNode);
+		m_pkDirector->replaceScene((CCScene *)scene->m_ccNode);
 				
 		this->AfterDirectorPushScene(scene);
 		
@@ -200,7 +200,7 @@ namespace NDEngine
 		this->BeforeDirectorPushScene(scene);
 		
 		m_scenesStack.push_back(scene);		
-		m_director->pushScene((CCScene *)scene->m_ccNode);		
+		m_pkDirector->pushScene((CCScene *)scene->m_ccNode);		
 		
 		this->AfterDirectorPushScene(scene);
 		
@@ -235,7 +235,7 @@ namespace NDEngine
 			delete m_scenesStack.back();
 		}			
 		m_scenesStack.pop_back();		
-		m_director->popScene();
+		m_pkDirector->popScene();
 		
 		this->AfterDirectorPopScene(cleanUp);
 		
@@ -254,27 +254,27 @@ namespace NDEngine
 	
 	void NDDirector::Pause()
 	{
-		m_director->pause();
+		m_pkDirector->pause();
 	}
 	
 	void NDDirector::Resume()
 	{
-		m_director->resume();
+		m_pkDirector->resume();
 	}
 	
 	void NDDirector::StopAnimation()
 	{
-		m_director->stopAnimation();
+		m_pkDirector->stopAnimation();
 	}
 	
 	void NDDirector::StartAnimation()
 	{
-		m_director->startAnimation();
+		m_pkDirector->startAnimation();
 	}
 	
 	void NDDirector::Stop()
 	{
-		m_director->end();
+		m_pkDirector->end();
 		
 		while (m_scenesStack.begin() != m_scenesStack.end()) 
 		{
@@ -285,7 +285,7 @@ namespace NDEngine
 	
 	bool NDDirector::isPaused()
 	{
-		return (bool)m_director->isPaused();
+		return (bool)m_pkDirector->isPaused();
 	}
 	
 	NDScene* NDDirector::GetScene(const NDRuntimeClass* runtimeClass)
@@ -314,12 +314,12 @@ namespace NDEngine
 	
 	void NDDirector::SetDisplayFPS(bool bDisplayed)
 	{
-		m_director->setDisplayFPS(bDisplayed);
+		m_pkDirector->setDisplayFPS(bDisplayed);
 	}
 	
 	CGSize NDDirector::GetWinSize()
 	{
-		return m_director->getWinSizeInPixels();
+		return m_pkDirector->getWinSizeInPixels();
 	}
 	
 	void NDDirector::SetViewRect(CGRect rect, NDNode* node)
@@ -329,7 +329,7 @@ namespace NDEngine
 			return;
 		}
 
-		CGSize winSize = m_director->getWinSizeInPixels();
+		CGSize winSize = m_pkDirector->getWinSizeInPixels();
 		
 		glEnable(GL_SCISSOR_TEST);
 		//		if (m_TransitionSceneWait)
@@ -453,6 +453,6 @@ namespace NDEngine
 	
 	float NDDirector::GetScaleFactor()
 	{
-		return m_director->getContentScaleFactor();
+		return m_pkDirector->getContentScaleFactor();
 	}
 }

@@ -125,7 +125,7 @@ namespace NDEngine
 		ScriptGlobalEvent::OnEvent(GE_GENERATE_GAMESCENE);
 
 		NDPlayer::pugeHero();
-		NDPlayer& kPlayer = NDPlayer::defaultHero();
+		NDPlayer& kPlayer = NDPlayer::defaultHero(1);
 
 		int x = 100;
 		int y = 100;

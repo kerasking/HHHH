@@ -342,10 +342,11 @@ namespace NDEngine
 		int model_id = lookface / 1000000;
 		//	if (sex % 2 == SpriteSexMale)
 
-		NSString *aniPath = new CCString(NDPath::GetAnimationPath().c_str());
+		NSString* pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
 		CCString *pString = CCString::stringWithFormat("%smodel_%d.spr",
-			aniPath->toStdString().c_str(),model_id);
+			pstrAniPath->toStdString().c_str(),model_id);
 		NDSprite::Initialization(pString->toStdString().c_str());
+		SAFE_DELETE(pstrAniPath);
 //		else 
 //			NDSprite::Initialization(MANUELROLE_HUMAN_FEMALE);
 
@@ -2066,15 +2067,19 @@ namespace NDEngine
 			InitNameLable(m_lbSynName[0]);InitNameLable(m_lbSynName[1]);
 			
 			
-			SetLableName(names, iX+8*fScale-iNameW, iY-LABLESIZE*fScale, isEnemy);
+			SetLableName(names, iX + 8 * fScale - iNameW, iY - LABLESIZE * fScale, isEnemy);
 			std::stringstream ss; ss << m_strSynName << " [" << m_strSynRank << "]";
 			int iSynNameW = getStringSizeMutiLine(ss.str().c_str(), LABLESIZE, sizewin).width/2;
 			cocos2d::ccColor4B color = INTCOLORTOCCC4(0xffffff);
+
 			if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)))
 			{
 				color = INTCOLORTOCCC4(0x00ff00);
 			}
-			SetLable(eLabelSynName, iX+8*fScale-iSynNameW, iY-LABLESIZE*fScale*2, ss.str(), INTCOLORTOCCC4(0x00ff00), INTCOLORTOCCC4(0x003300));
+
+			SetLable(eLabelSynName, iX + 8 * fScale - iSynNameW,
+				iY - LABLESIZE * fScale * 2, ss.str(),
+				INTCOLORTOCCC4(0x00ff00), INTCOLORTOCCC4(0x003300));
 			/*
 			if (iPeerage > 0)
 				SetLable(eLablePeerage, iX+8-iNameW-iPeerage, iY-LABLESIZE, strPeerage, 
@@ -2090,7 +2095,7 @@ namespace NDEngine
 		{
 			InitNameLable(m_lbName[0]);InitNameLable(m_lbName[1]);
 			InitNameLable(m_lbPeerage[0]);InitNameLable(m_lbPeerage[1]);
-			SetLableName(names, iX+8*fScale-iNameW, iY-LABLESIZE*fScale, isEnemy);
+			SetLableName(names, iX + 8 * fScale - iNameW, iY - LABLESIZE * fScale, isEnemy);
 			/*
 			if (iPeerage >= 0)
 				SetLable(eLablePeerage, iX+8-iNameW-iPeerage, iY-LABLESIZE, strPeerage, 
@@ -2274,25 +2279,25 @@ namespace NDEngine
 			return false;
 		}
 		
-		NDPlayer& player = NDPlayer::defaultHero();
+		NDPlayer& kPlayer = NDPlayer::defaultHero();
 		
-		if (otherRole->m_nID == player.m_nID)
+		if (otherRole->m_nID == kPlayer.m_nID)
 		{
 			return true;
 		}
 		
-		if (player.m_nID == m_nID)
+		if (kPlayer.m_nID == m_nID)
 		{
 			return false;
 		}
 		
-		if (isTeamMember() && player.m_nTeamID == m_nTeamID)
+		if (isTeamMember() && kPlayer.m_nTeamID == m_nTeamID)
 		{
 			return false;
 		}
 		
 		if (otherRole->isTeamMember() &&
-			player.m_nTeamID == otherRole->m_nTeamID)
+			kPlayer.m_nTeamID == otherRole->m_nTeamID)
 		{
 			return true;
 		}
@@ -2340,10 +2345,10 @@ namespace NDEngine
 				sprFullPath.append(ss.str());
 			}
 			
-			NDLightEffect *effect = new NDLightEffect();
-			effect->Initialization(sprFullPath.c_str());
-			effect->SetLightId(0);
-			serverEffect.effect = effect;
+			NDLightEffect* pkEffect = new NDLightEffect();
+			pkEffect->Initialization(sprFullPath.c_str());
+			pkEffect->SetLightId(0);
+			serverEffect.effect = pkEffect;
 			
 			if (effectId / 100000 % 10 == 0)
 			{ // ±≥∫Ûπ‚–ß

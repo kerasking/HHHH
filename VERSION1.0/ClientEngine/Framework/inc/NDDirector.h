@@ -212,7 +212,7 @@ namespace NDEngine
 		void SetTransitionScene(NDScene *scene, TransitionSceneType type);
 		
 	private:
-		cocos2d::CCDirector *m_director;
+		cocos2d::CCDirector* m_pkDirector;
 		std::vector<NDScene*> m_scenesStack;
 		NDNode* m_setViewRectNode;
 		bool m_resetViewRect;

@@ -18,8 +18,8 @@ IMPLEMENT_CLASS(NDCombinePicture, NDObject)
 
 NDCombinePicture::NDCombinePicture()
 {
-	m_rectLast = CGRectZero;
-	m_sizeMax = CGSizeZero;
+	m_kRectLast = CGRectZero;
+	m_kSizeMax = CGSizeZero;
 }
 
 NDCombinePicture::~NDCombinePicture()
@@ -38,21 +38,21 @@ void NDCombinePicture::AddPicture(NDPicture* pic, CombintPictureAligment aligmen
 	
 	rectDraw.size = pic->GetSize();
 	
-	m_rectLast.origin = rectDraw.origin = caclNext(m_rectLast.origin,
-		aligment, m_rectLast.size, rectDraw.size);
+	m_kRectLast.origin = rectDraw.origin = caclNext(m_kRectLast.origin,
+		aligment, m_kRectLast.size, rectDraw.size);
 	
-	m_rectLast.size = rectDraw.size;
+	m_kRectLast.size = rectDraw.size;
 	
 	m_vecCombinePic.push_back(CombinePicture(pic, aligment, rectDraw));
 	
-	if (rectDraw.origin.x + rectDraw.size.width > m_sizeMax.width)
+	if (rectDraw.origin.x + rectDraw.size.width > m_kSizeMax.width)
 	{
-		m_sizeMax.width = rectDraw.origin.x + rectDraw.size.width;
+		m_kSizeMax.width = rectDraw.origin.x + rectDraw.size.width;
 	}
 	
-	if (rectDraw.origin.y + rectDraw.size.height > m_sizeMax.height)
+	if (rectDraw.origin.y + rectDraw.size.height > m_kSizeMax.height)
 	{
-		m_sizeMax.height = rectDraw.origin.y + rectDraw.size.height;
+		m_kSizeMax.height = rectDraw.origin.y + rectDraw.size.height;
 	}
 }
 
@@ -66,7 +66,7 @@ void NDCombinePicture::SetColor(ccColor4B color)
 
 CGSize NDCombinePicture::GetSize()
 {
-	return m_sizeMax;
+	return m_kSizeMax;
 }
 
 void NDCombinePicture::DrawInRect(CGRect rect)
