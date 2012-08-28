@@ -17,9 +17,9 @@ bool NDColorPool::GetColorFromPool(const char* colorFile,
 								   VEC_COLOR_ARRAY& colorArray)
 {
 	PAIR_COLOR_KEY key(colorFile, colorIndex);
-	MAP_COLOR_IT it = this->m_mapColors.find(key);
+	MAP_COLOR_IT it = this->m_kMapColors.find(key);
 
-	if (it != this->m_mapColors.end())
+	if (it != this->m_kMapColors.end())
 	{
 		colorArray = it->second;
 		return true;
@@ -27,9 +27,9 @@ bool NDColorPool::GetColorFromPool(const char* colorFile,
 	else
 	{
 		this->LoadColor(colorFile);
-		it = this->m_mapColors.find(key);
+		it = this->m_kMapColors.find(key);
 
-		if (it != this->m_mapColors.end())
+		if (it != this->m_kMapColors.end())
 		{
 			colorArray = it->second;
 			return true;

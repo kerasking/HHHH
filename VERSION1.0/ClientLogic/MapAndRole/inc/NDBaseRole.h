@@ -44,7 +44,6 @@ namespace NDEngine
 		//......
 		//£­£­£­end
 
-		///< ÁÙÊ±ÐÔ×¢ÊÍ --¹ùºÆ
  		bool OnDrawBegin(bool bDraw); override
 // 		void OnDrawEnd(bool bDraw); override
 // 		void OnBeforeNodeRemoveFromParent(NDNode* node, bool bCleanUp); override
@@ -53,6 +52,7 @@ namespace NDEngine
 		void DirectRight(bool bRight);
 		
 	public:
+
 		virtual void Update(unsigned long ulDiff){}
 		virtual void SetAction(bool bMove);
 		virtual bool AssuredRidePet();

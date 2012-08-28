@@ -139,7 +139,7 @@ bool GameScene::bRidePetBroken = false;
 GameScene* GameScene::Scene()
 {	
 	GameScene* scene = new GameScene();
-	scene->Initialization(69);
+	scene->Initialization(1);
 	return scene;
 }
 

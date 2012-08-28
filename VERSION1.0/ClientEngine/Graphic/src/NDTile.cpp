@@ -23,14 +23,14 @@ bool IsTileHightLight()
 }
 
 NDTile::NDTile()
-: m_Texture(NULL)
+: m_pkTexture(NULL)
 , m_bReverse(false)
 , m_Rotation(NDRotationEnumRotation0)
 , m_pfVertices(NULL)
 , m_pfCoordinates(NULL)
 {
-	m_CutRect		= CGRectMake(0, 0, 0, 0);
-	m_DrawRect		= CGRectMake(0, 0, 0, 0);
+	m_kCutRect		= CGRectMake(0, 0, 0, 0);
+	m_kDrawRect		= CGRectMake(0, 0, 0, 0);
 	m_MapSize		= CGSizeMake(0, 0);
 
 	m_pfCoordinates = (float *)malloc(sizeof(float) * 8);
@@ -41,7 +41,7 @@ NDTile::~NDTile()
 {
 	free(m_pfCoordinates);
 	free(m_pfVertices);
-	CC_SAFE_FREE(m_Texture);
+	CC_SAFE_FREE(m_pkTexture);
 }
 
 void NDTile::makeTex(float* pData)
@@ -51,23 +51,23 @@ void NDTile::makeTex(float* pData)
 	//BOOL re=NO;
 	if (getReverse())
 	{
-		*pc++ = (m_CutRect.origin.x + m_CutRect.size.width) / m_Texture->getPixelsWide();
-		*pc++ = (m_CutRect.origin.y + m_CutRect.size.height) / m_Texture->getPixelsHigh();
-		*pc++ = m_CutRect.origin.x / m_Texture->getPixelsWide();
+		*pc++ = (m_kCutRect.origin.x + m_kCutRect.size.width) / m_pkTexture->getPixelsWide();
+		*pc++ = (m_kCutRect.origin.y + m_kCutRect.size.height) / m_pkTexture->getPixelsHigh();
+		*pc++ = m_kCutRect.origin.x / m_pkTexture->getPixelsWide();
 		*pc++ = pData[1];
 		*pc++ = pData[0];
-		*pc++ = m_CutRect.origin.y / m_Texture->getPixelsHigh();
+		*pc++ = m_kCutRect.origin.y / m_pkTexture->getPixelsHigh();
 		*pc++ = pData[2];
 		*pc++ = pData[5];		
 	}
 	else 
 	{
-		*pc++ = m_CutRect.origin.x / m_Texture->getPixelsWide();
-		*pc++ = (m_CutRect.origin.y + m_CutRect.size.height) / m_Texture->getPixelsHigh();
-		*pc++ = (m_CutRect.origin.x + m_CutRect.size.width) / m_Texture->getPixelsWide();
+		*pc++ = m_kCutRect.origin.x / m_pkTexture->getPixelsWide();
+		*pc++ = (m_kCutRect.origin.y + m_kCutRect.size.height) / m_pkTexture->getPixelsHigh();
+		*pc++ = (m_kCutRect.origin.x + m_kCutRect.size.width) / m_pkTexture->getPixelsWide();
 		*pc++ = pData[1];
 		*pc++ = pData[0];
-		*pc++ = m_CutRect.origin.y / m_Texture->getPixelsHigh();
+		*pc++ = m_kCutRect.origin.y / m_pkTexture->getPixelsHigh();
 		*pc++ = pData[2];
 		*pc++ = pData[5];			
 	}
@@ -444,9 +444,8 @@ void NDTile::makeVetex(float* pData, CGRect kRect)
 
 void NDTile::make()
 {
-	m_DrawRect = CCRect(0,-240,960,640);///< 临时性修改 郭浩
 	this->makeTex(m_pfCoordinates);
-	this->makeVetex(m_pfVertices, m_DrawRect);	
+	this->makeVetex(m_pfVertices, m_kDrawRect);	
 }
 
 static GLbyte tileColors[] = {255, 255, 255, 255,
@@ -464,9 +463,9 @@ static GLbyte tileHightLightColors[] =
 
 void NDTile::draw()
 {
-	if (m_Texture)
+	if (m_pkTexture)
 	{
-		glBindTexture(GL_TEXTURE_2D, m_Texture->getName());		//绑定纹理
+		glBindTexture(GL_TEXTURE_2D, m_pkTexture->getName());		//绑定纹理
 		glVertexPointer(3, GL_FLOAT, 0, m_pfVertices);		//绑定目标位置数组
 		glColorPointer(4, GL_UNSIGNED_BYTE, 0, s_bTileHightLight ? tileHightLightColors : tileColors);
 		glTexCoordPointer(2, GL_FLOAT, 0, m_pfCoordinates);	//绑定瓦片数组
@@ -480,31 +479,31 @@ void NDTile::drawSubRect(CGRect rect)
 	float coordinates[8];
 	float *pc = coordinates;
 	
-	float xl = m_CutRect.origin.x + m_CutRect.size.width * rect.origin.x;
-	float xr = m_CutRect.origin.x + m_CutRect.size.width * (rect.size.width + rect.origin.x);
-	float yt = m_CutRect.origin.y + m_CutRect.size.height * rect.origin.y;
-	float yb = m_CutRect.origin.y + m_CutRect.size.height * (rect.size.height + rect.origin.y);
+	float xl = m_kCutRect.origin.x + m_kCutRect.size.width * rect.origin.x;
+	float xr = m_kCutRect.origin.x + m_kCutRect.size.width * (rect.size.width + rect.origin.x);
+	float yt = m_kCutRect.origin.y + m_kCutRect.size.height * rect.origin.y;
+	float yb = m_kCutRect.origin.y + m_kCutRect.size.height * (rect.size.height + rect.origin.y);
 	
 	//BOOL re=NO;
 	if (getReverse())
 	{
-		*pc++ = xr / m_Texture->getPixelsWide();
-		*pc++ = yb / m_Texture->getPixelsHigh();
-		*pc++ = xl / m_Texture->getPixelsWide();
+		*pc++ = xr / m_pkTexture->getPixelsWide();
+		*pc++ = yb / m_pkTexture->getPixelsHigh();
+		*pc++ = xl / m_pkTexture->getPixelsWide();
 		*pc++ = coordinates[1];
 		*pc++ = coordinates[0];
-		*pc++ = yt / m_Texture->getPixelsHigh();
+		*pc++ = yt / m_pkTexture->getPixelsHigh();
 		*pc++ = coordinates[2];
 		*pc++ = coordinates[5];
 	}
 	else 
 	{
-		*pc++ = xl / m_Texture->getPixelsWide();
-		*pc++ = yb / m_Texture->getPixelsHigh();
-		*pc++ = xr / m_Texture->getPixelsWide();
+		*pc++ = xl / m_pkTexture->getPixelsWide();
+		*pc++ = yb / m_pkTexture->getPixelsHigh();
+		*pc++ = xr / m_pkTexture->getPixelsWide();
 		*pc++ = coordinates[1];
 		*pc++ = coordinates[0];
-		*pc++ = yt / m_Texture->getPixelsHigh();
+		*pc++ = yt / m_pkTexture->getPixelsHigh();
 		*pc++ = coordinates[2];
 		*pc++ = coordinates[5];
 	}
@@ -512,16 +511,16 @@ void NDTile::drawSubRect(CGRect rect)
 	float vertices[12] = {0.0f};
 	
 	CGRect drawRect;
-	drawRect.origin.x		= m_DrawRect.origin.x + rect.origin.x * m_DrawRect.size.width;
-	drawRect.origin.y		= m_DrawRect.origin.y + rect.origin.y * m_DrawRect.size.height;
-	drawRect.size.width		= rect.size.width * m_DrawRect.size.width;
-	drawRect.size.height	= rect.size.height * m_DrawRect.size.height;
+	drawRect.origin.x		= m_kDrawRect.origin.x + rect.origin.x * m_kDrawRect.size.width;
+	drawRect.origin.y		= m_kDrawRect.origin.y + rect.origin.y * m_kDrawRect.size.height;
+	drawRect.size.width		= rect.size.width * m_kDrawRect.size.width;
+	drawRect.size.height	= rect.size.height * m_kDrawRect.size.height;
 	
 	this->makeVetex(vertices, drawRect);
 	
-	if (m_Texture)
+	if (m_pkTexture)
 	{
-		glBindTexture(GL_TEXTURE_2D, m_Texture->getName());		//绑定纹理
+		glBindTexture(GL_TEXTURE_2D, m_pkTexture->getName());		//绑定纹理
 		
 		glVertexPointer(3, GL_FLOAT, 0, vertices);		//绑定目标位置数组
 		

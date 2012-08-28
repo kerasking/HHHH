@@ -183,7 +183,7 @@ namespace NDEngine
 		cocos2d::CCMutableArray< cocos2d::CCMutableArray<NDFrameRunRecord*>* >
 			*m_pkFrameRunRecordsOfMapAniGroups;
 		cocos2d::CCMutableArray< NDFrameRunRecord* > *m_frameRunRecordsOfMapSwitch;
-		NDAnimationGroup *m_switchAniGroup;
+		NDAnimationGroup* m_pkSwitchAniGroup;
 		NDSprite *m_TreasureBox;
 		NDUILabel *m_lbTime;
 		NDUIImage *m_lbTitle;

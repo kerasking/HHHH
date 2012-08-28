@@ -80,7 +80,7 @@ namespace NDEngine
 		m_nMapIndex = -1;
 		m_pkPicMap = NULL;
 		//m_texMap = NULL;
-		m_switchAniGroup = NULL;
+		m_pkSwitchAniGroup = NULL;
 		m_pkMapData = NULL;
 		m_lbTime = NULL;
 		m_lbTitle = NULL;
@@ -118,7 +118,7 @@ namespace NDEngine
 		CC_SAFE_RELEASE(m_frameRunRecordsOfMapSwitch);
 		//CC_SAFE_RELEASE(m_texMap);
 		CC_SAFE_RELEASE(m_pkMapData);
-		CC_SAFE_RELEASE(m_switchAniGroup);
+		CC_SAFE_RELEASE(m_pkSwitchAniGroup);
 		CC_SAFE_RELEASE(m_pkOrders);
 		CC_SAFE_RELEASE(m_pkOrders);
 		CC_SAFE_RELEASE(m_pkOrders);
@@ -196,7 +196,8 @@ namespace NDEngine
 		NDUILayer::Initialization();
 		this->SetTouchEnabled(true);
 		
-		m_switchAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithModelId(8);
+		m_pkSwitchAniGroup = NDAnimationGroupPool::defaultPool()->
+			addObjectWithModelId(8);
 		
 		m_pkMapData = new NDMapData;
 		m_pkMapData->initWithFile(mapFile);
@@ -212,7 +213,8 @@ namespace NDEngine
 			
 			
 			CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-			m_kScreenCenter = ccp(winSize.width / 2, this->GetContentSize().height - winSize.height / 2);
+			m_kScreenCenter = ccp(winSize.width / 2,
+				this->GetContentSize().height - winSize.height / 2);
 			this->m_ccNode->setPosition(0, 0);	
 			
 			/*
@@ -761,18 +763,18 @@ namespace NDEngine
 				NDMapSwitch *mapSwitch = (NDMapSwitch *)m_pkMapData->getSwitchs()->objectAtIndex(uiIndex);
 				NDFrameRunRecord *frameRunRecord = m_frameRunRecordsOfMapSwitch->getObjectAtIndex(uiIndex);
 				
-				m_switchAniGroup->setReverse(false);
+				m_pkSwitchAniGroup->setReverse(false);
 				
 				CGPoint pos = ccp(mapSwitch->getX() * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
 					mapSwitch->getY() * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
 				
-				m_switchAniGroup->setPosition(pos);
+				m_pkSwitchAniGroup->setPosition(pos);
 
-				m_switchAniGroup->setRunningMapSize(this->GetContentSize());
+				m_pkSwitchAniGroup->setRunningMapSize(this->GetContentSize());
 				
-				if (m_switchAniGroup->getAnimations()->count() > 0) 
+				if (m_pkSwitchAniGroup->getAnimations()->count() > 0) 
 				{
-					NDAnimation *pkAnimation = (NDAnimation *)m_switchAniGroup->
+					NDAnimation *pkAnimation = (NDAnimation *)m_pkSwitchAniGroup->
 						getAnimations()->objectAtIndex(0);
 
 					if (this->isMapRectIntersectScreen(pkAnimation->getRect())) 

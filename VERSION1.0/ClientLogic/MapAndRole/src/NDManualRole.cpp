@@ -53,7 +53,7 @@ namespace NDEngine
 	NDManualRole::NDManualRole() :
 	m_nState(0)
 	{
-		aniGroupTransformed = NULL;
+		pkAniGroupTransformed = NULL;
 		idTransformTo = 0;
 		m_nMoney = 0;								// 银两
 		m_dwLookFace = 0;							// 创建人物的时候有6种外观可供选择外观
@@ -72,16 +72,16 @@ namespace NDEngine
 		
 		m_nTeamID = 0;
 		
-		isSafeProtected = false;
+		m_bIsSafeProtected = false;
 		
 		m_nCampOutOfTeam = -1;
 		
 		m_bClear = false;
 		
-		m_oldPos = CGPointZero;
+		m_kOldPos = CGPointZero;
 		
-		serverCol = -1;
-		serverRow = -1;
+		m_nServerCol = -1;
+		m_nServerRow = -1;
 		m_picVendor = NULL;
 		m_picBattle = NULL;
 		m_picGraveStone = NULL;
@@ -98,11 +98,11 @@ namespace NDEngine
 		memset(m_lbPeerage, 0, sizeof(m_lbPeerage));
 		m_numberOneEffect = NULL;
 		
-		effectFeedPetAniGroup = NULL;
-		effectArmorAniGroup = NULL;
-		effectDacoityAniGroup = NULL;
+		m_pkEffectFeedPetAniGroup = NULL;
+		m_pkEffectArmorAniGroup = NULL;
+		m_pkEffectDacoityAniGroup = NULL;
 		
-		m_posBackup = CGPointZero;
+		m_kPosBackup = CGPointZero;
 		
 		m_nMarriageID = 0;
 		
@@ -1149,7 +1149,7 @@ namespace NDEngine
 			{// 人物普通移动
 				if (isTransformed())
 				{
-					AnimationListObj.moveAction(TYPE_MANUALROLE, aniGroupTransformed, 1 - m_bFaceRight);
+					AnimationListObj.moveAction(TYPE_MANUALROLE, pkAniGroupTransformed, 1 - m_bFaceRight);
 				}
 				else 
 				{
@@ -1175,7 +1175,7 @@ namespace NDEngine
 			{
 				if (isTransformed())
 				{
-					AnimationListObj.standAction(TYPE_MANUALROLE, aniGroupTransformed, 1 - m_bFaceRight);
+					AnimationListObj.standAction(TYPE_MANUALROLE, pkAniGroupTransformed, 1 - m_bFaceRight);
 				} 
 				else
 				{
@@ -1229,8 +1229,8 @@ namespace NDEngine
 			}
 		}
 		
-		serverCol = nNewCol;
-		serverRow = nNewRow;
+		m_nServerCol = nNewCol;
+		m_nServerRow = nNewRow;
 		NDSprite::SetPosition(newPosition);
 		
 		/*if (m_pBattlePetShow) 
@@ -1392,19 +1392,19 @@ namespace NDEngine
 		updateBattlePetEffect();
 		refreshEquipmentEffectData();
 		
-		if (effectFeedPetAniGroup)
+		if (m_pkEffectFeedPetAniGroup)
 		{
-			if (!effectFeedPetAniGroup->GetParent())
+			if (!m_pkEffectFeedPetAniGroup->GetParent())
 			{
-				m_pkSubNode->AddChild(effectFeedPetAniGroup);
+				m_pkSubNode->AddChild(m_pkEffectFeedPetAniGroup);
 			}
 		}
 		
-		if (effectArmorAniGroup)
+		if (m_pkEffectArmorAniGroup)
 		{
-			if (!effectArmorAniGroup->GetParent())
+			if (!m_pkEffectArmorAniGroup->GetParent())
 			{
-				m_pkSubNode->AddChild(effectArmorAniGroup);
+				m_pkSubNode->AddChild(m_pkEffectArmorAniGroup);
 			}
 		}
 		
@@ -1437,13 +1437,13 @@ namespace NDEngine
 		*/
 		
 		// 人物变形动画
-		if (aniGroupTransformed)
+		if (pkAniGroupTransformed)
 		{
 			bDraw = !this->IsInState(USERSTATE_STEALTH);
-			this->aniGroupTransformed->SetPosition(pos);
-			aniGroupTransformed->SetCurrentAnimation(m_bIsMoving ? MONSTER_MAP_MOVE : MONSTER_MAP_STAND, !this->m_bFaceRight);
-			aniGroupTransformed->SetSpriteDir(this->m_bFaceRight ? 2 : 0);
-			aniGroupTransformed->RunAnimation(bDraw);
+			this->pkAniGroupTransformed->SetPosition(pos);
+			pkAniGroupTransformed->SetCurrentAnimation(m_bIsMoving ? MONSTER_MAP_MOVE : MONSTER_MAP_STAND, !this->m_bFaceRight);
+			pkAniGroupTransformed->SetSpriteDir(this->m_bFaceRight ? 2 : 0);
+			pkAniGroupTransformed->RunAnimation(bDraw);
 		}
 		
 		//if (m_talkBox && m_talkBox->IsVisibled()) 
@@ -1517,12 +1517,12 @@ namespace NDEngine
 			}
 		}
 		
-		if (effectArmorAniGroup != NULL && effectArmorAniGroup->GetParent() && !isTransformed()) 
+		if (m_pkEffectArmorAniGroup != NULL && m_pkEffectArmorAniGroup->GetParent() && !isTransformed()) 
 		{
 			CGPoint pos = GetPosition();
-			pos.y += 6 - getGravityY() + effectArmorAniGroup->GetHeight();
-			effectArmorAniGroup->SetPosition(pos);
-			effectArmorAniGroup->RunAnimation(bDraw);
+			pos.y += 6 - getGravityY() + m_pkEffectArmorAniGroup->GetHeight();
+			m_pkEffectArmorAniGroup->SetPosition(pos);
+			m_pkEffectArmorAniGroup->RunAnimation(bDraw);
 		}
 		
 		//　画服务端下发的前部光效
@@ -1557,8 +1557,8 @@ namespace NDEngine
 		
 		if (bResetPos) 
 		{
-			NDManualRole::SetPosition(ccp(serverCol * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-				serverRow * MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+			NDManualRole::SetPosition(ccp(m_nServerCol * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+				m_nServerRow * MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
 		}
 		
 		SetAction(false);
@@ -1593,7 +1593,7 @@ namespace NDEngine
 			CGPoint pos = GetPosition();
 			int ty = 0;
 			if (isTransformed()) {
-				ty = pos.y - DISPLAY_POS_Y_OFFSET-aniGroupTransformed->getGravityY() + 46;
+				ty = pos.y - DISPLAY_POS_Y_OFFSET-pkAniGroupTransformed->getGravityY() + 46;
 			} else {
 	
 				ty =  pos.y-DISPLAY_POS_Y_OFFSET- getGravityY() + 46;
@@ -1635,24 +1635,24 @@ namespace NDEngine
 	
 	void NDManualRole::SetServerPositon(int col, int row)
 	{
-		serverCol = col;
-		serverRow = row;
+		m_nServerCol = col;
+		m_nServerRow = row;
 	}
 	
 	void NDManualRole::SetServerDir(int dir)
 	{
 		switch (dir) {
 			case 0:
-				serverRow--;
+				m_nServerRow--;
 				break;
 			case 1:
-				serverRow++;
+				m_nServerRow++;
 				break;
 			case 2:
-				serverCol--;
+				m_nServerCol--;
 				break;
 			case 3:
-				serverCol++;
+				m_nServerCol++;
 				break;
 		}
 	}
@@ -1871,24 +1871,24 @@ namespace NDEngine
 		{
 			this->idTransformTo = idLookface;
 
-			if (aniGroupTransformed)
+			if (pkAniGroupTransformed)
 			{
-				aniGroupTransformed->RemoveFromParent(true);
-				aniGroupTransformed = NULL;
+				pkAniGroupTransformed->RemoveFromParent(true);
+				pkAniGroupTransformed = NULL;
 			}
 			
 			if (this->idTransformTo != 0)
 			{
-				this->aniGroupTransformed = new NDMonster;
-				this->aniGroupTransformed->SetNormalAniGroup(idLookface);
-				this->m_pkSubNode->AddChild(aniGroupTransformed);
+				this->pkAniGroupTransformed = new NDMonster;
+				this->pkAniGroupTransformed->SetNormalAniGroup(idLookface);
+				this->m_pkSubNode->AddChild(pkAniGroupTransformed);
 			}
 		}
 	}
 	
 	bool NDManualRole::isTransformed()
 	{
-		return this->aniGroupTransformed != NULL;
+		return this->pkAniGroupTransformed != NULL;
 	}
 	
 	void NDManualRole::playerLevelUp()
@@ -2196,7 +2196,7 @@ namespace NDEngine
 				SafeAddEffect(effectFeedPetAniGroup, "effect_2001.spr");
 			}
 		} else */{
-			SafeClearEffect(effectFeedPetAniGroup);
+			SafeClearEffect(m_pkEffectFeedPetAniGroup);
 		}
 	}
 	
@@ -2206,28 +2206,28 @@ namespace NDEngine
 		{
 		    if (this->m_armorQuality > 8 || this->m_cloakQuality > 8)
 			{
-				SafeAddEffect(effectArmorAniGroup, "effect_4001.spr");
+				SafeAddEffect(m_pkEffectArmorAniGroup, "effect_4001.spr");
 		    }
 			else 
 			{
-				SafeClearEffect(effectArmorAniGroup);
+				SafeClearEffect(m_pkEffectArmorAniGroup);
 			}
 
 		}
 		else
 		{
-			SafeClearEffect(effectArmorAniGroup);
+			SafeClearEffect(m_pkEffectArmorAniGroup);
 		}
 	}
 	
 	void NDManualRole::BackupPositon()
 	{
-		m_posBackup = GetPosition();
+		m_kPosBackup = GetPosition();
 	}
 	
 	CGPoint NDManualRole::GetBackupPosition()
 	{
-		return m_posBackup;
+		return m_kPosBackup;
 	}
 	
 	void NDManualRole::HandleEffectDacoity()
@@ -2244,25 +2244,25 @@ namespace NDEngine
 			 this->IsInState(USERSTATE_BATTLE_POSITIVE))
 			 ) 
 		{
-			SafeAddEffect(effectDacoityAniGroup, "effect_101.spr");
+			SafeAddEffect(m_pkEffectDacoityAniGroup, "effect_101.spr");
 		} 
 		else 
 		{
-			SafeClearEffect(effectDacoityAniGroup);
+			SafeClearEffect(m_pkEffectDacoityAniGroup);
 		}
 		
-		if (effectDacoityAniGroup)
+		if (m_pkEffectDacoityAniGroup)
 		{
-			if (!effectDacoityAniGroup->GetParent())
+			if (!m_pkEffectDacoityAniGroup->GetParent())
 			{
-				m_pkSubNode->AddChild(effectDacoityAniGroup);
+				m_pkSubNode->AddChild(m_pkEffectDacoityAniGroup);
 			}
 		}
 		
-		if (effectDacoityAniGroup != NULL && effectDacoityAniGroup->GetParent()) 
+		if (m_pkEffectDacoityAniGroup != NULL && m_pkEffectDacoityAniGroup->GetParent()) 
 		{
-			effectDacoityAniGroup->SetPosition(ccpAdd(GetPosition(), ccp(0,8)));
-			effectDacoityAniGroup->RunAnimation(true);
+			m_pkEffectDacoityAniGroup->SetPosition(ccpAdd(GetPosition(), ccp(0,8)));
+			m_pkEffectDacoityAniGroup->RunAnimation(true);
 		}
 	}
 	
@@ -2303,19 +2303,18 @@ namespace NDEngine
 	void NDManualRole::SetServerEffect(std::vector<int>& vEffect)
 	{
 		// 删除原先光效
-		for_vec(m_serverEffectBack, std::vector<ServerEffect>::iterator)
+		for_vec(m_kServerEffectBack, std::vector<ServerEffect>::iterator)
 		{
 			delete (*it).effect;
 		}
 		
-		for_vec(m_serverEffectFront, std::vector<ServerEffect>::iterator)
+		for_vec(m_kServerEffectFront, std::vector<ServerEffect>::iterator)
 		{
 			delete (*it).effect;
 		}
 		
-		m_serverEffectBack.clear();
-		
-		m_serverEffectFront.clear();
+		m_kServerEffectBack.clear();
+		m_kServerEffectFront.clear();
 		
 		// 设置新光效
 		for_vec(vEffect, std::vector<int>::iterator)
@@ -2348,11 +2347,11 @@ namespace NDEngine
 			
 			if (effectId / 100000 % 10 == 0)
 			{ // 背后光效
-				m_serverEffectBack.push_back(serverEffect);
+				m_kServerEffectBack.push_back(serverEffect);
 			}
 			else
 			{ // 前面光效
-				m_serverEffectFront.push_back(serverEffect);
+				m_kServerEffectFront.push_back(serverEffect);
 			}
 		}
 	}
@@ -2385,7 +2384,7 @@ namespace NDEngine
 			{
 				if (isTransformed())
 				{
-					ty = m_position.y - DISPLAY_POS_Y_OFFSET - aniGroupTransformed->getGravityY() + 46;
+					ty = m_position.y - DISPLAY_POS_Y_OFFSET - pkAniGroupTransformed->getGravityY() + 46;
 				}
 				else
 				{
@@ -2421,23 +2420,23 @@ namespace NDEngine
 	
 	void NDManualRole::drawServerBackEffect(bool draw)
 	{
-		if (m_serverEffectBack.size())
+		if (m_kServerEffectBack.size())
 		{
-			drawServerEffect(m_serverEffectBack, draw);
+			drawServerEffect(m_kServerEffectBack, draw);
 		}
 	}
 	
 	void NDManualRole::drawServerFrontEffect(bool draw)
 	{
-		if (m_serverEffectFront.size())
+		if (m_kServerEffectFront.size())
 		{
-			drawServerEffect(m_serverEffectFront, draw);
+			drawServerEffect(m_kServerEffectFront, draw);
 		}
 	}
 	
 	bool NDManualRole::IsServerEffectHasQiZhi()
 	{
-		for_vec(m_serverEffectBack, std::vector<ServerEffect>::iterator)
+		for_vec(m_kServerEffectBack, std::vector<ServerEffect>::iterator)
 		{
 			if ( (*it).bQiZhi )
 			{
@@ -2445,7 +2444,7 @@ namespace NDEngine
 			}
 		}
 		
-		for_vec(m_serverEffectFront, std::vector<ServerEffect>::iterator)
+		for_vec(m_kServerEffectFront, std::vector<ServerEffect>::iterator)
 		{
 			if ( (*it).bQiZhi )
 			{
@@ -2456,9 +2455,10 @@ namespace NDEngine
 		return false;
 	}
 	
-	CGRect NDManualRole::GetFocusRect() override
+	CGRect NDManualRole::GetFocusRect()
 	{
-		int tx = m_position.x-DISPLAY_POS_X_OFFSET - 4, ty = 0;
+		int tx = m_position.x - DISPLAY_POS_X_OFFSET - 4;
+		int ty = 0;
 		int w = 24;
 		int h = 0;
 		
@@ -2472,9 +2472,9 @@ namespace NDEngine
 		}
 		else if (isTransformed())
 		{
-			h = this->aniGroupTransformed->GetHeight();
+			h = this->pkAniGroupTransformed->GetHeight();
 			ty = m_position.y - h;
-			w = this->aniGroupTransformed->GetWidth();
+			w = this->pkAniGroupTransformed->GetWidth();
 		}
 		else
 		{
@@ -2540,7 +2540,7 @@ namespace NDEngine
 	
 	bool NDManualRole::GetShowPetInfo(ShowPetInfo& info)
 	{
-		info = m_infoShowPet;
+		info = m_kInfoShowPet;
 		return true;
 	}
 	

@@ -26,10 +26,10 @@ public:
 
 private:
 
-	CAutoLink<NDUILayer>	_ndUILayerNode;
-	CAutoLink<NDLayer>		_ndLayerNode;
-	NDTouch					*m_ndTouch;
-	bool					m_press;
+	CAutoLink<NDUILayer>	m_kUILayerNode;
+	CAutoLink<NDLayer>		m_kLayerNode;
+	NDTouch*				m_pkTouch;
+	bool					m_bPress;
 
 public:
 

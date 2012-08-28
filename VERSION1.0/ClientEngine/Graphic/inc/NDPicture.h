@@ -33,13 +33,13 @@ namespace NDEngine
 		~NDPicture();
 	public:
 
-		void Initialization(const char* imageFile); hide
+		void Initialization(const char* imageFile);
 		
 		//void Initialization(vector<const char*>& vImgFiles); hide
 		
 		//void Initialization(vector<const char*>& vImgFiles, vector<CGRect>& vImgCustomRect, vector<CGPoint>&vOffsetPoint); hide
 
-		void Initialization(const char* imageFile, int hrizontalPixel, int verticalPixel=0); hide
+		void Initialization(const char* imageFile, int hrizontalPixel, int verticalPixel=0);
 
 		void Cut(CGRect rect);
 

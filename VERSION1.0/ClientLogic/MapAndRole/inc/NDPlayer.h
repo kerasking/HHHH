@@ -149,14 +149,14 @@ namespace NDEngine
 		int m_nHonour;
 		int m_nExpendHonour; // 已消耗荣誉值
 		
-		int synMoney; // 帮派银两
-		int synContribute; // 帮派帮贡
-		int synSelfContribute; // 个人帮贡
-		int synSelfContributeMoney; // 个人捐献钱
+		int m_nSynMoney; // 帮派银两
+		int m_nSynContribute; // 帮派帮贡
+		int m_nSynSelfContribute; // 个人帮贡
+		int m_nSynSelfContributeMoney; // 个人捐献钱
 		
-		int iStorgeMoney; // 仓库银两
-		int iStorgeEmoney; // 仓库元宝
-		int iSkillPoint; // 灵气值
+		int m_nStorgeMoney; // 仓库银两
+		int m_nStorgeEmoney; // 仓库元宝
+		int m_nSkillPoint; // 灵气值
 		
 		int iRecordMap;
 		

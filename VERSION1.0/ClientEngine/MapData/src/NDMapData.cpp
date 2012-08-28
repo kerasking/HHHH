@@ -384,30 +384,30 @@ void NDMapData::initWithFile(const char* mapFile)
     参数:地图文件流
 */
 
-void NDMapData::decode(FILE* stream)
+void NDMapData::decode(FILE* pkStream)
 {	
 	FileOp kFileOp;
 	//<-------------------地图名
-	m_Name = kFileOp.readUTF8String(stream);//[self readUTF8String:stream];
+	m_Name = kFileOp.readUTF8String(pkStream);//[self readUTF8String:stream];
 	//<-------------------单元格尺寸
-	m_nUnitSize=kFileOp.readByte(stream);
+	m_nUnitSize=kFileOp.readByte(pkStream);
 	int TileWidth		= m_nUnitSize;
 	int TileHeight		= m_nUnitSize;
 	//------------------->层数
-	m_nLayerCount = kFileOp.readByte(stream);
+	m_nLayerCount = kFileOp.readByte(pkStream);
 	//<-------------------列数
-	m_nColumns = kFileOp.readByte(stream);
+	m_nColumns = kFileOp.readByte(pkStream);
 	//------------------->行数
-	m_nRows = kFileOp.readByte(stream);
+	m_nRows = kFileOp.readByte(pkStream);
 	//<-------------------使用到的图块资源
 	std::vector<std::string> _tileImages;
-	int nTileImageCount = kFileOp.readShort(stream);
+	int nTileImageCount = kFileOp.readShort(pkStream);
 
 	for (int i = 0; i < nTileImageCount; i++) 
 	{
-		int idx = kFileOp.readShort(stream);
+		int nIDx = kFileOp.readShort(pkStream);
 		char pszImageName[256] = {0};
-		sprintf(pszImageName, "%st%d.png", NDEngine::NDPath::GetImagePath().c_str(), idx);
+		sprintf(pszImageName, "%st%d.png", NDEngine::NDPath::GetImagePath().c_str(), nIDx);
 		FILE* pkFile = fopen(pszImageName, "rt");
 
 		if (pkFile ) 
@@ -428,15 +428,15 @@ void NDMapData::decode(FILE* stream)
 		{
 			for (uint c = 0; c < m_nColumns; c++)
 			{					
-				int imageIndex		= kFileOp.readByte(stream) - 1;	//资源下标
+				int imageIndex		= kFileOp.readByte(pkStream) - 1;	//资源下标
 
 				if (imageIndex == -1) 
 				{
 					imageIndex = 0;
 				}
 
-				int	tileIndex		= kFileOp.readByte(stream);		//图块下标
-				bool reverse		= kFileOp.readByte(stream) == 1;	//翻转
+				int	tileIndex		= kFileOp.readByte(pkStream);		//图块下标
+				bool reverse		= kFileOp.readByte(pkStream) == 1;	//翻转
 
 				if (imageIndex == -1)
 				{
@@ -467,11 +467,11 @@ void NDMapData::decode(FILE* stream)
 		m_pkObstacles->push_back(true);
 	}
 	
-	int notPassCount = kFileOp.readShort(stream);	
+	int notPassCount = kFileOp.readShort(pkStream);	
 	for (int i = 0; i < notPassCount; i++) 
 	{		
-		int	rowIndex	= kFileOp.readByte(stream);
-		int columnIndex	= kFileOp.readByte(stream);
+		int	rowIndex	= kFileOp.readByte(pkStream);
+		int columnIndex	= kFileOp.readByte(pkStream);
 		int nIndex		= rowIndex * m_nColumns+columnIndex;
 		if (m_pkObstacles->size() > nIndex)
 		{
@@ -481,15 +481,15 @@ void NDMapData::decode(FILE* stream)
 	//------------------->切屏
 	m_Switchs = CCArray::array();
 	m_Switchs->retain();
-	int switchsCount = kFileOp.readByte(stream);
+	int switchsCount = kFileOp.readByte(pkStream);
 	for (int i = 0; i < switchsCount; i++) 
 	{
 		//NDMapSwitch *mapSwitch = [[NDMapSwitch alloc] init];
 		
-		/*mapSwitch.x = */kFileOp.readByte(stream); //切屏点x
-		/*mapSwitch.y = */kFileOp.readByte(stream);//切屏点y
-		/*mapSwitch.mapIndex = */kFileOp.readByte(stream); //目标地图
-		/*mapSwitch.passIndex = */kFileOp.readByte(stream); //目标点
+		/*mapSwitch.x = */kFileOp.readByte(pkStream); //切屏点x
+		/*mapSwitch.y = */kFileOp.readByte(pkStream);//切屏点y
+		/*mapSwitch.mapIndex = */kFileOp.readByte(pkStream); //目标地图
+		/*mapSwitch.passIndex = */kFileOp.readByte(pkStream); //目标点
 		/*[mapSwitch SetLabel:self];*/
 		
 		/*[_switchs addObject:mapSwitch];*/
@@ -498,10 +498,11 @@ void NDMapData::decode(FILE* stream)
 	//<---------------------使用到的背景资源
 	std::vector<std::string> kBackGroundImages;
 	std::vector<int>_bgOrders;
-	int bgImageCount = kFileOp.readShort(stream);
+	int bgImageCount = kFileOp.readShort(pkStream);
+
 	for (int i = 0; i < bgImageCount; i++) 
 	{
-		int idx = kFileOp.readShort(stream);
+		int idx = kFileOp.readShort(pkStream);
 		char imageName[256] = {0};
 		sprintf(imageName, "%sb%d.png", NDEngine::NDPath::GetImagePath().c_str(), idx);
 		FILE* f = fopen(imageName, "rt");
@@ -515,20 +516,20 @@ void NDMapData::decode(FILE* stream)
 			kBackGroundImages.push_back(imageName);
 		}
 		
-		int v = kFileOp.readShort(stream);
+		int v = kFileOp.readShort(pkStream);
 		_bgOrders.push_back(v);
 	}
 	//---------------------->背景
 	m_pkBackgroundTiles = CCArray::array();
 	m_pkBackgroundTiles->retain();
-	int bgCount = kFileOp.readShort(stream);
+	int bgCount = kFileOp.readShort(pkStream);
 
 	for (int i = 0; i < bgCount; i++) 
 	{		
-		int nResourceIndex	= kFileOp.readByte(stream);										//资源下标
-		int	nX				= kFileOp.readShort(stream);	//x坐标
-		int nY				= kFileOp.readShort(stream);	//y坐标
-		bool nReverse		= kFileOp.readByte(stream) > 0;									//翻转
+		int nResourceIndex	= kFileOp.readByte(pkStream);										//资源下标
+		int	nX				= kFileOp.readShort(pkStream);	//x坐标
+		int nY				= kFileOp.readShort(pkStream);	//y坐标
+		bool nReverse		= kFileOp.readByte(pkStream) > 0;									//翻转
 		
 		if (kBackGroundImages.size() <= nResourceIndex ||
 			_bgOrders.size() <= nResourceIndex)
@@ -556,14 +557,15 @@ void NDMapData::decode(FILE* stream)
 	//<-------------------使用到的布景资源
 	std::vector<std::string> kSceneImages;
 	std::vector<int> kSceneOrders;
-	int nSceneImageCount = kFileOp.readShort(stream);
+	int nSceneImageCount = kFileOp.readShort(pkStream);
 
 	for (int i = 0; i < nSceneImageCount; i++) 
 	{
-		int nIDx = kFileOp.readShort(stream);
+		int nIDx = kFileOp.readShort(pkStream);
 		char szImageName[256] = {0};
 		sprintf(szImageName, "%s%d.png", NDEngine::NDPath::GetImagePath().c_str(), nIDx);
 		FILE* pkFile = fopen(szImageName, "rt");
+
 		if (pkFile )  
 		{
 			kSceneImages.push_back(szImageName);
@@ -574,30 +576,31 @@ void NDMapData::decode(FILE* stream)
 			kSceneImages.push_back(szImageName);
 		}
 		
-		int v = kFileOp.readShort(stream);
+		int v = kFileOp.readShort(pkStream);
 		kSceneOrders.push_back(v);
 	}
 	//------------------->布景
 	m_pkSceneTiles = CCArray::array();
 	m_pkSceneTiles->retain();
-	int sceneCount = kFileOp.readShort(stream);
-	for (int i = 0; i < sceneCount; i++) 
+	int nSceneCount = kFileOp.readShort(pkStream);
+
+	for (int i = 0; i < nSceneCount; i++) 
 	{		
-		int resourceIndex	= kFileOp.readByte(stream);										//资源下标
-		int	x				= kFileOp.readShort(stream);	//x坐标
-		int y				= kFileOp.readShort(stream);	//y坐标
-		BOOL reverse		= kFileOp.readByte(stream) > 0;									//翻转
+		int nResourceIndex	= kFileOp.readByte(pkStream);										//资源下标
+		int	x = (short)((kFileOp.readByte(pkStream) << 8) + kFileOp.readByte(pkStream));	//x坐标
+		int y = (short)((kFileOp.readByte(pkStream) << 8) + kFileOp.readByte(pkStream));	//y坐标
+		BOOL bReverse		= kFileOp.readByte(pkStream) > 0;									//翻转
 		
-		if (kSceneImages.size() <= resourceIndex ||
-			kSceneOrders.size() <= resourceIndex)
+		if (kSceneImages.size() <= nResourceIndex ||
+			kSceneOrders.size() <= nResourceIndex)
 		{
 			continue;
 		}
 		
 		NDSceneTile* pkTile = new NDSceneTile;
-		pkTile->setOrderID(kSceneOrders[resourceIndex] + y);
+		pkTile->setOrderID(kSceneOrders[nResourceIndex] + y);
 
-		std::string strImagePath = kSceneImages[resourceIndex];
+		std::string strImagePath = kSceneImages[nResourceIndex];
 
 		int nPos = strImagePath.find_first_of("./");
 
@@ -615,15 +618,18 @@ void NDMapData::decode(FILE* stream)
 			}
 		}
 
-		pkTile->setTexture(CCTextureCache::sharedTextureCache()->addImage(strImagePath.c_str()));
+		pkTile->setTexture(CCTextureCache::sharedTextureCache()->
+			addImage(strImagePath.c_str()));
 
-		int picWidth	= pkTile->getTexture()->getPixelsWide() * pkTile->getTexture()->getMaxS(); 
-		int picHeight	= pkTile->getTexture()->getPixelsHigh() * pkTile->getTexture()->getMaxT();
+		int nPicWidth = pkTile->getTexture()->
+			getPixelsWide() * pkTile->getTexture()->getMaxS(); 
+		int nPicHeight = pkTile->getTexture()->
+			getPixelsHigh() * pkTile->getTexture()->getMaxT();
 		
 		pkTile->setMapSize(CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
-		pkTile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
-		pkTile->setDrawRect(CGRectMake(x, y, picWidth, picHeight));
-		pkTile->setReverse(reverse);
+		pkTile->setCutRect(CGRectMake(0, 0, nPicWidth, nPicHeight));
+		pkTile->setDrawRect(CGRectMake(x, y, nPicWidth, nPicHeight));
+		pkTile->setReverse(bReverse);
 		
 		pkTile->make();
 		
@@ -635,20 +641,20 @@ void NDMapData::decode(FILE* stream)
 	m_AnimationGroups->retain();
 	m_AniGroupParams  = CCArray::array();
 	m_AniGroupParams->retain();
-	int aniGroupCount = kFileOp.readShort(stream);
+	int m_AniGroupCount = kFileOp.readShort(pkStream);
 
-	for (int i = 0; i < aniGroupCount; i++) 
+	for (int i = 0; i < m_AniGroupCount; i++) 
 	{			
-		int identifer = kFileOp.readShort(stream);			//动画id
+		int identifer = kFileOp.readShort(pkStream);			//动画id
 		NDAnimationGroup *aniGroup = NDAnimationGroupPool::defaultPool()->
 			addObjectWithSceneAnimationId(identifer);
 		if (!aniGroup) continue;
 		m_AnimationGroups->addObject(aniGroup);
 		aniGroup->release();
 
-		int x = kFileOp.readShort(stream);		//x坐标
-		int y = kFileOp.readShort(stream);		//y坐标
-		int aniOrder = y + kFileOp.readShort(stream);	//排序重心
+		int x = kFileOp.readShort(pkStream);		//x坐标
+		int y = kFileOp.readShort(pkStream);		//y坐标
+		int aniOrder = y + kFileOp.readShort(pkStream);	//排序重心
 		
 		anigroup_param* pkDict = new anigroup_param;
 
@@ -694,13 +700,16 @@ void NDMapData::decode(FILE* stream)
  */
 bool NDMapData::canPassByRow(unsigned int row, unsigned int column)
 {
-	if ( column >= m_nColumns || row >= m_nRows ) {
+	if ( column >= m_nColumns || row >= m_nRows )
+	{
 		return false;
 	}
+
 	if(row == m_nRoadBlockY)
 	{
 		return false;
 	}
+
 	if(column == m_nRoadBlockX)
 	{
 		return false;
@@ -724,13 +733,13 @@ void NDMapData::setRoadBlock(int x, int y)
 
 NDSceneTile * NDMapData::getBackGroundTile(unsigned int index)
 {
-	if (index>=m_pkBackgroundTiles->count()) 
+	if (m_pkBackgroundTiles->count() <= index) 
 	{
 		return NULL;
 	}
 	else
 	{	
-		return (NDSceneTile *)m_pkBackgroundTiles->objectAtIndex(index);
+		return (NDSceneTile*)m_pkBackgroundTiles->objectAtIndex(index);
 	}
 
 	return NULL;
@@ -793,7 +802,7 @@ void NDMapData::addObstacleCell(unsigned int row, unsigned int column)
 		return;
 	}
 	
-	int nIndex = row*m_nColumns+column;
+	int nIndex = row * m_nColumns+column;
 	if (m_pkObstacles->size() > nIndex)
 	{
 		(*m_pkObstacles)[nIndex] = false;
@@ -825,16 +834,16 @@ void NDMapData::addMapSwitch(unsigned int x,			// 切屏点 x
 					  const char* name,	// 目标地图名称
 					  const char* desc)	// 目标地图描述
 {
-	NDMapSwitch *mapSwitch = new NDMapSwitch;
+	NDMapSwitch* pkMapSwitch = new NDMapSwitch;
 	
-	mapSwitch->setX(x); //切屏点x
-	mapSwitch->setY(y); //切屏点y
-	mapSwitch->setMapIndex(mapid); //目标地图
-	mapSwitch->setPassIndex(index); //目标点
-	mapSwitch->setNameDesMap(name);
-	mapSwitch->setDescDesMap(desc);
-	mapSwitch->SetLabelNew(this);
+	pkMapSwitch->setX(x); //切屏点x
+	pkMapSwitch->setY(y); //切屏点y
+	pkMapSwitch->setMapIndex(mapid); //目标地图
+	pkMapSwitch->setPassIndex(index); //目标点
+	pkMapSwitch->setNameDesMap(name);
+	pkMapSwitch->setDescDesMap(desc);
+	pkMapSwitch->SetLabelNew(this);
 	
-	m_Switchs->addObject(mapSwitch);
-	mapSwitch->release();
+	m_Switchs->addObject(pkMapSwitch);
+	pkMapSwitch->release();
 }

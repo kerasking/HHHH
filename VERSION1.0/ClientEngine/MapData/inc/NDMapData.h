@@ -133,6 +133,7 @@ public:
 	void setRoadBlock(int x, int y);
 
 private:
-	void decode(FILE* stream);
+
+	void decode(FILE* pkStream);
 };
 #endif

@@ -31,7 +31,7 @@ namespace NDEngine
 		char*	className;
 		int		objectSize;
 		NDObject* (*m_pfnCreateObject)();
-		NDRuntimeClass*	m_pBaseClass;		
+		NDRuntimeClass*	m_pBaseClass;
 		NDRuntimeClass* m_pNextClass;
 		static NDRuntimeClass* pFirstClass;
 		static NDRuntimeClass* RuntimeClassFromString(const char* ndClassName);
@@ -104,7 +104,7 @@ public:\
 		virtual NDRuntimeClass* GetRuntimeClass() const;
 		
 	public:
-		static NDRuntimeClass classNDObject;		
+		static NDRuntimeClass classNDObject;
 		static NDObject* CreateObject();
 		
 	private:

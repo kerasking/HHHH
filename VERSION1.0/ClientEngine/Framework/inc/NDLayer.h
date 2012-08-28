@@ -49,6 +49,6 @@ namespace NDEngine
 		
 		DECLARE_AUTOLINK(NDLayer)
 		INTERFACE_AUTOLINK(NDLayer)
-	};	
+	};
 }
 #endif

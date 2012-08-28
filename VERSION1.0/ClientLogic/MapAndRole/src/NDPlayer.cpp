@@ -61,7 +61,7 @@ namespace NDEngine
 		return 0; ///< 临时性的加上，到时候要去掉 郭浩
 	}
 
-	static NDPlayer* g_defaultHero = NULL;
+	static NDPlayer* g_pkDefaultHero = NULL;
 	
 	IMPLEMENT_CLASS(NDPlayer, NDManualRole)
 	
@@ -80,10 +80,10 @@ namespace NDEngine
 	swCamp(0),
 	m_nHonour(0),
 	//synRank(-1),
-	synMoney(0),
-	synContribute(0),
-	synSelfContribute(0),
-	synSelfContributeMoney(0),
+	m_nSynMoney(0),
+	m_nSynContribute(0),
+	m_nSynSelfContribute(0),
+	m_nSynSelfContributeMoney(0),
 	idCurMap(0)
 	{
 		phyAdd = 0;
@@ -120,11 +120,11 @@ namespace NDEngine
 		
 		jifeng = 0;
 		
-		serverCol = -1;
-		serverRow = -1;
-		iStorgeMoney = 0;
-		iStorgeEmoney = 0;
-		iSkillPoint = 0;
+		m_nServerCol = -1;
+		m_nServerRow = -1;
+		m_nStorgeMoney = 0;
+		m_nStorgeEmoney = 0;
+		m_nSkillPoint = 0;
 		
 		// 装备直接属性增加值
 		eAtkSpd = 0;
@@ -143,7 +143,7 @@ namespace NDEngine
 		iTmpDefPoint = 0;
 		iTmpRestPoint = 0;
 		
-		beginProtectedTime = 0;
+		m_nBeginProtectedTime = 0;
 		
 		m_iFocusManuRoleID = -1;
 		//m_npcFocus = NULL;
@@ -183,7 +183,7 @@ namespace NDEngine
 	
 	NDPlayer::~NDPlayer()
 	{
-		g_defaultHero = NULL;
+		g_pkDefaultHero = NULL;
 		delete m_timer;
 		m_timer = NULL;
 	}
@@ -197,19 +197,19 @@ namespace NDEngine
 			m_bFirstUse = false;
 		}
 		
-		if (!g_defaultHero)
+		if (!g_pkDefaultHero)
 		{
-			g_defaultHero = new NDPlayer();
-			g_defaultHero->Initialization(lookface, false);
-			g_defaultHero->SetLookface(lookface);
+			g_pkDefaultHero = new NDPlayer();
+			g_pkDefaultHero->Initialization(lookface, false);
+			g_pkDefaultHero->SetLookface(lookface);
 		}
 
-		return *g_defaultHero;
+		return *g_pkDefaultHero;
 	}
 	
 	void NDPlayer::pugeHero()
 	{
-		SAFE_DELETE_NODE(g_defaultHero);
+		SAFE_DELETE_NODE(g_pkDefaultHero);
 	}
 	
 	void NDPlayer::SendNpcInteractionMessage(unsigned int idNpc)

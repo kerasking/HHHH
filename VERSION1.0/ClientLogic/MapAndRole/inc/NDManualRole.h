@@ -112,8 +112,8 @@ namespace NDEngine
 		
 		void SetServerDir(int dir);
 		
-		int GetServerX(){ return serverCol; }
-		int GetServerY(){ return serverRow; }
+		int GetServerX(){ return m_nServerCol; }
+		int GetServerY(){ return m_nServerRow; }
 		
 		void uppackBattlePet();
 		
@@ -140,7 +140,7 @@ namespace NDEngine
 		void teamSetServerDir(int dir);
 		void teamSetServerPosition(int iCol, int iRow);
 		
-		bool IsSafeProtected(){ return isSafeProtected; }
+		bool IsSafeProtected(){ return m_bIsSafeProtected; }
 		void setSafeProtected(bool isSafeProtected);
 		
 		void updateFlagOfQiZhi();
@@ -233,7 +233,7 @@ namespace NDEngine
 		string m_strSynRank;						// 官职名字
 		
 		string m_strRank;
-		int		m_nRank;
+		int	m_nRank;
 		
 		bool m_bLevelUp;
 		
@@ -246,7 +246,7 @@ namespace NDEngine
 		int m_nMarriageID;
 		
 		/* 伴侣名字**/
-		std::string loverName;
+		std::string m_strLoverName;
 		
 		int m_nMarriageState;
 		
@@ -257,7 +257,7 @@ namespace NDEngine
 		
 		bool m_bClear;
 		
-		NDMonster* aniGroupTransformed;
+		NDMonster* pkAniGroupTransformed;
 		
 		vector<int> m_vEquipsID;
 		
@@ -266,7 +266,7 @@ namespace NDEngine
 	private:
 		// 战宠相关
 		//CAutoLink<NDBattlePet> m_pBattlePetShow;
-		ShowPetInfo	m_infoShowPet;
+		ShowPetInfo	m_kInfoShowPet;
 		
 		deque<int>	m_dequeWalk;
 		bool		m_bUpdateDiff;
@@ -280,25 +280,34 @@ namespace NDEngine
 		void RunNumberOneEffect();
 		
 	protected:
-		int beginProtectedTime;
-		bool isSafeProtected;
-		int serverCol, serverRow;
+
+		int m_nBeginProtectedTime;
+		bool m_bIsSafeProtected;
+		int m_nServerCol;
+		int m_nServerRow;
+
 	public:
-		CGPoint m_oldPos;
+
+		CGPoint m_kOldPos;
+
 	protected:
+
 		bool m_bToLastPos;
 		
 		NDUILabel *m_lbName[2];
 		NDUILabel *m_lbSynName[2];
 		NDUILabel *m_lbPeerage[2];
 		
-		NDSprite *effectFeedPetAniGroup;
-		NDSprite *effectArmorAniGroup;
-		NDSprite *effectDacoityAniGroup;
+		NDSprite* m_pkEffectFeedPetAniGroup;
+		NDSprite* m_pkEffectArmorAniGroup;
+		NDSprite* m_pkEffectDacoityAniGroup;
 		
-		CGPoint m_posBackup;
+		CGPoint m_kPosBackup;
+
 	private:
-		std::vector<ServerEffect> m_serverEffectBack, m_serverEffectFront;
+
+		std::vector<ServerEffect> m_kServerEffectBack;
+		std::vector<ServerEffect> m_kServerEffectFront;
 	};
 }
 
