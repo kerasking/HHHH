@@ -169,8 +169,6 @@ namespace NDEngine
 			}
 			
 			NDNode* pkNode = this->GetParent();
-
-			SetPosition(ccp(500,200));
 			
 			if (!pkNode)
 			{

@@ -23,7 +23,8 @@ namespace NDEngine
 	bool NDGameApplication::initInstance()
 	{
 		bool bRet = false;
-		do {
+		do
+		{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
 			// Initialize OpenGLView instance, that release by CCDirector when application terminate.
@@ -130,7 +131,7 @@ namespace NDEngine
 		int x = 100;
 		int y = 100;
 
-	  	kPlayer.SetPositionEx(ccp(x * 32 + 16, y * 32 + 16));
+	  	kPlayer.SetPositionEx(ccp(500,500));///< x * 32 + 16, y * 32 + 16
 	  	kPlayer.SetServerPositon(x, y);
 		kPlayer.m_nID = 1;
 		kPlayer.m_name = "ÍõÔö";

@@ -15,7 +15,6 @@
 
 using namespace cocos2d;
 
-
 NDTileTableRecord::NDTileTableRecord()
 : m_nImageIndex(0)
 , m_nX(0)
@@ -32,16 +31,16 @@ NDAnimationGroup::NDAnimationGroup()
 , m_nIdentifer(0)
 , m_bReverse(false)
 , m_pkAnimations(NULL)
-, m_Images(NULL)
+, m_pkImages(NULL)
 , m_pkTileTable(NULL)
 , m_pkRuningSprite(NULL)
 , m_pkUnpassPoint(NULL)
 {
-	m_Position			= CGPointMake(0, 0);
+	m_kPosition			= CGPointMake(0, 0);
 	m_kRunningMapSize	= CGSizeMake(0, 0);
 	m_pkAnimations		= CCArray::array();
 	m_pkTileTable			= CCArray::array();
-	m_Images			= new vector<std::string>();
+	m_pkImages			= new vector<std::string>();
 
 	m_pkAnimations->retain();
 	m_pkTileTable->retain();
@@ -51,7 +50,7 @@ NDAnimationGroup::~NDAnimationGroup()
 {
 	CC_SAFE_RELEASE(m_pkAnimations);
 	CC_SAFE_RELEASE(m_pkTileTable);
-	CC_SAFE_DELETE(m_Images);
+	CC_SAFE_DELETE(m_pkImages);
 	CC_SAFE_DELETE(m_pkUnpassPoint);
 }
 
@@ -108,15 +107,11 @@ void NDAnimationGroup::decodeSprtFile(FILE* pkStream)
  		pkRecord->setW(kFileOp.readShort(pkStream));
  		pkRecord->setH(kFileOp.readShort(pkStream));
 
-		//kFileOp.readByte(pkStream);
-
  		pkRecord->setReplace(kFileOp.readByte(pkStream));
  		m_pkTileTable->addObject(pkRecord);
  		pkRecord->release();	
 	}
 }
-
-
 
 void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 {
@@ -125,9 +120,9 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 	int nImageCount = kFileOp.readByte(pkStream);
 	for (int i = 0; i < nImageCount; i++) 
 	{
-		std::string imageName = kFileOp.readUTF8String(pkStream);
-		std::string image = NDEngine::NDPath::GetImagePath() + imageName;
-		m_Images->push_back(image);
+		std::string strImageName = kFileOp.readUTF8String(pkStream);
+		std::string strImage = NDEngine::NDPath::GetImagePath() + strImageName;
+		m_pkImages->push_back(strImage);
 	}
 	
 	int nAnimationCount = kFileOp.readByte(pkStream);

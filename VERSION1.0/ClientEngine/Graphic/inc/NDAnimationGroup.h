@@ -38,14 +38,14 @@ class NDAnimationGroup : public cocos2d::CCObject
 {
 	CC_SYNTHESIZE(int, m_nType, Type)
 	CC_SYNTHESIZE(int, m_nIdentifer, Identifer)
-	CC_SYNTHESIZE(CGPoint, m_Position, Position)
+	CC_SYNTHESIZE(CGPoint, m_kPosition, Position)
 	CC_SYNTHESIZE(CGSize, m_kRunningMapSize, RunningMapSize)
 	CC_SYNTHESIZE(NDEngine::NDSprite*, m_pkRuningSprite, RuningSprite)
 	
 	CC_PROPERTY(bool, m_bReverse, Reverse)
 	CC_SYNTHESIZE(cocos2d::CCArray*, m_pkAnimations, Animations)
 	CC_SYNTHESIZE(cocos2d::CCArray*, m_pkTileTable, TileTable)
-	CC_SYNTHESIZE(std::vector<std::string>*, m_Images, Images)
+	CC_SYNTHESIZE(std::vector<std::string>*, m_pkImages, Images)
 	CC_SYNTHESIZE(std::vector<int>*, m_pkUnpassPoint, UnpassPoint)
 
 public:

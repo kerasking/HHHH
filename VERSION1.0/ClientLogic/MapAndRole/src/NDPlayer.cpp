@@ -504,7 +504,7 @@ namespace NDEngine
 	}
 	
 	int NDPlayer::GetOrder()
-	{		
+	{
 		if (m_pkRidePet) 
 		{
 			return m_pkRidePet->GetOrder() + 1;
@@ -527,7 +527,7 @@ namespace NDEngine
 			int(toPos.y) / MAP_UNITSIZE * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
 		
 		CGPoint posCur = GetPosition();
-		if ( ((int)posCur.x - DISPLAY_POS_X_OFFSET) % MAP_UNITSIZE != 0 || 
+		if ( ((int)posCur.x - DISPLAY_POS_X_OFFSET) % MAP_UNITSIZE != 0 ||
 			 ((int)posCur.y - DISPLAY_POS_Y_OFFSET) % MAP_UNITSIZE != 0)
 		{ // Cell没走完,又设置新的目标
 			m_kTargetPos = kPos;
@@ -548,9 +548,9 @@ namespace NDEngine
 		int nOldCol = (GetPosition().x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
 		int nOldRow = (GetPosition().y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
 		
-		NDManualRole::SetPosition(newPosition);	
+		NDManualRole::SetPosition(newPosition);
 		
-		if (!isTeamLeader() && isTeamMember()) 
+		if (!isTeamLeader() && isTeamMember())
 		{
 			return;
 		}
@@ -1099,7 +1099,7 @@ namespace NDEngine
 	bool NDPlayer::isRoleCanMove()
 	{
 		return !IsInState(USERSTATE_BOOTH)
-		&& (isTeamLeader() || !isTeamMember())&&!m_bLocked;
+		&& (isTeamLeader() || !isTeamMember()) && !m_bLocked;
 	}
 	
 	void NDPlayer::OnDialogClose(NDUIDialog* dialog)
@@ -1140,7 +1140,8 @@ namespace NDEngine
 			return;
 		}
 		
-		if (!this->GetParent() || !this->GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer))) 
+		if (!this->GetParent() || !this->GetParent()->
+			IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
 			return;
 		}
@@ -1317,7 +1318,10 @@ namespace NDEngine
 	// NPC焦点相关操作
 	NDNpc* NDPlayer::GetFocusNpc()
 	{
-		if (!IsFocusNpcValid()) return NULL;
+		if (!IsFocusNpcValid())
+		{
+			return NULL;
+		}
 		
 		//return NDMapMgrObj.GetNpcByID(m_iFocusNpcID); ///< 临时性注释 郭浩
 	}
@@ -1356,8 +1360,7 @@ namespace NDEngine
 		return m_nLookface;
 	}
 
-	override
-		NDBattlePet* NDPlayer::GetShowPet()
+	NDBattlePet* NDPlayer::GetShowPet()
 	{
 		return 0;
 	}
