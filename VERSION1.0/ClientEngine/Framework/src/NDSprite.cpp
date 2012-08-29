@@ -85,30 +85,30 @@ void NDSprite::Initialization(const char* sprFile)
 			sprFile);
 }
 
-void NDSprite::SetCurrentAnimation(int animationIndex, bool reverse)
+void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 {
 	//NDLog("animationIndex%d",animationIndex);
 	if (m_pkAniGroup)
 	{
-		if (animationIndex < 0
-				|| animationIndex
+		if (nAnimationIndex < 0
+				|| nAnimationIndex
 						>= (int) m_pkAniGroup->getAnimations()->count())
 		{
 			return;
 		}
 
-		m_bReverse = reverse;
+		m_bReverse = bReverse;
 
 		if (m_pkCurrentAnimation == NULL
 				|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_END
 				|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_START
 				|| this->m_pkCurrentAnimation->getCurIndexInAniGroup()
-						!= animationIndex)
+						!= nAnimationIndex)
 		{
 			m_pkCurrentAnimation =
 					(NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(
-							animationIndex);
-			m_pkCurrentAnimation->setCurIndexInAniGroup(animationIndex);
+							nAnimationIndex);
+			m_pkCurrentAnimation->setCurIndexInAniGroup(nAnimationIndex);
 			CC_SAFE_RELEASE_NULL (m_pkFrameRunRecord);
 			SAFE_RELEASE(m_pkFrameRunRecord);
 			m_pkFrameRunRecord = new NDFrameRunRecord;

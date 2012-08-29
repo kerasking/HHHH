@@ -46,7 +46,8 @@ public:
 	virtual void TouchMoved(NDTouch* touch);
 	virtual bool TouchDoubleClick(NDTouch* touch);
 
-DECLARE_AUTOLINK(NDLayer)INTERFACE_AUTOLINK(NDLayer)
+DECLARE_AUTOLINK(NDLayer)
+INTERFACE_AUTOLINK(NDLayer)
 };
 }
 #endif

@@ -30,7 +30,7 @@ public:
 	void Stop();
 	
 private:
-	std::string m_des;
+	std::string m_strDes;
 	
 	bool m_bWork;
 };

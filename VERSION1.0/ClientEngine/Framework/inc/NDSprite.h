@@ -349,7 +349,7 @@ public:
 	}
 	void RunAnimation(bool bDraw);
 	CGRect GetSpriteRect();
-	void SetCurrentAnimation(int animationIndex, bool reverse);
+	void SetCurrentAnimation(int nAnimationIndex, bool bReverse);
 
 	void SetSpriteDir(int dir)
 	{
