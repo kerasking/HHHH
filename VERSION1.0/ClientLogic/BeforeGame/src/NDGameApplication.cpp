@@ -134,7 +134,7 @@ namespace NDEngine
 	  	kPlayer.SetPositionEx(ccp(500,500));///< x * 32 + 16, y * 32 + 16
 	  	kPlayer.SetServerPositon(x, y);
 		kPlayer.m_nID = 1;
-		kPlayer.m_name = "ÍõÔö";
+		kPlayer.m_name = "ÕÅÃô";
 		kPlayer.SetLoadMapComplete();
 
 		NDScene* pkScene = pkDirector->GetRunningScene();

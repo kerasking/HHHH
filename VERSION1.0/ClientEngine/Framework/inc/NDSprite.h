@@ -26,7 +26,7 @@
 class NDAnimationGroup;
 
 namespace NDEngine 
-{	
+{
 
 #define		WEAPON_NONE				0
 #define		ONE_HAND_WEAPON			6
@@ -274,11 +274,9 @@ namespace NDEngine
 		void SetNonRole(bool bNonRole) { this->m_bNonRole = bNonRole; }
 		
 		bool IsNonRole() { return this->m_bNonRole; }
-		
 		bool isMoving(){ return m_bIsMoving; }
-		
+
 		void SetPlayFrameRange(int nStartFrame, int nEndFrame);
-		
 		void SetHightLight(bool bSet);
 
 		NDFrame* GetCurrentFrame();

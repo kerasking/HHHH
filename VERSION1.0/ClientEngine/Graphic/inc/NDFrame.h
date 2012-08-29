@@ -14,7 +14,7 @@
 #include "NDTile.h"
 #include "NDAnimationGroup.h"
 
-class NDFrameRunRecord : public cocos2d::CCObject
+class NDFrameRunRecord: public cocos2d::CCObject
 {
 	CC_SYNTHESIZE(int, m_nNextFrameIndex, NextFrameIndex)
 	CC_SYNTHESIZE(int, m_nCurrentFrameIndex, CurrentFrameIndex)
@@ -37,7 +37,7 @@ private:
 
 //////////////////////////////////////////////////////////////////////////
 //动画中所使用到的瓦片
-class NDFrameTile : public cocos2d::CCObject
+class NDFrameTile: public cocos2d::CCObject
 {
 	CC_SYNTHESIZE(int, m_nX, X)
 	CC_SYNTHESIZE(int, m_nY, Y)
@@ -54,11 +54,11 @@ typedef struct _TILE_REVERSE_ROTATION
 	BOOL reverse;					//是否翻转
 	NDRotationEnum rotation;		//旋转角度
 	float tileW;
-}TILE_REVERSE_ROTATION;
+} TILE_REVERSE_ROTATION;
 
 class NDAnimation;
 class NDAnimationGroup;
-class NDFrame : public cocos2d::CCObject
+class NDFrame: public cocos2d::CCObject
 {
 	CC_SYNTHESIZE(int, m_nEnduration, Enduration)
 	CC_SYNTHESIZE(NDAnimation*, m_BelongAnimation, BelongAnimation)
@@ -80,13 +80,15 @@ public:
 	void drawHeadAt(CGPoint pos);
 
 private:
-	int						m_count;
-	bool					m_needInitTitles;
+	int m_count;
+	bool m_needInitTitles;
 	cocos2d::CCMutableArray<NDTile*>* m_pkTiles;
 
 private:
-	TILE_REVERSE_ROTATION tileReverseRotationWithReverse(bool reverse, int rota);
-	cocos2d::CCTexture2D* getTileTextureWithImageIndex(int imageIndex, int replace);
+	TILE_REVERSE_ROTATION tileReverseRotationWithReverse(bool reverse,
+			int rota);
+	cocos2d::CCTexture2D* getTileTextureWithImageIndex(int imageIndex,
+			int replace);
 	float getTileW(int w, int h, NDRotationEnum rotation);
 };
 

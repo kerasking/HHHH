@@ -184,7 +184,7 @@ unsigned int CGlobalDialog::Show(NDEngine::NDObject* delegate, const char* title
 	info.text += text ? text : "";
 	//info.cancelbtn += cancleButton ? cancleButton : "";
 	info.bShowing = false;
-	info.uiID = m_idAlloc.GetID();
+	info.uiID = m_kIDAlloc.GetID();
 	info.btns = ortherButtons;
 	info.timeout = timeout;
 	
@@ -235,7 +235,7 @@ void CGlobalDialog::deal()
 	
 	s_dlg_info *p = m_listDlg.front();
 	
-	if (p && p->bShowing && !m_dlg)
+	if (p && p->bShowing && !m_kDialog)
 	{ // 对话框被关掉了,但是内部保存的数据还没清掉
 		m_listDlg.pop_front();
 		
@@ -262,7 +262,7 @@ void CGlobalDialog::deal()
 		dlg->Show(p->title.c_str(), p->text.c_str(), p->cancelbtn.c_str(), vec_str, vec_arrow);
 		dlg->SetTime(p->timeout);
 		
-		m_dlg = dlg->QueryLink();
+		m_kDialog = dlg->QueryLink();
 		
 		// 停止怪物ai
 		NDScene* runningScene = NDDirector::DefaultDirector()->GetRunningScene();
@@ -283,7 +283,7 @@ void CGlobalDialog::quitGame()
 		}
 	}
 	m_listDlg.clear();
-	m_idAlloc.reset();
+	m_kIDAlloc.reset();
 }
 
 void CGlobalDialog::OnDialogShow(NDUIDialog* dialog)
@@ -337,7 +337,7 @@ void CGlobalDialog::OnDialogClose(NDUIDialog* dialog)
 	
 	m_listDlg.pop_front();
 	
-	m_idAlloc.ReturnID(dialog->GetTag());
+	m_kIDAlloc.ReturnID(dialog->GetTag());
 	
 	deal();
 }
@@ -391,22 +391,22 @@ bool CGlobalDialog::OnDialogTimeOut(NDUIDialog* dialog)
 
 IMPLEMENT_CLASS(GameQuitDialog, NDUIDialog)
 
-GameQuitDialog* GameQuitDialog::s_GameQuitDialog = NULL;
+GameQuitDialog* GameQuitDialog::ms_pkGameQuitDialog = NULL;
 
 void GameQuitDialog::DefaultShow(std::string title, std::string content, float seconds /*= 0.0f*/, bool replace/*=false*/)
 {
-	if (!s_GameQuitDialog)
+	if (!ms_pkGameQuitDialog)
 	{
-		s_GameQuitDialog = new GameQuitDialog;
-		s_GameQuitDialog->Initialization();
-		s_GameQuitDialog->Show(title.c_str(), content.c_str(), NDCommonCString("Ok"), NULL);
-		s_GameQuitDialog->SetTime(seconds);
+		ms_pkGameQuitDialog = new GameQuitDialog;
+		ms_pkGameQuitDialog->Initialization();
+		ms_pkGameQuitDialog->Show(title.c_str(), content.c_str(), NDCommonCString("Ok"), NULL);
+		ms_pkGameQuitDialog->SetTime(seconds);
 	}
 	else if (replace)
 	{
-		s_GameQuitDialog->SetTitle(title.c_str());
-		s_GameQuitDialog->SetContent(content.c_str());
-		s_GameQuitDialog->SetTime(seconds);
+		ms_pkGameQuitDialog->SetTitle(title.c_str());
+		ms_pkGameQuitDialog->SetContent(content.c_str());
+		ms_pkGameQuitDialog->SetTime(seconds);
 	}
 }
 
@@ -416,7 +416,7 @@ GameQuitDialog::GameQuitDialog()
 
 GameQuitDialog::~GameQuitDialog()
 {
-	s_GameQuitDialog = NULL;
+	ms_pkGameQuitDialog = NULL;
 }
 
 void GameQuitDialog::Initialization()

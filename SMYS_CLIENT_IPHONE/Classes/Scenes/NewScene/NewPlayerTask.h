@@ -167,7 +167,9 @@ public:
 	void OnButtonClick(NDUIButton* button);
 	
 	void OnTabLayerSelect(TabLayer* tab, unsigned int lastIndex, unsigned int curIndex);
+
 private:
+
 	NDUILayer* m_layerLeft;
 	NDUILayer* m_layerKeJie;
 	NDUILayer* m_layerYiJie;
@@ -176,18 +178,11 @@ private:
 	NDUITableLayer* m_tlYiJie;
 	
 	NDPicture* m_picTaskDone;
-	
-	NDUIButton* m_btnClose;
-	
+		
 	NDUILabel* m_lbTaskTitle;
-	
-	TaskDeal m_taskInfo;
-	
-	static NewPlayerTask* s_instance;
-	
-	static vec_task s_AcceptTaskList;
-	
+
 private:
+
 	void refreshTaskList(bool bAcceptable);
 	
 	void refreshTaskDetailYiJie(Task* task);

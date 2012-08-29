@@ -87,11 +87,11 @@ namespace NDEngine
 		~NDManualRole();
 		
 	public:
-		void Update(unsigned long ulDiff); override
-		void SetAction(bool bMove, bool ignoreFighting=false); hide
+		void Update(unsigned long ulDiff);
+		void SetAction(bool bMove, bool ignoreFighting=false);
 		bool AssuredRidePet(); hide
 		
-		void Initialization(int lookface, bool bSetLookFace=true); hide 
+		void Initialization(int lookface, bool bSetLookFace=true); 
 		
 		virtual void Walk(CGPoint toPos, SpriteSpeed speed);
 		void OnMoving(bool bLastPos); override
@@ -102,7 +102,7 @@ namespace NDEngine
 		bool OnDrawBegin(bool bDraw); override
 		void OnDrawEnd(bool bDraw); override
 		
-		virtual void stopMoving(bool bResetPos=true, bool bResetTeamPos=true); hide
+		virtual void stopMoving(bool bResetPos=true, bool bResetTeamPos=true);
 		
 		void drawEffects(bool bDraw); override
 		

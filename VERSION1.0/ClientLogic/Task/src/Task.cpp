@@ -17,7 +17,7 @@ bool Task::BEGIN_FRESHMAN_TASK = false;
 
 Task::Task() 
 {
-	taskId = 0;
+	m_nTaskID = 0;
 	m_strTaskTitle = NDCommonCString("empty");
 	Init();
 }
@@ -25,7 +25,7 @@ Task::Task()
 Task::Task(int id, std::string title)
 {
 	
-	taskId = id;
+	m_nTaskID = id;
 	m_strTaskTitle = title;
 	Init();
 }
@@ -153,9 +153,9 @@ int  Task::getTaskType()
 {
 	int res = TASK_STORY;
 	
-	if ( taskId >= 6000000 && taskId <= 9999999  )
+	if ( m_nTaskID >= 6000000 && m_nTaskID <= 9999999  )
 	{
-		res = taskId / 1000000;
+		res = m_nTaskID / 1000000;
 	}
 	
 	return res;

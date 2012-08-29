@@ -122,18 +122,18 @@ void completeTask(int taskId)
 	//		if (!T.dealOverMsgAndCheckTimeout()) {
 	//			return;
 	//		}
-	NDPlayer& player = NDPlayer::defaultHero();
-	
-	vec_task& tasks = player.m_vPlayerTask;
-	for_vec(tasks, vec_task_it)
+	NDPlayer& kPlayer = NDPlayer::defaultHero();
+	vec_task& kTasks = kPlayer.m_vPlayerTask;
+
+	for_vec(kTasks, vec_task_it)
 	{
-		Task* t = (*it);
-		if (taskId == (*it)->taskId)
+		Task* pkTask = (*it);
+		if (taskId == (*it)->m_nTaskID)
 		{
 			//deleteGatherPointByTask(temp);
-			showPrizeDialog(*t);
-			delete t;
-			tasks.erase(it);
+			showPrizeDialog(*pkTask);
+			SAFE_DELETE(pkTask);
+			kTasks.erase(it);
 			break;
 		}
 	}
@@ -154,7 +154,9 @@ void completeTask(int taskId)
 	//		Npc.refreshNpcStateInMap(); // 完成时要重新刷新整个地图npc的状态
 }
 
-std::string setTaskInfo(std::string taskStr, Task& task, int index, std::vector<int> datas, int monCornIndex)
+std::string setTaskInfo(std::string taskStr, Task& task,
+						int index, std::vector<int> datas,
+						int monCornIndex)
 {
 	if (index > 100)
 	{	// 防止无限递归
@@ -170,203 +172,206 @@ std::string setTaskInfo(std::string taskStr, Task& task, int index, std::vector<
 	{
 		std::string taskStart = sBuffer.substr(startIndex + 1, endIndex-startIndex-1);
 		
-		std::vector<std::string> task_array;
+		std::vector<std::string> kTaskArray;
 		
-		int fromIndex = 0, toIndex = 0;
+		int nFromIndex = 0;
+		int nToIndex = 0;
 
-		while (int(std::string::npos) != (toIndex = taskStart.find(" ", fromIndex)))
+		while (int(std::string::npos) != (nToIndex = taskStart.find(" ", nFromIndex)))
 		{
-			task_array.push_back(taskStart.substr(fromIndex, toIndex-fromIndex));
-			fromIndex = toIndex+1;
+			kTaskArray.push_back(taskStart.substr(nFromIndex, nToIndex-nFromIndex));
+			nFromIndex = nToIndex+1;
 		}
 
 		//补上最后一个
-		task_array.push_back(taskStart.substr(fromIndex, sBuffer.size()-fromIndex));
+		kTaskArray.push_back(taskStart.substr(nFromIndex, sBuffer.size()-nFromIndex));
 		
-		if (!task_array.empty())
+		if (!kTaskArray.empty())
 		{
-			if (task_array[0] == "mon" && task_array.size() >= 6 )
+			if (kTaskArray[0] == "mon" && kTaskArray.size() >= 6 )
 			{ // 表示怪物信息
 				
 				// [mon ID name 格式 data 数量 mapid mapname X Y XXXX]
 				
 				//Array dataArray = task.taskDataArray;
-				TaskData *taskElement = new TaskData();
-				taskElement->setMId(atoi(task_array[1].c_str())); // 怪物id
-				taskElement->setElementName(task_array[2]); // 怪物名字
-				int nType = atoi(task_array[3].c_str());
-				taskElement->setMShowType(nType); // 表示要不要显示在功能区
-				taskElement->setMSumCount(atoi(task_array[5].c_str())); // 怪物总数量
+				TaskData *pkTaskElement = new TaskData();
+				pkTaskElement->setMId(atoi(kTaskArray[1].c_str())); // 怪物id
+				pkTaskElement->setElementName(kTaskArray[2]); // 怪物名字
+				int nType = atoi(kTaskArray[3].c_str());
+				pkTaskElement->setMShowType(nType); // 表示要不要显示在功能区
+				pkTaskElement->setMSumCount(atoi(kTaskArray[5].c_str())); // 怪物总数量
 				
 				if (monCornIndex < int(datas.size()))
 				{ // monCornIndex记录的是按顺序接收的怪物data
-					taskElement->setMCurCount(datas[monCornIndex]); // 怪物目前data
+					pkTaskElement->setMCurCount(datas[monCornIndex]); // 怪物目前data
 				}
+
 				monCornIndex++;
 				
-				if (nType && task_array.size() >= 10)
+				if (nType && kTaskArray.size() >= 10)
 				{
-					taskElement->setMapId(atoi(task_array[6].c_str())); // mapId
-					taskElement->setMapName(task_array[7]); // map 名字
-					taskElement->setMapX(atoi(task_array[8].c_str())); // map
+					pkTaskElement->setMapId(atoi(kTaskArray[6].c_str())); // mapId
+					pkTaskElement->setMapName(kTaskArray[7]); // map 名字
+					pkTaskElement->setMapX(atoi(kTaskArray[8].c_str())); // map
 					// x
-					taskElement->setMapY(atoi(task_array[9].c_str())); // map
+					pkTaskElement->setMapY(atoi(kTaskArray[9].c_str())); // map
 					// Y
 					
 				}
 
-				if (10 < task_array.size())
+				if (10 < kTaskArray.size())
 				{
-					taskElement->setMAction(task_array[10]); // action
+					pkTaskElement->setMAction(kTaskArray[10]); // action
 				}
 				else
 				{
-					taskElement->setMAction(""); // action
+					pkTaskElement->setMAction(""); // action
 				}
 				
-				taskElement->setMType(TaskData::TASK_MONSTER); // 表示类型
+				pkTaskElement->setMType(TaskData::TASK_MONSTER); // 表示类型
 				
-				sBuffer.replace(startIndex, endIndex -startIndex+ 1, taskElement->getElementName());
-				task.taskDataArray.push_back(taskElement);
+				sBuffer.replace(startIndex, endIndex -startIndex+ 1, pkTaskElement->getElementName());
+				task.taskDataArray.push_back(pkTaskElement);
 			}
-			else if(task_array[0] == "item" && task_array.size() >= 6)
+			else if(kTaskArray[0] == "item" && kTaskArray.size() >= 6)
 			{
 				
 				// [item id name 格式 data 数量 mapid mapname X Y XXXX]
 				
 				// 格式1表示要传送
 				//Array dataArray = task.taskDataArray;
-				TaskData *taskElement = new TaskData();
-				taskElement->setMId(atoi(task_array[1].c_str())); // itemType
-				taskElement->setElementName(task_array[2]); // 物品名字
-				int nType = atoi(task_array[3].c_str());
-				taskElement->setMShowType(nType); // 显示格式					
+				TaskData* pkTaskElement = new TaskData();
+				pkTaskElement->setMId(atoi(kTaskArray[1].c_str())); // itemType
+				pkTaskElement->setElementName(kTaskArray[2]); // 物品名字
+				int nType = atoi(kTaskArray[3].c_str());
+				pkTaskElement->setMShowType(nType); // 显示格式					
 				// ,
 				// 表示要不要显示在功能去
-				taskElement->setMSumCount(atoi(task_array[5].c_str())); // 物品总数量
+				pkTaskElement->setMSumCount(atoi(kTaskArray[5].c_str())); // 物品总数量
 				// ,
 				// 要先赋值最大值
-				int tempIndex = atoi(task_array[4].c_str()) - 1;
+				int tempIndex = atoi(kTaskArray[4].c_str()) - 1;
 
 				if (tempIndex >= 0 && tempIndex < int(datas.size()))
 				{
-					taskElement->setMCurCount(datas[tempIndex]); // 物品目前data
+					pkTaskElement->setMCurCount(datas[tempIndex]); // 物品目前data
 				}
 
-				if (nType && task_array.size() >= 10)
+				if (nType && kTaskArray.size() >= 10)
 				{
-					taskElement->setMapId(atoi(task_array[6].c_str())); // mapId
-					taskElement->setMapName(task_array[7]); // map 名字
-					taskElement->setMapX(atoi(task_array[8].c_str())); // mapx
-					taskElement->setMapY(atoi(task_array[9].c_str())); // mapY
+					pkTaskElement->setMapId(atoi(kTaskArray[6].c_str())); // mapId
+					pkTaskElement->setMapName(kTaskArray[7]); // map 名字
+					pkTaskElement->setMapX(atoi(kTaskArray[8].c_str())); // mapx
+					pkTaskElement->setMapY(atoi(kTaskArray[9].c_str())); // mapY
 				}
 				
-				if (10 < task_array.size())
+				if (10 < kTaskArray.size())
 				{// 有可能没有Action描述
-					taskElement->setMAction(task_array[10]); // action
+					pkTaskElement->setMAction(kTaskArray[10]); // action
 				}
 				else
 				{
-					taskElement->setMAction(""); // action
+					pkTaskElement->setMAction(""); // action
 				}
 
-				taskElement->setMType(TaskData::TASK_ITEM); // 表示类型
+				pkTaskElement->setMType(TaskData::TASK_ITEM); // 表示类型
 				
 				//sBuffer.delete(startIndex, endIndex + 1);
-				//sBuffer.insert(startIndex, taskElement.getElementName());
-				sBuffer.replace(startIndex, endIndex -startIndex+ 1, taskElement->getElementName());
-				task.taskDataArray.push_back(taskElement);
+				//sBuffer.insert(startIndex, pkTaskElement.getElementName());
+				sBuffer.replace(startIndex, endIndex -startIndex+ 1,
+					pkTaskElement->getElementName());
+				task.taskDataArray.push_back(pkTaskElement);
 				
 			}
-			else if (task_array[0] == "npc" && task_array.size() >= 7)
+			else if (kTaskArray[0] == "npc" && kTaskArray.size() >= 7)
 			{
 				// [npc npcid name mapid mapname x y XXXXX ]
 				
 				//Array dataArray = task.taskDataArray;
-				TaskData *taskElement = new TaskData();
-				taskElement->setMId(atoi(task_array[1].c_str())); // id
-				taskElement->setElementName(task_array[2]); // 物品名字
-				taskElement->setMShowType(1); // 显示格式
-				taskElement->setMapId(atoi(task_array[3].c_str())); // mapId
-				taskElement->setMapName(task_array[4]); // map 名字
-				taskElement->setMapX(atoi(task_array[5].c_str())); // mapx
+				TaskData* pkTaskElement = new TaskData();
+				pkTaskElement->setMId(atoi(kTaskArray[1].c_str())); // id
+				pkTaskElement->setElementName(kTaskArray[2]); // 物品名字
+				pkTaskElement->setMShowType(1); // 显示格式
+				pkTaskElement->setMapId(atoi(kTaskArray[3].c_str())); // mapId
+				pkTaskElement->setMapName(kTaskArray[4]); // map 名字
+				pkTaskElement->setMapX(atoi(kTaskArray[5].c_str())); // mapx
 				
-				if (task_array.size() > 6)
+				if (kTaskArray.size() > 6)
 				{
-					taskElement->setMapY(atoi(task_array[6].c_str())); // mapY
+					pkTaskElement->setMapY(atoi(kTaskArray[6].c_str())); // mapY
 				}
 				
-				if (7 < task_array.size())
+				if (7 < kTaskArray.size())
 				{ // 有可能没有Action描述
-					taskElement->setMAction(task_array[7]); // action
+					pkTaskElement->setMAction(kTaskArray[7]); // action
 				}
 				else
 				{
-					taskElement->setMAction(""); // action
+					pkTaskElement->setMAction(""); // action
 				}
 
-				taskElement->setMType(TaskData::TASK_NPC); // 表示类型
+				pkTaskElement->setMType(TaskData::TASK_NPC); // 表示类型
 				
 				//sBuffer.delete(startIndex, endIndex + 1);
-				//sBuffer.insert(startIndex, taskElement.getElementName());
-				sBuffer.replace(startIndex, endIndex -startIndex+ 1, taskElement->getElementName());
-				task.taskDataArray.push_back(taskElement);
+				//sBuffer.insert(startIndex, pkTaskElement.getElementName());
+				sBuffer.replace(startIndex, endIndex -startIndex+ 1, pkTaskElement->getElementName());
+				task.taskDataArray.push_back(pkTaskElement);
 				
 			}
-			else if (task_array[0] == "pr" && task_array.size() >= 3)
+			else if (kTaskArray[0] == "pr" && kTaskArray.size() >= 3)
 			{
-				TaskData *taskElement = new TaskData();
-				taskElement->setMSumCount(atoi(task_array[1].c_str()));
-				taskElement->setMCurCount(NDPlayer::defaultHero().m_nPeerage);
-				taskElement->setElementName(task_array[2]);
-				taskElement->setMShowType(0);
-				taskElement->setMType(TaskData::TASK_PR);
-				sBuffer.replace(startIndex, endIndex -startIndex+ 1, taskElement->getElementName());
-				task.taskDataArray.push_back(taskElement);
+				TaskData* pkTaskElement = new TaskData();
+				pkTaskElement->setMSumCount(atoi(kTaskArray[1].c_str()));
+				pkTaskElement->setMCurCount(NDPlayer::defaultHero().m_nPeerage);
+				pkTaskElement->setElementName(kTaskArray[2]);
+				pkTaskElement->setMShowType(0);
+				pkTaskElement->setMType(TaskData::TASK_PR);
+				sBuffer.replace(startIndex, endIndex -startIndex+ 1, pkTaskElement->getElementName());
+				task.taskDataArray.push_back(pkTaskElement);
 			}
-			else if (task_array[0] == "rank" && task_array.size() >= 3)
+			else if (kTaskArray[0] == "rank" && kTaskArray.size() >= 3)
 			{
-				TaskData *taskElement = new TaskData();
-				taskElement->setMSumCount(atoi(task_array[1].c_str()));
-				taskElement->setMCurCount(NDPlayer::defaultHero().m_nRank);
-				taskElement->setElementName(task_array[2]);
-				taskElement->setMShowType(0);
-				taskElement->setMType(TaskData::TASK_RANK);
-				sBuffer.replace(startIndex, endIndex -startIndex+ 1, taskElement->getElementName());
-				task.taskDataArray.push_back(taskElement);
+				TaskData* pkTaskElement = new TaskData();
+				pkTaskElement->setMSumCount(atoi(kTaskArray[1].c_str()));
+				pkTaskElement->setMCurCount(NDPlayer::defaultHero().m_nRank);
+				pkTaskElement->setElementName(kTaskArray[2]);
+				pkTaskElement->setMShowType(0);
+				pkTaskElement->setMType(TaskData::TASK_RANK);
+				sBuffer.replace(startIndex, endIndex -startIndex+ 1, pkTaskElement->getElementName());
+				task.taskDataArray.push_back(pkTaskElement);
 			}
-			else if (task_array[0] == "gold" && task_array.size() >= 2)
+			else if (kTaskArray[0] == "gold" && kTaskArray.size() >= 2)
 			{
-				TaskData *taskElement = new TaskData();
-				taskElement->setMSumCount(atoi(task_array[1].c_str()));
-				taskElement->setMCurCount(NDPlayer::defaultHero().m_nMoney);
-				taskElement->setElementName(NDCommonCString("money"));
-				taskElement->setMShowType(0);
-				taskElement->setMType(TaskData::TASK_GOLD);
-				sBuffer.replace(startIndex, endIndex -startIndex+ 1, taskElement->getElementName());
-				task.taskDataArray.push_back(taskElement);
+				TaskData* pkTaskElement = new TaskData();
+				pkTaskElement->setMSumCount(atoi(kTaskArray[1].c_str()));
+				pkTaskElement->setMCurCount(NDPlayer::defaultHero().m_nMoney);
+				pkTaskElement->setElementName(NDCommonCString("money"));
+				pkTaskElement->setMShowType(0);
+				pkTaskElement->setMType(TaskData::TASK_GOLD);
+				sBuffer.replace(startIndex, endIndex -startIndex+ 1, pkTaskElement->getElementName());
+				task.taskDataArray.push_back(pkTaskElement);
 			}
-			else if (task_array[0] == "rep" && task_array.size() >= 2)
+			else if (kTaskArray[0] == "rep" && kTaskArray.size() >= 2)
 			{
-				TaskData *taskElement = new TaskData();
-				taskElement->setMSumCount(atoi(task_array[1].c_str()));
-				taskElement->setMCurCount(NDPlayer::defaultHero().swCamp + NDPlayer::defaultHero().swGuojia);
-				taskElement->setElementName(NDCommonCString("repute"));
-				taskElement->setMShowType(0);
-				taskElement->setMType(TaskData::TASK_REP);
-				sBuffer.replace(startIndex, endIndex -startIndex+ 1, taskElement->getElementName());
-				task.taskDataArray.push_back(taskElement);
+				TaskData* pkTaskElement = new TaskData();
+				pkTaskElement->setMSumCount(atoi(kTaskArray[1].c_str()));
+				pkTaskElement->setMCurCount(NDPlayer::defaultHero().swCamp + NDPlayer::defaultHero().swGuojia);
+				pkTaskElement->setElementName(NDCommonCString("repute"));
+				pkTaskElement->setMShowType(0);
+				pkTaskElement->setMType(TaskData::TASK_REP);
+				sBuffer.replace(startIndex, endIndex -startIndex+ 1, pkTaskElement->getElementName());
+				task.taskDataArray.push_back(pkTaskElement);
 			}
-			else if (task_array[0] == "hr" && task_array.size() >= 2)
+			else if (kTaskArray[0] == "hr" && kTaskArray.size() >= 2)
 			{
-				TaskData *taskElement = new TaskData();
-				taskElement->setMSumCount(atoi(task_array[1].c_str()));
-				taskElement->setMCurCount(NDPlayer::defaultHero().m_nHonour);
-				taskElement->setElementName(NDCommonCString("honur"));
-				taskElement->setMShowType(0);
-				taskElement->setMType(TaskData::TASK_HR);
-				sBuffer.replace(startIndex, endIndex -startIndex+ 1, taskElement->getElementName());
-				task.taskDataArray.push_back(taskElement);
+				TaskData* pkTaskElement = new TaskData();
+				pkTaskElement->setMSumCount(atoi(kTaskArray[1].c_str()));
+				pkTaskElement->setMCurCount(NDPlayer::defaultHero().m_nHonour);
+				pkTaskElement->setElementName(NDCommonCString("honur"));
+				pkTaskElement->setMShowType(0);
+				pkTaskElement->setMType(TaskData::TASK_HR);
+				sBuffer.replace(startIndex, endIndex -startIndex+ 1, pkTaskElement->getElementName());
+				task.taskDataArray.push_back(pkTaskElement);
 			}
 			else
 			{
@@ -385,41 +390,42 @@ std::string setTaskInfo(std::string taskStr, Task& task, int index, std::vector<
 
 int getTaskItemCount(int taskItemType)
 {
-	int count = 0;
-	VEC_ITEM& vec_item = ItemMgrObj.GetPlayerBagItems();
-	for_vec(vec_item, VEC_ITEM_IT)
+	int nCount = 0;
+	VEC_ITEM& kItemVector = ItemMgrObj.GetPlayerBagItems();
+
+	for_vec(kItemVector, VEC_ITEM_IT)
 	{
 		Item *item = (*it);
 		if (item->iItemType == taskItemType)
 		{
 			if (item->isEquip())
 			{
-				count++;
+				nCount++;
 			}
 			else
 			{
-				count += item->iAmount;
+				nCount += item->iAmount;
 			}
 		}
 		
 	}
 	
-	return count;
+	return nCount;
 }
 
-void showChatForTask(Task& task, TaskData& taskElement)
+void showChatForTask(Task& task, TaskData& pkTaskElement)
 {
 	if (task.isFinish)
 	{
 		return;
 	}
 
-	std::stringstream sb;
-	sb << (task.m_strTaskTitle);
-	sb << " " << taskElement.getElementName();
-	sb << "(" << taskElement.getMCurCount() << "/" << taskElement.getMSumCount() << ")";
+	std::stringstream kStringStream;
+	kStringStream << (task.m_strTaskTitle);
+	kStringStream << " " << pkTaskElement.getElementName();
+	kStringStream << "(" << pkTaskElement.getMCurCount() << "/" << pkTaskElement.getMSumCount() << ")";
 	
-	std::stringstream chat; chat << sb.str();
+	std::stringstream chat; chat << kStringStream.str();
 //	Chat::DefaultChat()->AddMessage(ChatTypeSystem, chat.str().c_str()); ///< 临时性注释 郭浩
 	//Chat::DefaultChat()->AddMessage(chat.str().c_str());
 	//if (GameScreen.getInstance() != null) {
@@ -439,13 +445,13 @@ void showChatForTask(Task& task, TaskData& taskElement)
 //			vec_taskdata& taskdatas = task->taskDataArray;
 //			for_vec(taskdatas, vec_taskdata_it)
 //			{
-//				TaskData *taskElement = (*it);
-//				if (taskElement->getMType() == TaskData::TASK_ITEM) {
-//					if (taskElement->getMId() == item.iItemType) {
-//						taskElement->setMCurCount(curCount);
+//				TaskData* pkTaskElement = (*it);
+//				if (pkTaskElement->getMType() == TaskData::TASK_ITEM) {
+//					if (pkTaskElement->getMId() == item.iItemType) {
+//						pkTaskElement->setMCurCount(curCount);
 //						if (isShow) {
-//							showChatForTask(*task, *taskElement);
-//							if (taskElement->getMSumCount() == taskElement->getMCurCount()) {
+//							showChatForTask(*task,* pkTaskElement);
+//							if (pkTaskElement->getMSumCount() == pkTaskElement->getMCurCount()) {
 //								task->isFinish = task->checkIsFinished();
 //								
 //								// 整个任务完成提示
@@ -485,14 +491,14 @@ void showChatForTask(Task& task, TaskData& taskElement)
 
 void dealBackData_MSG_TASKINFO(NDTransData* pkData)
 {
-	unsigned char btAction = 0; (*pkData) >> btAction;
+	unsigned char ucAction = 0; (*pkData) >> ucAction;
 	
-	int taskId = 0;
-	(*pkData) >> taskId;
+	int nTaskID = 0;
+	(*pkData) >> nTaskID;
 	
-	NDPlayer& player = NDPlayer::defaultHero();
+	NDPlayer& kPlayer = NDPlayer::defaultHero();
 	
-	switch (btAction)
+	switch (ucAction)
 	{
 			//		case ServiceCode.TASK_ADD: { // 收到任务刷一次
 			////			if (!T.dealOverMsgAndCheckTimeout()) {
@@ -517,15 +523,15 @@ void dealBackData_MSG_TASKINFO(NDTransData* pkData)
 			//		}
 		case Task::TASK_DEL:
 			{
-				vec_task& task = player.m_vPlayerTask;
-				for_vec(task, vec_task_it)
+				vec_task& kTask = kPlayer.m_vPlayerTask;
+				for_vec(kTask, vec_task_it)
 				{
-					Task* t = (*it);
-					if (taskId == t->taskId)
+					Task* pkTask = (*it);
+					if (nTaskID == pkTask->m_nTaskID)
 					{
 						//deleteGatherPointByTask(temp);
-						delete t;
-						task.erase(it);
+						delete pkTask;
+						kTask.erase(it);
 						//if (TaskListScreen.instance != null) {
 	//						TaskListScreen.instance.refreshTaskList();
 	//					}
@@ -540,7 +546,7 @@ void dealBackData_MSG_TASKINFO(NDTransData* pkData)
 			}
 		case Task::TASK_COMPLETE:
 			{ // 任务完成
-				completeTask(taskId);
+				completeTask(nTaskID);
 				break;
 			}
 			//		case ServiceCode.TASK_DONE: { // 任务完成但是不可以继续做
@@ -549,24 +555,29 @@ void dealBackData_MSG_TASKINFO(NDTransData* pkData)
 			//		}
 		case Task::TASK_STATE_COMPLETE:
 			{ // 单纯设置任务状态,一定是完成状态
-				vec_task& task = player.m_vPlayerTask;
+				vec_task& task = kPlayer.m_vPlayerTask;
 				for_vec(task, vec_task_it)
 				{
-					Task* t = (*it);
+					Task* pkTask = (*it);
 
-					if (taskId == t->taskId)
+					if (nTaskID == pkTask->m_nTaskID)
 					{
-						t->isFinish = true;
+						pkTask->isFinish = true;
 						//Npc.setNpcTaskStateById(task.startNpcId, Npc.QUEST_NONE);
 						//Npc.setNpcTaskStateById(task.finishNpcId, Npc.QUEST_FINISH);
 						//return;
-						if (t->isDailyTask())
+						if (pkTask->isDailyTask())
 						{
-							std::stringstream tip;
-							tip << t->m_strTaskTitle << NDCommonCString("finish") << NDCommonCString("le");
-							GameScene* scene = GameScene::GetCurGameScene();
-							if (scene) scene->ShowTaskFinish(true, tip.str());
+							std::stringstream kTip;
+							kTip << pkTask->m_strTaskTitle << NDCommonCString("finish") << NDCommonCString("le");
+							GameScene* pkScene = GameScene::GetCurGameScene();
+
+							if (pkScene)
+							{
+								pkScene->ShowTaskFinish(true, kTip.str());
+							}
 						}
+
 						break;
 					}
 				}
@@ -576,10 +587,10 @@ void dealBackData_MSG_TASKINFO(NDTransData* pkData)
 		case 6: // 查看任务
 			Task *pkTask = NULL;
 
-			vec_task& tasks = player.m_vPlayerTask;
+			vec_task& tasks = kPlayer.m_vPlayerTask;
 			for_vec(tasks, vec_task_it)
 			{
-				if (taskId == (*it)->taskId)
+				if (nTaskID == (*it)->m_nTaskID)
 				{
 					pkTask = (*it);
 					break;
@@ -689,7 +700,7 @@ void dealBackData_MSG_DOING_TASK_LIST(NDTransData *data)
 		unsigned char cIsFinish = 0; 
 		(*data) >> nTaskID >> cIsFinish;
 		
-		pkTask->taskId = nTaskID; pkTask->isFinish = cIsFinish == 2;
+		pkTask->m_nTaskID = nTaskID; pkTask->isFinish = cIsFinish == 2;
 	
 		std::vector<int> datas;
 		for (int j = 0; j < 6; j++)
@@ -755,15 +766,15 @@ void dealBackData_MSG_DOING_TASK_LIST(NDTransData *data)
 
 void dealWithFreshmanTask(Task* task)
 {
-	if (task->taskId >= Task::startId
-	    && task->taskId <= Task::endId)
+	if (task->m_nTaskID >= Task::startId
+	    && task->m_nTaskID <= Task::endId)
 	{
 		Task::BEGIN_FRESHMAN_TASK = true;
 	}
 
 	if (!task->isFinish)
 	{
-		switch (task->taskId)
+		switch (task->m_nTaskID)
 		{
 		case Task::TASK_TEAM:
 			{
@@ -801,7 +812,7 @@ void dealBackData_MSG_TASK_ITEM_OPT(NDTransData *data)
 	for_vec(task, vec_task_it)
 	{
 		Task* t = (*it);
-		if (taskId == t->taskId)
+		if (taskId == t->m_nTaskID)
 		{
 			temp = t;
 			break;
@@ -929,14 +940,14 @@ void updateTaskDataByType(int nType, int nData, bool isShow)
 			vec_taskdata& taskdatas = task->taskDataArray;
 			for_vec(taskdatas, vec_taskdata_it)
 			{
-				TaskData *taskElement = (*it);
-				if (taskElement->getMType() == nType)
+				TaskData* pkTaskElement = (*it);
+				if (pkTaskElement->getMType() == nType)
 				{
-					taskElement->setMCurCount(nData);
+					pkTaskElement->setMCurCount(nData);
 					if (isShow) 
 					{
-						showChatForTask(*task, *taskElement);
-						if (taskElement->getMSumCount() == taskElement->getMCurCount())
+						showChatForTask(*task,* pkTaskElement);
+						if (pkTaskElement->getMSumCount() == pkTaskElement->getMCurCount())
 						{
 							task->isFinish = task->checkIsFinished();
 							

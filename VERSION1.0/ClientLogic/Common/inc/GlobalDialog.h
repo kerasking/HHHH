@@ -97,9 +97,9 @@ private:
 	};
 	
 	std::list<s_dlg_info*> m_listDlg;
-	CIDFactory m_idAlloc;
+	CIDFactory m_kIDAlloc;
 	bool m_bInBattle;
-	CAutoLink<NDUIDialog> m_dlg;
+	CAutoLink<NDUIDialog> m_kDialog;
 	//NDUIDialog* m_dlg;
 	//NDTimer m_timer;
 };
@@ -109,13 +109,15 @@ class GameQuitDialog : public NDUIDialog
 	DECLARE_CLASS(GameQuitDialog)
 public:
 	~GameQuitDialog();
-	static void DefaultShow(std::string title, std::string content, float seconds = 0.0f, bool replace=false);
+	static void DefaultShow(std::string title, std::string content, float seconds = 0.0f, bool replace = false);
 private:
 	GameQuitDialog();
-	void Close();hide
-	void Initialization(); override
+	void Close();
+	void Initialization();
+
 private:
-	static GameQuitDialog* s_GameQuitDialog;
+
+	static GameQuitDialog* ms_pkGameQuitDialog;
 };
 
 #endif // _GLOBAL_DIALOG_H_

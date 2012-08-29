@@ -81,7 +81,8 @@ private:
 	void Init();
 	
 public:
-	int taskId;
+
+	int m_nTaskID;
 	
 	std::string m_strTaskTitle;
 	
