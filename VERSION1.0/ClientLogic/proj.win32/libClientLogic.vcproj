@@ -526,10 +526,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\MapAndRole\inc\NDMapMgr.h"
-					>
-				</File>
-				<File
 					RelativePath="..\MapAndRole\inc\NDMonster.h"
 					>
 				</File>

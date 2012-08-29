@@ -25,7 +25,7 @@
 
 class NDAnimationGroup;
 
-namespace NDEngine 
+namespace NDEngine
 {
 
 #define		WEAPON_NONE				0
@@ -39,65 +39,64 @@ namespace NDEngine
 #define		TWO_HAND_SPEAR			7
 #define		SEC_SHIELD				9
 #define		SEC_FAQI				10
-	
-	
-	typedef enum 
-	{
-		SpriteSexNone,
-		SpriteSexMale,
-		SpriteSexFemale,
-		SpriteSexDynamic
-	}SpriteSex;	
-	
-	typedef enum
-	{
-		SpriteSpeedStep4 = 8,
-		SpriteSpeedStep8 = 16
-	}SpriteSpeed;
-	
-	
-	class NDEngine::NDPicture;
 
-	class NDSprite : public NDNode 
-	{
-		DECLARE_CLASS(NDSprite)
-	public:
+typedef enum
+{
+	SpriteSexNone, SpriteSexMale, SpriteSexFemale, SpriteSexDynamic
+} SpriteSex;
 
-		NDSprite();
-		~NDSprite();
+typedef enum
+{
+	SpriteSpeedStep4 = 8, SpriteSpeedStep8 = 16
+} SpriteSpeed;
 
-	public:
+class NDEngine::NDPicture;
+
+class NDSprite: public NDNode
+{
+DECLARE_CLASS(NDSprite)
+public:
+
+	NDSprite();
+	~NDSprite();
+
+public:
 //		
 //		函数：Initialization
 //		作用：初始化精灵，必须被显示或隐式调用
 //		参数：sprFile动画文件，每一个精灵需要与一个动画文件绑定
 //		返回值：无
-		void Initialization(const char* sprFile);
+	void Initialization(const char* sprFile);
 //		
 //		函数：OnDrawBegin
 //		作用：该方法在精灵绘制之前被框架调用
 //		参数：bDraw精灵是否显示在屏幕上
 //		返回值：无
-		virtual bool OnDrawBegin(bool bDraw){ return true; };
+	virtual bool OnDrawBegin(bool bDraw)
+	{
+		return true;
+	}
 //		
 //		函数：OnDrawEnd
 //		作用：该方法在精灵绘制完成后被框架调用
 //		参数：bDraw精灵是否显示在屏幕上
 //		返回值：无
-		virtual void OnDrawEnd(bool bDraw){};
+	virtual void OnDrawEnd(bool bDraw)
+	{
+	}
 //		
 //		函数：SetPosition
 //		作用：设置精灵在地图上的坐标
 //		参数：newPosition地图坐标
 //		返回值：无
-		virtual void SetPosition(CGPoint newPosition);
+	virtual void SetPosition(CGPoint newPosition);
 //		
 //		函数：GetPosition
 //		作用：获取精灵在地图上的坐标
 //		参数：无
 //		返回值：地图坐标
-		CGPoint GetPosition();
-		
+	CGPoint GetPosition();
+
 // 		int GetCol() {
 // 			return (this->m_position.x - DISPLAY_POS_X_OFFSET) / 32.0f;
 // 		}
@@ -105,9 +104,9 @@ namespace NDEngine
 // 		int GetRow() {
 // 			return (this->m_position.y - DISPLAY_POS_Y_OFFSET) / 32.0f;
 // 		}
-		
-		int GetCurFrameIndex();
-		
+
+	int GetCurFrameIndex();
+
 //		
 //		函数：OnMoveTurning
 //		作用：
@@ -119,259 +118,306 @@ namespace NDEngine
 //		作用：停止精灵在地图上的移动，如果精灵式停止的没有任何影响
 //		参数：无
 //		返回值：无		
-		virtual void stopMoving();//{ m_moving = false; }
+	virtual void stopMoving(); //{ m_moving = false; }
 //		
 //		函数：GetOrder
 //		作用：获取精灵的排序重心值
 //		参数：无
 //		返回值：排序重心值
-		virtual int GetOrder();
+	virtual int GetOrder();
 //		
 //		函数：IsAnimationComplete
 //		作用：判断精灵所绑定的动画是否播放完一遍
 //		参数：无
 //		返回值：true是，false否
-		bool IsAnimationComplete();
+	bool IsAnimationComplete();
 //		
 //		函数：SetHairImage
 //		作用：设置头发图片
 //		参数：imageFile图片文件
 //		返回值：无	
-		virtual void SetHairImage(const char* imageFile, int colorIndex);
+	virtual void SetHairImage(const char* imageFile, int colorIndex);
 //		
 //		函数：SetFaceImage
 //		作用：设置面部图片
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetFaceImage(const char* imageFile);
+	virtual void SetFaceImage(const char* imageFile);
 //		
 //		函数：SetExpressionImage
 //		作用：设置表情图片
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetExpressionImage(const char* imageFile);
+	virtual void SetExpressionImage(const char* imageFile);
 //		
 //		函数：SetCapImage
 //		作用：设置头盔图片
 //		参数：imageFile图片文件
 //		返回值：
-		virtual void SetCapImage(const char* imageFile);
+	virtual void SetCapImage(const char* imageFile);
 //		
 //		函数：SetArmorImage
 //		作用：设置盔甲图片
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetArmorImage(const char* imageFile);
+	virtual void SetArmorImage(const char* imageFile);
 //		
 //		函数：SetRightHandWeaponImage
 //		作用：设置右手武器图片
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetRightHandWeaponImage(const char* imageFile);
+	virtual void SetRightHandWeaponImage(const char* imageFile);
 //		
 //		函数：SetLeftHandWeaponImage
 //		作用：设置左手武器图片
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetLeftHandWeaponImage(const char* imageFile);
+	virtual void SetLeftHandWeaponImage(const char* imageFile);
 //		
 //		函数：SetDoubleHandWeaponImage
 //		作用：设置双手武器图片
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetDoubleHandWeaponImage(const char* imageFile);
+	virtual void SetDoubleHandWeaponImage(const char* imageFile);
 //		
 //		函数：SetDualSwordImage
 //		作用：
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetDualSwordImage(const char* imageFile);
+	virtual void SetDualSwordImage(const char* imageFile);
 //		
 //		函数：
 //		作用：
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetDualKnifeImage(const char* imageFile);
+	virtual void SetDualKnifeImage(const char* imageFile);
 //		
 //		函数：
 //		作用：
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetDoubleHandWandImage(const char* imageFile);
+	virtual void SetDoubleHandWandImage(const char* imageFile);
 //		
 //		函数：
 //		作用：
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetDoubleHandBowImage(const char* imageFile);
+	virtual void SetDoubleHandBowImage(const char* imageFile);
 //		
 //		函数：
 //		作用：
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetShieldImage(const char* imageFile);
+	virtual void SetShieldImage(const char* imageFile);
 //		
 //		函数：
 //		作用：
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetFaqiImage(const char* imageFile);
+	virtual void SetFaqiImage(const char* imageFile);
 //		
 //		函数：
 //		作用：
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetCloakImage(const char* imageFile);
+	virtual void SetCloakImage(const char* imageFile);
 //		
 //		函数：
 //		作用：
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetDoubleHandSpearImage(const char* imageFile);
+	virtual void SetDoubleHandSpearImage(const char* imageFile);
 //		
 //		函数：
 //		作用：
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetLeftShoulderImage(const char* imageFile);
+	virtual void SetLeftShoulderImage(const char* imageFile);
 //		
 //		函数：
 //		作用：
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetRightShoulderImage(const char* imageFile);
+	virtual void SetRightShoulderImage(const char* imageFile);
 //		
 //		函数：
 //		作用：
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetSkirtStandImage(const char* imageFile);
+	virtual void SetSkirtStandImage(const char* imageFile);
 //		
 //		函数：
 //		作用：
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetSkirtWalkImage(const char* imageFile);
+	virtual void SetSkirtWalkImage(const char* imageFile);
 //		
 //		函数：
 //		作用：
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetSkirtSitImage(const char* imageFile);
+	virtual void SetSkirtSitImage(const char* imageFile);
 //		
 //		函数：
 //		作用：
 //		参数：imageFile图片文件
 //		返回值：无
-		virtual void SetSkirtLiftLegImage(const char* imageFile);
-		
-		void SetMoveMap(bool bSet) { m_bMoveMap = bSet; }
-		
-		void SetPointList(std::vector<CGPoint>& vec_point){ m_pointList = vec_point; StartMoving(); }
-		
-		void StartMoving(){ m_bIsMoving = true; m_nMovePathIndex = 0; }
-		
-		void SetNonRole(bool bNonRole) { this->m_bNonRole = bNonRole; }
-		
-		bool IsNonRole() { return this->m_bNonRole; }
-		bool isMoving(){ return m_bIsMoving; }
+	virtual void SetSkirtLiftLegImage(const char* imageFile);
 
-		void SetPlayFrameRange(int nStartFrame, int nEndFrame);
-		void SetHightLight(bool bSet);
+	void SetMoveMap(bool bSet)
+	{
+		m_bMoveMap = bSet;
+	}
 
-		NDFrame* GetCurrentFrame();
-	public:
-		
-		//////////////////////////////////////////////////////////////////////
-		
-		virtual cocos2d::CCTexture2D	*GetHairImage();
-		virtual cocos2d::CCTexture2D	*GetFaceImage();
-		virtual cocos2d::CCTexture2D	*GetExpressionImage();
-		virtual cocos2d::CCTexture2D	*GetCapImage();
-		virtual cocos2d::CCTexture2D	*GetArmorImage();
-		virtual cocos2d::CCTexture2D	*GetRightHandWeaponImage();
-		virtual cocos2d::CCTexture2D	*GetLeftHandWeaponImage();
-		virtual cocos2d::CCTexture2D	*GetDoubleHandWeaponImage();
-		virtual cocos2d::CCTexture2D	*GetDualSwordImage();
-		virtual cocos2d::CCTexture2D	*GetDualKnifeImage();
-		virtual cocos2d::CCTexture2D	*GetDoubleHandWandImage();
-		virtual cocos2d::CCTexture2D	*GetDoubleHandBowImage();
-		virtual cocos2d::CCTexture2D	*GetShieldImage();
-		virtual cocos2d::CCTexture2D	*GetFaqiImage();
-		virtual cocos2d::CCTexture2D *GetCloakImage();
-		virtual cocos2d::CCTexture2D	*GetDoubleHandSpearImage();
-		
-		virtual cocos2d::CCTexture2D	*GetLeftShoulderImage();
-		virtual cocos2d::CCTexture2D	*GetRightShoulderImage();
-		virtual cocos2d::CCTexture2D	*GetSkirtStandImage();
-		virtual cocos2d::CCTexture2D	*GetSkirtWalkImage();
-		virtual cocos2d::CCTexture2D	*GetSkirtSitImage();
-		virtual cocos2d::CCTexture2D	*GetSkirtLiftLegImage();
-		
-		int GetWidth();
-		int GetHeight();
-		
-		cocos2d::CCTexture2D* getColorTexture(int imageIndex, NDAnimationGroup* animationGroup);
-		cocos2d::CCTexture2D* getNpcLookfaceTexture(int imageIndex, NDAnimationGroup* animationGroup);
-		cocos2d::CCTexture2D* getArmorImageByCloak(){ return m_nCloak == -1 ? GetArmorImage() : NULL; }
-		
-		bool IsCloakEmpty(){ return m_nCloak == -1 ? true : false; }
-		
-		virtual void BeforeRunAnimation(bool bDraw) {}
-		void RunAnimation(bool bDraw);
-		CGRect GetSpriteRect();		
-		void SetCurrentAnimation(int animationIndex, bool reverse);
-		
-		void SetSpriteDir(int dir){ dir == 2 ? (m_bFaceRight = m_bReverse = false) : (m_bFaceRight = m_bReverse = true);}
-		int getGravityY();
-		int getGravityX();
-		void SetScale(float s){m_fScale = s;}
-		float GetScale(){return m_fScale;}
-		bool GetLastPointOfPath(CGPoint& pos);
-		bool IsReverse() { return m_bReverse; }
-	protected:
-		void MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed, bool moveMap, bool ignoreMask=false, bool mustArrive=false);
-		virtual void OnMoveBegin();
-		virtual void OnMoveEnd();
-		virtual void OnMoving(bool bLastPos);
-		void SetSprite(NDPicture* pic);
-		
-	protected:
+	void SetPointList(std::vector<CGPoint>& vec_point)
+	{
+		m_pointList = vec_point;
+		StartMoving();
+	}
 
-		std::string m_hairImage, m_faceImage, m_expressionImage, m_capImage, m_armorImage, m_rightHandWeaponImage, m_leftHandWeaponImage,
-		m_doubleHandWeaponImage, m_dualSwordImage, m_dualKnifeImage, m_doubleHandWandImage, m_doubleHandBowImage, m_shieldImage, 
-		m_faqiImage, m_cloakImage, m_doubleHandSpearImage;		
-		std::string m_leftShoulderImage, m_rightShoulderImage, m_skirtStandImage, m_skirtWalkImage,
-		m_skirtSitImage, m_skirtLiftLegImage;
-		std::string colorInfoImage;
-		
-		int m_weaponType, m_secWeaponType, m_weaponQuality, m_secWeaponQuality, m_capQuality, m_armorQuality, m_cloakQuality;
-		CGPoint m_position;		
-		NDAnimation *m_pkCurrentAnimation;
-		NDFrameRunRecord *m_pkFrameRunRecord;
-		NDAnimationGroup *m_pkAniGroup;
-		bool m_bReverse;
-		bool m_bMoveMap;
-		bool m_bIsMoving;
-		int m_nMovePathIndex;
-		
-		int m_nNPCLookface;
-		int m_nColorInfo;
-		int m_nCloak;
-		
-		std::vector<CGPoint> m_pointList;
-		int m_iSpeed;
-		CGPoint m_kTargetPos;
-		
-		bool m_bNonRole;
-		float m_fScale;
-	public:
-		bool m_bFaceRight;		// 精灵面部朝向
-	private:
-		NDPicture *m_picSprite;
-		CGRect m_kRectSprite;
-		bool m_bHightLight;
-	};
+	void StartMoving()
+	{
+		m_bIsMoving = true;
+		m_nMovePathIndex = 0;
+	}
+
+	void SetNonRole(bool bNonRole)
+	{
+		this->m_bNonRole = bNonRole;
+	}
+
+	bool IsNonRole()
+	{
+		return this->m_bNonRole;
+	}
+	bool isMoving()
+	{
+		return m_bIsMoving;
+	}
+
+	void SetPlayFrameRange(int nStartFrame, int nEndFrame);
+	void SetHightLight(bool bSet);
+
+	NDFrame* GetCurrentFrame();
+public:
+
+	//////////////////////////////////////////////////////////////////////
+
+	virtual cocos2d::CCTexture2D *GetHairImage();
+	virtual cocos2d::CCTexture2D *GetFaceImage();
+	virtual cocos2d::CCTexture2D *GetExpressionImage();
+	virtual cocos2d::CCTexture2D *GetCapImage();
+	virtual cocos2d::CCTexture2D *GetArmorImage();
+	virtual cocos2d::CCTexture2D *GetRightHandWeaponImage();
+	virtual cocos2d::CCTexture2D *GetLeftHandWeaponImage();
+	virtual cocos2d::CCTexture2D *GetDoubleHandWeaponImage();
+	virtual cocos2d::CCTexture2D *GetDualSwordImage();
+	virtual cocos2d::CCTexture2D *GetDualKnifeImage();
+	virtual cocos2d::CCTexture2D *GetDoubleHandWandImage();
+	virtual cocos2d::CCTexture2D *GetDoubleHandBowImage();
+	virtual cocos2d::CCTexture2D *GetShieldImage();
+	virtual cocos2d::CCTexture2D *GetFaqiImage();
+	virtual cocos2d::CCTexture2D *GetCloakImage();
+	virtual cocos2d::CCTexture2D *GetDoubleHandSpearImage();
+
+	virtual cocos2d::CCTexture2D *GetLeftShoulderImage();
+	virtual cocos2d::CCTexture2D *GetRightShoulderImage();
+	virtual cocos2d::CCTexture2D *GetSkirtStandImage();
+	virtual cocos2d::CCTexture2D *GetSkirtWalkImage();
+	virtual cocos2d::CCTexture2D *GetSkirtSitImage();
+	virtual cocos2d::CCTexture2D *GetSkirtLiftLegImage();
+
+	int GetWidth();
+	int GetHeight();
+
+	cocos2d::CCTexture2D* getColorTexture(int imageIndex,
+			NDAnimationGroup* animationGroup);
+	cocos2d::CCTexture2D* getNpcLookfaceTexture(int imageIndex,
+			NDAnimationGroup* animationGroup);
+	cocos2d::CCTexture2D* getArmorImageByCloak()
+	{
+		return m_nCloak == -1 ? GetArmorImage() : NULL;
+	}
+
+	bool IsCloakEmpty()
+	{
+		return m_nCloak == -1 ? true : false;
+	}
+
+	virtual void BeforeRunAnimation(bool bDraw)
+	{
+	}
+	void RunAnimation(bool bDraw);
+	CGRect GetSpriteRect();
+	void SetCurrentAnimation(int animationIndex, bool reverse);
+
+	void SetSpriteDir(int dir)
+	{
+		dir == 2 ? (m_bFaceRight = m_bReverse = false) : (m_bFaceRight =
+							m_bReverse = true);
+	}
+	int getGravityY();
+	int getGravityX();
+	void SetScale(float s)
+	{
+		m_fScale = s;
+	}
+	float GetScale()
+	{
+		return m_fScale;
+	}
+	bool GetLastPointOfPath(CGPoint& pos);
+	bool IsReverse()
+	{
+		return m_bReverse;
+	}
+protected:
+	void MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed,
+			bool moveMap, bool ignoreMask = false, bool mustArrive = false);
+	virtual void OnMoveBegin();
+	virtual void OnMoveEnd();
+	virtual void OnMoving(bool bLastPos);
+	void SetSprite(NDPicture* pic);
+
+protected:
+
+	std::string m_hairImage, m_faceImage, m_expressionImage, m_capImage,
+			m_armorImage, m_rightHandWeaponImage, m_leftHandWeaponImage,
+			m_doubleHandWeaponImage, m_dualSwordImage, m_dualKnifeImage,
+			m_doubleHandWandImage, m_doubleHandBowImage, m_shieldImage,
+			m_faqiImage, m_cloakImage, m_doubleHandSpearImage;
+	std::string m_leftShoulderImage, m_rightShoulderImage, m_skirtStandImage,
+			m_skirtWalkImage, m_skirtSitImage, m_skirtLiftLegImage;
+	std::string colorInfoImage;
+
+	int m_weaponType, m_secWeaponType, m_weaponQuality, m_secWeaponQuality,
+			m_capQuality, m_armorQuality, m_cloakQuality;
+	CGPoint m_position;
+	NDAnimation *m_pkCurrentAnimation;
+	NDFrameRunRecord *m_pkFrameRunRecord;
+	NDAnimationGroup *m_pkAniGroup;
+	bool m_bReverse;
+	bool m_bMoveMap;
+	bool m_bIsMoving;
+	int m_nMovePathIndex;
+
+	int m_nNPCLookface;
+	int m_nColorInfo;
+	int m_nCloak;
+
+	std::vector<CGPoint> m_pointList;
+	int m_iSpeed;
+	CGPoint m_kTargetPos;
+
+	bool m_bNonRole;
+	float m_fScale;
+public:
+	bool m_bFaceRight;		// 精灵面部朝向
+private:
+	NDPicture *m_picSprite;
+	CGRect m_kRectSprite;
+	bool m_bHightLight;
+};
 }
 
 #endif

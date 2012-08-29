@@ -13,7 +13,7 @@
 #include "NDNode.h"
 #include "platform/CCPlatformMacros.h"
 
-class NDBaseNode : public cocos2d::CCNode 
+class NDBaseNode: public cocos2d::CCNode
 {
 	CC_SYNTHESIZE(NDEngine::NDNode*, m_ndNode, NDNode)
 

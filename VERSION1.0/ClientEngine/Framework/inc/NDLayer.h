@@ -3,17 +3,16 @@
 //  DragonDrive
 //
 //  Created by xiezhenghai on 10-12-8.
-//  Copyright 2010 (ç½‘é¾™)DeNA. All rights reserved.
+//  Copyright 2010 (ÍøÁú)DeNA. All rights reserved.
 //
-//	ï¼ï¼ä»‹ç»ï¼ï¼
-//	å±‚æ˜¯æ¸¸æˆçš„é‡ç‚¹ï¼Œæ¸¸æˆä¸­å¤§å¤šçš„æ—¶é—´èŠ±åœ¨å±‚ä¸Šã€‚
-//	å±‚çš„æ˜¾ç¤ºï¼š
-//		åæ·»åŠ çš„å±‚å°†ä¼šè¦†ç›–å…ˆå‰æ·»åŠ çš„å±‚ï¼Œ
-//		å¦‚æœå±‚æ—¶é€æ˜ã€æˆ–è€…åŠé€æ˜ï¼Œåˆ™åº•éƒ¨çš„å±‚å°†ä¼šæ˜¾ç¤ºæˆ–è€…éƒ¨åˆ†æ˜¾ç¤ºã€‚
-//	å±‚çš„äº‹ä»¶å“åº”ï¼š
-//		æœ€ä¸Šé¢çš„å±‚æœ€å…ˆæ¥æ”¶åˆ°ç³»ç»Ÿäº‹ä»¶(å¦‚ï¼šæ‰‹æŒ‡ç‚¹å‡»å±å¹•äº‹ä»¶)ï¼Œ
-//		å¦‚æœäº‹ä»¶è¢«å¤„ç†äº†åˆ™å±è”½äº‹ä»¶çš„åˆ†å‘ï¼Œå¦åˆ™å°†å¾€ä¸‹é¢çš„å±‚è¿›è¡Œåˆ†å‘äº‹ä»¶ï¼Œç›´åˆ°äº‹ä»¶è¢«å±è”½ä¸ºæ­¢ã€‚
-
+//	£­£­½éÉÜ£­£­
+//	²ãÊÇÓÎÏ·µÄÖØµã£¬ÓÎÏ·ÖĞ´ó¶àµÄÊ±¼ä»¨ÔÚ²ãÉÏ¡£
+//	²ãµÄÏÔÊ¾£º
+//		ºóÌí¼ÓµÄ²ã½«»á¸²¸ÇÏÈÇ°Ìí¼ÓµÄ²ã£¬
+//		Èç¹û²ãÊ±Í¸Ã÷¡¢»òÕß°ëÍ¸Ã÷£¬Ôòµ×²¿µÄ²ã½«»áÏÔÊ¾»òÕß²¿·ÖÏÔÊ¾¡£
+//	²ãµÄÊÂ¼şÏìÓ¦£º
+//		×îÉÏÃæµÄ²ã×îÏÈ½ÓÊÕµ½ÏµÍ³ÊÂ¼ş(Èç£ºÊÖÖ¸µã»÷ÆÁÄ»ÊÂ¼ş)£¬
+//		Èç¹ûÊÂ¼ş±»´¦ÀíÁËÔòÆÁ±ÎÊÂ¼şµÄ·Ö·¢£¬·ñÔò½«ÍùÏÂÃæµÄ²ã½øĞĞ·Ö·¢ÊÂ¼ş£¬Ö±µ½ÊÂ¼ş±»ÆÁ±ÎÎªÖ¹¡£
 
 #ifndef __NDLayer_H
 #define __NDLayer_H
@@ -24,31 +23,30 @@
 
 namespace NDEngine
 {
-	class NDLayer : public NDNode
-	{
-		DECLARE_CLASS(NDLayer)
-	public:
-		NDLayer();
-		~NDLayer();
-		
-	public:
+class NDLayer: public NDNode
+{
+DECLARE_CLASS(NDLayer)
+public:
+	NDLayer();
+	~NDLayer();
 
-		static NDLayer* Layer();
+public:
 
-		void Initialization(); override
+	static NDLayer* Layer();
 
-		void draw(); override
+	void Initialization();override
 
-		void SetTouchEnabled(bool bEnabled);
+	void draw();override
 
-		virtual bool TouchBegin(NDTouch* touch);
-		virtual void TouchEnd(NDTouch* touch);
-		virtual void TouchCancelled(NDTouch* touch);
-		virtual void TouchMoved(NDTouch* touch);
-		virtual bool TouchDoubleClick(NDTouch* touch);
-		
-		DECLARE_AUTOLINK(NDLayer)
-		INTERFACE_AUTOLINK(NDLayer)
-	};
+	void SetTouchEnabled(bool bEnabled);
+
+	virtual bool TouchBegin(NDTouch* touch);
+	virtual void TouchEnd(NDTouch* touch);
+	virtual void TouchCancelled(NDTouch* touch);
+	virtual void TouchMoved(NDTouch* touch);
+	virtual bool TouchDoubleClick(NDTouch* touch);
+
+DECLARE_AUTOLINK(NDLayer)INTERFACE_AUTOLINK(NDLayer)
+};
 }
 #endif

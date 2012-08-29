@@ -16,37 +16,38 @@
 
 namespace NDEngine
 {
-	class NDLightEffect : public NDNode
-	{
-		DECLARE_CLASS(NDLightEffect)
-		NDLightEffect();
-		~NDLightEffect();
+class NDLightEffect: public NDNode
+{
+DECLARE_CLASS(NDLightEffect)
+	NDLightEffect();
+	~NDLightEffect();
 
-	public:
+public:
 
-		void Initialization(const char* sprFile);		
-		void SetPosition(CGPoint kNewPosition);
-		void SetRepeatTimes(unsigned int times);
-		void SetLightId(unsigned int uiLightID, bool bReverse = true);
-		void SlowDown(unsigned int mutli);
-		
-	public: //武状元光效使用
-		void Run(CGSize mapSize, bool draw = true);
-		
-	public:
+	void Initialization(const char* sprFile);
+	void SetPosition(CGPoint kNewPosition);
+	void SetRepeatTimes(unsigned int times);
+	void SetLightId(unsigned int uiLightID, bool bReverse = true);
+	void SlowDown(unsigned int mutli);
 
-		void draw();
-		
-	private:
+public:
+	//武状元光效使用
+	void Run(CGSize mapSize, bool draw = true);
 
-		NDFrameRunRecord* m_pkFrameRunRecord;
-		NDAnimationGroup* m_pkAniGroup;
+public:
 
-		CGPoint m_kPosition;
-		unsigned int m_nLightID;
+	void draw();
 
-		bool m_bIsStop;
-		bool m_bReverse;
-	};
+private:
+
+	NDFrameRunRecord* m_pkFrameRunRecord;
+	NDAnimationGroup* m_pkAniGroup;
+
+	CGPoint m_kPosition;
+	unsigned int m_nLightID;
+
+	bool m_bIsStop;
+	bool m_bReverse;
+};
 }
 #endif

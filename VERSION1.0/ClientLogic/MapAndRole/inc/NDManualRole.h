@@ -61,7 +61,7 @@ public:
 	// 服务端下发的光效显示
 	typedef struct _tagServerEffect
 	{
-		bool bQiZhi = false;
+		bool bQiZhi;
 		int severEffectId;
 		NDLightEffect* effect;
 		_tagServerEffect()
