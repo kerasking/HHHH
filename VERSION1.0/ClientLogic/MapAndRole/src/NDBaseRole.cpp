@@ -35,36 +35,36 @@ NDBaseRole::NDBaseRole()
 {
 	m_weaponType = WEAPON_NONE;
 	m_secWeaponType = WEAPON_NONE;
-	
-	sex = -1;	
-	skinColor = -1;		
+
+	sex = -1;
+	skinColor = -1;
 	hairColor = -1;
 	hair = -1;
-	
+
 	direct = -1;
 	expresstion = -1;
 	model = -1;
 	weapon = -1;
 	cap = -1;
 	armor = -1;
-	
+
 	m_nLife = 0;
 	m_nMaxLife = 0;
 	m_nMana = 0;
 	m_nMaxMana = 0;
 	m_nLevel = 0;
 	m_eCamp = CAMP_TYPE_NONE;
-	
+
 	m_bFaceRight = true;
-	
+
 	m_pkRidePet = NULL;
-	
+
 	m_bFocus = false;
-	
+
 	m_pkSubNode = NDNode::Node();
 	m_pkSubNode->SetContentSize(NDDirector::DefaultDirector()->GetWinSize());
-	
-	m_posScreen = CGPointZero;	
+
+	m_posScreen = CGPointZero;
 	m_picRing = NULL;
 	m_pkPicShadow = NULL;
 	m_pkPicShadowBig = NULL;
@@ -72,31 +72,31 @@ NDBaseRole::NDBaseRole()
 	m_iShadowOffsetY = 10;
 	m_bBigShadow = false;
 	m_bShowShadow = true;
-	
+
 	m_nID = 0;
-	
+
 	m_pkEffectFlagAniGroup = NULL;
-	
+
 	//m_talkBox = NULL;
-	
+
 	this->SetDelegate(this);
-	
+
 	m_pkEffectRidePetAniGroup = NULL;
 }
 
 NDBaseRole::~NDBaseRole()
 {
-	SAFE_DELETE(m_pkSubNode);
-	SAFE_DELETE(m_picRing);
-	SAFE_DELETE(m_pkPicShadow);
-	SAFE_DELETE(m_pkPicShadowBig);
+	SAFE_DELETE (m_pkSubNode);
+	SAFE_DELETE (m_picRing);
+	SAFE_DELETE (m_pkPicShadow);
+	SAFE_DELETE (m_pkPicShadowBig);
 	//if (ridepet)
 //	{
 //		delete ridepet;
 //		ridepet = NULL;
 //	}
 
-	//if (m_talkBox) 
+//if (m_talkBox)
 //	{
 //		if (m_talkBox->GetParent()) 
 //		{
@@ -118,14 +118,14 @@ NDBaseRole::~NDBaseRole()
 CGRect NDBaseRole::GetFocusRect()
 {
 	/*
-	if (!IsFocus())
-	{
-		return CGRectZero;
-	}
-	*/
-	
+	 if (!IsFocus())
+	 {
+	 return CGRectZero;
+	 }
+	 */
+
 	CGPoint point;
-	
+
 	if (m_pkRidePet)
 	{
 		point = m_pkRidePet->GetPosition();
@@ -134,32 +134,32 @@ CGRect NDBaseRole::GetFocusRect()
 	{
 		point = GetPosition();
 	}
-	
+
 	if (m_picRing == NULL)
 	{
 		m_picRing = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
 	}
-	
+
 	CGSize sizeRing = m_picRing->GetSize();
-	
-	return CGRectMake(point.x - 8 - 13, point.y - 16 - 5,
-		sizeRing.width, sizeRing.height);
+
+	return CGRectMake(point.x - 8 - 13, point.y - 16 - 5, sizeRing.width,
+			sizeRing.height);
 }
 
 void NDBaseRole::DirectRight(bool bRight)
 {
-	if (bRight) 
+	if (bRight)
 	{
 		this->SetSpriteDir(1);
-		if (m_pkRidePet) 
+		if (m_pkRidePet)
 		{
 			m_pkRidePet->SetSpriteDir(1);
 		}
 	}
-	else 
+	else
 	{
 		this->SetSpriteDir(2);
-		if (m_pkRidePet) 
+		if (m_pkRidePet)
 		{
 			m_pkRidePet->SetSpriteDir(2);
 		}
@@ -172,12 +172,24 @@ int NDBaseRole::getFlagId(int index)
 
 	switch (index)
 	{
-		case CAMP_NEUTRAL : iid = -1;break;
-		case CAMP_SUI: iid = FLAG_SUI_DYNASTY_1;break;
-		case CAMP_TANG: iid = FLAG_TAN_DYNASTY_1;break;
-		case CAMP_TUJUE: iid = FLAG_TUJUE_DYNASTY_1;break;
-		case CAMP_FOR_ESCORT : iid = FLAG_ESCORT_1;break;//ïÚÆì
-		case 5:iid = FLAG_TEAM_1;break; //¶ÓÎé
+	case CAMP_NEUTRAL:
+		iid = -1;
+		break;
+	case CAMP_SUI:
+		iid = FLAG_SUI_DYNASTY_1;
+		break;
+	case CAMP_TANG:
+		iid = FLAG_TAN_DYNASTY_1;
+		break;
+	case CAMP_TUJUE:
+		iid = FLAG_TUJUE_DYNASTY_1;
+		break;
+	case CAMP_FOR_ESCORT:
+		iid = FLAG_ESCORT_1;
+		break;	//ïÚÆì
+	case 5:
+		iid = FLAG_TEAM_1;
+		break; //¶ÓÎé
 	}
 
 	return iid;
@@ -185,15 +197,15 @@ int NDBaseRole::getFlagId(int index)
 
 void NDBaseRole::DrawRingImage(bool bDraw)
 {
-	if (this->IsKindOfClass(RUNTIME_CLASS(NDNpc))) 
+	if (this->IsKindOfClass(RUNTIME_CLASS(NDNpc)))
 	{
-		NDNpc* npc = (NDNpc*)this;
-		if (!npc->IsActionOnRing()) 
+		NDNpc* npc = (NDNpc*) this;
+		if (!npc->IsActionOnRing())
 		{
 			return;
 		}
 	}
-	
+
 	if (m_bFocus && bDraw)
 	{
 		if (m_picRing == NULL)
@@ -201,10 +213,10 @@ void NDBaseRole::DrawRingImage(bool bDraw)
 			m_picRing = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
 		}
 		CGSize sizeRing = m_picRing->GetSize();
-		
-		if (this->GetParent()) 
+
+		if (this->GetParent())
 		{
-			NDLayer *layer = (NDLayer*)this->GetParent();
+			NDLayer *layer = (NDLayer*) this->GetParent();
 			CGSize sizemap = layer->GetContentSize();
 			if (!m_pkRidePet)
 			{
@@ -214,7 +226,7 @@ void NDBaseRole::DrawRingImage(bool bDraw)
 			{
 				//m_picRing->DrawInRect(CGRectMake(ridepet->GetPosition().x-13-8, ridepet->GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
 			}
-		}		
+		}
 	}
 }
 
@@ -223,36 +235,38 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 	NDNode *node = this->GetParent();
 	CGSize sizemap;
 
-	if (node )
+	if (node)
 	{
-		
+
 		if (node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
 			//°Ñbaserole×ø±ê×ª³ÉÆÁÄ»×ø±ê
-			NDMapLayer *layer = (NDMapLayer*)node;
+			NDMapLayer *layer = (NDMapLayer*) node;
 			CGPoint screen = layer->GetScreenCenter();
 			CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-			m_posScreen = ccpSub(this->GetPosition(), ccpSub(screen, 
-				CGPointMake(winSize.width / 2, winSize.height / 2)));
+			m_posScreen = ccpSub(this->GetPosition(),
+					ccpSub(screen,
+							CGPointMake(winSize.width / 2,
+									winSize.height / 2)));
 		}
-		else 
+		else
 		{
 			m_posScreen = GetPosition();
 		}
-				
+
 		sizemap = node->GetContentSize();
 	}
 	else
 	{
 		return true;
 	}
-	
+
 	m_pkSubNode->SetContentSize(sizemap);
-	
+
 	HandleShadow(sizemap);
-	
+
 	DrawRingImage(bDraw);
-	
+
 	if (m_pkEffectFlagAniGroup)
 	{
 		if (!m_pkEffectFlagAniGroup->GetParent())
@@ -260,9 +274,9 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 			m_pkSubNode->AddChild(m_pkEffectFlagAniGroup);
 		}
 	}
-	
+
 //	updateRidePetEffect(); ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	
+
 	if (m_pkEffectRidePetAniGroup)
 	{
 		if (!m_pkEffectRidePetAniGroup->GetParent())
@@ -270,14 +284,14 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 			m_pkSubNode->AddChild(m_pkEffectRidePetAniGroup);
 		}
 	}
-	
+
 	drawEffects(bDraw);
-	
+
 	//if (m_talkBox) 
 	//{
 	//	m_talkBox->draw();
 	//}
-	
+
 	return true;
 }
 
@@ -310,19 +324,19 @@ void NDBaseRole::SetAction(bool bMove)
 		if (AssuredRidePet())
 		{
 			setMoveActionWithRidePet();
-		} 
-		else 
-		{// ÈËÎïÆÕÍ¨ÒÆ¶¯
+		}
+		else
+		{	// ÈËÎïÆÕÍ¨ÒÆ¶¯
 			AnimationListObj.moveAction(TYPE_MANUALROLE, this, m_bFaceRight);
 		}
-	} 
-	else 
+	}
+	else
 	{
 		if (AssuredRidePet())
-		{// Æï³èÕ¾Á¢
+		{	// Æï³èÕ¾Á¢
 			setStandActionWithRidePet();
-		} 
-		else 
+		}
+		else
 		{
 			AnimationListObj.standAction(TYPE_MANUALROLE, this, m_bFaceRight);
 		}
@@ -337,45 +351,51 @@ bool NDBaseRole::AssuredRidePet()
 
 void NDBaseRole::setMoveActionWithRidePet()
 {
-	if (!m_pkRidePet) 
+	if (!m_pkRidePet)
 	{
 		return;
 	}
-	
+
 	AnimationListObj.moveAction(TYPE_RIDEPET, m_pkRidePet, m_bFaceRight);// Æï³èÒÆ¶¯
 	switch (m_pkRidePet->iType)
 	{
-		case TYPE_RIDE:// ÈËÎïÆïÔÚÆï³èÉÏÒÆ¶¯
-			AnimationListObj.ridePetMoveAction(TYPE_MANUALROLE, this, m_bFaceRight);
-			break;
-		case TYPE_STAND:// ÈËÎïÕ¾ÔÚÆï³èÉÏÒÆ¶¯
-			AnimationListObj.standPetMoveAction(TYPE_MANUALROLE, this, m_bFaceRight);
-			break;
-		case TYPE_RIDE_BIRD:
-			AnimationListObj.moveAction(TYPE_RIDEPET, m_pkRidePet, 1 -m_bFaceRight);
-			AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight, MANUELROLE_RIDE_BIRD_WALK);
-			break;
-		case TYPE_RIDE_FLY:
-			AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight, MANUELROLE_FLY_PET_WALK);
-			break;
-		case TYPE_RIDE_YFSH:
-			AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight, MANUELROLE_FLY_PET_WALK);
-			break;
-		case TYPE_RIDE_QL:
-			AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight, MANUELROLE_RIDE_QL);
-			break;
+	case TYPE_RIDE:	// ÈËÎïÆïÔÚÆï³èÉÏÒÆ¶¯
+		AnimationListObj.ridePetMoveAction(TYPE_MANUALROLE, this, m_bFaceRight);
+		break;
+	case TYPE_STAND:	// ÈËÎïÕ¾ÔÚÆï³èÉÏÒÆ¶¯
+		AnimationListObj.standPetMoveAction(TYPE_MANUALROLE, this,
+				m_bFaceRight);
+		break;
+	case TYPE_RIDE_BIRD:
+		AnimationListObj.moveAction(TYPE_RIDEPET, m_pkRidePet,
+				1 - m_bFaceRight);
+		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+				MANUELROLE_RIDE_BIRD_WALK);
+		break;
+	case TYPE_RIDE_FLY:
+		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+				MANUELROLE_FLY_PET_WALK);
+		break;
+	case TYPE_RIDE_YFSH:
+		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+				MANUELROLE_FLY_PET_WALK);
+		break;
+	case TYPE_RIDE_QL:
+		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+				MANUELROLE_RIDE_QL);
+		break;
 	}
 }
 
 void NDBaseRole::setStandActionWithRidePet()
 {
-	if (!m_pkRidePet) 
+	if (!m_pkRidePet)
 	{
 		return;
 	}
-	
+
 	AnimationListObj.standAction(TYPE_RIDEPET, m_pkRidePet, m_bFaceRight);
-	
+
 	// ×°±¸½çÃæ¡¢ÊôÐÔ½çÃæ¡¢Õ½¶·ÖÐ£¬ÈËÒªÕ¾Á¢×´Ì¬
 	//if (EquipUIScreen.instance == null
 //	&& Attribute.instance == null
@@ -385,28 +405,35 @@ void NDBaseRole::setStandActionWithRidePet()
 //	* null
 //	*/) 
 //	{
-		switch (m_pkRidePet->iType)
-		{
-			case TYPE_RIDE:
-				AnimationListObj.ridePetStandAction(TYPE_MANUALROLE, this, m_bFaceRight);
-				break;
-			case TYPE_STAND:
-				AnimationListObj.standPetStandAction(TYPE_MANUALROLE, this, m_bFaceRight);
-				break;
-			case TYPE_RIDE_BIRD:
-				AnimationListObj.standAction(TYPE_RIDEPET, m_pkRidePet, 1 - m_bFaceRight);
-				AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight, MANUELROLE_RIDE_BIRD_STAND);
-				break;
-			case TYPE_RIDE_FLY:
-				AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight, MANUELROLE_FLY_PET_STAND);
-				break;
-			case TYPE_RIDE_YFSH:
-				AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,MANUELROLE_FLY_PET_WALK);
-				break;
-			case TYPE_RIDE_QL:
-				AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,MANUELROLE_RIDE_QL);
-				break;
-		 }
+	switch (m_pkRidePet->iType)
+	{
+	case TYPE_RIDE:
+		AnimationListObj.ridePetStandAction(TYPE_MANUALROLE, this,
+				m_bFaceRight);
+		break;
+	case TYPE_STAND:
+		AnimationListObj.standPetStandAction(TYPE_MANUALROLE, this,
+				m_bFaceRight);
+		break;
+	case TYPE_RIDE_BIRD:
+		AnimationListObj.standAction(TYPE_RIDEPET, m_pkRidePet,
+				1 - m_bFaceRight);
+		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+				MANUELROLE_RIDE_BIRD_STAND);
+		break;
+	case TYPE_RIDE_FLY:
+		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+				MANUELROLE_FLY_PET_STAND);
+		break;
+	case TYPE_RIDE_YFSH:
+		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+				MANUELROLE_FLY_PET_WALK);
+		break;
+	case TYPE_RIDE_QL:
+		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+				MANUELROLE_RIDE_QL);
+		break;
+	}
 //	} 
 //	else 
 //	{
@@ -443,7 +470,7 @@ void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 //	this->SetHair(tmpsex+1); // ·¢ÐÍ
 //	
 //	SetHairImageWithEquipmentId(hair);
-	
+
 //	int flagOrRidePet = lookface / 10000000 % 10;
 //	if (flagOrRidePet > 0) {
 //		if (flagOrRidePet < 5) {
@@ -453,34 +480,34 @@ void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 //			SetEquipment(id,0);
 //		}
 //	}
-	
+
 //	weapon	= getEquipmentLookFace(lookface, 0);
 //	cap			= getEquipmentLookFace(lookface, 1);
 //	armor		= getEquipmentLookFace(lookface, 2);
 //	SetEquipment(weapon, 0);//ÎäÆ÷
 //	SetEquipment(cap, 0);//Í·¿ø
 //	SetEquipment(armor, 0);//ÐØ¼×
-	
+
 	//Load Animation Group
-	int model_id=lookface / 1000000;
+	int model_id = lookface / 1000000;
 //	if (sex % 2 == SpriteSexMale) 
 	//NSString* aniPath = [NSString stringWithUTF8String:NDPath::GetAnimationPath().c_str()];  ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 //	Initialization([[NSString stringWithFormat:@"%@model_%d.spr",aniPath,model_id] UTF8String] ); ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 //	else 
 //		Initialization(MANUELROLE_HUMAN_FEMALE);
-	
+
 	m_bFaceRight = direct == 2;
-	SetFaceImageWithEquipmentId(m_bFaceRight);
+	SetFaceImageWithEquipmentId (m_bFaceRight);
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
-	
+
 	defaultDeal();
 }
 
 void NDBaseRole::SetEquipment(int equipmentId, int quality)
 {
 	/***
-	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	*/
+	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	 */
 //	if (equipmentId <= 0 ) 
 //		return;
 //	
@@ -608,143 +635,141 @@ int NDBaseRole::getEquipmentLookFace(int lookface, int type)
 	int nID = 0;
 	switch (type)
 	{
-		case 0: 
-		{//ÎäÆ÷
-			int index = lookface / 100000 % 100;
-			if (index == 99)
-			{
-				return 0;
-			}
-			if (index <10)
-			{
-				nID = 1000 + index;
-			}
-			else if (index < 20)
-			{
-				nID = 1600 + index - 10;
-			}
-			else if (index < 30) 
-			{
-				nID = 2800 + index - 20;
-			}
-			else if (index < 40) 
-			{
-				nID = 1200 + index - 30;
-			}
-			else if (index < 50) 
-			{
-				nID = 1800 + index - 40;
-			}
-			else if (index < 60) 
-			{
-				nID = 2200 + index - 50;
-			}
-			else if (index < 70) 
-			{
-				nID = 2400 + index - 60;
-			}
-			else if (index < 80) 
-			{
-				nID = 5000 + index - 70;
-			}
-			else if (index < 90) 
-			{
-				nID = 2600 + index - 80;
-			}
-			break;
+	case 0:
+	{	//ÎäÆ÷
+		int index = lookface / 100000 % 100;
+		if (index == 99)
+		{
+			return 0;
 		}
-		case 1:
-		{ //Í·¿ø
-			int index =  lookface / 1000 % 100;
-			if (index == 99) 
+		if (index < 10)
+		{
+			nID = 1000 + index;
+		}
+		else if (index < 20)
+		{
+			nID = 1600 + index - 10;
+		}
+		else if (index < 30)
+		{
+			nID = 2800 + index - 20;
+		}
+		else if (index < 40)
+		{
+			nID = 1200 + index - 30;
+		}
+		else if (index < 50)
+		{
+			nID = 1800 + index - 40;
+		}
+		else if (index < 60)
+		{
+			nID = 2200 + index - 50;
+		}
+		else if (index < 70)
+		{
+			nID = 2400 + index - 60;
+		}
+		else if (index < 80)
+		{
+			nID = 5000 + index - 70;
+		}
+		else if (index < 90)
+		{
+			nID = 2600 + index - 80;
+		}
+		break;
+	}
+	case 1:
+	{ //Í·¿ø
+		int index = lookface / 1000 % 100;
+		if (index == 99)
+		{
+			return 0;
+		}
+		if (index < 5)
+		{
+			nID = 10600 + index;
+		}
+		else if (index < 21)
+		{
+			nID = 10650 + index - 5;
+		}
+		else if (index < 26)
+		{
+			nID = 10700 + index - 21;
+		}
+		else if (index < 28)
+		{
+			nID = 10750 + index - 26;
+		}
+		else
+		{
+			nID = 10800 + index - 28;
+		};
+		break;
+	}
+	case 2:
+	{ //ÐØ¼×
+		int index = lookface / 10 % 100;
+
+		if (index == 99)
+		{
+			return 0;
+		}
+		if (index < 50)
+		{
+			if (index < 5)
 			{
-				return 0;
+				nID = 11200 + index;
 			}
-			if (index < 5) 
+			else if (index < 9)
 			{
-				nID = 10600 + index;
+				nID = 11250 + index - 5;
 			}
-			else if (index < 21) 
+			else if (index < 14)
 			{
-				nID = 10650 + index - 5;
-			}
-			else if (index < 26) 
-			{
-				nID = 10700 + index - 21;
-			}
-			else if (index < 28) 
-			{
-				nID = 10750 + index - 26;
+				nID = 11300 + index - 9;
 			}
 			else
 			{
-				nID = 10800 + index - 28;
-			};
-			break;
+				nID = 11400 + index - 14;
+			}
 		}
-		case 2: 
-		{//ÐØ¼×
-			int index =  lookface / 10 % 100;
-
-			if (index == 99) 
-			{
-				return 0;
-			}
-			if (index < 50) 
-			{
-				if (index < 5) 
-				{
-					nID = 11200 + index;
-				}
-				else if(index < 9) 
-				{
-					nID = 11250 + index - 5;
-				}
-				else if (index < 14)
-				{
-					nID = 11300 + index - 9;
-				}
-				else
-				{
-					nID = 11400 + index - 14;
-				}
-			}
-			else 
-			{ //Åû·ç
-				nID = (index - 50)*8 + 30000;
-			}
-			break;
+		else
+		{ //Åû·ç
+			nID = (index - 50) * 8 + 30000;
 		}
+		break;
+	}
 	}
 	return nID;
 }
 
 void NDBaseRole::defaultDeal()
 {
-	if (expresstion == -1) 
+	if (expresstion == -1)
 	{
-		if (sex % 2 == SpriteSexMale) 
+		if (sex % 2 == SpriteSexMale)
 		{
 			expresstion = 10400;
 		}
-		else 
+		else
 		{
 			expresstion = 10401;
 		}
 
-		SetExpressionImageWithEquipmentId(expresstion);
+		SetExpressionImageWithEquipmentId (expresstion);
 	}
 }
 
-
-
 void NDBaseRole::SetHairImageWithEquipmentId(int equipmentId)
 {
-	if (equipmentId >= 10000 && equipmentId < 10400) 
+	if (equipmentId >= 10000 && equipmentId < 10400)
 	{
 		/**
-		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		*/
+		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		 */
 // 		NSString* hairImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		hairImageName = [NSString stringWithFormat:@"%@%d", hairImageName, equipmentId];
 // 		if (sex % 2 == SpriteSexMale) 
@@ -757,14 +782,14 @@ void NDBaseRole::SetHairImageWithEquipmentId(int equipmentId)
 // 		}
 // 		hairImageName = [NSString stringWithFormat:@"%@.png", hairImageName];
 // 		this->SetHairImage([hairImageName UTF8String], this->hairColor);
-	}	
+	}
 }
 
 void NDBaseRole::SetFaceImageWithEquipmentId(int equipmentId)
 {
 	/**
-	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	*/
+	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	 */
 
 // 	NSString* faceImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 	faceImageName = [NSString stringWithFormat:@"%@skin.png", faceImageName];	
@@ -774,12 +799,12 @@ void NDBaseRole::SetFaceImageWithEquipmentId(int equipmentId)
 
 void NDBaseRole::SetExpressionImageWithEquipmentId(int equipmentId)
 {
-	if (equipmentId >= 10400 && equipmentId < 10600) 
+	if (equipmentId >= 10400 && equipmentId < 10600)
 	{
 		/**
-		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		*/
-		
+		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		 */
+
 // 		NSString* expressionImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		expressionImageName = [NSString stringWithFormat:@"%@%d.png", expressionImageName, equipmentId];	
 // 		this->SetExpressionImage([expressionImageName UTF8String]);
@@ -788,39 +813,37 @@ void NDBaseRole::SetExpressionImageWithEquipmentId(int equipmentId)
 
 void NDBaseRole::SetCapImageWithEquipmentId(int equipmentId)
 {
-	if (equipmentId >= 10600 && equipmentId < 11200) 
+	if (equipmentId >= 10600 && equipmentId < 11200)
 	{
 		/**
-		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		* begin
-		*/
+		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		 * begin
+		 */
 // 		NSString* capImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		capImageName = [NSString stringWithFormat:@"%@%d.png", capImageName, equipmentId];	
 // 		this->SetCapImage([capImageName UTF8String]);
-
 		/**
-		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		* end
-		*/
+		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		 * end
+		 */
 	}
 }
 
 void NDBaseRole::SetArmorImageWithEquipmentId(int equipmentId)
 {
-	if (equipmentId >= 11200 && equipmentId < 11800) 
+	if (equipmentId >= 11200 && equipmentId < 11800)
 	{
 		/**
-		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		* begin
-		*/
+		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		 * begin
+		 */
 // 		NSString* armorImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		armorImageName = [NSString stringWithFormat:@"%@%d.png", armorImageName, equipmentId];	
 // 		this->SetArmorImage([armorImageName UTF8String]);
-	
 		/**
-		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		* end
-		*/
+		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		 * end
+		 */
 	}
 }
 
@@ -837,9 +860,9 @@ void NDBaseRole::SetCloakImageWithEquipmentId(int equipmentId)
 	if (equipmentId >= 30000 && equipmentId < 40000)
 	{
 		/**
-		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		* begin
-		*/
+		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		 * begin
+		 */
 
 // 		NSString* cloakName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		cloakName = [NSString stringWithFormat:@"%@%d.png", cloakName, equipmentId+7];	
@@ -869,11 +892,10 @@ void NDBaseRole::SetCloakImageWithEquipmentId(int equipmentId)
 // 		NSString* skirtLiftLegName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		skirtLiftLegName = [NSString stringWithFormat:@"%@%d.png", skirtLiftLegName, equipmentId+6];	
 // 		this->SetSkirtLiftLegImage([skirtLiftLegName UTF8String]);
-
 		/**
-		* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		* end
-		*/
+		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		 * end
+		 */
 	}
 }
 
@@ -955,26 +977,26 @@ int NDBaseRole::GetCloakQuality()
 
 void NDBaseRole::SetHair(int style, int color)
 {
-	
-	switch (style) 
+
+	switch (style)
 	{
-		case 1:
-		case 0:
-			this->hair = 10000;
-			break;
-		case 2:
-			this->hair = 10001;
-			break;
-		case 3:
-			this->hair = 10002;
-			break;
+	case 1:
+	case 0:
+		this->hair = 10000;
+		break;
+	case 2:
+		this->hair = 10001;
+		break;
+	case 3:
+		this->hair = 10002;
+		break;
 	}
 	this->hairColor = color;
 
 	/**
-	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	* begin
-	*/
+	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	 * begin
+	 */
 // 	NSString* hairImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 	hairImageName = [NSString stringWithFormat:@"%@%d", hairImageName, this->hair];
 // 	if (this->sex % 2 == SpriteSexMale) 
@@ -1024,7 +1046,7 @@ void NDBaseRole::SetPositionEx(CGPoint newPosition)
 
 NDRidePet* NDBaseRole::GetRidePet()
 {
-	if (m_pkRidePet == NULL) 
+	if (m_pkRidePet == NULL)
 	{
 		m_pkRidePet = new NDRidePet;
 	}
@@ -1037,67 +1059,67 @@ void NDBaseRole::unpackEquip(int iEquipPos)
 	{
 		return;
 	}
-	
+
 	switch (iEquipPos)
 	{
-		case Item::eEP_MainArmor :
-			this->SetWeaponType(WEAPON_NONE);
-			this->SetRightHandWeaponImage("");
-			this->SetDoubleHandWeaponImage("");
-			this->SetDoubleHandWandImage("");
-			this->SetDoubleHandBowImage("");
-			this->SetDoubleHandSpearImage("");
-			this->SetWeaponQuality(0);
-			break;
-		case Item::eEP_FuArmor :
-			this->SetSecWeaponType(WEAPON_NONE);
-			this->SetLeftHandWeaponImage("");
-			this->SetShieldImage("");
-			this->SetSecWeaponQuality(0);
-			break;
-		case Item::eEP_Head:
-			this->SetCapImage("");
-			this->SetCapQuality(0);
-			break;
-		case Item::eEP_Armor:
-			this->SetArmorImage("");
-			this->SetArmorQuality(0);
-			break;
-		case Item::eEP_YaoDai:
-			this->SetCloakImage("");
-			this->SetLeftShoulderImage("");
-			this->SetRightShoulderImage("");
-			this->SetSkirtStandImage("");
-			this->SetSkirtWalkImage("");
-			this->SetSkirtSitImage("");
-			this->SetSkirtLiftLegImage("");
-			this->SetCloakQuality(0);
-			this->m_nCloak = -1;
-			break;
-		case Item::eEP_Ride:
-			SAFE_DELETE_NODE(m_pkRidePet);
-			break;
-		default:
-			break;
+	case Item::eEP_MainArmor:
+		this->SetWeaponType(WEAPON_NONE);
+		this->SetRightHandWeaponImage("");
+		this->SetDoubleHandWeaponImage("");
+		this->SetDoubleHandWandImage("");
+		this->SetDoubleHandBowImage("");
+		this->SetDoubleHandSpearImage("");
+		this->SetWeaponQuality(0);
+		break;
+	case Item::eEP_FuArmor:
+		this->SetSecWeaponType(WEAPON_NONE);
+		this->SetLeftHandWeaponImage("");
+		this->SetShieldImage("");
+		this->SetSecWeaponQuality(0);
+		break;
+	case Item::eEP_Head:
+		this->SetCapImage("");
+		this->SetCapQuality(0);
+		break;
+	case Item::eEP_Armor:
+		this->SetArmorImage("");
+		this->SetArmorQuality(0);
+		break;
+	case Item::eEP_YaoDai:
+		this->SetCloakImage("");
+		this->SetLeftShoulderImage("");
+		this->SetRightShoulderImage("");
+		this->SetSkirtStandImage("");
+		this->SetSkirtWalkImage("");
+		this->SetSkirtSitImage("");
+		this->SetSkirtLiftLegImage("");
+		this->SetCloakQuality(0);
+		this->m_nCloak = -1;
+		break;
+	case Item::eEP_Ride:
+		SAFE_DELETE_NODE (m_pkRidePet);
+		break;
+	default:
+		break;
 	}
 }
 
 void NDBaseRole::unpakcAllEquip()
 {
-	for (int i = Item::eEP_Begin; i < Item::eEP_End; i++) 
+	for (int i = Item::eEP_Begin; i < Item::eEP_End; i++)
 	{
 		unpackEquip(i);
 	}
 }
 
-void NDBaseRole::addTalkMsg(std::string msg,int timeForTalkMsg)
+void NDBaseRole::addTalkMsg(std::string msg, int timeForTalkMsg)
 {
 	NDScene *pkScene = NDDirector::DefaultDirector()->GetRunningScene();
-	if (!pkScene || !pkScene->IsKindOfClass(RUNTIME_CLASS(GameScene))) 
+	if (!pkScene || !pkScene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
 	{
 		return;
 	}
-	
+
 	//if (!m_talkBox && subnode) 
 	//{
 	//	m_talkBox = new TalkBox;
@@ -1113,8 +1135,8 @@ void NDBaseRole::addTalkMsg(std::string msg,int timeForTalkMsg)
 
 void NDBaseRole::drawEffects(bool bDraw)
 {
-	if (m_pkEffectRidePetAniGroup != NULL &&
-		m_pkEffectRidePetAniGroup->GetParent()) 
+	if (m_pkEffectRidePetAniGroup != NULL
+			&& m_pkEffectRidePetAniGroup->GetParent())
 	{
 		m_pkEffectRidePetAniGroup->SetPosition(GetPosition());
 		m_pkEffectRidePetAniGroup->RunAnimation(bDraw);
@@ -1123,29 +1145,29 @@ void NDBaseRole::drawEffects(bool bDraw)
 
 void NDBaseRole::updateRidePetEffect()
 {
-	if (AssuredRidePet() && m_pkRidePet->quality > 8) 
+	if (AssuredRidePet() && m_pkRidePet->quality > 8)
 	{
 		SafeAddEffect(m_pkEffectRidePetAniGroup, "effect_3001.spr");
-	} 
-	else 
+	}
+	else
 	{
-		SafeClearEffect(m_pkEffectRidePetAniGroup);
+		SafeClearEffect (m_pkEffectRidePetAniGroup);
 	}
 }
 
 void NDBaseRole::SafeClearEffect(NDSprite*& sprite)
 {
-	if (sprite != NULL) 
+	if (sprite != NULL)
 	{
-		if (sprite->GetParent()) 
+		if (sprite->GetParent())
 		{
 			sprite->RemoveFromParent(true);
 		}
-		else 
+		else
 		{
 			delete sprite;
 		}
-		
+
 		sprite = NULL;
 	}
 }
@@ -1174,17 +1196,18 @@ void NDBaseRole::SetShadowOffset(int iX, int iY)
 
 void NDBaseRole::HandleShadow(CGSize parentsize)
 {
-	if (!m_bShowShadow) 
+	if (!m_bShowShadow)
 	{
 		return;
 	}
-	
+
 	NDPicture *pic = NULL;
 	if (!m_bBigShadow)
 	{
 		if (m_pkPicShadow == NULL)
 		{
-			m_pkPicShadow = NDPicturePool::DefaultPool()->AddPicture(SHADOW_IMAGE);
+			m_pkPicShadow = NDPicturePool::DefaultPool()->AddPicture(
+					SHADOW_IMAGE);
 		}
 		pic = m_pkPicShadow;
 	}
@@ -1192,19 +1215,23 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 	{
 		if (m_pkPicShadowBig == NULL)
 		{
-			m_pkPicShadowBig = NDPicturePool::DefaultPool()->AddPicture(BIG_SHADOW_IMAGE);
+			m_pkPicShadowBig = NDPicturePool::DefaultPool()->AddPicture(
+					BIG_SHADOW_IMAGE);
 		}
-		pic = m_pkPicShadowBig; 
+		pic = m_pkPicShadowBig;
 	}
-	
+
 	CGSize sizeShadow = pic->GetSize();
 
 	int x = m_position.x - DISPLAY_POS_X_OFFSET;
 	int y = m_position.y - DISPLAY_POS_Y_OFFSET;
 
-	pic->DrawInRect(CGRectMake(x + m_iShadowOffsetX,
-		y + m_iShadowOffsetY + NDDirector::DefaultDirector()->GetWinSize().height -
-		parentsize.height, sizeShadow.width, sizeShadow.height));
+	pic->DrawInRect(
+			CGRectMake(x + m_iShadowOffsetX,
+					y + m_iShadowOffsetY
+							+ NDDirector::DefaultDirector()->GetWinSize().height
+							- parentsize.height, sizeShadow.width,
+					sizeShadow.height));
 }
 
 void NDBaseRole::SetNormalAniGroup(int lookface)
@@ -1214,8 +1241,10 @@ void NDBaseRole::SetNormalAniGroup(int lookface)
 		return;
 	}
 
-	Initialization( tq::CString("%smodel_%d%s", 
-		NDEngine::NDPath::GetAnimationPath().c_str(), lookface / 100, ".spr") );
+	Initialization(
+			tq::CString("%smodel_%d%s",
+					NDEngine::NDPath::GetAnimationPath().c_str(),
+					lookface / 100, ".spr"));
 
 	m_bFaceRight = true;
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
