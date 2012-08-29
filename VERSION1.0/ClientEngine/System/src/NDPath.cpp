@@ -13,7 +13,7 @@
 namespace NDEngine
 {
 	std::string NDPath::NDPath_ResPath = "./SimplifiedChineseRes/res/";
-	std::string NDPath::NDPath_ImgPath = "./SimplifiedChineseRes/res/map/";
+	std::string NDPath::NDPath_ImgPath = "./SimplifiedChineseRes/res/Image/";
 	std::string NDPath::NDPath_MapPath = "";
 	std::string NDPath::NDPath_AniPath = "";
 	std::string NDPath::NDPath_SoundPath = "";

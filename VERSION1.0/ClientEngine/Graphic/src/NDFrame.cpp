@@ -287,15 +287,15 @@ void NDFrame::run(float scale)
 	for (int i = 0; i < (int) m_FrameTiles->count(); i++)
 	{
 		NDFrameTile* pkFrameTile = m_FrameTiles->getObjectAtIndex(i);
-		NDTileTableRecord *record =
+		NDTileTableRecord *pkRecord =
 				(NDTileTableRecord *) pkAnimationGroup->getTileTable()->objectAtIndex(
 						pkFrameTile->getTableIndex());
 
 		NDTile *pkTile = m_pkTiles->getObjectAtIndex(i);
 
 		pkTile->setTexture(
-				getTileTextureWithImageIndex(record->getImageIndex(),
-						record->getReplace()));
+				getTileTextureWithImageIndex(pkRecord->getImageIndex(),
+						pkRecord->getReplace()));
 
 		if (pkTile->getTexture() == NULL)
 		{
@@ -311,8 +311,8 @@ void NDFrame::run(float scale)
 				(NDEngine::NDSprite *) pkAnimationGroup->getRuningSprite();
 
 		if (sprite && !sprite->IsCloakEmpty()
-				&& record->getReplace() >= REPLACEABLE_LEFT_SHOULDER
-				&& record->getReplace() <= REPLACEABLE_SKIRT_LIFT_LEG)
+				&& pkRecord->getReplace() >= REPLACEABLE_LEFT_SHOULDER
+				&& pkRecord->getReplace() <= REPLACEABLE_SKIRT_LIFT_LEG)
 		{
 			pkTile->setCutRect(
 					CGRectMake(0, 0,
@@ -324,8 +324,8 @@ void NDFrame::run(float scale)
 		else
 		{
 			pkTile->setCutRect(
-					CGRectMake(record->getX(), record->getY(), record->getW(),
-							record->getH()));
+					CGRectMake(pkRecord->getX(), pkRecord->getY(), pkRecord->getW(),
+							pkRecord->getH()));
 		}
 
 		GLfloat x = pkAnimationGroup->getPosition().x;
@@ -344,7 +344,7 @@ void NDFrame::run(float scale)
 
 		if (pkAnimation->getReverse())
 		{
-			int tileW = this->getTileW(record->getW(), record->getH(),
+			int tileW = this->getTileW(pkRecord->getW(), pkRecord->getH(),
 					reverseRotation.rotation);
 //			if (reverseRotation.rotation == NDRotationEnumRotation90 || reverseRotation.rotation == NDRotationEnumRotation270) 
 //			{

@@ -59,7 +59,7 @@ public:
 
 private:
 
-	int _orderId;
+	int m_nOrderID;
 
 	//NDEngine::NDSprite* m_RunningSprite;
 	void* m_pRunningSprite;

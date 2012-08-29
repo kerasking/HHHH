@@ -335,7 +335,7 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 	direct = 2;
 
 //		if (sex % 2 == SpriteSexMale) 
-	int model_id = lookface / 1000000;
+	int model_id = 8;//lookface / 1000000;
 	//	if (sex % 2 == SpriteSexMale)
 
 	NSString* pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
@@ -422,11 +422,11 @@ void NDManualRole::WalkToPosition(const std::vector<CGPoint>& vec_toPos,
 
 	if (isTeamLeader() || !isTeamMember())
 	{
-		bool ignoreMask = IsInState(USERSTATE_FLY); // && NDMapMgrObj.canFly(); ///< 临时性注释 郭浩 外加一个分号
+		bool bGnoreMask = IsInState(USERSTATE_FLY); // && NDMapMgrObj.canFly(); ///< 临时性注释 郭浩 外加一个分号
 		this->MoveToPosition(vec_toPos,
 				IsInState(USERSTATE_SPEED_UP) ?
 						SpriteSpeedStep8 : SpriteSpeedStep4, moveMap,
-				ignoreMask, mustArrive);
+				bGnoreMask, mustArrive);
 		if (isTeamLeader())
 		{
 			if (!m_pointList.empty())
