@@ -483,7 +483,6 @@ TILE_REVERSE_ROTATION NDFrame::tileReverseRotationWithReverse(bool reverse,
 		{
 			reverseRotaionResult.reverse = false;
 			reverseRotaionResult.rotation = NDRotationEnumRotation60;
-			;
 		}
 		break;
 	case 5:

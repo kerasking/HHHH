@@ -11,7 +11,7 @@ public:
 	CAutoLink(const CAutoLink<T>& link)				{ Init(); Insert(&const_cast<CAutoLink<T>&>(link)); }
 	//explicit CAutoLink(T* ptr)								{ Init(); Insert(&ptr->QueryLink(CAutoLink<T>())); }
 	CAutoLink&	operator=(const CAutoLink<T>& link)	{ Break(); Insert(&const_cast<CAutoLink<T>&>(link)); return *this; }
-	CAutoLink&	operator=(T* ptr)					;
+	CAutoLink&	operator=(T* ptr);
 	void	Init(T* pOwner)							{ NDAsssert(!IsValid()); m_pOwner=pOwner; }
 	void	Clear()									{ Break(); }
 	bool operator==( CAutoLink &objRight ) const { return m_pOwner == objRight.m_pOwner ; }
