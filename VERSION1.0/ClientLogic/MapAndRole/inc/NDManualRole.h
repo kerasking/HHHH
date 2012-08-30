@@ -286,7 +286,7 @@ public:
 
 	bool m_bClear;
 
-	NDMonster* pkAniGroupTransformed;
+	NDMonster* m_pkAniGroupTransformed;
 
 	vector<int> m_vEquipsID;
 

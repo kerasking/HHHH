@@ -52,7 +52,7 @@ IMPLEMENT_CLASS(NDManualRole, NDBaseRole)
 NDManualRole::NDManualRole() :
 m_nState(0)
 {
-	pkAniGroupTransformed = NULL;
+	m_pkAniGroupTransformed = NULL;
 	idTransformTo = 0;
 	m_nMoney = 0;								// 银两
 	m_dwLookFace = 0;// 创建人物的时候有6种外观可供选择外观
@@ -335,12 +335,12 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 	direct = 2;
 
 //		if (sex % 2 == SpriteSexMale) 
-	int model_id = 2;//lookface / 1000000;
+	int nModelID = 1;//lookface / 1000000;
 	//	if (sex % 2 == SpriteSexMale)
 
 	NSString* pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
 	CCString *pString = CCString::stringWithFormat("%smodel_%d.spr",
-			pstrAniPath->toStdString().c_str(), model_id);
+			pstrAniPath->toStdString().c_str(), nModelID);
 	NDSprite::Initialization(pString->toStdString().c_str());
 	SAFE_DELETE(pstrAniPath);
 //		else 
@@ -348,7 +348,7 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 
 	m_bFaceRight = direct == 2;
 
-	this->SetCurrentAnimation(MANUELROLE_DEFENCE, m_bFaceRight);
+	this->SetCurrentAnimation(MANUELROLE_DODGE, m_bFaceRight);
 
 	//defaultDeal();
 }
@@ -1146,7 +1146,7 @@ void NDManualRole::SetAction(bool bMove, bool ignoreFighting/*=false*/)
 			if (isTransformed())
 			{
 				AnimationListObj.moveAction(TYPE_MANUALROLE,
-						pkAniGroupTransformed, 1 - m_bFaceRight);
+						m_pkAniGroupTransformed, 1 - m_bFaceRight);
 			}
 			else
 			{
@@ -1175,7 +1175,7 @@ void NDManualRole::SetAction(bool bMove, bool ignoreFighting/*=false*/)
 			if (isTransformed())
 			{
 				AnimationListObj.standAction(TYPE_MANUALROLE,
-						pkAniGroupTransformed, 1 - m_bFaceRight);
+						m_pkAniGroupTransformed, 1 - m_bFaceRight);
 			}
 			else
 			{
@@ -1438,15 +1438,15 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	 */
 
 	// 人物变形动画
-	if (pkAniGroupTransformed)
+	if (m_pkAniGroupTransformed)
 	{
 		bDraw = !this->IsInState(USERSTATE_STEALTH);
-		this->pkAniGroupTransformed->SetPosition(pos);
-		pkAniGroupTransformed->SetCurrentAnimation(
+		this->m_pkAniGroupTransformed->SetPosition(pos);
+		m_pkAniGroupTransformed->SetCurrentAnimation(
 				m_bIsMoving ? MONSTER_MAP_MOVE : MONSTER_MAP_STAND,
 				!this->m_bFaceRight);
-		pkAniGroupTransformed->SetSpriteDir(this->m_bFaceRight ? 2 : 0);
-		pkAniGroupTransformed->RunAnimation(bDraw);
+		m_pkAniGroupTransformed->SetSpriteDir(this->m_bFaceRight ? 2 : 0);
+		m_pkAniGroupTransformed->RunAnimation(bDraw);
 	}
 
 	//if (m_talkBox && m_talkBox->IsVisibled())
@@ -1603,7 +1603,7 @@ void NDManualRole::drawEffects(bool bDraw)
 		if (isTransformed())
 		{
 			ty = pos.y - DISPLAY_POS_Y_OFFSET
-					- pkAniGroupTransformed->getGravityY() + 46;
+					- m_pkAniGroupTransformed->getGravityY() + 46;
 		}
 		else
 		{
@@ -1884,24 +1884,24 @@ void NDManualRole::updateTransform(int idLookface)
 	{
 		this->idTransformTo = idLookface;
 
-		if (pkAniGroupTransformed)
+		if (m_pkAniGroupTransformed)
 		{
-			pkAniGroupTransformed->RemoveFromParent(true);
-			pkAniGroupTransformed = NULL;
+			m_pkAniGroupTransformed->RemoveFromParent(true);
+			m_pkAniGroupTransformed = NULL;
 		}
 
 		if (this->idTransformTo != 0)
 		{
-			this->pkAniGroupTransformed = new NDMonster;
-			this->pkAniGroupTransformed->SetNormalAniGroup(idLookface);
-			this->m_pkSubNode->AddChild(pkAniGroupTransformed);
+			this->m_pkAniGroupTransformed = new NDMonster;
+			this->m_pkAniGroupTransformed->SetNormalAniGroup(idLookface);
+			this->m_pkSubNode->AddChild(m_pkAniGroupTransformed);
 		}
 	}
 }
 
 bool NDManualRole::isTransformed()
 {
-	return this->pkAniGroupTransformed != NULL;
+	return this->m_pkAniGroupTransformed != NULL;
 }
 
 void NDManualRole::playerLevelUp()
@@ -2418,7 +2418,7 @@ void NDManualRole::drawServerEffect(std::vector<ServerEffect>& vEffect,
 			if (isTransformed())
 			{
 				ty = m_position.y - DISPLAY_POS_Y_OFFSET
-						- pkAniGroupTransformed->getGravityY() + 46;
+						- m_pkAniGroupTransformed->getGravityY() + 46;
 			}
 			else
 			{
@@ -2508,9 +2508,9 @@ CGRect NDManualRole::GetFocusRect()
 	}
 	else if (isTransformed())
 	{
-		h = this->pkAniGroupTransformed->GetHeight();
+		h = this->m_pkAniGroupTransformed->GetHeight();
 		ty = m_position.y - h;
-		w = this->pkAniGroupTransformed->GetWidth();
+		w = this->m_pkAniGroupTransformed->GetWidth();
 	}
 	else
 	{
