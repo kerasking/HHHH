@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "support/data_support/ccCArray.h"
 #include "ccMacros.h"
 #include <algorithm>
+#include "CCDirector.h"
 
 /**
  * Used for sort
@@ -97,6 +98,9 @@ bool CCTouchDispatcher::init(void)
 	m_sHandlerHelperData[CCTOUCHENDED].m_type = CCTOUCHENDED;
 	m_sHandlerHelperData[CCTOUCHCANCELLED].m_type = CCTOUCHCANCELLED;
 
+	m_curPos = CCPointZero;
+	m_prePos = CCPointZero;
+
 	return true;
 }
 
@@ -107,7 +111,7 @@ CCTouchDispatcher::~CCTouchDispatcher(void)
 	CC_SAFE_RELEASE(m_pHandlersToAdd);
 
 	ccCArrayFree(m_pHandlersToRemove);
-	m_pHandlersToRemove = NULL;	
+	m_pHandlersToRemove = NULL;
 }
 
 //
@@ -367,7 +371,7 @@ void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int u
 				{
 					bClaimed = pHandler->getDelegate()->ccTouchBegan(pTouch, pEvent);
 
-					if (!bClaimed)
+					if (bClaimed)
 					{
 						pHandler->getClaimedTouches()->addObject(pTouch);
 					}
@@ -495,6 +499,18 @@ void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int u
 
 void CCTouchDispatcher::touchesBegan(CCSet *touches, CCEvent *pEvent)
 {
+	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+	CCTouch *touch = (CCTouch *)touches->anyObject();
+	CCPoint curPos = touch->locationInView();
+	CCPoint prePos = touch->previousLocationInView();
+
+ 	//m_curPos = CCPointMake(curPos.y, winSize.height - curPos.x);
+ 	//m_prePos = CCPointMake(prePos.y, winSize.height - prePos.x);
+// 	m_curPos = CCPointMake(curPos.x, winSize.height - curPos.y);
+// 	m_prePos = CCPointMake(prePos.x, winSize.height - prePos.y);
+	m_curPos = curPos;
+	m_prePos = prePos;
+
 	if (m_bDispatchEvents)
 	{
 		this->touches(touches, pEvent, CCTOUCHBEGAN);
@@ -503,6 +519,18 @@ void CCTouchDispatcher::touchesBegan(CCSet *touches, CCEvent *pEvent)
 
 void CCTouchDispatcher::touchesMoved(CCSet *touches, CCEvent *pEvent)
 {
+	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+	CCTouch *touch = (CCTouch *)touches->anyObject();
+	CCPoint curPos = touch->locationInView();
+	CCPoint prePos = touch->previousLocationInView();
+
+	// 	m_curPos = CCPointMake(curPos.y, winSize.height - curPos.x);
+	// 	m_prePos = CCPointMake(prePos.y, winSize.height - prePos.x);
+// 	m_curPos = CCPointMake(curPos.x, winSize.height - curPos.y);
+// 	m_prePos = CCPointMake(prePos.x, winSize.height - prePos.y);
+	m_curPos = curPos;
+	m_prePos = prePos;
+
     if (m_bDispatchEvents)
 	{
 		this->touches(touches, pEvent, CCTOUCHMOVED);
@@ -511,6 +539,18 @@ void CCTouchDispatcher::touchesMoved(CCSet *touches, CCEvent *pEvent)
 
 void CCTouchDispatcher::touchesEnded(CCSet *touches, CCEvent *pEvent)
 {
+	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+	CCTouch *touch = (CCTouch *)touches->anyObject();
+	CCPoint curPos = touch->locationInView();
+	CCPoint prePos = touch->previousLocationInView();
+
+	// 	m_curPos = CCPointMake(curPos.y, winSize.height - curPos.x);
+	// 	m_prePos = CCPointMake(prePos.y, winSize.height - prePos.x);
+// 	m_curPos = CCPointMake(curPos.x, winSize.height - curPos.y);
+// 	m_prePos = CCPointMake(prePos.x, winSize.height - prePos.y);
+	m_curPos = curPos;
+	m_prePos = prePos;
+
     if (m_bDispatchEvents)
 	{
 		this->touches(touches, pEvent, CCTOUCHENDED);
@@ -519,9 +559,28 @@ void CCTouchDispatcher::touchesEnded(CCSet *touches, CCEvent *pEvent)
 
 void CCTouchDispatcher::touchesCancelled(CCSet *touches, CCEvent *pEvent)
 {
+// 	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+// 	CCTouch *touch = (CCTouch *)touches->anyObject();
+// 	CCPoint curPos = touch->locationInView();
+// 	CCPoint prePos = touch->previousLocationInView();
+// 
+// 	m_curPos = CCPointMake(curPos.y, winSize.height - curPos.x);
+// 	m_prePos = CCPointMake(prePos.y, winSize.height - prePos.x);
+
     if (m_bDispatchEvents)
 	{
 		this->touches(touches, pEvent, CCTOUCHCANCELLED);
 	}
 }
+
+CCPoint CCTouchDispatcher::getCurPos()
+{
+	return m_curPos;
+}
+
+CCPoint CCTouchDispatcher::getPrePos()
+{
+	return m_prePos;
+}
+
 }//namespace   cocos2d 

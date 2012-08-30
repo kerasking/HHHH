@@ -69,8 +69,8 @@ namespace NDEngine
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		//view->setMultipleTouchEnabled(false);
 #endif
-		m_director->enableRetinaDisplay(true);
-		m_director->setAnimationInterval(1.0f / 5000);
+		m_director->enableRetinaDisplay(TRUE);
+		m_director->setAnimationInterval(1.0f / 30);
 
 		CCTexture2D::setDefaultAlphaPixelFormat(kTexture2DPixelFormat_RGBA8888);	
 		
