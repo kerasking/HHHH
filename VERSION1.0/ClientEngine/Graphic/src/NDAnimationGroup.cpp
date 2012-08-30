@@ -192,7 +192,6 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 
 			pkAnimation->getFrames()->addObject(pkFrame);
 			pkFrame->release();
-
 		}
 
 		m_pkAnimations->addObject(pkAnimation);

@@ -222,7 +222,7 @@ void NDManualRole::Update(unsigned long ulDiff)
 // 				}
 // 				m_dequeWalk.clear();
 // 
-// 				if (!vec_pos.empty()) 
+// 				if (!vec_pos.empty())
 // 				{
 // 					SetAction(true);
 // 					if (isTeamLeader()) 
@@ -335,7 +335,7 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 	direct = 2;
 
 //		if (sex % 2 == SpriteSexMale) 
-	int model_id = 8;//lookface / 1000000;
+	int model_id = 2;//lookface / 1000000;
 	//	if (sex % 2 == SpriteSexMale)
 
 	NSString* pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
@@ -348,7 +348,7 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 
 	m_bFaceRight = direct == 2;
 
-	this->SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
+	this->SetCurrentAnimation(MANUELROLE_DEFENCE, m_bFaceRight);
 
 	//defaultDeal();
 }

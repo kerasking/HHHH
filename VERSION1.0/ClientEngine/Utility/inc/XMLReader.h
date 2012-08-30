@@ -1,6 +1,6 @@
 /*
-*
-*/
+ *
+ */
 
 #ifndef XMLREADER_H
 #define XMLREADER_H
@@ -17,14 +17,14 @@ class XMLReader
 {
 public:
 
-	typedef map<string,string> FileData,*FileDataPtr;
+	typedef map<string, string> FileData, *FileDataPtr;
 
 	XMLReader();
 	virtual ~XMLReader();
 
 	bool initWithFile(const char* pszFilename);
-	bool initWithData(const char* pszData,int nSize);
-	void* getObjectWithPath(string strPath,int* pnIndexArray,int nArraySize);
+	bool initWithData(const char* pszData, int nSize);
+	void* getObjectWithPath(string strPath, int* pnIndexArray, int nArraySize);
 
 	XMLReader::FileDataPtr getMapWithContentsOfFile();
 
