@@ -224,15 +224,15 @@ std::string loadPackInfo(int param)
 
 	std::string channelIni = NDEngine::NDPath::GetResourcePath().append(
 			"channel.ini");
-	FILE* f = fopen(channelIni.c_str(), "rt");
+	FILE* pkFile = fopen(channelIni.c_str(), "rt");
 
-	if (!f)
+	if (!pkFile)
 		return "IPHONE_BYWX";
 
 	char buf[1025] =
 	{ 0x00 };
-	fgets(buf, 1024, f);
-	fclose(f);
+	fgets(buf, 1024, pkFile);
+	fclose(pkFile);
 
 	char ret[1025] =
 	{ 0x00 };

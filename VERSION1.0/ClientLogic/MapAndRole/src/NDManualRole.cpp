@@ -53,11 +53,11 @@ NDManualRole::NDManualRole() :
 m_nState(0)
 {
 	m_pkAniGroupTransformed = NULL;
-	idTransformTo = 0;
+	m_nIDTransformTo = 0;
 	m_nMoney = 0;								// 银两
 	m_dwLookFace = 0;// 创建人物的时候有6种外观可供选择外观
 	m_nProfesstion = 0;//玩家的职业
-	synRank = SYNRANK_NONE;// 帮派级别
+	m_nSynRank = SYNRANK_NONE;// 帮派级别
 	m_nPKPoint = 0;// pk值
 
 	//m_pBattlePetShow = NULL;
@@ -348,7 +348,7 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 
 	m_bFaceRight = direct == 2;
 
-	this->SetCurrentAnimation(MANUELROLE_DODGE, m_bFaceRight);
+	this->SetCurrentAnimation(MANUELROLE_ATTACK, m_bFaceRight);
 
 	//defaultDeal();
 }
@@ -873,7 +873,7 @@ void NDManualRole::SetTeamToLastPos()
 		return;
 	}
 
-	if (m_dequeWalk.empty())
+	if (m_kDequeWalk.empty())
 	{
 		return;
 	}
@@ -889,8 +889,8 @@ void NDManualRole::SetTeamToLastPos()
 		kCurrentPosition = m_pointList.at(m_pointList.size() - 1);
 	}
 
-	deque<int>::iterator itdeque = m_dequeWalk.begin();
-	for (; itdeque != m_dequeWalk.end(); itdeque++)
+	deque<int>::iterator itdeque = m_kDequeWalk.begin();
+	for (; itdeque != m_kDequeWalk.end(); itdeque++)
 	{
 		int dir = *itdeque;
 
@@ -969,7 +969,7 @@ void NDManualRole::SetTeamToLastPos()
 	 * end
 	 */
 
-	m_dequeWalk.clear();
+	m_kDequeWalk.clear();
 }
 
 void NDManualRole::teamSetServerDir(int dir)
@@ -1263,7 +1263,7 @@ void NDManualRole::OnMoveTurning(bool bXTurnigToY, bool bInc)
 
 bool NDManualRole::OnDrawBegin(bool bDraw)
 {
-	NDNode *node = this->GetParent();
+	NDNode* pkNode = this->GetParent();
 
 	//if (!node
 //			|| !(node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)) 
@@ -1272,15 +1272,15 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 //			return true;
 //		}
 
-	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
-	if (!(scene->IsKindOfClass(RUNTIME_CLASS(GameScene))
-			|| scene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene))
-			|| scene->IsKindOfClass(RUNTIME_CLASS(DramaScene))))
+	NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
+	if (!(pkScene->IsKindOfClass(RUNTIME_CLASS(GameScene))
+			|| pkScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene))
+			|| pkScene->IsKindOfClass(RUNTIME_CLASS(DramaScene))))
 	{
 		return true;
 	}
 
-	if (!node)
+	if (!pkNode)
 	{
 		return true;
 	}
@@ -1302,19 +1302,19 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 		if (this->m_picVendor)
 		{
 			CGSize sizemap;
-			if (node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+			if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 			{
 				CGSize szVendor = this->m_picVendor->GetSize();
 				//把baserole坐标转成屏幕坐标
-				NDMapLayer *layer = (NDMapLayer*) node;
-				CGPoint screen = layer->GetScreenCenter();
+				NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
+				CGPoint screen = pkLayer->GetScreenCenter();
 				CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 				m_posScreen = ccpSub(this->GetPosition(),
 						ccpSub(screen,
 								CGPointMake(winSize.width / 2,
 										winSize.height / 2)));
 
-				sizemap = layer->GetContentSize();
+				sizemap = pkLayer->GetContentSize();
 				this->m_picVendor->DrawInRect(
 						CGRectMake(pos.x - 13 - 8,
 								pos.y - 10 + 320 - sizemap.height,
@@ -1336,10 +1336,10 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 
 		if (m_picGraveStone)
 		{
-			if (node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+			if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 			{
 				CGSize sizemap;
-				NDMapLayer *layer = (NDMapLayer*) node;
+				NDMapLayer *layer = (NDMapLayer*) pkNode;
 				sizemap = layer->GetContentSize();
 				CGSize sizeGraveStone = m_picGraveStone->GetSize();
 				CGRect rect = CGRectMake(pos.x - 13 - 8,
@@ -1362,7 +1362,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 		{
 			SetShadowOffset(0, 10);
 			ShowShadow(true);
-			HandleShadow(node->GetContentSize());
+			HandleShadow(pkNode->GetContentSize());
 		}
 		return true;
 	}
@@ -1385,9 +1385,9 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	 * end
 	 */
 
-	if (node->IsKindOfClass(RUNTIME_CLASS(Battle)))
+	if (pkNode->IsKindOfClass(RUNTIME_CLASS(Battle)))
 	{
-		HandleShadow(node->GetContentSize());
+		HandleShadow(pkNode->GetContentSize());
 		return true;
 	}
 
@@ -1698,11 +1698,11 @@ void NDManualRole::uppackBattlePet()
 
 void NDManualRole::AddWalkDir(int dir)
 {
-	if (m_dequeWalk.size() == 0)
+	if (m_kDequeWalk.size() == 0)
 	{
 		m_bUpdateDiff = true;
 	}
-	m_dequeWalk.push_back(dir);
+	m_kDequeWalk.push_back(dir);
 }
 
 //NDRidePet* NDManualRole::GetRidePet()
@@ -1880,9 +1880,9 @@ void NDManualRole::updateFlagOfQiZhi()
 
 void NDManualRole::updateTransform(int idLookface)
 {
-	if (idLookface != this->idTransformTo)
+	if (idLookface != this->m_nIDTransformTo)
 	{
-		this->idTransformTo = idLookface;
+		this->m_nIDTransformTo = idLookface;
 
 		if (m_pkAniGroupTransformed)
 		{
@@ -1890,7 +1890,7 @@ void NDManualRole::updateTransform(int idLookface)
 			m_pkAniGroupTransformed = NULL;
 		}
 
-		if (this->idTransformTo != 0)
+		if (this->m_nIDTransformTo != 0)
 		{
 			this->m_pkAniGroupTransformed = new NDMonster;
 			this->m_pkAniGroupTransformed->SetNormalAniGroup(idLookface);

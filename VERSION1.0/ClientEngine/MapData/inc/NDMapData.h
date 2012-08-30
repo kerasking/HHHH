@@ -13,7 +13,7 @@
 #include "NDUILabel.h"
 #include "CCMutableDictionary.h"
 
-class MapTexturePool : public cocos2d::CCObject
+class MapTexturePool: public cocos2d::CCObject
 {
 public:
 	static MapTexturePool* defaultPool();
@@ -30,11 +30,9 @@ public:
 	~MapTexturePool();
 };
 
-
-
 class NDMapData;
 //切屏点
-class NDMapSwitch : public cocos2d::CCObject
+class NDMapSwitch: public cocos2d::CCObject
 {
 	CC_SYNTHESIZE(int, m_nX, X)
 	CC_SYNTHESIZE(int, m_nY, Y)
@@ -47,10 +45,11 @@ public:
 	NDMapSwitch();
 	~NDMapSwitch();
 
-	void SetLabel(NDMapData* mapdata); 
+	void SetLabel(NDMapData* mapdata);
 	void SetLabelNew(NDMapData* mapdata);
 	void SetLableByType(int eLableType, int x, int y, const char* text,
-		cocos2d::ccColor4B color1, cocos2d::ccColor4B color2, CGSize sizeParent);
+			cocos2d::ccColor4B color1, cocos2d::ccColor4B color2,
+			CGSize sizeParent);
 	void draw();
 
 private:
@@ -58,17 +57,19 @@ private:
 };
 
 //布景
-class NDSceneTile : public NDTile
+class NDSceneTile: public NDTile
 {
 	CC_SYNTHESIZE(int, m_nOrderID, OrderID)
 
 public:
 	NDSceneTile();
-	~NDSceneTile(){}
+	~NDSceneTile()
+	{
+	}
 };
 
 //刷怪区
-class NDMapMonsterRange : public cocos2d::CCObject
+class NDMapMonsterRange: public cocos2d::CCObject
 {
 	CC_SYNTHESIZE(int, m_nTypeId, TypeId)
 	CC_SYNTHESIZE(int, m_nColumn, Column)
@@ -79,9 +80,12 @@ public:
 	NDMapMonsterRange();
 };
 
-class anigroup_param : public cocos2d::CCObject, public std::map<std::string, int>{};
+class anigroup_param: public cocos2d::CCObject,
+		public std::map<std::string, int>
+{
+};
 
-class NDMapData : public cocos2d::CCObject 
+class NDMapData: public cocos2d::CCObject
 {
 
 public:
@@ -92,7 +96,7 @@ public:
 	CC_SYNTHESIZE(int, m_nUnitSize, UnitSize)
 	CC_SYNTHESIZE(unsigned int, m_nRoadBlockX, RoadBlockX)
 	CC_SYNTHESIZE(unsigned int, m_nRoadBlockY, RoadBlockY)
-	
+
 	//CC_SYNTHESIZE_READONLY(CCArray<CustomCCTexture2D*>*, m_MapTiles, MapTiles)
 	CC_SYNTHESIZE(std::vector<bool>*, m_pkObstacles, Obstacles)
 	CC_SYNTHESIZE(cocos2d::CCArray*, m_pkSceneTiles, SceneTiles)
@@ -106,14 +110,14 @@ public:
 	~NDMapData();
 
 	/*通过地图文件(不包含路径)加载地图数据
-	参数:mapFile-地图文件名
-	*/
+	 参数:mapFile-地图文件名
+	 */
 	void initWithFile(const char* mapFile);
 
 	/*判断某个位置是否可走
-	参数:row-某行,column-某列
-	返回值:YES/NO
-	*/
+	 参数:row-某行,column-某列
+	 返回值:YES/NO
+	 */
 	bool canPassByRow(unsigned int row, unsigned int column);
 
 	//CustomCCTexture2D * getTileAtRow(unsigned int row, unsigned int column);
@@ -125,11 +129,11 @@ public:
 	void addObstacleCell(unsigned int row, unsigned int column);
 	void removeObstacleCell(unsigned int row, unsigned int column);
 	void addMapSwitch(unsigned int x,			// 切屏点 x
-						unsigned int y,			// 切屏点 y
-						unsigned int index,		// 切屏点索引
-						unsigned int mapid,		// 目标地图id
-						const char* name,	// 目标地图名称
-						const char* desc);	// 目标地图描述
+			unsigned int y,			// 切屏点 y
+			unsigned int index,		// 切屏点索引
+			unsigned int mapid,		// 目标地图id
+			const char* name,	// 目标地图名称
+			const char* desc);	// 目标地图描述
 	void setRoadBlock(int x, int y);
 
 private:

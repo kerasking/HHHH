@@ -165,13 +165,13 @@ public:
 	// 军团相关
 	void setSynRank(int rank)
 	{
-		this->synRank = rank;
-		this->m_strSynRank = getRankStr(synRank);
+		this->m_nSynRank = rank;
+		this->m_strSynRank = getRankStr(m_nSynRank);
 	}
 
 	int getSynRank() const
 	{
-		return this->synRank;
+		return this->m_nSynRank;
 	}
 
 	void TeamSetToLastPos(bool bSet)
@@ -297,13 +297,13 @@ private:
 	//CAutoLink<NDBattlePet> m_pBattlePetShow;
 	ShowPetInfo m_kInfoShowPet;
 
-	deque<int> m_dequeWalk;
+	deque<int> m_kDequeWalk;
 	bool m_bUpdateDiff;
-	int idTransformTo;
+	int m_nIDTransformTo;
 	NDPicture* m_picVendor;
 	NDPicture* m_picBattle;
 	NDPicture* m_picGraveStone;
-	int synRank;							// 帮派级别
+	int m_nSynRank;							// 帮派级别
 
 	NDLightEffect* m_numberOneEffect;
 	void RunNumberOneEffect();
