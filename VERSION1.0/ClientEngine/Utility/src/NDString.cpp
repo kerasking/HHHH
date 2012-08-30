@@ -97,12 +97,11 @@ NDString::NDString(float fvalue)
 NDString::NDString(const string& str)
 {
 	buf = str.c_str();
-	;
 }
 
 NDString::NDString(int value)
 {
-	char str[256];
+	char str[256] = {0};
 	sprintf(str, "%d", value);
 	buf = str;
 }
@@ -112,8 +111,7 @@ NDString::NDString(const NDString& data)
 	buf = data.buf;
 }
 
-NDString&
-NDString::operator=(const char* str)
+NDString& NDString::operator=(const char* str)
 {
 	buf = str;
 	return (*this);

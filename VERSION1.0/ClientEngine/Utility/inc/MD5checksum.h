@@ -320,7 +320,7 @@ public:
 		delete this;
 		return 0;
 	}
-	;
+
 	virtual int Encrypt(unsigned char* buf, int nLen);
 	virtual string EncryptEx(unsigned char* buf, int nLen)
 	{
@@ -330,25 +330,25 @@ public:
 	{
 		return 0;
 	}
-	;
+
 	virtual int Rencrypt(unsigned char* buf, int nLen)
 	{
 		return 0;
 	}
-	;
+
 	virtual void ChangeCode(unsigned long ulCode)
 	{
 	}
-	;
+
 	virtual void ChangeCode(const char* pszKey)
 	{
 	}
-	;
+
 	virtual IEncryptor* Duplicate(void)
 	{
 		return NULL;
 	}
-	;
+
 	virtual int ShakeHand(char* pszBuf, int nLenvoid)
 	{
 		return 0;
@@ -362,7 +362,7 @@ public:
 	virtual ~CMD5Checksum()
 	{
 	}
-	;
+
 
 	void Update(BYTE* Input, ULONG nInputLen);
 	std::string Final();
