@@ -31,9 +31,9 @@ namespace NDEngine
 	typedef vec_task::iterator					vec_task_it;
 
 	class NDPlayer : 
-	public NDManualRole, 
-	public NDUIDialogDelegate,
-	public ITimerCallback
+		public NDManualRole,
+		public NDUIDialogDelegate,
+		public ITimerCallback
 	{
 		DECLARE_CLASS(NDPlayer)
 	public:

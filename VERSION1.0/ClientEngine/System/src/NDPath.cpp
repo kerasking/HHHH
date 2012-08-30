@@ -169,7 +169,7 @@ namespace NDEngine
     {
 		//return std::string(GetResPath()+"image/"+filename).c_str();
 
-		string strRes = std::string(GetResPath()+"image/"+filename);
+		string strRes = std::string(GetResPath() + "image/" + filename);
 		char* pszTemp = new char[255];
 		memset(pszTemp,0,sizeof(char) * 255);
 		strcpy(pszTemp,strRes.c_str());
@@ -179,7 +179,7 @@ namespace NDEngine
     
     const char* NDPath::GetImgPathBattleUI(const char* fileName)
 	{
-		string strRes = std::string(GetResPath()+"image/battle_ui/"+fileName);
+		string strRes = std::string(GetResPath() + "image/battle_ui/" + fileName);
 		char* pszTemp = new char[255];
 		memset(pszTemp,0,sizeof(char) * 255);
 		strcpy(pszTemp,strRes.c_str());
@@ -190,13 +190,13 @@ namespace NDEngine
     
     const char* NDPath::GetAniPath(const char* fileName)
 	{
-		return std::string(GetResPath()+"animation/"+fileName).c_str();
+		return std::string(GetResPath() + "animation/" + fileName).c_str();
     }
     
     // 新界面资源统一放在 res/image/ui_new
     const char* NDPath::GetImgPathNew(const char* fileName)
 	{
-		string strRes = std::string(GetResPath()+"image/ui_new/"+fileName);
+		string strRes = std::string(GetResPath() + "image/ui_new/" + fileName);
 		char* pszTemp = new char[255];
 		memset(pszTemp,0,sizeof(char) * 255);
 		strcpy(pszTemp,strRes.c_str());
@@ -206,7 +206,7 @@ namespace NDEngine
     // 新界面高分辨率资源统一放在 res/image/ui_new/advance
     const char* NDPath::GetImgPathNewAdvance(const char* fileName)
 	{
-		string strRes = std::string(GetResPath()+"image/ui_new/advance/"+fileName);
+		string strRes = std::string(GetResPath() + "image/ui_new/advance/" + fileName);
 		char* pszTemp = new char[255];
 		memset(pszTemp,0,sizeof(char) * 255);
 		strcpy(pszTemp,strRes.c_str());
@@ -216,12 +216,12 @@ namespace NDEngine
     
     const char* NDPath::GetMapPath(const char* fileName)
 	{
-		return std::string(GetResPath()+"map/"+fileName).c_str();
+		return std::string(GetResPath() + "map/" + fileName).c_str();
     }
     
     const char* NDPath::GetUIConfigPath(const char* filename)
 	{
-		string strRes = std::string(GetResPath()+"UI/"+filename);
+		string strRes = std::string(GetResPath() + "UI/" + filename);
 		char* pszTemp = new char[255];
 		memset(pszTemp,0,sizeof(char) * 255);
 		strcpy(pszTemp,strRes.c_str());
@@ -270,7 +270,7 @@ namespace NDEngine
     
     const char* NDPath::GetSMImgPath(const char* fileName)
 	{
-		string strRes = std::string(GetResPath()+"image/Res00/"+ fileName);
+		string strRes = std::string(GetResPath() + "image/Res00/" + fileName);
 		char* pszTemp = new char[255];
 		memset(pszTemp,0,sizeof(char) * 255);
 		strcpy(pszTemp,strRes.c_str());

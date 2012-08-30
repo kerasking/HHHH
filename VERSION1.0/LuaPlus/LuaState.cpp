@@ -260,19 +260,26 @@ static size_t lua_WChar_len(const lua_WChar* str)
 LuaObject LuaState::GetLocalByName( int level, const char* name )
 {
 	lua_State * L = GetCState();
-	lua_Debug ar;
-	int i;
+	lua_Debug ar = {0};
+	int i = 0;
 	const char *localName;
+
 	if (lua_getstack(L, level, &ar) == 0)
+	{
 		return LuaObject(this);  /* failure: no such level in the stack */
+	}
+
 	i = 1;
-	while ((localName = lua_getlocal(L, &ar, i++)) != NULL) {
+
+	while ((localName = lua_getlocal(L, &ar, i++)) != NULL)
+	{
 		if (strcmp(name, localName) == 0)
 		{
 			LuaObject obj(this, -1);
 			lua_pop(L, 1);
 			return obj;
 		}
+
 		lua_pop(L, 1);  /* remove variable value */
 	}
 	return LuaObject(this);

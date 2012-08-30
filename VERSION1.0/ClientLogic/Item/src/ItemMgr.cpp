@@ -96,11 +96,15 @@ ItemMgr::~ItemMgr()
 		SAFE_DELETE(m_EquipList[i]);
 	}
 	
-	for (MAP_ITEMTYPE::iterator it = m_mapItemType.begin(); it != m_mapItemType.end(); it++) {
+	for (MAP_ITEMTYPE::iterator it = m_mapItemType.begin();
+		it != m_mapItemType.end(); it++)
+	{
 		delete it->second;
 	}
 	
-	for (MAP_ENHANCEDTYPE_IT itEnhanced = m_mapEnhancedType.begin(); itEnhanced != m_mapEnhancedType.end(); itEnhanced++) {
+	for (MAP_ENHANCEDTYPE_IT itEnhanced = m_mapEnhancedType.begin();
+		itEnhanced != m_mapEnhancedType.end(); itEnhanced++)
+	{
 		SAFE_DELETE(itEnhanced->second);
 	}
 	
@@ -250,7 +254,8 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 	
 	unsigned char itemCount = 0; (*data) >> itemCount; // 接收的物品个数
 	
-	for (int j = 0; j < itemCount; j++) {
+	for (int j = 0; j < itemCount; j++)
+	{
 		int itemID = 0; (*data) >> itemID; // 物品的Id 4个字节
 		int ownerID = 0; (*data) >> ownerID; // 物品的所有者id 4个字节
 		int itemType = 0; (*data) >> itemType; // 物品类型 id 4个字节
@@ -291,39 +296,51 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 			for (int i = 0; i < int(m_vecStorage.size()); i++) 
 			{
 				Item *item2 = m_vecStorage[i];
-				if (item2->iID == item->iID) {
+				if (item2->iID == item->iID)
+				{
 					bolHas = true;
 				}
 			}
-			if (!bolHas) {
+			if (!bolHas)
+			{
 				m_vecStorage.push_back(item);
 				GameStorageAddItem(eGameStorage_Storage, *item);
 				//if (Storage.instance != null) {
 //					Storage.instance.storageItemPanel.insertAnItem(item);
 //				}
-			} else {
+			}
+			else
+			{
 				SAFE_DELETE(item);
 			}
 			continue;
-		} else if (itemPosition == POSITION_MAIL) 
+		}
+		else if (itemPosition == POSITION_MAIL) 
 		{ // 邮件物品
 			m_vOtherItems.push_back(item);
 		} else if (itemPosition == POSITION_AUCTION) 
 		{ // 之前拍卖的,暂时先加上,防止数据库 有之前的脏数据,
 			// 如果正常运行是不会有91的值出现
 			delete item; //功能未开，暂时delete
-		}else if (itemPosition == POSITION_SOLD) 
+		}
+		else if (itemPosition == POSITION_SOLD) 
 		{ // 已出售的物品
 			m_mapSoldItems[item->iID] = item;
-		} else 
+		}
+		else 
 		{ // 增加的是背包中的物品
 			// 其他玩家物品
 			NDPlayer& role = NDPlayer::defaultHero();
-			if (role.m_id != item->iOwnerID) { // 其他玩家物品
+			if (role.m_id != item->iOwnerID)
+			{ // 其他玩家物品
 				this->m_vOtherItems.push_back(item);
-			} else {
+			}
+			else
+			{
 				bool bolHandle = false;
-				for (VEC_ITEM_IT it = this->m_vecBag.begin(); it != m_vecBag.end(); it++) {
+
+				for (VEC_ITEM_IT it = this->m_vecBag.begin(); it != m_vecBag.end(); it++)
+				{
 					if (item->iID == (*it)->iID) {
 						int nItemTypeUseInScript = item->iItemType;
 						(*it)->iAmount = item->iAmount;
@@ -338,11 +355,13 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 					}
 				}
 				
-				if (!bolHandle) {
+				if (!bolHandle)
+				{
 					// 增加到背包中
 					if (itemPosition == POSITION_PACK) 
 					{// 背包中的
 						m_vecBag.push_back(item);
+
 						if (bagscene)
 						{
 							bagscene->AddItemToBag(item);
@@ -359,7 +378,8 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 						//updateTaskItemData(*item, true);
 						int nItemTypeUseInScript = item->iItemType;
 						ScriptGlobalEvent::OnEvent(GE_ITEM_UPDATE, nItemTypeUseInScript);
-					} else 
+					}
+					else 
 					{// 装备上的
 						
 						Item::eEquip_Pos pos = getEquipListPos(item);
@@ -419,7 +439,8 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 							//					pet->m_faceRight = NDPlayer::defaultHero().m_faceRight;
 							//					pet->SetCurrentAnimation(MONSTER_STAND, !pet->m_faceRight);
 							
-						} else 
+						}
+						else 
 						{
 							NDPlayer::defaultHero().SetEquipment(nID, quality);
 						}
@@ -555,9 +576,11 @@ void ItemMgr::processItemAttrib(NDTransData* data, int len)
 		}
 		case ITEMDATA_POSITION: 
 		{ // action==2时,穿上装备 amount表示物品的位置相当于postion
-			if (this->ChangeItemPosSold(itemID, amount)) {
+			if (this->ChangeItemPosSold(itemID, amount))
+			{
 				return;
 			}
+
 			Item *itemBag = NULL;
 			
 			if ( HasItemByType(ITEM_BAG, itemID, itemBag) )
@@ -567,102 +590,127 @@ void ItemMgr::processItemAttrib(NDTransData* data, int len)
 				int equipItem = -1;
 				int  changeItem = -1;
 				
-				switch (amount) {
-					case 1: { // 头盔
-						equipItem = Item::eEP_Head;
-						break;
-					}
-					case 2: { // 肩膀
-						equipItem = Item::eEP_Shoulder;
-						break;
-					}
-					case 3: {// 胸甲
-						equipItem = Item::eEP_Armor;
-						break;
-					}
-					case 4: {// 护腕
-						equipItem = Item::eEP_Shou;
-						break;
-					}
-					case 5: {// 腰带--披风
-						equipItem = Item::eEP_YaoDai;
-						break;
-					}
-					case 6: {// 护腿
-						equipItem = Item::eEP_HuTui;
-						break;
-					}
-					case 7: {// 鞋子
-						equipItem = Item::eEP_Shoes;
-						break;
-					}
-					case 8: {// 项链
-						equipItem = Item::eEP_XianLian;
-						break;
-					}
-					case 9: {// 耳环
-						equipItem = Item::eEP_ErHuan;
-						break;
-					}
-					case 10: {// 护符 徽记
-						equipItem = Item::eEP_HuiJi;
-						break;
-					}
-					case 11: {// 左戒指
-						equipItem = Item::eEP_LeftRing;
-						break;
-					}
-					case 12: {// 右戒指
-						equipItem = Item::eEP_RightRing;
-						break;
-					}
-					case 13: {// 左武器
-						equipItem = Item::eEP_MainArmor;
-						if (equipType == 1) {
-							if (m_EquipList[Item::eEP_FuArmor] != NULL) {
-								changeItem = Item::eEP_FuArmor;
-							}
-						} else if (m_EquipList[Item::eEP_FuArmor] != NULL) {// 不是装双手武器，判断是否装备副手武器。
-							int itemtype = m_EquipList[Item::eEP_FuArmor]->iItemType;
-							int type1 = Item::getIdRule(itemtype, Item::ITEM_CLASS); // 装备类型
-							int type2 = Item::getIdRule(itemType, Item::ITEM_CLASS);
-							if (type1 != type2) {
-								changeItem = Item::eEP_FuArmor;
-							}
+				switch (amount)
+				{
+					case 1:
+						{ // 头盔
+							equipItem = Item::eEP_Head;
+							break;
 						}
-						
-						break;
-					}
-					case 14: {// 右武器
-						equipItem = Item::eEP_FuArmor;
-						
-						Item *tempI = m_EquipList[Item::eEP_MainArmor];
-						if (tempI != NULL) {
-							int tempEquipType = Item::getIdRule(tempI->iItemType,
-																Item::ITEM_EQUIP);
+					case 2:
+						{ // 肩膀
+							equipItem = Item::eEP_Shoulder;
+							break;
+						}
+					case 3:
+						{// 胸甲
+							equipItem = Item::eEP_Armor;
+							break;
+						}
+					case 4: 
+						{// 护腕
+							equipItem = Item::eEP_Shou;
+							break;
+						}
+					case 5: 
+						{// 腰带--披风
+							equipItem = Item::eEP_YaoDai;
+							break;
+						}
+					case 6: 
+						{// 护腿
+							equipItem = Item::eEP_HuTui;
+							break;
+						}
+					case 7:
+						{// 鞋子
+							equipItem = Item::eEP_Shoes;
+							break;
+						}
+					case 8:
+						{// 项链
+							equipItem = Item::eEP_XianLian;
+							break;
+						}
+					case 9:
+						{// 耳环
+							equipItem = Item::eEP_ErHuan;
+							break;
+						}
+					case 10:
+						{// 护符 徽记
+							equipItem = Item::eEP_HuiJi;
+							break;
+						}
+					case 11:
+						{// 左戒指
+							equipItem = Item::eEP_LeftRing;
+							break;
+						}
+					case 12:
+						{// 右戒指
+							equipItem = Item::eEP_RightRing;
+							break;
+						}
+					case 13:
+						{// 左武器
+							equipItem = Item::eEP_MainArmor;
+
+							if (equipType == 1)
+							{
+								if (m_EquipList[Item::eEP_FuArmor] != NULL)
+								{
+									changeItem = Item::eEP_FuArmor;
+								}
+							} 
+							else if(m_EquipList[Item::eEP_FuArmor] != NULL)
+							{// 不是装双手武器，判断是否装备副手武器。
+								int itemtype = m_EquipList[Item::eEP_FuArmor]->iItemType;
+								int type1 = Item::getIdRule(itemtype, Item::ITEM_CLASS); // 装备类型
+								int type2 = Item::getIdRule(itemType, Item::ITEM_CLASS);
+
+								if (type1 != type2)
+								{
+									changeItem = Item::eEP_FuArmor;
+								}
+							}
 							
-							if (tempEquipType == 1) {
-								// unpackEquip(T.roleEuiptItems[6]);
-								changeItem = Item::eEP_MainArmor;
-							}
+							break;
 						}
-						
-						break;
-					}
-					case 80: { // 坐骑
-						equipItem = Item::eEP_Ride;
-						break;
-					}
-					case 81: { // 勋章
-						equipItem =  Item::eEP_Decoration;
-						break;
-					}
+					case 14:
+						{// 右武器
+							equipItem = Item::eEP_FuArmor;
+							
+							Item *tempI = m_EquipList[Item::eEP_MainArmor];
+							if (tempI != NULL) {
+								int tempEquipType = Item::getIdRule(tempI->iItemType,
+																	Item::ITEM_EQUIP);
+								
+								if (tempEquipType == 1) {
+									// unpackEquip(T.roleEuiptItems[6]);
+									changeItem = Item::eEP_MainArmor;
+								}
+							}
+							
+							break;
+						}
+					case 80: 
+						{ // 坐骑
+							equipItem = Item::eEP_Ride;
+							break;
+						}
+					case 81:
+						{ // 勋章
+							equipItem =  Item::eEP_Decoration;
+							break;
+						}
 				}
 				
 				if (equipItem == -1)
 				{
 					DelItem(ITEM_BAG, itemID);
-				}else 
+				}
+				else 
 				{
 					DelItem(ITEM_BAG, itemID, false);
 					
