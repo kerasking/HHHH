@@ -20,7 +20,7 @@
 
 class NDFrameRunRecord;
 class NDAnimationGroup;
-class NDAnimation : public cocos2d::CCObject 
+class NDAnimation: public cocos2d::CCObject
 {
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDFrame*>*, m_pkFrames, Frames)
 	CC_SYNTHESIZE(int, m_nX, X)
@@ -41,7 +41,8 @@ public:
 	CGRect getRect();
 
 	void runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord, bool needDraw);
-	void runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord, bool needDraw, float drawScale);
+	void runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord, bool needDraw,
+			float drawScale);
 	void SlowDown(unsigned int multi);
 };
 
