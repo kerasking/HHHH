@@ -494,7 +494,7 @@ void GameScene::Initialization(int mapID)
 	
 	m_bHeadShow = true;
 	
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 	
 	maplayer = new NDMapLayerLogic();
 	maplayer->Initialization(mapID); 
@@ -740,7 +740,7 @@ layer->AddChild(btn); \
 	imgShrinkBg = new NDUIImage;
 	imgShrinkBg->Initialization();
 	imgShrinkBg->SetPicture(NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathBattleUI("bar_shrink.png"), false));
-	imgShrinkBg->SetFrameRect(CGRectMake(winsize.width-66.5-31, 284, 62, 36));
+	imgShrinkBg->SetFrameRect(CGRectMake(kWinSize.width-66.5-31, 284, 62, 36));
 	this->AddUIChild(imgShrinkBg);
 
 	/***

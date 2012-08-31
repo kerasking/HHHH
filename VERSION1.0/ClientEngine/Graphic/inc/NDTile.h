@@ -51,7 +51,7 @@ class NDTile : public cocos2d::CCObject
 	CC_SYNTHESIZE(CGRect, m_kDrawRect, DrawRect)
 	CC_SYNTHESIZE(bool, m_bReverse, Reverse)
 	CC_SYNTHESIZE(NDRotationEnum, m_Rotation, Rotation)
-	CC_SYNTHESIZE(CGSize, m_MapSize, MapSize)
+	CC_SYNTHESIZE(CGSize, m_kMapSize, MapSize)
 
 public:
 	NDTile();

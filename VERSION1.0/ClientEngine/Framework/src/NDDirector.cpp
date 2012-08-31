@@ -152,11 +152,11 @@ void NDDirector::EnableDispatchEvent(bool enable)
 
 void NDDirector::RunScene(NDScene* scene)
 {
-	m_scenesStack.push_back(scene);
+	m_kScenesStack.push_back(scene);
 	m_pkDirector->runWithScene((CCScene *) scene->m_ccNode);
 }
 
-void NDDirector::ReplaceScene(NDScene* scene, bool bAnimate/*=false*/)
+void NDDirector::ReplaceScene(NDScene* pkScene, bool bAnimate/*=false*/)
 {
 // 		if (bAnimate) 
 // 		{
@@ -165,24 +165,24 @@ void NDDirector::ReplaceScene(NDScene* scene, bool bAnimate/*=false*/)
 // 			return;
 // 		}
 
-	if (m_scenesStack.size() > 0)
+	if (m_kScenesStack.size() > 0)
 	{
 		//NDLog("===============================当前场景栈大小[%u]", m_scenesStack.size());
-		this->BeforeDirectorPopScene(m_scenesStack.back(), true);
+		this->BeforeDirectorPopScene(m_kScenesStack.back(), true);
 
-		delete m_scenesStack.back();
-		m_scenesStack.pop_back();
+		delete m_kScenesStack.back();
+		m_kScenesStack.pop_back();
 
 		this->AfterDirectorPopScene(true);
 	}
 
-	this->BeforeDirectorPushScene(scene);
+	this->BeforeDirectorPushScene(pkScene);
 
-	m_scenesStack.push_back(scene);
+	m_kScenesStack.push_back(pkScene);
 
-	m_pkDirector->replaceScene((CCScene *) scene->m_ccNode);
+	m_pkDirector->replaceScene((CCScene *) pkScene->m_ccNode);
 
-	this->AfterDirectorPushScene(scene);
+	this->AfterDirectorPushScene(pkScene);
 
 	//NDLog("===============================当前场景栈大小[%u]", m_scenesStack.size());
 }
@@ -198,7 +198,7 @@ void NDDirector::PushScene(NDScene* scene, bool bAnimate/*=false*/)
 
 	this->BeforeDirectorPushScene(scene);
 
-	m_scenesStack.push_back(scene);
+	m_kScenesStack.push_back(scene);
 	m_pkDirector->pushScene((CCScene *) scene->m_ccNode);
 
 	this->AfterDirectorPushScene(scene);
@@ -220,7 +220,7 @@ bool NDDirector::PopScene(NDScene* scene/*=NULL*/, bool bAnimate/*=false*/)
 
 bool NDDirector::PopScene(bool cleanUp)
 {
-	if (m_scenesStack.size() < 2)
+	if (m_kScenesStack.size() < 2)
 	{
 		return false;
 	}
@@ -231,9 +231,9 @@ bool NDDirector::PopScene(bool cleanUp)
 
 	if (cleanUp)
 	{
-		delete m_scenesStack.back();
+		delete m_kScenesStack.back();
 	}
-	m_scenesStack.pop_back();
+	m_kScenesStack.pop_back();
 	m_pkDirector->popScene();
 
 	this->AfterDirectorPopScene(cleanUp);
@@ -275,10 +275,10 @@ void NDDirector::Stop()
 {
 	m_pkDirector->end();
 
-	while (m_scenesStack.begin() != m_scenesStack.end())
+	while (m_kScenesStack.begin() != m_kScenesStack.end())
 	{
-		delete m_scenesStack.back();
-		m_scenesStack.pop_back();
+		delete m_kScenesStack.back();
+		m_kScenesStack.pop_back();
 	}
 }
 
@@ -289,9 +289,9 @@ bool NDDirector::isPaused()
 
 NDScene* NDDirector::GetScene(const NDRuntimeClass* runtimeClass)
 {
-	for (size_t i = 0; i < m_scenesStack.size(); i++)
+	for (size_t i = 0; i < m_kScenesStack.size(); i++)
 	{
-		NDScene* scene = m_scenesStack.at(i);
+		NDScene* scene = m_kScenesStack.at(i);
 
 		if (scene->IsKindOfClass(runtimeClass))
 		{
@@ -303,9 +303,9 @@ NDScene* NDDirector::GetScene(const NDRuntimeClass* runtimeClass)
 
 NDScene* NDDirector::GetRunningScene()
 {
-	if (m_scenesStack.size() > 0)
+	if (m_kScenesStack.size() > 0)
 	{
-		return m_scenesStack.back();
+		return m_kScenesStack.back();
 	}
 
 	return NULL;
@@ -439,9 +439,9 @@ void NDDirector::AfterDirectorPushScene(NDScene* scene)
 
 NDScene* NDDirector::GetSceneByTag(int nSceneTag)
 {
-	for (size_t i = 0; i < m_scenesStack.size(); i++)
+	for (size_t i = 0; i < m_kScenesStack.size(); i++)
 	{
-		NDScene* scene = m_scenesStack.at(i);
+		NDScene* scene = m_kScenesStack.at(i);
 		if (scene->GetTag() == nSceneTag)
 		{
 			return scene;

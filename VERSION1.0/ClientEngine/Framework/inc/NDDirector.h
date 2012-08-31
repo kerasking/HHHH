@@ -95,7 +95,7 @@ public:
 //		作用：替换场景，用于场景变更；使用该方法必须确保游戏中有场景正在运行，第一个场景不会被替换，只会被压入栈底
 //		参数：scene
 //		返回值：无
-	void ReplaceScene(NDScene* scene, bool bAnimate = false);
+	void ReplaceScene(NDScene* pkScene, bool bAnimate = false);
 //		
 //		函数：PushScene
 //		作用：压入场景，用于场景变更；
@@ -222,7 +222,7 @@ private:
 
 private:
 	cocos2d::CCDirector* m_pkDirector;
-	std::vector<NDScene*> m_scenesStack;
+	std::vector<NDScene*> m_kScenesStack;
 	NDNode* m_setViewRectNode;
 	bool m_resetViewRect;
 	std::vector<NDObject*> m_delegates;

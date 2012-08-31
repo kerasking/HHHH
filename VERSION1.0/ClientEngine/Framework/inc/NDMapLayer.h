@@ -160,7 +160,7 @@ private:
 	void QuickSort(cocos2d::CCArray*/*<MAP_ORDER*>*/array, int low, int high);
 	int Partition(cocos2d::CCArray*/*<MAP_ORDER*>*/array, int low, int high);
 
-	void SetPosition(CGPoint p);
+	void SetPosition(CGPoint kPosition);
 
 	void DrawMapTiles();
 	void DrawScenesAndAnimations();

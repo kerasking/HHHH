@@ -11,7 +11,7 @@
 
 #include "NDMapData.h"
 
-class PlaceNode : public cocos2d::CCObject
+class PlaceNode: public cocos2d::CCObject
 {
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCTexture2D*, m_Texture, Texture)
 	CC_SYNTHESIZE(int, m_nPlaceId, PlaceId)
@@ -34,18 +34,18 @@ typedef struct PASS_WAY
 	int fromMapID;
 	int fromPassIndex;
 	int desMapID;
-	
+
 	PASS_WAY(int mapID, int passIndex, int desMapID)
 	{
 		this->fromMapID = mapID;
 		this->fromPassIndex = passIndex;
 		this->desMapID = desMapID;
 	}
-}PassWay; 
+} PassWay;
 
 //class anigroup_param : public cocos2d::CCObject, public std::map<std::string, int>{};
 
-class NDWorldMapData : public cocos2d::CCObject
+class NDWorldMapData: public cocos2d::CCObject
 {
 public:
 	CC_SYNTHESIZE(std::string, m_Name, Name)

@@ -313,19 +313,14 @@ bool NDNode::ContainChild(NDNode* node)
 
 NDNode* NDNode::GetChild(int tag)
 {
-	if (87 == tag)
-	{
-		CCLog("’“µΩ87");
-	}
-
 	std::vector<NDNode*>::iterator iter;
 	for (iter = m_pkChildrenList.begin(); iter != m_pkChildrenList.end();
 			iter++)
 	{
-		NDNode* node = (NDNode*) *iter;
-		if (node->m_ccNode->getTag() == tag)
+		NDNode* pkNode = (NDNode*) *iter;
+		if (pkNode->m_ccNode->getTag() == tag)
 		{
-			return node;
+			return pkNode;
 		}
 	}
 	return NULL;

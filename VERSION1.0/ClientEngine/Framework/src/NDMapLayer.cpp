@@ -722,7 +722,7 @@ void NDMapLayer::DrawScenesAndAnimations()
 
 			if (pkTile)
 			{
-				if (this->isMapRectIntersectScreen(pkTile->getDrawRect()))
+				if (isMapRectIntersectScreen(pkTile->getDrawRect()))
 				{
 					pkTile->draw();
 				}
@@ -907,31 +907,31 @@ bool NDMapLayer::isMapRectIntersectScreen(CGRect mapRect)
 	return CGRectIntersectsRect(scrRect, mapRect);
 }
 
-void NDMapLayer::SetPosition(CGPoint p)
+void NDMapLayer::SetPosition(CGPoint kPosition)
 {
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 
-	if (p.x > 0)
+	if (kPosition.x > 0)
 	{
-		p.x = 0;
+		kPosition.x = 0;
 	}
 
-	if (p.x < winSize.width - this->GetContentSize().width)
+	if (kPosition.x < kWinSize.width - this->GetContentSize().width)
 	{
-		p.x = winSize.width - this->GetContentSize().width;
+		kPosition.x = kWinSize.width - this->GetContentSize().width;
 	}
 
-	if (p.y > 0)
+	if (kPosition.y > 0)
 	{
-		p.y = 0;
+		kPosition.y = 0;
 	}
 
-	if (p.y < winSize.height - this->GetContentSize().height)
+	if (kPosition.y < kWinSize.height - this->GetContentSize().height)
 	{
-		p.y = winSize.height - this->GetContentSize().height;
+		kPosition.y = kWinSize.height - this->GetContentSize().height;
 	}
 
-	this->m_ccNode->setPositionInPixels(p);
+	this->m_ccNode->setPositionInPixels(kPosition);
 }
 
 bool NDMapLayer::SetScreenCenter(CGPoint kPoint)
@@ -1316,7 +1316,6 @@ void NDMapLayer::MakeOrders()
 	for (int i = 0; i < (int) kCLD.size(); i++)
 	{
 		NDNode* pkNode = kCLD.at(i);
-		CCLog(pkNode->GetRuntimeClass()->className);
 // 			if (node->IsKindOfClass(RUNTIME_CLASS(NDManualRole))) 
 // 			{
 // 				NDManualRole* role = (NDManualRole*)node;
@@ -1449,7 +1448,7 @@ void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 		NDSceneTile *pkSceneTile =
 				(NDSceneTile *) m_pkMapData->getSceneTiles()->objectAtIndex(i);
 
-		int orderId = pkSceneTile->getOrderID();
+		int orderId = 0;//pkSceneTile->getOrderID();
 
 		MAP_ORDER *dict = new MAP_ORDER;
 
