@@ -108,8 +108,6 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 	pkDirector->Initialization();
 	pkDirector->RunScene(GameScene::Scene());
-		pkDirector->Initialization();
-		pkDirector->RunScene(CSMLoginScene::Scene());
 
 	ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
 	NDScriptGameData* pkData = new NDScriptGameData;

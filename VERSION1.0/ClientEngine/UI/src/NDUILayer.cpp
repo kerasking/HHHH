@@ -342,11 +342,11 @@ namespace NDEngine
 		m_dispatchTouchEndEvent = true;
 		m_beginTouch = touch->GetLocation();
 		//add by zhangdi 20120828
-		float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-		CGPoint tmpTouch = CGPointMake(m_beginTouch.x*scale, m_beginTouch.y*scale);
+		float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+		CGPoint tmpTouch = CGPointMake(m_beginTouch.x * fScale, m_beginTouch.y * fScale);
 		m_beginTouch = tmpTouch;
 		
-		if (CGRectContainsPoint(this->GetScreenRect(), m_beginTouch) && this->IsVisibled() && this->EventEnabled())
+	//	if (CGRectContainsPoint(this->GetScreenRect(), m_beginTouch) && this->IsVisibled() && this->EventEnabled())
 		//if (CGRectContainsPoint(CGRectMake(0, 0, 960, 640), m_beginTouch) && this->IsVisibled() && this->EventEnabled())
 		if (CGRectContainsPoint(this->GetScreenRect(), m_beginTouch) &&
 			this->IsVisibled() && this->EventEnabled()) 

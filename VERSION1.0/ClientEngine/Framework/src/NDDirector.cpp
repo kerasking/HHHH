@@ -70,8 +70,6 @@ void NDDirector::Initialization()
 #endif
 	m_pkDirector->enableRetinaDisplay(true);
 	m_pkDirector->setAnimationInterval(1.0f / 24.0f);
-		m_director->enableRetinaDisplay(TRUE);
-		m_director->setAnimationInterval(1.0f / 30);
 
 	CCTexture2D::setDefaultAlphaPixelFormat (kTexture2DPixelFormat_RGBA8888);
 
