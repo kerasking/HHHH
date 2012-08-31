@@ -41,7 +41,6 @@ CSMGameScene::~CSMGameScene()
 {
 }
 
-
 void CSMGameScene::Initialization(int mapID)
 {
 	NDScene::Initialization();

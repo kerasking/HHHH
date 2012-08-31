@@ -15,7 +15,8 @@
 
 namespace NDEngine
 {
-	typedef enum {
+	typedef enum
+	{
 		ScrollTextFromRightToLeft,
 		ScrollTextFromLeftToRight,
 		ScrollTextFromDownToUp,
@@ -27,7 +28,9 @@ namespace NDEngine
 		DECLARE_CLASS(NDUIScrollText)
 		NDUIScrollText();
 		~NDUIScrollText();
+
 	public:
+
 		void Initialization(); override		
 		void SetScrollType(ScrollTextType scrollTextType);
 		//speed must between 0 ~ 60
@@ -45,6 +48,7 @@ namespace NDEngine
 		void SetTextPos(CGPoint pos);
 		
 	public:
+
 		void draw(); override
 		void OnFrameRectChange(CGRect srcRect, CGRect dstRect); override
 		

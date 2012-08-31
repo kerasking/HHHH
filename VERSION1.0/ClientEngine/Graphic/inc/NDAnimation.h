@@ -20,9 +20,9 @@
 
 class NDFrameRunRecord;
 class NDAnimationGroup;
-class NDAnimation : public cocos2d::CCObject 
+class NDAnimation: public cocos2d::CCObject
 {
-	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDFrame*>*, m_Frames, Frames)
+	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDFrame*>*, m_pkFrames, Frames)
 	CC_SYNTHESIZE(int, m_nX, X)
 	CC_SYNTHESIZE(int, m_nY, Y)
 	CC_SYNTHESIZE(int, m_nW, W)
@@ -30,8 +30,8 @@ class NDAnimation : public cocos2d::CCObject
 	CC_SYNTHESIZE(int, m_nMidX, MidX)
 	CC_SYNTHESIZE(int, m_nBottomY, BottomY)
 	CC_SYNTHESIZE(int, m_nType, Type)
-//	CC_PROPERTY(bool, m_bReverse, Reverse) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	CC_SYNTHESIZE(NDAnimationGroup*, m_BelongAnimationGroup, BelongAnimationGroup)
+	CC_SYNTHESIZE(bool, m_bReverse, Reverse)
+	CC_SYNTHESIZE(NDAnimationGroup*, m_pkBelongAnimationGroup, BelongAnimationGroup)
 	CC_SYNTHESIZE(int, m_nCurIndexInAniGroup, CurIndexInAniGroup)
 
 public:
@@ -40,8 +40,9 @@ public:
 
 	CGRect getRect();
 
-	void runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord, bool needDraw);
-	void runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord, bool needDraw, float drawScale);
+	void runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord, bool bNeedDraw);
+	void runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord, bool bNeedDraw,
+			float drawScale);
 	void SlowDown(unsigned int multi);
 };
 

@@ -17,7 +17,7 @@
 
 using namespace NDEngine;
 
-class NDBaseLayer : public cocos2d::CCLayer 
+class NDBaseLayer: public cocos2d::CCLayer
 {
 public:
 
@@ -26,14 +26,14 @@ public:
 
 private:
 
-	CAutoLink<NDUILayer>	_ndUILayerNode;
-	CAutoLink<NDLayer>		_ndLayerNode;
-	NDTouch					*m_ndTouch;
-	bool					m_press;
+	CAutoLink<NDUILayer> m_kUILayerNode;
+	CAutoLink<NDLayer> m_kLayerNode;
+	NDTouch* m_pkTouch;
+	bool m_bPress;
 
 public:
 
-	void SetUILayer(NDUILayer* uilayer); 
+	void SetUILayer(NDUILayer* uilayer);
 	void SetLayer(NDLayer* layer);
 
 public:
@@ -43,13 +43,18 @@ public:
 
 	virtual void registerWithTouchDispatcher(void);
 
-	virtual bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual void ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual bool ccTouchBegan(cocos2d::CCTouch *pTouch,
+			cocos2d::CCEvent *pEvent);
+	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch,
+			cocos2d::CCEvent *pEvent);
+	virtual void ccTouchEnded(cocos2d::CCTouch *pTouch,
+			cocos2d::CCEvent *pEvent);
 
-	virtual void ccTouchCancelled(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual void ccTouchCancelled(cocos2d::CCTouch *pTouch,
+			cocos2d::CCEvent *pEvent);
 	// toto
-	virtual bool ccTouchDoubleClick(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual bool ccTouchDoubleClick(cocos2d::CCTouch *pTouch,
+			cocos2d::CCEvent *pEvent);
 };
 
 #endif

@@ -175,7 +175,7 @@ void NDMapLayerLogic::OnTimer(OBJID tag)
 	{
 		double oldTimeStamp = m_doubleTimeStamp;
 		//m_doubleTimeStamp = [NSDate timeIntervalSinceReferenceDate]; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		Update( (unsigned long)( (m_doubleTimeStamp - oldTimeStamp)*1000 ) );
+		Update( (unsigned long)( (m_doubleTimeStamp - oldTimeStamp) * 1000 ) );
 	}
 	else if (tag == TAG_MAP_LONGTOUCH)
 	{
@@ -185,7 +185,8 @@ void NDMapLayerLogic::OnTimer(OBJID tag)
 	}
 	else if (tag == TAG_MAP_LONGTOUCH_STATE)
 	{
-		if (IsPathing() && !NDPlayer::defaultHero().ClickPoint(this->ConvertToMapPoint(m_posTouch), true) )
+		if (IsPathing() && !NDPlayer::defaultHero().
+			ClickPoint(this->ConvertToMapPoint(m_posTouch), true) )
 		{
 			SetLongTouch(false);
 			
@@ -202,7 +203,7 @@ void NDMapLayerLogic::OnTimer(OBJID tag)
 
 void NDMapLayerLogic::SetLongTouch(bool bSet)
 {
-	m_bLongTouch	= bSet;
+	m_bLongTouch = bSet;
 }
 
 bool NDMapLayerLogic::IsLongTouch()
@@ -219,8 +220,6 @@ bool NDMapLayerLogic::IsPathing()
 {
 	return m_bPathing;
 }
-
-override
 
 bool NDEngine::NDMapLayerLogic::isAutoFight()
 {

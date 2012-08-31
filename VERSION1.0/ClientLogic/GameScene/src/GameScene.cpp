@@ -138,7 +138,8 @@ bool GameScene::bRidePetBroken = false;
 
 GameScene* GameScene::Scene()
 {	
-	GameScene* scene = new GameScene();	
+	GameScene* scene = new GameScene();
+	scene->Initialization(1);
 	return scene;
 }
 
@@ -240,45 +241,45 @@ GameScene::GameScene()
 	m_hccOPItem = NULL;
 	
 	m_picMap = new NDPicture();
-	m_picMap->Initialization(NDPath::GetImgPath("ui_map.png"));
+	m_picMap->Initialization(NDPath::GetFullImagepath("ui_map.png"));
 	m_btnMap = NULL;
 	
 	m_picTarget = new NDPicture();
-	m_picTarget->Initialization(NDPath::GetImgPath("ui_target.png"));
+	m_picTarget->Initialization(NDPath::GetFullImagepath("ui_target.png"));
 	m_btnTarget = NULL;
 	
 	m_picInterative = new NDPicture();
-	m_picInterative->Initialization(NDPath::GetImgPath("ui_interective.png"));
+	m_picInterative->Initialization(NDPath::GetFullImagepath("ui_interective.png"));
 	m_btnInterative = NULL;
 	
 	//m_hccOPMenu = NULL;		///< 临时性注释 郭浩
 	
 	m_picTeam = new NDPicture();
-	m_picTeam->Initialization(NDPath::GetImgPath("ui_team.png"));
+	m_picTeam->Initialization(NDPath::GetFullImagepath("ui_team.png"));
 	m_btnTeam = NULL;
 	
 	m_picSocial = new NDPicture();
-	m_picSocial->Initialization(NDPath::GetImgPath("ui_social.png"));
+	m_picSocial->Initialization(NDPath::GetFullImagepath("ui_social.png"));
 	m_btnSocial = NULL;
 	
 	m_picTalk = new NDPicture();
-	m_picTalk->Initialization(NDPath::GetImgPath("ui_talk.png"));
+	m_picTalk->Initialization(NDPath::GetFullImagepath("ui_talk.png"));
 	m_btnTalk = NULL;
 	
 	m_picTask = new NDPicture();
-	m_picTask->Initialization(NDPath::GetImgPath("ui_task.png"));
+	m_picTask->Initialization(NDPath::GetFullImagepath("ui_task.png"));
 	m_btnTask = NULL;
 	
 	m_picBag = new NDPicture();
-	m_picBag->Initialization(NDPath::GetImgPath("ui_bag.png"));
+	m_picBag->Initialization(NDPath::GetFullImagepath("ui_bag.png"));
 	m_btnBag = NULL;
 	
 	m_picStore = new NDPicture();
-	m_picStore->Initialization(NDPath::GetImgPath("ui_store.png"));
+	m_picStore->Initialization(NDPath::GetFullImagepath("ui_store.png"));
 	m_btnStore = NULL;
 	
 	m_picMenu = new NDPicture();
-	m_picMenu->Initialization(NDPath::GetImgPath("ui_menu.png"));
+	m_picMenu->Initialization(NDPath::GetFullImagepath("ui_menu.png"));
 	m_btnMenu = NULL;
 	
 	m_tlShare = NULL;
@@ -326,7 +327,8 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-	if (s_curGameScene == this) {
+	if (s_curGameScene == this)
+	{
 		s_curGameScene = NULL;
 	}
 
@@ -418,7 +420,7 @@ void GameScene::OnBattleBegin()
 	
 	std::vector<NDNode*> vDel;
 	
-	std::vector<NDNode*>::iterator it = this->m_childrenList.begin();
+	std::vector<NDNode*>::iterator it = this->m_pkChildrenList.begin();
 
 	/***
 	* 临时性注释 郭浩
@@ -492,7 +494,7 @@ void GameScene::Initialization(int mapID)
 	
 	m_bHeadShow = true;
 	
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 	
 	maplayer = new NDMapLayerLogic();
 	maplayer->Initialization(mapID); 
@@ -631,67 +633,49 @@ layer->AddChild(btn); \
 * end
 */
 	
-	m_tlInvitePlayers = new NDUITableLayer;
-	m_tlInvitePlayers->Initialization();
-	m_tlInvitePlayers->VisibleSectionTitles(false);
-	m_tlInvitePlayers->SetDelegate(this);
-	m_tlInvitePlayers->SetVisible(false);
-	this->AddUIChild(m_tlInvitePlayers);
+	//m_tlInvitePlayers = new NDUITableLayer;
+	//m_tlInvitePlayers->Initialization();
+	//m_tlInvitePlayers->VisibleSectionTitles(false);
+	//m_tlInvitePlayers->SetDelegate(this);
+	//m_tlInvitePlayers->SetVisible(false);
+	//this->AddUIChild(m_tlInvitePlayers);
 	
-	m_tlKickPlayers = new NDUITableLayer;
-	m_tlKickPlayers->Initialization();
-	m_tlKickPlayers->VisibleSectionTitles(false);
-	m_tlKickPlayers->SetDelegate(this);
-	m_tlKickPlayers->SetVisible(false);
-	this->AddUIChild(m_tlKickPlayers);
-	
-	m_tlTiShengPlayers = new NDUITableLayer;
-	m_tlTiShengPlayers->Initialization();
-	m_tlTiShengPlayers->VisibleSectionTitles(false);
-	m_tlTiShengPlayers->SetDelegate(this);
-	m_tlTiShengPlayers->SetVisible(false);
-	this->AddUIChild(m_tlTiShengPlayers);
-	
-	m_tlPaiHang = new NDUITableLayer;
-	m_tlPaiHang->Initialization();
-	m_tlPaiHang->VisibleSectionTitles(false);
-	m_tlPaiHang->SetDelegate(this);
-	m_tlPaiHang->SetVisible(false);
-	this->AddUIChild(m_tlPaiHang);
-	
-	m_tlMarriage = new NDUITableLayer;
-	m_tlMarriage->Initialization();
-	m_tlMarriage->VisibleSectionTitles(false);
-	m_tlMarriage->SetDelegate(this);
-	m_tlMarriage->SetVisible(false);
-	this->AddUIChild(m_tlMarriage);
+	//m_tlKickPlayers = new NDUITableLayer;
+	//m_tlKickPlayers->Initialization();
+	//m_tlKickPlayers->VisibleSectionTitles(false);
+	//m_tlKickPlayers->SetDelegate(this);
+	//m_tlKickPlayers->SetVisible(false);
+	//this->AddUIChild(m_tlKickPlayers);
+	//
+	//m_tlTiShengPlayers = new NDUITableLayer;
+	//m_tlTiShengPlayers->Initialization();
+	//m_tlTiShengPlayers->VisibleSectionTitles(false);
+	//m_tlTiShengPlayers->SetDelegate(this);
+	//m_tlTiShengPlayers->SetVisible(false);
+	//this->AddUIChild(m_tlTiShengPlayers);
+	//
+	//m_tlPaiHang = new NDUITableLayer;
+	//m_tlPaiHang->Initialization();
+	//m_tlPaiHang->VisibleSectionTitles(false);
+	//m_tlPaiHang->SetDelegate(this);
+	//m_tlPaiHang->SetVisible(false);
+	//this->AddUIChild(m_tlPaiHang);
+	//
+	//m_tlMarriage = new NDUITableLayer;
+	//m_tlMarriage->Initialization();
+	//m_tlMarriage->VisibleSectionTitles(false);
+	//m_tlMarriage->SetDelegate(this);
+	//m_tlMarriage->SetVisible(false);
+	//this->AddUIChild(m_tlMarriage);
 	
 	do
 	{
-		m_tlInteractive = new NDUITableLayer;
-		m_tlInteractive->Initialization();
-		m_tlInteractive->VisibleSectionTitles(false);
-		//m_tlInteractive->SetFrameRect(CGRectMake((480-120)/2, (320-30*8)/2, 120, 30*8));
-//		NDDataSource *dataSource = new NDDataSource;
-//		NDSection *section = new NDSection;
-//		
-//		for(int i=interactive_begin; i<interactive_end; i++)
-//		{
-//			NDUILabel *lbText = new NDUILabel; 
-//			lbText->Initialization(); 
-//			lbText->SetText(interactive_str[i].c_str()); 
-//			lbText->SetFontSize(13); 
-//			lbText->SetTextAlignment(LabelTextAlignmentCenter); 
-//			lbText->SetFrameRect(CGRectMake(0, 8, 120, 13)); 
-//			lbText->SetFontColor(ccc4(16, 56, 66,255)); 
-//			section->AddCell(lbText);
-//		}
-//		
-//		dataSource->AddSection(section);
-//		m_tlInteractive->SetDataSource(dataSource);
-		m_tlInteractive->SetVisible(false);
-		m_tlInteractive->SetDelegate(this);
-		this->AddUIChild(m_tlInteractive);
+		//m_tlInteractive = new NDUITableLayer;
+		//m_tlInteractive->Initialization();
+		//m_tlInteractive->VisibleSectionTitles(false);
+		//m_tlInteractive->SetVisible(false);
+		//m_tlInteractive->SetDelegate(this);
+		//this->AddUIChild(m_tlInteractive);
 	} while (0);
 	
 	//this->ShowMiniMap(NDDataPersist::IsGameSettingOn(GS_SHOW_MINI_MAP));
@@ -715,7 +699,8 @@ layer->AddChild(btn); \
 	layer->Initialization();
 	layer->SetFrameRect(CGRectMake(0, 0, 36, 42));
 	
-	NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathBattleUI("scenerolehandle.png"), false);
+	NDPicture* pic = NDPicturePool::DefaultPool()->
+		AddPicture(NDPath::GetImgPathBattleUI("scenerolehandle.png"), false);
 	m_imgHeadShow = new NDUIImage;
 	m_imgHeadShow->Initialization();
 	m_imgHeadShow->SetPicture(pic, true);
@@ -724,7 +709,8 @@ layer->AddChild(btn); \
 	
 	m_btnHeadShow = new NDUIButton;
 	m_btnHeadShow->Initialization();
-	m_picHeadShow = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathBattleUI("handlearraw.png"), false);
+	m_picHeadShow = NDPicturePool::DefaultPool()->
+		AddPicture(NDPath::GetImgPathBattleUI("handlearraw.png"), false);
 	m_picHeadShow->Rotation(PictureRotation180);
 	m_btnHeadShow->SetImage(m_picHeadShow, true, CGRectMake(10, 13, 9, 16), true);
 	m_btnHeadShow->SetFrameRect(CGRectMake(0, 0, 27, 46));
@@ -746,14 +732,15 @@ layer->AddChild(btn); \
 
 	NDUIImage* imgShrinkBg = new NDUIImage;
 	imgShrinkBg->Initialization();
-	imgShrinkBg->SetPicture(NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathBattleUI("bar_shrink.png"), false));
+	imgShrinkBg->SetPicture(NDPicturePool::DefaultPool()->
+		AddPicture(NDPath::GetImgPathBattleUI("bar_shrink.png"), false));
 	imgShrinkBg->SetFrameRect(CGRectMake(35.5, 284, 62, 36));
 	this->AddUIChild(imgShrinkBg);
 	
 	imgShrinkBg = new NDUIImage;
 	imgShrinkBg->Initialization();
 	imgShrinkBg->SetPicture(NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathBattleUI("bar_shrink.png"), false));
-	imgShrinkBg->SetFrameRect(CGRectMake(winsize.width-66.5-31, 284, 62, 36));
+	imgShrinkBg->SetFrameRect(CGRectMake(kWinSize.width-66.5-31, 284, 62, 36));
 	this->AddUIChild(imgShrinkBg);
 
 	/***
@@ -801,7 +788,8 @@ layer->AddChild(btn); \
 	
 	m_btnQuickInterationShrink = new NDUIButton;
 	m_btnQuickInterationShrink->Initialization();
-	m_picQuickInteration = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathBattleUI("handlearraw.png"), false);
+	m_picQuickInteration = NDPicturePool::DefaultPool()->
+		AddPicture(NDPath::GetImgPathBattleUI("handlearraw.png"), false);
 	m_picQuickInteration->Rotation(PictureRotation90);
 	m_btnQuickInterationShrink->SetImage(m_picQuickInteration, true, CGRectMake(10, 20, 16, 9), true);
 	m_btnQuickInterationShrink->SetFrameRect(CGRectMake(13, 00, 62, 56));
@@ -3291,7 +3279,7 @@ void GameSceneReleaseHelper::BeforeDirectorPopScene(NDDirector* director,
 	{
 		m_bGameSceneRelease = true;
 		
-		NDManualRole::s_bGameSceneRelease = true;
+		NDManualRole::ms_bGameSceneRelease = true;
 	}
 }
 
@@ -3300,7 +3288,7 @@ void GameSceneReleaseHelper::AfterDirectorPopScene(NDDirector* director,
 {
 	if (m_bGameSceneRelease) 
 	{
-		NDManualRole::s_bGameSceneRelease = false;
+		NDManualRole::ms_bGameSceneRelease = false;
 		
 		m_bGameSceneRelease = false;
 	}

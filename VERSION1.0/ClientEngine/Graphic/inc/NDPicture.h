@@ -19,106 +19,109 @@
 
 namespace NDEngine
 {
-	typedef enum{
-		PictureRotation0,
-		PictureRotation90,
-		PictureRotation180,
-		PictureRotation270
-	}PictureRotation;
-	
-	class NDPicture : public NDObject
-	{
-		DECLARE_CLASS(NDPicture)
-		NDPicture(bool canGray=false);
-		~NDPicture();
-	public:
+typedef enum
+{
+	PictureRotation0,
+	PictureRotation90,
+	PictureRotation180,
+	PictureRotation270
+} PictureRotation;
 
-		void Initialization(const char* imageFile); hide
-		
-		//void Initialization(vector<const char*>& vImgFiles); hide
-		
-		//void Initialization(vector<const char*>& vImgFiles, vector<CGRect>& vImgCustomRect, vector<CGPoint>&vOffsetPoint); hide
+class NDPicture: public NDObject
+{
+	DECLARE_CLASS (NDPicture)
+	NDPicture(bool canGray = false);
+	~NDPicture();
+public:
 
-		void Initialization(const char* imageFile, int hrizontalPixel, int verticalPixel=0); hide
+	void Initialization(const char* imageFile);
 
-		void Cut(CGRect rect);
+	//void Initialization(vector<const char*>& vImgFiles); hide
 
-		void SetReverse(bool reverse);
+	//void Initialization(vector<const char*>& vImgFiles, vector<CGRect>& vImgCustomRect, vector<CGPoint>&vOffsetPoint); hide
 
-		void Rotation(PictureRotation rotation);
+	void Initialization(const char* imageFile, int hrizontalPixel,
+			int verticalPixel = 0);
 
-		void SetColor(cocos2d::ccColor4B color);
+	void Cut(CGRect rect);
 
-		void DrawInRect(CGRect rect);
+	void SetReverse(bool reverse);
 
-		CGSize GetSize();
+	void Rotation(PictureRotation rotation);
 
-		NDPicture* Copy();
+	void SetColor(cocos2d::ccColor4B color);
 
-		bool SetGrayState(bool gray);
+	void DrawInRect(CGRect rect);
 
-		bool IsGrayState();
-		
-	public:	
-		cocos2d::CCTexture2D *GetTexture();
+	CGSize GetSize();
 
-		void SetTexture(cocos2d::CCTexture2D* tex);
-	private:
-		cocos2d::CCTexture2D *m_texture;
-		CGRect m_cutRect;
-		bool m_reverse, m_bAdvance;
-		PictureRotation m_rotation;
+	NDPicture* Copy();
 
-		// ±ä»Ò
-		bool m_canGray;
-		bool m_stateGray;
-		cocos2d::CCTexture2D *m_textureGray;
-		
-		GLfloat m_coordinates[8];
-		GLubyte m_colors[16];
-		GLfloat m_vertices[8];
-		
-		std::string m_strfile;
-		int m_hrizontalPixel;
-		int m_verticalPixel;
-		
-		void SetCoorinates();
-		void SetVertices(CGRect drawRect);
-	};
-	
-	class NDPictureDictionary : public NDDictionary
-	{
-		DECLARE_CLASS(NDPictureDictionary)
-		public:
-			void Recyle();
-	};
-	
-	class NDPicturePool : public NDObject
-	{
-		DECLARE_CLASS(NDPicturePool)
-		NDPicturePool();
-		~NDPicturePool();
-	public:
-		static NDPicturePool* DefaultPool();
-		
-		static void PurgeDefaultPool();
+	bool SetGrayState(bool gray);
 
-		NDPicture* AddPicture(const char* imageFile, bool gray = false);
-		NDPicture* AddPicture(const char* imageFile, int hrizontalPixel,
+	bool IsGrayState();
+
+public:
+	cocos2d::CCTexture2D *GetTexture();
+
+	void SetTexture(cocos2d::CCTexture2D* tex);
+private:
+	cocos2d::CCTexture2D *m_texture;
+	CGRect m_cutRect;
+	bool m_reverse, m_bAdvance;
+	PictureRotation m_rotation;
+
+	// ±ä»Ò
+	bool m_canGray;
+	bool m_stateGray;
+	cocos2d::CCTexture2D *m_textureGray;
+
+	GLfloat m_coordinates[8];
+	GLubyte m_colors[16];
+	GLfloat m_vertices[8];
+
+	std::string m_strfile;
+	int m_hrizontalPixel;
+	int m_verticalPixel;
+
+	void SetCoorinates();
+	void SetVertices(CGRect drawRect);
+};
+
+class NDPictureDictionary: public NDDictionary
+{
+	DECLARE_CLASS (NDPictureDictionary)
+public:
+	void Recyle();
+};
+
+class NDPicturePool: public NDObject
+{
+	DECLARE_CLASS (NDPicturePool)
+	NDPicturePool();
+	~NDPicturePool();
+public:
+	static NDPicturePool* DefaultPool();
+
+	static void PurgeDefaultPool();
+
+	NDPicture* AddPicture(const char* imageFile, bool gray = false);
+	NDPicture* AddPicture(const char* imageFile, int hrizontalPixel,
 			int verticalPixel = 0, bool gray = false);
 
-		void RemovePicture(const char* imageFile);
-		
-		void Recyle();
-		
-	private:
-		NDPictureDictionary *m_textures;
-		
-		std::map<std::string, CGSize> m_mapStr2Size;
-		
-	private:
-		CGSize GetImageSize(std::string filename);
-	};
+	void RemovePicture(const char* imageFile);
+
+	void Recyle();
+
+private:
+	NDPictureDictionary *m_textures;
+
+	std::map<std::string, CGSize> m_mapStr2Size;
+
+private:
+	CGSize GetImageSize(std::string filename);
+};
+
 }
 
 #endif

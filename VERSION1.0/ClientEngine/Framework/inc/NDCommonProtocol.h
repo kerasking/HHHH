@@ -25,26 +25,48 @@ m_autolink##class_name.Init(this)
 namespace NDEngine
 {
 
-	class NDCommonProtocol : public NDObject
+class NDCommonProtocol: public NDObject
+{
+	DECLARE_CLASS (NDCommonProtocol)
+
+	NDCommonProtocol();
+	virtual ~NDCommonProtocol();
+	
+	DECLARE_PROTOCOLAUTOLINK(NDCommonProtocol)
+	INTERFACE_PROTOCOLAUTOLINK(NDCommonProtocol)
+
+public:
+	virtual bool CanHorizontalMove(NDObject* object, float& hDistance)
 	{
-		DECLARE_CLASS (NDCommonProtocol)
-		NDCommonProtocol();
-		virtual ~NDCommonProtocol();
-		DECLARE_PROTOCOLAUTOLINK(NDCommonProtocol)
-		INTERFACE_PROTOCOLAUTOLINK(NDCommonProtocol)
-		
-	public:
-		virtual bool CanHorizontalMove(NDObject* object, float& hDistance) { return true; }
-		virtual bool CanVerticalMove(NDObject* object, float& vDistance)	{ return true; }
-		
-		virtual void OnScrollViewMove(NDObject* object, float fVertical, float fHorizontal) {}
-		virtual void OnScrollViewScrollMoveStop(NDObject* object) {}
-		virtual bool OnClick(NDObject* object) { return false; }
-		
-		//edit控件协议
-		virtual bool OnEditReturn(NDObject* object) { return true; }
-		virtual bool OnEditTextChange(NDObject* object, const char* inputString) { return true; }
-	};
+		return true;
+	}
+	virtual bool CanVerticalMove(NDObject* object, float& vDistance)
+	{
+		return true;
+	}
+
+	virtual void OnScrollViewMove(NDObject* object, float fVertical,
+			float fHorizontal)
+	{
+	}
+	virtual void OnScrollViewScrollMoveStop(NDObject* object)
+	{
+	}
+	virtual bool OnClick(NDObject* object)
+	{
+		return false;
+	}
+
+	//edit控件协议
+	virtual bool OnEditReturn(NDObject* object)
+	{
+		return true;
+	}
+	virtual bool OnEditTextChange(NDObject* object, const char* inputString)
+	{
+		return true;
+	}
+};
 
 }
 

@@ -37,6 +37,8 @@ namespace NDEngine
 		static void SetAnimationPath(const char* szPath);
 		static void SetResPath(const char* szPath);
 		static void SetSoundPath(const char* szPath);
+		static const char* GetFullImagepath(const char* pszFileName);
+		static std::string GetFullMapPath();
         static const char* GetImgPath(const char* fileName);
         // 新界面资源统一放在 res/image/ui_new
         static const char* GetImgPathNew(const char* fileName);

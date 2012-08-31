@@ -270,14 +270,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\Common\inc\EnumDef.h"
-					>
-				</File>
-				<File
-					RelativePath="..\Common\inc\globaldef.h"
-					>
-				</File>
-				<File
 					RelativePath="..\Common\inc\GlobalDialog.h"
 					>
 				</File>
@@ -286,31 +278,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\Common\inc\NDLocalization.h"
-					>
-				</File>
-				<File
-					RelativePath="..\Common\inc\NDLocalXmlString.h"
-					>
-				</File>
-				<File
-					RelativePath="..\Common\inc\NDMsgDefine.h"
-					>
-				</File>
-				<File
 					RelativePath="..\Common\inc\NDUtility.h"
-					>
-				</File>
-				<File
-					RelativePath="..\Common\inc\SMString.h"
-					>
-				</File>
-				<File
-					RelativePath="..\Common\inc\TableDef.h"
-					>
-				</File>
-				<File
-					RelativePath="..\Common\inc\typedef.h"
 					>
 				</File>
 			</Filter>
@@ -555,10 +523,6 @@
 				</File>
 				<File
 					RelativePath="..\MapAndRole\inc\NDMapLayerLogic.h"
-					>
-				</File>
-				<File
-					RelativePath="..\MapAndRole\inc\NDMapMgr.h"
 					>
 				</File>
 				<File

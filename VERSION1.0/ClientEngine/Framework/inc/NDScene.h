@@ -8,25 +8,24 @@
 #ifndef __NDScene_H
 #define __NDScene_H
 
-
 #include "NDNode.h"
 #include "NDLayer.h"
 #include <vector>
 
-namespace NDEngine 
+namespace NDEngine
 {
-	class NDScene : public NDNode 
-	{
-		DECLARE_CLASS(NDScene)
-	public:
+class NDScene: public NDNode
+{
+DECLARE_CLASS(NDScene)
+public:
 
-		NDScene();
-		~NDScene();
-		
-	public:
+	NDScene();
+	~NDScene();
 
-		static NDScene* Scene();
-	};
+public:
+
+	static NDScene* Scene();
+};
 }
 
 #endif

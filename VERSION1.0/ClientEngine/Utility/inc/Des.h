@@ -10,36 +10,36 @@
 #ifndef _DES_H_
 #define _DES_H_
 
-class CDes  
+class CDes
 {
 public:
 	CDes();
 	virtual ~CDes();
-	
+
 	//加密解密
-	enum	
+	enum
 	{
-		ENCRYPT	=	0,	//加密
+		ENCRYPT = 0,	//加密
 		DECRYPT			//解密
 	};
-	
+
 	//DES算法的模式
 	enum
 	{
-		ECB		=	0,	//ECB模式
+		ECB = 0,	//ECB模式
 		CBC				//CBC模式
 	};
-	
-	typedef bool    (*PSubKey)[16][48];
-	
+
+	typedef bool (*PSubKey)[16][48];
+
 	//Pad填充的模式
 	enum
 	{
-		PAD_ISO_1 =	0,	//ISO_1填充：数据长度不足8比特的倍数，以0x00补足，如果为8比特的倍数，补8个0x00
-		PAD_ISO_2,		//ISO_2填充：数据长度不足8比特的倍数，以0x80,0x00..补足，如果为8比特的倍数，补0x80,0x00..0x00
+		PAD_ISO_1 = 0,	//ISO_1填充：数据长度不足8比特的倍数，以0x00补足，如果为8比特的倍数，补8个0x00
+		PAD_ISO_2,//ISO_2填充：数据长度不足8比特的倍数，以0x80,0x00..补足，如果为8比特的倍数，补0x80,0x00..0x00
 		PAD_PKCS_7		//PKCS7填充：数据长度除8余数为n,以(8-n)补足为8的倍数
 	};
-	
+
 	/*******************************************************************/
 	/*
 	 函 数 名 称:	RunPad
@@ -52,11 +52,8 @@ public:
 	 
 	 返回值 说明：	bool	:是否填充成功
 	 *******************************************************************/
-	static bool	RunPad(int nType,
-					   const char* In,
-					   unsigned int uDataLen,
-					   char* Out,
-					   unsigned int& uPadLen);
+	static bool RunPad(int nType, const char* In, unsigned int uDataLen,
+			char* Out, unsigned int& uPadLen);
 	/*******************************************************************/
 	/*
 	 函 数 名 称:	PadCount
@@ -81,38 +78,23 @@ public:
 	 
 	 返回值 说明：	bool	:是否加密成功
 	 *******************************************************************/
-	static bool RunDes (bool bType,
-						bool bMode,
-						char* In,
-						unsigned int uInDataLen,
-						char* Out,
-						unsigned int uOutDataLen,
-						const char *Key,
-						const unsigned char ucKeyLen);
+	static bool RunDes(bool bType, bool bMode, char* In,
+			unsigned int uInDataLen, char* Out, unsigned int uOutDataLen,
+			const char *Key, const unsigned char ucKeyLen);
 	/*******************************************************************/
-	static bool Encrypt_Pad_PKCS_7( const char *Key,
-								   const unsigned char ucKeyLen,
-								   char* In,
-								   unsigned int uInDataLen,
-								   char* Out,
-								   unsigned int& uOutDataLen);
+	static bool Encrypt_Pad_PKCS_7(const char *Key,
+			const unsigned char ucKeyLen, char* In, unsigned int uInDataLen,
+			char* Out, unsigned int& uOutDataLen);
 	/*******************************************************************/
-	static bool Decrypt_Pad_PKCS_7( const char *Key,
-								   const unsigned char ucKeyLen,
-								   char* In,
-								   unsigned int uInDataLen,
-								   char* Out,
-								   unsigned int& uOutDataLen);
+	static bool Decrypt_Pad_PKCS_7(const char *Key,
+			const unsigned char ucKeyLen, char* In, unsigned int uInDataLen,
+			char* Out, unsigned int& uOutDataLen);
 	/*******************************************************************/
 	//计算并填充子密钥到SubKey数据中
-	static void SetSubKey(PSubKey pSubKey,
-						  const char Key[8]);	
+	static void SetSubKey(PSubKey pSubKey, const char Key[8]);
 	/*******************************************************************/
 	//DES单元运算
-	static void DES(char Out[8],
-					char In[8],
-					const PSubKey pSubKey, 
-					bool Type);
+	static void DES(char Out[8], char In[8], const PSubKey pSubKey, bool Type);
 };
 /*******************************************************************/
 

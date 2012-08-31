@@ -16,48 +16,46 @@
 
 using namespace NDEngine;
 
-void GlobalShowDlg(std::string title, std::string content, float seconds/* = 0*/)
+void GlobalShowDlg(std::string title, std::string content,
+		float seconds/* = 0*/)
 {
 	GlobalDialogObj.Show(NULL, title.c_str(), content.c_str(), seconds, NULL);
 }
 
-void GlobalShowDlg(NDEngine::NDObject* delegate, std::string title, std::string content, float seconds/* = 0*/)
+void GlobalShowDlg(NDEngine::NDObject* delegate, std::string title,
+		std::string content, float seconds/* = 0*/)
 {
-	GlobalDialogObj.Show(delegate, title.c_str(), content.c_str(), seconds, NULL);
+	GlobalDialogObj.Show(delegate, title.c_str(), content.c_str(), seconds,
+			NULL);
 }
 
-uint GlobalShowDlg(
-	NDEngine::NDObject* delegate,
-	const char* title, 
-	const char* text,
-	uint second,					// second-倒计时,若为0则无倒计时
-	const char* ortherButtons,
-	.../*must NULL end*/
-	)
+uint GlobalShowDlg(NDEngine::NDObject* delegate, const char* title,
+		const char* text, uint second,				// second-倒计旄1�7,若为0则无倒计旄1�7
+		const char* ortherButtons, .../*must NULL end*/
+		)
 {
-	std::vector<GlobalDialogBtnContent> btns;
-	
+	std::vector < GlobalDialogBtnContent > btns;
+
 	va_list argumentList;
 	char *eachObject;
-	
-	if (ortherButtons) 
-	{	
+
+	if (ortherButtons)
+	{
 		btns.push_back(GlobalDialogBtnContent(std::string(ortherButtons)));
 		va_start(argumentList, ortherButtons);
-		while ((eachObject = va_arg(argumentList, char*))) 
+		while ((eachObject = va_arg(argumentList, char*)))
 		{
 			btns.push_back(GlobalDialogBtnContent(std::string(eachObject)));
 		}
 		va_end(argumentList);
 	}
-	
+
 	return GlobalDialogObj.Show(delegate, title, text, second, btns);
 }
 
 ///////////////////////////////////////////////////
 
 #define MAX_FACTORY_ID (2147483647) // (2^31-1)
-
 CIDFactory::CIDFactory()
 {
 	reset();
@@ -83,7 +81,7 @@ unsigned int CIDFactory::GetID()
 		}
 		return m_uiCurID;
 	}
-	
+
 	unsigned int uiRet = m_vecRecyle.back();
 	m_vecRecyle.pop_back();
 	return uiRet;
@@ -128,7 +126,9 @@ CGlobalDialog::~CGlobalDialog()
 	quitGame();
 }
 
-unsigned int CGlobalDialog::Show(NDObject* delegate, const char* title, const char* text, uint timeout, const char* ortherButtons,.../*must NULL end*/)
+unsigned int CGlobalDialog::Show(NDObject* delegate, const char* title,
+		const char* text, uint timeout, const char* ortherButtons,
+		.../*must NULL end*/)
 {
 //	s_dlg_info *p = new s_dlg_info;
 //	s_dlg_info& info = *p;
@@ -139,43 +139,47 @@ unsigned int CGlobalDialog::Show(NDObject* delegate, const char* title, const ch
 //	info.bShowing = false;
 //	info.uiID = m_idAlloc.GetID();
 //	std::vector<std::string>& btns = info.btns;
-	
-	std::vector<GlobalDialogBtnContent> btns;
+
+	std::vector < GlobalDialogBtnContent > btns;
 	va_list argumentList;
 	char *eachObject;
-	
-	if (ortherButtons) 
-	{	
+
+	if (ortherButtons)
+	{
 		btns.push_back(GlobalDialogBtnContent(std::string(ortherButtons)));
 		va_start(argumentList, ortherButtons);
-		while ((eachObject = va_arg(argumentList, char*))) 
+		while ((eachObject = va_arg(argumentList, char*)))
 		{
 			btns.push_back(GlobalDialogBtnContent(std::string(eachObject)));
 		}
 		va_end(argumentList);
 	}
-	
+
 	//m_listDlg.push_back(p);
 //	
 //	deal();
-	
+
 //	return info.uiID;
 	return Show(delegate, title, text, timeout, btns);
 }
 
-unsigned int CGlobalDialog::Show(NDEngine::NDObject* delegate, const char* title, const char* text, uint timeout, const std::vector<std::string>& ortherButtons)
+unsigned int CGlobalDialog::Show(NDEngine::NDObject* delegate,
+		const char* title, const char* text, uint timeout,
+		const std::vector<std::string>& ortherButtons)
 {
-	std::vector<GlobalDialogBtnContent> vec_btns;
-	
-	for_vec(ortherButtons, std::vector<std::string>::const_iterator)
+	std::vector < GlobalDialogBtnContent > vec_btns;
+
+	for_vec(ortherButtons, std::vector < std::string > ::const_iterator)
 	{
 		vec_btns.push_back(GlobalDialogBtnContent(*it));
 	}
-	
+
 	return Show(delegate, title, text, timeout, vec_btns);
 }
 
-unsigned int CGlobalDialog::Show(NDEngine::NDObject* delegate, const char* title, const char* text, uint timeout, const std::vector<GlobalDialogBtnContent>& ortherButtons)
+unsigned int CGlobalDialog::Show(NDEngine::NDObject* delegate,
+		const char* title, const char* text, uint timeout,
+		const std::vector<GlobalDialogBtnContent>& ortherButtons)
 {
 	s_dlg_info *p = new s_dlg_info;
 	s_dlg_info& info = *p;
@@ -184,34 +188,34 @@ unsigned int CGlobalDialog::Show(NDEngine::NDObject* delegate, const char* title
 	info.text += text ? text : "";
 	//info.cancelbtn += cancleButton ? cancleButton : "";
 	info.bShowing = false;
-	info.uiID = m_idAlloc.GetID();
+	info.uiID = m_kIDAlloc.GetID();
 	info.btns = ortherButtons;
 	info.timeout = timeout;
-	
+
 	m_listDlg.push_back(p);
-	
+
 	deal();
-	
+
 	return info.uiID;
 }
 
 /*
-void CGlobalDialog::DisappearedAfterSeconds(float seconds)
-{
-	m_timer.SetTimer(this, 1, seconds);
-}
-*/
+ void CGlobalDialog::DisappearedAfterSeconds(float seconds)
+ {
+ m_timer.SetTimer(this, 1, seconds);
+ }
+ */
 
 /*
-void CGlobalDialog::OnTimer(OBJID tag)
-{		
-	if (m_dlg) 
-	{
-		m_dlg->Close();
-	}	
-	m_timer.KillTimer(this, 1);
-}
-*/
+ void CGlobalDialog::OnTimer(OBJID tag)
+ {
+ if (m_dlg)
+ {
+ m_dlg->Close();
+ }
+ m_timer.KillTimer(this, 1);
+ }
+ */
 
 void CGlobalDialog::deal()
 {
@@ -220,8 +224,8 @@ void CGlobalDialog::deal()
 		m_bInBattle = false;
 		return;
 	}
-	
-	if (m_bInBattle) 
+
+	if (m_bInBattle)
 	{
 		std::list<s_dlg_info*>::iterator it = m_listDlg.begin();
 		for (; it != m_listDlg.end(); it++)
@@ -232,42 +236,46 @@ void CGlobalDialog::deal()
 		m_bInBattle = false;
 		return;
 	}
-	
+
 	s_dlg_info *p = m_listDlg.front();
-	
-	if (p && p->bShowing && !m_dlg)
-	{ // 对话框被关掉了,但是内部保存的数据还没清掉
+
+	if (p && p->bShowing && !m_kDialog)
+	{ // 对话框被关掉亄1�7,但是内部保存的数据还没清掄1�7
 		m_listDlg.pop_front();
-		
+
 		if (!m_listDlg.empty())
 			p = m_listDlg.front();
 	}
-	
+
 	if (p && !p->bShowing)
 	{
 		p->bShowing = true;
-		
+
 		NDUIDialog *dlg = new NDUIDialog;
 		dlg->Initialization();
 		dlg->SetTag(p->uiID);
 		dlg->SetDelegate(this);
 		CloseProgressBar;
 		std::vector<bool> vec_arrow;
-		std::vector<std::string> vec_str;
-		for_vec(p->btns, std::vector<GlobalDialogBtnContent>::iterator)
+		std::vector < std::string > vec_str;
+		for_vec(p->btns, std::vector < GlobalDialogBtnContent > ::iterator)
 		{
 			vec_str.push_back((*it).str);
 			vec_arrow.push_back((*it).bArrow);
 		}
-		dlg->Show(p->title.c_str(), p->text.c_str(), p->cancelbtn.c_str(), vec_str, vec_arrow);
+		dlg->Show(p->title.c_str(), p->text.c_str(), p->cancelbtn.c_str(),
+				vec_str, vec_arrow);
 		dlg->SetTime(p->timeout);
-		
-		m_dlg = dlg->QueryLink();
-		
+
+		m_kDialog = dlg->QueryLink();
+
 		// 停止怪物ai
-		NDScene* runningScene = NDDirector::DefaultDirector()->GetRunningScene();
-		if (runningScene && runningScene->IsKindOfClass(RUNTIME_CLASS(GameScene))) {
-			((GameScene*)runningScene)->SetUIShow(true);
+		NDScene* runningScene =
+				NDDirector::DefaultDirector()->GetRunningScene();
+		if (runningScene
+				&& runningScene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
+		{
+			((GameScene*) runningScene)->SetUIShow(true);
 		}
 	}
 }
@@ -283,7 +291,7 @@ void CGlobalDialog::quitGame()
 		}
 	}
 	m_listDlg.clear();
-	m_idAlloc.reset();
+	m_kIDAlloc.reset();
 }
 
 void CGlobalDialog::OnDialogShow(NDUIDialog* dialog)
@@ -292,15 +300,16 @@ void CGlobalDialog::OnDialogShow(NDUIDialog* dialog)
 	{
 		return;
 	}
-	
+
 	s_dlg_info *p = m_listDlg.front();
-	
+
 	NDAsssert(int(p->uiID) == dialog->GetTag());
-	
+
 	if (p->delegate)
 	{
-		NDUIDialogDelegate* delegate = dynamic_cast<NDUIDialogDelegate*> (p->delegate);
-		if (delegate) 
+		NDUIDialogDelegate* delegate =
+				dynamic_cast<NDUIDialogDelegate*>(p->delegate);
+		if (delegate)
 		{
 			delegate->OnDialogShow(dialog);
 		}
@@ -311,52 +320,56 @@ void CGlobalDialog::OnDialogClose(NDUIDialog* dialog)
 {
 	// 恢复怪物ai
 	NDScene* runningScene = NDDirector::DefaultDirector()->GetRunningScene();
-	if (runningScene && runningScene->IsKindOfClass(RUNTIME_CLASS(GameScene))) {
-		((GameScene*)runningScene)->SetUIShow(false);
+	if (runningScene && runningScene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
+	{
+		((GameScene*) runningScene)->SetUIShow(false);
 	}
-	
+
 	if (m_listDlg.empty())
 	{
 		return;
 	}
-	
+
 	s_dlg_info *p = m_listDlg.front();
-	
+
 	NDAsssert(int(p->uiID) == dialog->GetTag());
-	
+
 	NDAsssert(p->bShowing);
-	
+
 	if (p->delegate)
 	{
-		NDUIDialogDelegate* delegate = dynamic_cast<NDUIDialogDelegate*> (p->delegate);
-		if (delegate) 
+		NDUIDialogDelegate* delegate =
+				dynamic_cast<NDUIDialogDelegate*>(p->delegate);
+		if (delegate)
 		{
 			delegate->OnDialogClose(dialog);
 		}
 	}
-	
+
 	m_listDlg.pop_front();
-	
-	m_idAlloc.ReturnID(dialog->GetTag());
-	
+
+	m_kIDAlloc.ReturnID(dialog->GetTag());
+
 	deal();
 }
 
-void CGlobalDialog::OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex)
+void CGlobalDialog::OnDialogButtonClick(NDUIDialog* dialog,
+		unsigned int buttonIndex)
 {
 	if (m_listDlg.empty())
 	{
 		return;
 	}
-	
+
 	s_dlg_info *p = m_listDlg.front();
-	
+
 	NDAsssert(int(p->uiID) == dialog->GetTag());
-	
+
 	if (p->delegate)
 	{
-		NDUIDialogDelegate* delegate = dynamic_cast<NDUIDialogDelegate*> (p->delegate);
-		if (delegate) 
+		NDUIDialogDelegate* delegate =
+				dynamic_cast<NDUIDialogDelegate*>(p->delegate);
+		if (delegate)
 		{
 			delegate->OnDialogButtonClick(dialog, buttonIndex);
 		}
@@ -369,44 +382,46 @@ bool CGlobalDialog::OnDialogTimeOut(NDUIDialog* dialog)
 	{
 		return false;
 	}
-	
+
 	s_dlg_info *p = m_listDlg.front();
-	
+
 	NDAsssert(int(p->uiID) == dialog->GetTag());
-	
+
 	if (p->delegate)
 	{
-		NDUIDialogDelegate* delegate = dynamic_cast<NDUIDialogDelegate*> (p->delegate);
-		if (delegate) 
+		NDUIDialogDelegate* delegate =
+				dynamic_cast<NDUIDialogDelegate*>(p->delegate);
+		if (delegate)
 		{
 			return delegate->OnDialogTimeOut(dialog);
 		}
 	}
-	
+
 	return false;
 }
-
 
 #define TAG_TIMER_QUIT (16314)
 
 IMPLEMENT_CLASS(GameQuitDialog, NDUIDialog)
 
-GameQuitDialog* GameQuitDialog::s_GameQuitDialog = NULL;
+GameQuitDialog* GameQuitDialog::ms_pkGameQuitDialog = NULL;
 
-void GameQuitDialog::DefaultShow(std::string title, std::string content, float seconds /*= 0.0f*/, bool replace/*=false*/)
+void GameQuitDialog::DefaultShow(std::string title, std::string content,
+		float seconds /*= 0.0f*/, bool replace/*=false*/)
 {
-	if (!s_GameQuitDialog)
+	if (!ms_pkGameQuitDialog)
 	{
-		s_GameQuitDialog = new GameQuitDialog;
-		s_GameQuitDialog->Initialization();
-		s_GameQuitDialog->Show(title.c_str(), content.c_str(), NDCommonCString("Ok"), NULL);
-		s_GameQuitDialog->SetTime(seconds);
+		ms_pkGameQuitDialog = new GameQuitDialog;
+		ms_pkGameQuitDialog->Initialization();
+		ms_pkGameQuitDialog->Show(title.c_str(), content.c_str(),
+				NDCommonCString("Ok"), NULL);
+		ms_pkGameQuitDialog->SetTime(seconds);
 	}
 	else if (replace)
 	{
-		s_GameQuitDialog->SetTitle(title.c_str());
-		s_GameQuitDialog->SetContent(content.c_str());
-		s_GameQuitDialog->SetTime(seconds);
+		ms_pkGameQuitDialog->SetTitle(title.c_str());
+		ms_pkGameQuitDialog->SetContent(content.c_str());
+		ms_pkGameQuitDialog->SetTime(seconds);
 	}
 }
 
@@ -416,7 +431,7 @@ GameQuitDialog::GameQuitDialog()
 
 GameQuitDialog::~GameQuitDialog()
 {
-	s_GameQuitDialog = NULL;
+	ms_pkGameQuitDialog = NULL;
 }
 
 void GameQuitDialog::Initialization()
@@ -427,6 +442,6 @@ void GameQuitDialog::Initialization()
 void GameQuitDialog::Close()
 {
 	NDUIDialog::Close();
-	
+
 	quitGame();
 }

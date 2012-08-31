@@ -38,10 +38,10 @@ namespace NDEngine
 	
 	NDUINode::NDUINode()
 	{
-		m_frameRect = CGRectZero;		
-		m_visibled = true;
-		m_eventEnabled = true;
-		m_scrRect = CGRectZero;
+		m_kFrameRect = CGRectZero;		
+		m_bVisibled = true;
+		m_bEventEnabled = true;
+		m_kScrRect = CGRectZero;
 	}
 
 	////////////////////////////////////////////////////////////
@@ -99,17 +99,17 @@ namespace NDEngine
 	void NDUINode::SetFrameRect(CGRect rect)
 	{			
 		this->SetContentSize(CGSizeMake(rect.size.width, rect.size.height));	
-		m_frameRect = rect;
+		m_kFrameRect = rect;
 	}
 	
 	CGRect NDUINode::GetFrameRect()
 	{
-		return m_frameRect;
+		return m_kFrameRect;
 	}	
 	
 	void NDUINode::SetVisible(bool visible)
 	{
-		m_visibled = visible;
+		m_bVisibled = visible;
 		if (NULL != m_ccNode)
 		{
 			m_ccNode->setIsVisible(visible);
@@ -129,12 +129,12 @@ namespace NDEngine
 	
 	bool NDUINode::IsVisibled()
 	{
-		return m_visibled;
+		return m_bVisibled;
 	}
 	
 	void  NDUINode::EnableEvent(bool enabled)
 	{
-		m_eventEnabled = enabled;
+		m_bEventEnabled = enabled;
 		for (int i = this->GetChildren().size() - 1; i >= 0; i--) 
 		{
 			NDNode *node = this->GetChildren().at(i);
@@ -142,14 +142,14 @@ namespace NDEngine
 			if (node->IsKindOfClass(RUNTIME_CLASS(NDUINode))) 
 			{
 				NDUINode* uiNode = (NDUINode*)node;
-				uiNode->EnableEvent(m_eventEnabled);
+				uiNode->EnableEvent(m_bEventEnabled);
 			}
 		}
 	}
 	
 	bool NDUINode::EventEnabled()
 	{
-		return m_eventEnabled;
+		return m_bEventEnabled;
 	}
 	
 	CGRect NDUINode::GetScreenRect()
@@ -164,13 +164,13 @@ namespace NDEngine
 				
 				CGRect nodeRect = node->GetScreenRect();
 				
-				return CGRectMake(nodeRect.origin.x + m_frameRect.origin.x, 
-								  nodeRect.origin.y + m_frameRect.origin.y, 
-								  m_frameRect.size.width, m_frameRect.size.height);
+				return CGRectMake(nodeRect.origin.x + m_kFrameRect.origin.x, 
+								  nodeRect.origin.y + m_kFrameRect.origin.y, 
+								  m_kFrameRect.size.width, m_kFrameRect.size.height);
 			}
-			return m_frameRect;
+			return m_kFrameRect;
 		}	
-		return m_frameRect;
+		return m_kFrameRect;
 	}
 	
 	void NDUINode::draw()
@@ -178,11 +178,11 @@ namespace NDEngine
 		NDNode::draw();
 		
 		CGRect scrRect = this->GetScreenRect();
-		if (scrRect.origin.x != m_scrRect.origin.x || scrRect.origin.y != m_scrRect.origin.y ||
-			scrRect.size.width != m_scrRect.size.width || scrRect.size.height != m_scrRect.size.height) 
+		if (scrRect.origin.x != m_kScrRect.origin.x || scrRect.origin.y != m_kScrRect.origin.y ||
+			scrRect.size.width != m_kScrRect.size.width || scrRect.size.height != m_kScrRect.size.height) 
 		{
-			this->OnFrameRectChange(m_scrRect, scrRect);
-			m_scrRect = scrRect;
+			this->OnFrameRectChange(m_kScrRect, scrRect);
+			m_kScrRect = scrRect;
 		}
 	}
 	

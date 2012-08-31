@@ -48,7 +48,7 @@ void CPetNode::ChangePet(OBJID idPet)
 {
 	PetInfo* petInfo = PetMgrObj.GetPet(idPet);
 	
-	if ( !(m_role && m_role->m_id == idPet) )
+	if ( !(m_role && m_role->m_nID == idPet) )
 	{
 		SAFE_DELETE_NODE(m_role);
 		
@@ -58,7 +58,7 @@ void CPetNode::ChangePet(OBJID idPet)
 		
 		m_role = new NDBaseRole;
 		m_role->SetNormalAniGroup(petData.int_PET_ATTR_LOOKFACE);
-		m_role->m_id = idPet;
+		m_role->m_nID = idPet;
 		this->AddChild(m_role);
 		refeshPosition();
 	}

@@ -805,7 +805,7 @@ void CCNode::visit()
             pNode = (CCNode*) arrayData->arr[i];
 			int nZ = pNode->getZOrder();
 
-			if ( pNode) 
+			if (  pNode && pNode->m_nZOrder < 0) 
 			{
 				pNode->visit();
 			}
@@ -820,6 +820,7 @@ void CCNode::visit()
 	this->draw();
 
 	// draw children zOrder >= 0
+
     if (m_pChildren && m_pChildren->count() > 0)
     {
         ccArray *arrayData = m_pChildren->data;

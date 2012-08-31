@@ -16,7 +16,9 @@
 
 namespace NDEngine 
 {
-	class NDMapLayerLogic : public NDMapLayer,public NDUIDialogDelegate 
+	class NDMapLayerLogic:
+		public NDMapLayer,
+		public NDUIDialogDelegate 
 	{
 		DECLARE_CLASS(NDMapLayerLogic)
 	public:

@@ -46,12 +46,12 @@ bool IsTileHightLight();
 
 class NDTile : public cocos2d::CCObject 
 {
-	CC_SYNTHESIZE_RETAIN(cocos2d::CCTexture2D*, m_Texture, Texture)
-	CC_SYNTHESIZE(CGRect, m_CutRect, CutRect)
-	CC_SYNTHESIZE(CGRect, m_DrawRect, DrawRect)
-//	CC_PROPERTY(bool, m_bReverse, Reverse) ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	CC_SYNTHESIZE_RETAIN(cocos2d::CCTexture2D*, m_pkTexture, Texture)
+	CC_SYNTHESIZE(CGRect, m_kCutRect, CutRect)
+	CC_SYNTHESIZE(CGRect, m_kDrawRect, DrawRect)
+	CC_SYNTHESIZE(bool, m_bReverse, Reverse)
 	CC_SYNTHESIZE(NDRotationEnum, m_Rotation, Rotation)
-	CC_SYNTHESIZE(CGSize, m_MapSize, MapSize)
+	CC_SYNTHESIZE(CGSize, m_kMapSize, MapSize)
 
 public:
 	NDTile();
@@ -59,13 +59,14 @@ public:
 
 	void make();
 	void draw();
-	void drawSubRect(CGRect rect);
+	void drawSubRect(CGRect kRect);
 	void makeTex(float* pData);
-	void makeVetex(float* pData, CGRect rect);
+	void makeVetex(float* pData, CGRect kRect);
 
 private:
-	float *m_vertices;
-	float *m_coordinates;
+
+	float* m_pfVertices;
+	float* m_pfCoordinates;
 };
 
 #endif

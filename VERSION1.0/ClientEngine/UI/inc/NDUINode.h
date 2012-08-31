@@ -103,10 +103,10 @@ namespace NDEngine
 		void draw(); override
 		
 	private:		
-		bool m_visibled;
-		CGRect m_frameRect;
-		bool m_eventEnabled;
-		CGRect m_scrRect;
+		bool m_bVisibled;
+		CGRect m_kFrameRect;
+		bool m_bEventEnabled;
+		CGRect m_kScrRect;
 		
 	public:
 		void SetTargetDelegate(NDUITargetDelegate* targetDelegate);

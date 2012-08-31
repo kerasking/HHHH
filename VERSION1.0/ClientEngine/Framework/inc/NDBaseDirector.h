@@ -11,7 +11,7 @@
 
 #include "CCDirector.h"
 
-class NDBaseDirector : public cocos2d::CCDisplayLinkDirector
+class NDBaseDirector: public cocos2d::CCDisplayLinkDirector
 {
 public:
 	virtual void mainLoop(void);

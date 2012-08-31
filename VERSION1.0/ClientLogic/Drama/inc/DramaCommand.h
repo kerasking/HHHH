@@ -14,10 +14,10 @@
 #include "NDTimer.h"
 
 ///////////////////////////////////////////////
-class DramaCommandDlg :
-public DramaCommandBase
+class DramaCommandDlg :public DramaCommandBase
 {
 public:
+
 	void InitWithOpen(bool bLeft);
 	void InitWithClose(bool bLeft);
 	void InitWithSetFigure(bool bLeft, std::string filename, bool bReverse);
@@ -26,13 +26,16 @@ public:
 	void InitWithSetContent(bool bLeft, std::string content, int nFontSize, int nFontColor);
 	void InitWithTip(std::string content);
 	virtual void excute();
+
+protected:
+private:
 };
 
 ///////////////////////////////////////////////
-class DramaCommandSprite :
-public DramaCommandBase
+class DramaCommandSprite :public DramaCommandBase
 {
 public:
+
 	void InitWithAdd(int nLookFace, int nType, bool faceRight, std::string name);
 	void InitWithAddByFile(std::string filename);
 	void InitWithRemove(int nKey);
@@ -42,6 +45,7 @@ public:
 	virtual void excute();
 	
 private:
+
 	void ExcuteAddSprite();
 	void ExcuteAddSpriteByFile();
 	void ExcuteRemoveSprite();
@@ -51,10 +55,10 @@ private:
 };
 
 ///////////////////////////////////////////////
-class DramaCommandScene :
-public DramaCommandBase
+class DramaCommandScene :public DramaCommandBase
 {
 public:
+
 	void InitWithLoadDrama(int nMapId);
 	void InitWithFinishDrama();
 	void InitWithLoad(std::string centerText, int nFontSize, int nFontColor);
@@ -62,6 +66,7 @@ public:
 	virtual void excute();
 	
 private:
+
 	void ExcuteLoadDramaScene();
 	void ExcuteFinishDrama();
 	void ExcuteLoadEraseScene();
@@ -69,39 +74,44 @@ private:
 };
 
 ///////////////////////////////////////////////
-class DramaCommandCamera :
-public DramaCommandBase
+class DramaCommandCamera :public DramaCommandBase
 {
 public:
+
 	void InitWithSetPos(int nPosX, int nPosY);
 	void InitWithMove(int nToPosX, int nToPosY, int nStep);
 	virtual void excute();
 	
 private:
+
 	void ExcuteSetPosition();
 	void ExcuteMovePostion();
 };
 
 ///////////////////////////////////////////////
 class DramaCommandWait :
-public DramaCommandBase,
-public ITimerCallback
+	public DramaCommandBase,
+	public ITimerCallback
 {
 public:
+
 	void InitWithWait(float fTime);
 	void InitWithWaitPreActionFinish();
 	void InitWithWaitPreActFinishAndClick();
 	virtual void excute();
 	
 private:
+
 	void ExcuteWaitTime();
 	void ExcuteWaitPreAction();
 	void ExcuteWaitPreActionAndClick();
 	
 public:
+
 	void OnTimer(OBJID tag);
 	
 private:
+
 	NDTimer m_timer;
 };
 

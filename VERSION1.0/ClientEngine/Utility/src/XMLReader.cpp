@@ -1,8 +1,8 @@
 #include "XMLReader.h"
 #include "..\..\TinyXML\inc\tinyxml.h"
 
-XMLReader::XMLReader():
-m_pkFileDataMap(0)
+XMLReader::XMLReader() :
+		m_pkFileDataMap(0)
 {
 	m_pkFileDataMap = new FileData;
 }
@@ -18,7 +18,7 @@ XMLReader::FileDataPtr XMLReader::getMapWithContentsOfFile()
 	return m_pkFileDataMap;
 }
 
-bool XMLReader::initWithFile( const char* pszFilename )
+bool XMLReader::initWithFile(const char* pszFilename)
 {
 	if (0 == pszFilename || !*pszFilename)
 	{
@@ -48,7 +48,7 @@ bool XMLReader::initWithFile( const char* pszFilename )
 	{
 		return false;
 	}
-	
+
 	TiXmlElement* pkKeyElement = pkDictElement->FirstChildElement("key");
 	TiXmlElement* pkStringElement = pkDictElement->FirstChildElement("string");
 
@@ -62,7 +62,7 @@ bool XMLReader::initWithFile( const char* pszFilename )
 		string strKey = pkKeyElement->GetText();
 		string strString = pkStringElement->GetText();
 
-		m_pkFileDataMap->insert(make_pair(strKey,strString));
+		m_pkFileDataMap->insert(make_pair(strKey, strString));
 
 		pkKeyElement = pkKeyElement->NextSiblingElement("key");
 		pkStringElement = pkStringElement->NextSiblingElement("string");
@@ -71,7 +71,7 @@ bool XMLReader::initWithFile( const char* pszFilename )
 	return true;
 }
 
-bool XMLReader::initWithData( const char* pszData,int nSize )
+bool XMLReader::initWithData(const char* pszData, int nSize)
 {
 	if (0 == pszData || !*pszData)
 	{
@@ -81,9 +81,8 @@ bool XMLReader::initWithData( const char* pszData,int nSize )
 	return true;
 }
 
-void* XMLReader::getObjectWithPath( string strPath,
-								   int* pnIndexArray,
-								   int nArraySize )
+void* XMLReader::getObjectWithPath(string strPath, int* pnIndexArray,
+		int nArraySize)
 {
 	return 0;
 }

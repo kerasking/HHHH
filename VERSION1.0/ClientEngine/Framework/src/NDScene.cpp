@@ -9,15 +9,18 @@
 #include "NDScene.h"
 namespace NDEngine
 {
-	IMPLEMENT_CLASS(NDScene, NDNode)
-	
-	NDScene::NDScene(){}
-	NDScene::~NDScene(){}
-	
-	NDScene* NDScene::Scene()
-	{
-		NDScene *scene = new NDScene();
-		scene->Initialization();
-		return scene;
-	}
+IMPLEMENT_CLASS(NDScene, NDNode)
+
+NDScene::NDScene()
+{}
+NDScene::~NDScene()
+{
+}
+
+NDScene* NDScene::Scene()
+{
+	NDScene *scene = new NDScene();
+	scene->Initialization();
+	return scene;
+}
 }

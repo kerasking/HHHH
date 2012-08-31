@@ -47,8 +47,6 @@ __NDLOCAL_INNER_STRING("%s_%s", NSKeyFileName, NSKeyName])
 #define _NDLOCAL_INNER_CString_STRING( NSKeyFileName, cStringKeyName) \
 __NDLOCAL_INNER_STRING("%s_%s", NSKeyFileName, cStringKeyName])
 
-#pragma mark 以文件名+"_"+KeyName作为键(通过key返回的字串在当前文件相同)
-
 // key_name type NSString
 #define NDNSString(NSKeyName) \
 _NDLOCAL_INNER_NS_STRING((NDString(__FILE__).getFileName(), NSKeyName)
@@ -56,8 +54,6 @@ _NDLOCAL_INNER_NS_STRING((NDString(__FILE__).getFileName(), NSKeyName)
 // key_name type cString(null end)
 #define NDCString(cStringKeyName) \
 _NDLOCAL_INNER_CString_STRING(NDString(__FILE__).getFileName(), cStringKeyName)
-
-#pragma mark 以"Common"+"_"+KeyName作为键(通过key返回的字串相同)
 
 // key_name type NSString
 #define NDCommonNSString(NSKeyName) \
@@ -84,8 +80,6 @@ __NDLOCAL_INNER_STRING_RETNS("%s_%s", NSKeyFileName, NSKeyName)
 #define _NDLOCAL_INNER_CString_STRING_RETNS( NSKeyFileName, cStringKeyName) \
 __NDLOCAL_INNER_STRING_RETNS("%s_%s", NSKeyFileName, cStringKeyName])
 
-#pragma mark 以文件名+"_"+KeyName作为键(通过key返回的字串在当前文件相同)-----返回NSString
-
 // key_name type NSString
 #define NDNSString_RETNS(NSKeyName) \
 _NDLOCAL_INNER_NS_STRING_RETNS(NDString(__FILE__).getFileName(), NSKeyName)
@@ -93,8 +87,6 @@ _NDLOCAL_INNER_NS_STRING_RETNS(NDString(__FILE__).getFileName(), NSKeyName)
 // key_name type cString(null end)
 #define NDCString_RETNS(cStringKeyName) \
 _NDLOCAL_INNER_CString_STRING_RETNS(NSString(__FILE__).getFileName(), cStringKeyName)
-
-#pragma mark 以"Common"+"_"+KeyName作为键(通过key返回的字串相同)-----返回NSString
 
 // key_name type NSString
 #define NDCommonNSString_RETNS(NSKeyName) \

@@ -250,7 +250,8 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 {	
 	NewPlayerBagLayer* bagscene = NewPlayerBagLayer::GetInstance();
 	
-	GameScene* gamescene = (GameScene*)(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene)));
+	GameScene* gamescene = (GameScene*)(NDDirector::DefaultDirector()->
+		GetScene(RUNTIME_CLASS(GameScene)));
 	
 	unsigned char itemCount = 0; (*data) >> itemCount; // 接收的物品个数
 	
@@ -331,7 +332,7 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 		{ // 增加的是背包中的物品
 			// 其他玩家物品
 			NDPlayer& role = NDPlayer::defaultHero();
-			if (role.m_id != item->iOwnerID)
+			if (role.m_nID != item->iOwnerID)
 			{ // 其他玩家物品
 				this->m_vOtherItems.push_back(item);
 			}

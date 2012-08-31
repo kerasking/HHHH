@@ -30,32 +30,34 @@ using namespace NDEngine;
 
 bool IsPointInside(CGPoint pt, CGRect rect)
 {
-	return (pt.x >= rect.origin.x &&
-		pt.y >= rect.origin.y &&
-		pt.x <= rect.size.width + rect.origin.x &&
-		pt.y <= rect.size.height + rect.origin.y);
+	return (pt.x >= rect.origin.x && pt.y >= rect.origin.y
+			&& pt.x <= rect.size.width + rect.origin.x
+			&& pt.y <= rect.size.height + rect.origin.y);
 }
 
 int GetNumBits(int num)
 {
 	int bits = 0;
-	while (num > 0) {
+	while (num > 0)
+	{
 		bits++;
 		num /= 10;
 	}
-	
+
 	return bits;
 }
 
 bool VerifyUnsignedNum(const std::string strnum)
 {
-	if (strnum.empty()) return false;
-	
+	if (strnum.empty())
+		return false;
+
 	for_vec(strnum, std::string::const_iterator)
 	{
-		if (!isdigit(*it)) return false;
+		if (!isdigit(*it))
+			return false;
 	}
-	
+
 	return true;
 }
 
@@ -65,9 +67,9 @@ std::string changeToChineseSign(std::string old)
 	{
 		return "";
 	}
-	
+
 	NDString ndstr(old);
-	
+
 	ndstr.replace(NDString(","), NDString("，"));
 	ndstr.replace(NDString("."), NDString("。"));
 	ndstr.replace(NDString("!"), NDString("！"));
@@ -75,33 +77,32 @@ std::string changeToChineseSign(std::string old)
 	ndstr.replace(NDString(":"), NDString("："));
 	ndstr.replace(NDString("("), NDString("（"));
 	ndstr.replace(NDString(")"), NDString("）"));
-	
+
 	ndstr.replace(NDString("。。。。。。"), NDString("......"));
 	ndstr.replace(NDString("。。。。。"), NDString("....."));
 	ndstr.replace(NDString("。。。。"), NDString("...."));
 	ndstr.replace(NDString("。。。"), NDString("..."));
 	ndstr.replace(NDString("。。"), NDString(".."));
-	
+
 	return std::string(ndstr.getData());
 }
 
 // 退出游戏,返回主界面时统一做释放及各模块初始化操作
 void quitGame(bool bTipNet/*=false*/)
 {
-	ScriptGlobalEvent::OnEvent(GE_QUITGAME);
+	ScriptGlobalEvent::OnEvent (GE_QUITGAME);
 	CloseProgressBar;
 	Battle::ResetLastTurnBattleAction();
 	DramaObj.QuitGame();
 	/*BeatHeartMgrObj.Stop();*/
 	//NDMapMgrObj.quitGame(); ///< 临时性注释 郭浩
-	
 	BattleMgrObj.ReleaseAllBattleSkill();
-	
+
 	while (NDDirector::DefaultDirector()->PopScene());
-	
+
 	NDDirector::DefaultDirector()->ReplaceScene(CSMLoginScene::Scene());
-	
-	ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
+
+	ScriptGlobalEvent::OnEvent (GE_LOGIN_GAME);
 }
 
 // string getStringTime(long nSeconds)
@@ -134,7 +135,8 @@ void quitGame(bool bTipNet/*=false*/)
 // 	return [ret UTF8String];
 // }
 
-static char COPY_DATA[1024] = {0X00};
+static char COPY_DATA[1024] =
+{ 0X00 };
 
 const char* GetCopyCacheData()
 {
@@ -144,11 +146,11 @@ const char* GetCopyCacheData()
 void CopyDataToCopyCache(const char* data)
 {
 	memset(COPY_DATA, 0x00, sizeof(COPY_DATA));
-	if (strlen(data) < sizeof(COPY_DATA)) 
+	if (strlen(data) < sizeof(COPY_DATA))
 	{
 		strcpy(COPY_DATA, data);
 	}
-	else 
+	else
 	{
 		memcpy(COPY_DATA, data, sizeof(COPY_DATA) - 1);
 	}
@@ -219,26 +221,30 @@ std::string loadPackInfo(int param)
 	{
 		return "";
 	}
-	
-	std::string channelIni = NDEngine::NDPath::GetResourcePath().append("channel.ini"); 
-	FILE* f = fopen(channelIni.c_str(), "rt");
-	
-	if (!f) return "IPHONE_BYWX";
-	
-	char buf[1025] = { 0x00 };
-	fgets(buf, 1024, f);
-	fclose(f);
-	
-	char ret[1025] = { 0x00 };
+
+	std::string channelIni = NDEngine::NDPath::GetResourcePath().append(
+			"channel.ini");
+	FILE* pkFile = fopen(channelIni.c_str(), "rt");
+
+	if (!pkFile)
+		return "IPHONE_BYWX";
+
+	char buf[1025] =
+	{ 0x00 };
+	fgets(buf, 1024, pkFile);
+	fclose(pkFile);
+
+	char ret[1025] =
+	{ 0x00 };
 	char* ptr = buf;
 	char* ptr2 = ret;
-	while (*ptr != '\0') 
+	while (*ptr != '\0')
 	{
 		if (*ptr == ',')
 			break;
 		*ptr2++ = *ptr++;
 	}
-	
+
 	return ret;
 }
 
@@ -271,22 +277,25 @@ std::string GetIosVersion()
 
 std::string GetChannelInfo()
 {
-	std::string channelIni = NDEngine::NDPath::GetResourcePath().append("channel.ini"); 
+	std::string channelIni = NDEngine::NDPath::GetResourcePath().append(
+			"channel.ini");
 	FILE* f = fopen(channelIni.c_str(), "rt");
-	if (f) 
+	if (f)
 	{
-		char buf[1025] = { 0x00 };
+		char buf[1025] =
+		{ 0x00 };
 		fgets(buf, 1024, f);
 		fclose(f);
-		
-		char ret[1025] = { 0x00 };
+
+		char ret[1025] =
+		{ 0x00 };
 		char* ptr = buf;
 		char* ptr2 = ret;
-		while (*ptr != '\0') 
+		while (*ptr != '\0')
 		{
-			if (*ptr != ',') 
+			if (*ptr != ',')
 				*ptr2++ = *ptr++;
-			else 
+			else
 				break;
 		}
 		return ret;
@@ -295,25 +304,28 @@ std::string GetChannelInfo()
 }
 std::string GetUpdateUrl()
 {
-	std::string channelIni = NDEngine::NDPath::GetResourcePath().append("channel.ini"); 
+	std::string channelIni = NDEngine::NDPath::GetResourcePath().append(
+			"channel.ini");
 	FILE* f = fopen(channelIni.c_str(), "rt");
-	if (f) 
+	if (f)
 	{
-		char buf[1025] = { 0x00 };
+		char buf[1025] =
+		{ 0x00 };
 		fgets(buf, 1024, f);
 		fclose(f);
-		
-		char ret[1025] = { 0x00 };
+
+		char ret[1025] =
+		{ 0x00 };
 		char* ptr = buf;
 		char* ptr2 = ret;
-		while (*ptr != '\0') 
+		while (*ptr != '\0')
 		{
 			if (*ptr++ == ',')
 				break;
 		}
-		
-		while ((*ptr2++ = *ptr++)); 
-		
+
+		while ((*ptr2++ = *ptr++));
+
 		return ret;
 	}
 	return "";
@@ -367,18 +379,18 @@ std::string platformString()
 	//return [[[UIDevice currentDevice] platformString] UTF8String];
 }
 
-void drawRectBar2(int x, int y, int color, int num1, int num2, int width) 
+void drawRectBar2(int x, int y, int color, int num1, int num2, int width)
 {
 	int curColor = 0x0B2212;
 //	DrawPolygon(CGRectMake(x, y, width + 1, 5), INTCOLORTOCCC4(curColor), 1); ///< 临时性注释 郭浩
-	
-	if (num2 <= 0) 
+
+	if (num2 <= 0)
 	{
 		return;
 	}
-	
+
 	int width1 = width * num1 / num2;
-	if (num1 > num2) 
+	if (num1 > num2)
 	{
 		width1 = width;
 	}
@@ -393,8 +405,9 @@ void drawRectBar2(int x, int y, int color, int num1, int num2, int width)
 
 CGRect getNewNumCut(unsigned int num, bool hightlight)
 {
-	if (num > 9) return CGRectZero;
-	return CGRectMake(num*14, (hightlight ? 14 : 0), 14, 14);
+	if (num > 9)
+		return CGRectZero;
+	return CGRectMake(num * 14, (hightlight ? 14 : 0), 14, 14);
 }
 
 void ShowAlert(const char* pszAlert)
@@ -408,165 +421,151 @@ void ShowAlert(const char* pszAlert)
 uint TimeConvert(TIME_TYPE type /*=TIME_MILLISECOND*/, time_t long_time)
 {
 	uint dwTime = 0;
-	switch(type)
+	switch (type)
 	{
-		case TIME_SECOND:
-			dwTime = long_time;
-			break;
-			
-		case TIME_MINUTE:
-		{
-			struct tm *pTime;
-			pTime = ::localtime( &long_time ); /* Convert to local time. */
-			
-			dwTime = pTime->tm_year % 100 * 100000000 +
-			(pTime->tm_mon+1)*1000000 +
-			pTime->tm_mday*10000 +
-			pTime->tm_hour*100 + 
-			pTime->tm_min;
-		}
-			break;
-			
-		case TIME_HOUR:
-		{
-			struct tm *pTime;
-			pTime = ::localtime( &long_time ); /* Convert to local time. */
-			
-			dwTime	=	pTime->tm_year*1000000 +
-			(pTime->tm_mon+1)*10000 +
-			pTime->tm_mday*100 +
-			pTime->tm_hour;
-		}
-			break;
-			
-		case TIME_DAY:
-		{
-			struct tm *pTime;
-			pTime = ::localtime( &long_time ); /* Convert to local time. */
-			
-			dwTime	=	pTime->tm_year*10000 +
-			(pTime->tm_mon+1)*100 +
-			pTime->tm_mday;
-		}
-			break;
-			
-		case TIME_DAYTIME: 
-		{
-			struct tm *pTime;
-			pTime = ::localtime( &long_time ); /* Convert to local time. */
-			
-			dwTime	=	pTime->tm_hour*10000 + 
-			pTime->tm_min *100 +
-			pTime->tm_sec;
-		}
-			break;
-			
-		case TIME_STAMP: 
-		{
-			struct tm *pTime;
-			pTime = ::localtime( &long_time ); /* Convert to local time. */
-			
-			dwTime	=	(pTime->tm_mon+1)*100000000 +
-			pTime->tm_mday*1000000 +
-			pTime->tm_hour*10000 + 
-			pTime->tm_min *100 +
-			pTime->tm_sec;
-		}
-			break;
-			
-		default:
-			dwTime = long_time;
-			break;
+	case TIME_SECOND:
+		dwTime = long_time;
+		break;
+
+	case TIME_MINUTE:
+	{
+		struct tm *pTime;
+		pTime = ::localtime(&long_time); /* Convert to local time. */
+
+		dwTime = pTime->tm_year % 100 * 100000000
+				+ (pTime->tm_mon + 1) * 1000000 + pTime->tm_mday * 10000
+				+ pTime->tm_hour * 100 + pTime->tm_min;
+	}
+		break;
+
+	case TIME_HOUR:
+	{
+		struct tm *pTime;
+		pTime = ::localtime(&long_time); /* Convert to local time. */
+
+		dwTime = pTime->tm_year * 1000000 + (pTime->tm_mon + 1) * 10000
+				+ pTime->tm_mday * 100 + pTime->tm_hour;
+	}
+		break;
+
+	case TIME_DAY:
+	{
+		struct tm *pTime;
+		pTime = ::localtime(&long_time); /* Convert to local time. */
+
+		dwTime = pTime->tm_year * 10000 + (pTime->tm_mon + 1) * 100
+				+ pTime->tm_mday;
+	}
+		break;
+
+	case TIME_DAYTIME:
+	{
+		struct tm *pTime;
+		pTime = ::localtime(&long_time); /* Convert to local time. */
+
+		dwTime = pTime->tm_hour * 10000 + pTime->tm_min * 100 + pTime->tm_sec;
+	}
+		break;
+
+	case TIME_STAMP:
+	{
+		struct tm *pTime;
+		pTime = ::localtime(&long_time); /* Convert to local time. */
+
+		dwTime = (pTime->tm_mon + 1) * 100000000 + pTime->tm_mday * 1000000
+				+ pTime->tm_hour * 10000 + pTime->tm_min * 100 + pTime->tm_sec;
+	}
+		break;
+
+	default:
+		dwTime = long_time;
+		break;
 	}
 	return dwTime;
 }
 
 std::string TimeConvertToStr(TIME_TYPE type, time_t long_time)
-{	
+{
 	struct tm *pTime;
-	pTime = ::localtime( &long_time );
-	
-	if (!pTime) return "";
-	
+	pTime = ::localtime(&long_time);
+
+	if (!pTime)
+		return "";
+
 	char szOut[256];
-	
+
 	memset(szOut, 0, sizeof(szOut));
-	
-	switch(type)
+
+	switch (type)
 	{
-		case TIME_SECOND:
-			sprintf(szOut, "%d%s%d%s%d%s%d%s%d%s%d%s",
-					pTime->tm_year,	NDCommonCString("year"),
-					pTime->tm_mon,	NDCommonCString("month"),
-					pTime->tm_mday,	NDCommonCString("day"),
-					pTime->tm_hour,	NDCommonCString("hour"),
-					pTime->tm_min,	NDCommonCString("minute"),
-					pTime->tm_sec,	NDCommonCString("second"));
-			break;
-		case TIME_MINUTE:
-		{
-			sprintf(szOut, "%d%s%d%s%d%s%d%s%d%s",
-					pTime->tm_year,	NDCommonCString("year"),
-					pTime->tm_mon,	NDCommonCString("month"),
-					pTime->tm_mday,	NDCommonCString("day"),
-					pTime->tm_hour,	NDCommonCString("hour"),
-					pTime->tm_min,	NDCommonCString("minute"));
-		}
-			break;
-			
-		case TIME_HOUR:
-		{
-			sprintf(szOut, "%d%s%d%s%d%s%d%s",
-					pTime->tm_year,	NDCommonCString("year"),
-					pTime->tm_mon,	NDCommonCString("month"),
-					pTime->tm_mday,	NDCommonCString("day"),
-					pTime->tm_hour,	NDCommonCString("hour"));
-		}
-			break;
-			
-		case TIME_DAY:
-		{
-			sprintf(szOut, "%d%s%d%s%d%s",
-					pTime->tm_year,	NDCommonCString("year"),
-					pTime->tm_mon,	NDCommonCString("month"),
-					pTime->tm_mday,	NDCommonCString("day"));
-		}
-			break;
-			
-		case TIME_DAYTIME: 
-		{
-			sprintf(szOut, "%d%s%d%s%d%s",
-					pTime->tm_hour,	NDCommonCString("hour"),
-					pTime->tm_min,	NDCommonCString("minute"),
-					pTime->tm_sec,	NDCommonCString("second")  );
-		}
-			break;
-			
-		case TIME_STAMP: 
-		{
-			sprintf(szOut, "%d%s%d%s%d%s%d%s%d%s",
-					pTime->tm_mon,	NDCommonCString("month"),
-					pTime->tm_mday,	NDCommonCString("day"),
-					pTime->tm_hour,	NDCommonCString("hour"),
-					pTime->tm_min,	NDCommonCString("minute"),
-					pTime->tm_sec,	NDCommonCString("second"));
-		}
-			break;
-			
-		default:
-			break;
+	case TIME_SECOND:
+		sprintf(szOut, "%d%s%d%s%d%s%d%s%d%s%d%s", pTime->tm_year,
+				NDCommonCString("year"), pTime->tm_mon,
+				NDCommonCString("month"), pTime->tm_mday,
+				NDCommonCString("day"), pTime->tm_hour, NDCommonCString("hour"),
+				pTime->tm_min, NDCommonCString("minute"), pTime->tm_sec,
+				NDCommonCString("second"));
+		break;
+	case TIME_MINUTE:
+	{
+		sprintf(szOut, "%d%s%d%s%d%s%d%s%d%s", pTime->tm_year,
+				NDCommonCString("year"), pTime->tm_mon,
+				NDCommonCString("month"), pTime->tm_mday,
+				NDCommonCString("day"), pTime->tm_hour, NDCommonCString("hour"),
+				pTime->tm_min, NDCommonCString("minute"));
+	}
+		break;
+
+	case TIME_HOUR:
+	{
+		sprintf(szOut, "%d%s%d%s%d%s%d%s", pTime->tm_year,
+				NDCommonCString("year"), pTime->tm_mon,
+				NDCommonCString("month"), pTime->tm_mday,
+				NDCommonCString("day"), pTime->tm_hour,
+				NDCommonCString("hour"));
+	}
+		break;
+
+	case TIME_DAY:
+	{
+		sprintf(szOut, "%d%s%d%s%d%s", pTime->tm_year, NDCommonCString("year"),
+				pTime->tm_mon, NDCommonCString("month"), pTime->tm_mday,
+				NDCommonCString("day"));
+	}
+		break;
+
+	case TIME_DAYTIME:
+	{
+		sprintf(szOut, "%d%s%d%s%d%s", pTime->tm_hour, NDCommonCString("hour"),
+				pTime->tm_min, NDCommonCString("minute"), pTime->tm_sec,
+				NDCommonCString("second"));
+	}
+		break;
+
+	case TIME_STAMP:
+	{
+		sprintf(szOut, "%d%s%d%s%d%s%d%s%d%s", pTime->tm_mon,
+				NDCommonCString("month"), pTime->tm_mday,
+				NDCommonCString("day"), pTime->tm_hour, NDCommonCString("hour"),
+				pTime->tm_min, NDCommonCString("minute"), pTime->tm_sec,
+				NDCommonCString("second"));
+	}
+		break;
+
+	default:
+		break;
 	}
 
 	return szOut;
 }
 
-NDLANGUAGE localNdLunguage = NDLANGUAGE_None; 
+NDLANGUAGE localNdLunguage = NDLANGUAGE_None;
 
 bool IsInSimplifiedChinese()
 {
 	if (localNdLunguage == NDLANGUAGE_None)
 		GetLocalLanguage();
-		
+
 	return localNdLunguage == NDLANGUAGE_SimplifiedChinese;
 }
 
@@ -574,7 +573,7 @@ bool IsTraditionalChinese()
 {
 	if (localNdLunguage == NDLANGUAGE_None)
 		GetLocalLanguage();
-	
+
 	return localNdLunguage == NDLANGUAGE_TraditionalChinese;
 }
 
@@ -643,7 +642,7 @@ NDLANGUAGE GetLocalLanguage()
 // 	return localNdLunguage;
 }
 
-std::string getStringTime( long nSeconds )
+std::string getStringTime(long nSeconds)
 {
 	return string("");
 }

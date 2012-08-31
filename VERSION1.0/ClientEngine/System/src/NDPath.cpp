@@ -13,7 +13,7 @@
 namespace NDEngine
 {
 	std::string NDPath::NDPath_ResPath = "./SimplifiedChineseRes/res/";
-	std::string NDPath::NDPath_ImgPath = "./SimplifiedChineseRes/res/map/";
+	std::string NDPath::NDPath_ImgPath = "./SimplifiedChineseRes/res/Image/";
 	std::string NDPath::NDPath_MapPath = "";
 	std::string NDPath::NDPath_AniPath = "";
 	std::string NDPath::NDPath_SoundPath = "";
@@ -85,7 +85,16 @@ namespace NDEngine
 // 		
 // 		return std::string([path UTF8String]);
 	}
-	
+
+	const char* NDPath::GetFullImagepath( const char* pszFileName )
+	{
+		string strRes = std::string(std::string("SimplifiedChineseRes\\res\\") + "image\\" + pszFileName);
+		char* pszTemp = new char[255];
+		memset(pszTemp,0,sizeof(char) * 255);
+		strcpy(pszTemp,strRes.c_str());
+		return pszTemp;
+	}
+
 	std::string NDPath::GetMapPath()
 	{
 		return "./SimplifiedChineseRes/res/map/";
@@ -110,7 +119,7 @@ namespace NDEngine
 	
 	std::string NDPath::GetAnimationPath()
 	{
-		return NDPath_AniPath;
+		return string("./SimplifiedChineseRes/res/animation/");
 // 	#ifdef TRADITION
 // 		NSString *path = [NSString stringWithFormat:@"%@/TraditionalChineseRes/res/animation/", [[NSBundle mainBundle] resourcePath]] ;
 // 	#else
@@ -287,4 +296,9 @@ namespace NDEngine
 		return pszTemp;
 		//return std::string(GetResPath()+"Script/"+filename).c_str();
     }
+
+	std::string NDPath::GetFullMapPath()
+	{
+		return std::string("SimplifiedChineseRes/res/map/");
+	}
 }

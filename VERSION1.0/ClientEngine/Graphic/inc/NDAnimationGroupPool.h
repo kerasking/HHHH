@@ -15,6 +15,9 @@
 class NDAnimationGroupPool : public cocos2d::CCObject 
 {
 public:
+
+	~NDAnimationGroupPool();
+
 	static NDAnimationGroupPool* defaultPool();
 	static void purgeDefaultPool();
 
@@ -27,12 +30,10 @@ public:
 	void Recyle();
 
 private:
-	cocos2d::CCMutableDictionary<std::string, NDAnimationGroup*> *m_animationGroups;
 
-private:
 	NDAnimationGroupPool();
-public:
-	~NDAnimationGroupPool();
+
+	cocos2d::CCMutableDictionary<std::string, NDAnimationGroup*>* m_pkAnimationGroups;
 };
 
 #endif

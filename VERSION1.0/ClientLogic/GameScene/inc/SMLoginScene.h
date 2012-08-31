@@ -35,10 +35,10 @@
 #define ID_LOADING_PROCESS (90)
 
 class CSMLoginScene :
-public NDScene,
-public NDUIButtonDelegate,
-public NDUITargetDelegate,
-public ITimerCallback
+	public NDScene,
+	public NDUIButtonDelegate,
+	public NDUITargetDelegate,
+	public ITimerCallback
 {
 	DECLARE_CLASS(CSMLoginScene)
 	

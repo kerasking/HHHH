@@ -18,180 +18,180 @@ using namespace cocos2d;
 
 NDBaseLayer::NDBaseLayer()
 {
-	m_ndTouch = new NDTouch();
-	m_press = false;
+	m_pkTouch = new NDTouch();
+	m_bPress = false;
 }
 
 NDBaseLayer::~NDBaseLayer()
 {
-	delete m_ndTouch;
+	delete m_pkTouch;
 }
 
 void NDBaseLayer::SetUILayer(NDUILayer* uilayer)
 {
-	if (!uilayer) 
+	if (!uilayer)
 	{
-		_ndUILayerNode.Clear();
+		m_kUILayerNode.Clear();
 		return;
 	}
-	_ndUILayerNode = uilayer->QueryLink();
+	m_kUILayerNode = uilayer->QueryLink();
 }
 
 void NDBaseLayer::SetLayer(NDLayer* layer)
 {
 	if (!layer)
 	{
-		_ndLayerNode.Clear();
+		m_kLayerNode.Clear();
 		return;
 	}
-	_ndLayerNode = layer->QueryLink();
+	m_kLayerNode = layer->QueryLink();
 }
 
 void NDBaseLayer::registerWithTouchDispatcher(void)
 {
-	int iPriority  = INT_MAX - PRIORITY_ADJUST;
-	
-	NDNode* node = NULL;
-	if (_ndUILayerNode.Pointer())
+	int iPriority = INT_MAX - PRIORITY_ADJUST;
+
+	NDNode* pkNode = NULL;
+	if (m_kUILayerNode.Pointer())
 	{
-		node = _ndUILayerNode.Pointer();
+		pkNode = m_kUILayerNode.Pointer();
 	}
-	else if (_ndLayerNode.Pointer())
+	else if (m_kLayerNode.Pointer())
 	{
-		node = _ndLayerNode.Pointer();
-	} 
-	
-	while (node) 
-	{
-		iPriority -= node->GetzOrder();
-		node = node->GetParent();
+		pkNode = m_kLayerNode.Pointer();
 	}
-	
+
+	while (pkNode)
+	{
+		iPriority -= pkNode->GetzOrder();
+		pkNode = pkNode->GetParent();
+	}
+
 	CCTouchDispatcher::sharedDispatcher()->addTargetedDelegate(this, 0, true);
 }
 
 bool NDBaseLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 {
-	m_ndTouch->Initialization(pTouch);
-	
+	m_pkTouch->Initialization(pTouch);
+
 	//if (g_NDBaseLayerPress)
 	//{
 	//	return NO;
 	//}
 
-	if (_ndUILayerNode) 
+	if (m_kUILayerNode)
 	{
-		if (_ndUILayerNode->UITouchBegin(m_ndTouch))
+		if (m_kUILayerNode->UITouchBegin(m_pkTouch))
 		{
 			//g_NDBaseLayerPress = true;
-			m_press = true;
+			m_bPress = true;
 			return true;
 		}
 	}
-	else if (_ndLayerNode) 
+	else if (m_kLayerNode)
 	{
-		if (_ndLayerNode->TouchBegin(m_ndTouch))
+		if (m_kLayerNode->TouchBegin(m_pkTouch))
 		{
 			//g_NDBaseLayerPress = true;
-			m_press = true;
+			m_bPress = true;
 			return true;
 		}
 	}
 
-	return false;	
+	return false;
 }
 
- void NDBaseLayer::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
- {
- 	m_ndTouch->Initialization(pTouch);
- 	
- 	//g_NDBaseLayerPress = false;
- 	
- 	m_press = false;
- 	
- 	if (_ndUILayerNode) 
- 	{
- 		return _ndUILayerNode->UITouchEnd(m_ndTouch);
- 	}
- 	else if (_ndLayerNode)
- 	{
- 		return _ndLayerNode->TouchEnd(m_ndTouch);
- 	}
- }
+void NDBaseLayer::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
+{
+	m_pkTouch->Initialization(pTouch);
+
+	//g_NDBaseLayerPress = false;
+
+	m_bPress = false;
+
+	if (m_kUILayerNode)
+	{
+		return m_kUILayerNode->UITouchEnd(m_pkTouch);
+	}
+	else if (m_kLayerNode)
+	{
+		return m_kLayerNode->TouchEnd(m_pkTouch);
+	}
+}
 
 void NDBaseLayer::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 {
-	m_ndTouch->Initialization(pTouch);
-	
+	m_pkTouch->Initialization(pTouch);
+
 	//g_NDBaseLayerPress = false;
-	
-	m_press = false;
-	
-	if (_ndUILayerNode) 
+
+	m_bPress = false;
+
+	if (m_kUILayerNode)
 	{
-		return _ndUILayerNode->UITouchCancelled(m_ndTouch);
+		return m_kUILayerNode->UITouchCancelled(m_pkTouch);
 	}
-	else if (_ndLayerNode) 
+	else if (m_kLayerNode)
 	{
-		return _ndLayerNode->TouchCancelled(m_ndTouch);
+		return m_kLayerNode->TouchCancelled(m_pkTouch);
 	}
 }
 
 void NDBaseLayer::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 {
-	m_ndTouch->Initialization(pTouch);
-	if (_ndUILayerNode)
+	m_pkTouch->Initialization(pTouch);
+	if (m_kUILayerNode)
 	{
-		return _ndUILayerNode->UITouchMoved(m_ndTouch);
+		return m_kUILayerNode->UITouchMoved(m_pkTouch);
 	}
-	else if (_ndLayerNode) 
+	else if (m_kLayerNode)
 	{
-		return _ndLayerNode->TouchMoved(m_ndTouch);
+		return m_kLayerNode->TouchMoved(m_pkTouch);
 	}
 }
 
 bool NDBaseLayer::ccTouchDoubleClick(CCTouch *pTouch, CCEvent *pEvent)
 {
 //	g_NDBaseLayerPress = false;
-	
-	m_ndTouch->Initialization(pTouch);
-	if (_ndUILayerNode) 
+
+	m_pkTouch->Initialization(pTouch);
+	if (m_kUILayerNode)
 	{
-		return _ndUILayerNode->UITouchDoubleClick(m_ndTouch);
+		return m_kUILayerNode->UITouchDoubleClick(m_pkTouch);
 	}
-	else if (_ndLayerNode) 
+	else if (m_kLayerNode)
 	{
-		return _ndLayerNode->TouchDoubleClick(m_ndTouch);
+		return m_kLayerNode->TouchDoubleClick(m_pkTouch);
 	}
-	
+
 	return false;
 }
 
 void NDBaseLayer::draw()
 {
-	NDNode* node = NULL;
-	if (_ndUILayerNode.Pointer())
+	NDNode* pkNode = NULL;
+	if (m_kUILayerNode.Pointer())
 	{
-		node = _ndUILayerNode.Pointer();
+		pkNode = m_kUILayerNode.Pointer();
 	}
-	else if (_ndLayerNode.Pointer())
+	else if (m_kLayerNode.Pointer())
 	{
-		node = _ndLayerNode.Pointer();
-	} 
-	
-	if (node && node->DrawEnabled()) 
+		pkNode = m_kLayerNode.Pointer();
+	}
+
+	if (pkNode && pkNode->DrawEnabled())
 	{
-		NDDirector::DefaultDirector()->ResumeViewRect(node);
-		node->draw();	
-	}	
+		NDDirector::DefaultDirector()->ResumeViewRect(pkNode);
+		pkNode->draw();
+	}
 }
 
 void NDBaseLayer::onExit()
 {
 	cocos2d::CCLayer::onExit();
-	
-	if (_ndUILayerNode) 
+
+	if (m_kUILayerNode)
 	{
-		return _ndUILayerNode->OnCanceledTouch();
+		return m_kUILayerNode->OnCanceledTouch();
 	}
 }

@@ -17,21 +17,23 @@ using namespace cocos2d;
 static NDAnimationGroupPool *NDAnimationGroupPool_DefaultPool = NULL;
 
 NDAnimationGroupPool::NDAnimationGroupPool()
-: m_animationGroups(NULL)
+: m_pkAnimationGroups(NULL)
 {
 	NDAsssert(NDAnimationGroupPool_DefaultPool == NULL);
-	m_animationGroups = new CCMutableDictionary<std::string, NDAnimationGroup*>();
+	m_pkAnimationGroups = new CCMutableDictionary<std::string, NDAnimationGroup*>();
 }
 
 NDAnimationGroupPool::~NDAnimationGroupPool()
 {
-	CC_SAFE_RELEASE(m_animationGroups);
+	CC_SAFE_RELEASE(m_pkAnimationGroups);
 }
 
 NDAnimationGroupPool* NDAnimationGroupPool::defaultPool()
 {
 	if (!NDAnimationGroupPool_DefaultPool)
+	{
 		NDAnimationGroupPool_DefaultPool = new NDAnimationGroupPool;
+	}
 	
 	return NDAnimationGroupPool_DefaultPool;
 }
@@ -43,90 +45,96 @@ void NDAnimationGroupPool::purgeDefaultPool()
 
 NDAnimationGroup* NDAnimationGroupPool::addObjectWithSpr(const char*sprFile)
 {
-	NDAnimationGroup *group = NULL;
+	NDAnimationGroup *pkGroup = NULL;
 	
-	group = m_animationGroups->objectForKey(sprFile);
-	if (!group) 
+	pkGroup = m_pkAnimationGroups->objectForKey(sprFile);
+
+	if (!pkGroup) 
 	{
-		group = new NDAnimationGroup;
-		group->initWithSprFile(sprFile);
-		if (group) 
+		pkGroup = new NDAnimationGroup;
+		pkGroup->initWithSprFile(sprFile);
+
+		if (pkGroup) 
 		{
-			m_animationGroups->setObject(group, sprFile);
+			m_pkAnimationGroups->setObject(pkGroup, sprFile);
 			//[group release];
-		}		
+		}
 	}
 	else 
 	{
-		group->retain();
+		pkGroup->retain();
 	}
 
-	return group;
+	return pkGroup;
 }
 
 NDAnimationGroup* NDAnimationGroupPool::addObjectWithModelId(int ModelId)
 {	
 	char sprFile[256] = {0};
-	sprintf(sprFile, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(), ModelId);
+	sprintf(sprFile, "%smodel_%d.spr", 
+		NDPath::GetAnimationPath().c_str(), ModelId);
 	return this->addObjectWithSpr(sprFile);
 }
 
 NDAnimationGroup* NDAnimationGroupPool::addObjectWithSceneAnimationId(int SceneAnimationId)
 {	
 	char sprFile[256] = {0};
-	sprintf(sprFile, "%sscene_ani_%d.spr", NDPath::GetAnimationPath().c_str(), SceneAnimationId);
+	sprintf(sprFile, "%sscene_ani_%d.spr", 
+		NDPath::GetAnimationPath().c_str(), SceneAnimationId);
 	return this->addObjectWithSpr(sprFile);
 }
 
 void NDAnimationGroupPool::removeObjectWithSpr(const char* sprFile)
 {
-	m_animationGroups->removeObjectForKey(sprFile);
+	m_pkAnimationGroups->removeObjectForKey(sprFile);
 }
 
 void NDAnimationGroupPool::removeObjectWithSceneAnimationId(int SceneAnimationId)
 {
 	char sprFile[256] = {0};
-	sprintf(sprFile, "%sscene_ani_%d.spr", NDPath::GetAnimationPath().c_str(), SceneAnimationId);
+	sprintf(sprFile, "%sscene_ani_%d.spr",
+		NDPath::GetAnimationPath().c_str(), SceneAnimationId);
 	this->removeObjectWithSpr(sprFile);
 }
 
 void NDAnimationGroupPool::Recyle()
 {
-	if (NULL == m_animationGroups)
+	if (NULL == m_pkAnimationGroups)
 	{
 		return;
 	}
 	
-	std::vector<std::string> allKeys = m_animationGroups->allKeys();
+	std::vector<std::string> kAllKeys = m_pkAnimationGroups->allKeys();
 	
-	if (allKeys.empty())
+	if (kAllKeys.empty())
 	{
 		return;
 	}
 	
 	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	std::vector<std::string> recyle;
+	std::vector<std::string> kRecyle;
 	
-	for (unsigned int i = 0; i < allKeys.size(); i++) 
+	for (unsigned int i = 0; i < kAllKeys.size(); i++) 
 	{
-		std::string	key = allKeys[i];
+		std::string	strKey = kAllKeys[i];
 
-		NDAnimationGroup *anigroup = m_animationGroups->objectForKey(key);
-		if (NULL == anigroup)
+		NDAnimationGroup *pkAnimationGroup = m_pkAnimationGroups->objectForKey(strKey);
+
+		if (NULL == pkAnimationGroup)
 		{
 			continue;
 		}
 		
-		if (1 >= anigroup->retainCount())
+		if (1 >= pkAnimationGroup->retainCount())
 		{
-			recyle.push_back(key);
+			kRecyle.push_back(strKey);
 		}
 	}
 
-	for (unsigned int i = 0; i < recyle.size(); i++)
+	for (unsigned int i = 0; i < kRecyle.size(); i++)
 	{
-		m_animationGroups->removeObjectForKey(recyle[i]);
+		m_pkAnimationGroups->removeObjectForKey(kRecyle[i]);
 	}
 
 	//[pool release];

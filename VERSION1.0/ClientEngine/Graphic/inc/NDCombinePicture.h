@@ -80,9 +80,8 @@ private:
 		}
 	};
 	
-	CGRect m_rectLast;
-	
-	CGSize m_sizeMax;
+	CGRect m_kRectLast;
+	CGSize m_kSizeMax;
 	
 	std::vector<CombinePicture> m_vecCombinePic;
 };

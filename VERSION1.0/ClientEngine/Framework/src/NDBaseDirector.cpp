@@ -12,10 +12,10 @@
 #include <vector>
 #include "ScriptMgr.h"
 
-// 帧数限制开关
+// 帧数限制弄1�7兄1�7
 #define FRAME_LIMIT_SWITCH 1
 
-// 帧数限制:每秒跑24帧
+// 帧数限制:每秒跄1�7帄1�7
 #define FRAME_LIMIT (24) ssss
 
 #if FRAME_LIMIT_SWITCH == 1
@@ -43,14 +43,14 @@
 		PerformanceEnd;													\
 		PerformanceStart;												\
 		PerformanceTestBeginName("消息处理");							
-		
+
 #define PERFORMANCE_DEBUG_2												\
 		PerformanceTestEndName("消息处理");								\
 		PerformanceTestBeginName("游戏场景");								
-	
+
 #define PERFORMANCE_DEBUG_3												\
 		PerformanceTestEndName("游戏场景");								\
-		PerformanceTest.BeginTestModule("游戏帧调用间隔", key);
+		PerformanceTest.BeginTestModule("游戏帧调用间隄1�7", key);
 #else
 #define PERFORMANCE_DEBUG_1	
 
@@ -69,7 +69,6 @@ void NDBaseDirector::mainLoop(void)
 
 	CCDisplayLinkDirector::mainLoop();
 }
-
 
 void NDBaseDirector::OnIdle()
 {

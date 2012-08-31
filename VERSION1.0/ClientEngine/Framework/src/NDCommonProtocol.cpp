@@ -11,14 +11,14 @@
 
 namespace NDEngine
 {
-	IMPLEMENT_CLASS(NDCommonProtocol, NDObject)
-	
-	NDCommonProtocol::NDCommonProtocol()
-	{
-		INIT_PROTOCOLAUTOLINK(NDCommonProtocol);
-	}
-	
-	NDCommonProtocol::~NDCommonProtocol()
-	{
-	}
+IMPLEMENT_CLASS(NDCommonProtocol, NDObject)
+
+NDCommonProtocol::NDCommonProtocol()
+{
+	INIT_PROTOCOLAUTOLINK(NDCommonProtocol);
+}
+
+NDCommonProtocol::~NDCommonProtocol()
+{
+}
 }

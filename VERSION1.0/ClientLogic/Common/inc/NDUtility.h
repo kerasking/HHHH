@@ -22,7 +22,7 @@ std::string changeToChineseSign(std::string old);
 //void showDialog(const char* title,const char* content){}
 //void showDialog(const char* content){}
 
-void quitGame(bool bTipNet=false);
+void quitGame(bool bTipNet = false);
 
 // string getStringTime(long nSeconds);
 // 
@@ -34,10 +34,9 @@ void quitGame(bool bTipNet=false);
 const char* GetCopyCacheData();
 void CopyDataToCopyCache(const char* data);
 
-enum 
+enum
 {
-	STRPARAM = 1,
-	UPDATEURL = 2,
+	STRPARAM = 1, UPDATEURL = 2,
 };
 std::string loadPackInfo(int param);
 
@@ -63,13 +62,8 @@ void ShowAlert(const char* pszAlert);
 // 时间转换函数
 typedef enum
 {
-	TIME_SECOND,
-	TIME_MINUTE,
-	TIME_HOUR,
-	TIME_DAY,
-	TIME_DAYTIME,
-	TIME_STAMP,
-}TIME_TYPE;
+	TIME_SECOND, TIME_MINUTE, TIME_HOUR, TIME_DAY, TIME_DAYTIME, TIME_STAMP,
+} TIME_TYPE;
 
 // long_time 以秒为单位
 uint TimeConvert(TIME_TYPE type /*=TIME_MILLISECOND*/, time_t long_time);
@@ -79,15 +73,13 @@ std::string TimeConvertToStr(TIME_TYPE type, time_t long_time);
 
 enum NDLANGUAGE
 {
-	NDLANGUAGE_None,
-	NDLANGUAGE_SimplifiedChinese,				// 简体中文
+	NDLANGUAGE_None, NDLANGUAGE_SimplifiedChinese,				// 简体中文
 	NDLANGUAGE_TraditionalChinese,			// 繁体中文
 };
 
 bool IsInSimplifiedChinese();
 
 bool IsTraditionalChinese();
-
 
 NDLANGUAGE GetLocalLanguage();
 

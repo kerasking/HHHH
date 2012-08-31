@@ -32,7 +32,8 @@ ItemImage::~ItemImage()
 {
 }
 
-NDPicture*  ItemImage::GetItemPicByType(int iItemType, bool gray, bool smallicon/*=false*/)
+NDPicture*  ItemImage::GetItemPicByType(int iItemType, bool gray,
+										bool smallicon/*=false*/)
 {
 	int iIconIndex = -1;
 	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
@@ -62,13 +63,17 @@ NDPicture* ItemImage::GetItem(int iIndex, bool gray/*=false*/, bool smallicon/*=
 	int iX = iIndex % 6 * iItemSizeW;
 	int iY = iIndex / 6* iItemSizeH;
 	
-	NDPicture *res = NDPicturePool::DefaultPool()->AddPicture((smallicon ? NDPath::GetImgPathBattleUI("item_small.png") : NDPath::GetSMImgPath("mix/mix_goods.png") ) , true);
+	NDPicture *res = NDPicturePool::DefaultPool()->AddPicture(
+		(smallicon ? NDPath::GetImgPathBattleUI("item_small.png") :
+		NDPath::GetSMImgPath("mix/mix_goods.png") ) , true);
+
 	if (!res)
 	{
 		return NULL;
 	}
 
 	CGSize size = res->GetSize();
+
 	if ( iX + iItemSizeW > size.width || iY + iItemSizeH > size.height ) 
 	{
 		delete res;
@@ -118,7 +123,8 @@ NDPicture* ItemImage::GetPinZhiPic(int iItemType, bool smallicon/*=false*/)
 		return res;
 	}
 	
-	res = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathBattleUI(smallicon ? "item_small.png" : "items.png"), true);
+	res = NDPicturePool::DefaultPool()->AddPicture(
+		NDPath::GetImgPathBattleUI(smallicon ? "item_small.png" : "items.png"), true);
 	if (!res)
 	{
 		return NULL;
@@ -137,7 +143,8 @@ NDPicture* ItemImage::GetPinZhiPic(int iItemType, bool smallicon/*=false*/)
 
 }
 
-NDPicture* ItemImage::GetItemByIconIndex(int iIconIndex, bool gray/*=false*/, bool smallicon/*=false*/)
+NDPicture* ItemImage::GetItemByIconIndex(int iIconIndex, bool gray/*=false*/,
+										 bool smallicon/*=false*/)
 {
 	if (iIconIndex > 0)
 	{
@@ -159,11 +166,15 @@ NDPicture* GetSkillIconByIconIndex(int iIconIndex, bool gray/*=false*/)
 	int nStartX = (iIconIndex % 100 - 1) * SKILL_SIZE_W;
 	int nStartY = (iIconIndex / 100 - 1) * SKILL_SIZE_H;
 	
-	NDPicture *res = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathNew("skillicon.png"), gray);
+	NDPicture *res = NDPicturePool::DefaultPool()->
+		AddPicture(NDPath::GetImgPathNew("skillicon.png"), gray);
 	
-	if (res) {
+	if (res)
+	{
 		CGSize size = res->GetSize();
-		if (nStartX < 0 || nStartY < 0 || nStartX + SKILL_SIZE_W > size.width || nStartY + SKILL_SIZE_H > size.height )
+		if (nStartX < 0 || nStartY < 0 ||
+			nStartX + SKILL_SIZE_W > size.width ||
+			nStartY + SKILL_SIZE_H > size.height )
 		{
 			CC_SAFE_DELETE(res);
 			return NULL;
@@ -171,12 +182,15 @@ NDPicture* GetSkillIconByIconIndex(int iIconIndex, bool gray/*=false*/)
 		res->Cut(CGRectMake(nStartX, nStartY, SKILL_SIZE_W, SKILL_SIZE_H));
 		return res;
 	}
+
 	return NULL;
 }
 
 NDPicture* ItemImage::GetSMItem(int nIconVal)
 {
-	NDPicture *res = NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("mix/mix_goods.png"), true);
+	NDPicture *res = NDPicturePool::DefaultPool()->
+		AddPicture(GetSMImgPath("mix/mix_goods.png"), true);
+
 	if (!res)
 	{
 		return NULL;

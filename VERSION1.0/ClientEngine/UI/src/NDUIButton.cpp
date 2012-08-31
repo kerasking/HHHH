@@ -109,6 +109,7 @@ namespace NDEngine
 		delete m_rimImageRT;
 		delete m_rimImageRB;
 		delete m_rimImageLB;
+
 		if (m_clearUpPicOnFree) 
 		{
 			delete m_image;
@@ -123,7 +124,9 @@ namespace NDEngine
 		//if (m_spriteArrow) delete m_spriteArrow;
 		
 		if (m_ClearFocusImageOnFree && m_focusImage)
+		{
 			delete m_focusImage;
+		}
 			
 		if (m_bClearBgOnFree)
 		{
@@ -165,7 +168,8 @@ namespace NDEngine
 		m_clearUpPicOnFree = clearPicOnFree;
 	}
 	
-	void NDUIButton::SetCombineImage(NDCombinePicture* combinepic, bool useCustomRect, CGRect customRect, bool clearPicOnFree)
+	void NDUIButton::SetCombineImage(NDCombinePicture* combinepic, 
+		bool useCustomRect, CGRect customRect, bool clearPicOnFree)
 	{
 		if (m_clearUpPicOnFree) 
 		{
@@ -186,7 +190,8 @@ namespace NDEngine
 		this->SetTouchDownImage(pic, false, CGRectZero, true);
 	}
 	
-	void NDUIButton::SetTouchDownImage(NDPicture* pic, bool useCustomRect, CGRect customRect, bool clearPicOnFree)
+	void NDUIButton::SetTouchDownImage(NDPicture* pic, bool useCustomRect,
+		CGRect customRect, bool clearPicOnFree)
 	{
 		if (m_clearDownPicOnFree) 
 		{

@@ -38,7 +38,6 @@ namespace NDEngine
 		m_colorFontBoder = ccc4(0, 0, 0, 0);
 	
 		memset(m_verticesBoder, 0, sizeof(m_verticesBoder));
-		
 		memset(m_colorsBorder, 0, sizeof(m_colorsBorder));
 	}
 	
@@ -63,7 +62,8 @@ namespace NDEngine
 	
 	void NDUILabel::OnFrameRectChange(CGRect srcRect, CGRect dstRect)
 	{
-		CGRect thisRect = this->GetFrameRect();		
+		CGRect thisRect = this->GetFrameRect();
+
 		if (srcRect.size.width != dstRect.size.width ||
 			srcRect.size.height != dstRect.size.height)
 		{
@@ -105,7 +105,9 @@ namespace NDEngine
 	
 	void NDUILabel::SetFontSize(unsigned int fontSize)
 	{
-		fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
+		fontSize = fontSize * NDDirector::DefaultDirector()->
+			GetScaleFactor();
+
 		if (m_fontSize != fontSize)
 		{
 			m_needMakeTex = true;
@@ -202,8 +204,10 @@ namespace NDEngine
 			}
 			else if (m_textAlignment == LabelTextAlignmentCenter)
 			{
-				drawRect.origin.x = scrRect.origin.x + (scrRect.size.width - m_cutRect.size.width) / 2;
-				drawRect.origin.y = scrRect.origin.y + (scrRect.size.height - m_cutRect.size.height) / 2;
+				drawRect.origin.x = scrRect.origin.x +
+					(scrRect.size.width - m_cutRect.size.width) / 2;
+				drawRect.origin.y = scrRect.origin.y +
+					(scrRect.size.height - m_cutRect.size.height) / 2;
 			}
 			else
 			{

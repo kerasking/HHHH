@@ -81,9 +81,10 @@ private:
 	void Init();
 	
 public:
-	int taskId;
+
+	int m_nTaskID;
 	
-	std::string taskTitle;
+	std::string m_strTaskTitle;
 	
 	std::string startNpcName, startMapName;
 	

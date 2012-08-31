@@ -231,7 +231,9 @@ bool CCTexture2D::initWithData(const void *data, CCTexture2DPixelFormat pixelFor
 char * CCTexture2D::description(void)
 {
 	char *ret = new char[100];
-	sprintf(ret, "<CCTexture2D | Name = %u | Dimensions = %u x %u | Coordinates = (%.2f, %.2f)>", m_uName, m_uPixelsWide, m_uPixelsHigh, m_fMaxS, m_fMaxT);
+	memset(ret,0,sizeof(char) * 100);
+	sprintf(ret, "<CCTexture2D | Name = %u | Dimensions = %u x %u | Coordinates = (%.2f, %.2f)>",
+		m_uName, m_uPixelsWide, m_uPixelsHigh, m_fMaxS, m_fMaxT);
 	return ret;
 }
 
@@ -271,7 +273,8 @@ bool CCTexture2D::initWithImage(CCImage * uiImage, ccResolutionType resolution)
 	unsigned maxTextureSize = conf->getMaxTextureSize();
 	if( POTHigh > maxTextureSize || POTWide > maxTextureSize ) 
 	{
-		CCLOG("cocos2d: WARNING: Image (%u x %u) is bigger than the supported %u x %u", POTWide, POTHigh, maxTextureSize, maxTextureSize);
+		CCLOG("cocos2d: WARNING: Image (%u x %u) is bigger than the supported %u x %u",
+			POTWide, POTHigh, maxTextureSize, maxTextureSize);
 		this->release();
 		return NULL;
 	}
@@ -344,7 +347,8 @@ bool CCTexture2D::initPremultipliedATextureWithImage(CCImage *image,
                 int imageHeight = image->getHeight();
 				for(int y = 0; y < imageHeight; ++y)
 				{
-					memcpy(pTargetData+POTWide*4*y, pPixelData+(image->getWidth())*4*y, (image->getWidth())*4);
+					memcpy(pTargetData+POTWide * 4 * y,
+						pPixelData+(image->getWidth()) * 4 * y, (image->getWidth()) * 4);
 				}
 			}
 
@@ -368,7 +372,8 @@ bool CCTexture2D::initPremultipliedATextureWithImage(CCImage *image,
 				int imageHeight = image->getHeight();
 				for(int y = 0; y < imageHeight; ++y)
 				{
-					memcpy(pTargetData+POTWide*3*y, pPixelData+(image->getWidth())*3*y, (image->getWidth())*3);
+					memcpy(pTargetData+POTWide * 3 * y, pPixelData+(image->
+						getWidth()) * 3 * y, (image->getWidth()) * 3);
 				}
 			}
 			break;   
@@ -474,11 +479,16 @@ bool CCTexture2D::initPremultipliedATextureWithImage(CCImage *image,
 }
 
 // implementation CCTexture2D (Text)
-bool CCTexture2D::initWithString(const char *text, const char *fontName, float fontSize)
+bool CCTexture2D::initWithString(const char *text,
+								 const char *fontName,
+								 float fontSize)
 {
-	return initWithString(text, CCSizeMake(0,0), CCTextAlignmentCenter, fontName, fontSize);
+	return initWithString(text, CCSizeMake(0,0), 
+		CCTextAlignmentCenter, fontName, fontSize);
 }
-bool CCTexture2D::initWithString(const char *text, const CCSize& dimensions, CCTextAlignment alignment, const char *fontName, float fontSize)
+bool CCTexture2D::initWithString(const char *text, const CCSize& dimensions,
+								 CCTextAlignment alignment, 
+								 const char *fontName, float fontSize)
 {
 #if CC_ENABLE_CACHE_TEXTTURE_DATA
     // cache the texture data
@@ -496,7 +506,8 @@ bool CCTexture2D::initWithString(const char *text, const CCSize& dimensions, CCT
     CCImage::ETextAlign eAlign = (CCTextAlignmentCenter == alignment) ? CCImage::kAlignCenter
         : (CCTextAlignmentLeft == alignment) ? CCImage::kAlignLeft : CCImage::kAlignRight;
     
-    if (! image.initWithString(text, (int)dimensions.width, (int)dimensions.height, eAlign, fontName, (int)fontSize))
+    if (! image.initWithString(text, (int)dimensions.width,
+		(int)dimensions.height, eAlign, fontName, (int)fontSize))
     {
         return false;
     }
@@ -508,20 +519,24 @@ bool CCTexture2D::initWithString(const char *text, const CCSize& dimensions, CCT
 
 void CCTexture2D::drawAtPoint(const CCPoint& point)
 {
-	GLfloat	coordinates[] = {	
+	GLfloat	coordinates[] =
+	{	
 		0.0f,	m_fMaxT,
 		m_fMaxS,m_fMaxT,
 		0.0f,	0.0f,
-		m_fMaxS,0.0f };
+		m_fMaxS,0.0f
+	};
 
 	GLfloat	width = (GLfloat)m_uPixelsWide * m_fMaxS,
 		height = (GLfloat)m_uPixelsHigh * m_fMaxT;
 
-	GLfloat		vertices[] = {	
+	GLfloat		vertices[] =
+	{	
 		point.x,			point.y,	0.0f,
 		width + point.x,	point.y,	0.0f,
 		point.x,			height  + point.y,	0.0f,
-		width + point.x,	height  + point.y,	0.0f };
+		width + point.x,	height  + point.y,	0.0f
+	};
 
 	glBindTexture(GL_TEXTURE_2D, m_uName);
 	glVertexPointer(3, GL_FLOAT, 0, vertices);
@@ -633,7 +648,10 @@ void CCTexture2D::PVRImagesHavePremultipliedAlpha(bool haveAlphaPremultiplied)
 
 void CCTexture2D::generateMipmap()
 {
-	CCAssert( m_uPixelsWide == ccNextPOT(m_uPixelsWide) && m_uPixelsHigh == ccNextPOT(m_uPixelsHigh), "Mimpap texture only works in POT textures");
+	CCAssert( m_uPixelsWide == ccNextPOT(m_uPixelsWide) &&
+		m_uPixelsHigh == ccNextPOT(m_uPixelsHigh),
+		"Mimpap texture only works in POT textures");
+
 	glBindTexture( GL_TEXTURE_2D, this->m_uName );
 	ccglGenerateMipmap(GL_TEXTURE_2D);
 }
