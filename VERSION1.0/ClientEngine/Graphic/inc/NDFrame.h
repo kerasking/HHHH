@@ -74,7 +74,7 @@ public:
 	bool enableRunNextFrame(NDFrameRunRecord* frameRunRecord);
 	//跑一帧
 	void run();
-	void run(float scale);
+	void run(float fScale);
 
 	// 绘制人物头像
 	void drawHeadAt(CGPoint pos);
@@ -85,8 +85,8 @@ private:
 	cocos2d::CCMutableArray<NDTile*>* m_pkTiles;
 
 private:
-	TILE_REVERSE_ROTATION tileReverseRotationWithReverse(bool reverse,
-			int rota);
+	TILE_REVERSE_ROTATION tileReverseRotationWithReverse(bool bReverse,
+			int nRota);
 	cocos2d::CCTexture2D* getTileTextureWithImageIndex(int imageIndex,
 			int replace);
 	float getTileW(int w, int h, NDRotationEnum rotation);

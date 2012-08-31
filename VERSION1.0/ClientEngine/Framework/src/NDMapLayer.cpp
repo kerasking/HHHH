@@ -45,7 +45,7 @@ bool GetIntersectRect(CGRect first, CGRect second, CGRect& ret)
 	return true;
 }
 
-bool GetRectPercent(CGRect rect, CGRect subrect, CGRect& ret)
+bool GetRectPercent(CGRect kRect, CGRect kSubRect, CGRect& kRet)
 {
 	/*
 	 if (!CGRectContainsRect(rect, subrect))
@@ -54,20 +54,20 @@ bool GetRectPercent(CGRect rect, CGRect subrect, CGRect& ret)
 	 }
 	 */
 
-	if (rect.origin.x > subrect.origin.x || rect.origin.y > subrect.origin.y
-			|| rect.origin.x + rect.size.width
-					< subrect.origin.x + subrect.size.width
-			|| rect.origin.y + rect.size.height
-					< subrect.origin.y + subrect.size.height)
+	if (kRect.origin.x > kSubRect.origin.x || kRect.origin.y > kSubRect.origin.y
+			|| kRect.origin.x + kRect.size.width
+					< kSubRect.origin.x + kSubRect.size.width
+			|| kRect.origin.y + kRect.size.height
+					< kSubRect.origin.y + kSubRect.size.height)
 	{
 		return false;
 	}
 
-	ret.origin.x = (subrect.origin.x - rect.origin.x) / rect.size.width;
-	ret.origin.y = (subrect.origin.y - rect.origin.y) / rect.size.height;
+	kRet.origin.x = (kSubRect.origin.x - kRect.origin.x) / kRect.size.width;
+	kRet.origin.y = (kSubRect.origin.y - kRect.origin.y) / kRect.size.height;
 
-	ret.size.width = subrect.size.width / rect.size.width;
-	ret.size.height = subrect.size.height / rect.size.height;
+	kRet.size.width = kSubRect.size.width / kRect.size.width;
+	kRet.size.height = kSubRect.size.height / kRect.size.height;
 
 	return true;
 }
@@ -99,16 +99,16 @@ NDMapLayer::NDMapLayer()
 	this->m_ndTitleTimer = NULL;
 	//this->switchSpriteNode=NULL;
 	//this->isAutoBossFight = false;
-	m_nRoadBlockTimeCount=0;
-	m_nTitleAlpha=0;
+	m_nRoadBlockTimeCount = 0;
+	m_nTitleAlpha = 0;
 	m_pkSubNode = NDNode::Node();
 	m_pkSubNode->SetContentSize(NDDirector::DefaultDirector()->GetWinSize());
 //		m_blockTimerTag=-1;
 //		m_titleTimerTag=-1;
-	m_bShowTitle=false;
+	m_bShowTitle = false;
 	//switch_type=SWITCH_NONE;
-	m_pkTreasureBox=NULL;
-	m_eBoxStatus=BOX_NONE;
+	m_pkTreasureBox = NULL;
+	m_eBoxStatus = BOX_NONE;
 	m_pkRoadSignLightEffect = NULL;
 }
 
@@ -216,9 +216,9 @@ void NDMapLayer::Initialization(const char* mapFile)
 		this->MakeOrdersOfMapscenesAndMapanimations();
 		this->MakeFrameRunRecords();
 
-		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-		m_kScreenCenter = ccp(winSize.width / 2,
-				this->GetContentSize().height - winSize.height / 2);
+		CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+		m_kScreenCenter = ccp(kWinSize.width / 2,
+				this->GetContentSize().height - kWinSize.height / 2);
 		this->m_ccNode->setPosition(0, 0);
 
 		/*
@@ -302,13 +302,13 @@ void NDMapLayer::refreshTitle()
 					//m_lbTitleBg->draw();
 					m_lbTitle->SetFrameRect(CGRectMake(nX, nY, 300, 60));
 
-					NDPicture* p1 = m_lbTitle->GetPicture();
+					NDPicture* pkPicture_1 = m_lbTitle->GetPicture();
 
-					p1->SetColor(ccc4(m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha));
+					pkPicture_1->SetColor(ccc4(m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha));
 
-					NDPicture* p2 = m_lbTitleBg->GetPicture();
+					NDPicture* pkPicture_2 = m_lbTitleBg->GetPicture();
 
-					p2->SetColor(ccc4(m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha));
+					pkPicture_2->SetColor(ccc4(m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha,m_nTitleAlpha));
 
 					m_nTitleAlpha -= 15;
 				}
@@ -564,7 +564,7 @@ void NDMapLayer::draw()
 			tq::CString str_time("%s:%s",str_mi,str_se);
 			m_lbTime->SetText(str_time);
 
-			CGSize size = getStringSize(str_time, 30);
+			CGSize kSize = getStringSize(str_time, 30);
 
 			if (!m_lbTime->GetParent() && m_pkSubNode)
 			{
@@ -574,11 +574,11 @@ void NDMapLayer::draw()
 			m_lbTime->SetFontColor(ccc4(255,0,0,255));
 			m_lbTime->SetFontSize(30);
 
-			int x = m_kScreenCenter.x - (size.width) / 2;
-			int y = m_kScreenCenter.y - GetContentSize().height - (size.height) / 2 +
+			int x = m_kScreenCenter.x - (kSize.width) / 2;
+			int y = m_kScreenCenter.y - GetContentSize().height - (kSize.height) / 2 +
 			NDDirector::DefaultDirector()->GetWinSize().height;
 			//NDLog("x:%d,y:%d",x,y);
-			m_lbTime->SetFrameRect(CGRectMake(x, y, size.width, size.height + 5));
+			m_lbTime->SetFrameRect(CGRectMake(x, y, kSize.width, kSize.height + 5));
 			m_lbTime->draw();
 		}
 
@@ -609,14 +609,14 @@ void NDMapLayer::MapSwitchRefresh()
 	this->MakeOrdersOfMapscenesAndMapanimations();
 	CC_SAFE_RELEASE (m_pkFrameRunRecordsOfMapSwitch);
 
-	m_pkFrameRunRecordsOfMapSwitch =
-			new cocos2d::CCMutableArray<NDFrameRunRecord*>();
+	m_pkFrameRunRecordsOfMapSwitch = new cocos2d::CCMutableArray<
+			NDFrameRunRecord*>();
 
 	for (int i = 0; i < (int) m_pkMapData->getSwitchs()->count(); i++)
 	{
-		NDFrameRunRecord *frameRunRecord = new NDFrameRunRecord;
-		m_pkFrameRunRecordsOfMapSwitch->addObject(frameRunRecord);
-		frameRunRecord->release();
+		NDFrameRunRecord *pkFrameRunRecord = new NDFrameRunRecord;
+		m_pkFrameRunRecordsOfMapSwitch->addObject(pkFrameRunRecord);
+		pkFrameRunRecord->release();
 	}
 }
 
@@ -717,11 +717,12 @@ void NDMapLayer::DrawScenesAndAnimations()
 		{
 			//PerformanceTestPerFrameBeginName("²¼¾°");
 			NDTile *pkTile =
-				(NDTile *) m_pkMapData->getSceneTiles()->objectAtIndex(
-				uiIndex);
+					(NDTile *) m_pkMapData->getSceneTiles()->objectAtIndex(
+							uiIndex);
+
 			if (pkTile)
 			{
-				if (this->isMapRectIntersectScreen(pkTile->getDrawRect())) //
+				if (this->isMapRectIntersectScreen(pkTile->getDrawRect()))
 				{
 					pkTile->draw();
 				}
@@ -795,7 +796,8 @@ void NDMapLayer::DrawScenesAndAnimations()
 			if (m_pkSwitchAniGroup->getAnimations()->count() > 0)
 			{
 				NDAnimation *pkAnimation =
-						(NDAnimation *) m_pkSwitchAniGroup->getAnimations()->objectAtIndex(0);
+						(NDAnimation *) m_pkSwitchAniGroup->getAnimations()->objectAtIndex(
+								0);
 
 				if (this->isMapRectIntersectScreen(pkAnimation->getRect()))
 				{
@@ -845,14 +847,6 @@ void NDMapLayer::DrawScenesAndAnimations()
 
 				if (true) //bSet)
 				{
-					static float fX = 0.0f;
-					static float fY = 0.0f;
-
-					fX += 20.0f;
-					fY += 20.0f;
-
-					pkSprite->SetPosition(ccp(fX,fY));
-
 					pkSprite->RunAnimation(pkSprite->DrawEnabled());
 				}
 				//sprite->RunAnimation(bSet);
@@ -1414,9 +1408,10 @@ void NDMapLayer::MakeOrders()
 
 			MAP_ORDER* pkDict = new MAP_ORDER;
 
-			(*pkDict)["index"] = it->first + m_pkMapData->getSceneTiles()->count()
-					+ m_pkMapData->getAnimationGroups()->count() +
-					m_pkMapData->getSwitchs()->count();
+			(*pkDict)["index"] = it->first
+					+ m_pkMapData->getSceneTiles()->count()
+					+ m_pkMapData->getAnimationGroups()->count()
+					+ m_pkMapData->getSwitchs()->count();
 
 			(*pkDict)["orderId"] = pkSprite->GetOrder();
 
@@ -1495,7 +1490,7 @@ void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 					(NDMapSwitch *) m_pkMapData->getSwitchs()->objectAtIndex(i);
 			//int orderId = mapSwitch.y * m_mapData.unitSize;
 
-			int orderId = pkMapSwitch->getY() * m_pkMapData->getUnitSize();//+ 32 ;
+			int orderId = pkMapSwitch->getY() * m_pkMapData->getUnitSize();	//+ 32 ;
 
 			MAP_ORDER *dict = new MAP_ORDER;
 
@@ -1617,15 +1612,16 @@ int NDMapLayer::Partition(cocos2d::CCArray*/*<MAP_ORDER*>*/array, int low,
 
 void NDMapLayer::MakeFrameRunRecords()
 {
-	for (int i = 0; i < (int)m_pkMapData->getAnimationGroups()->count();i++)
+	for (int i = 0; i < (int) m_pkMapData->getAnimationGroups()->count(); i++)
 	{
-		NDAnimationGroup *pkAniGroup = (NDAnimationGroup *)m_pkMapData->
-			getAnimationGroups()->objectAtIndex(i);
+		NDAnimationGroup *pkAniGroup =
+				(NDAnimationGroup *) m_pkMapData->getAnimationGroups()->objectAtIndex(
+						i);
 
 		cocos2d::CCMutableArray<NDFrameRunRecord*>* pkRunFrameRecordList =
 				new cocos2d::CCMutableArray<NDFrameRunRecord*>();
 
-		for (int j = 0; j < (int)pkAniGroup->getAnimations()->count();j++)
+		for (int j = 0; j < (int) pkAniGroup->getAnimations()->count(); j++)
 		{
 			NDFrameRunRecord *pkFrameRunRecord = new NDFrameRunRecord;
 			pkRunFrameRecordList->addObject(pkFrameRunRecord);

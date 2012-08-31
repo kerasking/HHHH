@@ -348,7 +348,7 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 
 	m_bFaceRight = direct == 2;
 
-	this->SetCurrentAnimation(MANUELROLE_ATTACK, m_bFaceRight);
+	this->SetCurrentAnimation(MANUELROLE_BATTLE_STAND, m_bFaceRight);
 
 	//defaultDeal();
 }

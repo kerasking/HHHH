@@ -31,7 +31,7 @@ class NDAnimation: public cocos2d::CCObject
 	CC_SYNTHESIZE(int, m_nBottomY, BottomY)
 	CC_SYNTHESIZE(int, m_nType, Type)
 	CC_SYNTHESIZE(bool, m_bReverse, Reverse)
-	CC_SYNTHESIZE(NDAnimationGroup*, m_BelongAnimationGroup, BelongAnimationGroup)
+	CC_SYNTHESIZE(NDAnimationGroup*, m_pkBelongAnimationGroup, BelongAnimationGroup)
 	CC_SYNTHESIZE(int, m_nCurIndexInAniGroup, CurIndexInAniGroup)
 
 public:
@@ -40,8 +40,8 @@ public:
 
 	CGRect getRect();
 
-	void runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord, bool needDraw);
-	void runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord, bool needDraw,
+	void runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord, bool bNeedDraw);
+	void runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord, bool bNeedDraw,
 			float drawScale);
 	void SlowDown(unsigned int multi);
 };

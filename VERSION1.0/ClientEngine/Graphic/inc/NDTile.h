@@ -59,7 +59,7 @@ public:
 
 	void make();
 	void draw();
-	void drawSubRect(CGRect rect);
+	void drawSubRect(CGRect kRect);
 	void makeTex(float* pData);
 	void makeVetex(float* pData, CGRect kRect);
 

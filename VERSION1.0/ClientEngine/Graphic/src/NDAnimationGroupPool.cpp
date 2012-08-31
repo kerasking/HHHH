@@ -45,27 +45,27 @@ void NDAnimationGroupPool::purgeDefaultPool()
 
 NDAnimationGroup* NDAnimationGroupPool::addObjectWithSpr(const char*sprFile)
 {
-	NDAnimationGroup *group = NULL;
+	NDAnimationGroup *pkGroup = NULL;
 	
-	group = m_pkAnimationGroups->objectForKey(sprFile);
+	pkGroup = m_pkAnimationGroups->objectForKey(sprFile);
 
-	if (!group) 
+	if (!pkGroup) 
 	{
-		group = new NDAnimationGroup;
-		group->initWithSprFile(sprFile);
+		pkGroup = new NDAnimationGroup;
+		pkGroup->initWithSprFile(sprFile);
 
-		if (group) 
+		if (pkGroup) 
 		{
-			m_pkAnimationGroups->setObject(group, sprFile);
+			m_pkAnimationGroups->setObject(pkGroup, sprFile);
 			//[group release];
 		}
 	}
 	else 
 	{
-		group->retain();
+		pkGroup->retain();
 	}
 
-	return group;
+	return pkGroup;
 }
 
 NDAnimationGroup* NDAnimationGroupPool::addObjectWithModelId(int ModelId)
@@ -104,37 +104,37 @@ void NDAnimationGroupPool::Recyle()
 		return;
 	}
 	
-	std::vector<std::string> allKeys = m_pkAnimationGroups->allKeys();
+	std::vector<std::string> kAllKeys = m_pkAnimationGroups->allKeys();
 	
-	if (allKeys.empty())
+	if (kAllKeys.empty())
 	{
 		return;
 	}
 	
 	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	std::vector<std::string> recyle;
+	std::vector<std::string> kRecyle;
 	
-	for (unsigned int i = 0; i < allKeys.size(); i++) 
+	for (unsigned int i = 0; i < kAllKeys.size(); i++) 
 	{
-		std::string	key = allKeys[i];
+		std::string	strKey = kAllKeys[i];
 
-		NDAnimationGroup *anigroup = m_pkAnimationGroups->objectForKey(key);
+		NDAnimationGroup *pkAnimationGroup = m_pkAnimationGroups->objectForKey(strKey);
 
-		if (NULL == anigroup)
+		if (NULL == pkAnimationGroup)
 		{
 			continue;
 		}
 		
-		if (1 >= anigroup->retainCount())
+		if (1 >= pkAnimationGroup->retainCount())
 		{
-			recyle.push_back(key);
+			kRecyle.push_back(strKey);
 		}
 	}
 
-	for (unsigned int i = 0; i < recyle.size(); i++)
+	for (unsigned int i = 0; i < kRecyle.size(); i++)
 	{
-		m_pkAnimationGroups->removeObjectForKey(recyle[i]);
+		m_pkAnimationGroups->removeObjectForKey(kRecyle[i]);
 	}
 
 	//[pool release];

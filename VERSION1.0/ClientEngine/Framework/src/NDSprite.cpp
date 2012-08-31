@@ -140,7 +140,7 @@ void NDSprite::RunAnimation(bool bDraw)
 					this->OnMoving(m_nMovePathIndex == iPoints - 1);
 				}
 
-				CGPoint pos = m_pointList.at(m_nMovePathIndex++);
+				CGPoint kPos = m_pointList.at(m_nMovePathIndex++);
 //						if (m_movePathIndex < (int)m_pointList.size() && m_movePathIndex > 2)
 //						{
 //							CGPoint prePos = this->GetPosition();
@@ -162,7 +162,7 @@ void NDSprite::RunAnimation(bool bDraw)
 //							}
 //						}
 
-				this->SetPosition(pos);
+				this->SetPosition(kPos);
 			}
 			else
 			{
@@ -186,7 +186,7 @@ void NDSprite::RunAnimation(bool bDraw)
 
 		m_pkCurrentAnimation->setReverse(m_bReverse);
 
-		bool oldTitleHightLight = IsTileHightLight();
+		bool bIsOldTitleHightLight = IsTileHightLight();
 		TileSetHightLight (m_bHightLight);
 
 		bool bRet = OnDrawBegin(bDraw);
@@ -199,7 +199,7 @@ void NDSprite::RunAnimation(bool bDraw)
 
 		OnDrawEnd(bDraw);
 
-		TileSetHightLight(oldTitleHightLight);
+		TileSetHightLight(bIsOldTitleHightLight);
 
 		if (m_bMoveMap && pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
@@ -253,8 +253,8 @@ void NDSprite::MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed,
 
 	if (this->GetParent())
 	{
-		NDNode* layer = this->GetParent();
-		if (layer->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+		NDNode* pkLayer = this->GetParent();
+		if (pkLayer->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
 			m_bMoveMap = moveMap;
 			m_bIsMoving = true;
@@ -277,7 +277,7 @@ void NDSprite::MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed,
 				CGPoint to = toPos[i];
 				std::vector < CGPoint > pointlist;
 				NDAutoPath::sharedAutoPath()->autoFindPath(from, to,
-						(NDMapLayer*) layer, m_iSpeed, mustArrive, ignoreMask);
+						(NDMapLayer*) pkLayer, m_iSpeed, mustArrive, ignoreMask);
 				pointlist = NDAutoPath::sharedAutoPath()->getPathPointVetor();
 
 				if (!pointlist.empty())

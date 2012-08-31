@@ -376,8 +376,8 @@ void NDMapData::decode(FILE* pkStream)
 	CCLog(m_Name.c_str());
 	//<-------------------单元格尺寸
 	m_nUnitSize = kFileOp.readByte(pkStream);
-	int TileWidth = m_nUnitSize;
-	int TileHeight = m_nUnitSize;
+	int nTileWidth = m_nUnitSize;
+	int nTileHeight = m_nUnitSize;
 	//------------------->层数
 	m_nLayerCount = kFileOp.readByte(pkStream);
 	//<-------------------列数
@@ -497,8 +497,8 @@ void NDMapData::decode(FILE* pkStream)
 		{ 0 };
 		sprintf(imageName, "%sb%d.png",
 				NDEngine::NDPath::GetImagePath().c_str(), idx);
-		FILE* f = fopen(imageName, "rt");
-		if (f)
+		FILE* pkFile = fopen(imageName, "rb");
+		if (pkFile)
 		{
 			kBackGroundImages.push_back(imageName);
 		}
@@ -542,7 +542,7 @@ void NDMapData::decode(FILE* pkStream)
 				* pkTile->getTexture()->getMaxT();
 
 		pkTile->setMapSize(
-				CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
+				CGSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
 		pkTile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
 		pkTile->setDrawRect(CGRectMake(nX, nY, picWidth, picHeight));
 		pkTile->setReverse(nReverse);
@@ -631,7 +631,7 @@ void NDMapData::decode(FILE* pkStream)
 				* pkTile->getTexture()->getMaxT();
 
 		pkTile->setMapSize(
-				CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
+				CGSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
 		pkTile->setCutRect(CGRectMake(0, 0, nPicWidth, nPicHeight));
 		pkTile->setDrawRect(CGRectMake(x, y, nPicWidth, nPicHeight));
 		pkTile->setReverse(bReverse);

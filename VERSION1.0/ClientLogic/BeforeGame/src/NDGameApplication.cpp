@@ -136,7 +136,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	kPlayer.SetPositionEx(ccp(500, 200));		///< x * 32 + 16, y * 32 + 16
 	kPlayer.SetServerPositon(x, y);
 	kPlayer.m_nID = 1;
-	kPlayer.m_name = "¸ß¸»Ë§";
+	kPlayer.m_name = "ÓàÎõö©";
 	kPlayer.SetLoadMapComplete();
 
 	NDScene* pkScene = pkDirector->GetRunningScene();

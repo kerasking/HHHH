@@ -274,7 +274,7 @@ void NDFrame::run()
 	this->run(1.0f);
 }
 
-void NDFrame::run(float scale)
+void NDFrame::run(float fScale)
 {
 	if (m_needInitTitles)
 	{
@@ -307,10 +307,10 @@ void NDFrame::run(float scale)
 		pkTile->setReverse(reverseRotation.reverse);
 		//	tile->setRotation(reverseRotation.rotation);
 
-		NDEngine::NDSprite *sprite =
+		NDEngine::NDSprite *pkSprite =
 				(NDEngine::NDSprite *) pkAnimationGroup->getRuningSprite();
 
-		if (sprite && !sprite->IsCloakEmpty()
+		if (pkSprite && !pkSprite->IsCloakEmpty()
 				&& pkRecord->getReplace() >= REPLACEABLE_LEFT_SHOULDER
 				&& pkRecord->getReplace() <= REPLACEABLE_SKIRT_LIFT_LEG)
 		{
@@ -332,15 +332,15 @@ void NDFrame::run(float scale)
 		GLfloat y = pkAnimationGroup->getPosition().y;
 		if (pkAnimation->getMidX() != 0)
 		{
-			x -= (pkAnimation->getMidX() - pkAnimation->getX()) * scale;
+			x -= (pkAnimation->getMidX() - pkAnimation->getX()) * fScale;
 		}
 
 		if (pkAnimation->getBottomY() != 0)
 		{
-			y -= (pkAnimation->getBottomY() - pkAnimation->getY()) * scale;
+			y -= (pkAnimation->getBottomY() - pkAnimation->getY()) * fScale;
 		}
 
-		y = y + pkFrameTile->getY() * scale - pkAnimation->getY() * scale;
+		y = y + pkFrameTile->getY() * fScale - pkAnimation->getY() * fScale;
 
 		if (pkAnimation->getReverse())
 		{
@@ -352,17 +352,17 @@ void NDFrame::run(float scale)
 //			}
 			int newX = pkAnimation->getMidX()
 					+ (pkAnimation->getMidX() - pkFrameTile->getX() - tileW);
-			x = x + newX * scale - pkAnimation->getX() * scale;
+			x = x + newX * fScale - pkAnimation->getX() * fScale;
 		}
 
 		else
 		{
-			x = x + pkFrameTile->getX() * scale - pkAnimation->getX() * scale;
+			x = x + pkFrameTile->getX() * fScale - pkAnimation->getX() * fScale;
 		}
 
 		pkTile->setDrawRect(
-				CGRectMake(x, y, pkTile->getCutRect().size.width * scale,
-						pkTile->getCutRect().size.height * scale));
+				CGRectMake(x, y, pkTile->getCutRect().size.width * fScale,
+						pkTile->getCutRect().size.height * fScale));
 		pkTile->setMapSize(pkAnimationGroup->getRunningMapSize());
 		pkTile->make();
 		pkTile->draw();
@@ -418,630 +418,632 @@ float NDFrame::getTileW(int w, int h, NDRotationEnum rotation)
 	return w;
 }
 
-TILE_REVERSE_ROTATION NDFrame::tileReverseRotationWithReverse(bool reverse,
-		int rota)
+TILE_REVERSE_ROTATION NDFrame::tileReverseRotationWithReverse(bool bReverse,
+		int nRota)
 {
 	//reverse = true;
-	static TILE_REVERSE_ROTATION reverseRotaionResult;
-	switch (rota)
+	static TILE_REVERSE_ROTATION s_kReverseRotaionResult = {0};
+
+	switch (nRota)
 	{
 	case 0:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation0;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation0;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation0;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation0;
 		}
 		break;
 	case 1:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation345;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation345;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation15;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation15;
 		}
 		break;
 	case 2:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation330;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation330;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation30;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation30;
 		}
 		break;
 	case 3:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation315;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation315;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation45;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation45;
 		}
 		break;
 	case 4:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation300;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation300;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation60;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation60;
 		}
 		break;
 	case 5:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation285;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation285;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation75;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation75;
 		}
 		break;
 	case 6:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation270;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation270;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation90;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation90;
 		}
 		break;
 	case 7:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation255;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation255;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation105;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation105;
 		}
 		break;
 	case 8:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation240;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation240;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation120;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation120;
 		}
 		break;
 	case 9:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation225;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation225;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation135;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation135;
 		}
 		break;
 	case 10:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation210;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation210;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation150;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation150;
 		}
 		break;
 	case 11:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation195;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation195;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation165;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation165;
 		}
 		break;
 	case 12:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation180;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation180;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation180;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation180;
 		}
 		break;
 	case 13:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation165;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation165;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation195;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation195;
 		}
 		break;
 	case 14:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation150;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation150;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation210;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation210;
 		}
 		break;
 	case 15:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation135;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation135;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation225;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation225;
 		}
 		break;
 	case 16:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation120;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation120;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation240;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation240;
 		}
 		break;
 	case 17:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation105;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation105;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation255;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation255;
 		}
 		break;
 	case 18:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation90;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation90;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation270;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation270;
 		}
 		break;
 	case 19:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation75;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation75;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation285;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation285;
 		}
 		break;
 	case 20:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation60;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation60;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation300;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation300;
 		}
 		break;
 	case 21:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation45;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation45;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation315;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation315;
 		}
 		break;
 	case 22:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation30;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation30;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation330;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation330;
 		}
 		break;
 	case 23:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation15;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation15;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation345;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation345;
 		}
 		break;
 	case 24:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation0;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation0;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation0;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation0;
 		}
 		break;
 	case 25:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation15;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation15;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation345;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation345;
 		}
 		break;
 	case 26:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation30;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation30;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation330;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation330;
 		}
 		break;
 	case 27:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation45;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation45;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation315;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation315;
 		}
 		break;
 	case 28:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation60;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation60;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation300;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation300;
 		}
 		break;
 	case 29:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation75;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation75;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation285;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation285;
 		}
 		break;
 	case 30:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation90;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation90;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation270;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation270;
 		}
 		break;
 	case 31:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation105;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation105;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation255;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation255;
 		}
 		break;
 	case 32:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation120;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation120;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation240;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation240;
 		}
 		break;
 	case 33:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation135;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation135;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation225;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation225;
 		}
 		break;
 	case 34:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation150;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation150;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation210;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation210;
 		}
 		break;
 	case 35:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation165;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation165;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation195;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation195;
 		}
 		break;
 	case 36:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation180;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation180;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation180;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation180;
 		}
 		break;
 	case 37:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation195;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation195;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation165;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation165;
 		}
 		break;
 	case 38:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation210;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation210;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation150;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation150;
 		}
 		break;
 	case 39:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation225;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation225;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation135;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation135;
 		}
 		break;
 	case 40:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation240;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation240;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation120;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation120;
 		}
 		break;
 	case 41:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation255;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation255;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation105;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation105;
 		}
 		break;
 	case 42:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation270;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation270;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation90;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation90;
 		}
 		break;
 	case 43:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation285;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation285;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation75;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation75;
 		}
 		break;
 	case 44:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation300;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation300;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation60;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation60;
 		}
 		break;
 	case 45:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation315;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation315;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation45;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation45;
 		}
 		break;
 	case 46:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation330;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation330;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation30;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation30;
 		}
 		break;
 	case 47:
-		if (reverse)
+		if (bReverse)
 		{
-			reverseRotaionResult.reverse = false;
-			reverseRotaionResult.rotation = NDRotationEnumRotation345;
+			s_kReverseRotaionResult.reverse = false;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation345;
 		}
 		else
 		{
-			reverseRotaionResult.reverse = true;
-			reverseRotaionResult.rotation = NDRotationEnumRotation15;
+			s_kReverseRotaionResult.reverse = true;
+			s_kReverseRotaionResult.rotation = NDRotationEnumRotation15;
 		}
 		break;
 	}
 
-	return reverseRotaionResult;
+	return s_kReverseRotaionResult;
 }
 
 CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 {
-	NDAnimation *animation = m_BelongAnimation;
-	NDAnimationGroup *animationGroup = animation->getBelongAnimationGroup();
-	NDEngine::NDSprite *sprite =
-			(NDEngine::NDSprite *) animationGroup->getRuningSprite();
+	NDAnimation *pkAnimation = m_BelongAnimation;
+	NDAnimationGroup *pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
+	NDEngine::NDSprite *pkSprite =
+			(NDEngine::NDSprite *) pkAnimationGroup->getRuningSprite();
 
-	CCTexture2D *tex = NULL;
-	if (sprite)
+	CCTexture2D *pkTexture = NULL;
+
+	if (pkSprite)
 	{
-		tex = sprite->getColorTexture(imageIndex, animationGroup);
-		if (tex)
+		pkTexture = pkSprite->getColorTexture(imageIndex, pkAnimationGroup);
+		if (pkTexture)
 		{
-			return tex;
+			return pkTexture;
 		}
 
-		if (sprite->IsNonRole())
+		if (pkSprite->IsNonRole())
 		{
-			std::vector < std::string > *vImg = animationGroup->getImages();
+			std::vector < std::string > *vImg = pkAnimationGroup->getImages();
 
 			if (vImg && vImg->size() > imageIndex)
 			{
-				tex = CCTextureCache::sharedTextureCache()->addImage(
+				pkTexture = CCTextureCache::sharedTextureCache()->addImage(
 						(*vImg)[imageIndex].c_str());
 			}
 		}
 
-		if (tex)
+		if (pkTexture)
 		{
-			return tex;
+			return pkTexture;
 		}
 	}
-	std::vector < std::string > *vImg = animationGroup->getImages();
+	std::vector < std::string > *vImg = pkAnimationGroup->getImages();
 	if (vImg && vImg->size() > imageIndex)
 	{
-		tex = CCTextureCache::sharedTextureCache()->addImage(
+		pkTexture = CCTextureCache::sharedTextureCache()->addImage(
 				(*vImg)[imageIndex].c_str());
 	}
 	//tex = CCTextureCache::sharedTextureCache()->addImage(animationGroup->getImages()->getObjectAtIndex(imageIndex);
@@ -1324,5 +1326,5 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 	 break;
 	 }*/
 
-	return tex;
+	return pkTexture;
 }
