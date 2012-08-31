@@ -112,7 +112,7 @@ public:
 //		作用：设置地图坐标点对应屏幕中心；如果超出地图的表现范围，则该点并不对应于屏幕的中心
 //		参数：p地图坐标点
 //		返回值：true 到边界了, false 还没到边界
-	bool SetScreenCenter(CGPoint p);
+	bool SetScreenCenter(CGPoint kPoint);
 //		
 //		函数：GetScreenCenter
 //		作用：获取屏幕中心点的地图坐标
@@ -156,7 +156,7 @@ public:
 private:
 	void MakeOrders();
 	void MakeOrdersOfMapscenesAndMapanimations();
-	int InsertIndex(int order, cocos2d::CCArray*/*<MAP_ORDER*>*/inArray);
+	int InsertIndex(int order, cocos2d::CCArray* inArray);
 	void QuickSort(cocos2d::CCArray*/*<MAP_ORDER*>*/array, int low, int high);
 	int Partition(cocos2d::CCArray*/*<MAP_ORDER*>*/array, int low, int high);
 
@@ -183,9 +183,9 @@ private:
 	cocos2d::CCArray* m_pkOrdersOfMapscenesAndMapanimations;
 	NDMapData *m_pkMapData;
 	cocos2d::CCMutableArray<cocos2d::CCMutableArray<NDFrameRunRecord*>*> *m_pkFrameRunRecordsOfMapAniGroups;
-	cocos2d::CCMutableArray<NDFrameRunRecord*> *m_frameRunRecordsOfMapSwitch;
+	cocos2d::CCMutableArray<NDFrameRunRecord*> *m_pkFrameRunRecordsOfMapSwitch;
 	NDAnimationGroup* m_pkSwitchAniGroup;
-	NDSprite *m_TreasureBox;
+	NDSprite *m_pkTreasureBox;
 	NDUILabel *m_lbTime;
 	NDUIImage *m_lbTitle;
 	NDUIImage *m_lbTitleBg;

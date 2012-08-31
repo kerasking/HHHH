@@ -133,7 +133,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	int x = 100;
 	int y = 100;
 
-	kPlayer.SetPositionEx(ccp(500, 500));		///< x * 32 + 16, y * 32 + 16
+	kPlayer.SetPositionEx(ccp(500, 200));		///< x * 32 + 16, y * 32 + 16
 	kPlayer.SetServerPositon(x, y);
 	kPlayer.m_nID = 1;
 	kPlayer.m_name = "¸ß¸»Ë§";

@@ -80,38 +80,38 @@ void NDTile::makeTex(float* pData)
 void NDTile::makeVetex(float* pData, CGRect kRect)
 {
 	//--------------->ÆÁÄ»×ø±ê
-	float *pv = pData;
+	float* pfVector = pData;
 	//int r=NDRotationEnumRotation15;
 	switch (m_Rotation)
 	{
 	case NDRotationEnumRotation0:
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + kRect.size.width;
-		*pv++ = pData[1];
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = pData[3];
-		*pv++ = pData[7];
-		*pv++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + kRect.size.width;
+		*pfVector++ = pData[1];
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = pData[3];
+		*pfVector++ = pData[7];
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation15:
 		//			NDLog("15");
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - kRect.size.height * COS15;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + COS15 * kRect.size.width;
-		*pv++ = pData[1] - SIN15 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + SIN15 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = pData[6] + COS15 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y - SIN15 * kRect.size.width;
-		*pv++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - kRect.size.height * COS15;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + COS15 * kRect.size.width;
+		*pfVector++ = pData[1] - SIN15 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + SIN15 * kRect.size.height;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = pData[6] + COS15 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - SIN15 * kRect.size.width;
+		*pfVector++ = 0;
 
 		//			*pv++		=	rect.origin.x+COS75*rect.size.height;
 		//			*pv++		=	m_MapSize.height - rect.origin.y - rect.size.height*SIN75-COS75*rect.size.width;
@@ -127,329 +127,329 @@ void NDTile::makeVetex(float* pData, CGRect kRect)
 		//			*pv++		=	0;
 		break;
 	case NDRotationEnumRotation30:
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - kRect.size.height * COS30;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + COS30 * kRect.size.width;
-		*pv++ = pData[1] - SIN30 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + SIN30 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = pData[6] + COS30 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y - SIN30 * kRect.size.width;
-		*pv++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - kRect.size.height * COS30;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + COS30 * kRect.size.width;
+		*pfVector++ = pData[1] - SIN30 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + SIN30 * kRect.size.height;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = pData[6] + COS30 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - SIN30 * kRect.size.width;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation45:
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - kRect.size.height * COS45;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + COS45 * kRect.size.width;
-		*pv++ = pData[1] - SIN45 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + SIN45 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = pData[6] + COS45 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y - SIN45 * kRect.size.width;
-		*pv++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - kRect.size.height * COS45;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + COS45 * kRect.size.width;
+		*pfVector++ = pData[1] - SIN45 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + SIN45 * kRect.size.height;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = pData[6] + COS45 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - SIN45 * kRect.size.width;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation60:
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - kRect.size.height * COS60;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + COS60 * kRect.size.width;
-		*pv++ = pData[1] - SIN60 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + SIN60 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = pData[6] + COS60 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y - SIN60 * kRect.size.width;
-		*pv++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - kRect.size.height * COS60;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + COS60 * kRect.size.width;
+		*pfVector++ = pData[1] - SIN60 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + SIN60 * kRect.size.height;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = pData[6] + COS60 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - SIN60 * kRect.size.width;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation75:
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - kRect.size.height * COS75;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + COS75 * kRect.size.width;
-		*pv++ = pData[1] - SIN75 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + SIN75 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = pData[6] + COS75 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y - SIN75 * kRect.size.width;
-		*pv++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - kRect.size.height * COS75;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + COS75 * kRect.size.width;
+		*pfVector++ = pData[1] - SIN75 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + SIN75 * kRect.size.height;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = pData[6] + COS75 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - SIN75 * kRect.size.width;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation90:
 
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = pData[0];
-		*pv++ = pData[1] - kRect.size.width;
-		*pv++ = 0;
-		*pv++ = pData[0] + kRect.size.height;
-		*pv++ = pData[1];
-		*pv++ = 0;
-		*pv++ = pData[6];
-		*pv++ = pData[4];
-		*pv++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = pData[0];
+		*pfVector++ = pData[1] - kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = pData[0] + kRect.size.height;
+		*pfVector++ = pData[1];
+		*pfVector++ = 0;
+		*pfVector++ = pData[6];
+		*pfVector++ = pData[4];
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation105:
 		//			NDLog("105");
-		*pv++ = kRect.origin.x + SIN15 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - COS15 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = pData[0] + COS15 * kRect.size.height;
-		*pv++ = pData[1] - SIN15 * kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + COS15 * kRect.size.height;
-		*pv++ = pData[4] - SIN15 * kRect.size.height;
-		*pv++ = 0;
+		*pfVector++ = kRect.origin.x + SIN15 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - COS15 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = pData[0] + COS15 * kRect.size.height;
+		*pfVector++ = pData[1] - SIN15 * kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + COS15 * kRect.size.height;
+		*pfVector++ = pData[4] - SIN15 * kRect.size.height;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation120:
 
-		*pv++ = kRect.origin.x + SIN30 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - COS30 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = pData[0] + COS30 * kRect.size.height;
-		*pv++ = pData[1] - SIN30 * kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + COS30 * kRect.size.height;
-		*pv++ = pData[4] - SIN30 * kRect.size.height;
-		*pv++ = 0;
+		*pfVector++ = kRect.origin.x + SIN30 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - COS30 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = pData[0] + COS30 * kRect.size.height;
+		*pfVector++ = pData[1] - SIN30 * kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + COS30 * kRect.size.height;
+		*pfVector++ = pData[4] - SIN30 * kRect.size.height;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation135:
 
-		*pv++ = kRect.origin.x + SIN45 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - COS45 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = pData[0] + COS45 * kRect.size.height;
-		*pv++ = pData[1] - SIN45 * kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + COS45 * kRect.size.height;
-		*pv++ = pData[4] - SIN45 * kRect.size.height;
-		*pv++ = 0;
+		*pfVector++ = kRect.origin.x + SIN45 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - COS45 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = pData[0] + COS45 * kRect.size.height;
+		*pfVector++ = pData[1] - SIN45 * kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + COS45 * kRect.size.height;
+		*pfVector++ = pData[4] - SIN45 * kRect.size.height;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation150:
 
-		*pv++ = kRect.origin.x + SIN60 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - COS60 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = pData[0] + COS60 * kRect.size.height;
-		*pv++ = pData[1] - SIN60 * kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + COS60 * kRect.size.height;
-		*pv++ = pData[4] - SIN60 * kRect.size.height;
-		*pv++ = 0;
+		*pfVector++ = kRect.origin.x + SIN60 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - COS60 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = pData[0] + COS60 * kRect.size.height;
+		*pfVector++ = pData[1] - SIN60 * kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + COS60 * kRect.size.height;
+		*pfVector++ = pData[4] - SIN60 * kRect.size.height;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation165:
 
-		*pv++ = kRect.origin.x + SIN75 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - COS75 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = pData[0] + COS75 * kRect.size.height;
-		*pv++ = pData[1] - SIN75 * kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + COS75 * kRect.size.height;
-		*pv++ = pData[4] - SIN75 * kRect.size.height;
-		*pv++ = 0;
+		*pfVector++ = kRect.origin.x + SIN75 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - COS75 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = pData[0] + COS75 * kRect.size.height;
+		*pfVector++ = pData[1] - SIN75 * kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + COS75 * kRect.size.height;
+		*pfVector++ = pData[4] - SIN75 * kRect.size.height;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation180:
-		*pv++ = kRect.origin.x + kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = pData[1];
-		*pv++ = 0;
-		*pv++ = pData[0];
-		*pv++ = m_MapSize.height - kRect.origin.y - kRect.size.height;
-		*pv++ = 0;
-		*pv++ = pData[3];
-		*pv++ = pData[7];
-		*pv++ = 0;
+		*pfVector++ = kRect.origin.x + kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = pData[1];
+		*pfVector++ = 0;
+		*pfVector++ = pData[0];
+		*pfVector++ = m_MapSize.height - kRect.origin.y - kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = pData[3];
+		*pfVector++ = pData[7];
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation195:
-		*pv++ = kRect.origin.x + COS15 * kRect.size.width
+		*pfVector++ = kRect.origin.x + COS15 * kRect.size.width
 				+ SIN15 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y - SIN15 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + SIN15 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + COS15 * kRect.size.width;
-		*pv++ = pData[1] - COS15 * kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - COS15 * kRect.size.height;
-		*pv++ = 0;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - SIN15 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + SIN15 * kRect.size.height;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + COS15 * kRect.size.width;
+		*pfVector++ = pData[1] - COS15 * kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - COS15 * kRect.size.height;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation210:
-		*pv++ = kRect.origin.x + COS30 * kRect.size.width
+		*pfVector++ = kRect.origin.x + COS30 * kRect.size.width
 				+ SIN30 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y - SIN30 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + SIN30 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + COS30 * kRect.size.width;
-		*pv++ = pData[1] - COS30 * kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - COS30 * kRect.size.height;
-		*pv++ = 0;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - SIN30 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + SIN30 * kRect.size.height;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + COS30 * kRect.size.width;
+		*pfVector++ = pData[1] - COS30 * kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - COS30 * kRect.size.height;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation225:
-		*pv++ = kRect.origin.x + COS45 * kRect.size.width
+		*pfVector++ = kRect.origin.x + COS45 * kRect.size.width
 				+ SIN45 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y - SIN45 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + SIN45 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + COS45 * kRect.size.width;
-		*pv++ = pData[1] - COS45 * kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - COS45 * kRect.size.height;
-		*pv++ = 0;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - SIN45 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + SIN45 * kRect.size.height;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + COS45 * kRect.size.width;
+		*pfVector++ = pData[1] - COS45 * kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - COS45 * kRect.size.height;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation240:
-		*pv++ = kRect.origin.x + COS60 * kRect.size.width
+		*pfVector++ = kRect.origin.x + COS60 * kRect.size.width
 				+ SIN60 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y - SIN60 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + SIN60 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + COS60 * kRect.size.width;
-		*pv++ = pData[1] - COS60 * kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - COS60 * kRect.size.height;
-		*pv++ = 0;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - SIN60 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + SIN60 * kRect.size.height;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + COS60 * kRect.size.width;
+		*pfVector++ = pData[1] - COS60 * kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - COS60 * kRect.size.height;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation255:
-		*pv++ = kRect.origin.x + COS75 * kRect.size.width
+		*pfVector++ = kRect.origin.x + COS75 * kRect.size.width
 				+ SIN75 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y - SIN75 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + SIN75 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + COS75 * kRect.size.width;
-		*pv++ = pData[1] - COS75 * kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - COS75 * kRect.size.height;
-		*pv++ = 0;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - SIN75 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + SIN75 * kRect.size.height;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + COS75 * kRect.size.width;
+		*pfVector++ = pData[1] - COS75 * kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - COS75 * kRect.size.height;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation270:
-		*pv++ = kRect.origin.x + kRect.size.height;
-		*pv++ = m_MapSize.height - (kRect.origin.y + kRect.size.width);
-		*pv++ = 0;
-		*pv++ = pData[0];
-		*pv++ = pData[1] + kRect.size.width;
-		*pv++ = 0;
-		*pv++ = pData[0] - kRect.size.height;
-		*pv++ = pData[1];
-		*pv++ = 0;
-		*pv++ = pData[6];
-		*pv++ = pData[4];
-		*pv++ = 0;
+		*pfVector++ = kRect.origin.x + kRect.size.height;
+		*pfVector++ = m_MapSize.height - (kRect.origin.y + kRect.size.width);
+		*pfVector++ = 0;
+		*pfVector++ = pData[0];
+		*pfVector++ = pData[1] + kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = pData[0] - kRect.size.height;
+		*pfVector++ = pData[1];
+		*pfVector++ = 0;
+		*pfVector++ = pData[6];
+		*pfVector++ = pData[4];
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation285:
-		*pv++ = kRect.origin.x + COS15 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y - kRect.size.height * SIN15
+		*pfVector++ = kRect.origin.x + COS15 * kRect.size.height;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - kRect.size.height * SIN15
 				- COS15 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = pData[0] + SIN15 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y - SIN15 * kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - COS15 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + SIN15 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
+		*pfVector++ = 0;
+		*pfVector++ = pData[0] + SIN15 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - SIN15 * kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - COS15 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + SIN15 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation300:
-		*pv++ = kRect.origin.x + COS30 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y - kRect.size.height * SIN30
+		*pfVector++ = kRect.origin.x + COS30 * kRect.size.height;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - kRect.size.height * SIN30
 				- COS30 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = pData[0] + SIN30 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y - SIN30 * kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - COS30 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + SIN30 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
+		*pfVector++ = 0;
+		*pfVector++ = pData[0] + SIN30 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - SIN30 * kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - COS30 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + SIN30 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation315:
-		*pv++ = kRect.origin.x + COS45 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y - kRect.size.height * SIN45
+		*pfVector++ = kRect.origin.x + COS45 * kRect.size.height;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - kRect.size.height * SIN45
 				- COS45 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = pData[0] + SIN45 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y - SIN45 * kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - COS45 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + SIN45 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
+		*pfVector++ = 0;
+		*pfVector++ = pData[0] + SIN45 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - SIN45 * kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - COS45 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + SIN45 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation330:
-		*pv++ = kRect.origin.x + COS60 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y - kRect.size.height * SIN60
+		*pfVector++ = kRect.origin.x + COS60 * kRect.size.height;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - kRect.size.height * SIN60
 				- COS60 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = pData[0] + SIN60 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y - SIN60 * kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - COS60 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + SIN60 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
+		*pfVector++ = 0;
+		*pfVector++ = pData[0] + SIN60 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - SIN60 * kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - COS60 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + SIN60 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation345:
 		//			NDLog("345");
-		*pv++ = kRect.origin.x + COS75 * kRect.size.height;
-		*pv++ = m_MapSize.height - kRect.origin.y - kRect.size.height * SIN75
+		*pfVector++ = kRect.origin.x + COS75 * kRect.size.height;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - kRect.size.height * SIN75
 				- COS75 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = pData[0] + SIN75 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y - SIN75 * kRect.size.height;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x;
-		*pv++ = m_MapSize.height - kRect.origin.y - COS75 * kRect.size.width;
-		*pv++ = 0;
-		*pv++ = kRect.origin.x + SIN75 * kRect.size.width;
-		*pv++ = m_MapSize.height - kRect.origin.y;
-		*pv++ = 0;
+		*pfVector++ = 0;
+		*pfVector++ = pData[0] + SIN75 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - SIN75 * kRect.size.height;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x;
+		*pfVector++ = m_MapSize.height - kRect.origin.y - COS75 * kRect.size.width;
+		*pfVector++ = 0;
+		*pfVector++ = kRect.origin.x + SIN75 * kRect.size.width;
+		*pfVector++ = m_MapSize.height - kRect.origin.y;
+		*pfVector++ = 0;
 		break;
 	default:
 		break;
@@ -523,15 +523,15 @@ void NDTile::drawSubRect(CGRect rect)
 	float vertices[12] =
 	{ 0.0f };
 
-	CGRect drawRect;
-	drawRect.origin.x = m_kDrawRect.origin.x
+	CGRect kDrawRect;
+	kDrawRect.origin.x = m_kDrawRect.origin.x
 			+ rect.origin.x * m_kDrawRect.size.width;
-	drawRect.origin.y = m_kDrawRect.origin.y
+	kDrawRect.origin.y = m_kDrawRect.origin.y
 			+ rect.origin.y * m_kDrawRect.size.height;
-	drawRect.size.width = rect.size.width * m_kDrawRect.size.width;
-	drawRect.size.height = rect.size.height * m_kDrawRect.size.height;
+	kDrawRect.size.width = rect.size.width * m_kDrawRect.size.width;
+	kDrawRect.size.height = rect.size.height * m_kDrawRect.size.height;
 
-	this->makeVetex(vertices, drawRect);
+	this->makeVetex(vertices, kDrawRect);
 
 	if (m_pkTexture)
 	{

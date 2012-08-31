@@ -655,7 +655,10 @@ void NDMapData::decode(FILE* pkStream)
 				NDAnimationGroupPool::defaultPool()->addObjectWithSceneAnimationId(
 						identifer);
 		if (!aniGroup)
+		{
 			continue;
+		}
+
 		m_AnimationGroups->addObject(aniGroup);
 		aniGroup->release();
 

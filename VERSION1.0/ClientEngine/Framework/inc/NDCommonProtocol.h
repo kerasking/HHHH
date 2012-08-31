@@ -27,9 +27,13 @@ namespace NDEngine
 
 class NDCommonProtocol: public NDObject
 {
-DECLARE_CLASS (NDCommonProtocol)
+	DECLARE_CLASS (NDCommonProtocol)
+
 	NDCommonProtocol();
-	virtual ~NDCommonProtocol();DECLARE_PROTOCOLAUTOLINK(NDCommonProtocol)INTERFACE_PROTOCOLAUTOLINK(NDCommonProtocol)
+	virtual ~NDCommonProtocol();
+	
+	DECLARE_PROTOCOLAUTOLINK(NDCommonProtocol)
+	INTERFACE_PROTOCOLAUTOLINK(NDCommonProtocol)
 
 public:
 	virtual bool CanHorizontalMove(NDObject* object, float& hDistance)
