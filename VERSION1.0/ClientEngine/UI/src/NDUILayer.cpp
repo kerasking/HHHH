@@ -28,6 +28,7 @@
 #include "CCImage.h"
 #include "NDUIBaseGraphics.h"
 #include "Utility.h"
+#include "NDDirector.h"
 
 using namespace cocos2d;
 
@@ -339,9 +340,14 @@ namespace NDEngine
 		}
 		
 		m_dispatchTouchEndEvent = true;
-		m_beginTouch = touch->GetLocation();		
+		m_beginTouch = touch->GetLocation();
+		//add by zhangdi 20120828
+		float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+		CGPoint tmpTouch = CGPointMake(m_beginTouch.x*scale, m_beginTouch.y*scale);
+		m_beginTouch = tmpTouch;
 		
-		if (CGRectContainsPoint(this->GetScreenRect(), m_beginTouch) && this->IsVisibled() && this->EventEnabled()) 
+		if (CGRectContainsPoint(this->GetScreenRect(), m_beginTouch) && this->IsVisibled() && this->EventEnabled())
+		//if (CGRectContainsPoint(CGRectMake(0, 0, 960, 640), m_beginTouch) && this->IsVisibled() && this->EventEnabled())
 		{
 			this->DispatchTouchBeginEvent(m_beginTouch);
 			printf("\nbegin x[%.1f]y[%.1f]", m_beginTouch.x, m_beginTouch.y);
@@ -361,6 +367,10 @@ namespace NDEngine
 	bool NDUILayer::TouchEnd(NDTouch* touch)
 	{	
 		m_endTouch = touch->GetLocation();
+		//add by zhangdi 20120828
+		float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+		CGPoint tmpTouch = CGPointMake(m_endTouch.x*scale, m_endTouch.y*scale);
+		m_endTouch = tmpTouch;
 		
 		
 		if (m_dragOverNode)
@@ -393,7 +403,11 @@ namespace NDEngine
 	
 		
 		if (m_dispatchTouchEndEvent && !m_layerMoved) 
-		{			
+		{
+			//add by zhangdi 20120828
+// 			float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+// 			CGPoint beginTouch = CGPointMake(m_beginTouch.x*scale, m_beginTouch.y*scale);
+//			if ( this->DispatchTouchEndEvent(beginTouch, beginTouch) )
 			if ( this->DispatchTouchEndEvent(m_beginTouch, m_beginTouch) )
 			{
 				return true;

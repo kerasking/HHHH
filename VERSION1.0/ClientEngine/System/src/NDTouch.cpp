@@ -49,22 +49,22 @@ namespace NDEngine
 		//m_location = [touch locationInView:[[CCDirector sharedDirector] openGLView]];
 		//m_previousLocation = [touch previousLocationInView:[[CCDirector sharedDirector] openGLView]];
 		// todo(zjh)
-		//m_location = CCTouchDispatcher::sharedDispatcher()->GetCurPos();
-		//m_previousLocation = CCTouchDispatcher::sharedDispatcher()->GetPrePos();
-		if( CC_CONTENT_SCALE_FACTOR() == 1 )
-		{
-
-		}
-		else
-		{
-			m_location.x=m_location.x*2;
-			m_location.y=m_location.y*2;
-			m_previousLocation.x=m_previousLocation.x*2;
-			m_previousLocation.y=m_previousLocation.y*2;
-		}	
-		m_location = CGPointMake(m_location.y , NDDirector::DefaultDirector()->GetWinSize().height - m_location.x ); 
-
-		m_previousLocation = CGPointMake(m_previousLocation.y , NDDirector::DefaultDirector()->GetWinSize().height - m_previousLocation.x);
+		m_location = CCTouchDispatcher::sharedDispatcher()->getCurPos();
+		m_previousLocation = CCTouchDispatcher::sharedDispatcher()->getPrePos();
+// 		if( CC_CONTENT_SCALE_FACTOR() == 1 )
+// 		{
+// 
+// 		}
+// 		else
+// 		{
+// 			m_location.x=m_location.x*2;
+// 			m_location.y=m_location.y*2;
+// 			m_previousLocation.x=m_previousLocation.x*2;
+// 			m_previousLocation.y=m_previousLocation.y*2;
+// 		}	
+// 		m_location = CGPointMake(m_location.y , NDDirector::DefaultDirector()->GetWinSize().height - m_location.x ); 
+// 
+// 		m_previousLocation = CGPointMake(m_previousLocation.y , NDDirector::DefaultDirector()->GetWinSize().height - m_previousLocation.x);
 	}
 	
 	void NDTouch::Initialization(unsigned int tapCount, CGPoint location, CGPoint previousLocation)

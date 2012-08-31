@@ -99,7 +99,7 @@ namespace NDEngine
 		ScriptMgr kScriptManager = ScriptMgr::GetSingleton();
 
 		pkDirector->Initialization();
-		pkDirector->RunScene(CSMGameScene::Scene());
+		pkDirector->RunScene(CSMLoginScene::Scene());
 
 		ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
 		NDScriptGameData* pkData = new NDScriptGameData;
@@ -115,7 +115,7 @@ namespace NDEngine
 
 		kScriptManager.Load();
 
-		ScriptGlobalEvent::OnEvent(GE_GENERATE_GAMESCENE);
+		ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
 
 		return true;
 	}
