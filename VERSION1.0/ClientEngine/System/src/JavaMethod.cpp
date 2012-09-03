@@ -9,9 +9,9 @@
 #include "JavaMethod.h"
 #include "Utility.h"
 
-int FileOp::readByte(FILE* f)
+int FileOp::readByte(FILE* pkFile)
 {
-	if (!f)
+	if (!pkFile)
 	{
 		NDAsssert(0);
 		return 0;
@@ -19,7 +19,7 @@ int FileOp::readByte(FILE* f)
 
 	size_t size = sizeof(unsigned char);
 	unsigned char ucData = 0;
-	size_t read = fread(&ucData, 1, size, f);
+	size_t read = fread(&ucData, 1, size, pkFile);
 	if (size != read)
 	{
 		NDAsssert(0);

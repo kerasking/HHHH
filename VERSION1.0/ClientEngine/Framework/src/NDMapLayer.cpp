@@ -1448,7 +1448,7 @@ void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 		NDSceneTile *pkSceneTile =
 				(NDSceneTile *) m_pkMapData->getSceneTiles()->objectAtIndex(i);
 
-		int orderId = 0;//pkSceneTile->getOrderID();
+		int orderId = (short)pkSceneTile->getOrderID();
 
 		MAP_ORDER *dict = new MAP_ORDER;
 

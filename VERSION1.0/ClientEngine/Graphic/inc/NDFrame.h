@@ -80,7 +80,7 @@ public:
 	void drawHeadAt(CGPoint pos);
 
 private:
-	int m_count;
+
 	bool m_needInitTitles;
 	cocos2d::CCMutableArray<NDTile*>* m_pkTiles;
 

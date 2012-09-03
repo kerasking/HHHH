@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\..\Bin\$(ConfigurationName)"
-			IntermediateDirectory="..\..\..\Obj\$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="..\..\..\..\..\Bin\$(ConfigurationName)"
+			IntermediateDirectory="..\..\..\..\..\Obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			>
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
-				CommandLine="if not exist &quot;..\..\..\Lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;if not exist &quot;..\..\..\Bin\$(ConfigurationName)&quot; mkdir &quot;..\..\..\Bin\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.lib&quot; &quot;..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.dll&quot; &quot;..\..\..\Bin\$(ConfigurationName)&quot;"
+				CommandLine="if not exist &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;if not exist &quot;..\..\..\..\..\Bin\$(ConfigurationName)&quot; mkdir &quot;..\..\..\..\..\Bin\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.lib&quot; &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.dll&quot; &quot;..\..\..\..\..\Bin\$(ConfigurationName)&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -73,7 +73,7 @@
 				IgnoreDefaultLibraryNames=" "
 				GenerateDebugInformation="true"
 				SubSystem="2"
-				ImportLibrary="..\..\..\Lib\$(ConfigurationName)\$(TargetName).lib"
+				ImportLibrary="..\..\..\..\..\Lib\$(ConfigurationName)\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -101,8 +101,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\..\Bin\$(ConfigurationName)"
-			IntermediateDirectory="..\..\..\Obj\$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="..\..\..\..\..\Bin\$(ConfigurationName)"
+			IntermediateDirectory="..\..\..\..\..\Obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			>
@@ -141,7 +141,7 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
-				CommandLine="if not exist &quot;..\..\..\Lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;if not exist &quot;..\..\..\Bin\$(ConfigurationName)&quot; mkdir &quot;..\..\..\Bin\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.lib&quot; &quot;..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.dll&quot; &quot;..\..\..\Bin\$(ConfigurationName)&quot;"
+				CommandLine="if not exist &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;if not exist &quot;..\..\..\..\..\Bin\$(ConfigurationName)&quot; mkdir &quot;..\..\..\..\..\Bin\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.lib&quot; &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.dll&quot; &quot;..\..\..\..\..\Bin\$(ConfigurationName)&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -154,7 +154,7 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				ImportLibrary="..\..\..\Lib\$(ConfigurationName)\$(TargetName).lib"
+				ImportLibrary="..\..\..\..\..\Lib\$(ConfigurationName)\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool

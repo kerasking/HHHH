@@ -18,7 +18,7 @@
 //调用完成之后请关闭流
 struct FileOp
 {
-	int readByte(FILE* f);
+	int readByte(FILE* pkFile);
 
 	int readShort(FILE* f);
 

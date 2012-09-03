@@ -143,7 +143,6 @@ m_nEnduration(0),
 m_BelongAnimation(NULL),
 m_SubAnimationGroups(NULL),
 m_FrameTiles(NULL),
-m_count(0),
 m_needInitTitles(true)
 {
 	m_SubAnimationGroups = new CCMutableArray<NDAnimationGroup*>();
