@@ -315,10 +315,10 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	 **/
 
-	//if (AutoPathTipObj.IsWorking())
-	//{
-	//	AutoPathTipObj.Stop();
-	//}
+	if (AutoPathTipObj.IsWorking())
+	{
+		AutoPathTipObj.Stop();
+	}
 	//
 	//if (ScriptMgrObj.excuteLuaFunc("CloseMainUI", ""))
 	//{
@@ -335,44 +335,15 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 	//
 	//bool bNpcPath = false;
 	//
-	//NDScene* runningScene = NDDirector::DefaultDirector()->GetRunningScene();
-	//if (runningScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene)))
-	//{
-	//	CSMGameScene* gameScene = (CSMGameScene*)runningScene;
-	//	if (!NDUISynLayer::IsShown())// && !gameScene->IsUIShow())
-	//	{
-	//		do {
-	//
-	//		bool bDealed = false;
-	//		// 1.ÏÈ´¦Àínpc
-
-// 				NDMapMgr::VEC_NPC& npclist = NDMapMgrObj.m_vNpc;
-// 				for (NDMapMgr::vec_npc_it it = npclist.begin(); it != npclist.end(); it++) 
-// 				{
-// 					NDNpc* npc = *it;
-// 				
-// 					if (npc && npc->IsPointInside(point))
-// 					{
-// 						int dis = NDMapMgrObj.getDistBetweenRole(this, npc);
-// 						
-// 						CGPoint pos;
-// 						
-// 						if ( dis < FOCUS_JUDGE_DISTANCE )
-// 						{
-// 							SendNpcInteractionMessage(npc->m_id);
-// 							return false;
-// 						}
-// 						else if (npc->getNearestPoint(this->GetPosition(), pos))
-// 						{
-// 							point = pos;
-// 							AutoPathTipObj.work(npc->m_name);
-// 							bDealed = true;
-// 							bNpcPath = true;
-// 							break;
-// 							
-// 						}
-// 					}
-	//}
+	NDScene* runningScene = NDDirector::DefaultDirector()->GetRunningScene();
+	if (runningScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene)))
+	{
+		CSMGameScene* gameScene = (CSMGameScene*)runningScene;
+		if (!NDUISynLayer::IsShown())// && !gameScene->IsUIShow())
+		{
+			int a = 10;
+		}
+	}
 // 
 // 
 // 				if (bDealed)
@@ -427,10 +398,10 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 // 			}
 // 		}
 // 		
-// 		if (bPath || bNpcPath)
-// 		{
-// 			NDPlayer::defaultHero().Walk(point, SpriteSpeedStep4);
-// 		}
+ 		if (bPath)
+ 		{
+ 			NDPlayer::defaultHero().Walk(point, SpriteSpeedStep4);
+ 		}
 // 		
 // 		if (m_pointList.empty())
 // 		{
@@ -449,8 +420,8 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 
 	return true;
 }
+
 void NDPlayer::stopMoving(bool bResetPos/*=true*/, bool bResetTeamPos/*=true*/)
-hide
 {
 	/***
 	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
@@ -511,10 +482,18 @@ int NDPlayer::GetOrder()
 
 void NDPlayer::Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 {
-	if (!isRoleCanMove())
-	{
-		return;
-	}
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* begin
+	*/
+// 	if (!isRoleCanMove())
+// 	{
+// 		return;
+// 	}
+	/***
+	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	* end
+	*/
 
 	CGPoint kPos = CGPointMake(
 			int(toPos.x) / MAP_UNITSIZE * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
@@ -588,7 +567,7 @@ void NDPlayer::SetPosition(CGPoint newPosition)
 // 						teamSetServerDir(dir);
 // 					}
 // 				
-// 					processSwitch();
+ 					//processSwitch();
 // 					
 // 					if (m_iDacoityStep < MAX_DACOITY_STEP) m_iDacoityStep++;
 // 					

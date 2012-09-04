@@ -883,10 +883,15 @@ void NDMapLayer::DrawScenesAndAnimations()
 CGPoint NDMapLayer::ConvertToMapPoint(CGPoint screenPoint)
 {
 	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-	return ccpAdd(
-			ccpSub(screenPoint,
-					CGPointMake(winSize.width / 2, winSize.height / 2)),
-			m_kScreenCenter);
+
+	CGPoint kPoint = ccpAdd(
+		ccpSub(screenPoint,
+		CGPointMake(winSize.width / 2, winSize.height / 2)),
+		m_kScreenCenter);
+
+	//kPoint.y = m_kScreenCenter.y - kPoint.y;
+
+	return kPoint;
 }
 
 bool NDMapLayer::isMapPointInScreen(CGPoint mapPoint)

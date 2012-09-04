@@ -650,10 +650,10 @@ void NDMapData::decode(FILE* pkStream)
 
 	for (int i = 0; i < m_AniGroupCount; i++)
 	{
-		int identifer = kFileOp.readShort(pkStream);			//¶¯»­id
+		int nIdentifer = kFileOp.readShort(pkStream);			//¶¯»­id
 		NDAnimationGroup *aniGroup =
 				NDAnimationGroupPool::defaultPool()->addObjectWithSceneAnimationId(
-						identifer);
+						nIdentifer);
 		if (!aniGroup)
 		{
 			continue;

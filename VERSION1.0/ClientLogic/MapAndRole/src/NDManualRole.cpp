@@ -397,6 +397,8 @@ void NDManualRole::OnMoving(bool bLastPos)
 	 * @end
 	 */
 
+	int a = 10;
+
 	//if (isTeamLeader())
 //		{
 //			processTeamMemberOnMove(eMoveTypeMoving);

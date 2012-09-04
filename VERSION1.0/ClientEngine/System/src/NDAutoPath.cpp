@@ -207,10 +207,10 @@ void NDAutoPath::GetPath()
 	{
 		int iTimes = MAP_UNITSIZE / m_nStep;
 
-		CGPoint pos;
-		NodeInfo* node = path[0];
-		pos.x = node->nX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
-		pos.y = node->nY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
+		CGPoint kPos;
+		NodeInfo* pkNode = path[0];
+		kPos.x = pkNode->nX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
+		kPos.y = pkNode->nY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
 
 		for (int index = 0; index < nCount - 1; index++)
 		{
@@ -269,10 +269,10 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						pos.y -= m_nStep;
-						pos.x -= m_nStep;
+						kPos.y -= m_nStep;
+						kPos.x -= m_nStep;
 
-						m_pointVector.push_back(pos);
+						m_pointVector.push_back(kPos);
 					}
 				}
 				else if (first.nY < second.nY)
@@ -280,10 +280,10 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						pos.y += m_nStep;
-						pos.x -= m_nStep;
+						kPos.y += m_nStep;
+						kPos.x -= m_nStep;
 
-						m_pointVector.push_back(pos);
+						m_pointVector.push_back(kPos);
 					}
 				}
 				else if (first.nY == second.nY)
@@ -291,9 +291,9 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						pos.x -= m_nStep;
+						kPos.x -= m_nStep;
 
-						m_pointVector.push_back(pos);
+						m_pointVector.push_back(kPos);
 					}
 				}
 			}
@@ -304,10 +304,10 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						pos.y -= m_nStep;
-						pos.x += m_nStep;
+						kPos.y -= m_nStep;
+						kPos.x += m_nStep;
 
-						m_pointVector.push_back(pos);
+						m_pointVector.push_back(kPos);
 					}
 				}
 				else if (first.nY < second.nY)
@@ -315,10 +315,10 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						pos.y += m_nStep;
-						pos.x += m_nStep;
+						kPos.y += m_nStep;
+						kPos.x += m_nStep;
 
-						m_pointVector.push_back(pos);
+						m_pointVector.push_back(kPos);
 					}
 				}
 				else if (first.nY == second.nY)
@@ -326,9 +326,9 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						pos.x += m_nStep;
+						kPos.x += m_nStep;
 
-						m_pointVector.push_back(pos);
+						m_pointVector.push_back(kPos);
 					}
 				}
 			}
@@ -339,9 +339,9 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						pos.y -= m_nStep;
+						kPos.y -= m_nStep;
 
-						m_pointVector.push_back(pos);
+						m_pointVector.push_back(kPos);
 					}
 				}
 				else if (first.nY < second.nY)
@@ -349,9 +349,9 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						pos.y += m_nStep;
+						kPos.y += m_nStep;
 
-						m_pointVector.push_back(pos);
+						m_pointVector.push_back(kPos);
 					}
 				}
 				else if (first.nY == second.nY)

@@ -39,13 +39,13 @@ IMPLEMENT_CLASS(NDMapLayerLogic, NDMapLayer)
 NDMapLayerLogic::NDMapLayerLogic()
 {
 	//m_doubleTimeStamp = [NSDate timeIntervalSinceReferenceDate];  ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	
+
 	m_timer.SetTimer(this, TAG_MAP_UPDTAE, 0.01f);
-	
+
 	SetLongTouch(false);
-	
-	m_posTouch	= CGPointZero;
-	
+
+	m_posTouch = CGPointZero;
+
 	SetPathing(false);
 }
 
@@ -60,9 +60,9 @@ void NDMapLayerLogic::DidFinishLaunching()
 bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 {
 	/***
-	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	* begin
-	*/
+	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	 * begin
+	 */
 
 // 	if (this->isAutoFight()){
 // 		NDMonster* boss = NDMapMgrObj.GetBoss();
@@ -71,23 +71,22 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 // 			return false;
 // 		}
 // 	}
-
 	/***
-	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	* end
-	*/
-	
+	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	 * end
+	 */
+
 	SetPathing(false);
-	
+
 	SetLongTouch(false);
 
 	m_posTouch = touch->GetLocation();
-	CGPoint touchPoint=this->ConvertToMapPoint(m_posTouch);
+	CGPoint touchPoint = this->ConvertToMapPoint(m_posTouch);
 
 	/***
-	* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	* begin
-	*/
+	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	 * begin
+	 */
 // 	if(isTouchTreasureBox(touchPoint))
 // 	{
 // 		NDLog("touch treasureBox");
@@ -95,46 +94,45 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 // 		return false;
 // 	}
 	/**
-	* end
-	*/
+	 * end
+	 */
 	//if ( NDPlayer::defaultHero().ClickPoint(touchPoint, false) )
 //	{
 //		m_timer.SetTimer(this, TAG_MAP_LONGTOUCH, LONG_TOUCH_INTERVAL);
 //	}
-	
 	if (!NDPlayer::defaultHero().DealClickPointInSideNpc(touchPoint))
 	{
 		SetPathing(true);
 	}
-	
+
 	m_timer.SetTimer(this, TAG_MAP_LONGTOUCH, LONG_TOUCH_INTERVAL);
-	
+
 	//ShowTreasureBox();
 
 	return true;
 }
 
 bool NDMapLayerLogic::TouchEnd(NDTouch* touch)
-{	
-	NDPlayer& player = NDPlayer::defaultHero();
-	
-	if (!player.ClickPoint(this->ConvertToMapPoint(touch->GetLocation()), false, IsPathing()))
+{
+	NDPlayer& kPlayer = NDPlayer::defaultHero();
+
+	if (!kPlayer.ClickPoint(this->ConvertToMapPoint(touch->GetLocation()),
+			false, IsPathing()))
 	{
-		player.stopMoving();
+		kPlayer.stopMoving();
 	}
-	
-	player.CancelClickPointInSideNpc();
-	
+
+	kPlayer.CancelClickPointInSideNpc();
+
 	m_timer.KillTimer(this, TAG_MAP_LONGTOUCH_STATE);
 	m_timer.KillTimer(this, TAG_MAP_LONGTOUCH);
-	
+
 	return true;
 //	
 //	SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
 //	NSString *effectFile = [NSString stringWithUTF8String:NDPath::GetSoundPath().append("press.wav").c_str()];
 //	[audioEngine playEffect:effectFile loop:NO];
 
-	
 //	NDPlayer::defaultHero().Walk(point, SpriteSpeedStep4);
 //	NDTransData bao(_MSG_BATTLEACT);
 //	bao << (unsigned char)BATTLE_ACT_CREATE // ActionÖµ
@@ -147,12 +145,12 @@ bool NDMapLayerLogic::TouchEnd(NDTouch* touch)
 
 void NDMapLayerLogic::TouchCancelled(NDTouch* touch)
 {
-	
+
 }
 
 bool NDMapLayerLogic::TouchMoved(NDTouch* touch)
 {
-	m_posTouch	= touch->GetLocation();
+	m_posTouch = touch->GetLocation();
 	return true;
 }
 
@@ -163,19 +161,18 @@ void NDMapLayerLogic::Update(unsigned long ulDiff)
 
 void NDMapLayerLogic::OnTimer(OBJID tag)
 {
-	if ( !(tag == TAG_MAP_UPDTAE || 
-		   tag == TAG_MAP_LONGTOUCH ||
-		   tag == TAG_MAP_LONGTOUCH_STATE)  )
-	{	
+	if (!(tag == TAG_MAP_UPDTAE || tag == TAG_MAP_LONGTOUCH
+			|| tag == TAG_MAP_LONGTOUCH_STATE))
+	{
 		NDMapLayer::OnTimer(tag);
 		return;
 	}
-	
+
 	if (tag == TAG_MAP_UPDTAE)
 	{
 		double oldTimeStamp = m_doubleTimeStamp;
 		//m_doubleTimeStamp = [NSDate timeIntervalSinceReferenceDate]; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		Update( (unsigned long)( (m_doubleTimeStamp - oldTimeStamp) * 1000 ) );
+		Update((unsigned long) ((m_doubleTimeStamp - oldTimeStamp) * 1000));
 	}
 	else if (tag == TAG_MAP_LONGTOUCH)
 	{
@@ -185,18 +182,20 @@ void NDMapLayerLogic::OnTimer(OBJID tag)
 	}
 	else if (tag == TAG_MAP_LONGTOUCH_STATE)
 	{
-		if (IsPathing() && !NDPlayer::defaultHero().
-			ClickPoint(this->ConvertToMapPoint(m_posTouch), true) )
+		if (IsPathing()
+				&& !NDPlayer::defaultHero().ClickPoint(
+						this->ConvertToMapPoint(m_posTouch), true))
 		{
 			SetLongTouch(false);
-			
+
 			m_timer.KillTimer(this, TAG_MAP_LONGTOUCH_STATE);
 			m_timer.KillTimer(this, TAG_MAP_LONGTOUCH);
 		}
-		
+
 		if (!IsPathing())
 		{
-			NDPlayer::defaultHero().DealClickPointInSideNpc(this->ConvertToMapPoint(m_posTouch));
+			NDPlayer::defaultHero().DealClickPointInSideNpc(
+					this->ConvertToMapPoint(m_posTouch));
 		}
 	}
 }
@@ -213,7 +212,7 @@ bool NDMapLayerLogic::IsLongTouch()
 
 void NDMapLayerLogic::SetPathing(bool bPathing)
 {
-	m_bPathing	= bPathing;
+	m_bPathing = bPathing;
 }
 
 bool NDMapLayerLogic::IsPathing()
