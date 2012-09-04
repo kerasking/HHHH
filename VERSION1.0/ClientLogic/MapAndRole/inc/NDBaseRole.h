@@ -31,7 +31,10 @@ namespace NDEngine
 
 class NDNode;
 class NDRidePet;
-class NDBaseRole: public NDSprite, public NDNodeDelegate
+
+class NDBaseRole:
+	public NDSprite,
+	public NDNodeDelegate
 {
 	DECLARE_CLASS (NDBaseRole)
 public:

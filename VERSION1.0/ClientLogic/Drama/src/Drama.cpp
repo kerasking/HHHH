@@ -23,7 +23,7 @@ Drama::~Drama()
 void Drama::Start()
 {
 	End();
-	
+
 	StartUpdate();
 }
 
@@ -40,7 +40,7 @@ void Drama::QuitGame()
 void Drama::End()
 {
 	EndUpdate();
-	
+
 	ReleaseQueue(true);
 	ReleaseQueue(false);
 }
@@ -65,29 +65,30 @@ void Drama::Update()
 			return;
 		}
 	}
-	
+
 	if (m_queueCommondExcute.empty())
 	{
 		End();
 		return;
 	}
-	
+
 	bool bFinish = true;
-	for (COMMANDQUE_IT it = m_queueCommondExcute.begin(); it != m_queueCommondExcute.end();) 
+	for (COMMANDQUE_IT it = m_queueCommondExcute.begin();
+			it != m_queueCommondExcute.end();)
 	{
 		DramaCommandBase* command = *it;
 		if (!command)
 		{
 			continue;
 		}
-		
+
 		command->SetPreCommandsFinish(bFinish);
 		command->excute();
 		if (!command->IsFinish() && bFinish)
 		{
 			bFinish = false;
 		}
-		
+
 		if (command->IsFinish())
 		{
 			delete command;
@@ -98,7 +99,7 @@ void Drama::Update()
 			it++;
 		}
 	}
-	
+
 	if (bFinish)
 	{
 		ReleaseQueue(true);
@@ -111,7 +112,7 @@ void Drama::OnTimer(OBJID tag)
 	{
 		return;
 	}
-	
+
 	Update();
 }
 
@@ -121,20 +122,20 @@ bool Drama::FillExcuteQueue()
 	{
 		return false;
 	}
-	
+
 	DramaCommandBase* command = NULL;
-	
-	while ( 0 < m_queueCommond.size() && (command = m_queueCommond.front()) ) 
+
+	while (0 < m_queueCommond.size() && (command = m_queueCommond.front()))
 	{
 		m_queueCommondExcute.push_back(command);
 		m_queueCommond.pop_front();
-		
+
 		if (!command->CanExcuteNextCommand())
 		{
 			break;
 		}
 	}
-	
+
 	return true;
 }
 
@@ -142,24 +143,26 @@ bool Drama::ReleaseQueue(bool bExcute)
 {
 	if (bExcute)
 	{
-		for (COMMANDQUE_IT it = m_queueCommondExcute.begin(); it != m_queueCommondExcute.end(); it++) 
+		for (COMMANDQUE_IT it = m_queueCommondExcute.begin();
+				it != m_queueCommondExcute.end(); it++)
 		{
 			DramaCommandBase* command = *it;
 			delete command;
 		}
-		
+
 		m_queueCommondExcute.clear();
 	}
-	else 
+	else
 	{
-		for (COMMANDQUE_IT it = m_queueCommond.begin(); it != m_queueCommond.end(); it++) 
+		for (COMMANDQUE_IT it = m_queueCommond.begin();
+				it != m_queueCommond.end(); it++)
 		{
 			DramaCommandBase* command = *it;
 			delete command;
 		}
-		
+
 		m_queueCommond.clear();
 	}
-	
+
 	return true;
 }

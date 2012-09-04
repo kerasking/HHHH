@@ -115,7 +115,7 @@ BOOL CAStar::FindPath(NDMapLayer* pGamemap, const CMyPos& posStart,
 		int x = pkCurrentNode->nX;
 		int y = pkCurrentNode->nY;
 
-		CCLog("Current Find:%d,%d   F:%d",x,y,pkCurrentNode->nF);
+		CCLog("X: %d  , Y:  %d",x,y);
 
 		if (NULL == pkCurrentNode)
 		{ ///\open表已经空了
@@ -281,6 +281,8 @@ void CAStar::SearchChild(NodeInfo* pParentNode)
 		posNewNode.x = posNode.x + nArrayX[i];
 		posNewNode.y = posNode.y + nArrayY[i];
 
+	//	CCLog("Add Node:%d,%d",posNewNode.x,posNewNode.y);
+
 		if (posNewNode.x < 0)
 			continue;
 		if (posNewNode.y < 0)
@@ -316,18 +318,20 @@ void CAStar::SearchChild(NodeInfo* pParentNode)
 		}
 		else if (pCheck = this->CheckList(m_setClose, nNumber)) //if没问题!
 		{ ///\已经存在close表中
-			pParentNode->pChildNode[pParentNode->nChildNum++] = pCheck;
-			if (nG < pCheck->nG)
-			{ ///\更新 G H
-				pCheck->pParent = pParentNode;
-				pCheck->nG = nG;
-				pCheck->nF = nG + pCheck->nH;
-				pCheck->nDir = i;
-				pCheck->nStep = pParentNode->nStep + 1;
-			}
+			//pParentNode->pChildNode[pParentNode->nChildNum++] = pCheck;
+			//if (nG < pCheck->nG)
+			//{ ///\更新 G H
+			//	pCheck->pParent = pParentNode;
+			//	pCheck->nG = nG;
+			//	pCheck->nF = nG + pCheck->nH;
+			//	pCheck->nDir = i;
+			//	pCheck->nStep = pParentNode->nStep + 1;
+			//}
 
-			//pCell[m_nMapWidth*posNewNode.y + posNewNode.x].nClose =1;
-			UpdateChildren(pCheck);
+			////pCell[m_nMapWidth*posNewNode.y + posNewNode.x].nClose =1;
+			//UpdateChildren(pCheck);
+
+			continue;
 		}
 		else
 		{ ///\创建一个新的点并放入open表中

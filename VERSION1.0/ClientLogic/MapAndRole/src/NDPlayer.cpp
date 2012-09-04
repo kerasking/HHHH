@@ -434,21 +434,21 @@ void NDPlayer::stopMoving(bool bResetPos/*=true*/, bool bResetTeamPos/*=true*/)
 // 			maplayer->ShowRoadSign(false);
 // 		}
 // 		
-// 		NDManualRole::stopMoving(bResetPos, bResetTeamPos);
+ 		NDManualRole::stopMoving(bResetPos, bResetTeamPos);
 // 		
-// 		m_targetPos = CGPointZero;
+ 		m_kTargetPos = CGPointZero;
 // 		
-// 		NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
-// 		if (scene) 
-// 		{
-// 			NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
-// 			layer->SetScreenCenter(this->GetPosition());
-// 		}
-// 		
-// 		if (AutoPathTipObj.IsWorking()) 
-// 		{
-// 			AutoPathTipObj.Stop();
-// 		}
+ 		//NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
+ 		//if (scene) 
+ 		//{
+ 		//	NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
+ 		//	layer->SetScreenCenter(this->GetPosition());
+ 		//}
+ 		
+ 		if (AutoPathTipObj.IsWorking()) 
+ 		{
+ 			AutoPathTipObj.Stop();
+ 		}
 }
 
 Task* NDPlayer::GetPlayerTask(int idTask)
@@ -508,6 +508,7 @@ void NDPlayer::Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 	else
 	{
 		std::vector < CGPoint > vec_pos;
+		kPos = ccpAdd(kPos,kPos);
 		vec_pos.push_back(kPos);
 		this->WalkToPosition(vec_pos, speed, true, mustArrive);
 	}

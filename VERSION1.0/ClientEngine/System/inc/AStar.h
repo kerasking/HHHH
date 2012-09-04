@@ -73,6 +73,7 @@ private:
 	NodeInfo* GetCurrentNode();
 	void SearchChild(NodeInfo* pNode);
 	void UpdateChildren(NodeInfo* pNode);
+	bool CheckTarget();
 
 	void GetPath(NodeInfo* pNode);
 
