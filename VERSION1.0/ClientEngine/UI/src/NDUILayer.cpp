@@ -50,7 +50,8 @@ namespace NDEngine
 		m_focusNode = NULL;
 		m_backgroudTexture = NULL;
 		m_backgroudColor = ccc4(0, 0, 0, 0);
-		m_pic = NULL; m_picFocus = NULL;
+		m_pic = NULL;
+		m_picFocus = NULL;
 		m_bClearOnFree = false; m_bFocusClearOnFree = false;
 		
 		m_longTouchTimer = new NDTimer;
