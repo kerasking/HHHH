@@ -23,7 +23,7 @@
 #include "GameSettingScene.h"
 #include "NDMiniMap.h"
 //#include "NDDataPersist.h"
-///< #include "NDMapMgr.h" 涓存椂鎬ф敞閲� 閮旦
+///< #include "NDMapMgr.h" 涓存椂鎬ф敞閲?? 閮旦
 #include "NDUISynLayer.h"
 #include "NDDataTransThread.h"
 #include "NDNpc.h"
@@ -38,7 +38,7 @@
 #include "GameUIPlayerList.h"
 #include "GameUIRequest.h"
 #include "GoodFriendUILayer.h"
-//#include "GameUIPaiHang.h" ///< 涓存椂鎬ф敞閲� 閮旦
+//#include "GameUIPaiHang.h" ///< 涓存椂鎬ф敞閲?? 閮旦
 #include "TutorUILayer.h"
 #include "GameUINpcStore.h"
 #include "UserStateUILayer.h"
@@ -84,9 +84,9 @@ const unsigned int TAG_UPDATE_FORCE = 333;
 const unsigned int TAG_UPDATE_NOT_FORCE = 444;
 
 const char* MENU_SYNDICATE[6] =
-{ "1", "2", "3", "4", "5", "6" };					///< 涓存椂鎬т慨鏀� 閮旦 瀛楃涓蹭贡鐮�
+{ "1", "2", "3", "4", "5", "6" };					///< 临时性修改 郭浩 字符串乱码
 const char* MENU_SYN_MANAGE[9] =
-{ "1", "2", "3", "4", "5", "6", "7", "8", "9" };	///< 涓存椂鎬т慨鏀� 閮旦 瀛楃涓蹭贡鐮�
+{ "1", "2", "3", "4", "5", "6", "7", "8", "9" };	///< 临时性修改 郭浩 字符串乱码
 
 IMPLEMENT_CLASS(MapUILayer, NDUILayer)
 
@@ -114,8 +114,8 @@ enum MENU_TYPE
 };
 
 /***
- * 涓存椂鎬т慨鏀� 閮旦
- * @warning 杩欎簺瀛楃涓叉槸缂栬瘧涓嶈繃鐨勨�︹��
+ * 涓存椂鎬т慨鏀?? 閮旦
+ * @warning 杩欎簺瀛楃涓叉槸缂栬瘧涓嶈繃鐨勨??︹????
  */
 static std::string interactive_str[interactive_end] =
 { "1", "1", "1", "1", "1", "1", "1", "1", "1", };
@@ -138,7 +138,7 @@ GameScene* GameScene::Scene()
 
 void GameScene::AddUserState(int idState, string& str)
 {
-	//this->m_userState->AddStateLabel(idState, str); ///< 涓存椂鎬ф敞閲� 閮旦
+	//this->m_userState->AddStateLabel(idState, str); ///< 涓存椂鎬ф敞閲?? 閮旦
 }
 
 void GameScene::DelUserState(int idState)
@@ -188,7 +188,7 @@ GameScene* GameScene::GetCurGameScene()
 void GameScene::SetTargetHead(NDBaseRole* target)
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * all
 	 */
 // 	if (m_targetHead) 
@@ -199,7 +199,7 @@ void GameScene::SetTargetHead(NDBaseRole* target)
 // 		} 
 // 		else
 // 		{
-// 			//m_targetHead->SetRole(target); ///< 涓存椂鎬ф敞閲� 閮旦
+// 			//m_targetHead->SetRole(target); ///< 涓存椂鎬ф敞閲?? 閮旦
 // 
 // 			if (m_targetHead->GetParent() == NULL) 
 // 			{
@@ -213,7 +213,7 @@ void GameScene::RefreshQuickInterationBar(NDBaseRole* target)
 {
 	if (m_quickInteration)
 	{
-		//m_quickInteration->Refresh(target); ///< 涓存椂鎬ф敞閲� 閮旦
+		//m_quickInteration->Refresh(target); ///< 涓存椂鎬ф敞閲?? 閮旦
 		return;
 	}
 }
@@ -222,13 +222,13 @@ GameScene::GameScene()
 {
 	s_curGameScene = this;
 
-//	m_userState = NULL; ///< 涓存椂鎬ф敞閲� 閮旦
-//	m_playerHead = NULL; ///< 涓存椂鎬ф敞閲� 閮旦
-//	m_targetHead = NULL; ///< 涓存椂鎬ф敞閲� 閮旦
-//	m_petHead = NULL; ///< 涓存椂鎬ф敞閲� 閮旦
+//	m_userState = NULL; ///< 涓存椂鎬ф敞閲?? 閮旦
+//	m_playerHead = NULL; ///< 涓存椂鎬ф敞閲?? 閮旦
+//	m_targetHead = NULL; ///< 涓存椂鎬ф敞閲?? 閮旦
+//	m_petHead = NULL; ///< 涓存椂鎬ф敞閲?? 閮旦
 	m_tlRelieve = NULL;
 	m_relieveLayer = NULL;
-//	m_miniMap = NULL; ///< 涓存椂鎬ф敞閲� 閮旦
+//	m_miniMap = NULL; ///< 涓存椂鎬ф敞閲?? 閮旦
 	maplayer = NULL;
 
 	m_hccOPItem = NULL;
@@ -246,7 +246,7 @@ GameScene::GameScene()
 			NDPath::GetFullImagepath("ui_interective.png"));
 	m_btnInterative = NULL;
 
-	//m_hccOPMenu = NULL;		///< 涓存椂鎬ф敞閲� 閮旦
+	//m_hccOPMenu = NULL;		///< 涓存椂鎬ф敞閲?? 閮旦
 
 	m_picTeam = new NDPicture();
 	m_picTeam->Initialization(NDPath::GetFullImagepath("ui_team.png"));
@@ -278,8 +278,8 @@ GameScene::GameScene()
 
 	m_tlShare = NULL;
 
-	//m_anilayerRequest = NULL;		///< 涓存椂鎬ф敞閲� 閮旦
-	//m_anilayerMail = NULL;		///< 涓存椂鎬ф敞閲� 閮旦
+	//m_anilayerRequest = NULL;		///< 涓存椂鎬ф敞閲?? 閮旦
+	//m_anilayerMail = NULL;		///< 涓存椂鎬ф敞閲?? 閮旦
 
 	//m_dlgNPC = NULL;
 	m_dlgTaskAwardItemTag = ID_NONE;
@@ -310,11 +310,11 @@ GameScene::GameScene()
 	m_uiLayer = NULL;
 
 	m_dlgFarm = NULL;
-//	m_directKey = NULL; ///< 涓存椂鎬ф敞閲� 閮旦
+//	m_directKey = NULL; ///< 涓存椂鎬ф敞閲?? 閮旦
 
 	m_quickItem = NULL;
 
-//	m_quickFunc = NULL; ///< 涓存椂鎬ф敞閲� 閮旦
+//	m_quickFunc = NULL; ///< 涓存椂鎬ф敞閲?? 閮旦
 
 	m_quickTeam = NULL;
 }
@@ -327,7 +327,7 @@ GameScene::~GameScene()
 	}
 
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * begin
 	 */
 // 	if (m_targetHead && m_targetHead->GetParent() == NULL)
@@ -335,7 +335,7 @@ GameScene::~GameScene()
 // 		SAFE_DELETE(m_targetHead);
 // 	}
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * end
 	 */
 
@@ -345,7 +345,7 @@ GameScene::~GameScene()
 	SAFE_DELETE (m_picInterative);
 
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * begin
 	 */
 
@@ -357,7 +357,7 @@ GameScene::~GameScene()
 // 		NDMapMgrObj.bRootMenuZhangKai = m_hccOPMenu->IsZhangKai();
 // 	}
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * end
 	 */
 
@@ -416,7 +416,7 @@ void GameScene::OnBattleBegin()
 	std::vector<NDNode*>::iterator it = this->m_pkChildrenList.begin();
 
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * begin
 	 */
 	//for (; it != this->m_childrenList.end(); it++) 
@@ -439,7 +439,7 @@ void GameScene::OnBattleBegin()
 	//	}
 	//}
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * end
 	 */
 
@@ -459,7 +459,7 @@ void GameScene::OnBattleBegin()
 	}
 
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * begin
 	 */
 // 	if (m_directKey)
@@ -471,7 +471,7 @@ void GameScene::OnBattleBegin()
 // 	if (m_quickInteration)
 // 		m_quickInteration->OnBattleBegin();
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * end
 	 */
 }
@@ -575,13 +575,13 @@ layer->AddChild(btn); \
 	 } while (0); */
 
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * begin
 	 */
 // 	m_anilayerRequest = new NDUIAniLayer;
 // 	m_anilayerRequest->Initialization("cuebubble.spr");
 // 	m_anilayerRequest->SetFrameRect(CGRectMake(0, 0, 480, 320));
-// 	//鍘熷厛x鍧愭爣涓�鐢变簬妯℃嫙鍣ㄧ洸鍖�,鏃犳硶娴嬭瘯,鏁呮妸x鍧愭爣璋冧负40
+// 	//鍘熷厛x鍧愭爣涓??鐢变簬妯℃嫙鍣ㄧ洸鍖??,鏃犳硶娴嬭瘯,鏁呮妸x鍧愭爣璋冧负40
 // //#ifdef DEBUG
 // 	m_anilayerRequest->SetAniRectXYSize(CGRectMake(0, 320-53-9, 57, 53), CGSizeMake(17, 17));
 // //#else
@@ -591,7 +591,7 @@ layer->AddChild(btn); \
 // 	m_anilayerRequest->SetDelegate(this);
 // 	this->AddUIChild(m_anilayerRequest);
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * end
 	 */
 
@@ -610,7 +610,7 @@ layer->AddChild(btn); \
 	 */
 
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * begin
 	 */
 // 	m_tlShare = new NDUITableLayer;
@@ -620,7 +620,7 @@ layer->AddChild(btn); \
 // 	m_tlShare->SetVisible(false);
 // 	this->AddUIChild(m_tlShare);
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * end
 	 */
 
@@ -673,14 +673,14 @@ layer->AddChild(btn); \
 	this->ShowPlayerHead(true);
 
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * begin
 	 */
 // 	m_userState = new UserStateLayer;
 // 	m_userState->Initialization();
 // 	this->AddUIChild(m_userState, 2);
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * end
 	 */
 
@@ -709,14 +709,14 @@ layer->AddChild(btn); \
 	this->AddUIChild(layer, 1);
 
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * begin
 	 */
 // 	m_targetHead = new TargetHeadInMap;
 // 	m_targetHead->Initialization();
 // 	m_targetHead->SetFrameRect(CGRectMake(210.0f, 0.0f, 87.0f, 40.0f));
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * end
 	 */
 
@@ -738,7 +738,7 @@ layer->AddChild(btn); \
 	this->AddUIChild(imgShrinkBg);
 
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * begin
 	 */
 // 	m_bQuickInterationShow = true;
@@ -749,7 +749,7 @@ layer->AddChild(btn); \
 // 	m_quickInteration->SetFrameRect(CGRectMake(66.5, 247.0f, 347, 75.0f));
 // 	this->AddUIChild(m_quickInteration);
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * end
 	 */
 
@@ -767,7 +767,7 @@ layer->AddChild(btn); \
 	layer->AddChild(imgQuickInterationShrink);
 
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * begin
 	 */
 // 	m_quickItem = new QuickItem;
@@ -776,11 +776,11 @@ layer->AddChild(btn); \
 // 	this->AddUIChild(m_quickItem);
 //	RefreshQuickItem();
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * end
 	 */
 
-//	m_quickItem->SetShrink(true); ///< 涓存椂鎬ф敞閲� 閮旦
+//	m_quickItem->SetShrink(true); ///< 涓存椂鎬ф敞閲?? 閮旦
 	m_btnQuickInterationShrink = new NDUIButton;
 	m_btnQuickInterationShrink->Initialization();
 	m_picQuickInteration = NDPicturePool::DefaultPool()->AddPicture(
@@ -793,9 +793,9 @@ layer->AddChild(btn); \
 	layer->AddChild(m_btnQuickInterationShrink);
 	this->AddUIChild(layer);
 
-//	m_quickFunc = new QuickFunc; ///< 涓存椂鎬ф敞閲� 閮旦
-//	m_quickFunc->Initialization(true); ///< 涓存椂鎬ф敞閲� 閮旦
-//	this->AddUIChild(m_quickFunc); ///< 涓存椂鎬ф敞閲� 閮旦
+//	m_quickFunc = new QuickFunc; ///< 涓存椂鎬ф敞閲?? 閮旦
+//	m_quickFunc->Initialization(true); ///< 涓存椂鎬ф敞閲?? 閮旦
+//	this->AddUIChild(m_quickFunc); ///< 涓存椂鎬ф敞閲?? 閮旦
 
 	TeamRefreh(false);
 }
@@ -817,7 +817,7 @@ void GameScene::SetMiniMapVisible(bool bVisible)
 	//this->m_miniMap->EnableDraw(bVisible);
 //	}
 
-	// 鍚屾椂涔熻缃ご鍍�
+	// 鍚屾椂涔熻缃ご鍍??
 //	if (m_playerHead)
 //	{
 	//this->m_playerHead->EnableDraw(bVisible);
@@ -832,7 +832,7 @@ void GameScene::SetMiniMapVisible(bool bVisible)
 void GameScene::ShowPetHead(bool bShow)
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * all
 	 */
 // 	NDBattlePet* battlepet = (NDBattlePet*)NDPlayer::defaultHero().GetShowPet();
@@ -860,7 +860,7 @@ void GameScene::ShowPetHead(bool bShow)
 void GameScene::ShowPlayerHead(bool bShow)
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * all
 	 */
 // 	if (bShow)
@@ -887,7 +887,7 @@ void GameScene::ShowPlayerHead(bool bShow)
 void GameScene::ShowDirectKey(bool bShow)
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * begin
 	 */
 // 	if (bShow)
@@ -906,7 +906,7 @@ void GameScene::ShowDirectKey(bool bShow)
 // 		}
 // 	}
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * end
 	 */
 
@@ -921,7 +921,7 @@ const CGRect RECT_MINI_MAP = CGRectMake(308.0f, 0.0f, 172.0f, 84.0f);
 void GameScene::ShowMiniMap(bool bShow)
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * this function
 	 */
 // 	if (bShow) 
@@ -949,7 +949,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 		unsigned int cellIndex, NDSection* section)
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 */
 
 //	if (table == m_tlInteractive && m_tlInteractive->IsVisibled() && cellIndex < interactive_end)
@@ -974,8 +974,8 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		{ // "鏌ョ湅瑁呭"
 //			sendQueryPlayer(role->m_id, SEE_EQUIP_INFO);
 //		}
-//		else if ( str == "閭�璇风粍闃�")
-//		{ // "閭�璇风粍闃�"
+//		else if ( str == "閭??璇风粍闃??")
+//		{ // "閭??璇风粍闃??"
 //			NDTransData bao(_MSG_TEAM);
 //			bao << (unsigned short)MSG_TEAM_INVITE << player.m_id << role->m_id;
 //			// SEND_DATA(bao);
@@ -987,8 +987,8 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			// SEND_DATA(bao);
 //			
 //		}
-//		else if ( str == "閭�璇风粍闃�")
-//		{ // "閭�璇风粍闃�"
+//		else if ( str == "閭??璇风粍闃??")
+//		{ // "閭??璇风粍闃??"
 //			NDTransData bao(_MSG_TEAM);
 //			bao << (unsigned short)MSG_TEAM_INVITE << player.m_id << role->m_id;
 //			// SEND_DATA(bao);
@@ -997,7 +997,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		{ // "浜ゆ槗"
 //			//if (AutoFindPath.getInstance().isWork()) {
 //			//				if (!AutoFindPath.getInstance().isClickScreenMode()) {
-//			//					GameScreen.getInstance().initNewChat(new ChatRecordManager(5, "绯荤粺", "鎮ㄦ鍦ㄤ娇鐢ㄨ嚜鍔ㄥ鑸紝涓嶈兘杩涜浜ゆ槗锛�"));
+//			//					GameScreen.getInstance().initNewChat(new ChatRecordManager(5, "绯荤粺", "鎮ㄦ鍦ㄤ娇鐢ㄨ嚜鍔ㄥ鑸紝涓嶈兘杩涜浜ゆ槗锛??"));
 //			//					break;
 //			//				}
 //			//				AutoFindPath.getInstance().stop();
@@ -1117,29 +1117,29 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 ////				NDDirector::DefaultDirector()->PushScene(NewVipStoreScene::Scene());
 ////			}
 //		}
-//		else if (strCurSel == "鍏呭��")
+//		else if (strCurSel == "鍏呭????")
 //		{
 //			//sendChargeInfo(0);
 //		}
 //		else if (strCurSel == "浜虹墿")
 //		{
-//			InitTLShareContent("灞炴��", "鎶�鑳�", "鎽嗘憡", "鐗规畩鐘舵��", NULL);
+//			InitTLShareContent("灞炴????", "鎶??鑳??", "鎽嗘憡", "鐗规畩鐘舵????", NULL);
 //		}
 //		else if (strCurSel == "瀹犵墿")
 //		{
-//			InitTLShareContent("瀹犵墿灞炴��", "瀹犵墿鎶�鑳�", NULL);
+//			InitTLShareContent("瀹犵墿灞炴????", "瀹犵墿鎶??鑳??", NULL);
 //		}
 //		else if (strCurSel == "搴勫洯")
 //		{
-//			if (false) // 濡傛灉娌℃湁搴勫洯 todo 鏆傛椂鍏堜笉浣�
+//			if (false) // 濡傛灉娌℃湁搴勫洯 todo 鏆傛椂鍏堜笉浣??
 //			{
 //				InitTLShareContent("绔嬪嵆鍒涘缓", NULL);
 //			}
 //			else 
 //			{
-//				InitTLShareContent("搴勫洯鍟嗗煄", "搴勫洯鍔ㄦ��", "杩滅▼杩涘叆", NULL);
+//				InitTLShareContent("搴勫洯鍟嗗煄", "搴勫洯鍔ㄦ????", "杩滅▼杩涘叆", NULL);
 //			}
-//			//showDialog("", "鏆傛湭寮�鏀�,鏁鍏虫敞");
+//			//showDialog("", "鏆傛湭寮??鏀??,鏁鍏虫敞");
 //		}
 //		else if (strCurSel == "绯荤粺")
 //		{
@@ -1169,23 +1169,23 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		{
 //			queryCreatedInSynList(0);
 //		}
-//		else if (strCurSel == "閭�璇峰嚱")
+//		else if (strCurSel == "閭??璇峰嚱")
 //		{
 //			sendQueryInviteList();
 //		}
-//		else if (strCurSel == "鑱屼綅绔為��")
+//		else if (strCurSel == "鑱屼綅绔為????")
 //		{
-//			InitTLShareContent("鍐涘洟闀�", "鍓洟闀�", "鍏冭��", "鍫備富", "闂ㄤ富", NULL);
+//			InitTLShareContent("鍐涘洟闀??", "鍓洟闀??", "鍏冭????", "鍫備富", "闂ㄤ富", NULL);
 //		}
-//		else if (strCurSel == "鍐涘洟闀�")
+//		else if (strCurSel == "鍐涘洟闀??")
 //		{
 //			sendSynElection(ACT_QUERY_OFFICER, 12);
 //		}
-//		else if (strCurSel == "鍓洟闀�")
+//		else if (strCurSel == "鍓洟闀??")
 //		{
 //			sendSynElection(ACT_QUERY_OFFICER, 11);
 //		}
-//		else if (strCurSel == "鍏冭��")
+//		else if (strCurSel == "鍏冭????")
 //		{
 //			sendSynElection(ACT_QUERY_OFFICER, 10);
 //		}
@@ -1197,7 +1197,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		{
 //			sendSynElection(ACT_QUERY_OFFICER, 1);
 //		}
-//		else if (strCurSel == "鎶曠エ绠�")
+//		else if (strCurSel == "鎶曠エ绠??")
 //		{
 //			sendQuerySynNormalInfo(ACT_QUERY_VOTE_LIST);
 //		}
@@ -1208,11 +1208,11 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			vector<string> vMgrOpt;
 //			
 //			for (int i = 0; i < 9; i++) {
-//				if (i == 4) {// "鍐涘洟鍗囩骇"锛屽壇鍥㈠強浠ヤ笂鏈夋潈闄�
+//				if (i == 4) {// "鍐涘洟鍗囩骇"锛屽壇鍥㈠強浠ヤ笂鏈夋潈闄??
 //					if (synRank < SYNRANK_VICE_LEADER) {
 //						continue;
 //					}
-//				} else if (i == 5 || i == 6 || i == 7) {// "鍐涘洟閭�璇�"//"浜哄憳瀹℃牳"//"杈炶亴"锛岄棬涓诲強浠ヤ笂鏈夋潈闄�
+//				} else if (i == 5 || i == 6 || i == 7) {// "鍐涘洟閭??璇??"//"浜哄憳瀹℃牳"//"杈炶亴"锛岄棬涓诲強浠ヤ笂鏈夋潈闄??
 //					if (synRank < SYNRANK_MENZHU_SHENG) {
 //						continue;
 //					}
@@ -1237,7 +1237,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		{
 //			sendQuerySynNormalInfo(ACT_QUERY_SYN_UPGRADE_INFO);
 //		}
-//		else if (strCurSel == "鍐涘洟閭�璇�")
+//		else if (strCurSel == "鍐涘洟閭??璇??")
 //		{
 //			SyndicateInvite::Show();
 //		}
@@ -1253,15 +1253,15 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		{
 //			this->m_dlgSyndicateResign = GlobalDialogObj.Show(this, 
 //									  "娓╅Θ鎻愮ず",
-//									  "璇锋偍纭鏄惁瑕佽緸鎺夊綋鍓嶅畼鑱�", 0, "纭杈炶亴", NULL);
+//									  "璇锋偍纭鏄惁瑕佽緸鎺夊綋鍓嶅畼鑱??", 0, "纭杈炶亴", NULL);
 //		}
 //		else if (strCurSel == "绂诲紑鍐涘洟")
 //		{
 //			this->m_dlgSyndicateQuit = GlobalDialogObj.Show(this, 
 //									  "娓╅Θ鎻愮ず",
-//									  "澶т緺鎮ㄧ‘瀹氳绂诲紑鏈啗鍥�", 0, NDCommonCString("Ok"), NULL);
+//									  "澶т緺鎮ㄧ‘瀹氳绂诲紑鏈啗鍥??", 0, NDCommonCString("Ok"), NULL);
 //		}
-//		else if (strCurSel == "灞炴��")
+//		else if (strCurSel == "灞炴????")
 //		{
 //			//SetUIShow(true);
 ////			GameUIAttrib *attrib = new GameUIAttrib;
@@ -1270,9 +1270,9 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			NDDirector::DefaultDirector()->PushScene(GameAttribScene::Scene());
 //			table->SetVisible(false);
 //		}
-//		else if (strCurSel == "鎶�鑳�")
+//		else if (strCurSel == "鎶??鑳??")
 //		{
-//			InitTLShareContent("鎴樻枟鎶�鑳�", "鐐奸噾鎶�鑳�", "瀹濈煶鍚堟垚", NULL);
+//			InitTLShareContent("鎴樻枟鎶??鑳??", "鐐奸噾鎶??鑳??", "瀹濈煶鍚堟垚", NULL);
 //		}
 //		else if (strCurSel == "鎽嗘憡")
 //		{
@@ -1284,7 +1284,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //				showDialog("娓╅Θ鎻愮ず", "鎮ㄤ笉鑳藉湪杩欓噷鎽嗘憡");
 //			}
 //		}
-//		else if (strCurSel == "鐗规畩鐘舵��")
+//		else if (strCurSel == "鐗规畩鐘舵????")
 //		{
 //			UserStateUILayer *list = new UserStateUILayer;
 //			list->Initialization();
@@ -1292,7 +1292,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			table->SetVisible(false);
 //			SetUIShow(true);
 //		}
-//		else if (strCurSel == "瀹犵墿灞炴��")
+//		else if (strCurSel == "瀹犵墿灞炴????")
 //		{
 //			//if (NDPlayer::defaultHero().battlepet)
 //			//{
@@ -1303,13 +1303,13 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			//}
 //			//else 
 //			//{
-//			//	GlobalDialogObj.Show(NULL, "鎻愮ず", "鎮ㄦ病鏈夎澶囧疇鐗�", NULL, NULL);
+//			//	GlobalDialogObj.Show(NULL, "鎻愮ず", "鎮ㄦ病鏈夎澶囧疇鐗??", NULL, NULL);
 //			//}	
 //			
 //			//table->SetVisible(false);
 //			//SetUIShow(true);
 //		}
-//		else if (strCurSel == "瀹犵墿鎶�鑳�")
+//		else if (strCurSel == "瀹犵墿鎶??鑳??")
 //		{
 //			PetSkillScene *scene = new PetSkillScene;
 //			scene->Initialization();
@@ -1322,7 +1322,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		}
 //		else if (strCurSel == "鍒犻櫎瑙掕壊")
 //		{
-//			this->m_dlgDelRoleTag = GlobalDialogObj.Show(this, "娓╅Θ鎻愮ず", "澶т緺鎮ㄧ‘瀹氳鍒犻櫎瑙掕壊,鍒犻櫎鍚庡皢鏃犳硶鎵惧洖鎵�鏈夋暟鎹�.鏄惁鍒犻櫎",
+//			this->m_dlgDelRoleTag = GlobalDialogObj.Show(this, "娓╅Θ鎻愮ず", "澶т緺鎮ㄧ‘瀹氳鍒犻櫎瑙掕壊,鍒犻櫎鍚庡皢鏃犳硶鎵惧洖鎵??鏈夋暟鎹??.鏄惁鍒犻櫎",
 //					     NULL, NDCommonCString("Cancel"), NDCommonCString("Ok"), NULL);
 //		}
 //		else if (strCurSel == "鐧诲綍淇℃伅")
@@ -1351,7 +1351,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			view->SetTag(TAG_CV_SEND_QUESTION);
 //			view->SetDelegate(this);
 //			std::vector<int> vec_id; vec_id.push_back(1);
-//			std::vector<std::string> vec_str; vec_str.push_back("璇疯緭鍏ュ唴瀹�,鏈�澶氳緭鍏�涓眽瀛�");
+//			std::vector<std::string> vec_str; vec_str.push_back("璇疯緭鍏ュ唴瀹??,鏈??澶氳緭鍏??涓眽瀛??");
 //			view->SetEdit(1, vec_id, vec_str);
 //			view->Show();
 //			this->AddChild(view);
@@ -1368,9 +1368,9 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			vec_id.push_back(3);
 //			
 //			std::vector<std::string> vec_str;
-//			vec_str.push_back("璇疯緭鍏ュ綋鍓嶅瘑鐮�(12浣嶄互鍐�)");
-//			vec_str.push_back("璇疯緭鍏ユ柊瀵嗙爜:(7-12浣�)");
-//			vec_str.push_back("璇峰啀娆¤緭鍏ユ柊瀵嗙爜:(7-12浣�)");
+//			vec_str.push_back("璇疯緭鍏ュ綋鍓嶅瘑鐮??(12浣嶄互鍐??)");
+//			vec_str.push_back("璇疯緭鍏ユ柊瀵嗙爜:(7-12浣??)");
+//			vec_str.push_back("璇峰啀娆¤緭鍏ユ柊瀵嗙爜:(7-12浣??)");
 //			
 //			view->SetEdit(3, vec_id, vec_str);
 //			view->Show();
@@ -1387,7 +1387,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			NDMapMgr& mgr = NDMapMgrObj;
 //			GlobalShowDlg(mgr.noteTitle, mgr.noteContent);
 //		}
-//		else if (strCurSel == "鎴樻枟鎶�鑳�")
+//		else if (strCurSel == "鎴樻枟鎶??鑳??")
 //		{
 //			NDPlayer& player = NDPlayer::defaultHero();
 //			
@@ -1404,10 +1404,10 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			}
 //			else
 //			{
-//				showDialog("鎿嶄綔澶辫触", "澶т緺浣犺繕鏈ㄦ湁瀛︿範鎴樻枟鎶�鑳藉憿!");
+//				showDialog("鎿嶄綔澶辫触", "澶т緺浣犺繕鏈ㄦ湁瀛︿範鎴樻枟鎶??鑳藉憿!");
 //			}
 //		}
-//		else if (strCurSel == "鐐奸噾鎶�鑳�")
+//		else if (strCurSel == "鐐奸噾鎶??鑳??")
 //		{
 //			if ( NDMapMgrObj.getLifeSkill(ALCHEMY_IDSKILL) != NULL )
 //			{
@@ -1417,7 +1417,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			}
 //			else 
 //			{
-//				GlobalShowDlg("鎿嶄綔澶辫触", "澶т緺浣犺繕鏈ㄦ湁瀛︿範鐐奸噾鎶�鑳藉憿!璧剁揣鍘诲垵绾х偧閲戞妧鑳絥pc閭ｉ噷瀛︿範鍚�.");
+//				GlobalShowDlg("鎿嶄綔澶辫触", "澶т緺浣犺繕鏈ㄦ湁瀛︿範鐐奸噾鎶??鑳藉憿!璧剁揣鍘诲垵绾х偧閲戞妧鑳絥pc閭ｉ噷瀛︿範鍚??.");
 //			}
 //			
 //		}
@@ -1431,20 +1431,20 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			}
 //			else 
 //			{
-//				GlobalShowDlg("鎿嶄綔澶辫触", "澶т緺浣犺繕鏈ㄦ湁瀛︿範瀹濈煶鍚堟垚鎶�鑳藉憿!璧剁揣鍘诲垵绾у疂鐭冲悎鎴恘pc閭ｉ噷瀛︿範鍚�.");
+//				GlobalShowDlg("鎿嶄綔澶辫触", "澶т緺浣犺繕鏈ㄦ湁瀛︿範瀹濈煶鍚堟垚鎶??鑳藉憿!璧剁揣鍘诲垵绾у疂鐭冲悎鎴恘pc閭ｉ噷瀛︿範鍚??.");
 //			}
 //		}
-//		else if (strCurSel == "鏀朵欢绠�")
+//		else if (strCurSel == "鏀朵欢绠??")
 //		{
 //			GameMailsScene *scene = new GameMailsScene;
 //			scene->Initialization();
 //			NDDirector::DefaultDirector()->PushScene(scene);
 //		}
-//		else if (strCurSel == "鍙戜欢绠�")
+//		else if (strCurSel == "鍙戜欢绠??")
 //		{
 //			NDDirector::DefaultDirector()->PushScene(EmailSendScene::Scene());
 //		}
-//		else if (strCurSel == "鍏抽棴鍔犲叆" || strCurSel == "寮�鍚姞鍏�")
+//		else if (strCurSel == "鍏抽棴鍔犲叆" || strCurSel == "寮??鍚姞鍏??")
 //		{
 //			m_stackUIMenu.clear();
 //			NDTransData bao(_MSG_TEAM);
@@ -1461,7 +1461,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			
 //			// SEND_DATA(bao);
 //		}
-//		else if (strCurSel == "閭�璇峰叆闃�")
+//		else if (strCurSel == "閭??璇峰叆闃??")
 //		{
 //			SetUIShow(true);
 //			m_stackUIMenu.push_front(MT_DUI_WU);
@@ -1480,7 +1480,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			}
 //			if (vec_str.empty()) 
 //			{
-//				vec_str.push_back("鏃�"); vec_id.push_back(0);
+//				vec_str.push_back("鏃??"); vec_id.push_back(0);
 //			}
 //			
 //			InitContent(m_tlInvitePlayers, vec_str, vec_id);
@@ -1497,9 +1497,9 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			
 //			std::vector<NDManualRole*> tempRoleList = NDMapMgrObj.GetPlayerTeamList();
 //			if (tempRoleList.empty()) 
-//				Chat::DefaultChat()->AddMessage(ChatTypeSystem, "娌℃湁闃熷憳锛�");
+//				Chat::DefaultChat()->AddMessage(ChatTypeSystem, "娌℃湁闃熷憳锛??");
 //			//				GameScreen.getInstance().initNewChat(
-//			//													 new ChatRecord(5, GameScreen.role.getName(), "娌℃湁闃熷憳锛�"));
+//			//													 new ChatRecord(5, GameScreen.role.getName(), "娌℃湁闃熷憳锛??"));
 //			//				return;
 //			//			}
 //			
@@ -1518,7 +1518,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			
 //			if (vec_str.empty()) 
 //			{
-//				vec_str.push_back("鏃�"); vec_id.push_back(0);
+//				vec_str.push_back("鏃??"); vec_id.push_back(0);
 //			}
 //			
 //			InitContent(m_tlKickPlayers, vec_str, vec_id);
@@ -1542,7 +1542,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			
 //			std::vector<NDManualRole*> tempRoleList = NDMapMgrObj.GetPlayerTeamList();
 //			if (tempRoleList.empty()) 
-//				Chat::DefaultChat()->AddMessage(ChatTypeSystem, "娌℃湁闃熷憳锛�");
+//				Chat::DefaultChat()->AddMessage(ChatTypeSystem, "娌℃湁闃熷憳锛??");
 //			
 //			std::vector<std::string> vec_str;
 //			for (int i=0; i < eTeamLen; i++) 
@@ -1589,7 +1589,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			
 //			std::vector<NDManualRole*> tempRoleList = mapmgr.GetPlayerTeamList();
 //			if (tempRoleList.empty()) 
-//				Chat::DefaultChat()->AddMessage(ChatTypeSystem, "娌℃湁闃熷憳锛�");
+//				Chat::DefaultChat()->AddMessage(ChatTypeSystem, "娌℃湁闃熷憳锛??");
 //			
 //			std::vector<std::string> vec_str; std::vector<int> vec_id;
 //			for (int i=1; i < eTeamLen; i++) 
@@ -1606,7 +1606,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			
 //			if (vec_str.empty()) 
 //			{
-//				vec_str.push_back("鏃�"); vec_id.push_back(0);
+//				vec_str.push_back("鏃??"); vec_id.push_back(0);
 //			}
 //			
 //			InitContent(m_tlTiShengPlayers, vec_str, vec_id);
@@ -1632,7 +1632,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 ////				NDDirector::DefaultDirector()->PushScene(scene);
 ////			}
 //		} 
-//		else if (strCurSel == "搴勫洯鍔ㄦ��")
+//		else if (strCurSel == "搴勫洯鍔ㄦ????")
 //		{
 //			NDTransData bao(_MSG_ENTER_HAMLET);
 //			bao << (unsigned char)2 << int(0);
@@ -1640,18 +1640,18 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		} 
 //		else if (strCurSel == "杩滅▼杩涘叆")
 //		{
-//			std::stringstream ss; ss << "鐐瑰嚮纭浣跨敤涓�涓煄闀囦紶閫佸嵎杞�";
+//			std::stringstream ss; ss << "鐐瑰嚮纭浣跨敤涓??涓煄闀囦紶閫佸嵎杞??";
 //			m_dlgFarm = new NDUIDialog;
 //			m_dlgFarm->Initialization();
 //			m_dlgFarm->SetDelegate(this);
 //			m_dlgFarm->Show("", ss.str().c_str(), NDCommonCString("Cancel"), "纭", NULL);
 //		} 
-//		//else if (strCurSel == "绔嬪嵆鍒涘缓") 鏆傛椂鍏堜笉鍋�
+//		//else if (strCurSel == "绔嬪嵆鍒涘缓") 鏆傛椂鍏堜笉鍋??
 ////		{
 ////			NDMapMgr& mgr = NDMapMgr;
 ////			if (mar.m_iMapID == 21003) // 21003涓洪暱瀹夊煄鍦板浘id 
 ////			{
-////				showDialog("鎻愮ず", "璇峰幓闀垮畨鍩庢壘XXXX锛坅a,bb锛夛紝浠栬兘鎸囧浣犲垱寤鸿嚜宸辩殑搴勫洯銆�");
+////				showDialog("鎻愮ず", "璇峰幓闀垮畨鍩庢壘XXXX锛坅a,bb锛夛紝浠栬兘鎸囧浣犲垱寤鸿嚜宸辩殑搴勫洯銆??");
 ////			}
 ////			else 
 ////			{
@@ -1759,7 +1759,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 void GameScene::OnButtonClick(NDUIButton* button)
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * all
 	 */
 
@@ -1830,7 +1830,7 @@ void GameScene::OnButtonClick(NDUIButton* button)
 ////		{
 //			NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(player->m_iFocusManuRoleID);
 //			if ( !otherplayer && !player->IsFocusNpcValid())
-//			{ //涓庡叾瀹冪帺瀹朵氦浜�
+//			{ //涓庡叾瀹冪帺瀹朵氦浜??
 //				
 //				NDUIDialog *dlg = new NDUIDialog;
 //				dlg->Initialization();
@@ -1977,7 +1977,7 @@ void GameScene::OnButtonClick(NDUIButton* button)
 //	}
 //	else if (button == m_btnStore)
 //	{
-//		//InitTLShareContent("鍟嗗煄", "鍏呭��", NULL);
+//		//InitTLShareContent("鍟嗗煄", "鍏呭????", NULL);
 //	}
 //	else if (button == m_btnMenu)
 //	{
@@ -1988,7 +1988,7 @@ void GameScene::OnButtonClick(NDUIButton* button)
 void GameScene::onClickTeam()
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * all
 	 */
 
@@ -2006,10 +2006,10 @@ void GameScene::onClickTeam()
 	//		} 
 	//		else 
 	//		{
-	//			vec_str.push_back("寮�鍚姞鍏�");
+	//			vec_str.push_back("寮??鍚姞鍏??");
 	//		}
 	//		
-	//		vec_str.push_back("閭�璇峰叆闃�");
+	//		vec_str.push_back("閭??璇峰叆闃??");
 	//		vec_str.push_back("璇峰嚭闃熶紞");
 	//		vec_str.push_back("绂诲紑闃熶紞");
 	//		vec_str.push_back("鏄剧ず鎴愬憳");
@@ -2100,7 +2100,7 @@ void GameScene::ShowPaiHang(const std::vector<std::string>& vec_str,
 }
 
 /***
- *	涓存椂鎬ф敞閲� 閮旦
+ *	涓存椂鎬ф敞閲?? 閮旦
  *   this function
  */
 //bool GameScene::OnClickHControlContainer(NDUIHControlContainer* hcontrolcontainer)
@@ -2113,7 +2113,7 @@ void GameScene::ShowPaiHang(const std::vector<std::string>& vec_str,
 //	return false;
 //}
 /***
- *	涓存椂鎬ф敞閲� 閮旦
+ *	涓存椂鎬ф敞閲?? 閮旦
  *   this function
  */
 //void GameScene::OnClickNDUIAniLayer(NDUIAniLayer* anilayer)
@@ -2133,7 +2133,7 @@ void GameScene::ShowPaiHang(const std::vector<std::string>& vec_str,
 //	}
 //	else if (anilayer == m_anilayerMail)
 //	{
-//		InitTLShareContent("鏀朵欢绠�", "鍙戜欢绠�", NULL);
+//		InitTLShareContent("鏀朵欢绠??", "鍙戜欢绠??", NULL);
 //		m_anilayerMail->SetCurrentAnimation(0);
 //	}
 //}
@@ -2141,7 +2141,7 @@ void GameScene::OnDialogButtonClick(NDUIDialog* dialog,
 		unsigned int buttonIndex)
 {
 	/***
-	 *	涓存椂鎬ф敞閲� 閮旦
+	 *	涓存椂鎬ф敞閲?? 閮旦
 	 *   all
 	 */
 //	if (dialog == m_dlgFarm) 
@@ -2197,10 +2197,10 @@ void GameScene::OnDialogButtonClick(NDUIDialog* dialog,
 //		dialog->Close();
 //		this->m_dlgTaskAwardItemConfirmTag = -1;
 //		if (buttonIndex == 0) {
-//			// 閲嶆柊鏄剧ず鐗╁搧閫夋嫨瀵硅瘽妗�
+//			// 閲嶆柊鏄剧ず鐗╁搧閫夋嫨瀵硅瘽妗??
 //			this->ReShowTaskAwardItemOpt();
 //		} else if (buttonIndex == 1) {
-//			// 鍙戦�佺墿鍝侀�夐」,鍚屾椂閲婃斁璧勬簮
+//			// 鍙戦??佺墿鍝侀??夐」,鍚屾椂閲婃斁璧勬簮
 //			NDUISynLayer::Show();
 //			NDTransData bao(_MSG_TASK_ITEM_OPT);
 //			bao << (Byte)this->m_curSelTaskAwardItemIndex;
@@ -2240,7 +2240,7 @@ void GameScene::OnDialogButtonClick(NDUIDialog* dialog,
 void GameScene::OnDialogClose(NDUIDialog* dialog)
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * all
 	 */
 
@@ -2266,7 +2266,7 @@ void GameScene::OnDialogClose(NDUIDialog* dialog)
 void GameScene::flashAniLayer(int type, bool bFlash)
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * all
 	 */
 	//if (type == 0)
@@ -2511,7 +2511,7 @@ void GameScene::ReShowTaskAwardItemOpt()
 
 		if (tempItem.isEquip())
 		{
-			// 濡傛灉鏄澶囩被鐨勫皢褰撳墠鐨勮�愪箙鍊兼敼涓烘渶澶у��
+			// 濡傛灉鏄澶囩被鐨勫皢褰撳墠鐨勮??愪箙鍊兼敼涓烘渶澶у????
 			tempItem.iAmount = tempItem.getAmount_limit();
 		}
 		else
@@ -2564,7 +2564,7 @@ void GameScene::ShowNPCDialog(bool bShowLeaveBtn/*=true*/)
 //	m_dlgNPC->SetDelegate(this);
 
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * begin
 	 */
 	//NDMapMgr& mapmgr = NDMapMgrObj;
@@ -2636,7 +2636,7 @@ void GameScene::ShowNPCDialog(bool bShowLeaveBtn/*=true*/)
 	//}
 	//SetUIShow(true);
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * end
 	 */
 }
@@ -2668,21 +2668,21 @@ void GameScene::ShowUIPaiHang()
 	if (!node)
 	{
 		/***
-		 * 涓存椂鎬ф敞閲� 閮旦
+		 * 涓存椂鎬ф敞閲?? 閮旦
 		 * begin
 		 */
 // 		GameUIPaiHang *paihang = new GameUIPaiHang;
 // 		paihang->Initialization();
 // 		scene->AddChild(paihang, UILAYER_Z, UILAYER_PAIHANG_TAG);
 		/***
-		 * 涓存椂鎬ф敞閲� 閮旦
+		 * 涓存椂鎬ф敞閲?? 閮旦
 		 * end
 		 */
 		//CloseProgressBar;
 	}
 	else
 	{
-		//((GameUIPaiHang*)node)->UpdateMainUI(); ///< 涓存椂鎬ф敞閲� 閮旦
+		//((GameUIPaiHang*)node)->UpdateMainUI(); ///< 涓存椂鎬ф敞閲?? 閮旦
 	}
 	((GameScene*) scene)->SetUIShow(true);
 }
@@ -2691,7 +2691,7 @@ void GameScene::ShowShop(int iNPCID /*= 0*/)
 {
 	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * begin
 	 */
 	// 	if (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameNpcStoreScene)))
@@ -2700,7 +2700,7 @@ void GameScene::ShowShop(int iNPCID /*= 0*/)
 // 		return;
 // 	}
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * end
 	 */
 
@@ -2756,7 +2756,7 @@ void GameScene::onClickSyndicate()
 }
 
 /***
- * 涓存椂鎬ф敞閲� 閮旦
+ * 涓存椂鎬ф敞閲?? 閮旦
  * this function
  */
 //bool GameScene::OnCustomViewConfirm(NDUICustomView* customView)
@@ -2843,7 +2843,7 @@ void GameScene::processMsgLightEffect(NDTransData& data)
 	CloseProgressBar;
 
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * all
 	 */
 	//NDLayer *layer = NDMapMgrObj.getMapLayerOfScene(this);
@@ -2906,7 +2906,7 @@ void GameScene::processVersionMsg(const char* version, int flag,
 	}
 	else
 	{
-		//鏅�氭洿鏂�
+		//鏅??氭洿鏂??
 		dlg->SetTag(TAG_UPDATE_NOT_FORCE);
 	}
 
@@ -2915,7 +2915,7 @@ void GameScene::processVersionMsg(const char* version, int flag,
 }
 
 /***
- * 涓存椂鎬ф敞閲� 閮旦
+ * 涓存椂鎬ф敞閲?? 閮旦
  * begin
  */
 // DirectKey* const GameScene::GetDirectKey()
@@ -2923,14 +2923,14 @@ void GameScene::processVersionMsg(const char* version, int flag,
 // 	return m_directKey;
 // }
 /***
- * 涓存椂鎬ф敞閲� 閮旦
+ * 涓存椂鎬ф敞閲?? 閮旦
  * end
  */
 
 void GameScene::HandleRootMenuAfterSceneLoad()
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * all
 	 */
 	//if (NDMapMgrObj.bRootItemZhangKai) 
@@ -2959,7 +2959,7 @@ void GameScene::HandleRootMenuAfterSceneLoad()
 void GameScene::RefreshQuickItem()
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * all
 	 */
 // 	if (m_quickItem) 
@@ -2971,7 +2971,7 @@ void GameScene::RefreshQuickItem()
 void GameScene::ShrinkQuickInteraction()
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * all
 	 */
 // 	if (m_quickInteration)
@@ -2988,7 +2988,7 @@ void GameScene::ShrinkQuickInteraction()
 void GameScene::OnTimer(OBJID tag)
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * begin
 	 */
 // 	if (1 == tag) 
@@ -3008,7 +3008,7 @@ void GameScene::OnTimer(OBJID tag)
 // 		}
 // 	}
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * end
 	 */
 
@@ -3047,16 +3047,16 @@ void GameScene::processMsgPosText(NDTransData& data)
 			int showBackColor = data.ReadByte();
 			int num = data.ReadInt();
 			string str = data.ReadUnicodeString();
-			//			PosText* pt = new PosText(idPosText, direction, posX, posY, showSec, showClr, num, str, showBackColor); ///< 涓存椂鎬ф敞閲� 閮旦
-			//			s_mapPosText[idPosText] = pt; ///< 涓存椂鎬ф敞閲� 閮旦
-//				m_userState->AddPosText(pt); ///< 涓存椂鎬ф敞閲� 閮旦
+			//			PosText* pt = new PosText(idPosText, direction, posX, posY, showSec, showClr, num, str, showBackColor); ///< 涓存椂鎬ф敞閲?? 閮旦
+			//			s_mapPosText[idPosText] = pt; ///< 涓存椂鎬ф敞閲?? 閮旦
+//				m_userState->AddPosText(pt); ///< 涓存椂鎬ф敞閲?? 閮旦
 		}
 	}
 		break;
-	case 1: // 鏇存柊鏁板瓧鍜屾枃瀛�
+	case 1: // 鏇存柊鏁板瓧鍜屾枃瀛??
 	{
 		/***
-		 * 涓存椂鎬ф敞閲� 閮旦
+		 * 涓存椂鎬ф敞閲?? 閮旦
 		 * begin
 		 */
 // 			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
@@ -3065,10 +3065,10 @@ void GameScene::processMsgPosText(NDTransData& data)
 // 				PosText* pt = it->second;
 // 				pt->m_num = data.ReadInt();
 // 				pt->m_str = data.ReadUnicodeString();;
-// 				//m_userState->AddPosText(pt); ///< 涓存椂鎬ф敞閲� 閮旦
+// 				//m_userState->AddPosText(pt); ///< 涓存椂鎬ф敞閲?? 閮旦
 // 			}
 		/***
-		 * 涓存椂鎬ф敞閲� 閮旦
+		 * 涓存椂鎬ф敞閲?? 閮旦
 		 * end
 		 */
 	}
@@ -3076,7 +3076,7 @@ void GameScene::processMsgPosText(NDTransData& data)
 	case 2: // 鏇存柊鏁板瓧
 	{
 		/***
-		 * 涓存椂鎬ф敞閲� 閮旦
+		 * 涓存椂鎬ф敞閲?? 閮旦
 		 * begin
 		 */
 // 			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
@@ -3084,10 +3084,10 @@ void GameScene::processMsgPosText(NDTransData& data)
 // 			{
 // 				PosText* pt = it->second;
 // 				pt->m_num = data.ReadInt();
-// 			//	m_userState->AddPosText(pt); ///< 涓存椂鎬ф敞閲� 閮旦
+// 			//	m_userState->AddPosText(pt); ///< 涓存椂鎬ф敞閲?? 閮旦
 // 			}
 		/***
-		 * 涓存椂鎬ф敞閲� 閮旦
+		 * 涓存椂鎬ф敞閲?? 閮旦
 		 * end
 		 */
 	}
@@ -3095,7 +3095,7 @@ void GameScene::processMsgPosText(NDTransData& data)
 	case 3: // 鏇存柊鏂囧瓧
 	{
 		/***
-		 * 涓存椂鎬ф敞閲� 閮旦
+		 * 涓存椂鎬ф敞閲?? 閮旦
 		 * begin
 		 */
 // 			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
@@ -3103,10 +3103,10 @@ void GameScene::processMsgPosText(NDTransData& data)
 // 			{
 // 				PosText* pt = it->second;
 // 				pt->m_str = data.ReadUnicodeString();
-// 			//	m_userState->AddPosText(pt); ///< 涓存椂鎬ф敞閲� 閮旦
+// 			//	m_userState->AddPosText(pt); ///< 涓存椂鎬ф敞閲?? 閮旦
 // 			}
 		/***
-		 * 涓存椂鎬ф敞閲� 閮旦
+		 * 涓存椂鎬ф敞閲?? 閮旦
 		 * end
 		 */
 	}
@@ -3116,7 +3116,7 @@ void GameScene::processMsgPosText(NDTransData& data)
 		MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
 		if (it != s_mapPosText.end())
 		{
-			//			m_userState->RemovePosText(it->second); ///< 涓存椂鎬ф敞閲� 閮旦
+			//			m_userState->RemovePosText(it->second); ///< 涓存椂鎬ф敞閲?? 閮旦
 			SAFE_DELETE(it->second);
 			s_mapPosText.erase(it);
 		}
@@ -3129,7 +3129,7 @@ void GameScene::processMsgPosText(NDTransData& data)
 
 void GameScene::ShowShopAndRecharge()
 {
-	//InitTLShareContent("鍟嗗煄", "鍏呭��", NULL);
+	//InitTLShareContent("鍟嗗煄", "鍏呭????", NULL);
 	map_vip_item& items = ItemMgrObj.GetVipStore();
 
 	if (items.empty())
@@ -3141,7 +3141,7 @@ void GameScene::ShowShopAndRecharge()
 	}
 	else
 	{
-		//NDDirector::DefaultDirector()->PushScene(NewVipStoreScene::Scene()); ///< 涓存椂鎬ф敞閲� 閮旦
+		//NDDirector::DefaultDirector()->PushScene(NewVipStoreScene::Scene()); ///< 涓存椂鎬ф敞閲?? 閮旦
 	}
 }
 
@@ -3162,7 +3162,7 @@ void GameScene::ShowMarriageList(vec_marriage& vMarriage)
 void GameScene::ShrinkQuickItem()
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * all
 	 */
 // 	if (m_quickItem)
@@ -3172,7 +3172,7 @@ void GameScene::ShrinkQuickItem()
 void GameScene::TeamRefreh(bool newJoin)
 {
 	/***
-	 *  涓存椂鎬ф敞閲� 閮旦
+	 *  涓存椂鎬ф敞閲?? 閮旦
 	 *  all
 	 */
 	//NDPlayer& player = NDPlayer::defaultHero();
@@ -3230,9 +3230,9 @@ void GameScene::TeamRefreh(bool newJoin)
 
 void GameScene::ShowTaskFinish(bool show, std::string tip)
 {
-//	if (!m_quickFunc) return; ///< 涓存椂鎬ф敞閲� 閮旦
+//	if (!m_quickFunc) return; ///< 涓存椂鎬ф敞閲?? 閮旦
 
-//	m_quickFunc->ShowTaskTip(show, tip); ///< 涓存椂鎬ф敞閲� 閮旦
+//	m_quickFunc->ShowTaskTip(show, tip); ///< 涓存椂鎬ф敞閲?? 閮旦
 }
 
 //////////////////////////////////

@@ -3,13 +3,13 @@
 //  DragonDrive
 //
 //  Created by xiezhenghai on 10-12-7.
-//  Copyright 2010 (缃戦緳)DeNA. All rights reserved.
+//  Copyright 2010 (网龙)DeNA. All rights reserved.
 //
-//	锛嶏紞浠嬬粛锛嶏紞
-//	NDNode鏄鏋剁殑鍩虹鑺傜偣
-//	鑺傜偣鐨勬樉绀轰笌z杞存湁鍏筹紝z杞磋秺澶у垯瓒婇潬鍓嶆樉绀�
-//	娲剧敓绫诲繀椤婚殣寮忔垨鏄剧ず鐨勫疄鐜癐nitialization鏂规硶
-//	娲剧敓绫荤殑瀵硅薄鐢熸垚涔嬪悗蹇呴』闅愬紡鎴栨樉绀虹殑璋冪敤Initialization鏂规硶
+//	－－介绍－－
+//	NDNode是框架的基础节点
+//	节点的显示与z轴有关，z轴越大则越靠前显示
+//	派生类必须隐式或显示的实现Initialization方法
+//	派生类的对象生成之后必须隐式或显示的调用Initialization方法
 
 #ifndef	__NDNode_H
 #define __NDNode_H
@@ -164,7 +164,7 @@ private:
 	//灞忓箷鏍煎瓙鍧愭爣
 	int m_nPosx;
 	int m_nPosy;
-	int m_nLevel; //鏁板�艰秺楂樼骇鍒秺楂橈紝鏁板�间负0涓嶅仛鎺掑簭澶勭悊
+	int m_nLevel; //鏁板??艰秺楂樼骇鍒秺楂橈紝鏁板??间负0涓嶅仛鎺掑簭澶勭悊
 
 public:
 	void AddViewer(NDCommonProtocol* viewer);

@@ -29,19 +29,17 @@ using namespace NDEngine;
 
 #define TAG_WORLD_MAP		(65535)
 
-class WorldMapLayer : 
-public NDUILayer, 
-public NDUIButtonDelegate
+class WorldMapLayer: public NDUILayer, public NDUIButtonDelegate
 {
-	DECLARE_CLASS(WorldMapLayer)
+	DECLARE_CLASS (WorldMapLayer)
 	WorldMapLayer();
 	~WorldMapLayer();
 public:
-	void Initialization(int nMapId); override
-	void OnButtonClick(NDUIButton* button); override
-	void draw(); override
-	void OnTimer(OBJID tag); override
-	bool TouchBegin(NDTouch* touch); override
+	void Initialization(int nMapId);override
+	void OnButtonClick(NDUIButton* button);override
+	void draw();override
+	void OnTimer(OBJID tag);override
+	bool TouchBegin(NDTouch* touch);override
 	void ShowRoleAtPlace(int placeId);
 	void Goto(int nMapId);
 	void SetFilter(ID_VEC idVec);
@@ -62,7 +60,7 @@ private:
 	int GetPlaceIdByIndex(int nIndex);
 	bool IsInFilterList(int nMapId);
 	void SetCenterAtPos(CGPoint pos);
-	
+
 	CGPoint GetPlaceIdScreenPos(int placeId);
 private:
 	NDWorldMapData* m_mapData;
@@ -70,16 +68,15 @@ private:
 	NDTimer m_timer;
 	cocos2d::CCArray *m_buttons;
 	cocos2d::CCArray *m_buttonsFocus;
-	CGPoint	m_screenCenter, m_posMapOffset;
+	CGPoint m_screenCenter, m_posMapOffset;
 	ID_VEC m_vIdFilter;
 	CUIRoleNode *m_roleNode;
-	NDUIButton	*m_btnClose;
-	NDUIButton	*m_btnRet;
-	CGPoint		m_posTarget;
-	int			m_nTargetMapId;
-	bool		m_bInMoving;
+	NDUIButton *m_btnClose;
+	NDUIButton *m_btnRet;
+	CGPoint m_posTarget;
+	int m_nTargetMapId;
+	bool m_bInMoving;
 	std::map<int, std::string> m_mapFilename;
 };
-
 
 #endif

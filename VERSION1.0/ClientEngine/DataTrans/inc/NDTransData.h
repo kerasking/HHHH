@@ -124,7 +124,9 @@ namespace NDEngine
 		void SetPackageHead();
 		
 	private:
-		unsigned short m_nSize, m_nReadPos, m_nWritePos;
+		unsigned short m_nSize;
+		unsigned short m_nReadPos;
+		unsigned short m_nWritePos;
 		unsigned char* m_pBuffer;
 		
 	};	

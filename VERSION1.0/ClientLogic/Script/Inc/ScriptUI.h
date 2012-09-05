@@ -11,7 +11,7 @@
 #include "ScriptInc.h"
 #include "NDUINode.h"
 
-class ScriptObjectUI : public NDEngine::ScriptObject
+class ScriptObjectUI: public NDEngine::ScriptObject
 {
 public:
 	virtual void OnLoad();
