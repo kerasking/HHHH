@@ -348,7 +348,7 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 
 	m_bFaceRight = direct == 2;
 
-	this->SetCurrentAnimation(MANUELROLE_BATTLE_STAND, m_bFaceRight);
+	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 
 	//defaultDeal();
 }
@@ -396,7 +396,7 @@ void NDManualRole::OnMoving(bool bLastPos)
 	/***
 	 * @end
 	 */
-
+	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 	int a = 10;
 
 	//if (isTeamLeader())

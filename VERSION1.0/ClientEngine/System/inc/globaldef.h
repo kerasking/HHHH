@@ -35,18 +35,19 @@
 // 	UI_ZORDER_DIALOG = 1000,
 // };
 
-enum ONTIMER_TAG {
-    ONTIMER_TAG_INIT = 9000,
-    ONTIMER_TAG_LOGIN,
+enum ONTIMER_TAG
+{
+	ONTIMER_TAG_INIT = 9000,
+	ONTIMER_TAG_LOGIN,
 };
 
 //typedef unsigned long			OBJID;
 
 // set
-typedef std::vector<OBJID>		ID_VEC;
-typedef std::deque<OBJID>		ID_DEQ;
-typedef std::set<OBJID>	        ID_SET;
-typedef std::map<OBJID, OBJID>	ID_MAP;
+typedef std::vector<OBJID> ID_VEC;
+typedef std::deque<OBJID> ID_DEQ;
+typedef std::set<OBJID> ID_SET;
+typedef std::map<OBJID, OBJID> ID_MAP;
 
 #define SEND_DATA(bao) do{\
 	NDSocket* skt = NDEngine::NDDataTransThread::DefaultThread()->GetSocket();\

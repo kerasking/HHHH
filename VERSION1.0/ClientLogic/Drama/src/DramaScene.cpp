@@ -98,18 +98,18 @@ bool DramaScene::AddNpc(int nKey, int nLookFace)
 		return false;
 	}
 
-	NDNpc *npc = new NDNpc;
-	npc->Initialization(nLookFace);
-	if (!AddNodeToMap(npc))
+	NDNpc *pkNPC = new NDNpc;
+	pkNPC->Initialization(nLookFace);
+	if (!AddNodeToMap(pkNPC))
 	{
-		delete npc;
+		delete pkNPC;
 		ScriptMgrObj.DebugOutPut(
 				"DramaScene::AddNpc !AddNodeToMap lookface[%d]key[%d]",
 				nLookFace, nKey);
 		return false;
 	}
 
-	m_mapNpc.insert(std::make_pair(nKey, npc));
+	m_mapNpc.insert(std::make_pair(nKey, pkNPC));
 
 	return true;
 }
@@ -127,18 +127,18 @@ bool DramaScene::AddManuRole(int nKey, int nLookFace)
 		return false;
 	}
 
-	NDManualRole *role = new NDManualRole;
-	role->Initialization(nLookFace);
-	if (!AddNodeToMap(role))
+	NDManualRole *pkRole = new NDManualRole;
+	pkRole->Initialization(nLookFace);
+	if (!AddNodeToMap(pkRole))
 	{
-		delete role;
+		delete pkRole;
 		ScriptMgrObj.DebugOutPut(
 				"DramaScene::AddManuRole !AddNodeToMap lookface[%d]key[%d]",
 				nLookFace, nKey);
 		return false;
 	}
 
-	m_mapManuRole.insert(std::make_pair(nKey, role));
+	m_mapManuRole.insert(std::make_pair(nKey, pkRole));
 
 	return true;
 }
@@ -280,13 +280,13 @@ bool DramaScene::PushScene(int nKey, DramaTransitionScene* scene)
 
 	m_mapScene.insert(std::make_pair(nKey, scene->QueryLink()));
 
-	NDDirector* director = NDDirector::DefaultDirector();
-	if (!director)
+	NDDirector* pkDirector = NDDirector::DefaultDirector();
+	if (!pkDirector)
 	{
 		return false;
 	}
 
-	director->PushScene(scene);
+	pkDirector->PushScene(scene);
 
 	return true;
 }
@@ -525,8 +525,8 @@ bool DramaScene::RemoveNpcNode(NDNode* node)
 bool DramaScene::RemoveManuroleNode(NDNode* node)
 {
 	bool bSucces = false;
-	for (MAP_MANUROLE_IT it = m_mapManuRole.begin(); it != m_mapManuRole.end();
-			it++)
+	for (MAP_MANUROLE_IT it = m_mapManuRole.begin();
+		it != m_mapManuRole.end();it++)
 	{
 		if (node == it->second)
 		{

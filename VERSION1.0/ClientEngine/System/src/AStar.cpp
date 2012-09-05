@@ -110,12 +110,9 @@ BOOL CAStar::FindPath(NDMapLayer* pGamemap, const CMyPos& posStart,
 		{
 			return FALSE;
 		}
+
 		NodeInfo* pkCurrentNode = this->GetCurrentNode();
 
-		int x = pkCurrentNode->nX;
-		int y = pkCurrentNode->nY;
-
-		CCLog("X: %d  , Y:  %d",x,y);
 
 		if (NULL == pkCurrentNode)
 		{ ///\open表已经空了

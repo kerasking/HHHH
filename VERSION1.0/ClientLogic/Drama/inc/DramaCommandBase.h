@@ -6,10 +6,10 @@
  *  Copyright 2012 (ÍøÁú)DeNA. All rights reserved.
  *
  */
- 
- #ifndef _DRAMA_COMMAND_BASE_H_ZJH_
- #define _DRAMA_COMMAND_BASE_H_ZJH_
- 
+
+#ifndef _DRAMA_COMMAND_BASE_H_ZJH_
+#define _DRAMA_COMMAND_BASE_H_ZJH_
+
 #include "DramaDef.h"
 #include "globaldef.h"
 
@@ -18,9 +18,11 @@ class DramaCommandBase
 public:
 	DramaCommandBase();
 	virtual ~DramaCommandBase();
-	
-	virtual void excute()				{}
-	
+
+	virtual void excute()
+	{
+	}
+
 	bool IsFinish();
 	bool CanExcuteNextCommand();
 	void SetPreCommandsFinish(bool bSet);
@@ -30,20 +32,20 @@ public:
 	unsigned int GetKey();
 public:
 	static void ResetKeyAlloc();
-	
+
 protected:
-	DramaCommandParam					m_param;
-	bool								m_bFinish;
-	bool								m_bCanExcuteNextCommand;
-	bool								m_bPreCommandsFinish;
-	
+	DramaCommandParam m_kParam;
+	bool m_bFinish;
+	bool m_bCanExcuteNextCommand;
+	bool m_bPreCommandsFinish;
+
 protected:
 	void SetFinish(bool bFinish);
 	void SetCanExcuteNextCommand(bool bCan);
-	
+
 private:
-	static unsigned int					m_uiKeyGenerator;
-	static								ID_VEC m_vIdRecyle;
+	static unsigned int m_uiKeyGenerator;
+	static ID_VEC m_vIdRecyle;
 };
 
 #endif // _DRAMA_COMMAND_BASE_H_ZJH_

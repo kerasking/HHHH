@@ -37,60 +37,60 @@ DramaScene* GetDramaScene()
 ///////////////////////////////////////////////
 void DramaCommandDlg::InitWithOpen(bool bLeft)
 {
-	m_param.type = DCT_OPEN;
-	m_param.u3.bLeft = bLeft;
+	m_kParam.type = DCT_OPEN;
+	m_kParam.u3.bLeft = bLeft;
 }
 
 void DramaCommandDlg::InitWithClose(bool bLeft)
 {
-	m_param.type = DCT_CLOSE;
-	m_param.u3.bLeft = bLeft;
+	m_kParam.type = DCT_CLOSE;
+	m_kParam.u3.bLeft = bLeft;
 }
 
 void DramaCommandDlg::InitWithSetFigure(bool bLeft, std::string filename,
 		bool bReverse)
 {
-	m_param.type = DCT_SETDLGFIG;
-	m_param.str = filename;
-	m_param.u3.bLeft = bLeft;
-	m_param.u1.bReverse = bReverse;
+	m_kParam.type = DCT_SETDLGFIG;
+	m_kParam.str = filename;
+	m_kParam.u3.bLeft = bLeft;
+	m_kParam.u1.bReverse = bReverse;
 }
 
 void DramaCommandDlg::InitWithSetTitle(bool bLeft, std::string title,
 		int nFontSize, int nFontColor)
 {
-	m_param.type = DCT_SETDLGTITLE;
-	m_param.str = title;
-	m_param.u3.bLeft = bLeft;
-	m_param.u2.nFontSize = nFontSize;
-	m_param.u1.nFontColor = nFontColor;
-	m_param.nKey = 0;
+	m_kParam.type = DCT_SETDLGTITLE;
+	m_kParam.str = title;
+	m_kParam.u3.bLeft = bLeft;
+	m_kParam.u2.nFontSize = nFontSize;
+	m_kParam.u1.nFontColor = nFontColor;
+	m_kParam.nKey = 0;
 }
 
 void DramaCommandDlg::InitWithSetTitleBySpriteKey(bool bLeft, int nKey,
 		int nFontSize, int nFontColor)
 {
-	m_param.type = DCT_SETDLGTITLE;
-	m_param.u3.bLeft = bLeft;
-	m_param.u2.nFontSize = nFontSize;
-	m_param.u1.nFontColor = nFontColor;
-	m_param.nKey = nKey;
+	m_kParam.type = DCT_SETDLGTITLE;
+	m_kParam.u3.bLeft = bLeft;
+	m_kParam.u2.nFontSize = nFontSize;
+	m_kParam.u1.nFontColor = nFontColor;
+	m_kParam.nKey = nKey;
 }
 
 void DramaCommandDlg::InitWithSetContent(bool bLeft, std::string content,
 		int nFontSize, int nFontColor)
 {
-	m_param.type = DCT_SETDLGCONTENT;
-	m_param.str = content;
-	m_param.u3.bLeft = bLeft;
-	m_param.u2.nFontSize = nFontSize;
-	m_param.u1.nFontColor = nFontColor;
+	m_kParam.type = DCT_SETDLGCONTENT;
+	m_kParam.str = content;
+	m_kParam.u3.bLeft = bLeft;
+	m_kParam.u2.nFontSize = nFontSize;
+	m_kParam.u1.nFontColor = nFontColor;
 }
 
 void DramaCommandDlg::InitWithTip(std::string content)
 {
-	m_param.type = DCT_SHOWTIPDLG;
-	m_param.str = content;
+	m_kParam.type = DCT_SHOWTIPDLG;
+	m_kParam.str = content;
 }
 
 void DramaCommandDlg::excute()
@@ -104,40 +104,40 @@ void DramaCommandDlg::excute()
 		return;
 	}
 
-	if (DCT_OPEN == m_param.type)
+	if (DCT_OPEN == m_kParam.type)
 	{
-		dramaScene->OpenChat(m_param.u3.bLeft);
+		dramaScene->OpenChat(m_kParam.u3.bLeft);
 	}
-	else if (DCT_CLOSE == m_param.type)
+	else if (DCT_CLOSE == m_kParam.type)
 	{
-		dramaScene->CloseChat(m_param.u3.bLeft);
+		dramaScene->CloseChat(m_kParam.u3.bLeft);
 	}
-	else if (DCT_SETDLGFIG == m_param.type)
+	else if (DCT_SETDLGFIG == m_kParam.type)
 	{
-		dramaScene->SetChatFigure(m_param.u3.bLeft, m_param.str,
-				m_param.u1.bReverse);
+		dramaScene->SetChatFigure(m_kParam.u3.bLeft, m_kParam.str,
+				m_kParam.u1.bReverse);
 	}
-	else if (DCT_SETDLGTITLE == m_param.type)
+	else if (DCT_SETDLGTITLE == m_kParam.type)
 	{
-		if (0 == m_param.nKey)
+		if (0 == m_kParam.nKey)
 		{
-			dramaScene->SetChatTitle(m_param.u3.bLeft, m_param.str,
-					m_param.u2.nFontSize, m_param.u1.nFontColor);
+			dramaScene->SetChatTitle(m_kParam.u3.bLeft, m_kParam.str,
+					m_kParam.u2.nFontSize, m_kParam.u1.nFontColor);
 		}
 		else
 		{
-			dramaScene->SetChatTitleBySpriteKey(m_param.u3.bLeft, m_param.nKey,
-					m_param.u2.nFontSize, m_param.u1.nFontColor);
+			dramaScene->SetChatTitleBySpriteKey(m_kParam.u3.bLeft, m_kParam.nKey,
+					m_kParam.u2.nFontSize, m_kParam.u1.nFontColor);
 		}
 	}
-	else if (DCT_SETDLGCONTENT == m_param.type)
+	else if (DCT_SETDLGCONTENT == m_kParam.type)
 	{
-		dramaScene->SetChatContent(m_param.u3.bLeft, m_param.str,
-				m_param.u2.nFontSize, m_param.u1.nFontColor);
+		dramaScene->SetChatContent(m_kParam.u3.bLeft, m_kParam.str,
+				m_kParam.u2.nFontSize, m_kParam.u1.nFontColor);
 	}
-	else if (DCT_SHOWTIPDLG == m_param.type)
+	else if (DCT_SHOWTIPDLG == m_kParam.type)
 	{
-		dramaScene->ShowTipDlg(m_param.str);
+		dramaScene->ShowTipDlg(m_kParam.str);
 	}
 }
 
@@ -145,75 +145,75 @@ void DramaCommandDlg::excute()
 void DramaCommandSprite::InitWithAdd(int nLookFace, int nType, bool faceRight,
 		std::string name)
 {
-	m_param.nKey = AllocKey();
-	m_param.type = DCT_ADDSPRITE;
-	m_param.u1.nLookFace = nLookFace;
-	m_param.u2.nSpriteType = nType;
-	m_param.u3.bFaceRight = faceRight;
-	m_param.str = name;
+	m_kParam.nKey = AllocKey();
+	m_kParam.type = DCT_ADDSPRITE;
+	m_kParam.u1.nLookFace = nLookFace;
+	m_kParam.u2.nSpriteType = nType;
+	m_kParam.u3.bFaceRight = faceRight;
+	m_kParam.str = name;
 }
 
 void DramaCommandSprite::InitWithAddByFile(std::string filename)
 {
-	m_param.nKey = AllocKey();
-	m_param.type = DCT_ADDSPRITEBYFILE;
-	m_param.str = filename;
+	m_kParam.nKey = AllocKey();
+	m_kParam.type = DCT_ADDSPRITEBYFILE;
+	m_kParam.str = filename;
 }
 
 void DramaCommandSprite::InitWithRemove(int nKey)
 {
-	m_param.u3.nTargetKey = nKey;
-	m_param.type = DCT_REMOVESPRITE;
+	m_kParam.u3.nTargetKey = nKey;
+	m_kParam.type = DCT_REMOVESPRITE;
 }
 
 void DramaCommandSprite::InitWithSetAnimation(int nKey, int nAniIndex)
 {
-	m_param.u3.nTargetKey = nKey;
-	m_param.type = DCT_SETSPRITEANI;
-	m_param.u1.nAniIndex = nAniIndex;
+	m_kParam.u3.nTargetKey = nKey;
+	m_kParam.type = DCT_SETSPRITEANI;
+	m_kParam.u1.nAniIndex = nAniIndex;
 }
 
 void DramaCommandSprite::InitWithSetPos(int nKey, int nPosX, int nPosY)
 {
-	m_param.u3.nTargetKey = nKey;
-	m_param.type = DCT_SETSPRITEPOS;
-	m_param.u1.nPosX = nPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
-	m_param.u2.nPoxY = nPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
+	m_kParam.u3.nTargetKey = nKey;
+	m_kParam.type = DCT_SETSPRITEPOS;
+	m_kParam.u1.nPosX = nPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
+	m_kParam.u2.nPoxY = nPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
 }
 
 void DramaCommandSprite::InitWithMove(int nKey, int nToPosX, int nToPosY,
 		int nStep)
 {
-	m_param.nKey = nKey;
-	m_param.type = DCT_MOVESPRITE;
-	m_param.u1.nToPosX = nToPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
-	m_param.u2.nToPosY = nToPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
-	m_param.u3.nMoveStep = nStep;
+	m_kParam.nKey = nKey;
+	m_kParam.type = DCT_MOVESPRITE;
+	m_kParam.u1.nToPosX = nToPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
+	m_kParam.u2.nToPosY = nToPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
+	m_kParam.u3.nMoveStep = nStep;
 }
 
 void DramaCommandSprite::excute()
 {
-	if (DCT_ADDSPRITE == m_param.type)
+	if (DCT_ADDSPRITE == m_kParam.type)
 	{
 		ExcuteAddSprite();
 	}
-	else if (DCT_ADDSPRITEBYFILE == m_param.type)
+	else if (DCT_ADDSPRITEBYFILE == m_kParam.type)
 	{
 		ExcuteAddSpriteByFile();
 	}
-	else if (DCT_REMOVESPRITE == m_param.type)
+	else if (DCT_REMOVESPRITE == m_kParam.type)
 	{
 		ExcuteRemoveSprite();
 	}
-	else if (DCT_SETSPRITEANI == m_param.type)
+	else if (DCT_SETSPRITEANI == m_kParam.type)
 	{
 		ExcuteSetAnimation();
 	}
-	else if (DCT_SETSPRITEPOS == m_param.type)
+	else if (DCT_SETSPRITEPOS == m_kParam.type)
 	{
 		ExcuteSetPostion();
 	}
-	else if (DCT_MOVESPRITE == m_param.type)
+	else if (DCT_MOVESPRITE == m_kParam.type)
 	{
 		ExcuteMoveSprite();
 	}
@@ -221,56 +221,56 @@ void DramaCommandSprite::excute()
 
 void DramaCommandSprite::ExcuteAddSprite()
 {
-	NDAsssert(DCT_ADDSPRITE == m_param.type);
+	NDAsssert(DCT_ADDSPRITE == m_kParam.type);
 
 	this->SetFinish(true);
 
-	DramaScene* dramaScene = GetDramaScene();
+	DramaScene* pkDramaScene = GetDramaScene();
 
-	if (!dramaScene)
+	if (!pkDramaScene)
 	{
 		return;
 	}
 
-	switch (m_param.u2.nSpriteType)
+	switch (m_kParam.u2.nSpriteType)
 	{
 	case ST_PLAYER:
-		dramaScene->AddManuRole(m_param.nKey, m_param.u1.nLookFace);
+		pkDramaScene->AddManuRole(m_kParam.nKey, m_kParam.u1.nLookFace);
 		break;
 	case ST_NPC:
-		dramaScene->AddNpc(m_param.nKey, m_param.u1.nLookFace);
+		pkDramaScene->AddNpc(m_kParam.nKey, m_kParam.u1.nLookFace);
 		break;
 	case ST_MONSTER:
-		dramaScene->AddMonster(m_param.nKey, m_param.u1.nLookFace);
+		pkDramaScene->AddMonster(m_kParam.nKey, m_kParam.u1.nLookFace);
 		break;
 	default:
 		break;
 	}
 
-	NDSprite* sprite = dramaScene->GetSprite(m_param.nKey);
+	NDSprite* sprite = pkDramaScene->GetSprite(m_kParam.nKey);
 
 	if (sprite && sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)))
 	{
-		((NDBaseRole*) sprite)->m_name = m_param.str;
+		((NDBaseRole*) sprite)->m_name = m_kParam.str;
 	}
 }
 
 void DramaCommandSprite::ExcuteAddSpriteByFile()
 {
-	NDAsssert(DCT_ADDSPRITEBYFILE == m_param.type);
+	NDAsssert(DCT_ADDSPRITEBYFILE == m_kParam.type);
 
-	this->SetFinish(true);
+	SetFinish(true);
 
-	DramaScene* dramaScene = GetDramaScene();
+	DramaScene* pkDramaScene = GetDramaScene();
 
-	if (!dramaScene)
+	if (!pkDramaScene)
 	{
 		return;
 	}
 
-	dramaScene->AddSprite(m_param.nKey, m_param.str);
+	pkDramaScene->AddSprite(m_kParam.nKey, m_kParam.str);
 
-	NDSprite* sprite = dramaScene->GetSprite(m_param.nKey);
+	NDSprite* sprite = pkDramaScene->GetSprite(m_kParam.nKey);
 
 	if (sprite && sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)))
 	{
@@ -280,24 +280,24 @@ void DramaCommandSprite::ExcuteAddSpriteByFile()
 
 void DramaCommandSprite::ExcuteRemoveSprite()
 {
-	NDAsssert(DCT_REMOVESPRITE == m_param.type);
+	NDAsssert(DCT_REMOVESPRITE == m_kParam.type);
 
 	this->SetFinish(true);
 
-	DramaScene* dramaScene = GetDramaScene();
+	DramaScene* pkDramaScene = GetDramaScene();
 
-	if (!dramaScene)
+	if (!pkDramaScene)
 	{
 		return;
 	}
 
-	dramaScene->RemoveSprite(m_param.u3.nTargetKey);
-	DeAllocKey(m_param.u3.nTargetKey);
+	pkDramaScene->RemoveSprite(m_kParam.u3.nTargetKey);
+	DeAllocKey(m_kParam.u3.nTargetKey);
 }
 
 void DramaCommandSprite::ExcuteSetAnimation()
 {
-	NDAsssert(DCT_SETSPRITEANI == m_param.type);
+	NDAsssert(DCT_SETSPRITEANI == m_kParam.type);
 
 	this->SetFinish(true);
 
@@ -308,19 +308,19 @@ void DramaCommandSprite::ExcuteSetAnimation()
 		return;
 	}
 
-	NDSprite* sprite = dramaScene->GetSprite(m_param.u3.nTargetKey);
+	NDSprite* sprite = dramaScene->GetSprite(m_kParam.u3.nTargetKey);
 
 	if (!sprite)
 	{
 		return;
 	}
 
-	sprite->SetCurrentAnimation(m_param.u1.nAniIndex, sprite->IsReverse());
+	sprite->SetCurrentAnimation(m_kParam.u1.nAniIndex, sprite->IsReverse());
 }
 
 void DramaCommandSprite::ExcuteSetPostion()
 {
-	NDAsssert(DCT_SETSPRITEPOS == m_param.type);
+	NDAsssert(DCT_SETSPRITEPOS == m_kParam.type);
 
 	this->SetFinish(true);
 
@@ -331,18 +331,18 @@ void DramaCommandSprite::ExcuteSetPostion()
 		return;
 	}
 
-	NDSprite* sprite = dramaScene->GetSprite(m_param.u3.nTargetKey);
+	NDSprite* sprite = dramaScene->GetSprite(m_kParam.u3.nTargetKey);
 	if (!sprite)
 	{
 		return;
 	}
 
-	sprite->SetPosition(ccp(m_param.u1.nPosX, m_param.u2.nPoxY));
+	sprite->SetPosition(ccp(m_kParam.u1.nPosX, m_kParam.u2.nPoxY));
 }
 
 void DramaCommandSprite::ExcuteMoveSprite()
 {
-	NDAsssert(DCT_MOVESPRITE == m_param.type);
+	NDAsssert(DCT_MOVESPRITE == m_kParam.type);
 
 	DramaScene* dramaScene = GetDramaScene();
 
@@ -352,7 +352,7 @@ void DramaCommandSprite::ExcuteMoveSprite()
 		return;
 	}
 
-	NDSprite* sprite = dramaScene->GetSprite(m_param.nKey);
+	NDSprite* sprite = dramaScene->GetSprite(m_kParam.nKey);
 	if (!sprite)
 	{
 		this->SetFinish(true);
@@ -362,32 +362,32 @@ void DramaCommandSprite::ExcuteMoveSprite()
 	bool bXArrive = false;
 	bool bYArrive = false;
 	CGPoint curPos = sprite->GetPosition();
-	if (abs(int(curPos.x) - m_param.u1.nToPosX) <= m_param.u3.nMoveStep)
+	if (abs(int(curPos.x) - m_kParam.u1.nToPosX) <= m_kParam.u3.nMoveStep)
 	{
-		curPos.x = m_param.u1.nToPosX;
+		curPos.x = m_kParam.u1.nToPosX;
 		bXArrive = true;
 	}
-	else if (int(curPos.x) > m_param.u1.nToPosX)
+	else if (int(curPos.x) > m_kParam.u1.nToPosX)
 	{
-		curPos.x -= m_param.u3.nMoveStep;
+		curPos.x -= m_kParam.u3.nMoveStep;
 	}
-	else if (int(curPos.x) < m_param.u1.nToPosX)
+	else if (int(curPos.x) < m_kParam.u1.nToPosX)
 	{
-		curPos.x += m_param.u3.nMoveStep;
+		curPos.x += m_kParam.u3.nMoveStep;
 	}
 
-	if (abs(int(curPos.y) - m_param.u2.nToPosY) <= m_param.u3.nMoveStep)
+	if (abs(int(curPos.y) - m_kParam.u2.nToPosY) <= m_kParam.u3.nMoveStep)
 	{
-		curPos.y = m_param.u2.nToPosY;
+		curPos.y = m_kParam.u2.nToPosY;
 		bYArrive = true;
 	}
-	else if (int(curPos.y) > m_param.u2.nToPosY)
+	else if (int(curPos.y) > m_kParam.u2.nToPosY)
 	{
-		curPos.y -= m_param.u3.nMoveStep;
+		curPos.y -= m_kParam.u3.nMoveStep;
 	}
-	else if (int(curPos.y) < m_param.u2.nToPosY)
+	else if (int(curPos.y) < m_kParam.u2.nToPosY)
 	{
-		curPos.y += m_param.u3.nMoveStep;
+		curPos.y += m_kParam.u3.nMoveStep;
 	}
 
 	sprite->SetCurrentAnimation(MANUELROLE_WALK, sprite->IsReverse());
@@ -402,46 +402,46 @@ void DramaCommandSprite::ExcuteMoveSprite()
 ///////////////////////////////////////////////
 void DramaCommandScene::InitWithLoadDrama(int nMapId)
 {
-	m_param.type = DCT_LOADMAPSCENE;
-	m_param.u1.nMapId = nMapId;
+	m_kParam.type = DCT_LOADMAPSCENE;
+	m_kParam.u1.nMapId = nMapId;
 }
 
 void DramaCommandScene::InitWithFinishDrama()
 {
-	m_param.type = DCT_OVER;
+	m_kParam.type = DCT_OVER;
 }
 
 void DramaCommandScene::InitWithLoad(std::string centerText, int nFontSize,
 		int nFontColor)
 {
-	m_param.nKey = AllocKey();
-	m_param.type = DCT_LOADERASESCENE;
-	m_param.str = centerText;
-	m_param.u2.nFontSize = nFontSize;
-	m_param.u1.nFontColor = nFontColor;
+	m_kParam.nKey = AllocKey();
+	m_kParam.type = DCT_LOADERASESCENE;
+	m_kParam.str = centerText;
+	m_kParam.u2.nFontSize = nFontSize;
+	m_kParam.u1.nFontColor = nFontColor;
 }
 
 void DramaCommandScene::InitWithRemove(int nKey)
 {
-	m_param.type = DCT_REMOVEERASESCENE;
-	m_param.u3.nTargetKey = nKey;
+	m_kParam.type = DCT_REMOVEERASESCENE;
+	m_kParam.u3.nTargetKey = nKey;
 }
 
 void DramaCommandScene::excute()
 {
-	if (DCT_LOADMAPSCENE == m_param.type)
+	if (DCT_LOADMAPSCENE == m_kParam.type)
 	{
 		ExcuteLoadDramaScene();
 	}
-	else if (DCT_OVER == m_param.type)
+	else if (DCT_OVER == m_kParam.type)
 	{
 		ExcuteFinishDrama();
 	}
-	else if (DCT_LOADERASESCENE == m_param.type)
+	else if (DCT_LOADERASESCENE == m_kParam.type)
 	{
 		ExcuteLoadEraseScene();
 	}
-	else if (DCT_REMOVEERASESCENE == m_param.type)
+	else if (DCT_REMOVEERASESCENE == m_kParam.type)
 	{
 		ExcuteRemoveEraseScene();
 	}
@@ -449,18 +449,18 @@ void DramaCommandScene::excute()
 
 void DramaCommandScene::ExcuteLoadDramaScene()
 {
-	NDAsssert(DCT_LOADMAPSCENE == m_param.type);
+	NDAsssert(DCT_LOADMAPSCENE == m_kParam.type);
 
 	this->SetFinish(true);
 
 	DramaScene* scene = new DramaScene;
-	scene->Init(m_param.u1.nMapId);
+	scene->Init(m_kParam.u1.nMapId);
 	NDDirector::DefaultDirector()->PushScene(scene);
 }
 
 void DramaCommandScene::ExcuteFinishDrama()
 {
-	NDAsssert(DCT_OVER == m_param.type);
+	NDAsssert(DCT_OVER == m_kParam.type);
 
 	this->SetFinish(true);
 
@@ -477,10 +477,10 @@ void DramaCommandScene::ExcuteFinishDrama()
 		return;
 	}
 
-	NDScene* runScene = NULL;
-	while ((runScene = director->GetRunningScene()))
+	NDScene* pkRunScene = NULL;
+	while ((pkRunScene = director->GetRunningScene()))
 	{
-		bool bfind = runScene->IsKindOfClass(RUNTIME_CLASS(DramaScene));
+		bool bfind = pkRunScene->IsKindOfClass(RUNTIME_CLASS(DramaScene));
 		if (!director->PopScene(true) || bfind)
 		{
 			break;
@@ -492,7 +492,7 @@ void DramaCommandScene::ExcuteFinishDrama()
 
 void DramaCommandScene::ExcuteLoadEraseScene()
 {
-	NDAsssert(DCT_LOADERASESCENE == m_param.type);
+	NDAsssert(DCT_LOADERASESCENE == m_kParam.type);
 
 	this->SetFinish(true);
 
@@ -505,9 +505,9 @@ void DramaCommandScene::ExcuteLoadEraseScene()
 
 	DramaTransitionScene* scene = new DramaTransitionScene;
 	scene->Init();
-	scene->SetText(m_param.str, m_param.u2.nFontSize, m_param.u1.nFontColor);
+	scene->SetText(m_kParam.str, m_kParam.u2.nFontSize, m_kParam.u1.nFontColor);
 
-	if (!dramaScene->PushScene(m_param.nKey, scene))
+	if (!dramaScene->PushScene(m_kParam.nKey, scene))
 	{
 		delete scene;
 	}
@@ -515,44 +515,44 @@ void DramaCommandScene::ExcuteLoadEraseScene()
 
 void DramaCommandScene::ExcuteRemoveEraseScene()
 {
-	NDAsssert(DCT_REMOVEERASESCENE == m_param.type);
+	NDAsssert(DCT_REMOVEERASESCENE == m_kParam.type);
 
 	this->SetFinish(true);
 
-	DramaScene* dramaScene = GetDramaScene();
+	DramaScene* pkDramaScene = GetDramaScene();
 
-	if (!dramaScene)
+	if (!pkDramaScene)
 	{
 		return;
 	}
 
-	dramaScene->RemoveScene(m_param.u3.nTargetKey);
-	DeAllocKey(m_param.u3.nTargetKey);
+	pkDramaScene->RemoveScene(m_kParam.u3.nTargetKey);
+	DeAllocKey(m_kParam.u3.nTargetKey);
 }
 
 ///////////////////////////////////////////////
 void DramaCommandCamera::InitWithSetPos(int nPosX, int nPosY)
 {
-	m_param.type = DCT_SETCAMERA;
-	m_param.u1.nPosX = nPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
-	m_param.u2.nPoxY = nPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
+	m_kParam.type = DCT_SETCAMERA;
+	m_kParam.u1.nPosX = nPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
+	m_kParam.u2.nPoxY = nPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
 }
 
 void DramaCommandCamera::InitWithMove(int nToPosX, int nToPosY, int nStep)
 {
-	m_param.type = DCT_MOVECAMERA;
-	m_param.u1.nToPosX = nToPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
-	m_param.u2.nToPosY = nToPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
-	m_param.u3.nMoveStep = nStep;
+	m_kParam.type = DCT_MOVECAMERA;
+	m_kParam.u1.nToPosX = nToPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
+	m_kParam.u2.nToPosY = nToPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
+	m_kParam.u3.nMoveStep = nStep;
 }
 
 void DramaCommandCamera::excute()
 {
-	if (DCT_SETCAMERA == m_param.type)
+	if (DCT_SETCAMERA == m_kParam.type)
 	{
 		ExcuteSetPosition();
 	}
-	else if (DCT_MOVECAMERA == m_param.type)
+	else if (DCT_MOVECAMERA == m_kParam.type)
 	{
 		ExcuteMovePostion();
 	}
@@ -560,7 +560,7 @@ void DramaCommandCamera::excute()
 
 void DramaCommandCamera::ExcuteSetPosition()
 {
-	NDAsssert(DCT_SETCAMERA == m_param.type);
+	NDAsssert(DCT_SETCAMERA == m_kParam.type);
 
 	this->SetFinish(true);
 
@@ -571,12 +571,12 @@ void DramaCommandCamera::ExcuteSetPosition()
 		return;
 	}
 
-	dramaScene->SetCenter(ccp(m_param.u1.nPosX, m_param.u2.nPoxY));
+	dramaScene->SetCenter(ccp(m_kParam.u1.nPosX, m_kParam.u2.nPoxY));
 }
 
 void DramaCommandCamera::ExcuteMovePostion()
 {
-	NDAsssert(DCT_MOVECAMERA == m_param.type);
+	NDAsssert(DCT_MOVECAMERA == m_kParam.type);
 
 	DramaScene* dramaScene = GetDramaScene();
 
@@ -589,32 +589,32 @@ void DramaCommandCamera::ExcuteMovePostion()
 	bool bXArrive = false;
 	bool bYArrive = false;
 	CGPoint curPos = dramaScene->GetCenter();
-	if (abs(int(curPos.x) - m_param.u1.nToPosX) <= m_param.u3.nMoveStep)
+	if (abs(int(curPos.x) - m_kParam.u1.nToPosX) <= m_kParam.u3.nMoveStep)
 	{
-		curPos.x = m_param.u1.nToPosX;
+		curPos.x = m_kParam.u1.nToPosX;
 		bXArrive = true;
 	}
-	else if (int(curPos.x) > m_param.u1.nToPosX)
+	else if (int(curPos.x) > m_kParam.u1.nToPosX)
 	{
-		curPos.x -= m_param.u3.nMoveStep;
+		curPos.x -= m_kParam.u3.nMoveStep;
 	}
-	else if (int(curPos.x) < m_param.u1.nToPosX)
+	else if (int(curPos.x) < m_kParam.u1.nToPosX)
 	{
-		curPos.x += m_param.u3.nMoveStep;
+		curPos.x += m_kParam.u3.nMoveStep;
 	}
 
-	if (abs(int(curPos.y) - m_param.u2.nToPosY) <= m_param.u3.nMoveStep)
+	if (abs(int(curPos.y) - m_kParam.u2.nToPosY) <= m_kParam.u3.nMoveStep)
 	{
-		curPos.y = m_param.u2.nToPosY;
+		curPos.y = m_kParam.u2.nToPosY;
 		bYArrive = true;
 	}
-	else if (int(curPos.y) > m_param.u2.nToPosY)
+	else if (int(curPos.y) > m_kParam.u2.nToPosY)
 	{
-		curPos.y -= m_param.u3.nMoveStep;
+		curPos.y -= m_kParam.u3.nMoveStep;
 	}
-	else if (int(curPos.y) < m_param.u2.nToPosY)
+	else if (int(curPos.y) < m_kParam.u2.nToPosY)
 	{
-		curPos.y += m_param.u3.nMoveStep;
+		curPos.y += m_kParam.u3.nMoveStep;
 	}
 
 	bool bOverBoder = dramaScene->SetCenter(curPos);
@@ -630,24 +630,24 @@ void DramaCommandCamera::ExcuteMovePostion()
 
 void DramaCommandWait::InitWithWait(float fTime)
 {
-	m_param.type = DCT_WAITTIME;
-	m_param.u1.fTime = fTime;
-	m_param.u2.bTimeStart = false;
-	m_param.u3.bTimeout = false;
+	m_kParam.type = DCT_WAITTIME;
+	m_kParam.u1.fTime = fTime;
+	m_kParam.u2.bTimeStart = false;
+	m_kParam.u3.bTimeout = false;
 
 	this->SetCanExcuteNextCommand(false);
 }
 
 void DramaCommandWait::InitWithWaitPreActionFinish()
 {
-	m_param.type = DCT_WAITPREACTFINISH;
+	m_kParam.type = DCT_WAITPREACTFINISH;
 
 	this->SetCanExcuteNextCommand(false);
 }
 
 void DramaCommandWait::InitWithWaitPreActFinishAndClick()
 {
-	m_param.type = DCT_WAITPREACTFINISHANDCLICK;
+	m_kParam.type = DCT_WAITPREACTFINISHANDCLICK;
 
 	this->SetCanExcuteNextCommand(false);
 }
@@ -659,21 +659,21 @@ void DramaCommandWait::OnTimer(OBJID tag)
 		return;
 	}
 
-	m_param.u3.bTimeout = true;
+	m_kParam.u3.bTimeout = true;
 	m_timer.KillTimer(this, TAG_TIME_WAIT);
 }
 
 void DramaCommandWait::excute()
 {
-	if (DCT_WAITTIME == m_param.type)
+	if (DCT_WAITTIME == m_kParam.type)
 	{
 		ExcuteWaitTime();
 	}
-	else if (DCT_WAITPREACTFINISH == m_param.type)
+	else if (DCT_WAITPREACTFINISH == m_kParam.type)
 	{
 		ExcuteWaitPreAction();
 	}
-	else if (DCT_WAITPREACTFINISHANDCLICK == m_param.type)
+	else if (DCT_WAITPREACTFINISHANDCLICK == m_kParam.type)
 	{
 		ExcuteWaitPreActionAndClick();
 	}
@@ -681,28 +681,28 @@ void DramaCommandWait::excute()
 
 void DramaCommandWait::ExcuteWaitTime()
 {
-	NDAsssert(DCT_WAITTIME == m_param.type);
+	NDAsssert(DCT_WAITTIME == m_kParam.type);
 
 	DramaScene* dramaScene = GetDramaScene();
 
-	if (!dramaScene || m_param.u3.bTimeout)
+	if (!dramaScene || m_kParam.u3.bTimeout)
 	{
 		this->SetFinish(true);
 		this->SetCanExcuteNextCommand(true);
 		return;
 	}
 
-	if (!m_param.u2.bTimeStart)
+	if (!m_kParam.u2.bTimeStart)
 	{
-		m_timer.SetTimer(this, TAG_TIME_WAIT, m_param.u1.fTime);
+		m_timer.SetTimer(this, TAG_TIME_WAIT, m_kParam.u1.fTime);
 
-		m_param.u2.bTimeStart = true;
+		m_kParam.u2.bTimeStart = true;
 	}
 }
 
 void DramaCommandWait::ExcuteWaitPreAction()
 {
-	NDAsssert(DCT_WAITPREACTFINISH == m_param.type);
+	NDAsssert(DCT_WAITPREACTFINISH == m_kParam.type);
 
 	DramaScene* dramaScene = GetDramaScene();
 
@@ -719,7 +719,7 @@ void DramaCommandWait::ExcuteWaitPreAction()
 
 void DramaCommandWait::ExcuteWaitPreActionAndClick()
 {
-	NDAsssert(DCT_WAITPREACTFINISHANDCLICK == m_param.type);
+	NDAsssert(DCT_WAITPREACTFINISHANDCLICK == m_kParam.type);
 
 	DramaScene* dramaScene = GetDramaScene();
 

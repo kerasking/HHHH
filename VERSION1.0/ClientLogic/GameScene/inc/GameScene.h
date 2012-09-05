@@ -37,13 +37,13 @@ class QuickItem;
 
 class QuickInteraction;
 
-//class QuickFunc; ///< 临时性注釄1�7 郭浩
+//class QuickFunc; ///< 临时性注释 郭浩
 
 class QuickTeam;
 
-//class UserStateLayer; ///< 临时性注釄1�7 郭浩
+//class UserStateLayer; ///< 临时性注释 郭浩
 class Task;
-//class NDMiniMap; ///< 临时性注釄1�7 郭浩
+//class NDMiniMap; ///< 临时性注释 郭浩
 using namespace NDEngine;
 
 ///////////////////////////////////////////////

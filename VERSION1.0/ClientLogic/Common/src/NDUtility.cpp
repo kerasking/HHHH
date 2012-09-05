@@ -112,7 +112,7 @@ void quitGame(bool bTipNet/*=false*/)
 // 	NSString* retStr = [strEndTime substringWithRange:NSMakeRange(5, 11)];
 // 	return [retStr UTF8String];
 // }
-// 
+//
 // std::string getNextMonthDay(long nSeconds)
 // {
 // 	NSDateComponents *comps = [[NSDateComponents alloc] init]; 

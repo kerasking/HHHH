@@ -9,15 +9,15 @@
 
 #include "DramaCommandBase.h"
 
-unsigned int DramaCommandBase::m_uiKeyGenerator	= 0;
+unsigned int DramaCommandBase::m_uiKeyGenerator = 0;
 
 ID_VEC DramaCommandBase::m_vIdRecyle;
 
 DramaCommandBase::DramaCommandBase()
 {
-	m_bFinish					= false;
-	m_bCanExcuteNextCommand		= true;
-	m_bPreCommandsFinish		= true;
+	m_bFinish = false;
+	m_bCanExcuteNextCommand = true;
+	m_bPreCommandsFinish = true;
 }
 
 DramaCommandBase::~DramaCommandBase()
@@ -31,7 +31,7 @@ bool DramaCommandBase::IsFinish()
 
 void DramaCommandBase::SetFinish(bool bFinish)
 {
-	m_bFinish	= bFinish;
+	m_bFinish = bFinish;
 }
 
 bool DramaCommandBase::CanExcuteNextCommand()
@@ -46,7 +46,7 @@ void DramaCommandBase::SetCanExcuteNextCommand(bool bCan)
 
 void DramaCommandBase::SetPreCommandsFinish(bool bSet)
 {
-	m_bPreCommandsFinish	= bSet;
+	m_bPreCommandsFinish = bSet;
 }
 
 bool DramaCommandBase::IsPreCommandsFinish()
@@ -62,7 +62,7 @@ unsigned int DramaCommandBase::AllocKey()
 		m_vIdRecyle.erase(m_vIdRecyle.end() - 1);
 		return nKey;
 	}
-	
+
 	return ++m_uiKeyGenerator;
 }
 
@@ -73,7 +73,7 @@ void DramaCommandBase::DeAllocKey(unsigned int nKey)
 
 unsigned int DramaCommandBase::GetKey()
 {
-	return m_param.nKey;
+	return m_kParam.nKey;
 }
 
 void DramaCommandBase::ResetKeyAlloc()
