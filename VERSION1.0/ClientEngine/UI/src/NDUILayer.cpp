@@ -370,8 +370,8 @@ namespace NDEngine
 	{	
 		m_endTouch = touch->GetLocation();
 		//add by zhangdi 20120828
-		float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-		CGPoint tmpTouch = CGPointMake(m_endTouch.x * scale, m_endTouch.y * scale);
+		float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+		CGPoint tmpTouch = CGPointMake(m_endTouch.x * fScale, m_endTouch.y * fScale);
 		m_endTouch = tmpTouch;
 		
 		if (m_dragOverNode)

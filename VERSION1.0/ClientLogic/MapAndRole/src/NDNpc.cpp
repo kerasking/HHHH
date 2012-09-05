@@ -401,8 +401,8 @@ bool NDNpc::IsPointInside(CGPoint point)
 {
 	if (m_pkCurrentAnimation)
 	{
-		CGRect kRect = CGRectMake(this->m_position.x - this->GetWidth() / 2,
-				this->m_position.y - this->GetHeight(), this->GetWidth(),
+		CGRect kRect = CGRectMake(this->m_kPosition.x - this->GetWidth() / 2,
+				this->m_kPosition.y - this->GetHeight(), this->GetWidth(),
 				this->GetHeight());
 
 		if (CGRectContainsPoint(kRect, point))

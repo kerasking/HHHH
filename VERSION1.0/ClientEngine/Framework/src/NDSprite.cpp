@@ -40,8 +40,8 @@ NDSprite::NDSprite()
 	m_nMovePathIndex = 0;
 
 //		NDLog("init pos");
-	m_position.x = 0;
-	m_position.y = 0;
+	m_kPosition.x = 0;
+	m_kPosition.y = 0;
 
 	m_nCloak = -1;
 	m_nColorInfo = -1;
@@ -182,7 +182,7 @@ void NDSprite::RunAnimation(bool bDraw)
 
 		m_pkAniGroup->setRuningSprite(this);
 		m_pkAniGroup->setRunningMapSize(pkNode->GetContentSize());
-		m_pkAniGroup->setPosition(m_position);
+		m_pkAniGroup->setPosition(m_kPosition);
 
 		m_pkCurrentAnimation->setReverse(m_bReverse);
 
@@ -204,7 +204,7 @@ void NDSprite::RunAnimation(bool bDraw)
 		if (m_bMoveMap && pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
 			NDMapLayer* mapLayer = (NDMapLayer*) pkNode;
-			mapLayer->SetScreenCenter(m_position);
+			mapLayer->SetScreenCenter(m_kPosition);
 		}
 	}
 	else if (m_picSprite)
@@ -239,7 +239,7 @@ void NDSprite::RunAnimation(bool bDraw)
 void NDSprite::SetPosition(CGPoint newPosition)
 {
 //		NDLog("new pos:%f,%f",newPosition.x, newPosition.y);
-	this->m_position = CGPointMake(newPosition.x, newPosition.y);
+	this->m_kPosition = CGPointMake(newPosition.x, newPosition.y);
 }
 
 void NDSprite::MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed,
@@ -271,7 +271,7 @@ void NDSprite::MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed,
 			m_nMovePathIndex = 0;
 			m_pointList.clear();
 
-			CGPoint from = m_position;
+			CGPoint from = m_kPosition;
 			for (int i = 0; i < iSize; i++)
 			{
 				CGPoint to = toPos[i];
@@ -316,7 +316,7 @@ void NDSprite::OnMoveEnd()
 
 CGPoint NDSprite::GetPosition()
 {
-	return m_position;
+	return m_kPosition;
 }
 
 void NDSprite::stopMoving()
@@ -328,7 +328,7 @@ void NDSprite::stopMoving()
 
 int NDSprite::GetOrder()
 {
-	return m_position.y + 16;
+	return m_kPosition.y + 16;
 }
 
 void NDSprite::SetSprite(NDPicture* pkPicture)
@@ -359,7 +359,7 @@ CGRect NDSprite::GetSpriteRect()
 {
 	if (m_pkCurrentAnimation)
 	{
-		m_pkAniGroup->setPosition(m_position);
+		m_pkAniGroup->setPosition(m_kPosition);
 		return m_pkCurrentAnimation->getRect();
 	}
 

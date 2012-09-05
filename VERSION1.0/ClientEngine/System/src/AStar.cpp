@@ -315,18 +315,18 @@ void CAStar::SearchChild(NodeInfo* pParentNode)
 		}
 		else if (pCheck = this->CheckList(m_setClose, nNumber)) //if没问题!
 		{ ///\已经存在close表中
-			//pParentNode->pChildNode[pParentNode->nChildNum++] = pCheck;
-			//if (nG < pCheck->nG)
-			//{ ///\更新 G H
-			//	pCheck->pParent = pParentNode;
-			//	pCheck->nG = nG;
-			//	pCheck->nF = nG + pCheck->nH;
-			//	pCheck->nDir = i;
-			//	pCheck->nStep = pParentNode->nStep + 1;
-			//}
+			pParentNode->pChildNode[pParentNode->nChildNum++] = pCheck;
+			if (nG < pCheck->nG)
+			{ ///\更新 G H
+				pCheck->pParent = pParentNode;
+				pCheck->nG = nG;
+				pCheck->nF = nG + pCheck->nH;
+				pCheck->nDir = i;
+				pCheck->nStep = pParentNode->nStep + 1;
+			}
 
-			////pCell[m_nMapWidth*posNewNode.y + posNewNode.x].nClose =1;
-			//UpdateChildren(pCheck);
+			//pCell[m_nMapWidth*posNewNode.y + posNewNode.x].nClose =1;
+			UpdateChildren(pCheck);
 
 			continue;
 		}

@@ -508,7 +508,7 @@ void NDPlayer::Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 	else
 	{
 		std::vector < CGPoint > vec_pos;
-		kPos = ccpAdd(kPos,kPos);
+		//kPos = ccpAdd(kPos,kPos);
 		vec_pos.push_back(kPos);
 		this->WalkToPosition(vec_pos, speed, true, mustArrive);
 	}

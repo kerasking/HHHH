@@ -285,8 +285,8 @@ bool NDMonster::OnDrawBegin(bool bDraw)
 
 		if (m_nMonsterCatogary == MONSTER_BOSS)
 		{
-			int iX = m_position.x;
-			int iY = m_position.y-DISPLAY_POS_Y_OFFSET;
+			int iX = m_kPosition.x;
+			int iY = m_kPosition.y-DISPLAY_POS_Y_OFFSET;
 			iX += getGravityX()-GetWidth()/2;
 			iY += BASE_BOTTOM_WH + 8;
 			bossRing->SetPosition(ccp(iX, iY));
@@ -1041,8 +1041,8 @@ void NDMonster::drawName(bool bDraw)
 	CGRect rect1 = CGRectMake(posPlayer.x - SHOW_NAME_ROLE_W,
 			posPlayer.y - SHOW_NAME_ROLE_H, SHOW_NAME_ROLE_W << 1,
 			SHOW_NAME_ROLE_H << 1);
-	CGRect rect2 = CGRectMake(m_position.x - DISPLAY_POS_X_OFFSET,
-			m_position.y - DISPLAY_POS_Y_OFFSET, 16, 16);
+	CGRect rect2 = CGRectMake(m_kPosition.x - DISPLAY_POS_X_OFFSET,
+			m_kPosition.y - DISPLAY_POS_Y_OFFSET, 16, 16);
 	//if (CGRectIntersectsRect(rect1, rect2)) { // 显示区域内的怪物名字
 	int iColor = 0;
 	if (m_nLevel - player.m_nLevel <= LEVEL_GRAY)
@@ -1076,8 +1076,8 @@ void NDMonster::drawName(bool bDraw)
 
 	iColor = 0xff0000;
 
-	int iX = m_position.x - DISPLAY_POS_X_OFFSET;
-	int iY = m_position.y - DISPLAY_POS_Y_OFFSET;
+	int iX = m_kPosition.x - DISPLAY_POS_X_OFFSET;
+	int iY = m_kPosition.y - DISPLAY_POS_Y_OFFSET;
 	iX += BASE_BOTTOM_WH / 2;
 	//iY += BASE_BOTTOM_WH-getGravityY();
 	iY -= getGravityY();

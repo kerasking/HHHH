@@ -2413,18 +2413,18 @@ void NDManualRole::drawServerEffect(std::vector<ServerEffect>& vEffect,
 		ServerEffect& serverEffect = *it;
 
 		float ty = 0;
-		float tx = m_position.x - 4;
+		float tx = m_kPosition.x - 4;
 
 		if (serverEffect.bQiZhi)
 		{
 			if (isTransformed())
 			{
-				ty = m_position.y - DISPLAY_POS_Y_OFFSET
+				ty = m_kPosition.y - DISPLAY_POS_Y_OFFSET
 						- m_pkAniGroupTransformed->getGravityY() + 46;
 			}
 			else
 			{
-				ty = m_position.y - DISPLAY_POS_Y_OFFSET - getGravityY() + 46;
+				ty = m_kPosition.y - DISPLAY_POS_Y_OFFSET - getGravityY() + 46;
 			}
 
 			if (isEffectTurn(serverEffect.severEffectId / 10000 % 10))
@@ -2434,12 +2434,12 @@ void NDManualRole::drawServerEffect(std::vector<ServerEffect>& vEffect,
 		}
 		else
 		{
-			tx = m_position.x + (m_bFaceRight ? 0 : 2);
+			tx = m_kPosition.x + (m_bFaceRight ? 0 : 2);
 			//ty = m_position.y + 8;// + (ridepet ? -8 : 0);
 
 			bool gravity = (serverEffect.severEffectId / 1000000 % 10) == 1;
 
-			ty = m_position.y - DISPLAY_POS_Y_OFFSET
+			ty = m_kPosition.y - DISPLAY_POS_Y_OFFSET
 					- (gravity ? getGravityY() : 0) + 46 + 32;
 		}
 
@@ -2495,7 +2495,7 @@ bool NDManualRole::IsServerEffectHasQiZhi()
 
 CGRect NDManualRole::GetFocusRect()
 {
-	int tx = m_position.x - DISPLAY_POS_X_OFFSET - 4;
+	int tx = m_kPosition.x - DISPLAY_POS_X_OFFSET - 4;
 	int ty = 0;
 	int w = 24;
 	int h = 0;
@@ -2504,20 +2504,20 @@ CGRect NDManualRole::GetFocusRect()
 	{
 		CGSize sizeGraveStone = m_picGraveStone->GetSize();
 		h = sizeGraveStone.height;
-		ty = m_position.y - 16;
+		ty = m_kPosition.y - 16;
 		w = sizeGraveStone.width;
 		tx -= 4;
 	}
 	else if (isTransformed())
 	{
 		h = this->m_pkAniGroupTransformed->GetHeight();
-		ty = m_position.y - h;
+		ty = m_kPosition.y - h;
 		w = this->m_pkAniGroupTransformed->GetWidth();
 	}
 	else
 	{
 		h = this->getGravityY();
-		ty = m_position.y - h + 22;
+		ty = m_kPosition.y - h + 22;
 		w = this->GetWidth();
 	}
 

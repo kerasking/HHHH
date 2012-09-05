@@ -42,7 +42,7 @@ void NDAutoPath::purgeSharedAutoPath()
 {
 	m_pointVector.clear();
 
-	CC_SAFE_DELETE (m_astar);
+	CC_SAFE_DELETE (m_pkAStar);
 }
 
 void NDAutoPath::init()
@@ -55,69 +55,70 @@ void NDAutoPath::init()
 
 	m_bMustArrive = true;
 
-	m_astar = new CAStar;
+	m_pkAStar = new CAStar;
 
-	m_astar->SetCheckMethod(checkCanPass);
+	m_pkAStar->SetCheckMethod(checkCanPass);
 }
 
 /* 从某一个像素点自动寻路到另外一个像素点(结果通过getPathPointArray方法获取)
  参数:fromPosition-起始像素点,toPoition-结束像素点,mapLayer-地图层指针,step-寻路间隔步数
  */
-bool NDAutoPath::autoFindPath(CGPoint fromPosition, CGPoint toPosition,
-		NDMapLayer* mapLayer, int step, bool mustarrive/*=false*/,
-		bool ignoreMask/*=false*/)
+bool NDAutoPath::autoFindPath(CGPoint kFromPosition, CGPoint kToPosition,
+		NDMapLayer* pkMapLayer, int nStep, bool bMustarrive/*=false*/,
+		bool bIgnoreMask/*=false*/)
 {
-	if (!mapLayer || !mapLayer->GetMapData())
+	if (!pkMapLayer || !pkMapLayer->GetMapData())
 	{
 		return false;
 	}
 
-	if (!m_astar)
+	if (!m_pkAStar)
 		return false;
 
 	//PerformanceTestName("自动寻路");
 
-	m_nStep = step;
+	m_nStep = nStep;
 
-	m_bIgnoreMask = ignoreMask;
+	m_bIgnoreMask = bIgnoreMask;
 
-	m_bMustArrive = mustarrive;
+	m_bMustArrive = bMustarrive;
 
-	fromPosition.x -= DISPLAY_POS_X_OFFSET;
-	fromPosition.y -= DISPLAY_POS_Y_OFFSET;
+	kFromPosition.x -= DISPLAY_POS_X_OFFSET;
+	kFromPosition.y -= DISPLAY_POS_Y_OFFSET;
 
-	toPosition.x -= DISPLAY_POS_X_OFFSET;
-	toPosition.y -= DISPLAY_POS_Y_OFFSET;
+	kToPosition.x -= DISPLAY_POS_X_OFFSET;
+	kToPosition.y -= DISPLAY_POS_Y_OFFSET;
 
 	m_pointVector.clear();
 
-	CMyPos startPos, endPos;
+	CMyPos kStartPos;
+	CMyPos kEndPos;
 
-	startPos.x = (int) fromPosition.x / MAP_UNITSIZE;
-	startPos.y = (int) fromPosition.y / MAP_UNITSIZE;
+	kStartPos.x = (int) kFromPosition.x / MAP_UNITSIZE;
+	kStartPos.y = (int) kFromPosition.y / MAP_UNITSIZE;
 
-	endPos.x = (int) toPosition.x / MAP_UNITSIZE;
-	endPos.y = (int) toPosition.y / MAP_UNITSIZE;
+	kEndPos.x = (int) kToPosition.x / MAP_UNITSIZE;
+	kEndPos.y = (int) kToPosition.y / MAP_UNITSIZE;
 
 	std::stringstream ss;
 
-	ss << "\n开始寻路==================" << "\n" << "寻路起始点[" << startPos.x << ","
-			<< startPos.y << "]\n" << "寻路目标点[" << endPos.x << "," << endPos.y
+	ss << "\n开始寻路==================" << "\n" << "寻路起始点[" << kStartPos.x << ","
+			<< kStartPos.y << "]\n" << "寻路目标点[" << kEndPos.x << "," << kEndPos.y
 			<< "]\n";
 
 	//NDLog("%@", [NSString stringWithUTF8String:ss.str().c_str()]);
 
-	m_astar->SetAStarRange(mapLayer->GetMapData()->getColumns(),
-			mapLayer->GetMapData()->getRows());
+	m_pkAStar->SetAStarRange(pkMapLayer->GetMapData()->getColumns(),
+			pkMapLayer->GetMapData()->getRows());
 
 	unsigned long maxTime = 1000 * 20;
 
-	if (mustarrive)
+	if (bMustarrive)
 	{
 		maxTime = 1000 * 1000;
 	}
 
-	if (!m_astar->FindPath(mapLayer, startPos, endPos, maxTime, mustarrive))
+	if (!m_pkAStar->FindPath(pkMapLayer, kStartPos, kEndPos, maxTime, bMustarrive))
 		return false;
 
 	this->GetPath();
@@ -175,10 +176,10 @@ const std::vector<CGPoint>& NDAutoPath::getPathPointVetor()
 
 void NDAutoPath::GetPath()
 {
-	if (!m_astar)
+	if (!m_pkAStar)
 		return;
 
-	DEQUE_NODE& path = m_astar->GetAStarPath();
+	DEQUE_NODE& path = m_pkAStar->GetAStarPath();
 
 	if (path.empty())
 		return;

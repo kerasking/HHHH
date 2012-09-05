@@ -1223,8 +1223,8 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 
 	CGSize sizeShadow = pic->GetSize();
 
-	int x = m_position.x - DISPLAY_POS_X_OFFSET;
-	int y = m_position.y - DISPLAY_POS_Y_OFFSET;
+	int x = m_kPosition.x - DISPLAY_POS_X_OFFSET;
+	int y = m_kPosition.y - DISPLAY_POS_Y_OFFSET;
 
 	pic->DrawInRect(
 			CGRectMake(x + m_iShadowOffsetX,
