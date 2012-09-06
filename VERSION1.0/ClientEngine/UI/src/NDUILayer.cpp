@@ -46,12 +46,12 @@ namespace NDEngine
 	NDUILayer::NDUILayer()
 	{
 		INIT_AUTOLINK(NDUILayer);
-		m_touchedNode = NULL;
-		m_focusNode = NULL;
-		m_backgroudTexture = NULL;
-		m_backgroudColor = ccc4(0, 0, 0, 0);
-		m_pic = NULL;
-		m_picFocus = NULL;
+		m_pkTouchedNode = NULL;
+		m_pkFocusNode = NULL;
+		m_pkBackgroudTexture = NULL;
+		m_kBackgroudColor = ccc4(0, 0, 0, 0);
+		m_pkPic = NULL;
+		m_pkPicFocus = NULL;
 		m_bClearOnFree = false; m_bFocusClearOnFree = false;
 		
 		m_longTouchTimer = new NDTimer;
@@ -66,7 +66,7 @@ namespace NDEngine
 		
 		m_enableDragOver = false;
 		
-		m_dragOverNode = NULL;
+		m_pkDragOverNode = NULL;
 		
 		m_moveTouch = CGPointZero;
 		
@@ -77,16 +77,16 @@ namespace NDEngine
 	
 	NDUILayer::~NDUILayer()
 	{
-		CC_SAFE_RELEASE(m_backgroudTexture);
+		CC_SAFE_RELEASE(m_pkBackgroudTexture);
 		
 		if (m_bClearOnFree) 
 		{
-			CC_SAFE_DELETE(m_pic);
+			CC_SAFE_DELETE(m_pkPic);
 		}
 		
 		if (m_bFocusClearOnFree) 
 		{
-			CC_SAFE_DELETE(m_picFocus);
+			CC_SAFE_DELETE(m_pkPicFocus);
 		}
 		
 		if (m_longTouchTimer) 
@@ -142,7 +142,7 @@ namespace NDEngine
 	
 	void NDUILayer::SetBackgroundImage(const char* imageFile)
 	{
-		CC_SAFE_RELEASE_NULL(m_backgroudTexture);
+		CC_SAFE_RELEASE_NULL(m_pkBackgroudTexture);
 		if (!imageFile)
 		{
 			return;
@@ -150,8 +150,8 @@ namespace NDEngine
 
 		CCImage image;
 		image.initWithImageFile(imageFile);
-		m_backgroudTexture	= new CCTexture2D;
-		m_backgroudTexture->initWithImage(&image);
+		m_pkBackgroudTexture	= new CCTexture2D;
+		m_pkBackgroudTexture->initWithImage(&image);
 	}
 	
 	void NDUILayer::SetBackgroundImageLua(NDPicture *pic)
@@ -163,10 +163,10 @@ namespace NDEngine
 	{
 		if (m_bClearOnFree) 
 		{
-			delete m_pic;
+			delete m_pkPic;
 		}
 		
-		m_pic = pic;
+		m_pkPic = pic;
 		
 		m_bClearOnFree = bClearOnFree;
 	}
@@ -180,27 +180,27 @@ namespace NDEngine
 	{
 		if (m_bFocusClearOnFree) 
 		{
-			delete m_picFocus;
+			delete m_pkPicFocus;
 		}
 		
-		m_picFocus = pic;
+		m_pkPicFocus = pic;
 		
 		m_bFocusClearOnFree = bClearOnFree;
 	}
 	
 	void NDUILayer::SetBackgroundColor(ccColor4B color)
 	{
-		m_backgroudColor = ccc4(color.r, color.g, color.b, color.a);
+		m_kBackgroudColor = ccc4(color.r, color.g, color.b, color.a);
 	}
 	
 	void NDUILayer::SetFocus(NDUINode* node)
 	{
-		m_focusNode = node;
+		m_pkFocusNode = node;
 	}
 	
 	NDUINode* NDUILayer::GetFocus()
 	{
-		return m_focusNode;
+		return m_pkFocusNode;
 	}
 	
 	void NDUILayer::draw()
@@ -216,7 +216,7 @@ namespace NDEngine
 
 			bool focus = false;
 			
-			if (m_picFocus
+			if (m_pkPicFocus
 				&& this->GetParent() 
 				&& this->GetParent()->IsKindOfClass(RUNTIME_CLASS(NDUILayer))
 				) 
@@ -228,11 +228,11 @@ namespace NDEngine
 			
 			CGRect scrRect = this->GetScreenRect();
 			
-			NDPicture* pic = focus ? (m_picFocus == NULL ? m_pic : m_picFocus) : m_pic;
+			NDPicture* pic = focus ? (m_pkPicFocus == NULL ? m_pkPic : m_pkPicFocus) : m_pkPic;
 			
 			if (pic) 
 			{
-				DrawRecttangle(scrRect, m_backgroudColor);
+				DrawRecttangle(scrRect, m_kBackgroudColor);
 				
 				pic->DrawInRect(scrRect);
 			}
@@ -240,14 +240,14 @@ namespace NDEngine
 			{
 				ccColor4B kColor = {0};
 
-				m_backgroudColor = kColor;
-				DrawRecttangle(scrRect, m_backgroudColor);
+				m_kBackgroudColor = kColor;
+				DrawRecttangle(scrRect, m_kBackgroudColor);
 				
-				if (m_backgroudTexture) 
+				if (m_pkBackgroudTexture) 
 				{
 					//glDisableClientState(GL_COLOR_ARRAY);
 					
-					m_backgroudTexture->drawInRect(scrRect);	
+					m_pkBackgroudTexture->drawInRect(scrRect);	
 					
 					//glEnableClientState(GL_COLOR_ARRAY);
 				}
@@ -340,7 +340,7 @@ namespace NDEngine
 			return false;
 		}
 		
-		m_dispatchTouchEndEvent = true;
+		m_bDispatchTouchEndEvent = true;
 		m_beginTouch = touch->GetLocation();
 		//add by zhangdi 20120828
 		float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
@@ -357,7 +357,7 @@ namespace NDEngine
 			//this->DispatchTouchEndEvent(m_beginTouch, m_beginTouch);
 			
 			// 长按开始
-			if (m_touchedNode && m_longTouchTimer) 
+			if (m_pkTouchedNode && m_longTouchTimer) 
 			{
 				m_longTouchTimer->SetTimer(this, LONG_TOUCH_TIMER_TAG, LONG_TOUCH_TIME);
 			}
@@ -375,16 +375,16 @@ namespace NDEngine
 		CGPoint tmpTouch = CGPointMake(m_endTouch.x * fScale, m_endTouch.y * fScale);
 		m_endTouch = tmpTouch;
 		
-		if (m_dragOverNode)
+		if (m_pkDragOverNode)
 		{
-			if (m_dragOverNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
+			if (m_pkDragOverNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
 			{
 				NDUIButtonDelegate* delegate = dynamic_cast<NDUIButtonDelegate*>
-					(m_dragOverNode->GetDelegate());
+					(m_pkDragOverNode->GetDelegate());
 				
 				if (delegate)
 				{
-					delegate->OnButtonDragOver((NDUIButton*)m_dragOverNode, false);	
+					delegate->OnButtonDragOver((NDUIButton*)m_pkDragOverNode, false);	
 				}
 			}
 		}
@@ -406,7 +406,7 @@ namespace NDEngine
 		}
 	
 		
-		if (m_dispatchTouchEndEvent && !m_layerMoved) 
+		if (m_bDispatchTouchEndEvent && !m_layerMoved) 
 		{
 			//add by zhangdi 20120828
 // 			float scale = NDDirector::DefaultDirector()->GetScaleFactor();
@@ -427,12 +427,12 @@ namespace NDEngine
 		// 拖入
 		if (m_dragOutFlag && !m_layerMoved) 
 		{
-			if (!DispatchDragInEvent(m_touchedNode, m_beginTouch, m_endTouch, m_longTouch, true)) 
+			if (!DispatchDragInEvent(m_pkTouchedNode, m_beginTouch, m_endTouch, m_longTouch, true)) 
 			{
 				NDNode *node = this;
 				
 				while ( (node = node->GetParent()) && node->IsKindOfClass(RUNTIME_CLASS(NDUILayer))) 
-					if (((NDUILayer*)node)->DispatchDragInEvent(m_touchedNode, m_beginTouch, m_endTouch, m_longTouch, true))
+					if (((NDUILayer*)node)->DispatchDragInEvent(m_pkTouchedNode, m_beginTouch, m_endTouch, m_longTouch, true))
 					{
 						return true;
 					}
@@ -457,10 +457,10 @@ namespace NDEngine
 		
 		printf("\nmove x[%.1f]y[%.1f]", moveTouch.x, moveTouch.y);
 		
-		if (m_touchedNode && m_dispatchTouchEndEvent) 
+		if (m_pkTouchedNode && m_bDispatchTouchEndEvent) 
 		{
 			DealTouchNodeState(false);
-			m_dispatchTouchEndEvent = false;
+			m_bDispatchTouchEndEvent = false;
 		}
 		
 		if (m_bDispatchLongTouchEvent)
@@ -472,11 +472,11 @@ namespace NDEngine
 		m_touchMoved = true;
 		
 		// 长按
-		if (m_touchedNode) 
+		if (m_pkTouchedNode) 
 		{
 			DispatchDragOverEvent(m_beginTouch, moveTouch);
 			
-			CGRect nodeFrame = m_touchedNode->GetScreenRect();
+			CGRect nodeFrame = m_pkTouchedNode->GetScreenRect();
 			nodeFrame = RectAdd(nodeFrame, 2);	
 			
 			if ( !m_layerMoved && (CGRectContainsPoint(nodeFrame, moveTouch) || m_dragOutFlag) ) 
@@ -512,7 +512,7 @@ namespace NDEngine
 			return false;
 		}
 		
-		m_dispatchTouchEndEvent = true;
+		m_bDispatchTouchEndEvent = true;
 		m_beginTouch = touch->GetLocation();		
 		
 		if (CGRectContainsPoint(this->GetScreenRect(), m_beginTouch) && this->IsVisibled() && this->EventEnabled()) 
@@ -526,7 +526,7 @@ namespace NDEngine
 	
 	bool NDUILayer::DispatchTouchBeginEvent(CGPoint beginTouch)
 	{	
-		m_touchedNode = NULL;
+		m_pkTouchedNode = NULL;
 		
 		if (!this->IsVisibled())
 		{
@@ -576,7 +576,7 @@ namespace NDEngine
 			
 			if (CGRectContainsPoint(nodeFrame, beginTouch)) 
 			{
-				m_touchedNode = uiNode;
+				m_pkTouchedNode = uiNode;
 				DealTouchNodeState(true);
 				return true;
 			}
@@ -586,7 +586,7 @@ namespace NDEngine
 	
 	bool NDUILayer::DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch)
 	{	
-		if (m_touchedNode) 
+		if (m_pkTouchedNode) 
 		{
 			DealTouchNodeState(false);
 		}
@@ -634,7 +634,7 @@ namespace NDEngine
 				if (CGRectContainsPoint(nodeFrame, beginTouch)) 
 				{
 					//set focus 
-					m_focusNode = uiNode;	
+					m_pkFocusNode = uiNode;	
 					
 					//NDUILayer need dispatch event
 					if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer))) 
@@ -882,12 +882,12 @@ namespace NDEngine
 	
 	void NDUILayer::DealTouchNodeState(bool down)
 	{
-		if (m_touchedNode && m_dispatchTouchEndEvent) 
+		if (m_pkTouchedNode && m_bDispatchTouchEndEvent) 
 		{
 			//NDUIButton must clear touch down event on touch up 
-			if (m_touchedNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton))) 
+			if (m_pkTouchedNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton))) 
 			{
-				NDUIButton* uiButton = (NDUIButton*)m_touchedNode;
+				NDUIButton* uiButton = (NDUIButton*)m_pkTouchedNode;
 				uiButton->OnTouchDown(down);
 			}
 			//NDUISectionTitle must clear touch down event on touch up 
@@ -917,12 +917,12 @@ namespace NDEngine
 	
 	void NDUILayer::DealLongTouchNodeState(bool down)
 	{
-		if (m_touchedNode) 
+		if (m_pkTouchedNode) 
 		{
 			//NDUIButton must clear touch down event on touch up 
-			if (m_touchedNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton))) 
+			if (m_pkTouchedNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton))) 
 			{
-				NDUIButton* uiButton = (NDUIButton*)m_touchedNode;
+				NDUIButton* uiButton = (NDUIButton*)m_pkTouchedNode;
 				uiButton->OnLongTouchDown(down);
 			}
 		}
@@ -949,7 +949,7 @@ namespace NDEngine
 	
 	bool NDUILayer::DispatchLongTouchClickEvent(CGPoint beginTouch, CGPoint endTouch)
 	{
-		if (m_touchedNode) 
+		if (m_pkTouchedNode) 
 		{
 			DealTouchNodeState(false);
 		}
@@ -997,7 +997,7 @@ namespace NDEngine
 				if (CGRectContainsPoint(nodeFrame, beginTouch)) 
 				{
 					//set focus 
-					m_focusNode = uiNode;	
+					m_pkFocusNode = uiNode;	
 					
 					//NDUILayer need dispatch event
 					if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer))) 
@@ -1026,11 +1026,11 @@ namespace NDEngine
 	
 	bool NDUILayer::DispatchLongTouchEvent(CGPoint beginTouch, bool touch)
 	{
-		if (!m_touchedNode || m_touchMoved) return false;
+		if (!m_pkTouchedNode || m_touchMoved) return false;
 		
 		DealLongTouchNodeState(touch);
 		
-		NDUINode* uiNode = m_touchedNode;
+		NDUINode* uiNode = m_pkTouchedNode;
 		
 		if (!this->IsVisibled())
 		{
@@ -1098,7 +1098,7 @@ namespace NDEngine
 	
 	bool NDUILayer::DispatchDragOutEvent(CGPoint beginTouch, CGPoint moveTouch, bool longTouch/*=false*/)
 	{
-		if (!m_touchedNode) return false;
+		if (!m_pkTouchedNode) return false;
 		
 		if (!this->IsVisibled())
 		{
@@ -1107,7 +1107,7 @@ namespace NDEngine
 		
 		//m_focusNode = m_touchedNode;
 	
-		NDUINode* uiNode = m_touchedNode;
+		NDUINode* uiNode = m_pkTouchedNode;
 		
 		//un visibled node dont accept event
 		if (!uiNode->IsVisibled()) 
@@ -1176,9 +1176,9 @@ namespace NDEngine
 	
 	bool NDUILayer::DispatchDragOutCompleteEvent(CGPoint beginTouch, CGPoint endTouch, bool longTouch/*=false*/)
 	{
-		if (!m_touchedNode) return false;
+		if (!m_pkTouchedNode) return false;
 		
-		NDUINode* uiNode = m_touchedNode;
+		NDUINode* uiNode = m_pkTouchedNode;
 		
 		if (!this->IsVisibled())
 		{
@@ -1323,21 +1323,21 @@ namespace NDEngine
 			return false;
 		}
 		
-		if (m_dragOverNode)
+		if (m_pkDragOverNode)
 		{
-			CGRect nodeFrame = m_dragOverNode->GetScreenRect();
+			CGRect nodeFrame = m_pkDragOverNode->GetScreenRect();
 			nodeFrame = RectAdd(nodeFrame, 2);	
 			
 			bool isInRange = CGRectContainsPoint(nodeFrame, moveTouch);
-			if (m_dragOverNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
+			if (m_pkDragOverNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
 			{
-				NDUIButtonDelegate* delegate = dynamic_cast<NDUIButtonDelegate*> (m_dragOverNode->GetDelegate());
+				NDUIButtonDelegate* delegate = dynamic_cast<NDUIButtonDelegate*> (m_pkDragOverNode->GetDelegate());
 				
 				if (!delegate) return false;
 				
 				if (isInRange) return true;
 				
-				delegate->OnButtonDragOver((NDUIButton*)m_dragOverNode, false);	
+				delegate->OnButtonDragOver((NDUIButton*)m_pkDragOverNode, false);	
 			}
 		}
 		
@@ -1395,7 +1395,7 @@ namespace NDEngine
 					NDUIButtonDelegate* delegate = dynamic_cast<NDUIButtonDelegate*> (uiNode->GetDelegate());
 					if (delegate && delegate->OnButtonDragOver((NDUIButton*)uiNode, true))
 					{
-						m_dragOverNode = uiNode;
+						m_pkDragOverNode = uiNode;
 						return true;
 					}
 				}					
@@ -1555,7 +1555,7 @@ namespace NDEngine
 		
 		m_layerMoved = false;
 		
-		m_dragOverNode = NULL;
+		m_pkDragOverNode = NULL;
 	}
 	
 	CGRect NDUILayer::RectAdd(CGRect rect, int value)

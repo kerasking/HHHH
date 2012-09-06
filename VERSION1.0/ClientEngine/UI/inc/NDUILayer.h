@@ -138,16 +138,17 @@ namespace NDEngine
 		void DealTouchNodeState(bool down);
 		void DealLongTouchNodeState(bool down);
 	private:
-		NDUINode* m_focusNode; 
-		NDUINode* m_touchedNode;
-		NDUINode* m_dragOverNode;
+		NDUINode* m_pkFocusNode; 
+		NDUINode* m_pkTouchedNode;
+		NDUINode* m_pkDragOverNode;
 		
-		NDPicture *m_pic, *m_picFocus;
+		NDPicture* m_pkPic;
+		NDPicture* m_pkPicFocus;
 		bool	  m_bClearOnFree, m_bFocusClearOnFree;
-		cocos2d::CCTexture2D *m_backgroudTexture;
-		cocos2d::ccColor4B m_backgroudColor;
+		cocos2d::CCTexture2D* m_pkBackgroudTexture;
+		cocos2d::ccColor4B m_kBackgroudColor;
 		
-		bool m_dispatchTouchEndEvent;
+		bool m_bDispatchTouchEndEvent;
 		
 		CGRect RectAdd(CGRect rect, int value);
 		//NDUIEdit deals
