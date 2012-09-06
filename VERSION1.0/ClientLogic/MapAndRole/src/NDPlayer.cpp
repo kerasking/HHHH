@@ -704,7 +704,8 @@ void NDPlayer::OnMoveEnd()
 		return;
 	}
 
-	SetAction(false);
+	//SetAction(false);
+	SetCurrentAnimation(MANUELROLE_STAND,false);
 	NDManualRole::OnMoveEnd();
 	if (isTeamLeader())
 	{

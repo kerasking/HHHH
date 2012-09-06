@@ -86,7 +86,7 @@ public:
 
 public:
 	void Update(unsigned long ulDiff);
-	void SetAction(bool bMove, bool ignoreFighting = false);
+	void SetAction(bool bMove, bool bIgnoreFighting = false);
 	bool AssuredRidePet();hide
 
 	void Initialization(int lookface, bool bSetLookFace = true);
@@ -231,8 +231,8 @@ private:
 	void SetLable(LableType eLableType, int x, int y, std::string text,
 			cocos2d::ccColor4B color1, cocos2d::ccColor4B color2);
 protected:
-	void WalkToPosition(const std::vector<CGPoint>& vec_toPos,
-			SpriteSpeed speed, bool moveMap, bool mustArrive = false);
+	void WalkToPosition(const std::vector<CGPoint>& kToPosVector,
+			SpriteSpeed eSpeed, bool bMoveMap, bool bMustArrive = false);
 	void processTeamMemberMove(bool bDraw);
 
 	enum

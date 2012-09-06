@@ -396,7 +396,7 @@ void NDManualRole::OnMoving(bool bLastPos)
 	/***
 	 * @end
 	 */
-	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
+	//SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 	int a = 10;
 
 	//if (isTeamLeader())
@@ -405,15 +405,15 @@ void NDManualRole::OnMoving(bool bLastPos)
 //		}
 }
 
-void NDManualRole::WalkToPosition(const std::vector<CGPoint>& vec_toPos,
-		SpriteSpeed speed, bool moveMap, bool mustArrive/*=false*/)
+void NDManualRole::WalkToPosition(const std::vector<CGPoint>& kToPosVector,
+		SpriteSpeed eSpeed, bool bMoveMap, bool bMustArrive/*=false*/)
 {
-	if (vec_toPos.empty())
+	if (kToPosVector.empty())
 	{
 		return;
 	}
 
-	if (this->GetPosition().x > vec_toPos[0].x)
+	if (this->GetPosition().x > kToPosVector[0].x)
 	{
 		m_bFaceRight = false;
 	}
@@ -425,15 +425,15 @@ void NDManualRole::WalkToPosition(const std::vector<CGPoint>& vec_toPos,
 	if (isTeamLeader() || !isTeamMember())
 	{
 		bool bGnoreMask = IsInState(USERSTATE_FLY); // && NDMapMgrObj.canFly(); ///< 临时性注释 郭浩 外加一个分号
-		this->MoveToPosition(vec_toPos,
+		this->MoveToPosition(kToPosVector,
 				IsInState(USERSTATE_SPEED_UP) ?
-						SpriteSpeedStep8 : SpriteSpeedStep4, moveMap,
-				bGnoreMask, mustArrive);
+						SpriteSpeedStep8 : SpriteSpeedStep4, bMoveMap,
+				bGnoreMask, bMustArrive);
 		if (isTeamLeader())
 		{
 			if (!m_kPointList.empty())
 			{
-				teamMemberWalkToPosition(vec_toPos);
+				teamMemberWalkToPosition(kToPosVector);
 			}
 			else
 			{
@@ -466,7 +466,7 @@ void NDManualRole::WalkToPosition(const std::vector<CGPoint>& vec_toPos,
 	if (m_pkRidePet)
 	{
 		m_pkRidePet->m_bFaceRight = m_bFaceRight;
-		m_pkRidePet->WalkToPosition(vec_toPos[0]);
+		m_pkRidePet->WalkToPosition(kToPosVector[0]);
 	}
 
 	SetAction(true);
@@ -1063,7 +1063,7 @@ void NDManualRole::OnMoveEnd()
 //		}
 }
 
-void NDManualRole::SetAction(bool bMove, bool ignoreFighting/*=false*/)
+void NDManualRole::SetAction(bool bMove, bool bIgnoreFighting/*=false*/)
 {
 	//int animationIndex = MANUELROLE_STAND;
 //		if (bMove) 
@@ -1139,23 +1139,32 @@ void NDManualRole::SetAction(bool bMove, bool ignoreFighting/*=false*/)
 		 {// 溜宠移动
 		 AnimationListObj.moveAction(TYPE_ENEMYROLE, m_pBattlePetShow, m_faceRight);
 		 }*/
-		if (AssuredRidePet() && !isTransformed())
-		{
-			this->setMoveActionWithRidePet();
-		}
-		else
-		{ // 人物普通移动
+			/***
+			* 临时性注释 郭浩
+			* begin
+			*/
+		//if (AssuredRidePet() && !isTransformed())
+		//{
+		//	this->setMoveActionWithRidePet();
+		//}
+		//else
+		//{ // 人物普通移动
+			/***
+			* 临时性注释 郭浩
+			* end
+			*/
+
 			if (isTransformed())
 			{
 				AnimationListObj.moveAction(TYPE_MANUALROLE,
-						m_pkAniGroupTransformed, 1 - m_bFaceRight);
+					m_pkAniGroupTransformed, 1 - m_bFaceRight);
 			}
 			else
 			{
 				AnimationListObj.moveAction(TYPE_MANUALROLE, this,
-						m_bFaceRight);
+					m_bFaceRight);
 			}
-		}
+	//	}	///< 临时性注释 郭浩
 	}
 	else
 	{
@@ -1168,23 +1177,36 @@ void NDManualRole::SetAction(bool bMove, bool ignoreFighting/*=false*/)
 		 {// 溜宠站立
 		 AnimationListObj.standAction(TYPE_ENEMYROLE, m_pBattlePetShow, m_faceRight);
 		 }*/
-		if (AssuredRidePet() && !isTransformed())
-		{ // 骑宠站立
-			this->setStandActionWithRidePet();
-		}
-		else
+
+		/***
+		* 临时性注释 郭浩
+		* begin
+		*/
+		//if (AssuredRidePet() && !isTransformed())
+		//{ // 骑宠站立
+		//	this->setStandActionWithRidePet();
+		//}
+		//else
+		//{
+		/***
+		* 临时性注释 郭浩
+		* end
+		*/
+
+		if (isTransformed())
 		{
 			if (isTransformed())
 			{
 				AnimationListObj.standAction(TYPE_MANUALROLE,
-						m_pkAniGroupTransformed, 1 - m_bFaceRight);
+					m_pkAniGroupTransformed, 1 - m_bFaceRight);
 			}
 			else
 			{
 				AnimationListObj.standAction(TYPE_MANUALROLE, this,
-						m_bFaceRight);
+					m_bFaceRight);
 			}
 		}
+		//} ///< 临时性注释 郭浩 
 	}
 
 }
