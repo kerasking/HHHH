@@ -453,7 +453,7 @@ bool CUIScroll::OnLayerMoveOfDistance(NDUILayer* uiLayer, float hDistance, float
 
 void CUIScroll::OnMove()
 {
-	UIMoveInfo info(m_moveTouch, 0);//todo(zjh)[NSDate timeIntervalSinceReferenceDate]);
+	UIMoveInfo info(m_kMoveTouch, 0);//todo(zjh)[NSDate timeIntervalSinceReferenceDate]);
 	PushMove(info);
 	
 	if (m_bUp) 

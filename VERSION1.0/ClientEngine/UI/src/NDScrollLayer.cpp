@@ -145,7 +145,7 @@ bool NDScrollLayer::OnLayerMove(NDUILayer* uiLayer, UILayerMove move,
 	if (!bVertical && !bHorizontal)
 		return false;
 
-	MoveInfo info(m_moveTouch, clock());
+	MoveInfo info(m_kMoveTouch, clock());
 	PushMove(info, bHorizontal);
 
 	if (bVertical)
