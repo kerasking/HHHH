@@ -675,7 +675,7 @@ void NDMapData::decode(FILE* pkStream)
 
 		int x = kFileOp.readShort(pkStream);		//x坐标
 		int y = kFileOp.readShort(pkStream);		//y坐标
-		int aniOrder = y + kFileOp.readShort(pkStream);	//排序重心
+		int nAniOrder = y + kFileOp.readShort(pkStream);	//排序重心
 
 		anigroup_param* pkDict = new anigroup_param;
 
@@ -684,7 +684,7 @@ void NDMapData::decode(FILE* pkStream)
 		pkDict->insert(std::make_pair("positionY", y));
 		pkDict->insert(std::make_pair("mapSizeW", m_nColumns * m_nUnitSize));
 		pkDict->insert(std::make_pair("mapSizeH", m_nRows * m_nUnitSize));
-		pkDict->insert(std::make_pair("orderId", aniOrder));
+		pkDict->insert(std::make_pair("orderId", nAniOrder));
 		pkDict->insert(std::make_pair("reverse", 0));
 		pkDict->insert(std::make_pair("reverse", 0));
 

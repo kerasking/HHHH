@@ -128,7 +128,7 @@ void NDSprite::RunAnimation(bool bDraw)
 		{
 			//else
 //				{
-			int iPoints = m_pointList.size();
+			int iPoints = m_kPointList.size();
 			if (m_nMovePathIndex < iPoints)
 			{
 				if (m_nMovePathIndex == 0)
@@ -140,7 +140,7 @@ void NDSprite::RunAnimation(bool bDraw)
 					this->OnMoving(m_nMovePathIndex == iPoints - 1);
 				}
 
-				CGPoint kPos = m_pointList.at(m_nMovePathIndex++);
+				CGPoint kPos = m_kPointList.at(m_nMovePathIndex++);
 //						if (m_movePathIndex < (int)m_pointList.size() && m_movePathIndex > 2)
 //						{
 //							CGPoint prePos = this->GetPosition();
@@ -242,10 +242,10 @@ void NDSprite::SetPosition(CGPoint newPosition)
 	this->m_kPosition = CGPointMake(newPosition.x, newPosition.y);
 }
 
-void NDSprite::MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed,
+void NDSprite::MoveToPosition(std::vector<CGPoint> kToPos, SpriteSpeed speed,
 		bool moveMap, bool ignoreMask/*=false*/, bool mustArrive/*=false*/)
 {
-	int iSize = toPos.size();
+	int iSize = kToPos.size();
 	if (iSize == 0)
 	{
 		return;
@@ -269,26 +269,26 @@ void NDSprite::MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed,
 //				}
 
 			m_nMovePathIndex = 0;
-			m_pointList.clear();
+			m_kPointList.clear();
 
 			CGPoint from = m_kPosition;
 			for (int i = 0; i < iSize; i++)
 			{
-				CGPoint to = toPos[i];
-				std::vector < CGPoint > pointlist;
+				CGPoint to = kToPos[i];
+				std::vector < CGPoint > kPointList;
 				NDAutoPath::sharedAutoPath()->autoFindPath(from, to,
 						(NDMapLayer*) pkLayer, m_iSpeed, mustArrive, ignoreMask);
-				pointlist = NDAutoPath::sharedAutoPath()->getPathPointVetor();
+				kPointList = NDAutoPath::sharedAutoPath()->getPathPointVetor();
 
-				if (!pointlist.empty())
+				if (!kPointList.empty())
 				{
-					m_pointList.insert(m_pointList.end(), pointlist.begin(),
-							pointlist.end());
-					from = m_pointList[m_pointList.size() - 1];
+					m_kPointList.insert(m_kPointList.end(), kPointList.begin(),
+							kPointList.end());
+					from = m_kPointList[m_kPointList.size() - 1];
 				}
 			}
 
-			if (m_pointList.empty())
+			if (m_kPointList.empty())
 			{
 				m_bIsMoving = false;
 			}
@@ -322,7 +322,7 @@ CGPoint NDSprite::GetPosition()
 void NDSprite::stopMoving()
 {
 	m_bIsMoving = false;
-	m_pointList.clear();
+	m_kPointList.clear();
 	m_nMovePathIndex = 0;
 }
 
@@ -877,14 +877,14 @@ int NDSprite::getGravityX()
 
 bool NDSprite::GetLastPointOfPath(CGPoint& pos)
 {
-	size_t count = m_pointList.size();
+	size_t count = m_kPointList.size();
 
 	if (count == 0)
 	{
 		return false;
 	}
 
-	pos = m_pointList[count - 1];
+	pos = m_kPointList[count - 1];
 
 	return true;
 }

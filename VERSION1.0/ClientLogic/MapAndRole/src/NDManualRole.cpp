@@ -431,7 +431,7 @@ void NDManualRole::WalkToPosition(const std::vector<CGPoint>& vec_toPos,
 				bGnoreMask, mustArrive);
 		if (isTeamLeader())
 		{
-			if (!m_pointList.empty())
+			if (!m_kPointList.empty())
 			{
 				teamMemberWalkToPosition(vec_toPos);
 			}
@@ -882,13 +882,13 @@ void NDManualRole::SetTeamToLastPos()
 
 	std::vector < CGPoint > vec_pos;
 	CGPoint kCurrentPosition;
-	if (m_pointList.empty())
+	if (m_kPointList.empty())
 	{
 		kCurrentPosition = GetPosition();
 	}
 	else
 	{
-		kCurrentPosition = m_pointList.at(m_pointList.size() - 1);
+		kCurrentPosition = m_kPointList.at(m_kPointList.size() - 1);
 	}
 
 	deque<int>::iterator itdeque = m_kDequeWalk.begin();

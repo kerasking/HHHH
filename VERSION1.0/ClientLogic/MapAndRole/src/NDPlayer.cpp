@@ -677,12 +677,12 @@ void NDPlayer::OnMoving(bool bLastPos)
 void NDPlayer::OnMoveBegin()
 {
 	NDMapLayer* maplayer = M_GetMapLayer();
-	if (!maplayer || m_pointList.size() == 0)
+	if (!maplayer || m_kPointList.size() == 0)
 	{
 		return;
 	}
 
-	CGPoint pos = m_pointList[m_pointList.size() - 1];
+	CGPoint pos = m_kPointList[m_kPointList.size() - 1];
 	int nX = (pos.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
 	int nY = (pos.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
 

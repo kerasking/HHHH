@@ -271,7 +271,7 @@ public:
 
 	void SetPointList(std::vector<CGPoint>& vec_point)
 	{
-		m_pointList = vec_point;
+		m_kPointList = vec_point;
 		StartMoving();
 	}
 
@@ -405,7 +405,7 @@ protected:
 	int m_nColorInfo;
 	int m_nCloak;
 
-	std::vector<CGPoint> m_pointList;
+	std::vector<CGPoint> m_kPointList;
 	int m_iSpeed;
 	CGPoint m_kTargetPos;
 

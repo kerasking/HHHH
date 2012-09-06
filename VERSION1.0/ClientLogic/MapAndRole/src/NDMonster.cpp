@@ -305,11 +305,11 @@ void NDMonster::MoveToPosition(CGPoint toPos,
 		NDLayer* layer = (NDLayer *) this->GetParent();
 		if (layer->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
-			m_pointList.clear();
+			m_kPointList.clear();
 			m_bMoveMap = moveMap;
 			m_bIsMoving = true;
 			m_nMovePathIndex = 0;
-			m_pointList.push_back(toPos);
+			m_kPointList.push_back(toPos);
 		}
 	}
 }

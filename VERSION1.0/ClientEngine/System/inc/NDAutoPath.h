@@ -54,7 +54,7 @@ private:
 	void GetPath();
 
 private:
-	std::vector<CGPoint> m_pointVector;					// 寻路结果后得到的像素Vector
+	std::vector<CGPoint> m_kPointVector;					// 寻路结果后得到的像素Vector
 	bool m_bIgnoreMask, m_bMustArrive;
 	CAStar* m_pkAStar;
 	int m_nStep;

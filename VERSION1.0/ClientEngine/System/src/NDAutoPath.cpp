@@ -11,6 +11,7 @@
 #include <sstream>
 #include <stdlib.h>
 //#include "Performance.h"
+#include "CCPointExtension.h"
 
 namespace NDEngine
 {
@@ -40,14 +41,14 @@ NDAutoPath* NDAutoPath::sharedAutoPath()
  */
 void NDAutoPath::purgeSharedAutoPath()
 {
-	m_pointVector.clear();
+	m_kPointVector.clear();
 
 	CC_SAFE_DELETE (m_pkAStar);
 }
 
 void NDAutoPath::init()
 {
-	m_pointVector.clear();
+	m_kPointVector.clear();
 
 	m_nStep = 0;
 
@@ -64,7 +65,7 @@ void NDAutoPath::init()
  参数:fromPosition-起始像素点,toPoition-结束像素点,mapLayer-地图层指针,step-寻路间隔步数
  */
 bool NDAutoPath::autoFindPath(CGPoint kFromPosition, CGPoint kToPosition,
-		NDMapLayer* pkMapLayer, int nStep, bool bMustarrive/*=false*/,
+		NDMapLayer* pkMapLayer, int nStep, bool bMustArrive/*=false*/,
 		bool bIgnoreMask/*=false*/)
 {
 	if (!pkMapLayer || !pkMapLayer->GetMapData())
@@ -81,7 +82,7 @@ bool NDAutoPath::autoFindPath(CGPoint kFromPosition, CGPoint kToPosition,
 
 	m_bIgnoreMask = bIgnoreMask;
 
-	m_bMustArrive = bMustarrive;
+	m_bMustArrive = bMustArrive;
 
 	kFromPosition.x -= DISPLAY_POS_X_OFFSET;
 	kFromPosition.y -= DISPLAY_POS_Y_OFFSET;
@@ -89,7 +90,7 @@ bool NDAutoPath::autoFindPath(CGPoint kFromPosition, CGPoint kToPosition,
 	kToPosition.x -= DISPLAY_POS_X_OFFSET;
 	kToPosition.y -= DISPLAY_POS_Y_OFFSET;
 
-	m_pointVector.clear();
+	m_kPointVector.clear();
 
 	CMyPos kStartPos;
 	CMyPos kEndPos;
@@ -111,14 +112,14 @@ bool NDAutoPath::autoFindPath(CGPoint kFromPosition, CGPoint kToPosition,
 	m_pkAStar->SetAStarRange(pkMapLayer->GetMapData()->getColumns(),
 			pkMapLayer->GetMapData()->getRows());
 
-	unsigned long maxTime = 1000 * 20;
+	unsigned long ulMaxTime = 1000 * 20;
 
-	if (bMustarrive)
+	if (bMustArrive)
 	{
-		maxTime = 1000 * 1000;
+		ulMaxTime = 1000 * 1000;
 	}
 
-	if (!m_pkAStar->FindPath(pkMapLayer, kStartPos, kEndPos, maxTime, bMustarrive))
+	if (!m_pkAStar->FindPath(pkMapLayer, kStartPos, kEndPos, ulMaxTime, bMustArrive))
 		return false;
 
 	this->GetPath();
@@ -158,7 +159,7 @@ bool NDAutoPath::autoFindPath(CGPoint kFromPosition, CGPoint kToPosition,
  */
 const std::vector<CGPoint>& NDAutoPath::getPathPointVetor()
 {
-	return m_pointVector;
+	return m_kPointVector;
 }
 
 /*
@@ -179,27 +180,27 @@ void NDAutoPath::GetPath()
 	if (!m_pkAStar)
 		return;
 
-	DEQUE_NODE& path = m_pkAStar->GetAStarPath();
+	DEQUE_NODE& kPath = m_pkAStar->GetAStarPath();
 
-	if (path.empty())
+	if (kPath.empty())
 		return;
 
-	int nCount = (int) path.size();
+	int nCount = (int) kPath.size();
 
 	if (nCount > 1)
 	{
-		std::stringstream ss;
-		ss << "\n本次寻路路径==================" << "\n";
-		ss << "总步数:" << nCount << "\n";
+		std::stringstream kStringStream;
+		kStringStream << "\n本次寻路路径==================" << "\n";
+		kStringStream << "总步数:" << nCount << "\n";
 		//<< "寻路起始:" << "[" << nStartCellX << "," << nStartCellY << "]"
 		//<< ", 寻路目标" << "[" << nEndCellX << "," << nEndCellY << "]"
 		//<< "\n";
 		for (int i = 0; i < nCount; i++)
 		{
-			NodeInfo* pathnode = path[i];
-			ss << "[" << pathnode->nX << "," << pathnode->nY << "]";
+			NodeInfo* pathnode = kPath[i];
+			kStringStream << "[" << pathnode->nX << "," << pathnode->nY << "]";
 		}
-		ss << "\n路径结束==================\n";
+		kStringStream << "\n路径结束==================\n";
 
 		//NDLog("%@", [NSString stringWithUTF8String:ss.str().c_str()]);
 	}
@@ -209,14 +210,14 @@ void NDAutoPath::GetPath()
 		int iTimes = MAP_UNITSIZE / m_nStep;
 
 		CGPoint kPos;
-		NodeInfo* pkNode = path[0];
+		NodeInfo* pkNode = kPath[0];
 		kPos.x = pkNode->nX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
 		kPos.y = pkNode->nY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
 
 		for (int index = 0; index < nCount - 1; index++)
 		{
-			NodeInfo& first = *(path[index]);
-			NodeInfo& second = *(path[index + 1]);
+			NodeInfo& first = *(kPath[index]);
+			NodeInfo& second = *(kPath[index + 1]);
 			/*
 			 if (first.nX > second.nX)
 			 {
@@ -273,7 +274,7 @@ void NDAutoPath::GetPath()
 						kPos.y -= m_nStep;
 						kPos.x -= m_nStep;
 
-						m_pointVector.push_back(kPos);
+						m_kPointVector.push_back(kPos);
 					}
 				}
 				else if (first.nY < second.nY)
@@ -284,7 +285,7 @@ void NDAutoPath::GetPath()
 						kPos.y += m_nStep;
 						kPos.x -= m_nStep;
 
-						m_pointVector.push_back(kPos);
+						m_kPointVector.push_back(kPos);
 					}
 				}
 				else if (first.nY == second.nY)
@@ -294,7 +295,7 @@ void NDAutoPath::GetPath()
 						// 加点
 						kPos.x -= m_nStep;
 
-						m_pointVector.push_back(kPos);
+						m_kPointVector.push_back(kPos);
 					}
 				}
 			}
@@ -308,7 +309,7 @@ void NDAutoPath::GetPath()
 						kPos.y -= m_nStep;
 						kPos.x += m_nStep;
 
-						m_pointVector.push_back(kPos);
+						m_kPointVector.push_back(kPos);
 					}
 				}
 				else if (first.nY < second.nY)
@@ -319,7 +320,7 @@ void NDAutoPath::GetPath()
 						kPos.y += m_nStep;
 						kPos.x += m_nStep;
 
-						m_pointVector.push_back(kPos);
+						m_kPointVector.push_back(kPos);
 					}
 				}
 				else if (first.nY == second.nY)
@@ -329,7 +330,7 @@ void NDAutoPath::GetPath()
 						// 加点
 						kPos.x += m_nStep;
 
-						m_pointVector.push_back(kPos);
+						m_kPointVector.push_back(kPos);
 					}
 				}
 			}
@@ -342,7 +343,7 @@ void NDAutoPath::GetPath()
 						// 加点
 						kPos.y -= m_nStep;
 
-						m_pointVector.push_back(kPos);
+						m_kPointVector.push_back(kPos);
 					}
 				}
 				else if (first.nY < second.nY)
@@ -352,7 +353,7 @@ void NDAutoPath::GetPath()
 						// 加点
 						kPos.y += m_nStep;
 
-						m_pointVector.push_back(kPos);
+						m_kPointVector.push_back(kPos);
 					}
 				}
 				else if (first.nY == second.nY)
