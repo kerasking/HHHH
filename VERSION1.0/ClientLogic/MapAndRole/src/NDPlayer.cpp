@@ -270,6 +270,34 @@ bool NDPlayer::DealClickPointInSideNpc(CGPoint point)
 	 * end
 	 */
 
+	NDDirector* pkDirector = NDDirector::DefaultDirector();
+	NDScene* pkScene = pkDirector->GetRunningScene();
+	NDNode* pkMapLayerNode = pkScene->GetChild(MAPLAYER_TAG);
+
+	if (!pkMapLayerNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+	{
+		return false;
+	}
+
+	NDMapLayer* pkLayer = (NDMapLayer*) pkMapLayerNode;
+	for(int i = 10001; i < 10001 + 4; i++)
+	{
+		NDNode* pkNpcNode = pkLayer->GetChild(i);
+		if (pkNpcNode && pkNpcNode->IsKindOfClass(RUNTIME_CLASS(NDNpc)))
+		{
+			NDNpc* npc = (NDNpc*)pkNpcNode;
+			if (npc->IsPointInside(point))
+			{
+				bDeal = true;
+				npc->ShowHightLight(true);
+			}
+			else
+			{
+				npc->ShowHightLight(false);
+			}
+		}
+	}
+
 	return bDeal;
 }
 
@@ -292,6 +320,27 @@ bool NDPlayer::CancelClickPointInSideNpc()
 // 			
 // 			npc->ShowHightLight(false);
 // 		}
+
+	NDDirector* pkDirector = NDDirector::DefaultDirector();
+	NDScene* pkScene = pkDirector->GetRunningScene();
+	NDNode* pkMapLayerNode = pkScene->GetChild(MAPLAYER_TAG);
+
+	if (!pkMapLayerNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+	{
+		return false;
+	}
+
+	NDMapLayer* pkLayer = (NDMapLayer*) pkMapLayerNode;
+	for(int i = 10001; i < 10001 + 4; i++)
+	{
+		NDNode* pkNpcNode = pkLayer->GetChild(i);
+		if (pkNpcNode && pkNpcNode->IsKindOfClass(RUNTIME_CLASS(NDNpc)))
+		{
+			NDNpc* npc = (NDNpc*)pkNpcNode;
+			npc->ShowHightLight(false);
+		}
+	}
+
 	return true;
 
 }

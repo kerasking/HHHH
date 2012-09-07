@@ -170,7 +170,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 // 	DramaObj.AddCommond(commandSprite);
 
 
-	for(int i= 0; i < 4; i++)
+	for(int i = 0; i < 4; i++)
 	{
 		NDNpc *npc = new NDNpc;
 		npc->m_nID = 10001+i;
@@ -196,8 +196,8 @@ bool NDGameApplication::applicationDidFinishLaunching()
 				npc->m_name = "西门无名";
 				break;
 		}
-		npc->Initialization(111+i);//31000112
-		npc->SetPosition(ccp((5+i*6)*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, 11*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+		npc->Initialization(111 + i);//31000112
+		npc->SetPosition(ccp((5 + i * 15) * MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, 11 * MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
 		//npc->dataStr = "哈哈";
 		//npc->talkStr = "你想知道什么？";
 		npc->SetType(0);
@@ -207,7 +207,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 		if(!pkLayer->ContainChild(npc))
 		{
-			pkLayer->AddChild((NDNode *)npc, 100+i, 10001+i);
+			pkLayer->AddChild((NDNode *)npc, 100 + i, 10001 + i);
 			//npc->HandleNpcMask(TRUE);
 		}
 
