@@ -1195,16 +1195,13 @@ void NDManualRole::SetAction(bool bMove, bool bIgnoreFighting/*=false*/)
 
 		if (isTransformed())
 		{
-			if (isTransformed())
-			{
-				AnimationListObj.standAction(TYPE_MANUALROLE,
-					m_pkAniGroupTransformed, 1 - m_bFaceRight);
-			}
-			else
-			{
-				AnimationListObj.standAction(TYPE_MANUALROLE, this,
-					m_bFaceRight);
-			}
+			AnimationListObj.standAction(TYPE_MANUALROLE,
+				m_pkAniGroupTransformed, 1 - m_bFaceRight);
+		}
+		else
+		{
+			AnimationListObj.standAction(TYPE_MANUALROLE, this,
+				m_bFaceRight);
 		}
 		//} ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ 
 	}

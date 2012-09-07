@@ -176,9 +176,9 @@ void NDFrame::initTiles()
 	{
 		for (int i = 0; i < (int) m_FrameTiles->count(); i++)
 		{
-			NDTile *tile = new NDTile;
-			m_pkTiles->addObject(tile);
-			tile->release();
+			NDTile *pkTile = new NDTile;
+			m_pkTiles->addObject(pkTile);
+			pkTile->release();
 		}
 	}
 	m_needInitTitles = false;
