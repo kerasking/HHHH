@@ -195,7 +195,44 @@ public:
 	void ShowMarriageList(vec_marriage& vMarriage);
 
 	void ShowTaskFinish(bool show, std::string tip);
+
+	//add by ZhangDi 120904
+	bool AddMonster(int nKey, int nLookFace);
+
+	bool AddNpc(int nKey, int nLookFace);
+
+	bool AddManuRole(int nKey, int nLookFace);
+
+	NDManualRole* GetManuRole(int nKey);
+
+	NDMonster* GetMonster(int nKey);
+
+	NDNpc* GetNpc(int nKey);
+
+	NDSprite* GetSprite(int nKey);
 private:
+	//add by ZhangDi 120904
+	bool AddNodeToMap(NDNode* node);
+	bool RemoveNodeFromMap(NDNode* node);
+
+	bool RemoveNpcNode(NDNode* node);
+	typedef std::map<int, NDManualRole*>					MAP_MANUROLE;
+	typedef MAP_MANUROLE::iterator							MAP_MANUROLE_IT;
+
+	typedef std::map<int, NDMonster*>						MAP_MONSTER;
+	typedef MAP_MONSTER::iterator							MAP_MONSTER_IT;
+
+	typedef std::map<int, NDNpc*>							MAP_NPC;
+	typedef MAP_NPC::iterator								MAP_NPC_IT;
+
+	typedef std::map<int, NDSprite*>						MAP_SPRITE;
+	typedef MAP_SPRITE::iterator							MAP_SPRITE_IT;
+
+	MAP_MANUROLE				m_mapManuRole;
+	MAP_MONSTER					m_mapMonster;
+	MAP_NPC						m_mapNpc;
+	MAP_SPRITE					m_mapSprite;
+
 	void InitTLShareContent(std::vector<std::string>& vec_str);
 	void InitTLShareContent(const char* text, ...);
 	void InitContent(NDUITableLayer* tl,

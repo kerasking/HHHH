@@ -101,8 +101,10 @@ void NDNpc::Initialization(int nLookface)
 	}
 	else
 	{
-		sprFile.Format("%@model_%d%s", NDPath::GetAnimationPath().c_str(),
-				nLookface / 1000000, ".spr");
+// 		sprFile.Format("%@model_%d%s", NDPath::GetAnimationPath().c_str(),
+// 				nLookface / 1000000, ".spr");
+		sprFile.Format("%smodel_%d%s", NDPath::GetAnimationPath().c_str(),
+			nLookface, ".spr");
 	}
 
 	NDSprite::Initialization(sprFile);
