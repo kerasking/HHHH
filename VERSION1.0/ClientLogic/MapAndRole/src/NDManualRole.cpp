@@ -332,7 +332,7 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 
 	//Load Animation Group
 	//sex = lookface / 100000000 % 10; // 人物性别，1-男性，2-女性；
-	direct = 2;
+	m_nDirect = 2;
 
 //		if (sex % 2 == SpriteSexMale) 
 	int nModelID = 2;//lookface / 1000000;
@@ -346,7 +346,7 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 //		else 
 //			NDSprite::Initialization(MANUELROLE_HUMAN_FEMALE);
 
-	m_bFaceRight = direct == 2;
+	m_bFaceRight = m_nDirect == 2;
 
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 

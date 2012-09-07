@@ -153,6 +153,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 	NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
 	pkLayer->AddChild(&kPlayer, 111, 1000);
+	kPlayer.SetCurrentAnimation(MANUELROLE_STAND,true);
 
 	return true;
 }

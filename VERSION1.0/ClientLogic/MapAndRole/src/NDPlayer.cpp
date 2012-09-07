@@ -150,8 +150,8 @@ idCurMap(0)
 
 	m_nTargetIndex = 0;
 	m_bCollide = false;
-	m_timer = new NDTimer();
-	m_dlgGather = NULL;
+	m_pkTimer = new NDTimer();
+	m_kGatherDlg = NULL;
 
 	memset(&m_caclData, 0, sizeof(m_caclData));
 
@@ -173,8 +173,8 @@ idCurMap(0)
 NDPlayer::~NDPlayer()
 {
 	g_pkDefaultHero = NULL;
-	delete m_timer;
-	m_timer = NULL;
+	delete m_pkTimer;
+	m_pkTimer = NULL;
 }
 
 NDPlayer& NDPlayer::defaultHero(int lookface/* = 0*/,
@@ -682,10 +682,10 @@ void NDPlayer::OnMoveEnd()
 {
 	ScriptGlobalEvent::OnEvent (GE_ONMOVE);
 
-	NDMapLayer* maplayer = M_GetMapLayer();
-	if (maplayer)
+	NDMapLayer* pkMaplayer = M_GetMapLayer();
+	if (pkMaplayer)
 	{
-		maplayer->ShowRoadSign(false);
+		pkMaplayer->ShowRoadSign(false);
 	}
 
 	if (!isTeamLeader() && isTeamMember())

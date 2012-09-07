@@ -1136,17 +1136,17 @@ void NDMonster::changeLookface(int lookface)
 		m_bRoleMonster = true;
 		{	//InitNonRoleData
 			//m_id = 0; // 用户id
-			sex = lookface / 100000000 % 10; // 人物性别，1-男性，2-女性；
-			direct = lookface % 10;
-			hairColor = lookface / 1000000 % 10;
-			int tmpsex = (sex - 1) / 2 - 1;
+			m_nSex = lookface / 100000000 % 10; // 人物性别，1-男性，2-女性；
+			m_nDirect = lookface % 10;
+			m_nHairColor = lookface / 1000000 % 10;
+			int tmpsex = (m_nSex - 1) / 2 - 1;
 			if (tmpsex < 0 || tmpsex > 2)
 			{
 				tmpsex = 0;
 			}
 			this->SetHair(tmpsex + 1); // 发型
 
-			SetHairImageWithEquipmentId (hair);
+			SetHairImageWithEquipmentId (m_nHair);
 
 			int flagOrRidePet = lookface / 10000000 % 10;
 			if (flagOrRidePet > 0)
@@ -1162,12 +1162,12 @@ void NDMonster::changeLookface(int lookface)
 				}
 			}
 
-			weapon = getEquipmentLookFace(lookface, 0);
-			cap = getEquipmentLookFace(lookface, 1);
-			armor = getEquipmentLookFace(lookface, 2);
-			SetEquipment(weapon, 0); //武器
-			SetEquipment(cap, 0); //头盔
-			SetEquipment(armor, 0); //胸甲
+			m_nWeapon = getEquipmentLookFace(lookface, 0);
+			m_nCap = getEquipmentLookFace(lookface, 1);
+			m_nArmor = getEquipmentLookFace(lookface, 2);
+			SetEquipment(m_nWeapon, 0); //武器
+			SetEquipment(m_nCap, 0); //头盔
+			SetEquipment(m_nArmor, 0); //胸甲
 
 			//Load Animation Group
 			CC_SAFE_DELETE (m_pkAniGroup);
@@ -1185,7 +1185,7 @@ void NDMonster::changeLookface(int lookface)
 			 * end
 			 */
 
-			m_bFaceRight = direct == 2;
+			m_bFaceRight = m_nDirect == 2;
 			SetFaceImageWithEquipmentId (m_bFaceRight);
 			SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 

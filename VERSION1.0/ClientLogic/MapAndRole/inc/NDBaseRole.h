@@ -101,7 +101,7 @@ public:
 	//		作用：设置默认动画组
 	//		参数：lookface服务器下发的标识，用于精灵的表现
 	//		返回值：无
-	void SetNormalAniGroup(int lookface);
+	void SetNormalAniGroup(int nLookface);
 public:
 	void DrawHead(const CGPoint& pos);
 	void SetWeaponType(int weaponType);
@@ -170,17 +170,17 @@ public:
 public:
 	/**精灵的各个属性*/
 	// lookface决定的5个属性
-	int sex;
-	int skinColor;
-	int hairColor;
-	int hair;
+	int m_nSex;
+	int m_nSkinColor;
+	int m_nHairColor;
+	int m_nHair;
 
-	int direct;
-	int expresstion;
-	int model;
-	int weapon;
-	int cap;
-	int armor;
+	int m_nDirect;
+	int m_nExpresstion;
+	int m_nModel;
+	int m_nWeapon;
+	int m_nCap;
+	int m_nArmor;
 
 	/*基本角色信息*/
 	int m_nLife;				//生命值

@@ -248,8 +248,8 @@ public:
 private:
 	bool m_bCollide;
 	//GatherPoint *m_gp;
-	NDTimer *m_timer;
-	NDUIDialog *m_dlgGather;
+	NDTimer* m_pkTimer;
+	NDUIDialog* m_kGatherDlg;
 	bool m_bRequireDacoity;
 	bool m_bRequireBattleField;
 	int m_iDacoityStep;

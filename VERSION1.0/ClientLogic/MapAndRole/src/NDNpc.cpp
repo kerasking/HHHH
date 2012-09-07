@@ -89,8 +89,8 @@ NDNpc::~NDNpc()
 
 void NDNpc::Initialization(int nLookface)
 {
-	sex = nLookface / 100000000 % 10;
-	model = nLookface / 1000 % 100;
+	m_nSex = nLookface / 100000000 % 10;
+	m_nModel = nLookface / 1000 % 100;
 	//lookface = 2000000;
 
 	tq::CString sprFile;
@@ -107,7 +107,7 @@ void NDNpc::Initialization(int nLookface)
 
 	NDSprite::Initialization(sprFile);
 
-	m_bFaceRight = direct == 2;
+	m_bFaceRight = m_nDirect == 2;
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 }
 
