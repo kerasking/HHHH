@@ -22,6 +22,7 @@
 //class Fighter;
 
 #include "NDFrame.h"
+#include "..\ClientLogic\Common\inc\define.h"
 
 class NDAnimationGroup;
 
@@ -119,6 +120,8 @@ public:
 //		参数：无
 //		返回值：无		
 	virtual void stopMoving(); //{ m_moving = false; }
+
+	virtual void standAction(bool bStand);
 //		
 //		函数：GetOrder
 //		作用：获取精灵的排序重心值
@@ -372,6 +375,7 @@ public:
 		return m_bReverse;
 	}
 protected:
+
 	void MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed,
 			bool moveMap, bool ignoreMask = false, bool mustArrive = false);
 	virtual void OnMoveBegin();
@@ -393,9 +397,9 @@ protected:
 	int m_weaponType, m_secWeaponType, m_weaponQuality, m_secWeaponQuality,
 			m_capQuality, m_armorQuality, m_cloakQuality;
 	CGPoint m_kPosition;
-	NDAnimation *m_pkCurrentAnimation;
-	NDFrameRunRecord *m_pkFrameRunRecord;
-	NDAnimationGroup *m_pkAniGroup;
+	NDAnimation* m_pkCurrentAnimation;
+	NDFrameRunRecord* m_pkFrameRunRecord;
+	NDAnimationGroup* m_pkAniGroup;
 	bool m_bReverse;
 	bool m_bMoveMap;
 	bool m_bIsMoving;
@@ -417,6 +421,7 @@ private:
 	NDPicture *m_picSprite;
 	CGRect m_kRectSprite;
 	bool m_bHightLight;
+	NSTimeInterval m_dBeginTime;
 };
 }
 

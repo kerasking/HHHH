@@ -337,7 +337,7 @@ void Fighter::LoadRole(int nLookFace, int lev, const string& name)
 	NDManualRole *role = new NDManualRole;
 	role->InitRoleLookFace(nLookFace);
 	m_role = role;
-	m_role->m_name = name;
+	m_role->m_strName = name;
 	m_role->m_nLevel = lev;
 	role->SetNonRole(false);
 }
@@ -369,7 +369,7 @@ void Fighter::LoadMonster(int nLookFace, int lev, const string& name)
 //	}
 
 	fighter_name = name;
-	m_role->m_name = name;
+	m_role->m_strName = name;
 	m_role->m_nLevel = lev;
 
 	//this->m_info.bRoleMonster = role->m_bRoleMonster;
@@ -716,9 +716,9 @@ void Fighter::showFighterName(bool b)
 			this->lb_FighterName->Initialization();
 			//this->lb_FighterName->SetTag(TAG_FIGHTER_NAME);
 			this->lb_FighterName->SetFontColor(ccc4(255, 255, 255, 255));
-			this->lb_FighterName->SetText(GetRole()->m_name.c_str());
+			this->lb_FighterName->SetText(GetRole()->m_strName.c_str());
 			this->lb_FighterName->SetFontSize(DEFAULT_FONT_SIZE);
-			CGSize sizefighterName = getStringSize(GetRole()->m_name.c_str(),
+			CGSize sizefighterName = getStringSize(GetRole()->m_strName.c_str(),
 					DEFAULT_FONT_SIZE);
 			//fighterName->SetTag(TAG_FIGHTER_NAME);
 			lb_FighterName->SetFrameRect(

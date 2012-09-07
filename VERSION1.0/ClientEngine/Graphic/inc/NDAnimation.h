@@ -44,6 +44,8 @@ public:
 	void runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord, bool bNeedDraw,
 			float drawScale);
 	void SlowDown(unsigned int multi);
+
+	bool lastFrameEnd(NDFrameRunRecord* pkRunRecord);
 };
 
 #endif

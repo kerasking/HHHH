@@ -1271,7 +1271,7 @@ void NDManualRole::SetPosition(CGPoint newPosition)
 		//ridepet->SetPosition(newPosition);
 	}
 
-	SetAction(true);
+	//SetAction(true);
 }
 
 void NDManualRole::OnMoveTurning(bool bXTurnigToY, bool bInc)
@@ -2051,7 +2051,7 @@ void NDManualRole::ShowNameLabel(bool bDraw)
 	}
 
 	bool isEnemy = false;
-	std::string names = m_name;
+	std::string names = m_strName;
 	NDPlayer& player = NDPlayer::defaultHero();
 	CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
 	int iX = GetPosition().x - DISPLAY_POS_X_OFFSET;

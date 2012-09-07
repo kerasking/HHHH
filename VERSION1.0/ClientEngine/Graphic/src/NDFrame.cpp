@@ -32,6 +32,8 @@ m_bIsCompleted(false),
 m_nRepeatTimes(0),
 m_nStartFrame(0),
 m_nEndFrame(0),
+m_nEnduration(0),
+m_nTotalFrame(0),
 m_bSetPlayRange(false)
 {
 
@@ -127,6 +129,20 @@ void NDFrameRunRecord::NextFrame(int nTotalFrames)
 	}
 }
 
+bool NDFrameRunRecord::isThisFrameEnd()
+{
+	if (m_nEnduration && m_nRunCount >= m_nEnduration - 1)
+	{
+		return true;
+	} 
+	else
+	{
+		return false;
+	}
+
+	return true;
+}
+
 //////////////////////////////////////////////////////////////////////////
 NDFrameTile::NDFrameTile() :
 m_nX(0),
@@ -141,19 +157,19 @@ m_nTableIndex(0)
 NDFrame::NDFrame() :
 m_nEnduration(0),
 m_BelongAnimation(NULL),
-m_SubAnimationGroups(NULL),
-m_FrameTiles(NULL),
+m_pkSubAnimationGroups(NULL),
+m_pkFrameTiles(NULL),
 m_needInitTitles(true)
 {
-	m_SubAnimationGroups = new CCMutableArray<NDAnimationGroup*>();
-	m_FrameTiles = new CCMutableArray<NDFrameTile*>();
+	m_pkSubAnimationGroups = new CCMutableArray<NDAnimationGroup*>();
+	m_pkFrameTiles = new CCMutableArray<NDFrameTile*>();
 	m_pkTiles = new CCMutableArray<NDTile*>();
 }
 
 NDFrame::~NDFrame()
 {
-	CC_SAFE_RELEASE (m_SubAnimationGroups);
-	CC_SAFE_RELEASE (m_FrameTiles);
+	CC_SAFE_RELEASE (m_pkSubAnimationGroups);
+	CC_SAFE_RELEASE (m_pkFrameTiles);
 	CC_SAFE_RELEASE (m_pkTiles);
 }
 
@@ -174,7 +190,7 @@ void NDFrame::initTiles()
 {
 	if (m_needInitTitles)
 	{
-		for (int i = 0; i < (int) m_FrameTiles->count(); i++)
+		for (int i = 0; i < (int) m_pkFrameTiles->count(); i++)
 		{
 			NDTile *pkTile = new NDTile;
 			m_pkTiles->addObject(pkTile);
@@ -201,9 +217,9 @@ void NDFrame::drawHeadAt(CGPoint pos)
 	}
 
 	// ¼ÆËãÁ³²¿Æ«ÒÆ
-	for (unsigned int i = 0; i < m_FrameTiles->count(); i++)
+	for (unsigned int i = 0; i < m_pkFrameTiles->count(); i++)
 	{
-		NDFrameTile* pkFrameTile = m_FrameTiles->getObjectAtIndex(i);
+		NDFrameTile* pkFrameTile = m_pkFrameTiles->getObjectAtIndex(i);
 
 		NDTileTableRecord* pkRecord =
 				(NDTileTableRecord *) pkAnimationGroup->getTileTable()->objectAtIndex(
@@ -218,9 +234,9 @@ void NDFrame::drawHeadAt(CGPoint pos)
 		}
 	}
 
-	for (unsigned i = 0; i < m_FrameTiles->count(); i++)
+	for (unsigned i = 0; i < m_pkFrameTiles->count(); i++)
 	{
-		NDFrameTile* pkFrameTile = m_FrameTiles->getObjectAtIndex(i);
+		NDFrameTile* pkFrameTile = m_pkFrameTiles->getObjectAtIndex(i);
 		NDTileTableRecord* pkRecord =
 				(NDTileTableRecord *) pkAnimationGroup->getTileTable()->objectAtIndex(
 						pkFrameTile->getTableIndex());
@@ -283,9 +299,9 @@ void NDFrame::run(float fScale)
 	NDAnimation *pkAnimation = m_BelongAnimation;
 	NDAnimationGroup *pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
 
-	for (int i = 0; i < (int) m_FrameTiles->count(); i++)
+	for (int i = 0; i < (int) m_pkFrameTiles->count(); i++)
 	{
-		NDFrameTile* pkFrameTile = m_FrameTiles->getObjectAtIndex(i);
+		NDFrameTile* pkFrameTile = m_pkFrameTiles->getObjectAtIndex(i);
 		NDTileTableRecord *pkRecord =
 				(NDTileTableRecord *) pkAnimationGroup->getTileTable()->objectAtIndex(
 						pkFrameTile->getTableIndex());

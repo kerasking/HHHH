@@ -41,6 +41,8 @@
 #define NO false
 #endif
 
+typedef double NSTimeInterval;
+
 #define NSUInteger int
 
 #ifndef nil

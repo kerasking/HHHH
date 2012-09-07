@@ -58,9 +58,11 @@ CGRect NDAnimation::getRect()
 void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 		bool bNeedDraw, float drawScale)
 {
-	if (m_pkFrames->count())
+	unsigned int uiFrameCount = m_pkFrames->count();
+
+	if (uiFrameCount)
 	{
-		if (pkRunFrameRecord->getCurrentFrameIndex() >= (int) m_pkFrames->count())
+		if (pkRunFrameRecord->getCurrentFrameIndex() >= (int) uiFrameCount)
 		{
 			return;
 		}
@@ -97,6 +99,9 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 		//获取动画的当前帧
 		NDFrame *pkFrame = m_pkFrames->getObjectAtIndex(
 				pkRunFrameRecord->getCurrentFrameIndex());
+
+		pkRunFrameRecord->setTotalFrame((int) uiFrameCount);
+		pkRunFrameRecord->setEnduration(pkFrame->getEnduration());
 
 		//判断是否允许跑下一帧，如果允许则跑下一帧，否则还是跑当前帧
 		if (pkFrame->enableRunNextFrame(pkRunFrameRecord))
@@ -157,4 +162,15 @@ void NDAnimation::SlowDown(unsigned int multi)
 			pkFrame->setEnduration(pkFrame->getEnduration() * multi);
 		}
 	}
+}
+
+bool NDAnimation::lastFrameEnd( NDFrameRunRecord* pkRunRecord )
+{
+	if (pkRunRecord->isThisFrameEnd())
+	{
+		return pkRunRecord->getCurrentFrameIndex() ==
+			pkRunRecord->getTotalFrame() - 1 && pkRunRecord->getRepeatTimes() <= 1;
+	}
+
+	return false;
 }

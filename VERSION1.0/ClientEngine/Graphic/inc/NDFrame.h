@@ -21,6 +21,8 @@ class NDFrameRunRecord: public cocos2d::CCObject
 	CC_SYNTHESIZE(int, m_nRunCount, RunCount)
 	CC_SYNTHESIZE(bool, m_bIsCompleted, IsCompleted)
 	CC_SYNTHESIZE(int, m_nRepeatTimes, RepeatTimes)
+	CC_SYNTHESIZE(int,m_nEnduration,Enduration);
+	CC_SYNTHESIZE(int,m_nTotalFrame,TotalFrame);
 
 public:
 
@@ -28,6 +30,7 @@ public:
 
 	void SetPlayRange(int nStartFrame, int nEndFrame);
 	void NextFrame(int nTotalFrames);
+	bool isThisFrameEnd();
 
 private:
 
@@ -62,8 +65,8 @@ class NDFrame: public cocos2d::CCObject
 {
 	CC_SYNTHESIZE(int, m_nEnduration, Enduration)
 	CC_SYNTHESIZE(NDAnimation*, m_BelongAnimation, BelongAnimation)
-	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDAnimationGroup*>*, m_SubAnimationGroups, SubAnimationGroups)
-	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDFrameTile*>*, m_FrameTiles, FrameTiles)
+	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDAnimationGroup*>*, m_pkSubAnimationGroups, SubAnimationGroups)
+	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDFrameTile*>*, m_pkFrameTiles, FrameTiles)
 
 public:
 	NDFrame();

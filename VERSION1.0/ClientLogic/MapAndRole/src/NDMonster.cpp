@@ -97,7 +97,7 @@ NDMonster::~NDMonster()
 void NDMonster::Initialization(int idType)
 {
 //		ScriptDB* m_Db=new ScriptDB();
-	m_name = ScriptDBObj.GetS("monstertype", idType, DB_MONSTERTYPE_NAME);
+	m_strName = ScriptDBObj.GetS("monstertype", idType, DB_MONSTERTYPE_NAME);
 
 	m_nType = idType;
 
@@ -116,7 +116,7 @@ void NDMonster::Initialization(int idType)
 //			turnFace = true;
 //		}
 	m_bRoleMonster = true;
-	InitNonRoleData(m_name, lookface, m_nLevel);
+	InitNonRoleData(m_strName, lookface, m_nLevel);
 //		if ( sex >= 3 ) // isRoleMonster
 //		{
 //			m_bRoleMonster = true;
@@ -1082,7 +1082,7 @@ void NDMonster::drawName(bool bDraw)
 	//iY += BASE_BOTTOM_WH-getGravityY();
 	iY -= getGravityY();
 
-	CGSize size = getStringSize(m_name.c_str(), 12);
+	CGSize size = getStringSize(m_strName.c_str(), 12);
 	CGSize sizemap;
 	sizemap = m_pkSubNode->GetContentSize();
 
@@ -1091,7 +1091,7 @@ void NDMonster::drawName(bool bDraw)
 		m_lbName = new NDUILabel;
 		m_lbName->Initialization();
 		m_lbName->SetFontSize(12);
-		m_lbName->SetText(m_name.c_str());
+		m_lbName->SetText(m_strName.c_str());
 	}
 
 	if (!m_lbName->GetParent() && m_pkSubNode)

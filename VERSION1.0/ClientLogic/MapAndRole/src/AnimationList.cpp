@@ -21,21 +21,21 @@ AnimationList::~AnimationList()
 
 void AnimationList::moveAction(int type, NDSprite* sprite, int face)
 {
-	
+
 	if (sprite == NULL)
 	{
 		return;
 	}
-	
+
 	if (face == FACE_LEFT)
 	{
 		sprite->SetCurrentAnimation(MANUELROLE_WALK, false);
-	} 
+	}
 	else if (face == FACE_RIGHT)
 	{
 		sprite->SetCurrentAnimation(MANUELROLE_WALK, true);
 	}
-	
+
 //	switch (type)
 //	{
 //		case TYPE_MANUALROLE:
@@ -89,8 +89,7 @@ void AnimationList::sitAction(NDSprite* sprite)
 	{
 		return;
 	}
-	
-	
+
 	sprite->SetCurrentAnimation(MANUELROLE_SITE, true);
 }
 
@@ -100,19 +99,19 @@ void AnimationList::ridePetMoveAction(int type, NDSprite* sprite, int face)
 	{
 		return;
 	}
-	
+
 	switch (type)
 	{
-		case TYPE_MANUALROLE:
-			if (face == FACE_LEFT) 
-			{
-				sprite->SetCurrentAnimation(MANUELROLE_RIDE_PET_MOVE, false);
-			} 
-			else if (face == FACE_RIGHT) 
-			{
-				sprite->SetCurrentAnimation(MANUELROLE_RIDE_PET_MOVE, true);
-			}
-			break;
+	case TYPE_MANUALROLE:
+		if (face == FACE_LEFT)
+		{
+			sprite->SetCurrentAnimation(MANUELROLE_RIDE_PET_MOVE, false);
+		}
+		else if (face == FACE_RIGHT)
+		{
+			sprite->SetCurrentAnimation(MANUELROLE_RIDE_PET_MOVE, true);
+		}
+		break;
 	}
 }
 
@@ -122,19 +121,19 @@ void AnimationList::ridePetStandAction(int type, NDSprite* sprite, int face)
 	{
 		return;
 	}
-	
-	switch (type) 
+
+	switch (type)
 	{
-		case TYPE_MANUALROLE:
-			if (face == FACE_LEFT)
-			{
-				sprite->SetCurrentAnimation(MANUELROLE_RIDE_PET_STAND, false);
-			}
-			else if (face == FACE_RIGHT)
-			{
-				sprite->SetCurrentAnimation(MANUELROLE_RIDE_PET_STAND, true);
-			}
-			break;
+	case TYPE_MANUALROLE:
+		if (face == FACE_LEFT)
+		{
+			sprite->SetCurrentAnimation(MANUELROLE_RIDE_PET_STAND, false);
+		}
+		else if (face == FACE_RIGHT)
+		{
+			sprite->SetCurrentAnimation(MANUELROLE_RIDE_PET_STAND, true);
+		}
+		break;
 	}
 }
 
@@ -144,19 +143,19 @@ void AnimationList::standPetStandAction(int type, NDSprite* sprite, int face)
 	{
 		return;
 	}
-	
+
 	switch (type)
 	{
-		case TYPE_MANUALROLE:
-			if (face == FACE_LEFT)
-			{
-				sprite->SetCurrentAnimation(MANUELROLE_STAND_PET_STAND, false);
-			} 
-			else if (face == FACE_RIGHT) 
-			{
-				sprite->SetCurrentAnimation(MANUELROLE_STAND_PET_STAND, true);
-			}
-			break;
+	case TYPE_MANUALROLE:
+		if (face == FACE_LEFT)
+		{
+			sprite->SetCurrentAnimation(MANUELROLE_STAND_PET_STAND, false);
+		}
+		else if (face == FACE_RIGHT)
+		{
+			sprite->SetCurrentAnimation(MANUELROLE_STAND_PET_STAND, true);
+		}
+		break;
 	}
 }
 
@@ -166,19 +165,19 @@ void AnimationList::standPetMoveAction(int type, NDSprite* sprite, int face)
 	{
 		return;
 	}
-	
+
 	switch (type)
 	{
-		case TYPE_MANUALROLE:
-			if (face == FACE_LEFT) 
-			{
-				sprite->SetCurrentAnimation(MANUELROLE_STAND_PET_MOVE, false);
-			} 
-			else if (face == FACE_RIGHT)
-			{
-				sprite->SetCurrentAnimation(MANUELROLE_STAND_PET_MOVE, true);
-			}
-			break;
+	case TYPE_MANUALROLE:
+		if (face == FACE_LEFT)
+		{
+			sprite->SetCurrentAnimation(MANUELROLE_STAND_PET_MOVE, false);
+		}
+		else if (face == FACE_RIGHT)
+		{
+			sprite->SetCurrentAnimation(MANUELROLE_STAND_PET_MOVE, true);
+		}
+		break;
 	}
 }
 
@@ -188,16 +187,16 @@ void AnimationList::setAction(int type, NDSprite* sprite, int face, int aniId)
 	{
 		return;
 	}
-	
+
 	if (face == FACE_LEFT)
 	{
 		sprite->SetCurrentAnimation(aniId, false);
-	} 
+	}
 	else if (face == FACE_RIGHT)
 	{
 		sprite->SetCurrentAnimation(aniId, true);
 	}
-	
+
 //	switch (type)
 //	{
 //		case TYPE_MANUALROLE:
@@ -219,7 +218,7 @@ void AnimationList::standAction(int type, NDSprite* sprite, int face)
 	{
 		return;
 	}
-	
+
 	if (face == FACE_LEFT)
 	{
 		sprite->SetCurrentAnimation(MANUELROLE_STAND, false);
@@ -228,7 +227,7 @@ void AnimationList::standAction(int type, NDSprite* sprite, int face)
 	{
 		sprite->SetCurrentAnimation(MANUELROLE_STAND, true);
 	}
-	
+
 //	switch (type)
 //	{
 //		case TYPE_MANUALROLE:
@@ -262,5 +261,5 @@ void AnimationList::standAction(int type, NDSprite* sprite, int face)
 //			}
 //			break;
 //	}
-	
+
 }

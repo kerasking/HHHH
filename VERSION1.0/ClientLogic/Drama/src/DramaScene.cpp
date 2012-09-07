@@ -11,6 +11,7 @@
 #include "NDDirector.h"
 #include "NDTargetEvent.h"
 #include "NDConstant.h"
+#include "define.h"
 
 ///////////////////////////////////////////////
 IMPLEMENT_CLASS(DramaScene, NDScene)
@@ -69,18 +70,18 @@ bool DramaScene::AddMonster(int nKey, int nLookFace)
 		return false;
 	}
 
-	NDMonster *monster = new NDMonster;
-	monster->Initialization(nLookFace, nKey, 1);
-	if (!AddNodeToMap(monster))
+	NDMonster* pkMonster = new NDMonster;
+	pkMonster->Initialization(nLookFace, nKey, 1);
+	if (!AddNodeToMap(pkMonster))
 	{
-		delete monster;
+		SAFE_DELETE(pkMonster);
 		ScriptMgrObj.DebugOutPut(
 				"DramaScene::AddMonster !AddNodeToMap lookface[%d]key[%d]",
 				nLookFace, nKey);
 		return false;
 	}
 
-	m_mapMonster.insert(std::make_pair(nKey, monster));
+	m_mapMonster.insert(std::make_pair(nKey, pkMonster));
 
 	return true;
 }
@@ -391,7 +392,7 @@ void DramaScene::SetChatTitleBySpriteKey(bool bLeft, int nKey, int nFontSize,
 
 	if (sprite && sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)))
 	{
-		title = ((NDBaseRole*) sprite)->m_name;
+		title = ((NDBaseRole*) sprite)->m_strName;
 	}
 
 	this->SetChatTitle(bLeft, title, nFontSize, nFontColor);

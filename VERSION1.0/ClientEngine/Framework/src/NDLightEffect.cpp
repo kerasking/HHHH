@@ -116,5 +116,5 @@ void NDLightEffect::draw()
 		}
 	}
 }
-}
 
+}

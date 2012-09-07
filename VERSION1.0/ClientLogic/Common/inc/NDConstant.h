@@ -57,7 +57,11 @@
 #define MANUELROLE_DODGE					4
 #define MANUELROLE_HURT						5
 #define MANUELROLE_ATTACK					6
-#define MANUELROLE_SEAT						7
+#define MANUELROLE_RELAX					7
+#define MANUELROLE_SEAT						8
+#define MANUELROLE_SKILL					9
+#define MANUELROLE_RIDE_STAND				10
+#define MANUELROLE_RIDE_WALK				11
 //以下人物动作与怪物动作将不再使用
 
 #define MANUELROLE_RIDE_PET_STAND			6

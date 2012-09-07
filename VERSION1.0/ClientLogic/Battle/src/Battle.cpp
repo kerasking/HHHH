@@ -237,7 +237,7 @@ void HighlightTip::SetFighter(Fighter* f)
 		this->AddChild(name);
 	}
 	std::stringstream ss;
-	ss << role->m_name << "Lv" << role->m_nLevel;
+	ss << role->m_strName << "Lv" << role->m_nLevel;
 	//	if (f->m_info.fighterType == Fighter_TYPE_RARE_MONSTER)
 	//	{
 	//		ss << "¡¾" << NDCommonCString("xiyou") << "¡¿"; 
@@ -1930,7 +1930,7 @@ void Battle::HighlightFighter(Fighter* f)
 		this->AddChild(name);
 	}
 	std::stringstream ss;
-	ss << role->m_name << "Lv" << role->m_nLevel;
+	ss << role->m_strName << "Lv" << role->m_nLevel;
 	//	if (f->m_info.fighterType == Fighter_TYPE_RARE_MONSTER)
 	//	{
 	//		ss << "¡¾" << NDCommonCString("xiyou") << "¡¿"; 

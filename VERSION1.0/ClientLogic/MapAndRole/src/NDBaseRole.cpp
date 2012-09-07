@@ -457,7 +457,7 @@ void NDBaseRole::InitRoleLookFace(int lookface)
 
 void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 {
-	m_name = name;
+	m_strName = name;
 	m_nLevel = lev;
 	//m_id = 0; // 用户id
 //	sex = lookface / 100000000 % 10; // 人物性别，1-男性，2-女性；

@@ -21,6 +21,7 @@
 #include "NDLightEffect.h"
 #include "Utility.h"
 #include "..\ClientLogic\Common\inc\define.h"
+#include "..\ClientLogic\Common\inc\NDConstant.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -70,6 +71,8 @@ NDSprite::NDSprite()
 	m_fScale = 1.0f;
 
 	m_bHightLight = false;
+
+	m_dBeginTime = 0.0;
 }
 
 NDSprite::~NDSprite()
@@ -193,6 +196,7 @@ void NDSprite::RunAnimation(bool bDraw)
 
 		if (bRet)
 		{
+			standAction(true);
 			m_pkCurrentAnimation->runWithRunFrameRecord(m_pkFrameRunRecord,
 					bDraw, m_fScale);
 		}
@@ -832,7 +836,7 @@ CCTexture2D *NDSprite::GetDoubleHandSpearImage()
 CCTexture2D* NDSprite::getNpcLookfaceTexture(int imageIndex,
 		NDAnimationGroup* animationGroup)
 {
-	CCTexture2D* tex = NULL;
+	CCTexture2D* pkTex = NULL;
 	if (!animationGroup)
 	{
 		return NULL;
@@ -840,10 +844,10 @@ CCTexture2D* NDSprite::getNpcLookfaceTexture(int imageIndex,
 	std::vector < std::string > *vImg = animationGroup->getImages();
 	if (m_nNPCLookface == -1 && vImg && vImg->size() > imageIndex)  //·ÇÆÕÍ¨NPC
 	{
-		tex = CCTextureCache::sharedTextureCache()->addImage(
+		pkTex = CCTextureCache::sharedTextureCache()->addImage(
 				(*vImg)[imageIndex].c_str());
 	}
-	return tex;
+	return pkTex;
 }
 
 int NDSprite::GetHeight()
@@ -953,4 +957,37 @@ cocos2d::CCTexture2D* NDSprite::getColorTexture(int imageIndex,
 
 	return pkTex;
 }
+
+void NDSprite::standAction( bool bStand )
+{
+	bool bEnd = m_pkCurrentAnimation->lastFrameEnd(m_pkFrameRunRecord);
+
+	if (bEnd)
+	{
+		int nAnimationMax = (int)m_pkAniGroup->getAnimations()->count();
+
+		if (m_pkCurrentAnimation->getCurIndexInAniGroup() == MANUELROLE_RELAX)
+		{
+			m_dBeginTime = (double)time(0);
+		}
+		else if (m_pkCurrentAnimation->getCurIndexInAniGroup() == MANUELROLE_STAND &&
+			nAnimationMax > MANUELROLE_RELAX)
+		{
+			NSTimeInterval dCurTime = (double)time(0);
+
+			if ((dCurTime - m_dBeginTime) > 5 && rand() % 100 > 95)
+			{
+				m_dBeginTime = dCurTime;
+				SetCurrentAnimation(MANUELROLE_RELAX,m_bReverse);
+				m_pkCurrentAnimation->setReverse(m_bReverse);
+			}
+		}
+		else if (bStand)
+		{
+			SetCurrentAnimation(MANUELROLE_STAND,m_bReverse);
+			m_pkCurrentAnimation->setReverse(m_bReverse);
+		}
+	}
+}
+
 }
