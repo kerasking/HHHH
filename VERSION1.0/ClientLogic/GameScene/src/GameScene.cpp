@@ -3253,6 +3253,205 @@ void GameScene::ShowTaskFinish(bool show, std::string tip)
 //	m_quickFunc->ShowTaskTip(show, tip); ///< 临时性注释 郭浩
 }
 
+bool GameScene::AddMonster(int nKey, int nLookFace)
+{
+	MAP_MONSTER_IT it = m_mapMonster.find(nKey);
+
+	if (m_mapMonster.end() != it)
+	{
+		NDAsssert(0);
+		ScriptMgrObj.DebugOutPut("DramaScene::AddMonster m_mapMonster.end() != it lookface[%d]key[%d]", nLookFace, nKey);
+		return false;
+	}
+
+	NDMonster *monster = new NDMonster;
+	monster->Initialization(nLookFace, nKey, 1);
+	if (!AddNodeToMap(monster))
+	{
+		delete monster;
+		ScriptMgrObj.DebugOutPut("DramaScene::AddMonster !AddNodeToMap lookface[%d]key[%d]", nLookFace, nKey);
+		return false;
+	}
+
+	m_mapMonster.insert(std::make_pair(nKey, monster));
+
+	return true;
+}
+
+bool GameScene::AddNpc(int nKey, int nLookFace)
+{
+	MAP_NPC_IT it = m_mapNpc.find(nKey);
+
+	if (m_mapNpc.end() != it)
+	{
+		NDAsssert(0);
+		ScriptMgrObj.DebugOutPut("DramaScene::AddNpc m_mapNpc.end() != it lookface[%d]key[%d]", nLookFace, nKey);
+		return false;
+	}
+
+	NDNpc *npc = new NDNpc;
+	npc->Initialization(nLookFace);
+	if (!AddNodeToMap(npc))
+	{
+		delete npc;
+		ScriptMgrObj.DebugOutPut("DramaScene::AddNpc !AddNodeToMap lookface[%d]key[%d]", nLookFace, nKey);
+		return false;
+	}
+
+	m_mapNpc.insert(std::make_pair(nKey, npc));
+
+	return true;
+}
+
+bool GameScene::AddManuRole(int nKey, int nLookFace)
+{
+	MAP_MANUROLE_IT it = m_mapManuRole.find(nKey);
+
+	if (m_mapManuRole.end() != it)
+	{
+		NDAsssert(0);
+		ScriptMgrObj.DebugOutPut("DramaScene::AddManuRole m_mapManuRole.end() != it lookface[%d]key[%d]", nLookFace, nKey);
+		return false;
+	}
+
+	NDManualRole *role  = new NDManualRole;
+	role->Initialization(nLookFace);
+	if (!AddNodeToMap(role))
+	{
+		delete role;
+		ScriptMgrObj.DebugOutPut("DramaScene::AddManuRole !AddNodeToMap lookface[%d]key[%d]", nLookFace, nKey);
+		return false;
+	}
+
+	m_mapManuRole.insert(std::make_pair(nKey, role));
+
+	return true;
+}
+
+NDManualRole* GameScene::GetManuRole(int nKey)
+{
+	MAP_MANUROLE_IT it = m_mapManuRole.find(nKey);
+
+	if (m_mapManuRole.end() != it)
+	{
+		return it->second;
+	}
+
+	return NULL;
+}
+
+NDMonster* GameScene::GetMonster(int nKey)
+{
+	MAP_MONSTER_IT it = m_mapMonster.find(nKey);
+
+	if (m_mapMonster.end() != it)
+	{
+		return it->second;
+	}
+
+	return NULL;
+}
+
+NDNpc* GameScene::GetNpc(int nKey)
+{
+	MAP_NPC_IT it = m_mapNpc.find(nKey);
+
+	if (m_mapNpc.end() != it)
+	{
+		return it->second;
+	}
+
+	return NULL;
+}
+
+NDSprite* GameScene::GetSprite(int nKey)
+{
+	MAP_SPRITE_IT it = m_mapSprite.find(nKey);
+
+	if (m_mapSprite.end() != it)
+	{
+		return it->second;
+	}
+
+	NDSprite* sprite = GetManuRole(nKey);
+
+	if (NULL != sprite)
+	{
+		return sprite;
+	}
+
+	sprite = GetMonster(nKey);
+
+	if (NULL != sprite)
+	{
+		return sprite;
+	}
+
+	sprite = GetNpc(nKey);
+
+	if (NULL != sprite)
+	{
+		return sprite;
+	}
+
+	return NULL;
+}
+
+bool GameScene::RemoveNpcNode( NDNode* node )
+{
+	bool bSucces = false;
+	for (MAP_NPC_IT it = m_mapNpc.begin(); 
+		it != m_mapNpc.end(); 
+		it++) 
+	{
+		if (node == it->second)
+		{
+			bSucces = RemoveNodeFromMap(node);
+
+			if (bSucces)
+			{
+				m_mapNpc.erase(it);
+			}
+
+			return bSucces;
+		}
+	}
+ 
+ 	return false;
+}
+
+bool GameScene::AddNodeToMap( NDNode* node )
+{
+	NDNode* pkNode = this->GetChild(MAPLAYER_TAG);
+	//asssert(pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer));
+	NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
+
+	if (!pkLayer || !node || NULL != node->GetParent())
+	{
+		return false;
+	}
+
+	pkLayer->AddChild(node,0,0);
+
+	return true;
+}
+
+bool GameScene::RemoveNodeFromMap( NDNode* node )
+{
+	NDNode* pkNode = this->GetChild(MAPLAYER_TAG);
+	//asssert(pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer));
+	NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
+
+	if (!pkLayer || !node || node->GetParent() != pkLayer)
+	{
+		return false;
+	}
+
+	pkLayer->RemoveChild(node, true);
+
+	return true;
+}
+
 //////////////////////////////////
 
 IMPLEMENT_CLASS(GameSceneReleaseHelper, NDObject)

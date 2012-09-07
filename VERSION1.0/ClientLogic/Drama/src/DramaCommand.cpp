@@ -13,6 +13,7 @@
 #include "NDDirector.h"
 #include "CCPointExtension.h"
 #include "NDConstant.h"
+#include "GameScene.h"
 
 ///////////////////////////////////////////////
 DramaScene* GetDramaScene()
@@ -160,6 +161,10 @@ void DramaCommandSprite::InitWithAdd(int nLookFace,
 	m_param.u2.nSpriteType				= nType;
 	m_param.u3.bFaceRight				= faceRight;
 	m_param.str							= name;
+
+	//add by ZhangDi 120904
+	m_param.u1.nPosX					= 9*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET;
+	m_param.u2.nPoxY					= 11*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET;
 }
 
 void DramaCommandSprite::InitWithAddByFile(std::string filename)
@@ -233,13 +238,15 @@ void DramaCommandSprite::ExcuteAddSprite()
 	
 	this->SetFinish(true);
 	
-	DramaScene* dramaScene	= GetDramaScene();
+	//modified by ZhangDi 120905
+	//DramaScene* dramaScene	= GetDramaScene();
+	NDDirector* director = NDDirector::DefaultDirector();
+	//GameScene* dramaScene = (GameScene*)director->GetRunningScene();
+	GameScene* dramaScene = (GameScene*)director->GetScene(RUNTIME_CLASS(GameScene));
+	NDAsssert(dramaScene != NULL);
 	
-	if (!dramaScene)
-	{
-		return;
-	}
-	
+	m_param.u2.nSpriteType = ST_NPC;
+
 	switch (m_param.u2.nSpriteType) {
 		case ST_PLAYER:
 			dramaScene->AddManuRole(m_param.nKey, m_param.u1.nLookFace);

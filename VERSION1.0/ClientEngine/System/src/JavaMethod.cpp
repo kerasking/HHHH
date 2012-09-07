@@ -19,12 +19,20 @@ int FileOp::readByte(FILE* pkFile)
 
 	size_t size = sizeof(unsigned char);
 	unsigned char ucData = 0;
+	//char ucData = 0;
 	size_t read = fread(&ucData, 1, size, pkFile);
 	if (size != read)
 	{
 		NDAsssert(0);
 		return 0;
 	}
+
+	//add by zhangdi 120903
+	if(ucData > 127)
+	{
+		printf("number > 127\n");
+	}
+
 	return ucData;
 }
 
