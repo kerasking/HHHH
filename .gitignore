@@ -4,6 +4,7 @@
 *.bak
 *.old
 *.sdf
+*.db
 debug/
 Debug/
 release/
