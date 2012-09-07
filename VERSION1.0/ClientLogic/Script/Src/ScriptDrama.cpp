@@ -30,7 +30,7 @@ using namespace NDEngine;
 
 // 函数: DramaCloseRChatDlg();
 // 功能: 关闭右边对话框
-	
+
 // 函数: DramaSetLChatFigure(string strFileName);
 // 功能: 设置剧情左边聊天头像
 // 参数: strFileName: 头像文件名
@@ -291,7 +291,8 @@ void DramaSetRChatContent(std::string strContent, int nFontSize, int nFontColor)
 //      faceRight:精灵的朝向, true 朝右, false 朝左
 //      name:显示在头上的名字
 // 返回值: int nKey : 用于后续对该精灵的其它操作
-double DramaAddSprite(int nLookface, int nType, bool faceRight, std::string name)
+double DramaAddSprite(int nLookface, int nType, bool faceRight,
+		std::string name)
 {
 	DramaCommandSprite* command = new DramaCommandSprite;
 	command->InitWithAdd(nLookface, nType, faceRight, name);
@@ -376,7 +377,8 @@ void DramaLoadScene(int nMapID)
 // 参数:	nFontsize: 字体(默认NULL)
 // 参数:	nFontcolor: 颜色(默认NULL)
 // 返回值: key(用于后续操作例如删除场景)
-double DramaLoadEraseInOutScene(string centerText, int nFontsize, int nFontColor)
+double DramaLoadEraseInOutScene(string centerText, int nFontsize,
+		int nFontColor)
 {
 	DramaCommandScene* command = new DramaCommandScene;
 	command->InitWithLoad(centerText, nFontsize, nFontColor);
@@ -408,11 +410,11 @@ void DramaSetCameraPos(int nPosX, int nPosY)
 	DramaObj.AddCommond(command);
 }
 
-	// 函数: DramaMoveCamera(int nToPosX, int nToPosY, int nStep)
-	// 功能: 移动相机到场景中的指定位置
-	// 参数: nToPosX: 地图坐标X(以Cell为单位)
-	//		nToPosY: 地图坐标Y(以Cell为单位)
-	//		nStep:像机步进距离
+// 函数: DramaMoveCamera(int nToPosX, int nToPosY, int nStep)
+// 功能: 移动相机到场景中的指定位置
+// 参数: nToPosX: 地图坐标X(以Cell为单位)
+//		nToPosY: 地图坐标Y(以Cell为单位)
+//		nStep:像机步进距离
 void DramaMoveCamera(int nToPosX, int nToPosY, int nStep)
 {
 	DramaCommandCamera* command = new DramaCommandCamera;
@@ -504,7 +506,8 @@ void ScriptObjectDrama::OnLoad()
 	ETCFUNC("DramaMoveCamera", DramaMoveCamera);
 	ETCFUNC("DramaSetWaitTime", DramaSetWaitTime);
 	ETCFUNC("DramaWaitPrevActionFinish", DramaWaitPrevActionFinish);
-	ETCFUNC("DramaWaitPrevActionFinishAndClick", DramaWaitPrevActionFinishAndClick);
+	ETCFUNC("DramaWaitPrevActionFinishAndClick",
+			DramaWaitPrevActionFinishAndClick);
 	ETCFUNC("DramaStart", DramaStart);
 	ETCFUNC("DramaFinish", DramaFinish);
 	ETCFUNC("DramaShowTipDlg", DramaShowTipDlg);

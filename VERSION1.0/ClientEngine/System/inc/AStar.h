@@ -73,12 +73,13 @@ private:
 	NodeInfo* GetCurrentNode();
 	void SearchChild(NodeInfo* pNode);
 	void UpdateChildren(NodeInfo* pNode);
+	bool CheckTarget();
 
 	void GetPath(NodeInfo* pNode);
 
 	inline NodeInfo* CheckList(MAP_NODE& list, int nNumber);
 	inline void AddToList(MAP_NODE& list, NodeInfo* pNode);
-	inline int GetHValue(const CMyPos& pos);
+	inline int GetHValue(const CMyPos& kPos);
 
 public:
 	///\Â·¾¶¹ÜÀí

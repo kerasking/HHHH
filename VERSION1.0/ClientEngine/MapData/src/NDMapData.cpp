@@ -464,7 +464,7 @@ void NDMapData::decode(FILE* pkStream)
 
  		if (m_pkObstacles->size() > nIndex)
  		{
- 			(*m_pkObstacles)[nIndex] = false;
+ 			(*m_pkObstacles)[nIndex] = true;//false 临时性的都改为true 郭浩;
  		}
 	}
 	//------------------->切屏
@@ -650,10 +650,10 @@ void NDMapData::decode(FILE* pkStream)
 
 	for (int i = 0; i < m_AniGroupCount; i++)
 	{
-		int identifer = kFileOp.readShort(pkStream);			//动画id
+		int nIdentifer = kFileOp.readShort(pkStream);			//动画id
 		NDAnimationGroup *aniGroup =
 				NDAnimationGroupPool::defaultPool()->addObjectWithSceneAnimationId(
-						identifer);
+						nIdentifer);
 		if (!aniGroup)
 		{
 			continue;

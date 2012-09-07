@@ -223,7 +223,9 @@ private:
 	void ShowNameLabel(bool bDraw);
 	enum LableType
 	{
-		eLableName, eLabelSynName, eLablePeerage,
+		eLableName,
+		eLabelSynName,
+		eLablePeerage,
 	};
 	void SetLableName(std::string text, int x, int y, bool isEnemy);
 	void SetLable(LableType eLableType, int x, int y, std::string text,
@@ -235,7 +237,9 @@ protected:
 
 	enum
 	{
-		eMoveTypeBegin = 0, eMoveTypeMoving, eMoveTypeEnd,
+		eMoveTypeBegin = 0,
+		eMoveTypeMoving,
+		eMoveTypeEnd,
 	};
 	void processTeamMemberOnMove(int itype);
 

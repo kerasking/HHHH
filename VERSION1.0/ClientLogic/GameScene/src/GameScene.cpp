@@ -23,7 +23,7 @@
 #include "GameSettingScene.h"
 #include "NDMiniMap.h"
 //#include "NDDataPersist.h"
-///< #include "NDMapMgr.h" 临时性注释 郭浩
+///< #include "NDMapMgr.h" 临时性注�?? 郭浩
 #include "NDUISynLayer.h"
 #include "NDDataTransThread.h"
 #include "NDNpc.h"
@@ -38,7 +38,7 @@
 #include "GameUIPlayerList.h"
 #include "GameUIRequest.h"
 #include "GoodFriendUILayer.h"
-//#include "GameUIPaiHang.h" ///< 临时性注释 郭浩
+//#include "GameUIPaiHang.h" ///< 临时性注�?? 郭浩
 #include "TutorUILayer.h"
 #include "GameUINpcStore.h"
 #include "UserStateUILayer.h"
@@ -83,14 +83,16 @@ const int TAG_CV_CHANG_PWD = 2;
 const unsigned int TAG_UPDATE_FORCE = 333;
 const unsigned int TAG_UPDATE_NOT_FORCE = 444;
 
-const char* MENU_SYNDICATE[6] = {"1","2","3","4","5","6"};					///< 临时性修改 郭浩 字符串乱码
-const char* MENU_SYN_MANAGE[9] = {"1","2","3","4","5","6","7","8","9"};		///< 临时性修改 郭浩 字符串乱码
+const char* MENU_SYNDICATE[6] =
+{ "1", "2", "3", "4", "5", "6" };					///< ��ʱ���޸� ���� �ַ�������
+const char* MENU_SYN_MANAGE[9] =
+{ "1", "2", "3", "4", "5", "6", "7", "8", "9" };	///< ��ʱ���޸� ���� �ַ�������
 
 IMPLEMENT_CLASS(MapUILayer, NDUILayer)
 
 ///////////////////////////////////////////////
 
-enum  
+enum
 {
 	interactive_begin = 0,
 	interactive_playinfo = interactive_begin,
@@ -106,26 +108,17 @@ enum
 	interactive_end,
 };
 
-enum MENU_TYPE {
+enum MENU_TYPE
+{
 	MT_DUI_WU = 1,
 };
 
 /***
-* 临时性修改 郭浩
-* @warning 这些字符串是编译不过的……
-*/
+ * 临时性修�?? 郭浩
+ * @warning 这些字符串是编译不过的�??��????
+ */
 static std::string interactive_str[interactive_end] =
-{
-	"1",
-	"1",
-	"1",
-	"1",
-	"1",
-	"1",
-	"1",
-	"1",
-	"1",
-};
+{ "1", "1", "1", "1", "1", "1", "1", "1", "1", };
 
 using namespace NDEngine;
 
@@ -137,7 +130,7 @@ bool GameScene::bDefBroken = false;
 bool GameScene::bRidePetBroken = false;
 
 GameScene* GameScene::Scene()
-{	
+{
 	GameScene* scene = new GameScene();
 	scene->Initialization(1);
 	return scene;
@@ -145,7 +138,7 @@ GameScene* GameScene::Scene()
 
 void GameScene::AddUserState(int idState, string& str)
 {
-	//this->m_userState->AddStateLabel(idState, str); ///< 临时性注释 郭浩
+	//this->m_userState->AddStateLabel(idState, str); ///< 临时性注�?? 郭浩
 }
 
 void GameScene::DelUserState(int idState)
@@ -156,11 +149,11 @@ void GameScene::DelUserState(int idState)
 void GameScene::SetUIShow(bool bShow)
 {
 	m_bUIShow = bShow;
-	
-	if (m_bUIShow) 
+
+	if (m_bUIShow)
 	{ // 玩家操作UI时需要停止寻路等放这
 		NDPlayer& player = NDPlayer::defaultHero();
-		if (player.isTeamLeader() || !player.isTeamMember()) 
+		if (player.isTeamLeader() || !player.isTeamMember())
 		{
 			player.stopMoving();
 		}
@@ -174,11 +167,11 @@ void GameScene::SetUIShow(bool bShow)
 
 			switch (menuType)
 			{
-				case MT_DUI_WU:
-					this->onClickTeam();
-					break;
-				default:
-					break;
+			case MT_DUI_WU:
+				this->onClickTeam();
+				break;
+			default:
+				break;
 			}
 		}
 	}
@@ -194,10 +187,10 @@ GameScene* GameScene::GetCurGameScene()
 
 void GameScene::SetTargetHead(NDBaseRole* target)
 {
-/***
-* 临时性注释 郭浩
-* all
-*/
+	/***
+	 * 临时性注�?? 郭浩
+	 * all
+	 */
 // 	if (m_targetHead) 
 // 	{
 // 		if (!target)
@@ -206,7 +199,7 @@ void GameScene::SetTargetHead(NDBaseRole* target)
 // 		} 
 // 		else
 // 		{
-// 			//m_targetHead->SetRole(target); ///< 临时性注释 郭浩
+// 			//m_targetHead->SetRole(target); ///< 临时性注�?? 郭浩
 // 
 // 			if (m_targetHead->GetParent() == NULL) 
 // 			{
@@ -218,9 +211,9 @@ void GameScene::SetTargetHead(NDBaseRole* target)
 
 void GameScene::RefreshQuickInterationBar(NDBaseRole* target)
 {
-	if (m_quickInteration) 
+	if (m_quickInteration)
 	{
-		//m_quickInteration->Refresh(target); ///< 临时性注释 郭浩
+		//m_quickInteration->Refresh(target); ///< 临时性注�?? 郭浩
 		return;
 	}
 }
@@ -228,65 +221,66 @@ void GameScene::RefreshQuickInterationBar(NDBaseRole* target)
 GameScene::GameScene()
 {
 	s_curGameScene = this;
-	
-//	m_userState = NULL; ///< 临时性注释 郭浩
-//	m_playerHead = NULL; ///< 临时性注释 郭浩
-//	m_targetHead = NULL; ///< 临时性注释 郭浩
-//	m_petHead = NULL; ///< 临时性注释 郭浩
+
+//	m_userState = NULL; ///< 临时性注�?? 郭浩
+//	m_playerHead = NULL; ///< 临时性注�?? 郭浩
+//	m_targetHead = NULL; ///< 临时性注�?? 郭浩
+//	m_petHead = NULL; ///< 临时性注�?? 郭浩
 	m_tlRelieve = NULL;
 	m_relieveLayer = NULL;
-//	m_miniMap = NULL; ///< 临时性注释 郭浩
+//	m_miniMap = NULL; ///< 临时性注�?? 郭浩
 	maplayer = NULL;
-	
+
 	m_hccOPItem = NULL;
-	
+
 	m_picMap = new NDPicture();
 	m_picMap->Initialization(NDPath::GetFullImagepath("ui_map.png"));
 	m_btnMap = NULL;
-	
+
 	m_picTarget = new NDPicture();
 	m_picTarget->Initialization(NDPath::GetFullImagepath("ui_target.png"));
 	m_btnTarget = NULL;
-	
+
 	m_picInterative = new NDPicture();
-	m_picInterative->Initialization(NDPath::GetFullImagepath("ui_interective.png"));
+	m_picInterative->Initialization(
+			NDPath::GetFullImagepath("ui_interective.png"));
 	m_btnInterative = NULL;
-	
-	//m_hccOPMenu = NULL;		///< 临时性注释 郭浩
-	
+
+	//m_hccOPMenu = NULL;		///< 临时性注�?? 郭浩
+
 	m_picTeam = new NDPicture();
 	m_picTeam->Initialization(NDPath::GetFullImagepath("ui_team.png"));
 	m_btnTeam = NULL;
-	
+
 	m_picSocial = new NDPicture();
 	m_picSocial->Initialization(NDPath::GetFullImagepath("ui_social.png"));
 	m_btnSocial = NULL;
-	
+
 	m_picTalk = new NDPicture();
 	m_picTalk->Initialization(NDPath::GetFullImagepath("ui_talk.png"));
 	m_btnTalk = NULL;
-	
+
 	m_picTask = new NDPicture();
 	m_picTask->Initialization(NDPath::GetFullImagepath("ui_task.png"));
 	m_btnTask = NULL;
-	
+
 	m_picBag = new NDPicture();
 	m_picBag->Initialization(NDPath::GetFullImagepath("ui_bag.png"));
 	m_btnBag = NULL;
-	
+
 	m_picStore = new NDPicture();
 	m_picStore->Initialization(NDPath::GetFullImagepath("ui_store.png"));
 	m_btnStore = NULL;
-	
+
 	m_picMenu = new NDPicture();
 	m_picMenu->Initialization(NDPath::GetFullImagepath("ui_menu.png"));
 	m_btnMenu = NULL;
-	
+
 	m_tlShare = NULL;
-	
-	//m_anilayerRequest = NULL;		///< 临时性注释 郭浩
-	//m_anilayerMail = NULL;		///< 临时性注释 郭浩
-	
+
+	//m_anilayerRequest = NULL;		///< 临时性注�?? 郭浩
+	//m_anilayerMail = NULL;		///< 临时性注�?? 郭浩
+
 	//m_dlgNPC = NULL;
 	m_dlgTaskAwardItemTag = ID_NONE;
 	m_dlgTaskAwardItemConfirmTag = ID_NONE;
@@ -294,21 +288,21 @@ GameScene::GameScene()
 	m_dlgSyndicateQuit = ID_NONE;
 	m_dlgDelRoleTag = ID_NONE;
 	m_curSelTaskAwardItemIndex = 0;
-	
+
 	m_tlInteractive = NULL;
-	
+
 	SetWeaponBroken(false);
-	
+
 	SetDefBroken(false);
-	
+
 	SetRidePetBroken(false);
-	
+
 	m_bUIShow = false;
-	
+
 	m_dlgNPCTag = -1;
-	
+
 	m_tlInvitePlayers = NULL;
-	
+
 	m_tlKickPlayers = NULL;
 	m_tlTiShengPlayers = NULL;
 	m_tlPaiHang = NULL;
@@ -316,12 +310,12 @@ GameScene::GameScene()
 	m_uiLayer = NULL;
 
 	m_dlgFarm = NULL;
-//	m_directKey = NULL; ///< 临时性注释 郭浩
-	
+//	m_directKey = NULL; ///< 临时性注�?? 郭浩
+
 	m_quickItem = NULL;
-	
-//	m_quickFunc = NULL; ///< 临时性注释 郭浩
-	
+
+//	m_quickFunc = NULL; ///< 临时性注�?? 郭浩
+
 	m_quickTeam = NULL;
 }
 
@@ -333,27 +327,27 @@ GameScene::~GameScene()
 	}
 
 	/***
-	* 临时性注释 郭浩
-	* begin
-	*/
+	 * 临时性注�?? 郭浩
+	 * begin
+	 */
 // 	if (m_targetHead && m_targetHead->GetParent() == NULL)
 // 	{
 // 		SAFE_DELETE(m_targetHead);
 // 	}
 	/***
-	* 临时性注释 郭浩
-	* end
-	*/
-	
+	 * 临时性注�?? 郭浩
+	 * end
+	 */
+
 	BattleMgrObj.quitBattle(false);
-	SAFE_DELETE(m_picMap);
-	SAFE_DELETE(m_picTarget);
-	SAFE_DELETE(m_picInterative);
-	
+	SAFE_DELETE (m_picMap);
+	SAFE_DELETE (m_picTarget);
+	SAFE_DELETE (m_picInterative);
+
 	/***
-	* 临时性注释 郭浩
-	* begin
-	*/
+	 * 临时性注�?? 郭浩
+	 * begin
+	 */
 
 // 	if (m_hccOPItem) {
 // 		NDMapMgrObj.bRootItemZhangKai = m_hccOPItem->IsZhangKai();
@@ -362,20 +356,19 @@ GameScene::~GameScene()
 // 	if (m_hccOPMenu) {
 // 		NDMapMgrObj.bRootMenuZhangKai = m_hccOPMenu->IsZhangKai();
 // 	}
-
 	/***
-	* 临时性注释 郭浩
-	* end
-	*/
-	
+	 * 临时性注�?? 郭浩
+	 * end
+	 */
+
 	/*
-	if (m_directKey && m_directKey->GetParent() == NULL)
-	{
-		delete m_directKey;
-		m_directKey = NULL;
-	}
-	*/
-	
+	 if (m_directKey && m_directKey->GetParent() == NULL)
+	 {
+	 delete m_directKey;
+	 m_directKey = NULL;
+	 }
+	 */
+
 	if (this->m_uiLayer->GetParent() == NULL)
 	{
 		SAFE_DELETE(this->m_uiLayer);
@@ -401,7 +394,7 @@ void GameScene::OnBattleEnd()
 {
 	//this->AddChild(m_uiLayer);
 	GlobalDialogObj.SetInBattle(false);
-	
+
 //	if (m_directKey)
 //		m_directKey->OnBattleEnd();
 //		
@@ -415,26 +408,26 @@ void GameScene::OnBattleEnd()
 void GameScene::OnBattleBegin()
 {
 	GlobalDialogObj.SetInBattle(true);
-	
+
 	this->RemoveChild(this->m_uiLayer, false);
-	
+
 	std::vector<NDNode*> vDel;
-	
+
 	std::vector<NDNode*>::iterator it = this->m_pkChildrenList.begin();
 
 	/***
-	* 临时性注释 郭浩
-	* begin
-	*/
+	 * 临时性注�?? 郭浩
+	 * begin
+	 */
 	//for (; it != this->m_childrenList.end(); it++) 
 	//{
 	//	if ((*it)->IsKindOfClass(RUNTIME_CLASS(NDMapLayerLogic)) ||
 	//	    (*it)->IsKindOfClass(RUNTIME_CLASS(TextControl)) ||
 	//	    (*it)->IsKindOfClass(RUNTIME_CLASS(NDUIScrollText)) ||
 	//		(*it)->IsKindOfClass(RUNTIME_CLASS(TalkBox)) ||
-			//(*it)->IsKindOfClass(RUNTIME_CLASS(NDUIDirectKeyTop)) ||
-			//(*it)->IsKindOfClass(RUNTIME_CLASS(BattleFieldRelive)) ||
-			//(*it)->IsKindOfClass(RUNTIME_CLASS(NDUIMaskLayer)) )
+	//(*it)->IsKindOfClass(RUNTIME_CLASS(NDUIDirectKeyTop)) ||
+	//(*it)->IsKindOfClass(RUNTIME_CLASS(BattleFieldRelive)) ||
+	//(*it)->IsKindOfClass(RUNTIME_CLASS(NDUIMaskLayer)) )
 	//		)
 	//	{
 	//		if ((*it)->IsKindOfClass(RUNTIME_CLASS(TalkBox))) ((NDUINode*)(*it))->SetVisible(false);
@@ -446,29 +439,29 @@ void GameScene::OnBattleBegin()
 	//	}
 	//}
 	/***
-	* 临时性注释 郭浩
-	* end
-	*/
-	
+	 * 临时性注�?? 郭浩
+	 * end
+	 */
+
 	for (it = vDel.begin(); it != vDel.end(); it++)
 	{
 		if ((*it)->IsKindOfClass(RUNTIME_CLASS(NDUIDialog)))
 		{
 			if (!(*it)->IsKindOfClass(RUNTIME_CLASS(GameQuitDialog)))
 			{
-				((NDUIDialog*)(*it))->Close();
+				((NDUIDialog*) (*it))->Close();
 			}
-		} 
-		else 
+		}
+		else
 		{
 			(*it)->RemoveFromParent(true);
 		}
 	}
 
 	/***
-	* 临时性注释 郭浩
-	* begin
-	*/
+	 * 临时性注�?? 郭浩
+	 * begin
+	 */
 // 	if (m_directKey)
 // 		m_directKey->OnBattleBegin();
 // 		
@@ -478,81 +471,81 @@ void GameScene::OnBattleBegin()
 // 	if (m_quickInteration)
 // 		m_quickInteration->OnBattleBegin();
 	/***
-	* 临时性注释 郭浩
-	* end
-	*/
+	 * 临时性注�?? 郭浩
+	 * end
+	 */
 }
 
 void GameScene::Initialization(int mapID)
 {
 	NDScene::Initialization();
-	
+
 	m_timer.SetTimer(this, 1, 1);
-	
+
 	// test
 	//m_timer.SetTimer(this, 2, 1.5f);
-	
+
 	m_bHeadShow = true;
-	
+
 	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
-	
+
 	maplayer = new NDMapLayerLogic();
-	maplayer->Initialization(mapID); 
+	maplayer->Initialization(mapID);
 	this->AddChild(maplayer, MAPLAYER_Z, MAPLAYER_TAG);
-	
+
 	m_uiLayer = new MapUILayer;
 	m_uiLayer->Initialization();
 	this->AddChild(m_uiLayer, MAP_UILAYER_Z);
-	
+
 	// 确保方向键最先加入到uilayer
 	this->ShowDirectKey(true);
 	/*
-	do 
-	{
-		m_hccOPItem = new NDUIHControlContainer;
-		m_hccOPItem->Initialization();
-		m_hccOPItem->SetFrameRect(CGRectMake(480-103, 120, 40, 200+2));
-		m_hccOPItem->SetRectInit(CGRectMake(480-103, 120, 40, 200+2));
-		m_hccOPItem->SetButtonName("ui_menu_scroll.png");
-		m_hccOPItem->SetUINodeInterval(20);
-		
-		m_btnMap = new NDUIButton;
-		m_btnMap->Initialization();
-		m_btnMap->SetImage(m_picMap);
-		m_btnMap->SetDelegate(this);
-		m_btnMap->SetFrameRect(CGRectMake(0, 0, 40, 40));
-		m_hccOPItem->AddUINode(m_btnMap);
-		
-		m_btnTarget = new NDUIButton;
-		m_btnTarget->Initialization();
-		m_btnTarget->SetImage(m_picTarget);
-		m_btnTarget->SetDelegate(this);
-		m_btnTarget->SetFrameRect(CGRectMake(0, 0, 40, 40));
-		m_hccOPItem->AddUINode(m_btnTarget);
-		
-		m_btnInterative = new NDUIButton;
-		m_btnInterative->Initialization();
-		m_btnInterative->SetImage(m_picInterative);
-		m_btnInterative->SetDelegate(this);
-		m_btnInterative->SetFrameRect(CGRectMake(0, 0, 40, 40));
-		m_hccOPItem->AddUINode(m_btnInterative);
-		
-		m_hccOPItem->SetDelegate(this);
-		
-		this->AddUIChild(m_hccOPItem);
-	} while (0);
-	
-	do 
-	{
-		m_hccOPMenu = new NDUIHControlContainer;
-		m_hccOPMenu->Initialization();
-		m_hccOPMenu->SetFrameRect(CGRectMake(480-40, 0, 40, 320));
-		m_hccOPMenu->SetRectInit(CGRectMake(480-40, 0, 40, 320));
-		m_hccOPMenu->SetButtonName("ui_item_scroll.png");
-		m_hccOPMenu->SetUINodeInterval(0);
-		m_hccOPMenu->SetBGImage("ui_menu_line.png");
-		
-#define fastinit(btn,pic) \
+	 do
+	 {
+	 m_hccOPItem = new NDUIHControlContainer;
+	 m_hccOPItem->Initialization();
+	 m_hccOPItem->SetFrameRect(CGRectMake(480-103, 120, 40, 200+2));
+	 m_hccOPItem->SetRectInit(CGRectMake(480-103, 120, 40, 200+2));
+	 m_hccOPItem->SetButtonName("ui_menu_scroll.png");
+	 m_hccOPItem->SetUINodeInterval(20);
+
+	 m_btnMap = new NDUIButton;
+	 m_btnMap->Initialization();
+	 m_btnMap->SetImage(m_picMap);
+	 m_btnMap->SetDelegate(this);
+	 m_btnMap->SetFrameRect(CGRectMake(0, 0, 40, 40));
+	 m_hccOPItem->AddUINode(m_btnMap);
+
+	 m_btnTarget = new NDUIButton;
+	 m_btnTarget->Initialization();
+	 m_btnTarget->SetImage(m_picTarget);
+	 m_btnTarget->SetDelegate(this);
+	 m_btnTarget->SetFrameRect(CGRectMake(0, 0, 40, 40));
+	 m_hccOPItem->AddUINode(m_btnTarget);
+
+	 m_btnInterative = new NDUIButton;
+	 m_btnInterative->Initialization();
+	 m_btnInterative->SetImage(m_picInterative);
+	 m_btnInterative->SetDelegate(this);
+	 m_btnInterative->SetFrameRect(CGRectMake(0, 0, 40, 40));
+	 m_hccOPItem->AddUINode(m_btnInterative);
+
+	 m_hccOPItem->SetDelegate(this);
+
+	 this->AddUIChild(m_hccOPItem);
+	 } while (0);
+
+	 do
+	 {
+	 m_hccOPMenu = new NDUIHControlContainer;
+	 m_hccOPMenu->Initialization();
+	 m_hccOPMenu->SetFrameRect(CGRectMake(480-40, 0, 40, 320));
+	 m_hccOPMenu->SetRectInit(CGRectMake(480-40, 0, 40, 320));
+	 m_hccOPMenu->SetButtonName("ui_item_scroll.png");
+	 m_hccOPMenu->SetUINodeInterval(0);
+	 m_hccOPMenu->SetBGImage("ui_menu_line.png");
+
+	 #define fastinit(btn,pic) \
 do \
 { \
 NDUILayer *layer = new NDUILayer; \
@@ -567,29 +560,28 @@ btn->SetDelegate(this); \
 btn->SetFrameRect(CGRectMake(0, 0, 40, 40)); \
 layer->AddChild(btn); \
 } while (0);
-		
-		fastinit(m_btnTeam, m_picTeam)
-		fastinit(m_btnSocial, m_picSocial)
-		fastinit(m_btnTalk, m_picTalk)
-		fastinit(m_btnTask, m_picTask)
-		fastinit(m_btnBag, m_picBag)
-		fastinit(m_btnStore, m_picStore)
-		fastinit(m_btnMenu, m_picMenu)
-#undef fastinit
-		
-		m_hccOPMenu->SetDelegate(this);
-		this->AddUIChild(m_hccOPMenu);
-	} while (0); */
 
+	 fastinit(m_btnTeam, m_picTeam)
+	 fastinit(m_btnSocial, m_picSocial)
+	 fastinit(m_btnTalk, m_picTalk)
+	 fastinit(m_btnTask, m_picTask)
+	 fastinit(m_btnBag, m_picBag)
+	 fastinit(m_btnStore, m_picStore)
+	 fastinit(m_btnMenu, m_picMenu)
+	 #undef fastinit
+
+	 m_hccOPMenu->SetDelegate(this);
+	 this->AddUIChild(m_hccOPMenu);
+	 } while (0); */
 
 	/***
-	* 临时性注释 郭浩
-	* begin
-	*/
+	 * 临时性注�?? 郭浩
+	 * begin
+	 */
 // 	m_anilayerRequest = new NDUIAniLayer;
 // 	m_anilayerRequest->Initialization("cuebubble.spr");
 // 	m_anilayerRequest->SetFrameRect(CGRectMake(0, 0, 480, 320));
-// 	//原先x坐标为0,由于模拟器盲区,无法测试,故把x坐标调为40
+// 	//原先x坐标�??由于模拟器盲�??,无法测试,故把x坐标调为40
 // //#ifdef DEBUG
 // 	m_anilayerRequest->SetAniRectXYSize(CGRectMake(0, 320-53-9, 57, 53), CGSizeMake(17, 17));
 // //#else
@@ -598,48 +590,46 @@ layer->AddChild(btn); \
 // 	m_anilayerRequest->SetCurrentAnimation(0);
 // 	m_anilayerRequest->SetDelegate(this);
 // 	this->AddUIChild(m_anilayerRequest);
+	/***
+	 * 临时性注�?? 郭浩
+	 * end
+	 */
+
+	/*
+	 m_anilayerMail = new NDUIAniLayer;
+	 m_anilayerMail->Initialization("mail_flash.spr");
+	 m_anilayerMail->SetFrameRect(CGRectMake(0, 0, 480, 320));
+	 #ifdef DEBUG
+	 m_anilayerMail->SetAniRectXYSize(CGRectMake(40, 160, 25, 17), CGSizeMake(2, 2));
+	 #else
+	 m_anilayerMail->SetAniRectXYSize(CGRectMake(0, 160, 25, 17), CGSizeMake(2, 2));
+	 #endif
+	 m_anilayerMail->SetCurrentAnimation(0);
+	 m_anilayerMail->SetDelegate(this);
+	 this->AddUIChild(m_anilayerMail);
+	 */
 
 	/***
-	* 临时性注释 郭浩
-	* end
-	*/
-	
-	/*
-	m_anilayerMail = new NDUIAniLayer;
-	m_anilayerMail->Initialization("mail_flash.spr");
-	m_anilayerMail->SetFrameRect(CGRectMake(0, 0, 480, 320));
-#ifdef DEBUG
-	m_anilayerMail->SetAniRectXYSize(CGRectMake(40, 160, 25, 17), CGSizeMake(2, 2));
-#else
-	m_anilayerMail->SetAniRectXYSize(CGRectMake(0, 160, 25, 17), CGSizeMake(2, 2));
-#endif
-	m_anilayerMail->SetCurrentAnimation(0);
-	m_anilayerMail->SetDelegate(this);
-	this->AddUIChild(m_anilayerMail);
-	*/
-
-/***
-* 临时性注释 郭浩
-* begin
-*/
+	 * 临时性注�?? 郭浩
+	 * begin
+	 */
 // 	m_tlShare = new NDUITableLayer;
 // 	m_tlShare->Initialization();
 // 	m_tlShare->VisibleSectionTitles(false);
 // 	m_tlShare->SetDelegate(this);
 // 	m_tlShare->SetVisible(false);
 // 	this->AddUIChild(m_tlShare);
-/***
-* 临时性注释 郭浩
-* end
-*/
-	
+	/***
+	 * 临时性注�?? 郭浩
+	 * end
+	 */
+
 	//m_tlInvitePlayers = new NDUITableLayer;
 	//m_tlInvitePlayers->Initialization();
 	//m_tlInvitePlayers->VisibleSectionTitles(false);
 	//m_tlInvitePlayers->SetDelegate(this);
 	//m_tlInvitePlayers->SetVisible(false);
 	//this->AddUIChild(m_tlInvitePlayers);
-	
 	//m_tlKickPlayers = new NDUITableLayer;
 	//m_tlKickPlayers->Initialization();
 	//m_tlKickPlayers->VisibleSectionTitles(false);
@@ -667,7 +657,6 @@ layer->AddChild(btn); \
 	//m_tlMarriage->SetDelegate(this);
 	//m_tlMarriage->SetVisible(false);
 	//this->AddUIChild(m_tlMarriage);
-	
 	do
 	{
 		//m_tlInteractive = new NDUITableLayer;
@@ -677,76 +666,81 @@ layer->AddChild(btn); \
 		//m_tlInteractive->SetDelegate(this);
 		//this->AddUIChild(m_tlInteractive);
 	} while (0);
-	
+
 	//this->ShowMiniMap(NDDataPersist::IsGameSettingOn(GS_SHOW_MINI_MAP));
 	//this->ShowPlayerHead(NDDataPersist::IsGameSettingOn(GS_SHOW_HEAD));
 	this->ShowMiniMap(true);
 	this->ShowPlayerHead(true);
 
 	/***
-	* 临时性注释 郭浩
-	* begin
-	*/
+	 * 临时性注�?? 郭浩
+	 * begin
+	 */
 // 	m_userState = new UserStateLayer;
 // 	m_userState->Initialization();
 // 	this->AddUIChild(m_userState, 2);
 	/***
-	* 临时性注释 郭浩
-	* end
-	*/
+	 * 临时性注�?? 郭浩
+	 * end
+	 */
 
 	NDUILayer* layer = new NDUILayer;
 	layer->Initialization();
 	layer->SetFrameRect(CGRectMake(0, 0, 36, 42));
-	
-	NDPicture* pic = NDPicturePool::DefaultPool()->
-		AddPicture(NDPath::GetImgPathBattleUI("scenerolehandle.png"), false);
+
+	NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture(
+			NDPath::GetImgPathBattleUI("scenerolehandle.png"), false);
 	m_imgHeadShow = new NDUIImage;
 	m_imgHeadShow->Initialization();
 	m_imgHeadShow->SetPicture(pic, true);
 	m_imgHeadShow->SetFrameRect(CGRectMake(0, 0, 27, 46));
 	this->AddUIChild(m_imgHeadShow, 1);
-	
+
 	m_btnHeadShow = new NDUIButton;
 	m_btnHeadShow->Initialization();
-	m_picHeadShow = NDPicturePool::DefaultPool()->
-		AddPicture(NDPath::GetImgPathBattleUI("handlearraw.png"), false);
+	m_picHeadShow = NDPicturePool::DefaultPool()->AddPicture(
+			NDPath::GetImgPathBattleUI("handlearraw.png"), false);
 	m_picHeadShow->Rotation(PictureRotation180);
-	m_btnHeadShow->SetImage(m_picHeadShow, true, CGRectMake(10, 13, 9, 16), true);
+	m_btnHeadShow->SetImage(m_picHeadShow, true, CGRectMake(10, 13, 9, 16),
+			true);
 	m_btnHeadShow->SetFrameRect(CGRectMake(0, 0, 27, 46));
 	m_btnHeadShow->SetDelegate(this);
 	layer->AddChild(m_btnHeadShow);
 	this->AddUIChild(layer, 1);
 
 	/***
-	* 临时性注释 郭浩
-	* begin
-	*/
+	 * 临时性注�?? 郭浩
+	 * begin
+	 */
 // 	m_targetHead = new TargetHeadInMap;
 // 	m_targetHead->Initialization();
 // 	m_targetHead->SetFrameRect(CGRectMake(210.0f, 0.0f, 87.0f, 40.0f));
 	/***
-	* 临时性注释 郭浩
-	* end
-	*/
+	 * 临时性注�?? 郭浩
+	 * end
+	 */
 
 	NDUIImage* imgShrinkBg = new NDUIImage;
 	imgShrinkBg->Initialization();
-	imgShrinkBg->SetPicture(NDPicturePool::DefaultPool()->
-		AddPicture(NDPath::GetImgPathBattleUI("bar_shrink.png"), false));
+	imgShrinkBg->SetPicture(
+			NDPicturePool::DefaultPool()->AddPicture(
+					NDPath::GetImgPathBattleUI("bar_shrink.png"), false));
 	imgShrinkBg->SetFrameRect(CGRectMake(35.5, 284, 62, 36));
 	this->AddUIChild(imgShrinkBg);
-	
+
 	imgShrinkBg = new NDUIImage;
 	imgShrinkBg->Initialization();
-	imgShrinkBg->SetPicture(NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathBattleUI("bar_shrink.png"), false));
-	imgShrinkBg->SetFrameRect(CGRectMake(kWinSize.width-66.5-31, 284, 62, 36));
+	imgShrinkBg->SetPicture(
+			NDPicturePool::DefaultPool()->AddPicture(
+					NDPath::GetImgPathBattleUI("bar_shrink.png"), false));
+	imgShrinkBg->SetFrameRect(
+			CGRectMake(kWinSize.width - 66.5 - 31, 284, 62, 36));
 	this->AddUIChild(imgShrinkBg);
 
 	/***
-	* 临时性注释 郭浩
-	* begin
-	*/
+	 * 临时性注�?? 郭浩
+	 * begin
+	 */
 // 	m_bQuickInterationShow = true;
 // 	
 // 	m_quickInteration = new QuickInteraction;
@@ -755,52 +749,54 @@ layer->AddChild(btn); \
 // 	m_quickInteration->SetFrameRect(CGRectMake(66.5, 247.0f, 347, 75.0f));
 // 	this->AddUIChild(m_quickInteration);
 	/***
-	* 临时性注释 郭浩
-	* end
-	*/
+	 * 临时性注�?? 郭浩
+	 * end
+	 */
 
 	layer = new NDUILayer;
 	layer->Initialization();
 	layer->SetFrameRect(CGRectMake(35.5, 284, 62, 36));
-	
+
 	NDUIImage* imgQuickInterationShrink = new NDUIImage;
 	imgQuickInterationShrink->Initialization();
-	imgQuickInterationShrink->SetPicture(NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathBattleUI("bottom_shrink.png"), false), true);
+	imgQuickInterationShrink->SetPicture(
+			NDPicturePool::DefaultPool()->AddPicture(
+					NDPath::GetImgPathBattleUI("bottom_shrink.png"), false),
+			true);
 	imgQuickInterationShrink->SetFrameRect(CGRectMake(14, 14, 34, 22));
 	layer->AddChild(imgQuickInterationShrink);
 
 	/***
-	* 临时性注释 郭浩
-	* begin
-	*/
+	 * 临时性注�?? 郭浩
+	 * begin
+	 */
 // 	m_quickItem = new QuickItem;
 // 	m_quickItem->Initialization();
 // 	m_quickItem->SetFrameRect(CGRectMake(66.5, 244.0f, 400.0f, 78.0f));
 // 	this->AddUIChild(m_quickItem);
 //	RefreshQuickItem();
 	/***
-	* 临时性注释 郭浩
-	* end
-	*/
+	 * 临时性注�?? 郭浩
+	 * end
+	 */
 
-	
-//	m_quickItem->SetShrink(true); ///< 临时性注释 郭浩
-	
+//	m_quickItem->SetShrink(true); ///< 临时性注�?? 郭浩
 	m_btnQuickInterationShrink = new NDUIButton;
 	m_btnQuickInterationShrink->Initialization();
-	m_picQuickInteration = NDPicturePool::DefaultPool()->
-		AddPicture(NDPath::GetImgPathBattleUI("handlearraw.png"), false);
+	m_picQuickInteration = NDPicturePool::DefaultPool()->AddPicture(
+			NDPath::GetImgPathBattleUI("handlearraw.png"), false);
 	m_picQuickInteration->Rotation(PictureRotation90);
-	m_btnQuickInterationShrink->SetImage(m_picQuickInteration, true, CGRectMake(10, 20, 16, 9), true);
+	m_btnQuickInterationShrink->SetImage(m_picQuickInteration, true,
+			CGRectMake(10, 20, 16, 9), true);
 	m_btnQuickInterationShrink->SetFrameRect(CGRectMake(13, 00, 62, 56));
 	m_btnQuickInterationShrink->SetDelegate(this);
 	layer->AddChild(m_btnQuickInterationShrink);
 	this->AddUIChild(layer);
-	
-//	m_quickFunc = new QuickFunc; ///< 临时性注释 郭浩
-//	m_quickFunc->Initialization(true); ///< 临时性注释 郭浩
-//	this->AddUIChild(m_quickFunc); ///< 临时性注释 郭浩
-	
+
+//	m_quickFunc = new QuickFunc; ///< 临时性注�?? 郭浩
+//	m_quickFunc->Initialization(true); ///< 临时性注�?? 郭浩
+//	this->AddUIChild(m_quickFunc); ///< 临时性注�?? 郭浩
+
 	TeamRefreh(false);
 }
 
@@ -818,27 +814,27 @@ void GameScene::SetMiniMapVisible(bool bVisible)
 {
 // 	if (m_miniMap)
 // 	{
-		//this->m_miniMap->EnableDraw(bVisible);
+	//this->m_miniMap->EnableDraw(bVisible);
 //	}
-	
-	// 同时也设置头像
+
+	// 同时也设置头�??
 //	if (m_playerHead)
 //	{
-		//this->m_playerHead->EnableDraw(bVisible);
+	//this->m_playerHead->EnableDraw(bVisible);
 //	}
-	
+
 //	if (m_petHead)
 //	{
-		//this->m_petHead->EnableDraw(bVisible);
+	//this->m_petHead->EnableDraw(bVisible);
 //	}
 }
 
 void GameScene::ShowPetHead(bool bShow)
 {
 	/***
-	* 临时性注释 郭浩
-	* all
-	*/
+	 * 临时性注�?? 郭浩
+	 * all
+	 */
 // 	NDBattlePet* battlepet = (NDBattlePet*)NDPlayer::defaultHero().GetShowPet();
 // 	
 // 	if (bShow && battlepet)
@@ -864,9 +860,9 @@ void GameScene::ShowPetHead(bool bShow)
 void GameScene::ShowPlayerHead(bool bShow)
 {
 	/***
-	* 临时性注释 郭浩
-	* all
-	*/
+	 * 临时性注�?? 郭浩
+	 * all
+	 */
 // 	if (bShow)
 // 	{
 // 		if (!this->m_playerHead)
@@ -891,9 +887,9 @@ void GameScene::ShowPlayerHead(bool bShow)
 void GameScene::ShowDirectKey(bool bShow)
 {
 	/***
-	* 临时性注释 郭浩
-	* begin
-	*/
+	 * 临时性注�?? 郭浩
+	 * begin
+	 */
 // 	if (bShow)
 // 	{
 // 		if (!m_directKey) 
@@ -909,10 +905,10 @@ void GameScene::ShowDirectKey(bool bShow)
 // 			m_directKey->ShowFinish(this);
 // 		}
 // 	}
-/***
-* 临时性注释 郭浩
-* end
-*/
+	/***
+	 * 临时性注�?? 郭浩
+	 * end
+	 */
 
 //	else 
 //	{
@@ -925,9 +921,9 @@ const CGRect RECT_MINI_MAP = CGRectMake(308.0f, 0.0f, 172.0f, 84.0f);
 void GameScene::ShowMiniMap(bool bShow)
 {
 	/***
-	* 临时性注释 郭浩
-	* this function
-	*/
+	 * 临时性注�?? 郭浩
+	 * this function
+	 */
 // 	if (bShow) 
 // 	{
 // 		if (!this->m_miniMap) 
@@ -950,11 +946,11 @@ void GameScene::ShowMiniMap(bool bShow)
 }
 
 void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
-										 unsigned int cellIndex, NDSection* section)
+		unsigned int cellIndex, NDSection* section)
 {
 	/***
-	* 临时性注释 郭浩
-	*/
+	 * 临时性注�?? 郭浩
+	 */
 
 //	if (table == m_tlInteractive && m_tlInteractive->IsVisibled() && cellIndex < interactive_end)
 //	{
@@ -978,8 +974,8 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		{ // "查看装备"
 //			sendQueryPlayer(role->m_id, SEE_EQUIP_INFO);
 //		}
-//		else if ( str == "邀请组队")
-//		{ // "邀请组队"
+//		else if ( str == "�??请组�??")
+//		{ // "�??请组�??"
 //			NDTransData bao(_MSG_TEAM);
 //			bao << (unsigned short)MSG_TEAM_INVITE << player.m_id << role->m_id;
 //			// SEND_DATA(bao);
@@ -991,8 +987,8 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			// SEND_DATA(bao);
 //			
 //		}
-//		else if ( str == "邀请组队")
-//		{ // "邀请组队"
+//		else if ( str == "�??请组�??")
+//		{ // "�??请组�??"
 //			NDTransData bao(_MSG_TEAM);
 //			bao << (unsigned short)MSG_TEAM_INVITE << player.m_id << role->m_id;
 //			// SEND_DATA(bao);
@@ -1001,7 +997,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		{ // "交易"
 //			//if (AutoFindPath.getInstance().isWork()) {
 //			//				if (!AutoFindPath.getInstance().isClickScreenMode()) {
-//			//					GameScreen.getInstance().initNewChat(new ChatRecordManager(5, "系统", "您正在使用自动导航，不能进行交易！"));
+//			//					GameScreen.getInstance().initNewChat(new ChatRecordManager(5, "系统", "您正在使用自动导航，不能进行交易�??"));
 //			//					break;
 //			//				}
 //			//				AutoFindPath.getInstance().stop();
@@ -1121,29 +1117,29 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 ////				NDDirector::DefaultDirector()->PushScene(NewVipStoreScene::Scene());
 ////			}
 //		}
-//		else if (strCurSel == "充值")
+//		else if (strCurSel == "充�????")
 //		{
 //			//sendChargeInfo(0);
 //		}
 //		else if (strCurSel == "人物")
 //		{
-//			InitTLShareContent("属性", "技能", "摆摊", "特殊状态", NULL);
+//			InitTLShareContent("属�????", "�??�??", "摆摊", "特殊状�????", NULL);
 //		}
 //		else if (strCurSel == "宠物")
 //		{
-//			InitTLShareContent("宠物属性", "宠物技能", NULL);
+//			InitTLShareContent("宠物属�????", "宠物�??�??", NULL);
 //		}
 //		else if (strCurSel == "庄园")
 //		{
-//			if (false) // 如果没有庄园 todo 暂时先不作
+//			if (false) // 如果没有庄园 todo 暂时先不�??
 //			{
 //				InitTLShareContent("立即创建", NULL);
 //			}
 //			else 
 //			{
-//				InitTLShareContent("庄园商城", "庄园动态", "远程进入", NULL);
+//				InitTLShareContent("庄园商城", "庄园动�????", "远程进入", NULL);
 //			}
-//			//showDialog("", "暂未开放,敬请关注");
+//			//showDialog("", "暂未�??�??,敬请关注");
 //		}
 //		else if (strCurSel == "系统")
 //		{
@@ -1173,23 +1169,23 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		{
 //			queryCreatedInSynList(0);
 //		}
-//		else if (strCurSel == "邀请函")
+//		else if (strCurSel == "�??请函")
 //		{
 //			sendQueryInviteList();
 //		}
-//		else if (strCurSel == "职位竞选")
+//		else if (strCurSel == "职位竞�????")
 //		{
-//			InitTLShareContent("军团长", "副团长", "元老", "堂主", "门主", NULL);
+//			InitTLShareContent("军团�??", "副团�??", "元�????", "堂主", "门主", NULL);
 //		}
-//		else if (strCurSel == "军团长")
+//		else if (strCurSel == "军团�??")
 //		{
 //			sendSynElection(ACT_QUERY_OFFICER, 12);
 //		}
-//		else if (strCurSel == "副团长")
+//		else if (strCurSel == "副团�??")
 //		{
 //			sendSynElection(ACT_QUERY_OFFICER, 11);
 //		}
-//		else if (strCurSel == "元老")
+//		else if (strCurSel == "元�????")
 //		{
 //			sendSynElection(ACT_QUERY_OFFICER, 10);
 //		}
@@ -1201,7 +1197,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		{
 //			sendSynElection(ACT_QUERY_OFFICER, 1);
 //		}
-//		else if (strCurSel == "投票箱")
+//		else if (strCurSel == "投票�??")
 //		{
 //			sendQuerySynNormalInfo(ACT_QUERY_VOTE_LIST);
 //		}
@@ -1212,11 +1208,11 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			vector<string> vMgrOpt;
 //			
 //			for (int i = 0; i < 9; i++) {
-//				if (i == 4) {// "军团升级"，副团及以上有权限
+//				if (i == 4) {// "军团升级"，副团及以上有权�??
 //					if (synRank < SYNRANK_VICE_LEADER) {
 //						continue;
 //					}
-//				} else if (i == 5 || i == 6 || i == 7) {// "军团邀请"//"人员审核"//"辞职"，门主及以上有权限
+//				} else if (i == 5 || i == 6 || i == 7) {// "军团�??�??"//"人员审核"//"辞职"，门主及以上有权�??
 //					if (synRank < SYNRANK_MENZHU_SHENG) {
 //						continue;
 //					}
@@ -1241,7 +1237,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		{
 //			sendQuerySynNormalInfo(ACT_QUERY_SYN_UPGRADE_INFO);
 //		}
-//		else if (strCurSel == "军团邀请")
+//		else if (strCurSel == "军团�??�??")
 //		{
 //			SyndicateInvite::Show();
 //		}
@@ -1257,15 +1253,15 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		{
 //			this->m_dlgSyndicateResign = GlobalDialogObj.Show(this, 
 //									  "温馨提示",
-//									  "请您确认是否要辞掉当前官职?", 0, "确认辞职", NULL);
+//									  "请您确认是否要辞掉当前官�??", 0, "确认辞职", NULL);
 //		}
 //		else if (strCurSel == "离开军团")
 //		{
 //			this->m_dlgSyndicateQuit = GlobalDialogObj.Show(this, 
 //									  "温馨提示",
-//									  "大侠您确定要离开本军团?", 0, NDCommonCString("Ok"), NULL);
+//									  "大侠您确定要离开本军�??", 0, NDCommonCString("Ok"), NULL);
 //		}
-//		else if (strCurSel == "属性")
+//		else if (strCurSel == "属�????")
 //		{
 //			//SetUIShow(true);
 ////			GameUIAttrib *attrib = new GameUIAttrib;
@@ -1274,9 +1270,9 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			NDDirector::DefaultDirector()->PushScene(GameAttribScene::Scene());
 //			table->SetVisible(false);
 //		}
-//		else if (strCurSel == "技能")
+//		else if (strCurSel == "�??�??")
 //		{
-//			InitTLShareContent("战斗技能", "炼金技能", "宝石合成", NULL);
+//			InitTLShareContent("战斗�??�??", "炼金�??�??", "宝石合成", NULL);
 //		}
 //		else if (strCurSel == "摆摊")
 //		{
@@ -1288,7 +1284,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //				showDialog("温馨提示", "您不能在这里摆摊");
 //			}
 //		}
-//		else if (strCurSel == "特殊状态")
+//		else if (strCurSel == "特殊状�????")
 //		{
 //			UserStateUILayer *list = new UserStateUILayer;
 //			list->Initialization();
@@ -1296,7 +1292,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			table->SetVisible(false);
 //			SetUIShow(true);
 //		}
-//		else if (strCurSel == "宠物属性")
+//		else if (strCurSel == "宠物属�????")
 //		{
 //			//if (NDPlayer::defaultHero().battlepet)
 //			//{
@@ -1307,13 +1303,13 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			//}
 //			//else 
 //			//{
-//			//	GlobalDialogObj.Show(NULL, "提示", "您没有装备宠物", NULL, NULL);
+//			//	GlobalDialogObj.Show(NULL, "提示", "您没有装备宠�??", NULL, NULL);
 //			//}	
 //			
 //			//table->SetVisible(false);
 //			//SetUIShow(true);
 //		}
-//		else if (strCurSel == "宠物技能")
+//		else if (strCurSel == "宠物�??�??")
 //		{
 //			PetSkillScene *scene = new PetSkillScene;
 //			scene->Initialization();
@@ -1326,7 +1322,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		}
 //		else if (strCurSel == "删除角色")
 //		{
-//			this->m_dlgDelRoleTag = GlobalDialogObj.Show(this, "温馨提示", "大侠您确定要删除角色,删除后将无法找回所有数据.是否删除",
+//			this->m_dlgDelRoleTag = GlobalDialogObj.Show(this, "温馨提示", "大侠您确定要删除角色,删除后将无法找回�??有数�??.是否删除",
 //					     NULL, NDCommonCString("Cancel"), NDCommonCString("Ok"), NULL);
 //		}
 //		else if (strCurSel == "登录信息")
@@ -1355,7 +1351,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			view->SetTag(TAG_CV_SEND_QUESTION);
 //			view->SetDelegate(this);
 //			std::vector<int> vec_id; vec_id.push_back(1);
-//			std::vector<std::string> vec_str; vec_str.push_back("请输入内容,最多输入50个汉字");
+//			std::vector<std::string> vec_str; vec_str.push_back("请输入内�??,�??多输�??个汉�??");
 //			view->SetEdit(1, vec_id, vec_str);
 //			view->Show();
 //			this->AddChild(view);
@@ -1372,9 +1368,9 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			vec_id.push_back(3);
 //			
 //			std::vector<std::string> vec_str;
-//			vec_str.push_back("请输入当前密码:(12位以内)");
-//			vec_str.push_back("请输入新密码:(7-12位)");
-//			vec_str.push_back("请再次输入新密码:(7-12位)");
+//			vec_str.push_back("请输入当前密�??(12位以�??)");
+//			vec_str.push_back("请输入新密码:(7-12�??)");
+//			vec_str.push_back("请再次输入新密码:(7-12�??)");
 //			
 //			view->SetEdit(3, vec_id, vec_str);
 //			view->Show();
@@ -1391,7 +1387,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			NDMapMgr& mgr = NDMapMgrObj;
 //			GlobalShowDlg(mgr.noteTitle, mgr.noteContent);
 //		}
-//		else if (strCurSel == "战斗技能")
+//		else if (strCurSel == "战斗�??�??")
 //		{
 //			NDPlayer& player = NDPlayer::defaultHero();
 //			
@@ -1408,10 +1404,10 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			}
 //			else
 //			{
-//				showDialog("操作失败", "大侠你还木有学习战斗技能呢!");
+//				showDialog("操作失败", "大侠你还木有学习战斗�??能呢!");
 //			}
 //		}
-//		else if (strCurSel == "炼金技能")
+//		else if (strCurSel == "炼金�??�??")
 //		{
 //			if ( NDMapMgrObj.getLifeSkill(ALCHEMY_IDSKILL) != NULL )
 //			{
@@ -1421,7 +1417,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			}
 //			else 
 //			{
-//				GlobalShowDlg("操作失败", "大侠你还木有学习炼金技能呢!赶紧去初级炼金技能npc那里学习吧.");
+//				GlobalShowDlg("操作失败", "大侠你还木有学习炼金�??能呢!赶紧去初级炼金技能npc那里学习�??.");
 //			}
 //			
 //		}
@@ -1435,20 +1431,20 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			}
 //			else 
 //			{
-//				GlobalShowDlg("操作失败", "大侠你还木有学习宝石合成技能呢!赶紧去初级宝石合成npc那里学习吧.");
+//				GlobalShowDlg("操作失败", "大侠你还木有学习宝石合成�??能呢!赶紧去初级宝石合成npc那里学习�??.");
 //			}
 //		}
-//		else if (strCurSel == "收件箱")
+//		else if (strCurSel == "收件�??")
 //		{
 //			GameMailsScene *scene = new GameMailsScene;
 //			scene->Initialization();
 //			NDDirector::DefaultDirector()->PushScene(scene);
 //		}
-//		else if (strCurSel == "发件箱")
+//		else if (strCurSel == "发件�??")
 //		{
 //			NDDirector::DefaultDirector()->PushScene(EmailSendScene::Scene());
 //		}
-//		else if (strCurSel == "关闭加入" || strCurSel == "开启加入")
+//		else if (strCurSel == "关闭加入" || strCurSel == "�??启加�??")
 //		{
 //			m_stackUIMenu.clear();
 //			NDTransData bao(_MSG_TEAM);
@@ -1465,7 +1461,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			
 //			// SEND_DATA(bao);
 //		}
-//		else if (strCurSel == "邀请入队")
+//		else if (strCurSel == "�??请入�??")
 //		{
 //			SetUIShow(true);
 //			m_stackUIMenu.push_front(MT_DUI_WU);
@@ -1484,7 +1480,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			}
 //			if (vec_str.empty()) 
 //			{
-//				vec_str.push_back("无"); vec_id.push_back(0);
+//				vec_str.push_back("�??"); vec_id.push_back(0);
 //			}
 //			
 //			InitContent(m_tlInvitePlayers, vec_str, vec_id);
@@ -1501,9 +1497,9 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			
 //			std::vector<NDManualRole*> tempRoleList = NDMapMgrObj.GetPlayerTeamList();
 //			if (tempRoleList.empty()) 
-//				Chat::DefaultChat()->AddMessage(ChatTypeSystem, "没有队员！");
+//				Chat::DefaultChat()->AddMessage(ChatTypeSystem, "没有队员�??");
 //			//				GameScreen.getInstance().initNewChat(
-//			//													 new ChatRecord(5, GameScreen.role.getName(), "没有队员！"));
+//			//													 new ChatRecord(5, GameScreen.role.getName(), "没有队员�??"));
 //			//				return;
 //			//			}
 //			
@@ -1522,7 +1518,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			
 //			if (vec_str.empty()) 
 //			{
-//				vec_str.push_back("无"); vec_id.push_back(0);
+//				vec_str.push_back("�??"); vec_id.push_back(0);
 //			}
 //			
 //			InitContent(m_tlKickPlayers, vec_str, vec_id);
@@ -1546,7 +1542,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			
 //			std::vector<NDManualRole*> tempRoleList = NDMapMgrObj.GetPlayerTeamList();
 //			if (tempRoleList.empty()) 
-//				Chat::DefaultChat()->AddMessage(ChatTypeSystem, "没有队员！");
+//				Chat::DefaultChat()->AddMessage(ChatTypeSystem, "没有队员�??");
 //			
 //			std::vector<std::string> vec_str;
 //			for (int i=0; i < eTeamLen; i++) 
@@ -1593,7 +1589,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			
 //			std::vector<NDManualRole*> tempRoleList = mapmgr.GetPlayerTeamList();
 //			if (tempRoleList.empty()) 
-//				Chat::DefaultChat()->AddMessage(ChatTypeSystem, "没有队员！");
+//				Chat::DefaultChat()->AddMessage(ChatTypeSystem, "没有队员�??");
 //			
 //			std::vector<std::string> vec_str; std::vector<int> vec_id;
 //			for (int i=1; i < eTeamLen; i++) 
@@ -1610,7 +1606,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			
 //			if (vec_str.empty()) 
 //			{
-//				vec_str.push_back("无"); vec_id.push_back(0);
+//				vec_str.push_back("�??"); vec_id.push_back(0);
 //			}
 //			
 //			InitContent(m_tlTiShengPlayers, vec_str, vec_id);
@@ -1636,7 +1632,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 ////				NDDirector::DefaultDirector()->PushScene(scene);
 ////			}
 //		} 
-//		else if (strCurSel == "庄园动态")
+//		else if (strCurSel == "庄园动�????")
 //		{
 //			NDTransData bao(_MSG_ENTER_HAMLET);
 //			bao << (unsigned char)2 << int(0);
@@ -1644,18 +1640,18 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		} 
 //		else if (strCurSel == "远程进入")
 //		{
-//			std::stringstream ss; ss << "点击确认使用一个城镇传送卷轴";
+//			std::stringstream ss; ss << "点击确认使用�??个城镇传送卷�??";
 //			m_dlgFarm = new NDUIDialog;
 //			m_dlgFarm->Initialization();
 //			m_dlgFarm->SetDelegate(this);
 //			m_dlgFarm->Show("", ss.str().c_str(), NDCommonCString("Cancel"), "确认", NULL);
 //		} 
-//		//else if (strCurSel == "立即创建") 暂时先不做
+//		//else if (strCurSel == "立即创建") 暂时先不�??
 ////		{
 ////			NDMapMgr& mgr = NDMapMgr;
 ////			if (mar.m_iMapID == 21003) // 21003为长安城地图id 
 ////			{
-////				showDialog("提示", "请去长安城找XXXX（aa,bb），他能指导你创建自己的庄园。");
+////				showDialog("提示", "请去长安城找XXXX（aa,bb），他能指导你创建自己的庄园�??");
 ////			}
 ////			else 
 ////			{
@@ -1763,9 +1759,9 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 void GameScene::OnButtonClick(NDUIButton* button)
 {
 	/***
-	* 临时性注释 郭浩
-	* all
-	*/
+	 * 临时性注�?? 郭浩
+	 * all
+	 */
 
 //	if(HideTLShare()) return;
 //	
@@ -1834,7 +1830,7 @@ void GameScene::OnButtonClick(NDUIButton* button)
 ////		{
 //			NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(player->m_iFocusManuRoleID);
 //			if ( !otherplayer && !player->IsFocusNpcValid())
-//			{ //与其它玩家交互
+//			{ //与其它玩家交�??
 //				
 //				NDUIDialog *dlg = new NDUIDialog;
 //				dlg->Initialization();
@@ -1981,7 +1977,7 @@ void GameScene::OnButtonClick(NDUIButton* button)
 //	}
 //	else if (button == m_btnStore)
 //	{
-//		//InitTLShareContent("商城", "充值", NULL);
+//		//InitTLShareContent("商城", "充�????", NULL);
 //	}
 //	else if (button == m_btnMenu)
 //	{
@@ -1992,9 +1988,9 @@ void GameScene::OnButtonClick(NDUIButton* button)
 void GameScene::onClickTeam()
 {
 	/***
-	* 临时性注释 郭浩
-	* all
-	*/
+	 * 临时性注�?? 郭浩
+	 * all
+	 */
 
 	//NDPlayer& player = NDPlayer::defaultHero();
 	//NDMapMgr& mapmgr = NDMapMgrObj;
@@ -2010,10 +2006,10 @@ void GameScene::onClickTeam()
 	//		} 
 	//		else 
 	//		{
-	//			vec_str.push_back("开启加入");
+	//			vec_str.push_back("�??启加�??");
 	//		}
 	//		
-	//		vec_str.push_back("邀请入队");
+	//		vec_str.push_back("�??请入�??");
 	//		vec_str.push_back("请出队伍");
 	//		vec_str.push_back("离开队伍");
 	//		vec_str.push_back("显示成员");
@@ -2039,45 +2035,47 @@ void GameScene::ShowRelieve(bool bShow)
 {
 	if (bShow)
 	{
-		if (this->m_relieveLayer) 
+		if (this->m_relieveLayer)
 		{
 			return;
 		}
-		
+
 		this->m_relieveLayer = new NDUILayer;
 		m_relieveLayer->Initialization();
 		m_relieveLayer->SetFrameRect(CGRectMake(0, 0, 480, 320));
 		this->AddChild(m_relieveLayer, UIDIALOG_Z);
-		
+
 		CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
-		
+
 		this->m_tlRelieve = new NDUITableLayer;
 		m_tlRelieve->Initialization();
 		m_tlRelieve->VisibleSectionTitles(false);
 		m_tlRelieve->SetDelegate(this);
 		//m_tlRelieve->SetFrameRect(CGRectMake(30, 10, 120, 60));
-		m_tlRelieve->SetFrameRect(CGRectMake((winsize.width-120)/2, (winsize.height-60)/2, 120, 60));
+		m_tlRelieve->SetFrameRect(
+				CGRectMake((winsize.width - 120) / 2, (winsize.height - 60) / 2,
+						120, 60));
 		m_relieveLayer->AddChild(m_tlRelieve);
-		
+
 		NDDataSource *dataSource = new NDDataSource;
 		NDSection *section = new NDSection;
-		
+
 		NDUIButton *button = new NDUIButton;
 		button->Initialization();
 		button->SetFrameRect(CGRectMake(0, 0, 120, 30));
 		button->SetTitle(NDCommonCString("ReliveInCity"));
 		section->AddCell(button);
-		
+
 		button = new NDUIButton;
 		button->Initialization();
 		button->SetFrameRect(CGRectMake(0, 0, 120, 30));
 		button->SetTitle(NDCommonCString("ReliveUseItem"));
 		section->AddCell(button);
-		
+
 		dataSource->AddSection(section);
 		m_tlRelieve->SetDataSource(dataSource);
 		SetUIShow(true);
-	} 
+	}
 	else
 	{
 		if (this->m_relieveLayer)
@@ -2096,15 +2094,15 @@ void GameScene::PushWorldMapScene()
 }
 
 void GameScene::ShowPaiHang(const std::vector<std::string>& vec_str,
-							const std::vector<int>& vec_id)
+		const std::vector<int>& vec_id)
 {
 	InitContent(m_tlPaiHang, vec_str, vec_id);
 }
 
 /***
-*	临时性注释 郭浩
-*   this function
-*/
+ *	临时性注�?? 郭浩
+ *   this function
+ */
 //bool GameScene::OnClickHControlContainer(NDUIHControlContainer* hcontrolcontainer)
 //{
 //	if (hcontrolcontainer == m_hccOPItem || hcontrolcontainer == hcontrolcontainer)
@@ -2114,11 +2112,10 @@ void GameScene::ShowPaiHang(const std::vector<std::string>& vec_str,
 //
 //	return false;
 //}
-
 /***
-*	临时性注释 郭浩
-*   this function
-*/
+ *	临时性注�?? 郭浩
+ *   this function
+ */
 //void GameScene::OnClickNDUIAniLayer(NDUIAniLayer* anilayer)
 //{
 //	if(HideTLShare()) return;
@@ -2136,17 +2133,17 @@ void GameScene::ShowPaiHang(const std::vector<std::string>& vec_str,
 //	}
 //	else if (anilayer == m_anilayerMail)
 //	{
-//		InitTLShareContent("收件箱", "发件箱", NULL);
+//		InitTLShareContent("收件�??", "发件�??", NULL);
 //		m_anilayerMail->SetCurrentAnimation(0);
 //	}
 //}
-
-void GameScene::OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex)
+void GameScene::OnDialogButtonClick(NDUIDialog* dialog,
+		unsigned int buttonIndex)
 {
 	/***
-	*	临时性注释 郭浩
-	*   all
-	*/
+	 *	临时性注�?? 郭浩
+	 *   all
+	 */
 //	if (dialog == m_dlgFarm) 
 //	{
 //		NDTransData  bao(_MSG_ENTER_HAMLET);
@@ -2200,10 +2197,10 @@ void GameScene::OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex
 //		dialog->Close();
 //		this->m_dlgTaskAwardItemConfirmTag = -1;
 //		if (buttonIndex == 0) {
-//			// 重新显示物品选择对话框
+//			// 重新显示物品选择对话�??
 //			this->ReShowTaskAwardItemOpt();
 //		} else if (buttonIndex == 1) {
-//			// 发送物品选项,同时释放资源
+//			// 发�??�物品�??�项,同时释放资源
 //			NDUISynLayer::Show();
 //			NDTransData bao(_MSG_TASK_ITEM_OPT);
 //			bao << (Byte)this->m_curSelTaskAwardItemIndex;
@@ -2243,9 +2240,9 @@ void GameScene::OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex
 void GameScene::OnDialogClose(NDUIDialog* dialog)
 {
 	/***
-	* 临时性注释 郭浩
-	* all
-	*/
+	 * 临时性注�?? 郭浩
+	 * all
+	 */
 
 	//OBJID tagDlg = dialog->GetTag();
 	//if (tagDlg == m_dlgNPCTag)
@@ -2269,9 +2266,9 @@ void GameScene::OnDialogClose(NDUIDialog* dialog)
 void GameScene::flashAniLayer(int type, bool bFlash)
 {
 	/***
-	* 临时性注释 郭浩
-	* all
-	*/
+	 * 临时性注�?? 郭浩
+	 * all
+	 */
 	//if (type == 0)
 	//{ //请求列表
 	//	if (m_anilayerRequest)
@@ -2286,11 +2283,10 @@ void GameScene::flashAniLayer(int type, bool bFlash)
 	//		m_anilayerMail->SetCurrentAnimation(bFlash);
 	//	}
 	//}
-	
 }
 
 bool GameScene::HideTLShare()
-{	
+{
 #define TLCommonDeal(tl) \
 	if(tl && tl->IsVisibled()) \
 	{ \
@@ -2298,7 +2294,7 @@ bool GameScene::HideTLShare()
 		SetUIShow(false); \
 		return true; \
 	}
-	
+
 	TLCommonDeal(m_tlShare);
 	TLCommonDeal(m_tlInteractive);
 	TLCommonDeal(m_tlPaiHang);
@@ -2306,7 +2302,7 @@ bool GameScene::HideTLShare()
 	TLCommonDeal(m_tlKickPlayers);
 	TLCommonDeal(m_tlTiShengPlayers);
 	TLCommonDeal(m_tlMarriage);
-	
+
 #undef TLCommonDeal
 	return false;
 }
@@ -2323,17 +2319,17 @@ button->SetTitle(text); \
 button->SetFocusColor(ccc4(253, 253, 253, 255)); \
 section->AddCell(button); \
 } while (0);
-	
+
 	if (!m_tlShare)
 	{
 		return;
 	}
-	
+
 	if (vec_str.empty())
 	{
 		return;
 	}
-	
+
 	NDDataSource *dataSource = new NDDataSource;
 	NDSection *section = new NDSection;
 	section->UseCellHeight(true);
@@ -2343,16 +2339,17 @@ section->AddCell(button); \
 		fastinit(((*it).c_str()))
 	}
 	section->SetFocusOnCell(0);
-	
+
 	dataSource->AddSection(section);
-	
-	m_tlShare->SetFrameRect(CGRectMake((480 - 200) / 2,
-		(320 - 30 * vec_str.size() - vec_str.size() - 1 ) / 2,
-		200, 30 * vec_str.size() + vec_str.size()+1));
+
+	m_tlShare->SetFrameRect(
+			CGRectMake((480 - 200) / 2,
+					(320 - 30 * vec_str.size() - vec_str.size() - 1) / 2, 200,
+					30 * vec_str.size() + vec_str.size() + 1));
 
 	m_tlShare->SetVisible(true);
 	SetUIShow(true);
-	
+
 	if (m_tlShare->GetDataSource())
 	{
 		m_tlShare->SetDataSource(dataSource);
@@ -2362,14 +2359,12 @@ section->AddCell(button); \
 	{
 		m_tlShare->SetDataSource(dataSource);
 	}
-	
-	
+
 #undef fastinit
 }
 
 void GameScene::InitContent(NDUITableLayer* tl,
-							const std::vector<std::string>& vec_str,
-							const std::vector<int>& vec_id)
+		const std::vector<std::string>& vec_str, const std::vector<int>& vec_id)
 {
 #define fastinit(text, iid) \
 do \
@@ -2382,17 +2377,17 @@ button->SetTag(iid); \
 button->SetFocusColor(ccc4(253, 253, 253, 255)); \
 section->AddCell(button); \
 } while (0);
-	
+
 	if (!tl)
 	{
 		return;
 	}
-	
+
 	if (vec_str.empty() || vec_str.size() != vec_id.size())
 	{
 		return;
 	}
-	
+
 	NDDataSource *dataSource = new NDDataSource;
 	NDSection *section = new NDSection;
 	section->UseCellHeight(true);
@@ -2403,9 +2398,9 @@ section->AddCell(button); \
 	}
 	section->SetFocusOnCell(0);
 	dataSource->AddSection(section);
-	
+
 	int iHeightX, iHeight;
-	if ((320 - 30 * vec_str.size() - vec_str.size() - 1) / 2 < 20) 
+	if ((320 - 30 * vec_str.size() - vec_str.size() - 1) / 2 < 20)
 	{
 		iHeightX = 20;
 	}
@@ -2413,19 +2408,19 @@ section->AddCell(button); \
 	{
 		iHeightX = (320 - 30 * vec_str.size() - vec_str.size() - 1) / 2;
 	}
-	if (30*vec_str.size()+vec_str.size() + 1 > 300) 
+	if (30 * vec_str.size() + vec_str.size() + 1 > 300)
 	{
 		iHeight = 300;
 	}
-	else 
+	else
 	{
-		iHeight = 30*vec_str.size()+vec_str.size()+1;
+		iHeight = 30 * vec_str.size() + vec_str.size() + 1;
 	}
 
-	tl->SetFrameRect(CGRectMake((480-120)/2, iHeightX, 120, iHeight));
+	tl->SetFrameRect(CGRectMake((480 - 120) / 2, iHeightX, 120, iHeight));
 	tl->SetVisible(true);
 	SetUIShow(true);
-	
+
 	if (tl->GetDataSource())
 	{
 		tl->SetDataSource(dataSource);
@@ -2435,8 +2430,7 @@ section->AddCell(button); \
 	{
 		tl->SetDataSource(dataSource);
 	}
-	
-	
+
 #undef fastinit
 }
 
@@ -2446,15 +2440,15 @@ void GameScene::InitTLShareContent(const char* text, ...)
 	{
 		return;
 	}
-	
+
 	va_list argumentList;
 	char *eachObject;
-	std::vector<std::string> vectext; 
+	std::vector < std::string > vectext;
 	if (text)
 	{
 		vectext.push_back(std::string(text));
 		va_start(argumentList, text);
-		while ((eachObject = va_arg(argumentList, char*))) 
+		while ((eachObject = va_arg(argumentList, char*)))
 		{
 			vectext.push_back(std::string(eachObject));
 		}
@@ -2464,8 +2458,8 @@ void GameScene::InitTLShareContent(const char* text, ...)
 	{
 		return;
 	}
-	
-	InitTLShareContent(vectext);
+
+	InitTLShareContent (vectext);
 }
 
 std::string GameScene::GetTLShareSelText(NDUINode* uinode)
@@ -2486,40 +2480,38 @@ std::string GameScene::GetTLShareSelText(NDUINode* uinode)
 	//			result = lable->GetText();
 	//		}
 	//	}
-	
+
 	std::string result = "";
-	if( m_tlShare 
-	  // && m_tlShare->IsVisibled() 
-	   && uinode
-	   && uinode->IsKindOfClass(RUNTIME_CLASS(NDUIButton))
-	   )
+	if (m_tlShare
+	// && m_tlShare->IsVisibled()
+			&& uinode && uinode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
 	{
-		NDUIButton *button = (NDUIButton*)uinode;
+		NDUIButton *button = (NDUIButton*) uinode;
 		result = button->GetTitle();
 	}
-	
+
 	return result;
 }
 
 void GameScene::ReShowTaskAwardItemOpt()
 {
-	std::vector<std::string> strOP;
+	std::vector < std::string > strOP;
 
 	for (VEC_ITEM_IT it = this->m_vTaskAwardItem.begin();
-		it != this->m_vTaskAwardItem.end(); it++)
+			it != this->m_vTaskAwardItem.end(); it++)
 	{
 		if (!*it)
 		{
 			continue;
 		}
-		
+
 		Item& tempItem = *(*it);
 		stringstream sb;
 		sb << tempItem.getItemName();
-		
+
 		if (tempItem.isEquip())
-		{ 
-			// 如果是装备类的将当前的耐久值改为最大值
+		{
+			// 如果是装备类的将当前的�??�久值改为最大�????
 			tempItem.iAmount = tempItem.getAmount_limit();
 		}
 		else
@@ -2529,17 +2521,18 @@ void GameScene::ReShowTaskAwardItemOpt()
 				sb << " x" << tempItem.iAmount;
 			}
 		}
-		
+
 		strOP.push_back(sb.str());
 	}
-	
-	this->m_dlgTaskAwardItemTag = GlobalDialogObj.Show(this, NULL, NULL, NULL, strOP);
+
+	this->m_dlgTaskAwardItemTag = GlobalDialogObj.Show(this, NULL, NULL, NULL,
+			strOP);
 }
 
 void GameScene::ShowTaskAwardItemOpt(Task* task)
 {
 	NDAsssert(task != NULL);
-	
+
 	if (task->award_item1 != 0)
 	{
 		Item *item = new Item(task->award_item1);
@@ -2560,7 +2553,7 @@ void GameScene::ShowTaskAwardItemOpt(Task* task)
 		item->iAmount = task->award_num3;
 		this->m_vTaskAwardItem.push_back(item);
 	}
-	
+
 	this->ReShowTaskAwardItemOpt();
 }
 
@@ -2569,13 +2562,12 @@ void GameScene::ShowNPCDialog(bool bShowLeaveBtn/*=true*/)
 	//m_dlgNPC = new NDUIDialog;
 //	m_dlgNPC->Initialization();
 //	m_dlgNPC->SetDelegate(this);
-	
-	/***
-	* 临时性注释 郭浩
-	* begin
-	*/
-	//NDMapMgr& mapmgr = NDMapMgrObj;
 
+	/***
+	 * 临时性注�?? 郭浩
+	 * begin
+	 */
+	//NDMapMgr& mapmgr = NDMapMgrObj;
 	//std::string strTitle="";
 	//if (mapmgr.strTitle.empty())
 	//{
@@ -2589,7 +2581,6 @@ void GameScene::ShowNPCDialog(bool bShowLeaveBtn/*=true*/)
 	//{
 	//	strTitle = mapmgr.strTitle;
 	//}
-
 	//std::vector<GlobalDialogBtnContent> strOP;
 	//vector<NDMapMgr::st_npc_op>::iterator it = mapmgr.vecNPCOPText.begin();
 	//for (; it != mapmgr.vecNPCOPText.end(); it++)
@@ -2597,13 +2588,11 @@ void GameScene::ShowNPCDialog(bool bShowLeaveBtn/*=true*/)
 	//	strOP.push_back(GlobalDialogBtnContent((*it).str, (*it).bArrow));
 	//}
 	//std::string text = mapmgr.strNPCText;
-
 	//if (strOP.empty() && text.empty()) 
 	//{
 	//	mapmgr.ClearNPCChat();
 	//	return;
 	//}
-
 	//// 农场
 	//if (NDFarmMgrObj.fs.bNew) {
 	//	std::vector<std::string> vec_str;
@@ -2612,7 +2601,6 @@ void GameScene::ShowNPCDialog(bool bShowLeaveBtn/*=true*/)
 	//	{
 	//		vec_str.push_back((*it).str);
 	//	}
-
 	//	if (bShowLeaveBtn)
 	//		vec_str.push_back(mapmgr.strLeaveMsg.empty()? NDCommonCString("leave") : mapmgr.strLeaveMsg.c_str());
 	//	NDFarmMgr& farm = NDFarmMgrObj;
@@ -2631,7 +2619,6 @@ void GameScene::ShowNPCDialog(bool bShowLeaveBtn/*=true*/)
 	//	dlg->Show(strTitle, text);
 	//	return;
 	//}
-
 	//if (strOP.empty() && mapmgr.strLeaveMsg.empty() )
 	//{
 	//	//m_dlgNPC->Show(strTitle.c_str(), text.c_str(), NULL, NULL);
@@ -2641,19 +2628,17 @@ void GameScene::ShowNPCDialog(bool bShowLeaveBtn/*=true*/)
 	//{
 	//	//m_dlgNPC->Show(strTitle.c_str(), text.c_str(), 
 	//	//			       mapmgr.strLeaveMsg.empty()? NDCommonCString("leave") : mapmgr.strLeaveMsg.c_str(), strOP);
-
 	//	m_dlgNPCTag = GlobalDialogObj.Show(this, strTitle.c_str(), 
 	//		text.c_str(),
 	//		//!bShowLeaveBtn ? NULL : (mapmgr.strLeaveMsg.empty()? NDCommonCString("leave") : mapmgr.strLeaveMsg.c_str()),
 	//		0,
 	//		strOP);
 	//}
-
 	//SetUIShow(true);
 	/***
-	* 临时性注释 郭浩
-	* end
-	*/
+	 * 临时性注�?? 郭浩
+	 * end
+	 */
 }
 
 void GameScene::SetWeaponBroken(bool bSet)
@@ -2671,7 +2656,6 @@ void GameScene::SetRidePetBroken(bool bSet)
 	bRidePetBroken = bSet;
 }
 
-
 void GameScene::ShowUIPaiHang()
 {
 	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
@@ -2679,49 +2663,49 @@ void GameScene::ShowUIPaiHang()
 	{
 		return;
 	}
-	
+
 	NDNode *node = scene->GetChild(UILAYER_PAIHANG_TAG);
-	if (!node) 
+	if (!node)
 	{
 		/***
-		* 临时性注释 郭浩
-		* begin
-		*/
+		 * 临时性注�?? 郭浩
+		 * begin
+		 */
 // 		GameUIPaiHang *paihang = new GameUIPaiHang;
 // 		paihang->Initialization();
 // 		scene->AddChild(paihang, UILAYER_Z, UILAYER_PAIHANG_TAG);
 		/***
-		* 临时性注释 郭浩
-		* end
-		*/
+		 * 临时性注�?? 郭浩
+		 * end
+		 */
 		//CloseProgressBar;
 	}
 	else
 	{
-		//((GameUIPaiHang*)node)->UpdateMainUI(); ///< 临时性注释 郭浩
+		//((GameUIPaiHang*)node)->UpdateMainUI(); ///< 临时性注�?? 郭浩
 	}
-	((GameScene*)scene)->SetUIShow(true);
+	((GameScene*) scene)->SetUIShow(true);
 }
 
 void GameScene::ShowShop(int iNPCID /*= 0*/)
 {
 	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
-/***
-* 临时性注释 郭浩
-* begin
-*/
+	/***
+	 * 临时性注�?? 郭浩
+	 * begin
+	 */
 	// 	if (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameNpcStoreScene)))
 // 	{
 // 		NDDirector::DefaultDirector()->PushScene(GameNpcStoreScene::Scene(iNPCID));
 // 		return;
 // 	}
 	/***
-	* 临时性注释 郭浩
-	* end
-	*/
-	
+	 * 临时性注�?? 郭浩
+	 * end
+	 */
+
 	NDNode *node = scene->GetChild(UILAYER_NPCSHOP_TAG);
-	if (!node) 
+	if (!node)
 	{
 		//GameUINpcStore *npcstore = new GameUINpcStore;
 //		npcstore->Initialization();
@@ -2731,8 +2715,8 @@ void GameScene::ShowShop(int iNPCID /*= 0*/)
 	else
 	{
 		//((GameUIPaiHang*)node)->UpdateMainUI();
-		((GameUINpcStore*)node)->UpdateBag();
-		((GameUINpcStore*)node)->UpdateMoney();
+		((GameUINpcStore*) node)->UpdateBag();
+		((GameUINpcStore*) node)->UpdateMoney();
 	}
 	//((GameScene*)scene)->SetUIShow(true);
 }
@@ -2740,41 +2724,41 @@ void GameScene::ShowShop(int iNPCID /*= 0*/)
 void GameScene::onClickSyndicate()
 {
 	NDPlayer& role = NDPlayer::defaultHero();
-	
-	std::vector<std::string> vOpts;
-	
+
+	std::vector < std::string > vOpts;
+
 	vOpts.push_back(MENU_SYNDICATE[1]);
-	
+
 	switch (role.getSynRank())
 	{
-		case SYNRANK_NONE:
-		{
-			vOpts.push_back(MENU_SYNDICATE[0]);
-			vOpts.push_back(MENU_SYNDICATE[2]);
-		}
-			break;
-		case SYNRANK_LEADER:
-		{
-			vOpts.push_back(MENU_SYNDICATE[3]);
-			vOpts.push_back(MENU_SYNDICATE[4]);
-		}
-			break;
-		default:
-		{
-			vOpts.push_back(MENU_SYNDICATE[4]);
-			vOpts.push_back(MENU_SYNDICATE[3]);
-			vOpts.push_back(MENU_SYNDICATE[5]);
-		}
-			break;
+	case SYNRANK_NONE:
+	{
+		vOpts.push_back(MENU_SYNDICATE[0]);
+		vOpts.push_back(MENU_SYNDICATE[2]);
+	}
+		break;
+	case SYNRANK_LEADER:
+	{
+		vOpts.push_back(MENU_SYNDICATE[3]);
+		vOpts.push_back(MENU_SYNDICATE[4]);
+	}
+		break;
+	default:
+	{
+		vOpts.push_back(MENU_SYNDICATE[4]);
+		vOpts.push_back(MENU_SYNDICATE[3]);
+		vOpts.push_back(MENU_SYNDICATE[5]);
+	}
+		break;
 	}
 
-	InitTLShareContent(vOpts);
+	InitTLShareContent (vOpts);
 }
 
 /***
-* 临时性注释 郭浩
-* this function
-*/
+ * 临时性注�?? 郭浩
+ * this function
+ */
 //bool GameScene::OnCustomViewConfirm(NDUICustomView* customView)
 //{
 //	int tag = customView->GetTag();
@@ -2831,23 +2815,21 @@ void GameScene::onClickSyndicate()
 //	
 //	return true;
 //}
-
 bool GameScene::checkNewPwd(const string& pwd)
 {
 	if (pwd.empty())
 	{
 		return false;
 	}
-	
+
 	char c = 0;
 
 	for (size_t i = 0; i < pwd.size(); i++)
 	{
 		c = pwd.at(i);
 
-		if (!(((c >= '0') && (c <= '9')) ||
-			((c >= 'a') && (c <= 'z')) ||
-			((c >= 'A') && (c <= 'Z'))))
+		if (!(((c >= '0') && (c <= '9')) || ((c >= 'a') && (c <= 'z'))
+				|| ((c >= 'A') && (c <= 'Z'))))
 		{
 			return false;
 		}
@@ -2859,11 +2841,11 @@ bool GameScene::checkNewPwd(const string& pwd)
 void GameScene::processMsgLightEffect(NDTransData& data)
 {
 	CloseProgressBar;
-	
+
 	/***
-	* 临时性注释 郭浩
-	* all
-	*/
+	 * 临时性注�?? 郭浩
+	 * all
+	 */
 	//NDLayer *layer = NDMapMgrObj.getMapLayerOfScene(this);
 	//if (!layer)
 	//{
@@ -2905,52 +2887,52 @@ void GameScene::processMsgLightEffect(NDTransData& data)
 	//}		 
 }
 
-void GameScene::processVersionMsg(const char* version, int flag, const char* url)
+void GameScene::processVersionMsg(const char* version, int flag,
+		const char* url)
 {
-	if (url) 
+	if (url)
 	{
 		m_updateUrl = url;
-	}	
-	
+	}
+
 	NDUIDialog* dlg = new NDUIDialog();
 	dlg->Initialization();
 	dlg->SetDelegate(this);
 
-	if (flag != 0) 
+	if (flag != 0)
 	{
 		//强制更新		
-		dlg->SetTag(TAG_UPDATE_FORCE);		
+		dlg->SetTag(TAG_UPDATE_FORCE);
 	}
-	else 
+	else
 	{
-		//普通更新
+		//普�??�更�??
 		dlg->SetTag(TAG_UPDATE_NOT_FORCE);
 	}
 
-	dlg->Show(NDCommonCString("VersionUpdate"), 
-		version, NDCommonCString("Cancel"),
-		NDCommonCString("Ok"), NULL);
+	dlg->Show(NDCommonCString("VersionUpdate"), version,
+			NDCommonCString("Cancel"), NDCommonCString("Ok"), NULL);
 }
 
 /***
-* 临时性注释 郭浩
-* begin
-*/
+ * 临时性注�?? 郭浩
+ * begin
+ */
 // DirectKey* const GameScene::GetDirectKey()
 // {
 // 	return m_directKey;
 // }
 /***
-* 临时性注释 郭浩
-* end
-*/
+ * 临时性注�?? 郭浩
+ * end
+ */
 
 void GameScene::HandleRootMenuAfterSceneLoad()
 {
 	/***
-	* 临时性注释 郭浩
-	* all
-	*/
+	 * 临时性注�?? 郭浩
+	 * all
+	 */
 	//if (NDMapMgrObj.bRootItemZhangKai) 
 	//{
 	//	if (m_hccOPItem)
@@ -2977,9 +2959,9 @@ void GameScene::HandleRootMenuAfterSceneLoad()
 void GameScene::RefreshQuickItem()
 {
 	/***
-	* 临时性注释 郭浩
-	* all
-	*/
+	 * 临时性注�?? 郭浩
+	 * all
+	 */
 // 	if (m_quickItem) 
 // 	{
 // 		m_quickItem->Refresh();
@@ -2989,9 +2971,9 @@ void GameScene::RefreshQuickItem()
 void GameScene::ShrinkQuickInteraction()
 {
 	/***
-	* 临时性注释 郭浩
-	* all
-	*/
+	 * 临时性注�?? 郭浩
+	 * all
+	 */
 // 	if (m_quickInteration)
 // 	{
 // 		m_quickInteration->SetShrink(true);
@@ -3006,9 +2988,9 @@ void GameScene::ShrinkQuickInteraction()
 void GameScene::OnTimer(OBJID tag)
 {
 	/***
-	* 临时性注释 郭浩
-	* begin
-	*/
+	 * 临时性注�?? 郭浩
+	 * begin
+	 */
 // 	if (1 == tag) 
 // 	{
 // 		for (MAP_POS_TEXT_IT it = s_mapPosText.begin(); it != s_mapPosText.end();) 
@@ -3026,9 +3008,9 @@ void GameScene::OnTimer(OBJID tag)
 // 		}
 // 	}
 	/***
-	* 临时性注释 郭浩
-	* end
-	*/
+	 * 临时性注�?? 郭浩
+	 * end
+	 */
 
 	// test
 	if (2 == tag)
@@ -3041,148 +3023,148 @@ void GameScene::processMsgPosText(NDTransData& data)
 {
 	int action = data.ReadByte();
 	int idPosText = data.ReadByte();
-	
+
 	switch (action)
 	{
-		case 0: // 新建
+	case 0: // 新建
+	{
+		MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
+
+		if (it != s_mapPosText.end())
 		{
-			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
-			
-			if (it != s_mapPosText.end())
-			{
-				SAFE_DELETE(it->second);
-				s_mapPosText.erase(it);
-			}
-			
-			if (s_mapPosText.count(idPosText) == 0) 
-			{
-				int direction = data.ReadByte();
-				int posX = data.ReadByte();
-				int posY = data.ReadByte();
-				int showSec = data.ReadShort();
-				int showClr = data.ReadByte();
-				// add by jhzheng
-				int showBackColor = data.ReadByte();
-				int num = data.ReadInt();
-				string str = data.ReadUnicodeString();
-	//			PosText* pt = new PosText(idPosText, direction, posX, posY, showSec, showClr, num, str, showBackColor); ///< 临时性注释 郭浩
-	//			s_mapPosText[idPosText] = pt; ///< 临时性注释 郭浩
-//				m_userState->AddPosText(pt); ///< 临时性注释 郭浩
-			}
+			SAFE_DELETE(it->second);
+			s_mapPosText.erase(it);
 		}
-			break;
-		case 1: // 更新数字和文字
-		{ 
-			/***
-			* 临时性注释 郭浩
-			* begin
-			*/
+
+		if (s_mapPosText.count(idPosText) == 0)
+		{
+			int direction = data.ReadByte();
+			int posX = data.ReadByte();
+			int posY = data.ReadByte();
+			int showSec = data.ReadShort();
+			int showClr = data.ReadByte();
+			// add by jhzheng
+			int showBackColor = data.ReadByte();
+			int num = data.ReadInt();
+			string str = data.ReadUnicodeString();
+			//			PosText* pt = new PosText(idPosText, direction, posX, posY, showSec, showClr, num, str, showBackColor); ///< 临时性注�?? 郭浩
+			//			s_mapPosText[idPosText] = pt; ///< 临时性注�?? 郭浩
+//				m_userState->AddPosText(pt); ///< 临时性注�?? 郭浩
+		}
+	}
+		break;
+	case 1: // 更新数字和文�??
+	{
+		/***
+		 * 临时性注�?? 郭浩
+		 * begin
+		 */
 // 			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
 // 			if (it != s_mapPosText.end()) 
 // 			{
 // 				PosText* pt = it->second;
 // 				pt->m_num = data.ReadInt();
 // 				pt->m_str = data.ReadUnicodeString();;
-// 				//m_userState->AddPosText(pt); ///< 临时性注释 郭浩
+// 				//m_userState->AddPosText(pt); ///< 临时性注�?? 郭浩
 // 			}
-			/***
-			* 临时性注释 郭浩
-			* end
-			*/
-		}
-			break;
-		case 2: // 更新数字
-		{
-			/***
-			* 临时性注释 郭浩
-			* begin
-			*/
+		/***
+		 * 临时性注�?? 郭浩
+		 * end
+		 */
+	}
+		break;
+	case 2: // 更新数字
+	{
+		/***
+		 * 临时性注�?? 郭浩
+		 * begin
+		 */
 // 			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
 // 			if (it != s_mapPosText.end()) 
 // 			{
 // 				PosText* pt = it->second;
 // 				pt->m_num = data.ReadInt();
-// 			//	m_userState->AddPosText(pt); ///< 临时性注释 郭浩
+// 			//	m_userState->AddPosText(pt); ///< 临时性注�?? 郭浩
 // 			}
-			/***
-			* 临时性注释 郭浩
-			* end
-			*/
-		}
-			break;
-		case 3: // 更新文字
-		{
-			/***
-			* 临时性注释 郭浩
-			* begin
-			*/
+		/***
+		 * 临时性注�?? 郭浩
+		 * end
+		 */
+	}
+		break;
+	case 3: // 更新文字
+	{
+		/***
+		 * 临时性注�?? 郭浩
+		 * begin
+		 */
 // 			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
 // 			if (it != s_mapPosText.end()) 
 // 			{
 // 				PosText* pt = it->second;
 // 				pt->m_str = data.ReadUnicodeString();
-// 			//	m_userState->AddPosText(pt); ///< 临时性注释 郭浩
+// 			//	m_userState->AddPosText(pt); ///< 临时性注�?? 郭浩
 // 			}
-			/***
-			* 临时性注释 郭浩
-			* end
-			*/
-		}
-			break;
-		case 4: // 删除
+		/***
+		 * 临时性注�?? 郭浩
+		 * end
+		 */
+	}
+		break;
+	case 4: // 删除
+	{
+		MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
+		if (it != s_mapPosText.end())
 		{
-			MAP_POS_TEXT_IT it = s_mapPosText.find(idPosText);
-			if (it != s_mapPosText.end())
-			{
-	//			m_userState->RemovePosText(it->second); ///< 临时性注释 郭浩
-				SAFE_DELETE(it->second);
-				s_mapPosText.erase(it);
-			}
+			//			m_userState->RemovePosText(it->second); ///< 临时性注�?? 郭浩
+			SAFE_DELETE(it->second);
+			s_mapPosText.erase(it);
 		}
-			break;
-		default:
-			break;
+	}
+		break;
+	default:
+		break;
 	}
 }
 
 void GameScene::ShowShopAndRecharge()
 {
-	//InitTLShareContent("商城", "充值", NULL);
+	//InitTLShareContent("商城", "充�????", NULL);
 	map_vip_item& items = ItemMgrObj.GetVipStore();
 
-	if (items.empty()) 
+	if (items.empty())
 	{
 		NDTransData bao(_MSG_SHOP_CENTER);
-		bao << (unsigned char)0;
+		bao << (unsigned char) 0;
 		// SEND_DATA(bao);
 		ShowProgressBar;
 	}
 	else
 	{
-		//NDDirector::DefaultDirector()->PushScene(NewVipStoreScene::Scene()); ///< 临时性注释 郭浩
+		//NDDirector::DefaultDirector()->PushScene(NewVipStoreScene::Scene()); ///< 临时性注�?? 郭浩
 	}
 }
 
 void GameScene::ShowMarriageList(vec_marriage& vMarriage)
 {
-	std::vector<std::string> vec_str;
+	std::vector < std::string > vec_str;
 	std::vector<int> vec_id;
-	
+
 	for_vec(vMarriage, vec_marriage_it)
 	{
 		vec_str.push_back((*it).name);
 		vec_id.push_back((*it).iId);
 	}
-	
+
 	InitContent(m_tlMarriage, vec_str, vec_id);
 }
 
 void GameScene::ShrinkQuickItem()
 {
 	/***
-	* 临时性注释 郭浩
-	* all
-	*/
+	 * 临时性注�?? 郭浩
+	 * all
+	 */
 // 	if (m_quickItem)
 // 		m_quickItem->SetShrink(true);
 }
@@ -3190,9 +3172,9 @@ void GameScene::ShrinkQuickItem()
 void GameScene::TeamRefreh(bool newJoin)
 {
 	/***
-	*  临时性注释 郭浩
-	*  all
-	*/
+	 *  临时性注�?? 郭浩
+	 *  all
+	 */
 	//NDPlayer& player = NDPlayer::defaultHero();
 	//
 	//if (!player.isTeamMember())
@@ -3248,9 +3230,9 @@ void GameScene::TeamRefreh(bool newJoin)
 
 void GameScene::ShowTaskFinish(bool show, std::string tip)
 {
-//	if (!m_quickFunc) return; ///< 临时性注释 郭浩
-	
-//	m_quickFunc->ShowTaskTip(show, tip); ///< 临时性注释 郭浩
+//	if (!m_quickFunc) return; ///< 临时性注�?? 郭浩
+
+//	m_quickFunc->ShowTaskTip(show, tip); ///< 临时性注�?? 郭浩
 }
 
 bool GameScene::AddMonster(int nKey, int nLookFace)
@@ -3461,7 +3443,7 @@ GameSceneReleaseHelper* GameSceneReleaseHelper::s_instance = NULL;
 GameSceneReleaseHelper::GameSceneReleaseHelper()
 {
 	NDDirector::DefaultDirector()->AddDelegate(this);
-	
+
 	m_bGameSceneRelease = false;
 }
 
@@ -3471,24 +3453,23 @@ GameSceneReleaseHelper::~GameSceneReleaseHelper()
 }
 
 void GameSceneReleaseHelper::BeforeDirectorPopScene(NDDirector* director,
-													NDScene* scene,
-													bool cleanScene)
+		NDScene* scene, bool cleanScene)
 {
-	if (scene->IsKindOfClass(RUNTIME_CLASS(GameScene))) 
+	if (scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
 	{
 		m_bGameSceneRelease = true;
-		
+
 		NDManualRole::ms_bGameSceneRelease = true;
 	}
 }
 
 void GameSceneReleaseHelper::AfterDirectorPopScene(NDDirector* director,
-												   bool cleanScene)
+		bool cleanScene)
 {
-	if (m_bGameSceneRelease) 
+	if (m_bGameSceneRelease)
 	{
 		NDManualRole::ms_bGameSceneRelease = false;
-		
+
 		m_bGameSceneRelease = false;
 	}
 }
@@ -3496,7 +3477,7 @@ void GameSceneReleaseHelper::AfterDirectorPopScene(NDDirector* director,
 void GameSceneReleaseHelper::Begin()
 {
 	//assert(s_instance == NULL);
-	if (!s_instance) 
+	if (!s_instance)
 	{
 		s_instance = new GameSceneReleaseHelper();
 	}
@@ -3505,6 +3486,6 @@ void GameSceneReleaseHelper::Begin()
 void GameSceneReleaseHelper::End()
 {
 	//assert(s_instance != NULL);
-	SAFE_DELETE(s_instance);
+	SAFE_DELETE (s_instance);
 }
 

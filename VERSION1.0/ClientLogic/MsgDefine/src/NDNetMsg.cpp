@@ -41,87 +41,88 @@ bool NDNetMsgPool::Process(NDTransData* data)
 	{
 		return false;
 	}
-	
+
 	int nMsgLen = data->GetSize();
-	
-	
-	if (nMsgLen<6)
+
+	if (nMsgLen < 6)
 	{
 		return false;
 	}
-	
-	int nMsgID  = data->ReadShort();
-	
-	
-	if (nMsgID != _MSG_GAME_QUIT) 
+
+	int nMsgID = data->ReadShort();
+
+	if (nMsgID != _MSG_GAME_QUIT)
 	{
-//		BeatHeartMgrObj.HadServerMsgArrive(); ///< 临时性注释 郭浩
+//		BeatHeartMgrObj.HadServerMsgArrive(); ///< 临时性注釄1�7 郭浩
 	}
-		
-	return Process(nMsgID, data, nMsgLen-6);;
+
+	return Process(nMsgID, data, nMsgLen - 6);;
 }
-	
+
 bool NDNetMsgPool::Process(MSGID msgID, NDTransData* data, int len)
 {
-	NDLog("\n---------------------------------------------<--接收id[%d],len[%d]-----------------------", msgID, len+6);
-	if (len+6 > 1024)
+	NDLog(
+			"\n---------------------------------------------<--接收id[%d],len[%d]-----------------------",
+			msgID, len + 6);
+	if (len + 6 > 1024)
 	{
 		NDAsssert(0);
 	}
-	
+
 	// script dispatch first
 	if (ScriptNetMsg::Process(msgID, data))
 	{
 
 		return true;
 	}
-	
+
 	map_class_callback_it it = m_mapCallBack.find(msgID);
-	if (it == m_mapCallBack.end()) 
+	if (it == m_mapCallBack.end())
 	{
 		return false;
 	}
-	
+
 	NDMsgObject* obj = it->second;
-	if ( !obj ) 
+	if (!obj)
 	{
 		return false;
 	}
 	//NDLog("\n=========================================收到消息[%d]", msgID);
 	obj->process(msgID, data, len);
-	
+
 	return true;
 }
 
 bool NDNetMsgPool::RegMsg(MSGID msgID, NDMsgObject* msgObj)
 {
 	/*
-	REG_MSG(NDServerCode::SWAP_KEY, NDBeforeGameMgrPtr)
-	REG_MSG(NDServerCode::NOTIFY, NDBeforeGameMgrPtr)
-	REG_MSG(NDServerCode::_MSG_USERINFO, NDMapMgrPtr)
-	REG_MSG(NDServerCode::_MSG_ITEMINFO, NDMapMgrPtr)
-	REG_MSG(NDServerCode::ACQUIRE_SERVER_INFO_RECIEVE, NDBeforeGameMgrPtr)
-	REG_MSG(NDServerCode::_MSG_USERATTRIB, NDMapMgrPtr)
-	REG_MSG(NDServerCode::_MSG_WALK, NDMapMgrPtr)
-	REG_MSG(NDServerCode::KICK_BACK, NDMapMgrPtr)
-	REG_MSG(NDServerCode::CHANGE_ROOM, NDMapMgrPtr)
-	REG_MSG(NDServerCode::_MSG_PLAYER, NDMapMgrPtr)
-	REG_MSG(NDServerCode::_MSG_PLAYER_EXT, NDMapMgrPtr)
-	REG_MSG(NDServerCode::MSG_DISAPPEAR, NDMapMgrPtr)
-	REG_MSG(NDServerCode::_MSG_NPCINFO_LIST, NDMapMgrPtr)
-	REG_MSG(NDServerCode::_MSG_NPC_STATUS, NDMapMgrPtr)
-	REG_MSG(NDServerCode::_MSG_MONSTER_INFO, NDMapMgrPtr)
-	*/
-	
-	map_class_callback_it it = m_mapCallBack.find(msgID);	
+	 REG_MSG(NDServerCode::SWAP_KEY, NDBeforeGameMgrPtr)
+	 REG_MSG(NDServerCode::NOTIFY, NDBeforeGameMgrPtr)
+	 REG_MSG(NDServerCode::_MSG_USERINFO, NDMapMgrPtr)
+	 REG_MSG(NDServerCode::_MSG_ITEMINFO, NDMapMgrPtr)
+	 REG_MSG(NDServerCode::ACQUIRE_SERVER_INFO_RECIEVE, NDBeforeGameMgrPtr)
+	 REG_MSG(NDServerCode::_MSG_USERATTRIB, NDMapMgrPtr)
+	 REG_MSG(NDServerCode::_MSG_WALK, NDMapMgrPtr)
+	 REG_MSG(NDServerCode::KICK_BACK, NDMapMgrPtr)
+	 REG_MSG(NDServerCode::CHANGE_ROOM, NDMapMgrPtr)
+	 REG_MSG(NDServerCode::_MSG_PLAYER, NDMapMgrPtr)
+	 REG_MSG(NDServerCode::_MSG_PLAYER_EXT, NDMapMgrPtr)
+	 REG_MSG(NDServerCode::MSG_DISAPPEAR, NDMapMgrPtr)
+	 REG_MSG(NDServerCode::_MSG_NPCINFO_LIST, NDMapMgrPtr)
+	 REG_MSG(NDServerCode::_MSG_NPC_STATUS, NDMapMgrPtr)
+	 REG_MSG(NDServerCode::_MSG_MONSTER_INFO, NDMapMgrPtr)
+	 */
 
-	if (it != m_mapCallBack.end() || !(msgObj))								
+	map_class_callback_it it = m_mapCallBack.find(msgID);
+
+	if (it != m_mapCallBack.end() || !(msgObj))
 	{
 		return false;
 	}
-	
-	m_mapCallBack.insert(map_class_callback_pair(msgID,(NDMsgObject*)(msgObj)));	
-	
+
+	m_mapCallBack.insert(
+			map_class_callback_pair(msgID, (NDMsgObject*) (msgObj)));
+
 	return true;
 }
 

@@ -15,6 +15,7 @@
 #include "CCPointExtension.h"
 #include "NDConstant.h"
 #include "NDNpc.h"
+#include "ScriptDrama.h"
 
 namespace NDEngine
 {
@@ -116,10 +117,12 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	ScriptObjectCommon* pkCommon = new ScriptObjectCommon;
 	ScriptObjectUI* pkScriptUI = new ScriptObjectUI;
 	ScriptTimerMgr* pkTimerManager = new ScriptTimerMgr;
+	ScriptObjectDrama* pkDrama = new ScriptObjectDrama;
 
 	pkData->Load();
 	pkTimerManager->OnLoad();
 	pkLogic->OnLoad();
+	pkDrama->OnLoad();
 	pkCommon->OnLoad();
 	pkGlobalEvent->OnLoad();
 	pkScriptUI->OnLoad();
@@ -127,7 +130,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	kScriptManager.Load();
 
 	ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
-		ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
+	//ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
 
 	NDPlayer::pugeHero();
 	NDPlayer& kPlayer = NDPlayer::defaultHero(1);
@@ -135,7 +138,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	int x = 100;
 	int y = 100;
 
-	kPlayer.SetPositionEx(ccp(500, 500));		///< x * 32 + 16, y * 32 + 16
+	kPlayer.SetPosition(ccp(528, 512));		///< x * 32 + 16, y * 32 + 16
 	kPlayer.SetServerPositon(x, y);
 	kPlayer.m_nID = 1;
 	kPlayer.m_name = "°×¸»ÃÀ";

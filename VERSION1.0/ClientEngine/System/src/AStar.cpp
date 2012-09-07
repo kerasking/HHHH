@@ -73,7 +73,7 @@ BOOL CAStar::FindPath(NDMapLayer* pGamemap, const CMyPos& posStart,
 		pNode->nX = m_posStart.x;
 		pNode->nY = m_posStart.y;
 		pNode->nG = 0;
-		pNode->nH = this->GetHValue(m_posStart);
+		pNode->nH = GetHValue(m_posStart);
 		pNode->nStep = 0;
 		pNode->pParent = NULL;
 		pNode->nChildNum = 0;
@@ -85,42 +85,56 @@ BOOL CAStar::FindPath(NDMapLayer* pGamemap, const CMyPos& posStart,
 
 	double dTimeBeg = time(NULL); //[NSDate timeIntervalSinceReferenceDate];
 
-	unsigned int pathstep = 0;
+	unsigned int nPathStep = 0;
 
 	while (true)
 	{
 		double dTimePass = time(NULL) - dTimeBeg;
 		unsigned long usec = (unsigned long) (dTimePass * 1000000);
-		if (usec > dwMaxSerachTime)
-		{
-			//NDLog("astar time out");
-			break;
-		}
+
+		/***
+		* 临时性注释 郭浩
+		* begin
+		*/
+		// 		if (usec > dwMaxSerachTime)
+		// 		{
+		// 			//NDLog("astar time out");
+		// 			break;
+		// 		}
+		/***
+		* 临时性注释 郭浩
+		* end
+		*/
 
 		if (!m_bDoFindPath)
 		{
 			return FALSE;
 		}
-		NodeInfo* pCurrentNode = this->GetCurrentNode();
+		NodeInfo* pkCurrentNode = this->GetCurrentNode();
 
-		if (NULL == pCurrentNode)
+		int x = pkCurrentNode->nX;
+		int y = pkCurrentNode->nY;
+
+		CCLog("X: %d  , Y:  %d",x,y);
+
+		if (NULL == pkCurrentNode)
 		{ ///\open表已经空了
 			break;
 		}
 
-		if ((pCurrentNode->nX == m_posTarget.x)
-				&& (pCurrentNode->nY == m_posTarget.y))
+		if ((pkCurrentNode->nX == m_posTarget.x)
+				&& (pkCurrentNode->nY == m_posTarget.y))
 		{
 			///\终点放入close 表
-			this->GetPath(pCurrentNode);
+			this->GetPath(pkCurrentNode);
 			break;
 		}
 
 		///\加入close表 
-		this->AddToList(m_setClose, pCurrentNode);
-		this->SearchChild(pCurrentNode);
+		this->AddToList(m_setClose, pkCurrentNode);
+		this->SearchChild(pkCurrentNode);
 
-		pathstep++;
+		nPathStep++;
 	}
 
 	//NDLog("astar step=%d", pathstep);
@@ -141,17 +155,17 @@ BOOL CAStar::FindPath(NDMapLayer* pGamemap, const CMyPos& posStart,
 }
 
 //----------------------------------------------------//
-int CAStar::GetHValue(const CMyPos& pos)
+int CAStar::GetHValue(const CMyPos& kPos)
 {
-	int nDx = abs(m_posTarget.x - pos.x);
-	int nDy = abs(m_posTarget.y - pos.y);
+	int nDx = abs(m_posTarget.x - kPos.x);
+	int nDy = abs(m_posTarget.y - kPos.y);
 
 	if (nDx > nDy)
 	{
-		return 10 * nDx + 6 * nDy;
+		return 10 * nDx + 10 * nDy;
 	}
 
-	return 10 * nDy + 6 * nDx;
+	return 10 * nDy + 10 * nDx;
 }
 
 void CAStar::AddToList(MAP_NODE& _list, NodeInfo* pNodeNew)
@@ -202,7 +216,7 @@ void CAStar::UpdateChildren(NodeInfo* pParent)
 	int nG = pParent->nG + 1;
 
 	NodeInfo* pKidNode = NULL;
-	stack<NodeInfo*> StackNode;
+	stack<NodeInfo*> kStackNode;
 
 	for (int i = 0; i < pParent->nChildNum; ++i)
 	{
@@ -215,28 +229,28 @@ void CAStar::UpdateChildren(NodeInfo* pParent)
 			pKidNode->pParent = pParent;
 			pKidNode->nStep = pParent->nStep + 1;
 			///\省去重新计算子节点的方向放在最后计算
-			StackNode.push(pKidNode);
+			kStackNode.push(pKidNode);
 		}
 	}
 
 	NodeInfo* pKidParent = NULL;
-	while (!StackNode.empty())
+	while (!kStackNode.empty())
 	{
-		pKidParent = StackNode.top();
-		StackNode.pop();
+		pKidParent = kStackNode.top();
+		kStackNode.pop();
 
 		for (int j = 0; j < pKidParent->nChildNum; ++j)
 		{ ///\遍历所有子节点 并将他们都push到栈中检查后续子节点
 			pKidNode = pKidParent->pChildNode[j];
 
-			if (pKidParent->nG + 1 < pKidNode->nG)
+			if (pKidParent->nG + 10 < pKidNode->nG)
 			{ ///\如果路径更优则更新他们的G H
-				pKidNode->nG = pKidParent->nG + 1;
+				pKidNode->nG = pKidParent->nG + 10;
 				pKidNode->nF = nG + pKidNode->nH;
 				pKidNode->pParent = pKidParent;
 				pKidNode->nStep = pParent->nStep + 1;
 				///\省去重新计算子节点的方向放在最后计算
-				StackNode.push(pKidNode);
+				kStackNode.push(pKidNode);
 			}
 		}
 	}
@@ -267,6 +281,8 @@ void CAStar::SearchChild(NodeInfo* pParentNode)
 		posNewNode.x = posNode.x + nArrayX[i];
 		posNewNode.y = posNode.y + nArrayY[i];
 
+	//	CCLog("Add Node:%d,%d",posNewNode.x,posNewNode.y);
+
 		if (posNewNode.x < 0)
 			continue;
 		if (posNewNode.y < 0)
@@ -282,8 +298,9 @@ void CAStar::SearchChild(NodeInfo* pParentNode)
 		}
 
 		int nNumber = posNewNode.x << 16 | posNewNode.y;
+		int nG = 0;
 
-		int nG = pParentNode->nG + 1;
+		i % 2 == 0 ? nG = pParentNode->nG + 10 : nG = pParentNode->nG + 14; 
 
 		NodeInfo* pCheck = NULL;
 		if (pCheck = this->CheckList(m_setOpen, nNumber)) //if没问题!
@@ -301,24 +318,29 @@ void CAStar::SearchChild(NodeInfo* pParentNode)
 		}
 		else if (pCheck = this->CheckList(m_setClose, nNumber)) //if没问题!
 		{ ///\已经存在close表中
-			pParentNode->pChildNode[pParentNode->nChildNum++] = pCheck;
-			if (nG < pCheck->nG)
-			{ ///\更新 G H
-				pCheck->pParent = pParentNode;
-				pCheck->nG = nG;
-				pCheck->nF = nG + pCheck->nH;
-				pCheck->nDir = i;
-				pCheck->nStep = pParentNode->nStep + 1;
-			}
+			//pParentNode->pChildNode[pParentNode->nChildNum++] = pCheck;
+			//if (nG < pCheck->nG)
+			//{ ///\更新 G H
+			//	pCheck->pParent = pParentNode;
+			//	pCheck->nG = nG;
+			//	pCheck->nF = nG + pCheck->nH;
+			//	pCheck->nDir = i;
+			//	pCheck->nStep = pParentNode->nStep + 1;
+			//}
 
-			//pCell[m_nMapWidth*posNewNode.y + posNewNode.x].nClose =1;
-			this->UpdateChildren(pCheck);
+			////pCell[m_nMapWidth*posNewNode.y + posNewNode.x].nClose =1;
+			//UpdateChildren(pCheck);
+
+			continue;
 		}
 		else
 		{ ///\创建一个新的点并放入open表中
 			NodeInfo* pNewNode = this->CreateNewNode();
+
 			if (!pNewNode)
+			{
 				continue;
+			}
 
 			pNewNode->nX = posNewNode.x;
 			pNewNode->nY = posNewNode.y;
@@ -346,6 +368,7 @@ void CAStar::SearchChild(NodeInfo* pParentNode)
 					* (pNewNode->nX - m_posTarget.x)
 					+ (pNewNode->nY - m_posTarget.y)
 							* (pNewNode->nY - m_posTarget.y);
+
 			if (dwNewV < dwOldV)
 			{
 				m_posRealTarget.x = pNewNode->nX;

@@ -53,24 +53,23 @@
 using namespace NDEngine;
 using namespace cocos2d;
 
-NDUINode*							
+NDUINode*
 GetUiNode(NDNode* pNode, int tag)
 {
 	if (!pNode)
 	{
 		return NULL;
 	}
-	
+
 	NDNode *uinode = pNode->GetChild(tag);
-	
+
 	if (!uinode || !uinode->IsKindOfClass(RUNTIME_CLASS(NDUINode)))
 	{
 		return NULL;
 	}
-	
-	return (NDUINode*)uinode;
-}
 
+	return (NDUINode*) uinode;
+}
 
 NDUILabel* GetLabel(NDNode* pNode, int tag)
 {
@@ -80,13 +79,13 @@ NDUILabel* GetLabel(NDNode* pNode, int tag)
 	}
 
 	NDNode *lb = pNode->GetChild(tag);
-	
+
 	if (!lb || !lb->IsKindOfClass(RUNTIME_CLASS(NDUILabel)))
 	{
 		return NULL;
 	}
-	
-	return (NDUILabel*)lb;
+
+	return (NDUILabel*) lb;
 }
 
 NDUIButton* GetButton(NDNode* pNode, int tag)
@@ -95,15 +94,15 @@ NDUIButton* GetButton(NDNode* pNode, int tag)
 	{
 		return NULL;
 	}
-	
+
 	NDNode *btn = pNode->GetChild(tag);
-	
+
 	if (!btn || !btn->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
 	{
 		return NULL;
 	}
-	
-	return (NDUIButton*)btn;
+
+	return (NDUIButton*) btn;
 }
 
 NDUILayer* GetUiLayer(NDNode* pNode, int tag)
@@ -112,49 +111,49 @@ NDUILayer* GetUiLayer(NDNode* pNode, int tag)
 	{
 		return NULL;
 	}
-	
+
 	NDNode *layer = pNode->GetChild(tag);
-	
+
 	if (!layer || !layer->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
 	{
 		return NULL;
 	}
-	
-	return (NDUILayer*)layer;
+
+	return (NDUILayer*) layer;
 }
 
-NDUITableLayer*	GetTableLayer(NDNode* pNode, int tag)
+NDUITableLayer* GetTableLayer(NDNode* pNode, int tag)
 {
 	if (!pNode)
 	{
 		return NULL;
 	}
-	
+
 	NDNode *tl = pNode->GetChild(tag);
-	
+
 	if (!tl || !tl->IsKindOfClass(RUNTIME_CLASS(NDUITableLayer)))
 	{
 		return NULL;
 	}
-	
-	return (NDUITableLayer*)tl;
+
+	return (NDUITableLayer*) tl;
 }
 
 NDUIImage* GetImage(NDNode* pNode, int tag)
-{	
+{
 	if (!pNode)
 	{
 		return NULL;
 	}
-	
+
 	NDNode *img = pNode->GetChild(tag);
-	
+
 	if (!img || !img->IsKindOfClass(RUNTIME_CLASS(NDUIImage)))
 	{
 		return NULL;
 	}
-	
-	return (NDUIImage*)img;
+
+	return (NDUIImage*) img;
 }
 
 NDUIContainerScrollLayer* GetScrollLayer(NDNode* pNode, int tag)
@@ -163,15 +162,15 @@ NDUIContainerScrollLayer* GetScrollLayer(NDNode* pNode, int tag)
 	{
 		return NULL;
 	}
-	
+
 	NDNode *sl = pNode->GetChild(tag);
-	
+
 	if (!sl || !sl->IsKindOfClass(RUNTIME_CLASS(NDUIContainerScrollLayer)))
 	{
 		return NULL;
 	}
-	
-	return (NDUIContainerScrollLayer*)sl;
+
+	return (NDUIContainerScrollLayer*) sl;
 }
 
 NDUIContainerHScrollLayer* GetHScrollLayer(NDNode* pNode, int tag)
@@ -180,15 +179,15 @@ NDUIContainerHScrollLayer* GetHScrollLayer(NDNode* pNode, int tag)
 	{
 		return NULL;
 	}
-	
+
 	NDNode *hsl = pNode->GetChild(tag);
-	
+
 	if (!hsl || !hsl->IsKindOfClass(RUNTIME_CLASS(NDUIContainerHScrollLayer)))
 	{
 		return NULL;
 	}
-	
-	return (NDUIContainerHScrollLayer*)hsl;
+
+	return (NDUIContainerHScrollLayer*) hsl;
 }
 
 CUIScrollViewContainer* GetScrollViewContainer(NDNode* pNode, int tag)
@@ -197,15 +196,15 @@ CUIScrollViewContainer* GetScrollViewContainer(NDNode* pNode, int tag)
 	{
 		return NULL;
 	}
-	
+
 	NDNode *sc = pNode->GetChild(tag);
-	
+
 	if (!sc || !sc->IsKindOfClass(RUNTIME_CLASS(CUIScrollViewContainer)))
 	{
 		return NULL;
 	}
-	
-	return (CUIScrollViewContainer*)sc;
+
+	return (CUIScrollViewContainer*) sc;
 }
 
 CUIHyperlinkText*
@@ -215,15 +214,15 @@ GetHyperLinkText(NDNode* pNode, int tag)
 	{
 		return NULL;
 	}
-	
+
 	NDNode *hlt = pNode->GetChild(tag);
-	
+
 	if (!hlt || !hlt->IsKindOfClass(RUNTIME_CLASS(CUIHyperlinkText)))
 	{
 		return NULL;
 	}
-	
-	return (CUIHyperlinkText*)hlt;
+
+	return (CUIHyperlinkText*) hlt;
 }
 
 CUIHyperlinkButton*
@@ -233,15 +232,15 @@ GetHyperLinkButton(NDNode* pNode, int tag)
 	{
 		return NULL;
 	}
-	
+
 	NDNode* hlb = pNode->GetChild(tag);
-	
+
 	if (!hlb || !hlb->IsKindOfClass(RUNTIME_CLASS(CUIHyperlinkButton)))
 	{
 		return NULL;
 	}
-	
-	return (CUIHyperlinkButton*)hlb;
+
+	return (CUIHyperlinkButton*) hlb;
 }
 
 CUIItemButton*
@@ -251,35 +250,34 @@ GetItemButton(NDNode* pNode, int tag)
 	{
 		return NULL;
 	}
-	
+
 	NDNode* itemBtn = pNode->GetChild(tag);
-	
+
 	if (!itemBtn || !itemBtn->IsKindOfClass(RUNTIME_CLASS(CUIItemButton)))
 	{
 		return NULL;
 	}
-	
-	return (CUIItemButton*)itemBtn;
+
+	return (CUIItemButton*) itemBtn;
 }
 
-CUIEquipItem*							
+CUIEquipItem*
 GetEquipButton(NDNode* pNode, int tag)
 {
 	if (!pNode)
 	{
 		return NULL;
 	}
-	
+
 	NDNode* equipBtn = pNode->GetChild(tag);
-	
+
 	if (!equipBtn || !equipBtn->IsKindOfClass(RUNTIME_CLASS(CUIEquipItem)))
 	{
 		return NULL;
 	}
-	
-	return (CUIEquipItem*)equipBtn; 
-}
 
+	return (CUIEquipItem*) equipBtn;
+}
 
 //通过tag列表获取节点
 NDNode* RecursiveNode(NDNode* pParentNode, LuaObject& tagTable)
@@ -288,105 +286,100 @@ NDNode* RecursiveNode(NDNode* pParentNode, LuaObject& tagTable)
 	{
 		return NULL;
 	}
-	
+
 	int nTableCount = tagTable.GetTableCount();
 	if (nTableCount <= 0)
 	{
 		return NULL;
 	}
-	
+
 	NDNode* pResultNode = pParentNode;
-	for (int i = 1; i <= nTableCount; i++) 
+	for (int i = 1; i <= nTableCount; i++)
 	{
 		LuaObject tag = tagTable[i];
 		if (!tag.IsInteger())
 		{
 			return NULL;
 		}
-		
+
 		if (!pResultNode)
 		{
 			return NULL;
 		}
 		pResultNode = pResultNode->GetChild(tag.GetInteger());
 	}
-	
+
 	return pResultNode;
 }
 
 //通过tag列表获取UI节点(不导到脚本)
-NDUINode*							
+NDUINode*
 RecursiveUINode(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUINode)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUINode)))
 	{
 		return NULL;
 	}
-	
-	return (NDUINode*)pResultNode; 
+
+	return (NDUINode*) pResultNode;
 }
 
 //通过tag列表获取标签节点
-NDUILabel*							
+NDUILabel*
 RecursiveLabel(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUILabel)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUILabel)))
 	{
 		return NULL;
 	}
-	
-	return (NDUILabel*)pResultNode; 
+
+	return (NDUILabel*) pResultNode;
 }
 
 //通过tag列表获取按钮节点
-NDUIButton*							
+NDUIButton*
 RecursiveButton(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
 	{
 		return NULL;
 	}
-	
-	return (NDUIButton*)pResultNode; 
+
+	return (NDUIButton*) pResultNode;
 }
 
 //通过tag列表获取层节点
-NDUILayer*							
+NDUILayer*
 RecursiveUILayer(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
 	{
 		return NULL;
 	}
-	
-	return (NDUILayer*)pResultNode; 
+
+	return (NDUILayer*) pResultNode;
 }
 
 //通过tag列表获取层节点
-NDUIImage*							
+NDUIImage*
 RecursiveImage(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUIImage)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUIImage)))
 	{
 		return NULL;
 	}
-	
-	return (NDUIImage*)pResultNode; 
+
+	return (NDUIImage*) pResultNode;
 }
 
 //通过tag列表获取滚动节点
@@ -394,14 +387,13 @@ CUIScroll*
 RecursiveScroll(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIScroll)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIScroll)))
 	{
 		return NULL;
 	}
-	
-	return (CUIScroll*)pResultNode; 
+
+	return (CUIScroll*) pResultNode;
 }
 
 //通过tag列表获取滚动层节点
@@ -409,196 +401,193 @@ CUIScrollContainer*
 RecursiveScrollContainer(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollContainer)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollContainer)))
 	{
 		return NULL;
 	}
-	
-	return (CUIScrollContainer*)pResultNode; 
+
+	return (CUIScrollContainer*) pResultNode;
 }
 
 //通过tag列表获取视图容器节点
-CUIScrollViewContainer*							
+CUIScrollViewContainer*
 RecursiveSVC(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollViewContainer)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(
+					RUNTIME_CLASS(CUIScrollViewContainer)))
 	{
 		return NULL;
 	}
-	
-	return (CUIScrollViewContainer*)pResultNode; 
+
+	return (CUIScrollViewContainer*) pResultNode;
 }
 
 //通过tag列表获取视图节点
-CUIScrollView*							
+CUIScrollView*
 RecursiveSV(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollView)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollView)))
 	{
 		return NULL;
 	}
-	
-	return (CUIScrollView*)pResultNode; 
+
+	return (CUIScrollView*) pResultNode;
 }
 
 //通过tag列表获取超链接文本节点
-CUIHyperlinkText*							
+CUIHyperlinkText*
 RecursiveHyperText(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIHyperlinkText)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIHyperlinkText)))
 	{
 		return NULL;
 	}
-	
-	return (CUIHyperlinkText*)pResultNode; 
+
+	return (CUIHyperlinkText*) pResultNode;
 }
 
 //通过tag列表获取超链接按钮节点
-CUIHyperlinkButton*							
+CUIHyperlinkButton*
 RecursiveHyperBtn(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIHyperlinkButton)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIHyperlinkButton)))
 	{
 		return NULL;
 	}
-	
-	return (CUIHyperlinkButton*)pResultNode; 
+
+	return (CUIHyperlinkButton*) pResultNode;
 }
 
 //通过tag列表获取物品按钮节点
-CUIItemButton*							
+CUIItemButton*
 RecursiveItemBtn(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIItemButton)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIItemButton)))
 	{
 		return NULL;
 	}
-	
-	return (CUIItemButton*)pResultNode; 
+
+	return (CUIItemButton*) pResultNode;
 }
 
 //通过tag列表获取装备按钮节点
-CUIEquipItem*							
+CUIEquipItem*
 RecursiveEquipBtn(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIEquipItem)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIEquipItem)))
 	{
 		return NULL;
 	}
-	
-	return (CUIEquipItem*)pResultNode; 
+
+	return (CUIEquipItem*) pResultNode;
 }
 
 //通过tag列表获取CheckBox节点
-CUICheckBox*							
+CUICheckBox*
 RecursiveCheckBox(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUICheckBox)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUICheckBox)))
 	{
 		return NULL;
 	}
-	
-	return (CUICheckBox*)pResultNode; 
+
+	return (CUICheckBox*) pResultNode;
 }
 
 //通过tag列表获取RadioButton节点
-CUIRadioButton*							
+CUIRadioButton*
 RecursiveRadioBtn(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIRadioButton)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIRadioButton)))
 	{
 		return NULL;
 	}
-	
-	return (CUIRadioButton*)pResultNode; 
+
+	return (CUIRadioButton*) pResultNode;
 }
 
 //通过tag列表获取RadioGroup节点
-CUIRadioGroup*							
+CUIRadioGroup*
 RecursiveRadioGroup(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIRadioGroup)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIRadioGroup)))
 	{
 		return NULL;
 	}
-	
-	return (CUIRadioGroup*)pResultNode; 
+
+	return (CUIRadioGroup*) pResultNode;
 }
 
 //通过tag列表获取经验条节点
-CUIExp*							
+CUIExp*
 RecursivUIExp(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIExp)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIExp)))
 	{
 		return NULL;
 	}
-	
-	return (CUIExp*)pResultNode; 
+
+	return (CUIExp*) pResultNode;
 }
 
 //通过tag列表获取edit节点
-CUIEdit*							
+CUIEdit*
 RecursivUIEdit(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIEdit)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIEdit)))
 	{
 		return NULL;
 	}
-	
-	return (CUIEdit*)pResultNode; 
+
+	return (CUIEdit*) pResultNode;
 }
 
 //通过tag列表获取精灵节点
-CUISpriteNode*							
+CUISpriteNode*
 RecursivUISprite(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUISpriteNode)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUISpriteNode)))
 	{
 		return NULL;
 	}
-	
-	return (CUISpriteNode*)pResultNode; 
-}
 
+	return (CUISpriteNode*) pResultNode;
+}
 
 //通过tag列表获取节点
 NDNode* PRecursiveNode(NDNode* pChildNode, unsigned int nRecuriveCount)
@@ -607,9 +596,9 @@ NDNode* PRecursiveNode(NDNode* pChildNode, unsigned int nRecuriveCount)
 	{
 		return NULL;
 	}
-	
+
 	NDNode* pResultNode = pChildNode;
-	for (unsigned int i = 0; i < nRecuriveCount; i++) 
+	for (unsigned int i = 0; i < nRecuriveCount; i++)
 	{
 		if (!pResultNode)
 		{
@@ -617,390 +606,382 @@ NDNode* PRecursiveNode(NDNode* pChildNode, unsigned int nRecuriveCount)
 		}
 		pResultNode = pResultNode->GetParent();
 	}
-	
+
 	return pResultNode;
 }
 
 //通过tag列表获取UI节点(不导到脚本)
-NDUINode*							
+NDUINode*
 PRecursiveUINode(NDNode* pChildNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pChildNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUINode)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUINode)))
 	{
 		return NULL;
 	}
-	
-	return (NDUINode*)pResultNode; 
+
+	return (NDUINode*) pResultNode;
 }
 
 //通过tag列表获取标签节点
-NDUILabel*							
+NDUILabel*
 PRecursiveLabel(NDNode* pChildNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pChildNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUILabel)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUILabel)))
 	{
 		return NULL;
 	}
-	
-	return (NDUILabel*)pResultNode; 
+
+	return (NDUILabel*) pResultNode;
 }
 
 //通过tag列表获取按钮节点
-NDUIButton*							
+NDUIButton*
 PRecursiveButton(NDNode* pChildNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pChildNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
 	{
 		return NULL;
 	}
-	
-	return (NDUIButton*)pResultNode; 
+
+	return (NDUIButton*) pResultNode;
 }
 
 //通过tag列表获取层节点
-NDUILayer*							
+NDUILayer*
 PRecursiveUILayer(NDNode* pChildNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pChildNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
 	{
 		return NULL;
 	}
-	
-	return (NDUILayer*)pResultNode; 
+
+	return (NDUILayer*) pResultNode;
 }
 
 //通过tag列表获取层节点
-NDUIImage*							
+NDUIImage*
 PRecursiveImage(NDNode* pChildNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pChildNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUIImage)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUIImage)))
 	{
 		return NULL;
 	}
-	
-	return (NDUIImage*)pResultNode; 
+
+	return (NDUIImage*) pResultNode;
 }
 
 //通过tag列表获取视图容器节点
-CUIScrollViewContainer*							
+CUIScrollViewContainer*
 PRecursiveSVC(NDNode* pChildNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pChildNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollViewContainer)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(
+					RUNTIME_CLASS(CUIScrollViewContainer)))
 	{
 		return NULL;
 	}
-	
-	return (CUIScrollViewContainer*)pResultNode; 
+
+	return (CUIScrollViewContainer*) pResultNode;
 }
 
 //通过tag列表获取视图节点
-CUIScrollView*							
+CUIScrollView*
 PRecursiveSV(NDNode* pChildNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pChildNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollView)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollView)))
 	{
 		return NULL;
 	}
-	
-	return (CUIScrollView*)pResultNode; 
+
+	return (CUIScrollView*) pResultNode;
 }
 
 //通过tag列表获取超链接文本节点
-CUIHyperlinkText*							
+CUIHyperlinkText*
 PRecursiveHyperText(NDNode* pChildNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pChildNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIHyperlinkText)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIHyperlinkText)))
 	{
 		return NULL;
 	}
-	
-	return (CUIHyperlinkText*)pResultNode; 
+
+	return (CUIHyperlinkText*) pResultNode;
 }
 
 //通过tag列表获取超链接按钮节点
-CUIHyperlinkButton*							
+CUIHyperlinkButton*
 PRecursiveHyperBtn(NDNode* pChildNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pChildNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIHyperlinkButton)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIHyperlinkButton)))
 	{
 		return NULL;
 	}
-	
-	return (CUIHyperlinkButton*)pResultNode; 
+
+	return (CUIHyperlinkButton*) pResultNode;
 }
 
 //通过tag列表获取物品按钮节点
-CUIItemButton*							
+CUIItemButton*
 PRecursiveItemBtn(NDNode* pChildNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pChildNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIItemButton)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIItemButton)))
 	{
 		return NULL;
 	}
-	
-	return (CUIItemButton*)pResultNode; 
+
+	return (CUIItemButton*) pResultNode;
 }
 
 //通过tag列表获取装备按钮节点
-CUIEquipItem*							
+CUIEquipItem*
 PRecursiveEquipBtn(NDNode* pChildNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pChildNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIEquipItem)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIEquipItem)))
 	{
 		return NULL;
 	}
-	
-	return (CUIEquipItem*)pResultNode; 
+
+	return (CUIEquipItem*) pResultNode;
 }
 
 //通过tag列表获取CheckBox节点
-CUICheckBox*							
+CUICheckBox*
 PRecursiveCheckBox(NDNode* pParentNode, unsigned int nRecuriveCoun)
 {
 	NDNode* pResultNode = PRecursiveNode(pParentNode, nRecuriveCoun);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUICheckBox)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUICheckBox)))
 	{
 		return NULL;
 	}
-	
-	return (CUICheckBox*)pResultNode; 
+
+	return (CUICheckBox*) pResultNode;
 }
 
 //通过tag列表获取RadioButton节点
-CUIRadioButton*							
+CUIRadioButton*
 PRecursiveRadioBtn(NDNode* pParentNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pParentNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIRadioButton)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIRadioButton)))
 	{
 		return NULL;
 	}
-	
-	return (CUIRadioButton*)pResultNode; 
+
+	return (CUIRadioButton*) pResultNode;
 }
 
 //通过tag列表获取RadioGroup节点
-CUIRadioGroup*							
+CUIRadioGroup*
 PRecursiveRadioGroup(NDNode* pParentNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pParentNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIRadioGroup)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIRadioGroup)))
 	{
 		return NULL;
 	}
-	
-	return (CUIRadioGroup*)pResultNode; 
+
+	return (CUIRadioGroup*) pResultNode;
 }
 
 //通过tag列表获取经验条节点
-CUIExp*	
+CUIExp*
 PRecursiveUIExp(NDNode* pParentNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pParentNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIExp)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIExp)))
 	{
 		return NULL;
 	}
-	
-	return (CUIExp*)pResultNode; 
+
+	return (CUIExp*) pResultNode;
 }
 
 //通过tag列表获取edit条节点
-CUIEdit*	
+CUIEdit*
 PRecursiveUIEdit(NDNode* pParentNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pParentNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIEdit)))
+
+	if (!pResultNode || !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIEdit)))
 	{
 		return NULL;
 	}
-	
-	return (CUIEdit*)pResultNode; 
+
+	return (CUIEdit*) pResultNode;
 }
 
 //通过tag列表获取精灵节点
-CUISpriteNode*	
+CUISpriteNode*
 PRecursiveUISprite(NDNode* pParentNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pParentNode, nRecuriveCount);
-	
-	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUISpriteNode)))
+
+	if (!pResultNode
+			|| !pResultNode->IsKindOfClass(RUNTIME_CLASS(CUISpriteNode)))
 	{
 		return NULL;
 	}
-	
-	return (CUISpriteNode*)pResultNode; 
+
+	return (CUISpriteNode*) pResultNode;
 }
 
-NDUINode*							
+NDUINode*
 ConverToUiNode(NDNode* pNode)
 {
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(NDUINode)))
 	{
 		return NULL;
 	}
-	
-	return (NDUINode*)pNode;
+
+	return (NDUINode*) pNode;
 }
 
-
-NDUILabel*							
+NDUILabel*
 ConverToLabel(NDNode* pNode)
 {
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(NDUILabel)))
 	{
 		return NULL;
 	}
-	
-	return (NDUILabel*)pNode;
+
+	return (NDUILabel*) pNode;
 }
 
-NDUIButton*							
+NDUIButton*
 ConverToButton(NDNode* pNode)
 {
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
 	{
 		return NULL;
 	}
-	
-	return (NDUIButton*)pNode;
+
+	return (NDUIButton*) pNode;
 }
 
-NDUILayer*							
+NDUILayer*
 ConverToUiLayer(NDNode* pNode)
 {
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
 	{
 		return NULL;
 	}
-	
-	return (NDUILayer*)pNode;
+
+	return (NDUILayer*) pNode;
 }
 
-NDUITableLayer*						
+NDUITableLayer*
 ConverToTableLayer(NDNode* pNode)
 {
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(NDUITableLayer)))
 	{
 		return NULL;
 	}
-	
-	return (NDUITableLayer*)pNode;
+
+	return (NDUITableLayer*) pNode;
 }
 
-NDUIImage*							
+NDUIImage*
 ConverToImage(NDNode* pNode)
-{	
+{
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(NDUIImage)))
 	{
 		return NULL;
 	}
-	
-	return (NDUIImage*)pNode;
+
+	return (NDUIImage*) pNode;
 }
 
 /*
-NDUIContainerScrollLayer*			
-GetScrollLayer(NDNode* pNode, int tag)
-{
-	if (!pNode)
-	{
-		return NULL;
-	}
-	
-	NDNode *sl = pNode->GetChild(tag);
-	
-	if (!sl || !sl->IsKindOfClass(RUNTIME_CLASS(NDUIContainerScrollLayer)))
-	{
-		return NULL;
-	}
-	
-	return (NDUIContainerScrollLayer*)sl;
-}
+ NDUIContainerScrollLayer*
+ GetScrollLayer(NDNode* pNode, int tag)
+ {
+ if (!pNode)
+ {
+ return NULL;
+ }
 
-NDUIContainerHScrollLayer*			
-GetHScrollLayer(NDNode* pNode, int tag)
-{
-	if (!pNode)
-	{
-		return NULL;
-	}
-	
-	NDNode *hsl = pNode->GetChild(tag);
-	
-	if (!hsl || !hsl->IsKindOfClass(RUNTIME_CLASS(NDUIContainerHScrollLayer)))
-	{
-		return NULL;
-	}
-	
-	return (NDUIContainerHScrollLayer*)hsl;
-}
-*/
+ NDNode *sl = pNode->GetChild(tag);
 
-CUIScrollViewContainer*			
+ if (!sl || !sl->IsKindOfClass(RUNTIME_CLASS(NDUIContainerScrollLayer)))
+ {
+ return NULL;
+ }
+
+ return (NDUIContainerScrollLayer*)sl;
+ }
+
+ NDUIContainerHScrollLayer*
+ GetHScrollLayer(NDNode* pNode, int tag)
+ {
+ if (!pNode)
+ {
+ return NULL;
+ }
+
+ NDNode *hsl = pNode->GetChild(tag);
+
+ if (!hsl || !hsl->IsKindOfClass(RUNTIME_CLASS(NDUIContainerHScrollLayer)))
+ {
+ return NULL;
+ }
+
+ return (NDUIContainerHScrollLayer*)hsl;
+ }
+ */
+
+CUIScrollViewContainer*
 ConverToSVC(NDNode* pNode)
 {
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollViewContainer)))
 	{
 		return NULL;
 	}
-	
-	return (CUIScrollViewContainer*)pNode;
+
+	return (CUIScrollViewContainer*) pNode;
 }
 
-CUIScrollView*			
+CUIScrollView*
 ConverToSV(NDNode* pNode)
 {
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollView)))
 	{
 		return NULL;
 	}
-	
-	return (CUIScrollView*)pNode;
+
+	return (CUIScrollView*) pNode;
 }
 
 CUIHyperlinkText*
@@ -1010,8 +991,8 @@ ConverToHLT(NDNode* pNode)
 	{
 		return NULL;
 	}
-	
-	return (CUIHyperlinkText*)pNode;
+
+	return (CUIHyperlinkText*) pNode;
 }
 
 CUIHyperlinkButton*
@@ -1021,8 +1002,8 @@ ConverToHLB(NDNode* pNode)
 	{
 		return NULL;
 	}
-	
-	return (CUIHyperlinkButton*)pNode;
+
+	return (CUIHyperlinkButton*) pNode;
 }
 
 CUIItemButton*
@@ -1032,76 +1013,75 @@ ConverToItemButton(NDNode* pNode)
 	{
 		return NULL;
 	}
-	
-	return (CUIItemButton*)pNode;
+
+	return (CUIItemButton*) pNode;
 }
 
-CUIEquipItem*							
+CUIEquipItem*
 ConverToEquipBtn(NDNode* pNode)
 {
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(CUIEquipItem)))
 	{
 		return NULL;
 	}
-	
-	return (CUIEquipItem*)pNode; 
+
+	return (CUIEquipItem*) pNode;
 }
 
-CUICheckBox*							
+CUICheckBox*
 ConverToCheckBox(NDNode* pNode)
 {
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(CUICheckBox)))
 	{
 		return NULL;
 	}
-	
-	return (CUICheckBox*)pNode;  
+
+	return (CUICheckBox*) pNode;
 }
 
-CUIRadioButton*							
+CUIRadioButton*
 ConverToRadioBtn(NDNode* pNode)
 {
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(CUIRadioButton)))
 	{
 		return NULL;
 	}
-	
-	return (CUIRadioButton*)pNode;
+
+	return (CUIRadioButton*) pNode;
 }
 
-CUIRadioGroup*							
+CUIRadioGroup*
 ConverToRadioGroup(NDNode* pNode)
 {
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(CUIRadioGroup)))
 	{
 		return NULL;
 	}
-	
-	return (CUIRadioGroup*)pNode;  
+
+	return (CUIRadioGroup*) pNode;
 }
 
-CUIEdit*							
+CUIEdit*
 ConverToEdit(NDNode* pNode)
 {
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(CUIEdit)))
 	{
 		return NULL;
 	}
-	
-	return (CUIEdit*)pNode;  
+
+	return (CUIEdit*) pNode;
 }
 
-CUISpriteNode*							
+CUISpriteNode*
 ConverToSprite(NDNode* pNode)
 {
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(CUISpriteNode)))
 	{
 		return NULL;
 	}
-	
-	return (CUISpriteNode*)pNode;  
-}
 
+	return (CUISpriteNode*) pNode;
+}
 
 CGSize GetStringSize(const char* str, unsigned int fontsize)
 {
@@ -1112,28 +1092,34 @@ CGSize GetStringSize(const char* str, unsigned int fontsize)
 	return getStringSize(str, fontsize);
 }
 
-CGSize GetHyperLinkTextSize(const char* str, unsigned int fontsize, int nBoundWidth)
+CGSize GetHyperLinkTextSize(const char* str, unsigned int fontsize,
+		int nBoundWidth)
 {
 	if (!str)
 	{
 		return CGSizeZero;
 	}
 	CGSize textSize;
-	textSize.width	= nBoundWidth;
-	textSize.height = NDUITextBuilder::DefaultBuilder()->StringHeightAfterFilter(str, textSize.width, fontsize);
-	textSize.width	= NDUITextBuilder::DefaultBuilder()->StringWidthAfterFilter(str, textSize.width, fontsize);
+	textSize.width = nBoundWidth;
+	textSize.height =
+			NDUITextBuilder::DefaultBuilder()->StringHeightAfterFilter(str,
+					textSize.width, fontsize);
+	textSize.width = NDUITextBuilder::DefaultBuilder()->StringWidthAfterFilter(
+			str, textSize.width, fontsize);
 	return textSize;
 }
 
-NDUINode* CreateColorLabel(const char* str, unsigned int fontsize, unsigned int nConstraitWidth)
+NDUINode* CreateColorLabel(const char* str, unsigned int fontsize,
+		unsigned int nConstraitWidth)
 {
 	if (!str)
 	{
 		return NULL;
 	}
-	CGSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
-	winsize.width	= nConstraitWidth;
-	return (NDUINode*)NDUITextBuilder::DefaultBuilder()->Build(str, fontsize, winsize, ccc4(255, 255, 255, 255));
+	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	winsize.width = nConstraitWidth;
+	return (NDUINode*) NDUITextBuilder::DefaultBuilder()->Build(str, fontsize,
+			winsize, ccc4(255, 255, 255, 255));
 }
 
 NDScene* GetSMGameScene()
@@ -1170,53 +1156,53 @@ void CloseLoadBar()
 	CloseProgressBar;
 }
 
-CCRect RectMake(float x,float y,float width,float height)
+CCRect RectMake(float x, float y, float width, float height)
 {
 	return CCRect((x), (y), (width), (height));
 }
 
-CCPoint PointMake(float x,float y)
+CCPoint PointMake(float x, float y)
 {
 	return CCPoint((x), (y));
 }
 
-CCSize SizeMake(float width,float height)
+CCSize SizeMake(float width, float height)
 {
 	return CCSize((width), (height));
 }
-	
+
 void ScriptObjectUI::OnLoad()
 {
-	ETCFUNC("GetUiNode",		GetUiNode)
-	ETCFUNC("GetLabel",			GetLabel)
-	ETCFUNC("GetButton",		GetButton)
-	ETCFUNC("GetUiLayer",		GetUiLayer)
-	ETCFUNC("GetTableLayer",	GetTableLayer)
-	ETCFUNC("GetImage",			GetImage)
-	ETCFUNC("GetScrollLayer",	GetScrollLayer)
-	ETCFUNC("GetHScrollLayer",	GetHScrollLayer)
-	ETCFUNC("GetScrollViewContainer",	GetScrollViewContainer)		
-	ETCFUNC("CGSizeMake",		SizeMake)
-	ETCFUNC("CGPointMake",		PointMake)
-	ETCFUNC("CGRectMake",		RectMake)
-	ETCFUNC("ccc4",				ccc4);
-	ETCFUNC("ccc3",				ccc3);
-	ETCFUNC("ShowLoadBar",		ShowLoadBar);
-	ETCFUNC("CloseLoadBar",		CloseLoadBar);
-	ETCFUNC("GetSMGameScene",	GetSMGameScene);
-    ETCFUNC("GetSMLoginScene",	GetSMLoginScene);
-	ETCFUNC("GetWinSize",		GetWinSize);
-	ETCFUNC("RectZero",			RectZero);
-	ETCFUNC("SizeZero",			SizeZero);
-	ETCFUNC("GetStringSize",		GetStringSize);
+	ETCFUNC("GetUiNode", GetUiNode)
+	ETCFUNC("GetLabel", GetLabel)
+	ETCFUNC("GetButton", GetButton)
+	ETCFUNC("GetUiLayer", GetUiLayer)
+	ETCFUNC("GetTableLayer", GetTableLayer)
+	ETCFUNC("GetImage", GetImage)
+	ETCFUNC("GetScrollLayer", GetScrollLayer)
+	ETCFUNC("GetHScrollLayer", GetHScrollLayer)
+	ETCFUNC("GetScrollViewContainer", GetScrollViewContainer)
+	ETCFUNC("CGSizeMake", SizeMake)
+	ETCFUNC("CGPointMake", PointMake)
+	ETCFUNC("CGRectMake", RectMake)
+	ETCFUNC("ccc4", ccc4);
+	ETCFUNC("ccc3", ccc3);
+	ETCFUNC("ShowLoadBar", ShowLoadBar);
+	ETCFUNC("CloseLoadBar", CloseLoadBar);
+	ETCFUNC("GetSMGameScene", GetSMGameScene);
+	ETCFUNC("GetSMLoginScene", GetSMLoginScene);
+	ETCFUNC("GetWinSize", GetWinSize);
+	ETCFUNC("RectZero", RectZero);
+	ETCFUNC("SizeZero", SizeZero);
+	ETCFUNC("GetStringSize", GetStringSize);
 	ETCFUNC("GetHyperLinkTextSize", GetHyperLinkTextSize);
-	ETCFUNC("GetHyperLinkText",	GetHyperLinkText);
+	ETCFUNC("GetHyperLinkText", GetHyperLinkText);
 	ETCFUNC("GetHyperLinkButton", GetHyperLinkButton);
 	ETCFUNC("GetItemButton", GetItemButton);
 	ETCFUNC("GetEquipButton", GetEquipButton);
-	
+
 	ETCFUNC("CreateColorLabel", CreateColorLabel);
-	
+
 	ETCFUNC("RecursiveUINode", RecursiveUINode);
 	ETCFUNC("RecursiveLabel", RecursiveLabel);
 	ETCFUNC("RecursiveButton", RecursiveButton);
@@ -1236,7 +1222,7 @@ void ScriptObjectUI::OnLoad()
 	ETCFUNC("RecursivUIExp", RecursivUIExp);
 	ETCFUNC("RecursivUIEdit", RecursivUIEdit);
 	ETCFUNC("RecursivUISprite", RecursivUISprite);
-	
+
 	ETCFUNC("PRecursiveUINode", PRecursiveUINode);
 	ETCFUNC("PRecursiveLabel", PRecursiveLabel);
 	ETCFUNC("PRecursiveButton", PRecursiveButton);
@@ -1248,14 +1234,14 @@ void ScriptObjectUI::OnLoad()
 	ETCFUNC("PRecursiveHyperBtn", PRecursiveHyperBtn);
 	ETCFUNC("PRecursiveItemBtn", PRecursiveItemBtn);
 	ETCFUNC("PRecursiveEquipBtn", PRecursiveEquipBtn);
-	
+
 	ETCFUNC("PRecursiveCheckBox", PRecursiveCheckBox);
 	ETCFUNC("PRecursiveRadioBtn", PRecursiveRadioBtn);
 	ETCFUNC("PRecursiveRadioGroup", PRecursiveRadioGroup);
 	ETCFUNC("PRecursiveUIExp", PRecursiveUIExp);
 	ETCFUNC("PRecursiveUIEdit", PRecursiveUIEdit);
 	ETCFUNC("PRecursiveUISprite", PRecursiveUISprite);
-	
+
 	ETCFUNC("ConverToUiNode", ConverToUiNode);
 	ETCFUNC("ConverToLabel", ConverToLabel);
 	ETCFUNC("ConverToButton", ConverToButton);
@@ -1268,408 +1254,406 @@ void ScriptObjectUI::OnLoad()
 	ETCFUNC("ConverToHLB", ConverToHLB);
 	ETCFUNC("ConverToItemButton", ConverToItemButton);
 	ETCFUNC("ConverToEquipBtn", ConverToEquipBtn);
-	
+
 	ETCFUNC("ConverToCheckBox", ConverToCheckBox);
 	ETCFUNC("ConverToRadioBtn", ConverToRadioBtn);
 	ETCFUNC("ConverToRadioGroup", ConverToRadioGroup);
-    ETCFUNC("ConverToEdit", ConverToEdit);
+	ETCFUNC("ConverToEdit", ConverToEdit);
 	ETCFUNC("ConverToSprite", ConverToSprite);
 }
-	
-	// 颜色结构导出
-	ETSTRUCTBEGIN(ccColor4B)
-	ETSTRUCTPROP("r",								&ccColor4B::r)
-	ETSTRUCTPROP("g",								&ccColor4B::g)
-	ETSTRUCTPROP("b",								&ccColor4B::b)
-	ETSTRUCTPROP("a",								&ccColor4B::a)
-	ETSTRUCTEND(ccColor4B)
-	
-	ETSTRUCTBEGIN(ccColor3B)
-	ETSTRUCTPROP("r",								&ccColor3B::r)
-	ETSTRUCTPROP("g",								&ccColor3B::g)
-	ETSTRUCTPROP("b",								&ccColor3B::b)
-	ETSTRUCTEND(ccColor3B)
-	
-	// 图片池导出
-	ETCLASSBEGIN(NDPicturePool)
-	ETCFUNC("DefaultPicPool",						&NDPicturePool::DefaultPool)
-	ETMEMBERFUNC("AddPicture",						(NDPicture* (NDPicturePool::*)(const char*, bool))&NDPicturePool::AddPicture)
-	ETMEMBERFUNC("AddPictureEx",					(NDPicture* (NDPicturePool::*)(const char*, int, int, bool))&NDPicturePool::AddPicture)
-	ETCLASSEND(NDPicturePool)
-	
-	// 图片类导出
-	ETCLASSBEGIN(NDPicture)
-	//ETCONSTRUCTARG1("createNDPicture", bool)
-	//ETDESTRUCT("Free")
-	//ETMEMBERFUNC("Initialization",					(void (NDPicture::*)(const char*))&NDPicture::Initialization)
-	//ETMEMBERFUNC("InitializationEx",				(void (NDPicture::*)(const char*, int, int))&NDPicture::Initialization)
-	ETMEMBERFUNC("Cut",								&NDPicture::Cut)
-	ETMEMBERFUNC("SetReverse",						&NDPicture::SetReverse)
-	ETMEMBERFUNC("Rotation",						&NDPicture::Rotation)
-	ETMEMBERFUNC("SetColor",						&NDPicture::SetColor)
-	ETMEMBERFUNC("GetSize",							&NDPicture::GetSize)
-	ETMEMBERFUNC("SetGrayState",					&NDPicture::SetGrayState)
-	ETMEMBERFUNC("IsGrayState",						&NDPicture::IsGrayState)
-	ETCLASSEND(NDPicture)
-	
-	
-	// 大小结构导出
-	ETSTRUCTBEGIN(CGSize)
-	ETSTRUCTPROP("w",								&CGSize::width)
-	ETSTRUCTPROP("h",								&CGSize::height)
-	ETSTRUCTEND(CGSize)
-	
-	// 点结构导出
-	ETSTRUCTBEGIN(CGPoint)
-	ETSTRUCTPROP("x",								&CGPoint::x)
-	ETSTRUCTPROP("y",								&CGPoint::y)
-	ETSTRUCTEND(CGPoint)
-	
-	// 范围结构导出
-	ETSTRUCTBEGIN(CGRect)
-	ETSTRUCTPROP("origin",							&CGRect::origin)
-	ETSTRUCTPROP("size",							&CGRect::size)
-	ETSTRUCTEND(CGRect)
-	
-	ETCLASSBEGIN(NDUILoad)
-	ETCONSTRUCT("createNDUILoad")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Load",							(bool (NDUILoad::*)(const char*, NDUINode *, LuaObject, CGFloat, CGFloat))&NDUILoad::LoadLua)
-	ETCLASSEND(NDUILoad)
-	
-	// 节点类导出
-	ETCLASSBEGIN(NDNode)
-	ETCONSTRUCT("createNDNode")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							&NDNode::Initialization)
-	ETMEMBERFUNC("GetParent",						&NDNode::GetParent)
-	ETMEMBERFUNC("RemoveAllChildren",				&NDNode::RemoveAllChildren)
-	ETMEMBERFUNC("GetzOrder",						&NDNode::GetzOrder)
-	ETMEMBERFUNC("GetTag",							&NDNode::GetTag)
-	ETMEMBERFUNC("SetTag",							&NDNode::SetTag)
-	ETMEMBERFUNC("AddChild",						(void (NDNode::*)(NDNode*))&NDNode::AddChild)
-	ETMEMBERFUNC("AddChildZ",						(void (NDNode::*)(NDNode*, int))&NDNode::AddChild)
-	ETMEMBERFUNC("AddChildZTag",					(void (NDNode::*)(NDNode*, int, int))&NDNode::AddChild)
-	ETMEMBERFUNC("RemoveChild",						(void (NDNode::*)(NDNode*, bool))&NDNode::RemoveChild)
-	ETMEMBERFUNC("RemoveChildByTag",				(void (NDNode::*)(int, bool))&NDNode::RemoveChild)
-	ETMEMBERFUNC("ContainChild",					&NDNode::ContainChild)
-	ETMEMBERFUNC("RemoveFromParent",				&NDNode::RemoveFromParent)
-	ETMEMBERFUNC("GetChild",						&NDNode::GetChild)
-	ETMEMBERFUNC("IsChildOf",						&NDNode::IsChildOf)
-	ETMEMBERFUNC("DrawEnabled",						&NDNode::DrawEnabled)
-	ETMEMBERFUNC("SetParam1",						&NDNode::SetParam1)
-	ETMEMBERFUNC("SetParam2",						&NDNode::SetParam2)
-	ETMEMBERFUNC("GetParam1",						&NDNode::GetParam1)
-	ETMEMBERFUNC("GetParam2",						&NDNode::GetParam2)
-	ETMEMBERFUNC("SetDestroyNotify",				&NDNode::SetDestroyNotify)
-	ETCLASSEND(NDNode)
-	
-	// 导演类导出
-	ETCLASSBEGIN(NDDirector)
-	ETCFUNC("DefaultDirector",						&NDDirector::DefaultDirector)  ///<临时性注释 郭浩
-	ETMEMBERFUNC("PushScene",						&NDDirector::PushScene)
-	ETMEMBERFUNC("PopScene",						(bool (NDDirector::*)(bool))&NDDirector::PopScene)
-	ETMEMBERFUNC("GetRunningScene",					&NDDirector::GetRunningScene)
-	ETMEMBERFUNC("GetWinSize",						&NDDirector::GetWinSize)
-	ETMEMBERFUNC("SetViewRect",						&NDDirector::SetViewRect)
-	ETMEMBERFUNC("ResumeViewRect",					&NDDirector::ResumeViewRect)
-	ETMEMBERFUNC("GetSceneByTag",					&NDDirector::GetSceneByTag)
-	ETMEMBERFUNC("GetScaleFactor",					&NDDirector::GetScaleFactor)
-	ETCLASSEND(NDDirector)
-	
-	// 场景类导出
-	ETSUBCLASSBEGIN(NDScene, NDNode)
-	//ETCFUNC("Scene",								&NDScene::Scene)  ///<临时性注释 郭浩
-	ETCLASSEND(NDScene)
-	
-	// UI基类导出
-	ETSUBCLASSBEGIN(NDUINode, NDNode)
-	ETCONSTRUCT("createNDUINode")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							&NDUINode::Initialization)
-	ETMEMBERFUNC("SetFrameRect",					&NDUINode::SetFrameRect)
-	ETMEMBERFUNC("GetFrameRect",					&NDUINode::GetFrameRect)
-	ETMEMBERFUNC("SetVisible",						&NDUINode::SetVisible)
-	ETMEMBERFUNC("IsVisibled",						&NDUINode::IsVisibled)
-	ETMEMBERFUNC("EnableEvent",						&NDUINode::EnableEvent)
-	ETMEMBERFUNC("EventEnabled",					&NDUINode::EventEnabled)
-	ETMEMBERFUNC("GetScreenRect",					&NDUINode::GetScreenRect)
-	ETMEMBERFUNC("SetLuaDelegate",					&NDUINode::SetLuaDelegate)
-	ETCLASSEND(NDUINode)
-	
-	// 层类导出
-	ETSUBCLASSBEGIN(NDUILayer, NDUINode)
-	ETCONSTRUCT("createNDUILayer")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							&NDUILayer::Initialization)
-	ETMEMBERFUNC("SetBackgroundImage",				&NDUILayer::SetBackgroundImageLua)
-	ETMEMBERFUNC("SetBackgroundFocusImage",			&NDUILayer::SetBackgroundFocusImageLua)
-	ETMEMBERFUNC("SetBackgroundColor",				&NDUILayer::SetBackgroundColor)
-	ETMEMBERFUNC("SetFocus",						&NDUILayer::SetFocus)
-	ETMEMBERFUNC("GetFocus",						&NDUILayer::GetFocus)
-	ETCLASSEND(NDUILayer)
-	
 
-	// 按钮类导出
-	ETSUBCLASSBEGIN(NDUIButton, NDUINode)
-	ETCONSTRUCT("createNDUIButton")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							&NDUIButton::Initialization)
-	ETMEMBERFUNC("SetImage",						&NDUIButton::SetImageLua)
-	ETMEMBERFUNC("SetImageEx",						&NDUIButton::SetImageCustom)
-	ETMEMBERFUNC("SetTouchDownImage",				&NDUIButton::SetTouchDownImageLua)
-	ETMEMBERFUNC("SetTouchDownImageEx",				&NDUIButton::SetTouchDownImageCustom)
-	ETMEMBERFUNC("SetTouchDownColor",				&NDUIButton::SetTouchDownColor)
-	ETMEMBERFUNC("SetFocusColor",					&NDUIButton::SetFocusColor)
-	ETMEMBERFUNC("SetFocusFontColor",				&NDUIButton::SetFocusFontColor)
-	ETMEMBERFUNC("SetFocusImage",					&NDUIButton::SetFocusImageLua)
-	ETMEMBERFUNC("SetFocusImageEx",					&NDUIButton::SetFocusImageCustom)
-	ETMEMBERFUNC("OpenFrame",						&NDUIButton::OpenFrame)
-	ETMEMBERFUNC("CloseFrame",						&NDUIButton::CloseFrame)
-	ETMEMBERFUNC("SetTitle",						&NDUIButton::SetTitleLua)
-	ETMEMBERFUNC("GetTitle",						&NDUIButton::GetTitle)
-	ETMEMBERFUNC("SetFontColor",					&NDUIButton::SetFontColor)
-	ETMEMBERFUNC("GetFontColor",					&NDUIButton::GetFontColor)
-	ETMEMBERFUNC("SetBackgroundPicture",			&NDUIButton::SetBackgroundPictureLua)
-	ETMEMBERFUNC("SetBackgroundPictureEx",			&NDUIButton::SetBackgroundPictureCustom)
-	ETMEMBERFUNC("SetFontSize",						&NDUIButton::SetFontSize)
-	ETMEMBERFUNC("GetFontSize",						&NDUIButton::GetFontSize)
-	ETMEMBERFUNC("SetArrow",						&NDUIButton::SetArrow)
-	ETMEMBERFUNC("EnalbeGray",						&NDUIButton::EnalbeGray)
-	ETMEMBERFUNC("IsGray",							&NDUIButton::IsGray)
-	ETMEMBERFUNC("EnalbelBackgroundGray",			&NDUIButton::EnalbelBackgroundGray)
-	ETMEMBERFUNC("IsBackgroundGray",				&NDUIButton::IsBackgroundGray)
-	ETMEMBERFUNC("SetNormalImageColor",				&NDUIButton::SetNormalImageColor)
-	ETMEMBERFUNC("GetImage",						&NDUIButton::GetImage)
-	ETMEMBERFUNC("GetImageCopy",					&NDUIButton::GetImageCopy)
-	ETCLASSEND(NDUIButton)
-	
-	ETSUBCLASSBEGIN(NDUIImage, NDUINode)
-	ETCONSTRUCT("createNDUIImage")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("SetPicture",						&NDUIImage::SetPictureLua)
-	ETCLASSEND(NDUIImage)
-	
-	ETSUBCLASSBEGIN(NDUILabel, NDUINode)
-	ETCONSTRUCT("createNDUILabel")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("SetText",							&NDUILabel::SetText)
-	ETMEMBERFUNC("GetText",							&NDUILabel::GetText)
-	ETMEMBERFUNC("SetFontColor",					&NDUILabel::SetFontColor)
-	ETMEMBERFUNC("GetFontColor",					&NDUILabel::GetFontColor)
-	ETMEMBERFUNC("SetFontSize",						&NDUILabel::SetFontSize)
-	ETMEMBERFUNC("GetFontSize",						&NDUILabel::GetFontSize)
-	ETMEMBERFUNC("SetTextAlignment",				&NDUILabel::SetTextAlignment)
-	ETMEMBERFUNC("GetTextAlignment",				&NDUILabel::GetTextAlignment)
-	ETMEMBERFUNC("SetRenderTimes",					&NDUILabel::SetRenderTimes)
-	ETMEMBERFUNC("GetRenderTimes",					&NDUILabel::GetRenderTimes)
-	ETMEMBERFUNC("SetFontBoderColer",				&NDUILabel::SetFontBoderColer)
-	ETCLASSEND(NDUILabel)
-	
-	ETSUBCLASSBEGIN(NDUIDialog, NDUILayer)
-	ETCONSTRUCT("createNDUIDialog")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Show0",							&NDUIDialog::Show0)
-	ETMEMBERFUNC("Show1",							&NDUIDialog::Show1)
-	ETMEMBERFUNC("Show2",							&NDUIDialog::Show2)
-	ETMEMBERFUNC("Show3",							&NDUIDialog::Show3)
-	ETMEMBERFUNC("Show4",							&NDUIDialog::Show4)
-	ETMEMBERFUNC("Show5",							&NDUIDialog::Show5)
-	ETMEMBERFUNC("Show6",							&NDUIDialog::Show6)
-	ETMEMBERFUNC("Show7",							&NDUIDialog::Show7)
-	ETMEMBERFUNC("Show8",							&NDUIDialog::Show8)
-	ETMEMBERFUNC("Show9",							&NDUIDialog::Show9)
-	ETMEMBERFUNC("Show10",							&NDUIDialog::Show10)
-	ETCLASSEND(NDUIDialog)
-	
-	ETSUBCLASSBEGIN(CUIChatText,NDUINode)
-	ETCONSTRUCT("createUIChatText")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							&CUIChatText::Initialization)
-	ETMEMBERFUNC("SetContentWidth",					&CUIChatText::SetContentWidth)	
-	ETMEMBERFUNC("SetContent",						&CUIChatText::SetContent)
-	ETMEMBERFUNC("GetContentHeight",				&CUIChatText::GetContentHeight)	
-	ETCLASSEND(CUIChatText)
-	
-	ETSUBCLASSBEGIN(CUIMovableLayer, NDUILayer)
-	ETCONSTRUCT("createUIMovableLayer")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							&CUIMovableLayer::Initialization)
-	ETMEMBERFUNC("SetMovableViewer",				&CUIMovableLayer::SetMovableViewer)
-	ETCLASSEND(CUIMovableLayer)
-	
-	ETSUBCLASSBEGIN(CUIScroll, CUIMovableLayer)
-	ETCONSTRUCT("createUIScroll")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							&CUIScroll::Initialization)
-	ETMEMBERFUNC("SetScrollStyle",					&CUIScroll::SetScrollStyle)
-	ETMEMBERFUNC("IsCanAccerate",					&CUIScroll::IsCanAccerate)
-	ETMEMBERFUNC("IsInAccceratState",				&CUIScroll::IsInAccceratState)
-	ETMEMBERFUNC("StopAccerate",					&CUIScroll::StopAccerate)
-	ETMEMBERFUNC("GetScrollStyle",					&CUIScroll::GetScrollStyle)
-	ETMEMBERFUNC("SetContainer",					&CUIScroll::SetContainer)
-	ETCLASSEND(CUIScroll)
-	
-	ETSUBCLASSBEGIN(CUIScrollContainer, NDUILayer)
-	ETCONSTRUCT("createUIScrollContainer")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							&CUIScrollContainer::Initialization)
-	ETMEMBERFUNC("SetLeftReserveDistance",			&CUIScrollContainer::SetLeftReserveDistance)
-	ETMEMBERFUNC("SetRightReserveDistance",			&CUIScrollContainer::SetRightReserveDistance)
-	ETMEMBERFUNC("SetTopReserveDistance",			&CUIScrollContainer::SetTopReserveDistance)
-	ETMEMBERFUNC("SetBottomReserveDistance",		&CUIScrollContainer::SetBottomReserveDistance)
-	ETCLASSEND(CUIScrollContainer)
-	
-	ETSUBCLASSBEGIN(CUIScrollView, CUIScroll)
-	ETCONSTRUCT("createUIScrollView")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							&CUIScrollView::Initialization)
-	ETMEMBERFUNC("SetScrollViewer",					&CUIScrollView::SetScrollViewer)
-	ETMEMBERFUNC("SetViewId",						&CUIScrollView::SetViewId)
-	ETMEMBERFUNC("GetViewId",						&CUIScrollView::GetViewId)
-	ETCLASSEND(CUIScrollView)
-	
-	ETSUBCLASSBEGIN(CUIScrollViewContainer, CUIScrollContainer)
-	ETCONSTRUCT("createUIScrollViewContainer")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",						&CUIScrollViewContainer::Initialization)
-	ETMEMBERFUNC("SetStyle",					&CUIScrollViewContainer::SetStyle)
-	ETMEMBERFUNC("GetScrollStyle",				&CUIScrollViewContainer::GetScrollStyle)
-	ETMEMBERFUNC("SetCenterAdjust",				&CUIScrollViewContainer::SetCenterAdjust)
-	ETMEMBERFUNC("IsCenterAdjust",				&CUIScrollViewContainer::IsCenterAdjust)
-	ETMEMBERFUNC("GetViewCount",				&CUIScrollViewContainer::GetViewCount)
-	ETMEMBERFUNC("SetViewSize",				&CUIScrollViewContainer::SetViewSize)
-	ETMEMBERFUNC("GetViewSize",				&CUIScrollViewContainer::GetViewSize)
-	ETMEMBERFUNC("AddView",						&CUIScrollViewContainer::AddView)
-	ETMEMBERFUNC("RemoveView",					&CUIScrollViewContainer::RemoveView)
-	ETMEMBERFUNC("RemoveViewById",				&CUIScrollViewContainer::RemoveViewById)
-	ETMEMBERFUNC("RemoveAllView",				&CUIScrollViewContainer::RemoveAllView)
-	ETMEMBERFUNC("ShowViewByIndex",				&CUIScrollViewContainer::ShowViewByIndex)
-	ETMEMBERFUNC("ShowViewById",				&CUIScrollViewContainer::ShowViewById)
-	ETMEMBERFUNC("ScrollViewByIndex",			&CUIScrollViewContainer::ScrollViewByIndex)
-	ETMEMBERFUNC("ScrollViewById",				&CUIScrollViewContainer::ScrollViewById)
-	ETMEMBERFUNC("GetView",						&CUIScrollViewContainer::GetView)
-	ETMEMBERFUNC("GetViewById",					&CUIScrollViewContainer::GetViewById)
-	ETMEMBERFUNC("GetBeginView",				&CUIScrollViewContainer::GetBeginView)
-	ETMEMBERFUNC("GetBeginIndex",				&CUIScrollViewContainer::GetBeginIndex)
-	ETMEMBERFUNC("EnableScrollBar",				&CUIScrollViewContainer::EnableScrollBar)
-	ETCLASSEND(CUIScrollViewContainer)
-	
-	ETSUBCLASSBEGIN(CUIRoleNode, NDUINode)
-	ETCONSTRUCT("createUIRoleNode")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",						&CUIRoleNode::Initialization)
-	ETMEMBERFUNC("ChangeLookFace",				&CUIRoleNode::ChangeLookFace)
-	ETMEMBERFUNC("SetEquip",					&CUIRoleNode::SetEquip)
-	ETCLASSEND(CUIRoleNode)
-	
-	ETSUBCLASSBEGIN(CUIHyperlinkText, NDUINode)
-	ETCONSTRUCT("createUIHyperLink")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							&CUIHyperlinkText::Initialization)
-	ETMEMBERFUNC("SetLinkBoundRect",				&CUIHyperlinkText::SetLinkBoundRect)
-	ETMEMBERFUNC("SetLinkText",						&CUIHyperlinkText::SetLinkText)
-	ETMEMBERFUNC("SetLinkTextFontSize",				&CUIHyperlinkText::SetLinkTextFontSize)
-	ETMEMBERFUNC("SetLinkTextColor",				&CUIHyperlinkText::SetLinkTextColor)
-	ETMEMBERFUNC("EnableLine",						&CUIHyperlinkText::EnableLine)
-	ETCLASSEND(CUIHyperlinkText)
-	
-	ETSUBCLASSBEGIN(CUIHyperlinkButton, NDUIButton)
-	ETCONSTRUCT("createUIHyperlinkButton")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							&CUIHyperlinkButton::Initialization)
-	ETMEMBERFUNC("SetLinkBoundRect",				&CUIHyperlinkButton::SetLinkBoundRect)
-	ETMEMBERFUNC("SetLinkText",						&CUIHyperlinkButton::SetLinkText)
-	ETMEMBERFUNC("SetLinkTextFontSize",				&CUIHyperlinkButton::SetLinkTextFontSize)
-	ETMEMBERFUNC("SetLinkTextColor",				&CUIHyperlinkButton::SetLinkTextColor)
-	ETMEMBERFUNC("EnableLine",						&CUIHyperlinkButton::EnableLine)
-	ETCLASSEND(CUIHyperlinkButton)
-	
-	ETSUBCLASSBEGIN(CUIItemButton, NDUIButton)
-	ETCONSTRUCT("createUIItemButton")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("ChangeItem",						&CUIItemButton::ChangeItem)
-	ETMEMBERFUNC("GetItemId",						&CUIItemButton::GetItemId)
-	ETMEMBERFUNC("ChangeItemType",					&CUIItemButton::ChangeItemType)
-	ETMEMBERFUNC("GetItemType",						&CUIItemButton::GetItemType)
-	ETMEMBERFUNC("RefreshItemCount",				&CUIItemButton::RefreshItemCount)
-	ETMEMBERFUNC("SetLock",							&CUIItemButton::SetLock)
-	ETMEMBERFUNC("IsLock",							&CUIItemButton::IsLock)
-	ETMEMBERFUNC("SetShowAdapt",					&CUIItemButton::SetShowAdapt)
-	ETCLASSEND(CUIItemButton)
-	
-	ETSUBCLASSBEGIN(CUIEquipItem, CUIItemButton)
-	ETCONSTRUCT("createUIEquipItem")
-	ETDESTRUCT("Free")
-	ETCLASSEND(CUIEquipItem)
-	
-	ETSUBCLASSBEGIN(CUICheckBox, NDUINode)
-	ETCONSTRUCT("createUICheckBox")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							(void (CUICheckBox::*)(const char*, const char*))&CUICheckBox::Initialization)
-	ETMEMBERFUNC("SetSelect",						&CUICheckBox::SetSelect)
-	ETMEMBERFUNC("IsSelect",						&CUICheckBox::IsSelect)
-	ETMEMBERFUNC("SetText",							&CUICheckBox::SetText)
-	ETMEMBERFUNC("GetText",							&CUICheckBox::GetText)
-	ETMEMBERFUNC("SetTextFontColor",				&CUICheckBox::SetTextFontColor)
-	ETMEMBERFUNC("SetTextFontSize",					&CUICheckBox::SetTextFontSize)
-	ETCLASSEND(CUICheckBox)
-	
-	ETSUBCLASSBEGIN(CUIRadioButton, CUICheckBox)
-	ETCONSTRUCT("createUIRadioButton")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							(void (CUIRadioButton::*)(const char*, const char*))&CUIRadioButton::Initialization)
-	ETCLASSEND(CUIRadioButton)
-	
-	ETSUBCLASSBEGIN(CUIRadioGroup, NDUINode)
-	ETCONSTRUCT("createUIRadioGroup")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("AddRadio",						&CUIRadioGroup::AddRadio)
-	ETMEMBERFUNC("ContainRadio",					&CUIRadioGroup::ContainRadio)
-	ETMEMBERFUNC("SetIndexSelected",				&CUIRadioGroup::SetIndexSelected)
-	ETMEMBERFUNC("SetRadioSelected",				&CUIRadioGroup::SetRadioSelected)
-	ETMEMBERFUNC("GetSelectedRadio",				&CUIRadioGroup::GetSelectedRadio)
-	ETMEMBERFUNC("GetSelectedIndex",				&CUIRadioGroup::GetSelectedIndex)
-	ETCLASSEND(CUIRadioGroup)
-	
-	ETSUBCLASSBEGIN(CUIExp, NDUINode)
-	ETCONSTRUCT("createUIExp")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							(void (CUIExp::*)(const char*, const char*))&CUIExp::Initialization)
-	ETMEMBERFUNC("SetProcess",						&CUIExp::SetProcess)
-	ETMEMBERFUNC("SetTotal",						&CUIExp::SetTotal)
-	ETMEMBERFUNC("SetStyle",                        &CUIExp::SetStyle)
-	ETMEMBERFUNC("GetProcess",						&CUIExp::GetProcess)
-	ETMEMBERFUNC("GetTotal",						&CUIExp::GetTotal)
-	ETMEMBERFUNC("SetText",							&CUIExp::SetText)
-	ETMEMBERFUNC("SetTextFontColor",				&CUIExp::SetTextFontColor)
-	ETMEMBERFUNC("SetTextFontSize",					&CUIExp::SetTextFontSize)
-	ETCLASSEND(CUIExp)
+// 颜色结构导出
+ETSTRUCTBEGIN (ccColor4B)
+ETSTRUCTPROP("r", &ccColor4B::r)
+ETSTRUCTPROP("g", &ccColor4B::g)
+ETSTRUCTPROP("b", &ccColor4B::b)
+ETSTRUCTPROP("a", &ccColor4B::a)
+ETSTRUCTEND(ccColor4B)
 
-	ETSUBCLASSBEGIN(CUISpriteNode, NDUINode)
-	ETCONSTRUCT("createUISpriteNode")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							(void (CUISpriteNode::*)(const char*, const char*))&CUISpriteNode::Initialization)
-	ETMEMBERFUNC("ChangeSprite",					&CUISpriteNode::ChangeSprite)
-	ETMEMBERFUNC("SetAnimation",					&CUISpriteNode::SetAnimation)
-	ETMEMBERFUNC("SetPlayFrameRange",				&CUISpriteNode::SetPlayFrameRange)
-	ETCLASSEND(CUISpriteNode)
+ETSTRUCTBEGIN(ccColor3B)
+ETSTRUCTPROP("r", &ccColor3B::r)
+ETSTRUCTPROP("g", &ccColor3B::g)
+ETSTRUCTPROP("b", &ccColor3B::b)
+ETSTRUCTEND(ccColor3B)
 
-	ETSUBCLASSBEGIN(CUIEdit, NDUINode)
-	ETCONSTRUCT("createUIEdit")
-	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							&CUIEdit::Initialization)
-	ETMEMBERFUNC("SetText",							&CUIEdit::SetText)
-	ETMEMBERFUNC("GetText",							&CUIEdit::GetText)
-	ETMEMBERFUNC("SetPassword",						&CUIEdit::SetPassword)
-	ETMEMBERFUNC("IsPassword",						&CUIEdit::IsPassword)
-	ETMEMBERFUNC("SetMaxLength",					&CUIEdit::SetMaxLength)
-	ETMEMBERFUNC("GetMaxLength",					&CUIEdit::GetMaxLength)
-	ETMEMBERFUNC("SetMinLength",					&CUIEdit::SetMinLength)
-	ETMEMBERFUNC("GetMinLength",					&CUIEdit::GetMinLength)
-	ETMEMBERFUNC("SetImage",						&CUIEdit::SetImage)
-	ETMEMBERFUNC("SetFocusImage",					&CUIEdit::SetFocusImage)
-	ETMEMBERFUNC("EnableAdjustView",				&CUIEdit::EnableAdjustView)
-	ETMEMBERFUNC("IsTextLessMinLen",				&CUIEdit::IsTextLessMinLen)
-	ETMEMBERFUNC("IsTextLessMinLen",				&CUIEdit::IsTextMoreMaxLen)
-	ETCLASSEND(CUIEdit)
+// 图片池导出
+ETCLASSBEGIN(NDPicturePool)
+ETCFUNC("DefaultPicPool", &NDPicturePool::DefaultPool)
+ETMEMBERFUNC("AddPicture", (NDPicture* (NDPicturePool::*)(const char*, bool))&NDPicturePool::AddPicture)
+ETMEMBERFUNC("AddPictureEx", (NDPicture* (NDPicturePool::*)(const char*, int, int, bool))&NDPicturePool::AddPicture)
+ETCLASSEND(NDPicturePool)
+
+// 图片类导出
+ETCLASSBEGIN(NDPicture)
+//ETCONSTRUCTARG1("createNDPicture", bool)
+//ETDESTRUCT("Free")
+//ETMEMBERFUNC("Initialization",					(void (NDPicture::*)(const char*))&NDPicture::Initialization)
+//ETMEMBERFUNC("InitializationEx",				(void (NDPicture::*)(const char*, int, int))&NDPicture::Initialization)
+ETMEMBERFUNC("Cut", &NDPicture::Cut)
+ETMEMBERFUNC("SetReverse", &NDPicture::SetReverse)
+ETMEMBERFUNC("Rotation", &NDPicture::Rotation)
+ETMEMBERFUNC("SetColor", &NDPicture::SetColor)
+ETMEMBERFUNC("GetSize", &NDPicture::GetSize)
+ETMEMBERFUNC("SetGrayState", &NDPicture::SetGrayState)
+ETMEMBERFUNC("IsGrayState", &NDPicture::IsGrayState)
+ETCLASSEND(NDPicture)
+
+// 大小结构导出
+ETSTRUCTBEGIN(CGSize)
+ETSTRUCTPROP("w", &CGSize::width)
+ETSTRUCTPROP("h", &CGSize::height)
+ETSTRUCTEND(CGSize)
+
+// 点结构导出
+ETSTRUCTBEGIN(CGPoint)
+ETSTRUCTPROP("x", &CGPoint::x)
+ETSTRUCTPROP("y", &CGPoint::y)
+ETSTRUCTEND(CGPoint)
+
+// 范围结构导出
+ETSTRUCTBEGIN(CGRect)
+ETSTRUCTPROP("origin", &CGRect::origin)
+ETSTRUCTPROP("size", &CGRect::size)
+ETSTRUCTEND(CGRect)
+
+ETCLASSBEGIN(NDUILoad)
+ETCONSTRUCT("createNDUILoad")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Load", (bool (NDUILoad::*)(const char*, NDUINode *, LuaObject, CGFloat, CGFloat))&NDUILoad::LoadLua)
+ETCLASSEND(NDUILoad)
+
+// 节点类导出
+ETCLASSBEGIN(NDNode)
+ETCONSTRUCT("createNDNode")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", &NDNode::Initialization)
+ETMEMBERFUNC("GetParent", &NDNode::GetParent)
+ETMEMBERFUNC("RemoveAllChildren", &NDNode::RemoveAllChildren)
+ETMEMBERFUNC("GetzOrder", &NDNode::GetzOrder)
+ETMEMBERFUNC("GetTag", &NDNode::GetTag)
+ETMEMBERFUNC("SetTag", &NDNode::SetTag)
+ETMEMBERFUNC("AddChild", (void (NDNode::*)(NDNode*))&NDNode::AddChild)
+ETMEMBERFUNC("AddChildZ", (void (NDNode::*)(NDNode*, int))&NDNode::AddChild)
+ETMEMBERFUNC("AddChildZTag", (void (NDNode::*)(NDNode*, int, int))&NDNode::AddChild)
+ETMEMBERFUNC("RemoveChild", (void (NDNode::*)(NDNode*, bool))&NDNode::RemoveChild)
+ETMEMBERFUNC("RemoveChildByTag", (void (NDNode::*)(int, bool))&NDNode::RemoveChild)
+ETMEMBERFUNC("ContainChild", &NDNode::ContainChild)
+ETMEMBERFUNC("RemoveFromParent", &NDNode::RemoveFromParent)
+ETMEMBERFUNC("GetChild", &NDNode::GetChild)
+ETMEMBERFUNC("IsChildOf", &NDNode::IsChildOf)
+ETMEMBERFUNC("DrawEnabled", &NDNode::DrawEnabled)
+ETMEMBERFUNC("SetParam1", &NDNode::SetParam1)
+ETMEMBERFUNC("SetParam2", &NDNode::SetParam2)
+ETMEMBERFUNC("GetParam1", &NDNode::GetParam1)
+ETMEMBERFUNC("GetParam2", &NDNode::GetParam2)
+ETMEMBERFUNC("SetDestroyNotify", &NDNode::SetDestroyNotify)
+ETCLASSEND(NDNode)
+
+// 导演类导出
+ETCLASSBEGIN(NDDirector)
+ETCFUNC("DefaultDirector", &NDDirector::DefaultDirector)///<临时性注释 郭浩
+ETMEMBERFUNC("PushScene", &NDDirector::PushScene)
+ETMEMBERFUNC("PopScene", (bool (NDDirector::*)(bool))&NDDirector::PopScene)
+ETMEMBERFUNC("GetRunningScene", &NDDirector::GetRunningScene)
+ETMEMBERFUNC("GetWinSize", &NDDirector::GetWinSize)
+ETMEMBERFUNC("SetViewRect", &NDDirector::SetViewRect)
+ETMEMBERFUNC("ResumeViewRect", &NDDirector::ResumeViewRect)
+ETMEMBERFUNC("GetSceneByTag", &NDDirector::GetSceneByTag)
+ETMEMBERFUNC("GetScaleFactor", &NDDirector::GetScaleFactor)
+ETCLASSEND(NDDirector)
+
+// 场景类导出
+ETSUBCLASSBEGIN(NDScene, NDNode)
+//ETCFUNC("Scene",								&NDScene::Scene)  ///<临时性注释 郭浩
+ETCLASSEND(NDScene)
+
+// UI基类导出
+ETSUBCLASSBEGIN(NDUINode, NDNode)
+ETCONSTRUCT("createNDUINode")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", &NDUINode::Initialization)
+ETMEMBERFUNC("SetFrameRect", &NDUINode::SetFrameRect)
+ETMEMBERFUNC("GetFrameRect", &NDUINode::GetFrameRect)
+ETMEMBERFUNC("SetVisible", &NDUINode::SetVisible)
+ETMEMBERFUNC("IsVisibled", &NDUINode::IsVisibled)
+ETMEMBERFUNC("EnableEvent", &NDUINode::EnableEvent)
+ETMEMBERFUNC("EventEnabled", &NDUINode::EventEnabled)
+ETMEMBERFUNC("GetScreenRect", &NDUINode::GetScreenRect)
+ETMEMBERFUNC("SetLuaDelegate", &NDUINode::SetLuaDelegate)
+ETCLASSEND(NDUINode)
+
+// 层类导出
+ETSUBCLASSBEGIN(NDUILayer, NDUINode)
+ETCONSTRUCT("createNDUILayer")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", &NDUILayer::Initialization)
+ETMEMBERFUNC("SetBackgroundImage", &NDUILayer::SetBackgroundImageLua)
+ETMEMBERFUNC("SetBackgroundFocusImage", &NDUILayer::SetBackgroundFocusImageLua)
+ETMEMBERFUNC("SetBackgroundColor", &NDUILayer::SetBackgroundColor)
+ETMEMBERFUNC("SetFocus", &NDUILayer::SetFocus)
+ETMEMBERFUNC("GetFocus", &NDUILayer::GetFocus)
+ETCLASSEND(NDUILayer)
+
+// 按钮类导出
+ETSUBCLASSBEGIN(NDUIButton, NDUINode)
+ETCONSTRUCT("createNDUIButton")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", &NDUIButton::Initialization)
+ETMEMBERFUNC("SetImage", &NDUIButton::SetImageLua)
+ETMEMBERFUNC("SetImageEx", &NDUIButton::SetImageCustom)
+ETMEMBERFUNC("SetTouchDownImage", &NDUIButton::SetTouchDownImageLua)
+ETMEMBERFUNC("SetTouchDownImageEx", &NDUIButton::SetTouchDownImageCustom)
+ETMEMBERFUNC("SetTouchDownColor", &NDUIButton::SetTouchDownColor)
+ETMEMBERFUNC("SetFocusColor", &NDUIButton::SetFocusColor)
+ETMEMBERFUNC("SetFocusFontColor", &NDUIButton::SetFocusFontColor)
+ETMEMBERFUNC("SetFocusImage", &NDUIButton::SetFocusImageLua)
+ETMEMBERFUNC("SetFocusImageEx", &NDUIButton::SetFocusImageCustom)
+ETMEMBERFUNC("OpenFrame", &NDUIButton::OpenFrame)
+ETMEMBERFUNC("CloseFrame", &NDUIButton::CloseFrame)
+ETMEMBERFUNC("SetTitle", &NDUIButton::SetTitleLua)
+ETMEMBERFUNC("GetTitle", &NDUIButton::GetTitle)
+ETMEMBERFUNC("SetFontColor", &NDUIButton::SetFontColor)
+ETMEMBERFUNC("GetFontColor", &NDUIButton::GetFontColor)
+ETMEMBERFUNC("SetBackgroundPicture", &NDUIButton::SetBackgroundPictureLua)
+ETMEMBERFUNC("SetBackgroundPictureEx", &NDUIButton::SetBackgroundPictureCustom)
+ETMEMBERFUNC("SetFontSize", &NDUIButton::SetFontSize)
+ETMEMBERFUNC("GetFontSize", &NDUIButton::GetFontSize)
+ETMEMBERFUNC("SetArrow", &NDUIButton::SetArrow)
+ETMEMBERFUNC("EnalbeGray", &NDUIButton::EnalbeGray)
+ETMEMBERFUNC("IsGray", &NDUIButton::IsGray)
+ETMEMBERFUNC("EnalbelBackgroundGray", &NDUIButton::EnalbelBackgroundGray)
+ETMEMBERFUNC("IsBackgroundGray", &NDUIButton::IsBackgroundGray)
+ETMEMBERFUNC("SetNormalImageColor", &NDUIButton::SetNormalImageColor)
+ETMEMBERFUNC("GetImage", &NDUIButton::GetImage)
+ETMEMBERFUNC("GetImageCopy", &NDUIButton::GetImageCopy)
+ETCLASSEND(NDUIButton)
+
+ETSUBCLASSBEGIN(NDUIImage, NDUINode)
+ETCONSTRUCT("createNDUIImage")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("SetPicture", &NDUIImage::SetPictureLua)
+ETCLASSEND(NDUIImage)
+
+ETSUBCLASSBEGIN(NDUILabel, NDUINode)
+ETCONSTRUCT("createNDUILabel")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("SetText", &NDUILabel::SetText)
+ETMEMBERFUNC("GetText", &NDUILabel::GetText)
+ETMEMBERFUNC("SetFontColor", &NDUILabel::SetFontColor)
+ETMEMBERFUNC("GetFontColor", &NDUILabel::GetFontColor)
+ETMEMBERFUNC("SetFontSize", &NDUILabel::SetFontSize)
+ETMEMBERFUNC("GetFontSize", &NDUILabel::GetFontSize)
+ETMEMBERFUNC("SetTextAlignment", &NDUILabel::SetTextAlignment)
+ETMEMBERFUNC("GetTextAlignment", &NDUILabel::GetTextAlignment)
+ETMEMBERFUNC("SetRenderTimes", &NDUILabel::SetRenderTimes)
+ETMEMBERFUNC("GetRenderTimes", &NDUILabel::GetRenderTimes)
+ETMEMBERFUNC("SetFontBoderColer", &NDUILabel::SetFontBoderColer)
+ETCLASSEND(NDUILabel)
+
+ETSUBCLASSBEGIN(NDUIDialog, NDUILayer)
+ETCONSTRUCT("createNDUIDialog")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Show0", &NDUIDialog::Show0)
+ETMEMBERFUNC("Show1", &NDUIDialog::Show1)
+ETMEMBERFUNC("Show2", &NDUIDialog::Show2)
+ETMEMBERFUNC("Show3", &NDUIDialog::Show3)
+ETMEMBERFUNC("Show4", &NDUIDialog::Show4)
+ETMEMBERFUNC("Show5", &NDUIDialog::Show5)
+ETMEMBERFUNC("Show6", &NDUIDialog::Show6)
+ETMEMBERFUNC("Show7", &NDUIDialog::Show7)
+ETMEMBERFUNC("Show8", &NDUIDialog::Show8)
+ETMEMBERFUNC("Show9", &NDUIDialog::Show9)
+ETMEMBERFUNC("Show10", &NDUIDialog::Show10)
+ETCLASSEND(NDUIDialog)
+
+ETSUBCLASSBEGIN(CUIChatText,NDUINode)
+ETCONSTRUCT("createUIChatText")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", &CUIChatText::Initialization)
+ETMEMBERFUNC("SetContentWidth", &CUIChatText::SetContentWidth)
+ETMEMBERFUNC("SetContent", &CUIChatText::SetContent)
+ETMEMBERFUNC("GetContentHeight", &CUIChatText::GetContentHeight)
+ETCLASSEND(CUIChatText)
+
+ETSUBCLASSBEGIN(CUIMovableLayer, NDUILayer)
+ETCONSTRUCT("createUIMovableLayer")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", &CUIMovableLayer::Initialization)
+ETMEMBERFUNC("SetMovableViewer", &CUIMovableLayer::SetMovableViewer)
+ETCLASSEND(CUIMovableLayer)
+
+ETSUBCLASSBEGIN(CUIScroll, CUIMovableLayer)
+ETCONSTRUCT("createUIScroll")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", &CUIScroll::Initialization)
+ETMEMBERFUNC("SetScrollStyle", &CUIScroll::SetScrollStyle)
+ETMEMBERFUNC("IsCanAccerate", &CUIScroll::IsCanAccerate)
+ETMEMBERFUNC("IsInAccceratState", &CUIScroll::IsInAccceratState)
+ETMEMBERFUNC("StopAccerate", &CUIScroll::StopAccerate)
+ETMEMBERFUNC("GetScrollStyle", &CUIScroll::GetScrollStyle)
+ETMEMBERFUNC("SetContainer", &CUIScroll::SetContainer)
+ETCLASSEND(CUIScroll)
+
+ETSUBCLASSBEGIN(CUIScrollContainer, NDUILayer)
+ETCONSTRUCT("createUIScrollContainer")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", &CUIScrollContainer::Initialization)
+ETMEMBERFUNC("SetLeftReserveDistance", &CUIScrollContainer::SetLeftReserveDistance)
+ETMEMBERFUNC("SetRightReserveDistance", &CUIScrollContainer::SetRightReserveDistance)
+ETMEMBERFUNC("SetTopReserveDistance", &CUIScrollContainer::SetTopReserveDistance)
+ETMEMBERFUNC("SetBottomReserveDistance", &CUIScrollContainer::SetBottomReserveDistance)
+ETCLASSEND(CUIScrollContainer)
+
+ETSUBCLASSBEGIN(CUIScrollView, CUIScroll)
+ETCONSTRUCT("createUIScrollView")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", &CUIScrollView::Initialization)
+ETMEMBERFUNC("SetScrollViewer", &CUIScrollView::SetScrollViewer)
+ETMEMBERFUNC("SetViewId", &CUIScrollView::SetViewId)
+ETMEMBERFUNC("GetViewId", &CUIScrollView::GetViewId)
+ETCLASSEND(CUIScrollView)
+
+ETSUBCLASSBEGIN(CUIScrollViewContainer, CUIScrollContainer)
+ETCONSTRUCT("createUIScrollViewContainer")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", &CUIScrollViewContainer::Initialization)
+ETMEMBERFUNC("SetStyle", &CUIScrollViewContainer::SetStyle)
+ETMEMBERFUNC("GetScrollStyle", &CUIScrollViewContainer::GetScrollStyle)
+ETMEMBERFUNC("SetCenterAdjust", &CUIScrollViewContainer::SetCenterAdjust)
+ETMEMBERFUNC("IsCenterAdjust", &CUIScrollViewContainer::IsCenterAdjust)
+ETMEMBERFUNC("GetViewCount", &CUIScrollViewContainer::GetViewCount)
+ETMEMBERFUNC("SetViewSize", &CUIScrollViewContainer::SetViewSize)
+ETMEMBERFUNC("GetViewSize", &CUIScrollViewContainer::GetViewSize)
+ETMEMBERFUNC("AddView", &CUIScrollViewContainer::AddView)
+ETMEMBERFUNC("RemoveView", &CUIScrollViewContainer::RemoveView)
+ETMEMBERFUNC("RemoveViewById", &CUIScrollViewContainer::RemoveViewById)
+ETMEMBERFUNC("RemoveAllView", &CUIScrollViewContainer::RemoveAllView)
+ETMEMBERFUNC("ShowViewByIndex", &CUIScrollViewContainer::ShowViewByIndex)
+ETMEMBERFUNC("ShowViewById", &CUIScrollViewContainer::ShowViewById)
+ETMEMBERFUNC("ScrollViewByIndex", &CUIScrollViewContainer::ScrollViewByIndex)
+ETMEMBERFUNC("ScrollViewById", &CUIScrollViewContainer::ScrollViewById)
+ETMEMBERFUNC("GetView", &CUIScrollViewContainer::GetView)
+ETMEMBERFUNC("GetViewById", &CUIScrollViewContainer::GetViewById)
+ETMEMBERFUNC("GetBeginView", &CUIScrollViewContainer::GetBeginView)
+ETMEMBERFUNC("GetBeginIndex", &CUIScrollViewContainer::GetBeginIndex)
+ETMEMBERFUNC("EnableScrollBar", &CUIScrollViewContainer::EnableScrollBar)
+ETCLASSEND(CUIScrollViewContainer)
+
+ETSUBCLASSBEGIN(CUIRoleNode, NDUINode)
+ETCONSTRUCT("createUIRoleNode")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", &CUIRoleNode::Initialization)
+ETMEMBERFUNC("ChangeLookFace", &CUIRoleNode::ChangeLookFace)
+ETMEMBERFUNC("SetEquip", &CUIRoleNode::SetEquip)
+ETCLASSEND(CUIRoleNode)
+
+ETSUBCLASSBEGIN(CUIHyperlinkText, NDUINode)
+ETCONSTRUCT("createUIHyperLink")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", &CUIHyperlinkText::Initialization)
+ETMEMBERFUNC("SetLinkBoundRect", &CUIHyperlinkText::SetLinkBoundRect)
+ETMEMBERFUNC("SetLinkText", &CUIHyperlinkText::SetLinkText)
+ETMEMBERFUNC("SetLinkTextFontSize", &CUIHyperlinkText::SetLinkTextFontSize)
+ETMEMBERFUNC("SetLinkTextColor", &CUIHyperlinkText::SetLinkTextColor)
+ETMEMBERFUNC("EnableLine", &CUIHyperlinkText::EnableLine)
+ETCLASSEND(CUIHyperlinkText)
+
+ETSUBCLASSBEGIN(CUIHyperlinkButton, NDUIButton)
+ETCONSTRUCT("createUIHyperlinkButton")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", &CUIHyperlinkButton::Initialization)
+ETMEMBERFUNC("SetLinkBoundRect", &CUIHyperlinkButton::SetLinkBoundRect)
+ETMEMBERFUNC("SetLinkText", &CUIHyperlinkButton::SetLinkText)
+ETMEMBERFUNC("SetLinkTextFontSize", &CUIHyperlinkButton::SetLinkTextFontSize)
+ETMEMBERFUNC("SetLinkTextColor", &CUIHyperlinkButton::SetLinkTextColor)
+ETMEMBERFUNC("EnableLine", &CUIHyperlinkButton::EnableLine)
+ETCLASSEND(CUIHyperlinkButton)
+
+ETSUBCLASSBEGIN(CUIItemButton, NDUIButton)
+ETCONSTRUCT("createUIItemButton")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("ChangeItem", &CUIItemButton::ChangeItem)
+ETMEMBERFUNC("GetItemId", &CUIItemButton::GetItemId)
+ETMEMBERFUNC("ChangeItemType", &CUIItemButton::ChangeItemType)
+ETMEMBERFUNC("GetItemType", &CUIItemButton::GetItemType)
+ETMEMBERFUNC("RefreshItemCount", &CUIItemButton::RefreshItemCount)
+ETMEMBERFUNC("SetLock", &CUIItemButton::SetLock)
+ETMEMBERFUNC("IsLock", &CUIItemButton::IsLock)
+ETMEMBERFUNC("SetShowAdapt", &CUIItemButton::SetShowAdapt)
+ETCLASSEND(CUIItemButton)
+
+ETSUBCLASSBEGIN(CUIEquipItem, CUIItemButton)
+ETCONSTRUCT("createUIEquipItem")
+ETDESTRUCT("Free")
+ETCLASSEND(CUIEquipItem)
+
+ETSUBCLASSBEGIN(CUICheckBox, NDUINode)
+ETCONSTRUCT("createUICheckBox")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", (void (CUICheckBox::*)(const char*, const char*))&CUICheckBox::Initialization)
+ETMEMBERFUNC("SetSelect", &CUICheckBox::SetSelect)
+ETMEMBERFUNC("IsSelect", &CUICheckBox::IsSelect)
+ETMEMBERFUNC("SetText", &CUICheckBox::SetText)
+ETMEMBERFUNC("GetText", &CUICheckBox::GetText)
+ETMEMBERFUNC("SetTextFontColor", &CUICheckBox::SetTextFontColor)
+ETMEMBERFUNC("SetTextFontSize", &CUICheckBox::SetTextFontSize)
+ETCLASSEND(CUICheckBox)
+
+ETSUBCLASSBEGIN(CUIRadioButton, CUICheckBox)
+ETCONSTRUCT("createUIRadioButton")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", (void (CUIRadioButton::*)(const char*, const char*))&CUIRadioButton::Initialization)
+ETCLASSEND(CUIRadioButton)
+
+ETSUBCLASSBEGIN(CUIRadioGroup, NDUINode)
+ETCONSTRUCT("createUIRadioGroup")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("AddRadio", &CUIRadioGroup::AddRadio)
+ETMEMBERFUNC("ContainRadio", &CUIRadioGroup::ContainRadio)
+ETMEMBERFUNC("SetIndexSelected", &CUIRadioGroup::SetIndexSelected)
+ETMEMBERFUNC("SetRadioSelected", &CUIRadioGroup::SetRadioSelected)
+ETMEMBERFUNC("GetSelectedRadio", &CUIRadioGroup::GetSelectedRadio)
+ETMEMBERFUNC("GetSelectedIndex", &CUIRadioGroup::GetSelectedIndex)
+ETCLASSEND(CUIRadioGroup)
+
+ETSUBCLASSBEGIN(CUIExp, NDUINode)
+ETCONSTRUCT("createUIExp")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", (void (CUIExp::*)(const char*, const char*))&CUIExp::Initialization)
+ETMEMBERFUNC("SetProcess", &CUIExp::SetProcess)
+ETMEMBERFUNC("SetTotal", &CUIExp::SetTotal)
+ETMEMBERFUNC("SetStyle", &CUIExp::SetStyle)
+ETMEMBERFUNC("GetProcess", &CUIExp::GetProcess)
+ETMEMBERFUNC("GetTotal", &CUIExp::GetTotal)
+ETMEMBERFUNC("SetText", &CUIExp::SetText)
+ETMEMBERFUNC("SetTextFontColor", &CUIExp::SetTextFontColor)
+ETMEMBERFUNC("SetTextFontSize", &CUIExp::SetTextFontSize)
+ETCLASSEND(CUIExp)
+
+ETSUBCLASSBEGIN(CUISpriteNode, NDUINode)
+ETCONSTRUCT("createUISpriteNode")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", (void (CUISpriteNode::*)(const char*, const char*))&CUISpriteNode::Initialization)
+ETMEMBERFUNC("ChangeSprite", &CUISpriteNode::ChangeSprite)
+ETMEMBERFUNC("SetAnimation", &CUISpriteNode::SetAnimation)
+ETMEMBERFUNC("SetPlayFrameRange", &CUISpriteNode::SetPlayFrameRange)
+ETCLASSEND(CUISpriteNode)
+
+ETSUBCLASSBEGIN(CUIEdit, NDUINode)
+ETCONSTRUCT("createUIEdit")
+ETDESTRUCT("Free")
+ETMEMBERFUNC("Init", &CUIEdit::Initialization)
+ETMEMBERFUNC("SetText", &CUIEdit::SetText)
+ETMEMBERFUNC("GetText", &CUIEdit::GetText)
+ETMEMBERFUNC("SetPassword", &CUIEdit::SetPassword)
+ETMEMBERFUNC("IsPassword", &CUIEdit::IsPassword)
+ETMEMBERFUNC("SetMaxLength", &CUIEdit::SetMaxLength)
+ETMEMBERFUNC("GetMaxLength", &CUIEdit::GetMaxLength)
+ETMEMBERFUNC("SetMinLength", &CUIEdit::SetMinLength)
+ETMEMBERFUNC("GetMinLength", &CUIEdit::GetMinLength)
+ETMEMBERFUNC("SetImage", &CUIEdit::SetImage)
+ETMEMBERFUNC("SetFocusImage", &CUIEdit::SetFocusImage)
+ETMEMBERFUNC("EnableAdjustView", &CUIEdit::EnableAdjustView)
+ETMEMBERFUNC("IsTextLessMinLen", &CUIEdit::IsTextLessMinLen)
+ETMEMBERFUNC("IsTextLessMinLen", &CUIEdit::IsTextMoreMaxLen)
+ETCLASSEND(CUIEdit)

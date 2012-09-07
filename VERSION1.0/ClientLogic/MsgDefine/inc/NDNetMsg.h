@@ -17,25 +17,29 @@
 
 using namespace std;
 
-
 class NDMsgObject
 {
 public:
-	NDMsgObject(){}
-	virtual ~NDMsgObject(){};
+	NDMsgObject()
+	{
+	}
+	virtual ~NDMsgObject()
+	{
+	}
+	;
 	virtual bool process(MSGID msgID, NDEngine::NDTransData*, int len) = 0;
 };
 
-class NDNetMsgPool  : public TSingleton<NDNetMsgPool> 
-{	
-	typedef map<MSGID, NDMsgObject*>			map_class_callback;
-	typedef map_class_callback::iterator	map_class_callback_it;
-	typedef pair<MSGID, NDMsgObject*>			map_class_callback_pair;
-	
+class NDNetMsgPool: public TSingleton<NDNetMsgPool>
+{
+	typedef map<MSGID, NDMsgObject*> map_class_callback;
+	typedef map_class_callback::iterator map_class_callback_it;
+	typedef pair<MSGID, NDMsgObject*> map_class_callback_pair;
+
 public:
 	NDNetMsgPool();
 	~NDNetMsgPool();
-	
+
 	bool Process(NDEngine::NDTransData* data);
 	bool Process(MSGID msgID, NDEngine::NDTransData* data, int len);
 	bool RegMsg(MSGID msgID, NDMsgObject* msgObj);
@@ -43,7 +47,7 @@ public:
 private:
 	map_class_callback m_mapCallBack;
 private:
-	
+
 };
 
 #define NDNetMsgPoolObj NDNetMsgPool::GetSingleton()

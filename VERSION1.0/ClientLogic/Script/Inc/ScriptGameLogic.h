@@ -15,7 +15,7 @@ int GetCurrentMonsterRound();
 int GetPlayerLookface();
 const char* GetSMImgPath(const char* name);
 
-class ScriptObjectGameLogic : public NDEngine::ScriptObject
+class ScriptObjectGameLogic: public NDEngine::ScriptObject
 {
 public:
 	virtual void OnLoad();
