@@ -22,36 +22,36 @@
 #include "CCImage.h"
 #include "NDConstant.h"
 
-MapTexturePool *MapTexturePool_defaultPool = NULL;
+MapTexturePool* g_pkMapTexturePoolDefaultPool = NULL;
 
 using namespace cocos2d;
 using namespace NDEngine;
 
 MapTexturePool::MapTexturePool() :
-		m_dict(NULL)
+		m_pkDict(NULL)
 {
-	NDAsssert(MapTexturePool_defaultPool == NULL);
-	m_dict = new CCMutableDictionary<std::string, CCTexture2D*>();
+	NDAsssert(g_pkMapTexturePoolDefaultPool == NULL);
+	m_pkDict = new CCMutableDictionary<std::string, CCTexture2D*>();
 }
 
 MapTexturePool::~MapTexturePool()
 {
-	NDAsssert(MapTexturePool_defaultPool != NULL);
-	MapTexturePool_defaultPool = NULL;
-	CC_SAFE_RELEASE (m_dict);
+	NDAsssert(g_pkMapTexturePoolDefaultPool != NULL);
+	g_pkMapTexturePoolDefaultPool = NULL;
+	CC_SAFE_RELEASE (m_pkDict);
 }
 
 MapTexturePool* MapTexturePool::defaultPool()
 {
-	if (!MapTexturePool_defaultPool)
-		MapTexturePool_defaultPool = new MapTexturePool;
+	if (!g_pkMapTexturePoolDefaultPool)
+		g_pkMapTexturePoolDefaultPool = new MapTexturePool;
 
-	return MapTexturePool_defaultPool;
+	return g_pkMapTexturePoolDefaultPool;
 }
 
 void MapTexturePool::purgeDefaultPool()
 {
-	CC_SAFE_RELEASE_NULL (MapTexturePool_defaultPool);
+	CC_SAFE_RELEASE_NULL (g_pkMapTexturePoolDefaultPool);
 }
 
 CCTexture2D* MapTexturePool::addImage(const char* path, bool keep)
@@ -63,7 +63,7 @@ CCTexture2D* MapTexturePool::addImage(const char* path, bool keep)
 	// MUTEX:
 	// Needed since addImageAsync calls this method from a different thread
 
-	tex = m_dict->objectForKey(path);
+	tex = m_pkDict->objectForKey(path);
 
 	if (!tex)
 	{
@@ -76,7 +76,7 @@ CCTexture2D* MapTexturePool::addImage(const char* path, bool keep)
 
 		if (tex)
 		{
-			m_dict->setObject(tex, path);
+			m_pkDict->setObject(tex, path);
 			tex->release();
 		}
 	}
@@ -85,32 +85,35 @@ CCTexture2D* MapTexturePool::addImage(const char* path, bool keep)
 }
 
 NDMapSwitch::NDMapSwitch() :
-		m_nX(0), m_nY(0), m_nMapIndex(0), m_nPassIndex(0)
+m_nX(0),
+m_nY(0),
+m_nMapIndex(0),
+m_nPassIndex(0)
 {
-	memset(_lbName, 0, sizeof(_lbName));
-	memset(_lbDes, 0, sizeof(_lbDes));
+	memset(m_pkNameLabels, 0, sizeof(m_pkNameLabels));
+	memset(m_pkDesLabels, 0, sizeof(m_pkDesLabels));
 }
 
 NDMapSwitch::~NDMapSwitch()
 {
-	if (_lbName[0])
+	if (m_pkNameLabels[0])
 	{
-		delete _lbName[0];
+		delete m_pkNameLabels[0];
 	}
 
-	if (_lbName[1])
+	if (m_pkNameLabels[1])
 	{
-		delete _lbName[1];
+		delete m_pkNameLabels[1];
 	}
 
-	if (_lbDes[0])
+	if (m_pkDesLabels[0])
 	{
-		delete _lbDes[0];
+		delete m_pkDesLabels[0];
 	}
 
-	if (_lbDes[1])
+	if (m_pkDesLabels[1])
 	{
-		delete _lbDes[1];
+		delete m_pkDesLabels[1];
 	}
 }
 
@@ -181,41 +184,42 @@ NDMapSwitch::~NDMapSwitch()
 // 	}
 // }
 
-void NDMapSwitch::SetLabelNew(NDMapData* mapdata)
+void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 {
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
-	if (mapdata == NULL)
+
+	if (pkMapdata == NULL)
 	{
 		return;
 	}
 
 	//std::string name = NDCString("notopen"), des = "";
-	std::string name = "";
-	std::string des = m_DescDesMap;
-	name = m_NameDesMap;
+	std::string strName = "";
+	std::string strDes = m_strDescDesMap;
+	strName = m_strNameDesMap;
 
-	int tw = getStringSize(name.c_str(), 15).width;
-	int tx = m_nX * mapdata->getUnitSize() + DISPLAY_POS_X_OFFSET - tw / 2;
-	int ty = m_nY * mapdata->getUnitSize() + DISPLAY_POS_Y_OFFSET
+	int tw = getStringSize(strName.c_str(), 15).width;
+	int tx = m_nX * pkMapdata->getUnitSize() + DISPLAY_POS_X_OFFSET - tw / 2;
+	int ty = m_nY * pkMapdata->getUnitSize() + DISPLAY_POS_Y_OFFSET
 			- 62 * fScaleFactor;
 
-	if (!des.empty() && des != "")
+	if (!strDes.empty() && strDes != "")
 	{
-		int tx2 = m_nX * mapdata->getUnitSize() + 10 * fScaleFactor
-				- (getStringSize(des.c_str(), 15).width / 2);
-		int ty2 = m_nY * mapdata->getUnitSize() - 52 * fScaleFactor;	//ty;
+		int tx2 = m_nX * pkMapdata->getUnitSize() + 10 * fScaleFactor
+				- (getStringSize(strDes.c_str(), 15).width / 2);
+		int ty2 = m_nY * pkMapdata->getUnitSize() - 52 * fScaleFactor;	//ty;
 		//T.drawString2(g, introduce, tx2, ty2, 0xFFF5B4,0xC75900, 0);//后文字 0xFFF5B4, 0xC75900
-		this->SetLableByType(1, tx2, ty2, des.c_str(), INTCOLORTOCCC4(0xFFF5B4),
+		this->SetLableByType(1, tx2, ty2, strDes.c_str(), INTCOLORTOCCC4(0xFFF5B4),
 				INTCOLORTOCCC4(0xC75900),
-				CGSizeMake(mapdata->getColumns() * mapdata->getUnitSize(),
-						mapdata->getRows() * mapdata->getUnitSize()));
+				CGSizeMake(pkMapdata->getColumns() * pkMapdata->getUnitSize(),
+						pkMapdata->getRows() * pkMapdata->getUnitSize()));
 		ty -= 20 * fScaleFactor;
 	}
 	//T.drawString2(g, name, tx, ty, 0xFFFF00,0x2F4F4F,0);//0x2F4F4F
-	this->SetLableByType(0, tx, ty, name.c_str(), INTCOLORTOCCC4(0xFFFF00),
+	this->SetLableByType(0, tx, ty, strName.c_str(), INTCOLORTOCCC4(0xFFFF00),
 			INTCOLORTOCCC4(0x2F4F4F),
-			CGSizeMake(mapdata->getColumns() * mapdata->getUnitSize(),
-					mapdata->getRows() * mapdata->getUnitSize()));
+			CGSizeMake(pkMapdata->getColumns() * pkMapdata->getUnitSize(),
+					pkMapdata->getRows() * pkMapdata->getUnitSize()));
 
 }
 
@@ -229,92 +233,92 @@ void NDMapSwitch::SetLableByType(int eLableType, int x, int y, const char* text,
 
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
 
-	NDUILabel *lable[2];
-	memset(lable, 0, sizeof(lable));
+	NDUILabel* pkLabels[2];
+	memset(pkLabels, 0, sizeof(pkLabels));
 	if (eLableType == 0)
 	{
-		if (!_lbName[0])
+		if (!m_pkNameLabels[0])
 		{
-			_lbName[0] = new NDUILabel;
-			_lbName[0]->Initialization();
+			m_pkNameLabels[0] = new NDUILabel;
+			m_pkNameLabels[0]->Initialization();
 		}
 
-		if (!_lbName[1])
+		if (!m_pkNameLabels[1])
 		{
-			_lbName[1] = new NDUILabel;
-			_lbName[1]->Initialization();
+			m_pkNameLabels[1] = new NDUILabel;
+			m_pkNameLabels[1]->Initialization();
 		}
 
-		lable[0] = _lbName[0];
-		lable[1] = _lbName[1];
+		pkLabels[0] = m_pkNameLabels[0];
+		pkLabels[1] = m_pkNameLabels[1];
 	}
 	else if (eLableType == 1)
 	{
-		if (!_lbDes[0])
+		if (!m_pkDesLabels[0])
 		{
-			_lbDes[0] = new NDUILabel;
-			_lbDes[0]->Initialization();
+			m_pkDesLabels[0] = new NDUILabel;
+			m_pkDesLabels[0]->Initialization();
 		}
 
-		if (!_lbDes[1])
+		if (!m_pkDesLabels[1])
 		{
-			_lbDes[1] = new NDUILabel;
-			_lbDes[1]->Initialization();
+			m_pkDesLabels[1] = new NDUILabel;
+			m_pkDesLabels[1]->Initialization();
 		}
 
-		lable[0] = _lbDes[0];
-		lable[1] = _lbDes[1];
+		pkLabels[0] = m_pkDesLabels[0];
+		pkLabels[1] = m_pkDesLabels[1];
 	}
 
-	if (!lable[0] || !lable[1])
+	if (!pkLabels[0] || !pkLabels[1])
 	{
 		return;
 	}
 
-	lable[0]->SetText(text);
-	lable[1]->SetText(text);
+	pkLabels[0]->SetText(text);
+	pkLabels[1]->SetText(text);
 
-	lable[0]->SetFontColor(color1);
-	lable[1]->SetFontColor(color2);
+	pkLabels[0]->SetFontColor(color1);
+	pkLabels[1]->SetFontColor(color2);
 
-	lable[0]->SetFontSize(15);
-	lable[1]->SetFontSize(15);
+	pkLabels[0]->SetFontSize(15);
+	pkLabels[1]->SetFontSize(15);
 
 	CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
 
-	lable[1]->SetFrameRect(
+	pkLabels[1]->SetFrameRect(
 			CGRectMake(x + 1, y + sizewin.height + 1 - sizeParent.height,
 					sizewin.width, 20 * fScaleFactor));
-	lable[0]->SetFrameRect(
+	pkLabels[0]->SetFrameRect(
 			CGRectMake(x, y + sizewin.height - sizeParent.height, sizewin.width,
 					20 * fScaleFactor));
 }
 
 void NDMapSwitch::draw()
 {
-	if (_lbName[1])
+	if (m_pkNameLabels[1])
 	{
-		_lbName[1]->draw();
+		m_pkNameLabels[1]->draw();
 	}
 
-	if (_lbName[0])
+	if (m_pkNameLabels[0])
 	{
-		_lbName[0]->draw();
+		m_pkNameLabels[0]->draw();
 	}
 
-	if (_lbDes[1])
+	if (m_pkDesLabels[1])
 	{
-		_lbDes[1]->draw();
+		m_pkDesLabels[1]->draw();
 	}
 
-	if (_lbDes[0])
+	if (m_pkDesLabels[0])
 	{
-		_lbDes[0]->draw();
+		m_pkDesLabels[0]->draw();
 	}
 }
 
 NDSceneTile::NDSceneTile() :
-		m_nOrderID(0)
+m_nOrderID(0)
 {
 }
 
@@ -325,12 +329,19 @@ NDMapMonsterRange::NDMapMonsterRange() :
 }
 
 NDMapData::NDMapData() :
-		m_nLayerCount(0), m_nColumns(0), m_nRows(0), m_nUnitSize(0), m_nRoadBlockX(
-				-1), m_nRoadBlockY(-1)
+m_nLayerCount(0),
+m_nColumns(0),
+m_nRows(0),
+m_nUnitSize(0),
+m_nRoadBlockX(-1),
+m_nRoadBlockY(-1),
 //, m_MapTiles(NULL)
-				, m_pkObstacles(NULL), m_pkSceneTiles(NULL), m_pkBackgroundTiles(
-				NULL), m_Switchs(NULL), m_AnimationGroups(NULL), m_AniGroupParams(
-				NULL)
+m_pkObstacles(NULL),
+m_pkSceneTiles(NULL),
+m_pkBackgroundTiles(NULL),
+m_pkSwitchs(NULL),
+m_AnimationGroups(NULL),
+m_AniGroupParams(NULL)
 {
 }
 
@@ -340,7 +351,7 @@ NDMapData::~NDMapData()
 	CC_SAFE_DELETE (m_pkObstacles);
 	CC_SAFE_RELEASE (m_pkSceneTiles);
 	CC_SAFE_RELEASE (m_pkBackgroundTiles);
-	CC_SAFE_RELEASE (m_Switchs);
+	CC_SAFE_RELEASE (m_pkSwitchs);
 	CC_SAFE_RELEASE (m_AnimationGroups);
 	CC_SAFE_RELEASE (m_AniGroupParams);
 	MapTexturePool::defaultPool()->release();
@@ -385,7 +396,7 @@ void NDMapData::decode(FILE* pkStream)
 	//------------------->行数
 	m_nRows = kFileOp.readByte(pkStream);
 	//<-------------------使用到的图块资源
-	std::vector < std::string > _tileImages;
+	std::vector < std::string > kTileImages;
 	int nTileImageCount = kFileOp.readShort(pkStream);
 
 	for (int i = 0; i < nTileImageCount; i++)
@@ -399,7 +410,7 @@ void NDMapData::decode(FILE* pkStream)
 
 		if (pkFile)
 		{
-			_tileImages.push_back(pszImageName);
+			kTileImages.push_back(pszImageName);
 		}
 		else
 		{
@@ -431,9 +442,9 @@ void NDMapData::decode(FILE* pkStream)
 					//continue;
 				}
 
-				if (_tileImages.size() > nImageIndex)
+				if (kTileImages.size() > nImageIndex)
 				{
-					std::string imageName = _tileImages[nImageIndex];
+					std::string imageName = kTileImages[nImageIndex];
 
 					// 					CustomCCTexture2D *tile = new CustomCCTexture2D();
 					// 					tile->setTexture(MapTexturePool::defaultPool()->addImage(imageName.c_str(), true));	//[[CCTextureCache sharedTextureCache] addImage:imageName keepData:true]; 
@@ -468,8 +479,8 @@ void NDMapData::decode(FILE* pkStream)
  		}
 	}
 	//------------------->切屏
-	m_Switchs = CCArray::array();
-	m_Switchs->retain();
+	m_pkSwitchs = CCArray::array();
+	m_pkSwitchs->retain();
 	int switchsCount = kFileOp.readByte(pkStream);
 	for (int i = 0; i < switchsCount; i++)
 	{
@@ -664,7 +675,7 @@ void NDMapData::decode(FILE* pkStream)
 
 		int x = kFileOp.readShort(pkStream);		//x坐标
 		int y = kFileOp.readShort(pkStream);		//y坐标
-		int aniOrder = y + kFileOp.readShort(pkStream);	//排序重心
+		int nAniOrder = y + kFileOp.readShort(pkStream);	//排序重心
 
 		anigroup_param* pkDict = new anigroup_param;
 
@@ -673,7 +684,7 @@ void NDMapData::decode(FILE* pkStream)
 		pkDict->insert(std::make_pair("positionY", y));
 		pkDict->insert(std::make_pair("mapSizeW", m_nColumns * m_nUnitSize));
 		pkDict->insert(std::make_pair("mapSizeH", m_nRows * m_nUnitSize));
-		pkDict->insert(std::make_pair("orderId", aniOrder));
+		pkDict->insert(std::make_pair("orderId", nAniOrder));
 		pkDict->insert(std::make_pair("reverse", 0));
 		pkDict->insert(std::make_pair("reverse", 0));
 
@@ -853,6 +864,6 @@ void NDMapData::addMapSwitch(unsigned int x,			// 切屏点 x
 	pkMapSwitch->setDescDesMap(desc);
 	pkMapSwitch->SetLabelNew(this);
 
-	m_Switchs->addObject(pkMapSwitch);
+	m_pkSwitchs->addObject(pkMapSwitch);
 	pkMapSwitch->release();
 }

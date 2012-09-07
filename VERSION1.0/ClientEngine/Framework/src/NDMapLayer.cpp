@@ -880,14 +880,14 @@ void NDMapLayer::DrawScenesAndAnimations()
 
  }
  */
-CGPoint NDMapLayer::ConvertToMapPoint(CGPoint screenPoint)
+CGPoint NDMapLayer::ConvertToMapPoint(CGPoint kScreenPoint)
 {
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	CGPoint kTempScreen = ccpAdd(kScreenPoint,kScreenPoint);	///< 因分辨率成倍，所以对触发点的坐标进行2倍，郭浩
+	CGPoint kTempPoint = ccpSub(kTempScreen,
+		CGPointMake(kWinSize.width / 2, kWinSize.height / 2));
 
-	CGPoint kPoint = ccpAdd(
-		ccpSub(screenPoint,
-		CGPointMake(winSize.width / 2, winSize.height / 2)),
-		m_kScreenCenter);
+	CGPoint kPoint = ccpAdd(kTempPoint,	m_kScreenCenter);
 
 	//kPoint.y = m_kScreenCenter.y - kPoint.y;
 
@@ -896,11 +896,11 @@ CGPoint NDMapLayer::ConvertToMapPoint(CGPoint screenPoint)
 
 bool NDMapLayer::isMapPointInScreen(CGPoint mapPoint)
 {
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 	return CGRectContainsPoint(
-			CGRectMake(m_kScreenCenter.x - winSize.width / 2,
-					m_kScreenCenter.y - winSize.height / 2, winSize.width,
-					winSize.height), mapPoint);
+			CGRectMake(m_kScreenCenter.x - kWinSize.width / 2,
+					m_kScreenCenter.y - kWinSize.height / 2, kWinSize.width,
+					kWinSize.height), mapPoint);
 }
 
 bool NDMapLayer::isMapRectIntersectScreen(CGRect mapRect)

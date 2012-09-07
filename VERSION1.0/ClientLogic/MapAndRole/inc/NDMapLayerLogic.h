@@ -23,20 +23,20 @@ public:
 	NDMapLayerLogic();
 	~NDMapLayerLogic();
 public:
-	void DidFinishLaunching();override
+	void DidFinishLaunching();
 
 	bool isAutoFight();
-	bool TouchBegin(NDTouch* touch);override
-	bool TouchEnd(NDTouch* touch);override
-	void TouchCancelled(NDTouch* touch);override
-	bool TouchMoved(NDTouch* touch);override
-	void Update(unsigned long ulDiff);override
-	void OnTimer(OBJID tag);override
+	bool TouchBegin(NDTouch* touch);
+	bool TouchEnd(NDTouch* touch);
+	void TouchCancelled(NDTouch* touch);
+	bool TouchMoved(NDTouch* touch);
+	void Update(unsigned long ulDiff);
+	void OnTimer(OBJID uiTag);
 private:
-	NDTimer m_timer;
-	double m_doubleTimeStamp;
+	NDTimer m_kTimer;
+	double m_dTimeStamp;
 	bool m_bLongTouch;
-	CGPoint m_posTouch;
+	CGPoint m_kPosTouch;
 	bool m_bPathing;
 
 private:

@@ -11,67 +11,69 @@
 using namespace NDEngine;
 using namespace cocos2d;
 
-
-DictionaryObject::DictionaryObject()
-: m_NdObject(NULL)
+DictionaryObject::DictionaryObject() :
+m_NdObject(NULL)
 {
 
 }
 
 DictionaryObject::~DictionaryObject()
 {
-	CC_SAFE_DELETE(m_NdObject);
+	CC_SAFE_DELETE (m_NdObject);
 }
 
 namespace NDEngine
 {
-	IMPLEMENT_CLASS(NDDictionary, NDObject)
-	
-	NDDictionary::NDDictionary()
+IMPLEMENT_CLASS(NDDictionary, NDObject)
+
+NDDictionary::NDDictionary()
+{
+	m_nsDictionary = new CCMutableDictionary<std::string, cocos2d::CCObject*>();
+}
+
+NDDictionary::~NDDictionary()
+{
+	this->RemoveAllObjects();
+	CC_SAFE_RELEASE (m_nsDictionary);
+}
+
+void NDDictionary::SetObject(NDObject* obj, const char* key)
+{
+	if (obj)
 	{
-		m_nsDictionary = new CCMutableDictionary<std::string, cocos2d::CCObject*>();
+		DictionaryObject *dictObj = new DictionaryObject;
+		dictObj->setNdObject(obj);
+		m_nsDictionary->setObject(dictObj, key);
+		dictObj->release();
 	}
-	
-	NDDictionary::~NDDictionary()
+}
+
+NDObject* NDDictionary::Object(const char* key)
+{
+	DictionaryObject *dictObj =
+			(DictionaryObject *) m_nsDictionary->objectForKey(key);
+	if (dictObj)
 	{
-		this->RemoveAllObjects();
-		CC_SAFE_RELEASE(m_nsDictionary);
+		return dictObj->getNdObject();
 	}
-	
-	void NDDictionary::SetObject(NDObject* obj, const char* key)
+	return NULL;
+}
+
+void NDDictionary::RemoveObject(const char* key)
+{
+	DictionaryObject *dictObj =
+			(DictionaryObject *) m_nsDictionary->objectForKey(key);
+	if (dictObj)
 	{
-		if (obj) 
-		{
-			DictionaryObject *dictObj = new DictionaryObject;
-			dictObj->setNdObject(obj);
-			m_nsDictionary->setObject(dictObj, key);
-			dictObj->release();
-		}
+		delete dictObj->getNdObject();
+		dictObj->setNdObject(NULL);
+		m_nsDictionary->removeObjectForKey(key);
 	}
-	
-	NDObject* NDDictionary::Object(const char* key)
-	{
-		DictionaryObject *dictObj = (DictionaryObject *)m_nsDictionary->objectForKey(key);
-		if (dictObj) 
-		{
-			return dictObj->getNdObject();
-		}
-		return NULL;
-	}
-	
-	void NDDictionary::RemoveObject(const char* key)
-	{
-		DictionaryObject *dictObj = (DictionaryObject *)m_nsDictionary->objectForKey(key);
-		if (dictObj) 
-		{
-			delete dictObj->getNdObject();
-			dictObj->setNdObject(NULL);
-			m_nsDictionary->removeObjectForKey(key);
-		}		
-	}
-	
-	void NDDictionary::RemoveAllObjects()
-	{
-		m_nsDictionary->removeAllObjects();
-	}
+}
+
+void NDDictionary::RemoveAllObjects()
+{
+	m_nsDictionary->removeAllObjects();
+}
+
 }

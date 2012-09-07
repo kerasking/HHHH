@@ -40,19 +40,19 @@ public:
 	virtual ~CAStar();
 
 private:
-	DEQUE_NODE m_setNode;
+	DEQUE_NODE m_kSetNode;
 	int m_nNodeIndex;
 
-	MAP_NODE m_setOpen;
-	MAP_NODE m_setClose;
+	MAP_NODE m_kSetOpen;
+	MAP_NODE m_kSetClose;
 
-	DEQUE_NODE m_setPath;
+	DEQUE_NODE m_kSetPath;
 
-	CMyPos m_posStart;
-	CMyPos m_posTarget;
+	CMyPos m_kPosStart;
+	CMyPos m_kPosTarget;
 
-	CMyPos m_posRealTarget;
-	NodeInfo* m_pNearestNode;
+	CMyPos m_kPosRealTarget;
+	NodeInfo* m_pkNearestNode;
 
 	unsigned long m_uMaxSerachTime;
 

@@ -271,7 +271,7 @@ public:
 
 	void SetPointList(std::vector<CGPoint>& vec_point)
 	{
-		m_pointList = vec_point;
+		m_kPointList = vec_point;
 		StartMoving();
 	}
 
@@ -392,7 +392,7 @@ protected:
 
 	int m_weaponType, m_secWeaponType, m_weaponQuality, m_secWeaponQuality,
 			m_capQuality, m_armorQuality, m_cloakQuality;
-	CGPoint m_position;
+	CGPoint m_kPosition;
 	NDAnimation *m_pkCurrentAnimation;
 	NDFrameRunRecord *m_pkFrameRunRecord;
 	NDAnimationGroup *m_pkAniGroup;
@@ -405,7 +405,7 @@ protected:
 	int m_nColorInfo;
 	int m_nCloak;
 
-	std::vector<CGPoint> m_pointList;
+	std::vector<CGPoint> m_kPointList;
 	int m_iSpeed;
 	CGPoint m_kTargetPos;
 

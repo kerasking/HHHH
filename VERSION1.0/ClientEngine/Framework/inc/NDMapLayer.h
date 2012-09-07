@@ -94,7 +94,7 @@ public:
 //		作用：将屏幕坐标转化成地图坐标
 //		参数：screenPoint屏幕坐标
 //		返回值：地图坐标
-	CGPoint ConvertToMapPoint(CGPoint screenPoint);
+	CGPoint ConvertToMapPoint(CGPoint kScreenPoint);
 //		
 //		函数：isMapPointInScreen
 //		作用：判断地图坐标点是否在屏幕范围内

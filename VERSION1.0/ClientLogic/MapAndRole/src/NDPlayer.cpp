@@ -65,7 +65,7 @@ static NDPlayer* g_pkDefaultHero = NULL;
 
 IMPLEMENT_CLASS(NDPlayer, NDManualRole)
 
-bool NDPlayer::m_bFirstUse = true;
+bool NDPlayer::ms_bFirstUse = true;
 
 NDPlayer::NDPlayer() :
 //money(0),
@@ -76,8 +76,8 @@ m_nMagPoint(0),
 m_nDefPoint(0),
 m_nLevelUpExp(0),
 m_nSP(0),
-swGuojia(0),
-swCamp(0),
+m_nSWCountry(0),
+m_nSWCamp(0),
 m_nHonour(0),
 //synRank(-1),
 m_nSynMoney(0),
@@ -118,7 +118,7 @@ idCurMap(0)
 	/** 物理命中附加 */
 	wuLiMingZhongAdd = 0;
 
-	jifeng = 0;
+	m_nGamePoints = 0;
 
 	m_nServerCol = -1;
 	m_nServerRow = -1;
@@ -127,73 +127,62 @@ idCurMap(0)
 	m_nSkillPoint = 0;
 
 	// 装备直接属性增加值
-	eAtkSpd = 0;
-	eAtk = 0;
-	eDef = 0;
-	eHardAtk = 0;
-	eSkillAtk = 0;
-	eSkillDef = 0;
-	eSkillHard = 0;
-	eDodge = 0;
-	ePhyHit = 0;
+	m_eAtkSpd = 0;
+	m_eAtk = 0;
+	m_eDef = 0;
+	m_eHardAtk = 0;
+	m_eSkillAtk = 0;
+	m_eSkillDef = 0;
+	m_eSkillHard = 0;
+	m_eDodge = 0;
+	m_ePhyHit = 0;
 
-	iTmpPhyPoint = 0;
-	iTmpDexPoint = 0;
-	iTmpMagPoint = 0;
-	iTmpDefPoint = 0;
-	iTmpRestPoint = 0;
+	m_iTmpPhyPoint = 0;
+	m_iTmpDexPoint = 0;
+	m_iTmpMagPoint = 0;
+	m_iTmpDefPoint = 0;
+	m_iTmpRestPoint = 0;
 
 	m_nBeginProtectedTime = 0;
 
 	m_iFocusManuRoleID = -1;
 	//m_npcFocus = NULL;
 
-	targetIndex = 0;
-
+	m_nTargetIndex = 0;
 	m_bCollide = false;
-
-	m_timer = new NDTimer();
-
-	m_dlgGather = NULL;
+	m_pkTimer = new NDTimer();
+	m_kGatherDlg = NULL;
 
 	memset(&m_caclData, 0, sizeof(m_caclData));
 
 	m_bRequireDacoity = false;
-
 	m_iDacoityStep = 0;
-
 	m_iBattleFieldStep = 0;
 
 	InvalidNPC();
 
-	activityValue = 0;
-
-	activityValueMax = 0;
-
+	m_nActivityValue = 0;
+	m_nActivityValueMax = 0;
 	m_nExpendHonour = 0;
-
 	m_nMaxSlot = 0;
-
 	m_nVipLev = 0;
-
 	m_nLookface = 0;
-
 	m_bLocked = false;
 }
 
 NDPlayer::~NDPlayer()
 {
 	g_pkDefaultHero = NULL;
-	delete m_timer;
-	m_timer = NULL;
+	delete m_pkTimer;
+	m_pkTimer = NULL;
 }
 
 NDPlayer& NDPlayer::defaultHero(int lookface/* = 0*/,
 		bool bSetLookFace/*=false*/)
 {
-	if (m_bFirstUse)
+	if (ms_bFirstUse)
 	{
-		m_bFirstUse = false;
+		ms_bFirstUse = false;
 	}
 
 	if (!g_pkDefaultHero)
@@ -241,9 +230,9 @@ void NDPlayer::SendNpcInteractionMessage(unsigned int idNpc)
 	return;
 
 	ShowProgressBar;
-	NDTransData data(_MSG_NPC);
-	data << (int) idNpc << (unsigned char) 0 << (unsigned char) 0 << int(123);
-	NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
+	NDTransData kTranslateData(_MSG_NPC);
+	kTranslateData << (int) idNpc << (unsigned char) 0 << (unsigned char) 0 << int(123);
+	NDDataTransThread::DefaultThread()->GetSocket()->Send(&kTranslateData);
 }
 
 bool NDPlayer::DealClickPointInSideNpc(CGPoint point)
@@ -335,10 +324,10 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 	//
 	//bool bNpcPath = false;
 	//
-	NDScene* runningScene = NDDirector::DefaultDirector()->GetRunningScene();
-	if (runningScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene)))
+	NDScene* pkRunningScene = NDDirector::DefaultDirector()->GetRunningScene();
+	if (pkRunningScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene)))
 	{
-		CSMGameScene* gameScene = (CSMGameScene*)runningScene;
+		CSMGameScene* gameScene = (CSMGameScene*)pkRunningScene;
 		if (!NDUISynLayer::IsShown())// && !gameScene->IsUIShow())
 		{
 			int a = 10;
@@ -508,7 +497,7 @@ void NDPlayer::Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 	else
 	{
 		std::vector < CGPoint > vec_pos;
-		kPos = ccpAdd(kPos,kPos);
+		//kPos = ccpAdd(kPos,kPos);
 		vec_pos.push_back(kPos);
 		this->WalkToPosition(vec_pos, speed, true, mustArrive);
 	}
@@ -677,12 +666,12 @@ void NDPlayer::OnMoving(bool bLastPos)
 void NDPlayer::OnMoveBegin()
 {
 	NDMapLayer* maplayer = M_GetMapLayer();
-	if (!maplayer || m_pointList.size() == 0)
+	if (!maplayer || m_kPointList.size() == 0)
 	{
 		return;
 	}
 
-	CGPoint pos = m_pointList[m_pointList.size() - 1];
+	CGPoint pos = m_kPointList[m_kPointList.size() - 1];
 	int nX = (pos.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
 	int nY = (pos.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
 
@@ -693,10 +682,10 @@ void NDPlayer::OnMoveEnd()
 {
 	ScriptGlobalEvent::OnEvent (GE_ONMOVE);
 
-	NDMapLayer* maplayer = M_GetMapLayer();
-	if (maplayer)
+	NDMapLayer* pkMaplayer = M_GetMapLayer();
+	if (pkMaplayer)
 	{
-		maplayer->ShowRoadSign(false);
+		pkMaplayer->ShowRoadSign(false);
 	}
 
 	if (!isTeamLeader() && isTeamMember())
@@ -705,6 +694,7 @@ void NDPlayer::OnMoveEnd()
 	}
 
 	SetAction(false);
+	//SetCurrentAnimation(MANUELROLE_STAND,false);
 	NDManualRole::OnMoveEnd();
 	if (isTeamLeader())
 	{
@@ -727,15 +717,15 @@ void NDPlayer::OnDrawEnd(bool bDraw)
 
 void NDPlayer::CaclEquipEffect()
 {
-	eAtkSpd = 0;
-	eAtk = 0;
-	eDef = 0;
-	eHardAtk = 0;
-	eSkillAtk = 0;
-	eSkillDef = 0;
-	eSkillHard = 0;
-	eDodge = 0;
-	ePhyHit = 0;
+	m_eAtkSpd = 0;
+	m_eAtk = 0;
+	m_eDef = 0;
+	m_eHardAtk = 0;
+	m_eSkillAtk = 0;
+	m_eSkillDef = 0;
+	m_eSkillHard = 0;
+	m_eDodge = 0;
+	m_ePhyHit = 0;
 
 	for (int i = Item::eEP_Begin; i < Item::eEP_End; i++)
 	{
@@ -756,24 +746,24 @@ void NDPlayer::CaclEquipEffect()
 			continue;
 		}
 
-		eAtkSpd += itemtype->m_data.m_atk_speed + item->getInlayAtk_speed();
+		m_eAtkSpd += itemtype->m_data.m_atk_speed + item->getInlayAtk_speed();
 
-		eAtk += item->getAdditionResult(itemtype->m_data.m_enhancedId,
+		m_eAtk += item->getAdditionResult(itemtype->m_data.m_enhancedId,
 				item->iAddition, itemtype->m_data.m_atk) + item->getInlayAtk();
-		eDef += item->getAdditionResult(itemtype->m_data.m_enhancedId,
+		m_eDef += item->getAdditionResult(itemtype->m_data.m_enhancedId,
 				item->iAddition, itemtype->m_data.m_def) + item->getInlayDef();
-		eHardAtk += itemtype->m_data.m_hard_hitrate
+		m_eHardAtk += itemtype->m_data.m_hard_hitrate
 				+ item->getInlayHard_hitrate();
-		eSkillAtk += item->getAdditionResult(itemtype->m_data.m_enhancedId,
+		m_eSkillAtk += item->getAdditionResult(itemtype->m_data.m_enhancedId,
 				item->iAddition, itemtype->m_data.m_mag_atk)
 				+ item->getInlayMag_atk();
-		eSkillDef += item->getAdditionResult(itemtype->m_data.m_enhancedId,
+		m_eSkillDef += item->getAdditionResult(itemtype->m_data.m_enhancedId,
 				item->iAddition, itemtype->m_data.m_mag_def)
 				+ item->getInlayMag_def();
-		eSkillHard += itemtype->m_data.m_mana_limit
+		m_eSkillHard += itemtype->m_data.m_mana_limit
 				+ item->getInlayMana_limit();
-		eDodge += itemtype->m_data.m_dodge + item->getInlayDodge();
-		ePhyHit += itemtype->m_data.m_hitrate + item->getInlayHitrate(); // 物理命中
+		m_eDodge += itemtype->m_data.m_dodge + item->getInlayDodge();
+		m_ePhyHit += itemtype->m_data.m_hitrate + item->getInlayHitrate(); // 物理命中
 	}
 }
 

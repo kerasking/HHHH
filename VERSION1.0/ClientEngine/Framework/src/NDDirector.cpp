@@ -74,7 +74,7 @@ void NDDirector::Initialization()
 	CCTexture2D::setDefaultAlphaPixelFormat (kTexture2DPixelFormat_RGBA8888);
 
 	//#if ND_DEBUG_STATE == 1
-	m_pkDirector->setDisplayFPS(true);
+	m_pkDirector->setDisplayFPS(false);
 	//#else
 	//m_director.displayFPS = NO;
 	//#endif

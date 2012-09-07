@@ -22,7 +22,7 @@ public:
 	cocos2d::CCTexture2D* addImage(const char* path, bool keep);
 
 private:
-	cocos2d::CCMutableDictionary<std::string, cocos2d::CCTexture2D*> *m_dict;
+	cocos2d::CCMutableDictionary<std::string, cocos2d::CCTexture2D*>* m_pkDict;
 
 private:
 	MapTexturePool();
@@ -38,22 +38,23 @@ class NDMapSwitch: public cocos2d::CCObject
 	CC_SYNTHESIZE(int, m_nY, Y)
 	CC_SYNTHESIZE(int, m_nMapIndex, MapIndex)
 	CC_SYNTHESIZE(int, m_nPassIndex, PassIndex)
-	CC_SYNTHESIZE(std::string, m_NameDesMap, NameDesMap)
-	CC_SYNTHESIZE(std::string, m_DescDesMap, DescDesMap)
+	CC_SYNTHESIZE(std::string, m_strNameDesMap, NameDesMap)
+	CC_SYNTHESIZE(std::string, m_strDescDesMap, DescDesMap)
 
 public:
 	NDMapSwitch();
 	~NDMapSwitch();
 
 	void SetLabel(NDMapData* mapdata);
-	void SetLabelNew(NDMapData* mapdata);
+	void SetLabelNew(NDMapData* pkMapdata);
 	void SetLableByType(int eLableType, int x, int y, const char* text,
 			cocos2d::ccColor4B color1, cocos2d::ccColor4B color2,
 			CGSize sizeParent);
 	void draw();
 
 private:
-	NDEngine::NDUILabel *_lbName[2], *_lbDes[2];
+	NDEngine::NDUILabel* m_pkNameLabels[2];
+	NDEngine::NDUILabel* m_pkDesLabels[2];
 };
 
 //²¼¾°
@@ -101,7 +102,7 @@ public:
 	CC_SYNTHESIZE(std::vector<bool>*, m_pkObstacles, Obstacles)
 	CC_SYNTHESIZE(cocos2d::CCArray*, m_pkSceneTiles, SceneTiles)
 	CC_SYNTHESIZE(cocos2d::CCArray*, m_pkBackgroundTiles, BgTiles)
-	CC_SYNTHESIZE(cocos2d::CCArray*, m_Switchs, Switchs)
+	CC_SYNTHESIZE(cocos2d::CCArray*, m_pkSwitchs, Switchs)
 	CC_SYNTHESIZE_READONLY(cocos2d::CCArray*, m_AnimationGroups, AnimationGroups)
 	CC_SYNTHESIZE(cocos2d::CCArray*, m_AniGroupParams, AniGroupParams)
 

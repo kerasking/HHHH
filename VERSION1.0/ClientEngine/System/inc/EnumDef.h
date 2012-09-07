@@ -15,7 +15,7 @@
 
 //同客户端对应
 enum USER_ATTR_TYPE
-{  
+{
 	USERATTRIB_INVALID	= -1,		// 非法值
 	
 	USERATTRIB_LIFE = 0,			//血

@@ -332,7 +332,7 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 
 	//Load Animation Group
 	//sex = lookface / 100000000 % 10; // 人物性别，1-男性，2-女性；
-	direct = 2;
+	m_nDirect = 2;
 
 //		if (sex % 2 == SpriteSexMale) 
 	int nModelID = 2;//lookface / 1000000;
@@ -346,7 +346,7 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 //		else 
 //			NDSprite::Initialization(MANUELROLE_HUMAN_FEMALE);
 
-	m_bFaceRight = direct == 2;
+	m_bFaceRight = m_nDirect == 2;
 
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 
@@ -396,7 +396,7 @@ void NDManualRole::OnMoving(bool bLastPos)
 	/***
 	 * @end
 	 */
-	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
+	//SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 	int a = 10;
 
 	//if (isTeamLeader())
@@ -405,15 +405,15 @@ void NDManualRole::OnMoving(bool bLastPos)
 //		}
 }
 
-void NDManualRole::WalkToPosition(const std::vector<CGPoint>& vec_toPos,
-		SpriteSpeed speed, bool moveMap, bool mustArrive/*=false*/)
+void NDManualRole::WalkToPosition(const std::vector<CGPoint>& kToPosVector,
+		SpriteSpeed eSpeed, bool bMoveMap, bool bMustArrive/*=false*/)
 {
-	if (vec_toPos.empty())
+	if (kToPosVector.empty())
 	{
 		return;
 	}
 
-	if (this->GetPosition().x > vec_toPos[0].x)
+	if (this->GetPosition().x > kToPosVector[0].x)
 	{
 		m_bFaceRight = false;
 	}
@@ -425,15 +425,15 @@ void NDManualRole::WalkToPosition(const std::vector<CGPoint>& vec_toPos,
 	if (isTeamLeader() || !isTeamMember())
 	{
 		bool bGnoreMask = IsInState(USERSTATE_FLY); // && NDMapMgrObj.canFly(); ///< 临时性注释 郭浩 外加一个分号
-		this->MoveToPosition(vec_toPos,
+		this->MoveToPosition(kToPosVector,
 				IsInState(USERSTATE_SPEED_UP) ?
-						SpriteSpeedStep8 : SpriteSpeedStep4, moveMap,
-				bGnoreMask, mustArrive);
+						SpriteSpeedStep8 : SpriteSpeedStep4, bMoveMap,
+				bGnoreMask, bMustArrive);
 		if (isTeamLeader())
 		{
-			if (!m_pointList.empty())
+			if (!m_kPointList.empty())
 			{
-				teamMemberWalkToPosition(vec_toPos);
+				teamMemberWalkToPosition(kToPosVector);
 			}
 			else
 			{
@@ -466,7 +466,7 @@ void NDManualRole::WalkToPosition(const std::vector<CGPoint>& vec_toPos,
 	if (m_pkRidePet)
 	{
 		m_pkRidePet->m_bFaceRight = m_bFaceRight;
-		m_pkRidePet->WalkToPosition(vec_toPos[0]);
+		m_pkRidePet->WalkToPosition(kToPosVector[0]);
 	}
 
 	SetAction(true);
@@ -882,13 +882,13 @@ void NDManualRole::SetTeamToLastPos()
 
 	std::vector < CGPoint > vec_pos;
 	CGPoint kCurrentPosition;
-	if (m_pointList.empty())
+	if (m_kPointList.empty())
 	{
 		kCurrentPosition = GetPosition();
 	}
 	else
 	{
-		kCurrentPosition = m_pointList.at(m_pointList.size() - 1);
+		kCurrentPosition = m_kPointList.at(m_kPointList.size() - 1);
 	}
 
 	deque<int>::iterator itdeque = m_kDequeWalk.begin();
@@ -1063,7 +1063,7 @@ void NDManualRole::OnMoveEnd()
 //		}
 }
 
-void NDManualRole::SetAction(bool bMove, bool ignoreFighting/*=false*/)
+void NDManualRole::SetAction(bool bMove, bool bIgnoreFighting/*=false*/)
 {
 	//int animationIndex = MANUELROLE_STAND;
 //		if (bMove) 
@@ -1139,23 +1139,32 @@ void NDManualRole::SetAction(bool bMove, bool ignoreFighting/*=false*/)
 		 {// 溜宠移动
 		 AnimationListObj.moveAction(TYPE_ENEMYROLE, m_pBattlePetShow, m_faceRight);
 		 }*/
-		if (AssuredRidePet() && !isTransformed())
-		{
-			this->setMoveActionWithRidePet();
-		}
-		else
-		{ // 人物普通移动
+			/***
+			* 临时性注释 郭浩
+			* begin
+			*/
+		//if (AssuredRidePet() && !isTransformed())
+		//{
+		//	this->setMoveActionWithRidePet();
+		//}
+		//else
+		//{ // 人物普通移动
+			/***
+			* 临时性注释 郭浩
+			* end
+			*/
+
 			if (isTransformed())
 			{
 				AnimationListObj.moveAction(TYPE_MANUALROLE,
-						m_pkAniGroupTransformed, 1 - m_bFaceRight);
+					m_pkAniGroupTransformed, 1 - m_bFaceRight);
 			}
 			else
 			{
 				AnimationListObj.moveAction(TYPE_MANUALROLE, this,
-						m_bFaceRight);
+					m_bFaceRight);
 			}
-		}
+	//	}	///< 临时性注释 郭浩
 	}
 	else
 	{
@@ -1168,23 +1177,33 @@ void NDManualRole::SetAction(bool bMove, bool ignoreFighting/*=false*/)
 		 {// 溜宠站立
 		 AnimationListObj.standAction(TYPE_ENEMYROLE, m_pBattlePetShow, m_faceRight);
 		 }*/
-		if (AssuredRidePet() && !isTransformed())
-		{ // 骑宠站立
-			this->setStandActionWithRidePet();
+
+		/***
+		* 临时性注释 郭浩
+		* begin
+		*/
+		//if (AssuredRidePet() && !isTransformed())
+		//{ // 骑宠站立
+		//	this->setStandActionWithRidePet();
+		//}
+		//else
+		//{
+		/***
+		* 临时性注释 郭浩
+		* end
+		*/
+
+		if (isTransformed())
+		{
+			AnimationListObj.standAction(TYPE_MANUALROLE,
+				m_pkAniGroupTransformed, 1 - m_bFaceRight);
 		}
 		else
 		{
-			if (isTransformed())
-			{
-				AnimationListObj.standAction(TYPE_MANUALROLE,
-						m_pkAniGroupTransformed, 1 - m_bFaceRight);
-			}
-			else
-			{
-				AnimationListObj.standAction(TYPE_MANUALROLE, this,
-						m_bFaceRight);
-			}
+			AnimationListObj.standAction(TYPE_MANUALROLE, this,
+				m_bFaceRight);
 		}
+		//} ///< 临时性注释 郭浩 
 	}
 
 }
@@ -2413,18 +2432,18 @@ void NDManualRole::drawServerEffect(std::vector<ServerEffect>& vEffect,
 		ServerEffect& serverEffect = *it;
 
 		float ty = 0;
-		float tx = m_position.x - 4;
+		float tx = m_kPosition.x - 4;
 
 		if (serverEffect.bQiZhi)
 		{
 			if (isTransformed())
 			{
-				ty = m_position.y - DISPLAY_POS_Y_OFFSET
+				ty = m_kPosition.y - DISPLAY_POS_Y_OFFSET
 						- m_pkAniGroupTransformed->getGravityY() + 46;
 			}
 			else
 			{
-				ty = m_position.y - DISPLAY_POS_Y_OFFSET - getGravityY() + 46;
+				ty = m_kPosition.y - DISPLAY_POS_Y_OFFSET - getGravityY() + 46;
 			}
 
 			if (isEffectTurn(serverEffect.severEffectId / 10000 % 10))
@@ -2434,12 +2453,12 @@ void NDManualRole::drawServerEffect(std::vector<ServerEffect>& vEffect,
 		}
 		else
 		{
-			tx = m_position.x + (m_bFaceRight ? 0 : 2);
+			tx = m_kPosition.x + (m_bFaceRight ? 0 : 2);
 			//ty = m_position.y + 8;// + (ridepet ? -8 : 0);
 
 			bool gravity = (serverEffect.severEffectId / 1000000 % 10) == 1;
 
-			ty = m_position.y - DISPLAY_POS_Y_OFFSET
+			ty = m_kPosition.y - DISPLAY_POS_Y_OFFSET
 					- (gravity ? getGravityY() : 0) + 46 + 32;
 		}
 
@@ -2495,7 +2514,7 @@ bool NDManualRole::IsServerEffectHasQiZhi()
 
 CGRect NDManualRole::GetFocusRect()
 {
-	int tx = m_position.x - DISPLAY_POS_X_OFFSET - 4;
+	int tx = m_kPosition.x - DISPLAY_POS_X_OFFSET - 4;
 	int ty = 0;
 	int w = 24;
 	int h = 0;
@@ -2504,20 +2523,20 @@ CGRect NDManualRole::GetFocusRect()
 	{
 		CGSize sizeGraveStone = m_picGraveStone->GetSize();
 		h = sizeGraveStone.height;
-		ty = m_position.y - 16;
+		ty = m_kPosition.y - 16;
 		w = sizeGraveStone.width;
 		tx -= 4;
 	}
 	else if (isTransformed())
 	{
 		h = this->m_pkAniGroupTransformed->GetHeight();
-		ty = m_position.y - h;
+		ty = m_kPosition.y - h;
 		w = this->m_pkAniGroupTransformed->GetWidth();
 	}
 	else
 	{
 		h = this->getGravityY();
-		ty = m_position.y - h + 22;
+		ty = m_kPosition.y - h + 22;
 		w = this->GetWidth();
 	}
 

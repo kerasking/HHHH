@@ -154,6 +154,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 	NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
 	pkLayer->AddChild(&kPlayer, 111, 1000);
+	kPlayer.SetCurrentAnimation(MANUELROLE_STAND,true);
 
 // 	//add by ZhangDi 120904
 // 	DramaObj.Start();

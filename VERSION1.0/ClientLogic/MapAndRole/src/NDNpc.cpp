@@ -89,8 +89,8 @@ NDNpc::~NDNpc()
 
 void NDNpc::Initialization(int nLookface)
 {
-	sex = nLookface / 100000000 % 10;
-	model = nLookface / 1000 % 100;
+	m_nSex = nLookface / 100000000 % 10;
+	m_nModel = nLookface / 1000 % 100;
 	//lookface = 2000000;
 
 	tq::CString sprFile;
@@ -109,7 +109,7 @@ void NDNpc::Initialization(int nLookface)
 
 	NDSprite::Initialization(sprFile);
 
-	m_bFaceRight = direct == 2;
+	m_bFaceRight = m_nDirect == 2;
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 }
 
@@ -403,8 +403,8 @@ bool NDNpc::IsPointInside(CGPoint point)
 {
 	if (m_pkCurrentAnimation)
 	{
-		CGRect kRect = CGRectMake(this->m_position.x - this->GetWidth() / 2,
-				this->m_position.y - this->GetHeight(), this->GetWidth(),
+		CGRect kRect = CGRectMake(this->m_kPosition.x - this->GetWidth() / 2,
+				this->m_kPosition.y - this->GetHeight(), this->GetWidth(),
 				this->GetHeight());
 
 		if (CGRectContainsPoint(kRect, point))

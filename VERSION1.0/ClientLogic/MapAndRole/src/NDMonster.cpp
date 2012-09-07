@@ -285,8 +285,8 @@ bool NDMonster::OnDrawBegin(bool bDraw)
 
 		if (m_nMonsterCatogary == MONSTER_BOSS)
 		{
-			int iX = m_position.x;
-			int iY = m_position.y-DISPLAY_POS_Y_OFFSET;
+			int iX = m_kPosition.x;
+			int iY = m_kPosition.y-DISPLAY_POS_Y_OFFSET;
 			iX += getGravityX()-GetWidth()/2;
 			iY += BASE_BOTTOM_WH + 8;
 			bossRing->SetPosition(ccp(iX, iY));
@@ -305,11 +305,11 @@ void NDMonster::MoveToPosition(CGPoint toPos,
 		NDLayer* layer = (NDLayer *) this->GetParent();
 		if (layer->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
-			m_pointList.clear();
+			m_kPointList.clear();
 			m_bMoveMap = moveMap;
 			m_bIsMoving = true;
 			m_nMovePathIndex = 0;
-			m_pointList.push_back(toPos);
+			m_kPointList.push_back(toPos);
 		}
 	}
 }
@@ -1041,8 +1041,8 @@ void NDMonster::drawName(bool bDraw)
 	CGRect rect1 = CGRectMake(posPlayer.x - SHOW_NAME_ROLE_W,
 			posPlayer.y - SHOW_NAME_ROLE_H, SHOW_NAME_ROLE_W << 1,
 			SHOW_NAME_ROLE_H << 1);
-	CGRect rect2 = CGRectMake(m_position.x - DISPLAY_POS_X_OFFSET,
-			m_position.y - DISPLAY_POS_Y_OFFSET, 16, 16);
+	CGRect rect2 = CGRectMake(m_kPosition.x - DISPLAY_POS_X_OFFSET,
+			m_kPosition.y - DISPLAY_POS_Y_OFFSET, 16, 16);
 	//if (CGRectIntersectsRect(rect1, rect2)) { // 显示区域内的怪物名字
 	int iColor = 0;
 	if (m_nLevel - player.m_nLevel <= LEVEL_GRAY)
@@ -1076,8 +1076,8 @@ void NDMonster::drawName(bool bDraw)
 
 	iColor = 0xff0000;
 
-	int iX = m_position.x - DISPLAY_POS_X_OFFSET;
-	int iY = m_position.y - DISPLAY_POS_Y_OFFSET;
+	int iX = m_kPosition.x - DISPLAY_POS_X_OFFSET;
+	int iY = m_kPosition.y - DISPLAY_POS_Y_OFFSET;
 	iX += BASE_BOTTOM_WH / 2;
 	//iY += BASE_BOTTOM_WH-getGravityY();
 	iY -= getGravityY();
@@ -1136,17 +1136,17 @@ void NDMonster::changeLookface(int lookface)
 		m_bRoleMonster = true;
 		{	//InitNonRoleData
 			//m_id = 0; // 用户id
-			sex = lookface / 100000000 % 10; // 人物性别，1-男性，2-女性；
-			direct = lookface % 10;
-			hairColor = lookface / 1000000 % 10;
-			int tmpsex = (sex - 1) / 2 - 1;
+			m_nSex = lookface / 100000000 % 10; // 人物性别，1-男性，2-女性；
+			m_nDirect = lookface % 10;
+			m_nHairColor = lookface / 1000000 % 10;
+			int tmpsex = (m_nSex - 1) / 2 - 1;
 			if (tmpsex < 0 || tmpsex > 2)
 			{
 				tmpsex = 0;
 			}
 			this->SetHair(tmpsex + 1); // 发型
 
-			SetHairImageWithEquipmentId (hair);
+			SetHairImageWithEquipmentId (m_nHair);
 
 			int flagOrRidePet = lookface / 10000000 % 10;
 			if (flagOrRidePet > 0)
@@ -1162,12 +1162,12 @@ void NDMonster::changeLookface(int lookface)
 				}
 			}
 
-			weapon = getEquipmentLookFace(lookface, 0);
-			cap = getEquipmentLookFace(lookface, 1);
-			armor = getEquipmentLookFace(lookface, 2);
-			SetEquipment(weapon, 0); //武器
-			SetEquipment(cap, 0); //头盔
-			SetEquipment(armor, 0); //胸甲
+			m_nWeapon = getEquipmentLookFace(lookface, 0);
+			m_nCap = getEquipmentLookFace(lookface, 1);
+			m_nArmor = getEquipmentLookFace(lookface, 2);
+			SetEquipment(m_nWeapon, 0); //武器
+			SetEquipment(m_nCap, 0); //头盔
+			SetEquipment(m_nArmor, 0); //胸甲
 
 			//Load Animation Group
 			CC_SAFE_DELETE (m_pkAniGroup);
@@ -1185,7 +1185,7 @@ void NDMonster::changeLookface(int lookface)
 			 * end
 			 */
 
-			m_bFaceRight = direct == 2;
+			m_bFaceRight = m_nDirect == 2;
 			SetFaceImageWithEquipmentId (m_bFaceRight);
 			SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 

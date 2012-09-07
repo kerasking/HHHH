@@ -40,11 +40,11 @@ NDMapLayerLogic::NDMapLayerLogic()
 {
 	//m_doubleTimeStamp = [NSDate timeIntervalSinceReferenceDate];  ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 
-	m_timer.SetTimer(this, TAG_MAP_UPDTAE, 0.01f);
+	m_kTimer.SetTimer(this, TAG_MAP_UPDTAE, 0.01f);
 
 	SetLongTouch(false);
 
-	m_posTouch = CGPointZero;
+	m_kPosTouch = CGPointZero;
 
 	SetPathing(false);
 }
@@ -80,8 +80,8 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 
 	SetLongTouch(false);
 
-	m_posTouch = touch->GetLocation();
-	CGPoint touchPoint = this->ConvertToMapPoint(m_posTouch);
+	m_kPosTouch = touch->GetLocation();
+	CGPoint touchPoint = this->ConvertToMapPoint(m_kPosTouch);
 
 	/***
 	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
@@ -105,7 +105,7 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 		SetPathing(true);
 	}
 
-	m_timer.SetTimer(this, TAG_MAP_LONGTOUCH, LONG_TOUCH_INTERVAL);
+	m_kTimer.SetTimer(this, TAG_MAP_LONGTOUCH, LONG_TOUCH_INTERVAL);
 
 	//ShowTreasureBox();
 
@@ -124,8 +124,8 @@ bool NDMapLayerLogic::TouchEnd(NDTouch* touch)
 
 	kPlayer.CancelClickPointInSideNpc();
 
-	m_timer.KillTimer(this, TAG_MAP_LONGTOUCH_STATE);
-	m_timer.KillTimer(this, TAG_MAP_LONGTOUCH);
+	m_kTimer.KillTimer(this, TAG_MAP_LONGTOUCH_STATE);
+	m_kTimer.KillTimer(this, TAG_MAP_LONGTOUCH);
 
 	return true;
 //	
@@ -150,7 +150,7 @@ void NDMapLayerLogic::TouchCancelled(NDTouch* touch)
 
 bool NDMapLayerLogic::TouchMoved(NDTouch* touch)
 {
-	m_posTouch = touch->GetLocation();
+	m_kPosTouch = touch->GetLocation();
 	return true;
 }
 
@@ -159,43 +159,43 @@ void NDMapLayerLogic::Update(unsigned long ulDiff)
 	// NDMapMgrObj.Update(ulDiff); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 }
 
-void NDMapLayerLogic::OnTimer(OBJID tag)
+void NDMapLayerLogic::OnTimer(OBJID uiTag)
 {
-	if (!(tag == TAG_MAP_UPDTAE || tag == TAG_MAP_LONGTOUCH
-			|| tag == TAG_MAP_LONGTOUCH_STATE))
+	if (!(uiTag == TAG_MAP_UPDTAE || uiTag == TAG_MAP_LONGTOUCH
+			|| uiTag == TAG_MAP_LONGTOUCH_STATE))
 	{
-		NDMapLayer::OnTimer(tag);
+		NDMapLayer::OnTimer(uiTag);
 		return;
 	}
 
-	if (tag == TAG_MAP_UPDTAE)
+	if (uiTag == TAG_MAP_UPDTAE)
 	{
-		double oldTimeStamp = m_doubleTimeStamp;
+		double oldTimeStamp = m_dTimeStamp;
 		//m_doubleTimeStamp = [NSDate timeIntervalSinceReferenceDate]; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		Update((unsigned long) ((m_doubleTimeStamp - oldTimeStamp) * 1000));
+		Update((unsigned long) ((m_dTimeStamp - oldTimeStamp) * 1000));
 	}
-	else if (tag == TAG_MAP_LONGTOUCH)
+	else if (uiTag == TAG_MAP_LONGTOUCH)
 	{
 		SetLongTouch(true);
-		m_timer.KillTimer(this, TAG_MAP_LONGTOUCH);
-		m_timer.SetTimer(this, TAG_MAP_LONGTOUCH_STATE, 0.1f);
+		m_kTimer.KillTimer(this, TAG_MAP_LONGTOUCH);
+		m_kTimer.SetTimer(this, TAG_MAP_LONGTOUCH_STATE, 0.1f);
 	}
-	else if (tag == TAG_MAP_LONGTOUCH_STATE)
+	else if (uiTag == TAG_MAP_LONGTOUCH_STATE)
 	{
 		if (IsPathing()
 				&& !NDPlayer::defaultHero().ClickPoint(
-						this->ConvertToMapPoint(m_posTouch), true))
+						this->ConvertToMapPoint(m_kPosTouch), true))
 		{
 			SetLongTouch(false);
 
-			m_timer.KillTimer(this, TAG_MAP_LONGTOUCH_STATE);
-			m_timer.KillTimer(this, TAG_MAP_LONGTOUCH);
+			m_kTimer.KillTimer(this, TAG_MAP_LONGTOUCH_STATE);
+			m_kTimer.KillTimer(this, TAG_MAP_LONGTOUCH);
 		}
 
 		if (!IsPathing())
 		{
 			NDPlayer::defaultHero().DealClickPointInSideNpc(
-					this->ConvertToMapPoint(m_posTouch));
+					this->ConvertToMapPoint(m_kPosTouch));
 		}
 	}
 }

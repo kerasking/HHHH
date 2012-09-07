@@ -136,7 +136,7 @@ private:
 	void HandleStateDacoity();
 private:
 	// 勿用
-	static bool m_bFirstUse;
+	static bool ms_bFirstUse;
 private:
 	bool m_bIsLoadingMap;
 
@@ -150,8 +150,8 @@ public:
 	int m_nLevelUpExp; // 下次升级所需EXP
 	int m_nSP;
 	/** 声望: 国家, 阵营; 荣誉 */
-	int swGuojia;
-	int swCamp;
+	int m_nSWCountry;
+	int m_nSWCamp;
 	int m_nHonour;
 	int m_nExpendHonour; // 已消耗荣誉值
 
@@ -169,15 +169,22 @@ public:
 	// 玩家当前所在地图id
 	int idCurMap;
 
-	int eAtkSpd, eAtk, eDef, eHardAtk, eSkillAtk, eSkillDef, eSkillHard, eDodge,
-			ePhyHit; // 装备直接属性增加值
+	int m_eAtkSpd;
+	int m_eAtk;
+	int m_eDef;
+	int m_eHardAtk;
+	int m_eSkillAtk;
+	int m_eSkillDef;
+	int m_eSkillHard;
+	int m_eDodge;
+	int	m_ePhyHit; // 装备直接属性增加值
 
 	// 属性相关,属性界面更改属性缓存
-	int iTmpPhyPoint;
-	int iTmpDexPoint;
-	int iTmpMagPoint;
-	int iTmpDefPoint;
-	int iTmpRestPoint;
+	int m_iTmpPhyPoint;
+	int m_iTmpDexPoint;
+	int m_iTmpMagPoint;
+	int m_iTmpDefPoint;
+	int m_iTmpRestPoint;
 
 	// 特殊状态附加属性
 	/** 力量附加 */
@@ -214,11 +221,11 @@ public:
 	int wuLiMingZhongAdd;
 
 	/** 积分*/
-	int jifeng;
+	int m_nGamePoints;
 
 	/**活动值*/
-	int activityValue;
-	int activityValueMax;
+	int m_nActivityValue;
+	int m_nActivityValueMax;
 	/**技能槽*/
 	int m_nMaxSlot;
 	/**VIP等级*/
@@ -235,14 +242,14 @@ public:
 	int m_iFocusManuRoleID;
 	//NDNpc *m_npcFocus;
 
-	int targetIndex; // 玩家当前选择的角色索引,该索引是magmgr里的所有NPC,其它玩家所在容器的索引.
+	int m_nTargetIndex; // 玩家当前选择的角色索引,该索引是magmgr里的所有NPC,其它玩家所在容器的索引.
 
 	vec_task m_vPlayerTask; //玩家任务列表
 private:
 	bool m_bCollide;
 	//GatherPoint *m_gp;
-	NDTimer *m_timer;
-	NDUIDialog *m_dlgGather;
+	NDTimer* m_pkTimer;
+	NDUIDialog* m_kGatherDlg;
 	bool m_bRequireDacoity;
 	bool m_bRequireBattleField;
 	int m_iDacoityStep;
