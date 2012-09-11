@@ -53,7 +53,7 @@ NDSprite::NDSprite()
 
 	m_pkAniGroup = NULL;
 
-	m_picSprite = NULL;
+	m_pkPicSprite = NULL;
 
 	m_kRectSprite = CGRectZero;
 
@@ -211,7 +211,7 @@ void NDSprite::RunAnimation(bool bDraw)
 			mapLayer->SetScreenCenter(m_kPosition);
 		}
 	}
-	else if (m_picSprite)
+	else if (m_pkPicSprite)
 	{
 		if (GetParent())
 		{
@@ -225,9 +225,9 @@ void NDSprite::RunAnimation(bool bDraw)
 				if (bDraw && bRet)
 				{
 					CGSize sizemap = layer->GetContentSize();
-					CGSize size = m_picSprite->GetSize();
+					CGSize size = m_pkPicSprite->GetSize();
 
-					m_picSprite->DrawInRect(
+					m_pkPicSprite->DrawInRect(
 							CGRectMake(GetPosition().x,
 									GetPosition().y + winsize.height
 											- sizemap.height, size.width,
@@ -337,7 +337,7 @@ int NDSprite::GetOrder()
 
 void NDSprite::SetSprite(NDPicture* pkPicture)
 {
-	m_picSprite = pkPicture;
+	m_pkPicSprite = pkPicture;
 
 	if (pkPicture)
 	{
@@ -367,7 +367,7 @@ CGRect NDSprite::GetSpriteRect()
 		return m_pkCurrentAnimation->getRect();
 	}
 
-	if (m_picSprite)
+	if (m_pkPicSprite)
 	{
 		return m_kRectSprite;
 	}

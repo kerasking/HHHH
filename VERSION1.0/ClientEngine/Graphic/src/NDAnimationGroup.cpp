@@ -159,9 +159,9 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 
 			for (int k = 0; k < sagSize; k++)
 			{
-				std::string animationPath =
+				std::string strAnimationPath =
 						NDEngine::NDPath::GetAnimationPath();
-				std::string sprFile = animationPath
+				std::string sprFile = strAnimationPath
 						+ kFileOp.readUTF8String(pkStream);
 				NDAnimationGroup* pkSag = new NDAnimationGroup;
 				pkSag->initWithSprFile(sprFile.c_str());
@@ -199,8 +199,8 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 	}
 
 	//根据特殊字符怕是是否是带掩码点的动画
-	std::string judge = kFileOp.readUTF8StringNoExcept(pkStream);
-	if (judge == "■")
+	std::string strJudge = kFileOp.readUTF8StringNoExcept(pkStream);
+	if (strJudge == "■")
 	{
 		if (!m_pkUnpassPoint)
 		{

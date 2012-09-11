@@ -90,7 +90,7 @@ class NDMapData: public cocos2d::CCObject
 {
 
 public:
-	CC_SYNTHESIZE(std::string, m_Name, Name)
+	CC_SYNTHESIZE(std::string, m_strName, Name)
 	CC_SYNTHESIZE(int, m_nLayerCount, LayerCount)
 	CC_SYNTHESIZE(unsigned int, m_nColumns, Columns)
 	CC_SYNTHESIZE(unsigned int, m_nRows, Rows)
@@ -103,8 +103,8 @@ public:
 	CC_SYNTHESIZE(cocos2d::CCArray*, m_pkSceneTiles, SceneTiles)
 	CC_SYNTHESIZE(cocos2d::CCArray*, m_pkBackgroundTiles, BgTiles)
 	CC_SYNTHESIZE(cocos2d::CCArray*, m_pkSwitchs, Switchs)
-	CC_SYNTHESIZE_READONLY(cocos2d::CCArray*, m_AnimationGroups, AnimationGroups)
-	CC_SYNTHESIZE(cocos2d::CCArray*, m_AniGroupParams, AniGroupParams)
+	CC_SYNTHESIZE_READONLY(cocos2d::CCArray*, m_pkAnimationGroups, AnimationGroups)
+	CC_SYNTHESIZE(cocos2d::CCArray*, m_pkAniGroupParams, AniGroupParams)
 
 public:
 	NDMapData();

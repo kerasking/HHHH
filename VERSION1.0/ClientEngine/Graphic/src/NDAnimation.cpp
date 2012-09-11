@@ -15,8 +15,10 @@ using namespace cocos2d;
 
 NDAnimation::NDAnimation() :
 m_pkFrames(NULL),
-m_nX(0), m_nY(0),
-m_nW(0), m_nH(0),
+m_nX(0),
+m_nY(0),
+m_nW(0),
+m_nH(0),
 m_nMidX(0),
 m_nBottomY(0),
 m_nType(0),

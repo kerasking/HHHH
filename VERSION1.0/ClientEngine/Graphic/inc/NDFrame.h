@@ -84,7 +84,7 @@ public:
 
 private:
 
-	bool m_needInitTitles;
+	bool m_bNeedInitTitles;
 	cocos2d::CCMutableArray<NDTile*>* m_pkTiles;
 
 private:

@@ -133,12 +133,12 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	//ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
 
 	NDPlayer::pugeHero();
-	NDPlayer& kPlayer = NDPlayer::defaultHero(1);
+	NDPlayer& kPlayer = NDPlayer::defaultHero(8);
 
 	int x = 100;
 	int y = 100;
 
-//	kPlayer.SetPosition(ccp(528, 512));		///< x * 32 + 16, y * 32 + 16
+	kPlayer.SetPosition(ccp(528, 512));		///< x * 32 + 16, y * 32 + 16
 	kPlayer.SetServerPositon(x, y);
 	kPlayer.m_nID = 1;
 	kPlayer.m_strName = "°×¸»ÃÀ";

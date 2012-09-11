@@ -159,7 +159,7 @@ m_nEnduration(0),
 m_BelongAnimation(NULL),
 m_pkSubAnimationGroups(NULL),
 m_pkFrameTiles(NULL),
-m_needInitTitles(true)
+m_bNeedInitTitles(true)
 {
 	m_pkSubAnimationGroups = new CCMutableArray<NDAnimationGroup*>();
 	m_pkFrameTiles = new CCMutableArray<NDFrameTile*>();
@@ -188,7 +188,7 @@ bool NDFrame::enableRunNextFrame(NDFrameRunRecord* frameRunRecord)
 
 void NDFrame::initTiles()
 {
-	if (m_needInitTitles)
+	if (m_bNeedInitTitles)
 	{
 		for (int i = 0; i < (int) m_pkFrameTiles->count(); i++)
 		{
@@ -197,7 +197,7 @@ void NDFrame::initTiles()
 			pkTile->release();
 		}
 	}
-	m_needInitTitles = false;
+	m_bNeedInitTitles = false;
 }
 
 void NDFrame::drawHeadAt(CGPoint pos)
@@ -211,7 +211,7 @@ void NDFrame::drawHeadAt(CGPoint pos)
 	NDAnimation* pkAnimation = m_BelongAnimation;
 	NDAnimationGroup* pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
 
-	if (m_needInitTitles)
+	if (m_bNeedInitTitles)
 	{
 		this->run();
 	}
@@ -291,7 +291,7 @@ void NDFrame::run()
 
 void NDFrame::run(float fScale)
 {
-	if (m_needInitTitles)
+	if (m_bNeedInitTitles)
 	{
 		this->initTiles();
 	}

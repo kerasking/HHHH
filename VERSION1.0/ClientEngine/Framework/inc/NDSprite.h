@@ -418,7 +418,7 @@ protected:
 public:
 	bool m_bFaceRight;		// 精灵面部朝向
 private:
-	NDPicture *m_picSprite;
+	NDPicture* m_pkPicSprite;
 	CGRect m_kRectSprite;
 	bool m_bHightLight;
 	NSTimeInterval m_dBeginTime;
