@@ -33,8 +33,8 @@ bool NDBaseRole::ms_bGameSceneRelease = false;
 
 NDBaseRole::NDBaseRole()
 {
-	m_weaponType = WEAPON_NONE;
-	m_secWeaponType = WEAPON_NONE;
+	m_nMasterWeaponType = WEAPON_NONE;
+	m_nSecondWeaponType = WEAPON_NONE;
 
 	m_nSex = -1;
 	m_nSkinColor = -1;
@@ -907,72 +907,72 @@ void NDBaseRole::DrawHead(const CGPoint& pos)
 
 void NDBaseRole::SetWeaponType(int weaponType)
 {
-	m_weaponType = weaponType;
+	m_nMasterWeaponType = weaponType;
 }
 
 int NDBaseRole::GetWeaponType()
 {
-	return m_weaponType;
+	return m_nMasterWeaponType;
 }
 
 void NDBaseRole::SetSecWeaponType(int secWeaponType)
 {
-	m_secWeaponType = secWeaponType;
+	m_nSecondWeaponType = secWeaponType;
 }
 
 int NDBaseRole::GetSecWeaponType()
 {
-	return m_secWeaponType;
+	return m_nSecondWeaponType;
 }
 
 void NDBaseRole::SetWeaponQuality(int quality)
 {
-	m_weaponQuality = quality;
+	m_nMasterWeaponQuality = quality;
 }
 
 int NDBaseRole::GetWeaponQuality()
 {
-	return m_weaponQuality;
+	return m_nMasterWeaponQuality;
 }
 
 void NDBaseRole::SetSecWeaponQuality(int quality)
 {
-	m_secWeaponQuality = quality;
+	m_nSecondWeaponQuality = quality;
 }
 
 int NDBaseRole::GetSecWeaponQuality()
 {
-	return m_secWeaponQuality;
+	return m_nSecondWeaponQuality;
 }
 
 void NDBaseRole::SetCapQuality(int quality)
 {
-	m_capQuality = quality;
+	m_nCapQuality = quality;
 }
 
 int NDBaseRole::GetCapQuality()
 {
-	return m_capQuality;
+	return m_nCapQuality;
 }
 
 void NDBaseRole::SetArmorQuality(int quality)
 {
-	m_armorQuality = quality;
+	m_nArmorQuality = quality;
 }
 
 int NDBaseRole::GetArmorQuality()
 {
-	return m_armorQuality;
+	return m_nArmorQuality;
 }
 
 void NDBaseRole::SetCloakQuality(int quality)
 {
-	m_cloakQuality = quality;
+	m_nCloakQuality = quality;
 }
 
 int NDBaseRole::GetCloakQuality()
 {
-	return m_cloakQuality;
+	return m_nCloakQuality;
 }
 
 void NDBaseRole::SetHair(int style, int color)

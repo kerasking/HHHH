@@ -48,7 +48,7 @@ NDSprite::NDSprite()
 	m_nColorInfo = -1;
 	m_nNPCLookface = -1;
 
-	m_iSpeed = 4;
+	m_nSpeed = 4;
 	m_kTargetPos = CGPointZero;
 
 	m_pkAniGroup = NULL;
@@ -65,7 +65,13 @@ NDSprite::NDSprite()
 // 		m_faqiImage = m_cloakImage = m_doubleHandSpearImage = m_leftShoulderImage = m_rightShoulderImage = m_skirtStandImage = m_skirtWalkImage = NULL;
 // 		m_skirtSitImage = m_skirtLiftLegImage = colorInfoImage = NULL;
 
-	m_weaponType = m_secWeaponType = m_weaponQuality = m_secWeaponQuality = m_capQuality = m_armorQuality = m_cloakQuality = 0;
+	m_nMasterWeaponType = 0;
+	m_nSecondWeaponType = 0;
+	m_nMasterWeaponQuality = 0;
+	m_nSecondWeaponQuality = 0;
+	m_nCapQuality = 0;
+	m_nArmorQuality = 0;
+	m_nCloakQuality = 0;
 
 	m_bFaceRight = true;
 	m_fScale = 1.0f;
@@ -105,7 +111,7 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 		if (m_pkCurrentAnimation == NULL
 				|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_END
 				|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_START
-				|| this->m_pkCurrentAnimation->getCurIndexInAniGroup()
+				|| m_pkCurrentAnimation->getCurIndexInAniGroup()
 						!= nAnimationIndex)
 		{
 			m_pkCurrentAnimation =
@@ -117,7 +123,7 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 			m_pkFrameRunRecord = new NDFrameRunRecord;
 		}
 
-		this->SetContentSize(
+		SetContentSize(
 				CGSizeMake(m_pkCurrentAnimation->getW(),
 						m_pkCurrentAnimation->getH()));
 	}
@@ -136,17 +142,17 @@ void NDSprite::RunAnimation(bool bDraw)
 			{
 				if (m_nMovePathIndex == 0)
 				{
-					this->OnMoveBegin();
+					OnMoveBegin();
 				}
 				else
 				{
-					this->OnMoving(m_nMovePathIndex == iPoints - 1);
+					OnMoving(m_nMovePathIndex == iPoints - 1);
 				}
 
 				CGPoint kPos = m_kPointList.at(m_nMovePathIndex++);
 //						if (m_movePathIndex < (int)m_pointList.size() && m_movePathIndex > 2)
 //						{
-//							CGPoint prePos = this->GetPosition();
+//							CGPoint prePos = GetPosition();
 //							CGPoint nextPos = m_pointList[m_movePathIndex];
 //							
 //							if (prePos.y == pos.y && prePos.x != pos.x)
@@ -165,18 +171,18 @@ void NDSprite::RunAnimation(bool bDraw)
 //							}
 //						}
 
-				this->SetPosition(kPos);
+				SetPosition(kPos);
 			}
 			else
 			{
-				this->OnMoveEnd();
+				OnMoveEnd();
 				m_bIsMoving = false;
 			}
 			//	}
 
 		}
 
-		NDNode* pkNode = this->GetParent();
+		NDNode* pkNode = GetParent();
 
 		if (!pkNode)
 		{
@@ -216,7 +222,7 @@ void NDSprite::RunAnimation(bool bDraw)
 		if (GetParent())
 		{
 			CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
-			NDNode* layer = this->GetParent();
+			NDNode* layer = GetParent();
 
 			if (layer->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 			{
@@ -243,7 +249,7 @@ void NDSprite::RunAnimation(bool bDraw)
 void NDSprite::SetPosition(CGPoint newPosition)
 {
 //		NDLog("new pos:%f,%f",newPosition.x, newPosition.y);
-	this->m_kPosition = CGPointMake(newPosition.x, newPosition.y);
+	m_kPosition = CGPointMake(newPosition.x, newPosition.y);
 }
 
 void NDSprite::MoveToPosition(std::vector<CGPoint> kToPos, SpriteSpeed speed,
@@ -255,14 +261,14 @@ void NDSprite::MoveToPosition(std::vector<CGPoint> kToPos, SpriteSpeed speed,
 		return;
 	}
 
-	if (this->GetParent())
+	if (GetParent())
 	{
-		NDNode* pkLayer = this->GetParent();
+		NDNode* pkLayer = GetParent();
 		if (pkLayer->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
 			m_bMoveMap = moveMap;
 			m_bIsMoving = true;
-			m_iSpeed = speed;
+			m_nSpeed = speed;
 
 			//CGPoint pos = GetPosition();
 //				if ( ((int)pos.x-DISPLAY_POS_X_OFFSET) % 16 != 0 || 
@@ -281,7 +287,7 @@ void NDSprite::MoveToPosition(std::vector<CGPoint> kToPos, SpriteSpeed speed,
 				CGPoint to = kToPos[i];
 				std::vector < CGPoint > kPointList;
 				NDAutoPath::sharedAutoPath()->autoFindPath(from, to,
-						(NDMapLayer*) pkLayer, m_iSpeed, mustArrive, ignoreMask);
+						(NDMapLayer*) pkLayer, m_nSpeed, mustArrive, ignoreMask);
 				kPointList = NDAutoPath::sharedAutoPath()->getPathPointVetor();
 
 				if (!kPointList.empty())
@@ -341,7 +347,7 @@ void NDSprite::SetSprite(NDPicture* pkPicture)
 
 	if (pkPicture)
 	{
-		CGPoint point = this->GetPosition();
+		CGPoint point = GetPosition();
 		CGSize size = pkPicture->GetSize();
 		m_kRectSprite = CGRectMake(point.x, point.y, size.width, size.height);
 	}
@@ -379,18 +385,18 @@ void NDSprite::SetHairImage(const char* imageFile, int colorIndex)
 	if (imageFile)
 	{
 		tq::CString str("%s@%d", imageFile, colorIndex - 1);
-		m_hairImage = str;
+		m_strHairImage = str;
 		//todo(zjh)
 		//CCTextureCache::sharedTextureCache()->addColorImage(m_hairImage);
 	}
 
 //		stringstream ss;
 //		ss << imageFile << "@" << (colorIndex - 1);
-//		this->m_hairImage = ss.str();
+//		m_hairImage = ss.str();
 //		
-//		if (!this->m_hairImage.empty())
+//		if (!m_hairImage.empty())
 //		{
-//			[[CCTextureCache sharedTextureCache] addColorImage:[NSString stringWithUTF8String:this->m_hairImage.c_str()]];
+//			[[CCTextureCache sharedTextureCache] addColorImage:[NSString stringWithUTF8String:m_hairImage.c_str()]];
 //		}
 }
 
@@ -399,7 +405,7 @@ void NDSprite::SetFaceImage(const char* imageFile)
 	//m_faceImage = imageFile;
 	if (imageFile)
 	{
-		m_faceImage = imageFile;
+		m_strFaceImage = imageFile;
 	}
 }
 
@@ -408,7 +414,7 @@ void NDSprite::SetExpressionImage(const char* imageFile)
 	//m_expressionImage = imageFile;
 	if (imageFile)
 	{
-		m_expressionImage = imageFile;
+		m_strExpressionImage = imageFile;
 	}
 }
 
@@ -417,7 +423,7 @@ void NDSprite::SetCapImage(const char* imageFile)
 	//m_capImage = imageFile;
 	if (imageFile)
 	{
-		m_capImage = imageFile;
+		m_strCapImage = imageFile;
 	}
 }
 
@@ -426,7 +432,7 @@ void NDSprite::SetArmorImage(const char* imageFile)
 	//m_armorImage = imageFile;
 	if (imageFile)
 	{
-		m_armorImage = imageFile;
+		m_strArmorImage = imageFile;
 	}
 }
 
@@ -435,7 +441,7 @@ void NDSprite::SetRightHandWeaponImage(const char* imageFile)
 	//m_rightHandWeaponImage = imageFile;
 	if (imageFile)
 	{
-		m_rightHandWeaponImage = imageFile;
+		m_strRightHandWeaponImage = imageFile;
 	}
 }
 
@@ -444,7 +450,7 @@ void NDSprite::SetLeftHandWeaponImage(const char* imageFile)
 	//m_leftHandWeaponImage = imageFile;
 	if (imageFile)
 	{
-		m_leftHandWeaponImage = imageFile;
+		m_strLeftHandWeaponImage = imageFile;
 	}
 }
 
@@ -453,7 +459,7 @@ void NDSprite::SetDoubleHandWeaponImage(const char* imageFile)
 	//m_doubleHandWeaponImage = imageFile;
 	if (imageFile)
 	{
-		m_doubleHandWeaponImage = imageFile;
+		m_strDoubleHandWeaponImage = imageFile;
 	}
 }
 
@@ -462,7 +468,7 @@ void NDSprite::SetDualSwordImage(const char* imageFile)
 	//m_dualSwordImage = imageFile;
 	if (imageFile)
 	{
-		m_dualSwordImage = imageFile;
+		m_strDualSwordImage = imageFile;
 	}
 }
 
@@ -471,7 +477,7 @@ void NDSprite::SetDualKnifeImage(const char* imageFile)
 	//m_dualKnifeImage = imageFile;
 	if (imageFile)
 	{
-		m_dualKnifeImage = imageFile;
+		m_strDualKnifeImage = imageFile;
 	}
 }
 
@@ -480,7 +486,7 @@ void NDSprite::SetDoubleHandWandImage(const char* imageFile)
 	//m_doubleHandWandImage = imageFile;
 	if (imageFile)
 	{
-		m_doubleHandWandImage = imageFile;
+		m_strDoubleHandWandImage = imageFile;
 	}
 }
 
@@ -489,7 +495,7 @@ void NDSprite::SetDoubleHandBowImage(const char* imageFile)
 	//m_doubleHandBowImage = imageFile;
 	if (imageFile)
 	{
-		m_doubleHandBowImage = imageFile;
+		m_strDoubleHandBowImage = imageFile;
 	}
 }
 
@@ -498,7 +504,7 @@ void NDSprite::SetShieldImage(const char* imageFile)
 	//m_shieldImage = imageFile;
 	if (imageFile)
 	{
-		m_shieldImage = imageFile;
+		m_strShieldImage = imageFile;
 	}
 }
 
@@ -507,7 +513,7 @@ void NDSprite::SetFaqiImage(const char* imageFile)
 	//m_faqiImage = imageFile;
 	if (imageFile)
 	{
-		m_faqiImage = imageFile;
+		m_strFaqiImage = imageFile;
 	}
 }
 
@@ -516,7 +522,7 @@ void NDSprite::SetCloakImage(const char* imageFile)
 	//m_cloakImage = imageFile;
 	if (imageFile)
 	{
-		m_cloakImage = imageFile;
+		m_strCloakImage = imageFile;
 	}
 }
 ///////////////////////////////////////////////////
@@ -526,7 +532,7 @@ void NDSprite::SetLeftShoulderImage(const char* imageFile)
 	//m_leftShoulderImage = imageFile;
 	if (imageFile)
 	{
-		m_leftShoulderImage = imageFile;
+		m_strLeftShoulderImage = imageFile;
 	}
 }
 
@@ -535,7 +541,7 @@ void NDSprite::SetRightShoulderImage(const char* imageFile)
 	//m_rightShoulderImage= imageFile;
 	if (imageFile)
 	{
-		m_rightShoulderImage = imageFile;
+		m_strRightShoulderImage = imageFile;
 	}
 }
 
@@ -544,7 +550,7 @@ void NDSprite::SetSkirtStandImage(const char* imageFile)
 	//m_skirtStandImage = imageFile;
 	if (imageFile)
 	{
-		m_skirtStandImage = imageFile;
+		m_strSkirtStandImage = imageFile;
 	}
 }
 
@@ -553,7 +559,7 @@ void NDSprite::SetSkirtWalkImage(const char* imageFile)
 	//m_skirtWalkImage = imageFile;
 	if (imageFile)
 	{
-		m_skirtWalkImage = imageFile;
+		m_strSkirtWalkImage = imageFile;
 	}
 }
 
@@ -562,7 +568,7 @@ void NDSprite::SetSkirtSitImage(const char* imageFile)
 	//m_skirtSitImage = imageFile;
 	if (imageFile)
 	{
-		m_skirtSitImage = imageFile;
+		m_strSkirtSitImage = imageFile;
 	}
 }
 
@@ -571,7 +577,7 @@ void NDSprite::SetSkirtLiftLegImage(const char* imageFile)
 	//m_skirtLiftLegImage = imageFile;
 	if (imageFile)
 	{
-		m_skirtLiftLegImage = imageFile;
+		m_strSkirtLiftLegImage = imageFile;
 	}
 }
 ///////////////////////////////////////////////////
@@ -581,13 +587,13 @@ void NDSprite::SetDoubleHandSpearImage(const char* imageFile)
 	//m_doubleHandSpearImage = imageFile;
 	if (imageFile)
 	{
-		m_doubleHandSpearImage = imageFile;
+		m_strDoubleHandSpearImage = imageFile;
 	}
 }
 
 CCTexture2D *NDSprite::GetHairImage()
 {
-	if (!m_hairImage.empty())
+	if (!m_strHairImage.empty())
 	{
 		//todo(zjh)
 		//return [[CCTextureCache sharedTextureCache] addColorImage:m_hairImage];
@@ -597,10 +603,10 @@ CCTexture2D *NDSprite::GetHairImage()
 
 CCTexture2D *NDSprite::GetFaceImage()
 {
-	if (!m_faceImage.empty())
+	if (!m_strFaceImage.empty())
 	{
 		return CCTextureCache::sharedTextureCache()->addImage(
-				m_faceImage.c_str());
+				m_strFaceImage.c_str());
 	}
 	return NULL;
 
@@ -608,138 +614,138 @@ CCTexture2D *NDSprite::GetFaceImage()
 
 CCTexture2D *NDSprite::GetExpressionImage()
 {
-	if (!m_expressionImage.empty())
+	if (!m_strExpressionImage.empty())
 	{
 		return CCTextureCache::sharedTextureCache()->addImage(
-				m_expressionImage.c_str());
+				m_strExpressionImage.c_str());
 	}
 	return NULL;
 }
 
 CCTexture2D *NDSprite::GetCapImage()
 {
-	if (!m_capImage.empty())
+	if (!m_strCapImage.empty())
 	{
 		return CCTextureCache::sharedTextureCache()->addImage(
-				m_capImage.c_str());
+				m_strCapImage.c_str());
 	}
 	return NULL;
 }
 
 CCTexture2D *NDSprite::GetArmorImage()
 {
-	if (!m_armorImage.empty())
+	if (!m_strArmorImage.empty())
 	{
 		return CCTextureCache::sharedTextureCache()->addImage(
-				m_armorImage.c_str());
+				m_strArmorImage.c_str());
 	}
 	return NULL;
 }
 
 CCTexture2D *NDSprite::GetRightHandWeaponImage()
 {
-	if (m_rightHandWeaponImage.empty() || m_weaponType != ONE_HAND_WEAPON)
+	if (m_strRightHandWeaponImage.empty() || m_nMasterWeaponType != ONE_HAND_WEAPON)
 	{
 		return NULL;
 	}
 	return CCTextureCache::sharedTextureCache()->addImage(
-			m_rightHandWeaponImage.c_str());
+			m_strRightHandWeaponImage.c_str());
 }
 
 CCTexture2D *NDSprite::GetLeftHandWeaponImage()
 {
-	if (m_leftHandWeaponImage.empty() || m_secWeaponType != ONE_HAND_WEAPON)
+	if (m_strLeftHandWeaponImage.empty() || m_nSecondWeaponType != ONE_HAND_WEAPON)
 	{
 		return NULL;
 	}
 	return CCTextureCache::sharedTextureCache()->addImage(
-			m_leftHandWeaponImage.c_str());
+			m_strLeftHandWeaponImage.c_str());
 }
 
 CCTexture2D *NDSprite::GetDoubleHandWeaponImage()
 {
-	if (m_doubleHandWeaponImage.empty() || m_weaponType != TWO_HAND_WEAPON)
+	if (m_strDoubleHandWeaponImage.empty() || m_nMasterWeaponType != TWO_HAND_WEAPON)
 	{
 		return NULL;
 	}
 	return CCTextureCache::sharedTextureCache()->addImage(
-			m_doubleHandWeaponImage.c_str());
+			m_strDoubleHandWeaponImage.c_str());
 }
 
 CCTexture2D *NDSprite::GetDualSwordImage()
 {
-	if (m_dualSwordImage.empty() || m_weaponType != DUAL_SWORD)
+	if (m_strDualSwordImage.empty() || m_nMasterWeaponType != DUAL_SWORD)
 	{
 		return NULL;
 	}
 	return CCTextureCache::sharedTextureCache()->addImage(
-			m_dualSwordImage.c_str());
+			m_strDualSwordImage.c_str());
 }
 
 CCTexture2D *NDSprite::GetDualKnifeImage()
 {
-	if (m_dualKnifeImage.empty() || m_weaponType != DUAL_KNIFE)
+	if (m_strDualKnifeImage.empty() || m_nMasterWeaponType != DUAL_KNIFE)
 	{
 		return NULL;
 	}
 	return CCTextureCache::sharedTextureCache()->addImage(
-			m_dualKnifeImage.c_str());
+			m_strDualKnifeImage.c_str());
 }
 
 CCTexture2D *NDSprite::GetDoubleHandWandImage()
 {
-	if (m_doubleHandWandImage.empty() || m_weaponType != TWO_HAND_WAND)
+	if (m_strDoubleHandWandImage.empty() || m_nMasterWeaponType != TWO_HAND_WAND)
 	{
 		return NULL;
 	}
 	return CCTextureCache::sharedTextureCache()->addImage(
-			m_doubleHandWandImage.c_str());
+			m_strDoubleHandWandImage.c_str());
 }
 
 CCTexture2D *NDSprite::GetDoubleHandBowImage()
 {
-	if (m_doubleHandBowImage.empty() || m_weaponType != TWO_HAND_BOW)
+	if (m_strDoubleHandBowImage.empty() || m_nMasterWeaponType != TWO_HAND_BOW)
 	{
 		return NULL;
 	}
 	return CCTextureCache::sharedTextureCache()->addImage(
-			m_doubleHandBowImage.c_str());
+			m_strDoubleHandBowImage.c_str());
 }
 
 CCTexture2D *NDSprite::GetShieldImage()
 {
-	if (m_shieldImage.empty() || m_secWeaponType != SEC_SHIELD)
+	if (m_strShieldImage.empty() || m_nSecondWeaponType != SEC_SHIELD)
 	{
 		return NULL;
 	}
-	return CCTextureCache::sharedTextureCache()->addImage(m_shieldImage.c_str());
+	return CCTextureCache::sharedTextureCache()->addImage(m_strShieldImage.c_str());
 }
 
 CCTexture2D *NDSprite::GetFaqiImage()
 {
-	if (m_faqiImage.empty() || m_secWeaponType != SEC_FAQI)
+	if (m_strFaqiImage.empty() || m_nSecondWeaponType != SEC_FAQI)
 	{
 		return NULL;
 	}
-	return CCTextureCache::sharedTextureCache()->addImage(m_faqiImage.c_str());
+	return CCTextureCache::sharedTextureCache()->addImage(m_strFaqiImage.c_str());
 }
 
 CCTexture2D *NDSprite::GetCloakImage()
 {
-	if (!m_cloakImage.empty())
+	if (!m_strCloakImage.empty())
 	{
 		return CCTextureCache::sharedTextureCache()->addImage(
-				m_cloakImage.c_str());
+				m_strCloakImage.c_str());
 	}
 	return NULL;
 }
 
 CCTexture2D *NDSprite::GetLeftShoulderImage()
 {
-	if (!m_leftShoulderImage.empty())
+	if (!m_strLeftShoulderImage.empty())
 	{
 		return CCTextureCache::sharedTextureCache()->addImage(
-				m_leftShoulderImage.c_str());
+				m_strLeftShoulderImage.c_str());
 	}
 	return NULL;
 
@@ -747,30 +753,30 @@ CCTexture2D *NDSprite::GetLeftShoulderImage()
 
 CCTexture2D *NDSprite::GetRightShoulderImage()
 {
-	if (!m_rightShoulderImage.empty())
+	if (!m_strRightShoulderImage.empty())
 	{
 		return CCTextureCache::sharedTextureCache()->addImage(
-				m_rightShoulderImage.c_str());
+				m_strRightShoulderImage.c_str());
 	}
 	return NULL;
 }
 
 CCTexture2D *NDSprite::GetSkirtStandImage()
 {
-	if (!m_skirtStandImage.empty())
+	if (!m_strSkirtStandImage.empty())
 	{
 		return CCTextureCache::sharedTextureCache()->addImage(
-				m_skirtStandImage.c_str());
+				m_strSkirtStandImage.c_str());
 	}
 	return NULL;
 }
 
 CCTexture2D *NDSprite::GetSkirtWalkImage()
 {
-	if (!m_skirtWalkImage.empty())
+	if (!m_strSkirtWalkImage.empty())
 	{
 		return CCTextureCache::sharedTextureCache()->addImage(
-				m_skirtWalkImage.c_str());
+				m_strSkirtWalkImage.c_str());
 	}
 	return NULL;
 
@@ -778,46 +784,46 @@ CCTexture2D *NDSprite::GetSkirtWalkImage()
 
 CCTexture2D *NDSprite::GetSkirtSitImage()
 {
-	if (!m_skirtSitImage.empty())
+	if (!m_strSkirtSitImage.empty())
 	{
 		return CCTextureCache::sharedTextureCache()->addImage(
-				m_skirtSitImage.c_str());
+				m_strSkirtSitImage.c_str());
 	}
 	return NULL;
 }
 
 CCTexture2D *NDSprite::GetSkirtLiftLegImage()
 {
-	if (!m_skirtLiftLegImage.empty())
+	if (!m_strSkirtLiftLegImage.empty())
 	{
 		return CCTextureCache::sharedTextureCache()->addImage(
-				m_skirtLiftLegImage.c_str());
+				m_strSkirtLiftLegImage.c_str());
 	}
 	return NULL;
 }
 
 CCTexture2D *NDSprite::GetDoubleHandSpearImage()
 {
-	if (m_doubleHandSpearImage.empty() || m_weaponType != TWO_HAND_SPEAR)
+	if (m_strDoubleHandSpearImage.empty() || m_nMasterWeaponType != TWO_HAND_SPEAR)
 	{
 		return NULL;
 	}
 	return CCTextureCache::sharedTextureCache()->addImage(
-			m_doubleHandSpearImage.c_str());
+			m_strDoubleHandSpearImage.c_str());
 }
 
 // 	CCTexture2D* NDSprite::getColorTexture(int imageIndex, NDAnimationGroup* animationGroup)
 // 	{
 // 		CCTexture2D* tex = NULL;
 // 		// colorinfoÌØÊâ´¦Àí
-// 		if ( animationGroup && this->colorInfo != -1 ) 
+// 		if ( animationGroup && colorInfo != -1 ) 
 // 		{
 // 			if (!colorInfoImage) 
 // 			{
 // //				stringstream ss;
 // //				ss << [[animationGroup.images objectAtIndex:imageIndex] UTF8String]
-// //				<< "@" << this->colorInfo;
-// 				colorInfoImage = [[NSString stringWithFormat:@"%@@%d", [animationGroup.images objectAtIndex:imageIndex], this->colorInfo] retain];
+// //				<< "@" << colorInfo;
+// 				colorInfoImage = [[NSString stringWithFormat:@"%@@%d", [animationGroup.images objectAtIndex:imageIndex], colorInfo] retain];
 // 			}
 // 			
 // 			tex = [[CCTextureCache sharedTextureCache] addColorImage:colorInfoImage];
@@ -921,22 +927,22 @@ cocos2d::CCTexture2D* NDSprite::getColorTexture(int imageIndex,
 
 	if (animationGroup && 1 != m_nColorInfo)
 	{
-		if (0 == colorInfoImage.length())
+		if (0 == m_strColorInfoImage.length())
 		{
 			std::vector < std::string > *pkVector = animationGroup->getImages();
-			colorInfoImage = (*pkVector)[imageIndex];
+			m_strColorInfoImage = (*pkVector)[imageIndex];
 		}
 
-		int nPos = colorInfoImage.find_first_of("./");
+		int nPos = m_strColorInfoImage.find_first_of("./");
 
 		if (0 == nPos)
 		{
-			colorInfoImage = colorInfoImage.substr(nPos + 2,
-					colorInfoImage.length());
+			m_strColorInfoImage = m_strColorInfoImage.substr(nPos + 2,
+					m_strColorInfoImage.length());
 		}
 
-		for (std::string::iterator it = colorInfoImage.begin();
-				it != colorInfoImage.end(); it++)
+		for (std::string::iterator it = m_strColorInfoImage.begin();
+				it != m_strColorInfoImage.end(); it++)
 		{
 			if (*it == '/')
 			{
@@ -945,7 +951,7 @@ cocos2d::CCTexture2D* NDSprite::getColorTexture(int imageIndex,
 		}
 
 		pkPic = NDPicturePool::DefaultPool()->AddPicture(
-				colorInfoImage.c_str());
+				m_strColorInfoImage.c_str());
 
 		if (0 == pkPic)
 		{

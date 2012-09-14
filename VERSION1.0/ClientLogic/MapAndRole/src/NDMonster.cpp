@@ -908,32 +908,32 @@ void NDMonster::sendBattleAction()
 {
 	NDUISynLayer::Show();
 
-	NDTransData bao(_MSG_BATTLEACT);
+	NDTransData kBao(_MSG_BATTLEACT);
 
 	switch (m_nMonsterCatogary)
 	{
 	case MONSTER_NORMAL:
 	{
-		bao << (unsigned char) BATTLE_ACT_CREATE; // Action值
-		bao << (unsigned char) 0; // btturn
-		bao << (unsigned char) 1; // datacount
-		bao << m_nID; // 怪物类型Id
+		kBao << (unsigned char) BATTLE_ACT_CREATE; // Action值
+		kBao << (unsigned char) 0; // btturn
+		kBao << (unsigned char) 1; // datacount
+		kBao << m_nID; // 怪物类型Id
 		break;
 	}
 	case MONSTER_ELITE:
 	{
-		bao << (unsigned char) BATTLE_ACT_CREATE_ELITE; // Action值
-		bao << (unsigned char) 0; // btturn
-		bao << (unsigned char) 1; // datacount
-		bao << m_nID; // 怪物类型Id
+		kBao << (unsigned char) BATTLE_ACT_CREATE_ELITE; // Action值
+		kBao << (unsigned char) 0; // btturn
+		kBao << (unsigned char) 1; // datacount
+		kBao << m_nID; // 怪物类型Id
 		break;
 	}
 	case MONSTER_BOSS:
 	{
-		bao << (unsigned char) BATTLE_ACT_CREATE_BOSS; // Action值
-		bao << (unsigned char) 0; // btturn
-		bao << (unsigned char) 1; // datacount
-		bao << m_nID; // 怪物Id
+		kBao << (unsigned char) BATTLE_ACT_CREATE_BOSS; // Action值
+		kBao << (unsigned char) 0; // btturn
+		kBao << (unsigned char) 1; // datacount
+		kBao << m_nID; // 怪物Id
 		break;
 	}
 	default:
@@ -941,7 +941,7 @@ void NDMonster::sendBattleAction()
 		break;
 	}
 
-	NDDataTransThread::DefaultThread()->GetSocket()->Send(&bao);
+	NDDataTransThread::DefaultThread()->GetSocket()->Send(&kBao);
 //		NDMapMgrObj.SetBattleMonster(this); ///< 临时性注释 郭浩
 	NDPlayer::defaultHero().stopMoving(true);
 }
