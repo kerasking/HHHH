@@ -159,22 +159,22 @@ void completeTask(int taskId)
 	//		Npc.refreshNpcStateInMap(); // 完成时要重新刷新整个地图npc的状怄1�7
 }
 
-std::string setTaskInfo(std::string taskStr, Task& task, int index,
-		std::vector<int> datas, int monCornIndex)
+std::string setTaskInfo(std::string strTask, Task& kTask, int nIndex,
+		std::vector<int> kDatas, int nMonCornIndex)
 {
-	if (index > 100)
+	if (nIndex > 100)
 	{	// 防止无限递归
 		return "";
 	}
 	//StringBuffer sBuffer = new StringBuffer(taskStr);
 
-	std::string sBuffer = taskStr;
+	std::string sBuffer = strTask;
 	int startIndex = sBuffer.find("[", 0);
 	int endIndex = sBuffer.find("]", 0);
 
 	if (startIndex != -1 && endIndex != -1 && startIndex < endIndex)
 	{
-		std::string taskStart = sBuffer.substr(startIndex + 1,
+		std::string strTaskStart = sBuffer.substr(startIndex + 1,
 				endIndex - startIndex - 1);
 
 		std::vector < std::string > kTaskArray;
@@ -183,16 +183,16 @@ std::string setTaskInfo(std::string taskStr, Task& task, int index,
 		int nToIndex = 0;
 
 		while (int(std::string::npos)
-				!= (nToIndex = taskStart.find(" ", nFromIndex)))
+				!= (nToIndex = strTaskStart.find(" ", nFromIndex)))
 		{
 			kTaskArray.push_back(
-					taskStart.substr(nFromIndex, nToIndex - nFromIndex));
+					strTaskStart.substr(nFromIndex, nToIndex - nFromIndex));
 			nFromIndex = nToIndex + 1;
 		}
 
 		//补上朄1�7后一丄1�7
 		kTaskArray.push_back(
-				taskStart.substr(nFromIndex, sBuffer.size() - nFromIndex));
+				strTaskStart.substr(nFromIndex, sBuffer.size() - nFromIndex));
 
 		if (!kTaskArray.empty())
 		{
@@ -202,19 +202,19 @@ std::string setTaskInfo(std::string taskStr, Task& task, int index,
 				// [mon ID name 格式 data 数量 mapid mapname X Y XXXX]
 
 				//Array dataArray = task.taskDataArray;
-				TaskData *pkTaskElement = new TaskData();
+				TaskData* pkTaskElement = new TaskData();
 				pkTaskElement->setMId(atoi(kTaskArray[1].c_str())); // 怪物id
 				pkTaskElement->setElementName(kTaskArray[2]); // 怪物名字
 				int nType = atoi(kTaskArray[3].c_str());
 				pkTaskElement->setMShowType(nType); // 表示要不要显示在功能匄1�7
 				pkTaskElement->setMSumCount(atoi(kTaskArray[5].c_str())); // 怪物总数釄1�7
 
-				if (monCornIndex < int(datas.size()))
+				if (nMonCornIndex < int(kDatas.size()))
 				{ // monCornIndex记录的是按顺序接收的怪物data
-					pkTaskElement->setMCurCount(datas[monCornIndex]); // 怪物目前data
+					pkTaskElement->setMCurCount(kDatas[nMonCornIndex]); // 怪物目前data
 				}
 
-				monCornIndex++;
+				nMonCornIndex++;
 
 				if (nType && kTaskArray.size() >= 10)
 				{
@@ -240,7 +240,7 @@ std::string setTaskInfo(std::string taskStr, Task& task, int index,
 
 				sBuffer.replace(startIndex, endIndex - startIndex + 1,
 						pkTaskElement->getElementName());
-				task.taskDataArray.push_back(pkTaskElement);
+				kTask.taskDataArray.push_back(pkTaskElement);
 			}
 			else if (kTaskArray[0] == "item" && kTaskArray.size() >= 6)
 			{
@@ -259,11 +259,11 @@ std::string setTaskInfo(std::string taskStr, Task& task, int index,
 				pkTaskElement->setMSumCount(atoi(kTaskArray[5].c_str())); // 物品总数釄1�7
 				// ,
 				// 要先赋1儤7�最大1儤7�1�7
-				int tempIndex = atoi(kTaskArray[4].c_str()) - 1;
+				int nTempIndex = atoi(kTaskArray[4].c_str()) - 1;
 
-				if (tempIndex >= 0 && tempIndex < int(datas.size()))
+				if (nTempIndex >= 0 && nTempIndex < int(kDatas.size()))
 				{
-					pkTaskElement->setMCurCount(datas[tempIndex]); // 物品目前data
+					pkTaskElement->setMCurCount(kDatas[nTempIndex]); // 物品目前data
 				}
 
 				if (nType && kTaskArray.size() >= 10)
@@ -289,7 +289,7 @@ std::string setTaskInfo(std::string taskStr, Task& task, int index,
 				//sBuffer.insert(startIndex, pkTaskElement.getElementName());
 				sBuffer.replace(startIndex, endIndex - startIndex + 1,
 						pkTaskElement->getElementName());
-				task.taskDataArray.push_back(pkTaskElement);
+				kTask.taskDataArray.push_back(pkTaskElement);
 
 			}
 			else if (kTaskArray[0] == "npc" && kTaskArray.size() >= 7)
@@ -325,7 +325,7 @@ std::string setTaskInfo(std::string taskStr, Task& task, int index,
 				//sBuffer.insert(startIndex, pkTaskElement.getElementName());
 				sBuffer.replace(startIndex, endIndex - startIndex + 1,
 						pkTaskElement->getElementName());
-				task.taskDataArray.push_back(pkTaskElement);
+				kTask.taskDataArray.push_back(pkTaskElement);
 
 			}
 			else if (kTaskArray[0] == "pr" && kTaskArray.size() >= 3)
@@ -338,7 +338,7 @@ std::string setTaskInfo(std::string taskStr, Task& task, int index,
 				pkTaskElement->setMType(TaskData::TASK_PR);
 				sBuffer.replace(startIndex, endIndex - startIndex + 1,
 						pkTaskElement->getElementName());
-				task.taskDataArray.push_back(pkTaskElement);
+				kTask.taskDataArray.push_back(pkTaskElement);
 			}
 			else if (kTaskArray[0] == "rank" && kTaskArray.size() >= 3)
 			{
@@ -350,7 +350,7 @@ std::string setTaskInfo(std::string taskStr, Task& task, int index,
 				pkTaskElement->setMType(TaskData::TASK_RANK);
 				sBuffer.replace(startIndex, endIndex - startIndex + 1,
 						pkTaskElement->getElementName());
-				task.taskDataArray.push_back(pkTaskElement);
+				kTask.taskDataArray.push_back(pkTaskElement);
 			}
 			else if (kTaskArray[0] == "gold" && kTaskArray.size() >= 2)
 			{
@@ -362,7 +362,7 @@ std::string setTaskInfo(std::string taskStr, Task& task, int index,
 				pkTaskElement->setMType(TaskData::TASK_GOLD);
 				sBuffer.replace(startIndex, endIndex - startIndex + 1,
 						pkTaskElement->getElementName());
-				task.taskDataArray.push_back(pkTaskElement);
+				kTask.taskDataArray.push_back(pkTaskElement);
 			}
 			else if (kTaskArray[0] == "rep" && kTaskArray.size() >= 2)
 			{
@@ -376,7 +376,7 @@ std::string setTaskInfo(std::string taskStr, Task& task, int index,
 				pkTaskElement->setMType(TaskData::TASK_REP);
 				sBuffer.replace(startIndex, endIndex - startIndex + 1,
 						pkTaskElement->getElementName());
-				task.taskDataArray.push_back(pkTaskElement);
+				kTask.taskDataArray.push_back(pkTaskElement);
 			}
 			else if (kTaskArray[0] == "hr" && kTaskArray.size() >= 2)
 			{
@@ -388,7 +388,7 @@ std::string setTaskInfo(std::string taskStr, Task& task, int index,
 				pkTaskElement->setMType(TaskData::TASK_HR);
 				sBuffer.replace(startIndex, endIndex - startIndex + 1,
 						pkTaskElement->getElementName());
-				task.taskDataArray.push_back(pkTaskElement);
+				kTask.taskDataArray.push_back(pkTaskElement);
 			}
 			else
 			{
@@ -396,8 +396,8 @@ std::string setTaskInfo(std::string taskStr, Task& task, int index,
 			}
 		}
 
-		index++;
-		return setTaskInfo(sBuffer, task, index, datas, monCornIndex);
+		nIndex++;
+		return setTaskInfo(sBuffer, kTask, nIndex, kDatas, nMonCornIndex);
 
 	}
 	else
@@ -859,43 +859,43 @@ void dealBackData_MSG_TASK_ITEM_OPT(NDTransData *data)
 	}
 }
 
-void updateTaskMonsterData(int monId, bool isShow)
+void updateTaskMonsterData(int nMonId, bool bIsShow)
 { // 打1愤7�完调用
-	ScriptGlobalEvent::OnEvent(GE_KILL_MONSTER, monId);
+	ScriptGlobalEvent::OnEvent(GE_KILL_MONSTER, nMonId);
 	vec_task& tasks = NDPlayer::defaultHero().m_vPlayerTask;
 	for_vec(tasks, vec_task_it)
 	{
-		Task *task = (*it);
-		if (task)
+		Task* pkTask = (*it);
+		if (pkTask)
 		{
-			vec_taskdata& taskdatas = task->taskDataArray;
+			vec_taskdata& taskdatas = pkTask->taskDataArray;
 			for_vec(taskdatas, vec_taskdata_it)
 			{
 				TaskData* pkTaskElement = (*it);
 				if (pkTaskElement->getMType() == TaskData::TASK_MONSTER)
 				{
-					if (pkTaskElement->getMId() == monId)
+					if (pkTaskElement->getMId() == nMonId)
 					{
 						int curCount = pkTaskElement->getMCurCount();
 						pkTaskElement->setMCurCount(curCount + 1);
 						// 同一个任务中不会打同丄1�7种1愤7�故break,多个任务间可能打同种怄1�7
-						if (isShow)
+						if (bIsShow)
 						{
-							showChatForTask(*task, *pkTaskElement);
+							showChatForTask(*pkTask, *pkTaskElement);
 							if (pkTaskElement->getMSumCount()
 									== pkTaskElement->getMCurCount())
 							{
-								task->isFinish = task->checkIsFinished();
+								pkTask->isFinish = pkTask->checkIsFinished();
 
 								// 整个任务完成提示
-								if (task->isFinish)
+								if (pkTask->isFinish)
 								{
-									stringstream sb;
-									sb << task->m_strTaskTitle;
-									sb << "(" << NDCommonCString("finish")
-											<< ")";
+									stringstream kStreamData;
+									kStreamData << pkTask->m_strTaskTitle;
+									kStreamData << "(" <<
+										NDCommonCString("finish") << ")";
 									std::stringstream chat;
-									chat << sb.str();
+									chat << kStreamData.str();
 //									Chat::DefaultChat()->AddMessage(ChatTypeSystem, chat.str().c_str()); ///< 临时性注釄1�7 郭浩
 									//Chat::DefaultChat()->AddMessage(chat.str().c_str());
 									//if (GameScreen.getInstance() != null) { 
@@ -909,10 +909,10 @@ void updateTaskMonsterData(int monId, bool isShow)
 				}
 			}
 
-			if (task->isFinish && task->isDailyTask())
+			if (pkTask->isFinish && pkTask->isDailyTask())
 			{
 				std::stringstream tip;
-				tip << task->m_strTaskTitle << NDCommonCString("finish")
+				tip << pkTask->m_strTaskTitle << NDCommonCString("finish")
 						<< NDCommonCString("le");
 				GameScene* scene = GameScene::GetCurGameScene();
 				if (scene)
@@ -957,15 +957,15 @@ void updateTaskDataByType(int nType, int nData, bool isShow)
 		return;
 	}
 
-	vec_task& tasks = NDPlayer::defaultHero().m_vPlayerTask;
+	vec_task& kTasks = NDPlayer::defaultHero().m_vPlayerTask;
 
-	for_vec(tasks, vec_task_it)
+	for_vec(kTasks, vec_task_it)
 	{
-		Task *task = (*it);
+		Task* pkTask = (*it);
 
-		if (task)
+		if (pkTask)
 		{
-			vec_taskdata& taskdatas = task->taskDataArray;
+			vec_taskdata& taskdatas = pkTask->taskDataArray;
 			for_vec(taskdatas, vec_taskdata_it)
 			{
 				TaskData* pkTaskElement = (*it);
@@ -974,20 +974,20 @@ void updateTaskDataByType(int nType, int nData, bool isShow)
 					pkTaskElement->setMCurCount(nData);
 					if (isShow)
 					{
-						showChatForTask(*task, *pkTaskElement);
+						showChatForTask(*pkTask, *pkTaskElement);
 						if (pkTaskElement->getMSumCount()
 								== pkTaskElement->getMCurCount())
 						{
-							task->isFinish = task->checkIsFinished();
+							pkTask->isFinish = pkTask->checkIsFinished();
 
 							// 整个任务完成提示
-							if (task->isFinish)
+							if (pkTask->isFinish)
 							{
-								stringstream sb;
-								sb << task->m_strTaskTitle;
-								sb << "(" << NDCommonCString("finish") << ")";
-								std::stringstream chat;
-								chat << sb.str();
+								stringstream kStringStream;
+								kStringStream << pkTask->m_strTaskTitle;
+								kStringStream << "(" << NDCommonCString("finish") << ")";
+								std::stringstream kStingStreamChat;
+								kStingStreamChat << kStringStream.str();
 								//							Chat::DefaultChat()->AddMessage(ChatTypeSystem, chat.str().c_str()); ///< 临时性注釄1�7 郭浩
 							}
 						}
@@ -996,16 +996,16 @@ void updateTaskDataByType(int nType, int nData, bool isShow)
 				}
 			}
 
-			if (task->isFinish && task->isDailyTask())
+			if (pkTask->isFinish && pkTask->isDailyTask())
 			{
-				std::stringstream tip;
-				tip << task->m_strTaskTitle << NDCommonCString("finish")
+				std::stringstream kTip;
+				kTip << pkTask->m_strTaskTitle << NDCommonCString("finish")
 						<< NDCommonCString("le");
-				GameScene* scene = GameScene::GetCurGameScene();
+				GameScene* pkScene = GameScene::GetCurGameScene();
 
-				if (scene)
+				if (pkScene)
 				{
-					scene->ShowTaskFinish(true, tip.str());
+					pkScene->ShowTaskFinish(true, kTip.str());
 				}
 			}
 		}

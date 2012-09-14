@@ -114,7 +114,7 @@ void simpleDecode(const unsigned char *src, unsigned char *dest)
 
 const size_t MAX_ACCOUNT = 10;
 
-int NDDataPersist::s_gameSetting = 0xFFFFFFFF; // 默认全开
+int NDDataPersist::ms_nGameSetting = 0xFFFFFFFF; // 默认全开
 
 void NDDataPersist::LoadGameSetting()
 {
@@ -123,9 +123,9 @@ void NDDataPersist::LoadGameSetting()
 }
 
 NDDataPersist::NDDataPersist():
-accountList(0),
-dataArray(0),
-accountDeviceList(0)
+m_pkAccountList(0),
+m_pkDataArray(0),
+m_pkAccountDeviceList(0)
 {
 	this->LoadData();
 	this->LoadAccountList();
@@ -134,9 +134,9 @@ accountDeviceList(0)
 
 NDDataPersist::~NDDataPersist()
 {
-	SAFE_RELEASE(dataArray);
-	SAFE_RELEASE(accountList);
-	SAFE_RELEASE(accountDeviceList);
+	SAFE_RELEASE(m_pkDataArray);
+	SAFE_RELEASE(m_pkAccountList);
+	SAFE_RELEASE(m_pkAccountDeviceList);
 
 // 	[dataArray release];
 // 	[accountList release];
@@ -223,21 +223,21 @@ void NDDataPersist::SaveLoginData()
 
 CCMutableDictionary<const char*>* NDDataPersist::LoadDataDiction(unsigned int index)
 {
-	NDAsssert(dataArray != nil);
+	NDAsssert(m_pkDataArray != nil);
 	
 	CCMutableDictionary<const char*>* dic = nil;
 	
-	if (dataArray->count() > index)
+	if (m_pkDataArray->count() > index)
 	{
-		dic = (CCMutableDictionary<const char*>*)dataArray->getObjectAtIndex(index);
+		dic = (CCMutableDictionary<const char*>*)m_pkDataArray->getObjectAtIndex(index);
 	}
 	
 	if (dic == nil)
 	{ // 数据不存在,初始化
-		for (unsigned int i = dataArray->count(); i <= index; i++) 
+		for (unsigned int i = m_pkDataArray->count(); i <= index; i++) 
 		{
 			dic = new CCMutableDictionary<const char*>;
-			dataArray->insertObjectAtIndex(dic,i);
+			m_pkDataArray->insertObjectAtIndex(dic,i);
 			SAFE_DELETE(dic);
 // 			[dataArray insertObject:dic atIndex:i];
 // 			[dic release];
@@ -252,7 +252,7 @@ void NDDataPersist::LoadData()
  	NSString *filePath = this->GetDataPath();
 
 	XMLReader kReader;
-	dataArray = new CCMutableArray<CCObject*>;
+	m_pkDataArray = new CCMutableArray<CCObject*>;
 	
 	if (!kReader.initWithFile(filePath->toStdString().c_str()))
 	{
@@ -279,7 +279,7 @@ void NDDataPersist::LoadData()
 
 		pkDic->setObject(new CCString(strKey.c_str()),new CCString(strString.c_str()));
 
-		dataArray->addObject(pkDic);
+		m_pkDataArray->addObject(pkDic);
 	}
 
 // 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
@@ -377,14 +377,14 @@ void NDDataPersist::AddAcount(const char* account, const char* pwd)
 			accountNode->addObject(&NSString((const char*)encPwd));
 		}
 		
-		for (int i = 0; i < accountList->count(); i++) 
+		for (int i = 0; i < m_pkAccountList->count(); i++) 
 		{
-			CCArray* tmpAccountNode = (CCArray*)accountList->objectAtIndex(i);
+			CCArray* tmpAccountNode = (CCArray*)m_pkAccountList->objectAtIndex(i);
 			NSString *tmpAccount = (NSString*)tmpAccountNode->objectAtIndex(0);
 
 			if (tmpAccount->isEqual(new NSString((const char*) encAccount)))
 			{
-				accountList->removeObject(tmpAccount);
+				m_pkAccountList->removeObject(tmpAccount);
 			}
 
 // 			if ([tmpAccount isEqual:[NSString stringWithUTF8String:(const char*)encAccount]]) 
@@ -394,13 +394,13 @@ void NDDataPersist::AddAcount(const char* account, const char* pwd)
 // 			}
 		}
 		
-		if (accountList->count() >= MAX_ACCOUNT) 
+		if (m_pkAccountList->count() >= MAX_ACCOUNT) 
 		{
 			//[accountList removeObjectAtIndex:0];
-			accountList->removeObjectAtIndex(0);
+			m_pkAccountList->removeObjectAtIndex(0);
 		}
 		
-		accountList->addObject(accountNode);
+		m_pkAccountList->addObject(accountNode);
 		//[accountList addObject:accountNode];
 		
 		accountNode->release();
@@ -416,9 +416,9 @@ void NDDataPersist::GetAccount(VEC_ACCOUNT& vAccount)
 	
 	CCArray* account = 0;
 
-	for (int i = 0;i < accountList->count();i++)
+	for (int i = 0;i < m_pkAccountList->count();i++)
 	{
-		account = (CCArray*)accountList->objectAtIndex(i);
+		account = (CCArray*)m_pkAccountList->objectAtIndex(i);
 		string acc = ((NSString*)(account->objectAtIndex(0)))->toStdString();
 		string pwd = "";
 
@@ -460,7 +460,7 @@ void NDDataPersist::GetAccount(VEC_ACCOUNT& vAccount)
 void NDDataPersist::SaveAccountList()
 {
 //	[accountList writeToFile:this->GetAccountListPath() atomically:YES];
-	accountList->writeToFile(GetAccountListPath(),YES);
+	m_pkAccountList->writeToFile(GetAccountListPath(),YES);
 }
 
 NSString* NDDataPersist::GetAccountDeviceListPath()
@@ -518,9 +518,9 @@ void NDDataPersist::AddAccountDevice(const char* account)
 		unsigned char encAccount[1024] = {0x00};
 		simpleEncode((const unsigned char*)account, encAccount);
 		
-		for (NSUInteger i = 0; i < accountList->count(); i++) 
+		for (NSUInteger i = 0; i < m_pkAccountList->count(); i++) 
 		{
-			NSString* tmpAccountNode = (NSString*)accountList->objectAtIndex(i);
+			NSString* tmpAccountNode = (NSString*)m_pkAccountList->objectAtIndex(i);
 
 			if (tmpAccountNode->isEqual(NSString::stringWithUTF8String((const char*)encAccount)))
 			{
@@ -534,7 +534,7 @@ void NDDataPersist::AddAccountDevice(const char* account)
 		}
 		
 		//[accountDeviceList addObject:[NSString stringWithUTF8String:(const char*)encAccount]];
-		accountDeviceList->addObject(NSString::stringWithUTF8String((const char*)encAccount));
+		m_pkAccountDeviceList->addObject(NSString::stringWithUTF8String((const char*)encAccount));
 	}	
 }
 
@@ -558,7 +558,7 @@ bool NDDataPersist::HasAccountDevice(const char* account)
 	
 	id object = 0;
 
-	for (int i = 0;i < accountDeviceList->count();i++)
+	for (int i = 0;i < m_pkAccountDeviceList->count();i++)
 	{
 		string acc = ((NSString*)object)->UTF8String();
 		unsigned char decAcc[1024] = {0};
@@ -596,22 +596,22 @@ void NDDataPersist::SetGameSetting(GAME_SETTING type, bool bOn)
 {
 	if (bOn) 
 	{
-		s_gameSetting |= type;
+		ms_nGameSetting |= type;
 	} 
 	else
 	{
-		s_gameSetting &= ~type;
+		ms_nGameSetting &= ~type;
 	}
 }
 
 bool NDDataPersist::IsGameSettingOn(GAME_SETTING type)
 {
-	return NDDataPersist::s_gameSetting & type;
+	return NDDataPersist::ms_nGameSetting & type;
 }
 
 void NDDataPersist::SaveGameSetting()
 {
-	NSString* strGameSetting = NSString::stringWithFormat("%d",s_gameSetting);
+	NSString* strGameSetting = NSString::stringWithFormat("%d",ms_nGameSetting);
 
 	NSString* strTemp = new NSString(kGameSetting);
 	SetData(kGameSettingData,strTemp,strGameSetting->UTF8String());
