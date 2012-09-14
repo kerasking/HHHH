@@ -14,53 +14,54 @@
 using namespace NDEngine;
 using namespace cocos2d;
 
-static NDAnimationGroupPool *NDAnimationGroupPool_DefaultPool = NULL;
+static NDAnimationGroupPool* gs_pkNDAnimationGroupPool_DefaultPool = NULL;
 
-NDAnimationGroupPool::NDAnimationGroupPool()
-: m_pkAnimationGroups(NULL)
+NDAnimationGroupPool::NDAnimationGroupPool() :
+m_pkAnimationGroups(NULL)
 {
-	NDAsssert(NDAnimationGroupPool_DefaultPool == NULL);
-	m_pkAnimationGroups = new CCMutableDictionary<std::string, NDAnimationGroup*>();
+	NDAsssert(gs_pkNDAnimationGroupPool_DefaultPool == NULL);
+	m_pkAnimationGroups =
+			new CCMutableDictionary<std::string, NDAnimationGroup*>();
 }
 
 NDAnimationGroupPool::~NDAnimationGroupPool()
 {
-	CC_SAFE_RELEASE(m_pkAnimationGroups);
+	CC_SAFE_RELEASE (m_pkAnimationGroups);
 }
 
 NDAnimationGroupPool* NDAnimationGroupPool::defaultPool()
 {
-	if (!NDAnimationGroupPool_DefaultPool)
+	if (!gs_pkNDAnimationGroupPool_DefaultPool)
 	{
-		NDAnimationGroupPool_DefaultPool = new NDAnimationGroupPool;
+		gs_pkNDAnimationGroupPool_DefaultPool = new NDAnimationGroupPool;
 	}
-	
-	return NDAnimationGroupPool_DefaultPool;
+
+	return gs_pkNDAnimationGroupPool_DefaultPool;
 }
 
 void NDAnimationGroupPool::purgeDefaultPool()
 {
-	CC_SAFE_RELEASE_NULL(NDAnimationGroupPool_DefaultPool);
+	CC_SAFE_RELEASE_NULL (gs_pkNDAnimationGroupPool_DefaultPool);
 }
 
 NDAnimationGroup* NDAnimationGroupPool::addObjectWithSpr(const char*sprFile)
 {
 	NDAnimationGroup *pkGroup = NULL;
-	
+
 	pkGroup = m_pkAnimationGroups->objectForKey(sprFile);
 
-	if (!pkGroup) 
+	if (!pkGroup)
 	{
 		pkGroup = new NDAnimationGroup;
 		pkGroup->initWithSprFile(sprFile);
 
-		if (pkGroup) 
+		if (pkGroup)
 		{
 			m_pkAnimationGroups->setObject(pkGroup, sprFile);
 			//[group release];
 		}
 	}
-	else 
+	else
 	{
 		pkGroup->retain();
 	}
@@ -69,18 +70,21 @@ NDAnimationGroup* NDAnimationGroupPool::addObjectWithSpr(const char*sprFile)
 }
 
 NDAnimationGroup* NDAnimationGroupPool::addObjectWithModelId(int ModelId)
-{	
-	char sprFile[256] = {0};
-	sprintf(sprFile, "%smodel_%d.spr", 
-		NDPath::GetAnimationPath().c_str(), ModelId);
+{
+	char sprFile[256] =
+	{ 0 };
+	sprintf(sprFile, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(),
+			ModelId);
 	return this->addObjectWithSpr(sprFile);
 }
 
-NDAnimationGroup* NDAnimationGroupPool::addObjectWithSceneAnimationId(int SceneAnimationId)
-{	
-	char sprFile[256] = {0};
-	sprintf(sprFile, "%sscene_ani_%d.spr", 
-		NDPath::GetAnimationPath().c_str(), SceneAnimationId);
+NDAnimationGroup* NDAnimationGroupPool::addObjectWithSceneAnimationId(
+		int nSceneAnimationId)
+{
+	char sprFile[256] =
+	{ 0 };
+	sprintf(sprFile, "%sscene_ani_%d.spr", NDPath::GetAnimationPath().c_str(),
+			nSceneAnimationId);
 	return this->addObjectWithSpr(sprFile);
 }
 
@@ -89,11 +93,13 @@ void NDAnimationGroupPool::removeObjectWithSpr(const char* sprFile)
 	m_pkAnimationGroups->removeObjectForKey(sprFile);
 }
 
-void NDAnimationGroupPool::removeObjectWithSceneAnimationId(int SceneAnimationId)
+void NDAnimationGroupPool::removeObjectWithSceneAnimationId(
+		int SceneAnimationId)
 {
-	char sprFile[256] = {0};
-	sprintf(sprFile, "%sscene_ani_%d.spr",
-		NDPath::GetAnimationPath().c_str(), SceneAnimationId);
+	char sprFile[256] =
+	{ 0 };
+	sprintf(sprFile, "%sscene_ani_%d.spr", NDPath::GetAnimationPath().c_str(),
+			SceneAnimationId);
 	this->removeObjectWithSpr(sprFile);
 }
 
@@ -103,29 +109,30 @@ void NDAnimationGroupPool::Recyle()
 	{
 		return;
 	}
-	
-	std::vector<std::string> kAllKeys = m_pkAnimationGroups->allKeys();
-	
+
+	std::vector < std::string > kAllKeys = m_pkAnimationGroups->allKeys();
+
 	if (kAllKeys.empty())
 	{
 		return;
 	}
-	
-	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	std::vector<std::string> kRecyle;
-	
-	for (unsigned int i = 0; i < kAllKeys.size(); i++) 
-	{
-		std::string	strKey = kAllKeys[i];
 
-		NDAnimationGroup *pkAnimationGroup = m_pkAnimationGroups->objectForKey(strKey);
+	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
+	std::vector < std::string > kRecyle;
+
+	for (unsigned int i = 0; i < kAllKeys.size(); i++)
+	{
+		std::string strKey = kAllKeys[i];
+
+		NDAnimationGroup *pkAnimationGroup = m_pkAnimationGroups->objectForKey(
+				strKey);
 
 		if (NULL == pkAnimationGroup)
 		{
 			continue;
 		}
-		
+
 		if (1 >= pkAnimationGroup->retainCount())
 		{
 			kRecyle.push_back(strKey);

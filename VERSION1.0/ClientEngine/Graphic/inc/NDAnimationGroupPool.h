@@ -12,7 +12,7 @@
 #include "NDAnimationGroup.h"
 #include "CCMutableDictionary.h"
 
-class NDAnimationGroupPool : public cocos2d::CCObject 
+class NDAnimationGroupPool: public cocos2d::CCObject
 {
 public:
 
@@ -22,7 +22,7 @@ public:
 	static void purgeDefaultPool();
 
 	NDAnimationGroup* addObjectWithSpr(const char*sprFile);
-	NDAnimationGroup* addObjectWithSceneAnimationId(int SceneAnimationId);
+	NDAnimationGroup* addObjectWithSceneAnimationId(int nSceneAnimationId);
 	NDAnimationGroup* addObjectWithModelId(int ModelId);
 
 	void removeObjectWithSpr(const char* sprFile);

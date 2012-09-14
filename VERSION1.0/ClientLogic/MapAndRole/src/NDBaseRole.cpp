@@ -637,46 +637,46 @@ int NDBaseRole::getEquipmentLookFace(int lookface, int type)
 	{
 	case 0:
 	{	//ÎäÆ÷
-		int index = lookface / 100000 % 100;
-		if (index == 99)
+		int nIndex = lookface / 100000 % 100;
+		if (nIndex == 99)
 		{
 			return 0;
 		}
-		if (index < 10)
+		if (nIndex < 10)
 		{
-			nID = 1000 + index;
+			nID = 1000 + nIndex;
 		}
-		else if (index < 20)
+		else if (nIndex < 20)
 		{
-			nID = 1600 + index - 10;
+			nID = 1600 + nIndex - 10;
 		}
-		else if (index < 30)
+		else if (nIndex < 30)
 		{
-			nID = 2800 + index - 20;
+			nID = 2800 + nIndex - 20;
 		}
-		else if (index < 40)
+		else if (nIndex < 40)
 		{
-			nID = 1200 + index - 30;
+			nID = 1200 + nIndex - 30;
 		}
-		else if (index < 50)
+		else if (nIndex < 50)
 		{
-			nID = 1800 + index - 40;
+			nID = 1800 + nIndex - 40;
 		}
-		else if (index < 60)
+		else if (nIndex < 60)
 		{
-			nID = 2200 + index - 50;
+			nID = 2200 + nIndex - 50;
 		}
-		else if (index < 70)
+		else if (nIndex < 70)
 		{
-			nID = 2400 + index - 60;
+			nID = 2400 + nIndex - 60;
 		}
-		else if (index < 80)
+		else if (nIndex < 80)
 		{
-			nID = 5000 + index - 70;
+			nID = 5000 + nIndex - 70;
 		}
-		else if (index < 90)
+		else if (nIndex < 90)
 		{
-			nID = 2600 + index - 80;
+			nID = 2600 + nIndex - 80;
 		}
 		break;
 	}

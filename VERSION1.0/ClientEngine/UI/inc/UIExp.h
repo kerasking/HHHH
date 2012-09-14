@@ -18,49 +18,51 @@
 
 using namespace NDEngine;
 
-class CUIExp :
-public NDUINode
+class CUIExp: public NDUINode
 {
-	DECLARE_CLASS(CUIExp)
-	
+	DECLARE_CLASS (CUIExp)
+
 	CUIExp();
 	~CUIExp();
-	
+
 public:
-	void Initialization(const char* bgfile, const char* processfile); override
-	
+	void Initialization(const char* bgfile, const char* processfile);override
+
 	void SetProcess(unsigned int unProcess);
 	void SetTotal(unsigned int unTotal);
-	
+
 	unsigned int GetProcess();
 	unsigned int GetTotal();
-	
+
 	//设置进度数字前面的文本
-	void SetText(const char* text);	
+	void SetText(const char* text);
 	void SetTextFontColor(cocos2d::ccColor4B color);
 	void SetTextFontSize(unsigned int unSize);
-    void SetStyle(int nStyle) { m_nStyle = nStyle; }
+	void SetStyle(int nStyle)
+	{
+		m_nStyle = nStyle;
+	}
 
 private:
-	NDPicture*				m_picBg;
-	NDPicture*				m_picProcess;
-	NDUILabel*				m_lbText;
-	
-	std::string				m_strBgFile;
-	std::string				m_strProcessFile;
-	std::string				m_strText;
-	
-	unsigned int			m_unTotal;
-	unsigned int			m_unProcess;
-    
-    int                     m_nStyle;
-	
-	bool					m_bRecacl;
+	NDPicture* m_picBg;
+	NDPicture* m_picProcess;
+	NDUILabel* m_lbText;
+
+	std::string m_strBgFile;
+	std::string m_strProcessFile;
+	std::string m_strText;
+
+	unsigned int m_unTotal;
+	unsigned int m_unProcess;
+
+	int m_nStyle;
+
+	bool m_bRecacl;
 protected:
-	void draw(); override
-	
+	void draw();override
+
 public:
-	void SetFrameRect(CGRect rect); override
+	void SetFrameRect(CGRect rect);override
 };
 
 #endif // _UIEXP_H_ZJH_
