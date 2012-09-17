@@ -98,7 +98,7 @@ void StatusDialog::Initialization(Fighter* f)
 	ssTitle << f->GetRole()->m_strName << "("
 	<< f->GetRole()->m_nLevel << NDCommonCString("Ji") << ")";
 	
-	if(f->m_info.fighterType==Fighter_TYPE_RARE_MONSTER){
+	if(f->m_kInfo.fighterType==Fighter_TYPE_RARE_MONSTER){
 		ssTitle << "¡¾" << NDCommonCString("xiyou") << "¡¿";
 	}
 	
@@ -113,8 +113,8 @@ void StatusDialog::Initialization(Fighter* f)
 	nHeight += 20;
 	
 	stringstream ss;
-	ss << "HP: " << f->m_info.nLife << "/" << f->m_info.nLifeMax
-	<< "\nMP: " << f->m_info.nMana << "/" << f->m_info.nManaMax;
+	ss << "HP: " << f->m_kInfo.nLife << "/" << f->m_kInfo.nLifeMax
+	<< "\nMP: " << f->m_kInfo.nMana << "/" << f->m_kInfo.nManaMax;
 	
 	m_memo = NDUITextBuilder::DefaultBuilder()->Build(ss.str().c_str(), 
 							  13, 

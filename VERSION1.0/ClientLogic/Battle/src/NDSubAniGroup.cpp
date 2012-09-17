@@ -148,7 +148,7 @@ namespace NDEngine
 		if (curFrame && curFrame->getSubAnimationGroups()) {
 			for (int i = 0; i < curFrame->getSubAnimationGroups()->count(); i++) {
 				NDAnimationGroup *group = curFrame->getSubAnimationGroups()->getObjectAtIndex(i);
-				group->setReverse(f->m_info.group == BATTLE_GROUP_DEFENCE ? false : true);
+				group->setReverse(f->m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true);
 				
 				if (group->getIdentifer() == 0) { // 非魔法特效
 					if (group->getType() == SUB_ANI_TYPE_SELF || group->getType() == SUB_ANI_TYPE_NONE) {
@@ -162,7 +162,7 @@ namespace NDEngine
 							
 							VEC_FIGHTER& array = f->getArrayTarget();
 							if (array.size() == 0) { // 如果没有目标数组，则制定目标为mainTarget
-								battle->addSubAniGroup(role, group, f->m_mainTarget);
+								battle->addSubAniGroup(role, group, f->m_pkMainTarget);
 							} else {
 								for (size_t j = 0; j < array.size(); j++) {
 									battle->addSubAniGroup(role, group, array.at(j));

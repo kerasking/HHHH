@@ -64,7 +64,7 @@ void QuickTalkCell::Initialization(const char* pszText, const CGSize& size)
 	pic->Initialization(NDPath::GetImgPathBattleUI("chat_icon_sys.png"));
 	img->SetPicture(pic, true);
 	img->SetFrameRect(CGRectMake(3.0f, 9.0f, 9.0f, 9.0f));
-	this->AddChild(img);
+	AddChild(img);
 
 	img = new NDUIImage;
 	img->Initialization();
@@ -72,7 +72,7 @@ void QuickTalkCell::Initialization(const char* pszText, const CGSize& size)
 	pic->Initialization(NDPath::GetImgPathBattleUI("battle_chat_line.png"), 10,1);
 	img->SetPicture(pic, true);
 	img->SetFrameRect(CGRectMake(0.0f, size.height - 6.0f, size.width, 2.0f));
-	this->AddChild(img);
+	AddChild(img);
 
 	CGRect rectText = CGRectMake(15.0f, 5.0f, size.width - 15.0f,
 			size.height - 7.0f);
@@ -84,12 +84,12 @@ void QuickTalkCell::Initialization(const char* pszText, const CGSize& size)
 	m_lbText->SetText(pszText);
 	m_lbText->SetTextAlignment(LabelTextAlignmentLeft);
 	m_lbText->SetFrameRect(rectText);
-	this->AddChild(m_lbText);
+	AddChild(m_lbText);
 }
 
 void QuickTalkCell::draw()
 {
-	NDNode* parentNode = this->GetParent();
+	NDNode* parentNode = GetParent();
 
 	if (parentNode && parentNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
 	{
@@ -97,7 +97,7 @@ void QuickTalkCell::draw()
 
 		if (uiLayer->GetFocus() == this)
 		{ // 当前处于焦点,绘制焦点色
-		  //DrawRecttangle(this->GetScreenRect(), m_clrFocus); ///< 临时性注释 郭浩
+		  //DrawRecttangle(GetScreenRect(), m_clrFocus); ///< 临时性注释 郭浩
 			m_lbText->SetFontColor(m_clrFocusText);
 		}
 		else
@@ -146,7 +146,7 @@ void HighlightTip::Initialization()
 			CGRectMake(0, 0, m_pkPicBubble->GetSize().width,
 					m_pkPicBubble->GetSize().height));
 	pImgBubble->SetPicture(m_pkPicBubble, false);
-	this->AddChild(pImgBubble);
+	AddChild(pImgBubble);
 
 	NDUIImage* imgHp = new NDUIImage;
 	imgHp->Initialization();
@@ -155,7 +155,7 @@ void HighlightTip::Initialization()
 	imgHp->SetPicture(pic);
 	imgHp->SetFrameRect(
 			CGRectMake(2, 20, pic->GetSize().width, pic->GetSize().height));
-	this->AddChild(imgHp);
+	AddChild(imgHp);
 
 	NDUIImage* imgMp = new NDUIImage;
 	imgMp->Initialization();
@@ -164,27 +164,27 @@ void HighlightTip::Initialization()
 	imgMp->SetPicture(pic);
 	imgMp->SetFrameRect(
 			CGRectMake(2, 35, pic->GetSize().width, pic->GetSize().height));
-	this->AddChild(imgMp);
+	AddChild(imgMp);
 
 	m_hpBar = new HighlightTipStatusBar(0xC7321A);
 	m_hpBar->Initialization();
-	this->AddChild(m_hpBar);
+	AddChild(m_hpBar);
 
 	m_mpBar = new HighlightTipStatusBar(0x3C4ACF);
 	m_mpBar->Initialization();
-	this->AddChild(m_mpBar);
+	AddChild(m_mpBar);
 
-	this->m_imgNumHp = new ImageNumber;
+	m_imgNumHp = new ImageNumber;
 	m_imgNumHp->Initialization();
 	m_imgNumHp->SetFrameRect(CGRectMake(16, 25, 40, 10));
-	this->AddChild(m_imgNumHp);
+	AddChild(m_imgNumHp);
 
-	this->m_imgNumMp = new ImageNumber;
+	m_imgNumMp = new ImageNumber;
 	m_imgNumMp->Initialization();
 	m_imgNumMp->SetFrameRect(CGRectMake(16, 43, 40, 10));
-	this->AddChild(m_imgNumMp);
+	AddChild(m_imgNumMp);
 
-	this->EnableEvent(false);
+	EnableEvent(false);
 }
 
 void HighlightTip::SetFighter(Fighter* pkFighter)
@@ -214,19 +214,19 @@ void HighlightTip::SetFighter(Fighter* pkFighter)
 		kRect.origin.y = 0;
 	}
 
-	this->SetFrameRect(kRect);
+	SetFrameRect(kRect);
 
-	m_hpBar->SetNum(pkFighter->m_info.nLife, pkFighter->m_info.nLifeMax);
+	m_hpBar->SetNum(pkFighter->m_kInfo.nLife, pkFighter->m_kInfo.nLifeMax);
 	m_hpBar->SetFrameRect(
 			CGRectMake(kRect.origin.x + 16, kRect.origin.y + 20, 40, 10));
-	m_imgNumHp->SetSmallRedTwoNumber(pkFighter->m_info.nLife, pkFighter->m_info.nLifeMax);
+	m_imgNumHp->SetSmallRedTwoNumber(pkFighter->m_kInfo.nLife, pkFighter->m_kInfo.nLifeMax);
 
-	m_mpBar->SetNum(pkFighter->m_info.nMana, pkFighter->m_info.nManaMax);
+	m_mpBar->SetNum(pkFighter->m_kInfo.nMana, pkFighter->m_kInfo.nManaMax);
 	m_mpBar->SetFrameRect(
 			CGRectMake(kRect.origin.x + 16, kRect.origin.y + 38, 40, 10));
-	m_imgNumMp->SetSmallRedTwoNumber(pkFighter->m_info.nMana, pkFighter->m_info.nManaMax);
+	m_imgNumMp->SetSmallRedTwoNumber(pkFighter->m_kInfo.nMana, pkFighter->m_kInfo.nManaMax);
 
-	NDUILabel* pkNameLabel = (NDUILabel*) this->GetChild(TAG_NAME);
+	NDUILabel* pkNameLabel = (NDUILabel*) GetChild(TAG_NAME);
 
 	if (!pkNameLabel)
 	{
@@ -234,11 +234,11 @@ void HighlightTip::SetFighter(Fighter* pkFighter)
 		pkNameLabel->SetFontColor(ccc4(255, 255, 255, 255));
 		pkNameLabel->Initialization();
 		pkNameLabel->SetTag(TAG_NAME);
-		this->AddChild(pkNameLabel);
+		AddChild(pkNameLabel);
 	}
 	std::stringstream kStringStream;
 	kStringStream << pkRole->m_strName << "Lv" << pkRole->m_nLevel;
-	//	if (f->m_info.fighterType == Fighter_TYPE_RARE_MONSTER)
+	//	if (f->m_kInfo.fighterType == Fighter_TYPE_RARE_MONSTER)
 	//	{
 	//		ss << "【" << NDCommonCString("xiyou") << "】"; 
 	//	}
@@ -282,12 +282,12 @@ void Battle::ResetLastTurnBattleAction()
 
 Battle::Battle()
 {
-	this->Init();
+	Init();
 }
 
 Battle::Battle(Byte btType)
 {
-	this->Init();
+	Init();
 	m_battleType = BATTLE_TYPE(btType);
 
 }
@@ -326,7 +326,7 @@ Battle::~Battle()
 	//		SAFE_DELETE(m_btnSendChat);
 	//	}
 
-	this->CloseChatInput();
+	CloseChatInput();
 	//[m_chatDelegate release];
 	if (eraseInOutEffect)
 	{
@@ -386,16 +386,16 @@ Battle::~Battle()
 
 	gameScene->OnBattleEnd();
 	//	if (m_btnLeave) {
-	//		this->RemoveChild(m_btnLeave, false);
+	//		RemoveChild(m_btnLeave, false);
 	//		SAFE_DELETE(m_btnLeave);
 	//	}
 
 	//	if (m_battleOpt) {
-	//		this->RemoveChild(m_battleOpt, false);
+	//		RemoveChild(m_battleOpt, false);
 	//		SAFE_DELETE(m_battleOpt);
 	//	}
 	//	if (m_eudemonOpt) {
-	//		this->RemoveChild(m_eudemonOpt, false);
+	//		RemoveChild(m_eudemonOpt, false);
 	//		SAFE_DELETE(m_eudemonOpt);
 	//	}
 
@@ -405,13 +405,13 @@ Battle::~Battle()
 	//	SAFE_DELETE(m_picBoji);
 
 	//	if (s_bAuto) {
-	//		this->RemoveChild(m_lbAuto, false);
-	//		this->RemoveChild(m_imgAutoCount, false);
+	//		RemoveChild(m_lbAuto, false);
+	//		RemoveChild(m_imgAutoCount, false);
 	//		SAFE_DELETE(m_imgAutoCount);
 	//		SAFE_DELETE(m_lbAuto);
 	//	}
 
-	this->ReleaseCommandList();
+	ReleaseCommandList();
 
 	for (VEC_FIGHTER_IT it = m_vAttaker.begin(); it != m_vAttaker.end(); it++)
 	{
@@ -425,7 +425,7 @@ Battle::~Battle()
 		fighter->GetRole()->RemoveFromParent(false);
 	}
 
-	for (VEC_SUB_ANI_GROUP_IT it = this->m_vSubAniGroup.begin();
+	for (VEC_SUB_ANI_GROUP_IT it = m_vSubAniGroup.begin();
 			it != m_vSubAniGroup.end(); it++)
 	{
 		it->frameRec->release();
@@ -462,7 +462,7 @@ Battle::~Battle()
 	//	BattleFieldRelive::Show();
 	//}
 	//
-	if (this->m_rewardContent.size() > 2)
+	if (m_rewardContent.size() > 2)
 	{
 		GlobalShowDlg(NDCommonCString("BattleRes"), m_rewardContent.c_str(),
 				3.0f);
@@ -479,15 +479,15 @@ void Battle::OnDialogClose(NDUIDialog* dialog)
 		BattleMgrObj.quitBattle();
 		//	} else if (m_dlgHint == dialog) {
 		//		m_dlgHint = NULL;
-		//		switch (this->m_battleStatus) {
+		//		switch (m_battleStatus) {
 		//			case BS_USE_ITEM_MENU:
 		//			case BS_USER_SKILL_MENU:
-		//				this->m_battleStatus = BS_USER_MENU;
-		//				//this->AddChild(m_battleOpt);
+		//				m_battleStatus = BS_USER_MENU;
+		//				//AddChild(m_battleOpt);
 		//				break;
 		//			case BS_EUDEMON_SKILL_MENU:
-		//				this->m_battleStatus = BS_EUDEMON_MENU;
-		//				//this->AddChild(this->m_eudemonOpt);
+		//				m_battleStatus = BS_EUDEMON_MENU;
+		//				//AddChild(m_eudemonOpt);
 		//				break;
 		//			default:
 		//				break;
@@ -505,19 +505,19 @@ void Battle::AddFighter(Fighter* f)
 		return;
 	}
 
-	this->AddChild(role);
+	AddChild(role);
 	if (role->IsKindOfClass(RUNTIME_CLASS(NDPlayer)))
 	{
-		//		this->m_playerHead->SetBattlePlayer(f);
-		this->m_ourGroup = group;
+		//		m_playerHead->SetBattlePlayer(f);
+		m_ourGroup = group;
 	}
 
 	//	if (role->IsKindOfClass(RUNTIME_CLASS(NDBattlePet))) {
-	//		if (f->m_info.line == BATTLE_LINE_FRONT && f->m_info.posIdx == 0) { // 玩家战宠
-	//			if (NULL == this->m_petHead) {
+	//		if (f->m_kInfo.line == BATTLE_LINE_FRONT && f->m_kInfo.posIdx == 0) { // 玩家战宠
+	//			if (NULL == m_petHead) {
 	//				m_petHead = new PetHead;
 	//				m_petHead->Initialization(f);
-	//				this->AddChild(m_petHead);
+	//				AddChild(m_petHead);
 	//			}
 	//		}
 	//	}
@@ -534,7 +534,7 @@ void Battle::AddFighter(Fighter* f)
 	}
 	f->setPosition(m_teamAmout);
 	f->showFighterName(true);
-	//	if (f->m_info.bRoleMonster) {
+	//	if (f->m_kInfo.bRoleMonster) {
 	//		role->m_faceRight = !role->m_faceRight;
 	//	}
 
@@ -543,18 +543,18 @@ void Battle::AddFighter(Fighter* f)
 
 void Battle::clearHighlight()
 {
-	this->RemoveChild(TAG_LINGPAI, true);
-	this->RemoveChild(TAG_NAME, true);
-	this->clearAllWillBeAtk();
-	//if (this->m_highlightFighter)
-	//		this->m_highlightFighter->setWillBeAtk(false);
-	this->m_highlightFighter = NULL;
+	RemoveChild(TAG_LINGPAI, true);
+	RemoveChild(TAG_NAME, true);
+	clearAllWillBeAtk();
+	//if (m_highlightFighter)
+	//		m_highlightFighter->setWillBeAtk(false);
+	m_highlightFighter = NULL;
 }
 
 void Battle::CloseViewStatus()
 {
-	this->RemoveChild(TAG_VIEW_FIGHTER_STATUS, true);
-	this->clearHighlight();
+	RemoveChild(TAG_VIEW_FIGHTER_STATUS, true);
+	clearHighlight();
 
 	//	if (m_dlgHint) {
 	//		m_dlgHint->RemoveFromParent(true);
@@ -570,13 +570,13 @@ void Battle::CloseViewStatus()
 
 //void Battle::CloseSkillMenu()
 //{
-//	if (this->m_dlgHint) {
+//	if (m_dlgHint) {
 //		m_dlgHint->RemoveFromParent(true);
 //		m_dlgHint = NULL;
-//	} else if (this->m_skillOpt) {
-//		this->RemoveChild(m_skillOpt, true);
+//	} else if (m_skillOpt) {
+//		RemoveChild(m_skillOpt, true);
 //		m_skillOpt = NULL;
-//		this->RemoveChild(TAG_SKILL_MEMO, true);
+//		RemoveChild(TAG_SKILL_MEMO, true);
 //	}
 //}
 
@@ -587,7 +587,7 @@ void Battle::CloseViewStatus()
 //		m_dlgHint = NULL;
 //	} else if (m_itemOpt) {
 //		m_mapUseItem.clear();
-//		this->RemoveChild(m_itemOpt, true);
+//		RemoveChild(m_itemOpt, true);
 //		m_itemOpt = NULL;
 //	}
 //}
@@ -595,12 +595,12 @@ void Battle::CloseViewStatus()
 void Battle::ShowQuickChat(bool bShow)
 {
 	//	if (bShow) {
-	//		this->AddChild(m_imgQuickTalkBg);
-	//		this->AddChild(m_tlQuickTalk);
+	//		AddChild(m_imgQuickTalkBg);
+	//		AddChild(m_tlQuickTalk);
 	//		m_layerBtnQuitTalk->SetFrameRect(CGRectMake(35, 136, 48, 20));
 	//	} else {
-	//		this->RemoveChild(m_imgQuickTalkBg, false);
-	//		this->RemoveChild(m_tlQuickTalk, false);
+	//		RemoveChild(m_imgQuickTalkBg, false);
+	//		RemoveChild(m_tlQuickTalk, false);
 	//		m_layerBtnQuitTalk->SetFrameRect(CGRectMake(35, 300, 48, 20));
 	//	}
 }
@@ -614,8 +614,8 @@ void Battle::ShowChatTextField(bool bShow)
 	//	m_bShowChatTextField = bShow;
 	//	
 	//	if (m_bShowChatTextField) {
-	//		this->AddChild(m_imgChat);
-	//		this->AddChild(m_btnSendChat);
+	//		AddChild(m_imgChat);
+	//		AddChild(m_btnSendChat);
 	//		
 	//		if (NULL == m_chatDelegate.tfChat) {
 	//			UITextField* tfChat = [[UITextField alloc] init];
@@ -632,8 +632,8 @@ void Battle::ShowChatTextField(bool bShow)
 	//			[[[CCDirector sharedDirector] openGLView] addSubview:m_chatDelegate.tfChat];
 	//		}
 	//	} else {
-	//		this->RemoveChild(m_imgChat, false);
-	//		this->RemoveChild(m_btnSendChat, false);
+	//		RemoveChild(m_imgChat, false);
+	//		RemoveChild(m_btnSendChat, false);
 	//		[m_chatDelegate.tfChat removeFromSuperview];
 	//	}
 }
@@ -641,7 +641,7 @@ void Battle::ShowChatTextField(bool bShow)
 void Battle::OnButtonClick(NDUIButton* button)
 {
 	//	if (button == m_btnLeave) {
-	//		if (this->m_bWatch) {
+	//		if (m_bWatch) {
 	//			ShowProgressBar;
 	//			NDTransData bao(_MSG_BATTLEACT);
 	//			bao << BATTLE_ACT_LEAVE << Byte(0) << Byte(0);
@@ -651,28 +651,28 @@ void Battle::OnButtonClick(NDUIButton* button)
 	//		
 	//	} else if (button == m_btnAuto) {
 	//		if (s_bAuto) {
-	//			this->stopAuto();
+	//			stopAuto();
 	//		} else {
-	//			this->OnBtnAuto(this->m_battleStatus < BS_SET_FIGHTER);
+	//			OnBtnAuto(m_battleStatus < BS_SET_FIGHTER);
 	//		}
 	//		
 	//		/*switch (m_battleStatus) {
 	//			case BS_USER_MENU:
 	//			case BS_EUDEMON_MENU:
 	//			{
-	//				this->stopAuto();
-	//				VEC_FIGHTER& enemyList = this->GetEnemySideList();
+	//				stopAuto();
+	//				VEC_FIGHTER& enemyList = GetEnemySideList();
 	//				for (VEC_FIGHTER_IT it = enemyList.begin(); it != enemyList.end(); it++) {
 	//					if ((*it)->isVisiable()) {
-	//						if (this->m_battleStatus == BS_EUDEMON_MENU) {
-	//							this->m_battleStatus = BS_CHOOSE_VIEW_FIGHTER_STATUS_PET;
-	//							this->RemoveChild(this->m_eudemonOpt, false);
+	//						if (m_battleStatus == BS_EUDEMON_MENU) {
+	//							m_battleStatus = BS_CHOOSE_VIEW_FIGHTER_STATUS_PET;
+	//							RemoveChild(m_eudemonOpt, false);
 	//						} else {
 	//							m_battleStatus = BS_CHOOSE_VIEW_FIGHTER_STATUS;
-	//							this->RemoveChild(m_battleOpt, false);
+	//							RemoveChild(m_battleOpt, false);
 	//						}
 	//						
-	//						this->HighlightFighter(*it);
+	//						HighlightFighter(*it);
 	//						
 	//						CGSize size = NDDirector::DefaultDirector()->GetWinSize();
 	//						NDUILabel* lbViewFighter = new NDUILabel;
@@ -683,64 +683,64 @@ void Battle::OnButtonClick(NDUIButton* button)
 	//						lbViewFighter->SetTag(TAG_VIEW_FIGHTER_STATUS);
 	//						lbViewFighter->SetFrameRect(CGRectMake((size.width - sizeText.width) / 2
 	//										       , 260, sizeText.width, sizeText.height));
-	//						this->AddChild(lbViewFighter);
+	//						AddChild(lbViewFighter);
 	//						return;
 	//					}
 	//				}
 	//			}
 	//				break;
 	//			case BS_CHOOSE_VIEW_FIGHTER_STATUS:
-	//				this->CloseViewStatus();
-	//				this->AddChild(m_battleOpt);
+	//				CloseViewStatus();
+	//				AddChild(m_battleOpt);
 	//				m_battleStatus = BS_USER_MENU;
 	//				break;
 	//			case BS_CHOOSE_VIEW_FIGHTER_STATUS_PET:
-	//				this->CloseViewStatus();
-	//				this->AddChild(this->m_eudemonOpt);
+	//				CloseViewStatus();
+	//				AddChild(m_eudemonOpt);
 	//				m_battleStatus = BS_EUDEMON_MENU;
 	//				break;
 	//			case BS_USE_ITEM_MENU:
-	//				this->CloseItemMenu();
-	//				this->m_battleStatus = BS_USER_MENU;
-	//				this->AddChild(m_battleOpt);
+	//				CloseItemMenu();
+	//				m_battleStatus = BS_USER_MENU;
+	//				AddChild(m_battleOpt);
 	//				break;
 	//			case BS_EUDEMON_USE_ITEM_MENU:
-	//				this->CloseItemMenu();
-	//				this->m_battleStatus = BS_EUDEMON_MENU;
-	//				this->AddChild(m_eudemonOpt);
+	//				CloseItemMenu();
+	//				m_battleStatus = BS_EUDEMON_MENU;
+	//				AddChild(m_eudemonOpt);
 	//				break;
 	//			case BS_USER_SKILL_MENU:
-	//				this->CloseSkillMenu();
-	//				this->m_battleStatus = BS_USER_MENU;
-	//				this->AddChild(m_battleOpt);
+	//				CloseSkillMenu();
+	//				m_battleStatus = BS_USER_MENU;
+	//				AddChild(m_battleOpt);
 	//				break;
 	//			case BS_EUDEMON_SKILL_MENU:
-	//				this->CloseSkillMenu();
-	//				this->m_battleStatus = BS_EUDEMON_MENU;
-	//				this->AddChild(this->m_eudemonOpt);
+	//				CloseSkillMenu();
+	//				m_battleStatus = BS_EUDEMON_MENU;
+	//				AddChild(m_eudemonOpt);
 	//				break;
 	//			case BS_CHOOSE_ENEMY_CATCH:
 	//			case BS_CHOOSE_ENEMY_PHY_ATK:
 	//			case BS_CHOOSE_ENEMY_MAG_ATK:
 	//			case BS_CHOOSE_OUR_SIDE_MAG_ATK:
-	//				this->clearHighlight();
-	//				this->AddChild(m_battleOpt);
-	//				this->m_battleStatus = BS_USER_MENU;
+	//				clearHighlight();
+	//				AddChild(m_battleOpt);
+	//				m_battleStatus = BS_USER_MENU;
 	//				break;
 	//			case BS_CHOOSE_OUR_SIDE_USE_ITEM_USER:
-	//				this->clearHighlight();
-	//				this->OnBtnUseItem(BS_USE_ITEM_MENU);
+	//				clearHighlight();
+	//				OnBtnUseItem(BS_USE_ITEM_MENU);
 	//				break;
 	//			case BS_CHOOSE_OUR_SIDE_USE_ITEM_EUDEMON:
-	//				this->clearHighlight();
-	//				this->OnBtnUseItem(BS_EUDEMON_USE_ITEM_MENU);
+	//				clearHighlight();
+	//				OnBtnUseItem(BS_EUDEMON_USE_ITEM_MENU);
 	//				break;
 	//			case BS_CHOOSE_ENEMY_PHY_ATK_EUDEMON:
 	//			case BS_CHOOSE_ENEMY_MAG_ATK_EUDEMON:
 	//			case BS_CHOOSE_OUR_SIDE_MAG_ATK_EUDEMON:
-	//				this->clearHighlight();
-	//				this->AddChild(this->m_eudemonOpt);
-	//				this->m_battleStatus = BS_EUDEMON_MENU;
+	//				clearHighlight();
+	//				AddChild(m_eudemonOpt);
+	//				m_battleStatus = BS_EUDEMON_MENU;
 	//				break;
 	//			default:
 	//				break;
@@ -749,17 +749,17 @@ void Battle::OnButtonClick(NDUIButton* button)
 	//	{
 	//		//ChatRecordManager::DefaultManager()->Show();
 	//		// 直接显示聊天输入框
-	//		//this->ShowChatTextField(!m_bShowChatTextField);
+	//		//ShowChatTextField(!m_bShowChatTextField);
 	//		NewChatScene::DefaultManager()->Show();
 	//	} else if (button == m_btnQuickTalk) {
 	//		// 快捷聊天
-	//		this->ShowQuickChat(m_imgQuickTalkBg->GetParent() == NULL);
+	//		ShowQuickChat(m_imgQuickTalkBg->GetParent() == NULL);
 	//		
 	//	} else if (button == m_btnSendChat) {
-	//		NSString* msg = this->m_chatDelegate.tfChat.text;
+	//		NSString* msg = m_chatDelegate.tfChat.text;
 	//		if ([msg length] > 0) {
 	//			ChatInput::SendChatDataToServer(ChatTypeSection, [msg UTF8String]);
-	//			this->m_chatDelegate.tfChat.text = @"";
+	//			m_chatDelegate.tfChat.text = @"";
 	//			string speaker = NDPlayer::defaultHero().m_name;
 	//			speaker += "：";
 	//			Chat::DefaultChat()->AddMessage(ChatTypeSection, [msg UTF8String], speaker.c_str());
@@ -768,7 +768,7 @@ void Battle::OnButtonClick(NDUIButton* button)
 	//	else if (button == m_btnCancleAutoFight)
 	//	{
 	//		//取消自动战斗
-	//		this->RemoveCancleAutoFightButton();
+	//		RemoveCancleAutoFightButton();
 	//		s_bAuto = false;
 	//	}
 }
@@ -777,11 +777,11 @@ void Battle::Initialization(int action)
 {
 	NDUILayer::Initialization();
 
-	this->SetScrollEnabled(true);
+	SetScrollEnabled(true);
 
 	if (action == BATTLE_STAGE_WATCH)
 	{
-		this->m_bWatch = true;
+		m_bWatch = true;
 	}
 
 	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
@@ -803,13 +803,13 @@ void Battle::Initialization(int action)
 	//	m_btnTalk->SetFrameRect(CGRectMake(0, 263, 47, 57));
 	//	m_btnTalk->SetTag(BTN_TALK);
 	//	m_btnTalk->SetDelegate(this);
-	//	this->AddChild(m_btnTalk);
+	//	AddChild(m_btnTalk);
 	//	
 	//	m_layerBtnQuitTalk = new NDUILayer;
 	//	m_layerBtnQuitTalk->Initialization();
 	//	m_layerBtnQuitTalk->SetBackgroundColor(ccc4(0, 0, 0, 0));
 	//	m_layerBtnQuitTalk->SetFrameRect(CGRectMake(40, 300, 48, 20));
-	//	this->AddChild(m_layerBtnQuitTalk, 1);
+	//	AddChild(m_layerBtnQuitTalk, 1);
 	//	
 	//	m_btnQuickTalk = new NDUIButton();
 	//	m_btnQuickTalk->Initialization();
@@ -819,7 +819,7 @@ void Battle::Initialization(int action)
 	//	m_layerBtnQuitTalk->AddChild(m_btnQuickTalk);
 	//	
 	//	
-	//	if (this->m_bWatch) {
+	//	if (m_bWatch) {
 	//		m_picLeave = new NDPicture();
 	//		m_picLeave->Initialization(GetImgPathBattleUI("battle_cancel.png"));
 	//		
@@ -828,7 +828,7 @@ void Battle::Initialization(int action)
 	//		m_btnLeave->SetImage(m_picLeave);
 	//		m_btnLeave->SetDelegate(this);
 	//		m_btnLeave->SetFrameRect(CGRectMake(420, 260, 60, 60));
-	//		this->AddChild(m_btnLeave);
+	//		AddChild(m_btnLeave);
 	//	} else {
 	//		m_picAuto = new NDPicture();
 	//		m_picAuto->Initialization(GetImgPathBattleUI("battle_auto.png"));
@@ -841,7 +841,7 @@ void Battle::Initialization(int action)
 	//		m_btnAuto->SetImage(s_bAuto ? m_picAutoCancel : m_picAuto);
 	//		m_btnAuto->SetFrameRect(CGRectMake(420, 260, 60, 60));
 	//		m_btnAuto->SetDelegate(this);
-	//		this->AddChild(m_btnAuto);
+	//		AddChild(m_btnAuto);
 	//	}
 	//	
 	//	m_imgTimer = new NDUIImage;
@@ -850,7 +850,7 @@ void Battle::Initialization(int action)
 	//	pic->Initialization(GetImgPathBattleUI("timerback.png"));
 	//	m_imgTimer->SetPicture(pic, true);
 	//	m_imgTimer->SetFrameRect(CGRectMake(185.0f, 75.0f, 111.0f, 46.0f));
-	//	this->AddChild(m_imgTimer);
+	//	AddChild(m_imgTimer);
 	//	
 	//	m_lbTimerTitle = new NDUILabel;
 	//	m_lbTimerTitle->?ialization();
@@ -858,7 +858,7 @@ void Battle::Initialization(int action)
 	//	m_lbTimerTitle->SetFontColor(ccc4(255, 255, 255, 255));
 	//	m_lbTimerTitle->SetText(NDCommonCString("DaoJiShi"));
 	//	m_lbTimerTitle->SetFrameRect(CGRectMake(218.0f, 81.0f, 60.0f, 20.0f));
-	//	this->AddChild(m_lbTimerTitle);
+	//	AddChild(m_lbTimerTitle);
 	//	
 	//	m_lbTimer = new NDUILabel;
 	//	m_lbTimer->Initialization();
@@ -866,7 +866,7 @@ void Battle::Initialization(int action)
 	//	m_lbTimer->SetFontColor(ccc4(255, 255, 255, 255));
 	//	m_lbTimer->SetText("30");
 	//	m_lbTimer->SetFrameRect(CGRectMake(233.0f, 103.0f, 60.0f, 20.0f));
-	//	this->AddChild(m_lbTimer);
+	//	AddChild(m_lbTimer);
 	//	
 	//	m_imgTurn = new NDUIImage;
 	//	m_imgTurn->Initialization();
@@ -874,7 +874,7 @@ void Battle::Initialization(int action)
 	//	pic->Initialization(GetImgPathBattleUI("turnback.png"));
 	//	m_imgTurn->SetPicture(pic, true);
 	//	m_imgTurn->SetFrameRect(CGRectMake(185.0f, 155.0f, 111.0f, 46.0f));
-	//	this->AddChild(m_imgTurn);
+	//	AddChild(m_imgTurn);
 	//	
 	//	m_lbTurnTitle = new NDUILabel;
 	//	m_lbTurnTitle->Initialization();
@@ -882,7 +882,7 @@ void Battle::Initialization(int action)
 	//	m_lbTurnTitle->SetFontColor(ccc4(255, 255, 255, 255));
 	//	m_lbTurnTitle->SetText(NDCommonCString("HuiHe"));
 	//	m_lbTurnTitle->SetFrameRect(CGRectMake(225.0f, 160.0f, 60.0f, 20.0f));
-	//	this->AddChild(m_lbTurnTitle);
+	//	AddChild(m_lbTurnTitle);
 	//	
 	//	m_lbTurn = new NDUILabel;
 	//	m_lbTurn->Initialization();
@@ -890,7 +890,7 @@ void Battle::Initialization(int action)
 	//	m_lbTurn->SetFontColor(ccc4(255, 255, 255, 255));
 	//	m_lbTurn->SetText("1/30");
 	//	m_lbTurn->SetFrameRect(CGRectMake(226.0f, 177.0f, 60.0f, 20.0f));
-	//	this->AddChild(m_lbTurn);
+	//	AddChild(m_lbTurn);
 	//	
 	//	m_timer.SetTimer(this, TIMER_TIMELEFT, 1);
 	//	
@@ -904,7 +904,7 @@ void Battle::Initialization(int action)
 	//	pic->Initialization(GetImgPathBattleUI("input_edit.png"));
 	//	m_imgChat->SetPicture(pic, true);
 	//	m_imgChat->SetFrameRect(CGRectMake(44.0f, 0.0f, 392.0f, 38.0f));
-	//	//this->AddChild(m_imgChat);
+	//	//AddChild(m_imgChat);
 	//	
 	//	m_btnSendChat = new NDUIButton;
 	//	m_btnSendChat->Initialization();
@@ -913,7 +913,7 @@ void Battle::Initialization(int action)
 	//	m_btnSendChat->SetImage(pic, false, CGRectMake(0, 0, 0, 0), true);
 	//	m_btnSendChat->SetFrameRect(CGRectMake(386.0f, 3.0f, 25.0f, 26.0f));
 	//	m_btnSendChat->SetDelegate(this);
-	//	//this->AddChild(m_btnSendChat);
+	//	//AddChild(m_btnSendChat);
 	//	
 	//	m_imgQuickTalkBg = new NDUIImage;
 	//	m_imgQuickTalkBg->Initialization();
@@ -921,7 +921,7 @@ void Battle::Initialization(int action)
 	//	pic->Initialization(GetImgPathBattleUI("battle_fast_bg.png"), 10, 10);
 	//	m_imgQuickTalkBg->SetPicture(pic, true);
 	//	m_imgQuickTalkBg->SetFrameRect(CGRectMake(1.0f, 154.0f, 210.0f, 166.0f));
-	//	//this->AddChild(m_imgQuickTalkBg);
+	//	//AddChild(m_imgQuickTalkBg);
 	//	
 	//	m_tlQuickTalk = new NDUITableLayer;
 	//	m_tlQuickTalk->Initialization();
@@ -961,9 +961,9 @@ void Battle::Initialization(int action)
 	//	ds->AddSection(sec);
 	//	m_tlQuickTalk->SetDelegate(this);
 	//	m_tlQuickTalk->SetDataSource(ds);
-	//this->AddChild(m_tlQuickTalk);
+	//AddChild(m_tlQuickTalk);
 
-	if (this->m_bWatch)
+	if (m_bWatch)
 	{ // 观战不需要其他操作
 		return;
 	}
@@ -974,7 +974,7 @@ void Battle::Initialization(int action)
 	//	m_picLingPai = NDPicturePool::DefaultPool()->AddPicture(GetImgPath("lingpai.png"));
 	//	m_imgWhoAmI->SetFrameRect(CGRectMake(0, 0, m_picWhoAmI->GetSize().width, m_picWhoAmI->GetSize().height));
 	//	m_imgWhoAmI->SetPicture(m_picWhoAmI);
-	//	this->AddChild(m_imgWhoAmI);
+	//	AddChild(m_imgWhoAmI);
 
 	/*m_battleOpt = new NDUITableLayer;
 	 m_battleOpt->Initialization();
@@ -1025,7 +1025,7 @@ void Battle::Initialization(int action)
 	 // 逃跑
 	 NDUIButton  *btnRun = new NDUIButton;
 	 btnRun->Initialization();
-	 if (this->m_battleType != BATTLE_TYPE_PRACTICE) {
+	 if (m_battleType != BATTLE_TYPE_PRACTICE) {
 	 btnRun->SetTitle("逃  跑");
 	 } else {
 	 btnRun->SetTitle("退  出");
@@ -1036,7 +1036,7 @@ void Battle::Initialization(int action)
 	 sec->AddCell(btnRun);
 	 
 	 // 捕捉
-	 if (this->m_battleType != BATTLE_TYPE_PRACTICE) {
+	 if (m_battleType != BATTLE_TYPE_PRACTICE) {
 	 NDUIButton  *btnCatch = new NDUIButton;
 	 btnCatch->Initialization();
 	 btnCatch->SetTitle("捕  捉");
@@ -1051,20 +1051,20 @@ void Battle::Initialization(int action)
 	 ds->AddSection(sec);
 	 m_battleOpt->SetDelegate(this);
 	 m_battleOpt->SetDataSource(ds);
-	 this->AddChild(m_battleOpt);*/
+	 AddChild(m_battleOpt);*/
 
 	if (ms_bAuto)
 	{
-		this->SetAutoCount();
+		SetAutoCount();
 	}
 
-	//	this->m_playerHead = new PlayerHead(&NDPlayer::defaultHero());
+	//	m_playerHead = new PlayerHead(&NDPlayer::defaultHero());
 	//	m_playerHead->Initialization(true);
-	//	this->AddChild(m_playerHead);
+	//	AddChild(m_playerHead);
 
 	if (ms_bAuto)
 	{
-		//this->RemoveChild(m_battleOpt, false);
+		//RemoveChild(m_battleOpt, false);
 		m_timer.SetTimer(this, TIMER_AUTOFIGHT, 0.5f);
 	}
 }
@@ -1072,9 +1072,9 @@ void Battle::Initialization(int action)
 void Battle::InitEudemonOpt()
 {
 	// 有战宠
-	this->getMainEudemon();
+	getMainEudemon();
 
-	/*if (this->getMainEudemon()) {
+	/*if (getMainEudemon()) {
 	 CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 	 m_eudemonOpt = new NDUITableLayer;
 	 m_eudemonOpt->Initialization();
@@ -1132,21 +1132,21 @@ void Battle::InitEudemonOpt()
  {
  if (m_skillOpt == table) {
  // 技能说明
- NDUIMemo* skillMemo = (NDUIMemo*)this->GetChild(TAG_SKILL_MEMO);
+ NDUIMemo* skillMemo = (NDUIMemo*)GetChild(TAG_SKILL_MEMO);
  
- if (this->m_battleStatus == BS_USER_SKILL_MENU) {
- this->m_curBattleAction->btAction = BATTLE_ACT_MAG_ATK;
+ if (m_battleStatus == BS_USER_SKILL_MENU) {
+ m_curBattleAction->btAction = BATTLE_ACT_MAG_ATK;
  s_lastTurnActionUser.btAction = BATTLE_ACT_MAG_ATK;
  s_lastTurnActionUser.vData.clear();
  
- SET_BATTLE_SKILL_LIST_IT itSkill = this->m_setBattleSkillList.begin();
+ SET_BATTLE_SKILL_LIST_IT itSkill = m_setBattleSkillList.begin();
  size_t n = 0;
  for (; n < cellIndex; n++) {
  itSkill++;
  }
  
- if (n < this->m_setBattleSkillList.size()) {
- this->m_curBattleAction->vData.push_back(*itSkill);
+ if (n < m_setBattleSkillList.size()) {
+ m_curBattleAction->vData.push_back(*itSkill);
  s_lastTurnActionUser.vData.push_back(*itSkill);
  s_lastTurnActionUser.vData.push_back(0);
  }
@@ -1158,13 +1158,13 @@ void Battle::InitEudemonOpt()
  if (skillMemo) {
  skillMemo->SetText(skill->getSimpleDes(true).c_str());
  }
- } else if (this->m_battleStatus == BS_EUDEMON_SKILL_MENU) {
+ } else if (m_battleStatus == BS_EUDEMON_SKILL_MENU) {
  
  NDBattlePet* pet = NDPlayer::defaultHero().battlepet;
  NDAsssert(pet != NULL);
  SET_BATTLE_SKILL_LIST petBattleSkillList = pet->GetSkillList(SKILL_TYPE_ATTACK);
  
- this->m_curBattleAction->btAction = BATTLE_ACT_PET_MAG_ATK;
+ m_curBattleAction->btAction = BATTLE_ACT_PET_MAG_ATK;
  
  s_lastTurnActionEudemon.btAction = BATTLE_ACT_PET_MAG_ATK;
  s_lastTurnActionEudemon.vData.clear();
@@ -1176,7 +1176,7 @@ void Battle::InitEudemonOpt()
  }
  
  if (n < petBattleSkillList.size()) {
- this->m_curBattleAction->vData.push_back(*itSkill);
+ m_curBattleAction->vData.push_back(*itSkill);
  s_lastTurnActionEudemon.vData.push_back(*itSkill);
  s_lastTurnActionEudemon.vData.push_back(0);
  }
@@ -1203,7 +1203,7 @@ void Battle::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 	//			string speaker = NDPlayer::defaultHero().m_name;
 	//			speaker += "：";
 	//			Chat::DefaultChat()->AddMessage(ChatTypeSection, strText.c_str(), speaker.c_str());
-	//			this->ShowQuickChat(false);
+	//			ShowQuickChat(false);
 	//		}
 	//	}
 }
@@ -1213,31 +1213,31 @@ void Battle::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
  switch ((cellIndex + 1))
  {
  case BTN_ATTATCK:
- this->stopAuto();
- this->OnBtnAttack();
+ stopAuto();
+ OnBtnAttack();
  break;
  case BTN_FLEE:
- this->stopAuto();
- this->OnBtnRun();
+ stopAuto();
+ OnBtnRun();
  break;
  case BTN_DEFENCE:
- this->stopAuto();
- this->OnBtnDefence();
+ stopAuto();
+ OnBtnDefence();
  break;
  case BTN_CATCH:
- this->stopAuto();
- this->OnBtnCatch();
+ stopAuto();
+ OnBtnCatch();
  break;
  case BTN_AUTO:
- this->OnBtnAuto(true);
+ OnBtnAuto(true);
  break;
  //			case BTN_ITEM:
- //				this->stopAuto();
- //				this->OnBtnUseItem(BS_USE_ITEM_MENU);
+ //				stopAuto();
+ //				OnBtnUseItem(BS_USE_ITEM_MENU);
  //				break;
  case BTN_SKILL:
- this->stopAuto();
- //this->OnBtnSkill();
+ stopAuto();
+ //OnBtnSkill();
  break;
  default:
  break;
@@ -1245,10 +1245,10 @@ void Battle::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
  } else if (m_itemOpt == table) {
  if (m_battleStatus == BS_USE_ITEM_MENU) {
  m_curBattleAction->btAction = BATTLE_ACT_USEITEM;
- this->m_battleStatus = BS_CHOOSE_OUR_SIDE_USE_ITEM_USER;
+ m_battleStatus = BS_CHOOSE_OUR_SIDE_USE_ITEM_USER;
  } else {
  m_curBattleAction->btAction = BATTLE_ACT_PET_USEITEM;
- this->m_battleStatus = BS_CHOOSE_OUR_SIDE_USE_ITEM_EUDEMON;
+ m_battleStatus = BS_CHOOSE_OUR_SIDE_USE_ITEM_EUDEMON;
  }
  
  m_curBattleAction->vData.clear();
@@ -1261,61 +1261,61 @@ void Battle::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
  m_curBattleAction->vData.push_back(it->second.first);
  }
  
- VEC_FIGHTER& ourSideList = this->GetOurSideList();
+ VEC_FIGHTER& ourSideList = GetOurSideList();
  Fighter* f;
  for (size_t i = 0; i < ourSideList.size(); i++) {
  f = ourSideList.at(i);
  if (f->isVisiable()) {
- this->HighlightFighter(f);
+ HighlightFighter(f);
  break;
  }
  }
  
- this->RemoveChild(m_itemOpt, true);
+ RemoveChild(m_itemOpt, true);
  m_itemOpt = NULL;
  } else if (m_eudemonOpt == table) {
  switch (cell->GetTag()) {
  case BTN_EUD_ATK:
- this->OnEudemonAttack();
+ OnEudemonAttack();
  break;
  case BTN_EUD_SKILL:
- //this->OnEudemonSkill();
+ //OnEudemonSkill();
  break;
  case BTN_EUD_DEF:
  {
  BattleAction actioin(BATTLE_ACT_PET_PHY_DEF);
  s_lastTurnActionEudemon.btAction = BATTLE_ACT_PET_PHY_DEF;
- this->SendBattleAction(actioin);
+ SendBattleAction(actioin);
  }
  break;
  case BTN_EUD_FLEE:
  {
  BattleAction actioin(BATTLE_ACT_PET_ESCAPE);
- this->SendBattleAction(actioin);
+ SendBattleAction(actioin);
  }
  break;
  //			case BTN_EUD_ITEM:
- //				this->OnBtnUseItem(BS_EUDEMON_USE_ITEM_MENU);
+ //				OnBtnUseItem(BS_EUDEMON_USE_ITEM_MENU);
  //				break;
  default:
  break;
  }
- } else if (this->m_skillOpt == table) {
- this->m_curBattleAction->vData.clear();
+ } else if (m_skillOpt == table) {
+ m_curBattleAction->vData.clear();
  
- if (this->m_battleStatus == BS_USER_SKILL_MENU) {
- this->m_curBattleAction->btAction = BATTLE_ACT_MAG_ATK;
+ if (m_battleStatus == BS_USER_SKILL_MENU) {
+ m_curBattleAction->btAction = BATTLE_ACT_MAG_ATK;
  s_lastTurnActionUser.btAction = BATTLE_ACT_MAG_ATK;
  s_lastTurnActionUser.vData.clear();
  
- SET_BATTLE_SKILL_LIST_IT itSkill = this->m_setBattleSkillList.begin();
+ SET_BATTLE_SKILL_LIST_IT itSkill = m_setBattleSkillList.begin();
  size_t n = 0;
  for (; n < cellIndex; n++) {
  itSkill++;
  }
  
- if (n < this->m_setBattleSkillList.size()) {
- this->m_curBattleAction->vData.push_back(*itSkill);
+ if (n < m_setBattleSkillList.size()) {
+ m_curBattleAction->vData.push_back(*itSkill);
  s_lastTurnActionUser.vData.push_back(*itSkill);
  s_lastTurnActionUser.vData.push_back(0);
  }
@@ -1325,48 +1325,48 @@ void Battle::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
  }
  
  int targetType = skill->getAtkType();
- this->GetMainUser()->setUseSkill(skill);
+ GetMainUser()->setUseSkill(skill);
  
  if ((targetType & SKILL_ATK_TYPE_ENEMY) == SKILL_ATK_TYPE_ENEMY) {
  
- this->m_battleStatus = BS_CHOOSE_ENEMY_MAG_ATK;
+ m_battleStatus = BS_CHOOSE_ENEMY_MAG_ATK;
  
- VEC_FIGHTER& enemyList = this->GetEnemySideList();
+ VEC_FIGHTER& enemyList = GetEnemySideList();
  Fighter* f;
  for (size_t i = 0; i < enemyList.size(); i++) {
  f = enemyList.at(i);
  if (f->isVisiable()) {
- this->HighlightFighter(f);
+ HighlightFighter(f);
  break;
  }
  }
  
  } else if ((targetType & SKILL_ATK_TYPE_FRIEND) == SKILL_ATK_TYPE_FRIEND) {
  
- this->m_battleStatus = BS_CHOOSE_OUR_SIDE_MAG_ATK;
+ m_battleStatus = BS_CHOOSE_OUR_SIDE_MAG_ATK;
  
- VEC_FIGHTER& ourList = this->GetOurSideList();
+ VEC_FIGHTER& ourList = GetOurSideList();
  Fighter* f;
  for (size_t i = 0; i < ourList.size(); i++) {
  f = ourList.at(i);
  if (f->isVisiable()) {
- this->HighlightFighter(f);
+ HighlightFighter(f);
  break;
  }
  }
  
  } else if ((targetType & SKILL_ATK_TYPE_SELF) == SKILL_ATK_TYPE_SELF) {
- this->m_curBattleAction->vData.push_back(this->GetMainUser()->m_info.idObj);
- this->SendBattleAction(*m_curBattleAction);
+ m_curBattleAction->vData.push_back(GetMainUser()->m_kInfo.idObj);
+ SendBattleAction(*m_curBattleAction);
  
  }
- } else if (this->m_battleStatus == BS_EUDEMON_SKILL_MENU) {
+ } else if (m_battleStatus == BS_EUDEMON_SKILL_MENU) {
  
  NDBattlePet* pet = NDPlayer::defaultHero().battlepet;
  NDAsssert(pet != NULL);
  SET_BATTLE_SKILL_LIST petBattleSkillList = pet->GetSkillList(SKILL_TYPE_ATTACK);
  
- this->m_curBattleAction->btAction = BATTLE_ACT_PET_MAG_ATK;
+ m_curBattleAction->btAction = BATTLE_ACT_PET_MAG_ATK;
  
  s_lastTurnActionEudemon.btAction = BATTLE_ACT_PET_MAG_ATK;
  s_lastTurnActionEudemon.vData.clear();
@@ -1378,7 +1378,7 @@ void Battle::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
  }
  
  if (n < petBattleSkillList.size()) {
- this->m_curBattleAction->vData.push_back(*itSkill);
+ m_curBattleAction->vData.push_back(*itSkill);
  s_lastTurnActionEudemon.vData.push_back(*itSkill);
  s_lastTurnActionEudemon.vData.push_back(0);
  }
@@ -1388,7 +1388,7 @@ void Battle::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
  }
  
  // 宠物mp不足提示
- if (this->getMainEudemon()->m_info.nMana < skill->getMpRequire()) {
+ if (getMainEudemon()->m_kInfo.nMana < skill->getMpRequire()) {
  m_dlgHint = new NDUIDialog;
  m_dlgHint->Initialization();
  m_dlgHint->SetDelegate(this);
@@ -1398,66 +1398,66 @@ void Battle::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
  
  if ((targetType & SKILL_ATK_TYPE_ENEMY) == SKILL_ATK_TYPE_ENEMY) {
  
- this->m_battleStatus = BS_CHOOSE_ENEMY_MAG_ATK_EUDEMON;
+ m_battleStatus = BS_CHOOSE_ENEMY_MAG_ATK_EUDEMON;
  
- VEC_FIGHTER& enemyList = this->GetEnemySideList();
+ VEC_FIGHTER& enemyList = GetEnemySideList();
  Fighter* f;
  for (size_t i = 0; i < enemyList.size(); i++) {
  f = enemyList.at(i);
  if (f->isVisiable()) {
- this->HighlightFighter(f);
+ HighlightFighter(f);
  break;
  }
  }
  
  } else if ((targetType & SKILL_ATK_TYPE_FRIEND) == SKILL_ATK_TYPE_FRIEND) {
  
- this->m_battleStatus = BS_CHOOSE_OUR_SIDE_MAG_ATK_EUDEMON;
+ m_battleStatus = BS_CHOOSE_OUR_SIDE_MAG_ATK_EUDEMON;
  
- VEC_FIGHTER& ourList = this->GetOurSideList();
+ VEC_FIGHTER& ourList = GetOurSideList();
  Fighter* f;
  for (size_t i = 0; i < ourList.size(); i++) {
  f = ourList.at(i);
  if (f->isVisiable()) {
- this->HighlightFighter(f);
+ HighlightFighter(f);
  break;
  }
  }
  
  } else if ((targetType & SKILL_ATK_TYPE_SELF) == SKILL_ATK_TYPE_SELF) {
- this->m_curBattleAction->vData.push_back(this->getMainEudemon()->m_info.idObj);
- this->SendBattleAction(*m_curBattleAction);
+ m_curBattleAction->vData.push_back(getMainEudemon()->m_kInfo.idObj);
+ SendBattleAction(*m_curBattleAction);
  
  }
  }
  }
- this->RemoveChild(this->m_skillOpt, true);
+ RemoveChild(m_skillOpt, true);
  m_skillOpt = NULL;
- this->RemoveChild(TAG_SKILL_MEMO, true);
+ RemoveChild(TAG_SKILL_MEMO, true);
  }
  }*/
 
 void Battle::processBattleSkillList(NDTransData& data, int len)
 {
-	//	this->m_setBattleSkillList.clear();
+	//	m_setBattleSkillList.clear();
 	//	int nCount = data.ReadShort();
 	//	for (int i = 0; i < nCount; i++) {
-	//		this->m_setBattleSkillList.insert(data.ReadInt());
+	//		m_setBattleSkillList.insert(data.ReadInt());
 	//	}
 	//	
 	//	if (s_bAuto) {
-	//		this->RefreshSkillBar();
+	//		RefreshSkillBar();
 	//		m_fighterLeft->SetGray(true);
 	//	}
 }
 
 /*void Battle::OnBtnSkill()
  {
- this->m_battleStatus = BS_USER_SKILL_MENU;
- this->RemoveChild(this->m_battleOpt, false);
+ m_battleStatus = BS_USER_SKILL_MENU;
+ RemoveChild(m_battleOpt, false);
  
  // 没有技能
- if (this->m_setBattleSkillList.size() <= 0) {
+ if (m_setBattleSkillList.size() <= 0) {
  m_dlgHint = new NDUIDialog;
  m_dlgHint->Initialization();
  m_dlgHint->SetDelegate(this);
@@ -1471,7 +1471,7 @@ void Battle::processBattleSkillList(NDTransData& data, int len)
  CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
  int height = 0;
  
- this->m_skillOpt = new NDUITableLayer;
+ m_skillOpt = new NDUITableLayer;
  m_skillOpt->Initialization();
  m_skillOpt->VisibleSectionTitles(false);
  
@@ -1481,9 +1481,9 @@ void Battle::processBattleSkillList(NDTransData& data, int len)
  BattleMgr& bm = BattleMgrObj;
  BattleSkill* bs = NULL;
  
- SET_BATTLE_SKILL_LIST_IT itSkill = this->m_setBattleSkillList.begin();
+ SET_BATTLE_SKILL_LIST_IT itSkill = m_setBattleSkillList.begin();
  BattleSkill* firstSkill = bm.GetBattleSkill(*itSkill);
- for (; itSkill != this->m_setBattleSkillList.end(); itSkill++) {
+ for (; itSkill != m_setBattleSkillList.end(); itSkill++) {
  bs = bm.GetBattleSkill(*itSkill);
  if (!bs) {
  continue;
@@ -1507,7 +1507,7 @@ void Battle::processBattleSkillList(NDTransData& data, int len)
  m_skillOpt->SetDelegate(this);
  m_skillOpt->SetDataSource(ds);
  m_skillOpt->SetFrameRect(CGRectMake((winSize.width / 2) - 80, winSize.height / 2, 160, height));
- this->AddChild(m_skillOpt);
+ AddChild(m_skillOpt);
  
  // 技能说明
  NDUIMemo* skillMemo = new NDUIMemo();
@@ -1516,19 +1516,19 @@ void Battle::processBattleSkillList(NDTransData& data, int len)
  skillMemo->SetBackgroundColor(ccc4(228, 219, 169, 255));
  skillMemo->SetText(firstSkill->getSimpleDes(true).c_str());
  skillMemo->SetFrameRect(CGRectMake((winSize.width / 2) - 80, 30, 160, winSize.height / 2 - 35));
- this->AddChild(skillMemo);
+ AddChild(skillMemo);
  }*/
 
 /*void Battle::OnBtnUseItem(BATTLE_STATUS bs)
  {
- this->m_battleStatus = bs;
+ m_battleStatus = bs;
  if (m_battleOpt) 
  {
- this->RemoveChild(m_battleOpt, false);
+ RemoveChild(m_battleOpt, false);
  }	
  if (m_eudemonOpt) 
  {
- this->RemoveChild(m_eudemonOpt, false);
+ RemoveChild(m_eudemonOpt, false);
  }
  
  m_mapUseItem.clear();
@@ -1597,7 +1597,7 @@ void Battle::processBattleSkillList(NDTransData& data, int len)
  m_itemOpt->SetDelegate(this);
  m_itemOpt->SetDataSource(ds);
  m_itemOpt->SetFrameRect(CGRectMake((winSize.width / 2) - 80, winSize.height / 2 - 115, 160, height));
- this->AddChild(m_itemOpt);
+ AddChild(m_itemOpt);
  }*/
 
 void Battle::OnBtnCatch()
@@ -1610,12 +1610,12 @@ void Battle::OnBtnCatch()
 //		return;
 //	}
 //	
-//	VEC_FIGHTER& enemyList = this->GetEnemySideList();
+//	VEC_FIGHTER& enemyList = GetEnemySideList();
 //	Fighter* f;
 //	for (size_t i = 0; i < enemyList.size(); i++) {
 //		f = enemyList.at(i);
 //		if (f->isCatchable()) {
-//			this->HighlightFighter(f);
+//			HighlightFighter(f);
 //			return;
 //		}
 //	}
@@ -1630,7 +1630,7 @@ void Battle::OnBtnDefence()
 	ms_kLastTurnActionUser.btAction = BATTLE_ACT_PHY_DEF;
 
 	BattleAction actioin(BATTLE_ACT_PHY_DEF);
-	this->SendBattleAction(actioin);
+	SendBattleAction(actioin);
 }
 
 void Battle::OnBtnRun()
@@ -1638,13 +1638,13 @@ void Battle::OnBtnRun()
 	//m_battleOpt->RemoveFromParent(false);
 
 	BattleAction actioin(BATTLE_ACT_ESCAPE);
-	this->SendBattleAction(actioin);
+	SendBattleAction(actioin);
 }
 
 /*void Battle::OnEudemonSkill()
  {
- this->m_battleStatus = BS_EUDEMON_SKILL_MENU;
- this->RemoveChild(this->m_eudemonOpt, false);
+ m_battleStatus = BS_EUDEMON_SKILL_MENU;
+ RemoveChild(m_eudemonOpt, false);
  
  // 获取宠物技能
  NDBattlePet* pet = NDPlayer::defaultHero().battlepet;
@@ -1667,7 +1667,7 @@ void Battle::OnBtnRun()
  CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
  int height = 0;
  
- this->m_skillOpt = new NDUITableLayer;
+ m_skillOpt = new NDUITableLayer;
  m_skillOpt->Initialization();
  m_skillOpt->VisibleSectionTitles(false);
  
@@ -1703,7 +1703,7 @@ void Battle::OnBtnRun()
  m_skillOpt->SetDelegate(this);
  m_skillOpt->SetDataSource(ds);
  m_skillOpt->SetFrameRect(CGRectMake((winSize.width / 2) - 80, winSize.height / 2, 160, height));
- this->AddChild(m_skillOpt);
+ AddChild(m_skillOpt);
  
  // 技能说明
  NDUIMemo* skillMemo = new NDUIMemo();
@@ -1712,25 +1712,25 @@ void Battle::OnBtnRun()
  skillMemo->SetBackgroundColor(ccc4(228, 219, 169, 255));
  skillMemo->SetText(firstSkill->getSimpleDes(true).c_str());
  skillMemo->SetFrameRect(CGRectMake((winSize.width / 2) - 80, 30, 160, winSize.height / 2 - 35));
- this->AddChild(skillMemo);
+ AddChild(skillMemo);
  }*/
 
 void Battle::OnEudemonAttack()
 {
-//	if (BS_CHOOSE_ENEMY_PHY_ATK_EUDEMON == this->m_battleStatus) {
+//	if (BS_CHOOSE_ENEMY_PHY_ATK_EUDEMON == m_battleStatus) {
 //		return;
 //	}
 //	
-//	//this->m_eudemonOpt->RemoveFromParent(false);
+//	//m_eudemonOpt->RemoveFromParent(false);
 //	setBattleStatus(BS_CHOOSE_ENEMY_PHY_ATK_EUDEMON);
 //	//	m_fighterRight->SetFoucusByIndex(3);
 //	//	m_fighterLeft->defocus();
 //	//	m_fighterBottom->defocus();
 //	
-//	this->m_curBattleAction->btAction = BATTLE_ACT_PET_PHY_ATK;
-//	this->m_curBattleAction->vData.clear();
+//	m_curBattleAction->btAction = BATTLE_ACT_PET_PHY_ATK;
+//	m_curBattleAction->vData.clear();
 //	
-//	VEC_FIGHTER& enemyList = this->GetEnemySideList();
+//	VEC_FIGHTER& enemyList = GetEnemySideList();
 //	
 //	Fighter* f;
 //	for (size_t i = 0; i < enemyList.size(); i++) {
@@ -1738,7 +1738,7 @@ void Battle::OnEudemonAttack()
 //		if (f->isVisiable()) {
 //			s_lastTurnActionEudemon.btAction = BATTLE_ACT_PET_PHY_ATK;
 //			s_lastTurnActionEudemon.vData.clear();
-//			this->HighlightFighter(f);
+//			HighlightFighter(f);
 //			return;
 //		}
 //	}
@@ -1756,17 +1756,17 @@ void Battle::OnBtnAttack()
 //	//	m_fighterLeft->defocus();
 //	//	m_fighterBottom->defocus();
 //	
-//	this->m_curBattleAction->btAction = BATTLE_ACT_PHY_ATK;
-//	this->m_curBattleAction->vData.clear();
+//	m_curBattleAction->btAction = BATTLE_ACT_PHY_ATK;
+//	m_curBattleAction->vData.clear();
 //	
-//	VEC_FIGHTER& enemyList = this->GetEnemySideList();
+//	VEC_FIGHTER& enemyList = GetEnemySideList();
 //	
 //	Fighter* f;
 //	for (size_t i = 0; i < enemyList.size(); i++) {
 //		f = enemyList.at(i);
 //		if (f->isVisiable()) {
 //			s_lastTurnActionUser.btAction = BATTLE_ACT_PHY_ATK;
-//			this->HighlightFighter(f);
+//			HighlightFighter(f);
 //			return;
 //		}
 //	}
@@ -1777,11 +1777,11 @@ void Battle::stopAuto()
 	if (ms_bAuto)
 	{
 		//		m_timer.KillTimer(this, TIMER_AUTOCOUNT);
-		//		this->RemoveChild(m_lbAuto, false);
-		//		this->RemoveChild(m_imgAutoCount, false);
+		//		RemoveChild(m_lbAuto, false);
+		//		RemoveChild(m_imgAutoCount, false);
 		//		SAFE_DELETE(m_lbAuto);
 		//		SAFE_DELETE(m_imgAutoCount);
-		//		this->m_autoCount = AUTO_COUNT;
+		//		m_autoCount = AUTO_COUNT;
 		ms_bAuto = false;
 		//		m_btnAuto->SetImage(m_picAuto);
 	}
@@ -1795,29 +1795,29 @@ void Battle::SetAutoCount()
 	//	m_lbAuto->SetFontColor(ccc4(255, 255, 255, 255));
 	//	CGSize sizeText = getStringSize("自动", 15);
 	//	m_lbAuto->SetFrameRect(CGRectMake(2, 2, sizeText.width, sizeText.height));
-	//	this->AddChild(m_lbAuto);
+	//	AddChild(m_lbAuto);
 	//	
 	//	m_imgAutoCount = new ImageNumber();
 	//	m_imgAutoCount->Initialization();
-	//	m_imgAutoCount->SetBigRedNumber(this->m_autoCount, false);
+	//	m_imgAutoCount->SetBigRedNumber(m_autoCount, false);
 	//	m_imgAutoCount->SetFrameRect(CGRectMake(40, 2, m_imgAutoCount->GetNumberSize().width, m_imgAutoCount->GetNumberSize().height));
-	//	this->AddChild(m_imgAutoCount);
+	//	AddChild(m_imgAutoCount);
 	//	
 	//	m_timer.SetTimer(this, TIMER_AUTOCOUNT, 1);
 }
 
 void Battle::OnBtnAuto(bool bSendAction)
 {
-	//this->RemoveChild(m_battleOpt, false);
+	//RemoveChild(m_battleOpt, false);
 
 	//CreateCancleAutoFightButton();
 
-	this->m_autoCount = 0;
+	m_autoCount = 0;
 
 	if (!ms_bAuto)
 	{
 		ms_bAuto = true;
-		//this->SetAutoCount();
+		//SetAutoCount();
 		//		m_btnAuto->SetImage(m_picAutoCancel);
 		//		m_fighterRight->SetShrink(true);
 		//		m_fighterLeft->SetShrink(true);
@@ -1829,8 +1829,8 @@ void Battle::OnBtnAuto(bool bSendAction)
 		return;
 	}
 
-	if (!this->m_bSendCurTurnUserAction && this->GetMainUser()
-			&& this->GetMainUser()->isAlive())
+	if (!m_bSendCurTurnUserAction && GetMainUser()
+			&& GetMainUser()->isAlive())
 	{
 		bool bUserActionSend = false;
 		switch (ms_kLastTurnActionUser.btAction)
@@ -1844,12 +1844,12 @@ void Battle::OnBtnAuto(bool bSendAction)
 			break;
 		case BATTLE_ACT_MAG_ATK:
 		{
-			if (this->m_setBattleSkillList.count(
+			if (m_setBattleSkillList.count(
 					ms_kLastTurnActionUser.vData.at(0)) == 0)
 			{ // 该技能本回合已不可使用
 				BattleAction atk(BATTLE_ACT_PHY_ATK);
 				atk.vData.push_back(0);
-				this->SendBattleAction(atk);
+				SendBattleAction(atk);
 				bUserActionSend = true;
 			}
 		}
@@ -1863,12 +1863,12 @@ void Battle::OnBtnAuto(bool bSendAction)
 
 		if (!bUserActionSend)
 		{
-			this->SendBattleAction(ms_kLastTurnActionUser);
+			SendBattleAction(ms_kLastTurnActionUser);
 		}
 	}
 
 	// 宠物自动战斗
-	if (this->m_mainEudemon && m_mainEudemon->isAlive()
+	if (m_mainEudemon && m_mainEudemon->isAlive()
 			&& !m_mainEudemon->isEscape())
 	{
 		switch (ms_kLastTurnActionEudemon.btAction)
@@ -1884,7 +1884,7 @@ void Battle::OnBtnAuto(bool bSendAction)
 			ms_kLastTurnActionEudemon.vData.push_back(0);
 			break;
 		}
-		this->SendBattleAction(ms_kLastTurnActionEudemon);
+		SendBattleAction(ms_kLastTurnActionEudemon);
 	}
 }
 
@@ -1892,8 +1892,8 @@ void Battle::HighlightFighter(Fighter* f)
 {
 	m_highlightFighter = f;
 
-	NDUILabel *name = (NDUILabel*) this->GetChild(TAG_NAME);
-	NDUIImage *lingpai = (NDUIImage*) this->GetChild(TAG_LINGPAI);
+	NDUILabel *name = (NDUILabel*) GetChild(TAG_NAME);
+	NDUIImage *lingpai = (NDUIImage*) GetChild(TAG_LINGPAI);
 
 	NDBaseRole* role = f->GetRole();
 	CGPoint pt = CGPointMake(f->getX(), f->getY());
@@ -1904,7 +1904,7 @@ void Battle::HighlightFighter(Fighter* f)
 		//		lingpai->Initialization();
 		//		lingpai->SetTag(TAG_LINGPAI);
 		//		lingpai->SetPicture(m_picBoji);
-		//		this->AddChild(lingpai);
+		//		AddChild(lingpai);
 	}
 
 	//	if (m_picBoji) m_picBoji->SetReverse(f->GetGroup() == BATTLE_GROUP_DEFENCE);
@@ -1927,11 +1927,11 @@ void Battle::HighlightFighter(Fighter* f)
 		name->SetFontColor(ccc4(255, 255, 255, 255));
 		name->Initialization();
 		name->SetTag(TAG_NAME);
-		this->AddChild(name);
+		AddChild(name);
 	}
 	std::stringstream ss;
 	ss << role->m_strName << "Lv" << role->m_nLevel;
-	//	if (f->m_info.fighterType == Fighter_TYPE_RARE_MONSTER)
+	//	if (f->m_kInfo.fighterType == Fighter_TYPE_RARE_MONSTER)
 	//	{
 	//		ss << "【" << NDCommonCString("xiyou") << "】"; 
 	//	}
@@ -1942,7 +1942,7 @@ void Battle::HighlightFighter(Fighter* f)
 					pt.y - role->getGravityY() - sizeName.height,
 					sizeName.width, sizeName.height));
 
-	this->setWillBeAtk(this->getHighlightList());
+	setWillBeAtk(getHighlightList());
 
 	//f->setWillBeAtk(true);	
 }
@@ -1957,8 +1957,8 @@ void Battle::OnTimer(OBJID tag)
 		{
 			if (m_bWatch)
 			{
-				if (this->m_battleStatus != BS_SHOW_FIGHT
-						&& this->m_battleStatus != BS_FIGHTER_SHOW_PAS)
+				if (m_battleStatus != BS_SHOW_FIGHT
+						&& m_battleStatus != BS_FIGHTER_SHOW_PAS)
 				{
 					m_timeLeft--;
 					stringstream ss;
@@ -1969,7 +1969,7 @@ void Battle::OnTimer(OBJID tag)
 			}
 			else
 			{
-				if (this->IsUserOperating() || this->IsEudemonOperating())
+				if (IsUserOperating() || IsEudemonOperating())
 				{
 					m_timeLeft--;
 					stringstream ss;
@@ -1990,7 +1990,7 @@ void Battle::OnTimer(OBJID tag)
 	//			m_autoCount--;
 	//			m_imgAutoCount->SetBigRedNumber(m_autoCount, false);
 	//			if (m_autoCount == 0) {
-	//				this->OnBtnAuto();
+	//				OnBtnAuto();
 	//			}
 	//		}
 	//	}
@@ -2017,11 +2017,11 @@ void Battle::Init()
 	m_orignalMapId = 0;
 	m_nLastSkillPageUser = 0;
 	m_nLastSkillPageEudemon = 0;
-	//this->m_chatDelegate = [[ChatTextFieldDelegate alloc] init];
+	//m_chatDelegate = [[ChatTextFieldDelegate alloc] init];
 	m_bShowChatTextField = false;
 	//	m_imgChat = NULL;
 	//	m_btnSendChat = NULL;
-	this->m_mapLayer = NULL;
+	m_mapLayer = NULL;
 	m_bSendCurTurnUserAction = false;
 
 	//m_btnCancleAutoFight = NULL;
@@ -2029,7 +2029,7 @@ void Battle::Init()
 	m_dlgStatus = NULL;
 	theActor = NULL;
 	theTarget = NULL;
-	this->m_bWatch = false;
+	m_bWatch = false;
 	//m_battleOpt = NULL;
 	//	m_playerHead = NULL;
 	//	m_petHead = NULL;
@@ -2070,7 +2070,7 @@ void Battle::Init()
 	serverBattleResult = 2;
 	battleCompleteResult = BATTLE_COMPLETE_NO;
 	m_battleType = BATTLE_TYPE_NONE;
-	this->m_ourGroup = BATTLE_GROUP_ATTACK;
+	m_ourGroup = BATTLE_GROUP_ATTACK;
 	m_turn = 0;
 	//	m_lbTurnTitle = NULL;
 	//	m_lbTurn = NULL;
@@ -2156,7 +2156,7 @@ bool Battle::TouchEnd(NDTouch* touch)
 	 */
 // 	if (m_dlgStatus)
 // 	{
-// 		this->CloseStatusDlg();
+// 		CloseStatusDlg();
 // 	}
 // 	
 // 	if (touch && touch->GetLocation().x > 0.0001f && touch->GetLocation().y > 0.0001f) {
@@ -2165,34 +2165,34 @@ bool Battle::TouchEnd(NDTouch* touch)
 // 		}
 // 	}
 // 	
-// 	Fighter* f = this->GetTouchedFighter(this->GetOurSideList(), touch->GetLocation());
+// 	Fighter* f = GetTouchedFighter(GetOurSideList(), touch->GetLocation());
 // 	if(!f){
-// 		f=this->GetTouchedFighter(this->GetEnemySideList(), touch->GetLocation());
+// 		f=GetTouchedFighter(GetEnemySideList(), touch->GetLocation());
 // 	}
 // 	
 // 	if(f)
 // 	{
 // 		NDLog("touch fighter");
-// 		if(this->currentShowFighter>0)
+// 		if(currentShowFighter>0)
 // 		{
 // 			ScriptMgrObj.excuteLuaFunc("CloseFighterInfo","FighterInfo",0);
 // 		}
-// 		this->currentShowFighter=f->m_info.idObj;
+// 		currentShowFighter=f->m_kInfo.idObj;
 // 		
-// 		int idType=f->m_info.idType;
+// 		int idType=f->m_kInfo.idType;
 // 		int skillId=-1;
-// 		if(f->m_info.fighterType==FIGHTER_TYPE_PET)
+// 		if(f->m_kInfo.fighterType==FIGHTER_TYPE_PET)
 // 		{
 // 			skillId=ScriptDBObj.GetN("pet_config",idType,DB_PET_CONFIG_SKILL);
-// 		}else if(f->m_info.fighterType==FIGHTER_TYPE_MONSTER)
+// 		}else if(f->m_kInfo.fighterType==FIGHTER_TYPE_MONSTER)
 // 		{
 // 			skillId=ScriptDBObj.GetN("monstertype",idType,DB_MONSTERTYPE_SKILL);
 // 		}
 // 		std::string skillName=ScriptDBObj.GetS("skill_config",skillId,DB_SKILL_CONFIG_NAME);
 // 		ScriptMgrObj.excuteLuaFunc("LoadUI", "FighterInfo",f->getOriginX(),f->getOriginY());
 // 		ScriptMgrObj.excuteLuaFunc<bool>("SetFighterInfo","FighterInfo",f->GetRole()->m_name,skillName);
-// 		ScriptMgrObj.excuteLuaFunc("UpdateHp","FighterInfo",f->m_info.nLife,f->m_info.nLifeMax);
-// 		ScriptMgrObj.excuteLuaFunc("UpdateMp","FighterInfo",f->m_info.nMana,f->m_info.nManaMax);
+// 		ScriptMgrObj.excuteLuaFunc("UpdateHp","FighterInfo",f->m_kInfo.nLife,f->m_kInfo.nLifeMax);
+// 		ScriptMgrObj.excuteLuaFunc("UpdateMp","FighterInfo",f->m_kInfo.nMana,f->m_kInfo.nManaMax);
 // 	}
 	/***
 	 * 临时性注释 郭浩
@@ -2204,14 +2204,14 @@ bool Battle::TouchEnd(NDTouch* touch)
 //		case BS_CHOOSE_VIEW_FIGHTER_STATUS:
 //		case BS_CHOOSE_VIEW_FIGHTER_STATUS_PET:
 //		{
-//			Fighter* f = this->GetTouchedFighter(this->GetEnemySideList(), touch->GetLocation());
+//			Fighter* f = GetTouchedFighter(GetEnemySideList(), touch->GetLocation());
 //			if (!f) {
-//				f = this->GetTouchedFighter(this->GetOurSideList(), touch->GetLocation());
+//				f = GetTouchedFighter(GetOurSideList(), touch->GetLocation());
 //			}
 //			
 //			if (f) {
 //				if (m_highlightFighter != f) {
-//					this->HighlightFighter(f);
+//					HighlightFighter(f);
 //					break;
 //				}
 //			}
@@ -2221,7 +2221,7 @@ bool Battle::TouchEnd(NDTouch* touch)
 //				m_dlgStatus->Initialization(m_highlightFighter);
 //				m_dlgStatus->SetFrameRect(CGRectMake(0, 0, NDDirector::DefaultDirector()->GetWinSize().width,
 //													 NDDirector::DefaultDirector()->GetWinSize().height));
-//				this->AddChild(m_dlgStatus);
+//				AddChild(m_dlgStatus);
 //			}
 //		}
 //			break;
@@ -2230,14 +2230,14 @@ bool Battle::TouchEnd(NDTouch* touch)
 //		case BS_CHOOSE_ENEMY_MAG_ATK:
 //		case BS_CHOOSE_ENEMY_MAG_ATK_EUDEMON:
 //		{
-//			Fighter* f = this->GetTouchedFighter(this->GetEnemySideList(), touch->GetLocation());
+//			Fighter* f = GetTouchedFighter(GetEnemySideList(), touch->GetLocation());
 //			if (f)
 //			{
 //				if (m_highlightFighter == f)
 //				{
 //					// 发送攻击指令
-//					this->m_curBattleAction->vData.push_back(m_highlightFighter->m_info.idObj);
-//					this->SendBattleAction(*m_curBattleAction);
+//					m_curBattleAction->vData.push_back(m_highlightFighter->m_kInfo.idObj);
+//					SendBattleAction(*m_curBattleAction);
 //				}
 //				else
 //				{
@@ -2246,13 +2246,13 @@ bool Battle::TouchEnd(NDTouch* touch)
 //					} else {
 //						m_defaultTargetEudemon = f;
 //					}
-//					this->HighlightFighter(f);
+//					HighlightFighter(f);
 //				}
 //			} else {
 //				if (m_highlightFighter) {
 //					// 发送攻击指令
-//					this->m_curBattleAction->vData.push_back(m_highlightFighter->m_info.idObj);
-//					this->SendBattleAction(*m_curBattleAction);
+//					m_curBattleAction->vData.push_back(m_highlightFighter->m_kInfo.idObj);
+//					SendBattleAction(*m_curBattleAction);
 //				}
 //			}
 //			
@@ -2260,14 +2260,14 @@ bool Battle::TouchEnd(NDTouch* touch)
 //			break;
 //		case BS_CHOOSE_ENEMY_CATCH:
 //		{
-//			Fighter* f = this->GetTouchedFighter(this->GetEnemySideList(), touch->GetLocation());
+//			Fighter* f = GetTouchedFighter(GetEnemySideList(), touch->GetLocation());
 //			if (f)
 //			{
 //				if (f->isCatchable()) {
 //					// 发送捕捉指令
 //					BattleAction actioin(BATTLE_ACT_CATCH);
-//					actioin.vData.push_back(f->m_info.idObj);
-//					this->SendBattleAction(actioin);
+//					actioin.vData.push_back(f->m_kInfo.idObj);
+//					SendBattleAction(actioin);
 //				} else {
 //					Chat::DefaultChat()->AddMessage(ChatTypeSystem, NDCommonCString("DestCantCatch"));
 //				}
@@ -2276,8 +2276,8 @@ bool Battle::TouchEnd(NDTouch* touch)
 //				if (m_highlightFighter) {
 //					// 发送捕捉指令
 //					BattleAction actioin(BATTLE_ACT_CATCH);
-//					actioin.vData.push_back(m_highlightFighter->m_info.idObj);
-//					this->SendBattleAction(actioin);
+//					actioin.vData.push_back(m_highlightFighter->m_kInfo.idObj);
+//					SendBattleAction(actioin);
 //				}
 //			}
 //			
@@ -2288,13 +2288,13 @@ bool Battle::TouchEnd(NDTouch* touch)
 //		case BS_CHOOSE_OUR_SIDE_MAG_ATK:
 //		case BS_CHOOSE_OUR_SIDE_MAG_ATK_EUDEMON:
 //		{
-//			Fighter* f = this->GetTouchedFighter(this->GetOurSideList(), touch->GetLocation());
+//			Fighter* f = GetTouchedFighter(GetOurSideList(), touch->GetLocation());
 //			if (f)
 //			{
 //				if (m_highlightFighter == f)
 //				{
-//					m_curBattleAction->vData.push_back(m_highlightFighter->m_info.idObj);
-//					this->SendBattleAction(*m_curBattleAction);
+//					m_curBattleAction->vData.push_back(m_highlightFighter->m_kInfo.idObj);
+//					SendBattleAction(*m_curBattleAction);
 //				}
 //				else
 //				{
@@ -2303,12 +2303,12 @@ bool Battle::TouchEnd(NDTouch* touch)
 //					} else if (m_battleStatus == BS_CHOOSE_OUR_SIDE_MAG_ATK_EUDEMON) {
 //						m_defaultTargetEudemon = f;
 //					}
-//					this->HighlightFighter(f);
+//					HighlightFighter(f);
 //				}
 //			} else {
 //				if (m_highlightFighter) {
-//					m_curBattleAction->vData.push_back(m_highlightFighter->m_info.idObj);
-//					this->SendBattleAction(*m_curBattleAction);
+//					m_curBattleAction->vData.push_back(m_highlightFighter->m_kInfo.idObj);
+//					SendBattleAction(*m_curBattleAction);
 //				}
 //			}
 //		}
@@ -2316,8 +2316,8 @@ bool Battle::TouchEnd(NDTouch* touch)
 //		case BS_CHOOSE_SELF_MAG_ATK:
 //		case BS_CHOOSE_SELF_MAG_ATK_EUDEMON:
 //			if (m_highlightFighter) {
-//				m_curBattleAction->vData.push_back(m_highlightFighter->m_info.idObj);
-//				this->SendBattleAction(*m_curBattleAction);
+//				m_curBattleAction->vData.push_back(m_highlightFighter->m_kInfo.idObj);
+//				SendBattleAction(*m_curBattleAction);
 //			}
 //		default:
 //			break;
@@ -2328,9 +2328,9 @@ bool Battle::TouchEnd(NDTouch* touch)
 void Battle::SendBattleAction(const BattleAction& action)
 {
 	// 移除令牌和名字显示，加入等待显示
-	this->clearHighlight();
+	clearHighlight();
 
-	if (!this->GetChild(TAG_WAITING) && this->m_mainFighter)
+	if (!GetChild(TAG_WAITING) && m_mainFighter)
 	{
 		CGPoint pt = m_mainFighter->GetRole()->GetPosition();
 		NDUILabel* waiting = new NDUILabel;
@@ -2342,12 +2342,12 @@ void Battle::SendBattleAction(const BattleAction& action)
 		waiting->SetFrameRect(
 				CGRectMake(pt.x - sizeText.width / 2, pt.y, sizeText.width,
 						sizeText.height));
-		this->AddChild(waiting);
+		AddChild(waiting);
 	}
 
 	NDTransData data(_MSG_BATTLEACT);
 	Byte btDataCount = action.vData.size();
-	data << action.btAction << Byte(this->m_turn - 1) << btDataCount;
+	data << action.btAction << Byte(m_turn - 1) << btDataCount;
 
 	for (int i = 0; i < btDataCount; i++)
 	{
@@ -2369,9 +2369,9 @@ void Battle::SendBattleAction(const BattleAction& action)
 	}
 
 	// 有宠物，且非自动战斗
-//	if (this->m_mainEudemon && this->m_mainEudemon->isAlive() &&
-//	    !this->m_mainEudemon->isEscape() && !s_bAuto) {
-//		switch (this->m_battleStatus) {
+//	if (m_mainEudemon && m_mainEudemon->isAlive() &&
+//	    !m_mainEudemon->isEscape() && !s_bAuto) {
+//		switch (m_battleStatus) {
 //			case BS_USER_MENU:
 //			case BS_USER_SKILL_MENU:
 //			case BS_CHOOSE_ENEMY_PHY_ATK:
@@ -2379,13 +2379,13 @@ void Battle::SendBattleAction(const BattleAction& action)
 //			case BS_CHOOSE_OUR_SIDE_USE_ITEM_USER:
 //			case BS_CHOOSE_ENEMY_MAG_ATK:
 //			case BS_CHOOSE_OUR_SIDE_MAG_ATK:
-//				//this->m_battleStatus = BS_EUDEMON_MENU;
-//				//this->AddChild(this->m_eudemonOpt);
-//				this->m_bSendCurTurnUserAction = true;
-//				this->m_bTurnStartPet = true;
+//				//m_battleStatus = BS_EUDEMON_MENU;
+//				//AddChild(m_eudemonOpt);
+//				m_bSendCurTurnUserAction = true;
+//				m_bTurnStartPet = true;
 //				return;
 //			default:
-//				//this->RemoveChild(this->m_eudemonOpt, false);
+//				//RemoveChild(m_eudemonOpt, false);
 //				break;
 //		}
 //	}
@@ -2415,9 +2415,9 @@ void Battle::setBattleMap(int mapId, int posX, int posY)
 	 */
 	// 	NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
 // 	if(mapLayer){
-// 		this->sceneMapId = mapLayer->GetMapIndex();
-// 		this->sceneCenterX = mapLayer->GetScreenCenter().x;
-// 		this->sceneCenterY = mapLayer->GetScreenCenter().y;
+// 		sceneMapId = mapLayer->GetMapIndex();
+// 		sceneCenterX = mapLayer->GetScreenCenter().x;
+// 		sceneCenterY = mapLayer->GetScreenCenter().y;
 // 		//mapLayer->SetBattleBackground(true);
 // 		mapLayer->replaceMapData(mapId, posX, posY);
 	//mapLayer->SetNeedShowBackground(false);
@@ -2436,8 +2436,8 @@ void Battle::drawSubAniGroup()
 {
 	bool bErase = false;
 
-	for (VEC_SUB_ANI_GROUP_IT it = this->m_vSubAniGroup.begin();
-			it != this->m_vSubAniGroup.end(); it++)
+	for (VEC_SUB_ANI_GROUP_IT it = m_vSubAniGroup.begin();
+			it != m_vSubAniGroup.end(); it++)
 	{
 		NDSprite* role = it->role;
 		if (!role)
@@ -2474,7 +2474,7 @@ void Battle::drawSubAniGroup()
 
 	if (bErase)
 	{
-		this->m_vSubAniGroup.erase(
+		m_vSubAniGroup.erase(
 				remove_if(m_vSubAniGroup.begin(), m_vSubAniGroup.end(),
 						IsSubAniGroupComplete()), m_vSubAniGroup.end());
 	}
@@ -2501,8 +2501,8 @@ void Battle::sortFighterList(VEC_FIGHTER& fighterList)
 
 void Battle::sortFighterList()
 {
-	this->sortFighterList(m_vDefencer);
-	this->sortFighterList(m_vAttaker);
+	sortFighterList(m_vDefencer);
+	sortFighterList(m_vAttaker);
 
 	for (VEC_FIGHTER_IT it = m_vDefencer.begin(); it != m_vDefencer.end(); it++)
 	{
@@ -2536,7 +2536,7 @@ void Battle::drawFighter()
 		}
 	}
 
-	//	if (this->m_mainFighter && !this->watchBattle)
+	//	if (m_mainFighter && !watchBattle)
 	//	{
 	//		NDBaseRole* role = m_mainFighter->GetRole();
 	//		CGPoint pt = role->GetPosition();
@@ -2551,9 +2551,9 @@ void Battle::draw()
 		return;
 	}
 
-	if (!this->IsVisibled())
+	if (!IsVisibled())
 	{
-		this->SetVisible(true);
+		SetVisible(true);
 		//		NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
 		//		mapLayer->SetBattleBackground(true);
 		//		mapLayer->SetNeedShowBackground(false);
@@ -2561,14 +2561,14 @@ void Battle::draw()
 
 	NDDirector::DefaultDirector()->EnableDispatchEvent(true);
 	//	
-	//	if(this->m_mapLayer){
-	//		this->m_mapLayer->draw();
+	//	if(m_mapLayer){
+	//		m_mapLayer->draw();
 	//	}
 
 	//	m_battleBg->draw();
 
 	//if (eraseInOutEffect->isChangeComplete())
-	this->battleRefresh();
+	battleRefresh();
 
 	// 绘制参战单位
 	drawFighter();
@@ -2580,7 +2580,7 @@ void Battle::draw()
 	// 绘制去血
 	drawAllFighterHurtNumber();
 
-//	switch (this->m_battleStatus) {
+//	switch (m_battleStatus) {
 //		case BS_CHOOSE_ENEMY_PHY_ATK_EUDEMON:
 //		case BS_CHOOSE_ENEMY_PHY_ATK:
 //		case BS_CHOOSE_ENEMY_CATCH:
@@ -2595,7 +2595,7 @@ void Battle::draw()
 //			break;
 //	}
 
-	this->drawSubAniGroup();
+	drawSubAniGroup();
 
 	//	if (m_mainFighter && m_battleOpt) 
 	//	{
@@ -2621,7 +2621,7 @@ Fighter* Battle::GetMainUser()
 			for (VEC_FIGHTER_IT it = m_vAttaker.begin(); it != m_vAttaker.end();
 					it++)
 			{
-				if ((*it)->m_info.idObj == player.m_nID)
+				if ((*it)->m_kInfo.idObj == player.m_nID)
 				{
 					m_mainFighter = (*it);
 				}
@@ -2632,7 +2632,7 @@ Fighter* Battle::GetMainUser()
 			for (VEC_FIGHTER_IT it = m_vDefencer.begin();
 					it != m_vDefencer.end(); it++)
 			{
-				if ((*it)->m_info.idObj == player.m_nID)
+				if ((*it)->m_kInfo.idObj == player.m_nID)
 				{
 					m_mainFighter = (*it);
 				}
@@ -2665,7 +2665,7 @@ void Battle::AddActionCommand(FightAction* action)
 	int team = 0;
 	if (f)
 	{
-		team = (f->m_info.btBattleTeam - 1) % 3 + 1;
+		team = (f->m_kInfo.btBattleTeam - 1) % 3 + 1;
 	}
 	else
 	{
@@ -2717,7 +2717,7 @@ Fighter* Battle::GetFighter(int idFighter)
 	VEC_FIGHTER_IT it = m_vAttaker.begin();
 	for (; it != m_vAttaker.end(); it++)
 	{
-		if ((*it)->m_info.idObj == idFighter)
+		if ((*it)->m_kInfo.idObj == idFighter)
 		{
 			return *it;
 		}
@@ -2725,7 +2725,7 @@ Fighter* Battle::GetFighter(int idFighter)
 
 	for (it = m_vDefencer.begin(); it != m_vDefencer.end(); it++)
 	{
-		if ((*it)->m_info.idObj == idFighter)
+		if ((*it)->m_kInfo.idObj == idFighter)
 		{
 			return *it;
 		}
@@ -2752,7 +2752,7 @@ void Battle::showBattleComplete()
 {
 	const char* psz = NULL;
 
-	switch (this->battleCompleteResult)
+	switch (battleCompleteResult)
 	{
 	case BATTLE_COMPLETE_WIN:
 		psz = NDCommonCString("BattleSucc");
@@ -2790,23 +2790,23 @@ void Battle::battleRefresh()
 	if (m_battleStatus == BS_SHOW_FIGHT && m_startWait <= 0)
 	{
 
-		this->ShowFight();
+		ShowFight();
 
 	}
 	else if (m_battleStatus == BS_FIGHTER_SHOW_PAS)
 	{
 		if (AllFighterActionOK())
 		{
-			this->ShowPas();
+			ShowPas();
 		}
 
 	}
 //	else {
 //		if (!m_bWatch) {
 //			if (m_bTurnStart) {
-//				this->TurnStart();
+//				TurnStart();
 //			} else if (m_bTurnStartPet) {
-//				this->TurnStartPet();
+//				TurnStartPet();
 //			}
 //		}
 //	}
@@ -2816,17 +2816,17 @@ void Battle::battleRefresh()
 		m_startWait--;
 	}
 
-	//this->refreshFighterData();
+	//refreshFighterData();
 }
 
 bool Battle::sideRightAtk()
 {
 	bool result = false;
 
-	for (size_t i = 0; i < this->m_vActionFighterList.size(); i++)
+	for (size_t i = 0; i < m_vActionFighterList.size(); i++)
 	{
 		Fighter& f = *m_vActionFighterList.at(i);
-		if (f.m_info.group == BATTLE_GROUP_ATTACK)
+		if (f.m_kInfo.group == BATTLE_GROUP_ATTACK)
 		{
 			if (f.m_action == Fighter::ATTACK
 					|| f.m_action == Fighter::SKILLATTACK)
@@ -2841,34 +2841,34 @@ bool Battle::sideRightAtk()
 
 bool Battle::sideAttakerAtk()
 {
-	bool result = false;
+	bool bResult = false;
 
 	for (size_t i = 0; i < m_vActionFighterList.size(); i++)
 	{
-		Fighter& f = *m_vActionFighterList.at(i);
-		if (f.m_info.group == BATTLE_GROUP_ATTACK)
+		Fighter& kFighter = *m_vActionFighterList.at(i);
+		if (kFighter.m_kInfo.group == BATTLE_GROUP_ATTACK)
 		{
-			if (f.m_action == Fighter::ATTACK
-					|| f.m_action == Fighter::SKILLATTACK)
+			if (kFighter.m_action == Fighter::ATTACK
+					|| kFighter.m_action == Fighter::SKILLATTACK)
 			{
-				result = true;
+				bResult = true;
 				break;
 			}
 		}
 	}
-	return result;
+	return bResult;
 }
 
 void Battle::ShowTimerAndTurn(bool bShow)
 {
 	//	if (bShow) {
-	//		this->AddChild(m_imgTimer);
-	//		this->AddChild(m_lbTimer);
-	//		this->AddChild(m_lbTimerTitle);
+	//		AddChild(m_imgTimer);
+	//		AddChild(m_lbTimer);
+	//		AddChild(m_lbTimerTitle);
 	//		
-	//		this->AddChild(m_imgTurn);
-	//		this->AddChild(m_lbTurn);
-	//		this->AddChild(m_lbTurnTitle);
+	//		AddChild(m_imgTurn);
+	//		AddChild(m_lbTurn);
+	//		AddChild(m_lbTurnTitle);
 	//	} else {
 	//		m_lbTimer->RemoveFromParent(false);
 	//		m_imgTimer->RemoveFromParent(false);
@@ -2887,60 +2887,60 @@ void Battle::dealWithCommand()
 	{
 		setBattleStatus (BS_SET_FIGHTER);
 
-		for (int i = 0; i < this->m_vCmdList.size(); i++)
+		for (int i = 0; i < m_vCmdList.size(); i++)
 		{
 			NDLog("%d action", i);
-			Command* cmd = this->m_vCmdList.at(i);
+			Command* pkCommand = m_vCmdList.at(i);
 
-			if (cmd->complete)
+			if (pkCommand->complete)
 			{	// 针对连锁cmd
 				continue;
 			}
-			FightAction* action = NULL;
-			switch (cmd->btEffectType)
+			FightAction* pkAction = NULL;
+			switch (pkCommand->btEffectType)
 			{
 			case BATTLE_EFFECT_TYPE_ATK:	//攻击
-				NDLog("%d effect_atk", cmd->idActor);
+				NDLog("%d effect_atk", pkCommand->idActor);
 				//					Fighter* theTarget =
 				//					theActor->m_effectType=BATTLE_EFFECT_TYPE(cmd->btEffectType);
-				//					theActor->m_mainTarget=this->GetFighter(cmd->idTarget);
+				//					theActor->m_mainTarget=GetFighter(cmd->idTarget);
 				//					if (theActor->GetNormalAtkType() == ATKTYPE_NEAR) {
 				//						theActor->m_action = (Fighter::MOVETOTARGET);
 				//					} else if (theActor->GetNormalAtkType() == ATKTYPE_DISTANCE) {
 				//						theActor->m_action = (Fighter::AIMTARGET);
 				//					}
 				//					theActor->m_actionType = (Fighter::ACTION_TYPE_NORMALATK);
-				//					this->AddAnActionFighter(theActor);
-				action = new FightAction(this->GetFighter(cmd->idActor),
-						this->GetFighter(cmd->idTarget),
-						BATTLE_EFFECT_TYPE(cmd->btEffectType));
+				//					AddAnActionFighter(theActor);
+				pkAction = new FightAction(GetFighter(pkCommand->idActor),
+						GetFighter(pkCommand->idTarget),
+						BATTLE_EFFECT_TYPE(pkCommand->btEffectType));
 				break;
 			case BATTLE_EFFECT_TYPE_SKILL:					//技能
-				NDLog("%d effect_skill", cmd->idActor);
-				action = new FightAction(this->GetFighter(cmd->idActor),
-						this->GetFighter(cmd->idTarget),
-						BATTLE_EFFECT_TYPE(cmd->btEffectType));
-				action->m_pkSkill = cmd->skill;
+				NDLog("%d effect_skill", pkCommand->idActor);
+				pkAction = new FightAction(GetFighter(pkCommand->idActor),
+						GetFighter(pkCommand->idTarget),
+						BATTLE_EFFECT_TYPE(pkCommand->btEffectType));
+				pkAction->m_pkSkill = pkCommand->skill;
 				break;
 			case EFFECT_TYPE_TURN_END:
 				NDLog("turn end");
 				continue;
 			case EFFECT_TYPE_BATTLE_BEGIN:
-				NDLog("%d battle_begin", cmd->idTarget);
-				action = new FightAction(cmd->idActor, cmd->idTarget,
+				NDLog("%d battle_begin", pkCommand->idTarget);
+				pkAction = new FightAction(pkCommand->idActor, pkCommand->idTarget,
 						EFFECT_TYPE_BATTLE_BEGIN);
 				break;
 			case EFFECT_TYPE_BATTLE_END:
-				NDLog("%d battle_end", cmd->idActor);
-				action = new FightAction(cmd->idActor, cmd->idTarget,
+				NDLog("%d battle_end", pkCommand->idActor);
+				pkAction = new FightAction(pkCommand->idActor, pkCommand->idTarget,
 						EFFECT_TYPE_BATTLE_END);
 				break;
 			case BATTLE_EFFECT_TYPE_STATUS_LIFE:
-				NDLog("%d status_life", cmd->idActor);
-				action = new FightAction(this->GetFighter(cmd->idActor),
-						this->GetFighter(cmd->idTarget),
-						BATTLE_EFFECT_TYPE(cmd->btEffectType));
-				action->m_nData = cmd->nHpLost;
+				NDLog("%d status_life", pkCommand->idActor);
+				pkAction = new FightAction(GetFighter(pkCommand->idActor),
+						GetFighter(pkCommand->idTarget),
+						BATTLE_EFFECT_TYPE(pkCommand->btEffectType));
+				pkAction->m_nData = pkCommand->nHpLost;
 				break;
 				//				case BATTLE_EFFECT_TYPE_DODGE:// 闪避
 				//					if (!theActor || !theTarget) {
@@ -2958,7 +2958,7 @@ void Battle::dealWithCommand()
 				//					}
 				//					theActor->m_actionType = (Fighter::ACTION_TYPE_NORMALATK);
 				//					theActor->m_changeLifeType = EFFECT_CHANGE_LIFE_TYPE(cmd->btType);
-				//					this->AddAnActionFighter(theActor);
+				//					AddAnActionFighter(theActor);
 				//					break;
 				//
 				//				case EFFECT_TYPE_CHANGELIFE: // 去血
@@ -2974,7 +2974,7 @@ void Battle::dealWithCommand()
 				//						theTarget->m_actor = (theActor);
 				//
 				//						theTarget->AddAHurt(theActor, cmd->btType, cmd->nHpLost, cmd->nMpLost, cmd->dwData, HURT_TYPE_ACTIVE);
-				//						this->AddAnActionFighter(theActor);
+				//						AddAnActionFighter(theActor);
 				//
 				//						theTarget->m_bHardAtk = cmd->btType == EFFECT_CHANGE_LIFE_TYPE_PHY_HARDATK;
 				//
@@ -2990,8 +2990,8 @@ void Battle::dealWithCommand()
 				//							theActor->m_action = (Fighter::AIMTARGET);
 				//						}
 				//					} else if (cmd->btType == EFFECT_CHANGE_LIFE_TYPE_USE_SKILL) {
-				//						theActor->m_info.nMana += cmd->nMpLost;
-				//						theActor->m_info.nLife += cmd->nHpLost;
+				//						theActor->m_kInfo.nMana += cmd->nMpLost;
+				//						theActor->m_kInfo.nLife += cmd->nHpLost;
 				//
 				//					} else if (cmd->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_ATK || cmd->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_HARDATK) {
 				//						theActor->m_changeLifeType = EFFECT_CHANGE_LIFE_TYPE(cmd->btType);
@@ -3002,7 +3002,7 @@ void Battle::dealWithCommand()
 				//						theActor->AddATarget(theTarget);
 				//						theTarget->m_actor = (theActor);
 				//
-				//						this->AddAnActionFighter(theActor);
+				//						AddAnActionFighter(theActor);
 				//
 				//						if (cmd->triggerProtect && theTarget->protector) {
 				//							theTarget->protector->m_action = (Fighter::MOVETOTARGET);
@@ -3049,7 +3049,7 @@ void Battle::dealWithCommand()
 				//						theTarget->AddPasStatus(cmd->dwData);
 				//
 				//						theTarget->AddAHurt(NULL, cmd->btType, cmd->nHpLost, cmd->nMpLost, cmd->dwData, HURT_TYPE_PASSIVE);// 状态去血不要指定是被谁打的
-				//						this->AddAnActionFighter(theTarget);
+				//						AddAnActionFighter(theTarget);
 				//					} else if (cmd->btType == EFFECT_CHANGE_LIFE_TYPE_USE_ITEM) {
 				//
 				//						theActor->m_idUsedItem = (cmd->dwData);
@@ -3062,7 +3062,7 @@ void Battle::dealWithCommand()
 				//						theTarget->m_actor = (theActor);
 				//
 				//						theTarget->AddAHurt(theActor, cmd->btType, cmd->nHpLost, cmd->nMpLost, cmd->dwData, HURT_TYPE_ACTIVE);
-				//						this->AddAnActionFighter(theActor);
+				//						AddAnActionFighter(theActor);
 				//					} else if (cmd->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_STATUS_ADD
 				//						   || cmd->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_STATUS_LOST) {
 				//						// 在回合初收到状态消息，则马上处理
@@ -3096,7 +3096,7 @@ void Battle::dealWithCommand()
 				//					theActor->m_effectType = EFFECT_TYPE(cmd->btEffectType);
 				//
 				//					theActor->m_action = (Fighter::FLEE_SUCCESS);
-				//					this->AddAnActionFighter(theActor);
+				//					AddAnActionFighter(theActor);
 				//					theActor->m_bFleeNoDie = (true);
 				//					break;
 				//
@@ -3107,7 +3107,7 @@ void Battle::dealWithCommand()
 				//					theActor->m_effectType = EFFECT_TYPE(cmd->btEffectType);
 				//
 				//					theActor->m_action = (Fighter::FLEE_FAIL);
-				//					this->AddAnActionFighter(theActor);
+				//					AddAnActionFighter(theActor);
 				//					break;
 				//
 				//				case EFFECT_TYPE_DEFENCE:
@@ -3119,7 +3119,7 @@ void Battle::dealWithCommand()
 				//					theActor->m_bDefenceOK = (true);
 				//					theActor->m_action = (Fighter::DEFENCE);
 				//					defenceAction(*theActor);
-				//					this->AddAnActionFighter(theActor);
+				//					AddAnActionFighter(theActor);
 				//					break;
 				//
 				//				case EFFECT_TYPE_LEFT:
@@ -3132,7 +3132,7 @@ void Battle::dealWithCommand()
 				//					theActor->m_mainTarget = (theTarget);
 				//					theActor->AddATarget(theTarget);
 				//					theTarget->m_actor = (theActor);
-				//					this->AddAnActionFighter(theActor);
+				//					AddAnActionFighter(theActor);
 				//					break;
 				//				case EFFECT_TYPE_CATCH_FAIL:
 				//					theActor->m_effectType = (EFFECT_TYPE_CATCH_FAIL);
@@ -3141,15 +3141,15 @@ void Battle::dealWithCommand()
 				//					theActor->m_mainTarget = (theTarget);
 				//					theActor->AddATarget(theTarget);
 				//					theTarget->m_actor = (theActor);
-				//					this->AddAnActionFighter(theActor);
+				//					AddAnActionFighter(theActor);
 				//					break;
 			default:
 				break;
 			}
 			//处理主要动作后的连锁动作
-			if (action)
+			if (pkAction)
 			{
-				Command* nextCmd = cmd->cmdNext;
+				Command* nextCmd = pkCommand->cmdNext;
 				while (nextCmd)
 				{
 
@@ -3171,13 +3171,13 @@ void Battle::dealWithCommand()
 						break;
 					case BATTLE_EFFECT_TYPE_SKILL_TARGET:
 						NDLog("%d skill_target", nextCmd->idTarget);
-						if (action->m_eEffectType == BATTLE_EFFECT_TYPE_SKILL)
+						if (pkAction->m_eEffectType == BATTLE_EFFECT_TYPE_SKILL)
 						{
-							action->m_kFighterList.push_back(
+							pkAction->m_kFighterList.push_back(
 									GetFighter(nextCmd->idTarget));
-							if (action->m_pkTarget == NULL)
+							if (pkAction->m_pkTarget == NULL)
 							{
-								action->m_pkTarget = GetFighter(
+								pkAction->m_pkTarget = GetFighter(
 										nextCmd->idTarget);
 							}
 						}
@@ -3201,15 +3201,15 @@ void Battle::dealWithCommand()
 						break;
 					case BATTLE_EFFECT_TYPE_COMBO:
 						NDLog("%d combo", nextCmd->idActor);
-						action->m_bIsCombo = true;
-						this->AddActionCommand(action);
-						action = new FightAction(this->GetFighter(cmd->idActor),
-								this->GetFighter(cmd->idTarget),
-								BATTLE_EFFECT_TYPE(cmd->btEffectType));
-						fcmd->actor = cmd->idTarget;
+						pkAction->m_bIsCombo = true;
+						AddActionCommand(pkAction);
+						pkAction = new FightAction(GetFighter(pkCommand->idActor),
+								GetFighter(pkCommand->idTarget),
+								BATTLE_EFFECT_TYPE(pkCommand->btEffectType));
+						fcmd->actor = pkCommand->idTarget;
 						fcmd->effect_type = BATTLE_EFFECT_TYPE_LIFE;
 						fcmd->data = (int) nextCmd->nHpLost;
-						action->addCommand(fcmd);
+						pkAction->addCommand(fcmd);
 						nextCmd = nextCmd->cmdNext;
 						continue;
 					case BATTLE_EFFECT_TYPE_STATUS_ADD:
@@ -3229,7 +3229,7 @@ void Battle::dealWithCommand()
 					default:
 						break;
 					}
-					action->addCommand(fcmd);
+					pkAction->addCommand(fcmd);
 					//					theTarget = GetFighter(nextCmd->idActor);
 
 					//					if (nextCmd->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_STATUS_ADD) {
@@ -3261,7 +3261,7 @@ void Battle::dealWithCommand()
 				}
 			}
 			NDLog("addAction");
-			this->AddActionCommand(action);
+			AddActionCommand(pkAction);
 		}
 
 		//		if (m_vActionFighterList.size() > 0) {
@@ -3269,9 +3269,9 @@ void Battle::dealWithCommand()
 		//			f->setBeginAction(true);
 		//		}
 
-		this->m_actionFighterPoint = 0;
+		m_actionFighterPoint = 0;
 
-		this->m_foreBattleStatus = 0;
+		m_foreBattleStatus = 0;
 
 		setBattleStatus (BS_SHOW_FIGHT);
 		m_startWait = 25;
@@ -3280,17 +3280,17 @@ void Battle::dealWithCommand()
 
 void Battle::RestartFight()
 {
-	this->ShowTimerAndTurn(false);
+	ShowTimerAndTurn(false);
 
-	this->RemoveChild(TAG_WAITING, true);
-	this->clearHighlight();
+	RemoveChild(TAG_WAITING, true);
+	clearHighlight();
 
-	this->m_currentActionIndex1 = 0;
-	this->m_currentActionIndex2 = 0;
-	this->m_currentActionIndex3 = 0;
-	this->m_Team1_status = TEAM_WAIT;
-	this->m_Team2_status = TEAM_WAIT;
-	this->m_Team3_status = TEAM_WAIT;
+	m_currentActionIndex1 = 0;
+	m_currentActionIndex2 = 0;
+	m_currentActionIndex3 = 0;
+	m_Team1_status = TEAM_WAIT;
+	m_Team2_status = TEAM_WAIT;
+	m_Team3_status = TEAM_WAIT;
 
 	setBattleStatus (BS_SHOW_FIGHT);
 	m_startWait = 25;
@@ -3298,42 +3298,42 @@ void Battle::RestartFight()
 
 void Battle::StartFight()
 {
-	this->ShowTimerAndTurn(false);
-	//this->RemoveChild(TAG_TIMER, false);
-	if (!this->m_bWatch)
+	ShowTimerAndTurn(false);
+	//RemoveChild(TAG_TIMER, false);
+	if (!m_bWatch)
 	{
-		this->RemoveChild(TAG_WAITING, true);
-		this->clearHighlight();
+		RemoveChild(TAG_WAITING, true);
+		clearHighlight();
 		if (ms_bAuto)
 		{
-			//			this->RemoveChild(m_imgAutoCount, false);
-			//			this->RemoveChild(m_lbAuto, false);
+			//			RemoveChild(m_imgAutoCount, false);
+			//			RemoveChild(m_lbAuto, false);
 		}
 
 //		switch (m_battleStatus) {
 //			case BS_USER_MENU:
-//				//this->RemoveChild(m_battleOpt, false);
+//				//RemoveChild(m_battleOpt, false);
 //				break;
 //			case BS_USE_ITEM_MENU:
-//				//this->CloseItemMenu();
+//				//CloseItemMenu();
 //				break;
 //			case BS_CHOOSE_VIEW_FIGHTER_STATUS:
-//				this->CloseViewStatus();
+//				CloseViewStatus();
 //				break;
 //			case BS_USER_SKILL_MENU:
-//				//this->CloseSkillMenu();
+//				//CloseSkillMenu();
 //				break;
 //			default:
 //				break;
 //		}
 	}
 	dealWithCommand();
-	this->m_currentActionIndex1 = 0;
-	this->m_currentActionIndex2 = 0;
-	this->m_currentActionIndex3 = 0;
-	this->m_Team1_status = TEAM_WAIT;
-	this->m_Team2_status = TEAM_WAIT;
-	this->m_Team3_status = TEAM_WAIT;
+	m_currentActionIndex1 = 0;
+	m_currentActionIndex2 = 0;
+	m_currentActionIndex3 = 0;
+	m_Team1_status = TEAM_WAIT;
+	m_Team2_status = TEAM_WAIT;
+	m_Team3_status = TEAM_WAIT;
 }
 
 bool Battle::AllFighterActionOK()
@@ -3341,7 +3341,7 @@ bool Battle::AllFighterActionOK()
 	bool result = true;
 
 	//test 预防actionOK不了超时的问题。
-	for (size_t i = 0; i < this->m_vActionFighterList.size(); i++)
+	for (size_t i = 0; i < m_vActionFighterList.size(); i++)
 	{
 		Fighter* f = m_vActionFighterList.at(i);
 		if (f->getActionTime() > 200)
@@ -3394,7 +3394,7 @@ bool Battle::fighterStatusOK(VEC_FIGHTER& fighterList)
 
 void Battle::notifyNextFighterBeginAction()
 {
-	size_t idx = this->m_actionFighterPoint;
+	size_t idx = m_actionFighterPoint;
 
 	if (idx >= m_vActionFighterList.size())
 		return;
@@ -3416,12 +3416,12 @@ void Battle::notifyNextFighterBeginAction()
 	}
 	if (fNext)
 	{
-		if (f->m_info.group == fNext->m_info.group)
+		if (f->m_kInfo.group == fNext->m_kInfo.group)
 		{			// 同边的很快就开始动作
 			if (f->completeOneAction())
 			{
 				fNext->setBeginAction(true);
-				this->m_actionFighterPoint = i;
+				m_actionFighterPoint = i;
 			}
 		}
 		else
@@ -3431,7 +3431,7 @@ void Battle::notifyNextFighterBeginAction()
 					|| f->m_actionType == Fighter::ACTION_TYPE_PROTECT)
 			{
 				fNext->setBeginAction(true);
-				this->m_actionFighterPoint = i;
+				m_actionFighterPoint = i;
 			}
 		}
 	}
@@ -3474,21 +3474,21 @@ bool Battle::noOneCanAct(VEC_FIGHTER& fighterList)
 
 BATTLE_COMPLETE Battle::battleComplete()
 {
-	BATTLE_COMPLETE result = BATTLE_COMPLETE(this->serverBattleResult);
-//	if (noOneCanAct(this->GetEnemySideList())) {
+	BATTLE_COMPLETE result = BATTLE_COMPLETE(serverBattleResult);
+//	if (noOneCanAct(GetEnemySideList())) {
 //		result = BATTLE_COMPLETE_WIN;
-//		if (this->GetMainUser() == NULL || this->GetMainUser()->m_info.nLife > 0) {
-//			monsterResult(this->GetEnemySideList());
+//		if (GetMainUser() == NULL || GetMainUser()->m_kInfo.nLife > 0) {
+//			monsterResult(GetEnemySideList());
 //		}
-//	}else if (noOneCanAct(this->GetOurSideList())) {
+//	}else if (noOneCanAct(GetOurSideList())) {
 //		result = BATTLE_COMPLETE_LOSE;
 //	}
 //	
 //	if(getServerBattleResult() != -2) {
 //		result = BATTLE_COMPLETE(getServerBattleResult());
 //	}
-	monsterResult(this->GetEnemySideList());
-	monsterResult(this->GetOurSideList());
+	monsterResult(GetEnemySideList());
+	monsterResult(GetOurSideList());
 	return result;
 }
 
@@ -3527,7 +3527,7 @@ Fighter* Battle::getMainEudemon()
 		//	VEC_FIGHTER& euList = GetOurSideList();
 		//	for (size_t i = 0; i < euList.size(); i++) {
 		//		Fighter* f =  euList.at(i);
-		//		//					if (f->m_info.idPet == petInfo->data.int_PET_ID) {
+		//		//					if (f->m_kInfo.idPet == petInfo->data.int_PET_ID) {
 		//		//						m_mainEudemon = f;
 		//		//						break;
 		//		//					}
@@ -3599,32 +3599,32 @@ void Battle::FinishBattle()
 void Battle::ShowPas()
 {
 	setBattleStatus (BS_BATTLE_COMPLETE);
-	this->battleCompleteResult = battleComplete();
-	//this->showBattleComplete();
+	battleCompleteResult = battleComplete();
+	//showBattleComplete();
 	// 退出战斗,地图逻辑处理
 
-	if (this->currentShowFighter > 0)
+	if (currentShowFighter > 0)
 	{
 		//ScriptMgrObj.excuteLuaFunc("CloseFighterInfo","FighterInfo",0); ///< 临时性注释 郭浩
 	}
 	BattleMgrObj.showBattleResult();
 	//	if (isPasClear() && AllFighterActionOK()) {
-	//		this->battleCompleteResult = battleComplete();
+	//		battleCompleteResult = battleComplete();
 	//		
-	//		if (this->battleCompleteResult != BATTLE_COMPLETE_NO) {
+	//		if (battleCompleteResult != BATTLE_COMPLETE_NO) {
 	//			setBattleStatus(BS_BATTLE_COMPLETE);
-	//			this->showBattleComplete();
+	//			showBattleComplete();
 	//		} else {// 战斗还未结束,回合结束
 	//			if (m_vCmdList.size() > 0) {// 已经存了不少服务端提前发来的指令。不再收集玩家指令了。
 	//				setBattleStatus(BS_SET_FIGHTER);
 	//				
 	//			} else {
-	//				if (this->GetMainUser()) {
+	//				if (GetMainUser()) {
 	//					setBattleStatus(BS_USER_MENU);// 先进入玩家指令状态，在根据具体情况改变。
 	//					
-	//					if (!this->GetMainUser()->isAlive()) {// 如果玩家死了，有宠物就弹出宠物的指令
-	//						if (this->getMainEudemon()) {// 如果玩家有宠物
-	//							if (this->getMainEudemon()->isVisiable()) {
+	//					if (!GetMainUser()->isAlive()) {// 如果玩家死了，有宠物就弹出宠物的指令
+	//						if (getMainEudemon()) {// 如果玩家有宠物
+	//							if (getMainEudemon()->isVisiable()) {
 	//								setBattleStatus(BS_EUDEMON_MENU);
 	//							}
 	//						} else {// 玩家又没有宠物
@@ -3633,7 +3633,7 @@ void Battle::ShowPas()
 	//					} else {// 如果玩家活着
 	//						if (GetMainUser()->isVisiable()) {// 而且玩家没有逃跑，就是用玩家指令
 	//							setBattleStatus(BS_USER_MENU);
-	//							this->m_bSendCurTurnUserAction = false;
+	//							m_bSendCurTurnUserAction = false;
 	//							
 	//						} else {// 但是玩家跑了，有宠物就用宠物指令。
 	//							if (getMainEudemon() != NULL && getMainEudemon()->isVisiable()) {
@@ -3650,16 +3650,16 @@ void Battle::ShowPas()
 	//						}
 	//						else 
 	//						{
-	//							//this->AddChild(this->m_battleOpt);
+	//							//AddChild(m_battleOpt);
 	//							m_bTurnStart = true;
 	//						}
 	//					} 
 	//					else if (m_battleStatus == BS_EUDEMON_MENU) 
 	//					{
 	//						if (s_bAuto) {
-	//							this->OnBtnAuto(true);
+	//							OnBtnAuto(true);
 	//						} else {
-	//							//this->AddChild(this->m_eudemonOpt);
+	//							//AddChild(m_eudemonOpt);
 	//							m_bTurnStartPet = true;
 	//						}
 	//
@@ -3670,13 +3670,13 @@ void Battle::ShowPas()
 	//					}
 	//					else
 	//					{
-	//						if (this->getMainEudemon()) {// 如果玩家有宠物
-	//							if (this->getMainEudemon()->isVisiable()) {
+	//						if (getMainEudemon()) {// 如果玩家有宠物
+	//							if (getMainEudemon()->isVisiable()) {
 	//								setBattleStatus(BS_EUDEMON_MENU);
 	//								if (s_bAuto) {
-	//									this->OnBtnAuto(true);
+	//									OnBtnAuto(true);
 	//								} else {
-	//									//this->AddChild(this->m_eudemonOpt);
+	//									//AddChild(m_eudemonOpt);
 	//									m_bTurnStartPet = true;
 	//								}
 	//							}
@@ -3699,24 +3699,24 @@ void Battle::ShowPas()
 	////				m_lbTurn->SetText(ss.str().c_str());
 	//			}
 	//			//m_imgTurn->SetBigRedTwoNumber(m_turn, MAX_TURN);
-	//			this->m_timeLeft = this->m_timeLeftMax;
+	//			m_timeLeft = m_timeLeftMax;
 	//			{
 	//				stringstream ss;
-	//				ss << this->m_timeLeft;
+	//				ss << m_timeLeft;
 	////				m_lbTimer->SetText(ss.str().c_str());
 	//			}
-	//			this->ShowTimerAndTurn(true);
+	//			ShowTimerAndTurn(true);
 	//			//m_imgTimer->SetBigRedNumber(, false);
 	////			if (m_lbTimer->GetParent() == NULL) {
-	////				this->AddChild(m_lbTimer);
+	////				AddChild(m_lbTimer);
 	////			}
 	//			
 	//			// 更新倒计时
-	////			if (s_bAuto && this->m_mainFighter->isAlive()) {
-	////				this->AddChild(m_imgAutoCount);
-	////				this->AddChild(m_lbAuto);
-	////				this->m_autoCount = AUTO_COUNT;
-	////				m_imgAutoCount->SetBigRedNumber(this->m_autoCount, false);
+	////			if (s_bAuto && m_mainFighter->isAlive()) {
+	////				AddChild(m_imgAutoCount);
+	////				AddChild(m_lbAuto);
+	////				m_autoCount = AUTO_COUNT;
+	////				m_imgAutoCount->SetBigRedNumber(m_autoCount, false);
 	////			}
 	//			
 	//			clearActionFighterStatus();
@@ -3749,21 +3749,21 @@ void Battle::performStatus(Fighter& theTarget)
 	//		int currentMP = 0;
 	//		if (hurtHP != 0) {
 	//			if (theTarget.m_changeLifeTypePas == EFFECT_CHANGE_LIFE_TYPE_CHG_MAX) {
-	//				addHP = hurtHP - theTarget.m_info.nLifeMax;
-	//				theTarget.m_info.nLifeMax = (hurtHP);
-	//				currentHP = theTarget.m_info.nLife;
+	//				addHP = hurtHP - theTarget.m_kInfo.nLifeMax;
+	//				theTarget.m_kInfo.nLifeMax = (hurtHP);
+	//				currentHP = theTarget.m_kInfo.nLife;
 	//				currentHP += addHP;
 	//				theTarget.hurted(addHP);
 	//				
 	//			} else {
-	//				currentHP = theTarget.m_info.nLife;
+	//				currentHP = theTarget.m_kInfo.nLife;
 	//				currentHP += hurtHP;
 	//				theTarget.hurted(hurtHP);
 	//			}
-	//			if (!this->IsPracticeBattle()) {
+	//			if (!IsPracticeBattle()) {
 	//				theTarget.setCurrentHP(currentHP);
 	//			}
-	//			currentHP = theTarget.m_info.nLife;
+	//			currentHP = theTarget.m_kInfo.nLife;
 	//			if (hurtHP < 0) {
 	//				
 	//				if (currentHP > 0) {// hurt
@@ -3778,14 +3778,14 @@ void Battle::performStatus(Fighter& theTarget)
 	//		}
 	//		if (hurtMP != 0) {
 	//			if (theTarget.m_changeLifeTypePas == EFFECT_CHANGE_LIFE_TYPE_CHG_MAX) {
-	//				addMP = hurtMP - theTarget.m_info.nManaMax;
-	//				theTarget.m_info.nManaMax = (hurtMP);
-	//				currentMP = theTarget.m_info.nMana;
+	//				addMP = hurtMP - theTarget.m_kInfo.nManaMax;
+	//				theTarget.m_kInfo.nManaMax = (hurtMP);
+	//				currentMP = theTarget.m_kInfo.nMana;
 	//				currentMP += addMP;
 	//				theTarget.hurted(addMP);
 	//				theTarget.setCurrentMP(currentMP);
 	//			} else {
-	//				currentMP = theTarget.m_info.nMana;
+	//				currentMP = theTarget.m_kInfo.nMana;
 	//				currentMP += hurtMP;
 	//				theTarget.hurted(hurtMP);
 	//				theTarget.setCurrentMP(currentMP);
@@ -3869,7 +3869,7 @@ VEC_FIGHTER& Battle::getDefFightersByTeam(int team)
 			it != m_vDefencer.end(); it++)
 	{
 		Fighter* f = *it;
-		if (f->m_info.btBattleTeam == team)
+		if (f->m_kInfo.btBattleTeam == team)
 		{
 
 			v_team.push_back(f);
@@ -3908,13 +3908,13 @@ void Battle::startAction(FightAction* action)
 				it++)
 		{
 			Fighter* f = *it;
-			if (f->m_info.btBattleTeam == action->m_nTeamDefense)
+			if (f->m_kInfo.btBattleTeam == action->m_nTeamDefense)
 			{
 				f->m_action = Fighter::MOVETOTARGET;
-				f->targetX = countX(this->m_teamAmout, f->m_info.group,
-						(action->m_nTeamDefense - 1) % 3 + 1, f->m_info.btStations);
-				f->targetY = countY(this->m_teamAmout, f->m_info.group,
-						(action->m_nTeamDefense - 1) % 3 + 1, f->m_info.btStations);
+				f->targetX = countX(m_teamAmout, f->m_kInfo.group,
+						(action->m_nTeamDefense - 1) % 3 + 1, f->m_kInfo.btStations);
+				f->targetY = countY(m_teamAmout, f->m_kInfo.group,
+						(action->m_nTeamDefense - 1) % 3 + 1, f->m_kInfo.btStations);
 				action->m_kFighterList.push_back(f);
 			}
 		}
@@ -4129,8 +4129,8 @@ void Battle::runAction(int teamId)
 			break;
 		case BATTLE_EFFECT_TYPE_STATUS_LIFE:				//状态去血
 			fa->m_pkActor->hurted(fa->m_nData);
-			fa->m_pkActor->setCurrentHP((fa->m_pkActor->m_info.nLife) + (fa->m_nData));
-			if (fa->m_pkActor->m_info.nLife > 0)
+			fa->m_pkActor->setCurrentHP((fa->m_pkActor->m_kInfo.nLife) + (fa->m_nData));
+			if (fa->m_pkActor->m_kInfo.nLife > 0)
 			{				// hurt
 				fa->m_pkActor->setHurtOK(true);
 				hurtAction(*(fa->m_pkActor));
@@ -4175,10 +4175,10 @@ void Battle::ShowFight()
 	{
 		setBattleStatus (BS_FIGHTER_SHOW_PAS);
 		//ReleaseActionList();
-		this->ReleaseCommandList();
+		ReleaseCommandList();
 
 	}
-	//	if (this->AllFighterActionOK()) {
+	//	if (AllFighterActionOK()) {
 	//		setBattleStatus(BS_FIGHTER_SHOW_PAS);
 	//	}
 }
@@ -4189,24 +4189,24 @@ void Battle::useItem(Fighter& theActor)
 	{	// 暂时没有使用道具的动作，而且是对自己使用补充物品
 		if (theActor.GetRole()->IsAnimationComplete())
 		{
-			Fighter& target = *theActor.m_mainTarget;
+			Fighter& target = *theActor.m_pkMainTarget;
 
-			Hurt hurt = target.getHurt(&theActor, 0, theActor.m_idUsedItem,
+			Hurt hurt = target.getHurt(&theActor, 0, theActor.m_uiUsedItem,
 					HURT_TYPE_ACTIVE).second;
 
 			int hurtHP = hurt.hurtHP;
 
 			if (hurtHP > 0)
 			{
-				int currentHP = target.m_info.nLife;
+				int currentHP = target.m_kInfo.nLife;
 				int addHP = hurtHP;
 				currentHP += addHP;
-				if (currentHP > target.m_info.nLifeMax)
+				if (currentHP > target.m_kInfo.nLifeMax)
 				{
-					currentHP = target.m_info.nLifeMax;
+					currentHP = target.m_kInfo.nLifeMax;
 				}
 				target.hurted(addHP);
-				if (!this->IsPracticeBattle())
+				if (!IsPracticeBattle())
 				{
 					target.setCurrentHP(currentHP);
 				}
@@ -4224,12 +4224,12 @@ void Battle::useItem(Fighter& theActor)
 
 			if (hurtMP > 0)
 			{
-				int currentMP = target.m_info.nMana;
+				int currentMP = target.m_kInfo.nMana;
 				int addMP = hurtMP;
 				currentMP += addMP;
-				if (currentMP > target.m_info.nManaMax)
+				if (currentMP > target.m_kInfo.nManaMax)
 				{
-					currentMP = target.m_info.nManaMax;
+					currentMP = target.m_kInfo.nManaMax;
 				}
 				target.hurted(addMP);
 				target.setCurrentMP(currentMP);
@@ -4254,7 +4254,7 @@ void Battle::catchPet(Fighter& f)
 	//				Chat::DefaultChat()->AddMessage(ChatTypeSystem, NDCommonCString("CatchFail"));
 	//			}
 	//			// 动作后触发状态变化
-	//			handleStatusActions(this->theActor->getArrayStatusTarget());
+	//			handleStatusActions(theActor->getArrayStatusTarget());
 	//			// 设置下一状态
 	//			f.m_action = (Fighter::DISTANCEATTACKOVER);
 	//			battleStandAction(f);
@@ -4279,10 +4279,10 @@ void Battle::fleeFail(Fighter& theActor)
 {
 	if (theActor.m_action == Fighter::FLEE_FAIL)
 	{
-		if (!this->bActionSet)
+		if (!bActionSet)
 		{
 			fleeFailAction(theActor);
-			this->bActionSet = true;
+			bActionSet = true;
 		}
 		if (theActor.GetRole()->IsAnimationComplete())
 		{
@@ -4290,7 +4290,7 @@ void Battle::fleeFail(Fighter& theActor)
 			// 动作后触发状态变化
 			handleStatusActions(theActor.getArrayStatusTarget());
 			battleStandAction(theActor);
-			this->bActionSet = false;
+			bActionSet = false;
 		}
 	}
 }
@@ -4299,25 +4299,25 @@ void Battle::fleeSuccess(Fighter& theActor)
 {
 	if (theActor.m_action == Fighter::FLEE_SUCCESS)
 	{
-		if (!this->bActionSet)
+		if (!bActionSet)
 		{
-			this->bActionSet = true;
+			bActionSet = true;
 			fleeSuccessAction(theActor);
 		}
 		if (theActor.GetRole()->IsAnimationComplete())
 		{
-			if (theActor.m_info.idObj == NDPlayer::defaultHero().m_nID)
+			if (theActor.m_kInfo.idObj == NDPlayer::defaultHero().m_nID)
 			{	// 如果是自己逃跑了或者死了
 				// ，就观战
-				this->watchBattle = true;
-				//				this->m_imgWhoAmI->RemoveFromParent(true);
+				watchBattle = true;
+				//				m_imgWhoAmI->RemoveFromParent(true);
 				//				m_imgWhoAmI = NULL;
 			}
 			// 动作后触发状态变化
 			handleStatusActions(theActor.getArrayStatusTarget());
 			theActor.setActionOK(true);
 			theActor.setEscape(true);
-			this->bActionSet = false;
+			bActionSet = false;
 		}
 	}
 }
@@ -4369,10 +4369,10 @@ void Battle::moveToTarget(FightAction* action)
 		NDBaseRole* role = theActor->GetRole();
 
 		int coordw = role->GetWidth() >> 1;
-		//		if (theActor.m_info.group != this->m_ourGroup) {
+		//		if (theActor.m_kInfo.group != m_ourGroup) {
 		//			coordw = -coordw;
 		//		}
-		if (theActor->m_info.group == BATTLE_GROUP_ATTACK)
+		if (theActor->m_kInfo.group == BATTLE_GROUP_ATTACK)
 		{
 			coordw = -coordw;
 		}
@@ -4391,7 +4391,7 @@ void Battle::moveToTarget(FightAction* action)
 
 		//		if (role->IsKindOfClass(RUNTIME_CLASS(NDManualRole)) &&
 		//		    theActor.m_mainTarget->GetRole()->IsKindOfClass(RUNTIME_CLASS(NDManualRole))) {
-		//			roleOffset = theActor.m_info.group == BATTLE_GROUP_ATTACK ? 60 : -60;
+		//			roleOffset = theActor.m_kInfo.group == BATTLE_GROUP_ATTACK ? 60 : -60;
 		//		}
 		if (action->m_pkTarget)
 		{
@@ -4507,8 +4507,8 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 			fighter->m_bHardAtk = false;
 			fighter->hurted(cmd->data);
 			NDLog("hurt %d", cmd->data);
-			fighter->setCurrentHP((fighter->m_info.nLife) + (cmd->data));
-			if (fighter->m_info.nLife > 0)
+			fighter->setCurrentHP((fighter->m_kInfo.nLife) + (cmd->data));
+			if (fighter->m_kInfo.nLife > 0)
 			{				// hurt
 				fighter->setHurtOK(true);
 				if (cmd->data < 0)
@@ -4530,7 +4530,7 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 			}
 			break;
 		case BATTLE_EFFECT_TYPE_MANA:
-			fighter->setCurrentMP((fighter->m_info.nMana) + (cmd->data));
+			fighter->setCurrentMP((fighter->m_kInfo.nMana) + (cmd->data));
 			break;
 		case BATTLE_EFFECT_TYPE_DODGE:
 			fighter->setDodgeOK(true);
@@ -4539,8 +4539,8 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 		case BATTLE_EFFECT_TYPE_DRITICAL:
 			fighter->m_bHardAtk = true;
 			//				fighter->hurted(cmd->data);
-			//				fighter->setCurrentHP((fighter->m_info.nLife)+(cmd->data));
-			//				if (fighter->m_info.nLife > 0) {// hurt
+			//				fighter->setCurrentHP((fighter->m_kInfo.nLife)+(cmd->data));
+			//				if (fighter->m_kInfo.nLife > 0) {// hurt
 			//					fighter->setHurtOK(true);
 			//					if(cmd->data<0){
 			//						hurtAction(*fighter);
@@ -4564,7 +4564,7 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 //					cmd->status->m_aniGroup=new NDSubAniGroup;
 //					NDAnimation* effect=[[NDAnimationGroup alloc] initWithSprFile:file];
 //					cmd->status->m_aniGroup->aniGroup = [effect retain];
-//					//subAniGroup.aniGroup.position=CGPointMake(this->x, this->y);
+//					//subAniGroup.aniGroup.position=CGPointMake(x, y);
 //					
 //					cmd->status->m_aniGroup->role = fighter->GetRole();
 //					
@@ -4599,7 +4599,7 @@ void Battle::normalAttack(FightAction* action)
 		NDBaseRole* role = theActor->GetRole();
 		if (role->IsAnimationComplete())
 		{
-			NDLog("%d:normalATK", theActor->m_info.idObj);
+			NDLog("%d:normalATK", theActor->m_kInfo.idObj);
 			for (int i = 0; i < action->m_vCmdList.size(); i++)
 			{
 				FIGHTER_CMD* cmd = action->m_vCmdList.at(i);
@@ -4616,14 +4616,14 @@ void Battle::normalAttack(FightAction* action)
 			//					moveBackAction(theActor);
 			//				}
 			//			} else {
-			//				int currentHP = theTarget->m_info.nLife;
+			//				int currentHP = theTarget->m_kInfo.nLife;
 			//				int hurtHP = theTarget->getHurt(&theActor, 1, 0, HURT_TYPE_ACTIVE).second.hurtHP;
 			//				currentHP += hurtHP;
 			//				theTarget->hurted(hurtHP);
-			//				if (!this->IsPracticeBattle()) {
+			//				if (!IsPracticeBattle()) {
 			//					theTarget->setCurrentHP(currentHP);
 			//				}
-			//				if (theTarget->m_info.nLife > 0) {// hurt
+			//				if (theTarget->m_kInfo.nLife > 0) {// hurt
 			//					theTarget->setHurtOK(true);
 			//					hurtAction(*theTarget);
 			//				} else {// die
@@ -4707,7 +4707,7 @@ void Battle::addSkillEffectToFighter(Fighter* fighter, NDAnimationGroup* effect,
 	sa.frameRec = new NDFrameRunRecord;
 	sa.isFromOut = true;
 	sa.startFrame = delay;
-	this->m_vSubAniGroup.push_back(sa);
+	m_vSubAniGroup.push_back(sa);
 
 	//effect->release();
 }
@@ -4748,7 +4748,7 @@ void Battle::addSkillEffect(Fighter& theActor, bool user/*=false*/)
 //				VEC_FIGHTER& allTarget = theActor.getArrayTarget();
 //				int size = allTarget.size();
 //				for (int i = 0; i < size; i++) {
-//					if (allTarget.at(i)->m_info.group == theActor.m_mainTarget->m_info.group) {
+//					if (allTarget.at(i)->m_kInfo.group == theActor.m_mainTarget->m_kInfo.group) {
 //						NDSubAniGroup sa;
 //						sa.role = theActor.GetRole();
 //						sa.fighter = allTarget.at(i);
@@ -4756,7 +4756,7 @@ void Battle::addSkillEffect(Fighter& theActor, bool user/*=false*/)
 //						sa.frameRec = [[NDFrameRunRecord alloc] init];
 //						sa.isFromOut = true;
 //						sa.startFrame = effectDelay;
-//						this->m_vSubAniGroup.push_back(sa);
+//						m_vSubAniGroup.push_back(sa);
 //					}
 //				}
 //			}
@@ -4769,7 +4769,7 @@ void Battle::addSkillEffect(Fighter& theActor, bool user/*=false*/)
 //				sa.aniGroup = [effect retain];
 //				sa.isFromOut = true;
 //				sa.frameRec = [[NDFrameRunRecord alloc] init];
-//				this->m_vSubAniGroup.push_back(sa);
+//				m_vSubAniGroup.push_back(sa);
 //				sa.startFrame = effectDelay;
 //				break;
 //			}
@@ -4829,7 +4829,7 @@ void Battle::aimTarget(FightAction* action)
 //				}
 //			}
 
-			//			if (theActor.m_info.fighterType == FIGHTER_TYPE_PET) { // 玩家
+			//			if (theActor.m_kInfo.fighterType == FIGHTER_TYPE_PET) { // 玩家
 			//				/*
 			//				int skillId = theActor.getUseSkill()->getSkillTypeID();
 			//				while (skillId >= 100) {
@@ -4868,7 +4868,7 @@ void Battle::normalDistanceAttack(FightAction* action)
 		NDBaseRole* role = theActor->GetRole();
 		if (role->IsAnimationComplete())
 		{
-			NDLog("%d:normalDistanceATK", theActor->m_info.idObj);
+			NDLog("%d:normalDistanceATK", theActor->m_kInfo.idObj);
 			for (int i = 0; i < action->m_vCmdList.size(); i++)
 			{
 				FIGHTER_CMD* cmd = action->m_vCmdList.at(i);
@@ -4882,14 +4882,14 @@ void Battle::normalDistanceAttack(FightAction* action)
 			//					battleStandAction(theActor);
 			//				}
 			//			} else {
-			//				int currentHP = target->m_info.nLife;
+			//				int currentHP = target->m_kInfo.nLife;
 			//				int hurtHP = target->getHurt(&theActor, 1, 0, HURT_TYPE_ACTIVE).second.hurtHP;
 			//				currentHP += hurtHP;
 			//				target->hurted(hurtHP);
-			//				if (!this->IsPracticeBattle()) {
+			//				if (!IsPracticeBattle()) {
 			//					target->setCurrentHP(currentHP);
 			//				}
-			//				if (target->m_info.nLife > 0) {// hurt
+			//				if (target->m_kInfo.nLife > 0) {// hurt
 			//					target->setHurtOK(true);
 			//					hurtAction(*target);
 			//					battleStandAction(theActor);
@@ -4970,10 +4970,10 @@ void Battle::fighterSomeActionChangeToWait(VEC_FIGHTER& fighterList)
 		{ //死亡过程
 			if (f.GetRole()->IsAnimationComplete())
 			{
-				if (f.m_info.idObj == NDPlayer::defaultHero().m_nID)
+				if (f.m_kInfo.idObj == NDPlayer::defaultHero().m_nID)
 				{ // 如果是自己死了
 					// ，就观战
-					this->watchBattle = true;
+					watchBattle = true;
 				}
 				f.setActionOK(true);					//整组动作结束
 				f.setAlive(false);
@@ -5037,11 +5037,11 @@ NDPicture* Battle::getActionWord(ACTION_WORD index)
 	switch (index)
 	{
 	case AW_DEF:
-		return this->m_picActionWordDef;
+		return m_picActionWordDef;
 	case AW_FLEE:
-		return this->m_picActionWordFlee;
+		return m_picActionWordFlee;
 	case AW_DODGE:
-		return this->m_picActionWordDodge;
+		return m_picActionWordDodge;
 	default:
 		return NULL;
 	}
@@ -5055,7 +5055,7 @@ void Battle::skillAttack(FightAction* action)
 	{
 		if (theActor->GetRole()->IsAnimationComplete())
 		{
-			NDLog("%d:SkillATK", theActor->m_info.idObj);
+			NDLog("%d:SkillATK", theActor->m_kInfo.idObj);
 			for (int i = 0; i < action->m_vCmdList.size(); i++)
 			{
 				FIGHTER_CMD* cmd = action->m_vCmdList.at(i);
@@ -5071,16 +5071,16 @@ void Battle::skillAttack(FightAction* action)
 			//					target.protector->hurted(target.protector->hurtInprotect);
 			//					target.protector->hurtInprotect = 0;
 			//				}
-			//				int currentHP = target.m_info.nLife;
+			//				int currentHP = target.m_kInfo.nLife;
 			//				
 			//				Hurt hurt = target.getHurt(&theActor, 0, theActor.getUseSkill()->getId(), HURT_TYPE_ACTIVE).second;
 			//				int hurtHP = hurt.hurtHP;
 			//				currentHP += hurtHP;
 			//				target.hurted(hurtHP);
-			//				if (!this->IsPracticeBattle()) {
+			//				if (!IsPracticeBattle()) {
 			//					target.setCurrentHP(currentHP);
 			//				}
-			//				currentHP = target.m_info.nLife;
+			//				currentHP = target.m_kInfo.nLife;
 			//				if (hurtHP <= 0) {
 			//					if (currentHP > 0) {// hurt
 			//						target.setHurtOK(true);
@@ -5108,7 +5108,7 @@ void Battle::distanceSkillAttack(FightAction* action)
 	{
 		if (theActor->GetRole()->IsAnimationComplete())
 		{
-			NDLog("%d:distanceSkillATK", theActor->m_info.idObj);
+			NDLog("%d:distanceSkillATK", theActor->m_kInfo.idObj);
 			for (int i = 0; i < action->m_vCmdList.size(); i++)
 			{
 				FIGHTER_CMD* cmd = action->m_vCmdList.at(i);
@@ -5125,16 +5125,16 @@ void Battle::distanceSkillAttack(FightAction* action)
 			//					target.protector->hurted(target.protector->hurtInprotect);
 			//					target.protector->hurtInprotect = 0;
 			//				}
-			//				int currentHP = target.m_info.nLife;
+			//				int currentHP = target.m_kInfo.nLife;
 			//				
 			//				Hurt hurt = target.getHurt(&theActor, 0, theActor.getUseSkill()->getId(), HURT_TYPE_ACTIVE).second;
 			//				int hurtHP = hurt.hurtHP;
 			//				currentHP += hurtHP;
 			//				target.hurted(hurtHP);
-			//				if (!this->IsPracticeBattle()) {
+			//				if (!IsPracticeBattle()) {
 			//					target.setCurrentHP(currentHP);
 			//				}
-			//				currentHP = target.m_info.nLife;
+			//				currentHP = target.m_kInfo.nLife;
 			//				if (hurtHP < 0) {
 			//					if (currentHP > 0) {// hurt
 			//						target.setHurtOK(true);
@@ -5150,7 +5150,7 @@ void Battle::distanceSkillAttack(FightAction* action)
 			//					target.setAlive(true);
 			//					clearFighterStatus(target);
 			//					battleStandAction(target);
-			//					this->watchBattle = false;
+			//					watchBattle = false;
 			//				}
 			//			}
 			//			
@@ -5174,8 +5174,8 @@ void Battle::clearWillBeAtk(VEC_FIGHTER& fighterList)
 
 void Battle::clearAllWillBeAtk()
 {
-	clearWillBeAtk(this->GetOurSideList());
-	clearWillBeAtk(this->GetEnemySideList());
+	clearWillBeAtk(GetOurSideList());
+	clearWillBeAtk(GetEnemySideList());
 }
 
 Fighter* Battle::getFighterByPos(VEC_FIGHTER& fighterList, int pos, int line)
@@ -5184,7 +5184,7 @@ Fighter* Battle::getFighterByPos(VEC_FIGHTER& fighterList, int pos, int line)
 	for (size_t i = 0; i < fighterList.size(); i++)
 	{
 		Fighter* f = fighterList.at(i);
-		if (f->m_info.btStations == pos)
+		if (f->m_kInfo.btStations == pos)
 		{
 			result = f;
 			break;
@@ -5201,14 +5201,14 @@ Fighter* Battle::getUpNearFighter(VEC_FIGHTER& fighterList, Fighter* f)
 		return NULL;
 	}
 
-	if (f->m_info.btStations == 1 || f->m_info.btStations == 4
-			|| f->m_info.btStations == 7)
+	if (f->m_kInfo.btStations == 1 || f->m_kInfo.btStations == 4
+			|| f->m_kInfo.btStations == 7)
 	{			// 最上面
 		result = NULL;
 	}
 	else
 	{
-		Byte pos = f->m_info.btStations;
+		Byte pos = f->m_kInfo.btStations;
 		result = getFighterByPos(fighterList, pos - 1, 0);
 	}
 	return result;
@@ -5221,14 +5221,14 @@ Fighter* Battle::getDownNearFighter(VEC_FIGHTER& fighterList, Fighter* f)
 	{
 		return NULL;
 	}
-	if (f->m_info.btStations == 3 || f->m_info.btStations == 6
-			|| f->m_info.btStations == 9)
+	if (f->m_kInfo.btStations == 3 || f->m_kInfo.btStations == 6
+			|| f->m_kInfo.btStations == 9)
 	{			// 最上面
 		result = NULL;
 	}
 	else
 	{
-		Byte pos = f->m_info.btStations;
+		Byte pos = f->m_kInfo.btStations;
 		result = getFighterByPos(fighterList, pos + 1, 0);
 	}
 	return result;
@@ -5239,13 +5239,13 @@ void Battle::setWillBeAtk(VEC_FIGHTER& fighterList)
 //	clearAllWillBeAtk();
 //	int area = 0;
 //	
-//	switch (this->m_battleStatus) {
+//	switch (m_battleStatus) {
 //		case BS_CHOOSE_ENEMY_MAG_ATK: // 玩家技能攻击
 //		case BS_CHOOSE_OUR_SIDE_MAG_ATK:
 //		{
-//			if (this->GetMainUser() == NULL) return;
+//			if (GetMainUser() == NULL) return;
 //			
-//			BattleSkill* useSkill = this->GetMainUser()->getUseSkill();
+//			BattleSkill* useSkill = GetMainUser()->getUseSkill();
 //			if (!useSkill) {
 //				return;
 //			}
@@ -5254,7 +5254,7 @@ void Battle::setWillBeAtk(VEC_FIGHTER& fighterList)
 //			break;
 //		case BS_CHOOSE_ENEMY_MAG_ATK_EUDEMON:
 //		{
-//			BattleSkill* useSkill = this->getMainEudemon()->getUseSkill();
+//			BattleSkill* useSkill = getMainEudemon()->getUseSkill();
 //			if (!useSkill) {
 //				return;
 //			}
@@ -5265,12 +5265,12 @@ void Battle::setWillBeAtk(VEC_FIGHTER& fighterList)
 //			return;
 //	}
 //	
-//	if (!this->m_highlightFighter) {
+//	if (!m_highlightFighter) {
 //		return;
 //	}
 //	
-//	Fighter* f = this->m_highlightFighter;
-//	this->m_highlightFighter->setWillBeAtk(true);
+//	Fighter* f = m_highlightFighter;
+//	m_highlightFighter->setWillBeAtk(true);
 //	
 //	
 //	if (area == 2) {
@@ -5337,10 +5337,10 @@ void Battle::setWillBeAtk(VEC_FIGHTER& fighterList)
 
 VEC_FIGHTER& Battle::getHighlightList()
 {
-	for (VEC_FIGHTER_IT it = this->m_vAttaker.begin(); it != m_vAttaker.end();
+	for (VEC_FIGHTER_IT it = m_vAttaker.begin(); it != m_vAttaker.end();
 			it++)
 	{
-		if (this->m_highlightFighter == *it)
+		if (m_highlightFighter == *it)
 		{
 			return m_vAttaker;
 		}
@@ -5356,7 +5356,7 @@ void Battle::addSubAniGroup(NDSprite* role, NDAnimationGroup* group, Fighter* f)
 	subAniGroup.fighter = f;
 	subAniGroup.frameRec = new NDFrameRunRecord;
 
-	this->m_vSubAniGroup.push_back(subAniGroup);
+	m_vSubAniGroup.push_back(subAniGroup);
 }
 
 void Battle::handleStatusActions(VEC_STATUS_ACTION& statusActions)
@@ -5377,7 +5377,7 @@ void Battle::handleStatusActions(VEC_STATUS_ACTION& statusActions)
 	//		// 状态去血
 	//		if (pairHurt.first) {
 	//			Hurt& hurt = pairHurt.second;
-	//			int currentHP = target->m_info.nLife;
+	//			int currentHP = target->m_kInfo.nLife;
 	//			if (currentHP > 0) {
 	//				int hurtHP = hurt.hurtHP;
 	//				currentHP += hurtHP;
@@ -5405,7 +5405,7 @@ void Battle::handleStatusActions(VEC_STATUS_ACTION& statusActions)
 
 void Battle::SetFighterOnline(int idFighter, bool bOnline)
 {
-	Fighter* f = this->GetFighter(idFighter);
+	Fighter* f = GetFighter(idFighter);
 	if (f)
 	{
 		f->setOnline(bOnline);
@@ -5423,7 +5423,7 @@ void Battle::SetFighterOnline(int idFighter, bool bOnline)
  m_btnCancleAutoFight->SetTag(BTN_CANCLE_AUTO);
  m_btnCancleAutoFight->SetBackgroundColor(ccc4(107, 158, 156, 255));
  m_btnCancleAutoFight->SetTitle("取消");
- this->AddChild(m_btnCancleAutoFight);
+ AddChild(m_btnCancleAutoFight);
  }
  else 
  {
@@ -5442,7 +5442,7 @@ void Battle::SetFighterOnline(int idFighter, bool bOnline)
 void Battle::TurnStart()
 {
 //	// 自动战斗，返回
-//	if (this->m_bWatch || s_bAuto || m_bTurnStart == false) {
+//	if (m_bWatch || s_bAuto || m_bTurnStart == false) {
 //		m_bTurnStart = false;
 //		m_bTurnStartPet = true;
 //		return;
@@ -5454,19 +5454,19 @@ void Battle::TurnStart()
 //	Fighter* mainFighter = GetMainUser();
 //	if (mainFighter == NULL || mainFighter->isEscape() || !mainFighter->isAlive() || mainFighter->isDieOK()) 
 //	{
-//		this->m_bSendCurTurnUserAction = true;
-//		this->m_bTurnStartPet = true;
+//		m_bSendCurTurnUserAction = true;
+//		m_bTurnStartPet = true;
 //		m_bTurnStart = false;
 //		return;
 //	}
 //	
-//	//	this->RefreshSkillBar();
+//	//	RefreshSkillBar();
 //	//	
 //	//	m_fighterLeft->SetPage(m_lastSkillPageUser);
 //	//	
 //	////	m_fighterBottom->SetGray(false);
 //	//	
-//	//	this->RefreshItemBar();
+//	//	RefreshItemBar();
 //	//	
 //	//	// 根据玩家上回合的操作修改
 //	//	m_fighterRight->SetShrink(m_bShrinkRight);
@@ -5474,7 +5474,7 @@ void Battle::TurnStart()
 //	//	m_fighterBottom->SetShrink(m_bShrinkBottom);
 //	
 //	// 无可捕捉目标，捕捉变灰
-//	VEC_FIGHTER& enemyList = this->GetEnemySideList();
+//	VEC_FIGHTER& enemyList = GetEnemySideList();
 //	Fighter* f;
 //	bool bCatchGray = true;
 //	for (size_t i = 0; i < enemyList.size(); i++) {
@@ -5496,26 +5496,26 @@ void Battle::TurnStart()
 //	// 技能本回合不可用，则改为普通攻击
 //	if (BATTLE_ACT_PHY_ATK == m_defaultActionUser) {
 //		if (m_defaultTargetUser == NULL || !m_defaultTargetUser->isVisiable()) {
-//			this->OnBtnAttack();
+//			OnBtnAttack();
 //			m_defaultTargetUser = m_highlightFighter;
 //		} else {
-//			this->OnBtnAttack();
-//			this->HighlightFighter(m_defaultTargetUser);
+//			OnBtnAttack();
+//			HighlightFighter(m_defaultTargetUser);
 //		}
 //		
 //	} else if (BATTLE_ACT_MAG_ATK == m_defaultActionUser) {
-//		if (this->m_setBattleSkillList.count(this->m_defaultSkillID) <= 0) {
+//		if (m_setBattleSkillList.count(m_defaultSkillID) <= 0) {
 //			m_defaultActionUser = BATTLE_ACT_PHY_ATK;
-//			this->OnBtnAttack();
+//			OnBtnAttack();
 //			m_defaultTargetUser = m_highlightFighter;
 //		} else {
-//			this->m_curBattleAction->btAction = BATTLE_ACT_MAG_ATK;
-//			this->m_curBattleAction->vData.clear();
+//			m_curBattleAction->btAction = BATTLE_ACT_MAG_ATK;
+//			m_curBattleAction->vData.clear();
 //			
 //			s_lastTurnActionUser.btAction = BATTLE_ACT_MAG_ATK;
 //			s_lastTurnActionUser.vData.clear();
 //			
-//			this->m_curBattleAction->vData.push_back(this->m_defaultSkillID);
+//			m_curBattleAction->vData.push_back(m_defaultSkillID);
 //			s_lastTurnActionUser.vData.push_back(m_defaultSkillID);
 //			s_lastTurnActionUser.vData.push_back(0);
 //			
@@ -5523,19 +5523,19 @@ void Battle::TurnStart()
 //			
 //			if (skill) {
 //				int targetType = skill->getAtkType();
-//				this->GetMainUser()->setUseSkill(skill);
+//				GetMainUser()->setUseSkill(skill);
 //				
 //				if (m_defaultTargetUser == NULL || !m_defaultTargetUser->isVisiable()) {
 //					if ((targetType & SKILL_ATK_TYPE_ENEMY) == SKILL_ATK_TYPE_ENEMY) {
 //						setBattleStatus(BS_CHOOSE_ENEMY_MAG_ATK);
 //						
-//						VEC_FIGHTER& enemyList = this->GetEnemySideList();
+//						VEC_FIGHTER& enemyList = GetEnemySideList();
 //						Fighter* f;
 //						for (size_t i = 0; i < enemyList.size(); i++) {
 //							f = enemyList.at(i);
 //							if (f->isVisiable()) {
 //								m_defaultTargetUser = f;
-//								this->HighlightFighter(f);
+//								HighlightFighter(f);
 //								break;
 //							}
 //						}
@@ -5543,13 +5543,13 @@ void Battle::TurnStart()
 //					} else if ((targetType & SKILL_ATK_TYPE_FRIEND) == SKILL_ATK_TYPE_FRIEND) {
 //						setBattleStatus(BS_CHOOSE_OUR_SIDE_MAG_ATK);
 //						
-//						VEC_FIGHTER& ourList = this->GetOurSideList();
+//						VEC_FIGHTER& ourList = GetOurSideList();
 //						Fighter* f;
 //						for (size_t i = 0; i < ourList.size(); i++) {
 //							f = ourList.at(i);
 //							if (f->isVisiable()) {
 //								m_defaultTargetUser = f;
-//								this->HighlightFighter(f);
+//								HighlightFighter(f);
 //								break;
 //							}
 //						}
@@ -5557,15 +5557,15 @@ void Battle::TurnStart()
 //				} else {
 //					if ((targetType & SKILL_ATK_TYPE_ENEMY) == SKILL_ATK_TYPE_ENEMY) {
 //						setBattleStatus(BS_CHOOSE_ENEMY_MAG_ATK);
-//						this->HighlightFighter(m_defaultTargetUser);
+//						HighlightFighter(m_defaultTargetUser);
 //						
 //					} else if ((targetType & SKILL_ATK_TYPE_FRIEND) == SKILL_ATK_TYPE_FRIEND) {
 //						setBattleStatus(BS_CHOOSE_OUR_SIDE_MAG_ATK);
-//						this->HighlightFighter(m_defaultTargetUser);
+//						HighlightFighter(m_defaultTargetUser);
 //						
 //					} else if ((targetType & SKILL_ATK_TYPE_SELF) == SKILL_ATK_TYPE_SELF) {
 //						setBattleStatus(BS_CHOOSE_SELF_MAG_ATK);
-//						this->HighlightFighter(m_defaultTargetUser);
+//						HighlightFighter(m_defaultTargetUser);
 //					}
 //				}
 //			}
@@ -5575,7 +5575,7 @@ void Battle::TurnStart()
 
 void Battle::TurnStartPet()
 {
-//	if (this->m_bWatch || s_bAuto || m_bTurnStartPet == false) {
+//	if (m_bWatch || s_bAuto || m_bTurnStartPet == false) {
 //		m_bTurnStartPet = false;
 //		return;
 //	}
@@ -5593,29 +5593,29 @@ void Battle::TurnStartPet()
 //	// 捕捉按钮变灰
 //	//	m_fighterRight->SetGray(true, 0);
 //	
-//	this->RefreshSkillBarPet();
+//	RefreshSkillBarPet();
 //	
 //	//	m_fighterLeft->SetPage(m_lastSkillPageEudemon);
 //	
 //	if (BATTLE_ACT_PET_PHY_ATK == m_defaultActionEudemon) {
 //		if (m_defaultTargetEudemon == NULL || !m_defaultTargetEudemon->isVisiable()) {
-//			this->OnEudemonAttack();
+//			OnEudemonAttack();
 //			m_defaultTargetEudemon = m_highlightFighter;
 //		} else {
-//			this->OnEudemonAttack();
-//			this->HighlightFighter(m_defaultTargetEudemon);
+//			OnEudemonAttack();
+//			HighlightFighter(m_defaultTargetEudemon);
 //		}
 //		
 //	} else if (BATTLE_ACT_PET_MAG_ATK == m_defaultActionEudemon) {
 //		// 上回合宠物技能可用
-//		if (this->m_defaultSkillIDEudemon > ID_NONE) {
-//			this->m_curBattleAction->btAction = BATTLE_ACT_PET_MAG_ATK;
-//			this->m_curBattleAction->vData.clear();
+//		if (m_defaultSkillIDEudemon > ID_NONE) {
+//			m_curBattleAction->btAction = BATTLE_ACT_PET_MAG_ATK;
+//			m_curBattleAction->vData.clear();
 //			
 //			s_lastTurnActionEudemon.btAction = BATTLE_ACT_PET_MAG_ATK;
 //			s_lastTurnActionEudemon.vData.clear();
 //			
-//			this->m_curBattleAction->vData.push_back(m_defaultSkillIDEudemon);
+//			m_curBattleAction->vData.push_back(m_defaultSkillIDEudemon);
 //			s_lastTurnActionEudemon.vData.push_back(m_defaultSkillIDEudemon);
 //			s_lastTurnActionEudemon.vData.push_back(0);
 //			
@@ -5628,13 +5628,13 @@ void Battle::TurnStartPet()
 //					if ((targetType & SKILL_ATK_TYPE_ENEMY) == SKILL_ATK_TYPE_ENEMY) {
 //						setBattleStatus(BS_CHOOSE_ENEMY_MAG_ATK_EUDEMON);
 //						
-//						VEC_FIGHTER& enemyList = this->GetEnemySideList();
+//						VEC_FIGHTER& enemyList = GetEnemySideList();
 //						Fighter* f;
 //						for (size_t i = 0; i < enemyList.size(); i++) {
 //							f = enemyList.at(i);
 //							if (f->isVisiable()) {
-//								this->m_defaultTargetEudemon = f;
-//								this->HighlightFighter(f);
+//								m_defaultTargetEudemon = f;
+//								HighlightFighter(f);
 //								break;
 //							}
 //						}
@@ -5642,13 +5642,13 @@ void Battle::TurnStartPet()
 //					} else if ((targetType & SKILL_ATK_TYPE_FRIEND) == SKILL_ATK_TYPE_FRIEND) {
 //						setBattleStatus(BS_CHOOSE_OUR_SIDE_MAG_ATK_EUDEMON);
 //						
-//						VEC_FIGHTER& ourList = this->GetOurSideList();
+//						VEC_FIGHTER& ourList = GetOurSideList();
 //						Fighter* f;
 //						for (size_t i = 0; i < ourList.size(); i++) {
 //							f = ourList.at(i);
 //							if (f->isVisiable()) {
-//								this->m_defaultTargetEudemon = f;
-//								this->HighlightFighter(f);
+//								m_defaultTargetEudemon = f;
+//								HighlightFighter(f);
 //								break;
 //							}
 //						}
@@ -5657,22 +5657,22 @@ void Battle::TurnStartPet()
 //				} else {
 //					if ((targetType & SKILL_ATK_TYPE_ENEMY) == SKILL_ATK_TYPE_ENEMY) {
 //						setBattleStatus(BS_CHOOSE_ENEMY_MAG_ATK_EUDEMON);
-//						this->HighlightFighter(this->m_defaultTargetEudemon);
+//						HighlightFighter(m_defaultTargetEudemon);
 //						
 //					} else if ((targetType & SKILL_ATK_TYPE_FRIEND) == SKILL_ATK_TYPE_FRIEND) {
 //						setBattleStatus(BS_CHOOSE_OUR_SIDE_MAG_ATK_EUDEMON);
-//						this->HighlightFighter(this->m_defaultTargetEudemon);
+//						HighlightFighter(m_defaultTargetEudemon);
 //						
 //					} else if ((targetType & SKILL_ATK_TYPE_SELF) == SKILL_ATK_TYPE_SELF) {
 //						setBattleStatus(BS_CHOOSE_SELF_MAG_ATK_EUDEMON);
-//						this->HighlightFighter(m_defaultTargetEudemon);
+//						HighlightFighter(m_defaultTargetEudemon);
 //						
 //					}
 //				}
 //			}
 //		} else {
 //			m_defaultActionEudemon = BATTLE_ACT_PET_PHY_ATK;
-//			this->OnEudemonAttack();
+//			OnEudemonAttack();
 //			m_defaultTargetEudemon = m_highlightFighter;
 //		}
 //	}
@@ -5691,7 +5691,7 @@ void Battle::RefreshSkillBarPet()
 	//BattleSkill* bs = NULL;
 	//SET_BATTLE_SKILL_LIST_IT itSkill = petSkillList.begin();
 	//
-	//int nPetMp = this->getMainEudemon()->m_info.nMana;
+	//int nPetMp = getMainEudemon()->m_kInfo.nMana;
 	//
 	//int nFocus = -1;
 	//for (int i = 0; i < MAX_SKILL_NUM; i++) {
@@ -5714,11 +5714,11 @@ void Battle::RefreshSkillBarPet()
 	//			}
 	//			
 	//			// 上回合使用的技能
-	//			if (this->m_defaultSkillIDEudemon == ci.param1 && !ci.gray) {
+	//			if (m_defaultSkillIDEudemon == ci.param1 && !ci.gray) {
 	//				nFocus = i;
 	//			} else {
 	//				// 上回合技能清零，表示该技能失效
-	//				this->m_defaultSkillIDEudemon = ID_NONE;
+	//				m_defaultSkillIDEudemon = ID_NONE;
 	//			}
 	//			
 	//		}
@@ -5743,16 +5743,16 @@ void Battle::RefreshSkillBar()
 	//
 	//BattleMgr& bm = BattleMgrObj;
 	//BattleSkill* bs = NULL;
-	//SET_BATTLE_SKILL_LIST_IT itSkill = this->m_setBattleSkillList.begin();
+	//SET_BATTLE_SKILL_LIST_IT itSkill = m_setBattleSkillList.begin();
 	//
-	//if (this->GetMainUser() == NULL) return;
+	//if (GetMainUser() == NULL) return;
 	//
-	//int nPlayerMp = this->GetMainUser()->m_info.nMana;
+	//int nPlayerMp = GetMainUser()->m_kInfo.nMana;
 	//
 	//int nFocus = -1;
 	//int i = 0;
 	//for (; i < MAX_SKILL_NUM; i++) {
-	//	if (itSkill != this->m_setBattleSkillList.end()) {
+	//	if (itSkill != m_setBattleSkillList.end()) {
 	//		skillInfo.push_back(SpeedBarCellInfo());
 	//		SpeedBarCellInfo& ci = skillInfo.back();
 	//		bs = bm.GetBattleSkill(*itSkill);
@@ -5763,10 +5763,10 @@ void Battle::RefreshSkillBar()
 	//			ci.param1 = bs->getId();
 	//			ci.param2 = bs->getCd();
 	//			// 上回合使用的技能
-	//			if (this->m_defaultSkillID == ci.param1 && !ci.gray) {
+	//			if (m_defaultSkillID == ci.param1 && !ci.gray) {
 	//				nFocus = i;
 	//			} else {
-	//				this->m_defaultSkillID = ID_NONE;
+	//				m_defaultSkillID = ID_NONE;
 	//			}
 	//			
 	//		}
@@ -5792,7 +5792,7 @@ void Battle::RefreshSkillBar()
 	//		
 	//		if (bs->getType() == SKILL_TYPE_PASSIVE) continue;
 	//		
-	//		if (this->m_setBattleSkillList.count(skillID) == 0 && size < size_t(MAX_SKILL_NUM)) {
+	//		if (m_setBattleSkillList.count(skillID) == 0 && size < size_t(MAX_SKILL_NUM)) {
 	//			skillInfo.push_back(SpeedBarCellInfo());
 	//			SpeedBarCellInfo& ci = skillInfo.back();
 	//			ci.foreground = GetSkillIconByIconIndex(bs->getIconIndex(), true);
@@ -5801,8 +5801,8 @@ void Battle::RefreshSkillBar()
 	//			ci.param1 = bs->getId();
 	//			ci.param2 = bs->getCd();
 	//			// 上回合使用的技能
-	//			if (this->m_defaultSkillID == ci.param1) {
-	//				this->m_defaultSkillID = ID_NONE;
+	//			if (m_defaultSkillID == ci.param1) {
+	//				m_defaultSkillID = ID_NONE;
 	//			}
 	//			
 	//			size++;
@@ -5908,22 +5908,22 @@ void Battle::InitSpeedBar()
 	//	m_fighterBottom->SetDelegate(this);
 	//	
 	//	if (s_bAuto) {
-	//		this->RefreshItemBar();
+	//		RefreshItemBar();
 	//	}
 	//	
-	//	this->AddChild(m_fighterBottom);
+	//	AddChild(m_fighterBottom);
 
 	//	m_fighterLeft = new FighterLeft;
 	//	m_fighterLeft->Initialization();
 	//	m_fighterLeft->SetDelegate(this);
 	//	
 	//	if (s_bAuto) {
-	//		this->RefreshSkillBar();
+	//		RefreshSkillBar();
 	//	}
 	//	
-	//	this->AddChild(m_fighterLeft);
+	//	AddChild(m_fighterLeft);
 	//	
-	//	//this->AddChild(m_btnQuickTalk);
+	//	//AddChild(m_btnQuickTalk);
 	//
 	//	m_fighterRight = new FighterRight;
 	//	m_fighterRight->SetDelegate(this);
@@ -5973,7 +5973,7 @@ void Battle::InitSpeedBar()
 
 	//	m_fighterRight->refresh(speedbarRight);
 	//	
-	//	this->AddChild(m_fighterRight);
+	//	AddChild(m_fighterRight);
 }
 //
 //void Battle::OnNDUISpeedBarEvent(NDUISpeedBar* speedbar, const SpeedBarCellInfo& info, bool focused)
@@ -6006,39 +6006,39 @@ void Battle::InitSpeedBar()
 //	//	if (speedbar == m_fighterLeft) 
 //	//	{
 //	//		if (info.param1 > 0) {
-//	//			if (this->IsUserOperating()) {
+//	//			if (IsUserOperating()) {
 //	//				if (focused) {
 //	//					NDTouch touch;
-//	//					this->TouchEnd(&touch);
+//	//					TouchEnd(&touch);
 //	//					
 //	//				} else {
-//	//					this->m_curBattleAction->vData.clear();
-//	//					this->m_curBattleAction->btAction = BATTLE_ACT_MAG_ATK;
+//	//					m_curBattleAction->vData.clear();
+//	//					m_curBattleAction->btAction = BATTLE_ACT_MAG_ATK;
 //	//					
 //	//					s_lastTurnActionUser.btAction = BATTLE_ACT_MAG_ATK;
 //	//					s_lastTurnActionUser.vData.clear();
 //	//					
-//	//					this->m_defaultActionUser = BATTLE_ACT_MAG_ATK;
-//	//					this->m_defaultSkillID = info.param1;
+//	//					m_defaultActionUser = BATTLE_ACT_MAG_ATK;
+//	//					m_defaultSkillID = info.param1;
 //	//					
-//	//					this->m_curBattleAction->vData.push_back(info.param1);
+//	//					m_curBattleAction->vData.push_back(info.param1);
 //	//					s_lastTurnActionUser.vData.push_back(info.param1);
 //	//					s_lastTurnActionUser.vData.push_back(0);
 //	//					
 //	//					BattleSkill* skill = BattleMgrObj.GetBattleSkill(info.param1);
-//	//					if (skill && this->GetMainUser()) {
+//	//					if (skill && GetMainUser()) {
 //	//						int targetType = skill->getAtkType();
-//	//						this->GetMainUser()->setUseSkill(skill);
+//	//						GetMainUser()->setUseSkill(skill);
 //	//						
 //	//						if ((targetType & SKILL_ATK_TYPE_ENEMY) == SKILL_ATK_TYPE_ENEMY) {
 //	//							setBattleStatus(BS_CHOOSE_ENEMY_MAG_ATK);
-//	//							VEC_FIGHTER& enemyList = this->GetEnemySideList();
+//	//							VEC_FIGHTER& enemyList = GetEnemySideList();
 //	//							Fighter* f;
 //	//							for (size_t i = 0; i < enemyList.size(); i++) {
 //	//								f = enemyList.at(i);
 //	//								if (f->isVisiable()) {
 //	//									m_defaultTargetUser = f;
-//	//									this->HighlightFighter(f);
+//	//									HighlightFighter(f);
 //	//									break;
 //	//								}
 //	//							}
@@ -6046,59 +6046,59 @@ void Battle::InitSpeedBar()
 //	//						} else if ((targetType & SKILL_ATK_TYPE_FRIEND) == SKILL_ATK_TYPE_FRIEND) {
 //	//							setBattleStatus(BS_CHOOSE_OUR_SIDE_MAG_ATK);
 //	//							
-//	//							VEC_FIGHTER& ourList = this->GetOurSideList();
+//	//							VEC_FIGHTER& ourList = GetOurSideList();
 //	//							Fighter* f;
 //	//							for (size_t i = 0; i < ourList.size(); i++) {
 //	//								f = ourList.at(i);
 //	//								if (f->isVisiable()) {
 //	//									m_defaultTargetUser = f;
-//	//									this->HighlightFighter(f);
+//	//									HighlightFighter(f);
 //	//									break;
 //	//								}
 //	//							}
 //	//							
 //	//						} else if ((targetType & SKILL_ATK_TYPE_SELF) == SKILL_ATK_TYPE_SELF) {
-//	//							m_defaultTargetUser = this->GetMainUser();
-//	//							this->m_curBattleAction->vData.push_back(this->GetMainUser()->m_info.idObj);
-//	//							this->SendBattleAction(*m_curBattleAction);
+//	//							m_defaultTargetUser = GetMainUser();
+//	//							m_curBattleAction->vData.push_back(GetMainUser()->m_kInfo.idObj);
+//	//							SendBattleAction(*m_curBattleAction);
 //	//							
 //	//						}
 //	//					}
 //	//				}
 //	//				
-//	//			} else if (this->IsEudemonOperating()) {
+//	//			} else if (IsEudemonOperating()) {
 //	//				if (focused) {
 //	//					NDTouch touch;
-//	//					this->TouchEnd(&touch);
+//	//					TouchEnd(&touch);
 //	//					
 //	//				} else {
-//	//					this->m_curBattleAction->btAction = BATTLE_ACT_PET_MAG_ATK;
+//	//					m_curBattleAction->btAction = BATTLE_ACT_PET_MAG_ATK;
 //	//					
 //	//					s_lastTurnActionEudemon.btAction = BATTLE_ACT_PET_MAG_ATK;
 //	//					s_lastTurnActionEudemon.vData.clear();
 //	//					
-//	//					this->m_defaultActionEudemon = BATTLE_ACT_PET_MAG_ATK;
-//	//					this->m_defaultSkillIDEudemon = info.param1;
+//	//					m_defaultActionEudemon = BATTLE_ACT_PET_MAG_ATK;
+//	//					m_defaultSkillIDEudemon = info.param1;
 //	//					
-//	//					this->m_curBattleAction->vData.push_back(info.param1);
+//	//					m_curBattleAction->vData.push_back(info.param1);
 //	//					s_lastTurnActionEudemon.vData.push_back(info.param1);
 //	//					s_lastTurnActionEudemon.vData.push_back(0);
 //	//					
 //	//					BattleSkill* skill = BattleMgrObj.GetBattleSkill(info.param1);
 //	//					if (skill) {
-//	//						if (this->getMainEudemon()->m_info.nMana >= skill->getMpRequire()) {
+//	//						if (getMainEudemon()->m_kInfo.nMana >= skill->getMpRequire()) {
 //	//							int targetType = skill->getAtkType();
 //	//							
 //	//							if ((targetType & SKILL_ATK_TYPE_ENEMY) == SKILL_ATK_TYPE_ENEMY) {
 //	//								setBattleStatus(BS_CHOOSE_ENEMY_MAG_ATK_EUDEMON);
 //	//								
-//	//								VEC_FIGHTER& enemyList = this->GetEnemySideList();
+//	//								VEC_FIGHTER& enemyList = GetEnemySideList();
 //	//								Fighter* f;
 //	//								for (size_t i = 0; i < enemyList.size(); i++) {
 //	//									f = enemyList.at(i);
 //	//									if (f->isVisiable()) {
-//	//										this->m_defaultTargetEudemon = f;
-//	//										this->HighlightFighter(f);
+//	//										m_defaultTargetEudemon = f;
+//	//										HighlightFighter(f);
 //	//										break;
 //	//									}
 //	//								}
@@ -6106,21 +6106,21 @@ void Battle::InitSpeedBar()
 //	//							} else if ((targetType & SKILL_ATK_TYPE_FRIEND) == SKILL_ATK_TYPE_FRIEND) {
 //	//								setBattleStatus(BS_CHOOSE_OUR_SIDE_MAG_ATK_EUDEMON);
 //	//								
-//	//								VEC_FIGHTER& ourList = this->GetOurSideList();
+//	//								VEC_FIGHTER& ourList = GetOurSideList();
 //	//								Fighter* f;
 //	//								for (size_t i = 0; i < ourList.size(); i++) {
 //	//									f = ourList.at(i);
 //	//									if (f->isVisiable()) {
-//	//										this->m_defaultTargetEudemon = f;
-//	//										this->HighlightFighter(f);
+//	//										m_defaultTargetEudemon = f;
+//	//										HighlightFighter(f);
 //	//										break;
 //	//									}
 //	//								}
 //	//								
 //	//							} else if ((targetType & SKILL_ATK_TYPE_SELF) == SKILL_ATK_TYPE_SELF) {
-//	//								this->m_defaultTargetEudemon = this->getMainEudemon();
-//	//								this->m_curBattleAction->vData.push_back(this->getMainEudemon()->m_info.idObj);
-//	//								this->SendBattleAction(*m_curBattleAction);
+//	//								m_defaultTargetEudemon = getMainEudemon();
+//	//								m_curBattleAction->vData.push_back(getMainEudemon()->m_kInfo.idObj);
+//	//								SendBattleAction(*m_curBattleAction);
 //	//								
 //	//							}
 //	//						}
@@ -6132,26 +6132,26 @@ void Battle::InitSpeedBar()
 //	//	else if (speedbar == m_fighterBottom) 
 //	//	{
 //	//		if (info.param1 > 0) {
-//	//			if (this->IsUserOperating()) {
+//	//			if (IsUserOperating()) {
 //	//				if (focused) {
 //	//					NDTouch touch;
-//	//					this->TouchEnd(&touch);
+//	//					TouchEnd(&touch);
 //	//				} else {
 //	//					m_curBattleAction->btAction = BATTLE_ACT_USEITEM;
 //	//					setBattleStatus(BS_CHOOSE_OUR_SIDE_USE_ITEM_USER);
 //	//				}
 //	//				
-//	//			} else if (this->IsEudemonOperating()) {
+//	//			} else if (IsEudemonOperating()) {
 //	//				if (focused) {
 //	//					NDTouch touch;
-//	//					this->TouchEnd(&touch);
+//	//					TouchEnd(&touch);
 //	//				} else {
 //	//					m_curBattleAction->btAction = BATTLE_ACT_PET_USEITEM;
 //	//					setBattleStatus(BS_CHOOSE_OUR_SIDE_USE_ITEM_EUDEMON);
 //	//				}
 //	//			}
 //	//			
-//	//			if (this->m_battleStatus == BS_CHOOSE_OUR_SIDE_USE_ITEM_USER || this->m_battleStatus == BS_CHOOSE_OUR_SIDE_USE_ITEM_EUDEMON) {
+//	//			if (m_battleStatus == BS_CHOOSE_OUR_SIDE_USE_ITEM_USER || m_battleStatus == BS_CHOOSE_OUR_SIDE_USE_ITEM_EUDEMON) {
 //	//				m_curBattleAction->vData.clear();
 //	//				
 //	//				MAP_USEITEM_IT it = m_mapUseItem.find(info.param1);
@@ -6160,12 +6160,12 @@ void Battle::InitSpeedBar()
 //	//					m_curBattleAction->vData.push_back(it->second.first);
 //	//				}
 //	//				
-//	//				VEC_FIGHTER& ourSideList = this->GetOurSideList();
+//	//				VEC_FIGHTER& ourSideList = GetOurSideList();
 //	//				Fighter* f;
 //	//				for (size_t i = 0; i < ourSideList.size(); i++) {
 //	//					f = ourSideList.at(i);
 //	//					if (f->isVisiable()) {
-//	//						this->HighlightFighter(f);
+//	//						HighlightFighter(f);
 //	//						break;
 //	//					}
 //	//				}
@@ -6176,65 +6176,65 @@ void Battle::InitSpeedBar()
 //	//	{
 //	//		switch (info.param1) {
 //	//			case CELL_TAG_ATK:
-//	//				if (this->IsUserOperating()) {
+//	//				if (IsUserOperating()) {
 //	//					if (focused) {
 //	//						NDTouch touch;
-//	//						this->TouchEnd(&touch);
+//	//						TouchEnd(&touch);
 //	//					} else {
-//	//						this->stopAuto();
-//	//						this->OnBtnAttack();
+//	//						stopAuto();
+//	//						OnBtnAttack();
 //	//						m_defaultActionUser = BATTLE_ACT_PHY_ATK;
 //	//						m_defaultTargetUser = m_highlightFighter;
 //	//					}
-//	//				} else if (this->IsEudemonOperating()) {
+//	//				} else if (IsEudemonOperating()) {
 //	//					if (focused) {
 //	//						NDTouch touch;
-//	//						this->TouchEnd(&touch);
+//	//						TouchEnd(&touch);
 //	//					} else {
-//	//						this->OnEudemonAttack();
+//	//						OnEudemonAttack();
 //	//						m_defaultActionEudemon = BATTLE_ACT_PET_PHY_ATK;
 //	//						m_defaultTargetEudemon = m_highlightFighter;
 //	//					}
 //	//				}
 //	//				break;
 //	//			case CELL_TAG_DEF:
-//	//				if (this->IsUserOperating()) {
-//	//					this->stopAuto();
-//	//					this->OnBtnDefence();
-//	//				} else if (this->IsEudemonOperating()) {
+//	//				if (IsUserOperating()) {
+//	//					stopAuto();
+//	//					OnBtnDefence();
+//	//				} else if (IsEudemonOperating()) {
 //	//					BattleAction actioin(BATTLE_ACT_PET_PHY_DEF);
 //	//					s_lastTurnActionEudemon.btAction = BATTLE_ACT_PET_PHY_DEF;
-//	//					this->SendBattleAction(actioin);
+//	//					SendBattleAction(actioin);
 //	//				}
 //	//				break;
 //	//			case CELL_TAG_CATCH:
-//	//				if (this->IsUserOperating()) {
+//	//				if (IsUserOperating()) {
 //	//					if (focused) {
 //	//						NDTouch touch;
-//	//						this->TouchEnd(&touch);
+//	//						TouchEnd(&touch);
 //	//					} else {
-//	//						this->stopAuto();
-//	//						this->OnBtnCatch();
+//	//						stopAuto();
+//	//						OnBtnCatch();
 //	//					}
 //	//				}
 //	//				break;
 //	//			case CELL_TAG_FLEE:
-//	//				if (this->IsUserOperating()) {
-//	//					this->stopAuto();
-//	//					this->OnBtnRun();
-//	//				} else if (this->IsEudemonOperating()) {
+//	//				if (IsUserOperating()) {
+//	//					stopAuto();
+//	//					OnBtnRun();
+//	//				} else if (IsEudemonOperating()) {
 //	//					BattleAction actioin(BATTLE_ACT_PET_ESCAPE);
-//	//					this->SendBattleAction(actioin);
+//	//					SendBattleAction(actioin);
 //	//				}
 //	//				break;
 //	//			case CELL_TAG_VIEWSTATUS:
 //	//			{
 //	//				if (focused) {
 //	//					NDTouch touch;
-//	//					this->TouchEnd(&touch);
+//	//					TouchEnd(&touch);
 //	//				} else {
 //	//					Fighter* f = NULL;
-//	//					VEC_FIGHTER& enemyList = this->GetEnemySideList();
+//	//					VEC_FIGHTER& enemyList = GetEnemySideList();
 //	//					for (VEC_FIGHTER_IT it = enemyList.begin(); it != enemyList.end(); it++) {
 //	//						if ((*it)->isVisiable()) {
 //	//							f = *it;
@@ -6242,12 +6242,12 @@ void Battle::InitSpeedBar()
 //	//						}
 //	//					}
 //	//					
-//	//					if (this->IsUserOperating()) {
+//	//					if (IsUserOperating()) {
 //	//						setBattleStatus(BS_CHOOSE_VIEW_FIGHTER_STATUS);
-//	//						this->HighlightFighter(f);
-//	//					} else if (this->IsEudemonOperating()) {
+//	//						HighlightFighter(f);
+//	//					} else if (IsEudemonOperating()) {
 //	//						setBattleStatus(BS_CHOOSE_VIEW_FIGHTER_STATUS_PET);
-//	//						this->HighlightFighter(f);
+//	//						HighlightFighter(f);
 //	//					}
 //	//				}
 //	//
@@ -6279,21 +6279,21 @@ void Battle::InitSpeedBar()
 //	//	if (speedbar == m_fighterBottom) 
 //	//	{
 //	//		if (m_bShowChatTextField) {
-//	//			this->ShowChatTextField(false);
+//	//			ShowChatTextField(false);
 //	//			m_bChatTextFieldShouldShow = true;
 //	//		}
 //	//		
 //	//		// 物品设置后，切换为普通攻击
-//	//		if (this->IsUserOperating()) {
-//	//			this->OnBtnAttack();
-//	//		} else if (this->IsEudemonOperating()) {
-//	//			this->OnEudemonAttack();
+//	//		if (IsUserOperating()) {
+//	//			OnBtnAttack();
+//	//		} else if (IsEudemonOperating()) {
+//	//			OnEudemonAttack();
 //	//		}
 //	//		
 //	//		GameUIItemConfig *config = new GameUIItemConfig;
 //	//		config->Initialization();
 //	//		config->SetDelegate(this);
-//	//		this->AddChild(config, 97);
+//	//		AddChild(config, 97);
 //	//	}
 //}
 //
@@ -6312,9 +6312,9 @@ void Battle::InitSpeedBar()
 //void Battle::OnRefreshFinish(NDUISpeedBar* speedbar, unsigned int page)
 //{
 //	//	if (speedbar == m_fighterLeft) {
-//	//		if (this->IsUserOperating()) {
+//	//		if (IsUserOperating()) {
 //	//			m_lastSkillPageUser = page;
-//	//		} else if (this->IsEudemonOperating()) {
+//	//		} else if (IsEudemonOperating()) {
 //	//			m_lastSkillPageEudemon = page;
 //	//		}
 //	//	}
@@ -6346,13 +6346,13 @@ void Battle::OnItemConfigFinish()
 	RefreshItemBar();
 	if (m_bChatTextFieldShouldShow)
 	{
-		this->ShowChatTextField(true);
+		ShowChatTextField(true);
 	}
 }
 
 bool Battle::IsUserOperating()
 {
-//	switch (this->m_battleStatus) {
+//	switch (m_battleStatus) {
 //		case BS_CHOOSE_VIEW_FIGHTER_STATUS:
 //		case BS_CHOOSE_ENEMY_PHY_ATK:
 //		case BS_CHOOSE_ENEMY_MAG_ATK:
@@ -6370,7 +6370,7 @@ bool Battle::IsUserOperating()
 
 bool Battle::IsEudemonOperating()
 {
-//	switch (this->m_battleStatus) {
+//	switch (m_battleStatus) {
 //		case BS_CHOOSE_VIEW_FIGHTER_STATUS_PET:
 //		case BS_CHOOSE_ENEMY_PHY_ATK_EUDEMON:
 //		case BS_CHOOSE_ENEMY_MAG_ATK_EUDEMON:
@@ -6398,7 +6398,7 @@ bool Battle::OnRoleDisapper(int iRoleID)
 		if (f->GetRole() && f->GetRole()->m_nID == iRoleID)
 		{
 
-			size_t idx = this->m_actionFighterPoint;
+			size_t idx = m_actionFighterPoint;
 
 			if (idx == index)
 			{
@@ -6406,13 +6406,13 @@ bool Battle::OnRoleDisapper(int iRoleID)
 
 				if (m_vActionFighterList.size())
 				{
-					this->m_actionFighterPoint = (index + 1)
+					m_actionFighterPoint = (index + 1)
 							% m_vActionFighterList.size();
 
-					if (this->m_actionFighterPoint
+					if (m_actionFighterPoint
 							< int(m_vActionFighterList.size()))
 					{
-						m_vActionFighterList[this->m_actionFighterPoint]->setActionOK(
+						m_vActionFighterList[m_actionFighterPoint]->setActionOK(
 								true);
 					}
 				}
@@ -6450,10 +6450,10 @@ bool Battle::OnRoleDisapper(int iRoleID)
 		}
 	}
 
-	if (this->m_mainFighter && this->m_mainFighter->GetRole()
-			&& this->m_mainFighter->GetRole()->m_nID == iRoleID)
+	if (m_mainFighter && m_mainFighter->GetRole()
+			&& m_mainFighter->GetRole()->m_nID == iRoleID)
 	{
-		this->m_mainFighter = NULL;
+		m_mainFighter = NULL;
 		ret = true;
 	}
 
@@ -6515,5 +6515,5 @@ void Battle::setBattleStatus(BATTLE_STATUS status)
 	if (status == m_battleStatus)
 		return;
 
-	this->m_battleStatus = status;
+	m_battleStatus = status;
 }

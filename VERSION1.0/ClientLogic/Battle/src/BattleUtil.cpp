@@ -19,7 +19,7 @@ void defenceAction(Fighter& f)
 	NDBaseRole *role = f.GetRole();
 	int action = MANUELROLE_DEFENCE;
 	f.m_bDefenceAtk=true;
-	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
+	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
 	
 //	if (f.m_lookfaceType==LOOKFACE_MANUAL) {
 //		switch (role->GetWeaponType()) {
@@ -64,7 +64,7 @@ void assasinSkillAction(Fighter& f) {
 	NDBaseRole *role = f.GetRole();
 	int action = 0;
 	int skill = 0;
-	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
+	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
 	
 	if (f.m_lookfaceType==LOOKFACE_MANUAL) {
 		skill = f.getUseSkill()->getSkillTypeID();
@@ -115,8 +115,8 @@ void assasinSkillAction(Fighter& f) {
 void wizzardSkillAction(Fighter& f) {
 	NDBaseRole *role = f.GetRole();
 	int action = 0;
-	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
-	switch (f.m_info.fighterType) {
+	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
+	switch (f.m_kInfo.fighterType) {
 		case FIGHTER_TYPE_PET:
 			action = MANUELROLE_SKILL_WIZZARD;
 			break;
@@ -141,9 +141,9 @@ void warriorSkillAction(Fighter& f) {
 	NDBaseRole *role = f.GetRole();
 	int action = 0;
 	int skill = 0;
-	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
+	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
 	
-	if (f.m_info.fighterType == FIGHTER_TYPE_PET) {
+	if (f.m_kInfo.fighterType == FIGHTER_TYPE_PET) {
 		skill = f.getUseSkill()->getSkillTypeID();
 		action = MANUELROLE_SKILL_WARRIOR_SWORD_SINGLE;
 		switch (skill) {
@@ -193,7 +193,7 @@ void warriorSkillAction(Fighter& f) {
 void attackAction(Fighter& f) {
 	NDBaseRole *role = f.GetRole();
 	int action = MANUELROLE_ATTACK;
-	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
+	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
 //	if(f.m_lookfaceType==LOOKFACE_MANUAL){
 //		switch (role->GetWeaponType()) {
 //			case TWO_HAND_SPEAR:
@@ -237,7 +237,7 @@ void attackAction(Fighter& f) {
 void moveToTargetAction(Fighter& f) {
 	NDBaseRole *role = f.GetRole();
 	int action = MANUELROLE_BATTLE_STAND;
-	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
+	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
 	
 //	if(f.m_lookfaceType==LOOKFACE_MANUAL){
 //		action = MANUELROLE_MOVE_TO_TARGET;
@@ -255,7 +255,7 @@ void moveToTargetAction(Fighter& f) {
 void dodgeAction(Fighter& f) {
 	NDBaseRole *role = f.GetRole();
 	int action = 0;
-	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
+	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
 	if(f.m_lookfaceType==LOOKFACE_MANUAL){
 		action = MANUELROLE_DODGE;
 	}else{
@@ -307,7 +307,7 @@ void hurtAction(Fighter& f) {
 	}
 	NDBaseRole *role = f.GetRole();
 	int action = MANUELROLE_HURT;
-	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
+	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
 //	if(f.m_lookfaceType==LOOKFACE_MANUAL){
 //		action = MANUELROLE_HURT;
 //	}else{
@@ -342,7 +342,7 @@ void hurtAction(Fighter& f) {
 void dieAction(Fighter& f) {
 	NDBaseRole *role = f.GetRole();
 	int action = MANUELROLE_HURT;
-	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
+	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
 //	if(f.m_lookfaceType==LOOKFACE_MANUAL){
 //		action = MANUELROLE_DIE;
 //	}else{
@@ -362,7 +362,7 @@ void battleStandAction(Fighter& f) {
 
 	NDBaseRole *role = f.GetRole();
 	int action = MANUELROLE_BATTLE_STAND;
-	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
+	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
 //	if(f.m_lookfaceType==LOOKFACE_MANUAL){
 //		action = MANUELROLE_BATTLE_STAND;
 //	}else{
@@ -400,8 +400,8 @@ void useItemAction(Fighter& f) {
 	
 	NDBaseRole *role = f.GetRole();
 	int action = 0;
-	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
-	switch (f.m_info.fighterType) {
+	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
+	switch (f.m_kInfo.fighterType) {
 		case FIGHTER_TYPE_PET:
 			action = MANUELROLE_ITEM_USE;
 			break;
@@ -425,7 +425,7 @@ void useItemAction(Fighter& f) {
 void catchPetAction(Fighter& f) {
 	NDBaseRole *role = f.GetRole();
 	
-	if (f.m_info.fighterType == FIGHTER_TYPE_PET) {
+	if (f.m_kInfo.fighterType == FIGHTER_TYPE_PET) {
 		role->SetCurrentAnimation(MANUELROLE_CATCH_PET, role->m_bFaceRight);
 	}
 }
@@ -433,8 +433,8 @@ void catchPetAction(Fighter& f) {
 void fleeFailAction(Fighter& f) {
 	NDBaseRole *role = f.GetRole();
 	int action = 0;
-	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
-	switch (f.m_info.fighterType) {
+	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
+	switch (f.m_kInfo.fighterType) {
 		case FIGHTER_TYPE_PET:
 			action = MANUELROLE_FLEE_FAIL;
 			break;
@@ -458,8 +458,8 @@ void fleeFailAction(Fighter& f) {
 void fleeSuccessAction(Fighter& f) {
 	NDBaseRole *role = f.GetRole();
 	int action = 0;
-	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
-	switch (f.m_info.fighterType) {
+	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
+	switch (f.m_kInfo.fighterType) {
 		case FIGHTER_TYPE_PET:
 			action = MANUELROLE_FLEE_SUCCESS;
 			break;
@@ -486,7 +486,7 @@ void monsterResult(VEC_FIGHTER& monsterList)
 	for (size_t i = 0; i < monsterList.size(); i++) {
 		Fighter& obj = *monsterList.at(i);
 		//if(obj.m_info.fighterType==FIGHTER_TYPE_MONSTER){
-			int idMonType = obj.m_info.idType;
+			int idMonType = obj.m_kInfo.idType;
 			if (0 != idMonType) {
 				// 打怪任务结算
 				updateTaskMonsterData(idMonType, true);
@@ -498,9 +498,9 @@ void monsterResult(VEC_FIGHTER& monsterList)
 void petAction(Fighter& f, int act) {
 	NDBaseRole *role = f.GetRole();
 	
-	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
+	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
 	
-	switch (f.m_info.fighterType) {
+	switch (f.m_kInfo.fighterType) {
 		case FIGHTER_TYPE_EUDEMON:
 		case FIGHTER_TYPE_ELITE_MONSTER:
 		case FIGHTER_TYPE_MONSTER:
@@ -517,7 +517,7 @@ void petAction(Fighter& f, int act) {
 
 void roleAction(Fighter& f, int act) {
 	NDBaseRole *role = f.GetRole();
-	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
+	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
 	if (role)
 		role->SetCurrentAnimation(act, bFaceRight);
 }

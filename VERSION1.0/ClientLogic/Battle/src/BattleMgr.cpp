@@ -673,7 +673,7 @@ void BattleMgr::processControlPoint(NDEngine::NDTransData& bao)
 	Fighter* user = m_pkBattle->GetMainUser();
 	if (user)
 	{
-		bao >> user->m_atkPoint >> user->m_defPoint >> user->m_disPoint;
+		bao >> user->m_nAttackPoint >> user->m_nDefencePoint >> user->m_nDistancePoint;
 	}
 }
 
