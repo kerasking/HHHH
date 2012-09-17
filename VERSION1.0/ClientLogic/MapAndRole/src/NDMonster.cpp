@@ -39,58 +39,58 @@ bool NDMonster::isRoleMonster(int lookface)
 }
 
 NDMonster::NDMonster() :
-		state(0)
+		m_nState(0)
 {
 	INIT_AUTOLINK (NDMonster);
-	self_move_rectw = NORMAL_MOVE_RECTW;
-	self_move_rectH = NORMAL_MOVE_RECTH;
-	bossRing = NULL;
+	m_nSelfMoveRectW = NORMAL_MOVE_RECTW;
+	m_nSelfMoveRectH = NORMAL_MOVE_RECTH;
+	m_pkBossRing = NULL;
 	m_bIsAutoAttack = true;
 
-	stop_time_count = 0;
+	m_nStopTimeCount = 0;
 
-	curStopCount = 0;
+	m_nCurStopCount = 0;
 
-	curMoveCount = 0;
+	m_nCurMoveCount = 0;
 
-	curCount = 0;
+	m_nCurCount = 0;
 
-	isFrozen = false;
+	m_bIsFrozen = false;
 
-	deadTime = time(NULL);
+	m_nDeadTime = time(NULL);
 
-	frozenTime = time(NULL);
+	m_nFrozenTime = time(NULL);
 
 	m_nAttackArea = 0;
 
 	monsterInit();
 
-	moveRectW = 0;
-	moveRectH = 0;
+	m_nMoveRectW = 0;
+	m_nMoveRectH = 0;
 
-	bBattleMap = false;
+	m_bBattleMap = false;
 	m_bRoleMonster = false;
 
-	bClear = false;
+	m_bClear = false;
 
 	m_nFigure = 0;
 
 	m_lbName = NULL;
 
-	turnFace = false;
+	m_bTurnFace = false;
 
 	m_bCanBattle = true;
 
 	m_nOriginal_x = 0;
 	m_nOriginal_y = 0;
 
-	m_timeBossProtect = 0.0f;
+	m_dTimeBossProtect = 0.0f;
 	m_bIsHunt = false;
 }
 
 NDMonster::~NDMonster()
 {
-	SafeClearEffect (bossRing);
+	SafeClearEffect (m_pkBossRing);
 	m_lbName = NULL;
 }
 
@@ -140,12 +140,12 @@ void NDMonster::Initialization(int idType)
 //		else 
 //		{
 	m_nMonsterCatogary = MONSTER_NORMAL;
-	self_move_rectw = NORMAL_MOVE_RECTW;
-	self_move_rectH = NORMAL_MOVE_RECTH;
+	m_nSelfMoveRectW = NORMAL_MOVE_RECTW;
+	m_nSelfMoveRectH = NORMAL_MOVE_RECTH;
 //		}
 
-	selfMoveRectX = GetPosition().x - (self_move_rectw - BASE_BOTTOM_WH) / 2;
-	selfMoveRectY = GetPosition().y - (self_move_rectH - BASE_BOTTOM_WH) / 2;
+	m_nSelfMoveRectX = GetPosition().x - (m_nSelfMoveRectW - BASE_BOTTOM_WH) / 2;
+	m_nSelfMoveRectY = GetPosition().y - (m_nSelfMoveRectH - BASE_BOTTOM_WH) / 2;
 
 	srandom (time(NULL));
 
@@ -176,14 +176,14 @@ void NDMonster::setOriginalPosition(int o_x, int o_y)
 
 void NDMonster::restorePosition()
 {
-	this->SetPosition(ccp(m_nOriginal_x, m_nOriginal_y));
+	SetPosition(ccp(m_nOriginal_x, m_nOriginal_y));
 }
 
 void NDMonster::SetMoveRect(CGPoint point, int size)
 {
 
-	self_move_rectw = size * 2 * MAP_UNITSIZE;
-	self_move_rectH = size * 2 * MAP_UNITSIZE;
+	m_nSelfMoveRectW = size * 2 * MAP_UNITSIZE;
+	m_nSelfMoveRectH = size * 2 * MAP_UNITSIZE;
 
 	/***
 	 * 临时性注释 郭浩
@@ -202,8 +202,8 @@ void NDMonster::SetMoveRect(CGPoint point, int size)
 	 * end
 	 */
 
-	selfMoveRectX = point.x - self_move_rectw / 2;
-	selfMoveRectY = 0;
+	m_nSelfMoveRectX = point.x - m_nSelfMoveRectW / 2;
+	m_nSelfMoveRectY = 0;
 }
 
 void NDMonster::Initialization(int lookface, int idNpc, int lvl)
@@ -229,11 +229,11 @@ void NDMonster::Initialization(int lookface, int idNpc, int lvl)
 	m_nID = idNpc;
 
 	m_nMonsterCatogary = MONSTER_Farm;
-	self_move_rectw = BOSS_MOVE_RECTW;
-	self_move_rectH = BOSS_MOVE_RECTH;
+	m_nSelfMoveRectW = BOSS_MOVE_RECTW;
+	m_nSelfMoveRectH = BOSS_MOVE_RECTH;
 
-	selfMoveRectX = GetPosition().x - (self_move_rectw - BASE_BOTTOM_WH) / 2;
-	selfMoveRectY = GetPosition().y - (self_move_rectH - BASE_BOTTOM_WH) / 2;
+	m_nSelfMoveRectX = GetPosition().x - (m_nSelfMoveRectW - BASE_BOTTOM_WH) / 2;
+	m_nSelfMoveRectY = GetPosition().y - (m_nSelfMoveRectH - BASE_BOTTOM_WH) / 2;
 
 	if (isUseAI())
 	{
@@ -270,17 +270,17 @@ bool NDMonster::OnDrawBegin(bool bDraw)
 
 	NDBaseRole::OnDrawBegin(bDraw);
 
-	if (this->GetParent()
-			&& this->GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+	if (GetParent()
+			&& GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 	{
 		drawName(bDraw);
 	}
 
-	if (bossRing && m_pkSubNode)
+	if (m_pkBossRing && m_pkSubNode)
 	{
-		if (!bossRing->GetParent())
+		if (!m_pkBossRing->GetParent())
 		{
-			m_pkSubNode->AddChild(bossRing);
+			m_pkSubNode->AddChild(m_pkBossRing);
 		}
 
 		if (m_nMonsterCatogary == MONSTER_BOSS)
@@ -289,8 +289,8 @@ bool NDMonster::OnDrawBegin(bool bDraw)
 			int iY = m_kPosition.y-DISPLAY_POS_Y_OFFSET;
 			iX += getGravityX()-GetWidth()/2;
 			iY += BASE_BOTTOM_WH + 8;
-			bossRing->SetPosition(ccp(iX, iY));
-			bossRing->RunAnimation(bDraw);
+			m_pkBossRing->SetPosition(ccp(iX, iY));
+			m_pkBossRing->RunAnimation(bDraw);
 		}
 	}
 
@@ -300,9 +300,9 @@ bool NDMonster::OnDrawBegin(bool bDraw)
 void NDMonster::MoveToPosition(CGPoint toPos,
 		SpriteSpeed speed/* = SpriteSpeedStep4*/, bool moveMap/* = false*/)
 {
-	if (this->GetParent())
+	if (GetParent())
 	{
-		NDLayer* layer = (NDLayer *) this->GetParent();
+		NDLayer* layer = (NDLayer *) GetParent();
 		if (layer->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
 			m_kPointList.clear();
@@ -316,32 +316,32 @@ void NDMonster::MoveToPosition(CGPoint toPos,
 
 void NDMonster::WalkToPosition(CGPoint toPos)
 {
-	if (this->GetPosition().x > toPos.x)
+	if (GetPosition().x > toPos.x)
 	{
-		if (!turnFace)
+		if (!m_bTurnFace)
 			m_bReverse = m_bFaceRight = true;
 		else
 			m_bReverse = m_bFaceRight = false;
 	}
 	else
 	{
-		if (!turnFace)
+		if (!m_bTurnFace)
 			m_bReverse = m_bFaceRight = false;
 		else
 			m_bReverse = m_bFaceRight = true;
 	}
 
-//		if (this->m_bRoleMonster) {
+//		if (m_bRoleMonster) {
 	//NDLog("faceRight:%d",m_faceRight);
 	m_bFaceRight = !m_bFaceRight;
 	m_bReverse = !m_bReverse;
 //		}
-	this->MoveToPosition(toPos, SpriteSpeedStep4, false);
+	MoveToPosition(toPos, SpriteSpeedStep4, false);
 }
 
 void NDMonster::Update(unsigned long ulDiff)
 {
-	if ((!this->GetParent() && state == MONSTER_STATE_NORMAL) || bBattleMap)
+	if ((!GetParent() && m_nState == MONSTER_STATE_NORMAL) || m_bBattleMap)
 	{
 		return;
 	}
@@ -360,15 +360,15 @@ void NDMonster::Update(unsigned long ulDiff)
 	 * end
 	 */
 
-	if (isFrozen)
+	if (m_bIsFrozen)
 	{
-		if (time(NULL) - frozenTime >= FROZEN_TIME)
+		if (time(NULL) - m_nFrozenTime >= FROZEN_TIME)
 		{
 			//setMonsterFrozen(false);
 		}
 	}
 
-	switch (state)
+	switch (m_nState)
 	{
 	case MONSTER_STATE_DEAD:
 	{
@@ -398,7 +398,7 @@ void NDMonster::Update(unsigned long ulDiff)
 	{
 		// 玩家的碰撞检测放这吧
 		doMonsterCollides();
-		if (!isMonsterCollide) //&& T.getDialogList().size() == 0)
+		if (!m_bIsMonsterCollide) //&& T.getDialogList().size() == 0)
 		{ // 非碰撞状态
 			runLogic();
 		}
@@ -437,7 +437,7 @@ bool NDMonster::isUseAI()
 		int roleX = NDPlayer::defaultHero().GetPosition().x;
 		int roleY = NDPlayer::defaultHero().GetPosition().y;
 
-		if (roleX >= selfMoveRectX && roleX <= selfMoveRectX + self_move_rectw)
+		if (roleX >= m_nSelfMoveRectX && roleX <= m_nSelfMoveRectX + m_nSelfMoveRectW)
 		//&& roleY >= selfMoveRectY
 		//&& roleY <= selfMoveRectY + self_move_rectH)
 		{ // 并且玩家在怪物的活动范围内
@@ -446,8 +446,8 @@ bool NDMonster::isUseAI()
 //						return false;
 //					} else 
 //					{
-			if (roleX > (selfMoveRectX + self_move_rectw / 2 - 16)
-					&& roleX < (selfMoveRectX + self_move_rectw / 2 + 16))
+			if (roleX > (m_nSelfMoveRectX + m_nSelfMoveRectW / 2 - 16)
+					&& roleX < (m_nSelfMoveRectX + m_nSelfMoveRectW / 2 + 16))
 			{
 				NDPlayer::defaultHero().SetLocked(true);
 				NDPlayer::defaultHero().stopMoving();
@@ -553,7 +553,7 @@ int NDMonster::getRandomAIDirect()
 
 void NDMonster::randomMonsterUseAI()
 {
-	curStopCount = 0;
+	m_nCurStopCount = 0;
 	srandom (time(NULL));int
 	m = getRandomAIDirect();
 	//NDLog("monster ai direct:%d",m);
@@ -562,27 +562,27 @@ void NDMonster::randomMonsterUseAI()
 		m_bIsAIUseful = false;
 		m_nMoveDirect = (random() % 4 + random() % 4) % 4;
 		m_nMoveCount = random() % MOVE_MIN + random() % MOVE_MIN;
-		stop_time_count = random() % ((m_nMoveCount + 1) * 10);
+		m_nStopTimeCount = random() % ((m_nMoveCount + 1) * 10);
 	}
 	else
 	{
 		m_bIsAIUseful = true;
 		m_nMoveDirect = m;
 		m_nMoveCount = 1;
-		stop_time_count = 0;
+		m_nStopTimeCount = 0;
 	}
-	curMoveCount = 0;
+	m_nCurMoveCount = 0;
 	//setAnigroupFace();
 	SetCurrentAnimation(MONSTER_MAP_MOVE, m_bFaceRight);
 }
 
 void NDMonster::randomMonsterNotAI()
 {
-	curStopCount = 0;
+	m_nCurStopCount = 0;
 	m_nMoveDirect = (random() % 4 + random() % 4) % 4;
 	m_nMoveCount = random() % MOVE_MIN + random() % MOVE_MIN;
-	stop_time_count = random() % ((m_nMoveCount + 1) * 10);
-	curMoveCount = 0;
+	m_nStopTimeCount = random() % ((m_nMoveCount + 1) * 10);
+	m_nCurMoveCount = 0;
 	//setAnigroupFace();
 	SetCurrentAnimation(MONSTER_MAP_MOVE, m_bFaceRight);
 }
@@ -603,7 +603,7 @@ void NDMonster::setAnigroupFace()
 	}
 	}
 
-//		if (this->m_bRoleMonster) {
+//		if (m_bRoleMonster) {
 	m_bFaceRight = !m_bFaceRight;
 	m_bReverse = !m_bReverse;
 //		}
@@ -611,24 +611,24 @@ void NDMonster::setAnigroupFace()
 
 void NDMonster::setMonsterFrozen(bool f) // 精英怪才有冻结状态,防止战败后又遇怪
 {
-	isFrozen = f;
+	m_bIsFrozen = f;
 	if (f)
 	{
-		frozenTime = time(0);
+		m_nFrozenTime = time(0);
 	}
 }
 
 void NDMonster::monsterInit()
 {
-	state = MONSTER_STATE_NORMAL;
-	isMonsterCollide = false;
+	m_nState = MONSTER_STATE_NORMAL;
+	m_bIsMonsterCollide = false;
 }
 
 void NDMonster::runLogic()
 {
 	if (m_nMoveDirect == dir_invalid)
 	{
-		if (curStopCount >= stop_time_count)
+		if (m_nCurStopCount >= m_nStopTimeCount)
 		{
 			if (isUseAI())
 			{
@@ -641,7 +641,7 @@ void NDMonster::runLogic()
 		}
 		else
 		{
-			curStopCount++;
+			m_nCurStopCount++;
 			SetCurrentAnimation(MONSTER_MAP_STAND, m_bFaceRight);
 		}
 
@@ -659,7 +659,7 @@ void NDMonster::directLogic()
 	int row = y / MAP_UNITSIZE;
 	int col = x / MAP_UNITSIZE;
 
-	//NSString *s1 = [NSString stringWithUTF8String:this->m_name.c_str()];
+	//NSString *s1 = [NSString stringWithUTF8String:m_name.c_str()];
 	//NDLog("%@",s1);
 
 	/***
@@ -790,7 +790,7 @@ void NDMonster::LogicNotDraw(bool bClear /*= false*/)
 		// 其它操作
 		//通知mapmgr把自己删除
 		//NDMapMgrObj.ClearOneMonster(this);
-		this->bClear = bClear;
+		m_bClear = bClear;
 		return;
 	}
 
@@ -803,51 +803,51 @@ void NDMonster::LogicNotDraw(bool bClear /*= false*/)
 
 void NDMonster::doMonsterCollides()
 {
-	NDPlayer& player = NDPlayer::defaultHero();
-	if (player.IsInState(USERSTATE_FIGHTING) || player.IsSafeProtected()
-			|| player.IsInState(USERSTATE_BF_WAIT_RELIVE)
-			|| player.IsInState(USERSTATE_DEAD) || player.IsGathering()
-			|| (player.isTeamMember() && !player.isTeamLeader())
+	NDPlayer& kPlayer = NDPlayer::defaultHero();
+	if (kPlayer.IsInState(USERSTATE_FIGHTING) || kPlayer.IsSafeProtected()
+			|| kPlayer.IsInState(USERSTATE_BF_WAIT_RELIVE)
+			|| kPlayer.IsInState(USERSTATE_DEAD) || kPlayer.IsGathering()
+			|| (kPlayer.isTeamMember() && !kPlayer.isTeamLeader())
 			|| !m_bCanBattle)
 	{
-		isMonsterCollide = false;
+		m_bIsMonsterCollide = false;
 		return;
 	}
 
 	if (m_nMonsterCatogary == MONSTER_BOSS
-			&& time(NULL) - m_timeBossProtect < BOSS_PROTECT_TIME)
+			&& time(NULL) - m_dTimeBossProtect < BOSS_PROTECT_TIME)
 	{
-		isMonsterCollide = false;
+		m_bIsMonsterCollide = false;
 		return;
 	}
 
-	if (player.IsInState(USERSTATE_BATTLEFIELD)
-			&& this->m_eCamp == player.m_eCamp)
+	if (kPlayer.IsInState(USERSTATE_BATTLEFIELD)
+			&& m_eCamp == kPlayer.m_eCamp)
 	{
-		isMonsterCollide = false;
+		m_bIsMonsterCollide = false;
 		return;
 	}
 
 	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 	if (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene)))
 	{
-		isMonsterCollide = false;
+		m_bIsMonsterCollide = false;
 		return;
 	}
 
 	int m_nScope = m_nAttackArea * 32;
 
-	CGRect rectRole = CGRectMake(NDPlayer::defaultHero().GetPosition().x - 32,
+	CGRect kRectRole = CGRectMake(NDPlayer::defaultHero().GetPosition().x - 32,
 			NDPlayer::defaultHero().GetPosition().y - 32, 64, 64);
-	CGRect rectMonster = CGRectMake(GetPosition().x - m_nScope,
+	CGRect kRectMonster = CGRectMake(GetPosition().x - m_nScope,
 			GetPosition().y - m_nScope, getCollideW() + m_nScope * 2,
 			getCollideH() + m_nScope * 2);
 
-	bool collides = CGRectIntersectsRect(rectRole, rectMonster);
+	bool bCollides = CGRectIntersectsRect(kRectRole, kRectMonster);
 
-	if (collides)
+	if (bCollides)
 	{ // 碰怪
-		isMonsterCollide = true;
+		m_bIsMonsterCollide = true;
 
 		//setWaitingBattle(true);
 
@@ -908,32 +908,32 @@ void NDMonster::sendBattleAction()
 {
 	NDUISynLayer::Show();
 
-	NDTransData bao(_MSG_BATTLEACT);
+	NDTransData kBao(_MSG_BATTLEACT);
 
 	switch (m_nMonsterCatogary)
 	{
 	case MONSTER_NORMAL:
 	{
-		bao << (unsigned char) BATTLE_ACT_CREATE; // Action值
-		bao << (unsigned char) 0; // btturn
-		bao << (unsigned char) 1; // datacount
-		bao << m_nID; // 怪物类型Id
+		kBao << (unsigned char) BATTLE_ACT_CREATE; // Action值
+		kBao << (unsigned char) 0; // btturn
+		kBao << (unsigned char) 1; // datacount
+		kBao << m_nID; // 怪物类型Id
 		break;
 	}
 	case MONSTER_ELITE:
 	{
-		bao << (unsigned char) BATTLE_ACT_CREATE_ELITE; // Action值
-		bao << (unsigned char) 0; // btturn
-		bao << (unsigned char) 1; // datacount
-		bao << m_nID; // 怪物类型Id
+		kBao << (unsigned char) BATTLE_ACT_CREATE_ELITE; // Action值
+		kBao << (unsigned char) 0; // btturn
+		kBao << (unsigned char) 1; // datacount
+		kBao << m_nID; // 怪物类型Id
 		break;
 	}
 	case MONSTER_BOSS:
 	{
-		bao << (unsigned char) BATTLE_ACT_CREATE_BOSS; // Action值
-		bao << (unsigned char) 0; // btturn
-		bao << (unsigned char) 1; // datacount
-		bao << m_nID; // 怪物Id
+		kBao << (unsigned char) BATTLE_ACT_CREATE_BOSS; // Action值
+		kBao << (unsigned char) 0; // btturn
+		kBao << (unsigned char) 1; // datacount
+		kBao << m_nID; // 怪物Id
 		break;
 	}
 	default:
@@ -941,14 +941,14 @@ void NDMonster::sendBattleAction()
 		break;
 	}
 
-	NDDataTransThread::DefaultThread()->GetSocket()->Send(&bao);
+	NDDataTransThread::DefaultThread()->GetSocket()->Send(&kBao);
 //		NDMapMgrObj.SetBattleMonster(this); ///< 临时性注释 郭浩
 	NDPlayer::defaultHero().stopMoving(true);
 }
 
 void NDMonster::ElementMonsterDeal()
 {
-	if (!bossRing)
+	if (!m_pkBossRing)
 	{
 //			bossRing = new NDSprite;
 //			bossRing->Initialization([[NSString stringWithFormat:@"%@effect_101.spr", [NSString stringWithUTF8String:NDPath::GetAnimationPath().c_str()] ] UTF8String]);
@@ -994,24 +994,24 @@ void NDMonster::endBattle()
 {
 	if (m_nMonsterCatogary == MONSTER_BOSS)
 	{
-		m_timeBossProtect = time(NULL);
+		m_dTimeBossProtect = time(NULL);
 	}
 }
 
 void NDMonster::setState(int monsterState)
 {
-	state = monsterState;
-	switch (state)
+	m_nState = monsterState;
+	switch (m_nState)
 	{
 	case MONSTER_STATE_DEAD:
 	{
-		deadTime = time(NULL);
+		m_nDeadTime = time(NULL);
 		break;
 	}
 	case MONSTER_STATE_NORMAL:
 	{
-		isMonsterCollide = false;
-		if (m_nMonsterCatogary == MONSTER_BOSS && this->GetParent() == NULL)
+		m_bIsMonsterCollide = false;
+		if (m_nMonsterCatogary == MONSTER_BOSS && GetParent() == NULL)
 		{
 			LogicDraw();
 		}
@@ -1144,7 +1144,7 @@ void NDMonster::changeLookface(int lookface)
 			{
 				tmpsex = 0;
 			}
-			this->SetHair(tmpsex + 1); // 发型
+			SetHair(tmpsex + 1); // 发型
 
 			SetHairImageWithEquipmentId (m_nHair);
 

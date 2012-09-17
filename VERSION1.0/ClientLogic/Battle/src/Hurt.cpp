@@ -10,7 +10,8 @@
 #include "Hurt.h"
 #include "Fighter.h"
 
-Hurt::Hurt(Fighter* actor, int btType, int hurtHP, int hurtMP, int dwData, HURT_TYPE ht)
+Hurt::Hurt(Fighter* actor, int btType, int hurtHP, int hurtMP, int dwData,
+		HURT_TYPE ht)
 {
 	this->theActor = actor;
 	this->btType = btType;

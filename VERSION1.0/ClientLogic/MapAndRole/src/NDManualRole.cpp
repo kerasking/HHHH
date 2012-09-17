@@ -2256,7 +2256,7 @@ void NDManualRole::refreshEquipmentEffectData()
 {
 	if (!isTransformed())
 	{
-		if (this->m_armorQuality > 8 || this->m_cloakQuality > 8)
+		if (this->m_nArmorQuality > 8 || this->m_nCloakQuality > 8)
 		{
 			SafeAddEffect(m_pkEffectArmorAniGroup, "effect_4001.spr");
 		}

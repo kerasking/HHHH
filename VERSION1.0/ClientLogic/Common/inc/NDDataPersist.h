@@ -113,13 +113,12 @@ public:
 	
 private:
 	// 上次登录帐号，密码及服务器地址, 游戏设置
-	CCMutableArray<CCObject*> *dataArray;
+	CCMutableArray<CCObject*>* m_pkDataArray;
 	// 常用帐号列表
-	CCArray *accountList;
+	CCArray* m_pkAccountList;
+	CCArray* m_pkAccountDeviceList;
 
-	CCArray *accountDeviceList;
-
-	static int s_gameSetting;
+	static int ms_nGameSetting;
 
 private:
 	void LoadData();
