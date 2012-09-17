@@ -340,8 +340,8 @@ m_pkObstacles(NULL),
 m_pkSceneTiles(NULL),
 m_pkBackgroundTiles(NULL),
 m_pkSwitchs(NULL),
-m_AnimationGroups(NULL),
-m_AniGroupParams(NULL)
+m_pkAnimationGroups(NULL),
+m_pkAniGroupParams(NULL)
 {
 }
 
@@ -352,8 +352,8 @@ NDMapData::~NDMapData()
 	CC_SAFE_RELEASE (m_pkSceneTiles);
 	CC_SAFE_RELEASE (m_pkBackgroundTiles);
 	CC_SAFE_RELEASE (m_pkSwitchs);
-	CC_SAFE_RELEASE (m_AnimationGroups);
-	CC_SAFE_RELEASE (m_AniGroupParams);
+	CC_SAFE_RELEASE (m_pkAnimationGroups);
+	CC_SAFE_RELEASE (m_pkAniGroupParams);
 	MapTexturePool::defaultPool()->release();
 }
 
@@ -383,8 +383,8 @@ void NDMapData::decode(FILE* pkStream)
 {
 	FileOp kFileOp;
 	//<-------------------地图名
-	m_Name = kFileOp.readUTF8String(pkStream);	//[self readUTF8String:stream];
-	CCLog(m_Name.c_str());
+	m_strName = kFileOp.readUTF8String(pkStream);	//[self readUTF8String:stream];
+	CCLog(m_strName.c_str());
 	//<-------------------单元格尺寸
 	m_nUnitSize = kFileOp.readByte(pkStream);
 	int nTileWidth = m_nUnitSize;
@@ -653,25 +653,25 @@ void NDMapData::decode(FILE* pkStream)
 		pkTile->release();
 	}
 	//<-------------------动画
-	m_AnimationGroups = CCArray::array();
-	m_AnimationGroups->retain();
-	m_AniGroupParams = CCArray::array();
-	m_AniGroupParams->retain();
+	m_pkAnimationGroups = CCArray::array();
+	m_pkAnimationGroups->retain();
+	m_pkAniGroupParams = CCArray::array();
+	m_pkAniGroupParams->retain();
 	int m_AniGroupCount = kFileOp.readShort(pkStream);
 
 	for (int i = 0; i < m_AniGroupCount; i++)
 	{
 		int nIdentifer = kFileOp.readShort(pkStream);			//动画id
-		NDAnimationGroup *aniGroup =
+		NDAnimationGroup *pkAniGroup =
 				NDAnimationGroupPool::defaultPool()->addObjectWithSceneAnimationId(
 						nIdentifer);
-		if (!aniGroup)
+		if (!pkAniGroup)
 		{
 			continue;
 		}
 
-		m_AnimationGroups->addObject(aniGroup);
-		aniGroup->release();
+		m_pkAnimationGroups->addObject(pkAniGroup);
+		pkAniGroup->release();
 
 		int x = kFileOp.readShort(pkStream);		//x坐标
 		int y = kFileOp.readShort(pkStream);		//y坐标
@@ -688,7 +688,7 @@ void NDMapData::decode(FILE* pkStream)
 		pkDict->insert(std::make_pair("reverse", 0));
 		pkDict->insert(std::make_pair("reverse", 0));
 
-		m_AniGroupParams->addObject(pkDict);
+		m_pkAniGroupParams->addObject(pkDict);
 		pkDict->release();
 	}
 	//------------------->刷怪区

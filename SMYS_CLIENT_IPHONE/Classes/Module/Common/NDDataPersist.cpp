@@ -97,7 +97,7 @@ void simpleDecode(const unsigned char *src, unsigned char *dest)
 
 const size_t MAX_ACCOUNT = 10;
 
-int NDDataPersist::s_gameSetting = 0xFFFFFFFF; // 默认全开
+int NDDataPersist::ms_nGameSetting = 0xFFFFFFFF; // 默认全开
 
 void NDDataPersist::LoadGameSetting()
 {
@@ -114,9 +114,9 @@ NDDataPersist::NDDataPersist()
 
 NDDataPersist::~NDDataPersist()
 {
-	[dataArray release];
-	[accountList release];
-	[accountDeviceList release];
+	[m_pkDataArray release];
+	[m_pkAccountList release];
+	[m_pkAccountDeviceList release];
 }
 
 bool NDDataPersist::NeedEncodeForKey(NSString* key)
@@ -176,7 +176,7 @@ const char* NDDataPersist::GetData(uint index, NSString* key)
 
 void NDDataPersist::SaveData()
 {
-	[dataArray writeToFile:this->GetDataPath() atomically:YES];
+	[m_pkDataArray writeToFile:this->GetDataPath() atomically:YES];
 }
 
 void NDDataPersist::SaveLoginData()
@@ -186,18 +186,18 @@ void NDDataPersist::SaveLoginData()
 
 NSMutableDictionary* NDDataPersist::LoadDataDiction(uint index)
 {
-	NDAsssert(dataArray != nil);
+	NDAsssert(m_pkDataArray != nil);
 	
 	NSMutableDictionary* dic = nil;
 	
-	if ([dataArray count] > index) {
-		dic = (NSMutableDictionary*)[dataArray objectAtIndex:index];
+	if ([m_pkDataArray count] > index) {
+		dic = (NSMutableDictionary*)[m_pkDataArray objectAtIndex:index];
 	}
 	
 	if (dic == nil) { // 数据不存在,初始化
-		for (uint i = [dataArray count]; i <= index; i++) {
+		for (uint i = [m_pkDataArray count]; i <= index; i++) {
 			dic = [[NSMutableDictionary alloc] init];
-			[dataArray insertObject:dic atIndex:i];
+			[m_pkDataArray insertObject:dic atIndex:i];
 			[dic release];
 		}
 	}
@@ -210,15 +210,15 @@ void NDDataPersist::LoadData()
 	NSString *filePath = this->GetDataPath();
 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
 	{ 
-		dataArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
+		m_pkDataArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
 		const char* pszGameSetting = this->GetData(kGameSettingData, kGameSetting);
 		if (pszGameSetting) { // 已经存储
-			NDDataPersist::s_gameSetting = atoi(pszGameSetting);
+			NDDataPersist::ms_nGameSetting = atoi(pszGameSetting);
 		}
 	}
 	else
 	{
-		dataArray = [[NSMutableArray alloc] init];
+		m_pkDataArray = [[NSMutableArray alloc] init];
 	}
 }
 
@@ -261,11 +261,11 @@ void NDDataPersist::LoadAccountList()
 	NSString *filePath = this->GetAccountListPath();
 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
 	{ 
-		accountList = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
+		m_pkAccountList = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
 	}
 	else
 	{
-		accountList = [[NSMutableArray alloc] init];
+		m_pkAccountList = [[NSMutableArray alloc] init];
 	}	
 }
 
@@ -286,23 +286,23 @@ void NDDataPersist::AddAcount(const char* account, const char* pwd)
 			[accountNode addObject:[NSString stringWithUTF8String:(const char*)encPwd]];
 		}
 		
-		for (NSUInteger i = 0; i < [accountList count]; i++) 
+		for (NSUInteger i = 0; i < [m_pkAccountList count]; i++) 
 		{
-			NSArray *tmpAccountNode = [accountList objectAtIndex:i];
+			NSArray *tmpAccountNode = [m_pkAccountList objectAtIndex:i];
 			NSString *tmpAccount = [tmpAccountNode objectAtIndex:0];
 			if ([tmpAccount isEqual:[NSString stringWithUTF8String:(const char*)encAccount]]) 
 			{
-				[accountList removeObject:tmpAccountNode];
+				[m_pkAccountList removeObject:tmpAccountNode];
 				break;
 			}
 		}
 		
-		if ([accountList count] >= MAX_ACCOUNT) 
+		if ([m_pkAccountList count] >= MAX_ACCOUNT) 
 		{
-			[accountList removeObjectAtIndex:0];
+			[m_pkAccountList removeObjectAtIndex:0];
 		}
 		
-		[accountList addObject:accountNode];
+		[m_pkAccountList addObject:accountNode];
 		
 		[accountNode release];
 	}	
@@ -313,7 +313,7 @@ void NDDataPersist::GetAccount(VEC_ACCOUNT& vAccount)
 	vAccount.clear();
 	
 	NSEnumerator *enumerator;
-	enumerator = [accountList objectEnumerator];
+	enumerator = [m_pkAccountList objectEnumerator];
 	
 	id account;
 	while ((account = [enumerator nextObject]) != nil)
@@ -335,7 +335,7 @@ void NDDataPersist::GetAccount(VEC_ACCOUNT& vAccount)
 
 void NDDataPersist::SaveAccountList()
 {
-	[accountList writeToFile:this->GetAccountListPath() atomically:YES];
+	[m_pkAccountList writeToFile:this->GetAccountListPath() atomically:YES];
 }
 
 NSString* NDDataPersist::GetAccountDeviceListPath()
@@ -360,11 +360,11 @@ void NDDataPersist::LoadAccountDeviceList()
 	NSString *filePath = this->GetAccountDeviceListPath();
 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
 	{ 
-		accountDeviceList = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
+		m_pkAccountDeviceList = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
 	}
 	else
 	{
-		accountDeviceList = [[NSMutableArray alloc] init];
+		m_pkAccountDeviceList = [[NSMutableArray alloc] init];
 	}	
 }
 
@@ -375,16 +375,16 @@ void NDDataPersist::AddAccountDevice(const char* account)
 		unsigned char encAccount[1024] = {0x00};
 		simpleEncode((const unsigned char*)account, encAccount);
 		
-		for (NSUInteger i = 0; i < [accountList count]; i++) 
+		for (NSUInteger i = 0; i < [m_pkAccountList count]; i++) 
 		{
-			NSString* tmpAccountNode = (NSString*)[accountList objectAtIndex:i];
+			NSString* tmpAccountNode = (NSString*)[m_pkAccountList objectAtIndex:i];
 			if ([tmpAccountNode isEqual:[NSString stringWithUTF8String:(const char*)encAccount]]) 
 			{
 				return;
 			}
 		}
 		
-		[accountDeviceList addObject:[NSString stringWithUTF8String:(const char*)encAccount]];
+		[m_pkAccountDeviceList addObject:[NSString stringWithUTF8String:(const char*)encAccount]];
 	}	
 }
 
@@ -393,7 +393,7 @@ bool NDDataPersist::HasAccountDevice(const char* account)
 	if (!account) return true;
 	
 	NSEnumerator *enumerator;
-	enumerator = [accountDeviceList objectEnumerator];
+	enumerator = [m_pkAccountDeviceList objectEnumerator];
 	
 	NSString* tmpAccountNode = [NSString stringWithUTF8String:account];
 	
@@ -416,26 +416,26 @@ bool NDDataPersist::HasAccountDevice(const char* account)
 
 void NDDataPersist::SaveAccountDeviceList()
 {
-	[accountDeviceList writeToFile:this->GetAccountDeviceListPath() atomically:YES];
+	[m_pkAccountDeviceList writeToFile:this->GetAccountDeviceListPath() atomically:YES];
 }
 
 void NDDataPersist::SetGameSetting(GAME_SETTING type, bool bOn)
 {
 	if (bOn) {
-		s_gameSetting |= type;
+		ms_nGameSetting |= type;
 	} else {
-		s_gameSetting &= ~type;
+		ms_nGameSetting &= ~type;
 	}
 }
 
 bool NDDataPersist::IsGameSettingOn(GAME_SETTING type)
 {
-	return NDDataPersist::s_gameSetting & type;
+	return NDDataPersist::ms_nGameSetting & type;
 }
 
 void NDDataPersist::SaveGameSetting()
 {
-	NSString* strGameSetting = [NSString stringWithFormat:@"%d", s_gameSetting];
+	NSString* strGameSetting = [NSString stringWithFormat:@"%d", ms_nGameSetting];
 	this->SetData(kGameSettingData, kGameSetting, [strGameSetting UTF8String]);
 	this->SaveData();
 }

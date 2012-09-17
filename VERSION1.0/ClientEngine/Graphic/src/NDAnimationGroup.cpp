@@ -79,14 +79,14 @@ void NDAnimationGroup::initWithSprFile(const char* sprFile)
 	}
 }
 
-void NDAnimationGroup::setReverse(bool newReverse)
+void NDAnimationGroup::setReverse(bool bNewReverse)
 {
-	m_bReverse = newReverse;
+	m_bReverse = bNewReverse;
 	for (int i = 0; i < (int) m_pkAnimations->count(); i++)
 	{
-		NDAnimation *animation = (NDAnimation *) m_pkAnimations->
+		NDAnimation *pkAnimation = (NDAnimation *) m_pkAnimations->
 			objectAtIndex(i);
-		animation->setReverse(newReverse);
+		pkAnimation->setReverse(bNewReverse);
 	}
 }
 
@@ -104,10 +104,16 @@ void NDAnimationGroup::decodeSprtFile(FILE* pkStream)
 	{
 		NDTileTableRecord *pkRecord = new NDTileTableRecord;
 		pkRecord->setImageIndex(kFileOp.readByte(pkStream));
-		pkRecord->setX(kFileOp.readShort(pkStream));
-		pkRecord->setY(kFileOp.readShort(pkStream));
-		pkRecord->setW(kFileOp.readShort(pkStream));
-		pkRecord->setH(kFileOp.readShort(pkStream));
+
+		int nX = kFileOp.readShort(pkStream);
+		int nY = kFileOp.readShort(pkStream);
+		int nW = kFileOp.readShort(pkStream);
+		int nH = kFileOp.readShort(pkStream);
+
+		pkRecord->setX(nX);
+		pkRecord->setY(nY);
+		pkRecord->setW(nW);
+		pkRecord->setH(nH);
 
 		pkRecord->setReplace(kFileOp.readByte(pkStream));
 		m_pkTileTable->addObject(pkRecord);
@@ -141,16 +147,16 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 		pkAnimation->setReverse(false);
 		pkAnimation->setBelongAnimationGroup(this);
 
-		int frameSize = kFileOp.readByte(pkStream);
-		for (int j = 0; j < frameSize; j++)
+		int nFrameSize = kFileOp.readByte(pkStream);
+		for (int j = 0; j < nFrameSize; j++)
 		{
 			NDFrame* pkFrame = new NDFrame;
 			pkFrame->setEnduration(kFileOp.readShort(pkStream));
 			pkFrame->setBelongAnimation(pkAnimation);
 			// read music, do not deal now
-			int sound_num = kFileOp.readShort(pkStream);
+			int nSoundNumber = kFileOp.readShort(pkStream);
 
-			for (int n = 0; n < sound_num; n++)
+			for (int n = 0; n < nSoundNumber; n++)
 			{
 				kFileOp.readUTF8String(pkStream);
 			}
@@ -159,9 +165,9 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 
 			for (int k = 0; k < sagSize; k++)
 			{
-				std::string animationPath =
+				std::string strAnimationPath =
 						NDEngine::NDPath::GetAnimationPath();
-				std::string sprFile = animationPath
+				std::string sprFile = strAnimationPath
 						+ kFileOp.readUTF8String(pkStream);
 				NDAnimationGroup* pkSag = new NDAnimationGroup;
 				pkSag->initWithSprFile(sprFile.c_str());
@@ -199,8 +205,8 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 	}
 
 	//根据特殊字符怕是是否是带掩码点的动画
-	std::string judge = kFileOp.readUTF8StringNoExcept(pkStream);
-	if (judge == "■")
+	std::string strJudge = kFileOp.readUTF8StringNoExcept(pkStream);
+	if (strJudge == "■")
 	{
 		if (!m_pkUnpassPoint)
 		{
@@ -219,7 +225,7 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 
 void NDAnimationGroup::drawHeadAt(CGPoint pos)
 {
-	NDAnimation* firstAni = (NDAnimation*) m_pkAnimations->objectAtIndex(0);
-	NDFrame* firstFrame = firstAni->getFrames()->getObjectAtIndex(0);
-	firstFrame->drawHeadAt(pos);
+	NDAnimation* pkFirstAni = (NDAnimation*) m_pkAnimations->objectAtIndex(0);
+	NDFrame* pkFirstFrame = pkFirstAni->getFrames()->getObjectAtIndex(0);
+	pkFirstFrame->drawHeadAt(pos);
 }

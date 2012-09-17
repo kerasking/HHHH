@@ -17,12 +17,12 @@ using namespace NDEngine;
 
 #define AnimationListObj AnimationList::GetSingleton()
 
-class AnimationList : public TSingleton<AnimationList>
+class AnimationList: public TSingleton<AnimationList>
 {
 public:
 	AnimationList();
 	~AnimationList();
-	
+
 	void moveAction(int type, NDSprite* sprite, int face);
 	void sitAction(NDSprite* sprite);
 	void ridePetMoveAction(int type, NDSprite* sprite, int face);

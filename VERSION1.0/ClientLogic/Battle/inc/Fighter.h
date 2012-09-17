@@ -215,14 +215,14 @@ public:
 	LOOKFACE_TYPE m_lookfaceType;
 	BATTLE_GROUP GetGroup() const
 	{
-		return m_info.group;
+		return m_kInfo.group;
 	}
 	void SetRole(NDBaseRole* role);
 	void LoadMonster(int nLookFace, int lev, const string& name);
 	void LoadRole(int nLookFace, int lev, const string& name);
 	NDBaseRole* GetRole() const
 	{
-		return m_role;
+		return m_pkRole;
 	}
 
 	void setPosition(int offset);
@@ -235,7 +235,7 @@ public:
 
 	int GetNormalAtkType() const
 	{
-		return m_normalAtkType;
+		return m_nNormalAtkType;
 	}
 
 	void AddAHurt(Fighter* actor, int btType, int hurtHP, int hurtMP,
@@ -250,7 +250,7 @@ public:
 
 	VEC_STATUS_ACTION& getArrayStatusTarget()
 	{
-		return this->arrayStatusTarget;
+		return this->m_kArrayStatusTarget;
 	}
 
 	void AddPasStatus(int dwData);
@@ -258,19 +258,19 @@ public:
 
 	int getActionTime()
 	{
-		return m_actionTime;
+		return m_nActionTime;
 	}
 
 	void setActionTime(int waitToActionTime)
 	{
-		m_actionTime = waitToActionTime;
+		m_nActionTime = waitToActionTime;
 	}
 
 	void actionTimeIncrease()
 	{
-		if (m_actionTime != 0)
+		if (m_nActionTime != 0)
 		{
-			m_actionTime++;
+			m_nActionTime++;
 		}
 	}
 
@@ -278,23 +278,23 @@ public:
 
 	bool isActionOK()
 	{
-		return actionOK;
+		return m_bIsActionOK;
 	}
 
 	void setActionOK(bool bOK)
 	{
-		this->actionOK = bOK;
+		this->m_bIsActionOK = bOK;
 	}
 
 	void setBeginAction(bool bBegin)
 	{
-		beginAction = bBegin;
-		m_actionTime = 1;
+		m_bBeginAction = bBegin;
+		m_nActionTime = 1;
 	}
 
 	bool isBeginAction()
 	{
-		return beginAction;
+		return m_bBeginAction;
 	}
 
 	bool isVisiable();
@@ -303,81 +303,81 @@ public:
 
 	bool isAlive()
 	{
-		return alive;
+		return m_bIsAlive;
 	}
 
 	void setAlive(bool a)
 	{
-		this->alive = a;
+		this->m_bIsAlive = a;
 	}
 
 	bool isEscape()
 	{
-		return escape;
+		return m_bIsEscape;
 	}
 
 	void setEscape(bool esc);
 
 	bool isHurtOK()
 	{
-		return hurtOK;
+		return m_bIsHurtOK;
 	}
 
 	void setHurtOK(bool htOK)
 	{
-		hurtOK = htOK;
+		m_bIsHurtOK = htOK;
 	}
 
 	bool isDodgeOK()
 	{
-		return dodgeOK;
+		return m_bIsDodgeOK;
 	}
 
 	void setDodgeOK(bool bOK)
 	{
-		dodgeOK = bOK;
+		m_bIsDodgeOK = bOK;
 	}
 
 	bool isDefenceOK()
 	{
-		return defenceOK;
+		return m_bIsDefenceOK;
 	}
 
 	void setDefenceOK(bool bOK)
 	{
-		defenceOK = bOK;
+		m_bIsDefenceOK = bOK;
 	}
 	void setOriginPos(int x, int y)
 	{
-		originX = x;
-		originY = y;
+		m_nOriginX = x;
+		m_nOriginY = y;
 	}
 
 	bool isDieOK()
 	{
-		return dieOK;
+		return m_bIsDieOK;
 	}
 
 	void setDieOK(bool bOK);
 
 	BattleSkill* getUseSkill()
 	{
-		return &useSkill;
+		return &m_kUseSkill;
 	}
 
 	void setUseSkill(BattleSkill* skill)
 	{
-		useSkill = *skill;
+		m_kUseSkill = *skill;
 	}
 
 	ATKTYPE getSkillAtkType()
 	{
-		return skillAtkType;
+		return m_eSkillAtkType;
 	}
 
 	void setSkillAtkType(ATKTYPE atkType)
 	{
-		skillAtkType = atkType;
+		m_eSkillAtkType = atkType;
 	}
 
 	bool completeOneAction();
@@ -386,26 +386,26 @@ public:
 
 	int getX()
 	{
-		return x;
+		return m_nX;
 	}
 	int getY()
 	{
-		return y;
+		return m_nY;
 	}
 
 	int getOriginX()
 	{
-		return originX;
+		return m_nOriginX;
 	}
 
 	int getOriginY()
 	{
-		return originY;
+		return m_nOriginY;
 	}
 
 	bool StandInOrigin()
 	{
-		return x == originX && y == originY;
+		return m_nX == m_nOriginX && m_nY == m_nOriginY;
 	}
 
 	void hurted(int num);
@@ -441,7 +441,7 @@ public:
 
 	void setBattle(Battle* parent)
 	{
-		this->m_parent = parent;
+		this->m_pkParent = parent;
 	}
 
 	void setSkillName(std::string name)
@@ -452,29 +452,29 @@ public:
 
 	VEC_FIGHTER_STATUS& getFighterStatus()
 	{
-		return this->battleStatusList;
+		return this->m_vBattleStatusList;
 	}
 
 public:
-	FIGHTER_INFO m_info;
+	FIGHTER_INFO m_kInfo;
 
-	USHORT m_atkPoint;
-	USHORT m_defPoint;
-	USHORT m_disPoint;
+	USHORT m_nAttackPoint;
+	USHORT m_nDefencePoint;
+	USHORT m_nDistancePoint;
 
-	OBJID m_idUsedItem;
+	OBJID m_uiUsedItem;
 
 	BATTLE_EFFECT_TYPE m_effectType;
 
-	Fighter* m_mainTarget;
-	Fighter* m_actor;
+	Fighter* m_pkMainTarget;
+	Fighter* m_pkActor;
 
 	/** 保护对象 */
-	Fighter* protectTarget;
+	Fighter* m_pkProtectTarget;
 	/** 保护者 */
-	Fighter* protector;
+	Fighter* m_pkProtector;
 	/** 保护对象时去的血临时存等保护对象去血的时候显示出来 */
-	int hurtInprotect;
+	int m_nHurtInprotect;
 
 	bool m_bMissAtk;
 	bool m_bHardAtk;
@@ -497,60 +497,61 @@ public:
 
 	void reStoreAttr();
 private:
-	int x;
-	int y;
+	int m_nX;
+	int m_nY;
 
-	int originX, originY;
+	int m_nOriginX;
+	int m_nOriginY;
 
 	// role原来的父节点
-	NDNode* m_roleParent;
-	CGPoint m_ptRoleInParent;
+	NDNode* m_pkRoleParent;
+	CGPoint m_kRoleInParentPoint;
 
 	// 绘制动画组
-	NDBaseRole* m_role;
-	NDSprite* m_rareMonsterEffect;
+	NDBaseRole* m_pkRole;
+	NDSprite* m_pkRareMonsterEffect;
 	// 是否要主动释放role
 	bool m_bRoleShouldDelete;
 
-	int m_normalAtkType; // 普通攻击是进程还是远程
-	int m_actionTime; // fighter开始行动的时间
+	int m_nNormalAtkType; // 普通攻击是进程还是远程
+	int m_nActionTime; // fighter开始行动的时间
 
 	VEC_HURT m_vHurt;
-	VEC_STATUS_ACTION arrayStatusTarget;
+	VEC_STATUS_ACTION m_kArrayStatusTarget;
 	VEC_FIGHTER m_vTarget;
 	VEC_PAS_STASUS m_vPasStatus;
 	VEC_HURT_NUM m_vHurtNum;
 
-	bool beginAction;
-	bool escape; // 完全脱离战斗
-	bool alive; // 战士是否存活，死亡时暂时脱离战斗，可以被复活再回到战斗
-	bool dodgeOK;
-	bool hurtOK;
-	bool dieOK;
-	bool defenceOK;
-	bool addLifeOK;
-	bool actionOK;
-	bool statusPerformOK;
-	bool statusOverOK;
+	bool m_bBeginAction;
+	bool m_bIsEscape; // 完全脱离战斗
+	bool m_bIsAlive; // 战士是否存活，死亡时暂时脱离战斗，可以被复活再回到战斗
+	bool m_bIsDodgeOK;
+	bool m_bIsHurtOK;
+	bool m_bIsDieOK;
+	bool m_bIsDefenceOK;
+	bool m_bIsAddLifeOK;
+	bool m_bIsActionOK;
+	bool m_bIsStatusPerformOK;
+	bool m_bIsStatusOverOK;
 	bool m_bShowName;
-	NDUILabel* lb_FighterName;
-	NDUILabel* lb_skillName;
-	BattleSkill useSkill;
+	NDUILabel* m_pkFighterNameLabel;
+	NDUILabel* m_pkSkillNameLabel;
+	BattleSkill m_kUseSkill;
 	std::string m_strSkillName;
-	ATKTYPE skillAtkType;
-	bool willBeAtk;
+	ATKTYPE m_eSkillAtkType;
+	bool m_bWillBeAttack;
 
 	//ImageNumber* m_imgHurtNum; ///< 临时性注释 郭浩
-	NDUIImage* m_imgBaoJi;
-	NDUIImage* m_imgActionWord;
-	NDUIImage* m_imgBoji;
+	NDUIImage* m_pkCritImage;
+	NDUIImage* m_pkActionWordImage;
+	NDUIImage* m_pkBojiImage;
 
-	Battle* m_parent;
+	Battle* m_pkParent;
 
-	VEC_FIGHTER_STATUS battleStatusList;
-	std::string fighter_name;
+	VEC_FIGHTER_STATUS m_vBattleStatusList;
+	std::string m_strFighterName;
 
-	string strMsgStatus;
+	string m_strMsgStatus;
 
 private:
 	Fighter(const Fighter& rhs)

@@ -49,7 +49,7 @@ void CreatePlayer(int lookface, int x, int y, int userid, std::string name)
 //  	player.SetPositionEx(ccp(x * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET, y * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
 //  	player.SetServerPositon(x, y);
 	player.m_nID = userid;
-	player.m_name = "王增";
+	player.m_strName = "王增";
 }
 
 unsigned long GetPlayerId()

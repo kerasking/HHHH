@@ -33,105 +33,105 @@ const int STEP = 64;
 
 Fighter::Fighter(const FIGHTER_INFO& fInfo)
 {
-	m_imgActionWord = NULL;
+	m_pkActionWordImage = NULL;
 
-	m_ptRoleInParent = CGPointMake(0.0f, 0.0f);
-	m_roleParent = NULL;
-	m_role = NULL;
+	m_kRoleInParentPoint = CGPointMake(0.0f, 0.0f);
+	m_pkRoleParent = NULL;
+	m_pkRole = NULL;
 	m_bRoleShouldDelete = false;
-	m_atkPoint = 0;
-	m_defPoint = 0;
-	m_disPoint = 0;
-	m_info = fInfo;
-	m_normalAtkType = ATKTYPE_NEAR;
+	m_nAttackPoint = 0;
+	m_nDefencePoint = 0;
+	m_nDistancePoint = 0;
+	m_kInfo = fInfo;
+	m_nNormalAtkType = ATKTYPE_NEAR;
 //	m_effectType = EFFECT_TYPE_NONE;
-	m_mainTarget = NULL;
-	m_actor = NULL;
+	m_pkMainTarget = NULL;
+	m_pkActor = NULL;
 	m_bMissAtk = false;
 	m_bHardAtk = false;
 	m_bDefenceAtk = false;
 	m_bFleeNoDie = false;
 	m_bDefenceOK = false;
-	beginAction = false;
+	m_bBeginAction = false;
 	m_action = WAIT;
 	m_actionType = ACTION_TYPE_NORMALATK;
 //	m_changeLifeType = EFFECT_CHANGE_LIFE_TYPE_NONE;
 //	m_changeLifeTypePas = EFFECT_CHANGE_LIFE_TYPE_NONE;
-	m_idUsedItem = ID_NONE;
-	m_actionTime = 0;
-	escape = false;
-	alive = true;
-	willBeAtk = false;
-	m_parent = NULL;
+	m_uiUsedItem = ID_NONE;
+	m_nActionTime = 0;
+	m_bIsEscape = false;
+	m_bIsAlive = true;
+	m_bWillBeAttack = false;
+	m_pkParent = NULL;
 
-	x = 0;
-	y = 0;
-	originX = 0;
-	originY = 0;
+	m_nX = 0;
+	m_nY = 0;
+	m_nOriginX = 0;
+	m_nOriginY = 0;
 
 	isVisibleStatus = true;
 
-	dodgeOK = false;
-	hurtOK = false;
-	dieOK = false;
-	defenceOK = false;
-	addLifeOK = false;
-	actionOK = true;
-	statusPerformOK = false;
-	statusOverOK = false;
+	m_bIsDodgeOK = false;
+	m_bIsHurtOK = false;
+	m_bIsDieOK = false;
+	m_bIsDefenceOK = false;
+	m_bIsAddLifeOK = false;
+	m_bIsActionOK = true;
+	m_bIsStatusPerformOK = false;
+	m_bIsStatusOverOK = false;
 	m_bShowName = false;
-	lb_skillName = NULL;
-	lb_FighterName = NULL;
+	m_pkSkillNameLabel = NULL;
+	m_pkFighterNameLabel = NULL;
 //	m_imgHurtNum = NULL; ///< 临时性注释 郭浩
-	m_imgBaoJi = NULL;
-	m_imgBoji = NULL;
-	this->skillAtkType = ATKTYPE_NEAR;
+	m_pkCritImage = NULL;
+	m_pkBojiImage = NULL;
+	m_eSkillAtkType = ATKTYPE_NEAR;
 
-	protectTarget = NULL;
-	protector = NULL;
-	hurtInprotect = 0;
+	m_pkProtectTarget = NULL;
+	m_pkProtector = NULL;
+	m_nHurtInprotect = 0;
 
-	m_rareMonsterEffect = NULL;
+	m_pkRareMonsterEffect = NULL;
 }
 
 void Fighter::releaseStatus()
 {
-	for (VEC_FIGHTER_STATUS_IT it = this->battleStatusList.begin();
-			it != battleStatusList.end(); it++)
+	for (VEC_FIGHTER_STATUS_IT it = m_vBattleStatusList.begin();
+			it != m_vBattleStatusList.end(); it++)
 	{
 		CC_SAFE_DELETE(*it);
 	}
-	battleStatusList.clear();
+	m_vBattleStatusList.clear();
 }
 
 Fighter::~Fighter()
 {
-	this->releaseStatus();
+	releaseStatus();
 
-	if (m_role)
+	if (m_pkRole)
 	{
-		m_role->RemoveFromParent(false);
+		m_pkRole->RemoveFromParent(false);
 	}
 
 	if (m_bRoleShouldDelete)
 	{
-		CC_SAFE_DELETE (m_role);
+		CC_SAFE_DELETE (m_pkRole);
 	}
 
-	if (m_role && m_roleParent)
+	if (m_pkRole && m_pkRoleParent)
 	{
-		m_role->SetPositionEx(m_ptRoleInParent);
-		m_roleParent->AddChild(m_role);
-		if (m_role->IsKindOfClass(RUNTIME_CLASS(NDManualRole)))
+		m_pkRole->SetPositionEx(m_kRoleInParentPoint);
+		m_pkRoleParent->AddChild(m_pkRole);
+		if (m_pkRole->IsKindOfClass(RUNTIME_CLASS(NDManualRole)))
 		{
-			NDManualRole* role = (NDManualRole*)m_role;
+			NDManualRole* role = (NDManualRole*)m_pkRole;
 			role->SetAction(false);
 		}
 	}
 
 //	CC_SAFE_DELETE(m_imgHurtNum); ///< 临时性注释 郭浩
-	CC_SAFE_DELETE (m_imgBaoJi);
-	CC_SAFE_DELETE (m_imgBoji);
+	CC_SAFE_DELETE (m_pkCritImage);
+	CC_SAFE_DELETE (m_pkBojiImage);
 }
 
 int countY(int teamAmount, BATTLE_GROUP group, int t, int pos)
@@ -156,7 +156,7 @@ int countY(int teamAmount, BATTLE_GROUP group, int t, int pos)
 		float teamW = winsize.width * 2 / 9;
 		float teamOffset = teamW / 4;
 		//		NDLog("team:%d,pos:%d",team,st);
-		//		NDLog("x:%d,y:%d",this->originX,this->originY);
+		//		NDLog("x:%d,y:%d",originX,originY);
 	}
 }
 
@@ -200,33 +200,33 @@ int countX(int teamAmount, BATTLE_GROUP group, int t, int pos)
 
 		}
 		//		NDLog("team:%d,pos:%d",team,st);
-		//		NDLog("x:%d,y:%d",this->originX,this->originY);
+		//		NDLog("x:%d,y:%d",originX,originY);
 	}
 }
 
 void Fighter::setPosition(int teamAmout)
 {
 	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
-//	int st=this->m_info.btStations-1;
-//	int team=this->m_info.btBattleTeam-1;
-	this->originX = countX(teamAmout, this->m_info.group, m_info.btBattleTeam,
-			this->m_info.btStations);
-	this->originY = countY(teamAmout, this->m_info.group, m_info.btBattleTeam,
-			this->m_info.btStations);
+//	int st=m_info.btStations-1;
+//	int team=m_info.btBattleTeam-1;
+	m_nOriginX = countX(teamAmout, m_kInfo.group, m_kInfo.btBattleTeam,
+			m_kInfo.btStations);
+	m_nOriginY = countY(teamAmout, m_kInfo.group, m_kInfo.btBattleTeam,
+			m_kInfo.btStations);
 
 //	if (m_info.fighterType == FIGHTER_TYPE_MONSTER || m_info.fighterType == FIGHTER_TYPE_ELITE_MONSTER) {// 怪物的话，要错开站位
-//		if (this->m_info.line == BATTLE_LINE_BACK) // 后排
+//		if (m_info.line == BATTLE_LINE_BACK) // 后排
 //		{
-//			this->originY -= 8;
+//			originY -= 8;
 //		}
 //		else // 前排
 //		{
-//			this->originY += 8;
+//			originY += 8;
 //		}
 //	}
 
-	this->x = this->originX;
-	this->y = this->originY;
+	m_nX = m_nOriginX;
+	m_nY = m_nOriginY;
 }
 
 //void Fighter::AddCommand(FIGHTER_CMD* cmd)
@@ -236,39 +236,39 @@ void Fighter::setPosition(int teamAmout)
 
 void Fighter::updatePos()
 {
-	this->m_role->SetPositionEx(ccp(this->x, this->y));
+	m_pkRole->SetPositionEx(ccp(m_nX, m_nY));
 	if (!isVisibleStatus)
 	{
-		NDUILabel* lbHover = (NDUILabel*) this->m_parent->GetChild(
+		NDUILabel* lbHover = (NDUILabel*) m_pkParent->GetChild(
 				TAG_HOVER_MSG);
 		if (lbHover)
 		{
 			CGSize sizeStr = getStringSize(lbHover->GetText().c_str(),
 					DEFAULT_FONT_SIZE);
 			lbHover->SetFrameRect(
-					CGRectMake(x - sizeStr.width / 2, y - m_role->GetHeight(),
+					CGRectMake(m_nX - sizeStr.width / 2, m_nY - m_pkRole->GetHeight(),
 							sizeStr.width, sizeStr.height));
 		}
 	}
-	//NDUILabel* lbName = (NDUILabel*)this->m_parent->GetChild(TAG_FIGHTER_NAME);
-	if (this->lb_FighterName)
+	//NDUILabel* lbName = (NDUILabel*)m_parent->GetChild(TAG_FIGHTER_NAME);
+	if (m_pkFighterNameLabel)
 	{
-		CGSize sizeStr = getStringSize(lb_FighterName->GetText().c_str(),
+		CGSize sizeStr = getStringSize(m_pkFighterNameLabel->GetText().c_str(),
 				DEFAULT_FONT_SIZE);
-		this->lb_FighterName->SetFrameRect(
-				CGRectMake(x - sizeStr.width / 2,
-						y - m_role->GetHeight() - sizeStr.height, sizeStr.width,
+		m_pkFighterNameLabel->SetFrameRect(
+				CGRectMake(m_nX - sizeStr.width / 2,
+						m_nY - m_pkRole->GetHeight() - sizeStr.height, sizeStr.width,
 						sizeStr.height));
 	}
 
-	if (lb_skillName)
+	if (m_pkSkillNameLabel)
 	{
-		CGPoint pt = this->m_role->GetPosition();
-		CGSize sizeStr = getStringSize(lb_skillName->GetText().c_str(),
+		CGPoint pt = m_pkRole->GetPosition();
+		CGSize sizeStr = getStringSize(m_pkSkillNameLabel->GetText().c_str(),
 				DEFAULT_FONT_SIZE);
-		lb_skillName->SetFrameRect(
-				CGRectMake(pt.x + (m_role->GetWidth() / 2),
-						pt.y - (m_role->GetHeight() / 2) - sizeStr.height,
+		m_pkSkillNameLabel->SetFrameRect(
+				CGRectMake(pt.x + (m_pkRole->GetWidth() / 2),
+						pt.y - (m_pkRole->GetHeight() / 2) - sizeStr.height,
 						sizeStr.width, sizeStr.height));
 	}
 }
@@ -281,29 +281,29 @@ void Fighter::reStoreAttr()
 	m_bDefenceAtk = false;
 	m_bFleeNoDie = false;
 	m_bDefenceOK = false;
-	beginAction = false;
+	m_bBeginAction = false;
 	m_action = WAIT;
 
-	m_actionTime = 0;
-	escape = false;
-	alive = true;
-	willBeAtk = false;
+	m_nActionTime = 0;
+	m_bIsEscape = false;
+	m_bIsAlive = true;
+	m_bWillBeAttack = false;
 
-	dodgeOK = false;
-	hurtOK = false;
-	dieOK = false;
-	defenceOK = false;
-	addLifeOK = false;
-	actionOK = true;
-	statusPerformOK = false;
-	statusOverOK = false;
+	m_bIsDodgeOK = false;
+	m_bIsHurtOK = false;
+	m_bIsDieOK = false;
+	m_bIsDefenceOK = false;
+	m_bIsAddLifeOK = false;
+	m_bIsActionOK = true;
+	m_bIsStatusPerformOK = false;
+	m_bIsStatusOverOK = false;
 	m_bShowName = false;
 
-	m_info.nLife = m_info.original_life;
-	GetRole()->m_nLife = m_info.nLife;
-	GetRole()->m_nMaxLife = m_info.nLifeMax;
-	GetRole()->m_nMana = m_info.nMana;
-	GetRole()->m_nMaxMana = m_info.nManaMax;
+	m_kInfo.nLife = m_kInfo.original_life;
+	GetRole()->m_nLife = m_kInfo.nLife;
+	GetRole()->m_nMaxLife = m_kInfo.nLifeMax;
+	GetRole()->m_nMana = m_kInfo.nMana;
+	GetRole()->m_nMaxMana = m_kInfo.nManaMax;
 }
 
 void Fighter::LoadEudemon()
@@ -336,9 +336,9 @@ void Fighter::LoadRole(int nLookFace, int lev, const string& name)
 	m_bRoleShouldDelete = true;
 	NDManualRole *role = new NDManualRole;
 	role->InitRoleLookFace(nLookFace);
-	m_role = role;
-	m_role->m_name = name;
-	m_role->m_nLevel = lev;
+	m_pkRole = role;
+	m_pkRole->m_strName = name;
+	m_pkRole->m_nLevel = lev;
 	role->SetNonRole(false);
 }
 
@@ -351,7 +351,7 @@ void Fighter::LoadMonster(int nLookFace, int lev, const string& name)
 	NDManualRole *role = new NDManualRole;
 	role->Initialization(nLookFace, true);
 	role->m_dwLookFace = nLookFace;
-	m_role = role;
+	m_pkRole = role;
 	m_lookfaceType = LOOKFACE_MANUAL;
 //	}else if (NDMonster::isRoleMonster(nLookFace)) {//人形怪
 //		NDMonster *role = new NDMonster;
@@ -368,17 +368,17 @@ void Fighter::LoadMonster(int nLookFace, int lev, const string& name)
 //		m_lookfaceType=LOOKFACE_MONSTER;
 //	}
 
-	fighter_name = name;
-	m_role->m_name = name;
-	m_role->m_nLevel = lev;
+	m_strFighterName = name;
+	m_pkRole->m_strName = name;
+	m_pkRole->m_nLevel = lev;
 
-	//this->m_info.bRoleMonster = role->m_bRoleMonster;
+	//m_info.bRoleMonster = role->m_bRoleMonster;
 }
 
 /*void Fighter::GetCurSubAniGroup(VEC_SAG& sagList)
  {
  VEC_SAG allSagList;
- this->m_role->GetSubAniGroup(allSagList);
+ m_role->GetSubAniGroup(allSagList);
 
  NDSubAniGroup* sag;
  for (VEC_SAG_IT it = allSagList.begin(); it != allSagList.end(); it++) {
@@ -398,16 +398,16 @@ void Fighter::LoadMonster(int nLookFace, int lev, const string& name)
  bAdd = true;
  }
  } else { // 魔法特效
- if (sag->getId() == this->getUseSkill()->getSubAniID()) {
+ if (sag->getId() == getUseSkill()->getSubAniID()) {
  if (sag->getType() == SUB_ANI_TYPE_SELF) {
  sag->fighter = this;
  sagList.push_back(sag);
  bAdd = true;
  } else if (sag->getType() == SUB_ANI_TYPE_TARGET) {
 
- VEC_FIGHTER& array = this->getArrayTarget();
+ VEC_FIGHTER& array = getArrayTarget();
  if (array.size() == 0) {// 如果没有目标数组，则制定目标为mainTarget
- sag->fighter = this->m_mainTarget;
+ sag->fighter = m_mainTarget;
  sagList.push_back(sag);
  bAdd = true;
  } else {
@@ -435,15 +435,15 @@ void Fighter::LoadMonster(int nLookFace, int lev, const string& name)
 void Fighter::draw()
 {
 	drawRareMonsterEffect (isVisibleStatus);
-	m_role->RunAnimation(isVisibleStatus);
-	RunBattleSubAnimation(m_role, this);
-	this->drawStatusAniGroup();
+	m_pkRole->RunAnimation(isVisibleStatus);
+	RunBattleSubAnimation(m_pkRole, this);
+	drawStatusAniGroup();
 }
 
 void Fighter::drawStatusAniGroup()
 {
-	for (VEC_FIGHTER_STATUS_IT it = this->battleStatusList.begin();
-			it != battleStatusList.end(); it++)
+	for (VEC_FIGHTER_STATUS_IT it = m_vBattleStatusList.begin();
+			it != m_vBattleStatusList.end(); it++)
 	{
 		if ((*it)->m_aniGroup)
 		{
@@ -459,12 +459,12 @@ void Fighter::drawStatusAniGroup()
 
 void Fighter::SetRole(NDBaseRole* role)
 {
-	this->m_role = role;
+	m_pkRole = role;
 
-	m_roleParent = role->GetParent();
-	m_ptRoleInParent = role->GetPosition();
+	m_pkRoleParent = role->GetParent();
+	m_kRoleInParentPoint = role->GetPosition();
 
-	if (m_roleParent)
+	if (m_pkRoleParent)
 	{
 		role->RemoveFromParent(false);
 	}
@@ -472,7 +472,7 @@ void Fighter::SetRole(NDBaseRole* role)
 	switch (role->GetWeaponType())
 	{
 	case TWO_HAND_BOW:
-		this->m_normalAtkType = ATKTYPE_DISTANCE;
+		m_nNormalAtkType = ATKTYPE_DISTANCE;
 		break;
 	case DUAL_SWORD:
 	case TWO_HAND_WAND:
@@ -480,7 +480,7 @@ void Fighter::SetRole(NDBaseRole* role)
 	case ONE_HAND_WEAPON:
 	case WEAPON_NONE:
 	case DUAL_KNIFE:
-		this->m_normalAtkType = ATKTYPE_NEAR;
+		m_nNormalAtkType = ATKTYPE_NEAR;
 		break;
 	}
 }
@@ -533,7 +533,7 @@ PAIR_GET_HURT Fighter::getHurt(Fighter* actor, int btType, int dwData, int type)
 
 void Fighter::AddAStatusTarget(StatusAction& f)
 {
-	arrayStatusTarget.push_back(f);
+	m_kArrayStatusTarget.push_back(f);
 }
 
 void Fighter::AddATarget(Fighter* f)
@@ -549,7 +549,7 @@ void Fighter::AddPasStatus(int dwData)
 bool Fighter::isCatchable()
 {
 //	bool ret = false;
-//	if (this->isVisiable()) {
+//	if (isVisiable()) {
 //		ret = m_info.catchFlag > 0 ? true : false;
 //	}
 	return false;
@@ -557,11 +557,11 @@ bool Fighter::isCatchable()
 
 void Fighter::setEscape(bool esc)
 {
-	this->escape = esc;
-	if (m_imgActionWord)
+	m_bIsEscape = esc;
+	if (m_pkActionWordImage)
 	{
-		m_imgActionWord->RemoveFromParent(true);
-		m_imgActionWord = NULL;
+		m_pkActionWordImage->RemoveFromParent(true);
+		m_pkActionWordImage = NULL;
 	}
 }
 
@@ -569,14 +569,14 @@ bool Fighter::isVisiable()
 {
 	bool result = false;
 
-//	if (this->m_info.fighterType == FIGHTER_TYPE_PET) {
+//	if (m_info.fighterType == FIGHTER_TYPE_PET) {
 //		if (escape) {
 //			result = false;
 //		} else {
 //			result = true;
 //		}
 //	} else {
-	if (escape || !alive)
+	if (m_bIsEscape || !m_bIsAlive)
 	{
 		result = false;
 	}
@@ -593,7 +593,7 @@ bool Fighter::completeOneAction()
 {
 	bool result = false;
 
-	if (this->m_actionTime >= 20)
+	if (m_nActionTime >= 20)
 	{
 		result = true;
 	}
@@ -605,40 +605,40 @@ bool Fighter::moveTo(int tx, int ty)
 
 	bool arrive = false;
 
-	if (abs(x - tx) < STEP)
+	if (abs(m_nX - tx) < STEP)
 	{
-		x = tx;
+		m_nX = tx;
 
 	}
 	else
 	{
-		if (x > tx)
+		if (m_nX > tx)
 		{
-			x -= STEP;
+			m_nX -= STEP;
 		}
 		else
 		{
-			x += STEP;
+			m_nX += STEP;
 		}
 	}
 
-	if (abs(y - ty) < STEP)
+	if (abs(m_nY - ty) < STEP)
 	{
-		y = ty;
+		m_nY = ty;
 	}
 	else
 	{
-		if (y > ty)
+		if (m_nY > ty)
 		{
-			y -= STEP;
+			m_nY -= STEP;
 		}
 		else
 		{
-			y += STEP;
+			m_nY += STEP;
 		}
 	}
 
-	if (x == tx && y == ty)
+	if (m_nX == tx && m_nY == ty)
 	{
 		arrive = true;
 	}
@@ -653,26 +653,26 @@ void Fighter::hurted(int num)
 		return;
 	}
 
-	this->m_vHurtNum.push_back(num);
+	m_vHurtNum.push_back(num);
 }
 
 void Fighter::setCurrentHP(int hp)
 {
 	if (hp <= 0)
 	{
-		m_info.nLife = 0;
+		m_kInfo.nLife = 0;
 	}
-	else if (hp > m_info.nLifeMax)
+	else if (hp > m_kInfo.nLifeMax)
 	{
-		m_info.nLife = m_info.nLifeMax;
+		m_kInfo.nLife = m_kInfo.nLifeMax;
 	}
 	else
 	{
-		m_info.nLife = hp;
+		m_kInfo.nLife = hp;
 	}
 
 	int currentId = BattleMgrObj.GetBattle()->GetCurrentShowFighterId();
-	if (currentId == m_info.idObj)
+	if (currentId == m_kInfo.idObj)
 	{
 		//ScriptMgrObj.excuteLuaFunc("UpdateHp","FighterInfo",m_info.nLife,m_info.nLifeMax); ///< 临时性注释 郭浩
 	}
@@ -682,19 +682,19 @@ void Fighter::setCurrentMP(int mp)
 {
 	if (mp <= 0)
 	{
-		m_info.nMana = 0;
+		m_kInfo.nMana = 0;
 	}
-	else if (mp > m_info.nManaMax)
+	else if (mp > m_kInfo.nManaMax)
 	{
-		m_info.nMana = m_info.nManaMax;
+		m_kInfo.nMana = m_kInfo.nManaMax;
 	}
 	else
 	{
-		m_info.nMana = mp;
+		m_kInfo.nMana = mp;
 	}
 
 	int currentId = BattleMgrObj.GetBattle()->GetCurrentShowFighterId();
-	if (currentId == m_info.idObj)
+	if (currentId == m_kInfo.idObj)
 	{
 		//ScriptMgrObj.excuteLuaFunc("UpdateMp","FighterInfo",m_info.nMana,m_info.nManaMax); ///< 临时性注释 郭浩
 	}
@@ -711,29 +711,29 @@ void Fighter::showFighterName(bool b)
 		NDBaseRole* role = GetRole();
 		if (role)
 		{
-			CGPoint pt = this->m_role->GetPosition();
-			this->lb_FighterName = new NDUILabel;
-			this->lb_FighterName->Initialization();
-			//this->lb_FighterName->SetTag(TAG_FIGHTER_NAME);
-			this->lb_FighterName->SetFontColor(ccc4(255, 255, 255, 255));
-			this->lb_FighterName->SetText(GetRole()->m_name.c_str());
-			this->lb_FighterName->SetFontSize(DEFAULT_FONT_SIZE);
-			CGSize sizefighterName = getStringSize(GetRole()->m_name.c_str(),
+			CGPoint pt = m_pkRole->GetPosition();
+			m_pkFighterNameLabel = new NDUILabel;
+			m_pkFighterNameLabel->Initialization();
+			//lb_FighterName->SetTag(TAG_FIGHTER_NAME);
+			m_pkFighterNameLabel->SetFontColor(ccc4(255, 255, 255, 255));
+			m_pkFighterNameLabel->SetText(GetRole()->m_strName.c_str());
+			m_pkFighterNameLabel->SetFontSize(DEFAULT_FONT_SIZE);
+			CGSize sizefighterName = getStringSize(GetRole()->m_strName.c_str(),
 					DEFAULT_FONT_SIZE);
 			//fighterName->SetTag(TAG_FIGHTER_NAME);
-			lb_FighterName->SetFrameRect(
+			m_pkFighterNameLabel->SetFrameRect(
 					CGRectMake(pt.x - sizefighterName.width / 2,
-							pt.y - m_role->GetHeight() - sizefighterName.height,
+							pt.y - m_pkRole->GetHeight() - sizefighterName.height,
 							sizefighterName.width, sizefighterName.height));
-			this->m_parent->AddChild(this->lb_FighterName);
+			m_pkParent->AddChild(m_pkFighterNameLabel);
 		}
 	}
 	else
 	{
-		if (lb_FighterName)
+		if (m_pkFighterNameLabel)
 		{
-			this->lb_FighterName->RemoveFromParent(true);
-			this->lb_FighterName = NULL;
+			m_pkFighterNameLabel->RemoveFromParent(true);
+			m_pkFighterNameLabel = NULL;
 		}
 	}
 	m_bShowName = b;
@@ -743,34 +743,34 @@ void Fighter::showSkillName(bool b)
 {
 	if (b)
 	{
-		CGPoint pt = this->m_role->GetPosition();
-		lb_skillName = new NDUILabel;
-		lb_skillName->Initialization();
-		lb_skillName->SetFontColor(ccc4(254, 3, 9, 255));
-		lb_skillName->SetText(m_strSkillName.c_str());
+		CGPoint pt = m_pkRole->GetPosition();
+		m_pkSkillNameLabel = new NDUILabel;
+		m_pkSkillNameLabel->Initialization();
+		m_pkSkillNameLabel->SetFontColor(ccc4(254, 3, 9, 255));
+		m_pkSkillNameLabel->SetText(m_strSkillName.c_str());
 		CGSize sizeSkillName = getStringSize(m_strSkillName.c_str(),
 				DEFAULT_FONT_SIZE);
 		//lb_skillName->SetTag(TAG_SKILL_NAME);
-		lb_skillName->SetFontSize(DEFAULT_FONT_SIZE);
-		lb_skillName->SetFrameRect(
-				CGRectMake(pt.x + (m_role->GetWidth() / 2),
-						pt.y - (m_role->GetHeight() / 2) - sizeSkillName.height,
+		m_pkSkillNameLabel->SetFontSize(DEFAULT_FONT_SIZE);
+		m_pkSkillNameLabel->SetFrameRect(
+				CGRectMake(pt.x + (m_pkRole->GetWidth() / 2),
+						pt.y - (m_pkRole->GetHeight() / 2) - sizeSkillName.height,
 						sizeSkillName.width, sizeSkillName.height));
-		this->m_parent->AddChild(lb_skillName);
+		m_pkParent->AddChild(m_pkSkillNameLabel);
 	}
 	else
 	{
-		if (lb_skillName)
+		if (m_pkSkillNameLabel)
 		{
-			this->lb_skillName->RemoveFromParent(true);
-			lb_skillName = NULL;
+			m_pkSkillNameLabel->RemoveFromParent(true);
+			m_pkSkillNameLabel = NULL;
 		}
 	}
 }
 
 void Fighter::showActionWord(ACTION_WORD index)
 {
-	if (m_imgActionWord)
+	if (m_pkActionWordImage)
 	{
 		return;
 	}
@@ -779,13 +779,13 @@ void Fighter::showActionWord(ACTION_WORD index)
 	switch (index)
 	{
 	case AW_DEF:
-		pic = (this->m_parent->getActionWord(AW_DEF));
+		pic = (m_pkParent->getActionWord(AW_DEF));
 		break;
 	case AW_FLEE:
-		pic = (this->m_parent->getActionWord(AW_FLEE));
+		pic = (m_pkParent->getActionWord(AW_FLEE));
 		break;
 	case AW_DODGE:
-		pic = (this->m_parent->getActionWord(AW_DODGE));
+		pic = (m_pkParent->getActionWord(AW_DODGE));
 		break;
 	default:
 		break;
@@ -798,70 +798,70 @@ void Fighter::showActionWord(ACTION_WORD index)
 
 	CGSize size = pic->GetSize();
 
-	m_imgActionWord = new NDUIImage;
-	m_imgActionWord->Initialization();
-	m_imgActionWord->SetPicture(pic);
-	m_imgActionWord->SetFrameRect(
-			CGRectMake(this->x - size.width / 2, this->y - m_role->GetHeight(),
+	m_pkActionWordImage = new NDUIImage;
+	m_pkActionWordImage->Initialization();
+	m_pkActionWordImage->SetPicture(pic);
+	m_pkActionWordImage->SetFrameRect(
+			CGRectMake(m_nX - size.width / 2, m_nY - m_pkRole->GetHeight(),
 					size.width, size.height));
-	this->m_parent->AddChild(m_imgActionWord);
+	m_pkParent->AddChild(m_pkActionWordImage);
 }
 
 void Fighter::drawActionWord()
 {
-	//if (!this->m_role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
+	//if (!m_role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
 //	{
 //		NDLog("dfdsfdsf");
 //	}
-	if (this->isAlive())
+	if (isAlive())
 	{
-		switch (this->m_action)
+		switch (m_action)
 		{
 		case FLEE_FAIL:
 		case FLEE_SUCCESS:
 			if (isBeginAction() && !isActionOK())
 			{
-				this->showActionWord(AW_FLEE);
+				showActionWord(AW_FLEE);
 				return;
 			}
 			break;
 		case DEFENCE:
-			this->showActionWord(AW_DEF);
+			showActionWord(AW_DEF);
 			return;
 		default:
 			break;
 		}
 
-		if (this->dodgeOK)		//&& isBeginAction())
+		if (m_bIsDodgeOK)		//&& isBeginAction())
 		{
-			this->showActionWord(AW_DODGE);
+			showActionWord(AW_DODGE);
 			return;
 		}
 
-		if (this->defenceOK)
+		if (m_bIsDefenceOK)
 		{
-			this->showActionWord(AW_DEF);
+			showActionWord(AW_DEF);
 			return;
 		}
 	}
 
 	// 不显示
-	if (m_imgActionWord)
+	if (m_pkActionWordImage)
 	{
-		this->m_parent->RemoveChild(m_imgActionWord, true);
-		m_imgActionWord = NULL;
+		m_pkParent->RemoveChild(m_pkActionWordImage, true);
+		m_pkActionWordImage = NULL;
 	}
 }
 
 void Fighter::setDieOK(bool bOK)
 {
-	if (m_imgActionWord && m_imgActionWord->GetParent())
+	if (m_pkActionWordImage && m_pkActionWordImage->GetParent())
 	{
-		m_imgActionWord->RemoveFromParent(true);
-		m_imgActionWord = NULL;
+		m_pkActionWordImage->RemoveFromParent(true);
+		m_pkActionWordImage = NULL;
 	}
 
-	this->dieOK = bOK;
+	m_bIsDieOK = bOK;
 }
 
 void Fighter::drawHurtNumber()
@@ -893,11 +893,11 @@ void Fighter::drawHurtNumber()
 
 				if (m_bHardAtk)
 				{
-					NDPicture* picBaoJi = this->m_parent->GetBaoJiPic();
-					m_imgBaoJi = new NDUIImage;
-					m_imgBaoJi->Initialization();
-					m_imgBaoJi->SetPicture(picBaoJi);
-					this->m_parent->AddChild(m_imgBaoJi);
+					NDPicture* picBaoJi = m_pkParent->GetBaoJiPic();
+					m_pkCritImage = new NDUIImage;
+					m_pkCritImage->Initialization();
+					m_pkCritImage->SetPicture(picBaoJi);
+					m_pkParent->AddChild(m_pkCritImage);
 
 					//m_imgHurtNum->SetBigRedNumber(hn.getHurtNum(), false); ///< 临时性注释 郭浩
 
@@ -923,7 +923,7 @@ void Fighter::drawHurtNumber()
 					 */
 				}
 
-				//	this->m_parent->AddChild(m_imgHurtNum); ///< 临时性注释 郭浩
+				//	m_parent->AddChild(m_imgHurtNum); ///< 临时性注释 郭浩
 			}
 		}
 
@@ -934,20 +934,20 @@ void Fighter::drawHurtNumber()
 			 */
 			//if (m_bHardAtk)
 			//{
-			//	NDPicture* picBaoJi = this->m_parent->GetBaoJiPic();
+			//	NDPicture* picBaoJi = m_parent->GetBaoJiPic();
 			//	int bjW = picBaoJi->GetSize().width;
 			//	int bjH = picBaoJi->GetSize().height;
 			//	if (m_imgBaoJi)
 			//	{
-			//		m_imgBaoJi->SetFrameRect(CGRectMake(this->x - (bjW >> 1),
+			//		m_imgBaoJi->SetFrameRect(CGRectMake(x - (bjW >> 1),
 			//						    y - m_role->GetHeight() - bjH - hn.getHurtNumberY(),
 			//						    bjW,
 			//						    bjH));
 			//	}
 			//	if (m_imgHurtNum)
 			//	{
-			//		m_imgHurtNum->SetFrameRect(CGRectMake(this->x - (w >> 1),
-			//						      this->y - m_role->GetHeight() - hn.getHurtNumberY() - bjH * 13 / 20,
+			//		m_imgHurtNum->SetFrameRect(CGRectMake(x - (w >> 1),
+			//						      y - m_role->GetHeight() - hn.getHurtNumberY() - bjH * 13 / 20,
 			//						      m_imgHurtNum->GetNumberSize().width,
 			//						      m_imgHurtNum->GetNumberSize().height));
 			//	}
@@ -957,8 +957,8 @@ void Fighter::drawHurtNumber()
 			//{
 			//	if (m_imgHurtNum) 
 			//	{
-			//		m_imgHurtNum->SetFrameRect(CGRectMake(this->x - (w >> 1),
-			//						      this->y - m_role->GetHeight() - hn.getHurtNumberY(),
+			//		m_imgHurtNum->SetFrameRect(CGRectMake(x - (w >> 1),
+			//						      y - m_role->GetHeight() - hn.getHurtNumberY(),
 			//						      m_imgHurtNum->GetNumberSize().width,
 			//						      m_imgHurtNum->GetNumberSize().height));
 			//	}
@@ -978,10 +978,10 @@ void Fighter::drawHurtNumber()
 	{
 		m_vHurtNum.erase(m_vHurtNum.begin());
 		// 删除去血提示
-		if (m_imgBaoJi)
+		if (m_pkCritImage)
 		{
-			m_imgBaoJi->RemoveFromParent(false);
-			CC_SAFE_DELETE (m_imgBaoJi);
+			m_pkCritImage->RemoveFromParent(false);
+			CC_SAFE_DELETE (m_pkCritImage);
 		}
 		/***
 		 * 临时性注释 郭浩
@@ -1005,10 +1005,10 @@ void Fighter::drawHPMP()
 	{
 		return;
 	}
-	int drawx = this->m_role->GetPosition().x;
-	int drawy = this->m_role->GetPosition().y;
+	int drawx = m_pkRole->GetPosition().x;
+	int drawy = m_pkRole->GetPosition().y;
 
-	drawy -= this->m_role->GetHeight();
+	drawy -= m_pkRole->GetHeight();
 
 	int w = 30;
 	int h = 7;
@@ -1016,24 +1016,24 @@ void Fighter::drawHPMP()
 //	int manaw=0;
 
 	drawx -= w >> 1;
-	if (this->m_info.nLifeMax == 0)
+	if (m_kInfo.nLifeMax == 0)
 	{
 		lifew = 0;
 	}
 	else
 	{
-		if (this->m_info.nLife >= this->m_info.nLifeMax)
+		if (m_kInfo.nLife >= m_kInfo.nLifeMax)
 		{
 			lifew = w - 4;
 		}
 		else
 		{
-			lifew = this->m_info.nLife * (w - 4) / this->m_info.nLifeMax;
+			lifew = m_kInfo.nLife * (w - 4) / m_kInfo.nLifeMax;
 		}
 
 		if (lifew == 0)
 		{
-			if (this->m_info.nLife == 0)
+			if (m_kInfo.nLife == 0)
 			{
 				lifew = 0;
 			}
@@ -1044,12 +1044,12 @@ void Fighter::drawHPMP()
 		}
 	}
 
-//	if(this->m_info.nLifeMax==0){
+//	if(m_info.nLifeMax==0){
 //		manaw=0;
 //	}else{
-//		manaw = this->m_info.nMana * (w - 4) / this->m_info.nManaMax;
+//		manaw = m_info.nMana * (w - 4) / m_info.nManaMax;
 //		if (manaw == 0) {
-//			if (this->m_info.nMana == 0) {
+//			if (m_info.nMana == 0) {
 //				manaw = 0;
 //			} else {
 //				manaw = 1;
@@ -1074,11 +1074,11 @@ void Fighter::drawHPMP()
 
 void Fighter::clearFighterStatus()
 {
-	this->m_vPasStatus.clear();
-	this->m_vTarget.clear();
-	this->arrayStatusTarget.clear();
+	m_vPasStatus.clear();
+	m_vTarget.clear();
+	m_kArrayStatusTarget.clear();
 	BattleSkill bs;
-	this->useSkill = bs;
+	m_kUseSkill = bs;
 }
 
 int Fighter::getAPasStatus()
@@ -1148,17 +1148,17 @@ void Fighter::removeAStatusAniGroup(FighterStatus* status)
 	if (status->m_LastEffectID == 404)
 	{			// 隐身特殊处理
 		isVisibleStatus = true;
-		strMsgStatus = "";
-		this->m_parent->RemoveChild(TAG_HOVER_MSG, true);
+		m_strMsgStatus = "";
+		m_pkParent->RemoveChild(TAG_HOVER_MSG, true);
 	}
 
-	for (VEC_FIGHTER_STATUS_IT it = this->battleStatusList.begin();
-			it != this->battleStatusList.end(); it++)
+	for (VEC_FIGHTER_STATUS_IT it = m_vBattleStatusList.begin();
+			it != m_vBattleStatusList.end(); it++)
 	{
 		if ((*it)->m_id == status->m_id)
 		{
 			CC_SAFE_DELETE(*it);
-			battleStatusList.erase(it);
+			m_vBattleStatusList.erase(it);
 			return;
 		}
 	}
@@ -1166,12 +1166,12 @@ void Fighter::removeAStatusAniGroup(FighterStatus* status)
 
 void Fighter::setWillBeAtk(bool bSet)
 {
-	this->willBeAtk = bSet;
+	m_bWillBeAttack = bSet;
 
 	if (bSet)
 	{
-//		NDPicture* pic = this->m_parent->GetBojiPic();
-//		bool bReverse = this->m_info.group == BATTLE_GROUP_ATTACK;
+//		NDPicture* pic = m_parent->GetBojiPic();
+//		bool bReverse = m_info.group == BATTLE_GROUP_ATTACK;
 //		pic->SetReverse(bReverse);
 //		
 //		CGRect rect = CGRectMake(x + m_role->GetWidth() / 2 + 5,
@@ -1183,10 +1183,10 @@ void Fighter::setWillBeAtk(bool bSet)
 //			rect.origin.x = rect.origin.x - m_role->GetWidth() - 10;
 //		}
 //		
-//		if (!this->m_imgBoji) {
-//			this->m_imgBoji = new NDUIImage;
+//		if (!m_imgBoji) {
+//			m_imgBoji = new NDUIImage;
 //			m_imgBoji->Initialization();
-//			this->m_parent->AddChild(m_imgBoji);
+//			m_parent->AddChild(m_imgBoji);
 //		}
 //		m_imgBoji->SetPicture(pic);
 //		m_imgBoji->SetFrameRect(rect);
@@ -1214,48 +1214,48 @@ void Fighter::addAStatus(FighterStatus* fs)
 	{
 		// 隐身特殊处理
 		isVisibleStatus = false;
-		this->strMsgStatus = NDCommonCString("YingSheng");
-		this->showHoverMsg(strMsgStatus.c_str());
+		m_strMsgStatus = NDCommonCString("YingSheng");
+		showHoverMsg(m_strMsgStatus.c_str());
 	}
 
 	NDLog("add a status");
-	this->battleStatusList.push_back(fs);
+	m_vBattleStatusList.push_back(fs);
 }
 
 void Fighter::setOnline(bool bOnline)
 {
 	if (bOnline)
 	{
-		if (!this->strMsgStatus.empty())
+		if (!m_strMsgStatus.empty())
 		{
-			this->showHoverMsg(strMsgStatus.c_str());
+			showHoverMsg(m_strMsgStatus.c_str());
 		}
 		else
 		{
-			this->m_parent->RemoveChild(TAG_HOVER_MSG, true);
+			m_pkParent->RemoveChild(TAG_HOVER_MSG, true);
 		}
 	}
 	else
 	{
-		this->showHoverMsg(NDCommonCString("leave"));
+		showHoverMsg(NDCommonCString("leave"));
 	}
 }
 
 void Fighter::showHoverMsg(const char* str)
 {
-	NDUILabel* lbHover = (NDUILabel*) this->m_parent->GetChild(TAG_HOVER_MSG);
+	NDUILabel* lbHover = (NDUILabel*) m_pkParent->GetChild(TAG_HOVER_MSG);
 	if (!lbHover)
 	{
-		CGPoint pt = this->m_role->GetPosition();
+		CGPoint pt = m_pkRole->GetPosition();
 		lbHover = new NDUILabel;
 		lbHover->Initialization();
 		lbHover->SetFontColor(ccc4(0, 255, 100, 255));
 		CGSize sizeStr = getStringSize(str, DEFAULT_FONT_SIZE);
 		lbHover->SetTag(TAG_HOVER_MSG);
 		lbHover->SetFrameRect(
-				CGRectMake(pt.x - sizeStr.width / 2, pt.y - m_role->GetHeight(),
+				CGRectMake(pt.x - sizeStr.width / 2, pt.y - m_pkRole->GetHeight(),
 						sizeStr.width, sizeStr.height));
-		this->m_parent->AddChild(lbHover);
+		m_pkParent->AddChild(lbHover);
 	}
 	lbHover->SetText(str);
 }
@@ -1263,8 +1263,8 @@ void Fighter::showHoverMsg(const char* str)
 void Fighter::drawRareMonsterEffect(bool bVisible)
 {
 	// 稀有怪光环
-	if (m_info.fighterType == Fighter_TYPE_RARE_MONSTER && m_role
-			&& m_role->GetParent())
+	if (m_kInfo.fighterType == Fighter_TYPE_RARE_MONSTER && m_pkRole
+			&& m_pkRole->GetParent())
 	{
 //		if (!m_rareMonsterEffect) 
 //		{
@@ -1281,6 +1281,6 @@ void Fighter::drawRareMonsterEffect(bool bVisible)
 	}
 	else
 	{
-		SAFE_DELETE_NODE (m_rareMonsterEffect);
+		SAFE_DELETE_NODE (m_pkRareMonsterEffect);
 	}
 }

@@ -22,40 +22,40 @@ namespace NDEngine
 {
 IMPLEMENT_CLASS(NDDirector, NDObject)
 
-static NDDirector* NDDirector_defaultDirector = NULL;
+static NDDirector* gs_pkNDDirectorDefaultDirector = NULL;
 
 NDDirector::NDDirector()
 {
-	NDAsssert(NDDirector_defaultDirector == NULL);
+	NDAsssert(gs_pkNDDirectorDefaultDirector == NULL);
 
 	//CC_DIRECTOR_INIT();
 	m_pkDirector = CCDirector::sharedDirector();
-	m_setViewRectNode = NULL;
-	m_resetViewRect = false;
+	m_pkSetViewRectNode = NULL;
+	m_bResetViewRect = false;
 
-	m_TransitionSceneWait = NULL;
+	m_pkTransitionSceneWait = NULL;
 
-	m_TransitionSceneType = eTransitionSceneNone;
+	m_eTransitionSceneType = eTransitionSceneNone;
 }
 
 NDDirector::~NDDirector()
 {
-	if (m_TransitionSceneWait)
+	if (m_pkTransitionSceneWait)
 	{
-		delete m_TransitionSceneWait;
+		delete m_pkTransitionSceneWait;
 	}
 
 	m_pkDirector->release();
-	NDDirector_defaultDirector = NULL;
+	gs_pkNDDirectorDefaultDirector = NULL;
 }
 
 NDDirector* NDDirector::DefaultDirector()
 {
-	if (NDDirector_defaultDirector == NULL)
+	if (gs_pkNDDirectorDefaultDirector == NULL)
 	{
-		NDDirector_defaultDirector = new NDDirector();
+		gs_pkNDDirectorDefaultDirector = new NDDirector();
 	}
-	return NDDirector_defaultDirector;
+	return gs_pkNDDirectorDefaultDirector;
 }
 
 void NDDirector::Initialization()
@@ -103,18 +103,18 @@ void NDDirector::RemoveDelegate(NDObject* receiver)
 
 void NDDirector::TransitionAnimateComplete()
 {
-	if (!m_TransitionSceneWait)
+	if (!m_pkTransitionSceneWait)
 	{
 		return;
 	}
 
-	switch (m_TransitionSceneType)
+	switch (m_eTransitionSceneType)
 	{
 	case eTransitionSceneReplace:
-		ReplaceScene (m_TransitionSceneWait);
+		ReplaceScene (m_pkTransitionSceneWait);
 		break;
 	case eTransitionScenePush:
-		PushScene(m_TransitionSceneWait);
+		PushScene(m_pkTransitionSceneWait);
 		break;
 	case eTransitionScenePop:
 		PopScene(NULL, false);
@@ -122,7 +122,7 @@ void NDDirector::TransitionAnimateComplete()
 		break;
 	}
 
-	m_TransitionSceneWait = NULL;
+	m_pkTransitionSceneWait = NULL;
 }
 
 void NDDirector::SetTransitionScene(NDScene *scene, TransitionSceneType type)
@@ -323,7 +323,7 @@ CGSize NDDirector::GetWinSize()
 
 void NDDirector::SetViewRect(CGRect rect, NDNode* node)
 {
-	if (m_TransitionSceneWait)
+	if (m_pkTransitionSceneWait)
 	{
 		return;
 	}
@@ -340,25 +340,25 @@ void NDDirector::SetViewRect(CGRect rect, NDNode* node)
 			winSize.width - rect.origin.x - rect.size.width, rect.size.height,
 			rect.size.width);
 
-	m_setViewRectNode = node;
-	m_resetViewRect = true;
+	m_pkSetViewRectNode = node;
+	m_bResetViewRect = true;
 }
 
 void NDDirector::ResumeViewRect(NDNode* drawingNode)
 {
-	if (!m_resetViewRect)
+	if (!m_bResetViewRect)
 	{
 		return;
 	}
 
-	if (m_setViewRectNode)
+	if (m_pkSetViewRectNode)
 	{
-		if (drawingNode == m_setViewRectNode)
+		if (drawingNode == m_pkSetViewRectNode)
 		{
 			return;
 		}
 
-		if (drawingNode->IsChildOf(m_setViewRectNode))
+		if (drawingNode->IsChildOf(m_pkSetViewRectNode))
 		{
 			return;
 		}
@@ -370,8 +370,8 @@ void NDDirector::ResumeViewRect(NDNode* drawingNode)
 void NDDirector::DisibleScissor()
 {
 	glDisable (GL_SCISSOR_TEST);
-	m_setViewRectNode = NULL;
-	m_resetViewRect = false;
+	m_pkSetViewRectNode = NULL;
+	m_bResetViewRect = false;
 }
 
 void NDDirector::BeforeDirectorPopScene(NDScene* scene, bool cleanScene)

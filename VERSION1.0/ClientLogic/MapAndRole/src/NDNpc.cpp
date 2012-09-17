@@ -152,35 +152,36 @@ bool NDNpc::OnDrawBegin(bool bDraw)
 
 void NDNpc::OnDrawEnd(bool bDraw)
 {
-	NDNode *node = this->GetParent();
+	NDNode* pkNode = this->GetParent();
 
-	CGSize sizemap;
-	if (node && node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+	CGSize kSizeMap;
+	if (pkNode && pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 	{
-		sizemap = node->GetContentSize();
+		kSizeMap = pkNode->GetContentSize();
 	}
 	else
 	{
 		return;
 	}
 
-	NDPlayer& player = NDPlayer::defaultHero();
-	CGPoint playerpos = player.GetPosition();
-	CGPoint npcpos = this->GetPosition();
+	NDPlayer& kPlayer = NDPlayer::defaultHero();
+	CGPoint kPlayerPos = kPlayer.GetPosition();
+	CGPoint kNPCPos = this->GetPosition();
 
-	CGRect rectRole, rectNPC;
-	rectRole = CGRectMake(playerpos.x - SHOW_NAME_ROLE_W,
-			playerpos.y - SHOW_NAME_ROLE_H, SHOW_NAME_ROLE_W << 1,
+	CGRect kRectRole;
+	CGRect kRectNPC;
+	kRectRole = CGRectMake(kPlayerPos.x - SHOW_NAME_ROLE_W,
+			kPlayerPos.y - SHOW_NAME_ROLE_H, SHOW_NAME_ROLE_W << 1,
 			SHOW_NAME_ROLE_H << 1);
-	rectNPC = CGRectMake(npcpos.x, npcpos.y, 16, 16);
-	bool collides = CGRectIntersectsRect(rectRole, rectNPC);
+	kRectNPC = CGRectMake(kNPCPos.x, kNPCPos.y, 16, 16);
+	bool bCollides = CGRectIntersectsRect(kRectRole, kRectNPC);
 
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
 
-	CGSize size = getStringSize(m_name.c_str(), 12);
+	CGSize kSize = getStringSize(m_strName.c_str(), 12);
 
-	int showX = npcpos.x;
-	int showY = npcpos.y - size.height
+	int nShowX = kNPCPos.x;
+	int nShowY = kNPCPos.y - kSize.height
 			- (m_pkCurrentAnimation ?
 					(m_pkCurrentAnimation->getBottomY()
 							- m_pkCurrentAnimation->getY()) :
@@ -189,10 +190,10 @@ void NDNpc::OnDrawEnd(bool bDraw)
 //	if (collides)
 //	{
 	bool isEmemy = false;
-	if (player.IsInState(USERSTATE_FIGHTING))
+	if (kPlayer.IsInState(USERSTATE_FIGHTING))
 	{
-		isEmemy = (GetCamp() != CAMP_NEUTRAL && player.GetCamp() != CAMP_NEUTRAL
-				&& GetCamp() != player.GetCamp());
+		isEmemy = (GetCamp() != CAMP_NEUTRAL && kPlayer.GetCamp() != CAMP_NEUTRAL
+				&& GetCamp() != kPlayer.GetCamp());
 	}
 
 	//unsigned int iColor = isEmemy ? 0xe30318 : 0x88EEFF;
@@ -206,11 +207,11 @@ void NDNpc::OnDrawEnd(bool bDraw)
 // 			showY -= 20 * fScaleFactor;
 // 		}
 
-	if (!m_name.empty())
+	if (!m_strName.empty())
 	{
 		InitNameLable(m_pkNameLabel[0]);
 		InitNameLable(m_pkNameLabel[1]);
-		SetLable(eLableName, showX, showY, m_name, INTCOLORTOCCC4(iColor),
+		SetLable(eLableName, nShowX, nShowY, m_strName, INTCOLORTOCCC4(iColor),
 				ccc4(0, 0, 0, 255));
 		DrawLable(m_pkNameLabel[1], bDraw);
 		DrawLable(m_pkNameLabel[0], bDraw);
@@ -225,10 +226,10 @@ void NDNpc::OnDrawEnd(bool bDraw)
 					NDPath::GetImgPath("battle.png"));
 			CGSize sizeBattle = m_pkPicBattle->GetSize();
 			m_pkPicBattle->DrawInRect(
-					CGRectMake(npcpos.x - 16,
+					CGRectMake(kNPCPos.x - 16,
 							GetPosition().y - 64
 									+ NDDirector::DefaultDirector()->GetWinSize().height
-									- sizemap.height, sizeBattle.width,
+									- kSizeMap.height, sizeBattle.width,
 							sizeBattle.height));
 		}
 	}
@@ -237,12 +238,12 @@ void NDNpc::OnDrawEnd(bool bDraw)
 		if (m_pkPicState != NULL)
 		{
 			CGSize sizeState = m_pkPicState->GetSize();
-			CGRect rect = CGRectMake(npcpos.x - sizeState.width / 2,
-					showY + NDDirector::DefaultDirector()->GetWinSize().height
-							- sizemap.height - sizeState.height,
+			CGRect rect = CGRectMake(kNPCPos.x - sizeState.width / 2,
+					nShowY + NDDirector::DefaultDirector()->GetWinSize().height
+							- kSizeMap.height - sizeState.height,
 					sizeState.width, sizeState.height);
-			m_rectState = CGRectMake(npcpos.x - sizeState.width / 2,
-					showY - sizeState.height, sizeState.width,
+			m_rectState = CGRectMake(kNPCPos.x - sizeState.width / 2,
+					nShowY - sizeState.height, sizeState.width,
 					sizeState.height);
 			m_pkPicState->DrawInRect(rect);
 		}

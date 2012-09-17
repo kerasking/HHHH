@@ -33,8 +33,8 @@ bool NDBaseRole::ms_bGameSceneRelease = false;
 
 NDBaseRole::NDBaseRole()
 {
-	m_weaponType = WEAPON_NONE;
-	m_secWeaponType = WEAPON_NONE;
+	m_nMasterWeaponType = WEAPON_NONE;
+	m_nSecondWeaponType = WEAPON_NONE;
 
 	m_nSex = -1;
 	m_nSkinColor = -1;
@@ -457,7 +457,7 @@ void NDBaseRole::InitRoleLookFace(int lookface)
 
 void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 {
-	m_name = name;
+	m_strName = name;
 	m_nLevel = lev;
 	//m_id = 0; // 用户id
 //	sex = lookface / 100000000 % 10; // 人物性别，1-男性，2-女性；
@@ -637,46 +637,46 @@ int NDBaseRole::getEquipmentLookFace(int lookface, int type)
 	{
 	case 0:
 	{	//武器
-		int index = lookface / 100000 % 100;
-		if (index == 99)
+		int nIndex = lookface / 100000 % 100;
+		if (nIndex == 99)
 		{
 			return 0;
 		}
-		if (index < 10)
+		if (nIndex < 10)
 		{
-			nID = 1000 + index;
+			nID = 1000 + nIndex;
 		}
-		else if (index < 20)
+		else if (nIndex < 20)
 		{
-			nID = 1600 + index - 10;
+			nID = 1600 + nIndex - 10;
 		}
-		else if (index < 30)
+		else if (nIndex < 30)
 		{
-			nID = 2800 + index - 20;
+			nID = 2800 + nIndex - 20;
 		}
-		else if (index < 40)
+		else if (nIndex < 40)
 		{
-			nID = 1200 + index - 30;
+			nID = 1200 + nIndex - 30;
 		}
-		else if (index < 50)
+		else if (nIndex < 50)
 		{
-			nID = 1800 + index - 40;
+			nID = 1800 + nIndex - 40;
 		}
-		else if (index < 60)
+		else if (nIndex < 60)
 		{
-			nID = 2200 + index - 50;
+			nID = 2200 + nIndex - 50;
 		}
-		else if (index < 70)
+		else if (nIndex < 70)
 		{
-			nID = 2400 + index - 60;
+			nID = 2400 + nIndex - 60;
 		}
-		else if (index < 80)
+		else if (nIndex < 80)
 		{
-			nID = 5000 + index - 70;
+			nID = 5000 + nIndex - 70;
 		}
-		else if (index < 90)
+		else if (nIndex < 90)
 		{
-			nID = 2600 + index - 80;
+			nID = 2600 + nIndex - 80;
 		}
 		break;
 	}
@@ -907,72 +907,72 @@ void NDBaseRole::DrawHead(const CGPoint& pos)
 
 void NDBaseRole::SetWeaponType(int weaponType)
 {
-	m_weaponType = weaponType;
+	m_nMasterWeaponType = weaponType;
 }
 
 int NDBaseRole::GetWeaponType()
 {
-	return m_weaponType;
+	return m_nMasterWeaponType;
 }
 
 void NDBaseRole::SetSecWeaponType(int secWeaponType)
 {
-	m_secWeaponType = secWeaponType;
+	m_nSecondWeaponType = secWeaponType;
 }
 
 int NDBaseRole::GetSecWeaponType()
 {
-	return m_secWeaponType;
+	return m_nSecondWeaponType;
 }
 
 void NDBaseRole::SetWeaponQuality(int quality)
 {
-	m_weaponQuality = quality;
+	m_nMasterWeaponQuality = quality;
 }
 
 int NDBaseRole::GetWeaponQuality()
 {
-	return m_weaponQuality;
+	return m_nMasterWeaponQuality;
 }
 
 void NDBaseRole::SetSecWeaponQuality(int quality)
 {
-	m_secWeaponQuality = quality;
+	m_nSecondWeaponQuality = quality;
 }
 
 int NDBaseRole::GetSecWeaponQuality()
 {
-	return m_secWeaponQuality;
+	return m_nSecondWeaponQuality;
 }
 
 void NDBaseRole::SetCapQuality(int quality)
 {
-	m_capQuality = quality;
+	m_nCapQuality = quality;
 }
 
 int NDBaseRole::GetCapQuality()
 {
-	return m_capQuality;
+	return m_nCapQuality;
 }
 
 void NDBaseRole::SetArmorQuality(int quality)
 {
-	m_armorQuality = quality;
+	m_nArmorQuality = quality;
 }
 
 int NDBaseRole::GetArmorQuality()
 {
-	return m_armorQuality;
+	return m_nArmorQuality;
 }
 
 void NDBaseRole::SetCloakQuality(int quality)
 {
-	m_cloakQuality = quality;
+	m_nCloakQuality = quality;
 }
 
 int NDBaseRole::GetCloakQuality()
 {
-	return m_cloakQuality;
+	return m_nCloakQuality;
 }
 
 void NDBaseRole::SetHair(int style, int color)

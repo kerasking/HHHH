@@ -190,7 +190,7 @@ public:
 	int m_nLevel;				//等级
 
 	CAMP_TYPE m_eCamp;			//阵营
-	std::string m_name;
+	std::string m_strName;
 	std::string m_strRank;		// 军衔
 public:
 	// 骑宠相关

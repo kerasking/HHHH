@@ -17,7 +17,7 @@
 
 void processTask(MSGID msgID, NDEngine::NDTransData* data);
 //void updateTaskItemData(Item& item, bool isShow);
-void updateTaskMonsterData(int monId, bool isShow);
+void updateTaskMonsterData(int nMonId, bool bIsShow);
 void dealWithFreshmanTask(Task* task);
 void sendTaskFinishMsg(int taskId);
 

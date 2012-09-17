@@ -22,6 +22,7 @@
 //class Fighter;
 
 #include "NDFrame.h"
+#include "..\ClientLogic\Common\inc\define.h"
 
 class NDAnimationGroup;
 
@@ -119,6 +120,8 @@ public:
 //		参数：无
 //		返回值：无		
 	virtual void stopMoving(); //{ m_moving = false; }
+
+	virtual void standAction(bool bStand);
 //		
 //		函数：GetOrder
 //		作用：获取精灵的排序重心值
@@ -372,6 +375,7 @@ public:
 		return m_bReverse;
 	}
 protected:
+
 	void MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed,
 			bool moveMap, bool ignoreMask = false, bool mustArrive = false);
 	virtual void OnMoveBegin();
@@ -381,32 +385,54 @@ protected:
 
 protected:
 
-	std::string m_hairImage, m_faceImage, m_expressionImage, m_capImage,
-			m_armorImage, m_rightHandWeaponImage, m_leftHandWeaponImage,
-			m_doubleHandWeaponImage, m_dualSwordImage, m_dualKnifeImage,
-			m_doubleHandWandImage, m_doubleHandBowImage, m_shieldImage,
-			m_faqiImage, m_cloakImage, m_doubleHandSpearImage;
-	std::string m_leftShoulderImage, m_rightShoulderImage, m_skirtStandImage,
-			m_skirtWalkImage, m_skirtSitImage, m_skirtLiftLegImage;
-	std::string colorInfoImage;
+	std::string m_strHairImage;
+	std::string m_strFaceImage;
+	std::string m_strExpressionImage;
+	std::string m_strCapImage;
+	std::string m_strArmorImage;
+	std::string m_strRightHandWeaponImage;
+	std::string m_strLeftHandWeaponImage;
+	std::string m_strDoubleHandWeaponImage;
+	std::string m_strDualSwordImage;
+	std::string m_strDualKnifeImage;
+	std::string m_strDoubleHandWandImage;
+	std::string m_strDoubleHandBowImage;
+	std::string m_strShieldImage;
+	std::string m_strFaqiImage;
+	std::string m_strCloakImage;
+	std::string m_strDoubleHandSpearImage;
+	std::string m_strLeftShoulderImage;
+	std::string m_strRightShoulderImage;
+	std::string m_strSkirtStandImage;
+	std::string m_strSkirtWalkImage;
+	std::string m_strSkirtSitImage;
+	std::string m_strSkirtLiftLegImage;
+	std::string m_strColorInfoImage;
 
-	int m_weaponType, m_secWeaponType, m_weaponQuality, m_secWeaponQuality,
-			m_capQuality, m_armorQuality, m_cloakQuality;
+	int m_nMasterWeaponType;
+	int m_nSecondWeaponType;
+	int m_nMasterWeaponQuality;
+	int m_nSecondWeaponQuality;
+	int m_nCapQuality;
+	int m_nArmorQuality;
+	int m_nCloakQuality;
+
 	CGPoint m_kPosition;
-	NDAnimation *m_pkCurrentAnimation;
-	NDFrameRunRecord *m_pkFrameRunRecord;
-	NDAnimationGroup *m_pkAniGroup;
+	NDAnimation* m_pkCurrentAnimation;
+	NDFrameRunRecord* m_pkFrameRunRecord;
+	NDAnimationGroup* m_pkAniGroup;
+
 	bool m_bReverse;
 	bool m_bMoveMap;
 	bool m_bIsMoving;
-	int m_nMovePathIndex;
 
+	int m_nMovePathIndex;
 	int m_nNPCLookface;
 	int m_nColorInfo;
 	int m_nCloak;
+	int m_nSpeed;
 
 	std::vector<CGPoint> m_kPointList;
-	int m_iSpeed;
 	CGPoint m_kTargetPos;
 
 	bool m_bNonRole;
@@ -414,9 +440,10 @@ protected:
 public:
 	bool m_bFaceRight;		// 精灵面部朝向
 private:
-	NDPicture *m_picSprite;
+	NDPicture* m_pkPicSprite;
 	CGRect m_kRectSprite;
 	bool m_bHightLight;
+	NSTimeInterval m_dBeginTime;
 };
 }
 

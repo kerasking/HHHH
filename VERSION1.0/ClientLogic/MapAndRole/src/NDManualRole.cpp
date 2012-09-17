@@ -335,7 +335,7 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 	m_nDirect = 2;
 
 //		if (sex % 2 == SpriteSexMale) 
-	int nModelID = 2;//lookface / 1000000;
+	int nModelID = 8;//lookface / 1000000;
 	//	if (sex % 2 == SpriteSexMale)
 
 	NSString* pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
@@ -1271,7 +1271,7 @@ void NDManualRole::SetPosition(CGPoint newPosition)
 		//ridepet->SetPosition(newPosition);
 	}
 
-	SetAction(true);
+	//SetAction(true);
 }
 
 void NDManualRole::OnMoveTurning(bool bXTurnigToY, bool bInc)
@@ -2051,7 +2051,7 @@ void NDManualRole::ShowNameLabel(bool bDraw)
 	}
 
 	bool isEnemy = false;
-	std::string names = m_name;
+	std::string names = m_strName;
 	NDPlayer& player = NDPlayer::defaultHero();
 	CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
 	int iX = GetPosition().x - DISPLAY_POS_X_OFFSET;
@@ -2256,7 +2256,7 @@ void NDManualRole::refreshEquipmentEffectData()
 {
 	if (!isTransformed())
 	{
-		if (this->m_armorQuality > 8 || this->m_cloakQuality > 8)
+		if (this->m_nArmorQuality > 8 || this->m_nCloakQuality > 8)
 		{
 			SafeAddEffect(m_pkEffectArmorAniGroup, "effect_4001.spr");
 		}

@@ -41,14 +41,14 @@ struct FileOp
 			return false;
 		size_t size = sizeof(unsigned short);
 		usData = 0;
-		unsigned char shortBuf[2] =
+		unsigned char ucShortBuf[2] =
 		{ 0x00 };
-		size_t read = fread(&shortBuf, 1, size, f);
+		size_t read = fread(&ucShortBuf, 1, size, f);
 		if (size != read)
 		{
 			return false;
 		}
-		usData = ((unsigned short) shortBuf[0] << 8) + shortBuf[1];
+		usData = ((unsigned short) ucShortBuf[0] << 8) + ucShortBuf[1];
 		return true;
 	}
 	bool ReadUInt(FILE* f, unsigned int& unData)

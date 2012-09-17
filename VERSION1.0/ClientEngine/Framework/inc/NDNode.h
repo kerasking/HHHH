@@ -124,7 +124,7 @@ public:
 protected:
 	std::vector<NDNode*> m_pkChildrenList;
 	NDNode* m_pkParent;
-	bool m_drawEnabled;
+	bool m_bDrawEnabled;
 
 	void SetParent(NDNode* node);
 
@@ -132,7 +132,7 @@ public:
 	void SetDestroyNotify(LuaObject func);
 	bool GetDestroyNotify(LuaObject& func);
 private:
-	LuaObject m_delegateDestroy;
+	LuaObject m_kDelegateDestroy;
 
 public:
 	void SetPosx(int nposx)
@@ -161,10 +161,10 @@ public:
 	}
 
 private:
-	//灞忓箷鏍煎瓙鍧愭爣
+	//屏幕格子坐标
 	int m_nPosx;
 	int m_nPosy;
-	int m_nLevel; //鏁板??艰秺楂樼骇鍒秺楂橈紝鏁板??间负0涓嶅仛鎺掑簭澶勭悊
+	int m_nLevel; //数值越高级别越高，数值为0不做排序处理
 
 public:
 	void AddViewer(NDCommonProtocol* viewer);

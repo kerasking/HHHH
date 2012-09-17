@@ -15,8 +15,10 @@ using namespace cocos2d;
 
 NDAnimation::NDAnimation() :
 m_pkFrames(NULL),
-m_nX(0), m_nY(0),
-m_nW(0), m_nH(0),
+m_nX(0),
+m_nY(0),
+m_nW(0),
+m_nH(0),
 m_nMidX(0),
 m_nBottomY(0),
 m_nType(0),
@@ -56,11 +58,13 @@ CGRect NDAnimation::getRect()
 }
 
 void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
-		bool bNeedDraw, float drawScale)
+		bool bNeedDraw, float fDrawScale)
 {
-	if (m_pkFrames->count())
+	unsigned int uiFrameCount = m_pkFrames->count();
+
+	if (uiFrameCount)
 	{
-		if (pkRunFrameRecord->getCurrentFrameIndex() >= (int) m_pkFrames->count())
+		if (pkRunFrameRecord->getCurrentFrameIndex() >= (int) uiFrameCount)
 		{
 			return;
 		}
@@ -76,7 +80,7 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 
 				if (bNeedDraw)
 				{
-					pkFrame->run(drawScale);
+					pkFrame->run(fDrawScale);
 				}
 
 				return;
@@ -87,7 +91,7 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 
 				if (bNeedDraw)
 				{
-					pkFrame->run(drawScale);
+					pkFrame->run(fDrawScale);
 				}
 
 				return;
@@ -97,6 +101,9 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 		//获取动画的当前帧
 		NDFrame *pkFrame = m_pkFrames->getObjectAtIndex(
 				pkRunFrameRecord->getCurrentFrameIndex());
+
+		pkRunFrameRecord->setTotalFrame((int) uiFrameCount);
+		pkRunFrameRecord->setEnduration(pkFrame->getEnduration());
 
 		//判断是否允许跑下一帧，如果允许则跑下一帧，否则还是跑当前帧
 		if (pkFrame->enableRunNextFrame(pkRunFrameRecord))
@@ -136,7 +143,7 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 		if (bNeedDraw)
 		{
 			//跑一帧
-			pkFrame->run(drawScale);
+			pkFrame->run(fDrawScale);
 		}
 	}
 }
@@ -157,4 +164,15 @@ void NDAnimation::SlowDown(unsigned int multi)
 			pkFrame->setEnduration(pkFrame->getEnduration() * multi);
 		}
 	}
+}
+
+bool NDAnimation::lastFrameEnd( NDFrameRunRecord* pkRunRecord )
+{
+	if (pkRunRecord->isThisFrameEnd())
+	{
+		return pkRunRecord->getCurrentFrameIndex() ==
+			pkRunRecord->getTotalFrame() - 1 && pkRunRecord->getRepeatTimes() <= 1;
+	}
+
+	return false;
 }

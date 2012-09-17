@@ -102,7 +102,7 @@ public:
 	void endBattle();
 	int getState()
 	{
-		return state;
+		return m_nState;
 	}
 	void restorePosition();
 	void changeLookface(int lookface);
@@ -131,13 +131,13 @@ public:
 	void setState(int monsterState);
 	void setOriginalPosition(int o_x, int o_y);
 public:
-	int state;						//怪物状态
+	int m_nState;						//怪物状态
 private:
 	int m_nAttackArea;					//怪物攻击范围
 	int m_nType;						//怪物类型
-	CGSize m_moveSize;
+	CGSize m_kMoveSize;
 	int m_nFigure;						// 体型：0-小只，1-大只。
-	NDSprite *bossRing;				//精英怪光环
+	NDSprite* m_pkBossRing;				//精英怪光环
 	NDUILabel *m_lbName;
 	bool m_bIsHunt;
 	int m_nOriginal_x;
@@ -150,41 +150,42 @@ public:
 	bool m_bIsAutoAttack; // 怪物主动攻击
 	int m_nMonsterCatogary;
 
-	int self_move_rectw;
-	int self_move_rectH; // 怪物活动范围we
-	int selfMoveRectX, selfMoveRectY; // 怪物自身活动范围的左上角xy
+	int m_nSelfMoveRectW;
+	int m_nSelfMoveRectH; // 怪物活动范围we
+	int m_nSelfMoveRectX;
+	int m_nSelfMoveRectY; // 怪物自身活动范围的左上角xy
 
-	bool isMonsterCollide; // 表示怪物碰撞后不能运动
+	bool m_bIsMonsterCollide; // 表示怪物碰撞后不能运动
+	bool m_bIsFrozen; // 精英怪才有冻结状态
 
-	bool isFrozen; // 精英怪才有冻结状态
+	long m_nDeadTime;
+	long m_nFrozenTime; // 怪物死亡时间,精英怪冻结
 
-	long deadTime, frozenTime; // 怪物死亡时间,精英怪冻结
 private:
+
 	int m_nMoveCount; // 有基数计算得出的步数
+	int m_nStopTimeCount; // 每次怪走完路后会固定停顿一定时间
+	int m_nCurStopCount; // 表当前停顿
+	int m_nCurMoveCount; // 配合EVERY_MOVE_COUNT, 将每一步拆分多个小步
 
-	int stop_time_count; // 每次怪走完路后会固定停顿一定时间
-
-	int curStopCount; // 表当前停顿
-
-	int curMoveCount; // 配合EVERY_MOVE_COUNT, 将每一步拆分多个小步
-
-	int curCount; // 表当前步数
+	int m_nCurCount; // 表当前步数
 
 	/** 某些资源朝向相反需重新定义移动方向如坐骑 */
-	bool turnFace;
+	bool m_bTurnFace;
 
 	bool m_bCanBattle;
 
 	//守卫,没用到
-	int moveRectW;
-	int moveRectH;
+	int m_nMoveRectW;
+	int m_nMoveRectH;
 
-	double m_timeBossProtect;
+	double m_dTimeBossProtect;
+
 public:
 	//是否是战场里的
-	bool bBattleMap;
-	bool isSafeProtected;
-	bool bClear;
+	bool m_bBattleMap;
+	bool m_bIsSafeProtected;
+	bool m_bClear;
 
 	DECLARE_AUTOLINK (NDMonster)
 	INTERFACE_AUTOLINK (NDMonster)

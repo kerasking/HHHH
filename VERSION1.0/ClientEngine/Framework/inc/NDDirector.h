@@ -223,8 +223,8 @@ private:
 private:
 	cocos2d::CCDirector* m_pkDirector;
 	std::vector<NDScene*> m_kScenesStack;
-	NDNode* m_setViewRectNode;
-	bool m_resetViewRect;
+	NDNode* m_pkSetViewRectNode;
+	bool m_bResetViewRect;
 	std::vector<NDObject*> m_delegates;
 
 	void SetDelegate(NDObject* receiver)
@@ -242,8 +242,8 @@ private:
 	void BeforeDirectorPushScene(NDScene* scene);
 	void AfterDirectorPushScene(NDScene* scene);
 
-	NDScene *m_TransitionSceneWait;
-	TransitionSceneType m_TransitionSceneType;
+	NDScene* m_pkTransitionSceneWait;
+	TransitionSceneType m_eTransitionSceneType;
 };
 }
 

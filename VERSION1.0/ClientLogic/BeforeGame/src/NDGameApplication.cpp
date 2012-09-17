@@ -133,7 +133,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	//ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
 
 	NDPlayer::pugeHero();
-	NDPlayer& kPlayer = NDPlayer::defaultHero(1);
+	NDPlayer& kPlayer = NDPlayer::defaultHero(8);
 
 	int x = 100;
 	int y = 100;
@@ -141,7 +141,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	kPlayer.SetPosition(ccp(528, 512));		///< x * 32 + 16, y * 32 + 16
 	kPlayer.SetServerPositon(x, y);
 	kPlayer.m_nID = 1;
-	kPlayer.m_name = "白富美";
+	kPlayer.m_strName = "白富美";
 	kPlayer.SetLoadMapComplete();
 
 	NDScene* pkScene = pkDirector->GetRunningScene();
@@ -154,7 +154,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 	NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
 	pkLayer->AddChild(&kPlayer, 111, 1000);
-	kPlayer.SetCurrentAnimation(MANUELROLE_STAND,true);
+	kPlayer.standAction(true);
 
 // 	//add by ZhangDi 120904
 // 	DramaObj.Start();
@@ -170,34 +170,37 @@ bool NDGameApplication::applicationDidFinishLaunching()
 // 	DramaObj.AddCommond(commandSprite);
 
 
-	for(int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
-		NDNpc *npc = new NDNpc;
-		npc->m_nID = 10001+i;
+		NDNpc* npc = new NDNpc;
+		npc->m_nID = 10001 + i;
 		//npc->col = 9;
 		//npc->row = 11;
 		//npc->look = 31000112;
 
-		switch(i)
+		switch (i)
 		{
-			case 0:
-				npc->m_name = "郭嘉";
-				break;
-			case 1:
-				npc->m_name = "华佗";
-				break;
-			case 2:
-				npc->m_name = "袁绍";
-				break;
-			case 3:
-				npc->m_name = "刘表";
-				break;
-			default:
-				npc->m_name = "西门无名";
-				break;
+		case 0:
+			npc->m_strName = "郭嘉";
+			break;
+		case 1:
+			npc->m_strName = "华佗";
+			break;
+		case 2:
+			npc->m_strName = "袁绍";
+			break;
+		case 3:
+			npc->m_strName = "刘表";
+			break;
+		default:
+			npc->m_strName = "西门无名";
+			break;
 		}
-		npc->Initialization(111 + i);//31000112
-		npc->SetPosition(ccp((5 + i * 15) * MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, 11 * MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+		npc->Initialization(111 + i);		//31000112
+		npc->SetPosition(
+				ccp((5 + i * 6) * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+						11 * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+
 		//npc->dataStr = "哈哈";
 		//npc->talkStr = "你想知道什么？";
 		npc->SetType(0);
@@ -205,9 +208,9 @@ bool NDGameApplication::applicationDidFinishLaunching()
 		//npc->SetDirectOnTalk(FALSE);
 		//npc->initUnpassPoint();
 
-		if(!pkLayer->ContainChild(npc))
+		if (!pkLayer->ContainChild(npc))
 		{
-			pkLayer->AddChild((NDNode *)npc, 100 + i, 10001 + i);
+			pkLayer->AddChild((NDNode *) npc, 100 + i, 10001 + i);
 			//npc->HandleNpcMask(TRUE);
 		}
 

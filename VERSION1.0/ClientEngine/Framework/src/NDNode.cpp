@@ -23,7 +23,7 @@ m_nPosy(-1)
 {
 	m_pkParent = NULL;
 	m_ccNode = NULL;
-	m_drawEnabled = true;
+	m_bDrawEnabled = true;
 	m_nParam1 = 0;
 	m_nParam2 = 0;
 }
@@ -342,20 +342,20 @@ bool NDNode::IsChildOf(NDNode* node)
 
 void NDNode::EnableDraw(bool enabled)
 {
-	m_drawEnabled = enabled;
+	m_bDrawEnabled = enabled;
 
 	std::vector<NDNode*>::iterator iter;
-	for (iter = m_pkChildrenList.begin(); iter != m_pkChildrenList.end();
-			iter++)
+	for (iter = m_pkChildrenList.begin();
+		iter != m_pkChildrenList.end();iter++)
 	{
 		NDNode* node = (NDNode*) *iter;
-		node->EnableDraw(m_drawEnabled);
+		node->EnableDraw(m_bDrawEnabled);
 	}
 }
 
 bool NDNode::DrawEnabled()
 {
-	return m_drawEnabled;
+	return m_bDrawEnabled;
 }
 
 void NDNode::SetParam1(int nParam1)
@@ -380,17 +380,17 @@ int NDNode::GetParam2()
 
 void NDNode::SetDestroyNotify(LuaObject func)
 {
-	m_delegateDestroy = func;
+	m_kDelegateDestroy = func;
 }
 
 bool NDNode::GetDestroyNotify(LuaObject& func)
 {
-	if (!m_delegateDestroy.IsFunction())
+	if (!m_kDelegateDestroy.IsFunction())
 	{
 		return false;
 	}
 
-	func = m_delegateDestroy;
+	func = m_kDelegateDestroy;
 
 	return true;
 }
@@ -445,4 +445,5 @@ bool NDNode::DispatchClickOfViewr(NDObject* object)
 
 	return bDeal;
 }
+
 }

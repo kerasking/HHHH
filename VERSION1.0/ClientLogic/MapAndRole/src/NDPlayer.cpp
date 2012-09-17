@@ -742,7 +742,7 @@ void NDPlayer::OnMoveEnd()
 		return;
 	}
 
-	SetAction(false);
+	//SetAction(false);
 	//SetCurrentAnimation(MANUELROLE_STAND,false);
 	NDManualRole::OnMoveEnd();
 	if (isTeamLeader())
@@ -783,36 +783,36 @@ void NDPlayer::CaclEquipEffect()
 			continue;
 		}
 
-		Item* item = ItemMgrObj.GetEquipItemByPos((Item::eEquip_Pos) i);
-		if (item == NULL)
+		Item* pkItem = ItemMgrObj.GetEquipItemByPos((Item::eEquip_Pos) i);
+		if (pkItem == NULL)
 		{
 			continue;
 		}
 
-		NDItemType *itemtype = ItemMgrObj.QueryItemType(item->iItemType);
+		NDItemType *itemtype = ItemMgrObj.QueryItemType(pkItem->iItemType);
 		if (itemtype == NULL)
 		{
 			continue;
 		}
 
-		m_eAtkSpd += itemtype->m_data.m_atk_speed + item->getInlayAtk_speed();
+		m_eAtkSpd += itemtype->m_data.m_atk_speed + pkItem->getInlayAtk_speed();
 
-		m_eAtk += item->getAdditionResult(itemtype->m_data.m_enhancedId,
-				item->iAddition, itemtype->m_data.m_atk) + item->getInlayAtk();
-		m_eDef += item->getAdditionResult(itemtype->m_data.m_enhancedId,
-				item->iAddition, itemtype->m_data.m_def) + item->getInlayDef();
+		m_eAtk += pkItem->getAdditionResult(itemtype->m_data.m_enhancedId,
+				pkItem->iAddition, itemtype->m_data.m_atk) + pkItem->getInlayAtk();
+		m_eDef += pkItem->getAdditionResult(itemtype->m_data.m_enhancedId,
+				pkItem->iAddition, itemtype->m_data.m_def) + pkItem->getInlayDef();
 		m_eHardAtk += itemtype->m_data.m_hard_hitrate
-				+ item->getInlayHard_hitrate();
-		m_eSkillAtk += item->getAdditionResult(itemtype->m_data.m_enhancedId,
-				item->iAddition, itemtype->m_data.m_mag_atk)
-				+ item->getInlayMag_atk();
-		m_eSkillDef += item->getAdditionResult(itemtype->m_data.m_enhancedId,
-				item->iAddition, itemtype->m_data.m_mag_def)
-				+ item->getInlayMag_def();
+				+ pkItem->getInlayHard_hitrate();
+		m_eSkillAtk += pkItem->getAdditionResult(itemtype->m_data.m_enhancedId,
+				pkItem->iAddition, itemtype->m_data.m_mag_atk)
+				+ pkItem->getInlayMag_atk();
+		m_eSkillDef += pkItem->getAdditionResult(itemtype->m_data.m_enhancedId,
+				pkItem->iAddition, itemtype->m_data.m_mag_def)
+				+ pkItem->getInlayMag_def();
 		m_eSkillHard += itemtype->m_data.m_mana_limit
-				+ item->getInlayMana_limit();
-		m_eDodge += itemtype->m_data.m_dodge + item->getInlayDodge();
-		m_ePhyHit += itemtype->m_data.m_hitrate + item->getInlayHitrate(); // 物理命中
+				+ pkItem->getInlayMana_limit();
+		m_eDodge += itemtype->m_data.m_dodge + pkItem->getInlayDodge();
+		m_ePhyHit += itemtype->m_data.m_hitrate + pkItem->getInlayHitrate(); // 物理命中
 	}
 }
 

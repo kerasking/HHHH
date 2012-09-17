@@ -182,7 +182,7 @@ private:
 	cocos2d::CCArray* m_pkOrders;
 	cocos2d::CCArray* m_pkOrdersOfMapscenesAndMapanimations;
 	NDMapData *m_pkMapData;
-	cocos2d::CCMutableArray<cocos2d::CCMutableArray<NDFrameRunRecord*>*> *m_pkFrameRunRecordsOfMapAniGroups;
+	cocos2d::CCMutableArray<cocos2d::CCMutableArray<NDFrameRunRecord*>*>* m_pkFrameRunRecordsOfMapAniGroups;
 	cocos2d::CCMutableArray<NDFrameRunRecord*> *m_pkFrameRunRecordsOfMapSwitch;
 	NDAnimationGroup* m_pkSwitchAniGroup;
 	NDSprite *m_pkTreasureBox;
