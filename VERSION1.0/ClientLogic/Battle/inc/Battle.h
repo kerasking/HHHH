@@ -132,10 +132,10 @@ public:
 	~HighlightTip();
 
 	void Initialization();
-	void SetFighter(Fighter* f);
+	void SetFighter(Fighter* pkFighter);
 
 private:
-	NDPicture *m_picBubble;
+	NDPicture* m_pkPicBubble;
 
 	HighlightTipStatusBar* m_hpBar;
 	HighlightTipStatusBar* m_mpBar;
@@ -382,19 +382,20 @@ private:
 		return *this;
 	}
 
-	static bool s_bAuto;
-	static BattleAction s_lastTurnActionUser;
-	static BattleAction s_lastTurnActionEudemon;
+	static bool ms_bAuto;
+	static BattleAction ms_kLastTurnActionUser;
+	static BattleAction ms_kLastTurnActionEudemon;
 
-	bool m_bTurnStart, m_bTurnStartPet;
+	bool m_bTurnStart;
+	bool m_bTurnStartPet;
 	BATTLE_ACTION m_defaultActionUser;
-	Fighter* m_defaultTargetUser;
-	int m_defaultSkillID;
+	Fighter* m_pkDefaultTargetUser;
+	int m_nDefaultSkillID;
 	BATTLE_ACTION m_defaultActionEudemon;
 	Fighter* m_defaultTargetEudemon;
 	int m_defaultSkillIDEudemon;
-	int m_lastSkillPageUser;
-	int m_lastSkillPageEudemon;
+	int m_nLastSkillPageUser;
+	int m_nLastSkillPageEudemon;
 	NDAnimationGroup* dieAniGroup;
 	typedef vector<Command*> VEC_COMMAND;
 	typedef VEC_COMMAND::iterator VEC_COMMAND_IT;

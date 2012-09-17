@@ -124,28 +124,28 @@ IMPLEMENT_CLASS(HighlightTip, NDUILayer)
 
 HighlightTip::HighlightTip()
 {
-	m_picBubble = NULL;
+	m_pkPicBubble = NULL;
 	m_hpBar = NULL;
 	m_mpBar = NULL;
 }
 HighlightTip::~HighlightTip()
 {
-	CC_SAFE_DELETE (m_picBubble);
+	CC_SAFE_DELETE (m_pkPicBubble);
 }
 
 void HighlightTip::Initialization()
 {
 	NDUILayer::Initialization();
 
-	m_picBubble = new NDPicture;
-	m_picBubble->Initialization(NDPath::GetImgPath("ui_map.png"), 70, 60);
+	m_pkPicBubble = new NDPicture;
+	m_pkPicBubble->Initialization(NDPath::GetImgPath("ui_map.png"), 70, 60);
 
 	NDUIImage* pImgBubble = new NDUIImage;
 	pImgBubble->Initialization();
 	pImgBubble->SetFrameRect(
-			CGRectMake(0, 0, m_picBubble->GetSize().width,
-					m_picBubble->GetSize().height));
-	pImgBubble->SetPicture(m_picBubble, false);
+			CGRectMake(0, 0, m_pkPicBubble->GetSize().width,
+					m_pkPicBubble->GetSize().height));
+	pImgBubble->SetPicture(m_pkPicBubble, false);
 	this->AddChild(pImgBubble);
 
 	NDUIImage* imgHp = new NDUIImage;
@@ -187,65 +187,65 @@ void HighlightTip::Initialization()
 	this->EnableEvent(false);
 }
 
-void HighlightTip::SetFighter(Fighter* f)
+void HighlightTip::SetFighter(Fighter* pkFighter)
 {
-	if (!f)
+	if (!pkFighter)
 	{
 		return;
 	}
 
-	NDBaseRole* role = f->GetRole();
-	CGPoint pt = CGPointMake(f->getX(), f->getY());
+	NDBaseRole* pkRole = pkFighter->GetRole();
+	CGPoint kPoint = CGPointMake(pkFighter->getX(), pkFighter->getY());
 
-	CGRect rect = CGRectMake(pt.x, pt.y, m_picBubble->GetSize().width,
-			m_picBubble->GetSize().height);
+	CGRect kRect = CGRectMake(kPoint.x, kPoint.y, m_pkPicBubble->GetSize().width,
+			m_pkPicBubble->GetSize().height);
 
-	rect.origin.x -= rect.size.width / 2;
+	kRect.origin.x -= kRect.size.width / 2;
 
-	if (rect.origin.x < 0)
+	if (kRect.origin.x < 0)
 	{
-		rect.origin.x = 0;
+		kRect.origin.x = 0;
 	}
 
-	rect.origin.y = rect.origin.y - role->GetHeight() - rect.size.height;
+	kRect.origin.y = kRect.origin.y - pkRole->GetHeight() - kRect.size.height;
 
-	if (rect.origin.y < 0)
+	if (kRect.origin.y < 0)
 	{
-		rect.origin.y = 0;
+		kRect.origin.y = 0;
 	}
 
-	this->SetFrameRect(rect);
+	this->SetFrameRect(kRect);
 
-	m_hpBar->SetNum(f->m_info.nLife, f->m_info.nLifeMax);
+	m_hpBar->SetNum(pkFighter->m_info.nLife, pkFighter->m_info.nLifeMax);
 	m_hpBar->SetFrameRect(
-			CGRectMake(rect.origin.x + 16, rect.origin.y + 20, 40, 10));
-	m_imgNumHp->SetSmallRedTwoNumber(f->m_info.nLife, f->m_info.nLifeMax);
+			CGRectMake(kRect.origin.x + 16, kRect.origin.y + 20, 40, 10));
+	m_imgNumHp->SetSmallRedTwoNumber(pkFighter->m_info.nLife, pkFighter->m_info.nLifeMax);
 
-	m_mpBar->SetNum(f->m_info.nMana, f->m_info.nManaMax);
+	m_mpBar->SetNum(pkFighter->m_info.nMana, pkFighter->m_info.nManaMax);
 	m_mpBar->SetFrameRect(
-			CGRectMake(rect.origin.x + 16, rect.origin.y + 38, 40, 10));
-	m_imgNumMp->SetSmallRedTwoNumber(f->m_info.nMana, f->m_info.nManaMax);
+			CGRectMake(kRect.origin.x + 16, kRect.origin.y + 38, 40, 10));
+	m_imgNumMp->SetSmallRedTwoNumber(pkFighter->m_info.nMana, pkFighter->m_info.nManaMax);
 
-	NDUILabel* name = (NDUILabel*) this->GetChild(TAG_NAME);
+	NDUILabel* pkNameLabel = (NDUILabel*) this->GetChild(TAG_NAME);
 
-	if (!name)
+	if (!pkNameLabel)
 	{
-		name = new NDUILabel;
-		name->SetFontColor(ccc4(255, 255, 255, 255));
-		name->Initialization();
-		name->SetTag(TAG_NAME);
-		this->AddChild(name);
+		pkNameLabel = new NDUILabel;
+		pkNameLabel->SetFontColor(ccc4(255, 255, 255, 255));
+		pkNameLabel->Initialization();
+		pkNameLabel->SetTag(TAG_NAME);
+		this->AddChild(pkNameLabel);
 	}
-	std::stringstream ss;
-	ss << role->m_strName << "Lv" << role->m_nLevel;
+	std::stringstream kStringStream;
+	kStringStream << pkRole->m_strName << "Lv" << pkRole->m_nLevel;
 	//	if (f->m_info.fighterType == Fighter_TYPE_RARE_MONSTER)
 	//	{
 	//		ss << "【" << NDCommonCString("xiyou") << "】"; 
 	//	}
-	name->SetText(ss.str().c_str());
-	CGSize sizeName = getStringSize(ss.str().c_str(), 15);
-	name->SetFrameRect(
-			CGRectMake((rect.size.width - sizeName.width) / 2, 0,
+	pkNameLabel->SetText(kStringStream.str().c_str());
+	CGSize sizeName = getStringSize(kStringStream.str().c_str(), 15);
+	pkNameLabel->SetFrameRect(
+			CGRectMake((kRect.size.width - sizeName.width) / 2, 0,
 					sizeName.width, sizeName.height));
 }
 
@@ -265,19 +265,19 @@ enum
 
 const char* TEXT_VIEW_STATUS = NDCommonCString("ViewState");
 
-bool Battle::s_bAuto = false;
-BattleAction Battle::s_lastTurnActionUser(BATTLE_ACT_PHY_ATK);
-BattleAction Battle::s_lastTurnActionEudemon(BATTLE_ACT_PET_PHY_ATK);
+bool Battle::ms_bAuto = false;
+BattleAction Battle::ms_kLastTurnActionUser(BATTLE_ACT_PHY_ATK);
+BattleAction Battle::ms_kLastTurnActionEudemon(BATTLE_ACT_PET_PHY_ATK);
 
 IMPLEMENT_CLASS(Battle, NDUILayer)
 
 void Battle::ResetLastTurnBattleAction()
 {
-	s_bAuto = false;
-	s_lastTurnActionUser.btAction = BATTLE_ACT_PHY_ATK;
-	s_lastTurnActionUser.vData.clear();
-	s_lastTurnActionEudemon.btAction = BATTLE_ACT_PET_PHY_ATK;
-	s_lastTurnActionEudemon.vData.clear();
+	ms_bAuto = false;
+	ms_kLastTurnActionUser.btAction = BATTLE_ACT_PHY_ATK;
+	ms_kLastTurnActionUser.vData.clear();
+	ms_kLastTurnActionEudemon.btAction = BATTLE_ACT_PET_PHY_ATK;
+	ms_kLastTurnActionEudemon.vData.clear();
 }
 
 Battle::Battle()
@@ -1053,7 +1053,7 @@ void Battle::Initialization(int action)
 	 m_battleOpt->SetDataSource(ds);
 	 this->AddChild(m_battleOpt);*/
 
-	if (s_bAuto)
+	if (ms_bAuto)
 	{
 		this->SetAutoCount();
 	}
@@ -1062,7 +1062,7 @@ void Battle::Initialization(int action)
 	//	m_playerHead->Initialization(true);
 	//	this->AddChild(m_playerHead);
 
-	if (s_bAuto)
+	if (ms_bAuto)
 	{
 		//this->RemoveChild(m_battleOpt, false);
 		m_timer.SetTimer(this, TIMER_AUTOFIGHT, 0.5f);
@@ -1627,7 +1627,7 @@ void Battle::OnBtnDefence()
 {
 	//m_battleOpt->RemoveFromParent(false);
 
-	s_lastTurnActionUser.btAction = BATTLE_ACT_PHY_DEF;
+	ms_kLastTurnActionUser.btAction = BATTLE_ACT_PHY_DEF;
 
 	BattleAction actioin(BATTLE_ACT_PHY_DEF);
 	this->SendBattleAction(actioin);
@@ -1774,7 +1774,7 @@ void Battle::OnBtnAttack()
 
 void Battle::stopAuto()
 {
-	if (s_bAuto)
+	if (ms_bAuto)
 	{
 		//		m_timer.KillTimer(this, TIMER_AUTOCOUNT);
 		//		this->RemoveChild(m_lbAuto, false);
@@ -1782,7 +1782,7 @@ void Battle::stopAuto()
 		//		SAFE_DELETE(m_lbAuto);
 		//		SAFE_DELETE(m_imgAutoCount);
 		//		this->m_autoCount = AUTO_COUNT;
-		s_bAuto = false;
+		ms_bAuto = false;
 		//		m_btnAuto->SetImage(m_picAuto);
 	}
 }
@@ -1814,9 +1814,9 @@ void Battle::OnBtnAuto(bool bSendAction)
 
 	this->m_autoCount = 0;
 
-	if (!s_bAuto)
+	if (!ms_bAuto)
 	{
-		s_bAuto = true;
+		ms_bAuto = true;
 		//this->SetAutoCount();
 		//		m_btnAuto->SetImage(m_picAutoCancel);
 		//		m_fighterRight->SetShrink(true);
@@ -1833,19 +1833,19 @@ void Battle::OnBtnAuto(bool bSendAction)
 			&& this->GetMainUser()->isAlive())
 	{
 		bool bUserActionSend = false;
-		switch (s_lastTurnActionUser.btAction)
+		switch (ms_kLastTurnActionUser.btAction)
 		{
 		case BATTLE_ACT_PHY_ATK:
-			s_lastTurnActionUser.vData.clear();
-			s_lastTurnActionUser.vData.push_back(0);
+			ms_kLastTurnActionUser.vData.clear();
+			ms_kLastTurnActionUser.vData.push_back(0);
 			break;
 		case BATTLE_ACT_PHY_DEF:
-			s_lastTurnActionUser.vData.clear();
+			ms_kLastTurnActionUser.vData.clear();
 			break;
 		case BATTLE_ACT_MAG_ATK:
 		{
 			if (this->m_setBattleSkillList.count(
-					s_lastTurnActionUser.vData.at(0)) == 0)
+					ms_kLastTurnActionUser.vData.at(0)) == 0)
 			{ // 该技能本回合已不可使用
 				BattleAction atk(BATTLE_ACT_PHY_ATK);
 				atk.vData.push_back(0);
@@ -1855,15 +1855,15 @@ void Battle::OnBtnAuto(bool bSendAction)
 		}
 			break;
 		default:
-			s_lastTurnActionUser.btAction = BATTLE_ACT_PHY_ATK;
-			s_lastTurnActionUser.vData.clear();
-			s_lastTurnActionUser.vData.push_back(0);
+			ms_kLastTurnActionUser.btAction = BATTLE_ACT_PHY_ATK;
+			ms_kLastTurnActionUser.vData.clear();
+			ms_kLastTurnActionUser.vData.push_back(0);
 			break;
 		}
 
 		if (!bUserActionSend)
 		{
-			this->SendBattleAction(s_lastTurnActionUser);
+			this->SendBattleAction(ms_kLastTurnActionUser);
 		}
 	}
 
@@ -1871,20 +1871,20 @@ void Battle::OnBtnAuto(bool bSendAction)
 	if (this->m_mainEudemon && m_mainEudemon->isAlive()
 			&& !m_mainEudemon->isEscape())
 	{
-		switch (s_lastTurnActionEudemon.btAction)
+		switch (ms_kLastTurnActionEudemon.btAction)
 		{
 		case BATTLE_ACT_PET_PHY_DEF:
-			s_lastTurnActionEudemon.vData.clear();
+			ms_kLastTurnActionEudemon.vData.clear();
 			break;
 		case BATTLE_ACT_PET_MAG_ATK:
 			break;
 		default:
-			s_lastTurnActionEudemon.btAction = BATTLE_ACT_PET_PHY_ATK;
-			s_lastTurnActionEudemon.vData.clear();
-			s_lastTurnActionEudemon.vData.push_back(0);
+			ms_kLastTurnActionEudemon.btAction = BATTLE_ACT_PET_PHY_ATK;
+			ms_kLastTurnActionEudemon.vData.clear();
+			ms_kLastTurnActionEudemon.vData.push_back(0);
 			break;
 		}
-		this->SendBattleAction(s_lastTurnActionEudemon);
+		this->SendBattleAction(ms_kLastTurnActionEudemon);
 	}
 }
 
@@ -2015,8 +2015,8 @@ void Battle::Init()
 	//	m_imgQuickTalkBg = NULL;
 	//	m_tlQuickTalk = NULL;
 	m_orignalMapId = 0;
-	m_lastSkillPageUser = 0;
-	m_lastSkillPageEudemon = 0;
+	m_nLastSkillPageUser = 0;
+	m_nLastSkillPageEudemon = 0;
 	//this->m_chatDelegate = [[ChatTextFieldDelegate alloc] init];
 	m_bShowChatTextField = false;
 	//	m_imgChat = NULL;
@@ -2096,8 +2096,8 @@ void Battle::Init()
 	//	m_picBoji->Initialization(GetImgPath("boji.png"));
 
 	m_defaultActionUser = BATTLE_ACT_PHY_ATK;
-	m_defaultTargetUser = NULL;
-	m_defaultSkillID = ID_NONE;
+	m_pkDefaultTargetUser = NULL;
+	m_nDefaultSkillID = ID_NONE;
 
 	m_defaultActionEudemon = BATTLE_ACT_PET_PHY_ATK;
 	m_defaultTargetEudemon = NULL;
@@ -2121,27 +2121,27 @@ Fighter* Battle::GetTouchedFighter(VEC_FIGHTER& fighterList, CGPoint pt)
 	VEC_FIGHTER_IT itBegin = fighterList.begin();
 	VEC_FIGHTER_IT itEnd = fighterList.end();
 
-	Fighter *f;
+	Fighter* pkFighter;
 	for (; itBegin != itEnd; itBegin++)
 	{
-		f = (*itBegin);
-		if (!(f->isVisiable() && f->isVisibleStatus))
+		pkFighter = (*itBegin);
+		if (!(pkFighter->isVisiable() && pkFighter->isVisibleStatus))
 		{
 			continue;
 		}
 
-		NDBaseRole* role = f->GetRole();
-		CGPoint fPos = role->GetPosition();
+		NDBaseRole* pkRole = pkFighter->GetRole();
+		CGPoint fPos = pkRole->GetPosition();
 
-		int w = role->GetWidth();
-		int h = role->GetHeight();
+		int w = pkRole->GetWidth();
+		int h = pkRole->GetHeight();
 
 		fPos.x -= (w >> 1);
 		fPos.y -= h;
 
 		if (IsPointInside(pt, CGRectMake(fPos.x, fPos.y, w, h)))
 		{
-			return f;
+			return pkFighter;
 		}
 	}
 
@@ -3304,7 +3304,7 @@ void Battle::StartFight()
 	{
 		this->RemoveChild(TAG_WAITING, true);
 		this->clearHighlight();
-		if (s_bAuto)
+		if (ms_bAuto)
 		{
 			//			this->RemoveChild(m_imgAutoCount, false);
 			//			this->RemoveChild(m_lbAuto, false);
