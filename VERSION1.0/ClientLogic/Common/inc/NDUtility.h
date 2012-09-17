@@ -36,7 +36,8 @@ void CopyDataToCopyCache(const char* data);
 
 enum
 {
-	STRPARAM = 1, UPDATEURL = 2,
+	STRPARAM = 1,
+	UPDATEURL = 2,
 };
 std::string loadPackInfo(int param);
 

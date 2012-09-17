@@ -2661,7 +2661,7 @@ void Battle::AddCommand(Command* cmd)
 
 void Battle::AddActionCommand(FightAction* action)
 {
-	Fighter* f = action->m_Actor;
+	Fighter* f = action->m_pkActor;
 	int team = 0;
 	if (f)
 	{
@@ -2669,7 +2669,7 @@ void Battle::AddActionCommand(FightAction* action)
 	}
 	else
 	{
-		team = (action->team_Atk - 1) % 3 + 1;
+		team = (action->m_nTeamAttack - 1) % 3 + 1;
 	}
 
 	switch (team)
@@ -2920,7 +2920,7 @@ void Battle::dealWithCommand()
 				action = new FightAction(this->GetFighter(cmd->idActor),
 						this->GetFighter(cmd->idTarget),
 						BATTLE_EFFECT_TYPE(cmd->btEffectType));
-				action->skill = cmd->skill;
+				action->m_pkSkill = cmd->skill;
 				break;
 			case EFFECT_TYPE_TURN_END:
 				NDLog("turn end");
@@ -2940,7 +2940,7 @@ void Battle::dealWithCommand()
 				action = new FightAction(this->GetFighter(cmd->idActor),
 						this->GetFighter(cmd->idTarget),
 						BATTLE_EFFECT_TYPE(cmd->btEffectType));
-				action->data = cmd->nHpLost;
+				action->m_nData = cmd->nHpLost;
 				break;
 				//				case BATTLE_EFFECT_TYPE_DODGE:// 闪避
 				//					if (!theActor || !theTarget) {
@@ -3171,13 +3171,13 @@ void Battle::dealWithCommand()
 						break;
 					case BATTLE_EFFECT_TYPE_SKILL_TARGET:
 						NDLog("%d skill_target", nextCmd->idTarget);
-						if (action->effect_type == BATTLE_EFFECT_TYPE_SKILL)
+						if (action->m_eEffectType == BATTLE_EFFECT_TYPE_SKILL)
 						{
-							action->m_FighterList.push_back(
+							action->m_kFighterList.push_back(
 									GetFighter(nextCmd->idTarget));
-							if (action->m_Target == NULL)
+							if (action->m_pkTarget == NULL)
 							{
-								action->m_Target = GetFighter(
+								action->m_pkTarget = GetFighter(
 										nextCmd->idTarget);
 							}
 						}
@@ -3201,7 +3201,7 @@ void Battle::dealWithCommand()
 						break;
 					case BATTLE_EFFECT_TYPE_COMBO:
 						NDLog("%d combo", nextCmd->idActor);
-						action->isCombo = true;
+						action->m_bIsCombo = true;
 						this->AddActionCommand(action);
 						action = new FightAction(this->GetFighter(cmd->idActor),
 								this->GetFighter(cmd->idTarget),
@@ -3810,12 +3810,12 @@ void Battle::performStatus(Fighter& theTarget)
 
 bool Battle::isActionCanBegin(FightAction* action)
 {
-	Fighter* fighter = action->m_Actor;
+	Fighter* fighter = action->m_pkActor;
 	if (fighter)
 	{
 		if (!fighter->isAlive())
 		{
-			action->action_status = ACTION_STATUS_FINISH;
+			action->m_eActionStatus = ACTION_STATUS_FINISH;
 			NDLog("fighter already dead,action skip");
 			return false;
 		}
@@ -3832,10 +3832,10 @@ bool Battle::isActionCanBegin(FightAction* action)
 	}
 	else
 	{
-		if (action->effect_type == EFFECT_TYPE_BATTLE_BEGIN)
+		if (action->m_eEffectType == EFFECT_TYPE_BATTLE_BEGIN)
 		{
 			TEAM_STATUS status;
-			switch (action->team_Atk)
+			switch (action->m_nTeamAttack)
 			{
 			case 1:
 				status = m_Team1_status;
@@ -3880,26 +3880,26 @@ VEC_FIGHTER& Battle::getDefFightersByTeam(int team)
 
 void Battle::startAction(FightAction* action)
 {
-	switch (action->effect_type)
+	switch (action->m_eEffectType)
 	{
 	case BATTLE_EFFECT_TYPE_ATK:
-		if (action->m_Actor->GetNormalAtkType() == ATKTYPE_NEAR)
+		if (action->m_pkActor->GetNormalAtkType() == ATKTYPE_NEAR)
 		{
-			action->m_Actor->m_action = Fighter::MOVETOTARGET;
+			action->m_pkActor->m_action = Fighter::MOVETOTARGET;
 		}
-		else if (action->m_Actor->GetNormalAtkType() == ATKTYPE_DISTANCE)
+		else if (action->m_pkActor->GetNormalAtkType() == ATKTYPE_DISTANCE)
 		{
-			action->m_Actor->m_action = Fighter::AIMTARGET;
+			action->m_pkActor->m_action = Fighter::AIMTARGET;
 		}
 		break;
 	case BATTLE_EFFECT_TYPE_SKILL:
-		if (action->skill->getAtkType() == SKILL_ATK_TYPE_REMOTE)
+		if (action->m_pkSkill->getAtkType() == SKILL_ATK_TYPE_REMOTE)
 		{
-			action->m_Actor->m_action = Fighter::AIMTARGET;
+			action->m_pkActor->m_action = Fighter::AIMTARGET;
 		}
 		else
 		{
-			action->m_Actor->m_action = Fighter::MOVETOTARGET;
+			action->m_pkActor->m_action = Fighter::MOVETOTARGET;
 		}
 		break;
 	case EFFECT_TYPE_BATTLE_BEGIN:
@@ -3908,17 +3908,17 @@ void Battle::startAction(FightAction* action)
 				it++)
 		{
 			Fighter* f = *it;
-			if (f->m_info.btBattleTeam == action->team_def)
+			if (f->m_info.btBattleTeam == action->m_nTeamDefense)
 			{
 				f->m_action = Fighter::MOVETOTARGET;
 				f->targetX = countX(this->m_teamAmout, f->m_info.group,
-						(action->team_def - 1) % 3 + 1, f->m_info.btStations);
+						(action->m_nTeamDefense - 1) % 3 + 1, f->m_info.btStations);
 				f->targetY = countY(this->m_teamAmout, f->m_info.group,
-						(action->team_def - 1) % 3 + 1, f->m_info.btStations);
-				action->m_FighterList.push_back(f);
+						(action->m_nTeamDefense - 1) % 3 + 1, f->m_info.btStations);
+				action->m_kFighterList.push_back(f);
 			}
 		}
-		switch (action->team_Atk)
+		switch (action->m_nTeamAttack)
 		{
 		case 1:
 			m_Team1_status = TEAM_FIGHT;
@@ -3936,7 +3936,7 @@ void Battle::startAction(FightAction* action)
 	default:
 		break;
 	}
-	action->action_status = ACTION_STATUS_PLAY;
+	action->m_eActionStatus = ACTION_STATUS_PLAY;
 }
 
 void Battle::runAction(int teamId)
@@ -3990,12 +3990,12 @@ void Battle::runAction(int teamId)
 
 	if (fa)
 	{
-		if (fa->m_Actor)
+		if (fa->m_pkActor)
 		{
-			fa->m_Actor->actionTimeIncrease();
+			fa->m_pkActor->actionTimeIncrease();
 		}
 
-		if (fa->action_status == ACTION_STATUS_FINISH)
+		if (fa->m_eActionStatus == ACTION_STATUS_FINISH)
 		{
 			currentIndex++;
 			switch (teamId)
@@ -4030,7 +4030,7 @@ void Battle::runAction(int teamId)
 				return;
 			}
 		}
-		else if (fa->action_status == ACTION_STATUS_WAIT)
+		else if (fa->m_eActionStatus == ACTION_STATUS_WAIT)
 		{
 			if (isActionCanBegin(fa))
 			{
@@ -4042,10 +4042,10 @@ void Battle::runAction(int teamId)
 			}
 		}
 
-		switch (fa->effect_type)
+		switch (fa->m_eEffectType)
 		{
 		case BATTLE_EFFECT_TYPE_ATK:
-			if (fa->m_Actor->GetNormalAtkType() == ATKTYPE_NEAR)
+			if (fa->m_pkActor->GetNormalAtkType() == ATKTYPE_NEAR)
 			{
 				moveToTarget(fa);
 				//						if (f->m_mainTarget->protector) {
@@ -4057,7 +4057,7 @@ void Battle::runAction(int teamId)
 				//							moveBack(*f->m_mainTarget->protector);
 				//						}
 			}
-			else if (fa->m_Actor->GetNormalAtkType() == ATKTYPE_DISTANCE)
+			else if (fa->m_pkActor->GetNormalAtkType() == ATKTYPE_DISTANCE)
 			{
 				aimTarget(fa);
 				//						if (f->m_mainTarget->protector) {
@@ -4071,7 +4071,7 @@ void Battle::runAction(int teamId)
 			}
 			break;
 		case BATTLE_EFFECT_TYPE_SKILL:
-			if (fa->skill->getAtkType() == SKILL_ATK_TYPE_REMOTE)
+			if (fa->m_pkSkill->getAtkType() == SKILL_ATK_TYPE_REMOTE)
 			{
 				aimTarget(fa);
 				//						if (f->m_mainTarget->protector) {
@@ -4111,7 +4111,7 @@ void Battle::runAction(int teamId)
 			//				break;
 			//			}
 		case EFFECT_TYPE_BATTLE_END:
-			switch (fa->team_Atk)
+			switch (fa->m_nTeamAttack)
 			{
 			case 1:
 				m_Team1_status = TEAM_WAIT;
@@ -4125,29 +4125,29 @@ void Battle::runAction(int teamId)
 			default:
 				break;
 			}
-			fa->action_status = ACTION_STATUS_FINISH;
+			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
 		case BATTLE_EFFECT_TYPE_STATUS_LIFE:				//状态去血
-			fa->m_Actor->hurted(fa->data);
-			fa->m_Actor->setCurrentHP((fa->m_Actor->m_info.nLife) + (fa->data));
-			if (fa->m_Actor->m_info.nLife > 0)
+			fa->m_pkActor->hurted(fa->m_nData);
+			fa->m_pkActor->setCurrentHP((fa->m_pkActor->m_info.nLife) + (fa->m_nData));
+			if (fa->m_pkActor->m_info.nLife > 0)
 			{				// hurt
-				fa->m_Actor->setHurtOK(true);
-				hurtAction(*(fa->m_Actor));
+				fa->m_pkActor->setHurtOK(true);
+				hurtAction(*(fa->m_pkActor));
 			}
 			else
 			{				// die
-				fa->m_Actor->setDieOK(true);
+				fa->m_pkActor->setDieOK(true);
 				stringstream ss;
 				ss << "die_action.spr";
 				const char* file = NDPath::GetAniPath(ss.str().c_str());
 				NDAnimationGroup* dieAniGroup = new NDAnimationGroup;
 				dieAniGroup->initWithSprFile(file);
-				addSkillEffectToFighter(fa->m_Actor, dieAniGroup, 0);
-				fa->m_Actor->showFighterName(false);
-				dieAction(*(fa->m_Actor));
+				addSkillEffectToFighter(fa->m_pkActor, dieAniGroup, 0);
+				fa->m_pkActor->showFighterName(false);
+				dieAction(*(fa->m_pkActor));
 			}
-			fa->action_status = ACTION_STATUS_FINISH;
+			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
 		default:
 			break;
@@ -4325,7 +4325,7 @@ void Battle::fleeSuccess(Fighter& theActor)
 void Battle::moveTeam(FightAction* action)
 {
 
-	VEC_FIGHTER* v_fighters = &(action->m_FighterList);
+	VEC_FIGHTER* v_fighters = &(action->m_kFighterList);
 	bool isOk = true;
 	if (v_fighters)
 	{
@@ -4351,7 +4351,7 @@ void Battle::moveTeam(FightAction* action)
 	}
 	if (isOk)
 	{
-		action->action_status = ACTION_STATUS_FINISH;
+		action->m_eActionStatus = ACTION_STATUS_FINISH;
 		for (int i = 0; i < action->m_vCmdList.size(); i++)
 		{
 			FIGHTER_CMD* cmd = action->m_vCmdList.at(i);
@@ -4362,7 +4362,7 @@ void Battle::moveTeam(FightAction* action)
 
 void Battle::moveToTarget(FightAction* action)
 {
-	Fighter* theActor = action->m_Actor;
+	Fighter* theActor = action->m_pkActor;
 	if (theActor->m_action == Fighter::MOVETOTARGET)
 	{
 
@@ -4384,7 +4384,7 @@ void Battle::moveToTarget(FightAction* action)
 
 		if (theActor->StandInOrigin())
 		{
-			moveToTargetAction(*(action->m_Actor));
+			moveToTargetAction(*(action->m_pkActor));
 		}
 
 		int roleOffset = 0;
@@ -4393,23 +4393,23 @@ void Battle::moveToTarget(FightAction* action)
 		//		    theActor.m_mainTarget->GetRole()->IsKindOfClass(RUNTIME_CLASS(NDManualRole))) {
 		//			roleOffset = theActor.m_info.group == BATTLE_GROUP_ATTACK ? 60 : -60;
 		//		}
-		if (action->m_Target)
+		if (action->m_pkTarget)
 		{
 			if (theActor->moveTo(
-					action->m_Target->getOriginX() + coordw + roleOffset,
-					action->m_Target->getOriginY()))
+					action->m_pkTarget->getOriginX() + coordw + roleOffset,
+					action->m_pkTarget->getOriginY()))
 			{		// 如果返回到达目的地
-				if (action->effect_type == BATTLE_EFFECT_TYPE_ATK)
+				if (action->m_eEffectType == BATTLE_EFFECT_TYPE_ATK)
 				{
 					theActor->m_action = (Fighter::ATTACK);
 					attackAction(*theActor);
 				}
-				else if (action->effect_type == BATTLE_EFFECT_TYPE_SKILL)
+				else if (action->m_eEffectType == BATTLE_EFFECT_TYPE_SKILL)
 				{
 
 					theActor->m_action = (Fighter::SKILLATTACK);
 					//处理技能动作
-					BattleSkill* skill = action->skill;
+					BattleSkill* skill = action->m_pkSkill;
 					theActor->setSkillName(skill->getName());
 					theActor->showSkillName(true);
 					int actId = skill->GetActId();
@@ -4447,18 +4447,18 @@ void Battle::moveToTarget(FightAction* action)
 		}
 		else
 		{
-			if (action->effect_type == BATTLE_EFFECT_TYPE_ATK)
+			if (action->m_eEffectType == BATTLE_EFFECT_TYPE_ATK)
 			{
 				theActor->m_action = (Fighter::ATTACK);
 				attackAction(*theActor);
 			}
-			else if (action->effect_type == BATTLE_EFFECT_TYPE_SKILL)
+			else if (action->m_eEffectType == BATTLE_EFFECT_TYPE_SKILL)
 			{
 
 				theActor->showSkillName(true);
 				theActor->m_action = (Fighter::SKILLATTACK);
 				//处理技能动作
-				BattleSkill* skill = action->skill;
+				BattleSkill* skill = action->m_pkSkill;
 				int actId = skill->GetActId();
 //				if(theActor->m_lookfaceType==LOOKFACE_MANUAL){
 				roleAction(*theActor, MANUELROLE_ATTACK);
@@ -4593,7 +4593,7 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 
 void Battle::normalAttack(FightAction* action)
 {
-	Fighter* theActor = action->m_Actor;
+	Fighter* theActor = action->m_pkActor;
 	if (theActor->m_action == Fighter::ATTACK)
 	{
 		NDBaseRole* role = theActor->GetRole();
@@ -4641,7 +4641,7 @@ void Battle::normalAttack(FightAction* action)
 			//			}
 			//			// 动作后触发状态变化
 			//			handleStatusActions(theActor.getArrayStatusTarget());
-			if (!action->isCombo)
+			if (!action->m_bIsCombo)
 			{
 				theActor->m_action = (Fighter::MOVEBACK);
 				moveBackAction(*theActor);
@@ -4651,7 +4651,7 @@ void Battle::normalAttack(FightAction* action)
 				theActor->m_action = (Fighter::WAIT);
 				theActor->setActionOK(true);
 				battleStandAction(*theActor);
-				action->action_status = ACTION_STATUS_FINISH;
+				action->m_eActionStatus = ACTION_STATUS_FINISH;
 			}
 		}
 	}
@@ -4659,7 +4659,7 @@ void Battle::normalAttack(FightAction* action)
 
 void Battle::moveBack(FightAction* action)
 {
-	Fighter* theActor = action->m_Actor;
+	Fighter* theActor = action->m_pkActor;
 	if (theActor->m_action == Fighter::MOVEBACK)
 	{
 		if (theActor->moveTo(theActor->getOriginX(), theActor->getOriginY()))
@@ -4667,7 +4667,7 @@ void Battle::moveBack(FightAction* action)
 			theActor->m_action = (Fighter::WAIT);
 			theActor->setActionOK(true);
 			battleStandAction(*theActor);
-			action->action_status = ACTION_STATUS_FINISH;
+			action->m_eActionStatus = ACTION_STATUS_FINISH;
 			//			if (theActor.protectTarget) {
 			//				theActor.protectTarget->protector = NULL;
 			//				theActor.protectTarget = NULL;
@@ -4783,19 +4783,19 @@ void Battle::addSkillEffect(Fighter& theActor, bool user/*=false*/)
 
 void Battle::aimTarget(FightAction* action)
 {
-	Fighter* theActor = action->m_Actor;
+	Fighter* theActor = action->m_pkActor;
 	if (theActor->m_action == Fighter::AIMTARGET)
 	{
-		if (action->effect_type == BATTLE_EFFECT_TYPE_ATK)
+		if (action->m_eEffectType == BATTLE_EFFECT_TYPE_ATK)
 		{
 			theActor->m_action = (Fighter::DISTANCEATTACK);
 			attackAction(*theActor);
 		}
-		else if (action->effect_type == BATTLE_EFFECT_TYPE_SKILL)
+		else if (action->m_eEffectType == BATTLE_EFFECT_TYPE_SKILL)
 		{
 			theActor->m_action = (Fighter::DISTANCESKILLATTACK);
 			//处理技能动作
-			BattleSkill* skill = action->skill;
+			BattleSkill* skill = action->m_pkSkill;
 			theActor->setSkillName(skill->getName());
 			theActor->showSkillName(true);
 			int actId = skill->GetActId();
@@ -4862,7 +4862,7 @@ void Battle::aimTarget(FightAction* action)
 
 void Battle::normalDistanceAttack(FightAction* action)
 {
-	Fighter* theActor = action->m_Actor;
+	Fighter* theActor = action->m_pkActor;
 	if (theActor->m_action == Fighter::DISTANCEATTACK)
 	{
 		NDBaseRole* role = theActor->GetRole();
@@ -4907,7 +4907,7 @@ void Battle::normalDistanceAttack(FightAction* action)
 			//			}
 			// 动作后触发状态变化
 			//			handleStatusActions(theActor.getArrayStatusTarget());
-			if (!action->isCombo)
+			if (!action->m_bIsCombo)
 			{
 				theActor->m_action = (Fighter::DISTANCEATTACKOVER);
 				//				moveBackAction(*theActor);
@@ -4917,7 +4917,7 @@ void Battle::normalDistanceAttack(FightAction* action)
 				theActor->m_action = (Fighter::WAIT);
 				theActor->setActionOK(true);
 				battleStandAction(*theActor);
-				action->action_status = ACTION_STATUS_FINISH;
+				action->m_eActionStatus = ACTION_STATUS_FINISH;
 			}
 		}
 	}
@@ -4925,7 +4925,7 @@ void Battle::normalDistanceAttack(FightAction* action)
 
 void Battle::distanceAttackOver(FightAction* action)
 {
-	Fighter* theActor = action->m_Actor;
+	Fighter* theActor = action->m_pkActor;
 	if (theActor->m_action == Fighter::DISTANCEATTACKOVER)
 	{
 		if (theActor->GetRole()->IsAnimationComplete())
@@ -4933,7 +4933,7 @@ void Battle::distanceAttackOver(FightAction* action)
 			theActor->m_action = (Fighter::WAIT);
 			theActor->setActionOK(true);
 			battleStandAction(*theActor);
-			action->action_status = ACTION_STATUS_FINISH;
+			action->m_eActionStatus = ACTION_STATUS_FINISH;
 		}
 	}
 }
@@ -5049,8 +5049,8 @@ NDPicture* Battle::getActionWord(ACTION_WORD index)
 
 void Battle::skillAttack(FightAction* action)
 {
-	Fighter* theActor = action->m_Actor;
-	BattleSkill* skill = action->skill;
+	Fighter* theActor = action->m_pkActor;
+	BattleSkill* skill = action->m_pkSkill;
 	if (theActor->m_action == Fighter::SKILLATTACK)
 	{
 		if (theActor->GetRole()->IsAnimationComplete())
@@ -5103,7 +5103,7 @@ void Battle::skillAttack(FightAction* action)
 
 void Battle::distanceSkillAttack(FightAction* action)
 {
-	Fighter* theActor = action->m_Actor;
+	Fighter* theActor = action->m_pkActor;
 	if (theActor->m_action == Fighter::DISTANCESKILLATTACK)
 	{
 		if (theActor->GetRole()->IsAnimationComplete())
