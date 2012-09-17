@@ -169,6 +169,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 // 	//commandSprite->InitWithSetPos(command->GetKey(), 9, 11);
 // 	DramaObj.AddCommond(commandSprite);
 
+
 	for (int i = 0; i < 4; i++)
 	{
 		NDNpc* npc = new NDNpc;
@@ -199,6 +200,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 		npc->SetPosition(
 				ccp((5 + i * 6) * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
 						11 * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+
 		//npc->dataStr = "哈哈";
 		//npc->talkStr = "你想知道什么？";
 		npc->SetType(0);
