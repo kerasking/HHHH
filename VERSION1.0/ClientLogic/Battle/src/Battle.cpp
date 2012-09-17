@@ -3911,10 +3911,10 @@ void Battle::startAction(FightAction* action)
 			if (f->m_kInfo.btBattleTeam == action->m_nTeamDefense)
 			{
 				f->m_action = Fighter::MOVETOTARGET;
-				f->targetX = countX(m_teamAmout, f->m_kInfo.group,
-						(action->m_nTeamDefense - 1) % 3 + 1, f->m_kInfo.btStations);
-				f->targetY = countY(m_teamAmout, f->m_kInfo.group,
-						(action->m_nTeamDefense - 1) % 3 + 1, f->m_kInfo.btStations);
+				f->m_nTargetX = countX(this->m_teamAmout, f->m_info.group,
+						(action->m_nTeamDefense - 1) % 3 + 1, f->m_info.btStations);
+				f->m_nTargetY = countY(this->m_teamAmout, f->m_info.group,
+						(action->m_nTeamDefense - 1) % 3 + 1, f->m_info.btStations);
 				action->m_kFighterList.push_back(f);
 			}
 		}
@@ -4336,11 +4336,11 @@ void Battle::moveTeam(FightAction* action)
 			{
 				moveToTargetAction(*f);
 			}
-			if (f->moveTo(f->targetX, f->targetY))
+			if (f->moveTo(f->m_nTargetX, f->m_nTargetY))
 			{
 				f->m_action = (Fighter::WAIT);
 				battleStandAction(*f);
-				f->setOriginPos(f->targetX, f->targetY);
+				f->setOriginPos(f->m_nTargetX, f->m_nTargetY);
 				f->setActionOK(true);
 			}
 			else
