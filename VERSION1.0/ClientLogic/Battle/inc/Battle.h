@@ -614,9 +614,9 @@ private:
 	void handleStatusActions(VEC_STATUS_ACTION& statusActions);
 	void addSkillEffect(Fighter& theActor, bool user = false);
 	void sortFighterList(VEC_FIGHTER& fighterList);
-	void startAction(FightAction* action);
+	void startAction(FightAction* pkFighterAction);
 	VEC_FIGHTER& getDefFightersByTeam(int team);
-	void runAction(int teadId);
+	void runAction(int nTeamID);
 	bool isActionCanBegin(FightAction* action);
 //	void CreateCancleAutoFightButton();
 //	void RemoveCancleAutoFightButton();

@@ -3878,28 +3878,28 @@ VEC_FIGHTER& Battle::getDefFightersByTeam(int team)
 	return v_team;
 }
 
-void Battle::startAction(FightAction* action)
+void Battle::startAction(FightAction* pkFighterAction)
 {
-	switch (action->m_eEffectType)
+	switch (pkFighterAction->m_eEffectType)
 	{
 	case BATTLE_EFFECT_TYPE_ATK:
-		if (action->m_pkActor->GetNormalAtkType() == ATKTYPE_NEAR)
+		if (pkFighterAction->m_pkActor->GetNormalAtkType() == ATKTYPE_NEAR)
 		{
-			action->m_pkActor->m_action = Fighter::MOVETOTARGET;
+			pkFighterAction->m_pkActor->m_action = Fighter::MOVETOTARGET;
 		}
-		else if (action->m_pkActor->GetNormalAtkType() == ATKTYPE_DISTANCE)
+		else if (pkFighterAction->m_pkActor->GetNormalAtkType() == ATKTYPE_DISTANCE)
 		{
-			action->m_pkActor->m_action = Fighter::AIMTARGET;
+			pkFighterAction->m_pkActor->m_action = Fighter::AIMTARGET;
 		}
 		break;
 	case BATTLE_EFFECT_TYPE_SKILL:
-		if (action->m_pkSkill->getAtkType() == SKILL_ATK_TYPE_REMOTE)
+		if (pkFighterAction->m_pkSkill->getAtkType() == SKILL_ATK_TYPE_REMOTE)
 		{
-			action->m_pkActor->m_action = Fighter::AIMTARGET;
+			pkFighterAction->m_pkActor->m_action = Fighter::AIMTARGET;
 		}
 		else
 		{
-			action->m_pkActor->m_action = Fighter::MOVETOTARGET;
+			pkFighterAction->m_pkActor->m_action = Fighter::MOVETOTARGET;
 		}
 		break;
 	case EFFECT_TYPE_BATTLE_BEGIN:
@@ -3907,18 +3907,18 @@ void Battle::startAction(FightAction* action)
 		for (VEC_FIGHTER_IT it = m_vAttaker.begin(); it != m_vAttaker.end();
 				it++)
 		{
-			Fighter* f = *it;
-			if (f->m_kInfo.btBattleTeam == action->m_nTeamDefense)
+			Fighter* pkFighter = *it;
+			if (pkFighter->m_kInfo.btBattleTeam == pkFighterAction->m_nTeamDefense)
 			{
-				f->m_action = Fighter::MOVETOTARGET;
-				f->m_nTargetX = countX(this->m_teamAmout, f->m_info.group,
-						(action->m_nTeamDefense - 1) % 3 + 1, f->m_info.btStations);
-				f->m_nTargetY = countY(this->m_teamAmout, f->m_info.group,
-						(action->m_nTeamDefense - 1) % 3 + 1, f->m_info.btStations);
-				action->m_kFighterList.push_back(f);
+				pkFighter->m_action = Fighter::MOVETOTARGET;
+				pkFighter->m_nTargetX = countX(m_teamAmout, pkFighter->m_kInfo.group,
+						(pkFighterAction->m_nTeamDefense - 1) % 3 + 1, pkFighter->m_kInfo.btStations);
+				pkFighter->m_nTargetY = countY(m_teamAmout, pkFighter->m_kInfo.group,
+						(pkFighterAction->m_nTeamDefense - 1) % 3 + 1, pkFighter->m_kInfo.btStations);
+				pkFighterAction->m_kFighterList.push_back(pkFighter);
 			}
 		}
-		switch (action->m_nTeamAttack)
+		switch (pkFighterAction->m_nTeamAttack)
 		{
 		case 1:
 			m_Team1_status = TEAM_FIGHT;
@@ -3936,40 +3936,40 @@ void Battle::startAction(FightAction* action)
 	default:
 		break;
 	}
-	action->m_eActionStatus = ACTION_STATUS_PLAY;
+	pkFighterAction->m_eActionStatus = ACTION_STATUS_PLAY;
 }
 
-void Battle::runAction(int teamId)
+void Battle::runAction(int nTeamID)
 {
-	int currentIndex = 0;
-	VEC_FIGHTACTION* actionList;
-	switch (teamId)
+	int nCurrentIndex = 0;
+	VEC_FIGHTACTION* pkActionList;
+	switch (nTeamID)
 	{
 	case 1:
-		currentIndex = m_currentActionIndex1;
-		actionList = &(BattleMgrObj.m_vActionList1);
+		nCurrentIndex = m_currentActionIndex1;
+		pkActionList = &(BattleMgrObj.m_vActionList1);
 		break;
 	case 2:
-		currentIndex = m_currentActionIndex2;
-		actionList = &(BattleMgrObj.m_vActionList2);
+		nCurrentIndex = m_currentActionIndex2;
+		pkActionList = &(BattleMgrObj.m_vActionList2);
 		break;
 	case 3:
-		currentIndex = m_currentActionIndex3;
-		actionList = &(BattleMgrObj.m_vActionList3);
+		nCurrentIndex = m_currentActionIndex3;
+		pkActionList = &(BattleMgrObj.m_vActionList3);
 		break;
 	default:
 		break;
 	}
 
 	FightAction* fa = NULL;
-	if (currentIndex < actionList->size())
+	if (nCurrentIndex < pkActionList->size())
 	{
-		fa = actionList->at(currentIndex);
+		fa = pkActionList->at(nCurrentIndex);
 	}
 	else
 	{	//actio列表已取完
 		//NDLog("%d no more action,battle end",teamId);
-		switch (teamId)
+		switch (nTeamID)
 		{
 		case 1:
 			m_Team1_status = TEAM_OVER;
@@ -3997,24 +3997,24 @@ void Battle::runAction(int teamId)
 
 		if (fa->m_eActionStatus == ACTION_STATUS_FINISH)
 		{
-			currentIndex++;
-			switch (teamId)
+			nCurrentIndex++;
+			switch (nTeamID)
 			{
 			case 1:
-				m_currentActionIndex1 = currentIndex;
+				m_currentActionIndex1 = nCurrentIndex;
 				break;
 			case 2:
-				m_currentActionIndex2 = currentIndex;
+				m_currentActionIndex2 = nCurrentIndex;
 				break;
 			case 3:
-				m_currentActionIndex3 = currentIndex;
+				m_currentActionIndex3 = nCurrentIndex;
 				break;
 			default:
 				break;
 			}
-			if (currentIndex < actionList->size())
+			if (nCurrentIndex < pkActionList->size())
 			{
-				fa = actionList->at(currentIndex);
+				fa = pkActionList->at(nCurrentIndex);
 				//NDLog("team:%d index %d",teamId,currentIndex);
 				if (isActionCanBegin(fa))
 				{

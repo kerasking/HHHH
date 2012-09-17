@@ -17,11 +17,12 @@
 #include <vector>
 #include "NDLocalization.h"
 
-const std::string ELE_POWER = NDCommonCString("TiLi");//·ÀÓù
-const std::string ELE_VITALITY = NDCommonCString("yuanqi");//¹¥»÷
-const std::string ELE_SPIRIT = NDCommonCString("jingsheng");//»ìÂÒ
+const std::string ELE_POWER = NDCommonCString("TiLi"); //·ÀÓù
+const std::string ELE_VITALITY = NDCommonCString("yuanqi"); //¹¥»÷
+const std::string ELE_SPIRIT = NDCommonCString("jingsheng"); //»ìÂÒ
 
-enum {
+enum
+{
 	DEFAULT_FONT_SIZE = 12,
 };
 
@@ -33,7 +34,7 @@ class Fighter;
 typedef std::vector<Fighter*> VEC_FIGHTER;
 typedef VEC_FIGHTER::iterator VEC_FIGHTER_IT;
 
-void defenceAction(Fighter& f);
+void defenceAction(Fighter& kFighter);
 
 void attackAction(Fighter& f);
 
