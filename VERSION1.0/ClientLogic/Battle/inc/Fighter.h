@@ -70,47 +70,47 @@ class FighterStatus
 public:
 	FighterStatus()
 	{
-		m_id = 0;
-		m_StartEffectID = 0;
-		m_LastEffectID = 0;
-		m_aniGroup = NULL;
+		m_nID = 0;
+		m_nStartEffectID = 0;
+		m_nLastEffectID = 0;
+		m_pkAniGroup = NULL;
 	}
 
 	FighterStatus(int id, int startEffectID, int lastEffectID)
 	{
-		m_id = id;
-		m_StartEffectID = startEffectID;
-		m_LastEffectID = lastEffectID;
-		m_aniGroup = NULL;
+		m_nID = id;
+		m_nStartEffectID = startEffectID;
+		m_nLastEffectID = lastEffectID;
+		m_pkAniGroup = NULL;
 	}
 
 	FighterStatus(const FighterStatus& rhs)
 	{
-		m_id = rhs.m_id;
-		m_StartEffectID = rhs.m_StartEffectID;
-		m_LastEffectID = rhs.m_LastEffectID;
-		m_aniGroup = NULL;
+		m_nID = rhs.m_nID;
+		m_nStartEffectID = rhs.m_nStartEffectID;
+		m_nLastEffectID = rhs.m_nLastEffectID;
+		m_pkAniGroup = NULL;
 	}
 
 	FighterStatus& operator =(const FighterStatus& rhs)
 	{
-		m_id = rhs.m_id;
-		m_StartEffectID = rhs.m_StartEffectID;
-		m_LastEffectID = rhs.m_LastEffectID;
-		m_aniGroup = NULL;
+		m_nID = rhs.m_nID;
+		m_nStartEffectID = rhs.m_nStartEffectID;
+		m_nLastEffectID = rhs.m_nLastEffectID;
+		m_pkAniGroup = NULL;
 		return *this;
 	}
 
 	~FighterStatus()
 	{
-		CC_SAFE_DELETE(m_aniGroup);
+		CC_SAFE_DELETE(m_pkAniGroup);
 	}
 
 public:
-	int m_id;
-	int m_StartEffectID;
-	int m_LastEffectID;
-	NDSubAniGroup* m_aniGroup;
+	int m_nID;
+	int m_nStartEffectID;
+	int m_nLastEffectID;
+	NDSubAniGroup* m_pkAniGroup;
 };
 
 //struct FIGHTER_CMD
@@ -145,15 +145,15 @@ public:
 	};
 
 	StatusAction(int act, FighterStatus* fs, int id) :
-			status(fs)
+		m_pkStatus(fs)
 	{
-		action = act;
-		idTarget = id;
+		m_nAction = act;
+		m_nTargetID = id;
 	}
 
-	int action;
-	FighterStatus* status;
-	int idTarget;
+	int m_nAction;
+	FighterStatus* m_pkStatus;
+	int m_nTargetID;
 };
 
 typedef set<string> SET_STATUS_PERSIST;
@@ -210,9 +210,9 @@ public:
 public:
 	Fighter(const FIGHTER_INFO& fInfo);
 	~Fighter();
-	int targetX;
-	int targetY;
-	LOOKFACE_TYPE m_lookfaceType;
+	int m_nTargetX;
+	int m_nTargetY;
+	LOOKFACE_TYPE m_eLookfaceType;
 	BATTLE_GROUP GetGroup() const
 	{
 		return m_info.group;

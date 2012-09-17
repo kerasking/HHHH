@@ -182,8 +182,8 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 				pkSag->release();
 			}
 
-			int tileSize = kFileOp.readByte(pkStream);
-			for (int k = 0; k < tileSize; k++)
+			int nTileSize = kFileOp.readByte(pkStream);
+			for (int k = 0; k < nTileSize; k++)
 			{
 				NDFrameTile* pkFrameTile = new NDFrameTile;
 

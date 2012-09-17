@@ -66,7 +66,7 @@ void assasinSkillAction(Fighter& f) {
 	int skill = 0;
 	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
 	
-	if (f.m_lookfaceType==LOOKFACE_MANUAL) {
+	if (f.m_eLookfaceType==LOOKFACE_MANUAL) {
 		skill = f.getUseSkill()->getSkillTypeID();
 		action = MANUELROLE_SKILL_ASSASIN_BOW_SINGLE;
 		switch (skill) {
@@ -256,7 +256,7 @@ void dodgeAction(Fighter& f) {
 	NDBaseRole *role = f.GetRole();
 	int action = 0;
 	bool bFaceRight = f.m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
-	if(f.m_lookfaceType==LOOKFACE_MANUAL){
+	if(f.m_eLookfaceType==LOOKFACE_MANUAL){
 		action = MANUELROLE_DODGE;
 	}else{
 //		if (role->bRoleMonster) {

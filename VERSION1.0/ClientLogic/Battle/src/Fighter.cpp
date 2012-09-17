@@ -352,7 +352,7 @@ void Fighter::LoadMonster(int nLookFace, int lev, const string& name)
 	role->Initialization(nLookFace, true);
 	role->m_dwLookFace = nLookFace;
 	m_role = role;
-	m_lookfaceType = LOOKFACE_MANUAL;
+	m_eLookfaceType = LOOKFACE_MANUAL;
 //	}else if (NDMonster::isRoleMonster(nLookFace)) {//人形怪
 //		NDMonster *role = new NDMonster;
 //		role->m_bRoleMonster = true;
@@ -445,9 +445,9 @@ void Fighter::drawStatusAniGroup()
 	for (VEC_FIGHTER_STATUS_IT it = this->battleStatusList.begin();
 			it != battleStatusList.end(); it++)
 	{
-		if ((*it)->m_aniGroup)
+		if ((*it)->m_pkAniGroup)
 		{
-			NDSprite* role = (*it)->m_aniGroup->role;
+			NDSprite* role = (*it)->m_pkAniGroup->role;
 			if (!role)
 			{
 				continue;
@@ -1145,7 +1145,7 @@ int Fighter::getAPasStatus()
 void Fighter::removeAStatusAniGroup(FighterStatus* status)
 {
 
-	if (status->m_LastEffectID == 404)
+	if (status->m_nLastEffectID == 404)
 	{			// 隐身特殊处理
 		isVisibleStatus = true;
 		strMsgStatus = "";
@@ -1155,7 +1155,7 @@ void Fighter::removeAStatusAniGroup(FighterStatus* status)
 	for (VEC_FIGHTER_STATUS_IT it = this->battleStatusList.begin();
 			it != this->battleStatusList.end(); it++)
 	{
-		if ((*it)->m_id == status->m_id)
+		if ((*it)->m_nID == status->m_nID)
 		{
 			CC_SAFE_DELETE(*it);
 			battleStatusList.erase(it);
@@ -1210,7 +1210,7 @@ void Fighter::addAStatus(FighterStatus* fs)
 //	int idSub = (fs.m_LastEffectID / 10000) % 1000;
 
 //	NDAnimationGroup* effect;
-	if (fs->m_LastEffectID == 404)
+	if (fs->m_nLastEffectID == 404)
 	{
 		// 隐身特殊处理
 		isVisibleStatus = false;
