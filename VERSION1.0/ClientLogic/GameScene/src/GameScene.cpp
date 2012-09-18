@@ -233,6 +233,8 @@ GameScene::GameScene()
 
 	m_hccOPItem = NULL;
 
+	m_pkUpdatePlayer = 0;
+
 	m_picMap = new NDPicture();
 	m_picMap->Initialization(NDPath::GetFullImagepath("ui_map.png"));
 	m_btnMap = NULL;
@@ -2512,13 +2514,13 @@ void GameScene::ReShowTaskAwardItemOpt()
 		if (tempItem.isEquip())
 		{
 			// 如果是装备类的将当前的�??�久值改为最大�????
-			tempItem.iAmount = tempItem.getAmount_limit();
+			tempItem.m_nAmount = tempItem.getAmount_limit();
 		}
 		else
 		{
-			if (tempItem.iAmount > 1)
+			if (tempItem.m_nAmount > 1)
 			{
-				sb << " x" << tempItem.iAmount;
+				sb << " x" << tempItem.m_nAmount;
 			}
 		}
 
@@ -2536,21 +2538,21 @@ void GameScene::ShowTaskAwardItemOpt(Task* task)
 	if (task->award_item1 != 0)
 	{
 		Item *item = new Item(task->award_item1);
-		item->iAmount = task->award_num1;
+		item->m_nAmount = task->award_num1;
 		this->m_vTaskAwardItem.push_back(item);
 	}
 
 	if (task->award_item2 != 0)
 	{
 		Item *item = new Item(task->award_item2);
-		item->iAmount = task->award_num2;
+		item->m_nAmount = task->award_num2;
 		this->m_vTaskAwardItem.push_back(item);
 	}
 
 	if (task->award_item3 != 0)
 	{
 		Item *item = new Item(task->award_item3);
-		item->iAmount = task->award_num3;
+		item->m_nAmount = task->award_num3;
 		this->m_vTaskAwardItem.push_back(item);
 	}
 
@@ -3013,6 +3015,12 @@ void GameScene::OnTimer(OBJID tag)
 	 */
 
 	// test
+
+	if (m_pkUpdatePlayer)
+	{
+		m_pkUpdatePlayer->Update(10);
+	}
+
 	if (2 == tag)
 	{
 		//quitGame();

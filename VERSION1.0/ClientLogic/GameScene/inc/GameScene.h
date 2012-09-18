@@ -87,13 +87,16 @@ class GameScene: public NDScene,
 {
 	DECLARE_CLASS (GameScene)
 public:
+
+	CC_SYNTHESIZE(NDPlayer*,m_pkUpdatePlayer,UpdatePlayer);
+
 	void processMsgLightEffect(NDTransData& data);
 
 	GameScene();
 	~GameScene();
 
 	static GameScene* Scene();
-	void Initialization(int mapID);hide
+	void Initialization(int mapID);
 	void OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 			unsigned int cellIndex, NDSection* section);override
 	void OnButtonClick(NDUIButton* button);override

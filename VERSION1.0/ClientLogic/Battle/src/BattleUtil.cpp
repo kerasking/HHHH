@@ -17,7 +17,7 @@ using namespace NDEngine;
 void defenceAction(Fighter& kFighter)
 {
 	NDBaseRole* pkRole = kFighter.GetRole();
-	int action = MANUELROLE_DEFENCE;
+	int nAction = MANUELROLE_DEFENCE;
 	kFighter.m_bDefenceAtk = true;
 	bool bFaceRight =
 			kFighter.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
@@ -58,19 +58,19 @@ void defenceAction(Fighter& kFighter)
 //		bFaceRight = !bFaceRight;
 //	}
 
-	pkRole->SetCurrentAnimation(action, bFaceRight);
+	pkRole->SetCurrentAnimation(nAction, bFaceRight);
 }
 
-void assasinSkillAction(Fighter& f)
+void assasinSkillAction(Fighter& kFighter)
 {
-	NDBaseRole* pkRole = f.GetRole();
+	NDBaseRole* pkRole = kFighter.GetRole();
 	int nAction = 0;
 	int nSkill = 0;
-	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
+	bool bFaceRight = kFighter.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
 
-	if (f.m_eLookfaceType == LOOKFACE_MANUAL)
+	if (kFighter.m_eLookfaceType == LOOKFACE_MANUAL)
 	{
-		nSkill = f.getUseSkill()->getSkillTypeID();
+		nSkill = kFighter.getUseSkill()->getSkillTypeID();
 		nAction = MANUELROLE_SKILL_ASSASIN_BOW_SINGLE;
 		switch (nSkill)
 		{
@@ -118,12 +118,12 @@ void assasinSkillAction(Fighter& f)
 	pkRole->SetCurrentAnimation(nAction, bFaceRight);
 }
 
-void wizzardSkillAction(Fighter& f)
+void wizzardSkillAction(Fighter& kFighter)
 {
-	NDBaseRole *pkRole = f.GetRole();
+	NDBaseRole *pkRole = kFighter.GetRole();
 	int nAction = 0;
-	bool bFaceRight = f.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
-	switch (f.m_kInfo.fighterType)
+	bool bFaceRight = kFighter.m_kInfo.group == BATTLE_GROUP_DEFENCE ? false : true;
+	switch (kFighter.m_kInfo.fighterType)
 	{
 	case FIGHTER_TYPE_PET:
 		nAction = MANUELROLE_SKILL_WIZZARD;

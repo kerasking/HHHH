@@ -81,19 +81,19 @@ void showPrizeDialog(Task& task)
 		if (task.award_item1 != 0)
 		{
 			Item *item = new Item(task.award_item1);
-			item->iAmount = task.award_num1;
+			item->m_nAmount = task.award_num1;
 			itemArray.push_back(item);
 		}
 		if (task.award_item2 != 0)
 		{
 			Item *item = new Item(task.award_item2);
-			item->iAmount = task.award_num2;
+			item->m_nAmount = task.award_num2;
 			itemArray.push_back(item);
 		}
 		if (task.award_item3 != 0)
 		{
 			Item *item = new Item(task.award_item3);
-			item->iAmount = task.award_num3;
+			item->m_nAmount = task.award_num3;
 			itemArray.push_back(item);
 		}
 
@@ -101,7 +101,7 @@ void showPrizeDialog(Task& task)
 		{
 			Item *tempItem = (*it);
 			sbPrize << (tempItem->getItemName());
-			sbPrize << " x" << tempItem->iAmount;
+			sbPrize << " x" << tempItem->m_nAmount;
 			sbPrize << "\n";
 			delete tempItem;
 		}
@@ -415,7 +415,7 @@ int getTaskItemCount(int taskItemType)
 	for_vec(kItemVector, VEC_ITEM_IT)
 	{
 		Item *item = (*it);
-		if (item->iItemType == taskItemType)
+		if (item->m_nItemType == taskItemType)
 		{
 			if (item->isEquip())
 			{
@@ -423,7 +423,7 @@ int getTaskItemCount(int taskItemType)
 			}
 			else
 			{
-				nCount += item->iAmount;
+				nCount += item->m_nAmount;
 			}
 		}
 

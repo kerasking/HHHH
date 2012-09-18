@@ -144,7 +144,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	kPlayer.m_strName = "°×¸»ÃÀ";
 	kPlayer.SetLoadMapComplete();
 
-	NDScene* pkScene = pkDirector->GetRunningScene();
+	GameScene* pkScene = (GameScene*)pkDirector->GetRunningScene();
 	NDNode* pkNode = pkScene->GetChild(MAPLAYER_TAG);
 
 	if (!pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
@@ -155,6 +155,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
 	pkLayer->AddChild(&kPlayer, 111, 1000);
 	kPlayer.standAction(true);
+	pkScene->setUpdatePlayer(&kPlayer);
 
 // 	//add by ZhangDi 120904
 // 	DramaObj.Start();
@@ -215,7 +216,6 @@ bool NDGameApplication::applicationDidFinishLaunching()
 		}
 
 		NDPlayer::defaultHero().UpdateFocus();
-
 	}
 
 	return true;

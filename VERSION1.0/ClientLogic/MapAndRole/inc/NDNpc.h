@@ -109,7 +109,7 @@ private:
 	// role–Õ npc
 	bool m_bRoleNpc;
 	int m_iType;
-	CGRect m_rectState;
+	CGRect m_kRectState;
 
 private:
 

@@ -227,7 +227,7 @@ Item* ItemMgr::QueryOtherItem(int idItem)
 	for (VEC_ITEM_IT it = this->m_vOtherItems.begin();
 		it != this->m_vOtherItems.end(); it++)
 	{
-		if ((*it)->iID == idItem)
+		if ((*it)->m_nID == idItem)
 		{
 			return *it;
 		}
@@ -270,16 +270,16 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 		unsigned char stoneCount = 0; (*data) >> stoneCount;
 		
 		Item *item = new Item;
-		item->iID = itemID;
-		item->iOwnerID = ownerID;
-		item->iItemType = itemType;
-		item->iAmount = dwAmount;
-		item->iPosition = itemPosition;
-		item->iAddition = btAddition;
-		item->byBindState = bindState;
-		item->byHole = btHole;
-		item->iCreateTime = createTime;
-		item->sAge = sAge;
+		item->m_nID = itemID;
+		item->m_nOwnerID = ownerID;
+		item->m_nItemType = itemType;
+		item->m_nAmount = dwAmount;
+		item->m_nPosition = itemPosition;
+		item->m_nAddition = btAddition;
+		item->m_nBindState = bindState;
+		item->m_nHole = btHole;
+		item->m_nCreateTime = createTime;
+		item->m_nAge = sAge;
 		
 		if (stoneCount > 0) 
 		{
@@ -287,7 +287,7 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 			{
 				int stoneID = 0; (*data) >> stoneID;
 				Item *stoneItem = new Item(stoneID);
-				item->vecStone.push_back(stoneItem);
+				item->m_vStone.push_back(stoneItem);
 			}
 		}
 		
@@ -297,7 +297,7 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 			for (int i = 0; i < int(m_vecStorage.size()); i++) 
 			{
 				Item *item2 = m_vecStorage[i];
-				if (item2->iID == item->iID)
+				if (item2->m_nID == item->m_nID)
 				{
 					bolHas = true;
 				}
@@ -326,13 +326,13 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 		}
 		else if (itemPosition == POSITION_SOLD) 
 		{ // 已出售的物品
-			m_mapSoldItems[item->iID] = item;
+			m_mapSoldItems[item->m_nID] = item;
 		}
 		else 
 		{ // 增加的是背包中的物品
 			// 其他玩家物品
 			NDPlayer& role = NDPlayer::defaultHero();
-			if (role.m_nID != item->iOwnerID)
+			if (role.m_nID != item->m_nOwnerID)
 			{ // 其他玩家物品
 				this->m_vOtherItems.push_back(item);
 			}
@@ -342,13 +342,13 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 
 				for (VEC_ITEM_IT it = this->m_vecBag.begin(); it != m_vecBag.end(); it++)
 				{
-					if (item->iID == (*it)->iID) {
-						int nItemTypeUseInScript = item->iItemType;
-						(*it)->iAmount = item->iAmount;
-						(*it)->iItemType = item->iItemType;
-						(*it)->iAddition = item->iAddition;
-						(*it)->byHole = item->byHole;
-						(*it)->iCreateTime = item->iCreateTime;
+					if (item->m_nID == (*it)->m_nID) {
+						int nItemTypeUseInScript = item->m_nItemType;
+						(*it)->m_nAmount = item->m_nAmount;
+						(*it)->m_nItemType = item->m_nItemType;
+						(*it)->m_nAddition = item->m_nAddition;
+						(*it)->m_nHole = item->m_nHole;
+						(*it)->m_nCreateTime = item->m_nCreateTime;
 						SAFE_DELETE(item);
 						bolHandle = true;
 						ScriptGlobalEvent::OnEvent(GE_ITEM_UPDATE, nItemTypeUseInScript);
@@ -372,12 +372,12 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 						
 						if (uiPet)
 						{
-							uiPet->PetBagAddItem(item->iID);
+							uiPet->PetBagAddItem(item->m_nID);
 						}
 						
 						GameStorageAddItem(eGameStorage_Bag, *item);
 						//updateTaskItemData(*item, true);
-						int nItemTypeUseInScript = item->iItemType;
+						int nItemTypeUseInScript = item->m_nItemType;
 						ScriptGlobalEvent::OnEvent(GE_ITEM_UPDATE, nItemTypeUseInScript);
 					}
 					else 
@@ -475,7 +475,7 @@ void ItemMgr::processEquipEffect(NDTransData* data, int len)
 		for (int j = Item::eEP_Begin; j < Item::eEP_End; j++) 
 		{
 			Item *item = m_EquipList[j];
-			if (item != NULL && item->iID == itemID) 
+			if (item != NULL && item->m_nID == itemID) 
 			{
 				roleEuiptItemsOK[j] = effect;
 				break;
@@ -505,11 +505,11 @@ void ItemMgr::processItemAttrib(NDTransData* data, int len)
 			
 			if ( HasItemByType(ITEM_BAG, itemID, itemBag) )
 			{
-				itemBag->iAmount = amount;
+				itemBag->m_nAmount = amount;
 				//updateTaskItemData(*itemBag, true); // 更新任务物品
 				//bolProed = true;
 				
-				int nItemTypeUseInScript = itemBag->iItemType;
+				int nItemTypeUseInScript = itemBag->m_nItemType;
 				ScriptGlobalEvent::OnEvent(GE_ITEM_UPDATE, nItemTypeUseInScript);
 				
 				if (gamescene) 
@@ -521,12 +521,12 @@ void ItemMgr::processItemAttrib(NDTransData* data, int len)
 				
 				if (uiPet)
 				{
-					uiPet->PetBagItemCount(itemBag->iID);
+					uiPet->PetBagItemCount(itemBag->m_nID);
 				}
 				
 				if (bagscene) 
 				{
-					bagscene->UpdateItem(itemBag->iID);
+					bagscene->UpdateItem(itemBag->m_nID);
 				}
 				break;
 			}
@@ -540,7 +540,7 @@ void ItemMgr::processItemAttrib(NDTransData* data, int len)
 				
 				if ( HasItemByType(ITEM_STORAGE, itemID, itemStorage) )
 				{
-					itemStorage->iAmount = amount;
+					itemStorage->m_nAmount = amount;
 					//bolProed = true;
 					break;
 				}
@@ -554,12 +554,12 @@ void ItemMgr::processItemAttrib(NDTransData* data, int len)
 				if ( HasItemByType(ITEM_EQUIP, itemID, itemEquip) )
 				{
 					bool bSetEquipState = false;
-					if (itemEquip->iAmount == 0 || amount == 0)
+					if (itemEquip->m_nAmount == 0 || amount == 0)
 					{
 						bSetEquipState = true;
 					}
 					
-					itemEquip->iAmount = amount;
+					itemEquip->m_nAmount = amount;
 					
 					if (bSetEquipState)
 					{// 如果耐久度为0，检测下有无损坏
@@ -586,7 +586,7 @@ void ItemMgr::processItemAttrib(NDTransData* data, int len)
 			
 			if ( HasItemByType(ITEM_BAG, itemID, itemBag) )
 			{
-				int itemType = itemBag->iItemType;
+				int itemType = itemBag->m_nItemType;
 				int equipType = Item::getIdRule(itemType, Item::ITEM_EQUIP); // 装备类型
 				int equipItem = -1;
 				int  changeItem = -1;
@@ -666,7 +666,7 @@ void ItemMgr::processItemAttrib(NDTransData* data, int len)
 							} 
 							else if(m_EquipList[Item::eEP_FuArmor] != NULL)
 							{// 不是装双手武器，判断是否装备副手武器。
-								int itemtype = m_EquipList[Item::eEP_FuArmor]->iItemType;
+								int itemtype = m_EquipList[Item::eEP_FuArmor]->m_nItemType;
 								int type1 = Item::getIdRule(itemtype, Item::ITEM_CLASS); // 装备类型
 								int type2 = Item::getIdRule(itemType, Item::ITEM_CLASS);
 
@@ -684,7 +684,7 @@ void ItemMgr::processItemAttrib(NDTransData* data, int len)
 							
 							Item *tempI = m_EquipList[Item::eEP_MainArmor];
 							if (tempI != NULL) {
-								int tempEquipType = Item::getIdRule(tempI->iItemType,
+								int tempEquipType = Item::getIdRule(tempI->m_nItemType,
 																	Item::ITEM_EQUIP);
 								
 								if (tempEquipType == 1) {
@@ -719,7 +719,7 @@ void ItemMgr::processItemAttrib(NDTransData* data, int len)
 					
 					m_EquipList[equipItem] = itemBag;
 					
-					NDItemType* item_type = ItemMgrObj.QueryItemType(itemBag->iItemType);
+					NDItemType* item_type = ItemMgrObj.QueryItemType(itemBag->m_nItemType);
 					
 					if (item_type ) 
 					{
@@ -757,7 +757,7 @@ void ItemMgr::processItemAttrib(NDTransData* data, int len)
 			
 			if ( HasItemByType(ITEM_EQUIP, itemID, itemEquip) )
 			{
-				itemEquip->sAge = amount;
+				itemEquip->m_nAge = amount;
 				break;
 			}
 			break;
@@ -858,7 +858,7 @@ void ItemMgr::processItem(NDTransData* data, int len)
 			for (int i = Item::eEP_Begin; i < Item::eEP_End; i++)
 			{
 				Item* item = m_EquipList[i];
-				if (item && item->iID == itemID)
+				if (item && item->m_nID == itemID)
 				{
 					unpackEquip(i,true);
 					break;
@@ -943,7 +943,7 @@ void ItemMgr::processStone(NDTransData* data, int len)
 		for (; it != m_vecBag.end(); it++)
 		{
 			Item* item = *it;
-			if (item->iID == idItem)
+			if (item->m_nID == idItem)
 			{
 				item->AddStone(idStoneType);
 			}
@@ -952,7 +952,7 @@ void ItemMgr::processStone(NDTransData* data, int len)
 		for (int i = Item::eEP_Begin; i < Item::eEP_End; i++)
 		{
 			Item* item = m_EquipList[i];
-			if ( item && item->iID == idItem)
+			if ( item && item->m_nID == idItem)
 			{
 				item->AddStone(idStoneType);
 			}
@@ -980,7 +980,7 @@ void ItemMgr::processStone(NDTransData* data, int len)
 		for (; it != m_vecBag.end(); it++)
 		{
 			Item* item = *it;
-			if (item->iID == idItem)
+			if (item->m_nID == idItem)
 			{
 				item->DelAllStone();
 			}
@@ -989,7 +989,7 @@ void ItemMgr::processStone(NDTransData* data, int len)
 		for (int i = Item::eEP_Begin; i < Item::eEP_End; i++)
 		{
 			Item* item = m_EquipList[i];
-			if (item && item->iID == idItem)
+			if (item && item->m_nID == idItem)
 			{
 				item->DelAllStone();
 			}
@@ -1011,7 +1011,7 @@ void ItemMgr::processStoneInfo(NDTransData* data, int len)
 		for (; it != m_vecBag.end(); it++)
 		{
 			Item* item = *it;
-			if (item->iID == idItem)
+			if (item->m_nID == idItem)
 			{
 				item->AddStone(idStoneType);
 			}
@@ -1020,7 +1020,7 @@ void ItemMgr::processStoneInfo(NDTransData* data, int len)
 		for (int i = Item::eEP_Begin; i < Item::eEP_End; i++)
 		{
 			Item* item = m_EquipList[i];
-			if (item->iID == idItem)
+			if (item->m_nID == idItem)
 			{
 				item->AddStone(idStoneType);
 			}
@@ -1384,7 +1384,7 @@ void ItemMgr::processEquipBind(NDTransData* data, int len)
 		Item *res = NULL;
 		if (HasItemByType(ITEM_BAG, itemId, res)) 
 		{
-			if (res) res->byBindState = BIND_STATE_UNBIND;
+			if (res) res->m_nBindState = BIND_STATE_UNBIND;
 		}
 	}
 }
@@ -1431,7 +1431,7 @@ EquipPropAddtions ItemMgr::GetEquipAddtionProp()
 		Item *item = m_EquipList[i];
 		if (item) 
 		{
-			NDItemType *itemtype = QueryItemType(item->iItemType);
+			NDItemType *itemtype = QueryItemType(item->m_nItemType);
 			if (itemtype) 
 			{
 				result.iPowerAdd += itemtype->m_data.m_atk_point_add;
@@ -1455,7 +1455,7 @@ Item::eEquip_Pos ItemMgr::getEquipListPos(Item* item)
 		return pos;
 	}
 	
-	switch (item->iPosition) 
+	switch (item->m_nPosition) 
 	{
 		case 1: 
 		{ // 头盔
@@ -1790,13 +1790,13 @@ void ItemMgr::unpackEquip(int iPos, bool bUpdateGui)
 	
 	if (!( iPos < Item::eEP_Begin || iPos >= Item::eEP_End || !m_EquipList[iPos] ))
 	{
-		int iItemType = m_EquipList[iPos]->iItemType;
+		int iItemType = m_EquipList[iPos]->m_nItemType;
 		m_vecBag.push_back(m_EquipList[iPos]);
 		if (bagscene)
 		{
 			bagscene->AddItemToBag(m_EquipList[iPos]);
 		}
-		int nItemTypeUseInScript = m_EquipList[iPos]->iItemType;
+		int nItemTypeUseInScript = m_EquipList[iPos]->m_nItemType;
 		ScriptGlobalEvent::OnEvent(GE_ITEM_UPDATE, nItemTypeUseInScript);
 		m_EquipList[iPos] = NULL;
 		unpackEquipOfRole(iItemType);
@@ -1866,19 +1866,19 @@ void ItemMgr::setEquipState()
 	{
 		if (m_EquipList[i])
 		{
-			if (m_EquipList[i]->iAmount == 0)
+			if (m_EquipList[i]->m_nAmount == 0)
 			{
-				if (Item::isWeapon(m_EquipList[i]->iItemType))
+				if (Item::isWeapon(m_EquipList[i]->m_nItemType))
 				{
 					bWeaponBroken = true;
 				}
-				else if (Item::isDefEquip(m_EquipList[i]->iItemType)
-						 || Item::isAccessories(m_EquipList[i]->iItemType) )
+				else if (Item::isDefEquip(m_EquipList[i]->m_nItemType)
+						 || Item::isAccessories(m_EquipList[i]->m_nItemType) )
 				{
 					bDefBroken = true;
 				}
 						 
-				if(m_EquipList[i]->iAmount == 0 || m_EquipList[i]->sAge == 0)
+				if(m_EquipList[i]->m_nAmount == 0 || m_EquipList[i]->m_nAge == 0)
 				{
 					bRidePetBroken = true;
 				}
@@ -1899,10 +1899,10 @@ void ItemMgr::refreshEquipAmount(int itemId, int type)
 			for (int i = Item::eEP_Begin; i < Item::eEP_End; i++) 
 			{
 				Item *item = m_EquipList[i];
-				if (item && item->iID == itemId)
+				if (item && item->m_nID == itemId)
 				{
 					int equipAllAmount = item->getAmount_limit();
-					item->iAmount = equipAllAmount;
+					item->m_nAmount = equipAllAmount;
 					
 					NewEquipRepairLayer::refreshAmount();
 					return;
@@ -1913,10 +1913,10 @@ void ItemMgr::refreshEquipAmount(int itemId, int type)
 			for (; it != m_vecBag.end(); it++)
 			{
 				Item *item = *it;
-				if (item && item->iID == itemId) 
+				if (item && item->m_nID == itemId) 
 				{
 					int equipAllAmount = item->getAmount_limit();
-					item->iAmount = equipAllAmount;
+					item->m_nAmount = equipAllAmount;
 					NewEquipRepairLayer::refreshAmount();
 					return;
 				}
@@ -1931,7 +1931,7 @@ void ItemMgr::refreshEquipAmount(int itemId, int type)
 				if (item && item->isEquip() && !item->isRidePet() )
 				{
 					int equipAllAmount = item->getAmount_limit();
-					item->iAmount = equipAllAmount;
+					item->m_nAmount = equipAllAmount;
 				}
 			}
 			NewEquipRepairLayer::refreshAmount();
@@ -1947,7 +1947,7 @@ Item* ItemMgr::GetSuitItem(int idItem)
 		if (m_EquipList[i]) 
 		{
 			Item *item = m_EquipList[i];
-			if (item->iItemType/10 == idItem) 
+			if (item->m_nItemType/10 == idItem) 
 			{
 				return item;
 			}
@@ -1974,13 +1974,13 @@ void ItemMgr::repackEquip()
 	{
 		if (m_EquipList[i] && i != Item::eEP_Ride) 
 		{
-			NDItemType* item_type = ItemMgrObj.QueryItemType(m_EquipList[i]->iItemType);
+			NDItemType* item_type = ItemMgrObj.QueryItemType(m_EquipList[i]->m_nItemType);
 			if (!item_type) 
 			{
 				continue;
 			}
 			int nID = item_type->m_data.m_lookface;
-			int quality = m_EquipList[i]->iItemType % 10;
+			int quality = m_EquipList[i]->m_nItemType % 10;
 			player.SetEquipment(nID, quality);
 		}
 	}
@@ -1995,7 +1995,7 @@ void ItemMgr::GetEnhanceItem(VEC_ITEM& itemlist)
 		Item *item = *it;
 		if (item) 
 		{
-			if (item->isCanEnhance() || (item->iItemType >= 28010000 && item->iItemType <= 28019999)) {
+			if (item->isCanEnhance() || (item->m_nItemType >= 28010000 && item->m_nItemType <= 28019999)) {
 				itemlist.push_back(item);
 			}
 		}
@@ -2011,13 +2011,13 @@ void ItemMgr::GetBattleUsableItem(std::vector<Item*>& itemlist)
 		Item *item = *it;
 		if (item) 
 		{
-			NDItemType *itemtype = QueryItemType(item->iItemType);
+			NDItemType *itemtype = QueryItemType(item->m_nItemType);
 			int monopoly = 0;
 			if (itemtype) 
 			{
 				monopoly = itemtype->m_data.m_monopoly;
 			}
-			if ( item->iItemType / 10000000 == 2 && ( (monopoly & ITEMTYPE_MONOPOLY_BATTLE) == ITEMTYPE_MONOPOLY_BATTLE )
+			if ( item->m_nItemType / 10000000 == 2 && ( (monopoly & ITEMTYPE_MONOPOLY_BATTLE) == ITEMTYPE_MONOPOLY_BATTLE )
 				) 
 				itemlist.push_back(item);
 		}
@@ -2036,7 +2036,7 @@ void ItemMgr::GetCanUsableItem(std::vector<Item*>& itemlist)
 			bool hasExist = false;
 			for_vec(itemlist, VEC_ITEM_IT)
 			{
-				if ((*it)->iItemType == item->iItemType)
+				if ((*it)->m_nItemType == item->m_nItemType)
 				{
 					hasExist = true;
 					
@@ -2066,11 +2066,11 @@ int ItemMgr::GetBagItemCount(int iType)
 	for_vec(m_vecBag, VEC_ITEM_IT)
 	{
 		Item *item = *it;
-		if (item && item->iItemType == iType) 
+		if (item && item->m_nItemType == iType) 
 		{
-			if (item->iAmount > 0) 
+			if (item->m_nAmount > 0) 
 			{
-				count += item->iAmount;
+				count += item->m_nAmount;
 			} 
 			else 
 			{
@@ -2088,7 +2088,7 @@ Item* ItemMgr::GetBagItemByType(int idItemType)
 	for (; it != m_vecBag.end(); it++)
 	{
 		Item *item = *it;
-		if (item && item->iItemType == idItemType) 
+		if (item && item->m_nItemType == idItemType) 
 		{
 			return item;
 		}
@@ -2106,7 +2106,7 @@ bool ItemMgr::HasItemByType(int iType, int iItemID, Item*& itemRes)
 		for (; it != m_vecBag.end(); it++)
 		{
 			Item *item = *it;
-			if (item && item->iID == iItemID) 
+			if (item && item->m_nID == iItemID) 
 			{
 				itemRes =  item;
 				bRet = true;
@@ -2120,7 +2120,7 @@ bool ItemMgr::HasItemByType(int iType, int iItemID, Item*& itemRes)
 		for (; it != m_vecStorage.end(); it++)
 		{
 			Item *item = *it;
-			if (item && item->iID == iItemID) 
+			if (item && item->m_nID == iItemID) 
 			{
 				itemRes =  item;
 				bRet = true;
@@ -2133,7 +2133,7 @@ bool ItemMgr::HasItemByType(int iType, int iItemID, Item*& itemRes)
 		for (int i = Item::eEP_Begin; i < Item::eEP_End; i++) 
 		{
 			Item *item = m_EquipList[i];
-			if (item && item->iID == iItemID)
+			if (item && item->m_nID == iItemID)
 			{
 				itemRes =  item;
 				bRet = true;
@@ -2164,9 +2164,9 @@ bool ItemMgr::DelItem(int iType, int iItemID, bool bClear/*=true*/)
 		for (; it != m_vecBag.end(); it++)
 		{
 			Item *item = *it;
-			if (item && item->iID == iItemID) 
+			if (item && item->m_nID == iItemID) 
 			{
-				int nItemTypeUseInScript = item->iItemType;
+				int nItemTypeUseInScript = item->m_nItemType;
 				GameScene* gamescene = (GameScene*)(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene)));
 				NewPlayerBagLayer* bagscene = NewPlayerBagLayer::GetInstance();
 				if (bagscene)
@@ -2223,9 +2223,9 @@ bool ItemMgr::DelItem(int iType, int iItemID, bool bClear/*=true*/)
 		for (; it != m_vecStorage.end(); it++)
 		{
 			Item *item = *it;
-			if (item && item->iID == iItemID) 
+			if (item && item->m_nID == iItemID) 
 			{
-				int nItemTypeUseInScript = item->iItemType;
+				int nItemTypeUseInScript = item->m_nItemType;
 				if (bClear) 
 				{
 					delete item;
@@ -2245,9 +2245,9 @@ bool ItemMgr::DelItem(int iType, int iItemID, bool bClear/*=true*/)
 		for (int i = Item::eEP_Begin; i < Item::eEP_End; i++) 
 		{
 			Item *item = m_EquipList[i];
-			if (item && item->iID == iItemID)
+			if (item && item->m_nID == iItemID)
 			{
-				int nItemTypeUseInScript = item->iItemType;
+				int nItemTypeUseInScript = item->m_nItemType;
 				if (bClear) 
 				{
 					delete item;
@@ -2330,7 +2330,7 @@ Item* ItemMgr::QueryItem(OBJID idItem)
 	for (; it != m_vecBag.end(); it++)
 	{
 		Item *item = *it;
-		if (item && OBJID(item->iID) == idItem) 
+		if (item && OBJID(item->m_nID) == idItem) 
 		{
 			return item;
 		}
@@ -2341,7 +2341,7 @@ Item* ItemMgr::QueryItem(OBJID idItem)
 	for (; it != m_vecStorage.end(); it++)
 	{
 		Item *item = *it;
-		if (item && OBJID(item->iID) == idItem) 
+		if (item && OBJID(item->m_nID) == idItem) 
 		{
 			return item;
 		}
@@ -2351,7 +2351,7 @@ Item* ItemMgr::QueryItem(OBJID idItem)
 	for (int i = Item::eEP_Begin; i < Item::eEP_End; i++) 
 	{
 		Item *item = m_EquipList[i];
-		if (item && OBJID(item->iID) == idItem)
+		if (item && OBJID(item->m_nID) == idItem)
 		{
 			return item;
 		}
@@ -2383,7 +2383,7 @@ void ItemMgr::GetSoldItemsId(ID_VEC& vecId)
 	for (; itSold != m_mapSoldItems.end(); itSold++) 
 	{
 		if ((itSold->second)){
-			vecId.push_back(itSold->second->iID);
+			vecId.push_back(itSold->second->m_nID);
 		}
 	}
 }
@@ -2425,7 +2425,7 @@ bool ItemMgr::ChangeItemPosSold(OBJID idItem, int nPos)
 
 ///////////////////////////////////////////////////////////////////
 void sendItemUse(Item& item) {
-	NDItemType* itemType = ItemMgrObj.QueryItemType(item.iItemType);
+	NDItemType* itemType = ItemMgrObj.QueryItemType(item.m_nItemType);
 	NDAsssert(itemType != NULL);
 	
 	/*
@@ -2441,7 +2441,7 @@ void sendItemUse(Item& item) {
 	ShowProgressBar;
 	
 	NDTransData bao(_MSG_ITEM);
-	bao << (int)item.iID << (unsigned char)(Item::ITEM_USE);
+	bao << (int)item.m_nID << (unsigned char)(Item::ITEM_USE);
 	
 //	// SEND_DATA(bao);
 }
@@ -2449,7 +2449,7 @@ void sendItemUse(Item& item) {
 void sendDropItem(Item& item) {
 	ShowProgressBar;
 	NDTransData bao(_MSG_ITEM);
-	bao << (int)item.iID << (unsigned char)Item::ITEM_DROP;
+	bao << (int)item.m_nID << (unsigned char)Item::ITEM_DROP;
 	// SEND_DATA(bao);
 }
 
@@ -2463,7 +2463,7 @@ void sendItemRepair(int itemID, int action) {
 int GetItemPos(Item& item)
 {
 	int iRes = Item::eEP_End;
-	switch (item.iPosition) {
+	switch (item.m_nPosition) {
 		case 1: { // 头盔
 			iRes = Item::eEP_Head;
 			break;

@@ -24,7 +24,6 @@ using namespace std;
 namespace NDEngine
 {
 #define BEGIN_PROTECTED_TIME 3// 人物一开始的的保护时间,即不会遇怪
-
 #define SHOW_NAME_ROLE_W (64) // 在w(-64,64)区域内显示怪物和npc名字
 #define SHOW_NAME_ROLE_H (64)
 
@@ -304,12 +303,12 @@ private:
 	deque<int> m_kDequeWalk;
 	bool m_bUpdateDiff;
 	int m_nIDTransformTo;
-	NDPicture* m_picVendor;
-	NDPicture* m_picBattle;
-	NDPicture* m_picGraveStone;
+	NDPicture* m_pkVendorPicture;
+	NDPicture* m_pkBattlePicture;
+	NDPicture* m_pkGraveStonePicture;
 	int m_nSynRank;							// 帮派级别
 
-	NDLightEffect* m_numberOneEffect;
+	NDLightEffect* m_pkNumberOneEffect;
 	void RunNumberOneEffect();
 
 protected:

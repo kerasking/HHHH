@@ -63,83 +63,83 @@ NDPicture* ItemImage::GetItem(int iIndex, bool gray/*=false*/, bool smallicon/*=
 	int iX = iIndex % 6 * iItemSizeW;
 	int iY = iIndex / 6* iItemSizeH;
 	
-	NDPicture *res = NDPicturePool::DefaultPool()->AddPicture(
+	NDPicture* pkResource = NDPicturePool::DefaultPool()->AddPicture(
 		(smallicon ? NDPath::GetImgPathBattleUI("item_small.png") :
 		NDPath::GetSMImgPath("mix/mix_goods.png") ) , true);
 
-	if (!res)
+	if (!pkResource)
 	{
 		return NULL;
 	}
 
-	CGSize size = res->GetSize();
+	CGSize kSize = pkResource->GetSize();
 
-	if ( iX + iItemSizeW > size.width || iY + iItemSizeH > size.height ) 
+	if ( iX + iItemSizeW > kSize.width || iY + iItemSizeH > kSize.height ) 
 	{
-		delete res;
+		delete pkResource;
 		return NULL;
 	}
 	
-	res->Cut(CGRectMake(iX, iY, iItemSizeW, iItemSizeH));
+	pkResource->Cut(CGRectMake(iX, iY, iItemSizeW, iItemSizeH));
 	
-	return res;
+	return pkResource;
 }
 
 NDPicture* ItemImage::GetPinZhiPic(int iItemType, bool smallicon/*=false*/)
 {
-	NDPicture *res = NULL;
+	NDPicture* pkResource = NULL;
 	
 	int iItemSizeW = smallicon ? SMALL_ITEM_SIZE_W : ITEM_SIZE_W;
 	int iItemSizeH = smallicon ? SMALL_ITEM_SIZE_H : ITEM_SIZE_H;
 	
-	std::vector<int> ids = Item::getItemType(iItemType);
-	int x = ITEM_SIZE_H, y =14*iItemSizeH;
+	std::vector<int> kIDs = Item::getItemType(iItemType);
+	int x = ITEM_SIZE_H, y =14 * iItemSizeH;
 	//int result = -1;
-	if ( ids[0] > 1 ) 
+	if ( kIDs[0] > 1 ) 
 	{
-		return res;
+		return pkResource;
 	}
-	if (ids[7] == 5) 
+	if (kIDs[7] == 5) 
 	{
 	} 
-	else if (ids[7] == 6)
+	else if (kIDs[7] == 6)
 	{
 		x += iItemSizeH;
 	} 
-	else if (ids[7] == 7)
+	else if (kIDs[7] == 7)
 	{
 		x += iItemSizeH * 2;
 	} 
-	else if (ids[7] == 8)
+	else if (kIDs[7] == 8)
 	{
 		x += iItemSizeH * 3;
 	}
-	else if (ids[7] == 9)
+	else if (kIDs[7] == 9)
 	{
 		x += iItemSizeH * 4;
 	}
 	else
 	{
-		return res;
+		return pkResource;
 	}
 	
-	res = NDPicturePool::DefaultPool()->AddPicture(
+	pkResource = NDPicturePool::DefaultPool()->AddPicture(
 		NDPath::GetImgPathBattleUI(smallicon ? "item_small.png" : "items.png"), true);
-	if (!res)
+	if (!pkResource)
 	{
 		return NULL;
 	}
 	
-	CGSize size = res->GetSize();
+	CGSize size = pkResource->GetSize();
 	if ( x + iItemSizeW > size.width || y + iItemSizeH > size.height ) 
 	{
-		delete res;
+		delete pkResource;
 		return NULL;
 	}
 	
-	res->Cut(CGRectMake(x, y, iItemSizeW, iItemSizeH));
+	pkResource->Cut(CGRectMake(x, y, iItemSizeW, iItemSizeH));
 	
-	return res;
+	return pkResource;
 
 }
 
@@ -166,21 +166,21 @@ NDPicture* GetSkillIconByIconIndex(int iIconIndex, bool gray/*=false*/)
 	int nStartX = (iIconIndex % 100 - 1) * SKILL_SIZE_W;
 	int nStartY = (iIconIndex / 100 - 1) * SKILL_SIZE_H;
 	
-	NDPicture *res = NDPicturePool::DefaultPool()->
+	NDPicture* pkResource = NDPicturePool::DefaultPool()->
 		AddPicture(NDPath::GetImgPathNew("skillicon.png"), gray);
 	
-	if (res)
+	if (pkResource)
 	{
-		CGSize size = res->GetSize();
+		CGSize size = pkResource->GetSize();
 		if (nStartX < 0 || nStartY < 0 ||
 			nStartX + SKILL_SIZE_W > size.width ||
 			nStartY + SKILL_SIZE_H > size.height )
 		{
-			CC_SAFE_DELETE(res);
+			CC_SAFE_DELETE(pkResource);
 			return NULL;
 		}
-		res->Cut(CGRectMake(nStartX, nStartY, SKILL_SIZE_W, SKILL_SIZE_H));
-		return res;
+		pkResource->Cut(CGRectMake(nStartX, nStartY, SKILL_SIZE_W, SKILL_SIZE_H));
+		return pkResource;
 	}
 
 	return NULL;
@@ -188,26 +188,26 @@ NDPicture* GetSkillIconByIconIndex(int iIconIndex, bool gray/*=false*/)
 
 NDPicture* ItemImage::GetSMItem(int nIconVal)
 {
-	NDPicture *res = NDPicturePool::DefaultPool()->
+	NDPicture* pkResource = NDPicturePool::DefaultPool()->
 		AddPicture(GetSMImgPath("mix/mix_goods.png"), true);
 
-	if (!res)
+	if (!pkResource)
 	{
 		return NULL;
 	}
 	
-	CGSize size = res->GetSize();
+	CGSize kSize = pkResource->GetSize();
 	int nCol	= nIconVal % 100 - 1;
 	int nRow	= nIconVal / 100 - 1;
 	
 	if (nRow < 0 || nCol < 0 ||
-		ITEM_SIZE_W * nCol > size.width || ITEM_SIZE_H * nRow > size.height)
+		ITEM_SIZE_W * nCol > kSize.width || ITEM_SIZE_H * nRow > kSize.height)
 	{
-		delete res;
+		delete pkResource;
 		return NULL;
 	}
 	
-	res->Cut(CGRectMake(ITEM_SIZE_W * nCol, ITEM_SIZE_H * nRow, ITEM_SIZE_W, ITEM_SIZE_H));
+	pkResource->Cut(CGRectMake(ITEM_SIZE_W * nCol, ITEM_SIZE_H * nRow, ITEM_SIZE_W, ITEM_SIZE_H));
 	
-	return res;
+	return pkResource;
 }

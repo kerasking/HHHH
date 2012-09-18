@@ -88,7 +88,7 @@ int GetItemCount(int nItemType)
 	{
 		Item *item = (*it);
 
-		if (item->iItemType == nItemType)
+		if (item->m_nItemType == nItemType)
 		{
 			if (item->isEquip())
 			{
@@ -96,7 +96,7 @@ int GetItemCount(int nItemType)
 			}
 			else
 			{
-				count += item->iAmount;
+				count += item->m_nAmount;
 			}
 		}
 

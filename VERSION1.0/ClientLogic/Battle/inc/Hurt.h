@@ -47,76 +47,76 @@ class HurtNumber
 public:
 	HurtNumber(int num)
 	{
-		hurtNum = num;
-		existTime = EXIST_TIME_MAX;
-		hurtNumberY = 0;
-		disappear = false;
+		m_nHurtNum = num;
+		m_nExistTime = EXIST_TIME_MAX;
+		m_nHurtNumberY = 0;
+		m_bIsDisappear = false;
 	}
 
 	void timeLost()
 	{
-		if (existTime < EXIST_TIME_MAX)
+		if (m_nExistTime < EXIST_TIME_MAX)
 		{
-			existTime--;
-			if (existTime > EXIST_TIME_MAX - 3)
+			m_nExistTime--;
+			if (m_nExistTime > EXIST_TIME_MAX - 3)
 			{
-				hurtNumberY += 2;
+				m_nHurtNumberY += 2;
 			}
-			if (existTime == 0)
+			if (m_nExistTime == 0)
 			{
-				disappear = true;
-				existTime = EXIST_TIME_MAX;
+				m_bIsDisappear = true;
+				m_nExistTime = EXIST_TIME_MAX;
 			}
 		}
 	}
 
 	bool isNew()
 	{
-		return existTime == EXIST_TIME_MAX ? true : false;
+		return m_nExistTime == EXIST_TIME_MAX ? true : false;
 	}
 
 	void beginAppear()
 	{
-		existTime = EXIST_TIME_MAX - 1;
-		hurtNumberY = 1;
+		m_nExistTime = EXIST_TIME_MAX - 1;
+		m_nHurtNumberY = 1;
 	}
 
 	bool isDisappear()
 	{
-		return disappear;
+		return m_bIsDisappear;
 	}
 
 	void setDisappear(bool bDis)
 	{
-		disappear = bDis;
+		m_bIsDisappear = bDis;
 	}
 
 	int getHurtNum()
 	{
-		return hurtNum;
+		return m_nHurtNum;
 	}
 
 	void setHurtNum(int hn)
 	{
-		hurtNum = hn;
+		m_nHurtNum = hn;
 	}
 
 	int getHurtNumberY()
 	{
-		return hurtNumberY;
+		return m_nHurtNumberY;
 	}
 
 	void setHurtNumberY(int hnY)
 	{
-		hurtNumberY = hnY;
+		m_nHurtNumberY = hnY;
 	}
 
 private:
-	int hurtNum;
-	int existTime;
+	int m_nHurtNum;
+	int m_nExistTime;
 
-	bool disappear;
-	int hurtNumberY;
+	bool m_bIsDisappear;
+	int m_nHurtNumberY;
 };
 
 #endif

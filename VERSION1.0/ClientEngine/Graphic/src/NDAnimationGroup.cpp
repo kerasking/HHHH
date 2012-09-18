@@ -170,9 +170,9 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 				kFileOp.readUTF8String(pkStream);
 			}
 
-			int sagSize = kFileOp.readByte(pkStream);
+			int nSagSize = kFileOp.readByte(pkStream);
 
-			for (int k = 0; k < sagSize; k++)
+			for (int k = 0; k < nSagSize; k++)
 			{
 				std::string strAnimationPath =
 						NDEngine::NDPath::GetAnimationPath();

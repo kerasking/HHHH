@@ -18,13 +18,13 @@ IMPLEMENT_CLASS(CUISpriteNode, NDUINode)
 
 CUISpriteNode::CUISpriteNode()
 {
-	m_pSpriteParentNode		= NULL;
-	m_pSprite				= NULL;
+	m_pkSpriteParentNode		= NULL;
+	m_pkSprite				= NULL;
 }
 
 CUISpriteNode::~CUISpriteNode()
 {
-	SAFE_DELETE_NODE(m_pSpriteParentNode);
+	SAFE_DELETE_NODE(m_pkSpriteParentNode);
 }
 
 void CUISpriteNode::Initialization()
@@ -33,9 +33,9 @@ void CUISpriteNode::Initialization()
 	
 	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 	
-	m_pSpriteParentNode	= new NDUINode;
-	m_pSpriteParentNode->Initialization();
-	m_pSpriteParentNode->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
+	m_pkSpriteParentNode	= new NDUINode;
+	m_pkSpriteParentNode->Initialization();
+	m_pkSpriteParentNode->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
 }
 
 /////////////////////////////////////////////////////////
@@ -45,14 +45,14 @@ CUISpriteNode::SetPosition(int nPosX, int nPosY)
 	CGPoint point;
 	point.x = nPosX;
 	point.y = nPosY;
-	m_pSprite->SetPosition(point);
+	m_pkSprite->SetPosition(point);
 }
 
 void CUISpriteNode::ChangeSprite(const char* sprfile)
 {
-	SAFE_DELETE_NODE(m_pSprite);
+	SAFE_DELETE_NODE(m_pkSprite);
 	
-	if (!m_pSpriteParentNode || !sprfile)
+	if (!m_pkSpriteParentNode || !sprfile)
 	{
 		return;
 	}
@@ -62,20 +62,20 @@ void CUISpriteNode::ChangeSprite(const char* sprfile)
 		return;
 	}
 	
-	m_pSprite		= new NDEngine::NDSprite;
-	m_pSprite->Initialization(sprfile);
-	m_pSprite->SetCurrentAnimation(0, false);
-	m_pSpriteParentNode->AddChild(m_pSprite);
+	m_pkSprite		= new NDEngine::NDSprite;
+	m_pkSprite->Initialization(sprfile);
+	m_pkSprite->SetCurrentAnimation(0, false);
+	m_pkSpriteParentNode->AddChild(m_pkSprite);
 }
 
 bool CUISpriteNode::isAnimationComplete()
 {
-	if(!m_pSprite)
+	if(!m_pkSprite)
 	{
 		return true;
 	}
 	
-	return m_pSprite->IsAnimationComplete();
+	return m_pkSprite->IsAnimationComplete();
 }
 
 void CUISpriteNode::draw()
@@ -87,7 +87,7 @@ void CUISpriteNode::draw()
 	
 	NDUINode::draw();
 	
-	if (!m_pSprite)
+	if (!m_pkSprite)
 	{
 		return;
 	}
@@ -100,22 +100,22 @@ void CUISpriteNode::draw()
 							 ccp((scrRect.size.width ) / 2 ,
 								 (scrRect.size.height) / 2) );
 	
-	m_pSprite->SetPosition(pos);
-	m_pSprite->RunAnimation(true);
+	m_pkSprite->SetPosition(pos);
+	m_pkSprite->RunAnimation(true);
 }
 
 void CUISpriteNode::SetAnimation(int nIndex, bool bFaceRight)
 {
-	if (m_pSprite)
+	if (m_pkSprite)
 	{
-		m_pSprite->SetCurrentAnimation(nIndex, bFaceRight);
+		m_pkSprite->SetCurrentAnimation(nIndex, bFaceRight);
 	}
 }
 
 void CUISpriteNode::SetPlayFrameRange(int nStartFrame, int nEndFrame)
 {
-	if (m_pSprite)
+	if (m_pkSprite)
 	{
-		m_pSprite->SetPlayFrameRange(nStartFrame, nEndFrame);
+		m_pkSprite->SetPlayFrameRange(nStartFrame, nEndFrame);
 	}
 }

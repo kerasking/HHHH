@@ -448,11 +448,11 @@ Battle::~Battle()
 				|| player.m_nMana < player.m_nMaxMana)
 		{
 			ItemMgr& items = ItemMgrObj;
-			Item* recover = items.GetBagItemByType(IT_RECOVER);
+			Item* pkRecoverItem = items.GetBagItemByType(IT_RECOVER);
 
-			if (recover && recover->active)
+			if (pkRecoverItem && pkRecoverItem->m_bIsActive)
 			{
-				sendItemUse(*recover);
+				sendItemUse(*pkRecoverItem);
 			}
 		}
 	}
@@ -464,8 +464,7 @@ Battle::~Battle()
 	//
 	if (m_rewardContent.size() > 2)
 	{
-		GlobalShowDlg(NDCommonCString("BattleRes"), m_rewardContent.c_str(),
-				3.0f);
+		GlobalShowDlg(NDCommonCString("BattleRes"), m_rewardContent.c_str(),3.0f);
 	}
 }
 

@@ -60,7 +60,7 @@ void fleeFailAction(Fighter& f);
 
 void warriorSkillAction(Fighter& f);
 
-void assasinSkillAction(Fighter& f);
+void assasinSkillAction(Fighter& kFighter);
 
 void wizzardSkillAction(Fighter& f);
 

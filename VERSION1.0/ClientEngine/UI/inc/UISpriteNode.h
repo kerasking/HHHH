@@ -33,8 +33,8 @@ public:
 	void SetPlayFrameRange(int nStartFrame, int nEndFrame);
 	void SetPosition(int nPosX, int nPosY);
 private:
-	NDEngine::NDUINode*				m_pSpriteParentNode;
-	NDEngine::NDSprite*				m_pSprite;
+	NDEngine::NDUINode*				m_pkSpriteParentNode;
+	NDEngine::NDSprite*				m_pkSprite;
 	
 protected:
 	void draw(); override

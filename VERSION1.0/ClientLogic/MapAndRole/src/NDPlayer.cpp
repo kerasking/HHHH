@@ -622,6 +622,8 @@ void NDPlayer::SetPosition(CGPoint newPosition)
 
 void NDPlayer::Update(unsigned long ulDiff)
 {
+	NDManualRole::Update(ulDiff);
+
 	/***
 	 * ÁÙÊ±ĞÔ×¢ÊÍ ¹ùºÆ
 	 * all
@@ -789,7 +791,7 @@ void NDPlayer::CaclEquipEffect()
 			continue;
 		}
 
-		NDItemType *itemtype = ItemMgrObj.QueryItemType(pkItem->iItemType);
+		NDItemType *itemtype = ItemMgrObj.QueryItemType(pkItem->m_nItemType);
 		if (itemtype == NULL)
 		{
 			continue;
@@ -798,16 +800,16 @@ void NDPlayer::CaclEquipEffect()
 		m_eAtkSpd += itemtype->m_data.m_atk_speed + pkItem->getInlayAtk_speed();
 
 		m_eAtk += pkItem->getAdditionResult(itemtype->m_data.m_enhancedId,
-				pkItem->iAddition, itemtype->m_data.m_atk) + pkItem->getInlayAtk();
+				pkItem->m_nAddition, itemtype->m_data.m_atk) + pkItem->getInlayAtk();
 		m_eDef += pkItem->getAdditionResult(itemtype->m_data.m_enhancedId,
-				pkItem->iAddition, itemtype->m_data.m_def) + pkItem->getInlayDef();
+				pkItem->m_nAddition, itemtype->m_data.m_def) + pkItem->getInlayDef();
 		m_eHardAtk += itemtype->m_data.m_hard_hitrate
 				+ pkItem->getInlayHard_hitrate();
 		m_eSkillAtk += pkItem->getAdditionResult(itemtype->m_data.m_enhancedId,
-				pkItem->iAddition, itemtype->m_data.m_mag_atk)
+				pkItem->m_nAddition, itemtype->m_data.m_mag_atk)
 				+ pkItem->getInlayMag_atk();
 		m_eSkillDef += pkItem->getAdditionResult(itemtype->m_data.m_enhancedId,
-				pkItem->iAddition, itemtype->m_data.m_mag_def)
+				pkItem->m_nAddition, itemtype->m_data.m_mag_def)
 				+ pkItem->getInlayMag_def();
 		m_eSkillHard += itemtype->m_data.m_mana_limit
 				+ pkItem->getInlayMana_limit();

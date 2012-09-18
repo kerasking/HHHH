@@ -31,7 +31,7 @@ Item::Item()
 Item::Item(int iItemType)
 {
 	this->init();
-	this->iItemType = iItemType;
+	this->m_nItemType = iItemType;
 }
 
 Item::Item(const Item& rhs)
@@ -46,31 +46,31 @@ Item& Item::operator =(const Item& rhs)
 		return *this;
 	}
 
-	this->iID = rhs.iID;						// 鐗╁搧鐨処d
-	this->iOwnerID = rhs.iOwnerID;			// 鐗╁搧鐨勬墍鏈夎�卛d
-	this->iItemType = rhs.iItemType;			// 鐗╁搧绫诲瀷 id
-	this->iAmount = rhs.iAmount;				// 鐗╁搧鏁伴噺/鑰愪箙搴�
-	this->iPosition = rhs.iPosition;				// 鐗╁搧浣嶇疆
-	this->iAddition = rhs.iAddition;				// 瑁呭杩藉姞
-	this->byBindState = rhs.byBindState;		// 缁戝畾鐘舵��
-	this->byHole = rhs.byHole;				// 瑁呭鏈夊嚑涓礊
-	this->iCreateTime = rhs.iCreateTime;			// 鍒涘缓鏃堕棿
-	this->sAge = rhs.sAge;					// 楠戝疇瀵垮懡
-	this->active = rhs.active;
+	this->m_nID = rhs.m_nID;						// 鐗╁搧鐨処d
+	this->m_nOwnerID = rhs.m_nOwnerID;			// 鐗╁搧鐨勬墍鏈夎??卛d
+	this->m_nItemType = rhs.m_nItemType;			// 鐗╁搧绫诲瀷 id
+	this->m_nAmount = rhs.m_nAmount;				// 鐗╁搧鏁伴噺/鑰愪箙搴??
+	this->m_nPosition = rhs.m_nPosition;				// 鐗╁搧浣嶇疆
+	this->m_nAddition = rhs.m_nAddition;				// 瑁呭杩藉姞
+	this->m_nBindState = rhs.m_nBindState;		// 缁戝畾鐘舵????
+	this->m_nHole = rhs.m_nHole;				// 瑁呭鏈夊嚑涓礊
+	this->m_nCreateTime = rhs.m_nCreateTime;			// 鍒涘缓鏃堕棿
+	this->m_nAge = rhs.m_nAge;					// 楠戝疇瀵垮懡
+	this->m_bIsActive = rhs.m_bIsActive;
 
-	for (std::vector<Item*>::iterator it = vecStone.begin();
-			it != vecStone.end(); it++)
+	for (std::vector<Item*>::iterator it = m_vStone.begin();
+			it != m_vStone.end(); it++)
 	{
 		SAFE_DELETE(*it);
 	}
-	vecStone.clear();
+	m_vStone.clear();
 
-	for (std::vector<Item*>::const_iterator it = rhs.vecStone.begin();
-			it != rhs.vecStone.end(); it++)
+	for (std::vector<Item*>::const_iterator it = rhs.m_vStone.begin();
+			it != rhs.m_vStone.end(); it++)
 	{
 		Item* stone = new Item;
 		(*stone) = *(*it);
-		this->vecStone.push_back(stone);
+		this->m_vStone.push_back(stone);
 	}
 
 	return *this;
@@ -78,23 +78,23 @@ Item& Item::operator =(const Item& rhs)
 
 void Item::init()
 {
-	iID = 0;					// 鐗╁搧鐨処d
-	iOwnerID = 0;				// 鐗╁搧鐨勬墍鏈夎�卛d
-	iItemType = 0;				// 鐗╁搧绫诲瀷 id
-	iAmount = 0;				// 鐗╁搧鏁伴噺/鑰愪箙搴�
-	iPosition = 0;				// 鐗╁搧浣嶇疆
-	iAddition = 0;				// 瑁呭杩藉姞
-	byBindState = 0;			// 缁戝畾鐘舵��
-	byHole = 0;				// 瑁呭鏈夊嚑涓礊
-	iCreateTime = 0;			// 鍒涘缓鏃堕棿
-	sAge = 0;					// 楠戝疇瀵垮懡
-	active = false;
+	m_nID = 0;					// 鐗╁搧鐨処d
+	m_nOwnerID = 0;				// 鐗╁搧鐨勬墍鏈夎??卛d
+	m_nItemType = 0;				// 鐗╁搧绫诲瀷 id
+	m_nAmount = 0;				// 鐗╁搧鏁伴噺/鑰愪箙搴??
+	m_nPosition = 0;				// 鐗╁搧浣嶇疆
+	m_nAddition = 0;				// 瑁呭杩藉姞
+	m_nBindState = 0;			// 缁戝畾鐘舵????
+	m_nHole = 0;				// 瑁呭鏈夊嚑涓礊
+	m_nCreateTime = 0;			// 鍒涘缓鏃堕棿
+	m_nAge = 0;					// 楠戝疇瀵垮懡
+	m_bIsActive = false;
 }
 
 Item::~Item()
 {
-	for (std::vector<Item*>::iterator it = vecStone.begin();
-			it != vecStone.end(); it++)
+	for (std::vector<Item*>::iterator it = m_vStone.begin();
+			it != m_vStone.end(); it++)
 	{
 		Item* item = *it;
 		SAFE_DELETE(item);
@@ -104,19 +104,19 @@ Item::~Item()
 void Item::AddStone(int iItemType)
 {
 	Item* item = new Item(iItemType);
-	vecStone.push_back(item);
+	m_vStone.push_back(item);
 }
 
 void Item::DelStone(int iItemID)
 {
-	std::vector<Item*>::iterator it = vecStone.begin();
-	for (; it != vecStone.end(); it++)
+	std::vector<Item*>::iterator it = m_vStone.begin();
+	for (; it != m_vStone.end(); it++)
 	{
 		Item *item = *it;
-		if (iItemID == (item->iID))
+		if (iItemID == (item->m_nID))
 		{
 			delete item;
-			vecStone.erase(it);
+			m_vStone.erase(it);
 			break;
 		}
 	}
@@ -124,24 +124,24 @@ void Item::DelStone(int iItemID)
 
 void Item::DelAllStone()
 {
-	std::vector<Item*>::iterator it = vecStone.begin();
-	for (; it != vecStone.end(); it++)
+	std::vector<Item*>::iterator it = m_vStone.begin();
+	for (; it != m_vStone.end(); it++)
 	{
 		delete (*it);
 	}
-	vecStone.clear();
+	m_vStone.clear();
 }
 
 int Item::getInlayAtk_speed()
 {
 	int result = 0;
-	for (std::vector<Item*>::iterator it = vecStone.begin();
-			it != vecStone.end(); it++)
+	for (std::vector<Item*>::iterator it = m_vStone.begin();
+			it != m_vStone.end(); it++)
 	{
 		Item* item = *it;
 		if (item)
 		{
-			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->iItemType);
+			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->m_nItemType);
 			if (itemtype)
 			{
 				result += itemtype->m_data.m_atk_speed;
@@ -154,13 +154,13 @@ int Item::getInlayAtk_speed()
 int Item::getInlayAtk()
 {
 	int result = 0;
-	for (std::vector<Item*>::iterator it = vecStone.begin();
-			it != vecStone.end(); it++)
+	for (std::vector<Item*>::iterator it = m_vStone.begin();
+			it != m_vStone.end(); it++)
 	{
 		Item* item = *it;
 		if (item)
 		{
-			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->iItemType);
+			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->m_nItemType);
 			if (itemtype)
 			{
 				result += itemtype->m_data.m_atk;
@@ -173,13 +173,13 @@ int Item::getInlayAtk()
 int Item::getInlayDef()
 {
 	int result = 0;
-	for (std::vector<Item*>::iterator it = vecStone.begin();
-			it != vecStone.end(); it++)
+	for (std::vector<Item*>::iterator it = m_vStone.begin();
+			it != m_vStone.end(); it++)
 	{
 		Item* item = *it;
 		if (item)
 		{
-			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->iItemType);
+			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->m_nItemType);
 			if (itemtype)
 			{
 				result += itemtype->m_data.m_def;
@@ -192,13 +192,13 @@ int Item::getInlayDef()
 int Item::getInlayHard_hitrate()
 {
 	int result = 0;
-	for (std::vector<Item*>::iterator it = vecStone.begin();
-			it != vecStone.end(); it++)
+	for (std::vector<Item*>::iterator it = m_vStone.begin();
+			it != m_vStone.end(); it++)
 	{
 		Item* item = *it;
 		if (item)
 		{
-			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->iItemType);
+			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->m_nItemType);
 			if (itemtype)
 			{
 				result += itemtype->m_data.m_hard_hitrate;
@@ -211,13 +211,13 @@ int Item::getInlayHard_hitrate()
 int Item::getInlayMag_atk()
 {
 	int result = 0;
-	for (std::vector<Item*>::iterator it = vecStone.begin();
-			it != vecStone.end(); it++)
+	for (std::vector<Item*>::iterator it = m_vStone.begin();
+			it != m_vStone.end(); it++)
 	{
 		Item* item = *it;
 		if (item)
 		{
-			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->iItemType);
+			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->m_nItemType);
 			if (itemtype)
 			{
 				result += itemtype->m_data.m_mag_atk;
@@ -230,13 +230,13 @@ int Item::getInlayMag_atk()
 int Item::getInlayMag_def()
 {
 	int result = 0;
-	for (std::vector<Item*>::iterator it = vecStone.begin();
-			it != vecStone.end(); it++)
+	for (std::vector<Item*>::iterator it = m_vStone.begin();
+			it != m_vStone.end(); it++)
 	{
 		Item* item = *it;
 		if (item)
 		{
-			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->iItemType);
+			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->m_nItemType);
 			if (itemtype)
 			{
 				result += itemtype->m_data.m_mag_def;
@@ -249,13 +249,13 @@ int Item::getInlayMag_def()
 int Item::getInlayMana_limit()
 {
 	int result = 0;
-	for (std::vector<Item*>::iterator it = vecStone.begin();
-			it != vecStone.end(); it++)
+	for (std::vector<Item*>::iterator it = m_vStone.begin();
+			it != m_vStone.end(); it++)
 	{
 		Item* item = *it;
 		if (item)
 		{
-			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->iItemType);
+			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->m_nItemType);
 			if (itemtype)
 			{
 				result += itemtype->m_data.m_mana_limit;
@@ -268,13 +268,13 @@ int Item::getInlayMana_limit()
 int Item::getInlayDodge()
 {
 	int result = 0;
-	for (std::vector<Item*>::iterator it = vecStone.begin();
-			it != vecStone.end(); it++)
+	for (std::vector<Item*>::iterator it = m_vStone.begin();
+			it != m_vStone.end(); it++)
 	{
 		Item* item = *it;
 		if (item)
 		{
-			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->iItemType);
+			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->m_nItemType);
 			if (itemtype)
 			{
 				result += itemtype->m_data.m_dodge;
@@ -287,13 +287,13 @@ int Item::getInlayDodge()
 int Item::getInlayHitrate()
 {
 	int result = 0;
-	for (std::vector<Item*>::iterator it = vecStone.begin();
-			it != vecStone.end(); it++)
+	for (std::vector<Item*>::iterator it = m_vStone.begin();
+			it != m_vStone.end(); it++)
 	{
 		Item* item = *it;
 		if (item)
 		{
-			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->iItemType);
+			NDItemType *itemtype = ItemMgrObj.QueryItemType(item->m_nItemType);
 			if (itemtype)
 			{
 				result += itemtype->m_data.m_hitrate;
@@ -332,7 +332,7 @@ int Item::getPercentByLevel(int btAddition)
 
 int Item::getMonopoly()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (itemtype)
 	{
 		return itemtype->m_data.m_monopoly;
@@ -342,7 +342,7 @@ int Item::getMonopoly()
 
 int Item::getEnhanceId()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (itemtype)
 	{
 		return itemtype->m_data.m_enhancedId;
@@ -352,7 +352,7 @@ int Item::getEnhanceId()
 
 int Item::getIconIndex()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (itemtype)
 	{
 		return itemtype->m_data.m_iconIndex;
@@ -362,7 +362,7 @@ int Item::getIconIndex()
 
 int Item::getItemColor()
 {
-	std::vector<int> ids = getItemType(iItemType);
+	std::vector<int> ids = getItemType(m_nItemType);
 	//int result = -1;
 	int result = 0xe5cc80;
 	if (ids[0] > 1)
@@ -395,24 +395,24 @@ int Item::getItemColor()
 std::string Item::getItemDesc()
 {
 	stringstream sb;
-	int type = getIdRule(iItemType, Item::ITEM_TYPE); // 鐗╁搧绫诲瀷
+	int type = getIdRule(m_nItemType, Item::ITEM_TYPE); // 鐗╁搧绫诲瀷
 	sb << (getItemNameWithAdd());
 	if (type == 0)
 	{ // 瑁呭
 		sb << " " << NDCommonCString("NaiJiuDu") << ": "
-				<< getdwAmountShow(iAmount) << "/"
+				<< getdwAmountShow(m_nAmount) << "/"
 				<< getdwAmountShow(getAmount_limit());
 	}
 	else if (isRidePet())
 	{ // 楠戝疇
-		sb << " " << NDCommonCString("TiLi") << ": " << iAmount << "/"
+		sb << " " << NDCommonCString("TiLi") << ": " << m_nAmount << "/"
 				<< getAmount_limit();
 	}
 	else
 	{
-		if (iAmount > 1)
+		if (m_nAmount > 1)
 		{
-			sb << " x " << iAmount;
+			sb << " x " << m_nAmount;
 		}
 	}
 	return std::string(sb.str().c_str());
@@ -429,7 +429,7 @@ std::vector<int> Item::getItemType(int iType)
 }
 
 bool Item::isDefEquip(int itemType)
-{ // 鏄惁闃插叿鍜屽壇鎵�,閮界畻鍋氶槻鍏�
+{ // 鏄惁闃插叿鍜屽壇鎵??,閮界畻鍋氶槻鍏??
 	std::vector<int> rule = getItemType(itemType);
 	if (rule[0] == 0 && (rule[1] == 3 || rule[1] == 4))
 	{
@@ -449,7 +449,7 @@ bool Item::isAccessories(int itemType)
 }
 
 bool Item::isWeapon(int itemType)
-{ // 鏄惁姝﹀櫒,鍖呮嫭鍗曞弻鎵�
+{ // 鏄惁姝﹀櫒,鍖呮嫭鍗曞弻鎵??
 
 	std::vector<int> rule = getItemType(itemType);
 	if (rule[0] == 0 && (rule[1] == 1 || rule[1] == 2))
@@ -468,8 +468,8 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 	}
 	Item& item1 = *item;
 	Item& item2 = *otheritem;
-	std::vector<int> ids1 = Item::getItemType(item1.iItemType);
-	std::vector<int> ids2 = Item::getItemType(item2.iItemType);
+	std::vector<int> ids1 = Item::getItemType(item1.m_nItemType);
+	std::vector<int> ids2 = Item::getItemType(item2.m_nItemType);
 
 	stringstream sb;
 
@@ -506,9 +506,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		sb << "\n";
 	}
 
-	tempInt1 = item1.vecStone.size();
-	tempInt2 = item2.vecStone.size();
-	sb << NDCommonCString("XiangQian") << "锛� +" << tempInt1 << "->";
+	tempInt1 = item1.m_vStone.size();
+	tempInt2 = item2.m_vStone.size();
+	sb << NDCommonCString("XiangQian") << "锛?? +" << tempInt1 << "->";
 	if (tempInt1 == tempInt2)
 	{
 		sb << "+" << tempInt2;
@@ -528,9 +528,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 
 	sb << ("\n");
 
-	tempInt1 = item1.iAddition;
-	tempInt2 = item2.iAddition;
-	sb << NDCommonCString("QiangHua") << "锛� +" << tempInt1 << "->";
+	tempInt1 = item1.m_nAddition;
+	tempInt2 = item2.m_nAddition;
+	sb << NDCommonCString("QiangHua") << "锛?? +" << tempInt1 << "->";
 	if (tempInt1 == tempInt2)
 	{
 		sb << "+" << tempInt2;
@@ -639,9 +639,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		tempInt1 = item1.getAtk_point_add();
 		tempInt2 = item2.getAtk_point_add();	// 鍔涢噺
 		int addNum1 = 0;
-		for (int j = 0; j < int(item1.vecStone.size()); j++)
+		for (int j = 0; j < int(item1.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item1.vecStone[j];
+			Item *stoneItem = item1.m_vStone[j];
 			int x = stoneItem->getAtk_point_add();
 			if (x > 0)
 			{
@@ -649,9 +649,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 			}
 		}
 		int addNum2 = 0;
-		for (int j = 0; j < int(item2.vecStone.size()); j++)
+		for (int j = 0; j < int(item2.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item2.vecStone[j];
+			Item *stoneItem = item2.m_vStone[j];
 			int x = stoneItem->getAtk_point_add();
 			if (x > 0)
 			{
@@ -668,9 +668,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		tempInt1 = item1.getDef_point_add();
 		tempInt2 = item2.getDef_point_add();	// 浣撹川
 		addNum1 = 0;
-		for (int j = 0; j < int(item1.vecStone.size()); j++)
+		for (int j = 0; j < int(item1.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item1.vecStone[j];
+			Item *stoneItem = item1.m_vStone[j];
 			int x = stoneItem->getDef_point_add();
 			if (x > 0)
 			{
@@ -678,9 +678,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 			}
 		}
 		addNum2 = 0;
-		for (int j = 0; j < int(item2.vecStone.size()); j++)
+		for (int j = 0; j < int(item2.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item2.vecStone[j];
+			Item *stoneItem = item2.m_vStone[j];
 			int x = stoneItem->getDef_point_add();
 			if (x > 0)
 			{
@@ -697,9 +697,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		tempInt1 = item1.getMag_point_add();
 		tempInt2 = item2.getMag_point_add();	// 鏅哄姏
 		addNum1 = 0;
-		for (int j = 0; j < int(item1.vecStone.size()); j++)
+		for (int j = 0; j < int(item1.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item1.vecStone[j];
+			Item *stoneItem = item1.m_vStone[j];
 			int x = stoneItem->getMag_point_add();
 			if (x > 0)
 			{
@@ -707,9 +707,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 			}
 		}
 		addNum2 = 0;
-		for (int j = 0; j < int(item2.vecStone.size()); j++)
+		for (int j = 0; j < int(item2.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item2.vecStone[j];
+			Item *stoneItem = item2.m_vStone[j];
 			int x = stoneItem->getMag_point_add();
 			if (x > 0)
 			{
@@ -726,9 +726,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		tempInt1 = item1.getDex_point_add();
 		tempInt2 = item2.getDex_point_add();	// 鏁忔嵎
 		addNum1 = 0;
-		for (int j = 0; j < int(item1.vecStone.size()); j++)
+		for (int j = 0; j < int(item1.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item1.vecStone[j];
+			Item *stoneItem = item1.m_vStone[j];
 			int x = stoneItem->getDex_point_add();
 			if (x > 0)
 			{
@@ -736,9 +736,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 			}
 		}
 		addNum2 = 0;
-		for (int j = 0; j < int(item2.vecStone.size()); j++)
+		for (int j = 0; j < int(item2.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item2.vecStone[j];
+			Item *stoneItem = item2.m_vStone[j];
 			int x = stoneItem->getDex_point_add();
 			if (x > 0)
 			{
@@ -755,9 +755,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		tempInt1 = item1.getDodge();
 		tempInt2 = item2.getDodge();	// 闂伩
 		addNum1 = 0;
-		for (int j = 0; j < int(item1.vecStone.size()); j++)
+		for (int j = 0; j < int(item1.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item1.vecStone[j];
+			Item *stoneItem = item1.m_vStone[j];
 			int x = stoneItem->getDodge();
 			if (x > 0)
 			{
@@ -765,9 +765,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 			}
 		}
 		addNum2 = 0;
-		for (int j = 0; j < int(item2.vecStone.size()); j++)
+		for (int j = 0; j < int(item2.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item2.vecStone[j];
+			Item *stoneItem = item2.m_vStone[j];
 			int x = stoneItem->getDodge();
 			if (x > 0)
 			{
@@ -784,9 +784,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		tempInt1 = item1.getHitrate();
 		tempInt2 = item2.getHitrate();	// 鐗╃悊鍛戒腑
 		addNum1 = 0;
-		for (int j = 0; j < int(item1.vecStone.size()); j++)
+		for (int j = 0; j < int(item1.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item1.vecStone[j];
+			Item *stoneItem = item1.m_vStone[j];
 			int x = stoneItem->getHitrate();
 			if (x > 0)
 			{
@@ -794,9 +794,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 			}
 		}
 		addNum2 = 0;
-		for (int j = 0; j < int(item2.vecStone.size()); j++)
+		for (int j = 0; j < int(item2.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item2.vecStone[j];
+			Item *stoneItem = item2.m_vStone[j];
 			int x = stoneItem->getHitrate();
 			if (x > 0)
 			{
@@ -813,34 +813,34 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		tempInt1 = item1.getAtk();
 		tempInt2 = item2.getAtk();	// 鐗╃悊鏀诲嚮
 		addNum1 = 0;
-		for (int j = 0; j < int(item1.vecStone.size()); j++)
+		for (int j = 0; j < int(item1.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item1.vecStone[j];
+			Item *stoneItem = item1.m_vStone[j];
 			int x = stoneItem->getAtk();
 			if (x > 0)
 			{
 				addNum1 += x;
 			}
 		}
-		if (item1.iAddition >= 1)
+		if (item1.m_nAddition >= 1)
 		{
 			addNum1 += getOnlyAdditionPoint(item1.getEnhanceId(),
-					item1.iAddition, tempInt1);
+					item1.m_nAddition, tempInt1);
 		}
 		addNum2 = 0;
-		for (int j = 0; j < int(item2.vecStone.size()); j++)
+		for (int j = 0; j < int(item2.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item2.vecStone[j];
+			Item *stoneItem = item2.m_vStone[j];
 			int x = stoneItem->getAtk();
 			if (x > 0)
 			{
 				addNum2 += x;
 			}
 		}
-		if (item2.iAddition >= 1)
+		if (item2.m_nAddition >= 1)
 		{
 			addNum2 += getOnlyAdditionPoint(item2.getEnhanceId(),
-					item2.iAddition, tempInt2);
+					item2.m_nAddition, tempInt2);
 		}
 		temp = getEffectString(NDCommonCString("PhyAtk"), tempInt1, addNum1,
 				tempInt2, addNum2);
@@ -852,34 +852,34 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		tempInt1 = item1.getMag_atk();	// 榄旀硶浼ゅ
 		tempInt2 = item2.getMag_atk();
 		addNum1 = 0;
-		for (int j = 0; j < int(item1.vecStone.size()); j++)
+		for (int j = 0; j < int(item1.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item1.vecStone[j];
+			Item *stoneItem = item1.m_vStone[j];
 			int x = stoneItem->getMag_atk();
 			if (x > 0)
 			{
 				addNum1 += x;
 			}
 		}
-		if (item1.iAddition >= 1)
+		if (item1.m_nAddition >= 1)
 		{
 			addNum1 += getOnlyAdditionPoint(item1.getEnhanceId(),
-					item1.iAddition, tempInt1);
+					item1.m_nAddition, tempInt1);
 		}
 		addNum2 = 0;
-		for (int j = 0; j < int(item2.vecStone.size()); j++)
+		for (int j = 0; j < int(item2.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item2.vecStone[j];
+			Item *stoneItem = item2.m_vStone[j];
 			int x = stoneItem->getMag_atk();
 			if (x > 0)
 			{
 				addNum2 += x;
 			}
 		}
-		if (item2.iAddition >= 1)
+		if (item2.m_nAddition >= 1)
 		{
 			addNum2 += getOnlyAdditionPoint(item2.getEnhanceId(),
-					item2.iAddition, tempInt2);
+					item2.m_nAddition, tempInt2);
 		}
 		temp = getEffectString(NDCommonCString("MagicHurt"), tempInt1, addNum1,
 				tempInt2, addNum2);
@@ -891,9 +891,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		tempInt1 = item1.getHard_hitrate();
 		tempInt2 = item2.getHard_hitrate();	// 鐗╃悊鏆村嚮
 		addNum1 = 0;
-		for (int j = 0; j < int(item1.vecStone.size()); j++)
+		for (int j = 0; j < int(item1.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item1.vecStone[j];
+			Item *stoneItem = item1.m_vStone[j];
 			int x = stoneItem->getHard_hitrate();
 			if (x > 0)
 			{
@@ -901,9 +901,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 			}
 		}
 		addNum2 = 0;
-		for (int j = 0; j < int(item2.vecStone.size()); j++)
+		for (int j = 0; j < int(item2.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item2.vecStone[j];
+			Item *stoneItem = item2.m_vStone[j];
 			int x = stoneItem->getHard_hitrate();
 			if (x > 0)
 			{
@@ -920,9 +920,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		tempInt1 = item1.getMana_limit();
 		tempInt2 = item2.getMana_limit();	// 榄旀硶鏆村嚮
 		addNum1 = 0;
-		for (int j = 0; j < int(item1.vecStone.size()); j++)
+		for (int j = 0; j < int(item1.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item1.vecStone[j];
+			Item *stoneItem = item1.m_vStone[j];
 			int x = stoneItem->getMana_limit();
 			if (x > 0)
 			{
@@ -930,9 +930,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 			}
 		}
 		addNum2 = 0;
-		for (int j = 0; j < int(item2.vecStone.size()); j++)
+		for (int j = 0; j < int(item2.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item2.vecStone[j];
+			Item *stoneItem = item2.m_vStone[j];
 			int x = stoneItem->getMana_limit();
 			if (x > 0)
 			{
@@ -949,34 +949,34 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		tempInt1 = item1.getDef();	// 鐗╃悊闃插尽
 		tempInt2 = item2.getDef();
 		addNum1 = 0;
-		for (int j = 0; j < int(item1.vecStone.size()); j++)
+		for (int j = 0; j < int(item1.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item1.vecStone[j];
+			Item *stoneItem = item1.m_vStone[j];
 			int x = stoneItem->getDef();
 			if (x > 0)
 			{
 				addNum1 += x;
 			}
 		}
-		if (item1.iAddition >= 1)
+		if (item1.m_nAddition >= 1)
 		{
 			addNum1 += getOnlyAdditionPoint(item1.getEnhanceId(),
-					item1.iAddition, tempInt1);
+					item1.m_nAddition, tempInt1);
 		}
 		addNum2 = 0;
-		for (int j = 0; j < int(item2.vecStone.size()); j++)
+		for (int j = 0; j < int(item2.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item2.vecStone[j];
+			Item *stoneItem = item2.m_vStone[j];
 			int x = stoneItem->getDef();
 			if (x > 0)
 			{
 				addNum2 += x;
 			}
 		}
-		if (item2.iAddition >= 1)
+		if (item2.m_nAddition >= 1)
 		{
 			addNum2 += getOnlyAdditionPoint(item2.getEnhanceId(),
-					item2.iAddition, tempInt2);
+					item2.m_nAddition, tempInt2);
 		}
 		temp = getEffectString(NDCommonCString("PhyDef"), tempInt1, addNum1,
 				tempInt2, addNum2);
@@ -985,37 +985,37 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 			sb << (temp);
 		}
 
-		tempInt1 = item1.getMag_def();	// 榄旀硶鎶楁��
+		tempInt1 = item1.getMag_def();	// 榄旀硶鎶楁????
 		tempInt2 = item2.getMag_def();
 		addNum1 = 0;
-		for (int j = 0; j < int(item1.vecStone.size()); j++)
+		for (int j = 0; j < int(item1.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item1.vecStone[j];
+			Item *stoneItem = item1.m_vStone[j];
 			int x = stoneItem->getMag_def();
 			if (x > 0)
 			{
 				addNum1 += x;
 			}
 		}
-		if (item1.iAddition >= 1)
+		if (item1.m_nAddition >= 1)
 		{
 			addNum1 += getOnlyAdditionPoint(item1.getEnhanceId(),
-					item1.iAddition, tempInt1);
+					item1.m_nAddition, tempInt1);
 		}
 		addNum2 = 0;
-		for (int j = 0; j < int(item2.vecStone.size()); j++)
+		for (int j = 0; j < int(item2.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item2.vecStone[j];
+			Item *stoneItem = item2.m_vStone[j];
 			int x = stoneItem->getMag_def();
 			if (x > 0)
 			{
 				addNum2 += x;
 			}
 		}
-		if (item2.iAddition >= 1)
+		if (item2.m_nAddition >= 1)
 		{
 			addNum2 += getOnlyAdditionPoint(item2.getEnhanceId(),
-					item2.iAddition, tempInt2);
+					item2.m_nAddition, tempInt2);
 		}
 		temp = getEffectString(NDCommonCString("MagicDef"), tempInt1, addNum1,
 				tempInt2, addNum2);
@@ -1027,9 +1027,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		tempInt1 = item1.getAtk_speed();
 		tempInt2 = item2.getAtk_speed();	// 鏀诲嚮閫熷害
 		addNum1 = 0;
-		for (int j = 0; j < int(item1.vecStone.size()); j++)
+		for (int j = 0; j < int(item1.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item1.vecStone[j];
+			Item *stoneItem = item1.m_vStone[j];
 			int x = stoneItem->getAtk_speed();
 			if (x > 0)
 			{
@@ -1037,9 +1037,9 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 			}
 		}
 		addNum2 = 0;
-		for (int j = 0; j < int(item2.vecStone.size()); j++)
+		for (int j = 0; j < int(item2.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item2.vecStone[j];
+			Item *stoneItem = item2.m_vStone[j];
 			int x = stoneItem->getAtk_speed();
 			if (x > 0)
 			{
@@ -1056,34 +1056,34 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		tempInt1 = item1.getLife();	// 鐢熷懡
 		tempInt2 = item2.getLife();
 		addNum1 = 0;
-		for (int j = 0; j < int(item1.vecStone.size()); j++)
+		for (int j = 0; j < int(item1.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item1.vecStone[j];
+			Item *stoneItem = item1.m_vStone[j];
 			int x = stoneItem->getLife();
 			if (x > 0)
 			{
 				addNum1 += x;
 			}
 		}
-		if (item1.iAddition >= 1)
+		if (item1.m_nAddition >= 1)
 		{
 			addNum1 += getOnlyAdditionPoint(item1.getEnhanceId(),
-					item1.iAddition, tempInt1);
+					item1.m_nAddition, tempInt1);
 		}
 		addNum2 = 0;
-		for (int j = 0; j < int(item2.vecStone.size()); j++)
+		for (int j = 0; j < int(item2.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item2.vecStone[j];
+			Item *stoneItem = item2.m_vStone[j];
 			int x = stoneItem->getLife();
 			if (x > 0)
 			{
 				addNum2 += x;
 			}
 		}
-		if (item2.iAddition >= 1)
+		if (item2.m_nAddition >= 1)
 		{
 			addNum2 += getOnlyAdditionPoint(item2.getEnhanceId(),
-					item2.iAddition, tempInt2);
+					item2.m_nAddition, tempInt2);
 		}
 		temp = getEffectString(NDCommonCString("life"), tempInt1, addNum1,
 				tempInt2, addNum2);
@@ -1095,34 +1095,34 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		tempInt1 = item1.getMana();	// 娉曞姏
 		tempInt2 = item2.getMana();
 		addNum1 = 0;
-		for (int j = 0; j < int(item1.vecStone.size()); j++)
+		for (int j = 0; j < int(item1.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item1.vecStone[j];
+			Item *stoneItem = item1.m_vStone[j];
 			int x = stoneItem->getMana();
 			if (x > 0)
 			{
 				addNum1 += x;
 			}
 		}
-		if (item1.iAddition >= 1)
+		if (item1.m_nAddition >= 1)
 		{
 			addNum1 += getOnlyAdditionPoint(item1.getEnhanceId(),
-					item1.iAddition, tempInt1);
+					item1.m_nAddition, tempInt1);
 		}
 		addNum2 = 0;
-		for (int j = 0; j < int(item2.vecStone.size()); j++)
+		for (int j = 0; j < int(item2.m_vStone.size()); j++)
 		{
-			Item *stoneItem = item2.vecStone[j];
+			Item *stoneItem = item2.m_vStone[j];
 			int x = stoneItem->getMana();
 			if (x > 0)
 			{
 				addNum2 += x;
 			}
 		}
-		if (item2.iAddition >= 1)
+		if (item2.m_nAddition >= 1)
 		{
 			addNum2 += getOnlyAdditionPoint(item2.getEnhanceId(),
-					item2.iAddition, tempInt2);
+					item2.m_nAddition, tempInt2);
 		}
 		temp = getEffectString(NDCommonCString("magic"), tempInt1, addNum1,
 				tempInt2, addNum2);
@@ -1137,14 +1137,14 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		{
 
 			tempInt1 = getdwAmountShow(item1.getAmount_limit());
-			tempInt2 = getdwAmountShow(item2.iAmount);
+			tempInt2 = getdwAmountShow(item2.m_nAmount);
 
 			break;
 		}
 		case 2:
 		{
 
-			tempInt1 = getdwAmountShow(item1.iAmount);
+			tempInt1 = getdwAmountShow(item1.m_nAmount);
 			tempInt2 = getdwAmountShow(item2.getAmount_limit());
 
 			break;
@@ -1152,8 +1152,8 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		default:
 		{
 
-			tempInt1 = getdwAmountShow(item1.iAmount);
-			tempInt2 = getdwAmountShow(item2.iAmount);
+			tempInt1 = getdwAmountShow(item1.m_nAmount);
+			tempInt2 = getdwAmountShow(item2.m_nAmount);
 
 			break;
 		}
@@ -1179,7 +1179,7 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 		sb << ("\n");
 
 		tempInt1 = getdwAmountShow(item1.getAmount_limit());
-		tempInt2 = getdwAmountShow(item2.getAmount_limit());	// 鏈�澶ц�愪箙搴�
+		tempInt2 = getdwAmountShow(item2.getAmount_limit());	// 鏈??澶ц??愪箙搴??
 
 		sb << NDCommonCString("MaxNaiJiuDu") << ":" << tempInt1 << "->";
 		if (tempInt1 == tempInt2)
@@ -1272,26 +1272,26 @@ std::string Item::getEffectString(std::string name, int tempInt1, int addNum1,
 
 std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return std::string(NDCommonCString("wu"));
 	}
 
-	std::string color = NDItemType::getItemStrColor(iItemType % 10);
+	std::string color = NDItemType::getItemStrColor(m_nItemType % 10);
 
 	stringstream sb;
-	// 鎶�鑳戒功,鏆傛椂澶嶇敤lookface瀛楁浣滀负鎶�鑳絠d鐨勫叧鑱�
+	// 鎶??鑳戒功,鏆傛椂澶嶇敤lookface瀛楁浣滀负鎶??鑳絠d鐨勫叧鑱??
 	//		if (this.isSkillBook()) {
-	//			sb.append("绫诲瀷: 鎶�鑳界绗圽n");
+	//			sb.append("绫诲瀷: 鎶??鑳界绗圽n");
 	//			BattleSkill sk = SkillManager.getInstance().getSkill(itemTypes.lookface);
 	//			sb.append(sk.getSimpleDes(false));
 	//			return sb.toString();
 	//		}
 
-	int type = iItemType / 10000000;
+	int type = m_nItemType / 10000000;
 
-	// 浠ヤ笅涓哄疂鐭抽檮鍔犵殑灞炴�х偣(鍚拷鍔�)
+	// 浠ヤ笅涓哄疂鐭抽檮鍔犵殑灞炴??х偣(鍚拷鍔??)
 	int atk_point_add = 0;		// 鍔涢噺
 	int def_point_add = 0;		// 浣撹川
 	int dex_point_add = 0;		// 鏁忔嵎
@@ -1305,8 +1305,8 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 	int hard_hitrate = 0; 		// 鐗╃悊鏆村嚮
 	int mana_limit = 0;			// 榄旀硶鏆村嚮
 	int atk_speed = 0;			// 鏀诲嚮閫熷害
-	int life = 0;				// 鐢熷懡鍊艰拷鍔�
-	int mana = 0;				// 榄旀硶鍊艰拷鍔�
+	int life = 0;				// 鐢熷懡鍊艰拷鍔??
+	int mana = 0;				// 榄旀硶鍊艰拷鍔??
 
 	if (type == 0 || type == 1)
 	{ // 瑁呭 & 瀹犵墿鍝佽川
@@ -1315,7 +1315,7 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 		{
 			sb << "<c" << color;
 		}
-		switch (iItemType % 10)
+		switch (m_nItemType % 10)
 		{
 		case 5:
 		{
@@ -1324,7 +1324,7 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 		}
 		case 6:
 		{
-			if (iItemType == 0)
+			if (m_nItemType == 0)
 			{
 				sb << NDCommonCString("jingzhi");
 			}
@@ -1341,7 +1341,7 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 		}
 		case 8:
 		{
-			if (iItemType == 0)
+			if (m_nItemType == 0)
 			{
 				sb << NDCommonCString("sishi");
 			}
@@ -1367,7 +1367,7 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 	sb << NDCommonCString("type") << ": ";
 	if (type == 0)
 	{ // 瑁呭
-		switch (iItemType / 100000)
+		switch (m_nItemType / 100000)
 		{
 		case 11:
 		{
@@ -1501,7 +1501,7 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 		/*
 		 if (byHole > 0)
 		 {
-		 sb << "闀跺祵锛�" << vecStone.size() << "/" << int(byHole) << ("\n");
+		 sb << "闀跺祵锛??" << vecStone.size() << "/" << int(byHole) << ("\n");
 		 std::vector<Item*>::iterator it = vecStone.begin();
 
 		 if(int(vecStone.size())>0&&bolShowColor){
@@ -1535,12 +1535,12 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 		 */
 
 		// 闀跺祵
-		if (byHole > 0)
+		if (m_nHole > 0)
 		{
-			sb << NDCommonCString("XiangQian") << ": " << vecStone.size() << "/"
-					<< int(byHole);
+			sb << NDCommonCString("XiangQian") << ": " << m_vStone.size() << "/"
+					<< int(m_nHole);
 			Item* stone;
-			int size = vecStone.size();
+			int size = m_vStone.size();
 			if (size > 0 && bolShowColor)
 			{
 				sb << "<c199900 \n";
@@ -1551,7 +1551,7 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 			}
 			for (int i = 0; i < size; i++)
 			{
-				stone = vecStone[i];
+				stone = m_vStone[i];
 				atk_point_add += stone->getAtk_point_add();
 				if (stone->getAtk_point_add() > 0)
 				{
@@ -1658,20 +1658,20 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 		}
 
 		// 杩藉姞
-		if (iAddition >= 1)
+		if (m_nAddition >= 1)
 		{
 			life += getOnlyAdditionPoint(itemtype->m_data.m_enhancedId,
-					iAddition, getLife());
+					m_nAddition, getLife());
 			mana += getOnlyAdditionPoint(itemtype->m_data.m_enhancedId,
-					iAddition, getMana());
+					m_nAddition, getMana());
 			atk += getOnlyAdditionPoint(itemtype->m_data.m_enhancedId,
-					iAddition, getAtk());
+					m_nAddition, getAtk());
 			def += getOnlyAdditionPoint(itemtype->m_data.m_enhancedId,
-					iAddition, getDef());
+					m_nAddition, getDef());
 			mag_atk += getOnlyAdditionPoint(itemtype->m_data.m_enhancedId,
-					iAddition, getMag_atk());
+					m_nAddition, getMag_atk());
 			mag_def += getOnlyAdditionPoint(itemtype->m_data.m_enhancedId,
-					iAddition, getMag_def());
+					m_nAddition, getMag_def());
 		}
 
 	}
@@ -1681,7 +1681,7 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 	}
 	else
 	{
-		switch (iItemType / 1000000)
+		switch (m_nItemType / 1000000)
 		{
 		case 10:
 			sb << NDCommonCString("pet");
@@ -1734,7 +1734,7 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 		sb << "\n";
 	}
 
-	if (byBindState == BIND_STATE_BIND)
+	if (m_nBindState == BIND_STATE_BIND)
 	{
 		sb << NDCommonCString("hadbind") << " ";
 		sb << ("\n");
@@ -1810,10 +1810,10 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 	if (type == 0)
 	{
 		sb << NDCommonCString("NaiJiu") << ": ";
-		if (iAmount >= 0)
+		if (m_nAmount >= 0)
 		{
 			//sb << (iAmount / 100);
-			sb << (iAmount);
+			sb << (m_nAmount);
 		}
 		else
 		{
@@ -1891,9 +1891,9 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 	if (isRidePet())
 	{
 		sb << NDCommonCString("ShouMing") << ":";
-		if (iID != 0)
+		if (m_nID != 0)
 		{
-			sb << ((this->sAge + 99) / 100);
+			sb << ((this->m_nAge + 99) / 100);
 		}
 		else
 		{
@@ -1901,9 +1901,9 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 		}
 		sb << ("\n");
 		sb << NDCommonCString("TiLi") << ":";
-		if (iID != 0)
+		if (m_nID != 0)
 		{
-			sb << (iAmount);
+			sb << (m_nAmount);
 		}
 		else
 		{
@@ -1974,18 +1974,18 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 
 	{
 
-		if (iID != 0)
+		if (m_nID != 0)
 		{
 			//sb << getStringTime(iCreateTime + itemtype->m_data.m_save_time);
 			// iCreateTime YYMMDDHHmm
-			if (iCreateTime != 0)
+			if (m_nCreateTime != 0)
 			{
-				uint recycle = iCreateTime / 100; // YYMMDDHH
+				uint recycle = m_nCreateTime / 100; // YYMMDDHH
 				sb << "20" << (recycle / 1000000) << NDCommonCString("year")
 						<< (recycle % 1000000 / 10000)
 						<< NDCommonCString("month") << (recycle % 10000 / 100)
 						<< NDCommonCString("day") << (recycle % 100)
-						<< NDCommonCString("hour") << (iCreateTime % 100)
+						<< NDCommonCString("hour") << (m_nCreateTime % 100)
 						<< NDCommonCString("minute") << "<cff0000" << " "
 						<< NDCommonCString("RecycleBySys") << "/e";
 			}
@@ -2049,7 +2049,7 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 		sb << ("\n");
 	}
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * begin
 	 */
 // 	if(itemtype->m_data.m_suitData != 0 && type == 0)
@@ -2247,13 +2247,13 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 // 		}
 // 	}
 // 	
-// 	// 閿婚�犳弿杩�
+// 	// 閿婚??犳弿杩??
 // 	if (type == 0 && itemtype->m_data.m_enhancedStatus != 0) {
 // 		sb << ("\n ");
 // 		SuitTypeObj* suitTypeObj = SuitTypeObj::findSuitType(itemtype->m_data.m_enhancedStatus);
 // 		if (suitTypeObj) {
 // 			if (bolShowColor) {
-// 				sb << "<c199900" << NDCommonCString("DuanZhaoAttach") << "锛�/e \n";
+// 				sb << "<c199900" << NDCommonCString("DuanZhaoAttach") << "锛??/e \n";
 // 			} else {
 // 				sb << NDCommonCString("DuanZhaoAttach") << "\n";
 // 			}
@@ -2288,19 +2288,19 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 // 		}
 // 	}
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * end
 	 */
 	return std::string(sb.str().c_str());
 }
 
 /**
- * 娣诲姞灞炴�у�兼弿杩颁俊鎭�
- * @param sb 娣诲姞鍒扮殑瀛楃涓�
- * @param equipPoint 鍩烘湰灞炴�у��
- * @param stonePoint 闀跺祵瀹濈煶灞炴�у��
+ * 娣诲姞灞炴??у??兼弿杩颁俊鎭??
+ * @param sb 娣诲姞鍒扮殑瀛楃涓??
+ * @param equipPoint 鍩烘湰灞炴??у????
+ * @param stonePoint 闀跺祵瀹濈煶灞炴??у????
  * @param des 鍩烘湰鎻忚堪
- * @param bolShowColor 闄勫姞灞炴�ф槸鍚︽樉绀洪鑹�
+ * @param bolShowColor 闄勫姞灞炴??ф槸鍚︽樉绀洪鑹??
  */
 void Item::appendPointsDes(string& str, int equipPoint, int stonePoint,
 		std::string des, bool bolShowColor)
@@ -2332,7 +2332,7 @@ void Item::appendPointsDes(string& str, int equipPoint, int stonePoint,
 
 std::string Item::getInlayPos()
 {
-	switch ((iItemType / 1000) % 100)
+	switch ((m_nItemType / 1000) % 100)
 	{
 	case 1:
 		return NDCommonCString("WuQi");
@@ -2366,10 +2366,10 @@ string Item::makeItemName()
 
 	if (!this->isRidePet())
 	{
-		int type = this->iItemType / 10000000;
-		if (type > 0 && this->iAmount > 1)
+		int type = this->m_nItemType / 10000000;
+		if (type > 0 && this->m_nAmount > 1)
 		{
-			ss << " 脳 " << this->iAmount;
+			ss << " 脳 " << this->m_nAmount;
 		}
 	}
 	return ss.str();
@@ -2377,7 +2377,7 @@ string Item::makeItemName()
 
 std::string Item::getItemName()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (itemtype)
 	{
 		return itemtype->m_name;
@@ -2388,14 +2388,14 @@ std::string Item::getItemName()
 
 std::string Item::getItemNameWithAdd()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (itemtype)
 	{
 		stringstream ss;
 		ss << itemtype->m_name;
-		if (iAddition > 0)
+		if (m_nAddition > 0)
 		{
-			ss << "+" << iAddition;
+			ss << "+" << m_nAddition;
 		}
 		return std::string(ss.str().c_str());
 	}
@@ -2405,7 +2405,7 @@ std::string Item::getItemNameWithAdd()
 
 int Item::getAtk_point_add()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2415,7 +2415,7 @@ int Item::getAtk_point_add()
 
 int Item::getDef_point_add()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2425,7 +2425,7 @@ int Item::getDef_point_add()
 
 int Item::getDex_point_add()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2435,7 +2435,7 @@ int Item::getDex_point_add()
 
 int Item::getMag_point_add()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2445,7 +2445,7 @@ int Item::getMag_point_add()
 
 int Item::getDodge()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2455,7 +2455,7 @@ int Item::getDodge()
 
 int Item::getHitrate()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2465,7 +2465,7 @@ int Item::getHitrate()
 
 int Item::getAtk()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2475,7 +2475,7 @@ int Item::getAtk()
 
 int Item::getDef()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2485,7 +2485,7 @@ int Item::getDef()
 
 int Item::getMag_atk()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2495,7 +2495,7 @@ int Item::getMag_atk()
 
 int Item::getHard_hitrate()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2505,7 +2505,7 @@ int Item::getHard_hitrate()
 
 int Item::getAtk_speed()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2515,7 +2515,7 @@ int Item::getAtk_speed()
 
 int Item::getMana_limit()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2525,7 +2525,7 @@ int Item::getMana_limit()
 
 int Item::getLife()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2535,7 +2535,7 @@ int Item::getLife()
 
 int Item::getMana()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2545,7 +2545,7 @@ int Item::getMana()
 
 int Item::getMag_def()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2555,7 +2555,7 @@ int Item::getMag_def()
 
 int Item::getAmount_limit()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2565,7 +2565,7 @@ int Item::getAmount_limit()
 
 int Item::getPrice()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2575,7 +2575,7 @@ int Item::getPrice()
 
 int Item::getReq_level()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2585,7 +2585,7 @@ int Item::getReq_level()
 
 int Item::getReq_phy()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2595,7 +2595,7 @@ int Item::getReq_phy()
 
 int Item::getReq_dex()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2605,7 +2605,7 @@ int Item::getReq_dex()
 
 int Item::getReq_mag()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2615,7 +2615,7 @@ int Item::getReq_mag()
 
 int Item::getReq_def()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2625,7 +2625,7 @@ int Item::getReq_def()
 
 int Item::getItemLevel()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2635,7 +2635,7 @@ int Item::getItemLevel()
 
 int Item::getReq_profession()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2645,7 +2645,7 @@ int Item::getReq_profession()
 
 int Item::getSave_time()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2655,7 +2655,7 @@ int Item::getSave_time()
 
 int Item::getRecycle_time()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2665,7 +2665,7 @@ int Item::getRecycle_time()
 
 int Item::getEmoney()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2675,7 +2675,7 @@ int Item::getEmoney()
 
 int Item::getSuitData()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2685,7 +2685,7 @@ int Item::getSuitData()
 
 int Item::getIdUpLev()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2700,13 +2700,13 @@ bool Item::IsNeedRepair()
 		return false;
 	}
 
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return false;
 	}
 
-	if (itemtype->m_data.m_amount_limit > iAmount)
+	if (itemtype->m_data.m_amount_limit > m_nAmount)
 	{
 		return true;
 	}
@@ -2716,7 +2716,7 @@ bool Item::IsNeedRepair()
 
 bool Item::isEquip()
 {
-	int type = Item::getIdRule(iItemType, Item::ITEM_TYPE);
+	int type = Item::getIdRule(m_nItemType, Item::ITEM_TYPE);
 	if (type == 0 || type == 1)
 	{
 		return true;
@@ -2759,7 +2759,7 @@ bool Item::isItemCanStore()
 
 bool Item::isFormulaExt()
 {
-	std::vector<int> arr = getItemType(iItemType);
+	std::vector<int> arr = getItemType(m_nItemType);
 	int item_type = arr[0]; // 鍗冧竾
 	int item_equip = arr[1]; // 鐧句竾
 	int item_class = arr[2]; // 鍗佷竾
@@ -2774,12 +2774,12 @@ bool Item::isCanEnhance()
 {
 	int enhanceId = getEnhanceId();
 	return enhanceId > 0
-			&& ItemMgrObj.QueryEnhancedType(enhanceId + iAddition + 1) != NULL;
+			&& ItemMgrObj.QueryEnhancedType(enhanceId + m_nAddition + 1) != NULL;
 }
 
 bool Item::canOpenHole()
 {
-	std::vector<int> rule = getItemType(iItemType);
+	std::vector<int> rule = getItemType(m_nItemType);
 	if (rule[0] == 0)
 	{
 		return true;
@@ -2795,7 +2795,7 @@ NDEngine::NDUIDialog* Item::makeItemDialog(std::vector<std::string>& vec_str)
 
 	//ChatRecord.parserChat(tempStr,7) 
 
-	if (getSuitData() > 0 && iItemType / 10000000 == 0)
+	if (getSuitData() > 0 && m_nItemType / 10000000 == 0)
 	{
 		name << "[" << NDCommonCString("tao") << "]";
 	}
@@ -2814,7 +2814,7 @@ NDEngine::NDUIDialog* Item::makeItemDialog(std::vector<std::string>& vec_str)
 }
 
 /**
- * 涓㈠純鏄惁鏈夋彁閱�
+ * 涓㈠純鏄惁鏈夋彁閱??
  * 
  * @param itemType
  * @return
@@ -2882,7 +2882,7 @@ int Item::getIdRule(int nItemType, int rule)
 Item* Item::findItemByItemType(int idItem)
 {
 	/***
-	 * 涓存椂鎬ф敞閲� 閮旦
+	 * 涓存椂鎬ф敞閲?? 閮旦
 	 * all
 	 */
 // 	NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
@@ -2897,9 +2897,9 @@ Item* Item::findItemByItemType(int idItem)
 
 bool Item::IsPetUseItem()
 {
-	if (iItemType == 28000005 || iItemType == 28000006
-			|| (28000015 <= iItemType && iItemType <= 28000017)
-			|| iItemType / 100000 == 262 || this->IsPetSkillItem())
+	if (m_nItemType == 28000005 || m_nItemType == 28000006
+			|| (28000015 <= m_nItemType && m_nItemType <= 28000017)
+			|| m_nItemType / 100000 == 262 || this->IsPetSkillItem())
 	{
 		return true;
 	}
@@ -2908,7 +2908,7 @@ bool Item::IsPetUseItem()
 
 bool Item::IsPetSkillItem()
 {
-	if (iItemType / 100000 == 252)
+	if (m_nItemType / 100000 == 252)
 	{
 		return true;
 	}
@@ -2917,7 +2917,7 @@ bool Item::IsPetSkillItem()
 
 int Item::getLookFace()
 {
-	NDItemType *itemtype = ItemMgrObj.QueryItemType(iItemType);
+	NDItemType *itemtype = ItemMgrObj.QueryItemType(m_nItemType);
 	if (!itemtype)
 	{
 		return 0;
@@ -2939,7 +2939,7 @@ int getItemColor(Item* item)
 	{
 		return 0xe5cc80;
 	}
-	int color = NDItemType::getItemColor(item->iItemType);
+	int color = NDItemType::getItemColor(item->m_nItemType);
 	if (color == -1)
 	{
 		return 0xe5cc80;

@@ -64,8 +64,8 @@ NDBaseRole::NDBaseRole()
 	m_pkSubNode = NDNode::Node();
 	m_pkSubNode->SetContentSize(NDDirector::DefaultDirector()->GetWinSize());
 
-	m_posScreen = CGPointZero;
-	m_picRing = NULL;
+	m_kScreenPosition = CGPointZero;
+	m_pkRingPic = NULL;
 	m_pkPicShadow = NULL;
 	m_pkPicShadowBig = NULL;
 	m_iShadowOffsetX = 0;
@@ -87,7 +87,7 @@ NDBaseRole::NDBaseRole()
 NDBaseRole::~NDBaseRole()
 {
 	SAFE_DELETE (m_pkSubNode);
-	SAFE_DELETE (m_picRing);
+	SAFE_DELETE (m_pkRingPic);
 	SAFE_DELETE (m_pkPicShadow);
 	SAFE_DELETE (m_pkPicShadowBig);
 	//if (ridepet)
@@ -135,12 +135,12 @@ CGRect NDBaseRole::GetFocusRect()
 		point = GetPosition();
 	}
 
-	if (m_picRing == NULL)
+	if (m_pkRingPic == NULL)
 	{
-		m_picRing = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
+		m_pkRingPic = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
 	}
 
-	CGSize sizeRing = m_picRing->GetSize();
+	CGSize sizeRing = m_pkRingPic->GetSize();
 
 	return CGRectMake(point.x - 8 - 13, point.y - 16 - 5, sizeRing.width,
 			sizeRing.height);
@@ -208,11 +208,11 @@ void NDBaseRole::DrawRingImage(bool bDraw)
 
 	if (m_bFocus && bDraw)
 	{
-		if (m_picRing == NULL)
+		if (m_pkRingPic == NULL)
 		{
-			m_picRing = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
+			m_pkRingPic = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
 		}
-		CGSize sizeRing = m_picRing->GetSize();
+		CGSize sizeRing = m_pkRingPic->GetSize();
 
 		if (GetParent())
 		{
@@ -244,14 +244,14 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 			NDMapLayer *layer = (NDMapLayer*) node;
 			CGPoint screen = layer->GetScreenCenter();
 			CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-			m_posScreen = ccpSub(GetPosition(),
+			m_kScreenPosition = ccpSub(GetPosition(),
 					ccpSub(screen,
 							CGPointMake(winSize.width / 2,
 									winSize.height / 2)));
 		}
 		else
 		{
-			m_posScreen = GetPosition();
+			m_kScreenPosition = GetPosition();
 		}
 
 		sizemap = node->GetContentSize();
@@ -311,7 +311,7 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 
 CGPoint NDBaseRole::GetScreenPoint()
 {
-	return m_posScreen;
+	return m_kScreenPosition;
 }
 
 void NDBaseRole::SetAction(bool bMove)

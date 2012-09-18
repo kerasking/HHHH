@@ -78,7 +78,7 @@ m_eNPCState(NPC_STATE_NO_MARK)
 
 	m_bUnpassTurn = false;
 
-	m_rectState = CGRectZero;
+	m_kRectState = CGRectZero;
 }
 
 NDNpc::~NDNpc()
@@ -242,7 +242,7 @@ void NDNpc::OnDrawEnd(bool bDraw)
 					nShowY + NDDirector::DefaultDirector()->GetWinSize().height
 							- kSizeMap.height - sizeState.height,
 					sizeState.width, sizeState.height);
-			m_rectState = CGRectMake(kNPCPos.x - sizeState.width / 2,
+			m_kRectState = CGRectMake(kNPCPos.x - sizeState.width / 2,
 					nShowY - sizeState.height, sizeState.width,
 					sizeState.height);
 			m_pkPicState->DrawInRect(rect);
@@ -416,7 +416,7 @@ bool NDNpc::IsPointInside(CGPoint point)
 
 	if (m_pkPicState)
 	{
-		if (CGRectContainsPoint(m_rectState, point))
+		if (CGRectContainsPoint(m_kRectState, point))
 		{
 			return true;
 		}

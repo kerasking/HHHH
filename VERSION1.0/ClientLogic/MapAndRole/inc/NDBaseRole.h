@@ -199,11 +199,11 @@ private:
 	bool m_bFocus;
 public:
 	NDNode* m_pkSubNode; // 角色对象的其它动画节点都挂在这个节点上
-	CGPoint m_posScreen;
+	CGPoint m_kScreenPosition;
 protected:
-	NDPicture *m_picRing;
-	NDSprite *m_pkEffectFlagAniGroup;
-	NDSprite *m_pkEffectRidePetAniGroup;
+	NDPicture* m_pkRingPic;
+	NDSprite* m_pkEffectFlagAniGroup;
+	NDSprite* m_pkEffectRidePetAniGroup;
 	NDPicture* m_pkPicShadow;
 	NDPicture* m_pkPicShadowBig;
 	int m_iShadowOffsetX;
