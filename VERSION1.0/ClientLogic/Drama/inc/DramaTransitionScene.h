@@ -17,32 +17,30 @@
 
 using namespace NDEngine;
 
-class DramaTransitionScene :
-public NDScene,
-public ITimerCallback
+class DramaTransitionScene: public NDScene, public ITimerCallback
 {
-	DECLARE_CLASS(DramaTransitionScene)
-	
+	DECLARE_CLASS (DramaTransitionScene)
+
 	DramaTransitionScene();
 	~DramaTransitionScene();
-	
+
 public:
 	void Init();
-	
+
 	void SetText(std::string text, int nFontSize, int nFontColor);
-	
+
 	void SetCloseTime(float fTime);
-	
+
 private:
-	NDTimer					m_timer;
-	NDUILabel*				m_lbText;
-	NDUILayer*				m_layerBack;
-	
+	NDTimer m_kTimer;
+	NDUILabel* m_pkLabelText;
+	NDUILayer* m_pkLayerBack;
+
 public:
 	virtual void OnTimer(OBJID tag);
-	
-	DECLARE_AUTOLINK(DramaTransitionScene)
-	INTERFACE_AUTOLINK(DramaTransitionScene)
+
+	DECLARE_AUTOLINK (DramaTransitionScene)
+	INTERFACE_AUTOLINK (DramaTransitionScene)
 };
 
 #endif // _DRAMA_TRANSITION_SCENE_H_ZJH_

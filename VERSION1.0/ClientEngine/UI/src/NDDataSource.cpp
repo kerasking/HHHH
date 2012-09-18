@@ -15,10 +15,10 @@ namespace NDEngine
 	
 	NDSection::NDSection()
 	{
-		m_columnCount = 1;
-		m_rowHeight = 28;
-		m_focusCellIndex = (unsigned int)-1;
-		m_useCellHeight = false;
+		m_uiColumnCount = 1;
+		m_uiRowHeight = 28;
+		m_uiFocusCellIndex = (unsigned int)-1;
+		m_bUseCellHeight = false;
 	}
 	
 	NDSection::~NDSection()
@@ -29,35 +29,35 @@ namespace NDEngine
 	void  NDSection::SetColumnCount(unsigned int columnCount)
 	{ 
 		if (columnCount == 0) 
-			m_columnCount = 1; 
+			m_uiColumnCount = 1; 
 		else
-			m_columnCount = columnCount; 
+			m_uiColumnCount = columnCount; 
 	}
 	
 	void NDSection::AddCell(NDUINode* cell)
 	{
-		m_cells.push_back(cell);
+		m_vCells.push_back(cell);
 	}
 	
 	void NDSection::InsertCell(unsigned int index, NDUINode* cell)
 	{
-		if (index >= m_cells.size())
+		if (index >= m_vCells.size())
 		{
-			m_cells.push_back(cell);
+			m_vCells.push_back(cell);
 		}
 		else 
 		{
-			std::vector<NDUINode*>::iterator iter = m_cells.begin();
+			std::vector<NDUINode*>::iterator iter = m_vCells.begin();
 			for (unsigned int i = 0; i < index; i++, iter++);
-			m_cells.insert(iter, cell);
+			m_vCells.insert(iter, cell);
 		}
 	}
 	
 	void NDSection::RemoveCell(unsigned int index)
 	{
-		if (index < m_cells.size())		 
+		if (index < m_vCells.size())		 
 		{
-			std::vector<NDUINode*>::iterator iter = m_cells.begin();
+			std::vector<NDUINode*>::iterator iter = m_vCells.begin();
 			for (unsigned int i = 0; i < index; i++, iter++);
 			NDUINode* cell = (NDUINode*)*iter;	
 			if (cell->GetParent()) 
@@ -66,14 +66,14 @@ namespace NDEngine
 			}
 			else 
 				delete cell;	
-			m_cells.erase(iter);
+			m_vCells.erase(iter);
 		}
 	}
 	
 	void NDSection::RemoveCell(NDUINode* cell)
 	{
 		std::vector<NDUINode*>::iterator iter;
-		for (iter = m_cells.begin(); iter != m_cells.end(); iter++)
+		for (iter = m_vCells.begin(); iter != m_vCells.end(); iter++)
 		{
 			NDUINode* srcCell = (NDUINode*)*iter;
 			if (cell == srcCell) 
@@ -84,7 +84,7 @@ namespace NDEngine
 				}
 				else 
 					delete cell;
-				m_cells.erase(iter);
+				m_vCells.erase(iter);
 				break;
 			}
 		}
@@ -92,30 +92,30 @@ namespace NDEngine
 	
 	NDUINode* NDSection::Cell(unsigned int index)
 	{
-		return m_cells.at(index);
+		return m_vCells.at(index);
 	}
 	
 	void NDSection::Clear()
 	{
-		if (!m_cells.empty()) 
+		if (!m_vCells.empty()) 
 		{
-			while (m_cells.begin() != m_cells.end()) 
+			while (m_vCells.begin() != m_vCells.end()) 
 			{
-				NDUINode* cell = (NDUINode*)m_cells.back();	
+				NDUINode* cell = (NDUINode*)m_vCells.back();	
 				if (cell->GetParent()) 
 				{
 					cell->RemoveFromParent(true);
 				}
 				else 
 					delete cell;
-				m_cells.pop_back();
+				m_vCells.pop_back();
 			}
 		}
 	}
 	
 	unsigned int NDSection::Count()
 	{
-		return m_cells.size();
+		return m_vCells.size();
 	}
 	
 	

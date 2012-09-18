@@ -79,13 +79,13 @@ namespace NDEngine
 		//		作用：设置区的标题
 		//		参数：title标题
 		//		返回值：无
-		void SetTitle(const char* title){ m_title = title; }
+		void SetTitle(const char* title){ m_strTitle = title; }
 		//		
 		//		函数：GetTitle
 		//		作用：获取分区的标题
 		//		参数：无
 		//		返回值：标题
-		std::string GetTitle(){ return m_title; }
+		std::string GetTitle(){ return m_strTitle; }
 		//		
 		//		函数：SetColumnCount
 		//		作用：设置分区的列数
@@ -97,34 +97,34 @@ namespace NDEngine
 		//		作用：获取分区的列数
 		//		参数：无
 		//		返回值：列数
-		unsigned int GetColumnCount(){ return m_columnCount; }
+		unsigned int GetColumnCount(){ return m_uiColumnCount; }
 		//		
 		//		函数：SetRowHeight
 		//		作用：设置每一行的高度
 		//		参数：rowHeight高度
 		//		返回值：无
-		void SetRowHeight(unsigned int rowHeight){ m_rowHeight = rowHeight; }
+		void SetRowHeight(unsigned int rowHeight){ m_uiRowHeight = rowHeight; }
 		//		
 		//		函数：GetRowHeight
 		//		作用：获取每一行的高度
 		//		参数：无
 		//		返回值：高度
-		unsigned int GetRowHeight(){ return m_rowHeight; }
+		unsigned int GetRowHeight(){ return m_uiRowHeight; }
 
-		void UseCellHeight(bool useCellHeight){ m_useCellHeight = useCellHeight; }
-		bool IsUseCellHeight(){ return m_useCellHeight; }
+		void UseCellHeight(bool useCellHeight){ m_bUseCellHeight = useCellHeight; }
+		bool IsUseCellHeight(){ return m_bUseCellHeight; }
 		//		
 		//		函数：SetFocusOnCell
 		//		作用：设置焦点于某一单元格
 		//		参数：单元格索引
 		//		返回值：无
-		void SetFocusOnCell(unsigned int cellIndex){ m_focusCellIndex = cellIndex; }
+		void SetFocusOnCell(unsigned int cellIndex){ m_uiFocusCellIndex = cellIndex; }
 		//		
 		//		函数：GetFocusCellIndex
 		//		作用：获取焦点所在的单元格索引
 		//		参数：无
 		//		返回值：单元格索引
-		unsigned int GetFocusCellIndex(){ return m_focusCellIndex; }
+		unsigned int GetFocusCellIndex(){ return m_uiFocusCellIndex; }
 		//		
 		//		函数：AddCell
 		//		作用：添加单元格
@@ -170,10 +170,12 @@ namespace NDEngine
 
 	private:
 
-		std::vector<NDUINode*> m_cells;
-		std::string m_title;
-		unsigned int m_columnCount, m_rowHeight, m_focusCellIndex;
-		bool m_useCellHeight;
+		std::vector<NDUINode*> m_vCells;
+		std::string m_strTitle;
+		unsigned int m_uiColumnCount;
+		unsigned int m_uiRowHeight;
+		unsigned int m_uiFocusCellIndex;
+		bool m_bUseCellHeight;
 	};
 }
 

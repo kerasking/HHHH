@@ -137,13 +137,22 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 	for (int i = 0; i < nAnimationCount; i++)
 	{
 		NDAnimation* pkAnimation = new NDAnimation;
-		pkAnimation->setX(kFileOp.readShort(pkStream));
-		pkAnimation->setY(kFileOp.readShort(pkStream));
-		pkAnimation->setW(kFileOp.readShort(pkStream));
-		pkAnimation->setH(kFileOp.readShort(pkStream));
-		pkAnimation->setMidX(kFileOp.readShort(pkStream));
-		pkAnimation->setBottomY(kFileOp.readShort(pkStream));
-		pkAnimation->setType(kFileOp.readByte(pkStream));
+
+		int nX = kFileOp.readShort(pkStream);
+		int nY = kFileOp.readShort(pkStream);
+		int nW = kFileOp.readShort(pkStream);
+		int nH = kFileOp.readShort(pkStream);
+		int nMid = kFileOp.readShort(pkStream);
+		int nBottomY = kFileOp.readShort(pkStream);
+		int nType = kFileOp.readByte(pkStream);
+
+		pkAnimation->setX(nX);
+		pkAnimation->setY(nY);
+		pkAnimation->setW(nW);
+		pkAnimation->setH(nH);
+		pkAnimation->setMidX(nMid);
+		pkAnimation->setBottomY(nBottomY);
+		pkAnimation->setType(nType);
 		pkAnimation->setReverse(false);
 		pkAnimation->setBelongAnimationGroup(this);
 

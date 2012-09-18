@@ -10,16 +10,16 @@
 
 using namespace cocos2d;
 
-static bool s_bTileHightLight = false;
+static bool gs_bTileHightLight = false;
 
 void TileSetHightLight(bool bHightLight)
 {
-	s_bTileHightLight = bHightLight;
+	gs_bTileHightLight = bHightLight;
 }
 
 bool IsTileHightLight()
 {
-	return s_bTileHightLight;
+	return gs_bTileHightLight;
 }
 
 NDTile::NDTile() :
@@ -477,7 +477,7 @@ void NDTile::draw()
 		glBindTexture(GL_TEXTURE_2D, m_pkTexture->getName());		//绑定纹理
 		glVertexPointer(3, GL_FLOAT, 0, m_pfVertices);		//绑定目标位置数组
 		glColorPointer(4, GL_UNSIGNED_BYTE, 0,
-				s_bTileHightLight ? gs_nTileHightLightColors : gs_nTileColors);
+				gs_bTileHightLight ? gs_nTileHightLightColors : gs_nTileColors);
 		glTexCoordPointer(2, GL_FLOAT, 0, m_pfCoordinates);	//绑定瓦片数组
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);				//由opengl组合画图
 	}
