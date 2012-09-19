@@ -9,3 +9,10 @@
 
 #include <stdio.h>
 #include <tchar.h>
+
+#include <tinyxml.h>
+
+#include <vector>
+#include <string>
+
+using namespace std;

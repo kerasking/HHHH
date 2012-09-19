@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../inc"
+				AdditionalIncludeDirectories="../inc;../../../VERSION1.0/sqlite3/inc;../../../VERSION1.0/tinyxml/inc;&quot;$(BOOST_PATH)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,7 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="TinyXML.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\..\..\..\Lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -115,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../inc"
+				AdditionalIncludeDirectories="../inc;../../../VERSION1.0/sqlite3/inc;../../../VERSION1.0/tinyxml/inc;&quot;$(BOOST_PATH)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -134,7 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="TinyXML.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\..\..\..\Lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -177,6 +181,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\main.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\stdafx.cpp"
 				>
 			</File>
@@ -186,6 +194,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\inc\ConverToMK.h"
+				>
+			</File>
 			<File
 				RelativePath="..\inc\stdafx.h"
 				>
