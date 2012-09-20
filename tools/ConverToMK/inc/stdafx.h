@@ -16,3 +16,33 @@
 #include <string>
 
 using namespace std;
+
+#define SAFE_DELETE(pObject)\
+do \
+{\
+	if (0 != pObject)\
+	{\
+		delete pObject;\
+		pObject = 0;\
+	}\
+} while (false)
+
+#define SAFE_DELETE_ARRAY(pObject)\
+do \
+{\
+	if (0 != pObject)\
+	{\
+		delete [] pObject;\
+		pObject = 0;\
+	}\
+} while (false)
+
+#define SAFE_RELEASE(pObject)\
+do \
+{\
+	if (0 != pObject)\
+	{\
+		pObject->release();\
+		pObject = 0;\
+	}\
+} while (false)

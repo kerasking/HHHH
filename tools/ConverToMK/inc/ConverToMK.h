@@ -20,7 +20,10 @@ public:
 
 protected:
 
+	bool Parse(TiXmlElement* pkElement);
+
 	bool m_bIsInit;
+	char* m_pszIniFile;
 
 	StringVector m_kFilesPathData;
 
