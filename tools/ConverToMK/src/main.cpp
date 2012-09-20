@@ -6,7 +6,7 @@
 
 int main(int argc, char** argv)
 {
-	CConverToMK* pkMK = CConverToMK::initWithIniFile("libClientEngine.vcproj");
+	CConverToMK* pkMK = CConverToMK::initWithIniFile("ConverToMKConfig.ini");
 
 	return 0;
 }

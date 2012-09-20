@@ -15,7 +15,13 @@
 #include <vector>
 #include <string>
 
+#include <boost/noncopyable.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
+
 using namespace std;
+using namespace boost;
+using namespace boost::property_tree;
 
 #define SAFE_DELETE(pObject)\
 do \

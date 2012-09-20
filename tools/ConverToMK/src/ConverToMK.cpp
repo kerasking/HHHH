@@ -1,19 +1,27 @@
 #include "stdafx.h"
 #include "ConverToMK.h"
 
-CConverToMK::CConverToMK( const char* pszIniFile ):
+CConverToMK::CConverToMK( const char* pszVCProjectFile,const char* pszMKFile):
 m_bIsInit(false),
-m_pszIniFile(0)
+m_pszVCProjectFile(0),
+m_pszMKFile(0)
 {
-	m_pszIniFile = new char[MAX_PATH];
-	memset(m_pszIniFile,0,sizeof(char) * MAX_PATH);
+	m_pszVCProjectFile = new char[255];
+	m_pszMKFile = new char[255];
 
-	if (0 == pszIniFile || !*pszIniFile)
+	memset(m_pszMKFile,0,sizeof(char) * 255);
+	memset(m_pszVCProjectFile,0,sizeof(char) * 255);
+
+	if (0 == pszVCProjectFile || !*pszVCProjectFile ||
+		0 == pszMKFile || !*pszMKFile)
 	{
 		return;
 	}
 
-	TiXmlDocument kDocument(pszIniFile);
+	strcpy_s(m_pszMKFile,255,pszMKFile);
+	strcpy_s(m_pszVCProjectFile,255,pszVCProjectFile);
+
+	TiXmlDocument kDocument(pszVCProjectFile);
 
 	if (!kDocument.LoadFile())
 	{
@@ -41,12 +49,24 @@ m_pszIniFile(0)
 
 CConverToMK::~CConverToMK()
 {
-	SAFE_DELETE_ARRAY(m_pszIniFile);
+	SAFE_DELETE_ARRAY(m_pszVCProjectFile);
+	SAFE_DELETE_ARRAY(m_pszMKFile);
 }
 
 CConverToMK* CConverToMK::initWithIniFile( const char* pszIniFile )
 {
-	CConverToMK* pkMK = new CConverToMK(pszIniFile);
+	if (0 == pszIniFile || !*pszIniFile)
+	{
+		return 0;
+	}
+
+	ptree kTree;
+	read_ini(pszIniFile,kTree);
+
+	string strVCProj = kTree.get<string>("PATH.VCProjectPath");
+	string strMKFile = kTree.get<string>("PATH.MKFilePath");
+
+	CConverToMK* pkMK = new CConverToMK(strVCProj.c_str(),strMKFile.c_str());
 
 	if (!pkMK->GetInitialised())
 	{
@@ -58,12 +78,12 @@ CConverToMK* CConverToMK::initWithIniFile( const char* pszIniFile )
 
 bool CConverToMK::Parse( TiXmlElement* pkElement )
 {
-	TiXmlElement* pkFilter = pkElement->FirstChildElement();
-
-	if (strcmp("Filter",pkFilter->Value()) != 0 || 0 == pkFilter)
+	if (0 == pkElement)
 	{
 		return false;
 	}
+
+	TiXmlElement* pkFilter = pkElement->FirstChildElement();
 
 	do
 	{
@@ -81,6 +101,16 @@ bool CConverToMK::Parse( TiXmlElement* pkElement )
 			m_kFilesPathData.push_back(strName);
 		}
 	} while (pkFilter = pkFilter->NextSiblingElement());
+
+	return true;
+}
+
+bool CConverToMK::WriteToMKFile( const char* pszFilename)
+{
+	if (0 == pszFilename || !*pszFilename)
+	{
+		return false;
+	}
 
 	return true;
 }
