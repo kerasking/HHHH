@@ -105,11 +105,13 @@ bool CConverToMK::Parse( TiXmlElement* pkElement )
 	return true;
 }
 
-bool CConverToMK::WriteToMKFile( const char* pszFilename)
+bool CConverToMK::WriteToMKFile()
 {
-	if (0 == pszFilename || !*pszFilename)
+	file_type eType = status(m_pszMKFile).type();
+
+	if (regular_file != eType)
 	{
-		return false;
+		return true;
 	}
 
 	return true;

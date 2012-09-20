@@ -18,10 +18,12 @@
 #include <boost/noncopyable.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
+#include <boost/filesystem.hpp>
 
 using namespace std;
 using namespace boost;
 using namespace boost::property_tree;
+using namespace boost::filesystem;
 
 #define SAFE_DELETE(pObject)\
 do \

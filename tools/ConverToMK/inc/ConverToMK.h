@@ -16,7 +16,7 @@ public:
 
 	static CConverToMK* initWithIniFile(const char* pszIniFile);
 
-	bool WriteToMKFile(const char* pszFilename = 0);
+	bool WriteToMKFile();
 
 	inline bool GetInitialised(){return m_bIsInit;}
 
