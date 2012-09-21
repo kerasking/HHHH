@@ -1,15 +1,20 @@
 #include "stdafx.h"
 #include "ConverToMK.h"
 
-CConverToMK::CConverToMK( const char* pszVCProjectFile,const char* pszMKFile):
+CConverToMK::CConverToMK( const char* pszVCProjectFile,
+						 const char* pszMKFile,
+						 const char* pszFilter):
 m_bIsInit(false),
 m_pszVCProjectFile(0),
 m_pszMKFile(0),
-m_uiKeyStringPosition(0)
+m_uiKeyStringPosition(0),
+m_pszFilterWord(0)
 {
 	m_pszVCProjectFile = new char[255];
 	m_pszMKFile = new char[255];
-
+	m_pszFilterWord = new char[255];
+	
+	memset(m_pszFilterWord,0,sizeof(char) * 255);
 	memset(m_pszMKFile,0,sizeof(char) * 255);
 	memset(m_pszVCProjectFile,0,sizeof(char) * 255);
 
@@ -21,6 +26,7 @@ m_uiKeyStringPosition(0)
 
 	strcpy_s(m_pszMKFile,255,pszMKFile);
 	strcpy_s(m_pszVCProjectFile,255,pszVCProjectFile);
+	SetFilterWord(pszFilter);
 
 	if (!ParseVCProjectFile())
 	{
@@ -38,6 +44,7 @@ m_uiKeyStringPosition(0)
 CConverToMK::~CConverToMK()
 {
 	SAFE_DELETE_ARRAY(m_pszVCProjectFile);
+	SAFE_DELETE_ARRAY(m_pszFilterWord);
 	SAFE_DELETE_ARRAY(m_pszMKFile);
 }
 
@@ -53,8 +60,10 @@ CConverToMK* CConverToMK::initWithIniFile( const char* pszIniFile )
 
 	string strVCProj = kTree.get<string>("PATH.VCProjectPath");
 	string strMKFile = kTree.get<string>("PATH.MKFilePath");
+	string strFilter = kTree.get<string>("FILTER.SrcFile");
 
-	CConverToMK* pkMK = new CConverToMK(strVCProj.c_str(),strMKFile.c_str());
+	CConverToMK* pkMK = new CConverToMK(strVCProj.c_str(),
+		strMKFile.c_str(),strFilter.c_str());
 
 	if (!pkMK->GetInitialised())
 	{
@@ -86,6 +95,12 @@ bool CConverToMK::ParseFilterInVCProjectFile( TiXmlElement* pkElement )
 		else if (strcmp("File",strType.c_str()) == 0)
 		{
 			string strName = pkAttr->Value();
+
+			if (!IsFilterWord(strName.c_str()))
+			{
+				continue;
+			}
+
 			m_kFilesPathData.push_back(strName);
 		}
 	} while (pkFilter = pkFilter->NextSiblingElement());
@@ -248,6 +263,32 @@ bool CConverToMK::ParseMKFile()
 
 	m_kMKFileData.erase(pkIterator,pkEndIterator);
 	kInStream.close();
+
+	return true;
+}
+
+void CConverToMK::SetFilterWord( const char* pszWord )
+{
+	assert(pszWord);
+
+	strcpy_s(m_pszFilterWord,255,pszWord);
+}
+
+bool CConverToMK::IsFilterWord( const char* pszFilter )
+{
+	if (0 == pszFilter || !*pszFilter)
+	{
+		return false;
+	}
+
+	filesystem::path kPath(pszFilter);
+
+	string strExt = kPath.extension().string();
+
+	if (strcmp(m_pszFilterWord,strExt.c_str()) != 0)
+	{
+		return false;
+	}
 
 	return true;
 }
