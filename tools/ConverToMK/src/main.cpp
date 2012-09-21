@@ -10,5 +10,7 @@ int main(int argc, char** argv)
 
 	pkMK->WriteToMKFile();
 
+	getchar();
+
 	return 0;
 }

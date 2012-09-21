@@ -4,7 +4,8 @@
 CConverToMK::CConverToMK( const char* pszVCProjectFile,const char* pszMKFile):
 m_bIsInit(false),
 m_pszVCProjectFile(0),
-m_pszMKFile(0)
+m_pszMKFile(0),
+m_uiKeyStringPosition(0)
 {
 	m_pszVCProjectFile = new char[255];
 	m_pszMKFile = new char[255];
@@ -21,28 +22,15 @@ m_pszMKFile(0)
 	strcpy_s(m_pszMKFile,255,pszMKFile);
 	strcpy_s(m_pszVCProjectFile,255,pszVCProjectFile);
 
-	TiXmlDocument kDocument(pszVCProjectFile);
-
-	if (!kDocument.LoadFile())
+	if (!ParseVCProjectFile())
 	{
 		return;
 	}
 
-	TiXmlElement* pkRootElement = kDocument.RootElement();
-
-	if (0 == pkRootElement)
+	if (!ParseMKFile())
 	{
 		return;
 	}
-
-	TiXmlElement* pkFiles = pkRootElement->FirstChildElement("Files");
-
-	if (0 == pkFiles)
-	{
-		return;
-	}
-	
-	Parse(pkFiles);
 
 	m_bIsInit = true;
 }
@@ -76,7 +64,7 @@ CConverToMK* CConverToMK::initWithIniFile( const char* pszIniFile )
 	return pkMK;
 }
 
-bool CConverToMK::Parse( TiXmlElement* pkElement )
+bool CConverToMK::ParseFilterInVCProjectFile( TiXmlElement* pkElement )
 {
 	if (0 == pkElement)
 	{
@@ -93,7 +81,7 @@ bool CConverToMK::Parse( TiXmlElement* pkElement )
 
 		if (strcmp("Filter",strType.c_str()) == 0)
 		{
-			Parse(pkFilter);
+			ParseFilterInVCProjectFile(pkFilter);
 		}
 		else if (strcmp("File",strType.c_str()) == 0)
 		{
@@ -107,12 +95,159 @@ bool CConverToMK::Parse( TiXmlElement* pkElement )
 
 bool CConverToMK::WriteToMKFile()
 {
+	filesystem::path kPath(m_pszMKFile);
+	string strParentPath = kPath.parent_path().string();
+	StringVector kPathSet = m_kMKFileData;
+	StringVector::iterator pkIterator = kPathSet.begin();
+
+	for (unsigned int i = 0;i < m_uiKeyStringPosition;i++)
+	{
+		pkIterator++;
+	}
+
+	kPathSet.insert(pkIterator,string("LOCAL_SRC_FILES := \\"));
+	unsigned int uiPos = m_uiKeyStringPosition + 1;
+
+	for (unsigned int uiIndex = 0;uiIndex < m_kFilesPathData.size();uiIndex++)
+	{
+		string strFull = m_kFilesPathData[uiIndex];
+
+		if (uiIndex != m_kFilesPathData.size() - 1)
+		{
+			strFull = strFull + string(" \\");
+		}
+
+		kPathSet.insert(kPathSet.begin() + uiPos,strFull);
+		uiPos++;
+	}
+
+// 	for (unsigned int uiIndex = 0;uiIndex < kPathSet.size();uiIndex++)
+// 	{
+// 		string strFullPath = strParentPath + string("/") + kPathSet[uiIndex];
+// 		file_type eFileType = status(strFullPath).type();
+// 
+// 		if (regular_file != eFileType)
+// 		{
+// 			kPathSet[uiIndex] = "";
+// 			cout << "File not found :" << kPathSet[uiIndex] << endl;
+// 			continue;;
+// 		}
+// 	}
+
+	ofstream kOutStream("temp.mk");
+
+	for (unsigned int uiIndex = 0;uiIndex < kPathSet.size();uiIndex++)
+	{
+		kOutStream << kPathSet[uiIndex] << endl;
+	}
+
+	kOutStream.close();
+
+	return true;
+}
+
+bool CConverToMK::ParseVCProjectFile()
+{
+	TiXmlDocument kDocument(m_pszVCProjectFile);
+
+	if (!kDocument.LoadFile())
+	{
+		return false;
+	}
+
+	TiXmlElement* pkRootElement = kDocument.RootElement();
+
+	if (0 == pkRootElement)
+	{
+		return false;
+	}
+
+	TiXmlElement* pkFiles = pkRootElement->FirstChildElement("Files");
+
+	if (0 == pkFiles)
+	{
+		return false;
+	}
+
+	ParseFilterInVCProjectFile(pkFiles);
+
+	return true;
+}
+
+bool CConverToMK::ParseMKFile()
+{
 	file_type eType = status(m_pszMKFile).type();
 
 	if (regular_file != eType)
 	{
-		return true;
+		return false;
 	}
+
+	ifstream kInStream(m_pszMKFile);
+
+	if (!kInStream.is_open())
+	{
+		return false;
+	}
+
+	char szTempData[1024] = {0};
+
+	while (kInStream.getline(szTempData,1024))
+	{
+		string strData = szTempData;
+		m_kMKFileData.push_back(strData);
+	}
+
+	unsigned int uiEndPosition = -1;
+	StringVector::iterator pkIterator = m_kMKFileData.begin();
+	StringVector::iterator pkEndIterator = m_kMKFileData.begin();
+
+	for (unsigned int i = 0;i < m_kMKFileData.size();i++)
+	{
+		iterator_range<string::iterator> kRange;
+		kRange = find_first(m_kMKFileData[i],"LOCAL_SRC_FILES");
+
+		if (kRange.size() != 0)
+		{
+			m_uiKeyStringPosition = i;
+			break;
+		}
+
+		pkIterator++;
+	}
+
+	pkEndIterator = pkIterator;
+
+	for (unsigned int i = m_uiKeyStringPosition;i < m_kMKFileData.size();i++)
+	{
+		iterator_range<string::iterator> kRange;
+		kRange = find_first(m_kMKFileData[i],"\\");
+
+		string strTemp;
+
+		strTemp = m_kMKFileData[i];
+
+		pkEndIterator++;
+
+		if (kRange.size() == 0)
+		{
+			if (strTemp.length() == 0)
+			{
+				continue;
+			}
+
+			uiEndPosition = i;
+			break;
+		}
+
+		if (m_uiKeyStringPosition == i)
+		{
+			continue;
+		}
+	}
+
+	m_kMKFileData.erase(pkIterator,pkEndIterator);
+	kInStream.close();
 
 	return true;
 }

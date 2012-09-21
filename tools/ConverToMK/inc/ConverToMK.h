@@ -22,13 +22,18 @@ public:
 
 protected:
 
-	bool Parse(TiXmlElement* pkElement);
+	bool ParseVCProjectFile();
+	bool ParseMKFile();
+	bool ParseFilterInVCProjectFile(TiXmlElement* pkElement);
 
 	bool m_bIsInit;
 	char* m_pszVCProjectFile;
 	char* m_pszMKFile;
 
 	StringVector m_kFilesPathData;
+	StringVector m_kMKFileData;
+
+	unsigned int m_uiKeyStringPosition;
 
 private:
 };

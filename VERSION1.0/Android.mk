@@ -25,7 +25,7 @@ ClientEngine/System/src/NDPath.cpp \
 ClientEngine/System/src/NDTimer.cpp \
 ClientEngine/System/src/NDTouch.cpp \
 ClientEngine/System/src/NDWideString.cpp \
-ClientEngine/System/src/SMString.cpp \
+ClientEngine/System/src/SMString.cpp
 
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../cocos2dx \
