@@ -16,16 +16,23 @@
 #include <string>
 #include <fstream>
 
+#include <boost/config/warning_disable.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/program_options.hpp>
+#include <boost/assign.hpp>
+#include <boost/typeof/typeof.hpp>
 
 using namespace std;
 using namespace boost;
+using namespace boost::assign;
 using namespace boost::property_tree;
 using namespace boost::filesystem;
+using namespace boost::program_options;
 
 #define SAFE_DELETE(pObject)\
 do \

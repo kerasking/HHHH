@@ -3,18 +3,20 @@
 
 CConverToMK::CConverToMK( const char* pszVCProjectFile,
 						 const char* pszMKFile,
-						 const char* pszFilter):
+						 CConverToMK::StringVector kFilterWords):
 m_bIsInit(false),
 m_pszVCProjectFile(0),
 m_pszMKFile(0),
-m_uiKeyStringPosition(0),
-m_pszFilterWord(0)
+m_uiKeyStringPosition(0)
 {
 	m_pszVCProjectFile = new char[255];
 	m_pszMKFile = new char[255];
-	m_pszFilterWord = new char[255];
+
+	if (kFilterWords.size())
+	{
+		m_kFilterWord = kFilterWords;
+	}
 	
-	memset(m_pszFilterWord,0,sizeof(char) * 255);
 	memset(m_pszMKFile,0,sizeof(char) * 255);
 	memset(m_pszVCProjectFile,0,sizeof(char) * 255);
 
@@ -26,7 +28,6 @@ m_pszFilterWord(0)
 
 	strcpy_s(m_pszMKFile,255,pszMKFile);
 	strcpy_s(m_pszVCProjectFile,255,pszVCProjectFile);
-	SetFilterWord(pszFilter);
 
 	if (!ParseVCProjectFile())
 	{
@@ -44,7 +45,6 @@ m_pszFilterWord(0)
 CConverToMK::~CConverToMK()
 {
 	SAFE_DELETE_ARRAY(m_pszVCProjectFile);
-	SAFE_DELETE_ARRAY(m_pszFilterWord);
 	SAFE_DELETE_ARRAY(m_pszMKFile);
 }
 
@@ -56,14 +56,21 @@ CConverToMK* CConverToMK::initWithIniFile( const char* pszIniFile )
 	}
 
 	ptree kTree;
-	read_ini(pszIniFile,kTree);
+	read_xml(pszIniFile,kTree);
+	StringVector kFilterWords;
 
-	string strVCProj = kTree.get<string>("PATH.VCProjectPath");
-	string strMKFile = kTree.get<string>("PATH.MKFilePath");
-	string strFilter = kTree.get<string>("FILTER.SrcFile");
+	string strVCProj = kTree.get<string>("conf.path.VCProjectPath");
+	string strMKFile = kTree.get<string>("conf.path.MKFilePath");
+
+	BOOST_AUTO(child,kTree.get_child("conf.filter"));
+	for (BOOST_AUTO(pkPos,child.begin());child.end() != pkPos;++pkPos)
+	{
+		string strTemp = pkPos->second.data();
+		kFilterWords.push_back(strTemp);
+	}
 
 	CConverToMK* pkMK = new CConverToMK(strVCProj.c_str(),
-		strMKFile.c_str(),strFilter.c_str());
+		strMKFile.c_str(),kFilterWords);
 
 	if (!pkMK->GetInitialised())
 	{
@@ -126,6 +133,8 @@ bool CConverToMK::WriteToMKFile()
 	for (unsigned int uiIndex = 0;uiIndex < m_kFilesPathData.size();uiIndex++)
 	{
 		string strFull = m_kFilesPathData[uiIndex];
+
+		replace_all(strFull,"\\","/");
 
 		if (uiIndex != m_kFilesPathData.size() - 1)
 		{
@@ -267,13 +276,6 @@ bool CConverToMK::ParseMKFile()
 	return true;
 }
 
-void CConverToMK::SetFilterWord( const char* pszWord )
-{
-	assert(pszWord);
-
-	strcpy_s(m_pszFilterWord,255,pszWord);
-}
-
 bool CConverToMK::IsFilterWord( const char* pszFilter )
 {
 	if (0 == pszFilter || !*pszFilter)
@@ -285,9 +287,14 @@ bool CConverToMK::IsFilterWord( const char* pszFilter )
 
 	string strExt = kPath.extension().string();
 
-	if (strcmp(m_pszFilterWord,strExt.c_str()) != 0)
+	for (unsigned int i = 0;i < m_kFilterWord.size();i++)
 	{
-		return false;
+		string strFilter = m_kFilterWord[i];
+
+		if (strcmp(strFilter.c_str(),strExt.c_str()) != 0)
+		{
+			return false;
+		}
 	}
 
 	return true;

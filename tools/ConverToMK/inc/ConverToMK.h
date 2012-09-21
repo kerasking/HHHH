@@ -12,7 +12,7 @@ public:
 	typedef vector<string> StringVector,*StringVectorPtr;
 
 	CConverToMK( const char* pszVCProjectFile,const char* pszMKFile,
-		const char* pszFilter);
+		CConverToMK::StringVector kFilterWords);
 	virtual ~CConverToMK();
 
 	static CConverToMK* initWithIniFile(const char* pszIniFile);
@@ -20,8 +20,6 @@ public:
 	bool WriteToMKFile();
 
 	inline bool GetInitialised(){return m_bIsInit;}
-
-	void SetFilterWord(const char* pszWord);
 
 protected:
 
@@ -37,6 +35,7 @@ protected:
 
 	StringVector m_kFilesPathData;
 	StringVector m_kMKFileData;
+	StringVector m_kFilterWord;
 
 	unsigned int m_uiKeyStringPosition;
 
