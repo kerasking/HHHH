@@ -25,6 +25,7 @@ protected:
 
 	bool ParseVCProjectFile();
 	bool ParseMKFile();
+	bool ProcessPath(const char* pszPath,string& strRes);
 	bool ParseFilterInVCProjectFile(TiXmlElement* pkElement);
 	bool IsFilterWord(const char* pszFilter);
 

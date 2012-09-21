@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ConverToMK.h"
+#include <Windows.h>
 
 CConverToMK::CConverToMK( const char* pszVCProjectFile,
 						 const char* pszMKFile,
@@ -129,20 +130,30 @@ bool CConverToMK::WriteToMKFile()
 
 	kPathSet.insert(pkIterator,string("LOCAL_SRC_FILES := \\"));
 	unsigned int uiPos = m_uiKeyStringPosition + 1;
+	ofstream kOutStream("temp.mk");
+
+	cout << "正在写入到" << "temp.mk" << "文件里" << endl;
+	progress_display kProgressDisplay(m_kFilesPathData.size());
 
 	for (unsigned int uiIndex = 0;uiIndex < m_kFilesPathData.size();uiIndex++)
 	{
-		string strFull = m_kFilesPathData[uiIndex];
+		string strFullPath = m_kFilesPathData[uiIndex];
+		string strProcessedPath = "";
 
-		replace_all(strFull,"\\","/");
+		ProcessPath(strFullPath.c_str(),strProcessedPath);
+
+		replace_all(strProcessedPath,"\\","/");
 
 		if (uiIndex != m_kFilesPathData.size() - 1)
 		{
-			strFull = strFull + string(" \\");
+			strProcessedPath = strProcessedPath + string(" \\");
 		}
 
-		kPathSet.insert(kPathSet.begin() + uiPos,strFull);
+		kPathSet.insert(kPathSet.begin() + uiPos,strProcessedPath);
 		uiPos++;
+		++kProgressDisplay;
+
+		Sleep(50);
 	}
 
 // 	for (unsigned int uiIndex = 0;uiIndex < kPathSet.size();uiIndex++)
@@ -158,14 +169,14 @@ bool CConverToMK::WriteToMKFile()
 // 		}
 // 	}
 
-	ofstream kOutStream("temp.mk");
-
 	for (unsigned int uiIndex = 0;uiIndex < kPathSet.size();uiIndex++)
 	{
 		kOutStream << kPathSet[uiIndex] << endl;
 	}
 
 	kOutStream.close();
+
+	cout << "已经写完并且关闭文件" << endl;
 
 	return true;
 }
@@ -291,10 +302,108 @@ bool CConverToMK::IsFilterWord( const char* pszFilter )
 	{
 		string strFilter = m_kFilterWord[i];
 
-		if (strcmp(strFilter.c_str(),strExt.c_str()) != 0)
+		if (strcmp(strFilter.c_str(),strExt.c_str()) == 0)
 		{
-			return false;
+			return true;
 		}
+	}
+
+	return false;
+}
+
+bool CConverToMK::ProcessPath( const char* pszPath,string& strRes )
+{
+	if (0 == pszPath || !*pszPath)
+	{
+		return false;
+	}
+
+	if (strRes.size())
+	{
+		strRes = "";
+	}
+
+	filesystem::path kVCFile(m_pszVCProjectFile);
+	filesystem::path kMKFile(m_pszMKFile);
+	filesystem::path kInputPath(pszPath);
+
+	unsigned int uiParentFolderCount = 0;
+
+	kInputPath = kInputPath.parent_path();
+
+	kVCFile = kVCFile.parent_path();
+	kMKFile = kMKFile.parent_path();
+
+	StringVector kVCSets;
+	StringVector kMKSets;
+	StringVector kTargetSets;
+
+	BOOST_AUTO(pkInputPathPos,kInputPath.begin());
+	BOOST_AUTO(pkVCPos,kVCFile.begin());
+	BOOST_AUTO(pkMKPos,kMKFile.begin());
+
+	while (pkInputPathPos != kInputPath.end())
+	{
+		string strPath = pkInputPathPos->string().c_str();
+
+		if (strcmp(strPath.c_str(),"..") == 0)
+		{
+			uiParentFolderCount++;
+			pkInputPathPos++;
+			continue;
+		}
+
+		kTargetSets.push_back(strPath);
+		pkInputPathPos++;
+	}
+
+	while (pkVCPos != kVCFile.end())
+	{
+		filesystem::path strVC = *pkVCPos;
+		kVCSets.push_back(strVC.string());
+		pkVCPos++;
+	}
+
+	while (0 < uiParentFolderCount)
+	{
+		kVCSets.pop_back();
+		uiParentFolderCount--;
+	}
+
+	while (pkMKPos != kMKFile.end())
+	{
+		string strVC = pkMKPos->string();
+		kMKSets.push_back(strVC);
+		pkMKPos++;
+	}
+
+	unsigned int uiMin = kMKSets.size() < kVCSets.size() ?
+		kMKSets.size() : kVCSets.size();
+	unsigned int uiIndex = 0;
+
+	for (uiIndex = 0;uiIndex < uiMin;uiIndex++)
+	{
+		if (strcmp(kMKSets[uiIndex].c_str(),kVCSets[uiIndex].c_str()) != 0)
+		{
+			break;
+		}
+	}
+
+	kMKSets.erase(kMKSets.begin(),kMKSets.begin() + uiIndex);
+	kVCSets.erase(kVCSets.begin(),kVCSets.begin() + uiIndex);
+
+	strRes += ".";
+
+	for (unsigned int uiIndex = 0;uiIndex < kVCSets.size();uiIndex++)
+	{
+		strRes += "\\";
+		strRes += kVCSets[uiIndex];
+	}
+
+	for (unsigned int uiIndex = 0;uiIndex < kTargetSets.size();uiIndex++)
+	{
+		strRes += "\\";
+		strRes += kTargetSets[uiIndex];
 	}
 
 	return true;

@@ -26,6 +26,7 @@
 #include <boost/program_options.hpp>
 #include <boost/assign.hpp>
 #include <boost/typeof/typeof.hpp>
+#include <boost/progress.hpp>
 
 using namespace std;
 using namespace boost;
