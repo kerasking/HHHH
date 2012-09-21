@@ -4,20 +4,34 @@
 
 CConverToMK::CConverToMK( const char* pszVCProjectFile,
 						 const char* pszMKFile,
-						 CConverToMK::StringVector kFilterWords):
+						 CConverToMK::StringVector kFilterWords,
+						 const char* pszHelpFile):
 m_bIsInit(false),
 m_pszVCProjectFile(0),
 m_pszMKFile(0),
+m_pszHelpFile(0),
 m_uiKeyStringPosition(0)
 {
 	m_pszVCProjectFile = new char[255];
 	m_pszMKFile = new char[255];
+	m_pszHelpFile = new char[255];
 
 	if (kFilterWords.size())
 	{
 		m_kFilterWord = kFilterWords;
 	}
-	
+
+	if (*pszHelpFile)
+	{
+		strcpy_s(m_pszHelpFile,255,pszHelpFile);
+
+		if (!InitialiseHelp())
+		{
+			return;
+		}
+	}
+
+	memset(m_pszHelpFile,0,sizeof(char) * 255);
 	memset(m_pszMKFile,0,sizeof(char) * 255);
 	memset(m_pszVCProjectFile,0,sizeof(char) * 255);
 
@@ -29,6 +43,7 @@ m_uiKeyStringPosition(0)
 
 	strcpy_s(m_pszMKFile,255,pszMKFile);
 	strcpy_s(m_pszVCProjectFile,255,pszVCProjectFile);
+	strcpy_s(m_pszHelpFile,255,pszHelpFile);
 
 	if (!ParseVCProjectFile())
 	{
@@ -47,6 +62,7 @@ CConverToMK::~CConverToMK()
 {
 	SAFE_DELETE_ARRAY(m_pszVCProjectFile);
 	SAFE_DELETE_ARRAY(m_pszMKFile);
+	SAFE_DELETE_ARRAY(m_pszHelpFile);
 }
 
 CConverToMK* CConverToMK::initWithIniFile( const char* pszIniFile )
@@ -60,6 +76,7 @@ CConverToMK* CConverToMK::initWithIniFile( const char* pszIniFile )
 	read_xml(pszIniFile,kTree);
 	StringVector kFilterWords;
 
+	string strHelpFile = kTree.get<string>("conf.path.HelpFilePath");
 	string strVCProj = kTree.get<string>("conf.path.VCProjectPath");
 	string strMKFile = kTree.get<string>("conf.path.MKFilePath");
 
@@ -71,7 +88,7 @@ CConverToMK* CConverToMK::initWithIniFile( const char* pszIniFile )
 	}
 
 	CConverToMK* pkMK = new CConverToMK(strVCProj.c_str(),
-		strMKFile.c_str(),kFilterWords);
+		strMKFile.c_str(),kFilterWords,strHelpFile.c_str());
 
 	if (!pkMK->GetInitialised())
 	{
@@ -130,17 +147,17 @@ bool CConverToMK::WriteToMKFile()
 
 	kPathSet.insert(pkIterator,string("LOCAL_SRC_FILES := \\"));
 	unsigned int uiPos = m_uiKeyStringPosition + 1;
-	ofstream kOutStream("temp.mk");
-
-	cout << "正在写入到" << "temp.mk" << "文件里" << endl;
-	progress_display kProgressDisplay(m_kFilesPathData.size());
 
 	for (unsigned int uiIndex = 0;uiIndex < m_kFilesPathData.size();uiIndex++)
 	{
 		string strFullPath = m_kFilesPathData[uiIndex];
 		string strProcessedPath = "";
 
-		ProcessPath(strFullPath.c_str(),strProcessedPath);
+		if (!ProcessPath(strFullPath.c_str(),strProcessedPath))
+		{
+			cout << "文件 " << strFullPath << " 找不到！请检查vcproj文件" << endl;
+			continue;
+		}
 
 		replace_all(strProcessedPath,"\\","/");
 
@@ -151,27 +168,17 @@ bool CConverToMK::WriteToMKFile()
 
 		kPathSet.insert(kPathSet.begin() + uiPos,strProcessedPath);
 		uiPos++;
-		++kProgressDisplay;
-
-		Sleep(50);
 	}
 
-// 	for (unsigned int uiIndex = 0;uiIndex < kPathSet.size();uiIndex++)
-// 	{
-// 		string strFullPath = strParentPath + string("/") + kPathSet[uiIndex];
-// 		file_type eFileType = status(strFullPath).type();
-// 
-// 		if (regular_file != eFileType)
-// 		{
-// 			kPathSet[uiIndex] = "";
-// 			cout << "File not found :" << kPathSet[uiIndex] << endl;
-// 			continue;;
-// 		}
-// 	}
+	ofstream kOutStream("temp.mk");
+	cout << "正在写入到" << "temp.mk" << "文件里" << endl;
+	progress_display kProgressDisplay(kPathSet.size());
 
 	for (unsigned int uiIndex = 0;uiIndex < kPathSet.size();uiIndex++)
 	{
 		kOutStream << kPathSet[uiIndex] << endl;
+		++kProgressDisplay;
+		Sleep(20);
 	}
 
 	kOutStream.close();
@@ -211,9 +218,7 @@ bool CConverToMK::ParseVCProjectFile()
 
 bool CConverToMK::ParseMKFile()
 {
-	file_type eType = status(m_pszMKFile).type();
-
-	if (regular_file != eType)
+	if (!CheckFileExist(m_pszMKFile))
 	{
 		return false;
 	}
@@ -328,6 +333,7 @@ bool CConverToMK::ProcessPath( const char* pszPath,string& strRes )
 	filesystem::path kInputPath(pszPath);
 
 	unsigned int uiParentFolderCount = 0;
+	string strFilename = kInputPath.filename().string();
 
 	kInputPath = kInputPath.parent_path();
 
@@ -337,6 +343,7 @@ bool CConverToMK::ProcessPath( const char* pszPath,string& strRes )
 	StringVector kVCSets;
 	StringVector kMKSets;
 	StringVector kTargetSets;
+	StringVector kTempVC;
 
 	BOOST_AUTO(pkInputPathPos,kInputPath.begin());
 	BOOST_AUTO(pkVCPos,kVCFile.begin());
@@ -364,8 +371,11 @@ bool CConverToMK::ProcessPath( const char* pszPath,string& strRes )
 		pkVCPos++;
 	}
 
+	kTempVC = kVCSets;
+
 	while (0 < uiParentFolderCount)
 	{
+		kTempVC.pop_back();
 		kVCSets.pop_back();
 		uiParentFolderCount--;
 	}
@@ -393,6 +403,13 @@ bool CConverToMK::ProcessPath( const char* pszPath,string& strRes )
 	kVCSets.erase(kVCSets.begin(),kVCSets.begin() + uiIndex);
 
 	strRes += ".";
+	string strPrePath = "";
+
+	for (unsigned int uiIndex = 0;uiIndex < kTempVC.size();uiIndex++)
+	{
+		strPrePath += kTempVC[uiIndex];
+		strPrePath += "\\";
+	}
 
 	for (unsigned int uiIndex = 0;uiIndex < kVCSets.size();uiIndex++)
 	{
@@ -403,7 +420,66 @@ bool CConverToMK::ProcessPath( const char* pszPath,string& strRes )
 	for (unsigned int uiIndex = 0;uiIndex < kTargetSets.size();uiIndex++)
 	{
 		strRes += "\\";
+		strPrePath += kTargetSets[uiIndex];
+		strPrePath += "\\";
+
 		strRes += kTargetSets[uiIndex];
+	}
+
+	strRes += "\\";
+	strRes += strFilename;
+	strPrePath += strFilename;
+
+	if (!CheckFileExist(strPrePath.c_str()))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool CConverToMK::CheckFileExist( const char* pszFile )
+{
+	if (0 == pszFile || !*pszFile)
+	{
+		return false;
+	}
+
+	file_type eType = status(pszFile).type();
+
+	if (regular_file != eType)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+CConverToMK::StringVector CConverToMK::GetHelpComment()
+{
+	return m_kHelpData;
+}
+
+bool CConverToMK::InitialiseHelp()
+{
+	if (!CheckFileExist(m_pszHelpFile))
+	{
+		return false;
+	}
+
+	ifstream kInStream(m_pszHelpFile);
+
+	if (!kInStream.is_open())
+	{
+		return false;
+	}
+
+	char szTempData[1024] = {0};
+
+	while (kInStream.getline(szTempData,1024))
+	{
+		string strData = szTempData;
+		m_kHelpData.push_back(strData);
 	}
 
 	return true;
