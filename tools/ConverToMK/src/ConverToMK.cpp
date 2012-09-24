@@ -2,28 +2,100 @@
 #include "ConverToMK.h"
 #include <Windows.h>
 
-CConverToMK::CConverToMK( const char* pszVCProjectFile,
-						 const char* pszMKFile,
-						 CConverToMK::StringVector kFilterWords,
-						 const char* pszHelpFile):
+CConverToMK::CConverToMK(const char* pszXMLFile):
 m_bIsInit(false),
-m_pszVCProjectFile(0),
 m_pszMKFile(0),
 m_pszHelpFile(0),
+m_pszConfigFile(0),
 m_uiKeyStringPosition(0)
 {
-	m_pszVCProjectFile = new char[255];
 	m_pszMKFile = new char[255];
 	m_pszHelpFile = new char[255];
+	m_pszConfigFile = new char[255];
 
-	if (kFilterWords.size())
+	memset(m_pszHelpFile,0,sizeof(char) * 255);
+	memset(m_pszMKFile,0,sizeof(char) * 255);
+	memset(m_pszConfigFile,0,sizeof(char) * 255);
+	memset(&m_kMKFileInfo,0,sizeof(MKFileInfo));
+
+	TiXmlDocument kDocument(pszXMLFile);
+
+	if (!kDocument.LoadFile())
 	{
-		m_kFilterWord = kFilterWords;
+		return;
 	}
 
-	if (*pszHelpFile)
+	TiXmlElement* pkConfElement = kDocument.RootElement();
+
+	if (0 == pkConfElement)
 	{
-		strcpy_s(m_pszHelpFile,255,pszHelpFile);
+		return;
+	}
+
+	TiXmlElement* pkSubElement = pkConfElement->FirstChildElement("module");
+
+	do
+	{
+		TiXmlAttribute* pkNameAttribute = pkSubElement->FirstAttribute();
+		string strName = pkNameAttribute->Name();
+		string strData;
+
+		if (strcmp("name",strName.c_str()) != 0)
+		{
+			continue;
+		}
+
+		strData = pkNameAttribute->Value();
+		ModuleInfo kInfo = {0};
+		strcpy_s(kInfo.szModuleName,255,strData.c_str());
+
+		TiXmlElement* pkVCProjectPath = pkSubElement->FirstChildElement("VCProjectPath");
+
+		if (0 == pkVCProjectPath)
+		{
+			continue;
+		}
+
+		string strVCPath = pkVCProjectPath->GetText();
+
+		strcpy_s(kInfo.szVCProjFile,255,strVCPath.c_str());
+
+		crc_32_type kCrc32;
+		kCrc32.process_bytes(kInfo.szModuleName,strlen(kInfo.szModuleName));
+		unsigned int uiID = kCrc32.checksum();
+
+		m_kModuleInfoMap.insert(make_pair(uiID,kInfo));
+	} while (pkSubElement = pkSubElement->NextSiblingElement("module"));
+
+	TiXmlElement* pkPathElement = pkConfElement->FirstChildElement("path");
+
+	if (0 == pkPathElement)
+	{
+		return;
+	}
+
+	TiXmlElement* pkMKFilePath = pkPathElement->FirstChildElement("MKFilePath");
+	TiXmlElement* pkHelpFilePath = pkPathElement->FirstChildElement("HelpFilePath");
+
+	string strHelpFile = pkHelpFilePath->GetText();
+	string strMKFile = pkMKFilePath->GetText();
+
+	TiXmlElement* pkFilterElement = pkConfElement->FirstChildElement("filter");
+
+	if (pkFilterElement)
+	{
+		TiXmlElement* pkSrcFileElement = pkFilterElement->FirstChildElement("SrcFile");
+
+		do 
+		{
+			string strTemp = pkSrcFileElement->GetText();
+			m_kFilterWord.push_back(strTemp);
+		} while (pkSrcFileElement = pkSrcFileElement->NextSiblingElement("SrcFile"));
+	}
+
+	if (strHelpFile.length() != 0)
+	{
+		strcpy_s(m_pszHelpFile,255,strHelpFile.c_str());
 
 		if (!InitialiseHelp())
 		{
@@ -31,19 +103,12 @@ m_uiKeyStringPosition(0)
 		}
 	}
 
-	memset(m_pszHelpFile,0,sizeof(char) * 255);
-	memset(m_pszMKFile,0,sizeof(char) * 255);
-	memset(m_pszVCProjectFile,0,sizeof(char) * 255);
-
-	if (0 == pszVCProjectFile || !*pszVCProjectFile ||
-		0 == pszMKFile || !*pszMKFile)
+	if (0 == strMKFile.c_str())
 	{
 		return;
 	}
 
-	strcpy_s(m_pszMKFile,255,pszMKFile);
-	strcpy_s(m_pszVCProjectFile,255,pszVCProjectFile);
-	strcpy_s(m_pszHelpFile,255,pszHelpFile);
+	strcpy_s(m_pszMKFile,255,strMKFile.c_str());
 
 	if (!ParseVCProjectFile())
 	{
@@ -60,9 +125,9 @@ m_uiKeyStringPosition(0)
 
 CConverToMK::~CConverToMK()
 {
-	SAFE_DELETE_ARRAY(m_pszVCProjectFile);
 	SAFE_DELETE_ARRAY(m_pszMKFile);
 	SAFE_DELETE_ARRAY(m_pszHelpFile);
+	SAFE_DELETE_ARRAY(m_pszConfigFile);
 }
 
 CConverToMK* CConverToMK::initWithIniFile( const char* pszIniFile )
@@ -72,23 +137,7 @@ CConverToMK* CConverToMK::initWithIniFile( const char* pszIniFile )
 		return 0;
 	}
 
-	ptree kTree;
-	read_xml(pszIniFile,kTree);
-	StringVector kFilterWords;
-
-	string strHelpFile = kTree.get<string>("conf.path.HelpFilePath");
-	string strVCProj = kTree.get<string>("conf.path.VCProjectPath");
-	string strMKFile = kTree.get<string>("conf.path.MKFilePath");
-
-	BOOST_AUTO(child,kTree.get_child("conf.filter"));
-	for (BOOST_AUTO(pkPos,child.begin());child.end() != pkPos;++pkPos)
-	{
-		string strTemp = pkPos->second.data();
-		kFilterWords.push_back(strTemp);
-	}
-
-	CConverToMK* pkMK = new CConverToMK(strVCProj.c_str(),
-		strMKFile.c_str(),kFilterWords,strHelpFile.c_str());
+	CConverToMK* pkMK = new CConverToMK(pszIniFile);
 
 	if (!pkMK->GetInitialised())
 	{
@@ -98,7 +147,8 @@ CConverToMK* CConverToMK::initWithIniFile( const char* pszIniFile )
 	return pkMK;
 }
 
-bool CConverToMK::ParseFilterInVCProjectFile( TiXmlElement* pkElement )
+bool CConverToMK::ParseFilterInVCProjectFile( TiXmlElement* pkElement,
+											 StringVector& kVector)
 {
 	if (0 == pkElement)
 	{
@@ -115,7 +165,7 @@ bool CConverToMK::ParseFilterInVCProjectFile( TiXmlElement* pkElement )
 
 		if (strcmp("Filter",strType.c_str()) == 0)
 		{
-			ParseFilterInVCProjectFile(pkFilter);
+			ParseFilterInVCProjectFile(pkFilter,kVector);
 		}
 		else if (strcmp("File",strType.c_str()) == 0)
 		{
@@ -126,7 +176,7 @@ bool CConverToMK::ParseFilterInVCProjectFile( TiXmlElement* pkElement )
 				continue;
 			}
 
-			m_kFilesPathData.push_back(strName);
+			kVector.push_back(strName);
 		}
 	} while (pkFilter = pkFilter->NextSiblingElement());
 
@@ -148,26 +198,33 @@ bool CConverToMK::WriteToMKFile()
 	kPathSet.insert(pkIterator,string("LOCAL_SRC_FILES := \\"));
 	unsigned int uiPos = m_uiKeyStringPosition + 1;
 
-	for (unsigned int uiIndex = 0;uiIndex < m_kFilesPathData.size();uiIndex++)
+	for (ModuleInfoMap::iterator it = m_kModuleInfoMap.begin();
+		it != m_kModuleInfoMap.end();it++)
 	{
-		string strFullPath = m_kFilesPathData[uiIndex];
-		string strProcessedPath = "";
+		ModuleInfo kInfo = it->second;
+		StringVector kStringVector = m_kFilesPathData[string(kInfo.szModuleName)];
 
-		if (!ProcessPath(strFullPath.c_str(),strProcessedPath))
+		for (unsigned int uiIndex = 0;uiIndex < kStringVector.size();uiIndex++)
 		{
-			cout << "文件 " << strFullPath << " 找不到！请检查vcproj文件" << endl;
-			continue;
+			string strFullPath = kStringVector[uiIndex];
+			string strProcessedPath = "";
+
+			if (!ProcessPath(kInfo.szVCProjFile,strFullPath.c_str(),strProcessedPath))
+			{
+				cout << "文件 " << strFullPath << " 找不到！请检查vcproj文件" << endl;
+				continue;
+			}
+
+			replace_all(strProcessedPath,"\\","/");
+
+			if (uiIndex != kStringVector.size() - 1)
+			{
+				strProcessedPath = strProcessedPath + string(" \\");
+			}
+
+			kPathSet.insert(kPathSet.begin() + uiPos,strProcessedPath);
+			uiPos++;
 		}
-
-		replace_all(strProcessedPath,"\\","/");
-
-		if (uiIndex != m_kFilesPathData.size() - 1)
-		{
-			strProcessedPath = strProcessedPath + string(" \\");
-		}
-
-		kPathSet.insert(kPathSet.begin() + uiPos,strProcessedPath);
-		uiPos++;
 	}
 
 	ofstream kOutStream("temp.mk");
@@ -190,28 +247,37 @@ bool CConverToMK::WriteToMKFile()
 
 bool CConverToMK::ParseVCProjectFile()
 {
-	TiXmlDocument kDocument(m_pszVCProjectFile);
-
-	if (!kDocument.LoadFile())
+	for (ModuleInfoMap::iterator it = m_kModuleInfoMap.begin();
+		it != m_kModuleInfoMap.end();it++)
 	{
-		return false;
+		ModuleInfo kInfo = it->second;
+		StringVector kVector;
+
+		TiXmlDocument kDocument(kInfo.szVCProjFile);
+
+		if (!kDocument.LoadFile())
+		{
+			return false;
+		}
+
+		TiXmlElement* pkRootElement = kDocument.RootElement();
+
+		if (0 == pkRootElement)
+		{
+			return false;
+		}
+
+		TiXmlElement* pkFiles = pkRootElement->FirstChildElement("Files");
+
+		if (0 == pkFiles)
+		{
+			return false;
+		}
+
+		ParseFilterInVCProjectFile(pkFiles,kVector);
+
+		m_kFilesPathData.insert(make_pair(string(kInfo.szModuleName),kVector));
 	}
-
-	TiXmlElement* pkRootElement = kDocument.RootElement();
-
-	if (0 == pkRootElement)
-	{
-		return false;
-	}
-
-	TiXmlElement* pkFiles = pkRootElement->FirstChildElement("Files");
-
-	if (0 == pkFiles)
-	{
-		return false;
-	}
-
-	ParseFilterInVCProjectFile(pkFiles);
 
 	return true;
 }
@@ -316,7 +382,9 @@ bool CConverToMK::IsFilterWord( const char* pszFilter )
 	return false;
 }
 
-bool CConverToMK::ProcessPath( const char* pszPath,string& strRes )
+bool CConverToMK::ProcessPath(const char* pszVCPath,
+							  const char* pszPath,
+							  string& strRes )
 {
 	if (0 == pszPath || !*pszPath)
 	{
@@ -328,7 +396,7 @@ bool CConverToMK::ProcessPath( const char* pszPath,string& strRes )
 		strRes = "";
 	}
 
-	filesystem::path kVCFile(m_pszVCProjectFile);
+	filesystem::path kVCFile(pszVCPath);
 	filesystem::path kMKFile(m_pszMKFile);
 	filesystem::path kInputPath(pszPath);
 
@@ -480,6 +548,48 @@ bool CConverToMK::InitialiseHelp()
 	{
 		string strData = szTempData;
 		m_kHelpData.push_back(strData);
+	}
+
+	return true;
+}
+
+bool CConverToMK::ProcessKeyWord(const char* pszKeyword)
+{
+	if (0 == pszKeyword || !*pszKeyword)
+	{
+		return false;
+	}
+
+	string strData;
+	bool bIsKeyword = false;
+
+	for (unsigned int uiIndex = 0;uiIndex < m_kMKFileData.size();
+		uiIndex++)
+	{
+		string strTemp = m_kMKFileData[uiIndex];
+		int nPos = -1;
+
+		nPos = strTemp.find_last_of("\\");
+
+		iterator_range<string::iterator> kRange;
+		kRange = find_first(strTemp,pszKeyword);
+
+		if (kRange.size() != 0)
+		{
+			strData += strTemp;
+			bIsKeyword = true;
+		}
+		else
+		{
+			continue;
+		}
+
+		if (-1 == nPos)
+		{
+			continue;
+		}
+
+		strData += strTemp;
 	}
 
 	return true;
