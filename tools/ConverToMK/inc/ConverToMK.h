@@ -15,13 +15,6 @@ public:
 		char szVCProjFile[255];
 	};
 
-	struct MKFileInfo
-	{
-		char szLocalPath[1024];
-		char szInclude[255][1024];
-		char szLocalCIncludes[1024];
-		char szLocalLDLibs[1024];
-	};
 
 	typedef vector<string> StringVector,*StringVectorPtr;
 	typedef map<unsigned int,ModuleInfo> ModuleInfoMap,*ModuleInfoMapPtr;
@@ -40,7 +33,6 @@ public:
 protected:
 
 	bool InitialiseHelp();
-	bool ProcessKeyWord(const char* pszKeyword);
 	bool CheckFileExist(const char* pszFile);
 	bool ParseVCProjectFile();
 	bool ParseMKFile();
@@ -58,7 +50,7 @@ protected:
 	StringVector m_kFilterWord;
 	StringVector m_kHelpData;
 	ModuleInfoMap m_kModuleInfoMap;
-	MKFileInfo m_kMKFileInfo;
+	StringVectorMap m_kKeyWordMap;
 
 	unsigned int m_uiKeyStringPosition;
 

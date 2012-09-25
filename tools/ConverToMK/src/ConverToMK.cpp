@@ -16,7 +16,6 @@ m_uiKeyStringPosition(0)
 	memset(m_pszHelpFile,0,sizeof(char) * 255);
 	memset(m_pszMKFile,0,sizeof(char) * 255);
 	memset(m_pszConfigFile,0,sizeof(char) * 255);
-	memset(&m_kMKFileInfo,0,sizeof(MKFileInfo));
 
 	TiXmlDocument kDocument(pszXMLFile);
 
@@ -548,48 +547,6 @@ bool CConverToMK::InitialiseHelp()
 	{
 		string strData = szTempData;
 		m_kHelpData.push_back(strData);
-	}
-
-	return true;
-}
-
-bool CConverToMK::ProcessKeyWord(const char* pszKeyword)
-{
-	if (0 == pszKeyword || !*pszKeyword)
-	{
-		return false;
-	}
-
-	string strData;
-	bool bIsKeyword = false;
-
-	for (unsigned int uiIndex = 0;uiIndex < m_kMKFileData.size();
-		uiIndex++)
-	{
-		string strTemp = m_kMKFileData[uiIndex];
-		int nPos = -1;
-
-		nPos = strTemp.find_last_of("\\");
-
-		iterator_range<string::iterator> kRange;
-		kRange = find_first(strTemp,pszKeyword);
-
-		if (kRange.size() != 0)
-		{
-			strData += strTemp;
-			bIsKeyword = true;
-		}
-		else
-		{
-			continue;
-		}
-
-		if (-1 == nPos)
-		{
-			continue;
-		}
-
-		strData += strTemp;
 	}
 
 	return true;
