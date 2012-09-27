@@ -95,7 +95,7 @@ namespace cocos2d {
 	}
 	void CCTileMapAtlas::calculateItemsToRender()
 	{
-		CCAssert( m_pTGAInfo != NULL, "tgaInfo must be non-NULL");
+		CCAssert( m_pTGAInfo != NULL, "tgaInfo must be non-nil");
 
 		m_nItemsToRender = 0;
 		for(int x=0;x < m_pTGAInfo->width; x++ ) 
@@ -113,7 +113,7 @@ namespace cocos2d {
 	}
 	void CCTileMapAtlas::loadTGAfile(const char *file)
 	{
-		CCAssert( file != NULL, "file must be non-NULL");
+		CCAssert( file != NULL, "file must be non-nil");
 
 		//	//Find the path of the file
 		//	NSBundle *mainBndl = [CCDirector sharedDirector].loadingBundle;
@@ -132,8 +132,8 @@ namespace cocos2d {
 	// CCTileMapAtlas - Atlas generation / updates
 	void CCTileMapAtlas::setTile(const ccColor3B& tile, const ccGridSize& position)
 	{
-		CCAssert( m_pTGAInfo != NULL, "tgaInfo must not be NULL");
-		CCAssert( m_pPosToAtlasIndex != NULL, "posToAtlasIndex must not be NULL");
+		CCAssert( m_pTGAInfo != NULL, "tgaInfo must not be nil");
+		CCAssert( m_pPosToAtlasIndex != NULL, "posToAtlasIndex must not be nil");
 		CCAssert( position.x < m_pTGAInfo->width, "Invalid position.x");
 		CCAssert( position.y < m_pTGAInfo->height, "Invalid position.x");
 		CCAssert( tile.r != 0, "R component must be non 0");
@@ -166,7 +166,7 @@ namespace cocos2d {
 	}
 	ccColor3B CCTileMapAtlas::tileAt(const ccGridSize& position)
 	{
-		CCAssert( m_pTGAInfo != NULL, "tgaInfo must not be NULL");
+		CCAssert( m_pTGAInfo != NULL, "tgaInfo must not be nil");
 		CCAssert( position.x < m_pTGAInfo->width, "Invalid position.x");
 		CCAssert( position.y < m_pTGAInfo->height, "Invalid position.y");
 
@@ -225,7 +225,7 @@ namespace cocos2d {
 	}
 	void CCTileMapAtlas::updateAtlasValues()
 	{
-		CCAssert( m_pTGAInfo != NULL, "tgaInfo must be non-NULL");
+		CCAssert( m_pTGAInfo != NULL, "tgaInfo must be non-nil");
 
 		int total = 0;
 

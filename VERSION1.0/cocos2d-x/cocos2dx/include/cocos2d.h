@@ -105,7 +105,7 @@ THE SOFTWARE.
 #include "CCGeometry.h"
 #include "CCAffineTransform.h"
 #include "CCTouch.h"
-//#include "CCPointExtension.h"
+#include "CCPointExtension.h"
 
 //
 // platform specific

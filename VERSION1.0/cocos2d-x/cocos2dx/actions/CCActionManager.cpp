@@ -382,7 +382,7 @@ void CCActionManager::update(ccTime dt)
 					m_pCurrentTarget->currentAction->stop();
 
 					CCAction *pAction = m_pCurrentTarget->currentAction;
-					// Make currentAction NULL to prevent removeAction from salvaging it.
+					// Make currentAction nil to prevent removeAction from salvaging it.
 					m_pCurrentTarget->currentAction = NULL;
 					removeAction(pAction);
 				}

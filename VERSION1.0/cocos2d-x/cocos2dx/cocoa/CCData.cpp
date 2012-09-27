@@ -27,7 +27,6 @@ THE SOFTWARE.
 #include "CCFileUtils.h"
 
 #include <stdio.h>
-#include <time.inl>
 
 using namespace std;
 namespace   cocos2d {
@@ -72,5 +71,4 @@ CCData* CCData::dataWithBytes(unsigned char *pBytes, int size)
     CC_UNUSED_PARAM(size);
 	return NULL;
 }
-
 }//namespace   cocos2d 

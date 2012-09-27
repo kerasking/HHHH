@@ -56,7 +56,7 @@ public:
     
     float getMainScreenScale() { return -1.0f; }
 
-	virtual bool Create(const wchar_t* pTitle, int w, int h);
+	virtual bool Create(LPCTSTR pTitle, int w, int h);
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 
     int setDeviceOrientation(int eOritation);

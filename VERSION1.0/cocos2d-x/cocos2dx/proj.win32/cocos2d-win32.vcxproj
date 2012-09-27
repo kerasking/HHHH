@@ -70,7 +70,7 @@
     </ClCompile>
     <PreLinkEvent>
       <Command>if not exist "$(OutDir)" mkdir "$(OutDir)"
-xcopy /Y /Q "$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.*" "$(OutDir)"
+xcopy /Y /Q "$(SolutionDir)cocos2dx\platform\third_party\win32\libraries\*.*" "$(OutDir)"
 </Command>
     </PreLinkEvent>
     <Link>
@@ -106,7 +106,7 @@ xcopy /Y /Q "$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\librari
     </ClCompile>
     <PreLinkEvent>
       <Command>if not exist "$(OutDir)" mkdir "$(OutDir)"
-xcopy /Y /Q "$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.*" "$(OutDir)"
+xcopy /Y /Q "$(SolutionDir)cocos2dx\platform\third_party\win32\libraries\*.*" "$(OutDir)"
 </Command>
     </PreLinkEvent>
     <Link>
@@ -341,9 +341,6 @@ xcopy /Y /Q "$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\librari
     <ClInclude Include="..\support\zip_support\ZipUtils.h" />
     <ClInclude Include="..\touch_dispatcher\CCTouchHandler.h" />
     <ClInclude Include="..\CCConfiguration.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\ClientEngine\proj.win32\libClientEngine.vcproj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

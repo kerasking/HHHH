@@ -23,6 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "CCEGLView.h"
+
 #include "EGL/egl.h"
 #include "gles/gl.h"
 
@@ -64,7 +65,7 @@ public:
 
 	static CCEGL * create(CCEGLView * pWindow)
 	{
-		CCEGL* pEGL = new CCEGL;
+		CCEGL * pEGL = new CCEGL;
 		BOOL bSuccess = FALSE;
 		do 
 		{
@@ -89,8 +90,8 @@ public:
 				EGL_DEPTH_SIZE,			16,
 				EGL_NONE,
 			};
-			EGLint iConfigs = 0;
-			EGLConfig eglConfig = 0;
+			EGLint iConfigs;
+			EGLConfig eglConfig;
 			CC_BREAK_IF(EGL_FALSE == eglChooseConfig(eglDisplay, aConfigAttribs, &eglConfig, 1, &iConfigs) 
 				|| (iConfigs != 1));
 
@@ -202,7 +203,7 @@ CCEGLView::~CCEGLView()
 {
 }
 
-bool CCEGLView::Create(const wchar_t* pTitle, int w, int h)
+bool CCEGLView::Create(LPCTSTR pTitle, int w, int h)
 {
 	bool bRet = false;
 	do 
@@ -210,7 +211,7 @@ bool CCEGLView::Create(const wchar_t* pTitle, int w, int h)
 		CC_BREAK_IF(m_hWnd);
 
 		HINSTANCE hInstance = GetModuleHandle( NULL );
-		WNDCLASS wc = {0};		// Windows Class Structure
+		WNDCLASS  wc;		// Windows Class Structure
 
 		// Redraw On Size, And Own DC For Window.
 		wc.style          = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;  
@@ -227,11 +228,11 @@ bool CCEGLView::Create(const wchar_t* pTitle, int w, int h)
 		CC_BREAK_IF(! RegisterClass(&wc) && 1410 != GetLastError());		
 
 		// center window position
-		RECT rcDesktop = {0};
+		RECT rcDesktop;
 		GetWindowRect(GetDesktopWindow(), &rcDesktop);
 
 		// create window
-		m_hWnd = CreateWindowExW(
+		m_hWnd = CreateWindowEx(
 			WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,	// Extended Style For The Window
 			kWindowClassName,									// Class Name
 			pTitle,												// Window Title
@@ -272,7 +273,7 @@ bool CCEGLView::Create(const wchar_t* pTitle, int w, int h)
 
 LRESULT CCEGLView::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	PAINTSTRUCT ps = {0};
+	PAINTSTRUCT ps;
 
 	switch (message)
 	{
@@ -516,7 +517,7 @@ void CCEGLView::resize(int width, int height)
         return;
     }
 
-	RECT rcClient = {0};
+    RECT rcClient;
     GetClientRect(m_hWnd, &rcClient);
     if (rcClient.right - rcClient.left == width &&
         rcClient.bottom - rcClient.top == height)

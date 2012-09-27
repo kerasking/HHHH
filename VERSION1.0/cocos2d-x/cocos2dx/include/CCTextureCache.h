@@ -94,7 +94,7 @@ public:
 	* If the image was not previously loaded, it will create a new CCTexture2D object and it will return it.
 	* Otherwise it will return a reference of a previously loaded image
 	* The "key" parameter will be used as the "key" for the cache.
-	* If "key" is NULL, then a new texture will be created each time.
+	* If "key" is nil, then a new texture will be created each time.
 	* @since v0.8
 	*/
 	// @todo CGImageRef CCTexture2D* addCGImage(CGImageRef image, string &  key);
@@ -102,11 +102,11 @@ public:
 	* If the image was not previously loaded, it will create a new CCTexture2D object and it will return it.
 	* Otherwise it will return a reference of a previously loaded image
 	* The "key" parameter will be used as the "key" for the cache.
-	* If "key" is NULL, then a new texture will be created each time.
+	* If "key" is nil, then a new texture will be created each time.
 	*/
 	CCTexture2D* addUIImage(CCImage *image, const char *key);
 
-	/** Returns an already created texture. Returns NULL if the texture doesn't exist.
+	/** Returns an already created texture. Returns nil if the texture doesn't exist.
 	@since v0.99.5
 	*/
 	CCTexture2D* textureForKey(const char* key);

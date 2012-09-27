@@ -53,11 +53,9 @@ namespace cocos2d {
 
 typedef struct _ccArray 
 {
-	unsigned int num;
-	unsigned int max;
-
+	unsigned int num, max;
 	CCObject**    arr; //equals CCObject** arr;
-} ccArray,*ccArrayPtr;
+} ccArray;
 
 /** Allocates and initializes a new array with specified capacity */
 static inline ccArray* ccArrayNew(unsigned int capacity) 
@@ -78,7 +76,7 @@ static inline ccArray* ccArrayNew(unsigned int capacity)
 
 static inline void ccArrayRemoveAllObjects(ccArray *arr);
 
-/** Frees array after removing all remaining objects. Silently ignores NULL arr. */
+/** Frees array after removing all remaining objects. Silently ignores nil arr. */
 static inline void ccArrayFree(ccArray *arr)
 {
 	if( arr == NULL ) 
@@ -119,17 +117,17 @@ static inline void ccArrayShrink(ccArray *arr)
     unsigned int newSize;
 
     //only resize when necessary
-    if (arr->max > arr->num && !(arr->num == 0 && arr->max == 1))
+    if (arr->max > arr->num && !(arr->num==0 && arr->max==1))
     {
-        if (arr->num != 0) 
+        if (arr->num!=0) 
         {
-            newSize = arr->num;
-            arr->max = arr->num; 
+            newSize=arr->num;
+            arr->max=arr->num; 
         }
         else 
         {//minimum capacity of 1, with 0 elements the array would be free'd by realloc
-            newSize = 1;
-            arr->max = 1;
+            newSize=1;
+            arr->max=1;
         }
 
         arr->arr = (CCObject**) realloc(arr->arr,newSize * sizeof(CCObject*) );
@@ -197,7 +195,7 @@ static inline void ccArrayInsertObjectAtIndex(ccArray *arr, CCObject* object, un
 
     unsigned int remaining = arr->num - index;
     if( remaining > 0)
-        memmove(&arr->arr[index + 1], &arr->arr[index], sizeof(CCObject*) * remaining );
+        memmove(&arr->arr[index+1], &arr->arr[index], sizeof(CCObject*) * remaining );
 
     object->retain();
     arr->arr[index] = object;
@@ -325,7 +323,7 @@ static inline ccCArray* ccCArrayNew(unsigned int capacity)
 	return arr;
 }
 
-/** Frees C array after removing all remaining values. Silently ignores NULL arr. */
+/** Frees C array after removing all remaining values. Silently ignores nil arr. */
 static inline void ccCArrayFree(ccCArray *arr)
 {
 	if( arr == NULL ) 
@@ -387,7 +385,7 @@ static inline void ccCArrayInsertValueAtIndex( ccCArray *arr, void* value, unsig
 	if( remaining > 0) 
 	{
 		// tex coordinates
-		memmove( &arr->arr[index + 1],&arr->arr[index], sizeof(void*) * remaining );
+		memmove( &arr->arr[index+1],&arr->arr[index], sizeof(void*) * remaining );
 	}
 	
 	arr->num++;	
@@ -489,8 +487,7 @@ static inline void ccCArrayFullRemoveArray(ccCArray *arr, ccCArray *minusArr)
 		if( ccCArrayContainsValue(minusArr, arr->arr[i]) ) 
 		{
 			back++;
-		}
-		else
+		} else
 		{
 			arr->arr[i - back] = arr->arr[i];
 		}

@@ -139,9 +139,6 @@ public:
 	virtual void touchesEnded(CCSet* touches, CCEvent* pEvent);
 	virtual void touchesCancelled(CCSet* touches, CCEvent* pEvent);
 
-	CCPoint getCurPos();
-	CCPoint getPrePos();
-
 public:
 	/** singleton of the CCTouchDispatcher */
 	static CCTouchDispatcher* sharedDispatcher();
@@ -168,9 +165,6 @@ protected:
 
 	// 4, 1 for each type of event
 	struct ccTouchHandlerHelperData m_sHandlerHelperData[ccTouchMax];
-
-	CCPoint m_curPos;
-	CCPoint m_prePos;
 };
 }//namespace   cocos2d 
 

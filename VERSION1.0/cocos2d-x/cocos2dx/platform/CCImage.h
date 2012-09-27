@@ -91,11 +91,11 @@ public:
 
     /**
     @brief	Create image with specified string.
-    @param  pText       the text which the image show, NULL cause init fail
+    @param  pText       the text which the image show, nil cause init fail
     @param  nWidth      the image width, if 0, the width match the text's width
     @param  nHeight     the image height, if 0, the height match the text's height
     @param  eAlignMask  the test Alignment
-    @param  pFontName   the name of the font which use to draw the text. If NULL, use the default system font.
+    @param  pFontName   the name of the font which use to draw the text. If nil, use the default system font.
     @param  nSize       the font size, if 0, use the system default size.
     */
     bool initWithString(

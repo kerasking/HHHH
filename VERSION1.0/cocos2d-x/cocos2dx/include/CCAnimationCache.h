@@ -64,7 +64,7 @@ namespace cocos2d
 		void removeAnimationByName(const char* name);
 
 		/** Returns a CCAnimation that was previously added.
-		If the name is not found it will return NULL.
+		If the name is not found it will return nil.
 		You should retain the returned copy if you are going to use it.
 		*/
 		CCAnimation* animationByName(const char* name);

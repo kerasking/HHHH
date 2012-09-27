@@ -45,7 +45,7 @@ namespace cocos2d{
 	}
 	bool CCTMXTiledMap::initWithTMXFile(const char *tmxFile)
 	{
-		CCAssert(tmxFile != NULL && strlen(tmxFile)>0, "TMXTiledMap: tmx file should not bi NULL");
+		CCAssert(tmxFile != NULL && strlen(tmxFile)>0, "TMXTiledMap: tmx file should not bi nil");
 		
 		setContentSize(CCSizeZero);
 

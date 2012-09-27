@@ -39,7 +39,6 @@ public:
 	void* bytes(void);
 
 public:
-
 	static CCData* dataWithBytes(unsigned char *pBytes, int size);
 	static CCData* dataWithContentsOfFile(const std::string &strPath);
 

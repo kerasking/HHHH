@@ -283,7 +283,7 @@ void CCScheduler::scheduleSelector(SEL_SCHEDULE pfnSelector, CCObject *pTarget, 
 
 void CCScheduler::unscheduleSelector(SEL_SCHEDULE pfnSelector, CCObject *pTarget)
 {
-	// explicity handle NULL arguments when removing an object
+	// explicity handle nil arguments when removing an object
 	if (pTarget == 0 || pfnSelector == 0)
 	{
 		return;
@@ -626,7 +626,7 @@ void CCScheduler::pauseTarget(CCObject *pTarget)
 
 bool CCScheduler::isTargetPaused(CCObject *pTarget)
 {
-    CCAssert( pTarget != NULL, "target must be non NULL" );
+    CCAssert( pTarget != NULL, "target must be non nil" );
 
     // Custom selectors
     tHashSelectorEntry *pElement = NULL;

@@ -700,7 +700,4 @@
       <Filter>extensions</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\ClientEngine\proj.win32\libClientEngine.vcproj" />
-  </ItemGroup>
 </Project>

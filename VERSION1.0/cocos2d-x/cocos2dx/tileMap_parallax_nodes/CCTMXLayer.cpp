@@ -466,7 +466,7 @@ namespace cocos2d {
 	void CCTMXLayer::removeChild(CCNode* node, bool cleanup)
 	{
 		CCSprite *sprite = (CCSprite*)node;
-		// allows removing NULL objects
+		// allows removing nil objects
 		if( ! sprite )
 			return;
 

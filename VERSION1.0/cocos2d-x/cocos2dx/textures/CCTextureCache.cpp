@@ -499,7 +499,7 @@ CCTexture2D* CCTextureCache::addUIImage(CCImage *image, const char *key)
 
 	do 
 	{
-		// If key is NULL, then create a new texture each time
+		// If key is nil, then create a new texture each time
 		if(key && (texture = m_pTextures->objectForKey(forKey)))
 		{
 			break;

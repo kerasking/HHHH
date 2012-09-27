@@ -48,8 +48,7 @@ build for which target platform
 #define CC_PLATFORM_QNX				   8
 
 // Determine tartet platform by compile environment macro.
-//#define CC_TARGET_PLATFORM             CC_PLATFORM_UNKNOWN
-#define CC_TARGET_PLATFORM             CC_PLATFORM_WIN32
+#define CC_TARGET_PLATFORM             CC_PLATFORM_UNKNOWN
 
 // iphone
 #if ! CC_TARGET_PLATFORM && (defined(TARGET_OS_IPHONE) || defined(TARGET_IPHONE_SIMULATOR))
