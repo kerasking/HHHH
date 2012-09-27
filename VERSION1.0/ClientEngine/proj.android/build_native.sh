@@ -30,7 +30,7 @@ done
 
 # try to get global variable
 
-HELLOWORLD_ROOT=$COCOS2DX_ROOT_LOCAL/HelloWorld/android
+HELLOWORLD_ROOT=/cygdrive/d/work/smys/VERSION1.0/ClientEngine/proj.android
 
 # make sure assets is exist
 if [ -d $HELLOWORLD_ROOT/assets ]; then
