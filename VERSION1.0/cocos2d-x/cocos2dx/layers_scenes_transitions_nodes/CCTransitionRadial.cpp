@@ -32,12 +32,12 @@ THE SOFTWARE.
 
 namespace   cocos2d {
 
-//#include "CCDirector.h"
-//#include "CCRadialTransition.h"
-//#include "CCRenderTexture.h"
-//#include "CCLayer.h"
-//#include "CCInstantAction.h"
-//#include "Support/CCPointExtension.h"
+//#import "CCDirector.h"
+//#import "CCRadialTransition.h"
+//#import "CCRenderTexture.h"
+//#import "CCLayer.h"
+//#import "CCInstantAction.h"
+//#import "Support/CCPointExtension.h"
 
 enum {
 	kSceneRadial = 0xc001,

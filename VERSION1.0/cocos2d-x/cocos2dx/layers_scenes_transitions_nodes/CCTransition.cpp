@@ -77,7 +77,7 @@ CCTransitionScene * CCTransitionScene::transitionWithDuration(ccTime t, CCScene 
 
 bool CCTransitionScene::initWithDuration(ccTime t, CCScene *scene)
 {
-	CCAssert( scene != NULL, "Argument scene must be non-NULL");
+	CCAssert( scene != NULL, "Argument scene must be non-nil");
 
 	if (CCScene::init())
 	{

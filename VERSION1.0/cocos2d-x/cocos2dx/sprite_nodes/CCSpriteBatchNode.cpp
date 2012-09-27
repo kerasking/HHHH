@@ -570,7 +570,7 @@ namespace cocos2d
 
     void CCSpriteBatchNode::addQuadFromSprite(CCSprite *sprite, unsigned int index)
     {
-        CCAssert( sprite != NULL, "Argument must be non-NULL");
+        CCAssert( sprite != NULL, "Argument must be non-nil");
         /// @todo CCAssert( [sprite isKindOfClass:[CCSprite class]], @"CCSpriteSheet only supports CCSprites as children");
 
         while(index >= m_pobTextureAtlas->getCapacity() || m_pobTextureAtlas->getCapacity() == m_pobTextureAtlas->getTotalQuads())
@@ -594,7 +594,7 @@ namespace cocos2d
 
     CCSpriteBatchNode * CCSpriteBatchNode::addSpriteWithoutQuad(CCSprite*child, unsigned int z, int aTag)
     {
-        CCAssert( child != NULL, "Argument must be non-NULL");
+        CCAssert( child != NULL, "Argument must be non-nil");
         /// @todo CCAssert( [child isKindOfClass:[CCSprite class]], @"CCSpriteSheet only supports CCSprites as children");
 
         // quad index is Z

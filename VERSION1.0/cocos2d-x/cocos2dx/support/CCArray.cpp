@@ -133,9 +133,9 @@ CCObject* CCArray::lastObject()
 
 CCObject* CCArray::randomObject()
 {
-    if(data->num == 0) return NULL;
+    if(data->num==0) return NULL;
 
-    return data->arr[(int)(data->num * CCRANDOM_0_1())];
+    return data->arr[(int)(data->num*CCRANDOM_0_1())];
 }
 
 bool CCArray::containsObject(CCObject* object)
@@ -161,7 +161,7 @@ void CCArray::insertObject(CCObject* object, unsigned int index)
 void CCArray::removeLastObject()
 {
     CCAssert(data->num, "no objects added");
-    ccArrayRemoveObjectAtIndex(data, data->num - 1);
+    ccArrayRemoveObjectAtIndex(data, data->num-1);
 }
 
 void CCArray::removeObject(CCObject* object)
@@ -221,7 +221,7 @@ void CCArray::reverseObjects()
     if (data->num > 1)
     {
         //floor it since in case of a oneven number the number of swaps stays the same
-        int count = (int) floorf(data->num / 2.f); 
+        int count = (int) floorf(data->num/2.f); 
         unsigned int maxIndex = data->num - 1;
 
         for (int i = 0; i < count ; i++)

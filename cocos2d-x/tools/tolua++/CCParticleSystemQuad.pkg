@@ -1,4 +1,0 @@
-
-class CCParticleSystemQuad : public CCParticleSystem {
-    static CCParticleSystemQuad* particleWithFile(char *plistFile);
-};

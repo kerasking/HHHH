@@ -353,11 +353,7 @@ bool CCRenderTexture::getUIImageFromBuffer(CCImage *pImage, int x, int y, int nW
 				nSavedBufferWidth * 4);
 		}
 
-		bRet = pImage->initWithImageData(pBuffer, 
-			nSavedBufferWidth * nSavedBufferHeight * 4,
-			CCImage::kFmtRawData, nSavedBufferWidth, 
-			nSavedBufferHeight, 8);
-
+		bRet = pImage->initWithImageData(pBuffer, nSavedBufferWidth * nSavedBufferHeight * 4, CCImage::kFmtRawData, nSavedBufferWidth, nSavedBufferHeight, 8);
 	} while (0);
 
 	CC_SAFE_DELETE_ARRAY(pBuffer);

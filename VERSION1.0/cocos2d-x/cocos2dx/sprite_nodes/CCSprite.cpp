@@ -515,7 +515,7 @@ void CCSprite::updateTransform(void)
 		return;
 	}
 
-	// Optimization: If parent is batchnode, or parent is NULL
+	// Optimization: If parent is batchnode, or parent is nil
 	// build Affine transform manually
 	if (! m_pParent || m_pParent == m_pobBatchNode)
 	{
@@ -1090,7 +1090,7 @@ void CCSprite::setTexture(CCTexture2D *texture)
 	CCAssert(! m_bUsesBatchNode, "setTexture doesn't work when the sprite is rendered using a CCSpriteSheet");
 
 	// we can not use RTTI, so we do not known the type of object
-	// accept texture==NULL as argument
+	// accept texture==nil as argument
 	/*CCAssert((! texture) || dynamic_cast<CCTexture2D*>(texture));*/
 
 	CC_SAFE_RELEASE(m_pobTexture);

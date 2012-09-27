@@ -38,9 +38,9 @@ NS_CC_BEGIN;
 
 void CCLog(const char * pszFormat, ...)
 {
-	char szBuf[MAX_LEN] = {0};
+    char szBuf[MAX_LEN];
 
-    va_list ap = 0;
+    va_list ap;
     va_start(ap, pszFormat);
     vsnprintf_s(szBuf, MAX_LEN, MAX_LEN, pszFormat, ap);
     va_end(ap);

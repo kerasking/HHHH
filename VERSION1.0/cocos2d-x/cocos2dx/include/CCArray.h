@@ -38,7 +38,7 @@ In cocos2d-iphone 1.0.0, This macro have been update to like this:
 #define CCARRAY_FOREACH(__array__, __object__)												\
 if (__array__ && __array__->data->num > 0)													\
 for(id *__arr__ = __array__->data->arr, *end = __array__->data->arr + __array__->data->num-1;	\
-__arr__ <= end && ((__object__ = *__arr__) != NULL || true);										\
+__arr__ <= end && ((__object__ = *__arr__) != nil || true);										\
 __arr__++)
 
 I found that it's not work in C++. So it keep what it's look like in version 1.0.0-rc3. ---By Bin
@@ -127,7 +127,6 @@ public:
     void reduceMemoryFootprint();
 
 public:
-
     ccArray* data;
 
 private:

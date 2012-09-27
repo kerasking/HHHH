@@ -297,7 +297,7 @@ void CCSpriteFrameCache::removeUnusedSpriteFrames(void)
 
 void CCSpriteFrameCache::removeSpriteFrameByName(const char *pszName)
 {
-	// explicit NULL handling
+	// explicit nil handling
 	if( ! pszName )
 	{
 		return;

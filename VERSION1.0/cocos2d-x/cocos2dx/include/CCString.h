@@ -44,8 +44,6 @@ namespace cocos2d {
 			m_sString = str;
 		}
 
-		virtual ~CCString(){ m_sString.clear(); }
-
 		/***
 		* @brief 去除路径中最后一个"\"之后的所有的东西，包括斜杠本身。
 		*
@@ -117,6 +115,8 @@ namespace cocos2d {
 
 			return pszOutBuffer;
 		}
+
+		virtual ~CCString(){ m_sString.clear(); }
 		
 		int toInt()
 		{
@@ -174,7 +174,7 @@ namespace cocos2d {
             return pszRet;
         }
 
-		/***
+				/***
 		* @brief 根据UTF-8字符，转换成GB2312进行存储。
 		*
 		* @param pszUTF8 要传入的UTF8字符。

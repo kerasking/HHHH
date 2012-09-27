@@ -59,7 +59,7 @@ public:
 	virtual void startWithTarget(CCNode *pTarget);
 
 	/** 
-	called after the action has finished. It will set the 'target' to NULL.
+	called after the action has finished. It will set the 'target' to nil.
     IMPORTANT: You should never call "[action stop]" manually. Instead, use: "target->stopAction(action);"
 	*/
     virtual void stop(void);
@@ -82,7 +82,7 @@ public:
 	inline void setTarget(CCNode *pTarget) { m_pTarget = pTarget; }
 	
 	inline CCNode* getOriginalTarget(void) { return m_pOriginalTarget; } 
-	/** Set the original target, since target can be NULL.
+	/** Set the original target, since target can be nil.
 	Is the target that were used to run the action. Unless you are doing something complex, like CCActionManager, you should NOT call this method.
 	The target is 'assigned', it is not 'retained'.
 	@since v0.8.2
@@ -100,7 +100,7 @@ protected:
 	CCNode	*m_pOriginalTarget;
 	/** The "target".
 	The target will be set with the 'startWithTarget' method.
-	When the 'stop' method is called, target will be set to NULL.
+	When the 'stop' method is called, target will be set to nil.
 	The target is 'assigned', it is not 'retained'.
 	*/
 	CCNode	*m_pTarget;

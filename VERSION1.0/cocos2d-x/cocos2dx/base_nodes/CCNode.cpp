@@ -35,9 +35,6 @@ THE SOFTWARE.
 #include "CCTouch.h"
 #include "CCActionManager.h"
 #include "CCScriptSupport.h"
-#include <vector>
-#include <functional>
-#include <algorithm>
 
 #if CC_COCOSNODE_RENDER_SUBPIXEL
 #define RENDER_IN_SUBPIXEL
@@ -72,7 +69,7 @@ CCNode::CCNode(void)
 // "whole screen" objects. like Scenes and Layers, should set isRelativeAnchorPoint to false
 , m_bIsRelativeAnchorPoint(true)
 , m_nTag(kCCNodeTagInvalid)
-// userData is always inited as NULL
+// userData is always inited as nil
 , m_pUserData(NULL)
 , m_bIsTransformDirty(true)
 , m_bIsInverseDirty(true)
@@ -600,7 +597,7 @@ CCNode* CCNode::getChildByTag(int aTag)
 */
 void CCNode::addChild(CCNode *child, int zOrder, int tag)
 {	
-	CCAssert( child != NULL, "Argument must be non-NULL");
+	CCAssert( child != NULL, "Argument must be non-nil");
 	CCAssert( child->m_pParent == NULL, "child already added. It can't be added again");
 
 	if( ! m_pChildren )
@@ -623,13 +620,13 @@ void CCNode::addChild(CCNode *child, int zOrder, int tag)
 
 void CCNode::addChild(CCNode *child, int zOrder)
 {
-	CCAssert( child != NULL, "Argument must be non-NULL");
+	CCAssert( child != NULL, "Argument must be non-nil");
 	this->addChild(child, zOrder, child->m_nTag);
 }
 
 void CCNode::addChild(CCNode *child)
 {
-	CCAssert( child != NULL, "Argument must be non-NULL");
+	CCAssert( child != NULL, "Argument must be non-nil");
 	this->addChild(child, child->m_nZOrder, child->m_nTag);
 }
 
@@ -644,7 +641,7 @@ void CCNode::removeFromParentAndCleanup(bool cleanup)
 */
 void CCNode::removeChild(CCNode* child, bool cleanup)
 {
-	// explicit NULL handling
+	// explicit nil handling
 	if (m_pChildren == NULL)
 	{
 		return;
@@ -695,7 +692,7 @@ void CCNode::removeAllChildrenWithCleanup(bool cleanup)
 				{
 					pNode->cleanup();
 				}
-				// set parent NULL at the end
+				// set parent nil at the end
 				pNode->setParent(NULL);
 			}
 		}
@@ -722,7 +719,7 @@ void CCNode::detachChild(CCNode *child, bool doCleanup)
 		child->cleanup();
 	}
 
-	// set parent NULL at the end
+	// set parent nil at the end
 	child->setParent(NULL);
 
 	m_pChildren->removeObject(child);
@@ -758,7 +755,7 @@ void CCNode::insertChild(CCNode* child, int z)
 
 void CCNode::reorderChild(CCNode *child, int zOrder)
 {
-	CCAssert( child != NULL, "Child must be non-NULL");
+	CCAssert( child != NULL, "Child must be non-nil");
 
 	child->retain();
 	m_pChildren->removeObject(child);
@@ -799,13 +796,11 @@ void CCNode::visit()
 	{
 		// draw children zOrder < 0
         ccArray *arrayData = m_pChildren->data;
-
         for( ; i < arrayData->num; i++ )
         {
             pNode = (CCNode*) arrayData->arr[i];
-			int nZ = pNode->getZOrder();
 
-			if (  pNode && pNode->m_nZOrder < 0) 
+			if ( pNode && pNode->m_nZOrder < 0 ) 
 			{
 				pNode->visit();
 			}
@@ -820,7 +815,6 @@ void CCNode::visit()
 	this->draw();
 
 	// draw children zOrder >= 0
-
     if (m_pChildren && m_pChildren->count() > 0)
     {
         ccArray *arrayData = m_pChildren->data;
@@ -985,7 +979,7 @@ void CCNode::unregisterScriptHandler(void)
 
 CCAction * CCNode::runAction(CCAction* action)
 {
-	CCAssert( action != NULL, "Argument must be non-NULL");
+	CCAssert( action != NULL, "Argument must be non-nil");
 	CCActionManager::sharedManager()->addAction(action, this, !m_bIsRunning);
 	return action;
 }
@@ -1041,7 +1035,7 @@ void CCNode::schedule(SEL_SCHEDULE selector)
 
 void CCNode::schedule(SEL_SCHEDULE selector, ccTime interval)
 {
-	CCAssert( selector, "Argument must be non-NULL");
+	CCAssert( selector, "Argument must be non-nil");
 	CCAssert( interval >=0, "Argument must be positive");
 
 	CCScheduler::sharedScheduler()->scheduleSelector(selector, this, interval, !m_bIsRunning);
@@ -1049,7 +1043,7 @@ void CCNode::schedule(SEL_SCHEDULE selector, ccTime interval)
 
 void CCNode::unschedule(SEL_SCHEDULE selector)
 {
-	// explicit NULL handling
+	// explicit nil handling
 	if (selector == 0)
 		return;
 

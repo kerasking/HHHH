@@ -141,7 +141,7 @@ CCActionInterval* CCActionInterval::reverse(void)
 	 NSException* myException = [NSException
 								exceptionWithName:@"ReverseActionNotImplemented"
 								reason:@"Reverse Action not implemented"
-								userInfo:NULL];
+								userInfo:nil];
 	@throw myException;	
 	*/
 	return NULL;

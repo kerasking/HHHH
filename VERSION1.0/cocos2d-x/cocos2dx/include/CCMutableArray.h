@@ -42,7 +42,6 @@ public:
 	typedef typename CCObjectArray::reverse_iterator	CCMutableArrayRevIterator;
 
 public:
-
 	CCMutableArray(unsigned int uSize = 0)
 	{
 		if (uSize != 0)

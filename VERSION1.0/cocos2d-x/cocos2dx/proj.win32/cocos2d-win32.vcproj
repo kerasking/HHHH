@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
-				CommandLine="if not exist &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;if not exist &quot;..\..\..\..\..\Bin\$(ConfigurationName)&quot; mkdir &quot;..\..\..\..\..\Bin\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.lib&quot; &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.dll&quot; &quot;..\..\..\..\..\Bin\$(ConfigurationName)&quot;&#x0D;&#x0A;"
+				CommandLine="if not exist &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.dll&quot; &quot;..\..\..\..\..\bin\$(ConfigurationName)&quot;&#x0D;&#x0A;if not exist &quot;..\..\..\..\..\lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\..\..\bin\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.lib&quot; &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -141,7 +141,7 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
-				CommandLine="if not exist &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;if not exist &quot;..\..\..\..\..\Bin\$(ConfigurationName)&quot; mkdir &quot;..\..\..\..\..\Bin\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.lib&quot; &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.dll&quot; &quot;..\..\..\..\..\Bin\$(ConfigurationName)&quot;&#x0D;&#x0A;"
+				CommandLine="if not exist &quot;$(OutDir)&quot; mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2dx\platform\third_party\win32\libraries\*.*&quot; &quot;..\..\..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCLinkerTool"

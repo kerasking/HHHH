@@ -134,7 +134,7 @@ CCDirector::~CCDirector(void)
 #if CC_DIRECTOR_FAST_FPS
 	CC_SAFE_RELEASE(m_pFPSLabel);
 #endif 
-
+    
 	CC_SAFE_RELEASE(m_pRunningScene);
 	CC_SAFE_RELEASE(m_pNotificationNode);
 	CC_SAFE_RELEASE(m_pobScenesStack);
@@ -253,8 +253,7 @@ void CCDirector::calculateDeltaTime(void)
 	}
 	else
 	{
-		m_fDeltaTime = (now.tv_sec - m_pLastUpdate->tv_sec) +
-			(now.tv_usec - m_pLastUpdate->tv_usec) / 1000000.0f;
+		m_fDeltaTime = (now.tv_sec - m_pLastUpdate->tv_sec) + (now.tv_usec - m_pLastUpdate->tv_usec) / 1000000.0f;
 		m_fDeltaTime = MAX(0, m_fDeltaTime);
 	}
 
@@ -284,8 +283,7 @@ void CCDirector::setOpenGLView(CC_GLVIEW *pobOpenGLView)
 
 		// set size
 		m_obWinSizeInPoints = m_pobOpenGLView->getSize();
-		m_obWinSizeInPixels = CCSizeMake(m_obWinSizeInPoints.width * m_fContentScaleFactor,
-			m_obWinSizeInPoints.height * m_fContentScaleFactor);
+		m_obWinSizeInPixels = CCSizeMake(m_obWinSizeInPoints.width * m_fContentScaleFactor, m_obWinSizeInPoints.height * m_fContentScaleFactor);
         setGLDefaultValues();
 
 		if (m_fContentScaleFactor != 1)
@@ -333,8 +331,7 @@ void CCDirector::setProjection(ccDirectorProjection kProjection)
 		// accommodate iPad retina while keep backward compatibility
 		if (m_pobOpenGLView && m_pobOpenGLView->isIpad() && m_pobOpenGLView->getMainScreenScale() > 1.0)
 		{
-			gluPerspective(60, (GLfloat)size.width / size.height,
-				zeye-size.height / 2, zeye+size.height / 2);	
+			gluPerspective(60, (GLfloat)size.width/size.height, zeye-size.height/2, zeye+size.height/2);	
 		}
 		else
 		{

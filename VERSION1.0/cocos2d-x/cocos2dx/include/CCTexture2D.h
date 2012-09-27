@@ -117,8 +117,6 @@ class CC_DLL CCTexture2D : public CCObject
 	CC_PROPERTY_READONLY(bool, m_bHasPremultipliedAlpha, HasPremultipliedAlpha);
 	CC_PROPERTY(ccResolutionType, m_eResolutionType, ResolutionType);
 
-	const char* GetName() const;
-
 public:
 	CCTexture2D();
 	virtual ~CCTexture2D();
@@ -130,8 +128,7 @@ public:
 	void* keepData(void *data, unsigned int length);
 
 	/** Intializes with a texture2d with data */
-	bool initWithData(const void* data, CCTexture2DPixelFormat pixelFormat,
-		unsigned int pixelsWide, unsigned int pixelsHigh, const CCSize& contentSize);
+	bool initWithData(const void* data, CCTexture2DPixelFormat pixelFormat, unsigned int pixelsWide, unsigned int pixelsHigh, const CCSize& contentSize);
 
 	/**
 	Drawing extensions to make it easy to draw basic quads using a CCTexture2D object.
@@ -246,7 +243,6 @@ private:
     
     // By default PVR images are treated as if they don't have the alpha channel premultiplied
     bool m_bPVRHaveAlphaPremultiplied;
-	char* m_pszName;
 
 };
 }//namespace   cocos2d 

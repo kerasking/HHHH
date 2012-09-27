@@ -112,7 +112,7 @@ public:
 	void removeSpriteFramesFromTexture(CCTexture2D* texture);
 
 	/** Returns an Sprite Frame that was previously added.
-	 If the name is not found it will return NULL.
+	 If the name is not found it will return nil.
 	 You should retain the returned copy if you are going to use it.
 	 */
 	CCSpriteFrame* spriteFrameByName(const char *pszName);
