@@ -29,6 +29,7 @@ int main(int argc, char** argv)
 
 		cout << "以下为参数功能" << endl;
 		cout << kOptions << endl;
+		getchar();
 		return 0;
 	}
 

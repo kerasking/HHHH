@@ -536,13 +536,9 @@ void NDTile::drawSubRect(CGRect kRect)
 	if (m_pkTexture)
 	{
 		glBindTexture(GL_TEXTURE_2D, m_pkTexture->getName());		//绑定纹理
-
-		glVertexPointer(3, GL_FLOAT, 0, fVertices);		//绑定目标位置数组
-
+		glVertexPointer(3, GL_FLOAT, 0, fVertices);					//绑定目标位置数组
 		glColorPointer(4, GL_UNSIGNED_BYTE, 0, gs_nTileColors);
-
-		glTexCoordPointer(2, GL_FLOAT, 0, fCoordinates);	//绑定瓦片数组
-
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);				//由opengl组合画图
+		glTexCoordPointer(2, GL_FLOAT, 0, fCoordinates);			//绑定瓦片数组
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);						//由opengl组合画图
 	}
 }
