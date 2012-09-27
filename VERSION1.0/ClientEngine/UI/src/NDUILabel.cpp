@@ -265,7 +265,6 @@ namespace NDEngine
 			
 			if (m_texture) 
 			{
-				const char* pszTemp = m_texture->GetName();
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				glBindTexture(GL_TEXTURE_2D, m_texture->getName());
 				glTexCoordPointer(2, GL_FLOAT, 0, m_coordinates);

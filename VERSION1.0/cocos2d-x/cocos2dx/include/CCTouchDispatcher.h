@@ -140,6 +140,10 @@ public:
 	virtual void touchesCancelled(CCSet* touches, CCEvent* pEvent);
 
 public:
+
+	CCPoint getCurPos();
+	CCPoint getPrePos();
+
 	/** singleton of the CCTouchDispatcher */
 	static CCTouchDispatcher* sharedDispatcher();
 	CCTouchHandler* findHandler(CCTouchDelegate *pDelegate);
@@ -162,6 +166,9 @@ protected:
 	struct _ccCArray *m_pHandlersToRemove;
 	bool m_bToQuit;
 	bool m_bDispatchEvents;
+
+	CCPoint m_curPos;
+	CCPoint m_prePos;
 
 	// 4, 1 for each type of event
 	struct ccTouchHandlerHelperData m_sHandlerHelperData[ccTouchMax];

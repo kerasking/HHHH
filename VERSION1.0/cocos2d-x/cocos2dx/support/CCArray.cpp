@@ -242,4 +242,14 @@ CCArray::~CCArray()
     ccArrayFree(data);
 }
 
+bool CCArray::writeToFile( CCString* path,bool bUseAuxiliaryFile )
+{
+	if (0 == path)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 }
