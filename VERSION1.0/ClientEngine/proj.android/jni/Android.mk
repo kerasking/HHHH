@@ -101,9 +101,7 @@ $(LOCAL_PATH)/../../UI/inc \
 $(LOCAL_PATH)/../../Utility/inc
 
 LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
-LOCAL_WHOLE_STATIC_LIBRARIES += cocosdenshion_static
 
 include $(BUILD_SHARED_LIBRARY)
 
 $(call import-module,cocos2dx)
-$(call import-module,CocosDenshion/android)

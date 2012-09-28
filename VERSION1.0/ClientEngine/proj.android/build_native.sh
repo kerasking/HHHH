@@ -40,16 +40,7 @@ fi
 mkdir $HELLOWORLD_ROOT/assets
 
 # copy resources
-for file in $COCOS2DX_ROOT_LOCAL/HelloWorld/Resources/*
-do
-    if [ -d $file ]; then
-        cp -rf $file $HELLOWORLD_ROOT/assets
-    fi
 
-    if [ -f $file ]; then
-        cp $file $HELLOWORLD_ROOT/assets
-    fi
-done
 
 if [[ $buildexternalsfromsource ]]; then
     echo "Building external dependencies from source"
