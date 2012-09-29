@@ -15,3 +15,5 @@ Lib/
 MID/
 Debug.win32/
 assets
+obj/
+libs/
