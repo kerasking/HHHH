@@ -2,9 +2,9 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := luaplus
+LOCAL_MODULE := tinyxml
 
-LOCAL_MODULE_FILENAME := luaplus
+LOCAL_MODULE_FILENAME := tinyxml
 
 LOCAL_SRC_FILES := \
 ../../src/tinystr.cpp \
