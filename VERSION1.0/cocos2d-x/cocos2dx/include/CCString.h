@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "CCFileUtils.h"
 #include "..\platform\third_party\win32\iconv\iconv.h"
 
+#include <stdarg.h>
+
 namespace cocos2d {
 
 	class CC_DLL CCString : public CCObject
@@ -174,7 +176,7 @@ namespace cocos2d {
             return pszRet;
         }
 
-				/***
+		/***
 		* @brief 根据UTF-8字符，转换成GB2312进行存储。
 		*
 		* @param pszUTF8 要传入的UTF8字符。

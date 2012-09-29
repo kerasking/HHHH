@@ -26,7 +26,6 @@ public:
 	virtual ~NDMsgObject()
 	{
 	}
-	;
 	virtual bool process(MSGID msgID, NDEngine::NDTransData*, int len) = 0;
 };
 

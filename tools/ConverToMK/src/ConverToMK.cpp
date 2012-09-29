@@ -156,6 +156,11 @@ bool CConverToMK::ParseFilterInVCProjectFile( TiXmlElement* pkElement,
 
 	TiXmlElement* pkFilter = pkElement->FirstChildElement();
 
+	if (0 == pkFilter)
+	{
+		return false;
+	}
+
 	do
 	{
 		TiXmlAttribute* pkAttr = pkFilter->FirstAttribute();

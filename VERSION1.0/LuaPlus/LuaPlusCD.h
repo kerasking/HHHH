@@ -82,7 +82,7 @@ namespace LPCD
 #ifdef __APPLE__
 		metaname += typeid(T).name();
 #else
-		metaname += typeid(T).raw_name();
+		metaname += "";
 #endif
 		//lua_getglobal(L, metaname.c_str());
 		lua_getfield(L, LUA_REGISTRYINDEX, metaname.c_str());
@@ -114,7 +114,7 @@ namespace LPCD
 #ifdef __APPLE__
 		metaname += typeid(T).name();
 #else
-		metaname += typeid(T).raw_name();
+		metaname += "";
 #endif
 		
 		lua_getfield(L, LUA_REGISTRYINDEX, metaname.c_str());

@@ -30,7 +30,7 @@ done
 
 # try to get global variable
 
-HELLOWORLD_ROOT=/cygdrive/d/work/smys/VERSION1.0/clientengine/proj.android
+HELLOWORLD_ROOT=/cygdrive/d/work/smys/VERSION1.0/luaplus/proj.android
 
 # make sure assets is exist
 if [ -d $HELLOWORLD_ROOT/assets ]; then
