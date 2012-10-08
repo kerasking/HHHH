@@ -115,9 +115,13 @@ void NDAnimationGroup::decodeSprtFile(FILE* pkStream)
 		pkRecord->setW(nW);
 		pkRecord->setH(nH);
 
-		pkRecord->setReplace(kFileOp.readByte(pkStream));
+		unsigned int uiTemp = kFileOp.readByte(pkStream);
+
+		pkRecord->setReplace(uiTemp);
 		m_pkTileTable->addObject(pkRecord);
 		pkRecord->release();
+
+		CCLog("the number is : %d",uiTemp);
 	}
 }
 

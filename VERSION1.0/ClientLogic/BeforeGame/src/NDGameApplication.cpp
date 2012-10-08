@@ -36,7 +36,7 @@ bool NDGameApplication::initInstance()
 		// Initialize OpenGLView instance, that release by CCDirector when application terminate.
 		// The HelloWorld is designed as HVGA.
 		NDPath::SetResPath(
-				"../../SMYS_CLIENT_IPHONE/SimplifiedChineseRes/res/");
+				"../../Bin/SimplifiedChineseRes/res/");
 		CCEGLView* pMainWnd = new CCEGLView();
 		CC_BREAK_IF(!pMainWnd || !pMainWnd->Create(L"´ó»°Áú½«", 320, 480));
 

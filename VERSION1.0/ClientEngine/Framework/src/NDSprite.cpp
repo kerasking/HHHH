@@ -933,23 +933,6 @@ cocos2d::CCTexture2D* NDSprite::getColorTexture(int imageIndex,
 			m_strColorInfoImage = (*pkVector)[imageIndex];
 		}
 
-		int nPos = m_strColorInfoImage.find_first_of("./");
-
-		if (0 == nPos)
-		{
-			m_strColorInfoImage = m_strColorInfoImage.substr(nPos + 2,
-					m_strColorInfoImage.length());
-		}
-
-		for (std::string::iterator it = m_strColorInfoImage.begin();
-				it != m_strColorInfoImage.end(); it++)
-		{
-			if (*it == '/')
-			{
-				*it = '\\';
-			}
-		}
-
 		pkPic = NDPicturePool::DefaultPool()->AddPicture(
 				m_strColorInfoImage.c_str());
 

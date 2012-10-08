@@ -616,22 +616,6 @@ void NDMapData::decode(FILE* pkStream)
 
 		std::string strImagePath = kSceneImages[nResourceIndex];
 
-		int nPos = strImagePath.find_first_of("./");
-
-		if (0 == nPos)
-		{
-			strImagePath = strImagePath.substr(nPos + 2, strImagePath.length());
-		}
-
-		for (std::string::iterator it = strImagePath.begin();
-				it != strImagePath.end(); it++)
-		{
-			if (*it == '/')
-			{
-				*it = '\\';
-			}
-		}
-
 		pkTile->setTexture(
 				CCTextureCache::sharedTextureCache()->addImage(
 						strImagePath.c_str()));

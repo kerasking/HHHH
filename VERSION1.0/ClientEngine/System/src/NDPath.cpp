@@ -12,8 +12,8 @@
 
 namespace NDEngine
 {
-std::string NDPath::NDPath_ResPath = "./SimplifiedChineseRes/res/";
-std::string NDPath::NDPath_ImgPath = "./SimplifiedChineseRes/res/Image/";
+std::string NDPath::NDPath_ResPath = "../SimplifiedChineseRes/res/";
+std::string NDPath::NDPath_ImgPath = "../SimplifiedChineseRes/res/Image/";
 std::string NDPath::NDPath_MapPath = "";
 std::string NDPath::NDPath_AniPath = "";
 std::string NDPath::NDPath_SoundPath = "";
@@ -59,7 +59,7 @@ std::string NDPath::GetResourcePath()
 
 std::string NDPath::GetResPath()
 {
-	std::string strPath = "./SimplifiedChineseRes/res/";
+	std::string strPath = "../SimplifiedChineseRes/res/";
 	return strPath;
 // #ifdef TRADITION
 // 		NSString *path = [NSString stringWithFormat:@"%@/TraditionalChineseRes/res/", [[NSBundle mainBundle] resourcePath]];
@@ -89,7 +89,7 @@ std::string NDPath::GetImagePath()
 const char* NDPath::GetFullImagepath(const char* pszFileName)
 {
 	string strRes = std::string(
-			std::string("SimplifiedChineseRes\\res\\") + "image\\"
+			std::string("..\\SimplifiedChineseRes\\res\\") + "image\\"
 					+ pszFileName);
 	char* pszTemp = new char[255];
 	memset(pszTemp, 0, sizeof(char) * 255);
@@ -99,7 +99,7 @@ const char* NDPath::GetFullImagepath(const char* pszFileName)
 
 std::string NDPath::GetMapPath()
 {
-	return "./SimplifiedChineseRes/res/map/";
+	return "../SimplifiedChineseRes/res/map/";
 // 	#ifdef TRADITION
 // 		NSString *path = [NSString stringWithFormat:@"%@/TraditionalChineseRes/res/map/", [[NSBundle mainBundle] resourcePath]];
 // 	#else
@@ -121,7 +121,7 @@ std::string NDPath::GetSoundPath()
 
 std::string NDPath::GetAnimationPath()
 {
-	return string("./SimplifiedChineseRes/res/animation/");
+	return string("../SimplifiedChineseRes/res/animation/");
 // 	#ifdef TRADITION
 // 		NSString *path = [NSString stringWithFormat:@"%@/TraditionalChineseRes/res/animation/", [[NSBundle mainBundle] resourcePath]] ;
 // 	#else
@@ -291,7 +291,7 @@ const char* NDPath::GetSMImgPath(const char* fileName)
 const char* NDPath::GetScriptPath(const char* filename)
 {
 	string strRes = std::string(
-			std::string("./SimplifiedChineseRes/res/") + "Script/" + filename);
+			std::string("../SimplifiedChineseRes/res/") + "Script/" + filename);
 	char* pszTemp = new char[255];
 	memset(pszTemp, 0, sizeof(char) * 255);
 	strcpy(pszTemp, strRes.c_str());
@@ -301,6 +301,6 @@ const char* NDPath::GetScriptPath(const char* filename)
 
 std::string NDPath::GetFullMapPath()
 {
-	return std::string("SimplifiedChineseRes/res/map/");
+	return std::string("../SimplifiedChineseRes/res/map/");
 }
 }
