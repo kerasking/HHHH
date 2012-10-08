@@ -61,11 +61,11 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
-				CommandLine="if not exist &quot;..\..\..\Lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.dll&quot; &quot;..\..\..\bin\$(ConfigurationName)&quot;&#x0D;&#x0A;if not exist &quot;..\..\..\lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\bin\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.lib&quot; &quot;..\..\..\Lib\$(ConfigurationName)&quot;"
+				CommandLine="if not exist &quot;..\..\..\Lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.dll&quot; &quot;..\..\..\bin\$(ConfigurationName)&quot;&#x0D;&#x0A;if not exist &quot;..\..\..\lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\bin\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.lib&quot; &quot;..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libEGL.lib libgles_cm.lib libxml2.lib libzlib.lib libpng.lib libjpeg.lib libiconv.lib pthreadVCE2.lib"
+				AdditionalDependencies="libEGL.lib libgles_cm.lib libxml2.lib libzlib.lib libpng.lib libjpeg.lib libiconv.lib pthread.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\..\..\Lib\$(ConfigurationName)&quot;"
@@ -141,7 +141,7 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
-				CommandLine="if not exist &quot;..\..\..\Lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.dll&quot; &quot;..\..\..\bin\$(ConfigurationName)&quot;&#x0D;&#x0A;if not exist &quot;..\..\..\lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\bin\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.lib&quot; &quot;..\..\..\Lib\$(ConfigurationName)&quot;"
+				CommandLine="if not exist &quot;..\..\..\Lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.dll&quot; &quot;..\..\..\bin\$(ConfigurationName)&quot;&#x0D;&#x0A;if not exist &quot;..\..\..\lib\$(ConfigurationName)&quot; mkdir &quot;..\..\..\bin\$(ConfigurationName)&quot;&#x0D;&#x0A;xcopy /Y /Q &quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\libraries\*.lib&quot; &quot;..\..\..\Lib\$(ConfigurationName)&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
