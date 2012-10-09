@@ -298,8 +298,9 @@ void NDFrame::run(float fScale)
 
 	NDAnimation *pkAnimation = m_BelongAnimation;
 	NDAnimationGroup *pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
+	int nCount = m_pkFrameTiles->count();
 
-	for (int i = 0; i < (int) m_pkFrameTiles->count(); i++)
+	for (int i = 0; i < nCount; i++)
 	{
 		NDFrameTile* pkFrameTile = m_pkFrameTiles->getObjectAtIndex(i);
 		NDTileTableRecord *pkRecord =
