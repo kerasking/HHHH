@@ -336,7 +336,7 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 	m_nDirect = 2;
 
 //		if (sex % 2 == SpriteSexMale) 
-	int nModelID = 1;	//lookface / 1000000;
+	int nModelID = 8;	//lookface / 1000000;
 	//	if (sex % 2 == SpriteSexMale)
 
 	NSString* pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());

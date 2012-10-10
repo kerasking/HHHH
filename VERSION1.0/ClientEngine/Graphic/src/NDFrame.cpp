@@ -317,10 +317,10 @@ void NDFrame::run(float fScale)
 			continue;
 		}
 
-		TILE_REVERSE_ROTATION reverseRotation = tileReverseRotationWithReverse(
-				true, pkFrameTile->getRotation());
-		pkTile->setReverse(reverseRotation.reverse);
-		//	tile->setRotation(reverseRotation.rotation);
+		TILE_REVERSE_ROTATION kReverseRotation = tileReverseRotationWithReverse(
+				pkAnimation->getReverse(), pkFrameTile->getRotation());
+		pkTile->setReverse(kReverseRotation.reverse);
+		pkTile->setRotation(kReverseRotation.rotation);
 
 		NDEngine::NDSprite *pkSprite =
 				(NDEngine::NDSprite *) pkAnimationGroup->getRuningSprite();
@@ -360,7 +360,7 @@ void NDFrame::run(float fScale)
 		if (pkAnimation->getReverse())
 		{
 			int tileW = this->getTileW(pkRecord->getW(), pkRecord->getH(),
-					reverseRotation.rotation);
+					kReverseRotation.rotation);
 //			if (reverseRotation.rotation == NDRotationEnumRotation90 || reverseRotation.rotation == NDRotationEnumRotation270) 
 //			{
 //				tileW = record.h;
