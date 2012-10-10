@@ -11,7 +11,7 @@
 #include "NDConstant.h"
 #include "NDDirector.h"
 #include "GameUIAttrib.h"
-#include "GameUIPetAttrib.h"
+#include <GameUIPetAttrib.h>
 #include "InitMenuScene.h"
 #include "NDPlayer.h"
 #include "NDUtility.h"
