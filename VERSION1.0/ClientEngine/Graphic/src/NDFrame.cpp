@@ -1041,13 +1041,15 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 
 		if (pkSprite->IsNonRole())
 		{
-			std::vector < std::string > *vImg = pkAnimationGroup->getImages();
+			pkTexture = NDPicturePool::DefaultPool()->AddPicture(pkAnimationGroup->getImages()->at(imageIndex).c_str());
 
-			if (vImg && vImg->size() > imageIndex)
-			{
-				pkTexture = CCTextureCache::sharedTextureCache()->addImage(
-						(*vImg)[imageIndex].c_str());
-			}
+// 			std::vector < std::string > *vImg = pkAnimationGroup->getImages();
+// 
+// 			if (vImg && vImg->size() > imageIndex)
+// 			{
+// 				pkTexture = CCTextureCache::sharedTextureCache()->addImage(
+// 						(*vImg)[imageIndex].c_str());
+// 			}
 		}
 
 		if (pkTexture)
@@ -1055,12 +1057,14 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 			return pkTexture;
 		}
 	}
+
 	std::vector < std::string > *vImg = pkAnimationGroup->getImages();
 	if (vImg && vImg->size() > imageIndex)
 	{
 		pkTexture = CCTextureCache::sharedTextureCache()->addImage(
 				(*vImg)[imageIndex].c_str());
 	}
+
 	//tex = CCTextureCache::sharedTextureCache()->addImage(animationGroup->getImages()->getObjectAtIndex(imageIndex);
 	/*switch (replace) 
 	 {

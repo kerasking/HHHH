@@ -643,13 +643,13 @@ static NDPicturePool* NDPicturePool_DefaultPool = NULL;
 NDPicturePool::NDPicturePool()
 {
 	NDAsssert(NDPicturePool_DefaultPool == NULL);
-	m_textures = new NDPictureDictionary();
+	m_pkTextures = new NDPictureDictionary();
 }
 
 NDPicturePool::~NDPicturePool()
 {
 	NDPicturePool_DefaultPool = NULL;
-	delete m_textures;
+	delete m_pkTextures;
 }
 
 NDPicturePool* NDPicturePool::DefaultPool()
@@ -673,17 +673,17 @@ NDPicture* NDPicturePool::AddPicture(const char* imageFile, bool gray/*=false*/)
 	std::stringstream ss;
 	ss << imageFile;
 
-	NDPicture* pic = (NDPicture *) m_textures->Object(ss.str().c_str());
+	NDPicture* pkPicture = (NDPicture *) m_pkTextures->Object(ss.str().c_str());
 
-	if (!pic)
+	if (!pkPicture)
 	{
-		pic = new NDPicture(gray);
-		pic->Initialization(imageFile);
+		pkPicture = new NDPicture(gray);
+		pkPicture->Initialization(imageFile);
 
-		m_textures->SetObject(pic, ss.str().c_str());
+		m_pkTextures->SetObject(pkPicture, ss.str().c_str());
 	}
 
-	return pic->Copy();
+	return pkPicture->Copy();
 }
 
 NDPicture* NDPicturePool::AddPicture(const char* imageFile, int hrizontalPixel,
@@ -703,14 +703,14 @@ NDPicture* NDPicturePool::AddPicture(const char* imageFile, int hrizontalPixel,
 	std::stringstream ss;
 	ss << imageFile << "_" << hrizontalPixel << "_" << verticalPixel;
 
-	NDPicture* pic = (NDPicture *) m_textures->Object(ss.str().c_str());
+	NDPicture* pic = (NDPicture *) m_pkTextures->Object(ss.str().c_str());
 
 	if (!pic)
 	{
 		pic = new NDPicture(gray);
 		pic->Initialization(imageFile, hrizontalPixel, verticalPixel);
 
-		m_textures->SetObject(pic, ss.str().c_str());
+		m_pkTextures->SetObject(pic, ss.str().c_str());
 	}
 
 	return pic->Copy();
@@ -720,14 +720,14 @@ void NDPicturePool::RemovePicture(const char* imageFile)
 {
 	NDAsssert(imageFile != NULL);
 
-	m_textures->RemoveObject(imageFile);
+	m_pkTextures->RemoveObject(imageFile);
 }
 
 void NDPicturePool::Recyle()
 {
-	if (m_textures)
+	if (m_pkTextures)
 	{
-		m_textures->Recyle();
+		m_pkTextures->Recyle();
 	}
 }
 
@@ -759,5 +759,39 @@ CGSize NDPicturePool::GetImageSize(std::string filename)
 
 	return size;
 }
+
+CCTexture2D* NDPicturePool::AddTexture( const char* pszImageFile )
+{
+	NDAsssert(0 != pszImageFile);
+
+	stringstream kStream;
+	kStream << pszImageFile;
 }
 
+
+NDTexture::NDTexture()
+{
+	m_pkTexture = 0;
+}
+
+NDTexture::~NDTexture()
+{
+
+}
+
+void NDTexture::Initialization( const char* pszImageFile )
+{
+
+}
+
+CCTexture2D* NDTexture::GetTexture()
+{
+
+}
+
+CCTexture2D* NDTexture::GetTextureRetain()
+{
+
+}
+
+}
