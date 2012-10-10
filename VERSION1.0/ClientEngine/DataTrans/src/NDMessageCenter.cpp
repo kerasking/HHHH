@@ -8,6 +8,7 @@
 
 #include "NDMessageCenter.h"
 #include "basedefine.h"
+#include "define.h"
 #include "NDMsgDefine.h"
 
 namespace NDEngine
@@ -37,11 +38,11 @@ namespace NDEngine
 	
 	void NDMessageCenter::AddMessage(NDTransData* data)
 	{
-		const unsigned char* buf = data->GetBuffer();
-		unsigned short idMsg = 0;
-		idMsg = buf[4] + (buf[5] << 8);
+		//const unsigned char* buf = data->GetBuffer();
+		//unsigned short idMsg = 0;
+		//idMsg = buf[4] + (buf[5] << 8);
 		
-		//NDLog(@"收到消息%d", idMsg);
+		//NDLog(@"�յ���Ϣ%d", idMsg);
 		
 		_transdata *pWritePtr = NULL;
 		unsigned int nWriteSize = 0;
@@ -49,7 +50,7 @@ namespace NDEngine
 		
 		if ( nWriteSize  == 0 ) 
 		{
-			NDLog(@"消息中心接收缓冲已满，不能再接收数据了!!![不应该出现]");
+			//NDLog(@"��Ϣ���Ľ��ջ����������ٽ�������!!![˲�Ӧ�ó��]");
 			delete data;
 			return;
 		}
@@ -101,14 +102,14 @@ namespace NDEngine
 		}
 	}*/
 	
-#pragma mark 网络消息管理单例(支持多线程)
+#pragma mark �������Ϣ�������(�֧�ֶ��߳)
 	
-	// 描述:网络消息管理单例(支持多线程)
-	// 提供增加网络原始数据功能
-	// 提供获取服务器消息包功能
-	// 提供增加回主界面消息包功能
-	// 提供清除所有网络原始数据功能
-	// 提供跟踪网络接收数据量功能
+	// ����:�������Ϣ�������(�֧�ֶ��߳)
+	// ��ṩ�������ԭʼ��ݹ��
+	// ��ṩ��ȡ��������Ϣ���
+	// ��ṩ��ӻ��������Ϣ���
+	// ��ṩ�����������ԭʼ��ݹ��
+	// ��ṩ������������������
 	// jhzhen 2011.12.1
 	
 	static NDNetMsgMgr* s_NDNetMsgMgr = NULL;
@@ -145,8 +146,8 @@ namespace NDEngine
 		
 		m_buffer.GetWritePtr(pWritePtr, uiWriteSize);
 		
-		#ifdef DEBUG 
-		// 观察未读的缓冲大小
+#ifdef DEBUG 
+		// ܹ۲�δ��Ļ����С
 		static unsigned int s_maxHasWriteSize = 1046 * 15;
 		
 		unsigned int hasWriteSize = 0;
@@ -170,32 +171,32 @@ namespace NDEngine
 			s_maxHasWriteSize = newMaxWriteSize;
 		}
 		
-		// 观察总的接收数据大小
-		/*if (net)
+		// �۲��ܵĽ�����ݴ�С
+		if (net)
 		{
 			m_lockNetData.lock();
 		
 			m_uiTotalNetData += uilen;
 		
 			m_lockNetData.unlock();
-		}*/
-		#endif
+		}
+#endif
 		
 		if (uiWriteSize < 1046 * 128)
 		{
-			NDLog(@"\nNDNetMsgMgr::AddNetRawData net msg buffer has only half space!!!");
+			//NDLog(@"\nNDNetMsgMgr::AddNetRawData net msg buffer has only half space!!!");
 		}
 		
 		if ( uiWriteSize == 0 )
 		{
-			NDLog(@"\nNDNetMsgMgr::AddNetRawData net msg buffer has not space!!!");
+			//NDLog(@"\nNDNetMsgMgr::AddNetRawData net msg buffer has not space!!!");
 			
 			return false;
 		}
 		
 		if ( uiWriteSize < uilen )
 		{
-			NDLog(@"\nNDNetMsgMgr::AddNetRawData net msg buffer not enough space");
+			//NDLog(@"\nNDNetMsgMgr::AddNetRawData net msg buffer not enough space");
 			
 			return false;
 		}
@@ -204,7 +205,7 @@ namespace NDEngine
 		
 		if (!sucess)
 		{
-			NDLog(@"\nDNetMsgMgr::AddNetRawData PushData failed!!!");
+			//NDLog(@"\nDNetMsgMgr::AddNetRawData PushData failed!!!");
 		}
 		
 		return sucess;
@@ -217,11 +218,14 @@ namespace NDEngine
 		
 		m_buffer.GetReadPtr(pReadPtr, uiReadSize);
 		
-		if (uiReadSize < 4)
+		if (uiReadSize < ND_C_MSGID_BEGIN)
 		{
 			return false;
 		}
 		
+#if (defined(USE_NDSDK) || defined(USE_MGSDK))
+		unsigned int msgLen = (pReadPtr[0] & 0xff) + ((pReadPtr[1] & 0xff) << 8);
+#else
 		while(0xff != pReadPtr[0] || 0xfe != pReadPtr[1])
 		{
 			NDLog(@"NDNetMsgMgr::GetServerMsgPacket received message not match protocol of we defined!");
@@ -242,26 +246,27 @@ namespace NDEngine
 				return false;
 			}
 		}
-		
-		unsigned int msgLen = (pReadPtr[2] & 0xff) + ((pReadPtr[3] & 0xff) << 8);
+        
+        unsigned int msgLen = (pReadPtr[2] & 0xff) + ((pReadPtr[3] & 0xff) << 8);
+#endif
 		
 		if (uiReadSize < msgLen)
 		{
 			return false;
 		}
-		
+
 		data.Clear();
-		
-		if (!data.Write(pReadPtr + 4, msgLen - 4))
+
+		if (!data.Write(pReadPtr + ND_C_MSGID_BEGIN, msgLen - ND_C_MSGID_BEGIN))
 		{
-			NDLog(@"NDNetMsgMgr::GetServerMsgPacket write NDTransData failed!!!");
+			//NDLog(@"NDNetMsgMgr::GetServerMsgPacket write NDTransData failed!!!");
 			
 			return false;
 		}
 		
 		if (!m_buffer.DeleteData(msgLen))
 		{
-			NDLog(@"NDNetMsgMgr::GetServerMsgPacket DeleteData failed!!!");
+			//NDLog(@"NDNetMsgMgr::GetServerMsgPacket DeleteData failed!!!");
 			
 			return false;
 		}
@@ -280,7 +285,7 @@ namespace NDEngine
 		
 		if ( !AddNetRawData(bao.GetBuffer(), bao.GetSize(), false) )
 		{
-			NDLog(@"NDNetMsgMgr::AddBackToMenuPacket failed!!!");
+			//NDLog(@"NDNetMsgMgr::AddBackToMenuPacket failed!!!");
 			
 			return false;
 		}
@@ -307,7 +312,7 @@ namespace NDEngine
 	void NDNetMsgMgr::Report()
 	{
 		return;
-		/*#ifdef DEBUG
+		#ifdef DEBUG
 			
 			m_lockNetData.lock();
 			NDLog(@"\n---------------------------------------------");
@@ -315,20 +320,17 @@ namespace NDEngine
 			
 			m_lockNetData.unlock();
 		
-		#endif*/
+		#endif
 		
 		unsigned char* pReadPtr = NULL;
 		unsigned int uiReadSize = 0;
 		
 		m_buffer.GetReadPtr(pReadPtr, uiReadSize);
 		
-		NDLog(@"\n---------------------------------------------");
-		NDLog(@"NDNetMsgMgr total deal net data %u byte, %u byte remain in buffer, %u byte error data.", 
-				m_uiTotalValidRecv + m_uiTotalInvalidRecv + uiReadSize,
-				uiReadSize,
-				m_uiTotalInvalidRecv);
-		
-	}
+		//NDLog(@"\n---------------------------------------------");
+		//NDLog(@"NDNetMsgMgr total deal net data %u byte, %u byte remain in buffer, %u byte error data.", 
+				//m_uiTotalValidRecv + m_uiTotalInvalidRecv + uiReadSize,
+				//uiReadSize,
+				//m_uiTotalInvalidRecv);
+    }
 }
-
-

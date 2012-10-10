@@ -16,6 +16,8 @@
 #include "NDConstant.h"
 #include "NDNpc.h"
 #include "ScriptDrama.h"
+#include <ScriptGameLogic.h>
+#include <NDSocket.h>
 
 namespace NDEngine
 {
@@ -32,6 +34,9 @@ bool NDGameApplication::initInstance()
 	do
 	{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+
+        // initialize socket
+        InitSocket();
 
 		// Initialize OpenGLView instance, that release by CCDirector when application terminate.
 		// The HelloWorld is designed as HVGA.
@@ -100,13 +105,15 @@ bool NDGameApplication::initInstance()
 		bRet = true;
 	} while (0);
 
+    // 现在这里登陆
+    SwichKeyToServer("192.168.243.54", 9528, "285929910", "", "xx");
 	return bRet;
 }
 
 bool NDGameApplication::applicationDidFinishLaunching()
 {
 	NDDirector* pkDirector = NDDirector::DefaultDirector();
-	ScriptMgr kScriptManager = ScriptMgr::GetSingleton();
+	ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();
 
 	pkDirector->Initialization();
 	pkDirector->RunScene(GameScene::Scene());

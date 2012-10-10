@@ -62,7 +62,7 @@ namespace  cocos2d
 {
 
 // singleton stuff
-static CCDisplayLinkDirector s_sharedDirector;
+static CCDisplayLinkDirector *sm_pSharedDirector;
 static bool s_bFirstRun = true;
 
 #define kDefaultFPS		60  // 60 frames per second
@@ -72,11 +72,11 @@ CCDirector* CCDirector::sharedDirector(void)
 {
 	if (s_bFirstRun)
 	{
-		s_sharedDirector.init();
+		sm_pSharedDirector->init();
         s_bFirstRun = false;
 	}
 
-	return &s_sharedDirector;
+	return sm_pSharedDirector;
 }
 
 bool CCDirector::init(void)
@@ -103,6 +103,7 @@ bool CCDirector::init(void)
 	m_uTotalFrames = m_uFrames = 0;
 	m_pszFPS = new char[10];
 	m_pLastUpdate = new struct cc_timeval();
+    m_pFPSLabel = NULL;
 
 	// paused ?
 	m_bPaused = false;
@@ -916,6 +917,12 @@ void CCDirector::setDeviceOrientation(ccDeviceOrientation kDeviceOrientation)
 /***************************************************
 * implementation of DisplayLinkDirector
 **************************************************/
+
+CCDisplayLinkDirector::CCDisplayLinkDirector(void)
+		: m_bInvalid(false)
+{
+    sm_pSharedDirector = this;
+}
 
 // should we afford 4 types of director ??
 // I think DisplayLinkDirector is enough

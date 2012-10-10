@@ -6,7 +6,7 @@
  *****************************************************************************/
 
 #include "NDDataTransThread.h"
-
+#include <NDMessageCenter.h>
 #include "NDTransData.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
@@ -113,7 +113,7 @@ void NDDataTransThread::Start(const char* ipAddr, int port)
 		if (ret)
 		{
 			pthread_t pid;
-			if (0) //pthread_create(&pid, NULL, execThread, this) != 0)
+			if(pthread_create(&pid, NULL, execThread, this) != 0)
 			{
 				cocos2d::CCLog("create thread error, maybe memory not enough!");
 			}
@@ -156,6 +156,12 @@ ThreadStatus NDDataTransThread::GetThreadStatus()
 NDSocket* NDDataTransThread::GetSocket()
 {
 	return m_socket;
+}
+
+void NDDataTransThread::ResetDefaultThread()
+{   
+    delete NDDataTransThread_dafaultThread;
+    NDDataTransThread_dafaultThread = NULL;
 }
 
 //===========================================================================
@@ -327,6 +333,12 @@ void NDDataTransThread::BlockDeal()
 	}
 }
 
+void NDDataTransThread::ChangeCode(DWORD dwCode)
+{
+    if(m_socket)
+        m_socket->ChangeCode(dwCode);
+}
+
 //===========================================================================
 void NDDataTransThread::NotBlockDeal()
 {
@@ -350,8 +362,7 @@ void NDDataTransThread::NotBlockDeal()
 		}
 		else
 		{
-			unsigned char buffer[1046] =
-			{ 0x00 };
+			unsigned char buffer[1046] = { 0x00 };
 			int readedLen = 0;
 			if (!m_socket->Receive(buffer, readedLen))
 			{
@@ -360,14 +371,13 @@ void NDDataTransThread::NotBlockDeal()
 			}
 			else if (readedLen)
 			{
-				//if (readedLen != 0 && !NDNetMsgMgr::GetSingleton().AddNetRawData(buffer, readedLen))	//???????????????
-				//{
-				m_operate = ThreadStatusStoped;
-				//}
+                if (readedLen != 0 && !NDNetMsgMgr::GetSingleton().AddNetRawData(buffer, readedLen))	//???????????????
+                {
+                    m_operate = ThreadStatusStoped;
+                }
 			}
 			else if (readedLen == 0)
 			{
-				if (readedLen == 0)
 					//usleep(1000*50);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 					Sleep(50);

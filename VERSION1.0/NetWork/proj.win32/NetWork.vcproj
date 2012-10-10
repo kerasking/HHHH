@@ -17,9 +17,9 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			OutputDirectory="$(SolutionDir)Lib\$(ConfigurationName)"
+			IntermediateDirectory="..\..\Obj\$(ConfigurationName)\$(ProjectName)"
+			ConfigurationType="4"
 			CharacterSet="2"
 			>
 			<Tool
@@ -40,6 +40,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="..\inc;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform&quot;;..\..\pthreads"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -56,15 +58,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				GenerateDebugInformation="true"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -76,16 +73,13 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)Lib\$(ConfigurationName)"
+			IntermediateDirectory="..\..\Obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -109,6 +103,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="..\inc;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform&quot;;..\..\pthreads"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
@@ -157,16 +153,56 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Source Files"
+			Name="Src"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath="..\src\Kathy.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\KConnection.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\KMutex.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\KNetworkAddress.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\KTcpClientSocket.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\StringData.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
-			Name="Header Files"
+			Name="inc"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\inc\Kathy.h"
+				>
+			</File>
+			<File
+				RelativePath="..\inc\KConnection.h"
+				>
+			</File>
+			<File
+				RelativePath="..\inc\KNetworkAddress.h"
+				>
+			</File>
+			<File
+				RelativePath="..\inc\KTcpClientSocket.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"

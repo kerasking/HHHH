@@ -25,6 +25,7 @@
 #include "BattleMgr.h"
 #include "Battle.h"
 #include "ChatManager.h"
+#include "NDDataTransThread.h"
 
 using namespace NDEngine;
 
@@ -32,6 +33,23 @@ void QuitGame()
 {
 	quitGame();
 	ScriptGameDataObj.DelAllData();
+}
+
+// 根据seed值，产生一个salt值，直接采用vc crt库的srand和rand算法
+int GetEncryptSalt(unsigned int seed)
+{
+    return( ((seed * 214013L + 2531011L) >> 16) & 0x7fff );
+}
+
+void sendMsgConnect(int idAccount) 
+{
+	NDTransData data(_MSG_CONNECT);
+    std::string phoneKey = "1yyyyyyyyyyyyyyyyyyyyyyyyyy";
+	int dwAuthorize = 0;
+	data << idAccount;
+	data << dwAuthorize;
+	data.Write((unsigned char*)(phoneKey.c_str()), phoneKey.size());
+	NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
 }
 
 void CreatePlayer(int lookface, int x, int y, int userid, std::string name)
@@ -279,8 +297,30 @@ std::string GetFastPwd()
 bool SwichKeyToServer(const char* pszIp, int nPort, const char* pszAccountName,
 		const char* pszPwd, const char* pszServerName)
 {
-//    return NDBeforeGameMgrObj.SwichKeyToServer(pszIp,nPort,pszAccountName,pszPwd,pszServerName); ///< 临时性注释 郭浩
-	return true;
+    //return NDBeforeGameMgrObj.SwichKeyToServer(pszIp,nPort,pszAccountName,pszPwd,pszServerName);
+    NDDataTransThread::DefaultThread()->Stop();
+    NDDataTransThread::ResetDefaultThread();
+
+    NDDataTransThread::DefaultThread()->Start(pszIp, nPort);
+	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
+	{
+		return false;
+	}
+    
+    //this->SetUserName(pszAccountName);
+    //this->SetServerInfo(pszIp,pszServerName,pszServerName,nPort);
+    //this->SetPassWord(pszPwd);
+
+    int idAccount = atoi(pszAccountName);
+    sendMsgConnect(idAccount);
+//    srand(idAccount);
+    int nSalt = GetEncryptSalt(idAccount);
+    DWORD dwAuthorize = 0;
+    DWORD dwData = dwAuthorize ^ (nSalt % idAccount);
+    dwAuthorize = dwData;
+    DWORD dwEncryptCode = (idAccount+dwAuthorize)^0x4321;
+    dwAuthorize = dwAuthorize ^ dwEncryptCode;
+    NDDataTransThread::DefaultThread()->ChangeCode(dwAuthorize);
 }
 
 ///////////////////////////////////////////////

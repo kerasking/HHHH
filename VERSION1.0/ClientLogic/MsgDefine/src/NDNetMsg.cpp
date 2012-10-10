@@ -53,18 +53,17 @@ bool NDNetMsgPool::Process(NDTransData* data)
 
 	if (nMsgID != _MSG_GAME_QUIT)
 	{
-//		BeatHeartMgrObj.HadServerMsgArrive(); ///< 涓存椂鎬ф敞閲� 閮旦
+		//BeatHeartMgrObj.HadServerMsgArrive(); ///< 涓存椂鎬ф敞閲?? 閮旦
 	}
 
-	return Process(nMsgID, data, nMsgLen - 6);;
+	return Process(nMsgID, data, nMsgLen - ND_C_HEAD_SIZE);
 }
 
 bool NDNetMsgPool::Process(MSGID msgID, NDTransData* data, int len)
 {
-	NDLog(
-			"\n---------------------------------------------<--鎺ユ敹id[%d],len[%d]-----------------------",
-			msgID, len + 6);
-	if (len + 6 > 1024)
+    cocos2d::CCLog("\n---------------------------------------------<--接收id[%d],len[%d]-----------------------", msgID, len+ND_C_HEAD_SIZE);
+
+	if (len + ND_C_HEAD_SIZE > 1024)
 	{
 		NDAsssert(0);
 	}
@@ -87,7 +86,6 @@ bool NDNetMsgPool::Process(MSGID msgID, NDTransData* data, int len)
 	{
 		return false;
 	}
-	//NDLog("\n=========================================鏀跺埌娑堟伅[%d]", msgID);
 	obj->process(msgID, data, len);
 
 	return true;

@@ -16,6 +16,14 @@
 
 namespace NDEngine
 {	
+#if (defined(USE_NDSDK) || defined(USE_MGSDK))
+	const int ND_C_MSGID_BEGIN  = 2;
+	const int ND_C_HEAD_SIZE   = 4;
+#else
+	const int ND_C_MSGID_BEGIN  = 4;
+	const int ND_C_HEAD_SIZE   = 6;
+#endif
+
 	class NDTransData : public NDObject 
 	{
 		DECLARE_CLASS(NDTransData)
@@ -117,14 +125,15 @@ namespace NDEngine
 		unsigned short GetSize(){ return m_nSize; };
 		
 		unsigned short GetCode();
-
-	private:
-		bool SetSize(unsigned short newSize);
 		void SetPackageSize();
+	private:
+        void SetSize(unsigned short newSize){ m_nSize = newSize;}
+        bool SetBufSize(unsigned short newSize);
 		void SetPackageHead();
 		
 	private:
 		unsigned short m_nSize;
+		unsigned short m_nBufSize;
 		unsigned short m_nReadPos;
 		unsigned short m_nWritePos;
 		unsigned char* m_pBuffer;

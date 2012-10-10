@@ -16,6 +16,8 @@ namespace NDEngine
 	const int ND_C_SET_UNCODE = 0;
 	const int ND_C_SET_UTF8	= 1;
 	const int ND_C_SET_ASCII  = 2;
+
+    const int ND_C_BUF_SIZE   = 256;
 	
 	IMPLEMENT_CLASS(NDTransData, NDObject)
 
@@ -139,13 +141,13 @@ namespace NDEngine
 		if (pBuffer && nLen)
 		{
             unsigned int nSize = m_nWritePos + nLen;
-            if (nSize > m_nSize)
+            if (nSize > m_nBufSize)
 			{
-			    if (SetSize(nSize))
+			    if (SetBufSize(nSize))
 				{
 					memcpy(m_pBuffer + m_nWritePos, pBuffer, nLen);
 					m_nWritePos += nLen;
-					
+                    this->SetSize(nSize);
 					return true;
 				}
 				else
@@ -153,6 +155,13 @@ namespace NDEngine
 					return false;
 				}
 			}
+            else
+            {
+                memcpy(m_pBuffer + this->m_nWritePos, pBuffer, nLen);
+                this->m_nWritePos += nLen;
+                this->SetSize(nSize);
+                return true;
+            }
 		}
 		
 		return false;
@@ -338,7 +347,7 @@ namespace NDEngine
 	{
 		if (&rhs != this)
 		{
-			SetSize(rhs.m_nSize);
+			SetBufSize(rhs.m_nSize);
 			
 			memcpy(m_pBuffer, rhs.m_pBuffer, rhs.m_nSize);
 			m_nReadPos = rhs.m_nReadPos;
@@ -450,21 +459,27 @@ namespace NDEngine
 			free(m_pBuffer);
 		
 		m_pBuffer = NULL;
-		m_nSize	  = 0;
-		
-		if (SetSize(4))
+		m_nBufSize	  = 0;
+        m_nReadPos = 0;
+		m_nWritePos = 0;
+
+		if (SetBufSize(ND_C_BUF_SIZE))
 		{
-			SetPackageHead();
+            if(ND_C_MSGID_BEGIN == 4)
+            {
+                SetPackageHead();
+            }
 			
-			m_nReadPos = 4;
-			m_nWritePos = 4;
+            SetSize(ND_C_MSGID_BEGIN);
+			m_nReadPos = ND_C_MSGID_BEGIN;
+			m_nWritePos = ND_C_MSGID_BEGIN;
 		}		
 	}
 	
 //======================================================================
 	void NDTransData::SetPackageSize()
 	{
-		memcpy(&m_pBuffer[2], &m_nSize, 2);
+		memcpy(&m_pBuffer[ND_C_MSGID_BEGIN - 2], &m_nSize, 2);
 	}
 	
 	void NDTransData::SetPackageHead()
@@ -472,12 +487,12 @@ namespace NDEngine
 		m_pBuffer[0] = 0xff, m_pBuffer[1] = 0xfe;
 	}
 	
-	bool NDTransData::SetSize(unsigned short newSize)
+	bool NDTransData::SetBufSize(unsigned short newSize)
 	{
-		if (m_pBuffer && (newSize == m_nSize))
+		if (m_pBuffer && (newSize == this->m_nBufSize))
 			return true;
 		
-		unsigned short nLen = GetSize();
+		unsigned short nLen = this->m_nBufSize;
 		if (newSize > nLen)
 			nLen = newSize;
 		
@@ -490,13 +505,12 @@ namespace NDEngine
 		if (pNewBuffer)
 		{
 			m_pBuffer = pNewBuffer;
-			m_nSize = nLen;
-			SetPackageSize();
+			m_nBufSize = nLen;
 			
-			if (m_nReadPos > m_nSize)
-				m_nReadPos = m_nSize;
-			if (m_nWritePos > m_nSize)
-				m_nWritePos = m_nSize;
+			if (m_nReadPos > m_nBufSize)
+				m_nReadPos = m_nBufSize;
+			if (m_nWritePos > m_nBufSize)
+				m_nWritePos = m_nBufSize;
 			
 			return true;
 		}
@@ -507,10 +521,10 @@ namespace NDEngine
 //======================================================================
 	unsigned short NDTransData::GetCode()
 	{
-		if (this->GetSize() < 6)
+		if (this->GetSize() < ND_C_HEAD_SIZE)
 			return 0;
 		
-		return (unsigned short)( m_pBuffer[4] + (m_pBuffer[5] << 8) );
+		return (unsigned short)( m_pBuffer[ND_C_MSGID_BEGIN] + (m_pBuffer[ND_C_MSGID_BEGIN + 1] << 8) );
 	}
 	
 }

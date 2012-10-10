@@ -10,12 +10,15 @@
 #include "NDDirector.h"
 #include <string>
 #include <vector>
+#include <NDTransData.h>
 #include "ScriptMgr.h"
+#include <NDNetMsg.h>
+#include <NDMessageCenter.h>
 
-// 甯ф暟闄愬埗寮�鍏�
+// 甯ф暟闄愬埗寮??鍏??
 #define FRAME_LIMIT_SWITCH 1
 
-// 甯ф暟闄愬埗:姣忕璺�甯�
+// 甯ф暟闄愬埗:姣忕璺??甯??
 #define FRAME_LIMIT (24) ssss
 
 #if FRAME_LIMIT_SWITCH == 1
@@ -50,7 +53,7 @@
 
 #define PERFORMANCE_DEBUG_3												\
 		PerformanceTestEndName("娓告垙鍦烘櫙");								\
-		PerformanceTest.BeginTestModule("娓告垙甯ц皟鐢ㄩ棿闅�", key);
+		PerformanceTest.BeginTestModule("娓告垙甯ц皟鐢ㄩ棿闅??", key);
 #else
 #define PERFORMANCE_DEBUG_1	
 
@@ -64,8 +67,9 @@ using namespace NDEngine;
 void NDBaseDirector::mainLoop(void)
 {
 	this->OnIdle();
+    this->DispatchOneMessage();
 
-	NDDirector::DefaultDirector()->DisibleScissor();
+	//NDDirector::DefaultDirector()->DisibleScissor(); // 暂时先注释掉
 
 	CCDisplayLinkDirector::mainLoop();
 }
@@ -75,34 +79,29 @@ void NDBaseDirector::OnIdle()
 	ScriptMgrObj.update();
 }
 
-// - (void)dispatchOneMessage
-// {		
-// #if USE_ROBOT == 1
-// 	RobotMgrObj.Update();
-// #else
-// 	NDTransData bao;
-// 	//NDTransData* data = NDMessageCenter::DefaultMessageCenter()->GetMessage();
-// 	for (int n = 0; n < 10; n++) 
-// 	{
-// 		if (NDNetMsgMgr::GetSingleton().GetServerMsgPacket(bao))
-// 		{
-// 			NDNetMsgPoolObj.Process(&bao);
-// 			if ( (bao.GetCode() != _MSG_WALK)			&& 
-// 				 (bao.GetCode() != _MSG_PLAYER_EXT)		&&
-// 				 (bao.GetCode() != _MSG_TALK)	
-// 				 )
-// 				 break;
-// 			//NDMessageCenter::DefaultMessageCenter()->DelMessage();
-// 			//delete data;
-// 		}
-// 		else 
-// 		{
-// 			break;
-// 		}
-// 	}
-// 	
-// #endif
-// }
+void NDBaseDirector::DispatchOneMessage()
+{
+    static NDTransData bao;
+    //NDTransData* data = NDMessageCenter::DefaultMessageCenter()->GetMessage();
+    for (int n = 0; n < 10; n++) 
+    {
+        if (NDNetMsgMgr::GetSingleton().GetServerMsgPacket(bao))
+        {
+            NDNetMsgPoolObj.Process(&bao);
+            if ( (bao.GetCode() != _MSG_WALK)			&& 
+                (bao.GetCode() != _MSG_PLAYER_EXT)		&&
+                (bao.GetCode() != _MSG_TALK)	
+                )
+                break;
+            //NDMessageCenter::DefaultMessageCenter()->DelMessage();
+            //delete data;
+        }
+        else 
+        {
+            break;
+        }
+    }
+}
 
 // - (void)drawScene
 // {

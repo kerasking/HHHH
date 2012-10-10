@@ -15,6 +15,9 @@ int GetCurrentMonsterRound();
 int GetPlayerLookface();
 const char* GetSMImgPath(const char* name);
 
+bool SwichKeyToServer(const char* pszIp, int nPort, const char* pszAccountName,
+		const char* pszPwd, const char* pszServerName);
+
 class ScriptObjectGameLogic: public NDEngine::ScriptObject
 {
 public:

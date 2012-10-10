@@ -489,13 +489,10 @@ protected:
  
  @since v0.8.2
  */
-class CCDisplayLinkDirector : public CCDirector
+class CC_DLL CCDisplayLinkDirector : public CCDirector
 {
 public:
-	CCDisplayLinkDirector(void) 
-		: m_bInvalid(false)
-	{}
-
+	CCDisplayLinkDirector(void);
 	virtual void mainLoop(void);
 	virtual void setAnimationInterval(double dValue);
 	virtual void startAnimation(void);

@@ -62,8 +62,16 @@
 		delete p;					\
 		p = NULL; } }while(0)
 
-enum{	UI_TAG_BEGIN	= 10000,	UI_TAG_DIALOG,};
+enum
+{
+	UI_TAG_BEGIN	= 10000,
+	UI_TAG_DIALOG,
+};
 
-enum{	UI_ZORDER_BEGIN	= 0,	UI_ZORDER_DIALOG = 1000,};
+enum
+{
+	UI_ZORDER_BEGIN	= 0,
+	UI_ZORDER_DIALOG = 1000,
+};
 
 #endif // __DEFINE_H__

@@ -12,6 +12,7 @@
 #include "NDTransData.h"
 #include "NDUtility.h"
 #include <map>
+#include <NDDataTransThread.h>
 
 using namespace NDEngine;
 using namespace LuaPlus;
@@ -68,7 +69,7 @@ void SendMsg(NDTransData* data)
 	{
 		return;
 	}
-	// SEND_DATA(*data);
+	 SEND_DATA(*data);
 }
 
 void ScriptNetMsg::OnLoad()
