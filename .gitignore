@@ -5,6 +5,9 @@
 *.old
 *.sdf
 *.db
+
+*.so
+
 debug/
 Debug/
 release/

@@ -176,3 +176,13 @@ bool NDAnimation::lastFrameEnd( NDFrameRunRecord* pkRunRecord )
 
 	return false;
 }
+
+void NDAnimation::setFrames(cocos2d::CCMutableArray<NDFrame*>* pkFrames)
+{
+	m_pkFrames = pkFrames;
+}
+
+cocos2d::CCMutableArray<NDFrame*>* NDAnimation::getFrames()
+{
+	return m_pkFrames;
+}

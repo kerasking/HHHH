@@ -140,7 +140,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	//ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
 
 	NDPlayer::pugeHero();
-	NDPlayer& kPlayer = NDPlayer::defaultHero(8);
+	NDPlayer& kPlayer = NDPlayer::defaultHero(1);
 
 	int x = 100;
 	int y = 100;
