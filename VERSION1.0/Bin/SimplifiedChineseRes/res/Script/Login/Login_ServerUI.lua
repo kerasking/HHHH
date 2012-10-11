@@ -64,7 +64,7 @@ function p.LoadUI(strAccount, strPwd)
         return false;
     end
 
-    uiLoad:Load("ServerSelect.ini", layer, p.OnUIEvent, 0, 0);--选择服务器
+    uiLoad:Load("login_2.ini", layer, p.OnUIEvent, 0, 0);--选择服务器
     uiLoad:Free();
 
     p.Init();
