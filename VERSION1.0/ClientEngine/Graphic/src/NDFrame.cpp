@@ -318,10 +318,10 @@ void NDFrame::run(float fScale)
 			continue;
 		}
 
-		TILE_REVERSE_ROTATION reverseRotation = tileReverseRotationWithReverse(
-				true, pkFrameTile->getRotation());
-		pkTile->setReverse(reverseRotation.reverse);
-		//	tile->setRotation(reverseRotation.rotation);
+		TILE_REVERSE_ROTATION kReverseRotation = tileReverseRotationWithReverse(
+				pkAnimation->getReverse(), pkFrameTile->getRotation());
+		pkTile->setReverse(kReverseRotation.reverse);
+		pkTile->setRotation(kReverseRotation.rotation);
 
 		NDEngine::NDSprite *pkSprite =
 				(NDEngine::NDSprite *) pkAnimationGroup->getRuningSprite();
@@ -361,7 +361,7 @@ void NDFrame::run(float fScale)
 		if (pkAnimation->getReverse())
 		{
 			int tileW = this->getTileW(pkRecord->getW(), pkRecord->getH(),
-					reverseRotation.rotation);
+					kReverseRotation.rotation);
 //			if (reverseRotation.rotation == NDRotationEnumRotation90 || reverseRotation.rotation == NDRotationEnumRotation270) 
 //			{
 //				tileW = record.h;
@@ -1042,13 +1042,15 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 
 		if (pkSprite->IsNonRole())
 		{
-			std::vector < std::string > *vImg = pkAnimationGroup->getImages();
+			pkTexture = NDPicturePool::DefaultPool()->AddPicture(pkAnimationGroup->getImages()->at(imageIndex).c_str());
 
-			if (vImg && vImg->size() > imageIndex)
-			{
-				pkTexture = CCTextureCache::sharedTextureCache()->addImage(
-						(*vImg)[imageIndex].c_str());
-			}
+// 			std::vector < std::string > *vImg = pkAnimationGroup->getImages();
+// 
+// 			if (vImg && vImg->size() > imageIndex)
+// 			{
+// 				pkTexture = CCTextureCache::sharedTextureCache()->addImage(
+// 						(*vImg)[imageIndex].c_str());
+// 			}
 		}
 
 		if (pkTexture)
@@ -1056,12 +1058,14 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 			return pkTexture;
 		}
 	}
+
 	std::vector < std::string > *vImg = pkAnimationGroup->getImages();
 	if (vImg && vImg->size() > imageIndex)
 	{
 		pkTexture = CCTextureCache::sharedTextureCache()->addImage(
 				(*vImg)[imageIndex].c_str());
 	}
+
 	//tex = CCTextureCache::sharedTextureCache()->addImage(animationGroup->getImages()->getObjectAtIndex(imageIndex);
 	/*switch (replace) 
 	 {

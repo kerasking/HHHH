@@ -27,6 +27,33 @@ typedef enum
 	PictureRotation270
 } PictureRotation;
 
+typedef enum
+{
+	ContainerTypeNormal,
+	ContainerTypeAddPic,
+	ContainerTypeAddTexture
+}ContainerTypeOfTexture;
+
+class NDTexture:public NDObject
+{
+	DECLARE_CLASS(NDTexture);
+public:
+
+	NDTexture();
+	virtual ~NDTexture();
+
+	virtual void Initialization(const char* pszImageFile);
+
+	CCTexture2D* GetTexture();
+	CCTexture2D* GetTextureRetain();
+
+protected:
+
+	CCTexture2D* m_pkTexture;
+
+private:
+};
+
 class NDPicture: public NDObject
 {
 	DECLARE_CLASS (NDPicture)
@@ -100,7 +127,9 @@ class NDPicturePool: public NDObject
 	DECLARE_CLASS (NDPicturePool)
 	NDPicturePool();
 	~NDPicturePool();
+
 public:
+
 	static NDPicturePool* DefaultPool();
 
 	static void PurgeDefaultPool();
@@ -108,13 +137,15 @@ public:
 	NDPicture* AddPicture(const char* imageFile, bool gray = false);
 	NDPicture* AddPicture(const char* imageFile, int hrizontalPixel,
 			int verticalPixel = 0, bool gray = false);
+	CCTexture2D* AddTexture(const char* pszImageFile);
 
 	void RemovePicture(const char* imageFile);
 
 	void Recyle();
 
 private:
-	NDPictureDictionary *m_textures;
+
+	NDPictureDictionary* m_pkTextures;
 
 	std::map<std::string, CGSize> m_mapStr2Size;
 
