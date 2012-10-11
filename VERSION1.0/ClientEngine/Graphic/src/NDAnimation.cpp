@@ -113,7 +113,7 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 			pkFrame = m_pkFrames->getObjectAtIndex(
 					pkRunFrameRecord->getNextFrameIndex());
 
-			pkRunFrameRecord->NextFrame((int) m_pkFrames->count());
+			pkRunFrameRecord->NextFrame(3);
 			/*
 			 //当前帧的索引值改变
 			 if (++runFrameRecord.currentFrameIndex == (int)[_frames count])

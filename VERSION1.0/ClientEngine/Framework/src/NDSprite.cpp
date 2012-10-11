@@ -951,32 +951,32 @@ void NDSprite::standAction( bool bStand )
 {
 	bool bEnd = m_pkCurrentAnimation->lastFrameEnd(m_pkFrameRunRecord);
 
-	if (bEnd)
-	{
-		int nAnimationMax = (int)m_pkAniGroup->getAnimations()->count();
-
-		if (m_pkCurrentAnimation->getCurIndexInAniGroup() == MANUELROLE_RELAX)
-		{
-			m_dBeginTime = (double)time(0);
-		}
-		else if (m_pkCurrentAnimation->getCurIndexInAniGroup() == MANUELROLE_STAND &&
-			nAnimationMax > MANUELROLE_RELAX)
-		{
-			NSTimeInterval dCurTime = (double)time(0);
-
-			if ((dCurTime - m_dBeginTime) > 5 && rand() % 100 > 95)
-			{
-				m_dBeginTime = dCurTime;
-				SetCurrentAnimation(MANUELROLE_RELAX,m_bReverse);
-				m_pkCurrentAnimation->setReverse(m_bReverse);
-			}
-		}
-		else if (bStand)
-		{
-			SetCurrentAnimation(MANUELROLE_STAND,m_bReverse);
-			m_pkCurrentAnimation->setReverse(m_bReverse);
-		}
-	}
+// 	if (bEnd)
+// 	{
+// 		int nAnimationMax = (int)m_pkAniGroup->getAnimations()->count();
+// 
+// 		if (m_pkCurrentAnimation->getCurIndexInAniGroup() == MANUELROLE_RELAX)
+// 		{
+// 			m_dBeginTime = (double)time(0);
+// 		}
+// 		else if (m_pkCurrentAnimation->getCurIndexInAniGroup() == MANUELROLE_STAND &&
+// 			nAnimationMax > MANUELROLE_RELAX)
+// 		{
+// 			NSTimeInterval dCurTime = (double)time(0);
+// 
+// 			if ((dCurTime - m_dBeginTime) > 5 && rand() % 100 > 95)
+// 			{
+// 				m_dBeginTime = dCurTime;
+// 				SetCurrentAnimation(MANUELROLE_RELAX,m_bReverse);
+// 				m_pkCurrentAnimation->setReverse(m_bReverse);
+// 			}
+// 		}
+// 		else if (bStand)
+// 		{
+// 			SetCurrentAnimation(MANUELROLE_STAND,m_bReverse);
+// 			m_pkCurrentAnimation->setReverse(m_bReverse);
+// 		}
+// 	}
 }
 
 }
