@@ -64,6 +64,8 @@ typedef enum
 	//! 2-bit PVRTC-compressed texture: PVRTC2
 	kCCTexture2DPixelFormat_PVRTC2,
 
+	kCCTexture2DPixelFormat_RGBA8,
+
 	//! Default texture format: RGBA8888
 	kCCTexture2DPixelFormat_Default = kCCTexture2DPixelFormat_RGBA8888,
 
@@ -120,7 +122,13 @@ class CC_DLL CCTexture2D : public CCObject
 	CC_PROPERTY_READONLY(bool, m_bHasPremultipliedAlpha, HasPremultipliedAlpha);
 	CC_PROPERTY(ccResolutionType, m_eResolutionType, ResolutionType);
 
+	CC_SYNTHESIZE_READONLY(bool,m_bKeepData,KeepData);							///< @author xiezhenghai
+	CC_SYNTHESIZE_READONLY(void*,m_pData,Data);						///< @author xiezhenghai
+	CC_SYNTHESIZE_READONLY(GLubyte,m_nContainerType,ContainerType);	///< @author xiezhenghai
+
+
 public:
+
 	CCTexture2D();
 	virtual ~CCTexture2D();
 
@@ -131,7 +139,8 @@ public:
 	void* keepData(void *data, unsigned int length);
 
 	/** Intializes with a texture2d with data */
-	bool initWithData(const void* data, CCTexture2DPixelFormat pixelFormat, unsigned int pixelsWide, unsigned int pixelsHigh, const CCSize& contentSize);
+	bool initWithData(const void* data, CCTexture2DPixelFormat pixelFormat,
+		unsigned int pixelsWide, unsigned int pixelsHigh, const CCSize& contentSize);
 
 	/**
 	 Drawing extensions to make it easy to draw basic quads using a CCTexture2D object.
@@ -151,7 +160,9 @@ public:
 
 	bool initWithImage(CCImage *uiImage, ccResolutionType resolution);
 
-	bool initWithPaletteData(const void* pData,CCTexture2DPixelFormat ePixelFormat,int nWidth,int nHeight,CCSize kSize,unsigned int uiSizeOfData);
+	bool initWithPaletteData(const void* pData,
+		CCTexture2DPixelFormat ePixelFormat,int nWidth,
+		int nHeight,CCSize kSize,unsigned int uiSizeOfData);
 	bool initWithPalettePNG(const char* pszPNGFile);
 
 	/**
@@ -159,7 +170,8 @@ public:
 	 Note that the generated textures are of type A8 - use the blending mode (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA).
 	 */
 	/** Initializes a texture from a string with dimensions, alignment, font name and font size */
-	bool initWithString(const char *text, const CCSize& dimensions, CCTextAlignment alignment, const char *fontName, float fontSize);
+	bool initWithString(const char *text, const CCSize& dimensions,
+		CCTextAlignment alignment, const char *fontName, float fontSize);
 	/** Initializes a texture from a string with font name and font size */
 	bool initWithString(const char *text, const char *fontName, float fontSize);
 
@@ -172,7 +184,8 @@ public:
 	 Note that the generated textures don't have their alpha premultiplied - use the blending mode (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA).
 	 */
 	/** Initializes a texture from a PVRTC buffer */
-	bool initWithPVRTCData(const void *data, int level, int bpp, bool hasAlpha, int length, CCTexture2DPixelFormat pixelFormat);
+	bool initWithPVRTCData(const void *data, int level, int bpp,
+		bool hasAlpha, int length, CCTexture2DPixelFormat pixelFormat);
 #endif // CC_SUPPORT_PVRTC
 	/** Initializes a texture from a PVR file */
 	bool initWithPVRFile(const char* file);
@@ -243,7 +256,9 @@ public:
 	static void PVRImagesHavePremultipliedAlpha(bool haveAlphaPremultiplied);
 
 private:
-	bool initPremultipliedATextureWithImage(CCImage * image, unsigned int pixelsWide, unsigned int pixelsHigh);
+
+	bool initPremultipliedATextureWithImage(CCImage * image,
+		unsigned int pixelsWide, unsigned int pixelsHigh);
 
 	// By default PVR images are treated as if they don't have the alpha channel premultiplied
 	bool m_bPVRHaveAlphaPremultiplied;

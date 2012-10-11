@@ -68,7 +68,10 @@ m_uName(0),
 m_fMaxS(0.0f),
 m_fMaxT(0.0f),
 m_bHasPremultipliedAlpha(false),
-m_bPVRHaveAlphaPremultiplied(true)
+m_bPVRHaveAlphaPremultiplied(true),
+m_pData(0),
+m_bKeepData(false),
+m_nContainerType(0)
 {
 }
 
@@ -248,7 +251,8 @@ bool CCTexture2D::initWithImage(CCImage *uiImage)
 
 bool CCTexture2D::initWithImage(CCImage * uiImage, ccResolutionType resolution)
 {
-	unsigned int POTWide, POTHigh;
+	unsigned int POTWide = 0;
+	unsigned int POTHigh = 0;
 
 	if (uiImage == NULL)
 	{
@@ -738,6 +742,52 @@ bool CCTexture2D::initWithPaletteData(const void* pData,
 		CCTexture2DPixelFormat ePixelFormat, int nWidth, int nHeight,
 		CCSize kSize, unsigned int uiSizeOfData)
 {
+	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
+	glGenTextures(1,&m_uName);
+	glBindTexture(GL_TEXTURE_2D,m_uName);
+
+	setAntiAliasTexParameters();
+
+	switch(ePixelFormat)
+	{
+	case kCCTexture2DPixelFormat_RGBA8888:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei) nWidth, (GLsizei) nWidth, 0, GL_RGBA, GL_UNSIGNED_BYTE, pData);
+		break;
+	case kCCTexture2DPixelFormat_RGBA4444:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei) nWidth, (GLsizei) nWidth, 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, pData);
+		break;
+	case kCCTexture2DPixelFormat_RGB5A1:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei) nWidth, (GLsizei) nWidth, 0, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, pData);
+		break;
+	case kCCTexture2DPixelFormat_RGB565:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei) nWidth, (GLsizei) nWidth, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, pData);
+		break;
+	case kCCTexture2DPixelFormat_AI88:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, (GLsizei) nWidth, (GLsizei) nWidth, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, pData);
+		break;
+	case kCCTexture2DPixelFormat_A8:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, (GLsizei) nWidth, (GLsizei) nWidth, 0, GL_ALPHA, GL_UNSIGNED_BYTE, pData);
+		break;
+	case kCCTexture2DPixelFormat_RGBA8:
+		glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_PALETTE8_RGBA8_OES, nWidth, nWidth, 0, uiSizeOfData, pData);
+		break;
+	default:
+		//[NSException raise:NSInternalInconsistencyException format:@""];
+		break;
+
+	}
+
+// 	size_ = size;
+// 	width_ = width;
+// 	height_ = height;
+// 	format_ = pixelFormat;
+// 	maxS_ = size.width / (float)width;
+// 	maxT_ = size.height / (float)height;
+// 
+// 	hasPremultipliedAlpha_ = NO;
+// 	_data = NULL;
+// 	_ContainerType = 0;
+
 	return true;
 }
 
