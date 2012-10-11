@@ -17,6 +17,8 @@
 #include "CCTexture2D.h"
 #include "ccTypes.h"
 
+using namespace cocos2d;
+
 namespace NDEngine
 {
 typedef enum

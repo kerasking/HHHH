@@ -1042,7 +1042,7 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 
 		if (pkSprite->IsNonRole())
 		{
-			pkTexture = NDPicturePool::DefaultPool()->AddPicture(pkAnimationGroup->getImages()->at(imageIndex).c_str());
+			//pkTexture = NDPicturePool::DefaultPool()->AddPicture(pkAnimationGroup->getImages()->at(imageIndex).c_str());
 
 // 			std::vector < std::string > *vImg = pkAnimationGroup->getImages();
 // 

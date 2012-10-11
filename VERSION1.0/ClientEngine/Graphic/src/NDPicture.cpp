@@ -17,6 +17,7 @@ using namespace cocos2d;
 namespace NDEngine
 {
 IMPLEMENT_CLASS(NDPicture, NDObject)
+IMPLEMENT_CLASS(NDTexture,NDObject)
 
 NDPicture::NDPicture(bool canGray/*=false*/)
 {
@@ -766,6 +767,7 @@ CCTexture2D* NDPicturePool::AddTexture( const char* pszImageFile )
 
 	stringstream kStream;
 	kStream << pszImageFile;
+	return 0;
 }
 
 
@@ -786,12 +788,12 @@ void NDTexture::Initialization( const char* pszImageFile )
 
 CCTexture2D* NDTexture::GetTexture()
 {
-
+	return 0;
 }
 
 CCTexture2D* NDTexture::GetTextureRetain()
 {
-
+	return 0;
 }
 
 }
