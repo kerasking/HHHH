@@ -38,14 +38,7 @@ function p.LoadUI()
     uiLoad:Load("Loading.ini", layer, p.OnUIEvent, 0, 0);
     uiLoad:Free();
 
-    local LoadingProcess = RecursivUIExp(layer, {ID_LOADING_PROCESS_CTRL} );
-    if CheckP(LoadingProcess) then
-        LoadingProcess:SetProcess(0);
-        LoadingProcess:SetTotal(100);
-    end
-	
-	p.OnConstruct();
-	layer:SetDestroyNotify(p.OnDeConstruct);
+
 	
     return true;
 end

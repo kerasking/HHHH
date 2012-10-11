@@ -41,13 +41,13 @@ function p.LoadUI()
     uiLoad:Load("Register1_other.ini", layer, p.OnUIEvent, 0, 0);--注册帐号
     --uiLoad:Load("Login_Main.ini", layer, p.OnUIEvent, 0, 0);--注册帐号
     uiLoad:Free();
-    p.Init();
+    p.Init(); --error here
     return true;
 end
 
 function p.getUiLayer()
     local scene = GetSMLoginScene();
-    if not CheckP(scene) then
+    if not CheckP(scene) then --error here
         return nil;
     end
 
@@ -60,7 +60,7 @@ function p.getUiLayer()
 end
 
 function p.Init()
-    local uiLayer = p.getUiLayer();
+    local uiLayer = p.getUiLayer(); --error here
     local pCheckBox = RecursiveCheckBox(uiLayer,{ID_ACCOUNTUI_SAVEPWD});
     if CheckP(pCheckBox) then
         pCheckBox:SetSelect(true);

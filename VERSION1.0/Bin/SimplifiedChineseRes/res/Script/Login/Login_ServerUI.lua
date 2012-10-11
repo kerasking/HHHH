@@ -114,4 +114,4 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 	PrintString("fefaew");
 	return true;
 end
-RegisterGlobalEventHandler(103,"Login_Main.LoadUI", p.LoadUI);
+RegisterGlobalEventHandler(103,"Login_ServerUI.LoadUI", p.LoadUI);

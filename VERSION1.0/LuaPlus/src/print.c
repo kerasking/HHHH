@@ -43,13 +43,9 @@ static void PrintString(const TString* ts)
 		case '\v': printf("\\v"); break;
 		default:	
 			if (isprint((unsigned char)c))
-			{
 				putchar(c);
-			}
 			else
-			{
 				printf("\\%03u",(unsigned char)c);
-			}
 		}
 	}
 	putchar('"');
@@ -57,26 +53,25 @@ static void PrintString(const TString* ts)
 
 static void PrintConstant(const Proto* f, int i)
 {
-	const TValue *o = &f->k[i];
-
-	switch (ttype(o))
-	{
-		case LUA_TNIL:
-			printf("nil");
-			break;
-		case LUA_TBOOLEAN:
-			printf(bvalue(o) ? "true" : "false");
-			break;
-		case LUA_TNUMBER:
-			printf(LUA_NUMBER_FMT,nvalue(o));
-			break;
-		case LUA_TSTRING:
-			PrintString(rawtsvalue(o));
-			break;
-		default:				/* cannot happen */
-			printf("? type=%d",ttype(o));
-			break;
-	}
+ const TValue* o=&f->k[i];
+ switch (ttype(o))
+ {
+  case LUA_TNIL:
+	printf("nil");
+	break;
+  case LUA_TBOOLEAN:
+	printf(bvalue(o) ? "true" : "false");
+	break;
+  case LUA_TNUMBER:
+	printf(LUA_NUMBER_FMT,nvalue(o));
+	break;
+  case LUA_TSTRING:
+	PrintString(rawtsvalue(o));
+	break;
+  default:				/* cannot happen */
+	printf("? type=%d",ttype(o));
+	break;
+ }
 }
 
 static void PrintCode(const Proto* f)
