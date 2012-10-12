@@ -84,6 +84,7 @@ public:
 	~NDManualRole();
 
 public:
+
 	void Update(unsigned long ulDiff);
 	void SetAction(bool bMove, bool bIgnoreFighting = false);
 	bool AssuredRidePet();hide
@@ -150,6 +151,8 @@ public:
 	}
 	void teamSetServerDir(int dir);
 	void teamSetServerPosition(int iCol, int iRow);
+
+	void SetShowPet(ShowPetInfo& kInfo);
 
 	bool IsSafeProtected()
 	{

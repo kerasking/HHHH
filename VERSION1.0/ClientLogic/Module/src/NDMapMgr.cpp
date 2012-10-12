@@ -1,6 +1,10 @@
 #include "NDMapMgr.h"
 #include "NDPlayer.h"
 #include "NDConstant.h"
+#include "NDDirector.h"
+#include "NDMapLayer.h"
+#include "GameScene.h"
+#include "NDItemType.h"
 
 namespace NDEngine
 {
@@ -232,8 +236,8 @@ void NDMapMgr::AddManualRole(int nID, NDManualRole* pkRole)
 
 	m_mapManualRole.insert(make_pair(nID, pkRole));
 
-	NDLayer* pkLayer = getMapLayerOfScene(
-			NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG));
+	NDLayer* pkLayer = (NDLayer*)getMapLayerOfScene(
+		NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG));
 
 	if (0 == pkLayer)
 	{
@@ -257,12 +261,45 @@ void NDMapMgr::AddManualRole(int nID, NDManualRole* pkRole)
 
 NDManualRole* NDMapMgr::GetManualRole(int nID)
 {
+	NDPlayer& kRole = NDPlayer::defaultHero();
+
+	if (nID == kRole.m_nID)
+	{
+		return &kRole;
+	}
+
+	if (m_mapManualRole.empty())
+	{
+		return 0;
+	}
+
+	map_manualrole::iterator it = m_mapManualRole.find(nID);
+
+	if (m_mapManualRole.end() != it)
+	{
+		return it->second;
+	}
+
 	return 0;
 }
 
 NDManualRole* NDMapMgr::GetManualRole(const char* pszName)
 {
-	return 0;
+	NDManualRole* pkResult = 0;
+
+	for (map_manualrole::iterator it = m_mapManualRole.begin();
+		m_mapManualRole.end() != it;it++)
+	{
+		NDManualRole* pkRole = it->second;
+
+		if (0 == strcmp(pkRole->m_strName.c_str(),pszName))
+		{
+			pkResult = it->second;
+			break;
+		}
+	}
+
+	return pkResult;
 }
 
 void NDMapMgr::Update(unsigned long ulDiff)
@@ -302,8 +339,69 @@ void NDMapMgr::DelManualRole( int nID )
 
 		if (pkRole)
 		{
-			SAFE_DELETE_NODE(pkRole->GetRidePet()); ///< ß€ÓÐŒ™Îïß@ÍæÒâ†á£¿ ¹ùºÆ
 			SAFE_DELETE_NODE(pkRole);
+		}
+
+		m_mapManualRole.erase(it);
+	}
+}
+
+void NDMapMgr::processPlayerExt( NDTransData* pkData,int nLength )
+{
+	if (0 == pkData || 0 == nLength)
+	{
+		return;
+	}
+
+	int nUserID = 0;
+	(*pkData) >> nUserID;
+	int dwStatus = 0;
+	(*pkData) >> dwStatus;
+
+	NDManualRole* pkRole = 0;
+	pkRole = NDMapMgrObj.GetManualRole(nUserID);
+
+	if (0 == pkRole)
+	{
+		return;
+	}
+
+	pkRole->SetState(dwStatus);
+	pkRole->unpakcAllEquip();
+	
+	unsigned char btAmount = 0;
+	(*pkData) >> btAmount;
+
+	for (int i = 0;i < btAmount;i++)
+	{
+		int nEquipTypeID = 0;
+		(*pkData) >> nEquipTypeID;
+		NDItemType* pkItem = ItemMgrObj.QueryItemType(nEquipTypeID);
+
+		if (0 == pkItem)
+		{
+			continue;
+		}
+
+		pkRole->m_vEquipsID.push_back(nEquipTypeID);
+		int nID = pkItem->m_data.m_lookface;
+		int nQuality = nEquipTypeID % 10;
+
+		if (0 == nID)
+		{
+			continue;
+		}
+
+		int nAnimationID = 0;
+
+		if (10000 < nID)
+		{
+			nAnimationID = (nID % 100000) / 10;
+		}
+
+		if (nAnimationID >= 1900 && nAnimationID < 2000 || nID >= 19000 && nID < 20000)
+		{
+			ShowPetInfo kShowPetInfo = {0};
 		}
 	}
 }

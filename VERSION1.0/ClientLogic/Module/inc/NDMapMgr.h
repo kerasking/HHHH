@@ -18,6 +18,7 @@
 #include "NDNpc.h"
 #include "NDBaseRole.h"
 #include "NDUICustomView.h"
+#include "NDMapLayer.h"
 
 using namespace std;
 
@@ -276,6 +277,7 @@ public:
 
 	virtual bool process( MSGID usMsgID, NDEngine::NDTransData* pkData, int nLength );
 	void processPlayer(NDTransData* pkData,int nLength);
+	void processPlayerExt(NDTransData* pkData,int nLength);
 
 protected:
 
