@@ -23,7 +23,7 @@ namespace LuaPlus
 **/
 inline bool LuaObject::operator==(const LuaObject& right) const
 {
-	//luaplus_assert(m_state);
+	luaplus_assert(m_state);
 	return m_state->Equal(*this, right) != 0;
 }
 
@@ -32,7 +32,7 @@ inline bool LuaObject::operator==(const LuaObject& right) const
 **/
 inline bool LuaObject::operator<(const LuaObject& right) const
 {
-	//luaplus_assert(m_state);
+	luaplus_assert(m_state);
 	return m_state->LessThan(*this, right) != 0;
 }
 

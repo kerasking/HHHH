@@ -58,7 +58,7 @@ function p.LoadUI()
     uiLoad:Load("RegisterRole.ini", layer, p.OnUIEvent, 0, 0);--创建角色
     uiLoad:Free();
 
-    p.InitUI();
+    p.InitUI();--error here
     return true;
 end
 
@@ -77,7 +77,7 @@ function p.getUiLayer()
 end
 
 function p.InitUI()
-    local nDataNum = table.getn(p.BtnTagList);
+    local nDataNum = table.getn(p.BtnTagList);--error here
     if nDataNum < 1 then
         LogInfo("InitUI NULL Data!");
         return;

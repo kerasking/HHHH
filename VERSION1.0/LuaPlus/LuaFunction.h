@@ -202,13 +202,13 @@ public:
 	LuaFunctionVoid(const LuaObject& functionObj) :
 		m_functionObj(functionObj)
 	{
-		//luaplus_assert(m_functionObj.IsFunction());
+		luaplus_assert(m_functionObj.IsFunction());
 	}
 
 	LuaFunctionVoid(LuaState* state, const char* functionName)
 	{
 		m_functionObj = state->GetGlobals()[functionName];
-		//luaplus_assert(m_functionObj.IsFunction());
+		luaplus_assert(m_functionObj.IsFunction());
 	}
 
 	void operator()()

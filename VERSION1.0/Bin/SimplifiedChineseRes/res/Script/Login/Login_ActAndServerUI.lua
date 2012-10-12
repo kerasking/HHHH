@@ -84,13 +84,13 @@ function p.LoadUI()
 
     uiLoad:Load("ServerChange.ini", layer, p.OnUIEvent, 0, 0);--帐号和服务器选择
     uiLoad:Free();
-    p.InitUIData();
+    p.InitUIData(); --error here
     return true;
 end
 
 function p.getUiLayer()
     local scene = GetSMLoginScene();
-    if not CheckP(scene) then
+    if not CheckP(scene) then --error here
         return nil;
     end
 
@@ -105,7 +105,7 @@ end
 ------------初始化－－－－－－－－
 function p.InitUIData()
     --服务器列表排序，根据实际数量决定是否显示上一页和下一页的按钮
-    local layer = p.getUiLayer();
+    local layer = p.getUiLayer(); --error here
     local PageUp=GetButton(layer,ID_ACCOUNT_BTN_PAGE_UP);
     if CheckP(PageUp) then
         PageUp:SetVisible(false);
