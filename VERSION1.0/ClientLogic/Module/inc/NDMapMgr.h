@@ -17,6 +17,7 @@
 #include "NDMonster.h"
 #include "NDNpc.h"
 #include "NDBaseRole.h"
+#include "NDUICustomView.h"
 
 using namespace std;
 
@@ -255,11 +256,22 @@ typedef VEC_BATTLE_SKILL::iterator VEC_BATTLE_SKILL_IT;
 //typedef vector<EmailData*>	vec_email;
 //typedef vec_email::iterator	vec_email_it;
 
-class NDMapMgr:public NDObject
+class NDMapMgr:
+	public NDObject,
+	public TSingleton<NDMapMgr>,
+	public NDMsgObject,
+	public NDUIDialogDelegate,
+	public NDUICustomViewDelegate
 {
 public:
+
+	DECLARE_CLASS(NDMapMgr);
+
 	NDMapMgr();
 	virtual ~NDMapMgr();
+
+	virtual bool process( MSGID usMsgID, NDEngine::NDTransData* pkData, int nLength );
+
 protected:
 private:
 };
