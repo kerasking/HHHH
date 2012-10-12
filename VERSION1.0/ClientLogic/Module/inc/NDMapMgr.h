@@ -152,19 +152,6 @@ enum
 	KEY_LENGTH = 10, // 礼包序列号长度
 };
 
-enum  
-{
-	_MARRIAGE_APPLY = 1, // 结婚申请
-	_MARRIAGE_AGREE = 2, // 同意结婚
-	_MARRIAGE_REFUSE = 3, // 拒绝结婚
-	_DIVORCE_APPLY = 4, // 离婚申请
-	_DIVORCE_AGREE = 5, // 同意离婚
-	_MARRIAGE_QUARY = 6, // 下达配偶ID
-	_MARRIAGE_MATE_LOGIN = 7, // 配偶上线
-	_MARRIAGE_MATE_ONLINE = 8, // 配偶在线
-	_MARRIAGE_MATE_LOGOUT = 9, // 配偶下线
-};
-
 enum
 {
 	RECHARGE_RETURN_ACT_QUERY			= 0,	// 充值说明
@@ -267,6 +254,8 @@ class NDMapMgr:
 public:
 
 	typedef map<int,NDManualRole*> map_manualrole;
+	typedef vector<NDNpc*> VEC_NPC;
+	typedef vector<NDMonster*> VEC_MONSTER;
 
 	DECLARE_CLASS(NDMapMgr);
 
@@ -278,17 +267,29 @@ public:
 	virtual bool process( MSGID usMsgID, NDEngine::NDTransData* pkData, int nLength );
 	void processPlayer(NDTransData* pkData,int nLength);
 	void processPlayerExt(NDTransData* pkData,int nLength);
+	void processWalk(NDTransData* pkData,int nLength);
+	void processWalkTo(NDTransData& kData);
+	void processChangeRoom(NDTransData* pkData,int nLength);
+	void processNPCInfoList(NDTransData* pkData,int nLength);
 
 protected:
 
 	void AddManualRole(int nID,NDManualRole* pkRole);
 	NDManualRole* GetManualRole(int nID);
 	NDManualRole* GetManualRole(const char* pszName);
+	void AddAllNPCToMap();
 	void DelManualRole(int nID);
+
+	NDNpc* GetNPC(int nID);
 
 	NDMapLayer* getMapLayerOfScene(NDScene* pkScene);
 
+	virtual void OnCustomViewRadioButtonSelected( NDUICustomView* customView,
+		unsigned int radioButtonIndex, int ortherButtonTag );
+
 	map_manualrole m_mapManualRole;
+	VEC_NPC m_vNPC;
+	VEC_MONSTER m_vMonster;
 
 private:
 };

@@ -638,5 +638,21 @@ void NDNpc::ShowHightLight(bool bShow)
 
 bool NDEngine::NDNpc::IsActionOnRing()
 {
+	throw std::exception("The method or operation is not implemented.");
 	return true;
+}
+
+void NDEngine::NDNpc::initUnpassPoint()
+{
+	throw std::exception("The method or operation is not implemented.");
+}
+
+void NDEngine::NDNpc::SetDirectOnTalk( bool bOn )
+{
+	throw std::exception("The method or operation is not implemented.");
+}
+
+void NDEngine::NDNpc::HandleNPCMask( bool bSet )
+{
+	throw std::exception("The method or operation is not implemented.");
 }

@@ -2730,4 +2730,10 @@ bool NDManualRole::IsDirFaceRight(int nDir)
 
 	return false;
 }
+
+void NDManualRole::SetShowPet( ShowPetInfo& kInfo )
+{
+	
+}
+
 }

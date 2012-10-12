@@ -5,6 +5,9 @@
 #include "NDMapLayer.h"
 #include "GameScene.h"
 #include "NDItemType.h"
+#include "Battle.h"
+#include "define.h"
+#include "NDUISynLayer.h"
 
 namespace NDEngine
 {
@@ -29,6 +32,31 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 	case _MSG_CHG_PET_POINT:
 	{
 		int nBtAnswer = pkData->ReadByte();
+	}
+		break;
+	case _MSG_PLAYER:
+	{
+		processPlayer(pkData, nLength);
+	}
+		break;
+	case _MSG_PLAYER_EXT:
+	{
+		processPlayerExt(pkData, nLength);
+	}
+		break;
+	case _MSG_WALK_TO:
+	{
+		processWalkTo(*pkData);
+	}
+		break;
+	case _MSG_NPCINFO_LIST:
+	{
+		processNPCInfoList(pkData, nLength);
+	}
+		break;
+	case _MSG_ROOM:
+	{
+		processChangeRoom(pkData, nLength);
 	}
 		break;
 	default:
@@ -236,8 +264,8 @@ void NDMapMgr::AddManualRole(int nID, NDManualRole* pkRole)
 
 	m_mapManualRole.insert(make_pair(nID, pkRole));
 
-	NDLayer* pkLayer = (NDLayer*)getMapLayerOfScene(
-		NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG));
+	NDLayer* pkLayer = (NDLayer*) getMapLayerOfScene(
+			NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG));
 
 	if (0 == pkLayer)
 	{
@@ -288,11 +316,11 @@ NDManualRole* NDMapMgr::GetManualRole(const char* pszName)
 	NDManualRole* pkResult = 0;
 
 	for (map_manualrole::iterator it = m_mapManualRole.begin();
-		m_mapManualRole.end() != it;it++)
+			m_mapManualRole.end() != it; it++)
 	{
 		NDManualRole* pkRole = it->second;
 
-		if (0 == strcmp(pkRole->m_strName.c_str(),pszName))
+		if (0 == strcmp(pkRole->m_strName.c_str(), pszName))
 		{
 			pkResult = it->second;
 			break;
@@ -324,7 +352,7 @@ NDMapLayer* NDMapMgr::getMapLayerOfScene(NDScene* pkScene)
 	return (NDMapLayer*) pkNode;
 }
 
-void NDMapMgr::DelManualRole( int nID )
+void NDMapMgr::DelManualRole(int nID)
 {
 	if (-1 == nID)
 	{
@@ -346,7 +374,7 @@ void NDMapMgr::DelManualRole( int nID )
 	}
 }
 
-void NDMapMgr::processPlayerExt( NDTransData* pkData,int nLength )
+void NDMapMgr::processPlayerExt(NDTransData* pkData, int nLength)
 {
 	if (0 == pkData || 0 == nLength)
 	{
@@ -368,11 +396,11 @@ void NDMapMgr::processPlayerExt( NDTransData* pkData,int nLength )
 
 	pkRole->SetState(dwStatus);
 	pkRole->unpakcAllEquip();
-	
+
 	unsigned char btAmount = 0;
 	(*pkData) >> btAmount;
 
-	for (int i = 0;i < btAmount;i++)
+	for (int i = 0; i < btAmount; i++)
 	{
 		int nEquipTypeID = 0;
 		(*pkData) >> nEquipTypeID;
@@ -399,11 +427,211 @@ void NDMapMgr::processPlayerExt( NDTransData* pkData,int nLength )
 			nAnimationID = (nID % 100000) / 10;
 		}
 
-		if (nAnimationID >= 1900 && nAnimationID < 2000 || nID >= 19000 && nID < 20000)
+		if (nAnimationID >= 1900 && nAnimationID < 2000
+				|| nID >= 19000 && nID < 20000)
 		{
-			ShowPetInfo kShowPetInfo = {0};
+			ShowPetInfo kShowPetInfo(nEquipTypeID, nID, nQuality);
+			pkRole->SetShowPet(kShowPetInfo);
+		}
+		else
+		{
+			pkRole->SetEquipment(nID, nQuality);
 		}
 	}
+
+	if (pkRole->IsInState(USERSTATE_SHAPESHIFT))
+	{
+		pkRole->updateTransform(pkData->ReadInt());
+	}
+	else
+	{
+		pkRole->updateTransform(0);
+	}
+
+	if (pkRole->GetParent() != 0
+			&& !pkRole->GetParent()->IsKindOfClass(RUNTIME_CLASS(Battle)))
+	{
+		pkRole->SetAction(pkRole->isMoving(), true);
+	}
+}
+
+void NDMapMgr::processWalk(NDTransData* pkData, int nLength)
+{
+	if (0 == pkData || 0 == nLength)
+	{
+		return;
+	}
+
+	int nID = 0;
+	(*pkData) >> nID;
+	unsigned char ucDir = 0;
+	(*pkData) >> ucDir;
+
+	if (NDPlayer::defaultHero().m_nID != nID)
+	{
+		NDManualRole* pkRole = 0;
+		pkRole = NDMapMgrObj.GetManualRole(nID);
+
+		if (pkRole->isTeamLeader())
+		{
+			pkRole->teamSetServerDir(ucDir);
+		}
+	}
+}
+
+void NDMapMgr::processWalkTo(NDTransData& kData)
+{
+	int nPlayerID = kData.ReadInt();
+	int nAmount = kData.ReadByte();
+	NDPlayer& kPlayer = NDPlayer::defaultHero();
+
+	for (int i = 0; i < nAmount; i++)
+	{
+		int nPosX = kData.ReadShort();
+		int nPosY = kData.ReadShort();
+		int nNPCID = kData.ReadInt();
+
+		if (kPlayer.m_nID == nPlayerID)
+		{
+			CloseProgressBar;
+
+			if (0 != nNPCID)
+			{
+				NDNpc* pkNPC = 0;
+			}
+		}
+	}
+}
+
+NDNpc* NDMapMgr::GetNPC(int nID)
+{
+	for (VEC_NPC::iterator it = m_vNPC.begin(); m_vNPC.end() != it; it++)
+	{
+		NDNpc* pkTemp = *it;
+
+		if (nID != pkTemp->m_nID)
+		{
+			continue;
+		}
+
+		return pkTemp;
+	}
+
+	return 0;
+}
+
+void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
+{
+
+}
+
+void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
+{
+	const int LIST_ACTION_END = 1;
+	//NDLog(@"处理NPC消息-----------");
+	unsigned char btAction = 0;
+	(*pkData) >> btAction;
+	unsigned char btCount = 0;
+	(*pkData) >> btCount;
+	for (int i = 0; i < btCount; i++)
+	{
+		int nID = 0;
+		(*pkData) >> nID; // 4个字节 npc id
+		unsigned char uitype = 0;
+		(*pkData) >> uitype; // 该字段用于过滤寻路的npc列表
+		int usLook = 0;
+		(*pkData) >> usLook; // 4个字节
+		unsigned char btSort = 0;
+		(*pkData) >> btSort;
+		unsigned short usCellX = 0;
+		(*pkData) >> usCellX; // 2个字节
+		unsigned short usCellY = 0;
+		(*pkData) >> usCellY; // 2个字节
+		unsigned char btState = 0;
+		(*pkData) >> btState; // 1个字节表状态
+		unsigned char btCamp = 0;
+		(*pkData) >> btCamp;
+		std::string name = pkData->ReadUnicodeString();
+
+		std::string dataStr = pkData->ReadUnicodeString();
+		std::string talkStr = pkData->ReadUnicodeString();
+
+		NDNpc *pkNPC = new NDNpc;
+		pkNPC->m_nID = nID;
+		pkNPC->m_nCol = usCellX;
+		pkNPC->m_nRow = usCellY;
+		pkNPC->m_nLook = usLook;
+		pkNPC->SetCamp(CAMP_TYPE(btCamp));
+
+		if (uitype == 6)
+		{
+			pkNPC->m_strName = "";
+		}
+		else
+		{
+			pkNPC->m_strName = name;
+		}
+		pkNPC->SetPosition(
+				ccp(usCellX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+						usCellY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+		pkNPC->m_strData = dataStr;
+		pkNPC->m_strTalk = talkStr;
+		pkNPC->SetType(uitype);
+		pkNPC->Initialization(usLook);
+		if (btSort != 0)
+		{
+			pkNPC->SetActionOnRing(false);
+			pkNPC->SetDirectOnTalk(false);
+		}
+		pkNPC->initUnpassPoint();
+		NDMapMgrObj.m_vNPC.push_back(pkNPC);
+	}
+
+	if (btAction == LIST_ACTION_END)
+	{ // 收发结束
+		NDMapMgrObj.AddAllNPCToMap();
+	}
+}
+
+void NDMapMgr::AddAllNPCToMap()
+{
+	NDLayer* pkLayer = (NDLayer*) getMapLayerOfScene(
+			NDDirector::DefaultDirector()->GetRunningScene());
+
+	if (0 == pkLayer)
+	{
+		return;
+	}
+
+	for (VEC_NPC::iterator it = m_vNPC.begin(); m_vNPC.end() != it; it++)
+	{
+		NDNpc* pkNPC = *it;
+
+		if (pkLayer->ContainChild(pkNPC))
+		{
+			continue;
+		}
+
+		pkLayer->AddChild((NDNode*) pkNPC);
+
+		if (0 != pkNPC->GetRidePet())
+		{
+			pkNPC->GetRidePet()->stopMoving();
+			pkNPC->GetRidePet()->SetPositionEx(pkNPC->GetPosition());
+			pkNPC->GetRidePet()->SetCurrentAnimation(RIDEPET_STAND,
+					pkNPC->m_bFaceRight);
+		}
+
+		pkNPC->HandleNPCMask(true);
+	}
+
+	NDPlayer::defaultHero().UpdateFocus();
+}
+
+void NDMapMgr::OnCustomViewRadioButtonSelected(NDUICustomView* customView,
+		unsigned int radioButtonIndex, int ortherButtonTag)
+{
+	throw std::exception("The method or operation is not implemented.");
 }
 
 }
