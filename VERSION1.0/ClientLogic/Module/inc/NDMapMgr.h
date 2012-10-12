@@ -265,14 +265,29 @@ class NDMapMgr:
 {
 public:
 
+	typedef map<int,NDManualRole*> map_manualrole;
+
 	DECLARE_CLASS(NDMapMgr);
 
 	NDMapMgr();
 	virtual ~NDMapMgr();
 
+	void Update(unsigned long ulDiff);
+
 	virtual bool process( MSGID usMsgID, NDEngine::NDTransData* pkData, int nLength );
+	void processPlayer(NDTransData* pkData,int nLength);
 
 protected:
+
+	void AddManualRole(int nID,NDManualRole* pkRole);
+	NDManualRole* GetManualRole(int nID);
+	NDManualRole* GetManualRole(const char* pszName);
+	void DelManualRole(int nID);
+
+	NDMapLayer* getMapLayerOfScene(NDScene* pkScene);
+
+	map_manualrole m_mapManualRole;
+
 private:
 };
 

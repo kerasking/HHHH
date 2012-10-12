@@ -62,7 +62,7 @@ m_nState(0)
 
 					 //m_pBattlePetShow = NULL;
 					 //ridepet = NULL;
-
+	m_nQuality = 0;
 	m_bUpdateDiff = false;
 
 					 //m_picRing = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
