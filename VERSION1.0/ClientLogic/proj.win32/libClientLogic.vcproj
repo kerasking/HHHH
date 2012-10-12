@@ -831,6 +831,18 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Module"
+			>
+			<File
+				RelativePath="..\Module\src\NDMapMgr.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Module\inc\NDMapMgr.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\Common\src\NDDataPersist.cpp"
 			>
