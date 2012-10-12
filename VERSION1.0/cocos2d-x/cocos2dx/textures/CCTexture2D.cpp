@@ -71,7 +71,9 @@ m_bHasPremultipliedAlpha(false),
 m_bPVRHaveAlphaPremultiplied(true),
 m_pData(0),
 m_bKeepData(false),
-m_nContainerType(0)
+m_nContainerType(0),
+m_uiWidth(0),
+m_uiHeight(0)
 {
 }
 
@@ -777,16 +779,15 @@ bool CCTexture2D::initWithPaletteData(const void* pData,
 
 	}
 
-// 	size_ = size;
-// 	width_ = width;
-// 	height_ = height;
-// 	format_ = pixelFormat;
-// 	maxS_ = size.width / (float)width;
-// 	maxT_ = size.height / (float)height;
-// 
-// 	hasPremultipliedAlpha_ = NO;
-// 	_data = NULL;
-// 	_ContainerType = 0;
+	m_tContentSize = kSize;
+	m_uiWidth = (unsigned int)nWidth;
+	m_uiHeight = (unsigned int)nHeight;
+	m_ePixelFormat = ePixelFormat;
+	m_fMaxT = m_tContentSize.width / (float)m_uiWidth;
+	m_fMaxS = m_tContentSize.height / (float)m_uiHeight;
+	m_bHasPremultipliedAlpha = false;
+	m_pData = 0;
+	m_nContainerType = 0;
 
 	return true;
 }
