@@ -64,7 +64,7 @@ typedef enum
 	//! 2-bit PVRTC-compressed texture: PVRTC2
 	kCCTexture2DPixelFormat_PVRTC2,
 
-	kCCTexture2DPixelFormat_RGBA8,
+	kCCTexture2DPixelFormat_RGBA8,			///< @auther ljh
 
 	//! Default texture format: RGBA8888
 	kCCTexture2DPixelFormat_Default = kCCTexture2DPixelFormat_RGBA8888,

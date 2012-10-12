@@ -40,10 +40,13 @@
 #include "platform/CCPlatformMacros.h"
 #include "CCTexturePVR.h"
 #include "CCDirector.h"
+#include "png.h"
 
 #if CC_ENABLE_CACHE_TEXTTURE_DATA
 #include "CCTextureCache.h"
 #endif
+
+#define PNG_BYTES_TO_CHECK 8
 
 namespace cocos2d
 {
@@ -794,6 +797,157 @@ bool CCTexture2D::initWithPaletteData(const void* pData,
 
 bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 {
+	if (0 == pszPNGFile || !*pszPNGFile)
+	{
+		return false;
+	}
+
+	FILE* pkFile = 0;
+	unsigned int nPOTWide = 0;
+	unsigned int nPOTHigh = 0;
+	CCSize kImageSize;
+	char szBuffer[PNG_BYTES_TO_CHECK] = {0};
+
+	if (0 == (pkFile = fopen(pszPNGFile,"rb")))
+	{
+		return false;
+	}
+
+	if (PNG_BYTES_TO_CHECK != fread(szBuffer,1,PNG_BYTES_TO_CHECK,pkFile))
+	{
+		fclose(pkFile);
+		return false;
+	}
+
+	if (0 != png_sig_cmp((unsigned char*)szBuffer,(png_size_t)0,PNG_BYTES_TO_CHECK))
+	{
+		fclose(pkFile);
+		return false;
+	}
+
+	png_structp pkPNGPointer = 0;
+	png_infop pkPNGInfo = 0;
+	unsigned int uiSigRead = PNG_BYTES_TO_CHECK;
+
+	int nColorType = 0;
+	int nInterlaceType = 0;
+	png_uint_32 dwWidth = 0;
+	png_uint_32 dwHeight = 0;
+	int nPixelCount = 0;
+	int nCompressionType = 0;
+	int nFilterType = 0;
+
+	pkPNGPointer = png_create_read_struct(PNG_LIBPNG_VER_STRING,0,0,0);
+
+	if (0 == pkPNGPointer)
+	{
+		fclose(pkFile);
+		return false;
+	}
+
+	pkPNGInfo = png_create_info_struct(pkPNGPointer);
+
+	if (0 == pkPNGInfo)
+	{
+		fclose(pkFile);
+		png_destroy_read_struct(&pkPNGPointer,&pkPNGInfo,0);
+		return false;
+	}
+
+	png_init_io(pkPNGPointer,pkFile);
+	png_set_sig_bytes(pkPNGPointer,uiSigRead);
+
+	png_read_info(pkPNGPointer,pkPNGInfo);
+	png_get_IHDR(pkPNGPointer,pkPNGInfo,&dwWidth,&dwHeight,&nPixelCount,&nColorType,&nInterlaceType,&nCompressionType,&nFilterType);
+	CCConfiguration* pkConfig = CCConfiguration::sharedConfiguration();
+
+	nPOTWide = dwWidth;
+	nPOTHigh = dwHeight;
+
+	unsigned int uiMaxTextureSize = pkConfig->getMaxTextureSize();
+
+	if (nPOTHigh > uiMaxTextureSize || nPOTWide > uiMaxTextureSize)
+	{
+		release();
+		fclose(pkFile);
+		return false;
+	}
+
+	png_set_packing(pkPNGPointer);
+
+	if ((PNG_COLOR_TYPE_GRAY == nColorType && nPixelCount < 8) || PNG_COLOR_TYPE_PALETTE == nColorType)
+	{
+		png_set_expand(pkPNGPointer);
+	}
+
+	if (png_get_valid(pkPNGPointer,pkPNGInfo,PNG_INFO_tRNS))
+	{
+		png_set_tRNS_to_alpha(pkPNGPointer);
+	}
+
+	png_set_invert_mono(pkPNGPointer);
+	png_set_swap(pkPNGPointer);
+	png_set_filter(pkPNGPointer,0xFF,PNG_FILLER_AFTER);
+	png_read_update_info(pkPNGPointer,pkPNGInfo);
+	
+	png_color* pkPalette = 0;
+	int nNumberPalette = 0;
+	int nPaletteLength = 1 << nPixelCount;
+	RGBQUAD pBmiColors[256] = {0};
+
+	png_get_PLTE(pkPNGPointer,pkPNGInfo,&pkPalette,&nNumberPalette);
+
+	if (0 < nNumberPalette)
+	{
+		
+	}
+
+	static void* s_pData = 0;
+	CCTexture2DPixelFormat ePixelFormat = kCCTexture2DPixelFormat_Automatic;
+
+	int nRowBytes = png_get_rowbytes(pkPNGPointer,pkPNGInfo);
+	static png_bytepp s_pProwPointers = 0;
+	int nMaxHeight = 1024 * CC_CONTENT_SCALE_FACTOR();
+
+	if (dwHeight > nMaxHeight)
+	{
+		nMaxHeight = dwHeight;
+
+		if (0 != s_pProwPointers)
+		{
+			free(s_pProwPointers);
+			s_pProwPointers = 0;
+		}
+	}
+
+	if (0 == s_pProwPointers)
+	{
+		s_pProwPointers = (png_bytepp)malloc(sizeof(png_bytep) * nMaxHeight);
+	}
+
+	int nMaxRowBytes = 2048 * CC_CONTENT_SCALE_FACTOR();
+
+	if (nRowBytes > nMaxRowBytes)
+	{
+		nMaxRowBytes = nRowBytes;
+
+		if (0 == s_pData)
+		{
+			free(s_pData);
+			s_pData = 0;
+		}
+	}
+
+	if (0 == s_pData)
+	{
+		s_pData = malloc(sizeof(RGBQUAD) * 256 + nMaxRowBytes * nMaxHeight);
+	}
+
+	for (unsigned int row = 0;row < dwHeight;row++)
+	{
+		
+	}
+
 	return true;
 }
 
