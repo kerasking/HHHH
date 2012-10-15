@@ -145,6 +145,9 @@ public:
 	bool initWithData(const void* data, CCTexture2DPixelFormat pixelFormat,
 		unsigned int pixelsWide, unsigned int pixelsHigh, const CCSize& contentSize);
 
+	void SaveToBitmap(const char* pszPngFile,unsigned char** pBMPColorBuf,int rowByteWidth,int width,int height,int colorDepth,RGBQUAD* pPalette,int nPaletteLen);
+	void WriteToBMPFile(char* pFileName,BYTE* pBmpBuf,int nBmplen);
+
 	/**
 	 Drawing extensions to make it easy to draw basic quads using a CCTexture2D object.
 	 These functions require GL_TEXTURE_2D and both GL_VERTEX_ARRAY and GL_TEXTURE_COORD_ARRAY client states to be enabled.

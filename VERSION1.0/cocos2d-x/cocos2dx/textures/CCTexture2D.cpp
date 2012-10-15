@@ -958,4 +958,72 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 	return true;
 }
 
+void CCTexture2D::SaveToBitmap(const char* pszPngFile,
+		unsigned char** pBMPColorBuf, int rowByteWidth, int width, int height,
+		int colorDepth, RGBQUAD* pPalette, int nPaletteLen)
+{
+	int mPackedRowByteWidth = (rowByteWidth + 3) & 0xfffffffc;
+	BYTE *pBmpBuf = (BYTE*) malloc(
+			mPackedRowByteWidth * height + 54 + nPaletteLen * sizeof(RGBQUAD));
+	BITMAPFILEHEADER *pBfh = (BITMAPFILEHEADER *) pBmpBuf;
+	BYTE *pTemp = pBmpBuf;
+	*pTemp = 'B';
+	pTemp++;
+	*pTemp = 'M';
+
+	pBfh->bfOffBits = 54 + nPaletteLen * sizeof(RGBQUAD);
+	pBfh->bfSize = mPackedRowByteWidth * height + 54
+			+ nPaletteLen * sizeof(RGBQUAD);
+	pBfh->bfReserved1 = pBfh->bfReserved2 = 0;
+
+	BITMAPINFOHEADER *pBih = (BITMAPINFOHEADER *) (pBfh + 1);
+	pBih->biBitCount = colorDepth;
+	pBih->biClrImportant = 0;
+	pBih->biClrUsed = 0;
+	pBih->biCompression = 0;
+	pBih->biHeight = height;
+	pBih->biPlanes = 1;
+	pBih->biSize = 40;
+	pBih->biSizeImage = mPackedRowByteWidth * height;
+	pBih->biWidth = width;
+	pBih->biXPelsPerMeter = 0;
+	pBih->biYPelsPerMeter = 0;
+
+	// copy palette
+	BYTE *pRowBuf = (BYTE *) (pBih + 1);
+	if (nPaletteLen > 0)
+	{
+		memcpy(pRowBuf, pPalette, nPaletteLen * sizeof(RGBQUAD));
+		// copy data
+		pRowBuf += nPaletteLen * sizeof(RGBQUAD);
+	}
+
+	pRowBuf += mPackedRowByteWidth * (height - 1);
+	for (int i = 0; i < height; i++)
+	{
+		memcpy(pRowBuf, *pBMPColorBuf, rowByteWidth);
+		pRowBuf -= mPackedRowByteWidth;
+		pBMPColorBuf++;
+	}
+	//memcpy((BYTE *)(pBih+1),pBMPColorBuf,rowByteWidth * height);
+	char szFileName[256];
+	sprintf(szFileName, "%stestJPG_PngLib.bmp", pszPngFile);
+	WriteToBMPFile(szFileName, pBmpBuf,
+			mPackedRowByteWidth * height + 54 + nPaletteLen * sizeof(RGBQUAD));
+	free(pBmpBuf);
+}
+
+void CCTexture2D::WriteToBMPFile(char* pFileName, BYTE* pBmpBuf, int nBmplen)
+{
+	FILE* pkFile = fopen(pFileName, "wb");
+
+	if (0 == pkFile)
+	{
+		return;
+	}
+
+	fwrite(pBmpBuf, nBmplen, 1, pkFile);
+	fclose(pkFile);
+}
+
 } //namespace   cocos2d 

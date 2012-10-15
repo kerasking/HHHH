@@ -95,7 +95,7 @@ public:
 
 	void SetTexture(cocos2d::CCTexture2D* tex);
 private:
-	cocos2d::CCTexture2D *m_texture;
+	cocos2d::CCTexture2D* m_pkTexture;
 	CGRect m_cutRect;
 	bool m_reverse, m_bAdvance;
 	PictureRotation m_rotation;
