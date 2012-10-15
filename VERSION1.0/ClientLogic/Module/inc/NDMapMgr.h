@@ -262,7 +262,7 @@ public:
 	NDMapMgr();
 	virtual ~NDMapMgr();
 
-	void Update(unsigned long ulDiff);
+	virtual void Update(unsigned long ulDiff);
 
 	virtual bool process( MSGID usMsgID, NDEngine::NDTransData* pkData, int nLength );
 	void processPlayer(NDTransData* pkData,int nLength);

@@ -522,7 +522,10 @@ NDNpc* NDMapMgr::GetNPC(int nID)
 
 void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 {
-
+	if (0 == pkData || 0 == nLength)
+	{
+		return;
+	}
 }
 
 void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
