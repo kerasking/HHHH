@@ -274,12 +274,21 @@ public:
 
 protected:
 
+	void LoadSceneMonster();
 	void AddManualRole(int nID,NDManualRole* pkRole);
 	NDManualRole* GetManualRole(int nID);
 	NDManualRole* GetManualRole(const char* pszName);
 	void ClearManualRole();
 	void AddAllNPCToMap();
+	void AddAllMonsterToMap();
 	void DelManualRole(int nID);
+	void ClearNPC();
+	void ClearMonster();
+	void ClearGP();
+	bool loadSceneByMapDocID(int nMapID);
+	void AddSwitch();
+	int GetMapID();
+	int GetMotherMapID();
 
 	NDNpc* GetNPC(int nID);
 
@@ -300,6 +309,10 @@ protected:
 	int m_nRoadBlockY;
 	int m_nMapType;
 	int m_nSaveMapID;
+	int m_nMapID;
+	int m_nMapDocID;
+
+	CCSize m_kMapSize;
 
 	string m_strMapName;
 

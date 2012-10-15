@@ -167,7 +167,7 @@ public:
 	int iRecordMap;
 
 	// 玩家当前所在地图id
-	int idCurMap;
+	int m_nCurMapID;
 
 	int m_eAtkSpd;
 	int m_eAtk;

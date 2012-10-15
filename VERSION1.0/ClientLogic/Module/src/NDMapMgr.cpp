@@ -8,6 +8,10 @@
 #include "Battle.h"
 #include "define.h"
 #include "NDUISynLayer.h"
+#include "SMGameScene.h"
+#include "GameDataBase.h"
+#include "ItemMgr.h"
+#include "ScriptGlobalEvent.h"
 
 namespace NDEngine
 {
@@ -23,6 +27,8 @@ NDMapMgr::NDMapMgr()
 	m_nRoadBlockX = 0;
 	m_nRoadBlockY = 0;
 	m_nSaveMapID = 0;
+	m_nMapID = 0;
+	m_nMapDocID = 0;
 }
 
 NDMapMgr::~NDMapMgr()
@@ -569,10 +575,101 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 
 	if (kPlayer.IsInState(USERSTATE_DEAD))
 	{
-		NDUISynLayer::Close(SYN_RELIEVE);
+		NDUISynLayer::Close (SYN_RELIEVE);
 	}
 
-	NDUISynLayer::Close(SYN_CREATE_ROLE);
+	NDUISynLayer::Close (SYN_CREATE_ROLE);
+
+	NDMapMgrObj.ClearManualRole();
+
+	m_nMapID = nMapID;
+
+	if (1 == m_nMapID || 2 == m_nMapID)
+	{
+		m_nSaveMapID = m_nMapID;
+	}
+
+	kPlayer.m_nCurMapID = nMapDocID;
+
+	ShowPetInfo kPetInfoRerserve;
+	kPlayer.GetShowPetInfo(kPetInfoRerserve);
+
+	kPlayer.ResetShowPet();
+
+	if (kPlayer.GetParent() != 0)
+	{
+		NDRidePet* pkRidePet = NDPlayer::defaultHero().GetRidePet();
+
+		if (0 != pkRidePet && 0 != pkRidePet->GetParent())
+		{
+			pkRidePet->RemoveFromParent(false);
+		}
+
+		kPlayer.RemoveFromParent(false);
+	}
+
+	while (NDDirector::DefaultDirector()->PopScene())
+	{
+	}
+
+	NDMapMgrObj.ClearNPC();
+	NDMapMgrObj.ClearMonster();
+	NDMapMgrObj.ClearGP();
+	NDMapMgrObj.loadSceneByMapDocID(nMapDocID);
+
+	NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(
+			NDDirector::DefaultDirector()->GetRunningScene());
+
+	int nTheID = GetMotherMapID();
+	int nTitleID = ScriptDBObj.GetN("map", nTheID, DB_MAP_TITLE);
+	pkLayer->ShowTitle(nTitleID, 0);
+
+	if (0 == pkLayer)
+	{
+		return;
+	}
+
+	kPlayer.SetPositionEx(
+			ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+					dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+	kPlayer.SetServerPositon(dwPortalX, dwPortalY);
+	kPlayer.SetShowPet(kPetInfoRerserve);
+	kPlayer.stopMoving();
+
+	NDRidePet* pkRidePet = kPlayer.GetRidePet();
+
+	if (0 != pkRidePet)
+	{
+		pkRidePet->stopMoving();
+		pkRidePet->SetPositionEx(
+				ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+						dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+	}
+
+	pkLayer->SetScreenCenter(
+			ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+					dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+
+	kPlayer.SetAction(false);
+	kPlayer.SetLoadMapComplete();
+
+	ItemMgrObj.SortBag();
+
+	ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
+
+	if (nTheID / 100000000 > 0)
+	{
+		//	ScriptMgrObj.excuteLuaFunc("SetUIVisible","",0);
+	}
+	else
+	{
+		pkLayer->AddChild(&kPlayer, 0, 0);
+		//	ScriptMgrObj.executeLuaFunc("SetUIVisible","",1);
+	}
+
+	CloseProgressBar;
+
+	NDMapMgrObj.LoadSceneMonster();
 }
 
 void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
@@ -692,10 +789,198 @@ void NDMapMgr::ClearManualRole()
 	}
 
 	for (map_manualrole::iterator it = m_mapManualRole.begin();
-		m_mapManualRole.end() != it;it++)
+			m_mapManualRole.end() != it; it++)
 	{
 		NDManualRole* pkRole = it->second;
 		SAFE_DELETE_NODE(pkRole);
+	}
+}
+
+void NDMapMgr::ClearNPC()
+{
+	if (m_vNPC.empty())
+	{
+		return;
+	}
+
+	for (VEC_NPC::iterator it = m_vNPC.begin(); m_vNPC.end() != it; it++)
+	{
+		NDNpc* pkRole = *it;
+		SAFE_DELETE_NODE(pkRole);
+	}
+}
+
+void NDMapMgr::ClearMonster()
+{
+	if (m_vMonster.empty())
+	{
+		return;
+	}
+
+	for (VEC_MONSTER::iterator it = m_vMonster.begin(); m_vMonster.end() != it;
+			it++)
+	{
+		NDMonster* pkRole = *it;
+		SAFE_DELETE_NODE(pkRole);
+	}
+}
+
+void NDMapMgr::ClearGP()
+{
+
+}
+
+bool NDMapMgr::loadSceneByMapDocID(int nMapID)
+{
+	m_nMapDocID = nMapID;
+
+	NDDirector::DefaultDirector()->PurgeCachedData();
+	NDDirector::DefaultDirector()->ReplaceScene(NDScene::Scene());
+
+	CSMGameScene* pkScene = CSMGameScene::Scene();
+	pkScene->Initialization(nMapID);
+	pkScene->SetTag(SMGAMESCENE_TAG);
+	NDDirector::DefaultDirector()->ReplaceScene(pkScene);
+
+	NDMapLayer* pkMapLayer = getMapLayerOfScene(pkScene);
+
+	if (0 != pkMapLayer)
+	{
+		m_kMapSize = pkMapLayer->GetContentSize();
+	}
+	else
+	{
+		m_kMapSize = CCSizeZero;
+	}
+
+	AddSwitch();
+
+	return true;
+}
+
+void NDMapMgr::AddSwitch()
+{
+	NDScene* pkScene = NDDirector::DefaultDirector()->GetScene(
+			RUNTIME_CLASS(CSMGameScene));
+	NDMapLayer* pkLayer = 0;
+	NDMapData* pkMapData = 0;
+
+	if (0 != pkScene || 0 == (pkLayer = getMapLayerOfScene(pkScene))
+			|| 0 == (pkMapData = pkLayer->GetMapData()))
+	{
+		return;
+	}
+
+	ScriptDB& kScriptDB = ScriptDBObj;
+	ID_VEC kIDList;
+	kScriptDB.GetIdList("portal", kIDList);
+
+	for (ID_VEC::iterator it = kIDList.begin(); kIDList.end() != it; it++)
+	{
+		int nMapID = GetMapID();
+
+		if (kScriptDB.GetN("portal", *it, DB_PORTAL_MAPID) == nMapID)
+		{
+			int nIndex = kScriptDB.GetN("portal", *it, DB_PORTAL_PORTAL_INDEX);
+			int nX = kScriptDB.GetN("portal", *it, DB_PORTAL_PORTALX);
+			int nY = kScriptDB.GetN("portal", *it, DB_PORTAL_PORTALY);
+
+			string strDesc = "城門";
+
+			pkMapData->addMapSwitch(nX, nY, nIndex, nMapID, strDesc.c_str(),
+					"");
+		}
+	}
+
+	pkLayer->MapSwitchRefresh();
+}
+
+int NDMapMgr::GetMapID()
+{
+	return m_nMapID;
+}
+
+int NDMapMgr::GetMotherMapID()
+{
+	int nTheID = m_nMapID;
+
+	if (m_nMapID / 10000000 > 0)
+	{
+		nTheID = m_nMapID / 100000 * 100000;
+	}
+
+	return nTheID;
+}
+
+void NDMapMgr::LoadSceneMonster()
+{
+	int nTheID = GetMotherMapID();
+	ID_VEC kIDList;
+	ScriptDBObj.GetIdList("mapzone", kIDList);
+
+	for (unsigned int i = 0; i < kIDList.size(); i++)
+	{
+		int m_nID = ScriptDBObj.GetN("mapzone", kIDList.at(i),
+				DB_MAPZONE_MAPID);
+		if (m_nID == nTheID)
+		{
+
+			NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(
+					NDDirector::DefaultDirector()->GetRunningScene());
+			if (!pkLayer)
+			{
+				return;
+			}
+			NDMonster* pkMonster = new NDMonster();
+			int elite_flag = ScriptDBObj.GetN("mapzone", kIDList.at(i),
+					DB_MAPZONE_ELITE_FLAG);
+
+			pkMonster->m_nID = ScriptDBObj.GetN("mapzone", kIDList.at(i),
+					DB_MAPZONE_ID);
+			int col = ScriptDBObj.GetN("mapzone", kIDList.at(i),
+					DB_MAPZONE_POS_X);
+			int row = ScriptDBObj.GetN("mapzone", kIDList.at(i),
+					DB_MAPZONE_POS_Y);
+			int idType = ScriptDBObj.GetN("mapzone", kIDList.at(i),
+					DB_MAPZONE_MONSTER_TYPE);
+			int atk_area = ScriptDBObj.GetN("mapzone", kIDList.at(i),
+					DB_MAPZONE_ATK_AREA);
+			int rule_id = ScriptDBObj.GetN("mapzone", kIDList.at(i),
+					DB_MAPZONE_GENERATE_RULE_ID);
+			pkMonster->Initialization(idType);
+			NDMapMgrObj.m_vMonster.push_back(pkMonster);
+		}
+	}
+	NDMapMgrObj.AddAllMonsterToMap();
+}
+
+void NDMapMgr::AddAllMonsterToMap()
+{
+	NDMapLayer* pkLayer = getMapLayerOfScene(
+			NDDirector::DefaultDirector()->GetRunningScene());
+
+	if (0 == pkLayer)
+	{
+		return;
+	}
+
+	for (VEC_MONSTER::iterator it = m_vMonster.begin(); m_vMonster.end() != it;
+			it++)
+	{
+		NDMonster* pkMonster = *it;
+
+		if (0 != pkMonster && pkMonster->m_nID > 0
+				&& pkMonster->getState() == MONSTER_STATE_DEAD)
+		{
+			continue;
+		}
+
+		if (pkMonster->GetParent() == 0)
+		{
+			pkLayer->AddChild((NDNode*) pkMonster, 0, 0);
+		}
+
+		///< 这里添加gather... 郭浩
 	}
 }
 
