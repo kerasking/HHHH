@@ -44,7 +44,7 @@ enum BOX_STATUS
 
 namespace NDEngine
 {
-class NDMapLayer: public NDUILayer //NDLayer,public ITimerCallback
+class NDMapLayer: public NDUILayer//NDLayer,public ITimerCallback
 {
 DECLARE_CLASS(NDMapLayer)
 public:

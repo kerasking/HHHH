@@ -84,7 +84,7 @@ m_nSynMoney(0),
 m_nSynContribute(0),
 m_nSynSelfContribute(0),
 m_nSynSelfContributeMoney(0),
-idCurMap(0)
+m_nCurMapID(0)
 {
 	phyAdd = 0;
 

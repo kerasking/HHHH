@@ -45,6 +45,7 @@ public:
 	void Initialization(int nLookface);
 
 	void WalkToPosition(CGPoint toPos);
+	void HandleNPCMask(bool bSet);
 	//－－－end
 	//void SetHairImage(int hair, int hairColor);
 	void SetExpresstionImage(int nExpresstion);
@@ -58,6 +59,9 @@ public:
 	}
 
 	void SetStatus(int status);
+	void initUnpassPoint();
+	void SetActionOnRing(bool bOn);
+	void SetDirectOnTalk(bool bOn);
 
 	// 勿用,如需获取请直接访问ridePet
 	//NDRidePet* GetRidePet();
@@ -88,6 +92,11 @@ public:
 	bool m_bDirectOnTalk;
 	bool m_bFarmNpc;
 	bool m_bUnpassTurn;
+
+	int m_nCol;
+	int m_nRow;
+	int m_nLook;
+	int m_nModel;
 
 	NDSprite* m_pkUpdate;
 

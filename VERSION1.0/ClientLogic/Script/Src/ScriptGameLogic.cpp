@@ -54,11 +54,6 @@ void sendMsgConnect(int idAccount)
 
 void CreatePlayer(int lookface, int x, int y, int userid, std::string name)
 {
-	/***
-	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	 * all
-	 */
-
 	NDPlayer::pugeHero();
 	NDPlayer& player = NDPlayer::defaultHero(lookface, true);
 	player.InitRoleLookFace(lookface);
