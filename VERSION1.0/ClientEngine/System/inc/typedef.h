@@ -18,7 +18,7 @@
 //typedef unsigned long			OBJID;
 
 // set
-//typedef std::vector<OBJID>		ID_VEC;
+typedef std::vector<OBJID>		ID_VEC;
 //typedef std::deque<OBJID>		ID_DEQ;
 //typedef std::set<OBJID>	        ID_SET;
 //typedef std::map<OBJID, OBJID>	ID_MAP;

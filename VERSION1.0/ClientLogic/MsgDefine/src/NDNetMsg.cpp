@@ -4,7 +4,7 @@
  *  DragonDrive
  *
  *  Created by jhzheng on 10-12-27.
- *  Copyright 2010 (缃戦緳)DeNA. All rights reserved.
+ *  Copyright 2010 (网龙))DeNA. All rights reserved.
  *
  */
 
@@ -53,7 +53,7 @@ bool NDNetMsgPool::Process(NDTransData* data)
 
 	if (nMsgID != _MSG_GAME_QUIT)
 	{
-		//BeatHeartMgrObj.HadServerMsgArrive(); ///< 涓存椂鎬ф敞閲?? 閮旦
+		//BeatHeartMgrObj.HadServerMsgArrive();
 	}
 
 	return Process(nMsgID, data, nMsgLen - ND_C_HEAD_SIZE);
@@ -61,7 +61,9 @@ bool NDNetMsgPool::Process(NDTransData* data)
 
 bool NDNetMsgPool::Process(MSGID msgID, NDTransData* data, int len)
 {
-    cocos2d::CCLog("\n---------------------------------------------<--接收id[%d],len[%d]-----------------------", msgID, len+ND_C_HEAD_SIZE);
+	cocos2d::CCLog(
+			"\n---------------------------------------------<--接收id[%d],len[%d]-----------------------",
+			msgID, len + ND_C_HEAD_SIZE);
 
 	if (len + ND_C_HEAD_SIZE > 1024)
 	{

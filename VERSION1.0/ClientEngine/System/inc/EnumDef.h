@@ -282,6 +282,7 @@ enum USERSTATE
 	USERSTATE_FLY					= 0x8000,				// ·ÉÐÐ×´Ì¬
 	USERSTATE_BF_WAIT_RELIVE		= 0x10000,				// µÈ´ý¸´»î
 	USERSTATE_BATTLEFIELD			= 0x20000,				// Õ½³¡×´Ì¬
+	USERSTATE_PRACTISE				= 0x40000,				// ´ò×ø×´Ì¬
 };
 
 enum USERPOSE

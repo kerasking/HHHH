@@ -84,6 +84,7 @@ public:
 	~NDManualRole();
 
 public:
+
 	void Update(unsigned long ulDiff);
 	void SetAction(bool bMove, bool bIgnoreFighting = false);
 	bool AssuredRidePet();hide
@@ -93,17 +94,19 @@ public:
 	virtual void Walk(CGPoint toPos, SpriteSpeed speed);
 	void OnMoving(bool bLastPos);override
 	void OnMoveEnd();override
-	void SetPosition(CGPoint newPosition);override
-	void OnMoveTurning(bool bXTurnigToY, bool bInc);override
+	void SetPosition(CGPoint newPosition);
+	void OnMoveTurning(bool bXTurnigToY, bool bInc);
 
-	bool OnDrawBegin(bool bDraw);override
-	void OnDrawEnd(bool bDraw);override
+	bool OnDrawBegin(bool bDraw);
+	void OnDrawEnd(bool bDraw);
+
+	bool ChangeModelWithMount(int nRideStatus,int nMountType);
 
 	virtual void stopMoving(bool bResetPos = true, bool bResetTeamPos = true);
 
-	void drawEffects(bool bDraw);override
+	void drawEffects(bool bDraw);
 
-	void unpakcAllEquip();override
+	void unpakcAllEquip();
 
 	void SetServerPositon(int col, int row);
 
@@ -148,6 +151,8 @@ public:
 	}
 	void teamSetServerDir(int dir);
 	void teamSetServerPosition(int iCol, int iRow);
+
+	void SetShowPet(ShowPetInfo& kInfo);
 
 	bool IsSafeProtected()
 	{
@@ -260,6 +265,7 @@ public:
 	int m_dwLookFace;							// 创建人物的时候有6种外观可供选择外观
 	int m_nProfesstion;						//玩家的职业
 	int m_nPKPoint;							// pk值
+	int m_nQuality;
 
 	string m_strSynName;							// 帮派名字
 	string m_strSynRank;						// 官职名字
