@@ -638,7 +638,7 @@ void NDNpc::ShowHightLight(bool bShow)
 
 bool NDEngine::NDNpc::IsActionOnRing()
 {
-	throw std::exception("The method or operation is not implemented.");
+	//throw std::exception("The method or operation is not implemented.");
 	return true;
 }
 

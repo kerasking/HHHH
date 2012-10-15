@@ -198,7 +198,7 @@ void NDSprite::RunAnimation(bool bDraw)
 		bool bIsOldTitleHightLight = IsTileHightLight();
 		TileSetHightLight (m_bHightLight);
 
-		bool bRet = OnDrawBegin(bDraw);
+		bool bRet = this->OnDrawBegin(bDraw);
 
 		if (bRet)
 		{
