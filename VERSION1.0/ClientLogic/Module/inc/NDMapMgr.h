@@ -277,6 +277,7 @@ protected:
 	void AddManualRole(int nID,NDManualRole* pkRole);
 	NDManualRole* GetManualRole(int nID);
 	NDManualRole* GetManualRole(const char* pszName);
+	void ClearManualRole();
 	void AddAllNPCToMap();
 	void DelManualRole(int nID);
 
@@ -287,9 +288,20 @@ protected:
 	virtual void OnCustomViewRadioButtonSelected( NDUICustomView* customView,
 		unsigned int radioButtonIndex, int ortherButtonTag );
 
+	static bool m_bFirstCreate;
+	static bool m_bVerifyVersion;
+
 	map_manualrole m_mapManualRole;
 	VEC_NPC m_vNPC;
 	VEC_MONSTER m_vMonster;
+
+	int m_nCurrentMonsterBound;
+	int m_nRoadBlockX;
+	int m_nRoadBlockY;
+	int m_nMapType;
+	int m_nSaveMapID;
+
+	string m_strMapName;
 
 private:
 };

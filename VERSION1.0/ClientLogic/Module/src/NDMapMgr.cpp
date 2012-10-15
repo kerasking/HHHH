@@ -14,14 +14,21 @@ namespace NDEngine
 
 IMPLEMENT_CLASS(NDMapMgr,NDObject);
 
+bool NDMapMgr::m_bVerifyVersion = true;
+bool NDMapMgr::m_bFirstCreate = false;
+
 NDMapMgr::NDMapMgr()
 {
-
+	m_nCurrentMonsterBound = 0;
+	m_nRoadBlockX = 0;
+	m_nRoadBlockY = 0;
+	m_nSaveMapID = 0;
 }
 
 NDMapMgr::~NDMapMgr()
 {
-
+	m_vNPC.clear();
+	m_mapManualRole.clear();
 }
 
 bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
@@ -526,6 +533,46 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 	{
 		return;
 	}
+
+	m_nCurrentMonsterBound = 0;
+
+	if (m_bVerifyVersion)
+	{
+		m_bVerifyVersion = false;
+		//NDBeforeGameMgrObj.VerifyVersion();
+	}
+
+	m_nRoadBlockX = -1;
+	m_nRoadBlockY = -1;
+
+	BattleMgrObj.quitBattle(false);
+
+	pkData->ReadShort();
+	pkData->ReadInt();
+
+	int nMapID = pkData->ReadInt();
+	int nMapDocID = pkData->ReadInt();
+
+	int dwPortalX = pkData->ReadShort();
+	int dwPortalY = pkData->ReadShort();
+
+	pkData->ReadShort();
+	pkData->ReadShort();
+	pkData->ReadShort();
+	pkData->ReadShort();
+
+	m_nMapType = pkData->ReadInt();
+
+	m_strMapName = pkData->ReadUnicodeString();
+
+	NDPlayer& kPlayer = NDPlayer::defaultHero();
+
+	if (kPlayer.IsInState(USERSTATE_DEAD))
+	{
+		NDUISynLayer::Close(SYN_RELIEVE);
+	}
+
+	NDUISynLayer::Close(SYN_CREATE_ROLE);
 }
 
 void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
@@ -635,6 +682,21 @@ void NDMapMgr::OnCustomViewRadioButtonSelected(NDUICustomView* customView,
 		unsigned int radioButtonIndex, int ortherButtonTag)
 {
 	throw std::exception("The method or operation is not implemented.");
+}
+
+void NDMapMgr::ClearManualRole()
+{
+	if (m_mapManualRole.empty())
+	{
+		return;
+	}
+
+	for (map_manualrole::iterator it = m_mapManualRole.begin();
+		m_mapManualRole.end() != it;it++)
+	{
+		NDManualRole* pkRole = it->second;
+		SAFE_DELETE_NODE(pkRole);
+	}
 }
 
 }
