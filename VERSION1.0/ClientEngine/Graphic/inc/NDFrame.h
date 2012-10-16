@@ -64,7 +64,7 @@ class NDAnimationGroup;
 class NDFrame: public cocos2d::CCObject
 {
 	CC_SYNTHESIZE(int, m_nEnduration, Enduration)
-	CC_SYNTHESIZE(NDAnimation*, m_BelongAnimation, BelongAnimation)
+	CC_SYNTHESIZE(NDAnimation*, m_pkBelongAnimation, BelongAnimation)
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDAnimationGroup*>*, m_pkSubAnimationGroups, SubAnimationGroups)
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDFrameTile*>*, m_pkFrameTiles, FrameTiles)
 

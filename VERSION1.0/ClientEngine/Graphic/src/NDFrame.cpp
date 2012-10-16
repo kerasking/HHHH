@@ -156,7 +156,7 @@ m_nTableIndex(0)
 //////////////////////////////////////////////////////////////////////////
 NDFrame::NDFrame() :
 m_nEnduration(0),
-m_BelongAnimation(NULL),
+m_pkBelongAnimation(NULL),
 m_pkSubAnimationGroups(NULL),
 m_pkFrameTiles(NULL),
 m_bNeedInitTitles(true)
@@ -208,7 +208,7 @@ void NDFrame::drawHeadAt(CGPoint pos)
 	int coordX = 0;
 	int coordY = 0;
 
-	NDAnimation* pkAnimation = m_BelongAnimation;
+	NDAnimation* pkAnimation = m_pkBelongAnimation;
 	NDAnimationGroup* pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
 
 	if (m_bNeedInitTitles)
@@ -296,7 +296,7 @@ void NDFrame::run(float fScale)
 		this->initTiles();
 	}
 
-	NDAnimation *pkAnimation = m_BelongAnimation;
+	NDAnimation *pkAnimation = m_pkBelongAnimation;
 	NDAnimationGroup *pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
 	int nCount = m_pkFrameTiles->count();
 
@@ -1025,7 +1025,7 @@ TILE_REVERSE_ROTATION NDFrame::tileReverseRotationWithReverse(bool bReverse,
 
 CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 {
-	NDAnimation *pkAnimation = m_BelongAnimation;
+	NDAnimation *pkAnimation = m_pkBelongAnimation;
 	NDAnimationGroup *pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
 	NDEngine::NDSprite *pkSprite =
 			(NDEngine::NDSprite *) pkAnimationGroup->getRuningSprite();
