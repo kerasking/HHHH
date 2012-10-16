@@ -56,7 +56,7 @@ void NDPicture::Initialization(const char* imageFile)
 	}
 
 	m_pkTexture = new CCTexture2D;
-	m_pkTexture->initWithPalettePNG(imageFile);
+	m_pkTexture->initWithImage(&image);
 
 	/*
 	 if (m_canGray && image)

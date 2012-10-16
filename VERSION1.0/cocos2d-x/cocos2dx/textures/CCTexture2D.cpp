@@ -820,8 +820,7 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 		return false;
 	}
 
-	if (0
-			!= png_sig_cmp((unsigned char*) szBuffer, (png_size_t) 0,
+	if (0 != png_sig_cmp((unsigned char*) szBuffer, (png_size_t) 0,
 					PNG_BYTES_TO_CHECK))
 	{
 		fclose(pkFile);
@@ -892,7 +891,7 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 
 	png_set_invert_mono(pkPNGPointer);
 	png_set_swap(pkPNGPointer);
-	png_set_filter(pkPNGPointer, 0xFF, PNG_FILLER_AFTER);
+	//png_set_filter(pkPNGPointer, 0xFF, PNG_FILLER_AFTER);
 	png_read_update_info(pkPNGPointer, pkPNGInfo);
 
 	png_color* pkPalette = 0;
