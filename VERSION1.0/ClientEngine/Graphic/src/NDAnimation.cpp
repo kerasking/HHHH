@@ -24,7 +24,8 @@ m_nBottomY(0),
 m_nType(0),
 m_bReverse(false),
 m_pkBelongAnimationGroup(NULL),
-m_nCurIndexInAniGroup(-1)
+m_nCurIndexInAniGroup(-1),
+m_nPlayCount(0)
 {
 	m_pkFrames = new cocos2d::CCMutableArray<NDFrame*>();
 }
@@ -113,31 +114,12 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 			pkFrame = m_pkFrames->getObjectAtIndex(
 					pkRunFrameRecord->getNextFrameIndex());
 
-			pkRunFrameRecord->NextFrame(3);
-			/*
-			 //当前帧的索引值改变
-			 if (++runFrameRecord.currentFrameIndex == (int)[_frames count])
-			 {
-			 runFrameRecord.currentFrameIndex = 0;
+			pkRunFrameRecord->NextFrame(uiFrameCount);
 
-			 if (runFrameRecord.repeatTimes > 0)
-			 {
-			 runFrameRecord.repeatTimes--;
-			 }
-			 }
-
-			 //下一帧的索引值改变
-			 runFrameRecord.nextFrameIndex = runFrameRecord.currentFrameIndex + 1;
-			 if (runFrameRecord.nextFrameIndex == (int)[_frames count])
-			 {
-			 runFrameRecord.nextFrameIndex = 0;
-			 if (runFrameRecord.repeatTimes == 0)
-			 {
-			 runFrameRecord.isCompleted = YES;
-			 }
-
-			 }
-			 */
+			if (pkRunFrameRecord->getCurrentFrameIndex() + 1 == (int)uiFrameCount)
+			{
+				m_nPlayCount++;
+			}
 		}
 
 		if (bNeedDraw)

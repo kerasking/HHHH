@@ -112,7 +112,7 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 				|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_END
 				|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_START
 				|| m_pkCurrentAnimation->getCurIndexInAniGroup()
-						!= nAnimationIndex)
+						!= 1)
 		{
 			m_pkCurrentAnimation =
 					(NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(
@@ -150,27 +150,6 @@ void NDSprite::RunAnimation(bool bDraw)
 				}
 
 				CGPoint kPos = m_kPointList.at(m_nMovePathIndex++);
-//						if (m_movePathIndex < (int)m_pointList.size() && m_movePathIndex > 2)
-//						{
-//							CGPoint prePos = GetPosition();
-//							CGPoint nextPos = m_pointList[m_movePathIndex];
-//							
-//							if (prePos.y == pos.y && prePos.x != pos.x)
-//							{
-//								if (pos.x == nextPos.x && pos.y != nextPos.y) 
-//								{
-//									OnMoveTurning(true, nextPos.y > pos.y);
-//								}
-//							}
-//							else if (prePos.x == pos.x && prePos.y != pos.y)
-//							{
-//								if (pos.y == nextPos.y && pos.x != nextPos.x) 
-//								{
-//									OnMoveTurning(false, nextPos.x > pos.x);
-//								}
-//							}
-//						}
-
 				SetPosition(kPos);
 			}
 			else

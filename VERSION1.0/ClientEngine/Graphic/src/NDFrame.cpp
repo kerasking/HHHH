@@ -296,7 +296,7 @@ void NDFrame::run(float fScale)
 		this->initTiles();
 	}
 
-	NDAnimation *pkAnimation = m_pkBelongAnimation;
+	NDAnimation* pkAnimation = m_pkBelongAnimation;
 	NDAnimationGroup *pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
 	int nCount = m_pkFrameTiles->count();
 
@@ -346,6 +346,7 @@ void NDFrame::run(float fScale)
 
 		GLfloat x = pkAnimationGroup->getPosition().x;
 		GLfloat y = pkAnimationGroup->getPosition().y;
+
 		if (pkAnimation->getMidX() != 0)
 		{
 			x -= (pkAnimation->getMidX() - pkAnimation->getX()) * fScale;

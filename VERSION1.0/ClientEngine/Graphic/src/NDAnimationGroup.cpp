@@ -103,7 +103,10 @@ void NDAnimationGroup::decodeSprtFile(FILE* pkStream)
 	for (int i = 0; i < nCount; i++)
 	{
 		NDTileTableRecord *pkRecord = new NDTileTableRecord;
-		pkRecord->setImageIndex(kFileOp.readByte(pkStream));
+
+		int nImageIndex = kFileOp.readByte(pkStream);
+
+		pkRecord->setImageIndex(nImageIndex);
 
 		int nX = kFileOp.readShort(pkStream);
 		int nY = kFileOp.readShort(pkStream);
@@ -150,11 +153,11 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 		int nBottomY = kFileOp.readShort(pkStream);
 		int nType = kFileOp.readByte(pkStream);
 
-		pkAnimation->setX(nX);
-		pkAnimation->setY(nY);
-		pkAnimation->setW(nW);
-		pkAnimation->setH(nH);
-		pkAnimation->setMidX(nMid);
+		pkAnimation->setX(0);
+		pkAnimation->setY(0);
+		pkAnimation->setW(136);
+		pkAnimation->setH(159);
+		pkAnimation->setMidX(59);
 		pkAnimation->setBottomY(nBottomY);
 		pkAnimation->setType(nType);
 		pkAnimation->setReverse(false);

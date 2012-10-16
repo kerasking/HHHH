@@ -27,6 +27,7 @@ class NDAnimation: public cocos2d::CCObject
 	CC_SYNTHESIZE(int, m_nY, Y)
 	CC_SYNTHESIZE(int, m_nW, W)
 	CC_SYNTHESIZE(int, m_nH, H)
+	CC_SYNTHESIZE(int, m_nPlayCount,PlayCount);
 	CC_SYNTHESIZE(int, m_nMidX, MidX)
 	CC_SYNTHESIZE(int, m_nBottomY, BottomY)
 	CC_SYNTHESIZE(int, m_nType, Type)
