@@ -72,7 +72,7 @@ public:
 	void Initialization(const char* imageFile, int hrizontalPixel,
 			int verticalPixel = 0);
 
-	void Cut(CGRect rect);
+	void Cut(CGRect kRect);
 
 	void SetReverse(bool reverse);
 
@@ -97,17 +97,18 @@ public:
 private:
 	cocos2d::CCTexture2D* m_pkTexture;
 	CGRect m_cutRect;
-	bool m_reverse, m_bAdvance;
-	PictureRotation m_rotation;
+	bool m_bReverse;
+	bool m_bAdvance;
+	PictureRotation m_kRotation;
 
 	// ±ä»Ò
-	bool m_canGray;
-	bool m_stateGray;
-	cocos2d::CCTexture2D *m_textureGray;
+	bool m_bCanGray;
+	bool m_bStateGray;
+	cocos2d::CCTexture2D *m_pkTextureGray;
 
 	GLfloat m_coordinates[8];
 	GLubyte m_colors[16];
-	GLfloat m_vertices[8];
+	GLfloat m_pfVertices[8];
 
 	std::string m_strfile;
 	int m_hrizontalPixel;

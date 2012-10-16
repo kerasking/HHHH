@@ -122,13 +122,12 @@ class CC_DLL CCTexture2D : public CCObject
 	CC_PROPERTY_READONLY(bool, m_bHasPremultipliedAlpha, HasPremultipliedAlpha);
 	CC_PROPERTY(ccResolutionType, m_eResolutionType, ResolutionType);
 
-	CC_SYNTHESIZE_READONLY(bool,m_bKeepData,KeepData);							///< @author xiezhenghai
-	CC_SYNTHESIZE_READONLY(void*,m_pData,Data);									///< @author xiezhenghai
-	CC_SYNTHESIZE_READONLY(GLubyte,m_nContainerType,ContainerType);				///< @author xiezhenghai
+	CC_SYNTHESIZE_READONLY(bool,m_bKeepData,KeepData);	///< @author xiezhenghai
+	CC_SYNTHESIZE_READONLY(void*,m_pData,Data);///< @author xiezhenghai
+	CC_SYNTHESIZE_READONLY(GLubyte,m_nContainerType,ContainerType);///< @author xiezhenghai
 
 	CC_SYNTHESIZE(unsigned int,m_uiWidth,Width);
 	CC_SYNTHESIZE(unsigned int,m_uiHeight,Height);
-
 
 public:
 
@@ -143,9 +142,10 @@ public:
 
 	/** Intializes with a texture2d with data */
 	bool initWithData(const void* data, CCTexture2DPixelFormat pixelFormat,
-		unsigned int pixelsWide, unsigned int pixelsHigh, const CCSize& contentSize);
+			unsigned int pixelsWide, unsigned int pixelsHigh, const CCSize& contentSize);
 
-	void SaveToBitmap(const char* pszPngFile,unsigned char** pBMPColorBuf,int rowByteWidth,int width,int height,int colorDepth,RGBQUAD* pPalette,int nPaletteLen);
+	void SaveToBitmap(const char* pszPngFile,unsigned char** pBMPColorBuf,int rowByteWidth,
+		int width,int height,int colorDepth,RGBQUAD* pPalette,int nPaletteLen);
 	void WriteToBMPFile(char* pFileName,BYTE* pBmpBuf,int nBmplen);
 
 	/**
@@ -167,8 +167,8 @@ public:
 	bool initWithImage(CCImage *uiImage, ccResolutionType resolution);
 
 	bool initWithPaletteData(const void* pData,
-		CCTexture2DPixelFormat ePixelFormat,int nWidth,
-		int nHeight,CCSize kSize,unsigned int uiSizeOfData);
+			CCTexture2DPixelFormat ePixelFormat,int nWidth,
+			int nHeight,CCSize kSize,unsigned int uiSizeOfData);
 	bool initWithPalettePNG(const char* pszPNGFile);
 
 	/**
@@ -177,7 +177,7 @@ public:
 	 */
 	/** Initializes a texture from a string with dimensions, alignment, font name and font size */
 	bool initWithString(const char *text, const CCSize& dimensions,
-		CCTextAlignment alignment, const char *fontName, float fontSize);
+			CCTextAlignment alignment, const char *fontName, float fontSize);
 	/** Initializes a texture from a string with font name and font size */
 	bool initWithString(const char *text, const char *fontName, float fontSize);
 
@@ -191,7 +191,7 @@ public:
 	 */
 	/** Initializes a texture from a PVRTC buffer */
 	bool initWithPVRTCData(const void *data, int level, int bpp,
-		bool hasAlpha, int length, CCTexture2DPixelFormat pixelFormat);
+			bool hasAlpha, int length, CCTexture2DPixelFormat pixelFormat);
 #endif // CC_SUPPORT_PVRTC
 	/** Initializes a texture from a PVR file */
 	bool initWithPVRFile(const char* file);
@@ -264,13 +264,13 @@ public:
 private:
 
 	bool initPremultipliedATextureWithImage(CCImage * image,
-		unsigned int pixelsWide, unsigned int pixelsHigh);
+			unsigned int pixelsWide, unsigned int pixelsHigh);
 
 	// By default PVR images are treated as if they don't have the alpha channel premultiplied
 	bool m_bPVRHaveAlphaPremultiplied;
 
 };
 }
- //namespace   cocos2d 
+				//namespace   cocos2d 
 
 #endif //__CCTEXTURE2D_H__
