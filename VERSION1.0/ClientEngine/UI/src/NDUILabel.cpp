@@ -153,8 +153,7 @@ namespace NDEngine
 					CGSizeMake(thisRect.size.width, thisRect.size.height),
 					CCTextAlignmentLeft,
 					FONT_NAME,
-					m_fontSize
-					);
+					m_fontSize);
 // 			[[CCTexture2D alloc] initWithString:text 
 // 											 dimensions:dim 
 // 											  alignment:UITextAlignmentLeft

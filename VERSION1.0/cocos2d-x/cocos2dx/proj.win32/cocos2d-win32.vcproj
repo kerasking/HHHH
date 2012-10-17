@@ -1096,6 +1096,10 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="src"
+			>
+		</Filter>
 		<File
 			RelativePath="..\CCCamera.cpp"
 			>

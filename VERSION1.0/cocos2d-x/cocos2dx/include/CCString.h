@@ -31,7 +31,10 @@ THE SOFTWARE.
 
 #include <stdarg.h>
 
-namespace cocos2d {
+namespace cocos2d
+{
+
+	static char g_GBKConvUTF8Buf[5000] = {0};
 
 	class CC_DLL CCString : public CCObject
 	{
@@ -78,44 +81,34 @@ namespace cocos2d {
 		*/
 		const char* UTF8String()
 		{
-			iconv_t pConvert = 0;
-			const char* pszInbuffer = m_sString.c_str();
-			char* pszOutBuffer = new char[2048];
+			const char* strChar = m_sString.c_str();
+			iconv_t iconvH = 0;
+			iconvH = iconv_open("utf-8","gb2312");
 
-			memset(pszOutBuffer,0,sizeof(char) * 2048);
-
-			int nStatus = 0;
-			size_t sizOutBuffer = 2048;
-			size_t sizInBuffer = m_sString.length();
-			const char* pszInPtr = pszInbuffer;
-			size_t sizInSize = sizInBuffer;
-			char* pszOutPtr = pszOutBuffer;
-			size_t sizOutSize = sizOutBuffer;
-
-			pConvert = iconv_open("UTF-8","GB2312");
-
-			iconv(pConvert,0,0,0,0);
-
-			while (0 < sizInSize)
+			if (iconvH == 0)
 			{
-				size_t sizRes = iconv(pConvert,(const char**)&pszInPtr,
-					&sizInSize,&pszOutPtr,&sizOutSize);
-
-				if (pszOutPtr != pszOutBuffer)
-				{
-					strncpy(pszOutBuffer,pszOutBuffer,sizOutSize);
-				}
-
-				if ((size_t)-1 == sizRes)
-				{
-					int nOne = 1;
-					iconvctl(pConvert,ICONV_SET_DISCARD_ILSEQ,&nOne);
-				}
+				return NULL;
 			}
 
-			iconv_close(pConvert);
+			size_t strLength = strlen(strChar);
+			size_t outLength = strLength<<2;
+			size_t copyLength = outLength;
+			memset(g_GBKConvUTF8Buf, 0, 5000);
 
-			return pszOutBuffer;
+			char* outbuf = (char*) malloc(outLength);
+			char* pBuff = outbuf;
+			memset( outbuf, 0, outLength);
+
+			if (-1 == iconv(iconvH, &strChar, &strLength, &outbuf, &outLength))
+			{
+				iconv_close(iconvH);
+				return NULL;
+			}
+			memcpy(g_GBKConvUTF8Buf,pBuff,copyLength);
+			free(pBuff);
+			iconv_close(iconvH);
+
+			return g_GBKConvUTF8Buf;
 		}
 
 		virtual ~CCString(){ m_sString.clear(); }
