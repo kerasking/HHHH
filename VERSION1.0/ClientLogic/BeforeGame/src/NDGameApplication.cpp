@@ -18,6 +18,7 @@
 #include "ScriptDrama.h"
 #include <ScriptGameLogic.h>
 #include <NDSocket.h>
+#include "NDMapMgr.h"
 
 namespace NDEngine
 {

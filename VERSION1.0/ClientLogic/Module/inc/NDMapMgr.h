@@ -247,9 +247,7 @@ typedef VEC_BATTLE_SKILL::iterator VEC_BATTLE_SKILL_IT;
 class NDMapMgr:
 	public NDObject,
 	public TSingleton<NDMapMgr>,
-	public NDMsgObject,
-	public NDUIDialogDelegate,
-	public NDUICustomViewDelegate
+	public NDMsgObject
 {
 public:
 

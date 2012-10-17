@@ -2736,4 +2736,9 @@ void NDManualRole::SetShowPet( ShowPetInfo& kInfo )
 	
 }
 
+bool NDManualRole::ChangeModelWithMount( int nRideStatus,int nMountType )
+{
+	return true;
+}
+
 }
