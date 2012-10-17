@@ -257,80 +257,80 @@ void ScriptMgr::SetScriptFilePath(const char* szFilePath)
 	m_strScriptFilePath	= szFilePath;
 }
 
-// int ScriptMgr::excuteLuaFuncRetN(const char* funcname, const char* modulename)
-// {
-// 	LuaObject funcObj = GetLuaFunc(funcname, modulename);
-// 	
-// 	if (!funcObj.IsFunction())
-// 	{
-// 		return 0;
-// 	}
-// 	
-// 	LuaFunction<int> func = funcObj;
-// 	int ret = func();
-// 	
-// 	return ret;
-// }
-// 
-// bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename)
-// {
-// 	LuaObject funcObj = GetLuaFunc(funcname, modulename);
-// 
-// 	if (!funcObj.IsFunction())
-// 	{
-// 		return false;
-// 	}
-// 	
-// 	LuaFunction<bool> func = funcObj;
-// 	bool ret = func();
-// 	
-// 	return ret;
-// }
-// 
-// bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename, int param1)
-// {
-// 	LuaObject funcObj = GetLuaFunc(funcname, modulename);
-// 	
-// 	if (!funcObj.IsFunction())
-// 	{
-// 		return false;
-// 	}
-// 	
-// 	LuaFunction<bool> func = funcObj;
-// 	bool ret = func(param1);
-// 	
-// 	return ret;
-// }
-// 
-// bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename, int param1, int param2)
-// {
-// 	LuaObject funcObj = GetLuaFunc(funcname, modulename);
-// 	
-// 	if (!funcObj.IsFunction())
-// 	{
-// 		return false;
-// 	}
-// 	
-// 	LuaFunction<bool> func = funcObj;
-// 	bool ret = func(param1, param2);
-// 	
-// 	return ret;
-// }
-// 
-// bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename, int param1, int param2, int param3)
-// {
-// 	LuaObject funcObj = GetLuaFunc(funcname, modulename);
-// 	
-// 	if (!funcObj.IsFunction())
-// 	{
-// 		return false;
-// 	}
-// 	
-// 	LuaFunction<bool> func = funcObj;
-// 	bool ret = func(param1, param2, param3);
-// 	
-// 	return ret;
-// }
+//  int ScriptMgr::excuteLuaFuncRetN(const char* funcname, const char* modulename)
+//  {
+//  	LuaObject funcObj = GetLuaFunc(funcname, modulename);
+//  	
+//  	if (!funcObj.IsFunction())
+//  	{
+//  		return 0;
+//  	}
+//  	
+//  	LuaFunction<int> func = funcObj;
+//  	int ret = func();
+//  	
+//  	return ret;
+//  }
+ 
+ bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename)
+ {
+ 	LuaObject funcObj = GetLuaFunc(funcname, modulename);
+ 
+ 	if (!funcObj.IsFunction())
+ 	{
+ 		return false;
+ 	}
+ 	
+ 	LuaFunction<bool> func = funcObj;
+ 	bool ret = func();
+ 	
+ 	return ret;
+ }
+ 
+ bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename, int param1)
+ {
+ 	LuaObject funcObj = GetLuaFunc(funcname, modulename);
+ 	
+ 	if (!funcObj.IsFunction())
+ 	{
+ 		return false;
+ 	}
+ 	
+ 	LuaFunction<bool> func = funcObj;
+ 	bool ret = func(param1);
+ 	
+ 	return ret;
+ }
+ 
+ bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename, int param1, int param2)
+ {
+ 	LuaObject funcObj = GetLuaFunc(funcname, modulename);
+ 	
+ 	if (!funcObj.IsFunction())
+ 	{
+ 		return false;
+ 	}
+ 	
+ 	LuaFunction<bool> func = funcObj;
+ 	bool ret = func(param1, param2);
+ 	
+ 	return ret;
+ }
+ 
+ bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename, int param1, int param2, int param3)
+ {
+ 	LuaObject funcObj = GetLuaFunc(funcname, modulename);
+ 	
+ 	if (!funcObj.IsFunction())
+ 	{
+ 		return false;
+ 	}
+ 	
+ 	LuaFunction<bool> func = funcObj;
+ 	bool ret = func(param1, param2, param3);
+ 	
+ 	return ret;
+ }
 
 bool ScriptMgr::IsLuaFuncExist(const char* funcname, const char* modulename)
 {

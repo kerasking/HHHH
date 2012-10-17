@@ -127,18 +127,18 @@ void NDMapMgr::processPlayer(NDTransData* pkData, int nLength)
 	(*pkData) >> uiNum; // TQMB 个数 1字节
 	for (int i = 0; i < uiNum; i++)
 	{
-		std::string str = pkData->ReadUnicodeString();
+		std::string strString = pkData->ReadUnicodeString();
 		if (i == 0)
 		{
-			name = str;
+			name = strString;
 		}
-		else if (i == 1 && str.length() > 2)
+		else if (i == 1 && strString.length() > 2)
 		{
-			strRank = str;
+			strRank = strString;
 		}
 		else if (i == 2)
 		{
-			synName = str;
+			synName = strString;
 		}
 	}
 
@@ -197,9 +197,9 @@ void NDMapMgr::processPlayer(NDTransData* pkData, int nLength)
 	}
 
 	// 光效
-	int effectAmount = pkData->ReadByte();
+	int nEffectAmount = pkData->ReadByte();
 	std::vector<int> vEffect;
-	for (int i = 0; i < effectAmount; i++)
+	for (int i = 0; i < nEffectAmount; i++)
 	{
 		vEffect.push_back(pkData->ReadInt());
 	}
@@ -234,11 +234,6 @@ void NDMapMgr::processPlayer(NDTransData* pkData, int nLength)
 					usRecordY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
 	pkRole->SetSpriteDir(btDir);
 	pkRole->SetServerPositon(usRecordX, usRecordY);
-
-// 	if (pkRole->isTeamMember())
-// 	{
-// 		updateTeamListAddPlayer(*pkRole);
-// 	}
 
 	if (!bAdd)
 	{
