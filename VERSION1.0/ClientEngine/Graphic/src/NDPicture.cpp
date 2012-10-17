@@ -21,14 +21,14 @@ IMPLEMENT_CLASS(NDTexture,NDObject)
 
 NDPicture::NDPicture(bool canGray/*=false*/)
 {
-	m_texture = NULL;
+	m_pkTexture = NULL;
 	m_cutRect = CGRectZero;
-	m_reverse = false;
-	m_rotation = PictureRotation0;
+	m_bReverse = false;
+	m_kRotation = PictureRotation0;
 
-	m_canGray = true;
-	m_stateGray = false;
-	m_textureGray = NULL;
+	m_bCanGray = true;
+	m_bStateGray = false;
+	m_pkTextureGray = NULL;
 
 	m_hrizontalPixel = 0;
 	m_verticalPixel = 0;
@@ -36,17 +36,17 @@ NDPicture::NDPicture(bool canGray/*=false*/)
 
 NDPicture::~NDPicture()
 {
-	CC_SAFE_RELEASE (m_texture);
-	if (m_canGray)
+	CC_SAFE_RELEASE (m_pkTexture);
+	if (m_bCanGray)
 	{
-		CC_SAFE_RELEASE (m_textureGray);
+		CC_SAFE_RELEASE (m_pkTextureGray);
 	}
 }
 
 void NDPicture::Initialization(const char* imageFile)
 {
-	CC_SAFE_RELEASE_NULL (m_texture);
-	CC_SAFE_RELEASE_NULL (m_textureGray);
+	CC_SAFE_RELEASE_NULL (m_pkTexture);
+	CC_SAFE_RELEASE_NULL (m_pkTextureGray);
 
 	CCImage image;
 
@@ -55,8 +55,8 @@ void NDPicture::Initialization(const char* imageFile)
 		//ScriptMgrObj.DebugOutPut("picture [%s] not exist", imageFile);
 	}
 
-	m_texture = new CCTexture2D;
-	m_texture->initWithImage(&image);
+	m_pkTexture = new CCTexture2D;
+	m_pkTexture->initWithImage(&image);
 
 	/*
 	 if (m_canGray && image)
@@ -67,8 +67,8 @@ void NDPicture::Initialization(const char* imageFile)
 	 }
 	 */
 
-	m_cutRect = CGRectMake(0, 0, m_texture->getContentSizeInPixels().width,
-			m_texture->getContentSizeInPixels().height);
+	m_cutRect = CGRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
+			m_pkTexture->getContentSizeInPixels().height);
 	this->SetCoorinates();
 	this->SetColor(ccc4(255, 255, 255, 255));
 
@@ -156,8 +156,8 @@ void NDPicture::Initialization(const char* imageFile)
 void NDPicture::Initialization(const char* imageFile, int hrizontalPixel,
 		int verticalPixel/*=0*/)
 {
-	CC_SAFE_RELEASE_NULL (m_texture);
-	CC_SAFE_RELEASE_NULL (m_textureGray);
+	CC_SAFE_RELEASE_NULL (m_pkTexture);
+	CC_SAFE_RELEASE_NULL (m_pkTextureGray);
 
 	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
@@ -224,12 +224,12 @@ void NDPicture::Initialization(const char* imageFile, int hrizontalPixel,
 
 	if (!bLoadStretchImageSucess)
 	{
-		m_texture = new CCTexture2D;
-		m_texture->initWithImage(&image);
+		m_pkTexture = new CCTexture2D;
+		m_pkTexture->initWithImage(&image);
 	}
 
-	m_cutRect = CGRectMake(0, 0, m_texture->getContentSizeInPixels().width,
-			m_texture->getContentSizeInPixels().height);
+	m_cutRect = CGRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
+			m_pkTexture->getContentSizeInPixels().height);
 	this->SetCoorinates();
 	this->SetColor(ccc4(255, 255, 255, 255));
 
@@ -245,47 +245,47 @@ void NDPicture::Initialization(const char* imageFile, int hrizontalPixel,
 
 CCTexture2D *NDPicture::GetTexture()
 {
-	return m_texture;
+	return m_pkTexture;
 }
 
 void NDPicture::SetTexture(CCTexture2D* tex)
 {
 	CC_SAFE_RETAIN(tex);
-	CC_SAFE_RELEASE (m_texture);
-	m_texture = tex;
-	m_cutRect = CGRectMake(0, 0, m_texture->getContentSizeInPixels().width,
-			m_texture->getContentSizeInPixels().height);
+	CC_SAFE_RELEASE (m_pkTexture);
+	m_pkTexture = tex;
+	m_cutRect = CGRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
+			m_pkTexture->getContentSizeInPixels().height);
 	this->SetCoorinates();
 	this->SetColor(ccc4(255, 255, 255, 255));
 }
 
 void NDPicture::SetCoorinates()
 {
-	if (m_texture)
+	if (m_pkTexture)
 	{
-		if (m_reverse)
+		if (m_bReverse)
 		{
 			m_coordinates[0] = (m_cutRect.origin.x + m_cutRect.size.width)
-					/ m_texture->getPixelsWide();
+					/ m_pkTexture->getPixelsWide();
 			m_coordinates[1] = (m_cutRect.origin.y + m_cutRect.size.height)
-					/ m_texture->getPixelsHigh();
-			m_coordinates[2] = m_cutRect.origin.x / m_texture->getPixelsWide();
+					/ m_pkTexture->getPixelsHigh();
+			m_coordinates[2] = m_cutRect.origin.x / m_pkTexture->getPixelsWide();
 			m_coordinates[3] = m_coordinates[1];
 			m_coordinates[4] = m_coordinates[0];
-			m_coordinates[5] = m_cutRect.origin.y / m_texture->getPixelsHigh();
+			m_coordinates[5] = m_cutRect.origin.y / m_pkTexture->getPixelsHigh();
 			m_coordinates[6] = m_coordinates[2];
 			m_coordinates[7] = m_coordinates[5];
 		}
 		else
 		{
-			m_coordinates[0] = m_cutRect.origin.x / m_texture->getPixelsWide();
+			m_coordinates[0] = m_cutRect.origin.x / m_pkTexture->getPixelsWide();
 			m_coordinates[1] = (m_cutRect.origin.y + m_cutRect.size.height)
-					/ m_texture->getPixelsHigh();
+					/ m_pkTexture->getPixelsHigh();
 			m_coordinates[2] = (m_cutRect.origin.x + m_cutRect.size.width)
-					/ m_texture->getPixelsWide();
+					/ m_pkTexture->getPixelsWide();
 			m_coordinates[3] = m_coordinates[1];
 			m_coordinates[4] = m_coordinates[0];
-			m_coordinates[5] = m_cutRect.origin.y / m_texture->getPixelsHigh();
+			m_coordinates[5] = m_cutRect.origin.y / m_pkTexture->getPixelsHigh();
 			m_coordinates[6] = m_coordinates[2];
 			m_coordinates[7] = m_coordinates[5];
 		}
@@ -296,78 +296,78 @@ void NDPicture::SetVertices(CGRect drawRect)
 {
 	CGSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
 
-	switch (m_rotation)
+	switch (m_kRotation)
 	{
 	case PictureRotation0:
-		m_vertices[0] = drawRect.origin.x;
-		m_vertices[1] = winSize.height - drawRect.origin.y
+		m_pfVertices[0] = drawRect.origin.x;
+		m_pfVertices[1] = winSize.height - drawRect.origin.y
 				- drawRect.size.height;
-		m_vertices[2] = drawRect.origin.x + drawRect.size.width;
-		m_vertices[3] = m_vertices[1];
-		m_vertices[4] = drawRect.origin.x;
-		m_vertices[5] = winSize.height - drawRect.origin.y;
-		m_vertices[6] = m_vertices[2];
-		m_vertices[7] = m_vertices[5];
+		m_pfVertices[2] = drawRect.origin.x + drawRect.size.width;
+		m_pfVertices[3] = m_pfVertices[1];
+		m_pfVertices[4] = drawRect.origin.x;
+		m_pfVertices[5] = winSize.height - drawRect.origin.y;
+		m_pfVertices[6] = m_pfVertices[2];
+		m_pfVertices[7] = m_pfVertices[5];
 		break;
 	case PictureRotation90:
-		m_vertices[0] = drawRect.origin.x;
-		m_vertices[1] = winSize.height - drawRect.origin.y;
-		m_vertices[2] = m_vertices[0];
-		m_vertices[3] = m_vertices[1] - drawRect.size.height;
-		m_vertices[4] = m_vertices[0] + drawRect.size.width;
-		m_vertices[5] = m_vertices[1];
-		m_vertices[6] = m_vertices[4];
-		m_vertices[7] = m_vertices[3];
+		m_pfVertices[0] = drawRect.origin.x;
+		m_pfVertices[1] = winSize.height - drawRect.origin.y;
+		m_pfVertices[2] = m_pfVertices[0];
+		m_pfVertices[3] = m_pfVertices[1] - drawRect.size.height;
+		m_pfVertices[4] = m_pfVertices[0] + drawRect.size.width;
+		m_pfVertices[5] = m_pfVertices[1];
+		m_pfVertices[6] = m_pfVertices[4];
+		m_pfVertices[7] = m_pfVertices[3];
 		break;
 	case PictureRotation180:
-		m_vertices[0] = drawRect.origin.x + drawRect.size.width;
-		m_vertices[1] = winSize.height - drawRect.origin.y;
-		m_vertices[2] = drawRect.origin.x;
-		m_vertices[3] = m_vertices[1];
-		m_vertices[4] = m_vertices[0];
-		m_vertices[5] = winSize.height - drawRect.origin.y
+		m_pfVertices[0] = drawRect.origin.x + drawRect.size.width;
+		m_pfVertices[1] = winSize.height - drawRect.origin.y;
+		m_pfVertices[2] = drawRect.origin.x;
+		m_pfVertices[3] = m_pfVertices[1];
+		m_pfVertices[4] = m_pfVertices[0];
+		m_pfVertices[5] = winSize.height - drawRect.origin.y
 				- drawRect.size.height;
-		m_vertices[6] = m_vertices[2];
-		m_vertices[7] = m_vertices[5];
+		m_pfVertices[6] = m_pfVertices[2];
+		m_pfVertices[7] = m_pfVertices[5];
 		break;
 	case PictureRotation270:
-		m_vertices[0] = drawRect.origin.x + drawRect.size.width;
-		m_vertices[1] = winSize.height
+		m_pfVertices[0] = drawRect.origin.x + drawRect.size.width;
+		m_pfVertices[1] = winSize.height
 				- (drawRect.origin.y + drawRect.size.height);
-		m_vertices[2] = m_vertices[0];
-		m_vertices[3] = m_vertices[1] + drawRect.size.height;
-		m_vertices[4] = m_vertices[0] - drawRect.size.width;
-		m_vertices[5] = m_vertices[1];
-		m_vertices[6] = m_vertices[4];
-		m_vertices[7] = m_vertices[3];
+		m_pfVertices[2] = m_pfVertices[0];
+		m_pfVertices[3] = m_pfVertices[1] + drawRect.size.height;
+		m_pfVertices[4] = m_pfVertices[0] - drawRect.size.width;
+		m_pfVertices[5] = m_pfVertices[1];
+		m_pfVertices[6] = m_pfVertices[4];
+		m_pfVertices[7] = m_pfVertices[3];
 		break;
 	default:
 		break;
 	}
 }
 
-void NDPicture::Cut(CGRect rect)
+void NDPicture::Cut(CGRect kRect)
 {
-	if (m_texture)
+	if (m_pkTexture)
 	{
 		bool bCutSucess = false;
 
-		if (rect.origin.x + rect.size.width
-				<= m_texture->getContentSizeInPixels().width
-				&& rect.origin.y + rect.size.height
-						<= m_texture->getContentSizeInPixels().height)
+		if (kRect.origin.x + kRect.size.width
+				<= m_pkTexture->getContentSizeInPixels().width
+				&& kRect.origin.y + kRect.size.height
+						<= m_pkTexture->getContentSizeInPixels().height)
 		{
 			bCutSucess = true;
-			m_cutRect = rect;
+			m_cutRect = kRect;
 		}
-		else if (rect.origin.x < m_texture->getContentSizeInPixels().width
-				&& rect.origin.y < m_texture->getContentSizeInPixels().height)
+		else if (kRect.origin.x < m_pkTexture->getContentSizeInPixels().width
+				&& kRect.origin.y < m_pkTexture->getContentSizeInPixels().height)
 		{
 			bCutSucess = true;
-			m_cutRect.origin = rect.origin;
+			m_cutRect.origin = kRect.origin;
 			m_cutRect.size = CGSizeMake(
-					m_texture->getContentSizeInPixels().width - rect.origin.x,
-					m_texture->getContentSizeInPixels().height - rect.origin.y);
+					m_pkTexture->getContentSizeInPixels().width - kRect.origin.x,
+					m_pkTexture->getContentSizeInPixels().height - kRect.origin.y);
 		}
 
 		if (bCutSucess)
@@ -379,62 +379,62 @@ void NDPicture::Cut(CGRect rect)
 
 void NDPicture::SetReverse(bool reverse)
 {
-	m_reverse = reverse;
+	m_bReverse = reverse;
 	this->SetCoorinates();
 }
 
 void NDPicture::Rotation(PictureRotation rotation)
 {
-	m_rotation = rotation;
+	m_kRotation = rotation;
 }
 
 NDPicture* NDPicture::Copy()
 {
-	NDPicture* pic = new NDPicture();
-	CC_SAFE_RETAIN (m_texture);
-	pic->m_texture = m_texture;
-	pic->m_reverse = m_reverse;
-	pic->m_cutRect = m_cutRect;
-	pic->m_rotation = m_rotation;
-	pic->m_bAdvance = m_bAdvance;
-	pic->m_hrizontalPixel = m_hrizontalPixel;
-	pic->m_verticalPixel = m_verticalPixel;
-	memcpy(pic->m_coordinates, m_coordinates, sizeof(GLfloat) * 8);
-	memcpy(pic->m_colors, m_colors, sizeof(GLbyte) * 16);
-	memcpy(pic->m_vertices, m_vertices, sizeof(GLfloat) * 8);
+	NDPicture* pkPicture = new NDPicture();
+	CC_SAFE_RETAIN (m_pkTexture);
+	pkPicture->m_pkTexture = m_pkTexture;
+	pkPicture->m_bReverse = m_bReverse;
+	pkPicture->m_cutRect = m_cutRect;
+	pkPicture->m_kRotation = m_kRotation;
+	pkPicture->m_bAdvance = m_bAdvance;
+	pkPicture->m_hrizontalPixel = m_hrizontalPixel;
+	pkPicture->m_verticalPixel = m_verticalPixel;
+	memcpy(pkPicture->m_coordinates, m_coordinates, sizeof(GLfloat) * 8);
+	memcpy(pkPicture->m_colors, m_colors, sizeof(GLbyte) * 16);
+	memcpy(pkPicture->m_pfVertices, m_pfVertices, sizeof(GLfloat) * 8);
 
 	//»ÒÍ¼
-	pic->m_canGray = m_canGray;
-	pic->m_stateGray = m_stateGray;
-	pic->m_strfile = m_strfile;
-	if (m_canGray)
+	pkPicture->m_bCanGray = m_bCanGray;
+	pkPicture->m_bStateGray = m_bStateGray;
+	pkPicture->m_strfile = m_strfile;
+	if (m_bCanGray)
 	{
-		CC_SAFE_RETAIN (m_textureGray);
-		pic->m_textureGray = m_textureGray;
+		CC_SAFE_RETAIN (m_pkTextureGray);
+		pkPicture->m_pkTextureGray = m_pkTextureGray;
 	}
 	else
 	{
-		pic->m_textureGray = NULL;
+		pkPicture->m_pkTextureGray = NULL;
 	}
 
-	return pic;
+	return pkPicture;
 }
 
 void NDPicture::DrawInRect(CGRect rect)
 {
 	CCTexture2D *tmpTexture = NULL;
 
-	if (m_canGray && m_stateGray)
-	tmpTexture = m_textureGray;
+	if (m_bCanGray && m_bStateGray)
+	tmpTexture = m_pkTextureGray;
 	else
-	tmpTexture = m_texture;
+	tmpTexture = m_pkTexture;
 
 	if (tmpTexture)
 	{
 		this->SetVertices(rect);
 
 		glBindTexture(GL_TEXTURE_2D, tmpTexture->getName());
-		glVertexPointer(2, GL_FLOAT, 0, m_vertices);
+		glVertexPointer(2, GL_FLOAT, 0, m_pfVertices);
 		glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_colors);
 		glTexCoordPointer(2, GL_FLOAT, 0, m_coordinates);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -444,19 +444,19 @@ void NDPicture::DrawInRect(CGRect rect)
 CGSize NDPicture::GetSize()
 {
 	CGSize size = CGSizeZero;
-	if (m_texture)
+	if (m_pkTexture)
 	{
 		size = m_cutRect.size;
-		if (size.width > m_texture->getContentSizeInPixels().width)
+		if (size.width > m_pkTexture->getContentSizeInPixels().width)
 		{
-			size.width = m_texture->getContentSizeInPixels().width;
+			size.width = m_pkTexture->getContentSizeInPixels().width;
 		}
-		if (size.height > m_texture->getContentSizeInPixels().height)
+		if (size.height > m_pkTexture->getContentSizeInPixels().height)
 		{
-			size.height = m_texture->getContentSizeInPixels().height;
+			size.height = m_pkTexture->getContentSizeInPixels().height;
 		}
 
-		if (m_rotation == PictureRotation90 || m_rotation == PictureRotation270)
+		if (m_kRotation == PictureRotation90 || m_kRotation == PictureRotation270)
 		{
 			CGFloat temp = size.width;
 			size.width = size.height;
@@ -494,7 +494,7 @@ bool NDPicture::SetGrayState(bool gray)
 {
 	//if (!m_canGray) return false;
 
-	if (gray && NULL == m_textureGray && !m_strfile.empty())
+	if (gray && NULL == m_pkTextureGray && !m_strfile.empty())
 	{
 		// totdo
 // 			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];	
@@ -562,7 +562,7 @@ bool NDPicture::SetGrayState(bool gray)
 // 			[pool release];
 	}
 
-	m_stateGray = gray;
+	m_bStateGray = gray;
 
 	return true;
 }
@@ -571,7 +571,7 @@ bool NDPicture::IsGrayState()
 {
 	//if (!m_canGray) return false;
 
-	return m_stateGray;
+	return m_bStateGray;
 }
 
 /////////////////////////////
@@ -593,11 +593,11 @@ void NDPictureDictionary::Recyle()
 	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
 	//NSMutableArray *recyle = [[NSMutableArray alloc] init];
-	std::vector<std::string> recyle;
+	std::vector<std::string> kRecyle;
 
-	for (unsigned int i = 0; i < recyle.size(); i++)
+	for (unsigned int i = 0; i < kRecyle.size(); i++)
 	{
-		std::string key = recyle[i];
+		std::string key = kRecyle[i];
 
 		DictionaryObject *dictObj = (DictionaryObject*)m_nsDictionary->objectForKey(key);
 		if (NULL == dictObj)
@@ -618,7 +618,7 @@ void NDPictureDictionary::Recyle()
 #endif
 			if (texture && 1 >= texture->retainCount())
 			{
-				recyle.push_back(key);
+				kRecyle.push_back(key);
 			}
 			else
 			{
@@ -628,9 +628,9 @@ void NDPictureDictionary::Recyle()
 		}
 	}
 
-	for (unsigned int i = 0; i < recyle.size(); i++)
+	for (unsigned int i = 0; i < kRecyle.size(); i++)
 	{
-		m_nsDictionary->removeObjectForKey(recyle[i]);
+		m_nsDictionary->removeObjectForKey(kRecyle[i]);
 	}
 
 	//[pool release];

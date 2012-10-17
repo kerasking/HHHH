@@ -112,7 +112,7 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 				|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_END
 				|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_START
 				|| m_pkCurrentAnimation->getCurIndexInAniGroup()
-						!= nAnimationIndex)
+						!= 1)
 		{
 			m_pkCurrentAnimation =
 					(NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(
@@ -122,6 +122,14 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 			SAFE_RELEASE(m_pkFrameRunRecord);
 			m_pkFrameRunRecord = new NDFrameRunRecord;
 		}
+
+		m_pkCurrentAnimation =
+			(NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(
+			nAnimationIndex);
+		m_pkCurrentAnimation->setCurIndexInAniGroup(nAnimationIndex);
+		CC_SAFE_RELEASE_NULL (m_pkFrameRunRecord);
+		SAFE_RELEASE(m_pkFrameRunRecord);
+		m_pkFrameRunRecord = new NDFrameRunRecord;
 
 		SetContentSize(
 				CGSizeMake(m_pkCurrentAnimation->getW(),
@@ -150,27 +158,6 @@ void NDSprite::RunAnimation(bool bDraw)
 				}
 
 				CGPoint kPos = m_kPointList.at(m_nMovePathIndex++);
-//						if (m_movePathIndex < (int)m_pointList.size() && m_movePathIndex > 2)
-//						{
-//							CGPoint prePos = GetPosition();
-//							CGPoint nextPos = m_pointList[m_movePathIndex];
-//							
-//							if (prePos.y == pos.y && prePos.x != pos.x)
-//							{
-//								if (pos.x == nextPos.x && pos.y != nextPos.y) 
-//								{
-//									OnMoveTurning(true, nextPos.y > pos.y);
-//								}
-//							}
-//							else if (prePos.x == pos.x && prePos.y != pos.y)
-//							{
-//								if (pos.y == nextPos.y && pos.x != nextPos.x) 
-//								{
-//									OnMoveTurning(false, nextPos.x > pos.x);
-//								}
-//							}
-//						}
-
 				SetPosition(kPos);
 			}
 			else
@@ -923,26 +910,25 @@ cocos2d::CCTexture2D* NDSprite::getColorTexture(int imageIndex,
 		NDAnimationGroup* animationGroup)
 {
 	CCTexture2D* pkTex = 0;
-	NDPicture* pkPic = 0;
 
-	if (animationGroup && 1 != m_nColorInfo)
-	{
-		if (0 == m_strColorInfoImage.length())
-		{
-			std::vector < std::string > *pkVector = animationGroup->getImages();
-			m_strColorInfoImage = (*pkVector)[imageIndex];
-		}
-
-		pkPic = NDPicturePool::DefaultPool()->AddPicture(
-				m_strColorInfoImage.c_str());
-
-		if (0 == pkPic)
-		{
-			return 0;
-		}
-
-		pkTex = pkPic->GetTexture();
-	}
+// 	if (animationGroup && 1 != m_nColorInfo)
+// 	{
+// 		if (0 == m_strColorInfoImage.length())
+// 		{
+// 			std::vector < std::string > *pkVector = animationGroup->getImages();
+// 			m_strColorInfoImage = (*pkVector)[imageIndex];
+// 		}
+// 
+// 		pkPic = NDPicturePool::DefaultPool()->AddPicture(
+// 				m_strColorInfoImage.c_str());
+// 
+// 		if (0 == pkPic)
+// 		{
+// 			return 0;
+// 		}
+// 
+// 		pkTex = pkPic->GetTexture();
+// 	}
 
 	return pkTex;
 }

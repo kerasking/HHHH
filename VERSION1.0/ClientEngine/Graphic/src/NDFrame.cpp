@@ -156,7 +156,7 @@ m_nTableIndex(0)
 //////////////////////////////////////////////////////////////////////////
 NDFrame::NDFrame() :
 m_nEnduration(0),
-m_BelongAnimation(NULL),
+m_pkBelongAnimation(NULL),
 m_pkSubAnimationGroups(NULL),
 m_pkFrameTiles(NULL),
 m_bNeedInitTitles(true)
@@ -208,7 +208,7 @@ void NDFrame::drawHeadAt(CGPoint pos)
 	int coordX = 0;
 	int coordY = 0;
 
-	NDAnimation* pkAnimation = m_BelongAnimation;
+	NDAnimation* pkAnimation = m_pkBelongAnimation;
 	NDAnimationGroup* pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
 
 	if (m_bNeedInitTitles)
@@ -241,8 +241,8 @@ void NDFrame::drawHeadAt(CGPoint pos)
 				(NDTileTableRecord *) pkAnimationGroup->getTileTable()->objectAtIndex(
 						pkFrameTile->getTableIndex());
 
-		int fx = pkFrameTile->getX();
-		int fy = pkFrameTile->getY();
+		int fX = pkFrameTile->getX();
+		int fY = pkFrameTile->getY();
 
 		int clipw = pkRecord->getW();
 		int replace = pkRecord->getReplace();
@@ -268,10 +268,10 @@ void NDFrame::drawHeadAt(CGPoint pos)
 
 			int xx = pos.x
 					+ (pkAnimation->getMidX()
-							+ (pkAnimation->getMidX() - fx - clipw)
+							+ (pkAnimation->getMidX() - fX - clipw)
 							- pkAnimation->getX()) - coordX;
 
-			int yy = pos.y + (fy - pkAnimation->getY()) - coordY;
+			int yy = pos.y + (fY - pkAnimation->getY()) - coordY;
 
 			pkTile->setReverse(true);
 			pkTile->setDrawRect(
@@ -296,7 +296,7 @@ void NDFrame::run(float fScale)
 		this->initTiles();
 	}
 
-	NDAnimation *pkAnimation = m_BelongAnimation;
+	NDAnimation* pkAnimation = m_pkBelongAnimation;
 	NDAnimationGroup *pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
 	int nCount = m_pkFrameTiles->count();
 
@@ -339,13 +339,17 @@ void NDFrame::run(float fScale)
 		}
 		else
 		{
-			pkTile->setCutRect(
-					CGRectMake(pkRecord->getX(), pkRecord->getY(), pkRecord->getW(),
-							pkRecord->getH()));
+			int nCutX = pkRecord->getX();
+			int nCutY = pkRecord->getY();
+			int nCutW = pkRecord->getW();
+			int nCutH = pkRecord->getH();
+
+			pkTile->setCutRect(CGRectMake(nCutX, nCutY, nCutW,nCutH));
 		}
 
 		GLfloat x = pkAnimationGroup->getPosition().x;
 		GLfloat y = pkAnimationGroup->getPosition().y;
+
 		if (pkAnimation->getMidX() != 0)
 		{
 			x -= (pkAnimation->getMidX() - pkAnimation->getX()) * fScale;
@@ -1025,7 +1029,7 @@ TILE_REVERSE_ROTATION NDFrame::tileReverseRotationWithReverse(bool bReverse,
 
 CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 {
-	NDAnimation *pkAnimation = m_BelongAnimation;
+	NDAnimation *pkAnimation = m_pkBelongAnimation;
 	NDAnimationGroup *pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
 	NDEngine::NDSprite *pkSprite =
 			(NDEngine::NDSprite *) pkAnimationGroup->getRuningSprite();
@@ -1064,6 +1068,16 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 	{
 		pkTexture = CCTextureCache::sharedTextureCache()->addImage(
 				(*vImg)[imageIndex].c_str());
+	}
+
+	if (REPLACEABLE_ONE_HAND_WEAPON_1 == replace)
+	{
+		int a = 0;
+	}
+
+	if (0 == pkTexture)
+	{
+		
 	}
 
 	//tex = CCTextureCache::sharedTextureCache()->addImage(animationGroup->getImages()->getObjectAtIndex(imageIndex);

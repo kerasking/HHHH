@@ -47,7 +47,17 @@
 #define MANUELROLE_CHIVALROUS_FEMALE			GetAniPath("tang_woman.spr")
 
 // 切屏点动画
+// 切屏点动画
 #define TRANSPORT							99
+#define UPLEV_EFFECT						900
+#define TASKDONE_EFFECT						901
+#define ROLE_SEAT_EFFECT					902
+#define DRITICAL_EFFECT						903
+#define SKILL_ATKED_EFFECT					904
+#define PHY_ATKED_EFFECT					905
+#define ATKBACK_EFFECT						906
+#define ACTIVITY_OPEN_EFFECT				907
+#define MANAFULL_EFFECT						908
 
 // 玩家的动作。原型是面朝左边的
 #define MANUELROLE_STAND					0
@@ -121,6 +131,10 @@
 #define MANUELROLE_RIDE_QL						50
 
 
+#define SYSTEM_BG_MUSIC_KEY						"SYSTEM_BG_MUSIC"
+#define SYSTEM_EF_SOUND_KEY						"SYSTEM_EF_SOUND"
+#define SYSTEM_SHOW_OTHER_KEY					"SYSTEM_SHOW_OTHER"
+#define SYSTEM_SHOW_NAME_KEY					"SYSTEM_SHOW_NAME"
 // monster的动作，原型是面朝右边的。
 #define MONSTER_MAP_STAND						0
 #define MONSTER_MAP_MOVE						1
