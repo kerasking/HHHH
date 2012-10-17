@@ -47,7 +47,7 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 	{
 	case 1159:
 	{
-		processChangeRoom(0,0);
+		//processChangeRoom(0,0);
 	}
 		break;
 	case _MSG_CHG_PET_POINT:
@@ -840,7 +840,7 @@ bool NDMapMgr::loadSceneByMapDocID(int nMapID)
 	NDDirector::DefaultDirector()->PurgeCachedData();
 	NDDirector::DefaultDirector()->ReplaceScene(NDScene::Scene());
 
-	CSMGameScene* pkScene = CSMGameScene::Scene();
+	GameScene* pkScene = GameScene::Scene();
 	pkScene->Initialization(nMapID);
 	pkScene->SetTag(SMGAMESCENE_TAG);
 	NDDirector::DefaultDirector()->ReplaceScene(pkScene);

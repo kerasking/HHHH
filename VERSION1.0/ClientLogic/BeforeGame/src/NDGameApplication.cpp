@@ -113,12 +113,13 @@ bool NDGameApplication::initInstance()
 
 bool NDGameApplication::applicationDidFinishLaunching()
 {
-	NDMapMgrObj;
+	NDMapMgr& kMapMgr = NDMapMgrObj;
 	NDDirector* pkDirector = NDDirector::DefaultDirector();
 	ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();
 
 	pkDirector->Initialization();
-	pkDirector->RunScene(GameScene::Scene());
+	
+	kMapMgr.processChangeRoom(0,0);
 
 	ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
 	NDScriptGameData* pkData = new NDScriptGameData;

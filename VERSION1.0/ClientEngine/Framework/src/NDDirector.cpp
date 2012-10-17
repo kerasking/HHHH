@@ -186,7 +186,7 @@ void NDDirector::ReplaceScene(NDScene* pkScene, bool bAnimate/*=false*/)
 
 	m_kScenesStack.push_back(pkScene);
 
-	m_pkDirector->replaceScene((CCScene *) pkScene->m_ccNode);
+	m_pkDirector->runWithScene((CCScene *) pkScene->m_ccNode);
 
 	this->AfterDirectorPushScene(pkScene);
 
@@ -251,10 +251,6 @@ bool NDDirector::PopScene(bool cleanUp)
 
 void NDDirector::PurgeCachedData()
 {
-	// todo(zjh)
-// 		NDPicturePool::PurgeDefaultPool();
-// 		CCTextureCache::sharedTextureCache()->removeAllTextures();
-// 		NDAnimationGroupPool::purgeDefaultPool();
 }
 
 void NDDirector::Pause()
@@ -337,11 +333,7 @@ void NDDirector::SetViewRect(CGRect rect, NDNode* node)
 	CGSize winSize = m_pkDirector->getWinSizeInPixels();
 
 	glEnable (GL_SCISSOR_TEST);
-	//		if (m_TransitionSceneWait)
-	//			glScissor(winSize.width - rect.origin.x - rect.size.width,
-	//					  winSize.height - rect.origin.y - rect.size.height,
-	//					  rect.size.width, rect.size.height);
-	//		else
+
 	glScissor(winSize.height - rect.origin.y - rect.size.height,
 			winSize.width - rect.origin.x - rect.size.width, rect.size.height,
 			rect.size.width);
