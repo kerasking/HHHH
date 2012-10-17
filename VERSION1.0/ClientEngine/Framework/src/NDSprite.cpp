@@ -902,26 +902,25 @@ cocos2d::CCTexture2D* NDSprite::getColorTexture(int imageIndex,
 		NDAnimationGroup* animationGroup)
 {
 	CCTexture2D* pkTex = 0;
-	NDPicture* pkPic = 0;
 
-	if (animationGroup && 1 != m_nColorInfo)
-	{
-		if (0 == m_strColorInfoImage.length())
-		{
-			std::vector < std::string > *pkVector = animationGroup->getImages();
-			m_strColorInfoImage = (*pkVector)[imageIndex];
-		}
-
-		pkPic = NDPicturePool::DefaultPool()->AddPicture(
-				m_strColorInfoImage.c_str());
-
-		if (0 == pkPic)
-		{
-			return 0;
-		}
-
-		pkTex = pkPic->GetTexture();
-	}
+// 	if (animationGroup && 1 != m_nColorInfo)
+// 	{
+// 		if (0 == m_strColorInfoImage.length())
+// 		{
+// 			std::vector < std::string > *pkVector = animationGroup->getImages();
+// 			m_strColorInfoImage = (*pkVector)[imageIndex];
+// 		}
+// 
+// 		pkPic = NDPicturePool::DefaultPool()->AddPicture(
+// 				m_strColorInfoImage.c_str());
+// 
+// 		if (0 == pkPic)
+// 		{
+// 			return 0;
+// 		}
+// 
+// 		pkTex = pkPic->GetTexture();
+// 	}
 
 	return pkTex;
 }
