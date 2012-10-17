@@ -123,6 +123,14 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 			m_pkFrameRunRecord = new NDFrameRunRecord;
 		}
 
+		m_pkCurrentAnimation =
+			(NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(
+			nAnimationIndex);
+		m_pkCurrentAnimation->setCurIndexInAniGroup(nAnimationIndex);
+		CC_SAFE_RELEASE_NULL (m_pkFrameRunRecord);
+		SAFE_RELEASE(m_pkFrameRunRecord);
+		m_pkFrameRunRecord = new NDFrameRunRecord;
+
 		SetContentSize(
 				CGSizeMake(m_pkCurrentAnimation->getW(),
 						m_pkCurrentAnimation->getH()));
