@@ -18,15 +18,15 @@ Timer::Timer()
 
 void Timer::onTimer(ccTime elapsed)
 {
- 	if (m_TimerCallback)
- 	{
- 		m_TimerCallback->OnTimer(m_nTag);
- 	}
+	if (m_TimerCallback)
+	{
+		m_TimerCallback->OnTimer(m_nTag);
+	}
 }
 
 NDTimer::NDTimer()
 {
-	
+
 }
 
 NDTimer::~NDTimer()
@@ -46,16 +46,17 @@ void NDTimer::SetTimer(ITimerCallback* timerCallback, OBJID tag, float interval)
 	if (timerCallback && interval > 0)
 	{
 		IMP_CALLBACK cbImp;
-		cbImp.tag				= tag;
-		cbImp.timerCallback		= timerCallback;
-		
+		cbImp.tag = tag;
+		cbImp.timerCallback = timerCallback;
+
 		if (m_mapTimer.count(cbImp) <= 0)
 		{
 			CCScheduler *sch = CCScheduler::sharedScheduler();
 			Timer *timer = new Timer;
 			timer->setTag(tag);
 			timer->setTimerCallback(timerCallback);
-			sch->scheduleSelector(schedule_selector(Timer::onTimer), timer, interval, false);
+			sch->scheduleSelector(schedule_selector(Timer::onTimer), timer,
+					interval, false);
 			m_mapTimer[cbImp] = timer;
 		}
 	}
@@ -66,9 +67,9 @@ void NDTimer::KillTimer(ITimerCallback* timerCallback, OBJID tag)
 	IMP_CALLBACK cbImp;
 	cbImp.tag = tag;
 	cbImp.timerCallback = timerCallback;
-	
+
 	MAP_TIMER::iterator it = m_mapTimer.find(cbImp);
-	
+
 	if (it != m_mapTimer.end())
 	{
 		CCScheduler *sch = CCScheduler::sharedScheduler();

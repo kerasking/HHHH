@@ -170,7 +170,13 @@ void NDDirector::ReplaceScene(NDScene* pkScene, bool bAnimate/*=false*/)
 		//NDLog("===============================当前场景栈大小[%u]", m_scenesStack.size());
 		this->BeforeDirectorPopScene(m_kScenesStack.back(), true);
 
-		delete m_kScenesStack.back();
+		NDScene* pkScene = m_kScenesStack.back();
+
+		if (pkScene)
+		{
+			delete pkScene;
+		}
+
 		m_kScenesStack.pop_back();
 
 		this->AfterDirectorPopScene(true);

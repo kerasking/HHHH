@@ -113,6 +113,7 @@ bool NDGameApplication::initInstance()
 
 bool NDGameApplication::applicationDidFinishLaunching()
 {
+	NDMapMgrObj;
 	NDDirector* pkDirector = NDDirector::DefaultDirector();
 	ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();
 

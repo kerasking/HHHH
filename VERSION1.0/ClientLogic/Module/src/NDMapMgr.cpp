@@ -12,6 +12,7 @@
 #include "GameDataBase.h"
 #include "ItemMgr.h"
 #include "ScriptGlobalEvent.h"
+#include "NDNetMsg.h"
 
 namespace NDEngine
 {
@@ -21,14 +22,16 @@ IMPLEMENT_CLASS(NDMapMgr,NDObject);
 bool NDMapMgr::m_bVerifyVersion = true;
 bool NDMapMgr::m_bFirstCreate = false;
 
-NDMapMgr::NDMapMgr()
+NDMapMgr::NDMapMgr():
+m_nCurrentMonsterBound(0),
+m_nRoadBlockX(0),
+m_nRoadBlockY(0),
+m_nSaveMapID(0),
+m_nMapID(0),
+m_nMapDocID(0)
 {
-	m_nCurrentMonsterBound = 0;
-	m_nRoadBlockX = 0;
-	m_nRoadBlockY = 0;
-	m_nSaveMapID = 0;
-	m_nMapID = 0;
-	m_nMapDocID = 0;
+	NDNetMsgPool& kNetPool = NDNetMsgPoolObj;
+	kNetPool.RegMsg(1159,this);
 }
 
 NDMapMgr::~NDMapMgr()
@@ -42,6 +45,11 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 {
 	switch (usMsgID)
 	{
+	case 1159:
+	{
+		processChangeRoom(0,0);
+	}
+		break;
 	case _MSG_CHG_PET_POINT:
 	{
 		int nBtAnswer = pkData->ReadByte();
@@ -610,7 +618,7 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 	//NDMapMgrObj.ClearNPC();
 	//NDMapMgrObj.ClearMonster();
 	//NDMapMgrObj.ClearGP();
-	//NDMapMgrObj.loadSceneByMapDocID(nMapDocID);
+	NDMapMgrObj.loadSceneByMapDocID(2);
 
 	//NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(
 	//		NDDirector::DefaultDirector()->GetRunningScene());
