@@ -22,14 +22,12 @@
 // #include "ScriptTimer.h"
 // #include "ScriptDrama.h"
 
-
 using namespace std;
 //#include "NDDataPersist.h"
 
 #include "src/lstate.h"
 //#include "NDTextureMonitor.h"
 #include "NDPath.h"
-
 
 using namespace NDEngine;
 
@@ -50,28 +48,28 @@ void luaExceptLoadOutPut(const char *exceptinfo)
 LuaObject ScriptMgr::GetLuaFunc(const char* funcname, const char* modulename)
 {
 	LuaObject funcObj;
-	
-	if	(!funcname) 
+
+	if (!funcname)
 	{
 		return funcObj;
 	}
-	
+
 	if (modulename && std::string("") != modulename)
 	{
 		LuaObject module = LuaStateMgrObj.GetState()->GetGlobal(modulename);
-		
+
 		if (!module.IsTable())
 		{
 			return funcObj;
 		}
-		
+
 		funcObj = module.GetByName(funcname);
 	}
-	else 
+	else
 	{
 		funcObj = LuaStateMgrObj.GetState()->GetGlobal(funcname);
 	}
-	
+
 	return funcObj;
 }
 
@@ -83,22 +81,22 @@ ScriptMgr::~ScriptMgr()
 {
 	if (m_fDebugOutPut)
 	{
-		fclose(m_fDebugOutPut);
+		fclose (m_fDebugOutPut);
 	}
 }
 
 /*
-void ScriptMgr::DebugOutPut(const char* str)
-{
-	if (!str || !m_fDebugOutPut)
-	{
-		return;
-	}
-	
-	fprintf(m_fDebugOutPut, "\r\n%s", str);
-	fflush(m_fDebugOutPut);
-}
-*/
+ void ScriptMgr::DebugOutPut(const char* str)
+ {
+ if (!str || !m_fDebugOutPut)
+ {
+ return;
+ }
+ 
+ fprintf(m_fDebugOutPut, "\r\n%s", str);
+ fflush(m_fDebugOutPut);
+ }
+ */
 
 void ScriptMgr::DebugOutPut(const char* fmt, ...)
 {
@@ -109,26 +107,26 @@ void ScriptMgr::DebugOutPut(const char* fmt, ...)
 	va_list argumentList;
 	char buffer[4096] = "";
 	va_start(argumentList, fmt);
-	::vsprintf( buffer, fmt, argumentList);
+	::vsprintf(buffer, fmt, argumentList);
 	va_end(argumentList);
 #ifdef DEBUG
 	printf("\n%s", buffer);
 #else
 	fprintf(m_fDebugOutPut, "\r\n%s", buffer);
-	fflush(m_fDebugOutPut);
+	fflush (m_fDebugOutPut);
 #endif
 }
 
 //using namespace LuaPlus;
 void ScriptMgr::update()
 {
- 	static unsigned int frameCount = 0;
-	if ((++frameCount % 20) == 0) 
+	static unsigned int frameCount = 0;
+	if ((++frameCount % 20) == 0)
 	{
 		//LuaStateMgrObj.GetState()->GC(LUA_GCCOLLECT, 0);
 	}
-}	
-// 	if (++frameCount % 120 == 0) // 120甯ф墦鍗颁竴娆ua褰撳墠浣跨敤鐨勫唴瀛樻�婚噺
+}
+// 	if (++frameCount % 120 == 0) // 120甯ф墦鍗颁竴娆ua褰撳墠浣跨敤鐨勫唴瀛樻�婚噺
 // 	{
 // 		lua_State* state = LuaStateMgrObj.GetState()->GetCState();
 // 		if (state)
@@ -151,11 +149,11 @@ void ScriptMgr::update()
 
 void ScriptMgr::Load()
 {
-	char szFileName[256] = {0};
+	char szFileName[256] =
+	{ 0 };
 
-	_snprintf(szFileName, sizeof(szFileName), "%slog%ld.txt", 
-		m_strLogFilePath,
-		time(NULL));
+	_snprintf(szFileName, sizeof(szFileName), "%slog%ld.txt", m_strLogFilePath,
+			time(NULL));
 
 	m_fDebugOutPut = fopen(szFileName, "a");
 	LoadRegClassFuncs();
@@ -167,7 +165,6 @@ void ScriptMgr::Load()
 	//	(*it)->OnLoad();
 	//}
 
-	
 	//ScriptCommonLoad();
 	//
 	//ScriptGlobalEvent::Load();
@@ -188,7 +185,6 @@ void ScriptMgr::Load()
 	//
 	//ScriptDramaLoad();
 
-
 	LuaStateMgrObj.SetExceptOutput(&luaExceptLoadOutPut);
 
 	// make sure load lua file last;
@@ -198,15 +194,14 @@ void ScriptMgr::Load()
 	{
 		return;
 	}
-	
+
 	LuaStateMgrObj.SetExceptOutput(&luaExceptRunTimeOutPut);
 }
 
 void ScriptMgr::AddScriptObject(ScriptObject* object)
 {
-	for(vec_script_object_it it = m_vScriptObject.begin();
-		it != m_vScriptObject.end();
-		it++)
+	for (vec_script_object_it it = m_vScriptObject.begin();
+			it != m_vScriptObject.end(); it++)
 	{
 		if (object == *it)
 		{
@@ -219,9 +214,8 @@ void ScriptMgr::AddScriptObject(ScriptObject* object)
 
 void ScriptMgr::DelScriptObject(ScriptObject* object)
 {
-	for(vec_script_object_it it = m_vScriptObject.begin();
-		it != m_vScriptObject.end();
-		it++)
+	for (vec_script_object_it it = m_vScriptObject.begin();
+			it != m_vScriptObject.end(); it++)
 	{
 		if (object == *it)
 		{
@@ -232,8 +226,8 @@ void ScriptMgr::DelScriptObject(ScriptObject* object)
 
 bool ScriptMgr::AddRegClassFunc(RegisterClassFunc func)
 {
-	vRegClassFunc.push_back(func);
-	
+	m_vRegClassFunc.push_back(func);
+
 	return true;
 }
 
@@ -244,7 +238,7 @@ void ScriptMgr::SetLogFilePath(const char* szFilePath)
 		return;
 	}
 
-	m_strLogFilePath	= szFilePath;
+	m_strLogFilePath = szFilePath;
 }
 
 void ScriptMgr::SetScriptFilePath(const char* szFilePath)
@@ -254,7 +248,7 @@ void ScriptMgr::SetScriptFilePath(const char* szFilePath)
 		return;
 	}
 
-	m_strScriptFilePath	= szFilePath;
+	m_strScriptFilePath = szFilePath;
 }
 
 //  int ScriptMgr::excuteLuaFuncRetN(const char* funcname, const char* modulename)
@@ -271,92 +265,96 @@ void ScriptMgr::SetScriptFilePath(const char* szFilePath)
 //  	
 //  	return ret;
 //  }
- 
- bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename)
- {
- 	LuaObject funcObj = GetLuaFunc(funcname, modulename);
- 
- 	if (!funcObj.IsFunction())
- 	{
- 		return false;
- 	}
- 	
- 	LuaFunction<bool> func = funcObj;
- 	bool ret = func();
- 	
- 	return ret;
- }
- 
- bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename, int param1)
- {
- 	LuaObject funcObj = GetLuaFunc(funcname, modulename);
- 	
- 	if (!funcObj.IsFunction())
- 	{
- 		return false;
- 	}
- 	
- 	LuaFunction<bool> func = funcObj;
- 	bool ret = func(param1);
- 	
- 	return ret;
- }
- 
- bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename, int param1, int param2)
- {
- 	LuaObject funcObj = GetLuaFunc(funcname, modulename);
- 	
- 	if (!funcObj.IsFunction())
- 	{
- 		return false;
- 	}
- 	
- 	LuaFunction<bool> func = funcObj;
- 	bool ret = func(param1, param2);
- 	
- 	return ret;
- }
- 
- bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename, int param1, int param2, int param3)
- {
- 	LuaObject funcObj = GetLuaFunc(funcname, modulename);
- 	
- 	if (!funcObj.IsFunction())
- 	{
- 		return false;
- 	}
- 	
- 	LuaFunction<bool> func = funcObj;
- 	bool ret = func(param1, param2, param3);
- 	
- 	return ret;
- }
 
-bool ScriptMgr::IsLuaFuncExist(const char* funcname, const char* modulename)
+bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename)
 {
 	LuaObject funcObj = GetLuaFunc(funcname, modulename);
-	
+
 	if (!funcObj.IsFunction())
 	{
 		return false;
 	}
-	
+
+	LuaFunction<bool> func = funcObj;
+	bool ret = func();
+
+	return ret;
+}
+
+bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename,
+		int param1)
+{
+	LuaObject funcObj = GetLuaFunc(funcname, modulename);
+
+	if (!funcObj.IsFunction())
+	{
+		return false;
+	}
+
+	LuaFunction<bool> func = funcObj;
+	bool ret = func(param1);
+
+	return ret;
+}
+
+bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename,
+		int param1, int param2)
+{
+	LuaObject funcObj = GetLuaFunc(funcname, modulename);
+
+	if (!funcObj.IsFunction())
+	{
+		return false;
+	}
+
+	LuaFunction<bool> func = funcObj;
+	bool ret = func(param1, param2);
+
+	return ret;
+}
+
+bool ScriptMgr::excuteLuaFunc(const char* funcname, const char* modulename,
+		int param1, int param2, int param3)
+{
+	LuaObject funcObj = GetLuaFunc(funcname, modulename);
+
+	if (!funcObj.IsFunction())
+	{
+		return false;
+	}
+
+	LuaFunction<bool> func = funcObj;
+	bool ret = func(param1, param2, param3);
+
+	return ret;
+}
+
+bool ScriptMgr::IsLuaFuncExist(const char* funcname, const char* modulename)
+{
+	LuaObject funcObj = GetLuaFunc(funcname, modulename);
+
+	if (!funcObj.IsFunction())
+	{
+		return false;
+	}
+
 	return true;
 }
 
 void ScriptMgr::LoadRegClassFuncs()
 {
-	vec_regclass_func_it it = vRegClassFunc.begin();
+	vec_regclass_func_it it = m_vRegClassFunc.begin();
 
-	for (; it != vRegClassFunc.end(); it++) 
+	for (; it != m_vRegClassFunc.end(); it++)
 	{
 		(*it)();
 	}
-	
-	vRegClassFunc.clear();
+
+	m_vRegClassFunc.clear();
 }
 
-int NDEngine::ScriptMgr::excuteLuaFuncRetN( const char* funcname, const char* modulename )
+int NDEngine::ScriptMgr::excuteLuaFuncRetN(const char* funcname,
+		const char* modulename)
 {
 	return 0;
 }
