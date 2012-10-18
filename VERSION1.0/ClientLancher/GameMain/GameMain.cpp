@@ -29,6 +29,7 @@ int WINAPI WinMain (HINSTANCE hInstance,
  	InitGameInstance();
  
 	NDConsole kConsole;
+	kConsole.BeginReadLoop();
 
     // 手机平台堆栈会比较小, 以后要改用new
  	NDGameApplication kApp;
