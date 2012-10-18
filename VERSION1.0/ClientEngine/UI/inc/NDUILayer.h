@@ -153,7 +153,8 @@ private:
 
 	NDPicture* m_pkPic;
 	NDPicture* m_pkPicFocus;
-	bool m_bClearOnFree, m_bFocusClearOnFree;
+	bool m_bClearOnFree;
+	bool m_bFocusClearOnFree;
 	cocos2d::CCTexture2D* m_pkBackgroudTexture;
 	cocos2d::ccColor4B m_kBackgroudColor;
 

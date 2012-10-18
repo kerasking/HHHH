@@ -538,10 +538,10 @@ NDNpc* NDMapMgr::GetNPC(int nID)
 
 void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 {
-	if (0 == pkData || 0 == nLength)
-	{
-		return;
-	}
+// 	if (0 == pkData || 0 == nLength)
+// 	{
+// 		return;
+// 	}
 
 	m_nCurrentMonsterBound = 0;
 
@@ -556,25 +556,25 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 
 	BattleMgrObj.quitBattle(false);
 
-	pkData->ReadShort();
-	pkData->ReadInt();
+// 	pkData->ReadShort();
+// 	pkData->ReadInt();
 
-	int nMapID = pkData->ReadInt();
-	int nMapDocID = pkData->ReadInt();
+// 	int nMapID = pkData->ReadInt();
+// 	int nMapDocID = pkData->ReadInt();
+// 
+// 	int dwPortalX = pkData->ReadShort();
+// 	int dwPortalY = pkData->ReadShort();
 
-	int dwPortalX = pkData->ReadShort();
-	int dwPortalY = pkData->ReadShort();
+// 	pkData->ReadShort();
+// 	pkData->ReadShort();
+// 	pkData->ReadShort();
+// 	pkData->ReadShort();
 
-	pkData->ReadShort();
-	pkData->ReadShort();
-	pkData->ReadShort();
-	pkData->ReadShort();
-
-	m_nMapType = pkData->ReadInt();
-
-	m_strMapName = pkData->ReadUnicodeString();
-
-	NDPlayer& kPlayer = NDPlayer::defaultHero();
+// 	m_nMapType = pkData->ReadInt();
+// 
+// 	m_strMapName = pkData->ReadUnicodeString();
+// 
+ 	NDPlayer& kPlayer = NDPlayer::defaultHero();
 
 	if (kPlayer.IsInState(USERSTATE_DEAD))
 	{
@@ -585,14 +585,14 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 
 	NDMapMgrObj.ClearManualRole();
 
-	m_nMapID = nMapID;
+	m_nMapID = 1;//nMapID;
 
 	if (1 == m_nMapID || 2 == m_nMapID)
 	{
 		m_nSaveMapID = m_nMapID;
 	}
 
-	kPlayer.m_nCurMapID = nMapDocID;
+	kPlayer.m_nCurMapID = 0;//nMapDocID;
 
 	ShowPetInfo kPetInfoRerserve;
 	kPlayer.GetShowPetInfo(kPetInfoRerserve);
