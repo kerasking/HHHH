@@ -226,59 +226,58 @@ GameScene::GameScene()
 //	m_playerHead = NULL; ///< 临时性注�?? 郭浩
 //	m_targetHead = NULL; ///< 临时性注�?? 郭浩
 //	m_petHead = NULL; ///< 临时性注�?? 郭浩
-	m_tlRelieve = NULL;
-	m_relieveLayer = NULL;
-//	m_miniMap = NULL; ///< 临时性注�?? 郭浩
-	maplayer = NULL;
-
-	m_hccOPItem = NULL;
-
-	m_pkUpdatePlayer = 0;
-
-	m_picMap = new NDPicture();
-	m_picMap->Initialization(NDPath::GetFullImagepath("ui_map.png"));
-	m_btnMap = NULL;
-
-	m_picTarget = new NDPicture();
-	m_picTarget->Initialization(NDPath::GetFullImagepath("ui_target.png"));
-	m_btnTarget = NULL;
-
-	m_picInterative = new NDPicture();
-	m_picInterative->Initialization(
-			NDPath::GetFullImagepath("ui_interective.png"));
-	m_btnInterative = NULL;
-
-	//m_hccOPMenu = NULL;		///< 临时性注�?? 郭浩
-
-	m_picTeam = new NDPicture();
-	m_picTeam->Initialization(NDPath::GetFullImagepath("ui_team.png"));
-	m_btnTeam = NULL;
-
-	m_picSocial = new NDPicture();
-	m_picSocial->Initialization(NDPath::GetFullImagepath("ui_social.png"));
-	m_btnSocial = NULL;
-
-	m_picTalk = new NDPicture();
-	m_picTalk->Initialization(NDPath::GetFullImagepath("ui_talk.png"));
-	m_btnTalk = NULL;
-
-	m_picTask = new NDPicture();
-	m_picTask->Initialization(NDPath::GetFullImagepath("ui_task.png"));
-	m_btnTask = NULL;
-
-	m_picBag = new NDPicture();
-	m_picBag->Initialization(NDPath::GetFullImagepath("ui_bag.png"));
-	m_btnBag = NULL;
-
-	m_picStore = new NDPicture();
-	m_picStore->Initialization(NDPath::GetFullImagepath("ui_store.png"));
-	m_btnStore = NULL;
-
-	m_picMenu = new NDPicture();
-	m_picMenu->Initialization(NDPath::GetFullImagepath("ui_menu.png"));
-	m_btnMenu = NULL;
-
-	m_tlShare = NULL;
+// 	m_tlRelieve = NULL;
+// 	m_relieveLayer = NULL;
+// 	m_pkMapLayerLogic = NULL;
+// 
+// 	m_hccOPItem = NULL;
+// 
+// 	m_pkUpdatePlayer = 0;
+// 
+// 	m_picMap = new NDPicture();
+// 	m_picMap->Initialization(NDPath::GetFullImagepath("ui_map.png"));
+// 	m_btnMap = NULL;
+// 
+// 	m_picTarget = new NDPicture();
+// 	m_picTarget->Initialization(NDPath::GetFullImagepath("ui_target.png"));
+// 	m_btnTarget = NULL;
+// 
+// 	m_picInterative = new NDPicture();
+// 	m_picInterative->Initialization(
+// 			NDPath::GetFullImagepath("ui_interective.png"));
+// 	m_btnInterative = NULL;
+// 
+// 	//m_hccOPMenu = NULL;		///< 临时性注�?? 郭浩
+// 
+// 	m_picTeam = new NDPicture();
+// 	m_picTeam->Initialization(NDPath::GetFullImagepath("ui_team.png"));
+// 	m_btnTeam = NULL;
+// 
+// 	m_picSocial = new NDPicture();
+// 	m_picSocial->Initialization(NDPath::GetFullImagepath("ui_social.png"));
+// 	m_btnSocial = NULL;
+// 
+// 	m_picTalk = new NDPicture();
+// 	m_picTalk->Initialization(NDPath::GetFullImagepath("ui_talk.png"));
+// 	m_btnTalk = NULL;
+// 
+// 	m_picTask = new NDPicture();
+// 	m_picTask->Initialization(NDPath::GetFullImagepath("ui_task.png"));
+// 	m_btnTask = NULL;
+// 
+// 	m_picBag = new NDPicture();
+// 	m_picBag->Initialization(NDPath::GetFullImagepath("ui_bag.png"));
+// 	m_btnBag = NULL;
+// 
+// 	m_picStore = new NDPicture();
+// 	m_picStore->Initialization(NDPath::GetFullImagepath("ui_store.png"));
+// 	m_btnStore = NULL;
+// 
+// 	m_picMenu = new NDPicture();
+// 	m_picMenu->Initialization(NDPath::GetFullImagepath("ui_menu.png"));
+// 	m_btnMenu = NULL;
+// 
+// 	m_tlShare = NULL;
 
 	//m_anilayerRequest = NULL;		///< 临时性注�?? 郭浩
 	//m_anilayerMail = NULL;		///< 临时性注�?? 郭浩
@@ -491,9 +490,9 @@ void GameScene::Initialization(int mapID)
 
 	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 
-	maplayer = new NDMapLayerLogic();
-	maplayer->Initialization(mapID);
-	this->AddChild(maplayer, MAPLAYER_Z, MAPLAYER_TAG);
+	m_pkMapLayerLogic = new NDMapLayerLogic();
+	m_pkMapLayerLogic->Initialization(mapID);
+	this->AddChild(m_pkMapLayerLogic, MAPLAYER_Z, MAPLAYER_TAG);
 
 	m_uiLayer = new MapUILayer;
 	m_uiLayer->Initialization();
@@ -804,12 +803,12 @@ layer->AddChild(btn); \
 
 CGSize GameScene::GetSize()
 {
-	return this->maplayer->GetContentSize();
+	return this->m_pkMapLayerLogic->GetContentSize();
 }
 
 cocos2d::CCArray* GameScene::GetSwitchs()
 {
-	return this->maplayer->GetMapData()->getSwitchs();
+	return this->m_pkMapLayerLogic->GetMapData()->getSwitchs();
 }
 
 void GameScene::SetMiniMapVisible(bool bVisible)
@@ -3016,10 +3015,10 @@ void GameScene::OnTimer(OBJID tag)
 
 	// test
 
-	if (m_pkUpdatePlayer)
-	{
-		m_pkUpdatePlayer->Update(10);
-	}
+// 	if (m_pkUpdatePlayer)
+// 	{
+// 		m_pkUpdatePlayer->Update(10);
+// 	}
 
 	if (2 == tag)
 	{

@@ -247,7 +247,7 @@ private:
 	bool checkNewPwd(const string& pwd);
 	void onClickTeam();
 
-	NDMapLayerLogic *maplayer;
+	NDMapLayerLogic* m_pkMapLayerLogic;
 
 	//游戏场景中的总是可视UI定义..
 	//NDUIHControlContainer		*m_hccOPItem;

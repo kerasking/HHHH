@@ -34,7 +34,7 @@ CSMGameScene* CSMGameScene::Scene()
 CSMGameScene::CSMGameScene()
 {
 //	m_miniMap	= NULL;	 ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	m_mapLayer	= NULL;
+	m_pkMapLayerLogic	= NULL;
 }
 
 CSMGameScene::~CSMGameScene()
@@ -48,9 +48,9 @@ void CSMGameScene::Initialization(int mapID)
 	CGSize winsize			= NDDirector::DefaultDirector()->GetWinSize();
 	float fScaleFactor		= NDDirector::DefaultDirector()->GetScaleFactor();
 	
-	m_mapLayer = new NDMapLayerLogic();
-	m_mapLayer->Initialization(mapID); 
-	this->AddChild(m_mapLayer, MAPLAYER_Z, MAPLAYER_TAG);
+	m_pkMapLayerLogic = new NDMapLayerLogic();
+	m_pkMapLayerLogic->Initialization(mapID); 
+	this->AddChild(m_pkMapLayerLogic, MAPLAYER_Z, MAPLAYER_TAG);
 	//this->ShowMiniMap(true);
 	
 	/*
@@ -102,12 +102,12 @@ void CSMGameScene::ShowMiniMap(bool bShow)
 
 CGSize CSMGameScene::GetSize()
 {
-	return this->m_mapLayer->GetContentSize();
+	return this->m_pkMapLayerLogic->GetContentSize();
 }
 
 cocos2d::CCArray* CSMGameScene::GetSwitchs()
 {
-	return this->m_mapLayer->GetMapData()->getSwitchs();
+	return this->m_pkMapLayerLogic->GetMapData()->getSwitchs();
 }
 
 void CSMGameScene::OnButtonClick(NDUIButton* button)

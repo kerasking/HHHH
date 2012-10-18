@@ -601,12 +601,12 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 
 	BattleMgrObj.quitBattle(false);
 
-// 	pkData->ReadShort();
-// 	pkData->ReadInt();
+	pkData->ReadShort();
+	pkData->ReadInt();
 
-// 	int nMapID = pkData->ReadInt();
-// 	int nMapDocID = pkData->ReadInt();
-// 
+	int nMapID = pkData->ReadInt();
+	int nMapDocID = pkData->ReadInt();
+
 // 	int dwPortalX = pkData->ReadShort();
 // 	int dwPortalY = pkData->ReadShort();
 
@@ -630,7 +630,7 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 
 	NDMapMgrObj.ClearManualRole();
 
-	m_nMapID = 1;//nMapID;
+	m_nMapID = nMapID;
 
 	if (1 == m_nMapID || 2 == m_nMapID)
 	{
@@ -663,7 +663,7 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 	//NDMapMgrObj.ClearNPC();
 	//NDMapMgrObj.ClearMonster();
 	//NDMapMgrObj.ClearGP();
-	NDMapMgrObj.loadSceneByMapDocID(2);
+	NDMapMgrObj.loadSceneByMapDocID(nMapDocID);
 
 	//NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(
 	//		NDDirector::DefaultDirector()->GetRunningScene());
@@ -885,7 +885,7 @@ bool NDMapMgr::loadSceneByMapDocID(int nMapID)
 	NDDirector::DefaultDirector()->PurgeCachedData();
 	NDDirector::DefaultDirector()->ReplaceScene(NDScene::Scene());
 
-	GameScene* pkScene = GameScene::Scene();
+	CSMGameScene* pkScene = CSMGameScene::Scene();
 	pkScene->Initialization(nMapID);
 	pkScene->SetTag(SMGAMESCENE_TAG);
 	NDDirector::DefaultDirector()->ReplaceScene(pkScene);
@@ -1111,7 +1111,7 @@ bool NDMapMgr::processConsole( const char* pszInput )
 		}
 	}
 	
-	process(usMsgID,&kTransData,100);
+	process(usMsgID,&kTransData,0);
 	
 	printf("·ÖÎöÍê®…!\n");
 

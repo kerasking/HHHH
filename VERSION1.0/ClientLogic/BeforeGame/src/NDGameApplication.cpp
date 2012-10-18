@@ -120,8 +120,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();
 
 	pkDirector->Initialization();
-	
-	kMapMgr.processChangeRoom(0,0);
+	pkDirector->RunScene(CSMGameScene::Scene());
 
 	ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
 	NDScriptGameData* pkData = new NDScriptGameData;
@@ -156,31 +155,31 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	kPlayer.m_strName = "白富美";
 	kPlayer.SetLoadMapComplete();
 
-	GameScene* pkScene = (GameScene*)pkDirector->GetRunningScene();
-	NDNode* pkNode = pkScene->GetChild(MAPLAYER_TAG);
+ 	CSMGameScene* pkScene = (CSMGameScene*)pkDirector->GetRunningScene();
+ 	NDNode* pkNode = pkScene->GetChild(MAPLAYER_TAG);
+ 
+ 	if (!pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+ 	{
+ 		return false;
+ 	}
+ 
+ 	NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
+ 	pkLayer->AddChild(&kPlayer, 111, 1000);
+ 	kPlayer.standAction(true);
+ 	//pkScene->setUpdatePlayer(&kPlayer);
 
-	if (!pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
-	{
-		return false;
-	}
-
-	NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
-	pkLayer->AddChild(&kPlayer, 111, 1000);
-	kPlayer.standAction(true);
-	pkScene->setUpdatePlayer(&kPlayer);
-
-// 	//add by ZhangDi 120904
-// 	DramaObj.Start();
-// 
-//  	DramaCommandScene* commandScene = new DramaCommandScene;
-//  	commandScene->InitWithLoadDrama(5);
-// 	DramaObj.AddCommond(commandScene);
-// 
-// 
-// 	DramaCommandSprite* commandSprite = new DramaCommandSprite;
-// 	commandSprite->InitWithAdd(31000112, ST_NPC, FALSE, "华佗");
-// 	//commandSprite->InitWithSetPos(command->GetKey(), 9, 11);
-// 	DramaObj.AddCommond(commandSprite);
+ 	//add by ZhangDi 120904
+ 	//DramaObj.Start();
+ 
+  //	DramaCommandScene* commandScene = new DramaCommandScene;
+  //	commandScene->InitWithLoadDrama(5);
+ 	//DramaObj.AddCommond(commandScene);
+ 
+ 
+ 	//DramaCommandSprite* commandSprite = new DramaCommandSprite;
+ 	//commandSprite->InitWithAdd(31000112, ST_NPC, FALSE, "华佗");
+ 	////commandSprite->InitWithSetPos(command->GetKey(), 9, 11);
+ 	//DramaObj.AddCommond(commandSprite);
 
 
 	for (int i = 0; i < 4; i++)
