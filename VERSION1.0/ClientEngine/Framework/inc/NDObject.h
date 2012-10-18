@@ -3,13 +3,13 @@
 //  DragonDrive
 //
 //  Created by xiezhenghai on 10-12-7.
-//  Copyright 2010 (缃戦緳)DeNA. All rights reserved.
+//  Copyright 2010 (网龙)DeNA. All rights reserved.
 //
-//	锛嶏紞浠嬬粛锛嶏紞
-//	娓告垙妗嗘灦鍩虹绫??
-//	绋嬪簭涓ぇ澶氭暟鐨勭被閮界户鎵胯嚜璇ョ被
-//	濡傛灉娲剧敓绫诲垎鍒湪澶存枃浠朵腑瀹炵幇DECLARE_CLASS锛屽湪婧愭枃浠朵腑瀹炵幇IMPLEMENT_CLASS杩欎袱涓畯锛岄偅涔堣娲剧敓绫诲氨鍏锋湁浜嗗姩鎬佽瘑鍒姛鑳??
-//	娲剧敓绫诲繀椤绘嫢鏈夐粯璁ゆ瀯閫犲嚱鏁帮紝浠ュ鍔ㄦ??佺敓鎴愪娇鐢??
+//	－－介绍－－
+//	游戏框架基础类
+//	程序中大多数的类都继承自该类
+//	如果派生类分别在头文件中实现DECLARE_CLASS，在源文件中实现IMPLEMENT_CLASS这两个宏，那么该派生类就具有了动态识别功能
+//	派生类必须拥有默认构造函数，以备动态生成使用
 
 #ifndef __NDObject_H
 #define __NDObject_H
@@ -22,7 +22,7 @@
 
 namespace NDEngine
 {
-//锛嶏紞妯′豢mfc鍔ㄦ??佽瘑鍒紞锛??
+//－－模仿mfc动态识别－－
 //......
 class NDObject;
 
