@@ -109,6 +109,12 @@ void* NDConsole::ReadGameConsole(void* pData)
 		ReadConsoleA(NDConsole::GetSingletonPtr()->getInputHandle(),
 				(void*) ms_pszBuffer, 2048, &dwReadCount, &kControl);
 		pthread_mutex_unlock(&ms_pkAsyncStructQueueMutex);
+
+		if (*ms_pszBuffer)
+		{
+			NDConsole::GetSingletonPtr()->ProcessInput(ms_pszBuffer);
+			memset(ms_pszBuffer, 0, sizeof(char) * 2048);
+		}
 	}
 
 	return 0;
@@ -117,6 +123,50 @@ void* NDConsole::ReadGameConsole(void* pData)
 void NDConsole::StopReadLoop()
 {
 	ms_bContinueThread = false;
+}
+
+bool NDConsole::RegisterConsoleHandler(NDConsoleListener* pkListener,
+		const char* pszKeyword)
+{
+	if (0 == pszKeyword || !*pszKeyword || 0 == pkListener)
+	{
+		return false;
+	}
+
+	string strValue = pszKeyword;
+	m_kListenerMap.insert(make_pair(strValue, pkListener));
+
+	return true;
+}
+
+void NDConsole::ProcessInput(const char* pszInput)
+{
+	if (0 == pszInput || !*pszInput)
+	{
+		return;
+	}
+
+	string strInput = pszInput;
+
+	for (MAP_LISTENER::iterator it = m_kListenerMap.begin();
+			it != m_kListenerMap.end(); it++)
+	{
+		string strListenerKey = it->first;
+		NDConsoleListener* pkListener = 0;
+		int nPos = -1;
+
+		if (0 == (nPos = strInput.find(strListenerKey)))
+		{
+			pkListener = it->second;
+
+			if (pkListener)
+			{
+				string strResult = strInput.substr(strListenerKey.length(),
+						strInput.length());
+				pkListener->processConsole(strResult.c_str());
+			}
+		}
+	}
 }
 
 END_ND_NAMESPACE

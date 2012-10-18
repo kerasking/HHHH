@@ -32,6 +32,8 @@ m_nMapDocID(0)
 {
 	NDNetMsgPool& kNetPool = NDNetMsgPoolObj;
 	kNetPool.RegMsg(1159,this);
+
+	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"cmd ");
 }
 
 NDMapMgr::~NDMapMgr()
@@ -985,6 +987,16 @@ void NDMapMgr::AddAllMonsterToMap()
 
 		///< ÕâÀïÌí¼Ógather... ¹ùºÆ
 	}
+}
+
+bool NDMapMgr::processConsole( const char* pszInput )
+{
+	if (0 == pszInput || !*pszInput)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 }

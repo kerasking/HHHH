@@ -19,11 +19,13 @@
 #include <ScriptGameLogic.h>
 #include <NDSocket.h>
 #include "NDMapMgr.h"
+#include "LuaStateMgr.h"
 
 namespace NDEngine
 {
 NDGameApplication::NDGameApplication()
 {
+	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"script ");
 }
 NDGameApplication::~NDGameApplication()
 {
@@ -236,6 +238,18 @@ void NDGameApplication::applicationDidEnterBackground()
 }
 void NDGameApplication::applicationWillEnterForeground()
 {
+}
+
+bool NDGameApplication::processConsole( const char* pszInput )
+{
+	if (0 == pszInput || !*pszInput)
+	{
+		return false;
+	}
+
+	LuaStateMgrObj.GetState().m_state->DoString(pszInput);
+
+	return true;
 }
 
 }

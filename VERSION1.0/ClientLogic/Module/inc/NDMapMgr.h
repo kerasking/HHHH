@@ -19,6 +19,7 @@
 #include "NDBaseRole.h"
 #include "NDUICustomView.h"
 #include "NDMapLayer.h"
+#include "NDConsole.h"
 
 using namespace std;
 
@@ -34,6 +35,7 @@ class NDMonster;
 class NDTransData;
 class NDManualRole;
 class NDScene;
+
 enum 
 {
 	// battlelistener
@@ -247,7 +249,8 @@ typedef VEC_BATTLE_SKILL::iterator VEC_BATTLE_SKILL_IT;
 class NDMapMgr:
 	public NDObject,
 	public TSingleton<NDMapMgr>,
-	public NDMsgObject
+	public NDMsgObject,
+	public NDConsoleListener
 {
 public:
 
@@ -294,6 +297,8 @@ protected:
 
 	virtual void OnCustomViewRadioButtonSelected( NDUICustomView* customView,
 		unsigned int radioButtonIndex, int ortherButtonTag );
+
+	virtual bool processConsole( const char* pszInput );
 
 	static bool m_bFirstCreate;
 	static bool m_bVerifyVersion;
