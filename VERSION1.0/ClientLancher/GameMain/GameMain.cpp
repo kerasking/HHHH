@@ -8,6 +8,7 @@
 #include <NDGameApplication.h>
 #include <LuaPlus.h>
 #include <NDBaseDirector.h>
+#include "NDConsole.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -27,6 +28,8 @@ int WINAPI WinMain (HINSTANCE hInstance,
  
  	InitGameInstance();
  
+	NDConsole kConsole;
+
     // 手机平台堆栈会比较小, 以后要改用new
  	NDGameApplication kApp;
     NDBaseDirector kBaseDirector;

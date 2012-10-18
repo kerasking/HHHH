@@ -27,12 +27,6 @@ int FileOp::readByte(FILE* pkFile)
 		return 0;
 	}
 
-	//add by zhangdi 120903
-	if(ucData > 127)
-	{
-		printf("number > 127\n");
-	}
-
 	return ucData;
 }
 
