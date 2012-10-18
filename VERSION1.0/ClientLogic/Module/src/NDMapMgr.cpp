@@ -22,6 +22,54 @@ IMPLEMENT_CLASS(NDMapMgr,NDObject);
 bool NDMapMgr::m_bVerifyVersion = true;
 bool NDMapMgr::m_bFirstCreate = false;
 
+bool GetIntData(int& t,string strValue,string strType)
+{
+	int nPos = strValue.find(strType);
+
+	if (-1 == nPos || strValue.length() < strType.length())
+	{
+		return false;
+	}
+
+	string strNumber = strValue.substr(strType.length() + 1,strValue.length());
+
+	t = (int)atoi(strNumber.c_str());
+
+	return true;
+}
+
+bool GetShortData(short& t,string strValue,string strType)
+{
+	int nPos = strValue.find(strType);
+
+	if (-1 == nPos || strValue.length() < strType.length())
+	{
+		return false;
+	}
+
+	string strNumber = strValue.substr(strType.length() + 1,strValue.length());
+
+	t = (short)atoi(strNumber.c_str());
+
+	return true;
+}
+
+bool GetCharData(char& t,string strValue,string strType)
+{
+	int nPos = strValue.find(strType);
+
+	if (-1 == nPos || strValue.length() < strType.length())
+	{
+		return false;
+	}
+
+	string strNumber = strValue.substr(strType.length() + 1,strValue.length());
+
+	t = (char)atoi(strNumber.c_str());
+
+	return true;
+}
+
 NDMapMgr::NDMapMgr():
 m_nCurrentMonsterBound(0),
 m_nRoadBlockX(0),
@@ -33,7 +81,7 @@ m_nMapDocID(0)
 	NDNetMsgPool& kNetPool = NDNetMsgPoolObj;
 	kNetPool.RegMsg(1159,this);
 
-	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"cmd ");
+	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"sim ");
 }
 
 NDMapMgr::~NDMapMgr()
@@ -47,11 +95,6 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 {
 	switch (usMsgID)
 	{
-	case 1159:
-	{
-		//processChangeRoom(0,0);
-	}
-		break;
 	case _MSG_CHG_PET_POINT:
 	{
 		int nBtAnswer = pkData->ReadByte();
@@ -995,6 +1038,82 @@ bool NDMapMgr::processConsole( const char* pszInput )
 	{
 		return false;
 	}
+
+	string strInput = pszInput;
+
+	printf("開始分析要模擬的包……\n");
+
+	NDTransData kTransData;
+
+	vector<string> kStringVector;
+	int nPos = 0;
+	int nStartPos = 0;
+	int nOmegaPos = 0;
+	short usMsgID = 0;
+	unsigned char szBuffer[1024] = {0};
+	unsigned int pPos = 0;
+
+	nOmegaPos = strInput.find(';');
+	unsigned int nLength = strInput.length();
+
+	if (strInput.length() - 3 != nOmegaPos)
+	{
+		printf("语法错误\n");
+		return false;
+	}
+
+	while(true)
+	{
+		nPos = strInput.find(',');
+		int nKeywordPos = 0;
+
+		string strNum;
+
+		if (-1 == nPos)
+		{
+			strNum = strInput.substr(0,strInput.length() - 3);
+			break;
+		}
+		else
+		{
+			strNum = strInput.substr(nStartPos,nPos);
+		}
+
+		if (0 == strNum.length())
+		{
+			printf("出错\n");
+			break;
+		}
+
+		int uiData = 0;
+		short usData = 0;
+		char ucData = 0;
+		strInput = strInput.substr(nPos + 1,strInput.length());
+
+		if (GetShortData(usMsgID,strNum,string("id")))
+		{
+			if (0 == usMsgID)
+			{
+				return false;
+			}
+		}
+		else if (GetIntData(uiData,strNum,string("int")))
+		{
+			kTransData.WriteInt(uiData);
+		}
+		else if (GetShortData(usData,strNum,string("short")))
+		{
+			kTransData.WriteShort(usData);
+		}
+		else if (GetCharData(ucData,strNum,string("char")))
+		{
+			kTransData.WriteByte(ucData);
+		}
+	}
+	
+	process(usMsgID,&kTransData,100);
+	
+	printf("分析完畢!\n");
 
 	return true;
 }

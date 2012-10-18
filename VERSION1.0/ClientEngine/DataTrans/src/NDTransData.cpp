@@ -526,7 +526,6 @@ namespace NDEngine
 		
 		return (unsigned short)( m_pBuffer[ND_C_MSGID_BEGIN] + (m_pBuffer[ND_C_MSGID_BEGIN + 1] << 8) );
 	}
-	
 }
 
 
