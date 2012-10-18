@@ -538,78 +538,78 @@ NDNpc* NDMapMgr::GetNPC(int nID)
 
 void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 {
-	//if (0 == pkData || 0 == nLength)
-	//{
-	//	return;
-	//}
+	if (0 == pkData || 0 == nLength)
+	{
+		return;
+	}
 
-	//m_nCurrentMonsterBound = 0;
+	m_nCurrentMonsterBound = 0;
 
-	//if (m_bVerifyVersion)
-	//{
-	//	m_bVerifyVersion = false;
-	//	//NDBeforeGameMgrObj.VerifyVersion();
-	//}
+	if (m_bVerifyVersion)
+	{
+		m_bVerifyVersion = false;
+		//NDBeforeGameMgrObj.VerifyVersion();
+	}
 
-	//m_nRoadBlockX = -1;
-	//m_nRoadBlockY = -1;
+	m_nRoadBlockX = -1;
+	m_nRoadBlockY = -1;
 
-	//BattleMgrObj.quitBattle(false);
+	BattleMgrObj.quitBattle(false);
 
-	//pkData->ReadShort();
-	//pkData->ReadInt();
+	pkData->ReadShort();
+	pkData->ReadInt();
 
-	//int nMapID = pkData->ReadInt();
-	//int nMapDocID = pkData->ReadInt();
+	int nMapID = pkData->ReadInt();
+	int nMapDocID = pkData->ReadInt();
 
-	//int dwPortalX = pkData->ReadShort();
-	//int dwPortalY = pkData->ReadShort();
+	int dwPortalX = pkData->ReadShort();
+	int dwPortalY = pkData->ReadShort();
 
-	//pkData->ReadShort();
-	//pkData->ReadShort();
-	//pkData->ReadShort();
-	//pkData->ReadShort();
+	pkData->ReadShort();
+	pkData->ReadShort();
+	pkData->ReadShort();
+	pkData->ReadShort();
 
-	//m_nMapType = pkData->ReadInt();
+	m_nMapType = pkData->ReadInt();
 
-	//m_strMapName = pkData->ReadUnicodeString();
+	m_strMapName = pkData->ReadUnicodeString();
 
-	//NDPlayer& kPlayer = NDPlayer::defaultHero();
+	NDPlayer& kPlayer = NDPlayer::defaultHero();
 
-	//if (kPlayer.IsInState(USERSTATE_DEAD))
-	//{
-	//	NDUISynLayer::Close (SYN_RELIEVE);
-	//}
+	if (kPlayer.IsInState(USERSTATE_DEAD))
+	{
+		NDUISynLayer::Close (SYN_RELIEVE);
+	}
 
-	//NDUISynLayer::Close (SYN_CREATE_ROLE);
+	NDUISynLayer::Close (SYN_CREATE_ROLE);
 
-	//NDMapMgrObj.ClearManualRole();
+	NDMapMgrObj.ClearManualRole();
 
-	//m_nMapID = nMapID;
+	m_nMapID = nMapID;
 
-	//if (1 == m_nMapID || 2 == m_nMapID)
-	//{
-	//	m_nSaveMapID = m_nMapID;
-	//}
+	if (1 == m_nMapID || 2 == m_nMapID)
+	{
+		m_nSaveMapID = m_nMapID;
+	}
 
-	//kPlayer.m_nCurMapID = nMapDocID;
+	kPlayer.m_nCurMapID = nMapDocID;
 
-	//ShowPetInfo kPetInfoRerserve;
-	//kPlayer.GetShowPetInfo(kPetInfoRerserve);
+	ShowPetInfo kPetInfoRerserve;
+	kPlayer.GetShowPetInfo(kPetInfoRerserve);
 
-	//kPlayer.ResetShowPet();
+	kPlayer.ResetShowPet();
 
-	//if (kPlayer.GetParent() != 0)
-	//{
-	//	NDRidePet* pkRidePet = NDPlayer::defaultHero().GetRidePet();
+	if (kPlayer.GetParent() != 0)
+	{
+		NDRidePet* pkRidePet = NDPlayer::defaultHero().GetRidePet();
 
-	//	if (0 != pkRidePet && 0 != pkRidePet->GetParent())
-	//	{
-	//		pkRidePet->RemoveFromParent(false);
-	//	}
+		if (0 != pkRidePet && 0 != pkRidePet->GetParent())
+		{
+			pkRidePet->RemoveFromParent(false);
+		}
 
-	//	kPlayer.RemoveFromParent(false);
-	//}
+		kPlayer.RemoveFromParent(false);
+	}
 
 	while (NDDirector::DefaultDirector()->PopScene())
 	{

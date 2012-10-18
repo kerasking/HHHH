@@ -643,7 +643,7 @@ bool NDUIContainerScrollLayer::refresh(float distance)
 
 	//if (tmpChange < this->m_fMaxChange || tmpChange > 0.0f) return false;
 
-	for_vec(m_pkChildrenList, std::vector<NDNode*>::iterator)
+	for_vec(m_kChildrenList, std::vector<NDNode*>::iterator)
 	{
 		if (!(*it)->IsKindOfClass(RUNTIME_CLASS(NDUINode)))
 			continue;
@@ -685,7 +685,7 @@ void NDUIContainerScrollLayer::refreshContainer(
 {
 	float fMax = 0.0f;
 	float fMin = this->GetFrameRect().size.height;
-	for_vec(m_pkChildrenList, std::vector<NDNode*>::iterator)
+	for_vec(m_kChildrenList, std::vector<NDNode*>::iterator)
 	{
 		if (!(*it)->IsKindOfClass(RUNTIME_CLASS(NDUINode)))
 			continue;
@@ -764,7 +764,7 @@ float NDUIContainerScrollLayer::GetScrollBarWidth()
 
 void NDUIContainerScrollLayer::ScrollNodeToTop(NDUINode* node)
 {
-	for_vec(m_pkChildrenList, std::vector<NDNode*>::iterator)
+	for_vec(m_kChildrenList, std::vector<NDNode*>::iterator)
 	{
 		if (!(*it)->IsKindOfClass(RUNTIME_CLASS(NDUINode)))
 			continue;
@@ -853,7 +853,7 @@ bool NDUIContainerHScrollLayer::refreshHorizonal(float distance)
 
 	//if (tmpChange < this->m_fMaxChange || tmpChange > 0.0f) return false;
 
-	for_vec(m_pkChildrenList, std::vector<NDNode*>::iterator)
+	for_vec(m_kChildrenList, std::vector<NDNode*>::iterator)
 	{
 		if (!(*it)->IsKindOfClass(RUNTIME_CLASS(NDUINode)))
 			continue;
@@ -875,7 +875,7 @@ bool NDUIContainerHScrollLayer::refreshHorizonal(float distance)
 void NDUIContainerHScrollLayer::refreshContainer()
 {
 	float fMax = 0.0f;
-	for_vec(m_pkChildrenList, std::vector<NDNode*>::iterator)
+	for_vec(m_kChildrenList, std::vector<NDNode*>::iterator)
 	{
 		if (!(*it)->IsKindOfClass(RUNTIME_CLASS(NDUINode)))
 			continue;
