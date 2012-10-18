@@ -22,7 +22,7 @@
 //class Fighter;
 
 #include "NDFrame.h"
-#include "..\ClientLogic\Common\inc\define.h"
+#include "define.h"
 
 class NDAnimationGroup;
 

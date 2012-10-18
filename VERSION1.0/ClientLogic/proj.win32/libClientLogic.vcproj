@@ -104,6 +104,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="..\..\LuaPlus;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\OGLES&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\pthread&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\include&quot;;../Battle/inc;../BeforeGame/inc;../Chat/inc;../Common/inc;../Drama/inc;../GameData/inc;../GameScene/inc;../Item/inc;../MapAndRole/inc;../Script/inc;../UICommon/inc;../MsgDefine/inc;../Syndicate/inc;../Task/inc;../Pet/inc;..\NewScene;..\NewScene\UIPet;..\..\Include\C3\win;..\..\NetWork\inc;..\Module\inc\NewVipStore;..\..\KUtil;..\Module\inc;..\Module\inc\Farm;../../ClientEngine/System/inc;../../ClientEngine/UI/inc;../../ClientEngine/Framework/inc;../../ClientEngine/MapData/inc;../../ClientEngine/Graphic/inc;../../ClientEngine/Utility/inc;../../ClientEngine/Script/inc;../../ClientEngine/DataTrans/inc;../../ClientEngine/UI/import/inc;..\..\include\c3\win"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -273,10 +274,6 @@
 			<Filter
 				Name="inc"
 				>
-				<File
-					RelativePath="..\Common\inc\define.h"
-					>
-				</File>
 				<File
 					RelativePath="..\Common\inc\GlobalDialog.h"
 					>

@@ -20,8 +20,6 @@
 #include "NDDirector.h"
 #include "NDLightEffect.h"
 #include "Utility.h"
-#include "..\ClientLogic\Common\inc\define.h"
-#include "..\ClientLogic\Common\inc\NDConstant.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
