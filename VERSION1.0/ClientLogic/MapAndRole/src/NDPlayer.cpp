@@ -173,8 +173,8 @@ m_nCurMapID(0)
 NDPlayer::~NDPlayer()
 {
 	g_pkDefaultHero = NULL;
-	delete m_pkTimer;
-	m_pkTimer = NULL;
+	
+	SAFE_DELETE(m_pkTimer);
 }
 
 NDPlayer& NDPlayer::defaultHero(int lookface/* = 0*/,
@@ -200,38 +200,29 @@ void NDPlayer::pugeHero()
 	SAFE_DELETE_NODE (g_pkDefaultHero);
 }
 
-void NDPlayer::SendNpcInteractionMessage(unsigned int idNpc)
+void NDPlayer::SendNpcInteractionMessage(unsigned int uiNPCID)
 {
 	// 转到脚本处理
-	ScriptMgr& script = ScriptMgr::GetSingleton();
+	ScriptMgr& kScript = ScriptMgr::GetSingleton();
 	std::stringstream ssNpcFunc;
-	ssNpcFunc << "NPC_CLICK_" << idNpc;
-	bool bRet = script.IsLuaFuncExist(ssNpcFunc.str().c_str(), "NPC");
+	ssNpcFunc << "NPC_CLICK_" << uiNPCID;
+	bool bRet = kScript.IsLuaFuncExist(ssNpcFunc.str().c_str(), "NPC");
 
 	if (bRet)
 	{
-
-		/***
-		 * 临时性注释 郭浩
-		 * begin
-		 */
-		// 			bRet = script.excuteLuaFunc(ssNpcFunc.str().c_str(), "NPC", idNpc);
-// 			script.excuteLuaFunc("AttachTask", "NPC", idNpc);
-		/***
-		 * 临时性注释 郭浩
-		 * end
-		 */
+ 		bRet = kScript.excuteLuaFunc(ssNpcFunc.str().c_str(), "NPC", uiNPCID);
+		kScript.excuteLuaFunc("AttachTask", "NPC", uiNPCID);
 	}
 	else
 	{
-		//bRet = script.excuteLuaFunc("NPC_CLICK_COMMON", "NPC", idNpc); ///< 临时性注释 郭浩
+		bRet = kScript.excuteLuaFunc("NPC_CLICK_COMMON", "NPC", uiNPCID);
 	}
 
 	return;
 
 	ShowProgressBar;
 	NDTransData kTranslateData(_MSG_NPC);
-	kTranslateData << (int) idNpc << (unsigned char) 0 << (unsigned char) 0 << int(123);
+	kTranslateData << (int) uiNPCID << (unsigned char) 0 << (unsigned char) 0 << int(123);
 	NDDataTransThread::DefaultThread()->GetSocket()->Send(&kTranslateData);
 }
 
@@ -537,18 +528,19 @@ void NDPlayer::Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 			int(toPos.x) / MAP_UNITSIZE * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
 			int(toPos.y) / MAP_UNITSIZE * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
 
-	CGPoint posCur = GetPosition();
-	if (((int) posCur.x - DISPLAY_POS_X_OFFSET) % MAP_UNITSIZE != 0
-			|| ((int) posCur.y - DISPLAY_POS_Y_OFFSET) % MAP_UNITSIZE != 0)
+	CGPoint kCurrentPosition = GetPosition();
+
+	if (((int) kCurrentPosition.x - DISPLAY_POS_X_OFFSET) % MAP_UNITSIZE != 0
+			|| ((int) kCurrentPosition.y - DISPLAY_POS_Y_OFFSET) % MAP_UNITSIZE != 0)
 	{ // Cell没走完,又设置新的目标
 		m_kTargetPos = kPos;
 	}
 	else
 	{
-		std::vector < CGPoint > vec_pos;
+		std::vector < CGPoint > vPos;
 		//kPos = ccpAdd(kPos,kPos);
-		vec_pos.push_back(kPos);
-		this->WalkToPosition(vec_pos, speed, true, mustArrive);
+		vPos.push_back(kPos);
+		this->WalkToPosition(vPos, speed, true, mustArrive);
 	}
 
 	ResetFocusRole();

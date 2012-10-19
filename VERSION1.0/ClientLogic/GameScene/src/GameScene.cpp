@@ -84,9 +84,9 @@ const unsigned int TAG_UPDATE_FORCE = 333;
 const unsigned int TAG_UPDATE_NOT_FORCE = 444;
 
 const char* MENU_SYNDICATE[6] =
-{ "1", "2", "3", "4", "5", "6" };					///< ÁÙÊ±ÐÔÐÞ¸Ä ¹ùºÆ ×Ö·û´®ÂÒÂë
+{ "1", "2", "3", "4", "5", "6" };
 const char* MENU_SYN_MANAGE[9] =
-{ "1", "2", "3", "4", "5", "6", "7", "8", "9" };	///< ÁÙÊ±ÐÔÐÞ¸Ä ¹ùºÆ ×Ö·û´®ÂÒÂë
+{ "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
 IMPLEMENT_CLASS(MapUILayer, NDUILayer)
 
@@ -114,9 +114,9 @@ enum MENU_TYPE
 };
 
 /***
- * ä¸´æ—¶æ€§ä¿®æ”?? éƒ­æµ©
- * @warning è¿™äº›å­—ç¬¦ä¸²æ˜¯ç¼–è¯‘ä¸è¿‡çš„â??¦â????
- */
+* ÁÙÊ±ÐÔÐÞ¸Ä ¹ùºÆ
+* @warning ÕâÐ©×Ö·û´®ÊÇ±àÒë²»¹ýµÄ¡­¡­
+*/
 static std::string interactive_str[interactive_end] =
 { "1", "1", "1", "1", "1", "1", "1", "1", "1", };
 
@@ -226,59 +226,58 @@ GameScene::GameScene()
 //	m_playerHead = NULL; ///< ä¸´æ—¶æ€§æ³¨é‡?? éƒ­æµ©
 //	m_targetHead = NULL; ///< ä¸´æ—¶æ€§æ³¨é‡?? éƒ­æµ©
 //	m_petHead = NULL; ///< ä¸´æ—¶æ€§æ³¨é‡?? éƒ­æµ©
-	m_tlRelieve = NULL;
-	m_relieveLayer = NULL;
-//	m_miniMap = NULL; ///< ä¸´æ—¶æ€§æ³¨é‡?? éƒ­æµ©
-	maplayer = NULL;
-
-	m_hccOPItem = NULL;
-
-	m_pkUpdatePlayer = 0;
-
-	m_picMap = new NDPicture();
-	m_picMap->Initialization(NDPath::GetFullImagepath("ui_map.png"));
-	m_btnMap = NULL;
-
-	m_picTarget = new NDPicture();
-	m_picTarget->Initialization(NDPath::GetFullImagepath("ui_target.png"));
-	m_btnTarget = NULL;
-
-	m_picInterative = new NDPicture();
-	m_picInterative->Initialization(
-			NDPath::GetFullImagepath("ui_interective.png"));
-	m_btnInterative = NULL;
-
-	//m_hccOPMenu = NULL;		///< ä¸´æ—¶æ€§æ³¨é‡?? éƒ­æµ©
-
-	m_picTeam = new NDPicture();
-	m_picTeam->Initialization(NDPath::GetFullImagepath("ui_team.png"));
-	m_btnTeam = NULL;
-
-	m_picSocial = new NDPicture();
-	m_picSocial->Initialization(NDPath::GetFullImagepath("ui_social.png"));
-	m_btnSocial = NULL;
-
-	m_picTalk = new NDPicture();
-	m_picTalk->Initialization(NDPath::GetFullImagepath("ui_talk.png"));
-	m_btnTalk = NULL;
-
-	m_picTask = new NDPicture();
-	m_picTask->Initialization(NDPath::GetFullImagepath("ui_task.png"));
-	m_btnTask = NULL;
-
-	m_picBag = new NDPicture();
-	m_picBag->Initialization(NDPath::GetFullImagepath("ui_bag.png"));
-	m_btnBag = NULL;
-
-	m_picStore = new NDPicture();
-	m_picStore->Initialization(NDPath::GetFullImagepath("ui_store.png"));
-	m_btnStore = NULL;
-
-	m_picMenu = new NDPicture();
-	m_picMenu->Initialization(NDPath::GetFullImagepath("ui_menu.png"));
-	m_btnMenu = NULL;
-
-	m_tlShare = NULL;
+// 	m_tlRelieve = NULL;
+// 	m_relieveLayer = NULL;
+// 	m_pkMapLayerLogic = NULL;
+// 
+// 	m_hccOPItem = NULL;
+// 
+// 	m_pkUpdatePlayer = 0;
+// 
+// 	m_picMap = new NDPicture();
+// 	m_picMap->Initialization(NDPath::GetFullImagepath("ui_map.png"));
+// 	m_btnMap = NULL;
+// 
+// 	m_picTarget = new NDPicture();
+// 	m_picTarget->Initialization(NDPath::GetFullImagepath("ui_target.png"));
+// 	m_btnTarget = NULL;
+// 
+// 	m_picInterative = new NDPicture();
+// 	m_picInterative->Initialization(
+// 			NDPath::GetFullImagepath("ui_interective.png"));
+// 	m_btnInterative = NULL;
+// 
+// 	//m_hccOPMenu = NULL;		///< ä¸´æ—¶æ€§æ³¨é‡?? éƒ­æµ©
+// 
+// 	m_picTeam = new NDPicture();
+// 	m_picTeam->Initialization(NDPath::GetFullImagepath("ui_team.png"));
+// 	m_btnTeam = NULL;
+// 
+// 	m_picSocial = new NDPicture();
+// 	m_picSocial->Initialization(NDPath::GetFullImagepath("ui_social.png"));
+// 	m_btnSocial = NULL;
+// 
+// 	m_picTalk = new NDPicture();
+// 	m_picTalk->Initialization(NDPath::GetFullImagepath("ui_talk.png"));
+// 	m_btnTalk = NULL;
+// 
+// 	m_picTask = new NDPicture();
+// 	m_picTask->Initialization(NDPath::GetFullImagepath("ui_task.png"));
+// 	m_btnTask = NULL;
+// 
+// 	m_picBag = new NDPicture();
+// 	m_picBag->Initialization(NDPath::GetFullImagepath("ui_bag.png"));
+// 	m_btnBag = NULL;
+// 
+// 	m_picStore = new NDPicture();
+// 	m_picStore->Initialization(NDPath::GetFullImagepath("ui_store.png"));
+// 	m_btnStore = NULL;
+// 
+// 	m_picMenu = new NDPicture();
+// 	m_picMenu->Initialization(NDPath::GetFullImagepath("ui_menu.png"));
+// 	m_btnMenu = NULL;
+// 
+// 	m_tlShare = NULL;
 
 	//m_anilayerRequest = NULL;		///< ä¸´æ—¶æ€§æ³¨é‡?? éƒ­æµ©
 	//m_anilayerMail = NULL;		///< ä¸´æ—¶æ€§æ³¨é‡?? éƒ­æµ©
@@ -301,7 +300,7 @@ GameScene::GameScene()
 
 	m_bUIShow = false;
 
-	m_dlgNPCTag = -1;
+	m_uiNPCTagDialog = -1;
 
 	m_tlInvitePlayers = NULL;
 
@@ -415,7 +414,7 @@ void GameScene::OnBattleBegin()
 
 	std::vector<NDNode*> vDel;
 
-	std::vector<NDNode*>::iterator it = this->m_pkChildrenList.begin();
+	std::vector<NDNode*>::iterator it = this->m_kChildrenList.begin();
 
 	/***
 	 * ä¸´æ—¶æ€§æ³¨é‡?? éƒ­æµ©
@@ -491,9 +490,9 @@ void GameScene::Initialization(int mapID)
 
 	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 
-	maplayer = new NDMapLayerLogic();
-	maplayer->Initialization(mapID);
-	this->AddChild(maplayer, MAPLAYER_Z, MAPLAYER_TAG);
+	m_pkMapLayerLogic = new NDMapLayerLogic();
+	m_pkMapLayerLogic->Initialization(mapID);
+	this->AddChild(m_pkMapLayerLogic, MAPLAYER_Z, MAPLAYER_TAG);
 
 	m_uiLayer = new MapUILayer;
 	m_uiLayer->Initialization();
@@ -686,17 +685,17 @@ layer->AddChild(btn); \
 	 * end
 	 */
 
-	NDUILayer* layer = new NDUILayer;
-	layer->Initialization();
-	layer->SetFrameRect(CGRectMake(0, 0, 36, 42));
+	NDUILayer* pkLayer = new NDUILayer;
+	pkLayer->Initialization();
+	pkLayer->SetFrameRect(CGRectMake(0, 0, 36, 42));
 
 	NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture(
 			NDPath::GetImgPathBattleUI("scenerolehandle.png"), false);
-	m_imgHeadShow = new NDUIImage;
-	m_imgHeadShow->Initialization();
-	m_imgHeadShow->SetPicture(pic, true);
-	m_imgHeadShow->SetFrameRect(CGRectMake(0, 0, 27, 46));
-	this->AddUIChild(m_imgHeadShow, 1);
+	m_pkHeadShowImage = new NDUIImage;
+	m_pkHeadShowImage->Initialization();
+	m_pkHeadShowImage->SetPicture(pic, true);
+	m_pkHeadShowImage->SetFrameRect(CGRectMake(0, 0, 27, 46));
+	this->AddUIChild(m_pkHeadShowImage, 1);
 
 	m_btnHeadShow = new NDUIButton;
 	m_btnHeadShow->Initialization();
@@ -707,8 +706,8 @@ layer->AddChild(btn); \
 			true);
 	m_btnHeadShow->SetFrameRect(CGRectMake(0, 0, 27, 46));
 	m_btnHeadShow->SetDelegate(this);
-	layer->AddChild(m_btnHeadShow);
-	this->AddUIChild(layer, 1);
+	pkLayer->AddChild(m_btnHeadShow);
+	this->AddUIChild(pkLayer, 1);
 
 	/***
 	 * ä¸´æ—¶æ€§æ³¨é‡?? éƒ­æµ©
@@ -755,9 +754,9 @@ layer->AddChild(btn); \
 	 * end
 	 */
 
-	layer = new NDUILayer;
-	layer->Initialization();
-	layer->SetFrameRect(CGRectMake(35.5, 284, 62, 36));
+	pkLayer = new NDUILayer;
+	pkLayer->Initialization();
+	pkLayer->SetFrameRect(CGRectMake(35.5, 284, 62, 36));
 
 	NDUIImage* imgQuickInterationShrink = new NDUIImage;
 	imgQuickInterationShrink->Initialization();
@@ -766,7 +765,7 @@ layer->AddChild(btn); \
 					NDPath::GetImgPathBattleUI("bottom_shrink.png"), false),
 			true);
 	imgQuickInterationShrink->SetFrameRect(CGRectMake(14, 14, 34, 22));
-	layer->AddChild(imgQuickInterationShrink);
+	pkLayer->AddChild(imgQuickInterationShrink);
 
 	/***
 	 * ä¸´æ—¶æ€§æ³¨é‡?? éƒ­æµ©
@@ -792,8 +791,8 @@ layer->AddChild(btn); \
 			CGRectMake(10, 20, 16, 9), true);
 	m_btnQuickInterationShrink->SetFrameRect(CGRectMake(13, 00, 62, 56));
 	m_btnQuickInterationShrink->SetDelegate(this);
-	layer->AddChild(m_btnQuickInterationShrink);
-	this->AddUIChild(layer);
+	pkLayer->AddChild(m_btnQuickInterationShrink);
+	this->AddUIChild(pkLayer);
 
 //	m_quickFunc = new QuickFunc; ///< ä¸´æ—¶æ€§æ³¨é‡?? éƒ­æµ©
 //	m_quickFunc->Initialization(true); ///< ä¸´æ—¶æ€§æ³¨é‡?? éƒ­æµ©
@@ -804,12 +803,12 @@ layer->AddChild(btn); \
 
 CGSize GameScene::GetSize()
 {
-	return this->maplayer->GetContentSize();
+	return this->m_pkMapLayerLogic->GetContentSize();
 }
 
 cocos2d::CCArray* GameScene::GetSwitchs()
 {
-	return this->maplayer->GetMapData()->getSwitchs();
+	return this->m_pkMapLayerLogic->GetMapData()->getSwitchs();
 }
 
 void GameScene::SetMiniMapVisible(bool bVisible)
@@ -2311,13 +2310,13 @@ bool GameScene::HideTLShare()
 
 void GameScene::InitTLShareContent(std::vector<std::string>& vec_str)
 {
-#define fastinit(text) \
+#define fastinit(pszText) \
 do \
 { \
 NDUIButton *button = new NDUIButton; \
 button->Initialization(); \
 button->SetFrameRect(CGRectMake(0, 0, 120, 30)); \
-button->SetTitle(text); \
+button->SetTitle(pszText); \
 button->SetFocusColor(ccc4(253, 253, 253, 255)); \
 section->AddCell(button); \
 } while (0);
@@ -2368,13 +2367,13 @@ section->AddCell(button); \
 void GameScene::InitContent(NDUITableLayer* tl,
 		const std::vector<std::string>& vec_str, const std::vector<int>& vec_id)
 {
-#define fastinit(text, iid) \
+#define fastinit(pszText, iid) \
 do \
 { \
 NDUIButton *button = new NDUIButton; \
 button->Initialization(); \
 button->SetFrameRect(CGRectMake(0, 0, 200, 30)); \
-button->SetTitle(text); \
+button->SetTitle(pszText); \
 button->SetTag(iid); \
 button->SetFocusColor(ccc4(253, 253, 253, 255)); \
 section->AddCell(button); \
@@ -2436,7 +2435,7 @@ section->AddCell(button); \
 #undef fastinit
 }
 
-void GameScene::InitTLShareContent(const char* text, ...)
+void GameScene::InitTLShareContent(const char* pszText, ...)
 {
 	if (!m_tlShare)
 	{
@@ -2446,16 +2445,18 @@ void GameScene::InitTLShareContent(const char* text, ...)
 	va_list argumentList;
 	char *eachObject;
 	std::vector < std::string > vectext;
-	if (text)
+
+	if (pszText)
 	{
-		vectext.push_back(std::string(text));
-		va_start(argumentList, text);
+		vectext.push_back(std::string(pszText));
+		va_start(argumentList, pszText);
 		while ((eachObject = va_arg(argumentList, char*)))
 		{
 			vectext.push_back(std::string(eachObject));
 		}
 		va_end(argumentList);
 	}
+
 	if (vectext.empty())
 	{
 		return;
@@ -2706,8 +2707,8 @@ void GameScene::ShowShop(int iNPCID /*= 0*/)
 	 * end
 	 */
 
-	NDNode *node = scene->GetChild(UILAYER_NPCSHOP_TAG);
-	if (!node)
+	NDNode *pkNode = scene->GetChild(UILAYER_NPCSHOP_TAG);
+	if (!pkNode)
 	{
 		//GameUINpcStore *npcstore = new GameUINpcStore;
 //		npcstore->Initialization();
@@ -2717,8 +2718,8 @@ void GameScene::ShowShop(int iNPCID /*= 0*/)
 	else
 	{
 		//((GameUIPaiHang*)node)->UpdateMainUI();
-		((GameUINpcStore*) node)->UpdateBag();
-		((GameUINpcStore*) node)->UpdateMoney();
+		((GameUINpcStore*) pkNode)->UpdateBag();
+		((GameUINpcStore*) pkNode)->UpdateMoney();
 	}
 	//((GameScene*)scene)->SetUIShow(true);
 }
@@ -3016,10 +3017,10 @@ void GameScene::OnTimer(OBJID tag)
 
 	// test
 
-	if (m_pkUpdatePlayer)
-	{
-		m_pkUpdatePlayer->Update(10);
-	}
+// 	if (m_pkUpdatePlayer)
+// 	{
+// 		m_pkUpdatePlayer->Update(10);
+// 	}
 
 	if (2 == tag)
 	{

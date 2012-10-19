@@ -122,7 +122,8 @@ public:
 	cocos2d::CCNode *m_ccNode;
 
 protected:
-	std::vector<NDNode*> m_pkChildrenList;
+
+	std::vector<NDNode*> m_kChildrenList;
 	NDNode* m_pkParent;
 	bool m_bDrawEnabled;
 

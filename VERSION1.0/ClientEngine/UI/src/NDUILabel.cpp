@@ -23,22 +23,22 @@ namespace NDEngine
 	
 	NDUILabel::NDUILabel()
 	{
-		m_needMakeTex = false;
-		m_needMakeCoo = false;
-		m_needMakeVer = false;
-		m_fontSize = 15;
-		m_color = ccc4(0, 0, 0, 255);
-		m_textAlignment = LabelTextAlignmentLeft;
+		m_bNeedMakeTex = false;
+		m_bNeedMakeCoo = false;
+		m_bNeedMakeVer = false;
+		m_uiFontSize = 15;
+		m_kColor = ccc4(0, 0, 0, 255);
+		m_eTextAlignment = LabelTextAlignmentLeft;
 		m_texture = NULL;
-		m_cutRect = CGRectZero;
-		m_renderTimes = 2;
-		this->SetFontColor(m_color);
+		m_kCutRect = CGRectZero;
+		m_uiRenderTimes = 2;
+		this->SetFontColor(m_kColor);
 		
-		m_hasFontBoderColor = false;
-		m_colorFontBoder = ccc4(0, 0, 0, 0);
+		m_bHasFontBoderColor = false;
+		m_kColorFontBoder = ccc4(0, 0, 0, 0);
 	
-		memset(m_verticesBoder, 0, sizeof(m_verticesBoder));
-		memset(m_colorsBorder, 0, sizeof(m_colorsBorder));
+		memset(m_pfVerticesBoder, 0, sizeof(m_pfVerticesBoder));
+		memset(m_pbColorsBorder, 0, sizeof(m_pbColorsBorder));
 	}
 	
 	NDUILabel::~NDUILabel()
@@ -48,16 +48,16 @@ namespace NDEngine
 	
 	void NDUILabel::SetText(const char* text)
 	{
-		if (0 == strcmp(text, m_text.c_str())) 
+		if (0 == strcmp(text, m_strText.c_str())) 
 		{
 			return;
 		}
 		
-		m_needMakeTex = true;
-		m_needMakeCoo = true;
-		m_needMakeVer = true;
+		m_bNeedMakeTex = true;
+		m_bNeedMakeCoo = true;
+		m_bNeedMakeVer = true;
 
-		m_text = text;
+		m_strText = text;
 	}
 	
 	void NDUILabel::OnFrameRectChange(CGRect srcRect, CGRect dstRect)
@@ -67,40 +67,40 @@ namespace NDEngine
 		if (srcRect.size.width != dstRect.size.width ||
 			srcRect.size.height != dstRect.size.height)
 		{
-			m_needMakeTex = true;
-			m_needMakeCoo = true;
-			m_needMakeVer = true;
+			m_bNeedMakeTex = true;
+			m_bNeedMakeCoo = true;
+			m_bNeedMakeVer = true;
 		}
 		else if (srcRect.origin.x != dstRect.origin.x ||
 			srcRect.origin.y != dstRect.origin.y)
 		{
-			m_needMakeVer = true;
+			m_bNeedMakeVer = true;
 		}
 	}
 	
 	void NDUILabel::SetFontColor(ccColor4B fontColor)
 	{
-		m_color = fontColor;
+		m_kColor = fontColor;
 		
-		m_colors[0] = fontColor.r; 
-		m_colors[1] = fontColor.g;
-		m_colors[2] = fontColor.b;
-		m_colors[3] = fontColor.a;
+		m_pbColors[0] = fontColor.r; 
+		m_pbColors[1] = fontColor.g;
+		m_pbColors[2] = fontColor.b;
+		m_pbColors[3] = fontColor.a;
 		
-		m_colors[4] = fontColor.r; 
-		m_colors[5] = fontColor.g;
-		m_colors[6] = fontColor.b;
-		m_colors[7] = fontColor.a;
+		m_pbColors[4] = fontColor.r; 
+		m_pbColors[5] = fontColor.g;
+		m_pbColors[6] = fontColor.b;
+		m_pbColors[7] = fontColor.a;
 		
-		m_colors[8] = fontColor.r; 
-		m_colors[9] = fontColor.g;
-		m_colors[10] = fontColor.b;
-		m_colors[11] = fontColor.a;
+		m_pbColors[8] = fontColor.r; 
+		m_pbColors[9] = fontColor.g;
+		m_pbColors[10] = fontColor.b;
+		m_pbColors[11] = fontColor.a;
 		
-		m_colors[12] = fontColor.r; 
-		m_colors[13] = fontColor.g;
-		m_colors[14] = fontColor.b;
-		m_colors[15] = fontColor.a;
+		m_pbColors[12] = fontColor.r; 
+		m_pbColors[13] = fontColor.g;
+		m_pbColors[14] = fontColor.b;
+		m_pbColors[15] = fontColor.a;
 	}
 	
 	void NDUILabel::SetFontSize(unsigned int fontSize)
@@ -108,24 +108,24 @@ namespace NDEngine
 		fontSize = fontSize * NDDirector::DefaultDirector()->
 			GetScaleFactor();
 
-		if (m_fontSize != fontSize)
+		if (m_uiFontSize != fontSize)
 		{
-			m_needMakeTex = true;
-			m_needMakeCoo = true;
-			m_needMakeVer = true;
+			m_bNeedMakeTex = true;
+			m_bNeedMakeCoo = true;
+			m_bNeedMakeVer = true;
 		}
 		
-		m_fontSize = fontSize;
+		m_uiFontSize = fontSize;
 	}
 	
 	void NDUILabel::SetTextAlignment(int alignment)
 	{
-		if (m_textAlignment != alignment) 
+		if (m_eTextAlignment != alignment) 
 		{
-			m_needMakeVer = true;
+			m_bNeedMakeVer = true;
 		}
 		
-		m_textAlignment = (LabelTextAlignment)alignment;
+		m_eTextAlignment = (LabelTextAlignment)alignment;
 	}
 	
 	void NDUILabel::MakeTexture()
@@ -141,19 +141,20 @@ namespace NDEngine
 		*/
 		CC_SAFE_RELEASE(m_texture);
 
-		if ("" == m_text)
+		if ("" == m_strText)
 		{
 			return;
 		}
 
-		CCString* strString = new CCString(m_text.c_str());
+		CCString* strString = new CCString(m_strText.c_str());
 
 		m_texture = new CCTexture2D;
 		m_texture->initWithString(strString->UTF8String(),
 					CGSizeMake(thisRect.size.width, thisRect.size.height),
 					CCTextAlignmentLeft,
 					FONT_NAME,
-					m_fontSize);
+					m_uiFontSize
+					);
 // 			[[CCTexture2D alloc] initWithString:text 
 // 											 dimensions:dim 
 // 											  alignment:UITextAlignmentLeft
@@ -169,20 +170,20 @@ namespace NDEngine
 		{
 			CGRect thisRect = this->GetFrameRect();	
 			
-			m_cutRect = CGRectZero;
-			m_cutRect.size.width = m_texture->getContentSizeInPixels().width;
-			m_cutRect.size.height = thisRect.size.height <
+			m_kCutRect = CGRectZero;
+			m_kCutRect.size.width = m_texture->getContentSizeInPixels().width;
+			m_kCutRect.size.height = thisRect.size.height <
 				m_texture->getContentSizeInPixels().height ?
 				thisRect.size.height: m_texture->getContentSizeInPixels().height;
 			
-			m_coordinates[0] = m_cutRect.origin.x / m_texture->getPixelsWide();
-			m_coordinates[1] = (m_cutRect.origin.y + m_cutRect.size.height) / m_texture->getPixelsHigh();
-			m_coordinates[2] = (m_cutRect.origin.x + m_cutRect.size.width) / m_texture->getPixelsWide();
-			m_coordinates[3] = m_coordinates[1];
-			m_coordinates[4] = m_coordinates[0];
-			m_coordinates[5] = m_cutRect.origin.y / m_texture->getPixelsHigh();
-			m_coordinates[6] = m_coordinates[2];
-			m_coordinates[7] = m_coordinates[5];
+			m_pfCoordinates[0] = m_kCutRect.origin.x / m_texture->getPixelsWide();
+			m_pfCoordinates[1] = (m_kCutRect.origin.y + m_kCutRect.size.height) / m_texture->getPixelsHigh();
+			m_pfCoordinates[2] = (m_kCutRect.origin.x + m_kCutRect.size.width) / m_texture->getPixelsWide();
+			m_pfCoordinates[3] = m_pfCoordinates[1];
+			m_pfCoordinates[4] = m_pfCoordinates[0];
+			m_pfCoordinates[5] = m_kCutRect.origin.y / m_texture->getPixelsHigh();
+			m_pfCoordinates[6] = m_pfCoordinates[2];
+			m_pfCoordinates[7] = m_pfCoordinates[5];
 		}
 	}
 
@@ -194,45 +195,45 @@ namespace NDEngine
 			
 			CGRect drawRect = CGRectZero;
 			drawRect.origin.y = scrRect.origin.y;
-			drawRect.size.width = m_cutRect.size.width;
-			drawRect.size.height = m_cutRect.size.height;
+			drawRect.size.width = m_kCutRect.size.width;
+			drawRect.size.height = m_kCutRect.size.height;
 			
-			if (m_textAlignment == LabelTextAlignmentLeft) 
+			if (m_eTextAlignment == LabelTextAlignmentLeft) 
 			{
 				drawRect.origin.x = scrRect.origin.x;
 			}
-			else if (m_textAlignment == LabelTextAlignmentCenter)
+			else if (m_eTextAlignment == LabelTextAlignmentCenter)
 			{
 				drawRect.origin.x = scrRect.origin.x +
-					(scrRect.size.width - m_cutRect.size.width) / 2;
+					(scrRect.size.width - m_kCutRect.size.width) / 2;
 				drawRect.origin.y = scrRect.origin.y +
-					(scrRect.size.height - m_cutRect.size.height) / 2;
+					(scrRect.size.height - m_kCutRect.size.height) / 2;
 			}
 			else
 			{
-				drawRect.origin.x = scrRect.origin.x + scrRect.size.width - m_cutRect.size.width;	
+				drawRect.origin.x = scrRect.origin.x + scrRect.size.width - m_kCutRect.size.width;	
 				//drawRect.origin.y = scrRect.origin.y + scrRect.size.height - m_cutRect.size.height;
 			}
 			
 			CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-			m_vertices[0] = drawRect.origin.x;
-			m_vertices[1] = winSize.height - drawRect.origin.y - drawRect.size.height;
-			m_vertices[2] = 0;
-			m_vertices[3] = drawRect.origin.x + drawRect.size.width;
-			m_vertices[4] = m_vertices[1];
-			m_vertices[5] = 0;
-			m_vertices[6] = m_vertices[0];
-			m_vertices[7] = winSize.height - drawRect.origin.y;
-			m_vertices[8] = 0;
-			m_vertices[9] = m_vertices[3];
-			m_vertices[10] = m_vertices[7];
-			m_vertices[11] = 0;	
+			m_pfVertices[0] = drawRect.origin.x;
+			m_pfVertices[1] = winSize.height - drawRect.origin.y - drawRect.size.height;
+			m_pfVertices[2] = 0;
+			m_pfVertices[3] = drawRect.origin.x + drawRect.size.width;
+			m_pfVertices[4] = m_pfVertices[1];
+			m_pfVertices[5] = 0;
+			m_pfVertices[6] = m_pfVertices[0];
+			m_pfVertices[7] = winSize.height - drawRect.origin.y;
+			m_pfVertices[8] = 0;
+			m_pfVertices[9] = m_pfVertices[3];
+			m_pfVertices[10] = m_pfVertices[7];
+			m_pfVertices[11] = 0;	
 			
-			if (m_hasFontBoderColor) 
+			if (m_bHasFontBoderColor) 
 			{
 				for (int i = 0; i < 12; i++) 
 				{
-					m_verticesBoder[i] = m_vertices[i] + ((i % 3 == 2) ? 0.0f : 1.0f);
+					m_pfVerticesBoder[i] = m_pfVertices[i] + ((i % 3 == 2) ? 0.0f : 1.0f);
 				}
 			}
 		}
@@ -244,41 +245,41 @@ namespace NDEngine
 		
 		if (this->IsVisibled()) 
 		{
-			if (m_needMakeTex) 
+			if (m_bNeedMakeTex) 
 			{
 				this->MakeTexture();
-				m_needMakeTex = false;
+				m_bNeedMakeTex = false;
 			}
 			
-			if (m_needMakeCoo) 
+			if (m_bNeedMakeCoo) 
 			{
 				this->MakeCoordinates();
-				m_needMakeCoo = false;
+				m_bNeedMakeCoo = false;
 			}
 			
-			if (m_needMakeVer) 
+			if (m_bNeedMakeVer) 
 			{
 				this->MakeVertices();
-				m_needMakeVer = false;
+				m_bNeedMakeVer = false;
 			}
 			
 			if (m_texture) 
 			{
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				glBindTexture(GL_TEXTURE_2D, m_texture->getName());
-				glTexCoordPointer(2, GL_FLOAT, 0, m_coordinates);
+				glTexCoordPointer(2, GL_FLOAT, 0, m_pfCoordinates);
 
-				if (m_hasFontBoderColor) 
+				if (m_bHasFontBoderColor) 
 				{
-					glVertexPointer(3, GL_FLOAT, 0, m_verticesBoder);
-					glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_colorsBorder);
+					glVertexPointer(3, GL_FLOAT, 0, m_pfVerticesBoder);
+					glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_pbColorsBorder);
 					glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 				}
 
-				glVertexPointer(3, GL_FLOAT, 0, m_vertices);
-				glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_colors);
+				glVertexPointer(3, GL_FLOAT, 0, m_pfVertices);
+				glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_pbColors);
 
-				for (uint i = 0; i < m_renderTimes; i++) 
+				for (uint i = 0; i < m_uiRenderTimes; i++) 
 				{
 					glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 				}
@@ -311,30 +312,30 @@ namespace NDEngine
 	
 	void NDUILabel::SetFontBoderColer(ccColor4B fontColor)
 	{
-		m_hasFontBoderColor = true;
+		m_bHasFontBoderColor = true;
 		
-		m_colorFontBoder = fontColor;
+		m_kColorFontBoder = fontColor;
 		
-		m_needMakeVer = true;
+		m_bNeedMakeVer = true;
 		
-		m_colorsBorder[0] = fontColor.r;
-		m_colorsBorder[1] = fontColor.g;
-		m_colorsBorder[2] = fontColor.b;
-		m_colorsBorder[3] = fontColor.a;
+		m_pbColorsBorder[0] = fontColor.r;
+		m_pbColorsBorder[1] = fontColor.g;
+		m_pbColorsBorder[2] = fontColor.b;
+		m_pbColorsBorder[3] = fontColor.a;
 		
-		m_colorsBorder[4] = fontColor.r;
-		m_colorsBorder[5] = fontColor.g;
-		m_colorsBorder[6] = fontColor.b;
-		m_colorsBorder[7] = fontColor.a;
+		m_pbColorsBorder[4] = fontColor.r;
+		m_pbColorsBorder[5] = fontColor.g;
+		m_pbColorsBorder[6] = fontColor.b;
+		m_pbColorsBorder[7] = fontColor.a;
 		
-		m_colorsBorder[8] = fontColor.r;
-		m_colorsBorder[9] = fontColor.g;
-		m_colorsBorder[10] = fontColor.b;
-		m_colorsBorder[11] = fontColor.a;
+		m_pbColorsBorder[8] = fontColor.r;
+		m_pbColorsBorder[9] = fontColor.g;
+		m_pbColorsBorder[10] = fontColor.b;
+		m_pbColorsBorder[11] = fontColor.a;
 		
-		m_colorsBorder[12] = fontColor.r;
-		m_colorsBorder[13] = fontColor.g;
-		m_colorsBorder[14] = fontColor.b;
-		m_colorsBorder[15] = fontColor.a;
+		m_pbColorsBorder[12] = fontColor.r;
+		m_pbColorsBorder[13] = fontColor.g;
+		m_pbColorsBorder[14] = fontColor.b;
+		m_pbColorsBorder[15] = fontColor.a;
 	}
 }

@@ -166,23 +166,27 @@ void NDDirector::ReplaceScene(NDScene* pkScene, bool bAnimate/*=false*/)
 // 		}
 
 	if (m_kScenesStack.size() > 0)
-	{
-		//NDLog("===============================当前场景栈大小[%u]", m_scenesStack.size());
-		this->BeforeDirectorPopScene(m_kScenesStack.back(), true);
+		{
+			//NDLog("===============================当前场景栈大小[%u]", m_scenesStack.size());
+			this->BeforeDirectorPopScene(m_kScenesStack.back(), true);
+	
+			NDScene* pkScene = m_kScenesStack.back();
+	
+			if (pkScene)
+			{
+				delete pkScene;
+			}
+	
+			m_kScenesStack.pop_back();
+	
+			this->AfterDirectorPopScene(true);
+		}
+	
+	BeforeDirectorPushScene(pkScene);
 
-		delete m_kScenesStack.back();
-		m_kScenesStack.pop_back();
+	RunScene(pkScene);
 
-		this->AfterDirectorPopScene(true);
-	}
-
-	this->BeforeDirectorPushScene(pkScene);
-
-	m_kScenesStack.push_back(pkScene);
-
-	m_pkDirector->replaceScene((CCScene *) pkScene->m_ccNode);
-
-	this->AfterDirectorPushScene(pkScene);
+	AfterDirectorPushScene(pkScene);
 
 	//NDLog("===============================当前场景栈大小[%u]", m_scenesStack.size());
 }
@@ -245,10 +249,6 @@ bool NDDirector::PopScene(bool cleanUp)
 
 void NDDirector::PurgeCachedData()
 {
-	// todo(zjh)
-// 		NDPicturePool::PurgeDefaultPool();
-// 		CCTextureCache::sharedTextureCache()->removeAllTextures();
-// 		NDAnimationGroupPool::purgeDefaultPool();
 }
 
 void NDDirector::Pause()
@@ -331,11 +331,7 @@ void NDDirector::SetViewRect(CGRect rect, NDNode* node)
 	CGSize winSize = m_pkDirector->getWinSizeInPixels();
 
 	glEnable (GL_SCISSOR_TEST);
-	//		if (m_TransitionSceneWait)
-	//			glScissor(winSize.width - rect.origin.x - rect.size.width,
-	//					  winSize.height - rect.origin.y - rect.size.height,
-	//					  rect.size.width, rect.size.height);
-	//		else
+
 	glScissor(winSize.height - rect.origin.y - rect.size.height,
 			winSize.width - rect.origin.x - rect.size.width, rect.size.height,
 			rect.size.width);

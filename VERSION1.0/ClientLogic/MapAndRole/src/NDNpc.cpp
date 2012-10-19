@@ -656,3 +656,8 @@ void NDEngine::NDNpc::HandleNPCMask( bool bSet )
 {
 	throw std::exception("The method or operation is not implemented.");
 }
+
+void NDEngine::NDNpc::SetActionOnRing( bool bOn )
+{
+
+}

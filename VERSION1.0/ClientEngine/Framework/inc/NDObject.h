@@ -3,13 +3,13 @@
 //  DragonDrive
 //
 //  Created by xiezhenghai on 10-12-7.
-//  Copyright 2010 (缃戦緳)DeNA. All rights reserved.
+//  Copyright 2010 (网龙)DeNA. All rights reserved.
 //
-//	锛嶏紞浠嬬粛锛嶏紞
-//	娓告垙妗嗘灦鍩虹绫�
-//	绋嬪簭涓ぇ澶氭暟鐨勭被閮界户鎵胯嚜璇ョ被
-//	濡傛灉娲剧敓绫诲垎鍒湪澶存枃浠朵腑瀹炵幇DECLARE_CLASS锛屽湪婧愭枃浠朵腑瀹炵幇IMPLEMENT_CLASS杩欎袱涓畯锛岄偅涔堣娲剧敓绫诲氨鍏锋湁浜嗗姩鎬佽瘑鍒姛鑳�
-//	娲剧敓绫诲繀椤绘嫢鏈夐粯璁ゆ瀯閫犲嚱鏁帮紝浠ュ鍔ㄦ�佺敓鎴愪娇鐢�
+//	－－介绍－－
+//	游戏框架基础类
+//	程序中大多数的类都继承自该类
+//	如果派生类分别在头文件中实现DECLARE_CLASS，在源文件中实现IMPLEMENT_CLASS这两个宏，那么该派生类就具有了动态识别功能
+//	派生类必须拥有默认构造函数，以备动态生成使用
 
 #ifndef __NDObject_H
 #define __NDObject_H
@@ -22,7 +22,7 @@
 
 namespace NDEngine
 {
-//锛嶏紞妯′豢mfc鍔ㄦ�佽瘑鍒紞锛�
+//－－模仿mfc动态识别－－
 //......
 class NDObject;
 
@@ -79,28 +79,27 @@ public:
 
 public:
 //
-//		鍑芥暟锛欼sKindOfClass
-//		浣滅敤锛氱敤浜庡姩鎬佽瘑鍒被鍨嬶紝鐢ㄤ簬楠岃瘉瀵硅薄鏄惁鏃舵煇涓�涓被鎴栧叾鐖剁被鐨勫璞�
-//		鍙傛暟锛歳untimeClass闇�瑕佽璇嗗埆鐨勭被锛屼緥濡傦細RUNTIME_CLASS(NDObject)
-//		杩斿洖鍊硷細true姝ｇ‘ false閿欒
+//		函数：IsKindOfClass
+//		作用：用于动态识别类型，用于验证对象是否时某一个类或其父类的对象
+//		参数：runtimeClass需要被识别的类，例如：RUNTIME_CLASS(NDObject)
 	bool IsKindOfClass(const NDRuntimeClass* runtimeClass);
 //		
-//		鍑芥暟锛歋etDelegate
-//		浣滅敤锛氳缃鎵橈紝娉ㄦ剰锛氬叏灞�瀵硅薄娉ㄥ唽瀹屽鎵橈紝閲婃斁鏃惰娉ㄩ攢SetDelegate(NULL)
-//		鍙傛暟锛歳eceiver濮旀墭浜嬩欢鎺ユ敹鑰�
-//		杩斿洖鍊硷細鏃�	
+//		函数：SetDelegate
+//		作用：设置委托，注意：全局对象注册完委托，释放时请注销SetDelegate(NULL)
+//		参数：receiver委托事件接收者
+//		返回值：无	
 	void SetDelegate(NDObject* receiver);
 //		
-//		鍑芥暟锛欸etDelegate
-//		浣滅敤锛氳幏鍙栧鎵樼殑瀵硅薄
-//		鍙傛暟锛氭棤
-//		杩斿洖鍊硷細鏃�	
+//		函数：GetDelegate
+//		作用：获取委托的对象
+//		参数：无
+//		返回值：无	
 	NDObject* GetDelegate();
 //		
-//		鍑芥暟锛欸etRuntimeClass
-//		浣滅敤锛氳幏鍙栫被璇嗗埆淇℃伅
-//		鍙傛暟锛氭棤
-//		杩斿洖鍊硷細绫昏瘑鍒俊鎭粨鏋勪綋	
+//		函数：GetRuntimeClass
+//		作用：获取类识别信息
+//		参数：无
+//		返回值：类识别信息结构体	
 	virtual NDRuntimeClass* GetRuntimeClass() const;
 
 public:

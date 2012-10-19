@@ -70,16 +70,16 @@ void NDNode::SetParent(NDNode* node)
 
 const std::vector<NDNode*>& NDNode::GetChildren()
 {
-	return m_pkChildrenList;
+	return m_kChildrenList;
 }
 
 void NDNode::RemoveAllChildren(bool bCleanUp)
 {
 	NDAsssert(m_ccNode != NULL);
 
-	while (m_pkChildrenList.begin() != m_pkChildrenList.end())
+	while (m_kChildrenList.begin() != m_kChildrenList.end())
 	{
-		NDNode* node = (NDNode*) m_pkChildrenList.back();
+		NDNode* node = (NDNode*) m_kChildrenList.back();
 
 		LuaObject funcObj;
 
@@ -97,7 +97,7 @@ void NDNode::RemoveAllChildren(bool bCleanUp)
 			delegate->OnBeforeNodeRemoveFromParent(node, bCleanUp);
 		}
 
-		m_pkChildrenList.pop_back();
+		m_kChildrenList.pop_back();
 		node->SetParent(NULL);
 
 		if (delegate)
@@ -174,26 +174,21 @@ void NDNode::AddChild(NDNode* node, int z, int tag)
 	NDAsssert(m_ccNode != NULL && node != NULL && node->m_ccNode != NULL);
 	NDAsssert(node != this);
 
-	if (0 == strcmp(node->GetRuntimeClass()->className, "NDPlayer"))
-	{
-		int a = 0;
-	}
-
 	CCNode* pkNode = node->m_ccNode;
 
 	node->SetParent(this);
 
 	m_ccNode->addChild(pkNode, z, tag);
 
-	m_pkChildrenList.push_back(node);
+	m_kChildrenList.push_back(node);
 }
 
 void NDNode::RemoveChild(NDNode* node, bool bCleanUp)
 {
 	NDAsssert(m_ccNode != NULL && node != NULL && node->m_ccNode != NULL);
 
-	std::vector<NDNode*>::iterator iter = m_pkChildrenList.begin();
-	for (; iter != this->m_pkChildrenList.end(); iter++)
+	std::vector<NDNode*>::iterator iter = m_kChildrenList.begin();
+	for (; iter != this->m_kChildrenList.end(); iter++)
 	{
 		NDNode* ndNode = (NDNode*) *iter;
 		if (ndNode->m_ccNode == node->m_ccNode)
@@ -215,7 +210,7 @@ void NDNode::RemoveChild(NDNode* node, bool bCleanUp)
 				delegate->OnBeforeNodeRemoveFromParent(ndNode, bCleanUp);
 			}
 
-			m_pkChildrenList.erase(iter);
+			m_kChildrenList.erase(iter);
 			ndNode->SetParent(NULL);
 
 			if (delegate)
@@ -241,7 +236,7 @@ void NDNode::RemoveChild(int tag, bool bCleanUp)
 	NDAsssert(m_ccNode != NULL);
 
 	std::vector<NDNode*>::iterator iter;
-	for (iter = m_pkChildrenList.begin(); iter != m_pkChildrenList.end();
+	for (iter = m_kChildrenList.begin(); iter != m_kChildrenList.end();
 			iter++)
 	{
 		NDNode* node = (NDNode*) *iter;
@@ -263,7 +258,7 @@ void NDNode::RemoveChild(int tag, bool bCleanUp)
 				delegate->OnBeforeNodeRemoveFromParent(node, bCleanUp);
 			}
 
-			m_pkChildrenList.erase(iter);
+			m_kChildrenList.erase(iter);
 			node->SetParent(NULL);
 
 			if (delegate)
@@ -298,7 +293,7 @@ bool NDNode::ContainChild(NDNode* node)
 	NDAsssert(m_ccNode != NULL && node != NULL && node->m_ccNode != NULL);
 
 	std::vector<NDNode*>::iterator iter;
-	for (iter = m_pkChildrenList.begin(); iter != m_pkChildrenList.end();
+	for (iter = m_kChildrenList.begin(); iter != m_kChildrenList.end();
 			iter++)
 	{
 		NDNode* ndNode = (NDNode*) *iter;
@@ -314,7 +309,7 @@ bool NDNode::ContainChild(NDNode* node)
 NDNode* NDNode::GetChild(int tag)
 {
 	std::vector<NDNode*>::iterator iter;
-	for (iter = m_pkChildrenList.begin(); iter != m_pkChildrenList.end();
+	for (iter = m_kChildrenList.begin(); iter != m_kChildrenList.end();
 			iter++)
 	{
 		NDNode* pkNode = (NDNode*) *iter;
@@ -345,8 +340,8 @@ void NDNode::EnableDraw(bool enabled)
 	m_bDrawEnabled = enabled;
 
 	std::vector<NDNode*>::iterator iter;
-	for (iter = m_pkChildrenList.begin();
-		iter != m_pkChildrenList.end();iter++)
+	for (iter = m_kChildrenList.begin();
+		iter != m_kChildrenList.end();iter++)
 	{
 		NDNode* node = (NDNode*) *iter;
 		node->EnableDraw(m_bDrawEnabled);

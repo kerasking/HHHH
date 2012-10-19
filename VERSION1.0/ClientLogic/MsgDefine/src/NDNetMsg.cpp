@@ -73,7 +73,6 @@ bool NDNetMsgPool::Process(MSGID msgID, NDTransData* data, int len)
 	// script dispatch first
 	if (ScriptNetMsg::Process(msgID, data))
 	{
-
 		return true;
 	}
 

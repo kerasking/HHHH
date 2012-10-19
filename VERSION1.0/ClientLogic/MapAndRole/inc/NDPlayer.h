@@ -112,7 +112,7 @@ public:
 
 	int GetCanUseRepute();
 
-	void SendNpcInteractionMessage(unsigned int idNpc);
+	void SendNpcInteractionMessage(unsigned int uiNPCID);
 	// NPC焦点相关操作
 public:
 	NDNpc* GetFocusNpc();

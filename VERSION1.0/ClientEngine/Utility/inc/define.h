@@ -25,6 +25,9 @@
 #define srandom(x) rand()
 #define random(x) rand()
 
+#define BEGIN_ND_NAMESPACE namespace NDEngine{
+#define END_ND_NAMESPACE }
+
 /**
 * 添加类似objective-c 下的常用变量或者宏
 * @author 郭浩

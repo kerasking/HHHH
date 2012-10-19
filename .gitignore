@@ -13,6 +13,7 @@ Debug/
 release/
 Release/
 Obj/
+enc_temp_folder/
 Lib/
 Bin/
 MID/

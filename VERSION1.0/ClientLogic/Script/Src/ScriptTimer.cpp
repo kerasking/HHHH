@@ -53,7 +53,6 @@ unsigned int ScriptTimerMgr::AddTimer(LuaObject func, float fInterval)
 	OBJID nId = m_idAlloc.GetID();
 
 	m_kMapFunc.insert(std::make_pair(nId, func));
-
 	m_kTimer.SetTimer(this, nId, fInterval);
 
 	return nId;

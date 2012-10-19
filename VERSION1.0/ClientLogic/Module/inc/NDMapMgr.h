@@ -19,6 +19,8 @@
 #include "NDBaseRole.h"
 #include "NDUICustomView.h"
 #include "NDMapLayer.h"
+#include "NDConsole.h"
+#include "NDTimer.h"
 
 using namespace std;
 
@@ -34,6 +36,7 @@ class NDMonster;
 class NDTransData;
 class NDManualRole;
 class NDScene;
+
 enum 
 {
 	// battlelistener
@@ -248,8 +251,8 @@ class NDMapMgr:
 	public NDObject,
 	public TSingleton<NDMapMgr>,
 	public NDMsgObject,
-	public NDUIDialogDelegate,
-	public NDUICustomViewDelegate
+	public NDConsoleListener,
+	public ITimerCallback
 {
 public:
 
@@ -297,12 +300,18 @@ protected:
 	virtual void OnCustomViewRadioButtonSelected( NDUICustomView* customView,
 		unsigned int radioButtonIndex, int ortherButtonTag );
 
+	virtual bool processConsole( const char* pszInput );
+
+	virtual void OnTimer( OBJID tag );
+
 	static bool m_bFirstCreate;
 	static bool m_bVerifyVersion;
 
 	map_manualrole m_mapManualRole;
 	VEC_NPC m_vNPC;
 	VEC_MONSTER m_vMonster;
+
+	NDTimer m_kTimer;
 
 	int m_nCurrentMonsterBound;
 	int m_nRoadBlockX;

@@ -6,12 +6,15 @@
 #define NDGAMEAPPLICATION_H
 
 #include <cocos2d.h>
+#include "NDConsole.h"
 
 using namespace cocos2d;
 
 namespace NDEngine
 {
-class NDGameApplication: private CCApplication
+class NDGameApplication:
+	private CCApplication,
+	public NDConsoleListener
 {
 public:
 
@@ -22,6 +25,8 @@ public:
 	virtual bool applicationDidFinishLaunching();
 	virtual void applicationDidEnterBackground();
 	virtual void applicationWillEnterForeground();
+
+	virtual bool processConsole( const char* pszInput );
 
 protected:
 private:

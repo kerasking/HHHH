@@ -15,7 +15,8 @@
 
 using namespace LuaPlus;
 
-namespace NDEngine {
+namespace NDEngine
+{
 
 	#define LuaStateMgrObj LuaStateMgr::GetSingle()
 

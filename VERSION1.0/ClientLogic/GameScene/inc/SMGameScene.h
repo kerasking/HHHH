@@ -35,7 +35,7 @@ public:
 	cocos2d::CCArray* GetSwitchs();
 private:
 	//NDMiniMap *m_miniMap; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	NDMapLayerLogic *m_mapLayer;
+	NDMapLayerLogic* m_pkMapLayerLogic;
 	
 public:
 	void OnButtonClick(NDUIButton* button); override

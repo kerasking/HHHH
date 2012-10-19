@@ -237,7 +237,7 @@ private:
 	MAP_SPRITE					m_mapSprite;
 
 	void InitTLShareContent(std::vector<std::string>& vec_str);
-	void InitTLShareContent(const char* text, ...);
+	void InitTLShareContent(const char* pszText, ...);
 	void InitContent(NDUITableLayer* tl,
 			const std::vector<std::string>& vec_str,
 			const std::vector<int>& vec_id);
@@ -247,7 +247,7 @@ private:
 	bool checkNewPwd(const string& pwd);
 	void onClickTeam();
 
-	NDMapLayerLogic *maplayer;
+	NDMapLayerLogic* m_pkMapLayerLogic;
 
 	//游戏场景中的总是可视UI定义..
 	//NDUIHControlContainer		*m_hccOPItem;
@@ -317,12 +317,12 @@ private:
 	QuickTeam *m_quickTeam;
 
 	bool m_bHeadShow;
-	NDUIImage* m_imgHeadShow;
+	NDUIImage* m_pkHeadShowImage;
 	NDPicture* m_picHeadShow;
 	NDUIButton* m_btnHeadShow;
 
 	//NDUIDialog *m_dlgNPC;
-	unsigned int m_dlgNPCTag;
+	unsigned int m_uiNPCTagDialog;
 	OBJID m_dlgTaskAwardItemTag;
 	OBJID m_dlgTaskAwardItemConfirmTag;
 	OBJID m_dlgSyndicateResign; // 军团辞职

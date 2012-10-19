@@ -41,7 +41,7 @@ namespace NDEngine
 //		作用：获取标签的文本内容
 //		参数：无
 //		返回值：文本内容
-		std::string GetText(){ return m_text; }
+		std::string GetText(){ return m_strText; }
 //		
 //		函数：SetFontColor
 //		作用：设置标签字体的颜色
@@ -53,7 +53,7 @@ namespace NDEngine
 //		作用：获取标签的字体颜色
 //		参数：无
 //		返回值：颜色值rgba
-		cocos2d::ccColor4B GetFontColor(){ return m_color; }
+		cocos2d::ccColor4B GetFontColor(){ return m_kColor; }
 //		
 //		函数：SetFontSize
 //		作用：设置标签的字体大小
@@ -65,7 +65,7 @@ namespace NDEngine
 //		作用：获取标签字体大小
 //		参数：无
 //		返回值：字体大小
-		unsigned int GetFontSize(){ return m_fontSize; }
+		unsigned int GetFontSize(){ return m_uiFontSize; }
 //		
 //		函数：SetTextAlignment
 //		作用：设置标签文本的对齐方式
@@ -77,19 +77,19 @@ namespace NDEngine
 //		作用：获取标签文本的对齐方式
 //		参数：无
 //		返回值：对齐方式
-		int GetTextAlignment(){ return m_textAlignment; }
+		int GetTextAlignment(){ return m_eTextAlignment; }
 //		
 //		函数：SetRenderTimes
 //		作用：设置标签内容的渲染次数，注意：渲染次数越高则字体越清晰，但是效率也就越慢，默认渲染2次
 //		参数：times渲染次数
 //		返回值：无
-		void SetRenderTimes(unsigned int times){ m_renderTimes = times; }
+		void SetRenderTimes(unsigned int times){ m_uiRenderTimes = times; }
 
 //		函数：GetRenderTimes
 //		作用：获取标签的渲染次数
 //		参数：无
 //		返回值：次数
-		unsigned int GetRenderTimes(){ return m_renderTimes; }
+		unsigned int GetRenderTimes(){ return m_uiRenderTimes; }
 		
 		void SetFontBoderColer(cocos2d::ccColor4B fontColor);
 		
@@ -104,22 +104,26 @@ namespace NDEngine
 		void MakeVertices();
 		
 	private:
-		std::string m_text;
-		cocos2d::ccColor4B m_color;
-		unsigned int m_fontSize;
-		unsigned int m_renderTimes;
-		LabelTextAlignment m_textAlignment;
-		CGRect m_cutRect;
+		std::string m_strText;
+		cocos2d::ccColor4B m_kColor;
+		unsigned int m_uiFontSize;
+		unsigned int m_uiRenderTimes;
+		LabelTextAlignment m_eTextAlignment;
+		CGRect m_kCutRect;
 		
-		bool m_needMakeTex, m_needMakeCoo, m_needMakeVer;
+		bool m_bNeedMakeTex;
+		bool m_bNeedMakeCoo;
+		bool m_bNeedMakeVer;
 		
-		bool m_hasFontBoderColor;
-		cocos2d::ccColor4B m_colorFontBoder;
+		bool m_bHasFontBoderColor;
+		cocos2d::ccColor4B m_kColorFontBoder;
 		
 		cocos2d::CCTexture2D* m_texture;
-		GLfloat m_vertices[12], m_verticesBoder[12];
-		GLfloat m_coordinates[8];
-		GLbyte m_colors[16], m_colorsBorder[16];
+		GLfloat m_pfVertices[12];
+		GLfloat m_pfVerticesBoder[12];
+		GLfloat m_pfCoordinates[8];
+		GLbyte m_pbColors[16];
+		GLbyte m_pbColorsBorder[16];
 	};
 }
 
