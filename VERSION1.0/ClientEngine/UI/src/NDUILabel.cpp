@@ -57,7 +57,8 @@ namespace NDEngine
 		m_bNeedMakeCoo = true;
 		m_bNeedMakeVer = true;
 
-		m_strText = text;
+		CCString *pstrString = CCString::stringWithUTF8String(text);
+		m_strText = pstrString->toStdString();
 	}
 	
 	void NDUILabel::OnFrameRectChange(CGRect srcRect, CGRect dstRect)

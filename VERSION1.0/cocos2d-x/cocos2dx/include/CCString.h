@@ -182,7 +182,7 @@ namespace cocos2d
 		{
 			if (0 == pszUTF8 || !*pszUTF8)
 			{
-				return 0;
+				return new CCString("");
 			}
 
 			iconv_t pConvert = 0;
