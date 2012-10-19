@@ -150,6 +150,10 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\BeforeGame\inc\NDBeforeGameMgr.h"
+					>
+				</File>
+				<File
 					RelativePath="..\BeforeGame\inc\NDGameApplication.h"
 					>
 				</File>
@@ -157,6 +161,10 @@
 			<Filter
 				Name="src"
 				>
+				<File
+					RelativePath="..\BeforeGame\src\NDBeforeGameMgr.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\BeforeGame\src\NDGameApplication.cpp"
 					>
@@ -750,6 +758,14 @@
 		<Filter
 			Name="Module"
 			>
+			<File
+				RelativePath="..\Module\src\NDMapMgr.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Module\inc\NDMapMgr.h"
+				>
+			</File>
 			<Filter
 				Name="Battle"
 				>
@@ -834,14 +850,6 @@
 					</File>
 				</Filter>
 			</Filter>
-			<File
-				RelativePath="..\Module\src\NDMapMgr.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Module\inc\NDMapMgr.h"
-				>
-			</File>
 		</Filter>
 		<File
 			RelativePath="..\Common\src\NDDataPersist.cpp"

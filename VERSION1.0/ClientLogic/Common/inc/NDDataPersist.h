@@ -32,13 +32,22 @@
 //
 //// 上次登录信息
 #define kLoginData 0
-const static NSString kLastServerName("LastServerName");
-const static NSString kLastServerIP("LastServerIP");
-const static NSString kLastServerPort("LastServerPort");
-const static NSString kLastAccountName("LastAccountName");
-const static NSString kLastAccountPwd("LastAccountPwd");
-const static NSString kLastServerSendName("LastServerSendName");
-const static NSString kLinkType("LinkType");
+
+#define kLastServerName NSString("LastServerName")
+#define kLastServerIP NSString("LastServerIP")
+#define kLastServerPort NSString("LastServerPort")
+#define kLastAccountName NSString("LastAccountName")
+#define kLastAccountPwd NSString("LastAccountPwd")
+#define kLastServerSendName NSString("LastServerSendName")
+#define kLinkType NSString("LinkType")
+
+// NSString kLastServerName("LastServerName");
+// NSString kLastServerIP("LastServerIP");
+// NSString kLastServerPort("LastServerPort");
+// NSString kLastAccountName("LastAccountName");
+// NSString kLastAccountPwd("LastAccountPwd");
+// NSString kLastServerSendName("LastServerSendName");
+// NSString kLinkType("LinkType");
 //
 //// 游戏设置
 #define kGameSettingData 1

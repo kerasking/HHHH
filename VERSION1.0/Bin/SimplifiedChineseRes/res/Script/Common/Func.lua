@@ -250,6 +250,21 @@ function GetCurrentTime()
 	return os.time()
 end
 
+function GetRunningScene()
+    local pDirector = DefaultDirector();
+	if ( pDirector == nil ) then
+		LogInfo( "GetRunningScene: pDirector == nil" );
+		return nil;
+	end
+    
+	local pScene = pDirector:GetRunningScene();
+	if ( pScene == nil ) then
+		LogInfo( "GetRunningScene: scene == nil" );
+		return nil;
+	end
+    return pScene;
+end
+
 function GetSMAniPath(str)
 	if not CheckS(str) then
 		return ""

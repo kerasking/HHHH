@@ -277,12 +277,11 @@ public:
 	NDUILabel* Create(UIINFO& info, CGSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
-		NSString* pstrString = NSString::stringWithUTF8String(info.strText.c_str());
 		
 		NDUILabel *lb = new NDUILabel;
 		lb->Initialization();
 		lb->SetFrameRect(this->GetFrameRect());
-		lb->SetText(pstrString->toStdString().c_str());
+		lb->SetText(info.strText.c_str());
 		lb->SetTextAlignment(GetTextAlign());
 		lb->SetFontSize(info.nTextFontSize);
 		lb->SetFontColor(INTCOLORTOCCC4(info.nTextFontColor));
