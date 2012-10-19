@@ -723,7 +723,7 @@ void NDPlayer::OnMoveBegin()
 
 void NDPlayer::OnMoveEnd()
 {
-	ScriptGlobalEvent::OnEvent (GE_ONMOVE);
+	//ScriptGlobalEvent::OnEvent (GE_ONMOVE);
 
 	NDMapLayer* pkMaplayer = M_GetMapLayer();
 	if (pkMaplayer)
@@ -739,10 +739,13 @@ void NDPlayer::OnMoveEnd()
 	//SetAction(false);
 	//SetCurrentAnimation(MANUELROLE_STAND,false);
 	NDManualRole::OnMoveEnd();
-	if (isTeamLeader())
-	{
-		teamMemberAction(false);
-	}
+// 	if (isTeamLeader())
+// 	{
+// 		teamMemberAction(false);
+// 	}
+
+	SetCurrentAnimation(MANUELROLE_STAND,m_bReverse);
+
 	//玩家停下来的时候 做聚焦改变处理	npc加载完成后,也做一次聚焦改变处理
 	UpdateFocus();
 

@@ -1041,11 +1041,11 @@ void NDManualRole::OnMoveEnd()
 	 m_pBattlePetShow->OnMoveEnd();
 	 }*/
 
-	if (m_pkRidePet)
-	{
-		m_pkRidePet->OnMoveEnd();
-//			setStandActionWithRidePet();
-	}
+//	if (m_pkRidePet)
+//	{
+//		m_pkRidePet->OnMoveEnd();
+////			setStandActionWithRidePet();
+//	}
 
 	//if	(isTeamLeader())
 //		{

@@ -284,10 +284,10 @@ void NDSprite::MoveToPosition(std::vector<CGPoint> kToPos, SpriteSpeed speed,
 				}
 			}
 
-			if (m_kPointList.empty())
-			{
-				m_bIsMoving = false;
-			}
+// 			if (m_kPointList.empty())
+// 			{
+// 				m_bIsMoving = false;
+// 			}
 
 			//m_pointList = NDAutoPath::sharedAutoPath()->getPathPointVetor();
 
@@ -307,7 +307,7 @@ void NDSprite::OnMoving(bool bLastPos)
 
 void NDSprite::OnMoveEnd()
 {
-
+	SetCurrentAnimation(RIDEPET_STAND,m_bReverse);
 }
 
 CGPoint NDSprite::GetPosition()

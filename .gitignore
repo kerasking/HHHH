@@ -15,7 +15,6 @@ Release/
 Obj/
 enc_temp_folder/
 Lib/
-Bin/
 MID/
 Debug.win32/
 assets
