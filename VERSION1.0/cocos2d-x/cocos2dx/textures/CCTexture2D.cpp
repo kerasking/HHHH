@@ -112,7 +112,7 @@ const CCSize& CCTexture2D::getContentSizeInPixels()
 
 CCSize CCTexture2D::getContentSize()
 {
-	CCSize ret;
+	CCSize ret = CCSizeZero;
 	ret.width = m_tContentSize.width / CC_CONTENT_SCALE_FACTOR();
 	ret.height = m_tContentSize.height / CC_CONTENT_SCALE_FACTOR();
 

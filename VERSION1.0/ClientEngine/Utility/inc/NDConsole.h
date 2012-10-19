@@ -39,6 +39,7 @@ class NDConsole:
 public:
 
 	typedef map<string,NDConsoleListener*> MAP_LISTENER;
+	typedef map<string,const char*> MAP_STRING;
 
 	NDConsole();
 	NDConsole(LPCTSTR lpszTitle, SHORT ConsoleHeight = 300,
@@ -49,6 +50,8 @@ public:
 	void BeginReadLoop();
 	void StopReadLoop();
 	bool RegisterConsoleHandler(NDConsoleListener* pkListener,const char* pszKeyword);
+	const char* GetSpecialCommand(const char* pszCommand);
+	bool ClearSpecialCommand(const char* pszCommand);
 
 	CC_SYNTHESIZE(void*,m_hOutputHandle,OutputHandle);
 	CC_SYNTHESIZE(void*,m_hInputHandle,InputHandle);
@@ -67,6 +70,7 @@ protected:
 	static char* ms_pszBuffer;
 
 	MAP_LISTENER m_kListenerMap;
+	MAP_STRING* m_pkStringMap;
 
 private:
 };

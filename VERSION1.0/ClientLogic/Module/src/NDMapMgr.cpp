@@ -82,6 +82,8 @@ m_nMapDocID(0)
 	kNetPool.RegMsg(1159,this);
 
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"sim ");
+
+	m_kTimer.SetTimer(this,1,0.1);
 }
 
 NDMapMgr::~NDMapMgr()
@@ -95,6 +97,30 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 {
 	switch (usMsgID)
 	{
+	case 1159:
+		{
+			static bool bFirst = true;
+
+			if (bFirst)
+			{
+				NDTransData kData;
+				kData.WriteShort(1);
+				kData.WriteInt(1);
+				kData.WriteInt(1);
+				kData.WriteInt(1);
+				kData.WriteShort(528);
+				kData.WriteShort(512);
+				kData.WriteShort(0);
+				kData.WriteShort(0);
+				kData.WriteShort(0);
+				kData.WriteShort(0);
+				kData.WriteInt(1);
+
+				processChangeRoom(&kData,kData.GetSize());
+				bFirst = false;
+			}
+		}
+		break;
 	case _MSG_CHG_PET_POINT:
 	{
 		int nBtAnswer = pkData->ReadByte();
@@ -583,10 +609,10 @@ NDNpc* NDMapMgr::GetNPC(int nID)
 
 void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 {
-// 	if (0 == pkData || 0 == nLength)
-// 	{
-// 		return;
-// 	}
+ 	if (0 == pkData || 0 == nLength)
+ 	{
+ 		return;
+ 	}
 
 	m_nCurrentMonsterBound = 0;
 
@@ -601,72 +627,72 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 
 	BattleMgrObj.quitBattle(false);
 
+ 	pkData->ReadShort();
+ 	pkData->ReadInt();
+ 
+ 	int nMapID = pkData->ReadInt();
+ 	int nMapDocID = pkData->ReadInt();
+
+ 	int dwPortalX = pkData->ReadShort();
+ 	int dwPortalY = pkData->ReadShort();
+
 	pkData->ReadShort();
-	pkData->ReadInt();
+	pkData->ReadShort();
+	pkData->ReadShort();
+	pkData->ReadShort();
 
-	int nMapID = pkData->ReadInt();
-	int nMapDocID = pkData->ReadInt();
-
-// 	int dwPortalX = pkData->ReadShort();
-// 	int dwPortalY = pkData->ReadShort();
-
-// 	pkData->ReadShort();
-// 	pkData->ReadShort();
-// 	pkData->ReadShort();
-// 	pkData->ReadShort();
-
-// 	m_nMapType = pkData->ReadInt();
+ 	m_nMapType = pkData->ReadInt();
 // 
 // 	m_strMapName = pkData->ReadUnicodeString();
 // 
- 	NDPlayer& kPlayer = NDPlayer::defaultHero();
+  	NDPlayer& kPlayer = NDPlayer::defaultHero();
+// 
+// 	if (kPlayer.IsInState(USERSTATE_DEAD))
+// 	{
+// 		NDUISynLayer::Close (SYN_RELIEVE);
+// 	}
+// 
+// 	NDUISynLayer::Close (SYN_CREATE_ROLE);
+// 
+ 	NDMapMgrObj.ClearManualRole();
+// 
+ 	m_nMapID = nMapID;
+// 
+ 	if (1 == m_nMapID || 2 == m_nMapID)
+ 	{
+ 		m_nSaveMapID = m_nMapID;
+ 	}
+ 
+	kPlayer.m_nCurMapID = nMapDocID;
+ 
+ 	ShowPetInfo kPetInfoRerserve;
+ 	kPlayer.GetShowPetInfo(kPetInfoRerserve);
 
-	if (kPlayer.IsInState(USERSTATE_DEAD))
-	{
-		NDUISynLayer::Close (SYN_RELIEVE);
-	}
-
-	NDUISynLayer::Close (SYN_CREATE_ROLE);
-
-	NDMapMgrObj.ClearManualRole();
-
-	m_nMapID = nMapID;
-
-	if (1 == m_nMapID || 2 == m_nMapID)
-	{
-		m_nSaveMapID = m_nMapID;
-	}
-
-	kPlayer.m_nCurMapID = 0;//nMapDocID;
-
-	ShowPetInfo kPetInfoRerserve;
-	kPlayer.GetShowPetInfo(kPetInfoRerserve);
-
-	kPlayer.ResetShowPet();
-
-	if (kPlayer.GetParent() != 0)
-	{
-		NDRidePet* pkRidePet = NDPlayer::defaultHero().GetRidePet();
-
-		if (0 != pkRidePet && 0 != pkRidePet->GetParent())
-		{
-			pkRidePet->RemoveFromParent(false);
-		}
-
-		kPlayer.RemoveFromParent(false);
-	}
+ 	kPlayer.ResetShowPet();
+ 
+ 	if (kPlayer.GetParent() != 0)
+ 	{
+ 		NDRidePet* pkRidePet = NDPlayer::defaultHero().GetRidePet();
+ 
+ 		if (0 != pkRidePet && 0 != pkRidePet->GetParent())
+ 		{
+ 			pkRidePet->RemoveFromParent(false);
+ 		}
+ 
+ 		kPlayer.RemoveFromParent(false);
+ 	}
 
 	while (NDDirector::DefaultDirector()->PopScene())
 	{
 	}
 
-	//NDMapMgrObj.ClearNPC();
-	//NDMapMgrObj.ClearMonster();
-	//NDMapMgrObj.ClearGP();
+	NDMapMgrObj.ClearNPC();
+	NDMapMgrObj.ClearMonster();
+	NDMapMgrObj.ClearGP();
 	NDMapMgrObj.loadSceneByMapDocID(nMapDocID);
 
-	//NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(
-	//		NDDirector::DefaultDirector()->GetRunningScene());
+	NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(
+			NDDirector::DefaultDirector()->GetRunningScene());
 
 	//int nTheID = GetMotherMapID();
 	//int nTitleID = ScriptDBObj.GetN("map", nTheID, DB_MAP_TITLE);
@@ -728,6 +754,7 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 	(*pkData) >> btAction;
 	unsigned char btCount = 0;
 	(*pkData) >> btCount;
+
 	for (int i = 0; i < btCount; i++)
 	{
 		int nID = 0;
@@ -1034,7 +1061,7 @@ void NDMapMgr::AddAllMonsterToMap()
 
 bool NDMapMgr::processConsole( const char* pszInput )
 {
-	if (0 == pszInput || !*pszInput)
+	if (true)
 	{
 		return false;
 	}
@@ -1116,6 +1143,90 @@ bool NDMapMgr::processConsole( const char* pszInput )
 	printf("分析完畢!\n");
 
 	return true;
+}
+
+void NDMapMgr::OnTimer( OBJID tag )
+{
+	const char* pszCommand = NDConsole::GetSingletonPtr()->GetSpecialCommand("sim ");
+
+	if (0 != pszCommand && *pszCommand)
+	{
+		string strInput = pszCommand;
+
+		printf("開始分析要模擬的包……\n");
+
+		NDTransData kTransData;
+
+		vector<string> kStringVector;
+		int nPos = 0;
+		int nStartPos = 0;
+		int nOmegaPos = 0;
+		short usMsgID = 0;
+		unsigned char szBuffer[1024] = {0};
+		unsigned int pPos = 0;
+
+		nOmegaPos = strInput.find(';');
+		unsigned int nLength = strInput.length();
+
+		if (strInput.length() - 3 != nOmegaPos)
+		{
+			printf("语法错误\n");
+			return;
+		}
+
+		while(true)
+		{
+			nPos = strInput.find(',');
+			int nKeywordPos = 0;
+
+			string strNum;
+
+			if (-1 == nPos)
+			{
+				strNum = strInput.substr(0,strInput.length() - 3);
+				break;
+			}
+			else
+			{
+				strNum = strInput.substr(nStartPos,nPos);
+			}
+
+			if (0 == strNum.length())
+			{
+				printf("出错\n");
+				break;
+			}
+
+			int uiData = 0;
+			short usData = 0;
+			char ucData = 0;
+			strInput = strInput.substr(nPos + 1,strInput.length());
+
+			if (GetShortData(usMsgID,strNum,string("id")))
+			{
+				if (0 == usMsgID)
+				{
+					return;
+				}
+			}
+			else if (GetIntData(uiData,strNum,string("int")))
+			{
+				kTransData.WriteInt(uiData);
+			}
+			else if (GetShortData(usData,strNum,string("short")))
+			{
+				kTransData.WriteShort(usData);
+			}
+			else if (GetCharData(ucData,strNum,string("char")))
+			{
+				kTransData.WriteByte(ucData);
+			}
+		}
+
+		process(usMsgID,&kTransData,0);
+
+		printf("分析完畢!\n");
+	}
 }
 
 }

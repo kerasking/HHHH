@@ -16,7 +16,9 @@ bool NDConsole::ms_bContinueThread = false;
 char* NDConsole::ms_pszBuffer = 0;
 
 NDConsole::NDConsole() :
-		m_hOutputHandle(0), m_hInputHandle(0)
+m_hOutputHandle(0),
+m_hInputHandle(0),
+m_pkStringMap(0)
 {
 	if (ms_bIsExistent)
 	{
@@ -26,6 +28,7 @@ NDConsole::NDConsole() :
 	AllocConsole();
 	Attach(300, 80);
 	ms_bIsExistent = TRUE;
+	m_pkStringMap = new MAP_STRING;
 }
 
 NDConsole::NDConsole(LPCTSTR lpszTitle, SHORT ConsoleHeight /*= 300*/,
@@ -161,12 +164,56 @@ void NDConsole::ProcessInput(const char* pszInput)
 
 			if (pkListener)
 			{
+				char* pszTemp = new char[2048];
+				memset(pszTemp,0,sizeof(char) * 2048);
 				string strResult = strInput.substr(strListenerKey.length(),
 						strInput.length());
+				strcpy_s(pszTemp,2048,strResult.c_str());
+				m_pkStringMap->insert(make_pair(strListenerKey,pszTemp));
 				pkListener->processConsole(strResult.c_str());
 			}
 		}
 	}
+}
+
+const char* NDConsole::GetSpecialCommand( const char* pszCommand )
+{
+	if (0 == m_pkStringMap->size())
+	{
+		return 0;
+	}
+
+	string strCmd = pszCommand;
+	const char* pszRes = (*m_pkStringMap)[strCmd];
+
+	if (pszRes && *pszRes)
+	{
+		int a = 10;
+	}
+
+	return pszRes;
+}
+
+bool NDConsole::ClearSpecialCommand( const char* pszCommand )
+{
+	if (0 == pszCommand || !*pszCommand)
+	{
+		return false;
+	}
+
+	string strValue = pszCommand;
+
+	MAP_STRING::iterator it = m_pkStringMap->find(strValue);
+
+	if (m_pkStringMap->end() == it)
+	{
+		return false;
+	}
+
+	SAFE_DELETE_ARRAY(it->second);
+	m_pkStringMap->erase(it);
+
+	return true;
 }
 
 END_ND_NAMESPACE

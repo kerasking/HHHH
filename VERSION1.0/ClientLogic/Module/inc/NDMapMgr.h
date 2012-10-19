@@ -20,6 +20,7 @@
 #include "NDUICustomView.h"
 #include "NDMapLayer.h"
 #include "NDConsole.h"
+#include "NDTimer.h"
 
 using namespace std;
 
@@ -250,7 +251,8 @@ class NDMapMgr:
 	public NDObject,
 	public TSingleton<NDMapMgr>,
 	public NDMsgObject,
-	public NDConsoleListener
+	public NDConsoleListener,
+	public ITimerCallback
 {
 public:
 
@@ -300,12 +302,16 @@ protected:
 
 	virtual bool processConsole( const char* pszInput );
 
+	virtual void OnTimer( OBJID tag );
+
 	static bool m_bFirstCreate;
 	static bool m_bVerifyVersion;
 
 	map_manualrole m_mapManualRole;
 	VEC_NPC m_vNPC;
 	VEC_MONSTER m_vMonster;
+
+	NDTimer m_kTimer;
 
 	int m_nCurrentMonsterBound;
 	int m_nRoadBlockX;
