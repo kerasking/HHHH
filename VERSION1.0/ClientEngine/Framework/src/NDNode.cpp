@@ -174,11 +174,6 @@ void NDNode::AddChild(NDNode* node, int z, int tag)
 	NDAsssert(m_ccNode != NULL && node != NULL && node->m_ccNode != NULL);
 	NDAsssert(node != this);
 
-	if (0 == strcmp(node->GetRuntimeClass()->className, "NDPlayer"))
-	{
-		int a = 0;
-	}
-
 	CCNode* pkNode = node->m_ccNode;
 
 	node->SetParent(this);

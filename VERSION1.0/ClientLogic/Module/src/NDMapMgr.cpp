@@ -694,52 +694,50 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 	NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(
 			NDDirector::DefaultDirector()->GetRunningScene());
 
-	//int nTheID = GetMotherMapID();
-	//int nTitleID = ScriptDBObj.GetN("map", nTheID, DB_MAP_TITLE);
+	int nTheID = GetMotherMapID();
+	int nTitleID = ScriptDBObj.GetN("map", nTheID, DB_MAP_TITLE);
 	//pkLayer->ShowTitle(nTitleID, 0);
 
-	//if (0 == pkLayer)
-	//{
-	//	return;
-	//}
+	if (0 == pkLayer)
+	{
+		return;
+	}
 
-	//kPlayer.SetPositionEx(
-	//		ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-	//				dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
-	//kPlayer.SetServerPositon(dwPortalX, dwPortalY);
-	//kPlayer.SetShowPet(kPetInfoRerserve);
-	//kPlayer.stopMoving();
+	kPlayer.SetPositionEx(ccp(dwPortalX,dwPortalY));
+	kPlayer.SetServerPositon(dwPortalX, dwPortalY);
+	kPlayer.SetShowPet(kPetInfoRerserve);
+	kPlayer.stopMoving();
 
-	//NDRidePet* pkRidePet = kPlayer.GetRidePet();
+	NDRidePet* pkRidePet = kPlayer.GetRidePet();
 
-	//if (0 != pkRidePet)
-	//{
-	//	pkRidePet->stopMoving();
-	//	pkRidePet->SetPositionEx(
-	//			ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-	//					dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
-	//}
+	if (0 != pkRidePet)
+	{
+		pkRidePet->stopMoving();
+		pkRidePet->SetPositionEx(
+				ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+						dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+	}
 
-	//pkLayer->SetScreenCenter(
-	//		ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-	//				dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+	pkLayer->SetScreenCenter(
+			ccp(dwPortalX,
+					dwPortalY));
 
-	//kPlayer.SetAction(false);
-	//kPlayer.SetLoadMapComplete();
+	kPlayer.SetAction(false);
+	kPlayer.SetLoadMapComplete();
 
-	//ItemMgrObj.SortBag();
+	ItemMgrObj.SortBag();
 
-	//ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
+	ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
 
-	//if (nTheID / 100000000 > 0)
-	//{
-	//	//	ScriptMgrObj.excuteLuaFunc("SetUIVisible","",0);
-	//}
-	//else
-	//{
-	//	pkLayer->AddChild(&kPlayer, 0, 0);
-	//	//	ScriptMgrObj.executeLuaFunc("SetUIVisible","",1);
-	//}
+	if (nTheID / 100000000 > 0)
+	{
+		//	ScriptMgrObj.excuteLuaFunc("SetUIVisible","",0);
+	}
+	else
+	{
+		pkLayer->AddChild(&kPlayer, 111, 0);
+		//	ScriptMgrObj.executeLuaFunc("SetUIVisible","",1);
+	}
 
 //	CloseProgressBar;
 
