@@ -223,7 +223,6 @@ private:
 	int m_nBattleY;
 	int m_nLastBattleType;
 	int m_nLastBattleTeamCount;
-
 };
 
 #endif

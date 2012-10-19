@@ -55,7 +55,7 @@ function p.LoadUI()
         layer:Free();
         return false;
     end
-    uiLoad:Load("RegisterRole.ini", layer, p.OnUIEvent, 0, 0);--创建角色
+    uiLoad:Load("login_3.ini", layer, p.OnUIEvent, 0, 0);--创建角色
     uiLoad:Free();
 
     p.InitUI();--error here

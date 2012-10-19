@@ -82,7 +82,7 @@ Fighter::Fighter(const FIGHTER_INFO& fInfo)
 	m_bShowName = false;
 	m_pkSkillNameLabel = NULL;
 	m_pkFighterNameLabel = NULL;
-//	m_imgHurtNum = NULL; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+//	m_imgHurtNum = NULL;
 	m_pkCritImage = NULL;
 	m_pkBojiImage = NULL;
 	m_eSkillAtkType = ATKTYPE_NEAR;
@@ -92,6 +92,7 @@ Fighter::Fighter(const FIGHTER_INFO& fInfo)
 	m_nHurtInprotect = 0;
 
 	m_pkRareMonsterEffect = NULL;
+	m_testVa = 1;
 }
 
 void Fighter::releaseStatus()

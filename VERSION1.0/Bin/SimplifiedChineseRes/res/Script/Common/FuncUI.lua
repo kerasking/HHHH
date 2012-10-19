@@ -253,13 +253,17 @@ function SetGameDataSToLabel(pParent, nTag, nScriptData, nRoleData, nRoleId, nId
 end
 
 function SetLabel(pParent, nTag, str)
-	if not CheckP(pParent) or not CheckS(str) then
-		LogInfo("SetLabel invalid arg1");
+	if not CheckP(pParent) then
+		LogInfo("SetLabel invalid pParent");
+		return;
+	end
+    if not CheckS(str) then
+		LogInfo("SetLabel invalid str");
 		return;
 	end
 
 	if not CheckN(nTag) then
-		LogInfo("SetLabel invalid arg2");
+		LogInfo("SetLabel invalid nTag");
 		return;
 	end
 	
@@ -269,6 +273,7 @@ function SetLabel(pParent, nTag, str)
 	end
 	
 	lb:SetText(str);
+    return lb;
 end
 
 function SetHyperlinkText(pParent, nTag, str)
@@ -444,4 +449,29 @@ function CreateButton(picname, selpicname, text, rect, fontsize, focusPicname, b
 	end
 	
 	return btn;
+end
+
+--** chh 2012-08-01 **--
+function HideLoginUI(nTag)
+    LogInfo("HideLoginUI");
+    local scene = GetRunningScene();
+    
+    local hideTags = {
+        NMAINSCENECHILDTAG.Login_ServerUI,
+        NMAINSCENECHILDTAG.Login_RegRoleUI,
+    };
+    
+    for i,v in ipairs(hideTags) do 
+        local layer = GetUiLayer(scene,v);
+        if(layer) then
+            layer:SetVisible(false);
+        end
+    end
+    
+    local layer = GetUiLayer(scene,nTag);
+    if(layer) then
+        layer:SetVisible(true);
+        return true;
+    end
+    return false;
 end

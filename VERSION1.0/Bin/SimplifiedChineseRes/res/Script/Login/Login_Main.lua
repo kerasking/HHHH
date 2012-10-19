@@ -18,7 +18,35 @@ p.Login_Account=nil;
 p.Login_Pwd=nil;
 
 function p.LoadUI()
+   local scene = GetSMLoginScene();
+    if scene == nil then
+        LogInfo("scene == nil,load Login_Main failed!");
+        return false;
+    end
 
+    scene:RemoveAllChildren(true);
+    local layer = createNDUILayer();
+    if layer == nil then
+        return false;
+    end
+    layer:Init();
+    layer:SetTag(NMAINSCENECHILDTAG.Login_MainUI);
+    layer:SetFrameRect(RectFullScreenUILayer);
+    layer:SetBackgroundColor(ccc4(125, 125, 125, 125));
+    scene:AddChild(layer);
+
+    --初始化ui
+    local uiLoad = createNDUILoad();
+    if nil == uiLoad then
+        layer:Free();
+        return false;
+    end
+
+    uiLoad:Load("Login_Main.ini", layer, p.OnUIEvent, 0, 0);--选择服务器
+    uiLoad:Free();
+
+    p.Init();
+    p.Refresh();
     return true;
 end
 

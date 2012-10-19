@@ -41,15 +41,39 @@ int GetEncryptSalt(unsigned int seed)
     return( ((seed * 214013L + 2531011L) >> 16) & 0x7fff );
 }
 
-void sendMsgConnect(int idAccount) 
+// void sendMsgConnect(int idAccount) 
+// {
+// 	NDTransData data(_MSG_CONNECT);
+//     std::string phoneKey = "1yyyyyyyyyyyyyyyyyyyyyyyyyy";
+// 	int dwAuthorize = 0;
+// 	data << idAccount;
+// 	data << dwAuthorize;
+// 	data.Write((unsigned char*)(phoneKey.c_str()), phoneKey.size());
+// 	NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
+// }
+
+std::string Int2StrIP(int ip_Int)
 {
-	NDTransData data(_MSG_CONNECT);
-    std::string phoneKey = "1yyyyyyyyyyyyyyyyyyyyyyyyyy";
-	int dwAuthorize = 0;
-	data << idAccount;
-	data << dwAuthorize;
-	data.Write((unsigned char*)(phoneKey.c_str()), phoneKey.size());
-	NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
+	int num1 = ((ip_Int & 0xff000000) >> 24) & 0xff;
+	int num2 = ((ip_Int & 0xff0000L) >> 16) & 0xff;
+	int num3 = ((ip_Int & 0xff00L) >> 8) & 0xff;
+	int num4 = (ip_Int & 0xff);
+	tq::CString str;
+	str.Format("%d.%d.%d.%d", num4,num3,num2,num1);
+
+	return str;
+}
+
+void sendMsgConnect(const char* pszIp, int nPort, int idAccount)
+{
+	NDDataTransThread::DefaultThread()->Stop();
+	NDDataTransThread::ResetDefaultThread();
+	NDDataTransThread::DefaultThread()->Start(pszIp, nPort);
+	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
+	{
+		return;
+	}
+	NDBeforeGameMgrObj.sendMsgConnect(idAccount);
 }
 
 void CreatePlayer(int lookface, int x, int y, int userid, std::string name)
@@ -292,30 +316,34 @@ std::string GetFastPwd()
 bool SwichKeyToServer(const char* pszIp, int nPort, const char* pszAccountName,
 		const char* pszPwd, const char* pszServerName)
 {
-    //return NDBeforeGameMgrObj.SwichKeyToServer(pszIp,nPort,pszAccountName,pszPwd,pszServerName);
-    NDDataTransThread::DefaultThread()->Stop();
-    NDDataTransThread::ResetDefaultThread();
+//     //return NDBeforeGameMgrObj.SwichKeyToServer(pszIp,nPort,pszAccountName,pszPwd,pszServerName);
+//     NDDataTransThread::DefaultThread()->Stop();
+//     NDDataTransThread::ResetDefaultThread();
+// 
+//     NDDataTransThread::DefaultThread()->Start(pszIp, nPort);
+// 	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
+// 	{
+// 		return false;
+// 	}
+//     
+//     //this->SetUserName(pszAccountName);
+//     //this->SetServerInfo(pszIp,pszServerName,pszServerName,nPort);
+//     //this->SetPassWord(pszPwd);
+// 
+//     int idAccount = atoi(pszAccountName);
+//     sendMsgConnect(idAccount);
+// //    srand(idAccount);
+//     int nSalt = GetEncryptSalt(idAccount);
+//     DWORD dwAuthorize = 0;
+//     DWORD dwData = dwAuthorize ^ (nSalt % idAccount);
+//     dwAuthorize = dwData;
+//     DWORD dwEncryptCode = (idAccount+dwAuthorize)^0x4321;
+//     dwAuthorize = dwAuthorize ^ dwEncryptCode;
+//     NDDataTransThread::DefaultThread()->ChangeCode(dwAuthorize);
 
-    NDDataTransThread::DefaultThread()->Start(pszIp, nPort);
-	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
-	{
-		return false;
-	}
-    
-    //this->SetUserName(pszAccountName);
-    //this->SetServerInfo(pszIp,pszServerName,pszServerName,nPort);
-    //this->SetPassWord(pszPwd);
-
-    int idAccount = atoi(pszAccountName);
-    sendMsgConnect(idAccount);
-//    srand(idAccount);
-    int nSalt = GetEncryptSalt(idAccount);
-    DWORD dwAuthorize = 0;
-    DWORD dwData = dwAuthorize ^ (nSalt % idAccount);
-    dwAuthorize = dwData;
-    DWORD dwEncryptCode = (idAccount+dwAuthorize)^0x4321;
-    dwAuthorize = dwAuthorize ^ dwEncryptCode;
-    NDDataTransThread::DefaultThread()->ChangeCode(dwAuthorize);
+	NDDataTransThread::DefaultThread()->Stop();
+	NDDataTransThread::ResetDefaultThread();
+	return NDBeforeGameMgrObj.SwichKeyToServer(pszIp,nPort,pszAccountName,pszPwd,pszServerName);
 }
 
 ///////////////////////////////////////////////
@@ -400,6 +428,9 @@ void ScriptObjectGameLogic::OnLoad()
 	ETCFUNC("AddAllRecord", AddAllRecord);
 	ETCFUNC("SetCurrentChannel", SetCurrentChannel);
 	//ETCFUNC("CreateRole",CreateRole);
+
+	ETCFUNC("Int2StrIP",Int2StrIP);
+	ETCFUNC("sendMsgConnect",sendMsgConnect);
 }
 
 //地图层接口导出

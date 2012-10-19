@@ -6,6 +6,7 @@
 #include "GameData.h"
 #include "ScriptCommon.h"
 #include "ScriptGlobalEvent.h"
+#include "ScriptNetMsg.h"
 #include "ScriptUI.h"
 #include "ScriptGameLogic.h"
 #include "SMGameScene.h"
@@ -20,6 +21,7 @@
 #include <NDSocket.h>
 #include "NDMapMgr.h"
 #include "LuaStateMgr.h"
+#include "NDBeforeGameMgr.h"
 
 namespace NDEngine
 {
@@ -109,7 +111,7 @@ bool NDGameApplication::initInstance()
 	} while (0);
 
     // 现在这里登陆
-    SwichKeyToServer("192.168.9.47", 9500/*9528*/, "285929910", "", "xx");
+   // SwichKeyToServer("192.168.9.47", 9500/*9528*/, "285929910", "", "xx");
 	return bRet;
 }
 
@@ -118,11 +120,13 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	NDMapMgr& kMapMgr = NDMapMgrObj;
 	NDDirector* pkDirector = NDDirector::DefaultDirector();
 	ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();
+	NDBeforeGameMgrObj;
 
 	pkDirector->Initialization();
 //	pkDirector->RunScene(CSMGameScene::Scene());
 //	kMapMgr.processChangeRoom(0,0);
 
+	ScriptNetMsg* pkNetMsg = new ScriptNetMsg;
 	ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
 	NDScriptGameData* pkData = new NDScriptGameData;
 	ScriptGlobalEvent* pkGlobalEvent = new ScriptGlobalEvent;
@@ -133,6 +137,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 	pkData->Load();
 	pkTimerManager->OnLoad();
+	pkNetMsg->OnLoad();
 	pkLogic->OnLoad();
 	pkDrama->OnLoad();
 	pkCommon->OnLoad();
@@ -140,6 +145,8 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	pkScriptUI->OnLoad();
 
 	kScriptManager.Load();
+
+	//CC_SAFE_DELETE(pkNetMsg);
 
 	//ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
 	ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);

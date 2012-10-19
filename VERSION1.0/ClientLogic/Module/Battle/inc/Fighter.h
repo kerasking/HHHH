@@ -1,12 +1,3 @@
-/*
- *  Fighter.h
- *  DragonDrive
- *
- *  Created by wq on 11-1-19.
- *  Copyright 2011 (网龙)DeNA. All rights reserved.
- *
- */
-
 #ifndef __FIGHTER_H__
 #define __FIGHTER_H__
 
@@ -55,14 +46,18 @@ typedef struct _FIGHTER_INFO
 	int idlookface;
 	Byte btBattleTeam;
 	Byte btStations;
-	FIGHTER_TYPE fighterType; // 玩家，怪物,幻兽
+	FIGHTER_TYPE fighterType;
 	BATTLE_GROUP group;
 	int original_life;
+	int original_mana;
 	int nLife;
 	int nLifeMax;
 	int nMana;
 	int nManaMax;
+	int skillId;
+	int atk_type;
 	short level;
+	int nQuality;
 } FIGHTER_INFO;
 
 class FighterStatus
@@ -110,31 +105,13 @@ public:
 	int m_nID;
 	int m_nStartEffectID;
 	int m_nLastEffectID;
+	int startPos;
+	int lastPos;
 	NDSubAniGroup* m_pkAniGroup;
 };
 
-//struct FIGHTER_CMD
-//{
-//	FIGHTER_CMD()
-//	{
-//		memset(this, 0L, sizeof(FIGHTER_CMD));
-//	}
-//	
-//	~FIGHTER_CMD()
-//	{
-//		
-//	}
-//	
-//	BATTLE_EFFECT_TYPE effect_type;
-//	int actor;
-//	FighterStatus* status;
-//	int data;
-//};
-
 typedef vector<FighterStatus*> VEC_FIGHTER_STATUS;
 typedef VEC_FIGHTER_STATUS::iterator VEC_FIGHTER_STATUS_IT;
-//typedef vector<FIGHTER_CMD*> VEC_COMMAND;
-//typedef VEC_COMMAND::iterator VEC_COMMAND_IT;
 
 class StatusAction
 {
@@ -146,14 +123,14 @@ public:
 
 	StatusAction(int act, FighterStatus* fs, int id) :
 		m_pkStatus(fs)
-	{
-		m_nAction = act;
-		m_nTargetID = id;
-	}
+		{
+			m_nAction = act;
+			m_nTargetID = id;
+		}
 
-	int m_nAction;
-	FighterStatus* m_pkStatus;
-	int m_nTargetID;
+		int m_nAction;
+		FighterStatus* m_pkStatus;
+		int m_nTargetID;
 };
 
 typedef set<string> SET_STATUS_PERSIST;
@@ -162,7 +139,7 @@ typedef SET_STATUS_PERSIST::iterator SET_STATUS_PERSIST_IT;
 typedef vector<Hurt> VEC_HURT;
 typedef VEC_HURT::iterator VEC_HURT_IT;
 
-typedef vector<int> VEC_PAS_STASUS; // 被施加的被动状态
+typedef vector<int> VEC_PAS_STASUS;
 typedef VEC_PAS_STASUS::iterator VEC_PAS_STASUS_IT;
 
 typedef vector<HurtNumber> VEC_HURT_NUM;
@@ -229,8 +206,6 @@ public:
 	void updatePos();
 	void draw();
 
-//	void AddCommand(FIGHTER_CMD* cmd);
-
 	void setOnline(bool bOnline);
 
 	int GetNormalAtkType() const
@@ -239,7 +214,7 @@ public:
 	}
 
 	void AddAHurt(Fighter* actor, int btType, int hurtHP, int hurtMP,
-			int dwData, HURT_TYPE ht);
+		int dwData, HURT_TYPE ht);
 	void AddAStatusTarget(StatusAction& f);
 	void AddATarget(Fighter* f);
 
@@ -431,11 +406,7 @@ public:
 		return m_vPasStatus.size() > 0;
 	}
 
-	//void handleStatusPersist(int type, int dwdata);
-
 	void LoadEudemon();
-
-	//void GetCurSubAniGroup(VEC_SAG& sagList);
 
 	void setWillBeAtk(bool bSet);
 
@@ -469,11 +440,11 @@ public:
 	Fighter* m_pkMainTarget;
 	Fighter* m_pkActor;
 
-	/** 保护对象 */
+
 	Fighter* m_pkProtectTarget;
-	/** 保护者 */
+
 	Fighter* m_pkProtector;
-	/** 保护对象时去的血临时存等保护对象去血的时候显示出来 */
+
 	int m_nHurtInprotect;
 
 	bool m_bMissAtk;
@@ -484,14 +455,8 @@ public:
 
 	bool isVisibleStatus;
 
-//	VEC_COMMAND m_vCmdList;
-
 	FIGHTER_ACTION m_action;
-	ACTION_TYPE m_actionType; // 动作类型，普通攻击0，技能攻击1，道具使用2, 捕捉宠物3。对应使用的动作
-//	EFFECT_CHANGE_LIFE_TYPE m_changeLifeType;// 主动伤血类型，攻击，技能，道具等
-//	EFFECT_CHANGE_LIFE_TYPE m_changeLifeTypePas;
-
-	//SET_STATUS_PERSIST m_setStatusPersist;
+	ACTION_TYPE m_actionType;
 
 	void drawRareMonsterEffect(bool bVisible);
 
@@ -503,18 +468,16 @@ private:
 	int m_nOriginX;
 	int m_nOriginY;
 
-	// role原来的父节点
 	NDNode* m_pkRoleParent;
 	CGPoint m_kRoleInParentPoint;
 
-	// 绘制动画组
 	NDBaseRole* m_pkRole;
 	NDSprite* m_pkRareMonsterEffect;
-	// 是否要主动释放role
+
 	bool m_bRoleShouldDelete;
 
-	int m_nNormalAtkType; // 普通攻击是进程还是远程
-	int m_nActionTime; // fighter开始行动的时间
+	int m_nNormalAtkType;
+	int m_nActionTime;
 
 	VEC_HURT m_vHurt;
 	VEC_STATUS_ACTION m_kArrayStatusTarget;
@@ -523,8 +486,8 @@ private:
 	VEC_HURT_NUM m_vHurtNum;
 
 	bool m_bBeginAction;
-	bool m_bIsEscape; // 完全脱离战斗
-	bool m_bIsAlive; // 战士是否存活，死亡时暂时脱离战斗，可以被复活再回到战斗
+	bool m_bIsEscape;
+	bool m_bIsAlive;
 	bool m_bIsDodgeOK;
 	bool m_bIsHurtOK;
 	bool m_bIsDieOK;
@@ -541,7 +504,6 @@ private:
 	ATKTYPE m_eSkillAtkType;
 	bool m_bWillBeAttack;
 
-	//ImageNumber* m_imgHurtNum; ///< 临时性注释 郭浩
 	NDUIImage* m_pkCritImage;
 	NDUIImage* m_pkActionWordImage;
 	NDUIImage* m_pkBojiImage;
@@ -552,6 +514,7 @@ private:
 	std::string m_strFighterName;
 
 	string m_strMsgStatus;
+	int m_testVa;
 
 private:
 	Fighter(const Fighter& rhs)

@@ -23,7 +23,7 @@ const std::string ELE_SPIRIT = NDCommonCString("jingsheng"); //»ìÂÒ
 
 enum
 {
-	DEFAULT_FONT_SIZE = 12,
+	DEFAULT_FONT_SIZE = 14,
 };
 
 typedef std::set<OBJID> SET_BATTLE_SKILL_LIST;
