@@ -1770,5 +1770,5 @@ void NDMapLayer::AddChild(NDNode* node, int z, int tag)
 {
 	NDNode::AddChild(node, z, tag);
 }
-}
 
+}

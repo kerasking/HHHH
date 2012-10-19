@@ -433,7 +433,7 @@ void NDMapData::decode(FILE* pkStream)
 					nImageIndex = 0;
 				}
 
-				int tileIndex = kFileOp.readByte(pkStream);		//图块下标
+				int nTileIndex = kFileOp.readByte(pkStream);		//图块下标
 				bool reverse = kFileOp.readByte(pkStream) == 1;	//翻转
 
 				if (nImageIndex == -1)
@@ -465,8 +465,9 @@ void NDMapData::decode(FILE* pkStream)
 		m_pkObstacles->push_back(true);
 	}
 
-	int notPassCount = kFileOp.readShort(pkStream);
-	for (int i = 0; i < notPassCount; i++)
+	int nNotPassCount = kFileOp.readShort(pkStream);
+
+	for (int i = 0; i < nNotPassCount; i++)
 	{
 		int nRowIndex = kFileOp.readByte(pkStream);
 		int nColumnIndex = kFileOp.readByte(pkStream);
@@ -481,8 +482,9 @@ void NDMapData::decode(FILE* pkStream)
 	//------------------->切屏
 	m_pkSwitchs = CCArray::array();
 	m_pkSwitchs->retain();
-	int switchsCount = kFileOp.readByte(pkStream);
-	for (int i = 0; i < switchsCount; i++)
+	int nSwitchsCount = kFileOp.readByte(pkStream);
+
+	for (int i = 0; i < nSwitchsCount; i++)
 	{
 		//NDMapSwitch *mapSwitch = [[NDMapSwitch alloc] init];
 
@@ -588,7 +590,7 @@ void NDMapData::decode(FILE* pkStream)
 			kSceneImages.push_back(szImageName);
 		}
 
-		int v = kFileOp.readShort(pkStream);
+		int v = static_cast<short>(kFileOp.readShort(pkStream));
 		kSceneOrders.push_back(v);
 	}
 	//------------------->布景

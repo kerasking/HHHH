@@ -120,8 +120,8 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();
 
 	pkDirector->Initialization();
-	//pkDirector->RunScene(CSMGameScene::Scene());
-	//kMapMgr.processChangeRoom(0,0);
+//	pkDirector->RunScene(CSMGameScene::Scene());
+	kMapMgr.processChangeRoom(0,0);
 
 	ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
 	NDScriptGameData* pkData = new NDScriptGameData;
@@ -144,92 +144,92 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
 	//ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
 
-	NDPlayer::pugeHero();
-	NDPlayer& kPlayer = NDPlayer::defaultHero(1);
+	//NDPlayer::pugeHero();
+	//NDPlayer& kPlayer = NDPlayer::defaultHero(1);
 
-	int x = 100;
-	int y = 100;
+	//int x = 100;
+	//int y = 100;
 
-// 	kPlayer.SetPosition(ccp(528, 512));		///< x * 32 + 16, y * 32 + 16
-// 	kPlayer.SetServerPositon(x, y);
-// 	kPlayer.m_nID = 1;
-// 	kPlayer.m_strName = "白富美";
-// 	kPlayer.SetLoadMapComplete();
-// 
-//  	CSMGameScene* pkScene = (CSMGameScene*)pkDirector->GetRunningScene();
-//  	NDNode* pkNode = pkScene->GetChild(MAPLAYER_TAG);
-//  
-//  	if (!pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
-//  	{
-//  		return false;
-//  	}
-//  
-//  	NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
-//  	pkLayer->AddChild(&kPlayer, 111, 1000);
-//  	kPlayer.standAction(true);
-//  	//pkScene->setUpdatePlayer(&kPlayer);
-// 
-//  	//add by ZhangDi 120904
-//  	//DramaObj.Start();
-//  
-//   //	DramaCommandScene* commandScene = new DramaCommandScene;
-//   //	commandScene->InitWithLoadDrama(5);
-//  	//DramaObj.AddCommond(commandScene);
-//  
-//  
-//  	//DramaCommandSprite* commandSprite = new DramaCommandSprite;
-//  	//commandSprite->InitWithAdd(31000112, ST_NPC, FALSE, "华佗");
-//  	////commandSprite->InitWithSetPos(command->GetKey(), 9, 11);
-//  	//DramaObj.AddCommond(commandSprite);
-// 
-// 
-// 	for (int i = 0; i < 4; i++)
-// 	{
-// 		NDNpc* npc = new NDNpc;
-// 		npc->m_nID = 10001 + i;
-// 		//npc->col = 9;
-// 		//npc->row = 11;
-// 		//npc->look = 31000112;
-// 
-// 		switch (i)
-// 		{
-// 		case 0:
-// 			npc->m_strName = "郭嘉";
-// 			break;
-// 		case 1:
-// 			npc->m_strName = "华佗";
-// 			break;
-// 		case 2:
-// 			npc->m_strName = "袁绍";
-// 			break;
-// 		case 3:
-// 			npc->m_strName = "刘表";
-// 			break;
-// 		default:
-// 			npc->m_strName = "西门无名";
-// 			break;
-// 		}
-// 
-// 		npc->Initialization(111 + i);		//31000112
-// 		npc->SetPosition(
-// 				ccp((5 + i * 6) * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-// 						11 * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
-// 
-// 		//npc->dataStr = "哈哈";
-// 		//npc->talkStr = "你想知道什么？";
-// 		npc->SetType(0);
-// 		//npc->SetActionOnRing(FALSE);
-// 		//npc->SetDirectOnTalk(FALSE);
-// 		//npc->initUnpassPoint();
-// 
-// 		if (!pkLayer->ContainChild(npc))
-// 		{
-// 			pkLayer->AddChild((NDNode *) npc, 100 + i, 10001 + i);
-// 			//npc->HandleNpcMask(TRUE);
-// 		}
-// 
-// 		NDPlayer::defaultHero().UpdateFocus();
-// 	}
+ // 	kPlayer.SetPosition(ccp(528, 512));		///< x * 32 + 16, y * 32 + 16
+ // 	kPlayer.SetServerPositon(x, y);
+ // 	kPlayer.m_nID = 1;
+ // 	kPlayer.m_strName = "白富美";
+ // 	kPlayer.SetLoadMapComplete();
+ // 
+ //  	CSMGameScene* pkScene = (CSMGameScene*)pkDirector->GetRunningScene();
+ //  	NDNode* pkNode = pkScene->GetChild(MAPLAYER_TAG);
+ //  
+ //  	if (!pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+ //  	{
+ //  		return false;
+ //  	}
+ //  
+ //  	NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
+ //  	pkLayer->AddChild(&kPlayer, 111, 1000);
+ //  	kPlayer.standAction(true);
+ //  	//pkScene->setUpdatePlayer(&kPlayer);
+ // 
+ //  	//add by ZhangDi 120904
+ //  	//DramaObj.Start();
+ //  
+ //   //	DramaCommandScene* commandScene = new DramaCommandScene;
+ //   //	commandScene->InitWithLoadDrama(5);
+ //  	//DramaObj.AddCommond(commandScene);
+ //  
+ //  
+ //  	//DramaCommandSprite* commandSprite = new DramaCommandSprite;
+ //  	//commandSprite->InitWithAdd(31000112, ST_NPC, FALSE, "华佗");
+ //  	////commandSprite->InitWithSetPos(command->GetKey(), 9, 11);
+ //  	//DramaObj.AddCommond(commandSprite);
+ // 
+ // 
+ // 	for (int i = 0; i < 4; i++)
+ // 	{
+ // 		NDNpc* npc = new NDNpc;
+ // 		npc->m_nID = 10001 + i;
+ // 		//npc->col = 9;
+ // 		//npc->row = 11;
+ // 		//npc->look = 31000112;
+ // 
+ // 		switch (i)
+ // 		{
+ // 		case 0:
+ // 			npc->m_strName = "郭嘉";
+ // 			break;
+ // 		case 1:
+ // 			npc->m_strName = "华佗";
+ // 			break;
+ // 		case 2:
+ // 			npc->m_strName = "袁绍";
+ // 			break;
+ // 		case 3:
+ // 			npc->m_strName = "刘表";
+ // 			break;
+ // 		default:
+ // 			npc->m_strName = "西门无名";
+ // 			break;
+ // 		}
+ // 
+ // 		npc->Initialization(111 + i);		//31000112
+ // 		npc->SetPosition(
+ // 				ccp((5 + i * 6) * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+ // 						11 * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+ // 
+ // 		//npc->dataStr = "哈哈";
+ // 		//npc->talkStr = "你想知道什么？";
+ // 		npc->SetType(0);
+ // 		//npc->SetActionOnRing(FALSE);
+ // 		//npc->SetDirectOnTalk(FALSE);
+ // 		//npc->initUnpassPoint();
+ // 
+ // 		if (!pkLayer->ContainChild(npc))
+ // 		{
+ // 			pkLayer->AddChild((NDNode *) npc, 100 + i, 10001 + i);
+ // 			//npc->HandleNpcMask(TRUE);
+ // 		}
+ // 
+ // 		NDPlayer::defaultHero().UpdateFocus();
+ // 	}
 
 	return true;
 }

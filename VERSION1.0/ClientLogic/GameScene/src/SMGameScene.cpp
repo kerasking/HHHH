@@ -25,10 +25,10 @@ IMPLEMENT_CLASS(CSMGameScene, NDScene)
 
 CSMGameScene* CSMGameScene::Scene()
 {
-	CSMGameScene *scene = new CSMGameScene;
-	scene->Initialization(1);
-	scene->SetTag(SMGAMESCENE_TAG);
-	return scene;
+	CSMGameScene *pkScene = new CSMGameScene;
+	pkScene->Initialization(1);
+	pkScene->SetTag(SMGAMESCENE_TAG);
+	return pkScene;
 }
 
 CSMGameScene::CSMGameScene()

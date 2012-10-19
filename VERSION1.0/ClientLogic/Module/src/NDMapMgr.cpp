@@ -115,6 +115,7 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 				kData.WriteShort(0);
 				kData.WriteShort(0);
 				kData.WriteInt(1);
+				kData.WriteUnicodeString("Korman");
 
 				processChangeRoom(&kData,kData.GetSize());
 				bFirst = false;
@@ -642,10 +643,10 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 	pkData->ReadShort();
 
  	m_nMapType = pkData->ReadInt();
-// 
-// 	m_strMapName = pkData->ReadUnicodeString();
-// 
-  	NDPlayer& kPlayer = NDPlayer::defaultHero();
+
+ 	m_strMapName = pkData->ReadUnicodeString();
+ 
+ 	NDPlayer& kPlayer = NDPlayer::defaultHero(1);
 // 
 // 	if (kPlayer.IsInState(USERSTATE_DEAD))
 // 	{
@@ -653,91 +654,91 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 // 	}
 // 
 // 	NDUISynLayer::Close (SYN_CREATE_ROLE);
-// 
+ 
  	NDMapMgrObj.ClearManualRole();
-// 
+ 
  	m_nMapID = nMapID;
-// 
+ 
  	if (1 == m_nMapID || 2 == m_nMapID)
  	{
  		m_nSaveMapID = m_nMapID;
  	}
  
-	kPlayer.m_nCurMapID = nMapDocID;
+  	kPlayer.m_nCurMapID = nMapDocID;
+   
+   	ShowPetInfo kPetInfoRerserve;
+  // 	kPlayer.GetShowPetInfo(kPetInfoRerserve);
+  	kPlayer.m_strName = string("efawfawe");
+   //	kPlayer.ResetShowPet();
+  
+//   	if (kPlayer.GetParent() != 0)
+//   	{
+//   		NDRidePet* pkRidePet = NDPlayer::defaultHero().GetRidePet();
+//   
+//   		if (0 != pkRidePet && 0 != pkRidePet->GetParent())
+//   		{
+//   			pkRidePet->RemoveFromParent(false);
+//   		}
+//   
+//   		kPlayer.RemoveFromParent(false);
+//   	}
  
- 	ShowPetInfo kPetInfoRerserve;
- 	kPlayer.GetShowPetInfo(kPetInfoRerserve);
-
- 	kPlayer.ResetShowPet();
- 
- 	if (kPlayer.GetParent() != 0)
+ 	while (NDDirector::DefaultDirector()->PopScene())
  	{
- 		NDRidePet* pkRidePet = NDPlayer::defaultHero().GetRidePet();
- 
- 		if (0 != pkRidePet && 0 != pkRidePet->GetParent())
- 		{
- 			pkRidePet->RemoveFromParent(false);
- 		}
- 
- 		kPlayer.RemoveFromParent(false);
  	}
+ 
+ 	NDMapMgrObj.ClearNPC();
+ 	NDMapMgrObj.ClearMonster();
+ 	NDMapMgrObj.ClearGP();
+ 	NDMapMgrObj.loadSceneByMapDocID(nMapDocID);
+ 
+  	NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(
+  			NDDirector::DefaultDirector()->GetRunningScene());
+  
+  	int nTheID = GetMotherMapID();
+ // 	int nTitleID = ScriptDBObj.GetN("map", nTheID, DB_MAP_TITLE);
+  	//pkLayer->ShowTitle(nTitleID, 0);
+  
+  	if (0 == pkLayer)
+  	{
+  		return;
+  	}
+  
+  	kPlayer.SetPosition(ccp(dwPortalX,dwPortalY));
+  // 	kPlayer.SetServerPositon(dwPortalX, dwPortalY);
+  // 	kPlayer.SetShowPet(kPetInfoRerserve);
+  	kPlayer.stopMoving();
+  
+//   	NDRidePet* pkRidePet = kPlayer.GetRidePet();
+//   
+//   	if (0 != pkRidePet)
+//   	{
+//   		pkRidePet->stopMoving();
+//   		pkRidePet->SetPositionEx(
+//   				ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+//   						dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+//   	}
+  
+  	pkLayer->SetScreenCenter(
+  			ccp(dwPortalX,
+  					dwPortalY));
 
-	while (NDDirector::DefaultDirector()->PopScene())
-	{
-	}
-
-	NDMapMgrObj.ClearNPC();
-	NDMapMgrObj.ClearMonster();
-	NDMapMgrObj.ClearGP();
-	NDMapMgrObj.loadSceneByMapDocID(nMapDocID);
-
-	NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(
-			NDDirector::DefaultDirector()->GetRunningScene());
-
-	int nTheID = GetMotherMapID();
-	int nTitleID = ScriptDBObj.GetN("map", nTheID, DB_MAP_TITLE);
-	//pkLayer->ShowTitle(nTitleID, 0);
-
-	if (0 == pkLayer)
-	{
-		return;
-	}
-
-	kPlayer.SetPositionEx(ccp(dwPortalX,dwPortalY));
-	kPlayer.SetServerPositon(dwPortalX, dwPortalY);
-	kPlayer.SetShowPet(kPetInfoRerserve);
-	kPlayer.stopMoving();
-
-	NDRidePet* pkRidePet = kPlayer.GetRidePet();
-
-	if (0 != pkRidePet)
-	{
-		pkRidePet->stopMoving();
-		pkRidePet->SetPositionEx(
-				ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-						dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
-	}
-
-	pkLayer->SetScreenCenter(
-			ccp(dwPortalX,
-					dwPortalY));
-
-	kPlayer.SetAction(false);
-	kPlayer.SetLoadMapComplete();
-
-	ItemMgrObj.SortBag();
-
-	ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
-
-	if (nTheID / 100000000 > 0)
-	{
-		//	ScriptMgrObj.excuteLuaFunc("SetUIVisible","",0);
-	}
-	else
-	{
-		pkLayer->AddChild(&kPlayer, 111, 0);
-		//	ScriptMgrObj.executeLuaFunc("SetUIVisible","",1);
-	}
+  	kPlayer.SetAction(false);
+  	kPlayer.SetLoadMapComplete();
+  
+  //	ItemMgrObj.SortBag();
+  
+  	ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
+  
+  	if (nTheID / 100000000 > 0)
+  	{
+  		//	ScriptMgrObj.excuteLuaFunc("SetUIVisible","",0);
+  	}
+  	else
+  	{
+  		pkLayer->AddChild(&kPlayer, 111, 1000);
+  		//	ScriptMgrObj.executeLuaFunc("SetUIVisible","",1);
+  	}
 
 //	CloseProgressBar;
 
@@ -911,9 +912,9 @@ bool NDMapMgr::loadSceneByMapDocID(int nMapID)
 	NDDirector::DefaultDirector()->ReplaceScene(NDScene::Scene());
 
 	CSMGameScene* pkScene = CSMGameScene::Scene();
+	NDDirector::DefaultDirector()->ReplaceScene(pkScene);
 	pkScene->Initialization(nMapID);
 	pkScene->SetTag(SMGAMESCENE_TAG);
-	NDDirector::DefaultDirector()->ReplaceScene(pkScene);
 
 	NDMapLayer* pkMapLayer = getMapLayerOfScene(pkScene);
 
@@ -960,8 +961,8 @@ void NDMapMgr::AddSwitch()
 
 			string strDesc = "³ÇéT";
 
-			pkMapData->addMapSwitch(nX, nY, nIndex, nMapID, strDesc.c_str(),
-					"");
+			pkMapData->addMapSwitch(nX, nY, nIndex, nMapID,
+				strDesc.c_str(), "");
 		}
 	}
 

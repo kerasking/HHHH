@@ -166,29 +166,27 @@ void NDDirector::ReplaceScene(NDScene* pkScene, bool bAnimate/*=false*/)
 // 		}
 
 	if (m_kScenesStack.size() > 0)
-	{
-		//NDLog("===============================当前场景栈大小[%u]", m_scenesStack.size());
-		this->BeforeDirectorPopScene(m_kScenesStack.back(), true);
-
-		NDScene* pkScene = m_kScenesStack.back();
-
-		if (pkScene)
 		{
-			delete pkScene;
+			//NDLog("===============================当前场景栈大小[%u]", m_scenesStack.size());
+			this->BeforeDirectorPopScene(m_kScenesStack.back(), true);
+	
+			NDScene* pkScene = m_kScenesStack.back();
+	
+			if (pkScene)
+			{
+				delete pkScene;
+			}
+	
+			m_kScenesStack.pop_back();
+	
+			this->AfterDirectorPopScene(true);
 		}
+	
+	BeforeDirectorPushScene(pkScene);
 
-		m_kScenesStack.pop_back();
+	RunScene(pkScene);
 
-		this->AfterDirectorPopScene(true);
-	}
-
-	this->BeforeDirectorPushScene(pkScene);
-
-	m_kScenesStack.push_back(pkScene);
-
-	m_pkDirector->runWithScene((CCScene *) pkScene->m_ccNode);
-
-	this->AfterDirectorPushScene(pkScene);
+	AfterDirectorPushScene(pkScene);
 
 	//NDLog("===============================当前场景栈大小[%u]", m_scenesStack.size());
 }
