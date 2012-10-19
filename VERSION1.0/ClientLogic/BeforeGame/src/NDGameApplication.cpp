@@ -123,7 +123,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	NDBeforeGameMgrObj;
 
 	pkDirector->Initialization();
-//	pkDirector->RunScene(CSMGameScene::Scene());
+	pkDirector->RunScene(CSMLoginScene::Scene());
 //	kMapMgr.processChangeRoom(0,0);
 
 	ScriptNetMsg* pkNetMsg = new ScriptNetMsg;
