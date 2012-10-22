@@ -184,8 +184,7 @@ void NDNpc::OnDrawEnd(bool bDraw)
 	int nShowY = kNPCPos.y - kSize.height
 			- (m_pkCurrentAnimation ?
 					(m_pkCurrentAnimation->getBottomY()
-							- m_pkCurrentAnimation->getY()) :
-					0);
+							- m_pkCurrentAnimation->getY()) : 0);
 
 //	if (collides)
 //	{
