@@ -31,11 +31,11 @@
 #include "NDDataPersist.h"
 
 /* 玩家寻路八个方向值,无效的方向值-1
- 7  0  4
- \ | /
- \|/
- 2-------3
- /|\
+    7  0  4
+	 \ | /
+	  \|/
+   2-------3
+	  /|\
 	 / | \
 	6  1  5
  
@@ -1041,11 +1041,11 @@ void NDManualRole::OnMoveEnd()
 	 m_pBattlePetShow->OnMoveEnd();
 	 }*/
 
-	if (m_pkRidePet)
-	{
-		m_pkRidePet->OnMoveEnd();
-//			setStandActionWithRidePet();
-	}
+//	if (m_pkRidePet)
+//	{
+//		m_pkRidePet->OnMoveEnd();
+////			setStandActionWithRidePet();
+//	}
 
 	//if	(isTeamLeader())
 //		{

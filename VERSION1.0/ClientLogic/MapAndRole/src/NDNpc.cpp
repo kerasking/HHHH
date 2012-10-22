@@ -37,17 +37,17 @@ using namespace NDEngine;
 #define InitNameLable(lable) \
 do \
 { \
-if (!lable) \
-{ \
-lable = new NDUILabel; \
-lable->Initialization(); \
-lable->SetFontSize(12); \
-lable->SetRenderTimes(3); \
-} \
-if (!lable->GetParent() && m_pkSubNode) \
-{ \
-m_pkSubNode->AddChild(lable); \
-} \
+	if (!lable) \
+	{ \
+		lable = new NDUILabel; \
+		lable->Initialization(); \
+		lable->SetFontSize(12); \
+		lable->SetRenderTimes(3); \
+	} \
+	if (!lable->GetParent() && m_pkSubNode) \
+	{ \
+		m_pkSubNode->AddChild(lable); \
+	} \
 } while (0)
 
 #define DrawLable(lable, bDraw) do { if (bDraw && lable) lable->draw(); }while(0)
@@ -184,8 +184,7 @@ void NDNpc::OnDrawEnd(bool bDraw)
 	int nShowY = kNPCPos.y - kSize.height
 			- (m_pkCurrentAnimation ?
 					(m_pkCurrentAnimation->getBottomY()
-							- m_pkCurrentAnimation->getY()) :
-					0);
+							- m_pkCurrentAnimation->getY()) : 0);
 
 //	if (collides)
 //	{

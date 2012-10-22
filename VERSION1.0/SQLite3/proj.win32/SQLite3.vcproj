@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../inc"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;SQLITE_HAS_CODEC=1;CODEC_TYPE=CODEC_TYPE_AES128;SQLITE_CORE;THREADSAFE;SQLITE_SECURE_DELETE;SQLITE_SOUNDEX;SQLITE_ENABLE_COLUMN_METADATA"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -106,7 +106,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="../inc"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;SQLITE_HAS_CODEC=1;CODEC_TYPE=CODEC_TYPE_AES128;SQLITE_CORE;THREADSAFE;SQLITE_SECURE_DELETE;SQLITE_SOUNDEX;SQLITE_ENABLE_COLUMN_METADATA"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -158,6 +158,10 @@
 			>
 			<File
 				RelativePath="..\src\sqlite3.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\sqlite3secure.c"
 				>
 			</File>
 		</Filter>

@@ -31,7 +31,6 @@ public:
 	virtual void OnLoad()
 	{
 	}
-	;
 };
 
 class ScriptMgr: public TSingleton<ScriptMgr>

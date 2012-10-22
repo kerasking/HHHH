@@ -17,6 +17,6 @@ enc_temp_folder/
 Lib/
 MID/
 Debug.win32/
-assets
+assets/
 obj/
 libs/
