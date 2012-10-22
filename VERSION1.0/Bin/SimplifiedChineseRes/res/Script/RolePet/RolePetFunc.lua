@@ -20,6 +20,7 @@ function p.GetLookFace(nPetId)
 end
 
 function p.GetPropDesc(nPetId, nIndex)
+	--LogInfo("rolepetfunc: 1");
 	local strRes	= "";
 	if not CheckN(nPetId) or
 		not CheckN(nIndex) then
@@ -34,6 +35,12 @@ function p.GetPropDesc(nPetId, nIndex)
 	if nIndex == PET_ATTR.PET_ATTR_TYPE then
 	--职业
 		strRes	= ConvertS(GetDataBaseDataS("pet_config", nPetType, DB_PET_CONFIG.PRO_NAME));
+	elseif nIndex == PET_ATTR.PET_ATTR_DEX then
+	--敏捷
+		strRes	= SafeN2S(RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_DEX));		
+	elseif nIndex == PET_ATTR.PET_ATTR_SPEED then
+	--速度
+		strRes	= SafeN2S(RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_SPEED));
 	elseif nIndex == PET_ATTR.PET_ATTR_LEVEL then
 	--等级
 		strRes	= SafeN2S(RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_LEVEL));
@@ -51,8 +58,11 @@ function p.GetPropDesc(nPetId, nIndex)
 		strRes	= SafeN2S(RolePet.GetTotalSuperSkill(nPetId));
 	elseif nIndex == PET_ATTR.PET_ATTR_SKILL then
 	--技能
-		local nSkillId = GetDataBaseDataN("pet_config", nPetType,DB_PET_CONFIG.SKILL);
+		--** chh 2012-07-21 **--
+        local nSkillId = RolePet.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_SKILL);
+        --local nSkillId = GetDataBaseDataN("pet_config", nPetType,DB_PET_CONFIG.SKILL);
 		strRes	= GetDataBaseDataS("skill_config", nSkillId, DB_SKILL_CONFIG.NAME);
+        
 	elseif nIndex == PET_ATTR.PET_ATTR_MAGIC then
 	--法术
 		strRes	= SafeN2S(RolePet.GetTotalMagic(nPetId));
@@ -71,9 +81,7 @@ function p.GetPropDesc(nPetId, nIndex)
 	elseif nIndex == PET_ATTR.PET_ATTR_MAGIC_DEF then
 	--法防
 		strRes	= SafeN2S(RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_MAGIC_DEF));
-	elseif nIndex == PET_ATTR.PET_ATTR_SKILL_ATK then
-	--绝攻
-		strRes	= SafeN2S(RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_SKILL_ATK));
+
 	elseif nIndex == PET_ATTR.PET_ATTR_SKILL_DEF then
 	--绝防
 		strRes	= SafeN2S(RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_SKILL_DEF));
@@ -105,8 +113,13 @@ function p.GetPropDesc(nPetId, nIndex)
 	--必杀
 		local nVal	= RolePet.GetPetInfoN(nPetId, nIndex);
 		strRes	= tostring(GetNumDot(nVal / 10, 1)) .. "%";
-	else 
+	elseif nIndex == PET_ATTR.PET_ATTR_TEST then
 		-- other .. todo
+		local nVal	= RolePet.GetPetInfoN(nPetId, nIndex);
+		strRes	= tostring(GetNumDot(nVal / 10, 1)) .. "%";
+	elseif nIndex == PET_ATTR.PET_ATTR_HELP then
+		local nVal	= RolePet.GetPetInfoN(nPetId, nIndex);
+		strRes	= tostring(GetNumDot(nVal / 10, 1)) .. "%";		
 	end
 	
 	return strRes;
@@ -152,7 +165,8 @@ function p.GetNextLvlExp(nPetId)
 	if not listPetLvlExp[1] then
 		p.LoadPetLvlExp();
 	end
-	return ConvertN(listPetLvlExp[nLvl+1]);
+	--return ConvertN(listPetLvlExp[nLvl+1]);
+    return ConvertN(listPetLvlExp[nLvl]);
 end
 
 function p.LoadPetLvlExp()
@@ -171,3 +185,85 @@ function p.LoadPetLvlExp()
 		listPetLvlExp[nLvl]	= nExp;
 	end
 end
+
+
+
+---------------------------------------------------
+--++Guoen 2012.7.19
+-- 获得可重置次数值
+function p.GetResetNumber( nCampaignID )
+	local nPlayerVIPLv	= GetRoleBasicDataN( GetPlayerId(), USER_ATTR.USER_ATTR_VIP_RANK );
+    
+	if ( GetGetVipLevel_ELITE_MAP_RESET_NUM()<=0 ) then
+		return 0;
+	end
+    
+    
+	local nResetCount	= GetRoleBasicDataN( GetPlayerId(), USER_ATTR.USER_ATTR_INSTANCING_RESET_COUNT );	--已重置次数
+
+    nResetCount = ConvertReset(nResetCount, nCampaignID);
+    
+    
+    local nResetLimit   = GetVipVal(DB_VIP_CONFIG.ELITE_MAP_RESET_NUM);
+    --[[
+    local nResetLimit	= 1;	-- 限制的重置次數( 3~4:1, 5~xxx:2 )
+	if ( nPlayerVIPLv > 5 ) then
+		nResetLimit		= 2;
+	end
+    ]]
+    
+	local nResetNumber	= nResetLimit - nResetCount;
+	if ( nResetNumber < 0 ) then
+		nResetNumber	= 0;
+	end
+	return nResetNumber;
+end
+
+
+
+
+--** chh 2012-07-31 **--
+function p.GetJobDesc(nJob)
+    LogInfo("nJob:[%d]",nJob);
+	if not CheckN(nJob) then
+		return "";
+	end
+	if nJob == PROFESSION_TYPE.SWORD then
+		return '猛将';
+	elseif nJob == PROFESSION_TYPE.CHIVALROUS then
+		return '射手';
+	elseif nJob == PROFESSION_TYPE.FIST then
+		return '军师';
+	elseif nJob == PROFESSION_TYPE.AXE then
+		return '守将';
+	end
+	return '不限';
+end
+
+
+function p.GetStandDesc(nStand)
+    if not CheckN(nStand) then
+		return "";
+	end
+    
+    if nStand == STAND_TYPE.FIR then
+		return GetTxtPub("Fir");
+	elseif nStand == STAND_TYPE.SEC then
+		return GetTxtPub("Sec");
+	elseif nStand == STAND_TYPE.THIRD then
+		return GetTxtPub("Third");
+	end
+    
+    return "";
+end
+
+
+
+
+
+
+
+
+
+
+

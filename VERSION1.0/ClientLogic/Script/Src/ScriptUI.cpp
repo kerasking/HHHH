@@ -207,6 +207,42 @@ CUIScrollViewContainer* GetScrollViewContainer(NDNode* pNode, int tag)
 	return (CUIScrollViewContainer*) sc;
 }
 
+CUIScrollViewContainerM*			
+GetScrollViewContainerM(NDNode* pNode, int tag)
+{
+	if (!pNode)
+	{
+		return NULL;
+	}
+
+	NDNode *sc = pNode->GetChild(tag);
+
+	if (!sc || !sc->IsKindOfClass(RUNTIME_CLASS(CUIScrollViewContainerM)))
+	{
+		return NULL;
+	}
+
+	return (CUIScrollViewContainerM*)sc;
+}
+
+CUIScrollContainerExpand*			
+GetScrollContainerExpand(NDNode* pNode, int tag)
+{
+	if (!pNode)
+	{
+		return NULL;
+	}
+
+	NDNode *sc = pNode->GetChild(tag);
+
+	if (!sc || !sc->IsKindOfClass(RUNTIME_CLASS(CUIScrollContainerExpand)))
+	{
+		return NULL;
+	}
+
+	return (CUIScrollContainerExpand*)sc;
+}
+
 CUIHyperlinkText*
 GetHyperLinkText(NDNode* pNode, int tag)
 {
