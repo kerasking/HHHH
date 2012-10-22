@@ -10,6 +10,7 @@
 #include "NDBaseNode.h"
 #include <cocos2d.h>
 #include "CCPointExtension.h"
+#include "define.h"
 
 using namespace cocos2d;
 
@@ -439,6 +440,11 @@ bool NDNode::DispatchClickOfViewr(NDObject* object)
 	}
 
 	return bDeal;
+}
+
+void NDNode::Destroy()
+{
+	delete this;
 }
 
 }
