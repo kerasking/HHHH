@@ -40,7 +40,6 @@ for(int i=0; i<nCtrlAmount; i++)
 
 }
 
-
 */
 
 #pragma once
@@ -50,6 +49,16 @@ for(int i=0; i<nCtrlAmount; i++)
 #include "CCPointExtension.h"
 #include "IniFile.h"
 #include "Utility.h"
+
+enum DISPLAY_RESOLUTION
+{
+	DISPLAY_RESOLUTION_BEGIN,
+	DISPLAY_RESOLUTION_480_320				= DISPLAY_RESOLUTION_BEGIN,
+	DISPLAY_RESOLUTION_960_640,
+	DISPLAY_RESOLUTION_1024_768,
+	DISPLAY_RESOLUTION_2048_1536,
+	DISPLAY_RESOLUTION_END,
+};
 
 struct CTRL_UV
 {
@@ -95,8 +104,6 @@ struct UIINFO
 	
 	unsigned long nTextFontSize;
 	unsigned long nTextFontColor;
-
-
 };
 
 class CUIData
@@ -113,18 +120,17 @@ public:
 
 	UIINFO& getCtrlUiInfo()
 	{
-		return m_info;
+		return m_kInfo;
 	}
-
 
 	unsigned long getCtrlWidth()
 	{
-		return m_info.nCtrlWidth;
+		return m_kInfo.nCtrlWidth;
 	}
 
 	unsigned long getCtrlHeight()
 	{
-		return m_info.nCtrlHeight;
+		return m_kInfo.nCtrlHeight;
 	}
 
 	//控件图片路径，注（为相对路径）
@@ -137,65 +143,69 @@ public:
 	//取控件图片的UV信息
 	CTRL_UV getNormalFileUV()
 	{
-		return m_info.rectNormal;
+		return m_kInfo.rectNormal;
 	}
 	CTRL_UV getSelectedFileUV()
 	{
-		return m_info.rectSelected;
+		return m_kInfo.rectSelected;
 	}
 	CTRL_UV getDisableFileUV()
 	{
-		return m_info.rectDisable;
+		return m_kInfo.rectDisable;
 	}
 	CTRL_UV ggetFocusFileUV()
 	{
-		return m_info.rectFocus;
+		return m_kInfo.rectFocus;
 	}
 	
 	CTRL_UV ggetBackFileUV()
 	{
-		return m_info.rectBack;
+		return m_kInfo.rectBack;
 	}
 
 
 	//取控件坐标，[注：锚点坐标]
 	CGPoint getPos()
 	{
-		return m_info.CtrlPos;
+		return m_kInfo.CtrlPos;
 	}
 
 	//取控件锚点值
 	CGPoint getAnchorPoint()
 	{
-		return m_info.CtrlAnchorPos;
+		return m_kInfo.CtrlAnchorPos;
 	}
 
 	//取控件ID 
 	unsigned long getID()
 	{
-		return m_info.nID;
+		return m_kInfo.nID;
 	}
 
 	//取控件类型
 	unsigned long getType()	
 	{
-		return m_info.nType;
+		return m_kInfo.nType;
 	}
 
 	//取控件文本内容
 	std::string getCtrlText()
 	{
-		return m_info.strText;
+		return m_kInfo.strText;
 	}
 
 	//取文本对齐方式
 	std::string getCtrlTextAlign()
 	{
-		return m_info.strTextAlign;
+		return m_kInfo.strTextAlign;
 	}
 
 
 private:
-	UIINFO m_info;
-	CIniFile ini;	///< 临时性注释 郭浩
+
+	string GetValKeyStr(const char* str);
+
+	UIINFO m_kInfo;
+	CIniFile m_kINIFile;
+	DISPLAY_RESOLUTION m_kDisplayResolution;
 };

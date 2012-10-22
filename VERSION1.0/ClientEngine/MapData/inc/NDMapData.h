@@ -16,6 +16,7 @@
 class MapTexturePool: public cocos2d::CCObject
 {
 public:
+
 	static MapTexturePool* defaultPool();
 	void purgeDefaultPool();
 
