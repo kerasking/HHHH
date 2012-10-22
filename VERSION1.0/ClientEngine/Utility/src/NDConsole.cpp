@@ -48,6 +48,8 @@ NDConsole::NDConsole(LPCTSTR lpszTitle, SHORT ConsoleHeight /*= 300*/,
 
 NDConsole::~NDConsole()
 {
+	ms_bContinueThread = false;
+
 	if (ms_bIsExistent)
 	{
 		FreeConsole();
