@@ -12,6 +12,8 @@
 #include <stdlib.h>
 //#include "Performance.h"
 #include "CCPointExtension.h"
+#include "NDUtility.h"
+#include "NDDirector.h"
 
 namespace NDEngine
 {

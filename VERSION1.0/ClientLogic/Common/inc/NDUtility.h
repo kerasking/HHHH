@@ -12,6 +12,9 @@
 
 #include "globaldef.h"
 
+#define MAP_UNITSIZE (16 * ((int)(NDDirector::DefaultDirector()->GetScaleFactor())))
+#define SCREEN_SCALE (NDDirector::DefaultDirector()->GetScaleFactor())
+
 bool IsPointInside(CGPoint pt, CGRect rect);
 int GetNumBits(int num);
 bool VerifyUnsignedNum(const std::string strnum);
@@ -36,8 +39,7 @@ void CopyDataToCopyCache(const char* data);
 
 enum
 {
-	STRPARAM = 1,
-	UPDATEURL = 2,
+	STRPARAM = 1, UPDATEURL = 2,
 };
 std::string loadPackInfo(int param);
 
@@ -63,12 +65,7 @@ void ShowAlert(const char* pszAlert);
 // 时间转换函数
 typedef enum
 {
-	TIME_SECOND,
-	TIME_MINUTE,
-	TIME_HOUR,
-	TIME_DAY,
-	TIME_DAYTIME,
-	TIME_STAMP,
+	TIME_SECOND, TIME_MINUTE, TIME_HOUR, TIME_DAY, TIME_DAYTIME, TIME_STAMP,
 } TIME_TYPE;
 
 // long_time 以秒为单位
@@ -79,8 +76,7 @@ std::string TimeConvertToStr(TIME_TYPE type, time_t long_time);
 
 enum NDLANGUAGE
 {
-	NDLANGUAGE_None,
-	NDLANGUAGE_SimplifiedChinese,				// 简体中文
+	NDLANGUAGE_None, NDLANGUAGE_SimplifiedChinese,				// 简体中文
 	NDLANGUAGE_TraditionalChinese,			// 繁体中文
 };
 

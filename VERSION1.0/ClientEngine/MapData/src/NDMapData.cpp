@@ -21,6 +21,7 @@
 #include "NDWorldMapData.h"
 #include "CCImage.h"
 #include "NDConstant.h"
+#include "NDUtility.h"
 
 MapTexturePool* g_pkMapTexturePoolDefaultPool = NULL;
 

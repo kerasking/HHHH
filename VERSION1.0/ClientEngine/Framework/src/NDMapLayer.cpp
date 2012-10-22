@@ -25,6 +25,7 @@
 //#include "NDMapMgr.h"
 //#include "Performance.h"
 //#include "BattleMgr.h"
+#include "NDUtility.h"
 
 using namespace cocos2d;
 

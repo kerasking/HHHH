@@ -3,7 +3,7 @@
 //  DragonDrive
 //
 //  Created by xiezhenghai on 10-12-11.
-//  Copyright 2010 (网龙)DeNA. All rights reserved.
+//  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -36,17 +36,16 @@
 #define REPLACEABLE_TWO_HAND_SPEAR			23//双手矛
 
 // 玩家的外形
-#define MANUELROLE_HUMAN_MALE					GetAniPath("fist_man.spr")
-#define MANUELROLE_HUMAN_FEMALE					GetAniPath("fist_man.spr")
+#define MANUELROLE_HUMAN_MALE					NDPath::GetAniPath("fist_man.spr")
+#define MANUELROLE_HUMAN_FEMALE					NDPath::GetAniPath("fist_man.spr")
 
-#define MANUELROLE_FIST_MALE					GetAniPath("tang_man.spr")
-#define MANUELROLE_FIST_FEMALE					GetAniPath("tang_woman.spr")
-#define MANUELROLE_SWORD_MALE					GetAniPath("tang_man.spr")
-#define MANUELROLE_SWORD_FEMALE					GetAniPath("tang_woman.spr")
-#define MANUELROLE_CHIVALROUS_MALE				GetAniPath("tang_man.spr")
-#define MANUELROLE_CHIVALROUS_FEMALE			GetAniPath("tang_woman.spr")
+#define MANUELROLE_FIST_MALE					NDPath::GetAniPath("tang_man.spr")
+#define MANUELROLE_FIST_FEMALE					NDPath::GetAniPath("tang_woman.spr")
+#define MANUELROLE_SWORD_MALE					NDPath::GetAniPath("tang_man.spr")
+#define MANUELROLE_SWORD_FEMALE					NDPath::GetAniPath("tang_woman.spr")
+#define MANUELROLE_CHIVALROUS_MALE				NDPath::GetAniPath("tang_man.spr")
+#define MANUELROLE_CHIVALROUS_FEMALE			NDPath::GetAniPath("tang_woman.spr")
 
-// 切屏点动画
 // 切屏点动画
 #define TRANSPORT							99
 #define UPLEV_EFFECT						900
@@ -161,6 +160,17 @@
 #define FLAG_SUI_DYNASTY_2						7//隋军旗
 #define FLAG_TAN_DYNASTY_2						8
 #define FLAG_TUJUE_DYNASTY_2					9//突厥
+//#define EFFECT_LEVEL_UP							900
+//#define EFFECT_TASK_DONE						901
+//#define EFFECT_SITE								902
+#define EFFECT_DRITICAL							26
+//#define EFFECT_ATK_BY_MAGIC						904
+//#define EFFECT_ATK_BY_PHY						905
+//#define EFFECT_ATK_BACKWARDS					906
+#define EFFECT_MANA_FULL						20
+//#define EFFECT_MAGIC_ATK						909
+#define EFFECT_BLOCK							23//38
+#define EFFECT_DODGE							25//35
 
 
 // 骑宠的动作
@@ -196,6 +206,7 @@
 
 // layer tag
 #define MAPLAYER_TAG							1
+#define LOGIN_MAPLAYER_TAG                      888
 
 #define BATTLEMAPLAYER_TAG							3001
 
@@ -223,7 +234,7 @@
 #define DISPLAY_POS_X_OFFSET					(MAP_UNITSIZE / 2)
 #define DISPLAY_POS_Y_OFFSET					(MAP_UNITSIZE)
 //地图单元格尺寸
-#define MAP_UNITSIZE		32
+//#define MAP_UNITSIZE		(int)(32*(NDDirector::DefaultDirector()->GetScaleFactor()))
 //神魔主场景tag
 #define SMGAMESCENE_TAG							3000
 //神魔战斗场景tag
