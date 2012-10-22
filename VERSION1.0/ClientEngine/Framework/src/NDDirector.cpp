@@ -15,6 +15,8 @@
 #include "CCTextureCache.h"
 #include "CCTouchDispatcher.h"
 //#include "NDMapData.h"
+#include "NDPicture.h"
+#include "NDAnimationGroupPool.h"
 
 using namespace cocos2d;
 
@@ -32,6 +34,10 @@ NDDirector::NDDirector()
 	m_pkDirector = CCDirector::sharedDirector();
 	m_pkSetViewRectNode = NULL;
 	m_bResetViewRect = false;
+	m_fXScaleFactor = 1.0f;
+	m_fYScaleFactor = 1.0f;
+
+	m_bEnableRetinaDisplay = false;
 
 	m_pkTransitionSceneWait = NULL;
 
@@ -64,11 +70,17 @@ void NDDirector::Initialization()
 
 	m_pkDirector->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
 
-	CC_GLVIEW* view = m_pkDirector->getOpenGLView();
+	CC_GLVIEW* pkView = m_pkDirector->getOpenGLView();
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	//view->setMultipleTouchEnabled(false);
 #endif
-	m_pkDirector->enableRetinaDisplay(true);
+	
+	if (m_pkDirector->enableRetinaDisplay(true))
+	{
+		m_bEnableRetinaDisplay = true;
+	}
+
 	m_pkDirector->setAnimationInterval(1.0f / 24.0f);
 
 	CCTexture2D::setDefaultAlphaPixelFormat (kTexture2DPixelFormat_RGBA8888);
@@ -249,6 +261,9 @@ bool NDDirector::PopScene(bool cleanUp)
 
 void NDDirector::PurgeCachedData()
 {
+	NDPicturePool::PurgeDefaultPool();
+	CCTextureCache::sharedTextureCache()->removeAllTextures();
+	NDAnimationGroupPool::purgeDefaultPool();
 }
 
 void NDDirector::Pause()
@@ -321,22 +336,28 @@ CGSize NDDirector::GetWinSize()
 	return m_pkDirector->getWinSizeInPixels();
 }
 
-void NDDirector::SetViewRect(CGRect rect, NDNode* node)
+void NDDirector::SetViewRect(CGRect kRect, NDNode* pkNode)
 {
 	if (m_pkTransitionSceneWait)
 	{
 		return;
 	}
 
-	CGSize winSize = m_pkDirector->getWinSizeInPixels();
+	CGSize kWinSize = m_pkDirector->getWinSizeInPixels();
 
 	glEnable (GL_SCISSOR_TEST);
 
-	glScissor(winSize.height - rect.origin.y - rect.size.height,
-			winSize.width - rect.origin.x - rect.size.width, rect.size.height,
-			rect.size.width);
+	glScissor(kWinSize.height - kRect.origin.y - kRect.size.height,
+			kWinSize.width - kRect.origin.x - kRect.size.width, kRect.size.height,
+			kRect.size.width);
 
-	m_pkSetViewRectNode = node;
+	/***
+	*	这里略有不同，但是可以接受，因为Mac上是调用UIDevice.h中的，这里不需要。
+	*
+	*	@author 郭浩
+	*/
+
+	m_pkSetViewRectNode = pkNode;
 	m_bResetViewRect = true;
 }
 
@@ -450,4 +471,30 @@ float NDDirector::GetScaleFactor()
 {
 	return m_pkDirector->getContentScaleFactor();
 }
+
+cocos2d::CCSize NDDirector::GetWinPoint()
+{
+	return m_pkDirector->getWinSize();
+}
+
+float NDDirector::GetScaleFactorY()
+{
+	return CC_CONTENT_SCALE_FACTOR();
+}
+
+bool NDDirector::IsEnableRetinaDisplay()
+{
+	return m_bEnableRetinaDisplay;
+}
+
+void NDDirector::SetDelegate( NDObject* pkReceiver )
+{
+
+}
+
+NDObject* NDDirector::GetDelegate()
+{
+	return NULL;
+}
+
 }
