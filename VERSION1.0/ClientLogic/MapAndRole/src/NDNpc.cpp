@@ -34,23 +34,23 @@ using namespace NDEngine;
 
 // lable->SetRenderTimes(3);
 
-#define InitNameLable(lable) \
+#define InitNameLable(pkLables) \
 do \
 { \
-	if (!lable) \
+	if (!pkLables) \
 	{ \
-		lable = new NDUILabel; \
-		lable->Initialization(); \
-		lable->SetFontSize(12); \
-		lable->SetRenderTimes(3); \
+		pkLables = new NDUILabel; \
+		pkLables->Initialization(); \
+		pkLables->SetFontSize(12); \
+		pkLables->SetRenderTimes(3); \
 	} \
-	if (!lable->GetParent() && m_pkSubNode) \
+	if (!pkLables->GetParent() && m_pkSubNode) \
 	{ \
-		m_pkSubNode->AddChild(lable); \
+		m_pkSubNode->AddChild(pkLables); \
 	} \
 } while (0)
 
-#define DrawLable(lable, bDraw) do { if (bDraw && lable) lable->draw(); }while(0)
+#define DrawLable(pkLables, bDraw) do { if (bDraw && pkLables) pkLables->draw(); }while(0)
 
 IMPLEMENT_CLASS(NDNpc, NDBaseRole)
 
@@ -91,7 +91,6 @@ void NDNpc::Initialization(int nLookface)
 {
 	m_nSex = nLookface / 100000000 % 10;
 	m_nModel = nLookface % 1000;
-	//lookface = 2000000;
 
 	tq::CString sprFile;
 
@@ -113,7 +112,7 @@ void NDNpc::Initialization(int nLookface)
 
 bool NDNpc::OnDrawBegin(bool bDraw)
 {
-	NDNode *pkNode = this->GetParent();
+	NDNode* pkNode = this->GetParent();
 	CGSize kSizeMap;
 
 	if (pkNode && pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
@@ -129,7 +128,7 @@ bool NDNpc::OnDrawBegin(bool bDraw)
 
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
 
-	ShowShadow(this->m_nID != kPlayer.GetFocusNpcID());
+	ShowShadow(m_nID != kPlayer.GetFocusNpcID());
 
 	NDBaseRole::OnDrawBegin(bDraw);
 
@@ -184,8 +183,6 @@ void NDNpc::OnDrawEnd(bool bDraw)
 					(m_pkCurrentAnimation->getBottomY()
 							- m_pkCurrentAnimation->getY()) : 0);
 
-//	if (collides)
-//	{
 	bool isEmemy = false;
 	if (kPlayer.IsInState(USERSTATE_FIGHTING))
 	{
@@ -193,23 +190,14 @@ void NDNpc::OnDrawEnd(bool bDraw)
 				&& GetCamp() != kPlayer.GetCamp());
 	}
 
-	//unsigned int iColor = isEmemy ? 0xe30318 : 0x88EEFF;
-	unsigned int iColor = isEmemy ? 0xe30318 : 0xffff00;
-
-// 		if (!dataStr.empty() && dataStr != NDCommonCString("wu"))
-// 		{
-// 			InitNameLable(m_lbDataStr[0]);InitNameLable(m_lbDataStr[1]);
-// 			SetLable(eLabelDataStr, showX, showY, dataStr, INTCOLORTOCCC4(iColor), ccc4(0, 0, 0, 255));
-// 			DrawLable(m_lbDataStr[1], bDraw); DrawLable(m_lbDataStr[0], bDraw);
-// 			showY -= 20 * fScaleFactor;
-// 		}
+	unsigned int uiColor = isEmemy ? 0xe30318 : 0xffff00;
 
 	if (!m_strName.empty())
 	{
 		InitNameLable(m_pkNameLabel[0]);
 		InitNameLable(m_pkNameLabel[1]);
-		SetLable(eLableName, nShowX, nShowY, m_strName, INTCOLORTOCCC4(iColor),
-				ccc4(0, 0, 0, 255));
+// 		SetLable(eLableName, nShowX, nShowY, m_strName, INTCOLORTOCCC4(uiColor),
+// 				ccc4(0, 0, 0, 255)); ///< 不知道为什么会在这里卡住 郭浩
 		DrawLable(m_pkNameLabel[1], bDraw);
 		DrawLable(m_pkNameLabel[0], bDraw);
 		//showY -= 5 * fScaleFactor;
@@ -250,43 +238,43 @@ void NDNpc::OnDrawEnd(bool bDraw)
 
 void NDNpc::SetExpresstionImage(int nExpresstion)
 {
-	int express = 10400;
+	int nExpress = 10400;
 	switch (nExpresstion)
 	{
 	case 0: //
 		break;
 	case 1: //
-		express = 10400;
+		nExpress = 10400;
 		break;
 	case 2: //
-		express = 10401;
+		nExpress = 10401;
 		break;
 	case 3: //
-		express = 10404;
+		nExpress = 10404;
 		break;
 	case 4: //
-		express = 10405;
+		nExpress = 10405;
 		break;
 	case 5: //
-		express = 10406;
+		nExpress = 10406;
 		break;
 	case 6: //
-		express = 10407;
+		nExpress = 10407;
 		break;
 	case 7: //
-		express = 10408;
+		nExpress = 10408;
 		break;
 	case 8: //
-		express = 10409;
+		nExpress = 10409;
 		break;
 	case 9: //
-		express = 10410;
+		nExpress = 10410;
 		break;
 	}
 
-	if (express >= 10400 && express < 10600)
+	if (nExpress >= 10400 && nExpress < 10600)
 	{
-		tq::CString str("%s%d.png", NDPath::GetImagePath().c_str(), express);
+		tq::CString str("%s%d.png", NDPath::GetImagePath().c_str(), nExpress);
 		SetExpressionImage(str.c_str());
 	}
 }
@@ -353,47 +341,45 @@ void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text,
 		return;
 	}
 
-	NDUILabel *lable[2];
-	memset(lable, 0, sizeof(lable));
+	NDUILabel* pkLables[2] = {0};
+	memset(pkLables, 0, sizeof(pkLables));
+
 	if (eLableType == eLableName)
 	{
-		lable[0] = m_pkNameLabel[0];
-		lable[1] = m_pkNameLabel[1];
+		pkLables[0] = m_pkNameLabel[0];
+		pkLables[1] = m_pkNameLabel[1];
 	}
 	else if (eLableType == eLabelDataStr)
 	{
-		lable[0] = m_pkDataStrLebel[0];
-		lable[1] = m_pkDataStrLebel[1];
+		pkLables[0] = m_pkDataStrLebel[0];
+		pkLables[1] = m_pkDataStrLebel[1];
 	}
 
-	if (!lable[0] || !lable[1])
+	if (!pkLables[0] || !pkLables[1])
 	{
 		return;
 	}
 
-	lable[0]->SetText(text.c_str());
-	lable[1]->SetText(text.c_str());
+	pkLables[0]->SetText(text.c_str());
+	pkLables[1]->SetText(text.c_str());
 
-	lable[0]->SetFontColor(color1);
-	lable[1]->SetFontColor(color2);
+	pkLables[0]->SetFontColor(color1);
+	pkLables[1]->SetFontColor(color2);
 
-	//lable[0]->SetFontBoderColer(color1);
-	//lable[1]->SetFontBoderColer(color2);
-
-	CGSize sizemap;
-	sizemap = m_pkSubNode->GetContentSize();
-	CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
+	CGSize kSizeMap;
+	kSizeMap = m_pkSubNode->GetContentSize();
+	CGSize kSizeWin = NDDirector::DefaultDirector()->GetWinSize();
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
-	CGSize size = getStringSize(text.c_str(), 12);
-	lable[1]->SetFrameRect(
-			CGRectMake(x - (size.width / 2) + 1,
+	CGSize kSize = getStringSize(text.c_str(), 12);
+	pkLables[1]->SetFrameRect(
+			CGRectMake(x - (kSize.width / 2) + 1,
 					y + NDDirector::DefaultDirector()->GetWinSize().height
-							- sizemap.height, sizewin.width,
+							- kSizeMap.height, kSizeWin.width,
 					20 * fScaleFactor));
-	lable[0]->SetFrameRect(
-			CGRectMake(x - (size.width / 2),
+	pkLables[0]->SetFrameRect(
+			CGRectMake(x - (kSize.width / 2),
 					y + NDDirector::DefaultDirector()->GetWinSize().height
-							- sizemap.height, sizewin.width,
+							- kSizeMap.height, kSizeWin.width,
 					20 * fScaleFactor));
 }
 

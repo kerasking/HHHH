@@ -774,18 +774,21 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 		{
 			pkNPC->m_strName = strName;
 		}
+
 		pkNPC->SetPosition(
-				ccp(usCellX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-						usCellY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+			ccp(usCellX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+			usCellY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
 		pkNPC->m_strData = dataStr;
 		pkNPC->m_strTalk = talkStr;
 		pkNPC->SetType(uitype);
 		pkNPC->Initialization(usLook);
+
 		if (btSort != 0)
 		{
 			pkNPC->SetActionOnRing(false);
 			pkNPC->SetDirectOnTalk(false);
 		}
+
 		pkNPC->initUnpassPoint();
 		NDMapMgrObj.m_vNPC.push_back(pkNPC);
 	}
@@ -794,6 +797,8 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 	{ //  ’∑¢Ω· ¯
 		NDMapMgrObj.AddAllNPCToMap();
 	}
+
+	NDMapMgrObj.AddAllNPCToMap();
 }
 
 void NDMapMgr::AddAllNPCToMap()
