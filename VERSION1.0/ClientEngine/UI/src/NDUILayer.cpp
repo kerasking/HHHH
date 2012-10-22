@@ -357,7 +357,6 @@ bool NDUILayer::TouchBegin(NDTouch* touch)
 			&& this->IsVisibled() && this->EventEnabled())
 	{
 		this->DispatchTouchBeginEvent(m_kBeginTouch);
-		printf("\nbegin x[%.1f]y[%.1f]", m_kBeginTouch.x, m_kBeginTouch.y);
 		//this->DispatchTouchEndEvent(m_beginTouch, m_beginTouch);
 
 		// 长按开始
@@ -461,9 +460,7 @@ void NDUILayer::TouchCancelled(NDTouch* touch)
 
 bool NDUILayer::TouchMoved(NDTouch* touch)
 {
-	CGPoint moveTouch = touch->GetLocation();
-
-	printf("\nmove x[%.1f]y[%.1f]", moveTouch.x, moveTouch.y);
+	CGPoint kMoveTouch = touch->GetLocation();
 
 	if (m_pkTouchedNode && m_bDispatchTouchEndEvent)
 	{
@@ -482,19 +479,19 @@ bool NDUILayer::TouchMoved(NDTouch* touch)
 	// 长按
 	if (m_pkTouchedNode)
 	{
-		DispatchDragOverEvent(m_kBeginTouch, moveTouch);
+		DispatchDragOverEvent(m_kBeginTouch, kMoveTouch);
 
 		CGRect nodeFrame = m_pkTouchedNode->GetScreenRect();
 		nodeFrame = RectAdd(nodeFrame, 2);
 
 		if (!m_bLayerMoved
-				&& (CGRectContainsPoint(nodeFrame, moveTouch) || m_bDragOutFlag))
+				&& (CGRectContainsPoint(nodeFrame, kMoveTouch) || m_bDragOutFlag))
 		{
 			if (m_pkLongTouchTimer)
 				m_pkLongTouchTimer->KillTimer(this, LONG_TOUCH_TIMER_TAG);
 
 			if (m_bLongTouch
-					&& DispatchDragOutEvent(m_kBeginTouch, moveTouch,
+					&& DispatchDragOutEvent(m_kBeginTouch, kMoveTouch,
 							m_bLongTouch))
 			{ //拖出
 				m_bDragOutFlag = true;

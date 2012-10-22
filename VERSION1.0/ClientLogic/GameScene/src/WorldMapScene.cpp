@@ -351,7 +351,6 @@ void WorldMapLayer::OnTimer(OBJID tag)
 		m_timer.KillTimer(this, TAG_TIMER_MOVE);
 		SetMove(false);
 		// todo move
-		printf("\n到达地图[%d]", GetTargetMapId());
 //		NDMapMgrObj.WorldMapSwitch(GetTargetMapId()); ///< 临时性注释 郭浩
 		return;
 	}

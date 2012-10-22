@@ -253,8 +253,8 @@ void CUIScroll::SetMoveSpeed()
 	
 	double fSum = 0.0f;
 	unsigned int uiTotal = 0;
-	printf("size[%d]", size);
     float fMin = 100000.0f;
+
 	for (unsigned int i = 0; i < size - 1; i++) 
 	{
 		unsigned int firstindex		= (m_uiFirstMoveIndex + i) % MAX_MOVES;
@@ -274,9 +274,8 @@ void CUIScroll::SetMoveSpeed()
         if (fabs(fV) < fabs(fMin))
         {
             fMin    = fV;
-            printf("fMin=[%f]", fMin);
         }
-		printf("\ndis=[%f]time=[%f]v=[%f]", dispass, clockpass, fV);
+
 		if (clockpass != 0)
 		{
 			fSum += dispass / clockpass;
@@ -304,8 +303,6 @@ void CUIScroll::SetMoveSpeed()
             m_fV0 = UI_NEGA_UP_SPEED_MAX;
         }
     }
-
-    printf("\nvo=[%f]", this->m_fV0);
 	
 	if ( (this->m_fV0 < UI_POSI_UP_SPEED_MIN) && 
 		(this->m_fV0 > UI_NEGA_UP_SPEED_MIN) )
