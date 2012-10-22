@@ -1,22 +1,23 @@
 /*
-///////////////////////////////////////////////////////////////////////////////
-// Name:        codec.h
-// Purpose:     
-// Author:      Ulrich Telle
-// Modified by:
-// Created:     2006-12-06
-// Copyright:   (c) Ulrich Telle
-// Licence:     wxWindows licence
-///////////////////////////////////////////////////////////////////////////////
+ ///////////////////////////////////////////////////////////////////////////////
+ // Name:        codec.h
+ // Purpose:     
+ // Author:      Ulrich Telle
+ // Modified by:
+ // Created:     2006-12-06
+ // Copyright:   (c) Ulrich Telle
+ // Licence:     wxWindows licence
+ ///////////////////////////////////////////////////////////////////////////////
 
-/// \file codec.h Interface of the codec class
-*/
+ /// \file codec.h Interface of the codec class
+ */
 
 #ifndef _CODEC_H_
 #define _CODEC_H_
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #if defined(__BORLANDC__)
@@ -28,13 +29,13 @@ extern "C" {
 #endif
 
 /*
-// ATTENTION: Macro similar to that in pager.c
-// TODO: Check in case of new version of SQLite
-*/
+ // ATTENTION: Macro similar to that in pager.c
+ // TODO: Check in case of new version of SQLite
+ */
 #define WX_PAGER_MJ_PGNO(x) ((PENDING_BYTE/(x))+1)
 
 #ifdef __cplusplus
-}  /* End of the 'extern "C"' block */
+} /* End of the 'extern "C"' block */
 #endif
 
 #include "rijndael.h"
@@ -55,15 +56,15 @@ extern "C" {
 
 typedef struct _Codec
 {
-  int           m_isEncrypted;
-  int           m_hasReadKey;
-  unsigned char m_readKey[KEYLENGTH];
-  int           m_hasWriteKey;
-  unsigned char m_writeKey[KEYLENGTH];
-  Rijndael*     m_aes;
+	int m_isEncrypted;
+	int m_hasReadKey;
+	unsigned char m_readKey[KEYLENGTH];
+	int m_hasWriteKey;
+	unsigned char m_writeKey[KEYLENGTH];
+	Rijndael* m_aes;
 
-  Btree*        m_bt; /* Pointer to B-tree used by DB */
-  unsigned char m_page[SQLITE_MAX_PAGE_SIZE+8];
+	Btree* m_bt; /* Pointer to B-tree used by DB */
+	unsigned char m_page[SQLITE_MAX_PAGE_SIZE + 8];
 } Codec;
 
 void CodecInit(Codec* codec);
@@ -73,9 +74,11 @@ void CodecCopy(Codec* codec, Codec* other);
 
 void CodecGenerateReadKey(Codec* codec, char* userPassword, int passwordLength);
 
-void CodecGenerateWriteKey(Codec* codec, char* userPassword, int passwordLength);
+void CodecGenerateWriteKey(Codec* codec, char* userPassword,
+		int passwordLength);
 
-void CodecEncrypt(Codec* codec, int page, unsigned char* data, int len, int useWriteKey);
+void CodecEncrypt(Codec* codec, int page, unsigned char* data, int len,
+		int useWriteKey);
 
 void CodecDecrypt(Codec* codec, int page, unsigned char* data, int len);
 
@@ -92,24 +95,26 @@ int CodecHasWriteKey(Codec* codec);
 Btree* CodecGetBtree(Codec* codec);
 unsigned char* CodecGetPageBuffer(Codec* codec);
 
-void CodecGenerateEncryptionKey(Codec* codec, char* userPassword, int passwordLength, 
-                                unsigned char encryptionKey[KEYLENGTH]);
+void CodecGenerateEncryptionKey(Codec* codec, char* userPassword,
+		int passwordLength, unsigned char encryptionKey[KEYLENGTH]);
 
-void CodecPadPassword(Codec* codec, char* password, int pswdlen, unsigned char pswd[32]);
+void CodecPadPassword(Codec* codec, char* password, int pswdlen,
+		unsigned char pswd[32]);
 
 void CodecRC4(Codec* codec, unsigned char* key, int keylen,
-              unsigned char* textin, int textlen,
-         unsigned char* textout);
+		unsigned char* textin, int textlen, unsigned char* textout);
 
-void CodecGetMD5Binary(Codec* codec, unsigned char* data, int length, unsigned char* digest);
+void CodecGetMD5Binary(Codec* codec, unsigned char* data, int length,
+		unsigned char* digest);
 
 #if CODEC_TYPE == CODEC_TYPE_AES256
 void CodecGetSHABinary(Codec* codec, unsigned char* data, int length, unsigned char* digest);
 #endif
-  
+
 void CodecGenerateInitialVector(Codec* codec, int seed, unsigned char iv[16]);
 
-void CodecAES(Codec* codec, int page, int encrypt, unsigned char encryptionKey[KEYLENGTH],
-              unsigned char* datain, int datalen, unsigned char* dataout);
+void CodecAES(Codec* codec, int page, int encrypt,
+		unsigned char encryptionKey[KEYLENGTH], unsigned char* datain,
+		int datalen, unsigned char* dataout);
 
 #endif
