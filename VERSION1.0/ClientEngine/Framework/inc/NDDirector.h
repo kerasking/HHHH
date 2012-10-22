@@ -20,6 +20,8 @@
 #include "CCDirector.h"
 #include "NDNode.h"
 
+#define FONT_SCALE (NDDirector::DefaultDirector()->GetScaleFactor())
+
 namespace NDEngine
 {
 class NDDirector;
@@ -230,12 +232,11 @@ private:
 	void SetDelegate(NDObject* receiver)
 	{
 	}
-	hide
+
 	NDObject* GetDelegate()
 	{
 		return NULL;
 	}
-	hide
 
 	void BeforeDirectorPopScene(NDScene* scene, bool cleanScene);
 	void AfterDirectorPopScene(bool cleanScene);
