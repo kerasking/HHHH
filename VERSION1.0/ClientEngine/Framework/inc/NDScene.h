@@ -25,7 +25,9 @@ public:
 public:
 
 	static NDScene* Scene();
+	void Initialization();
 };
+
 }
 
 #endif
