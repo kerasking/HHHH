@@ -74,7 +74,7 @@ NDScene* NDScene::Scene()
 
 void NDScene::Initialization()
 {
-	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	//CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 }
 
 }
