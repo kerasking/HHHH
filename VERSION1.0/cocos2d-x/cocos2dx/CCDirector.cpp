@@ -502,7 +502,7 @@ void CCDirector::reshapeProjection(const CCSize& newWindowSize)
 void CCDirector::runWithScene(CCScene *pScene)
 {
 	CCAssert(pScene != NULL, "running scene should not be null");
-	CCAssert(m_pRunningScene == NULL, "m_pRunningScene should be null");
+	//CCAssert(m_pRunningScene == NULL, "m_pRunningScene should be null");
 
 	pushScene(pScene);
 	startAnimation();

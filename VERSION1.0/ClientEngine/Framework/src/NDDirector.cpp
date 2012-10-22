@@ -182,11 +182,11 @@ void NDDirector::ReplaceScene(NDScene* pkScene, bool bAnimate/*=false*/)
 			this->AfterDirectorPopScene(true);
 		}
 	
-	BeforeDirectorPushScene(pkScene);
+//	BeforeDirectorPushScene(pkScene);
 
 	RunScene(pkScene);
 
-	AfterDirectorPushScene(pkScene);
+//	AfterDirectorPushScene(pkScene);
 
 	//NDLog("===============================当前场景栈大小[%u]", m_scenesStack.size());
 }

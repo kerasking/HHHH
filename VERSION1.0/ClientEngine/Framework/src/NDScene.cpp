@@ -75,7 +75,12 @@ NDScene* NDScene::Scene()
 void NDScene::Initialization()
 {
 	NDNode::Initialization();
-	//CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	
+	/***
+	* 这里缺少部分代码，因PicMemoryUsingLogOut没实现
+	* 郭浩
+	*/
 }
 
 }

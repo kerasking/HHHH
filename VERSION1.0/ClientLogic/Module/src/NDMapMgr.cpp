@@ -80,6 +80,7 @@ m_nMapDocID(0)
 {
 	NDNetMsgPool& kNetPool = NDNetMsgPoolObj;
 	kNetPool.RegMsg(1159,this);
+	kNetPool.RegMsg(_MSG_ROOM,this);
 
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"sim ");
 
@@ -99,27 +100,27 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 	{
 	case 1159:
 		{
-			static bool bFirst = true;
+			//static bool bFirst = true;
 
-			if (bFirst)
-			{
-				NDTransData kData;
-				kData.WriteShort(1);
-				kData.WriteInt(1);
-				kData.WriteInt(1);
-				kData.WriteInt(1);
-				kData.WriteShort(528);
-				kData.WriteShort(512);
-				kData.WriteShort(0);
-				kData.WriteShort(0);
-				kData.WriteShort(0);
-				kData.WriteShort(0);
-				kData.WriteInt(1);
-				kData.WriteUnicodeString("Korman");
+			//if (bFirst)
+			//{
+			//	NDTransData kData;
+			//	kData.WriteShort(1);
+			//	kData.WriteInt(1);
+			//	kData.WriteInt(1);
+			//	kData.WriteInt(1);
+			//	kData.WriteShort(528);
+			//	kData.WriteShort(512);
+			//	kData.WriteShort(0);
+			//	kData.WriteShort(0);
+			//	kData.WriteShort(0);
+			//	kData.WriteShort(0);
+			//	kData.WriteInt(1);
+			//	kData.WriteUnicodeString("Korman");
 
-				processChangeRoom(&kData,kData.GetSize());
-				bFirst = false;
-			}
+			//	processChangeRoom(&kData,kData.GetSize());
+			//	bFirst = false;
+			//}
 		}
 		break;
 	case _MSG_CHG_PET_POINT:
@@ -704,9 +705,10 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
   		return;
   	}
   
-  	kPlayer.SetPosition(ccp(dwPortalX,dwPortalY));
-  // 	kPlayer.SetServerPositon(dwPortalX, dwPortalY);
-  // 	kPlayer.SetShowPet(kPetInfoRerserve);
+	kPlayer.SetPosition(ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+		dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+	kPlayer.SetServerPositon(dwPortalX, dwPortalY);
+	kPlayer.SetShowPet(kPetInfoRerserve);
   	kPlayer.stopMoving();
   
 //   	NDRidePet* pkRidePet = kPlayer.GetRidePet();
@@ -719,9 +721,8 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 //   						dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
 //   	}
   
-  	pkLayer->SetScreenCenter(
-  			ccp(dwPortalX,
-  					dwPortalY));
+  	pkLayer->SetScreenCenter(ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+		dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
 
   	kPlayer.SetAction(false);
   	kPlayer.SetLoadMapComplete();
