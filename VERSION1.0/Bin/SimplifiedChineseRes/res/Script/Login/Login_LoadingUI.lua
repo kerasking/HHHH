@@ -25,7 +25,7 @@ function p.LoadUI()
     layer:Init();
     layer:SetTag(NMAINSCENECHILDTAG.Login_LoadingUI);
     layer:SetFrameRect(RectFullScreenUILayer);
-    layer:SetBackgroundColor(ccc4(125, 125, 125, 125));
+    --layer:SetBackgroundColor(ccc4(125, 125, 125, 125));
     scene:AddChild(layer);
 
     --初始化ui
@@ -38,7 +38,15 @@ function p.LoadUI()
     uiLoad:Load("Loading.ini", layer, p.OnUIEvent, 0, 0);
     uiLoad:Free();
 
-
+    local LoadingProcess = RecursivUIExp(layer, {ID_LOADING_PROCESS_CTRL} );
+    if CheckP(LoadingProcess) then
+        LoadingProcess:SetProcess(0);
+        LoadingProcess:SetTotal(100);
+        LoadingProcess:SetStyle(2);
+    end
+	
+	p.OnConstruct();
+	layer:SetDestroyNotify(p.OnDeConstruct);
 	
     return true;
 end
@@ -73,6 +81,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 end
 
 function p.OnProcessTimer(nTag)
+	--LogInfo("Login_LoadingUI: OnProcessTimer()");
 	if not CheckN(nProcessTimeTag) or
 		not CheckN(nTag) or
 		nTag ~= nProcessTimeTag then
@@ -85,13 +94,17 @@ function p.OnProcessTimer(nTag)
 	end
 	
 	local nCurProcess	= ConvertN(LoadingProcess:GetProcess());
-	local nToatl		= ConvertN(LoadingProcess:GetTotal());
-	
-	p.SetProcess((nCurProcess + 20) % nToatl);
+	local nTotal		= ConvertN(LoadingProcess:GetTotal());
+	--LogInfo("Login_LoadingUI: OnProcessTimer() nCurProcess:%d",nCurProcess);
+	nCurProcess			= nCurProcess + 5;--(nCurProcess + 5) % nTotal
+	if ( nCurProcess > nTotal ) then
+		nCurProcess = nTotal;
+	end
+	p.SetProcess( nCurProcess );
 end
 
 function p.OnConstruct()
-	nProcessTimeTag	= _G.RegisterTimer(p.OnProcessTimer, 1);
+	nProcessTimeTag	= _G.RegisterTimer(p.OnProcessTimer, 1/20 );
 end
 
 function p.OnDeConstruct()

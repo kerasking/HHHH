@@ -8,12 +8,11 @@
 --玩家职业定义
 PROFESSION_TYPE =
 {
-	NONE		= 0,
-	SWORD		= 1,		--剑圣
-	CHIVALROUS	= 2,	--奇侠 
-	FIST		= 3,		--拳宗
-	AXE			= 4,		--斧皇(伙伴职业)
-	MAGIC		= 5,		--玄灵(伙伴职业)
+	NONE		= 0,    --不限
+	SWORD		= 1,	--猛将
+	CHIVALROUS	= 2,	--射手 
+	FIST		= 3,	--军师
+	AXE			= 4,	--守将
 };
 
 --玩家阵营定义
@@ -22,4 +21,19 @@ CAMP_TYPE =
 	NONE				= 0, --中立
 	HUANG_QUAN			= 1, --黄泉宗
 	YU_HUA				= 2, --羽化门
+
+    --** chh 2012-07-31 **--
+    Shu                 = 3, --蜀国
+    Wei                 = 4, --魏国
+    Wu                  = 5, --吴国
 };
+
+
+--** chh 2012-07-31 **--
+STAND_TYPE = 
+{
+    FIR                 = 1,
+    SEC                 = 2,
+    THIRD               = 3,
+};
+

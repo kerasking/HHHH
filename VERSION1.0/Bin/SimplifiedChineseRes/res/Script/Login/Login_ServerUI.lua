@@ -10,7 +10,7 @@ local p = Login_ServerUI;
 p.curSel=0;
 p.Account=nil;
 p.Pwd="";
-p.UIN=298845082;
+p.UIN=154973799;
 
 --推荐服务器(15--21)
 local ID_SERVER_SELECT_1 = 15;
