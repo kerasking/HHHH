@@ -90,7 +90,7 @@ NDNpc::~NDNpc()
 void NDNpc::Initialization(int nLookface)
 {
 	m_nSex = nLookface / 100000000 % 10;
-	m_nModel = nLookface / 1000 % 100;
+	m_nModel = nLookface % 1000;
 	//lookface = 2000000;
 
 	tq::CString sprFile;
@@ -101,10 +101,8 @@ void NDNpc::Initialization(int nLookface)
 	}
 	else
 	{
-// 		sprFile.Format("%@model_%d%s", NDPath::GetAnimationPath().c_str(),
-// 				nLookface / 1000000, ".spr");
 		sprFile.Format("%smodel_%d%s", NDPath::GetAnimationPath().c_str(),
-			nLookface, ".spr");
+			m_nModel, ".spr");
 	}
 
 	NDSprite::Initialization(sprFile);
@@ -643,17 +641,17 @@ bool NDEngine::NDNpc::IsActionOnRing()
 
 void NDEngine::NDNpc::initUnpassPoint()
 {
-	throw std::exception("The method or operation is not implemented.");
+	//throw std::exception("The method or operation is not implemented.");
 }
 
 void NDEngine::NDNpc::SetDirectOnTalk( bool bOn )
 {
-	throw std::exception("The method or operation is not implemented.");
+	//throw std::exception("The method or operation is not implemented.");
 }
 
 void NDEngine::NDNpc::HandleNPCMask( bool bSet )
 {
-	throw std::exception("The method or operation is not implemented.");
+	//throw std::exception("The method or operation is not implemented.");
 }
 
 void NDEngine::NDNpc::SetActionOnRing( bool bOn )

@@ -79,7 +79,7 @@ m_nMapID(0),
 m_nMapDocID(0)
 {
 	NDNetMsgPool& kNetPool = NDNetMsgPoolObj;
-	kNetPool.RegMsg(1159,this);
+	kNetPool.RegMsg(_MSG_NPCINFO_LIST,this);
 	kNetPool.RegMsg(_MSG_ROOM,this);
 
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"sim ");
@@ -98,31 +98,6 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 {
 	switch (usMsgID)
 	{
-	case 1159:
-		{
-			//static bool bFirst = true;
-
-			//if (bFirst)
-			//{
-			//	NDTransData kData;
-			//	kData.WriteShort(1);
-			//	kData.WriteInt(1);
-			//	kData.WriteInt(1);
-			//	kData.WriteInt(1);
-			//	kData.WriteShort(528);
-			//	kData.WriteShort(512);
-			//	kData.WriteShort(0);
-			//	kData.WriteShort(0);
-			//	kData.WriteShort(0);
-			//	kData.WriteShort(0);
-			//	kData.WriteInt(1);
-			//	kData.WriteUnicodeString("Korman");
-
-			//	processChangeRoom(&kData,kData.GetSize());
-			//	bFirst = false;
-			//}
-		}
-		break;
 	case _MSG_CHG_PET_POINT:
 	{
 		int nBtAnswer = pkData->ReadByte();
@@ -773,10 +748,16 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 		(*pkData) >> btState; // 1¸ö×Ö½Ú±í×´Ì¬
 		unsigned char btCamp = 0;
 		(*pkData) >> btCamp;
-		std::string name = pkData->ReadUnicodeString();
+		CCString* pstrTemp = CCString::stringWithUTF8String(pkData->ReadUnicodeString().c_str());
+		std::string strName = pstrTemp->toStdString();
+		SAFE_DELETE(pstrTemp);
 
-		std::string dataStr = pkData->ReadUnicodeString();
-		std::string talkStr = pkData->ReadUnicodeString();
+		pstrTemp = CCString::stringWithUTF8String(pkData->ReadUnicodeString().c_str());
+		std::string dataStr = pstrTemp->toStdString();
+		SAFE_DELETE(pstrTemp);
+		pstrTemp = CCString::stringWithUTF8String(pkData->ReadUnicodeString().c_str());
+		std::string talkStr = pstrTemp->toStdString();
+		SAFE_DELETE(pstrTemp);
 
 		NDNpc *pkNPC = new NDNpc;
 		pkNPC->m_nID = nID;
@@ -791,7 +772,7 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 		}
 		else
 		{
-			pkNPC->m_strName = name;
+			pkNPC->m_strName = strName;
 		}
 		pkNPC->SetPosition(
 				ccp(usCellX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
@@ -817,7 +798,7 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 
 void NDMapMgr::AddAllNPCToMap()
 {
-	NDLayer* pkLayer = (NDLayer*) getMapLayerOfScene(
+	NDMapLayer* pkLayer = (NDMapLayer*) getMapLayerOfScene(
 			NDDirector::DefaultDirector()->GetRunningScene());
 
 	if (0 == pkLayer)
@@ -834,15 +815,15 @@ void NDMapMgr::AddAllNPCToMap()
 			continue;
 		}
 
-		pkLayer->AddChild((NDNode*) pkNPC);
+		pkLayer->AddChild((NDNode*) pkNPC,2,100);
 
-		if (0 != pkNPC->GetRidePet())
-		{
-			pkNPC->GetRidePet()->stopMoving();
-			pkNPC->GetRidePet()->SetPositionEx(pkNPC->GetPosition());
-			pkNPC->GetRidePet()->SetCurrentAnimation(RIDEPET_STAND,
-					pkNPC->m_bFaceRight);
-		}
+// 		if (0 != pkNPC->GetRidePet())
+// 		{
+// 			pkNPC->GetRidePet()->stopMoving();
+// 			pkNPC->GetRidePet()->SetPositionEx(pkNPC->GetPosition());
+// 			pkNPC->GetRidePet()->SetCurrentAnimation(RIDEPET_STAND,
+// 					pkNPC->m_bFaceRight);
+// 		}
 
 		pkNPC->HandleNPCMask(true);
 	}
