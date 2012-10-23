@@ -170,7 +170,7 @@ private:
 public:
 	void AddViewer(NDCommonProtocol* viewer);
 	void RemoveViewer(NDCommonProtocol* viewer);
-protected:
+public:
 	bool DispatchClickOfViewr(NDObject* object);
 protected:
 	LIST_COMMON_VIEWER m_listCommonViewer;
