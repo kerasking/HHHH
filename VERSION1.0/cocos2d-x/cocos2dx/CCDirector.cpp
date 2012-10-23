@@ -918,8 +918,8 @@ void CCDirector::setDeviceOrientation(ccDeviceOrientation kDeviceOrientation)
 * implementation of DisplayLinkDirector
 **************************************************/
 
-CCDisplayLinkDirector::CCDisplayLinkDirector(void)
-		: m_bInvalid(false)
+CCDisplayLinkDirector::CCDisplayLinkDirector(void):
+m_bInvalid(false)
 {
     sm_pSharedDirector = this;
 }
