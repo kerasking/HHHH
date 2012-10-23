@@ -7,7 +7,7 @@
  *
  */
  
- #pragma once
+#pragma once
 
 #include "ScriptInc.h"
 

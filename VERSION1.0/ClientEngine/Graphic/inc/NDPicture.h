@@ -46,13 +46,11 @@ public:
 
 	virtual void Initialization(const char* pszImageFile);
 
-	CCTexture2D* GetTexture();
-	CCTexture2D* GetTextureRetain();
+	CC_SYNTHESIZE_READONLY(CCTexture2D*,m_pkTexture,Texture);
+	
+	unsigned int GetTextureRetain();
 
 protected:
-
-	CCTexture2D* m_pkTexture;
-
 private:
 };
 
@@ -133,6 +131,8 @@ class NDPicturePool: public NDObject
 
 public:
 
+	typedef map<CCTexture2D*,string> MAP_STRING;
+
 	static NDPicturePool* DefaultPool();
 
 	static void PurgeDefaultPool();
@@ -151,6 +151,7 @@ private:
 	NDPictureDictionary* m_pkTextures;
 
 	std::map<std::string, CGSize> m_mapStr2Size;
+	MAP_STRING m_mapTex2Str;
 
 private:
 	CGSize GetImageSize(std::string filename);

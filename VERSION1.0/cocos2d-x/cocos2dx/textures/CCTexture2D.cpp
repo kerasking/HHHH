@@ -72,10 +72,18 @@ static CCTexture2DPixelFormat g_defaultAlphaPixelFormat =
 static bool PVRHaveAlphaPremultiplied_ = false;
 
 CCTexture2D::CCTexture2D() :
-		m_uPixelsWide(0), m_uPixelsHigh(0), m_uName(0), m_fMaxS(0.0f), m_fMaxT(
-				0.0f), m_bHasPremultipliedAlpha(false), m_bPVRHaveAlphaPremultiplied(
-				true), m_pData(0), m_bKeepData(false), m_nContainerType(0), m_uiWidth(
-				0), m_uiHeight(0)
+m_uPixelsWide(0),
+m_uPixelsHigh(0),
+m_uName(0),
+m_fMaxS(0.0f),
+m_fMaxT(0.0f),
+m_bHasPremultipliedAlpha(false),
+m_bPVRHaveAlphaPremultiplied(true),
+m_pData(0),
+m_bKeepData(false),
+m_nContainerType(0),
+m_uiWidth(0),
+m_uiHeight(0)
 {
 }
 
