@@ -62,11 +62,8 @@ class NDPicture: public NDObject
 public:
 
 	void Initialization(const char* imageFile);
-
-	//void Initialization(vector<const char*>& vImgFiles); hide
-
-	//void Initialization(vector<const char*>& vImgFiles, vector<CGRect>& vImgCustomRect, vector<CGPoint>&vOffsetPoint); hide
-
+	//void Initialization(vector<const char*>& vImgFiles);
+	//void Initialization(vector<const char*>& vImgFiles, vector<CGRect>& vImgCustomRect, vector<CGPoint>&vOffsetPoint);
 	void Initialization(const char* imageFile, int hrizontalPixel,
 			int verticalPixel = 0);
 

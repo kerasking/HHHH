@@ -16,4 +16,3 @@ class ScriptObjectCommon : public NDEngine::ScriptObject
 public:
 	virtual void OnLoad();
 };
-	
