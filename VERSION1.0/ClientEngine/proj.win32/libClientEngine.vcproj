@@ -638,6 +638,10 @@
 				Name="src"
 				>
 				<File
+					RelativePath="..\UI\src\HyperLinkLabel.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\src\NDScrollLayer.cpp"
 					>
 				</File>

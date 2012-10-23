@@ -54,6 +54,7 @@ public:
 	void draw();
 
 private:
+
 	NDEngine::NDUILabel* m_pkNameLabels[2];
 	NDEngine::NDUILabel* m_pkDesLabels[2];
 };

@@ -175,11 +175,11 @@ void NDNode::AddChild(NDNode* pkNode, int nZBuffer, int nTag)
 	NDAsssert(m_ccNode != NULL && pkNode != NULL && pkNode->m_ccNode != NULL);
 	NDAsssert(pkNode != this);
 
-	CCNode* pkNode = pkNode->m_ccNode;
+	CCNode* pkCCNode = pkNode->m_ccNode;
 
 	pkNode->SetParent(this);
 
-	m_ccNode->addChild(pkNode, nZBuffer, nTag);
+	m_ccNode->addChild(pkCCNode, nZBuffer, nTag);
 
 	m_kChildrenList.push_back(pkNode);
 }
