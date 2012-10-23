@@ -23,19 +23,19 @@ IMPLEMENT_CLASS(NDUIText, NDUINode)
 
 NDUIText::NDUIText()
 {
-	m_pageCount = 0;
-	m_currentPageIndex = 1;
-	m_backgroundColor = ccc4(0, 0, 0, 0);
-	m_usePageArrowControl = true;
+	m_uiPageCount = 0;
+	m_uiCurrentPageIndex = 1;
+	m_kBackgroundColor = ccc4(0, 0, 0, 0);
+	m_bUsePageArrowControl = true;
 
-	m_colorFont = ccc4(255, 255, 0, 255);
+	m_kColorFont = ccc4(255, 255, 0, 255);
 	m_uiFontSize = 0;
 }
 
 NDUIText::~NDUIText()
 {
 	std::vector<NDUINode*>::iterator iter;
-	for (iter = m_pages.begin(); iter != m_pages.end(); iter++)
+	for (iter = m_pkPages.begin(); iter != m_pkPages.end(); iter++)
 	{
 		NDUINode* uiNode = *iter;
 		if (uiNode->GetParent())
@@ -51,28 +51,28 @@ void NDUIText::Initialization(bool usePageArrowControl)
 
 	if (usePageArrowControl)
 	{
-		m_pageArrow = new NDUIOptionButton();
-		m_pageArrow->Initialization();
-		m_pageArrow->SetDelegate(this);
-		m_pageArrow->SetFontColor(ccc4(24, 85, 82, 255));
-		m_pageArrow->SetBgClr(ccc4(0, 0, 0, 0));
-		m_pageArrow->ShowFrame(false);
-		m_pageArrow->SetFontSize(10);
-		m_pageArrow->EnableDraw(false);
-		this->AddChild(m_pageArrow, 10);
+		m_pkPageArrow = new NDUIOptionButton();
+		m_pkPageArrow->Initialization();
+		m_pkPageArrow->SetDelegate(this);
+		m_pkPageArrow->SetFontColor(ccc4(24, 85, 82, 255));
+		m_pkPageArrow->SetBgClr(ccc4(0, 0, 0, 0));
+		m_pkPageArrow->ShowFrame(false);
+		m_pkPageArrow->SetFontSize(10);
+		m_pkPageArrow->EnableDraw(false);
+		this->AddChild(m_pkPageArrow, 10);
 	}
 
-	m_usePageArrowControl = usePageArrowControl;
+	m_bUsePageArrowControl = usePageArrowControl;
 }
 
 void NDUIText::SetBackgroundColor(ccColor4B color)
 {
-	m_backgroundColor = color;
+	m_kBackgroundColor = color;
 }
 
 unsigned int NDUIText::GetCurrentPageIndex()
 {
-	return m_currentPageIndex;
+	return m_uiCurrentPageIndex;
 }
 
 void NDUIText::SetFontSize(unsigned int uiFontSize)
@@ -82,7 +82,7 @@ void NDUIText::SetFontSize(unsigned int uiFontSize)
 
 void NDUIText::SetFontColor(ccColor4B color)
 {
-	m_colorFont = color;
+	m_kColorFont = color;
 }
 
 unsigned int NDUIText::GetFontSize()
@@ -92,36 +92,36 @@ unsigned int NDUIText::GetFontSize()
 
 ccColor4B NDUIText::GetFontColor()
 {
-	return m_colorFont;
+	return m_kColorFont;
 }
 
 NDUINode* NDUIText::AddNewPage()
 {
 	NDUINode* uiNode = new NDUINode();
 	uiNode->Initialization();
-	this->AddChild(uiNode);
-	m_pages.push_back(uiNode);
+	AddChild(uiNode);
+	m_pkPages.push_back(uiNode);
 
-	m_pageCount++;
+	m_uiPageCount++;
 
-	if (m_usePageArrowControl)
+	if (m_bUsePageArrowControl)
 	{
-		if (m_pageCount > 1)
+		if (m_uiPageCount > 1)
 		{
-			m_pageArrow->EnableDraw(true);
+			m_pkPageArrow->EnableDraw(true);
 
 			VEC_OPTIONS options;
-			for (unsigned int i = 1; i <= m_pageCount; i++)
+			for (unsigned int i = 1; i <= m_uiPageCount; i++)
 			{
-				tq::CString str("%d / %d", i, m_pageCount);
+				tq::CString str("%d / %d", i, m_uiPageCount);
 				options.push_back(str);
 			}
 
-			m_pageArrow->SetOptions(options);
+			m_pkPageArrow->SetOptions(options);
 		}
 		else
 		{
-			m_pageArrow->EnableDraw(false);
+			m_pkPageArrow->EnableDraw(false);
 		}
 	}
 
@@ -131,16 +131,16 @@ NDUINode* NDUIText::AddNewPage()
 void NDUIText::SetFrameRect(CGRect rect)
 {
 	NDUINode::SetFrameRect(rect);
-	if (m_usePageArrowControl)
+	if (m_bUsePageArrowControl)
 	{
-		m_pageArrow->SetFrameRect(
+		m_pkPageArrow->SetFrameRect(
 				CGRectMake((rect.size.width - PAGE_ARROW_SIZE.width) / 2,
 						rect.size.height - PAGE_ARROW_SIZE.height,
 						PAGE_ARROW_SIZE.width, PAGE_ARROW_SIZE.height));
 	}
 
 	std::vector<NDUINode*>::iterator iter;
-	for (iter = m_pages.begin(); iter != m_pages.end(); iter++)
+	for (iter = m_pkPages.begin(); iter != m_pkPages.end(); iter++)
 	{
 		NDUINode* uiNode = *iter;
 		uiNode->SetFrameRect(
@@ -151,12 +151,12 @@ void NDUIText::SetFrameRect(CGRect rect)
 void NDUIText::SetVisible(bool visible)
 {
 	NDUINode::SetVisible(visible);
-	if (m_usePageArrowControl)
+	if (m_bUsePageArrowControl)
 	{
-		m_pageArrow->SetVisible(visible);
+		m_pkPageArrow->SetVisible(visible);
 	}
 	std::vector<NDUINode*>::iterator iter;
-	for (iter = m_pages.begin(); iter != m_pages.end(); iter++)
+	for (iter = m_pkPages.begin(); iter != m_pkPages.end(); iter++)
 	{
 		NDUINode* uiNode = *iter;
 		uiNode->SetVisible(visible);
@@ -165,31 +165,31 @@ void NDUIText::SetVisible(bool visible)
 
 void NDUIText::OnOptionChange(NDUIOptionButton* option)
 {
-	m_currentPageIndex = option->GetOptionIndex() + 1;
-	ActivePage (m_currentPageIndex);
+	m_uiCurrentPageIndex = option->GetOptionIndex() + 1;
+	ActivePage (m_uiCurrentPageIndex);
 }
 
 void NDUIText::ActivePage(unsigned int pageIndex)
 {
-	if (pageIndex >= 1 && pageIndex <= m_pageCount)
+	if (pageIndex >= 1 && pageIndex <= m_uiPageCount)
 	{
 		std::vector<NDUINode*>::iterator iter;
-		for (iter = m_pages.begin(); iter != m_pages.end(); iter++)
+		for (iter = m_pkPages.begin(); iter != m_pkPages.end(); iter++)
 		{
 			NDUINode* uiNode = *iter;
 			uiNode->RemoveFromParent(false);
 		}
 
-		this->AddChild(m_pages.at(pageIndex - 1));
+		this->AddChild(m_pkPages.at(pageIndex - 1));
 	}
 }
 
 bool NDUIText::OnTextClick(CGPoint touchPos)
 {
-	if (this->m_currentPageIndex - 1 >= 0
-			&& m_currentPageIndex - 1 < this->m_pages.size())
+	if (this->m_uiCurrentPageIndex - 1 >= 0
+			&& m_uiCurrentPageIndex - 1 < this->m_pkPages.size())
 	{
-		NDUINode* curPage = m_pages.at(m_currentPageIndex - 1);
+		NDUINode* curPage = m_pkPages.at(m_uiCurrentPageIndex - 1);
 		if (curPage)
 		{
 			std::vector<NDNode*> vChildren = curPage->GetChildren();
@@ -210,21 +210,21 @@ bool NDUIText::OnTextClick(CGPoint touchPos)
 		}
 	}
 
-	if (m_usePageArrowControl)
+	if (m_bUsePageArrowControl)
 	{
-		if (m_pageCount > 1)
+		if (m_uiPageCount > 1)
 		{
 			CGRect scrRect = this->GetScreenRect();
 			if (touchPos.x < scrRect.origin.x + scrRect.size.width / 2)
 			{
-				m_pageArrow->PreOpt();
+				m_pkPageArrow->PreOpt();
 			}
 			else
 			{
-				m_pageArrow->NextOpt();
+				m_pkPageArrow->NextOpt();
 			}
 
-			this->OnOptionChange(m_pageArrow);
+			this->OnOptionChange(m_pkPageArrow);
 		}
 	}
 	return false;
@@ -236,7 +236,7 @@ void NDUIText::draw()
 
 	if (this->IsVisibled())
 	{
-		DrawRecttangle(this->GetScreenRect(), m_backgroundColor);
+		DrawRecttangle(this->GetScreenRect(), m_kBackgroundColor);
 	}
 }
 
@@ -263,124 +263,157 @@ NDUITextBuilder* NDUITextBuilder::DefaultBuilder()
 	return NDUITextBuilder_DefaultBuilder;
 }
 
-NDUIText* NDUITextBuilder::Build(const char* text, unsigned int fontSize,
-		CGSize containerSize, ccColor4B defaultColor, bool withPageArrow,
+NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
+		CGSize kContainerSize, ccColor4B kDefaultColor, bool bWithPageArrow,
 		bool bHpyerLink)
 {
-	if (!text)
+	if (!pszText)
 	{
-		return NULL;
+		return 0;
 	}
 
-	std::vector < TextNode > textNodeList;
-	BuildRule rule = BuildRuleNone;
-	ccColor4B clr = defaultColor;
-	bool brk = false;
+	std::vector < TextNode > kTextNodeList;
+	BuildRule eRule = BuildRuleNone;
+	ccColor4B kColor = kDefaultColor;
+	bool bHasBreak = false;
+	bool bDrawLine = bHpyerLink;
 
-	while (*text != '\0')
+	while (*pszText != '\0')
 	{
-		if (*text == '\n')
+		if (*pszText == '\n')
 		{
-			brk = true;
-			text++;
+			bHasBreak = true;
+			pszText++;
 			continue;
 		}
 
-		bool retAnalysis = false;
+		bool bRetAnalysis = false;
 
-		retAnalysis = AnalysisRuleEnd(text, rule);
-		if (retAnalysis)
+		bRetAnalysis = AnalysisRuleEnd(pszText, eRule);
+
+		if (true == bRetAnalysis && BuildRuleLine == eRule
+				&& false != bHpyerLink)
 		{
-			if (rule == BuildRuleItem)
+			bDrawLine = false;
+		}
+
+		if (bRetAnalysis)
+		{
+			if (eRule == BuildRuleItem)
 			{
 				if (bHpyerLink)
 				{
-					//textNodeList.push_back(TextNode(brk, CreateLinkLabel("]", fontSize, clr, m_idItem), true)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+					kTextNodeList.push_back(
+							TextNode(bHasBreak,
+									CreateLinkLabel("]", uiFontSize, kColor,
+											m_nItemID), true));
 				}
 				else
 				{
-					//textNodeList.push_back(TextNode(brk, CreateLabel("]", fontSize, clr, m_idItem), true)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+					kTextNodeList.push_back(
+							TextNode(bHasBreak,
+									CreateLabel("]", uiFontSize, kColor,
+											m_nItemID), true));
 				}
 			}
-			rule = BuildRuleNone;
-			clr = defaultColor;
+
+			eRule = BuildRuleNone;
+			kColor = kDefaultColor;
 			continue;
 		}
 
-		retAnalysis = AnalysisRuleHead(text, rule, clr);
-		if (rule == BuildRuleExpression)
+		bRetAnalysis = AnalysisRuleHead(pszText, eRule, kColor);
+
+		if (eRule == BuildRuleExpression)
 		{
-			char imgIdx[3] =
+			char szImageIndex[3] =
 			{ 0x00 };
-			memcpy(imgIdx, text, 2);
+			memcpy(szImageIndex, pszText, 2);
 
-			NDUIImage* image = CreateFaceImage(imgIdx);
-			if (image)
+			NDUIImage* pkImage = CreateFaceImage(szImageIndex);
+			if (pkImage)
 			{
-				textNodeList.push_back(TextNode(brk, image));
-				brk = false;
+				kTextNodeList.push_back(TextNode(bHasBreak, pkImage));
+				bHasBreak = false;
 
-				text += 2;
+				pszText += 2;
 				continue;
 			}
 		}
-		if (retAnalysis)
+
+		if (bRetAnalysis)
 		{
-			if (rule == BuildRuleItem)
+			if (eRule == BuildRuleItem)
 			{
 				if (bHpyerLink)
 				{
-					//textNodeList.push_back(TextNode(brk, CreateLinkLabel("[", fontSize, clr, m_idItem), true)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+					kTextNodeList.push_back(
+							TextNode(bHasBreak,
+									CreateLinkLabel("[", uiFontSize, kColor,
+											m_nItemID), true));
 				}
 				else
 				{
-					//textNodeList.push_back(TextNode(brk, CreateLabel("[", fontSize, clr, m_idItem), true)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+					kTextNodeList.push_back(
+							TextNode(bHasBreak,
+									CreateLabel("[", uiFontSize, kColor,
+											m_nItemID), true));
 				}
 			}
 			continue;
 		}
 
-		char word[4] =
+		char szWord[4] =
 		{ 0x00 };
-		if ((unsigned char) *text < 0x80)
+		if ((unsigned char) *pszText < 0x80)
 		{
-			memcpy(word, text, 1);
-			text++;
+			memcpy(szWord, pszText, 1);
+			pszText++;
 		}
 		else
 		{
-			memcpy(word, text, 3);
-			text += 3;
+			memcpy(szWord, pszText, 3);
+			pszText += 3;
 		}
 
-		if (rule == BuildRuleItem)
+		if (eRule == BuildRuleItem)
 		{
 			if (bHpyerLink)
 			{
-				//textNodeList.push_back(TextNode(brk, CreateLinkLabel(word, fontSize, clr, m_idItem), true)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+				kTextNodeList.push_back(
+						TextNode(bHasBreak,
+								CreateLinkLabel(szWord, uiFontSize, kColor,
+										m_nItemID), true));
 			}
 			else
 			{
-				//textNodeList.push_back(TextNode(brk, CreateLabel(word, fontSize, clr, m_idItem), true)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+				kTextNodeList.push_back(
+						TextNode(bHasBreak,
+								CreateLabel(szWord, uiFontSize, kColor,
+										m_nItemID), true));
 			}
 		}
 		else
 		{
 			if (bHpyerLink)
 			{
-				//textNodeList.push_back(TextNode(brk, CreateLinkLabel(word, fontSize, clr))); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+				kTextNodeList.push_back(
+						TextNode(bHasBreak,
+								CreateLinkLabel(szWord, uiFontSize, kColor)));
 			}
 			else
 			{
-				//textNodeList.push_back(TextNode(brk, CreateLabel(word, fontSize, clr))); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+				kTextNodeList.push_back(
+						TextNode(bHasBreak,
+								CreateLabel(szWord, uiFontSize, kColor)));
 			}
 
 		}
 
-		brk = false;
+		bHasBreak = false;
 	}
 
-	return Combiner(textNodeList, containerSize, withPageArrow);
+	return Combiner(kTextNodeList, kContainerSize, bWithPageArrow);
 }
 
 unsigned int NDUITextBuilder::StringWidthAfterFilter(const char* text,
@@ -533,36 +566,36 @@ unsigned char NDUITextBuilder::unsignedCharToHex(const char* usChar)
 		return 0;
 	}
 
-	unsigned char result = 0;
+	unsigned char ucResult = 0;
 
 	for (int i = 0; i < 2; i++)
 	{
 		if (*usChar <= '9' && *usChar >= '0')
 		{
 			if (0 == i)
-				result += (*usChar - '0') << 4;
+				ucResult += (*usChar - '0') << 4;
 			else
-				result += *usChar - '0';
+				ucResult += *usChar - '0';
 		}
 		else if (*usChar <= 'f' && *usChar >= 'a')
 		{
 			if (0 == i)
-				result += (*usChar - 'a' + 10) << 4;
+				ucResult += (*usChar - 'a' + 10) << 4;
 			else
-				result += *usChar - 'a' + 10;
+				ucResult += *usChar - 'a' + 10;
 		}
 		else if (*usChar <= 'F' && *usChar >= 'A')
 		{
 			if (0 == i)
-				result += (*usChar - 'A' + 10) << 4;
+				ucResult += (*usChar - 'A' + 10) << 4;
 			else
-				result += *usChar - 'A' + 10;
+				ucResult += *usChar - 'A' + 10;
 		}
 
 		usChar++;
 	}
 
-	return result;
+	return ucResult;
 }
 
 bool NDUITextBuilder::AnalysisRuleEnd(const char*& text, BuildRule rule)
@@ -592,58 +625,58 @@ bool NDUITextBuilder::AnalysisRuleEnd(const char*& text, BuildRule rule)
 	return result;
 }
 
-bool NDUITextBuilder::AnalysisRuleHead(const char*& text, BuildRule &rule,
-		ccColor4B &textColor)
+bool NDUITextBuilder::AnalysisRuleHead(const char*& pszText, BuildRule &eRole,
+		ccColor4B &kTextColor)
 {
 	bool result = false;
-	if (*text == '<')
+	if (*pszText == '<')
 	{
-		if (*(++text) == 'c')
+		if (*(++pszText) == 'c')
 		{
 			char rValue[3] =
 			{ 0x00 };
-			memcpy(rValue, &text[1], 2);
-			textColor.r = unsignedCharToHex(rValue);
+			memcpy(rValue, &pszText[1], 2);
+			kTextColor.r = unsignedCharToHex(rValue);
 
 			char gValue[3] =
 			{ 0x00 };
-			memcpy(gValue, &text[3], 2);
-			textColor.g = unsignedCharToHex(gValue);
+			memcpy(gValue, &pszText[3], 2);
+			kTextColor.g = unsignedCharToHex(gValue);
 
 			char bValue[3] =
 			{ 0x00 };
-			memcpy(bValue, &text[5], 2);
-			textColor.b = unsignedCharToHex(bValue);
+			memcpy(bValue, &pszText[5], 2);
+			kTextColor.b = unsignedCharToHex(bValue);
 
-			rule = BuildRuleColor;
+			eRole = BuildRuleColor;
 
-			text += 7;
+			pszText += 7;
 			result = true;
 		}
-		else if (*text == 'f')
+		else if (*pszText == 'f')
 		{
-			rule = BuildRuleExpression;
+			eRole = BuildRuleExpression;
 
-			text++;
+			pszText++;
 			result = true;
 		}
-		else if (*text == 'b')
+		else if (*pszText == 'b')
 		{
-			rule = BuildRuleItem;
-			textColor = ccc4(255, 0, 0, 255);
+			eRole = BuildRuleItem;
+			kTextColor = ccc4(255, 0, 0, 255);
 			{
-				string str = text;
+				string str = pszText;
 				int nEnd = str.find_first_of('~');
 				str = str.substr(0, nEnd);
 				int nStart = str.find_last_of('/');
 				str = str.substr(nStart + 1, str.size() - nStart - 1);
-				m_idItem = atoi(str.c_str());
+				m_nItemID = atoi(str.c_str());
 			}
-			text++;
+			pszText++;
 			result = true;
 		}
 		else
-			text--;
+			pszText--;
 	}
 	return result;
 }
@@ -671,13 +704,13 @@ NDUIText* NDUITextBuilder::Combiner(std::vector<TextNode>& textNodeList,
 			x = 0.0f;
 			y += uiNodeRect.size.height;
 
-			float textHeight;
+			float fTextHeight;
 			if (withPageArrow)
-				textHeight = containerSize.height - PAGE_ARROW_SIZE.height;
+				fTextHeight = containerSize.height - PAGE_ARROW_SIZE.height;
 			else
-				textHeight = containerSize.height;
+				fTextHeight = containerSize.height;
 
-			if (y > textHeight)
+			if (y > fTextHeight)
 			{
 				curPage = result->AddNewPage();
 				y = 0.0f;
@@ -701,7 +734,7 @@ NDPicture* NDUITextBuilder::CreateFacePicture(unsigned int index)
 	NDPicture* result = NULL;
 	if (index < 25)
 	{
-		/*
+		/*		Õâ¸öÐèÒª¼ÓÉÏ£¬¹ùºÆ
 		 int row = index / 5;
 		 int col = index % 5;
 		 result = NDPicturePool::DefaultPool()->AddPicture(GetImgPath("face.png"));
@@ -732,50 +765,47 @@ NDUIImage* NDUITextBuilder::CreateFaceImage(const char* strIndex)
 	return pkResult;
 }
 
-NDUILabel* NDUITextBuilder::CreateLabel(const char* text, unsigned int fontSize,
-		ccColor4B color, int idItem/* = 0*/)
+NDUILabel* NDUITextBuilder::CreateLabel(const char* pszText,
+		unsigned int fontSize, ccColor4B color, int idItem/* = 0*/)
 {
 	NDUILabel* pkResult = NULL;
-	if (text)
+	if (pszText)
 	{
-		CGSize textSize = getStringSize(text, fontSize);
+		CGSize kTextSize = getStringSize(pszText, fontSize);
 		pkResult = new NDUILabel();
 		pkResult->Initialization();
 		pkResult->SetRenderTimes(1);
-		pkResult->SetText(text);
+		pkResult->SetText(pszText);
 		pkResult->SetTag(idItem);
 		pkResult->SetFontSize(fontSize);
 		pkResult->SetFontColor(color);
-		pkResult->SetFrameRect(CGRectMake(0, 0, textSize.width, textSize.height));
+		pkResult->SetFrameRect(
+				CGRectMake(0, 0, kTextSize.width, kTextSize.height));
 	}
 	return pkResult;
 }
 
-/***
- * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
- * begin
- */
-// 	HyperLinkLabel* NDUITextBuilder::CreateLinkLabel(const char* text, unsigned int fontSize, ccColor4B color, int idItem/* = 0*/)
-// 	{
-// 		HyperLinkLabel* result = NULL;
-// 		if (text) 
-// 		{
-// 			CGSize textSize = getStringSize(text, fontSize);
-// 			result = new HyperLinkLabel();
-// 			result->Initialization();
-// 			result->SetRenderTimes(1);
-// 			result->SetText(text);
-// 			result->SetTag(idItem);
-// 			result->SetFontSize(fontSize);
-// 			result->SetFontColor(color);
-// 			result->SetFrameRect(CGRectMake(0, 0, textSize.width, textSize.height));
-// 			result->SetIsLink(true);
-// 		}
-// 		return result;
-// 	}
-/***
- * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
- * end
- */
+HyperLinkLabel* NDUITextBuilder::CreateLinkLabel(const char* pszText,
+		unsigned int uiFontSize, ccColor4B kColor, int nItemID)
+{
+	HyperLinkLabel* pkResultLabel = NULL;
+
+	if (pszText)
+	{
+		CGSize kTextSize = getStringSize(pszText, uiFontSize);
+		pkResultLabel = new HyperLinkLabel();
+		pkResultLabel->Initialization();
+		pkResultLabel->SetRenderTimes(1);
+		pkResultLabel->SetText(pszText);
+		pkResultLabel->SetTag(nItemID);
+		pkResultLabel->SetFontSize(uiFontSize);
+		pkResultLabel->SetFontColor(kColor);
+		pkResultLabel->SetFrameRect(
+				CGRectMake(0, 0, kTextSize.width, kTextSize.height));
+		pkResultLabel->SetIsLink(true);
+	}
+
+	return pkResultLabel;
 }
 
+}

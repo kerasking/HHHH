@@ -47,9 +47,16 @@
 #endif
 
 #define PNG_BYTES_TO_CHECK 8
+#define png_infopp_NULL (png_infopp)NULL
 
 namespace cocos2d
 {
+
+#define alpha_composite(composite, fg, alpha, bg) {                     \
+unsigned short temp = ((unsigned short)(fg)*(unsigned short)(alpha) +                       \
+(unsigned short)(bg)*(unsigned short)(255 - (unsigned short)(alpha)) + (unsigned short)128);       \
+(composite) = (u_char)((temp + (temp >> 8)) >> 8);                   \
+}
 
 #if CC_FONT_LABEL_SUPPORT
 // FontLabel support
@@ -112,11 +119,11 @@ const CCSize& CCTexture2D::getContentSizeInPixels()
 
 CCSize CCTexture2D::getContentSize()
 {
-	CCSize ret;
-	ret.width = m_tContentSize.width / CC_CONTENT_SCALE_FACTOR();
-	ret.height = m_tContentSize.height / CC_CONTENT_SCALE_FACTOR();
+	CCSize kRet;
+	kRet.width = m_tContentSize.width / CC_CONTENT_SCALE_FACTOR();
+	kRet.height = m_tContentSize.height / CC_CONTENT_SCALE_FACTOR();
 
-	return ret;
+	return kRet;
 }
 
 GLfloat CCTexture2D::getMaxS()
@@ -735,7 +742,7 @@ unsigned int CCTexture2D::bitsPerPixelForFormat()
 	return ret;
 }
 
-bool CCTexture2D::initWithPaletteData(const void* pData,
+CCTexture2D* CCTexture2D::initWithPaletteData(const void* pData,
 		CCTexture2DPixelFormat ePixelFormat, int nWidth, int nHeight,
 		CCSize kSize, unsigned int uiSizeOfData)
 {
@@ -792,7 +799,7 @@ bool CCTexture2D::initWithPaletteData(const void* pData,
 	m_pData = 0;
 	m_nContainerType = 0;
 
-	return true;
+	return this;
 }
 
 bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
@@ -820,7 +827,8 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 		return false;
 	}
 
-	if (0 != png_sig_cmp((unsigned char*) szBuffer, (png_size_t) 0,
+	if (0
+			!= png_sig_cmp((unsigned char*) szBuffer, (png_size_t) 0,
 					PNG_BYTES_TO_CHECK))
 	{
 		fclose(pkFile);
@@ -891,7 +899,7 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 
 	png_set_invert_mono(pkPNGPointer);
 	png_set_swap(pkPNGPointer);
-	//png_set_filter(pkPNGPointer, 0xFF, PNG_FILLER_AFTER);
+	png_set_filter(pkPNGPointer, 0xFF, PNG_FILLER_AFTER);
 	png_read_update_info(pkPNGPointer, pkPNGInfo);
 
 	png_color* pkPalette = 0;
@@ -912,9 +920,9 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 
 	int nRowBytes = png_get_rowbytes(pkPNGPointer, pkPNGInfo);
 	static png_bytepp s_pProwPointers = 0;
-	int nMaxHeight = 1024 * CC_CONTENT_SCALE_FACTOR();
+	int nMaxHeight = static_cast<int>(1024.0f * CC_CONTENT_SCALE_FACTOR());
 
-	if (dwHeight > nMaxHeight)
+	if (dwHeight > (unsigned int) nMaxHeight)
 	{
 		nMaxHeight = dwHeight;
 
@@ -930,7 +938,7 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 		s_pProwPointers = (png_bytepp) malloc(sizeof(png_bytep) * nMaxHeight);
 	}
 
-	int nMaxRowBytes = 2048 * CC_CONTENT_SCALE_FACTOR();
+	int nMaxRowBytes = static_cast<int>(2048.0f * CC_CONTENT_SCALE_FACTOR());
 
 	if (nRowBytes > nMaxRowBytes)
 	{
@@ -954,6 +962,55 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 				+ nNumberPalette + row * nRowBytes;
 	}
 
+	if (0 < nNumberPalette)
+	{
+		memcpy(s_pData, (char*) pBmiColors, sizeof(RGBQUAD) * nNumberPalette);
+		ePixelFormat = kCCTexture2DPixelFormat_RGBA8;
+	}
+	else if (32 == pkPNGPointer->pixel_depth)
+	{
+		ePixelFormat = kCCTexture2DPixelFormat_RGBA8888;
+	}
+	else
+	{
+		ePixelFormat = kCCTexture2DPixelFormat_RGB565;
+	}
+
+	png_read_image(pkPNGPointer, s_pProwPointers);
+	png_read_end(pkPNGPointer, pkPNGInfo);
+
+	if (32 == pkPNGPointer->pixel_depth)
+	{
+		for (int row = 0; row < (int) dwHeight; row++)
+		{
+			for (int col = 0;col < (int) dwWidth * 4;col += 4)
+			{
+				alpha_composite(s_pProwPointers[row][col],
+					s_pProwPointers[row][col], s_pProwPointers[row][col + 3], 0);
+				alpha_composite(s_pProwPointers[row][col+1],
+					s_pProwPointers[row][col +1 ], s_pProwPointers[row][col + 3], 0);
+				alpha_composite(s_pProwPointers[row][col+2],
+					s_pProwPointers[row][col + 2], s_pProwPointers[row][col + 3], 0);
+			}
+		}
+	}
+
+	kImageSize = CCSizeMake(static_cast<float>(dwWidth), static_cast<float>(dwHeight));
+
+	initWithPaletteData(s_pData, ePixelFormat, nPOTWide,nPOTHigh,
+		kImageSize,sizeof(RGBQUAD) * nNumberPalette + nRowBytes + dwHeight);
+
+	m_bHasPremultipliedAlpha = true;
+
+	if (m_bKeepData)
+	{
+		m_pData = s_pData;
+	}
+
+	png_destroy_read_struct(&pkPNGPointer, &pkPNGInfo, png_infopp_NULL);
+
+	fclose(pkFile);
+
 	return true;
 }
 
@@ -965,14 +1022,14 @@ void CCTexture2D::SaveToBitmap(const char* pszPngFile,
 	BYTE *pBmpBuf = (BYTE*) malloc(
 			mPackedRowByteWidth * height + 54 + nPaletteLen * sizeof(RGBQUAD));
 	BITMAPFILEHEADER *pBfh = (BITMAPFILEHEADER *) pBmpBuf;
-	BYTE *pTemp = pBmpBuf;
+	BYTE* pTemp = pBmpBuf;
 	*pTemp = 'B';
 	pTemp++;
 	*pTemp = 'M';
 
 	pBfh->bfOffBits = 54 + nPaletteLen * sizeof(RGBQUAD);
 	pBfh->bfSize = mPackedRowByteWidth * height + 54
-			+ nPaletteLen * sizeof(RGBQUAD);
+	+ nPaletteLen * sizeof(RGBQUAD);
 	pBfh->bfReserved1 = pBfh->bfReserved2 = 0;
 
 	BITMAPINFOHEADER *pBih = (BITMAPINFOHEADER *) (pBfh + 1);
@@ -1005,7 +1062,8 @@ void CCTexture2D::SaveToBitmap(const char* pszPngFile,
 		pBMPColorBuf++;
 	}
 	//memcpy((BYTE *)(pBih+1),pBMPColorBuf,rowByteWidth * height);
-	char szFileName[256];
+	char szFileName[256] =
+	{	0};
 	sprintf(szFileName, "%stestJPG_PngLib.bmp", pszPngFile);
 	WriteToBMPFile(szFileName, pBmpBuf,
 			mPackedRowByteWidth * height + 54 + nPaletteLen * sizeof(RGBQUAD));
@@ -1025,4 +1083,4 @@ void CCTexture2D::WriteToBMPFile(char* pFileName, BYTE* pBmpBuf, int nBmplen)
 	fclose(pkFile);
 }
 
-} //namespace   cocos2d 
+}

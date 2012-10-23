@@ -166,7 +166,7 @@ public:
 
 	bool initWithImage(CCImage *uiImage, ccResolutionType resolution);
 
-	bool initWithPaletteData(const void* pData,
+	CCTexture2D* initWithPaletteData(const void* pData,
 			CCTexture2DPixelFormat ePixelFormat,int nWidth,
 			int nHeight,CCSize kSize,unsigned int uiSizeOfData);
 	bool initWithPalettePNG(const char* pszPNGFile);
