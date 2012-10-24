@@ -31,10 +31,12 @@ public:
 	void SetPlayRange(int nStartFrame, int nEndFrame);
 	void NextFrame(int nTotalFrames);
 	bool isThisFrameEnd();
+	void Clear();
 
 private:
 
-	int m_nStartFrame, m_nEndFrame;
+	int m_nStartFrame;
+	int m_nEndFrame;
 	BOOL m_bSetPlayRange;
 };
 
@@ -74,7 +76,7 @@ public:
 
 	void initTiles();
 	//是否允许跑下一帧
-	bool enableRunNextFrame(NDFrameRunRecord* frameRunRecord);
+	bool enableRunNextFrame(NDFrameRunRecord* pkFrameRunRecord);
 	//跑一帧
 	void run();
 	void run(float fScale);
@@ -88,10 +90,11 @@ private:
 	cocos2d::CCMutableArray<NDTile*>* m_pkTiles;
 
 private:
+
 	TILE_REVERSE_ROTATION tileReverseRotationWithReverse(bool bReverse,
 			int nRota);
-	cocos2d::CCTexture2D* getTileTextureWithImageIndex(int imageIndex,
-			int replace);
+	cocos2d::CCTexture2D* getTileTextureWithImageIndex(int nImageIndex,
+			int nReplace);
 	float getTileW(int w, int h, NDRotationEnum rotation);
 };
 
