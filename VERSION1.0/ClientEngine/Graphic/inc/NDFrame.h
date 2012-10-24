@@ -76,7 +76,7 @@ public:
 
 	void initTiles();
 	//是否允许跑下一帧
-	bool enableRunNextFrame(NDFrameRunRecord* frameRunRecord);
+	bool enableRunNextFrame(NDFrameRunRecord* pkFrameRunRecord);
 	//跑一帧
 	void run();
 	void run(float fScale);
@@ -90,6 +90,7 @@ private:
 	cocos2d::CCMutableArray<NDTile*>* m_pkTiles;
 
 private:
+
 	TILE_REVERSE_ROTATION tileReverseRotationWithReverse(bool bReverse,
 			int nRota);
 	cocos2d::CCTexture2D* getTileTextureWithImageIndex(int nImageIndex,
