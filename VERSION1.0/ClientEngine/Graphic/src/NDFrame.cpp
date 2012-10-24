@@ -938,6 +938,23 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int nImageIndex,
 		}
 	}
 
+	/***
+	* 此处需要去除，但是因为下面部分代码引用并没有实现，所以暂时保留
+	* 郭浩
+	* begin
+	*/
+
+	std::vector < std::string >* vImg = pkAnimationGroup->getImages();
+	if (vImg && vImg->size() > nImageIndex)
+	{
+		pkTexture = CCTextureCache::sharedTextureCache()->addImage(
+			(*vImg)[nImageIndex].c_str());
+	}
+
+	/***
+	* end
+	*/
+
 	if (REPLACEABLE_ONE_HAND_WEAPON_1 == nReplace)
 	{
 		//pkTexture = pkSprite->GetWeaponImage(); ///< 没有实现 郭浩
@@ -945,8 +962,8 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int nImageIndex,
 
 	if (0 == pkTexture)
 	{
-		pkTexture = NDPicturePool::DefaultPool()->AddTexture(
-			pkAnimationGroup->getImages()->at(nImageIndex).c_str());
+// 		pkTexture = NDPicturePool::DefaultPool()->AddTexture(			///< 等256色调色板 郭浩
+// 			pkAnimationGroup->getImages()->at(nImageIndex).c_str());
 	}
 
 	return pkTexture;
