@@ -31,10 +31,12 @@ public:
 	void SetPlayRange(int nStartFrame, int nEndFrame);
 	void NextFrame(int nTotalFrames);
 	bool isThisFrameEnd();
+	void Clear();
 
 private:
 
-	int m_nStartFrame, m_nEndFrame;
+	int m_nStartFrame;
+	int m_nEndFrame;
 	BOOL m_bSetPlayRange;
 };
 
@@ -90,8 +92,8 @@ private:
 private:
 	TILE_REVERSE_ROTATION tileReverseRotationWithReverse(bool bReverse,
 			int nRota);
-	cocos2d::CCTexture2D* getTileTextureWithImageIndex(int imageIndex,
-			int replace);
+	cocos2d::CCTexture2D* getTileTextureWithImageIndex(int nImageIndex,
+			int nReplace);
 	float getTileW(int w, int h, NDRotationEnum rotation);
 };
 

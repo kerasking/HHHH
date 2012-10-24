@@ -53,55 +53,13 @@ void NDFrameRunRecord::NextFrame(int nTotalFrames)
 {
 	if (m_bSetPlayRange)
 	{
+		m_nEndFrame = nTotalFrames < m_nEndFrame ? nTotalFrames : m_nEndFrame;
 		m_nCurrentFrameIndex =
 				m_nStartFrame < m_nEndFrame ?
 						m_nCurrentFrameIndex + 1 : m_nCurrentFrameIndex - 1;
 		m_nNextFrameIndex =
 				m_nStartFrame < m_nEndFrame ?
 						m_nCurrentFrameIndex + 1 : m_nCurrentFrameIndex - 1;
-
-		if (m_nStartFrame < m_nEndFrame)
-		{
-			if (m_nCurrentFrameIndex >= m_nEndFrame)
-			{
-				m_nCurrentFrameIndex = m_nEndFrame;
-				m_nNextFrameIndex = m_nEndFrame;
-			}
-		}
-		if (m_nStartFrame == m_nEndFrame)
-		{
-			m_nCurrentFrameIndex = m_nEndFrame;
-			m_nNextFrameIndex = m_nEndFrame;
-		}
-		else
-		{
-			if (m_nNextFrameIndex <= m_nEndFrame)
-			{
-				m_nCurrentFrameIndex = m_nEndFrame;
-				m_nNextFrameIndex = m_nEndFrame;
-			}
-		}
-
-		if (m_nCurrentFrameIndex < 0)
-		{
-			m_nCurrentFrameIndex = 0;
-		}
-
-		if (m_nCurrentFrameIndex >= nTotalFrames)
-		{
-			m_nCurrentFrameIndex = nTotalFrames;
-		}
-
-		if (m_nNextFrameIndex < 0)
-		{
-			m_nNextFrameIndex = 0;
-		}
-
-		if (m_nNextFrameIndex >= nTotalFrames)
-		{
-			m_nNextFrameIndex = nTotalFrames;
-		}
-
 		return;
 	}
 
@@ -121,11 +79,11 @@ void NDFrameRunRecord::NextFrame(int nTotalFrames)
 	if (m_nNextFrameIndex == nTotalFrames)
 	{
 		m_nNextFrameIndex = 0;
-		if (m_nRepeatTimes == 0)
-		{
-			m_bIsCompleted = true;
-		}
+	}
 
+	if ((nTotalFrames - 1) == m_nCurrentFrameIndex && m_nRepeatTimes <= 0)
+	{
+		m_bIsCompleted = true;
 	}
 }
 
@@ -141,6 +99,19 @@ bool NDFrameRunRecord::isThisFrameEnd()
 	}
 
 	return true;
+}
+
+void NDFrameRunRecord::Clear()
+{
+	m_nNextFrameIndex = 0;
+	m_nCurrentFrameIndex = 0;
+	m_nRunCount = 0;
+	m_bIsCompleted = false;
+	m_nRepeatTimes = 0;
+	m_nStartFrame = 0;
+	m_nEndFrame = 0;
+	m_nEnduration = 0;
+	m_nTotalFrame = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -202,98 +173,19 @@ void NDFrame::initTiles()
 
 void NDFrame::drawHeadAt(CGPoint pos)
 {
-	//todo(zjh)
-	int faceX = 5;
-	int faceY = 8;
-	int coordX = 0;
-	int coordY = 0;
-
-	NDAnimation* pkAnimation = m_pkBelongAnimation;
-	NDAnimationGroup* pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
-
-	if (m_bNeedInitTitles)
-	{
-		this->run();
-	}
-
-	// 计算脸部偏移
-	for (unsigned int i = 0; i < m_pkFrameTiles->count(); i++)
-	{
-		NDFrameTile* pkFrameTile = m_pkFrameTiles->getObjectAtIndex(i);
-
-		NDTileTableRecord* pkRecord =
-				(NDTileTableRecord *) pkAnimationGroup->getTileTable()->objectAtIndex(
-						pkFrameTile->getTableIndex());
-
-		if (pkRecord->getReplace() == REPLACEABLE_FACE && pkRecord->getX() == 0
-				&& pkRecord->getY() == 0)
-		{
-			coordX = (pkFrameTile->getX() - pkAnimation->getX()) - faceX;
-			coordY = (pkFrameTile->getY() - pkAnimation->getY()) - faceY;
-			break;
-		}
-	}
-
-	for (unsigned i = 0; i < m_pkFrameTiles->count(); i++)
-	{
-		NDFrameTile* pkFrameTile = m_pkFrameTiles->getObjectAtIndex(i);
-		NDTileTableRecord* pkRecord =
-				(NDTileTableRecord *) pkAnimationGroup->getTileTable()->objectAtIndex(
-						pkFrameTile->getTableIndex());
-
-		int fX = pkFrameTile->getX();
-		int fY = pkFrameTile->getY();
-
-		int clipw = pkRecord->getW();
-		int replace = pkRecord->getReplace();
-
-		if (replace == REPLACEABLE_FACE || replace == REPLACEABLE_HAIR
-				|| replace == REPLACEABLE_EXPRESSION)
-		{
-			NDTile* pkTile = m_pkTiles->getObjectAtIndex(i);
-
-			if (!pkTile)
-			{
-				continue;
-			}
-
-			pkTile->setTexture(
-					this->getTileTextureWithImageIndex(
-							pkRecord->getImageIndex(), pkRecord->getReplace()));
-
-			if (pkTile->getTexture() == NULL)
-			{
-				continue;
-			}
-
-			int xx = pos.x
-					+ (pkAnimation->getMidX()
-							+ (pkAnimation->getMidX() - fX - clipw)
-							- pkAnimation->getX()) - coordX;
-
-			int yy = pos.y + (fY - pkAnimation->getY()) - coordY;
-
-			pkTile->setReverse(true);
-			pkTile->setDrawRect(
-					CGRectMake(xx, yy, pkRecord->getW(), pkRecord->getH()));
-			pkTile->setMapSize(CGSizeMake(480.0f, 320.0f));
-			pkTile->make();
-			pkTile->draw();
-		}
-	}
-
+	///< 头像绘制已放于Lua，此处作废。郭浩
 }
 
 void NDFrame::run()
 {
-	this->run(1.0f);
+	run(1.0f);
 }
 
 void NDFrame::run(float fScale)
 {
 	if (m_bNeedInitTitles)
 	{
-		this->initTiles();
+		initTiles();
 	}
 
 	NDAnimation* pkAnimation = m_pkBelongAnimation;
@@ -364,17 +256,13 @@ void NDFrame::run(float fScale)
 
 		if (pkAnimation->getReverse())
 		{
-			int tileW = this->getTileW(pkRecord->getW(), pkRecord->getH(),
+			int tileW = getTileW(pkRecord->getW(), pkRecord->getH(),
 					kReverseRotation.rotation);
-//			if (reverseRotation.rotation == NDRotationEnumRotation90 || reverseRotation.rotation == NDRotationEnumRotation270) 
-//			{
-//				tileW = record.h;
-//			}
+
 			int newX = pkAnimation->getMidX()
 					+ (pkAnimation->getMidX() - pkFrameTile->getX() - tileW);
 			x = x + newX * fScale - pkAnimation->getX() * fScale;
 		}
-
 		else
 		{
 			x = x + pkFrameTile->getX() * fScale - pkAnimation->getX() * fScale;
@@ -1027,7 +915,7 @@ TILE_REVERSE_ROTATION NDFrame::tileReverseRotationWithReverse(bool bReverse,
 	return s_kReverseRotaionResult;
 }
 
-CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
+CCTexture2D* NDFrame::getTileTextureWithImageIndex(int nImageIndex, int nReplace)
 {
 	NDAnimation *pkAnimation = m_pkBelongAnimation;
 	NDAnimationGroup *pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
@@ -1038,7 +926,7 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 
 	if (pkSprite)
 	{
-		pkTexture = pkSprite->getColorTexture(imageIndex, pkAnimationGroup);
+		pkTexture = pkSprite->getColorTexture(nImageIndex, pkAnimationGroup);
 		if (pkTexture)
 		{
 			return pkTexture;
@@ -1046,15 +934,8 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 
 		if (pkSprite->IsNonRole())
 		{
-			//pkTexture = NDPicturePool::DefaultPool()->AddPicture(pkAnimationGroup->getImages()->at(imageIndex).c_str());
-
-// 			std::vector < std::string > *vImg = pkAnimationGroup->getImages();
-// 
-// 			if (vImg && vImg->size() > imageIndex)
-// 			{
-// 				pkTexture = CCTextureCache::sharedTextureCache()->addImage(
-// 						(*vImg)[imageIndex].c_str());
-// 			}
+			pkTexture = NDPicturePool::DefaultPool()->
+				AddTexture(pkAnimationGroup->getImages()->at(nImageIndex).c_str());
 		}
 
 		if (pkTexture)
@@ -1063,21 +944,14 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 		}
 	}
 
-	std::vector < std::string > *vImg = pkAnimationGroup->getImages();
-	if (vImg && vImg->size() > imageIndex)
+	if (REPLACEABLE_ONE_HAND_WEAPON_1 == nReplace)
 	{
-		pkTexture = CCTextureCache::sharedTextureCache()->addImage(
-				(*vImg)[imageIndex].c_str());
-	}
-
-	if (REPLACEABLE_ONE_HAND_WEAPON_1 == replace)
-	{
-		int a = 0;
+		//pkTexture = pkSprite->GetWeaponImage(); ///< 没有实现 郭浩
 	}
 
 	if (0 == pkTexture)
 	{
-		
+		pkTexture = NDPicturePool::DefaultPool()->AddTexture(pkAnimationGroup->getImages()->at)
 	}
 
 	//tex = CCTextureCache::sharedTextureCache()->addImage(animationGroup->getImages()->getObjectAtIndex(imageIndex);
