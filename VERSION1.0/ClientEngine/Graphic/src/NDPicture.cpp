@@ -767,7 +767,21 @@ CCTexture2D* NDPicturePool::AddTexture( const char* pszImageFile )
 
 	stringstream kStream;
 	kStream << pszImageFile;
-	return 0;
+
+	NDTexture* pkPicture = (NDTexture*)m_pkTextures->Object(kStream.str().c_str());
+
+	if (0 == pkPicture)
+	{
+		NDTexture* pkNewPicture = new NDTexture();
+		pkNewPicture->Initialization(pszImageFile);
+		m_pkTextures->SetObject(pkNewPicture,kStream.str().c_str());
+		CCTexture2D* pkTexture = pkNewPicture->getTexture();
+		pkTexture->setContainerType(ContainerTypeAddPic);
+		m_mapTex2Str.insert(MAP_STRING::value_type(pkTexture,string(pszImageFile)));
+		pkPicture->getTexture();
+	}
+
+	return pkPicture->getTexture();
 }
 
 
@@ -778,22 +792,26 @@ NDTexture::NDTexture()
 
 NDTexture::~NDTexture()
 {
-
+	m_pkTexture->release();
 }
 
 void NDTexture::Initialization( const char* pszImageFile )
 {
+	if (0 == pszImageFile || !*pszImageFile)
+	{
+		return;
+	}
 
+	if (m_pkTexture)
+	{
+		m_pkTexture->release();
+		m_pkTexture = 0;
+	}
 }
 
-CCTexture2D* NDTexture::GetTexture()
+unsigned int NDTexture::GetTextureRetain()
 {
-	return 0;
-}
-
-CCTexture2D* NDTexture::GetTextureRetain()
-{
-	return 0;
+	return m_pkTexture->retainCount();
 }
 
 }

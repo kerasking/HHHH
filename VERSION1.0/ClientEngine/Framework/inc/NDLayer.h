@@ -34,9 +34,8 @@ public:
 
 	static NDLayer* Layer();
 
-	void Initialization();override
-
-	void draw();override
+	void Initialization();
+	void draw();
 
 	void SetTouchEnabled(bool bEnabled);
 
