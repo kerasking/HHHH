@@ -458,8 +458,8 @@ void NDTile::makeVetex(float* pData, CGRect kRect)
 
 void NDTile::make()
 {
-	this->makeTex(m_pfCoordinates);
-	this->makeVetex(m_pfVertices, m_kDrawRect);
+	makeTex(m_pfCoordinates);
+	makeVetex(m_pfVertices, m_kDrawRect);
 }
 
 static GLbyte gs_nTileColors[] =
@@ -531,7 +531,7 @@ void NDTile::drawSubRect(CGRect kRect)
 	kDrawRect.size.width = kRect.size.width * m_kDrawRect.size.width;
 	kDrawRect.size.height = kRect.size.height * m_kDrawRect.size.height;
 
-	this->makeVetex(fVertices, kDrawRect);
+	makeVetex(fVertices, kDrawRect);
 
 	if (m_pkTexture)
 	{
