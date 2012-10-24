@@ -112,7 +112,7 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 	return true;
 }
 
-bool NDMapLayerLogic::TouchEnd(NDTouch* touch)
+void NDMapLayerLogic::TouchEnd(NDTouch* touch)
 {
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
 
@@ -126,8 +126,6 @@ bool NDMapLayerLogic::TouchEnd(NDTouch* touch)
 
 	m_kTimer.KillTimer(this, TAG_MAP_LONGTOUCH_STATE);
 	m_kTimer.KillTimer(this, TAG_MAP_LONGTOUCH);
-
-	return true;
 //	
 //	SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
 //	NSString *effectFile = [NSString stringWithUTF8String:NDPath::GetSoundPath().append("press.wav").c_str()];
@@ -148,10 +146,9 @@ void NDMapLayerLogic::TouchCancelled(NDTouch* touch)
 
 }
 
-bool NDMapLayerLogic::TouchMoved(NDTouch* touch)
+void NDMapLayerLogic::TouchMoved(NDTouch* touch)
 {
 	m_kPosTouch = touch->GetLocation();
-	return true;
 }
 
 void NDMapLayerLogic::Update(unsigned long ulDiff)

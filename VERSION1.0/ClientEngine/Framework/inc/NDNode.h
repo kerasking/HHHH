@@ -155,13 +155,13 @@ public:
 	//		作用：添加子节点
 	//		参数：node子节点，z子节点的z轴大小，tag子节点的标识
 	//		返回值：无
-	virtual void AddChild(NDNode* node, int z, int tag);
+	virtual void AddChild(NDNode* pkNode, int nZBuffer, int nTag);
 	//		
 	//		函数：RemoveChild(NDNode* node, bool bCleanUp)
 	//		作用：删除子节点
 	//		参数：node子节点，bCleanUp如果为true则由节点内部负责清理子节点的内存，否则需要外部负责清理
 	//		返回值：无
-	virtual void RemoveChild(NDNode* node, bool bCleanUp);
+	virtual void RemoveChild(NDNode* pkNode, bool bCleanUp);
 	//		
 	//		函数：RemoveChild(int tag, bool bCleanUp)
 	//		作用：删除子节点
@@ -271,7 +271,7 @@ private:
 public:
 	void AddViewer(NDCommonProtocol* viewer);
 	void RemoveViewer(NDCommonProtocol* viewer);
-protected:
+public:
 	bool DispatchClickOfViewr(NDObject* object);
 protected:
 	LIST_COMMON_VIEWER m_listCommonViewer;

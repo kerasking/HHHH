@@ -22,7 +22,7 @@ IMPLEMENT_CLASS(NDTexture,NDObject)
 NDPicture::NDPicture(bool canGray/*=false*/)
 {
 	m_pkTexture = NULL;
-	m_cutRect = CGRectZero;
+	m_kCutRect = CGRectZero;
 	m_bReverse = false;
 	m_kRotation = PictureRotation0;
 
@@ -67,7 +67,7 @@ void NDPicture::Initialization(const char* imageFile)
 	 }
 	 */
 
-	m_cutRect = CGRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
+	m_kCutRect = CGRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
 			m_pkTexture->getContentSizeInPixels().height);
 	this->SetCoorinates();
 	this->SetColor(ccc4(255, 255, 255, 255));
@@ -228,7 +228,7 @@ void NDPicture::Initialization(const char* imageFile, int hrizontalPixel,
 		m_pkTexture->initWithImage(&image);
 	}
 
-	m_cutRect = CGRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
+	m_kCutRect = CGRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
 			m_pkTexture->getContentSizeInPixels().height);
 	this->SetCoorinates();
 	this->SetColor(ccc4(255, 255, 255, 255));
@@ -253,7 +253,7 @@ void NDPicture::SetTexture(CCTexture2D* tex)
 	CC_SAFE_RETAIN(tex);
 	CC_SAFE_RELEASE (m_pkTexture);
 	m_pkTexture = tex;
-	m_cutRect = CGRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
+	m_kCutRect = CGRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
 			m_pkTexture->getContentSizeInPixels().height);
 	this->SetCoorinates();
 	this->SetColor(ccc4(255, 255, 255, 255));
@@ -265,27 +265,27 @@ void NDPicture::SetCoorinates()
 	{
 		if (m_bReverse)
 		{
-			m_coordinates[0] = (m_cutRect.origin.x + m_cutRect.size.width)
+			m_coordinates[0] = (m_kCutRect.origin.x + m_kCutRect.size.width)
 					/ m_pkTexture->getPixelsWide();
-			m_coordinates[1] = (m_cutRect.origin.y + m_cutRect.size.height)
+			m_coordinates[1] = (m_kCutRect.origin.y + m_kCutRect.size.height)
 					/ m_pkTexture->getPixelsHigh();
-			m_coordinates[2] = m_cutRect.origin.x / m_pkTexture->getPixelsWide();
+			m_coordinates[2] = m_kCutRect.origin.x / m_pkTexture->getPixelsWide();
 			m_coordinates[3] = m_coordinates[1];
 			m_coordinates[4] = m_coordinates[0];
-			m_coordinates[5] = m_cutRect.origin.y / m_pkTexture->getPixelsHigh();
+			m_coordinates[5] = m_kCutRect.origin.y / m_pkTexture->getPixelsHigh();
 			m_coordinates[6] = m_coordinates[2];
 			m_coordinates[7] = m_coordinates[5];
 		}
 		else
 		{
-			m_coordinates[0] = m_cutRect.origin.x / m_pkTexture->getPixelsWide();
-			m_coordinates[1] = (m_cutRect.origin.y + m_cutRect.size.height)
+			m_coordinates[0] = m_kCutRect.origin.x / m_pkTexture->getPixelsWide();
+			m_coordinates[1] = (m_kCutRect.origin.y + m_kCutRect.size.height)
 					/ m_pkTexture->getPixelsHigh();
-			m_coordinates[2] = (m_cutRect.origin.x + m_cutRect.size.width)
+			m_coordinates[2] = (m_kCutRect.origin.x + m_kCutRect.size.width)
 					/ m_pkTexture->getPixelsWide();
 			m_coordinates[3] = m_coordinates[1];
 			m_coordinates[4] = m_coordinates[0];
-			m_coordinates[5] = m_cutRect.origin.y / m_pkTexture->getPixelsHigh();
+			m_coordinates[5] = m_kCutRect.origin.y / m_pkTexture->getPixelsHigh();
 			m_coordinates[6] = m_coordinates[2];
 			m_coordinates[7] = m_coordinates[5];
 		}
@@ -358,14 +358,14 @@ void NDPicture::Cut(CGRect kRect)
 						<= m_pkTexture->getContentSizeInPixels().height)
 		{
 			bCutSucess = true;
-			m_cutRect = kRect;
+			m_kCutRect = kRect;
 		}
 		else if (kRect.origin.x < m_pkTexture->getContentSizeInPixels().width
 				&& kRect.origin.y < m_pkTexture->getContentSizeInPixels().height)
 		{
 			bCutSucess = true;
-			m_cutRect.origin = kRect.origin;
-			m_cutRect.size = CGSizeMake(
+			m_kCutRect.origin = kRect.origin;
+			m_kCutRect.size = CGSizeMake(
 					m_pkTexture->getContentSizeInPixels().width - kRect.origin.x,
 					m_pkTexture->getContentSizeInPixels().height - kRect.origin.y);
 		}
@@ -394,7 +394,7 @@ NDPicture* NDPicture::Copy()
 	CC_SAFE_RETAIN (m_pkTexture);
 	pkPicture->m_pkTexture = m_pkTexture;
 	pkPicture->m_bReverse = m_bReverse;
-	pkPicture->m_cutRect = m_cutRect;
+	pkPicture->m_kCutRect = m_kCutRect;
 	pkPicture->m_kRotation = m_kRotation;
 	pkPicture->m_bAdvance = m_bAdvance;
 	pkPicture->m_hrizontalPixel = m_hrizontalPixel;
@@ -446,7 +446,7 @@ CGSize NDPicture::GetSize()
 	CGSize size = CGSizeZero;
 	if (m_pkTexture)
 	{
-		size = m_cutRect.size;
+		size = m_kCutRect.size;
 		if (size.width > m_pkTexture->getContentSizeInPixels().width)
 		{
 			size.width = m_pkTexture->getContentSizeInPixels().width;
@@ -767,7 +767,21 @@ CCTexture2D* NDPicturePool::AddTexture( const char* pszImageFile )
 
 	stringstream kStream;
 	kStream << pszImageFile;
-	return 0;
+
+	NDTexture* pkPicture = (NDTexture*)m_pkTextures->Object(kStream.str().c_str());
+
+	if (0 == pkPicture)
+	{
+		NDTexture* pkNewPicture = new NDTexture();
+		pkNewPicture->Initialization(pszImageFile);
+		m_pkTextures->SetObject(pkNewPicture,kStream.str().c_str());
+		CCTexture2D* pkTexture = pkNewPicture->getTexture();
+		pkTexture->setContainerType(ContainerTypeAddPic);
+		m_mapTex2Str.insert(MAP_STRING::value_type(pkTexture,string(pszImageFile)));
+		pkPicture->getTexture();
+	}
+
+	return pkPicture->getTexture();
 }
 
 
@@ -778,22 +792,26 @@ NDTexture::NDTexture()
 
 NDTexture::~NDTexture()
 {
-
+	m_pkTexture->release();
 }
 
 void NDTexture::Initialization( const char* pszImageFile )
 {
+	if (0 == pszImageFile || !*pszImageFile)
+	{
+		return;
+	}
 
+	if (m_pkTexture)
+	{
+		m_pkTexture->release();
+		m_pkTexture = 0;
+	}
 }
 
-CCTexture2D* NDTexture::GetTexture()
+unsigned int NDTexture::GetTextureRetain()
 {
-	return 0;
-}
-
-CCTexture2D* NDTexture::GetTextureRetain()
-{
-	return 0;
+	return m_pkTexture->retainCount();
 }
 
 }

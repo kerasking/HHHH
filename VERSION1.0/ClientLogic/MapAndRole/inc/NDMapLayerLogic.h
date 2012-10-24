@@ -16,7 +16,9 @@
 
 namespace NDEngine
 {
-class NDMapLayerLogic: public NDMapLayer, public NDUIDialogDelegate
+class NDMapLayerLogic:
+	public NDMapLayer,
+	public NDUIDialogDelegate
 {
 	DECLARE_CLASS (NDMapLayerLogic)
 public:
@@ -26,13 +28,14 @@ public:
 	void DidFinishLaunching();
 
 	bool isAutoFight();
-	bool TouchBegin(NDTouch* touch);
-	bool TouchEnd(NDTouch* touch);
-	void TouchCancelled(NDTouch* touch);
-	bool TouchMoved(NDTouch* touch);
+	virtual bool TouchBegin( NDTouch* touch );
+	virtual void TouchEnd( NDTouch* touch );
+	virtual void TouchCancelled( NDTouch* touch );
+	virtual void TouchMoved( NDTouch* touch );
 	void Update(unsigned long ulDiff);
 	void OnTimer(OBJID uiTag);
 private:
+
 	NDTimer m_kTimer;
 	double m_dTimeStamp;
 	bool m_bLongTouch;

@@ -970,7 +970,7 @@ void CCDirector::setDeviceOrientation(ccDeviceOrientation kDeviceOrientation)
 
 #if ND_MOD
 CCDisplayLinkDirector::CCDisplayLinkDirector(void)
-		: m_bInvalid(false)
+	: m_bInvalid(false)
 {
     sm_pSharedDirector = this;
 }

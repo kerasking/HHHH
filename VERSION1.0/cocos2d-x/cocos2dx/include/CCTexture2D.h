@@ -124,7 +124,7 @@ class CC_DLL CCTexture2D : public CCObject
 #if ND_MOD
 	CC_SYNTHESIZE_READONLY(bool,m_bKeepData,KeepData);	///< @author xiezhenghai
 	CC_SYNTHESIZE_READONLY(void*,m_pData,Data);///< @author xiezhenghai
-	CC_SYNTHESIZE_READONLY(GLubyte,m_nContainerType,ContainerType);///< @author xiezhenghai
+	CC_SYNTHESIZE(GLubyte,m_nContainerType,ContainerType);///< @author xiezhenghai
 
 	CC_SYNTHESIZE(unsigned int,m_uiWidth,Width);
 	CC_SYNTHESIZE(unsigned int,m_uiHeight,Height);
@@ -149,7 +149,7 @@ public:
 		
 	void WriteToBMPFile(char* pFileName,BYTE* pBmpBuf,int nBmplen);
 	
-	bool initWithPaletteData(const void* pData,
+	CCTexture2D* initWithPaletteData(const void* pData,
 			CCTexture2DPixelFormat ePixelFormat,int nWidth,
 			int nHeight,CCSize kSize,unsigned int uiSizeOfData);
 			

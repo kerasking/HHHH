@@ -414,7 +414,16 @@ void BattleMgr::restartLastBattle()
 	}
 	if (!m_pkBattle)
 	{
-		m_pkBattle = new Battle(BATTLE_TYPE_PLAYBACK);
+		int battleType = this->m_nLastBattleType;
+		if(BATTLE_TYPE_MONSTER == battleType)
+		{
+			m_pkBattle = new Battle(BATTLE_TYPE_MONSTER_PLAYBACK);
+		}
+		else if(BATTLE_TYPE_SPORTS == battleType || BATTLE_TYPE_BOSS == battleType)
+		{
+			m_pkBattle = new Battle(BATTLE_TYPE_SPORTS_PLAYBACK);
+		}
+
 		m_pkBattle->Initialization(BATTLE_STAGE_START);
 		m_pkBattle->StartEraseOutEffect();
 		m_pkBattle->setTeamAmout(m_nLastBattleTeamCount);

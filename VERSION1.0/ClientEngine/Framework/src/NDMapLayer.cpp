@@ -94,12 +94,12 @@ NDMapLayer::NDMapLayer()
 	m_pkOrdersOfMapscenesAndMapanimations->retain();
 	m_pkFrameRunRecordsOfMapAniGroups = new CCMutableArray< CCMutableArray<NDFrameRunRecord*>* >();
 	m_pkFrameRunRecordsOfMapSwitch = new CCMutableArray< NDFrameRunRecord* >();
-	this->m_bBattleBackground = false;
-	this->m_bNeedShow = true;
-	this->m_ndBlockTimer = NULL;
-	this->m_ndTitleTimer = NULL;
-	//this->switchSpriteNode=NULL;
-	//this->isAutoBossFight = false;
+	m_bBattleBackground = false;
+	m_bNeedShow = true;
+	m_ndBlockTimer = NULL;
+	m_ndTitleTimer = NULL;
+	//switchSpriteNode=NULL;
+	//isAutoBossFight = false;
 	m_nRoadBlockTimeCount = 0;
 	m_nTitleAlpha = 0;
 	m_pkSubNode = NDNode::Node();
@@ -168,38 +168,38 @@ void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)
 
 	if (m_pkMapData)
 	{
-		this->SetContentSize(
+		SetContentSize(
 				CGSizeMake(
 						m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
 						m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
 
-		this->MakeOrdersOfMapscenesAndMapanimations();
-		this->MakeFrameRunRecords();
+		MakeOrdersOfMapscenesAndMapanimations();
+		MakeFrameRunRecords();
 
 		CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 		m_kScreenCenter = ccp(kWinSize.width / 2,
-				this->GetContentSize().height - kWinSize.height / 2);
-		this->m_ccNode->setPosition(0, 0);
+				GetContentSize().height - kWinSize.height / 2);
+		m_ccNode->setPosition(0, 0);
 
 		/*
 		 m_texMap = [[CCTexture2D alloc] initWithContentSize:winSize];
 		 m_picMap = new NDPicture();
 		 m_picMap->SetTexture(m_texMap);
 
-		 this->ReflashMapTexture(ccp(-winSize.width / 2, -winSize.height / 2), m_screenCenter);
+		 ReflashMapTexture(ccp(-winSize.width / 2, -winSize.height / 2), m_screenCenter);
 		 m_areaCamarkSplit = IntersectionAreaNone;
 		 m_ptCamarkSplit = ccp(0, 0);
 		 */
 	}
-	this->SetScreenCenter(ccp(center_x, center_y));
+	SetScreenCenter(ccp(center_x, center_y));
 
 	ShowRoadSign(false);
 }
 
 void NDMapLayer::Initialization(const char* mapFile)
 {
-	NDUILayer::Initialization();
-	this->SetTouchEnabled(true);
+	NDLayer::Initialization();
+	SetTouchEnabled(true);
 
 	m_pkSwitchAniGroup =
 			NDAnimationGroupPool::defaultPool()->addObjectWithModelId(106);
@@ -209,30 +209,30 @@ void NDMapLayer::Initialization(const char* mapFile)
 
 	if (m_pkMapData)
 	{
-		this->SetContentSize(
+		SetContentSize(
 				CGSizeMake(
 						m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
 						m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
 
-		this->MakeOrdersOfMapscenesAndMapanimations();
-		this->MakeFrameRunRecords();
+		MakeOrdersOfMapscenesAndMapanimations();
+		MakeFrameRunRecords();
 
 		CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 		m_kScreenCenter = ccp(kWinSize.width / 2,
-				this->GetContentSize().height - kWinSize.height / 2);
-		this->m_ccNode->setPosition(0, 0);
+				GetContentSize().height - kWinSize.height / 2);
+		m_ccNode->setPosition(0, 0);
 
 		/*
 		 m_texMap = [CCTexture2D alloc] initWithContentSize:winSize];
 		 m_picMap = new NDPicture();
 		 m_picMap->SetTexture(m_texMap);
 
-		 this->ReflashMapTexture(ccp(-winSize.width / 2, -winSize.height / 2), m_screenCenter);
+		 ReflashMapTexture(ccp(-winSize.width / 2, -winSize.height / 2), m_screenCenter);
 		 m_areaCamarkSplit = IntersectionAreaNone;
 		 m_ptCamarkSplit = ccp(0, 0);*/
 	}
 
-	this->DidFinishLaunching();
+	DidFinishLaunching();
 }
 
 void NDMapLayer::Initialization(int mapIndex)
@@ -240,7 +240,7 @@ void NDMapLayer::Initialization(int mapIndex)
 	tq::CString strMapFile("%smap_%d.map", NDPath::GetFullMapPath().c_str(),
 			mapIndex);
 	m_nMapIndex = mapIndex;
-	this->Initialization((const char*) strMapFile);
+	Initialization((const char*) strMapFile);
 	m_nTitleAlpha = 0;
 }
 
@@ -285,8 +285,8 @@ void NDMapLayer::refreshTitle()
 			}
 			else if(!m_ndTitleTimer)
 			{
-				this->m_ndTitleTimer = new NDTimer;
-				this->m_ndTitleTimer->SetTimer(this, titleTimerTag, 3.0f);
+				m_ndTitleTimer = new NDTimer;
+				m_ndTitleTimer->SetTimer(this, titleTimerTag, 3.0f);
 			}
 		}
 		else
@@ -338,7 +338,7 @@ void NDMapLayer::refreshTitle()
  m_TreasureBox->SetPosition(CGPointMake(NDPlayer::defaultHero().GetPosition().x+64,NDPlayer::defaultHero().GetPosition().y));
 
  m_TreasureBox->SetCurrentAnimation(0, false);
- this->AddChild(m_TreasureBox);
+ AddChild(m_TreasureBox);
  }
  }
 
@@ -385,12 +385,12 @@ void NDMapLayer::ShowTitle(int name_row, int name_col)
 
 	if (!m_lbTitleBg->GetParent())
 	{
-		this->GetParent()->AddChild(m_lbTitleBg);
+		GetParent()->AddChild(m_lbTitleBg);
 	}
 
 	if (!m_lbTitle->GetParent())
 	{
-		this->GetParent()->AddChild(m_lbTitle);
+		GetParent()->AddChild(m_lbTitle);
 	}
 	//m_lbTitle->draw();
 }
@@ -408,7 +408,7 @@ void NDMapLayer::PlayNDSprite(const char* pszSpriteFile, int nPosx, int nPosy,
 					pszSpriteFile));
 	pSprite->SetPosition(CGPointMake(nPosx + 64, nPosy));
 	pSprite->SetCurrentAnimation(0, false);
-	bool bSet = this->isMapRectIntersectScreen(pSprite->GetSpriteRect());
+	bool bSet = isMapRectIntersectScreen(pSprite->GetSpriteRect());
 	pSprite->BeforeRunAnimation(bSet);
 
 	if (bSet)
@@ -428,7 +428,7 @@ void NDMapLayer::PlayNDSprite(const char* pszSpriteFile, int nPosx, int nPosy,
 /*
  void NDMapLayer::showSwitchSprite(MAP_SWITCH_TYPE type)
  {
- this->switch_type=type;
+ switch_type=type;
  NSString* aniPath=[NSString stringWithUTF8String:NDEngine::NDPath::GetAnimationPath().c_str()];
  if(switchSpriteNode){
  switchSpriteNode->RemoveFromParent(true);
@@ -438,7 +438,7 @@ void NDMapLayer::PlayNDSprite(const char* pszSpriteFile, int nPosx, int nPosy,
  switchSpriteNode->Initialization();
  switchSpriteNode->ChangeSprite([[NSString stringWithFormat:@"%@scene_switch.spr", aniPath] UTF8String]);
  switchSpriteNode->SetFrameRect(CGRectMake(0,0,NDDirector::DefaultDirector()->GetWinSize().width,NDDirector::DefaultDirector()->GetWinSize().height));
- this->GetParent()->AddChild(switchSpriteNode);
+ GetParent()->AddChild(switchSpriteNode);
  }
  bool NDMapLayer::isTouchTreasureBox(CGPoint touchPoint){
  if(m_TreasureBox)
@@ -493,12 +493,12 @@ void NDMapLayer::draw()
 		//NDLog("start draw map");
 		//PerformanceTestBeginName("地表");
 		//draw map tiles.......
-		//this->DrawMapTiles();
+		//DrawMapTiles();
 		//PerformanceTestEndName("背景");
-		this->DrawBgs();
+		DrawBgs();
 		//PerformanceTestBeginName("场景动画");
 		//draw map scenes and animations......
-		this->DrawScenesAndAnimations();
+		DrawScenesAndAnimations();
 		//PerformanceTestEndName("场景动画");
 		//NDLog("done draw map");
 		//启用颜色数组
@@ -522,12 +522,12 @@ void NDMapLayer::draw()
 		 }
 
 		 }*/
-		this->refreshTitle();
-		this->RefreshBoxAnimation();
+		refreshTitle();
+		RefreshBoxAnimation();
 //			if(m_TreasureBox){
 //				m_TreasureBox->RunAnimation(true);
 //			}
-		if (this->m_nRoadBlockTimeCount > 0 && !m_bBattleBackground)
+		if (m_nRoadBlockTimeCount > 0 && !m_bBattleBackground)
 		{
 			//NDLog("showTime");
 			if(!m_lbTime)
@@ -538,7 +538,7 @@ void NDMapLayer::draw()
 
 			}
 
-			int mi = this->m_nRoadBlockTimeCount / 60;
+			int mi = m_nRoadBlockTimeCount / 60;
 			tq::CString str_mi;
 
 			if(mi < 10)
@@ -550,7 +550,7 @@ void NDMapLayer::draw()
 				str_mi.Format("%d",mi);
 			}
 
-			int se = this->m_nRoadBlockTimeCount % 60;
+			int se = m_nRoadBlockTimeCount % 60;
 			tq::CString str_se;
 
 			if(se < 10)
@@ -585,7 +585,7 @@ void NDMapLayer::draw()
 
 		if (m_pkRoadSignLightEffect)
 		{
-			m_pkRoadSignLightEffect->Run(this->GetContentSize());
+			m_pkRoadSignLightEffect->Run(GetContentSize());
 		}
 	}
 
@@ -593,21 +593,21 @@ void NDMapLayer::draw()
 
 // 	void NDMapLayer::SetBattleBackground(bool bBattleBackground)
 // 	{
-// 		this->m_bBattleBackground = bBattleBackground;
-// 		GameScene* gameScene =  (GameScene*)this->GetParent();
+// 		m_bBattleBackground = bBattleBackground;
+// 		GameScene* gameScene =  (GameScene*)GetParent();
 // 		gameScene->SetMiniMapVisible(!bBattleBackground);
 // 	}
 // 	
 // 	void NDMapLayer::SetNeedShowBackground(bool bNeedShow)
 // 	{
-// 		this->m_bNeedShow = bNeedShow;
-// //		GameScene* gameScene =  (GameScene*)this->GetParent();
+// 		m_bNeedShow = bNeedShow;
+// //		GameScene* gameScene =  (GameScene*)GetParent();
 // //		gameScene->SetMiniMapVisible(!bBattleBackground);
 // 	}
 
 void NDMapLayer::MapSwitchRefresh()
 {
-	this->MakeOrdersOfMapscenesAndMapanimations();
+	MakeOrdersOfMapscenesAndMapanimations();
 	CC_SAFE_RELEASE (m_pkFrameRunRecordsOfMapSwitch);
 
 	m_pkFrameRunRecordsOfMapSwitch = new cocos2d::CCMutableArray<
@@ -747,8 +747,8 @@ void NDMapLayer::DrawScenesAndAnimations()
 					m_pkFrameRunRecordsOfMapAniGroups->getObjectAtIndex(
 							uiIndex);
 
-			pkAniGroup->setReverse(this->GetMapDataAniParamReverse(uiIndex));
-			pkAniGroup->setPosition(this->GetMapDataAniParamPos(uiIndex));
+			pkAniGroup->setReverse(GetMapDataAniParamReverse(uiIndex));
+			pkAniGroup->setPosition(GetMapDataAniParamPos(uiIndex));
 			pkAniGroup->setRunningMapSize(GetMapDataAniParamMapSize(uiIndex));
 
 			unsigned int uiAniCount = pkAniGroup->getAnimations()->count();
@@ -761,7 +761,7 @@ void NDMapLayer::DrawScenesAndAnimations()
 						(NDAnimation *) pkAniGroup->getAnimations()->objectAtIndex(
 								j);
 
-				if (this->isMapRectIntersectScreen(pkAnimation->getRect()))
+				if (isMapRectIntersectScreen(pkAnimation->getRect()))
 				{
 					pkAnimation->runWithRunFrameRecord(pkFrameRunRecord, true);
 				}
@@ -800,7 +800,7 @@ void NDMapLayer::DrawScenesAndAnimations()
 						(NDAnimation *) m_pkSwitchAniGroup->getAnimations()->objectAtIndex(
 								0);
 
-				if (this->isMapRectIntersectScreen(pkAnimation->getRect()))
+				if (isMapRectIntersectScreen(pkAnimation->getRect()))
 				{
 					pkAnimation->runWithRunFrameRecord(pkFrameRunRecord, true);
 					pkMapSwitch->draw();
@@ -817,16 +817,16 @@ void NDMapLayer::DrawScenesAndAnimations()
 			//PerformanceTestPerFrameBeginName("精灵");
 			uiIndex -= uiSceneTileCount + aniGroupCount + switchCount;
 
-			if (uiIndex < 0 || uiIndex >= this->GetChildren().size())
+			if (uiIndex < 0 || uiIndex >= GetChildren().size())
 			{
 				continue;
 			}
 
-			NDNode* pkNode = this->GetChildren().at(uiIndex);
+			NDNode* pkNode = GetChildren().at(uiIndex);
 			if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDSprite)))
 			{
 				NDSprite* pkSprite = (NDSprite*) pkNode;
-				bool bSet = this->isMapRectIntersectScreen(
+				bool bSet = isMapRectIntersectScreen(
 						pkSprite->GetSpriteRect());
 				//NDManualRole* manualRole = NULL; 放到NDManualRole中处理
 //					
@@ -922,9 +922,9 @@ void NDMapLayer::SetPosition(CGPoint kPosition)
 		kPosition.x = 0;
 	}
 
-	if (kPosition.x < kWinSize.width - this->GetContentSize().width)
+	if (kPosition.x < kWinSize.width - GetContentSize().width)
 	{
-		kPosition.x = kWinSize.width - this->GetContentSize().width;
+		kPosition.x = kWinSize.width - GetContentSize().width;
 	}
 
 	if (kPosition.y > 0)
@@ -932,23 +932,23 @@ void NDMapLayer::SetPosition(CGPoint kPosition)
 		kPosition.y = 0;
 	}
 
-	if (kPosition.y < kWinSize.height - this->GetContentSize().height)
+	if (kPosition.y < kWinSize.height - GetContentSize().height)
 	{
-		kPosition.y = kWinSize.height - this->GetContentSize().height;
+		kPosition.y = kWinSize.height - GetContentSize().height;
 	}
 
-	this->m_ccNode->setPositionInPixels(kPosition);
+	m_ccNode->setPositionInPixels(kPosition);
 }
 
 bool NDMapLayer::SetScreenCenter(CGPoint kPoint)
 {
-// 		if(this->m_bBattleBackground){
+// 		if(m_bBattleBackground){
 // 			return false;
 // 		}
 
 	bool bOverBoder = false;
-	int width = this->GetContentSize().width;
-	int height = this->GetContentSize().height;
+	int width = GetContentSize().width;
+	int height = GetContentSize().height;
 
 	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 
@@ -974,7 +974,7 @@ bool NDMapLayer::SetScreenCenter(CGPoint kPoint)
 		bOverBoder = true;
 	}
 
-	//this->ReflashMapTexture(m_screenCenter, p);
+	//ReflashMapTexture(m_screenCenter, p);
 
 	//modify yay
 	CGPoint backOff = ccpSub(kPoint, m_kScreenCenter);
@@ -983,7 +983,7 @@ bool NDMapLayer::SetScreenCenter(CGPoint kPoint)
 
 	m_kScreenCenter = kPoint;
 	//NDLog("center:%f,%f",p.x,p.y);
-	this->SetPosition(
+	SetPosition(
 			CGPointMake(winSize.width / 2 - kPoint.x,
 					winSize.height / 2 + kPoint.y - height));
 
@@ -1004,11 +1004,11 @@ void NDMapLayer::setStartRoadBlockTimer(int time, int x, int y)
 {
 	if (!m_ndBlockTimer)
 	{
-		this->m_ndBlockTimer = new NDTimer;
+		m_ndBlockTimer = new NDTimer;
 	}
 
-	this->m_ndBlockTimer->SetTimer(this, blockTimerTag, 1.0f);
-	this->m_nRoadBlockTimeCount = time;
+	m_ndBlockTimer->SetTimer(this, blockTimerTag, 1.0f);
+	m_nRoadBlockTimeCount = time;
 
 	if (m_pkMapData)
 	{
@@ -1018,10 +1018,10 @@ void NDMapLayer::setStartRoadBlockTimer(int time, int x, int y)
 /*
  void NDMapLayer::setAutoBossFight(bool isAuto)
  {
- this->isAutoBossFight = isAuto;
+ isAutoBossFight = isAuto;
  if(isAuto)
  {
- this->walkToBoss();
+ walkToBoss();
  }else {
  NDPlayer::defaultHero().stopMoving(false, false);
  }
@@ -1043,8 +1043,8 @@ void NDMapLayer::OnTimer(OBJID tag)
 {
 	if (blockTimerTag == tag)
 	{
-		this->m_nRoadBlockTimeCount--;
-		//NDLog("tag:%d,count:%d",tag,this->roadBlockTimeCount);
+		m_nRoadBlockTimeCount--;
+		//NDLog("tag:%d,count:%d",tag,roadBlockTimeCount);
 		if (m_nRoadBlockTimeCount <= 0)
 		{
 			m_pkMapData->setRoadBlock(-1, -1);
@@ -1052,19 +1052,19 @@ void NDMapLayer::OnTimer(OBJID tag)
 			m_ndBlockTimer->KillTimer(this, blockTimerTag);
 			m_ndBlockTimer = NULL;
 
-			/*if(this->isAutoBossFight)
+			/*if(isAutoBossFight)
 			 {
-			 this->walkToBoss();
+			 walkToBoss();
 			 }*/
 		}
 	}
 	else if (tag == titleTimerTag)
 	{
-		this->m_ndTitleTimer->KillTimer(this, titleTimerTag);
-		this->m_ndTitleTimer = NULL;
+		m_ndTitleTimer->KillTimer(this, titleTimerTag);
+		m_ndTitleTimer = NULL;
 		//todo(zjh)
 		/*if(NDMapMgrObj.GetMotherMapID()/100000000!=9){
-		 this->showTitle=false;
+		 showTitle=false;
 		 }
 		 */
 	}
@@ -1316,7 +1316,7 @@ void NDMapLayer::MakeOrders()
 {
 	m_pkOrders->removeAllObjects();
 	m_pkOrders->addObjectsFromArray(m_pkOrdersOfMapscenesAndMapanimations);
-	const std::vector<NDNode*>& kCLD = this->GetChildren();
+	const std::vector<NDNode*>& kCLD = GetChildren();
 	std::map<int, NDNode*> kMapDrawlast;
 	//std::map<unsigned int, NDManualRole*> mapRoleCell;
 	for (int i = 0; i < (int) kCLD.size(); i++)
@@ -1427,7 +1427,7 @@ void NDMapLayer::MakeOrders()
 
 			if (it != kMapDrawlast.begin())
 			{
-				unsigned index = this->InsertIndex(pkSprite->GetOrder(),
+				unsigned index = InsertIndex(pkSprite->GetOrder(),
 						pkFlySpriteOrder);
 				m_pkOrders->insertObject(pkDict, index + uiOrderCount);
 				pkFlySpriteOrder->insertObject(pkDict, index);
@@ -1472,7 +1472,7 @@ void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 	for (int i = 0; i < (int) m_pkMapData->getAniGroupParams()->count(); i++)
 	{
 		//NSDictionary *dictAniGroupParam = [m_mapData.aniGroupParams objectAtIndex:i];
-		int nOrderID = this->GetMapDataAniParamOrderId(i);
+		int nOrderID = GetMapDataAniParamOrderId(i);
 
 		MAP_ORDER *pkDict = new MAP_ORDER;
 
@@ -1512,7 +1512,7 @@ void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 		}
 	}
 
-	this->QuickSort(m_pkOrdersOfMapscenesAndMapanimations, 0,
+	QuickSort(m_pkOrdersOfMapscenesAndMapanimations, 0,
 			m_pkOrdersOfMapscenesAndMapanimations->count() - 1);
 }
 
@@ -1529,7 +1529,7 @@ int NDMapLayer::InsertIndex(int order, cocos2d::CCArray*/*<MAP_ORDER*>*/inArray)
 	{
 
 		pkDict = (MAP_ORDER *) inArray->objectAtIndex(nHigh);
-		int highOrder = this->GetMapOrderId(pkDict);
+		int highOrder = GetMapOrderId(pkDict);
 
 		//[[dict objectForKey:@"orderId"] intValue];
 		if (order > highOrder)
@@ -1538,7 +1538,7 @@ int NDMapLayer::InsertIndex(int order, cocos2d::CCArray*/*<MAP_ORDER*>*/inArray)
 		}
 
 		pkDict = (MAP_ORDER *) inArray->objectAtIndex(nLow);
-		int lowOrder = this->GetMapOrderId(pkDict);
+		int lowOrder = GetMapOrderId(pkDict);
 		if (order < lowOrder)
 		{
 			return nLow;
@@ -1546,7 +1546,7 @@ int NDMapLayer::InsertIndex(int order, cocos2d::CCArray*/*<MAP_ORDER*>*/inArray)
 
 		nMid = (nLow + nHigh) / 2;
 		pkDict = (MAP_ORDER *) inArray->objectAtIndex(nMid);
-		nMidOrder = this->GetMapOrderId(pkDict);
+		nMidOrder = GetMapOrderId(pkDict);
 		if (nMidOrder == order)
 		{
 			return nMid;
@@ -1561,7 +1561,7 @@ int NDMapLayer::InsertIndex(int order, cocos2d::CCArray*/*<MAP_ORDER*>*/inArray)
 	if (inArray->count() > 0)
 	{
 		pkDict = (MAP_ORDER *) inArray->objectAtIndex(nMid);
-		nMidOrder = this->GetMapOrderId(pkDict);
+		nMidOrder = GetMapOrderId(pkDict);
 		if (nMidOrder > order)
 			return nMid;
 		else
@@ -1576,9 +1576,9 @@ void NDMapLayer::QuickSort(cocos2d::CCArray*/*<MAP_ORDER*>*/array, int low,
 {
 	if (low < high)
 	{
-		int pivotloc = this->Partition(array, low, high);
-		this->QuickSort(array, low, pivotloc);
-		this->QuickSort(array, pivotloc + 1, high);
+		int pivotloc = Partition(array, low, high);
+		QuickSort(array, low, pivotloc);
+		QuickSort(array, pivotloc + 1, high);
 	}
 }
 
@@ -1586,27 +1586,27 @@ int NDMapLayer::Partition(cocos2d::CCArray*/*<MAP_ORDER*>*/array, int low,
 		int high)
 {
 	MAP_ORDER *dict = (MAP_ORDER *) array->objectAtIndex(low);
-	int nPivotkey = this->GetMapOrderId(dict);
+	int nPivotkey = GetMapOrderId(dict);
 
 	while (low < high)
 	{
 		dict = (MAP_ORDER *) array->objectAtIndex(high);
-		int curKey = this->GetMapOrderId(dict);
+		int curKey = GetMapOrderId(dict);
 
 		while (low < high && curKey >= nPivotkey)
 		{
 			dict = (MAP_ORDER *) array->objectAtIndex(--high);
-			curKey = this->GetMapOrderId(dict);
+			curKey = GetMapOrderId(dict);
 		}
 		if (low != high)
 			array->exchangeObjectAtIndex(low, high);
 
 		dict = (MAP_ORDER *) array->objectAtIndex(low);
-		curKey = this->GetMapOrderId(dict);
+		curKey = GetMapOrderId(dict);
 		while (low < high && curKey <= nPivotkey)
 		{
 			dict = (MAP_ORDER *) array->objectAtIndex(++low);
-			curKey = this->GetMapOrderId(dict);
+			curKey = GetMapOrderId(dict);
 		}
 		if (low != high)
 			array->exchangeObjectAtIndex(low, high);
@@ -1753,23 +1753,48 @@ int NDMapLayer::GetMapDataAniParamOrderId(int nIndex)
 	return nOrderId;
 }
 
-int NDMapLayer::GetMapOrderId(MAP_ORDER * dict)
-{
-	int nOrderId = 0;
-	if (dict)
-	{
-		std::map<std::string, int>::iterator it = dict->find("orderId");
-		if (it != dict->end())
-		{
-			nOrderId = it->second;
-		}
-	}
-	return nOrderId;
-}
+ int NDMapLayer::GetMapOrderId(MAP_ORDER * dict)
+ {
+ 	int nOrderId = 0;
+ 	if (dict)
+ 	{
+ 		std::map<std::string, int>::iterator it = dict->find("orderId");
+ 		if (it != dict->end())
+ 		{
+ 			nOrderId = it->second;
+ 		}
+ 	}
+ 	return nOrderId;
+ }
 
 void NDMapLayer::AddChild(NDNode* node, int z, int tag)
 {
 	NDNode::AddChild(node, z, tag);
+}
+
+bool NDMapLayer::TouchBegin( NDTouch* touch )
+{
+	return true;
+}
+
+void NDMapLayer::TouchEnd( NDTouch* touch )
+{
+	
+}
+
+void NDMapLayer::TouchCancelled( NDTouch* touch )
+{
+	
+}
+
+void NDMapLayer::TouchMoved( NDTouch* touch )
+{
+	
+}
+
+bool NDMapLayer::TouchDoubleClick( NDTouch* touch )
+{
+	return true;
 }
 
 }
