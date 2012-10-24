@@ -21,6 +21,7 @@
 #include "NDUILayer.h"
 #include "NDLightEffect.h"
 #include "NDUIImage.h"
+#include "NDTimer.h"
 #include "UISpriteNode.h"
 
 #define blockTimerTag	(5)
@@ -44,11 +45,13 @@ enum BOX_STATUS
 
 namespace NDEngine
 {
-class NDMapLayer: public NDUILayer//NDLayer,public ITimerCallback
+class NDMapLayer: public NDLayer,public ITimerCallback
 {
 DECLARE_CLASS(NDMapLayer)
 public:
-	class MAP_ORDER: public cocos2d::CCObject, public std::map<std::string, int>
+	class MAP_ORDER:
+		public cocos2d::CCObject,
+		public std::map<std::string, int>
 	{
 	};
 public:
@@ -151,6 +154,13 @@ public:
 	//bool isTouchTreasureBox(CGPoint touchPoint);
 	//		void setRoadBlock(int x,int y){roadBlockX=x;roadBlockY=y;}
 public:
+
+	virtual bool TouchBegin( NDTouch* touch );
+	virtual void TouchEnd( NDTouch* touch );
+	virtual void TouchCancelled( NDTouch* touch );
+	virtual void TouchMoved( NDTouch* touch );
+	virtual bool TouchDoubleClick( NDTouch* touch );
+
 	void PlayNDSprite(const char* pszSpriteFile, int nPosx, int nPosy,
 			int nAnimationNo, int nPlayTimes);
 private:
