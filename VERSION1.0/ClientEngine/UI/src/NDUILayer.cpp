@@ -29,10 +29,11 @@
 #include "NDUIBaseGraphics.h"
 #include "Utility.h"
 #include "NDDirector.h"
+#include "NDUIImage.h"
 
 using namespace cocos2d;
 
-#define LONG_TOUCH_TIME (0.5f)
+#define LONG_TOUCH_TIME (0.1f)
 
 #define LONG_TOUCH_TIMER_TAG (6951)
 
@@ -74,6 +75,10 @@ NDUILayer::NDUILayer()
 	m_bHorizontal = false;
 
 	m_bMoveOutListener = false;
+	m_bTouchDwon = false;
+
+	m_nIsHVFirestTemp = 0;
+	m_bIsHVContainer = false;
 }
 
 NDUILayer::~NDUILayer()
@@ -97,6 +102,11 @@ NDUILayer::~NDUILayer()
 		delete m_pkLongTouchTimer;
 
 		m_pkLongTouchTimer = NULL;
+	}
+
+	if(this == m_pkLayerPress && !CanDispatchEvent())
+	{
+		EndDispatchEvent();
 	}
 }
 
@@ -135,10 +145,10 @@ void NDUILayer::SetDragOverEnabled(bool bEnabled)
 
 void NDUILayer::OnCanceledTouch()
 {
-// 		if (this == m_layerPress && !canDispatchEvent()) 
-// 		{
-// 			EndDispatchEvent();
-// 		}
+	if (this == m_pkLayerPress && !CanDispatchEvent()) 
+	{
+		EndDispatchEvent();
+	}
 }
 
 void NDUILayer::SetBackgroundImage(const char* imageFile)
@@ -240,10 +250,10 @@ void NDUILayer::draw()
 		}
 		else
 		{
-			ccColor4B kColor =
-			{ 0 };
-
-			m_kBackgroudColor = kColor;
+// 			ccColor4B kColor =
+// 			{ 0 };
+// 
+// 			m_kBackgroudColor = kColor;
 			DrawRecttangle(scrRect, m_kBackgroudColor);
 
 			if (m_pkBackgroudTexture)
@@ -283,11 +293,13 @@ bool NDUILayer::UITouchBegin(NDTouch* touch)
 //			return false;
 //		}
 
+	StartDispatchEvent();
+
 	ResetEventParam();
 
 	if (!TouchBegin(touch))
 	{
-		//EndDispatchEvent();
+		EndDispatchEvent();
 
 		return false;
 	}
@@ -438,11 +450,30 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 
 			while ((node = node->GetParent())
 					&& node->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
+			{
 				if (((NDUILayer*) node)->DispatchDragInEvent(m_pkTouchedNode,
 						m_kBeginTouch, m_kEndTouch, m_bLongTouch, true))
 				{
 					return true;
 				}
+			}
+
+			if(node && node->IsKindOfClass(RUNTIME_CLASS(NDScene)))
+			{
+				const std::vector<NDNode *>& childs = node->GetChildren();
+				std::vector<NDNode *>::const_iterator it = childs.begin();
+				for(; it != childs.end(); it++)
+				{
+					NDNode* node = *it;
+					if(node && node->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
+					{
+						if(((NDUILayer *)node)->DispatchDragInEvent(m_pkTouchedNode, m_kBeginTouch, m_kEndTouch, m_bLongTouch, true))
+						{
+							return true;
+						}
+					}
+				}
+			}
 		}
 		else
 		{
@@ -451,11 +482,14 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 		//return DispatchDragInEvent(m_beginTouch, m_endTouch, m_longTouch, true);
 	}
 
+	m_nIsHVFirestTemp = 0;
+
 	return false;
 }
 
 void NDUILayer::TouchCancelled(NDTouch* touch)
 {
+	m_nIsHVFirestTemp = 0;
 }
 
 bool NDUILayer::TouchMoved(NDTouch* touch)
@@ -570,14 +604,10 @@ bool NDUILayer::DispatchTouchBeginEvent(CGPoint beginTouch)
 			continue;
 		}
 
-		//NDUILayer need dispatch event
-		if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
+		//** chh 2012-07-21 **//
+		if(uiNode->IsKindOfClass(RUNTIME_CLASS(NDUIImage)))
 		{
-			NDUILayer* uiLayer = (NDUILayer*) uiNode;
-			if (uiLayer->DispatchTouchBeginEvent(beginTouch))
-				return true;
-			else
-				continue;
+			continue;
 		}
 
 		//touch event deal.....
@@ -585,6 +615,22 @@ bool NDUILayer::DispatchTouchBeginEvent(CGPoint beginTouch)
 
 		if (CGRectContainsPoint(nodeFrame, beginTouch))
 		{
+			//NDUILayer need dispatch event
+			if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
+			{
+				NDUILayer* uiLayer = (NDUILayer*) uiNode;
+				if (uiLayer->DispatchTouchBeginEvent(beginTouch))
+					return true;
+				else
+					continue;
+			}
+
+			//按钮播放音效
+			if(uiNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
+			{
+				//
+			}
+
 			m_pkTouchedNode = uiNode;
 			DealTouchNodeState(true);
 			return true;
@@ -636,7 +682,7 @@ bool NDUILayer::DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch)
 
 		//touch event deal
 		CGRect pkNodeFrame = uiNode->GetScreenRect();
-		pkNodeFrame = RectAdd(pkNodeFrame, 2);
+		//pkNodeFrame = RectAdd(pkNodeFrame, 2);
 
 		if (CGRectContainsPoint(pkNodeFrame, endTouch))
 		{
@@ -679,6 +725,7 @@ bool NDUILayer::DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch)
 					{
 						return true;
 					}
+					uiNode->DispatchClickOfViewr(uiNode);
 
 					NDUIButtonDelegate* delegate =
 							dynamic_cast<NDUIButtonDelegate*>(uiNode->GetDelegate());
@@ -1557,6 +1604,15 @@ bool NDUILayer::DispatchLayerMoveEvent(CGPoint beginPoint, NDTouch *moveTouch)
 
 	//tmpVertical = tmpVertical > 0.0f ? tmpVertical : -tmpVertical;
 
+// 	if(m_nIsHVFirestTemp)
+// 	{
+// 		NDNode *pNode = this->GetParent()->GetParent();
+// 		if(pNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollViewContainerM)))
+// 		{
+// 			//
+// 		}
+// 	}
+
 	if (m_bHorizontal)
 	{ // 水平滚动
 		if (horizontal > 0.0f)
@@ -1615,17 +1671,6 @@ CGRect NDUILayer::RectAdd(CGRect rect, int value)
 			rect.size.width + 2 * value, rect.size.height + 2 * value);
 }
 
-void NDUILayer::EndDispatchEvent()
-{
-	ms_bPressing = false;
-	m_pkLayerPress = 0;
-}
-
-void NDUILayer::StartDispatchEvent()
-{
-	ms_bPressing = true;
-	m_pkLayerPress = this;
-}
 /*
  void NDUILayer::AfterEditClickEvent(NDUIEdit* edit)
  {
@@ -1662,23 +1707,26 @@ void NDUILayer::StartDispatchEvent()
  delegate->OnEditInputCancle(edit);
  }
  */
-// 	bool NDUILayer::canDispatchEvent()
-// 	{
-// 		return !m_pressing;
-// 	}
-// 	void NDUILayer::StartDispatchEvent()
-// 	{
-// 		m_pressing  = true;
-// 		
-// 		m_layerPress = this;
-// 	}
-// 	
-// 	void NDUILayer::EndDispatchEvent()
-// 	{
-// 		m_pressing = false;
-// 		
-// 		m_layerPress = NULL;
-// 	}
-// 	bool NDUILayer::m_pressing = false;
-// 	NDUILayer* NDUILayer::m_layerPress = NULL;
+	bool NDUILayer::CanDispatchEvent()
+	{
+		return !ms_bPressing;
+	}
+	void NDUILayer::StartDispatchEvent()
+	{
+		ms_bPressing  = true;
+		
+		m_pkLayerPress = this;
+	}
+	
+	void NDUILayer::EndDispatchEvent()
+	{
+		ms_bPressing = false;
+		
+		m_pkLayerPress = NULL;
+	}
+
+	bool NDUILayer::IsTouchDown()
+	{
+		return m_bTouchDwon;
+	}
 }

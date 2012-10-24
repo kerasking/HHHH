@@ -132,6 +132,7 @@ public:
 	bool IsScrollHorizontal();
 
 	void SetMoveOutListener(bool bSet);
+	bool IsTouchDown();
 public:
 	void draw();override
 	bool IsVisibled();override
@@ -173,9 +174,6 @@ public:
 
 	void OnTimer(OBJID tag);
 
-	void StartDispatchEvent();
-	void EndDispatchEvent();
-
 	virtual bool DispatchLongTouchClickEvent(CGPoint beginTouch,
 			CGPoint endTouch);
 	virtual bool DispatchLongTouchEvent(CGPoint beginTouch, bool touch);
@@ -205,19 +203,24 @@ protected:
 	bool m_bSwallowDragIn;
 	bool m_bSwallowDragOver;
 	bool m_bEnableDragOver;
+
+	CGPoint m_kMoveTouch;
+
 	bool m_bHorizontal;
 	bool m_bMoveOutListener;
 	bool m_bDispatchLongTouchEvent;
+	bool m_bTouchDwon;
 
-	CGPoint m_kMoveTouch;
+	int m_nIsHVFirestTemp;  //0.还未确定滑动的方向 1.水平 2.垂直
+	bool m_bIsHVContainer;
 
 private:
 
 	static bool ms_bPressing;
 	static NDUILayer* m_pkLayerPress;
-// 		bool canDispatchEvent();
-// 		void StartDispatchEvent();
-// 		void EndDispatchEvent();
+	bool CanDispatchEvent();
+	void StartDispatchEvent();
+	void EndDispatchEvent();
 
 	DECLARE_AUTOLINK (NDUILayer)
 	INTERFACE_AUTOLINK (NDUILayer)
