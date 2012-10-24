@@ -1753,19 +1753,19 @@ int NDMapLayer::GetMapDataAniParamOrderId(int nIndex)
 	return nOrderId;
 }
 
-int NDMapLayer::GetMapOrderId(MAP_ORDER * dict)
-{
-	int nOrderId = 0;
-	if (dict)
-	{
-		std::map<std::string, int>::iterator it = dict->find("orderId");
-		if (it != dict->end())
-		{
-			nOrderId = it->second;
-		}
-	}
-	return nOrderId;
-}
+ int NDMapLayer::GetMapOrderId(MAP_ORDER * dict)
+ {
+ 	int nOrderId = 0;
+ 	if (dict)
+ 	{
+ 		std::map<std::string, int>::iterator it = dict->find("orderId");
+ 		if (it != dict->end())
+ 		{
+ 			nOrderId = it->second;
+ 		}
+ 	}
+ 	return nOrderId;
+ }
 
 void NDMapLayer::AddChild(NDNode* node, int z, int tag)
 {

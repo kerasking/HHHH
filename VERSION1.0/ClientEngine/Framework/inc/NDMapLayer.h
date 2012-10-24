@@ -26,12 +26,15 @@
 
 #define blockTimerTag	(5)
 #define titleTimerTag	(6)
+#define switch_ani_modelId		(106)	//传送点动画的model ID
+#define ZORDER_MASK_ANI			(999)	//遮罩动画的Z次序，在game scene里
 
 enum MAP_SWITCH_TYPE
 {
 	SWITCH_NONE = 0,
 	SWITCH_TO_BATTLE,
-	SWITCH_BACK_FROM_BATTLE
+	SWITCH_BACK_FROM_BATTLE,
+	SWITCH_START_BATTLE
 };
 
 enum BOX_STATUS
