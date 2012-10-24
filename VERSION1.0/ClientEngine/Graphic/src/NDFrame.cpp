@@ -12,6 +12,7 @@
 #include "NDAnimation.h"
 #include "CCTexture2D.h"
 #include "CCTextureCache.h"
+#include "CCDirector.h"
 //#include "NDConstant.h"
 #include "NDSprite.h"
 #include "NDPath.h"
@@ -131,16 +132,12 @@ void NDFrameRunRecord::NextFrame(int nTotalFrames)
 
 bool NDFrameRunRecord::isThisFrameEnd()
 {
-	if (m_nEnduration && m_nRunCount >= m_nEnduration - 1)
-	{
-		return true;
-	} 
-	else
-	{
-		return false;
-	}
+	//@zwq: 动画逐帧控制，应该按时间来，而不是Tick次数，先打个补丁！
+	float fMultiple = (1.0f / 24.0f) / CCDirector::sharedDirector()->getAnimationInterval();
+	//fMultiple *= 1.0f; //目前动作效果不好，加个参数细条，这些最好能在动画编辑器里调整。
 
-	return true;
+	return (m_nEnduration > 0)
+		&& (m_nRunCount >= int(m_nEnduration * fMultiple + 0.5f));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -175,14 +172,13 @@ NDFrame::~NDFrame()
 
 bool NDFrame::enableRunNextFrame(NDFrameRunRecord* frameRunRecord)
 {
-	if (frameRunRecord->getRunCount() >= m_nEnduration - 1)
+	if (frameRunRecord->isThisFrameEnd())
 	{
 		frameRunRecord->setRunCount(0);
 		return true;
 	}
 
 	frameRunRecord->setRunCount(frameRunRecord->getRunCount() + 1);
-
 	return false;
 }
 

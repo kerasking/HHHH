@@ -2016,25 +2016,31 @@ bool NDManualRole::CheckToLastPos()
 	return true; //bRet; ///< 临时性注释 郭浩 改为true
 }
 
+//@zwq
+void NDManualRole::InitNameLable( NDUILabel*& pLable )
+{
+	if (!pLable) 
+	{ 
+		pLable = new NDUILabel; 
+		pLable->Initialization(); 
+		pLable->SetFontSize(LABLESIZE); 
+
+		if (m_pkSubNode) 
+		{ 
+			m_pkSubNode->AddChild(pLable); 
+		}
+	} 
+}
+
+//@zwq
+void NDManualRole::DrawLable( NDUILabel* pLable, bool bDraw )
+{
+	if (bDraw && pLable) 
+		pLable->draw();
+}
+
 void NDManualRole::ShowNameLabel(bool bDraw)
 {
-#define InitNameLable(lable) \
-		do \
-		{ \
-			if (!lable) \
-			{ \
-				lable = new NDUILabel; \
-				lable->Initialization(); \
-				lable->SetFontSize(LABLESIZE); \
-			} \
-			if (!lable->GetParent() && m_pkSubNode) \
-			{ \
-				m_pkSubNode->AddChild(lable); \
-			} \
-		} while (0)
-
-#define DrawLable(lable, bDraw) do { if (bDraw && lable) lable->draw(); }while(0)
-
 	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 
 	if (!(scene->IsKindOfClass(RUNTIME_CLASS(GameScene))
@@ -2050,6 +2056,7 @@ void NDManualRole::ShowNameLabel(bool bDraw)
 	CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
 	int iX = GetPosition().x - DISPLAY_POS_X_OFFSET;
 	int iY = GetPosition().y; // - DISPLAY_POS_Y_OFFSET;
+
 	if (IsInState (USERSTATE_CAMP))
 	{
 		isEnemy = (GetCamp() != CAMP_NEUTRAL && player.GetCamp() != CAMP_NEUTRAL
@@ -2094,28 +2101,33 @@ void NDManualRole::ShowNameLabel(bool bDraw)
 		InitNameLable(m_lbSynName[1]);
 
 		SetLableName(names, iX + 8 * fScale - iNameW, iY - LABLESIZE * fScale,
-				isEnemy);
+			isEnemy);
+
 		std::stringstream ss;
 		ss << m_strSynName << " [" << m_strSynRank << "]";
 		int iSynNameW = getStringSizeMutiLine(ss.str().c_str(), LABLESIZE,
-				sizewin).width / 2;
+			sizewin).width / 2;
+
 		cocos2d::ccColor4B color = INTCOLORTOCCC4(0xffffff);
 
-		if (IsKindOfClass (RUNTIME_CLASS(NDPlayer))){
-		color = INTCOLORTOCCC4(0x00ff00);
-	}
+		if (IsKindOfClass (RUNTIME_CLASS(NDPlayer)))
+		{
+			color = INTCOLORTOCCC4(0x00ff00);
+		}
 
 		SetLable(eLabelSynName, iX + 8 * fScale - iSynNameW,
-				iY - LABLESIZE * fScale * 2, ss.str(), INTCOLORTOCCC4(0x00ff00),
-				INTCOLORTOCCC4(0x003300));
-		/*
-		 if (iPeerage > 0)
-		 SetLable(eLablePeerage, iX+8-iNameW-iPeerage, iY-LABLESIZE, strPeerage,
-		 INTCOLORTOCCC4(GetPeerageColor(m_nPeerage)), INTCOLORTOCCC4(0x003300));
+			iY - LABLESIZE * fScale * 2, ss.str(), INTCOLORTOCCC4(0x00ff00),
+			INTCOLORTOCCC4(0x003300));
 
-		 if (iPeerage > 0)
-		 DrawLable(m_lbPeerage[1], bDraw); DrawLable(m_lbPeerage[0], bDraw);
-		 */
+		/*
+		if (iPeerage > 0)
+		SetLable(eLablePeerage, iX+8-iNameW-iPeerage, iY-LABLESIZE, strPeerage,
+		INTCOLORTOCCC4(GetPeerageColor(m_nPeerage)), INTCOLORTOCCC4(0x003300));
+
+		if (iPeerage > 0)
+		DrawLable(m_lbPeerage[1], bDraw); DrawLable(m_lbPeerage[0], bDraw);
+		*/
+
 		DrawLable(m_lbName[1], bDraw);
 		DrawLable(m_lbName[0], bDraw);
 		DrawLable(m_lbSynName[1], bDraw);
@@ -2128,20 +2140,17 @@ void NDManualRole::ShowNameLabel(bool bDraw)
 		InitNameLable(m_lbPeerage[0]);
 		InitNameLable(m_lbPeerage[1]);
 		SetLableName(names, iX + 8 * fScale - iNameW, iY - LABLESIZE * fScale,
-				isEnemy);
+			isEnemy);
 		/*
-		 if (iPeerage >= 0)
-		 SetLable(eLablePeerage, iX+8-iNameW-iPeerage, iY-LABLESIZE, strPeerage,
-		 INTCOLORTOCCC4(GetPeerageColor(m_nPeerage)), INTCOLORTOCCC4(0x003300));
-		 if (iPeerage > 0)
-		 DrawLable(m_lbPeerage[1], bDraw); DrawLable(m_lbPeerage[0], bDraw);
-		 */
+		if (iPeerage >= 0)
+		SetLable(eLablePeerage, iX+8-iNameW-iPeerage, iY-LABLESIZE, strPeerage,
+		INTCOLORTOCCC4(GetPeerageColor(m_nPeerage)), INTCOLORTOCCC4(0x003300));
+		if (iPeerage > 0)
+		DrawLable(m_lbPeerage[1], bDraw); DrawLable(m_lbPeerage[0], bDraw);
+		*/
 		DrawLable(m_lbName[1], bDraw);
 		DrawLable(m_lbName[0], bDraw);
 	}
-
-#undef InitNameLable
-#undef DrawLable
 }
 
 void NDManualRole::SetLable(LableType eLableType, int x, int y,
