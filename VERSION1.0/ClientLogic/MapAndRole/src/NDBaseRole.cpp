@@ -13,7 +13,7 @@
 #include "EnumDef.h"
 #include "NDManualRole.h"
 #include "NDNpc.h"
-//#include "NDRidePet.h"
+#include "NDRidePet.h"
 #include "CCPointExtension.h"
 #include "AnimationList.h"
 #include "NDNode.h"
@@ -23,7 +23,7 @@
 #include "GameScene.h"
 #include "NDUtility.h"
 #include "define.h"
-#include "NDRidePet.h"
+#include "CCString.h"
 
 using namespace NDEngine;
 
@@ -35,7 +35,7 @@ NDBaseRole::NDBaseRole()
 {
 	m_nMasterWeaponType = WEAPON_NONE;
 	m_nSecondWeaponType = WEAPON_NONE;
-
+	m_bIsRide = false;
 	m_nSex = -1;
 	m_nSkinColor = -1;
 	m_nHairColor = -1;
@@ -77,11 +77,15 @@ NDBaseRole::NDBaseRole()
 
 	m_pkEffectFlagAniGroup = NULL;
 
-	//m_talkBox = NULL;
+	//m_pkTalkBox = NULL;
 
 	SetDelegate(this);
 
 	m_pkEffectRidePetAniGroup = NULL;
+	m_nPetStandAction = 9;
+	m_nPetRunAction = 9;
+	m_nAccLevel = 0;
+	m_nPetLookface = 0;
 }
 
 NDBaseRole::~NDBaseRole()
@@ -109,9 +113,9 @@ NDBaseRole::~NDBaseRole()
 //			m_talkBox = NULL;
 //		}
 //	}
-	//if (!s_bGameSceneRelease && m_talkBox) 
+	//if (!ms_bGameSceneRelease && m_pkTalkBox) 
 	//{
-	//	SAFE_DELETE_NODE(m_talkBox);
+	//	SAFE_DELETE_NODE(m_pkTalkBox);
 	//}
 }
 
@@ -277,13 +281,13 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 
 //	updateRidePetEffect(); ///<临时性注释 郭浩
 
-	if (m_pkEffectRidePetAniGroup)
-	{
-		if (!m_pkEffectRidePetAniGroup->GetParent())
-		{
-			m_pkSubNode->AddChild(m_pkEffectRidePetAniGroup);
-		}
-	}
+// 	if (m_pkEffectRidePetAniGroup)
+// 	{
+// 		if (!m_pkEffectRidePetAniGroup->GetParent())
+// 		{
+// 			m_pkSubNode->AddChild(m_pkEffectRidePetAniGroup);
+// 		}
+// 	}
 
 	drawEffects(bDraw);
 
@@ -295,19 +299,10 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 	return true;
 }
 
-///< 临时性注释 --郭浩
-// void NDBaseRole::OnDrawEnd(bool bDraw)
-// {
-// }
-// 
-// void NDBaseRole::OnBeforeNodeRemoveFromParent(NDNode* node, bool bCleanUp)
-// {
-// 	if (node == m_talkBox) 
-// 	{
-// 		m_talkBox = NULL;
-// 	}
-// 	// 其它操作.....
-// }
+void NDBaseRole::OnDrawEnd(bool bDraw)
+{
+	//
+}
 
 CGPoint NDBaseRole::GetScreenPoint()
 {
@@ -345,8 +340,7 @@ void NDBaseRole::SetAction(bool bMove)
 
 bool NDBaseRole::AssuredRidePet()
 {
-//	return ridepet != NULL && ridepet->canRide(); ///< 临时性注释 郭浩
-	return true;
+	return m_pkRidePet != NULL && m_bIsRide;
 }
 
 void NDBaseRole::setMoveActionWithRidePet()
@@ -357,34 +351,42 @@ void NDBaseRole::setMoveActionWithRidePet()
 	}
 
 	AnimationListObj.moveAction(TYPE_RIDEPET, m_pkRidePet, m_bFaceRight);// 骑宠移动
-	switch (m_pkRidePet->iType)
+	if(FACE_LEFT == m_bFaceRight)
 	{
-	case TYPE_RIDE:	// 人物骑在骑宠上移动
-		AnimationListObj.ridePetMoveAction(TYPE_MANUALROLE, this, m_bFaceRight);
-		break;
-	case TYPE_STAND:	// 人物站在骑宠上移动
-		AnimationListObj.standPetMoveAction(TYPE_MANUALROLE, this,
-				m_bFaceRight);
-		break;
-	case TYPE_RIDE_BIRD:
-		AnimationListObj.moveAction(TYPE_RIDEPET, m_pkRidePet,
-				1 - m_bFaceRight);
-		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
-				MANUELROLE_RIDE_BIRD_WALK);
-		break;
-	case TYPE_RIDE_FLY:
-		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
-				MANUELROLE_FLY_PET_WALK);
-		break;
-	case TYPE_RIDE_YFSH:
-		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
-				MANUELROLE_FLY_PET_WALK);
-		break;
-	case TYPE_RIDE_QL:
-		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
-				MANUELROLE_RIDE_QL);
-		break;
+		this->SetCurrentAnimation(this->m_nPetRunAction, false);
 	}
+	else if(FACE_RIGHT == m_bFaceRight)
+	{
+		this->SetCurrentAnimation(this->m_nPetRunAction, true);
+	}
+// 	switch (m_pkRidePet->iType)
+// 	{
+// 	case TYPE_RIDE:	// 人物骑在骑宠上移动
+// 		AnimationListObj.ridePetMoveAction(TYPE_MANUALROLE, this, m_bFaceRight);
+// 		break;
+// 	case TYPE_STAND:	// 人物站在骑宠上移动
+// 		AnimationListObj.standPetMoveAction(TYPE_MANUALROLE, this,
+// 				m_bFaceRight);
+// 		break;
+// 	case TYPE_RIDE_BIRD:
+// 		AnimationListObj.moveAction(TYPE_RIDEPET, m_pkRidePet,
+// 				1 - m_bFaceRight);
+// 		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+// 				MANUELROLE_RIDE_BIRD_WALK);
+// 		break;
+// 	case TYPE_RIDE_FLY:
+// 		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+// 				MANUELROLE_FLY_PET_WALK);
+// 		break;
+// 	case TYPE_RIDE_YFSH:
+// 		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+// 				MANUELROLE_FLY_PET_WALK);
+// 		break;
+// 	case TYPE_RIDE_QL:
+// 		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+// 				MANUELROLE_RIDE_QL);
+// 		break;
+// 	}
 }
 
 void NDBaseRole::setStandActionWithRidePet()
@@ -395,6 +397,14 @@ void NDBaseRole::setStandActionWithRidePet()
 	}
 
 	AnimationListObj.standAction(TYPE_RIDEPET, m_pkRidePet, m_bFaceRight);
+	if(FACE_LEFT == m_bFaceRight)
+	{
+		this->SetCurrentAnimation(this->m_nPetStandAction, false);
+	}
+	else if(FACE_RIGHT == m_bFaceRight)
+	{
+		this->SetCurrentAnimation(this->m_nPetStandAction, true);
+	}
 
 	// 装备界面、属性界面、战斗中，人要站立状态
 	//if (EquipUIScreen.instance == null
@@ -405,35 +415,35 @@ void NDBaseRole::setStandActionWithRidePet()
 //	* null
 //	*/) 
 //	{
-	switch (m_pkRidePet->iType)
-	{
-	case TYPE_RIDE:
-		AnimationListObj.ridePetStandAction(TYPE_MANUALROLE, this,
-				m_bFaceRight);
-		break;
-	case TYPE_STAND:
-		AnimationListObj.standPetStandAction(TYPE_MANUALROLE, this,
-				m_bFaceRight);
-		break;
-	case TYPE_RIDE_BIRD:
-		AnimationListObj.standAction(TYPE_RIDEPET, m_pkRidePet,
-				1 - m_bFaceRight);
-		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
-				MANUELROLE_RIDE_BIRD_STAND);
-		break;
-	case TYPE_RIDE_FLY:
-		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
-				MANUELROLE_FLY_PET_STAND);
-		break;
-	case TYPE_RIDE_YFSH:
-		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
-				MANUELROLE_FLY_PET_WALK);
-		break;
-	case TYPE_RIDE_QL:
-		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
-				MANUELROLE_RIDE_QL);
-		break;
-	}
+// 	switch (m_pkRidePet->iType)
+// 	{
+// 	case TYPE_RIDE:
+// 		AnimationListObj.ridePetStandAction(TYPE_MANUALROLE, this,
+// 				m_bFaceRight);
+// 		break;
+// 	case TYPE_STAND:
+// 		AnimationListObj.standPetStandAction(TYPE_MANUALROLE, this,
+// 				m_bFaceRight);
+// 		break;
+// 	case TYPE_RIDE_BIRD:
+// 		AnimationListObj.standAction(TYPE_RIDEPET, m_pkRidePet,
+// 				1 - m_bFaceRight);
+// 		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+// 				MANUELROLE_RIDE_BIRD_STAND);
+// 		break;
+// 	case TYPE_RIDE_FLY:
+// 		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+// 				MANUELROLE_FLY_PET_STAND);
+// 		break;
+// 	case TYPE_RIDE_YFSH:
+// 		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+// 				MANUELROLE_FLY_PET_WALK);
+// 		break;
+// 	case TYPE_RIDE_QL:
+// 		AnimationListObj.setAction(TYPE_MANUALROLE, this, m_bFaceRight,
+// 				MANUELROLE_RIDE_QL);
+// 		break;
+// 	}
 //	} 
 //	else 
 //	{
@@ -489,7 +499,14 @@ void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 //	SetEquipment(armor, 0);//胸甲
 
 	//Load Animation Group
-	int model_id = lookface / 1000000;
+	int model_id = lookface % 1000;
+	if(0 == model_id)
+		model_id = lookface / 1000000;
+
+	char sprFilePath[256];
+	_snprintf(sprFilePath, 256, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(), model_id);
+	Initialization(sprFilePath);
+
 //	if (sex % 2 == SpriteSexMale) 
 	//NSString* aniPath = [NSString stringWithUTF8String:NDPath::GetAnimationPath().c_str()];  ///<临时性注释 郭浩
 //	Initialization([[NSString stringWithFormat:@"%@model_%d.spr",aniPath,model_id] UTF8String] ); ///<临时性注释 郭浩
@@ -497,10 +514,10 @@ void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 //		Initialization(MANUELROLE_HUMAN_FEMALE);
 
 	m_bFaceRight = m_nDirect == 2;
-	SetFaceImageWithEquipmentId (m_bFaceRight);
+	//SetFaceImageWithEquipmentId (m_bFaceRight);
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 
-	defaultDeal();
+	//defaultDeal();
 }
 
 void NDBaseRole::SetEquipment(int equipmentId, int quality)
@@ -625,6 +642,37 @@ void NDBaseRole::SetEquipment(int equipmentId, int quality)
 //		SetCloakImageWithEquipmentId(equipmentId);
 //		SetCloakQuality(quality);
 //	}	
+}
+
+void NDBaseRole::SetRidePet(int lookface, int stand_action, int run_action, int acc)
+{
+	SAFE_DELETE_NODE(m_pkRidePet);
+	this->m_nPetStandAction = stand_action;
+	this->m_nPetRunAction = run_action;
+	this->m_nPetLookface = lookface;
+	m_nAccLevel = acc;
+	if (lookface != 0)
+	{
+		m_pkRidePet = new NDRidePet;
+		m_pkRidePet->Initialization(lookface);
+		//ridepet->quality = quality;
+		m_pkRidePet->SetPositionEx(this->GetPosition());
+		this->m_bIsRide = true;
+		//if (this->IsKindOfClass(RUNTIME_CLASS(NDManualRole))) 
+		//{
+		//			if (this->GetParent() && this->GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+		//			{
+		//				this->SetAction(false);
+		//			}
+		m_pkRidePet->SetOwner(this);
+		//ridepet->SetScale(this->GetScale());
+		setStandActionWithRidePet();
+	}
+	else
+	{
+		this->m_bIsRide = false;
+	}
+	//}
 }
 
 /*
@@ -782,6 +830,21 @@ void NDBaseRole::SetHairImageWithEquipmentId(int equipmentId)
 // 		}
 // 		hairImageName = [NSString stringWithFormat:@"%@.png", hairImageName];
 // 		SetHairImage([hairImageName UTF8String], hairColor);
+
+		char hairImageName[256];
+		char hairImageNameTmp1[128];
+		char hairImageNameTmp2[128];
+		_snprintf(hairImageNameTmp1, 128, "%s%d", NDPath::GetImagePath().c_str(), equipmentId);
+		if(SpriteSexMale == m_nSex % 2)
+		{
+			_snprintf(hairImageNameTmp2, 128, "%s_1", hairImageNameTmp1);
+		}
+		else
+		{
+			_snprintf(hairImageNameTmp2, 128, "%s_2", hairImageNameTmp1);
+		}
+		_snprintf(hairImageName, 256, "%s.png", hairImageNameTmp2);
+		SetHairImage(hairImageName, m_nHairColor);
 	}
 }
 
@@ -795,6 +858,10 @@ void NDBaseRole::SetFaceImageWithEquipmentId(int equipmentId)
 // 	faceImageName = [NSString stringWithFormat:@"%@skin.png", faceImageName];	
 // 	//faceImageName = [NSString stringWithFormat:@"%@skin@%d.png", faceImageName, skinColor];
 // 	SetFaceImage([faceImageName UTF8String]);
+
+	char faceImageName[256];
+	_snprintf(faceImageName, 256, "%sskin.png", NDPath::GetImagePath().c_str());
+	SetFaceImage(faceImageName);
 }
 
 void NDBaseRole::SetExpressionImageWithEquipmentId(int equipmentId)
@@ -808,6 +875,10 @@ void NDBaseRole::SetExpressionImageWithEquipmentId(int equipmentId)
 // 		NSString* expressionImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		expressionImageName = [NSString stringWithFormat:@"%@%d.png", expressionImageName, equipmentId];	
 // 		SetExpressionImage([expressionImageName UTF8String]);
+
+		char expressionImageName[256];
+		_snprintf(expressionImageName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId);
+		SetExpressionImage(expressionImageName);
 	}
 }
 
@@ -826,6 +897,10 @@ void NDBaseRole::SetCapImageWithEquipmentId(int equipmentId)
 		 * 临时性注释 郭浩
 		 * end
 		 */
+
+		char capImageName[256];
+		_snprintf(capImageName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId);
+		SetCapImage(capImageName);
 	}
 }
 
@@ -844,6 +919,10 @@ void NDBaseRole::SetArmorImageWithEquipmentId(int equipmentId)
 		 * 临时性注释 郭浩
 		 * end
 		 */
+
+		char armorImageName[256];
+		_snprintf(armorImageName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId);
+		SetArmorImage(armorImageName);
 	}
 }
 
@@ -896,6 +975,34 @@ void NDBaseRole::SetCloakImageWithEquipmentId(int equipmentId)
 		 * 临时性注释 郭浩
 		 * end
 		 */
+
+		char cloakName[256];
+		_snprintf(cloakName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId+7);
+		SetCloakImage(cloakName);
+
+		char leftShoulderName[256];
+		_snprintf(leftShoulderName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId+1);
+		SetLeftShoulderImage(leftShoulderName);
+
+		char rightShoulderName[256];
+		_snprintf(rightShoulderName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId+2);
+		SetRightShoulderImage(rightShoulderName);
+
+		char skirtStandName[256];
+		_snprintf(skirtStandName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId+3);
+		SetSkirtStandImage(skirtStandName);
+
+		char skirtWalkName[256];
+		_snprintf(skirtWalkName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId+4);
+		SetSkirtWalkImage(skirtWalkName);
+
+		char skirtSitName[256];
+		_snprintf(skirtSitName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId+5);
+		SetSkirtSitImage(skirtSitName);
+
+		char skirtLiftLegName[256];
+		_snprintf(skirtLiftLegName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId+6);
+		SetSkirtLiftLegImage(skirtLiftLegName);
 	}
 }
 
@@ -1046,10 +1153,10 @@ void NDBaseRole::SetPositionEx(CGPoint newPosition)
 
 NDRidePet* NDBaseRole::GetRidePet()
 {
-	if (m_pkRidePet == NULL)
-	{
-		m_pkRidePet = new NDRidePet;
-	}
+// 	if (m_pkRidePet == NULL)
+// 	{
+// 		m_pkRidePet = new NDRidePet;
+// 	}
 	return m_pkRidePet;
 }
 
@@ -1096,9 +1203,9 @@ void NDBaseRole::unpackEquip(int iEquipPos)
 		SetCloakQuality(0);
 		m_nCloak = -1;
 		break;
-	case Item::eEP_Ride:
-		SAFE_DELETE_NODE (m_pkRidePet);
-		break;
+// 	case Item::eEP_Ride:
+// 		SAFE_DELETE_NODE (m_pkRidePet);
+// 		break;
 	default:
 		break;
 	}
@@ -1120,17 +1227,17 @@ void NDBaseRole::addTalkMsg(std::string msg, int timeForTalkMsg)
 		return;
 	}
 
-	//if (!m_talkBox && subnode) 
+	//if (!m_pkTalkBox && m_pkSubNode) 
 	//{
-	//	m_talkBox = new TalkBox;
-	//	m_talkBox->Initialization();
-	//	((GameScene*)scene)->AddUIChild(m_talkBox);
-	//	m_talkBox->SetDelegate(this);
-	//	m_talkBox->SetVisible(false);
+	//	m_pkTalkBox = new TalkBox;
+	//	m_pkTalkBox->Initialization();
+	//	((GameScene*)scene)->AddUIChild(m_pkTalkBox);
+	//	m_pkTalkBox->SetDelegate(this);
+	//	m_pkTalkBox->SetVisible(false);
 	//}
 	//
-	//if (timeForTalkMsg == 0) m_talkBox->SetFix();
-	//m_talkBox->addTalkMsg(msg, timeForTalkMsg);
+	//if (timeForTalkMsg == 0) m_pkTalkBox->SetFix();
+	//m_pkTalkBox->addTalkMsg(msg, timeForTalkMsg);
 }
 
 void NDBaseRole::drawEffects(bool bDraw)
@@ -1234,18 +1341,18 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 					sizeShadow.height));
 }
 
-void NDBaseRole::SetNormalAniGroup(int nLookface)
-{
-	if (nLookface <= 0)
-	{
-		return;
-	}
-
-	Initialization(
-			tq::CString("%smodel_%d%s",
-					NDEngine::NDPath::GetAnimationPath().c_str(),
-					nLookface / 100, ".spr"));
-
-	m_bFaceRight = true;
-	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
-}
+// void NDBaseRole::SetNormalAniGroup(int nLookface)
+// {
+// 	if (nLookface <= 0)
+// 	{
+// 		return;
+// 	}
+// 
+// 	Initialization(
+// 			tq::CString("%smodel_%d%s",
+// 					NDEngine::NDPath::GetAnimationPath().c_str(),
+// 					nLookface / 100, ".spr"));
+// 
+// 	m_bFaceRight = true;
+// 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
+// }

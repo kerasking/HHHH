@@ -28,7 +28,6 @@
 #include "CPet.h"
 #include "SMGameScene.h"
 #include "DramaScene.h"
-#include "NDDataPersist.h"
 
 /* 玩家寻路八个方向值,无效的方向值-1
     7  0  4
@@ -55,19 +54,19 @@ m_nState(0)
 	m_pkAniGroupTransformed = NULL;
 	m_nIDTransformTo = 0;
 	m_nMoney = 0;								// 银两
-	m_dwLookFace = 0;// 创建人物的时候有6种外观可供选择外观
+/*	m_dwLookFace = 0;// 创建人物的时候有6种外观可供选择外观*/
 	m_nProfesstion = 0;//玩家的职业
 	m_nSynRank = SYNRANK_NONE;// 帮派级别
 	m_nPKPoint = 0;	 // pk值
 
-					 //m_pBattlePetShow = NULL;
-					 //ridepet = NULL;
-	m_nQuality = 0;
+	//m_pBattlePetShow = NULL;
+	//ridepet = NULL;
+
 	m_bUpdateDiff = false;
 
-					 //m_picRing = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
-					 //CGSize size = m_picRing->GetSize();
-					 //m_picRing->Cut(CGRectMake(0, 0, size.width, size.height));
+	//m_picRing = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
+	//CGSize size = m_picRing->GetSize();
+	//m_picRing->Cut(CGRectMake(0, 0, size.width, size.height));
 
 	m_nTeamID = 0;
 
@@ -105,10 +104,15 @@ m_nState(0)
 
 	m_nMarriageID = 0;
 
-//		marriageState = _MARRIAGE_MATE_LOGOUT; ///< 临时性注释 郭浩
+	m_nMarriageState = _MARRIAGE_MATE_LOGOUT;
 
 	m_nPeerage = 0;
 	m_nRank = 0;
+
+	m_nRideStatus	= 0;
+	m_nMountType	= 0;
+	m_nLookface		= 0;
+	m_nQuality = -1;
 }
 
 NDManualRole::~NDManualRole()
@@ -116,26 +120,33 @@ NDManualRole::~NDManualRole()
 	ResetShowPet();
 	SAFE_DELETE (m_pkRingPic);
 	delete m_pkNumberOneEffect;
+	RemoveAllSMEffect();
 }
 
 void NDManualRole::Update(unsigned long ulDiff)
 {
-	/***
-	 * 临时性注释 郭浩
-	 * begin
-	 */
-// 		
-// 		if (isSafeProtected) 
-// 		{
-// 			int intervalTime = [NSDate timeIntervalSinceReferenceDate] - beginProtectedTime;
-// 			if (intervalTime > BEGIN_PROTECTED_TIME)
-// 			{
-// 				setSafeProtected(false);
-// 			}
-// 		}
-	/***
-	 *end
-	 */
+	if (isSafeProtected) 
+	{
+		//获取自2001年1月1号零时到当前时间的秒数
+		tm timeStrt20010101;
+		timeStrt20010101.tm_year = 2001-1900;
+		timeStrt20010101.tm_mon = 0;
+		timeStrt20010101.tm_mday = 1;
+		timeStrt20010101.tm_hour = 0;
+		timeStrt20010101.tm_min = 0;
+		timeStrt20010101.tm_sec = 0;
+		timeStrt20010101.tm_isdst = 0;
+
+		time_t secOf20010101 = mktime(&timeStrt20010101);
+		time_t secNow = time(NULL);
+		int diff = secNow - secOf20010101;
+
+		int intervalTime = diff - m_nBeginProtectedTime;
+		if (intervalTime > BEGIN_PROTECTED_TIME)
+		{
+			setSafeProtected(false);
+		}
+	}
 
 	if (m_bUpdateDiff)
 	{
@@ -251,10 +262,10 @@ void NDManualRole::Update(unsigned long ulDiff)
 void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 {
 	NDLog("lookface:%d", lookface);
-	if (bSetLookFace)
-	{
-		NDBaseRole::InitRoleLookFace(lookface);
-	}
+// 	if (bSetLookFace)
+// 	{
+// 		NDBaseRole::InitRoleLookFace(lookface);
+// 	}
 
 	//SetArmorImageWithEquipmentId(11253);
 	//SetCloakImageWithEquipmentId(11253);
@@ -333,10 +344,10 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 
 	//Load Animation Group
 	//sex = lookface / 100000000 % 10; // 人物性别，1-男性，2-女性；
-	m_nDirect = 2;
+	//m_nDirect = 2;
 
 //		if (sex % 2 == SpriteSexMale) 
-	int nModelID = 1;	//lookface / 1000000;
+	int nModelID = lookface % 1000;
 	//	if (sex % 2 == SpriteSexMale)
 
 	NSString* pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
@@ -344,12 +355,23 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 			pstrAniPath->toStdString().c_str(), nModelID);
 	NDSprite::Initialization(pString->toStdString().c_str());
 	SAFE_DELETE(pstrAniPath);
+	m_nLookface = lookface;
 //		else 
 //			NDSprite::Initialization(MANUELROLE_HUMAN_FEMALE);
 
 	m_bFaceRight = m_nDirect == 2;
 
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
+}
+
+void NDManualRole::ReLoadLookface(int lookface)
+{
+	int model_id = lookface%1000;///100;//++Guosen2012.6.17
+
+	char aniPath[256];
+	_snprintf(aniPath, 256, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(), model_id);
+	this->reloadAni(aniPath);
+	this->SetCurrentAnimation(MANUELROLE_STAND, m_faceRight);
 
 	//defaultDeal();
 }
@@ -385,25 +407,34 @@ void NDManualRole::Walk(CGPoint toPos, SpriteSpeed speed)
 
 void NDManualRole::OnMoving(bool bLastPos)
 {
-	/***
-	 * 临时性注释 郭浩
-	 * begin
-	 */
-
-	//if (ridepet)
-	//{
-	//	ridepet->OnMoving(bLastPos);
-	//}
-	/***
-	 * @end
-	 */
-	//SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
-	int a = 10;
+	if (m_pkRidePet)
+	{
+		m_pkRidePet->OnMoving(bLastPos);
+	}
 
 	//if (isTeamLeader())
-//		{
-//			processTeamMemberOnMove(eMoveTypeMoving);
-//		}
+//	{
+//		processTeamMemberOnMove(eMoveTypeMoving);
+//	}
+}
+
+SpriteSpeed NDManualRole::GetSpeed()
+{
+	switch(this->m_nAccLevel)
+	{
+	case 0:
+		return SpriteSpeedStep4;
+	case 1:
+		return SpriteSpeedStep6;
+	case 2:
+		return SpriteSpeedStep8;
+	case 3:
+		return SpriteSpeedStep10;
+	case 4:
+		return SpriteSpeedStep12;
+	default:
+		return SpriteSpeedStep4;
+	}
 }
 
 void NDManualRole::WalkToPosition(const std::vector<CGPoint>& kToPosVector,
@@ -425,7 +456,7 @@ void NDManualRole::WalkToPosition(const std::vector<CGPoint>& kToPosVector,
 
 	if (isTeamLeader() || !isTeamMember())
 	{
-		bool bGnoreMask = IsInState(USERSTATE_FLY); // && NDMapMgrObj.canFly(); ///< 临时性注释 郭浩 外加一个分号
+		bool bGnoreMask = IsInState(USERSTATE_FLY) && NDMapMgrObj.canFly();
 		MoveToPosition(kToPosVector,
 				IsInState(USERSTATE_SPEED_UP) ?
 						SpriteSpeedStep8 : SpriteSpeedStep4, bMoveMap,
@@ -450,19 +481,19 @@ void NDManualRole::WalkToPosition(const std::vector<CGPoint>& kToPosVector,
 		return;
 	}
 
-	/*if (m_pBattlePetShow)
-	 {
-	 if (vec_toPos[0].y > m_position.y)
-	 {
-	 m_pBattlePetShow->SetOrderState(OrderStateDown);
-	 }
-	 else
-	 {
-	 m_pBattlePetShow->SetOrderState(OrderStateUp);
-	 }
-	 m_pBattlePetShow->m_faceRight = m_faceRight;
-	 m_pBattlePetShow->WalkToPosition(vec_toPos[0]);
-	 }*/
+// 	if (m_pBattlePetShow)
+// 	{
+// 		if (vec_toPos[0].y > m_position.y)
+// 		{
+// 			m_pBattlePetShow->SetOrderState(OrderStateDown);
+// 		}
+// 		else
+// 		{
+// 			m_pBattlePetShow->SetOrderState(OrderStateUp);
+// 		}
+// 		m_pBattlePetShow->m_faceRight = m_faceRight;
+// 		m_pBattlePetShow->WalkToPosition(vec_toPos[0]);
+// 	}
 
 	if (m_pkRidePet)
 	{
@@ -475,90 +506,82 @@ void NDManualRole::WalkToPosition(const std::vector<CGPoint>& kToPosVector,
 
 void NDManualRole::processTeamMemberMove(bool bDraw)
 {
-	/***
-	 * 临时性注释 郭浩
-	 * begin
-	 */
-// 		std::vector<s_team_info> teamlist = NDMapMgrObj.GetTeamList();
-// 		std::vector<s_team_info>::iterator it = teamlist.begin();
-// 		for (; it != teamlist.end(); it++) 
-// 		{
-// 			s_team_info info = *it;
-// 			if (info.team[0] == m_id) 
-// 			{
-// 				CGPoint posOld = m_oldPos;// ccp(GetPosition().x/16*16+DISPLAY_POS_X_OFFSET, GetPosition().y/16*16+DISPLAY_POS_Y_OFFSET);
-// 				CGPoint posNew = GetPosition();
-// 				//CGPoint tmppos = pos;
-// 				if (int(posOld.x) == 0 && int(posOld.y) == 0) 
-// 				{
-// 					break;
-// 				}
-// 				NDMapMgr& mapmgrobj = NDMapMgrObj;
-// 				bool bArrDraw[eTeamLen]; memset(bArrDraw, 0, sizeof(bArrDraw));
-// 				for (int j = 1; j < eTeamLen; j++) 
-// 				{
-// 					if (info.team[j] != 0) 
-// 					{ // 重连后的队伍信息出现错误 队长重复加
-// 						NDManualRole *mem = mapmgrobj.GetManualRole(info.team[j]);
-// 						if (mem != NULL) 
-// 						{	
-// 							if (!mem->GetParent()) 
-// 							{
-// 								subnode->AddChild(mem);
-// 							}
-// 							
-// 							if (int(posOld.x) == 0 && int(posOld.y) == 0) 
-// 							{
-// 								break;
-// 							}
-// 							
-// 							int mdir = -1;
-// 							
-// 							if (int(posOld.x) != int(posNew.x)) 
-// 							{
-// 								posNew.y = posOld.y;
-// 								if (int(posOld.x) > int(posNew.x)) 
-// 								{
-// 									posNew.x = posNew.x+16;
-// 								}
-// 								else 
-// 								{
-// 									posNew.x = posNew.x-16;
-// 								}
-// 								
-// 								mdir = 0;
-// 							}
-// 							if (int(posOld.y) != int(posNew.y)) 
-// 							{
-// 								posNew.x = posOld.x;
-// 								if (int(posOld.y) > int(posNew.y)) 
-// 								{
-// 									posNew.y = posNew.y+16;
-// 								}
-// 								else 
-// 								{
-// 									posNew.y = posNew.y-16;
-// 								}
-// 								
-// 								mdir = 0;
-// 							}
-// 							
-// 							if (mdir != -1) 
-// 							{
-// 								posOld = mem->GetPosition();
-// 								mem->SetPosition(posNew);
-// 								bArrDraw[j] = true;
-// 							}
-// 							else 
-// 							{
-// 								//NDLog("调和。。。。。");
-// 							}
-	/***
-	 * 临时性注释 郭浩
-	 * end
-	 */
+	std::vector<s_team_info> teamlist = NDMapMgrObj.GetTeamList();
+	std::vector<s_team_info>::iterator it = teamlist.begin();
+	for (; it != teamlist.end(); it++) 
+	{
+		s_team_info info = *it;
+		if (info.team[0] == m_id) 
+		{
+			CGPoint posOld = m_oldPos;// ccp(GetPosition().x/16*16+DISPLAY_POS_X_OFFSET, GetPosition().y/16*16+DISPLAY_POS_Y_OFFSET);
+			CGPoint posNew = GetPosition();
+			//CGPoint tmppos = pos;
+			if (int(posOld.x) == 0 && int(posOld.y) == 0) 
+			{
+				break;
+			}
+			NDMapMgr& mapmgrobj = NDMapMgrObj;
+			bool bArrDraw[eTeamLen]; memset(bArrDraw, 0, sizeof(bArrDraw));
+			for (int j = 1; j < eTeamLen; j++) 
+			{
+				if (info.team[j] != 0) 
+				{ // 重连后的队伍信息出现错误 队长重复加
+					NDManualRole *mem = mapmgrobj.GetManualRole(info.team[j]);
+					if (mem != NULL) 
+					{	
+						if (!mem->GetParent()) 
+						{
+							subnode->AddChild(mem);
+						}
 
-	//CGPoint posMem = mem->GetPosition();
+						if (int(posOld.x) == 0 && int(posOld.y) == 0) 
+						{
+							break;
+						}
+
+						int mdir = -1;
+
+						if (int(posOld.x) != int(posNew.x)) 
+						{
+							posNew.y = posOld.y;
+							if (int(posOld.x) > int(posNew.x)) 
+							{
+								posNew.x = posNew.x+16;
+							}
+							else 
+							{
+								posNew.x = posNew.x-16;
+							}
+
+							mdir = 0;
+						}
+						if (int(posOld.y) != int(posNew.y)) 
+						{
+							posNew.x = posOld.x;
+							if (int(posOld.y) > int(posNew.y)) 
+							{
+								posNew.y = posNew.y+16;
+							}
+							else 
+							{
+								posNew.y = posNew.y-16;
+							}
+
+							mdir = 0;
+						}
+
+						if (mdir != -1) 
+						{
+							posOld = mem->GetPosition();
+							mem->SetPosition(posNew);
+							bArrDraw[j] = true;
+						}
+						else 
+						{
+							//NDLog("调和。。。。。");
+						}
+
+						  //CGPoint posMem = mem->GetPosition();
 //							CGPoint posOld = posMem;
 //							int mdir = -1;
 //							if (int(posMem.x) != int(pos.x) ) 
@@ -604,105 +627,87 @@ void NDManualRole::processTeamMemberMove(bool bDraw)
 //								pos.y = posOld.y;
 //								bArrDraw[j] = true;
 //							}
-	/***
-	 * 临时性注释 郭浩
-	 * begin
-	 */
 
-// 						}
-// 					}
-// 				}
-// 				
-// 				for (int j = eTeamLen-1; j >= 1; j--) 
-// 				{
-// 					if (info.team[j] != 0) //&& bArrDraw[j]) 
-// 					{ // 重连后的队伍信息出现错误 队长重复加
-// 						NDManualRole *mem = mapmgrobj.GetManualRole(info.team[j]);
-// 						if (mem) 
-// 						{
-// 							mem->RunAnimation(bDraw);
-// 						}
-// 					}
-// 				}
-// 				
-// 				break;
-// 			}
-// 		}
-	/***
-	 * 临时性注释 郭浩
-	 * end
-	 */
+						}
+					}
+				}
+				
+				for (int j = eTeamLen-1; j >= 1; j--) 
+				{
+					if (info.team[j] != 0) //&& bArrDraw[j]) 
+					{ // 重连后的队伍信息出现错误 队长重复加
+						NDManualRole *mem = mapmgrobj.GetManualRole(info.team[j]);
+						if (mem) 
+						{
+							mem->RunAnimation(bDraw);
+						}
+					}
+				}
+				
+				break;
+			}
+		}
 }
 
 // itype=0(begin), =1(moving), =2(end)
 void NDManualRole::processTeamMemberOnMove(int itype)
 {
-	/***
-	 * 临时性注释 郭浩
-	 * all
-	 */
-
-// 		std::vector<s_team_info> teamlist = NDMapMgrObj.GetTeamList();
-// 		std::vector<s_team_info>::iterator it = teamlist.begin();
-// 		for (; it != teamlist.end(); it++) 
-// 		{
-// 			s_team_info info = *it;
-// 			if (info.team[0] == m_id) 
-// 			{
-// 				NDMapMgr& mapmgrobj = NDMapMgrObj;
-// 				for (int j = 1; j < eTeamLen; j++) 
-// 				{
-// 					if (info.team[j] != 0) 
-// 					{
-// 						NDManualRole* role = mapmgrobj.GetManualRole(info.team[j]);
-// 						if (role)
-// 						{
-// 							if (itype == eMoveTypeBegin) 
-// 							{
-// 								role->OnMoveBegin();
-// 							}
-// 							else if (itype == eMoveTypeMoving)
-// 							{
-// 								role->OnMoving(false);
-// 							}
-// 							else if (itype == eMoveTypeEnd)
-// 							{
-// 								role->OnMoveEnd();
-// 							}
-// 						}
-// 					}
-// 				}
-// 				break;
-// 			}
-// 		}
+		std::vector<s_team_info> teamlist = NDMapMgrObj.GetTeamList();
+		std::vector<s_team_info>::iterator it = teamlist.begin();
+		for (; it != teamlist.end(); it++) 
+		{
+			s_team_info info = *it;
+			if (info.team[0] == m_id) 
+			{
+				NDMapMgr& mapmgrobj = NDMapMgrObj;
+				for (int j = 1; j < eTeamLen; j++) 
+				{
+					if (info.team[j] != 0) 
+					{
+						NDManualRole* role = mapmgrobj.GetManualRole(info.team[j]);
+						if (role)
+						{
+							if (itype == eMoveTypeBegin) 
+							{
+								role->OnMoveBegin();
+							}
+							else if (itype == eMoveTypeMoving)
+							{
+								role->OnMoving(false);
+							}
+							else if (itype == eMoveTypeEnd)
+							{
+								role->OnMoveEnd();
+							}
+						}
+					}
+				}
+				break;
+			}
+		}
 }
 
 void NDManualRole::teamMemberWalkResetPosition()
 {
-
-	/***
-	 * 临时性注释 郭浩
-	 * all
-	 */
-	// 		NDMapMgr& mapmgrobj = NDMapMgrObj;
-// 		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
-// 		std::vector<s_team_info>::iterator it = teamlist.begin();
-// 		
-// 		for (; it != teamlist.end(); it++) 
-// 		{
-// 			s_team_info info = *it;
-// 			if (info.team[0] == m_id) 
-// 			{
-// 				for (int j = 1; j < eTeamLen; j++) 
-// 				{
-// 					NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
-// 					if (role) 
-// 					{
-// 						role->resetTeamPos();
-// 					}
-// 				}
-// 			}
-// 		}
+ 		NDMapMgr& mapmgrobj = NDMapMgrObj;
+		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
+		std::vector<s_team_info>::iterator it = teamlist.begin();
+		
+		for (; it != teamlist.end(); it++) 
+		{
+			s_team_info info = *it;
+			if (info.team[0] == m_id) 
+			{
+				for (int j = 1; j < eTeamLen; j++) 
+				{
+					NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
+					if (role) 
+					{
+						role->resetTeamPos();
+					}
+				}
+			}
+		}
 }
 
 void NDManualRole::resetTeamPos()
@@ -712,160 +717,145 @@ void NDManualRole::resetTeamPos()
 
 void NDManualRole::teamMemberWalkToPosition(const std::vector<CGPoint>& toPos)
 {
-	/***
-	 * 临时性注释 郭浩
-	 * all
-	 */
+	NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
+	if (!layer) 
+	{
+		return;
+	}
 
-// 		NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
-// 		if (!layer) 
-// 		{
-// 			return;
-// 		}
-// 		
-// 		std::vector<s_team_info> teamlist = NDMapMgrObj.GetTeamList();
-// 		std::vector<s_team_info>::iterator it = teamlist.begin();
-// 		
-// 		for (; it != teamlist.end(); it++) 
-// 		{
-// 			s_team_info info = *it;
-// 			if (info.team[0] == m_id) 
-// 			{
-// 				int iDealCount = 16 / m_iSpeed;
-// 				int iLastTeamMember = 0;
-// 				
-// 				NDMapMgr& mapmgrobj = NDMapMgrObj;
-// 				std::vector<CGPoint> deque_point[eTeamLen];
-// 				if (int(m_pointList.size()) < iDealCount) 
-// 				{
-// 					return;
-// 				}
-// 				//for (std::vector<CGPoint>::iterator it = m_pointList.begin(); it != m_pointList.end(); it++)
-// //				{
-// //					deque_point[iLastTeamMember].push_back((*it));
-// //				}
-// 				deque_point[iLastTeamMember] = m_pointList;
-// 				
-// 				for (int j = 1; j < eTeamLen; j++) 
-// 				{
-// 					if (info.team[j] != 0) 
-// 					{
-// 						NDManualRole* rolelast = mapmgrobj.GetTeamRole(info.team[iLastTeamMember]);
-// 						
-// 						NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
-// 						if (!role || !rolelast) 
-// 						{
-// 							continue;
-// 						}
-// 					
-// 						CGPoint posCur = role->GetPosition();
-// 						CGPoint posLast  = rolelast->GetPosition();
-// 					
-// 						
-// 						role->WalkToPosition(toPos, SpriteSpeedStep4, false);
-// 						role->stopMoving(false);
-// 						if (role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
-// 						{
-// 							role->SetMoveMap(true);
-// 						}
-// 						
-// 						if (int(deque_point[iLastTeamMember].size()) < iDealCount) 
-// 						{
-// 							break;
-// 						}
-// 						
-// 						NDAutoPath::sharedAutoPath()->autoFindPath(posCur, posLast, layer, m_iSpeed);
-// 						deque_point[j] = NDAutoPath::sharedAutoPath()->getPathPointVetor();
-// 						
-// 						if (deque_point[j].empty()) 
-// 						{
-// 							int iTemp = iDealCount;
-// 							while (iTemp--) 
-// 							{
-// 								deque_point[j].push_back(posLast);
-// 							}
-// 						}
-// 						
-// 						if (int(deque_point[iLastTeamMember].size()) > iDealCount) 
-// 						{
-// 							deque_point[j].insert(deque_point[j].end(), 
-// 												  deque_point[iLastTeamMember].begin(),
-// 												  deque_point[iLastTeamMember].begin()+deque_point[iLastTeamMember].size()-iDealCount
-// 													);
-// 			
-// 						}
-// 						
-// 						iLastTeamMember = j;
-// 						role->SetPointList(deque_point[j]);
-// 					}
-// 				}
-// 			}
-// 		}
+	std::vector<s_team_info> teamlist = NDMapMgrObj.GetTeamList();
+	std::vector<s_team_info>::iterator it = teamlist.begin();
+
+	for (; it != teamlist.end(); it++) 
+	{
+		s_team_info info = *it;
+		if (info.team[0] == m_id) 
+		{
+			int iDealCount = 16 / m_iSpeed;
+			int iLastTeamMember = 0;
+
+			NDMapMgr& mapmgrobj = NDMapMgrObj;
+			std::vector<CGPoint> deque_point[eTeamLen];
+			if (int(m_pointList.size()) < iDealCount) 
+			{
+				return;
+			}
+			//for (std::vector<CGPoint>::iterator it = m_pointList.begin(); it != m_pointList.end(); it++)
+			//				{
+			//					deque_point[iLastTeamMember].push_back((*it));
+			//				}
+			deque_point[iLastTeamMember] = m_pointList;
+
+			for (int j = 1; j < eTeamLen; j++) 
+			{
+				if (info.team[j] != 0) 
+				{
+					NDManualRole* rolelast = mapmgrobj.GetTeamRole(info.team[iLastTeamMember]);
+
+					NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
+					if (!role || !rolelast) 
+					{
+						continue;
+					}
+
+					CGPoint posCur = role->GetPosition();
+					CGPoint posLast  = rolelast->GetPosition();
+
+
+					role->WalkToPosition(toPos, SpriteSpeedStep4, false);
+					role->stopMoving(false);
+					if (role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
+					{
+						role->SetMoveMap(true);
+					}
+
+					if (int(deque_point[iLastTeamMember].size()) < iDealCount) 
+					{
+						break;
+					}
+
+					NDAutoPath::sharedAutoPath()->autoFindPath(posCur, posLast, layer, m_iSpeed);
+					deque_point[j] = NDAutoPath::sharedAutoPath()->getPathPointVetor();
+
+					if (deque_point[j].empty()) 
+					{
+						int iTemp = iDealCount;
+						while (iTemp--) 
+						{
+							deque_point[j].push_back(posLast);
+						}
+					}
+
+					if (int(deque_point[iLastTeamMember].size()) > iDealCount) 
+					{
+						deque_point[j].insert(deque_point[j].end(), 
+							deque_point[iLastTeamMember].begin(),
+							deque_point[iLastTeamMember].begin()+deque_point[iLastTeamMember].size()-iDealCount
+							);
+
+					}
+
+					iLastTeamMember = j;
+					role->SetPointList(deque_point[j]);
+				}
+			}
+		}
+	}
 }
 
 void NDManualRole::teamMemberAction(bool bAction)
 {
+	NDMapMgr& mapmgrobj = NDMapMgrObj;
+	std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
+	std::vector<s_team_info>::iterator it = teamlist.begin();
 
-	/***
-	 * 临时性注释 郭浩
-	 * all
-	 */
-	// 		NDMapMgr& mapmgrobj = NDMapMgrObj;
-// 		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
-// 		std::vector<s_team_info>::iterator it = teamlist.begin();
-// 		
-// 		for (; it != teamlist.end(); it++) 
-// 		{
-// 			s_team_info info = *it;
-// 			if (info.team[0] == m_id) 
-// 			{
-// 				for (int j = 1; j < eTeamLen; j++) 
-// 				{
-// 					NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
-// 					if (role) 
-// 					{
-// 						role->SetAction(bAction);
-// 					}
-// 				}
-// 			}
-// 		}
+	for (; it != teamlist.end(); it++) 
+	{
+		s_team_info info = *it;
+		if (info.team[0] == m_id) 
+		{
+			for (int j = 1; j < eTeamLen; j++) 
+			{
+				NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
+				if (role) 
+				{
+					role->SetAction(bAction);
+				}
+			}
+		}
+	}
 }
 
 void NDManualRole::teamMemberStopMoving(bool bResetPos)
 {
-	/***
-	 * 临时性注释 郭浩
-	 * all
-	 */
+	NDMapMgr& mapmgrobj = NDMapMgrObj;
+	std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
+	std::vector<s_team_info>::iterator it = teamlist.begin();
 
-// 		NDMapMgr& mapmgrobj = NDMapMgrObj;
-// 		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
-// 		std::vector<s_team_info>::iterator it = teamlist.begin();
-// 		
-// 		for (; it != teamlist.end(); it++) 
-// 		{
-// 			s_team_info info = *it;
-// 			if (info.team[0] == m_id) 
-// 			{
-// 				for (int j = 1; j < eTeamLen; j++) 
-// 				{
-// 					NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
-// 					if (!role) 
-// 					{
-// 						continue;
-// 					}
-// 					if (role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
-// 					{
-// 						((NDPlayer*)role)->stopMoving(bResetPos);
-// 					}
-// 					else 
-// 					{
-// 						role->stopMoving(bResetPos);
-// 					}
-// 
-// 				}
-// 			}
-// 		}
+	for (; it != teamlist.end(); it++) 
+	{
+		s_team_info info = *it;
+		if (info.team[0] == m_id) 
+		{
+			for (int j = 1; j < eTeamLen; j++) 
+			{
+				NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
+				if (!role) 
+				{
+					continue;
+				}
+				if (role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
+				{
+					((NDPlayer*)role)->stopMoving(bResetPos);
+				}
+				else 
+				{
+					role->stopMoving(bResetPos);
+				}
+
+			}
+		}
+	}
 }
 
 void NDManualRole::SetTeamToLastPos()
@@ -926,112 +916,89 @@ void NDManualRole::SetTeamToLastPos()
 		vec_pos.push_back(kCurrentPosition);
 	}
 
-	/***
-	 * 临时性注释 郭浩
-	 * begin
-	 */
+	NDMapMgr& mapmgrobj = NDMapMgrObj;
+	std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
+	std::vector<s_team_info>::iterator it = teamlist.begin();
 
-// 		NDMapMgr& mapmgrobj = NDMapMgrObj;
-// 		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
-// 		std::vector<s_team_info>::iterator it = teamlist.begin();
-// 		
-// 		int iIndex = 0;
-// 		int iSize = vec_pos.size();
-// 		for (; it != teamlist.end(); it++) 
-// 		{
-// 			s_team_info info = *it;
-// 			if (info.team[0] == m_id) 
-// 			{
-// 				for (int j = 0; j < eTeamLen; j++) 
-// 				{
-// 					NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
-// 					if (role) 
-// 					{
-// 						if (iIndex < iSize) 
-// 						{
-// 							role->SetPosition(vec_pos[iSize-iIndex-1]);
-// 							iIndex++;
-// 						}
-// 						
-// 						if (role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
-// 						{
-// 							((NDPlayer*)role)->stopMoving(true);
-// 						}
-// 						else 
-// 						{
-// 							role->stopMoving(true);
-// 						}
-// 
-// 					}
-// 				}
-// 			}
-// 		}
-	/***
-	 * 临时性注释 郭浩
-	 * end
-	 */
+	int iIndex = 0;
+	int iSize = vec_pos.size();
+	for (; it != teamlist.end(); it++) 
+	{
+		s_team_info info = *it;
+		if (info.team[0] == m_id) 
+		{
+			for (int j = 0; j < eTeamLen; j++) 
+			{
+				NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
+				if (role) 
+				{
+					if (iIndex < iSize) 
+					{
+						role->SetPosition(vec_pos[iSize-iIndex-1]);
+						iIndex++;
+					}
+
+					if (role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
+					{
+						((NDPlayer*)role)->stopMoving(true);
+					}
+					else 
+					{
+						role->stopMoving(true);
+					}
+
+				}
+			}
+		}
+	}
 
 	m_kDequeWalk.clear();
 }
 
 void NDManualRole::teamSetServerDir(int dir)
 {
-	/***
-	 * 临时性注释 郭浩
-	 * begin
-	 */
-
-	// 		NDMapMgr& mapmgrobj = NDMapMgrObj;
-// 		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
-// 		std::vector<s_team_info>::iterator it = teamlist.begin();
-// 		
-// 		for (; it != teamlist.end(); it++) 
-// 		{
-// 			s_team_info info = *it;
-// 			if (info.team[0] == m_id) 
-// 			{
-// 				for (int j = 1; j < eTeamLen; j++) 
-// 				{
-// 					NDManualRole* role = mapmgrobj.GetManualRole(info.team[j]);
-// 					if (role) 
-// 					{
-// 						role->SetServerDir(dir);
-// 					}
-// 				}
-// 			}
-// 		}
-	/***
-	 * 临时性注释 郭浩
-	 * end
-	 */
+		NDMapMgr& mapmgrobj = NDMapMgrObj;
+		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
+		std::vector<s_team_info>::iterator it = teamlist.begin();
+		
+		for (; it != teamlist.end(); it++) 
+		{
+			s_team_info info = *it;
+			if (info.team[0] == m_id) 
+			{
+				for (int j = 1; j < eTeamLen; j++) 
+				{
+					NDManualRole* role = mapmgrobj.GetManualRole(info.team[j]);
+					if (role) 
+					{
+						role->SetServerDir(dir);
+					}
+				}
+			}
+		}
 }
 
 void NDManualRole::teamSetServerPosition(int iCol, int iRow)
 {
-	/***
-	 * 临时性注释 郭浩
-	 * all
-	 */
+	NDMapMgr& mapmgrobj = NDMapMgrObj;
+	std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
+	std::vector<s_team_info>::iterator it = teamlist.begin();
 
-	// 		NDMapMgr& mapmgrobj = NDMapMgrObj;
-// 		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
-// 		std::vector<s_team_info>::iterator it = teamlist.begin();
-// 		
-// 		for (; it != teamlist.end(); it++) 
-// 		{
-// 			s_team_info info = *it;
-// 			if (info.team[0] == m_id) 
-// 			{
-// 				for (int j = 1; j < eTeamLen; j++) 
-// 				{
-// 					NDManualRole* role = mapmgrobj.GetManualRole(info.team[j]);
-// 					if (role) 
-// 					{
-// 						role->SetServerPositon(iCol, iRow);
-// 					}
-// 				}
-// 			}
-// 		}
+	for (; it != teamlist.end(); it++) 
+	{
+		s_team_info info = *it;
+		if (info.team[0] == m_id) 
+		{
+			for (int j = 1; j < eTeamLen; j++) 
+			{
+				NDManualRole* role = mapmgrobj.GetManualRole(info.team[j]);
+				if (role) 
+				{
+					role->SetServerPositon(iCol, iRow);
+				}
+			}
+		}
+	}
 }
 
 void NDManualRole::OnMoveEnd()
@@ -1041,11 +1008,11 @@ void NDManualRole::OnMoveEnd()
 	 m_pBattlePetShow->OnMoveEnd();
 	 }*/
 
-//	if (m_pkRidePet)
-//	{
-//		m_pkRidePet->OnMoveEnd();
-////			setStandActionWithRidePet();
-//	}
+	if (m_pkRidePet)
+	{
+		m_pkRidePet->OnMoveEnd();
+//			setStandActionWithRidePet();
+	}
 
 	//if	(isTeamLeader())
 //		{
@@ -1139,77 +1106,60 @@ void NDManualRole::SetAction(bool bMove, bool bIgnoreFighting/*=false*/)
 		 {// 溜宠移动
 		 AnimationListObj.moveAction(TYPE_ENEMYROLE, m_pBattlePetShow, m_faceRight);
 		 }*/
-		/***
-		 * 临时性注释 郭浩
-		 * begin
-		 */
-		//if (AssuredRidePet() && !isTransformed())
-		//{
-		//	setMoveActionWithRidePet();
-		//}
-		//else
-		//{ // 人物普通移动
-		/***
-		 * 临时性注释 郭浩
-		 * end
-		 */
 
-		if (isTransformed())
+		if (AssuredRidePet() && !isTransformed())
 		{
-			AnimationListObj.moveAction(TYPE_MANUALROLE,
-					m_pkAniGroupTransformed, 1 - m_bFaceRight);
+			setMoveActionWithRidePet();
 		}
 		else
-		{
-			AnimationListObj.moveAction(TYPE_MANUALROLE, this, m_bFaceRight);
+		{ // 人物普通移动
+			if (isTransformed())
+			{
+				AnimationListObj.moveAction(TYPE_MANUALROLE,
+					m_pkAniGroupTransformed, 1 - m_bFaceRight);
+			}
+			else
+			{
+				AnimationListObj.moveAction(TYPE_MANUALROLE, this, m_bFaceRight);
+			}
 		}
-		//	}	///< 临时性注释 郭浩
 	}
 	else
 	{
-		if (IsInState (USERSTATE_BOOTH))
+		if (IsInState(USERSTATE_BOOTH))
 		{
-			AnimationListObj.sitAction(this);
+			AnimationListObj.sitAction(this,m_faceRight);
 			return;
 		}
-		/*if (m_pBattlePetShow)
-		 {// 溜宠站立
-		 AnimationListObj.standAction(TYPE_ENEMYROLE, m_pBattlePetShow, m_faceRight);
-		 }*/
-
-		/***
-		 * 临时性注释 郭浩
-		 * begin
-		 */
-		//if (AssuredRidePet() && !isTransformed())
-		//{ // 骑宠站立
-		//	setStandActionWithRidePet();
-		//}
-		//else
-		//{
-		/***
-		 * 临时性注释 郭浩
-		 * end
-		 */
+		if (m_pBattlePetShow)
+		{// 溜宠站立
+			AnimationListObj.standAction(TYPE_ENEMYROLE, m_pBattlePetShow, m_faceRight);
+		}
 
 		if (isTransformed())
 		{
-			AnimationListObj.standAction(TYPE_MANUALROLE,
-					m_pkAniGroupTransformed, 1 - m_bFaceRight);
-		}
-		else
+			AnimationListObj.standAction(TYPE_MANUALROLE, aniGroupTransformed, 1 - m_faceRight);
+		} 
+		else if (IsInState(USERSTATE_PRACTISE))
 		{
-			AnimationListObj.standAction(TYPE_MANUALROLE, this, m_bFaceRight);
+			AnimationListObj.sitAction(this, m_faceRight);
+		}else if (AssuredRidePet() && !isTransformed())
+		{// 骑宠站立
+			this->setStandActionWithRidePet();
+		}else {
+			NDPlayer& player = NDPlayer::defaultHero();
+			if(&player == this)
+				AnimationListObj.standAction(TYPE_MANUALROLE, this, m_faceRight);
+			else
+				this->standAction(true);
 		}
-		//} ///< 临时性注释 郭浩 
 	}
 
 }
 
 bool NDManualRole::AssuredRidePet()
 {
-//		return ridepet != NULL && ridepet->canRide()&& !isTransformed(); ///< 临时性注释 郭浩
-	return true;
+	return m_pkRidePet != NULL && m_bIsRide && !isTransformed();
 }
 
 void NDManualRole::SetPosition(CGPoint newPosition)
@@ -1269,7 +1219,7 @@ void NDManualRole::SetPosition(CGPoint newPosition)
 		//ridepet->SetPosition(newPosition);
 	}
 
-	//SetAction(true);
+	SetAction(true);
 }
 
 void NDManualRole::OnMoveTurning(bool bXTurnigToY, bool bInc)
@@ -1313,6 +1263,17 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	 }
 	 */
 
+	if ( scene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene) ) )
+	{
+		NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(scene);
+		if ( GetParent() == layer )
+		{
+			if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) && !NDMapMgrObj.isShowOther ) 
+			{
+				return false;
+			}
+		}
+	}
 	CGPoint pos = GetPosition();
 
 	// 摆摊先处理
@@ -1377,31 +1338,24 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	// 处理影子
 	if (IsInState (USERSTATE_STEALTH))
 	{
-		if (IsKindOfClass (RUNTIME_CLASS(NDPlayer))){
-		SetShadowOffset(0, 10);
-		ShowShadow(true);
-		HandleShadow(pkNode->GetContentSize());
+		if (IsKindOfClass (RUNTIME_CLASS(NDPlayer)))
+		{
+			SetShadowOffset(0, 10);
+			ShowShadow(true);
+			HandleShadow(pkNode->GetContentSize());
+		}
+		return true;
 	}
-	return true;
-}
-else
-{
-	SetShadowOffset(m_pkRidePet ? -8 : 0, 10);
-	ShowShadow(true, m_pkRidePet != NULL);
-}
+	else
+	{
+		SetShadowOffset(m_pkRidePet ? -8 : 0, 10);
+		ShowShadow(true, m_pkRidePet != NULL);
+	}
 
-/***
- * 临时性注释 郭浩
- * begin
- */
-// 		if (scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
-// 		{
-// 			ShowShadow(false);
-// 		}
-/***
- * 临时性注释 郭浩
- * end
- */
+	if (scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
+	{
+		ShowShadow(false);
+	}
 
 	if (pkNode->IsKindOfClass(RUNTIME_CLASS(Battle)))
 	{
@@ -1441,29 +1395,40 @@ else
 		}
 	}
 
+	if(AssuredRidePet())
+	{
+		m_pkRidePet->SetScale(this->GetScale());
+	}
+	//NDLog(@"draw pet1");
 	//画骑宠
-	/***
-	 * 临时性注释 郭浩
-	 * begin
-	 */
-// 		if (AssuredRidePet() && ridepet->iType != TYPE_RIDE_FLY)
-// 		{
-// 			ridepet->RunAnimation(bDraw);
-// 		}
-	/***
-	 * 临时性注释 郭浩
-	 * end
-	 */
+	if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)))
+	{
+		//NDLog(@"draw pet2");
+		if(AssuredRidePet()) 
+		{
+			bool isSit=ScriptMgrObj.excuteLuaFunc<bool>("IsInPractising","PlayerFunc");
+			//NDLog(@"user draw ridepet");
+			if(!isSit)
+			{
+				//NDLog(@"user not sit,draw ridepet");
+				m_pkRidePet->RunAnimation(bDraw);
+			}
+		}
+	}else if (AssuredRidePet() &&!IsInState(USERSTATE_PRACTISE))
+	{
+		//NDLog(@"draw pet3");
+		m_pkRidePet->RunAnimation(bDraw);
+	}
 
 	// 人物变形动画
 	if (m_pkAniGroupTransformed)
 	{
 		bDraw = !IsInState(USERSTATE_STEALTH);
 		m_pkAniGroupTransformed->SetPosition(pos);
-		m_pkAniGroupTransformed->SetCurrentAnimation(
-				m_bIsMoving ? MONSTER_MAP_MOVE : MONSTER_MAP_STAND,
-				!m_bFaceRight);
-		m_pkAniGroupTransformed->SetSpriteDir(m_bFaceRight ? 2 : 0);
+// 		m_pkAniGroupTransformed->SetCurrentAnimation(
+// 				m_bIsMoving ? MONSTER_MAP_MOVE : MONSTER_MAP_STAND,
+// 				!m_bFaceRight);
+// 		m_pkAniGroupTransformed->SetSpriteDir(m_bFaceRight ? 2 : 0);
 		m_pkAniGroupTransformed->RunAnimation(bDraw);
 	}
 
@@ -1476,10 +1441,16 @@ else
 	//	m_talkBox->SetVisible(true);
 	//}
 
-	//if (!IsKindOfClass(RUNTIME_CLASS(NDPlayer)) )//&& NDDataPersist::IsGameSettingOn(GS_SHOW_NAME))
+	if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) || NDMapMgrObj.isShowName) 
 	{
 		ShowNameLabel(bDraw);
 	}
+
+	if (bDraw)
+	{
+		RunSMEffect(eSM_EFFECT_DRAW_ORDER_BACK);
+	}
+
 
 	return !isTransformed();
 }
@@ -1495,26 +1466,22 @@ void NDManualRole::OnDrawEnd(bool bDraw)
 
 	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 
-	/***
-	 * 临时性注释 郭浩
-	 * begin
-	 */
-//  		if (!IsKindOfClass(RUNTIME_CLASS(NDPlayer)) 
-//  			&& !NDDataPersist::IsGameSettingOn(GS_SHOW_OTHER_PLAYER)
-//  			&& (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading)))) 
-//  		{
-//  			return;
-//  		}
-//  		
+	/*
+	if (!IsKindOfClass(RUNTIME_CLASS(NDPlayer)) 
+		&& !NDDataPersist::IsGameSettingOn(GS_SHOW_OTHER_PLAYER)
+		&& (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading)))) 
+	{
+		return;
+	}
+	*/
+ 		
 	//画骑宠
-	//if (AssuredRidePet() && ridepet->iType == TYPE_RIDE_FLY)
-	//{
-	//	ridepet->RunAnimation(bDraw);
-	//}
-	/***
-	 * 临时性注释 郭浩
-	 * end
-	 */
+	if (AssuredRidePet() && ridepet->iType == TYPE_RIDE_FLY)
+	{
+		m_pkRidePet->RunAnimation(bDraw);
+	}
+
+
 	NDBaseRole::OnDrawEnd(bDraw);
 
 	if (IsInState (USERSTATE_NUM_ONE))
@@ -1549,6 +1516,10 @@ void NDManualRole::OnDrawEnd(bool bDraw)
 
 	//　画服务端下发的前部光效
 	drawServerFrontEffect(bDraw);
+	if (bDraw)
+	{
+		RunSMEffect(eSM_EFFECT_DRAW_ORDER_FRONT);
+	}
 }
 
 void NDManualRole::RunNumberOneEffect()
@@ -1639,12 +1610,12 @@ void NDManualRole::drawEffects(bool bDraw)
 		m_pkEffectFlagAniGroup->RunAnimation(bDraw);
 	}
 
-	/*if (effectFeedPetAniGroup != NULL && effectFeedPetAniGroup->GetParent() && m_pBattlePetShow && !bTransform)
-	 {
-	 CGPoint pos = m_pBattlePetShow->GetPosition();
-	 effectFeedPetAniGroup->SetPosition(ccp(pos.x, pos.y+8));
-	 effectFeedPetAniGroup->RunAnimation(bDraw);
-	 }*/
+// 	if (m_pkEffectFeedPetAniGroup != NULL && m_pkEffectFeedPetAniGroup->GetParent() && m_pBattlePetShow && !bTransform)
+// 	{
+// 		CGPoint pos = m_pBattlePetShow->GetPosition();
+// 		m_pkEffectFeedPetAniGroup->SetPosition(ccp(pos.x, pos.y+8));
+// 		m_pkEffectFeedPetAniGroup->RunAnimation(bDraw);
+// 	}
 
 	//if (effectArmorAniGroup != NULL && effectArmorAniGroup->GetParent() && !bTransform)
 //		{
@@ -1666,6 +1637,8 @@ void NDManualRole::SetServerPositon(int col, int row)
 {
 	m_nServerCol = col;
 	m_nServerRow = row;
+	SetPosx(col);
+	SetPosx(row);
 }
 
 void NDManualRole::SetServerDir(int dir)
@@ -1794,6 +1767,7 @@ void NDManualRole::UpdateState(int nState, bool bSet)
 
 void NDManualRole::SetState(int nState)
 {
+	bool bOldInPractise	= this->IsInState(USERSTATE_PRACTISE);
 	m_nState = nState;
 
 	if (IsInState (USERSTATE_BOOTH))
@@ -1815,6 +1789,16 @@ void NDManualRole::SetState(int nState)
 		}
 	}
 
+	bool bNewInPractise	= IsInState(USERSTATE_PRACTISE);
+	if (!bOldInPractise && bNewInPractise)
+	{
+		AddSMEffect(ScriptMgrObj.excuteLuaFunc<std::string>("GetPractiseEffectPath", "PlayerFunc"), 
+			eSM_EFFECT_ALIGNMENT_BOTTOM, eSM_EFFECT_DRAW_ORDER_FRONT);
+	}
+	else if (bOldInPractise && !bNewInPractise)
+	{
+		RemoveSMEffect(ScriptMgrObj.excuteLuaFunc<std::string>("GetPractiseEffectPath", "PlayerFunc"));
+	}
 }
 
 bool NDManualRole::IsInState(int iState)
@@ -1831,16 +1815,23 @@ bool NDManualRole::IsInDacoity()
 
 void NDManualRole::setSafeProtected(bool isSafeProtected)
 {
-	/***
-	 * 临时性注释 郭浩
-	 * begin
-	 */
+	m_bIsSafeProtected = isSafeProtected;
+	if (m_bIsSafeProtected)
+	{
+		//获取自2001年1月1号零时到当前时间的秒数
+		tm timeStrt20010101;
+		timeStrt20010101.tm_year = 2001-1900;
+		timeStrt20010101.tm_mon = 0;
+		timeStrt20010101.tm_mday = 1;
+		timeStrt20010101.tm_hour = 0;
+		timeStrt20010101.tm_min = 0;
+		timeStrt20010101.tm_sec = 0;
+		timeStrt20010101.tm_isdst = 0;
 
-// 		isSafeProtected = isSafeProtected;
-// 		if (isSafeProtected)
-// 		{
-// 			beginProtectedTime = [NSDate timeIntervalSinceReferenceDate];
-// 		}
+		time_t secOf20010101 = mktime(&timeStrt20010101);
+		time_t secNow = time(NULL);
+		m_nBeginProtectedTime = secNow - secOf20010101;
+	}
 }
 
 void NDManualRole::updateFlagOfQiZhi()
@@ -1982,38 +1973,29 @@ void NDManualRole::playerMarry()
 
 bool NDManualRole::CheckToLastPos()
 {
-	/************************************************************************/
-	/* 临时性注释 郭浩
-	 /* begin
-	 /************************************************************************/
+		bool bRet = false;
+		NDMapMgr& mapmgrobj = NDMapMgrObj;
+		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
+		std::vector<s_team_info>::iterator it = teamlist.begin();
+		
+		for (; it != teamlist.end(); it++) 
+		{
+			s_team_info info = *it;
+			if (info.team[0] == m_id) 
+			{
+				for (int j = 1; j < eTeamLen; j++) 
+				{
+					NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
+					if (role && role->TeamIsToLastPos()) 
+					{
+						bRet = true;
+						role->TeamSetToLastPos(false);
+					}
+				}
+			}
+		}
 
-// 		bool bRet = false;
-// 		NDMapMgr& mapmgrobj = NDMapMgrObj;
-// 		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
-// 		std::vector<s_team_info>::iterator it = teamlist.begin();
-// 		
-// 		for (; it != teamlist.end(); it++) 
-// 		{
-// 			s_team_info info = *it;
-// 			if (info.team[0] == m_id) 
-// 			{
-// 				for (int j = 1; j < eTeamLen; j++) 
-// 				{
-// 					NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
-// 					if (role && role->TeamIsToLastPos()) 
-// 					{
-// 						bRet = true;
-// 						role->TeamSetToLastPos(false);
-// 					}
-// 				}
-// 			}
-// 		}
-	/************************************************************************/
-	/* 临时性注释 郭浩
-	 * end
-	 /************************************************************************/
-
-	return true; //bRet; ///< 临时性注释 郭浩 改为true
+	return bRet;
 }
 
 void NDManualRole::ShowNameLabel(bool bDraw)
@@ -2065,10 +2047,9 @@ void NDManualRole::ShowNameLabel(bool bDraw)
 
 	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
 
-	iY = iY - getGravityY(); // - 5 * fScale;
+	iY = iY - FIGHTER_HEIGHT;// - 5 * fScale;
 
-	int iNameW = getStringSizeMutiLine(names.c_str(), LABLESIZE, sizewin).width
-			/ 2;
+	int iNameW = getStringSizeMutiLine(names.c_str(), LABLESIZE, sizewin).width/2;
 	/*
 	 std::string strPeerage = GetPeerageName(m_nPeerage);
 	 int iPeerage = 0;
@@ -2179,20 +2160,33 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 	lable[1]->SetText(text.c_str());
 
 	lable[0]->SetFontColor(color1);
-	lable[1]->SetFontColor(color2);
+/*	lable[1]->SetFontColor(color2);*/
 
 	CGSize sizemap;
 	sizemap = m_pkSubNode->GetContentSize();
 	CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
 	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
 
-	lable[1]->SetFrameRect(
-			CGRectMake(x + 1, y + sizewin.height + 1 - sizemap.height,
-					sizewin.width, (LABLESIZE + 5) * fScale));
+	//** chh 2012-07-04 **//
+	//lable[1]->SetFrameRect(CGRectMake(x+1, y+sizewin.height+1-sizemap.height, sizewin.width, (LABLESIZE+5)*fScale));
+	//lable[0]->SetFrameRect(CGRectMake(x, y+sizewin.height-sizemap.height, sizewin.width, (LABLESIZE+5)*fScale));
+	NDAnimation *animate = [m_aniGroup.animations objectAtIndex:0];
+	CGSize fontSize = getStringSize(lable[0]->GetText().c_str(), lable[0]->GetFontSize());
+	CGRect currAnimateRect = [animate getRect];
+	int newX = this->GetPosition().x - fontSize.width/2;
+	int newY = this->GetPosition().y - currAnimateRect.size.height - fontSize.height/2;
+	//int newX = x - fontSize.width/2;
+	//int newY = y;
 
-	lable[0]->SetFrameRect(
-			CGRectMake(x, y + sizewin.height - sizemap.height, sizewin.width,
-					(LABLESIZE + 5) * fScale));
+	lable[0]->SetFrameRect(CGRectMake(newX+1*fScale, newY, fontSize.width, fontSize.height));
+	lable[1]->SetFrameRect(CGRectMake(newX, newY, fontSize.width, fontSize.height));
+	lable[1]->SetVisible(false);
+	if(m_nQuality>-1){
+		ccColor4B cColor4 = ScriptMgrObj.excuteLuaFuncRetColor4("GetColor", "Item",m_nQuality);
+		lable[0]->SetFontColor(cColor4);
+		//lable[1]->SetFontColor(cColor4);
+	}
+
 }
 
 void NDManualRole::SetLableName(std::string text, int x, int y, bool isEnemy)
@@ -2215,6 +2209,7 @@ void NDManualRole::SetLableName(std::string text, int x, int y, bool isEnemy)
 		 SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0x760387), INTCOLORTOCCC4(0x003300));
 		 }
 		 */
+
 		cocos2d::ccColor4B color = ccc4(255, 255, 255, 255);
 		if (IsKindOfClass (RUNTIME_CLASS(NDPlayer))){
 		color = ccc4(243, 144, 27, 255);
@@ -2372,18 +2367,18 @@ void NDManualRole::SetServerEffect(std::vector<int>& vEffect)
 
 		std::string sprFullPath = NDPath::GetAnimationPath();
 
-		if (effectId / 1000 % 10 == 9)
-		{ // 旗子
-			serverEffect.bQiZhi = true;
-			sprFullPath.append("qizi.spr");
-		}
-		else
-		{
-			// 低四位为光效id
-			std::stringstream ss;
-			ss << "effect_" << effectId % 10000 << ".spr";
-			sprFullPath.append(ss.str());
-		}
+// 		if (effectId / 1000 % 10 == 9)
+// 		{ // 旗子
+// 			serverEffect.bQiZhi = true;
+// 			sprFullPath.append("qizi.spr");
+// 		}
+// 		else
+// 		{
+// 			// 低四位为光效id
+// 			std::stringstream ss;
+// 			ss << "effect_" << effectId % 10000 << ".spr";
+// 			sprFullPath.append(ss.str());
+// 		}
 
 		NDLightEffect* pkEffect = new NDLightEffect();
 		pkEffect->Initialization(sprFullPath.c_str());
@@ -2539,52 +2534,52 @@ bool NDManualRole::IsInGraveStoneState()
 	return IsInState(USERSTATE_DEAD) || IsInState(USERSTATE_BF_WAIT_RELIVE);
 }
 
-/*const NDBattlePet* NDManualRole::GetShowPet()
- {
- if (m_pBattlePetShow)
- return m_pBattlePetShow.Pointer();
+const NDBattlePet* NDManualRole::GetShowPet()
+{
+// 	if (m_pBattlePetShow)
+// 		return m_pBattlePetShow.Pointer();
 
- return NULL;
- }
+	return NULL;
+}
 
- void NDManualRole::SetShowPet(ShowPetInfo& info)
- {
- NDBattlePet* pet = m_pBattlePetShow.Pointer();
-
- bool recreate = !(info == m_infoShowPet);
-
- m_infoShowPet = info;
-
- if (recreate)
- {
- SAFE_DELETE_NODE(pet);
-
- if (m_infoShowPet.lookface > 0)
- {
- pet = new NDBattlePet();
- pet->Initialization(m_infoShowPet.lookface);
- pet->m_faceRight = !m_faceRight;
- pet->SetCurrentAnimation(MONSTER_STAND, !m_faceRight);
- pet->SetOwnerID(m_id);
- m_pBattlePetShow = pet->QueryLink();
-
- GameScene *scene = GameScene::GetCurGameScene();
- if (!scene) return;
- NDMapLayer* maplayer = NDMapMgrObj.getMapLayerOfScene(scene);
- if (!maplayer) return;
- maplayer->AddChild(pet);
-
- }
- }
-
- if (pet)
- {
- pet->m_id = m_infoShowPet.idPet;
- pet->SetQuality(m_infoShowPet.quality);
- }
-
- ResetShowPetPosition();
- }*/
+void NDManualRole::SetShowPet(ShowPetInfo& info)
+{
+// 	NDBattlePet* pet = m_pBattlePetShow.Pointer();
+// 
+// 	bool recreate = !(info == m_infoShowPet);
+// 
+// 	m_infoShowPet = info;
+// 
+// 	if (recreate)
+// 	{
+// 		SAFE_DELETE_NODE(pet);
+// 
+// 		if (m_infoShowPet.lookface > 0)
+// 		{
+// 			pet = new NDBattlePet();
+// 			pet->Initialization(m_infoShowPet.lookface);
+// 			pet->m_faceRight = !m_faceRight;
+// 			pet->SetCurrentAnimation(MONSTER_STAND, !m_faceRight);
+// 			pet->SetOwnerID(m_id);
+// 			m_pBattlePetShow = pet->QueryLink();
+// 
+// 			GameScene *scene = GameScene::GetCurGameScene();
+// 			if (!scene) return;
+// 			NDMapLayer* maplayer = NDMapMgrObj.getMapLayerOfScene(scene);
+// 			if (!maplayer) return;
+// 			maplayer->AddChild(pet);
+// 
+// 		}
+// 	}
+// 
+// 	if (pet)
+// 	{
+// 		pet->m_id = m_infoShowPet.idPet;
+// 		pet->SetQuality(m_infoShowPet.quality);
+// 	}
+// 
+// 	ResetShowPetPosition();
+}
 
 bool NDManualRole::GetShowPetInfo(ShowPetInfo& info)
 {
@@ -2731,14 +2726,156 @@ bool NDManualRole::IsDirFaceRight(int nDir)
 	return false;
 }
 
-void NDManualRole::SetShowPet( ShowPetInfo& kInfo )
-{
-	
-}
+	bool NDManualRole::AddSMEffect(std::string strEffectPath, int nSMEffectAlignment, int nDrawOrder)
+	{
+		if (eSM_EFFECT_ALIGNMENT_BEGIN > nSMEffectAlignment 
+			|| eSM_EFFECT_ALIGNMENT_END <= nSMEffectAlignment
+			|| eSM_EFFECT_DRAW_ORDER_BEGIN > nDrawOrder
+			|| eSM_EFFECT_DRAW_ORDER_END <= nDrawOrder)
+		{
+			return false;
+		}
+		if ("" == strEffectPath)
+		{
+			return false;
+		}
+		std::map<std::string, NDLightEffect*>& mapEffect	= m_kArrMapSMEffect[nDrawOrder][nSMEffectAlignment];
+		if (mapEffect.find(strEffectPath) != mapEffect.end())
+		{
+			return false;
+		}
+		mapEffect[strEffectPath]	= new NDLightEffect();
+		mapEffect[strEffectPath]->Initialization(strEffectPath.c_str());
+		mapEffect[strEffectPath]->SetLightId(0);
+	}
+	bool NDManualRole::RemoveSMEffect(std::string strEffectPath)
+	{
+		if ("" == strEffectPath)
+		{
+			return false;
+		}
+		bool bFind	= false;
+		for (int i = eSM_EFFECT_DRAW_ORDER_BEGIN; i < eSM_EFFECT_DRAW_ORDER_END; i++) 
+		{
+			for (int j = eSM_EFFECT_ALIGNMENT_BEGIN; j < eSM_EFFECT_ALIGNMENT_END; j++) 
+			{
+				std::map<std::string, NDLightEffect*>& mapEffect	= m_kArrMapSMEffect[i][j];
+				std::map<std::string, NDLightEffect*>::iterator it	= mapEffect.find(strEffectPath);
+				if (it != mapEffect.end())
+				{
+					SAFE_DELETE(it->second);
+					mapEffect.erase(it);
+					bFind	= true;
+				}
+			}
+		}
+		return bFind;
+	}
+	void NDManualRole::RemoveAllSMEffect()
+	{
+		for (int i = eSM_EFFECT_DRAW_ORDER_BEGIN; i < eSM_EFFECT_DRAW_ORDER_END; i++) 
+		{
+			for (int j = eSM_EFFECT_ALIGNMENT_BEGIN; j < eSM_EFFECT_ALIGNMENT_END; j++) 
+			{
+				std::map<std::string, NDLightEffect*>& mapEffect	= m_kArrMapSMEffect[i][j];
+				std::map<std::string, NDLightEffect*>::iterator it	= mapEffect.begin();
+				for (; it != mapEffect.end(); it++) 
+				{
+					SAFE_DELETE(it->second);
+				}
+				mapEffect.clear();
+			}
+		}
+	}
+	void NDManualRole::RunSMEffect(int nDrawOrder)
+	{
+		if (eSM_EFFECT_DRAW_ORDER_BEGIN > nDrawOrder
+			|| eSM_EFFECT_DRAW_ORDER_END <= nDrawOrder)
+		{
+			return;
+		}
+		NDNode* pParent = this->GetParent();
+		if (!pParent) 
+		{
+			return;
+		}
+		NDDirector* director		= NDDirector::DefaultDirector();
+		float fScaleFactor			= director->GetScaleFactor();
+		CGSize sizeEffectParent		= pParent->GetContentSize();
+		CGPoint posRole				= this->GetPosition();
+		for (int j = eSM_EFFECT_ALIGNMENT_BEGIN; j < eSM_EFFECT_ALIGNMENT_END; j++) 
+		{
+			std::map<std::string, NDLightEffect*>& mapEffect	= m_kArrMapSMEffect[nDrawOrder][j];
+			if (mapEffect.empty())
+			{
+				continue;
+			}
+			CGPoint posOffect		= CGPointZero;
+			if (eSM_EFFECT_ALIGNMENT_TOP == j)
+			{
+				posOffect			= ccp(0, -FIGHTER_HEIGHT * fScaleFactor);
+			}
+			else if (eSM_EFFECT_ALIGNMENT_CENTER == j)
+			{
+				posOffect			= ccp(0, -FIGHTER_HEIGHT * fScaleFactor / 2);
+			}
+			else if (eSM_EFFECT_ALIGNMENT_BOTTOM == j)
+			{
+			}
+			std::map<std::string, NDLightEffect*>::iterator it	= mapEffect.begin();
+			for (; it != mapEffect.end(); it++) 
+			{
+				NDLightEffect* pEffect	= it->second;
+				if (!pEffect)
+				{
+					continue;
+				}
+				pEffect->SetPosition(ccpAdd(posRole, posOffect));
+				pEffect->Run(sizeEffectParent);
+			}
+		}
+	}
+    /************************************************************************************************************
+     Function:         ChangeModelWithMount
+     Description:    根据骑乘状态修改人物当前的信息
+     Input:   nRideStatus:    骑乘状态  0：步行     1：骑马
+                  nMountType:    骑乘的类型 
+     Output:     无
+     －－－－－－－－－－－－－－－－修改说明－－－－－－－－－－－－－－－－－－－－－－－－
+     Other:  1. add by tangziqin  2012.7.27   增加函数头注释      
+                  2.
+     ************************************************************************************************************/
+	bool NDManualRole::ChangeModelWithMount( int nRideStatus, int nMountType )
+	{
+		if  (m_nRideStatus == nRideStatus)
+		{
+			if (0 == m_nRideStatus)
+            {
+				return true;
+            }
+			else if ( m_nMountType == nMountType )
+            {
+				return true;
+            }
+		}
+		unsigned int nMountLookface	= ScriptDBObj.GetN( "mount_model_config", nMountType, DB_MOUNT_MODEL_LOOKFACE );
+		unsigned int nMountID		= nMountLookface%1000;     
+		unsigned int nPlayerID		= m_nLookface%1000;
+		char aniPath[256];
+		if ( nRideStatus == 0 )
+		{
+			_snprintf(aniPath, 256, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(), nPlayerID);
+		}
+		else
+		{
+			_snprintf(aniPath, 256, "%smodel_%d_%d.spr", NDPath::GetAnimationPath().c_str(), nPlayerID, nMountID);
+		}
+		reloadAni(aniPath);
 
-bool NDManualRole::ChangeModelWithMount( int nRideStatus,int nMountType )
-{
-	return true;
-}
-
+		m_nRideStatus	= nRideStatus;
+		m_nMountType	= nMountType;
+		
+		SetCurrentAnimation( MANUELROLE_STAND, m_faceRight );
+		return true;
+	}
 }
