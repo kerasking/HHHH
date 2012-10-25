@@ -19,12 +19,12 @@
 // #include "basedefine.h"
 // #include "NDConstant.h"
 
-//class Fighter;
-
 #include "NDFrame.h"
 #include "define.h"
 
 class NDAnimationGroup;
+class NDSPrite;
+class Fighter;
 
 namespace NDEngine
 {
@@ -41,15 +41,91 @@ namespace NDEngine
 #define		SEC_SHIELD				9
 #define		SEC_FAQI				10
 
-typedef enum
-{
-	SpriteSexNone, SpriteSexMale, SpriteSexFemale, SpriteSexDynamic
-} SpriteSex;
+	typedef enum
+	{
+		SpriteSexNone,
+		SpriteSexMale,
+		SpriteSexFemale,
+		SpriteSexDynamic
+	} SpriteSex;
 
-typedef enum
+	typedef enum
+	{
+		SpriteSpeedStep4 = 8,
+		SpriteSpeedStep6 = 12,
+		SpriteSpeedStep8 = 16,
+		SpriteSpeedStep10 = 20,
+		SpriteSpeedStep12 = 24
+	} SpriteSpeed;
+
+	class NDSprite;
+
+	enum
+	{
+		SUB_ANI_TYPE_SELF = 0,
+		SUB_ANI_TYPE_TARGET = 1,
+		SUB_ANI_TYPE_NONE = 2,
+		SUB_ANI_TYPE_ROLE_FEEDPET = 3,
+		SUB_ANI_TYPE_ROLE_WEAPON = 4,
+		SUB_ANI_TYPE_SCREEN_CENTER = 5,
+	};
+
+class NDSubAniGroup
 {
-	SpriteSpeedStep4 = 8, SpriteSpeedStep8 = 16
-} SpriteSpeed;
+public:
+	NDSubAniGroup()
+	{
+		memset(this, 0L, sizeof(NDSubAniGroup));
+	}
+
+	NDSprite* role;
+	NDAnimationGroup* aniGroup;
+	Fighter* fighter;
+	NDFrameRunRecord* frameRec;
+
+	OBJID idAni;
+	short x;
+	short y;
+	bool reverse;
+	short coordW;
+	short coordH;
+	Byte type;
+	int time;	//播放次数
+	int antId;	//动作ID
+	bool bComplete; // 播放完成
+	bool isFromOut;
+	int startFrame;
+	bool isCanStart;//用来控制战斗中的延迟问题
+	int pos;//播放位置
+};
+
+struct NDSubAniGroupEx 
+{
+	short x;
+	short y;
+
+	short coordW;
+	short coordH;
+
+	Byte type;
+
+	std::string anifile;
+};
+
+enum FACE_DIRECT
+{
+	FACE_DIRECT_RIGHT = 0,
+	FACE_DIRECT_LEFT,
+	FACE_DIRECT_UP,
+	FACE_DIRECT_DOWN,
+};
+
+class ISpriteEvent
+{
+public:
+	virtual void DisplayFrameEvent(int nCurrentAnimation, int nCurrentFrame) =0;
+	virtual void DisplayCompleteEvent(int nCurrentAnimation, int nDispCount)=0;
+};
 
 class NDEngine::NDPicture;
 
@@ -329,6 +405,8 @@ public:
 	virtual cocos2d::CCTexture2D *GetSkirtWalkImage();
 	virtual cocos2d::CCTexture2D *GetSkirtSitImage();
 	virtual cocos2d::CCTexture2D *GetSkirtLiftLegImage();
+
+	void AddSubAniGroup(NDSubAniGroupEx& kGroup);
 
 	int GetWidth();
 	int GetHeight();

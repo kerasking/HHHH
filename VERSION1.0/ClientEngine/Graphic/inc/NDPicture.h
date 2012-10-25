@@ -75,7 +75,7 @@ public:
 
 	void SetColor(cocos2d::ccColor4B color);
 
-	void DrawInRect(CGRect rect);
+	void DrawInRect(CGRect kRect);
 
 	CGSize GetSize();
 
@@ -84,6 +84,9 @@ public:
 	bool SetGrayState(bool gray);
 
 	bool IsGrayState();
+
+	CC_SYNTHESIZE(float,m_fScale,Scale);
+	CC_SYNTHESIZE(bool,m_bIsTran,IsTran);
 
 public:
 	cocos2d::CCTexture2D *GetTexture();

@@ -964,4 +964,31 @@ void NDSprite::standAction( bool bStand )
 //  	}
 }
 
+void NDSprite::AddSubAniGroup( NDSubAniGroupEx& kGroup )
+{
+// 	if (kGroup.anifile.empty())
+// 	{
+// 		return;
+// 	}
+// 
+// 	GameScene* pkScene = (GameScene*)NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene));
+// 
+// 	if (0 == pkScene)
+// 	{
+// 		return;
+// 	}
+// 
+// 	NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(pkScene);
+// 
+// 	if (0 == pkLayer)
+// 	{
+// 		return;
+// 	}
+// 
+// 	NDLightEffect* pkLightEffect = new NDLightEffect;
+// 
+// 	string strSprFullPath = NDPath::GetAnimationPath();
+// 	strSprFullPath.append(kGroup.anifile);
+}
+
 }
