@@ -40,7 +40,7 @@ void CUIDlgOptBtn::Initialization()
 	m_sprTip = new CUISpriteNode;
 	m_sprTip->Initialization();
 	m_sprTip->SetFrameRect(rect);
-	m_sprTip->ChangeSprite(NDPath::GetAniPath("button.spr"));
+	m_sprTip->ChangeSprite(NDPath::GetAniPath("button.spr").c_str());
    
     
     //新增提示图片
