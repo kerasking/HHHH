@@ -12,11 +12,13 @@
 #include "NDUILabel.h"
 #include "NDPicture.h"
 #include "NDTextNode.h"
-#include "NDDirector.h"
+#include "NDUtility.h"
+#include "ScriptUI.h"
 #include "NDTargetEvent.h"
+#include "NDDirector.h"
+#include "NDPath.h"
 #include <string>
-
-using namespace cocos2d;
+//#include "I_Analyst.h"
 
 const int TAG_UITEXT	= 13869;
 
@@ -36,14 +38,15 @@ CUICheckBox::~CUICheckBox()
 	
 }
 
+# if 0
 void CUICheckBox::Initialization(const char* imgUnCheck, const char* imgCheck)
 {
 	NDUINode::Initialization();
 	
 	NDPicturePool& pool	= *(NDPicturePool::DefaultPool());
 	
-	std::string strUnCheckPath	= imgUnCheck ? imgUnCheck : "";//GetImgPath("Res00/btn_hook_normal.png");
-	std::string strCheckPath	= imgCheck ? imgCheck : "";//GetImgPath("Res00/btn_hook_select.png");
+	std::string strUnCheckPath	= imgUnCheck ? imgUnCheck : GetImgPath("Res00/btn_hook_normal.png");
+	std::string strCheckPath	= imgCheck ? imgCheck : GetImgPath("Res00/btn_hook_select.png");
 	
 	m_imgCheck	= new NDUIImage;
 	m_imgCheck->Initialization();
@@ -53,6 +56,41 @@ void CUICheckBox::Initialization(const char* imgUnCheck, const char* imgCheck)
 	m_imgUnCheck	= new NDUIImage;
 	m_imgUnCheck->Initialization();
 	m_imgUnCheck->SetPicture(pool.AddPicture(strUnCheckPath), true);
+	this->AddChild(m_imgUnCheck);
+	
+	m_lbText	= new NDUILabel;
+	m_lbText->Initialization();
+	this->AddChild(m_lbText);
+}
+#endif 
+
+void CUICheckBox::Initialization(NDPicture* imgUnCheck, NDPicture* imgCheck)
+{
+	NDUINode::Initialization();
+	
+	NDPicturePool& pool	= *(NDPicturePool::DefaultPool());
+    if (!imgUnCheck)
+    {
+        std::string strUnCheckPath	= NDPath::GetImgPath("Res00/btn_hook_normal.png");
+        imgUnCheck = pool.AddPicture(strUnCheckPath.c_str());
+    }
+    if (!imgCheck)
+    {
+        std::string strCheckPath	= NDPath::GetImgPath("Res00/btn_hook_select.png");
+        imgCheck = pool.AddPicture(strCheckPath.c_str());
+    }
+	
+	//std::string strUnCheckPath	= imgUnCheck ? imgUnCheck : GetImgPath("Res00/btn_hook_normal.png");
+	//std::string strCheckPath	= imgCheck ? imgCheck : GetImgPath("Res00/btn_hook_select.png");
+	
+	m_imgCheck	= new NDUIImage;
+	m_imgCheck->Initialization();
+	m_imgCheck->SetPicture(imgCheck, true);
+	this->AddChild(m_imgCheck);
+	
+	m_imgUnCheck	= new NDUIImage;
+	m_imgUnCheck->Initialization();
+	m_imgUnCheck->SetPicture(imgUnCheck, true);
 	this->AddChild(m_imgUnCheck);
 	
 	m_lbText	= new NDUILabel;
@@ -126,6 +164,7 @@ bool CUICheckBox::OnClick(NDObject* object)
 
 void CUICheckBox::draw()
 {
+ //   TICK_ANALYST(ANALYST_CUICheckBox);	
 	NDUINode::draw();
 	
 	if (!this->IsVisibled())
@@ -139,6 +178,7 @@ void CUICheckBox::draw()
 		if (m_imgCheck)
 		{
 			CGRect rect		= m_imgCheck->GetFrameRect();
+			rect.origin		= CGPointZero;
 			rect.size		= scrRect.size;
 			m_imgCheck->SetFrameRect(rect);
 		}
@@ -146,6 +186,7 @@ void CUICheckBox::draw()
 		if (m_imgUnCheck)
 		{
 			CGRect rect		= m_imgUnCheck->GetFrameRect();
+			rect.origin		= CGPointZero;
 			rect.size		= scrRect.size;
 			m_imgUnCheck->SetFrameRect(rect);
 		}
@@ -170,11 +211,11 @@ void CUICheckBox::draw()
 		const char* str			= m_lbText->GetText().c_str();
 		unsigned int fontsize	= m_lbText->GetFontSize();
 		
-		float fScaleFactor	= NDDirector::DefaultDirector()->GetScaleFactor();
-		if (!CompareEqualFloat(fScaleFactor, 0.0f))
-		{
-			fontsize	= fontsize / fScaleFactor; 
-		}
+		//float fScaleFactor	= NDDirector::DefaultDirector()->GetScaleFactor();
+		//if (!CompareEqualFloat(fScaleFactor, 0.0f))
+		//{
+		//	fontsize	= fontsize / fScaleFactor; 
+		//}
 		
 		CGSize textSize;
 		textSize.width	= fBoundWidth;
@@ -227,4 +268,20 @@ void CUICheckBox::SetFrameRect(CGRect rect)
 		}
 		m_imgUnCheck->SetFrameRect(CGRectMake(0, (rect.size.height - size.height) / 2, size.width, size.height));
 	}
+}
+bool CUICheckBox::CanDestroyOnRemoveAllChildren(NDNode* pNode)
+{
+	if (pNode == m_imgCheck)
+	{
+		m_imgCheck		= NULL;
+	}
+	else if (pNode == m_imgUnCheck)
+	{
+		m_imgUnCheck	= NULL;
+	}
+	else if (pNode == m_lbText)
+	{
+		m_lbText		= NULL;
+	}
+	return true;
 }

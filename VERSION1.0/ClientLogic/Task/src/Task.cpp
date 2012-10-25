@@ -50,7 +50,7 @@ void Task::Init()
 	
 	type = 0; // 1为不可重复,9为每日任务
 	
-	award_exp = 0; award_money = 0; // 任务经验和银两奖励
+	award_exp = 0; award_money = 0; // 任务经验和银币奖励
 	
 	award_itemflag = 0; // 任奖励务物品类型 0表不奖励,1表不选择直接奖励,2表多选1
 	

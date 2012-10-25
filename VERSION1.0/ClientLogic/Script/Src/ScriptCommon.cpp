@@ -9,8 +9,12 @@
 
 #include "ScriptCommon.h"
 #include "ScriptInc.h"
-#include <sstream>
 #include "NDPath.h"
+#include "NDUtility.h"
+#include <sstream>
+#include <map>
+#include "NDPicture.h"
+#include "CCTextureCacheExt.h"
 
 using namespace LuaPlus;
 using namespace NDEngine;
@@ -71,6 +75,29 @@ int BitwiseAnd(int x, int y)
 	return x & y;
 }
 
+
+std::map<std::string, double> debug_str_double;
+
+
+int PicMemoryUsingLogOut(bool bNotPrintLog)
+{
+	int nSize = 0;
+	if (!bNotPrintLog)
+	{
+		ScriptMgrObj.DebugOutPut("\n============NDPicturePool Memory Report==============\n");
+	}
+	//nSize += NDPicturePool::DefaultPool()->Statistics(bNotPrintLog);
+	if (!bNotPrintLog)
+	{
+		ScriptMgrObj.DebugOutPut("\n============CCTextureCache Memory Report==============\n");
+	}
+
+	//nSize += CCTextureCache::sharedTextureCache()->Statistics
+	//nSize += [[CCTextureCache sharedTextureCache] Statistics:bNotPrintLog];
+
+	return nSize;
+}
+
 ////////////////////////////////////////////////////////////
 //std::string g_strTmpWords;
 ////////////////////////////////////////////////////////////
@@ -83,5 +110,5 @@ void ScriptObjectCommon::OnLoad()
 	ETCFUNC("LeftShift", LeftShift)
 	ETCFUNC("RightShift", RightShift)
 	ETCFUNC("BitwiseAnd", BitwiseAnd)
-        //ETCFUNC("GetRandomWords", GetRandomWords);
+	//ETCFUNC("PicMemoryUsingLogOut", PicMemoryUsingLogOut);
 }

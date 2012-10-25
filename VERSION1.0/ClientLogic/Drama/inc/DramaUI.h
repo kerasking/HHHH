@@ -44,7 +44,7 @@ class DramaChatLayer: public ClickLayer
 	~DramaChatLayer();
 
 public:
-	virtual void SetFigure(std::string filename, bool bReverse);
+	virtual void SetFigure(std::string filename, bool bReverse, int nCol, int nRow);
 	virtual void SetTitle(std::string title, int nFontSize, int nFontColor);
 	virtual void SetContent(std::string contentt, int nFontSize,
 			int nFontColor);
