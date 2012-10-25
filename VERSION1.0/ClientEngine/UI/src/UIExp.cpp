@@ -118,7 +118,7 @@ void CUIExp::draw()
 			if ((int) fWidth > 0)
 			{
 				m_picProcess = NDPicturePool::DefaultPool()->AddPicture(
-						m_strProcessFile.c_str(), fWidth, kScrRect.size.height);
+						m_strProcessFile, fWidth, kScrRect.size.height);
 			}
 		}
 	}
@@ -180,7 +180,7 @@ void CUIExp::SetFrameRect(CGRect rect)
 
 	if (!m_strBgFile.empty())
 	{
-		m_picBg = NDPicturePool::DefaultPool()->AddPicture(m_strBgFile.c_str(),
+		m_picBg = NDPicturePool::DefaultPool()->AddPicture(m_strBgFile,
 				rect.size.width, rect.size.height);
 	}
 

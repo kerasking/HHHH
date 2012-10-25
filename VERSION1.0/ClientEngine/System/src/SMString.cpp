@@ -31,7 +31,11 @@ CString::CString(const char* fmt, ...) :
 		{
 			char buffer[MAX_STRING] = "";
 #if _MSC_VER < 1400     //below VS.net 2003
-			::vsprintf(buffer, fmt, (char*) ((&fmt) + 1));
+			//::vsprintf(buffer, fmt, (char*) ((&fmt) + 1));
+			va_list arglist;
+			va_start(arglist, fmt);
+			::vsprintf( buffer, fmt, arglist);
+			va_end(arglist);
 #else
 			buffer[sizeof(buffer)-1]='\0';
 			::vsprintf_s(buffer, sizeof(buffer)-1, fmt, (char *)((&fmt)+1) );

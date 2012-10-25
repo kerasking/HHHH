@@ -937,7 +937,7 @@ cocos2d::CCTexture2D* NDSprite::getColorTexture(int imageIndex,
 // 		}
 // 
 // 		pkPic = NDPicturePool::DefaultPool()->AddPicture(
-// 				m_strColorInfoImage.c_str());
+// 				m_strColorInfoImage);
 // 
 // 		if (0 == pkPic)
 // 		{

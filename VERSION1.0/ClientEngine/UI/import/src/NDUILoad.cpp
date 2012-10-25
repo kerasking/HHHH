@@ -139,7 +139,7 @@ bool NDUILoad::Load(
 	
 	CUIData  uiData;
 	
-	if ( !uiData.openUiFile(NDPath::GetUIConfigPath(uiname)) )
+	if ( !uiData.openUiFile(NDPath::GetUIConfigPath(uiname).c_str()) )
 	{
 		NDAsssert(0);
 		
@@ -378,7 +378,7 @@ bool NDUILoad::LoadLua(
 	
 	CUIData  uiData;
 	
-	if ( !uiData.openUiFile(NDPath::GetUIConfigPath(uiname)) )
+	if ( !uiData.openUiFile(NDPath::GetUIConfigPath(uiname).c_str()) )
 	{
 		NDAsssert(0);
 		
