@@ -81,7 +81,7 @@ void NDDirector::Initialization()
 		m_bEnableRetinaDisplay = true;
 	}
 
-	m_pkDirector->setAnimationInterval(1.0f / 24.0f);
+	m_pkDirector->setAnimationInterval(1.0f / 24.0f); //@zwq
 
 	CCTexture2D::setDefaultAlphaPixelFormat (kTexture2DPixelFormat_RGBA8888);
 
@@ -164,8 +164,17 @@ void NDDirector::EnableDispatchEvent(bool enable)
 
 void NDDirector::RunScene(NDScene* scene)
 {
-	m_kScenesStack.push_back(scene);
-	m_pkDirector->runWithScene((CCScene *) scene->m_ccNode);
+	//@zwq
+	if (m_pkDirector->getRunningScene())
+	{
+		m_kScenesStack.push_back(scene);
+		m_pkDirector->replaceScene((CCScene *) scene->m_ccNode);
+	}
+	else
+	{
+		m_kScenesStack.push_back(scene);
+		m_pkDirector->runWithScene((CCScene *) scene->m_ccNode);
+	}
 }
 
 void NDDirector::ReplaceScene(NDScene* pkScene, bool bAnimate/*=false*/)

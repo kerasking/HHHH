@@ -12,6 +12,7 @@
 #include "NDAnimation.h"
 #include "CCTexture2D.h"
 #include "CCTextureCache.h"
+#include "CCDirector.h"
 #include "NDSprite.h"
 #include "NDPath.h"
 #include "NDConstant.h"
@@ -84,16 +85,12 @@ void NDFrameRunRecord::NextFrame(int nTotalFrames)
 
 bool NDFrameRunRecord::isThisFrameEnd()
 {
-	if (m_nEnduration && m_nRunCount >= m_nEnduration - 1)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	//@zwq: 动画逐帧控制，应该按时间来，而不是Tick次数，先打个补丁！
+	float fMultiple = (1.0f / 24.0f) / CCDirector::sharedDirector()->getAnimationInterval();
+	//fMultiple *= 1.0f; //目前动作效果不好，加个参数细条，这些最好能在动画编辑器里调整。
 
-	return true;
+	return (m_nEnduration > 0)
+		&& (m_nRunCount >= int(m_nEnduration * fMultiple + 0.5f));
 }
 
 void NDFrameRunRecord::Clear()
@@ -148,7 +145,7 @@ bool NDFrame::enableRunNextFrame(NDFrameRunRecord* pkFrameRunRecord)
 	}
 
 	pkFrameRunRecord->setRunCount(pkFrameRunRecord->getRunCount() + 1);
-
+	
 	return false;
 }
 
@@ -941,6 +938,23 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int nImageIndex,
 		}
 	}
 
+	/***
+	* 此处需要去除，但是因为下面部分代码引用并没有实现，所以暂时保留
+	* 郭浩
+	* begin
+	*/
+
+	std::vector < std::string >* vImg = pkAnimationGroup->getImages();
+	if (vImg && vImg->size() > nImageIndex)
+	{
+		pkTexture = CCTextureCache::sharedTextureCache()->addImage(
+			(*vImg)[nImageIndex].c_str());
+	}
+
+	/***
+	* end
+	*/
+
 	if (REPLACEABLE_ONE_HAND_WEAPON_1 == nReplace)
 	{
 		//pkTexture = pkSprite->GetWeaponImage(); ///< 没有实现 郭浩
@@ -948,8 +962,8 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int nImageIndex,
 
 	if (0 == pkTexture)
 	{
-		pkTexture = NDPicturePool::DefaultPool()->AddTexture(
-			pkAnimationGroup->getImages()->at(nImageIndex).c_str());
+// 		pkTexture = NDPicturePool::DefaultPool()->AddTexture(			///< 等256色调色板 郭浩
+// 			pkAnimationGroup->getImages()->at(nImageIndex).c_str());
 	}
 
 	return pkTexture;

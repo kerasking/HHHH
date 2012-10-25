@@ -26,7 +26,8 @@ public NDUINode
 	~CUICheckBox();
 	
 public:
-	void Initialization(const char* imgUnCheck, const char* imgCheck); hide
+	//void Initialization(const char* imgUnCheck, const char* imgCheck); hide
+    void Initialization(NDPicture* imgUnCheck, NDPicture* imgCheck); hide
 	
 	void SetSelect(bool bSelect);
 	bool IsSelect();
@@ -34,7 +35,7 @@ public:
 	void SetText(const char* text);
 	const char* GetText();
 	
-	void SetTextFontColor(cocos2d::ccColor4B color);
+	void SetTextFontColor(ccColor4B color);
 	void SetTextFontSize(unsigned int unSize);
 	
 private:
@@ -51,6 +52,8 @@ protected:
 	void draw(); override
 public:
 	void SetFrameRect(CGRect rect); override
+protected:
+	bool CanDestroyOnRemoveAllChildren(NDNode* pNode);override
 };
 
 #endif // _CUI_CHECK_BOX_H_ZJH_

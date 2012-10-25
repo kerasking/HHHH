@@ -61,6 +61,7 @@ protected:
 	static void* ReadGameConsole(void* pData);
 
 	void ProcessInput(const char* pszInput);
+	void PM(const char* pszInput);
 
 	static bool ms_bIsExistent;
 	static sem_t ms_pkSemT;

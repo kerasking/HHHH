@@ -143,7 +143,8 @@ public:
 //		作用：初始化精灵，必须被显示或隐式调用
 //		参数：sprFile动画文件，每一个精灵需要与一个动画文件绑定
 //		返回值：无
-	void Initialization(const char* sprFile);
+	void Initialization(const char* pszSprFile,bool bFaceRight = true;);
+	void Initlalization(const char* pszSprFile,ISpriteEvent* pkEvent,bool bFaceRight);
 //		
 //		函数：OnDrawBegin
 //		作用：该方法在精灵绘制之前被框架调用
@@ -452,8 +453,10 @@ public:
 	{
 		return m_bReverse;
 	}
+
 protected:
 
+	bool MoveByPath( const bool bFirstPath = false );
 	void MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed,
 			bool moveMap, bool ignoreMask = false, bool mustArrive = false);
 	virtual void OnMoveBegin();
@@ -509,6 +512,7 @@ protected:
 	int m_nColorInfo;
 	int m_nCloak;
 	int m_nSpeed;
+	DWORD m_dwLastMoveTickTime;
 
 	std::vector<CGPoint> m_kPointList;
 	CGPoint m_kTargetPos;
@@ -521,6 +525,7 @@ private:
 	NDPicture* m_pkPicSprite;
 	CGRect m_kRectSprite;
 	bool m_bHightLight;
+	ISpriteEvent* m_pkSpriteEvent;
 	NSTimeInterval m_dBeginTime;
 };
 }

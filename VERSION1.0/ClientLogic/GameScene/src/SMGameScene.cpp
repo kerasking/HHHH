@@ -45,8 +45,8 @@ void CSMGameScene::Initialization(int mapID)
 {
 	NDScene::Initialization();
 	
-	CGSize winsize			= NDDirector::DefaultDirector()->GetWinSize();
-	float fScaleFactor		= NDDirector::DefaultDirector()->GetScaleFactor();
+	//CGSize winsize			= NDDirector::DefaultDirector()->GetWinSize();
+	//float fScaleFactor		= NDDirector::DefaultDirector()->GetScaleFactor();
 	
 	m_pkMapLayerLogic = new NDMapLayerLogic();
 	m_pkMapLayerLogic->Initialization(mapID); 

@@ -6,7 +6,7 @@
  *  Copyright 2012 (网龙)DeNA. All rights reserved.
  *
  */
-
+#include "NDDirector.h"
 #include "ScriptDrama.h"
 #include "ScriptInc.h"
 #include "DramaCommand.h"
@@ -159,9 +159,20 @@ using namespace NDEngine;
 ////////////////////////////////////////////////////////////////////////////////////
 // 对话设置
 
+void DramaCloseRChatDlg();
+void DramaOpenLChatDlgNotCloseRight();
+void DramaCloseLChatDlg();
+void DramaOpenRChatDlgNotCloseLeft();
 // 函数: DramaOpenLChatDlg();
-// 功能: 打开左边对话框
+// 功能: 打开左边对话框,同时关闭右边对话框
 void DramaOpenLChatDlg()
+{
+	DramaCloseRChatDlg();
+	DramaOpenLChatDlgNotCloseRight();
+}
+// 函数: DramaOpenLChatDlgNotCloseRight();
+// 功能: 打开左边对话框,不关闭右边对话框
+void DramaOpenLChatDlgNotCloseRight()
 {
 	DramaCommandDlg* command = new DramaCommandDlg;
 	command->InitWithOpen(true);
@@ -169,13 +180,21 @@ void DramaOpenLChatDlg()
 }
 
 // 函数: DramaOpenRChatDlg();
-// 功能: 打开右边对话框
+// 功能: 打开右边对话框，同时关闭左边对话框
 void DramaOpenRChatDlg()
+{
+	DramaCloseLChatDlg();
+	DramaOpenRChatDlgNotCloseLeft();
+}
+// 函数: DramaOpenRChatDlgNotCloseLeft();
+// 功能: 打开右边对话框，不关闭左边对话框
+void DramaOpenRChatDlgNotCloseLeft()
 {
 	DramaCommandDlg* command = new DramaCommandDlg;
 	command->InitWithOpen(false);
 	DramaObj.AddCommond(command);
 }
+
 
 // 函数: DramaCloseLChatDlg();
 // 功能: 关闭对话框
@@ -198,10 +217,10 @@ void DramaCloseRChatDlg()
 // 函数: DramaSetLChatFigure(string strFileName);
 // 功能: 设置剧情左边聊天头像
 // 参数: strFileName: 头像文件名
-void DramaSetLChatFigure(std::string strFileName, bool bReverse)
+void DramaSetLChatFigure(std::string strFileName, bool bReverse, int nCol, int nRow)
 {
 	DramaCommandDlg* command = new DramaCommandDlg;
-	command->InitWithSetFigure(true, strFileName, bReverse);
+	command->InitWithSetFigure(true, strFileName, bReverse, nCol, nRow);
 	DramaObj.AddCommond(command);
 }
 
@@ -212,7 +231,8 @@ void DramaSetLChatFigure(std::string strFileName, bool bReverse)
 //		nFontcolor: 颜色(默认NULL)
 
 void DramaSetLChatName(std::string strName, int nFontSize, int nFontColor)
-{
+{    
+	nFontSize *= FONT_SCALE;
 	DramaCommandDlg* command = new DramaCommandDlg;
 	command->InitWithSetTitle(true, strName, nFontSize, nFontColor);
 	DramaObj.AddCommond(command);
@@ -225,6 +245,7 @@ void DramaSetLChatName(std::string strName, int nFontSize, int nFontColor)
 //		nFontcolor: 颜色(默认NULL)
 void DramaSetLChatNameBySpriteKey(int nKey, int nFontSize, int nFontColor)
 {
+	nFontSize *= FONT_SCALE;
 	DramaCommandDlg* command = new DramaCommandDlg;
 	command->InitWithSetTitleBySpriteKey(true, nKey, nFontSize, nFontColor);
 	DramaObj.AddCommond(command);
@@ -237,6 +258,7 @@ void DramaSetLChatNameBySpriteKey(int nKey, int nFontSize, int nFontColor)
 //		nFontcolor: 颜色(默认NULL)
 void DramaSetLChatContent(std::string strContent, int nFontSize, int nFontColor)
 {
+	nFontSize *= FONT_SCALE;
 	DramaCommandDlg* command = new DramaCommandDlg;
 	command->InitWithSetContent(true, strContent, nFontSize, nFontColor);
 	DramaObj.AddCommond(command);
@@ -244,10 +266,10 @@ void DramaSetLChatContent(std::string strContent, int nFontSize, int nFontColor)
 
 // 函数: DramaSetRChatFigure(string strFileName);
 // 功能: 设置剧情右边聊天头像
-void DramaSetRChatFigure(std::string strFileName, bool bReverse)
+void DramaSetRChatFigure(std::string strFileName, bool bReverse, int nCol, int nRow)
 {
 	DramaCommandDlg* command = new DramaCommandDlg;
-	command->InitWithSetFigure(false, strFileName, bReverse);
+	command->InitWithSetFigure(false, strFileName, bReverse,  nCol ,  nRow);
 	DramaObj.AddCommond(command);
 }
 
@@ -255,6 +277,7 @@ void DramaSetRChatFigure(std::string strFileName, bool bReverse)
 // 功能: 设置剧情右边聊天名字
 void DramaSetRChatName(std::string strName, int nFontSize, int nFontColor)
 {
+	nFontSize *= FONT_SCALE;
 	DramaCommandDlg* command = new DramaCommandDlg;
 	command->InitWithSetTitle(false, strName, nFontSize, nFontColor);
 	DramaObj.AddCommond(command);
@@ -267,6 +290,7 @@ void DramaSetRChatName(std::string strName, int nFontSize, int nFontColor)
 //		nFontcolor: 颜色(默认NULL)
 void DramaSetRChatNameBySpriteKey(int nKey, int nFontSize, int nFontColor)
 {
+	nFontSize *= FONT_SCALE;
 	DramaCommandDlg* command = new DramaCommandDlg;
 	command->InitWithSetTitleBySpriteKey(false, nKey, nFontSize, nFontColor);
 	DramaObj.AddCommond(command);
@@ -276,6 +300,7 @@ void DramaSetRChatNameBySpriteKey(int nKey, int nFontSize, int nFontColor)
 // 功能: 设置剧情右边聊天内容
 void DramaSetRChatContent(std::string strContent, int nFontSize, int nFontColor)
 {
+	nFontSize *= FONT_SCALE;
 	DramaCommandDlg* command = new DramaCommandDlg;
 	command->InitWithSetContent(false, strContent, nFontSize, nFontColor);
 	DramaObj.AddCommond(command);
@@ -333,6 +358,17 @@ void DramaSetSpriteAni(int nKey, int nAniIndex)
 	DramaObj.AddCommond(command);
 }
 
+// 函数: DramaSetSpriteReverse(int nKey, bool bReverse)
+// 功能: 设置场景中的精灵的翻转
+// 参数: nKey: AddDramaSprite函数返回的key
+//		 bReverse: 是否翻转
+void DramaSetSpriteReverse(int nKey, bool bReverse)    
+{ 
+	DramaCommandSprite* command = new DramaCommandSprite;
+	command->InitWithSetReverse(nKey, bReverse);
+	DramaObj.AddCommond(command);
+}
+
 // 函数: DramaSetSpritePosition(int nKey, int nPosX, int nPosY);
 // 功能: 设置场景中的精灵的位置
 // 参数: nKey: AddDramaSprite函数返回的key
@@ -380,6 +416,7 @@ void DramaLoadScene(int nMapID)
 double DramaLoadEraseInOutScene(string centerText, int nFontsize,
 		int nFontColor)
 {
+	nFontsize *= FONT_SCALE;
 	DramaCommandScene* command = new DramaCommandScene;
 	command->InitWithLoad(centerText, nFontsize, nFontColor);
 	DramaObj.AddCommond(command);
@@ -479,10 +516,23 @@ void DramaShowTipDlg(std::string content)
 	DramaObj.AddCommond(command);
 }
 
+// 函数: DramaPlaySoundEffect
+// 功能: 播放音效
+// 参数: nSoundEffectId: 音效的id
+void DramaPlaySoundEffect(int nSoundEffectId)
+{
+	DramaCommandSoundEffect* command = new DramaCommandSoundEffect;
+	command->InitWithSoundEffectId(nSoundEffectId);
+	DramaObj.AddCommond(command);
+}
+
 void ScriptObjectDrama::OnLoad()
 {
+	ETCFUNC("DramaPlaySoundEffect", DramaPlaySoundEffect);
 	ETCFUNC("DramaOpenLChatDlg", DramaOpenLChatDlg);
+	ETCFUNC("DramaOpenLChatDlgNotCloseRight", DramaOpenLChatDlgNotCloseRight);
 	ETCFUNC("DramaOpenRChatDlg", DramaOpenRChatDlg);
+	ETCFUNC("DramaOpenRChatDlgNotCloseLeft", DramaOpenRChatDlgNotCloseLeft);
 	ETCFUNC("DramaCloseLChatDlg", DramaCloseLChatDlg);
 	ETCFUNC("DramaCloseRChatDlg", DramaCloseRChatDlg);
 	ETCFUNC("DramaSetLChatFigure", DramaSetLChatFigure);
@@ -511,4 +561,5 @@ void ScriptObjectDrama::OnLoad()
 	ETCFUNC("DramaStart", DramaStart);
 	ETCFUNC("DramaFinish", DramaFinish);
 	ETCFUNC("DramaShowTipDlg", DramaShowTipDlg);
+	ETCFUNC("DramaSetSpriteReverse", DramaSetSpriteReverse);
 }

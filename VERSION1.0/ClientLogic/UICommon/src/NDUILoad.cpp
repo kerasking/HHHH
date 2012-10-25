@@ -137,7 +137,7 @@ bool NDUILoad::Load(
 	}
 	
 	CUIData uiData;
-	const char* pszTemp = NDPath::GetUIConfigPath(uiname);
+	const char* pszTemp = NDPath::GetUIConfigPath(uiname).c_str();
 	
 	if ( !uiData.openUiFile(pszTemp) )
 	{
@@ -377,7 +377,7 @@ bool NDUILoad::LoadLua(
 	}
 	
 	CUIData uiData;
-	const char* pszPath = NDPath::GetUIConfigPath(uiname);
+	const char* pszPath = NDPath::GetUIConfigPath(uiname).c_str();
 	
 	if ( !uiData.openUiFile(pszPath) )
 	{

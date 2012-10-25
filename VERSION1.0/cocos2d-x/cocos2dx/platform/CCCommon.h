@@ -67,4 +67,6 @@ typedef enum LanguageType
 
 NS_CC_END;
 
+#define ND_MOD 1	//@zwq
+
 #endif	// __CC_COMMON_H__

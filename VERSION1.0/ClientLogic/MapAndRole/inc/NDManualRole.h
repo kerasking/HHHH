@@ -257,6 +257,10 @@ protected:
 		return m_bToLastPos;
 	}
 
+protected: //@zwq
+	void InitNameLable( NDUILabel*& pLable );
+	void DrawLable( NDUILabel* pLable, bool bDraw );
+
 public:
 	void SetTeamToLastPos();
 public:

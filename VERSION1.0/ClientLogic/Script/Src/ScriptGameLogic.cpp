@@ -184,7 +184,7 @@ const char* GetSMImgPath(const char* name)
 	std::string str = "Res00/";
 	str += name;
 
-	return NDPath::GetImgPath(str.c_str());
+	return NDPath::GetImgPath(str.c_str()).c_str();
 }
 
 const char* GetSMResPath(const char* name)
@@ -194,7 +194,7 @@ const char* GetSMResPath(const char* name)
 		return "";
 	}
 
-	return NDPath::GetResPath(name);
+	return NDPath::GetResPath(name).c_str();
 }
 
 NDMapLayer* GetMapLayer()
@@ -388,7 +388,7 @@ void CreateRole(const char* pszName, Byte nProfession, int nLookFace,
 
 const char* GetImagePathNew(const char* pszPath)
 {
-	return NDPath::GetImgPathNew(pszPath);
+	return NDPath::GetImgPathUINew(pszPath).c_str();
 }
 
 ///////////////////////////////////////////////

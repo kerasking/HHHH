@@ -29,16 +29,16 @@ IMPLEMENT_CLASS(StatusDialog, NDUILayer)
 StatusDialog::StatusDialog()
 {
 	std::string bottomImage = NDPath::GetImgPath("bottom.png");
-	m_picLeftTop = NDPicturePool::DefaultPool()->AddPicture(bottomImage.c_str());
+	m_picLeftTop = NDPicturePool::DefaultPool()->AddPicture(bottomImage);
 	m_picLeftTop->SetReverse(true);
 	m_picLeftTop->Rotation(PictureRotation180);
 	
-	m_picRightTop = NDPicturePool::DefaultPool()->AddPicture(bottomImage.c_str());
+	m_picRightTop = NDPicturePool::DefaultPool()->AddPicture(bottomImage);
 	m_picRightTop->Rotation(PictureRotation180);
 	
-	m_picLeftBottom = NDPicturePool::DefaultPool()->AddPicture(bottomImage.c_str());
+	m_picLeftBottom = NDPicturePool::DefaultPool()->AddPicture(bottomImage);
 	
-	m_picRightBottom = NDPicturePool::DefaultPool()->AddPicture(bottomImage.c_str());
+	m_picRightBottom = NDPicturePool::DefaultPool()->AddPicture(bottomImage);
 	m_picRightBottom->SetReverse(true);
 	
 	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
