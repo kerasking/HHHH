@@ -255,11 +255,11 @@ public:
 		const char* fileCheck	= NULL;
 		if (!m_info.strNormalFile.empty())
 		{
-			fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str());
+			fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str();
 		}
 		if (!m_info.strSelectedFile.empty())
 		{
-			fileCheck	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str());
+			fileCheck	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str()).c_str();
 		}
 		checkBox->Initialization(fileUnCheck, fileCheck);
 		checkBox->SetFrameRect(this->GetFrameRect());
@@ -435,11 +435,11 @@ public:
 		const char* processfile	= NULL;
 		if (!m_info.strNormalFile.empty())
 		{
-			bgfile	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str());
+			bgfile	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str();
 		}
 		if (!m_info.strSelectedFile.empty())
 		{
-			processfile	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str());
+			processfile	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str()).c_str();
 		}
 		exp->Initialization(bgfile, processfile);		
 		exp->SetFrameRect(this->GetFrameRect());
@@ -463,7 +463,7 @@ public:
 		sprite->SetFrameRect(this->GetFrameRect());
 		if (!m_info.strNormalFile.empty())
 		{
-			sprite->ChangeSprite(NDPath::GetUIImgPath(m_info.strNormalFile.c_str()));
+			sprite->ChangeSprite(NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str());
 		}
 		return sprite;
 	}
@@ -525,11 +525,11 @@ public:
 		const char* fileCheck	= NULL;
 		if (!m_info.strNormalFile.empty())
 		{
-			fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str());
+			fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str();
 		}
 		if (!m_info.strSelectedFile.empty())
 		{
-			fileCheck	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str());
+			fileCheck	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str()).c_str();
 		}
 		radio->Initialization(fileUnCheck, fileCheck);
 		radio->SetFrameRect(rect);

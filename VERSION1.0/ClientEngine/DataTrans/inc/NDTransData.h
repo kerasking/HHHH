@@ -36,8 +36,8 @@ namespace NDEngine
 		
 	public:
 		/**加解密现在只有登陆消息需要,其它消息不需要*/
-		bool encrypt(std::string strKey);
-		bool decrypt(std::string strKey);
+		bool encrypt(const std::string& strKey);
+		bool decrypt(const std::string& strKey);
 
 //		函数：Read
 //		作用：从流中读取一段数据

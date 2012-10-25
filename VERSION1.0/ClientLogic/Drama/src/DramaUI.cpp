@@ -87,7 +87,7 @@ void DramaChatLayer::SetFigure(std::string filename, bool bReverse)
 	if (node && node->IsKindOfClass(RUNTIME_CLASS(NDUIImage)))
 	{
 		NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture(
-				filename.c_str());
+				filename);
 		pic->SetReverse(bReverse);
 		((NDUIImage*) node)->SetPicture(pic);
 	}

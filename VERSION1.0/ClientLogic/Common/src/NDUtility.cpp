@@ -222,8 +222,8 @@ std::string loadPackInfo(int param)
 		return "";
 	}
 
-	std::string channelIni = NDEngine::NDPath::GetResourcePath().append(
-			"channel.ini");
+	std::string channelIni = NDEngine::NDPath::GetResPath();
+	channelIni.append("channel.ini");
 	FILE* pkFile = fopen(channelIni.c_str(), "rt");
 
 	if (!pkFile)
@@ -277,8 +277,9 @@ std::string GetIosVersion()
 
 std::string GetChannelInfo()
 {
-	std::string channelIni = NDEngine::NDPath::GetResourcePath().append(
-			"channel.ini");
+	std::string channelIni = NDEngine::NDPath::GetResPath();
+	channelIni.append("channel.ini");
+
 	FILE* f = fopen(channelIni.c_str(), "rt");
 	if (f)
 	{
@@ -304,8 +305,9 @@ std::string GetChannelInfo()
 }
 std::string GetUpdateUrl()
 {
-	std::string channelIni = NDEngine::NDPath::GetResourcePath().append(
-			"channel.ini");
+	std::string channelIni = NDEngine::NDPath::GetResPath();
+	channelIni.append("channel.ini");
+
 	FILE* f = fopen(channelIni.c_str(), "rt");
 	if (f)
 	{

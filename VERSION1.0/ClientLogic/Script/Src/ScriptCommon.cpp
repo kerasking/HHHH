@@ -49,7 +49,7 @@ int DoFile(LuaState* state)
 	
 	if (str.IsString())
 	{
-		const char* pszPath = NDPath::GetScriptPath(str.GetString());
+		const char* pszPath = NDPath::GetScriptPath(str.GetString()).c_str();
 		nRet = state->DoFile(pszPath);
 	}
 
