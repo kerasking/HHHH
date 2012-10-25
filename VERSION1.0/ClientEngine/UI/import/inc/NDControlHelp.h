@@ -261,7 +261,7 @@ public:
 		{
 			fileCheck	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str());
 		}
-		checkBox->Initialization(fileUnCheck, fileCheck);
+	//	checkBox->Initialization(fileUnCheck, fileCheck);
 		checkBox->SetFrameRect(this->GetFrameRect());
 		checkBox->SetText(info.strText.c_str());
 		checkBox->SetTextFontSize(info.nTextFontSize);

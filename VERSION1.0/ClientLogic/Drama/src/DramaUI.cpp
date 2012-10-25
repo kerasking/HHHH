@@ -80,7 +80,7 @@ DramaChatLayer::~DramaChatLayer()
 
 }
 
-void DramaChatLayer::SetFigure(std::string filename, bool bReverse)
+void DramaChatLayer::SetFigure(std::string filename, bool bReverse, int nCol, int nRow)
 {
 	NDNode* node = this->GetChild(m_nTagFigure);
 
@@ -89,6 +89,11 @@ void DramaChatLayer::SetFigure(std::string filename, bool bReverse)
 		NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture(
 				filename.c_str());
 		pic->SetReverse(bReverse);
+
+		int nCutX= nCol * 256;
+		int nCutY= nRow * 256;
+		pic->Cut(CGRectMake(nCutX+1, nCutY+1, 255, 255));
+
 		((NDUIImage*) node)->SetPicture(pic);
 	}
 }
@@ -151,6 +156,13 @@ void DramaLeftChat::Initialization()
 
 	this->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
 
+	//ÉèÖÃ±³¾°
+	NDUILayer *backlayer = new NDUILayer;
+	backlayer->Initialization();
+	backlayer->SetFrameRect(CGRectMake(winsize.width*0.1, winsize.height*0.7, winsize.width*0.9, winsize.height*0.3));
+	backlayer->SetBackgroundColor(ccc4(0,0,0,60));
+	this->AddChild(backlayer, -1);
+
 	NDUILoad uiload;
 	uiload.Load("dramaini/DLG_L.ini", this, NULL);
 
@@ -173,6 +185,13 @@ void DramaRightChat::Initialization()
 	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 
 	this->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
+	
+	//ÉèÖÃ±³¾°
+	NDUILayer *backlayer = new NDUILayer;
+	backlayer->Initialization();
+	backlayer->SetFrameRect(CGRectMake(0, 0, winsize.width*0.9, winsize.height*0.3));
+	backlayer->SetBackgroundColor(ccc4(0,0,0,60));
+	this->AddChild(backlayer, -1);
 
 	NDUILoad uiload;
 	uiload.Load("dramaini/DLG_R.ini", this, NULL);

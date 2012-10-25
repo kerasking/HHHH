@@ -20,7 +20,7 @@ public:
 
 	void InitWithOpen(bool bLeft);
 	void InitWithClose(bool bLeft);
-	void InitWithSetFigure(bool bLeft, std::string filename, bool bReverse);
+	void InitWithSetFigure(bool bLeft, std::string filename, bool bReverse, int nCol ,int nRow);
 	void InitWithSetTitle(bool bLeft, std::string title, int nFontSize,
 			int nFontColor);
 	void InitWithSetTitleBySpriteKey(bool bLeft, int nKey, int nFontSize,
@@ -29,9 +29,6 @@ public:
 			int nFontColor);
 	void InitWithTip(std::string content);
 	virtual void excute();
-
-protected:
-private:
 };
 
 ///////////////////////////////////////////////
@@ -46,8 +43,10 @@ public:
 	void InitWithSetAnimation(int nKey, int nAniIndex);
 	void InitWithSetPos(int nKey, int nPosX, int nPosY);
 	void InitWithMove(int nKey, int nToPosX, int nToPosY, int nStep);
+	void InitWithSetReverse(int nKey, bool bReverse);
+	//≤•∑≈Ãÿ–ß
+	void InitWithEffect(int nKey,int nEffectId);
 	virtual void excute();
-
 private:
 
 	void ExcuteAddSprite();
@@ -56,6 +55,8 @@ private:
 	void ExcuteSetAnimation();
 	void ExcuteSetPostion();
 	void ExcuteMoveSprite();
+	void ExcuteSpriteEffect();
+	void ExcuteSpriteReverse();
 };
 
 ///////////////////////////////////////////////
@@ -115,6 +116,18 @@ public:
 private:
 
 	NDTimer m_timer;
+};
+
+class DramaCommandSoundEffect:
+	public DramaCommandBase
+{
+public:
+	void InitWithSoundEffectId(int nId);
+	virtual void excute();
+
+private:
+	void ExcuteSoundEffect();
+
 };
 
 #endif // _DRAMA_COMMAND_H_ZJH_
