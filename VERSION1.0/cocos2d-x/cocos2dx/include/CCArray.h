@@ -87,7 +87,9 @@ public:
 	/** Returns a Boolean value that indicates whether object is present in array. */
     bool containsObject(CCObject* object);
 
+#if ND_MOD
 	bool writeToFile(CCString* path,bool bUseAuxiliaryFile);
+#endif
 
     // Adding Objects
 

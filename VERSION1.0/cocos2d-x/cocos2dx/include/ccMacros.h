@@ -162,4 +162,20 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 #define CC_SWAP_INT32_BIG_TO_HOST(i)    ((CC_HOST_IS_BIG_ENDIAN == true)? (i) : CC_SWAP32(i) )
 #define CC_SWAP_INT16_BIG_TO_HOST(i)    ((CC_HOST_IS_BIG_ENDIAN == true)? (i):  CC_SWAP16(i) )
 
+
+//--------------------------------------------------------------------------------------------
+//#if ND_MOD //@zwq
+template<typename T> 
+T TClamp(const T& x, const T& a, const T& b) {
+	return x < a ? a : (x > b ? b : x);
+}
+
+template<typename T>
+T TAbs(T x) { 
+	return (x >= 0 ? x : -x);
+}
+
+//#endif
+//--------------------------------------------------------------------------------------------
+
 #endif // __CCMACROS_H__

@@ -62,7 +62,12 @@ namespace  cocos2d
 {
 
 // singleton stuff
-static CCDisplayLinkDirector *sm_pSharedDirector;
+#if ND_MOD
+	static CCDisplayLinkDirector *sm_pSharedDirector = NULL;
+#else
+	static CCDisplayLinkDirector s_sharedDirector;
+#endif
+
 static bool s_bFirstRun = true;
 
 #define kDefaultFPS		60  // 60 frames per second
@@ -70,14 +75,60 @@ extern const char* cocos2dVersion(void);
 
 CCDirector* CCDirector::sharedDirector(void)
 {
-	if (s_bFirstRun)
+#if ND_MOD
+	CCAssert(sm_pSharedDirector, "sm_pSharedDirector should not be null");
+	if (s_bFirstRun && sm_pSharedDirector)
 	{
 		sm_pSharedDirector->init();
         s_bFirstRun = false;
 	}
 
 	return sm_pSharedDirector;
+#else
+	if (s_bFirstRun)
+	{
+		s_sharedDirector.init();
+        s_bFirstRun = false;
+	}
+
+	return &s_sharedDirector;
+#endif
 }
+
+#if ND_MOD
+CCDirector::CCDirector(void) 
+{
+	m_pobOpenGLView = NULL;
+	m_dAnimationInterval = 0;
+	m_dOldAnimationInterval = 0;
+	m_bLandscape = false;
+	m_bDisplayFPS = false;
+	m_fAccumDt = 0;
+	m_fFrameRate = 0;
+#if	CC_DIRECTOR_FAST_FPS
+	m_pFPSLabel = NULL;
+#endif
+	m_bPaused = false;
+	m_uTotalFrames = 0;
+	m_uFrames = 0;
+	m_pRunningScene = NULL;
+	m_pNextScene = NULL;
+	m_bSendCleanupToScene = false;
+	m_pobScenesStack = NULL;
+	m_pLastUpdate = NULL;
+	m_fDeltaTime = 0;
+	m_bNextDeltaTimeZero = false;
+	m_fContentScaleFactor = 0;
+	m_pszFPS = NULL;
+	m_pNotificationNode = NULL;
+	m_pProjectionDelegate = NULL;
+	m_bIsContentScaleSupported = false;
+	m_bRetinaDisplay = false;
+#if CC_ENABLE_PROFILERS
+	m_fAccumDtForProfiler = false;
+#endif
+}
+#endif
 
 bool CCDirector::init(void)
 {
@@ -103,7 +154,6 @@ bool CCDirector::init(void)
 	m_uTotalFrames = m_uFrames = 0;
 	m_pszFPS = new char[10];
 	m_pLastUpdate = new struct cc_timeval();
-    m_pFPSLabel = NULL;
 
 	// paused ?
 	m_bPaused = false;
@@ -502,7 +552,7 @@ void CCDirector::reshapeProjection(const CCSize& newWindowSize)
 void CCDirector::runWithScene(CCScene *pScene)
 {
 	CCAssert(pScene != NULL, "running scene should not be null");
-	//CCAssert(m_pRunningScene == NULL, "m_pRunningScene should be null");
+	CCAssert(m_pRunningScene == NULL, "m_pRunningScene should be null");
 
 	pushScene(pScene);
 	startAnimation();
@@ -719,7 +769,7 @@ void CCDirector::showFPS(void)
 		m_fAccumDt = 0;
 
 		sprintf(m_pszFPS, "%.1f", m_fFrameRate);
-		m_pFPSLabel->setString(m_pszFPS);
+		m_pFPSLabel->setString(m_pszFPS); 
 	}
 
     m_pFPSLabel->draw();
@@ -918,11 +968,13 @@ void CCDirector::setDeviceOrientation(ccDeviceOrientation kDeviceOrientation)
 * implementation of DisplayLinkDirector
 **************************************************/
 
+#if ND_MOD
 CCDisplayLinkDirector::CCDisplayLinkDirector(void)
-		: m_bInvalid(false)
+	: m_bInvalid(false)
 {
     sm_pSharedDirector = this;
 }
+#endif
 
 // should we afford 4 types of director ??
 // I think DisplayLinkDirector is enough

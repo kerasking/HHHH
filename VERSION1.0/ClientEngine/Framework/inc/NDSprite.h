@@ -376,6 +376,7 @@ public:
 	}
 protected:
 
+	bool MoveByPath( const bool bFirstPath = false );
 	void MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed,
 			bool moveMap, bool ignoreMask = false, bool mustArrive = false);
 	virtual void OnMoveBegin();
@@ -431,6 +432,7 @@ protected:
 	int m_nColorInfo;
 	int m_nCloak;
 	int m_nSpeed;
+	DWORD m_dwLastMoveTickTime;
 
 	std::vector<CGPoint> m_kPointList;
 	CGPoint m_kTargetPos;

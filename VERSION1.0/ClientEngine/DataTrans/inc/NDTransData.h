@@ -12,6 +12,7 @@
 #include "NDObject.h"
 
 #include <string>
+
 //////////////////////////////////////////////////////////////////////////
 
 namespace NDEngine
@@ -35,8 +36,8 @@ namespace NDEngine
 		
 	public:
 		/**加解密现在只有登陆消息需要,其它消息不需要*/
-		bool encrypt(std::string key);
-		bool decrypt(std::string key);
+		bool encrypt(std::string strKey);
+		bool decrypt(std::string strKey);
 
 //		函数：Read
 //		作用：从流中读取一段数据

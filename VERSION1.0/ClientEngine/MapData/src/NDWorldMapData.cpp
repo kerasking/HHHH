@@ -125,6 +125,7 @@ NDWorldMapData * NDWorldMapData::SharedData()
 	}
 	return NDWorldMapData_SharedData;
 }
+
 /*通过地图文件(不包含路径)加载地图数据
  参数:mapFile-地图文件名
  */
@@ -151,7 +152,6 @@ NDWorldMapData::~NDWorldMapData()
 /*  地图文件解析
  参数:地图文件流
  */
-
 void NDWorldMapData::decode(FILE* stream)
 {
 	FileOp kFileOp;

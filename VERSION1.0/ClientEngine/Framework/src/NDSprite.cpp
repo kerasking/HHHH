@@ -38,6 +38,7 @@ NDSprite::NDSprite()
 	m_bMoveMap = false;
 	m_bIsMoving = false;
 	m_nMovePathIndex = 0;
+	m_dwLastMoveTickTime = 0;
 
 //		NDLog("init pos");
 	m_kPosition.x = 0;
@@ -136,14 +137,31 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 	}
 }
 
+//@zwq: 移动应考虑时间速度，最好不要每个tick都移动.
+bool NDSprite::MoveByPath( const bool bFirstPath /*= false*/ )
+{
+	static int MOVES_PER_SECOND = 60;
+	
+	if (TAbs(GetTickCount() - m_dwLastMoveTickTime) > 1000/MOVES_PER_SECOND)
+	{
+		CGPoint kPos = m_kPointList.at(m_nMovePathIndex++);
+		SetPosition(kPos);
+
+		m_dwLastMoveTickTime = GetTickCount();
+
+		return true;
+	}
+	return false;
+}
+
+
 void NDSprite::RunAnimation(bool bDraw)
 {
 	if (m_pkFrameRunRecord && m_pkAniGroup && m_pkCurrentAnimation)
 	{
+		bool bMoved = false;
 		if (m_bIsMoving)
 		{
-			//else
-//				{
 			int iPoints = m_kPointList.size();
 			if (m_nMovePathIndex < iPoints)
 			{
@@ -156,28 +174,28 @@ void NDSprite::RunAnimation(bool bDraw)
 					OnMoving(m_nMovePathIndex == iPoints - 1);
 				}
 
-				CGPoint kPos = m_kPointList.at(m_nMovePathIndex++);
-				SetPosition(kPos);
+				bMoved = MoveByPath(m_nMovePathIndex == 0); //@zwq
 			}
 			else
 			{
 				OnMoveEnd();
 				m_bIsMoving = false;
 			}
-			//	}
+		}//m_bIsMoving
 
-		}
+		NDNode* pParentNode = GetParent();
 
-		NDNode* pkNode = GetParent();
-
-		if (!pkNode)
+		if (!pParentNode)
 		{
 			return;
 		}
 
 		m_pkAniGroup->setRuningSprite(this);
-		m_pkAniGroup->setRunningMapSize(pkNode->GetContentSize());
-		m_pkAniGroup->setPosition(m_kPosition);
+		m_pkAniGroup->setRunningMapSize(pParentNode->GetContentSize());
+		if (bMoved)
+		{
+			m_pkAniGroup->setPosition(m_kPosition);
+		}
 
 		m_pkCurrentAnimation->setReverse(m_bReverse);
 
@@ -197,9 +215,9 @@ void NDSprite::RunAnimation(bool bDraw)
 
 		TileSetHightLight(bIsOldTitleHightLight);
 
-		if (m_bMoveMap && pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+		if (bMoved && m_bMoveMap && pParentNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
-			NDMapLayer* mapLayer = (NDMapLayer*) pkNode;
+			NDMapLayer* mapLayer = (NDMapLayer*) pParentNode;
 			mapLayer->SetScreenCenter(m_kPosition);
 		}
 	}
@@ -220,10 +238,10 @@ void NDSprite::RunAnimation(bool bDraw)
 					CGSize size = m_pkPicSprite->GetSize();
 
 					m_pkPicSprite->DrawInRect(
-							CGRectMake(GetPosition().x,
-									GetPosition().y + winsize.height
-											- sizemap.height, size.width,
-									size.height));
+						CGRectMake(GetPosition().x,
+						GetPosition().y + winsize.height
+						- sizemap.height, size.width,
+						size.height));
 				}
 
 				OnDrawEnd(bDraw);
@@ -297,7 +315,7 @@ void NDSprite::MoveToPosition(std::vector<CGPoint> kToPos, SpriteSpeed speed,
 
 void NDSprite::OnMoveBegin()
 {
-
+	m_dwLastMoveTickTime = GetTickCount();
 }
 
 void NDSprite::OnMoving(bool bLastPos)

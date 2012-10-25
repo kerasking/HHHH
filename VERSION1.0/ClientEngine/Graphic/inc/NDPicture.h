@@ -46,13 +46,11 @@ public:
 
 	virtual void Initialization(const char* pszImageFile);
 
-	CCTexture2D* GetTexture();
-	CCTexture2D* GetTextureRetain();
+	CC_SYNTHESIZE_READONLY(CCTexture2D*,m_pkTexture,Texture);
+	
+	unsigned int GetTextureRetain();
 
 protected:
-
-	CCTexture2D* m_pkTexture;
-
 private:
 };
 
@@ -64,11 +62,8 @@ class NDPicture: public NDObject
 public:
 
 	void Initialization(const char* imageFile);
-
-	//void Initialization(vector<const char*>& vImgFiles); hide
-
-	//void Initialization(vector<const char*>& vImgFiles, vector<CGRect>& vImgCustomRect, vector<CGPoint>&vOffsetPoint); hide
-
+	//void Initialization(vector<const char*>& vImgFiles);
+	//void Initialization(vector<const char*>& vImgFiles, vector<CGRect>& vImgCustomRect, vector<CGPoint>&vOffsetPoint);
 	void Initialization(const char* imageFile, int hrizontalPixel,
 			int verticalPixel = 0);
 
@@ -96,7 +91,7 @@ public:
 	void SetTexture(cocos2d::CCTexture2D* tex);
 private:
 	cocos2d::CCTexture2D* m_pkTexture;
-	CGRect m_cutRect;
+	CGRect m_kCutRect;
 	bool m_bReverse;
 	bool m_bAdvance;
 	PictureRotation m_kRotation;
@@ -133,6 +128,8 @@ class NDPicturePool: public NDObject
 
 public:
 
+	typedef map<CCTexture2D*,string> MAP_STRING;
+
 	static NDPicturePool* DefaultPool();
 
 	static void PurgeDefaultPool();
@@ -151,6 +148,7 @@ private:
 	NDPictureDictionary* m_pkTextures;
 
 	std::map<std::string, CGSize> m_mapStr2Size;
+	MAP_STRING m_mapTex2Str;
 
 private:
 	CGSize GetImageSize(std::string filename);

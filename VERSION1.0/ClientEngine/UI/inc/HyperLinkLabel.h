@@ -13,21 +13,17 @@
 
 using namespace NDEngine;
 
-class HyperLinkLabel : public NDUILabel {
-	DECLARE_CLASS(HyperLinkLabel)
+class HyperLinkLabel: public NDUILabel
+{
+	DECLARE_CLASS (HyperLinkLabel)
 public:
-	HyperLinkLabel() {
-		m_isLink = false;
-	}
-	~HyperLinkLabel() {
-	}
-	
+
+	HyperLinkLabel();
+	~HyperLinkLabel();
+
 	void draw();
-	
-	void SetIsLink(bool isLink) {
-		m_isLink = isLink;
-	}
-	
+	void SetIsLink(bool isLink);
+
 private:
-	bool m_isLink;
+	bool m_bIsLink;
 };

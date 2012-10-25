@@ -7,7 +7,7 @@
  *
  */
  
- #pragma once
+#pragma once
 
 #include "ScriptInc.h"
 
@@ -18,4 +18,3 @@ public:
 };
 
 int PicMemoryUsingLogOut(bool bNotPrintLog);
-	
