@@ -4,8 +4,8 @@
 #include "Hurt.h"
 #include "EnumDef.h"
 #include "define.h"
-#include "NDBaseRole.h"
-#include "NDManualRole.h"
+#include "../../../MapAndRole/inc/NDBaseRole.h"
+#include "../../../MapAndRole/inc/NDManualRole.h"
 #include <string>
 #include <vector>
 #include "ImageNumber.h"

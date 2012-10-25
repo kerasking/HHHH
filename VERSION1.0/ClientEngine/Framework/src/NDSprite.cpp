@@ -21,6 +21,7 @@
 #include "NDLightEffect.h"
 #include "Utility.h"
 #include "NDConstant.h"
+#include "..\..\Module\Battle\inc\Battle.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -92,7 +93,7 @@ void NDSprite::Initialization(const char* pszSprFile,bool bFaceRight)
 {
 	NDNode::Initialization();
 	m_pkAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(
-			sprFile);
+			pszSprFile);
 }
 
 void NDSprite::Initlalization( const char* pszSprFile,ISpriteEvent* pkEvent,bool bFaceRight )
@@ -262,7 +263,7 @@ void NDSprite::RunAnimation(bool bDraw)
 
 void NDSprite::SetPosition(CGPoint newPosition)
 {
-//		NDLog("new pos:%f,%f",newPosition.x, newPosition.y);
+//		NDLog("new pos:%pkFighter,%pkFighter",newPosition.x, newPosition.y);
 	m_kPosition = CGPointMake(newPosition.x, newPosition.y);
 }
 
@@ -1017,6 +1018,49 @@ void NDSprite::AddSubAniGroup( NDSubAniGroupEx& kGroup )
 // 
 // 	string strSprFullPath = NDPath::GetAnimationPath();
 // 	strSprFullPath.append(kGroup.anifile);
+}
+
+void NDSprite::RunBattleSubAnimation( Fighter* pkFighter )
+{
+	Battle* battle = BattleMgrObj.GetBattle();
+	if (!battle) {
+		return;
+	}
+
+	// 1.获取当前帧
+	NDFrame* curFrame = m_pkCurrentAnimation->getFrames()->getObjectAtIndex(m_pkFrameRunRecord->getCurrentFrameIndex());
+
+	// 2.取当前帧的子动画数组并加入战斗对象的子动画数组
+	if (curFrame && curFrame->getSubAnimationGroups()) {
+		for (NSUInteger i = 0; i < curFrame->getSubAnimationGroups(); i++) {
+			NDAnimationGroup *group = curFrame->getSubAnimationGroups()->getObjectAtIndex(i);
+			group->getReverse() = pkFighter->m_info.group == BATTLE_GROUP_DEFENCE ? false : true;
+
+			if (group->getIdentifer() == 0) { // 非魔法特效
+				if (group->getType() == SUB_ANI_TYPE_SELF || group->getType() == SUB_ANI_TYPE_NONE) {
+					battle->addSubAniGroup(this, group, pkFighter);
+				}
+			} else { // 魔法特效
+				if (group->getIdentifer() == pkFighter->getUseSkill()->getSubAniID()) {
+					if (group->getType() == SUB_ANI_TYPE_SELF) {
+						battle->addSubAniGroup(this, group, pkFighter);
+					} else if (group->getType() == SUB_ANI_TYPE_TARGET) {
+
+						VEC_FIGHTER& array = pkFighter->getArrayTarget();
+						if (array.size() == 0) { // 如果没有目标数组，则制定目标为mainTarget
+							battle->addSubAniGroup(this, group, pkFighter->m_mainTarget);
+						} else {
+							for (size_t j = 0; j < array.size(); j++) {
+								battle->addSubAniGroup(this, group, array.at(j));
+							}
+						}
+					} else if (group->getType() == SUB_ANI_TYPE_NONE) {							
+						battle->addSubAniGroup(this, group, pkFighter);
+					}
+				}
+			}
+		}
+	}
 }
 
 }

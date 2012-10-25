@@ -143,7 +143,7 @@ public:
 //		作用：初始化精灵，必须被显示或隐式调用
 //		参数：sprFile动画文件，每一个精灵需要与一个动画文件绑定
 //		返回值：无
-	void Initialization(const char* pszSprFile,bool bFaceRight = true;);
+	void Initialization(const char* pszSprFile,bool bFaceRight = true);
 	void Initlalization(const char* pszSprFile,ISpriteEvent* pkEvent,bool bFaceRight);
 //		
 //		函数：OnDrawBegin
@@ -185,6 +185,8 @@ public:
 
 	int GetCurFrameIndex();
 
+	virtual void OnMoveTurning(bool bXTurningToY,bool bInc){}
+
 //		
 //		函数：OnMoveTurning
 //		作用：
@@ -211,6 +213,8 @@ public:
 //		参数：无
 //		返回值：true是，false否
 	bool IsAnimationComplete();
+
+	void RunBattleSubAnimation(Fighter* pkFighter);
 //		
 //		函数：SetHairImage
 //		作用：设置头发图片
