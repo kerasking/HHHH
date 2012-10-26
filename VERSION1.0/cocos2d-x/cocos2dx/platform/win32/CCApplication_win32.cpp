@@ -67,7 +67,11 @@ int CCApplication::run()
             }
             else
             {
+#if ND_MOD
+				Sleep(1);
+#else
                 Sleep(0);
+#endif
             }
             continue;
         }

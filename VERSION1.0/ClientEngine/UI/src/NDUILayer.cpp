@@ -30,6 +30,7 @@
 #include "Utility.h"
 #include "NDDirector.h"
 #include "NDUIImage.h"
+#include "NDDebugOpt.h"
 
 using namespace cocos2d;
 
@@ -218,6 +219,7 @@ NDUINode* NDUILayer::GetFocus()
 
 void NDUILayer::draw()
 {
+	if (!NDDebugOpt::getDrawUIEnabled()) return;
 
 	NDUINode::draw();
 
