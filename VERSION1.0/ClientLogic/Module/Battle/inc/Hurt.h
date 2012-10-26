@@ -11,12 +11,7 @@
 #define __BATTLE_HURT_H__
 
 #include "string.h"
-
-enum HURT_TYPE
-{
-	HURT_TYPE_ACTIVE = 0,
-	HURT_TYPE_PASSIVE = 1,
-};
+#include "NDBaseFighter.h"
 
 class Fighter;
 struct Hurt

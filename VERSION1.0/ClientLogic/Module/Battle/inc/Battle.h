@@ -33,6 +33,7 @@
 #include "NDMapLayer.h"
 #include "SMBattleScene.h"
 #include "BattleMgr.h"
+#include "..\..\TempClass\NDBaseBattle.h"
 
 #define BTN_ATTATCK 1
 #define BTN_ITEM 2
@@ -165,33 +166,6 @@ enum TEAM_STATUS
 	TEAM_OVER,
 };
 
-struct Command
-{
-	Command()
-	{
-		memset(this, 0L, sizeof(Command));
-	}
-
-	~Command()
-	{
-
-	}
-
-	int btEffectType;
-	int idActor;
-	int idTarget;
-	int nHpLost;
-	int nMpLost;
-
-	/**
-	 * 该命令所使用的技能,由服务端下发,含技能id,名字,atkType(id亿位解析出来)
-	 */
-	BattleSkill* skill;
-	FighterStatus* status;
-	Command* cmdNext; //command连锁
-	bool complete;
-};
-
 typedef vector<Command *> VEC_COMMAND;
 typedef VEC_COMMAND::iterator VEC_COMMAND_IT;
 
@@ -216,7 +190,7 @@ typedef CoolDownRecord::iterator CoolDownRecord_IT;
 typedef std::pair<CoolDownID, CoolDownData> CoolDownRecord_Pair;
 
 class Battle: public NDUILayer,
-//public ITimerCallback,
+		public NDBaseBattle,
 //public NDUITableLayerDelegate, ///< 临时性注释 郭浩
 		public NDUIDialogDelegate,
 //public NDUISpeedBarDelegate,

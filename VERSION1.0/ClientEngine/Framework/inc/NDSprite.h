@@ -21,6 +21,7 @@
 
 #include "NDFrame.h"
 #include "define.h"
+#include "NDBaseFighter.h"
 
 class NDAnimationGroup;
 class NDSPrite;
@@ -127,7 +128,7 @@ public:
 	virtual void DisplayCompleteEvent(int nCurrentAnimation, int nDispCount)=0;
 };
 
-class NDEngine::NDPicture;
+//class NDEngine::NDPicture;
 
 class NDSprite: public NDNode
 {
@@ -214,7 +215,7 @@ public:
 //		返回值：true是，false否
 	bool IsAnimationComplete();
 
-	void RunBattleSubAnimation(Fighter* pkFighter);
+	void RunBattleSubAnimation(NDBaseFighter* pkFighter);
 //		
 //		函数：SetHairImage
 //		作用：设置头发图片

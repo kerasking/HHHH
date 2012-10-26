@@ -14,6 +14,7 @@
 #include "NDSprite.h"
 #include "NDSubAniGroup.h"
 #include <map>
+#include "../../TempClass/NDBaseFighter.h"
 
 using namespace std;
 using namespace NDEngine;
@@ -110,9 +111,6 @@ public:
 	NDSubAniGroup* m_pkAniGroup;
 };
 
-typedef vector<FighterStatus*> VEC_FIGHTER_STATUS;
-typedef VEC_FIGHTER_STATUS::iterator VEC_FIGHTER_STATUS_IT;
-
 class StatusAction
 {
 public:
@@ -153,8 +151,10 @@ typedef VEC_STATUS_ACTION::iterator VEC_STATUS_ACTION_IT;
 int countX(int teamAmount, BATTLE_GROUP group, int team, int pos);
 int countY(int teamAmount, BATTLE_GROUP group, int team, int pos);
 
-class Fighter
+class Fighter:public NDBaseFighter
 {
+	DECLARE_CLASS(Fighter);
+
 public:
 	enum FIGHTER_ACTION
 	{
