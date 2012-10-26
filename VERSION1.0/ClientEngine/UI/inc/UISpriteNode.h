@@ -18,7 +18,7 @@ class NDEngine::NDSprite;
 using namespace NDEngine;
 
 
-class CUISpriteNode : public NDEngine::NDUINode
+class CUISpriteNode : public NDUINode
 {
 	DECLARE_CLASS(CUISpriteNode)
 	
@@ -26,15 +26,15 @@ class CUISpriteNode : public NDEngine::NDUINode
 	~CUISpriteNode();
 	
 public:
-	void Initialization(); override
+	void Initialization();
 	void ChangeSprite(const char* sprfile);
 	bool isAnimationComplete();
 	void SetAnimation(int nIndex, bool bFaceRight);
 	void SetPlayFrameRange(int nStartFrame, int nEndFrame);
 	void SetPosition(int nPosX, int nPosY);
 private:
-	NDEngine::NDUINode*				m_pkSpriteParentNode;
-	NDEngine::NDSprite*				m_pkSprite;
+	NDUINode*				m_pkSpriteParentNode;
+	NDSprite*				m_pkSprite;
 	
 protected:
 	void draw(); override
