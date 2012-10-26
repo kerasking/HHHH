@@ -1046,6 +1046,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\TempClass\NDBaseBattle.h"
+			>
+		</File>
+		<File
+			RelativePath="..\TempClass\NDBaseFighter.h"
+			>
+		</File>
+		<File
 			RelativePath="..\Utility\src\NDDataSource.cpp"
 			>
 		</File>

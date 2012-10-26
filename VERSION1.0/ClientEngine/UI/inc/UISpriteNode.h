@@ -23,7 +23,7 @@ class CUISpriteNode : public NDUINode/*, public ISpriteEvent*/
 	~CUISpriteNode();
 	
 public:
-	void Initialization(); override
+	void Initialization();
 	void ChangeSprite(const char* sprfile);
 	bool IsAnimationComplete();
 	void SetAnimation(int nIndex, bool bFaceRight);
@@ -49,6 +49,7 @@ public:
 	//+2012.6.3
 	
 private:
+
 	NDUINode*				m_pSpriteParentNode;
 	NDSprite*				m_pSprite;
 	

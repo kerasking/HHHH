@@ -97,4 +97,7 @@ do \
 	}\
 } while (false)
 
+#define NS_NDENGINE_BGN	namespace NDEngine{
+#define NS_NDENGINE_END }
+
 #endif // __DEFINE_H__
