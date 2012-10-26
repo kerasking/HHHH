@@ -164,6 +164,9 @@ protected:
 	void HandleShadow(CGSize parentsize);
 
 	void DrawRingImage(bool bDraw);
+
+	virtual void RunBattleSubAnimation( Fighter* pkFighter );
+
 public:
 	int m_nID;
 

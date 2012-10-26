@@ -24,6 +24,8 @@
 #include "NDUtility.h"
 #include "define.h"
 #include "NDRidePet.h"
+#include "Fighter.h"
+#include "Battle.h"
 
 using namespace NDEngine;
 
@@ -1248,4 +1250,73 @@ void NDBaseRole::SetNormalAniGroup(int nLookface)
 
 	m_bFaceRight = true;
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
+}
+
+void NDEngine::NDBaseRole::RunBattleSubAnimation( Fighter* pkFighter )
+{
+	Battle* pkBattle = 0;
+
+	if (!pkBattle)
+	{
+		return;
+	}
+
+	// 1.获取当前帧
+	NDFrame* curFrame = m_pkCurrentAnimation->getFrames()->getObjectAtIndex(
+		m_pkFrameRunRecord->getCurrentFrameIndex());
+
+	// 2.取当前帧的子动画数组并加入战斗对象的子动画数组
+	if (curFrame && curFrame->getSubAnimationGroups())
+	{
+		for (NSUInteger i = 0; i < curFrame->getSubAnimationGroups()->count(); i++)
+		{
+			NDAnimationGroup *pkAnimationGroup =
+				curFrame->getSubAnimationGroups()->getObjectAtIndex(i);
+			pkAnimationGroup->setReverse(pkFighter->m_kInfo.group == BATTLE_GROUP_DEFENCE ?
+				false : true);
+
+
+			if (pkAnimationGroup->getIdentifer() == 0)
+			{ // 非魔法特效
+				if (pkAnimationGroup->getType() == SUB_ANI_TYPE_SELF
+					|| pkAnimationGroup->getType() == SUB_ANI_TYPE_NONE)
+				{
+					pkBattle->addSubAniGroup(this, pkAnimationGroup, pkFighter);
+				}
+			}
+			else
+			{ // 魔法特效
+				if (pkAnimationGroup->getIdentifer()
+					== pkFighter->getUseSkill()->getSubAniID())
+				{
+					if (pkAnimationGroup->getType() == SUB_ANI_TYPE_SELF)
+					{
+						pkBattle->addSubAniGroup(this, pkAnimationGroup, pkFighter);
+					}
+					else if (pkAnimationGroup->getType() == SUB_ANI_TYPE_TARGET)
+					{
+
+						VEC_FIGHTER& array = pkFighter->getArrayTarget();
+						if (array.size() == 0)
+						{ // 如果没有目标数组，则制定目标为mainTarget
+							pkBattle->addSubAniGroup(this, pkAnimationGroup,
+								pkFighter->m_pkMainTarget);
+						}
+						else
+						{
+							for (size_t j = 0; j < array.size(); j++)
+							{
+								pkBattle->addSubAniGroup(this, pkAnimationGroup,
+									array.at(j));
+							}
+						}
+					}
+					else if (pkAnimationGroup->getType() == SUB_ANI_TYPE_NONE)
+					{
+						pkBattle->addSubAniGroup(this, pkAnimationGroup, pkFighter);
+					}
+				}
+			}
+		}
+	}
 }

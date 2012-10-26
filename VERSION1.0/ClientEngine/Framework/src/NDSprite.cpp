@@ -1025,12 +1025,12 @@ namespace NDEngine
 		// 	NDLightEffect* pkLightEffect = new NDLightEffect;
 		// 
 		// 	string strSprFullPath = NDPath::GetAnimationPath();
-		// 	strSprFullPath.append(kGroup.anifile);
+// 	strSprFullPath.append(kGroup.anifile);
 	}
 
-// 	void NDSprite::RunBattleSubAnimation(NDBaseFighter* pkFighter)
-// 	{
-// 
-// 	}
+ 	void NDSprite::RunBattleSubAnimation(Fighter* pkFighter)
+ 	{
+
+ 	}
 
 }

@@ -7,7 +7,6 @@
 
 #include "NDObject.h"
 #include "define.h"
-#include "NDUITableLayer.h"
 #include "NDDataSource.h"
 
 class BattleSkill;
@@ -16,10 +15,8 @@ class FightAction;
 
 NS_NDENGINE_BGN
 
-class NDBaseBattle: public NDObject
+class NDBaseBattle
 {
-	DECLARE_CLASS (NDBaseBattle);
-
 public:
 
 	NDBaseBattle(){}
