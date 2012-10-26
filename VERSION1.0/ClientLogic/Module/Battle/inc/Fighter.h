@@ -4,8 +4,8 @@
 #include "Hurt.h"
 #include "EnumDef.h"
 #include "define.h"
-#include "NDBaseRole.h"
-#include "NDManualRole.h"
+#include "../../../MapAndRole/inc/NDBaseRole.h"
+#include "../../../MapAndRole/inc/NDManualRole.h"
 #include <string>
 #include <vector>
 #include "ImageNumber.h"
@@ -14,6 +14,7 @@
 #include "NDSprite.h"
 #include "NDSubAniGroup.h"
 #include <map>
+//#include "../../TempClass/NDBaseFighter.h"
 
 using namespace std;
 using namespace NDEngine;
@@ -110,9 +111,6 @@ public:
 	NDSubAniGroup* m_pkAniGroup;
 };
 
-typedef vector<FighterStatus*> VEC_FIGHTER_STATUS;
-typedef VEC_FIGHTER_STATUS::iterator VEC_FIGHTER_STATUS_IT;
-
 class StatusAction
 {
 public:
@@ -122,7 +120,7 @@ public:
 	};
 
 	StatusAction(int act, FighterStatus* fs, int id) :
-		m_pkStatus(fs)
+	m_pkStatus(fs)
 		{
 			m_nAction = act;
 			m_nTargetID = id;
@@ -150,11 +148,16 @@ typedef pair<bool/*bFind*/, Hurt> PAIR_GET_HURT;
 typedef vector<StatusAction> VEC_STATUS_ACTION;
 typedef VEC_STATUS_ACTION::iterator VEC_STATUS_ACTION_IT;
 
+typedef vector<FighterStatus*> VEC_FIGHTER_STATUS;
+typedef VEC_FIGHTER_STATUS::iterator VEC_FIGHTER_STATUS_IT;
+
 int countX(int teamAmount, BATTLE_GROUP group, int team, int pos);
 int countY(int teamAmount, BATTLE_GROUP group, int team, int pos);
 
 class Fighter
 {
+//	DECLARE_CLASS(Fighter);
+
 public:
 	enum FIGHTER_ACTION
 	{
