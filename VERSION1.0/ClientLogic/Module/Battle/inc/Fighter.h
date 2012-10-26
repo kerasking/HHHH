@@ -148,6 +148,9 @@ typedef pair<bool/*bFind*/, Hurt> PAIR_GET_HURT;
 typedef vector<StatusAction> VEC_STATUS_ACTION;
 typedef VEC_STATUS_ACTION::iterator VEC_STATUS_ACTION_IT;
 
+typedef vector<FighterStatus*> VEC_FIGHTER_STATUS;
+typedef VEC_FIGHTER_STATUS::iterator VEC_FIGHTER_STATUS_IT;
+
 int countX(int teamAmount, BATTLE_GROUP group, int team, int pos);
 int countY(int teamAmount, BATTLE_GROUP group, int team, int pos);
 

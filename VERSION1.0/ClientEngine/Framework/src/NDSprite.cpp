@@ -1028,9 +1028,9 @@ namespace NDEngine
 		// 	strSprFullPath.append(kGroup.anifile);
 	}
 
-	void NDSprite::RunBattleSubAnimation(NDBaseFighter* pkFighter)
-	{
-
-	}
+// 	void NDSprite::RunBattleSubAnimation(NDBaseFighter* pkFighter)
+// 	{
+// 
+// 	}
 
 }

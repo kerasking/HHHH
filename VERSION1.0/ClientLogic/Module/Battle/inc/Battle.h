@@ -166,6 +166,33 @@ enum TEAM_STATUS
 	TEAM_OVER,
 };
 
+struct Command
+{
+	Command()
+	{
+		memset(this, 0L, sizeof(Command));
+	}
+
+	~Command()
+	{
+
+	}
+
+	int btEffectType;
+	int idActor;
+	int idTarget;
+	int nHpLost;
+	int nMpLost;
+
+	/**
+	 * 该命令所使用的技能,由服务端下发,含技能id,名字,atkType(id亿位解析出来)
+	 */
+	BattleSkill* skill;
+	FighterStatus* status;
+	Command* cmdNext; //command连锁
+	bool complete;
+};
+
 typedef vector<Command *> VEC_COMMAND;
 typedef VEC_COMMAND::iterator VEC_COMMAND_IT;
 
@@ -197,7 +224,7 @@ class Battle: public NDUILayer,
 		public NDUIButtonDelegate
 //public GameUIItemConfigDelegate
 {
-	//DECLARE_CLASS (Battle)
+	DECLARE_CLASS (Battle)
 public:
 	enum BATTLE_STATUS
 	{
