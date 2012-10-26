@@ -50,12 +50,12 @@ void CUICheckBox::Initialization(const char* imgUnCheck, const char* imgCheck)
 	
 	m_imgCheck	= new NDUIImage;
 	m_imgCheck->Initialization();
-	m_imgCheck->SetPicture(pool.AddPicture(strCheckPath.c_str()), true);
+	m_imgCheck->SetPicture(pool.AddPicture(strCheckPath), true);
 	this->AddChild(m_imgCheck);
 	
 	m_imgUnCheck	= new NDUIImage;
 	m_imgUnCheck->Initialization();
-	m_imgUnCheck->SetPicture(pool.AddPicture(strUnCheckPath.c_str()), true);
+	m_imgUnCheck->SetPicture(pool.AddPicture(strUnCheckPath), true);
 	this->AddChild(m_imgUnCheck);
 	
 	m_lbText	= new NDUILabel;

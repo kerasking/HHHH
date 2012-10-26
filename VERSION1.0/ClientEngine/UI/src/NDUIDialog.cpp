@@ -98,7 +98,7 @@ void NDUIDialog::InitFullScrBtns(const std::vector<std::string>& ortherButtons)
 		btn->SetFontColor(COLOR_OPTION_FULLSCR);
 		btn->CloseFrame();
 		btn->SetTouchDownImage(
-				pool.AddPicture(NDPath::GetImgPathNew("dlgfull_btn_click.png")),
+				pool.AddPicture(NDPath::GetImgPathUINew("dlgfull_btn_click.png")),
 				false, CGRectZero, true);
 		this->AddChild(btn);
 
@@ -147,7 +147,7 @@ void NDUIDialog::Show(const char* title, const char* text,
 
 	this->SetBackgroundImage(
 			pool.AddPicture(
-					NDPath::GetImgPathNew(
+					NDPath::GetImgPathUINew(
 							m_bFullScreen ? "dlgfull_bg.png" : "dlg_bg.png")),
 			true);
 
@@ -180,17 +180,17 @@ void NDUIDialog::Show(const char* title, const char* text,
 	m_btnClose->CloseFrame();
 	m_btnClose->SetImage(
 			pool.AddPicture(
-					NDPath::GetImgPathNew(
+					NDPath::GetImgPathUINew(
 							m_bFullScreen ?
 									"dlgfull_close_normal.png" :
-									"dlg_close_normal.png")), false, CGRectZero,
+									"dlg_close_normal.png").c_str()), false, CGRectZero,
 			true);
 	m_btnClose->SetTouchDownImage(
 			pool.AddPicture(
-					NDPath::GetImgPathNew(
+					NDPath::GetImgPathUINew(
 							m_bFullScreen ?
 									"dlgfull_close_click.png" :
-									"dlg_close_click.png")), false, CGRectZero,
+									"dlg_close_click.png").c_str()), false, CGRectZero,
 			true);
 	this->AddChild(m_btnClose);
 
@@ -207,11 +207,11 @@ void NDUIDialog::Show(const char* title, const char* text,
 								+ (hasBtn ? 0 : m_sizeBtnNotFullScr.height + 6)));
 		m_contentScroll->SetDelegate(this);
 		m_contentScroll->VisibleScroll(true);
-		//m_contentScroll->SetBackgroundImage(pool.AddPicture(NDPath::GetImgPathNew("attr_role_bg.png"), 317, 242), true);
+		//m_contentScroll->SetBackgroundImage(pool.AddPicture(NDPath::GetImgPathUINew("attr_role_bg.png"), 317, 242), true);
 		this->AddChild(m_contentScroll);
 		SetContent(text, COLOR_CONTENT_NOTFULLSCR, 14);
 		m_contentScroll->SetBackgroundImage(
-				pool.AddPicture(NDPath::GetImgPathNew("dlg_content.png"),
+				pool.AddPicture(NDPath::GetImgPathUINew("dlg_content.png"),
 						m_contentScroll->GetFrameRect().size.width,
 						m_contentScroll->GetFrameRect().size.height), true);
 
@@ -224,12 +224,12 @@ void NDUIDialog::Show(const char* title, const char* text,
 			m_btnConfirm->SetFontColor(COLOR_OPTION);
 			m_btnConfirm->CloseFrame();
 			m_btnConfirm->SetImage(
-					pool.AddPicture(NDPath::GetImgPathNew("dlg_btn_normal.png"),
+					pool.AddPicture(NDPath::GetImgPathUINew("dlg_btn_normal.png"),
 							m_sizeBtnNotFullScr.width,
 							m_sizeBtnNotFullScr.height), false, CGRectZero,
 					true);
 			m_btnConfirm->SetTouchDownImage(
-					pool.AddPicture(NDPath::GetImgPathNew("dlg_btn_click.png"),
+					pool.AddPicture(NDPath::GetImgPathUINew("dlg_btn_click.png"),
 							m_sizeBtnNotFullScr.width,
 							m_sizeBtnNotFullScr.height), false, CGRectZero,
 					true);

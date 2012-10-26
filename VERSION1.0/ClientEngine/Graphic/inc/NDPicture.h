@@ -75,7 +75,7 @@ public:
 
 	void SetColor(cocos2d::ccColor4B color);
 
-	void DrawInRect(CGRect rect);
+	void DrawInRect(CGRect kRect);
 
 	CGSize GetSize();
 
@@ -84,6 +84,9 @@ public:
 	bool SetGrayState(bool gray);
 
 	bool IsGrayState();
+
+	CC_SYNTHESIZE(float,m_fScale,Scale);
+	CC_SYNTHESIZE(bool,m_bIsTran,IsTran);
 
 public:
 	cocos2d::CCTexture2D *GetTexture();
@@ -133,6 +136,16 @@ public:
 	static NDPicturePool* DefaultPool();
 
 	static void PurgeDefaultPool();
+
+#if 1  // for simple use
+	NDPicture* AddPicture(const string& imageFile, bool gray = false) {
+		return AddPicture(imageFile.c_str(), gray);
+	}
+
+	NDPicture* AddPicture(const string& imageFile, int hrizontalPixel, int verticalPixel = 0, bool gray = false) {
+		return 	AddPicture(imageFile.c_str(), hrizontalPixel, verticalPixel, gray );
+	}
+#endif 
 
 	NDPicture* AddPicture(const char* imageFile, bool gray = false);
 	NDPicture* AddPicture(const char* imageFile, int hrizontalPixel,

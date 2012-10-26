@@ -12,8 +12,11 @@
 #include "NDObject.h"
 #include <string>
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
+using namespace std;
+
+
 class NDPath: public NDObject
 {
 	DECLARE_CLASS (NDPath)
@@ -23,47 +26,64 @@ public:
 
 public:
 
-	static std::string GetResourcePath();
-	static std::string GetImagePath();
-	static std::string GetMapPath();
-	static std::string GetMapResPath();
-	static std::string GetAnimationPath();
-	static std::string GetResPath();
-	static std::string GetSoundPath();
-	static const char* GetImgPathBattleUI(const char* fileName);
-
-	static void SetImagePath(const char* szPath);
-	static void SetMapPath(const char* szPath);
-	static void SetAnimationPath(const char* szPath);
+	// res path
+	static const string& GetResPath();
+	static const string& GetResPath(const char* fileName);
 	static void SetResPath(const char* szPath);
+
+	// map path
+	static const string& GetMapPath();
+	static const string& GetMapPath(const char* fileName);
+	static void SetMapPath(const char* szPath);
+
+	// animation path
+	static const string& GetAnimationPath();
+	static const string& GetAniPath(const char* fileName);
+	static void SetAnimationPath(const char* szPath);
+
+	// sound path
+	static const string& GetSoundPath();
 	static void SetSoundPath(const char* szPath);
-	static const char* GetFullImagepath(const char* pszFileName);
-	static std::string GetFullMapPath();
-	static const char* GetImgPath(const char* fileName);
-	// 新界面资源统丄1�7放在 res/image/ui_new
-	static const char* GetImgPathNew(const char* fileName);
-	// 新界面高分辨率资源统丄1�7放在 res/image/ui_new/advance
-	static const char* GetImgPathNewAdvance(const char* fileName);
-	static const char* GetAniPath(const char* fileName);
-	static const char* GetMapPath(const char* fileName);
-	static const char* GetUIConfigPath(const char* filename);
-	static const char* GetUIImgPath(const char* uiFileNameWithPath);
-	static const char* GetResPath(const char* fileName);
-	static const char* GetSMImgPath(const char* fileName);
-	//static const char* GetImgPath(const char* filename);
-	static std::string GetRootResPath();
-	static const char* GetScriptPath(const char* filename);
-	static std::string GetAppResFilePath(const char* filename);
-	static std::string GetResourceFilePath(const char* filename);
+
+	// script path
+	static const string& GetScriptPath();
+	static const string& GetScriptPath(const char* filename);
+
+	// ui path
+	static const string& GetUIPath();
+	static const string& GetUIConfigPath(const char* filename);
+	static const string& GetUIImgPath(const char* uiFileNameWithPath);
+
+	// image path
+	static const string& GetImagePath();
+	static const string& GetImgPath(const char* fileName);
+	static void SetImagePath(const char* szPath);
+	static const string& GetFullImagepath(const char* pszFileName); 
+	
+	// image ui new
+	static const string& GetImgPathUINew(const char* fileName); 
+	static const string& GetImgPathUINewAdvance(const char* fileName);
+
+	// image battle ui
+	static const string& GetImgPathBattleUI();
+	static const string& GetImgPathBattleUI(const char* fileName); 
+	
+	// etc
+	static const string& GetSMImgPath(const char* fileName);
 
 protected:
 
-	static std::string NDPath_ResPath;
-	static std::string NDPath_ImgPath;
-	static std::string NDPath_MapPath;
-	static std::string NDPath_AniPath;
-	static std::string NDPath_SoundPath;
+	static string NDPath_ResPath;
+	static string NDPath_ImgPath;
+	static string NDPath_ImgPath_UINew;
+	static string NDPath_ImgPath_BattleUI;
+	static string NDPath_MapPath;
+	static string NDPath_AniPath;
+	static string NDPath_SoundPath;
+	static string NDPath_UIPath;
+	static string NDPath_ScriptPath;
 };
-}
+
+NS_NDENGINE_END
 
 #endif

@@ -48,7 +48,7 @@ NDTransData::~NDTransData()
 //======================================================================
 //	/**数据发送之前调用*/
 
-bool NDTransData::encrypt(std::string strKey)
+bool NDTransData::encrypt(const std::string& strKey)
 {
 	if (strKey.empty())
 		return false;
@@ -80,7 +80,7 @@ bool NDTransData::encrypt(std::string strKey)
 }
 
 //======================================================================
-bool NDTransData::decrypt(std::string strKey)
+bool NDTransData::decrypt(const std::string& strKey)
 {
 
 	if (strKey.empty())

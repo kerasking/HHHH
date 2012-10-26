@@ -10,11 +10,14 @@
 #include "UIDialog.h"
 #include "NDTextNode.h"
 #include "NDDirector.h"
-#include "NDUtility.h"
+#include "Utility.h"
 #include "NDUILoad.h"
-//#include "CGPointExtension.h"
 #include "CCPointExtension.h"
 #include "NDPath.h"
+#include "NDAnimationGroup.h"
+
+using namespace cocos2d;
+
 
 IMPLEMENT_CLASS(CUIDlgOptBtn, NDUIButton)
 
@@ -34,36 +37,17 @@ void CUIDlgOptBtn::Initialization()
 	this->CloseFrame();
 	
 	CGSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
-	CGRect rect		= CGRectMake(0, 0, winsize.width * 0.15, winsize.height * 0.15);
+	CGRect rect		= CGRectMake(0, 0, winsize.width * 0.04, winsize.height * 0.125);
 	
-    
 	m_sprTip = new CUISpriteNode;
 	m_sprTip->Initialization();
 	m_sprTip->SetFrameRect(rect);
-	m_sprTip->ChangeSprite(NDPath::GetAniPath("button.spr"));
-   
-    
-    //新增提示图片
-    NDPicture *test =  NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImgPath("General/arrows/icon_arrows4.png"));
-    test->Cut(CGRectMake(0.0f, 0.0f, 72.0f, 32.0f));
-    NDUIImage *testimg = new NDUIImage;
-    testimg->Initialization();
-    testimg->SetPicture(test);
-    testimg->SetFrameRect(CGRectMake(0.0f, winsize.height*0.015, 72.0f, 32.0f));
-    
-    this->AddChild(testimg, 1000);
-    
-    
-    
-    
-    
-    
+	m_sprTip->ChangeSprite(tq::CString("%sbutton.spr", NDPath::GetAnimationPath()));
 	this->AddChild(m_sprTip);
 	
 	m_textHpyerlink = new CUIHyperlinkText;
 	m_textHpyerlink->Initialization();
-	m_textHpyerlink->SetFrameRect(CGRectMake(winsize.width*0.8f, 0, 0, 0));
-    m_textHpyerlink->EnableLine(NO);// EnableLine
+	m_textHpyerlink->SetFrameRect(CGRectMake(rect.size.width, 0, 0, 0));
 	this->AddChild(m_textHpyerlink);
 }
 
@@ -77,13 +61,10 @@ void CUIDlgOptBtn::SetFrameRect(CGRect rect)
 	}
 	
 	NDUIButton::SetFrameRect(rect);
-    //this->SetBackgroundColor(ccc4(125,125,125,125));
 }
 
 void CUIDlgOptBtn::SetBoundRect(CGRect rect)
 {
-    CGSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
-	
 	if (!m_textHpyerlink)
 	{
 		return;
@@ -92,7 +73,7 @@ void CUIDlgOptBtn::SetBoundRect(CGRect rect)
 	if (m_sprTip)
 	{
 		CGRect rectTip	= m_sprTip->GetFrameRect();
-		rect.origin.x	= winsize.width*0.08;
+		rect.origin.x	= rectTip.size.width;
 		rect.origin.y	= 0;
 		rect.size.width	= rect.size.width - rectTip.size.width;
 	}
@@ -158,7 +139,7 @@ IMPLEMENT_CLASS(CUIDialog, NDUILayer)
 
 CUIDialog::CUIDialog()
 {
-	m_uiOptHeight	= 24 * NDDirector::DefaultDirector()->GetScaleFactor();
+	m_uiOptHeight	= 20 * NDDirector::DefaultDirector()->GetScaleFactor();
 }
 
 CUIDialog::~CUIDialog()
@@ -172,30 +153,23 @@ void CUIDialog::Initialization()
 	NDUILoad ui;
 	ui.Load("TaskChat.ini", this, this, CGSizeMake(0, 0));
 	
-	//NDUINode* node = (NDUINode*)GetChild(ID_TASKCHAT_CTRL_PICTURE_9);
-	//if (!node)
-	///{
-	//	return;
-	//}
+	NDUINode* node = (NDUINode*)GetChild(ID_TASKCHAT_CTRL_PICTURE_9);
+	if (!node)
+	{
+		return;
+	}
 	
 	CGSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
-	
-    CGRect rectNode = CGRectMake(0,0,winsize.width,winsize.height);
-    //CGRect rectNode = node->GetFrameRect();
-    
+	CGRect rectNode = node->GetFrameRect();
 	this->SetFrameRect(CGRectMake((winsize.width - rectNode.size.width) / 2,
 					   (winsize.height - rectNode.size.height) / 2,
-                                  rectNode.size.width, rectNode.size.height));
-
+					   rectNode.size.width, rectNode.size.height));
+	
 	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 	if (scene)
 	{
 		scene->AddChild(this, UI_TAG_DIALOG, UI_ZORDER_DIALOG);
 	}
-    
-    NDUIButton* node = (NDUIButton*)this->GetChild(ID_TASKCHAT_CTRL_BUTTON_CLOSE);
-    //node->SetSoundEffect(0);
-    //node->SetBoundScale(200);
 }
 
 void CUIDialog::SetTitle(const char* title)
@@ -291,7 +265,6 @@ void CUIDialog::ClrOption()
 
 void CUIDialog::AddOpt(const char* text, int nAction)
 {
-    
 	if (!text)
 	{
 		return;
@@ -303,30 +276,21 @@ void CUIDialog::AddOpt(const char* text, int nAction)
 		return;
 	}
 	
-	float fScale		= NDDirector::DefaultDirector()->GetScaleFactor();
-    fScale = 1.0f;
 	CGRect rectNode		= node->GetFrameRect();
 	CGSize winsize		= NDDirector::DefaultDirector()->GetWinSize();
 	
-	CGRect rect;	
-    //rect.origin			= ccpAdd(rectNode.origin, ccp(0, 
-	//							winsize.height * 0.047f + 
-	//							m_vUiOpt.size() * m_uiOptHeight +
-	//							rectNode.size.height));
-    
-    int nOptNum = m_vUiOpt.size();
-   // int nLeftOffset = (((nOptNum % 2) == 0) ? 0 : (rectNode.size.width/2));
-   // rect.origin			= ccpAdd(rectNode.origin, ccp(nLeftOffset, nOptNum/2 * m_uiOptHeight ));
-    rect.origin			= ccpAdd(rectNode.origin, ccp(0, m_vUiOpt.size() * m_uiOptHeight ));
-	rect.size			= CGSizeMake(rectNode.size.width*1.1, m_uiOptHeight);
+	CGRect rect;
+	rect.origin			= ccpAdd(rectNode.origin, ccp(0, 
+								winsize.height * 0.047f + 
+								m_vUiOpt.size() * m_uiOptHeight +
+								rectNode.size.height));
+	rect.size			= CGSizeMake(rectNode.size.width, m_uiOptHeight);
 	
 	CUIDlgOptBtn *uiOpt	= new CUIDlgOptBtn;
-    
 	uiOpt->Initialization();
-	//uiOpt->an
-    uiOpt->SetFrameRect(rect);
+	uiOpt->SetFrameRect(rect);
 	uiOpt->SetBoundRect(rect);
-	uiOpt->SetLinkTextFontSize(13);
+	uiOpt->SetLinkTextFontSize(14);
 	uiOpt->SetLinkTextColor(ccc4(255, 255, 0, 255));
 	uiOpt->SetLinkText(text);
 	uiOpt->SetDelegate(this);
