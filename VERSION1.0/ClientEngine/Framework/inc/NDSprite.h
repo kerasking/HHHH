@@ -217,7 +217,9 @@ public:
 	bool IsAnimationComplete();
 
 	virtual void RunBattleSubAnimation(Fighter* pkFighter);
-//		
+	virtual bool DrawSubAnimation(NDSubAniGroup& kSag);
+	virtual void SetNormalAniGroup(int nLookface);
+	//		
 //		函数：SetHairImage
 //		作用：设置头发图片
 //		参数：imageFile图片文件

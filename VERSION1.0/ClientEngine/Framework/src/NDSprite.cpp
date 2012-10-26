@@ -21,6 +21,7 @@
 #include "NDLightEffect.h"
 #include "Utility.h"
 #include "NDConstant.h"
+#include "define.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -1025,12 +1026,34 @@ namespace NDEngine
 		// 	NDLightEffect* pkLightEffect = new NDLightEffect;
 		// 
 		// 	string strSprFullPath = NDPath::GetAnimationPath();
-// 	strSprFullPath.append(kGroup.anifile);
+		// 	strSprFullPath.append(kGroup.anifile);
 	}
 
- 	void NDSprite::RunBattleSubAnimation(Fighter* pkFighter)
- 	{
+	void NDSprite::RunBattleSubAnimation(Fighter* pkFighter)
+	{
 
- 	}
+	}
+
+	bool NDSprite::DrawSubAnimation(NDSubAniGroup& kSag)
+	{
+		return true;
+	}
+
+	void NDSprite::SetNormalAniGroup(int nLookface)
+	{
+		if (nLookface <= 0)
+		{
+			return;
+		}
+
+		NSString* strString = NSString::stringWithFormat("%smodel_%d%s",
+			NDPath::GetAnimationPath().c_str(), ".spr");
+
+		Initialization(strString->toStdString().c_str());
+
+		m_bFaceRight = true;
+		SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
+		SAFE_DELETE(strString);
+	}
 
 }
