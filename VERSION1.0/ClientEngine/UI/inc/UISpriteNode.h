@@ -26,7 +26,7 @@ class CUISpriteNode : public NDEngine::NDUINode
 	~CUISpriteNode();
 	
 public:
-	void Initialization(); override
+	void Initialization();
 	void ChangeSprite(const char* sprfile);
 	bool isAnimationComplete();
 	void SetAnimation(int nIndex, bool bFaceRight);

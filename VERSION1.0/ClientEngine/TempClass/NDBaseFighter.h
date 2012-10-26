@@ -11,6 +11,8 @@
 class FighterStatus;
 class NDBaseRole;
 
+NS_NDENGINE_BGN
+
 typedef vector<FighterStatus*> VEC_FIGHTER_STATUS;
 typedef VEC_FIGHTER_STATUS::iterator VEC_FIGHTER_STATUS_IT;
 
@@ -19,8 +21,6 @@ enum HURT_TYPE
 	HURT_TYPE_ACTIVE = 0,
 	HURT_TYPE_PASSIVE = 1,
 };
-
-NS_NDENGINE_BGN
 
 class NDBaseFighter:public NDObject
 {

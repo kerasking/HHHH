@@ -22,7 +22,7 @@
 #include "NDDirector.h"
 using namespace NDEngine;
 
-IMPLEMENT_CLASS(Fighter,NDBaseFighter);
+//IMPLEMENT_CLASS(Fighter,NDBaseFighter);
 
 const int LEFT_BACK_X = 120; // 左边后排 x 坐标
 const int LEFT_FRONT_X = 160; // 左边前排 x 坐标

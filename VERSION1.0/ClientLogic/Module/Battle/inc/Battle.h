@@ -190,14 +190,14 @@ typedef CoolDownRecord::iterator CoolDownRecord_IT;
 typedef std::pair<CoolDownID, CoolDownData> CoolDownRecord_Pair;
 
 class Battle: public NDUILayer,
-		public NDBaseBattle,
+	//	public NDBaseBattle,
 //public NDUITableLayerDelegate, ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		public NDUIDialogDelegate,
 //public NDUISpeedBarDelegate,
 		public NDUIButtonDelegate
 //public GameUIItemConfigDelegate
 {
-	DECLARE_CLASS (Battle)
+	//DECLARE_CLASS (Battle)
 public:
 	enum BATTLE_STATUS
 	{

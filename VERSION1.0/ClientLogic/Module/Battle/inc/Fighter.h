@@ -151,9 +151,9 @@ typedef VEC_STATUS_ACTION::iterator VEC_STATUS_ACTION_IT;
 int countX(int teamAmount, BATTLE_GROUP group, int team, int pos);
 int countY(int teamAmount, BATTLE_GROUP group, int team, int pos);
 
-class Fighter:public NDBaseFighter
+class Fighter
 {
-	DECLARE_CLASS(Fighter);
+//	DECLARE_CLASS(Fighter);
 
 public:
 	enum FIGHTER_ACTION
