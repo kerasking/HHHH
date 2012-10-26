@@ -41,6 +41,8 @@
 #include "CCTexturePVR.h"
 #include "CCDirector.h"
 #include "png.h"
+#include "pnginfo.h"
+#include "pngstruct.h"
 
 #if CC_ENABLE_CACHE_TEXTTURE_DATA
 #include "CCTextureCache.h"
@@ -48,14 +50,39 @@
 
 #define PNG_BYTES_TO_CHECK 8
 #define png_infopp_NULL (png_infopp)NULL
+#define int_p_NULL (int*)NULL
 
 namespace cocos2d
 {
-
 #define alpha_composite(composite, fg, alpha, bg) {                     \
-unsigned short temp = ((unsigned short)(fg)*(unsigned short)(alpha) +                       \
-(unsigned short)(bg)*(unsigned short)(255 - (unsigned short)(alpha)) + (unsigned short)128);       \
-(composite) = (u_char)((temp + (temp >> 8)) >> 8);                   \
+	unsigned short temp = ((unsigned short)(fg)*(unsigned short)(alpha) +                       \
+	(unsigned short)(bg)*(unsigned short)(255 - (unsigned short)(alpha)) + (unsigned short)128);       \
+	(composite) = (u_char)((temp + (temp >> 8)) >> 8);                   \
+}
+
+void ConvertPalette(png_color *pSrc, RGBQUAD *pDst, int nCount, png_bytep transalpha) 
+{
+	for(int i = 0 ; i< nCount; i++)
+	{
+
+		if(transalpha) {
+			pDst->rgbReserved = transalpha[i];
+			//            pDst->rgbBlue = pSrc->blue & pDst->rgbReserved;
+			//            pDst->rgbGreen = pSrc->green & pDst->rgbReserved;
+			//            pDst->rgbRed =pSrc->red & pDst->rgbReserved;
+		}
+		else {
+			//            pDst->rgbBlue = pSrc->blue;
+			//            pDst->rgbGreen = pSrc->green;
+			//            pDst->rgbRed = pSrc->red;
+			pDst->rgbReserved = 255;
+		}
+		alpha_composite(pDst->rgbBlue, pSrc->blue, pDst->rgbReserved, 0);
+		alpha_composite(pDst->rgbGreen, pSrc->green, pDst->rgbReserved, 0);
+		alpha_composite(pDst->rgbRed, pSrc->red, pDst->rgbReserved, 0);
+		pSrc++;
+		pDst++;
+	} 
 }
 
 #if CC_FONT_LABEL_SUPPORT
@@ -764,32 +791,32 @@ CCTexture2D* CCTexture2D::initWithPaletteData(const void* pData,
 	{
 	case kCCTexture2DPixelFormat_RGBA8888:
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei) nWidth,
-				(GLsizei) nWidth, 0, GL_RGBA, GL_UNSIGNED_BYTE, pData);
+				(GLsizei) nHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pData);
 		break;
 	case kCCTexture2DPixelFormat_RGBA4444:
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei) nWidth,
-				(GLsizei) nWidth, 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, pData);
+				(GLsizei) nHeight, 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, pData);
 		break;
 	case kCCTexture2DPixelFormat_RGB5A1:
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei) nWidth,
-				(GLsizei) nWidth, 0, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, pData);
+				(GLsizei) nHeight, 0, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, pData);
 		break;
 	case kCCTexture2DPixelFormat_RGB565:
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei) nWidth,
-				(GLsizei) nWidth, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, pData);
+				(GLsizei) nHeight, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, pData);
 		break;
 	case kCCTexture2DPixelFormat_AI88:
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, (GLsizei) nWidth,
-				(GLsizei) nWidth, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE,
+				(GLsizei) nHeight, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE,
 				pData);
 		break;
 	case kCCTexture2DPixelFormat_A8:
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, (GLsizei) nWidth,
-				(GLsizei) nWidth, 0, GL_ALPHA, GL_UNSIGNED_BYTE, pData);
+				(GLsizei) nHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, pData);
 		break;
 	case kCCTexture2DPixelFormat_RGBA8:
 		glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_PALETTE8_RGBA8_OES, nWidth,
-				nWidth, 0, uiSizeOfData, pData);
+				nHeight, 0, uiSizeOfData, pData);
 		break;
 	default:
 		//[NSException raise:NSInternalInconsistencyException format:@""];
@@ -800,6 +827,8 @@ CCTexture2D* CCTexture2D::initWithPaletteData(const void* pData,
 	m_tContentSize = kSize;
 	m_uiWidth = (unsigned int) nWidth;
 	m_uiHeight = (unsigned int) nHeight;
+	m_uPixelsWide = nWidth;
+	m_uPixelsHigh = nHeight;
 	m_ePixelFormat = ePixelFormat;
 	m_fMaxT = m_tContentSize.width / (float) m_uiWidth;
 	m_fMaxS = m_tContentSize.height / (float) m_uiHeight;
@@ -907,7 +936,7 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 
 	png_set_invert_mono(pkPNGPointer);
 	png_set_swap(pkPNGPointer);
-	png_set_filter(pkPNGPointer, 0xFF, PNG_FILLER_AFTER);
+	//png_set_filter(pkPNGPointer, 0xFF, PNG_FILLER_AFTER);
 	png_read_update_info(pkPNGPointer, pkPNGInfo);
 
 	png_color* pkPalette = 0;
@@ -920,7 +949,8 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 
 	if (0 < nNumberPalette)
 	{
-
+		pkPNGPointer->bReadTransforms = 0;
+		ConvertPalette(pkPalette,pBmiColors,nPaletteLength,pkPNGInfo->trans_alpha);
 	}
 
 	static void* s_pData = 0;
@@ -966,8 +996,7 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 
 	for (unsigned int row = 0; row < dwHeight; row++)
 	{
-		s_pProwPointers[row] = (png_byte*) s_pData + sizeof(RGBQUAD)
-				+ nNumberPalette + row * nRowBytes;
+		s_pProwPointers[row] = (png_byte*) s_pData + sizeof(RGBQUAD) * nNumberPalette + row * nRowBytes;
 	}
 
 	if (0 < nNumberPalette)
@@ -978,6 +1007,10 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 	else if (32 == pkPNGPointer->pixel_depth)
 	{
 		ePixelFormat = kCCTexture2DPixelFormat_RGBA8888;
+	}
+	else if (24 == pkPNGPointer->pixel_depth)
+	{
+		ePixelFormat = kCCTexture2DPixelFormat_RGB888;
 	}
 	else
 	{
@@ -1003,10 +1036,11 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 		}
 	}
 
+	//SaveToBitmap(pszPNGFile, s_pProwPointers,nRowBytes,dwWidth,dwHeight,pkPNGPointer->pixel_depth,pBmiColors,nNumberPalette);
 	kImageSize = CCSizeMake(static_cast<float>(dwWidth), static_cast<float>(dwHeight));
 
 	initWithPaletteData(s_pData, ePixelFormat, nPOTWide,nPOTHigh,
-		kImageSize,sizeof(RGBQUAD) * nNumberPalette + nRowBytes + dwHeight);
+		kImageSize,sizeof(RGBQUAD) * nNumberPalette + nRowBytes * dwHeight);
 
 	m_bHasPremultipliedAlpha = true;
 

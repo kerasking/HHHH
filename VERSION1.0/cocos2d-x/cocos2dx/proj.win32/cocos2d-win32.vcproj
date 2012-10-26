@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\platform;..\platform\third_party\win32\iconv;..\platform\third_party\win32\zlib;..\platform\third_party\win32\libpng;..\platform\third_party\win32\libjpeg;..\platform\third_party\win32\libxml2;..\platform\third_party\win32\pthread;..\platform\third_party\win32\OGLES;..\include;.."
+				AdditionalIncludeDirectories="..\..\libpng;..\platform;..\platform\third_party\win32\iconv;..\platform\third_party\win32\zlib;..\platform\third_party\win32\libjpeg;..\platform\third_party\win32\libxml2;..\platform\third_party\win32\pthread;..\platform\third_party\win32\OGLES;..\include;.."
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;COCOS2DXWIN32_EXPORTS;GL_GLEXT_PROTOTYPES"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -65,7 +65,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libEGL.lib libgles_cm.lib libxml2.lib libzlib.lib libpng.lib libjpeg.lib libiconv.lib pthread.lib"
+				AdditionalDependencies="libEGL.lib libgles_cm.lib libxml2.lib libzlib.lib libjpeg.lib libiconv.lib pthread.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\..\..\Lib\$(ConfigurationName)&quot;"
@@ -124,7 +124,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\platform;..\platform\third_party\win32\iconv;..\platform\third_party\win32\zlib;..\platform\third_party\win32\libpng;..\platform\third_party\win32\libjpeg;..\platform\third_party\win32\libxml2;..\platform\third_party\win32\pthread;..\platform\third_party\win32\OGLES;..\include;.."
+				AdditionalIncludeDirectories="..\..\libpng;..\platform;..\platform\third_party\win32\iconv;..\platform\third_party\win32\zlib;..\platform\third_party\win32\libjpeg;..\platform\third_party\win32\libxml2;..\platform\third_party\win32\pthread;..\platform\third_party\win32\OGLES;..\include;.."
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;COCOS2DXWIN32_EXPORTS;GL_GLEXT_PROTOTYPES"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -145,7 +145,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libEGL.lib libgles_cm.lib libxml2.lib libzlib.lib libpng.lib libjpeg.lib libiconv.lib pthreadVCE2.lib"
+				AdditionalDependencies="libEGL.lib libgles_cm.lib libxml2.lib libzlib.lib libjpeg.lib libiconv.lib pthreadVCE2.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\..\..\Lib\$(ConfigurationName)&quot;"
@@ -1099,6 +1099,98 @@
 		<Filter
 			Name="src"
 			>
+		</Filter>
+		<Filter
+			Name="libpng"
+			>
+			<File
+				RelativePath="..\..\libpng\png.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\png.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngconf.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngdebug.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngerror.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngget.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pnginfo.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pnglibconf.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngmem.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngpread.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngpriv.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngread.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngrio.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngrtran.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngrutil.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngset.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngstruct.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngtrans.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngwio.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngwrite.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngwtran.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libpng\pngwutil.c"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath="..\CCCamera.cpp"
