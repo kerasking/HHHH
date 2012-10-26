@@ -42,15 +42,15 @@ THE SOFTWARE.
 #include "platform/CCPlatformMacros.h"
 #include "CCTexturePVR.h"
 #include "CCDirector.h"
-#include "pnginfo.h"
-#include "pngstruct.h"
 
 #if CC_ENABLE_CACHE_TEXTTURE_DATA
     #include "CCTextureCache.h"
 #endif
 
 #if ND_MOD
-	#include "png.h"
+#include "png.h"
+#include "pnginfo.h"
+#include "pngstruct.h"
 #endif
 #define int_p_NULL (int*)NULL
 
@@ -58,7 +58,13 @@ THE SOFTWARE.
 	#define PNG_BYTES_TO_CHECK 8
 	#define png_infopp_NULL (png_infopp)NULL	
 #endif
-}#endif
+namespace   cocos2d {
+
+#define alpha_composite(composite, fg, alpha, bg) {                     \
+	unsigned short temp = ((unsigned short)(fg)*(unsigned short)(alpha) +                       \
+	(unsigned short)(bg)*(unsigned short)(255 - (unsigned short)(alpha)) + (unsigned short)128);       \
+	(composite) = (u_char)((temp + (temp >> 8)) >> 8);                   \
+}
 
 void ConvertPalette(png_color *pSrc, RGBQUAD *pDst, int nCount, png_bytep transalpha) 
 {

@@ -91,8 +91,7 @@ NDSprite::~NDSprite()
 void NDSprite::Initialization(const char* pszSprFile,bool bFaceRight)
 {
 	NDNode::Initialization();
-	m_pkAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(
-			sprFile);
+	m_pkAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(pszSprFile);
 }
 
 void NDSprite::Initlalization( const char* pszSprFile,ISpriteEvent* pkEvent,bool bFaceRight )
