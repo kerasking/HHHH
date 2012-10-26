@@ -437,7 +437,7 @@ void Fighter::draw()
 {
 	drawRareMonsterEffect (isVisibleStatus);
 	m_pkRole->RunAnimation(isVisibleStatus);
-	RunBattleSubAnimation(m_pkRole, this);
+	//RunBattleSubAnimation(m_pkRole, this); ///<Ã»ÊµÏÖ£¿ ¹ùºÆ
 	drawStatusAniGroup();
 }
 

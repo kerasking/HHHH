@@ -13,6 +13,7 @@
 //#include <iconv.h>
 #include "NDConstant.h"
 #include "GameApp.h"
+
 #include "NDDataPersist.h"
 
 IMPLEMENT_CLASS(CSMLoginScene, NDScene)

@@ -1,27 +1,27 @@
 /****************************************************************************
- Copyright (c) 2010-2011 cocos2d-x.org
- Copyright (c) 2009      Valentin Milea
+Copyright (c) 2010-2011 cocos2d-x.org
+Copyright (c) 2009      Valentin Milea
 
- http://www.cocos2d-x.org
+http://www.cocos2d-x.org
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
 
 #ifndef __TOUCH_DISPATCHER_CCTOUCH_DISPATCHER_H__
 #define __TOUCH_DISPATCHER_CCTOUCH_DISPATCHER_H__
@@ -29,8 +29,7 @@
 #include "CCTouchDelegateProtocol.h"
 #include "CCObject.h"
 #include "CCMutableArray.h"
-namespace cocos2d
-{
+namespace   cocos2d {
 
 typedef enum
 {
@@ -38,27 +37,29 @@ typedef enum
 	ccTouchSelectorMovedBit = 1 << 1,
 	ccTouchSelectorEndedBit = 1 << 2,
 	ccTouchSelectorCancelledBit = 1 << 3,
-	ccTouchSelectorAllBits = (ccTouchSelectorBeganBit | ccTouchSelectorMovedBit
-			| ccTouchSelectorEndedBit | ccTouchSelectorCancelledBit),
+	ccTouchSelectorAllBits = ( ccTouchSelectorBeganBit | ccTouchSelectorMovedBit | ccTouchSelectorEndedBit | ccTouchSelectorCancelledBit),
 } ccTouchSelectorFlag;
 
-enum
-{
-	CCTOUCHBEGAN, CCTOUCHMOVED, CCTOUCHENDED, CCTOUCHCANCELLED,
 
+enum {
+	CCTOUCHBEGAN,
+	CCTOUCHMOVED,
+	CCTOUCHENDED,
+	CCTOUCHCANCELLED,
+	
 	ccTouchMax,
 };
 
 class CCSet;
 class CCEvent;
 
-struct ccTouchHandlerHelperData
-{
+struct ccTouchHandlerHelperData {
 	// we only use the type
 //	void (StandardTouchDelegate::*touchesSel)(CCSet*, CCEvent*);
 //	void (TargetedTouchDelegate::*touchSel)(NSTouch*, CCEvent*);
-	int m_type;
+	int  m_type;
 };
+
 
 class CC_DLL EGLTouchDelegate
 {
@@ -68,8 +69,7 @@ public:
 	virtual void touchesEnded(CCSet* touches, CCEvent* pEvent) = 0;
 	virtual void touchesCancelled(CCSet* touches, CCEvent* pEvent) = 0;
 
-	virtual ~EGLTouchDelegate()
-	{}
+    virtual ~EGLTouchDelegate() {}
 };
 
 class CCTouchHandler;
@@ -78,8 +78,8 @@ struct _ccCArray;
  Singleton that handles all the touch events.
  The dispatcher dispatches events to the registered TouchHandlers.
  There are 2 different type of touch handlers:
- - Standard Touch Handlers
- - Targeted Touch Handlers
+   - Standard Touch Handlers
+   - Targeted Touch Handlers
  
  The Standard Touch Handlers work like the CocoaTouch touch handler: a set of touches is passed to the delegate.
  On the other hand, the Targeted Touch Handlers only receive 1 touch at the time, and they can "swallow" touches (avoid the propagation of the event).
@@ -95,17 +95,17 @@ class CC_DLL CCTouchDispatcher : public CCObject, public EGLTouchDelegate
 public:
 	~CCTouchDispatcher();
 	bool init(void);
-	CCTouchDispatcher()
-	: m_pTargetedHandlers(NULL)
-	, m_pStandardHandlers(NULL)
-	, m_pHandlersToAdd(NULL)
-	, m_pHandlersToRemove(NULL)
-
+	CCTouchDispatcher() 
+        : m_pTargetedHandlers(NULL)
+        , m_pStandardHandlers(NULL)
+		, m_pHandlersToAdd(NULL)
+		, m_pHandlersToRemove(NULL)
+		
 	{}
 
 public:
 	/** Whether or not the events are going to be dispatched. Default: true */
-	bool isDispatchEvents(void);
+    bool isDispatchEvents(void);
 	void setDispatchEvents(bool bDispatchEvents);
 
 	/** Adds a standard touch delegate to the dispatcher's list.
@@ -129,7 +129,7 @@ public:
 	void removeAllDelegates(void);
 
 	/** Changes the priority of a previously added delegate. The lower the number,
-	 the higher the priority */
+    the higher the priority */
 	void setPriority(int nPriority, CCTouchDelegate *pDelegate);
 
 	void touches(CCSet *pTouches, CCEvent *pEvent, unsigned int uIndex);
@@ -140,9 +140,10 @@ public:
 	virtual void touchesCancelled(CCSet* touches, CCEvent* pEvent);
 
 public:
-
+#if ND_MOD
 	CCPoint getCurPos();
 	CCPoint getPrePos();
+#endif
 
 	/** singleton of the CCTouchDispatcher */
 	static CCTouchDispatcher* sharedDispatcher();
@@ -156,24 +157,25 @@ protected:
 	CCTouchHandler* findHandler(CCMutableArray<CCTouchHandler*> *pArray, CCTouchDelegate *pDelegate);
 
 protected:
-	CCMutableArray<CCTouchHandler*> *m_pTargetedHandlers;
-	CCMutableArray<CCTouchHandler*> *m_pStandardHandlers;
+ 	CCMutableArray<CCTouchHandler*> *m_pTargetedHandlers;
+ 	CCMutableArray<CCTouchHandler*> *m_pStandardHandlers;
 
 	bool m_bLocked;
 	bool m_bToAdd;
 	bool m_bToRemove;
-	CCMutableArray<CCTouchHandler*> *m_pHandlersToAdd;
+ 	CCMutableArray<CCTouchHandler*> *m_pHandlersToAdd;
 	struct _ccCArray *m_pHandlersToRemove;
 	bool m_bToQuit;
 	bool m_bDispatchEvents;
 
+#if ND_MOD
 	CCPoint m_curPos;
 	CCPoint m_prePos;
+#endif
 
 	// 4, 1 for each type of event
 	struct ccTouchHandlerHelperData m_sHandlerHelperData[ccTouchMax];
 };
-}
- //namespace   cocos2d 
+}//namespace   cocos2d 
 
 #endif // __TOUCH_DISPATCHER_CCTOUCH_DISPATCHER_H__

@@ -115,7 +115,7 @@ public:
 	
 	int type; // 1为不可重复,9为每日任务
 	
-	int award_exp, award_money; // 任务经验和银两奖励
+	int award_exp, award_money; // 任务经验和银币奖励
 	
 	int award_itemflag; // 任奖励务物品类型 0表不奖励,1表不选择直接奖励,2表多选1
 	

@@ -20,6 +20,9 @@
 #define hide
 #define overload
 
+#define NS_NDENGINE_BGN namespace NDEngine{
+#define NS_NDENGINE_END }
+
 namespace NDEngine
 {
 //－－模仿mfc动态识别－－

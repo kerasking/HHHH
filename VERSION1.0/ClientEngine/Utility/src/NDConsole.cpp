@@ -176,6 +176,17 @@ void NDConsole::ProcessInput(const char* pszInput)
 			}
 		}
 	}
+
+	if (pszInput[0] == '/')
+	{
+		PM(pszInput);
+	}
+}
+
+void NDConsole::PM(const char* pszInput)
+{
+	const char* cmd = pszInput + 1;
+	//@todo...
 }
 
 const char* NDConsole::GetSpecialCommand( const char* pszCommand )

@@ -1550,7 +1550,7 @@ EnhancedObj* ItemMgr::QueryEnhancedType(int idEnhancedType)
 		MAP_ENHANCEDTYPE_INDEX::iterator itIndex = m_mapEnhancedTypeIndex.find(idEnhancedType);
 		if (itIndex != m_mapEnhancedTypeIndex.end())
 		{
-			//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResourcePath().c_str()];
+			//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResPath().c_str()];
 // 			NSString *type = [NSString stringWithFormat:@"%s", NDPath::GetResPath("enhancedtype.ini")];
 // 			NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:type]; ///<临时注释掉 --郭浩
 			
@@ -1590,7 +1590,7 @@ NDItemType* ItemMgr::QueryItemType(OBJID idItemType)
 		MAP_ITEMTYPE_INDEX::iterator itIndex = m_mapItemTypeIndex.find(idItemType);
 		if (itIndex != m_mapItemTypeIndex.end())
 		{
-			//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResourcePath().c_str()];
+			//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResPath().c_str()];
 			///< 临时性注释，郭浩 begin.
 // 			NSString *itemtype = [NSString stringWithFormat:@"%s", NDPath::GetResPath("itemtype.ini")];
 // 			NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:itemtype];
@@ -1661,7 +1661,7 @@ NDItemType* ItemMgr::QueryItemType(OBJID idItemType)
 
 void ItemMgr::LoadItemTypeIndex()
 {
-	//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResourcePath().c_str()];
+	//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResPath().c_str()];
 
 
 	/***
@@ -1690,7 +1690,7 @@ void ItemMgr::LoadItemTypeIndex()
 
 void ItemMgr::LoadEnhancedTypeIndex()
 {
-	//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResourcePath().c_str()];
+	//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResPath().c_str()];
 
 	/***
 	* 临时性注释，到函数尾部 --郭浩
@@ -1717,7 +1717,7 @@ void ItemMgr::LoadEnhancedTypeIndex()
 
 void ItemMgr::LoadItemAddtion()
 {
-	//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResourcePath().c_str()];
+	//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResPath().c_str()];
 // 	NSString *itemAdditionTable = [NSString stringWithFormat:@"%s", NDPath::GetResPath("addition.ini")];
 // 	NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:itemAdditionTable];
 // 	

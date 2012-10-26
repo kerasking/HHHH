@@ -16,3 +16,5 @@ class ScriptObjectCommon : public NDEngine::ScriptObject
 public:
 	virtual void OnLoad();
 };
+
+int PicMemoryUsingLogOut(bool bNotPrintLog);

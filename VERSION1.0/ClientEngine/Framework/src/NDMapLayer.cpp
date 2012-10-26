@@ -237,7 +237,7 @@ void NDMapLayer::Initialization(const char* mapFile)
 
 void NDMapLayer::Initialization(int mapIndex)
 {
-	tq::CString strMapFile("%smap_%d.map", NDPath::GetFullMapPath().c_str(),
+	tq::CString strMapFile("%smap_%d.map", NDPath::GetMapPath().c_str(),
 			mapIndex);
 	m_nMapIndex = mapIndex;
 	Initialization((const char*) strMapFile);
@@ -365,7 +365,7 @@ void NDMapLayer::ShowTitle(int name_row, int name_col)
 		m_lbTitle->Initialization();
 		NDPicture* picture = NDPicturePool::DefaultPool()->AddPicture(
 				tq::CString("%smap_title.png",
-						NDEngine::NDPath::GetImagePath().c_str()));
+						NDEngine::NDPath::GetImagePath()));
 		//picture->SetColor(ccc4(0, 0, 0,0));
 		int col = name_col;
 		int row = name_row;
@@ -379,7 +379,7 @@ void NDMapLayer::ShowTitle(int name_row, int name_col)
 		m_lbTitleBg->Initialization();
 		NDPicture* bg = NDPicturePool::DefaultPool()->AddPicture(
 				tq::CString("%map_title_bg.png",
-						NDEngine::NDPath::GetImagePath().c_str()));
+						NDEngine::NDPath::GetImagePath()));
 		m_lbTitleBg->SetPicture(bg, true);
 	}
 
