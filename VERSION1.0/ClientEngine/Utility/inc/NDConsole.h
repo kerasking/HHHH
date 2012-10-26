@@ -25,6 +25,7 @@ public:
 	virtual ~NDConsoleListener(){};
 
 	virtual bool processConsole(const char* pszInput) = 0;
+	virtual bool processPM(const char* pszCmd) = 0;
 
 protected:
 private:
