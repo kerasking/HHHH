@@ -36,6 +36,7 @@ NDSprite::NDSprite()
 	m_pkFrameRunRecord = NULL;
 	m_bReverse = false;
 	m_bMoveMap = false;
+	m_pkSpriteEvent = 0;
 	m_bIsMoving = false;
 	m_nMovePathIndex = 0;
 	m_dwLastMoveTickTime = 0;
@@ -87,11 +88,19 @@ NDSprite::~NDSprite()
 	CC_SAFE_RELEASE (m_pkFrameRunRecord);
 }
 
-void NDSprite::Initialization(const char* sprFile)
+void NDSprite::Initialization(const char* pszSprFile,bool bFaceRight)
 {
 	NDNode::Initialization();
-	m_pkAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(
-			sprFile);
+	m_pkAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(pszSprFile);
+}
+
+void NDSprite::Initlalization( const char* pszSprFile,ISpriteEvent* pkEvent,bool bFaceRight )
+{
+	NDNode::Initialization();
+
+	m_bFaceRight = bFaceRight;
+	m_pkAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(pszSprFile);
+	m_pkSpriteEvent = pkEvent;
 }
 
 void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
@@ -980,6 +989,33 @@ void NDSprite::standAction( bool bStand )
 //  			m_pkCurrentAnimation->setReverse(m_bReverse);
 //  		}
 //  	}
+}
+
+void NDSprite::AddSubAniGroup( NDSubAniGroupEx& kGroup )
+{
+// 	if (kGroup.anifile.empty())
+// 	{
+// 		return;
+// 	}
+// 
+// 	GameScene* pkScene = (GameScene*)NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene));
+// 
+// 	if (0 == pkScene)
+// 	{
+// 		return;
+// 	}
+// 
+// 	NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(pkScene);
+// 
+// 	if (0 == pkLayer)
+// 	{
+// 		return;
+// 	}
+// 
+// 	NDLightEffect* pkLightEffect = new NDLightEffect;
+// 
+// 	string strSprFullPath = NDPath::GetAnimationPath();
+// 	strSprFullPath.append(kGroup.anifile);
 }
 
 }

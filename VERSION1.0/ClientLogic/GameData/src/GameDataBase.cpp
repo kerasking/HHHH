@@ -7,6 +7,7 @@
  *
  */
 
+#if 0
 #include "ScriptDataBase.h"
 #include "ScriptGameData.h"
 #include "NDPath.h"
@@ -383,3 +384,4 @@ namespace NDEngine {
 	{
 	}
 }
+#endif

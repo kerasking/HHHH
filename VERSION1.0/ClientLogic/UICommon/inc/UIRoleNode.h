@@ -28,6 +28,8 @@ public:
 	void SetEquip(int nEquipId, int nQuality);
 	void SetMove(bool bSet, bool directRight=true);
 	void SetRoleScale(float scale);
+	void SetRidePet(int pet_look,int stand_action,int run_action);
+	NDManualRole* GetRole(){ return m_pRole; }
 private:
 	NDUINode*				m_pRoleParentNode;
 	NDManualRole*			m_pRole;

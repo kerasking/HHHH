@@ -3,7 +3,7 @@
  *  DragonDrive
  *
  *  Created by jhzheng on 12-1-4.
- *  Copyright 2012 (网龙)DeNA. All rights reserved.
+ *  Copyright 2012 (缃戦�?DeNA. All rights reserved.
  *
  */
 
@@ -126,7 +126,8 @@ void ScriptMgr::update()
 		//LuaStateMgrObj.GetState()->GC(LUA_GCCOLLECT, 0);
 	}
 }
-// 	if (++frameCount % 120 == 0) // 120帧打印一次lua当前使用的内存�??�量
+
+// 	if (++frameCount % 120 == 0) // 
 // 	{
 // 		lua_State* state = LuaStateMgrObj.GetState()->GetCState();
 // 		if (state)

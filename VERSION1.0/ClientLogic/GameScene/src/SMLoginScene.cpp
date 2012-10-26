@@ -49,7 +49,7 @@ CSMLoginScene::Initialization()
 	
 	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 	
-    m_layer = new NDUILayer();
+/*    m_layer = new NDUILayer();
 	m_layer->Initialization();
 	m_layer->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
 	this->AddChild(m_layer);
@@ -65,7 +65,7 @@ CSMLoginScene::Initialization()
     
     pProcess->SetProcess(0);
     pProcess->SetTotal(100);
-    pProcess->SetStyle(1);
+    pProcess->SetStyle(1);*/
    // while (!m_bUpdOk) {
         //更新资源存放目录
 
@@ -99,6 +99,23 @@ CSMLoginScene::Initialization()
         m_pClientUpd->StartUpdate(nVersion);  
     }*/
    //ui.free();
+}
+
+void
+CSMLoginScene::LoadIni(const char* iniFile)
+{
+		static NDUILayer* layer = new NDUILayer();
+		if(!layer)
+		{
+			CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+			layer = new NDUILayer();
+			layer->Initialization();
+			layer->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
+			this->AddChild(layer);
+		}
+
+		NDUILoad ui;
+		ui.Load(iniFile, layer, this, CGSizeMake(0, 37));
 }
 
 ////////////////////////////////////////////////////////////

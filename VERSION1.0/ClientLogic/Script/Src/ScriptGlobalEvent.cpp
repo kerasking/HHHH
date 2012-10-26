@@ -9,75 +9,57 @@
 
 #include "ScriptGlobalEvent.h"
 #include "ScriptInc.h"
-//#include <multimap.h> ///< ¡Ÿ ±–‘◊¢ Õ π˘∫∆
-#include "NDDirector.h"
-#include "NDConstant.h"
-#include "NDUIImage.h"
-#include "NDPicture.h"
+#include <map>
+#include "LuaObject.h"
 
-using namespace NDEngine;
+using namespace NDEngine; 
 using namespace LuaPlus;
 
 typedef std::multimap<GLOBALEVENT, LuaObject>::const_iterator	GLOBALEVENTCIT;
 typedef std::multimap<GLOBALEVENT, LuaObject>::value_type		GLOBALEVENTVT;
 std::multimap<GLOBALEVENT, LuaObject> mapGlobalEventHandler;
 
-bool PrintString(const char* pszString)
-{
-	if (0 == pszString || !*pszString)
-	{
-		return false;
-	}
-	
-	CCLog(pszString);
-
-	return true;
-}
-
 bool RegisterGlobalEventHandler(int nEvent, const char* funcname, LuaObject func)
 {
 	if (nEvent < GLOBALEVENT_BEGIN || nEvent >= GLOBALEVENT_END)
 	{
-		if (funcname)
 		{
-			ScriptMgrObj.DebugOutPut("reg global envent [%d][%s] failed! because invalid param event type", 
-				  nEvent,
-				  funcname);
+			if (funcname)
+			{
+				ScriptMgrObj.DebugOutPut("reg global envent [%d][%s] failed! because invalid param event type", 
+					nEvent,
+					funcname);
+			}
+			return false;
 		}
-		return false;
-	}
-	
-	if (!func.IsFunction())
-	{
-		ScriptMgrObj.DebugOutPut("reg global envent [%d][%s] failed! because invalid param function", 
-			  nEvent,
-			  funcname);
-		return false;
-	}
 
-	/***
-	* ¡Ÿ ±–‘◊¢ Õ π˘∫∆
-	* begin
-	* ’‚¿Ôª·Â¥µÙ
-	*/
-//     ScriptMgrObj.DebugOutPut("reg global envent [%d][%s] sucess!", 
-//                              nEvent,
-//                              funcname);
-	/***
-	* end
-	*/
+		if (!func.IsFunction())
+		{
+			ScriptMgrObj.DebugOutPut("reg global envent [%d][%s] failed! because invalid param function", 
+				nEvent,
+				funcname);
+			return false;
+		}
 
-	GLOBALEVENT eEvent = (GLOBALEVENT)nEvent;
-	
-	mapGlobalEventHandler.insert(GLOBALEVENTVT(eEvent, func));
-	
-	return true;
+		ScriptMgrObj.DebugOutPut("reg global envent [%d][%s] sucess!", 
+			nEvent,
+			funcname);
+
+		mapGlobalEventHandler.insert(GLOBALEVENTVT(GLOBALEVENT(nEvent), func));
+
+		return true;
+	}
 }
 
-void ScriptGlobalEvent::OnLoad()
+//void SendGlobalEvent(int iEventID, int param1=0, int param2=0, int param3=0);
+void SendGlobalEvent(int iEventID, int param1=0, int param2=0, int param3=0)
 {
- 	ETCFUNC("RegisterGlobalEventHandler", RegisterGlobalEventHandler)
- 	ETCFUNC("PrintString",PrintString)
+	ScriptGlobalEvent::OnEvent((GLOBALEVENT)iEventID, param1, param2, param3);
+}
+void ScriptGlobalEvent::Load()
+{
+	ETCFUNC( "RegisterGlobalEventHandler", RegisterGlobalEventHandler )
+	ETCFUNC( "SendGlobalEvent", SendGlobalEvent )
 }
 
 void ScriptGlobalEvent::OnEvent(GLOBALEVENT eEvent, int param1, int param2, int param3)
@@ -95,15 +77,9 @@ void ScriptGlobalEvent::OnEvent(GLOBALEVENT eEvent, int param1, int param2, int 
 		LuaFunction<void> luaFunc(fun);
 		luaFunc(param1, param2, param3);
 	}
+}
 
-// 	NDScene* pkScene = NDDirector::DefaultDirector()->GetSceneByTag(SMLOGINSCENE_TAG);
-// 	pkScene->RemoveAllChildren(true);
-// 
-// 	NDPicture* pkPic = new NDPicture;
-// 	NDUIImage* pkImage = new NDUIImage;
-// 
-// 	pkPic->Initialization("8.png");
-// 	pkImage->SetPicture(pkPic);
-// 
-// 	pkScene->AddChild(pkImage);
+void ScriptGlobalEventLoad()
+{
+
 }

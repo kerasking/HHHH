@@ -12,11 +12,8 @@
 #include "CCPointExtension.h"
 #include "NDUtility.h"
 #include "NDConstant.h"
-#include "CCGeometry.h"
 
 IMPLEMENT_CLASS(CUIRoleNode, NDUINode)
-
-using namespace cocos2d;
 
 CUIRoleNode::CUIRoleNode()
 {
@@ -60,6 +57,13 @@ void CUIRoleNode::ChangeLookFace(int nLookFace)
 	m_pRoleParentNode->AddChild(m_pRole);
 }
 
+void CUIRoleNode::SetRidePet(int pet_look,int stand_action,int run_action)
+{
+	if(m_pRole)
+	{
+		//m_pRole->SetRidePet(pet_look, stand_action, run_action, 0);
+	}
+}
 void CUIRoleNode::SetRoleScale(float scale)
 {
 	if(m_pRole){
@@ -112,4 +116,8 @@ void CUIRoleNode::SetMove(bool bSet, bool directRight/*=true*/)
 	
 	m_pRole->SetAction(bSet);
 	m_pRole->SetSpriteDir(directRight ? 0 : 2);
+	if (m_pRole->GetRidePet())
+	{
+		m_pRole->GetRidePet()->SetSpriteDir(directRight ? 0 : 2);
+	}
 }

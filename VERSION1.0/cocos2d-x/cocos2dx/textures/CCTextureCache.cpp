@@ -385,6 +385,7 @@ CCTexture2D * CCTextureCache::addImage(const char * path)
                 fullpath = CCFileUtils::fullPathFromRelativePath(fullpath.c_str(), &resolution);
 				texture = new CCTexture2D();
 				texture->initWithImage(&image, resolution);
+				//texture->initWithPalettePNG(fullpath.c_str());
 
 				if( texture )
 				{

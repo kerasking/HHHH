@@ -8,273 +8,1371 @@
  */
 
 #include "ScriptGameData.h"
-#include "ScriptInc.h"
-#include "ScriptDataBase.h"
+#include "globaldef.h"
+/////////////////////////////////////////////////////////////////////////////////////////
 
-using namespace NDEngine;
-
-int GetGameDataIdList(LuaState* state)
+unsigned int Get_VecScriptGameData_Size(VecScriptGameData& data)
 {
-	lua_State* L = state->GetCState();
+	unsigned int nTotal	= 0;
 	
-	if (!L)
-	{
-		state->PushNil();
-		return 1;
-	}
+	nTotal	+= (sizeof(int) + sizeof(ScriptGameData)) * data.size();
 	
-	lua_newtable(L);
-	
-	LuaStack args(state);
-	// eScriptData
-	LuaObject scriptdata = args[1];
-	// nKey
-	LuaObject key = args[2];
-	// eRoleData
-	LuaObject roledata = args[3];
-	
-	if (!scriptdata.IsNumber()	||
-		!key.IsNumber()			||
-		!roledata.IsNumber())
-	{
-		return 1;
-	}
-	
-	ID_VEC idVec;
-	if (!ScriptGameDataObj.GetDataIdList(
-		(eScriptData)scriptdata.GetInteger(), 
-		key.GetInteger(), 
-		(eRoleData)roledata.GetInteger(), 
-		idVec))
-	{
-	}
-	
-	size_t size = idVec.size();
-	for (size_t i = 0; i < size; i++) 
-	{
-		lua_pushnumber(L, i + 1);
-		lua_pushnumber(L, idVec[i]);
-		lua_settable(L, -3);
-	}
-	return 1;
+	return nTotal;
 }
 
-
-double GetRoleBasicDataN(int nRoleId, int dataIndex)
+unsigned int Get_STSCRIPTGAMEDATA_Size(STSCRIPTGAMEDATA& data)
 {
-	return GRDBasicN(nRoleId, dataIndex);
-}
-
-double GetRoleBasicDataF(int nRoleId, int dataIndex)
-{
-	return GRDBasicF(nRoleId, dataIndex);
-}
-
-const char* GetRoleBasicDataS(int nRoleId, int dataIndex)
-{
-	return GRDBasicS(nRoleId, dataIndex).c_str();
-}
-
-int GetRoleBasicDataBig(LuaState* state)
-{
-	LuaStack args(state);
-	LuaObject nRoleId = args[1];
-	LuaObject nDataIndex = args[2];
+	unsigned int nTotal	= 0;
 	
-	if ( !(nRoleId.IsNumber() && nDataIndex.IsNumber()) )
+	nTotal	+= sizeof(data.nId);
+	
+	nTotal	+= Get_VecScriptGameData_Size(data.vData);
+	
+	for (std::map<int, ID_VEC>::iterator it = data.mapIDList.begin(); 
+		 it != data.mapIDList.end();
+		 it++) 
 	{
-		state->PushNumber(0);
-		state->PushNumber(0);
+		nTotal	+= sizeof(int);
+		nTotal	+= sizeof(OBJID) * (it->second).size();
 	}
-	else
+	
+	return nTotal;
+}
+
+void NDScriptGameData::LogOutMemory()
+{
+	unsigned int nTotal = 0;
+	
+	for(size_t i = 0;
+		i < m_vMapGameScriptDataObject.size();
+		i++)
 	{
-		unsigned long long ull = 
-		GRDBasicN(nRoleId.GetNumber(), 
-				  nDataIndex.GetNumber());
+		MapGameScriptObject& MapGSO = m_vMapGameScriptDataObject[i];
 		
-		state->PushNumber(ull >> 32);
-		state->PushNumber(ull);
+		MapGameScriptObjectIt itMapGSO	= MapGSO.begin();
+		for (; itMapGSO != MapGSO.end(); itMapGSO++) 
+		{
+			nTotal	+= sizeof(unsigned int);
+			
+			GameScriptDataSet& gsd	= itMapGSO->second;
+			
+			nTotal	+= Get_VecScriptGameData_Size(gsd.basicdata);
+			
+			VecMapScriptGameData& extradata = gsd.extradata;
+			for (size_t j = 0; j < extradata.size(); j++) 
+			{
+				MapScriptGameData& msgd		= extradata[j];
+				
+				for (MapScriptGameDataIt it = msgd.begin(); it != msgd.end(); it++) 
+				{
+					nTotal		+= Get_STSCRIPTGAMEDATA_Size(*it);
+				}
+			}
+		}
 	}
 	
-	return 2;
+	//printf("\n*************cur game data size [%d] kbyte, [%d] mbyte", nTotal / 1024, nTotal / 1024 / 1024);
 }
 
-void SetRoleBasicDataN(int nRoleId, int dataIndex, double ulVal)
-{
-	return SRDBasic(nRoleId, dataIndex, ulVal);
-}
+#pragma mark 打印游戏数据
 
-void SetRoleBasicDataF(int nRoleId, int dataIndex, double dVal)
+void NDScriptGameData::LogOut(VecScriptGameData& vSGD)
 {
-	return SRDBasic(nRoleId, dataIndex, dVal);
-}
-
-void SetRoleBasicDataS(int nRoleId, int dataIndex, const char* szVal)
-{
-	return SRDBasic(nRoleId, dataIndex, szVal);
-}
-
-void SetGameDataN(int esd, unsigned int nKey, int e,  int nId, unsigned short index, double uiVal)
-{
-	return ScriptGameDataObj.SetData((eScriptData)esd, nKey, (eRoleData)e, nId, index, uiVal);
-}
-
-void SetGameDataF(int esd, unsigned int nKey, int e,  int nId, unsigned short index, float fVal)
-{
-	return ScriptGameDataObj.SetData((eScriptData)esd, nKey, (eRoleData)e, nId, index, fVal);
-}
-
-void SetGameDataS(int esd, unsigned int nKey, int e,  int nId, unsigned short index, const char* szVal)
-{
-	return ScriptGameDataObj.SetData((eScriptData)esd, nKey, (eRoleData)e, nId, index, szVal);
-}
-
-double GetGameDataN(int esd, unsigned int nKey, int e,  int nId, unsigned short index)
-{
-	double ulVal = ScriptGameDataObj.GetData<double>((eScriptData)esd, nKey, (eRoleData)e, nId, index);
-	return ulVal;
-}
-
-double GetGameDataF(int esd, unsigned int nKey, int e,  int nId, unsigned short index)
-{
-	float fVal = ScriptGameDataObj.GetData<double>((eScriptData)esd, nKey, (eRoleData)e, nId, index);
-	return fVal;
-}
-
-std::string GetGameDataS(int esd, unsigned int nKey, int e,  int nId, unsigned short index)
-{
-	std::string strVal = ScriptGameDataObj.GetData<std::string>((eScriptData)esd, nKey, (eRoleData)e, nId, index);
-	return strVal;
-}
-
-void DelRoleSubGameDataById(int esd, unsigned int nKey, int e, int nId)
-{
-	ScriptGameDataObj.DelData((eScriptData)esd, nKey, (eRoleData)e, nId);
-}
-
-void DelRoleSubGameData(int esd, unsigned int nKey, int e)
-{
-	ScriptGameDataObj.DelData((eScriptData)esd, nKey, (eRoleData)e);
-}
-
-void DelRoleGameDataById(int esd, unsigned int nKey)
-{
-	ScriptGameDataObj.DelData((eScriptData)esd, nKey);
-}
-
-void DelRoleGameData(int esd)
-{
-	ScriptGameDataObj.DelData((eScriptData)esd);
-} 
-
-void DelGameData()
-{
-	ScriptGameDataObj.DelAllData();
-}
-
-void DumpGameData(int esd, unsigned int nKey, int e, int nId)
-{
-	ScriptGameDataObj.LogOut((eScriptData)esd, nKey, (eRoleData)e, nId);
-}
-
-void DumpDataBaseData(const char* filename, int nId)
-{
-	ScriptDBObj.LogOut(filename, nId);
-}
-
-int GetRoleDataIdTable(LuaState* state)
-{
-	lua_State* L = state->GetCState();
-	
-	if (!L)
-	{
-		state->PushNil();
-		return 1;
-	}
-	
-	lua_newtable(L);
-	
-	LuaStack args(state);
-	// eScriptData
-	LuaObject esd = args[1];
-	// nKey
-	LuaObject nKey = args[2];
-	// eRoleData
-	LuaObject e = args[3];
-	
-	LuaObject nRoleId = args[4];
-	
-	LuaObject eList = args[5];
-	
-	if (!esd.IsNumber()			||
-		!nKey.IsNumber()		||
-		!e.IsNumber()			||
-		!nRoleId.IsNumber()		||
-		!eList.IsNumber())
-	{
-		return 1;
-	}
-	
 	ID_VEC idVec;
-	ScriptGameDataObj.GetRoleDataIdList((eScriptData)esd.GetInteger(), 
-					nKey.GetInteger(), (eRoleData)e.GetInteger(), 
-					nRoleId.GetInteger(),(eIDList)eList.GetInteger(), idVec);
-					
-	size_t size = idVec.size();
-	
-	for (size_t i = 0; i < size; i++) 
+	for (VecScriptGameDataIt it = vSGD.begin(); 
+		 it != vSGD.end(); 
+		 it++) 
 	{
-		lua_pushnumber(L, i + 1);
-		lua_pushnumber(L, idVec[i]);
-		lua_settable(L, -3);
+		idVec.push_back(it->first);
 	}
-	return 1;
+	
+	if (!idVec.empty())
+	{
+		std::sort(idVec.begin(), idVec.end());
+		for (ID_VEC::iterator it = idVec.begin(); 
+			 it != idVec.end(); 
+			 it++) 
+		{
+			VecScriptGameDataIt itData = vSGD.find(*it);
+			if (itData != vSGD.end())
+			{
+				ScriptGameData& sgd = itData->second;
+				if (GDT_String == sgd.typeOfData)
+				{
+					//NDLog(@"[index=%d,val=%@]", (*it), [NSString stringWithUTF8String:sgd.valueOfStr]);
+				}
+				else
+				{
+					//NDLog(@"[index=%d,val=%d]", (*it), sgd.valueOfNumber.ubigVal);
+				}
+			}
+		}
+	}
 }
 
-void AddRoleDataId(int esd, unsigned int nKey, int e, int nRoleId, int eList, int nId)
+void NDScriptGameData::LogOut(eScriptData esd, unsigned int nKey, eRoleData e, int nId)
 {
-	ScriptGameDataObj.PushRoleDataId((eScriptData)esd, nKey, (eRoleData)e, nRoleId, (eIDList)eList, nId);
+	if (esd < eScriptDataBegin || e < eRoleDataBasic)
+	{
+		return;
+	}
+	
+	if ( (size_t)esd >= m_vMapGameScriptDataObject.size() )
+		return;
+	
+	MapGameScriptObject& mapGSO = m_vMapGameScriptDataObject[esd];
+	
+	MapGameScriptObjectIt itMapGSO = mapGSO.find(nKey);
+	
+	if ( itMapGSO == mapGSO.end() )
+		return;
+	
+	GameScriptDataSet& gsdt = itMapGSO->second;
+	
+	if (0 == (size_t)e)
+	{
+		LogOut(gsdt.basicdata);
+		return;
+	}
+	
+	if ( (size_t)(e - 1) >= gsdt.extradata.size() )
+		return;
+	
+	MapScriptGameData& mapSGD = gsdt.extradata[e - 1];
+	if (mapSGD.empty())
+		return;
+	
+	MapScriptGameDataIt itMapSGD = mapSGD.begin();
+	for (; itMapSGD != mapSGD.end(); itMapSGD++) 
+	{
+		STSCRIPTGAMEDATA& stSG = *itMapSGD;
+		if (nId == stSG.nId)
+		{
+			LogOut(stSG.vData);
+			break;
+		}
+	}
 }
 
-void DelRoleDataId(int esd, unsigned int nKey, int e, int nRoleId, int eList, int nId)
+#pragma mark 角色数据id列表管理
+bool 
+NDScriptGameData::GetRoleDataIdList(eScriptData esd, unsigned int nKey, eRoleData e, int nRoleId, eIDList eList, ID_VEC& idVec)
 {
-	ScriptGameDataObj.PopRoleDataId((eScriptData)esd, nKey, (eRoleData)e, nRoleId, (eIDList)eList, nId);
+	if (esd < eScriptDataBegin || e <= eRoleDataBasic || eList < eIDList_Begin)
+	{
+		return false;
+	}
+	
+	if ( (size_t)esd >= m_vMapGameScriptDataObject.size())
+	{
+		return false;
+	}
+	
+	MapGameScriptObject& mapGSO = m_vMapGameScriptDataObject[esd];
+	
+	MapGameScriptObjectIt itMapSGO = mapGSO.find(nKey);
+	
+	if (itMapSGO == mapGSO.end())
+	{
+		return false;
+	}
+	
+	GameScriptDataSet& gsds = mapGSO[nKey];
+	
+	VecMapScriptGameData& vMSGD = gsds.extradata;
+	
+	size_t eIndex = e - 1;	
+	
+	if ( eIndex >= vMSGD.size() )
+	{
+		return false;
+	}
+	
+	MapScriptGameData& mapSGD = vMSGD[eIndex];
+	
+	bool bFind = false;
+	
+	MapScriptGameDataIt itMapSGD = mapSGD.begin();
+	for (; itMapSGD != mapSGD.end(); itMapSGD++) 
+	{
+		if ((*itMapSGD).nId == (unsigned int)nRoleId)
+		{
+			bFind = true;
+			break;
+		}
+	}
+	
+	if (!bFind)
+	{
+		return false;
+	}
+	
+	STSCRIPTGAMEDATA& st	= *itMapSGD;
+	
+	std::map<int, ID_VEC>& mapIdList			= st.mapIDList;
+	std::map<int, ID_VEC>::iterator itIDList	= mapIdList.find(eList);
+	
+	if (itIDList == mapIdList.end())
+	{
+		return false;
+	}
+	
+	idVec = mapIdList[eList];
+	
+	return true;
 }
 
-void DelRoleDataIdList(int esd, unsigned int nKey, int e, int nRoleId, int eList)
+bool			
+NDScriptGameData::DelRoleDataIdList(eScriptData esd, unsigned int nKey, eRoleData e, int nRoleId, eIDList eList)
 {
-	ScriptGameDataObj.DelRoleDataIdList((eScriptData)esd, nKey, (eRoleData)e, nRoleId, (eIDList)eList);
+	if (esd < eScriptDataBegin || e <= eRoleDataBasic || eList < eIDList_Begin)
+	{
+		return false;
+	}
+	
+	if ( (size_t)esd >= m_vMapGameScriptDataObject.size())
+	{
+		return false;
+	}
+	
+	MapGameScriptObject& mapGSO = m_vMapGameScriptDataObject[esd];
+	
+	MapGameScriptObjectIt itMapSGO = mapGSO.find(nKey);
+	
+	if (itMapSGO == mapGSO.end())
+	{
+		return false;
+	}
+	
+	GameScriptDataSet& gsds = mapGSO[nKey];
+	
+	VecMapScriptGameData& vMSGD = gsds.extradata;
+	
+	size_t eIndex = e - 1;	
+	
+	if ( eIndex >= vMSGD.size() )
+	{
+		return false;
+	}
+	
+	MapScriptGameData& mapSGD = vMSGD[eIndex];
+	
+	bool bFind = false;
+	
+	MapScriptGameDataIt itMapSGD = mapSGD.begin();
+	for (; itMapSGD != mapSGD.end(); itMapSGD++) 
+	{
+		if ((*itMapSGD).nId == (unsigned int)nRoleId)
+		{
+			bFind = true;
+			break;
+		}
+	}
+	
+	if (!bFind)
+	{
+		return false;
+	}
+	
+	STSCRIPTGAMEDATA& st	= *itMapSGD;
+	
+	std::map<int, ID_VEC>& mapIdList			= st.mapIDList;
+	std::map<int, ID_VEC>::iterator itIDList	= mapIdList.find(eList);
+	
+	if (itIDList == mapIdList.end())
+	{
+		return false;
+	}
+	
+	mapIdList.erase(itIDList);
+	
+	return true;
 }
 
-void LogOutRoleDataIdTable(int esd, unsigned int nKey, int e, int nRoleId, eIDList eList)
+void			
+NDScriptGameData::PushRoleDataId(eScriptData esd, unsigned int nKey, eRoleData e, int nRoleId, eIDList eList, int nId)
 {
-	ScriptGameDataObj.LogOutRoleDataIdList((eScriptData)esd, nKey, (eRoleData)e, nRoleId, (eIDList)eList);
+	if (esd < eScriptDataBegin || e <= eRoleDataBasic || eList < eIDList_Begin)
+	{
+		NDAsssert(0);
+		return;
+	}
+	
+	if ( (size_t)esd == m_vMapGameScriptDataObject.size())
+	{
+		m_vMapGameScriptDataObject.push_back(MapGameScriptObject());
+	}
+	else if ( (size_t)esd > m_vMapGameScriptDataObject.size() )
+	{
+		m_vMapGameScriptDataObject.resize(esd+1);
+	}
+	
+	MapGameScriptObject& mapGSO = m_vMapGameScriptDataObject[esd];
+	
+	MapGameScriptObjectIt itMapSGO = mapGSO.find(nKey);
+	
+	if (itMapSGO == mapGSO.end())
+	{
+		GameScriptDataSet newGSDS;
+		mapGSO.insert(MapGameScriptObjectPair(nKey, newGSDS));
+	}
+	
+	GameScriptDataSet& gsds = mapGSO[nKey];
+	
+	VecMapScriptGameData& vMSGD = gsds.extradata;
+	
+	size_t eIndex = e - 1;	
+	
+	if ( eIndex == vMSGD.size() )
+	{
+		vMSGD.push_back(MapScriptGameData());
+	}
+	else if ( eIndex > vMSGD.size() )
+	{
+		vMSGD.resize(eIndex + 1);
+	}
+	
+	MapScriptGameData& mapSGD = vMSGD[eIndex];
+	
+	STSCRIPTGAMEDATA& st	= GetVecScriptGameDataByMap(mapSGD, nRoleId);
+	
+	std::map<int, ID_VEC>& mapIdList			= st.mapIDList;
+	std::map<int, ID_VEC>::iterator itIDList	= mapIdList.find(eList);
+	
+	if (itIDList == mapIdList.end())
+	{
+		ID_VEC idList;
+		mapIdList.insert(std::make_pair(eList, idList));
+	}
+	
+	ID_VEC& vId = mapIdList[eList];
+	//size_t size = vId.size();
+	vId.push_back(nId);
+}
+
+void			
+NDScriptGameData::PopRoleDataId(eScriptData esd, unsigned int nKey, eRoleData e, int nRoleId, eIDList eList, int nId)
+{
+	if (esd < eScriptDataBegin || e <= eRoleDataBasic || eList < eIDList_Begin)
+	{
+		return;
+	}
+	
+	if ( (size_t)esd >= m_vMapGameScriptDataObject.size())
+	{
+		return;
+	}
+	
+	MapGameScriptObject& mapGSO = m_vMapGameScriptDataObject[esd];
+	
+	MapGameScriptObjectIt itMapSGO = mapGSO.find(nKey);
+	
+	if (itMapSGO == mapGSO.end())
+	{
+		return;
+	}
+	
+	GameScriptDataSet& gsds = mapGSO[nKey];
+	
+	VecMapScriptGameData& vMSGD = gsds.extradata;
+	
+	size_t eIndex = e - 1;	
+	
+	if ( eIndex >= vMSGD.size() )
+	{
+		return;
+	}
+	
+	MapScriptGameData& mapSGD = vMSGD[eIndex];
+	
+	bool bFind = false;
+	
+	MapScriptGameDataIt itMapSGD = mapSGD.begin();
+	for (; itMapSGD != mapSGD.end(); itMapSGD++) 
+	{
+		if ((*itMapSGD).nId == nRoleId)
+		{
+			bFind = true;
+			break;
+		}
+	}
+	
+	if (!bFind)
+	{
+		return;
+	}
+	
+	STSCRIPTGAMEDATA& st	= *itMapSGD;
+	
+	std::map<int, ID_VEC>& mapIdList			= st.mapIDList;
+	std::map<int, ID_VEC>::iterator itIDList	= mapIdList.find(eList);
+	
+	if (itIDList == mapIdList.end())
+	{
+		return;
+	}
+	
+	ID_VEC& idVec = itIDList->second;
+	
+	ID_VEC::iterator itId = idVec.begin();
+	
+	int nNum = 0;
+	
+	while (itId != idVec.end()) 
+	{
+		if (nId == *itId)
+		{
+			itId = idVec.erase(itId);
+			
+			nNum++;
+		}
+		else
+		{
+			itId++;
+		}
+	}
+	
+	if (nNum > 1)
+	{
+		NDAsssert(0);
+	}
+	
+	return;
+}
+
+void			
+NDScriptGameData::LogOutRoleDataIdList(eScriptData esd, unsigned int nKey, eRoleData e, int nRoleId, eIDList eList)
+{
+	ID_VEC idVec;
+	if (!GetRoleDataIdList(esd, nKey, e, nRoleId, eList, idVec))
+	{	
+		return;
+	}
+	
+	for (ID_VEC::iterator it = idVec.begin(); 
+		 it != idVec.end(); 
+		 it++) 
+	{
+		NDLog("[%d]", *it);
+	}
+}
+
+#pragma mark 获取id列表
+bool 
+NDScriptGameData::GetDataIdList(eScriptData esd, unsigned int nKey, eRoleData e, ID_VEC& idVec)
+{
+	if (esd < eScriptDataBegin || e <= eRoleDataBasic)
+	{
+		return false;
+	}
+	
+	if ( (size_t)esd >= m_vMapGameScriptDataObject.size() )
+		return false;
+	
+	MapGameScriptObject& mapGSO = m_vMapGameScriptDataObject[esd];
+	
+	MapGameScriptObjectIt itMapGSO = mapGSO.find(nKey);
+	
+	if ( itMapGSO == mapGSO.end() )
+		return false;
+	
+	GameScriptDataSet& gsdt = itMapGSO->second;
+	
+	if ( (size_t)(e - 1) >= gsdt.extradata.size() )
+		return false;
+		
+	MapScriptGameData& mapSGD = gsdt.extradata[e - 1];
+	if (mapSGD.empty())
+		return false;
+	
+	MapScriptGameDataIt itMapSGD = mapSGD.begin();
+	for (; itMapSGD != mapSGD.end(); itMapSGD++) 
+	{
+		STSCRIPTGAMEDATA& stSG = *itMapSGD;
+		idVec.push_back(stSG.nId);
+	}
+	
+	return true;
+}
+
+#pragma mark 脚本数据接口
+int				
+NDScriptGameData::GetIntData(eScriptData esd, unsigned int nKey, eRoleData e, int nId, unsigned short index)
+{
+	ScriptGameData sgd;
+	
+	if (!GetScriptGameData(esd, nKey, e, nId, index, sgd))
+		return 0;
+	
+	return GetScriptDataInt(sgd);
+}
+
+float			
+NDScriptGameData::GetFloatData(eScriptData esd, unsigned int nKey, eRoleData e, int nId, unsigned short index)
+{
+	ScriptGameData sgd;
+	
+	if (!GetScriptGameData(esd, nKey, e, nId, index, sgd))
+		return 0.0f;
+	
+	return GetScriptDataFloat(sgd);
+}
+
+long long		
+NDScriptGameData::GetBigIntData(eScriptData esd, unsigned int nKey, eRoleData e, int nId, unsigned short index)
+{
+	ScriptGameData sgd;
+	
+	if (!GetScriptGameData(esd, nKey, e, nId, index, sgd))
+		return 0;
+	
+	return GetScriptDataBigInt(sgd);
+}
+
+std::string		
+NDScriptGameData::GetStrData(eScriptData esd, unsigned int nKey, eRoleData e, int nId, unsigned short index)
+{
+	ScriptGameData sgd;
+	
+	if (!GetScriptGameData(esd, nKey, e, nId, index, sgd))
+		return "";
+	
+	return GetScriptDataStr(sgd);
+}
+
+void			
+NDScriptGameData::DelData(eScriptData esd, unsigned int nKey, eRoleData e, int nId)
+{
+	if ( e <= eRoleDataBasic || (size_t)esd >= m_vMapGameScriptDataObject.size() )
+		return;
+	
+	MapGameScriptObject& mGSO = m_vMapGameScriptDataObject[esd];
+	
+	MapGameScriptObjectIt itMGSO = mGSO.find(nKey);
+	
+	if (itMGSO == mGSO.end())
+		return;
+	
+	VecMapScriptGameData& vMSGD = itMGSO->second.extradata;
+	
+	size_t eIndex = e - 1;
+	
+	if ( eIndex >= vMSGD.size() )
+		return;
+	
+	MapScriptGameData& mapSGD = vMSGD[eIndex];
+
+	/*
+	MapScriptGameDataIt itMapSGD = mapSGD.find(nId);
+	
+	if (itMapSGD != mapSGD.end())
+		mapSGD.erase(itMapSGD);
+	*/
+	MapScriptGameDataIt itMapSGD = mapSGD.begin();
+	for (; itMapSGD != mapSGD.end(); itMapSGD++) 
+	{
+		STSCRIPTGAMEDATA& stSG = *itMapSGD;
+		if (stSG.nId == (unsigned int)nId)
+		{
+			mapSGD.erase(itMapSGD);
+			break;
+		}
+	}
+}
+
+void			
+NDScriptGameData::DelData(eScriptData esd, unsigned int nKey, eRoleData e)
+{
+	if ( e < eRoleDataBasic || (size_t)esd >= m_vMapGameScriptDataObject.size() )
+		return;
+	
+	MapGameScriptObject& mGSO = m_vMapGameScriptDataObject[esd];
+	
+	MapGameScriptObjectIt itMGSO = mGSO.find(nKey);
+	
+	if (itMGSO == mGSO.end())
+		return;
+		
+	GameScriptDataSet& gsds = itMGSO->second;
+	
+	if (e == eRoleDataBasic)
+	{
+		gsds.basicdata.clear();
+		
+		return;
+	}
+	
+	size_t eIndex = e - 1;
+	
+	if ( eIndex < gsds.extradata.size() )
+	{
+		//gsds.extradata.erase(gsds.extradata.begin() + eIndex);
+		gsds.extradata[eIndex] = MapScriptGameData();
+	}
+}
+
+void			
+NDScriptGameData::DelData(eScriptData esd, unsigned int nKey)
+{
+	if ( (size_t)esd >= m_vMapGameScriptDataObject.size() )
+		return;
+		
+	MapGameScriptObject& mGSO = m_vMapGameScriptDataObject[esd];
+	
+	MapGameScriptObjectIt itMGSO = mGSO.find(nKey);
+	
+	if (itMGSO == mGSO.end())
+		return;
+		
+	mGSO.erase(itMGSO);
+}
+
+void			
+NDScriptGameData::DelData(eScriptData esd)
+{
+	if ( (size_t)esd >= m_vMapGameScriptDataObject.size() )
+		return;
+		
+	//m_vMapGameScriptDataObject.erase(
+	//m_vMapGameScriptDataObject.begin() + esd );
+	
+	m_vMapGameScriptDataObject[esd] = MapGameScriptObject();
+}
+
+void			
+NDScriptGameData::DelAllData()
+{
+//	VecMapGameScriptDataObjectIt it = m_vMapGameScriptDataObject.begin();
+//	while (it != m_vMapGameScriptDataObject.end()) 
+//	{
+//		if (it != m_vMapGameScriptDataObject.begin())
+//		{
+//			it = m_vMapGameScriptDataObject.erase(it);
+//		}
+//		else
+//		{
+//			it++;
+//		}
+//	}
+    int n = m_vMapGameScriptDataObject.size();
+    m_vMapGameScriptDataObject.clear();
+    int n2 = m_vGlobalStr.size();
+    
+    for(int i = 0; i < m_vGlobalStr.size(); ++i)
+    {
+        free(m_vGlobalStr[i]);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma mark 角色基础数据接口
+int				
+NDScriptGameData::GetRoleBasicIntData(unsigned int nKey, unsigned short index)
+{
+	return GetIntData(eScriptDataRole, nKey, eRoleDataBasic, 0, index);
+}
+
+float 
+NDScriptGameData::GetRoleBasicFloatData(unsigned int nKey, unsigned short index)
+{
+	return GetFloatData(eScriptDataRole, nKey, eRoleDataBasic, 0, index);
+}
+
+long long		
+NDScriptGameData::GetRoleBasicBigIntData(unsigned int nKey, unsigned short index)
+{
+	return GetBigIntData(eScriptDataRole, nKey, eRoleDataBasic, 0, index);
+}
+
+std::string		
+NDScriptGameData::GetRoleBasicStrData(unsigned int nKey, unsigned short index)
+{
+	return GetStrData(eScriptDataRole, nKey, eRoleDataBasic, 0, index);
+}
+
+void			
+NDScriptGameData::DelRoleData(unsigned int nKey)
+{
+	DelData(eScriptDataRole, nKey);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma mark 角色技能数据接口
+
+int				
+NDScriptGameData::GetRoleSkillIntData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetIntData(eScriptDataRole, nKey, eRoleDataSkill, nId, index);
+}
+
+float			
+NDScriptGameData::GetRoleSkillFloatData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetFloatData(eScriptDataRole, nKey, eRoleDataSkill, nId, index);
+}
+
+long long		
+NDScriptGameData::GetRoleSkillBigIntData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetBigIntData(eScriptDataRole, nKey, eRoleDataSkill, nId, index);
+}
+
+std::string		
+NDScriptGameData::GetRoleSkillStrData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetStrData(eScriptDataRole, nKey, eRoleDataSkill, nId, index);
+}
+
+void			
+NDScriptGameData::DelRoleSkillData(unsigned int nKey, int nId)
+{
+	DelData(eScriptDataRole, nKey, eRoleDataSkill, nId);
+}
+
+void			
+NDScriptGameData::DelRoleSkillData(unsigned int nKey)
+{
+	DelData(eScriptDataRole, nKey, eRoleDataSkill);
 }
 
 void NDScriptGameData::Load()
 {
-	/*
-	ETCFUNC("GetRoleBasicDataN", GetRoleBasicDataN);
-	ETCFUNC("GetRoleBasicDataF", GetRoleBasicDataF);
-	ETCFUNC("GetRoleBasicDataS", GetRoleBasicDataS);
-	ETLUAFUNC("GetRoleBasicDataBig", GetRoleBasicDataBig);
-	*/
-// 	ETLUAFUNC("GetGameDataIdList", GetGameDataIdList);
-// 	ETCFUNC("SetGameDataN", SetGameDataN);
-// 	ETCFUNC("SetGameDataF", SetGameDataF);
-// 	ETCFUNC("SetGameDataS", SetGameDataS);
-// 	ETCFUNC("GetGameDataN", GetGameDataN);
-// 	ETCFUNC("GetGameDataF", GetGameDataF);
-// 	ETCFUNC("GetGameDataS", GetGameDataS);
-// 	ETCFUNC("DelRoleSubGameDataById", DelRoleSubGameDataById);
-// 	ETCFUNC("DelRoleSubGameData", DelRoleSubGameData);
-// 	ETCFUNC("DelRoleGameDataById", DelRoleGameDataById);
-// 	ETCFUNC("DelRoleGameData", DelRoleGameData);
-// 	ETCFUNC("DelGameData", DelGameData);
-// 	ETCFUNC("DumpGameData", DumpGameData);
-// 	ETCFUNC("DumpDataBaseData", DumpDataBaseData);
-// 	ETLUAFUNC("GetRoleDataIdTable", GetRoleDataIdTable);
-// 	ETCFUNC("AddRoleDataId", AddRoleDataId);
-// 	ETCFUNC("DelRoleDataId", DelRoleDataId);
-// 	ETCFUNC("LogOutRoleDataIdTable", LogOutRoleDataIdTable);
+
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma mark 角色状态数据接口
+int				
+NDScriptGameData::GetRoleStateIntData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetIntData(eScriptDataRole, nKey, eRoleDataState, nId, index);
+}
+
+float			
+NDScriptGameData::GetRoleStateFloatData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetFloatData(eScriptDataRole, nKey, eRoleDataState, nId, index);
+}
+
+long long		
+NDScriptGameData::GetRoleStateBigIntData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetBigIntData(eScriptDataRole, nKey, eRoleDataState, nId, index);
+}
+
+std::string		
+NDScriptGameData::GetRoleStateStrData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetStrData(eScriptDataRole, nKey, eRoleDataState, nId, index);
+}
+
+void			
+NDScriptGameData::DelRoleStateData(unsigned int nKey, int nId)
+{
+	DelData(eScriptDataRole, nKey, eRoleDataState, nId);
+}
+
+void			
+NDScriptGameData::DelRoleStateData(unsigned int nKey)
+{
+	DelData(eScriptDataRole, nKey, eRoleDataState);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma mark 角色物品数据接口
+
+int				
+NDScriptGameData::GetRoleItemIntData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetIntData(eScriptDataRole, nKey, eRoleDataItem, nId, index);
+}
+
+float			
+NDScriptGameData::GetRoleItemFloatData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetFloatData(eScriptDataRole, nKey, eRoleDataItem, nId, index);
+}
+
+long long		
+NDScriptGameData::GetRoleItemBigIntData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetBigIntData(eScriptDataRole, nKey, eRoleDataItem, nId, index);
+}
+
+std::string		
+NDScriptGameData::GetRoleItemStrData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetStrData(eScriptDataRole, nKey, eRoleDataItem, nId, index);
+}
+
+void			
+NDScriptGameData::DelRoleItemData(unsigned int nKey, int nId)
+{
+	DelData(eScriptDataRole, nKey, eRoleDataItem, nId);
+}
+
+void			
+NDScriptGameData::DelRoleItemData(unsigned int nKey)
+{
+	DelData(eScriptDataRole, nKey, eRoleDataItem);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma mark 角色宠物数据接口
+
+int				
+NDScriptGameData::GetRolePetIntData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetIntData(eScriptDataRole, nKey, eRoleDataPet, nId, index);
+}
+
+float			
+NDScriptGameData::GetRolePetFloatData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetFloatData(eScriptDataRole, nKey, eRoleDataPet, nId, index);
+}
+
+long long		
+NDScriptGameData::GetRolePetBigIntData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetBigIntData(eScriptDataRole, nKey, eRoleDataPet, nId, index);
+}
+
+std::string		
+NDScriptGameData::GetRolePetStrData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetStrData(eScriptDataRole, nKey, eRoleDataPet, nId, index);
+}
+
+void			
+NDScriptGameData::DelRolePetData(unsigned int nKey, int nId)
+{
+	DelData(eScriptDataRole, nKey, eRoleDataPet, nId);
+}
+
+void			
+NDScriptGameData::DelRolePetData(unsigned int nKey)
+{
+	DelData(eScriptDataRole, nKey, eRoleDataPet);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma mark 角色任务数据接口
+
+int				
+NDScriptGameData::GetRoleTaskIntData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetIntData(eScriptDataRole, nKey, eRoleDataTask, nId, index);
+}
+
+float			
+NDScriptGameData::GetRoleTaskFloatData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetFloatData(eScriptDataRole, nKey, eRoleDataTask, nId, index);
+}
+
+long long		
+NDScriptGameData::GetRoleTaskBigIntData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetBigIntData(eScriptDataRole, nKey, eRoleDataTask, nId, index);
+}
+
+std::string		
+NDScriptGameData::GetRoleTaskStrData(unsigned int nKey, int nId, unsigned short index)
+{
+	return GetStrData(eScriptDataRole, nKey, eRoleDataTask, nId, index);
+}
+
+void			
+NDScriptGameData::DelRoleTaskData(unsigned int nKey, int nId)
+{
+	DelData(eScriptDataRole, nKey, eRoleDataTask, nId);
+}
+
+void			
+NDScriptGameData::DelRoleTaskData(unsigned int nKey)
+{
+	DelData(eScriptDataRole, nKey, eRoleDataTask);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma mark 内部接口
+
+NDScriptGameData::NDScriptGameData()
+{
+    m_vGlobalStr.reserve(1500);
+    m_vMapGameScriptDataObject.reserve(15);
+}
+
+ScriptGameData&			
+NDScriptGameData::GetScriptGameDataByVec(VecScriptGameData& vSGD, unsigned short index)
+{
+	/*
+	if (index == vSGD.size())
+	{
+		vSGD.push_back(ScriptGameData());
+	}
+	else if (index > vSGD.size())
+	{
+		vSGD.resize(index+1);
+	}
+	
+	return vSGD[index];
+	*/
+	if (vSGD.find(index) == vSGD.end())
+	{
+		ScriptGameData sgd;
+		vSGD.insert(VecScriptGameDataVt(index, sgd));
+	}
+	
+	return vSGD[index];
+}
+
+STSCRIPTGAMEDATA&		
+NDScriptGameData::GetVecScriptGameDataByMap(MapScriptGameData& mapSGD, unsigned int nId)
+{
+	/*
+	if (mapSGD.find(nId) == mapSGD.end())
+	{
+		VecScriptGameData vec;
+		mapSGD.insert(MapScriptGameDataPair(nId, vec));
+	}
+	
+	return mapSGD[nId];
+	*/
+	MapScriptGameDataIt itMapSGD = mapSGD.begin();
+	for (; itMapSGD != mapSGD.end(); itMapSGD++) 
+	{
+		STSCRIPTGAMEDATA& stSG = *itMapSGD;
+		if (stSG.nId == nId)
+		{
+			return *itMapSGD;
+		}
+	}
+	
+	VecScriptGameData vData;
+	mapSGD.push_back(STSCRIPTGAMEDATA(nId, vData));
+	return mapSGD.back();
+}
+
+bool					
+NDScriptGameData::GetScriptGameData(eScriptData esd, unsigned int nKey, eRoleData e, int nId, unsigned short index, ScriptGameData& sgd)
+{
+	if ( (size_t)esd >= m_vMapGameScriptDataObject.size() )
+		return false;
+		
+	MapGameScriptObject& mapGSO = m_vMapGameScriptDataObject[esd];
+	
+	MapGameScriptObjectIt itMapGSO = mapGSO.find(nKey);
+	
+	if ( itMapGSO == mapGSO.end() )
+		return false;
+	
+	GameScriptDataSet& gsdt = itMapGSO->second;
+	
+	if ( e < eRoleDataBasic )
+		return false;
+	
+	if (e == eRoleDataBasic)
+	{
+		VecScriptGameData& vSGD = gsdt.basicdata;
+		/*
+		if (index >= vSGD.size())
+			return false;
+		
+		sgd = vSGD[index];
+		*/
+		if (vSGD.find(index) == vSGD.end())
+		{
+			return false;
+		}
+		sgd = vSGD[index];
+	}
+	else if ( e > eRoleDataBasic)
+	{
+		if ( (size_t)(e - 1) >= gsdt.extradata.size() )
+			return false;
+		
+		MapScriptGameData& mapSGD = gsdt.extradata[e - 1];
+		/*
+		MapScriptGameDataIt itMapSGD = mapSGD.find(nId);
+		
+		if (itMapSGD == mapSGD.end())
+			return false;
+		
+		VecScriptGameData& vSGD = itMapSGD->second;
+		
+		if (index >= vSGD.size())
+			return false;
+		
+		sgd = vSGD[index];
+		*/
+		bool find = false;
+		MapScriptGameDataIt itMapSGD = mapSGD.begin();
+		for (; itMapSGD != mapSGD.end(); itMapSGD++) 
+		{
+			STSCRIPTGAMEDATA& stSG = *itMapSGD;
+			if (stSG.nId == (unsigned int)nId)
+			{
+				VecScriptGameData& vSGD = stSG.vData;
+				
+				/*
+				if (index >= vSGD.size())
+					return false;
+				
+				sgd = vSGD[index];
+				*/
+				if (vSGD.find(index) == vSGD.end())
+				{
+					return false;
+				}
+				sgd = vSGD[index];
+				
+				find = true;
+			}
+		}
+		
+		if (!find)
+		{
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+ScriptGameData& 
+NDScriptGameData::GetScriptGameData(eScriptData esd, unsigned int nKey, eRoleData e, int nId, unsigned short index)
+{
+	if (esd < eScriptDataBegin || e < eRoleDataBasic)
+	{
+		NDAsssert(0);
+	}
+	
+	VecScriptGameData& vSGD = GetVecScriptGameData(esd, nKey, e, nId);
+	
+	return GetScriptGameDataByVec(vSGD, index);	
+}
+
+VecScriptGameData& 
+NDScriptGameData::GetVecScriptGameData(eScriptData esd, unsigned int nKey, eRoleData e, int nId)
+{
+	if (esd < eScriptDataBegin || e < eRoleDataBasic)
+	{
+		NDAsssert(0);
+	}
+	
+	if ( (size_t)esd == m_vMapGameScriptDataObject.size())
+	{
+		m_vMapGameScriptDataObject.push_back(MapGameScriptObject());
+	}
+	else if ( (size_t)esd > m_vMapGameScriptDataObject.size() )
+	{
+		m_vMapGameScriptDataObject.resize(esd+1);
+	}
+	
+	MapGameScriptObject& mapGSO = m_vMapGameScriptDataObject[esd];
+	
+	MapGameScriptObjectIt itMapSGO = mapGSO.find(nKey);
+	
+	if (itMapSGO == mapGSO.end())
+	{
+		GameScriptDataSet newGSDS;
+		mapGSO.insert(MapGameScriptObjectPair(nKey, newGSDS));
+	}
+	
+	GameScriptDataSet& gsds = mapGSO[nKey];
+	
+	if ( e == eRoleDataBasic )
+		return gsds.basicdata;
+	
+	VecMapScriptGameData& vMSGD = gsds.extradata;
+	
+	size_t eIndex = e - 1;	
+	
+	if ( eIndex == vMSGD.size() )
+	{
+		vMSGD.push_back(MapScriptGameData());
+	}
+	else if ( eIndex > vMSGD.size() )
+	{
+		vMSGD.resize(eIndex + 1);
+	}
+	
+	MapScriptGameData& mapSGD = vMSGD[eIndex];
+	
+	return GetVecScriptGameDataByMap(mapSGD, nId).vData;
+}
+
+int						
+NDScriptGameData::GetScriptDataInt(ScriptGameData& sgd)
+{
+	if (sgd.typeOfData == GDT_None		||
+		sgd.typeOfData == GDT_Float		||
+		sgd.typeOfData == GDT_Double	||
+		sgd.typeOfData == GDT_String	||
+		sgd.typeOfData == GDT_Int64		||
+		sgd.typeOfData == GDT_UInt64 )
+		return 0;
+	
+	return sgd.valueOfNumber.iVal;
+}
+
+double					
+NDScriptGameData::GetScriptDataFloat(ScriptGameData& sgd)
+{
+	if (sgd.typeOfData == GDT_Float)
+		return sgd.valueOfNumber.fVal;
+	else if (sgd.typeOfData == GDT_Double)
+		return sgd.valueOfNumber.dVal;
+	
+	return 0.0f;
+}
+
+long long				
+NDScriptGameData::GetScriptDataBigInt(ScriptGameData& sgd)
+{
+	if (sgd.typeOfData == GDT_Int64		||
+		sgd.typeOfData == GDT_UInt64 )
+		return sgd.valueOfNumber.bigVal;	
+	
+	return 0;
+}
+
+std::string				
+NDScriptGameData::GetScriptDataStr(ScriptGameData& sgd)
+{
+	if (sgd.typeOfData != GDT_String)
+		return "";
+	
+	return sgd.valueOfStr;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+/*
+ // test
+ 
+ char				cVal	= 127;
+ unsigned char		ucVal	= 255;
+ short				sVal	= 32767;
+ unsigned short		usVal	= 65535;
+ int					iVal	= 2147483647;
+ unsigned int		uiVal	= 4294967295;
+ float				fVal	= 1.1;
+ double				dVal	= 2.2;
+ long long			bigVal	= 9223372036854775807LL;
+ unsigned long long	ubigVal = 18446744073709551615LLU;
+ std::string			strVal	= "无所谓abc";
+ 
+ int nRoleId = 123456;
+ int dataIndex = 0;
+ // 设置角色基本数据
+ SRDBasic(nRoleId, dataIndex, ucVal);	dataIndex++;
+ SRDBasic(nRoleId, dataIndex, fVal);		dataIndex++;
+ SRDBasic(nRoleId, dataIndex, bigVal);	dataIndex++;
+ SRDBasic(nRoleId, dataIndex, strVal);	dataIndex++;
+ 
+ // 设置角色技能数据
+ int nSkillId = 123;
+ SRDSkill(nRoleId, nSkillId, dataIndex, ucVal-1); dataIndex++;
+ SRDSkill(nRoleId, nSkillId, dataIndex, fVal-1); dataIndex++;
+ SRDSkill(nRoleId, nSkillId, dataIndex, bigVal-1); dataIndex++;
+ SRDSkill(nRoleId, nSkillId, dataIndex, "设置角色技能数据"); dataIndex++;
+ 
+ // 设置角色状态数据
+ int nStateId = 123;
+ SRDState(nRoleId, nStateId, dataIndex, ucVal-2); dataIndex++;
+ SRDState(nRoleId, nStateId, dataIndex, fVal-2); dataIndex++;
+ SRDState(nRoleId, nStateId, dataIndex, bigVal-2); dataIndex++;
+ SRDState(nRoleId, nStateId, dataIndex, "设置角色状态数据"); dataIndex++;
+ 
+ // 设置角色物品数据
+ nRoleId++;
+ int nItemId = 234;
+ SRDItem(nRoleId, nItemId, dataIndex, ucVal-3); dataIndex++;
+ SRDItem(nRoleId, nItemId, dataIndex, fVal-3); dataIndex++;
+ SRDItem(nRoleId, nItemId, dataIndex, bigVal-3); dataIndex++;
+ SRDItem(nRoleId, nItemId, dataIndex, "设置角色物品数据"); dataIndex++;
+ 
+ // 设置角色宠物数据
+ int nPetId = 234;
+ SRDPet(nRoleId, nPetId, dataIndex, ucVal-4); dataIndex++;
+ SRDPet(nRoleId, nPetId, dataIndex, fVal-4); dataIndex++;
+ SRDPet(nRoleId, nPetId, dataIndex, bigVal-4); dataIndex++;
+ SRDPet(nRoleId, nPetId, dataIndex, "设置角色宠物数据"); dataIndex++;
+ 
+ // 设置角色任务数据
+ int nTaskId = 345;
+ SRDTask(nRoleId, nTaskId, dataIndex, ucVal-5); dataIndex++;
+ SRDTask(nRoleId, nTaskId, dataIndex, fVal-5); dataIndex++;
+ SRDTask(nRoleId, nTaskId, dataIndex, bigVal-5); dataIndex++;
+ SRDTask(nRoleId, nTaskId, dataIndex, "设置角色任务数据"); dataIndex++;
+ 
+ DRD(nRoleId);
+ 
+ do{
+ 
+ int nRoleId = 123456;
+ int dataIndex = 0;
+ // 获取角色基本数据
+ do {
+ unsigned char		ucVal		= GRDBasicN(nRoleId, dataIndex); dataIndex++;
+ float				fVal		= GRDBasicF(nRoleId, dataIndex); dataIndex++;
+ unsigned long long	bigVal		= GRDBasicN(nRoleId, dataIndex); dataIndex++;
+ std::string			strVal		= GRDBasicS(nRoleId, dataIndex); dataIndex++;
+ NDLog(@"%@", [NSString stringWithUTF8String:strVal.c_str()]);
+ }while(0);
+ 
+ // 获取角色技能数据
+ do {
+ int nSkillId = 123;
+ unsigned char		ucVal		= GRDSkillN(nRoleId, nSkillId, dataIndex); dataIndex++;
+ float				fVal		= GRDSkillF(nRoleId, nSkillId, dataIndex); dataIndex++;
+ unsigned long long	bigVal		= GRDSkillN(nRoleId, nSkillId, dataIndex); dataIndex++;
+ std::string			strVal		= GRDSkillS(nRoleId, nSkillId, dataIndex); dataIndex++;
+ NDLog(@"%@", [NSString stringWithUTF8String:strVal.c_str()]);
+ }while(0);
+ 
+ 
+ 
+ // 获取角色状态数据
+ do {
+ int nStateId = 123;
+ unsigned char		ucVal		= GRDStateN(nRoleId, nStateId, dataIndex); dataIndex++;
+ float				fVal		= GRDStateF(nRoleId, nStateId, dataIndex); dataIndex++;
+ unsigned long long	bigVal		= GRDStateN(nRoleId, nStateId, dataIndex); dataIndex++;
+ std::string			strVal		= GRDStateS(nRoleId, nStateId, dataIndex); dataIndex++;
+ NDLog(@"%@", [NSString stringWithUTF8String:strVal.c_str()]);
+ }while(0);
+ 
+ // 获取角色物品数据
+ do {
+ nRoleId++;
+ int nItemId = 234;
+ unsigned char		ucVal		= GRDItemN(nRoleId, nItemId, dataIndex); dataIndex++;
+ float				fVal		= GRDItemF(nRoleId, nItemId, dataIndex); dataIndex++;
+ unsigned long long	bigVal		= GRDItemN(nRoleId, nItemId, dataIndex); dataIndex++;
+ std::string			strVal		= GRDItemS(nRoleId, nItemId, dataIndex); dataIndex++;
+ NDLog(@"%@", [NSString stringWithUTF8String:strVal.c_str()]);
+ }while(0);
+ 
+ // 获取角色宠物数据
+ do {
+ int nPetId = 234;
+ unsigned char		ucVal		= GRDPetN(nRoleId, nPetId, dataIndex); dataIndex++;
+ float				fVal		= GRDPetF(nRoleId, nPetId, dataIndex); dataIndex++;
+ unsigned long long	bigVal		= GRDPetN(nRoleId, nPetId, dataIndex); dataIndex++;
+ std::string			strVal		= GRDPetS(nRoleId, nPetId, dataIndex); dataIndex++;
+ NDLog(@"%@", [NSString stringWithUTF8String:strVal.c_str()]);
+ }while(0);
+ 
+ // 获取角色任务数据
+ do {
+ int nTaskId = 345;
+ unsigned char		ucVal		= GRDTaskN(nRoleId, nTaskId, dataIndex); dataIndex++;
+ float				fVal		= GRDTaskF(nRoleId, nTaskId, dataIndex); dataIndex++;
+ unsigned long long	bigVal		= GRDTaskN(nRoleId, nTaskId, dataIndex); dataIndex++;
+ std::string			strVal		= GRDTaskS(nRoleId, nTaskId, dataIndex); dataIndex++;
+ NDLog(@"%@", [NSString stringWithUTF8String:strVal.c_str()]);
+ }while(0);
+ 
+ }while(0);
+ 
+ do {
+ 
+ // 设置NPC基本数据
+ int nNpcId = 123456;
+ int dataIndex = 0;
+ SNPCDBasic(nNpcId, dataIndex, ucVal-6);	dataIndex++;
+ SNPCDBasic(nNpcId, dataIndex, fVal-6);		dataIndex++;
+ SNPCDBasic(nNpcId, dataIndex, bigVal-6);	dataIndex++;
+ SNPCDBasic(nNpcId, dataIndex, "设置NPC基本数据");	dataIndex++;
+ 
+ nNpcId++;
+ SNPCDBasic(nNpcId, dataIndex, ucVal-7);	dataIndex++;
+ SNPCDBasic(nNpcId, dataIndex, fVal-7);		dataIndex++;
+ SNPCDBasic(nNpcId, dataIndex, bigVal-7);	dataIndex++;
+ SNPCDBasic(nNpcId, dataIndex, "设置NPC基本数据2");	dataIndex++;
+ 
+ DNPCD(123456);
+ 
+ do {
+ int nNpcId = 123456;
+ int dataIndex = 0;
+ 
+ do {
+ unsigned char		ucVal		= GNPCDBasicN(nNpcId, dataIndex); dataIndex++;
+ float				fVal		= GNPCDBasicF(nNpcId, dataIndex); dataIndex++;
+ unsigned long long	bigVal		= GNPCDBasicN(nNpcId, dataIndex); dataIndex++;
+ std::string			strVal		= GNPCDBasicS(nNpcId, dataIndex); dataIndex++;
+ NDLog(@"%@", [NSString stringWithUTF8String:strVal.c_str()]);
+ }while(0);
+ 
+ nNpcId++;
+ 
+ do {
+ unsigned char		ucVal		= GNPCDBasicN(nNpcId, dataIndex); dataIndex++;
+ float				fVal		= GNPCDBasicF(nNpcId, dataIndex); dataIndex++;
+ unsigned long long	bigVal		= GNPCDBasicN(nNpcId, dataIndex); dataIndex++;
+ std::string			strVal		= GNPCDBasicS(nNpcId, dataIndex); dataIndex++;
+ NDLog(@"%@", [NSString stringWithUTF8String:strVal.c_str()]);
+ }while(0);
+ 
+ }while(0);
+ 
+ ////////////////////////
+ do {
+ 
+ int nMonsterId = 123456;
+ int dataIndex = 0;
+ SMonsterDBasic(nMonsterId, dataIndex, ucVal-8);	dataIndex++;
+ SMonsterDBasic(nMonsterId, dataIndex, fVal-8);		dataIndex++;
+ SMonsterDBasic(nMonsterId, dataIndex, bigVal-8);	dataIndex++;
+ SMonsterDBasic(nMonsterId, dataIndex, "设置怪物基本数据");	dataIndex++;
+ 
+ nMonsterId++;
+ SMonsterDBasic(nMonsterId, dataIndex, ucVal-9);	dataIndex++;
+ SMonsterDBasic(nMonsterId, dataIndex, fVal-9);		dataIndex++;
+ SMonsterDBasic(nMonsterId, dataIndex, bigVal-9);	dataIndex++;
+ SMonsterDBasic(nMonsterId, dataIndex, "设置怪物基本数据2");	dataIndex++;
+ 
+ DMonsterD(123456);
+ 
+ do {
+ int nMonsterId = 123456;
+ int dataIndex = 0;
+ 
+ do {
+ unsigned char		ucVal		= GMonsterDBasicN(nMonsterId, dataIndex); dataIndex++;
+ float				fVal		= GMonsterDBasicF(nMonsterId, dataIndex); dataIndex++;
+ unsigned long long	bigVal		= GMonsterDBasicN(nMonsterId, dataIndex); dataIndex++;
+ std::string			strVal		= GMonsterDBasicS(nMonsterId, dataIndex); dataIndex++;
+ NDLog(@"%@", [NSString stringWithUTF8String:strVal.c_str()]);
+ }while(0);
+ 
+ nMonsterId++;
+ 
+ do {
+ unsigned char		ucVal		= GMonsterDBasicN(nMonsterId, dataIndex); dataIndex++;
+ float				fVal		= GMonsterDBasicF(nMonsterId, dataIndex); dataIndex++;
+ unsigned long long	bigVal		= GMonsterDBasicN(nMonsterId, dataIndex); dataIndex++;
+ std::string			strVal		= GMonsterDBasicS(nMonsterId, dataIndex); dataIndex++;
+ NDLog(@"%@", [NSString stringWithUTF8String:strVal.c_str()]);
+ }while(0);
+ 
+ }while(0);
+ 
+ }while(0);
+ 
+ }while(0);
+
+
+*/

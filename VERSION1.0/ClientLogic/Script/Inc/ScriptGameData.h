@@ -15,12 +15,11 @@
 
 #include "Singleton.h"
 #include "typedef.h"
-#include "globaldef.h"
 
 #define ScriptGameDataObj (NDScriptGameData::GetSingleton())
 
-#pragma mark set role data 
-#pragma mark (设置角色数据,包括主角跟其它玩家)
+//#pragma mark set role data 
+//#pragma mark (设置角色数据,包括主角跟其它玩家)
 
 // 设置角色基本数据
 #define SRDBasic(nRoleId, dataIndex, val) \
@@ -46,8 +45,8 @@ NDScriptGameData::GetSingleton().SetRolePetData(nRoleId, nPetId, dataIndex, val)
 #define SRDTask(nRoleId, nTaskId, dataIndex, val) \
 NDScriptGameData::GetSingleton().SetRoleTaskData(nRoleId, nTaskId, dataIndex, val)
 
-#pragma mark get role data 
-#pragma mark (获取角色数据,包括主角跟其它玩家)(以N结尾为数值型数据, 以F结尾为浮点型数据, 以S结尾为字符串型数据)
+//#pragma mark get role data 
+//#pragma mark (获取角色数据,包括主角跟其它玩家)(以N结尾为数值型数据, 以F结尾为浮点型数据, 以S结尾为字符串型数据)
 
 // 获取角色基本数据
 #define GRDBasicN(nRoleId, dataIndex) \
@@ -97,14 +96,14 @@ NDScriptGameData::GetSingleton().GetRoleTaskData<double>(nRoleId, nTaskId, dataI
 #define GRDTaskS(nRoleId, nTaskId, dataIndex) \
 NDScriptGameData::GetSingleton().GetRoleTaskData<std::string>(nRoleId, nTaskId, dataIndex)
 
-#pragma mark del role data
-#pragma mark 删除角色数据
+//#pragma mark del role data
+//#pragma mark 删除角色数据
 
 #define DRD(nRoleId) \
 NDScriptGameData::GetSingleton().DelRoleData(nRoleId)
 
-#pragma mark set npc data
-#pragma mark 设置NPC数据
+//#pragma mark set npc data
+//#pragma mark 设置NPC数据
 
 // 设置NPC基本数据
 #define SNPCDBasic(nNpcId, dataIndex, val) \
@@ -112,8 +111,8 @@ NDScriptGameData::GetSingleton().SetData(eScriptDataNpc, nNpcId, eRoleDataBasic,
 
 // 设置NPC其它数据... ToDo
 
-#pragma mark get npc data
-#pragma mark 获取NPC数据
+//#pragma mark get npc data
+//#pragma mark 获取NPC数据
 
 // 获取NPC基本数据
 #define GNPCDBasicN(nNpcId, dataIndex) \
@@ -123,16 +122,16 @@ NDScriptGameData::GetSingleton().GetData<double>(eScriptDataNpc, nNpcId, eRoleDa
 #define GNPCDBasicS(nNpcId, dataIndex) \
 NDScriptGameData::GetSingleton().GetData<std::string>(eScriptDataNpc, nNpcId, eRoleDataBasic, 0, dataIndex)
 
-#pragma mark del npc data
-#pragma mark 删除 npc 数据
+//#pragma mark del npc data
+//#pragma mark 删除 npc 数据
 
 // 删除NPC数据
 #define DNPCD(nNpcId) \
 NDScriptGameData::GetSingleton().DelData(eScriptDataNpc, nNpcId)
 
 
-#pragma mark set monster data
-#pragma mark 设置怪物数据
+//#pragma mark set monster data
+//#pragma mark 设置怪物数据
 
 // 设置怪物基本数据
 #define SMonsterDBasic(nMonsterId, dataIndex, val) \
@@ -140,8 +139,8 @@ NDScriptGameData::GetSingleton().SetData(eScriptDataMonster, nMonsterId, eRoleDa
 
 // 设置怪物其它数据... ToDo
 
-#pragma mark get monster data
-#pragma mark 获取怪物数据
+//#pragma mark get monster data
+//#pragma mark 获取怪物数据
 
 // 获取怪物基本数据
 #define GMonsterDBasicN(nMonsterId, dataIndex) \
@@ -151,8 +150,8 @@ NDScriptGameData::GetSingleton().GetData<double>(eScriptDataMonster, nMonsterId,
 #define GMonsterDBasicS(nMonsterId, dataIndex) \
 NDScriptGameData::GetSingleton().GetData<std::string>(eScriptDataMonster, nMonsterId, eRoleDataBasic, 0, dataIndex)
 
-#pragma mark del mosnter data
-#pragma mark 删除 怪物 数据
+//#pragma mark del mosnter data
+//#pragma mark 删除 怪物 数据
 
 // 删除怪物数据
 #define DMonsterD(nMonsterId) \
@@ -215,7 +214,7 @@ typedef struct
 _tagScriptGameData
 {
 	GameDataType typeOfData;
-	std::string  valueOfStr;
+	char*  valueOfStr;
 	union  
 	{
 		char				cVal;
@@ -233,6 +232,7 @@ _tagScriptGameData
 	_tagScriptGameData()
 	{
 		typeOfData = GDT_None;
+        valueOfStr = NULL;
 	}
 }ScriptGameData;
 
@@ -277,6 +277,8 @@ typedef std::pair<unsigned int, GameScriptDataSet>			MapGameScriptObjectPair;
 
 typedef std::vector<MapGameScriptObject>					VecMapGameScriptDataObject;
 typedef VecMapGameScriptDataObject::iterator				VecMapGameScriptDataObjectIt;
+typedef std::vector<char*>                                  VecGlobalStr;
+typedef VecGlobalStr::iterator                              VecGlobalStrIt;
 
 template<typename T>
 inline GameDataType GetGameDataType(T data)											{ return GDT_None; }
@@ -310,12 +312,12 @@ public:
 	
 	void LogOutMemory();
 	
-#pragma mark 打印游戏数据
+//#pragma mark 打印游戏数据
 	void LogOut(eScriptData esd, unsigned int nKey, eRoleData e, int nId);
 private:
 	void LogOut(VecScriptGameData& vSGD);
 	
-#pragma mark 角色数据id列表管理
+//#pragma mark 角色数据id列表管理
 public:
 	bool			GetRoleDataIdList(eScriptData esd, unsigned int nKey, eRoleData e, int nRoleId, eIDList eList, ID_VEC& idVec);
 	bool			DelRoleDataIdList(eScriptData esd, unsigned int nKey, eRoleData e, int nRoleId, eIDList eList);
@@ -324,10 +326,10 @@ public:
 	void			LogOutRoleDataIdList(eScriptData esd, unsigned int nKey, eRoleData e, int nRoleId, eIDList eList);
 
 public:
-#pragma mark 获取id列表
+//#pragma mark 获取id列表
 	bool			GetDataIdList(eScriptData esd, unsigned int nKey, eRoleData e, ID_VEC& idVec);
 	
-#pragma mark 脚本数据接口
+//#pragma mark 脚本数据接口
 	template<typename T>
 	void			SetData(eScriptData esd, unsigned int nKey, eRoleData e,  int nId, unsigned short index, T data);
 	
@@ -345,7 +347,7 @@ public:
 	void			DelData(eScriptData esd);
 	void			DelAllData();
 
-#pragma mark 角色基础数据接口
+//#pragma mark 角色基础数据接口
 	template<typename T>
 	void			SetRoleBasicData(unsigned int nKey, unsigned short index, T data);
 	template<typename RT>
@@ -356,7 +358,7 @@ public:
 	std::string		GetRoleBasicStrData(unsigned int nKey, unsigned short index);
 	void			DelRoleData(unsigned int nKey);
 	
-#pragma mark 角色技能数据接口
+//#pragma mark 角色技能数据接口
 	template<typename T>
 	void			SetRoleSkillData(unsigned int nKey, int nId, unsigned short index, T data);
 	template<typename RT>
@@ -368,7 +370,7 @@ public:
 	void			DelRoleSkillData(unsigned int nKey, int nId);
 	void			DelRoleSkillData(unsigned int nKey);
 	
-#pragma mark 角色状态数据接口
+//#pragma mark 角色状态数据接口
 	template<typename T>
 	void			SetRoleStateData(unsigned int nKey, int nId, unsigned short index, T data);
 	template<typename RT>
@@ -380,7 +382,7 @@ public:
 	void			DelRoleStateData(unsigned int nKey, int nId);
 	void			DelRoleStateData(unsigned int nKey);
 
-#pragma mark 角色物品数据接口
+//#pragma mark 角色物品数据接口
 	template<typename T>
 	void			SetRoleItemData(unsigned int nKey, int nId, unsigned short index, T data);
 	template<typename RT>
@@ -392,7 +394,7 @@ public:
 	void			DelRoleItemData(unsigned int nKey, int nId);
 	void			DelRoleItemData(unsigned int nKey);
 	
-#pragma mark 角色宠物数据接口
+//#pragma mark 角色宠物数据接口
 	template<typename T>
 	void			SetRolePetData(unsigned int nKey, int nId, unsigned short index, T data);
 	template<typename RT>
@@ -404,7 +406,7 @@ public:
 	void			DelRolePetData(unsigned int nKey, int nId);
 	void			DelRolePetData(unsigned int nKey);
 
-#pragma mark 角色任务数据接口
+//#pragma mark 角色任务数据接口
 	template<typename T>
 	void			SetRoleTaskData(unsigned int nKey, int nId, unsigned short index, T data);
 	template<typename RT>
@@ -418,6 +420,7 @@ public:
 
 private:
 	VecMapGameScriptDataObject	m_vMapGameScriptDataObject;
+    VecGlobalStr                m_vGlobalStr;
 	
 private:
 	ScriptGameData&			GetScriptGameDataByVec(VecScriptGameData& vSGD, unsigned short index);
@@ -541,7 +544,14 @@ inline void NDScriptGameData::SetScriptData(ScriptGameData& sgd, T& data)
 	sgd.typeOfData = gdt;
 	
 	if (gdt == GDT_String)
-		sgd.valueOfStr				= data;
+    {
+        int len = sizeof(T);
+        sgd.valueOfStr = (char*)malloc(len+1);
+        memcpy(sgd.valueOfStr, &data, len);
+        sgd.valueOfStr[len] = 0;
+        m_vGlobalStr.push_back(sgd.valueOfStr);
+		//sgd.valueOfStr				= data;
+    }
 	else if (gdt == GDT_Float)
 		sgd.valueOfNumber.fVal		= data;
 	else if (gdt == GDT_Double)
@@ -555,7 +565,12 @@ inline void NDScriptGameData::SetScriptData<std::string>(ScriptGameData& sgd, st
 {	
 	sgd.typeOfData = GDT_String;
 	
-	sgd.valueOfStr = data;
+    int len = data.length();
+    sgd.valueOfStr = (char*)malloc(len+1);
+    if(len > 0)
+        memcpy(sgd.valueOfStr, data.c_str(), len);
+    sgd.valueOfStr[len] = 0;
+    m_vGlobalStr.push_back(sgd.valueOfStr);
 }
 
 template<>
@@ -563,7 +578,13 @@ inline void NDScriptGameData::SetScriptData<const char*>(ScriptGameData& sgd, co
 {	
 	sgd.typeOfData = GDT_String;
 	
-	sgd.valueOfStr = data;
+    int len = strlen(data);
+
+    sgd.valueOfStr = (char*)malloc(len+1);
+    if(len > 0)
+        memcpy(sgd.valueOfStr, data, len);
+    sgd.valueOfStr[len] = 0;
+    m_vGlobalStr.push_back(sgd.valueOfStr);
 }
 
 template<typename RT>

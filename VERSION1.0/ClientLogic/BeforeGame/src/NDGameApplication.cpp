@@ -3,7 +3,6 @@
 #include "SMLoginScene.h"
 #include "../../../cocos2d-x/cocos2dx/platform/CCEGLView_platform.h"
 #include "NDPath.h"
-#include "GameData.h"
 #include "ScriptCommon.h"
 #include "ScriptGlobalEvent.h"
 #include "ScriptNetMsg.h"
@@ -22,6 +21,7 @@
 #include "NDMapMgr.h"
 #include "LuaStateMgr.h"
 #include "NDBeforeGameMgr.h"
+#include "ScriptGameData.h"
 
 namespace NDEngine
 {
@@ -129,7 +129,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	ScriptNetMsg* pkNetMsg = new ScriptNetMsg;
 	ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
 	NDScriptGameData* pkData = new NDScriptGameData;
-	ScriptGlobalEvent* pkGlobalEvent = new ScriptGlobalEvent;
+	//ScriptGlobalEvent* pkGlobalEvent = new ScriptGlobalEvent;
 	ScriptObjectCommon* pkCommon = new ScriptObjectCommon;
 	ScriptObjectUI* pkScriptUI = new ScriptObjectUI;
 	ScriptTimerMgr* pkTimerManager = new ScriptTimerMgr;
@@ -141,7 +141,8 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	pkLogic->OnLoad();
 	pkDrama->OnLoad();
 	pkCommon->OnLoad();
-	pkGlobalEvent->OnLoad();
+	ScriptGlobalEvent::Load();
+	//pkGlobalEvent->OnLoad();
 	pkScriptUI->OnLoad();
 
 	kScriptManager.Load();
