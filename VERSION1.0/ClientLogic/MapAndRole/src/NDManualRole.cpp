@@ -29,6 +29,7 @@
 #include "SMGameScene.h"
 #include "DramaScene.h"
 #include "NDDataPersist.h"
+#include "NDDebugOpt.h"
 
 /* 玩家寻路八个方向值,无效的方向值-1
     7  0  4
@@ -1282,6 +1283,8 @@ void NDManualRole::OnMoveTurning(bool bXTurnigToY, bool bInc)
 
 bool NDManualRole::OnDrawBegin(bool bDraw)
 {
+	if (!NDDebugOpt::getDrawRoleEnabled()) return false;
+
 	NDNode* pkNode = GetParent();
 
 	//if (!node
