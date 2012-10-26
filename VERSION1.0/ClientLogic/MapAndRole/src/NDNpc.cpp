@@ -29,6 +29,7 @@
 #include "TableDef.h"
 #include "ScriptGameLogic.h"
 #include "NDAnimationGroup.h"
+#include "NDDebugOpt.h"
 
 using namespace NDEngine;
 
@@ -112,6 +113,8 @@ void NDNpc::Initialization(int nLookface)
 
 bool NDNpc::OnDrawBegin(bool bDraw)
 {
+	if (!NDDebugOpt::getDrawRoleEnabled()) return false;
+
 	NDNode* pkNode = this->GetParent();
 	CGSize kSizeMap;
 

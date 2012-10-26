@@ -174,6 +174,9 @@ CCScheduler::CCScheduler(void)
 , m_pCurrentTarget(NULL)
 , m_bCurrentTargetSalvaged(false)
 , m_pScriptHandlerEntries(NULL)
+#if ND_MOD
+, m_bTickEnabled(true)
+#endif
 {
 	CCAssert(pSharedScheduler == NULL, "");
 }
@@ -641,6 +644,10 @@ bool CCScheduler::isTargetPaused(CCObject *pTarget)
 // main loop
 void CCScheduler::tick(ccTime dt)
 {
+#if ND_MOD
+	if (!m_bTickEnabled) return;
+#endif
+
 	m_bUpdateHashLocked = true;
 
 	if (m_fTimeScale != 1.0f)

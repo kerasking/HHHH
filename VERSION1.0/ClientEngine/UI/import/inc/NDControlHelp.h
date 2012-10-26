@@ -27,6 +27,7 @@
 //#include "UIEdit.h"
 #include "UISpriteNode.h"
 #include "NDPath.h"
+#include "NDWideString.h"
 
 using namespace NDEngine;
 
@@ -134,11 +135,21 @@ protected:
 		
 		LabelTextAlignment align = LabelTextAlignmentLeft;
 		
-		if (m_info.strTextAlign == "右对齐")
+		if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "左对齐" ))
+			align = LabelTextAlignmentLeft;
+
+		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "右对齐" ))
 			align = LabelTextAlignmentRight;
-		else if (m_info.strTextAlign == "居中")
+
+		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "居中" ))
 			align = LabelTextAlignmentCenter;
-		
+
+		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "水平居中" ))
+			align = LabelTextAlignmentHorzCenter;
+
+		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "竖直居中" ))
+			align = LabelTextAlignmentVertCenter;
+
 		return align;
 	}
 private:	
