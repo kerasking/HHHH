@@ -33,7 +33,7 @@
 #include "NDMapLayer.h"
 #include "SMBattleScene.h"
 #include "BattleMgr.h"
-#include "..\..\TempClass\NDBaseBattle.h"
+//#include "..\..\TempClass\NDBaseBattle.h"
 
 #define BTN_ATTATCK 1
 #define BTN_ITEM 2

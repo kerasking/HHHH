@@ -16,12 +16,6 @@ NS_NDENGINE_BGN
 typedef vector<FighterStatus*> VEC_FIGHTER_STATUS;
 typedef VEC_FIGHTER_STATUS::iterator VEC_FIGHTER_STATUS_IT;
 
-enum HURT_TYPE
-{
-	HURT_TYPE_ACTIVE = 0,
-	HURT_TYPE_PASSIVE = 1,
-};
-
 class NDBaseFighter:public NDObject
 {
 	DECLARE_CLASS(NDBaseFighter);
@@ -41,8 +35,8 @@ public:
 	virtual void draw() = 0;
 	virtual void setOnline(bool bOnline) = 0;
 	virtual int GetNormalAtkType() const;
-	virtual void AddAHurt(NDBaseFighter* actor, int btType, int hurtHP, int hurtMP,
-		int dwData, HURT_TYPE ht) = 0;
+// 	virtual void AddAHurt(NDBaseFighter* actor, int btType, int hurtHP, int hurtMP,
+// 		int dwData, HURT_TYPE ht) = 0;
 	//virtual void AddAStatusTarget(StatusAction& f) = 0;
 	virtual void AddATarget(NDBaseFighter* f) = 0;
 

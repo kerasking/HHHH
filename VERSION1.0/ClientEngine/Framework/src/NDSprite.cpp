@@ -21,7 +21,6 @@
 #include "NDLightEffect.h"
 #include "Utility.h"
 #include "NDConstant.h"
-#include "NDBaseBattle.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -1031,71 +1030,7 @@ namespace NDEngine
 
 	void NDSprite::RunBattleSubAnimation(NDBaseFighter* pkFighter)
 	{
-		NDBaseBattle* battle = 0;
 
-		if (!battle)
-		{
-			return;
-		}
-
-		// 1.获取当前帧
-		NDFrame* curFrame = m_pkCurrentAnimation->getFrames()->getObjectAtIndex(
-			m_pkFrameRunRecord->getCurrentFrameIndex());
-
-		// 2.取当前帧的子动画数组并加入战斗对象的子动画数组
-		if (curFrame && curFrame->getSubAnimationGroups())
-		{
-			for (NSUInteger i = 0; i < curFrame->getSubAnimationGroups()->count(); i++)
-			{
-				NDAnimationGroup *group =
-					curFrame->getSubAnimationGroups()->getObjectAtIndex(i);
-				group->getReverse() =
-					pkFighter->m_info.group == BATTLE_GROUP_DEFENCE ?
-					false : true;
-
-				if (group->getIdentifer() == 0)
-				{ // 非魔法特效
-					if (group->getType() == SUB_ANI_TYPE_SELF
-						|| group->getType() == SUB_ANI_TYPE_NONE)
-					{
-						battle->addSubAniGroup(this, group, pkFighter);
-					}
-				}
-				else
-				{ // 魔法特效
-					if (group->getIdentifer()
-						== pkFighter->getUseSkill()->getSubAniID())
-					{
-						if (group->getType() == SUB_ANI_TYPE_SELF)
-						{
-							battle->addSubAniGroup(this, group, pkFighter);
-						}
-						else if (group->getType() == SUB_ANI_TYPE_TARGET)
-						{
-
-							VEC_FIGHTER& array = pkFighter->getArrayTarget();
-							if (array.size() == 0)
-							{ // 如果没有目标数组，则制定目标为mainTarget
-								battle->addSubAniGroup(this, group,
-									pkFighter->m_mainTarget);
-							}
-							else
-							{
-								for (size_t j = 0; j < array.size(); j++)
-								{
-									battle->addSubAniGroup(this, group,
-										array.at(j));
-								}
-							}
-						}
-						else if (group->getType() == SUB_ANI_TYPE_NONE)
-						{
-							battle->addSubAniGroup(this, group, pkFighter);
-						}
-					}
-				}
-			}
-		}
 	}
 
 }

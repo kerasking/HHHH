@@ -14,7 +14,7 @@
 #include "NDSprite.h"
 #include "NDSubAniGroup.h"
 #include <map>
-#include "../../TempClass/NDBaseFighter.h"
+//#include "../../TempClass/NDBaseFighter.h"
 
 using namespace std;
 using namespace NDEngine;
@@ -120,7 +120,7 @@ public:
 	};
 
 	StatusAction(int act, FighterStatus* fs, int id) :
-		m_pkStatus(fs)
+	m_pkStatus(fs)
 		{
 			m_nAction = act;
 			m_nTargetID = id;

@@ -10,8 +10,6 @@
 #include "NDUITableLayer.h"
 #include "NDDataSource.h"
 
-NS_NDENGINE_BGN
-
 class BattleSkill;
 class FighterStatus;
 class FightAction;
@@ -80,7 +78,5 @@ public:
 protected:
 private:
 };
-
-NS_NDENGINE_END
 
 #endif
