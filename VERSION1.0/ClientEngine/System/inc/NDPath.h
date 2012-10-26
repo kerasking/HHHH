@@ -11,11 +11,11 @@
 
 #include "NDObject.h"
 #include <string>
+#include "define.h"
 
 NS_NDENGINE_BGN
 
 using namespace std;
-
 
 class NDPath: public NDObject
 {

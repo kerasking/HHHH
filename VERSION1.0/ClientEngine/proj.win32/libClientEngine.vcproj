@@ -170,6 +170,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Framework\inc\NDDebugOpt.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Framework\inc\NDDirector.h"
 					>
 				</File>
@@ -219,6 +223,10 @@
 				</File>
 				<File
 					RelativePath="..\Framework\src\NDCommonProtocol.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Framework\src\NDDebugOpt.cpp"
 					>
 				</File>
 				<File
@@ -626,7 +634,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\inc\UIScrollContainerExpand.h"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\inc\UIScrollView.h"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\UIScrollViewExpand.h"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\UIScrollViewMulHand.h"
 					>
 				</File>
 				<File
@@ -730,7 +750,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\src\UIScrollContainerExpand.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\src\UIScrollView.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\src\UIScrollViewExpand.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\src\UIScrollViewMulHand.cpp"
 					>
 				</File>
 				<File
@@ -1011,6 +1043,14 @@
 		</File>
 		<File
 			RelativePath="..\Utility\inc\ImageNumber.h"
+			>
+		</File>
+		<File
+			RelativePath="..\TempClass\NDBaseBattle.h"
+			>
+		</File>
+		<File
+			RelativePath="..\TempClass\NDBaseFighter.h"
 			>
 		</File>
 		<File

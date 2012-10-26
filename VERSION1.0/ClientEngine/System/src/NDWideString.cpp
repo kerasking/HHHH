@@ -6,6 +6,7 @@
  *****************************************************************************/
 
 #include "NDWideString.h"
+#include "windows.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -176,6 +177,29 @@ void NDWideString::ConvertUnicodeToUTF8()
 	}
 }
 
+//@zwq: 对比两个串是否相同（一个utf8编码，一个ansi）
+bool NDWideString::IsEqual_UTF8_Ansi( const char* utf8, const char* ansi )
+{
+	// early out
+	if (!utf8 || !ansi) return false;
+	if (utf8[0] == 0 && ansi[0] == 0) return true;
+
+	static wchar_t wbuf[1024] = {0};
+	static char buf[1024] = {0};
+	
+	// multiBytes -> wide
+	if (MultiByteToWideChar( CP_UTF8, 0, (LPCSTR)utf8, -1, wbuf, sizeof(wbuf)/sizeof(wchar_t)) > 0)
+	{
+		// wide -> ansi
+		if (WideCharToMultiByte( CP_ACP, 0, wbuf, -1, buf, sizeof(buf), NULL, NULL ) > 0)
+		{
+			// compare by both ansi
+			if (strcmp( buf, ansi ) == 0) 
+				return true;
+		}
+	}
+	return false;
+}
 
 //===========================================================================
 

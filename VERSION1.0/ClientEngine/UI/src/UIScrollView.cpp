@@ -8,16 +8,17 @@
  */
 
 #include "UIScrollView.h"
+#include "ScriptUI.h"
 #include "CCPointExtension.h"
 #include "NDDirector.h"
-#include "NDTargetEvent.h"
-
-using namespace cocos2d;
+#include "NDUtility.h"
+#include "ScriptGameLogic.h"
 
 IMPLEMENT_CLASS(CUIScrollView, CUIScroll)
 
 CUIScrollView::CUIScrollView()
 {
+	INIT_AUTOLINK(CUIScrollView);
 	m_uiViewId					= 0;
 }
 
@@ -179,13 +180,11 @@ CUIScrollViewContainer::CUIScrollViewContainer()
 	m_unBeginIndex					= 0;
 	m_bCenterAdjust					= false;
 	m_bRecaclClientEventRect		= false;
-	m_bOpenScrollBar				= false;
-	m_picScroll						= NULL;
 }
 
 CUIScrollViewContainer::~CUIScrollViewContainer()
 {
-	CC_SAFE_DELETE(m_picScroll);
+	SAFE_DELETE_NODE(m_pClientUINode);
 }
 
 void CUIScrollViewContainer::Initialization()
@@ -195,10 +194,8 @@ void CUIScrollViewContainer::Initialization()
 	m_pClientUINode = new ContainerClientLayer;
 	m_pClientUINode->Initialization();
 	//m_pClientUINode->EnableEvent(false);
-	this->AddChild(m_pClientUINode, 1);
+	this->AddChild(m_pClientUINode);
 	
-	//todo(zjh)
-	//m_picScroll = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathUINew("new_scroll.png"));
 }
 
 void CUIScrollViewContainer::SetStyle(int style)
@@ -361,7 +358,10 @@ void CUIScrollViewContainer::RemoveView(unsigned int uiIndex)
 	
 	refrehClientSize();
 	
-	this->ScrollView(nBeginIndex);
+	if (0 != childsize)
+	{
+		this->ScrollView(nBeginIndex);
+	}
 }
 
 void CUIScrollViewContainer::RemoveViewById(unsigned int uiViewId)
@@ -387,6 +387,8 @@ void CUIScrollViewContainer::RemoveAllView()
 	{
 		m_pClientUINode->SetFrameRect(CGRectZero);
 	}
+	EnableViewToScroll(false);
+	m_fScrollDistance		= 0.0f;
 }
 
 void CUIScrollViewContainer::ShowViewByIndex(unsigned int uiIndex)
@@ -426,6 +428,10 @@ void CUIScrollViewContainer::ScrollViewByIndex(unsigned int uiIndex)
 {
 	CUIScrollView* view = GetView(uiIndex);
 	if (!view)
+	{
+		return;
+	}
+	if (view == m_linkCurView)
 	{
 		return;
 	}
@@ -496,12 +502,6 @@ bool CUIScrollViewContainer::CheckView(CUIScrollView* view)
 	{
 		return false;
 	}
-	
-//	if (view->GetScrollStyle() != m_style)
-//	{
-//		return false;
-//	}
-	
 	return true;
 }
 
@@ -651,6 +651,8 @@ void CUIScrollViewContainer::ScrollView(unsigned int uiIndex, bool bImmediatelyS
 	{
 		if (!CanHorizontalMove(view, fDistance))
 		{
+			SetBeginIndex(uiIndex);
+			SetBeginViewIndex(uiIndex);
 			return;
 		}
 	}
@@ -658,6 +660,8 @@ void CUIScrollViewContainer::ScrollView(unsigned int uiIndex, bool bImmediatelyS
 	{
 		if (!CanVerticalMove(view, fDistance))
 		{
+			SetBeginIndex(uiIndex);
+			SetBeginViewIndex(uiIndex);
 			return;
 		}
 	}
@@ -992,6 +996,8 @@ void CUIScrollViewContainer::OnScrollViewScrollMoveStop(NDObject* object)
 		}
 	}
 	
+    ScriptMgrObj.excuteLuaFunc("PlayEffectSound", "Music",15);
+    
 	AdjustView();
 }
 
@@ -1105,8 +1111,9 @@ void CUIScrollViewContainer::EnableViewToScroll(bool bEnable)
 void CUIScrollViewContainer::SetBeginViewIndex(unsigned int nIndex)
 {
 	CUIScrollView* view = GetView(nIndex);
-	if (view)
+	if (view && view != m_linkCurView)
 	{
+		m_linkCurView	= view->QueryLink();
 		OnScriptUiEvent(this, TE_TOUCH_SC_VIEW_IN_BEGIN, nIndex);
 	}
 	
@@ -1164,29 +1171,106 @@ float CUIScrollViewContainer::GetOverDistance()
 	return fOver;
 }
 
-void CUIScrollViewContainer::EnableScrollBar(bool bEnable)
-{
-	m_bOpenScrollBar	= bEnable;
-}
 
 void CUIScrollViewContainer::DrawScrollBar()
 {
 	if (m_bOpenScrollBar && m_picScroll && m_pClientUINode && 
-		GetScrollStyle() == UIScrollStyleVerical && 
-		m_pClientUINode->GetFrameRect().size.height > this->GetFrameRect().size.height)
+		GetScrollStyle() == UIScrollStyleVerical /*&& 
+		m_pClientUINode->GetFrameRect().size.height > this->GetFrameRect().size.height*/)
 	{
-		CGRect rectself		= this->GetFrameRect();
+		bool bTouchDown							= false;
+		if (m_pClientUINode)
+		{
+			const std::vector<NDNode*>& children	= m_pClientUINode->GetChildren();
+			size_t size								= children.size();
+			for (size_t i = 0; i < size; i++) 
+			{
+				NDNode *child			= children[i];
+				if (!child || !child->IsKindOfClass(RUNTIME_CLASS(CUIScrollView)))
+				{
+					continue;
+				}
+				CUIScrollView* view		= (CUIScrollView*)child;
+				if (view->IsTouchDown())
+				{
+					bTouchDown			= true;
+					break;
+				}
+			}
+		}
+		if (!bTouchDown)
+		{
+			//return;
+		}
+		CGRect rectself;/*	= m_scrRect;*/
 		CGRect rectClient	= m_pClientUINode->GetFrameRect();
 		CGRect rect			= CGRectZero;
-		float fScale		= NDDirector::DefaultDirector()->GetScaleFactor();
 		CGSize sizePic		= m_picScroll->GetSize();
-		rect.size.width		= sizePic.width * fScale;
-		rect.size.height	= rectself.size.height / rectClient.size.height * rectself.size.height;//sizePic.height * fScale;
-		rect.origin			= ccp(rectself.size.width - rect.size.width,
-								  -rectClient.origin.y / rectClient.size.height * rectself.size.height);
+		
+        //** chh 2012-07-24 **//
+        //rect.size.width		= sizePic.width * fScale;
+		//rect.size.height	= rectself.size.height / rectClient.size.height * rectself.size.height;//sizePic.height * fScale;
+		rect.size.width		= sizePic.width;
+		rect.size.height	= sizePic.height;
+        
+        //rect.origin			= ccp(rectself.size.width - rect.size.width, -rectClient.origin.y / rectClient.size.height * rectself.size.height);
+        
+    
+        
+        
+        /*
+        rect.origin			= ccp(rectself.size.width - rect.size.width,
+								  -rectClient.origin.y / (rectClient.size.height-rectself.size.height+rect.size.height) * rectself.size.height);
+        */
+        
+        /*rect.origin			= ccp(rectself.size.width - rect.size.width,   (-rectClient.origin.y/(rectClient.size.height -rectself.size.height))*(rectself.size.height - rectself.origin.y -rect.size.height));*/
+        
+        
+        if(GetViewCount()*GetViewSize().height<=rectself.size.height){
+            return;
+        }
+        
+        
+        rect.origin			= ccp(rectself.size.width - rect.size.width,(-rectClient.origin.y/(rectClient.size.height-rectself.size.height))*(rectself.size.height-rect.size.height));
+        
+        
+        if(rect.origin.y<0){
+            rect.origin.y = 0;
+        }
+        
 		rect.origin			= ccpAdd(rect.origin, this->GetScreenRect().origin);
-		m_picScroll->DrawInRect(rect);
+        
+        
+        
+        
+		if (m_picScroll->GetSize().height != rect.size.height)
+		{
+            //** chh 2012-07-24 **//
+			//delete	m_picScroll;
+			//m_picScroll = NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("General/texture/texture5.png"),rect.size.width, rect.size.height);
+		}
+		
+        
+        if(m_picScrollBg) {
+            CGSize sizePic		= m_picScrollBg->GetSize();
+            CGRect rt;
+            rt.origin.x = rect.origin.x;
+            rt.origin.y = rectself.origin.y;
+            rt.size.width = sizePic.width;
+            rt.size.height = rectself.size.height;
+            m_picScrollBg->DrawInRect(rt);
+        }
+        
+        m_picScroll->DrawInRect(rect);
 	}	
+}
+bool CUIScrollViewContainer::CanDestroyOnRemoveAllChildren(NDNode* pNode)
+{
+	if (pNode == m_pClientUINode)
+	{
+		return false;
+	}
+	return true;
 }
 
 /*

@@ -22,6 +22,8 @@
 #include "NDFrame.h"
 #include "define.h"
 
+class NDBaseFighter;
+
 class NDAnimationGroup;
 class NDSPrite;
 class Fighter;
@@ -127,7 +129,7 @@ public:
 	virtual void DisplayCompleteEvent(int nCurrentAnimation, int nDispCount)=0;
 };
 
-class NDEngine::NDPicture;
+//class NDEngine::NDPicture;
 
 class NDSprite: public NDNode
 {
@@ -185,6 +187,8 @@ public:
 
 	int GetCurFrameIndex();
 
+	virtual void OnMoveTurning(bool bXTurningToY,bool bInc){}
+
 //		
 //		函数：OnMoveTurning
 //		作用：
@@ -211,7 +215,11 @@ public:
 //		参数：无
 //		返回值：true是，false否
 	bool IsAnimationComplete();
-//		
+
+	virtual void RunBattleSubAnimation(Fighter* pkFighter);
+	virtual bool DrawSubAnimation(NDSubAniGroup& kSag);
+	virtual void SetNormalAniGroup(int nLookface);
+	//		
 //		函数：SetHairImage
 //		作用：设置头发图片
 //		参数：imageFile图片文件

@@ -101,7 +101,7 @@ namespace NDEngine
 		virtual void OnFrameRectChange(CGRect srcRect, CGRect dstRect);
 	public:		
 		void draw(); override
-		
+	
 	private:		
 		bool m_bVisibled;
 		CGRect m_kFrameRect;

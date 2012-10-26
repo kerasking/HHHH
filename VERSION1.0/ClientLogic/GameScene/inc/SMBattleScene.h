@@ -11,7 +11,7 @@
 
 #include "NDScene.h"
 #include "NDUIButton.h"
-#include "NDMapLayerLogic.h"
+#include "../../MapAndRole/inc/NDMapLayerLogic.h"
 //#include	<Foundation/Foundation.h>
 
 using namespace NDEngine;

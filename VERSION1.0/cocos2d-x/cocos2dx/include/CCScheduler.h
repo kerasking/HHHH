@@ -224,6 +224,14 @@ protected:
 	// If true unschedule will not remove anything from a hash. Elements will only be marked for deletion.
 	bool m_bUpdateHashLocked;
     CCArray* m_pScriptHandlerEntries;
+
+#if ND_MOD
+public:
+	bool	getTickEnabled() { return m_bTickEnabled; }
+	void	setTickEnabled(bool flag) { m_bTickEnabled = flag; }
+protected:
+	bool	m_bTickEnabled;
+#endif
 };
 }//namespace   cocos2d
 
