@@ -14,7 +14,7 @@
 #include "ScriptMgr.h"
 #include <NDNetMsg.h>
 #include <NDMessageCenter.h>
-//#include "NDDebugOpt.h"
+#include "NDDebugOpt.h"
 #include "CCScheduler.h"
 
 
