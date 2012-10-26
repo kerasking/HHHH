@@ -8,27 +8,31 @@
  */
 
 #include "UIExp.h"
+#include "SMString.h"
 #include <sstream>
+#include "define.h"
 
-using namespace cocos2d;
+//using namespace cocos2d;
 
 IMPLEMENT_CLASS(CUIExp, NDUINode)
 
 CUIExp::CUIExp()
 {
-	m_picBg = NULL;
-	m_picProcess = NULL;
-	m_lbText = NULL;
-	m_unTotal = 0;
-	m_unProcess = 0;
-	m_bRecacl = true;
-	m_nStyle = 0;
+	m_picBg				= NULL;
+	m_picProcess		= NULL;
+	m_lbText			= NULL;
+	m_unTotal			= 0;
+	m_unProcess			= 0;
+    m_unStart           = 0;
+	m_bRecacl			= true;
+    m_nStyle            = 0;
 }
 
 CUIExp::~CUIExp()
 {
-	CC_SAFE_DELETE (m_picBg);
-	CC_SAFE_DELETE (m_picProcess);
+	SAFE_DELETE(m_picBg);
+	SAFE_DELETE(m_picProcess);
+	SAFE_DELETE_NODE(m_lbText);
 }
 
 void CUIExp::Initialization(const char* bgfile, const char* processfile)
@@ -71,6 +75,11 @@ void CUIExp::SetTextFontSize(unsigned int unSize)
 		m_lbText->SetFontSize(unSize);
 	}
 }
+void CUIExp::SetStart(unsigned int unStart)
+{
+    m_unStart	= unStart;
+	m_bRecacl	= true;
+}
 
 void CUIExp::SetProcess(unsigned int unProcess)
 {
@@ -81,9 +90,14 @@ void CUIExp::SetProcess(unsigned int unProcess)
 
 void CUIExp::SetTotal(unsigned int unTotal)
 {
-	m_unTotal = unTotal;
-
-	m_bRecacl = true;
+	m_unTotal	= unTotal;
+	
+	m_bRecacl	= true;
+}
+unsigned int CUIExp::GetStart()
+{
+    return m_unStart;
+    
 }
 
 unsigned int CUIExp::GetProcess()
@@ -104,63 +118,72 @@ void CUIExp::draw()
 	{
 		return;
 	}
-
-	CGRect kScrRect = this->GetScreenRect();
-
+	
+	CGRect scrRect		= this->GetScreenRect();
+	
 	if (m_bRecacl && !m_strProcessFile.empty())
 	{
-		CC_SAFE_DELETE (m_picProcess);
-
-		if (m_unProcess <= m_unTotal && 0 != m_unTotal && 0 != m_unProcess)
+		SAFE_DELETE(m_picProcess);
+        
+        unsigned int t_unProcess    = m_unProcess - m_unStart;
+        unsigned int t_unTotal      = m_unTotal - m_unStart;
+        
+		if (t_unProcess <= t_unTotal && 0 != t_unTotal && 0 != t_unProcess)
 		{
-			float fWidth = kScrRect.size.width * m_unProcess / m_unTotal;
+			float fWidth	= scrRect.size.width * t_unProcess / t_unTotal;
 
-			if ((int) fWidth > 0)
+			if (fWidth>scrRect.size.width)
 			{
-				m_picProcess = NDPicturePool::DefaultPool()->AddPicture(
-						m_strProcessFile.c_str(), fWidth, kScrRect.size.height);
+				fWidth=scrRect.size.width;
+			}
+			
+			if ((int)fWidth > 0)
+			{
+				m_picProcess	= NDPicturePool::DefaultPool()->AddPicture(
+								m_strProcessFile.c_str(), fWidth, scrRect.size.height);
 			}
 		}
 	}
-
-	if (m_bRecacl && m_lbText)
+	
+	if ( m_bRecacl && m_lbText )
 	{
-		if (m_unProcess <= m_unTotal && 0 != m_unTotal)
+		if (0 != m_unTotal)
 		{
-			if(m_nStyle == 0)
-			{
-				std::stringstream ss;
-				ss << m_strText.c_str() << m_unProcess << "/" << m_unTotal;
-				//tq::CString str("%s%u/%u", m_strText.c_str(), m_unProcess, m_unTotal);
-				m_lbText->SetText(ss.str().c_str());
-			}
-			else
-			{
-				std::stringstream ss;
-				ss << m_strText.c_str() << m_unProcess/m_unTotal << "%";
-				//tq::CString str("%s%u/%u", m_strText.c_str(), m_unProcess, m_unTotal);
-				m_lbText->SetText(ss.str().c_str());
-			}
-
+            if(m_nStyle == 0){
+				m_lbText->SetVisible(true);
+                std::stringstream ss;
+                ss << m_strText.c_str() << m_unProcess << "/" << m_unTotal;
+                //tq::CString str("%s%u/%u", m_strText.c_str(), m_unProcess, m_unTotal);
+                m_lbText->SetText(ss.str().c_str());
+            }else if(m_nStyle == 1){
+				m_lbText->SetVisible(true);
+                std::stringstream ss;
+                ss << m_strText.c_str() << m_unProcess/m_unTotal << "%";
+                //tq::CString str("%s%u/%u", m_strText.c_str(), m_unProcess, m_unTotal);
+                m_lbText->SetText(ss.str().c_str());
+            }else if (m_nStyle == 2){
+				m_lbText->SetVisible(false);
+            }
+            
 		}
 	}
-
+	
 	if (m_picBg)
 	{
-		m_picBg->DrawInRect(kScrRect);
+		m_picBg->DrawInRect(scrRect);
 	}
 
 	if (m_picProcess)
 	{
-		CGRect kRect;
-		kRect.origin = kScrRect.origin;
-		kRect.size = m_picProcess->GetSize();
-		m_picProcess->DrawInRect(kRect);
+		CGRect rect;
+		rect.origin		= scrRect.origin;
+		rect.size		= m_picProcess->GetSize();
+		m_picProcess->DrawInRect(rect);
 	}
 
 	if (m_bRecacl)
 	{
-		m_bRecacl = false;
+		m_bRecacl	= false;
 	}
 }
 
@@ -169,26 +192,33 @@ void CUIExp::SetFrameRect(CGRect rect)
 	CGRect rectOld = this->GetFrameRect();
 
 	NDUINode::SetFrameRect(rect);
-
-	if (CompareEqualFloat(rectOld.size.width, rect.size.width)
-			&& CompareEqualFloat(rectOld.size.height, rect.size.height))
+	
+	if (CompareEqualFloat(rectOld.size.width, rect.size.width) && 
+		CompareEqualFloat(rectOld.size.height, rect.size.height))
 	{
 		return;
 	}
 
-	CC_SAFE_DELETE (m_picBg);
-
+	SAFE_DELETE(m_picBg);
+	
 	if (!m_strBgFile.empty())
 	{
-		m_picBg = NDPicturePool::DefaultPool()->AddPicture(m_strBgFile.c_str(),
-				rect.size.width, rect.size.height);
+		m_picBg		= NDPicturePool::DefaultPool()->AddPicture(
+					m_strBgFile.c_str());//, rect.size.width, rect.size.height);
 	}
-
-	m_bRecacl = true;
-
+	
+	m_bRecacl	= true;
+	
 	if (m_lbText)
 	{
-		m_lbText->SetFrameRect(
-				CGRectMake(0, 0, rect.size.width, rect.size.height));
+		m_lbText->SetFrameRect(CGRectMake(0, 0, rect.size.width, rect.size.height*1.5));
 	}
+}
+bool CUIExp::CanDestroyOnRemoveAllChildren(NDNode* pNode)
+{
+	if (pNode == m_lbText)
+	{
+		return false;
+	}
+	return true;
 }

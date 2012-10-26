@@ -12,13 +12,10 @@
 
 #include "NDUINode.h"
 #include "NDSprite.h"
-#include "NDObject.h"
 
-class NDEngine::NDSprite;
 using namespace NDEngine;
 
-
-class CUISpriteNode : public NDEngine::NDUINode
+class CUISpriteNode : public NDUINode/*, public ISpriteEvent*/
 {
 	DECLARE_CLASS(CUISpriteNode)
 	
@@ -28,13 +25,32 @@ class CUISpriteNode : public NDEngine::NDUINode
 public:
 	void Initialization(); override
 	void ChangeSprite(const char* sprfile);
-	bool isAnimationComplete();
+	bool IsAnimationComplete();
 	void SetAnimation(int nIndex, bool bFaceRight);
 	void SetPlayFrameRange(int nStartFrame, int nEndFrame);
-	void SetPosition(int nPosX, int nPosY);
+	public:
+    //interface of ISpriteEvent
+    /*精灵播放序列帧回调*/
+    //virtual void DisplayFrameEvent(int nCurrentAnimation, int nCurrentFrame);
+    /*一个动画播放完成后的回调*/
+    //virtual void DisplayCompleteEvent(int nCurrentAnimation, int nDispCount);
+    
+	//+2012.6.3++ Guosen ++ 
+	//设置缩放比例
+	void SetScale( float fScale );
+	//获取缩放比例
+	float GetScale();
+	
+	//获得该精力包含动画个数
+	unsigned int GetAnimationAmount();
+	
+	//播放指定索引动画
+	void PlayAnimation( unsigned int nIndex, bool bReverse );
+	//+2012.6.3
+	
 private:
-	NDEngine::NDUINode*				m_pkSpriteParentNode;
-	NDEngine::NDSprite*				m_pkSprite;
+	NDUINode*				m_pSpriteParentNode;
+	NDSprite*				m_pSprite;
 	
 protected:
 	void draw(); override

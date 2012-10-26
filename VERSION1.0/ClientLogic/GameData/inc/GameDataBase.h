@@ -6,6 +6,7 @@
  *  Copyright 2012 (ÍøÁú)DeNA. All rights reserved.
  *
  */
+#if 0
 
 #ifndef _SCRIPT_DATA_BASE_H_
 #define _SCRIPT_DATA_BASE_H_
@@ -44,3 +45,4 @@ namespace NDEngine {
 }
 
 #endif // _SCRIPT_DATA_BASE_H_
+#endif
