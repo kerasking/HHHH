@@ -13,6 +13,7 @@
 #include "basedefine.h"
 #include "NDUIBaseGraphics.h"
 #include "CCString.h"
+#include "NDDebugOpt.h"
 
 using namespace cocos2d;
 
@@ -249,6 +250,8 @@ namespace NDEngine
 	
 	void NDUILabel::draw()
 	{
+		if (!NDDebugOpt::getDrawUILabelEnabled()) return;
+
 		NDUINode::draw();
 		
 		if (this->IsVisibled()) 

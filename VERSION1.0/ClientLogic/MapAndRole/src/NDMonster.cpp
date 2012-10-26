@@ -24,6 +24,7 @@
 #include "NDAnimationGroupPool.h"
 #include "SMGameScene.h"
 #include "ScriptDataBase.h"
+#include "NDDebugOpt.h"
 #include "globaldef.h"
 #include <time.h>
 #include <stdlib.h>
@@ -257,6 +258,8 @@ void NDMonster::SetType(int type)
 
 bool NDMonster::OnDrawBegin(bool bDraw)
 {
+	if (!NDDebugOpt::getDrawRoleEnabled()) return false;
+
 	if (m_nFigure == 0)
 	{
 		SetShadowOffset(0, 10);

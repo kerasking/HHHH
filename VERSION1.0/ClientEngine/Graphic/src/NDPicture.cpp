@@ -59,6 +59,7 @@ void NDPicture::Initialization(const char* imageFile)
 
 	m_pkTexture = new CCTexture2D;
 	m_pkTexture->initWithImage(&image);
+	//m_pkTexture->initWithPalettePNG(imageFile);
 
 	/*
 	 if (m_canGray && image)
@@ -228,6 +229,7 @@ void NDPicture::Initialization(const char* imageFile, int hrizontalPixel,
 	{
 		m_pkTexture = new CCTexture2D;
 		m_pkTexture->initWithImage(&image);
+		//m_pkTexture->initWithPalettePNG(imageFile);
 	}
 
 	m_kCutRect = CGRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
@@ -773,7 +775,8 @@ CGSize NDPicturePool::GetImageSize(std::string filename)
 
 	//todo(zjh)
 	CGSize size = CGSizeZero;
-	//CGSize size			= image.getSize();
+	size.width			= image.getWidth();
+	size.height			= image.getHeight();
 
 	m_mapStr2Size.insert(std::make_pair(filename, size));
 

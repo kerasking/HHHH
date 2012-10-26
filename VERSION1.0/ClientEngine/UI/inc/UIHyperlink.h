@@ -24,9 +24,10 @@ class CUIHyperlinkText : public NDUINode
 public:
 	void Initialization(); override
 	void SetLinkBoundRect(CGRect rectBound);
+	CGRect GetLinkBoundRect();
 	void SetLinkText(const char* text);
 	void SetLinkTextFontSize(unsigned int uiFontSize);
-	void SetLinkTextColor(cocos2d::ccColor4B color);
+	void SetLinkTextColor(ccColor4B color);
 	void SetLinkTextAlignment(int alignment);
 	void EnableLine(bool bEnable);
 	const char* GetLinkText();
@@ -35,11 +36,13 @@ public:
 private:
 	CGRect					m_rectLinkRect;
 	unsigned int			m_uiLinkFontSize;
-	cocos2d::ccColor4B		m_colorLinkFont;
+	ccColor4B				m_colorLinkFont;
 	NDUIText*				m_uiLinkText;
 	bool					m_bLineEnabel;
 	std::string				m_strText;
 	LabelTextAlignment		m_alignment;
+protected:
+	bool CanDestroyOnRemoveAllChildren(NDNode* pNode);override
 };
 
 ////////////////////////////////////////////////////////////////////////////
@@ -55,15 +58,18 @@ public:
 	void SetLinkBoundRect(CGRect rectBound);
 	void SetLinkText(const char* text);
 	void SetLinkTextFontSize(unsigned int uiFontSize);
-	void SetLinkTextColor(cocos2d::ccColor4B color);
+	void SetLinkTextColor(ccColor4B color);
 	void EnableLine(bool bEnable);
 	void SetLinkTextAlignment(int alignment);
 	int	 GetLinkTextAlignment();
 private:
 	CUIHyperlinkText*	m_hyperlinkText;
+	CGRect				m_rectLinkRect;
 	
 public:
 	void draw();
+protected:	
+	bool CanDestroyOnRemoveAllChildren(NDNode* pNode);override
 };
 
 

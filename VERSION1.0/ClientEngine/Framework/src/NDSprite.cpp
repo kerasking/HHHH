@@ -88,7 +88,7 @@ namespace NDEngine
 		CC_SAFE_RELEASE (m_pkAniGroup);
 		CC_SAFE_RELEASE (m_pkFrameRunRecord);
 	}
-
+	
 	void NDSprite::Initialization(const char* pszSprFile, bool bFaceRight)
 	{
 		NDNode::Initialization();

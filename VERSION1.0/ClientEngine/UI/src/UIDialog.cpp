@@ -42,7 +42,7 @@ void CUIDlgOptBtn::Initialization()
 	m_sprTip = new CUISpriteNode;
 	m_sprTip->Initialization();
 	m_sprTip->SetFrameRect(rect);
-	m_sprTip->ChangeSprite(tq::CString("%sbutton.spr", NDPath::GetAnimationPath()));
+	m_sprTip->ChangeSprite(tq::CString("%sbutton.spr", NDPath::GetAnimationPath().c_str()));
 	this->AddChild(m_sprTip);
 	
 	m_textHpyerlink = new CUIHyperlinkText;

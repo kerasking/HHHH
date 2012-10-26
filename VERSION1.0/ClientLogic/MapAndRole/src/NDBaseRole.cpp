@@ -26,6 +26,7 @@
 #include "NDRidePet.h"
 #include "Fighter.h"
 #include "Battle.h"
+#include "NDDebugOpt.h"
 
 using namespace NDEngine;
 
@@ -233,6 +234,8 @@ if (m_bFocus && bDraw)
 
 bool NDBaseRole::OnDrawBegin(bool bDraw)
 {
+	if (!NDDebugOpt::getDrawRoleEnabled()) return false;
+
 	NDNode *node = GetParent();
 	CGSize sizemap;
 

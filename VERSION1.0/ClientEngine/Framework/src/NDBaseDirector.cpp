@@ -14,6 +14,9 @@
 #include "ScriptMgr.h"
 #include <NDNetMsg.h>
 #include <NDMessageCenter.h>
+//#include "NDDebugOpt.h"
+#include "CCScheduler.h"
+
 
 // å¸§æ•°é™åˆ¶å¼??å…??
 #define FRAME_LIMIT_SWITCH 1
@@ -66,17 +69,27 @@ using namespace NDEngine;
 
 void NDBaseDirector::mainLoop(void)
 {
-	this->OnIdle();
-    this->DispatchOneMessage();
+	if (NDDebugOpt::getMainLoopEnabled())
+	{
+		this->OnIdle();
 
-	//NDDirector::DefaultDirector()->DisibleScissor(); // ÔÝÊ±ÏÈ×¢ÊÍµô
+		if (NDDebugOpt::getNetworkEnabled())
+		{
+			this->DispatchOneMessage();
+		}
 
-	CCDisplayLinkDirector::mainLoop();
+		//NDDirector::DefaultDirector()->DisibleScissor(); // ÔÝÊ±ÏÈ×¢ÊÍµô
+
+		CCScheduler::sharedScheduler()->setTickEnabled( NDDebugOpt::getTickEnabled() );
+
+		CCDisplayLinkDirector::mainLoop();
+	}
 }
 
 void NDBaseDirector::OnIdle()
 {
-	ScriptMgrObj.update();
+	if (NDDebugOpt::getScriptEnabled())
+		ScriptMgrObj.update();
 }
 
 void NDBaseDirector::DispatchOneMessage()

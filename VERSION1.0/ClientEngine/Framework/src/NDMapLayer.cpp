@@ -26,6 +26,7 @@
 //#include "Performance.h"
 //#include "BattleMgr.h"
 #include "NDUtility.h"
+#include "NDDebugOpt.h"
 
 using namespace cocos2d;
 
@@ -483,6 +484,8 @@ void NDMapLayer::RefreshBoxAnimation()
 
 void NDMapLayer::draw()
 {
+	if (!NDDebugOpt::getDrawMapEnabled()) return;
+
 	//PerformanceTestName("µØÍ¼²ãdraw");
 
 	if (m_pkMapData && m_bNeedShow)

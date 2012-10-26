@@ -247,7 +247,7 @@ namespace NDEngine
 		void SetFrameRect(CGRect rect); override
 		void OnTouchDown(bool touched);
 		void OnLongTouchDown(bool touched);
-	private:
+	protected:
 		void SetTitle();
 		void SetTwoTitle();
 	protected:

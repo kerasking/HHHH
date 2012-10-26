@@ -83,7 +83,7 @@ public:
 // 	virtual void OnUnCompress(int nFileNum,int nFileIndex,const char* pszFileName);
 // 	virtual void CompleteUpdate(ERROR_CODE emErrCode);
 // 	virtual void OnError(ERROR_CODE emErrCode,const char* pszErrMsg);
-    
+	void LoadIni(const char* iniFile);
 private:
     void OnTimer(OBJID idTag);
 	
