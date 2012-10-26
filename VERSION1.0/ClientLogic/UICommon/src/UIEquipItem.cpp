@@ -46,14 +46,14 @@ void CUIEquipItem::AdjustPos(){
             
             m_GUpgradeSprite = new CUISpriteNode;
             m_GUpgradeSprite->Initialization();
-            m_GUpgradeSprite->ChangeSprite(NDPath::GetAniPath(G_UPGRADE_SPRITE));
+            m_GUpgradeSprite->ChangeSprite(NDPath::GetAniPath(G_UPGRADE_SPRITE).c_str());
             this->AddChild(m_GUpgradeSprite);
         }
         
         if(m_RUpgradeSprite == NULL){
             m_RUpgradeSprite = new CUISpriteNode;
             m_RUpgradeSprite->Initialization();
-            m_RUpgradeSprite->ChangeSprite(NDPath::GetAniPath(R_UPGRADE_SPRITE));
+            m_RUpgradeSprite->ChangeSprite(NDPath::GetAniPath(R_UPGRADE_SPRITE).c_str());
             this->AddChild(m_RUpgradeSprite);
         }
         

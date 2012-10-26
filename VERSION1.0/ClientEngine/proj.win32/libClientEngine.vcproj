@@ -626,7 +626,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\inc\UIScrollContainerExpand.h"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\inc\UIScrollView.h"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\UIScrollViewExpand.h"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\UIScrollViewMulHand.h"
 					>
 				</File>
 				<File
@@ -730,7 +742,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\src\UIScrollContainerExpand.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\src\UIScrollView.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\src\UIScrollViewExpand.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\src\UIScrollViewMulHand.cpp"
 					>
 				</File>
 				<File
