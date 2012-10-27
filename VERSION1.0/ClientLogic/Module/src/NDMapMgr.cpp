@@ -15,6 +15,8 @@
 #include "NDNetMsg.h"
 #include "TutorUILayer.h"
 #include "ScriptMgr.h"
+#include "TaskListener.h"
+#include "BattleMgr.h"
 
 namespace NDEngine
 {
@@ -78,7 +80,8 @@ m_nRoadBlockX(0),
 m_nRoadBlockY(0),
 m_nSaveMapID(0),
 m_nMapID(0),
-m_nMapDocID(0)
+m_nMapDocID(0),
+m_nCurrentMonsterRound(0)
 {
 	NDNetMsgPool& kNetPool = NDNetMsgPoolObj;
 	kNetPool.RegMsg(_MSG_NPCINFO_LIST,this);
@@ -100,6 +103,44 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 {
 	switch (usMsgID)
 	{
+	case MB_MSG_DISAPPEAR:
+	{
+		processDisappear(pkData, nLength);
+	}
+		break;
+	case _MSG_REPUTE:
+	{
+		NDPlayer& kRole = NDPlayer::defaultHero();
+		kRole.m_nSWCountry = pkData->ReadInt();
+		kRole.m_nSWCamp = pkData->ReadInt();
+		kRole.m_nHonour = pkData->ReadInt();
+		kRole.m_nExpendHonour = pkData->ReadInt();
+		kRole.m_strRank = pkData->ReadUnicodeString();
+
+		updateTaskRepData(kRole.m_nSWCamp, false);
+		updateTaskHrData(kRole.m_nHonour, false);
+	}
+		break;
+	case _MSG_NPC_STATUS:
+	{
+		processNpcStatus(pkData, nLength);
+	}
+		break;
+	case _MSG_MONSTER_INFO_LIST:
+	{
+		processMonsterInfo(pkData,nLength);
+	}
+		break;
+	case _MSG_COMMON_LIST:
+	{
+		processMsgCommonList(*pkData);
+	}
+		break;
+	case _MSG_COMMON_LIST_RECORD:
+	{
+		processMsgCommonListRecord(*pkData);
+	}
+		break;
 	case _MSG_CHG_PET_POINT:
 	{
 		int nBtAnswer = pkData->ReadByte();
@@ -150,6 +191,11 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 	case _MSG_ROOM:
 	{
 		processChangeRoom(pkData, nLength);
+	}
+		break;
+	case _MSG_WALK:
+	{
+		processWalk(pkData, nLength);
 	}
 		break;
 	default:
@@ -1357,32 +1403,33 @@ void NDMapMgr::processNpcTalk( NDTransData& kData )
 	int nID = kData.ReadInt();
 	int nTime = kData.ReadInt();
 	std::string strMessage = kData.ReadUnicodeString2();
-	switch(nAction){
-			case 0:
-				{
-					NDManualRole* pkPlayer=GetManualRole(nID);
-					if(pkPlayer!=NULL){
-						pkPlayer->addTalkMsg(strMessage,nTime);
-					}
-					break;
-				}
-			case 1:
-				{
-					CloseProgressBar;
-					NDNpc *pkNPC = GetNPC(nID);
-					if (pkNPC != NULL) {
-						pkNPC->addTalkMsg(strMessage,nTime);
-					}
-					break;
-				}
-			case 2:
-				{
-					NDMonster *pkMonster=GetMonster(nID);
-					if (pkMonster != NULL) {
-						pkMonster->addTalkMsg(strMessage,nTime);
-					}
-				}
-				break;
+	switch(nAction)
+	{
+	case 0:
+		{
+			NDManualRole* pkPlayer=GetManualRole(nID);
+			if(pkPlayer!=NULL){
+				pkPlayer->addTalkMsg(strMessage,nTime);
+			}
+			break;
+		}
+	case 1:
+		{
+			CloseProgressBar;
+			NDNpc *pkNPC = GetNPC(nID);
+			if (pkNPC != NULL) {
+				pkNPC->addTalkMsg(strMessage,nTime);
+			}
+			break;
+		}
+	case 2:
+		{
+			NDMonster *pkMonster=GetMonster(nID);
+			if (pkMonster != NULL) {
+				pkMonster->addTalkMsg(strMessage,nTime);
+			}
+		}
+		break;
 	}
 }
 
@@ -1400,6 +1447,371 @@ NDMonster* NDMapMgr::GetMonster( int nID )
 	}
 
 	return NULL;
+}
+
+void NDMapMgr::processMsgCommonList( NDTransData& kData )
+{
+	///< 依赖汤自勤的NewPaiHangScene 郭浩
+
+// 	int iID = kData.ReadInt();
+// 	int field_count = kData.ReadInt();
+// 	int button_count = kData.ReadInt();
+// 	string title = kData.ReadUnicodeString();
+// 
+// 	NewPaiHangScene::curPaiHangType = iID;
+// 
+// 	std::vector<int>& fildTypes = NewPaiHangScene::s_PaiHangTitle[iID].fildTypes;
+// 	std::vector<std::string>& fildNames = NewPaiHangScene::s_PaiHangTitle[iID].fildNames;
+// 
+// 	fildTypes.clear();
+// 	fildNames.clear();
+// 
+// 	for (int i = 0; i < field_count; i++) {
+// 		fildTypes.push_back(kData.ReadByte());
+// 		fildNames.push_back(kData.ReadUnicodeString());
+// 	}
+// 
+// 	for (int i = 0; i < button_count; i++) {
+// 		kData.ReadUnicodeString();
+// 	}
+}
+
+void NDMapMgr::processMsgCommonListRecord( NDTransData& kData )
+{
+	///< 依赖汤自勤的NewPaiHangScene 郭浩
+
+// 	int packageFlag = kData.ReadByte();
+// 	int curCount = kData.ReadByte();
+// 	kData.ReadShort();
+// 
+// 
+// 	std::vector<int>& fildTypes = NewPaiHangScene::s_PaiHangTitle[NewPaiHangScene::curPaiHangType].fildTypes;
+// 	std::vector<std::string>& values = NewPaiHangScene::values[NewPaiHangScene::curPaiHangType];
+// 	values.clear();
+// 	for (int i = 0; i < curCount; i++) {
+// 		kData.ReadInt(); // button id
+// 		for (int j = 0; j < int(fildTypes.size()); j++) {
+// 			if (fildTypes[j] == 0) {
+// 				std::stringstream ss; ss << (kData.ReadInt());
+// 				values.push_back(ss.str());
+// 			} else if (fildTypes[j] == 1) {
+// 				values.push_back(kData.ReadUnicodeString());				
+// 			}
+// 		}
+// 	}
+// 
+// 	if ((packageFlag & 2) > 0) {
+// 		NewPaiHangScene::refresh();
+// 		CloseProgressBar;
+// 	}
+}
+
+void NDMapMgr::processMonsterInfo(NDTransData* pkData, int nLength)
+{
+	///< 此函数所有注释都依赖汤自勤的GatherPoint 郭浩
+
+	unsigned char btAction = 0; (*pkData) >> btAction;
+	unsigned char count = 0;  (*pkData) >> count;
+
+	switch(btAction)
+	{
+		case MONSTER_INFO_ACT_INFO:
+			for (int i = 0; i < count; i++)
+			{
+				
+				int idType = 0; (*pkData) >> idType;
+				int lookFace = 0; (*pkData) >> lookFace;
+				unsigned char lev = 0; (*pkData) >> lev;
+				unsigned char  btAiType = 0; (*pkData) >> btAiType;
+				unsigned char  btCamp = 0; (*pkData) >> btCamp;
+				unsigned char  btAtkArea = 0; (*pkData) >> btAtkArea;
+				std::string name = pkData->ReadUnicodeString(); //这个字符串可能需要做修改
+				
+				monster_type_info info;
+				info.idType = idType;
+				info.lookFace = lookFace;
+				info.lev = lev;
+				info.btAiType = btAiType;
+				info.btCamp = btCamp;
+				info.btAtkArea = btAtkArea;
+				info.name = name;
+				//if (lookFace == 19070 || lookFace == 206) continue;
+				
+				NDMapMgrObj.m_mapMonsterInfo.insert(monster_info_pair(idType, info));
+			}
+			break;
+		case MONSTER_INFO_ACT_POS:
+			for (int i = 0; i < count; i++)
+			{
+				int idMonster  = 0; (*pkData) >> idMonster;
+				int idType = 0; (*pkData) >> idType;
+				unsigned short col = 0; (*pkData) >> col;
+				unsigned short row = 0; (*pkData) >> row;
+				unsigned char  btState = 0; (*pkData) >> btState;
+				
+				NDLayer *layer = NDMapMgrObj.getMapLayerOfScene( NDDirector::DefaultDirector()->GetRunningScene());
+				if (!layer)
+				{
+					return;
+				}
+
+				if (idType / 1000000 == 6)
+				{ // 采集
+					//GatherPoint *gp = NULL;
+// 					if (idMonster > 0)
+// 					{
+// 						//map_gather_point_it it = m_mapGP.find(idMonster);
+// 						if (it != m_mapGP.end())
+// 						{
+// 							gp = it->second;
+// 						}
+// 					}
+					
+					//if (gp == NULL) 
+					//{
+						//gp = new GatherPoint(idMonster, idType, col*MAP_UNITSIZE,
+						//					 row *MAP_UNITSIZE, idMonster > 0, "");
+						//m_mapGP.insert(map_gather_point_pair(idMonster, gp));
+					//}
+					
+					//gp->setState(btState);
+					
+					continue;
+				}
+				
+				monster_type_info info;
+				if ( !NDMapMgrObj.GetMonsterInfo(info, idType) ) continue;
+
+				NDMonster* monster = new NDMonster;
+				monster->m_nID = idMonster;
+				monster->SetPosition(ccp(col*MAP_UNITSIZE, row*MAP_UNITSIZE));
+				monster->Initialization(idType);
+				monster->SetType(MONSTER_ELITE);
+				if (idMonster > 0)
+				{
+					monster->setState(btState);
+				}
+				
+				NDMapMgrObj.m_vMonster.push_back(monster);
+				
+			}
+			NDMapMgrObj.AddAllMonsterToMap();
+			break;
+		case MONSTER_INFO_ACT_STATE:
+			for (int i = 0; i < count; i++)
+			{
+				int idMonster = 0; (*pkData) >> idMonster;
+				unsigned char btState = 0; (*pkData) >> btState;
+				if (idMonster > 0)
+				{
+// 					GatherPoint *gp = NULL;
+// 					if (idMonster > 0)
+// 					{
+// 						map_gather_point_it it = m_mapGP.find(idMonster);
+// 						if (it != m_mapGP.end())
+// 						{
+// 							gp = it->second;
+// 						}
+// 					}
+// 					
+// 					if (gp == NULL) 
+// 					{
+// 						for_vec(m_vMonster, vec_monster_it)
+// 						{
+// 							if ((*it)->m_nID == idMonster)
+// 							{
+// 								(*it)->setState(btState);
+// 							}
+// 						}
+// 					}
+// 					else
+// 					{
+// 						gp->setState(btState);
+// 					}
+				}
+			}
+			break;
+		case MONSTER_INFO_ACT_BOSS_POS:
+			for (int i = 0; i < count; i++)
+			{
+				int idMonster  = 0; (*pkData) >> idMonster;
+				int idType = 0; (*pkData) >> idType;
+				unsigned short col = 0; (*pkData) >> col;
+				unsigned short row = 0; (*pkData) >> row;
+				unsigned char  btState = 0; (*pkData) >> btState;
+				
+				NDLayer *layer = NDMapMgrObj.getMapLayerOfScene( NDDirector::DefaultDirector()->GetRunningScene());
+				if (!layer)
+				{
+					return;
+				}
+				
+				if (idType / 1000000 == 6)
+				{ // 采集
+// 					GatherPoint *gp = NULL;
+// 					if (idMonster > 0)
+// 					{
+// 						map_gather_point_it it = m_mapGP.find(idMonster);
+// 						if (it != m_mapGP.end())
+// 						{
+// 							gp = it->second;
+// 						}
+// 					}
+// 					
+// 					if (gp == NULL) 
+// 					{
+// 						gp = new GatherPoint(idMonster, idType, col*MAP_UNITSIZE,
+// 											 row *MAP_UNITSIZE, idMonster > 0, "");
+// 						m_mapGP.insert(map_gather_point_pair(idMonster, gp));
+// 					}
+// 					
+// 					gp->setState(btState);
+					
+					continue;
+				}
+				
+				monster_type_info info;
+				NDMonster *monster = new NDMonster;
+				monster->m_nID = idMonster;
+				monster->SetPosition(ccp(col*MAP_UNITSIZE, row*MAP_UNITSIZE));
+				monster->Initialization(idType);
+				monster->SetType(MONSTER_BOSS);
+				if (idMonster > 0)
+				{
+					monster->setState(btState);
+				}
+				
+				
+				NDMapMgrObj.m_vMonster.push_back(monster);
+				
+			}
+			NDMapMgrObj.AddAllMonsterToMap();
+			break;
+		case MONSTER_INFO_ACT_BOSS_STATE:
+			for (int i = 0; i < count; i++)
+			{
+				int idMonster = 0; (*pkData) >> idMonster;
+				unsigned char btState = 0; (*pkData) >> btState;
+				if (idMonster > 0)
+				{
+					for_vec(m_vMonster, vec_monster_it)
+					{
+						if ((*it)->m_nID == idMonster&&(*it)->GetType() == MONSTER_BOSS)
+						{
+							(*it)->setState(btState);
+						}
+					}
+				}
+			}
+			break;
+	}
+}
+
+bool NDMapMgr::GetMonsterInfo( monster_type_info& kInfo, int nType )
+{
+	monster_info_it it = m_mapMonsterInfo.find(nType);
+
+	if (it == m_mapMonsterInfo.end())
+	{
+		return false;
+	}
+
+	kInfo = it->second;
+	return true;
+}
+
+void NDMapMgr::BattleEnd( int iResult )
+{
+	NDMonster* monster = GetBattleMonster();
+	if (monster&&monster->getState()!=MONSTER_STATE_DEAD) 
+	{
+		monster->endBattle();
+		monster->setMonsterStateFromBattle(iResult);
+		SetBattleMonster(0);
+	}
+
+	if (BATTLE_COMPLETE_WIN==iResult)
+	{
+		m_nCurrentMonsterRound++;
+	}else{
+		if(BattleMgrObj.GetBattle()->GetBattleType()==BATTLE_TYPE_MONSTER)
+		{
+			if(monster)
+			{
+				monster->restorePosition();
+
+				NDPlayer& player = NDPlayer::defaultHero();
+
+				player.SetPosition(ccp(monster->m_nSelfMoveRectX-64, monster->GetPosition().y));
+				player.SetServerPositon((monster->m_nSelfMoveRectX-64)/MAP_UNITSIZE, (monster->GetPosition().y)/MAP_UNITSIZE);
+
+				Battle* battle = BattleMgrObj.GetBattle();
+				if (battle)
+				{
+					battle->setSceneCetner(monster->m_nSelfMoveRectX-64, monster->GetPosition().y);
+					player.stopMoving();
+				}else{
+					NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene( NDDirector::DefaultDirector()->GetRunningScene());
+
+					if (layer) 
+					{
+						layer->SetScreenCenter(ccp(monster->m_nSelfMoveRectX-64, monster->GetPosition().y));
+					}
+					player.stopMoving();
+				}
+			}
+		}
+	}
+
+	NDPlayer::defaultHero().BattleEnd(iResult);
+}
+
+void NDMapMgr::processNpcStatus( NDTransData* pkData, int nLength )
+{
+	unsigned char ucCount = 0;
+	(*pkData) >> ucCount;
+
+	for (int i = 0; i < ucCount; i++)
+	{
+		int nNPCID = 0; nNPCID = pkData->ReadInt();
+		unsigned char ucState = 0; (*pkData) >> ucState;
+		NDNpc *pkNPC = NULL;
+		for_vec(m_vNPC, VEC_NPC::iterator)
+		{
+			if ((*it) && (*it)->m_nID == nNPCID)
+			{
+				pkNPC = *it;
+			}
+		}
+		if (pkNPC)
+		{
+			pkNPC->SetNpcState(NPC_STATE(ucState));
+		}
+	}
+}
+
+void NDMapMgr::processDisappear( NDTransData* pkData, int nLength )
+{
+	if (!pkData || nLength == 0) return ;
+
+	int nUserID = 0;
+	(*pkData) >> nUserID;
+
+	NDManualRole *pkRole = GetManualRole(nUserID);
+	if (pkRole)
+	{
+		pkRole->m_bClear = true;
+
+		BattleMgr& kBattleMgr = BattleMgrObj;
+
+		if (kBattleMgr.GetBattle()
+			&& kBattleMgr.GetBattle()->OnRoleDisapper(pkRole->m_nID)) 
+		{
+			pkRole->RemoveFromParent(false);
+		}
+
+		NDPlayer::defaultHero().UpdateFocusPlayer();
+	}
 }
 
 }

@@ -260,6 +260,7 @@ public:
 	typedef map<int,NDManualRole*> map_manualrole;
 	typedef vector<NDNpc*> VEC_NPC;
 	typedef vector<NDMonster*> VEC_MONSTER;
+	typedef VEC_MONSTER::iterator vec_monster_it;
 
 	DECLARE_CLASS(NDMapMgr);
 
@@ -270,6 +271,8 @@ public:
 	NDMonster* GetMonster(int nID);
 
 	virtual bool process( MSGID usMsgID, NDEngine::NDTransData* pkData, int nLength );
+	void processMsgCommonList(NDTransData& kData);
+	void processMsgCommonListRecord(NDTransData& kData);
 	void processPlayer(NDTransData* pkData,int nLength);
 	void processPlayerExt(NDTransData* pkData,int nLength);
 	void processWalk(NDTransData* pkData,int nLength);
@@ -278,6 +281,10 @@ public:
 	void ProcessLoginSuc(NDTransData& kData);
 	void processChangeRoom(NDTransData* pkData,int nLength);
 	void processNPCInfoList(NDTransData* pkData,int nLength);
+	void processMonsterInfo(NDTransData* pkData, int nLength);
+	void processNpcStatus(NDTransData* pkData, int nLength);
+	void processDisappear(NDTransData* pkData, int nLength);
+	void BattleEnd(int iResult);
 
 protected:
 
@@ -288,6 +295,7 @@ protected:
 	void ClearManualRole();
 	void AddAllNPCToMap();
 	void AddAllMonsterToMap();
+	bool GetMonsterInfo(monster_type_info& kInfo, int nType);
 	void DelManualRole(int nID);
 	void ClearNPC();
 	void ClearMonster();
@@ -310,10 +318,13 @@ protected:
 	virtual NDMonster* GetBattleMonster();
 	void SetBattleMonster(NDMonster* pkMonster);
 
+	CC_SYNTHESIZE(int,m_nCurrentMonsterRound,CurrentMonsterRound);		///< 貌似此变量没有什么引用，废弃掉？ 郭浩
+
 	static bool m_bFirstCreate;
 	static bool m_bVerifyVersion;
 
 	map_manualrole m_mapManualRole;
+	monster_info m_mapMonsterInfo;
 	VEC_NPC m_vNPC;
 	VEC_MONSTER m_vMonster;
 
