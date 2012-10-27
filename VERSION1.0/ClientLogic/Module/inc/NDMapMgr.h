@@ -21,6 +21,7 @@
 #include "NDMapLayer.h"
 #include "NDConsole.h"
 #include "NDTimer.h"
+#include "AutoLink.h"
 
 using namespace std;
 
@@ -266,12 +267,15 @@ public:
 	virtual ~NDMapMgr();
 
 	virtual void Update(unsigned long ulDiff);
+	NDMonster* GetMonster(int nID);
 
 	virtual bool process( MSGID usMsgID, NDEngine::NDTransData* pkData, int nLength );
 	void processPlayer(NDTransData* pkData,int nLength);
 	void processPlayerExt(NDTransData* pkData,int nLength);
 	void processWalk(NDTransData* pkData,int nLength);
 	void processWalkTo(NDTransData& kData);
+	void processNpcTalk(NDTransData& kData);
+	void ProcessLoginSuc(NDTransData& kData);
 	void processChangeRoom(NDTransData* pkData,int nLength);
 	void processNPCInfoList(NDTransData* pkData,int nLength);
 
@@ -303,6 +307,8 @@ protected:
 	virtual bool processConsole( const char* pszInput );
 
 	virtual void OnTimer( OBJID tag );
+	virtual NDMonster* GetBattleMonster();
+	void SetBattleMonster(NDMonster* pkMonster);
 
 	static bool m_bFirstCreate;
 	static bool m_bVerifyVersion;
@@ -324,6 +330,8 @@ protected:
 	CCSize m_kMapSize;
 
 	string m_strMapName;
+
+	CAutoLink<NDMonster> m_apWaitBattleMonster;
 
 private:
 };

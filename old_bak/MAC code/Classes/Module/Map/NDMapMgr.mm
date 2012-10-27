@@ -1788,12 +1788,6 @@ namespace NDEngine
 			case _MSG_ROADBLOCK:
 				this->processRoadBlock(*data);
 				break;
-//			case _MSG_BOSS_BATTLE_INFO:
-//				this->processBossInfo(*data);
-//				break;
-//			case _MSG_BOSS_BATTLE_SELF:
-//				this->processBossSelfInfo(*data);
-//				break;
             case _MSG_LOGIN_SUC:
                 this->ProcessLoginSuc(*data);
                 break;

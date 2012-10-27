@@ -13,6 +13,8 @@
 #include "ItemMgr.h"
 #include "ScriptGlobalEvent.h"
 #include "NDNetMsg.h"
+#include "TutorUILayer.h"
+#include "ScriptMgr.h"
 
 namespace NDEngine
 {
@@ -108,9 +110,31 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 		processPlayer(pkData, nLength);
 	}
 		break;
+	case _MSG_USER_POS:
+	{
+		///< 依赖张迪的TutorUILayer 郭浩
+		//TutorUILayer::processTutorList(*pkData);
+	}
+		break;
+	case _MSG_TIP:
+	{
+		///< 依赖汤自勤哥的GameSceneLoading 郭浩
+// 		GameSceneLoading* gsl = (GameSceneLoading*)scene;
+// 		gsl->UpdateTitle(kData->ReadUnicodeString());
+	}
+	case _MSG_LOGIN_SUC:
+	{
+		ProcessLoginSuc(*pkData);
+	}
+		break;
 	case _MSG_PLAYER_EXT:
 	{
 		processPlayerExt(pkData, nLength);
+	}
+		break;
+	case _MSG_NPC_TALK:
+	{
+		processNpcTalk(*pkData);
 	}
 		break;
 	case _MSG_WALK_TO:
@@ -396,7 +420,97 @@ NDManualRole* NDMapMgr::GetManualRole(const char* pszName)
 
 void NDMapMgr::Update(unsigned long ulDiff)
 {
+	NDPlayer& player = NDPlayer::defaultHero();
+	player.Update(ulDiff);
 
+	// 所有其它玩家
+	do 
+	{
+		map_manualrole::iterator it = m_mapManualRole.begin();
+		while (it != m_mapManualRole.end()) 
+		{
+			NDManualRole *role = it->second;
+			if (role->m_bClear) 
+			{
+			//	updateTeamListDelPlayer(*role);			///< No team 郭浩
+				SAFE_DELETE_NODE(role->GetRidePet());
+				SAFE_DELETE_NODE(role);
+				m_mapManualRole.erase(it++);
+			}
+			else
+			{
+				it++;
+			}
+		};
+
+		it = m_mapManualRole.begin();
+		for(;it != m_mapManualRole.end();it++)
+		{
+			NDManualRole* role = it->second;
+
+			if (role == &player) continue;
+
+			if (role) 
+			{
+				NDNode* parent = role->GetParent();
+				if (parent && !parent->IsKindOfClass(RUNTIME_CLASS(Battle))) {
+					role->Update(ulDiff);
+				}
+			}
+		}
+	} while (0);	
+
+
+	// 所有地图上的怪
+	do 
+	{
+		if (NDPlayer::defaultHero().IsInState(USERSTATE_FIGHTING)
+			|| NDPlayer::defaultHero().IsGathering() 
+			|| NDUISynLayer::IsShown())
+		{
+			break;
+		}
+
+		NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
+		if (scene && scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
+		{
+			GameScene *gamescene = (GameScene*)scene;
+			if (gamescene->IsUIShow())
+			{
+				break;
+			}
+		}
+
+		VEC_MONSTER::iterator it = m_vMonster.begin();
+		while (it != m_vMonster.end()) 
+		{
+			NDMonster* tmp = *it;
+			if (!tmp->m_bClear) 
+			{
+				it++;
+				continue;
+			}
+
+			if (GetBattleMonster() == tmp) 
+			{
+				tmp = NULL;
+			}
+
+			SAFE_DELETE_NODE(tmp);
+			it = m_vMonster.erase(it);
+		}
+
+
+		it = m_vMonster.begin();
+		for (; it != m_vMonster.end(); it++) 
+		{
+			NDMonster* monster = *it;
+			if (monster && it == m_vMonster.begin()) 
+			{
+				monster->Update(ulDiff);
+			}
+		}	
+	} while (0);
 }
 
 NDMapLayer* NDMapMgr::getMapLayerOfScene(NDScene* pkScene)
@@ -1213,6 +1327,79 @@ void NDMapMgr::OnTimer( OBJID tag )
 
 		printf("分析完畢!\n");
 	}
+}
+
+NDMonster* NDMapMgr::GetBattleMonster()
+{
+	return m_apWaitBattleMonster;
+}
+
+void NDMapMgr::SetBattleMonster( NDMonster* pkMonster )
+{
+	if (0 == pkMonster)
+	{
+		m_apWaitBattleMonster.Clear();
+	}
+	else
+	{
+		m_apWaitBattleMonster = pkMonster->QueryLink();
+	}
+}
+
+void NDMapMgr::ProcessLoginSuc( NDTransData& kData )
+{
+	ScriptMgrObj.excuteLuaFunc("ProcessLoginSuc", "MsgLoginSuc",0);
+}
+
+void NDMapMgr::processNpcTalk( NDTransData& kData )
+{
+	int nAction = kData.ReadByte();
+	int nID = kData.ReadInt();
+	int nTime = kData.ReadInt();
+	std::string strMessage = kData.ReadUnicodeString2();
+	switch(nAction){
+			case 0:
+				{
+					NDManualRole* pkPlayer=GetManualRole(nID);
+					if(pkPlayer!=NULL){
+						pkPlayer->addTalkMsg(strMessage,nTime);
+					}
+					break;
+				}
+			case 1:
+				{
+					CloseProgressBar;
+					NDNpc *pkNPC = GetNPC(nID);
+					if (pkNPC != NULL) {
+						pkNPC->addTalkMsg(strMessage,nTime);
+					}
+					break;
+				}
+			case 2:
+				{
+					NDMonster *pkMonster=GetMonster(nID);
+					if (pkMonster != NULL) {
+						pkMonster->addTalkMsg(strMessage,nTime);
+					}
+				}
+				break;
+	}
+}
+
+NDMonster* NDMapMgr::GetMonster( int nID )
+{
+	for (VEC_MONSTER::iterator it = m_vMonster.begin();
+		it != m_vMonster.end(); it++)
+	{
+		NDMonster *pkTempMonster = *it;
+
+		if (pkTempMonster->m_nID == nID) 
+		{
+			return pkTempMonster;
+		}
+	}
+
+	return NULL;
 }
 
 }

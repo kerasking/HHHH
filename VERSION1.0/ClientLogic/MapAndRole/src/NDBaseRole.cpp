@@ -1045,7 +1045,7 @@ void NDBaseRole::SetPositionEx(CGPoint newPosition)
 	NDSprite::SetPosition(newPosition);
 }
 
-NDRidePet* NDBaseRole::GetRidePet()
+NDRidePet*& NDBaseRole::GetRidePet()
 {
 	if (m_pkRidePet == NULL)
 	{
