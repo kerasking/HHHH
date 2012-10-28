@@ -17,6 +17,7 @@
 #include "ScriptMgr.h"
 #include "TaskListener.h"
 #include "BattleMgr.h"
+#include "CPet.h"
 
 namespace NDEngine
 {
@@ -103,9 +104,24 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 {
 	switch (usMsgID)
 	{
+	case _MSG_PETINFO:
+	{
+		processPetInfo(pkData,nLength);
+	}
+		break;
+	case _MSG_KICK_BACK:
+	{
+		processKickBack(pkData,nLength);
+	}
+		break;
 	case MB_MSG_DISAPPEAR:
 	{
 		processDisappear(pkData, nLength);
+	}
+		break;
+	case _MSG_CHGPOINT:
+	{
+		processChgPoint(pkData,nLength);
 	}
 		break;
 	case _MSG_REPUTE:
@@ -1812,6 +1828,353 @@ void NDMapMgr::processDisappear( NDTransData* pkData, int nLength )
 
 		NDPlayer::defaultHero().UpdateFocusPlayer();
 	}
+}
+
+void NDMapMgr::processKickBack( NDTransData* pkData,int nLength )
+{
+	if (!pkData || nLength == 0) return ;
+
+	unsigned short usRecordX = 0;
+	(*pkData) >> usRecordX;
+	unsigned short usRecordY = 0;
+	(*pkData) >> usRecordY;
+
+	NDPlayer& player = NDPlayer::defaultHero();
+
+	player.SetPosition(ccp(usRecordX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, usRecordY*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+	player.SetServerPositon(usRecordX, usRecordY);
+	if (player.isTeamLeader()) 
+	{
+		player.teamSetServerPosition(usRecordX, usRecordY);
+	}
+
+	Battle* battle = BattleMgrObj.GetBattle();
+	NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene( NDDirector::DefaultDirector()->GetRunningScene());
+	player.stopMoving();
+	if (battle) {
+		//NDLog(@"x,y=%d,%d",usRecordX,us);
+		battle->setSceneCetner(usRecordX*32+DISPLAY_POS_X_OFFSET, usRecordY*32+DISPLAY_POS_X_OFFSET);
+	}
+	else{
+
+		if (!layer) 
+		{
+			return;
+		}
+		layer->SetScreenCenter(ccp(usRecordX*32+DISPLAY_POS_X_OFFSET, usRecordY*32+DISPLAY_POS_Y_OFFSET));
+	}
+}
+
+void NDMapMgr::processChgPoint( NDTransData* pkData,int nLength )
+{
+	unsigned char ucAnswer = 0; (*pkData) >> ucAnswer;
+
+	if (ucAnswer == 1) 
+	{
+		// 出错了,还原，修改用户属性
+		NDPlayer::defaultHero().m_nPhyPoint -= NDPlayer::defaultHero().m_iTmpPhyPoint;
+		NDPlayer::defaultHero().m_nDexPoint -= NDPlayer::defaultHero().m_iTmpDexPoint;
+		NDPlayer::defaultHero().m_nMagPoint -= NDPlayer::defaultHero().m_iTmpMagPoint;
+		NDPlayer::defaultHero().m_nDefPoint -= NDPlayer::defaultHero().m_iTmpDefPoint;
+		NDPlayer::defaultHero().m_nRestPoint = NDPlayer::defaultHero().m_iTmpRestPoint;
+	}
+
+	// 清除加点属性缓存
+	NDPlayer::defaultHero().m_iTmpPhyPoint = 0;
+	NDPlayer::defaultHero().m_iTmpDexPoint = 0;
+	NDPlayer::defaultHero().m_iTmpMagPoint = 0;
+	NDPlayer::defaultHero().m_iTmpDefPoint = 0;
+	NDPlayer::defaultHero().m_iTmpRestPoint = 0;
+
+	/***
+	* 以下依赖汤自勤的 GameUIAttrib  郭浩
+	*/
+	// 如果人物属性界面处于打开状态,则更新该界面
+// 	GameUIAttrib *pkAttr = GameUIAttrib::GetInstance();
+// 	if (pkAttr) 
+// 	{
+// 		pkAttr->UpdateGameUIAttrib();
+// 	}
+}
+
+void NDMapMgr::processPetInfo( NDTransData* pkData,int nLength )
+{
+	NDPlayer& player = NDPlayer::defaultHero();
+
+	NDManualRole *role = NULL;
+
+	bool bUseNewScene = false;
+
+	int action = 0; (*pkData) >> action;
+
+	int idPet = 0; (*pkData) >> idPet;
+
+	if (action == 2)
+	{
+		NDPlayer& player = NDPlayer::defaultHero();
+		ShowPetInfo showPetInfo;
+		player.GetShowPetInfo(showPetInfo);
+		if (OBJID(idPet) == showPetInfo.idPet)
+		{
+			player.ResetShowPet();
+		}
+
+		PetMgrObj.DelPet(idPet);
+		//CUIPet* pUIPet = PlayerInfoScene::QueryPetScene();///< 此处注释依赖汤自勤的 PlayerInfoScene  郭浩
+		//if (pUIPet) {
+			///< 此处注释依赖汤自勤的 CUIPet  郭浩
+			//pUIPet->UpdateUI(idPet);
+		//}
+		return;
+	}
+
+	int ownerid = 0; (*pkData) >> ownerid;
+
+	if (ownerid == player.m_nID)
+	{
+		role = (NDManualRole*)&player;
+	}
+	else
+	{
+		role = GetManualRole(ownerid);
+	}
+
+	if (action != 1) 
+	{
+		return;
+	}
+
+
+	PetInfo* petInfo = PetMgrObj.GetPetWithCreate(ownerid, idPet);
+
+	NDAsssert(petInfo != NULL);
+
+	PetInfo::PetData *pet = &petInfo->data;
+
+	pet->int_PET_ID = idPet;
+
+	bool bSwithPlayerInfoScene = false;
+
+	int attrNum = 0; (*pkData) >> attrNum;
+	for (int i = 0; i < attrNum; i++) 
+	{
+		int type = 0; (*pkData) >> type;
+		int value = 0;
+
+		if (type != 100) {
+			value = pkData->ReadInt();
+		}
+
+		switch (type) 
+		{
+		case 1:// PET_ATTR_LEVEL
+			pet->int_PET_ATTR_LEVEL = value;
+			break;
+		case 2:// PET_ATTR_EXP
+			pet->int_PET_ATTR_EXP = value;
+			break;
+		case 3:// PET_ATTR_LIFE
+			pet->int_PET_ATTR_LIFE = value;
+			break;
+		case 4:// PET_ATTR_MAX_LIFE
+			pet->int_PET_ATTR_MAX_LIFE = value;
+			break;
+		case 5:// PET_ATTR_MANA
+			pet->int_PET_ATTR_MANA = value;
+			break;
+		case 6:// PET_ATTR_MAX_MANA6
+			pet->int_PET_ATTR_MAX_MANA = value;
+			break;
+		case 7:// PET_ATTR_STR7
+			pet->int_PET_ATTR_STR = value;
+			break;
+		case 8:// PET_ATTR_STA8
+			pet->int_PET_ATTR_STA = value;
+			break;
+		case 9:// PET_ATTR_AGI9
+			pet->int_PET_ATTR_AGI = value;
+			break;
+		case 10:// PET_ATTR_INI10
+			pet->int_PET_ATTR_INI = value;
+			break;
+		case 11:// PET_ATTR_LEVEL_INIT11
+			pet->int_PET_ATTR_LEVEL_INIT = value;
+			break;
+		case 12:// PET_ATTR_STR_INIT12
+			pet->int_PET_ATTR_STR_INIT = value;
+			break;
+		case 13:// PET_ATTR_STA_INIT13
+			pet->int_PET_ATTR_STA_INIT = value;
+			break;
+		case 14:// PET_ATTR_AGI_INIT14
+			pet->int_PET_ATTR_AGI_INIT = value;
+			break;
+		case 15:// PET_ATTR_INI_INIT15
+			pet->int_PET_ATTR_INI_INIT = value;
+			break;
+		case 16:// PET_ATTR_LOYAL16
+			pet->int_PET_ATTR_LOYAL = value;
+			break;
+		case 17:// PET_ATTR_AGE17
+			pet->int_PET_ATTR_AGE = value;
+			break;
+		case 18:// PET_ATTR_FREE_SP18
+			pet->int_PET_ATTR_FREE_SP = value;
+			break;
+		case 19:// PET_ATTR_STR_RATE19
+			pet->int_PET_PHY_ATK_RATE = value;
+			break;
+		case 20:// PET_ATTR_STA_RATE20
+			pet->int_PET_PHY_DEF_RATE = value;
+			break;
+		case 21:// PET_ATTR_AGI_RATE21
+			pet->int_PET_MAG_ATK_RATE = value;
+			break;
+		case 22:// PET_ATTR_INI_RATE22
+			pet->int_PET_MAG_DEF_RATE = value;
+			break;
+		case 23:// PET_ATTR_HP_RATE23
+			pet->int_PET_ATTR_HP_RATE = value;
+			break;
+		case 24:// PET_ATTR_MP_RATE24
+			pet->int_PET_ATTR_MP_RATE = value;
+			break;
+		case 25:// PET_ATTR_LEVEUP_EXP25
+			pet->int_PET_ATTR_LEVEUP_EXP = value;
+			break;
+		case 26:// PET_ATTR_PHY_ATK26
+			pet->int_PET_ATTR_PHY_ATK = value;
+			break;
+		case 27:// PET_ATTR_PHY_DEF27
+			pet->int_PET_ATTR_PHY_DEF = value;
+			break;
+		case 28:// PET_ATTR_MAG_ATK28
+			pet->int_PET_ATTR_MAG_ATK = value;
+			break;
+		case 29:// PET_ATTR_MAG_DEF29
+			pet->int_PET_ATTR_MAG_DEF = value;
+			break;
+		case 30:// PET_ATTR_HARD_HIT30
+			pet->int_PET_ATTR_HARD_HIT = value;
+			break;
+		case 31:// PET_ATTR_DODGE31
+			pet->int_PET_ATTR_DODGE = value;
+			break;
+		case 32:// PET_ATTR_ATK_SPEED32
+			pet->int_PET_ATTR_ATK_SPEED = value;
+			break;
+		case 33:// PET_ATTR_TYPE33 ;类型
+			pet->int_PET_ATTR_TYPE = value;
+			break;
+		case 34:// 外观
+			pet->int_PET_ATTR_LOOKFACE = value;
+			break;
+		case 35:// PET_ATTR_SKILL_1 32
+			pet->int_PET_MAX_SKILL_NUM = value;
+			//PetSkillSceneUpdate();
+			//PetSkillIconLayer::OnUnLockSkill(); ///< 未知 待查
+			bUseNewScene = true;
+			break;
+		case 36:// PET_ATTR_SKILL_2 33
+			pet->int_ATTR_FREE_POINT = value;
+			break;
+		case 37:// 速度资质
+			pet->int_PET_SPEED_RATE = value;
+			break;
+		case 38:// 物攻资质上限
+			pet->int_PET_PHY_ATK_RATE_MAX = value;
+			break;
+		case 39:// 物防资质上限
+			pet->int_PET_PHY_DEF_RATE_MAX = value;
+			break;
+		case 40:// 法攻资质上限
+			pet->int_PET_MAG_ATK_RATE_MAX = value;
+			break;
+		case 41:// 法防资质上限
+			pet->int_PET_MAG_DEF_RATE_MAX = value;
+			break;
+		case 42:// 生命加成资质上限
+			pet->int_PET_ATTR_HP_RATE_MAX = value;
+			break;
+		case 43:// 魔法加成资质上限
+			pet->int_PET_ATTR_MP_RATE_MAX = value;
+			break;
+		case 44:// 速度资质上限
+			pet->int_PET_SPEED_RATE_MAX = value;
+			break;
+		case 45:// 成长率
+			pet->int_PET_GROW_RATE = value;
+			break;
+		case 46:// 成长率上限
+			pet->int_PET_GROW_RATE_MAX = value;
+			break;
+		case 47:// 命中
+			pet->int_PET_HIT = value;					
+			break;
+		case 48://绑定状态
+			pet->bindStatus = value;
+			break;
+		case 49: //宠物位置
+			{
+				if (pet->int_PET_ATTR_POSITION != value)
+				{
+					bSwithPlayerInfoScene = true;
+				}
+
+				pet->int_PET_ATTR_POSITION = value;
+			}	
+			break;
+		case 100:// 名字
+			{
+				std::string petName = pkData->ReadUnicodeString();
+				petInfo->str_PET_ATTR_NAME = petName;
+				break;
+			}
+		default:
+			break;
+		}
+	}
+
+	if (pet->int_PET_ATTR_POSITION & PET_POSITION_SHOW)
+	{
+		if (role)
+		{
+			ShowPetInfo showPetInfo(
+				pet->int_PET_ID,
+				pet->int_PET_ATTR_LOOKFACE,
+				petInfo->GetQuality());
+			role->SetShowPet(showPetInfo);
+		}
+	}
+	else if (role)
+	{
+		ShowPetInfo showPetInfo;
+		role->GetShowPetInfo(showPetInfo);
+		if (OBJID(pet->int_PET_ID) == showPetInfo.idPet)
+		{
+			role->ResetShowPet();
+		}
+	}
+
+	if (bSwithPlayerInfoScene && role->m_nID == ownerid)
+	{
+		NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
+
+		//if (scene && scene->IsKindOfClass(RUNTIME_CLASS(PlayerInfoScene))) ///< 此处注释依赖汤自勤的 PlayerInfoScene  郭浩
+		{
+			///< 此两处注释依赖汤自勤的 PlayerInfoScene  郭浩
+			//PlayerInfoScene *playerInfoScene = (PlayerInfoScene*)scene;
+
+			//playerInfoScene->SetTabFocusOnIndex(3, true);
+		}
+	}
+
+	///< 此处注释依赖汤自勤的 PlayerInfoScene  郭浩
+	//CUIPet* pUIPet = PlayerInfoScene::QueryPetScene();
+	//if (pUIPet) {
+		///< 此处注释依赖汤自勤的 CUIPet  郭浩
+		//pUIPet->UpdateUI(pet->int_PET_ID);
+	//}
 }
 
 }

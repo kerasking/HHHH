@@ -281,6 +281,9 @@ public:
 	void ProcessLoginSuc(NDTransData& kData);
 	void processChangeRoom(NDTransData* pkData,int nLength);
 	void processNPCInfoList(NDTransData* pkData,int nLength);
+	void processKickBack(NDTransData* pkData,int nLength);
+	void processChgPoint(NDTransData* pkData,int nLength);
+	void processPetInfo(NDTransData* pkData,int nLength);
 	void processMonsterInfo(NDTransData* pkData, int nLength);
 	void processNpcStatus(NDTransData* pkData, int nLength);
 	void processDisappear(NDTransData* pkData, int nLength);
