@@ -1643,7 +1643,7 @@ namespace NDEngine
 			case _MSG_SEE:
 				processSee(*data);
 				break;
-			case _MSG_REPUTE_ATTR:
+			case _MSG_REPUTE_ATTR:			///< 貌似没
 			{
 				NDPlayer& player = NDPlayer::defaultHero();
 				int action = data->ReadByte();
@@ -1682,7 +1682,7 @@ namespace NDEngine
 				}
 			}
 				break;
-			case _MSG_CAMP_STORAGE:
+			case _MSG_CAMP_STORAGE:			///< 貌似没
 				processCampStorage(*data);
 				break;
 			case _MSG_NPC_POSITION:
@@ -1694,7 +1694,7 @@ namespace NDEngine
 			case _MSG_ITEM_TYPE_INFO:
 				processItemTypeInfo(*data);
 				break;
-			case _MSG_CUSTOMER_SERVICE:
+			case _MSG_CUSTOMER_SERVICE:			///<客服？ 貌似没
 			{
 				CloseProgressBar;
 				
@@ -1729,7 +1729,7 @@ namespace NDEngine
 			case _MSG_COMPETITION:
 				processCompetition(*data);
 				break;
-			case _MSG_WISH:
+			case _MSG_WISH:			///< 貌似没
 				processWish(*data);
 				break;
 			case MB_MSG_RECHARGE:
@@ -1755,7 +1755,7 @@ namespace NDEngine
 			case _MSG_QUERY_SOCIAL_INFO:
 				SocialScene::ProcessSocicalInfoData(*data);
 				break;
-			case MB_MSG_MOBILE_PWD:
+			case MB_MSG_MOBILE_PWD:		///< 貌似没
 			{
 				int btAction = data->ReadByte();
 				if (btAction == 3) 

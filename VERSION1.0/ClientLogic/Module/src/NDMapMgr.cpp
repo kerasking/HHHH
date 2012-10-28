@@ -23,10 +23,10 @@
 #include "NDDataPersist.h"
 // #include "Chat.h"
 // #include "NewChatScene.h"			///< 这俩包含需要汤哥和张迪的东西 郭浩
-#include "GlobalDialog.h"
+#include "SMLoginScene.h"
+#include "NDMsgDefine.h"
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
 
 IMPLEMENT_CLASS(NDMapMgr,NDObject);
 
@@ -110,6 +110,47 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 {
 	switch (usMsgID)
 	{
+	case _MSG_SHOW_TREASURE_HUNT_AWARD:
+	{
+		processShowTreasureHuntAward(*pkData);
+	}
+		break;
+	case _MSG_MARRIAGE:
+	{
+		processMarriage(*pkData);
+	}
+		break;
+	case 2562:	///< 为什么_MSG_PORTAL找不到
+	{
+		processPortal(*pkData);
+	}
+		break;
+	case _MSG_DELETEROLE:
+	{
+		processDeleteRole(*pkData);
+	}
+		break;
+	case _MSG_ACTIVITY:
+	{
+		processActivity(*pkData);
+	}
+		break;
+	case _MSG_CLIENT_VERSION:
+	{
+		processVersionMsg(*pkData);
+	}
+		break;
+	case MB_MSG_RECHARGE_RETURN:
+	{
+		processRechargeReturn(*pkData);
+	}
+		break;
+	case MB_MSG_CHANGE_PASS:
+	{
+		CloseProgressBar;
+		GlobalShowDlg(NDCommonCString("SysTip"), pkData->ReadUnicodeString());
+	}
+		break;
 	case _MSG_SEE:
 	{
 		processSee(*pkData);
@@ -132,6 +173,11 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 		processGameQuit(pkData,nLength);
 	}
 		break;
+	case MB_MSG_RECHARGE:
+	{
+		processReCharge(*pkData);
+	}
+		break;
 	case _MSG_PLAYERLEVELUP:
 	{
 		processPlayerLevelUp(*pkData);
@@ -142,9 +188,26 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 		processCollection(*pkData);
 	}
 		break;
+	case _MSG_AUCTION:
+	{
+		///< 依赖张迪 AuctionUILayer 郭浩
+		//AuctionUILayer::processAuction(*kData);
+	}
+		break;
+	case _MSG_AUCTIONINFO:
+	{
+		///< 依赖张迪 AuctionUILayer 郭浩
+		//AuctionUILayer::processAuctionInfo(*pkData);
+	}
+		break;
 	case _MSG_PETINFO:
 	{
 		processPetInfo(pkData,nLength);
+	}
+		break;
+	case _MSG_COMPETITION:
+	{
+		processCompetition(*pkData);
 	}
 		break;
 	case _MSG_KICK_BACK:
@@ -205,12 +268,6 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 		processPlayer(pkData, nLength);
 	}
 		break;
-	case _MSG_TIP:
-	{
-		///< 依赖汤自勤哥的GameSceneLoading 郭浩
-// 		GameSceneLoading* gsl = (GameSceneLoading*)scene;
-// 		gsl->UpdateTitle(kData->ReadUnicodeString());
-	}
 	case _MSG_LOGIN_SUC:
 	{
 		ProcessLoginSuc(*pkData);
@@ -219,6 +276,11 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 	case _MSG_PLAYER_EXT:
 	{
 		processPlayerExt(pkData, nLength);
+	}
+		break;
+	case _MSG_ITEM_TYPE_INFO:
+	{
+		processItemTypeInfo(*pkData);
 	}
 		break;
 	case _MSG_NPC_TALK:
@@ -396,9 +458,27 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 		//}
 	}
 		break;
+	case _MSG_TIP:
+		{
+			/***
+			* 依赖汤自勤的GameSceneLoading 郭浩
+			*/
+// 			NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
+// 			if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
+// 			{
+// 				GameSceneLoading* pkGameSceneLoading = (GameSceneLoading*)pkScene;
+// 				pkGameSceneLoading->UpdateTitle(kData->ReadUnicodeString());
+// 			}
+		}
+		break;
 	case _MSG_NAME:
 	{
 		//showDialog(NDCommonCString("tip"), NDCommonCString("RenameSucc")); ///< 依赖showDialog 郭浩
+	}
+		break;
+	case _MSG_NPC_POSITION:
+	{
+		processNpcPosition(*pkData);
 	}
 		break;
 	case _MSG_NPC:
@@ -3232,4 +3312,268 @@ void NDMapMgr::processSee( NDTransData& kData )
 	}
 }
 
+void NDMapMgr::processNpcPosition( NDTransData& kData )
+{
+	int npcId = kData.ReadInt();
+	short col = kData.ReadShort();
+	short row = kData.ReadShort();
+
+	NDNpc *npc = GetNpc(npcId);
+	if (npc != NULL) 
+	{
+		//npc->AddWalkPoint(col, row); ///< 依赖张迪 NDNpc
+	}
 }
+
+NDNpc* NDMapMgr::GetNpc( int nID )
+{
+	for (VEC_NPC::iterator it = m_vNPC.begin();
+		it != m_vNPC.end(); it++)
+	{
+		NDNpc* pkTempNPC = *it;
+
+		if (pkTempNPC->m_nID != nID) 
+		{
+			continue;
+		}
+
+		return pkTempNPC;
+	}
+
+	return NULL;
+}
+
+void NDMapMgr::processItemTypeInfo( NDTransData& kData )
+{
+	int cnt = kData.ReadByte();
+
+	for (int i = 0; i < cnt; i++)
+	{
+		NDItemType *itemtype = new NDItemType;
+		itemtype->m_data.m_id = kData.ReadInt();
+		itemtype->m_data.m_level =  kData.ReadByte();
+		itemtype->m_data.m_req_profession = kData.ReadInt();
+		itemtype->m_data.m_req_level = kData.ReadShort();
+		itemtype->m_data.m_req_sex = kData.ReadShort();
+		itemtype->m_data.m_req_phy = kData.ReadShort();
+		itemtype->m_data.m_req_dex = kData.ReadShort();
+		itemtype->m_data.m_req_mag = kData.ReadShort();
+		itemtype->m_data.m_req_def = kData.ReadShort();
+		itemtype->m_data.m_price = kData.ReadInt();
+		itemtype->m_data.m_emoney = kData.ReadInt();
+		itemtype->m_data.m_save_time = kData.ReadInt();
+		itemtype->m_data.m_life = kData.ReadShort();
+		itemtype->m_data.m_mana = kData.ReadInt();
+		itemtype->m_data.m_amount_limit = kData.ReadShort();
+		itemtype->m_data.m_hard_hitrate = kData.ReadShort();
+		itemtype->m_data.m_mana_limit = kData.ReadShort();
+		itemtype->m_data.m_atk_point_add = kData.ReadShort();
+		itemtype->m_data.m_def_point_add = kData.ReadShort();
+		itemtype->m_data.m_mag_point_add = kData.ReadShort();
+		itemtype->m_data.m_dex_point_add = kData.ReadShort();
+		itemtype->m_data.m_atk = kData.ReadShort();
+		itemtype->m_data.m_mag_atk = kData.ReadShort();
+		itemtype->m_data.m_def = kData.ReadShort();
+		itemtype->m_data.m_mag_def = kData.ReadShort();
+		itemtype->m_data.m_hitrate = kData.ReadShort();
+		itemtype->m_data.m_atk_speed = kData.ReadShort();
+		itemtype->m_data.m_dodge = kData.ReadShort();
+		itemtype->m_data.m_monopoly = kData.ReadShort();
+		itemtype->m_data.m_lookface = kData.ReadInt();
+		itemtype->m_data.m_iconIndex = kData.ReadInt();
+		itemtype->m_data.m_holeNum =  kData.ReadByte();
+		itemtype->m_data.m_suitData =kData.ReadInt();
+		itemtype->m_data.m_idUplev = kData.ReadInt();
+		itemtype->m_data.m_enhancedId = kData.ReadInt();
+		itemtype->m_data.m_enhancedStatus = kData.ReadInt();
+		itemtype->m_data.m_recycle_time = kData.ReadInt();
+
+		itemtype->m_name = kData.ReadUnicodeString();
+		itemtype->m_des = kData.ReadUnicodeString();
+
+		// 描述为"无"的不显示
+		if (itemtype->m_des == NDCommonCString("wu"))
+		{
+			itemtype->m_des.clear();
+		}
+		// 以服务端为准,存储或更新内存数据
+		ItemMgrObj.ReplaceItemType(itemtype);
+	}
+}
+
+void NDMapMgr::processCompetition( NDTransData& kData )
+{
+	/***
+	* 依赖张迪 SocialElement
+	* 郭浩
+	*/
+
+// 	CloseProgressBar;
+// 	int act = kData.ReadByte();
+// 	short curPage = kData.ReadShort();
+// 	short allPage = kData.ReadShort();
+// 	int amount =  kData.ReadByte();
+// 	VEC_SOCIAL_ELEMENT roles;
+// 	for (int i = 0; i < amount;) 
+// 	{
+// 		SocialElement *se = new SocialElement;
+// 		se->m_id = kData.ReadInt();
+// 		se->m_text1 = kData.ReadUnicodeString();
+// 
+// 		if (act == Competelist_VS) 
+// 		{
+// 			se->m_text2 = "VS";
+// 			se->m_param = kData.ReadInt();
+// 			se->m_text3 = kData.ReadUnicodeString();
+// 		}
+// 		else 
+// 		{
+// 			se->m_text2 = "   ";
+// 		}
+// 
+// 
+// 		roles.push_back(se);
+// 
+// 		act == Competelist_Joins ? i++ : i+=2;
+// 	}
+
+	//CompetelistUpdate(act, curPage, allPage, roles); 这句不知道哪里的 郭浩
+}
+
+void NDMapMgr::processReCharge( NDTransData& kData )
+{
+		int amount = kData.ReadShort();
+		int isEnd = kData.ReadShort();
+		for (int i = 0; i < amount; i++) 
+		{
+			int b1 = kData.ReadInt();// 菜单ID
+			int b2 = kData.ReadByte();// 菜单类型
+			std::string s = kData.ReadUnicodeString();// 名字
+			int id2 = b1 % 100;
+
+/***
+* 此处依赖汤自勤的NewRecharge
+* 郭浩
+* begin
+*/
+// 			if (id2 == 0) 
+// 			{
+// 				RechargeUI::s_data.push_back(NewRechargeData());
+// 				NewRechargeData& kData = RechargeUI::s_data.back();
+// 				kData.mainData = NewRechargeSubData(b1, b2, s);
+// 			} 
+// 			else 
+// 			{
+// 				if (!RechargeUI::s_data.empty())
+// 				{
+// 					NewRechargeData& kData = RechargeUI::s_data.back();
+// 					NDAsssert(b2 == RechargeData_Tip 
+// 							  || b2 == RechargeData_Card
+// 							  || b2 == RechargeData_Message);
+// 					switch (b2) {
+// 						case RechargeData_Tip:
+// 							kData.tipData = NewRechargeSubData(b1, b2, s);
+// 							break;
+// 						case RechargeData_Card:
+// 						case RechargeData_Message:
+// 							kData.vSubData.push_back(NewRechargeSubData(b1, b2, s));
+// 							break;
+// 						default:
+// 							break;
+// 					}
+// 				}
+// 			}
+// 		}
+/***
+* end
+*/
+
+
+/***
+* 依赖张迪的NewVipStoreScene
+* 郭浩
+* begin
+*/
+// 		if (isEnd == 1) 
+// 		{
+// 			CloseProgressBar;
+// 			NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
+// 			if (scene && scene->IsKindOfClass(RUNTIME_CLASS(NewVipStoreScene)))
+// 			{
+				
+// 				NewVipStoreScene *vipscene = (NewVipStoreScene*)scene;
+// 				
+// 				vipscene->ShowRechare();
+// 			}
+// 		}
+/***
+* end
+*/
+}
+
+}
+
+void NDMapMgr::processRechargeReturn( NDTransData& kData )
+{
+	/***
+	* 等汤自勤完成后再实现
+	* 郭浩
+	*/
+}
+
+void NDMapMgr::processVersionMsg( NDTransData& kData )
+{
+	CSMLoginScene* pkScene = (CSMLoginScene*)NDDirector::DefaultDirector()->GetSceneByTag(SMLOGINSCENE_TAG);
+	if(pkScene)
+	{
+		//return pkScene->OnMsg_ClientVersion(data); ///< 依赖汤自勤的CSMLoginScene 郭浩
+	}	
+}
+
+void NDMapMgr::processActivity( NDTransData& kData )
+{
+	/***
+	* CustomActivity 为未知类
+	* 郭浩
+	*/
+	CloseProgressBar;
+	int flag = kData.ReadByte();
+	int amount = kData.ReadByte();
+	if (flag == 1)
+	{
+		//CustomActivity::ClearData();
+	}
+	for (int i = 0; i < amount; i++)
+	{
+		std::string str = kData.ReadUnicodeString();
+		//CustomActivity::AddData(str);
+	}
+	if (flag == 2 || flag == 3)
+	{
+		//CustomActivity::refresh();
+	}
+}
+
+void NDMapMgr::processDeleteRole( NDTransData& kData )
+{
+	CloseProgressBar;
+	quitGame();
+}
+
+void NDMapMgr::processPortal( NDTransData& kData )
+{
+	///< 怀疑被废弃，因为直接return了 郭浩
+	//CloseProgressBar;
+
+	return;
+}
+
+void NDMapMgr::processMarriage( NDTransData& kData )
+{
+	/***
+	* 配偶的……游戏中没有配偶……
+	* 郭浩
+	*/
+}
+
+NS_NDENGINE_END

@@ -281,6 +281,7 @@ public:
 	void processNPCInfo(NDTransData& kData);
 	void processGameQuit(NDTransData* pkData,int nLength);
 	void processMsgCommonListRecord(NDTransData& kData);
+	void processNpcPosition(NDTransData& kData);
 	void processPlayer(NDTransData* pkData,int nLength);
 	void processPlayerExt(NDTransData* pkData,int nLength);
 	void processWalk(NDTransData* pkData,int nLength);
@@ -288,8 +289,18 @@ public:
 	void processTalk(NDTransData& kData);
 	void processNpcTalk(NDTransData& kData);
 	void ProcessLoginSuc(NDTransData& kData);
+	void processCompetition(NDTransData& kData);
+	void processShowTreasureHuntAward(NDTransData& kData);
+	void processItemTypeInfo(NDTransData& kData);
+	void processReCharge(NDTransData& kData);
 	void processGoodFriend(NDTransData& kData);
+	void processRechargeReturn(NDTransData& kData);
+	void processVersionMsg(NDTransData& kData);
 	void processChangeRoom(NDTransData* pkData,int nLength);
+	void processActivity(NDTransData& kData);
+	void processPortal(NDTransData& kData);
+	void processMarriage(NDTransData& kData);
+	void processDeleteRole(NDTransData& kData);
 	void processNPCInfoList(NDTransData* pkData,int nLength);
 	void processKickBack(NDTransData* pkData,int nLength);
 	void processChgPoint(NDTransData* pkData,int nLength);
@@ -319,6 +330,7 @@ protected:
 	bool GetMonsterInfo(monster_type_info& kInfo, int nType);
 	void DelManualRole(int nID);
 	void ClearNPC();
+	NDNpc* GetNpc(int nID);
 	void ClearMonster();
 	void setNpcTaskStateById(int nNPCID,int nState);
 	//void addRequst(RequsetInfo& kRequest);	///< ÒÀÀµÌÀ×ÔÇÚµÄRequsetInfo ¹ùºÆ
