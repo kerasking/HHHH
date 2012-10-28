@@ -192,12 +192,6 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 		processPlayer(pkData, nLength);
 	}
 		break;
-	case _MSG_USER_POS:
-	{
-		///< 依赖张迪的TutorUILayer 郭浩
-		//TutorUILayer::processTutorList(*pkData);
-	}
-		break;
 	case _MSG_TIP:
 	{
 		///< 依赖汤自勤哥的GameSceneLoading 郭浩
@@ -256,6 +250,51 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 	case _MSG_REHEARSE:
 	{
 		processRehearse(*pkData);
+	}
+		break;
+	case _MSG_GOODFRIEND:
+	{
+		processGoodFriend(*pkData);
+	}
+		break;
+	case _MSG_TUTOR:
+	{
+		///< 依赖张迪的TutorUILayer 郭浩
+		//TutorUILayer::processMsgTutor(*kData);
+	}
+		break;
+	case _MSG_REG_TUTOR_INFO:
+	{
+		///< 依赖张迪的MasterUILayer 郭浩
+		//MasterUILayer::refreshScroll(*kData);
+	}
+		break;
+	case _MSG_TUTOR_INFO:
+	{
+		///< 依赖张迪的TutorUILayer 郭浩
+		//TutorUILayer::processTutorList(*kData);
+	}
+		break;
+	case _MSG_USER_POS:
+	{
+		///< 依赖张迪的TutorUILayer 郭浩
+		//TutorUILayer::processUserPos(*kData);
+	}
+		break;
+	case _MSG_CHG_MAP_FAIL:
+	{
+		NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
+
+		///< 依赖汤自勤的GameSceneLoading 郭浩
+// 		if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
+// 		{
+// 			NDDirector::DefaultDirector()->PopScene();
+// 		}
+	}
+		break;
+	case _MSG_USERINFO_SEE:
+	{
+		processUserInfoSee(*pkData);
 	}
 		break;
 	default:
@@ -2597,6 +2636,256 @@ void NDMapMgr::processRehearse( NDTransData& kData )
 		}
 		break;
 	}
+}
+
+void NDMapMgr::processGoodFriend( NDTransData& kData )
+{
+	/***
+	* 此函数大量依赖张迪的GoodFriendUILayer
+	* 郭浩
+	*/
+
+// 	unsigned char action = 0; kData >> action;
+// 	unsigned char friendCount = 0; kData >> friendCount;
+// 
+// 	RequsetInfo info;
+// 	switch (action) {
+// 			case _FRIEND_APPLY: {
+// 				int iID = 0; kData >> iID;
+// 				// TAMBGString
+// 				std::string name = kData.ReadUnicodeString();
+// 				info.set(iID, name, RequsetInfo::ACTION_FRIEND);
+// 				addRequst(info);
+// 				break;
+// 								}
+// 			case _FRIEND_ACCEPT: {
+// 									 {
+// 										 int idFriend = kData.ReadInt();
+// 										 string name = kData.ReadUnicodeString();
+// 
+// 										 FriendElement& fe = this->m_mapFriend[idFriend];
+// 										 fe.m_id = idFriend;
+// 										 fe.m_text1 = name;
+// 										 fe.SetState(ES_ONLINE);
+// 
+// 										 this->onlineNum++;
+// 
+// 										 GoodFriendUILayer::refreshScroll();
+// 										 NewGoodFriendUILayer::refreshScroll();
+// 
+// 										 name += " "; name += NDCommonCString("BeFriendTip"); name += "。";
+// 										 Chat::DefaultChat()->AddMessage(ChatTypeSystem, name.c_str());
+// 									 }
+// 									 break;
+// 								 }
+// 			case _FRIEND_ONLINE: {
+// 									 {
+// 										 int idFriend = kData.ReadInt();
+// 
+// 										 FriendElement& fe = this->m_mapFriend[idFriend];
+// 										 fe.SetState(ES_ONLINE);
+// 										 this->onlineNum++;
+// 
+// 										 string content = std::string("") + NDCommonCString("YourFriend") + " " + fe.m_text1 + " " + NDCommonCString("logined");
+// 										 Chat::DefaultChat()->AddMessage(ChatTypeSystem, content.c_str());
+// 
+// 										 GoodFriendUILayer::refreshScroll();
+// 										 NewGoodFriendUILayer::refreshScroll();
+// 									 }
+// 									 break;
+// 								 }
+// 			case _FRIEND_OFFLINE: {
+// 									  {
+// 										  int idFriend = kData.ReadInt();
+// 
+// 										  FriendElement& fe = this->m_mapFriend[idFriend];
+// 										  fe.SetState(ES_OFFLINE);
+// 										  this->onlineNum--;
+// 
+// 										  string content = std::string("") + NDCommonCString("YourFriend") + " " + fe.m_text1 + " " + NDCommonCString("OfflineTip");
+// 										  Chat::DefaultChat()->AddMessage(ChatTypeSystem, content.c_str());
+// 										  GoodFriendUILayer::refreshScroll();
+// 										  NewGoodFriendUILayer::refreshScroll();
+// 									  }
+// 									  break;
+// 								  }
+// 			case _FRIEND_BREAK: {
+// 									{
+// 										int idFriend = kData.ReadInt();
+// 										FriendElement& fe = this->m_mapFriend[idFriend];
+// 
+// 										string content = fe.m_text1 + " " + NDCommonCString("DeFriendTip");
+// 										Chat::DefaultChat()->AddMessage(ChatTypeSystem, content.c_str());
+// 
+// 										this->onlineNum--;
+// 
+// 										this->m_mapFriend.erase(idFriend);
+// 										GoodFriendUILayer::refreshScroll();
+// 										NewGoodFriendUILayer::refreshScroll();
+// 										NDUISynLayer::Close();
+// 									}
+// 									break;
+// 								}
+// 			case _FRIEND_GETINFO: {
+// 									  {
+// 										  this->m_mapFriend.clear();
+// 										  this->onlineNum = 0;
+// 
+// 										  for (int i = 0; i < friendCount; i++) {
+// 											  int idFriend = kData.ReadInt();
+// 
+// 											  Byte state = kData.ReadByte();
+// 
+// 											  string name = kData.ReadUnicodeString();
+// 
+// 											  FriendElement& fe = this->m_mapFriend[idFriend];
+// 
+// 											  fe.m_id = idFriend;
+// 											  fe.m_text1 = name;
+// 											  fe.SetState((ELEMENT_STATE(state)));
+// 
+// 											  if (state == ES_ONLINE) { // 0表下线状态
+// 												  this->onlineNum++;
+// 											  }
+// 
+// 										  }
+// 										  GoodFriendUILayer::refreshScroll();
+// 										  NewGoodFriendUILayer::refreshScroll();
+// 									  }
+// 									  break;
+// 								  }
+// 			case _FRIEND_REFUSE: {
+// 									 {
+// 										 kData.ReadInt();
+// 										 string name = kData.ReadUnicodeString();
+// 
+// 										 name += " "; name += NDCommonCString("RejectFriendTip");
+// 										 Chat::DefaultChat()->AddMessage(ChatTypeSystem, name.c_str());
+// 									 }
+// 									 break;
+// 								 }
+// 			case _FRIEND_DELROLE: {
+// 									  {
+// 										  int idFriend = kData.ReadInt();
+// 
+// 										  FriendElement& fe = this->m_mapFriend[idFriend];
+// 
+// 										  if (fe.m_state == ES_ONLINE) {
+// 											  this->onlineNum--;
+// 										  }
+// 
+// 										  string content = fe.m_text1 + " " + NDCommonCString("DeFriendTip");
+// 										  Chat::DefaultChat()->AddMessage(ChatTypeSystem, content.c_str());
+// 
+// 										  this->m_mapFriend.erase(idFriend);
+// 
+// 										  GoodFriendUILayer::refreshScroll();
+// 										  NewGoodFriendUILayer::refreshScroll();
+// 									  }
+// 									  break;
+// 								  }
+// 	}
+}
+
+void NDMapMgr::processUserInfoSee( NDTransData& kData )
+{
+	std::deque<string> deqStrings;
+	int targeId = kData.ReadInt();
+
+	// 社交用到的数据采集
+	SocialData social;
+	social.iId = targeId;
+
+	std::stringstream sb;
+	int bSex = kData.ReadByte(); // 1男2女
+	sb << NDCommonCString("sex") << "       " << NDCommonCString("bie") << ": ";
+	if (bSex == USER_SEX_MALE) {
+		social.sex = NDCommonCString("male");
+		sb << NDCommonCString("male");
+	} else {
+		social.sex = NDCommonCString("female");
+		sb << NDCommonCString("female");
+	}
+	deqStrings.push_back(sb.str());
+	sb.str("");
+	int bLevel = kData.ReadByte(); // 等级
+	sb << NDCommonCString("deng") << "       " << NDCommonCString("Ji") << ": " << bLevel;
+	deqStrings.push_back(sb.str());
+	sb.str("");
+
+	social.lvl = bLevel;
+	kData.ReadByte();
+	int iPkPoint = kData.ReadInt(); // PK值
+	int iHornor = kData.ReadInt(); // 荣誉值
+
+	sb << "PK" << "      " << NDCommonCString("val") << ": " << iPkPoint;
+	deqStrings.push_back(sb.str());
+	sb.str("");
+
+	sb << NDCommonCString("HonurVal") << ": " << iHornor;
+	deqStrings.push_back(sb.str());
+	sb.str("");
+
+	int bShow = kData.ReadByte(); // 指明是否有帮派,配偶,按位取
+	std::string name = kData.ReadUnicodeString(); // 玩家名字
+	sb << NDCommonCString("PlayerXingMing") << ": " << name; // 插入名字
+	deqStrings.push_front(sb.str());
+	sb.str("");
+
+	bool isHaveSyn = false; // 是否有帮派
+	bool isMarry = false; // 是否结婚
+	for (int i = 0; i < 2; i++) {
+		int a = bShow & 0x1;
+		if (a == 1) {
+			if (i == 0) {
+				isHaveSyn = true;
+			} else {
+				isMarry = true;
+			}
+		}
+		bShow = bShow >> 1;
+	}
+	if (isHaveSyn) {
+		std::string synName = kData.ReadUnicodeString(); // 帮派名字
+		int bRank = kData.ReadByte(); // 帮派等级
+		sb << NDCommonCString("JunTuanName") << ": " << synName;
+		deqStrings.push_back(sb.str());
+		sb.str("");
+
+		sb << NDCommonCString("JunTuanPost") << ": " << getRankStr(bRank);
+		deqStrings.push_back(sb.str());
+		sb.str("");
+
+		social.SynName = synName;
+		social.rank = getRankStr(bRank);
+	} else {
+		sb << NDCommonCString("jun") << "       " << NDCommonCString("tuan") << ": " << NDCommonCString("wu");
+		deqStrings.push_back(sb.str());
+		sb.str("");
+	}
+	if (isMarry) {
+		std::string marryName = kData.ReadUnicodeString(); // 配偶名字
+		sb << NDCommonCString("pei") << "       " << NDCommonCString("ou") << ": " << marryName;
+		deqStrings.push_back(sb.str());
+		sb.str("");
+	} else {
+		sb << NDCommonCString("pei") << "       " << NDCommonCString("ou") << ": " << NDCommonCString("wu");
+		deqStrings.push_back(sb.str());
+		sb.str("");
+	}
+
+	CloseProgressBar;
+	//OtherPlayerInfoScene::showPlayerInfo(deqStrings); ///< 依赖汤自勤的OtherPlayerInfoScene 郭浩
+
+	/***
+	* 依赖张迪的 SynMbrListUILayer
+	* 郭浩
+	*/
+// 	SynMbrListUILayer* mbrList = SynMbrListUILayer::GetCurInstance();
+// 	if (mbrList) {
+// 		mbrList->processSocialData(social);
+// 	}
+	//GlobalShowDlg("玩家信息", content.str());
 }
 
 }

@@ -287,11 +287,13 @@ public:
 	void processTalk(NDTransData& kData);
 	void processNpcTalk(NDTransData& kData);
 	void ProcessLoginSuc(NDTransData& kData);
+	void processGoodFriend(NDTransData& kData);
 	void processChangeRoom(NDTransData* pkData,int nLength);
 	void processNPCInfoList(NDTransData* pkData,int nLength);
 	void processKickBack(NDTransData* pkData,int nLength);
 	void processChgPoint(NDTransData* pkData,int nLength);
 	void processCollection(NDTransData& kData);
+	void processUserInfoSee(NDTransData& kData);
 	void processPlayerLevelUp(NDTransData& kData);
 	void processPetInfo(NDTransData* pkData,int nLength);
 	void processMonsterInfo(NDTransData* pkData, int nLength);

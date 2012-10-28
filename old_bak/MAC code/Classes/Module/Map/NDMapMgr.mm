@@ -1461,7 +1461,7 @@ namespace NDEngine
 			case _MSG_REHEARSE:
 				processRehearse(*data);
 				break;
-			case _MSG_TEAM:
+			case _MSG_TEAM:				///< 游戏中没有Team,Pass! 郭浩
 				processTeam(*data);
 				break;
 			case _MSG_GOODFRIEND:
@@ -1473,22 +1473,22 @@ namespace NDEngine
 			case _MSG_TRADE:			///< 貌似没有交易
 				this->processTrade(*data);
 				break;
-			case _MSG_BILLBOARD:
+			case _MSG_BILLBOARD:		//< 貌似没
 				this->processBillBoard(*data);
 				break;
-			case _MSG_BILLBOARD_FIELD:
+			case _MSG_BILLBOARD_FIELD:		//< 貌似没
 				this->processBillBoardField(*data);
 				break;
-			case _MSG_BILLBOARD_LIST:
+			case _MSG_BILLBOARD_LIST:		//< 貌似没
 				this->processBillBoardList(*data);
 				break;
-			case _MSG_BILLBOARD_USER:
+			case _MSG_BILLBOARD_USER:		//< 貌似没
 				this->processBillBoardUser(*data);
 				break;
-			case _MSG_SHOPINFO:
+			case _MSG_SHOPINFO:		//< 貌似没
 				this->processShopInfo(*data);
 				break;
-			case _MSG_SHOP:
+			case _MSG_SHOP:			//< 貌似没
 				this->processShop(*data);
 				break;
 			case _MSG_REG_TUTOR_INFO:
