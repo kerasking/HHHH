@@ -18,13 +18,14 @@
 #include "TaskListener.h"
 #include "BattleMgr.h"
 #include "CPet.h"
+#include "NDMsgDefine.h"
 #include "NDUtility.h"
 #include "BeatHeart.h"
 #include "NDDataPersist.h"
 // #include "Chat.h"
 // #include "NewChatScene.h"			///< ÕâÁ©°üº¬ÐèÒªÌÀ¸çºÍÕÅµÏµÄ¶«Î÷ ¹ùºÆ
 #include "SMLoginScene.h"
-#include "NDMsgDefine.h"
+#include "GlobalDialog.h"
 
 NS_NDENGINE_BGN
 
@@ -110,6 +111,41 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 {
 	switch (usMsgID)
 	{
+	case _MSG_REQUEST_ACCESS_TOKEN_RET:
+	{
+		ProcessTempCredential(*pkData);
+	}
+		break;
+	case _MSG_ROADBLOCK:
+	{
+		processRoadBlock(*pkData);
+	}
+		break;
+	case _MSG_QUERY_PETCKILL:
+	{
+		processQueryPetSkill(*pkData);
+	}
+		break;
+	case _MSG_CHARGE_GIFT_INFO:
+	{
+		//RechargeUI::ProcessGiftInfo(*kData); ///< ÒÀÀµÌÀ×ÔÇÚµÄ NewRecharge ¹ùºÆ
+	}
+		break;
+	case _MSG_KICK_OUT_TIP:
+	{
+		processKickOutTip(*pkData);
+	}
+		break;
+	case 3003://_MSG_RESPOND_TREASURE_HUNT_PR0B: ´ËºêÕÒ²»µ½£¿£¿£¿£¿¹ùºÆ
+	{
+		processRespondTreasureHuntProb(*pkData);
+	}
+		break;
+	case 3005://_MSG_RESPOND_TREASURE_HUNT_INFO:	´ËºêÕÒ²»µ½£¿£¿£¿£¿¹ùºÆ
+	{
+		processRespondTreasureHuntInfo(*pkData);
+	}
+		break;
 	case _MSG_SHOW_TREASURE_HUNT_AWARD:
 	{
 		processShowTreasureHuntAward(*pkData);
@@ -3526,7 +3562,7 @@ void NDMapMgr::processVersionMsg( NDTransData& kData )
 	CSMLoginScene* pkScene = (CSMLoginScene*)NDDirector::DefaultDirector()->GetSceneByTag(SMLOGINSCENE_TAG);
 	if(pkScene)
 	{
-		//return pkScene->OnMsg_ClientVersion(data); ///< ÒÀÀµÌÀ×ÔÇÚµÄCSMLoginScene ¹ùºÆ
+		//return pkScene->OnMsg_ClientVersion(kData); ///< ÒÀÀµÌÀ×ÔÇÚµÄCSMLoginScene ¹ùºÆ
 	}	
 }
 
@@ -3574,6 +3610,94 @@ void NDMapMgr::processMarriage( NDTransData& kData )
 	* ÅäÅ¼µÄ¡­¡­ÓÎÏ·ÖÐÃ»ÓÐÅäÅ¼¡­¡­
 	* ¹ùºÆ
 	*/
+}
+
+void NDMapMgr::processShowTreasureHuntAward( NDTransData& kData )
+{
+	std::string strText = kData.ReadUnicodeString();
+	GlobalShowDlg(NDCommonCString("XunBao"), strText.c_str());
+}
+
+void NDMapMgr::processRespondTreasureHuntProb( NDTransData& kData )
+{
+	CloseProgressBar;
+
+	int huntLost = 0;
+	int equipAdd = 0;
+	int druation = 0;
+
+	huntLost = kData.ReadByte();
+	equipAdd = kData.ReadByte();
+	druation = kData.ReadInt();
+
+	///< ÕÒ²»µ½TreasureHuntScene ¹ùºÆ
+// 	TreasureHuntScene *scene = TreasureHuntScene::Scene();
+// 	scene->SetRateInfo(huntLost, equipAdd, druation);
+// 	NDDirector::DefaultDirector()->PushScene(scene);
+}
+
+void NDMapMgr::processRespondTreasureHuntInfo( NDTransData& kData )
+{
+	CloseProgressBar;
+	//TreasureHuntScene::processHuntDesc(kData); ///< ÕÒ²»µ½  ¹ùºÆ
+}
+
+void NDMapMgr::processKickOutTip( NDTransData& kData )
+{
+	CloseProgressBar;
+	std::string strTip = kData.ReadUnicodeString();
+
+	GameQuitDialog::DefaultShow(NDCommonCString("tip"), strTip.c_str(), 5.0f, true);
+}
+
+void NDMapMgr::processQueryPetSkill( NDTransData& kData )
+{
+	///< ÒÀÀµÌÀ×ÔÇÚµÄ NewPetScene ¹ùºÆ
+// 	CUIPet* pUIPet	= PlayerInfoScene::QueryPetScene();
+// 	if (pUIPet) {
+// 		OBJID idItem	= kData.ReadInt();
+// 		std::string	str	= kData.ReadUnicodeString();
+// 		pUIPet->UpdateSkillItemDesc(idItem, str);
+// 	}
+}
+
+void NDMapMgr::processRoadBlock( NDTransData& kData )
+{
+	int nX=kData.ReadInt();
+	int nY=kData.ReadInt();
+	unsigned int uiTime=kData.ReadInt();
+
+	NDScene* pkScene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
+
+	if(!pkScene)
+	{
+		return;
+	}
+
+	NDMapLayer* pkLayer = getMapLayerOfScene(pkScene);
+
+	if(!pkLayer)
+	{
+		return;
+	}
+
+	pkLayer->setStartRoadBlockTimer(uiTime,nX,nY);
+}
+
+void NDMapMgr::ProcessTempCredential( NDTransData& kData )
+{
+	///< ÕâÁ½ÐÐÏÈ×¢ÊÍµô ¹ùºÆ
+// 	NSString* temporaryCredential = data.ReadUTF8NString();
+// 	if(temporaryCredential == nil) return;
+
+#ifdef USE_MGSDK
+	[MBGSocialAuth authorizeToken:temporaryCredential onSuccess:^(NSString *verifier)
+	{
+		sendVerifier(verifier);
+	} onError:^(MBGError *error) {
+		VerifierError(error);
+	}];
+#endif
 }
 
 NS_NDENGINE_END

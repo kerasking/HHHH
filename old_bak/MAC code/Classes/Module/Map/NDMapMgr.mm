@@ -1788,19 +1788,19 @@ namespace NDEngine
 			case _MSG_ROADBLOCK:
 				this->processRoadBlock(*data);
 				break;
-            case _MSG_LOGIN_SUC:
+            case _MSG_LOGIN_SUC:		///< 貌似没
                 this->ProcessLoginSuc(*data);
                 break;
-            case _MSG_CREATE_TEMP_CREDENTIAL_RET:
+            case _MSG_CREATE_TEMP_CREDENTIAL_RET:	///< 貌似没
                 this->ProcessTempCredential(*data);
                 break;
-            case _MSG_REQUEST_ACCESS_TOKEN_RET:
+            case _MSG_REQUEST_ACCESS_TOKEN_RET:	///< 貌似没
                 this->ProcessOAuthTokenRet(*data);
                 break;
-            case _MSG_CREATE_TRANSACTION_RET:
+            case _MSG_CREATE_TRANSACTION_RET:	///< 貌似没
                 this->ProcessCreateTransactionRet(*data);
                 break;
-            case _MSG_CLOSE_TRANSACTION_RET:
+            case _MSG_CLOSE_TRANSACTION_RET:	///< 貌似没
                 this->ProcessCloseTransactionRet(*data);
                 break;
 			default:

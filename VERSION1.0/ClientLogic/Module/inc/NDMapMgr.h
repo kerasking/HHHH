@@ -291,11 +291,17 @@ public:
 	void ProcessLoginSuc(NDTransData& kData);
 	void processCompetition(NDTransData& kData);
 	void processShowTreasureHuntAward(NDTransData& kData);
+	void processRespondTreasureHuntProb(NDTransData& kData);
+	void processRespondTreasureHuntInfo(NDTransData& kData);
+	void processKickOutTip(NDTransData& kData);
 	void processItemTypeInfo(NDTransData& kData);
 	void processReCharge(NDTransData& kData);
 	void processGoodFriend(NDTransData& kData);
 	void processRechargeReturn(NDTransData& kData);
 	void processVersionMsg(NDTransData& kData);
+	void processQueryPetSkill(NDTransData& kData);
+	void processRoadBlock(NDTransData& kData);
+	void ProcessTempCredential(NDTransData& kData);
 	void processChangeRoom(NDTransData* pkData,int nLength);
 	void processActivity(NDTransData& kData);
 	void processPortal(NDTransData& kData);
