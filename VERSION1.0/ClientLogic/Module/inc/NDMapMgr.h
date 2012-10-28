@@ -22,6 +22,8 @@
 #include "NDConsole.h"
 #include "NDTimer.h"
 #include "AutoLink.h"
+//#include "GameUIRequest.h"		///< ÒÀÀµÌÀ×ÔÇÚµÄGameUIRequest
+#include "GlobalDialog.h"
 
 using namespace std;
 
@@ -262,6 +264,7 @@ public:
 	typedef map_manualrole::iterator map_manualrole_it;
 	typedef vector<NDNpc*> VEC_NPC;
 	typedef vector<NDMonster*> VEC_MONSTER;
+	//typedef vector<RequsetInfo> VEC_REQUST; ///< ÒÀÀµÌÀ×ÔÇÚµÄGameUIRequest ¹ùºÆ
 	typedef VEC_MONSTER::iterator vec_monster_it;
 
 	DECLARE_CLASS(NDMapMgr);
@@ -274,11 +277,14 @@ public:
 
 	virtual bool process( MSGID usMsgID, NDEngine::NDTransData* pkData, int nLength );
 	void processMsgCommonList(NDTransData& kData);
+	void processNPCInfo(NDTransData& kData);
+	void processGameQuit(NDTransData* pkData,int nLength);
 	void processMsgCommonListRecord(NDTransData& kData);
 	void processPlayer(NDTransData* pkData,int nLength);
 	void processPlayerExt(NDTransData* pkData,int nLength);
 	void processWalk(NDTransData* pkData,int nLength);
 	void processWalkTo(NDTransData& kData);
+	void processTalk(NDTransData& kData);
 	void processNpcTalk(NDTransData& kData);
 	void ProcessLoginSuc(NDTransData& kData);
 	void processChangeRoom(NDTransData* pkData,int nLength);
@@ -306,6 +312,10 @@ protected:
 	void DelManualRole(int nID);
 	void ClearNPC();
 	void ClearMonster();
+	//void addRequst(RequsetInfo& kRequest);	///< ÒÀÀµÌÀ×ÔÇÚµÄRequsetInfo ¹ùºÆ
+	void DelNpc(int nID);
+	void AddOneNPC(NDNpc* pkNpc);
+	bool DelRequest(int nID);
 	void ClearGP();
 	bool loadSceneByMapDocID(int nMapID);
 	void AddSwitch();
@@ -350,6 +360,8 @@ protected:
 	string m_strMapName;
 
 	CAutoLink<NDMonster> m_apWaitBattleMonster;
+//	VEC_REQUST m_vecRequest;		///< ÒÀÀµÌÀ×ÔÇÚµÄGameUIRequest ¹ùºÆ
+	CIDFactory m_idAlloc;
 
 private:
 };

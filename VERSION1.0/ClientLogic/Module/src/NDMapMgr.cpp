@@ -18,6 +18,11 @@
 #include "TaskListener.h"
 #include "BattleMgr.h"
 #include "CPet.h"
+#include "NDUtility.h"
+#include "BeatHeart.h"
+#include "NDDataPersist.h"
+// #include "Chat.h"
+// #include "NewChatScene.h"			///< 这俩包含需要汤哥和张迪的东西 郭浩
 
 namespace NDEngine
 {
@@ -104,6 +109,16 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 {
 	switch (usMsgID)
 	{
+	case _MSG_TALK:
+	{
+		processTalk(*pkData);
+	}
+		break;
+	case _MSG_GAME_QUIT:
+	{
+		processGameQuit(pkData,nLength);
+	}
+		break;
 	case _MSG_PLAYERLEVELUP:
 	{
 		processPlayerLevelUp(*pkData);
@@ -222,6 +237,20 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 	case _MSG_WALK:
 	{
 		processWalk(pkData, nLength);
+	}
+		break;
+	case _MSG_TASKINFO:
+	case _MSG_DOING_TASK_LIST:
+	case _MSG_QUERY_TASK_LIST:
+	case _MSG_TASK_ITEM_OPT:
+	case _MSG_QUERY_TASK_LIST_EX:
+	{
+		processTask(usMsgID,pkData);
+	}
+		break;
+	case _MSG_NPCINFO:
+	{
+		processNPCInfo(*pkData);
 	}
 		break;
 	default:
@@ -919,9 +948,9 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 	for (int i = 0; i < btCount; i++)
 	{
 		int nID = 0;
-		(*pkData) >> nID; // 4个字节 npc id
+		(*pkData) >> nID; // 4个字节 pkNpc id
 		unsigned char uitype = 0;
-		(*pkData) >> uitype; // 该字段用于过滤寻路的npc列表
+		(*pkData) >> uitype; // 该字段用于过滤寻路的pkNpc列表
 		int usLook = 0;
 		(*pkData) >> usLook; // 4个字节
 		unsigned char btSort = 0;
@@ -1911,13 +1940,15 @@ void NDMapMgr::processPetInfo( NDTransData* pkData,int nLength )
 {
 	NDPlayer& player = NDPlayer::defaultHero();
 
-	NDManualRole *role = NULL;
+	NDManualRole* pkRole = NULL;
 
 	bool bUseNewScene = false;
 
-	int action = 0; (*pkData) >> action;
+	int action = 0;
+	(*pkData) >> action;
 
-	int idPet = 0; (*pkData) >> idPet;
+	int idPet = 0;
+	(*pkData) >> idPet;
 
 	if (action == 2)
 	{
@@ -1942,11 +1973,11 @@ void NDMapMgr::processPetInfo( NDTransData* pkData,int nLength )
 
 	if (ownerid == player.m_nID)
 	{
-		role = (NDManualRole*)&player;
+		pkRole = (NDManualRole*)&player;
 	}
 	else
 	{
-		role = GetManualRole(ownerid);
+		pkRole = GetManualRole(ownerid);
 	}
 
 	if (action != 1) 
@@ -1955,13 +1986,13 @@ void NDMapMgr::processPetInfo( NDTransData* pkData,int nLength )
 	}
 
 
-	PetInfo* petInfo = PetMgrObj.GetPetWithCreate(ownerid, idPet);
+	PetInfo* kPetInfo = PetMgrObj.GetPetWithCreate(ownerid, idPet);
 
-	NDAsssert(petInfo != NULL);
+	NDAsssert(kPetInfo != NULL);
 
-	PetInfo::PetData *pet = &petInfo->data;
+	PetInfo::PetData* pkPet = &kPetInfo->data;
 
-	pet->int_PET_ID = idPet;
+	pkPet->int_PET_ID = idPet;
 
 	bool bSwithPlayerInfoScene = false;
 
@@ -1978,166 +2009,166 @@ void NDMapMgr::processPetInfo( NDTransData* pkData,int nLength )
 		switch (type) 
 		{
 		case 1:// PET_ATTR_LEVEL
-			pet->int_PET_ATTR_LEVEL = value;
+			pkPet->int_PET_ATTR_LEVEL = value;
 			break;
 		case 2:// PET_ATTR_EXP
-			pet->int_PET_ATTR_EXP = value;
+			pkPet->int_PET_ATTR_EXP = value;
 			break;
 		case 3:// PET_ATTR_LIFE
-			pet->int_PET_ATTR_LIFE = value;
+			pkPet->int_PET_ATTR_LIFE = value;
 			break;
 		case 4:// PET_ATTR_MAX_LIFE
-			pet->int_PET_ATTR_MAX_LIFE = value;
+			pkPet->int_PET_ATTR_MAX_LIFE = value;
 			break;
 		case 5:// PET_ATTR_MANA
-			pet->int_PET_ATTR_MANA = value;
+			pkPet->int_PET_ATTR_MANA = value;
 			break;
 		case 6:// PET_ATTR_MAX_MANA6
-			pet->int_PET_ATTR_MAX_MANA = value;
+			pkPet->int_PET_ATTR_MAX_MANA = value;
 			break;
 		case 7:// PET_ATTR_STR7
-			pet->int_PET_ATTR_STR = value;
+			pkPet->int_PET_ATTR_STR = value;
 			break;
 		case 8:// PET_ATTR_STA8
-			pet->int_PET_ATTR_STA = value;
+			pkPet->int_PET_ATTR_STA = value;
 			break;
 		case 9:// PET_ATTR_AGI9
-			pet->int_PET_ATTR_AGI = value;
+			pkPet->int_PET_ATTR_AGI = value;
 			break;
 		case 10:// PET_ATTR_INI10
-			pet->int_PET_ATTR_INI = value;
+			pkPet->int_PET_ATTR_INI = value;
 			break;
 		case 11:// PET_ATTR_LEVEL_INIT11
-			pet->int_PET_ATTR_LEVEL_INIT = value;
+			pkPet->int_PET_ATTR_LEVEL_INIT = value;
 			break;
 		case 12:// PET_ATTR_STR_INIT12
-			pet->int_PET_ATTR_STR_INIT = value;
+			pkPet->int_PET_ATTR_STR_INIT = value;
 			break;
 		case 13:// PET_ATTR_STA_INIT13
-			pet->int_PET_ATTR_STA_INIT = value;
+			pkPet->int_PET_ATTR_STA_INIT = value;
 			break;
 		case 14:// PET_ATTR_AGI_INIT14
-			pet->int_PET_ATTR_AGI_INIT = value;
+			pkPet->int_PET_ATTR_AGI_INIT = value;
 			break;
 		case 15:// PET_ATTR_INI_INIT15
-			pet->int_PET_ATTR_INI_INIT = value;
+			pkPet->int_PET_ATTR_INI_INIT = value;
 			break;
 		case 16:// PET_ATTR_LOYAL16
-			pet->int_PET_ATTR_LOYAL = value;
+			pkPet->int_PET_ATTR_LOYAL = value;
 			break;
 		case 17:// PET_ATTR_AGE17
-			pet->int_PET_ATTR_AGE = value;
+			pkPet->int_PET_ATTR_AGE = value;
 			break;
 		case 18:// PET_ATTR_FREE_SP18
-			pet->int_PET_ATTR_FREE_SP = value;
+			pkPet->int_PET_ATTR_FREE_SP = value;
 			break;
 		case 19:// PET_ATTR_STR_RATE19
-			pet->int_PET_PHY_ATK_RATE = value;
+			pkPet->int_PET_PHY_ATK_RATE = value;
 			break;
 		case 20:// PET_ATTR_STA_RATE20
-			pet->int_PET_PHY_DEF_RATE = value;
+			pkPet->int_PET_PHY_DEF_RATE = value;
 			break;
 		case 21:// PET_ATTR_AGI_RATE21
-			pet->int_PET_MAG_ATK_RATE = value;
+			pkPet->int_PET_MAG_ATK_RATE = value;
 			break;
 		case 22:// PET_ATTR_INI_RATE22
-			pet->int_PET_MAG_DEF_RATE = value;
+			pkPet->int_PET_MAG_DEF_RATE = value;
 			break;
 		case 23:// PET_ATTR_HP_RATE23
-			pet->int_PET_ATTR_HP_RATE = value;
+			pkPet->int_PET_ATTR_HP_RATE = value;
 			break;
 		case 24:// PET_ATTR_MP_RATE24
-			pet->int_PET_ATTR_MP_RATE = value;
+			pkPet->int_PET_ATTR_MP_RATE = value;
 			break;
 		case 25:// PET_ATTR_LEVEUP_EXP25
-			pet->int_PET_ATTR_LEVEUP_EXP = value;
+			pkPet->int_PET_ATTR_LEVEUP_EXP = value;
 			break;
 		case 26:// PET_ATTR_PHY_ATK26
-			pet->int_PET_ATTR_PHY_ATK = value;
+			pkPet->int_PET_ATTR_PHY_ATK = value;
 			break;
 		case 27:// PET_ATTR_PHY_DEF27
-			pet->int_PET_ATTR_PHY_DEF = value;
+			pkPet->int_PET_ATTR_PHY_DEF = value;
 			break;
 		case 28:// PET_ATTR_MAG_ATK28
-			pet->int_PET_ATTR_MAG_ATK = value;
+			pkPet->int_PET_ATTR_MAG_ATK = value;
 			break;
 		case 29:// PET_ATTR_MAG_DEF29
-			pet->int_PET_ATTR_MAG_DEF = value;
+			pkPet->int_PET_ATTR_MAG_DEF = value;
 			break;
 		case 30:// PET_ATTR_HARD_HIT30
-			pet->int_PET_ATTR_HARD_HIT = value;
+			pkPet->int_PET_ATTR_HARD_HIT = value;
 			break;
 		case 31:// PET_ATTR_DODGE31
-			pet->int_PET_ATTR_DODGE = value;
+			pkPet->int_PET_ATTR_DODGE = value;
 			break;
 		case 32:// PET_ATTR_ATK_SPEED32
-			pet->int_PET_ATTR_ATK_SPEED = value;
+			pkPet->int_PET_ATTR_ATK_SPEED = value;
 			break;
 		case 33:// PET_ATTR_TYPE33 ;类型
-			pet->int_PET_ATTR_TYPE = value;
+			pkPet->int_PET_ATTR_TYPE = value;
 			break;
 		case 34:// 外观
-			pet->int_PET_ATTR_LOOKFACE = value;
+			pkPet->int_PET_ATTR_LOOKFACE = value;
 			break;
 		case 35:// PET_ATTR_SKILL_1 32
-			pet->int_PET_MAX_SKILL_NUM = value;
+			pkPet->int_PET_MAX_SKILL_NUM = value;
 			//PetSkillSceneUpdate();
 			//PetSkillIconLayer::OnUnLockSkill(); ///< 未知 待查
 			bUseNewScene = true;
 			break;
 		case 36:// PET_ATTR_SKILL_2 33
-			pet->int_ATTR_FREE_POINT = value;
+			pkPet->int_ATTR_FREE_POINT = value;
 			break;
 		case 37:// 速度资质
-			pet->int_PET_SPEED_RATE = value;
+			pkPet->int_PET_SPEED_RATE = value;
 			break;
 		case 38:// 物攻资质上限
-			pet->int_PET_PHY_ATK_RATE_MAX = value;
+			pkPet->int_PET_PHY_ATK_RATE_MAX = value;
 			break;
 		case 39:// 物防资质上限
-			pet->int_PET_PHY_DEF_RATE_MAX = value;
+			pkPet->int_PET_PHY_DEF_RATE_MAX = value;
 			break;
 		case 40:// 法攻资质上限
-			pet->int_PET_MAG_ATK_RATE_MAX = value;
+			pkPet->int_PET_MAG_ATK_RATE_MAX = value;
 			break;
 		case 41:// 法防资质上限
-			pet->int_PET_MAG_DEF_RATE_MAX = value;
+			pkPet->int_PET_MAG_DEF_RATE_MAX = value;
 			break;
 		case 42:// 生命加成资质上限
-			pet->int_PET_ATTR_HP_RATE_MAX = value;
+			pkPet->int_PET_ATTR_HP_RATE_MAX = value;
 			break;
 		case 43:// 魔法加成资质上限
-			pet->int_PET_ATTR_MP_RATE_MAX = value;
+			pkPet->int_PET_ATTR_MP_RATE_MAX = value;
 			break;
 		case 44:// 速度资质上限
-			pet->int_PET_SPEED_RATE_MAX = value;
+			pkPet->int_PET_SPEED_RATE_MAX = value;
 			break;
 		case 45:// 成长率
-			pet->int_PET_GROW_RATE = value;
+			pkPet->int_PET_GROW_RATE = value;
 			break;
 		case 46:// 成长率上限
-			pet->int_PET_GROW_RATE_MAX = value;
+			pkPet->int_PET_GROW_RATE_MAX = value;
 			break;
 		case 47:// 命中
-			pet->int_PET_HIT = value;					
+			pkPet->int_PET_HIT = value;					
 			break;
 		case 48://绑定状态
-			pet->bindStatus = value;
+			pkPet->bindStatus = value;
 			break;
 		case 49: //宠物位置
 			{
-				if (pet->int_PET_ATTR_POSITION != value)
+				if (pkPet->int_PET_ATTR_POSITION != value)
 				{
 					bSwithPlayerInfoScene = true;
 				}
 
-				pet->int_PET_ATTR_POSITION = value;
+				pkPet->int_PET_ATTR_POSITION = value;
 			}	
 			break;
 		case 100:// 名字
 			{
 				std::string petName = pkData->ReadUnicodeString();
-				petInfo->str_PET_ATTR_NAME = petName;
+				kPetInfo->str_PET_ATTR_NAME = petName;
 				break;
 			}
 		default:
@@ -2145,28 +2176,28 @@ void NDMapMgr::processPetInfo( NDTransData* pkData,int nLength )
 		}
 	}
 
-	if (pet->int_PET_ATTR_POSITION & PET_POSITION_SHOW)
+	if (pkPet->int_PET_ATTR_POSITION & PET_POSITION_SHOW)
 	{
-		if (role)
+		if (pkRole)
 		{
 			ShowPetInfo showPetInfo(
-				pet->int_PET_ID,
-				pet->int_PET_ATTR_LOOKFACE,
-				petInfo->GetQuality());
-			role->SetShowPet(showPetInfo);
+				pkPet->int_PET_ID,
+				pkPet->int_PET_ATTR_LOOKFACE,
+				kPetInfo->GetQuality());
+			pkRole->SetShowPet(showPetInfo);
 		}
 	}
-	else if (role)
+	else if (pkRole)
 	{
 		ShowPetInfo showPetInfo;
-		role->GetShowPetInfo(showPetInfo);
-		if (OBJID(pet->int_PET_ID) == showPetInfo.idPet)
+		pkRole->GetShowPetInfo(showPetInfo);
+		if (OBJID(pkPet->int_PET_ID) == showPetInfo.idPet)
 		{
-			role->ResetShowPet();
+			pkRole->ResetShowPet();
 		}
 	}
 
-	if (bSwithPlayerInfoScene && role->m_nID == ownerid)
+	if (bSwithPlayerInfoScene && pkRole->m_nID == ownerid)
 	{
 		NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
 
@@ -2200,25 +2231,25 @@ void NDMapMgr::processCollection( NDTransData& kData )
 
 void NDMapMgr::processPlayerLevelUp( NDTransData& kData )
 {
-	std::stringstream msg;
-	msg << NDCommonCString("up") << "！！！";
-	int idPlayer = kData.ReadInt();
-	msg << " " << NDCommonCString("up") << NDCommonCString("object") << "：" << idPlayer;
+	std::stringstream kMessageStream;
+	kMessageStream << NDCommonCString("up") << "！！！";
+	int nPlayerID = kData.ReadInt();
+	kMessageStream << " " << NDCommonCString("up") << NDCommonCString("object") << "：" << nPlayerID;
 	int dwNewExp = kData.ReadInt();
-	msg << " " << NDCommonCString("NewExpVal") << dwNewExp;
+	kMessageStream << " " << NDCommonCString("NewExpVal") << dwNewExp;
 	int usNewLevel = kData.ReadShort();
-	msg << " " << NDCommonCString("NewLev") << usNewLevel;
+	kMessageStream << " " << NDCommonCString("NewLev") << usNewLevel;
 	int usAddPoint = kData.ReadShort();
-	msg << " " << NDCommonCString("NewRestDian") << usAddPoint;
+	kMessageStream << " " << NDCommonCString("NewRestDian") << usAddPoint;
 
-	NDPlayer& role = NDPlayer::defaultHero();
-	if (idPlayer == role.m_nID) {
-		role.m_nExp = dwNewExp;
-		role.m_nLevel = usNewLevel;
-		role.m_nRestPoint = usAddPoint;
+	NDPlayer& kRole = NDPlayer::defaultHero();
+	if (nPlayerID == kRole.m_nID) {
+		kRole.m_nExp = dwNewExp;
+		kRole.m_nLevel = usNewLevel;
+		kRole.m_nRestPoint = usAddPoint;
 
-		role.m_bLevelUp = true;
-		role.playerLevelUp();
+		kRole.m_bLevelUp = true;
+		kRole.playerLevelUp();
 
 //		Chat::DefaultChat()->AddMessage(ChatTypeSystem, NDCommonCString("UpTip")); ///< 依赖张迪Chat 郭浩
 
@@ -2230,23 +2261,286 @@ void NDMapMgr::processPlayerLevelUp( NDTransData& kData )
 		map_manualrole_it it = m_mapManualRole.begin();
 		for (; it != m_mapManualRole.end(); it++)
 		{
-			NDManualRole& player = *(it->second);
-			if (player.m_nID == idPlayer) {
-				player.m_nExp = dwNewExp;
-				player.m_nLevel = usNewLevel;
-				player.m_nRestPoint = usAddPoint;
+			NDManualRole& kPlayer = *(it->second);
+			if (kPlayer.m_nID == nPlayerID) {
+				kPlayer.m_nExp = dwNewExp;
+				kPlayer.m_nLevel = usNewLevel;
+				kPlayer.m_nRestPoint = usAddPoint;
 
-				player.m_bLevelUp = true;
-				NDPlayer& player = NDPlayer::defaultHero();
-				if (player.GetParent() && player.GetParent()->IsKindOfClass(RUNTIME_CLASS(GameScene))) 
+				kPlayer.m_bLevelUp = true;
+				NDPlayer& kPlayer = NDPlayer::defaultHero();
+				if (kPlayer.GetParent() && kPlayer.GetParent()->IsKindOfClass(RUNTIME_CLASS(GameScene))) 
 				{
-					player.playerLevelUp();
+					kPlayer.playerLevelUp();
 				}
 
 				break;
 			}
 		}
 	}
+}
+
+void NDMapMgr::processGameQuit( NDTransData* pkData,int nLength )
+{
+	//BeatHeartMgrObj.Stop(); ///< 此处依赖张迪 BeatHeart 郭浩
+	CloseProgressBar;
+
+	quitGame();
+    ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
+}
+
+void NDMapMgr::processNPCInfo( NDTransData& kData )
+{
+	int iid = 0;
+	kData >> iid;
+	unsigned char _unuse = 0;
+	unsigned char uctype = 0; kData >> _unuse >> uctype;
+
+	int usLook = 0; kData >> usLook;
+	kData >> _unuse;
+	unsigned short col = 0, row = 0;
+	kData >> col >> row;
+
+	unsigned char btState = 0, btCamp = 0;
+	kData >> btState >> btCamp;
+
+	std::string strName = kData.ReadUnicodeString();
+	std::string strData = kData.ReadUnicodeString();
+	std::string strTalk = kData.ReadUnicodeString(); 
+
+	DelNpc(iid);
+
+	NDNpc* pkNPC = new NDNpc;
+	pkNPC->m_nID = iid;
+	pkNPC->m_nCol	= col;
+	pkNPC->m_nRow	= row;
+	pkNPC->m_nLook	= usLook;
+	pkNPC->m_strName = strName;
+	pkNPC->SetPosition(ccp(col*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, row*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+	pkNPC->SetCamp(CAMP_TYPE(btCamp));
+	pkNPC->SetNpcState(NPC_STATE(btState));
+	pkNPC->m_strData = strData;
+	pkNPC->m_strTalk = strTalk;
+	pkNPC->SetType(uctype);
+	pkNPC->Initialization(usLook);
+	pkNPC->initUnpassPoint();
+	AddOneNPC(pkNPC);
+}
+
+void NDMapMgr::DelNpc( int nID )
+{
+	if (m_vNPC.empty())
+	{
+		return;
+	}
+
+	VEC_NPC::iterator it = m_vNPC.begin();
+	for (; it != m_vNPC.end(); it++)
+	{
+		NDNpc* pkNPC = *it;
+
+		if (pkNPC->m_nID != nID) 
+		{
+			continue;
+		}
+
+		if (pkNPC->m_nID == NDPlayer::defaultHero().GetFocusNpcID()) 
+		{
+			NDPlayer::defaultHero().InvalidNPC();
+		}
+
+		//pkNPC->HandleNpcMask(false); ///< 此处依赖张迪的NDNpc 郭浩
+
+		SAFE_DELETE_NODE(pkNPC->GetRidePet());
+
+		SAFE_DELETE_NODE(pkNPC);
+
+		m_vNPC.erase(it);
+		break;
+	}
+}
+
+void NDMapMgr::AddOneNPC( NDNpc* pkNpc )
+{
+	NDMapLayer* pkLayer = getMapLayerOfScene( NDDirector::DefaultDirector()->
+		GetScene(RUNTIME_CLASS(GameScene)));
+
+	if (!pkLayer || !pkNpc)
+	{
+		return;
+	}	
+
+	for_vec(m_vNPC, VEC_NPC::iterator)
+	{
+		if (pkNpc->m_nID == (*it)->m_nID)
+		{
+			return;
+		}
+	}
+
+	if (pkLayer->ContainChild(pkNpc)) 
+	{
+		return;
+	}
+
+	m_vNPC.push_back(pkNpc);
+	//pkLayer->AddChild((NDNode*)pkNpc); ///< 此处需要修改Layer 郭浩
+
+	// 骑宠
+	if (pkNpc->GetRidePet()) 
+	{				
+		pkNpc->GetRidePet()->stopMoving();
+
+		pkNpc->GetRidePet()->SetPositionEx(pkNpc->GetPosition());
+		pkNpc->GetRidePet()->SetCurrentAnimation(RIDEPET_STAND, pkNpc->m_bFaceRight);
+		pkNpc->SetCurrentAnimation(MANUELROLE_RIDE_PET_STAND, pkNpc->m_bFaceRight);
+	}
+
+	//pkNpc->HandleNpcMask(true); ///< 此处依赖张迪的NDNpc
+
+	NDPlayer::defaultHero().UpdateFocus();
+}
+
+void NDMapMgr::processTalk( NDTransData& kData )
+{
+	/***
+	* 此函数胆量依赖Chat和GameRequstUI 所以需要张迪和汤自勤配合
+	*/
+// 	unsigned char _ucUnuse = 0;
+// 	kData >> _ucUnuse;
+// 	unsigned char pindao = 0;
+// 	kData >> pindao;
+// 	int _iUnuse = 0;
+// 	kData >> _iUnuse;
+// 	kData >> _ucUnuse;
+// 	unsigned char amount = 0;
+// 	kData >> amount;
+// 
+// 	std::string speaker;
+// 	std::string text;
+// 	for (int i = 0; i < amount; i++) 
+// 	{
+// 		std::string c = kData.ReadUnicodeString();
+// 		if (i == 0) 
+// 		{
+// 			text = c;
+// 		} else if (i == 1) 
+// 		{
+// 			speaker = c;
+// 		}
+// 		// msg.append("内容" + c);
+// 
+// 	}
+// 
+// 	CloseProgressBar;
+// 
+// 	if (speaker.empty()) {// 字段数为0，导致没有Speaker，不处理
+// 		return;
+// 	}
+// 
+// 	if (NewChatScene::DefaultManager()->IsFilterBySpeaker(speaker.c_str())) {
+// 		return;
+// 	}
+// 
+// 	if (speaker == "SYSTEM" ) {
+// 		speaker = NDCommonCString("system");
+// 	}
+
+	//ChatType chatType = GetChatTypeFromChannel(pindao); ///< 此处所有ChatType依赖张迪的GetChatTypeFromChannel 郭浩
+// 	if (chatType == ChatTypeWorld && !NDDataPersist::IsGameSettingOn(GS_SHOW_WORLD_CHAT)) 
+// 	{
+// 		return;
+// 	}
+// 	else if (chatType == ChatTypeArmy && !NDDataPersist::IsGameSettingOn(GS_SHOW_SYN_CHAT)) 
+// 	{
+// 		return;
+// 	}
+// 	else if (chatType == ChatTypeQueue && !NDDataPersist::IsGameSettingOn(GS_SHOW_TEAM_CHAT)) 
+// 	{
+// 		return;
+// 	}
+// 	else if (chatType == ChatTypeSection && !NDDataPersist::IsGameSettingOn(GS_SHOW_AREA_CHAT)) 
+// 	{
+// 		return;
+// 	}	
+// 
+// 	if (chatType == ChatTypeSecret) 
+// 	{
+// 		std::string text(speaker);
+// 		if (text != (NDPlayer::defaultHero().m_strName)) 
+// 		{
+// 			RequsetInfo info;
+// 			info.set(0, NDCommonCString("YouHaveNewChat"), RequsetInfo::ACTION_NEWCHAT);
+// 			NDMapMgrObj.addRequst(info);
+// 		}
+// 
+// 	}
+
+	//Chat::DefaultChat()->AddMessage(chatType, text.c_str(), speaker.c_str()); ///< 此处依赖张迪的 Chat 郭浩
+}
+
+/***
+* 依赖汤自勤的 RequsetInfo
+* 郭浩
+*/
+// void NDMapMgr::addRequst( RequsetInfo& request )
+// {
+// 	std::stringstream strBuf;
+// 	strBuf << NDCommonCString("YouHaveNew") << request.info << "," << NDCommonCString("OpenRequestList");
+// 	//Chat::DefaultChat()->AddMessage(ChatTypeSystem, strBuf.str().c_str()); ///< 此处依赖张迪的Chat 郭浩
+// 
+// 	std::vector<RequsetInfo>::iterator it = m_vecRequest.begin();
+// 	for (; it != m_vecRequest.end(); it++)
+// 	{
+// 		RequsetInfo& info = *it;
+// 		if (info.iRoleID == request.iRoleID && info.iAction == request.iAction && (info.iAction != RequsetInfo::ACTION_NEWMAIL || info.iAction != RequsetInfo::ACTION_NEWCHAT))
+// 		{
+// 			DelRequest(info.iID);
+// 			break;
+// 		}
+// 	}
+// 	request.iID = m_idAlloc.GetID();
+// 	m_vecRequest.push_back(request);
+// 
+// 	//NewGameUIRequest::refreshQuestList(); ///< 此处依赖汤自勤的NewGameUIRequest
+// 
+// 	NDScene* scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene));
+// 	if (scene) 
+// 	{
+// 		GameScene* gamescene = (GameScene*)scene;
+// 		gamescene->flashAniLayer(0, true);
+// 
+// 		NDNode *node = gamescene->GetChild(UILAYER_REQUEST_LIST_TAG);
+// 		if (node && node->IsKindOfClass(RUNTIME_CLASS(GameUIRequest)))
+// 		{
+// 			///< 此处依赖汤自勤的GameUIRequest 郭浩
+// // 			GameUIRequest *request = (GameUIRequest*)node;
+// // 			if (request->IsVisibled())
+// // 			{
+// // 				request->UpdateMainUI();
+// // 			}
+// 		}
+// 	}
+// }
+
+/***
+* 依赖汤自勤的 RequsetInfo
+* 郭浩
+*/
+bool NDMapMgr::DelRequest( int nID )
+{
+// 	std::vector<RequsetInfo>::iterator it = m_vecRequest.begin();
+// 	for(; it != m_vecRequest.end(); it++)
+// 	{
+// 		if (nID == (*it).iID)
+// 		{
+// 			m_idAlloc.ReturnID(nID);
+// 			m_vecRequest.erase(it);
+// 			return true;
+// 		}
+// 	}
+ 
+ 	return false;
 }
 
 }
