@@ -104,6 +104,16 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 {
 	switch (usMsgID)
 	{
+	case _MSG_PLAYERLEVELUP:
+	{
+		processPlayerLevelUp(*pkData);
+	}
+		break;
+	case _MSG_COLLECTION:
+	{
+		processCollection(*pkData);
+	}
+		break;
 	case _MSG_PETINFO:
 	{
 		processPetInfo(pkData,nLength);
@@ -2175,6 +2185,68 @@ void NDMapMgr::processPetInfo( NDTransData* pkData,int nLength )
 		///< ´Ë´¦×¢ÊÍÒÀÀµÌÀ×ÔÇÚµÄ CUIPet  ¹ùºÆ
 		//pUIPet->UpdateUI(pet->int_PET_ID);
 	//}
+}
+
+void NDMapMgr::processCollection( NDTransData& kData )
+{
+	CloseProgressBar;
+	int itemtype = 0;
+	kData >> itemtype;
+	Item *item = new Item(itemtype);
+	stringstream ss; ss << NDCommonCString("GatheredTip") << " " << item->getItemName();
+	//showDialog(string("system"), ss.str().c_str()); ///< showDialogÔÝÊ±ÕÒ²»µ½ ¹ùºÆ
+	delete item;
+}
+
+void NDMapMgr::processPlayerLevelUp( NDTransData& kData )
+{
+	std::stringstream msg;
+	msg << NDCommonCString("up") << "£¡£¡£¡";
+	int idPlayer = kData.ReadInt();
+	msg << " " << NDCommonCString("up") << NDCommonCString("object") << "£º" << idPlayer;
+	int dwNewExp = kData.ReadInt();
+	msg << " " << NDCommonCString("NewExpVal") << dwNewExp;
+	int usNewLevel = kData.ReadShort();
+	msg << " " << NDCommonCString("NewLev") << usNewLevel;
+	int usAddPoint = kData.ReadShort();
+	msg << " " << NDCommonCString("NewRestDian") << usAddPoint;
+
+	NDPlayer& role = NDPlayer::defaultHero();
+	if (idPlayer == role.m_nID) {
+		role.m_nExp = dwNewExp;
+		role.m_nLevel = usNewLevel;
+		role.m_nRestPoint = usAddPoint;
+
+		role.m_bLevelUp = true;
+		role.playerLevelUp();
+
+//		Chat::DefaultChat()->AddMessage(ChatTypeSystem, NDCommonCString("UpTip")); ///< ÒÀÀµÕÅµÏChat ¹ùºÆ
+
+		if (usNewLevel == 20) {
+			//Chat::DefaultChat()->AddMessage(ChatTypeSystem, NDCommonCString("UpTip20"));	///< ÒÀÀµÕÅµÏChat ¹ùºÆ
+		}
+
+	} else {// ÆäËûÍæ¼ÒÉý¼¶
+		map_manualrole_it it = m_mapManualRole.begin();
+		for (; it != m_mapManualRole.end(); it++)
+		{
+			NDManualRole& player = *(it->second);
+			if (player.m_nID == idPlayer) {
+				player.m_nExp = dwNewExp;
+				player.m_nLevel = usNewLevel;
+				player.m_nRestPoint = usAddPoint;
+
+				player.m_bLevelUp = true;
+				NDPlayer& player = NDPlayer::defaultHero();
+				if (player.GetParent() && player.GetParent()->IsKindOfClass(RUNTIME_CLASS(GameScene))) 
+				{
+					player.playerLevelUp();
+				}
+
+				break;
+			}
+		}
+	}
 }
 
 }

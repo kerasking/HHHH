@@ -1433,10 +1433,10 @@ namespace NDEngine
 			case _MSG_DIALOG:
 				this->processMsgDlg(*data);
 				break;
-			case _MSG_LIFESKILL:
+			case _MSG_LIFESKILL:					///< 貌似没用到 郭浩
 				this->processLifeSkill(*data);
 				break;
-			case _MSG_SYNTHESIZE:
+			case _MSG_SYNTHESIZE:					//< 貌似没用到 郭浩
 				this->processLifeSkillSynthesize(*data);
 				break;
 			case _MSG_COLLECTION:

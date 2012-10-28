@@ -227,7 +227,8 @@ typedef MAP_FRIEND_ELEMENT::iterator		MAP_FRIEND_ELEMENT_IT;
 
 typedef struct _tagShopItemInfo 
 {
-	int itemType, payType;
+	int itemType;
+	int payType;
 	_tagShopItemInfo() { memset(this, 0, sizeof(*this)); }
 	_tagShopItemInfo(int itemType, int payType)
 	{
@@ -258,6 +259,7 @@ class NDMapMgr:
 public:
 
 	typedef map<int,NDManualRole*> map_manualrole;
+	typedef map_manualrole::iterator map_manualrole_it;
 	typedef vector<NDNpc*> VEC_NPC;
 	typedef vector<NDMonster*> VEC_MONSTER;
 	typedef VEC_MONSTER::iterator vec_monster_it;
@@ -283,6 +285,8 @@ public:
 	void processNPCInfoList(NDTransData* pkData,int nLength);
 	void processKickBack(NDTransData* pkData,int nLength);
 	void processChgPoint(NDTransData* pkData,int nLength);
+	void processCollection(NDTransData& kData);
+	void processPlayerLevelUp(NDTransData& kData);
 	void processPetInfo(NDTransData* pkData,int nLength);
 	void processMonsterInfo(NDTransData* pkData, int nLength);
 	void processNpcStatus(NDTransData* pkData, int nLength);
