@@ -1470,7 +1470,7 @@ namespace NDEngine
 			case _MSG_TUTOR:
 				TutorUILayer::processMsgTutor(*data);
 				break;
-			case _MSG_TRADE:
+			case _MSG_TRADE:			///< 貌似没有交易
 				this->processTrade(*data);
 				break;
 			case _MSG_BILLBOARD:

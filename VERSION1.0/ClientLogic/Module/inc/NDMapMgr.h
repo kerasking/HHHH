@@ -296,6 +296,7 @@ public:
 	void processPetInfo(NDTransData* pkData,int nLength);
 	void processMonsterInfo(NDTransData* pkData, int nLength);
 	void processNpcStatus(NDTransData* pkData, int nLength);
+	void processRehearse(NDTransData& kData);
 	void processDisappear(NDTransData* pkData, int nLength);
 	void BattleEnd(int iResult);
 

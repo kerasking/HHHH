@@ -253,6 +253,11 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 		processNPCInfo(*pkData);
 	}
 		break;
+	case _MSG_REHEARSE:
+	{
+		processRehearse(*pkData);
+	}
+		break;
 	default:
 		break;
 	}
@@ -1996,7 +2001,8 @@ void NDMapMgr::processPetInfo( NDTransData* pkData,int nLength )
 
 	bool bSwithPlayerInfoScene = false;
 
-	int attrNum = 0; (*pkData) >> attrNum;
+	int attrNum = 0;
+	(*pkData) >> attrNum;
 	for (int i = 0; i < attrNum; i++) 
 	{
 		int type = 0; (*pkData) >> type;
@@ -2541,6 +2547,56 @@ bool NDMapMgr::DelRequest( int nID )
 // 	}
  
  	return false;
+}
+
+void NDMapMgr::processRehearse( NDTransData& kData )
+{
+	unsigned char btAction = 0;
+	kData >> btAction;
+	int idTarget = 0;
+	kData >> idTarget;
+
+	NDManualRole* role = GetManualRole(idTarget);
+	//RequsetInfo info;	///< ÒÀÀµÌÀ×ÔÇÚRequsetInfo ¹ùºÆ
+
+	switch (btAction)
+	{
+	case REHEARSE_APPLY: 
+		{
+			if (role != NULL) 
+			{
+				//info.set(idTarget, role->m_strName, RequsetInfo::ACTION_BIWU);///< ÒÀÀµÌÀ×ÔÇÚRequsetInfo ¹ùºÆ
+				//addRequst(info);		///< ÒÀÀµÌÀ×ÔÇÚGameUIRequst ¹ùºÆ
+			}
+			break;
+		}
+	case REHEARSE_REFUSE: 
+		{
+			if (role != NULL) 
+			{
+				std::stringstream ss;
+				ss << role->m_strName << NDCommonCString("RejectRefraseTip");
+				//Chat::DefaultChat()->AddMessage(ChatTypeSystem, ss.str().c_str()); ///< ÒÀÀµÕÅµÏChat ¹ùºÆ
+			}
+			break;
+		}
+	case REHEARSE_LOGOUT:
+		{
+			Battle* battle = BattleMgrObj.GetBattle();
+			if (battle) {
+				battle->SetFighterOnline(idTarget, false);
+			}
+		}
+		break;
+	case REHEARSE_LOGIN:
+		{
+			Battle* battle = BattleMgrObj.GetBattle();
+			if (battle) {
+				battle->SetFighterOnline(idTarget, true);
+			}
+		}
+		break;
+	}
 }
 
 }
