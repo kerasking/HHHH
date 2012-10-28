@@ -1512,13 +1512,13 @@ namespace NDEngine
 			case _MSG_USERINFO_SEE:
 				this->processUserInfoSee(*data);
 				break;
-			case _MSG_EQUIP_INFO:
+			case _MSG_EQUIP_INFO:			//< 貌似没
 				this->processEquipInfo(*data);
 				break;
-			case _MSG_USER_STATE:
+			case _MSG_USER_STATE:			//< 貌似没
 				UserStateUILayer::processMsgUserState(*data);
 				break;
-			case _MSG_USER_STATE_CHG:
+			case _MSG_USER_STATE_CHG:		//< 貌似没
 				UserStateUILayer::processMsgUserStateChg(*data);
 				break;
 			case _MSG_POS_TEXT:
@@ -1529,10 +1529,10 @@ namespace NDEngine
 				}
 			}
 				break;
-			case _MSG_EQUIPIMPROVE:
+			case _MSG_EQUIPIMPROVE:	//< 貌似没
 				processEquipImprove(*data);
 				break;
-			case _MSG_FORMULA:
+			case _MSG_FORMULA:	//< 貌似没
 				processFormula(*data);
 				break;
 			case _MSG_BOOTH:
@@ -1542,12 +1542,12 @@ namespace NDEngine
 				VendorBuyUILayer::Show(*data);
 				break;
 			case _MSG_MAGIC_GOODS:
-				this->processSkillGoods(*data);
+				this->processSkillGoods(*data);	//< 貌似没
 				break;
 			case _MSG_SKILL:
-				this->processMsgSkill(*data);
+				this->processMsgSkill(*data);	//< 貌似没
 				break;
-			case _MSG_PET_SKILL:
+			case _MSG_PET_SKILL:				//< 貌似没
 				this->processMsgPetSkill(*data);
 				break;
 			case _MSG_LETTER:
@@ -1567,8 +1567,8 @@ namespace NDEngine
 			case _MSG_SYN_LIST_EX:
 				SyndicateUILayer::OnAllSynList(*data);
 				break;
-			case _MSG_INVITE_LIST:
-			case _MSG_INVITE_LIST_EX:
+			case _MSG_INVITE_LIST:			//< 貌似没
+			case _MSG_INVITE_LIST_EX:		//< 貌似没
 				// TODO: 加到请求列表
 			{
 				int btCount = data->ReadByte();
@@ -1582,7 +1582,7 @@ namespace NDEngine
 			}
 				//SyndicateInviteList::refreshScroll(*data);
 				break;
-			case _MSG_SYN_INVITE:
+			case _MSG_SYN_INVITE:			//< 貌似没
 				SyndicateInviteList::processSynInvite(*data);
 				break;
 			case _MSG_SYN_INFO:

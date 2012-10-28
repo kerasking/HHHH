@@ -23,6 +23,7 @@
 #include "NDDataPersist.h"
 // #include "Chat.h"
 // #include "NewChatScene.h"			///< 这俩包含需要汤哥和张迪的东西 郭浩
+#include "GlobalDialog.h"
 
 namespace NDEngine
 {
@@ -109,6 +110,18 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 {
 	switch (usMsgID)
 	{
+	case _MSG_SEE:
+	{
+		processSee(*pkData);
+	}
+		break;
+	case _MSG_SYSTEM_DIALOG:
+	{
+		m_strNoteTitle = pkData->ReadUnicodeString();
+		m_strNoteContent = pkData->ReadUnicodeString();
+		GlobalDialogObj.Show(NULL, m_strNoteTitle.c_str(), m_strNoteContent.c_str(), NULL, NULL);
+	}
+		break;
 	case _MSG_TALK:
 	{
 		processTalk(*pkData);
@@ -295,6 +308,102 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 	case _MSG_USERINFO_SEE:
 	{
 		processUserInfoSee(*pkData);
+	}
+		break;
+	case _MSG_POS_TEXT:
+	{
+		GameScene* pkGameScene = GameScene::GetCurGameScene();
+
+		if (pkGameScene)
+		{
+			pkGameScene->processMsgPosText(*pkData);
+		}
+	}
+		break;
+	case _MSG_FORMULA:
+	{
+		processFormula(*pkData);
+	}
+		break;
+	case _MSG_BOOTH:
+	{
+		//VendorUILayer::processMsgBooth(*kData);	///< 依赖张迪的VendorUILayer 郭浩
+	}
+		break;
+	case _MSG_BOOTH_GOODS:
+	{
+		//VendorBuyUILayer::Show(*kData);		///< 依赖张迪的VendorBuyUILayer 郭浩
+	}
+		break;
+	case _MSG_QUERY_REG_SYN_LIST:
+	{
+		//SyndicateRegListUILayer::refreshScroll(*kData); ///< 这个不知道是谁的 郭浩
+	}
+		break;
+	case _MSG_SYNDICATE:
+	{
+		processSyndicate(*pkData);
+	}
+		break;
+	case _MSG_SYN_INFO:
+	{
+		int nRank = pkData->ReadByte(); // 个人在帮派中的职位
+		string strSynName = pkData->ReadUnicodeString();// 帮派名字
+		NDPlayer& kRole = NDPlayer::defaultHero();
+		kRole.setSynRank(nRank);
+		kRole.m_strSynName = (strSynName);
+		break;
+	}
+		break;
+	case _MSG_SYN_ANNOUNCE:
+	{
+		/***
+		* 依赖张迪的SynInfoUILayer
+		* 郭浩
+		*/
+		//SynInfoUILayer* synInfo = SynInfoUILayer::GetCurInstance();
+		//if (synInfo) {
+		//	synInfo->processSynBraodcast(*kData);
+		//}
+	}
+		break;
+	case _MSG_APPLY_LIST:
+	{
+		/***
+		* 依赖张迪的 SynApproveUILayer
+		* 郭浩
+		*/
+		//SynApproveUILayer* approve = SynApproveUILayer::GetCurInstance();
+		//if (approve) {
+		//	approve->processApproveList(*kData);
+		//}
+	}
+		break;
+	case _MSG_DIGOUT:
+	{
+		processDigout(*pkData);
+	}
+		break;
+	case _MSG_MBR_LIST:
+	{
+		/***
+		* 依赖张迪的 SynMbrListUILayer
+		* 郭浩
+		*/
+		//SynMbrListUILayer* mbrList = SynMbrListUILayer::GetCurInstance();
+		//if (mbrList) {
+		//	mbrList->processMbrList(*kData);
+		//}
+	}
+		break;
+	case _MSG_NAME:
+	{
+		//showDialog(NDCommonCString("tip"), NDCommonCString("RenameSucc")); ///< 依赖showDialog 郭浩
+	}
+		break;
+	case _MSG_NPC:
+	{
+		processNPC(*pkData);
 	}
 		break;
 	default:
@@ -2663,12 +2772,12 @@ void NDMapMgr::processGoodFriend( NDTransData& kData )
 // 										 int idFriend = kData.ReadInt();
 // 										 string name = kData.ReadUnicodeString();
 // 
-// 										 FriendElement& fe = this->m_mapFriend[idFriend];
+// 										 FriendElement& fe = m_mapFriend[idFriend];
 // 										 fe.m_id = idFriend;
 // 										 fe.m_text1 = name;
 // 										 fe.SetState(ES_ONLINE);
 // 
-// 										 this->onlineNum++;
+// 										 onlineNum++;
 // 
 // 										 GoodFriendUILayer::refreshScroll();
 // 										 NewGoodFriendUILayer::refreshScroll();
@@ -2682,9 +2791,9 @@ void NDMapMgr::processGoodFriend( NDTransData& kData )
 // 									 {
 // 										 int idFriend = kData.ReadInt();
 // 
-// 										 FriendElement& fe = this->m_mapFriend[idFriend];
+// 										 FriendElement& fe = m_mapFriend[idFriend];
 // 										 fe.SetState(ES_ONLINE);
-// 										 this->onlineNum++;
+// 										 onlineNum++;
 // 
 // 										 string content = std::string("") + NDCommonCString("YourFriend") + " " + fe.m_text1 + " " + NDCommonCString("logined");
 // 										 Chat::DefaultChat()->AddMessage(ChatTypeSystem, content.c_str());
@@ -2698,9 +2807,9 @@ void NDMapMgr::processGoodFriend( NDTransData& kData )
 // 									  {
 // 										  int idFriend = kData.ReadInt();
 // 
-// 										  FriendElement& fe = this->m_mapFriend[idFriend];
+// 										  FriendElement& fe = m_mapFriend[idFriend];
 // 										  fe.SetState(ES_OFFLINE);
-// 										  this->onlineNum--;
+// 										  onlineNum--;
 // 
 // 										  string content = std::string("") + NDCommonCString("YourFriend") + " " + fe.m_text1 + " " + NDCommonCString("OfflineTip");
 // 										  Chat::DefaultChat()->AddMessage(ChatTypeSystem, content.c_str());
@@ -2712,14 +2821,14 @@ void NDMapMgr::processGoodFriend( NDTransData& kData )
 // 			case _FRIEND_BREAK: {
 // 									{
 // 										int idFriend = kData.ReadInt();
-// 										FriendElement& fe = this->m_mapFriend[idFriend];
+// 										FriendElement& fe = m_mapFriend[idFriend];
 // 
 // 										string content = fe.m_text1 + " " + NDCommonCString("DeFriendTip");
 // 										Chat::DefaultChat()->AddMessage(ChatTypeSystem, content.c_str());
 // 
-// 										this->onlineNum--;
+// 										onlineNum--;
 // 
-// 										this->m_mapFriend.erase(idFriend);
+// 										m_mapFriend.erase(idFriend);
 // 										GoodFriendUILayer::refreshScroll();
 // 										NewGoodFriendUILayer::refreshScroll();
 // 										NDUISynLayer::Close();
@@ -2728,8 +2837,8 @@ void NDMapMgr::processGoodFriend( NDTransData& kData )
 // 								}
 // 			case _FRIEND_GETINFO: {
 // 									  {
-// 										  this->m_mapFriend.clear();
-// 										  this->onlineNum = 0;
+// 										  m_mapFriend.clear();
+// 										  onlineNum = 0;
 // 
 // 										  for (int i = 0; i < friendCount; i++) {
 // 											  int idFriend = kData.ReadInt();
@@ -2738,14 +2847,14 @@ void NDMapMgr::processGoodFriend( NDTransData& kData )
 // 
 // 											  string name = kData.ReadUnicodeString();
 // 
-// 											  FriendElement& fe = this->m_mapFriend[idFriend];
+// 											  FriendElement& fe = m_mapFriend[idFriend];
 // 
 // 											  fe.m_id = idFriend;
 // 											  fe.m_text1 = name;
 // 											  fe.SetState((ELEMENT_STATE(state)));
 // 
 // 											  if (state == ES_ONLINE) { // 0表下线状态
-// 												  this->onlineNum++;
+// 												  onlineNum++;
 // 											  }
 // 
 // 										  }
@@ -2768,16 +2877,16 @@ void NDMapMgr::processGoodFriend( NDTransData& kData )
 // 									  {
 // 										  int idFriend = kData.ReadInt();
 // 
-// 										  FriendElement& fe = this->m_mapFriend[idFriend];
+// 										  FriendElement& fe = m_mapFriend[idFriend];
 // 
 // 										  if (fe.m_state == ES_ONLINE) {
-// 											  this->onlineNum--;
+// 											  onlineNum--;
 // 										  }
 // 
 // 										  string content = fe.m_text1 + " " + NDCommonCString("DeFriendTip");
 // 										  Chat::DefaultChat()->AddMessage(ChatTypeSystem, content.c_str());
 // 
-// 										  this->m_mapFriend.erase(idFriend);
+// 										  m_mapFriend.erase(idFriend);
 // 
 // 										  GoodFriendUILayer::refreshScroll();
 // 										  NewGoodFriendUILayer::refreshScroll();
@@ -2886,6 +2995,241 @@ void NDMapMgr::processUserInfoSee( NDTransData& kData )
 // 		mbrList->processSocialData(social);
 // 	}
 	//GlobalShowDlg("玩家信息", content.str());
+}
+
+void NDMapMgr::processFormula( NDTransData& kData )
+{
+	/***
+	* 找不到 FormulaMaterialData
+	* 郭浩
+	*/
+// 	int byStudyType = kData.ReadByte();//0是下发，1是学习
+// 	int btSkillCount = kData.ReadByte();
+// 	for(int i = 0;i<btSkillCount;i++){
+// 		int t_idFormula = kData.ReadInt();
+// 		int t_lev = kData.ReadByte();
+// 		int t_matID_1 = kData.ReadInt();
+// 		int t_matCount_1 = kData.ReadByte();
+// 		int t_matID_2 = kData.ReadInt();
+// 		int t_matCount_2 = kData.ReadByte();
+// 		int t_matID_3 = kData.ReadInt();
+// 		int t_matCount_3 = kData.ReadByte();
+// 		int t_producID = kData.ReadInt();
+// 		int t_money = kData.ReadInt();
+// 		int t_emoney = kData.ReadInt();
+// 		// TODO: 新增图标索引字段
+// 		int iconIndex = kData.ReadInt();
+// 		std::string s_formulaName = kData.ReadUnicodeString();
+// 		std::string strIconName = kData.ReadUnicodeString();
+// 		FormulaMaterialData* t_formula = getFormulaData(t_idFormula);
+// 		if(t_formula != NULL){
+// 			t_formula->init(t_lev,t_matID_1,t_matCount_1,t_matID_2,t_matCount_2,t_matID_3,t_matCount_3,t_producID,t_money,t_emoney,iconIndex);
+// 		}else{
+// 			m_mapFomula.insert( map_fomula_pair(t_idFormula,
+// 				new FormulaMaterialData(t_idFormula,t_lev,t_matID_1,t_matCount_1,t_matID_2,t_matCount_2,t_matID_3,t_matCount_3,t_producID,t_money,t_emoney,s_formulaName,iconIndex) ) 
+// 				);
+// 		}
+// 		if(byStudyType == 1){//0是下发，1是学习
+// 			//					String formulaName = new Item(t_idFormula).getItemName();
+// 			Item item(t_idFormula);
+// 			std::stringstream ss; ss << NDCommonCString("Common_LearnedTip") << item.getItemName();
+// 			GlobalShowDlg(NDCommonCString("OperateSucess"), ss.str());
+// 		}
+// 	}
+	CloseProgressBar;
+}
+
+void NDMapMgr::processSyndicate( NDTransData& kData )
+{
+	int answer = kData.ReadByte();
+	
+	/***
+	* 此函数大量依赖SynApproveUILayer
+	* 张迪的
+	* 郭浩
+	*/
+
+// 	switch (answer)
+// 	{
+// 	case ANS_SYN_PANEL_INFO:
+// 		{
+// 			SynInfoUILayer* infoLayer = SynInfoUILayer::GetCurInstance();
+// 			if (infoLayer) {
+// 				infoLayer->processSynInfo(kData);
+// 			}
+// 		}
+// 		break;
+// 	case ANS_REG_SYN_INFO:
+// 	case ANS_SYN_LIST_INFO:
+// 	case ANS_QUERY_VOTE_INFO:
+// 		{
+// 			CloseProgressBar;
+// 			string t_wndTitle = kData.ReadUnicodeString();
+// 			string t_wndDetail = kData.ReadUnicodeString();
+// 
+// 			SyndicateInfoScene* synInfoScene = new SyndicateInfoScene;
+// 			synInfoScene->Initialization(t_wndTitle, t_wndDetail);
+// 			NDDirector::DefaultDirector()->PushScene(synInfoScene);
+// 			return;
+// 		}
+// 	case ANS_QUERY_OFFICER:
+// 		{
+// 			SynElectionUILayer* election = SynElectionUILayer::GetCurInstance();
+// 			if (election) {
+// 				election->processQueryOfficer(kData);
+// 			}
+// 			return;
+// 		}
+// 	case ANS_QUERY_VOTE_LIST:{// 下发投票列表
+// 		SynVoteUILayer* voteLayer = SynVoteUILayer::GetCurInstance();
+// 		if (voteLayer) {
+// 			voteLayer->processVoteList(kData);
+// 		}
+// 		return;
+// 							 }
+// 	case ANS_QUERY_SYN_STORAGE:{
+// 		SynDonateUILayer* donate = SynDonateUILayer::GetCurInstance();
+// 		if (donate) {
+// 			donate->processSynDonate(kData);
+// 		}
+// 		return;
+// 							   }
+// 	case ANS_SYN_UPGRADE_INFO:{// 军团升级信息
+// 		SynUpgradeUILayer* upgrade = SynUpgradeUILayer::GetCurInstance();
+// 		if (upgrade) {
+// 			upgrade->processSynUpgrade(kData);
+// 		}
+// 		return;
+// 							  }
+// 	case APPROVE_ACCEPT_OK:
+// 	case APPROVE_ACCEPT_FAIL:
+// 	case APPROVE_REFUSE_OK: {
+// 		CloseProgressBar;
+// 		SynApproveUILayer* approve = SynApproveUILayer::GetCurInstance();
+// 		if (approve) {
+// 			approve->delCurSelCell();
+// 		}
+// 		break;
+// 		}
+// 	case ANS_UPDATE_SYN_MBR_RANK:
+// 		NDPlayer::defaultHero().setSynRank(kData.ReadByte());
+// 		return;
+// 	case QUIT_SYN_OK:
+// 		{
+// 		NDPlayer& role = NDPlayer::defaultHero();
+// 		role.synName = "";
+// 		role.setSynRank(SYNRANK_NONE);
+// 		return;
+// 		}
+// 	default:
+// 		break;
+// 	}
+}
+
+void NDMapMgr::processDigout( NDTransData& kData )
+{
+	int nItemID = kData.ReadInt();
+	kData.ReadByte();
+	int nNumber = kData.ReadByte();
+	std::vector<int> kStoneItemTypes;
+	for (int i = 0; i < nNumber; i++) {
+		kStoneItemTypes.push_back(kData.ReadInt());
+	}
+	Item* pkItem = NULL;
+	VEC_ITEM& kItemList = ItemMgrObj.GetPlayerBagItems();
+	for (int i = 0; i < int(kItemList.size()); i++) {
+		pkItem = kItemList[i];
+		if (pkItem->m_nID == nItemID) {
+			break;
+		}
+	}
+	if (pkItem != NULL) {
+		for (int i = 0; i < int(kStoneItemTypes.size()); i++) {
+			for (int j = 0; j < int(pkItem->m_vStone.size()); j++) {
+				Item* pkItemStone = pkItem->m_vStone[j];
+				if (pkItemStone->m_nItemType == kStoneItemTypes[i]) {
+					pkItem->DelStone(pkItemStone->m_nID);
+					break;
+				}
+			}
+		}
+	}
+	//RemoveStoneScene::Refresh(); ///< 依赖汤自勤的RemoveStoneScene 郭浩
+	//showDialog(NDCommonCString("tip"), NDCommonCString("WaChuBaoShiSucc")); ///< showDialog不知道是谁的
+}
+
+void NDMapMgr::processNPC( NDTransData& kData )
+{
+	CloseProgressBar;
+	int iid = kData.ReadInt(); // 4个字节 npc id
+	int btAction = kData.ReadByte(); // 1个字节 操作类型：EVENT_DELNPC = 3;
+	int btType = kData.ReadByte(); // 1个字节 NPC类型
+
+	if (btAction == 3) { // 删除NPC
+		DelNpc(iid);
+	} else if (btAction == 10) { // 任务提示
+		setNpcTaskStateById(iid, btType);
+	}
+}
+
+void NDMapMgr::setNpcTaskStateById( int nNPCID,int nState )
+{
+	if (m_vNPC.empty())
+	{
+		return;
+	}
+
+	for (VEC_NPC::iterator it = m_vNPC.begin(); it != m_vNPC.end(); it++)
+	{
+		NDNpc* pkTempNPC = *it;
+
+		if (pkTempNPC->m_nID != nNPCID) 
+		{
+			continue;
+		}
+
+		pkTempNPC->SetNpcState(NPC_STATE(nState));
+		break;
+	}
+}
+
+void NDMapMgr::processSee( NDTransData& kData )
+{
+	CloseProgressBar;
+
+	enum
+	{
+		SEE_USER_INFO		= 0,	// 查看玩家信息
+		SEE_EQUIP_INFO		= 1,	// 查看玩家装备
+		SEE_PET_INFO		= 2,	// 查询宠物信息
+		SEE_USER_PET_INFO	= 3,	// 查询玩家宠物信息
+		//查询结果
+		SEE_OK				= 4,	// 查询成功
+		SEE_FAIL			= 5,	// 查询失败
+
+		SEE_TUTOR_POS		= 6,	// 查询有师徒关系的人的位置,
+		SEE_PET_INFO_OK		= 7,
+		SEE_USER_INFO_OK	= 8,
+	};
+
+	int nAction = kData.ReadByte();// action
+	int nTargetID = kData.ReadInt();// idtarget
+
+	if (nAction == SEE_PET_INFO_OK)
+	{
+		// 查询单只宠物
+		PetInfo* pkPetInfo = PetMgrObj.GetPet(nTargetID);
+		if (pkPetInfo)
+		{
+			///< 依赖张迪（貌似是……）的NewPetInfoScene 郭浩
+			//NDDirector::DefaultDirector()->PushScene(NewPetInfoScene::Scene(idTarget));
+		}
+	}
+	else if (nAction == SEE_USER_INFO_OK)
+	{
+		///< 依赖汤自勤的 OtherPlayerInfoScene 郭浩
+		//OtherPlayerInfoScene::ShowPlayerPet(idTarget);
+	}
 }
 
 }

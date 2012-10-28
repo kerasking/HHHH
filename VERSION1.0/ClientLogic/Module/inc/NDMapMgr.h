@@ -277,6 +277,7 @@ public:
 
 	virtual bool process( MSGID usMsgID, NDEngine::NDTransData* pkData, int nLength );
 	void processMsgCommonList(NDTransData& kData);
+	void processSee(NDTransData& kData);
 	void processNPCInfo(NDTransData& kData);
 	void processGameQuit(NDTransData* pkData,int nLength);
 	void processMsgCommonListRecord(NDTransData& kData);
@@ -295,11 +296,15 @@ public:
 	void processCollection(NDTransData& kData);
 	void processUserInfoSee(NDTransData& kData);
 	void processPlayerLevelUp(NDTransData& kData);
+	void processNPC(NDTransData& kData);
 	void processPetInfo(NDTransData* pkData,int nLength);
 	void processMonsterInfo(NDTransData* pkData, int nLength);
 	void processNpcStatus(NDTransData* pkData, int nLength);
+	void processFormula(NDTransData& kData);
 	void processRehearse(NDTransData& kData);
+	void processDigout(NDTransData& kData);
 	void processDisappear(NDTransData* pkData, int nLength);
+	void processSyndicate(NDTransData& kData);
 	void BattleEnd(int iResult);
 
 protected:
@@ -315,6 +320,7 @@ protected:
 	void DelManualRole(int nID);
 	void ClearNPC();
 	void ClearMonster();
+	void setNpcTaskStateById(int nNPCID,int nState);
 	//void addRequst(RequsetInfo& kRequest);	///< 依赖汤自勤的RequsetInfo 郭浩
 	void DelNpc(int nID);
 	void AddOneNPC(NDNpc* pkNpc);
@@ -361,6 +367,13 @@ protected:
 	CCSize m_kMapSize;
 
 	string m_strMapName;
+	/**npc聊天相关*/
+	unsigned short usData;
+	string strLeaveMsg;
+	string strTitle;
+	string strNPCText;
+	string m_strNoteTitle; // 公告
+	string m_strNoteContent;
 
 	CAutoLink<NDMonster> m_apWaitBattleMonster;
 //	VEC_REQUST m_vecRequest;		///< 依赖汤自勤的GameUIRequest 郭浩
