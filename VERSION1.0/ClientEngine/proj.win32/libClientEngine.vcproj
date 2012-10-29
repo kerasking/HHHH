@@ -582,6 +582,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\inc\NDUIMemo.h"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\inc\NDUINode.h"
 					>
 				</File>
@@ -695,6 +699,10 @@
 				</File>
 				<File
 					RelativePath="..\UI\src\NDUILayer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\src\NDUIMemo.cpp"
 					>
 				</File>
 				<File

@@ -41,6 +41,8 @@ namespace NDEngine
 		m_rimImageRB = NULL;
 		m_focusImage = NULL;
 
+		m_pSprite = 0;
+
 		m_SoundEffectId = 1;
 		m_bCustomDisImageRect = false;
 		m_ClearDisImageOnFree = false;
@@ -299,7 +301,7 @@ namespace NDEngine
 			bool bForce/*=false*/, unsigned int leftWidth/*=0*/,
 			unsigned int rightWidth/*=0*/)
 	{
-		m_title->SetText(title);
+		//m_title->SetText(title);
 		m_strTitle = title;
 
 		std::string::size_type pos;
@@ -330,7 +332,7 @@ namespace NDEngine
 
 	void NDUIButton::SetFontSize(unsigned int fontSize)
 	{
-		m_title->SetFontSize(fontSize);
+		//m_title->SetFontSize(fontSize);
 		m_uiTitleFontSize = fontSize;
 		m_bNeedSetTitle = true;
 	}
@@ -344,7 +346,7 @@ namespace NDEngine
 	void NDUIButton::SetFrameRect(CGRect rect)
 	{
 		NDUINode::SetFrameRect(rect);
-		m_title->SetFrameRect(CGRectMake(0, 0, rect.size.width, rect.size.height));
+		//m_title->SetFrameRect(CGRectMake(0, 0, rect.size.width, rect.size.height));
 	}
 
 	void NDUIButton::draw()
