@@ -11,6 +11,7 @@
 
 #include <map>
 #include <string>
+#include "define.h"
 
 class NDLocalXmlString
 {
@@ -29,7 +30,7 @@ private:
 	void Init();
 	
 	//todo(zjh)
-	//NSString* GetDocumensDirectory();
+	NSString* GetDocumensDirectory();
 	
 	bool GetValue(const std::string str, bool& isKey, std::string& resValue);
 	

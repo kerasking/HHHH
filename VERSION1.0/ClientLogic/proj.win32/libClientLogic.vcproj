@@ -912,6 +912,14 @@
 			RelativePath="..\Common\inc\NDDataPersist.h"
 			>
 		</File>
+		<File
+			RelativePath="..\Module\src\TutorUILayer.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\Module\inc\TutorUILayer.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

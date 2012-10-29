@@ -122,9 +122,11 @@ bool NDAutoPath::autoFindPath(CGPoint kFromPosition, CGPoint kToPosition,
 	}
 
 	if (!m_pkAStar->FindPath(pkMapLayer, kStartPos, kEndPos, ulMaxTime, bMustArrive))
+	{
 		return false;
+	}
 
-	this->GetPath();
+	GetPath();
 
 	return true;
 
@@ -180,12 +182,16 @@ const std::vector<CGPoint>& NDAutoPath::getPathPointVetor()
 void NDAutoPath::GetPath()
 {
 	if (!m_pkAStar)
+	{
 		return;
+	}
 
 	DEQUE_NODE& kPath = m_pkAStar->GetAStarPath();
 
 	if (kPath.empty())
+	{
 		return;
+	}
 
 	int nCount = (int) kPath.size();
 
@@ -194,17 +200,13 @@ void NDAutoPath::GetPath()
 		std::stringstream kStringStream;
 		kStringStream << "\n本次寻路路径==================" << "\n";
 		kStringStream << "总步数:" << nCount << "\n";
-		//<< "寻路起始:" << "[" << nStartCellX << "," << nStartCellY << "]"
-		//<< ", 寻路目标" << "[" << nEndCellX << "," << nEndCellY << "]"
-		//<< "\n";
+
 		for (int i = 0; i < nCount; i++)
 		{
 			NodeInfo* pathnode = kPath[i];
 			kStringStream << "[" << pathnode->nX << "," << pathnode->nY << "]";
 		}
 		kStringStream << "\n路径结束==================\n";
-
-		//NDLog("%@", [NSString stringWithUTF8String:ss.str().c_str()]);
 	}
 
 	do
@@ -220,52 +222,7 @@ void NDAutoPath::GetPath()
 		{
 			NodeInfo& first = *(kPath[index]);
 			NodeInfo& second = *(kPath[index + 1]);
-			/*
-			 if (first.nX > second.nX)
-			 {
-			 for (int j=0; j<iTimes; j++)
-			 {
-			 // 加点
-			 pos.x				-=	m_nStep;
 
-			 m_pointVector.push_back(pos);
-			 }
-			 }
-
-			 if (first.nX < second.nX)
-			 {
-			 for (int j=0; j<iTimes; j++)
-			 {
-			 // 加点
-			 pos.x				+=	m_nStep;
-
-			 m_pointVector.push_back(pos);
-			 }
-			 }
-
-
-			 if (first.nY > second.nY)
-			 {
-			 for (int j=0; j<iTimes; j++)
-			 {
-			 // 加点
-			 pos.y				-= m_nStep;
-
-			 m_pointVector.push_back(pos);
-			 }
-			 }
-
-			 if (first.nY < second.nY)
-			 {
-			 for (int j=0; j<iTimes; j++)
-			 {
-			 // 加点
-			 pos.y				+= m_nStep;
-
-			 m_pointVector.push_back(pos);
-			 }
-			 }
-			 */
 			if (first.nX > second.nX)
 			{
 				if (first.nY > second.nY)
