@@ -11,12 +11,12 @@
 #include "NDManualRole.h"
 #include <string>
 #include "EnumDef.h"
-#include "Task.h"
+//#include "Task.h"
 #include "NDUIDialog.h"
 #include "NDTimer.h"
-//#include "GatherPoint.h"
+#include "GatherPoint.h"
 #include "BattleUtil.h"
-#include "NDBattlePet.h"
+//#include "NDBattlePet.h"
 
 using namespace std;
 
@@ -46,7 +46,7 @@ public:
 	void Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive = false);
 
 	void SetPosition(CGPoint newPosition);
-	NDBattlePet* GetShowPet();
+
 	void Update(unsigned long ulDiff);
 	//用于绘制
 	//void SetPositionEx(CGPoint newPosition);
@@ -87,7 +87,8 @@ public:
 	}
 	void ResetGather()
 	{
-		m_bCollide = false; /*m_gp = NULL;*/
+		m_bCollide = false;
+		m_gp = NULL;
 	}
 
 	void ResetFocusRole();
@@ -125,7 +126,7 @@ public:
 
 private:
 
-	//bool doGatherPointCollides(GatherPoint *se);
+	bool doGatherPointCollides(GatherPoint *se);
 	void processSwitch();
 	bool isRoleCanMove();
 
@@ -232,8 +233,6 @@ public:
 	int m_nVipLev;
 
 public:
-	void SetLookface(int nLookface);
-	int GetLookface();
 	void SetLocked(bool locked)
 	{
 		m_bLocked = locked;
@@ -247,7 +246,7 @@ public:
 	vec_task m_vPlayerTask; //玩家任务列表
 private:
 	bool m_bCollide;
-	//GatherPoint *m_gp;
+	GatherPoint *m_gp;
 	NDTimer* m_pkTimer;
 	NDUIDialog* m_kGatherDlg;
 	bool m_bRequireDacoity;
@@ -259,7 +258,7 @@ private:
 	SET_BATTLE_SKILL_LIST m_setActSkill;
 	SET_BATTLE_SKILL_LIST m_setPasSkill;
 
-	int m_nLookface;
+	//int m_nLookface;
 public:
 	// 服务端发过来不需要计算的数据
 	struct

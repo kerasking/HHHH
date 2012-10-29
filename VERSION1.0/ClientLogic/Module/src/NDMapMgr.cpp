@@ -830,7 +830,7 @@ void NDMapMgr::AddAllNPCToMap()
 // 					pkNPC->m_bFaceRight);
 // 		}
 
-		pkNPC->HandleNPCMask(true);
+		pkNPC->HandleNpcMask(true);
 	}
 
 	NDPlayer::defaultHero().UpdateFocus();

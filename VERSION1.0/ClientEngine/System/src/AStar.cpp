@@ -78,7 +78,7 @@ BOOL CAStar::FindPath(NDMapLayer* pGamemap, const CMyPos& posStart,
 		pNode->pParent = NULL;
 		pNode->nChildNum = 0;
 		pNode->nDir = 0;
-		pNode->nF = pNode->nG + pNode->nH;
+		pNode->nF = /*pNode->nG + */pNode->nH;
 		pNode->nNumber = m_kPosStart.x << 16 | m_kPosStart.y;
 		m_kSetOpen[pNode->nNumber] = pNode;
 	}
@@ -91,20 +91,11 @@ BOOL CAStar::FindPath(NDMapLayer* pGamemap, const CMyPos& posStart,
 	{
 		double dTimePass = time(NULL) - dTimeBeg;
 		unsigned long usec = (unsigned long) (dTimePass * 1000000);
-
-		/***
-		* 临时性注释 郭浩
-		* begin
-		*/
-		// 		if (usec > dwMaxSerachTime)
-		// 		{
-		// 			//NDLog("astar time out");
-		// 			break;
-		// 		}
-		/***
-		* 临时性注释 郭浩
-		* end
-		*/
+		if (usec > dwMaxSerachTime)
+		{
+			//NDLog("astar time out");
+			break;
+		}
 
 		if (!m_bDoFindPath)
 		{
@@ -159,10 +150,10 @@ int CAStar::GetHValue(const CMyPos& kPos)
 
 	if (nDx > nDy)
 	{
-		return 10 * nDx + 10 * nDy;
+		return 10*nDx+6*nDy;
 	}
 
-	return 10 * nDy + 10 * nDx;
+	return 10*nDy+6*nDx;
 }
 
 void CAStar::AddToList(MAP_NODE& _list, NodeInfo* pNodeNew)
@@ -296,9 +287,8 @@ void CAStar::SearchChild(NodeInfo* pParentNode)
 		}
 
 		int nNumber = kPosNewNode.x << 16 | kPosNewNode.y;
-		int nG = 0;
 
-		i % 2 == 0 ? nG = pParentNode->nG + 10 : nG = pParentNode->nG + 14; 
+		int nG = pParentNode->nG + 1;
 
 		NodeInfo* pCheck = NULL;
 		if (pCheck = this->CheckList(m_kSetOpen, nNumber)) //if没问题!
@@ -328,8 +318,6 @@ void CAStar::SearchChild(NodeInfo* pParentNode)
 
 			//pCell[m_nMapWidth*posNewNode.y + posNewNode.x].nClose =1;
 			UpdateChildren(pCheck);
-
-			continue;
 		}
 		else
 		{ ///\创建一个新的点并放入open表中

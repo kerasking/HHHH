@@ -116,8 +116,6 @@ public:
 	bool OnDrawBegin(bool bDraw); override
 	void OnDrawEnd(bool bDraw); override
 
-	bool ChangeModelWithMount(int nRideStatus,int nMountType);
-
 	virtual void stopMoving(bool bResetPos = true, bool bResetTeamPos = true);
 
 	void drawEffects(bool bDraw);

@@ -25,7 +25,6 @@ public:
 public:
 	void DidFinishLaunching();
 
-	bool isAutoFight();
 	bool TouchBegin(NDTouch* touch);
 	bool TouchEnd(NDTouch* touch);
 	void TouchCancelled(NDTouch* touch);
