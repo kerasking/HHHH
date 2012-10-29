@@ -35,6 +35,8 @@ protected:
 	virtual bool OnHorizontalMove(float fDistance);
 	virtual bool OnVerticalMove(float fDistance);
 	virtual void OnMoveStop();
+	DECLARE_AUTOLINK(CUIScrollView)
+	INTERFACE_AUTOLINK(CUIScrollView)
 };
 
 /////////////////////////////////////////////////////////
@@ -50,20 +52,35 @@ public CUIScrollContainer
 	
 public:
 	void Initialization(); override
+    //设置list控件的样式 水平或者垂直
 	void SetStyle(int style);
+    //获取list控件的样式 水平或者垂直 
 	UIScrollStyle GetScrollStyle();
 	
 	void SetCenterAdjust(bool bSet);
 	bool IsCenterAdjust();
 	
+    //获取list控件 view个数
 	int	GetViewCount();
+    
+    //设置每个view的大小
 	void SetViewSize(CGSize size);
+    //获取每个view的大小 
 	CGSize GetViewSize();
+    
+    //list控件中添加view
 	void AddView(CUIScrollView* view);
+    
+    //删除索引为uiIndex的view
+    void RemoveView(unsigned int uiIndex);
+    
+    //删除id为uiViewId的view
+    void RemoveViewById(unsigned int uiViewId);
+    
 	//void ReplaceView(unsigned int uiIndex, CUIScrollView* view);
 	//void ReplaceViewById(unsigned int uiViewId, CUIScrollView* view);
-	void RemoveView(unsigned int uiIndex);
-	void RemoveViewById(unsigned int uiViewId);
+
+    //删除所有的view
 	void RemoveAllView();
 	//void InsertView(unsigned int uiIndex, CUIScrollView* view);
 	void ShowViewByIndex(unsigned int uiIndex);
@@ -74,8 +91,11 @@ public:
 	CUIScrollView* GetViewById(unsigned int uiViewId);
 	CUIScrollView* GetBeginView();
 	unsigned int GetBeginIndex();
+    void EnableScrollBar(bool bEnable)
+    {
+        CUIScrollContainer::EnableScrollBar(bEnable);
+    }
 	
-	void EnableScrollBar(bool bEnable);
 	
 private:
 	float					m_fScrollDistance;
@@ -87,10 +107,8 @@ private:
 	unsigned int			m_unBeginIndex;
 	bool					m_bCenterAdjust;
 	bool					m_bRecaclClientEventRect;
+	CAutoLink<CUIScrollView> m_linkCurView;
 	
-	
-	NDPicture*				m_picScroll;
-	bool					m_bOpenScrollBar;
 	
 private:
 	bool CheckView(CUIScrollView* view);
@@ -127,7 +145,8 @@ public:
 	bool CanHorizontalMove(NDObject* object, float& hDistance); override
 	bool CanVerticalMove(NDObject* object, float& vDistance); override
 	
-private:
+protected:
+	bool CanDestroyOnRemoveAllChildren(NDNode* pNode);override
 };
 
 #endif // _UI_SCROLL_VIEW_ZJH_

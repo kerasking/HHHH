@@ -6,6 +6,8 @@
  *  Copyright 2011 __MyCompanyName__. All rights reserved.
  *
  */
+#if 0
+
 
 #ifndef _NEW_RECHARGE_H_
 #define _NEW_RECHARGE_H_
@@ -21,8 +23,7 @@
 #include "GlobalDialog.h"
 #include "NDCommonScene.h"
 
-#pragma mark　充值-数据
-
+//#pragma mark　充值-数据
 enum  
 {
 	RechargeData_None							= 0,
@@ -65,7 +66,7 @@ typedef struct _tagNewRechargeData
 typedef std::vector<NewRechargeData>	vec_recharge_data;
 typedef vec_recharge_data::iterator		vec_recharge_data_it;
 
-#pragma mark 充值信息基类
+//#pragma mark 充值信息基类
 
 class RechargeInfoBase :
 public NDUILayer
@@ -93,7 +94,7 @@ private:
 	std::string					m_info;
 };
 
-#pragma mark 充值基本输入界面
+//#pragma mark 充值基本输入界面
 
 class RechargeBaseInput :
 public NDUILayer,
@@ -158,7 +159,7 @@ protected:
 	std::string					m_tip;
 };
 
-#pragma mark 充值卡输入界面
+//#pragma mark 充值卡输入界面
 
 class RechargeCardInput : 
 public RechargeBaseInput
@@ -180,7 +181,7 @@ private:
 	unsigned int m_tagCardNum, m_tagCardPassword;
 };
 
-#pragma mark 短信充值输入界面
+//#pragma mark 短信充值输入界面
 
 class RechargeMessageInput : 
 public RechargeBaseInput
@@ -202,7 +203,7 @@ private:
 	unsigned int m_tagPhoneNum;
 };
 
-#pragma mark　卡类型基本UI
+//#pragma mark　卡类型基本UI
 
 class CardBaseUI : 
 public NDUIButton
@@ -231,7 +232,7 @@ protected:
 };
 
 
-#pragma mark 支付通道Cell
+//#pragma mark 支付通道Cell
 
 class RechargeChannelCell : 
 public CardBaseUI
@@ -253,7 +254,7 @@ private:
 };
 
 
-#pragma mark 支付面额Cell
+//#pragma mark 支付面额Cell
 
 class RechargeFaceValueCell :
 public CardBaseUI
@@ -266,7 +267,7 @@ public:
 	~RechargeFaceValueCell();
 };
 
-#pragma mark 充值界面
+//#pragma mark 充值界面
 
 class RechargeUI :
 public NDUILayer,
@@ -346,7 +347,7 @@ public:
 	};
 };
 
-#pragma mark 充值记录
+//#pragma mark 充值记录
 
 typedef struct _tagRechargeRecordData
 {
@@ -402,7 +403,7 @@ private:
 	void SetTotal(const char*text);
 };
 
-#pragma mark 充值
+//#pragma mark 充值
 
 class Recharge :
 public NDCommonLayer
@@ -418,3 +419,5 @@ public:
 };
 
 #endif // _NEW_RECHARGE_H_
+
+#endif 

@@ -48,9 +48,6 @@ protected:
 	bool CanHorizontalMove(NDObject* object, float& hDistance); override
 	bool CanVerticalMove(NDObject* object, float& vDistance); override
 	virtual void DrawScrollBar();
-
-   //tzq 临时添加等NDNode.h 修改好后删除
-	std::vector<NDNode*> m_childrenList;
 };
 
 #endif // _UI_SCROLL_CONTAINER_H_ZJH_
