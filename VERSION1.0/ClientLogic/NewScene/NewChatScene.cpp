@@ -6,7 +6,7 @@
  *  Copyright 2011 __MyCompanyName__. All rights reserved.
  *
  */
-
+#if 0
 #include "NewChatScene.h"
 #include "NDUIButton.h"
 #include "NDUIImage.h"
@@ -1183,3 +1183,4 @@ void ChatFaceOrItemLayer::OnButtonClick(NDUIButton* button)
 			break;
 	}
 }
+#endif 
