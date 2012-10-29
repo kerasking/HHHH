@@ -235,52 +235,7 @@ namespace NDEngine
 			{
 				NodeInfo& first	= *(path[index]);
 				NodeInfo& second = *(path[index+1]);
-				/*
-				if (first.nX > second.nX)
-				{
-					for (int j=0; j<iTimes; j++)
-					{
-						// 加点
-						pos.x				-=	m_nStep;
-						
-						m_pointVector.push_back(pos);
-					}
-				}
-				
-				if (first.nX < second.nX)
-				{
-					for (int j=0; j<iTimes; j++)
-					{
-						// 加点
-						pos.x				+=	m_nStep;
-						
-						m_pointVector.push_back(pos);
-					}
-				}
-				
-				
-				if (first.nY > second.nY)
-				{
-					for (int j=0; j<iTimes; j++)
-					{
-						// 加点
-						pos.y				-= m_nStep;
-						
-						m_pointVector.push_back(pos);
-					}
-				}
-				
-				if (first.nY < second.nY)
-				{
-					for (int j=0; j<iTimes; j++)
-					{
-						// 加点
-						pos.y				+= m_nStep;
-						
-						m_pointVector.push_back(pos);
-					}
-				}
-				*/
+
 				if (first.nX > second.nX)
 				{
 					if (first.nY > second.nY)

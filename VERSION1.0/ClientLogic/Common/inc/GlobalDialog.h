@@ -3,7 +3,7 @@
  *  DragonDrive
  *
  *  Created by jhzheng on 11-3-9.
- *  Copyright 2011 (缃戦緳)DeNA. All rights reserved.
+ *  Copyright 2011 (网龙)DeNA. All rights reserved.
  *
  */
 
@@ -22,7 +22,7 @@ void GlobalShowDlg(std::string title, std::string content, float seconds = 0);
 void GlobalShowDlg(NDEngine::NDObject* delegate, std::string title,
 		std::string content, float seconds = 0);
 uint GlobalShowDlg(NDEngine::NDObject* delegate, const char* title,
-		const char* text, uint second,				// second-鍊掕鏃�,鑻ヤ负0鍒欐棤鍊掕鏃�
+		const char* text, uint second,				// second-鍊掕鏃??,鑻ヤ负0鍒欐棤鍊掕鏃??
 		const char* ortherButtons, .../*must NULL end*/
 		);
 
@@ -73,7 +73,7 @@ public:
 		this->m_bInBattle = bInBattle;
 	}
 public:
-	// 寰�鍏ㄥ眬瀵硅瘽妗嗗垪琛ㄤ腑鍔犲叆瀵硅瘽妗�,杩斿洖璇ュ璇濇鐨則ag
+	// 寰??鍏ㄥ眬瀵硅瘽妗嗗垪琛ㄤ腑鍔犲叆瀵硅瘽妗??,杩斿洖璇ュ璇濇鐨則ag
 	unsigned int Show(NDEngine::NDObject* delegate, const char* title,
 			const char* text, uint timeout, const char* ortherButtons,
 			.../*must NULL end*/);

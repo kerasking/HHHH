@@ -142,19 +142,19 @@ public:
 	virtual void draw();
 	NDMapData *GetMapData();
 	void setStartRoadBlockTimer(int time, int x, int y);
-	/*
-	 void setAutoBossFight(bool isAuto);
-	 bool isAutoFight() {return isAutoBossFight;}
-	 void walkToBoss();
-	 */
+	
+	void setAutoBossFight(bool isAuto);
+	bool isAutoFight() {return isAutoBossFight;}
+	void walkToBoss();
+	 
 	void OnTimer(OBJID tag);
 	void replaceMapData(int mapId, int center_x, int center_y);
 	void ShowTitle(int name_col, int name_row);
 	void refreshTitle();
-	//void showSwitchSprite(MAP_SWITCH_TYPE type);
-	//void ShowTreasureBox();
-	//void OpenTreasureBox();
-	//bool isTouchTreasureBox(CGPoint touchPoint);
+	void showSwitchSprite(MAP_SWITCH_TYPE type);
+	void ShowTreasureBox();
+	void OpenTreasureBox();
+	bool isTouchTreasureBox(CGPoint touchPoint);
 	//		void setRoadBlock(int x,int y){roadBlockX=x;roadBlockY=y;}
 public:
 
@@ -196,19 +196,19 @@ private:
 	cocos2d::CCArray* m_pkOrdersOfMapscenesAndMapanimations;
 	NDMapData *m_pkMapData;
 	cocos2d::CCMutableArray<cocos2d::CCMutableArray<NDFrameRunRecord*>*>* m_pkFrameRunRecordsOfMapAniGroups;
-	cocos2d::CCMutableArray<NDFrameRunRecord*> *m_pkFrameRunRecordsOfMapSwitch;
+	cocos2d::CCMutableArray<NDFrameRunRecord*>* m_pkFrameRunRecordsOfMapSwitch;
 	NDAnimationGroup* m_pkSwitchAniGroup;
-	NDSprite *m_pkTreasureBox;
-	NDUILabel *m_lbTime;
-	NDUIImage *m_lbTitle;
-	NDUIImage *m_lbTitleBg;
-	//CUISpriteNode* switchSpriteNode;
+	NDSprite* m_pkTreasureBox;
+	NDUILabel* m_lbTime;
+	NDUIImage* m_lbTitle;
+	NDUIImage* m_lbTitleBg;
+	CUISpriteNode* m_pkSwitchSpriteNode;
 	bool m_bBattleBackground;
 	bool m_bNeedShow;
 	NDTimer* m_ndBlockTimer;
 	NDTimer* m_ndTitleTimer;
 	int m_nRoadBlockTimeCount;
-	//bool isAutoBossFight;
+	bool isAutoBossFight;
 	//CCColorLayer* m_battleBgColor;
 	int m_nTitleAlpha;
 	//cocos2d::CCTexture2D *m_texMap;
@@ -233,7 +233,7 @@ private:
 	int m_nMapIndex;
 
 	bool m_bShowTitle;
-	//MAP_SWITCH_TYPE switch_type;
+	MAP_SWITCH_TYPE m_eSwitchType;
 
 	NDLightEffect* m_pkRoadSignLightEffect;
 
