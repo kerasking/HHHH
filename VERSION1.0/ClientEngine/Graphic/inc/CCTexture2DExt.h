@@ -11,6 +11,7 @@
 #define _CC_TEXTURE_2D_EXT_H_
 
 #include "CCTexture2D.h"
+
 //todo
 /*
 @interface CCTexture2D (MemoryMonitor)

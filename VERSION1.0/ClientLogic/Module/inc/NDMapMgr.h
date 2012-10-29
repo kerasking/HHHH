@@ -21,6 +21,9 @@
 #include "NDMapLayer.h"
 #include "NDConsole.h"
 #include "NDTimer.h"
+#include "AutoLink.h"
+//#include "GameUIRequest.h"		///< 依赖汤自勤的GameUIRequest
+#include "GlobalDialog.h"
 
 using namespace std;
 
@@ -226,7 +229,8 @@ typedef MAP_FRIEND_ELEMENT::iterator		MAP_FRIEND_ELEMENT_IT;
 
 typedef struct _tagShopItemInfo 
 {
-	int itemType, payType;
+	int itemType;
+	int payType;
 	_tagShopItemInfo() { memset(this, 0, sizeof(*this)); }
 	_tagShopItemInfo(int itemType, int payType)
 	{
@@ -257,8 +261,11 @@ class NDMapMgr:
 public:
 
 	typedef map<int,NDManualRole*> map_manualrole;
+	typedef map_manualrole::iterator map_manualrole_it;
 	typedef vector<NDNpc*> VEC_NPC;
 	typedef vector<NDMonster*> VEC_MONSTER;
+	//typedef vector<RequsetInfo> VEC_REQUST; ///< 依赖汤自勤的GameUIRequest 郭浩
+	typedef VEC_MONSTER::iterator vec_monster_it;
 
 	DECLARE_CLASS(NDMapMgr);
 
@@ -266,14 +273,56 @@ public:
 	virtual ~NDMapMgr();
 
 	virtual void Update(unsigned long ulDiff);
+	NDMonster* GetMonster(int nID);
 
 	virtual bool process( MSGID usMsgID, NDEngine::NDTransData* pkData, int nLength );
+	void processMsgCommonList(NDTransData& kData);
+	void processSee(NDTransData& kData);
+	void processNPCInfo(NDTransData& kData);
+	void processGameQuit(NDTransData* pkData,int nLength);
+	void processMsgCommonListRecord(NDTransData& kData);
+	void processNpcPosition(NDTransData& kData);
 	void processPlayer(NDTransData* pkData,int nLength);
 	void processPlayerExt(NDTransData* pkData,int nLength);
 	void processWalk(NDTransData* pkData,int nLength);
 	void processWalkTo(NDTransData& kData);
+	void processTalk(NDTransData& kData);
+	void processNpcTalk(NDTransData& kData);
+	void ProcessLoginSuc(NDTransData& kData);
+	void processCompetition(NDTransData& kData);
+	void processShowTreasureHuntAward(NDTransData& kData);
+	void processRespondTreasureHuntProb(NDTransData& kData);
+	void processRespondTreasureHuntInfo(NDTransData& kData);
+	void processKickOutTip(NDTransData& kData);
+	void processItemTypeInfo(NDTransData& kData);
+	void processReCharge(NDTransData& kData);
+	void processGoodFriend(NDTransData& kData);
+	void processRechargeReturn(NDTransData& kData);
+	void processVersionMsg(NDTransData& kData);
+	void processQueryPetSkill(NDTransData& kData);
+	void processRoadBlock(NDTransData& kData);
+	void ProcessTempCredential(NDTransData& kData);
 	void processChangeRoom(NDTransData* pkData,int nLength);
+	void processActivity(NDTransData& kData);
+	void processPortal(NDTransData& kData);
+	void processMarriage(NDTransData& kData);
+	void processDeleteRole(NDTransData& kData);
 	void processNPCInfoList(NDTransData* pkData,int nLength);
+	void processKickBack(NDTransData* pkData,int nLength);
+	void processChgPoint(NDTransData* pkData,int nLength);
+	void processCollection(NDTransData& kData);
+	void processUserInfoSee(NDTransData& kData);
+	void processPlayerLevelUp(NDTransData& kData);
+	void processNPC(NDTransData& kData);
+	void processPetInfo(NDTransData* pkData,int nLength);
+	void processMonsterInfo(NDTransData* pkData, int nLength);
+	void processNpcStatus(NDTransData* pkData, int nLength);
+	void processFormula(NDTransData& kData);
+	void processRehearse(NDTransData& kData);
+	void processDigout(NDTransData& kData);
+	void processDisappear(NDTransData* pkData, int nLength);
+	void processSyndicate(NDTransData& kData);
+	void BattleEnd(int iResult);
 
 protected:
 
@@ -283,10 +332,18 @@ protected:
 	NDManualRole* GetManualRole(const char* pszName);
 	void ClearManualRole();
 	void AddAllNPCToMap();
+	NDMonster* GetBoss();
 	void AddAllMonsterToMap();
+	bool GetMonsterInfo(monster_type_info& kInfo, int nType);
 	void DelManualRole(int nID);
 	void ClearNPC();
+	NDNpc* GetNpc(int nID);
 	void ClearMonster();
+	void setNpcTaskStateById(int nNPCID,int nState);
+	//void addRequst(RequsetInfo& kRequest);	///< 依赖汤自勤的RequsetInfo 郭浩
+	void DelNpc(int nID);
+	void AddOneNPC(NDNpc* pkNpc);
+	bool DelRequest(int nID);
 	void ClearGP();
 	bool loadSceneByMapDocID(int nMapID);
 	void AddSwitch();
@@ -303,11 +360,16 @@ protected:
 	virtual bool processConsole( const char* pszInput );
 
 	virtual void OnTimer( OBJID tag );
+	virtual NDMonster* GetBattleMonster();
+	void SetBattleMonster(NDMonster* pkMonster);
+
+	CC_SYNTHESIZE(int,m_nCurrentMonsterRound,CurrentMonsterRound);		///< 貌似此变量没有什么引用，废弃掉？ 郭浩
 
 	static bool m_bFirstCreate;
 	static bool m_bVerifyVersion;
 
 	map_manualrole m_mapManualRole;
+	monster_info m_mapMonsterInfo;
 	VEC_NPC m_vNPC;
 	VEC_MONSTER m_vMonster;
 
@@ -324,6 +386,17 @@ protected:
 	CCSize m_kMapSize;
 
 	string m_strMapName;
+	/**npc聊天相关*/
+	unsigned short usData;
+	string strLeaveMsg;
+	string strTitle;
+	string strNPCText;
+	string m_strNoteTitle; // 公告
+	string m_strNoteContent;
+
+	CAutoLink<NDMonster> m_apWaitBattleMonster;
+//	VEC_REQUST m_vecRequest;		///< 依赖汤自勤的GameUIRequest 郭浩
+	CIDFactory m_idAlloc;
 
 private:
 };

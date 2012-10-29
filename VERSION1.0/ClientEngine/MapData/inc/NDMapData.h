@@ -48,9 +48,9 @@ public:
 
 	void SetLabel(NDMapData* mapdata);
 	void SetLabelNew(NDMapData* pkMapdata);
-	void SetLableByType(int eLableType, int x, int y, const char* text,
+	void SetLableByType(int eLableType, int x, int y, const char* pszText,
 			cocos2d::ccColor4B color1, cocos2d::ccColor4B color2,
-			CGSize sizeParent);
+			CGSize kParentSize);
 	void draw();
 
 private:
@@ -100,7 +100,7 @@ public:
 	CC_SYNTHESIZE(unsigned int, m_nRoadBlockX, RoadBlockX)
 	CC_SYNTHESIZE(unsigned int, m_nRoadBlockY, RoadBlockY)
 
-	//CC_SYNTHESIZE_READONLY(CCArray<CustomCCTexture2D*>*, m_MapTiles, MapTiles)
+	CC_SYNTHESIZE_READONLY(CCArray*, m_kMapTiles, MapTiles)
 	CC_SYNTHESIZE(std::vector<bool>*, m_pkObstacles, Obstacles)
 	CC_SYNTHESIZE(cocos2d::CCArray*, m_pkSceneTiles, SceneTiles)
 	CC_SYNTHESIZE(cocos2d::CCArray*, m_pkBackgroundTiles, BgTiles)

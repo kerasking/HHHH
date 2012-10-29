@@ -41,9 +41,16 @@ const int TileHeight = 16;
 std::vector<PassWay> m_passWayInfos;
 
 NDWorldMapData::NDWorldMapData() :
-		m_nLayerCount(0), m_nColumns(0), m_nRows(0), m_nUnitSize(0), m_MapTiles(
-				NULL), m_SceneTiles(NULL), m_BgTiles(NULL), m_AnimationGroups(
-				NULL), m_AniGroupParams(NULL), m_PlaceNodes(NULL)
+m_nLayerCount(0),
+m_nColumns(0),
+m_nRows(0),
+m_nUnitSize(0),
+m_MapTiles(NULL),
+m_SceneTiles(NULL),
+m_BgTiles(NULL),
+m_AnimationGroups(NULL),
+m_AniGroupParams(NULL),
+m_PlaceNodes(NULL)
 {
 	m_MapSize = CGSizeZero;
 }
@@ -469,7 +476,7 @@ int NDWorldMapData::getDestMapIdWithSourceMapId(int mapId, int passwayIndex)
 
 PlaceNode * NDWorldMapData::getPlaceNodeWithMapId(int mapId)
 {
-	PlaceNode *result = NULL;
+	PlaceNode* result = NULL;
 	for (unsigned int i = 0; i < m_PlaceNodes->count(); i++)
 	{
 		PlaceNode *node = (PlaceNode *) m_PlaceNodes->objectAtIndex(i);

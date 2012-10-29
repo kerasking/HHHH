@@ -218,11 +218,15 @@ bool NDLocalXmlString::GetValue(const std::string str, bool& isKey, std::string&
 	return true;
 }
 
-// NSString* NDLocalXmlString::GetDocumensDirectory()
-// {
-//	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
+ NSString* NDLocalXmlString::GetDocumensDirectory()
+ {
+	 /***
+	 * 暂时没找到实现替代方案
+	 * 郭浩
+	 */
+	//NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
 	
-//	NSString *documentsDirectory = [paths objectAtIndex:0]; 
+	NSString *documentsDirectory = 0;//[paths objectAtIndex:0]; 
 	
-//	return documentsDirectory;
-//}
+	return documentsDirectory;
+}

@@ -237,6 +237,7 @@ private:
 	LuaObject m_kDelegateDestroy;
 
 public:
+
 	void SetPosx(int nposx)
 	{
 		m_nPosx = nposx;
