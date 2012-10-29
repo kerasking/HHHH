@@ -324,6 +324,9 @@ public:
 	void processSyndicate(NDTransData& kData);
 	void BattleEnd(int iResult);
 
+public:
+	bool Hack_loadSceneByMapDocID(int nMapID) { return loadSceneByMapDocID(nMapID); }; //for debug purpose only.
+
 protected:
 
 	void LoadSceneMonster();
@@ -358,6 +361,7 @@ protected:
 		unsigned int radioButtonIndex, int ortherButtonTag );
 
 	virtual bool processConsole( const char* pszInput );
+	virtual bool processPM(const char* pszCmd) { return true; }
 
 	virtual void OnTimer( OBJID tag );
 	virtual NDMonster* GetBattleMonster();

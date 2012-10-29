@@ -184,56 +184,25 @@ void NDConsole::ProcessInput(const char* pszInput)
 	}
 }
 
+//@pm
 void NDConsole::PM(const char* pszInput)
 {	
+	// remove slash & lf
 	char cmd[100] = {0};
 	strncpy( cmd, pszInput + 1, sizeof(cmd) - 1 );
-	char* p = strstr( cmd, "\r\n" ); if (p) *p = 0;//remove line feed.
+	char* p = strstr( cmd, "\r\n" ); if (p) *p = 0;
 
-	int val = 0;
-	char szDebugOpt[50] = {0};
-
-	if (stricmp(cmd, "opt help") == 0)
+	// publish to all listener
+	for (MAP_LISTENER::iterator it = m_kListenerMap.begin();
+		it != m_kListenerMap.end(); it++)
 	{
-		TCHAR help[] =	L"syntax: opt arg 0/1\r\n"
-						L"arg can be: tick, script, network, mainloop, drawhud, drawui, drawrole, drawmap\r\n";
+		NDConsoleListener* pkListener = it->second;
 
-		DWORD n = 0;
-		WriteConsoleW( m_hOutputHandle, help, sizeof(help)/sizeof(TCHAR), &n, NULL );
+		if (pkListener)
+		{
+			pkListener->processPM( cmd );
+		}
 	}
-	else if (sscanf(cmd, "opt %s %d", szDebugOpt, &val) == 2)
-	{
-		if (stricmp(szDebugOpt, "tick") == 0)
-			NDDebugOpt::setTickEnabled( val != 0 );
-
-		else if (stricmp(szDebugOpt, "script") == 0)
-			NDDebugOpt::setScriptEnabled( val != 0 );
-
-		else if (stricmp(szDebugOpt, "network") == 0)
-			NDDebugOpt::setNetworkEnabled( val != 0 );
-
-		else if (stricmp(szDebugOpt, "mainloop") == 0)
-			NDDebugOpt::setMainLoopEnabled( val != 0 );
-
-		else if (stricmp(szDebugOpt, "drawhud") == 0)
-			NDDebugOpt::setDrawHudEnabled( val != 0 );
-
-		else if (stricmp(szDebugOpt, "drawui") == 0)
-			NDDebugOpt::setDrawUIEnabled( val != 0 );
-
-		else if (stricmp(szDebugOpt, "drawrole") == 0)
-			NDDebugOpt::setDrawRoleEnabled( val != 0 );
-
-		else if (stricmp(szDebugOpt, "drawmap") == 0)
-			NDDebugOpt::setDrawMapEnabled( val != 0 );
-	}
-	else
-	{
-		DWORD n = 0;
-		TCHAR msg[] = L"err: unknown cmd.\r\n";
-		WriteConsole( m_hOutputHandle, msg, sizeof(msg)/sizeof(TCHAR), &n, NULL );
-	}
-	//@todo...
 }
 
 const char* NDConsole::GetSpecialCommand( const char* pszCommand )
