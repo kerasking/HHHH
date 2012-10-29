@@ -9,8 +9,7 @@
 
 #include "UIHyperlink.h"
 #include "CCPointExtension.h"
-
-using namespace cocos2d;
+#include "NDUtility.h"
 
 IMPLEMENT_CLASS(CUIHyperlinkText, NDUINode)
 
@@ -124,6 +123,14 @@ int CUIHyperlinkText::GetLinkTextAlignment()
 	return m_alignment;
 }
 
+bool CUIHyperlinkText::CanDestroyOnRemoveAllChildren(NDNode* pNode)
+{
+	if (pNode == m_uiLinkText)
+	{
+		m_uiLinkText	= NULL;
+	}
+	return true;
+}
 ////////////////////////////////////////////////////////////////////////////
 
 IMPLEMENT_CLASS(CUIHyperlinkButton, NDUIButton)
@@ -131,6 +138,7 @@ IMPLEMENT_CLASS(CUIHyperlinkButton, NDUIButton)
 CUIHyperlinkButton::CUIHyperlinkButton()
 {	
 	m_hyperlinkText		= NULL;
+	m_rectLinkRect		= CGRectZero;
 }
 
 CUIHyperlinkButton::~CUIHyperlinkButton()
@@ -155,19 +163,30 @@ void CUIHyperlinkButton::SetLinkBoundRect(CGRect rectBound)
 		return;
 	}
 	
+	m_rectLinkRect		= rectBound;
+	this->SetFrameRect(rectBound);
 	rectBound.origin	= CGPointZero;
 	m_hyperlinkText->SetLinkBoundRect(rectBound);
 }
 
 void CUIHyperlinkButton::SetLinkText(const char* text)
 {
-	//NSString *nsstr = [NSString stringWithUTF8String:text];
 	if (!m_hyperlinkText)
 	{
 		return;
 	}
 	
 	m_hyperlinkText->SetLinkText(text);
+	CGRect rect		= this->GetFrameRect();
+	CGRect rectText = m_hyperlinkText->GetFrameRect();
+	rect.size		= rectText.size;
+	int nAlign		= m_hyperlinkText->GetLinkTextAlignment();
+	if (LabelTextAlignmentLeft != nAlign)
+	{
+		rect.origin	= ccpAdd(m_rectLinkRect.origin, rectText.origin);
+		m_hyperlinkText->SetFrameRect(CGRectMake(0, 0, rect.size.width, rect.size.height));
+	}
+	this->SetFrameRect(rect);
 }
 
 void CUIHyperlinkButton::SetLinkTextFontSize(unsigned int uiFontSize)
@@ -229,4 +248,12 @@ void CUIHyperlinkButton::EnableLine(bool bEnable)
 void CUIHyperlinkButton::draw()
 {
 	NDUIButton::draw();
+}
+bool CUIHyperlinkButton::CanDestroyOnRemoveAllChildren(NDNode* pNode)
+{
+	if (pNode == m_hyperlinkText)
+	{
+		m_hyperlinkText	= NULL;
+	}
+	return true;
 }

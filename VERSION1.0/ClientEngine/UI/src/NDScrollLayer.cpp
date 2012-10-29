@@ -670,7 +670,7 @@ bool NDUIContainerScrollLayer::refresh(float distance)
 			m_imageScroll->SetFrameRect(rect);
 
 			NDPicture *pic = NDPicturePool::DefaultPool()->AddPicture(
-					NDPath::GetImgPathNew("new_scroll.png"), 0,
+					NDPath::GetImgPathUINew("new_scroll.png"), 0,
 					rect.size.height);
 
 			m_imageScroll->SetPicture(pic, true);
@@ -733,7 +733,7 @@ void NDUIContainerScrollLayer::refreshContainer(
 				fMax < selfHeight ? 0.0f : selfHeight / fMax * selfHeight;
 
 		NDPicture *pic = NDPicturePool::DefaultPool()->AddPicture(
-				NDPath::GetImgPathNew("new_scroll.png"), 0, fHeight);
+				NDPath::GetImgPathUINew("new_scroll.png"), 0, fHeight);
 
 		m_imageScroll->SetPicture(pic, true);
 

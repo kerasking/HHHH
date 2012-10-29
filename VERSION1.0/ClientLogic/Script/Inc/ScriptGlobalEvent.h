@@ -7,9 +7,6 @@
  *
  */
 
-#include "NewGameUIPetAttrib.h"
-#include "ScriptMgr.h"
-
 #ifndef _SCRIPT_GLOBAL_EVENT_H_ZJH_
 #define _SCRIPT_GLOBAL_EVENT_H_ZJH_
 
@@ -28,15 +25,22 @@ typedef enum
 	GE_ONMOVE							= GLOBALEVENT_BEGIN + 5,
 	GE_ONMOVE_END						= GLOBALEVENT_BEGIN + 6,
 	GE_QUITGAME							= GLOBALEVENT_BEGIN + 7,
+	GE_BATTLE_BEGIN						= GLOBALEVENT_BEGIN + 8,
+	GE_BATTLE_END						= GLOBALEVENT_BEGIN + 9,
+	GE_CLICK_OTHERPLAYER                = GLOBALEVENT_BEGIN + 10,
+	GE_LOGINOK_GUEST                    = GLOBALEVENT_BEGIN + 11,
+	GE_LOGINOK_NORMAL                   = GLOBALEVENT_BEGIN + 12,
+	GE_LOGINOK_GUEST2NORMAL             = GLOBALEVENT_BEGIN + 13,
+	GE_LOGINERROR                       = GLOBALEVENT_BEGIN + 14,
+	GE_UPDATE_GAME                      = GLOBALEVENT_BEGIN + 90,
 	GLOBALEVENT_END,
 }GLOBALEVENT;
 
-class ScriptGlobalEvent : public NDEngine::ScriptObject
+class ScriptGlobalEvent
 {
 public:
-	virtual void OnLoad();
-
-	static void OnEvent(GLOBALEVENT eEvent, int param1 = 0, int param2 = 0, int param3 = 0);
+	static void Load();
+	static void OnEvent(GLOBALEVENT eEvent, int param1=0, int param2=0, int param3=0);
 };
 
 #endif // _SCRIPT_GLOBAL_EVENT_H_ZJH_

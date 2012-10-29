@@ -77,7 +77,7 @@ void CCObject::release(void)
 
 	if (m_uReference == 0)
 	{
-		//delete this;
+		delete this;
 	}
 }
 

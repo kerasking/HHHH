@@ -8,6 +8,7 @@
 
 #include "NDLightEffect.h"
 #include "NDAnimationGroupPool.h"
+#include "NDDebugOpt.h"
 
 namespace NDEngine
 {
@@ -89,6 +90,8 @@ void NDLightEffect::Run(CGSize mapSize, bool draw/*=true*/)
 
 void NDLightEffect::draw()
 {
+	if (!NDDebugOpt::getDrawLightEffectEnabled()) return;
+
 	NDNode::draw();
 
 	NDLayer* pkLayer = (NDLayer*) this->GetParent();

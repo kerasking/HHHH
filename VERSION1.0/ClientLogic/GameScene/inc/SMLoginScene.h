@@ -9,6 +9,7 @@
 #ifndef SMYS_SMLoginScene_h
 #define SMYS_SMLoginScene_h
 
+
 #include "NDScene.h"
 #include "NDUIButton.h"
 #include "NDUIlayer.h"
@@ -31,6 +32,31 @@
 //#include "BattleFieldMgr.h"
 //#include "NDCrashUpload.h"
 //#include "UpdateFactory.h"
+ 
+
+#if 0
+#include "NDScene.h"
+#include "NDUIButton.h"
+#include "NDUIlayer.h"
+#include "NDTimer.h"
+#include "NDUILoad.h"
+#include "UIExp.h"
+#include "BattleMgr.h"
+#include "NDColorPool.h"
+#include "NDDataPersist.h"
+#include "NDLocalXmlString.h"
+#include "ItemMgr.h"
+#include "cpLog.h"
+#include "NDUtility.h"
+#include "FarmMgr.h"
+#include "BattleFieldMgr.h"
+#include "SMUpdate.h"
+#include "DownloadPackage.h"
+#include "NDTransData.h"
+#include "NDUIDialog.h"
+#include "ZipUnZip.h"
+#endif
+
 
 #define ID_LOADING_PROCESS (90)
 
@@ -57,7 +83,7 @@ public:
 // 	virtual void OnUnCompress(int nFileNum,int nFileIndex,const char* pszFileName);
 // 	virtual void CompleteUpdate(ERROR_CODE emErrCode);
 // 	virtual void OnError(ERROR_CODE emErrCode,const char* pszErrMsg);
-    
+	void LoadIni(const char* iniFile);
 private:
     void OnTimer(OBJID idTag);
 	

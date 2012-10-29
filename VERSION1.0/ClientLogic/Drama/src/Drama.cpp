@@ -47,7 +47,7 @@ void Drama::End()
 
 void Drama::StartUpdate()
 {
-	m_timer.SetTimer(this, TAG_DRAMA_UPDATE, 0.1f);
+	m_timer.SetTimer(this, TAG_DRAMA_UPDATE, 0.04f);
 }
 
 void Drama::EndUpdate()

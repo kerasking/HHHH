@@ -12,13 +12,9 @@
 #include "NDAnimation.h"
 #include "CCTexture2D.h"
 #include "CCTextureCache.h"
-//#include "NDConstant.h"
+#include "CCDirector.h"
 #include "NDSprite.h"
 #include "NDPath.h"
-//#include "NDMonster.h"
-//#include "NDNpc.h"
-//#include "NDPlayer.h"
-//#include "NDBaseRole.h"
 #include "NDConstant.h"
 
 using namespace cocos2d;
@@ -53,55 +49,13 @@ void NDFrameRunRecord::NextFrame(int nTotalFrames)
 {
 	if (m_bSetPlayRange)
 	{
+		m_nEndFrame = nTotalFrames < m_nEndFrame ? nTotalFrames : m_nEndFrame;
 		m_nCurrentFrameIndex =
-				m_nStartFrame < m_nEndFrame ?
-						m_nCurrentFrameIndex + 1 : m_nCurrentFrameIndex - 1;
+			m_nStartFrame < m_nEndFrame ?
+			m_nCurrentFrameIndex + 1 : m_nCurrentFrameIndex - 1;
 		m_nNextFrameIndex =
-				m_nStartFrame < m_nEndFrame ?
-						m_nCurrentFrameIndex + 1 : m_nCurrentFrameIndex - 1;
-
-		if (m_nStartFrame < m_nEndFrame)
-		{
-			if (m_nCurrentFrameIndex >= m_nEndFrame)
-			{
-				m_nCurrentFrameIndex = m_nEndFrame;
-				m_nNextFrameIndex = m_nEndFrame;
-			}
-		}
-		if (m_nStartFrame == m_nEndFrame)
-		{
-			m_nCurrentFrameIndex = m_nEndFrame;
-			m_nNextFrameIndex = m_nEndFrame;
-		}
-		else
-		{
-			if (m_nNextFrameIndex <= m_nEndFrame)
-			{
-				m_nCurrentFrameIndex = m_nEndFrame;
-				m_nNextFrameIndex = m_nEndFrame;
-			}
-		}
-
-		if (m_nCurrentFrameIndex < 0)
-		{
-			m_nCurrentFrameIndex = 0;
-		}
-
-		if (m_nCurrentFrameIndex >= nTotalFrames)
-		{
-			m_nCurrentFrameIndex = nTotalFrames;
-		}
-
-		if (m_nNextFrameIndex < 0)
-		{
-			m_nNextFrameIndex = 0;
-		}
-
-		if (m_nNextFrameIndex >= nTotalFrames)
-		{
-			m_nNextFrameIndex = nTotalFrames;
-		}
-
+			m_nStartFrame < m_nEndFrame ?
+			m_nCurrentFrameIndex + 1 : m_nCurrentFrameIndex - 1;
 		return;
 	}
 
@@ -121,26 +75,35 @@ void NDFrameRunRecord::NextFrame(int nTotalFrames)
 	if (m_nNextFrameIndex == nTotalFrames)
 	{
 		m_nNextFrameIndex = 0;
-		if (m_nRepeatTimes == 0)
-		{
-			m_bIsCompleted = true;
-		}
+	}
 
+	if ((nTotalFrames - 1) == m_nCurrentFrameIndex && m_nRepeatTimes <= 0)
+	{
+		m_bIsCompleted = true;
 	}
 }
 
 bool NDFrameRunRecord::isThisFrameEnd()
 {
-	if (m_nEnduration && m_nRunCount >= m_nEnduration - 1)
-	{
-		return true;
-	} 
-	else
-	{
-		return false;
-	}
+	//@zwq: 动画逐帧控制，应该按时间来，而不是Tick次数，先打个补丁！
+	float fMultiple = (1.0f / 24.0f) / CCDirector::sharedDirector()->getAnimationInterval();
+	//fMultiple *= 1.0f; //目前动作效果不好，加个参数细条，这些最好能在动画编辑器里调整。
 
-	return true;
+	return (m_nEnduration > 0)
+		&& (m_nRunCount >= int(m_nEnduration * fMultiple + 0.5f));
+}
+
+void NDFrameRunRecord::Clear()
+{
+	m_nNextFrameIndex = 0;
+	m_nCurrentFrameIndex = 0;
+	m_nRunCount = 0;
+	m_bIsCompleted = false;
+	m_nRepeatTimes = 0;
+	m_nStartFrame = 0;
+	m_nEndFrame = 0;
+	m_nEnduration = 0;
+	m_nTotalFrame = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -173,16 +136,16 @@ NDFrame::~NDFrame()
 	CC_SAFE_RELEASE (m_pkTiles);
 }
 
-bool NDFrame::enableRunNextFrame(NDFrameRunRecord* frameRunRecord)
+bool NDFrame::enableRunNextFrame(NDFrameRunRecord* pkFrameRunRecord)
 {
-	if (frameRunRecord->getRunCount() >= m_nEnduration - 1)
+	if (pkFrameRunRecord->getRunCount() >= m_nEnduration - 1)
 	{
-		frameRunRecord->setRunCount(0);
+		pkFrameRunRecord->setRunCount(0);
 		return true;
 	}
 
-	frameRunRecord->setRunCount(frameRunRecord->getRunCount() + 1);
-
+	pkFrameRunRecord->setRunCount(pkFrameRunRecord->getRunCount() + 1);
+	
 	return false;
 }
 
@@ -202,98 +165,19 @@ void NDFrame::initTiles()
 
 void NDFrame::drawHeadAt(CGPoint pos)
 {
-	//todo(zjh)
-	int faceX = 5;
-	int faceY = 8;
-	int coordX = 0;
-	int coordY = 0;
-
-	NDAnimation* pkAnimation = m_pkBelongAnimation;
-	NDAnimationGroup* pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
-
-	if (m_bNeedInitTitles)
-	{
-		this->run();
-	}
-
-	// 计算脸部偏移
-	for (unsigned int i = 0; i < m_pkFrameTiles->count(); i++)
-	{
-		NDFrameTile* pkFrameTile = m_pkFrameTiles->getObjectAtIndex(i);
-
-		NDTileTableRecord* pkRecord =
-				(NDTileTableRecord *) pkAnimationGroup->getTileTable()->objectAtIndex(
-						pkFrameTile->getTableIndex());
-
-		if (pkRecord->getReplace() == REPLACEABLE_FACE && pkRecord->getX() == 0
-				&& pkRecord->getY() == 0)
-		{
-			coordX = (pkFrameTile->getX() - pkAnimation->getX()) - faceX;
-			coordY = (pkFrameTile->getY() - pkAnimation->getY()) - faceY;
-			break;
-		}
-	}
-
-	for (unsigned i = 0; i < m_pkFrameTiles->count(); i++)
-	{
-		NDFrameTile* pkFrameTile = m_pkFrameTiles->getObjectAtIndex(i);
-		NDTileTableRecord* pkRecord =
-				(NDTileTableRecord *) pkAnimationGroup->getTileTable()->objectAtIndex(
-						pkFrameTile->getTableIndex());
-
-		int fX = pkFrameTile->getX();
-		int fY = pkFrameTile->getY();
-
-		int clipw = pkRecord->getW();
-		int replace = pkRecord->getReplace();
-
-		if (replace == REPLACEABLE_FACE || replace == REPLACEABLE_HAIR
-				|| replace == REPLACEABLE_EXPRESSION)
-		{
-			NDTile* pkTile = m_pkTiles->getObjectAtIndex(i);
-
-			if (!pkTile)
-			{
-				continue;
-			}
-
-			pkTile->setTexture(
-					this->getTileTextureWithImageIndex(
-							pkRecord->getImageIndex(), pkRecord->getReplace()));
-
-			if (pkTile->getTexture() == NULL)
-			{
-				continue;
-			}
-
-			int xx = pos.x
-					+ (pkAnimation->getMidX()
-							+ (pkAnimation->getMidX() - fX - clipw)
-							- pkAnimation->getX()) - coordX;
-
-			int yy = pos.y + (fY - pkAnimation->getY()) - coordY;
-
-			pkTile->setReverse(true);
-			pkTile->setDrawRect(
-					CGRectMake(xx, yy, pkRecord->getW(), pkRecord->getH()));
-			pkTile->setMapSize(CGSizeMake(480.0f, 320.0f));
-			pkTile->make();
-			pkTile->draw();
-		}
-	}
-
+	///< 头像绘制已放于Lua，此处作废。郭浩
 }
 
 void NDFrame::run()
 {
-	this->run(1.0f);
+	run(1.0f);
 }
 
 void NDFrame::run(float fScale)
 {
 	if (m_bNeedInitTitles)
 	{
-		this->initTiles();
+		initTiles();
 	}
 
 	NDAnimation* pkAnimation = m_pkBelongAnimation;
@@ -304,14 +188,14 @@ void NDFrame::run(float fScale)
 	{
 		NDFrameTile* pkFrameTile = m_pkFrameTiles->getObjectAtIndex(i);
 		NDTileTableRecord *pkRecord =
-				(NDTileTableRecord *) pkAnimationGroup->getTileTable()->objectAtIndex(
-						pkFrameTile->getTableIndex());
+			(NDTileTableRecord *) pkAnimationGroup->getTileTable()->objectAtIndex(
+			pkFrameTile->getTableIndex());
 
 		NDTile *pkTile = m_pkTiles->getObjectAtIndex(i);
 
 		pkTile->setTexture(
-				getTileTextureWithImageIndex(pkRecord->getImageIndex(),
-						pkRecord->getReplace()));
+			getTileTextureWithImageIndex(pkRecord->getImageIndex(),
+			pkRecord->getReplace()));
 
 		if (pkTile->getTexture() == NULL)
 		{
@@ -319,23 +203,23 @@ void NDFrame::run(float fScale)
 		}
 
 		TILE_REVERSE_ROTATION kReverseRotation = tileReverseRotationWithReverse(
-				pkAnimation->getReverse(), pkFrameTile->getRotation());
+			pkAnimation->getReverse(), pkFrameTile->getRotation());
 		pkTile->setReverse(kReverseRotation.reverse);
 		pkTile->setRotation(kReverseRotation.rotation);
 
 		NDEngine::NDSprite *pkSprite =
-				(NDEngine::NDSprite *) pkAnimationGroup->getRuningSprite();
+			(NDEngine::NDSprite *) pkAnimationGroup->getRuningSprite();
 
 		if (pkSprite && !pkSprite->IsCloakEmpty()
-				&& pkRecord->getReplace() >= REPLACEABLE_LEFT_SHOULDER
-				&& pkRecord->getReplace() <= REPLACEABLE_SKIRT_LIFT_LEG)
+			&& pkRecord->getReplace() >= REPLACEABLE_LEFT_SHOULDER
+			&& pkRecord->getReplace() <= REPLACEABLE_SKIRT_LIFT_LEG)
 		{
 			pkTile->setCutRect(
-					CGRectMake(0, 0,
-							pkTile->getTexture()->getMaxS()
-									* pkTile->getTexture()->getPixelsWide(),
-							pkTile->getTexture()->getMaxT()
-									* pkTile->getTexture()->getPixelsHigh()));
+				CGRectMake(0, 0,
+				pkTile->getTexture()->getMaxS()
+				* pkTile->getTexture()->getPixelsWide(),
+				pkTile->getTexture()->getMaxT()
+				* pkTile->getTexture()->getPixelsHigh()));
 		}
 		else
 		{
@@ -344,7 +228,7 @@ void NDFrame::run(float fScale)
 			int nCutW = pkRecord->getW();
 			int nCutH = pkRecord->getH();
 
-			pkTile->setCutRect(CGRectMake(nCutX, nCutY, nCutW,nCutH));
+			pkTile->setCutRect(CGRectMake(nCutX, nCutY, nCutW, nCutH));
 		}
 
 		GLfloat x = pkAnimationGroup->getPosition().x;
@@ -364,25 +248,21 @@ void NDFrame::run(float fScale)
 
 		if (pkAnimation->getReverse())
 		{
-			int tileW = this->getTileW(pkRecord->getW(), pkRecord->getH(),
-					kReverseRotation.rotation);
-//			if (reverseRotation.rotation == NDRotationEnumRotation90 || reverseRotation.rotation == NDRotationEnumRotation270) 
-//			{
-//				tileW = record.h;
-//			}
+			int tileW = getTileW(pkRecord->getW(), pkRecord->getH(),
+				kReverseRotation.rotation);
+
 			int newX = pkAnimation->getMidX()
-					+ (pkAnimation->getMidX() - pkFrameTile->getX() - tileW);
+				+ (pkAnimation->getMidX() - pkFrameTile->getX() - tileW);
 			x = x + newX * fScale - pkAnimation->getX() * fScale;
 		}
-
 		else
 		{
 			x = x + pkFrameTile->getX() * fScale - pkAnimation->getX() * fScale;
 		}
 
 		pkTile->setDrawRect(
-				CGRectMake(x, y, pkTile->getCutRect().size.width * fScale,
-						pkTile->getCutRect().size.height * fScale));
+			CGRectMake(x, y, pkTile->getCutRect().size.width * fScale,
+			pkTile->getCutRect().size.height * fScale));
 		pkTile->setMapSize(pkAnimationGroup->getRunningMapSize());
 		pkTile->make();
 		pkTile->draw();
@@ -439,10 +319,11 @@ float NDFrame::getTileW(int w, int h, NDRotationEnum rotation)
 }
 
 TILE_REVERSE_ROTATION NDFrame::tileReverseRotationWithReverse(bool bReverse,
-		int nRota)
+															  int nRota)
 {
 	//reverse = true;
-	static TILE_REVERSE_ROTATION s_kReverseRotaionResult = {0};
+	static TILE_REVERSE_ROTATION s_kReverseRotaionResult =
+	{ 0 };
 
 	switch (nRota)
 	{
@@ -1027,18 +908,19 @@ TILE_REVERSE_ROTATION NDFrame::tileReverseRotationWithReverse(bool bReverse,
 	return s_kReverseRotaionResult;
 }
 
-CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
+CCTexture2D* NDFrame::getTileTextureWithImageIndex(int nImageIndex,
+												   int nReplace)
 {
 	NDAnimation *pkAnimation = m_pkBelongAnimation;
 	NDAnimationGroup *pkAnimationGroup = pkAnimation->getBelongAnimationGroup();
 	NDEngine::NDSprite *pkSprite =
-			(NDEngine::NDSprite *) pkAnimationGroup->getRuningSprite();
+		(NDEngine::NDSprite *) pkAnimationGroup->getRuningSprite();
 
 	CCTexture2D *pkTexture = NULL;
 
 	if (pkSprite)
 	{
-		pkTexture = pkSprite->getColorTexture(imageIndex, pkAnimationGroup);
+		pkTexture = pkSprite->getColorTexture(nImageIndex, pkAnimationGroup);
 		if (pkTexture)
 		{
 			return pkTexture;
@@ -1046,15 +928,8 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 
 		if (pkSprite->IsNonRole())
 		{
-			//pkTexture = NDPicturePool::DefaultPool()->AddPicture(pkAnimationGroup->getImages()->at(imageIndex).c_str());
-
-// 			std::vector < std::string > *vImg = pkAnimationGroup->getImages();
-// 
-// 			if (vImg && vImg->size() > imageIndex)
-// 			{
-// 				pkTexture = CCTextureCache::sharedTextureCache()->addImage(
-// 						(*vImg)[imageIndex].c_str());
-// 			}
+			pkTexture = NDPicturePool::DefaultPool()->AddTexture(
+				pkAnimationGroup->getImages()->at(nImageIndex).c_str());
 		}
 
 		if (pkTexture)
@@ -1063,302 +938,33 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int imageIndex, int replace)
 		}
 	}
 
-	std::vector < std::string > *vImg = pkAnimationGroup->getImages();
-	if (vImg && vImg->size() > imageIndex)
+	/***
+	* 此处需要去除，但是因为下面部分代码引用并没有实现，所以暂时保留
+	* 郭浩
+	* begin
+	*/
+
+	std::vector < std::string >* vImg = pkAnimationGroup->getImages();
+	if (vImg && vImg->size() > nImageIndex)
 	{
 		pkTexture = CCTextureCache::sharedTextureCache()->addImage(
-				(*vImg)[imageIndex].c_str());
+			(*vImg)[nImageIndex].c_str());
 	}
 
-	if (REPLACEABLE_ONE_HAND_WEAPON_1 == replace)
+	/***
+	* end
+	*/
+
+	if (REPLACEABLE_ONE_HAND_WEAPON_1 == nReplace)
 	{
-		int a = 0;
+		//pkTexture = pkSprite->GetWeaponImage(); ///< 没有实现 郭浩
 	}
 
 	if (0 == pkTexture)
 	{
-		
+// 		pkTexture = NDPicturePool::DefaultPool()->AddTexture(			///< 等256色调色板 郭浩
+// 			pkAnimationGroup->getImages()->at(nImageIndex).c_str());
 	}
-
-	//tex = CCTextureCache::sharedTextureCache()->addImage(animationGroup->getImages()->getObjectAtIndex(imageIndex);
-	/*switch (replace) 
-	 {
-	 case REPLACEABLE_NONE:
-	 tex =  CCTextureCache::sharedTextureCache()->addImage(animationGroup->getImages()->objectAtIndex(imageIndex));
-	 break;
-	 case REPLACEABLE_HAIR:
-	 if (sprite)
-	 {
-	 tex = sprite->GetHairImage();
-	 if ( !tex ) //非普通NPC
-	 {
-	 tex = sprite->getNpcLookfaceTexture(imageIndex, animationGroup);
-	 }
-	 }
-	 break;
-	 case REPLACEABLE_FACE:
-	 if (sprite)
-	 {
-	 tex = sprite->GetFaceImage();
-	 if ( !tex ) //非普通NPC
-	 {
-	 tex = sprite->getNpcLookfaceTexture(imageIndex, animationGroup);
-	 }
-	 }
-	 break;
-	 case REPLACEABLE_EXPRESSION:
-	 if (sprite)
-	 {
-	 tex = sprite->GetExpressionImage();
-	 if ( !tex )
-	 {
-	 tex =  CCTextureCache::sharedTextureCache()->addImage(animationGroup->getImages()->objectAtIndex(imageIndex));
-	 }
-	 }
-	 break;
-	 case REPLACEABLE_CAP:
-	 if (sprite)
-	 tex = sprite->GetCapImage();
-	 break;
-	 case REPLACEABLE_ARMOR:
-	 if (sprite)
-	 {
-	 if (sprite->IsCloakEmpty())
-	 {
-	 tex = sprite->GetArmorImage();
-	 if ( !tex ) //非普通NPC
-	 {
-	 tex = sprite->getNpcLookfaceTexture(imageIndex, animationGroup);
-	 }
-	 }
-	 else
-	 tex = sprite->GetCloakImage();
-	 }
-	 break;
-	 case REPLACEABLE_ONE_HAND_WEAPON_1:
-	 if (sprite &&
-	 sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)) &&
-	 ((NDBaseRole*)sprite)->GetWeaponType() == ONE_HAND_WEAPON )
-	 tex = sprite->GetRightHandWeaponImage();
-	 break;
-	 case REPLACEABLE_ONE_HAND_WEAPON_2:
-	 if (sprite &&
-	 sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)) &&
-	 ((NDBaseRole*)sprite)->GetSecWeaponType() == ONE_HAND_WEAPON)
-	 tex = sprite->GetLeftHandWeaponImage();
-	 break;
-	 case REPLACEABLE_TWO_HAND_WEAPON:
-	 if (sprite &&
-	 sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)) &&
-	 ((NDBaseRole*)sprite)->GetWeaponType() == TWO_HAND_WEAPON)
-	 tex = sprite->GetDoubleHandWeaponImage();
-	 break;
-	 case REPLACEABLE_DUAL_SWORD:
-	 if (sprite &&
-	 sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)) &&
-	 ((NDBaseRole*)sprite)->GetWeaponType() == DUAL_SWORD)
-	 tex = sprite->GetDualSwordImage();
-	 break;
-	 case REPLACEABLE_DUAL_KNIFE:
-	 if (sprite &&
-	 sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)) &&
-	 ((NDBaseRole*)sprite)->GetWeaponType() == TWO_HAND_KNIFE)
-	 tex = sprite->GetDualKnifeImage();
-	 break;
-	 case REPLACEABLE_TWO_HAND_WAND:
-	 if (sprite &&
-	 sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)) &&
-	 ((NDBaseRole*)sprite)->GetWeaponType() == TWO_HAND_WAND)
-	 tex = sprite->GetDoubleHandWandImage();
-	 break;
-	 case REPLACEABLE_TWO_HAND_BOW:
-	 if (sprite &&
-	 sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)) &&
-	 ((NDBaseRole*)sprite)->GetWeaponType() == TWO_HAND_BOW)
-	 tex = sprite->GetDoubleHandBowImage();
-	 break;
-	 case REPLACEABLE_SHIELD:
-	 if (sprite &&
-	 sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)) &&
-	 ((NDBaseRole*)sprite)->GetWeaponType() == SEC_SHIELD)
-	 tex = sprite->GetShieldImage();
-	 break;
-	 case REPLACEABLE_FAQI:
-	 if (sprite &&
-	 sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)) &&
-	 ((NDBaseRole*)sprite)->GetWeaponType() == SEC_FAQI)
-	 tex = sprite->GetFaqiImage();
-	 break;
-	 case REPLACEABLE_SKIRT_STAND:
-	 if (sprite)
-	 {
-	 tex = sprite->GetSkirtStandImage();
-
-	 if( !tex )
-	 {
-	 tex = sprite->getArmorImageByCloak();
-	 }
-
-	 if ( !tex ) //非普通NPC
-	 {
-	 tex = sprite->getNpcLookfaceTexture(imageIndex, animationGroup);
-	 }
-	 }
-	 if (sprite)
-	 {
-	 if (sprite->IsCloakEmpty())
-	 { //使用原装备，没有进行换裙子
-	 if( !tex )
-	 {
-	 tex = sprite->getArmorImageByCloak();
-	 }
-
-	 if ( !tex ) //非普通NPC
-	 {
-	 tex = sprite->getNpcLookfaceTexture(imageIndex, animationGroup);
-	 }
-	 }
-	 else
-	 { //换裙子了
-	 tex = sprite->GetSkirtStandImage();
-	 }
-	 }
-
-	 break;
-	 case REPLACEABLE_LEFT_SHOULDER:
-	 //if (sprite)
-	 //			{
-	 //				tex = sprite->GetLeftShoulderImage();
-	 //				if ( !tex ) //非普通NPC
-	 //				{
-	 //					tex = sprite->getNpcLookfaceTexture(imageIndex, animationGroup);
-	 //				}
-	 //			}
-	 if (sprite)
-	 {
-	 if (!sprite->IsCloakEmpty())
-	 { //换裙子了
-	 tex = sprite->GetLeftShoulderImage();
-	 }
-
-	 if ( !tex ) //非普通NPC
-	 {
-	 tex = sprite->getNpcLookfaceTexture(imageIndex, animationGroup);
-	 }
-	 }
-	 break;
-	 case REPLACEABLE_RIGHT_SHOULDER:
-	 //if (sprite)
-	 //			{
-	 //				tex = sprite->GetRightShoulderImage();
-	 //				if ( !tex ) //非普通NPC
-	 //				{
-	 //					tex = sprite->getNpcLookfaceTexture(imageIndex, animationGroup);
-	 //				}
-	 //			}
-	 if (sprite)
-	 {
-	 if (!sprite->IsCloakEmpty())
-	 { //换裙子了
-	 tex = sprite->GetRightShoulderImage();
-	 }
-
-	 if ( !tex ) //非普通NPC
-	 {
-	 tex = sprite->getNpcLookfaceTexture(imageIndex, animationGroup);
-	 }
-	 }
-
-	 break;
-	 case REPLACEABLE_SKIRT_LIFT_LEG:
-	 //if (sprite)
-	 //			{
-	 //				tex = sprite->GetSkirtLiftLegImage();
-	 //				if( !tex && sprite->IsCloakEmpty() )
-	 //				{
-	 //					tex = sprite->GetArmorImage();
-	 //				}
-	 //
-	 //				if ( !tex ) //非普通NPC
-	 //				{
-	 //					tex = sprite->getNpcLookfaceTexture(imageIndex, animationGroup);
-	 //				}
-	 //			}
-	 if (sprite)
-	 {
-	 if (!sprite->IsCloakEmpty())
-	 { //换裙子了
-	 tex = sprite->GetSkirtLiftLegImage();
-	 }
-
-	 if ( !tex ) //非普通NPC
-	 {
-	 tex = sprite->getNpcLookfaceTexture(imageIndex, animationGroup);
-	 }
-	 }
-	 break;
-	 case REPLACEABLE_SKIRT_SIT:
-	 //if (sprite)
-	 //			{
-	 //				tex = sprite->GetSkirtSitImage();
-	 //				if( !tex && sprite->IsCloakEmpty() )
-	 //				{
-	 //					tex = sprite->GetArmorImage();
-	 //				}
-	 //				if ( !tex ) //非普通NPC
-	 //				{
-	 //					tex = sprite->getNpcLookfaceTexture(imageIndex, animationGroup);
-	 //				}
-	 //			}
-	 if (sprite)
-	 {
-	 if (!sprite->IsCloakEmpty())
-	 { //换裙子了
-	 tex = sprite->GetSkirtSitImage();
-	 }
-
-	 if ( !tex ) //非普通NPC
-	 {
-	 tex = sprite->getNpcLookfaceTexture(imageIndex, animationGroup);
-	 }
-	 }
-	 break;
-	 case REPLACEABLE_SKIRT_WALK:
-	 //if (sprite)
-	 //			{
-	 //				tex = sprite->GetSkirtWalkImage();
-	 //				if( !tex && sprite->IsCloakEmpty() )
-	 //				{
-	 //					tex = sprite->GetArmorImage();
-	 //				}
-	 //
-	 //				if ( !tex ) //非普通NPC
-	 //				{
-	 //					tex = sprite->getNpcLookfaceTexture(imageIndex, animationGroup);
-	 //				}
-	 //			}
-	 if (sprite)
-	 {
-	 if (!sprite->IsCloakEmpty())
-	 { //换裙子了
-	 tex = sprite->GetSkirtWalkImage();
-	 }
-
-	 if ( !tex ) //非普通NPC
-	 {
-	 tex = sprite->getNpcLookfaceTexture(imageIndex, animationGroup);
-	 }
-	 }
-	 break;
-	 case REPLACEABLE_TWO_HAND_SPEAR:
-	 if (sprite &&
-	 sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)) &&
-	 ((NDBaseRole*)sprite)->GetWeaponType() == TWO_HAND_SPEAR)
-	 tex = sprite->GetDoubleHandSpearImage();
-	 break;
-	 default:
-	 break;
-	 }*/
 
 	return pkTexture;
 }

@@ -3,7 +3,6 @@
 #include "SMLoginScene.h"
 #include "../../../cocos2d-x/cocos2dx/platform/CCEGLView_platform.h"
 #include "NDPath.h"
-#include "GameData.h"
 #include "ScriptCommon.h"
 #include "ScriptGlobalEvent.h"
 #include "ScriptNetMsg.h"
@@ -22,9 +21,11 @@
 #include "NDMapMgr.h"
 #include "LuaStateMgr.h"
 #include "NDBeforeGameMgr.h"
+#include "ScriptGameData.h"
+#include "NDDebugOpt.h"
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
 NDGameApplication::NDGameApplication()
 {
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"script ");
@@ -129,7 +130,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	ScriptNetMsg* pkNetMsg = new ScriptNetMsg;
 	ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
 	NDScriptGameData* pkData = new NDScriptGameData;
-	ScriptGlobalEvent* pkGlobalEvent = new ScriptGlobalEvent;
+	//ScriptGlobalEvent* pkGlobalEvent = new ScriptGlobalEvent;
 	ScriptObjectCommon* pkCommon = new ScriptObjectCommon;
 	ScriptObjectUI* pkScriptUI = new ScriptObjectUI;
 	ScriptTimerMgr* pkTimerManager = new ScriptTimerMgr;
@@ -141,7 +142,8 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	pkLogic->OnLoad();
 	pkDrama->OnLoad();
 	pkCommon->OnLoad();
-	pkGlobalEvent->OnLoad();
+	ScriptGlobalEvent::Load();
+	//pkGlobalEvent->OnLoad();
 	pkScriptUI->OnLoad();
 
 	kScriptManager.Load();
@@ -260,4 +262,61 @@ bool NDGameApplication::processConsole( const char* pszInput )
 	return true;
 }
 
+//@pm
+bool NDGameApplication::processPM(const char* cmd) 
+{
+	if (cmd == 0 || cmd[0] == 0) return false;
+
+	int val = 0;
+	char szDebugOpt[50] = {0};
+
+	HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
+
+	if (stricmp(cmd, "opt help") == 0)
+	{
+		TCHAR help[] =	L"syntax: opt arg 0/1\r\n"
+			L"arg can be: tick, script, network, mainloop, drawhud, drawui, drawrole, drawmap\r\n";
+
+		DWORD n = 0;
+		WriteConsoleW( hOut, help, sizeof(help)/sizeof(TCHAR), &n, NULL );
+	}
+	else if (sscanf(cmd, "opt %s %d", szDebugOpt, &val) == 2)
+	{
+		if (stricmp(szDebugOpt, "tick") == 0)
+			NDDebugOpt::setTickEnabled( val != 0 );
+
+		else if (stricmp(szDebugOpt, "script") == 0)
+			NDDebugOpt::setScriptEnabled( val != 0 );
+
+		else if (stricmp(szDebugOpt, "network") == 0)
+			NDDebugOpt::setNetworkEnabled( val != 0 );
+
+		else if (stricmp(szDebugOpt, "mainloop") == 0)
+			NDDebugOpt::setMainLoopEnabled( val != 0 );
+
+		else if (stricmp(szDebugOpt, "drawhud") == 0)
+			NDDebugOpt::setDrawHudEnabled( val != 0 );
+
+		else if (stricmp(szDebugOpt, "drawui") == 0)
+			NDDebugOpt::setDrawUIEnabled( val != 0 );
+
+		else if (stricmp(szDebugOpt, "drawrole") == 0)
+			NDDebugOpt::setDrawRoleEnabled( val != 0 );
+
+		else if (stricmp(szDebugOpt, "drawmap") == 0)
+			NDDebugOpt::setDrawMapEnabled( val != 0 );
+	}
+	else if (sscanf(cmd, "openmap %d", &val) == 1)
+	{
+		NDMapMgrObj.Hack_loadSceneByMapDocID( val );
+	}
+	else
+	{
+		DWORD n = 0;
+		TCHAR msg[] = L"err: unknown cmd.\r\n";
+		WriteConsole( hOut, msg, sizeof(msg)/sizeof(TCHAR), &n, NULL );
+	}
+	return true;
 }
+
+NS_NDENGINE_END

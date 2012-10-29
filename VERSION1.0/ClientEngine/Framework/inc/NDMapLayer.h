@@ -21,16 +21,20 @@
 #include "NDUILayer.h"
 #include "NDLightEffect.h"
 #include "NDUIImage.h"
+#include "NDTimer.h"
 #include "UISpriteNode.h"
 
 #define blockTimerTag	(5)
 #define titleTimerTag	(6)
+#define switch_ani_modelId		(106)	//传送点动画的model ID
+#define ZORDER_MASK_ANI			(999)	//遮罩动画的Z次序，在game scene里
 
 enum MAP_SWITCH_TYPE
 {
 	SWITCH_NONE = 0,
 	SWITCH_TO_BATTLE,
-	SWITCH_BACK_FROM_BATTLE
+	SWITCH_BACK_FROM_BATTLE,
+	SWITCH_START_BATTLE
 };
 
 enum BOX_STATUS
@@ -44,11 +48,13 @@ enum BOX_STATUS
 
 namespace NDEngine
 {
-class NDMapLayer: public NDUILayer//NDLayer,public ITimerCallback
+class NDMapLayer: public NDLayer,public ITimerCallback
 {
 DECLARE_CLASS(NDMapLayer)
 public:
-	class MAP_ORDER: public cocos2d::CCObject, public std::map<std::string, int>
+	class MAP_ORDER:
+		public cocos2d::CCObject,
+		public std::map<std::string, int>
 	{
 	};
 public:
@@ -151,6 +157,13 @@ public:
 	//bool isTouchTreasureBox(CGPoint touchPoint);
 	//		void setRoadBlock(int x,int y){roadBlockX=x;roadBlockY=y;}
 public:
+
+	virtual bool TouchBegin( NDTouch* touch );
+	virtual void TouchEnd( NDTouch* touch );
+	virtual void TouchCancelled( NDTouch* touch );
+	virtual void TouchMoved( NDTouch* touch );
+	virtual bool TouchDoubleClick( NDTouch* touch );
+
 	void PlayNDSprite(const char* pszSpriteFile, int nPosx, int nPosy,
 			int nAnimationNo, int nPlayTimes);
 private:

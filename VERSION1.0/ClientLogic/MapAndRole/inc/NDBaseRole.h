@@ -15,11 +15,14 @@
 #include "NDPath.h"
 #include "NDRidePet.h"
 
+#define FIGHTER_HEIGHT	70 * (NDDirector::DefaultDirector()->GetScaleFactor())
+#define FIGHTER_WIDTH	45 * (NDDirector::DefaultDirector()->GetScaleFactor())
+
 namespace NDEngine
 {
-#define RING_IMAGE		(NDPath::GetFullImagepath("ui_ring.png"))
-#define SHADOW_IMAGE	(NDPath::GetFullImagepath("shadow.png"))
-#define BIG_SHADOW_IMAGE (NDPath::GetFullImagepath("shadowBig.png"))
+#define RING_IMAGE			(NDPath::GetFullImagepath("ui_ring.png").c_str())
+#define SHADOW_IMAGE		(NDPath::GetFullImagepath("shadow.png").c_str())
+#define BIG_SHADOW_IMAGE	(NDPath::GetFullImagepath("shadowBig.png").c_str())
 
 #define CAMP_NEUTRAL	0
 #define CAMP_TANG		1
@@ -164,6 +167,10 @@ protected:
 	void HandleShadow(CGSize parentsize);
 
 	void DrawRingImage(bool bDraw);
+
+	virtual void RunBattleSubAnimation( Fighter* pkFighter );
+	virtual bool DrawSubAnimation( NDSubAniGroup& kSag );
+
 public:
 	int m_nID;
 

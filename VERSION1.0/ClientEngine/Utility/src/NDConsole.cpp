@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <winbase.h>
 #include <fcntl.h>
+#include "NDDebugOpt.h"
 
 BEGIN_ND_NAMESPACE
 IMPLEMENT_CLASS(NDConsole, NDObject);
@@ -174,6 +175,32 @@ void NDConsole::ProcessInput(const char* pszInput)
 				m_pkStringMap->insert(make_pair(strListenerKey,pszTemp));
 				pkListener->processConsole(strResult.c_str());
 			}
+		}
+	}
+
+	if (pszInput[0] == '/')
+	{
+		PM(pszInput);
+	}
+}
+
+//@pm
+void NDConsole::PM(const char* pszInput)
+{	
+	// remove slash & lf
+	char cmd[100] = {0};
+	strncpy( cmd, pszInput + 1, sizeof(cmd) - 1 );
+	char* p = strstr( cmd, "\r\n" ); if (p) *p = 0;
+
+	// publish to all listener
+	for (MAP_LISTENER::iterator it = m_kListenerMap.begin();
+		it != m_kListenerMap.end(); it++)
+	{
+		NDConsoleListener* pkListener = it->second;
+
+		if (pkListener)
+		{
+			pkListener->processPM( cmd );
 		}
 	}
 }

@@ -165,7 +165,11 @@ class CC_DLL CCDirector : public CCObject
 public: 
 	virtual bool init(void);
 	virtual ~CCDirector(void);
+#if ND_MOD
+	CCDirector(void);
+#else
 	CCDirector(void) {}
+#endif
 
 	// attribute
 
@@ -489,10 +493,21 @@ protected:
  
  @since v0.8.2
  */
+#if ND_MOD
 class CC_DLL CCDisplayLinkDirector : public CCDirector
+#else
+class CCDisplayLinkDirector : public CCDirector
+#endif
 {
 public:
+#if ND_MOD
 	CCDisplayLinkDirector(void);
+#else
+	CCDisplayLinkDirector(void) 
+		: m_bInvalid(false)
+	{}
+#endif
+
 	virtual void mainLoop(void);
 	virtual void setAnimationInterval(double dValue);
 	virtual void startAnimation(void);

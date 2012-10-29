@@ -14,13 +14,11 @@
 #include <map>
 #include <string>
 #include "typedef.h"
-#include "globaldef.h"
-#include "basedefine.h"
 
 #define ScriptDBObj	NDEngine::ScriptDB::GetSingleton()
 
-namespace NDEngine
-{
+namespace NDEngine {
+	
 
 class ScriptDB: public TSingleton<ScriptDB>
 {

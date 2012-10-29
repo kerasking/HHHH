@@ -34,10 +34,10 @@ int CCApplication::run()
     PVRFrameEnableControlWindow(false);
 
     // Main message loop:
-	MSG msg = {0};
-	LARGE_INTEGER nFreq = {0};
-	LARGE_INTEGER nLast = {0};
-	LARGE_INTEGER nNow = {0};
+    MSG msg;
+    LARGE_INTEGER nFreq;
+    LARGE_INTEGER nLast;
+    LARGE_INTEGER nNow;
 
     QueryPerformanceFrequency(&nFreq);
     QueryPerformanceCounter(&nLast);
@@ -67,7 +67,11 @@ int CCApplication::run()
             }
             else
             {
+#if ND_MOD
+				Sleep(1);
+#else
                 Sleep(0);
+#endif
             }
             continue;
         }

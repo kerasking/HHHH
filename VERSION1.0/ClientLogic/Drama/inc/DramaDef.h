@@ -36,6 +36,9 @@ typedef enum
 	DCT_WAITPREACTFINISHANDCLICK	= 19,
 	DCT_SHOWTIPDLG					= 20,
 	DCT_OVER						= 21,
+	DCT_SPRITE_EFFECT              = 22,
+	DCT_SPRITE_REVERSE             = 23,
+	DCT_SOUND_EFFECT               = 24,
 }DramaCommandType;
 
 typedef enum
@@ -53,7 +56,11 @@ typedef struct _tagDramaCommandParam
 	
 	// Í¼ÏñÎÄ¼þÃû or title or content or sprite name or erase in/out scene center text
 	std::string str; 
-	
+
+	int m_Pic_CellX; 
+	int m_Pic_CellY;
+	bool bRightTmp;
+
 	union  
 	{
 		int		nMapId;

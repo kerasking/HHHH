@@ -21,6 +21,7 @@
 
 using namespace NDEngine;
 
+class DramaMapLayer;
 ///////////////////////////////////////////////
 class DramaScene: public NDScene, public NDUITargetDelegate
 {
@@ -36,13 +37,13 @@ public:
 
 	CGPoint GetCenter();
 
-	bool AddMonster(int nKey, int nLookFace);
+	bool AddMonster(int nKey, int nLookFace, bool bFaceRight=true);
 
-	bool AddNpc(int nKey, int nLookFace);
+	bool AddNpc(int nKey, int nLookFace, bool bFaceRight=true);
 
-	bool AddManuRole(int nKey, int nLookFace);
+	bool AddManuRole(int nKey, int nLookFace, bool bFaceRight=true);
 
-	bool AddSprite(int nKey, std::string filename);
+	bool AddSprite(int nKey, std::string filename, bool bFaceRight=true);
 
 	NDManualRole* GetManuRole(int nKey);
 
@@ -64,7 +65,7 @@ public:
 
 	void CloseChat(bool bLeft);
 
-	void SetChatFigure(bool bLeft, std::string filename, bool bReverse);
+	void SetChatFigure(bool bLeft, std::string filename, bool bReverse, int nCol, int nRow);
 
 	void SetChatTitle(bool bLeft, std::string title, int nFontSize,
 			int nFontColor);
@@ -95,7 +96,7 @@ private:
 	typedef std::map<int, CAutoLink<DramaTransitionScene> > MAP_SCENE;
 	typedef MAP_SCENE::iterator MAP_SCENE_IT;
 
-	NDMapLayer* m_layerMap;
+	DramaMapLayer*				m_layerMap;
 	MAP_MANUROLE m_mapManuRole;
 	MAP_MONSTER m_mapMonster;
 	MAP_NPC m_mapNpc;
@@ -121,6 +122,7 @@ private:
 
 public:
 	virtual bool OnTargetBtnEvent(NDUINode* uinode, int targetEvent);
+	virtual bool OnClick(NDObject* object);
 };
 
 #endif // _DRAMA_SCENE_H_ZJH_

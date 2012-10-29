@@ -8,7 +8,8 @@
  */
 
 #include "UIRadioButton.h"
-#include "NDTargetEvent.h"
+#include "ScriptUI.h"
+#include "NDUtility.h"
 
 IMPLEMENT_CLASS(CUIRadioButton,CUICheckBox)
 
@@ -23,10 +24,10 @@ CUIRadioButton::~CUIRadioButton()
 
 void CUIRadioButton::Initialization(const char* imgUnCheck, const char* imgCheck)
 {
-	std::string strUnCheckPath	= imgUnCheck ? imgUnCheck : "";//todo(zjh)GetImgPath("Res00/btn_circle_normal.png");
-	std::string strCheckPath	= imgCheck ? imgCheck : "";//todo(zjh)GetImgPath("Res00/btn_circle_select.png");
+	//std::string strUnCheckPath	= imgUnCheck ? imgUnCheck : GetImgPath("Res00/btn_circle_normal.png");
+	//std::string strCheckPath	= imgCheck ? imgCheck : GetImgPath("Res00/btn_circle_select.png");
 	
-	CUICheckBox::Initialization(strUnCheckPath.c_str(), strCheckPath.c_str());
+	CUICheckBox::Initialization(NULL, NULL);
 }
 
 bool CUIRadioButton::OnClick(NDObject* object)

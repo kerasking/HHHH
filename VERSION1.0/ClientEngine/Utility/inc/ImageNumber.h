@@ -1,16 +1,21 @@
 /**
  *
  */
-
 #ifndef IMAGENUMBER_H
 #define IMAGENUMBER_H
 
-#include <cocos2d.h>
+//#include <cocos2d.h>
 #include "./platform.h"
+#include "./platform.h"
+
+#include "NDUIImage.h"
+#include "NDPicture.h"
+#include "NDUILayer.h"
+#include <vector>
 
 using namespace cocos2d;
 
-class ImageNumber
+class ImageNumber:public NDUILayer
 {
 public:
 

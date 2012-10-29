@@ -7,7 +7,7 @@
  *
  */
  
- #pragma once
+#pragma once
 
 #include "ScriptInc.h"
 
@@ -16,4 +16,5 @@ class ScriptObjectCommon : public NDEngine::ScriptObject
 public:
 	virtual void OnLoad();
 };
-	
+
+int PicMemoryUsingLogOut(bool bNotPrintLog);

@@ -9,6 +9,10 @@
 
 #include "UIScrollContainer.h"
 #include "NDDirector.h"
+#include "UIScroll.h"
+#include "CCPointExtension.h"
+#include "NDUtility.h"
+#include "ScriptGameLogic.h"
 
 IMPLEMENT_CLASS(CUIScrollContainer, NDUILayer)
 
@@ -19,10 +23,17 @@ CUIScrollContainer::CUIScrollContainer()
 	m_uiLeftDistance			= 0;
 	m_uiTopDistance				= 0;
 	m_uiBottomDistance			= 0;
+	m_bOpenScrollBar			= false;
+	m_picScroll					= NULL;
+    m_picScrollBg               = NULL;
 }
 
 CUIScrollContainer::~CUIScrollContainer()
 {
+	SAFE_DELETE(m_picScroll);
+    SAFE_DELETE(m_picScrollBg);
+    m_picScroll = NULL;
+    m_picScrollBg = NULL;
 }
 
 void CUIScrollContainer::Initialization()
@@ -50,6 +61,48 @@ void CUIScrollContainer::SetBottomReserveDistance(unsigned int distance)
 	m_uiBottomDistance			= distance; 
 }
 
+void CUIScrollContainer::ScrollToTop()
+{
+	const std::vector<NDNode*>& children	= this->GetChildren();
+	for(std::vector<NDNode*>::const_iterator it = children.begin();
+		it != children.end();
+		it++)
+	{
+		NDNode* node			= *it;
+		if (!node->IsKindOfClass(RUNTIME_CLASS(CUIScroll)))
+		{
+			continue;
+		}
+		CUIScroll* scroll		= (CUIScroll*)node;
+		CGRect rect				= scroll->GetFrameRect();
+		scroll->SetFrameRect(CGRectMake(rect.origin.x, 0, rect.size.width, rect.size.height));
+		break;
+	}
+}
+void CUIScrollContainer::ScrollToBottom()
+{
+	CGRect selfRect							= this->GetFrameRect();
+	const std::vector<NDNode*>& children	= this->GetChildren();
+	for(std::vector<NDNode*>::const_iterator it = children.begin();
+		it != children.end();
+		it++)
+	{
+		NDNode* node			= *it;
+		if (!node->IsKindOfClass(RUNTIME_CLASS(CUIScroll)))
+		{
+			continue;
+		}
+		CUIScroll* scroll		= (CUIScroll*)node;
+		CGRect rect				= scroll->GetFrameRect();
+		if (rect.size.height < selfRect.size.height)
+		{
+			continue;
+		}
+		scroll->SetFrameRect(CGRectMake(rect.origin.x, selfRect.size.height - rect.size.height, 
+										rect.size.width, rect.size.height));
+		break;
+	}
+}
 void CUIScrollContainer::draw()
 {
 	if (!this->IsVisibled())
@@ -60,6 +113,7 @@ void CUIScrollContainer::draw()
 	NDDirector::DefaultDirector()->SetViewRect(this->GetScreenRect(), this);
 	
 	NDUILayer::draw();
+	DrawScrollBar();
 }
 
 bool CUIScrollContainer::CanHorizontalMove(NDObject* object, float& hDistance)
@@ -155,4 +209,69 @@ bool CUIScrollContainer::TouchBegin(NDTouch* touch)
 	}
 	
 	return false;
+}
+void CUIScrollContainer::EnableScrollBar(bool bEnable)
+{
+	m_bOpenScrollBar	= bEnable;
+    
+    if(m_bOpenScrollBar){
+        if(m_picScroll == NULL) {
+            m_picScroll = NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("General/texture/texture5.png"));
+        }
+        
+        if(m_picScrollBg == NULL){
+            m_picScrollBg = NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("General/texture/texture4.png"));
+        }
+    }else{
+        delete	m_picScroll;
+        m_picScroll = NULL;
+        
+        delete	m_picScrollBg;
+        m_picScrollBg = NULL;
+    }
+    
+    
+}
+void CUIScrollContainer::DrawScrollBar()
+{
+	if (!(m_bOpenScrollBar && m_picScroll))
+	{
+		return;
+	}
+	if (0 == int(m_childrenList.size()))
+	{
+		return;
+	}
+	NDNode *pNode		= m_childrenList[0];
+	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(CUIScroll)))
+	{
+		return;
+	}
+	CUIScroll* scroll	= (CUIScroll*)pNode;
+	if (scroll->GetScrollStyle() != UIScrollStyleVerical ||
+		!scroll->IsTouchDown())
+	{
+		return;
+	}
+	CGRect rectScroll	= scroll->GetFrameRect();
+	if(rectScroll.size.height > this->GetFrameRect().size.height)
+	{
+		CGRect rectself		= this->GetScreenRect();
+		CGRect rectClient	= rectScroll;
+		CGRect rect			= CGRectZero;
+		//float fScale		= NDDirector::DefaultDirector()->GetScaleFactor();
+		CGSize sizePic		= m_picScroll->GetSize();
+		rect.size.width		= sizePic.width;
+		rect.size.height	= rectself.size.height / rectClient.size.height * rectself.size.height;//sizePic.height * fScale;
+		rect.origin			= ccp(rectself.size.width - rect.size.width,
+								  -rectClient.origin.y / rectClient.size.height * rectself.size.height);
+		rect.origin			= ccpAdd(rect.origin, this->GetScreenRect().origin);
+		
+		m_picScroll->DrawInRect(rect);
+        
+        if(m_picScrollBg) {
+            rect.origin.y = rectClient.origin.y;
+            m_picScrollBg->DrawInRect(rect);
+        }
+	}	
 }

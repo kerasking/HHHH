@@ -25,6 +25,7 @@ public:
 	virtual ~NDConsoleListener(){};
 
 	virtual bool processConsole(const char* pszInput) = 0;
+	virtual bool processPM(const char* pszCmd) = 0;
 
 protected:
 private:
@@ -61,6 +62,7 @@ protected:
 	static void* ReadGameConsole(void* pData);
 
 	void ProcessInput(const char* pszInput);
+	void PM(const char* pszInput);
 
 	static bool ms_bIsExistent;
 	static sem_t ms_pkSemT;

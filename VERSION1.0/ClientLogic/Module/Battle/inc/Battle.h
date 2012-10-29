@@ -33,6 +33,7 @@
 #include "NDMapLayer.h"
 #include "SMBattleScene.h"
 #include "BattleMgr.h"
+#include "..\..\TempClass\NDBaseBattle.h"
 
 #define BTN_ATTATCK 1
 #define BTN_ITEM 2
@@ -216,7 +217,7 @@ typedef CoolDownRecord::iterator CoolDownRecord_IT;
 typedef std::pair<CoolDownID, CoolDownData> CoolDownRecord_Pair;
 
 class Battle: public NDUILayer,
-//public ITimerCallback,
+		public NDBaseBattle,
 //public NDUITableLayerDelegate, ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		public NDUIDialogDelegate,
 //public NDUISpeedBarDelegate,

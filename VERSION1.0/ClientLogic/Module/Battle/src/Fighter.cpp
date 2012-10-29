@@ -22,6 +22,8 @@
 #include "NDDirector.h"
 using namespace NDEngine;
 
+//IMPLEMENT_CLASS(Fighter,NDBaseFighter);
+
 const int LEFT_BACK_X = 120; // ×ó±ßºóÅÅ x ×ø±ê
 const int LEFT_FRONT_X = 160; // ×ó±ßÇ°ÅÅ x ×ø±ê
 const int RIGHT_FRONT_X = 320; // ÓÒ±ßºóÅÅ x ×ø±ê
@@ -437,7 +439,7 @@ void Fighter::draw()
 {
 	drawRareMonsterEffect (isVisibleStatus);
 	m_pkRole->RunAnimation(isVisibleStatus);
-	RunBattleSubAnimation(m_pkRole, this);
+	//RunBattleSubAnimation(m_pkRole, this); ///<Ã»ÊµÏÖ£¿ ¹ùºÆ
 	drawStatusAniGroup();
 }
 

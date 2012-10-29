@@ -167,7 +167,7 @@ NDPicture* GetSkillIconByIconIndex(int iIconIndex, bool gray/*=false*/)
 	int nStartY = (iIconIndex / 100 - 1) * SKILL_SIZE_H;
 	
 	NDPicture* pkResource = NDPicturePool::DefaultPool()->
-		AddPicture(NDPath::GetImgPathNew("skillicon.png"), gray);
+		AddPicture(NDPath::GetImgPathUINew("skillicon.png"), gray);
 	
 	if (pkResource)
 	{

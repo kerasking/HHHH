@@ -41,7 +41,7 @@ namespace NDEngine
 		bool DealReceivedData(const unsigned char* data, unsigned int dataLen);
 		void Close();
 		
-		std::string GetIpAddress(){ return m_address; }
+		const std::string& GetIpAddress(){ return m_address; }
 		unsigned short GetPort(){ return m_port; }
         void ChangeCode(DWORD dwCode);
 	private:

@@ -27,14 +27,18 @@ THE SOFTWARE.
 #include <stdlib.h>
 #include "CCObject.h"
 #include "CCFileUtils.h"
-#include "..\platform\third_party\win32\iconv\iconv.h"
 
-#include <stdarg.h>
+#if ND_MOD
+	#include "..\platform\third_party\win32\iconv\iconv.h"
+	#include <stdarg.h>
+#endif
 
-namespace cocos2d
-{
 
+namespace cocos2d {
+
+#if ND_MOD
 	static char g_GBKConvUTF8Buf[5000] = {0};
+#endif
 
 	class CC_DLL CCString : public CCObject
 	{
@@ -48,7 +52,66 @@ namespace cocos2d
 		{
 			m_sString = str;
 		}
+		virtual ~CCString(){ m_sString.clear(); }
+		
+		int toInt()
+		{
+			return atoi(m_sString.c_str());
+		}
+		unsigned int toUInt()
+		{
+			return (unsigned int)atoi(m_sString.c_str());
+		}
+		float toFloat()
+		{
+			return (float)atof(m_sString.c_str());
+		}
+		std::string toStdString()
+		{
+			return m_sString;
+		}
 
+		bool isEmpty()
+		{
+			return m_sString.empty();
+		}
+
+        virtual bool isEqual(const CCObject* pObject)
+        {
+            bool bRet = false;
+            const CCString* pStr = dynamic_cast<const CCString*>(pObject);
+            if (pStr != NULL)
+            {
+                if (0 == m_sString.compare(pStr->m_sString))
+                {
+                    bRet = true;
+                }
+            }
+            return bRet;
+        }
+
+        /** @brief: Get string from a file.
+        *   @return: a pointer which needs to be deleted manually by 'delete[]' .
+        */
+        static char* stringWithContentsOfFile(const char* pszFileName)
+        {
+            unsigned long size = 0;
+            unsigned char* pData = 0;
+            char* pszRet = 0;
+            pData = CCFileUtils::getFileData(pszFileName, "rb", &size);
+            do 
+            {
+                CC_BREAK_IF(!pData || size <= 0);
+                pszRet = new char[size+1];
+                pszRet[size] = '\0';
+                memcpy(pszRet, pData, size);
+                CC_SAFE_DELETE_ARRAY(pData);
+            } while (false);
+            return pszRet;
+        }
+
+
+#if ND_MOD
 		/***
 		* @brief 去除路径中最后一个"\"之后的所有的东西，包括斜杠本身。
 		*
@@ -111,63 +174,6 @@ namespace cocos2d
 			return g_GBKConvUTF8Buf;
 		}
 
-		virtual ~CCString(){ m_sString.clear(); }
-		
-		int toInt()
-		{
-			return atoi(m_sString.c_str());
-		}
-		unsigned int toUInt()
-		{
-			return (unsigned int)atoi(m_sString.c_str());
-		}
-		float toFloat()
-		{
-			return (float)atof(m_sString.c_str());
-		}
-		std::string toStdString()
-		{
-			return m_sString;
-		}
-
-		bool isEmpty()
-		{
-			return m_sString.empty();
-		}
-
-        virtual bool isEqual(const CCObject* pObject)
-        {
-            bool bRet = false;
-            const CCString* pStr = dynamic_cast<const CCString*>(pObject);
-            if (pStr != NULL)
-            {
-                if (0 == m_sString.compare(pStr->m_sString))
-                {
-                    bRet = true;
-                }
-            }
-            return bRet;
-        }
-
-        /** @brief: Get string from a file.
-        *   @return: a pointer which needs to be deleted manually by 'delete[]' .
-        */
-        static char* stringWithContentsOfFile(const char* pszFileName)
-        {
-            unsigned long size = 0;
-            unsigned char* pData = 0;
-            char* pszRet = 0;
-            pData = CCFileUtils::getFileData(pszFileName, "rb", &size);
-            do 
-            {
-                CC_BREAK_IF(!pData || size <= 0);
-                pszRet = new char[size+1];
-                pszRet[size] = '\0';
-                memcpy(pszRet, pData, size);
-                CC_SAFE_DELETE_ARRAY(pData);
-            } while (false);
-            return pszRet;
-        }
 
 		/***
 		* @brief 根据UTF-8字符，转换成GB2312进行存储。
@@ -254,6 +260,8 @@ namespace cocos2d
 
 			return pstrString;
 		}
+#endif //ND_MOD
+		
 	};
 }// namespace cocos2d
 #endif //__CCSTRING_H__

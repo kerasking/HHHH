@@ -62,7 +62,7 @@ void NDUICheckBox::Initialization()
 	this->AddChild(m_title);
 	
 	NDPicture *picCheckBkg = new NDPicture();
-	picCheckBkg->Initialization(NDPath::GetImgPath("checkbox_bg.png"));
+	picCheckBkg->Initialization(NDPath::GetImgPath("checkbox_bg.png").c_str());
 	
 	NDUIImage* image = new NDUIImage();
 	image->Initialization();
@@ -71,7 +71,7 @@ void NDUICheckBox::Initialization()
 	this->AddChild(image);
 	
 	NDPicture *picChecked = new NDPicture();
-	picChecked->Initialization(NDPath::GetImgPath("checkbox_check.png"));
+	picChecked->Initialization(NDPath::GetImgPath("checkbox_check.png").c_str());
 	
 	m_imgChecked = new NDUIImage();
 	m_imgChecked->Initialization();

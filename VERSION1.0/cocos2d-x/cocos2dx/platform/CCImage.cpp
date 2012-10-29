@@ -28,6 +28,8 @@ THE SOFTWARE.
 #include "CCStdC.h"
 #include "CCFileUtils.h"
 #include "png.h"
+#include "pnginfo.h"
+#include "pngstruct.h"
 #include <string>
 #include <ctype.h>
 
@@ -231,6 +233,7 @@ bool CCImage::_initWithPngData(void * pData, int nDatalen)
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_BADA)
         CC_BREAK_IF(setjmp(png_jmpbuf(png_ptr)));
 #endif
+		png_ptr->bReadTransforms = 1;
         // set the read call back function
         tImageSource imageSource;
         imageSource.data    = (unsigned char*)pData;
@@ -406,6 +409,7 @@ bool CCImage::_saveImageToPNG(const char * pszFilePath, bool bIsToRGB)
 		}
 #endif
 		png_init_io(png_ptr, fp);
+		png_ptr->bReadTransforms = 1;
 
 		if (!bIsToRGB && m_bHasAlpha)
 		{

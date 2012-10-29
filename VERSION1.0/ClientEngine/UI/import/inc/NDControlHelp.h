@@ -27,6 +27,7 @@
 //#include "UIEdit.h"
 #include "UISpriteNode.h"
 #include "NDPath.h"
+#include "NDWideString.h"
 
 using namespace NDEngine;
 
@@ -134,11 +135,21 @@ protected:
 		
 		LabelTextAlignment align = LabelTextAlignmentLeft;
 		
-		if (m_info.strTextAlign == "右对齐")
+		if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "左对齐" ))
+			align = LabelTextAlignmentLeft;
+
+		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "右对齐" ))
 			align = LabelTextAlignmentRight;
-		else if (m_info.strTextAlign == "居中")
+
+		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "居中" ))
 			align = LabelTextAlignmentCenter;
-		
+
+		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "水平居中" ))
+			align = LabelTextAlignmentHorzCenter;
+
+		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "竖直居中" ))
+			align = LabelTextAlignmentVertCenter;
+
 		return align;
 	}
 private:	
@@ -255,13 +266,13 @@ public:
 		const char* fileCheck	= NULL;
 		if (!m_info.strNormalFile.empty())
 		{
-			fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str());
+			fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str();
 		}
 		if (!m_info.strSelectedFile.empty())
 		{
-			fileCheck	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str());
+			fileCheck	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str()).c_str();
 		}
-		checkBox->Initialization(fileUnCheck, fileCheck);
+	//	checkBox->Initialization(fileUnCheck, fileCheck);
 		checkBox->SetFrameRect(this->GetFrameRect());
 		checkBox->SetText(info.strText.c_str());
 		checkBox->SetTextFontSize(info.nTextFontSize);
@@ -435,11 +446,11 @@ public:
 		const char* processfile	= NULL;
 		if (!m_info.strNormalFile.empty())
 		{
-			bgfile	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str());
+			bgfile	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str();
 		}
 		if (!m_info.strSelectedFile.empty())
 		{
-			processfile	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str());
+			processfile	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str()).c_str();
 		}
 		exp->Initialization(bgfile, processfile);		
 		exp->SetFrameRect(this->GetFrameRect());
@@ -463,7 +474,7 @@ public:
 		sprite->SetFrameRect(this->GetFrameRect());
 		if (!m_info.strNormalFile.empty())
 		{
-			sprite->ChangeSprite(NDPath::GetUIImgPath(m_info.strNormalFile.c_str()));
+			sprite->ChangeSprite(NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str());
 		}
 		return sprite;
 	}
@@ -525,11 +536,11 @@ public:
 		const char* fileCheck	= NULL;
 		if (!m_info.strNormalFile.empty())
 		{
-			fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str());
+			fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str();
 		}
 		if (!m_info.strSelectedFile.empty())
 		{
-			fileCheck	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str());
+			fileCheck	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str()).c_str();
 		}
 		radio->Initialization(fileUnCheck, fileCheck);
 		radio->SetFrameRect(rect);
