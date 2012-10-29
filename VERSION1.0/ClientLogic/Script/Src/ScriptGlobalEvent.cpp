@@ -23,32 +23,30 @@ bool RegisterGlobalEventHandler(int nEvent, const char* funcname, LuaObject func
 {
 	if (nEvent < GLOBALEVENT_BEGIN || nEvent >= GLOBALEVENT_END)
 	{
+		if (funcname)
 		{
-			if (funcname)
-			{
-				ScriptMgrObj.DebugOutPut("reg global envent [%d][%s] failed! because invalid param event type", 
-					nEvent,
-					funcname);
-			}
-			return false;
-		}
-
-		if (!func.IsFunction())
-		{
-			ScriptMgrObj.DebugOutPut("reg global envent [%d][%s] failed! because invalid param function", 
+			ScriptMgrObj.DebugOutPut("reg global envent [%d][%s] failed! because invalid param event type", 
 				nEvent,
 				funcname);
-			return false;
 		}
+		return false;
+	}
 
-		ScriptMgrObj.DebugOutPut("reg global envent [%d][%s] sucess!", 
+	if (!func.IsFunction())
+	{
+		ScriptMgrObj.DebugOutPut("reg global envent [%d][%s] failed! because invalid param function", 
 			nEvent,
 			funcname);
+		return false;
+	}
 
-		mapGlobalEventHandler.insert(GLOBALEVENTVT(GLOBALEVENT(nEvent), func));
+	ScriptMgrObj.DebugOutPut("reg global envent [%d][%s] sucess!", 
+		nEvent,
+		funcname);
+
+	mapGlobalEventHandler.insert(GLOBALEVENTVT(GLOBALEVENT(nEvent), func));
 
 		return true;
-	}
 }
 
 //void SendGlobalEvent(int iEventID, int param1=0, int param2=0, int param3=0);
@@ -56,7 +54,7 @@ void SendGlobalEvent(int iEventID, int param1=0, int param2=0, int param3=0)
 {
 	ScriptGlobalEvent::OnEvent((GLOBALEVENT)iEventID, param1, param2, param3);
 }
-void ScriptGlobalEvent::Load()
+void ScriptGlobalEvent::Load() 
 {
 	ETCFUNC( "RegisterGlobalEventHandler", RegisterGlobalEventHandler )
 	ETCFUNC( "SendGlobalEvent", SendGlobalEvent )

@@ -22,6 +22,7 @@
 #include "CCImage.h"
 #include "NDConstant.h"
 #include "NDUtility.h"
+#include "NDPicture.h"
 
 MapTexturePool* g_pkMapTexturePoolDefaultPool = NULL;
 
@@ -29,7 +30,7 @@ using namespace cocos2d;
 using namespace NDEngine;
 
 MapTexturePool::MapTexturePool() :
-		m_pkDict(NULL)
+m_pkDict(NULL)
 {
 	NDAsssert(g_pkMapTexturePoolDefaultPool == NULL);
 	m_pkDict = new CCMutableDictionary<std::string, CCTexture2D*>();
@@ -59,14 +60,14 @@ CCTexture2D* MapTexturePool::addImage(const char* path, bool keep)
 {
 	NDAsssert(path != NULL);
 
-	CCTexture2D * tex = NULL;
+	CCTexture2D* pkTexture = NULL;
 
 	// MUTEX:
 	// Needed since addImageAsync calls this method from a different thread
 
-	tex = m_pkDict->objectForKey(path);
+	pkTexture = m_pkDict->objectForKey(path);
 
-	if (!tex)
+	if (!pkTexture)
 	{
 		CCImage image;
 		if (image.initWithImageFile(path))
@@ -75,14 +76,14 @@ CCTexture2D* MapTexturePool::addImage(const char* path, bool keep)
 			//tex = [ [CCTexture2D alloc] initWithImage:image keepData:keep];
 		}
 
-		if (tex)
+		if (pkTexture)
 		{
-			m_pkDict->setObject(tex, path);
-			tex->release();
+			m_pkDict->setObject(pkTexture, path);
+			pkTexture->release();
 		}
 	}
 
-	return tex;
+	return pkTexture;
 }
 
 NDMapSwitch::NDMapSwitch() :
@@ -210,8 +211,8 @@ void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 				- (getStringSize(strDes.c_str(), 15).width / 2);
 		int ty2 = m_nY * pkMapdata->getUnitSize() - 52 * fScaleFactor;	//ty;
 		//T.drawString2(g, introduce, tx2, ty2, 0xFFF5B4,0xC75900, 0);//后文字 0xFFF5B4, 0xC75900
-		this->SetLableByType(1, tx2, ty2, strDes.c_str(), INTCOLORTOCCC4(0xFFF5B4),
-				INTCOLORTOCCC4(0xC75900),
+		this->SetLableByType(1, tx2, ty2, strDes.c_str(),
+				INTCOLORTOCCC4(0xFFF5B4), INTCOLORTOCCC4(0xC75900),
 				CGSizeMake(pkMapdata->getColumns() * pkMapdata->getUnitSize(),
 						pkMapdata->getRows() * pkMapdata->getUnitSize()));
 		ty -= 20 * fScaleFactor;
@@ -224,10 +225,10 @@ void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 
 }
 
-void NDMapSwitch::SetLableByType(int eLableType, int x, int y, const char* text,
-		ccColor4B color1, ccColor4B color2, CGSize sizeParent)
+void NDMapSwitch::SetLableByType(int eLableType, int x, int y, const char* pszText,
+		ccColor4B color1, ccColor4B color2, CGSize kParentSize)
 {
-	if (!text)
+	if (!pszText)
 	{
 		return;
 	}
@@ -276,8 +277,8 @@ void NDMapSwitch::SetLableByType(int eLableType, int x, int y, const char* text,
 		return;
 	}
 
-	pkLabels[0]->SetText(text);
-	pkLabels[1]->SetText(text);
+	pkLabels[0]->SetText(pszText);
+	pkLabels[1]->SetText(pszText);
 
 	pkLabels[0]->SetFontColor(color1);
 	pkLabels[1]->SetFontColor(color2);
@@ -288,10 +289,10 @@ void NDMapSwitch::SetLableByType(int eLableType, int x, int y, const char* text,
 	CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
 
 	pkLabels[1]->SetFrameRect(
-			CGRectMake(x + 1, y + sizewin.height + 1 - sizeParent.height,
+			CGRectMake(x + 1, y + sizewin.height + 1 - kParentSize.height,
 					sizewin.width, 20 * fScaleFactor));
 	pkLabels[0]->SetFrameRect(
-			CGRectMake(x, y + sizewin.height - sizeParent.height, sizewin.width,
+			CGRectMake(x, y + sizewin.height - kParentSize.height, sizewin.width,
 					20 * fScaleFactor));
 }
 
@@ -319,7 +320,7 @@ void NDMapSwitch::draw()
 }
 
 NDSceneTile::NDSceneTile() :
-m_nOrderID(0)
+		m_nOrderID(0)
 {
 }
 
@@ -330,19 +331,11 @@ NDMapMonsterRange::NDMapMonsterRange() :
 }
 
 NDMapData::NDMapData() :
-m_nLayerCount(0),
-m_nColumns(0),
-m_nRows(0),
-m_nUnitSize(0),
-m_nRoadBlockX(-1),
-m_nRoadBlockY(-1),
+		m_nLayerCount(0), m_nColumns(0), m_nRows(0), m_nUnitSize(0), m_nRoadBlockX(
+				-1), m_nRoadBlockY(-1),
 //, m_MapTiles(NULL)
-m_pkObstacles(NULL),
-m_pkSceneTiles(NULL),
-m_pkBackgroundTiles(NULL),
-m_pkSwitchs(NULL),
-m_pkAnimationGroups(NULL),
-m_pkAniGroupParams(NULL)
+		m_pkObstacles(NULL), m_pkSceneTiles(NULL), m_pkBackgroundTiles(NULL), m_pkSwitchs(
+				NULL), m_pkAnimationGroups(NULL), m_pkAniGroupParams(NULL)
 {
 }
 
@@ -384,7 +377,7 @@ void NDMapData::decode(FILE* pkStream)
 {
 	FileOp kFileOp;
 	//<-------------------地图名
-	m_strName = kFileOp.readUTF8String(pkStream);	//[self readUTF8String:stream];
+	m_strName = kFileOp.readUTF8String(pkStream);//[self readUTF8String:stream];
 	CCLog(m_strName.c_str());
 	//<-------------------单元格尺寸
 	m_nUnitSize = kFileOp.readByte(pkStream);
@@ -420,7 +413,7 @@ void NDMapData::decode(FILE* pkStream)
 	}
 
 	//------------------->瓦片	
-	//m_MapTiles = new CCArray<CustomCCTexture2D*>();
+	m_kMapTiles = CCArray::array();
 	for (int lay = 0; lay < m_nLayerCount; lay++)
 	{
 		for (uint r = 0; r < m_nRows; r++)
@@ -440,21 +433,28 @@ void NDMapData::decode(FILE* pkStream)
 				if (nImageIndex == -1)
 				{
 					nImageIndex = 0;
-					//continue;
 				}
 
 				if (kTileImages.size() > nImageIndex)
 				{
-					std::string imageName = kTileImages[nImageIndex];
+					std::string strImageName = kTileImages[nImageIndex];
 
-					// 					CustomCCTexture2D *tile = new CustomCCTexture2D();
-					// 					tile->setTexture(MapTexturePool::defaultPool()->addImage(imageName.c_str(), true));	//[[CCTextureCache sharedTextureCache] addImage:imageName keepData:true]; 
-					// 					int PicParts	= tile->getTexture()->getPixelsWide() * tile->getTexture()->getMaxS() / TileWidth;
-					// 					tile->setCutRect(CGRectMake(TileWidth*(tileIndex%PicParts), TileHeight*(tileIndex/PicParts), TileWidth, TileHeight));
-					// 					tile->setDrawRect(CGRectMake(TileWidth*c, TileHeight*r, TileWidth, TileHeight));
-					// 					tile->setHorizontalReverse(reverse);				
-					// 					m_MapTiles->addObject(tile);
-					// 					tile->release();			
+					NDTile* pkTile = new NDTile;
+					pkTile->setTexture(
+							NDPicturePool::DefaultPool()->AddTexture(
+									strImageName.c_str()));
+					int nPicParts = pkTile->getTexture()->getPixelsWide()
+							* pkTile->getTexture()->getMaxS() / nTileWidth;
+					pkTile->setCutRect(
+							CGRectMake(nTileWidth * (nTileIndex % nPicParts),
+									nTileHeight * (nTileIndex / nPicParts),
+									nTileWidth, nTileHeight));
+					pkTile->setDrawRect(
+							CGRectMake(nTileWidth * c, nTileHeight * r,
+									nTileWidth, nTileHeight));
+					pkTile->setReverse(reverse);
+					m_kMapTiles->addObject(pkTile);
+					pkTile->release();
 				}
 			}
 		}
@@ -475,10 +475,10 @@ void NDMapData::decode(FILE* pkStream)
 
 		int nIndex = nRowIndex * m_nColumns + nColumnIndex;
 
- 		if (m_pkObstacles->size() > nIndex)
- 		{
- 			(*m_pkObstacles)[nIndex] = true;//false 临时性的都改为true 郭浩;
- 		}
+		if (m_pkObstacles->size() > nIndex)
+		{
+			(*m_pkObstacles)[nIndex] = true;	//false 临时性的都改为true 郭浩;
+		}
 	}
 	//------------------->切屏
 	m_pkSwitchs = CCArray::array();
@@ -487,16 +487,10 @@ void NDMapData::decode(FILE* pkStream)
 
 	for (int i = 0; i < nSwitchsCount; i++)
 	{
-		//NDMapSwitch *mapSwitch = [[NDMapSwitch alloc] init];
-
-		/*mapSwitch.x = */kFileOp.readByte(pkStream); //切屏点x
-		/*mapSwitch.y = */kFileOp.readByte(pkStream); //切屏点y
-		/*mapSwitch.mapIndex = */kFileOp.readByte(pkStream); //目标地图
-		/*mapSwitch.passIndex = */kFileOp.readByte(pkStream); //目标点
-		/*[mapSwitch SetLabel:self];*/
-
-		/*[_switchs addObject:mapSwitch];*/
-		/*[mapSwitch release];*/
+		kFileOp.readByte(pkStream); //切屏点x
+		kFileOp.readByte(pkStream); //切屏点y
+		kFileOp.readByte(pkStream); //目标地图
+		kFileOp.readByte(pkStream); //目标点
 	}
 	//<---------------------使用到的背景资源
 	std::vector < std::string > kBackGroundImages;
@@ -518,7 +512,6 @@ void NDMapData::decode(FILE* pkStream)
 		}
 		else
 		{
-			//NDLog("背景资源%@没有找到!!!", imageName);
 			kBackGroundImages.push_back(imageName);
 		}
 
@@ -544,12 +537,12 @@ void NDMapData::decode(FILE* pkStream)
 			continue;
 		}
 
-		std::string imageName = kBackGroundImages[nResourceIndex];
+		std::string strImageName = kBackGroundImages[nResourceIndex];
 		NDSceneTile* pkTile = new NDSceneTile;
 		pkTile->setOrderID(_bgOrders[nResourceIndex] + nY);
 		pkTile->setTexture(
 				CCTextureCache::sharedTextureCache()->addImage(
-						imageName.c_str()));
+						strImageName.c_str()));
 		int picWidth = pkTile->getTexture()->getPixelsWide()
 				* pkTile->getTexture()->getMaxS();
 		int picHeight = pkTile->getTexture()->getPixelsHigh()

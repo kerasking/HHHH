@@ -179,7 +179,7 @@ namespace NDEngine
 		NSMutableArray *m_frameRunRecordsOfMapAniGroups;
 		NSMutableArray *m_frameRunRecordsOfMapSwitch;
 		NDAnimationGroup *m_switchAniGroup;
-		NDSprite *m_TreasureBox;
+		NDSprite* m_TreasureBox;
 		NDUILabel *m_lbTime;
 		NDUIImage *m_lbTitle;
 		NDUIImage *m_lbTitleBg;

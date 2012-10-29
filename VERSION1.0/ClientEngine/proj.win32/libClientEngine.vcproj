@@ -1077,6 +1077,14 @@
 			RelativePath="..\TempClass\NDUITableLayer.h"
 			>
 		</File>
+		<File
+			RelativePath="..\Performance.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\Performance.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

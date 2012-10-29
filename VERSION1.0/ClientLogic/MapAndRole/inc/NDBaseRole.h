@@ -62,7 +62,7 @@ public:
 	}
 	virtual void SetAction(bool bMove);
 	virtual bool AssuredRidePet();
-	NDRidePet* GetRidePet();
+	NDRidePet*& GetRidePet();
 	virtual void setMoveActionWithRidePet();
 	virtual void setStandActionWithRidePet();
 	virtual void updateRidePetEffect();

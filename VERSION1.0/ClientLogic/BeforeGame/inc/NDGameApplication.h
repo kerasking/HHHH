@@ -27,6 +27,7 @@ public:
 	virtual void applicationWillEnterForeground();
 
 	virtual bool processConsole( const char* pszInput );
+	virtual bool processPM( const char* pszCmd );
 
 protected:
 private:

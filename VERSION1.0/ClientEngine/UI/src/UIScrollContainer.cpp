@@ -238,11 +238,11 @@ void CUIScrollContainer::DrawScrollBar()
 	{
 		return;
 	}
-	if (0 == int(m_childrenList.size()))
+	if (0 == int(m_kChildrenList.size()))
 	{
 		return;
 	}
-	NDNode *pNode		= m_childrenList[0];
+	NDNode *pNode		= m_kChildrenList[0];
 	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(CUIScroll)))
 	{
 		return;
