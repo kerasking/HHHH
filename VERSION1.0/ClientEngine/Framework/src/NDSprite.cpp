@@ -1056,4 +1056,14 @@ namespace NDEngine
 		SAFE_DELETE(strString);
 	}
 
+	void NDSprite::reloadAni( const char* pszSprFile )
+	{
+		m_pkAniGroup->release();
+		m_pkFrameRunRecord->release();
+		m_pkAniGroup = 0;
+		m_pkFrameRunRecord = 0;
+		m_pkCurrentAnimation = 0;
+		m_pkAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(pszSprFile);
+	}
+
 }

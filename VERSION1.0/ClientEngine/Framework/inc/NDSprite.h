@@ -471,6 +471,7 @@ protected:
 	virtual void OnMoveEnd();
 	virtual void OnMoving(bool bLastPos);
 	void SetSprite(NDPicture* pic);
+	void reloadAni(const char* pszSprFile);
 
 protected:
 
