@@ -48,7 +48,8 @@ SMYS_CLIENT_IPHONE_userUI/Classes/Engine/Framework/src/NDDirector.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/Framework/src/NDLightEffect.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/Framework/src/NDMapLayer.mm	完成
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/Framework/src/NDNode.mm	貌似完成，待查
-SMYS_CLIENT_IPHONE_userUI/Classes/Engine/Framework/src/NDScene.mm
+SMYS_CLIENT_IPHONE_userUI/Classes/Engine/Framework/src/NDScene.mm	完成！
+SMYS_CLIENT_IPHONE_userUI/Classes/Engine/Framework/inc/NDSprite.h	完成！
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/Framework/src/NDSprite.mm	完成一部分，等待张迪那完成ScriptCommon！
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/Graphic/inc/NDPicture.h	完成，等待老大那里调好256色调色板
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/Graphic/src/CCTexture2DExt.h		待查
@@ -68,13 +69,13 @@ SMYS_CLIENT_IPHONE_userUI/Classes/Engine/NDLocalXmlString.mm		有个函数需要找到替
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/NDLocalization.h			完成
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/Performance.mm				完成
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/System/inc/NDAutoPath.h	完成
-SMYS_CLIENT_IPHONE_userUI/Classes/Engine/System/inc/NDPath.h
+SMYS_CLIENT_IPHONE_userUI/Classes/Engine/System/inc/NDPath.h		这个需要后期自适应宏定义，已适配安卓
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/System/src/NDAutoPath.mm	完成
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/System/src/NDPath.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/System/src/NDTouch.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/TestNewUI.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/inc/NDUIButton.h	完成！
-SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/inc/NDUILabel.h
+SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/inc/NDUILabel.h		完成
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/inc/NDUINode.h	完成
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDIphoneCustomView.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDTextNode.h   完成
@@ -83,7 +84,7 @@ SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUIButton.mm	完成！
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUICheckBox.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUIDialog.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUIEdit.mm
-SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUIFrame.mm
+SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUIFrame.mm	NDUIFrame
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUIImage.mm	完成
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUILabel.mm	完成
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUIMemo.mm		用不到

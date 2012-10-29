@@ -1,13 +1,3 @@
-//
-//  NDUIFrame.h
-//  DragonDrive
-//
-//  Created by xiezhenghai on 11-1-4.
-//  Copyright 2011 (网龙)DeNA. All rights reserved.
-//
-//	介绍
-//	龙御特有的控件容器
-
 #ifndef __NDUIFrame_H
 #define __NDUIFrame_H
 

@@ -34,6 +34,8 @@ public:
 	//武状元光效使用
 	void Run(CGSize mapSize, bool draw = true);
 
+	CC_SYNTHESIZE(float,m_fScale,Scale);
+
 public:
 
 	void draw();

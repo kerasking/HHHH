@@ -20,6 +20,7 @@ NDLightEffect::NDLightEffect()
 	m_pkAniGroup = NULL;
 	m_nLightID = 0;
 	m_bReverse = false;
+	m_fScale = 1.0f;
 }
 
 NDLightEffect::~NDLightEffect()
@@ -94,12 +95,12 @@ void NDLightEffect::draw()
 
 	NDNode::draw();
 
-	NDLayer* pkLayer = (NDLayer*) this->GetParent();
+	NDLayer* pkLayer = (NDLayer*) GetParent();
 	if (pkLayer)
 	{
 		if (m_pkFrameRunRecord->getIsCompleted())
 		{
-			this->RemoveFromParent(true);
+			RemoveFromParent(true);
 			return;
 		}
 
@@ -115,7 +116,7 @@ void NDLightEffect::draw()
 		}
 		else
 		{
-			this->RemoveFromParent(true);
+			RemoveFromParent(true);
 		}
 	}
 }
