@@ -57,6 +57,7 @@ namespace NDEngine
 //		参数：rect矩形显示范围
 //		返回值：无
 		virtual void SetFrameRect(CGRect rect);
+		virtual void FlyToRect(CGRect rect, int nFrameNum, int nDirect);
 //		
 //		函数：GetFrameRect
 //		作用：获取ui节点相对于父亲节点的矩形范围，
@@ -107,6 +108,11 @@ namespace NDEngine
 		CGRect m_kFrameRect;
 		bool m_bEventEnabled;
 		CGRect m_kScrRect;
+
+		float  m_fStep;  //步长
+		int  m_nStepNum; //步数
+		int  m_nDirect;//方向
+		float m_fBoundScale;
 		
 	public:
 		void SetTargetDelegate(NDUITargetDelegate* targetDelegate);
