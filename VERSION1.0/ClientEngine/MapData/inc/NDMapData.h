@@ -54,6 +54,7 @@ public:
 	void draw();
 
 private:
+
 	NDEngine::NDUILabel* m_pkNameLabels[2];
 	NDEngine::NDUILabel* m_pkDesLabels[2];
 };
@@ -76,7 +77,7 @@ class NDMapMonsterRange: public cocos2d::CCObject
 	CC_SYNTHESIZE(int, m_nTypeId, TypeId)
 	CC_SYNTHESIZE(int, m_nColumn, Column)
 	CC_SYNTHESIZE(int, m_nRow, Row)
-//	CC_PROPERTY(bool, m_bBoss, Boss) ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	CC_SYNTHESIZE(bool, m_bBoss, Boss)
 
 public:
 	NDMapMonsterRange();

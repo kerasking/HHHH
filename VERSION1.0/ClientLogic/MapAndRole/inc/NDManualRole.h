@@ -15,9 +15,10 @@
 #include <deque>
 #include "NDMonster.h"
 #include "NDUIImage.h"
-#include "SyndicateCommon.h"
+
 #include "NDUILabel.h"
 #include "NDLightEffect.h"
+#include "../../Syndicate/inc/SyndicateCommon.h"
 
 using namespace std;
 
@@ -40,14 +41,14 @@ typedef struct _tagShowPetInfo
 
 	_tagShowPetInfo(OBJID idPet, int lookface, int quality)
 	{
-		this->idPet = idPet;
-		this->lookface = lookface;
-		this->quality = quality;
+		idPet = idPet;
+		lookface = lookface;
+		quality = quality;
 	}
 
 	bool operator==(const _tagShowPetInfo& r)
 	{
-		return this->lookface == r.lookface;
+		return lookface == r.lookface;
 	}
 } ShowPetInfo;
 
@@ -80,16 +81,16 @@ public:
 		NDLightEffect* effect;
 		_tagServerEffect()
 		{
-			this->bQiZhi = false;
-			this->effect = NULL;
-			this->severEffectId = 0;
+			bQiZhi = false;
+			effect = NULL;
+			severEffectId = 0;
 		}
 
 		_tagServerEffect(bool bQiZhi, NDLightEffect* effect, int severEffectId)
 		{
-			this->bQiZhi = bQiZhi;
-			this->effect = effect;
-			this->severEffectId = severEffectId;
+			bQiZhi = bQiZhi;
+			effect = effect;
+			severEffectId = severEffectId;
 		}
 
 	} ServerEffect;
@@ -149,9 +150,6 @@ public:
 
 	void HandleEffectDacoity();
 
-	// 勿用,如需获取请直接访问battlepet
-	//NDBattlePet* GetBattlePet();
-
 	void AddWalkDir(int dir);
 
 	// 队伍相关接口
@@ -181,13 +179,13 @@ public:
 	// 军团相关
 	void setSynRank(int rank)
 	{
-		this->m_nSynRank = rank;
-		this->m_strSynRank = getRankStr(m_nSynRank);
+		m_nSynRank = rank;
+		m_strSynRank = getRankStr(m_nSynRank);
 	}
 
 	int getSynRank() const
 	{
-		return this->m_nSynRank;
+		return m_nSynRank;
 	}
 
 	void TeamSetToLastPos(bool bSet)
@@ -274,6 +272,10 @@ protected:
 	{
 		return m_bToLastPos;
 	}
+
+protected: //@zwq
+	void InitNameLable( NDUILabel*& pLable );
+	void DrawLable( NDUILabel* pLable, bool bDraw );
 
 public:
 	void SetTeamToLastPos();

@@ -43,58 +43,58 @@ GatherPoint::GatherPoint(int iID, int iTypeID, int xx, int yy,bool isBoss ,std::
 	bossRing = NULL;
 	m_pic = NULL;
 	
-	monster_type_info info;
-	if ( !NDMapMgrObj.GetMonsterInfo(info, m_iTypeID) )
-	{
-		NDLog(@"采集点初始化失败,原因是没有找到类型[%d]信息", m_iTypeID);
-		return;
-	}
-	else
-	{
-		gatherName = info.name;
-	}
-	
-	if (isBoss)
-	{
-		if (this->bossRing == NULL)
-		{
-			bossRing = new NDSprite;
-			bossRing->Initialization(NDPath::GetAniPath("caoyao_ani.spr"));
-			bossRing->SetCurrentAnimation(0, false);
-		}
-	}
-	
-	if (info.lookFace>1000) 
-	{
-		SetNormalAniGroup(info.lookFace);
-		m_position.x += 8;
-	}
-	else 
-	{
-		NDNode::Initialization();
-		
-		stringstream ss; ss << info.lookFace << ".png";
-		
-		m_pic = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath(ss.str().c_str()));
-		
-		if (m_pic) 
-		{
-			CGSize sizePic = m_pic->GetSize();
-			this->SetPosition(CGPointMake(x-8, y-sizePic.height));
-			SetSprite(m_pic);
-		}
-	}
-	
-	m_lbName = NULL;
-	
-	if (!gatherName.empty())
-	{
-		m_lbName = new NDUILabel;
-		m_lbName->Initialization();
-		m_lbName->SetFontSize(13);
-		m_lbName->SetFontColor(ccc4(0, 0, 0, 255));
-		m_lbName->SetText(gatherName.c_str());
-	}
+// 	monster_type_info info;
+// 	if ( !NDMapMgrObj.GetMonsterInfo(info, m_iTypeID) )
+// 	{
+// 		NDLog(@"采集点初始化失败,原因是没有找到类型[%d]信息", m_iTypeID);
+// 		return;
+// 	}
+// 	else
+// 	{
+// 		gatherName = info.name;
+// 	}
+// 	
+// 	if (isBoss)
+// 	{
+// 		if (this->bossRing == NULL)
+// 		{
+// 			bossRing = new NDSprite;
+// 			bossRing->Initialization(NDPath::GetAniPath("caoyao_ani.spr"));
+// 			bossRing->SetCurrentAnimation(0, false);
+// 		}
+// 	}
+// 	
+// 	if (info.lookFace>1000) 
+// 	{
+// 		SetNormalAniGroup(info.lookFace);
+// 		m_position.x += 8;
+// 	}
+// 	else 
+// 	{
+// 		NDNode::Initialization();
+// 		
+// 		stringstream ss; ss << info.lookFace << ".png";
+// 		
+// 		m_pic = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath(ss.str().c_str()));
+// 		
+// 		if (m_pic) 
+// 		{
+// 			CGSize sizePic = m_pic->GetSize();
+// 			this->SetPosition(CGPointMake(x-8, y-sizePic.height));
+// 			SetSprite(m_pic);
+// 		}
+// 	}
+// 	
+// 	m_lbName = NULL;
+// 	
+// 	if (!gatherName.empty())
+// 	{
+// 		m_lbName = new NDUILabel;
+// 		m_lbName->Initialization();
+// 		m_lbName->SetFontSize(13);
+// 		m_lbName->SetFontColor(ccc4(0, 0, 0, 255));
+// 		m_lbName->SetText(gatherName.c_str());
+// 	}
 }
 
 GatherPoint::~GatherPoint()
@@ -122,7 +122,7 @@ bool GatherPoint::OnDrawBegin(bool bDraw)
 	
 	m_pkSubNode->SetContentSize(sizemap);
 	
-	if (bossRing && m_aniGroup == nil)
+	if (bossRing && m_pkAniGroup == nil)
 	{
 		//bossRing->SetPosition(GetPosition());
 		CGPoint p = this->GetPosition();
@@ -194,7 +194,7 @@ void GatherPoint::enableRing(bool b) {
 	if (b) {
 		if (this->bossRing == NULL) {
 			bossRing = new NDSprite;
-			bossRing->Initialization(NDPath::GetAniPath("caoyao_ani.spr"));
+			bossRing->Initialization(NDPath::GetAniPath("caoyao_ani.spr").c_str());
 			bossRing->SetCurrentAnimation(0, false);
 		}
 	}else {
@@ -298,10 +298,10 @@ int GatherPoint::getTypeId() {
 }
 void GatherPoint::setState(int state) {
 	this->m_state = state;
-	if (state != MONSTER_STATE_NORMAL)
-	{
-		NDMapMgrObj.ClearOneGP(this);
-	}
+// 	if (state != MONSTER_STATE_NORMAL)
+// 	{
+// 		NDMapMgrObj.ClearOneGP(this);
+// 	}
 }
 int GatherPoint::getState() {
 	return this->m_state;

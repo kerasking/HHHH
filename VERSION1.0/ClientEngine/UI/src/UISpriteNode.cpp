@@ -11,20 +11,20 @@
 
 #include "NDDirector.h"
 #include "CCPointExtension.h"
-#include "NDAnimationGroup.h"
+#include "NDUtility.h"
 #include "NDSprite.h"
 
 IMPLEMENT_CLASS(CUISpriteNode, NDUINode)
 
 CUISpriteNode::CUISpriteNode()
 {
-	m_pkSpriteParentNode		= NULL;
-	m_pkSprite				= NULL;
+	m_pSpriteParentNode		= NULL;
+	m_pSprite				= NULL;
 }
 
 CUISpriteNode::~CUISpriteNode()
 {
-	SAFE_DELETE_NODE(m_pkSpriteParentNode);
+	SAFE_DELETE_NODE(m_pSpriteParentNode);
 }
 
 void CUISpriteNode::Initialization()
@@ -33,26 +33,16 @@ void CUISpriteNode::Initialization()
 	
 	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 	
-	m_pkSpriteParentNode	= new NDUINode;
-	m_pkSpriteParentNode->Initialization();
-	m_pkSpriteParentNode->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
-}
-
-/////////////////////////////////////////////////////////
-void 
-CUISpriteNode::SetPosition(int nPosX, int nPosY)
-{
-	CGPoint point;
-	point.x = nPosX;
-	point.y = nPosY;
-	m_pkSprite->SetPosition(point);
+	m_pSpriteParentNode	= new NDUINode;
+	m_pSpriteParentNode->Initialization();
+	m_pSpriteParentNode->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
 }
 
 void CUISpriteNode::ChangeSprite(const char* sprfile)
 {
-	SAFE_DELETE_NODE(m_pkSprite);
-	
-	if (!m_pkSpriteParentNode || !sprfile)
+	SAFE_DELETE_NODE(m_pSprite);
+    printf("SpriteFile[%s]", sprfile);
+	if (!m_pSpriteParentNode || !sprfile)
 	{
 		return;
 	}
@@ -62,20 +52,20 @@ void CUISpriteNode::ChangeSprite(const char* sprfile)
 		return;
 	}
 	
-	m_pkSprite		= new NDEngine::NDSprite;
-	m_pkSprite->Initialization(sprfile);
-	m_pkSprite->SetCurrentAnimation(0, false);
-	m_pkSpriteParentNode->AddChild(m_pkSprite);
+	m_pSprite		= new NDSprite;
+	//m_pSprite->Initialization(sprfile,this);
+	m_pSprite->SetCurrentAnimation(0, false);
+	m_pSpriteParentNode->AddChild(m_pSprite);
 }
 
-bool CUISpriteNode::isAnimationComplete()
+bool CUISpriteNode::IsAnimationComplete()
 {
-	if(!m_pkSprite)
+	if(!m_pSprite)
 	{
 		return true;
 	}
 	
-	return m_pkSprite->IsAnimationComplete();
+	return m_pSprite->IsAnimationComplete();
 }
 
 void CUISpriteNode::draw()
@@ -87,7 +77,7 @@ void CUISpriteNode::draw()
 	
 	NDUINode::draw();
 	
-	if (!m_pkSprite)
+	if (!m_pSprite)
 	{
 		return;
 	}
@@ -100,22 +90,74 @@ void CUISpriteNode::draw()
 							 ccp((scrRect.size.width ) / 2 ,
 								 (scrRect.size.height) / 2) );
 	
-	m_pkSprite->SetPosition(pos);
-	m_pkSprite->RunAnimation(true);
+	m_pSprite->SetPosition(pos);
+	m_pSprite->RunAnimation(true);
 }
 
 void CUISpriteNode::SetAnimation(int nIndex, bool bFaceRight)
 {
-	if (m_pkSprite)
+	if (m_pSprite)
 	{
-		m_pkSprite->SetCurrentAnimation(nIndex, bFaceRight);
+		m_pSprite->SetCurrentAnimation(nIndex, bFaceRight);
 	}
 }
 
 void CUISpriteNode::SetPlayFrameRange(int nStartFrame, int nEndFrame)
 {
-	if (m_pkSprite)
+	if (m_pSprite)
 	{
-		m_pkSprite->SetPlayFrameRange(nStartFrame, nEndFrame);
+		m_pSprite->SetPlayFrameRange(nStartFrame, nEndFrame);
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+#if 0
+void 
+CUISpriteNode::DisplayFrameEvent(int nCurrentAnimation, int nCurrentFrame)
+{
+    
+}
+/*一个动画播放完成后的回调*/
+///////////////////////////////////////////////////////////////////////////////////////////////
+void 
+CUISpriteNode::DisplayCompleteEvent(int nCurrentAnimation, int nDispCount)
+{
+    
+}
+#endif 
+
+//===========================================================================
+//+2012.6.3++ Guosen ++ 
+void CUISpriteNode::SetScale( float fScale )
+{
+	if( m_pSprite )
+	{
+		m_pSprite->SetScale(fScale);
+	}
+}
+
+float CUISpriteNode::GetScale()
+{
+	if( m_pSprite )
+	{
+		return m_pSprite->GetScale();
+	}
+	return 0;
+}
+
+unsigned int CUISpriteNode::GetAnimationAmount()
+{
+	if( m_pSprite )
+	{
+		//return m_pSprite->GetAnimationAmount();
+	}
+	return 0;
+}
+
+void CUISpriteNode::PlayAnimation( unsigned int nIndex, bool bReverse )
+{
+	if( m_pSprite )
+	{
+		return m_pSprite->SetCurrentAnimation( nIndex, bReverse );
 	}
 }

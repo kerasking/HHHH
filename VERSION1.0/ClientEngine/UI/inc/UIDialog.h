@@ -13,7 +13,8 @@
 #include "NDUILayer.h"
 #include "UISpriteNode.h"
 #include "UIHyperlink.h"
-#include "globaldef.h"
+#include "UIScrollContainer.h"
+#include "typedef.h"
 
 
 using namespace NDEngine;
@@ -27,7 +28,8 @@ typedef struct _TAGDLGOPION
 typedef std::vector<DLGOPION>		VEC_DLG_OPTION;
 typedef VEC_DLG_OPTION::iterator	VEC_DLG_OPTION_IT;
 
-class CUIDlgOptBtn:public NDUIButton
+class CUIDlgOptBtn :
+public NDUIButton
 {
 	DECLARE_CLASS(CUIDlgOptBtn)
 	CUIDlgOptBtn();
@@ -39,7 +41,7 @@ public:
 	void SetBoundRect(CGRect rect);
 	void SetLinkText(const char* text);
 	void SetLinkTextFontSize(unsigned int uiFontSize);
-	void SetLinkTextColor(cocos2d::ccColor4B color);
+	void SetLinkTextColor(ccColor4B color);
 	
 private:
 	CUIHyperlinkText*			m_textHpyerlink;

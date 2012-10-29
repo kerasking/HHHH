@@ -19,12 +19,14 @@
 // #include "basedefine.h"
 // #include "NDConstant.h"
 
-//class Fighter;
-
 #include "NDFrame.h"
 #include "define.h"
 
+class NDBaseFighter;
+
 class NDAnimationGroup;
+class NDSPrite;
+class Fighter;
 
 namespace NDEngine
 {
@@ -41,17 +43,93 @@ namespace NDEngine
 #define		SEC_SHIELD				9
 #define		SEC_FAQI				10
 
-typedef enum
-{
-	SpriteSexNone, SpriteSexMale, SpriteSexFemale, SpriteSexDynamic
-} SpriteSex;
+	typedef enum
+	{
+		SpriteSexNone,
+		SpriteSexMale,
+		SpriteSexFemale,
+		SpriteSexDynamic
+	} SpriteSex;
 
-typedef enum
-{
-	SpriteSpeedStep4 = 8, SpriteSpeedStep8 = 16
-} SpriteSpeed;
+	typedef enum
+	{
+		SpriteSpeedStep4 = 8,
+		SpriteSpeedStep6 = 12,
+		SpriteSpeedStep8 = 16,
+		SpriteSpeedStep10 = 20,
+		SpriteSpeedStep12 = 24
+	} SpriteSpeed;
 
-class NDEngine::NDPicture;
+	class NDSprite;
+
+	enum
+	{
+		SUB_ANI_TYPE_SELF = 0,
+		SUB_ANI_TYPE_TARGET = 1,
+		SUB_ANI_TYPE_NONE = 2,
+		SUB_ANI_TYPE_ROLE_FEEDPET = 3,
+		SUB_ANI_TYPE_ROLE_WEAPON = 4,
+		SUB_ANI_TYPE_SCREEN_CENTER = 5,
+	};
+
+class NDSubAniGroup
+{
+public:
+	NDSubAniGroup()
+	{
+		memset(this, 0L, sizeof(NDSubAniGroup));
+	}
+
+	NDSprite* role;
+	NDAnimationGroup* aniGroup;
+	Fighter* fighter;
+	NDFrameRunRecord* frameRec;
+
+	OBJID idAni;
+	short x;
+	short y;
+	bool reverse;
+	short coordW;
+	short coordH;
+	Byte type;
+	int time;	//播放次数
+	int antId;	//动作ID
+	bool bComplete; // 播放完成
+	bool isFromOut;
+	int startFrame;
+	bool isCanStart;//用来控制战斗中的延迟问题
+	int pos;//播放位置
+};
+
+struct NDSubAniGroupEx 
+{
+	short x;
+	short y;
+
+	short coordW;
+	short coordH;
+
+	Byte type;
+
+	std::string anifile;
+};
+
+enum FACE_DIRECT
+{
+	FACE_DIRECT_RIGHT = 0,
+	FACE_DIRECT_LEFT,
+	FACE_DIRECT_UP,
+	FACE_DIRECT_DOWN,
+};
+
+class ISpriteEvent
+{
+public:
+	virtual void DisplayFrameEvent(int nCurrentAnimation, int nCurrentFrame) =0;
+	virtual void DisplayCompleteEvent(int nCurrentAnimation, int nDispCount)=0;
+};
+
+//class NDEngine::NDPicture;
 
 class NDSprite: public NDNode
 {
@@ -67,7 +145,8 @@ public:
 //		作用：初始化精灵，必须被显示或隐式调用
 //		参数：sprFile动画文件，每一个精灵需要与一个动画文件绑定
 //		返回值：无
-	void Initialization(const char* sprFile);
+	void Initialization(const char* pszSprFile,bool bFaceRight = true);
+	void Initlalization(const char* pszSprFile,ISpriteEvent* pkEvent,bool bFaceRight);
 //		
 //		函数：OnDrawBegin
 //		作用：该方法在精灵绘制之前被框架调用
@@ -108,6 +187,8 @@ public:
 
 	int GetCurFrameIndex();
 
+	virtual void OnMoveTurning(bool bXTurningToY,bool bInc){}
+
 //		
 //		函数：OnMoveTurning
 //		作用：
@@ -134,7 +215,11 @@ public:
 //		参数：无
 //		返回值：true是，false否
 	bool IsAnimationComplete();
-//		
+
+	virtual void RunBattleSubAnimation(Fighter* pkFighter);
+	virtual bool DrawSubAnimation(NDSubAniGroup& kSag);
+	virtual void SetNormalAniGroup(int nLookface);
+	//		
 //		函数：SetHairImage
 //		作用：设置头发图片
 //		参数：imageFile图片文件
@@ -330,6 +415,8 @@ public:
 	virtual cocos2d::CCTexture2D *GetSkirtSitImage();
 	virtual cocos2d::CCTexture2D *GetSkirtLiftLegImage();
 
+	void AddSubAniGroup(NDSubAniGroupEx& kGroup);
+
 	int GetWidth();
 	int GetHeight();
 
@@ -374,8 +461,10 @@ public:
 	{
 		return m_bReverse;
 	}
+
 protected:
 
+	bool MoveByPath( const bool bFirstPath = false );
 	void MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed,
 			bool moveMap, bool ignoreMask = false, bool mustArrive = false);
 	virtual void OnMoveBegin();
@@ -431,6 +520,7 @@ protected:
 	int m_nColorInfo;
 	int m_nCloak;
 	int m_nSpeed;
+	DWORD m_dwLastMoveTickTime;
 
 	std::vector<CGPoint> m_kPointList;
 	CGPoint m_kTargetPos;
@@ -443,6 +533,7 @@ private:
 	NDPicture* m_pkPicSprite;
 	CGRect m_kRectSprite;
 	bool m_bHightLight;
+	ISpriteEvent* m_pkSpriteEvent;
 	NSTimeInterval m_dBeginTime;
 };
 }

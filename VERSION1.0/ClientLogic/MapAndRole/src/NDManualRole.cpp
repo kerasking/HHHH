@@ -14,7 +14,7 @@
 #include "EnumDef.h"
 #include "NDPicture.h"
 #include "NDMapLayer.h"
-///< #include "NDMapMgr.h" 临时性注释 郭浩
+#include "NDMapMgr.h"
 #include "NDDirector.h"
 #include "NDPlayer.h"
 #include "NDAutoPath.h"
@@ -23,7 +23,7 @@
 //#include "NDDataPersist.h"
 #include "NDUtility.h"
 #include "Battle.h"
-#include "GameSceneLoading.h"
+//#include "GameSceneLoading.h"
 #include <sstream>
 #include "CPet.h"
 #include "SMGameScene.h"
@@ -125,7 +125,7 @@ NDManualRole::~NDManualRole()
 
 void NDManualRole::Update(unsigned long ulDiff)
 {
-	if (isSafeProtected) 
+	if (m_bIsSafeProtected) 
 	{
 		//获取自2001年1月1号零时到当前时间的秒数
 		tm timeStrt20010101;
@@ -371,7 +371,7 @@ void NDManualRole::ReLoadLookface(int lookface)
 	char aniPath[256];
 	_snprintf(aniPath, 256, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(), model_id);
 	this->reloadAni(aniPath);
-	this->SetCurrentAnimation(MANUELROLE_STAND, m_faceRight);
+	this->SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 
 	//defaultDeal();
 }
@@ -456,7 +456,7 @@ void NDManualRole::WalkToPosition(const std::vector<CGPoint>& kToPosVector,
 
 	if (isTeamLeader() || !isTeamMember())
 	{
-		bool bGnoreMask = IsInState(USERSTATE_FLY) && NDMapMgrObj.canFly();
+		bool bGnoreMask = IsInState(USERSTATE_FLY) /*&& NDMapMgrObj.canFly()*/;
 		MoveToPosition(kToPosVector,
 				IsInState(USERSTATE_SPEED_UP) ?
 						SpriteSpeedStep8 : SpriteSpeedStep4, bMoveMap,
@@ -506,208 +506,208 @@ void NDManualRole::WalkToPosition(const std::vector<CGPoint>& kToPosVector,
 
 void NDManualRole::processTeamMemberMove(bool bDraw)
 {
-	std::vector<s_team_info> teamlist = NDMapMgrObj.GetTeamList();
-	std::vector<s_team_info>::iterator it = teamlist.begin();
-	for (; it != teamlist.end(); it++) 
-	{
-		s_team_info info = *it;
-		if (info.team[0] == m_id) 
-		{
-			CGPoint posOld = m_oldPos;// ccp(GetPosition().x/16*16+DISPLAY_POS_X_OFFSET, GetPosition().y/16*16+DISPLAY_POS_Y_OFFSET);
-			CGPoint posNew = GetPosition();
-			//CGPoint tmppos = pos;
-			if (int(posOld.x) == 0 && int(posOld.y) == 0) 
-			{
-				break;
-			}
-			NDMapMgr& mapmgrobj = NDMapMgrObj;
-			bool bArrDraw[eTeamLen]; memset(bArrDraw, 0, sizeof(bArrDraw));
-			for (int j = 1; j < eTeamLen; j++) 
-			{
-				if (info.team[j] != 0) 
-				{ // 重连后的队伍信息出现错误 队长重复加
-					NDManualRole *mem = mapmgrobj.GetManualRole(info.team[j]);
-					if (mem != NULL) 
-					{	
-						if (!mem->GetParent()) 
-						{
-							subnode->AddChild(mem);
-						}
-
-						if (int(posOld.x) == 0 && int(posOld.y) == 0) 
-						{
-							break;
-						}
-
-						int mdir = -1;
-
-						if (int(posOld.x) != int(posNew.x)) 
-						{
-							posNew.y = posOld.y;
-							if (int(posOld.x) > int(posNew.x)) 
-							{
-								posNew.x = posNew.x+16;
-							}
-							else 
-							{
-								posNew.x = posNew.x-16;
-							}
-
-							mdir = 0;
-						}
-						if (int(posOld.y) != int(posNew.y)) 
-						{
-							posNew.x = posOld.x;
-							if (int(posOld.y) > int(posNew.y)) 
-							{
-								posNew.y = posNew.y+16;
-							}
-							else 
-							{
-								posNew.y = posNew.y-16;
-							}
-
-							mdir = 0;
-						}
-
-						if (mdir != -1) 
-						{
-							posOld = mem->GetPosition();
-							mem->SetPosition(posNew);
-							bArrDraw[j] = true;
-						}
-						else 
-						{
-							//NDLog("调和。。。。。");
-						}
-
-						  //CGPoint posMem = mem->GetPosition();
-//							CGPoint posOld = posMem;
-//							int mdir = -1;
-//							if (int(posMem.x) != int(pos.x) ) 
-//							{
-//								posMem.y = pos.y;
-//								if (int(posMem.x) > int(pos.x)) 
-//								{
-//									posMem.x = pos.x + 16;
-//									mdir = 2;
-//								} 
-//								else 
-//								{
-//									posMem.x = pos.x - 16;
-//									mdir = 3;
-//								}
-//							} 
-//							else if (int(posMem.y) != int(pos.y)) 
-//							{
-//								posMem.x = pos.x;
-//								if (int(posMem.y) > int(pos.y)) 
-//								{
-//									posMem.y = pos.y + 16;
-//									mdir = 0;
-//								} 
-//								else 
-//								{
-//									posMem.y = pos.y - 16;
-//									mdir = 1;
-//								}
-//							}
-//							
-//							if (mdir != -1) 
-//							{
-//								mem->SetPosition(posMem);
-//								if (mem->m_id==4224) 
-//								{
-//									int a= 0;
-//									a++;
-//									a++;
-//								}
-//								//mem->RunAnimation(bDraw);
-//								pos.x = posOld.x;
-//								pos.y = posOld.y;
-//								bArrDraw[j] = true;
-//							}
-
-						}
-					}
-				}
-				
-				for (int j = eTeamLen-1; j >= 1; j--) 
-				{
-					if (info.team[j] != 0) //&& bArrDraw[j]) 
-					{ // 重连后的队伍信息出现错误 队长重复加
-						NDManualRole *mem = mapmgrobj.GetManualRole(info.team[j]);
-						if (mem) 
-						{
-							mem->RunAnimation(bDraw);
-						}
-					}
-				}
-				
-				break;
-			}
-		}
+// 	std::vector<s_team_info> teamlist = NDMapMgrObj.GetTeamList();
+// 	std::vector<s_team_info>::iterator it = teamlist.begin();
+// 	for (; it != teamlist.end(); it++) 
+// 	{
+// 		s_team_info info = *it;
+// 		if (info.team[0] == m_id) 
+// 		{
+// 			CGPoint posOld = m_oldPos;// ccp(GetPosition().x/16*16+DISPLAY_POS_X_OFFSET, GetPosition().y/16*16+DISPLAY_POS_Y_OFFSET);
+// 			CGPoint posNew = GetPosition();
+// 			//CGPoint tmppos = pos;
+// 			if (int(posOld.x) == 0 && int(posOld.y) == 0) 
+// 			{
+// 				break;
+// 			}
+// 			NDMapMgr& mapmgrobj = NDMapMgrObj;
+// 			bool bArrDraw[eTeamLen]; memset(bArrDraw, 0, sizeof(bArrDraw));
+// 			for (int j = 1; j < eTeamLen; j++) 
+// 			{
+// 				if (info.team[j] != 0) 
+// 				{ // 重连后的队伍信息出现错误 队长重复加
+// 					NDManualRole *mem = mapmgrobj.GetManualRole(info.team[j]);
+// 					if (mem != NULL) 
+// 					{	
+// 						if (!mem->GetParent()) 
+// 						{
+// 							subnode->AddChild(mem);
+// 						}
+// 
+// 						if (int(posOld.x) == 0 && int(posOld.y) == 0) 
+// 						{
+// 							break;
+// 						}
+// 
+// 						int mdir = -1;
+// 
+// 						if (int(posOld.x) != int(posNew.x)) 
+// 						{
+// 							posNew.y = posOld.y;
+// 							if (int(posOld.x) > int(posNew.x)) 
+// 							{
+// 								posNew.x = posNew.x+16;
+// 							}
+// 							else 
+// 							{
+// 								posNew.x = posNew.x-16;
+// 							}
+// 
+// 							mdir = 0;
+// 						}
+// 						if (int(posOld.y) != int(posNew.y)) 
+// 						{
+// 							posNew.x = posOld.x;
+// 							if (int(posOld.y) > int(posNew.y)) 
+// 							{
+// 								posNew.y = posNew.y+16;
+// 							}
+// 							else 
+// 							{
+// 								posNew.y = posNew.y-16;
+// 							}
+// 
+// 							mdir = 0;
+// 						}
+// 
+// 						if (mdir != -1) 
+// 						{
+// 							posOld = mem->GetPosition();
+// 							mem->SetPosition(posNew);
+// 							bArrDraw[j] = true;
+// 						}
+// 						else 
+// 						{
+// 							//NDLog("调和。。。。。");
+// 						}
+// 
+// 						  //CGPoint posMem = mem->GetPosition();
+// //							CGPoint posOld = posMem;
+// //							int mdir = -1;
+// //							if (int(posMem.x) != int(pos.x) ) 
+// //							{
+// //								posMem.y = pos.y;
+// //								if (int(posMem.x) > int(pos.x)) 
+// //								{
+// //									posMem.x = pos.x + 16;
+// //									mdir = 2;
+// //								} 
+// //								else 
+// //								{
+// //									posMem.x = pos.x - 16;
+// //									mdir = 3;
+// //								}
+// //							} 
+// //							else if (int(posMem.y) != int(pos.y)) 
+// //							{
+// //								posMem.x = pos.x;
+// //								if (int(posMem.y) > int(pos.y)) 
+// //								{
+// //									posMem.y = pos.y + 16;
+// //									mdir = 0;
+// //								} 
+// //								else 
+// //								{
+// //									posMem.y = pos.y - 16;
+// //									mdir = 1;
+// //								}
+// //							}
+// //							
+// //							if (mdir != -1) 
+// //							{
+// //								mem->SetPosition(posMem);
+// //								if (mem->m_id==4224) 
+// //								{
+// //									int a= 0;
+// //									a++;
+// //									a++;
+// //								}
+// //								//mem->RunAnimation(bDraw);
+// //								pos.x = posOld.x;
+// //								pos.y = posOld.y;
+// //								bArrDraw[j] = true;
+// //							}
+// 
+// 						}
+// 					}
+// 				}
+// 				
+// 				for (int j = eTeamLen-1; j >= 1; j--) 
+// 				{
+// 					if (info.team[j] != 0) //&& bArrDraw[j]) 
+// 					{ // 重连后的队伍信息出现错误 队长重复加
+// 						NDManualRole *mem = mapmgrobj.GetManualRole(info.team[j]);
+// 						if (mem) 
+// 						{
+// 							mem->RunAnimation(bDraw);
+// 						}
+// 					}
+// 				}
+// 				
+// 				break;
+// 			}
+// 		}
 }
 
 // itype=0(begin), =1(moving), =2(end)
 void NDManualRole::processTeamMemberOnMove(int itype)
 {
-		std::vector<s_team_info> teamlist = NDMapMgrObj.GetTeamList();
-		std::vector<s_team_info>::iterator it = teamlist.begin();
-		for (; it != teamlist.end(); it++) 
-		{
-			s_team_info info = *it;
-			if (info.team[0] == m_id) 
-			{
-				NDMapMgr& mapmgrobj = NDMapMgrObj;
-				for (int j = 1; j < eTeamLen; j++) 
-				{
-					if (info.team[j] != 0) 
-					{
-						NDManualRole* role = mapmgrobj.GetManualRole(info.team[j]);
-						if (role)
-						{
-							if (itype == eMoveTypeBegin) 
-							{
-								role->OnMoveBegin();
-							}
-							else if (itype == eMoveTypeMoving)
-							{
-								role->OnMoving(false);
-							}
-							else if (itype == eMoveTypeEnd)
-							{
-								role->OnMoveEnd();
-							}
-						}
-					}
-				}
-				break;
-			}
-		}
+// 		std::vector<s_team_info> teamlist = NDMapMgrObj.GetTeamList();
+// 		std::vector<s_team_info>::iterator it = teamlist.begin();
+// 		for (; it != teamlist.end(); it++) 
+// 		{
+// 			s_team_info info = *it;
+// 			if (info.team[0] == m_nID) 
+// 			{
+// 				NDMapMgr& mapmgrobj = NDMapMgrObj;
+// 				for (int j = 1; j < eTeamLen; j++) 
+// 				{
+// 					if (info.team[j] != 0) 
+// 					{
+// 						NDManualRole* role = mapmgrobj.GetManualRole(info.team[j]);
+// 						if (role)
+// 						{
+// 							if (itype == eMoveTypeBegin) 
+// 							{
+// 								role->OnMoveBegin();
+// 							}
+// 							else if (itype == eMoveTypeMoving)
+// 							{
+// 								role->OnMoving(false);
+// 							}
+// 							else if (itype == eMoveTypeEnd)
+// 							{
+// 								role->OnMoveEnd();
+// 							}
+// 						}
+// 					}
+// 				}
+// 				break;
+// 			}
+// 		}
 }
 
 void NDManualRole::teamMemberWalkResetPosition()
 {
- 		NDMapMgr& mapmgrobj = NDMapMgrObj;
-		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
-		std::vector<s_team_info>::iterator it = teamlist.begin();
-		
-		for (; it != teamlist.end(); it++) 
-		{
-			s_team_info info = *it;
-			if (info.team[0] == m_id) 
-			{
-				for (int j = 1; j < eTeamLen; j++) 
-				{
-					NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
-					if (role) 
-					{
-						role->resetTeamPos();
-					}
-				}
-			}
-		}
+//  		NDMapMgr& mapmgrobj = NDMapMgrObj;
+// 		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
+// 		std::vector<s_team_info>::iterator it = teamlist.begin();
+// 		
+// 		for (; it != teamlist.end(); it++) 
+// 		{
+// 			s_team_info info = *it;
+// 			if (info.team[0] == m_nID) 
+// 			{
+// 				for (int j = 1; j < eTeamLen; j++) 
+// 				{
+// 					NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
+// 					if (role) 
+// 					{
+// 						role->resetTeamPos();
+// 					}
+// 				}
+// 			}
+// 		}
 }
 
 void NDManualRole::resetTeamPos()
@@ -717,288 +717,288 @@ void NDManualRole::resetTeamPos()
 
 void NDManualRole::teamMemberWalkToPosition(const std::vector<CGPoint>& toPos)
 {
-	NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
-	if (!layer) 
-	{
-		return;
-	}
-
-	std::vector<s_team_info> teamlist = NDMapMgrObj.GetTeamList();
-	std::vector<s_team_info>::iterator it = teamlist.begin();
-
-	for (; it != teamlist.end(); it++) 
-	{
-		s_team_info info = *it;
-		if (info.team[0] == m_id) 
-		{
-			int iDealCount = 16 / m_iSpeed;
-			int iLastTeamMember = 0;
-
-			NDMapMgr& mapmgrobj = NDMapMgrObj;
-			std::vector<CGPoint> deque_point[eTeamLen];
-			if (int(m_pointList.size()) < iDealCount) 
-			{
-				return;
-			}
-			//for (std::vector<CGPoint>::iterator it = m_pointList.begin(); it != m_pointList.end(); it++)
-			//				{
-			//					deque_point[iLastTeamMember].push_back((*it));
-			//				}
-			deque_point[iLastTeamMember] = m_pointList;
-
-			for (int j = 1; j < eTeamLen; j++) 
-			{
-				if (info.team[j] != 0) 
-				{
-					NDManualRole* rolelast = mapmgrobj.GetTeamRole(info.team[iLastTeamMember]);
-
-					NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
-					if (!role || !rolelast) 
-					{
-						continue;
-					}
-
-					CGPoint posCur = role->GetPosition();
-					CGPoint posLast  = rolelast->GetPosition();
-
-
-					role->WalkToPosition(toPos, SpriteSpeedStep4, false);
-					role->stopMoving(false);
-					if (role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
-					{
-						role->SetMoveMap(true);
-					}
-
-					if (int(deque_point[iLastTeamMember].size()) < iDealCount) 
-					{
-						break;
-					}
-
-					NDAutoPath::sharedAutoPath()->autoFindPath(posCur, posLast, layer, m_iSpeed);
-					deque_point[j] = NDAutoPath::sharedAutoPath()->getPathPointVetor();
-
-					if (deque_point[j].empty()) 
-					{
-						int iTemp = iDealCount;
-						while (iTemp--) 
-						{
-							deque_point[j].push_back(posLast);
-						}
-					}
-
-					if (int(deque_point[iLastTeamMember].size()) > iDealCount) 
-					{
-						deque_point[j].insert(deque_point[j].end(), 
-							deque_point[iLastTeamMember].begin(),
-							deque_point[iLastTeamMember].begin()+deque_point[iLastTeamMember].size()-iDealCount
-							);
-
-					}
-
-					iLastTeamMember = j;
-					role->SetPointList(deque_point[j]);
-				}
-			}
-		}
-	}
+// 	NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
+// 	if (!layer) 
+// 	{
+// 		return;
+// 	}
+// 
+// 	std::vector<s_team_info> teamlist = NDMapMgrObj.GetTeamList();
+// 	std::vector<s_team_info>::iterator it = teamlist.begin();
+// 
+// 	for (; it != teamlist.end(); it++) 
+// 	{
+// 		s_team_info info = *it;
+// 		if (info.team[0] == m_nID) 
+// 		{
+// 			int iDealCount = 16 / m_nSpeed;
+// 			int iLastTeamMember = 0;
+// 
+// 			NDMapMgr& mapmgrobj = NDMapMgrObj;
+// 			std::vector<CGPoint> deque_point[eTeamLen];
+// 			if (int(m_kPointList.size()) < iDealCount) 
+// 			{
+// 				return;
+// 			}
+// 			//for (std::vector<CGPoint>::iterator it = m_pointList.begin(); it != m_pointList.end(); it++)
+// 			//				{
+// 			//					deque_point[iLastTeamMember].push_back((*it));
+// 			//				}
+// 			deque_point[iLastTeamMember] = m_pointList;
+// 
+// 			for (int j = 1; j < eTeamLen; j++) 
+// 			{
+// 				if (info.team[j] != 0) 
+// 				{
+// 					NDManualRole* rolelast = mapmgrobj.GetTeamRole(info.team[iLastTeamMember]);
+// 
+// 					NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
+// 					if (!role || !rolelast) 
+// 					{
+// 						continue;
+// 					}
+// 
+// 					CGPoint posCur = role->GetPosition();
+// 					CGPoint posLast  = rolelast->GetPosition();
+// 
+// 
+// 					role->WalkToPosition(toPos, SpriteSpeedStep4, false);
+// 					role->stopMoving(false);
+// 					if (role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
+// 					{
+// 						role->SetMoveMap(true);
+// 					}
+// 
+// 					if (int(deque_point[iLastTeamMember].size()) < iDealCount) 
+// 					{
+// 						break;
+// 					}
+// 
+// 					NDAutoPath::sharedAutoPath()->autoFindPath(posCur, posLast, layer, m_nSpeed);
+// 					deque_point[j] = NDAutoPath::sharedAutoPath()->getPathPointVetor();
+// 
+// 					if (deque_point[j].empty()) 
+// 					{
+// 						int iTemp = iDealCount;
+// 						while (iTemp--) 
+// 						{
+// 							deque_point[j].push_back(posLast);
+// 						}
+// 					}
+// 
+// 					if (int(deque_point[iLastTeamMember].size()) > iDealCount) 
+// 					{
+// 						deque_point[j].insert(deque_point[j].end(), 
+// 							deque_point[iLastTeamMember].begin(),
+// 							deque_point[iLastTeamMember].begin()+deque_point[iLastTeamMember].size()-iDealCount
+// 							);
+// 
+// 					}
+// 
+// 					iLastTeamMember = j;
+// 					role->SetPointList(deque_point[j]);
+// 				}
+// 			}
+// 		}
+// 	}
 }
 
 void NDManualRole::teamMemberAction(bool bAction)
 {
-	NDMapMgr& mapmgrobj = NDMapMgrObj;
-	std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
-	std::vector<s_team_info>::iterator it = teamlist.begin();
-
-	for (; it != teamlist.end(); it++) 
-	{
-		s_team_info info = *it;
-		if (info.team[0] == m_id) 
-		{
-			for (int j = 1; j < eTeamLen; j++) 
-			{
-				NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
-				if (role) 
-				{
-					role->SetAction(bAction);
-				}
-			}
-		}
-	}
+// 	NDMapMgr& mapmgrobj = NDMapMgrObj;
+// 	std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
+// 	std::vector<s_team_info>::iterator it = teamlist.begin();
+// 
+// 	for (; it != teamlist.end(); it++) 
+// 	{
+// 		s_team_info info = *it;
+// 		if (info.team[0] == m_nID) 
+// 		{
+// 			for (int j = 1; j < eTeamLen; j++) 
+// 			{
+// 				NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
+// 				if (role) 
+// 				{
+// 					role->SetAction(bAction);
+// 				}
+// 			}
+// 		}
+// 	}
 }
 
 void NDManualRole::teamMemberStopMoving(bool bResetPos)
 {
-	NDMapMgr& mapmgrobj = NDMapMgrObj;
-	std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
-	std::vector<s_team_info>::iterator it = teamlist.begin();
-
-	for (; it != teamlist.end(); it++) 
-	{
-		s_team_info info = *it;
-		if (info.team[0] == m_id) 
-		{
-			for (int j = 1; j < eTeamLen; j++) 
-			{
-				NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
-				if (!role) 
-				{
-					continue;
-				}
-				if (role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
-				{
-					((NDPlayer*)role)->stopMoving(bResetPos);
-				}
-				else 
-				{
-					role->stopMoving(bResetPos);
-				}
-
-			}
-		}
-	}
+// 	NDMapMgr& mapmgrobj = NDMapMgrObj;
+// 	std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
+// 	std::vector<s_team_info>::iterator it = teamlist.begin();
+// 
+// 	for (; it != teamlist.end(); it++) 
+// 	{
+// 		s_team_info info = *it;
+// 		if (info.team[0] == m_nID) 
+// 		{
+// 			for (int j = 1; j < eTeamLen; j++) 
+// 			{
+// 				NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
+// 				if (!role) 
+// 				{
+// 					continue;
+// 				}
+// 				if (role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
+// 				{
+// 					((NDPlayer*)role)->stopMoving(bResetPos);
+// 				}
+// 				else 
+// 				{
+// 					role->stopMoving(bResetPos);
+// 				}
+// 
+// 			}
+// 		}
+// 	}
 }
 
 void NDManualRole::SetTeamToLastPos()
 {
-	if (!isTeamLeader())
-	{
-		return;
-	}
-
-	if (m_kDequeWalk.empty())
-	{
-		return;
-	}
-
-	std::vector < CGPoint > vec_pos;
-	CGPoint kCurrentPosition;
-	if (m_kPointList.empty())
-	{
-		kCurrentPosition = GetPosition();
-	}
-	else
-	{
-		kCurrentPosition = m_kPointList.at(m_kPointList.size() - 1);
-	}
-
-	deque<int>::iterator itdeque = m_kDequeWalk.begin();
-	for (; itdeque != m_kDequeWalk.end(); itdeque++)
-	{
-		int dir = *itdeque;
-
-		kCurrentPosition.x -= DISPLAY_POS_X_OFFSET;
-		kCurrentPosition.y -= DISPLAY_POS_Y_OFFSET;
-
-		int usRecordX = (kCurrentPosition.x) / MAP_UNITSIZE;
-		int usRecordY = (kCurrentPosition.y) / MAP_UNITSIZE;
-		NDAsssert(dir >= 0 && dir <= 3);
-		switch (dir)
-		{
-		case 0:
-			usRecordY--;
-			break;
-		case 1:
-			usRecordY++;
-			break;
-		case 2:
-			usRecordX--;
-			break;
-		case 3:
-			usRecordX++;
-			break;
-		default:
-			break;
-		}
-
-		kCurrentPosition = ccp(usRecordX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-				usRecordY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
-
-		vec_pos.push_back(kCurrentPosition);
-	}
-
-	NDMapMgr& mapmgrobj = NDMapMgrObj;
-	std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
-	std::vector<s_team_info>::iterator it = teamlist.begin();
-
-	int iIndex = 0;
-	int iSize = vec_pos.size();
-	for (; it != teamlist.end(); it++) 
-	{
-		s_team_info info = *it;
-		if (info.team[0] == m_id) 
-		{
-			for (int j = 0; j < eTeamLen; j++) 
-			{
-				NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
-				if (role) 
-				{
-					if (iIndex < iSize) 
-					{
-						role->SetPosition(vec_pos[iSize-iIndex-1]);
-						iIndex++;
-					}
-
-					if (role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
-					{
-						((NDPlayer*)role)->stopMoving(true);
-					}
-					else 
-					{
-						role->stopMoving(true);
-					}
-
-				}
-			}
-		}
-	}
-
-	m_kDequeWalk.clear();
+// 	if (!isTeamLeader())
+// 	{
+// 		return;
+// 	}
+// 
+// 	if (m_kDequeWalk.empty())
+// 	{
+// 		return;
+// 	}
+// 
+// 	std::vector < CGPoint > vec_pos;
+// 	CGPoint kCurrentPosition;
+// 	if (m_kPointList.empty())
+// 	{
+// 		kCurrentPosition = GetPosition();
+// 	}
+// 	else
+// 	{
+// 		kCurrentPosition = m_kPointList.at(m_kPointList.size() - 1);
+// 	}
+// 
+// 	deque<int>::iterator itdeque = m_kDequeWalk.begin();
+// 	for (; itdeque != m_kDequeWalk.end(); itdeque++)
+// 	{
+// 		int dir = *itdeque;
+// 
+// 		kCurrentPosition.x -= DISPLAY_POS_X_OFFSET;
+// 		kCurrentPosition.y -= DISPLAY_POS_Y_OFFSET;
+// 
+// 		int usRecordX = (kCurrentPosition.x) / MAP_UNITSIZE;
+// 		int usRecordY = (kCurrentPosition.y) / MAP_UNITSIZE;
+// 		NDAsssert(dir >= 0 && dir <= 3);
+// 		switch (dir)
+// 		{
+// 		case 0:
+// 			usRecordY--;
+// 			break;
+// 		case 1:
+// 			usRecordY++;
+// 			break;
+// 		case 2:
+// 			usRecordX--;
+// 			break;
+// 		case 3:
+// 			usRecordX++;
+// 			break;
+// 		default:
+// 			break;
+// 		}
+// 
+// 		kCurrentPosition = ccp(usRecordX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+// 				usRecordY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
+// 
+// 		vec_pos.push_back(kCurrentPosition);
+// 	}
+// 
+// 	NDMapMgr& mapmgrobj = NDMapMgrObj;
+// 	std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
+// 	std::vector<s_team_info>::iterator it = teamlist.begin();
+// 
+// 	int iIndex = 0;
+// 	int iSize = vec_pos.size();
+// 	for (; it != teamlist.end(); it++) 
+// 	{
+// 		s_team_info info = *it;
+// 		if (info.team[0] == m_nID) 
+// 		{
+// 			for (int j = 0; j < eTeamLen; j++) 
+// 			{
+// 				NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
+// 				if (role) 
+// 				{
+// 					if (iIndex < iSize) 
+// 					{
+// 						role->SetPosition(vec_pos[iSize-iIndex-1]);
+// 						iIndex++;
+// 					}
+// 
+// 					if (role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
+// 					{
+// 						((NDPlayer*)role)->stopMoving(true);
+// 					}
+// 					else 
+// 					{
+// 						role->stopMoving(true);
+// 					}
+// 
+// 				}
+// 			}
+// 		}
+// 	}
+// 
+// 	m_kDequeWalk.clear();
 }
 
 void NDManualRole::teamSetServerDir(int dir)
 {
-		NDMapMgr& mapmgrobj = NDMapMgrObj;
-		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
-		std::vector<s_team_info>::iterator it = teamlist.begin();
-		
-		for (; it != teamlist.end(); it++) 
-		{
-			s_team_info info = *it;
-			if (info.team[0] == m_id) 
-			{
-				for (int j = 1; j < eTeamLen; j++) 
-				{
-					NDManualRole* role = mapmgrobj.GetManualRole(info.team[j]);
-					if (role) 
-					{
-						role->SetServerDir(dir);
-					}
-				}
-			}
-		}
+// 		NDMapMgr& mapmgrobj = NDMapMgrObj;
+// 		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
+// 		std::vector<s_team_info>::iterator it = teamlist.begin();
+// 		
+// 		for (; it != teamlist.end(); it++) 
+// 		{
+// 			s_team_info info = *it;
+// 			if (info.team[0] == m_nID) 
+// 			{
+// 				for (int j = 1; j < eTeamLen; j++) 
+// 				{
+// 					NDManualRole* role = mapmgrobj.GetManualRole(info.team[j]);
+// 					if (role) 
+// 					{
+// 						role->SetServerDir(dir);
+// 					}
+// 				}
+// 			}
+// 		}
 }
 
 void NDManualRole::teamSetServerPosition(int iCol, int iRow)
 {
-	NDMapMgr& mapmgrobj = NDMapMgrObj;
-	std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
-	std::vector<s_team_info>::iterator it = teamlist.begin();
-
-	for (; it != teamlist.end(); it++) 
-	{
-		s_team_info info = *it;
-		if (info.team[0] == m_id) 
-		{
-			for (int j = 1; j < eTeamLen; j++) 
-			{
-				NDManualRole* role = mapmgrobj.GetManualRole(info.team[j]);
-				if (role) 
-				{
-					role->SetServerPositon(iCol, iRow);
-				}
-			}
-		}
-	}
+// 	NDMapMgr& mapmgrobj = NDMapMgrObj;
+// 	std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
+// 	std::vector<s_team_info>::iterator it = teamlist.begin();
+// 
+// 	for (; it != teamlist.end(); it++) 
+// 	{
+// 		s_team_info info = *it;
+// 		if (info.team[0] == m_nID) 
+// 		{
+// 			for (int j = 1; j < eTeamLen; j++) 
+// 			{
+// 				NDManualRole* role = mapmgrobj.GetManualRole(info.team[j]);
+// 				if (role) 
+// 				{
+// 					role->SetServerPositon(iCol, iRow);
+// 				}
+// 			}
+// 		}
+// 	}
 }
 
 void NDManualRole::OnMoveEnd()
@@ -1128,28 +1128,28 @@ void NDManualRole::SetAction(bool bMove, bool bIgnoreFighting/*=false*/)
 	{
 		if (IsInState(USERSTATE_BOOTH))
 		{
-			AnimationListObj.sitAction(this,m_faceRight);
+			AnimationListObj.sitAction(this,m_bFaceRight);
 			return;
 		}
-		if (m_pBattlePetShow)
-		{// 溜宠站立
-			AnimationListObj.standAction(TYPE_ENEMYROLE, m_pBattlePetShow, m_faceRight);
-		}
+// 		if (m_pBattlePetShow)
+// 		{// 溜宠站立
+// 			AnimationListObj.standAction(TYPE_ENEMYROLE, m_pBattlePetShow, m_bFaceRight);
+// 		}
 
 		if (isTransformed())
 		{
-			AnimationListObj.standAction(TYPE_MANUALROLE, aniGroupTransformed, 1 - m_faceRight);
+			AnimationListObj.standAction(TYPE_MANUALROLE, m_pkAniGroupTransformed, 1 - m_bFaceRight);
 		} 
 		else if (IsInState(USERSTATE_PRACTISE))
 		{
-			AnimationListObj.sitAction(this, m_faceRight);
+			AnimationListObj.sitAction(this, m_bFaceRight);
 		}else if (AssuredRidePet() && !isTransformed())
 		{// 骑宠站立
 			this->setStandActionWithRidePet();
 		}else {
 			NDPlayer& player = NDPlayer::defaultHero();
 			if(&player == this)
-				AnimationListObj.standAction(TYPE_MANUALROLE, this, m_faceRight);
+				AnimationListObj.standAction(TYPE_MANUALROLE, this, m_bFaceRight);
 			else
 				this->standAction(true);
 		}
@@ -1263,17 +1263,17 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	 }
 	 */
 
-	if ( scene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene) ) )
-	{
-		NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(scene);
-		if ( GetParent() == layer )
-		{
-			if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) && !NDMapMgrObj.isShowOther ) 
-			{
-				return false;
-			}
-		}
-	}
+// 	if ( pkScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene) ) )
+// 	{
+// 		NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(pkScene);
+// 		if ( GetParent() == layer )
+// 		{
+// 			if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) && !NDMapMgrObj.isShowOther ) 
+// 			{
+// 				return false;
+// 			}
+// 		}
+// 	}
 	CGPoint pos = GetPosition();
 
 	// 摆摊先处理
@@ -1352,10 +1352,10 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 		ShowShadow(true, m_pkRidePet != NULL);
 	}
 
-	if (scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
-	{
-		ShowShadow(false);
-	}
+// 	if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
+// 	{
+// 		ShowShadow(false);
+// 	}
 
 	if (pkNode->IsKindOfClass(RUNTIME_CLASS(Battle)))
 	{
@@ -1441,10 +1441,10 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	//	m_talkBox->SetVisible(true);
 	//}
 
-	if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) || NDMapMgrObj.isShowName) 
-	{
-		ShowNameLabel(bDraw);
-	}
+// 	if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) || NDMapMgrObj.isShowName) 
+// 	{
+// 		ShowNameLabel(bDraw);
+// 	}
 
 	if (bDraw)
 	{
@@ -1475,11 +1475,11 @@ void NDManualRole::OnDrawEnd(bool bDraw)
 	}
 	*/
  		
-	//画骑宠
-	if (AssuredRidePet() && ridepet->iType == TYPE_RIDE_FLY)
-	{
-		m_pkRidePet->RunAnimation(bDraw);
-	}
+// 	//画骑宠
+// 	if (AssuredRidePet() && ridepet->iType == TYPE_RIDE_FLY)
+// 	{
+// 		m_pkRidePet->RunAnimation(bDraw);
+// 	}
 
 
 	NDBaseRole::OnDrawEnd(bDraw);
@@ -1720,7 +1720,7 @@ void NDManualRole::UpdateState(int nState, bool bSet)
 	{
 		if (bSet)
 		{
-			al.sitAction(this);
+			al.sitAction(this, m_bFaceRight);
 
 			if (!m_pkVendorPicture)
 			{
@@ -1974,49 +1974,55 @@ void NDManualRole::playerMarry()
 bool NDManualRole::CheckToLastPos()
 {
 		bool bRet = false;
-		NDMapMgr& mapmgrobj = NDMapMgrObj;
-		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
-		std::vector<s_team_info>::iterator it = teamlist.begin();
-		
-		for (; it != teamlist.end(); it++) 
-		{
-			s_team_info info = *it;
-			if (info.team[0] == m_id) 
-			{
-				for (int j = 1; j < eTeamLen; j++) 
-				{
-					NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
-					if (role && role->TeamIsToLastPos()) 
-					{
-						bRet = true;
-						role->TeamSetToLastPos(false);
-					}
-				}
-			}
-		}
+// 		NDMapMgr& mapmgrobj = NDMapMgrObj;
+// 		std::vector<s_team_info> teamlist = mapmgrobj.GetTeamList();
+// 		std::vector<s_team_info>::iterator it = teamlist.begin();
+// 		
+// 		for (; it != teamlist.end(); it++) 
+// 		{
+// 			s_team_info info = *it;
+// 			if (info.team[0] == m_nID) 
+// 			{
+// 				for (int j = 1; j < eTeamLen; j++) 
+// 				{
+// 					NDManualRole* role = mapmgrobj.GetTeamRole(info.team[j]);
+// 					if (role && role->TeamIsToLastPos()) 
+// 					{
+// 						bRet = true;
+// 						role->TeamSetToLastPos(false);
+// 					}
+// 				}
+// 			}
+// 		}
 
 	return bRet;
 }
 
+//@zwq
+void NDManualRole::InitNameLable( NDUILabel*& pLable )
+{
+	if (!pLable) 
+	{ 
+		pLable = new NDUILabel; 
+		pLable->Initialization(); 
+		pLable->SetFontSize(LABLESIZE); 
+
+		if (m_pkSubNode) 
+		{ 
+			m_pkSubNode->AddChild(pLable); 
+		}
+	} 
+}
+
+//@zwq
+void NDManualRole::DrawLable( NDUILabel* pLable, bool bDraw )
+{
+	if (bDraw && pLable) 
+		pLable->draw();
+}
+
 void NDManualRole::ShowNameLabel(bool bDraw)
 {
-#define InitNameLable(lable) \
-		do \
-		{ \
-			if (!lable) \
-			{ \
-				lable = new NDUILabel; \
-				lable->Initialization(); \
-				lable->SetFontSize(LABLESIZE); \
-			} \
-			if (!lable->GetParent() && m_pkSubNode) \
-			{ \
-				m_pkSubNode->AddChild(lable); \
-			} \
-		} while (0)
-
-#define DrawLable(lable, bDraw) do { if (bDraw && lable) lable->draw(); }while(0)
-
 	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 
 	if (!(scene->IsKindOfClass(RUNTIME_CLASS(GameScene))
@@ -2032,6 +2038,7 @@ void NDManualRole::ShowNameLabel(bool bDraw)
 	CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
 	int iX = GetPosition().x - DISPLAY_POS_X_OFFSET;
 	int iY = GetPosition().y; // - DISPLAY_POS_Y_OFFSET;
+
 	if (IsInState (USERSTATE_CAMP))
 	{
 		isEnemy = (GetCamp() != CAMP_NEUTRAL && player.GetCamp() != CAMP_NEUTRAL
@@ -2075,28 +2082,33 @@ void NDManualRole::ShowNameLabel(bool bDraw)
 		InitNameLable(m_lbSynName[1]);
 
 		SetLableName(names, iX + 8 * fScale - iNameW, iY - LABLESIZE * fScale,
-				isEnemy);
+			isEnemy);
+
 		std::stringstream ss;
 		ss << m_strSynName << " [" << m_strSynRank << "]";
 		int iSynNameW = getStringSizeMutiLine(ss.str().c_str(), LABLESIZE,
-				sizewin).width / 2;
+			sizewin).width / 2;
+
 		cocos2d::ccColor4B color = INTCOLORTOCCC4(0xffffff);
 
-		if (IsKindOfClass (RUNTIME_CLASS(NDPlayer))){
-		color = INTCOLORTOCCC4(0x00ff00);
-	}
+		if (IsKindOfClass (RUNTIME_CLASS(NDPlayer)))
+		{
+			color = INTCOLORTOCCC4(0x00ff00);
+		}
 
 		SetLable(eLabelSynName, iX + 8 * fScale - iSynNameW,
-				iY - LABLESIZE * fScale * 2, ss.str(), INTCOLORTOCCC4(0x00ff00),
-				INTCOLORTOCCC4(0x003300));
-		/*
-		 if (iPeerage > 0)
-		 SetLable(eLablePeerage, iX+8-iNameW-iPeerage, iY-LABLESIZE, strPeerage,
-		 INTCOLORTOCCC4(GetPeerageColor(m_nPeerage)), INTCOLORTOCCC4(0x003300));
+			iY - LABLESIZE * fScale * 2, ss.str(), INTCOLORTOCCC4(0x00ff00),
+			INTCOLORTOCCC4(0x003300));
 
-		 if (iPeerage > 0)
-		 DrawLable(m_lbPeerage[1], bDraw); DrawLable(m_lbPeerage[0], bDraw);
-		 */
+		/*
+		if (iPeerage > 0)
+		SetLable(eLablePeerage, iX+8-iNameW-iPeerage, iY-LABLESIZE, strPeerage,
+		INTCOLORTOCCC4(GetPeerageColor(m_nPeerage)), INTCOLORTOCCC4(0x003300));
+
+		if (iPeerage > 0)
+		DrawLable(m_lbPeerage[1], bDraw); DrawLable(m_lbPeerage[0], bDraw);
+		*/
+
 		DrawLable(m_lbName[1], bDraw);
 		DrawLable(m_lbName[0], bDraw);
 		DrawLable(m_lbSynName[1], bDraw);
@@ -2109,20 +2121,17 @@ void NDManualRole::ShowNameLabel(bool bDraw)
 		InitNameLable(m_lbPeerage[0]);
 		InitNameLable(m_lbPeerage[1]);
 		SetLableName(names, iX + 8 * fScale - iNameW, iY - LABLESIZE * fScale,
-				isEnemy);
+			isEnemy);
 		/*
-		 if (iPeerage >= 0)
-		 SetLable(eLablePeerage, iX+8-iNameW-iPeerage, iY-LABLESIZE, strPeerage,
-		 INTCOLORTOCCC4(GetPeerageColor(m_nPeerage)), INTCOLORTOCCC4(0x003300));
-		 if (iPeerage > 0)
-		 DrawLable(m_lbPeerage[1], bDraw); DrawLable(m_lbPeerage[0], bDraw);
-		 */
+		if (iPeerage >= 0)
+		SetLable(eLablePeerage, iX+8-iNameW-iPeerage, iY-LABLESIZE, strPeerage,
+		INTCOLORTOCCC4(GetPeerageColor(m_nPeerage)), INTCOLORTOCCC4(0x003300));
+		if (iPeerage > 0)
+		DrawLable(m_lbPeerage[1], bDraw); DrawLable(m_lbPeerage[0], bDraw);
+		*/
 		DrawLable(m_lbName[1], bDraw);
 		DrawLable(m_lbName[0], bDraw);
 	}
-
-#undef InitNameLable
-#undef DrawLable
 }
 
 void NDManualRole::SetLable(LableType eLableType, int x, int y,
@@ -2170,9 +2179,9 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 	//** chh 2012-07-04 **//
 	//lable[1]->SetFrameRect(CGRectMake(x+1, y+sizewin.height+1-sizemap.height, sizewin.width, (LABLESIZE+5)*fScale));
 	//lable[0]->SetFrameRect(CGRectMake(x, y+sizewin.height-sizemap.height, sizewin.width, (LABLESIZE+5)*fScale));
-	NDAnimation *animate = [m_aniGroup.animations objectAtIndex:0];
+	NDAnimation *animate = (NDAnimation *)m_pkAniGroup->getAnimations()->objectAtIndex(0);
 	CGSize fontSize = getStringSize(lable[0]->GetText().c_str(), lable[0]->GetFontSize());
-	CGRect currAnimateRect = [animate getRect];
+	CGRect currAnimateRect = animate->getRect();
 	int newX = this->GetPosition().x - fontSize.width/2;
 	int newY = this->GetPosition().y - currAnimateRect.size.height - fontSize.height/2;
 	//int newX = x - fontSize.width/2;
@@ -2534,13 +2543,13 @@ bool NDManualRole::IsInGraveStoneState()
 	return IsInState(USERSTATE_DEAD) || IsInState(USERSTATE_BF_WAIT_RELIVE);
 }
 
-const NDBattlePet* NDManualRole::GetShowPet()
-{
-// 	if (m_pBattlePetShow)
-// 		return m_pBattlePetShow.Pointer();
-
-	return NULL;
-}
+// const NDBattlePet* NDManualRole::GetShowPet()
+// {
+// // 	if (m_pBattlePetShow)
+// // 		return m_pBattlePetShow.Pointer();
+// 
+// 	return NULL;
+// }
 
 void NDManualRole::SetShowPet(ShowPetInfo& info)
 {
@@ -2875,7 +2884,7 @@ bool NDManualRole::IsDirFaceRight(int nDir)
 		m_nRideStatus	= nRideStatus;
 		m_nMountType	= nMountType;
 		
-		SetCurrentAnimation( MANUELROLE_STAND, m_faceRight );
+		SetCurrentAnimation( MANUELROLE_STAND, m_bFaceRight );
 		return true;
 	}
 }

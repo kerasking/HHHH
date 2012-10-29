@@ -198,7 +198,7 @@ void CUIScrollViewContainer::Initialization()
 	this->AddChild(m_pClientUINode, 1);
 	
 	//todo(zjh)
-	//m_picScroll = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathNew("new_scroll.png"));
+	//m_picScroll = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathUINew("new_scroll.png"));
 }
 
 void CUIScrollViewContainer::SetStyle(int style)

@@ -22,6 +22,8 @@
 #include "NDDirector.h"
 using namespace NDEngine;
 
+//IMPLEMENT_CLASS(Fighter,NDBaseFighter);
+
 const int LEFT_BACK_X = 120; // 左边后排 x 坐标
 const int LEFT_FRONT_X = 160; // 左边前排 x 坐标
 const int RIGHT_FRONT_X = 320; // 右边后排 x 坐标
@@ -351,7 +353,7 @@ void Fighter::LoadMonster(int nLookFace, int lev, const string& name)
 //	if(nLookFace/100000000%10>0&&nLookFace/100000000%10<=2){//人物
 	NDManualRole *role = new NDManualRole;
 	role->Initialization(nLookFace, true);
-	role->m_dwLookFace = nLookFace;
+	role->m_nLookface = nLookFace;
 	m_pkRole = role;
 	m_eLookfaceType = LOOKFACE_MANUAL;
 //	}else if (NDMonster::isRoleMonster(nLookFace)) {//人形怪
@@ -437,7 +439,7 @@ void Fighter::draw()
 {
 	drawRareMonsterEffect (isVisibleStatus);
 	m_pkRole->RunAnimation(isVisibleStatus);
-	RunBattleSubAnimation(m_pkRole, this);
+	//RunBattleSubAnimation(m_pkRole, this); ///<没实现？ 郭浩
 	drawStatusAniGroup();
 }
 

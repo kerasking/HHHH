@@ -32,6 +32,7 @@ public:
 	unsigned int GetItemType();
 	
 	void RefreshItemCount();
+	unsigned int GetItemCount();
 	
 	void SetShowAdapt(bool bShowAdapt);
 	bool IsShowAdapt();
@@ -39,6 +40,7 @@ public:
 private:
 	unsigned int			m_unItemId;
 	unsigned int			m_unItemType;
+	unsigned int			m_unItemCount;
 	bool					m_bLock;
 	bool					m_bShowAdapt;
 	

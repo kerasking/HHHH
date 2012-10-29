@@ -3,7 +3,7 @@
  *  DragonDrive
  *
  *  Created by jhzheng on 12-1-4.
- *  Copyright 2012 (缃戦緳)DeNA. All rights reserved.
+ *  Copyright 2012 (缂冩垿绶?DeNA. All rights reserved.
  *
  */
 
@@ -126,7 +126,8 @@ void ScriptMgr::update()
 		//LuaStateMgrObj.GetState()->GC(LUA_GCCOLLECT, 0);
 	}
 }
-// 	if (++frameCount % 120 == 0) // 120甯ф墦鍗颁竴娆ua褰撳墠浣跨敤鐨勫唴瀛樻�婚噺
+
+// 	if (++frameCount % 120 == 0) // 
 // 	{
 // 		lua_State* state = LuaStateMgrObj.GetState()->GetCState();
 // 		if (state)
@@ -188,7 +189,7 @@ void ScriptMgr::Load()
 	LuaStateMgrObj.SetExceptOutput(&luaExceptLoadOutPut);
 
 	// make sure load lua file last;
-	string strPath = string(NDPath::GetScriptPath("entry.lua"));
+	string strPath = NDPath::GetScriptPath("entry.lua");
 
 	if (0 != LuaStateMgrObj.GetState()->DoFile(strPath.c_str()))
 	{

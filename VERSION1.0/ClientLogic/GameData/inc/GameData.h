@@ -6,7 +6,7 @@
  *  Copyright 2012 (ÍøÁú)DeNA. All rights reserved.
  *
  */
- 
+#if 0
 #pragma once
 
 #include "globaldef.h"
@@ -566,3 +566,4 @@ inline std::string NDScriptGameData::GetData(eScriptData esd, unsigned int nKey,
 	
 	return GetScriptDataStr(sgd);
 }
+#endif 

@@ -174,13 +174,19 @@ public:
 //		参数：无
 //		返回值：屏幕大小
 	CGSize GetWinSize();
+
+//		函数：GetWinPoint
+//		作用：获取屏幕点大小
+//		参数：无
+//		返回值：屏幕点大小
+	CCSize GetWinPoint();
 //
 //		函数：SetViewRect
 //		作用：设置节点的绘制区域，一旦设置了节点的绘制区域，则子节点的绘制区域也不会超过该区域范围；
 //			 如果使用该方法通常时在draw方法里调用；慎用。
 //		参数：rect相对于屏幕的区域，node被设置绘制区域的节点
 //		返回值：无
-	void SetViewRect(CGRect rect, NDNode* node);
+	void SetViewRect(CGRect kRect, NDNode* pkNode);
 //		
 //		函数：ResumeViewRect
 //		作用：恢复初始绘制区域
@@ -207,6 +213,9 @@ public:
 	NDScene* GetSceneByTag(int nSceneTag);
 
 	float GetScaleFactor();
+	float GetScaleFactorY();
+
+	bool IsEnableRetinaDisplay();
 
 	void DisibleScissor();
 
@@ -229,22 +238,19 @@ private:
 	bool m_bResetViewRect;
 	std::vector<NDObject*> m_delegates;
 
-	void SetDelegate(NDObject* receiver)
-	{
-	}
-
-	NDObject* GetDelegate()
-	{
-		return NULL;
-	}
+	void SetDelegate(NDObject* pkReceiver);
+	NDObject* GetDelegate();
 
 	void BeforeDirectorPopScene(NDScene* scene, bool cleanScene);
 	void AfterDirectorPopScene(bool cleanScene);
 	void BeforeDirectorPushScene(NDScene* scene);
 	void AfterDirectorPushScene(NDScene* scene);
 
+	float m_fXScaleFactor;			///< 这俩变量压根就没用上啊！何解？ 郭浩
+	float m_fYScaleFactor;			///< 这俩变量压根就没用上啊！何解？ 郭浩
 	NDScene* m_pkTransitionSceneWait;
 	TransitionSceneType m_eTransitionSceneType;
+	bool m_bEnableRetinaDisplay;
 };
 }
 

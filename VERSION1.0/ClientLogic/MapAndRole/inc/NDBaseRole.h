@@ -20,9 +20,9 @@
 
 namespace NDEngine
 {
-#define RING_IMAGE		(NDPath::GetFullImagepath("ui_ring.png"))
-#define SHADOW_IMAGE	(NDPath::GetFullImagepath("shadow.png"))
-#define BIG_SHADOW_IMAGE (NDPath::GetFullImagepath("shadowBig.png"))
+#define RING_IMAGE			(NDPath::GetFullImagepath("ui_ring.png").c_str())
+#define SHADOW_IMAGE		(NDPath::GetFullImagepath("shadow.png").c_str())
+#define BIG_SHADOW_IMAGE	(NDPath::GetFullImagepath("shadowBig.png").c_str())
 
 #define CAMP_NEUTRAL	0
 #define CAMP_TANG		1
@@ -96,12 +96,6 @@ public:
 	virtual void unpakcAllEquip();
 
 	void addTalkMsg(std::string msg, int timeForTalkMsg);
-	//
-// 	//		函数：SetNormalAniGroup
-// 	//		作用：设置默认动画组
-// 	//		参数：lookface服务器下发的标识，用于精灵的表现
-// 	//		返回值：无
-// 	void SetNormalAniGroup(int nLookface);
 public:
 	void DrawHead(const CGPoint& pos);
 	void SetWeaponType(int weaponType);
@@ -172,6 +166,10 @@ protected:
 	void HandleShadow(CGSize parentsize);
 
 	void DrawRingImage(bool bDraw);
+
+// 	virtual void RunBattleSubAnimation( Fighter* pkFighter );
+// 	virtual bool DrawSubAnimation( NDSubAniGroup& kSag );
+
 public:
 	int m_nID;
 

@@ -38,6 +38,19 @@ NS_CC_BEGIN;
 
 void CCLog(const char * pszFormat, ...)
 {
+#if ND_MOD 
+#ifdef _DEBUG
+	static char szBuf[MAX_LEN] = {0};
+
+	va_list ap;
+	va_start(ap, pszFormat);
+	vsnprintf_s(szBuf, MAX_LEN, MAX_LEN, pszFormat, ap);
+	va_end(ap);
+
+	OutputDebugStringA(szBuf);
+	OutputDebugStringA("\n");
+#endif
+#else
     char szBuf[MAX_LEN];
 
     va_list ap;
@@ -49,6 +62,7 @@ void CCLog(const char * pszFormat, ...)
     MultiByteToWideChar(CP_UTF8, 0, szBuf, -1, wszBuf, sizeof(wszBuf));
     OutputDebugStringW(wszBuf);
     OutputDebugStringA("\n");
+#endif
 }
 
 void CCMessageBox(const char * pszMsg, const char * pszTitle)

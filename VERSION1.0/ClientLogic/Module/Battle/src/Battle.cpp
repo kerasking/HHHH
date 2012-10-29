@@ -61,7 +61,7 @@ void QuickTalkCell::Initialization(const char* pszText, const CGSize& size)
 	NDUIImage* img = new NDUIImage;
 	img->Initialization();
 	NDPicture* pic = new NDPicture;
-	pic->Initialization(NDPath::GetImgPathBattleUI("chat_icon_sys.png"));
+	pic->Initialization(NDPath::GetImgPathBattleUI("chat_icon_sys.png").c_str());
 	img->SetPicture(pic, true);
 	img->SetFrameRect(CGRectMake(3.0f, 9.0f, 9.0f, 9.0f));
 	AddChild(img);
@@ -69,7 +69,7 @@ void QuickTalkCell::Initialization(const char* pszText, const CGSize& size)
 	img = new NDUIImage;
 	img->Initialization();
 	pic = new NDPicture;
-	pic->Initialization(NDPath::GetImgPathBattleUI("battle_chat_line.png"), 10,1);
+	pic->Initialization(NDPath::GetImgPathBattleUI("battle_chat_line.png").c_str(), 10,1);
 	img->SetPicture(pic, true);
 	img->SetFrameRect(CGRectMake(0.0f, size.height - 6.0f, size.width, 2.0f));
 	AddChild(img);
@@ -138,7 +138,7 @@ void HighlightTip::Initialization()
 	NDUILayer::Initialization();
 
 	m_pkPicBubble = new NDPicture;
-	m_pkPicBubble->Initialization(NDPath::GetImgPath("ui_map.png"), 70, 60);
+	m_pkPicBubble->Initialization(NDPath::GetImgPath("ui_map.png").c_str(), 70, 60);
 
 	NDUIImage* pImgBubble = new NDUIImage;
 	pImgBubble->Initialization();
@@ -2035,13 +2035,13 @@ void Battle::Init()
 	m_battleBg = NULL;
 	//m_eudemonOpt = NULL;
 	m_picActionWordDef = new NDPicture;
-	m_picActionWordDef->Initialization(NDPath::GetImgPath("actionWord.png"));
+	m_picActionWordDef->Initialization(NDPath::GetImgPath("actionWord.png").c_str());
 	m_picActionWordDef->Cut(CGRectMake(0.0f, 0.0f, 37.0f, 18.0f));
 	m_picActionWordFlee = new NDPicture;
 	m_picActionWordDodge = new NDPicture;
-	m_picActionWordDodge->Initialization(NDPath::GetImgPath("actionWord.png"));
+	m_picActionWordDodge->Initialization(NDPath::GetImgPath("actionWord.png").c_str());
 	m_picActionWordDodge->Cut(CGRectMake(0.0f, 18.0f, 37.0f, 18.0f));
-	m_picActionWordFlee->Initialization(NDPath::GetImgPath("actionWord.png"));
+	m_picActionWordFlee->Initialization(NDPath::GetImgPath("actionWord.png").c_str());
 	m_picActionWordFlee->Cut(CGRectMake(0.0f, 36.0f, 37.0f, 18.0f));
 
 	//	m_picTalk = NULL;
@@ -2089,7 +2089,7 @@ void Battle::Init()
 	watchBattle = false;
 
 	m_picBaoJi = new NDPicture;
-	m_picBaoJi->Initialization(NDPath::GetImgPath("bo.png"));
+	m_picBaoJi->Initialization(NDPath::GetImgPath("bo.png").c_str());
 	//	
 	//	m_picBoji = new NDPicture;
 	//	m_picBoji->Initialization(GetImgPath("boji.png"));
@@ -4139,7 +4139,7 @@ void Battle::runAction(int nTeamID)
 				fa->m_pkActor->setDieOK(true);
 				stringstream ss;
 				ss << "die_action.spr";
-				const char* file = NDPath::GetAniPath(ss.str().c_str());
+				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
 				NDAnimationGroup* dieAniGroup = new NDAnimationGroup;
 				dieAniGroup->initWithSprFile(file);
 				addSkillEffectToFighter(fa->m_pkActor, dieAniGroup, 0);
@@ -4521,7 +4521,7 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 				dieAction(*fighter);
 				stringstream ss;
 				ss << "die_action.spr";
-				const char* file = NDPath::GetAniPath(ss.str().c_str());
+				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
 				NDAnimationGroup* dieAniGroup = new NDAnimationGroup;
 				dieAniGroup->initWithSprFile(file);
 				fighter->showFighterName(false);

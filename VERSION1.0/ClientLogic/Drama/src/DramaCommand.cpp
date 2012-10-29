@@ -13,6 +13,8 @@
 #include "NDDirector.h"
 #include "CCPointExtension.h"
 #include "NDConstant.h"
+#include "BattleMgr.h"
+#include "NDPath.h"
 
 ///////////////////////////////////////////////
 DramaScene* GetDramaScene()
@@ -47,13 +49,14 @@ void DramaCommandDlg::InitWithClose(bool bLeft)
 	m_kParam.u3.bLeft = bLeft;
 }
 
-void DramaCommandDlg::InitWithSetFigure(bool bLeft, std::string filename,
-		bool bReverse)
+void DramaCommandDlg::InitWithSetFigure(bool bLeft, std::string filename, bool bReverse, int nCol, int nRow)
 {
 	m_kParam.type = DCT_SETDLGFIG;
 	m_kParam.str = filename;
 	m_kParam.u3.bLeft = bLeft;
 	m_kParam.u1.bReverse = bReverse;
+	m_kParam.m_Pic_CellX = nCol;
+	m_kParam.m_Pic_CellY = nRow;
 }
 
 void DramaCommandDlg::InitWithSetTitle(bool bLeft, std::string title,
@@ -114,8 +117,8 @@ void DramaCommandDlg::excute()
 	}
 	else if (DCT_SETDLGFIG == m_kParam.type)
 	{
-		dramaScene->SetChatFigure(m_kParam.u3.bLeft, m_kParam.str,
-				m_kParam.u1.bReverse);
+		dramaScene->SetChatFigure(m_kParam.u3.bLeft, m_kParam.str, m_kParam.u1.bReverse,
+			                    m_kParam.m_Pic_CellX, m_kParam.m_Pic_CellY);
 	}
 	else if (DCT_SETDLGTITLE == m_kParam.type)
 	{
@@ -172,7 +175,13 @@ void DramaCommandSprite::InitWithSetAnimation(int nKey, int nAniIndex)
 	m_kParam.type = DCT_SETSPRITEANI;
 	m_kParam.u1.nAniIndex = nAniIndex;
 }
+void DramaCommandSprite::InitWithSetReverse(int nKey, bool bReverse)
+{
+	m_kParam.nKey						= nKey;
+	m_kParam.type						= DCT_SPRITE_REVERSE;
+	m_kParam.u1.bReverse              = bReverse;
 
+}
 void DramaCommandSprite::InitWithSetPos(int nKey, int nPosX, int nPosY)
 {
 	m_kParam.u3.nTargetKey = nKey;
@@ -190,7 +199,12 @@ void DramaCommandSprite::InitWithMove(int nKey, int nToPosX, int nToPosY,
 	m_kParam.u2.nToPosY = nToPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
 	m_kParam.u3.nMoveStep = nStep;
 }
+void DramaCommandSprite::InitWithEffect(int nKey,int nEffectId)
+{
+	m_kParam.nKey						= nKey;
+	m_kParam.type						= DCT_SPRITE_EFFECT;
 
+}
 void DramaCommandSprite::excute()
 {
 	if (DCT_ADDSPRITE == m_kParam.type)
@@ -217,6 +231,14 @@ void DramaCommandSprite::excute()
 	{
 		ExcuteMoveSprite();
 	}
+	else if(DCT_SPRITE_EFFECT == m_kParam.type)
+	{
+		ExcuteSpriteEffect();
+	}
+	else if(DCT_SPRITE_REVERSE == m_kParam.type)
+	{
+		ExcuteSpriteReverse();
+	}    
 }
 
 void DramaCommandSprite::ExcuteAddSprite()
@@ -232,19 +254,18 @@ void DramaCommandSprite::ExcuteAddSprite()
 		return;
 	}
 
-	switch (m_kParam.u2.nSpriteType)
-	{
-	case ST_PLAYER:
-		pkDramaScene->AddManuRole(m_kParam.nKey, m_kParam.u1.nLookFace);
-		break;
-	case ST_NPC:
-		pkDramaScene->AddNpc(m_kParam.nKey, m_kParam.u1.nLookFace);
-		break;
-	case ST_MONSTER:
-		pkDramaScene->AddMonster(m_kParam.nKey, m_kParam.u1.nLookFace);
-		break;
-	default:
-		break;
+	switch (m_kParam.u2.nSpriteType) {
+		case ST_PLAYER:
+			pkDramaScene->AddManuRole(m_kParam.nKey, m_kParam.u1.nLookFace, m_kParam.u3.bFaceRight);
+			break;
+		case ST_NPC:
+			pkDramaScene->AddNpc(m_kParam.nKey, m_kParam.u1.nLookFace, m_kParam.u3.bFaceRight);
+			break;
+		case ST_MONSTER:
+			pkDramaScene->AddMonster(m_kParam.nKey, m_kParam.u1.nLookFace, m_kParam.u3.bFaceRight);
+			break;
+		default:
+			break;
 	}
 
 	NDSprite* sprite = pkDramaScene->GetSprite(m_kParam.nKey);
@@ -252,6 +273,10 @@ void DramaCommandSprite::ExcuteAddSprite()
 	if (sprite && sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)))
 	{
 		((NDBaseRole*) sprite)->m_strName = m_kParam.str;
+	}
+	if (sprite && sprite->IsKindOfClass(RUNTIME_CLASS(NDMonster)))
+	{
+		//((NDMonster*)sprite)->SetNameColor(ccc4(0, 255, 0, 255));
 	}
 }
 
@@ -340,6 +365,39 @@ void DramaCommandSprite::ExcuteSetPostion()
 	sprite->SetPosition(ccp(m_kParam.u1.nPosX, m_kParam.u2.nPoxY));
 }
 
+void DramaCommandSprite::ExcuteSpriteReverse()
+{
+	NDAsssert(DCT_SPRITE_REVERSE == m_kParam.type);
+	this->SetFinish(true);
+	DramaScene* dramaScene	= GetDramaScene();
+
+	if (!dramaScene)
+	{
+		return;
+	}
+
+	NDSprite* sprite = dramaScene->GetSprite(m_kParam.nKey);
+	if (!sprite)
+	{
+		return;
+	}
+	sprite->SetCurrentAnimation(0, m_kParam.u1.bReverse);
+}
+
+void DramaCommandSprite::ExcuteSpriteEffect()
+{
+	NDAsssert(DCT_SETSPRITEPOS == m_kParam.type);
+	this->SetFinish(true);
+
+	DramaScene* dramaScene	= GetDramaScene();
+	if (!dramaScene)
+	{
+		return;
+	}
+
+	NDSprite* sprite = dramaScene->GetSprite(m_kParam.nKey);
+}
+
 void DramaCommandSprite::ExcuteMoveSprite()
 {
 	NDAsssert(DCT_MOVESPRITE == m_kParam.type);
@@ -358,7 +416,8 @@ void DramaCommandSprite::ExcuteMoveSprite()
 		this->SetFinish(true);
 		return;
 	}
-
+	
+	bool bRight   = false;
 	bool bXArrive = false;
 	bool bYArrive = false;
 	CGPoint curPos = sprite->GetPosition();
@@ -374,6 +433,7 @@ void DramaCommandSprite::ExcuteMoveSprite()
 	else if (int(curPos.x) < m_kParam.u1.nToPosX)
 	{
 		curPos.x += m_kParam.u3.nMoveStep;
+		bRight = true;
 	}
 
 	if (abs(int(curPos.y) - m_kParam.u2.nToPosY) <= m_kParam.u3.nMoveStep)
@@ -390,18 +450,23 @@ void DramaCommandSprite::ExcuteMoveSprite()
 		curPos.y += m_kParam.u3.nMoveStep;
 	}
 
+	sprite->SetSpriteDir(bRight ? 0 : 2);
 	sprite->SetCurrentAnimation(MANUELROLE_WALK, sprite->IsReverse());
 	sprite->SetPosition(curPos);
 
 	if (bXArrive && bYArrive)
 	{
+		sprite->SetCurrentAnimation(0, m_kParam.bRightTmp ? 2 : 0);
 		this->SetFinish(true);
+		return;
 	}
+	m_kParam.bRightTmp = bRight;
 }
 
 ///////////////////////////////////////////////
 void DramaCommandScene::InitWithLoadDrama(int nMapId)
 {
+    m_kParam.nKey = AllocKey();
 	m_kParam.type = DCT_LOADMAPSCENE;
 	m_kParam.u1.nMapId = nMapId;
 }
@@ -455,6 +520,13 @@ void DramaCommandScene::ExcuteLoadDramaScene()
 
 	DramaScene* scene = new DramaScene;
 	scene->Init(m_kParam.u1.nMapId);
+
+	//pop上一个场景
+	if(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(DramaScene)) != NULL )
+	{
+		NDDirector::DefaultDirector()->PopScene();
+	} 
+
 	NDDirector::DefaultDirector()->PushScene(scene);
 }
 
@@ -486,6 +558,14 @@ void DramaCommandScene::ExcuteFinishDrama()
 			break;
 		}
 	}
+
+#if 0
+	//继续战斗
+	if (BattleMgrObj.GetBattle() != NULL){
+		ScriptMgrObj.excuteLuaFunc("DramaEnd", "Drama");
+		BattleMgrObj.BattleContinue();
+	}
+#endif
 
 	DramaCommandBase::ResetKeyAlloc();
 }
@@ -542,7 +622,7 @@ void DramaCommandCamera::InitWithMove(int nToPosX, int nToPosY, int nStep)
 {
 	m_kParam.type = DCT_MOVECAMERA;
 	m_kParam.u1.nToPosX = nToPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
-	m_kParam.u2.nToPosY = nToPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
+	m_kParam.u2.nToPosY = nToPosY * MAP_UNITSIZE;
 	m_kParam.u3.nMoveStep = nStep;
 }
 
@@ -617,6 +697,7 @@ void DramaCommandCamera::ExcuteMovePostion()
 		curPos.y += m_kParam.u3.nMoveStep;
 	}
 
+	//越界判定
 	bool bOverBoder = dramaScene->SetCenter(curPos);
 
 	if ((bXArrive && bYArrive) || bOverBoder)
@@ -740,4 +821,16 @@ void DramaCommandWait::ExcuteWaitPreActionAndClick()
 		this->SetFinish(true);
 		this->SetCanExcuteNextCommand(true);
 	}
+}
+//qbw音效播放
+void DramaCommandSoundEffect::InitWithSoundEffectId(int nId)
+{
+	m_kParam.type			= DCT_SOUND_EFFECT;
+	m_kParam.nKey			= nId;	
+}
+void DramaCommandSoundEffect::excute()
+{
+	ScriptMgrObj.excuteLuaFunc("PlayEffectSound", "Music", m_kParam.nKey);
+	this->SetFinish(true);
+	this->SetCanExcuteNextCommand(true);
 }

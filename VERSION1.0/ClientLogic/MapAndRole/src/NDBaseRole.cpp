@@ -201,37 +201,36 @@ int NDBaseRole::getFlagId(int index)
 
 void NDBaseRole::DrawRingImage(bool bDraw)
 {
-	if (IsKindOfClass(RUNTIME_CLASS(NDNpc)))
+	if (IsKindOfClass (RUNTIME_CLASS(NDNpc))){
+	NDNpc* npc = (NDNpc*) this;
+	if (!npc->IsActionOnRing())
 	{
-		NDNpc* npc = (NDNpc*) this;
-		if (!npc->IsActionOnRing())
+		return;
+	}
+}
+
+if (m_bFocus && bDraw)
+{
+	if (m_pkRingPic == NULL)
+	{
+		m_pkRingPic = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
+	}
+	CGSize sizeRing = m_pkRingPic->GetSize();
+
+	if (GetParent())
+	{
+		NDLayer *layer = (NDLayer*) GetParent();
+		CGSize sizemap = layer->GetContentSize();
+		if (!m_pkRidePet)
 		{
-			return;
+			//m_picRing->DrawInRect(CGRectMake(GetPosition().x-13-8, GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
+		}
+		else
+		{
+			//m_picRing->DrawInRect(CGRectMake(ridepet->GetPosition().x-13-8, ridepet->GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
 		}
 	}
-
-	if (m_bFocus && bDraw)
-	{
-		if (m_pkRingPic == NULL)
-		{
-			m_pkRingPic = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
-		}
-		CGSize sizeRing = m_pkRingPic->GetSize();
-
-		if (GetParent())
-		{
-			NDLayer *layer = (NDLayer*) GetParent();
-			CGSize sizemap = layer->GetContentSize();
-			if (!m_pkRidePet)
-			{
-				//m_picRing->DrawInRect(CGRectMake(GetPosition().x-13-8, GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
-			}
-			else
-			{
-				//m_picRing->DrawInRect(CGRectMake(ridepet->GetPosition().x-13-8, ridepet->GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
-			}
-		}
-	}
+}
 }
 
 bool NDBaseRole::OnDrawBegin(bool bDraw)
@@ -664,7 +663,7 @@ void NDBaseRole::SetRidePet(int lookface, int stand_action, int run_action, int 
 		//			{
 		//				this->SetAction(false);
 		//			}
-		m_pkRidePet->SetOwner(this);
+		//m_pkRidePet->SetOwner(this);
 		//ridepet->SetScale(this->GetScale());
 		setStandActionWithRidePet();
 	}
@@ -1170,7 +1169,7 @@ void NDBaseRole::unpackEquip(int iEquipPos)
 	switch (iEquipPos)
 	{
 	case Item::eEP_MainArmor:
-		SetWeaponType(WEAPON_NONE);
+		SetWeaponType (WEAPON_NONE);
 		SetRightHandWeaponImage("");
 		SetDoubleHandWeaponImage("");
 		SetDoubleHandWandImage("");
@@ -1284,7 +1283,7 @@ void NDBaseRole::SafeAddEffect(NDSprite*& sprite, std::string file)
 	if (sprite == NULL && !file.empty())
 	{
 		sprite = new NDSprite;
-		sprite->Initialization(NDPath::GetAniPath(file.c_str()));
+		sprite->Initialization(NDPath::GetAniPath(file.c_str()).c_str());
 		sprite->SetCurrentAnimation(0, false);
 	}
 }
@@ -1341,18 +1340,177 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 					sizeShadow.height));
 }
 
-// void NDBaseRole::SetNormalAniGroup(int nLookface)
+// void NDEngine::NDBaseRole::RunBattleSubAnimation(Fighter* pkFighter)
 // {
-// 	if (nLookface <= 0)
+// 	Battle* pkBattle = 0;
+// 
+// 	if (!pkBattle)
 // 	{
 // 		return;
 // 	}
 // 
-// 	Initialization(
-// 			tq::CString("%smodel_%d%s",
-// 					NDEngine::NDPath::GetAnimationPath().c_str(),
-// 					nLookface / 100, ".spr"));
+// 	// 1.获取当前帧
+// 	NDFrame* curFrame = m_pkCurrentAnimation->getFrames()->getObjectAtIndex(
+// 			m_pkFrameRunRecord->getCurrentFrameIndex());
 // 
-// 	m_bFaceRight = true;
-// 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
+// 	// 2.取当前帧的子动画数组并加入战斗对象的子动画数组
+// 	if (curFrame && curFrame->getSubAnimationGroups())
+// 	{
+// 		for (NSUInteger i = 0; i < curFrame->getSubAnimationGroups()->count();
+// 				i++)
+// 		{
+// 			NDAnimationGroup *pkAnimationGroup =
+// 					curFrame->getSubAnimationGroups()->getObjectAtIndex(i);
+// 			pkAnimationGroup->setReverse(
+// 					pkFighter->m_kInfo.group == BATTLE_GROUP_DEFENCE ?
+// 							false : true);
+// 
+// 			if (pkAnimationGroup->getIdentifer() == 0)
+// 			{ // 非魔法特效
+// 				if (pkAnimationGroup->getType() == SUB_ANI_TYPE_SELF
+// 						|| pkAnimationGroup->getType() == SUB_ANI_TYPE_NONE)
+// 				{
+// 					pkBattle->addSubAniGroup(this, pkAnimationGroup, pkFighter);
+// 				}
+// 			}
+// 			else
+// 			{ // 魔法特效
+// 				if (pkAnimationGroup->getIdentifer()
+// 						== pkFighter->getUseSkill()->getSubAniID())
+// 				{
+// 					if (pkAnimationGroup->getType() == SUB_ANI_TYPE_SELF)
+// 					{
+// 						pkBattle->addSubAniGroup(this, pkAnimationGroup,
+// 								pkFighter);
+// 					}
+// 					else if (pkAnimationGroup->getType() == SUB_ANI_TYPE_TARGET)
+// 					{
+// 
+// 						VEC_FIGHTER& array = pkFighter->getArrayTarget();
+// 						if (array.size() == 0)
+// 						{ // 如果没有目标数组，则制定目标为mainTarget
+// 							pkBattle->addSubAniGroup(this, pkAnimationGroup,
+// 									pkFighter->m_pkMainTarget);
+// 						}
+// 						else
+// 						{
+// 							for (size_t j = 0; j < array.size(); j++)
+// 							{
+// 								pkBattle->addSubAniGroup(this, pkAnimationGroup,
+// 										array.at(j));
+// 							}
+// 						}
+// 					}
+// 					else if (pkAnimationGroup->getType() == SUB_ANI_TYPE_NONE)
+// 					{
+// 						pkBattle->addSubAniGroup(this, pkAnimationGroup,
+// 								pkFighter);
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+// }
+// 
+// bool NDEngine::NDBaseRole::DrawSubAnimation(NDSubAniGroup& kSag)
+// {
+// 	NDNode* pkLayer = this->GetParent();
+// 
+// 	if (!pkLayer)
+// 	{
+// 		return true;
+// 	}
+// 
+// 	NDFrameRunRecord* pkRecord = kSag.frameRec;
+// 
+// 	if (!pkRecord)
+// 	{
+// 		return true;
+// 	}
+// 
+// 	NDAnimationGroup* pkAnimationGroup = kSag.aniGroup;
+// 
+// 	if (!pkAnimationGroup)
+// 	{
+// 		return true;
+// 	}
+// 
+// 	CGPoint kPosition = pkAnimationGroup->getPosition();
+// 	pkAnimationGroup->setRunningMapSize(pkLayer->GetContentSize());
+// 
+// 	NDAnimation* pkAnimation = nil;
+// 	if (pkAnimationGroup->getAnimations()->count() > 0)
+// 	{
+// 		pkAnimation =
+// 				(NDAnimation*) pkAnimationGroup->getAnimations()->objectAtIndex(
+// 						0);
+// 	}
+// 
+// 	if (!pkAnimation)
+// 	{
+// 		return true;
+// 	}
+// 
+// 	CGPoint kTargetPos = ccp(0, 0);
+// 	if (pkAnimationGroup->getType() == SUB_ANI_TYPE_NONE)
+// 	{
+// 		if (kSag.reverse)
+// 		{
+// 			//允许翻转++Guosen 2012.6.28
+// 			pkAnimationGroup->setReverse(
+// 					kSag.fighter->m_kInfo.group == BATTLE_GROUP_DEFENCE ?
+// 							false : true);
+// 		}
+// 		else
+// 		{
+// 			pkAnimationGroup->setReverse(false);
+// 		}
+// 
+// 		int nCoordX = 0;
+// 
+// 		if (pkAnimationGroup->getReverse())
+// 		{
+// 			// 向右释放技能
+// 			nCoordX += (240
+// 					- (pkAnimationGroup->getPosition().x + pkAnimation->getX()))
+// 					* 2;
+// 		}
+// 
+// 		kTargetPos.x = kPosition.x + pkAnimation->getW() / 2 + nCoordX + 20;
+// 		kTargetPos.y = kPosition.y + pkAnimation->getH() / 2 + 45;
+// 	}
+// 	else if (pkAnimationGroup->getType() == SUB_ANI_TYPE_TARGET
+// 			|| pkAnimationGroup->getType() == SUB_ANI_TYPE_SELF)
+// 	{
+// 		kTargetPos.x = kSag.fighter->getX();
+// 		int nPosY = kSag.fighter->getY();
+// 		if (kSag.pos == 0)
+// 		{
+// 			nPosY -= FIGHTER_HEIGHT;
+// 		}
+// 		else if (kSag.pos == 2)
+// 		{
+// 			nPosY -= FIGHTER_HEIGHT / 2;
+// 		}
+// 		kTargetPos.y = nPosY;
+// 		if (kSag.reverse)
+// 		{
+// 			//允许翻转++Guosen 2012.6.28
+// 			pkAnimationGroup->setReverse(
+// 					kSag.fighter->m_kInfo.group == BATTLE_GROUP_DEFENCE ?
+// 							true : false);
+// 		}
+// 		else
+// 		{
+// 			pkAnimationGroup->setReverse(false);
+// 		}
+// 	}
+// 
+// 	// 子动画播放位置设置
+// 	pkAnimationGroup->setPosition(kTargetPos);
+// 	pkAnimation->runWithRunFrameRecord(pkRecord, true, m_fScale);
+// 	pkAnimationGroup->setPosition(kPosition);
+// 
+// 	return pkRecord->getCurrentFrameIndex() != 0
+// 			&& pkRecord->getNextFrameIndex() == 0;
 // }

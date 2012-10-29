@@ -13,6 +13,7 @@
 #include "basedefine.h"
 #include "NDUIBaseGraphics.h"
 #include "CCString.h"
+#include "NDDebugOpt.h"
 
 using namespace cocos2d;
 
@@ -75,6 +76,9 @@ namespace NDEngine
 		else if (srcRect.origin.x != dstRect.origin.x ||
 			srcRect.origin.y != dstRect.origin.y)
 		{
+			//@zwq: 不需要重新生成贴图
+			m_bNeedMakeVer = false;
+			m_bNeedMakeCoo = true;
 			m_bNeedMakeVer = true;
 		}
 	}
@@ -131,6 +135,10 @@ namespace NDEngine
 	
 	void NDUILabel::MakeTexture()
 	{
+#ifdef _DEBUG
+		CCLog( "@NDUILabel::MakeTexture(): %s", m_strText.c_str());
+#endif
+
 		CGRect thisRect = this->GetFrameRect();	
 		/*
 		CGSize dim = [text sizeWithFont:[UIFont fontWithName:FONT_NAME size:m_fontSize] 
@@ -242,6 +250,8 @@ namespace NDEngine
 	
 	void NDUILabel::draw()
 	{
+		if (!NDDebugOpt::getDrawUILabelEnabled()) return;
+
 		NDUINode::draw();
 		
 		if (this->IsVisibled()) 

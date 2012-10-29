@@ -6,7 +6,7 @@
  *  Copyright 2012 (ÍøÁú)DeNA. All rights reserved.
  *
  */
-
+#if 0
 #include "ScriptGameData.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -1350,3 +1350,4 @@ NDScriptGameData::GetScriptDataStr(ScriptGameData& sgd)
 
 
 */
+#endif 

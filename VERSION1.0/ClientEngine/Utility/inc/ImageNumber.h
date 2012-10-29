@@ -1,7 +1,6 @@
 /**
  *
  */
-
 #ifndef IMAGENUMBER_H
 #define IMAGENUMBER_H
 

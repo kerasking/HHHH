@@ -55,7 +55,8 @@ namespace NDEngine
 
 NDMapLayer* M_GetMapLayer()
 {
-	return NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene)));
+	//return NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene)));
+	return NULL;
 }
 
 static NDPlayer* g_pkDefaultHero = NULL;
@@ -185,7 +186,7 @@ NDPlayer& NDPlayer::defaultHero(int lookface/* = 0*/,
 	if (!g_pkDefaultHero)
 	{
 		g_pkDefaultHero = new NDPlayer();
-		g_defaultHero->SetNodeLevel(NODE_LEVEL_MAIN_ROLE);
+		g_pkDefaultHero->SetNodeLevel(NODE_LEVEL_MAIN_ROLE);
 		g_pkDefaultHero->Initialization(lookface, false);
 	}
 
@@ -227,45 +228,45 @@ bool NDPlayer::DealClickPointInSideNpc(CGPoint point)
 {
 	bool bDeal = false;
 
-	NDMapMgr::VEC_NPC& npclist = NDMapMgrObj.m_vNpc;
-	for (NDMapMgr::vec_npc_it it = npclist.begin(); it != npclist.end(); it++) 
-	{
-		NDNpc* npc = *it;
-
-		if (!npc)
-		{
-			continue;
-		}
-
-		if (npc->IsPointInside(point))
-		{
-			bDeal = true;
-
-			npc->ShowHightLight(true);
-		}
-		else
-		{
-			npc->ShowHightLight(false);
-		}
-	}
+// 	NDMapMgr::VEC_NPC& npclist = NDMapMgrObj.m_vNpc;
+// 	for (NDMapMgr::vec_npc_it it = npclist.begin(); it != npclist.end(); it++) 
+// 	{
+// 		NDNpc* npc = *it;
+// 
+// 		if (!npc)
+// 		{
+// 			continue;
+// 		}
+// 
+// 		if (npc->IsPointInside(point))
+// 		{
+// 			bDeal = true;
+// 
+// 			npc->ShowHightLight(true);
+// 		}
+// 		else
+// 		{
+// 			npc->ShowHightLight(false);
+// 		}
+// 	}
 
 	return bDeal;
 }
 
 bool NDPlayer::CancelClickPointInSideNpc()
 {
-	NDMapMgr::VEC_NPC& npclist = NDMapMgrObj.m_vNpc;
-	for (NDMapMgr::vec_npc_it it = npclist.begin(); it != npclist.end(); it++) 
-	{
-		NDNpc* npc = *it;
-
-		if (!npc)
-		{
-			continue;
-		}
-
-		npc->ShowHightLight(false);
-	}
+// 	NDMapMgr::VEC_NPC& npclist = NDMapMgrObj.m_vNpc;
+// 	for (NDMapMgr::vec_npc_it it = npclist.begin(); it != npclist.end(); it++) 
+// 	{
+// 		NDNpc* npc = *it;
+// 
+// 		if (!npc)
+// 		{
+// 			continue;
+// 		}
+// 
+// 		npc->ShowHightLight(false);
+// 	}
 
 	return true;
 
@@ -273,175 +274,175 @@ bool NDPlayer::CancelClickPointInSideNpc()
 
 bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 {
-	if (AutoPathTipObj.IsWorking())
-	{
-		AutoPathTipObj.Stop();
-	}
-	
-	if (ScriptMgrObj.excuteLuaFunc("CloseMainUI", ""))
-	{
-		//this->stopMoving();
-		//return false;
-	}
-	
-	if (bLongTouch && bPath)
-	{
-		//长按不执行其它操作
-		NDPlayer::defaultHero().Walk(point, SpriteSpeedStep4);
-		return true;
-	}
-	
-	bool bNpcPath = false;
-
-	NDScene* pkRunningScene = NDDirector::DefaultDirector()->GetRunningScene();
-	if (pkRunningScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene)))
-	{
-		//CSMGameScene* gameScene = (CSMGameScene*)pkRunningScene;
-		if (!NDUISynLayer::IsShown())// && !gameScene->IsUIShow())
-		{
-			do {
-
-				bool bDealed = false;
-				// 1.先处理npc
-				NDMapMgr::VEC_NPC& npclist = NDMapMgrObj.m_vNpc;
-				for (NDMapMgr::vec_npc_it it = npclist.begin(); it != npclist.end(); it++) 
-				{
-					NDNpc* npc = *it;
-
-					if (npc && npc->IsPointInside(point))
-					{
-						int dis = NDMapMgrObj.getDistBetweenRole(this, npc);
-
-						CGPoint pos;
-
-						if ( dis < FOCUS_JUDGE_DISTANCE )
-						{
-							SendNpcInteractionMessage(npc->m_id);
-							return false;
-						}
-						else if (npc->getNearestPoint(this->GetPosition(), pos))
-						{
-							point = ccpAdd(pos, CGPointMake(0, 30));
-
-							AutoPathTipObj.work(npc->m_name);
-							bDealed = true;
-							bNpcPath = true;
-							break;
-
-						}
-					}
-				}
-
-				if (bDealed)
-				{
-					break;
-				}
-
-								/*
-				// 2.再处理角色
-				//other role
-				if ( m_iFocusManuRoleID != -1 )
-				{
-					NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(m_iFocusManuRoleID);
-					if (otherplayer && CGRectContainsPoint(otherplayer->GetFocusRect(), point)) 
-					{
-						if ( otherplayer->IsInState(USERSTATE_BOOTH) )
-						{ //与其摆摊玩家交互
-							NDUISynLayer::Show();
-							VendorBuyUILayer::s_idVendor = otherplayer->m_id;
-							
-							NDTransData bao(_MSG_BOOTH);
-							bao << Byte(BOOTH_QUEST) << otherplayer->m_id << int(0);
-							// SEND_DATA(bao);
-						}
-						
-						QuickInteraction::RefreshOptions();
-						
-						return false;
-					}
-				}
-				else
-				{
-					NDMapMgr::map_manualrole& roles = NDMapMgrObj.GetManualRoles();
-					
-					bool find = false;
-					for (NDMapMgr::map_manualrole_it it = roles.begin(); it != roles.end(); it++) 
-					{
-						NDManualRole* role = it->second;
-						
-						if (role->bClear) continue;
-						
-						if ( !CGRectContainsPoint(role->GetFocusRect(), point)) continue;
-						
-						find = true;
-						
-						SetFocusRole(role);
-						
-						return false;
-					}
-				}
-				*/
-
-				//** chh 2012-08-27 **//
-				if ( m_iFocusManuRoleID == -1 )
-				{
-					NDMapMgr::map_manualrole& roles = NDMapMgrObj.GetManualRoles();
-
-					bool find = false;
-					for (NDMapMgr::map_manualrole_it it = roles.begin(); it != roles.end(); it++) 
-					{
-						NDManualRole* role = it->second;
-
-						if (role->bClear) continue;
-
-						if ( !CGRectContainsPoint(role->GetFocusRect(), point)) continue;
-
-						//find = true;
-
-						SetFocusRole(role);
-
-						//return false;
-					}
-				}
-
-				NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(m_iFocusManuRoleID);
-				if (otherplayer && CGRectContainsPoint(otherplayer->GetFocusRect(), point)) 
-				{
-					if ( otherplayer->IsInState(USERSTATE_BOOTH) )
-					{ //与其摆摊玩家交互
-						NDUISynLayer::Show();
-						VendorBuyUILayer::s_idVendor = otherplayer->m_id;
-
-						NDTransData bao(_MSG_BOOTH);
-						bao << Byte(BOOTH_QUEST) << otherplayer->m_id << int(0);
-						SEND_DATA(bao);
-					}
-
-					ScriptGlobalEvent::OnEvent(GE_CLICK_OTHERPLAYER,otherplayer->m_id);
-					QuickInteraction::RefreshOptions();
-
-					//return false;
-				}
-
-			}while(0);
-		}
-	}
- 		
-	if (bPath || bNpcPath)
-	{
-		NDPlayer::defaultHero().Walk(point, SpriteSpeedStep4);
-	}
-
-	if (m_pointList.empty())
-	{
-		NDMapLayer* layer = M_GetMapLayer();
-		if (layer)
-		{
-			layer->ShowRoadSign(false);
-		}
-
-		return false;
-	}
+// 	if (AutoPathTipObj.IsWorking())
+// 	{
+// 		AutoPathTipObj.Stop();
+// 	}
+// 	
+// 	if (ScriptMgrObj.excuteLuaFunc("CloseMainUI", ""))
+// 	{
+// 		//this->stopMoving();
+// 		//return false;
+// 	}
+// 	
+// 	if (bLongTouch && bPath)
+// 	{
+// 		//长按不执行其它操作
+// 		NDPlayer::defaultHero().Walk(point, SpriteSpeedStep4);
+// 		return true;
+// 	}
+// 	
+// 	bool bNpcPath = false;
+// 
+// 	NDScene* pkRunningScene = NDDirector::DefaultDirector()->GetRunningScene();
+// 	if (pkRunningScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene)))
+// 	{
+// 		//CSMGameScene* gameScene = (CSMGameScene*)pkRunningScene;
+// 		if (!NDUISynLayer::IsShown())// && !gameScene->IsUIShow())
+// 		{
+// 			do {
+// 
+// 				bool bDealed = false;
+// 				// 1.先处理npc
+// 				NDMapMgr::VEC_NPC& npclist = NDMapMgrObj.m_vNpc;
+// 				for (NDMapMgr::vec_npc_it it = npclist.begin(); it != npclist.end(); it++) 
+// 				{
+// 					NDNpc* npc = *it;
+// 
+// 					if (npc && npc->IsPointInside(point))
+// 					{
+// 						int dis = NDMapMgrObj.getDistBetweenRole(this, npc);
+// 
+// 						CGPoint pos;
+// 
+// 						if ( dis < FOCUS_JUDGE_DISTANCE )
+// 						{
+// 							SendNpcInteractionMessage(npc->m_id);
+// 							return false;
+// 						}
+// 						else if (npc->getNearestPoint(this->GetPosition(), pos))
+// 						{
+// 							point = ccpAdd(pos, CGPointMake(0, 30));
+// 
+// 							AutoPathTipObj.work(npc->m_name);
+// 							bDealed = true;
+// 							bNpcPath = true;
+// 							break;
+// 
+// 						}
+// 					}
+// 				}
+// 
+// 				if (bDealed)
+// 				{
+// 					break;
+// 				}
+// 
+// 								/*
+// 				// 2.再处理角色
+// 				//other role
+// 				if ( m_iFocusManuRoleID != -1 )
+// 				{
+// 					NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(m_iFocusManuRoleID);
+// 					if (otherplayer && CGRectContainsPoint(otherplayer->GetFocusRect(), point)) 
+// 					{
+// 						if ( otherplayer->IsInState(USERSTATE_BOOTH) )
+// 						{ //与其摆摊玩家交互
+// 							NDUISynLayer::Show();
+// 							VendorBuyUILayer::s_idVendor = otherplayer->m_id;
+// 							
+// 							NDTransData bao(_MSG_BOOTH);
+// 							bao << Byte(BOOTH_QUEST) << otherplayer->m_id << int(0);
+// 							// SEND_DATA(bao);
+// 						}
+// 						
+// 						QuickInteraction::RefreshOptions();
+// 						
+// 						return false;
+// 					}
+// 				}
+// 				else
+// 				{
+// 					NDMapMgr::map_manualrole& roles = NDMapMgrObj.GetManualRoles();
+// 					
+// 					bool find = false;
+// 					for (NDMapMgr::map_manualrole_it it = roles.begin(); it != roles.end(); it++) 
+// 					{
+// 						NDManualRole* role = it->second;
+// 						
+// 						if (role->bClear) continue;
+// 						
+// 						if ( !CGRectContainsPoint(role->GetFocusRect(), point)) continue;
+// 						
+// 						find = true;
+// 						
+// 						SetFocusRole(role);
+// 						
+// 						return false;
+// 					}
+// 				}
+// 				*/
+// 
+// 				//** chh 2012-08-27 **//
+// 				if ( m_iFocusManuRoleID == -1 )
+// 				{
+// 					NDMapMgr::map_manualrole& roles = NDMapMgrObj.GetManualRoles();
+// 
+// 					bool find = false;
+// 					for (NDMapMgr::map_manualrole_it it = roles.begin(); it != roles.end(); it++) 
+// 					{
+// 						NDManualRole* role = it->second;
+// 
+// 						if (role->bClear) continue;
+// 
+// 						if ( !CGRectContainsPoint(role->GetFocusRect(), point)) continue;
+// 
+// 						//find = true;
+// 
+// 						SetFocusRole(role);
+// 
+// 						//return false;
+// 					}
+// 				}
+// 
+// 				NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(m_iFocusManuRoleID);
+// 				if (otherplayer && CGRectContainsPoint(otherplayer->GetFocusRect(), point)) 
+// 				{
+// 					if ( otherplayer->IsInState(USERSTATE_BOOTH) )
+// 					{ //与其摆摊玩家交互
+// 						NDUISynLayer::Show();
+// 						VendorBuyUILayer::s_idVendor = otherplayer->m_id;
+// 
+// 						NDTransData bao(_MSG_BOOTH);
+// 						bao << Byte(BOOTH_QUEST) << otherplayer->m_id << int(0);
+// 						SEND_DATA(bao);
+// 					}
+// 
+// 					ScriptGlobalEvent::OnEvent(GE_CLICK_OTHERPLAYER,otherplayer->m_id);
+// 					QuickInteraction::RefreshOptions();
+// 
+// 					//return false;
+// 				}
+// 
+// 			}while(0);
+// 		}
+// 	}
+//  		
+// 	if (bPath || bNpcPath)
+// 	{
+// 		NDPlayer::defaultHero().Walk(point, SpriteSpeedStep4);
+// 	}
+// 
+// 	if (m_pointList.empty())
+// 	{
+// 		NDMapLayer* layer = M_GetMapLayer();
+// 		if (layer)
+// 		{
+// 			layer->ShowRoadSign(false);
+// 		}
+// 
+// 		return false;
+// 	}
 
 	return true;
 }
@@ -459,12 +460,12 @@ void NDPlayer::stopMoving(bool bResetPos/*=true*/, bool bResetTeamPos/*=true*/)
 
 	m_kTargetPos = CGPointZero;
 
-	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
-	if (scene) 
-	{
-		NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
-		layer->SetScreenCenter(this->GetPosition());
-	}
+// 	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
+// 	if (scene) 
+// 	{
+// 		NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
+// 		layer->SetScreenCenter(this->GetPosition());
+// 	}
 
 	if (AutoPathTipObj.IsWorking()) 
 	{
@@ -472,23 +473,23 @@ void NDPlayer::stopMoving(bool bResetPos/*=true*/, bool bResetTeamPos/*=true*/)
 	}
 }
 
-Task* NDPlayer::GetPlayerTask(int idTask)
-{
-	Task* task = NULL;
-
-	for (vec_task_it it = m_vPlayerTask.begin(); it != m_vPlayerTask.end();
-			it++)
-	{
-		task = *it;
-
-		if (task->m_nTaskID == idTask)
-		{
-			return task;
-		}
-	}
-
-	return NULL;
-}
+// Task* NDPlayer::GetPlayerTask(int idTask)
+// {
+// 	Task* task = NULL;
+// 
+// 	for (vec_task_it it = m_vPlayerTask.begin(); it != m_vPlayerTask.end();
+// 			it++)
+// 	{
+// 		task = *it;
+// 
+// 		if (task->m_nTaskID == idTask)
+// 		{
+// 			return task;
+// 		}
+// 	}
+// 
+// 	return NULL;
+// }
 
 int NDPlayer::GetOrder()
 {
@@ -559,17 +560,17 @@ void NDPlayer::SetPosition(CGPoint newPosition)
 
 			if (dir != -1)
 			{
-				if(NDMapMgrObj.GetMotherMapID()/100000000!=9)
-				{
-					NDTransData data(_MSG_WALK_EX);
-
-					data << m_id << (unsigned short)nNewCol 
-						<< (unsigned short)nNewRow << (unsigned char)dir;
-
-					NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
-				}
-				serverCol = nNewCol;
-				serverRow = nNewRow;
+// 				if(NDMapMgrObj.GetMotherMapID()/100000000!=9)
+// 				{
+// 					NDTransData data(_MSG_WALK_EX);
+// 
+// 					data << m_id << (unsigned short)nNewCol 
+// 						<< (unsigned short)nNewRow << (unsigned char)dir;
+// 
+// 					NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
+// 				}
+				m_nServerCol = nNewCol;
+				m_nServerRow = nNewRow;
 				//SetServerDir(dir);
 
 				if (isTeamLeader()) 
@@ -589,82 +590,82 @@ void NDPlayer::SetPosition(CGPoint newPosition)
 
 void NDPlayer::Update(unsigned long ulDiff)
 {
-	if (isSafeProtected) 
+	if (m_bIsSafeProtected) 
 	{
-		int intervalTime = [NSDate timeIntervalSinceReferenceDate] - beginProtectedTime;
+		int intervalTime = time(NULL) - m_nBeginProtectedTime;
 		if (intervalTime > BEGIN_PROTECTED_TIME)
 		{
 			setSafeProtected(false);
 		}
 	}
 
-	NDMapMgr& mgr = NDMapMgrObj;
-	if (mgr.GetBattleMonster()) 
-	{
-		m_targetPos = CGPointZero;
-		return;
-	}
-
-	if (!m_bRequireBattleField && m_iBattleFieldStep >= MAX_BATTLEFIELD_STEP)
-	{
-		HandleStateBattleField();
-	}
-
-	if (IsInDacoity() && !m_bRequireDacoity && m_iDacoityStep >= MAX_DACOITY_STEP) 
-	{
-		HandleStateDacoity();
-	}
-
-	// 采集
-	if (!m_bCollide)
-	{
-		map_gather_point& mapgp = mgr.m_mapGP;
-		map_gather_point_it it = mapgp.begin();
-		for (; it != mapgp.end(); it++)
-		{
-			GatherPoint *gp = it->second;
-			if (doGatherPointCollides(gp))
-			{
-				std::string str;
-				str += NDCommonCString("GatherOrNot"); str += gp->getName(); str += "?";
-				m_dlgGather = new NDUIDialog;
-				m_dlgGather->Initialization();
-				m_dlgGather->SetDelegate(this);
-				m_dlgGather->Show(NDCommonCString("WenXinTip"), str.c_str(), NDCommonCString("Cancel"), NDCommonCString("gather"), NULL);
-				m_gp = gp;
-				m_bCollide = true;
-				break;
-			}
-		}
-	}
-
-	CGPoint pos = GetPosition();
-	if (int(m_targetPos.x) != 0 
-		&& int(m_targetPos.y) != 0
-		&& ( (int)pos.x-DISPLAY_POS_X_OFFSET) % 32 == 0
-		&& ( (int)pos.y-DISPLAY_POS_Y_OFFSET) % 32 == 0
-		)
-	{
-		//if (this->GetParent()) 
-		//			{
-		//				NDLayer* layer = (NDLayer *)this->GetParent();
-		//				if (layer->IsKindOfClass(RUNTIME_CLASS(NDMapLayer))) 
-		//				{
-		//					m_movePathIndex = 0;
-		//					NDAutoPath::sharedAutoPath()->autoFindPath(m_position, m_targetPos, (NDMapLayer*)layer, m_iSpeed);
-		//					m_pointList = NDAutoPath::sharedAutoPath()->getPathPointVetor();
-		//					m_targetPos = CGPointZero;
-		//				}		
-		//			}
-		std::vector<CGPoint> vec_pos; vec_pos.push_back(m_targetPos);
-		this->WalkToPosition(vec_pos, SpriteSpeedStep8, true);
-		m_targetPos = CGPointZero;
-		ResetFocusRole();
-	}
-
-	HandleDirectKey();
-
-	updateFlagOfQiZhi();
+// 	NDMapMgr& mgr = NDMapMgrObj;
+// 	if (mgr.GetBattleMonster()) 
+// 	{
+// 		m_targetPos = CGPointZero;
+// 		return;
+// 	}
+// 
+// 	if (!m_bRequireBattleField && m_iBattleFieldStep >= MAX_BATTLEFIELD_STEP)
+// 	{
+// 		HandleStateBattleField();
+// 	}
+// 
+// 	if (IsInDacoity() && !m_bRequireDacoity && m_iDacoityStep >= MAX_DACOITY_STEP) 
+// 	{
+// 		HandleStateDacoity();
+// 	}
+// 
+// 	// 采集
+// 	if (!m_bCollide)
+// 	{
+// 		map_gather_point& mapgp = mgr.m_mapGP;
+// 		map_gather_point_it it = mapgp.begin();
+// 		for (; it != mapgp.end(); it++)
+// 		{
+// 			GatherPoint *gp = it->second;
+// 			if (doGatherPointCollides(gp))
+// 			{
+// 				std::string str;
+// 				str += NDCommonCString("GatherOrNot"); str += gp->getName(); str += "?";
+// 				m_dlgGather = new NDUIDialog;
+// 				m_dlgGather->Initialization();
+// 				m_dlgGather->SetDelegate(this);
+// 				m_dlgGather->Show(NDCommonCString("WenXinTip"), str.c_str(), NDCommonCString("Cancel"), NDCommonCString("gather"), NULL);
+// 				m_gp = gp;
+// 				m_bCollide = true;
+// 				break;
+// 			}
+// 		}
+// 	}
+// 
+// 	CGPoint pos = GetPosition();
+// 	if (int(m_targetPos.x) != 0 
+// 		&& int(m_targetPos.y) != 0
+// 		&& ( (int)pos.x-DISPLAY_POS_X_OFFSET) % 32 == 0
+// 		&& ( (int)pos.y-DISPLAY_POS_Y_OFFSET) % 32 == 0
+// 		)
+// 	{
+// 		//if (this->GetParent()) 
+// 		//			{
+// 		//				NDLayer* layer = (NDLayer *)this->GetParent();
+// 		//				if (layer->IsKindOfClass(RUNTIME_CLASS(NDMapLayer))) 
+// 		//				{
+// 		//					m_movePathIndex = 0;
+// 		//					NDAutoPath::sharedAutoPath()->autoFindPath(m_position, m_targetPos, (NDMapLayer*)layer, m_iSpeed);
+// 		//					m_pointList = NDAutoPath::sharedAutoPath()->getPathPointVetor();
+// 		//					m_targetPos = CGPointZero;
+// 		//				}		
+// 		//			}
+// 		std::vector<CGPoint> vec_pos; vec_pos.push_back(m_targetPos);
+// 		this->WalkToPosition(vec_pos, SpriteSpeedStep8, true);
+// 		m_targetPos = CGPointZero;
+// 		ResetFocusRole();
+// 	}
+// 
+// 	HandleDirectKey();
+// 
+// 	updateFlagOfQiZhi();
 }
 
 void NDPlayer::OnMoving(bool bLastPos)
@@ -723,7 +724,7 @@ void NDPlayer::OnMoveEnd()
 void NDPlayer::OnDrawEnd(bool bDraw)
 {
 	NDManualRole::OnDrawEnd(bDraw);
-	HarvestEventMgrObj.OnTimer(0);
+//	HarvestEventMgrObj.OnTimer(0);
 }
 
 void NDPlayer::CaclEquipEffect()
@@ -790,77 +791,77 @@ void NDPlayer::NextFocusTarget()
 		return;
 	}
 
-	SetFocusRole(NDMapMgrObj.GetNextTarget(FOCUS_JUDGE_DISTANCE));
+//	SetFocusRole(NDMapMgrObj.GetNextTarget(FOCUS_JUDGE_DISTANCE));
 }
 
 void NDPlayer::UpdateFocus()
 {
-	if ( isTeamMember() && !isTeamLeader() )
-	{
-		return;
-	}
-
-	if (!this->GetParent() || !this->GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
-	{
-		return;
-	}
-
-	SetFocusRole(NDMapMgrObj.GetRoleNearstPlayer(FOCUS_JUDGE_DISTANCE));
+// 	if ( isTeamMember() && !isTeamLeader() )
+// 	{
+// 		return;
+// 	}
+// 
+// 	if (!this->GetParent() || !this->GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+// 	{
+// 		return;
+// 	}
+// 
+// 	SetFocusRole(NDMapMgrObj.GetRoleNearstPlayer(FOCUS_JUDGE_DISTANCE));
 }
 
 void NDPlayer::SetFocusRole(NDBaseRole *baserole)
 {
-	//CSMGameScene* gs = (CSMGameScene*) NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
-	/*if (gs) {
-	 gs->SetTargetHead(baserole);
-	 gs->RefreshQuickInterationBar(baserole);
-	 }*/
-
-	if (!baserole)
-	{
-		ResetFocusRole();
-		return;
-	}
-
-	if (baserole->IsKindOfClass(RUNTIME_CLASS(NDNpc)))
-	{
-		ResetFocusRole();
-		m_iFocusNpcID = baserole->m_nID;
-		baserole->SetFocus(true);
-		return;
-	}
-
-	if (baserole->IsKindOfClass(RUNTIME_CLASS(NDManualRole)))
-	{
-		ResetFocusRole();
-		m_iFocusManuRoleID = baserole->m_id;
-		NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(m_iFocusManuRoleID);
-		if (!otherplayer)
-		{
-			ResetFocusRole();
-		}
-
-		otherplayer->SetFocus(true);
-		return;
-	}
+// 	//CSMGameScene* gs = (CSMGameScene*) NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
+// 	/*if (gs) {
+// 	 gs->SetTargetHead(baserole);
+// 	 gs->RefreshQuickInterationBar(baserole);
+// 	 }*/
+// 
+// 	if (!baserole)
+// 	{
+// 		ResetFocusRole();
+// 		return;
+// 	}
+// 
+// 	if (baserole->IsKindOfClass(RUNTIME_CLASS(NDNpc)))
+// 	{
+// 		ResetFocusRole();
+// 		m_iFocusNpcID = baserole->m_nID;
+// 		baserole->SetFocus(true);
+// 		return;
+// 	}
+// 
+// 	if (baserole->IsKindOfClass(RUNTIME_CLASS(NDManualRole)))
+// 	{
+// 		ResetFocusRole();
+// 		m_iFocusManuRoleID = baserole->m_nID;
+// 		NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(m_iFocusManuRoleID);
+// 		if (!otherplayer)
+// 		{
+// 			ResetFocusRole();
+// 		}
+// 
+// 		otherplayer->SetFocus(true);
+// 		return;
+// 	}
 }
 
 void NDPlayer::UpdateFocusPlayer()
 {
-	if ( m_iFocusManuRoleID != -1 )
-	{
-		NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(m_iFocusManuRoleID);
-		if ( !otherplayer || otherplayer->bClear) SetFocusRole(NULL);
-	}
+// 	if ( m_iFocusManuRoleID != -1 )
+// 	{
+// 		NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(m_iFocusManuRoleID);
+// 		if ( !otherplayer || otherplayer->bClear) SetFocusRole(NULL);
+// 	}
 }
 
 void NDPlayer::ResetFocusRole()
 {
-	if ( m_iFocusManuRoleID != -1 )
-	{
-		NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(m_iFocusManuRoleID);
-		if ( otherplayer ) otherplayer->SetFocus(false);
-	}
+// 	if ( m_iFocusManuRoleID != -1 )
+// 	{
+// 		NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(m_iFocusManuRoleID);
+// 		if ( otherplayer ) otherplayer->SetFocus(false);
+// 	}
 
 	m_iFocusManuRoleID = -1;
 
@@ -930,10 +931,10 @@ bool NDPlayer::doGatherPointCollides(GatherPoint *se)
 	    || this->IsSafeProtected() || this->IsInState(USERSTATE_DEAD) )
 		return false;
 
-	if (NDMapMgrObj.GetBattleMonster())
-	{
-		return false;
-	}
+// 	if (NDMapMgrObj.GetBattleMonster())
+// 	{
+// 		return false;
+// 	}
 
 	if (!se)
 	{
@@ -1025,30 +1026,30 @@ bool NDPlayer::CanSwitch(int iSwitchCellX, int iSwitchCellY)
 
 void NDPlayer::processSwitch()
 {
-	// 遍历所有切屏点
-	CSMGameScene* scene = (CSMGameScene*)NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
-
-	if (!scene) return;
-
-	NDMapLayer *maplayer = NDMapMgrObj.getMapLayerOfScene(scene);
-
-	if (!maplayer) return;
-
-	NDMapData *mapdata = maplayer->GetMapData();
-
-	if (mapdata && mapdata.switchs)
-	{
-		cocos2d::CCArray	*switchs = mapdata.switchs;
-
-		for (int i = 0; i < (int)[switchs count]; i++)
-		{
-			NDMapSwitch *mapswitch = [switchs objectAtIndex:i];
-
-			if (!mapswitch) continue;
-			if (DirectSwitch(mapswitch.x, mapswitch.y, mapswitch.passIndex)) 
-				break;
-		}
-	}
+// 	// 遍历所有切屏点
+// 	CSMGameScene* scene = (CSMGameScene*)NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
+// 
+// 	if (!scene) return;
+// 
+// 	NDMapLayer *maplayer = NDMapMgrObj.getMapLayerOfScene(scene);
+// 
+// 	if (!maplayer) return;
+// 
+// 	NDMapData *mapdata = maplayer->GetMapData();
+// 
+// 	if (mapdata && mapdata.switchs)
+// 	{
+// 		cocos2d::CCArray	*switchs = mapdata.switchs;
+// 
+// 		for (int i = 0; i < (int)[switchs count]; i++)
+// 		{
+// 			NDMapSwitch *mapswitch = [switchs objectAtIndex:i];
+// 
+// 			if (!mapswitch) continue;
+// 			if (DirectSwitch(mapswitch.x, mapswitch.y, mapswitch.passIndex)) 
+// 				break;
+// 		}
+// 	}
 }
 
 bool NDPlayer::isRoleCanMove()
@@ -1068,7 +1069,7 @@ void NDPlayer::OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex)
 	if (m_bCollide && m_gp)
 	{
 		NDUISynLayer::ShowWithTitle(NDCommonCString("gathering"));
-		m_timer->SetTimer(this, 101, 5.0f);
+		m_pkTimer->SetTimer(this, 101, 5.0f);
 		dialog->SetVisible(false);
 	}
 }
@@ -1077,11 +1078,11 @@ void NDPlayer::OnTimer(OBJID tag)
 {
 	if (m_bCollide && m_gp)
 	{
-		m_timer->KillTimer(this, 101);
+		m_pkTimer->KillTimer(this, 101);
 		m_gp->sendCollection();
-		if (m_dlgGather)
+		if (m_kGatherDlg)
 		{
-			m_dlgGather->Close();
+			m_kGatherDlg->Close();
 		}
 	}
 }
@@ -1101,102 +1102,102 @@ void NDPlayer::HandleDirectKey()
 		return;
 	}
 
-	DirectKey* dk = ((GameScene*)scene)->GetDirectKey();
-	if (!dk)
-	{
-		return;
-	}
-
-	dk_vec_pos kPosVector;
-
-	if (!dk->GetPosList(vpos)) return;
-
-	//dk->ClearPosList();
-
-	this->WalkToPosition(kPosVector, SpriteSpeedStep8, true);
+// 	DirectKey* dk = ((GameScene*)scene)->GetDirectKey();
+// 	if (!dk)
+// 	{
+// 		return;
+// 	}
+// 
+// 	dk_vec_pos kPosVector;
+// 
+// 	if (!dk->GetPosList(vpos)) return;
+// 
+// 	//dk->ClearPosList();
+// 
+// 	this->WalkToPosition(kPosVector, SpriteSpeedStep8, true);
 }
 
 void NDPlayer::HandleStateDacoity()
 {
-	if (this->IsInState(USERSTATE_FIGHTING)
-		|| this->IsInState(USERSTATE_DEAD)
-		|| this->IsInState(USERSTATE_PVE)
-		|| (isTeamMember() && !isTeamLeader())
-		|| this->IsInState(USERSTATE_BATTLEFIELD)
-		)
-	{
-		return;
-	}
-
-	NDMapMgr& mapmgr = NDMapMgrObj;
-
-	if (!(mapmgr.canPk()))
-	{
-		return;
-	}
-
-	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
-	if (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
-	{
-		return;
-	}
-
-	//与其它玩家碰撞检测
-	NDManualRole* role = mapmgr.NearestDacoityManualrole(*this, DACOITY_JUDGE_DISTANCE);
-
-	if (!role) return;
-
-	//发送战斗消息
-	NDTransData bao(_MSG_BATTLEACT);
-	bao << (unsigned char)BATTLE_ACT_USER_COLLIDE; // Action值
-	bao << (unsigned char)0; // btturn
-	bao << (unsigned char)1; // datacount
-	bao << int(role->m_id);
-	SEND_DATA(bao);
-
-	m_bRequireDacoity = true;
-
-	m_iDacoityStep = 0;
+// 	if (this->IsInState(USERSTATE_FIGHTING)
+// 		|| this->IsInState(USERSTATE_DEAD)
+// 		|| this->IsInState(USERSTATE_PVE)
+// 		|| (isTeamMember() && !isTeamLeader())
+// 		|| this->IsInState(USERSTATE_BATTLEFIELD)
+// 		)
+// 	{
+// 		return;
+// 	}
+// 
+// 	NDMapMgr& mapmgr = NDMapMgrObj;
+// 
+// 	if (!(mapmgr.canPk()))
+// 	{
+// 		return;
+// 	}
+// 
+// 	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
+// 	if (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
+// 	{
+// 		return;
+// 	}
+// 
+// 	//与其它玩家碰撞检测
+// 	NDManualRole* role = mapmgr.NearestDacoityManualrole(*this, DACOITY_JUDGE_DISTANCE);
+// 
+// 	if (!role) return;
+// 
+// 	//发送战斗消息
+// 	NDTransData bao(_MSG_BATTLEACT);
+// 	bao << (unsigned char)BATTLE_ACT_USER_COLLIDE; // Action值
+// 	bao << (unsigned char)0; // btturn
+// 	bao << (unsigned char)1; // datacount
+// 	bao << int(role->m_id);
+// 	SEND_DATA(bao);
+// 
+// 	m_bRequireDacoity = true;
+// 
+// 	m_iDacoityStep = 0;
 }
 
 void NDPlayer::HandleStateBattleField()
 {
-	if (!this->IsInState(USERSTATE_BATTLEFIELD) ||
-		this->IsInState(USERSTATE_BF_WAIT_RELIVE)
-		) 
-	{
-		return;
-	}
-
-	NDMapMgr& mapmgr = NDMapMgrObj;
-
-	//		if (!(mapmgr.canPk())) 
-	//		{
-	//			return;
-	//		}
-
-	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
-	if (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
-	{
-		return;
-	}
-
-	//与其它玩家碰撞检测
-	NDManualRole* role = mapmgr.NearestBattleFieldManualrole(*this, BATTLEFIELD_DISTANCE);
-
-	if (!role) return;
-
-	//发送战斗消息
-	NDTransData bao(_MSG_BATTLEACT);
-	bao << (unsigned char)BATTLE_ACT_USER_COLLIDE; // Action值
-	bao << (unsigned char)0; // btturn
-	bao << (unsigned char)1; // datacount
-	bao << int(role->m_id);
-	SEND_DATA(bao);
-
-	m_bRequireBattleField = true;
-
-	m_iBattleFieldStep = 0;
+// 	if (!this->IsInState(USERSTATE_BATTLEFIELD) ||
+// 		this->IsInState(USERSTATE_BF_WAIT_RELIVE)
+// 		) 
+// 	{
+// 		return;
+// 	}
+// 
+// 	NDMapMgr& mapmgr = NDMapMgrObj;
+// 
+// 	//		if (!(mapmgr.canPk())) 
+// 	//		{
+// 	//			return;
+// 	//		}
+// 
+// 	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
+// 	if (!scene || !scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
+// 	{
+// 		return;
+// 	}
+// 
+// 	//与其它玩家碰撞检测
+// 	NDManualRole* role = mapmgr.NearestBattleFieldManualrole(*this, BATTLEFIELD_DISTANCE);
+// 
+// 	if (!role) return;
+// 
+// 	//发送战斗消息
+// 	NDTransData bao(_MSG_BATTLEACT);
+// 	bao << (unsigned char)BATTLE_ACT_USER_COLLIDE; // Action值
+// 	bao << (unsigned char)0; // btturn
+// 	bao << (unsigned char)1; // datacount
+// 	bao << int(role->m_id);
+// 	SEND_DATA(bao);
+// 
+// 	m_bRequireBattleField = true;
+// 
+// 	m_iBattleFieldStep = 0;
 }
 
 void NDPlayer::BattleStart()
@@ -1215,28 +1216,28 @@ void NDPlayer::BattleEnd(int iResult)
 
 bool NDPlayer::canUnpackRidePet()
 {
-	NDMapMgr& mgr = NDMapMgrObj;
-
-	NDMapLayer * maplayer = mgr.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene)));
-
-	if (maplayer && IsInState(USERSTATE_FLY) && mgr.canFly())
-	{
-		NDMapData *mapdata = maplayer->GetMapData();
-
-		if (!mapdata || !mapdata.switchs || int([mapdata.switchs count]) == 0)
-		{
-			return true;
-		}
-
-		NDMapSwitch* mapswitch = [mapdata.switchs objectAtIndex:0];
-
-		if (!mapswitch) return true;
-
-		// 不能自动寻路到切屏点 todo
-		CGPoint from = ccp(serverCol*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, serverRow*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
-		CGPoint to = ccp(mapswitch.x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, mapswitch.y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
-		return NDAutoPath::sharedAutoPath()->autoFindPath(from, to , maplayer,IsInState(USERSTATE_SPEED_UP) ? SpriteSpeedStep8 : SpriteSpeedStep4, false);
-	}
+// 	NDMapMgr& mgr = NDMapMgrObj;
+// 
+// 	NDMapLayer * maplayer = mgr.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene)));
+// 
+// 	if (maplayer && IsInState(USERSTATE_FLY) && mgr.canFly())
+// 	{
+// 		NDMapData *mapdata = maplayer->GetMapData();
+// 
+// 		if (!mapdata || !mapdata.switchs || int([mapdata.switchs count]) == 0)
+// 		{
+// 			return true;
+// 		}
+// 
+// 		NDMapSwitch* mapswitch = [mapdata.switchs objectAtIndex:0];
+// 
+// 		if (!mapswitch) return true;
+// 
+// 		// 不能自动寻路到切屏点 todo
+// 		CGPoint from = ccp(serverCol*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, serverRow*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
+// 		CGPoint to = ccp(mapswitch.x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, mapswitch.y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
+// 		return NDAutoPath::sharedAutoPath()->autoFindPath(from, to , maplayer,IsInState(USERSTATE_SPEED_UP) ? SpriteSpeedStep8 : SpriteSpeedStep4, false);
+// 	}
 
 	return true;
 }
@@ -1249,7 +1250,8 @@ NDNpc* NDPlayer::GetFocusNpc()
 		return NULL;
 	}
 
-	return NDMapMgrObj.GetNpcByID(m_iFocusNpcID);
+	//return NDMapMgrObj.GetNpcByID(m_iFocusNpcID);
+	return NULL;
 }
 
 int NDPlayer::GetFocusNpcID()

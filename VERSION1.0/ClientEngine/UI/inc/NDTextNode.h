@@ -38,7 +38,8 @@ typedef enum
 	BuildRuleNone,			//无规则，默认
 	BuildRuleExpression,	//表情规则
 	BuildRuleItem,			//物品规则
-	BuildRuleColor			//颜色规则
+	BuildRuleColor,			//颜色规则
+	BuildRuleLine			//带下划线规则
 } BuildRule;
 
 class NDUIText: public NDUINode
@@ -47,10 +48,10 @@ class NDUIText: public NDUINode
 	NDUIText();
 	~NDUIText();
 public:
-	void Initialization(bool usePageArrowControl = true);override
+	void Initialization(bool usePageArrowControl = true);
 	unsigned int GetPageCount()
 	{
-		return m_pageCount;
+		return m_uiPageCount;
 	}
 	unsigned int GetCurrentPageIndex();
 	void SetBackgroundColor(cocos2d::ccColor4B color);
@@ -61,19 +62,20 @@ public:
 	unsigned int GetFontSize();
 	cocos2d::ccColor4B GetFontColor();
 public:
-	void draw();override
-	void OnOptionChange(NDUIOptionButton* option);override
-	void SetVisible(bool visible);override
-	void SetFrameRect(CGRect rect);override
+	void draw();
+	void OnOptionChange(NDUIOptionButton* option);
+	void SetVisible(bool visible);
+	void SetFrameRect(CGRect rect);
 	void ActivePage(unsigned int pageIndex);
 private:
-	unsigned int m_pageCount, m_currentPageIndex;
-	cocos2d::ccColor4B m_backgroundColor;
-	NDUIOptionButton* m_pageArrow;
-	std::vector<NDUINode*> m_pages;
-	bool m_usePageArrowControl;
+	unsigned int m_uiPageCount;
+	unsigned int m_uiCurrentPageIndex;
+	cocos2d::ccColor4B m_kBackgroundColor;
+	NDUIOptionButton* m_pkPageArrow;
+	std::vector<NDUINode*> m_pkPages;
+	bool m_bUsePageArrowControl;
 	unsigned int m_uiFontSize;
-	cocos2d::ccColor4B m_colorFont;
+	cocos2d::ccColor4B m_kColorFont;
 };
 
 //节点生成器
@@ -86,10 +88,10 @@ public:
 	//单例
 	static NDUITextBuilder* DefaultBuilder();
 	//解析字符串
-	NDUIText* Build(const char* text, unsigned int fontSize,
-			CGSize containerSize,
-			cocos2d::ccColor4B defaultColor = ccc4(0, 0, 0, 255),
-			bool withPageArrow = false, bool bHpyerLink = false);
+	NDUIText* Build(const char* pszText, unsigned int uiFontSize,
+			CGSize kContainerSize,
+			cocos2d::ccColor4B kDefaultColor = ccc4(0, 0, 0, 255),
+			bool bWithPageArrow = false, bool bHpyerLink = false);
 	unsigned int StringHeightAfterFilter(const char* text,
 			unsigned int textWidth, unsigned int fontSize);
 	unsigned int StringWidthAfterFilter(const char* text,
@@ -100,8 +102,8 @@ private:
 	//解析规则尾部
 	bool AnalysisRuleEnd(const char*& text, BuildRule rule);
 	//解析规则头部
-	bool AnalysisRuleHead(const char*& text, BuildRule &rule,
-			cocos2d::ccColor4B &textColor);
+	bool AnalysisRuleHead(const char*& pszText, BuildRule &eRole,
+			cocos2d::ccColor4B &kTextColor);
 	//组合节点
 	NDUIText* Combiner(std::vector<TextNode>& textNodeList,
 			CGSize containerSize, bool withPageArrow);
@@ -110,11 +112,12 @@ private:
 	//获取表情图片 格式如f00
 	NDUIImage* CreateFaceImage(const char* strIndex);
 	//获取标签
-	NDUILabel* CreateLabel(const char* text, unsigned int fontSize,
+	NDUILabel* CreateLabel(const char* pszText, unsigned int fontSize,
 			cocos2d::ccColor4B color, int idItem = 0);
-	//HyperLinkLabel* CreateLinkLabel(const char* text, unsigned int fontSize, cocos2d::ccColor4B color, int idItem = 0); ///< 临时性注释 郭浩
+	HyperLinkLabel* CreateLinkLabel(const char* pszText,
+			unsigned int uiFontSize, ccColor4B kColor, int nItemID = 0);
 private:
-	int m_idItem;
+	int m_nItemID;
 };
 }
 

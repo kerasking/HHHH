@@ -108,7 +108,7 @@ bool NDNpc::IsDirectOnTalk()
 	return m_bDirectOnTalk;
 }
 
-void Initialization(int nLookface, bool bFaceRight/*true*/)
+void NDNpc::Initialization(int nLookface, bool bFaceRight/*true*/)
 {
 	m_nSex = nLookface / 100000000 % 10;
 	m_nModel = nLookface % 1000;
@@ -153,7 +153,7 @@ void NDNpc::OnMoveEnd()
 	m_dequePos.pop_front();
 
 	std::vector<CGPoint> vec_pos; vec_pos.push_back(pos);
-	MoveToPosition(vec_pos, ridepet == NULL ? SpriteSpeedStep4 : SpriteSpeedStep8, false);
+//	MoveToPosition(vec_pos, ridepet == NULL ? SpriteSpeedStep4 : SpriteSpeedStep8, false);
 }
 
 bool NDNpc::OnDrawBegin(bool bDraw)
@@ -197,40 +197,40 @@ bool NDNpc::OnDrawBegin(bool bDraw)
 	}
 
 
-	if (m_talkBox && m_talkBox->IsVisibled() && bDraw) 
-	{
-		CGPoint scrPos = GetScreenPoint();
-		scrPos.x -= DISPLAY_POS_X_OFFSET;
-		scrPos.y -= DISPLAY_POS_Y_OFFSET;
-		//NDLog(@"x=[%d],y=[%d]",int(scrPos.x), int(scrPos.y));
-
-		CGSize sizeTalk = m_talkBox->GetSize();
-
-		scrPos.x = scrPos.x-8+GetWidth()/2-sizeTalk.width/2;
-
-		scrPos.y = scrPos.y-getGravityY()+30;
-
-		TipTriangleAlign align = TipTriangleAlignCenter;
-
-		CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
-
-		if (scrPos.x + sizeTalk.width > winsize.width) 
-		{
-			align = TipTriangleAlignRight;
-
-			scrPos.x -= sizeTalk.width/2;
-		}
-		else if (scrPos.x < 0)
-		{
-			scrPos.x = scrPos.x+sizeTalk.width/2; 
-
-			align = TipTriangleAlignLeft;
-		}
-
-		m_talkBox->SetTriangleAlign(align);
-		m_talkBox->SetDisPlayPos(scrPos);
-		m_talkBox->SetVisible(true);
-	}
+// 	if (m_talkBox && m_talkBox->IsVisibled() && bDraw) 
+// 	{
+// 		CGPoint scrPos = GetScreenPoint();
+// 		scrPos.x -= DISPLAY_POS_X_OFFSET;
+// 		scrPos.y -= DISPLAY_POS_Y_OFFSET;
+// 		//NDLog(@"x=[%d],y=[%d]",int(scrPos.x), int(scrPos.y));
+// 
+// 		CGSize sizeTalk = m_talkBox->GetSize();
+// 
+// 		scrPos.x = scrPos.x-8+GetWidth()/2-sizeTalk.width/2;
+// 
+// 		scrPos.y = scrPos.y-getGravityY()+30;
+// 
+// 		TipTriangleAlign align = TipTriangleAlignCenter;
+// 
+// 		CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+// 
+// 		if (scrPos.x + sizeTalk.width > winsize.width) 
+// 		{
+// 			align = TipTriangleAlignRight;
+// 
+// 			scrPos.x -= sizeTalk.width/2;
+// 		}
+// 		else if (scrPos.x < 0)
+// 		{
+// 			scrPos.x = scrPos.x+sizeTalk.width/2; 
+// 
+// 			align = TipTriangleAlignLeft;
+// 		}
+// 
+// 		m_talkBox->SetTriangleAlign(align);
+// 		m_talkBox->SetDisPlayPos(scrPos);
+// 		m_talkBox->SetVisible(true);
+// 	}
 
 
 	return true;
@@ -327,8 +327,8 @@ void NDNpc::OnDrawEnd(bool bDraw)
 
 	if (!m_strTalk.empty() && m_strTalk.size() > 3 && abs(kPlayer.GetCol()-m_nCol) <= 2 && abs(kPlayer.GetRow()-m_nRow) <= 2) 
 		addTalkMsg(m_strTalk, 0);
-	else if (m_pkTalkBox)
-		SAFE_DELETE_NODE(m_talkBox);
+// 	else if (m_pkTalkBox)
+// 		SAFE_DELETE_NODE(m_talkBox);
 
 	//升级特效
 	ShowUpdate(m_iStatus == 1, bDraw);
@@ -336,10 +336,10 @@ void NDNpc::OnDrawEnd(bool bDraw)
 
 void NDNpc::BeforeRunAnimation(bool bDraw)
 {
-	if (m_pkTalkBox && m_pkTalkBox->IsVisibled() && !bDraw) 
-	{
-		m_pkTalkBox->SetVisible(false);
-	}
+// 	if (m_pkTalkBox && m_pkTalkBox->IsVisibled() && !bDraw) 
+// 	{
+// 		m_pkTalkBox->SetVisible(false);
+// 	}
 }
 
 void NDNpc::SetExpresstionImage(int nExpresstion)
@@ -416,11 +416,11 @@ void NDNpc::SetNpcState(NPC_STATE state)
 	}
 	else if ( (m_eNPCState & QUEST_FINISH_SUB) > 0)
 	{
-		m_picState = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImgPath("mark_task_accept2.png"));
+		m_pkPicState = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImgPath("mark_task_accept2.png"));
 	}       
 	else if ( (m_eNPCState & QUEST_CAN_ACCEPT_SUB) > 0)
 	{
-		m_picState = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImgPath("mark_submit2.png"));
+		m_pkPicState = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImgPath("mark_submit2.png"));
 	}
 
 	if (!m_pkPicState)
@@ -429,7 +429,7 @@ void NDNpc::SetNpcState(NPC_STATE state)
 	}
 	if (m_pkPicState) {
 		//根据分辨率进行缩放
-		m_pkPicState->SetScale(0.5f*NDDirector::DefaultDirector()->GetScaleFactor());
+		m_pkPicState->setScale(0.5f*NDDirector::DefaultDirector()->GetScaleFactor());
 	}
 }
 
@@ -440,13 +440,13 @@ void NDNpc::AddWalkPoint(int col, int row)
 
 	m_dequePos.push_back(ccp(col*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, row*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
 
-	if (!m_moving) 
+	if (!m_bIsMoving) 
 	{
 		CGPoint pos = m_dequePos.front();
 		m_dequePos.pop_front();
 
 		std::vector<CGPoint> vec_pos; vec_pos.push_back(pos);
-		MoveToPosition(vec_pos, ridepet == NULL ? SpriteSpeedStep4 : SpriteSpeedStep8, false);
+/*		MoveToPosition(vec_pos, ridepet == NULL ? SpriteSpeedStep4 : SpriteSpeedStep8, false);*/
 	}
 }
 
@@ -501,17 +501,17 @@ void NDNpc::ShowUpdate(bool bshow, bool bDraw)
 
 void NDNpc::HandleNpcMask(bool bSet)
 {
-	NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene)));
-	if (!layer)
-	{
-		return;
-	}
-
-	NDMapData *mapdata = layer->GetMapData();
-
-	if (!mapdata) {
-		return;
-	}
+// 	NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene)));
+// 	if (!layer)
+// 	{
+// 		return;
+// 	}
+// 
+// 	NDMapData *mapdata = layer->GetMapData();
+// 
+// 	if (!mapdata) {
+// 		return;
+// 	}
 
 // 	CGPoint point = this->GetPosition();
 // 	int iCellY = int((point.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), iCellX = int((point.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
@@ -601,7 +601,7 @@ void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text,
 
 void NDNpc::initUnpassPoint()
 {
-	if (m_aniGroup == nil)
+	if (m_pkAniGroup == nil)
 		return;
 
 	CGPoint point = this->GetPosition();
@@ -675,106 +675,106 @@ bool NDNpc::IsPointInside(CGPoint point)
 
 bool NDNpc::getNearestPoint(CGPoint srcPoint, CGPoint& dstPoint)
 {
-	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
-	if (!scene) return false;
-	NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
-	if (!layer) return false;
-	NDMapData* mapdata = layer->GetMapData();
-	if (!mapdata) return false;
-	
-	int resX = 0, resY = 0;
-	
-	int srcY = int((srcPoint.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), srcX = int((srcPoint.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
-	
-	int maxDis = mapdata->getColumns()*mapdata->getColumns() + mapdata->getRows()*mapdata->getRows();
-	
-	int nArrayX[4] = {0, -1, 0, 1};
-	int nArrayY[4] = {1, 0, -1, 0};
-	
-	if (m_aniGroup != nil && [m_aniGroup unpassPoint] != nil)
-	{
-		NSArray *unpass = [m_aniGroup unpassPoint];
-		NSInteger unpassCount = [unpass count];
-
-		for (NSInteger i = 0; i < unpassCount; i+= 2) {
-			NSNumber *cellX = (NSNumber*)[unpass objectAtIndex:i];
-			NSNumber *cellY = (NSNumber*)[unpass objectAtIndex:i+1];
-
-			int x, y;
-
-			x = col + (IsUnpassNeedTurn() ? (-[cellX charValue]) : [cellX charValue]);
-			y = row + [cellY charValue];
-
-			int newX, newY;
-
-			for(int i = 0; i < 4; ++i)
-			{
-				newX = x + nArrayX[i];
-				newY = y + nArrayY[i];
-				if(newX < 0)
-					continue;
-				if(newX < 0)
-					continue;
-				if(newX > int([mapdata columns]))
-					continue;
-				if(newY > int([mapdata rows]))
-					continue;
-
-				if (![mapdata canPassByRow:newY andColumn:newX])
-					continue;
-
-				int cacl = (newX-srcX) * (newX-srcX) + (newY-srcY) * (newY-srcY);
-
-				if (cacl < maxDis)
-				{
-					maxDis = cacl;
-
-					resX = newX;
-
-					resY = newY;
-				}
-			}	
-		}
-	}
-	else 
-	{
-
-		for(int i = 0; i < 4; ++i)
-		{
-			int newX = col + nArrayX[i];
-			int newY = row + nArrayY[i];
-			if(newX < 0)
-				continue;
-			if(newX < 0)
-				continue;
-			if(newX > int([mapdata columns]))
-				continue;
-			if(newY > int([mapdata rows]))
-				continue;
-			
-			if (![mapdata canPassByRow:newY andColumn:newX])
-				continue;
-			
-			int cacl = (newX-srcX) * (newX-srcX) + (newY-srcY) * (newY-srcY);
-			
-			if (cacl < maxDis)
-			{
-				maxDis = cacl;
-				
-				resX = newX;
-				
-				resY = newY;
-			}
-		}	
-	}
-
-	if (resX == 0 && resY == 0)
-	{
-		resX = this->GetPosition().x;
-		resY = this->GetPosition().y;
-	}
-	
-	dstPoint = CGPointMake(resX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, resY*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET);
+// 	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
+// 	if (!scene) return false;
+// 	NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
+// 	if (!layer) return false;
+// 	NDMapData* mapdata = layer->GetMapData();
+// 	if (!mapdata) return false;
+//	
+// 	int resX = 0, resY = 0;
+// 	
+// 	int srcY = int((srcPoint.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), srcX = int((srcPoint.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
+// 	
+// 	int maxDis = mapdata->getColumns()*mapdata->getColumns() + mapdata->getRows()*mapdata->getRows();
+// 	
+// 	int nArrayX[4] = {0, -1, 0, 1};
+// 	int nArrayY[4] = {1, 0, -1, 0};
+// 	
+// 	if (m_pkAniGroup != nil && m_pkAniGroup->getUnpassPoint() != nil)
+// 	{
+// 		vector<int>* unpass = m_pkAniGroup->getUnpassPoint();
+// 		int unpassCount = unpass->size();
+// 
+// 		for (int i = 0; i < unpassCount; i+= 2) {
+// 			int *cellX = (int*)unpass->at(i);
+// 			int *cellY = (int*)unpass->at(i + 1);
+// 
+// 			int x, y;
+// 
+// 			x = m_nCol + (IsUnpassNeedTurn() ? (-[cellX charValue]) : [cellX charValue]);
+// 			y = m_nRow + [cellY charValue];
+// 
+// 			int newX, newY;
+// 
+// 			for(int i = 0; i < 4; ++i)
+// 			{
+// 				newX = x + nArrayX[i];
+// 				newY = y + nArrayY[i];
+// 				if(newX < 0)
+// 					continue;
+// 				if(newX < 0)
+// 					continue;
+// 				if(newX > int([mapdata columns]))
+// 					continue;
+// 				if(newY > int([mapdata rows]))
+// 					continue;
+// 
+// 				if (![mapdata canPassByRow:newY andColumn:newX])
+// 					continue;
+// 
+// 				int cacl = (newX-srcX) * (newX-srcX) + (newY-srcY) * (newY-srcY);
+// 
+// 				if (cacl < maxDis)
+// 				{
+// 					maxDis = cacl;
+// 
+// 					resX = newX;
+// 
+// 					resY = newY;
+// 				}
+// 			}	
+// 		}
+// 	}
+// 	else 
+// 	{
+// 
+// 		for(int i = 0; i < 4; ++i)
+// 		{
+// 			int newX = col + nArrayX[i];
+// 			int newY = row + nArrayY[i];
+// 			if(newX < 0)
+// 				continue;
+// 			if(newX < 0)
+// 				continue;
+// 			if(newX > int([mapdata columns]))
+// 				continue;
+// 			if(newY > int([mapdata rows]))
+// 				continue;
+// 			
+// 			if (![mapdata canPassByRow:newY andColumn:newX])
+// 				continue;
+// 			
+// 			int cacl = (newX-srcX) * (newX-srcX) + (newY-srcY) * (newY-srcY);
+// 			
+// 			if (cacl < maxDis)
+// 			{
+// 				maxDis = cacl;
+// 				
+// 				resX = newX;
+// 				
+// 				resY = newY;
+// 			}
+// 		}	
+// 	}
+// 
+// 	if (resX == 0 && resY == 0)
+// 	{
+// 		resX = this->GetPosition().x;
+// 		resY = this->GetPosition().y;
+// 	}
+// 	
+// 	dstPoint = CGPointMake(resX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, resY*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET);
 
 	return true;
 }
@@ -861,7 +861,7 @@ void NDNpc::RefreshTaskState()
 
 	//未完成任务
 	// 玩家已接任务列表
-	ScriptGameDataObj.GetDataIdList(eScriptDataRole, NDPlayer::defaultHero().m_id, eRoleDataTask, idlistAccept);
+	ScriptGameDataObj.GetDataIdList(eScriptDataRole, NDPlayer::defaultHero().m_nID, eRoleDataTask, idlistAccept);
 	if (!idlistAccept.empty())
 	{
 		for (ID_VEC::iterator it = idlistAccept.begin(); 
@@ -955,7 +955,7 @@ bool NDNpc::GetTaskList(ID_VEC& idVec)
 	for(ID_VEC::iterator it = idlist.begin(); it!= idlist.end();it++)
 	{
 		int nNpcId = ScriptDBObj.GetN("task_npc", *it, NPC_ID); 
-		if(nNpcId == this->m_id ){
+		if(nNpcId == m_nID ){
 			int nTaskId = ScriptDBObj.GetN("task_npc", *it, TASK_ID); 
 			idVec.push_back(nTaskId);
 		}        

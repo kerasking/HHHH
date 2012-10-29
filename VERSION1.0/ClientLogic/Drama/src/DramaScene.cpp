@@ -13,6 +13,22 @@
 #include "NDConstant.h"
 #include "define.h"
 
+
+
+class DramaMapLayer : public NDMapLayer
+{
+	DECLARE_CLASS(DramaMapLayer);
+public:
+	DramaMapLayer()						{}
+	~DramaMapLayer()					{}
+	bool TouchBegin(NDTouch* touch) override
+	{
+		this->DispatchClickOfViewr(this);
+		return true;
+	}
+};
+IMPLEMENT_CLASS(DramaMapLayer, NDMapLayer)
+
 ///////////////////////////////////////////////
 IMPLEMENT_CLASS(DramaScene, NDScene)
 
@@ -27,13 +43,19 @@ DramaScene::DramaScene()
 
 DramaScene::~DramaScene()
 {
+	if(m_layerMap != NULL)
+	{
+		delete (m_layerMap);
+		m_layerMap = NULL;
+	}
 }
 
 void DramaScene::Init(int nMapId)
 {
 	NDScene::Initialization();
-	m_layerMap = new NDMapLayer();
-	m_layerMap->Initialization(nMapId);
+	m_layerMap = new DramaMapLayer();
+	m_layerMap->Initialization(nMapId); 
+	m_layerMap->AddViewer(this);
 	this->AddChild(m_layerMap, MAPLAYER_Z, MAPLAYER_TAG);
 }
 
@@ -57,7 +79,7 @@ CGPoint DramaScene::GetCenter()
 	return m_layerMap->GetScreenCenter();
 }
 
-bool DramaScene::AddMonster(int nKey, int nLookFace)
+bool DramaScene::AddMonster(int nKey, int nLookFace, bool bFaceRight/*=true*/)
 {
 	MAP_MONSTER_IT it = m_mapMonster.find(nKey);
 
@@ -71,7 +93,7 @@ bool DramaScene::AddMonster(int nKey, int nLookFace)
 	}
 
 	NDMonster* pkMonster = new NDMonster;
-	pkMonster->Initialization(nLookFace, nKey, 1);
+	//pkMonster->Initialization(nLookFace, nKey, 1, bFaceRight);
 	if (!AddNodeToMap(pkMonster))
 	{
 		SAFE_DELETE(pkMonster);
@@ -85,8 +107,7 @@ bool DramaScene::AddMonster(int nKey, int nLookFace)
 
 	return true;
 }
-
-bool DramaScene::AddNpc(int nKey, int nLookFace)
+bool DramaScene::AddNpc(int nKey, int nLookFace, bool bFaceRight/*=true*/)
 {
 	MAP_NPC_IT it = m_mapNpc.find(nKey);
 
@@ -100,7 +121,7 @@ bool DramaScene::AddNpc(int nKey, int nLookFace)
 	}
 
 	NDNpc *pkNPC = new NDNpc;
-	pkNPC->Initialization(nLookFace);
+	//pkNPC->Initialization(nLookFace, bFaceRight);
 	if (!AddNodeToMap(pkNPC))
 	{
 		delete pkNPC;
@@ -115,7 +136,7 @@ bool DramaScene::AddNpc(int nKey, int nLookFace)
 	return true;
 }
 
-bool DramaScene::AddManuRole(int nKey, int nLookFace)
+bool DramaScene::AddManuRole(int nKey, int nLookFace, bool bFaceRight/*=true*/)
 {
 	MAP_MANUROLE_IT it = m_mapManuRole.find(nKey);
 
@@ -129,7 +150,7 @@ bool DramaScene::AddManuRole(int nKey, int nLookFace)
 	}
 
 	NDManualRole *pkRole = new NDManualRole;
-	pkRole->Initialization(nLookFace);
+	pkRole->Initialization(nLookFace, bFaceRight);
 	if (!AddNodeToMap(pkRole))
 	{
 		delete pkRole;
@@ -144,7 +165,7 @@ bool DramaScene::AddManuRole(int nKey, int nLookFace)
 	return true;
 }
 
-bool DramaScene::AddSprite(int nKey, std::string filename)
+bool DramaScene::AddSprite(int nKey, std::string filename, bool bFaceRight/*=true*/)
 {
 	MAP_SPRITE_IT it = m_mapSprite.find(nKey);
 
@@ -166,7 +187,7 @@ bool DramaScene::AddSprite(int nKey, std::string filename)
 	}
 
 	NDSprite *sprite = new NDSprite;
-	sprite->Initialization(filename.c_str());
+	//sprite->Initialization(filename.c_str(), bFaceRight);
 	if (!AddNodeToMap(sprite))
 	{
 		delete sprite;
@@ -287,7 +308,7 @@ bool DramaScene::PushScene(int nKey, DramaTransitionScene* scene)
 		return false;
 	}
 
-	pkDirector->PushScene(scene);
+	pkDirector->PushScene(scene, true);
 
 	return true;
 }
@@ -362,14 +383,14 @@ void DramaScene::CloseChat(bool bLeft)
 	SAFE_DELETE_NODE(chat);
 }
 
-void DramaScene::SetChatFigure(bool bLeft, std::string filename, bool bReverse)
+void DramaScene::SetChatFigure(bool bLeft, std::string filename, bool bReverse,int nCol, int nRow)
 {
 	DramaChatLayer*& chat = bLeft ? m_chatlayerLeft : m_chatlayerRight;
 	if (!chat)
 	{
 		return;
 	}
-	chat->SetFigure(filename, bReverse);
+	chat->SetFigure(filename, bReverse, nCol,  nRow);
 }
 
 void DramaScene::SetChatTitle(bool bLeft, std::string title, int nFontSize,
@@ -587,4 +608,14 @@ bool DramaScene::OnTargetBtnEvent(NDUINode* uinode, int targetEvent)
 	}
 
 	return false;
+}
+
+bool DramaScene::OnClick(NDObject* object) 
+{ 
+	if (object!= m_layerMap)
+	{
+		return false;
+	}
+	ProductClick();
+	return true; 
 }

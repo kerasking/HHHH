@@ -59,25 +59,25 @@ void NDMapLayerLogic::DidFinishLaunching()
 
 bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 {
-	if (this->isAutoFight()){
-		NDMonster* boss = NDMapMgrObj.GetBoss();
-		if (boss!=NULL)
-		{
-			return false;
-		}
-	}
+// 	if (this->isAutoFight()){
+// 		NDMonster* boss = NDMapMgrObj.GetBoss();
+// 		if (boss!=NULL)
+// 		{
+// 			return false;
+// 		}
+// 	}
 
 	SetPathing(false);
 	SetLongTouch(false);
 
 	m_kPosTouch = touch->GetLocation();
 	CGPoint touchPoint = this->ConvertToMapPoint(m_kPosTouch);
-	if(isTouchTreasureBox(touchPoint))
-	{
-		NDLog("touch treasureBox");
-		this->OpenTreasureBox();
-		return false;
-	}
+// 	if(isTouchTreasureBox(touchPoint))
+// 	{
+// 		NDLog("touch treasureBox");
+// 		this->OpenTreasureBox();
+// 		return false;
+// 	}
 
 	if (!NDPlayer::defaultHero().DealClickPointInSideNpc(touchPoint))
 	{
@@ -103,8 +103,6 @@ void NDMapLayerLogic::TouchEnd(NDTouch* touch)
 	kPlayer.CancelClickPointInSideNpc();
 	m_kTimer.KillTimer(this, TAG_MAP_LONGTOUCH_STATE);
 	m_kTimer.KillTimer(this, TAG_MAP_LONGTOUCH);
-	return true;
-
 //	
 //	SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
 //	NSString *effectFile = [NSString stringWithUTF8String:NDPath::GetSoundPath().append("press.wav").c_str()];
@@ -128,7 +126,6 @@ void NDMapLayerLogic::TouchCancelled(NDTouch* touch)
 void NDMapLayerLogic::TouchMoved(NDTouch* touch)
 {
 	m_kPosTouch = touch->GetLocation();
-	return true;
 }
 
 void NDMapLayerLogic::Update(unsigned long ulDiff)
@@ -149,7 +146,7 @@ void NDMapLayerLogic::OnTimer(OBJID uiTag)
 	if (uiTag == TAG_MAP_UPDTAE)
 	{
 		double oldTimeStamp = m_dTimeStamp;
-		m_doubleTimeStamp = time(NULL);
+		m_dTimeStamp = time(NULL);
 		Update((unsigned long) ((m_dTimeStamp - oldTimeStamp) * 1000));
 	}
 	else if (uiTag == TAG_MAP_LONGTOUCH)

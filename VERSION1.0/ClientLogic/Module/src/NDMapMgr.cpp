@@ -274,7 +274,7 @@ void NDMapMgr::processPlayer(NDTransData* pkData, int nLength)
 	pkRole->m_nMaxLife = nMaxLife;
 	pkRole->m_nMana = nMana;
 	pkRole->m_nMoney = nMoney;
-	pkRole->m_dwLookFace = dwLookFace;
+	pkRole->m_nLookface = dwLookFace;
 	pkRole->m_nProfesstion = btProfession;
 	pkRole->m_nLevel = btLevel;
 	pkRole->SetState(dwState);

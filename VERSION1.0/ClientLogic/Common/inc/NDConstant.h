@@ -36,8 +36,8 @@
 #define REPLACEABLE_TWO_HAND_SPEAR			23//双手矛
 
 // 玩家的外形
-#define MANUELROLE_HUMAN_MALE					GetAniPath("fist_man.spr")
-#define MANUELROLE_HUMAN_FEMALE					GetAniPath("fist_man.spr")
+#define MANUELROLE_HUMAN_MALE					(NDPath::GetAniPath("fist_man.spr").c_str())
+#define MANUELROLE_HUMAN_FEMALE					(NDPath::GetAniPath("fist_man.spr").c_str())
 
 #define MANUELROLE_FIST_MALE					GetAniPath("tang_man.spr")
 #define MANUELROLE_FIST_FEMALE					GetAniPath("tang_woman.spr")

@@ -33,6 +33,7 @@ CUIScroll::CUIScroll()
 	UI_NEGA_UP_SPEED_MIN = -300.0f * NDDirector::DefaultDirector()->GetScaleFactor();
 	UI_POSI_UP_SPEED_MAX = 800.0f * NDDirector::DefaultDirector()->GetScaleFactor();
 	UI_NEGA_UP_SPEED_MAX = -800.0f * NDDirector::DefaultDirector()->GetScaleFactor();
+//	m_bTouchDown				= false;
 }
 
 CUIScroll::~CUIScroll()
@@ -109,8 +110,8 @@ void CUIScroll::draw()
 		}
 		
 		float  fDistance = GetMoveDistance();
-		if (fDistance < 0.5f * NDDirector::DefaultDirector()->GetScaleFactor() && 
-			fDistance > -0.5f * NDDirector::DefaultDirector()->GetScaleFactor())
+		if (fDistance < 0.5f /** NDDirector::DefaultDirector()->GetScaleFactor()*/ && 
+			fDistance > -0.5f /* NDDirector::DefaultDirector()->GetScaleFactor()*/)
 		{
 			SwitchStateTo(STATE_STOP);
 		}
@@ -195,7 +196,7 @@ void CUIScroll::ResetMoveData()
 	m_nState				= STATE_STOP;
 	m_uiCurMoveIndex		= 0;
 	m_uiFirstMoveIndex		= 0;
-	m_clockT0				= 0.0f;
+	//m_clockT0				= 0.0f;
 	m_fV0					= 0.0f;
 	m_fOldS					= 0.0f;
 	m_bMoveInfoEmpty		= true;
@@ -253,8 +254,8 @@ void CUIScroll::SetMoveSpeed()
 	
 	double fSum = 0.0f;
 	unsigned int uiTotal = 0;
+	printf("size[%d]", size);
     float fMin = 100000.0f;
-
 	for (unsigned int i = 0; i < size - 1; i++) 
 	{
 		unsigned int firstindex		= (m_uiFirstMoveIndex + i) % MAX_MOVES;
@@ -274,8 +275,9 @@ void CUIScroll::SetMoveSpeed()
         if (fabs(fV) < fabs(fMin))
         {
             fMin    = fV;
+            printf("fMin=[%f]", fMin);
         }
-
+		printf("\ndis=[%f]time=[%f]v=[%f]", dispass, clockpass, fV);
 		if (clockpass != 0)
 		{
 			fSum += dispass / clockpass;
@@ -303,6 +305,8 @@ void CUIScroll::SetMoveSpeed()
             m_fV0 = UI_NEGA_UP_SPEED_MAX;
         }
     }
+
+    printf("\nvo=[%f]", this->m_fV0);
 	
 	if ( (this->m_fV0 < UI_POSI_UP_SPEED_MIN) && 
 		(this->m_fV0 > UI_NEGA_UP_SPEED_MIN) )
@@ -319,7 +323,6 @@ void CUIScroll::SetMoveSpeed()
 		m_fV0 = UI_NEGA_UP_SPEED_MAX;
 	}
 	
-	//todo(zjh)
 	//m_clockT0 = [NSDate timeIntervalSinceReferenceDate];
 }
 
@@ -450,8 +453,8 @@ bool CUIScroll::OnLayerMoveOfDistance(NDUILayer* uiLayer, float hDistance, float
 
 void CUIScroll::OnMove()
 {
-	UIMoveInfo info(m_kMoveTouch, 0);//todo(zjh)[NSDate timeIntervalSinceReferenceDate]);
-	PushMove(info);
+	//UIMoveInfo info(m_moveTouch, [NSDate timeIntervalSinceReferenceDate]);
+	//PushMove(info);
 	
 	if (m_bUp) 
 	{

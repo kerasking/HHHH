@@ -27,8 +27,8 @@ namespace NDEngine
 class NDNpc;
 class NDUIDialog;
 
-typedef vector<Task*> vec_task;
-typedef vec_task::iterator vec_task_it;
+// typedef vector<Task*> vec_task;
+// typedef vec_task::iterator vec_task_it;
 
 class NDPlayer: public NDManualRole,
 		public NDUIDialogDelegate,
@@ -103,7 +103,7 @@ public:
 	SET_BATTLE_SKILL_LIST& GetSkillList(SKILL_TYPE type);
 	bool IsBattleSkillLearned(OBJID idSkill);
 
-	Task* GetPlayerTask(int idTask);
+//	Task* GetPlayerTask(int idTask);
 
 	void BattleStart();
 
@@ -243,7 +243,7 @@ public:
 
 	int m_nTargetIndex; // 玩家当前选择的角色索引,该索引是magmgr里的所有NPC,其它玩家所在容器的索引.
 
-	vec_task m_vPlayerTask; //玩家任务列表
+	//vec_task m_vPlayerTask; //玩家任务列表
 private:
 	bool m_bCollide;
 	GatherPoint *m_gp;

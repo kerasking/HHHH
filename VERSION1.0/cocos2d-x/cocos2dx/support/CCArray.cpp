@@ -242,14 +242,11 @@ CCArray::~CCArray()
     ccArrayFree(data);
 }
 
+#if ND_MOD
 bool CCArray::writeToFile( CCString* path,bool bUseAuxiliaryFile )
 {
-	if (0 == path)
-	{
-		return false;
-	}
-
-	return true;
+	return (0 != path);
 }
+#endif
 
 }
