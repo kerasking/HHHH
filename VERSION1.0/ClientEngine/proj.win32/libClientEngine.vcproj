@@ -993,6 +993,10 @@
 					RelativePath="..\DataTrans\inc\NDTransData.h"
 					>
 				</File>
+				<File
+					RelativePath="..\DataTrans\inc\TEncryptor.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"

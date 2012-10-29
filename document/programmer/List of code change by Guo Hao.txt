@@ -31,7 +31,7 @@ SMYS_CLIENT_IPHONE_userUI/Classes/Engine/Data/src/NDWorldMapData.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/DataTrans/inc/NDDataTransThread.h
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/DataTrans/inc/NDSocket.h		貌似这个是邵阔改啊
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/DataTrans/inc/NDTransData.h	完成 待查
-SMYS_CLIENT_IPHONE_userUI/Classes/Engine/DataTrans/inc/TEncryptor.h
+SMYS_CLIENT_IPHONE_userUI/Classes/Engine/DataTrans/inc/TEncryptor.h		完成
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/DataTrans/src/NDDataTransThread.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/DataTrans/src/NDMessageCenter.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/DataTrans/src/NDSocket.mm		貌似这个是邵阔改啊
