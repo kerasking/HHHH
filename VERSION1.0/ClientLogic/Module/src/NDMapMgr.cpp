@@ -3806,4 +3806,19 @@ void NDMapMgr::ProcessTempCredential(NDTransData& kData)
 #endif
 }
 
+NDMonster* NDMapMgr::GetBoss()
+{
+	vec_monster_it it = m_vMonster.begin();
+	for (; it != m_vMonster.end(); it++)
+	{
+		NDMonster *pkMonster = *it;
+		if ( pkMonster && pkMonster->GetType() == MONSTER_BOSS &&
+			pkMonster->getState() != MONSTER_STATE_DEAD )
+		{
+			return pkMonster;
+		}
+	}
+	return NULL;
+}
+
 NS_NDENGINE_END

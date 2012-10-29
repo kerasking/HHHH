@@ -332,6 +332,7 @@ protected:
 	NDManualRole* GetManualRole(const char* pszName);
 	void ClearManualRole();
 	void AddAllNPCToMap();
+	NDMonster* GetBoss();
 	void AddAllMonsterToMap();
 	bool GetMonsterInfo(monster_type_info& kInfo, int nType);
 	void DelManualRole(int nID);

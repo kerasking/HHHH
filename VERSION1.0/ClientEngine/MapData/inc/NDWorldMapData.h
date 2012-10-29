@@ -63,6 +63,7 @@ public:
 	CC_SYNTHESIZE(cocos2d::CCArray*/*<PlaceNode*>**/, m_PlaceNodes, PlaceNodes)
 
 public:
+
 	static NDWorldMapData* SharedData();
 
 	NDTile * getTileAtRow(unsigned int row, unsigned int column);

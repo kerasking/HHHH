@@ -1065,5 +1065,4 @@ namespace NDEngine
 		m_pkCurrentAnimation = 0;
 		m_pkAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(pszSprFile);
 	}
-
 }
