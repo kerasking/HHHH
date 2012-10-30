@@ -11,6 +11,7 @@
 #include "ScriptInc.h"
 #include <map>
 #include "LuaObject.h"
+#include "ScriptDefine.h"
 
 using namespace NDEngine; 
 using namespace LuaPlus;

@@ -14,7 +14,7 @@
 #include "CCPointExtension.h"
 #include "ItemMgr.h"
 #include "Chat.h"
-///< #include "NDMapMgr.h" 临时性注释 郭浩
+#include "NDMapMgr.h"
 #include "ScriptGameData.h"
 #include "NewChatScene.h"
 #include "NDMapLayer.h"
@@ -24,420 +24,901 @@
 #include "NDBeforeGameMgr.h"
 #include "BattleMgr.h"
 #include "Battle.h"
-#include "ChatManager.h"
-#include "NDDataTransThread.h"
+#include "SqliteDBMgr.h"
+#include "NDPath.h"
+#include "SystemSetMgr.h"
+#include "ItemImage.h"
+#ifdef USE_MGSDK
+#include "MBGSocialService.h"
+#endif
+//#include "MobageViewController.h"
 
-using namespace NDEngine;
+//#include "CCVideoPlayer.h"
 
-void QuitGame()
-{
-	quitGame();
-	ScriptGameDataObj.DelAllData();
-}
+namespace NDEngine {
+    void PlayVideo(const char* videofilepath,bool bSkip)
+    {
+#if 0   tangziqin 暂时注释
+        if(!videofilepath || 0 == strlen(videofilepath))
+        {
+            
+            return;
+        }
+        
+        
+        NSString *path = [[NSString alloc] initWithUTF8String: NDPath::GetSMVideoPath(videofilepath)];
+        NDLog("%@",path);
+        
+        //** chh 2012-07-18 未加入该类 **//
+        
+        [CCVideoPlayer playMovieWithFile:path];
+        if( bSkip == true )
+        { 
+            [CCVideoPlayer setNoSkip:NO];
+        }else
+        {
+            [CCVideoPlayer setNoSkip:YES];
+        }
+#endif 
+         
+    }
+    
+    
+    void SysChat(const char* text)
+    {
+       #if 0
+ if(!text || 0 == strlen(text))
+        {
+            return;
+        }
+        
+        Chat::DefaultChat()->AddMessage(ChatTypeSystem,text);
+#endif
 
-// 根据seed值，产生一个salt值，直接采用vc crt库的srand和rand算法
-int GetEncryptSalt(unsigned int seed)
-{
-    return( ((seed * 214013L + 2531011L) >> 16) & 0x7fff );
-}
-
-// void sendMsgConnect(int idAccount) 
-// {
-// 	NDTransData data(_MSG_CONNECT);
-//     std::string phoneKey = "1yyyyyyyyyyyyyyyyyyyyyyyyyy";
-// 	int dwAuthorize = 0;
-// 	data << idAccount;
-// 	data << dwAuthorize;
-// 	data.Write((unsigned char*)(phoneKey.c_str()), phoneKey.size());
-// 	NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
-// }
-
-std::string Int2StrIP(int ip_Int)
-{
-	int num1 = ((ip_Int & 0xff000000) >> 24) & 0xff;
-	int num2 = ((ip_Int & 0xff0000L) >> 16) & 0xff;
-	int num3 = ((ip_Int & 0xff00L) >> 8) & 0xff;
-	int num4 = (ip_Int & 0xff);
-	tq::CString str;
-	str.Format("%d.%d.%d.%d", num4,num3,num2,num1);
-
-	return str;
-}
-
-void sendMsgConnect(const char* pszIp, int nPort, int idAccount)
-{
-	NDDataTransThread::DefaultThread()->Stop();
-	NDDataTransThread::ResetDefaultThread();
-	NDDataTransThread::DefaultThread()->Start(pszIp, nPort);
-	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
+    }
+    
+    
+	void QuitGame()
 	{
-		return;
+		#if 0
+quitGame();
+#endif
+		//ScriptGameDataObj.DelAllData();
 	}
-	NDBeforeGameMgrObj.sendMsgConnect(idAccount);
-}
-
-void CreatePlayer(int lookface, int x, int y, int userid, std::string name)
-{
-	NDPlayer::pugeHero();
-	NDPlayer& player = NDPlayer::defaultHero(lookface, true);
-	player.InitRoleLookFace(lookface);
-
-	player.stopMoving();
-//  	player.SetPositionEx(ccp(x * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET, y * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
-//  	player.SetServerPositon(x, y);
-	player.m_nID = userid;
-	player.m_strName = "王增";
-}
-
-unsigned long GetPlayerId()
-{
-	return NDPlayer::defaultHero().m_nID;
-}
-
-void PlayerStopMove()
-{
-	NDPlayer::defaultHero().stopMoving();
-}
-
-unsigned long GetMapId()
-{
-	//return NDMapMgrObj.GetMotherMapID(); ///< 临时性注释 郭浩
-	return 0;
-}
-
-int GetCurrentMonsterRound()
-{
-	//return NDMapMgrObj.GetCurrentMonsterRound(); ///< 临时性注释 郭浩
-	return 0;
-}
-
-int GetPlayerLookface()
-{
-	return NDPlayer::defaultHero().GetLookface();
-}
-
-int GetItemCount(int nItemType)
-{
-	int count = 0;
-	VEC_ITEM& vec_item = ItemMgrObj.GetPlayerBagItems();
-
-	for_vec(vec_item, VEC_ITEM_IT)
+	
+	void CreatePlayer(int lookface, int x, int y, int userid, std::string name)
 	{
-		Item *item = (*it);
-
-		if (item->m_nItemType == nItemType)
+		#if 0
+//NDLog("CreatePlayer:%@", [NSString stringWithUTF8String:name.c_str()]);
+		NDPlayer::pugeHero();
+		NDPlayer& player = NDPlayer::defaultHero(lookface, true);
+		player.InitRoleLookFace(lookface);
+		
+		player.stopMoving();
+		player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+		player.SetServerPositon(x, y);
+		player.m_id = userid;
+		player.m_name = name;
+#endif
+	}
+	void ReloadPlayer(int lookface)
+	{
+		#if 0
+NDLog("ReloadPlayer");
+		NDPlayer& player = NDPlayer::defaultHero();
+		player.ReLoadLookface(lookface);
+#endif
+	}
+    
+	//++Guosen 2012.7.13
+	//创建玩家附加骑乘状态和坐骑类型
+	void CreatePlayerWithMount(int lookface, int x, int y, int userid, std::string name, int nRideStatus=0, int nMountType=0 )
+	{
+		#if 0
+NDLog("CreatePlayer:%@", [NSString stringWithUTF8String:name.c_str()]);
+		NDPlayer::pugeHero();
+		NDPlayer& player = NDPlayer::defaultHero(lookface, true);
+		player.ChangeModelWithMount( nRideStatus, nMountType );
+		player.stopMoving();
+		player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+		player.SetServerPositon(x, y);
+		player.m_id = userid;
+		player.m_name = name;
+#endif
+	}
+	//玩家骑宠
+	void PlayerRideMount( int nRideStatus, int nMountType )
+	{
+		#if 0
+NDPlayer& player = NDPlayer::defaultHero();
+		player.ChangeModelWithMount( nRideStatus, nMountType );
+#endif
+	}
+    
+	//++
+	//打开网页-系统自带浏览器
+	bool OpenURL( std::string szURL )
+	{
+	#if 0
+	return [ [UIApplication sharedApplication] openURL: [ NSURL URLWithString: [NSString stringWithUTF8String: szURL.c_str()] ] ];
+#endif
+		return false;
+	}
+	//++
+    
+    //设置玩家名称颜色
+    void SetPlayerNameColorByQuality(int nQuality){
+		 #if 0
+NDPlayer& player = NDPlayer::defaultHero();
+        player.m_nQuality = nQuality;
+#endif
+    }
+    
+	void SetRidePet(int petLookface,int stand_action,int run_action,int acc)
+	{
+		//NDPlayer& player = NDPlayer::defaultHero();
+		//player.SetRidePet(petLookface,stand_action,run_action,acc);
+	}
+	void SetPlayerWeapon(int weapon_id)
+	{
+		//NDPlayer& player = NDPlayer::defaultHero();
+		//player.SetWeaponImage(weapon_id);
+	}
+	void SetPlayerAnimation(int nAnimationIndex)
+	{
+		//NDPlayer& player = NDPlayer::defaultHero();
+		//player.SetCurrentAnimation(nAnimationIndex, player.IsReverse());
+	}
+	void SetPlayerState(int nState)
+	{
+		//NDPlayer& player = NDPlayer::defaultHero();
+		//player.SetState(nState);
+	}
+	
+	unsigned long GetPlayerId()
+	{
+		//return NDPlayer::defaultHero().m_id;
+		return 1;
+	}
+	
+	void PlayerStopMove()
+	{
+		//NDPlayer::defaultHero().stopMoving();
+	}
+	
+	bool RoleAddSMEffect(int nRoleId, std::string strEffectPath, int nSMEffectAlignment, int nDrawOrder)
+	{
+		#if 0
+NDManualRole* role		= NDMapMgrObj.GetManualRole(nRoleId);
+		if (!role)
 		{
-			if (item->isEquip())
-			{
-				count++;
-			}
-			else
-			{
-				count += item->m_nAmount;
-			}
+			return false;
 		}
-
+		return role->AddSMEffect(strEffectPath, nSMEffectAlignment, nDrawOrder);
+#endif
+		return false;
 	}
-
-	return count;
-}
-
-void SysChat(const char* text)
-{
-	if (!text || 0 == strlen(text))
+	bool RoleRemoveSMEffect(int nRoleId, std::string strEffectPath)
 	{
-		return;
-	}
-//	Chat::DefaultChat()->AddMessage(ChatTypeSystem, text); ///< 临时性注释 郭浩
-}
-
-void NavigateTo(int nMapId, int nMapX, int nMapY)
-{
-	//NDMapMgrObj.NavigateTo(nMapX, nMapY, nMapId); ///< 临时性注释 郭浩
-}
-
-void NavigateToNpc(int nNpcId)
-{
-	// NDMapMgrObj.NavigateToNpc(nNpcId); ///< 临时性注释 郭浩
-}
-
-void ShowChat()
-{
-	NewChatScene::DefaultManager()->Show();
-}
-
-/***
- * 临时性注释 郭浩
- * this function
- */
-//int GetCurrentTime()
-//{
-//return (int)([[NSDate date] timeIntervalSince1970] / 1000);
-//}
-const char* GetSMImgPath(const char* name)
-{
-	if (!name)
-	{
-		return "";
-	}
-
-	std::string str = "Res00/";
-	str += name;
-
-	return NDPath::GetImgPath(str.c_str()).c_str();
-}
-
-const char* GetSMResPath(const char* name)
-{
-	if (!name)
-	{
-		return "";
-	}
-
-	return NDPath::GetResPath(name).c_str();
-}
-
-NDMapLayer* GetMapLayer()
-{
-	/***
-	 * 临时性注释 郭浩
-	 * all
-	 */
-
-// 	NDScene* scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
-// 	if(!scene)
-// 	{
-// 		return NULL;
-// 	}
-// 	NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
-// 	if(!layer)
-// 	{
-// 		return NULL;
-// 	}
-// 		
-// 	return layer;
-	return 0;
-}
-
-void AddChatInfoRecord(std::string speaker, std::string text, int content_id,
-		int type)
-{
-	ChatManagerObj.AddChatInfoRecord(speaker, text, content_id,
-			CHAT_CHANNEL_TYPE(type));
-}
-
-void AddAllRecord()
-{
-	ChatManagerObj.AddAllRecord();
-}
-
-void SetCurrentChannel(CHAT_CHANNEL_TYPE channel)
-{
-	ChatManagerObj.SetCurrentChannel(channel);
-}
-
-void restartLastBattle()
-{
-	BattleMgrObj.restartLastBattle();
-}
-
-void CloseBattle()
-{
-	Battle* battle = BattleMgrObj.GetBattle();
-	if (battle)
-	{
-		battle->FinishBattle();
-	}
-
-}
-
-void WorldMapGoto(int nMapId, LuaObject tFilter)
-{
-	NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
-	if (!pkScene)
-	{
-		return;
-	}
-
-	WorldMapLayer* pkWorld = NULL;
-	NDNode* node = pkScene->GetChild(TAG_WORLD_MAP);
-	if (node && node->IsKindOfClass(RUNTIME_CLASS(WorldMapLayer)))
-	{
-		pkWorld = (WorldMapLayer*) node;
-	}
-	else
-	{
-		pkWorld = new WorldMapLayer;
-		pkWorld->Initialization(GetMapId());
-		pkScene->AddChild(pkWorld);
-	}
-
-	if (tFilter.IsTable())
-	{
-		ID_VEC vId;
-		int nTableCount = tFilter.GetTableCount();
-		if (nTableCount > 0)
+		#if 0
+NDManualRole* role		= NDMapMgrObj.GetManualRole(nRoleId);
+		if (!role)
 		{
-			for (int i = 1; i <= nTableCount; i++)
-			{
-				LuaObject tag = tFilter[i];
+			return false;
+		}
+		return role->RemoveSMEffect(strEffectPath);
+#endif
+		return false;
 
-				if (tag.IsInteger())
-				{
-					vId.push_back(tag.GetInteger());
+	}
+	unsigned long GetMapId()
+	{
+		//return NDMapMgrObj.GetMotherMapID();
+		return 0;
+	}
+	int GetMapInstanceId()
+	{
+        #if 0
+int a  =  NDMapMgrObj.m_mapID ; 
+		if(NDMapMgrObj.m_mapID/100000000>0)
+		{
+			return NDMapMgrObj.GetMotherMapID();
+		}
+#endif
+		return 0;
+	}
+	
+	int GetCurrentMonsterRound()
+	{
+		//return NDMapMgrObj.GetCurrentMonsterRound();
+		return 0;
+
+	}
+	
+	int GetPlayerLookface()
+	{
+		//return NDPlayer::defaultHero().GetLookface();
+		return 1;
+	}
+	int GetPlayerPetLookface()
+	{
+		//return NDPlayer::defaultHero().GetPetLookface();
+		return 1;
+	}
+	int GetPlayerPetStandAction()
+	{
+		//return NDPlayer::defaultHero().GetPetStandAction();
+		return 1;
+	}
+	int GetPlayerPetWalkAction()
+	{
+		//return NDPlayer::defaultHero().GetPetWalkAction();
+		return 1;
+	}
+	
+	int	GetItemCount(int nItemType)
+	{
+		int count = 0;
+		#if 0
+VEC_ITEM& vec_item = ItemMgrObj.GetPlayerBagItems();
+		for_vec(vec_item, VEC_ITEM_IT)
+		{
+			Item *item = (*it);
+			if (item->iItemType == nItemType) {
+				if (item->isEquip()) {
+					count++;
+				} else {
+					count += item->iAmount;
 				}
 			}
+			
 		}
-		pkWorld->SetFilter(vId);
+#endif
+		
+		return count;
 	}
+	
+	
+	void NavigateTo(int nMapId, int nMapX, int nMapY)
+	{
+		//NDMapMgrObj.NavigateTo(nMapX, nMapY, nMapId);
+	}
+    void BackCity()
+	{
+        #if 0
+int nMapId = NDMapMgrObj.getMpid();
+		NDMapMgrObj.WorldMapSwitch(nMapId);
+#endif
+	}
+	
+	void NavigateToNpc(int nNpcId)
+	{
+		//NDMapMgrObj.NavigateToNpc(nNpcId);
+	}
+	
+	
+	int GetCurrentTime()
+	{
+		//return (int)([[NSDate date] timeIntervalSince1970] / 1000);
+		return 1;
+	}
+	
+	const char* GetSMImgPath(const char* name)
+	{
+		#if 0
+if (!name)
+		{
+			return "";
+		}
+		
+		std::string str = "Res00/";
+		str += name;
+		
+		return NDPath::GetImgPath(str.c_str()).c_str();
+#endif
+		return "";
+	}
+	const char* GetImgResPath(const char* name)
+	{
+		if (!name)
+		{
+			return "";
+		}
+		return NDPath::GetImgPath(name).c_str();
+	}
+	const char* GetAniResPath(const char* name)
+	{
+		if (!name)
+		{
+			return "";
+		}
+		return NDPath::GetAniPath(name).c_str();
+	}
+	
+	const char* GetSMResPath(const char* name)
+	{
+		if (!name)
+		{
+			return "";
+		}
+		
+		return NDPath::GetResPath(name).c_str();
+	}
+	NDPicture* GetItemPicture(int nIconIndex)
+	{
+		//return ItemImage::GetSMItemNew(nIconIndex);
+		return NULL;
+	}
+	
+	NDMapLayer* GetMapLayer()
+	{
+		NDScene* scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
+		if(!scene)
+		{
+			return NULL;
+		}
+		NDMapLayer* layer = NULL; /*NDMapMgrObj.getMapLayerOfScene(scene);*/
+		if(!layer)
+		{
+			return NULL;
+		}
+		
+		return layer;
+	}
+	
+	int GetSystemSetN(const char* key,int default_value)
+	{
+		//return SystemSetMgrObj.GetNumber(key,default_value);
+		return 1;
 
-	pkWorld->Goto(nMapId);
+	}
+	bool GetSystemSetB(const char* key,bool default_value)
+	{
+		//return SystemSetMgrObj.GetBoolean(key,default_value);
+		return 1;
+
+	}
+	const char* GetSystemSetS(const char* key,const char* default_value)
+	{
+		//return SystemSetMgrObj.GetString(key,default_value);
+		return NULL;
+	}
+	bool SetSystemSetN(const char* key,int value)
+	{
+		//return SystemSetMgrObj.Set(key,value);
+				return 1;
+	}
+	bool SetSystemSetB(const char* key,bool value)
+	{
+		//return SystemSetMgrObj.Set(key,value);
+				return 1;
+	}
+	bool SetSystemSetS(const char* key,const char* value)
+	{
+		//return SystemSetMgrObj.Set(key,value);
+				return 1;
+	}
+	void ShowRoleName(bool isShow)
+	{
+		//NDMapMgrObj.isShowName=isShow;
+	}
+	void ShowOtherRole(bool isShow)
+	{
+		//NDMapMgrObj.isShowOther=isShow;
+	}
+	void restartLastBattle()
+	{
+		BattleMgrObj.restartLastBattle();
+	}
+    void FinishBattle(void)
+	{
+		//BattleMgrObj.SetBattleOver();
+	}
+	
+	void CloseBattle()
+	{
+		#if 0
+Battle* battle=BattleMgrObj.GetBattle();
+		if(battle)
+		{
+			battle->FinishBattle();
+		}
+#endif
+
+	}
+    
+    void SetSceneMusicNew(int idMusic)
+    {
+        #if 0
+SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
+		NSString *musicPath = [NSString stringWithUTF8String:NDPath::GetSoundPath().c_str()]; 
+		NSString *musicFile = [NSString stringWithFormat:@"%@music_%d.aac", musicPath, idMusic];
+		[audioEngine playBackgroundMusic:musicFile loop:YES];
+#endif
+    }
+    
+    void SetBgMusicVolume(int nVolune)
+    {
+        #if 0
+ SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
+        float fvol = (float)nVolune/100;
+        
+        [audioEngine setBackgroundMusicVolume:fvol];
+#endif
+    }
+    
+    void SetEffectSoundVolune(int nVolune)
+    {
+       #if 0
+ SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
+        float fvol = (float)nVolune/100;
+        [audioEngine setEffectsVolume:fvol];
+#endif
+    }
+
+	void StartBGMusic()
+	{
+		//NDMapMgrObj.LoadMapMusic();
+	}
+	void StopBGMusic()
+	{
+		#if 0
+SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
+		[audioEngine stopBackgroundMusic];
+#endif
+	}
+    
+	int StartEffectSound(int idMusic)
+	{
+#if 0
+
+        NSString *musicPath = [NSString stringWithUTF8String:NDPath::GetSoundPath().c_str()]; 
+		NSString *musicFile = [NSString stringWithFormat:@"%@/effect/effect_%d.aac", musicPath, idMusic];
+		 
+        SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
+        
+        return (int)[audioEngine playEffect:musicFile loop:NO];
+#endif
+		return 0;
+    }
+    
+	void StopEffectSound()
+	{
+        //SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
+	}
+	
+    void WorldMapGoto(int nMapId, LuaObject tFilter)
+	{
+		#if 0
+NDScene* scene	= NDDirector::DefaultDirector()->GetRunningScene();
+		if (!scene)
+		{
+			return;
+		}
+		
+		WorldMapLayer* world	= NULL;
+		NDNode* node			= scene->GetChild(TAG_WORLD_MAP);
+		if (node && node->IsKindOfClass(RUNTIME_CLASS(WorldMapLayer)))
+		{
+			world	= (WorldMapLayer*)node;
+		}
+		else
+		{
+			world	= new WorldMapLayer;
+			world->Initialization(GetMapId());
+			scene->AddChild(world);
+		}
+		
+		if (tFilter.IsTable())
+		{
+			ID_VEC vId;
+			int nTableCount = tFilter.GetTableCount();
+			if (nTableCount > 0)
+			{
+				for (int i = 1; i <= nTableCount; i++) 
+				{
+					LuaObject tag = tFilter[i];
+					if (tag.IsInteger())
+					{
+						vId.push_back(tag.GetInteger());
+					}
+				}
+			}
+			world->SetFilter(vId);
+		}
+		
+		world->Goto(nMapId);
+#endif
+	}
+    
+    void WorldMap(int nMapId, LuaObject tFilter)
+	{
+	#if 0
+	NDScene* scene	= NDDirector::DefaultDirector()->GetRunningScene();
+		if (!scene)
+		{
+			return;
+		}
+		
+		WorldMapLayer* world	= NULL;
+		NDNode* node			= scene->GetChild(TAG_WORLD_MAP);
+		if (node && node->IsKindOfClass(RUNTIME_CLASS(WorldMapLayer)))
+		{
+			world	= (WorldMapLayer*)node;
+		}
+		else
+		{
+			world	= new WorldMapLayer;
+			world->Initialization(GetMapId());
+			scene->AddChild(world);
+		}
+		
+		if (tFilter.IsTable())
+		{
+			ID_VEC vId;
+			int nTableCount = tFilter.GetTableCount();
+			if (nTableCount > 0)
+			{
+				for (int i = 1; i <= nTableCount; i++) 
+				{
+					LuaObject tag = tFilter[i];
+					if (tag.IsInteger())
+					{
+						vId.push_back(tag.GetInteger());
+					}
+				}
+			}
+			world->SetFilter(vId);
+		}
+		
+		world->ShowRoleAtPlace(nMapId);
+#endif
+	}
+    
+    bool SwichKeyToServer(const char* pszIp, int nPort, const char* pszAccountName,const char* pszPwd, const char* pszServerName)
+    {
+        #if 0
+NDDataTransThread::DefaultThread()->Stop();
+        NDDataTransThread::ResetDefaultThread();
+        return NDBeforeGameMgrObj.SwichKeyToServer(pszIp,nPort,pszAccountName,pszPwd,pszServerName);
+#endif
+		return false;
+    }
+    bool doNDSdkLogin()
+    {
+        //return NDBeforeGameMgrObj.doNDSdkLogin();
+		return false;
+	
+	}
+    bool doNDSdkChangeLogin()
+    {
+        //return NDBeforeGameMgrObj.doNDSdkChangeLogin();
+		return false;
+
+    }
+    
+    void HideMobageSplashScreen()//Guosen 2012.8.3
+    {
+    	//[[MBGPlatform sharedPlatform] hideSplashScreen];
+    }
+    void doGoToMobageVipPage()
+    {
+#ifdef USE_MGSDK
+        [MBGSocialService showBankUI:^{ 
+        }];
+#endif
+    }
+    
+    void doShowMobageBalance()
+    {
+        #if 0
+MobageViewController* pMobageView = [MobageViewController sharedViewController];
+        [pMobageView showBalanceButton:CGRectMake(200, 70, 100, 36)];
+#endif
+    }
+    
+    void doHideMobageBalance()
+    {
+      #if 0
+  MobageViewController* pMobageView = [MobageViewController sharedViewController];
+        [pMobageView hideBalanceButton];
+#endif
+    }
+    
+    void doExchangeEmoney(int nQuantity)
+    {
+        #if 0
+int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
+        if(idAccount <= 0)
+            return;
+        if(!NDBeforeGameMgrObj.IsOAuthTokenOK())
+            return;
+        NDTransData bao(_MSG_CREATE_TRANSACTION);
+        bao << idAccount;
+        bao << nQuantity;
+        SEND_DATA(bao);
+#endif
+    }
+    
+    std::string Int2StrIP(int ip_Int)
+    {
+        int num1 = ((ip_Int & 0xff000000) >> 24) & 0xff;
+        int num2 = ((ip_Int & 0xff0000L) >> 16) & 0xff;
+        int num3 = ((ip_Int & 0xff00L) >> 8) & 0xff;
+        int num4 = (ip_Int & 0xff);
+        tq::CString str;
+        str.Format("%d.%d.%d.%d", num4,num3,num2,num1);
+        
+        return str;
+    }
+    
+    void sendMsgConnect(const char* pszIp, int nPort, int idAccount)
+    {
+        #if 0
+NDDataTransThread::DefaultThread()->Stop();
+        NDDataTransThread::ResetDefaultThread();
+        NDDataTransThread::DefaultThread()->Start(pszIp, nPort);
+        if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
+        {
+            return;
+        }
+        NDBeforeGameMgrObj.sendMsgConnect(idAccount);
+#endif
+    }
+    
+    void sendMsgCreateTempCredential()
+    {
+        #if 0
+int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
+        if(idAccount <= 0)
+            return;
+        NDTransData data(_MSG_CREATE_TEMP_CREDENTIAL);
+        
+        data << idAccount;
+        NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
+#endif
+    }
+    ///////////////////////////////////////////////
+    std::string SimpleDecode(const char* pszPwd)
+    {
+       #if 0
+ unsigned char pszDest[1024] = {0x00};
+        simpleDecode((const unsigned char*)pszPwd, pszDest);
+        return (char*)pszDest;
+#endif
+		return "";
+    }
+    
+    ///////////////////////////////////////////////
+    std::string GetDeviceToken()
+    {
+    	//return NDBeforeGameMgrObj.GetDeviceToken();
+		return "";
+    }
+    
+    ///////////////////////////////////////////////
+    //开始升级
+    bool StartUpdate()
+    {
+       #if 0
+ CSMLoginScene* pScene = (CSMLoginScene*)NDDirector::DefaultDirector()->GetSceneByTag(SMLOGINSCENE_TAG);
+        if(pScene){
+            return pScene->StartUpdate();
+        }
+#endif
+        return false;
+    }
+    //初始升级包地址队列
+    void InitUpdateURLQueue( const char* pszUrl )
+	{
+		#if 0
+CSMLoginScene* pScene = (CSMLoginScene*)NDDirector::DefaultDirector()->GetSceneByTag(SMLOGINSCENE_TAG);
+		if(pScene)
+		{
+			std::string	szURL	= pszUrl;
+			return pScene->InitDownload( szURL );
+		}
+#endif
+	}
+    ///////////////////////////////////////////////
+    //检测客户端版本
+    bool CheckClientVersion( const char* szURL )
+    {
+        //CSMLoginScene* pScene = (CSMLoginScene*)NDDirector::DefaultDirector()->GetSceneByTag(SMLOGINSCENE_TAG);
+        //if(pScene){
+        //    return pScene->CheckClientVersion();
+        //}
+        return false;
+       // return NDBeforeGameMgrObj.CheckClientVersion( szURL );
+    }
+    ///////////////////////////////////////////////
+    //void SetRole(unsigned long ulLookFace, const char* pszRoleName, int nProfession)
+    //{
+    //    NDBeforeGameMgrObj.SetRole(ulLookFace, pszRoleName, nProfession);
+    //}
+    
+    ///////////////////////////////////////////////
+    bool LoginByLastData(void)
+    {
+        //return NDBeforeGameMgrObj.LoginByLastData();
+		return 1;
+    }
+    
+    //////////////////////////////////////////////
+    int GetAccountListNum(void)
+    {
+       // return NDBeforeGameMgrObj.GetAccountListNum();
+		return 1;
+    }
+    
+    //////////////////////////////////////////////
+    const char* GetRecAccountNameByIdx(int idx)
+    {
+        //return NDBeforeGameMgrObj.GetRecAccountNameByIdx(idx);
+		return "";
+    }
+    
+    //////////////////////////////////////////////
+    const char* GetRecAccountPwdByIdx(int idx)
+    {
+        return NDBeforeGameMgrObj.GetRecAccountPwdByIdx(idx);
+    }
+    
+    void    CreateRole(const char* pszName, Byte nProfession, int nLookFace, const char* pszAccountName)
+    {
+        return NDBeforeGameMgrObj.CreateRole(pszName,nProfession, nLookFace, pszAccountName);
+    }
+    
+    bool   DownLoadServerListToDB(const char* pszIP, int nPort)
+    {
+        //return NDBeforeGameMgrObj.DownLoadServerListToDB(pszIP, nPort);
+		return false;
+    }
+    void  SaveAccountPwdToDB(const char* pszName, const char* pszPwd)
+    {
+        //return NDBeforeGameMgrObj.SaveAccountPwdToDB(pszName,pszPwd,0);
+    }
+    void RegisterAccount(const char* pszAccount, const char* pszPwd)
+    {
+        //return NDBeforeGameMgrObj.RegisterAccout(pszAccount, pszPwd);
+    }
+    
+    int GetVersion(void)
+    {
+        return 1;//CSMUpdate::sharedInstance().GetVersion(NDPath::GetResourcePath().c_str());
+    }
+	void LoadLoginScene(void)
+	{
+		//NDDirector::DefaultDirector()->ReplaceScene(CSMLoginScene::Scene());
+	}
+    /*
+    void LoginServer(const char* Login_Account,const char* Login_Server)
+    {
+        return NDBeforeGameMgrObj.LoginServer(Login_Account, Login_server);
+    }*/
+    
+   	void PauseScene(void)
+	{
+		//NDDirector::DefaultDirector()->ReplaceScene(CSMLoginScene::Scene());
+        //NDDirector::DefaultDirector()->Pause();
+	} 
+    
+    
+    int ConvertReset(int nNum, int nMapId){
+        int numG = (nNum & (int)pow(2.0, 2.0*(nMapId-1)))>>(2*nMapId-2);
+        int numS = (nNum & (int)pow(2.0, 2.0*nMapId-1))>>(2*nMapId-2);
+        return numS*2+numG;
+    }
+    
+    
+    
+	///////////////////////////////////////////////
+	void ScriptGameLogicLoad()
+	{
+        ETCFUNC("PlayVideo", PlayVideo);
+        ETCFUNC("SysChat", SysChat);
+		ETCFUNC("QuitGame", QuitGame);
+		ETCFUNC("CreatePlayer", CreatePlayer);
+		ETCFUNC("SetPlayerWeapon", SetPlayerWeapon);
+		ETCFUNC("SetPlayerAnimation", SetPlayerAnimation);
+		ETCFUNC("SetPlayerState", SetPlayerState);
+		ETCFUNC("ReloadPlayer", ReloadPlayer);
+        ETCFUNC("CreatePlayerWithMount",CreatePlayerWithMount);
+        ETCFUNC("PlayerRideMount",PlayerRideMount);
+        ETCFUNC("OpenURL",OpenURL);
+        ETCFUNC("SetPlayerNameColorByQuality",SetPlayerNameColorByQuality);
+		ETCFUNC("PlayerStopMove", PlayerStopMove);
+		//ETCFUNC("GetImgPathNew", NDPath::GetImgPathNew);
+		ETCFUNC("GetPlayerId", GetPlayerId);
+		ETCFUNC("NavigateTo", NavigateTo);
+		ETCFUNC("NavigateToNpc", NavigateToNpc);
+		ETCFUNC("GetMapId", GetMapId);
+		ETCFUNC("GetMapInstanceId", GetMapInstanceId);
+		ETCFUNC("GetCurrentMonsterRound",GetCurrentMonsterRound);
+		ETCFUNC("GetImgResPath",GetImgResPath);
+		ETCFUNC("GetAniResPath",GetAniResPath);
+		ETCFUNC("GetSMImgPath", GetSMImgPath);
+		ETCFUNC("GetSMResPath", GetSMResPath);
+		ETCFUNC("GetMapLayer", GetMapLayer);
+		ETCFUNC("restartLastBattle",restartLastBattle);
+        ETCFUNC("FinishBattle",FinishBattle);  
+		ETCFUNC("GetPlayerLookface", GetPlayerLookface);
+		ETCFUNC("GetPlayerPetLookface", GetPlayerPetLookface);
+		ETCFUNC("GetPlayerPetStandAction", GetPlayerPetStandAction);
+		ETCFUNC("GetPlayerPetWalkAction", GetPlayerPetWalkAction);
+		ETCFUNC("WorldMapGoto", WorldMapGoto);
+        //WorldMap 显示世界地图
+        ETCFUNC("WorldMap", WorldMap);
+        ETCFUNC("BackCity", BackCity);
+        //ETCFUNC("GetRandomWords", &CSMLoginScene::GetRandomWords);
+		ETCFUNC("CloseBattle",CloseBattle);
+		//ETCFUNC("GetCurrentTime",GetCurrentTime);
+		//ETCFUNC("WorldMapSwitch", WorldMapSwitch);
+        /*登陆部分*/
+        //ETCFUNC("FastRegister", FastRegister);
+        //ETCFUNC("GetFastAccount", GetFastAccount);
+        //ETCFUNC("GetFastPwd", GetFastPwd);
+        ETCFUNC("SwichKeyToServer",SwichKeyToServer);
+        ETCFUNC("doNDSdkLogin",doNDSdkLogin);
+        
+        //** chh 2012-07-24 **//
+        ETCFUNC("doNDSdkChangeLogin",doNDSdkChangeLogin);
+        ETCFUNC("HideMobageSplashScreen",HideMobageSplashScreen);
+        ETCFUNC("doGoToMobageVipPage",doGoToMobageVipPage);
+        ETCFUNC("doShowMobageBalance",doShowMobageBalance);
+        ETCFUNC("doHideMobageBalance",doHideMobageBalance);
+        ETCFUNC("doExchangeEmoney",doExchangeEmoney);
+        
+        ETCFUNC("Int2StrIP",Int2StrIP);
+        ETCFUNC("sendMsgConnect",sendMsgConnect);
+        ETCFUNC("sendMsgCreateTempCredential",sendMsgCreateTempCredential);
+        ETCFUNC("SaveAccountPwdToDB", SaveAccountPwdToDB);
+        ETCFUNC("GetVersion",GetVersion);
+        //ETCFUNC("SetRole", SetRole);
+        ETCFUNC("LoginByLastData", LoginByLastData);
+        ETCFUNC("DownLoadServerListToDB",DownLoadServerListToDB);
+		ETCFUNC("LoadLoginScene",LoadLoginScene);
+        ETCFUNC("GetAccountListNum",GetAccountListNum);
+        ETCFUNC("GetRecAccountNameByIdx",GetRecAccountNameByIdx);
+        ETCFUNC("GetRecAccountPwdByIdx",GetRecAccountPwdByIdx);
+		ETCFUNC("loadPackInfo",	loadPackInfo);
+        ETCFUNC("CheckClientVersion", CheckClientVersion);
+        ETCFUNC("StartUpdate",StartUpdate);
+        ETCFUNC("InitUpdateURLQueue",InitUpdateURLQueue);
+        ETCFUNC("RegisterAccount", RegisterAccount);
+        ETCFUNC("SetSceneMusicNew", SetSceneMusicNew);
+        ETCFUNC("SimpleDecode",SimpleDecode);
+		ETCFUNC("GetDeviceToken",GetDeviceToken);
+		ETCFUNC("SetRidePet",SetRidePet);
+		ETCFUNC("StartBGMusic",StartBGMusic);
+		ETCFUNC("StopBGMusic",StopBGMusic);
+		ETCFUNC("StartEffectSound",StartEffectSound);
+		ETCFUNC("StopEffectSound",StopEffectSound);
+        ETCFUNC("SetBgMusicVolume",SetBgMusicVolume);
+        ETCFUNC("SetEffectSoundVolune",SetEffectSoundVolune);
+		ETCFUNC("ShowRoleName",ShowRoleName);
+		ETCFUNC("ShowOtherRole",ShowOtherRole);
+		ETCFUNC("GetSystemSetN",GetSystemSetN);		
+		ETCFUNC("GetSystemSetB",GetSystemSetB);
+		ETCFUNC("GetSystemSetS",GetSystemSetS);
+		ETCFUNC("SetSystemSetN",SetSystemSetN);
+		ETCFUNC("SetSystemSetB",SetSystemSetB);
+		ETCFUNC("SetSystemSetS",SetSystemSetS);
+		ETCFUNC("GetItemPicture", GetItemPicture);
+        
+        ETCFUNC("ConvertReset", ConvertReset);
+	}
+	
+	//地图层接口导出
+	ETSUBCLASSBEGIN(NDMapLayer,NDNode)
+	ETMEMBERFUNC("setStartRoadBlockTimer",						&NDMapLayer::setStartRoadBlockTimer)
+	ETMEMBERFUNC("setAutoBossFight",						&NDMapLayer::setAutoBossFight)	
+	//ETMEMBERFUNC("IsBattleBackground",						&NDMapLayer::IsBattleBackground)	
+	ETMEMBERFUNC("ShowTreasureBox",							&NDMapLayer::ShowTreasureBox)
+    
+    //** chh 2012-07-15 **//
+    ETMEMBERFUNC("AddChild",                                (void (NDMapLayer::*)(NDNode*, int, int))&NDMapLayer::AddChild)
+    ETMEMBERFUNC("RemoveChildByTag",                        (void (NDMapLayer::*)(int, bool))&NDMapLayer::RemoveChild)
+	ETCLASSEND(NDMapLayer)
+	
 }
-
-void FastRegister()
-{
-//    NDBeforeGameMgrObj.FastGameOrRegister(1); ///< 临时性注释 郭浩
-}
-
-////////////////////////////////////////////////
-std::string GetFastAccount()
-{
-//    return NDBeforeGameMgrObj.GetUserName(); ///< 临时性注释 郭浩
-	return std::string("");
-}
-////////////////////////////////////////////////
-std::string GetFastPwd()
-{
-//    return NDBeforeGameMgrObj.GetPassWord(); ///< 临时性注释 郭浩
-	return std::string("");
-}
-
-///////////////////////////////////////////////
-bool SwichKeyToServer(const char* pszIp, int nPort, const char* pszAccountName,
-		const char* pszPwd, const char* pszServerName)
-{
-//     //return NDBeforeGameMgrObj.SwichKeyToServer(pszIp,nPort,pszAccountName,pszPwd,pszServerName);
-//     NDDataTransThread::DefaultThread()->Stop();
-//     NDDataTransThread::ResetDefaultThread();
-// 
-//     NDDataTransThread::DefaultThread()->Start(pszIp, nPort);
-// 	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
-// 	{
-// 		return false;
-// 	}
-//     
-//     //this->SetUserName(pszAccountName);
-//     //this->SetServerInfo(pszIp,pszServerName,pszServerName,nPort);
-//     //this->SetPassWord(pszPwd);
-// 
-//     int idAccount = atoi(pszAccountName);
-//     sendMsgConnect(idAccount);
-// //    srand(idAccount);
-//     int nSalt = GetEncryptSalt(idAccount);
-//     DWORD dwAuthorize = 0;
-//     DWORD dwData = dwAuthorize ^ (nSalt % idAccount);
-//     dwAuthorize = dwData;
-//     DWORD dwEncryptCode = (idAccount+dwAuthorize)^0x4321;
-//     dwAuthorize = dwAuthorize ^ dwEncryptCode;
-//     NDDataTransThread::DefaultThread()->ChangeCode(dwAuthorize);
-
-	NDDataTransThread::DefaultThread()->Stop();
-	NDDataTransThread::ResetDefaultThread();
-	return NDBeforeGameMgrObj.SwichKeyToServer(pszIp,nPort,pszAccountName,pszPwd,pszServerName);
-}
-
-///////////////////////////////////////////////
-void SetRole(unsigned long ulLookFace, const char* pszRoleName, int nProfession)
-{
-//    NDBeforeGameMgrObj.SetRole(ulLookFace, pszRoleName, nProfession);///< 临时性注释 郭浩
-}
-
-///////////////////////////////////////////////
-bool LoginByLastData(void)
-{
-//    return NDBeforeGameMgrObj.LoginByLastData();///< 临时性注释 郭浩
-	return true;
-}
-
-//////////////////////////////////////////////
-int GetAccountListNum(void)
-{
-//    return NDBeforeGameMgrObj.GetAccountListNum();///< 临时性注释 郭浩
-	return 0;
-}
-
-//////////////////////////////////////////////
-const char* GetRecAccountNameByIdx(int idx)
-{
-//    return NDBeforeGameMgrObj.GetRecAccountNameByIdx(idx);///< 临时性注释 郭浩
-	return 0;
-}
-
-//////////////////////////////////////////////
-const char* GetRecAccountPwdByIdx(int idx)
-{
-//    return NDBeforeGameMgrObj.GetRecAccountPwdByIdx(idx);///< 临时性注释 郭浩
-	return 0;
-}
-
-void CreateRole(const char* pszName, Byte nProfession, int nLookFace,
-		const char* pszAccountName)
-{
-	//   return NDBeforeGameMgrObj.CreateRole(pszName,nProfession, nLookFace, pszAccountName);///< 临时性注释 郭浩
-}
-
-const char* GetImagePathNew(const char* pszPath)
-{
-	return NDPath::GetImgPathUINew(pszPath).c_str();
-}
-
-///////////////////////////////////////////////
-void ScriptObjectGameLogic::OnLoad()
-{
-	ETCFUNC("QuitGame", QuitGame);
-	ETCFUNC("CreatePlayer", CreatePlayer);
-	ETCFUNC("PlayerStopMove", PlayerStopMove);
-	ETCFUNC("GetImgPathNew", GetImagePathNew);
-	ETCFUNC("GetPlayerId", GetPlayerId);
-	ETCFUNC("SysChat", SysChat);
-	ETCFUNC("NavigateTo", NavigateTo);
-	ETCFUNC("NavigateToNpc", NavigateToNpc);
-	ETCFUNC("ShowChat", ShowChat);
-	ETCFUNC("GetMapId", GetMapId);
-	ETCFUNC("GetCurrentMonsterRound", GetCurrentMonsterRound);
-	ETCFUNC("GetSMImgPath", GetSMImgPath);
-	ETCFUNC("GetSMResPath", GetSMResPath);
-	ETCFUNC("GetMapLayer", GetMapLayer);
-	ETCFUNC("restartLastBattle", restartLastBattle);
-	ETCFUNC("GetPlayerLookface", GetPlayerLookface);
-	ETCFUNC("WorldMapGoto", WorldMapGoto);
-	ETCFUNC("GetRandomWords", &CSMLoginScene::GetRandomWords);
-	ETCFUNC("CloseBattle", CloseBattle);
-	//ETCFUNC("GetCurrentTime",GetCurrentTime); ///< 临时性注释 郭浩
-	/*登陆部分*/
-	ETCFUNC("FastRegister", FastRegister);
-	ETCFUNC("GetFastAccount", GetFastAccount);
-	ETCFUNC("GetFastPwd", GetFastPwd);
-	ETCFUNC("SwichKeyToServer", SwichKeyToServer);
-	ETCFUNC("SetRole", SetRole);
-	ETCFUNC("LoginByLastData", LoginByLastData);
-	ETCFUNC("GetAccountListNum", GetAccountListNum);
-	ETCFUNC("GetRecAccountNameByIdx", GetRecAccountNameByIdx);
-	ETCFUNC("GetRecAccountPwdByIdx", GetRecAccountPwdByIdx);
-	ETCFUNC("AddChatInfoRecord", AddChatInfoRecord);
-	ETCFUNC("AddAllRecord", AddAllRecord);
-	ETCFUNC("SetCurrentChannel", SetCurrentChannel);
-	//ETCFUNC("CreateRole",CreateRole);
-
-	ETCFUNC("Int2StrIP",Int2StrIP);
-	ETCFUNC("sendMsgConnect",sendMsgConnect);
-}
-
-//地图层接口导出
-// ETCLASSBEGIN(NDMapLayer)
-// ETMEMBERFUNC("setStartRoadBlockTimer",						&NDMapLayer::setStartRoadBlockTimer)
-// ETMEMBERFUNC("setAutoBossFight",						&NDMapLayer::setAutoBossFight)	
-// ETMEMBERFUNC("IsBattleBackground",						&NDMapLayer::IsBattleBackground)	
-// ETMEMBERFUNC("ShowTreasureBox",							&NDMapLayer::ShowTreasureBox)
-// ETCLASSEND(NDMapLayer)
-

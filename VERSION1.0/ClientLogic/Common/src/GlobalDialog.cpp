@@ -30,7 +30,7 @@ void GlobalShowDlg(NDEngine::NDObject* delegate, std::string title,
 }
 
 uint GlobalShowDlg(NDEngine::NDObject* delegate, const char* title,
-		const char* text, uint second,				// second-鍊掕鏃�,鑻ヤ负0鍒欐棤鍊掕鏃�
+		const char* text, uint second,				// second-鍊掕鏃??,鑻ヤ负0鍒欐棤鍊掕鏃??
 		const char* ortherButtons, .../*must NULL end*/
 		)
 {
@@ -240,7 +240,7 @@ void CGlobalDialog::deal()
 	s_dlg_info *p = m_listDlg.front();
 
 	if (p && p->bShowing && !m_kDialog)
-	{ // 瀵硅瘽妗嗚鍏虫帀浜�,浣嗘槸鍐呴儴淇濆瓨鐨勬暟鎹繕娌℃竻鎺�
+	{ // 瀵硅瘽妗嗚鍏虫帀浜??,浣嗘槸鍐呴儴淇濆瓨鐨勬暟鎹繕娌℃竻鎺??
 		m_listDlg.pop_front();
 
 		if (!m_listDlg.empty())

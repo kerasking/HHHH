@@ -6,7 +6,6 @@
  *  Copyright 2011 (网龙)DeNA. All rights reserved.
  *
  */
-
 #include "GameScene.h"
 #include "NDConstant.h"
 #include "NDDirector.h"

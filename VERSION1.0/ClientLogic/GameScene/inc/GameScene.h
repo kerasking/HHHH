@@ -6,7 +6,6 @@
  *  Copyright 2011 (网龙)DeNA. All rights reserved.
  *
  */
-
 #ifndef _GAME_SCENE_H_
 #define _GAME_SCENE_H_
 

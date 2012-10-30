@@ -264,7 +264,7 @@ namespace NDEngine
 		void OnLongTouchDown(bool touched);
 		void SetChecked( bool bChecked ){ m_bChecked = bChecked; m_bGray = bChecked; }
 		bool CanDestroyOnRemoveAllChildren(NDNode* pNode);
-	private:
+	protected:
 		void SetTitle();
 		void SetTwoTitle();
 	protected:

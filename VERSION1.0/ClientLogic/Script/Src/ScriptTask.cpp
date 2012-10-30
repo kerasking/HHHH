@@ -19,8 +19,9 @@
 
 using namespace LuaPlus;
 
-using namespace NDEngine;
+namespace NDEngine {
 
+//#pragma mark npc交互对话框与数据单例
 class ScriptNpcDlgData : 
 public TSingleton<ScriptNpcDlgData>
 {
@@ -121,6 +122,7 @@ private:
 	CAutoLink<CUINpcDlg>		m_dlg;
 };
 
+//#pragma mark npc与任务脚本接口
 
 void OpenNpcDlg(int nNpcId)
 {
@@ -170,15 +172,15 @@ void OnDealTask(int nTaskId)
 	bool bRet = script.IsLuaFuncExist(ssTaskFunc.str().c_str(), "TASK");
 	if (bRet)
 	{
-		//script.excuteLuaFunc(ssTaskFunc.str().c_str(), "TASK", nTaskId); ///< 临时性注释 郭浩
+		script.excuteLuaFunc(ssTaskFunc.str().c_str(), "TASK", nTaskId);
 	}
 	else 
 	{
-		//script.excuteLuaFunc("TASK_FUNCTION_COMMON", "TASK", nTaskId); ///< 临时性注释 郭浩
+		script.excuteLuaFunc("TASK_FUNCTION_COMMON", "TASK", nTaskId);
 	}
 }
 
-void ScriptObjectTask::OnLoad()
+void ScriptTaskLoad()
 {
 	ETCFUNC("OpenNpcDlg",		OpenNpcDlg)
 	ETCFUNC("SetTitle",			SetTitle)
@@ -193,9 +195,10 @@ void ScriptObjectTask::OnLoad()
 
 int ScriptGetTaskState(int nTaskId)
 {
-	int nRoleId = NDPlayer::defaultHero().m_nID;
-	unsigned long ulVal = ScriptGameDataObj.GetData<unsigned long long>
-		(eScriptDataRole, nRoleId, eRoleDataTask, nTaskId, 2);
-
+	//tangziqin 依赖zd ndplayer
+	int nRoleId = 0;/*NDPlayer::defaultHero().m_id;*/
+	unsigned long ulVal = ScriptGameDataObj.GetData<unsigned long long>(eScriptDataRole, nRoleId, eRoleDataTask, nTaskId, 2);
 	return ulVal;
+}
+
 }

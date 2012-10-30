@@ -22,7 +22,10 @@
 #include "EnumDef.h"
 //client engine inc
 #include "Utility.h"
+#include "NDSocket.h"
+#include "NDDataTransThread.h"
 
+using namespace NDEngine;
 // enum
 // {
 // 	UI_TAG_BEGIN	= 10000,
