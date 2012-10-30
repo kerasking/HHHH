@@ -22,8 +22,8 @@ namespace NDEngine
 		LabelTextAlignmentLeft = 0, //左对齐
 		LabelTextAlignmentCenter,	//居中
 		LabelTextAlignmentRight,	//右对齐
-		LabelTextAlignmentHorzCenter,//水平居中
-		LabelTextAlignmentVertCenter,//竖直居中
+
+		LabelTextAlignmentLeftCenter    //水平左对齐，垂直居中对齐
 	}LabelTextAlignment;
 	
 	class NDUILabel : public NDUINode
@@ -96,6 +96,7 @@ namespace NDEngine
 		void SetFontBoderColer(cocos2d::ccColor4B fontColor);
 		
 		CGSize GetTextureSize() { if (m_texture) return m_texture->getContentSizeInPixels(); return CGSizeZero; }
+		void SetHasFontBoderColor(bool bIsBorder){m_bHasFontBoderColor = bIsBorder;};
 	public:
 		void draw(); override		
 		void OnFrameRectChange(CGRect srcRect, CGRect dstRect); override

@@ -15,26 +15,26 @@ namespace net
 	protected:
 		virtual ~IEncryptor()	{};
 	public:
-		// ????????o????????????
+		// ??�ơ֣���o���???̦���??
 		virtual USHORT			Release			(void)							= 0;
         
-		// ???????????o???????
+		// �ޣ��¡??ǡݡ??o족�?????
 		virtual int				Encrypt			(unsigned char* buf, int nLen)	= 0;
         
-		// ???????????????????	
+		// ̡ޣ��¡??ǡݡ??즸?�?????	
 		virtual int				Decrypt			(unsigned char* buf, int nLen)	= 0;
         
-		// ????????????????????????????????????????��C?o??????a??????????????????????
+		// ̣����Ʀ��??ơ������ޡ��¡??ǡݡ??�?̦�?�?????̡?¨C?o���?̡ꡧa�¡ǣ��̦���?�??̡ަ??̣�?��
 		virtual int				Rencrypt		(unsigned char* buf, int nLen)	= 0;
         
-		// ????o?????????
+		// �?ǡ�o롱�???̡???
 		virtual void			ChangeCode		(unsigned int ulCode)			= 0;
 		virtual void			ChangeCode		(const char* pszKey)			= 0;
         
-		// ??B???B??a???C???o????????????
+		// �ܨB���B��a�?ǨC?�?o̡��???̦���??
 		virtual IEncryptor*		Duplicate		(void)							= 0;
         
-		// ?????
+		// ?��?�
 		virtual int				ShakeHand		(char* pszBuf, int nLenvoid)	= 0;
 	};
 
@@ -149,7 +149,7 @@ namespace net
 				assert(m_nPos1 >=0 && m_nPos1 < 256);
 				assert(m_nPos2 >=0 && m_nPos2 < 256);
 
-			/*	// CQ AccountServer ?????C??
+			/*	// CQ AccountServer ??¡��C�?
 				int a = (bufMsg[i]&0x0f)*0x10;
 				int b = (bufMsg[i]&0xf0)/0x10;
 				bufMsg[i] = (a + b) ^ 0xab;
@@ -158,7 +158,7 @@ namespace net
 			
 			if(!bMove)
 			{
-				// a?????????
+				// a̡¡ǣ��¡ǡ�?
 				m_nPos1 = nOldPos1;
 				m_nPos2 = nOldPos2;
 			}
@@ -194,7 +194,7 @@ namespace net
 				assert(m_nPos1 >=0 && m_nPos1 < 256);
 				assert(m_nPos2 >=0 && m_nPos2 < 256);
 
-				// CQ AccountServer ?????C??
+				// CQ AccountServer ??���C�?
 				int a = (bufMsg[i]&0x0f)*0x10;
 				int b = (bufMsg[i]&0xf0)/0x10;
 				bufMsg[i] = (a + b) ^ 0xab;
@@ -202,7 +202,7 @@ namespace net
 			
 			if(!bMove)
 			{
-				// a?????????
+				// a̡¡ǣ��¡ǡ�?
 				m_nPos1 = nOldPos1;
 				m_nPos2 = nOldPos2;
 			}
@@ -256,7 +256,7 @@ namespace net
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// 3??????a?B??, ???????????????????INI?��C??SERVER KEY???a??
+	// 3�?Ǩ���a�B??, ���̡�?��?�?ܡ??ƨ�?��INI�¨C�?SERVER KEY̡��aܡ�
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	#define		__aa	0x7E
 	#define		__bb	0x33
@@ -322,7 +322,7 @@ namespace net
 		m_nPos1 = m_nPos2 = 0;
 		
 		try{
-			// ??B??? ABC
+			// 롭�B�ݡ� ABC
 			int	a1, b1, c1, fst1;
 			a1		= ((key1 >> 0) & 0xFF) ^ __aa;
 			b1		= ((key1 >> 8) & 0xFF) ^ __bb;
@@ -369,7 +369,7 @@ namespace net
 			for(int i = 0; i < nLen; i++)
 			{
 				/*
-				// CQ AccountServer ?????C??
+				// CQ AccountServer ??���C�?
 				bufMsg[i] ^= 0xab;
 				int a = (bufMsg[i]&0x0f)*0x10;
 				int b = (bufMsg[i]&0xf0)/0x10;
@@ -390,7 +390,7 @@ namespace net
 			
 			if(!bMove)
 			{
-				// a?????????
+				// a̡¡ǣ��¡ǡ�?
 				m_nPos1 = nOldPos1;
 				m_nPos2 = nOldPos2;
 			}
@@ -414,7 +414,7 @@ namespace net
 			int		nOldPos2 = m_nPos2;
 			for(int i = 0; i < nLen; i++)
 			{
-				// CQ AccountServer ?????C??
+				// CQ AccountServer ??���C�?
 				bufMsg[i] ^= 0xab;
 				int a = (bufMsg[i]&0x0f)*0x10;
 				int b = (bufMsg[i]&0xf0)/0x10;
@@ -434,7 +434,7 @@ namespace net
 			
 			if(!bMove)
 			{
-				// a?????????
+				// a̡¡ǣ��¡ǡ�?
 				m_nPos1 = nOldPos1;
 				m_nPos2 = nOldPos2;
 			}

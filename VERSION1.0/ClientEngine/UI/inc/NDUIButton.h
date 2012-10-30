@@ -18,6 +18,7 @@
 #include "NDUIScrollText.h"
 #include "NDCombinePicture.h"
 //#include "NDLightEffect.h"
+#include "NDLightEffect.h"
 
 
 namespace NDEngine
@@ -131,6 +132,8 @@ namespace NDEngine
 		}
 		
 		void SetFocusImageLua(NDPicture *pic);
+
+		void SetDisImage(NDPicture *pic, bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);
 //		
 //		函数：OpenFrame
 //		作用：打开文字按钮的边框，如果时文字按钮则框架默认时打开的
@@ -143,6 +146,7 @@ namespace NDEngine
 //		参数：无
 //		返回值：无
 		void CloseFrame(){ m_framed = false; }
+	public:
 //		
 //		函数：SetTitle
 //		作用：设置按钮的文本信息
@@ -220,14 +224,19 @@ namespace NDEngine
 					 
 		void SetArrow(bool bSet);
 		
-		void EnalbeGray(bool gray) { 
+		void EnalbeGray(bool gray)
+		{ 
 			m_bGray = gray; 
-			if (m_image) m_image->SetGrayState(gray); 
-			if (m_picBG) m_picBG->SetGrayState(gray);
-			if (m_picTouchBG) m_picTouchBG->SetGrayState(gray);
-			if (m_touchDownImage) m_touchDownImage->SetGrayState(gray);
-			if (m_focusImage) m_focusImage->SetGrayState(gray);
+			
+			if (0 == m_disImage)
+			{
+				if (m_image) m_image->SetGrayState(gray); 
+				if (m_picBG) m_picBG->SetGrayState(gray);
+				if (m_picTouchBG) m_picTouchBG->SetGrayState(gray);
+				if (m_touchDownImage) m_touchDownImage->SetGrayState(gray);
+				if (m_focusImage) m_focusImage->SetGrayState(gray);
 			}
+		}
 		
 		bool IsGray() { return m_bGray; }
 		
@@ -242,17 +251,27 @@ namespace NDEngine
 		
 		NDPicture* GetImage() { return m_image; }
 		NDPicture* GetImageCopy() { if (m_image) return m_image->Copy(); return NULL; }
+		void TabSel(bool bSel);
+		bool IsTabSel();
+		void ChangeSprite(const char* szSprite, CGPoint posOffset);
+		void SetFocus(bool bFocus);
+		void SetSoundEffect(int nId);
+		int GetSoundEffect();
+
 	public:
-		void draw(); override
-		void SetFrameRect(CGRect rect); override
+		void draw();
+		void SetFrameRect(CGRect rect); 
 		void OnTouchDown(bool touched);
 		void OnLongTouchDown(bool touched);
-	protected:
+		void SetChecked( bool bChecked ){ m_bChecked = bChecked; m_bGray = bChecked; }
+		bool CanDestroyOnRemoveAllChildren(NDNode* pNode);
+	public:
 		void SetTitle();
 		void SetTwoTitle();
 	protected:
 		NDPicture* m_image, *m_touchDownImage, *m_rimImageLT, *m_rimImageRT, *m_rimImageLB, *m_rimImageRB;
 		NDPicture* m_focusImage;
+		NDPicture* m_disImage;
 		NDUILabel* m_title;	
 		cocos2d::ccColor4B m_touchDownColor;
 		cocos2d::ccColor4B m_focusColor;
@@ -266,8 +285,15 @@ namespace NDEngine
 		bool m_bCustomFocusImageRect;
 		bool m_ClearFocusImageOnFree;
 		bool m_useBackgroundCustomRect;
+		int m_SoundEffectId;
 		CGRect m_backgroundCustomRect;
-		CGRect m_customRect, m_touchDownImgCustomRect, m_customFocusImageRect;
+		CGRect m_customRect;
+		CGRect m_touchDownImgCustomRect;
+		CGRect m_customFocusImageRect;
+		CGRect m_customDisImageRect;
+
+		bool m_bCustomDisImageRect;
+		bool m_ClearDisImageOnFree;
 		
 		typedef enum
 		{
@@ -285,7 +311,8 @@ namespace NDEngine
 			FocusImage,
 		}FocusStatus;
 		FocusStatus m_focusStatus;
-		
+		bool m_bFocusEnable;
+
 		NDUIScrollText* m_scrtTitle;
 		bool m_bAutoScroll, m_bForce;
 		std::string m_strTitle;
@@ -307,8 +334,13 @@ namespace NDEngine
 		bool			 m_bArrow;
 		//NDLightEffect	 *m_spriteArrow;
 		
-		unsigned int	 m_uiTitleLeftWidth, m_uiTitleRightWidth;
+		unsigned int	 m_uiTitleLeftWidth;
+		unsigned int m_uiTitleRightWidth;
 		bool			 m_bGray;
+		bool m_bChecked;
+		bool			 m_bTabSel;
+		NDLightEffect* m_pSprite;
+		CGPoint			m_posSprite;
 	};
 }
 
