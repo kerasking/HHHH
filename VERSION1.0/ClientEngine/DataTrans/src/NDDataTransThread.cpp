@@ -27,6 +27,7 @@
 #endif  // CC_PLATFORM_BADA
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_QNX)
 #endif // CC_PLATFORM_QNX\
+#include "define.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -56,18 +57,21 @@ NDDataTransThread::NDDataTransThread()
 	m_socket = new NDSocket;
 	m_status = ThreadStatusStoped;
 	m_operate = ThreadStatusStoped;
+	m_bQuitGame = false;
 }
 
 NDDataTransThread::~NDDataTransThread()
 {
-	delete m_socket;
-	NDDataTransThread_dafaultThread = NULL;
+	SAFE_DELETE(m_socket);
 }
 
 NDDataTransThread* NDDataTransThread::DefaultThread()
 {
 	if (!NDDataTransThread_dafaultThread)
+	{
 		NDDataTransThread_dafaultThread = new NDDataTransThread;
+	}
+
 	return NDDataTransThread_dafaultThread;
 }
 
@@ -158,10 +162,9 @@ NDSocket* NDDataTransThread::GetSocket()
 	return m_socket;
 }
 
-void NDDataTransThread::ResetDefaultThread()
+NDDataTransThread* NDDataTransThread::ResetDefaultThread()
 {   
-    delete NDDataTransThread_dafaultThread;
-    NDDataTransThread_dafaultThread = NULL;
+	SAFE_DELETE(NDDataTransThread_dafaultThread);
 }
 
 //===========================================================================
