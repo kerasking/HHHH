@@ -48,24 +48,22 @@ THE SOFTWARE.
 #endif
 
 #if ND_MOD
-#include "png.h"
-#include "pnginfo.h"
-#include "pngstruct.h"
-#endif
-#define int_p_NULL (int*)NULL
+	#include "png.h"
+	#include "pnginfo.h"
+	#include "pngstruct.h"
 
-#if ND_MOD
+	#define int_p_NULL (int*)NULL
 	#define PNG_BYTES_TO_CHECK 8
 	#define png_infopp_NULL (png_infopp)NULL	
+
+	#define alpha_composite(composite, fg, alpha, bg) {                     \
+		unsigned short temp = ((unsigned short)(fg)*(unsigned short)(alpha) +                       \
+		(unsigned short)(bg)*(unsigned short)(255 - (unsigned short)(alpha)) + (unsigned short)128);       \
+		(composite) = (u_char)((temp + (temp >> 8)) >> 8);                   \
+	}
 #endif
-namespace   cocos2d {
 
-#define alpha_composite(composite, fg, alpha, bg) {                     \
-	unsigned short temp = ((unsigned short)(fg)*(unsigned short)(alpha) +                       \
-	(unsigned short)(bg)*(unsigned short)(255 - (unsigned short)(alpha)) + (unsigned short)128);       \
-	(composite) = (u_char)((temp + (temp >> 8)) >> 8);                   \
-}
-
+#if ND_MOD
 void ConvertPalette(png_color *pSrc, RGBQUAD *pDst, int nCount, png_bytep transalpha) 
 {
 	for(int i = 0 ; i< nCount; i++)
@@ -90,6 +88,9 @@ void ConvertPalette(png_color *pSrc, RGBQUAD *pDst, int nCount, png_bytep transa
 		pDst++;
 	} 
 }
+#endif
+
+namespace   cocos2d {
 
 #if CC_FONT_LABEL_SUPPORT
 // FontLabel support
@@ -1099,4 +1100,4 @@ void CCTexture2D::WriteToBMPFile(char* pFileName, BYTE* pBmpBuf, int nBmplen)
 }
 #endif //ND_MOD
 
-}
+}//namespace   cocos2d 
