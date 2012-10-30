@@ -15,9 +15,6 @@
 #include "NDPath.h"
 #include "NDRidePet.h"
 
-#define FIGHTER_HEIGHT	70 * (NDDirector::DefaultDirector()->GetScaleFactor())
-#define FIGHTER_WIDTH	45 * (NDDirector::DefaultDirector()->GetScaleFactor())
-
 namespace NDEngine
 {
 #define RING_IMAGE			(NDPath::GetFullImagepath("ui_ring.png").c_str())

@@ -24,6 +24,7 @@
 #include "ScriptGameData.h"
 #include "NDDebugOpt.h"
 #include "NDClassFactory.h"
+#include "Battle.h"
 
 NS_NDENGINE_BGN
 
@@ -119,7 +120,8 @@ bool NDGameApplication::initInstance()
 
 bool NDGameApplication::applicationDidFinishLaunching()
 {
-	REGISTER_CLASS(NDSprite,NDBaseRole);
+	REGISTER_CLASS(NDBaseBattle,Battle);
+	REGISTER_CLASS(NDBaseFighter,Fighter);
 
 	NDSprite* pkSprite = CREATE_CLASS(NDSprite,"NDBaseRole");
 

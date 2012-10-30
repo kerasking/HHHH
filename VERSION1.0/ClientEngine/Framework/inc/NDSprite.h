@@ -22,8 +22,10 @@
 #include "NDFrame.h"
 #include "define.h"
 #include "NDConstant.h"
+#include "NDBaseFighter.h"
 
-class NDBaseFighter;
+#define FIGHTER_HEIGHT	70 * (NDDirector::DefaultDirector()->GetScaleFactor())
+#define FIGHTER_WIDTH	45 * (NDDirector::DefaultDirector()->GetScaleFactor())
 
 class NDAnimationGroup;
 class NDSPrite;
@@ -83,7 +85,7 @@ public:
 
 	NDSprite* role;
 	NDAnimationGroup* aniGroup;
-	Fighter* fighter;
+	NDBaseFighter* fighter;
 	NDFrameRunRecord* frameRec;
 
 	OBJID idAni;
@@ -219,7 +221,7 @@ public:
 //		∑µªÿ÷µ£∫true «£¨false∑Ò
 	bool IsAnimationComplete();
 
-	virtual void RunBattleSubAnimation(Fighter* pkFighter);
+	virtual void RunBattleSubAnimation(NDBaseFighter* pkFighter);
 	virtual bool DrawSubAnimation(NDSubAniGroup& kSag);
 	virtual void SetNormalAniGroup(int nLookface);
 	//		

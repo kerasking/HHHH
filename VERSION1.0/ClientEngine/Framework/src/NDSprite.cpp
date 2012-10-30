@@ -22,6 +22,7 @@
 #include "Utility.h"
 #include "NDConstant.h"
 #include "define.h"
+#include "NDClassFactory.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -32,6 +33,9 @@ namespace NDEngine
 
 		NDSprite::NDSprite()
 	{
+		NDBaseFighter* pkFighter = CREATE_CLASS(NDBaseFighter,"Fighter");
+		pkFighter->AddATarget(0);
+
 		m_pkAniGroup = NULL;
 		m_pkCurrentAnimation = NULL;
 		m_pkFrameRunRecord = NULL;
@@ -1029,9 +1033,9 @@ namespace NDEngine
 		// 	strSprFullPath.append(kGroup.anifile);
 	}
 
-	void NDSprite::RunBattleSubAnimation(Fighter* pkFighter)
+	void NDSprite::RunBattleSubAnimation(NDBaseFighter* pkFighter)
 	{
-
+	
 	}
 
 	bool NDSprite::DrawSubAnimation(NDSubAniGroup& kSag)

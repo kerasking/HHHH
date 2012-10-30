@@ -33,7 +33,7 @@ const int POS_INTERVAL_Y = 53; // y ÷·º‰∏Ù
 
 const int STEP = 64;
 
-Fighter::Fighter(const FIGHTER_INFO& fInfo)
+Fighter::Fighter()
 {
 	m_pkActionWordImage = NULL;
 
@@ -44,7 +44,6 @@ Fighter::Fighter(const FIGHTER_INFO& fInfo)
 	m_nAttackPoint = 0;
 	m_nDefencePoint = 0;
 	m_nDistancePoint = 0;
-	m_kInfo = fInfo;
 	m_nNormalAtkType = ATKTYPE_NEAR;
 //	m_effectType = EFFECT_TYPE_NONE;
 	m_pkMainTarget = NULL;
