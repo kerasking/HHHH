@@ -85,7 +85,8 @@ public:
 
 		if (iter != m_array.rend())
 			return *iter;
-		return 0;
+
+                return 0;
 	}
 
 	T getObjectAtIndex(unsigned int uIndex)
@@ -94,7 +95,7 @@ public:
 
 		if (uIndex >= count())
 		{
-			return 0;
+                        return 0;
 		}
 
 		return m_array[uIndex];
