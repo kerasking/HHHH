@@ -31,11 +31,8 @@ namespace NDEngine
 {
 	IMPLEMENT_CLASS(NDSprite, NDNode)
 
-		NDSprite::NDSprite()
+	NDSprite::NDSprite()
 	{
-		NDBaseFighter* pkFighter = CREATE_CLASS(NDBaseFighter,"Fighter");
-		pkFighter->AddATarget(0);
-
 		m_pkAniGroup = NULL;
 		m_pkCurrentAnimation = NULL;
 		m_pkFrameRunRecord = NULL;
