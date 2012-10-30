@@ -38,6 +38,8 @@ namespace NDEngine
 	
 	NDUINode::NDUINode()
 	{
+		m_fStep = 0.0f;
+		m_nStepNum = 0;
 		m_kFrameRect = CGRectZero;		
 		m_bVisibled = true;
 		m_bEventEnabled = true;
@@ -176,6 +178,28 @@ namespace NDEngine
 	void NDUINode::draw()
 	{	
 		NDNode::draw();
+
+		if (m_nStepNum)
+		{
+			switch (m_nDirect)
+			{
+			case 1:
+				m_kFrameRect.origin.x += m_fStep;
+				break;
+			case 2:
+				m_kFrameRect.origin.x -= m_fStep;
+				break;
+			case 3:
+				m_kFrameRect.origin.y += m_fStep;
+				break;
+			case 4:
+				m_kFrameRect.origin.y -= m_fStep;
+				break;
+			default:
+				break;
+			}
+			m_nStepNum--;
+		}
 		
 		CGRect scrRect = this->GetScreenRect();
 		if (scrRect.origin.x != m_kScrRect.origin.x || scrRect.origin.y != m_kScrRect.origin.y ||
@@ -241,4 +265,54 @@ namespace NDEngine
 
 		return bRet;
 	}
+
+	void NDUINode::FlyToRect( CGRect rect, int nFrameNum, int nDirect )
+	{
+		if (nFrameNum <= 0)
+		{
+			this->SetFrameRect(rect);
+			return;
+		}
+		//根据方向计算起始位置和步长
+		m_nStepNum = nFrameNum;
+		m_nDirect = nDirect;
+		switch (nDirect) {
+			case 1:
+				//if (m_frameRect.origin.x == 0) {
+				//    m_fStep = rect.size.width/nFrameNum;
+				//    m_frameRect.origin.x -= rect.size.width;
+				//}else{
+				m_fStep = (rect.origin.x-m_kFrameRect.origin.x)/nFrameNum;
+				//}
+				break;
+			case 2:
+				//if (m_frameRect.origin.x == 0) {
+				//    m_fStep = rect.size.width/nFrameNum;
+				//     m_frameRect.origin.x += rect.size.width;
+				//}else{
+				m_fStep = (m_kFrameRect.origin.x+rect.origin.x)/nFrameNum;
+				// }
+				break;
+			case 3:
+				//if (m_frameRect.origin.y == 0) {
+				//    m_fStep = rect.size.height/nFrameNum;
+				//     m_frameRect.origin.y += rect.size.height;
+				// }else{
+				m_fStep = (rect.origin.y-m_kFrameRect.origin.y)/nFrameNum;
+				//  }
+				break;
+			case 4:
+				//if (m_frameRect.origin.y == 0) {
+				//    m_fStep = rect.size.height/nFrameNum;
+				//    m_frameRect.origin.y -= rect.size.height;
+				// }else{
+				m_fStep = (m_kFrameRect.origin.y+rect.origin.y)/nFrameNum;
+				//}
+				break;
+			default:
+				break;
+		}
+		printf("Change From[%f][%f] To [%f][%f] Step[%f]",m_kFrameRect.origin.x,m_kFrameRect.origin.y,rect.origin.x,rect.origin.y, m_fStep);
+	}
+
 }

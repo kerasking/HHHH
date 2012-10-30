@@ -9,7 +9,7 @@
 
 #include "AnimationList.h"
 #include "NDConstant.h"
-#include "NDAnimationGroup.h"
+#include "NDSprite.h"
 
 AnimationList::AnimationList()
 {
@@ -83,14 +83,21 @@ void AnimationList::moveAction(int type, NDSprite* sprite, int face)
 //	}
 }
 
-void AnimationList::sitAction(NDSprite* sprite)
+void AnimationList::sitAction(NDSprite* sprite, int face)
 {
 	if (sprite == NULL)
 	{
 		return;
 	}
 
-	sprite->SetCurrentAnimation(MANUELROLE_SITE, true);
+	if (face == FACE_LEFT)
+	{
+		sprite->SetCurrentAnimation(MANUELROLE_SEAT, false);
+	} 
+	else if (face == FACE_RIGHT)
+	{
+		sprite->SetCurrentAnimation(MANUELROLE_SEAT, true);
+	}
 }
 
 void AnimationList::ridePetMoveAction(int type, NDSprite* sprite, int face)
@@ -103,13 +110,13 @@ void AnimationList::ridePetMoveAction(int type, NDSprite* sprite, int face)
 	switch (type)
 	{
 	case TYPE_MANUALROLE:
-		if (face == FACE_LEFT)
+		if (face == FACE_LEFT) 
 		{
-			sprite->SetCurrentAnimation(MANUELROLE_RIDE_PET_MOVE, false);
-		}
-		else if (face == FACE_RIGHT)
+			sprite->SetCurrentAnimation(MANUELROLE_RIDE_WALK, false);
+		} 
+		else if (face == FACE_RIGHT) 
 		{
-			sprite->SetCurrentAnimation(MANUELROLE_RIDE_PET_MOVE, true);
+			sprite->SetCurrentAnimation(MANUELROLE_RIDE_WALK, true);
 		}
 		break;
 	}
@@ -127,11 +134,11 @@ void AnimationList::ridePetStandAction(int type, NDSprite* sprite, int face)
 	case TYPE_MANUALROLE:
 		if (face == FACE_LEFT)
 		{
-			sprite->SetCurrentAnimation(MANUELROLE_RIDE_PET_STAND, false);
+			sprite->SetCurrentAnimation(MANUELROLE_RIDE_STAND, false);
 		}
 		else if (face == FACE_RIGHT)
 		{
-			sprite->SetCurrentAnimation(MANUELROLE_RIDE_PET_STAND, true);
+			sprite->SetCurrentAnimation(MANUELROLE_RIDE_STAND, true);
 		}
 		break;
 	}

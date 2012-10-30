@@ -240,9 +240,26 @@ namespace NDEngine
 			
 			if (m_bHasFontBoderColor) 
 			{
-				for (int i = 0; i < 12; i++) 
-				{
-					m_pfVerticesBoder[i] = m_pfVertices[i] + ((i % 3 == 2) ? 0.0f : 1.0f);
+				int sf = 0.5f*NDDirector::DefaultDirector()->GetScaleFactor();
+
+				m_pfVerticesBoder[0] = drawRect.origin.x + sf;
+				m_pfVerticesBoder[1] = winSize.height - drawRect.origin.y - drawRect.size.height - sf;
+				m_pfVerticesBoder[2] = 0;
+				m_pfVerticesBoder[3] = drawRect.origin.x + drawRect.size.width + sf;
+				m_pfVerticesBoder[4] = m_pfVerticesBoder[1];
+				m_pfVerticesBoder[5] = 0;
+				m_pfVerticesBoder[6] = m_pfVerticesBoder[0];
+				m_pfVerticesBoder[7] = winSize.height - drawRect.origin.y - sf;
+				m_pfVerticesBoder[8] = 0;
+				m_pfVerticesBoder[9] = m_pfVerticesBoder[3];
+				m_pfVerticesBoder[10] = m_pfVerticesBoder[7];
+				m_pfVerticesBoder[11] = 0;	
+
+
+
+				for (int i = 0; i < 12; i++) {
+					//m_pfVerticesBoder[i] = m_vertices[i]+((i%3 == 2) ? 0.0f : 1.0f*NDDirector::DefaultDirector()->GetScaleFactor());
+					//m_pfVerticesBoder[i] = m_vertices[i]-1.0f*NDDirector::DefaultDirector()->GetScaleFactor();
 				}
 			}
 		}
@@ -276,10 +293,20 @@ namespace NDEngine
 			
 			if (m_texture) 
 			{
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				glBindTexture(GL_TEXTURE_2D, m_texture->getName());
-				glTexCoordPointer(2, GL_FLOAT, 0, m_pfCoordinates);
+				//** chh 2012-08-08 文字透明功能 **//
+				if(m_kColor.a <255)
+				{
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+				}
+				else
+				{
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				}
 
+
+				glBindTexture(GL_TEXTURE_2D, m_texture->getName());
+
+				glTexCoordPointer(2, GL_FLOAT, 0, m_pfCoordinates);
 				if (m_bHasFontBoderColor) 
 				{
 					glVertexPointer(3, GL_FLOAT, 0, m_pfVerticesBoder);

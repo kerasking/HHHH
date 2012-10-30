@@ -76,7 +76,7 @@ public:
 	//......
 	void Initialization(int idType);hide
 
-	void Initialization(int lookface, int idNpc, int lvl);
+	void Initialization(int lookface, int idNpc, int lvl, bool bFaceRight=true);
 
 	bool OnDrawBegin(bool bDraw);override
 
@@ -93,6 +93,8 @@ public:
 		return m_nMonsterCatogary;
 	}
 
+	void SetNameColor(ccColor4B color);
+
 	//　精英怪处理
 	void ElementMonsterDeal();
 	//－－－end
@@ -108,6 +110,14 @@ public:
 	void changeLookface(int lookface);
 	void SetCanBattle(bool bCanBattle);
 	void SetMoveRect(CGPoint point, int size);
+	void SetRuleID(int rule_id)
+	{
+		m_nRuleId = rule_id;
+	}
+	int GetRuleID()
+	{
+		return m_nRuleId;
+	}
 	//CGRect GetMoveRect(){return CGRectMake(selfMoveRectX, selfMoveRectY, self_move_rectW, self_move_rectH);}
 	bool CanBattele();
 private:
@@ -142,6 +152,7 @@ private:
 	bool m_bIsHunt;
 	int m_nOriginal_x;
 	int m_nOriginal_y;
+	int m_nRuleId;
 public:
 	int m_nMoveDirect;
 	bool m_bIsAIUseful; // AI算法是否遇到掩码无法走动,是的话用普通走法
@@ -180,7 +191,8 @@ private:
 	int m_nMoveRectH;
 
 	double m_dTimeBossProtect;
-
+	bool m_bSetColor;
+	ccColor4B m_colorName;
 public:
 	//是否是战场里的
 	bool m_bBattleMap;

@@ -146,6 +146,7 @@ namespace NDEngine
 //		参数：无
 //		返回值：无
 		void CloseFrame(){ m_framed = false; }
+	public:
 //		
 //		函数：SetTitle
 //		作用：设置按钮的文本信息
@@ -264,7 +265,7 @@ namespace NDEngine
 		void OnLongTouchDown(bool touched);
 		void SetChecked( bool bChecked ){ m_bChecked = bChecked; m_bGray = bChecked; }
 		bool CanDestroyOnRemoveAllChildren(NDNode* pNode);
-	protected:
+	public:
 		void SetTitle();
 		void SetTwoTitle();
 	protected:
