@@ -31,6 +31,7 @@
 #include "AutoPathTip.h"
 #include "QuickInteraction.h"
 #include "NDString.h"
+#include "NDUtility.h"
 
 #include "ScriptMgr.h"
 #include "ScriptTask.h"
