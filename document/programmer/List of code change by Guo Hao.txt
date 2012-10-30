@@ -1,12 +1,12 @@
 
 郭浩修改部分
-SMYS_CLIENT_IPHONE_userUI/Analyst/Analyst.cpp
-SMYS_CLIENT_IPHONE_userUI/Analyst/Analyst.h
-SMYS_CLIENT_IPHONE_userUI/Analyst/AnalystType.h
-SMYS_CLIENT_IPHONE_userUI/Analyst/I_Analyst.h
-SMYS_CLIENT_IPHONE_userUI/Analyst/SysTimer.cpp
-SMYS_CLIENT_IPHONE_userUI/Analyst/SysTimer.h
-SMYS_CLIENT_IPHONE_userUI/Analyst/TickAnalyst.h
+SMYS_CLIENT_IPHONE_userUI/Analyst/Analyst.cpp	完成
+SMYS_CLIENT_IPHONE_userUI/Analyst/Analyst.h		完成
+SMYS_CLIENT_IPHONE_userUI/Analyst/AnalystType.h	完成
+SMYS_CLIENT_IPHONE_userUI/Analyst/I_Analyst.h	完成
+SMYS_CLIENT_IPHONE_userUI/Analyst/SysTimer.cpp	完成
+SMYS_CLIENT_IPHONE_userUI/Analyst/SysTimer.h	完成
+SMYS_CLIENT_IPHONE_userUI/Analyst/TickAnalyst.h	完成
 
 
 SMYS_CLIENT_IPHONE_userUI/libs/CCVideoPlayer/CCVideoPlayer.h
@@ -91,7 +91,7 @@ SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUIMemo.mm		用不到
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUIMenuLayer.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUINode.mm	完成
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUIOptionButton.mm
-SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUIProgressBar.mm
+SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUIProgressBar.mm	完成
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUISynLayer.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/src/NDUITableLayer.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/uiLib/NDControlHelp.h

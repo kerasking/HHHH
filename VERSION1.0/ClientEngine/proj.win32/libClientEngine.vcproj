@@ -546,6 +546,18 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\UI\inc\Analyst.h"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\AnalystType.h"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\I_Analyst.h"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\inc\NDScrollLayer.h"
 					>
 				</File>
@@ -598,11 +610,23 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\inc\NDUIProgressBar.h"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\inc\NDUIScrollText.h"
 					>
 				</File>
 				<File
 					RelativePath="..\UI\inc\NDUISynLayer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\SysTimer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\TickAnalyst.h"
 					>
 				</File>
 				<File
@@ -666,6 +690,10 @@
 				Name="src"
 				>
 				<File
+					RelativePath="..\UI\src\Analyst.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\src\HyperLinkLabel.cpp"
 					>
 				</File>
@@ -718,11 +746,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\src\NDUIProgressBar.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\src\NDUIScrollText.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\UI\src\NDUISynLayer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\src\SysTimer.cpp"
 					>
 				</File>
 				<File
