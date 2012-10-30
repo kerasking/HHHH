@@ -23,6 +23,7 @@
 #include "NDBeforeGameMgr.h"
 #include "ScriptGameData.h"
 #include "NDDebugOpt.h"
+#include "NDClassFactory.h"
 
 NS_NDENGINE_BGN
 
@@ -118,6 +119,10 @@ bool NDGameApplication::initInstance()
 
 bool NDGameApplication::applicationDidFinishLaunching()
 {
+	REGISTER_CLASS(NDSprite,NDBaseRole);
+
+	NDSprite* pkSprite = CREATE_CLASS(NDSprite,"NDBaseRole");
+
 	NDMapMgr& kMapMgr = NDMapMgrObj;
 	NDDirector* pkDirector = NDDirector::DefaultDirector();
 	ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();

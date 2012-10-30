@@ -446,6 +446,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\System\inc\NDClassFactory.h"
+					>
+				</File>
+				<File
 					RelativePath="..\System\inc\NDCompare.h"
 					>
 				</File>
@@ -507,6 +511,10 @@
 				</File>
 				<File
 					RelativePath="..\System\src\NDAutoPath.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\System\src\NDClassFactory.cpp"
 					>
 				</File>
 				<File
