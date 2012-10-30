@@ -71,7 +71,7 @@ SMYS_CLIENT_IPHONE_userUI/Classes/Engine/Performance.mm				完成
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/System/inc/NDAutoPath.h	完成
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/System/inc/NDPath.h		这个需要后期自适应宏定义，已适配安卓
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/System/src/NDAutoPath.mm	完成
-SMYS_CLIENT_IPHONE_userUI/Classes/Engine/System/src/NDPath.mm
+SMYS_CLIENT_IPHONE_userUI/Classes/Engine/System/src/NDPath.mm		这个需要后期自适应宏定义，已适配安卓
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/System/src/NDTouch.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/TestNewUI.mm
 SMYS_CLIENT_IPHONE_userUI/Classes/Engine/UI/inc/NDUIButton.h	完成！

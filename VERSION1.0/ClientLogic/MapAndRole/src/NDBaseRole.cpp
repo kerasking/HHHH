@@ -1347,6 +1347,22 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 					sizeShadow.height));
 }
 
+// void NDBaseRole::SetNormalAniGroup(int nLookface)
+// {
+// 	if (nLookface <= 0)
+// 	{
+// 		return;
+// 	}
+// 
+// 	Initialization(
+// 			tq::CString("%smodel_%d%s",
+// 					NDEngine::NDPath::GetAnimationPath().c_str(),
+// 					nLookface / 100, ".spr"));
+// 
+// 	m_bFaceRight = true;
+// 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
+// }
+// 
 // void NDEngine::NDBaseRole::RunBattleSubAnimation(Fighter* pkFighter)
 // {
 // 	Battle* pkBattle = 0;
@@ -1369,7 +1385,7 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 // 			NDAnimationGroup *pkAnimationGroup =
 // 					curFrame->getSubAnimationGroups()->getObjectAtIndex(i);
 // 			pkAnimationGroup->setReverse(
-// 					pkFighter->m_kInfo.group == BATTLE_GROUP_DEFENCE ?
+// 					pkFighter->getFighterInfo().group == BATTLE_GROUP_DEFENCE ?
 // 							false : true);
 // 
 // 			if (pkAnimationGroup->getIdentifer() == 0)
@@ -1504,7 +1520,7 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 // 		{
 // 			//ÔÊÐí·­×ª++Guosen 2012.6.28
 // 			pkAnimationGroup->setReverse(
-// 					kSag.fighter->m_kInfo.group == BATTLE_GROUP_DEFENCE ?
+// 					kSag.fighter->getFighterInfo().group == BATTLE_GROUP_DEFENCE ?
 // 							true : false);
 // 		}
 // 		else

@@ -586,7 +586,8 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		NDLog("id:%d,type:%d,fighterType,%d,group:%d,team:%d,pos:%d,life:%d",
 				idObj, idType, nFighterType, btGroup, btBattleTeam, btStations,
 				nLife);
-		Fighter* fighter = new Fighter(info);
+		Fighter* fighter = new Fighter();
+		fighter->setFighterInfo(info);
 		fighter->setBattle(m_pkBattle);
 
 //		if (nFighterType == FIGHTER_TYPE_PET) {
@@ -596,7 +597,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		//				} else { // ÖÜÎ§Íæ¼Ò
 		//					NDManualRole* player = mapMgr.GetManualRole(idObj);
 		//					if (player) {
-		//						CGPoint pos = CGPointZero;
+		//						CGPoint pos = CGPointZeroON;
 		//						if (player->GetLastPointOfPath(pos))
 		//						{
 		//							player->SetPositionEx(pos);

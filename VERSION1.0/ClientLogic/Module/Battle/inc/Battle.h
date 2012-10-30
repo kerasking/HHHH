@@ -216,8 +216,9 @@ typedef std::map<CoolDownID, CoolDownData> CoolDownRecord;
 typedef CoolDownRecord::iterator CoolDownRecord_IT;
 typedef std::pair<CoolDownID, CoolDownData> CoolDownRecord_Pair;
 
-class Battle: public NDUILayer,
-		public NDBaseBattle,
+class Battle:
+	public NDUILayer,
+	public NDBaseBattle,
 //public NDUITableLayerDelegate, ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		public NDUIDialogDelegate,
 //public NDUISpeedBarDelegate,
