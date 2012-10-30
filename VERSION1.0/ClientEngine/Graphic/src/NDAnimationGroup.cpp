@@ -41,6 +41,7 @@ m_pkUnpassPoint(NULL)
 	m_pkAnimations = CCArray::array();
 	m_pkTileTable = CCArray::array();
 	m_pkImages = new vector<std::string>();
+	m_pkUnpassPoint = new vector<int>();
 
 	m_pkAnimations->retain();
 	m_pkTileTable->retain();

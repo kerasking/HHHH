@@ -1433,10 +1433,10 @@ namespace NDEngine
 			case _MSG_DIALOG:
 				this->processMsgDlg(*data);
 				break;
-			case _MSG_LIFESKILL:
+			case _MSG_LIFESKILL:					///< 貌似没用到 郭浩
 				this->processLifeSkill(*data);
 				break;
-			case _MSG_SYNTHESIZE:
+			case _MSG_SYNTHESIZE:					//< 貌似没用到 郭浩
 				this->processLifeSkillSynthesize(*data);
 				break;
 			case _MSG_COLLECTION:
@@ -1461,7 +1461,7 @@ namespace NDEngine
 			case _MSG_REHEARSE:
 				processRehearse(*data);
 				break;
-			case _MSG_TEAM:
+			case _MSG_TEAM:				///< 游戏中没有Team,Pass! 郭浩
 				processTeam(*data);
 				break;
 			case _MSG_GOODFRIEND:
@@ -1470,25 +1470,25 @@ namespace NDEngine
 			case _MSG_TUTOR:
 				TutorUILayer::processMsgTutor(*data);
 				break;
-			case _MSG_TRADE:
+			case _MSG_TRADE:			///< 貌似没有交易
 				this->processTrade(*data);
 				break;
-			case _MSG_BILLBOARD:
+			case _MSG_BILLBOARD:		//< 貌似没
 				this->processBillBoard(*data);
 				break;
-			case _MSG_BILLBOARD_FIELD:
+			case _MSG_BILLBOARD_FIELD:		//< 貌似没
 				this->processBillBoardField(*data);
 				break;
-			case _MSG_BILLBOARD_LIST:
+			case _MSG_BILLBOARD_LIST:		//< 貌似没
 				this->processBillBoardList(*data);
 				break;
-			case _MSG_BILLBOARD_USER:
+			case _MSG_BILLBOARD_USER:		//< 貌似没
 				this->processBillBoardUser(*data);
 				break;
-			case _MSG_SHOPINFO:
+			case _MSG_SHOPINFO:		//< 貌似没
 				this->processShopInfo(*data);
 				break;
-			case _MSG_SHOP:
+			case _MSG_SHOP:			//< 貌似没
 				this->processShop(*data);
 				break;
 			case _MSG_REG_TUTOR_INFO:
@@ -1512,13 +1512,13 @@ namespace NDEngine
 			case _MSG_USERINFO_SEE:
 				this->processUserInfoSee(*data);
 				break;
-			case _MSG_EQUIP_INFO:
+			case _MSG_EQUIP_INFO:			//< 貌似没
 				this->processEquipInfo(*data);
 				break;
-			case _MSG_USER_STATE:
+			case _MSG_USER_STATE:			//< 貌似没
 				UserStateUILayer::processMsgUserState(*data);
 				break;
-			case _MSG_USER_STATE_CHG:
+			case _MSG_USER_STATE_CHG:		//< 貌似没
 				UserStateUILayer::processMsgUserStateChg(*data);
 				break;
 			case _MSG_POS_TEXT:
@@ -1529,10 +1529,10 @@ namespace NDEngine
 				}
 			}
 				break;
-			case _MSG_EQUIPIMPROVE:
+			case _MSG_EQUIPIMPROVE:	//< 貌似没
 				processEquipImprove(*data);
 				break;
-			case _MSG_FORMULA:
+			case _MSG_FORMULA:	//< 貌似没
 				processFormula(*data);
 				break;
 			case _MSG_BOOTH:
@@ -1542,12 +1542,12 @@ namespace NDEngine
 				VendorBuyUILayer::Show(*data);
 				break;
 			case _MSG_MAGIC_GOODS:
-				this->processSkillGoods(*data);
+				this->processSkillGoods(*data);	//< 貌似没
 				break;
 			case _MSG_SKILL:
-				this->processMsgSkill(*data);
+				this->processMsgSkill(*data);	//< 貌似没
 				break;
-			case _MSG_PET_SKILL:
+			case _MSG_PET_SKILL:				//< 貌似没
 				this->processMsgPetSkill(*data);
 				break;
 			case _MSG_LETTER:
@@ -1567,8 +1567,8 @@ namespace NDEngine
 			case _MSG_SYN_LIST_EX:
 				SyndicateUILayer::OnAllSynList(*data);
 				break;
-			case _MSG_INVITE_LIST:
-			case _MSG_INVITE_LIST_EX:
+			case _MSG_INVITE_LIST:			//< 貌似没
+			case _MSG_INVITE_LIST_EX:		//< 貌似没
 				// TODO: 加到请求列表
 			{
 				int btCount = data->ReadByte();
@@ -1582,7 +1582,7 @@ namespace NDEngine
 			}
 				//SyndicateInviteList::refreshScroll(*data);
 				break;
-			case _MSG_SYN_INVITE:
+			case _MSG_SYN_INVITE:			//< 貌似没
 				SyndicateInviteList::processSynInvite(*data);
 				break;
 			case _MSG_SYN_INFO:
@@ -1643,7 +1643,7 @@ namespace NDEngine
 			case _MSG_SEE:
 				processSee(*data);
 				break;
-			case _MSG_REPUTE_ATTR:
+			case _MSG_REPUTE_ATTR:			///< 貌似没
 			{
 				NDPlayer& player = NDPlayer::defaultHero();
 				int action = data->ReadByte();
@@ -1682,7 +1682,7 @@ namespace NDEngine
 				}
 			}
 				break;
-			case _MSG_CAMP_STORAGE:
+			case _MSG_CAMP_STORAGE:			///< 貌似没
 				processCampStorage(*data);
 				break;
 			case _MSG_NPC_POSITION:
@@ -1694,7 +1694,7 @@ namespace NDEngine
 			case _MSG_ITEM_TYPE_INFO:
 				processItemTypeInfo(*data);
 				break;
-			case _MSG_CUSTOMER_SERVICE:
+			case _MSG_CUSTOMER_SERVICE:			///<客服？ 貌似没
 			{
 				CloseProgressBar;
 				
@@ -1729,7 +1729,7 @@ namespace NDEngine
 			case _MSG_COMPETITION:
 				processCompetition(*data);
 				break;
-			case _MSG_WISH:
+			case _MSG_WISH:			///< 貌似没
 				processWish(*data);
 				break;
 			case MB_MSG_RECHARGE:
@@ -1755,7 +1755,7 @@ namespace NDEngine
 			case _MSG_QUERY_SOCIAL_INFO:
 				SocialScene::ProcessSocicalInfoData(*data);
 				break;
-			case MB_MSG_MOBILE_PWD:
+			case MB_MSG_MOBILE_PWD:		///< 貌似没
 			{
 				int btAction = data->ReadByte();
 				if (btAction == 3) 
@@ -1788,25 +1788,19 @@ namespace NDEngine
 			case _MSG_ROADBLOCK:
 				this->processRoadBlock(*data);
 				break;
-//			case _MSG_BOSS_BATTLE_INFO:
-//				this->processBossInfo(*data);
-//				break;
-//			case _MSG_BOSS_BATTLE_SELF:
-//				this->processBossSelfInfo(*data);
-//				break;
-            case _MSG_LOGIN_SUC:
+            case _MSG_LOGIN_SUC:		///< 貌似没
                 this->ProcessLoginSuc(*data);
                 break;
-            case _MSG_CREATE_TEMP_CREDENTIAL_RET:
+            case _MSG_CREATE_TEMP_CREDENTIAL_RET:	///< 貌似没
                 this->ProcessTempCredential(*data);
                 break;
-            case _MSG_REQUEST_ACCESS_TOKEN_RET:
+            case _MSG_REQUEST_ACCESS_TOKEN_RET:	///< 貌似没
                 this->ProcessOAuthTokenRet(*data);
                 break;
-            case _MSG_CREATE_TRANSACTION_RET:
+            case _MSG_CREATE_TRANSACTION_RET:	///< 貌似没
                 this->ProcessCreateTransactionRet(*data);
                 break;
-            case _MSG_CLOSE_TRANSACTION_RET:
+            case _MSG_CLOSE_TRANSACTION_RET:	///< 貌似没
                 this->ProcessCloseTransactionRet(*data);
                 break;
 			default:

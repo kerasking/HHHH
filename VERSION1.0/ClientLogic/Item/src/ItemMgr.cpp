@@ -885,11 +885,11 @@ void ItemMgr::processItem(NDTransData* data, int len)
 				std::stringstream name;
 				name << item->getItemNameWithAdd();
 				
-				GlobalShowDlg(name.str().c_str(), tempStr.c_str());
+				//GlobalShowDlg(name.str().c_str(), tempStr.c_str());
 			}
 			else 
 			{
-				GlobalShowDlg(NDCommonCString("error"), NDCommonCString("CantFindItem"));
+				//GlobalShowDlg(NDCommonCString("error"), NDCommonCString("CantFindItem"));
 			}
 		}
 			break;
@@ -1364,7 +1364,7 @@ void ItemMgr::processEquipBind(NDTransData* data, int len)
 	int result = data->ReadByte();
 	int itemId = data->ReadInt();
 	if (result == 0) { // 绑定成功
-		GlobalShowDlg(NDCommonCString("TipInfo"), NDCommonCString("BindSucc"));
+		//GlobalShowDlg(NDCommonCString("TipInfo"), NDCommonCString("BindSucc"));
 		Item *res = NULL;
 		if (HasItemByType(ITEM_BAG, itemId, res)) 
 		{
@@ -1380,7 +1380,7 @@ void ItemMgr::processEquipBind(NDTransData* data, int len)
 //			}
 		}
 	} else if (result == 1) { // 解除绑定成功
-		GlobalShowDlg(NDCommonCString("TipInfo"), NDCommonCString("DeBindSucc"));
+		//12GlobalShowDlg(NDCommonCString("TipInfo"), NDCommonCString("DeBindSucc"));
 		Item *res = NULL;
 		if (HasItemByType(ITEM_BAG, itemId, res)) 
 		{

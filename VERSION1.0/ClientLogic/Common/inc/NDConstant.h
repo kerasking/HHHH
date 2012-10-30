@@ -223,7 +223,7 @@
 #define DISPLAY_POS_X_OFFSET					(MAP_UNITSIZE / 2)
 #define DISPLAY_POS_Y_OFFSET					(MAP_UNITSIZE)
 //地图单元格尺寸
-#define MAP_UNITSIZE		32
+//#define MAP_UNITSIZE		32
 //神魔主场景tag
 #define SMGAMESCENE_TAG							3000
 //神魔战斗场景tag

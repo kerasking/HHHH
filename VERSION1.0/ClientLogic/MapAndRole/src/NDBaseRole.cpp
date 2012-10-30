@@ -1099,10 +1099,6 @@ void NDBaseRole::SetHair(int style, int color)
 	}
 	m_nHairColor = color;
 
-	/**
-	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	 * begin
-	 */
 // 	NSString* hairImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 	hairImageName = [NSString stringWithFormat:@"%@%d", hairImageName, m_nHair];
 // 	if (sex % 2 == SpriteSexMale) 
@@ -1115,6 +1111,17 @@ void NDBaseRole::SetHair(int style, int color)
 // 	}
 // 	hairImageName = [NSString stringWithFormat:@"%@.png", hairImageName];
 // 	SetHairImage([hairImageName UTF8String], hairColor);
+
+	char hairImageName[256];
+	if(SpriteSexMale == m_nSex % 2)
+	{
+		_snprintf(hairImageName, 256, "%s%d_1.png", NDPath::GetImagePath().c_str(), m_nHair);
+	}
+	else
+	{
+		_snprintf(hairImageName, 256, "%s%d_2.png", NDPath::GetImagePath().c_str(), m_nHair);
+	}
+	SetHairImage(hairImageName, m_nHairColor);
 }
 
 void NDBaseRole::SetMaxLife(int nMaxLife)
@@ -1152,10 +1159,10 @@ void NDBaseRole::SetPositionEx(CGPoint newPosition)
 
 NDRidePet* NDBaseRole::GetRidePet()
 {
-// 	if (m_pkRidePet == NULL)
-// 	{
-// 		m_pkRidePet = new NDRidePet;
-// 	}
+	if (m_pkRidePet == NULL)
+	{
+		m_pkRidePet = new NDRidePet;
+	}
 	return m_pkRidePet;
 }
 

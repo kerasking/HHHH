@@ -203,8 +203,8 @@ void CUIExp::SetFrameRect(CGRect rect)
 	
 	if (!m_strBgFile.empty())
 	{
-		m_picBg = NDPicturePool::DefaultPool()->AddPicture(m_strBgFile,
-				rect.size.width, rect.size.height);
+		m_picBg		= NDPicturePool::DefaultPool()->AddPicture(
+					m_strBgFile.c_str());//, rect.size.width, rect.size.height);
 	}
 	
 	m_bRecacl	= true;

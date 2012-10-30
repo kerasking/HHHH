@@ -88,6 +88,10 @@ NDNpc::~NDNpc()
 	CC_SAFE_DELETE (m_pkPicState);
 }
 
+void NDNpc::Init()
+{
+}
+
 void NDNpc::SetActionOnRing(bool on)
 {
 	m_bActionOnRing = on;
@@ -153,7 +157,7 @@ void NDNpc::OnMoveEnd()
 	m_dequePos.pop_front();
 
 	std::vector<CGPoint> vec_pos; vec_pos.push_back(pos);
-//	MoveToPosition(vec_pos, ridepet == NULL ? SpriteSpeedStep4 : SpriteSpeedStep8, false);
+	MoveToPosition(vec_pos, m_pkRidePet == NULL ? SpriteSpeedStep4 : SpriteSpeedStep8, false);
 }
 
 bool NDNpc::OnDrawBegin(bool bDraw)
@@ -286,8 +290,8 @@ void NDNpc::OnDrawEnd(bool bDraw)
 	{
 		InitNameLable(m_pkNameLabel[0]);
 		InitNameLable(m_pkNameLabel[1]);
- 		SetLable(eLableName, nShowX, nShowY, m_strName, INTCOLORTOCCC4(uiColor),
- 				ccc4(0, 0, 0, 255));
+//  		SetLable(eLableName, nShowX, nShowY, m_strName, INTCOLORTOCCC4(uiColor),
+//  				ccc4(0, 0, 0, 255));
 		DrawLable(m_pkNameLabel[1], bDraw);
 		DrawLable(m_pkNameLabel[0], bDraw);
 		//showY -= 5 * fScaleFactor;
@@ -446,7 +450,7 @@ void NDNpc::AddWalkPoint(int col, int row)
 		m_dequePos.pop_front();
 
 		std::vector<CGPoint> vec_pos; vec_pos.push_back(pos);
-/*		MoveToPosition(vec_pos, ridepet == NULL ? SpriteSpeedStep4 : SpriteSpeedStep8, false);*/
+		MoveToPosition(vec_pos, m_pkRidePet == NULL ? SpriteSpeedStep4 : SpriteSpeedStep8, false);
 	}
 }
 
@@ -501,41 +505,41 @@ void NDNpc::ShowUpdate(bool bshow, bool bDraw)
 
 void NDNpc::HandleNpcMask(bool bSet)
 {
-// 	NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene)));
-// 	if (!layer)
-// 	{
-// 		return;
-// 	}
-// 
-// 	NDMapData *mapdata = layer->GetMapData();
-// 
-// 	if (!mapdata) {
-// 		return;
-// 	}
+	NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene)));
+	if (!layer)
+	{
+		return;
+	}
 
-// 	CGPoint point = this->GetPosition();
-// 	int iCellY = int((point.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), iCellX = int((point.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
-// 
-// 	CCArray *unpass = m_aniGroup->unpassPoint();
-// 	NSInteger unpassCount = [unpass count];
-// 	if (unpass == nil || unpassCount % 2 != 0) {
-// 		if (bSet)
-// 			[mapdata addObstacleCell:iCellY andColumn:iCellX];
-// 		else
-// 			[mapdata removeObstacleCell:iCellY andColumn:iCellX];
-// 		return;
-// 	}
-// 
-// 	for (NSInteger i = 0; i < unpassCount; i+= 2) {
-// 		NSNumber *cellX = (NSNumber*)[unpass objectAtIndex:i];
-// 		NSNumber *cellY = (NSNumber*)[unpass objectAtIndex:i+1];
-// 		if (cellX && cellY) {
-// 			if (bSet)
-// 				[mapdata addObstacleCell:[cellY charValue]+iCellY andColumn:[cellX charValue]+iCellX];
-// 			else
-// 				[mapdata removeObstacleCell:[cellY charValue]+iCellY andColumn:[cellX charValue]+iCellX];
-// 		}
-// 	}
+	NDMapData *mapdata = layer->GetMapData();
+
+	if (!mapdata) {
+		return;
+	}
+
+	CGPoint point = this->GetPosition();
+	int iCellY = int((point.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), iCellX = int((point.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
+
+	vector<int>* unpass = m_pkAniGroup->getUnpassPoint();
+	int unpassCount = unpass->size();
+	if (unpass == nil || unpassCount % 2 != 0) {
+		if (bSet)
+			mapdata->addObstacleCell(iCellY, iCellX);
+		else
+			mapdata->removeObstacleCell(iCellY, iCellX);
+		return;
+	}
+
+	for (int i = 0; i < unpassCount; i+= 2) {
+		int cellX = unpass->at(i);
+		int cellY = unpass->at(i+1);
+		if (cellX && cellY) {
+			if (bSet)
+				mapdata->addObstacleCell(cellY+iCellY, cellX+iCellX);
+			else
+				mapdata->removeObstacleCell(cellY+iCellY, cellX+iCellX);
+		}
+	}
 
 }
 
@@ -606,29 +610,29 @@ void NDNpc::initUnpassPoint()
 
 	CGPoint point = this->GetPosition();
 
-// 	NSArray *unpass = [m_aniGroup unpassPoint];
-// 	NSInteger unpassCount = [unpass count];
-// 	if (unpass == nil || unpassCount % 2 != 0) {
-// 		m_vUnpassRect.clear();
-// 
-// 		m_vUnpassRect.push_back(CGRectMake(point.x-4, point.y-16, 20, 16));
-// 
-// 		return;
-// 	}
-// 
-// 	//int iCellY = int((point.y-DISPLAY_POS_Y_OFFSET)/16), iCellX = int((point.x-DISPLAY_POS_X_OFFSET)/16);
-// 
-// 	for (NSInteger i = 0; i < unpassCount; i+= 2) {
-// 		NSNumber *cellX = (NSNumber*)[unpass objectAtIndex:i];
-// 		NSNumber *cellY = (NSNumber*)[unpass objectAtIndex:i+1];
-// 
-// 		CGPoint pos;
-// 		pos.x = (IsUnpassNeedTurn() ? (-[cellX charValue]) : [cellX charValue]) * 16 + point.x;
-// 		pos.y = [cellY charValue] * 16 + 8 + point.y;
-// 
-// 
-// 		m_vUnpassRect.push_back(CGRectMake(pos.x, pos.y, 16, 16));
-// 	}
+	vector<int>* unpass = m_pkAniGroup->getUnpassPoint();
+	int unpassCount = unpass->size();
+	if (unpass == nil || unpassCount % 2 != 0) {
+		m_vUnpassRect.clear();
+
+		m_vUnpassRect.push_back(CGRectMake(point.x-4, point.y-16, 20, 16));
+
+		return;
+	}
+
+	//int iCellY = int((point.y-DISPLAY_POS_Y_OFFSET)/16), iCellX = int((point.x-DISPLAY_POS_X_OFFSET)/16);
+
+	for (int i = 0; i < unpassCount; i+= 2) {
+		int cellX = unpass->at(i);
+		int cellY = unpass->at(i+1);
+
+		CGPoint pos;
+		pos.x = (IsUnpassNeedTurn() ? (-cellX) : cellX) * 16 + point.x;
+		pos.y = cellY * 16 + 8 + point.y;
+
+
+		m_vUnpassRect.push_back(CGRectMake(pos.x, pos.y, 16, 16));
+	}
 }
 
 bool NDNpc::IsUnpassNeedTurn()
@@ -675,106 +679,106 @@ bool NDNpc::IsPointInside(CGPoint point)
 
 bool NDNpc::getNearestPoint(CGPoint srcPoint, CGPoint& dstPoint)
 {
-// 	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
-// 	if (!scene) return false;
-// 	NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
-// 	if (!layer) return false;
-// 	NDMapData* mapdata = layer->GetMapData();
-// 	if (!mapdata) return false;
-//	
-// 	int resX = 0, resY = 0;
-// 	
-// 	int srcY = int((srcPoint.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), srcX = int((srcPoint.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
-// 	
-// 	int maxDis = mapdata->getColumns()*mapdata->getColumns() + mapdata->getRows()*mapdata->getRows();
-// 	
-// 	int nArrayX[4] = {0, -1, 0, 1};
-// 	int nArrayY[4] = {1, 0, -1, 0};
-// 	
-// 	if (m_pkAniGroup != nil && m_pkAniGroup->getUnpassPoint() != nil)
-// 	{
-// 		vector<int>* unpass = m_pkAniGroup->getUnpassPoint();
-// 		int unpassCount = unpass->size();
-// 
-// 		for (int i = 0; i < unpassCount; i+= 2) {
-// 			int *cellX = (int*)unpass->at(i);
-// 			int *cellY = (int*)unpass->at(i + 1);
-// 
-// 			int x, y;
-// 
-// 			x = m_nCol + (IsUnpassNeedTurn() ? (-[cellX charValue]) : [cellX charValue]);
-// 			y = m_nRow + [cellY charValue];
-// 
-// 			int newX, newY;
-// 
-// 			for(int i = 0; i < 4; ++i)
-// 			{
-// 				newX = x + nArrayX[i];
-// 				newY = y + nArrayY[i];
-// 				if(newX < 0)
-// 					continue;
-// 				if(newX < 0)
-// 					continue;
-// 				if(newX > int([mapdata columns]))
-// 					continue;
-// 				if(newY > int([mapdata rows]))
-// 					continue;
-// 
-// 				if (![mapdata canPassByRow:newY andColumn:newX])
-// 					continue;
-// 
-// 				int cacl = (newX-srcX) * (newX-srcX) + (newY-srcY) * (newY-srcY);
-// 
-// 				if (cacl < maxDis)
-// 				{
-// 					maxDis = cacl;
-// 
-// 					resX = newX;
-// 
-// 					resY = newY;
-// 				}
-// 			}	
-// 		}
-// 	}
-// 	else 
-// 	{
-// 
-// 		for(int i = 0; i < 4; ++i)
-// 		{
-// 			int newX = col + nArrayX[i];
-// 			int newY = row + nArrayY[i];
-// 			if(newX < 0)
-// 				continue;
-// 			if(newX < 0)
-// 				continue;
-// 			if(newX > int([mapdata columns]))
-// 				continue;
-// 			if(newY > int([mapdata rows]))
-// 				continue;
-// 			
-// 			if (![mapdata canPassByRow:newY andColumn:newX])
-// 				continue;
-// 			
-// 			int cacl = (newX-srcX) * (newX-srcX) + (newY-srcY) * (newY-srcY);
-// 			
-// 			if (cacl < maxDis)
-// 			{
-// 				maxDis = cacl;
-// 				
-// 				resX = newX;
-// 				
-// 				resY = newY;
-// 			}
-// 		}	
-// 	}
-// 
-// 	if (resX == 0 && resY == 0)
-// 	{
-// 		resX = this->GetPosition().x;
-// 		resY = this->GetPosition().y;
-// 	}
-// 	
-// 	dstPoint = CGPointMake(resX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, resY*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET);
+	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
+	if (!scene) return false;
+	NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
+	if (!layer) return false;
+	NDMapData* mapdata = layer->GetMapData();
+	if (!mapdata) return false;
+	
+	int resX = 0, resY = 0;
+	
+	int srcY = int((srcPoint.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), srcX = int((srcPoint.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
+	
+	int maxDis = mapdata->getColumns()*mapdata->getColumns() + mapdata->getRows()*mapdata->getRows();
+	
+	int nArrayX[4] = {0, -1, 0, 1};
+	int nArrayY[4] = {1, 0, -1, 0};
+	
+	if (m_pkAniGroup != nil && m_pkAniGroup->getUnpassPoint() != nil)
+	{
+		vector<int>* unpass = m_pkAniGroup->getUnpassPoint();
+		int unpassCount = unpass->size();
+
+		for (int i = 0; i < unpassCount; i+= 2) {
+			int cellX = unpass->at(i);
+			int cellY = unpass->at(i + 1);
+
+			int x, y;
+
+			x = m_nCol + (IsUnpassNeedTurn() ? (-cellX) : cellX);
+			y = m_nRow + cellY;
+
+			int newX, newY;
+
+			for(int i = 0; i < 4; ++i)
+			{
+				newX = x + nArrayX[i];
+				newY = y + nArrayY[i];
+				if(newX < 0)
+					continue;
+				if(newX < 0)
+					continue;
+				if(newX > int(mapdata->getColumns()))
+					continue;
+				if(newY > int(mapdata->getRows()))
+					continue;
+
+				if (!mapdata->canPassByRow(newY, newX))
+					continue;
+
+				int cacl = (newX-srcX) * (newX-srcX) + (newY-srcY) * (newY-srcY);
+
+				if (cacl < maxDis)
+				{
+					maxDis = cacl;
+
+					resX = newX;
+
+					resY = newY;
+				}
+			}	
+		}
+	}
+	else 
+	{
+
+		for(int i = 0; i < 4; ++i)
+		{
+			int newX = m_nCol + nArrayX[i];
+			int newY = m_nRow + nArrayY[i];
+			if(newX < 0)
+				continue;
+			if(newX < 0)
+				continue;
+			if(newX > int(mapdata->getColumns()))
+				continue;
+			if(newY > int(mapdata->getRows()))
+				continue;
+			
+			if (!mapdata->canPassByRow(newY, newX))
+				continue;
+			
+			int cacl = (newX-srcX) * (newX-srcX) + (newY-srcY) * (newY-srcY);
+			
+			if (cacl < maxDis)
+			{
+				maxDis = cacl;
+				
+				resX = newX;
+				
+				resY = newY;
+			}
+		}	
+	}
+
+	if (resX == 0 && resY == 0)
+	{
+		resX = this->GetPosition().x;
+		resY = this->GetPosition().y;
+	}
+	
+	dstPoint = CGPointMake(resX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, resY*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET);
 
 	return true;
 }

@@ -21,6 +21,7 @@
 
 #include "NDFrame.h"
 #include "define.h"
+#include "NDConstant.h"
 
 class NDBaseFighter;
 
@@ -177,13 +178,15 @@ public:
 //		返回值：地图坐标
 	CGPoint GetPosition();
 
-// 		int GetCol() {
-// 			return (this->m_position.x - DISPLAY_POS_X_OFFSET) / 32.0f;
-// 		}
-// 		
-// 		int GetRow() {
-// 			return (this->m_position.y - DISPLAY_POS_Y_OFFSET) / 32.0f;
-// 		}
+	int GetCol()
+	{
+		return 0;//(m_kPosition.x - DISPLAY_POS_X_OFFSET) / 32.0f;	反向调用 郭浩
+	}
+	
+	int GetRow()
+	{
+		return 0;//(m_kPosition.y - DISPLAY_POS_Y_OFFSET) / 32.0f; 反向调用 郭浩
+	}
 
 	int GetCurFrameIndex();
 
@@ -471,6 +474,7 @@ protected:
 	virtual void OnMoveEnd();
 	virtual void OnMoving(bool bLastPos);
 	void SetSprite(NDPicture* pic);
+	void reloadAni(const char* pszSprFile);
 
 protected:
 

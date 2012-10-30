@@ -2190,11 +2190,11 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 	lable[0]->SetFrameRect(CGRectMake(newX+1*fScale, newY, fontSize.width, fontSize.height));
 	lable[1]->SetFrameRect(CGRectMake(newX, newY, fontSize.width, fontSize.height));
 	lable[1]->SetVisible(false);
-	if(m_nQuality>-1){
-		ccColor4B cColor4 = ScriptMgrObj.excuteLuaFuncRetColor4("GetColor", "Item",m_nQuality);
-		lable[0]->SetFontColor(cColor4);
-		//lable[1]->SetFontColor(cColor4);
-	}
+// 	if(m_nQuality>-1){
+// 		ccColor4B cColor4 = ScriptMgrObj.excuteLuaFuncRetColor4("GetColor", "Item",m_nQuality);
+// 		lable[0]->SetFontColor(cColor4);
+// 		//lable[1]->SetFontColor(cColor4);
+// 	}
 
 }
 
