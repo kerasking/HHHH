@@ -222,7 +222,8 @@ public:
 	virtual void RunBattleSubAnimation(Fighter* pkFighter);
 	virtual bool DrawSubAnimation(NDSubAniGroup& kSag);
 	virtual void SetNormalAniGroup(int nLookface);
-	//		
+
+	virtual void SetWeaponImage(int weapon_lookface);
 //		函数：SetHairImage
 //		作用：设置头发图片
 //		参数：imageFile图片文件

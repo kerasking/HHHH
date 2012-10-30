@@ -36,18 +36,19 @@
 //#include "CCVideoPlayer.h"
 
 namespace NDEngine {
+
     void PlayVideo(const char* videofilepath,bool bSkip)
     {
-#if 0   tangziqin 暂时注释
-        if(!videofilepath || 0 == strlen(videofilepath))
+     #if 0
+   if(!videofilepath || 0 == strlen(videofilepath))
         {
             
             return;
         }
         
         
-        NSString *path = [[NSString alloc] initWithUTF8String: NDPath::GetSMVideoPath(videofilepath)];
-        NDLog("%@",path);
+        string strPath = [[NSString alloc] initWithUTF8String: NDPath::GetSMVideoPath(videofilepath)];
+        NDLog("%s", strPath.c_str());
         
         //** chh 2012-07-18 未加入该类 **//
         
@@ -59,37 +60,32 @@ namespace NDEngine {
         {
             [CCVideoPlayer setNoSkip:YES];
         }
-#endif 
+#endif
          
     }
     
     
-    void SysChat(const char* text)
-    {
-       #if 0
- if(!text || 0 == strlen(text))
-        {
-            return;
-        }
-        
-        Chat::DefaultChat()->AddMessage(ChatTypeSystem,text);
-#endif
+	void SysChat(const char* text)
+	{
+#if 0
+		if(!text || 0 == strlen(text))
+		{
+			return;
+		}
 
-    }
+		Chat::DefaultChat()->AddMessage(ChatTypeSystem,text);
+#endif
+	}
     
     
 	void QuitGame()
 	{
-		#if 0
-quitGame();
-#endif
-		//ScriptGameDataObj.DelAllData();
+		quitGame();
 	}
 	
 	void CreatePlayer(int lookface, int x, int y, int userid, std::string name)
 	{
-		#if 0
-//NDLog("CreatePlayer:%@", [NSString stringWithUTF8String:name.c_str()]);
+		NDLog("CreatePlayer:%s", name.c_str());
 		NDPlayer::pugeHero();
 		NDPlayer& player = NDPlayer::defaultHero(lookface, true);
 		player.InitRoleLookFace(lookface);
@@ -97,42 +93,35 @@ quitGame();
 		player.stopMoving();
 		player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
 		player.SetServerPositon(x, y);
-		player.m_id = userid;
-		player.m_name = name;
-#endif
+		player.m_nID = userid;
+		player.m_strName = name;
 	}
 	void ReloadPlayer(int lookface)
 	{
-		#if 0
-NDLog("ReloadPlayer");
+		NDLog("ReloadPlayer");
 		NDPlayer& player = NDPlayer::defaultHero();
 		player.ReLoadLookface(lookface);
-#endif
 	}
     
 	//++Guosen 2012.7.13
 	//创建玩家附加骑乘状态和坐骑类型
 	void CreatePlayerWithMount(int lookface, int x, int y, int userid, std::string name, int nRideStatus=0, int nMountType=0 )
 	{
-		#if 0
-NDLog("CreatePlayer:%@", [NSString stringWithUTF8String:name.c_str()]);
+		NDLog("CreatePlayer:%s", name.c_str());
 		NDPlayer::pugeHero();
 		NDPlayer& player = NDPlayer::defaultHero(lookface, true);
 		player.ChangeModelWithMount( nRideStatus, nMountType );
 		player.stopMoving();
 		player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
 		player.SetServerPositon(x, y);
-		player.m_id = userid;
-		player.m_name = name;
-#endif
+		player.m_nID = userid;
+		player.m_strName = name;
 	}
 	//玩家骑宠
 	void PlayerRideMount( int nRideStatus, int nMountType )
 	{
-		#if 0
-NDPlayer& player = NDPlayer::defaultHero();
+		NDPlayer& player = NDPlayer::defaultHero();
 		player.ChangeModelWithMount( nRideStatus, nMountType );
-#endif
 	}
     
 	//++
@@ -147,134 +136,115 @@ NDPlayer& player = NDPlayer::defaultHero();
 	//++
     
     //设置玩家名称颜色
-    void SetPlayerNameColorByQuality(int nQuality){
-		 #if 0
-NDPlayer& player = NDPlayer::defaultHero();
-        player.m_nQuality = nQuality;
-#endif
+    void SetPlayerNameColorByQuality(int nQuality)
+	{
+		NDPlayer& player = NDPlayer::defaultHero();
+		player.m_nQuality = nQuality;
     }
     
-	void SetRidePet(int petLookface,int stand_action,int run_action,int acc)
+	void SetRidePet(int petLookface, int stand_action, int run_action, int acc)
 	{
-		//NDPlayer& player = NDPlayer::defaultHero();
-		//player.SetRidePet(petLookface,stand_action,run_action,acc);
+		NDPlayer& player = NDPlayer::defaultHero();
+		player.SetRidePet(petLookface,stand_action,run_action,acc);
 	}
 	void SetPlayerWeapon(int weapon_id)
 	{
-		//NDPlayer& player = NDPlayer::defaultHero();
-		//player.SetWeaponImage(weapon_id);
+		NDPlayer& player = NDPlayer::defaultHero();
+		player.SetWeaponImage(weapon_id);
 	}
 	void SetPlayerAnimation(int nAnimationIndex)
 	{
-		//NDPlayer& player = NDPlayer::defaultHero();
-		//player.SetCurrentAnimation(nAnimationIndex, player.IsReverse());
+		NDPlayer& player = NDPlayer::defaultHero();
+		player.SetCurrentAnimation(nAnimationIndex, player.IsReverse());
 	}
 	void SetPlayerState(int nState)
 	{
-		//NDPlayer& player = NDPlayer::defaultHero();
-		//player.SetState(nState);
+		NDPlayer& player = NDPlayer::defaultHero();
+		player.SetState(nState);
 	}
 	
 	unsigned long GetPlayerId()
 	{
-		//return NDPlayer::defaultHero().m_id;
-		return 1;
+		return NDPlayer::defaultHero().m_nID;
 	}
 	
 	void PlayerStopMove()
 	{
-		//NDPlayer::defaultHero().stopMoving();
+		NDPlayer::defaultHero().stopMoving();
 	}
 	
 	bool RoleAddSMEffect(int nRoleId, std::string strEffectPath, int nSMEffectAlignment, int nDrawOrder)
 	{
-		#if 0
-NDManualRole* role		= NDMapMgrObj.GetManualRole(nRoleId);
+		NDManualRole* role		= NDMapMgrObj.GetManualRole(nRoleId);
 		if (!role)
 		{
 			return false;
 		}
 		return role->AddSMEffect(strEffectPath, nSMEffectAlignment, nDrawOrder);
-#endif
-		return false;
 	}
 	bool RoleRemoveSMEffect(int nRoleId, std::string strEffectPath)
 	{
-		#if 0
-NDManualRole* role		= NDMapMgrObj.GetManualRole(nRoleId);
+		NDManualRole* role		= NDMapMgrObj.GetManualRole(nRoleId);
 		if (!role)
 		{
 			return false;
 		}
 		return role->RemoveSMEffect(strEffectPath);
-#endif
-		return false;
-
 	}
 	unsigned long GetMapId()
 	{
-		//return NDMapMgrObj.GetMotherMapID();
-		return 0;
+		return NDMapMgrObj.GetMotherMapID();
 	}
 	int GetMapInstanceId()
 	{
-        #if 0
-int a  =  NDMapMgrObj.m_mapID ; 
-		if(NDMapMgrObj.m_mapID/100000000>0)
+		int a = NDMapMgrObj.m_nMapID ; 
+		if(NDMapMgrObj.m_nMapID/100000000 > 0)
 		{
 			return NDMapMgrObj.GetMotherMapID();
 		}
-#endif
-		return 0;
 	}
 	
 	int GetCurrentMonsterRound()
 	{
-		//return NDMapMgrObj.GetCurrentMonsterRound();
-		return 0;
-
+		return NDMapMgrObj.GetCurrentMonsterRound();
 	}
 	
 	int GetPlayerLookface()
 	{
-		//return NDPlayer::defaultHero().GetLookface();
-		return 1;
+		return NDPlayer::defaultHero().GetLookface();
 	}
 	int GetPlayerPetLookface()
 	{
-		//return NDPlayer::defaultHero().GetPetLookface();
-		return 1;
+		return NDPlayer::defaultHero().GetPetLookface();
 	}
 	int GetPlayerPetStandAction()
 	{
-		//return NDPlayer::defaultHero().GetPetStandAction();
-		return 1;
+		return NDPlayer::defaultHero().GetPetStandAction();
 	}
 	int GetPlayerPetWalkAction()
 	{
-		//return NDPlayer::defaultHero().GetPetWalkAction();
-		return 1;
+		return NDPlayer::defaultHero().GetPetWalkAction();
 	}
 	
 	int	GetItemCount(int nItemType)
 	{
 		int count = 0;
-		#if 0
-VEC_ITEM& vec_item = ItemMgrObj.GetPlayerBagItems();
+		VEC_ITEM& vec_item = ItemMgrObj.GetPlayerBagItems();
 		for_vec(vec_item, VEC_ITEM_IT)
 		{
 			Item *item = (*it);
-			if (item->iItemType == nItemType) {
-				if (item->isEquip()) {
+			if (item->m_nItemType == nItemType)
+			{
+				if (item->isEquip()) 
+				{
 					count++;
-				} else {
-					count += item->iAmount;
+				} 
+				else 
+				{
+					count += item->m_nAmount;
 				}
 			}
-			
 		}
-#endif
-		
 		return count;
 	}
 	
@@ -285,15 +255,15 @@ VEC_ITEM& vec_item = ItemMgrObj.GetPlayerBagItems();
 	}
     void BackCity()
 	{
-        #if 0
-int nMapId = NDMapMgrObj.getMpid();
+	#if 0
+	int nMapId = NDMapMgrObj.getMpid();
 		NDMapMgrObj.WorldMapSwitch(nMapId);
 #endif
 	}
 	
 	void NavigateToNpc(int nNpcId)
 	{
-		//NDMapMgrObj.NavigateToNpc(nNpcId);
+	//	NDMapMgrObj.NavigateToNpc(nNpcId);
 	}
 	
 	
@@ -305,18 +275,17 @@ int nMapId = NDMapMgrObj.getMpid();
 	
 	const char* GetSMImgPath(const char* name)
 	{
-		#if 0
-if (!name)
+
+		if (!name)
 		{
 			return "";
 		}
-		
+
 		std::string str = "Res00/";
 		str += name;
-		
+
 		return NDPath::GetImgPath(str.c_str()).c_str();
-#endif
-		return "";
+
 	}
 	const char* GetImgResPath(const char* name)
 	{
@@ -357,7 +326,7 @@ if (!name)
 		{
 			return NULL;
 		}
-		NDMapLayer* layer = NULL; /*NDMapMgrObj.getMapLayerOfScene(scene);*/
+		NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
 		if(!layer)
 		{
 			return NULL;
@@ -368,35 +337,27 @@ if (!name)
 	
 	int GetSystemSetN(const char* key,int default_value)
 	{
-		//return SystemSetMgrObj.GetNumber(key,default_value);
-		return 1;
-
+		return SystemSetMgrObj.GetNumber(key,default_value);
 	}
 	bool GetSystemSetB(const char* key,bool default_value)
 	{
-		//return SystemSetMgrObj.GetBoolean(key,default_value);
-		return 1;
-
+		return SystemSetMgrObj.GetBoolean(key,default_value);
 	}
 	const char* GetSystemSetS(const char* key,const char* default_value)
 	{
-		//return SystemSetMgrObj.GetString(key,default_value);
-		return NULL;
+		return SystemSetMgrObj.GetString(key,default_value);
 	}
 	bool SetSystemSetN(const char* key,int value)
 	{
-		//return SystemSetMgrObj.Set(key,value);
-				return 1;
+		return SystemSetMgrObj.Set(key,value);
 	}
 	bool SetSystemSetB(const char* key,bool value)
 	{
-		//return SystemSetMgrObj.Set(key,value);
-				return 1;
+		return SystemSetMgrObj.Set(key,value);
 	}
 	bool SetSystemSetS(const char* key,const char* value)
 	{
-		//return SystemSetMgrObj.Set(key,value);
-				return 1;
+		return SystemSetMgrObj.Set(key,value);
 	}
 	void ShowRoleName(bool isShow)
 	{
@@ -417,14 +378,11 @@ if (!name)
 	
 	void CloseBattle()
 	{
-		#if 0
-Battle* battle=BattleMgrObj.GetBattle();
+		Battle* battle=BattleMgrObj.GetBattle();
 		if(battle)
 		{
 			battle->FinishBattle();
 		}
-#endif
-
 	}
     
     void SetSceneMusicNew(int idMusic)
@@ -487,15 +445,14 @@ SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
         //SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
 	}
 	
-    void WorldMapGoto(int nMapId, LuaObject tFilter)
+	void WorldMapGoto(int nMapId, LuaObject tFilter)
 	{
-		#if 0
-NDScene* scene	= NDDirector::DefaultDirector()->GetRunningScene();
+		NDScene* scene	= NDDirector::DefaultDirector()->GetRunningScene();
 		if (!scene)
 		{
 			return;
 		}
-		
+
 		WorldMapLayer* world	= NULL;
 		NDNode* node			= scene->GetChild(TAG_WORLD_MAP);
 		if (node && node->IsKindOfClass(RUNTIME_CLASS(WorldMapLayer)))
@@ -508,7 +465,7 @@ NDScene* scene	= NDDirector::DefaultDirector()->GetRunningScene();
 			world->Initialization(GetMapId());
 			scene->AddChild(world);
 		}
-		
+
 		if (tFilter.IsTable())
 		{
 			ID_VEC vId;
@@ -526,20 +483,18 @@ NDScene* scene	= NDDirector::DefaultDirector()->GetRunningScene();
 			}
 			world->SetFilter(vId);
 		}
-		
+
 		world->Goto(nMapId);
-#endif
 	}
     
-    void WorldMap(int nMapId, LuaObject tFilter)
+	void WorldMap(int nMapId, LuaObject tFilter)
 	{
-	#if 0
-	NDScene* scene	= NDDirector::DefaultDirector()->GetRunningScene();
+		NDScene* scene	= NDDirector::DefaultDirector()->GetRunningScene();
 		if (!scene)
 		{
 			return;
 		}
-		
+
 		WorldMapLayer* world	= NULL;
 		NDNode* node			= scene->GetChild(TAG_WORLD_MAP);
 		if (node && node->IsKindOfClass(RUNTIME_CLASS(WorldMapLayer)))
@@ -552,7 +507,7 @@ NDScene* scene	= NDDirector::DefaultDirector()->GetRunningScene();
 			world->Initialization(GetMapId());
 			scene->AddChild(world);
 		}
-		
+
 		if (tFilter.IsTable())
 		{
 			ID_VEC vId;
@@ -570,19 +525,15 @@ NDScene* scene	= NDDirector::DefaultDirector()->GetRunningScene();
 			}
 			world->SetFilter(vId);
 		}
-		
+
 		world->ShowRoleAtPlace(nMapId);
-#endif
 	}
-    
+
     bool SwichKeyToServer(const char* pszIp, int nPort, const char* pszAccountName,const char* pszPwd, const char* pszServerName)
     {
-        #if 0
-NDDataTransThread::DefaultThread()->Stop();
-        NDDataTransThread::ResetDefaultThread();
-        return NDBeforeGameMgrObj.SwichKeyToServer(pszIp,nPort,pszAccountName,pszPwd,pszServerName);
-#endif
-		return false;
+		NDDataTransThread::DefaultThread()->Stop();
+		NDDataTransThread::ResetDefaultThread();
+		return NDBeforeGameMgrObj.SwichKeyToServer(pszIp,nPort,pszAccountName,pszPwd,pszServerName);
     }
     bool doNDSdkLogin()
     {
@@ -654,37 +605,35 @@ int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
     
     void sendMsgConnect(const char* pszIp, int nPort, int idAccount)
     {
-        #if 0
-NDDataTransThread::DefaultThread()->Stop();
-        NDDataTransThread::ResetDefaultThread();
-        NDDataTransThread::DefaultThread()->Start(pszIp, nPort);
-        if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
-        {
-            return;
-        }
-        NDBeforeGameMgrObj.sendMsgConnect(idAccount);
-#endif
+		NDDataTransThread::DefaultThread()->Stop();
+		NDDataTransThread::ResetDefaultThread();
+		NDDataTransThread::DefaultThread()->Start(pszIp, nPort);
+		if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
+		{
+			return;
+		}
+		NDBeforeGameMgrObj.sendMsgConnect(idAccount);
     }
     
     void sendMsgCreateTempCredential()
     {
-        #if 0
-int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
-        if(idAccount <= 0)
-            return;
-        NDTransData data(_MSG_CREATE_TEMP_CREDENTIAL);
-        
-        data << idAccount;
-        NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
+	#if 0
+	int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
+		if(idAccount <= 0)
+			return;
+		NDTransData data(_MSG_CREATE_TEMP_CREDENTIAL);
+
+		data << idAccount;
+		NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
 #endif
     }
     ///////////////////////////////////////////////
     std::string SimpleDecode(const char* pszPwd)
     {
-       #if 0
- unsigned char pszDest[1024] = {0x00};
-        simpleDecode((const unsigned char*)pszPwd, pszDest);
-        return (char*)pszDest;
+		#if 0
+unsigned char pszDest[1024] = {0x00};
+		simpleDecode((const unsigned char*)pszPwd, pszDest);
+		return (char*)pszDest;
 #endif
 		return "";
     }

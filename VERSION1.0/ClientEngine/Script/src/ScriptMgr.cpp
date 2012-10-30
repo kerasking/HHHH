@@ -86,8 +86,7 @@ const char* NDEngine::GetScriptPath(const char* fileName)
 */
 ScriptMgr::ScriptMgr()
 {
-#if 0    tzq
-
+#if 0
 	char filename[256];
 	memset(filename, 0, sizeof(filename));
 	snprintf(filename, sizeof(filename), "%s/log%ld.txt", 
@@ -95,7 +94,7 @@ ScriptMgr::ScriptMgr()
 			 time(NULL));
 	m_fDebugOutPut = fopen(filename, "a");
     printf(filename);
-#endif
+#endif 
 }
 
 ScriptMgr::~ScriptMgr()
@@ -121,7 +120,6 @@ void ScriptMgr::DebugOutPut(const char* str)
 
 void ScriptMgr::DebugOutPut(const char* fmt, ...)
 {
-#if 0  tzq
 	if (!fmt || !m_fDebugOutPut)
 	{
 		return;
@@ -131,8 +129,7 @@ void ScriptMgr::DebugOutPut(const char* fmt, ...)
 	va_start(argumentList, fmt);
 	::vsprintf( buffer, fmt, argumentList);
 	va_end(argumentList);
-    NSLog("%@", [NSString stringWithUTF8String:buffer]);
-#endif
+    NDLog(buffer);
 }
 
 //using namespace LuaPlus;
@@ -154,7 +151,6 @@ void ScriptMgr::update()
 
 void ScriptMgr::Load()
 {
-#if 0
 	LoadRegClassFuncs();
 	
 	ScriptCommonLoad();
@@ -176,27 +172,13 @@ void ScriptMgr::Load()
 	ScriptGameLogicLoad();
 	
 	ScriptDramaLoad();
-#endif 
-	
-	//LuaStateMgrObj.SetExceptOutput(&luaExceptLoadOutPut);
-	LoadRegClassFuncs();
 
-	if (0 != LuaStateMgrObj.GetState()->DoFile(NDPath::GetScriptPath("entry.lua").c_str()));
-	{
-		return;
-	}
-
-	LuaStateMgrObj.SetExceptOutput(&luaExceptRunTimeOutPut);
-
-#if 0
 #ifndef UPDATE_RES 
     LuaStateMgrObj.GetState()->DoFile(NDPath::GetScriptPath("entry.lua").c_str());
 #else
 	this->LoadLuaFile(NDPath::GetScriptPath("entry.lua"));
 #endif
-#endif 
-    
-
+	LuaStateMgrObj.SetExceptOutput(&luaExceptRunTimeOutPut);
 }
 ///////
 void ScriptMgr::LoadLuaFile(const char* pszluaFile)

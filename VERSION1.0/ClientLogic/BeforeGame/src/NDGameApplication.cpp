@@ -126,52 +126,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 	pkDirector->Initialization();
 	pkDirector->RunScene(CSMLoginScene::Scene());
-	//ScriptMgrObj.Load();
-
-	//ScriptNetMsg* pkNetMsg = new ScriptNetMsg;
-	//ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
-
-
-
-
-#if 0
-	NDScriptGameData* pkData = new NDScriptGameData;
-	//ScriptGlobalEvent* pkGlobalEvent = new ScriptGlobalEvent;
-	//ScriptObjectCommon* pkCommon = new ScriptObjectCommon;
-	ScriptObjectUI* pkScriptUI = new ScriptObjectUI;
-	ScriptTimerMgr* pkTimerManager = new ScriptTimerMgr;
-	//ScriptObjectDrama* pkDrama = new ScriptObjectDrama;
-
-	pkData->Load();
-	pkTimerManager->OnLoad();
-	//pkNetMsg->OnLoad();
-	ScriptGameLogicLoad();
-	ScriptDramaLoad();
-	//pkLogic->OnLoad();
-	//pkDrama->OnLoad();
-	//pkCommon->OnLoad();
-	ScriptCommonLoad();
-	ScriptGlobalEvent::Load();
-	//pkGlobalEvent->OnLoad();
-	pkScriptUI->OnLoad();
-	kScriptManager.Load();
-	ScriptNetMsg::Load();
-#endif
-	//ScriptTimerMgrObj.Load();
-	//ScriptGameLogicLoad();
-	//ScriptDramaLoad();
-
-	ScriptNetMsg::Load();
-	ScriptCommonLoad();
-	ScriptGlobalEvent::Load();
-	ScriptUiLoad();
 	ScriptMgrObj.Load();
-
-
-
-	//CC_SAFE_DELETE(pkNetMsg);
-
-	//ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
 	ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
 
 	//NDPlayer::pugeHero();

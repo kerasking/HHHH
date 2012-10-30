@@ -195,8 +195,7 @@ void ScriptTaskLoad()
 
 int ScriptGetTaskState(int nTaskId)
 {
-	//tangziqin “¿¿µzd ndplayer
-	int nRoleId = 0;/*NDPlayer::defaultHero().m_id;*/
+	int nRoleId = NDPlayer::defaultHero().m_nID;
 	unsigned long ulVal = ScriptGameDataObj.GetData<unsigned long long>(eScriptDataRole, nRoleId, eRoleDataTask, nTaskId, 2);
 	return ulVal;
 }

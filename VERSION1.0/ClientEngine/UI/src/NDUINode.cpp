@@ -128,6 +128,11 @@ namespace NDEngine
 		}
 		*/
 	}
+
+	void NDUINode::SetBoundScale(int nScale)
+	{
+		m_fBoundScale = (float)nScale/100;
+	}
 	
 	bool NDUINode::IsVisibled()
 	{

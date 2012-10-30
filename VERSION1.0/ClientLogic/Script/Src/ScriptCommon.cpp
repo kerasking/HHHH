@@ -86,7 +86,6 @@ int PicMemoryUsingLogOut(bool bNotPrintLog)
 	{
 		NDLog("\n============NDPicturePool Memory Report==============\n");
 	}
-	//guohao NDPicture
 	//nSize += NDPicturePool::DefaultPool()->Statistics(bNotPrintLog);
 	if (!bNotPrintLog)
 	{
@@ -103,12 +102,12 @@ int PicMemoryUsingLogOut(bool bNotPrintLog)
 void ScriptCommonLoad()
 {
 	ETLUAFUNC("LuaLogInfo", LuaLogInfo);
-	//ETLUAFUNC("LuaLogError", LuaLogError);
+	ETLUAFUNC("LuaLogError", LuaLogError);
 	ETLUAFUNC("DoFile", DoFile);
-	//ETCFUNC("LeftShift", LeftShift);
-	//ETCFUNC("RightShift", RightShift);
-	//ETCFUNC("BitwiseAnd", BitwiseAnd);
-	//ETCFUNC("PicMemoryUsingLogOut", PicMemoryUsingLogOut);
+	ETCFUNC("LeftShift", LeftShift);
+	ETCFUNC("RightShift", RightShift);
+	ETCFUNC("BitwiseAnd", BitwiseAnd);
+	ETCFUNC("PicMemoryUsingLogOut", PicMemoryUsingLogOut);
 }
 
 }
