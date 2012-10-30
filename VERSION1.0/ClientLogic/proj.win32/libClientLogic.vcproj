@@ -199,6 +199,10 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\Common\inc\DirectKey.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Common\inc\GlobalDialog.h"
 					>
 				</File>
@@ -214,6 +218,10 @@
 			<Filter
 				Name="src"
 				>
+				<File
+					RelativePath="..\Common\src\DirectKey.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\Common\src\GlobalDialog.cpp"
 					>

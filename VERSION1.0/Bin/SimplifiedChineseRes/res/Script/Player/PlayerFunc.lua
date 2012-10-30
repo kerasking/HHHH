@@ -16,25 +16,6 @@ function p.GetJob(nPlayerId)
 	return GetRoleBasicDataN(nPlayerId, USER_ATTR.USER_ATTR_PROFESSION);
 end
 
-function p.GetJobDesc(nJob)
-	if not CheckN(nJob) then
-		return "";
-	end
-	
-	if nJob == PROFESSION_TYPE.SWORD then
-		return "剑圣";
-	elseif nJob == PROFESSION_TYPE.CHIVALROUS then
-		return "奇侠";
-	elseif nJob == PROFESSION_TYPE.FIST then
-		return "拳宗";
-	elseif nJob == PROFESSION_TYPE.AXE then
-		return "斧皇";
-	elseif nJob == PROFESSION_TYPE.MAGIC then
-		return "玄灵";
-	end
-	return "";
-end
-
 function p.GetAttrDesc(nPlayerId, nIndex)
 	local strRes	= "";
 	if not CheckN(nPlayerId) or
@@ -73,6 +54,18 @@ function p.GetUserAttr(nPlayerId, nIndex)
 	
 	return GetRoleBasicDataN(nPlayerId, nIndex);
 end
+
+--设置玩家属性
+function p.SetUserAttr(nPlayerId, nIndex, val)
+	if not CheckN(nPlayerId) or
+		not CheckN(nIndex) then
+		return 0;
+	end
+	
+	return SetRoleBasicDataN(nPlayerId, nIndex, val);
+end
+
+
 
 -- 取得体力
 function p.GetStamina(playerId)

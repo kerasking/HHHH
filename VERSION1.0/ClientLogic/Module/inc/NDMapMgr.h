@@ -9,7 +9,7 @@
 #include <string>
 #include <map>
 #include "NDObject.h"
-//#include "GatherPoint.h"
+#include "GatherPoint.h"
 #include "FriendElement.h"
 #include "NDScene.h"
 #include "NDManualRole.h"
@@ -232,9 +232,9 @@ typedef map<int,monster_type_info>			monster_info;
 typedef monster_info::iterator				monster_info_it;
 typedef pair<int, monster_type_info>		monster_info_pair;
 
-//typedef map<int,GatherPoint*>				map_gather_point;
-//typedef map_gather_point::iterator			map_gather_point_it;
-//typedef pair<int, GatherPoint*>				map_gather_point_pair;
+typedef map<int,GatherPoint*>				map_gather_point;
+typedef map_gather_point::iterator			map_gather_point_it;
+typedef pair<int, GatherPoint*>				map_gather_point_pair;
 
 typedef map<int, FriendElement>			MAP_FRIEND_ELEMENT;
 typedef MAP_FRIEND_ELEMENT::iterator		MAP_FRIEND_ELEMENT_IT;
@@ -278,6 +278,7 @@ public:
 	typedef vector<NDNpc*> VEC_NPC;
 	typedef vector<NDMonster*> VEC_MONSTER;
 	//typedef vector<RequsetInfo> VEC_REQUST; ///< ÒÀÀµÌÀ×ÔÇÚµÄGameUIRequest ¹ùºÆ
+	typedef VEC_NPC::iterator vec_npc_it;
 	typedef VEC_MONSTER::iterator vec_monster_it;
 
 	DECLARE_CLASS(NDMapMgr);
@@ -384,6 +385,9 @@ public:
 
 	static bool m_bFirstCreate;
 	static bool m_bVerifyVersion;
+
+	bool isShowName;
+	bool isShowOther;
 
 	map_manualrole m_mapManualRole;
 	monster_info m_mapMonsterInfo;

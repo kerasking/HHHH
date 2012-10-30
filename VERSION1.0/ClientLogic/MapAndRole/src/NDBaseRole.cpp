@@ -278,7 +278,7 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 		}
 	}
 
-//	updateRidePetEffect(); ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+//	updateRidePetEffect(); ///<ÁÙÊ±ÐÔ×¢ÊÍ
 
 // 	if (m_pkEffectRidePetAniGroup)
 // 	{
@@ -506,11 +506,8 @@ void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 	_snprintf(sprFilePath, 256, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(), model_id);
 	Initialization(sprFilePath);
 
-//	if (sex % 2 == SpriteSexMale) 
-	//NSString* aniPath = [NSString stringWithUTF8String:NDPath::GetAnimationPath().c_str()];  ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-//	Initialization([[NSString stringWithFormat:@"%@model_%d.spr",aniPath,model_id] UTF8String] ); ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-//	else 
-//		Initialization(MANUELROLE_HUMAN_FEMALE);
+//  NSString* aniPath = [NSString stringWithUTF8String:NDPath::GetAnimationPath().c_str()];  
+//	Initialization([[NSString stringWithFormat:@"%@model_%d.spr",aniPath,model_id] UTF8String] );
 
 	m_bFaceRight = m_nDirect == 2;
 	//SetFaceImageWithEquipmentId (m_bFaceRight);
@@ -522,7 +519,7 @@ void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 void NDBaseRole::SetEquipment(int equipmentId, int quality)
 {
 	/***
-	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	 * ÁÙÊ±ÐÔ×¢ÊÍ
 	 */
 //	if (equipmentId <= 0 ) 
 //		return;
@@ -814,9 +811,6 @@ void NDBaseRole::SetHairImageWithEquipmentId(int equipmentId)
 {
 	if (equipmentId >= 10000 && equipmentId < 10400)
 	{
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 */
 // 		NSString* hairImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		hairImageName = [NSString stringWithFormat:@"%@%d", hairImageName, equipmentId];
 // 		if (sex % 2 == SpriteSexMale) 
@@ -849,10 +843,6 @@ void NDBaseRole::SetHairImageWithEquipmentId(int equipmentId)
 
 void NDBaseRole::SetFaceImageWithEquipmentId(int equipmentId)
 {
-	/**
-	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	 */
-
 // 	NSString* faceImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 	faceImageName = [NSString stringWithFormat:@"%@skin.png", faceImageName];	
 // 	//faceImageName = [NSString stringWithFormat:@"%@skin@%d.png", faceImageName, skinColor];
@@ -867,10 +857,6 @@ void NDBaseRole::SetExpressionImageWithEquipmentId(int equipmentId)
 {
 	if (equipmentId >= 10400 && equipmentId < 10600)
 	{
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 */
-
 // 		NSString* expressionImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		expressionImageName = [NSString stringWithFormat:@"%@%d.png", expressionImageName, equipmentId];	
 // 		SetExpressionImage([expressionImageName UTF8String]);
@@ -885,17 +871,10 @@ void NDBaseRole::SetCapImageWithEquipmentId(int equipmentId)
 {
 	if (equipmentId >= 10600 && equipmentId < 11200)
 	{
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 * begin
-		 */
+
 // 		NSString* capImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		capImageName = [NSString stringWithFormat:@"%@%d.png", capImageName, equipmentId];	
 // 		SetCapImage([capImageName UTF8String]);
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 * end
-		 */
 
 		char capImageName[256];
 		_snprintf(capImageName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId);
@@ -907,17 +886,10 @@ void NDBaseRole::SetArmorImageWithEquipmentId(int equipmentId)
 {
 	if (equipmentId >= 11200 && equipmentId < 11800)
 	{
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 * begin
-		 */
+
 // 		NSString* armorImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		armorImageName = [NSString stringWithFormat:@"%@%d.png", armorImageName, equipmentId];	
 // 		SetArmorImage([armorImageName UTF8String]);
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 * end
-		 */
 
 		char armorImageName[256];
 		_snprintf(armorImageName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId);
@@ -937,11 +909,6 @@ void NDBaseRole::SetCloakImageWithEquipmentId(int equipmentId)
 	 */
 	if (equipmentId >= 30000 && equipmentId < 40000)
 	{
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 * begin
-		 */
-
 // 		NSString* cloakName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		cloakName = [NSString stringWithFormat:@"%@%d.png", cloakName, equipmentId+7];	
 // 		SetCloakImage([cloakName UTF8String]);
@@ -970,10 +937,6 @@ void NDBaseRole::SetCloakImageWithEquipmentId(int equipmentId)
 // 		NSString* skirtLiftLegName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		skirtLiftLegName = [NSString stringWithFormat:@"%@%d.png", skirtLiftLegName, equipmentId+6];	
 // 		SetSkirtLiftLegImage([skirtLiftLegName UTF8String]);
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 * end
-		 */
 
 		char cloakName[256];
 		_snprintf(cloakName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId+7);

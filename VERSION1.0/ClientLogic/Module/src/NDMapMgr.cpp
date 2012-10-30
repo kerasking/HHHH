@@ -93,6 +93,9 @@ NDMapMgr::NDMapMgr() :
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this, "sim ");
 
 	m_kTimer.SetTimer(this, 1, 0.1);
+
+	isShowName = true;
+	isShowOther = true;
 }
 
 NDMapMgr::~NDMapMgr()

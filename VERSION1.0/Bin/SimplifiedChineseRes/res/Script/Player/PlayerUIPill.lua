@@ -439,7 +439,7 @@ function p.OnPillItemUIEvent(uiNode, uiEventType, param)
 		   local itemName = ItemFunc.GetName(itemtype);
 		   local addValue = 5 * (i + 1)-(j-1) * 5;
 		   useLevel = i;
-		   CommonDlg.ShowNoPrompt("花费"..useEmoney[i].."元宝让角色第"..j.."次服用"..itemName..","..labelText[p.pillType].."+"..addValue, p.OnCommonDlg,true);
+		   CommonDlg.ShowNoPrompt("花费"..useEmoney[i].."金币让角色第"..j.."次服用"..itemName..","..labelText[p.pillType].."+"..addValue, p.OnCommonDlg,true);
 		 end
 	   end
 	 end

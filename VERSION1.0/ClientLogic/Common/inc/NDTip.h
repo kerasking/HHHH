@@ -71,49 +71,41 @@ private:
 };
 
 /////////////////////////////////////////////////////
-/***
-* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-* begin
-*/
-// class TalkBox : public NDUILayer
-// {
-// 	DECLARE_CLASS(TalkBox)
-// public:
-// 	TalkBox();
-// 	
-// 	void addTalkMsg(std::string msg,int sec);
-// 	
-// 	void SetDisPlayPos(CGPoint pos);
-// 	
-// 	void SetFix();
-// 	
-// 	void Initialization(); override
-// 	
-// 	void draw(); override
-// 	
-// 	void SetTriangleAlign(TipTriangleAlign align);
-// 	
-// 	CGSize GetSize();
-// 	
-// private:
-// 	void reset();
-// 	
-// 	LayerTip* newLayerTip();
-// 	
-// private:
-// 	int nextShowY;
-// 	bool isFirstNext;
-// 	enum { spilitWidth=80 };
-// 	long timeForTalkMsg;
-// 	int moveSpeed;
-// 	std::deque<std::string> talkMsgs;
-// 	CGPoint m_pos;
-// 	LayerTip *m_tip[2];
-// 	bool m_bConstant;
-// };
-/***
-* ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-* end
-*/
+class TalkBox : public NDUILayer
+{
+	DECLARE_CLASS(TalkBox)
+public:
+	TalkBox();
+	
+	void addTalkMsg(std::string msg,int sec);
+	
+	void SetDisPlayPos(CGPoint pos);
+	
+	void SetFix();
+	
+	void Initialization(); override
+	
+	void draw(); override
+	
+	void SetTriangleAlign(TipTriangleAlign align);
+	
+	CGSize GetSize();
+	
+private:
+	void reset();
+	
+	LayerTip* newLayerTip();
+	
+private:
+	int nextShowY;
+	bool isFirstNext;
+	enum { spilitWidth=80 };
+	long timeForTalkMsg;
+	int moveSpeed;
+	std::deque<std::string> talkMsgs;
+	CGPoint m_pos;
+	LayerTip *m_tip[2];
+	bool m_bConstant;
+};
 
 #endif // _ND_TIP_H_
