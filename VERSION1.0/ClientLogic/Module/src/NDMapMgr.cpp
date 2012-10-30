@@ -26,6 +26,7 @@
 // #include "NewChatScene.h"			///< 这俩包含需要汤哥和张迪的东西 郭浩
 #include "SMLoginScene.h"
 #include "GlobalDialog.h"
+#include "NDMonster.h"
 
 NS_NDENGINE_BGN
 
@@ -82,13 +83,20 @@ bool GetCharData(char& t, string strValue, string strType)
 	return true;
 }
 
-NDMapMgr::NDMapMgr() :
-		m_nCurrentMonsterBound(0), m_nRoadBlockX(0), m_nRoadBlockY(0), m_nSaveMapID(
-				0), m_nMapID(0), m_nMapDocID(0), m_nCurrentMonsterRound(0)
+NDMapMgr::NDMapMgr():
+m_nCurrentMonsterBound(0),
+m_nRoadBlockX(0),
+m_nRoadBlockY(0),
+m_nSaveMapID(0),
+m_nMapID(0),
+m_nMapDocID(0),
+m_nCurrentMonsterRound(0)
 {
 	NDNetMsgPool& kNetPool = NDNetMsgPoolObj;
 	kNetPool.RegMsg(_MSG_NPCINFO_LIST, this);
 	kNetPool.RegMsg(_MSG_ROOM, this);
+
+	mapType = MAPTYPE_NORMAL;
 
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this, "sim ");
 
@@ -3822,6 +3830,256 @@ NDMonster* NDMapMgr::GetBoss()
 		}
 	}
 	return NULL;
+}
+
+NDManualRole* NDMapMgr::NearestDacoityManualrole( NDManualRole& role, int iDis )
+{
+	int minDist = iDis;
+
+	NDManualRole * resrole = NULL;
+
+	map_manualrole_it it = m_mapManualRole.begin();
+	for (; it != m_mapManualRole.end(); it++)
+	{
+		NDManualRole* manualrole = it->second;
+
+		if (role.m_nID == manualrole->m_nID) continue;
+
+		if (!manualrole->IsInDacoity()) continue;
+
+		if (manualrole->IsInState(USERSTATE_FIGHTING) 
+			|| manualrole->IsInState(USERSTATE_DEAD)
+			|| manualrole->IsInState(USERSTATE_PVE)
+			) 
+		{
+			continue;
+		}
+
+		if ( !(role.IsInState(USERSTATE_BATTLE_POSITIVE) && manualrole->IsInState(USERSTATE_BATTLE_NEGATIVE) ||
+			role.IsInState(USERSTATE_BATTLE_NEGATIVE) && manualrole->IsInState(USERSTATE_BATTLE_POSITIVE))
+			)
+			continue;
+
+		int dis = getDistBetweenRole(manualrole, &role);
+
+		if ( dis <= minDist )
+		{
+			resrole = manualrole;
+			minDist = dis;
+		}
+	}
+
+	return resrole;
+}
+
+NDManualRole* NDMapMgr::NearestBattleFieldManualrole( NDManualRole& role, int iDis )
+{
+	int minDist = iDis;
+
+	NDManualRole * resrole = NULL;
+
+	map_manualrole_it it = m_mapManualRole.begin();
+	for (; it != m_mapManualRole.end(); it++)
+	{
+		NDManualRole* manualrole = it->second;
+
+		if (role.m_nID == manualrole->m_nID) continue;
+
+		if (!manualrole->IsInState(USERSTATE_BATTLEFIELD)) 
+		{
+			continue;
+		}
+
+
+		if (manualrole->IsInState(USERSTATE_BF_WAIT_RELIVE))
+		{
+			continue;
+		}
+
+		if (manualrole->IsInState(USERSTATE_FIGHTING) || manualrole->IsInState(USERSTATE_DEAD)) {
+			continue;
+		}
+
+		if (manualrole->m_eCamp == role.m_eCamp)
+		{
+			continue;
+		}
+
+		int dis = getDistBetweenRole(manualrole, &role);
+
+		if ( dis <= minDist )
+		{
+			resrole = manualrole;
+			minDist = dis;
+		}
+	}
+
+	return resrole;
+}
+
+int NDMapMgr::getDistBetweenRole( NDBaseRole *firstrole, NDBaseRole *secondrole )
+{
+	if (!firstrole || !secondrole)
+	{
+		return FOCUS_JUDGE_DISTANCE;
+	}
+
+
+	int w = (firstrole->GetPosition().x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE - (secondrole->GetPosition().x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE;
+	int h = (firstrole->GetPosition().y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE - (secondrole->GetPosition().y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE;
+
+	return w * w + h * h;
+}
+
+void NDMapMgr::BattleStart()
+{
+	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene));
+	if (scene) 
+	{
+		/***
+		* 等待张迪的 DirectKey
+		* 郭浩
+		*/
+		//DirectKey* dk = ((GameScene*)scene)->GetDirectKey();
+		//if (dk) 
+		//{
+		//	dk->OnButtonUp(NULL);
+		//}
+	}
+
+	NDPlayer::defaultHero().BattleStart();
+}
+
+NDBaseRole* NDMapMgr::GetNextTarget( int iDistance )
+{
+	NDPlayer *player = &NDPlayer::defaultHero();
+
+	NDBaseRole * resrole = NULL;
+
+	if (!player)
+	{
+		return resrole;
+	}
+
+	if (player->m_nTargetIndex >= int(m_vNPC.size()+m_mapManualRole.size()))
+	{
+		player->m_nTargetIndex = 0;
+	}
+
+	if (player->m_nTargetIndex < int(m_vNPC.size()) )
+	{
+		VEC_NPC::iterator it = m_vNPC.begin()+ player->m_nTargetIndex;
+		for (; it != m_vNPC.end(); it++)
+		{
+			player->m_nTargetIndex++;
+			NDNpc* npc = *it;
+
+			if (npc->m_nID == player->GetFocusNpcID() )
+			{
+				continue;
+			}
+
+			int dis = getDistBetweenRole(player, npc);
+			if ( dis < iDistance )
+			{
+				resrole = npc;
+				return resrole;
+			}
+		}
+	}
+
+	int iIndexManuRole = player->m_nTargetIndex - m_vNPC.size();
+
+	if (iIndexManuRole < 0)
+	{
+		iIndexManuRole = 0;
+	}
+
+	if (iIndexManuRole < (int)m_mapManualRole.size())
+	{
+		map_manualrole_it it = m_mapManualRole.begin();
+		for (int i = 0; i < iIndexManuRole; i++)
+		{
+			it++;
+		}
+
+		for (; it != m_mapManualRole.end(); it++)
+		{
+			player->m_nTargetIndex++;
+
+			NDManualRole *otherplayer = it->second;
+
+			if (otherplayer->m_nID == player->m_iFocusManuRoleID )
+			{
+				continue;
+			}
+
+			int dis = getDistBetweenRole(player, otherplayer);
+			if ( dis < iDistance )
+			{
+				resrole = otherplayer;
+				return resrole;
+			}
+		}
+	}
+
+	return resrole;
+}
+
+NDBaseRole* NDMapMgr::GetRoleNearstPlayer( int iDistance )
+{
+	int minDist = iDistance;
+
+	NDPlayer *player = &NDPlayer::defaultHero();
+
+	NDBaseRole * resrole = NULL;
+
+	if (!player)
+	{
+		return resrole;
+	}
+
+	do 
+	{
+		VEC_NPC::iterator it = m_vNPC.begin();
+		for (; it != m_vNPC.end(); it++)
+		{
+			NDNpc *npc = *it;
+			int dis = getDistBetweenRole(player, npc);
+			if ( dis < minDist )
+			{
+				resrole = npc;
+				minDist = dis;
+				player->m_nTargetIndex = 0;
+
+				//npc在附近则返回
+				return resrole;
+			}
+		}
+	} while (0);
+
+	do 
+	{
+		map_manualrole_it it = m_mapManualRole.begin();
+		for (; it != m_mapManualRole.end(); it++)
+		{
+			NDManualRole *otherplayer = it->second;
+
+			if (player->m_nTeamID !=0 && player->m_nTeamID == otherplayer->m_nTeamID)
+			{
+				continue;
+			}
+
+			int dis = getDistBetweenRole(player, otherplayer);
+			if ( dis < minDist )
+			{
+				resrole = otherplayer;
+				minDist = dis;
+			}
+		}
+	} while (0);
+
+	return resrole;
 }
 
 NS_NDENGINE_END

@@ -15,6 +15,7 @@
 #include "NDSubAniGroup.h"
 #include <map>
 //#include "../../TempClass/NDBaseFighter.h"
+#include "../../TempClass/NDBaseFighter.h"
 
 using namespace std;
 using namespace NDEngine;
@@ -34,32 +35,6 @@ enum LOOKFACE_TYPE
 };
 
 class Battle;
-
-typedef struct _FIGHTER_INFO
-{
-	_FIGHTER_INFO()
-	{
-		::memset(this, 0L, sizeof(_FIGHTER_INFO));
-	}
-
-	int idObj;
-	int idType;
-	int idlookface;
-	Byte btBattleTeam;
-	Byte btStations;
-	FIGHTER_TYPE fighterType;
-	BATTLE_GROUP group;
-	int original_life;
-	int original_mana;
-	int nLife;
-	int nLifeMax;
-	int nMana;
-	int nManaMax;
-	int skillId;
-	int atk_type;
-	short level;
-	int nQuality;
-} FIGHTER_INFO;
 
 class FighterStatus
 {
@@ -154,9 +129,11 @@ typedef VEC_FIGHTER_STATUS::iterator VEC_FIGHTER_STATUS_IT;
 int countX(int teamAmount, BATTLE_GROUP group, int team, int pos);
 int countY(int teamAmount, BATTLE_GROUP group, int team, int pos);
 
-class Fighter
+using namespace NDEngine;
+
+class Fighter:public NDBaseFighter
 {
-//	DECLARE_CLASS(Fighter);
+	//DECLARE_CLASS(Fighter);
 
 public:
 	enum FIGHTER_ACTION
@@ -188,8 +165,9 @@ public:
 	};
 
 public:
-	Fighter(const FIGHTER_INFO& fInfo);
+	Fighter();
 	~Fighter();
+
 	int m_nTargetX;
 	int m_nTargetY;
 	LOOKFACE_TYPE m_eLookfaceType;
@@ -430,8 +408,6 @@ public:
 	}
 
 public:
-	FIGHTER_INFO m_kInfo;
-
 	USHORT m_nAttackPoint;
 	USHORT m_nDefencePoint;
 	USHORT m_nDistancePoint;

@@ -247,8 +247,8 @@ typedef struct _tagShopItemInfo
 	_tagShopItemInfo() { memset(this, 0, sizeof(*this)); }
 	_tagShopItemInfo(int itemType, int payType)
 	{
-		this->itemType = itemType;
-		this->payType = payType;
+		itemType = itemType;
+		payType = payType;
 	}
 }ShopItemInfo;
 
@@ -288,6 +288,41 @@ public:
 
 	virtual void Update(unsigned long ulDiff);
 	NDMonster* GetMonster(int nID);
+
+	bool canChangeMap()
+	{
+		return (mapType & MAPTYPE_CHGMAP_DISABLE) == 0;
+	}
+
+	bool canRecord()
+	{
+		return (mapType & MAPTYPE_RECORD_DISABLE) == 0;
+	}
+
+	bool canPk()
+	{
+		return (mapType & MAPTYPE_PK_DISABLE) == 0;
+	}
+
+	bool canBooth()
+	{
+		return (mapType & MAPTYPE_BOOTH_ENABLE) > 0;
+	}
+
+	bool canBattle()
+	{
+		return (mapType & MAPTYPE_BATTLE_DISABLE) == 0;
+	}
+
+	bool canFly()
+	{
+		return false;
+	}
+
+
+	NDManualRole* NearestDacoityManualrole(NDManualRole& role, int iDis);
+	NDManualRole* NearestBattleFieldManualrole(NDManualRole& role, int iDis);
+	int getDistBetweenRole(NDBaseRole *firstrole, NDBaseRole *secondrole);
 
 	virtual bool process( MSGID usMsgID, NDEngine::NDTransData* pkData, int nLength );
 	void processMsgCommonList(NDTransData& kData);
@@ -336,17 +371,22 @@ public:
 	void processDigout(NDTransData& kData);
 	void processDisappear(NDTransData* pkData, int nLength);
 	void processSyndicate(NDTransData& kData);
+	void BattleStart();
 	void BattleEnd(int iResult);
 
 public:
-	//bool Hack_loadSceneByMapDocID(int nMapID) { return loadSceneByMapDocID(nMapID); }; //for debug purpose only.
 
+	bool Hack_loadSceneByMapDocID(int nMapID) { return loadSceneByMapDocID(nMapID); }; //for debug purpose only.
+	NDBaseRole* GetNextTarget(int iDistance);
+	NDBaseRole* GetRoleNearstPlayer(int iDistance);
+	
 public:
 
 	void LoadSceneMonster();
 	void AddManualRole(int nID,NDManualRole* pkRole);
 	NDManualRole* GetManualRole(int nID);
 	NDManualRole* GetManualRole(const char* pszName);
+	map_manualrole& GetManualRoles() { return m_mapManualRole; }
 	void ClearManualRole();
 	void AddAllNPCToMap();
 	NDMonster* GetBoss();
@@ -403,6 +443,10 @@ public:
 	int m_nSaveMapID;
 	int m_nMapID;
 	int m_nMapDocID;
+	int mapType;
+
+	bool isShowName;
+	bool isShowOther;
 
 	CCSize m_kMapSize;
 
