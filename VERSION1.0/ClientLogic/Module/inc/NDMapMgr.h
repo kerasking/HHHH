@@ -426,9 +426,6 @@ public:
 	static bool m_bFirstCreate;
 	static bool m_bVerifyVersion;
 
-	bool isShowName;
-	bool isShowOther;
-
 	map_manualrole m_mapManualRole;
 	monster_info m_mapMonsterInfo;
 	VEC_NPC m_vNPC;
