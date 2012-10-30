@@ -158,6 +158,19 @@ enum
 	KEY_LENGTH = 10, // 礼包序列号长度
 };
 
+enum  
+{
+	_MARRIAGE_APPLY = 1, // 结婚申请
+	_MARRIAGE_AGREE = 2, // 同意结婚
+	_MARRIAGE_REFUSE = 3, // 拒绝结婚
+	_DIVORCE_APPLY = 4, // 离婚申请
+	_DIVORCE_AGREE = 5, // 同意离婚
+	_MARRIAGE_QUARY = 6, // 下达配偶ID
+	_MARRIAGE_MATE_LOGIN = 7, // 配偶上线
+	_MARRIAGE_MATE_ONLINE = 8, // 配偶在线
+	_MARRIAGE_MATE_LOGOUT = 9, // 配偶下线
+};
+
 enum
 {
 	RECHARGE_RETURN_ACT_QUERY			= 0,	// 充值说明
@@ -361,11 +374,12 @@ public:
 	void BattleEnd(int iResult);
 
 public:
+
 	bool Hack_loadSceneByMapDocID(int nMapID) { return loadSceneByMapDocID(nMapID); }; //for debug purpose only.
 	NDBaseRole* GetNextTarget(int iDistance);
 	NDBaseRole* GetRoleNearstPlayer(int iDistance);
-
-protected:
+	
+public:
 
 	void LoadSceneMonster();
 	void AddManualRole(int nID,NDManualRole* pkRole);

@@ -18,7 +18,7 @@
 #include "NDPlayer.h"
 #include "NDUtility.h"
 #include "CCPointExtension.h"
-///< #include "NDMapMgr.h" 临时性注释 郭浩
+#include "NDMapMgr.h"
 #include "GameScene.h"
 #include "NDMapLayer.h"
 #include "SMGameScene.h"
@@ -28,8 +28,8 @@
 #include "ScriptTask.h"
 #include "TableDef.h"
 #include "ScriptGameLogic.h"
-#include "NDAnimationGroup.h"
-#include "NDDebugOpt.h"
+
+#define NPC_NAME_FONT_SIZE 14
 
 using namespace NDEngine;
 
@@ -42,7 +42,7 @@ do \
 	{ \
 		pkLables = new NDUILabel; \
 		pkLables->Initialization(); \
-		pkLables->SetFontSize(12); \
+		pkLables->SetFontSize(NPC_NAME_FONT_SIZE); \
 		pkLables->SetRenderTimes(3); \
 	} \
 	if (!pkLables->GetParent() && m_pkSubNode) \
@@ -88,7 +88,31 @@ NDNpc::~NDNpc()
 	CC_SAFE_DELETE (m_pkPicState);
 }
 
-void NDNpc::Initialization(int nLookface)
+void NDNpc::Init()
+{
+}
+
+void NDNpc::SetActionOnRing(bool on)
+{
+	m_bActionOnRing = on;
+}
+
+bool NDNpc::IsActionOnRing()
+{
+	return m_bActionOnRing;
+}
+
+void NDNpc::SetDirectOnTalk(bool on)
+{
+	m_bDirectOnTalk = on;
+}
+
+bool NDNpc::IsDirectOnTalk()
+{
+	return m_bDirectOnTalk;
+}
+
+void NDNpc::Initialization(int nLookface, bool bFaceRight/*true*/)
 {
 	m_nSex = nLookface / 100000000 % 10;
 	m_nModel = nLookface % 1000;
@@ -107,14 +131,37 @@ void NDNpc::Initialization(int nLookface)
 
 	NDSprite::Initialization(sprFile);
 
-	m_bFaceRight = m_nDirect == 2;
+	m_bFaceRight = bFaceRight;
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
+}
+
+void NDNpc::WalkToPosition(CGPoint toPos)
+{
+	std::vector<CGPoint> vec_pos; vec_pos.push_back(toPos);
+	this->MoveToPosition(vec_pos, SpriteSpeedStep4, false);
+}
+
+void NDNpc::OnMoving(bool bLastPos)
+{
+
+}
+
+void NDNpc::OnMoveEnd()
+{
+	if (m_dequePos.empty()) 
+	{
+		return;
+	}
+
+	CGPoint pos = m_dequePos.front();
+	m_dequePos.pop_front();
+
+	std::vector<CGPoint> vec_pos; vec_pos.push_back(pos);
+	MoveToPosition(vec_pos, m_pkRidePet == NULL ? SpriteSpeedStep4 : SpriteSpeedStep8, false);
 }
 
 bool NDNpc::OnDrawBegin(bool bDraw)
 {
-	if (!NDDebugOpt::getDrawRoleEnabled()) return false;
-
 	NDNode* pkNode = this->GetParent();
 	CGSize kSizeMap;
 
@@ -147,6 +194,49 @@ bool NDNpc::OnDrawBegin(bool bDraw)
 		}
 	}
 
+	//画骑宠
+	if (m_pkRidePet)
+	{
+		m_pkRidePet->RunAnimation(bDraw);
+	}
+
+
+// 	if (m_talkBox && m_talkBox->IsVisibled() && bDraw) 
+// 	{
+// 		CGPoint scrPos = GetScreenPoint();
+// 		scrPos.x -= DISPLAY_POS_X_OFFSET;
+// 		scrPos.y -= DISPLAY_POS_Y_OFFSET;
+// 		//NDLog(@"x=[%d],y=[%d]",int(scrPos.x), int(scrPos.y));
+// 
+// 		CGSize sizeTalk = m_talkBox->GetSize();
+// 
+// 		scrPos.x = scrPos.x-8+GetWidth()/2-sizeTalk.width/2;
+// 
+// 		scrPos.y = scrPos.y-getGravityY()+30;
+// 
+// 		TipTriangleAlign align = TipTriangleAlignCenter;
+// 
+// 		CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+// 
+// 		if (scrPos.x + sizeTalk.width > winsize.width) 
+// 		{
+// 			align = TipTriangleAlignRight;
+// 
+// 			scrPos.x -= sizeTalk.width/2;
+// 		}
+// 		else if (scrPos.x < 0)
+// 		{
+// 			scrPos.x = scrPos.x+sizeTalk.width/2; 
+// 
+// 			align = TipTriangleAlignLeft;
+// 		}
+// 
+// 		m_talkBox->SetTriangleAlign(align);
+// 		m_talkBox->SetDisPlayPos(scrPos);
+// 		m_talkBox->SetVisible(true);
+// 	}
+
+
 	return true;
 }
 
@@ -178,13 +268,14 @@ void NDNpc::OnDrawEnd(bool bDraw)
 
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
 
-	CGSize kSize = getStringSize(m_strName.c_str(), 12);
+	CGSize kSize = getStringSize(m_strName.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
 
 	int nShowX = kNPCPos.x;
+	//高度临时调整，后续应该修改为在缩放时进行数据处理，否则坐标外部需要处理HJQ
 	int nShowY = kNPCPos.y - kSize.height
-			- (m_pkCurrentAnimation ?
+			- ((m_pkCurrentAnimation ?
 					(m_pkCurrentAnimation->getBottomY()
-							- m_pkCurrentAnimation->getY()) : 0);
+							- m_pkCurrentAnimation->getY()) : 0)*0.5*fScaleFactor);
 
 	bool isEmemy = false;
 	if (kPlayer.IsInState(USERSTATE_FIGHTING))
@@ -199,8 +290,8 @@ void NDNpc::OnDrawEnd(bool bDraw)
 	{
 		InitNameLable(m_pkNameLabel[0]);
 		InitNameLable(m_pkNameLabel[1]);
-// 		SetLable(eLableName, nShowX, nShowY, m_strName, INTCOLORTOCCC4(uiColor),
-// 				ccc4(0, 0, 0, 255)); ///< 不知道为什么会在这里卡住 郭浩
+//  		SetLable(eLableName, nShowX, nShowY, m_strName, INTCOLORTOCCC4(uiColor),
+//  				ccc4(0, 0, 0, 255));
 		DrawLable(m_pkNameLabel[1], bDraw);
 		DrawLable(m_pkNameLabel[0], bDraw);
 		//showY -= 5 * fScaleFactor;
@@ -237,6 +328,22 @@ void NDNpc::OnDrawEnd(bool bDraw)
 		}
 	}
 //	}
+
+	if (!m_strTalk.empty() && m_strTalk.size() > 3 && abs(kPlayer.GetCol()-m_nCol) <= 2 && abs(kPlayer.GetRow()-m_nRow) <= 2) 
+		addTalkMsg(m_strTalk, 0);
+// 	else if (m_pkTalkBox)
+// 		SAFE_DELETE_NODE(m_talkBox);
+
+	//升级特效
+	ShowUpdate(m_iStatus == 1, bDraw);
+}
+
+void NDNpc::BeforeRunAnimation(bool bDraw)
+{
+// 	if (m_pkTalkBox && m_pkTalkBox->IsVisibled() && !bDraw) 
+// 	{
+// 		m_pkTalkBox->SetVisible(false);
+// 	}
 }
 
 void NDNpc::SetExpresstionImage(int nExpresstion)
@@ -301,29 +408,139 @@ void NDNpc::SetNpcState(NPC_STATE state)
 	}
 	else if ((m_eNPCState & QUEST_CAN_ACCEPT) > 0)
 	{
-		m_pkPicState = NDPicturePool::DefaultPool()->AddPicture(
-				GetSMImgPath("mark_submit.png"));
+		m_pkPicState = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImgPath("mark_submit.png"));
 	}
 	else if ((m_eNPCState & QUEST_NOT_FINISH) > 0)
 	{
-		m_pkPicState = NDPicturePool::DefaultPool()->AddPicture(
-				GetSMImgPath("mark_task_accepted.png"));
+		m_pkPicState = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImgPath("mark_task_accepted.png"));
 	}
 	else if ((m_eNPCState & QUEST_FINISH) > 0)
 	{
-		m_pkPicState = NDPicturePool::DefaultPool()->AddPicture(
-				GetSMImgPath("mark_task_accept.png"));
+		m_pkPicState = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImgPath("mark_task_accept.png"));
+	}
+	else if ( (m_eNPCState & QUEST_FINISH_SUB) > 0)
+	{
+		m_pkPicState = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImgPath("mark_task_accept2.png"));
+	}       
+	else if ( (m_eNPCState & QUEST_CAN_ACCEPT_SUB) > 0)
+	{
+		m_pkPicState = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImgPath("mark_submit2.png"));
 	}
 
 	if (!m_pkPicState)
 	{
-		//m_picState = ScriptMgrObj.excuteLuaFunc<NDPicture*>("GetNpcFuncPic", "NPC", this->m_id); ///< 临时性注释 郭浩
+		m_pkPicState = ScriptMgrObj.excuteLuaFunc<NDPicture*>("GetNpcFuncPic", "NPC", m_nID);
+	}
+	if (m_pkPicState) {
+		//根据分辨率进行缩放
+		m_pkPicState->setScale(0.5f*NDDirector::DefaultDirector()->GetScaleFactor());
 	}
 }
+
+void NDNpc::AddWalkPoint(int col, int row)
+{
+	m_nCol = col;
+	m_nRow = row;
+
+	m_dequePos.push_back(ccp(col*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, row*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+
+	if (!m_bIsMoving) 
+	{
+		CGPoint pos = m_dequePos.front();
+		m_dequePos.pop_front();
+
+		std::vector<CGPoint> vec_pos; vec_pos.push_back(pos);
+		MoveToPosition(vec_pos, m_pkRidePet == NULL ? SpriteSpeedStep4 : SpriteSpeedStep8, false);
+	}
+}
+
 
 void NDNpc::SetStatus(int status)
 {
 	m_iStatus = status;
+}
+
+void NDNpc::ShowUpdate(bool bshow, bool bDraw)
+{
+	if (!m_pkUpdate && bshow) 
+	{
+		m_pkUpdate = new NDSprite;
+		
+		char aniPath[256];
+		_snprintf(aniPath, 256, "%sbuiltupdate.spr", NDPath::GetAnimationPath().c_str());
+		m_pkUpdate->Initialization(aniPath);
+		m_pkUpdate->SetCurrentAnimation(0, false);
+
+		if (m_pkSubNode) m_pkSubNode->AddChild(m_pkUpdate);
+	}
+
+	if (m_pkUpdate && !bshow) 
+	{
+		SAFE_DELETE_NODE(m_pkUpdate);
+	}
+
+	if (bshow) 
+	{
+		CGPoint pos = this->GetPosition();
+		pos.x -= DISPLAY_POS_X_OFFSET;
+		pos.y -= DISPLAY_POS_Y_OFFSET;
+
+		//if (aniGroup != null) {
+		//			updateEffect.draw(g, x - 5, y - aniGroup.getGravityY(),
+		//							  offsetX, offsetY);
+		//		} else if (baseRole != null) {
+		//			updateEffect.draw(g, x - 5, y - baseRole.getHeight(), offsetX,
+		//							  offsetY);
+		//		} else {
+		//			updateEffect.draw(g, x - 5, y - 20, offsetX, offsetY);
+		//		}
+
+		pos.x -= 5;
+		pos.y -= getGravityY();
+
+		m_pkUpdate->SetPosition(pos);
+		m_pkUpdate->RunAnimation(bDraw);
+	}
+}
+
+void NDNpc::HandleNpcMask(bool bSet)
+{
+	NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene)));
+	if (!layer)
+	{
+		return;
+	}
+
+	NDMapData *mapdata = layer->GetMapData();
+
+	if (!mapdata) {
+		return;
+	}
+
+	CGPoint point = this->GetPosition();
+	int iCellY = int((point.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), iCellX = int((point.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
+
+	vector<int>* unpass = m_pkAniGroup->getUnpassPoint();
+	int unpassCount = unpass->size();
+	if (unpass == nil || unpassCount % 2 != 0) {
+		if (bSet)
+			mapdata->addObstacleCell(iCellY, iCellX);
+		else
+			mapdata->removeObstacleCell(iCellY, iCellX);
+		return;
+	}
+
+	for (int i = 0; i < unpassCount; i+= 2) {
+		int cellX = unpass->at(i);
+		int cellY = unpass->at(i+1);
+		if (cellX && cellY) {
+			if (bSet)
+				mapdata->addObstacleCell(cellY+iCellY, cellX+iCellX);
+			else
+				mapdata->removeObstacleCell(cellY+iCellY, cellX+iCellX);
+		}
+	}
+
 }
 
 void NDNpc::SetType(int iType)
@@ -373,17 +590,54 @@ void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text,
 	kSizeMap = m_pkSubNode->GetContentSize();
 	CGSize kSizeWin = NDDirector::DefaultDirector()->GetWinSize();
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
-	CGSize kSize = getStringSize(text.c_str(), 12);
+	CGSize kSize = getStringSize(text.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
 	pkLables[1]->SetFrameRect(
 			CGRectMake(x - (kSize.width / 2) + 1,
 					y + NDDirector::DefaultDirector()->GetWinSize().height
 							- kSizeMap.height, kSizeWin.width,
-					20 * fScaleFactor));
+					30 * fScaleFactor));
 	pkLables[0]->SetFrameRect(
 			CGRectMake(x - (kSize.width / 2),
 					y + NDDirector::DefaultDirector()->GetWinSize().height
 							- kSizeMap.height, kSizeWin.width,
-					20 * fScaleFactor));
+					30 * fScaleFactor));
+}
+
+void NDNpc::initUnpassPoint()
+{
+	if (m_pkAniGroup == nil)
+		return;
+
+	CGPoint point = this->GetPosition();
+
+	vector<int>* unpass = m_pkAniGroup->getUnpassPoint();
+	int unpassCount = unpass->size();
+	if (unpass == nil || unpassCount % 2 != 0) {
+		m_vUnpassRect.clear();
+
+		m_vUnpassRect.push_back(CGRectMake(point.x-4, point.y-16, 20, 16));
+
+		return;
+	}
+
+	//int iCellY = int((point.y-DISPLAY_POS_Y_OFFSET)/16), iCellX = int((point.x-DISPLAY_POS_X_OFFSET)/16);
+
+	for (int i = 0; i < unpassCount; i+= 2) {
+		int cellX = unpass->at(i);
+		int cellY = unpass->at(i+1);
+
+		CGPoint pos;
+		pos.x = (IsUnpassNeedTurn() ? (-cellX) : cellX) * 16 + point.x;
+		pos.y = cellY * 16 + 8 + point.y;
+
+
+		m_vUnpassRect.push_back(CGRectMake(pos.x, pos.y, 16, 16));
+	}
+}
+
+bool NDNpc::IsUnpassNeedTurn()
+{
+	return m_bUnpassTurn;
 }
 
 bool NDNpc::IsPointInside(CGPoint point)
@@ -408,79 +662,130 @@ bool NDNpc::IsPointInside(CGPoint point)
 		}
 	}
 
+	std::vector<CGRect>::iterator it = m_vUnpassRect.begin();
+
+	for (; it != m_vUnpassRect.end(); it++) {
+		CGRect rect = *it;
+		rect.origin.y -= 24;
+		rect.size.height += 24;
+		rect.origin.x -= 8;
+		rect.size.width += 8;
+		if (CGRectContainsPoint(rect, point))
+			return true;
+	}
+
 	return false;
 }
 
 bool NDNpc::getNearestPoint(CGPoint srcPoint, CGPoint& dstPoint)
 {
-	/***
-	 * 临时性注释 郭浩
-	 * begin
-	 */
+	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
+	if (!scene) return false;
+	NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
+	if (!layer) return false;
+	NDMapData* mapdata = layer->GetMapData();
+	if (!mapdata) return false;
+	
+	int resX = 0, resY = 0;
+	
+	int srcY = int((srcPoint.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), srcX = int((srcPoint.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
+	
+	int maxDis = mapdata->getColumns()*mapdata->getColumns() + mapdata->getRows()*mapdata->getRows();
+	
+	int nArrayX[4] = {0, -1, 0, 1};
+	int nArrayY[4] = {1, 0, -1, 0};
+	
+	if (m_pkAniGroup != nil && m_pkAniGroup->getUnpassPoint() != nil)
+	{
+		vector<int>* unpass = m_pkAniGroup->getUnpassPoint();
+		int unpassCount = unpass->size();
 
-// 	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
-// 	if (!scene) return false;
-// 	NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
-// 	if (!layer) return false;
-// 	NDMapData* mapdata = layer->GetMapData();
-// 	if (!mapdata) return false;
-// 	
-// 	int resX = 0, resY = 0;
-// 	
-// 	int srcY = int((srcPoint.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), srcX = int((srcPoint.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
-// 	
-// 	int maxDis = mapdata->getColumns()*mapdata->getColumns() + mapdata->getRows()*mapdata->getRows();
-// 	
-// 	int nArrayX[4] = {0, -1, 0, 1};
-// 	int nArrayY[4] = {1, 0, -1, 0};
-// 	
-// 	{
-// 		for(int i = 0; i < 4; ++i)
-// 		{
-// 			int newX = col + nArrayX[i];
-// 			int newY = row + nArrayY[i];
-// 			if(newX < 0)
-// 				continue;
-// 			if(newX < 0)
-// 				continue;
-// 			if(newX > int([mapdata columns]))
-// 				continue;
-// 			if(newY > int([mapdata rows]))
-// 				continue;
-// 			
-// 			if (![mapdata canPassByRow:newY andColumn:newX])
-// 				continue;
-// 			
-// 			int cacl = (newX-srcX) * (newX-srcX) + (newY-srcY) * (newY-srcY);
-// 			
-// 			if (cacl < maxDis)
-// 			{
-// 				maxDis = cacl;
-// 				
-// 				resX = newX;
-// 				
-// 				resY = newY;
-// 			}
-// 		}	
-// 	}
-// 
-// 	if (resX == 0 && resY == 0)
-// 	{
-// 		resX = this->GetPosition().x;
-// 		resY = this->GetPosition().y;
-// 	}
-// 	
-// 	dstPoint = CGPointMake(resX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, resY*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET);
-	/***
-	 * 临时性注释 郭浩
-	 * end
-	 */
+		for (int i = 0; i < unpassCount; i+= 2) {
+			int cellX = unpass->at(i);
+			int cellY = unpass->at(i + 1);
+
+			int x, y;
+
+			x = m_nCol + (IsUnpassNeedTurn() ? (-cellX) : cellX);
+			y = m_nRow + cellY;
+
+			int newX, newY;
+
+			for(int i = 0; i < 4; ++i)
+			{
+				newX = x + nArrayX[i];
+				newY = y + nArrayY[i];
+				if(newX < 0)
+					continue;
+				if(newX < 0)
+					continue;
+				if(newX > int(mapdata->getColumns()))
+					continue;
+				if(newY > int(mapdata->getRows()))
+					continue;
+
+				if (!mapdata->canPassByRow(newY, newX))
+					continue;
+
+				int cacl = (newX-srcX) * (newX-srcX) + (newY-srcY) * (newY-srcY);
+
+				if (cacl < maxDis)
+				{
+					maxDis = cacl;
+
+					resX = newX;
+
+					resY = newY;
+				}
+			}	
+		}
+	}
+	else 
+	{
+
+		for(int i = 0; i < 4; ++i)
+		{
+			int newX = m_nCol + nArrayX[i];
+			int newY = m_nRow + nArrayY[i];
+			if(newX < 0)
+				continue;
+			if(newX < 0)
+				continue;
+			if(newX > int(mapdata->getColumns()))
+				continue;
+			if(newY > int(mapdata->getRows()))
+				continue;
+			
+			if (!mapdata->canPassByRow(newY, newX))
+				continue;
+			
+			int cacl = (newX-srcX) * (newX-srcX) + (newY-srcY) * (newY-srcY);
+			
+			if (cacl < maxDis)
+			{
+				maxDis = cacl;
+				
+				resX = newX;
+				
+				resY = newY;
+			}
+		}	
+	}
+
+	if (resX == 0 && resY == 0)
+	{
+		resX = this->GetPosition().x;
+		resY = this->GetPosition().y;
+	}
+	
+	dstPoint = CGPointMake(resX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, resY*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET);
 
 	return true;
 }
 
 void NDNpc::RefreshTaskState()
 {
+	bool bIfSetState = false;
 	// 玩家已接任务列表
 	ID_VEC idlistAccept;
 	ScriptGameDataObj.GetDataIdList(eScriptDataRole,
@@ -498,12 +803,22 @@ void NDNpc::RefreshTaskState()
 						== ScriptDBObj.GetN("task_type", *it,
 								DB_TASK_TYPE_FINISH_NPC))
 				{
-					this->SetNpcState((NPC_STATE) QUEST_FINISH);
-					return;
+					//主线则返回
+					if (*it /10000 == 5){
+						this->SetNpcState((NPC_STATE)QUEST_FINISH);
+						return;
+					}else {
+						//支线优先级低于主线，若无主线则返回
+						this->SetNpcState((NPC_STATE)QUEST_FINISH_SUB);
+						bIfSetState = true;
+					}
+
 				}
 			}
 		}
 	}
+
+	if (bIfSetState == true) return;
 
 	ID_VEC idVec;
 	GetTaskList(idVec);
@@ -519,13 +834,23 @@ void NDNpc::RefreshTaskState()
 			{
 				if (*it == *itCanAccept)
 				{
-					this->SetNpcState((NPC_STATE) QUEST_CAN_ACCEPT);
-					return;
+					if (*it /10000 == 5){
+						this->SetNpcState((NPC_STATE)QUEST_CAN_ACCEPT);
+						return;
+					}
+					else {
+						this->SetNpcState((NPC_STATE)QUEST_CAN_ACCEPT_SUB);                
+						bIfSetState = true;
+					}
+
 				}
 			}
 		}
 	}
 
+	if (bIfSetState == true) return;
+
+	/*
 	for (ID_VEC::iterator it = idVec.begin(); it != idVec.end(); it++)
 	{
 		// 未完成
@@ -534,6 +859,29 @@ void NDNpc::RefreshTaskState()
 		{
 			this->SetNpcState((NPC_STATE) QUEST_NOT_FINISH);
 			return;
+		}
+	}
+	*/
+
+	//未完成任务
+	// 玩家已接任务列表
+	ScriptGameDataObj.GetDataIdList(eScriptDataRole, NDPlayer::defaultHero().m_nID, eRoleDataTask, idlistAccept);
+	if (!idlistAccept.empty())
+	{
+		for (ID_VEC::iterator it = idlistAccept.begin(); 
+			it != idlistAccept.end(); 
+			it++) 
+		{
+			//不可交
+			int nState = ScriptGetTaskState(*it);
+			if (TASK_STATE_UNCOMPLETE == nState)
+			{
+				if ( m_nID == ScriptDBObj.GetN("task_type", *it, DB_TASK_TYPE_FINISH_NPC))
+				{
+					SetNpcState((NPC_STATE)QUEST_NOT_FINISH);
+					return;
+				}
+			}
 		}
 	}
 
@@ -548,9 +896,10 @@ int NDNpc::GetDataBaseData(int nIndex)
 		return 0;
 	}
 	return ScriptGameDataObj.GetData<unsigned long long>(eScriptDataDataBase,
-			nKey, eRoleDataPet, this->m_nID, nIndex);
+			nKey, eRoleDataPet, m_nID, nIndex);
 }
 
+/*
 bool NDNpc::GetTaskList(ID_VEC& idVec)
 {
 	idVec.clear();
@@ -597,6 +946,26 @@ bool NDNpc::GetTaskList(ID_VEC& idVec)
 
 	return !idVec.empty();
 }
+*/
+ID_VEC idlist;
+bool NDNpc::GetTaskList(ID_VEC& idVec)
+{
+	int TASK_ID = 1;
+	int  NPC_ID = 2;
+	// ID_VEC idlist;
+	if(idlist.empty()){
+		ScriptDBObj.GetIdList("task_npc", idlist);
+	}
+	for(ID_VEC::iterator it = idlist.begin(); it!= idlist.end();it++)
+	{
+		int nNpcId = ScriptDBObj.GetN("task_npc", *it, NPC_ID); 
+		if(nNpcId == m_nID ){
+			int nTaskId = ScriptDBObj.GetN("task_npc", *it, TASK_ID); 
+			idVec.push_back(nTaskId);
+		}        
+	}
+	return !idVec.empty();
+}
 
 bool NDNpc::GetPlayerCanAcceptList(ID_VEC& idVec)
 {
@@ -620,30 +989,4 @@ void NDNpc::ShowHightLight(bool bShow)
 	}
 
 	this->SetHightLight(bShow);
-}
-
-bool NDEngine::NDNpc::IsActionOnRing()
-{
-	//throw std::exception("The method or operation is not implemented.");
-	return true;
-}
-
-void NDEngine::NDNpc::initUnpassPoint()
-{
-	//throw std::exception("The method or operation is not implemented.");
-}
-
-void NDEngine::NDNpc::SetDirectOnTalk( bool bOn )
-{
-	//throw std::exception("The method or operation is not implemented.");
-}
-
-void NDEngine::NDNpc::HandleNPCMask( bool bSet )
-{
-	//throw std::exception("The method or operation is not implemented.");
-}
-
-void NDEngine::NDNpc::SetActionOnRing( bool bOn )
-{
-
 }

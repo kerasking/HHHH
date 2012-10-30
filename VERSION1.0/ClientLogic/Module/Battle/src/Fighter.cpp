@@ -352,7 +352,7 @@ void Fighter::LoadMonster(int nLookFace, int lev, const string& name)
 //	if(nLookFace/100000000%10>0&&nLookFace/100000000%10<=2){//人物
 	NDManualRole *role = new NDManualRole;
 	role->Initialization(nLookFace, true);
-	role->m_dwLookFace = nLookFace;
+	role->m_nLookface = nLookFace;
 	m_pkRole = role;
 	m_eLookfaceType = LOOKFACE_MANUAL;
 //	}else if (NDMonster::isRoleMonster(nLookFace)) {//人形怪

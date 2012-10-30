@@ -27,11 +27,10 @@ public:
 public:
 	void DidFinishLaunching();
 
-	bool isAutoFight();
-	virtual bool TouchBegin( NDTouch* touch );
-	virtual void TouchEnd( NDTouch* touch );
-	virtual void TouchCancelled( NDTouch* touch );
-	virtual void TouchMoved( NDTouch* touch );
+	bool TouchBegin(NDTouch* touch);
+	void TouchEnd(NDTouch* touch);
+	void TouchCancelled(NDTouch* touch);
+	void TouchMoved(NDTouch* touch);
 	void Update(unsigned long ulDiff);
 	void OnTimer(OBJID uiTag);
 private:

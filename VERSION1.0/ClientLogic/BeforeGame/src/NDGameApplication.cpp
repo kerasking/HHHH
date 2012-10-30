@@ -315,7 +315,7 @@ bool NDGameApplication::processPM(const char* cmd)
 	}
 	else if (sscanf(cmd, "openmap %d", &val) == 1)
 	{
-		NDMapMgrObj.Hack_loadSceneByMapDocID( val );
+		//NDMapMgrObj.Hack_loadSceneByMapDocID( val );
 	}
 	else
 	{

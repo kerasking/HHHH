@@ -15,7 +15,7 @@
 #include "NDDataTransThread.h"
 #include "NDScene.h"
 #include "NDDirector.h"
-///< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+#include "NDMapMgr.h"
 #include "GameScene.h"
 #include "NDTransData.h"
 #include "NDUtility.h"
@@ -26,7 +26,7 @@
 #include "NDPath.h"
 
 #include "UIChatText.h"
-
+#include "ScriptInc.h"
 #define TAG_MAP_UPDTAE (2046)
 #define	TAG_MAP_LONGTOUCH (2047)
 #define TAG_MAP_LONGTOUCH_STATE (2048)
@@ -38,7 +38,7 @@ IMPLEMENT_CLASS(NDMapLayerLogic, NDMapLayer)
 
 NDMapLayerLogic::NDMapLayerLogic()
 {
-	//m_doubleTimeStamp = [NSDate timeIntervalSinceReferenceDate];  ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	m_dTimeStamp = time(NULL);
 
 	m_kTimer.SetTimer(this, TAG_MAP_UPDTAE, 0.01f);
 
@@ -59,11 +59,6 @@ void NDMapLayerLogic::DidFinishLaunching()
 
 bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 {
-	/***
-	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	 * begin
-	 */
-
 // 	if (this->isAutoFight()){
 // 		NDMonster* boss = NDMapMgrObj.GetBoss();
 // 		if (boss!=NULL)
@@ -71,59 +66,41 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 // 			return false;
 // 		}
 // 	}
-	/***
-	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	 * end
-	 */
 
 	SetPathing(false);
-
 	SetLongTouch(false);
 
 	m_kPosTouch = touch->GetLocation();
 	CGPoint touchPoint = this->ConvertToMapPoint(m_kPosTouch);
-
-	/***
-	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	 * begin
-	 */
 // 	if(isTouchTreasureBox(touchPoint))
 // 	{
 // 		NDLog("touch treasureBox");
 // 		this->OpenTreasureBox();
 // 		return false;
 // 	}
-	/**
-	 * end
-	 */
-	//if ( NDPlayer::defaultHero().ClickPoint(touchPoint, false) )
-//	{
-//		m_timer.SetTimer(this, TAG_MAP_LONGTOUCH, LONG_TOUCH_INTERVAL);
-//	}
+
 	if (!NDPlayer::defaultHero().DealClickPointInSideNpc(touchPoint))
 	{
 		SetPathing(true);
 	}
 
 	m_kTimer.SetTimer(this, TAG_MAP_LONGTOUCH, LONG_TOUCH_INTERVAL);
-
-	//ShowTreasureBox();
-
 	return true;
 }
 
 void NDMapLayerLogic::TouchEnd(NDTouch* touch)
 {
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
-
-	if (!kPlayer.ClickPoint(this->ConvertToMapPoint(touch->GetLocation()),
-			false, IsPathing()))
+	if (!kPlayer.ClickPoint(this->ConvertToMapPoint(touch->GetLocation()), false, IsPathing()))
 	{
 		kPlayer.stopMoving();
+		if (ScriptMgrObj.excuteLuaFunc<bool>("IsInPractising", "PlayerFunc"))
+		{
+			kPlayer.SetCurrentAnimation(7, kPlayer.IsReverse());
+		}
 	}
 
 	kPlayer.CancelClickPointInSideNpc();
-
 	m_kTimer.KillTimer(this, TAG_MAP_LONGTOUCH_STATE);
 	m_kTimer.KillTimer(this, TAG_MAP_LONGTOUCH);
 //	
@@ -153,13 +130,14 @@ void NDMapLayerLogic::TouchMoved(NDTouch* touch)
 
 void NDMapLayerLogic::Update(unsigned long ulDiff)
 {
-	// NDMapMgrObj.Update(ulDiff); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	NDMapMgrObj.Update(ulDiff);
 }
 
 void NDMapLayerLogic::OnTimer(OBJID uiTag)
 {
-	if (!(uiTag == TAG_MAP_UPDTAE || uiTag == TAG_MAP_LONGTOUCH
-			|| uiTag == TAG_MAP_LONGTOUCH_STATE))
+	if (!(uiTag == TAG_MAP_UPDTAE ||
+		  uiTag == TAG_MAP_LONGTOUCH ||
+		  uiTag == TAG_MAP_LONGTOUCH_STATE))
 	{
 		NDMapLayer::OnTimer(uiTag);
 		return;
@@ -168,7 +146,7 @@ void NDMapLayerLogic::OnTimer(OBJID uiTag)
 	if (uiTag == TAG_MAP_UPDTAE)
 	{
 		double oldTimeStamp = m_dTimeStamp;
-		//m_doubleTimeStamp = [NSDate timeIntervalSinceReferenceDate]; ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+		m_dTimeStamp = time(NULL);
 		Update((unsigned long) ((m_dTimeStamp - oldTimeStamp) * 1000));
 	}
 	else if (uiTag == TAG_MAP_LONGTOUCH)
@@ -179,9 +157,7 @@ void NDMapLayerLogic::OnTimer(OBJID uiTag)
 	}
 	else if (uiTag == TAG_MAP_LONGTOUCH_STATE)
 	{
-		if (IsPathing()
-				&& !NDPlayer::defaultHero().ClickPoint(
-						this->ConvertToMapPoint(m_kPosTouch), true))
+		if (IsPathing() && !NDPlayer::defaultHero().ClickPoint(this->ConvertToMapPoint(m_kPosTouch), true))
 		{
 			SetLongTouch(false);
 
@@ -191,8 +167,7 @@ void NDMapLayerLogic::OnTimer(OBJID uiTag)
 
 		if (!IsPathing())
 		{
-			NDPlayer::defaultHero().DealClickPointInSideNpc(
-					this->ConvertToMapPoint(m_kPosTouch));
+			NDPlayer::defaultHero().DealClickPointInSideNpc(this->ConvertToMapPoint(m_kPosTouch));
 		}
 	}
 }
@@ -215,9 +190,4 @@ void NDMapLayerLogic::SetPathing(bool bPathing)
 bool NDMapLayerLogic::IsPathing()
 {
 	return m_bPathing;
-}
-
-bool NDEngine::NDMapLayerLogic::isAutoFight()
-{
-	return true;
 }

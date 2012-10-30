@@ -47,52 +47,27 @@ function GetNpcName(nNpcId)
 	return GetDataBaseS(nNpcId, DB_NPC.NAME);
 end
 
-function GetNpcTaskList(nNpcId)
+
+function GetNpcTaskList(nMatchNpcId)
 	local idList	= {};
+	local idNpcTask = _G.GetDataBaseIdList("task_npc");  
+	--_G.LogInfoT(idNpcTask)
 	
-	local nTask		= GetDataBaseN(nNpcId, DB_NPC.TASK0);
-	if 0 < nTask then
-		table.insert(idList, nTask);
-	end
-	nTask			= GetDataBaseN(nNpcId, DB_NPC.TASK1);
-	if 0 < nTask then
-		table.insert(idList, nTask);
-	end
-	nTask			= GetDataBaseN(nNpcId, DB_NPC.TASK2);
-	if 0 < nTask then
-		table.insert(idList, nTask);
-	end
-	nTask			= GetDataBaseN(nNpcId, DB_NPC.TASK3);
-	if 0 < nTask then
-		table.insert(idList, nTask);
-	end
-	nTask			= GetDataBaseN(nNpcId, DB_NPC.TASK4);
-	if 0 < nTask then
-		table.insert(idList, nTask);
-	end
-	nTask			= GetDataBaseN(nNpcId, DB_NPC.TASK5);
-	if 0 < nTask then
-		table.insert(idList, nTask);
-	end
-	nTask			= GetDataBaseN(nNpcId, DB_NPC.TASK6);
-	if 0 < nTask then
-		table.insert(idList, nTask);
-	end
-	nTask			= GetDataBaseN(nNpcId, DB_NPC.TASK7);
-	if 0 < nTask then
-		table.insert(idList, nTask);
-	end
-	nTask			= GetDataBaseN(nNpcId, DB_NPC.TASK8);
-	if 0 < nTask then
-		table.insert(idList, nTask);
-	end
-	nTask			= GetDataBaseN(nNpcId, DB_NPC.TASK9);
-	if 0 < nTask then
-		table.insert(idList, nTask);
+	for i,v  in ipairs(idNpcTask) do
+		
+		local nNpcId = _G.GetDataBaseDataN("task_npc",v,2);
+		--LogInfo(nNpcId.."  "..nMatchNpcId)
+		if nNpcId == nMatchNpcId then
+			--LogInfo(nNpcId.."  "..nMatchNpcId.." ".._G.GetDataBaseDataN("task_npc",v,1))
+ 			table.insert(idList,_G.GetDataBaseDataN("task_npc",v,1));
+		end
 	end
 	
 	return idList;
 end
+
+
+
 
 function SendOption(nNpcId, nAction)
 	MsgNpc.SendOpt(nNpcId, nAction)
@@ -118,16 +93,22 @@ function Navigate(nNpcId)
 	
 	if _G.CheckN(nMapId) and _G.CheckN(nX) and _G.CheckN(nY) then
 		if nMapId == _G.GetMapId() then
-			_G.NavigateTo(nMapId, nX, nY);
+			_G.NavigateTo(nMapId, nX-1, nY+1);
 		else
 			mInNavigateState	= true;
 			mNavigateMapId		= nMapId;
-			mNavigateMapX		= nX;
-			mNavigateMapY		= nY;
-			_G.WorldMapGoto(nMapId);
+			mNavigateMapX		= nX-1;
+			mNavigateMapY		= nY+1;
+		
+			--_G.WorldMapGoto(nMapId);
+			
+			_G.TaskUI.GotoPortal();						
+			
 		end
 	end
 end
+
+
 
 function OnEnterGameScene()
 	_G.LogInfo("npc OnEnterGameScene");
@@ -137,11 +118,86 @@ function OnEnterGameScene()
 		_G.CheckN(mNavigateMapX) and 
 		_G.CheckN(mNavigateMapY) then
 		if mNavigateMapId == _G.GetMapId() then
-			_G.NavigateTo(mNavigateMapId, mNavigateMapX, mNavigateMapY);
+			DelayNavigate()
+			--_G.NavigateTo(mNavigateMapId, mNavigateMapX, mNavigateMapY);
+			_G.LogInfo("npc OnEnterGameScene  reset state false");
+			mInNavigateState	= false;
 		end
 	end
 	
-	mInNavigateState	= false;
+end
+
+function OnMapSwitch()
+	if mInNavigateState and 
+		_G.CheckN(mNavigateMapId) and 
+		_G.CheckN(mNavigateMapX) and 
+		_G.CheckN(mNavigateMapY) then
+		
+		_G.WorldMapGoto(mNavigateMapId);
+		return true;
+	else	
+		return false;
+	end
+end
+
+
+--延迟寻路
+mTimerTaskTag = nil;
+
+function DelayNavigate()
+	if (mTimerTaskTag) then
+		_G.UnRegisterTimer(mTimerTaskTag);
+		mTimerTaskTag = nil;
+	end
+
+	mTimerTaskTag = _G.RegisterTimer(NavigateFunc, 1);
+
+end
+
+function NavigateFunc()
+
+	if (mTimerTaskTag) then
+		_G.UnRegisterTimer(mTimerTaskTag);
+		mTimerTaskTag = nil;
+	end	
+	_G.LogInfo("npc OnEnterGameScene delay navigate");
+	_G.NavigateTo(mNavigateMapId, mNavigateMapX, mNavigateMapY);
+	
 end
 
 _G.RegisterGlobalEventHandler(_G.GLOBALEVENT.GE_GENERATE_GAMESCENE, "Npc.OnEnterGameScene", OnEnterGameScene);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

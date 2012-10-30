@@ -64,57 +64,12 @@ function GetNpcPotraitPic(nNpcId)
 	return pic;
 end
 
---npc功能图片表
-NpcfuncPicTable = 
-{
-	--白羲(仓库)
-	[20004]					= "npc_storage.png",
-	--宝主(玉牌商人)
-	[30006]					= "",
-	--九鼎仙尊(道具商人)
-	[30004]					= "npc_item.png",		
-	--六道散人(武器商人)
-	[30003]					= "npc_weapon.png",
-	--商子洛(猎命)
-	[30007]					= "npc_comprehension.png",
-	--神秘商人(密宝)
-	[40001]					= "npc_secret.png",
-	--云锦(客栈)
-	[10002]					= "npc_inn.png",
-};
-
---获取npc头上图片
-function GetNpcFuncPic(nNpcId)
-	if not _G.CheckN(nNpcId) then
-		return nil;
-	end
-	
-	if not _G.CheckS(NpcfuncPicTable[nNpcId]) then
-		return nil;
-	end
-	
-	local filename = NpcfuncPicTable[nNpcId];
-	if "" == filename then
-		return nil;
-	end
-	
-	local pool = _G.DefaultPicPool();
-	if not _G.CheckP(pool) then
-		return nil;
-	end
-	
-	local pic = pool:AddPicture(_G.GetSMImgPath(filename), true);
-	if not _G.CheckP(pic) then
-		return nil;
-	end
-	
-	return pic;
-end
-
 --打开客栈
-function OpenKeZhang()
-	
-end
+--function OpenKeZhang()
+--	LogInfo("OpenKeZhang: test2")
+--	CloseDlg();
+--	RoleInvite.LoadUI();	
+--end
 
 
 

@@ -732,13 +732,13 @@ void BattleMgr::processBattleEffect(NDEngine::NDTransData& bao)
 			{
 				pkCommand->skill->setAtkType(SKILL_ATK_TYPE_REMOTE);
 			}
-			pkCommand->skill->setLookface(
-					ScriptDBObj.GetN("skill_config", (unsigned int) data,
-							DB_SKILL_CONFIG_ACT_ID),
-					ScriptDBObj.GetN("skill_config", (unsigned int) data,
-							DB_SKILL_CONFIG_LOOKFACE_ID),
-					ScriptDBObj.GetN("skill_config", (unsigned int) data,
-							DB_SKILL_CONFIG_LOOKFACE_TARGET_ID));
+// 			pkCommand->skill->setLookface(
+// 					ScriptDBObj.GetN("skill_config", (unsigned int) data,
+// 							DB_SKILL_CONFIG_ACT_ID),
+// 					ScriptDBObj.GetN("skill_config", (unsigned int) data,
+// 							DB_SKILL_CONFIG_LOOKFACE_ID),
+// 					ScriptDBObj.GetN("skill_config", (unsigned int) data,
+// 							DB_SKILL_CONFIG_LOOKFACE_TARGET_ID));
 			pkCommand->skill->setId((unsigned int) data);
 			m_pkBeforeCommand = pkCommand;
 			break;

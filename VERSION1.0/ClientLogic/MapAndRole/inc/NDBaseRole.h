@@ -15,6 +15,9 @@
 #include "NDPath.h"
 #include "NDRidePet.h"
 
+#define FIGHTER_HEIGHT 70*(NDDirector::DefaultDirector()->GetScaleFactor())
+#define FIGHTER_WIDTH  45*(NDDirector::DefaultDirector()->GetScaleFactor())
+
 namespace NDEngine
 {
 #define RING_IMAGE			(NDPath::GetFullImagepath("ui_ring.png").c_str())
@@ -46,8 +49,7 @@ public:
 	//－－－end
 
 	bool OnDrawBegin(bool bDraw);override
-// 		void OnDrawEnd(bool bDraw); override
-// 		void OnBeforeNodeRemoveFromParent(NDNode* node, bool bCleanUp); override
+ 	void OnDrawEnd(bool bDraw); override
 
 	CGPoint GetScreenPoint();
 	void DirectRight(bool bRight);
@@ -59,10 +61,9 @@ public:
 	}
 	virtual void SetAction(bool bMove);
 	virtual bool AssuredRidePet();
-	NDRidePet*& GetRidePet();
+
 	virtual void setMoveActionWithRidePet();
 	virtual void setStandActionWithRidePet();
-	virtual void updateRidePetEffect();
 
 	virtual void drawEffects(bool bDraw);
 
@@ -96,12 +97,6 @@ public:
 	virtual void unpakcAllEquip();
 
 	void addTalkMsg(std::string msg, int timeForTalkMsg);
-	//
-	//		函数：SetNormalAniGroup
-	//		作用：设置默认动画组
-	//		参数：lookface服务器下发的标识，用于精灵的表现
-	//		返回值：无
-	void SetNormalAniGroup(int nLookface);
 public:
 	void DrawHead(const CGPoint& pos);
 	void SetWeaponType(int weaponType);
@@ -154,7 +149,15 @@ public:
 	virtual CGRect GetFocusRect();
 
 	int getFlagId(int index);
+	// 勿用，如需获取请直接访问ridePet
+	NDRidePet* GetRidePet();
 
+	void updateRidePetEffect();
+	void SetRidePet(int lookface,int stand_action,int run_action,int acc);
+	int GetPetStandAction() { return this->m_nPetStandAction; }
+	int GetPetWalkAction() { return this->m_nPetRunAction; }
+	int GetPetAccLevel() { return this->m_nAccLevel; }
+	int GetPetLookface() { return this->m_nPetLookface; }
 protected:
 	void SafeClearEffect(NDSprite*& sprite);
 	void SafeAddEffect(NDSprite*& sprite, std::string file);
@@ -165,8 +168,8 @@ protected:
 
 	void DrawRingImage(bool bDraw);
 
-	virtual void RunBattleSubAnimation( Fighter* pkFighter );
-	virtual bool DrawSubAnimation( NDSubAniGroup& kSag );
+// 	virtual void RunBattleSubAnimation( Fighter* pkFighter );
+// 	virtual bool DrawSubAnimation( NDSubAniGroup& kSag );
 
 public:
 	int m_nID;
@@ -207,6 +210,7 @@ public:
 protected:
 	NDPicture* m_pkRingPic;
 	NDSprite* m_pkEffectFlagAniGroup;
+	//TalkBox *m_pkTalkBox;
 	NDSprite* m_pkEffectRidePetAniGroup;
 	NDPicture* m_pkPicShadow;
 	NDPicture* m_pkPicShadowBig;
@@ -214,6 +218,11 @@ protected:
 	int m_iShadowOffsetY;
 	bool m_bShowShadow;
 	bool m_bBigShadow;
+	bool m_bIsRide;
+	int m_nPetStandAction;
+	int m_nPetRunAction;
+	int m_nAccLevel;
+	int m_nPetLookface;
 public:
 	static bool ms_bGameSceneRelease;
 };

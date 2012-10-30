@@ -11,12 +11,12 @@
 #include "NDManualRole.h"
 #include <string>
 #include "EnumDef.h"
-#include "Task.h"
+//#include "Task.h"
 #include "NDUIDialog.h"
 #include "NDTimer.h"
-//#include "GatherPoint.h"
+#include "GatherPoint.h"
 #include "BattleUtil.h"
-#include "NDBattlePet.h"
+//#include "NDBattlePet.h"
 
 using namespace std;
 
@@ -27,8 +27,8 @@ namespace NDEngine
 class NDNpc;
 class NDUIDialog;
 
-typedef vector<Task*> vec_task;
-typedef vec_task::iterator vec_task_it;
+// typedef vector<Task*> vec_task;
+// typedef vec_task::iterator vec_task_it;
 
 class NDPlayer: public NDManualRole,
 		public NDUIDialogDelegate,
@@ -46,7 +46,7 @@ public:
 	void Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive = false);
 
 	void SetPosition(CGPoint newPosition);
-	NDBattlePet* GetShowPet();
+
 	void Update(unsigned long ulDiff);
 	//用于绘制
 	//void SetPositionEx(CGPoint newPosition);
@@ -87,7 +87,8 @@ public:
 	}
 	void ResetGather()
 	{
-		m_bCollide = false; /*m_gp = NULL;*/
+		m_bCollide = false;
+		m_gp = NULL;
 	}
 
 	void ResetFocusRole();
@@ -102,7 +103,7 @@ public:
 	SET_BATTLE_SKILL_LIST& GetSkillList(SKILL_TYPE type);
 	bool IsBattleSkillLearned(OBJID idSkill);
 
-	Task* GetPlayerTask(int idTask);
+//	Task* GetPlayerTask(int idTask);
 
 	void BattleStart();
 
@@ -125,7 +126,7 @@ public:
 
 private:
 
-	//bool doGatherPointCollides(GatherPoint *se);
+	bool doGatherPointCollides(GatherPoint *se);
 	void processSwitch();
 	bool isRoleCanMove();
 
@@ -232,8 +233,6 @@ public:
 	int m_nVipLev;
 
 public:
-	void SetLookface(int nLookface);
-	int GetLookface();
 	void SetLocked(bool locked)
 	{
 		m_bLocked = locked;
@@ -244,10 +243,10 @@ public:
 
 	int m_nTargetIndex; // 玩家当前选择的角色索引,该索引是magmgr里的所有NPC,其它玩家所在容器的索引.
 
-	vec_task m_vPlayerTask; //玩家任务列表
+	//vec_task m_vPlayerTask; //玩家任务列表
 private:
 	bool m_bCollide;
-	//GatherPoint *m_gp;
+	GatherPoint *m_gp;
 	NDTimer* m_pkTimer;
 	NDUIDialog* m_kGatherDlg;
 	bool m_bRequireDacoity;
@@ -259,7 +258,7 @@ private:
 	SET_BATTLE_SKILL_LIST m_setActSkill;
 	SET_BATTLE_SKILL_LIST m_setPasSkill;
 
-	int m_nLookface;
+	//int m_nLookface;
 public:
 	// 服务端发过来不需要计算的数据
 	struct

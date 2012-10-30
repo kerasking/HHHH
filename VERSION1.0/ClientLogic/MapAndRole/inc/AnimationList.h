@@ -24,7 +24,7 @@ public:
 	~AnimationList();
 
 	void moveAction(int type, NDSprite* sprite, int face);
-	void sitAction(NDSprite* sprite);
+	void sitAction(NDSprite* sprite, int face);
 	void ridePetMoveAction(int type, NDSprite* sprite, int face);
 	void ridePetStandAction(int type, NDSprite* sprite, int face);
 	void standPetStandAction(int type, NDSprite* sprite, int face);
