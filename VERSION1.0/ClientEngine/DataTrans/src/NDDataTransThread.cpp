@@ -27,6 +27,7 @@
 #endif  // CC_PLATFORM_BADA
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_QNX)
 #endif // CC_PLATFORM_QNX\
+
 #include "define.h"
 
 /////////////////////////////////////////////////////////////////////////////
