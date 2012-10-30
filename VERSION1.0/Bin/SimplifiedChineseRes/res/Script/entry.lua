@@ -10,5 +10,8 @@ DoFile("Login/define.lua");
 --Íæ¼Ò
 DoFile("Player/define.lua");
 
+--Npc
+DoFile("Npc/define.lua");
+
 --RolePet
 DoFile("RolePet/define.lua");

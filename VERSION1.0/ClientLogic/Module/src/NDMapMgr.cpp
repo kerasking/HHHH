@@ -664,7 +664,7 @@ void NDMapMgr::processPlayer(NDTransData* pkData, int nLength)
 	pkRole->m_nMaxLife = nMaxLife;
 	pkRole->m_nMana = nMana;
 	pkRole->m_nMoney = nMoney;
-	pkRole->m_dwLookFace = dwLookFace;
+	pkRole->m_nLookface = dwLookFace;
 	pkRole->m_nProfesstion = btProfession;
 	pkRole->m_nLevel = btLevel;
 	pkRole->SetState(dwState);
@@ -799,7 +799,7 @@ void NDMapMgr::Update(unsigned long ulDiff)
 			if (role->m_bClear)
 			{
 				//	updateTeamListDelPlayer(*role);			///< No team ¹ùºÆ
-				SAFE_DELETE_NODE(role->GetRidePet());
+				SAFE_DELETE_NODE(role->m_pkRidePet);
 				SAFE_DELETE_NODE(role);
 				m_mapManualRole.erase(it++);
 			}
@@ -1315,7 +1315,7 @@ void NDMapMgr::AddAllNPCToMap()
 // 					pkNPC->m_bFaceRight);
 // 		}
 
-		pkNPC->HandleNPCMask(true);
+		pkNPC->HandleNpcMask(true);
 	}
 
 	NDPlayer::defaultHero().UpdateFocus();
@@ -2697,7 +2697,7 @@ void NDMapMgr::DelNpc(int nID)
 
 		//pkNPC->HandleNpcMask(false); ///< ´Ë´¦ÒÀÀµÕÅµÏµÄNDNpc ¹ùºÆ
 
-		SAFE_DELETE_NODE(pkNPC->GetRidePet());
+		SAFE_DELETE_NODE(pkNPC->m_pkRidePet);
 
 		SAFE_DELETE_NODE(pkNPC);
 

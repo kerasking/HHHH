@@ -52,6 +52,21 @@ typedef struct _tagShowPetInfo
 	}
 } ShowPetInfo;
 
+enum eSM_EFFECT_ALIGNMENT
+{
+	eSM_EFFECT_ALIGNMENT_BEGIN,
+	eSM_EFFECT_ALIGNMENT_BOTTOM	= eSM_EFFECT_ALIGNMENT_BEGIN,
+	eSM_EFFECT_ALIGNMENT_CENTER,
+	eSM_EFFECT_ALIGNMENT_TOP,
+	eSM_EFFECT_ALIGNMENT_END,
+};
+enum eSM_EFFECT_DRAW_ORDER
+{
+	eSM_EFFECT_DRAW_ORDER_BEGIN,
+	eSM_EFFECT_DRAW_ORDER_FRONT	= eSM_EFFECT_DRAW_ORDER_BEGIN,
+	eSM_EFFECT_DRAW_ORDER_BACK,
+	eSM_EFFECT_DRAW_ORDER_END,
+};
 class NDPicture;
 class NDManualRole: public NDBaseRole
 {
@@ -86,22 +101,21 @@ public:
 
 public:
 
-	void Update(unsigned long ulDiff);
-	void SetAction(bool bMove, bool bIgnoreFighting = false);
+	void Update(unsigned long ulDiff); override
+	void ReLoadLookface(int lookface);
+	void SetAction(bool bMove, bool bIgnoreFighting = false); hide
 	bool AssuredRidePet();hide
 
-	void Initialization(int lookface, bool bSetLookFace = true);
+	void Initialization(int lookface, bool bSetLookFace = true); hide
 
 	virtual void Walk(CGPoint toPos, SpriteSpeed speed);
-	void OnMoving(bool bLastPos);override
-	void OnMoveEnd();override
-	void SetPosition(CGPoint newPosition);
-	void OnMoveTurning(bool bXTurnigToY, bool bInc);
+	void OnMoving(bool bLastPos); override
+	void OnMoveEnd(); override 
+	void SetPosition(CGPoint newPosition); override
+	void OnMoveTurning(bool bXTurnigToY, bool bInc); override
 
-	bool OnDrawBegin(bool bDraw);
-	void OnDrawEnd(bool bDraw);
-
-	bool ChangeModelWithMount(int nRideStatus,int nMountType);
+	bool OnDrawBegin(bool bDraw); override
+	void OnDrawEnd(bool bDraw); override
 
 	virtual void stopMoving(bool bResetPos = true, bool bResetTeamPos = true);
 
@@ -136,9 +150,6 @@ public:
 
 	void HandleEffectDacoity();
 
-	// 勿用,如需获取请直接访问battlepet
-	//NDBattlePet* GetBattlePet();
-
 	void AddWalkDir(int dir);
 
 	// 队伍相关接口
@@ -152,8 +163,6 @@ public:
 	}
 	void teamSetServerDir(int dir);
 	void teamSetServerPosition(int iCol, int iRow);
-
-	void SetShowPet(ShowPetInfo& kInfo);
 
 	bool IsSafeProtected()
 	{
@@ -210,7 +219,7 @@ public:
 
 	bool IsInGraveStoneState();
 
-	//void SetShowPet(ShowPetInfo& info);
+	void SetShowPet(ShowPetInfo& kInfo);
 	bool GetShowPetInfo(ShowPetInfo& info);
 	//const NDBattlePet* GetShowPet();
 	void ResetShowPetPosition();
@@ -218,6 +227,11 @@ public:
 	int GetPathDir(int oldX, int oldY, int newX, int newY);
 	bool GetXYByDir(int oldX, int oldY, int dir, int& newX, int& newY);
 	bool IsDirFaceRight(int nDir);
+	bool AddSMEffect(std::string strEffectPath, int nSMEffectAlignment, int nDrawOrder);
+	bool RemoveSMEffect(std::string strEffectPath);
+private:
+	void RemoveAllSMEffect();
+	void RunSMEffect(int nDrawOrder);
 public:
 	// 爵位
 	static std::string GetPeerageName(int nPeerage);
@@ -235,6 +249,7 @@ private:
 	void SetLableName(std::string text, int x, int y, bool isEnemy);
 	void SetLable(LableType eLableType, int x, int y, std::string text,
 			cocos2d::ccColor4B color1, cocos2d::ccColor4B color2);
+	SpriteSpeed GetSpeed();
 protected:
 	void WalkToPosition(const std::vector<CGPoint>& kToPosVector,
 			SpriteSpeed eSpeed, bool bMoveMap, bool bMustArrive = false);
@@ -264,13 +279,15 @@ protected: //@zwq
 
 public:
 	void SetTeamToLastPos();
+	//++Guosen 2012.7.13
+	int GetLookface(){ return m_nLookface; }
+	bool ChangeModelWithMount( int nRideStatus, int nMountType );
 public:
 	int m_nState;								// 状态
 	int m_nMoney;								// 银两
-	int m_dwLookFace;							// 创建人物的时候有6种外观可供选择外观
+/*	int m_dwLookFace;							// 创建人物的时候有6种外观可供选择外观*/
 	int m_nProfesstion;						//玩家的职业
 	int m_nPKPoint;							// pk值
-	int m_nQuality;
 
 	string m_strSynName;							// 帮派名字
 	string m_strSynRank;						// 官职名字
@@ -306,6 +323,11 @@ public:
 
 	// 爵位
 	int m_nPeerage;
+	//++Guosen 2012.7.14
+	int	m_nRideStatus;	//骑乘状态0=步行，1=骑行
+	int	m_nMountType;	//坐骑类型
+	int	m_nLookface;	//
+	int m_nQuality;
 private:
 	// 战宠相关
 	//CAutoLink<NDBattlePet> m_pBattlePetShow;
@@ -351,6 +373,10 @@ private:
 
 	std::vector<ServerEffect> m_kServerEffectBack;
 	std::vector<ServerEffect> m_kServerEffectFront;
+
+private:
+
+	std::map<std::string, NDLightEffect*> m_kArrMapSMEffect[eSM_EFFECT_DRAW_ORDER_END][eSM_EFFECT_ALIGNMENT_END];
 };
 }
 

@@ -11,6 +11,7 @@
 #define __ND_UTILITY_H__
 
 #include "globaldef.h"
+#include "NDDirector.h"
 
 #define MAP_UNITSIZE (16 * ((int)(NDDirector::DefaultDirector()->GetScaleFactor())))
 #define SCREEN_SCALE (NDDirector::DefaultDirector()->GetScaleFactor())
