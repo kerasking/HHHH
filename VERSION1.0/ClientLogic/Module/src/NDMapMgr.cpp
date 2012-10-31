@@ -43,9 +43,10 @@ enum
 	TEXT_TEXT = 1,
 };
 
-int SHENGWANGMAX[7] = { 5000, 1500, 500,
-100, -100, -500, -1500 };
-int discount[7] = { 70, 80, 90, 95, 100, 110, 120 };
+int SHENGWANGMAX[7] =
+{ 5000, 1500, 500, 100, -100, -500, -1500 };
+int discount[7] =
+{ 70, 80, 90, 95, 100, 110, 120 };
 
 IMPLEMENT_CLASS(NDMapMgr, NDObject);
 
@@ -55,8 +56,10 @@ bool NDMapMgr::m_bFirstCreate = false;
 int getShengWangLevel(int v)
 {
 	int result = 7;
-	for (int i = 0; i < 7; i++) {
-		if (v > SHENGWANGMAX[i]) {
+	for (int i = 0; i < 7; i++)
+	{
+		if (v > SHENGWANGMAX[i])
+		{
 			result = i;
 			break;
 		}
@@ -64,7 +67,7 @@ int getShengWangLevel(int v)
 	return result;
 }
 
-int getDiscount( int v )
+int getDiscount(int v)
 {
 	return discount[getShengWangLevel(v)];
 }
@@ -117,7 +120,7 @@ bool GetCharData(char& t, string strValue, string strType)
 	return true;
 }
 
-NDMapMgr::NDMapMgr():
+NDMapMgr::NDMapMgr() :
 m_nCurrentMonsterBound(0),
 m_nRoadBlockX(0),
 m_nRoadBlockY(0),
@@ -3860,8 +3863,8 @@ NDMonster* NDMapMgr::GetBoss()
 	for (; it != m_vMonster.end(); it++)
 	{
 		NDMonster *pkMonster = *it;
-		if ( pkMonster && pkMonster->GetType() == MONSTER_BOSS &&
-			pkMonster->getState() != MONSTER_STATE_DEAD )
+		if (pkMonster && pkMonster->GetType() == MONSTER_BOSS
+				&& pkMonster->getState() != MONSTER_STATE_DEAD)
 		{
 			return pkMonster;
 		}
@@ -3869,7 +3872,7 @@ NDMonster* NDMapMgr::GetBoss()
 	return NULL;
 }
 
-NDManualRole* NDMapMgr::NearestDacoityManualrole( NDManualRole& role, int iDis )
+NDManualRole* NDMapMgr::NearestDacoityManualrole(NDManualRole& role, int iDis)
 {
 	int minDist = iDis;
 
@@ -3880,26 +3883,28 @@ NDManualRole* NDMapMgr::NearestDacoityManualrole( NDManualRole& role, int iDis )
 	{
 		NDManualRole* manualrole = it->second;
 
-		if (role.m_nID == manualrole->m_nID) continue;
+		if (role.m_nID == manualrole->m_nID)
+			continue;
 
-		if (!manualrole->IsInDacoity()) continue;
+		if (!manualrole->IsInDacoity())
+			continue;
 
-		if (manualrole->IsInState(USERSTATE_FIGHTING) 
-			|| manualrole->IsInState(USERSTATE_DEAD)
-			|| manualrole->IsInState(USERSTATE_PVE)
-			) 
+		if (manualrole->IsInState(USERSTATE_FIGHTING)
+				|| manualrole->IsInState(USERSTATE_DEAD)
+				|| manualrole->IsInState(USERSTATE_PVE))
 		{
 			continue;
 		}
 
-		if ( !(role.IsInState(USERSTATE_BATTLE_POSITIVE) && manualrole->IsInState(USERSTATE_BATTLE_NEGATIVE) ||
-			role.IsInState(USERSTATE_BATTLE_NEGATIVE) && manualrole->IsInState(USERSTATE_BATTLE_POSITIVE))
-			)
+		if (!(role.IsInState(USERSTATE_BATTLE_POSITIVE)
+				&& manualrole->IsInState(USERSTATE_BATTLE_NEGATIVE)
+				|| role.IsInState(USERSTATE_BATTLE_NEGATIVE)
+						&& manualrole->IsInState(USERSTATE_BATTLE_POSITIVE)))
 			continue;
 
 		int dis = getDistBetweenRole(manualrole, &role);
 
-		if ( dis <= minDist )
+		if (dis <= minDist)
 		{
 			resrole = manualrole;
 			minDist = dis;
@@ -3909,7 +3914,8 @@ NDManualRole* NDMapMgr::NearestDacoityManualrole( NDManualRole& role, int iDis )
 	return resrole;
 }
 
-NDManualRole* NDMapMgr::NearestBattleFieldManualrole( NDManualRole& role, int iDis )
+NDManualRole* NDMapMgr::NearestBattleFieldManualrole(NDManualRole& role,
+		int iDis)
 {
 	int minDist = iDis;
 
@@ -3920,20 +3926,22 @@ NDManualRole* NDMapMgr::NearestBattleFieldManualrole( NDManualRole& role, int iD
 	{
 		NDManualRole* manualrole = it->second;
 
-		if (role.m_nID == manualrole->m_nID) continue;
+		if (role.m_nID == manualrole->m_nID)
+			continue;
 
-		if (!manualrole->IsInState(USERSTATE_BATTLEFIELD)) 
+		if (!manualrole->IsInState(USERSTATE_BATTLEFIELD))
 		{
 			continue;
 		}
-
 
 		if (manualrole->IsInState(USERSTATE_BF_WAIT_RELIVE))
 		{
 			continue;
 		}
 
-		if (manualrole->IsInState(USERSTATE_FIGHTING) || manualrole->IsInState(USERSTATE_DEAD)) {
+		if (manualrole->IsInState(USERSTATE_FIGHTING)
+				|| manualrole->IsInState(USERSTATE_DEAD))
+		{
 			continue;
 		}
 
@@ -3944,7 +3952,7 @@ NDManualRole* NDMapMgr::NearestBattleFieldManualrole( NDManualRole& role, int iD
 
 		int dis = getDistBetweenRole(manualrole, &role);
 
-		if ( dis <= minDist )
+		if (dis <= minDist)
 		{
 			resrole = manualrole;
 			minDist = dis;
@@ -3954,29 +3962,33 @@ NDManualRole* NDMapMgr::NearestBattleFieldManualrole( NDManualRole& role, int iD
 	return resrole;
 }
 
-int NDMapMgr::getDistBetweenRole( NDBaseRole *firstrole, NDBaseRole *secondrole )
+int NDMapMgr::getDistBetweenRole(NDBaseRole *firstrole, NDBaseRole *secondrole)
 {
 	if (!firstrole || !secondrole)
 	{
 		return FOCUS_JUDGE_DISTANCE;
 	}
 
-
-	int w = (firstrole->GetPosition().x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE - (secondrole->GetPosition().x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE;
-	int h = (firstrole->GetPosition().y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE - (secondrole->GetPosition().y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE;
+	int w = (firstrole->GetPosition().x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE
+			- (secondrole->GetPosition().x - DISPLAY_POS_X_OFFSET)
+					/ MAP_UNITSIZE;
+	int h = (firstrole->GetPosition().y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE
+			- (secondrole->GetPosition().y - DISPLAY_POS_Y_OFFSET)
+					/ MAP_UNITSIZE;
 
 	return w * w + h * h;
 }
 
 void NDMapMgr::BattleStart()
 {
-	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene));
-	if (scene) 
+	NDScene *scene = NDDirector::DefaultDirector()->GetScene(
+			RUNTIME_CLASS(GameScene));
+	if (scene)
 	{
 		/***
-		* 等待张迪的 DirectKey
-		* 郭浩
-		*/
+		 * 等待张迪的 DirectKey
+		 * 郭浩
+		 */
 		//DirectKey* dk = ((GameScene*)scene)->GetDirectKey();
 		//if (dk) 
 		//{
@@ -3987,7 +3999,7 @@ void NDMapMgr::BattleStart()
 	NDPlayer::defaultHero().BattleStart();
 }
 
-NDBaseRole* NDMapMgr::GetNextTarget( int iDistance )
+NDBaseRole* NDMapMgr::GetNextTarget(int iDistance)
 {
 	NDPlayer *player = &NDPlayer::defaultHero();
 
@@ -3998,26 +4010,26 @@ NDBaseRole* NDMapMgr::GetNextTarget( int iDistance )
 		return resrole;
 	}
 
-	if (player->m_nTargetIndex >= int(m_vNPC.size()+m_mapManualRole.size()))
+	if (player->m_nTargetIndex >= int(m_vNPC.size() + m_mapManualRole.size()))
 	{
 		player->m_nTargetIndex = 0;
 	}
 
-	if (player->m_nTargetIndex < int(m_vNPC.size()) )
+	if (player->m_nTargetIndex < int(m_vNPC.size()))
 	{
-		VEC_NPC::iterator it = m_vNPC.begin()+ player->m_nTargetIndex;
+		VEC_NPC::iterator it = m_vNPC.begin() + player->m_nTargetIndex;
 		for (; it != m_vNPC.end(); it++)
 		{
 			player->m_nTargetIndex++;
 			NDNpc* npc = *it;
 
-			if (npc->m_nID == player->GetFocusNpcID() )
+			if (npc->m_nID == player->GetFocusNpcID())
 			{
 				continue;
 			}
 
 			int dis = getDistBetweenRole(player, npc);
-			if ( dis < iDistance )
+			if (dis < iDistance)
 			{
 				resrole = npc;
 				return resrole;
@@ -4032,7 +4044,7 @@ NDBaseRole* NDMapMgr::GetNextTarget( int iDistance )
 		iIndexManuRole = 0;
 	}
 
-	if (iIndexManuRole < (int)m_mapManualRole.size())
+	if (iIndexManuRole < (int) m_mapManualRole.size())
 	{
 		map_manualrole_it it = m_mapManualRole.begin();
 		for (int i = 0; i < iIndexManuRole; i++)
@@ -4046,13 +4058,13 @@ NDBaseRole* NDMapMgr::GetNextTarget( int iDistance )
 
 			NDManualRole *otherplayer = it->second;
 
-			if (otherplayer->m_nID == player->m_iFocusManuRoleID )
+			if (otherplayer->m_nID == player->m_iFocusManuRoleID)
 			{
 				continue;
 			}
 
 			int dis = getDistBetweenRole(player, otherplayer);
-			if ( dis < iDistance )
+			if (dis < iDistance)
 			{
 				resrole = otherplayer;
 				return resrole;
@@ -4063,7 +4075,7 @@ NDBaseRole* NDMapMgr::GetNextTarget( int iDistance )
 	return resrole;
 }
 
-NDBaseRole* NDMapMgr::GetRoleNearstPlayer( int iDistance )
+NDBaseRole* NDMapMgr::GetRoleNearstPlayer(int iDistance)
 {
 	int minDist = iDistance;
 
@@ -4076,14 +4088,14 @@ NDBaseRole* NDMapMgr::GetRoleNearstPlayer( int iDistance )
 		return resrole;
 	}
 
-	do 
+	do
 	{
 		VEC_NPC::iterator it = m_vNPC.begin();
 		for (; it != m_vNPC.end(); it++)
 		{
 			NDNpc *npc = *it;
 			int dis = getDistBetweenRole(player, npc);
-			if ( dis < minDist )
+			if (dis < minDist)
 			{
 				resrole = npc;
 				minDist = dis;
@@ -4095,20 +4107,21 @@ NDBaseRole* NDMapMgr::GetRoleNearstPlayer( int iDistance )
 		}
 	} while (0);
 
-	do 
+	do
 	{
 		map_manualrole_it it = m_mapManualRole.begin();
 		for (; it != m_mapManualRole.end(); it++)
 		{
 			NDManualRole *otherplayer = it->second;
 
-			if (player->m_nTeamID !=0 && player->m_nTeamID == otherplayer->m_nTeamID)
+			if (player->m_nTeamID != 0
+					&& player->m_nTeamID == otherplayer->m_nTeamID)
 			{
 				continue;
 			}
 
 			int dis = getDistBetweenRole(player, otherplayer);
-			if ( dis < minDist )
+			if (dis < minDist)
 			{
 				resrole = otherplayer;
 				minDist = dis;
@@ -4119,7 +4132,7 @@ NDBaseRole* NDMapMgr::GetRoleNearstPlayer( int iDistance )
 	return resrole;
 }
 
-void NDMapMgr::throughMap( int mapX, int mapY, int mapId )
+void NDMapMgr::throughMap(int mapX, int mapY, int mapId)
 {
 	//NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
 	//if (!scene) 
@@ -4138,7 +4151,7 @@ void NDMapMgr::throughMap( int mapX, int mapY, int mapId )
 
 //void NDMapMgr::addRequst( RequsetInfo& request )
 //{
-	///< 汤自勤已经完成 需要我这边合并后 郭浩
+///< 汤自勤已经完成 需要我这边合并后 郭浩
 // 	std::stringstream strBuf;
 // 	strBuf << NDCommonCString("YouHaveNew") << request.info << "," << NDCommonCString("OpenRequestList");
 // 	Chat::DefaultChat()->AddMessage(ChatTypeSystem, strBuf.str().c_str());
@@ -4179,7 +4192,7 @@ void NDMapMgr::throughMap( int mapX, int mapY, int mapId )
 // 	}
 //}
 
-void NDMapMgr::NavigateToNpc( int nNpcId )
+void NDMapMgr::NavigateToNpc(int nNpcId)
 {
 	NDNpc* pkNPC = GetNpcByID(nNpcId);
 
@@ -4191,7 +4204,7 @@ void NDMapMgr::NavigateToNpc( int nNpcId )
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
 
 	CGPoint kDstPoint = ccp(pkNPC->m_nCol * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-		pkNPC->m_nRow * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
+			pkNPC->m_nRow * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
 
 	NDPlayer& player = NDPlayer::defaultHero();
 
@@ -4199,7 +4212,7 @@ void NDMapMgr::NavigateToNpc( int nNpcId )
 
 	if (abs(int(disPos.x)) <= 32 && abs(int(disPos.y)) <= 32)
 	{
-		if (pkNPC && pkNPC->GetType() != 6) 
+		if (pkNPC && pkNPC->GetType() != 6)
 		{
 			player.SendNpcInteractionMessage(pkNPC->m_nID);
 		}
@@ -4229,191 +4242,226 @@ void NDMapMgr::ClearNPCChat()
 	m_iCurDlgNpcID = 0;
 }
 
-void NDMapMgr::processMsgDlg( NDTransData& kData )
+void NDMapMgr::processMsgDlg(NDTransData& kData)
 {
-		int npcID = kData.ReadInt();
-		
-		usData = kData.ReadShort();
-		
-		Byte iDx = kData.ReadByte();
-		
-		Byte ucAction = kData.ReadByte();
-		string str;
-		
-		// 防止消息延时过久，抛弃处理。
-		if (BattleMgrObj.GetBattle() != NULL) {
-			return;
+	int npcID = kData.ReadInt();
+
+	usData = kData.ReadShort();
+
+	Byte iDx = kData.ReadByte();
+
+	Byte ucAction = kData.ReadByte();
+	string str;
+
+	// 防止消息延时过久，抛弃处理。
+	if (BattleMgrObj.GetBattle() != NULL)
+	{
+		return;
+	}
+
+	NDPlayer& player = NDPlayer::defaultHero();
+	switch (ucAction)
+	{
+	case MSGDIALOG_LEAVE:
+	{
+		strLeaveMsg = kData.ReadUnicodeString();
+		break;
+	}
+	case MSGDIALOG_TITLE:
+	{
+		strTitle = kData.ReadUnicodeString();
+		break;
+	}
+	case MSGDIALOG_TEXT:
+	{ // TEXT 文本信息；非
+		if (usData == TEXT_TEXT)
+		{
+			str = kData.ReadUnicodeString();
+			strNPCText += str;
 		}
-		
-		NDPlayer& player = NDPlayer::defaultHero();
-		switch (ucAction) {
-			case MSGDIALOG_LEAVE: {
-				strLeaveMsg = kData.ReadUnicodeString();
-				break;
-			}
-			case MSGDIALOG_TITLE: {
-				strTitle = kData.ReadUnicodeString();
-				break;
-			}
-			case MSGDIALOG_TEXT: { // TEXT 文本信息；非
-				if (usData == TEXT_TEXT) {
-					str = kData.ReadUnicodeString();
-					strNPCText += str;
+		break;
+	}
+	case MSGDIALOG_LINK:
+	{ // 选项框形式 //非
+		if (usData == TEXT_TEXT)
+		{
+			str = kData.ReadUnicodeString();
+			str = changeToChineseSign(str);
+			st_npc_op op;
+			op.idx = iDx;
+			op.str = str;
+			vecNPCOPText.push_back(op);
+		}
+
+		break;
+	}
+	case MSGDIALOG_NO_TALK:
+	{
+		NDUISynLayer::Close (CLOSE);
+		break;
+	}
+	case MSGDIALOG_DLG:
+	{ // 对话框形式
+		if (usData == TEXT_TEXT)
+		{
+			str = kData.ReadUnicodeString();
+			str = changeNpcString(str);
+
+			//NDUIDialog *dlg = new NDUIDialog;
+			//					dlg->Initialization();
+			std::string title = "";
+			if (strTitle.empty())
+			{
+				NDNpc *focusNpc = player.GetFocusNpc();
+				if (focusNpc)
+				{
+					title = focusNpc->m_strName;
 				}
-				break;
 			}
-			case MSGDIALOG_LINK: { // 选项框形式 //非
-				if (usData == TEXT_TEXT) {
-					str = kData.ReadUnicodeString();
-					str = changeToChineseSign(str);
-					st_npc_op op;
-					op.idx = iDx;
-					op.str = str;
-					vecNPCOPText.push_back(op);
+
+			//dlg->Show(title.c_str(), str.c_str(), "", NULL);
+			GlobalDialogObj.Show(NULL, title.c_str(), str.c_str(), 0, NULL);
+			CloseProgressBar;
+		}
+
+		break;
+	}
+	case MSGDIALOG_USER_OPEN_DLG:
+	{
+		switch (usData)
+		{
+		case 1:
+		{ // 打开商店界面
+			NDNpc *npc = player.GetFocusNpc();
+			if (!npc)
+			{
+				CloseProgressBar;
+				return;
+			}
+
+			CloseProgressBar;
+
+			int npcCamp = npc->GetCamp();
+			if (npcCamp - 1 >= 0 && npcCamp - 1 < 7)
+			{
+				int discount = getDiscount(zhengYing[npcCamp - 1]);
+				if (discount != 100)
+				{
+					std::stringstream ss;
+					ss << NDCommonCString("ShopEnjoy") << discount << "%"
+							<< NDCommonCString("discount");
+					//showDialog(NDCommonCString("tip"), ss.str().c_str());	///< 暂时没找到showDialog 郭浩
 				}
-				
-				break;
 			}
-			case MSGDIALOG_NO_TALK: {
-				NDUISynLayer::Close(CLOSE);
-				break;
-			}
-			case MSGDIALOG_DLG: { // 对话框形式
-				if (usData == TEXT_TEXT) {
-					str = kData.ReadUnicodeString();
-					str = changeNpcString(str);
-					
-					//NDUIDialog *dlg = new NDUIDialog;
-					//					dlg->Initialization();
-					std::string title="";
-					if ( strTitle.empty())
-					{
-						NDNpc *focusNpc = player.GetFocusNpc();
-						if (focusNpc)
-						{
-							title = focusNpc->m_strName;
-						}
-					}
-					
-					//dlg->Show(title.c_str(), str.c_str(), "", NULL);
-					GlobalDialogObj.Show(NULL, title.c_str(), str.c_str(), 0, NULL);
-					CloseProgressBar;
+
+			map_npc_store_it it = m_mapNpcStore.find(npc->m_nID);
+			if (it == m_mapNpcStore.end())
+			{
+				NDTransData bao(_MSG_SHOPINFO);
+				bao << int(npc->m_nID) << (unsigned char) 0;
+				NDSocket* skt = NDDataTransThread::DefaultThread()->GetSocket();
+				if (skt)
+				{
+					skt->Send(&bao);
 				}
-				
-				break;
+				ShowProgressBar;
 			}
-			case MSGDIALOG_USER_OPEN_DLG: {
-				switch (usData) {
-					case 1: { // 打开商店界面
-						NDNpc *npc = player.GetFocusNpc();
-						if (!npc) 
-						{
-							CloseProgressBar;
-							return;
-						}
-						
-						CloseProgressBar;
-						
-						int npcCamp = npc->GetCamp();
-						if (npcCamp - 1 >= 0 && npcCamp - 1 < 7) {
-							int discount = getDiscount(zhengYing[npcCamp - 1]);
-							if (discount != 100) {
-								std::stringstream ss; ss << NDCommonCString("ShopEnjoy") << discount << "%" << NDCommonCString("discount");
-								//showDialog(NDCommonCString("tip"), ss.str().c_str());	///< 暂时没找到showDialog 郭浩
-							}
-						}
-						
-						map_npc_store_it it = m_mapNpcStore.find(npc->m_nID);
-						if (it == m_mapNpcStore.end()) 
-						{
-							NDTransData bao(_MSG_SHOPINFO);
-							bao << int(npc->m_nID) << (unsigned char)0;
-							NDSocket* skt = NDDataTransThread::DefaultThread()->GetSocket();
-							if (skt)
-							{
-								skt->Send(&bao);
-							}
-							ShowProgressBar;
-						}
-						else
-						{
+			else
+			{
 // 							GameUINpcStore::GenerateNpcItems(npc->m_nID); ///< 这个是张迪的 郭浩
 // 							GameScene::ShowShop();
-						}
-						
-						break;
-					}
-					case 2:
-					case 3: { // 打开装备界面
-						//T.addDialog(new EquipUIScreen(EquipUIScreen.SHOW_EQUIP_NORMAL));
-						break;
-					}
-					case 4: { // 打开仓库
-						if (!player.GetFocusNpc()) 
-						{
-							break;
-						}
-						CloseProgressBar;
-						int iNPCID = player.GetFocusNpcID();
-						if (ItemMgrObj.GetStorage().empty()) 
-						{
-							NDTransData bao(_MSG_ITEMKEEPER);
-							bao << int(0) << (unsigned char)MSG_STORAGE_ITEM_QUERY << iNPCID;
-							SEND_DATA(bao);
-							ShowProgressBar;
-						} else {
-							//NDDirector::DefaultDirector()->PushScene(GameStorageScene::Scene()); ///< 张迪的 郭浩
-						}
-						break;
-					}
-					case 5: { // todo 暂时没有 结婚或离婚
-						
-						CloseProgressBar;
-						
-						break;
-					}
-					case 6: {// 拍卖
-						break;
-					}
-					case 7: {// 公会
-						//CreateSynDialog::Show(); ///< 貌似废弃 郭浩
-						break;
-					}
-					case 8: {
-						int idCurNpc = 0;
-						if (player.IsFocusNpcValid()) {
-							idCurNpc = player.GetFocusNpcID();
-						}
-						
-						if (idCurNpc == 0) {
-							return;
-						}
-						
-						MAP_NPC_SKILL_STORE_IT it = m_mapNpcSkillStore.find(idCurNpc);
-						
-						if (it == m_mapNpcSkillStore.end()) { // 没有存，就请求
-							NDTransData bao(_MSG_MAGIC_GOODS);
-							bao << idCurNpc;
-							SEND_DATA(bao);
-							ShowProgressBar;
-						} else {
-							//LearnSkillUILayer::Show(it->second); ///< 暂时不弄 郭浩
-						}
-						break;
-					}
-					case 9: {// 装备修理
-						CloseProgressBar;
-						//NDDirector::DefaultDirector()->PushScene(NewEquipRepairScene::Scene()); ///< 没有装备修理 郭浩
-						break;
-					}
-					case 11: { // 装备品质升级
+			}
+
+			break;
+		}
+		case 2:
+		case 3:
+		{ // 打开装备界面
+		  //T.addDialog(new EquipUIScreen(EquipUIScreen.SHOW_EQUIP_NORMAL));
+			break;
+		}
+		case 4:
+		{ // 打开仓库
+			if (!player.GetFocusNpc())
+			{
+				break;
+			}
+			CloseProgressBar;
+			int iNPCID = player.GetFocusNpcID();
+			if (ItemMgrObj.GetStorage().empty())
+			{
+				NDTransData bao(_MSG_ITEMKEEPER);
+				bao << int(0) << (unsigned char) MSG_STORAGE_ITEM_QUERY
+						<< iNPCID;
+				SEND_DATA(bao);
+				ShowProgressBar;
+			}
+			else
+			{
+				//NDDirector::DefaultDirector()->PushScene(GameStorageScene::Scene()); ///< 张迪的 郭浩
+			}
+			break;
+		}
+		case 5:
+		{ // todo 暂时没有 结婚或离婚
+
+			CloseProgressBar;
+
+			break;
+		}
+		case 6:
+		{ // 拍卖
+			break;
+		}
+		case 7:
+		{ // 公会
+		  //CreateSynDialog::Show(); ///< 貌似废弃 郭浩
+			break;
+		}
+		case 8:
+		{
+			int idCurNpc = 0;
+			if (player.IsFocusNpcValid())
+			{
+				idCurNpc = player.GetFocusNpcID();
+			}
+
+			if (idCurNpc == 0)
+			{
+				return;
+			}
+
+			MAP_NPC_SKILL_STORE_IT it = m_mapNpcSkillStore.find(idCurNpc);
+
+			if (it == m_mapNpcSkillStore.end())
+			{ // 没有存，就请求
+				NDTransData bao(_MSG_MAGIC_GOODS);
+				bao << idCurNpc;
+				SEND_DATA(bao);
+				ShowProgressBar;
+			}
+			else
+			{
+				//LearnSkillUILayer::Show(it->second); ///< 暂时不弄 郭浩
+			}
+			break;
+		}
+		case 9:
+		{ // 装备修理
+			CloseProgressBar;
+			//NDDirector::DefaultDirector()->PushScene(NewEquipRepairScene::Scene()); ///< 没有装备修理 郭浩
+			break;
+		}
+		case 11:
+		{ // 装备品质升级
 // 						CloseProgressBar;
 // 						EquipUpgradeScene *scene = new EquipUpgradeScene;
 // 						scene->Initialization(EQUIP_UPGRADE);
 // 						NDDirector::DefaultDirector()->PushScene(scene);
-						break;
-					}
-					case 12: { // 装备锻造
+			break;
+		}
+		case 12:
+		{ // 装备锻造
 // 						CloseProgressBar;
 // 						NDScene* runningScene = NDDirector::DefaultDirector()->GetRunningScene();
 // 						if (runningScene && runningScene->IsKindOfClass(RUNTIME_CLASS(EquipForgeScene))) {
@@ -4425,23 +4473,26 @@ void NDMapMgr::processMsgDlg( NDTransData& kData )
 // // 							NDDirector::DefaultDirector()->PushScene(scene);
 // 						}
 // 						break;
-					}
-					case 13: { // 宝石摘除
-						//T.addDialog(new RemoveStone());
+		}
+		case 13:
+		{ // 宝石摘除
+		  //T.addDialog(new RemoveStone());
 // 						CloseProgressBar;
 // 						RemoveStoneScene *scene = new RemoveStoneScene;
 // 						scene->Initialization();
 // 						NDDirector::DefaultDirector()->PushScene(scene);
 // 						break;
-					}
-					case 14: { // 装备开洞
+		}
+		case 14:
+		{ // 装备开洞
 // 						CloseProgressBar;
 // 						OpenHoleScene *scene = new OpenHoleScene;
 // 						scene->Initialization();
 // 						NDDirector::DefaultDirector()->PushScene(scene);
-						break;
-					}
-					case 15: { // 领取礼包
+			break;
+		}
+		case 15:
+		{ // 领取礼包
 // 						NDUICustomView *view = new NDUICustomView;
 // 						view->Initialization();
 // 						view->SetDelegate(this);
@@ -4456,16 +4507,18 @@ void NDMapMgr::processMsgDlg( NDTransData& kData )
 // 							scene->AddChild(view);
 // 						}
 // 						CloseProgressBar;					
-						break;	
-					}
-					case 16:{ // 16随机炼药，17按配方炼药，18随机合成，19按配方合成
+			break;
+		}
+		case 16:
+		{ // 16随机炼药，17按配方炼药，18随机合成，19按配方合成
 // 						CloseProgressBar;
 // 						LifeSkillRandomScene *scene = new LifeSkillRandomScene;
 // 						scene->Initialization(eChaoYao);
 // 						NDDirector::DefaultDirector()->PushScene(scene);
 // 						break;
-					}
-					case 17:{ //17按配方炼药
+		}
+		case 17:
+		{ //17按配方炼药
 // 						CloseProgressBar;
 // 						if ( getLifeSkill(ALCHEMY_IDSKILL) != NULL )
 // 						{
@@ -4477,17 +4530,19 @@ void NDMapMgr::processMsgDlg( NDTransData& kData )
 // 						{
 // 							GlobalShowDlg(NDCommonCString("OperateFail"), NDCommonCString("NoLianJingSkillTip"));
 // 						}
-						
-						break;
-					}
-					case 18:{ //18随机合成
+
+			break;
+		}
+		case 18:
+		{ //18随机合成
 // 						CloseProgressBar;
 // 						LifeSkillRandomScene *scene = new LifeSkillRandomScene;
 // 						scene->Initialization(eBaoShiYuanShi);
 // 						NDDirector::DefaultDirector()->PushScene(scene);
- 						break;
-					}
-					case 19:{ //19按配方合成
+			break;
+		}
+		case 19:
+		{ //19按配方合成
 // 						CloseProgressBar;
 // 						if ( getLifeSkill(GEM_IDSKILL) != NULL )
 // 						{
@@ -4499,13 +4554,13 @@ void NDMapMgr::processMsgDlg( NDTransData& kData )
 // 						{
 // 							GlobalShowDlg(NDCommonCString("OperateFail"), NDCommonCString("NoBaoShiSkillTip"));
 // 						}
-						break;
-					}
-					case 20:
-				//		ForgetSkillUILayer::Show();
-						break;
-					case 21: // 许愿树
-					{
+			break;
+		}
+		case 20:
+			//		ForgetSkillUILayer::Show();
+			break;
+		case 21: // 许愿树
+		{
 // 						NDUICustomView *view = new NDUICustomView;
 // 						view->Initialization();
 // 						view->SetDelegate(this);
@@ -4519,12 +4574,12 @@ void NDMapMgr::processMsgDlg( NDTransData& kData )
 // 						{
 // 							scene->AddChild(view);
 // 						}
-						CloseProgressBar;
-					}
-						
-						break;
-					case 22: // 许愿树
-					{
+			CloseProgressBar;
+		}
+
+			break;
+		case 22: // 许愿树
+		{
 // 						NDUICustomView *view = new NDUICustomView;
 // 						view->Initialization();
 // 						view->SetDelegate(this);
@@ -4539,130 +4594,134 @@ void NDMapMgr::processMsgDlg( NDTransData& kData )
 // 						{
 // 							scene->AddChild(view);
 // 						}
-						CloseProgressBar;
-					}
-						break;
-					case 23://打开技能合成界面
-					{
-						CloseProgressBar;
-					}
-						break;
-					case 24:// 种植
-					{
-						CloseProgressBar;
-						//showUseItemUI(npcID, 0);
-					}
-						break;
-					case 25:// 饲养
-					{
-						CloseProgressBar;
-						//showUseItemUI(npcID, 1);
-					}
-						break;
-					case 26:// 施肥
-					{
-						CloseProgressBar;
-						//showUseItemUI(npcID, 2);
-					}
-						break;
-					case 27:// 喂饲料
-					{
-						CloseProgressBar;
-					//	showUseItemUI(npcID, 3);
-					}
-						break;
-					case 28://庄园改名
-					{
-						CloseProgressBar;
-						//ShowView(this, NDCommonCString("FarmRename"), eCVOP_FarmName, 15); ///< 暂时找不到ShowView 郭浩
+			CloseProgressBar;
+		}
+			break;
+		case 23: //打开技能合成界面
+		{
+			CloseProgressBar;
+		}
+			break;
+		case 24: // 种植
+		{
+			CloseProgressBar;
+			//showUseItemUI(npcID, 0);
+		}
+			break;
+		case 25: // 饲养
+		{
+			CloseProgressBar;
+			//showUseItemUI(npcID, 1);
+		}
+			break;
+		case 26: // 施肥
+		{
+			CloseProgressBar;
+			//showUseItemUI(npcID, 2);
+		}
+			break;
+		case 27: // 喂饲料
+		{
+			CloseProgressBar;
+			//	showUseItemUI(npcID, 3);
+		}
+			break;
+		case 28: //庄园改名
+		{
+			CloseProgressBar;
+			//ShowView(this, NDCommonCString("FarmRename"), eCVOP_FarmName, 15); ///< 暂时找不到ShowView 郭浩
 
-					}
-						break;
-					case 29://庄园欢迎词
-					{
-						CloseProgressBar;
-					//	ShowView(this, NDCommonCString("ModifyWelcome"), eCVOP_FarmWelcomeName, 64);
+		}
+			break;
+		case 29: //庄园欢迎词
+		{
+			CloseProgressBar;
+			//	ShowView(this, NDCommonCString("ModifyWelcome"), eCVOP_FarmWelcomeName, 64);
 
-					}
-						break;
-					case 30://加速升级
-					{
-						CloseProgressBar;
-					//	showUseItemUI(npcID, 4);
-					}
-						break;
-					case 31://建筑改名
-					{
-						CloseProgressBar;
-					//	ShowView(this, NDCommonCString("ModifyBuildingName"), eCVOP_FarmBuildingName, 15);
+		}
+			break;
+		case 30: //加速升级
+		{
+			CloseProgressBar;
+			//	showUseItemUI(npcID, 4);
+		}
+			break;
+		case 31: //建筑改名
+		{
+			CloseProgressBar;
+			//	ShowView(this, NDCommonCString("ModifyBuildingName"), eCVOP_FarmBuildingName, 15);
 
-						m_iCurDlgNpcID = npcID;
-					}
-						break;
-					case 32://村落改名
-					{
-						CloseProgressBar;
-						//ShowView(this, NDCommonCString("ModifyCunluoName"), eCVOP_FarmHarmletName, 15);  ///< ShowView暂时找不到 郭浩
+			m_iCurDlgNpcID = npcID;
+		}
+			break;
+		case 32: //村落改名
+		{
+			CloseProgressBar;
+			//ShowView(this, NDCommonCString("ModifyCunluoName"), eCVOP_FarmHarmletName, 15);  ///< ShowView暂时找不到 郭浩
 
-						m_iCurDlgNpcID = npcID;
-					}
-						break;
-					case 33://装备升级
-					{
+			m_iCurDlgNpcID = npcID;
+		}
+			break;
+		case 33: //装备升级
+		{
 // 						CloseProgressBar;
 // 						EquipUpgradeScene *scene = new EquipUpgradeScene;
 // 						scene->Initialization(EQUIP_UPLEVEL);
 // 						NDDirector::DefaultDirector()->PushScene(scene);
-					}
-						break;
-						
-						
-				}
-				break;
-			}
-			case MSGDIALOG_CREATE: { // npc对话 表结尾
-				m_iCurDlgNpcID = npcID;
-				NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
-				if (scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
-				{
-					GameScene *gamescene = (GameScene*)scene;
-					gamescene->ShowNPCDialog();
-				}
-				CloseProgressBar;
-				break;
-			}
-			case MSGDIALOG_MAGIC_EFFECT: { // todo 显示魔法特效
-				break;
-			}
-			case MSGDIALOG_LINK_EX: {// 选项（带提示箭头）
-				if (usData == TEXT_TEXT) {
-					str = kData.ReadUnicodeString();
-					str = changeToChineseSign(str);
-					st_npc_op op;
-					op.idx = iDx;
-					op.str = str;
-					op.bArrow = true;
-					vecNPCOPText.push_back(op);
-				}
-				break;
-			}
-			case MSGDIALOG_CREATE_EX: { // 结束（无离开按钮）
-				{
-					m_iCurDlgNpcID = npcID;
-					NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
-					if (scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
-					{
-						GameScene *gamescene = (GameScene*)scene;
-						gamescene->ShowNPCDialog(false);
-					}
-					CloseProgressBar;
-				}
-				break;
-			}
 		}
+			break;
+
+		}
+		break;
+	}
+	case MSGDIALOG_CREATE:
+	{ // npc对话 表结尾
+		m_iCurDlgNpcID = npcID;
+		NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
+		if (scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
+		{
+			GameScene *gamescene = (GameScene*) scene;
+			gamescene->ShowNPCDialog();
+		}
+		CloseProgressBar;
+		break;
+	}
+	case MSGDIALOG_MAGIC_EFFECT:
+	{ // todo 显示魔法特效
+		break;
+	}
+	case MSGDIALOG_LINK_EX:
+	{ // 选项（带提示箭头）
+		if (usData == TEXT_TEXT)
+		{
+			str = kData.ReadUnicodeString();
+			str = changeToChineseSign(str);
+			st_npc_op op;
+			op.idx = iDx;
+			op.str = str;
+			op.bArrow = true;
+			vecNPCOPText.push_back(op);
+		}
+		break;
+	}
+	case MSGDIALOG_CREATE_EX:
+	{ // 结束（无离开按钮）
+		{
+			m_iCurDlgNpcID = npcID;
+			NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
+			if (scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
+			{
+				GameScene *gamescene = (GameScene*) scene;
+				gamescene->ShowNPCDialog(false);
+			}
+			CloseProgressBar;
+		}
+		break;
+	}
+	}
 }
 
-string NDMapMgr::changeNpcString( string str )
+string NDMapMgr::changeNpcString(string str)
 {
 	if (str.empty())
 	{
@@ -4671,28 +4730,31 @@ string NDMapMgr::changeNpcString( string str )
 
 	NDString ndstrtmp(str);
 
-	ndstrtmp.replace(NDString("&n"), NDString(NDPlayer::defaultHero().m_strName));
+	ndstrtmp.replace(NDString("&n"),
+			NDString(NDPlayer::defaultHero().m_strName));
 	switch (NDPlayer::defaultHero().m_nSex)
 	{
 	case SpriteSexMale:
-		{
-			ndstrtmp.replace(NDString("&1"), NDString(NDCommonCString("XiaoMei")));
-			ndstrtmp.replace(NDString("&2"), NDString(NDCommonCString("DaJie")));
-			ndstrtmp.replace(NDString("&3"), NDString(NDCommonCString("NvXia")));
-			break;
-		}
+	{
+		ndstrtmp.replace(NDString("&1"), NDString(NDCommonCString("XiaoMei")));
+		ndstrtmp.replace(NDString("&2"), NDString(NDCommonCString("DaJie")));
+		ndstrtmp.replace(NDString("&3"), NDString(NDCommonCString("NvXia")));
+		break;
+	}
 	case SpriteSexFemale:
-	default: {
-		ndstrtmp.replace(NDString("&1"), NDString(NDCommonCString("XiaoXiongDi")));
+	default:
+	{
+		ndstrtmp.replace(NDString("&1"),
+				NDString(NDCommonCString("XiaoXiongDi")));
 		ndstrtmp.replace(NDString("&2"), NDString(NDCommonCString("DaGG")));
 		ndstrtmp.replace(NDString("&3"), NDString(NDCommonCString("ShaoXia")));
 		break;
-			 }
+	}
 	}
 	return changeToChineseSign(std::string(ndstrtmp.getData()));
 }
 
-void NDMapMgr::processShopInfo( NDTransData& data )
+void NDMapMgr::processShopInfo(NDTransData& data)
 {
 	///< 貌似废弃掉了 郭浩
 	//int shopID = data.ReadInt();

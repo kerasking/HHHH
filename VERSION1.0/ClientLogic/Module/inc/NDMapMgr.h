@@ -9,7 +9,7 @@
 #include <string>
 #include <map>
 #include "NDObject.h"
-//#include "GatherPoint.h"
+//#include "GatherPoint.h"		///< µÈ´ýÕÅµÏµÄ
 #include "FriendElement.h"
 #include "NDScene.h"
 #include "NDManualRole.h"
