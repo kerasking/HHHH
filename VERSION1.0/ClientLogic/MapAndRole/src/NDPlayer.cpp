@@ -405,24 +405,24 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 					}
 				}
 
-				NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(m_iFocusManuRoleID);
-				if (otherplayer && CGRectContainsPoint(otherplayer->GetFocusRect(), point)) 
-				{
-					if ( otherplayer->IsInState(USERSTATE_BOOTH) )
-					{ //与其摆摊玩家交互
-						NDUISynLayer::Show();
-						VendorBuyUILayer::s_idVendor = otherplayer->m_nID;
-
-						NDTransData bao(_MSG_BOOTH);
-						bao << Byte(BOOTH_QUEST) << otherplayer->m_nID << int(0);
-						SEND_DATA(bao);
-					}
-
-					ScriptGlobalEvent::OnEvent(GE_CLICK_OTHERPLAYER,otherplayer->m_nID);
-					//QuickInteraction::RefreshOptions();
-
-					//return false;
-				}
+// 				NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(m_iFocusManuRoleID);
+// 				if (otherplayer && CGRectContainsPoint(otherplayer->GetFocusRect(), point)) 
+// 				{
+// 					if ( otherplayer->IsInState(USERSTATE_BOOTH) )
+// 					{ //与其摆摊玩家交互
+// 						NDUISynLayer::Show();
+// 						VendorBuyUILayer::s_idVendor = otherplayer->m_nID;
+// 
+// 						NDTransData bao(_MSG_BOOTH);
+// 						bao << Byte(BOOTH_QUEST) << otherplayer->m_nID << int(0);
+// 						SEND_DATA(bao);
+// 					}
+// 
+// 					ScriptGlobalEvent::OnEvent(GE_CLICK_OTHERPLAYER,otherplayer->m_nID);
+// 					//QuickInteraction::RefreshOptions();
+// 
+// 					//return false;
+// 				}
 
 			}while(0);
 		}
@@ -616,28 +616,28 @@ void NDPlayer::Update(unsigned long ulDiff)
 		HandleStateDacoity();
 	}
 
-	// 采集
-	if (!m_bCollide)
-	{
-		map_gather_point& mapgp = mgr.m_mapGP;
-		map_gather_point_it it = mapgp.begin();
-		for (; it != mapgp.end(); it++)
-		{
-			GatherPoint *gp = it->second;
-			if (doGatherPointCollides(gp))
-			{
-				std::string str;
-				str += NDCommonCString("GatherOrNot"); str += gp->getName(); str += "?";
-				m_kGatherDlg = new NDUIDialog;
-				m_kGatherDlg->Initialization();
-				m_kGatherDlg->SetDelegate(this);
-				m_kGatherDlg->Show(NDCommonCString("WenXinTip"), str.c_str(), NDCommonCString("Cancel"), NDCommonCString("gather"), NULL);
-				m_gp = gp;
-				m_bCollide = true;
-				break;
-			}
-		}
-	}
+// 	// 采集
+// 	if (!m_bCollide)
+// 	{
+// 		map_gather_point& mapgp = mgr.m_mapGP;
+// 		map_gather_point_it it = mapgp.begin();
+// 		for (; it != mapgp.end(); it++)
+// 		{
+// 			GatherPoint *gp = it->second;
+// 			if (doGatherPointCollides(gp))
+// 			{
+// 				std::string str;
+// 				str += NDCommonCString("GatherOrNot"); str += gp->getName(); str += "?";
+// 				m_kGatherDlg = new NDUIDialog;
+// 				m_kGatherDlg->Initialization();
+// 				m_kGatherDlg->SetDelegate(this);
+// 				m_kGatherDlg->Show(NDCommonCString("WenXinTip"), str.c_str(), NDCommonCString("Cancel"), NDCommonCString("gather"), NULL);
+// 				m_gp = gp;
+// 				m_bCollide = true;
+// 				break;
+// 			}
+// 		}
+// 	}
 
 	CGPoint pos = GetPosition();
 	if (int(m_kTargetPos.x) != 0 
@@ -1250,7 +1250,7 @@ NDNpc* NDPlayer::GetFocusNpc()
 		return NULL;
 	}
 
-	return NDMapMgrObj.GetNpcByID(m_iFocusNpcID);
+	return NDMapMgrObj.GetNpc(m_iFocusNpcID);
 }
 
 int NDPlayer::GetFocusNpcID()

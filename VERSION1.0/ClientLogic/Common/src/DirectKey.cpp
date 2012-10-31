@@ -127,43 +127,43 @@ DirectKey::~DirectKey()
 
 void DirectKey::Initialization()
 {
-	NDUILayer::Initialization();
-	
-	NDPicturePool& pool = *(NDPicturePool::DefaultPool());
-	
-	m_picNormal = pool.AddPicture(NDPath::GetImgPathNew("nav_normal.png"));
-	
-	m_picNormal->SetColor(ccc4(125, 125, 125, 125));
-	
-	m_picDown = pool.AddPicture(NDPath::GetImgPathNew("nav_down.png"));
-	
-	//NDPicture *picCenter = pool.AddPicture(GetImgPathNew("nav_center.png"));
-	
-	vector<const char*>vImgFiles;
-	vector<CGRect> vImgCustomRect;
-	vector<CGPoint>vOffsetPoint;
-	
-	vImgFiles.push_back(NDPath::GetImgPathNew("nav_center.png")); 
-	vImgCustomRect.push_back(CGRectMake(0, 0, DIRECTKEY_DRAG_W, DIRECTKEY_DRAG_H));
-	vOffsetPoint.push_back(ccp(0.0f, 0.0f));
-	
-	vImgFiles.push_back(NDPath::GetImgPathNew("nav_fang.png")); 
-	vImgCustomRect.push_back(CGRectMake(0, 0, DIRECTKEY_SHRINK_W, DIRECTKEY_SHRINK_H));
-	vOffsetPoint.push_back(ccp((DIRECTKEY_DRAG_W-DIRECTKEY_SHRINK_W)/2, (DIRECTKEY_DRAG_H-DIRECTKEY_SHRINK_H)/2));
-	
-	m_picCenterNormal = new NDPicture;
-	
-	m_picCenterNormal->Initialization(vImgFiles, vImgCustomRect, vOffsetPoint);
-	
-	m_picCenterNormal->SetColor(ccc4(125, 125, 125, 125));
-	
-	vImgFiles[1] = NDPath::GetImgPathNew("nav_suo.png");
-	
-	m_picCenterShrink = new NDPicture;
-	
-	m_picCenterShrink->Initialization(vImgFiles, vImgCustomRect, vOffsetPoint);
-	
-	this->SetBackgroundImage(m_picNormal);
+// 	NDUILayer::Initialization();
+// 	
+// 	NDPicturePool& pool = *(NDPicturePool::DefaultPool());
+// 	
+// 	m_picNormal = pool.AddPicture(NDPath::GetImgPathNew("nav_normal.png"));
+// 	
+// 	m_picNormal->SetColor(ccc4(125, 125, 125, 125));
+// 	
+// 	m_picDown = pool.AddPicture(NDPath::GetImgPathNew("nav_down.png"));
+// 	
+// 	//NDPicture *picCenter = pool.AddPicture(GetImgPathNew("nav_center.png"));
+// 	
+// 	vector<const char*>vImgFiles;
+// 	vector<CGRect> vImgCustomRect;
+// 	vector<CGPoint>vOffsetPoint;
+// 	
+// 	vImgFiles.push_back(NDPath::GetImgPathNew("nav_center.png")); 
+// 	vImgCustomRect.push_back(CGRectMake(0, 0, DIRECTKEY_DRAG_W, DIRECTKEY_DRAG_H));
+// 	vOffsetPoint.push_back(ccp(0.0f, 0.0f));
+// 	
+// 	vImgFiles.push_back(NDPath::GetImgPathNew("nav_fang.png")); 
+// 	vImgCustomRect.push_back(CGRectMake(0, 0, DIRECTKEY_SHRINK_W, DIRECTKEY_SHRINK_H));
+// 	vOffsetPoint.push_back(ccp((DIRECTKEY_DRAG_W-DIRECTKEY_SHRINK_W)/2, (DIRECTKEY_DRAG_H-DIRECTKEY_SHRINK_H)/2));
+// 	
+// 	m_picCenterNormal = new NDPicture;
+// 	
+// 	m_picCenterNormal->Initialization(vImgFiles, vImgCustomRect, vOffsetPoint);
+// 	
+// 	m_picCenterNormal->SetColor(ccc4(125, 125, 125, 125));
+// 	
+// 	vImgFiles[1] = NDPath::GetImgPathNew("nav_suo.png");
+// 	
+// 	m_picCenterShrink = new NDPicture;
+// 	
+// 	m_picCenterShrink->Initialization(vImgFiles, vImgCustomRect, vOffsetPoint);
+// 	
+// 	this->SetBackgroundImage(m_picNormal);
 	
 	/*
 	CGSize sizeCenter = picCenter->GetSize(),
