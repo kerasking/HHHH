@@ -1,17 +1,10 @@
-//
-//  NDUIEdit.mm
-//  DragonDrive
-//
-//  Created by xiezhenghai on 10-12-29.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
-
-#import "NDUIEdit.h"
-#import "NDIphoneEdit.h"
-#import <UIKit/UIKit.h>
-#import "CGPointExtension.h"
-#import "NDUtility.h"
+#include "NDUIEdit.h"
+#include "NDIphoneEdit.h"
+//#include <UIKit/UIKit.h>
+//#include "CGPointExtension.h"
+#include "NDUtility.h"
 #include "I_Analyst.h"
+#include "NDUIBaseGraphics.h"
 
 
 namespace NDEngine

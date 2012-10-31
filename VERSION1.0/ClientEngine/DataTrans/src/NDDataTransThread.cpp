@@ -166,6 +166,7 @@ NDSocket* NDDataTransThread::GetSocket()
 NDDataTransThread* NDDataTransThread::ResetDefaultThread()
 {   
 	SAFE_DELETE(NDDataTransThread_dafaultThread);
+	return 0;
 }
 
 //===========================================================================
