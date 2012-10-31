@@ -459,7 +459,7 @@ void NDManualRole::WalkToPosition(const std::vector<CGPoint>& kToPosVector,
 		bool bGnoreMask = IsInState(USERSTATE_FLY) /*&& NDMapMgrObj.canFly()*/;
 		MoveToPosition(kToPosVector,
 				IsInState(USERSTATE_SPEED_UP) ?
-						SpriteSpeedStep8 : SpriteSpeedStep4, bMoveMap,
+						SpriteSpeedStep4 : SpriteSpeedStep8, bMoveMap,
 				bGnoreMask, bMustArrive);
 		if (isTeamLeader())
 		{
@@ -1263,17 +1263,17 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	 }
 	 */
 
-// 	if ( pkScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene) ) )
-// 	{
-// 		NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(pkScene);
-// 		if ( GetParent() == layer )
-// 		{
-// 			if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) && !NDMapMgrObj.isShowOther ) 
-// 			{
-// 				return false;
-// 			}
-// 		}
-// 	}
+	if ( pkScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene) ) )
+	{
+		NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(pkScene);
+		if ( GetParent() == layer )
+		{
+			if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) && !NDMapMgrObj.isShowOther ) 
+			{
+				return false;
+			}
+		}
+	}
 	CGPoint pos = GetPosition();
 
 	// °ÚÌ¯ÏÈ´¦Àí
@@ -1441,10 +1441,10 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	//	m_talkBox->SetVisible(true);
 	//}
 
-// 	if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) || NDMapMgrObj.isShowName) 
-// 	{
-// 		ShowNameLabel(bDraw);
-// 	}
+	if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) || NDMapMgrObj.isShowName) 
+	{
+		ShowNameLabel(bDraw);
+	}
 
 	if (bDraw)
 	{
@@ -1475,11 +1475,11 @@ void NDManualRole::OnDrawEnd(bool bDraw)
 	}
 	*/
  		
-// 	//»­Æï³è
-// 	if (AssuredRidePet() && ridepet->iType == TYPE_RIDE_FLY)
-// 	{
-// 		m_pkRidePet->RunAnimation(bDraw);
-// 	}
+	//»­Æï³è
+	if (AssuredRidePet() && m_pkRidePet->iType == TYPE_RIDE_FLY)
+	{
+		m_pkRidePet->RunAnimation(bDraw);
+	}
 
 
 	NDBaseRole::OnDrawEnd(bDraw);
@@ -1998,31 +1998,25 @@ bool NDManualRole::CheckToLastPos()
 	return bRet;
 }
 
-//@zwq
-void NDManualRole::InitNameLable( NDUILabel*& pLable )
-{
-	if (!pLable) 
-	{ 
-		pLable = new NDUILabel; 
-		pLable->Initialization(); 
-		pLable->SetFontSize(LABLESIZE); 
-
-		if (m_pkSubNode) 
-		{ 
-			m_pkSubNode->AddChild(pLable); 
-		}
-	} 
-}
-
-//@zwq
-void NDManualRole::DrawLable( NDUILabel* pLable, bool bDraw )
-{
-	if (bDraw && pLable) 
-		pLable->draw();
-}
-
 void NDManualRole::ShowNameLabel(bool bDraw)
 {
+#define InitNameLable(lable) \
+	do \
+	{ \
+	if (!lable) \
+	{ \
+	lable = new NDUILabel; \
+	lable->Initialization(); \
+	lable->SetFontSize(LABLESIZE); \
+} \
+	if (!lable->GetParent() && m_pkSubNode) \
+	{ \
+	m_pkSubNode->AddChild(lable); \
+} \
+} while (0)
+
+#define DrawLable(lable, bDraw) do { if (bDraw && lable) lable->draw(); }while(0)
+
 	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 
 	if (!(scene->IsKindOfClass(RUNTIME_CLASS(GameScene))
@@ -2132,6 +2126,9 @@ void NDManualRole::ShowNameLabel(bool bDraw)
 		DrawLable(m_lbName[1], bDraw);
 		DrawLable(m_lbName[0], bDraw);
 	}
+
+#undef InitNameLable
+#undef DrawLable
 }
 
 void NDManualRole::SetLable(LableType eLableType, int x, int y,
