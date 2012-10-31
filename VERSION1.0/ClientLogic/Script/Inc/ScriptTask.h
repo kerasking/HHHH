@@ -8,12 +8,10 @@
  */
 
 #pragma once
-#include "ScriptMgr.h"
 
-class ScriptObjectTask : public NDEngine::ScriptObject
-{
-public:
-	virtual void OnLoad();
-};
+namespace NDEngine {
 	
-int ScriptGetTaskState(int nTaskId);
+	void ScriptTaskLoad();
+	
+	int ScriptGetTaskState(int nTaskId);
+}

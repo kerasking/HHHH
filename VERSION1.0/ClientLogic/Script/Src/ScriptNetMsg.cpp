@@ -12,7 +12,6 @@
 #include "NDTransData.h"
 #include "NDUtility.h"
 #include <map>
-#include <NDDataTransThread.h>
 
 using namespace NDEngine;
 using namespace LuaPlus;
@@ -69,10 +68,13 @@ void SendMsg(NDTransData* data)
 	{
 		return;
 	}
-	 SEND_DATA(*data);
+	SEND_DATA(*data);
+    printf("qxx++++++MSG1=[%d]",data->ReadShort());
+    printf("qxx++++++MSG1=[%d]",data->ReadInt());
+    int a=1;
 }
 
-void ScriptNetMsg::OnLoad()
+void ScriptNetMsg::Load()
 {
 	ETLUAFUNC("RegisterNetMsgHandler", RegisterNetMsgHandler)
 	ETCFUNC("SendMsg", SendMsg)
@@ -92,7 +94,7 @@ bool ScriptNetMsg::Process(MSGID msgID, NDTransData* data)
 	
 	LuaFunction<int> luaFunc(fun);
 	
-	int nRet = luaFunc(data);
+	/*int nRet = */luaFunc(data);
 	
 	return true;
 }

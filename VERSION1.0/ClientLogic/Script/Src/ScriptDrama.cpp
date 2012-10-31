@@ -12,7 +12,7 @@
 #include "DramaCommand.h"
 #include "Drama.h"
 
-using namespace NDEngine;
+namespace NDEngine {
 
 // 脚本api
 
@@ -38,20 +38,20 @@ using namespace NDEngine;
 // 函数: DramaSetLChatName(string strName, int nFontsize, int nFontcolor);
 // 功能: 设置剧情左边聊天名字
 // 参数: strName: 名字
-//		nFontsize: 字体(默认NULL)
-//		nFontcolor: 颜色(默认NULL)
+//		nFontsize: 字体(默认nil)
+//		nFontcolor: 颜色(默认nil)
 
 // 函数: DramaSetLChatNameBySpriteKey(int nKey, int nFontsize, int nFontcolor);
 // 功能: 设置剧情左边聊天名字
 // 参数: nKey: 增加精灵时返回的key
-//		nFontsize: 字体(默认NULL)
-//		nFontcolor: 颜色(默认NULL)
+//		nFontsize: 字体(默认nil)
+//		nFontcolor: 颜色(默认nil)
 
 // 函数: DramaSetLChatContent(string strContent, int nFontsize, int nFontcolor);
 // 功能: 设置剧情左边聊天内容
 // 参数: strContent: 聊天内容
-//		nFontsize: 字体(默认NULL)
-//		nFontcolor: 颜色(默认NULL)
+//		nFontsize: 字体(默认nil)
+//		nFontcolor: 颜色(默认nil)
 
 // 函数: DramaSetRChatFigure(string strFileName);
 // 功能: 设置剧情右边聊天头像
@@ -62,8 +62,8 @@ using namespace NDEngine;
 // 函数: DramaSetRChatNameBySpriteKey(int nKey, int nFontsize, int nFontcolor);
 // 功能: 设置剧情右边聊天名字
 // 参数: nKey: 增加精灵时返回的key
-//		nFontsize: 字体(默认NULL)
-//		nFontcolor: 颜色(默认NULL)
+//		nFontsize: 字体(默认nil)
+//		nFontcolor: 颜色(默认nil)
 
 // 函数: DramaSetRChatContent(string strContent, int nFontsize, int nFontcolor);
 // 功能: 设置剧情右边聊天内容
@@ -111,8 +111,8 @@ using namespace NDEngine;
 // 函数: DramaLoadEraseInOutScene(string centerText, float showTime);
 // 功能: 加载淡入淡出场景
 // 参数: centerText: 屏幕中间显示的文本
-// 参数:	nFontsize: 字体(默认NULL)
-// 参数:	nFontcolor: 颜色(默认NULL)
+// 参数:	nFontsize: 字体(默认nil)
+// 参数:	nFontcolor: 颜色(默认nil)
 // 参数: showTime: 场景显示的时间
 
 // 函数: DramaRemoveEraseInOutScene(int nKey)
@@ -170,7 +170,7 @@ void DramaOpenLChatDlg()
 	DramaCloseRChatDlg();
 	DramaOpenLChatDlgNotCloseRight();
 }
-// 函数: DramaOpenLChatDlgNotCloseRight();
+// 函数: DramaOpenLChatDlg();
 // 功能: 打开左边对话框,不关闭右边对话框
 void DramaOpenLChatDlgNotCloseRight()
 {
@@ -180,7 +180,7 @@ void DramaOpenLChatDlgNotCloseRight()
 }
 
 // 函数: DramaOpenRChatDlg();
-// 功能: 打开右边对话框，同时关闭左边对话框
+// 功能: 打开右边对话框,同时关闭左边对话框
 void DramaOpenRChatDlg()
 {
 	DramaCloseLChatDlg();
@@ -227,12 +227,12 @@ void DramaSetLChatFigure(std::string strFileName, bool bReverse, int nCol, int n
 // 函数: DramaSetLChatName(string strName, int nFontsize, int nFontcolor);
 // 功能: 设置剧情左边聊天名字
 // 参数: strName: 名字
-//		nFontsize: 字体(默认NULL)
-//		nFontcolor: 颜色(默认NULL)
+//		nFontsize: 字体(默认nil)
+//		nFontcolor: 颜色(默认nil)
 
 void DramaSetLChatName(std::string strName, int nFontSize, int nFontColor)
-{    
-	nFontSize *= FONT_SCALE;
+{
+    nFontSize*=FONT_SCALE;
 	DramaCommandDlg* command = new DramaCommandDlg;
 	command->InitWithSetTitle(true, strName, nFontSize, nFontColor);
 	DramaObj.AddCommond(command);
@@ -241,8 +241,8 @@ void DramaSetLChatName(std::string strName, int nFontSize, int nFontColor)
 // 函数: DramaSetLChatNameBySpriteKey(int nKey, int nFontsize, int nFontcolor);
 // 功能: 设置剧情左边聊天名字
 // 参数: nKey: 增加精灵时返回的key
-//		nFontsize: 字体(默认NULL)
-//		nFontcolor: 颜色(默认NULL)
+//		nFontsize: 字体(默认nil)
+//		nFontcolor: 颜色(默认nil)
 void DramaSetLChatNameBySpriteKey(int nKey, int nFontSize, int nFontColor)
 {
 	nFontSize *= FONT_SCALE;
@@ -254,8 +254,8 @@ void DramaSetLChatNameBySpriteKey(int nKey, int nFontSize, int nFontColor)
 // 函数: DramaSetLChatContent(string strContent, int nFontsize, int nFontcolor);
 // 功能: 设置剧情左边聊天内容
 // 参数: strContent: 聊天内容
-//		nFontsize: 字体(默认NULL)
-//		nFontcolor: 颜色(默认NULL)
+//		nFontsize: 字体(默认nil)
+//		nFontcolor: 颜色(默认nil)
 void DramaSetLChatContent(std::string strContent, int nFontSize, int nFontColor)
 {
 	nFontSize *= FONT_SCALE;
@@ -286,8 +286,8 @@ void DramaSetRChatName(std::string strName, int nFontSize, int nFontColor)
 // 函数: DramaSetRChatNameBySpriteKey(int nKey, int nFontsize, int nFontcolor);
 // 功能: 设置剧情右边聊天名字
 // 参数: nKey: 增加精灵时返回的key
-//		nFontsize: 字体(默认NULL)
-//		nFontcolor: 颜色(默认NULL)
+//		nFontsize: 字体(默认nil)
+//		nFontcolor: 颜色(默认nil)
 void DramaSetRChatNameBySpriteKey(int nKey, int nFontSize, int nFontColor)
 {
 	nFontSize *= FONT_SCALE;
@@ -316,8 +316,7 @@ void DramaSetRChatContent(std::string strContent, int nFontSize, int nFontColor)
 //      faceRight:精灵的朝向, true 朝右, false 朝左
 //      name:显示在头上的名字
 // 返回值: int nKey : 用于后续对该精灵的其它操作
-double DramaAddSprite(int nLookface, int nType, bool faceRight,
-		std::string name)
+double DramaAddSprite(int nLookface, int nType, bool faceRight, std::string name)
 {
 	DramaCommandSprite* command = new DramaCommandSprite;
 	command->InitWithAdd(nLookface, nType, faceRight, name);
@@ -410,11 +409,10 @@ void DramaLoadScene(int nMapID)
 // 函数: DramaLoadEraseInOutScene(string centerText, int nFontsize, int nFontColor);
 // 功能: 加载淡入淡出场景
 // 参数: centerText: 屏幕中间显示的文本
-// 参数:	nFontsize: 字体(默认NULL)
-// 参数:	nFontcolor: 颜色(默认NULL)
+// 参数:	nFontsize: 字体(默认nil)
+// 参数:	nFontcolor: 颜色(默认nil)
 // 返回值: key(用于后续操作例如删除场景)
-double DramaLoadEraseInOutScene(string centerText, int nFontsize,
-		int nFontColor)
+double DramaLoadEraseInOutScene(string centerText, int nFontsize, int nFontColor)
 {
 	nFontsize *= FONT_SCALE;
 	DramaCommandScene* command = new DramaCommandScene;
@@ -525,8 +523,8 @@ void DramaPlaySoundEffect(int nSoundEffectId)
 	command->InitWithSoundEffectId(nSoundEffectId);
 	DramaObj.AddCommond(command);
 }
-
-void ScriptObjectDrama::OnLoad()
+    
+void ScriptDramaLoad()
 {
 	ETCFUNC("DramaPlaySoundEffect", DramaPlaySoundEffect);
 	ETCFUNC("DramaOpenLChatDlg", DramaOpenLChatDlg);
@@ -556,10 +554,11 @@ void ScriptObjectDrama::OnLoad()
 	ETCFUNC("DramaMoveCamera", DramaMoveCamera);
 	ETCFUNC("DramaSetWaitTime", DramaSetWaitTime);
 	ETCFUNC("DramaWaitPrevActionFinish", DramaWaitPrevActionFinish);
-	ETCFUNC("DramaWaitPrevActionFinishAndClick",
-			DramaWaitPrevActionFinishAndClick);
+	ETCFUNC("DramaWaitPrevActionFinishAndClick", DramaWaitPrevActionFinishAndClick);
 	ETCFUNC("DramaStart", DramaStart);
 	ETCFUNC("DramaFinish", DramaFinish);
 	ETCFUNC("DramaShowTipDlg", DramaShowTipDlg);
 	ETCFUNC("DramaSetSpriteReverse", DramaSetSpriteReverse);
+}
+
 }

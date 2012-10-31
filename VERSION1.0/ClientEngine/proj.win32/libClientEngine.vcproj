@@ -658,6 +658,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\inc\UIList.h"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\inc\UIMovableLayer.h"
 					>
 				</File>
@@ -787,6 +791,10 @@
 				</File>
 				<File
 					RelativePath="..\UI\src\UIHyperlink.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\src\UIList.cpp"
 					>
 				</File>
 				<File

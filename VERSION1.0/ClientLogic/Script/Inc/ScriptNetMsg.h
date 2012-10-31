@@ -11,11 +11,10 @@
 
 #include "NDMsgDefine.h"
 #include "NDTransData.h"
-#include "ScriptMgr.h"
 
-class ScriptNetMsg : public NDEngine::ScriptObject
+class ScriptNetMsg
 {
 public:
-	virtual void OnLoad();
+	static void Load();
 	static bool Process(MSGID msgID, NDEngine::NDTransData* data);
 };

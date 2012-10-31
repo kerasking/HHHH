@@ -1040,6 +1040,11 @@ namespace NDEngine
 		return true;
 	}
 
+	void NDSprite::SetWeaponImage(int weapon_lookface)
+	{
+
+	}
+
 	void NDSprite::SetNormalAniGroup(int nLookface)
 	{
 		if (nLookface <= 0)

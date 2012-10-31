@@ -27,6 +27,7 @@
 #include "Battle.h"
 
 NS_NDENGINE_BGN
+using namespace NDEngine;
 
 NDGameApplication::NDGameApplication()
 {
@@ -132,32 +133,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 	pkDirector->Initialization();
 	pkDirector->RunScene(CSMLoginScene::Scene());
-//	kMapMgr.processChangeRoom(0,0);
-
-	ScriptNetMsg* pkNetMsg = new ScriptNetMsg;
-	ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
-	NDScriptGameData* pkData = new NDScriptGameData;
-	//ScriptGlobalEvent* pkGlobalEvent = new ScriptGlobalEvent;
-	ScriptObjectCommon* pkCommon = new ScriptObjectCommon;
-	ScriptObjectUI* pkScriptUI = new ScriptObjectUI;
-	ScriptTimerMgr* pkTimerManager = new ScriptTimerMgr;
-	ScriptObjectDrama* pkDrama = new ScriptObjectDrama;
-
-	pkData->Load();
-	pkTimerManager->OnLoad();
-	pkNetMsg->OnLoad();
-	pkLogic->OnLoad();
-	pkDrama->OnLoad();
-	pkCommon->OnLoad();
-	ScriptGlobalEvent::Load();
-	//pkGlobalEvent->OnLoad();
-	pkScriptUI->OnLoad();
-
-	kScriptManager.Load();
-
-	//CC_SAFE_DELETE(pkNetMsg);
-
-	//ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
+	ScriptMgrObj.Load();
 	ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
 
 	//NDPlayer::pugeHero();

@@ -251,7 +251,7 @@ void CUIItemButton::draw()
                 else if (m_combinePicBG)
                     m_combinePicBG->DrawInRect(scrRect);
                 else
-                    DrawRecttangle(scrRect, m_backgroundColor);
+                  //  DrawRecttangle(scrRect, m_backgroundColor);
                 
                 
                 if (m_bScrollTitle && m_scrtTitle && m_scrtTitle->GetParent() == this) 
@@ -333,9 +333,10 @@ void CUIItemButton::draw()
                 {
                     if (m_framed) 
                     {
-                        DrawPolygon(scrRect, ccc4(16, 56, 66, 255), 2);
+                     #if 0
+   DrawPolygon(scrRect, ccc4(16, 56, 66, 255), 2);
                         DrawPolygon(CGRectMake(scrRect.origin.x + 3, scrRect.origin.y + 3, scrRect.size.width - 6, scrRect.size.height - 6), 
-                                    ccc4(134, 39, 0, 255), 1);						
+                                   ccc4(134, 39, 0, 255), 1);						
                       
 						//×óÉÏ½Ç
 						DrawLine(ccp(scrRect.origin.x + 3, scrRect.origin.y + 8), 
@@ -356,6 +357,7 @@ void CUIItemButton::draw()
 						DrawLine(ccp(scrRect.origin.x + scrRect.size.width - 3, scrRect.origin.y + scrRect.size.height - 8), 
 								 ccp(scrRect.origin.x + scrRect.size.width - 8, scrRect.origin.y + scrRect.size.height - 3), 
 								 ccc4(134, 39, 0, 255), 1);
+#endif
                     }						
                 }	
 #if 0                
@@ -442,8 +444,9 @@ void CUIItemButton::draw()
                             m_image->SetColor(m_touchDownColor);
                         else if (m_combinepicImg)
                             m_combinepicImg->SetColor(m_touchDownColor);
-                        else							
-                            DrawRecttangle(scrRectBig, m_touchDownColor);
+                        
+						//else							
+                        //    DrawRecttangle(scrRectBig, m_touchDownColor);
                     }						
                 }	
                 
@@ -453,7 +456,7 @@ void CUIItemButton::draw()
                 {
                     if (m_focusStatus == FocusColor /*&& m_bFocusEnable*/) 
                     {
-                        DrawRecttangle(scrRect, m_focusColor);
+                       // DrawRecttangle(scrRect, m_focusColor);
                         if (m_title) 
                         {
                             m_title->SetFontColor(m_colorFocusTitle);
@@ -461,7 +464,7 @@ void CUIItemButton::draw()
                     }
                     else if (m_focusStatus == FocusRimImage /*&& m_bFocusEnable*/)
                     {
-                        DrawRecttangle(scrRect, ccc4(138, 8, 8, 255));
+                      //  DrawRecttangle(scrRect, ccc4(138, 8, 8, 255));
                         
                         m_rimImageLT->DrawInRect(CGRectMake(scrRect.origin.x - 2, 
                                                             scrRect.origin.y - 3, 
@@ -485,7 +488,8 @@ void CUIItemButton::draw()
                             d = 1;
                         }
                         //left frame
-                        DrawLine(ccp(scrRect.origin.x + d, scrRect.origin.y + m_rimImageLT->GetSize().height - 8), 
+                       #if 0
+ DrawLine(ccp(scrRect.origin.x + d, scrRect.origin.y + m_rimImageLT->GetSize().height - 8), 
                                  ccp(scrRect.origin.x + d, scrRect.origin.y + scrRect.size.height - m_rimImageLT->GetSize().height + 8), 
                                  ccc4(172, 159, 71, 255), 1);
                         DrawLine(ccp(scrRect.origin.x + d + 1, scrRect.origin.y + m_rimImageLT->GetSize().height - 8), 
@@ -527,6 +531,7 @@ void CUIItemButton::draw()
                         DrawLine(ccp(scrRect.origin.x + m_rimImageLT->GetSize().width - 8, scrRect.origin.y + scrRect.size.height - 3), 
                                  ccp(scrRect.origin.x + scrRect.size.width - m_rimImageLT->GetSize().width + 8, scrRect.origin.y + scrRect.size.height - 3), 
                                  ccc4(172, 159, 71, 255), 1);
+#endif
 						
                     }
                     else if (m_focusStatus == FocusImage && m_focusImage /*&& m_bFocusEnable*/)

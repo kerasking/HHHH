@@ -17,20 +17,25 @@
 
 #define ScriptTimerMgrObj	ScriptTimerMgr::GetSingleton()
 
-class ScriptTimerMgr:
-	public TSingleton<ScriptTimerMgr>,
-	public ITimerCallback
+
+namespace NDEngine {
+
+class ScriptTimerMgr : 
+public TSingleton<ScriptTimerMgr>,
+public ITimerCallback
 {
 public:
-	void OnLoad();
-	void OnTimer(OBJID tag);override
+	void Load();
+	void OnTimer(OBJID tag); override
 	unsigned int AddTimer(LuaObject func, float fInterval);
 	bool RemoveTimer(OBJID tag);
 	bool RemoveAllTimer();
 private:
 	CIDFactory m_idAlloc;
-	std::map<OBJID, LuaObject> m_kMapFunc;
-	NDTimer m_kTimer;
+	std::map<OBJID, LuaObject> m_mapFunc;
+	NDTimer m_timer;
 };
+
+}
 
 #endif // _SCRIPT_TIMER_H_

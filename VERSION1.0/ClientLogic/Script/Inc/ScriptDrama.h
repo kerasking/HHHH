@@ -7,15 +7,12 @@
  *
  */
 // ½Å±¾¾çÇé
+
 #ifndef _SCRIPT_DRAMA_ZJH_
 #define _SCRIPT_DRAMA_ZJH_
 
-#include "ScriptInc.h"
-
-class ScriptObjectDrama: public NDEngine::ScriptObject
-{
-public:
-	virtual void OnLoad();
-};
+namespace NDEngine {
+	void ScriptDramaLoad();
+}
 
 #endif // _SCRIPT_DRAMA_ZJH_

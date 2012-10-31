@@ -1,3 +1,4 @@
+print("gggg");
 --common
 DoFile("Common/define.lua");
 

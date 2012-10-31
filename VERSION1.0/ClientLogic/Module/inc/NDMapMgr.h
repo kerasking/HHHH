@@ -422,6 +422,7 @@ public:
 	void SetBattleMonster(NDMonster* pkMonster);
 
 	CC_SYNTHESIZE(int,m_nCurrentMonsterRound,CurrentMonsterRound);		///< 貌似此变量没有什么引用，废弃掉？ 郭浩
+    int GetCurrentMonsterRound(){return m_nCurrentMonsterRound;}
 
 	static bool m_bFirstCreate;
 	static bool m_bVerifyVersion;
