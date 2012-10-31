@@ -210,6 +210,10 @@
 					RelativePath="..\Common\inc\NDUtility.h"
 					>
 				</File>
+				<File
+					RelativePath="..\Common\inc\SMUpdate.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -327,6 +331,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\GameScene\inc\GameUIRequest.h"
+					>
+				</File>
+				<File
 					RelativePath="..\GameScene\inc\SMBattleScene.h"
 					>
 				</File>
@@ -348,6 +356,10 @@
 				>
 				<File
 					RelativePath="..\GameScene\src\GameScene.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GameScene\src\GameUIRequest.cpp"
 					>
 				</File>
 				<File

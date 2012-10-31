@@ -380,7 +380,6 @@ public:
 	NDBaseRole* GetRoleNearstPlayer(int iDistance);
 	
 public:
-
 	void LoadSceneMonster();
 	void AddManualRole(int nID,NDManualRole* pkRole);
 	NDManualRole* GetManualRole(int nID);
