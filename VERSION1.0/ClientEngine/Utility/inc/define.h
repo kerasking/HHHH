@@ -13,6 +13,7 @@
 //typedef unsigned int OBJID;
 
 #include "CCObject.h"
+#include "NDObject.h"
 
 #define SEND_DATA(bao) do{\
 	NDSocket* skt = NDEngine::NDDataTransThread::DefaultThread()->GetSocket();\

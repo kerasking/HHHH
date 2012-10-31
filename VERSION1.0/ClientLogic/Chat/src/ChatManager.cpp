@@ -10,6 +10,7 @@
 #include "ChatManager.h"
 #include "NDUISynLayer.h"
 #include "NDLocalization.h"
+#include "NDUtility.h"
 
 using namespace NDEngine;
 
@@ -151,7 +152,7 @@ void ChatManager::processChatTalk(NDEngine::NDTransData& data)
 		// msg.append("内容" + c);
 
 	}
-	// showDialog("聊天回复", msg.toString());
+//	showDialog("聊天回复", msg.toString());
 
 	CloseProgressBar;
 

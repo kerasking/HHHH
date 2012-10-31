@@ -11,6 +11,7 @@
 #define __ND_UTILITY_H__
 
 #include "globaldef.h"
+#include "NDUIDialog.h"
 
 #define MAP_UNITSIZE (16 * ((int)(NDDirector::DefaultDirector()->GetScaleFactor())))
 #define SCREEN_SCALE (NDDirector::DefaultDirector()->GetScaleFactor())
@@ -22,8 +23,19 @@ std::string getStringTime(long nSeconds);
 
 std::string changeToChineseSign(std::string old);
 
-//void showDialog(const char* title,const char* content){}
-//void showDialog(const char* content){}
+NS_NDENGINE_BGN
+void showDialog(const char* title, const char* content)
+{
+	NDUIDialog *dialog = new NDUIDialog;
+	dialog->Initialization();
+	dialog->Show(title, content, NULL, NULL);
+}
+
+void showDialog(const char* content)
+{
+	showDialog(NDCommonCString("error"), content);
+}
+NS_NDENGINE_END
 
 void quitGame(bool bTipNet = false);
 
