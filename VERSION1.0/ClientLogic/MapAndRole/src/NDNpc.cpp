@@ -270,14 +270,16 @@ void NDNpc::OnDrawEnd(bool bDraw)
 
 	CGSize kSize = getStringSize(m_strName.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
 
-	int nShowX = kNPCPos.x;
+	int nShowX = kNPCPos.x - 30;		///< 临时性调整 郭浩
 	//高度临时调整，后续应该修改为在缩放时进行数据处理，否则坐标外部需要处理HJQ
 	int nShowY = kNPCPos.y - kSize.height
 			- ((m_pkCurrentAnimation ?
 					(m_pkCurrentAnimation->getBottomY()
-							- m_pkCurrentAnimation->getY()) : 0)*0.5*fScaleFactor);
+							- m_pkCurrentAnimation->getY()) : 0)
+											 * 0.5f * fScaleFactor + 45.0f);	///< 临时性调整 + 10.0f 郭浩
 
 	bool isEmemy = false;
+
 	if (kPlayer.IsInState(USERSTATE_FIGHTING))
 	{
 		isEmemy = (GetCamp() != CAMP_NEUTRAL && kPlayer.GetCamp() != CAMP_NEUTRAL
@@ -290,8 +292,8 @@ void NDNpc::OnDrawEnd(bool bDraw)
 	{
 		InitNameLable(m_pkNameLabel[0]);
 		InitNameLable(m_pkNameLabel[1]);
-//  		SetLable(eLableName, nShowX, nShowY, m_strName, INTCOLORTOCCC4(uiColor),
-//  				ccc4(0, 0, 0, 255));
+  		SetLable(eLableName, nShowX, nShowY, m_strName, INTCOLORTOCCC4(uiColor),
+  				ccc4(0, 0, 0, 255));
 		DrawLable(m_pkNameLabel[1], bDraw);
 		DrawLable(m_pkNameLabel[0], bDraw);
 		//showY -= 5 * fScaleFactor;

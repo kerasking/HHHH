@@ -14,6 +14,7 @@
 #include "NDUIBaseGraphics.h"
 #include "CCString.h"
 #include "NDDebugOpt.h"
+#include "define.h"
 
 using namespace cocos2d;
 
@@ -58,8 +59,11 @@ namespace NDEngine
 		m_bNeedMakeCoo = true;
 		m_bNeedMakeVer = true;
 
-		CCString *pstrString = CCString::stringWithUTF8String(text);
+		CCString *pstrString = 0;
+
+		pstrString = CCString::stringWithUTF8String(text);
 		m_strText = pstrString->toStdString();
+		SAFE_DELETE(pstrString);
 	}
 	
 	void NDUILabel::OnFrameRectChange(CGRect srcRect, CGRect dstRect)
