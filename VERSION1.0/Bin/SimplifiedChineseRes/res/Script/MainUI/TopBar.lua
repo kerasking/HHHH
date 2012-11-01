@@ -65,7 +65,6 @@ local TAG_NUMBER_IMG_B = 34;
 
 function p.LoadUI()
 
-
     --------------------获得游戏主场景------------------------------------------
     local scene = GetSMGameScene();
 	if scene == nil then

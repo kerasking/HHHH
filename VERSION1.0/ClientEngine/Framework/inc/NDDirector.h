@@ -219,6 +219,8 @@ public:
 
 	void DisibleScissor();
 
+	//UIWindow * GetWindow() { return window; } 这个UIWindow怎么处理? 郭浩
+
 private:
 
 	typedef enum

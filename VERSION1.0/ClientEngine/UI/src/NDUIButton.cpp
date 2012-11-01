@@ -161,12 +161,12 @@ namespace NDEngine
 // 		m_title->Initialization();
 // 		m_title->SetFontSize(FONT_SIZE);
 // 		m_title->SetTextAlignment(LabelTextAlignmentCenter);
-		//this->AddChild(m_title,500);
+		//AddChild(m_title,500);
 	}
 
 	void NDUIButton::SetImageLua(NDPicture* pic)
 	{
-		this->SetImage(pic, false, CGRectZero, true);
+		SetImage(pic, false, CGRectZero, true);
 	}
 
 	void NDUIButton::SetImage(NDPicture* pic, bool useCustomRect, CGRect customRect,
@@ -205,7 +205,7 @@ namespace NDEngine
 
 	void NDUIButton::SetTouchDownImageLua(NDPicture* pic)
 	{
-		this->SetTouchDownImage(pic, false, CGRectZero, true);
+		SetTouchDownImage(pic, false, CGRectZero, true);
 	}
 
 	void NDUIButton::SetTouchDownImage(NDPicture* pic, bool useCustomRect,
@@ -282,7 +282,7 @@ namespace NDEngine
 
 	void NDUIButton::SetFocusImageLua(NDPicture *pic)
 	{
-		this->SetFocusImage(pic, false, CGRectZero, true);
+		SetFocusImage(pic, false, CGRectZero, true);
 	}
 
 	void NDUIButton::SetFocusImage(NDPicture *pic, bool useCustomRect/*= false*/,
@@ -353,7 +353,7 @@ namespace NDEngine
 	{
 		NDUINode::draw();
 
-		if (this->IsVisibled())
+		if (IsVisibled())
 		{
 			if (m_bNeedSetTitle)
 			{
@@ -367,14 +367,14 @@ namespace NDEngine
 				m_bNeedSetTwoTitle = false;
 			}
 
-			NDNode* parentNode = this->GetParent();
+			NDNode* parentNode = GetParent();
 			if (parentNode)
 			{
 				if (parentNode - IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
 				{
 					NDUILayer* uiLayer = (NDUILayer*) parentNode;
 
-					CGRect scrRect = this->GetScreenRect();
+					CGRect scrRect = GetScreenRect();
 
 					if(m_bGray && m_disImage)
 					{
@@ -737,8 +737,8 @@ namespace NDEngine
 								m_combinepicImg->SetColor(ccc4(255, 255, 255, 255));
 						}
 
-						if ((m_touchDownStatus != TouchDownImage || !m_touched
-								|| NULL == m_touchDownImage) && m_bChecked)
+						if (!IsTabSel() && (m_touchDownStatus != TouchDownImage || !m_touched
+								|| NULL == m_touchDownImage))
 						{
 							if (m_useCustomRect)
 							{
@@ -932,7 +932,7 @@ namespace NDEngine
 	{
 		m_touched = touched;
 		NDUIButtonDelegate* delegate =
-				dynamic_cast<NDUIButtonDelegate*>(this->GetDelegate());
+				dynamic_cast<NDUIButtonDelegate*>(GetDelegate());
 		if (delegate)
 		{
 			if (m_touched)
@@ -1009,7 +1009,7 @@ namespace NDEngine
 	void NDUIButton::SetBackgroundPictureLua(NDPicture *pic,
 			NDPicture *touchPic/*= NULL*/)
 	{
-		this->SetBackgroundPicture(pic, touchPic, false, CGRectZero, true);
+		SetBackgroundPicture(pic, touchPic, false, CGRectZero, true);
 	}
 
 	void NDUIButton::SetBackgroundPicture(NDPicture *pic,
@@ -1065,7 +1065,7 @@ namespace NDEngine
 	//			return;
 	//		}
 
-		CGRect rect = this->GetFrameRect();
+		CGRect rect = GetFrameRect();
 
 		CGSize sizetext = getStringSize(m_strTitle.c_str(), m_uiTitleFontSize);
 
@@ -1091,7 +1091,7 @@ namespace NDEngine
 			// start pos
 			m_scrtTitle->SetStartPos(CGPointMake(5.0f, 0.0f));
 			m_scrtTitle->Stop();
-			this->AddChild(m_scrtTitle);
+			AddChild(m_scrtTitle);
 
 			m_bScrollTitle = true;
 		}
@@ -1109,7 +1109,7 @@ namespace NDEngine
 					CGRectMake(0 + m_uiTitleLeftWidth, 0,
 							rect.size.width - m_uiTitleLeftWidth
 									- m_uiTitleRightWidth, rect.size.height));
-			this->AddChild(m_title);
+			AddChild(m_title);
 
 			m_bScrollTitle = false;
 		}
@@ -1137,7 +1137,7 @@ namespace NDEngine
 		m_lbTitle1->SetFontSize(fontSize1);
 		m_lbTitle1->SetTextAlignment(LabelTextAlignmentLeft);
 		m_lbTitle1->SetFrameRect(CGRectZero);
-		this->AddChild(m_lbTitle1);
+		AddChild(m_lbTitle1);
 
 		if (!m_lbTitle2)
 		{
@@ -1150,7 +1150,7 @@ namespace NDEngine
 		m_lbTitle2->SetFontSize(fontSize2);
 		m_lbTitle2->SetTextAlignment(LabelTextAlignmentLeft);
 		m_lbTitle2->SetFrameRect(CGRectZero);
-		this->AddChild(m_lbTitle2);
+		AddChild(m_lbTitle2);
 
 		m_uiTwoTitleInter = interaval;
 
@@ -1169,7 +1169,7 @@ namespace NDEngine
 			return;
 		}
 
-		CGRect rect = this->GetFrameRect();
+		CGRect rect = GetFrameRect();
 		CGSize size1 = getStringSize(m_lbTitle1->GetText().c_str(),
 				m_lbTitle1->GetFontSize()), size2 = getStringSize(
 				m_lbTitle2->GetText().c_str(), m_lbTitle2->GetFontSize());
