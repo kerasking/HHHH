@@ -13,6 +13,8 @@
 
 NS_NDENGINE_BGN
 
+#define SZ_ROOT_SOURCE_DIR					"SimplifiedChineseRes"	//按语种划分资源根目录名
+
 string NDPath::NDPath_ResPath			= "../SimplifiedChineseRes/res/";
 string NDPath::NDPath_ImgPath			= "../SimplifiedChineseRes/res/Image/";
 string NDPath::NDPath_ImgPath_BattleUI	= "../SimplifiedChineseRes/res/Image/battle_ui/";
@@ -24,6 +26,8 @@ string NDPath::NDPath_UIPath			= "../SimplifiedChineseRes/res/UI/";
 string NDPath::NDPath_ScriptPath		= "../SimplifiedChineseRes/res/Script/";
 
 IMPLEMENT_CLASS(NDPath, NDObject)
+
+int NDPath::s_iResDirPos = 0;
 
 NDPath::NDPath()
 {
@@ -126,14 +130,14 @@ const string& NDPath::GetAnimationPath()
 // 		return string([path UTF8String]);
 }
 
-const string& NDPath::GetScriptPath()
-{
-	return NDPath_ScriptPath;
-}
-
 const string& NDPath::GetUIPath()
 {
 	return NDPath_UIPath;
+}
+
+const string& NDPath::GetUIPath( const char* fileName )
+{
+	return NDPath_UIPath += string(fileName);
 }
 
 const string& NDPath::GetImgPathBattleUI()
@@ -159,6 +163,7 @@ void NDPath::SetMapPath(const char* szPath)
 
 	NDPath_MapPath = szPath;
 }
+
 void NDPath::SetAnimationPath(const char* szPath)
 {
 	if (!szPath)
@@ -168,6 +173,7 @@ void NDPath::SetAnimationPath(const char* szPath)
 
 	NDPath_AniPath = szPath;
 }
+
 void NDPath::SetResPath(const char* szPath)
 {
 	if (!szPath)
@@ -177,15 +183,16 @@ void NDPath::SetResPath(const char* szPath)
 
 	NDPath_ResPath = szPath;
 }
-void NDPath::SetSoundPath(const char* szPath)
-{
-	if (!szPath)
-	{
-		return;
-	}
 
-	NDPath_SoundPath = szPath;
-}
+// void NDPath::SetSoundPath(const char* szPath)
+// {
+// 	if (!szPath)
+// 	{
+// 		return;
+// 	}
+// 
+// 	NDPath_SoundPath = szPath;
+// }
 
 const string& NDPath::GetFullImagepath(const char* pszFileName)
 {
@@ -353,5 +360,59 @@ const string& NDPath::GetScriptPath(const char* filename)
 // 	//return string(GetResPath()+"Script/"+filename).c_str();
 }
 
+const string& NDPath::GetScriptPath()
+{
+	return NDPath_ScriptPath;
+}
+
+const string& NDPath::GetAppPath()
+{
+#ifdef _DEBUG
+	return string("../");
+#else
+	return string("../release/");
+#endif
+}
+
+const string& NDPath::GetResourcePath()
+{
+	return string("");
+}
+
+const string& NDPath::GetImgPathNew( const char* fileName )
+{
+	return GetResPath() + string("/image/ui_new/") + string(fileName);
+}
+
+const string& NDPath::GetImgPathNewAdvance( const char* fileName )
+{
+	return GetResPath() + string("/image/ui_new/advance/") + string(fileName);
+}
+
+const string& NDPath::GetRootResPath()
+{
+	if ( s_iResDirPos == 0 )
+	{
+		return NDPath::GetAppPath() + SZ_ROOT_SOURCE_DIR + "/";
+	}
+	else
+	{
+#ifdef DOCUMENT
+		return NDPath::GetResourcePath() + SZ_ROOT_SOURCE_DIR + "/";
+#else
+		return NDPath::GetCashesPath() + SZ_ROOT_SOURCE_DIR + "/";
+#endif
+	}
+}
+
+std::string NDPath::GetCashesPath()
+{
+//     // NSError *error;
+//     NSString *path1 = [NSHomeDirectory()stringByAppendingPathComponent:@"Library"];
+//     NSString *CashesDirectory = [path1 stringByAppendingPathComponent:@"/Caches"];
+//     return std::string([CashesDirectory UTF8String]) +"/";
+
+	return string("");
+}
 
 NS_NDENGINE_END
