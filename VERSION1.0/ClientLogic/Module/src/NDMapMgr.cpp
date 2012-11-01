@@ -4518,27 +4518,11 @@ void NDMapMgr::processMsgDlg(NDTransData& kData)
 // 						break;
 		}
 		case 17:
-		{ //17按配方炼药
-// 						CloseProgressBar;
-// 						if ( getLifeSkill(ALCHEMY_IDSKILL) != NULL )
-// 						{
-// 							LifeSkillScene *scene = new LifeSkillScene;
-// 							scene->Initialization(ALCHEMY_IDSKILL, LifeSkillScene_Product);
-// 							NDDirector::DefaultDirector()->PushScene(scene);
-// 						}
-// 						else 
-// 						{
-// 							GlobalShowDlg(NDCommonCString("OperateFail"), NDCommonCString("NoLianJingSkillTip"));
-// 						}
-
+		{
 			break;
 		}
 		case 18:
-		{ //18随机合成
-// 						CloseProgressBar;
-// 						LifeSkillRandomScene *scene = new LifeSkillRandomScene;
-// 						scene->Initialization(eBaoShiYuanShi);
-// 						NDDirector::DefaultDirector()->PushScene(scene);
+		{
 			break;
 		}
 		case 19:
