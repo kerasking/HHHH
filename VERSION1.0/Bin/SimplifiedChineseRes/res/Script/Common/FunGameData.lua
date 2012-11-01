@@ -15,13 +15,11 @@ end
 
 function GetDataBaseIdList(strIniFile)
 	local idList = {};
-
 	local nKey = GetIniFileKey(strIniFile);
 	if 0 == nKey then
 		LogInfo("nKey==0");
 		return;
 	end
-	
 	idList=GetGameDataIdList(NScriptData.eDataBase, nKey, NRoleData.ePet);
 	return idList;
 end
@@ -156,6 +154,39 @@ end
 --]]
 
 -- 角色好友数据
+--[[
+function GetRoleFriendDataN(nRoleId, dataIndex, nFriendId)
+	local nVal = GetGameDataN(NScriptData.eRole, nRoleId, NRoleData.eFriend, nFriendId, dataIndex);
+	return nVal;
+end
+
+function GetRoleFriendDataF(nRoleId, dataIndex, nFriendId)
+	local fVal = GetGameDataF(NScriptData.eRole, nRoleId, NRoleData.eFriend, nFriendId, dataIndex);
+	return fVal;
+end
+
+function GetRoleFriendDataS(nRoleId, dataIndex, nFriendId)
+	local szVal = GetGameDataS(NScriptData.eRole, nRoleId, NRoleData.eFriend, nFriendId, dataIndex);
+	return szVal;
+end
+
+function SetRoleFriendDataN(nRoleId, dataIndex,ulVal, nFriendId)
+	SetGameDataN(NScriptData.eRole, nRoleId, NRoleData.eFriend, nFriendId, dataIndex,ulVal);
+end
+
+
+function SetRoleFriendDataF(nRoleId, dataIndex,dVal, nFriendId)
+	SetGameDataF(NScriptData.eRole, nRoleId, NRoleData.eFriend, nFriendId, dataIndex,dVal);
+end
+
+
+function SetRoleFriendDataS(nRoleId, dataIndex,szVal, nFriendId)
+	SetGameDataN(NScriptData.eRole, nRoleId, NRoleData.eFriend, nFriendId, dataIndex,szVal);
+end
+
+--]]
+
+-- 角色好友数据
 function GetRoleFriendDataN(nRoleId, dataIndex, nFriendId)
 	local nVal = GetGameDataN(NScriptData.eRole, nRoleId, NRoleData.eFriend, nFriendId, dataIndex);
 	return nVal;
@@ -184,6 +215,39 @@ end
 function SetRoleFriendDataS(nRoleId, dataIndex,szVal, nFriendId)
 	SetGameDataS(NScriptData.eRole, nRoleId, NRoleData.eFriend, nFriendId, dataIndex,szVal);
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

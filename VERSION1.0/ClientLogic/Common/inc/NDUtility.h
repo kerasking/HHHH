@@ -23,8 +23,8 @@ std::string getStringTime(long nSeconds);
 
 std::string changeToChineseSign(std::string old);
 
-//void showDialog(const char* title,const char* content){}
-//void showDialog(const char* content){}
+void showDialog(const char* title, const char* content);
+void showDialog(const char* content);
 
 // opengl绘图函数；必须在draw方法里调用，否则将不会长久生效
 // 画矩形

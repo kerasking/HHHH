@@ -48,38 +48,51 @@ end
 function p.ProcessUserInfo(netdata)
 	local idUser				= netdata:ReadInt();
 	local idLookface			= netdata:ReadInt();
-	local idRecordMap			= netdata:ReadInt();
-	local usRecordX				= netdata:ReadShort();
-	local usRecordY				= netdata:ReadShort();
+	local idRecordMap			= netdata:ReadInt();        --玩家离线时所在的地图
+	local usRecordX				= netdata:ReadShort();   --玩家离线时所在的地图x坐标	
+	local usRecordY				= netdata:ReadShort();   --玩家离线时所在的地图y坐标	 
 	local unMoney				= netdata:ReadInt();
 	local unEMoney				= netdata:ReadInt();
 	local usPackage				= netdata:ReadShort();
 	local usStorage				= netdata:ReadShort();
-	local unRepute				= netdata:ReadInt();
+	local unRepute				= netdata:ReadInt();                       --声望
 	local btCamp				= netdata:ReadByte();
 	local btVipLevel			= netdata:ReadByte();
 	local unVipExp				= netdata:ReadInt();
 	local unMatrix				= netdata:ReadInt();
-	local unSoph				= netdata:ReadInt();
+	local unSoph				= netdata:ReadInt();                           --将魂
 	local usPartsBag			= netdata:ReadShort();
-	local usDaoFaBag			= netdata:ReadShort();
+	local usDaoFaBag			= netdata:ReadInt();                            --强化降费节省银币数
 	local btPet_limit			= netdata:ReadByte();
 	local unStage				= netdata:ReadInt();
 	local cEquipCdCount			= netdata:ReadByte();
 	local usEquipTime1			= netdata:ReadShort();
 	local usEquipTime2			= netdata:ReadShort();
 	local usEquipTime3			= netdata:ReadShort();
-	local usStamina				= netdata:ReadShort();	
-	local usPartsCastCount		= netdata:ReadByte();
-	local usPartsChips			= netdata:ReadByte();	
-	local strName				= netdata:ReadUnicodeString();
+	local usStamina				= netdata:ReadShort();
+	local unRank				= netdata:ReadInt();
+	local usBoughtStamina		= netdata:ReadShort();
+	local usBuyedGem 			= netdata:ReadShort();
+	local usLevi 				= netdata:ReadShort();
+	
+	local usRecharge	= netdata:ReadInt();                            --充值金币数	 
+    local usGuideStage	= netdata:ReadInt();
 
-	LogInfo("btPet_limit:%d",btPet_limit);
-	LogInfo("player name[%s]",strName );
-	
-	LogInfo("usPartsCastCount:%d",usPartsCastCount);
-	LogInfo("usPartsChips:%d",usPartsChips);
-	
+    local nResetCount			= netdata:ReadInt();                 --精英副本已重置的次数--与服务端同步更新--
+    
+    
+    
+    local usSaveMoney			= netdata:ReadInt();                    --装备强化暴击节省银币数	
+    local usCritCount			= netdata:ReadInt();                    --装备强化暴击累加次数
+    local usQuality             = netdata:ReadByte();
+    
+    
+    
+	local strName				= netdata:ReadUnicodeString();
+    
+	LogInfo("qbw unStage:%d",unStage);
+    SetRoleBasicDataS(idUser, USER_ATTR.USER_ATTR_NAME, strName);
+	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_RECHARGE_EMONEY, usRecharge);
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_ID, idUser);
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_LOOKFACE, idLookface);
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_RECORD_MAP, idRecordMap);
@@ -96,51 +109,101 @@ function p.ProcessUserInfo(netdata)
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_MATRIX, unMatrix);
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_SOPH, unSoph);
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_PARTS_BAG, usPartsBag);
-	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_DAO_BAG, usDaoFaBag);	
+	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_EQUIP_ENHANCE_SAVE_MONEY, usDaoFaBag);	
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_PET_LIMIT, btPet_limit);
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_STAGE, unStage);
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_STAMINA, usStamina);
-	SetRoleBasicDataS(idUser, USER_ATTR.USER_ATTR_NAME, strName);
-	LogInfo("name:%s,count:%d,",strName,cEquipCdCount)
+    SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_BUYED_LEVY, usLevi);
+    SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_GUIDE_STAGE, usGuideStage);
+	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_HAVE_BUY_STAMINA, usBoughtStamina);
+    SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_RANK, unRank);
+    SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_INSTANCING_RESET_COUNT, nResetCount);	
+
+	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_BUYED_GEM, usBuyedGem);
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_EQUIP_QUEUE_COUNT, cEquipCdCount);
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME1, usEquipTime1);
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME2, usEquipTime2);
-	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME3, usEquipTime3);		
-	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_STAMINA_CAST_COUNT, usPartsCastCount);
-	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_STAMINA_PARTS_CHIPS, usPartsChips);
-
+	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME3, usEquipTime3);	
+    SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_RANK, unRank);
+    
+    --** chh 2012-08-17 **--
+    SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_EQUIP_CRIT_SAVE_MONEY, usSaveMoney);
+    SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_EQUIP_CRIT_COUNT, usCritCount);
+    SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_AUTO_EXERCISE, usQuality);
 	
+	--++Guosen 2012.7.15
+	local nRideStatus	= usEquipTime2;
+	local nMountType	= usEquipTime3;
+	CreatePlayerWithMount( idLookface, usRecordX, usRecordY, idUser, strName, nRideStatus, nMountType );
 	
-	CreatePlayer(idLookface, usRecordX, usRecordY, idUser, strName);
-	
+    GameDataEvent.OnEvent(GAMEDATAEVENT.USERSTAGEATTR);
+    
+    local szDeviceToken = GetDeviceToken();
+    if ( szDeviceToken ~= nil and szDeviceToken ~= "" ) then
+    	MsgLoginSuc.setMobileKey( GetDeviceToken() );
+    end
+    
+    --** 设置主角名称颜色 *＊--
+    SetPlayerNameColorByQuality(usQuality);
 	return 1;
 end
 
-
+local test = 0;
 function p.ProcessUserInfoUpdate(netdata)
+    LogInfo("p.ProcessUserInfoUpdate");
 	local idUser				= ConvertN(netdata:ReadInt());
 	local nPlayerId				= ConvertN(GetPlayerId());
 	if nPlayerId ~= idUser then
-		LogError("ProcessUserInfoUpdate playerid[%d] idUser[%d]", nPlayerId, idUser);
+		LogError("qbw:ProcessUserInfoUpdate playerid[%d] idUser[%d]", nPlayerId, idUser);
 		return;
 	end
 	
+	
+	test =0;
 	local btAmount				= netdata:ReadByte();
 	local datalist				= {};
 	for i=1, btAmount do
 		local nAttr				= ConvertN(netdata:ReadInt());
 		local nAttrData			= ConvertN(netdata:ReadInt());
-		
+        LogInfo("nAttr:[%d],nAttrData:[%d]",nAttr,nAttrData);
+		if nAttr ==  USER_ATTR.USER_ATTR_RANK then
+			LogInfo("USER_ATTR_RANK:"..nAttrData);
+			local rank = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_RANK);
+			
+			if rank < nAttrData then
+				--军衔升级
+				
+				--成功光效
+				PlayEffectAnimation.ShowAnimation(1);
+				
+				--成功音效
+   				Music.PlayEffectSound(Music.SoundEffect.RANK_UP);
+			end
+			
+		end
+        
+        if nAttr ==  USER_ATTR.USER_ATTR_AUTO_EXERCISE then
+             --** 设置主角名称颜色 *＊--
+            SetPlayerNameColorByQuality(nAttrData);
+        end
+
+
+		LogInfo("qbw: user info update nAttr"..nAttr.."  DATA:"..nAttrData);
 		if nAttr ~= USER_ATTR.USER_ATTR_ID then
 			SetRoleBasicDataN(idUser, nAttr, nAttrData);
 			--状态如果有特殊处理todo
 			table.insert(datalist, nAttr);
 			table.insert(datalist, nAttrData);
 		end
+        if(nAttr == USER_ATTR.USER_ATTR_STAGE) then
+            GameDataEvent.OnEvent(GAMEDATAEVENT.USERSTAGEATTR);
+        end
 	end
 	if 0 < #datalist then
 		GameDataEvent.OnEvent(GAMEDATAEVENT.USERATTR, datalist);
 	end
+    
+   
 end
 
 RegisterNetMsgHandler(NMSG_Type._MSG_USERINFO, "p.ProcessUserInfo", p.ProcessUserInfo);
