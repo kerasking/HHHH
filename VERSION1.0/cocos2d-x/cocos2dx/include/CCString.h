@@ -45,8 +45,7 @@ namespace cocos2d {
 	public:
 		std::string m_sString;
 	public:
-		CCString()
-			:m_sString("")
+		CCString():m_sString("")
 		{}
 		CCString(const char * str)
 		{
