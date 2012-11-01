@@ -536,7 +536,7 @@ void NDBeforeGameMgr::RegiserCallBack( int errCode, std::string strtip  )/* errC
 	SetUserName("");
 	SetPassWord("");
 	
-	//showDialog(NDCommonCString("tip"), strtip.c_str());
+	showDialog(NDCommonCString("tip"), strtip.c_str());
 	
 	//NDDirector::DefaultDirector()->ReplaceScene(RegisterAccountScene::Scene());
 }

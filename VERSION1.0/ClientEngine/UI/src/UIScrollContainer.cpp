@@ -110,7 +110,10 @@ void CUIScrollContainer::draw()
 		return;
 	}
 	
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#else
 	NDDirector::DefaultDirector()->SetViewRect(this->GetScreenRect(), this);
+#endif
 	
 	NDUILayer::draw();
 	DrawScrollBar();

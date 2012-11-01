@@ -1102,7 +1102,7 @@ void ItemMgr::processQueryDesc(NDTransData* data, int len)
 		
 		if (item) 
 		{
-		//	showDialog(item->getItemNameWithAdd().c_str(), strContent.c_str()); ///< 临时性注释 郭浩
+		showDialog(item->getItemNameWithAdd().c_str(), strContent.c_str()); ///< 临时性注释 郭浩
 		}
 	}
 	else

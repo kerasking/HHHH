@@ -331,6 +331,10 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\GameScene\inc\EquipUpgradeScene.h"
+					>
+				</File>
+				<File
 					RelativePath="..\GameScene\inc\GameScene.h"
 					>
 				</File>
@@ -354,6 +358,10 @@
 			<Filter
 				Name="src"
 				>
+				<File
+					RelativePath="..\GameScene\src\EquipUpgradeScene.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\GameScene\src\GameScene.cpp"
 					>
