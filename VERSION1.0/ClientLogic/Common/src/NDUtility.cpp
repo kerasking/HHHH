@@ -648,3 +648,19 @@ std::string getStringTime(long nSeconds)
 {
 	return string("");
 }
+
+NS_NDENGINE_BGN
+
+void showDialog( const char* title, const char* content )
+{
+	NDUIDialog *dialog = new NDUIDialog;
+	dialog->Initialization();
+	dialog->Show(title, content, NULL, NULL);
+}
+
+void showDialog( const char* content )
+{
+	//showDialog("error", content);
+}
+
+NS_NDENGINE_END

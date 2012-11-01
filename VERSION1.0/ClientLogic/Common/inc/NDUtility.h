@@ -24,17 +24,8 @@ std::string getStringTime(long nSeconds);
 std::string changeToChineseSign(std::string old);
 
 NS_NDENGINE_BGN
-void showDialog(const char* title, const char* content)
-{
-	NDUIDialog *dialog = new NDUIDialog;
-	dialog->Initialization();
-	dialog->Show(title, content, NULL, NULL);
-}
-
-void showDialog(const char* content)
-{
-	showDialog(NDCommonCString("error"), content);
-}
+void showDialog(const char* title, const char* content);
+void showDialog(const char* content);
 NS_NDENGINE_END
 
 void quitGame(bool bTipNet = false);
