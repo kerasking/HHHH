@@ -28,7 +28,7 @@ function SetUIVisible(visible)
 			if ui then
 				ui:SetVisible(false);
 			else
-				LogInfo("can not find ui");
+				LogInfo("can not find ui:[%d]",v);
 			end
 		end
 	elseif visible == 1 then --显示所有UI
@@ -120,9 +120,46 @@ function showDynMapUI()
 	end
 end
 
+--bTrack =0 则不是寻路状态
+function showBattleMapUI(mapid,bTrack) 
+   if 0 == TaskUI.GetTrackingBossId() then
+   		--Guosen 2012.7.20
+        local nBattleID		= TaskUI.GetMainBossId();--TaskUI.GetTrackingBossId();--获得当前任务副本ID，已完成的话为空---麻烦博威给接口
+        local nPromptType	= PromptType.TASK;--获得当前任务类型--麻烦博威给接口
+        if ( nBattleID ~= nil and nBattleID ~= 0 ) then
+			LogInfo("showBattleMapUI nBattleID:%d",nBattleID);
+        	NormalBossListUI.LoadUIWithBattleID( nBattleID, nPromptType );
+        else
+        	NormalBossListUI.LoadUI(mapid);  
+        end
+   else
+        --NormalBossListUI.LoadUIWithBattleID( TaskUI.GetTrackingBossId(), PromptType.TASK );--Guosen 2012.7.20
+        NormalBossListUI.LoadUIWithBattleID( TaskUI.GetTrackingBossId(), TaskUI.GetTrackType() );
+        
+        TaskUI.ResetTrackingBossId()
+   end 
+end
 
+function closeworldbutton()
+    BackCity();  
+end
+
+--删除node，bSoundEffect是否播放音效
+function RemoveChildByTagNew(nUITag, bCleanUp,bSoundEffect)
+	local scene = GetSMGameScene();
+	
+	if scene ~= nil then
+		scene:RemoveChildByTag(nUITag, bCleanUp);
+		if bSoundEffect ~= nil then
+			if true == bSoundEffect then
+				--Music.PlayEffectSound(0)
+			end
+		end
+	end	
+end
 
 function CloseMainUI()
+    LogInfo("CloseMainUI");
 	local bRet	= false;
 	if not CheckT(NMAINSCENECHILDTAG) then
 		LogInfo("CloseMainUI not CheckT(NMAINSCENECHILDTAG)");
@@ -136,20 +173,27 @@ function CloseMainUI()
 	end
 	
 	for i, v in pairs(NMAINSCENECHILDTAG) do
-		if i == "ChatMainUI" or i == "ChatMainBar" then
-			CloseUI(v);
-			continue;
-		end
 		if i ~= "BottomSpeedBar" 
-			and i~="TopSpeedBar" 
 			and i ~= "WorldMapBtn" 
 			and i ~= "bossUI" 
 			and i ~= "bossRankUI" 
 			and i ~= "UserStateList" 
 			and i ~= "DynMapToolBar"
 			and i ~= "CommonDlg" 
-			and i ~= "EmailList" 
-			and i ~= "Practise" then
+			and i ~= "EmailList"
+			and i ~= "MilOrdersDisPTxt"
+			and i ~= "MainUITop" 
+            and i ~= "BottomMsgBtn"
+            and i ~= "BottomControlBtn" 
+            and i ~= "BottomFind"
+            and i ~= "BottomMsg"
+            and i ~= "DynMapGuide" --++Guosen 2012.7.4
+            and i ~= "AffixNormalBoss" --++Guosen 2012.7.6
+            and i ~= "Arena" --++Guosen 2012.7.6
+            and i ~= "ChatGameScene"
+            and i ~= "TestDelPlayer" then
+            
+            
 			if CloseUI(v) then
 				bRet	= true;
 			end
@@ -176,12 +220,17 @@ function GetWorldMapUITag()
 	return NMAINSCENECHILDTAG.WorldMap;
 end
 
---关闭主界面某个UI
-function CloseUI(tagUI)
+--关闭主界面某个UI  默认播放音效
+function CloseUI(tagUI,bPlaySE)
 	local ui = GetUI(tagUI)
 	if not ui then
 		return false;	
 	end
+	
+	if bPlaySE == nil or bPlaySE == true then
+    	--Music.PlayEffectSound(0);
+    end
+    
 	ui:RemoveFromParent(true);
 	
 	return true;
@@ -197,6 +246,17 @@ function GetUI(tagUI)
 		return nil;
 	end
 	local layer = GetUiLayer(scene, tagUI);
+    --if(layer == nil) then
+        --layer = GetUiNode(scene, tagUI);
+    --end
+    --if(layer == nil) then
+        --layer = GetLabel(scene, tagUI);
+    --end
+    --if(layer == nil) then
+        --layer = GetButton(scene, tagUI);
+    --end
+    --LogInfo("layerTag:[%d]",tagUI);
+
 	return layer;
 end
 
@@ -253,17 +313,13 @@ function SetGameDataSToLabel(pParent, nTag, nScriptData, nRoleData, nRoleId, nId
 end
 
 function SetLabel(pParent, nTag, str)
-	if not CheckP(pParent) then
-		LogInfo("SetLabel invalid pParent");
-		return;
-	end
-    if not CheckS(str) then
-		LogInfo("SetLabel invalid str");
+	if not CheckP(pParent) or not CheckS(str) then
+		LogInfo("SetLabel invalid arg1");
 		return;
 	end
 
 	if not CheckN(nTag) then
-		LogInfo("SetLabel invalid nTag");
+		LogInfo("SetLabel invalid arg2");
 		return;
 	end
 	
@@ -273,7 +329,6 @@ function SetLabel(pParent, nTag, str)
 	end
 	
 	lb:SetText(str);
-    return lb;
 end
 
 function SetHyperlinkText(pParent, nTag, str)
@@ -450,6 +505,8 @@ function CreateButton(picname, selpicname, text, rect, fontsize, focusPicname, b
 	
 	return btn;
 end
+
+
 
 --** chh 2012-08-01 **--
 function HideLoginUI(nTag)

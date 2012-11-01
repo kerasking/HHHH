@@ -125,8 +125,28 @@ function p.AttachEquipInfo(pUiLayer, nItemId, nWidthLimit)
 	
 	--强化等级
 	local nEnhance			= Item.GetItemInfoN(nItemId, Item.ITEM_ADDITION);
+	local strEnhanceDesc	= "";
+	if nEnhance >= 1 and nEnhance <= 10 then
+		strEnhanceDesc	= "法器";
+	elseif nEnhance >= 11 and nEnhance <= 20 then
+		strEnhanceDesc	= "灵器";
+	elseif nEnhance >= 21 and nEnhance <= 30 then
+		strEnhanceDesc	= "道器";
+	elseif nEnhance >= 31 and nEnhance <= 40 then
+		strEnhanceDesc	= "下品仙器";
+	elseif nEnhance >= 41 and nEnhance <= 50 then
+		strEnhanceDesc	= "中品仙器";
+	elseif nEnhance >= 61 and nEnhance <= 70 then
+		strEnhanceDesc	= "王品仙器";
+	elseif nEnhance >= 71 and nEnhance <= 80 then
+		strEnhanceDesc	= "圣品仙器";
+	elseif nEnhance >= 81 and nEnhance <= 90 then
+		strEnhanceDesc	= "神器";
+	elseif nEnhance >= 91 and nEnhance <= 100 then
+		strEnhanceDesc	= "造化神器";
+	end
 	if nEnhance > 0 then
-		local str	= "<cEB6100强化等级 " .. EquipStrFunc.GetLevelName(nEnhance) .. "/e";
+		local str	= "<cEB6100强化等级 " .. strEnhanceDesc .. tostring(nEnhance) .. "级/e";
 		if p.AddColorLabel(pUiLayer, str, 12, nStartX, nResHeight, nWidthLimit) then
 			nResHeight	= nResHeight + 14 * ScaleFactor;
 		end
@@ -245,7 +265,7 @@ function p.AttachEquipInfo(pUiLayer, nItemId, nWidthLimit)
 			end
 		end
 		if nJobReq > PROFESSION_TYPE.NONE then
-			local str = "角色职业 " .. PlayerFunc.GetJobDesc(nJobReq);
+			local str = "角色职业 " .. RolePetFunc.GetJobDesc(nJobReq);
 			if p.AddColorLabel(pUiLayer, str, 12, nStartX, nResHeight, nWidthLimit) then
 				nResHeight	= nResHeight + 14 * ScaleFactor;
 			end
@@ -487,13 +507,32 @@ function p.AttachItemND(pUiLayer,formulaID , nWidthLimit)
 		     nEnhance = 1;
 		   end
 		end
-				
-		if nEnhance > 0 then
-		  local str	= "<cEB6100强化等级 " .. EquipStrFunc.GetLevelName(nEnhance) .. "/e";
-		  if p.AddColorLabel(pUiLayer, str, 12, nStartX, nResHeight, nWidthLimit) then
-			nResHeight	= nResHeight + 14 * ScaleFactor;
-		  end
+		
+		local strEnhanceDesc = "";
+	    if nEnhance >= 1 and nEnhance <= 10 then
+		  strEnhanceDesc	= "法器";
+	    elseif nEnhance >= 11 and nEnhance <= 20 then
+		  strEnhanceDesc	= "灵器";
+	    elseif nEnhance >= 21 and nEnhance <= 30 then
+		strEnhanceDesc	= "道器";
+	    elseif nEnhance >= 31 and nEnhance <= 40 then
+		  strEnhanceDesc	= "下品仙器";
+	    elseif nEnhance >= 41 and nEnhance <= 50 then
+		  strEnhanceDesc	= "中品仙器";
+	    elseif nEnhance >= 61 and nEnhance <= 70 then
+		  strEnhanceDesc	= "王品仙器";
+	    elseif nEnhance >= 71 and nEnhance <= 80 then
+		  strEnhanceDesc	= "圣品仙器";
+	    elseif nEnhance >= 81 and nEnhance <= 90 then
+		  strEnhanceDesc	= "神器";
+	    elseif nEnhance >= 91 and nEnhance <= 100 then
+		  strEnhanceDesc	= "造化神器";
 	    end
+		
+		local str	= "<cEB6100强化等级 " .. strEnhanceDesc .. tostring(nEnhance) .. "级/e";
+		if p.AddColorLabel(pUiLayer, str, 12, nStartX, nResHeight, nWidthLimit) then
+			nResHeight	= nResHeight + 14 * ScaleFactor;
+		end
 		
 		--普通属性
         for i=1, 3 do
@@ -620,84 +659,6 @@ function p.GetEquipColor(nItemType)
 	  color = ccc4(255,215,0,255); 
 	end
 	return color;
-end
-
---得到器灵值的颜色
-function p.GetQLValueColor(nQulity,nAttrType,itemId,index)
-  local color = ccc4(255, 255,255, 255);
-  local nVal = ConvertN(ItemFunc.GetAttrTypeVal(itemId, index));
-  if nQulity == Item.QL_QUALITY_BLUE then
-    if nAttrType == Item.ATTR_TYPE_PHY_ATK 
-	   or nAttrType == Item.ATTR_TYPE_SKILL_ATK
-	   or nAttrType == Item.ATTR_TYPE_MAGIC_ATK 
-	   or nAttrType == Item.ATTR_TYPE_PHY_DEF 
-	   or nAttrType == Item.ATTR_TYPE_SKILL_DEF 
-	   or nAttrType == Item.ATTR_TYPE_MAGIC_DEF then
-	   if nVal >= 100 and nVal <= 399 then
-	     color = ccc4(0,255,0,255);
-	   elseif nVal >= 400 and nVal <= 599 then
-	     color = ccc4(0,0,255, 255);
-	   elseif nVal == 600 then
-	     color = ccc4(167,87,168,255);
-	   end 
-	elseif nAttrType == Item.ATTR_TYPE_LIFE then  
-	   if nVal >= 1000 and nVal <= 2499 then
-	     color = ccc4(0,255,0,255);
-	   elseif nVal >= 2500 and nVal <= 3499 then
-	     color = ccc4(0,0,255, 255);
-	   elseif nVal == 3500 then
-	     color = ccc4(167,87,168,255);
-	   end 	
-	elseif ItemFunc.IsPercent(nAttrType) then 
-	   if nVal >= 0.5 and nVal <= 1.9 then
-	     color = ccc4(0,255,0,255);
-	   elseif nVal >= 2.0 and nVal <= 2.9 then
-	     color = ccc4(0,0,255, 255);
-	   elseif nVal == 3 then
-	     color = ccc4(167,87,168,255);
-	   end 		    
-	end  
-  elseif nQulity == Item.QL_QUALITY_PURPLE then
-    if nAttrType == Item.ATTR_TYPE_PHY_ATK 
-	   or nAttrType == Item.ATTR_TYPE_SKILL_ATK
-	   or nAttrType == Item.ATTR_TYPE_MAGIC_ATK 
-	   or nAttrType == Item.ATTR_TYPE_PHY_DEF 
-	   or nAttrType == Item.ATTR_TYPE_SKILL_DEF 
-	   or nAttrType == Item.ATTR_TYPE_MAGIC_DEF then
-	   if nVal >= 700 and nVal <= 799 then
-	     color = ccc4(0,255,0,255);
-	   elseif nVal >= 800 and nVal <= 999 then
-	     color = ccc4(0,0,255, 255);
-	   elseif  nVal >= 1000 and nVal <= 1499 then
-	     color = ccc4(167,87,168,255);
-	   elseif nVal == 1500 then
-	     color = ccc4(255,215,0,255);
-	   end 
-	elseif nAttrType == Item.ATTR_TYPE_LIFE then  
-	   if nVal >= 3400 and nVal <= 3999 then
-	     color = ccc4(0,255,0,255);
-	   elseif nVal >= 4000 and nVal <= 4999 then
-	     color = ccc4(0,0,255, 255);
-	   elseif nVal >= 5000 and nVal <= 7999 then
-	     color = ccc4(167,87,168,255);
-	   elseif nVal == 8000 then
-	     color = ccc4(255,215,0,255);
-	   end 	
-	elseif ItemFunc.IsPercent(nAttrType) then 
-	   if nVal >= 3.5 and nVal <= 4.9 then
-	     color = ccc4(0,255,0,255);
-	   elseif nVal >= 5.0 and nVal <= 5.9 then
-	     color = ccc4(0,0,255, 255);
-	   elseif nVal >= 6.0 and nVal <= 7.9 then
-	     color = ccc4(167,87,168,255);
-	   elseif nVal == 8.0 then
-	     color = ccc4(255,215,0,255);
-	   end 			    
-	end   
-  elseif nQulity == Item.QL_QUALITY_GOLDEN then
-    color = ccc4(255,215,0,255);
-  end
-  return color;
 end
 
 

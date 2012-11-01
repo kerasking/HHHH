@@ -8,7 +8,7 @@
 ItemPet = {};
 local p = ItemPet;
 
-local eEquipItem					= 0;	--宠物装备物品
+local eEquipItem					= 1;	--宠物装备物品
 local eDaoFaItem					= 1;	--宠物道法物品
 
 --宠物装备(Item.POSITION_EQUIP_1 ~ Item.POSITION_EQUIP_6)
@@ -82,7 +82,7 @@ function p.GetItemList(nRoleId, nPetId, e)
 		LogInfo("ItemPet p.GetItemList[%d][%d] failed", nRoleId, nPetId);
 		return;
 	end
-	
+    
 	idlist = _G.GetRoleDataIdTable(NScriptData.eRole, nRoleId, NRoleData.ePet, nPetId, e);
 	return idlist;
 end

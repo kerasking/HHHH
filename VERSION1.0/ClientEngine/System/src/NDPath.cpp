@@ -9,7 +9,6 @@
 #include "NDPath.h"
 #include "define.h"
 
-// todo
 
 NS_NDENGINE_BGN
 
@@ -343,14 +342,6 @@ const string& NDPath::GetScriptPath(const char* filename)
 {
 	static string ret;
 	return ret = NDPath_ScriptPath + filename;
-
-// 	string strRes = string(
-// 			string("../SimplifiedChineseRes/res/") + "Script/" + filename);
-// 	char* pszTemp = new char[255];
-// 	memset(pszTemp, 0, sizeof(char) * 255);
-// 	strcpy(pszTemp, strRes.c_str());
-// 	return pszTemp;
-// 	//return string(GetResPath()+"Script/"+filename).c_str();
 }
 
 

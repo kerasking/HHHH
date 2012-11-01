@@ -45,8 +45,6 @@ local ID_FOSTER_B_L_CTRL_TEXT_7						= 7;
 local ID_FOSTER_B_L_CTRL_TEXT_6						= 6;
 local ID_FOSTER_B_L_CTRL_EQUIP_BUTTON_2				= 2;
 
-local TAG_BEGIN_ARROW   = 24;
-local TAG_END_ARROW     = 25;
 
 -- 界面控件tag定义
 local TAG_CONTAINER = 2;						--容器tag
@@ -94,7 +92,7 @@ function p.LoadUI(nStoneId)
 	 local nStoneItemType = Item.GetItemInfoN(nStoneId,Item.ITEM_TYPE);
 	 --不是神石 
 	if Num7(nStoneItemType) ~= 5 then
-		CommonDlgNew.ShowYesDlg("该物品不是万金油！");
+		CommonDlgNew.ShowYesDlg("该物品不是神石！");
 		return;
 	end
 
@@ -143,7 +141,7 @@ function p.LoadUI(nStoneId)
 	LogInfo("formulaID="..formulaID);	
 	
 	--p.initComposeUI(layerCompose);
-	--[[
+	
 	local containter = RecursiveSVC(layer, {ID_FOSTER_B_CTRL_LIST_L});
 	if not CheckP(containter) then
 		layer:Free();
@@ -158,15 +156,11 @@ function p.LoadUI(nStoneId)
 	containter:SetLuaDelegate(p.OnUIEventMatirialContainerViewChange);
 	containter:SetStyle(UIScrollStyle.Verical);
 	containter:EnableScrollBar(true);
-	--]]
+	
 	p.initData();
 	 p.RefreshUI();
 	--p.RefreshMatirialContainer();
 	p.RefreshComposeInfoLayer()
-    
-    
-    SetArrow(p.GetLayer(),p.GetPetNameContainer(),1,TAG_BEGIN_ARROW,TAG_END_ARROW);
-    
 	return true;
 end
 
@@ -192,21 +186,6 @@ function p.OnUIEventBg(uiNode, uiEventType, param)
 				return true;
 			end
 		end	
-	elseif uiEventType == NUIEventType.TE_TOUCH_SC_VIEW_IN_BEGIN then
-		if tag == p.TagUserList then
-            LogInfo("p.OnUIEvent NUIEventType.TE_TOUCH_SC_VIEW_IN_BEGIN");
-            local pageContainer = p.GetPetNameContainer();
-        
-            local userContainer = p.GetUserContainer();
-            
-            LogInfo("userContainer:GetBeginIndex():[%d]",userContainer:GetBeginIndex());
-            
-            pageContainer:ShowViewByIndex(userContainer:GetBeginIndex());
-            
-            SetArrow(p.GetLayer(),p.GetPetNameContainer(),1,TAG_BEGIN_ARROW,TAG_END_ARROW);
-		end 
-
-		
 	end
 
 end
@@ -384,15 +363,9 @@ function p.RefreshComposeInfoLayer()
 	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_34,""..nAttackNew 	);
 	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_36,""..nNeedMoney.."银币");
 		
-	local l_name = SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_3,""..sItemName 	);
-    
-    --设置装备颜色
-    ItemFunc.SetLabelColor(l_name,nItemType);
-    
-	local l_newName = SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_4,""..sItemNameNew 	);
-    
-	--设置装备颜色
-    ItemFunc.SetLabelColor(l_newName,productItemType);
+	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_3,""..sItemName 	);
+	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_4,""..sItemNameNew 	);
+	
 
 			
 	--强化等级		
@@ -508,12 +481,6 @@ function p.EquipGlid()
        return false;
    end
    
-   --金钱不足返回提示
-   local nNeedMoney 		= GetDataBaseDataN("formulatype",formulaID,DB_FORMULATYPE.FEE_MONEY);
-	if  PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_MONEY) < nNeedMoney  then
-		 CommonDlgNew.ShowTipDlg("神铸所需银币不足!"); 
-		return;
-	end
 
   local formulaEmoney1 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL1,DB_FORMULATYPE.NUM1);
   local formulaEmoney2 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL2,DB_FORMULATYPE.NUM2);
@@ -600,11 +567,6 @@ function p.SuccGetProduct(nProductType)
 	CommonDlgNew.ShowYesDlg("制作成功:"..ItemFunc.GetName(nProductType));
 	scene:RemoveChildByTag(NMAINSCENECHILDTAG.PlayerEquipGlidUI, true);
 	
-    if(IsUIShow(NMAINSCENECHILDTAG.PlayerBackBag)) then
-        PlayerUIBackBag.RefreshCurrentBack();
-    elseif(IsUIShow(NMAINSCENECHILDTAG.PlayerAttr)) then
-        PlayerUIAttr.RefreshCurrentBack();
-    end
 end
 
 
@@ -666,14 +628,9 @@ function p.RefreshEquipInfo()
     local rectview = userContainer:GetFrameRect();
     userContainer:SetViewSize(rectview.size);
     
-    userContainer:EnableScrollBar(true);
-    
     local nPlayerId = GetPlayerId();
 	local idTable = RolePetUser.GetPetListPlayer(nPlayerId);
     
-    LogInfo("p.RefreshEquipInfo #idTable"..#idTable);
-    
-	idTable = RolePet.OrderPets(idTable);
     
     for i=1, #idTable do
         local petId = idTable[i];
@@ -688,14 +645,12 @@ end
 
 
 function p.AddPetEquipItem(petId)
-		LogInfo("p.AddPetEquipItem petId"..petId);
-	
         local userContainer = p.GetUserContainer();
         local rectview = userContainer:GetFrameRect();
         
         local clientLayer = createContainerClientLayerM();
         clientLayer:Init(false);
-        --clientLayer:SetViewSize(CGSizeMake(rectview.size.w, p.TagEquipListItemHeight));
+        clientLayer:SetViewSize(CGSizeMake(rectview.size.w, p.TagEquipListItemHeight));
         userContainer:AddView(clientLayer);
         
         local nPlayerId = GetPlayerId();
@@ -708,13 +663,13 @@ function p.AddPetEquipItem(petId)
             equipIdList = ItemPet.GetEquipItemList(nPlayerId, petId);
         end
         
-        equipIdList = Item.OrderItems(equipIdList);
+        
         for j, v in ipairs(equipIdList) do
             local equipId = equipIdList[j];
             local view = createUIScrollViewM();
             view:Init(false);
             view:SetViewId(equipId);
-            
+            clientLayer:AddView(view);
     
             --初始化ui
             local uiLoad = createNDUILoad();
@@ -724,17 +679,11 @@ function p.AddPetEquipItem(petId)
             end
             
             uiLoad:Load("foster_A_L_Item.ini", view, nil, 0, 0);
-            p.refreshEquipInfoListItem(clientLayer,view,equipId);
-            
-            clientLayer:AddView(view);
+            p.refreshEquipInfoListItem(view,equipId);
         end
-        
-        
 end
 
 function p.refreshUserInfoListItem(view, petId)
-	LogInfo("refreshUserInfoListItem petId"..petId);
-		
     local container = p.GetEquipContainer(petId);
     container:RemoveAllView();
     local rectview = container:GetFrameRect();
@@ -746,9 +695,36 @@ function p.refreshUserInfoListItem(view, petId)
     
     --遍历装备
 	for i, v in ipairs(equipIdList) do
-		p.AddPetEquipItem(v);
+		p.AddPetEquipItem(v,petId);
 	end
     
+end
+
+function p.AddPetEquipItem(equipId,petId)
+    if not CheckN(equipId) then
+		return;
+	end
+	local container = p.GetEquipContainer(petId);
+ 
+    local view = createUIScrollView();
+    if view == nil then
+        LogInfo("p.AddPetEquipItem createUIScrollView failed");
+        return;
+    end
+    view:Init(false);
+    view:SetViewId(equipId);
+    container:AddView(view);
+    
+    --初始化ui
+    local uiLoad = createNDUILoad();
+    if nil == uiLoad then
+        layer:Free();
+        return false;
+    end
+	
+    uiLoad:Load("foster_A_L_Item.ini", view, nil, 0, 0);
+    
+    p.refreshEquipInfoListItem(view,equipId);
 end
 
 function p.GetEquipContainer(viewId)
@@ -758,9 +734,7 @@ function p.GetEquipContainer(viewId)
     return container;
 end
 
-function p.refreshEquipInfoListItem(clientLayer,view,equipId)
-	LogInfo("refreshEquipInfoListItem "..equipId);
-	
+function p.refreshEquipInfoListItem(view,equipId)
     --set pic
     local pic = GetItemButton(view, TAG_EQUIP_PIC);
     pic:ChangeItem(equipId);
@@ -770,8 +744,6 @@ function p.refreshEquipInfoListItem(clientLayer,view,equipId)
     local equipName = ItemFunc.GetName(type);
     local name = GetLabel(view, TAG_EQUIP_NAME);
     name:SetText(equipName);
-    --设置装备颜色
-    ItemFunc.SetLabelColor(name,type);
     
     --set level
     local equipLv = Item.GetItemInfoN(equipId, Item.ITEM_ADDITION);
@@ -783,9 +755,6 @@ function p.refreshEquipInfoListItem(clientLayer,view,equipId)
     local btn = GetButton(view, TAG_EQUIP_BUTTON);
     btn:SetParam1(equipId);
     btn:SetLuaDelegate(p.OnUIEventSelectEquipBtn);
-    
-    --/*取每项大小*/
-    clientLayer:SetViewSize(btn:GetFrameRect().size);
 end
 
 function p.OnUIEventSelectEquipBtn(uiNode, uiEventType, param)
@@ -802,39 +771,17 @@ function p.OnUIEventSelectEquipBtn(uiNode, uiEventType, param)
 
  	local reqLev = GetDataBaseDataN("itemtype", g_ItemTypeId, DB_ITEMTYPE.REQ_LEVEL);
 	if reqLev <  100 then
-		CommonDlgNew.ShowTipDlg("该装备无法神铸，只有100级以上装备才可以神铸！");
+		CommonDlgNew.ShowYesDlg("该装备无法神铸，只有100级以上装备才可以神铸！");
 	elseif 	formulaID == 0 then
-		CommonDlgNew.ShowTipDlg("该物品无法神铸！");
+		CommonDlgNew.ShowYesDlg("该物品无法神铸！");
 	end
 	
 		
 	
 	p.RefreshComposeInfoLayer();
 	
-	p.SelectEquipFouce(g_ItemId);
+	
 end
-
---选择装备高亮功能
-function p.SelectEquipFouce(equipId)
-    local uContainer = p.GetUserContainer();
-    for i=1, uContainer:GetViewCount() do
-        local clientView = uContainer:GetView(i-1);
-        for j=1, clientView:GetViewCount() do
-            local view = clientView:GetView(j-1);
-            local equipBtn = GetButton(view, TAG_EQUIP_BUTTON);
-            if(equipBtn == nil) then
-                LogInfo("p.SelectEquipFouce equipBtn is nil!");
-                return;
-            end 
-            if(view:GetViewId() ~= equipId) then
-                equipBtn:SetFocus(false);
-            else
-                equipBtn:SetFocus(true);
-            end
-        end
-    end
-end
-
 
 ---------------------------刷新武将名称-----------------------------------
 function p.RefreshPetInfo()
@@ -866,8 +813,6 @@ function p.RefreshPetInfo()
 		p.AddPetNameItem(v);
 	end
     
-    --背包
-    p.AddPetNameItem(0);
 end
 
 function p.AddPetNameItem(nPetId)
@@ -875,9 +820,9 @@ function p.AddPetNameItem(nPetId)
 		return;
 	end
 	
-	--if not RolePet.IsExistPet(nPetId) then
---		return;
---	end
+	if not RolePet.IsExistPet(nPetId) then
+		return;
+	end
 	
 	local container = p.GetPetNameContainer();
  
@@ -902,21 +847,11 @@ function p.AddPetNameItem(nPetId)
     p.refreshPetInfoListItem(view,nPetId);
     
 end
---[[
+
 function p.refreshPetInfoListItem(view,nPetId)
     local strPetName = ConvertS(RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_NAME));
     local labelName = GetLabel(view, TAG_PET_NAME);
     labelName:SetText(strPetName);
-end
---]]
-function p.refreshPetInfoListItem(view,nPetId)
-    local labelName = GetLabel(view, TAG_PET_NAME);
-    if(nPetId == 0) then
-        labelName:SetText("背包");
-    else
-        local strPetName = ConvertS(RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_NAME));
-        labelName:SetText(strPetName);
-    end
 end
 
 function p.GetPetNameContainer()
@@ -946,10 +881,6 @@ function p.initData()
     
     local nPlayerId		= ConvertN(GetPlayerId());
     local idlistItem	= ItemUser.GetBagItemList(nPlayerId);
-    
-    --物品排序
-    idlistItem = Item.OrderItems(idlistItem);
-    
 	local nSize			= table.getn(idlistItem);
     
     for i, v in ipairs(idlistItem) do

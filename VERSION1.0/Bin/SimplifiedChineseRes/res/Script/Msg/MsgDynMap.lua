@@ -16,13 +16,14 @@ function p.SendDynMapQuit()
 	netdata:Free();
 end
 
-function p.SendDynMapGuide(round)
+function p.SendDynMapGuide(round,nTypeId)
 	LogInfo("sendGuide:%d",round);
 	local netdata = createNDTransData(NMSG_Type._MSG_INSTANCING_BATTLE_LOG);
 	if nil == netdata then
 		return false;
 	end
 	netdata:WriteByte(round);
+    netdata:WriteInt(nTypeId);
 	SendMsg(netdata);
 	netdata:Free();
 end

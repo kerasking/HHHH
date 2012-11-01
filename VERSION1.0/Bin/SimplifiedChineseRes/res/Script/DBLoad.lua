@@ -5,11 +5,11 @@ LoadDataBaseTable("npc", "npcTable");
 LoadDataBaseTable("matrix_config","matrix_configTable");
 LoadDataBaseTable("matrix_up_level","matrix_up_levelTable");
 LoadDataBaseTable("npc", "npcTable");
-LoadDataBaseTable("skill_type","skill_typeTable");
 LoadDataBaseTable("skill_config","skill_configTable");
 
-LoadDataBaseTable("skill_result_type","skill_result_table");
+LoadDataBaseTable("skill_result_cfg","skill_result_cfgTable");
 LoadDataBaseTable("monstertype","monstertypeTable");
+LoadDataBaseTable("monster_generate","monster_generateTable");
 LoadDataBaseTable("mapzone","mapzoneTable");
 LoadDataBaseTable("itemtype","itemtypeTable");
 
@@ -30,9 +30,24 @@ LoadDataBaseTable("pet_levexp","pet_levexpTable");
 LoadDataBaseTable("user_state_config","user_state_configTable");
 
 LoadDataBaseTable("enhanced","enhancedTable");
+LoadDataBaseTable("task_npc","task_npcTable");
 
-LoadDataBaseTable("parts_grow","parts_growTable");
+LoadDataBaseTable("rank_config","rank_configTable");
+LoadDataBaseTable("mount_config","mount_configTable");
+LoadDataBaseTable("mount_model_config","mount_model_configTable");
+LoadDataBaseTable("gsconfig","gsconfigTable");
 
 
+--** chh 2012-6-21 **--
+LoadDataBaseTable("giftpack_config","giftpack_configTable");
 
+--** chh 2012-7-14 **--
+LoadDataBaseTable("guide_config","guide_configTable");
+LoadDataBaseTable("vip_config","vip_configTable");
+
+--** tzq 2012-8-15 **--
+LoadDataBaseTable("achievement_config","achievement_configTable");
+
+LoadDataBaseTable("mount_train_config","mount_train_configTable");
+LoadDataBaseTable("equip_edu_config","equip_edu_configTable");
 

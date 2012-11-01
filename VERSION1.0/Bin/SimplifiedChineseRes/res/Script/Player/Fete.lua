@@ -12,9 +12,6 @@ local p=Fete;
 local count = 0;
 p.mList = {};
 
---是否消费提示
-p.bTwiceConfirm = false;
-
 local tVIPMilOrder = {}
 tVIPMilOrder[0] = 10
 tVIPMilOrder[1] = 20
@@ -78,7 +75,7 @@ local num3 =0;
 local num4 =0;
 
 local Anid = nil;
-p.flag = 0;
+local flag = 0;
 
 
 function p.LoadUI()
@@ -152,6 +149,7 @@ function p.refreshBtn()
      end
 end
 
+
 function p.OnUIEvent(uiNode,uiEventType,param)
     local tag = uiNode:GetTag();
     LogInfo("p.OnUIEvent[%d]",tag);
@@ -159,26 +157,26 @@ function p.OnUIEvent(uiNode,uiEventType,param)
         if p.TagClose == tag then
             CloseUI(NMAINSCENECHILDTAG.Fete);
             return true;
-        end
-        
-        
-        
-        if p.TagBtn1 == tag then
-            LogInfo("++++++count[%d]++++",count);
+        elseif p.TagBtn1 == tag then
+                 LogInfo("++++++count[%d]++++",count);
              for i = 1, count do
                 local t = p.mList[i];
                 if (t.type == 1) then
                     local nId = t.id;
                     local xnum1 = t.num;
+                    LogInfo("++++++nId[%d]++++",nId);
                     local needmoney1 = xnum1*2+2;
+                    LogInfo("++++++needmoney[%d]++++",needmoney1);
                     local nPlayerId = GetPlayerId();
                     local nMoney = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
                     if nMoney >= needmoney1 then
-                        p.TwiceConfirm(nId,needmoney1);
-                        p.flag=1;
+                        p.SendMsgFete(nId);
+                        p.refresh(1,0,0,0);
+                        flag=1;
                         Anid =1;
                     elseif nMoney < needmoney1 then
-                        CommonDlgNew.ShowTipDlg(GetTxtPub("JinBiBuZhu"));
+                           LogInfo("++++++nMoney < needmoney++++");
+                       CommonDlgNew.ShowTipDlg(GetTxtPri("JinBiBuZhu"));
                         return;
                     end
                 end
@@ -197,12 +195,13 @@ function p.OnUIEvent(uiNode,uiEventType,param)
                     local nPlayerId = GetPlayerId();
                     local nMoney = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
                     if nMoney >= needmoney2 then
-                        p.TwiceConfirm(nId,needmoney2);
-                        p.flag=1;
+                        p.SendMsgFete(nId);
+                        p.refresh(0,1,0,0);
+                        flag=1;
                         Anid =2;
                     elseif nMoney < needmoney2 then
                         LogInfo("++++++nMoney < needmoney++++");
-                        CommonDlgNew.ShowTipDlg(GetTxtPub("JinBiBuZhu"));
+                        CommonDlgNew.ShowTipDlg(GetTxtPri("JinBiBuZhu"));
                         return;
                     end
                 end
@@ -220,24 +219,19 @@ function p.OnUIEvent(uiNode,uiEventType,param)
                     local nPlayerId = GetPlayerId();
                     local nMoney = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
                     if nMoney >= needmoney3 then
-                        p.TwiceConfirm(nId,needmoney3);
-                        p.flag=1;
+                        p.SendMsgFete(nId);
+                        p.refresh(0,0,1,0);
+                        flag=1;
                         Anid =3;
                     elseif nMoney < needmoney3 then
                         LogInfo("++++++nMoney < needmoney++++");
-                        CommonDlgNew.ShowTipDlg(GetTxtPub("JinBiBuZhu"));
+                        CommonDlgNew.ShowTipDlg(GetTxtPri("JinBiBuZhu"));
                         return;
                     end
                 end
             end
         elseif p.TagBtn4 == tag then
             LogInfo("++++++count[%d]++++",count);
-            
-            --判断背包是否已满
-            if(ItemFunc.IsBagFull()) then
-                return true;
-            end
-            
             for i = 1, count do
             local t = p.mList[i];
                 if (t.type == 4) then
@@ -245,16 +239,17 @@ function p.OnUIEvent(uiNode,uiEventType,param)
                     LogInfo("++++++nId[%d]++++",nId);
                     local xnum4 = t.num;
                     local needmoney4 = xnum4*2+5;
-                    LogInfo("++++++needmoney4[%d]++++",needmoney4);
+                    LogInfo("++++++needmoney[%d]++++",needmoney4);
                     local nPlayerId = GetPlayerId();
                     local nMoney = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
                     if nMoney >= needmoney4 then
-                        p.TwiceConfirm(nId,needmoney4);
-                        p.flag=1;
+                        p.SendMsgFete(nId);
+                        p.refresh(0,0,0,1);
+                        flag=1;
                         Anid =4;
                     elseif nMoney < needmoney4 then
                         LogInfo("++++++nMoney < needmoney++++");
-                        CommonDlgNew.ShowTipDlg(GetTxtPub("JinBiBuZhu"));
+                        CommonDlgNew.ShowTipDlg(GetTxtPri("JinBiBuZhu"));
                         return;
                     end
                 end
@@ -297,72 +292,26 @@ function p.processSacrificeList(netdata)
         --p.setRoleMatrixAdd(m);
     end
     
-    if(Anid and Anid ~= 0) then
-
-        --刷新页面
-        if(Anid == 1) then
-            p.refresh(1,0,0,0);
-        elseif(Anid == 2) then
-            p.refresh(0,1,0,0);
-        elseif(Anid == 3) then
-            p.refresh(0,0,1,0);
-        elseif(Anid == 4) then
-            p.refresh(0,0,0,1);
-        end
-
-       
-        --成功音效    
-        Music.PlayEffectSound(Music.SoundEffect.LEVY);
-
-    end
-    
-    
+    CloseLoadBar();
     p.mList = m;
-    if p.flag==1 then
+    if flag==1 then
         p.showMessage(Anid);
     end
     
-    CloseLoadBar();
-    
     --引导任务事件触发
 	GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.WORSHIP);
+
 end
-
-
 
 function p.SendMsgFete(nTypeId)
-    LogInfo("p.SendMsgFete");
-    ShowLoadBar();
+     ShowLoadBar();
+        LogInfo("==========6005=========");
     local netdata = createNDTransData(NMSG_Type._MSG_CONFIRM_SACRIFICE);
-    netdata:WriteInt(nTypeId);
-    SendMsg(netdata);
-    netdata:Free();
-    
+        netdata:WriteInt(nTypeId);
+        SendMsg(netdata);
+        netdata:Free();
     return true;
 end
-
-function p.TwiceConfirm(nTypeId, nEMoney)
-    LogInfo("p.TwiceConfirm");
-    if(p.bTwiceConfirm == false) then
-        CommonDlgNew.ShowNotHintDlg(string.format("你是否花费 %d 金币完成祭祀",nEMoney), p.TwiceConfirmCallBack, nTypeId);
-    else
-        p.SendMsgFete(nTypeId);
-    end
-end
-
-
-function p.TwiceConfirmCallBack(nEventType, param, val)
-    LogInfo("p.TwiceConfirmCallBack");
-    if(nEventType == CommonDlgNew.BtnOk) then
-        LogInfo("p.TwiceConfirmCallBack true:param:[%d]",param);
-        p.SendMsgFete(param);
-        p.bTwiceConfirm = val;
-    elseif(nEventType == CommonDlgNew.BtnNo) then
-        p.bTwiceConfirm = val;
-    end
-end
-
-
 function p.showMessage(nId)
     local nPlayerId = GetPlayerId();
     LogInfo(nPlayerId);
@@ -375,43 +324,63 @@ function p.showMessage(nId)
     for i = 1, count do
     local t = p.mList[i];
         if (t.type == nId) then
-            local multiplesV = t.multiples; 
+            local multiplesV = t.multiples;
+            --LogInfo("++++++nId[%d]++++",nId);   
             local multiplesX = tMultiples[multiplesV];
+            --LogInfo("++++++multiplesX[%d]++++",multiplesX); 
             local smoney = (2000+userLevel*750)*multiplesX;
+            --LogInfo("++++++smoney[%d]++++",smoney); 
             local soph =  (100+userLevel*5)*multiplesX;
+            --LogInfo("++++++soph[%d]++++",soph); 
             local repute = (500+userLevel*50)*multiplesX;
+            --LogInfo("++++++repute[%d]++++",repute); 
             local gemstone = multiplesX;
-            
+             --LogInfo("++++++gemstone[%d]++++",gemstone); 
+             
+             
             if nId == 1 then
                 local title1 = string.format("%s%d%s", titley,smoney,GetTxtPub("coin"));
                 local title2 = string.format("%d%s%d%s", multiplesX, titlex,smoney,GetTxtPub("coin"));
                 if multiplesX == 1 then
+                    LogInfo("++++++multiplesX[%d]++++",multiplesX); 
+                    --CommonDlgNew.ShowYesDlg(title1,nil,nil,1,1,1);
                     CommonDlgNew.ShowTipsDlg({{title1,FeteColor[1]}});
+                    
                 elseif multiplesX ==2 or multiplesX == 4 or multiplesX == 10 then
+                    LogInfo("++++++multiplesX[%d]++++",multiplesX); 
+                    --CommonDlgNew.ShowYesDlg(title2,nil,nil,1,multiplesX,1);
                     CommonDlgNew.ShowTipsDlg({{title2,FeteColor[multiplesX]}});
                 end
             elseif nId == 2 then
                 local title1 = string.format("%s%d%s", titley,soph,GetTxtPub("JianHun"));
                 local title2 = string.format("%d%s%d%s", multiplesX, titlex,soph,GetTxtPub("JianHun"));
                 if multiplesX == 1 then
+                    --CommonDlgNew.ShowYesDlg(title1,nil,nil,1,1,1);
                     CommonDlgNew.ShowTipsDlg({{title1,FeteColor[1]}});
+                    
                 elseif multiplesX ==2 or multiplesX == 4 or multiplesX == 10 then
+                    --CommonDlgNew.ShowYesDlg(title2,nil,nil,1,multiplesX,1);
                     CommonDlgNew.ShowTipsDlg({{title2,FeteColor[multiplesX]}});
                 end
             elseif nId == 3 then
                 local title1 = string.format("%s%d%s", titley,repute,GetTxtPub("ShenWan"));
                 local title2 = string.format("%d%s%d%s", multiplesX, titlex,repute,GetTxtPub("ShenWan"));
                 if multiplesX == 1 then
+                    --CommonDlgNew.ShowYesDlg(title1,nil,nil,1,1,1);
                     CommonDlgNew.ShowTipsDlg({{title1,FeteColor[1]}});
+                    
                 elseif multiplesX ==2 or multiplesX == 4 or multiplesX == 10 then
+                    --CommonDlgNew.ShowYesDlg(title2,nil,nil,1,multiplesX,1);
                     CommonDlgNew.ShowTipsDlg({{title2,FeteColor[multiplesX]}});
                 end
             elseif nId == 4 then
                 local title1 = string.format("%s%d%s", titley,gemstone,GetTxtPub("DaiShi"));
                 local title2 = string.format("%d%s%d%s", multiplesX, titlex,gemstone,GetTxtPub("DaiShi"));
                 if multiplesX == 1 then
+                    --CommonDlgNew.ShowYesDlg(title1,nil,nil,1,1,1);
                     CommonDlgNew.ShowTipsDlg({{title1,FeteColor[1]}});
                 elseif multiplesX ==2 or multiplesX == 4 or multiplesX == 10 then
+                    --CommonDlgNew.ShowYesDlg(title2,nil,nil,1,multiplesX,1);
                     CommonDlgNew.ShowTipsDlg({{title2,FeteColor[multiplesX]}});
                 end
             end        

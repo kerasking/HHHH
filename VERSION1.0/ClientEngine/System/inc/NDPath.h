@@ -25,7 +25,6 @@ public:
 	~NDPath();
 
 public:
-
 	// res path
 	static const string& GetResPath();
 	static const string& GetResPath(const char* fileName);
@@ -45,7 +44,7 @@ public:
 	static const string& GetSoundPath();
 	static void SetSoundPath(const char* szPath);
 
-	// script path
+	// script path   
 	static const string& GetScriptPath();
 	static const string& GetScriptPath(const char* filename);
 

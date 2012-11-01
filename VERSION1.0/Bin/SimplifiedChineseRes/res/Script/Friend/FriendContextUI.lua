@@ -38,8 +38,7 @@ function p.LoadUI(id,name)
 	end
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.FriendContext);
-	layer:SetFrameRect(CGRectMake(150, 80, RectUILayer.size.w / 2, RectUILayer.size.h));
-	--layer:SetFrameRect(RectUILayer);
+	layer:SetFrameRect(RectUILayer);
 	scene:AddChild(layer);
 	
 	--初始化ui
@@ -53,8 +52,8 @@ function p.LoadUI(id,name)
 	uiLoad:Load("SM_JH_POP_MSG.ini", layer, p.OnUIEvent, 0, 0);
 	uiLoad:Free();
 	
-	local delBtn = GetButton(layer,ID_SM_JH_POP_MSG_CTRL_BUTTON_2);       --删除好友
-    local selBtn = GetButton(layer,ID_SM_JH_POP_MSG_CTRL_BUTTON_1);       --查看资料
+	local delBtn = GetButton(layer,ID_SM_JH_POP_MSG_CTRL_BUTTON_1);       --删除好友
+    local selBtn = GetButton(layer,ID_SM_JH_POP_MSG_CTRL_BUTTON_2);       --查看资料
 	local giveFlowerBtn = GetButton(layer,ID_SM_JH_POP_MSG_CTRL_BUTTON_3);--赠送鲜花
 	local chatBtn = GetButton(layer,ID_SM_JH_POP_MSG_CTRL_BUTTON_4);      --私聊
 	local compareBtn = GetButton(layer,ID_SM_JH_POP_MSG_CTRL_BUTTON_5);   --切磋
@@ -73,12 +72,10 @@ end
 ---------------
 function p.OnUIEventGiveFlower(uiNode, uiEventType, param)
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-		local tag = uiNode:GetTag();
-	    LogInfo("p.OnUIEventGiveFlower[%d]", tag);
-	    local flag = 0;
+	    local flag = 1;
 		--判断今天是否赠送过了
 		if flag == 0 then
-		    MsgFriend.SendOpenGiveFlower(friendId,friendName);
+		    MsgFriend.SendOpenGiveFlower(friendId);
 		else
 			CommonDlg.ShowTipInfo("提示", "您今天已经赠送过鲜花了!", nil, 2);
 		end
@@ -89,10 +86,7 @@ function p.OnUIEventGiveFlower(uiNode, uiEventType, param)
 end
 
 function p.OnUIEventDelFriend(uiNode, uiEventType, param)
-	LogInfo("aaaaa  delBtn")
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-		local tag = uiNode:GetTag();
-	    LogInfo("p.OnUIEventDelFriend[%d]", tag);
         CommonDlg.ShowNoPrompt(string.format("确定删除好友%s吗？",friendName), p.OnCommonDlgDelFriend, true);
 	end
 	
@@ -101,19 +95,13 @@ end
 
 function p.OnUIEventSelFriend(uiNode, uiEventType, param)
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-	     MsgFriend.SendFriendSel(friendId,friendName);
-		 
 		--获取玩家宠物id列表
 	    local idTable = RolePetUser.GetPetListPlayer(friendId);
-		LogInfoT(idTable)
---[[		
-	    if idTable == nil then				  
+	    if not CheckT(idTable) then
 		    MsgFriend.SendSelFriend(friendId,friendName);
 		else 
 		    FriendAttrUI.LoadUI(friendId);
 	    end
-		
-]]--		
 	end
 	
 	return true;

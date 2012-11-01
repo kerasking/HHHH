@@ -6,34 +6,44 @@
 local p = TaskUI;
 
 -- 任务详细tag
-local ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_GIVE		= 28;
+local ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_GIVE		= 24;
 local ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_ACCEPT		= 23;
-local ID_TASKLIST_D_CTRL_PICTURE_63					= 63;
 local ID_TASKLIST_D_CTRL_TEXT_29						= 29;
 local ID_TASKLIST_D_CTRL_TEXT_27						= 27;
-local ID_TASKLIST_D_CTRL_UI_TEXT_NPC					= 40;
-local ID_TASKLIST_D_CTRL_BUTTON_TASK_ABANDON			= 38;
-local ID_TASKLIST_D_CTRL_BUTTON_TASK_TRACK			= 37;
+local ID_TASKLIST_D_CTRL_UI_TEXT_NPC					= 22;
+local ID_TASKLIST_D_CTRL_BUTTON_TASK_ABANDON			= 30;
+local ID_TASKLIST_D_CTRL_BUTTON_TASK_TRACK			= 99;
 local ID_TASKLIST_D_CTRL_TEXT_GOODS					= 36;
-local ID_TASKLIST_D_CTRL_TEXT_MONEY					= 35;
+local ID_TASKLIST_D_CTRL_TEXT_MONEY					= 28;
 local ID_TASKLIST_D_CTRL_TEXT_34						= 34;
 local ID_TASKLIST_D_CTRL_TEXT_33						= 33;
-local ID_TASKLIST_D_CTRL_TEXT_EXP						= 32;
+local ID_TASKLIST_D_CTRL_TEXT_EXP						= 27;
 local ID_TASKLIST_D_CTRL_TEXT_12						= 12;
 local ID_TASKLIST_D_CTRL_TEXT_11						= 11;
-local ID_TASKLIST_D_CTRL_TEXT_TASK_NAME				= 9;
+local ID_TASKLIST_D_CTRL_TEXT_TASK_NAME				=15;
 local ID_TASKLIST_D_CTRL_TEXT_8						= 8;
-local ID_TASKLIST_D_CTRL_TEXT_TASK_INFO				= 6;
+local ID_TASKLIST_D_CTRL_TEXT_TASK_INFO				= 21;
 local ID_TASKLIST_D_CTRL_TEXT_5						= 5;
-local ID_TASKLIST_D_CTRL_LIST_TASK					= 26;
+local ID_QUEST_CTRL_TEXT_23						= 32;
+local ID_QUEST_CTRL_TEXT_22						= 31;
+local ID_QUEST_CTRL_TEXT_134						= 134;
 
+local ID_TASKLIST_D_CTRL_LIST_TASK					= 20;
+
+local ID_TASKLIST_D_CTRL_BUTTON_TASK_TRACKTASK		= 29;
+
+--测试用 直接完成任务
+local ID_TASKLIST_D_CTRL_BUTTON_TASK_FINISH			= 42;
 
 -- 任务界面tag
 local ID_TASKLIST_CTRL_CHECK_BUTTON_84			= 84;
-local ID_TASKLIST_CTRL_BUTTON_CLOSE				= 123;
-local ID_TASKLIST_CTRL_BUTTON_TASK_NOT			= 122;
-local ID_TASKLIST_CTRL_BUTTON_TASK_ACC			= 121;
+local ID_TASKLIST_CTRL_BUTTON_CLOSE				= 5;
+local ID_TASKLIST_CTRL_BUTTON_TASK_NOT			= 7;
+local ID_TASKLIST_CTRL_BUTTON_TASK_ACC			= 6;
 local ID_TASKLIST_CTRL_PICTURE_BG				= 120;
+local ID_TASKLIST_CTRL_BUTTON_PGUP				= 37;
+local ID_TASKLIST_CTRL_BUTTON_PAGEDOWN			= 39;
+local ID_TASKLIST_CTRL_BUTTON_DOWN			= 13;
 
 
 
@@ -46,7 +56,7 @@ local TAG_LAYER_TASK_PROGRESS						= 1002;
 local winsize = GetWinSize();
 local MAIN_OFFSET_X								= 0;
 local MAIN_OFFSET_Y								= 0;
-local TASK_NAME_FONT_SIZE							= 14;
+local TASK_NAME_FONT_SIZE							= 18;
 local TASK_NAME_FONT_HEIGHT							= winsize.h * 0.04375
 
 -- 配置数据
@@ -55,6 +65,11 @@ local MAX_TASK_NUM_PER_PAGE				= 6;
 -- 本地变量定义
 local nSelAcceptTaskId					= 0;			-- 已接任务当前选中的任务id
 local nSelUnAcceptTaskId				= 0;			-- 可接任务当前选中的任务id
+local bAcceptDetail =true ;--当前显示列表 true:Accept false:Unaccept
+
+
+local winsize = GetWinSize();
+local RectUILayer = CGRectMake(0, 0, winsize.w , winsize.h);
 
 function p.LoadUI()
 	nSelAcceptTaskId	= 0;
@@ -75,15 +90,16 @@ function p.LoadUI()
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerTask);
 	layer:SetFrameRect(RectUILayer);
 	--layer:SetBackgroundColor(ccc4(125, 125, 125, 125));
-	scene:AddChild(layer);
-
+	--scene:AddChild(layer);
+	scene:AddChildZ(layer,1);
+	
 	--初始化ui
 	local uiLoad = createNDUILoad();
 	if nil == uiLoad then
 		layer:Free();
 		return false;
 	end
-	uiLoad:Load("TaskList.ini", layer, p.OnMainUIEvent, MAIN_OFFSET_X, MAIN_OFFSET_Y);
+	uiLoad:Load("Quest_Bg.ini", layer, p.OnMainUIEvent, MAIN_OFFSET_X, MAIN_OFFSET_Y);
 
 	local btnAccept = GetButton(layer, ID_TASKLIST_CTRL_BUTTON_TASK_ACC);
 	if nil == btnAccept then
@@ -95,13 +111,14 @@ function p.LoadUI()
 	local rectBtnAccept		= btnAccept:GetFrameRect();
 	local nOffsetDetailX	= rectBtnAccept.origin.x;
 	local nOffsetDetailY	= rectBtnAccept.origin.y + rectBtnAccept.size.h;
-	local rectDetail		= CGRectMake(nOffsetDetailX, 
-										nOffsetDetailY,
-										RectUILayer.size.w - nOffsetDetailX * 2, 
-										RectUILayer.size.h - nOffsetDetailY - winsize.h * 0.03125
-							  );
+	local rectDetail		= CGRectMake(0, 
+										winsize.h*0.12,--75,
+										RectUILayer.size.w, 
+										RectUILayer.size.h
+							  );--]]
 
 	for i = 1, 2 do
+		
 		local layerDetail = createNDUILayer();
 		if layerDetail == nil then
 			layer:Free();
@@ -112,7 +129,7 @@ function p.LoadUI()
 		if i == 1 then
 	
 			layerDetail:SetTag(TAG_LAYER_ACCEPT);
-			uiLoad:Load("TaskList_D.ini", layerDetail, p.OnAcceptUIEvent, 0, 0);
+			uiLoad:Load("QUEST.ini", layerDetail, p.OnAcceptUIEvent, 0, 0);
 			--任务进度层
 			local pNode = GetUiNode(layerDetail, ID_TASKLIST_D_CTRL_UI_TEXT_NPC);
 			if pNode then
@@ -127,7 +144,7 @@ function p.LoadUI()
 			end
 		elseif i == 2 then
 			layerDetail:SetTag(TAG_LAYER_UNACCEPT);
-			uiLoad:Load("TaskList_D.ini", layerDetail, p.OnUnAcceptUIEvent, 0, 0);
+			uiLoad:Load("QUEST.ini", layerDetail, p.OnUnAcceptUIEvent, 0, 0);
 			layerDetail:RemoveChildByTag(ID_TASKLIST_D_CTRL_BUTTON_TASK_TRACK, true);
 		end
 		local btnAbandon = GetButton(layerDetail, ID_TASKLIST_D_CTRL_BUTTON_TASK_ABANDON);
@@ -148,6 +165,7 @@ function p.LoadUI()
 		elseif i == 2 then
 			bAccept = false;
 		end
+		--
 		local taskList = p.GetTaskList(bAccept);
 		if taskList then
 			local rectview = taskList:GetFrameRect();
@@ -160,8 +178,24 @@ function p.LoadUI()
 				taskList:SetBottomReserveDistance(rectview.size.h);
 				taskList:EnableScrollBar(true);
 			end
-		end
+		end--]]
 	end
+	
+
+	--[[
+	local pool = DefaultPool();
+	local linePic  = pool:AddPicture(GetSMImgPath("mark_up.png"),true);
+	--]]
+	--[[
+		local linePicImage = createNDUIImage();
+		linePicImage:Init();
+		linePicImage:SetTag(999);
+		linePicImage:SetPicture(linePic,true);	
+		--local sizeview		= view:GetFrameRect().size;
+		linePicImage:SetFrameRect(CGRectMake(0, 0, 300 , 200));
+		--layer:AddChildZ(linePicImage,10);
+	
+	--]]
 	
 	-- 刷新已接任务列表
 	p.RefreshTaskList(true);
@@ -169,6 +203,25 @@ function p.LoadUI()
 	p.RefreshTaskList(false);
 	-- 显示已接任务列表
 	p.ShowAccept(true)
+    local pBtnAcc = GetButton( layer, ID_TASKLIST_CTRL_BUTTON_TASK_ACC );
+    pBtnAcc:TabSel(true);    
+
+	
+	--刷新箭头按钮
+	p.RefreshDownBtn(true);
+	p.RefreshDownBtn(false);
+	
+	
+	
+	--设置关闭音效
+   	local closeBtn=GetButton(layer,ID_TASKLIST_CTRL_BUTTON_CLOSE);
+   	closeBtn:SetSoundEffect(Music.SoundEffect.CLOSEBTN);
+   	
+   	
+   		--测试用
+		--DoFile("Drama/define.lua");
+		-------
+			
 end
 
 function p.NavigateNpc(nNpcId)
@@ -177,23 +230,45 @@ function p.NavigateNpc(nNpcId)
 	end
 	NPC.Navigate(nNpcId);
 end
+---------------------------------------------------
+-- 获得任务的UI层
+function p.GetGuestUILayer()
+	local scene = GetSMGameScene();
+	if nil == scene then
+		return nil;
+	end
+
+	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerTask);
+	if nil == layer then
+		return nil;
+	end
+
+	return layer;
+end
 
 function p.OnMainUIEvent(uiNode, uiEventType, param)
 	local tag = uiNode:GetTag();
 	LogInfo("p.OnMainUIEvent[%d]", tag);
+    local pUILayer = p.GetGuestUILayer();
+        
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		if ID_TASKLIST_CTRL_BUTTON_CLOSE == tag then
-			local scene = GetSMGameScene();
-			--local director = DefaultDirector();
-			--local scene = director:GetRunningScene();
-			if scene ~= nil then
-				scene:RemoveChildByTag(NMAINSCENECHILDTAG.PlayerTask, true);
-				return true;
-			end
+			--Music.PlayEffectSound(0)
+			RemoveChildByTagNew(NMAINSCENECHILDTAG.PlayerTask, true,true);
+			return true;
 		elseif ID_TASKLIST_CTRL_BUTTON_TASK_ACC == tag then
 			p.ShowAccept(true);
+            local pBtnAcc = GetButton( pUILayer, ID_TASKLIST_CTRL_BUTTON_TASK_ACC );
+            local pBtnNot = GetButton( pUILayer, ID_TASKLIST_CTRL_BUTTON_TASK_NOT );     
+            pBtnAcc:TabSel(true);    
+            pBtnNot:TabSel(false);   
+                            
 		elseif ID_TASKLIST_CTRL_BUTTON_TASK_NOT == tag then
 			p.ShowAccept(false);
+            local pBtnAcc = GetButton( pUILayer, ID_TASKLIST_CTRL_BUTTON_TASK_ACC );
+            local pBtnNot = GetButton( pUILayer, ID_TASKLIST_CTRL_BUTTON_TASK_NOT );     
+            pBtnAcc:TabSel(false);    
+            pBtnNot:TabSel(true);   
 		end
 	elseif uiEventType == NUIEventType.TE_TOUCH_CHECK_CLICK then
 		local checkBox	= ConverToCheckBox(uiNode);
@@ -212,10 +287,12 @@ function p.OnMainUIEvent(uiNode, uiEventType, param)
 end
 
 function p.OnTaskDataUIEvent(uiNode, uiEventType, param)
+	return true;
+	--[[
 	local tag = uiNode:GetTag();
 	CloseUI(NMAINSCENECHILDTAG.PlayerTask);
 	p.DealTaskData(nSelAcceptTaskId, tag);
-	return true;
+	return true;--]]
 end
 
 function p.OnAcceptTaskListUIEvent(uiNode, uiEventType, param)
@@ -232,10 +309,122 @@ function p.OnUnAcceptTaskListUIEvent(uiNode, uiEventType, param)
 	return true;
 end
 
+
+
+
+function p.RefreshDownBtn(bAccept)
+		local scene = GetSMGameScene();
+		local btnDown = nil;
+		local tag = nil; 
+		
+		if bAccept then 
+			tag = TAG_LAYER_ACCEPT;
+		else
+			tag = TAG_LAYER_UNACCEPT;
+		end 
+		
+
+		btnDown = RecursiveUINode(scene,{NMAINSCENECHILDTAG.PlayerTask,tag,ID_TASKLIST_CTRL_BUTTON_DOWN}) 
+
+		if btnDown == nil then
+			LogInfo("qbw refreshbtn nil !!");
+			return
+		end
+						
+
+	if bAccept == false then
+		LogInfo("false");
+	else
+		LogInfo("true");
+	end
+	
+	local container = p.GetTaskList(bAccept);
+	--container:ShowViewByIndex(0);
+	local index = container:GetBeginIndex();
+	--local nstyle = container:GetScrollStyle();
+	--local viewsize = container:GetViewSize();
+	local nViewCount = container:GetViewCount();
+	--LogInfo("1111:"..index);
+	if index + MAX_TASK_NUM_PER_PAGE < nViewCount then
+		--index = index + MAX_TASK_NUM_PER_PAGE;
+		--container:ShowViewByIndex(index);
+		btnDown:SetVisible(true);
+	else
+
+		btnDown:SetVisible(false);
+	end
+	
+
+end
+
+
+function p.PageDown(bAccept)
+
+	LogInfo("2222");
+	
+	if bAccept == false then
+		LogInfo("false");
+	else
+		LogInfo("true");
+	end
+	
+	local container = p.GetTaskList(bAccept);
+	--container:ShowViewByIndex(0);
+	local index = container:GetBeginIndex();
+	local nViewCount = container:GetViewCount();
+	
+	if index + MAX_TASK_NUM_PER_PAGE < nViewCount - MAX_TASK_NUM_PER_PAGE then
+		index = index + MAX_TASK_NUM_PER_PAGE;
+		container:ShowViewByIndex(index);
+		
+	else
+		LogInfo("1111");
+		index = nViewCount - MAX_TASK_NUM_PER_PAGE;
+		container:ShowViewByIndex(index);
+		
+	end
+	local view = container:GetView(index);
+	local nTaskId = view:GetViewId();
+	p.RefreshTaskDetail(bAccept, nTaskId);
+end
+
+function p.PageUp(bAccept)
+
+	local container = p.GetTaskList(bAccept);
+	--container:ShowViewByIndex(0);
+	local index = container:GetBeginIndex();
+	local nViewCount = container:GetViewCount();
+	
+	if index - MAX_TASK_NUM_PER_PAGE >= 0 then
+		index = index - MAX_TASK_NUM_PER_PAGE;
+		container:ShowViewByIndex(index);
+	else
+		index = 0;
+		container:ShowViewByIndex(index);	
+	end
+	
+	local view = container:GetView(index);
+	local nTaskId = view:GetViewId();
+	p.RefreshTaskDetail(bAccept, nTaskId);	
+end
+
+function p.FinishTaskTest(nSelAcceptTaskId)
+	TASK.FinishTask_TEST(nSelAcceptTaskId);
+	
+
+end
+
+
 function p.OnAcceptUIEvent(uiNode, uiEventType, param)
 	local tag = uiNode:GetTag();
 	LogInfo("p.OnAcceptUIEvent[%d]", tag);
+	--LogInfo("uiEventType:  "..uiEventType.."  click:"..NUIEventType.TE_TOUCH_BTN_CLICK);
+	
+	LogInfo("qbw refreshbtn1");
+	p.RefreshDownBtn(true);
+	
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+		--LogInfo("qbw"..tag);
 		if tag == ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_ACCEPT then
 		-- 发布任务npc
 			local nNpcId = TASK.GetTaskStartNpcId(nSelAcceptTaskId);
@@ -257,6 +446,19 @@ function p.OnAcceptUIEvent(uiNode, uiEventType, param)
 			ShowLoadBar();
 		elseif tag == ID_TASKLIST_D_CTRL_BUTTON_TASK_TRACK then
 			-- 任务追踪
+		elseif tag == ID_TASKLIST_D_CTRL_BUTTON_TASK_TRACKTASK then	
+		--自动寻路
+			TASK.TrackTask(nSelAcceptTaskId);
+		elseif ID_TASKLIST_CTRL_BUTTON_PAGEDOWN == tag then	
+		
+			p.PageDown(true);	
+			return true;
+		elseif ID_TASKLIST_CTRL_BUTTON_PGUP == tag then	
+			
+			p.PageUp(true);
+			return true;	
+		elseif ID_TASKLIST_D_CTRL_BUTTON_TASK_FINISH == tag then
+			p.FinishTaskTest(nSelAcceptTaskId);						
 		end
 	elseif uiEventType == NUIEventType.TE_TOUCH_TABLE_FOCUS then
 	end
@@ -266,6 +468,9 @@ end
 function p.OnUnAcceptUIEvent(uiNode, uiEventType, param)
 	local tag = uiNode:GetTag();
 	LogInfo("p.OnAcceptUIEvent[%d]", tag);
+	
+	p.RefreshDownBtn(false);
+		
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		if tag == ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_ACCEPT then
 		-- 发布任务npc
@@ -284,13 +489,36 @@ function p.OnUnAcceptUIEvent(uiNode, uiEventType, param)
 			if 0 >= nSelUnAcceptTaskId then
 				return true;
 			end
+			
+			   	
+   		--测试用
+			--DoFile("Drama/define.lua");
+		-------
+			
+			
 			TASK.AcceptTask(nSelUnAcceptTaskId);
 			ShowLoadBar();
+		elseif tag == ID_TASKLIST_D_CTRL_BUTTON_TASK_TRACKTASK then	
+		--自动寻路
+			local nNpcId = TASK.GetTaskStartNpcId(nSelUnAcceptTaskId);
+			CloseUI(NMAINSCENECHILDTAG.PlayerTask);
+			-- 导航到npc
+			p.NavigateNpc(nNpcId);	
+		elseif ID_TASKLIST_CTRL_BUTTON_PAGEDOWN == tag then	
+		
+			p.PageDown(false);	
+			return true;
+		elseif ID_TASKLIST_CTRL_BUTTON_PGUP == tag then	
+			
+			p.PageUp(false);
+			return true;				
+
 		end
 	elseif uiEventType == NUIEventType.TE_TOUCH_TABLE_FOCUS then
 	end
 	return true;
 end
+
 
 
 -- 刷新任务列表
@@ -341,10 +569,27 @@ function p.AddTask(bAccept, nTaskId)
 		return;
 	end
 
+	local pool = DefaultPicPool();
+
 	local view = createUIScrollView();
 	if view ~= nil then
 		view:Init(false);
 		view:SetViewId(nTaskId);
+		
+		--增加线条
+		--[[
+		--local linePic  = pool:AddPicture(GetSMImgPath("General/line/icon_cutoff2.png"),false);
+		local linePic  = pool:AddPicture(GetSMImgPath("mark_up.png"),true);
+		local linePicImage = createNDUIImage();
+		linePicImage:Init();
+		linePicImage:SetTag(999);
+		linePicImage:SetPicture(linePic,true);	
+		local sizeview		= view:GetFrameRect().size;
+		linePicImage:SetFrameRect(CGRectMake(0, 0, sizeview.w , sizeview.h));
+		view:AddChildZ(linePicImage,2);
+		--]]
+		
+		
 		taskList:AddView(view);
 		local sizeview		= view:GetFrameRect().size;
 		local hyperlinkBtn	= CreateHyperlinkButton(taskName, 
@@ -361,6 +606,17 @@ function p.AddTask(bAccept, nTaskId)
 				hyperlinkBtn:SetLuaDelegate((p.OnUnAcceptTaskListUIEvent));
 			end
 			hyperlinkBtn:EnableLine(false);
+			
+			--[[
+			local linePic  = pool:AddPicture(GetSMImgPath("mark_up.png"),true);
+			local linePicImage = createNDUIImage();
+			linePicImage:Init();
+			linePicImage:SetTag(999);
+			linePicImage:SetPicture(linePic,true);	
+			hyperlinkBtn:AddChild(linePicImage);
+			--]]
+			
+			
 			view:AddChild(hyperlinkBtn);
 			if taskList:GetViewCount() <= 1 then
 				p.RefreshTaskDetail(bAccept, nTaskId);
@@ -368,6 +624,7 @@ function p.AddTask(bAccept, nTaskId)
 		end
 	end
 	
+	p.ShowAccept(false)
 	--taskList:SetVisible(taskList:IsVisibled());
 end
 -- 删除任务
@@ -390,6 +647,7 @@ function p.DelAcceptTask(bAccept,nTaskId)
 		end
 	end
 	
+	p.ShowAccept(true)
 	--taskList:SetVisible(taskList:IsVisibled());
 end
 -- 刷新任务详细
@@ -409,6 +667,8 @@ function p.RefreshTaskDetail(bAccept, nTaskId)
 	end
 
 
+	--无任务则不显示子界面
+
 	p.SetTaskTitle(pNodeDetailParent, nTaskId);
 
 	p.SetTaskContent(pNodeDetailParent, nTaskId);
@@ -419,6 +679,7 @@ function p.RefreshTaskDetail(bAccept, nTaskId)
 
 	p.SetTaskFinishNpc(pNodeDetailParent, nTaskId);
 
+LogInfo("qbw: process aa"..nTaskId)
 	p.SetTaskProcess(pNodeDetailParent, nTaskId);
 
 	--pNodeDetailParent:SetVisible(pNodeDetailParent:IsVisibled());
@@ -446,9 +707,13 @@ function p.SetTaskContent(pParent, nTaskId)
 	if not pParent or not CheckN(nTaskId) then
 		return;
 	end
+	
+	--LogInfo("设置任务内容:"..nTaskId);
+	
 	if nTaskId == 0 then
 		SetLabel(pParent, ID_TASKLIST_D_CTRL_TEXT_TASK_INFO, "");
 	else
+		LogInfo("设置任务内容:"..TASK.GetTaskDesc(nTaskId));
 		SetLabel(pParent, ID_TASKLIST_D_CTRL_TEXT_TASK_INFO, TASK.GetTaskDesc(nTaskId));
 	end
 end
@@ -458,38 +723,184 @@ function p.SetTaskPrize(pParent, nTaskId)
 		SetLabel(pParent, ID_TASKLIST_D_CTRL_TEXT_MONEY, "");
 		SetLabel(pParent, ID_TASKLIST_D_CTRL_TEXT_EXP, "");
 		SetLabel(pParent, ID_TASKLIST_D_CTRL_TEXT_GOODS, "");
+		SetLabel(pParent, ID_QUEST_CTRL_TEXT_22, "");
+		SetLabel(pParent, ID_QUEST_CTRL_TEXT_23, "");
+		SetLabel(pParent, ID_QUEST_CTRL_TEXT_134, "");
 	else
 		SetLabel(pParent, ID_TASKLIST_D_CTRL_TEXT_MONEY, SafeN2S(TASK.GetTaskPrizeMoney(nTaskId)));
 		SetLabel(pParent, ID_TASKLIST_D_CTRL_TEXT_EXP, SafeN2S(TASK.GetTaskPrizeExp(nTaskId)));
 		SetLabel(pParent, ID_TASKLIST_D_CTRL_TEXT_GOODS, TASK.GetTaskPrizeItemStr(nTaskId));
+		
+		if TASK.GetTaskPrizeRepute(nTaskId) ~= 0 then
+		
+			SetLabel(pParent, ID_QUEST_CTRL_TEXT_22, "声望 "..SafeN2S(TASK.GetTaskPrizeRepute(nTaskId)) );
+		else
+			SetLabel(pParent, ID_QUEST_CTRL_TEXT_22, "");
+		end
+	
+		if TASK.GetTaskPrizeSoul(nTaskId) ~= 0 then
+		
+			SetLabel(pParent, ID_QUEST_CTRL_TEXT_23, "将魂 "..SafeN2S(TASK.GetTaskPrizeSoul(nTaskId)) );
+	
+		else
+			SetLabel(pParent, ID_QUEST_CTRL_TEXT_23, "");
+		end
+		local AWARD_ITEMTYPE1		= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE1));
+		local AWARD_ITEMTYPE1_NUM	= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE1_NUM));
+		local AWARD_ITEMTYPE2		= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE2));
+		local AWARD_ITEMTYPE2_NUM	= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE2_NUM));
+		local AWARD_ITEMTYPE3		= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE3));
+		local AWARD_ITEMTYPE3_NUM	= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE3_NUM));
+		
+		local tAwardItem = {}
+		tAwardItem[1] = {AWARD_ITEMTYPE1,AWARD_ITEMTYPE1_NUM};
+		tAwardItem[2] = {AWARD_ITEMTYPE2,AWARD_ITEMTYPE2_NUM};
+		tAwardItem[3] = {AWARD_ITEMTYPE3,AWARD_ITEMTYPE3_NUM};
+		local strAward = "";
+		for i=1,3 do
+			if tAwardItem[i][1]~=0 and  tAwardItem[i][2]~=0 then
+				strAward = strAward .. TASK.GetDataBaseDataS("itemtype", tAwardItem[i][1], DB_ITEMTYPE.NAME) .. " X" .. tAwardItem[i][2] .. "\n";
+			end
+		end
+		
+		SetLabel(pParent, ID_QUEST_CTRL_TEXT_134, strAward);
 	end
 end
 
+function p.GetTaskPrizeContent(nTaskId)
+	local exp = SafeN2S(TASK.GetTaskPrizeExp(nTaskId));
+	local coin = SafeN2S(TASK.GetTaskPrizeMoney(nTaskId));
+	local repute = SafeN2S(TASK.GetTaskPrizeRepute(nTaskId));
+	local soul =SafeN2S(TASK.GetTaskPrizeSoul(nTaskId));
+	local s = "获得任务奖励 经验:"..exp.."  银币:"..coin;
+	
+	local AWARD_ITEMTYPE1		= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE1));
+	local AWARD_ITEMTYPE1_NUM	= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE1_NUM));
+	local AWARD_ITEMTYPE2		= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE2));
+	local AWARD_ITEMTYPE2_NUM	= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE2_NUM));
+	local AWARD_ITEMTYPE3		= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE3));
+	local AWARD_ITEMTYPE3_NUM	= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE3_NUM));
+	
+	local tAwardItem = {}
+	tAwardItem[1] = {AWARD_ITEMTYPE1,AWARD_ITEMTYPE1_NUM};
+	tAwardItem[2] = {AWARD_ITEMTYPE2,AWARD_ITEMTYPE2_NUM};
+	tAwardItem[3] = {AWARD_ITEMTYPE3,AWARD_ITEMTYPE3_NUM};
+	
+	if repute ~= "0" then
+		s = s.." 声望:"..repute;
+	end
+
+	if soul ~= "0" then
+		s = s.." 将魂:"..soul;
+	end		
+	
+	local strAward = "";
+	for i=1,3 do
+		if tAwardItem[i][1]~=0 and  tAwardItem[i][2]~=0 then
+			LogInfo("itemtype i"..i)
+			LogInfo("itemtype"..tAwardItem[i][1].." "..tAwardItem[i][2])
+			strAward = strAward..TASK.GetDataBaseDataS("itemtype", tAwardItem[i][1], DB_ITEMTYPE.NAME).."  X" .. tAwardItem[i][2];
+		end
+	end	
+	
+	s = s..strAward;
+	return s;
+end
+
+
+function p.GetTaskPrizeContentTable(nTaskId)
+	local tContent = {}
+	tContent[1] =""
+	tContent[2] =""
+	tContent[3] =""
+	tContent[4] =""
+	tContent[5] =""
+	
+	tContent[6] =""
+	tContent[7] =""	
+	
+	local exp = SafeN2S(TASK.GetTaskPrizeExp(nTaskId));
+	local coin = SafeN2S(TASK.GetTaskPrizeMoney(nTaskId));
+	local repute = SafeN2S(TASK.GetTaskPrizeRepute(nTaskId));
+	local soul =SafeN2S(TASK.GetTaskPrizeSoul(nTaskId));
+	
+	tContent[1] ="获得经验:"..exp;
+	tContent[2] ="获得银币:"..coin;
+	
+	
+	
+	local AWARD_ITEMTYPE1		= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE1));
+	local AWARD_ITEMTYPE1_NUM	= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE1_NUM));
+	local AWARD_ITEMTYPE2		= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE2));
+	local AWARD_ITEMTYPE2_NUM	= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE2_NUM));
+	local AWARD_ITEMTYPE3		= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE3));
+	local AWARD_ITEMTYPE3_NUM	= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE3_NUM));
+	
+	local tAwardItem = {}
+	tAwardItem[1] = {AWARD_ITEMTYPE1,AWARD_ITEMTYPE1_NUM};
+	tAwardItem[2] = {AWARD_ITEMTYPE2,AWARD_ITEMTYPE2_NUM};
+	tAwardItem[3] = {AWARD_ITEMTYPE3,AWARD_ITEMTYPE3_NUM};
+	
+	if repute ~= "0" then
+		tContent[6] ="获得声望:"..repute;
+	end
+
+	if soul ~= "0" then
+		tContent[7] ="获得将魂:"..soul;	
+	end		
+	
+	for i=1,3 do
+		if tAwardItem[i][1]~=0 and  tAwardItem[i][2]~=0 then
+			tContent[2+i] ="获得 "..TASK.GetDataBaseDataS("itemtype", tAwardItem[i][1], DB_ITEMTYPE.NAME).."  X" .. tAwardItem[i][2];
+		end
+	end	
+
+	return tContent;
+end
+
+
+
+
+
+
+
+
+
+
 function p.SetTaskStartNpc(pParent, nTaskId)
+	--LogInfo("qbw: start npc"..nTaskId)
+	--LogInfo("qbw: start npc name"..NPC.GetNpcName(TASK.GetTaskStartNpcId(nTaskId)));
 	if nTaskId == 0 then
-		SetHyperlinkButtn(pParent, ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_ACCEPT, "");
+		SetLabel(pParent, ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_ACCEPT, "");
+		--SetHyperlinkButtn(pParent, ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_ACCEPT, "");
 	else
-		SetHyperlinkButtn(pParent, ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_ACCEPT, NPC.GetNpcName(TASK.GetTaskStartNpcId(nTaskId)));
+		SetLabel(pParent, ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_ACCEPT, NPC.GetNpcName(TASK.GetTaskStartNpcId(nTaskId)));
+		--SetHyperlinkButtn(pParent, ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_ACCEPT, NPC.GetNpcName(TASK.GetTaskStartNpcId(nTaskId)));
 	end
 end
 
 function p.SetTaskFinishNpc(pParent, nTaskId)
 	if nTaskId == 0 then
-		SetHyperlinkButtn(pParent, ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_GIVE, "");
+		SetLabel(pParent, ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_GIVE, "");
+		
+		--SetHyperlinkButtn(pParent, ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_GIVE, "");
 	else
-		SetHyperlinkButtn(pParent, ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_GIVE, NPC.GetNpcName(TASK.GetTaskFinishNpcId(nTaskId)));
+		SetLabel(pParent, ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_GIVE, NPC.GetNpcName(TASK.GetTaskFinishNpcId(nTaskId)));
+		
+		--SetHyperlinkButtn(pParent, ID_TASKLIST_D_CTRL_HYPER_TEXT_BUTTON_GIVE, NPC.GetNpcName(TASK.GetTaskFinishNpcId(nTaskId)));
 	end
 end
 
 function p.SetTaskProcess(pParent, nTaskId)
+	LogInfo("qbw: process bb")
 	if not pParent or not CheckN(nTaskId) then
-		LogInfo("not pParent or not CheckN(nTaskId)");
+		LogInfo("qbw not pParent or not CheckN(nTaskId)");
 		return;
 	end
 	local layerProcess = GetUiLayer(pParent, TAG_LAYER_TASK_PROGRESS);
 	if not layerProcess then
-		LogInfo("not layerProcess");
-		return
+		LogInfo("qbw not layerProcess");
+		return;
 	end
 	layerProcess:RemoveAllChildren(true);
 	
@@ -497,16 +908,18 @@ function p.SetTaskProcess(pParent, nTaskId)
 		return;
 	end
 	
+
 	local processlist = TASK.GenerateContentTable(nTaskId);
 	if 0 == table.getn(processlist) then
 		return;
 	end
-	
+
 	local x = 0;
 	local y = 0;
 	local nData = 0;
 	local nIndex = 0;
 	for i, v in ipairs(processlist) do
+
 		local size;
 		if i % 2 == 0 then
 			local taskData	= p.GetTaskDataProcessStr(nTaskId, nIndex);
@@ -514,7 +927,13 @@ function p.SetTaskProcess(pParent, nTaskId)
 			local color		= ccc4(255, 0, 0, 255);
 			size			= GetHyperLinkTextSize(ConvertS(text), 14, layerProcess:GetFrameRect().size.w);
 			local rect		= CGRectMake(x, y, size.w, size.h);
+			
 			local hyperlinkbtn	= CreateHyperlinkButton(text, rect, 14, color);
+			
+			--local  lable = createNDUILabel();
+			--lable:Init();
+			--lable:SetText(text);
+			
 			hyperlinkbtn:SetTag(nIndex);
 			hyperlinkbtn:SetLuaDelegate(p.OnTaskDataUIEvent);
 			layerProcess:AddChild(hyperlinkbtn);
@@ -538,6 +957,7 @@ function p.SetTaskProcess(pParent, nTaskId)
 			x = x + size.w;
 		end
 	end
+	LogInfo("qbw: process3")
 end
 
 
@@ -557,6 +977,20 @@ function p.ShowAccept(bAccept)
 	if  pNodeUnAccept then
 		pNodeUnAccept:SetVisible(not bAccept);
 	end
+	
+	bAcceptDetail = bAccept;
+
+	--如果没有任务则隐藏
+	local taskList = p.GetTaskList(bAccept);
+	if not taskList then
+		return;
+	end
+	
+    if taskList:GetViewCount() <= 0 then
+		pNodeAccept:SetVisible(false);
+		pNodeUnAccept:SetVisible(false);
+	end
+	
 end
 
 -- 获取已接任务详细父节点

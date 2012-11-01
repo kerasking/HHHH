@@ -27,14 +27,64 @@ local NPC_TASK_DATA =
 	TIP				= 8
 };
 
+local GUIDE_TASK_DATA =
+{
+	TYPE			= 1,   --guide
+	ID				= 2,   --GUIDE类型
+	NUM				= 3,   --guide数量
+};
+
 local mInGoToState			= false;
 local mInGoToStateSwitch	= false;
 local mGoToDynMapId			= 0;
 local mGoToDestMapId		= 0;
 local mPassWayIndex			= 0;
+local mBossId				= 0;
+local mMainTaskBossId		= 0;
+
+function p.GetMainBossId()
+	if mMainTaskBossId == 0 then
+
+		local nTaskid = TASK.GetMainTaskId(); 
+		 -----======有主线======------	
+   	 	if nTaskid ~= nil then
+    
+			--获取任务目标类型
+			local nContenType,nVal  =	TASK.GetNextTaskTargetType(nTaskid);
+			if nContenType == nil then
+				return 0;
+			end
+						
+			if 	nContenType == TASK.SM_TASK_CONTENT_TYPE.ITEM or nContenType == TASK.SM_TASK_CONTENT_TYPE.MONSTER then
+				mMainTaskBossId = nVal;
+				return mMainTaskBossId;
+			else
+				 return 0;	
+			end
+			
+		else
+			return 0;	
+		end
+	
+	else
+		return mMainTaskBossId;
+	end
+	
+	
+end
 
 --进入切屏点的状态
 local state                 = 0;
+
+
+--副本寻路类型   (0无提示，1当前副本, 2掉落副本)
+local g_nTrackType = 0;
+
+function p.GetTrackType()
+	return g_nTrackType;
+end
+
+
 
 --获取任务数据进度字符串(例如:5/8)
 function p.GetTaskDataProcessStr(nTaskId, nIndex)
@@ -46,11 +96,16 @@ function p.GetTaskDataProcessStr(nTaskId, nIndex)
 	end
 	
 	local nContenType = ConvertN(cellDatas[TASK_CEL_DATA.SM_TASK_CELL_TYPE]);
+	LogInfo("p.GetTaskDataProcessStr nContenType:"..nContenType)
+	
 	if nContenType == TASK.SM_TASK_CONTENT_TYPE.MONSTER then
 		retStr = TASK.GetTaskMonsterDataProgressStr(nTaskId, cellDatas[TASK_CEL_DATA.SM_TASK_CELL_ID]);
 	elseif nContenType == TASK.SM_TASK_CONTENT_TYPE.ITEM then
 		retStr = TASK.GetTaskItemDataProgressStr(nTaskId, cellDatas[TASK_CEL_DATA.SM_TASK_CELL_ID]);
 	elseif nContenType == TASK.SM_TASK_CONTENT_TYPE.NPC then
+		local i =1;
+	elseif nContenType == TASK.SM_TASK_CONTENT_TYPE.GUIDE then
+		retStr = TASK.GetTaskGUIDEDataProgressStr(nTaskId, cellDatas[TASK_CEL_DATA.SM_TASK_CELL_ID]);
 	end
 	return retStr;
 end
@@ -77,6 +132,8 @@ function p.DealTaskData(nTaskId, nIndex)
 	--local nCurMapId	= ConvertN(_G.GetMapId());
 	--local bTrans	= ConvertN(cellDatas[TASK_CEL_DATA.SM_TASK_CELL_CAN_TRANS]);
 	local nContenType = ConvertN(cellDatas[TASK_CEL_DATA.SM_TASK_CELL_TYPE]);
+	
+	LogInfo("qbw1:mapid taskid:"..nMapId.." "..nId);
 	if nContenType == TASK.SM_TASK_CONTENT_TYPE.NPC then
 		NPC.Navigate(nId);
 		return;
@@ -84,6 +141,7 @@ function p.DealTaskData(nTaskId, nIndex)
 			nContenType == TASK.SM_TASK_CONTENT_TYPE.ITEM then
 		--local nMapX	= ConvertN(cellDatas[TASK_CEL_DATA.SM_TASK_CELL_MAP_X]);
 		--local nMapY	= ConvertN(cellDatas[TASK_CEL_DATA.SM_TASK_CELL_MAP_Y]);
+		LogInfo("qbw1:goto dynmap:"..nMapId);
 		p.GoToDynMap(nMapId);
 	end
 end
@@ -166,6 +224,11 @@ function p.SetTaskCellData(nTaskId, celldatas, nIndex)
 		nMapX			= celldatas[NPC_TASK_DATA.MAPX];
 		nMapY			= celldatas[NPC_TASK_DATA.MAPY];
 		strTip			= celldatas[NPC_TASK_DATA.TIP];
+    elseif "guide" == strtype then
+ 		nType			= TASK.SM_TASK_CONTENT_TYPE.GUIDE;
+		nId				= celldatas[GUIDE_TASK_DATA.ID];
+        nNum			= celldatas[GUIDE_TASK_DATA.NUM];
+        nMapId			= 0;
 	end
 	
 	if TASK.SM_TASK_CONTENT_TYPE.NONE == nType or nil == nId or nil == nMapId then
@@ -218,7 +281,13 @@ function p.DelContent(nTaskId)
 	_G.DelRoleGameDataById(NScriptData.eTaskConfig, nTaskId);
 end
 
-function p.GoToDynMap(nMapId,nState)
+function p.GoToDynMap(nMapId,nState,nTrackType)
+	if nTrackType == nil then
+		g_nTrackType = 1;
+	else
+		g_nTrackType = nTrackType;
+	end
+	
 	if not CheckN(nMapId) then
 		return;
 	end
@@ -236,35 +305,33 @@ function p.GoToDynMap(nMapId,nState)
 		local nDesMapId, nPassWayIndex	= AffixBossFunc.GetDynMapPassWay(nMapId);
 		LogInfo("p.GoToDynMap nDesMapId[%d], nPassWayIndex[%d]", nDesMapId, nPassWayIndex);
 		
-		if nDesMapId == _G.GetMapId() then
-			--在当前地图
-			local nCellX, nCellY	= AffixBossFunc.GetMapPortal(nDesMapId, nPassWayIndex);
+
+			local nPlayerMapId = _G.GetMapId();
+			
+			local nDesMapId, nPassWayIndex	= AffixBossFunc.GetDynMapPassWay(nPlayerMapId);
+			
+			local nCellX, nCellY	= AffixBossFunc.GetMapPortal(nPlayerMapId, nPassWayIndex);
 			if CheckN(nCellX) and CheckN(nCellY) and 0 ~= nCellX and 0 ~= nCellY then
 				mInGoToState		= false;
 				mInGoToStateSwitch	= true;
 				mPassWayIndex		= nPassWayIndex;
 				mGoToDynMapId		= nMapId;
-				_G.NavigateTo(nDesMapId, nCellX, nCellY);
-			end
-			return;
-		end
-		
-		if CheckN(nDesMapId) and CheckN(nPassWayIndex) and 0 < nDesMapId then
-			mInGoToState		= true;
-			mInGoToStateSwitch	= false;
-			mGoToDynMapId		= nMapId;
-			mGoToDestMapId		= nDesMapId;
-			mPassWayIndex		= nPassWayIndex;
-			WorldMapGoto(nDesMapId);
-			LogInfo("TaskUI WorldMapGoto[%d]", nMapId);
-		end
+				
+				if nTrackType == 1 then
+					mMainTaskBossId		= nMapId;
+				end
+				
+				--WorldMapGoto(nDesMapId);
+				_G.NavigateTo(nPlayerMapId, nCellX+1, nCellY);
+				--_G.NavigateTo(nDesMapId, nCellX, nCellY);
+			end		
 	end
 end
 
 function p.OnEnterGameScene()
 	_G.LogInfo("TaskUI OnEnterGameScene");
 	
-	local nCurMapId			= ConvertN(_G.GetMapId());
+	local nCurMapId		= ConvertN(_G.GetMapId());
 
 	if mInGoToState and mGoToDestMapId == nCurMapId and _G.CheckN(mPassWayIndex) then
 		local nCellX, nCellY	= AffixBossFunc.GetMapPortal(nCurMapId, mPassWayIndex);
@@ -283,6 +350,8 @@ function p.OnEnterGameScene()
 	state = 0;
 end
 
+
+
 function p.OnMapSwitch(nSwitchIndex)
 	_G.LogInfo("TaskUI OnMapSwitch");
 	
@@ -290,19 +359,38 @@ function p.OnMapSwitch(nSwitchIndex)
 		return;
 	end
 	
+    
+    --npc寻路
+   	if NPC.OnMapSwitch() == true then
+   		_G.LogInfo("NPC OnMapSwitch");
+    	return;
+    end
+    
+    --副本寻路
 	if mInGoToStateSwitch and (not mInGoToState) and  nSwitchIndex == mPassWayIndex then
 		if not IsUIShow(NMAINSCENECHILDTAG.AffixNormalBoss) then
 			_G.LogInfo("task goto dyn map[%d]", mGoToDynMapId);
 			_G.CloseMainUI();
-			NormalBossListUI.LoadUIByBossId(mGoToDynMapId);
+
+			 local nDesMapId, nPassWayIndex	= AffixBossFunc.GetDynMapPassWay(mGoToDynMapId);
+		       
+             _G.LogInfo("1nDesMapId,nPassWayIndex[%d][%d]", nDesMapId,nPassWayIndex);
+		     WorldMapGoto(nDesMapId);
+		     
+		     
 		end
 	else
 		if not IsUIShow(NMAINSCENECHILDTAG.AffixNormalBoss) then
 		   _G.CloseMainUI();
 		   if state == 1 then
-		      NormalBossListUI.LoadUIByBossId(mGoToDynMapId,1);
+	    
+		       local nDesMapId, nPassWayIndex	= AffixBossFunc.GetDynMapPassWay(mGoToDynMapId);
+		       
+                _G.LogInfo("2nDesMapId,nPassWayIndex[%d][%d]", nDesMapId,nPassWayIndex);
+		        WorldMapGoto(nDesMapId);
 		   else
-		      NormalBossListUI.LoadUIBySwitch(_G.GetMapId(), nSwitchIndex); 
+                WorldMapGoto(0);
+		      --NormalBossListUI.LoadUIBySwitch(_G.GetMapId(), nSwitchIndex); 
 		   end
 		end
 	end
@@ -311,6 +399,27 @@ function p.OnMapSwitch(nSwitchIndex)
 	mInGoToState		= false;
 	mInGoToStateSwitch	= false;
 end
+
+
+function p.GetTrackingBossId()
+	return mGoToDynMapId;
+end
+
+
+function p.ResetTrackingBossId()
+	LogInfo("ResetTrackingBossId")
+	 mGoToDynMapId = 0;
+end
+
+
+function p.GotoPortal()
+	local nPlayerMapId = _G.GetMapId();
+	local nDesMapId, nPassWayIndex	= AffixBossFunc.GetDynMapPassWay(nPlayerMapId);
+	local nCellX, nCellY	= AffixBossFunc.GetMapPortal(nPlayerMapId, nPassWayIndex);	
+	_G.NavigateTo(nPlayerMapId, nCellX, nCellY);
+	
+end
+
 
 _G.RegisterGlobalEventHandler(_G.GLOBALEVENT.GE_GENERATE_GAMESCENE, "TaskUI.OnEnterGameScene", p.OnEnterGameScene);
 _G.RegisterGlobalEventHandler(_G.GLOBALEVENT.GE_SWITCH, "TaskUI.OnMapSwitch", p.OnMapSwitch);

@@ -43,8 +43,12 @@ local tCallBackList = {};
 ---关闭一个对话框
 function p.CloseOneDlg()
 	local bSucess, nId = p.GetTopDlgId();
+    if nId == 0 then 
+        return false;
+    end
+    
 	if not bSucess then
-		LogInfo(" p.CloseOneDlg not bSucess");
+		LogInfo("CommonDlg: p.CloseOneDlg not bSucess");
 		return false;
 	end
 	
@@ -65,7 +69,9 @@ local ID_NO_PROMPT_CTRL_BUTTON_CONFIRM				= 181;
 local ID_NO_PROMPT_CTRL_TEXT_INFO					= 180;
 local ID_NO_PROMPT_CTRL_PICTURE_BG					= 179;
 
-local RectUILayerNoPrompt = CGRectMake((winsize.w - 300 * ScaleFactor) / 2, (winsize.h - 138 * ScaleFactor) / 2, 300 * ScaleFactor, 138 * ScaleFactor);
+
+--local RectUILayerNoPrompt = CGRectMake((winsize.w - 300 * ScaleFactor) / 2, (winsize.h - 138 * ScaleFactor) / 2, 300 * ScaleFactor, 138 * ScaleFactor);
+local RectUILayerNoPrompt = CGRectMake(0, 0,winsize.w,winsize.h);
 
 function p.ShowNoPrompt(tip, callback, bHideNoPrompt)
 	local scene = GetSMGameScene();
@@ -252,7 +258,7 @@ local ID_COPYSUGGEST_CTRL_TEXT_INFO						= 13;
 local ID_COPYSUGGEST_CTRL_PICTURE_BG					= 12;
 
 
-local RectUILayerConfirm = CGRectMake((winsize.w - 300 * ScaleFactor) / 2, (winsize.h - 138 * ScaleFactor) / 2, 300 * ScaleFactor, 138 * ScaleFactor);
+local RectUILayerConfirm = CGRectMake(0, 0, winsize.w, winsize.h);
 
 function p.ShowWithConfirm(tip, callback)
 	local scene = GetSMGameScene();
@@ -324,6 +330,103 @@ function p.OnUIEventConfirm(uiNode, uiEventType, param)
 	
 	return true;
 end
+
+---消息确认框------弹出窗口表现案2.4
+local ID_COPYCHOOSE_CTRL_BUTTON_CANCEL				= 16;
+local ID_COPYCHOOSE_CTRL_BUTTON_CONFIRM				= 15;
+local ID_COPYCHOOSE_CTRL_BUTTON_CLOSE				= 14;
+local ID_COPYCHOOSE_CTRL_TEXT_INFO					= 13;
+local ID_COPYCHOOSE_CTRL_PICTURE_BG					= 12;
+
+
+local RectUILayerChoose = CGRectMake(0,0,winsize.w,winsize.h);
+
+function p.ShowWithChoose(tip, callback)
+	local scene = GetSMGameScene();
+	if not CheckP(scene) then
+		LogInfo("not CheckP(scene),load CommonDlg.ShowWithChoose failed!");
+		return 0;
+	end
+	
+	local bSucess, nTag = p.GenerateDlgId();
+	
+	if not bSucess then
+		return 0;
+	end
+	
+	local layer = createNDUILayer();
+	if not CheckP(layer) then
+		return 0;
+	end
+	
+	layer:Init();
+	layer:SetTag(nTag);
+	layer:SetFrameRect(RectUILayerConfirm);
+	scene:AddChildZ(layer, 10000);
+	layer:SetDestroyNotify(p.OnDeConstruct);
+	
+	--初始化ui
+	local uiLoad = createNDUILoad();
+	if nil == uiLoad then
+		layer:Free();
+		return 0;
+	end
+	
+	uiLoad:Load("CopyChoose.ini", layer, p.OnUIEventChoose, 0, 0);
+	uiLoad:Free();
+	
+	tCallBackList[nTag] = callback;
+	
+	local lb = RecursiveLabel(scene, {nTag, ID_COPYCHOOSE_CTRL_TEXT_INFO});
+
+	if CheckP(lb) then
+		if not CheckS(tip) then
+			lb:SetText("");
+		else
+			lb:SetText(tip);
+		end
+	end
+
+	return nTag;
+end
+
+function p.OnUIEventChoose(uiNode, uiEventType, param)
+	local tag = uiNode:GetTag();
+	LogInfo("p.OnUIEventChoose[%d]", tag);
+	
+	local bSucess, nDlgId = p.GetDlgIdByChildNode(uiNode);
+	if not bSucess then
+		LogError("CommonDlg.OnUIEventChoose dlg id error");
+		return true;
+	end
+	
+	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+		if ID_COPYCHOOSE_CTRL_BUTTON_CLOSE == tag then
+			p.OnDlgEvent(nDlgId);
+            p.CloseDlg(nDlgId);
+		elseif ID_COPYCHOOSE_CTRL_BUTTON_CONFIRM == tag then
+			p.OnDlgEvent(nDlgId, p.EventOK);
+			p.CloseDlg(nDlgId);
+        elseif ID_COPYCHOOSE_CTRL_BUTTON_CANCEL == tag then
+            p.OnDlgEvent(nDlgId);
+            p.CloseDlg(nDlgId);
+		end
+	end
+	
+	return true;
+end
+
+
+
+
+
+
+
+
+
+
+
+
 
 ---消息提示框------弹出窗口表现案3.1
 local tTimeTag2DlgId = {};

@@ -53,4 +53,21 @@ function f.getEmoneyForCleanCoolDown(time)
 	end
 end
 
+--** chh 2012-06-18 判断武将是否在出战列表中 **--
+function f.ifIsInMatrix(petId)
+    local lst, count    = MsgMagic.getRoleMatrixList();
+	local CurrentMatrix    = lst[1];
+        
+    if CurrentMatrix == nil then
+        LogInfo("错误：玩家没有阵型！");
+        return false;
+    end 
+
+    for i = 1, #CurrentMatrix do
+        if(CurrentMatrix[i] == petId) then
+            return true;
+        end
+    end
+    return false;
+end
 

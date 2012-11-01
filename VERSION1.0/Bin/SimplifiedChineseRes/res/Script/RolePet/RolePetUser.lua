@@ -64,3 +64,23 @@ function p.GetPetListPlayer(nRoleId)
 	end
 	return retlist;
 end
+
+
+--获取主宠物id
+function p.GetMainPetId(nRoleId)
+	local idlist = p.GetPetList(nRoleId);
+	LogInfoT(idlist)
+	
+	for i, v in ipairs(idlist) do
+		local nMain = ConvertN(RolePet.GetPetInfoN(v,PET_ATTR.PET_ATTR_MAIN));
+		LogInfo(nMain.."  "..v)
+		if nMain == 1 then
+			
+			return v;
+				
+		end
+	end
+	return 0
+end
+
+

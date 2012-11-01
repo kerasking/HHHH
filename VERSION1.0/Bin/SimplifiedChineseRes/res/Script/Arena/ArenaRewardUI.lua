@@ -14,9 +14,9 @@ local ID_FIGHTEVALUATE_CTRL_BUTTON_CONFIRM =10;
 local ID_FIGHTEVALUATE_CTRL_TEXT_INFO =9;
 local ID_FIGHTEVALUATE_CTRL_PICTURE_STATE = 8;
 local ID_FIGHTEVALUATE_CTRL_PICTURE_7=7;
+--NMAINSCENECHILDTAG.ArenaRewardUI=96890;
 
 function p.LoadUI()
-	LogInfo("load,ArenaRewardUI");
 	local scene=GetSMGameScene();
 	if scene == nil then
 		LogInfo("scene = nil,load ArenaRewardUI failed!");
@@ -29,19 +29,24 @@ function p.LoadUI()
 	end
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.ArenaRewardUI);
+    
 	local winsize = GetWinSize();
-	layer:SetFrameRect( CGRectMake(winsize.w * 0.18, winsize.h *0.28, winsize.w *0.63, winsize.h * 0.44));
+	local ui_size=186*ScaleFactor;
+	layer:SetFrameRect(CGRectMake(0, 0, winsize.w, winsize.h));
 	--layer:SetBackgroundColor(ccc4(125,125,125,125));
-	scene:AddChild(layer);
-	
+	scene:AddChildZ(layer,1);
+	--_G.AddChild(scene, layer, NMAINSCENECHILDTAG.ArenaRewardUI);
+		
+        
 	local uiLoad=createNDUILoad();
 	if nil == uiLoad then
 		layer:Free();
 		LogInfo("scene = nil,4");
 		return false;
 	end
-	uiLoad:Load("FightEvaluate.ini",layer,p.OnUIEvent,0,0);
+	uiLoad:Load("SM_FIGHT_RESULT.ini",layer,p.OnUIEvent,0,0);
 	uiLoad:Free();
+ 
 end
 
 function p.GetParent()
@@ -60,55 +65,76 @@ function p.GetParent()
 end
 
 function p.SetResult(result,money,repute)
-	local layer=p.GetParent();
-	if nil==layer then
-		return;
-	end
-	local bg=GetImage(layer,ID_FIGHTEVALUATE_CTRL_PICTURE_STATE);
-	local pool = DefaultPicPool();
-	if result ==1 then
-		bg:SetPicture(pool:AddPicture(GetSMImgPath("word_success.png"), false),true);
-	elseif result ==0 then
-		bg:SetPicture(pool:AddPicture(GetSMImgPath("word_fail.png"), false),true);
-	end
-	
-	local str="";
+    LogInfo("+++++++++++result[%d]+++++++++++",result);
+    local layer=p.GetParent();
+    if nil==layer then
+        return;
+    end
+    local bg=GetImage(layer,ID_FIGHTEVALUATE_CTRL_PICTURE_STATE);
+    local pool = DefaultPicPool();
+    
+    local str="";
+    
+    if result ==1 then             
+        bg:SetPicture(pool:AddPicture(GetSMImgPath("battle/battle_icon4.png"), false), true);
+        str = "强者为尊应让我，英雄只此敢争先.";
+        SetLabel(layer,ID_FIGHTEVALUATE_CTRL_PICTURE_7,str);
 
-	if money > 0 then
-		str="获得铜钱＋"..SafeN2S(money);
-	end
-	
-	
-	if repute > 0 then
-		if money > 0 then
-			str=str..",";
-		end
-		str=str.."获得声望+"..SafeN2S(repute);
-	end
-	
-	SetLabel(layer,ID_FIGHTEVALUATE_CTRL_TEXT_INFO,str);
+        Music.PlayEffectSound(1094);
+
+    elseif result ==0 then    
+      bg:SetPicture(pool:AddPicture(GetSMImgPath("battle/battle_icon5.png"), false),true);
+      str = "虽败犹荣望天叹,血染钢刀不回头.";
+      SetLabel(layer,ID_FIGHTEVALUATE_CTRL_PICTURE_7,str);
+
+      Music.PlayEffectSound(1093);
+
+    elseif resule ==3 then
+    
+    end
+
+    str="";
+
+    if money > 0 then
+        str="获得银币＋"..SafeN2S(money);
+    end
+
+    if repute > 0 then
+    if money > 0 then
+    str=str..",";
+        end
+    str=str.."获得声望+"..SafeN2S(repute);
+        end
+
+    SetLabel(layer,ID_FIGHTEVALUATE_CTRL_TEXT_INFO,str);
 end
 
 
 function p.OnUIEvent(uiNode,uiEventType,param)
-	local tag = uiNode:GetTag();
-	LogInfo("p.OnUIEvent[%d]",tag);
-	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-		if ID_FIGHTEVALUATE_CTRL_BUTTON_CONFIRM == tag then
-			local scene = GetSMGameScene();
-			CloseBattle();
-			if scene~= nil then
-				scene:RemoveChildByTag(NMAINSCENECHILDTAG.ArenaRewardUI,true);
-				return true;
-			end
+    local tag = uiNode:GetTag();
+    --LogInfo("p.OnUIEvent[%d]",tag);
+    if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+        if ID_FIGHTEVALUATE_CTRL_BUTTON_CONFIRM == tag then
+         LogInfo("p.OnUIEvent111111[%d]",tag);
+            local scene = GetSMGameScene();
+            CloseBattle();
+        if scene~= nil then
+            --local layer = GetUiLayer(scene,NMAINSCENECHILDTAG.ArenaRewardUI);
+            --layer:SetVisible(false);
+            scene:RemoveChildByTag(NMAINSCENECHILDTAG.ArenaRewardUI,true);
+            return true;
+        end
 
-		elseif ID_FIGHTEVALUATE_CTRL_BUTTON_PLAYBACK == tag then
-			restartLastBattle();
-			local scene = GetSMGameScene();
-			if scene~= nil then
-				scene:RemoveChildByTag(NMAINSCENECHILDTAG.ArenaRewardUI,true);
-				return true;
-			end
-		end
-	end
+    elseif ID_FIGHTEVALUATE_CTRL_BUTTON_PLAYBACK == tag then
+            LogInfo("p.OnUIEvent111111[%d]",tag);
+            restartLastBattle();
+        local scene = GetSMGameScene();
+        if scene~= nil then
+            --local layer = GetUiLayer(scene,NMAINSCENECHILDTAG.ArenaRewardUI);
+            --layer:SetVisible(false);
+            scene:RemoveChildByTag(NMAINSCENECHILDTAG.ArenaRewardUI,true);
+            return true;
+            end
+        end
+    end
 end

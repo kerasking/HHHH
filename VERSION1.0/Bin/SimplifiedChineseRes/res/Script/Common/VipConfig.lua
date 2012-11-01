@@ -21,7 +21,7 @@ function f.getImperialTrainLevel()
 	return 6;
 end
 
--- 培养的元宝（2(加强)，3(白金)，4, 5）
+-- 培养的金币（2(加强)，3(白金)，4, 5）
 function f.getTrainMoney(type)
 	if (type == 2) then
 		return 2;

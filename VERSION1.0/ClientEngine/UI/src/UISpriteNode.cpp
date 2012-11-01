@@ -53,7 +53,7 @@ void CUISpriteNode::ChangeSprite(const char* sprfile)
 	}
 	
 	m_pSprite		= new NDSprite;
-	//m_pSprite->Initialization(sprfile,this);
+	m_pSprite->Initialization(sprfile,this);
 	m_pSprite->SetCurrentAnimation(0, false);
 	m_pSpriteParentNode->AddChild(m_pSprite);
 }

@@ -14,9 +14,15 @@ p.rewardItemTypes={0,0,0};
 local ID_DYNMAPSUCCESS_CTRL_BUTTON_WATCH	=28;
 local ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE5_EXP    = 27;
 local ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE5    = 26;
+
+local ID_DYNMAPSUCCESS_CTRL_TEXT_MONEY    = 29;
+local ID_DYNMAPSUCCESS_CTRL_TEXT_SOPH       = 30;
+
 local ID_DYNMAPSUCCESS_CTRL_PICTURE_21     = 24;
 local ID_DYNMAPSUCCESS_CTRL_PICTURE_SPOILS    = 25;
 local ID_DYNMAPSUCCESS_CTRL_BUTTON_CONFIRM    = 23;
+local ID_DYNMAPSUCCESS_CTRL_ANGIN_BATTLE    =37;
+local ID_DYNMAPSUCCESS_CTRL_NEXT_BATTLE     =35;
 
 local ID_DYNMAPSUCCESS_CTRL_OBJECT_BUTTON_SPOILS3    = 22;
 local ID_DYNMAPSUCCESS_CTRL_OBJECT_BUTTON_SPOILS2    = 21;
@@ -38,13 +44,17 @@ local ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE2     = 8;
 local ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE1     = 7;
 local ID_DYNMAPSUCCESS_CTRL_PICTURE_WIN_BACKGROUND2  = 4;
 local ID_DYNMAPSUCCESS_CTRL_PICTURE_WIN_BACKGROUND  = 1;
-
-local ID_DYNMAPSUCCESS_CTRL_TEXT_ITEM_NAME1	=	29;
-local ID_DYNMAPSUCCESS_CTRL_TEXT_ITEM_NAME2	=	30;
-local ID_DYNMAPSUCCESS_CTRL_TEXT_ITEM_NAME3	=	31;
+local exp = nil;
+local ID_DYNMAPSUCCESS_CTRL_TEXT_ITEM_NAME1	=	100;
+local ID_DYNMAPSUCCESS_CTRL_TEXT_ITEM_NAME2	=	101;
+local ID_DYNMAPSUCCESS_CTRL_TEXT_ITEM_NAME3	=	102;
 
 local TAG_ITEM_INFO_CONTAINER = 9997;			--物品信息与操作
 local TAG_ITEM_INFO = 9998;						--物品信息与操作
+
+
+local TAG_PET_HEAD = {64,65,66,67,68,};         --人物头像
+
 
 function p.GetParent()
 	local scene = GetSMGameScene();
@@ -66,13 +76,36 @@ function p.OnUIEvent(uiNode,uiEventType,param)
 	LogInfo("p.OnUIEvent[%d]",tag);
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		if ID_DYNMAPSUCCESS_CTRL_BUTTON_CONFIRM == tag then
-			local scene = GetSMGameScene();
+            Music.StopMusic();
 			CloseBattle();
-			if scene~= nil then
+			local scene = GetSMGameScene();
+			if scene ~= nil then
 				scene:RemoveChildByTag(NMAINSCENECHILDTAG.MonsterReward,true);
-				return true;
 			end
-			
+            --发送退出副本消息
+			MsgAffixBoss.sendNmlLeave();
+            WorldMap(NormalBossListUI.nCampaignID);  
+			NormalBossListUI.Redisplay();
+			return true;
+		elseif ID_DYNMAPSUCCESS_CTRL_ANGIN_BATTLE == tag then
+			CloseBattle();
+			local scene = GetSMGameScene();
+            if scene ~= nil then
+                scene:RemoveChildByTag(NMAINSCENECHILDTAG.MonsterReward,true);
+            end	
+			MsgAffixBoss.sendNmlLeave();
+			MsgAffixBoss.sendNmlEnter(NormalBossListUI.nChosenBattleID);
+			return true;
+		elseif ID_DYNMAPSUCCESS_CTRL_NEXT_BATTLE == tag then
+            Music.StopMusic();
+            CloseBattle();
+            local scene = GetSMGameScene();
+			if scene ~= nil then
+				scene:RemoveChildByTag(NMAINSCENECHILDTAG.MonsterReward,true);
+			end
+			MsgAffixBoss.sendNmlLeave();
+            -- 改回城++Guosen 2012.7.20	
+            NormalBossListUI.OnBtnBack();
 		elseif ID_DYNMAPSUCCESS_CTRL_BUTTON_WATCH == tag then
 			restartLastBattle();
 			
@@ -101,6 +134,7 @@ function p.OnUIEvent(uiNode,uiEventType,param)
 			end
 		end
 	end
+	return true;
 end
 
 function p.SetRewardExp(exp)
@@ -152,6 +186,21 @@ function p.SetRewardExp(exp)
 	end
 end
 
+function p.addSophMoney(iSoph, iMoney)
+	local layer = p.GetParent();
+	
+	if nil==layer then
+		return;
+	end
+    SetLabel(layer, ID_DYNMAPSUCCESS_CTRL_TEXT_MONEY, "银币: "..SafeN2S(iMoney));
+    
+    if iSoph ~= 0 then
+        SetLabel(layer, ID_DYNMAPSUCCESS_CTRL_TEXT_SOPH,"将魂: "..SafeN2S(iSoph));  
+    end
+end
+
+
+
 function p.addRewardItem(index,itemType,amount)
 	local layer = p.GetParent();
 	
@@ -161,22 +210,25 @@ function p.addRewardItem(index,itemType,amount)
 	
 	if index == 1 then
 		p.rewardItemTypes[1]=itemType;
-		SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_SPOIL1_NUM,SafeN2S(amount));
+		SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_SPOIL1_NUM,"x"..SafeN2S(amount));
 		local button1 = GetItemButton(layer,ID_DYNMAPSUCCESS_CTRL_OBJECT_BUTTON_SPOILS1);
 		button1:ChangeItemType(itemType);
 		SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ITEM_NAME1,ItemFunc.GetName(itemType))
+        button1:SetVisible(true);
 	elseif index == 2 then
 		p.rewardItemTypes[2]=itemType;
-		SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_SPOIL2_NUM,SafeN2S(amount));
+		SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_SPOIL2_NUM,"x"..SafeN2S(amount));
 		local button2 = GetItemButton(layer,ID_DYNMAPSUCCESS_CTRL_OBJECT_BUTTON_SPOILS2);
 		button2:ChangeItemType(itemType);
 		SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ITEM_NAME2,ItemFunc.GetName(itemType))
+        button2:SetVisible(true);
 	elseif index ==3 then
 		p.rewardItemTypes[3]=itemType;
-		SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_SPOIL3_NUM,SafeN2S(amount));
+		SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_SPOIL3_NUM,"x"..SafeN2S(amount));
 		local button3 = GetItemButton(layer,ID_DYNMAPSUCCESS_CTRL_OBJECT_BUTTON_SPOILS3);
 		button3:ChangeItemType(itemType);
 		SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ITEM_NAME3,ItemFunc.GetName(itemType))
+        button3:SetVisible(true);
 	end
 end
 
@@ -246,7 +298,8 @@ function p.ShowItemInfo(itemType)
 	scrollContainer:SetBackgroundImage(pic);
 end
 
-function p.LoadUI()
+function p.LoadUI(money,repute)
+    exp = repute;
 	local scene=GetSMGameScene();
 	if scene == nil then
 		LogInfo("scene = nil,load ArenaRankUI failed!");
@@ -260,7 +313,7 @@ function p.LoadUI()
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.MonsterReward);
 	local winsize = GetWinSize();
-	layer:SetFrameRect( CGRectMake(winsize.w /4, winsize.h *0.1, winsize.w /2, winsize.h * 0.8));
+	layer:SetFrameRect(RectFullScreenUILayer);
 	--layer:SetBackgroundColor(ccc4(125,125,125,125));
 	scene:AddChild(layer);
 	
@@ -272,7 +325,7 @@ function p.LoadUI()
 	end
 	uiLoad:Load("DynMapSuccess.ini",layer,p.OnUIEvent,0,0);
 	uiLoad:Free();
-	
+            
 	
 	--物品信息层初始化
 	local containerItem = createUIScrollContainer();
@@ -297,4 +350,76 @@ function p.LoadUI()
 	scroll:SetContainer(containerItem);
 	containerItem:AddChild(scroll);
 	
+    --设置武将头像
+    p.SetPetHead();
+    
+    
+    
+    local layer = p.GetParent();
+    local button1 = GetItemButton(layer,ID_DYNMAPSUCCESS_CTRL_OBJECT_BUTTON_SPOILS1);
+    local button2 = GetItemButton(layer,ID_DYNMAPSUCCESS_CTRL_OBJECT_BUTTON_SPOILS2);
+    local button3 = GetItemButton(layer,ID_DYNMAPSUCCESS_CTRL_OBJECT_BUTTON_SPOILS3);
+    button1:SetVisible(false);
+    button2:SetVisible(false);
+    button3:SetVisible(false);
+    
+    --胜利音效
+    Music.PlayEffectSound(1094);
+    
+    -- 可升级则播放升级动画及音像--Guosen 2012.8.6
+    MsgRolePet.ShowLevelUpAnimation();
 end
+
+--设置用户头像
+function p.SetPetHead()
+    local lst, count    = MsgMagic.getRoleMatrixList();
+	local currentMatrix    = lst[1];
+    if (currentMatrix == nil) then
+		currentMatrix = {0,0,0,0,0,0,0,0};
+	end
+    
+    local PetList = {};
+    --查找出战人数
+    for i=1,#currentMatrix do
+        if(currentMatrix[i]~=0) then
+            table.insert(PetList,currentMatrix[i]);
+        end
+    end
+    
+    for i=1,#PetList do
+        for j=i,#PetList do
+            local PetIExp = RolePet.GetPetInfoN(PetList[i],PET_ATTR.PET_ATTR_EXP);
+            local PetJExp = RolePet.GetPetInfoN(PetList[i],PET_ATTR.PET_ATTR_EXP);
+            if(PetIExp<PetJExp) then
+                PetList[i] = PetList[j];
+            end
+        end
+    end
+    
+    --显示武将头像
+    for i=1,#TAG_PET_HEAD do
+        local btn = GetButton(p.GetParent(),TAG_PET_HEAD[i]);
+        if(i>#PetList) then
+            btn:SetVisible(false);
+        else
+            btn:SetImage(p.getPetPicture(PetList[i]));
+        end
+        
+    end
+    
+end
+
+function p.getPetPicture(nId)
+	if not CheckN(nId) then
+		return nil;
+	end
+	
+	local nPetType = RolePet.GetPetInfoN(nId,PET_ATTR.PET_ATTR_TYPE);
+    --**chh 2012-06-08
+    if(nPetType == 0) then
+        return nil;
+    end
+    local rtn = GetPetPotraitPic(nPetType);
+	return rtn;
+end
+

@@ -18,12 +18,13 @@ p.Login_Account=nil;
 p.Login_Pwd=nil;
 
 function p.LoadUI()
-   local scene = GetSMLoginScene();
+    local scene = GetSMLoginScene();
     if scene == nil then
         LogInfo("scene == nil,load Login_Main failed!");
         return false;
     end
 
+	
     scene:RemoveAllChildren(true);
     local layer = createNDUILayer();
     if layer == nil then
@@ -32,7 +33,6 @@ function p.LoadUI()
     layer:Init();
     layer:SetTag(NMAINSCENECHILDTAG.Login_MainUI);
     layer:SetFrameRect(RectFullScreenUILayer);
-    layer:SetBackgroundColor(ccc4(125, 125, 125, 125));
     scene:AddChild(layer);
 
     --初始化ui
@@ -76,8 +76,8 @@ function p.Init()
     --判断是否存在登陆过的帐号，如果有，则在输入框中显示最后登陆的帐号和密码，否则聚焦到帐号输入框
     local nActNum = GetAccountListNum();
     if nActNum > 0 then
-        pNameEdit:SetText(GetRecAccountNameByIdx(nActNum-1));
-        pPwdEdit:SetText(GetRecAccountPwdByIdx(nActNum-1));
+        pNameEdit:SetText(GetRecAccountNameByIdx(0));
+        pPwdEdit:SetText(GetRecAccountPwdByIdx(0));
         p.Login_Account=pNameEdit:GetText();
         p.Login_Pwd=pPwdEdit:GetText();
         layer:SetFocus(pLoginBtnUiNode);
@@ -102,7 +102,7 @@ function p.getUiLayer()
 end
 
 function p.Refresh()
-end
+end 
 
 function p.OnUIEvent(uiNode, uiEventType, param)
     local tag = uiNode:GetTag();
@@ -132,3 +132,4 @@ function p.OnUIEvent(uiNode, uiEventType, param)
     end
     return true;
 end
+--RegisterGlobalEventHandler(GLOBALEVENT.GE_LOGIN_GAME,"Login_Main.LoadUI", p.LoadUI);

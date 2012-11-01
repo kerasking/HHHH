@@ -28,18 +28,20 @@ local ARENA_GIFT=0;
 local LEVEL_GIFT=1;
 local WORLD_BOSS_GIFT=2;
 local GROUP_BOSS_GIFT=3;
+local MAX_MILORDERS = 48;
 
 p.gift_info={};
 
 --滚动层配置
 p.ScrollTag = 1;
+
 local scroll;
 --按钮配置
 p.BtnTag = 
 {
 	101,
 	102,
-	--103,
+	103,
 	--104,
 	--105,
 	--106,
@@ -53,6 +55,7 @@ p.BtnText =
 {
 	"竞技场",
 	"活动",
+	"军令",
 	--"日常",
 
 };
@@ -67,7 +70,7 @@ p.BtnFile =
 
 function p.ShowGiftDialog(gift,index)
 	if index==1 then
-		local tip="你在竞技场排名"..SafeN2S(gift[4])..",获得铜钱＋"..SafeN2S(gift[2]);
+		local tip="你在竞技场排名"..SafeN2S(gift[4])..",获得银币＋"..SafeN2S(gift[2]);
 		CommonDlg.ShowWithConfirm(tip, nill);
 	elseif index==2 then
 		local tip="你的等级为"..SafeN2S(gift[4])..",获得声望＋"..SafeN2S(gift[2]);
@@ -294,10 +297,131 @@ function p.LoadUI()
 	
 	p.refreshBtns();
 
+	local rect =CGRectMake(winsize.w*0.1, p.Height, winsize.w*0.3, winsize.h*0.2);--CGRectMake(0, p.Height, 100, 30);
+	local layer = createNDUILayer();
+	if layer ==nil then
+		return
+	end
+	layer:Init();
+
+	layer:SetTag(NMAINSCENECHILDTAG.MilOrdersDisPTxt);
+	layer:SetFrameRect(rect);
+	local MilOrderstxt = CreateLabel("军令:",CGRectMake(0,0,300,150),12,ccc4(255,255,255,255));
+	MilOrderstxt:SetTag(1);
+	layer:AddChild(MilOrderstxt);
+	scene:AddChild(layer);
+	
+	GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"p.GameDataUserInfoRefresh",p.GameDataUserInfoRefresh);
+	
 end
 
 
+local tVIPMilOrder = {}
+	tVIPMilOrder[0] = 5
+	tVIPMilOrder[1] = 12
+	tVIPMilOrder[2] = 12
+	tVIPMilOrder[3] = 12
+	tVIPMilOrder[4] = 12
+	tVIPMilOrder[5] = 16
+	tVIPMilOrder[6] = 24
+	tVIPMilOrder[7] = 32
+	tVIPMilOrder[8] = 40
+	tVIPMilOrder[9] = 48
+	tVIPMilOrder[10] = 48
+
+local tGoldNeeded = {}
+	for i=0,48 do
+		if i <=5 then
+			tGoldNeeded[i] = 40 
+		elseif i<=12 then
+			tGoldNeeded[i] = 80
+		elseif i<=24 then
+			tGoldNeeded[i] = 150
+		elseif i<=48 then
+			tGoldNeeded[i] = 220
+		end
+	end
+
+
+function p.GameDataUserInfoRefresh(uiNode, uiEventType, param)
+	local scene = GetSMGameScene();
+	
+	local layer = GetUiLayer(scene,NMAINSCENECHILDTAG.MilOrdersDisPTxt);
+	
+	local nPlayerId = GetPlayerId();
+	local nVipRank = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_VIP_RANK);
+	if tVIPMilOrder[nVipRank] == nil then
+		LogInfo("qbw:wrong VIP RANK");
+		return;
+	end
+
+	
+	local nAvailBuyTime = tVIPMilOrder[nVipRank]; --每天可购买次数
+	
+	
+	local nBought = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_HAVE_BUY_STAMINA);
+	
+	local nLeftTime = nAvailBuyTime - nBought;
+
+	local nMilOrders = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_STAMINA);
+	local nGold =  GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
+	local str = string.format("军令:(%d/%d)\n 剩余购买次数:%d\nvip等级:%d\n金币:%d",nMilOrders,MAX_MILORDERS,nLeftTime,nVipRank,nGold);
+
+	SetLabel(layer,1,str);--..GetRoleBasicDataN(nPlayerId,USER_ATTR_MONEY));
+	
+end
+
+
+function p.BuyMilOrders(nId,nEvent,param)
+	if nEvent ~= CommonDlg.EventOK then
+		return;
+	end
+	
+	
+	_G.MsgMilOrder.SendMsgBuyMilOrder();
+end
+
+
+function p.OnClickBuyMilOrderBtn()
+		
+		
+		
+		local nPlayerId = GetPlayerId();
+		local nVipRank = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_VIP_RANK);
+		
+		if tVIPMilOrder[nVipRank] == nil then
+			LogInfo("qbw:wrong VIP RANK");
+			return;
+		end
+		
+		local nAvailBuyTime = tVIPMilOrder[nVipRank]; --每天可购买次数
+		local nBought = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_HAVE_BUY_STAMINA);
+		local nLeftTime = nAvailBuyTime - nBought;
+		LogInfo("qbwqbwqbw21:"..nAvailBuyTime.." "..nBought)
+		if nLeftTime <= 0 then
+			CommonDlg.ShowTipInfo("提示","剩余购买次数不足！",nil,2);
+			return;
+		end
+		if tGoldNeeded[nBought+1] >  GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY) then
+			CommonDlg.ShowTipInfo("提示","金币不足！",nil,2);
+			return;
+		end
+		if   GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_STAMINA) >= 48 then
+			CommonDlg.ShowTipInfo("提示","您的军令数已经达到上限！",nil,2);
+			return;
+		end
+		
+		
+		CommonDlg.ShowNoPrompt("今日可购买"..nLeftTime.."次。花费"..tGoldNeeded[nBought+1].."金币购买1个军令",p.BuyMilOrders,true)
+
+
+end
+
+
+
 function p.OnUIEvent(uiNode, uiEventType, param)
+
+	
 	local tag = uiNode:GetTag();
 
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
@@ -318,6 +442,13 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 				_G.MsgActivityMix.SendOpenDailyActivity();
 
 			end
+		elseif p.BtnTag[3] == tag then
+			if not IsUIShow(NMAINSCENECHILDTAG.MilOrdersBtn) then
+				CloseMainUI();
+				p.OnClickBuyMilOrderBtn();
+				
+			end	
+			
 		end
 		
 		if tag >= GiftTag_beginId then

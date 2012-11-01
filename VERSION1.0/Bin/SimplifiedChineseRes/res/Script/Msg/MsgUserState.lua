@@ -61,8 +61,8 @@ function p.refreshUserStateUI()
 end
 
 
-RegisterNetMsgHandler(NMSG_Type._MSG_USER_STATE, "p.ProcessUserState", p.ProcessUserState);
-RegisterNetMsgHandler(NMSG_Type._MSG_USER_STATE_CHG, "p.ProcessDelUserState", p.ProcessDelUserState);
+--RegisterNetMsgHandler(NMSG_Type._MSG_USER_STATE, "p.ProcessUserState", p.ProcessUserState);
+--RegisterNetMsgHandler(NMSG_Type._MSG_USER_STATE_CHG, "p.ProcessDelUserState", p.ProcessDelUserState);
 
 
 	

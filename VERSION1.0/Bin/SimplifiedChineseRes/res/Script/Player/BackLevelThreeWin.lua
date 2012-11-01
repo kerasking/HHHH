@@ -238,8 +238,7 @@ function p.ShowUIEquip(nItemId, currPetId , bEquip)
     local l_name = RecursiveLabel(p.parent,{EQUIP_LAYER,TAG_EQUIP_NAME});
     l_name:SetText(strName);
     
-    --设置装备颜色
-    ItemFunc.SetLabelColor(l_name,nItemType);
+    
     
     local l_price = RecursiveLabel(p.parent,{EQUIP_LAYER,TAG_EQUIP_PRICE});
     l_price:SetText(SafeN2S(price));
@@ -317,10 +316,6 @@ function p.ShowUIEquip(nItemId, currPetId , bEquip)
             LogInfo("name:[%s]",name);
             local l_gem = RecursiveLabel(p.parent,{EQUIP_LAYER,TAG_EQUIP_GEN[i]});
             l_gem:SetText(name);
-            
-            
-            --设置装备颜色
-            ItemFunc.SetLabelColor( l_gem,gemId);
         end
     end
     
@@ -341,8 +336,6 @@ function p.ShowUIMate(nItemId)
     local l_name = RecursiveLabel(p.parent,{MATE_LAYER,TAG_MATE_NAME});
     l_name:SetText(strName);
     
-    --设置装备颜色
-    ItemFunc.SetLabelColor(l_name,nItemType);
     
     local l_price = RecursiveLabel(p.parent,{MATE_LAYER,TAG_MATE_PRICE});
     l_price:SetText(SafeN2S(price));
@@ -362,7 +355,7 @@ function p.ShowUIGem(nItemId)
     local nItemType			= Item.GetItemInfoN(nItemId, Item.ITEM_TYPE);
     local strName			= ItemFunc.GetName(nItemType);
     local price             = ItemFunc.GetPrice(nItemType)*Item.GetItemInfoN(nItemId, Item.ITEM_AMOUNT);
-    --local prop              = ItemFunc.GetGemPropDesc(nItemType);
+    local prop              = ItemFunc.GetGemPropDesc(nItemType);
     local desc              = ItemFunc.GetDesc(nItemType);
 
     local l_pic = RecursiveEquipBtn(p.parent,{GEM_LAYER,TAG_GEM_PIC});
@@ -371,16 +364,11 @@ function p.ShowUIGem(nItemId)
     local l_name = RecursiveLabel(p.parent,{GEM_LAYER,TAG_GEM_NAME});
     l_name:SetText(strName);
     
-    --设置装备颜色
-    ItemFunc.SetLabelColor(l_name,nItemType);
-    
     local l_price = RecursiveLabel(p.parent,{GEM_LAYER,TAG_GEM_PRICE});
     l_price:SetText(SafeN2S(price));
     
-    --[[
     local l_prop = RecursiveLabel(p.parent,{GEM_LAYER,TAG_GEM_PROP});
     l_prop:SetText(prop);
-    ]]
     
     local l_desc = RecursiveLabel(p.parent,{GEM_LAYER,TAG_GEM_DESC});
     l_desc:SetText(desc);
@@ -390,13 +378,6 @@ function p.ShowUIGem(nItemId)
     
     local btnSyn = RecursiveButton(p.parent,{GEM_LAYER,TAG_GEM_SYNTHESIS});
     btnSyn:SetParam1(nItemId);
-    
-    local nGemLevel = Num3(nItemType)*10+Num2(nItemType);
-    if(nGemLevel == 12) then
-        btnSyn:EnalbeGray(true);
-    else
-        btnSyn:EnalbeGray(false);
-    end
     
     p.layerShowOrHide(GEM_LAYER, true);
 end
@@ -413,9 +394,6 @@ function p.ShowUIProp(nItemId, nCurrPetId)
     
     local l_name = RecursiveLabel(p.parent,{PROP_LAYER,TAG_PROP_NAME});
     l_name:SetText(strName);
-    
-    --设置装备颜色
-    ItemFunc.SetLabelColor(l_name,nItemType);
     
     local l_price = RecursiveLabel(p.parent,{PROP_LAYER,TAG_PROP_PRICE});
     l_price:SetText(SafeN2S(price));
@@ -434,7 +412,7 @@ function p.ShowUIProp(nItemId, nCurrPetId)
     local nItemType	= Item.GetItemInfoN(nItemId, Item.ITEM_TYPE);
     local nType = ItemFunc.GetPropType(nItemType);
     
-    if(nType == 1 or nType == 4 or nType == 5 or nType == 6) then
+    if(nType == 1 or nType == 4 or nType == 5) then
         btn:SetVisible(true);
     else
         btn:SetVisible(false);
@@ -467,6 +445,7 @@ function p.OnUIEventEquip(uiNode, uiEventType, param)
 			end   
         elseif(tag == TAG_EQUIP_SELL) then          --出售
             p.layerShowOrHide(EQUIP_LAYER, false);
+            ShowLoadBar();
             
             local btn = ConverToButton(uiNode);
             local nItemId = btn:GetParam1();
@@ -500,11 +479,11 @@ function p.EquipOperate(nItemId, nPetId, isEquip)
         
         if not IsUIShow(NMAINSCENECHILDTAG.PlayerBackBag) then
             CloseMainUI();
-            PlayerUIBackBag.LoadUI(Item.bTypeEquip, nPetId);
+            PlayerUIBackBag.LoadUI(Item.bTypeEquip);
         end
         
         --判断背包是否已满
-        if(ItemFunc.IsBagFull(-1)) then
+        if(ItemFunc.IsBagFull()) then
             return false;
         end
         
@@ -584,6 +563,7 @@ function p.OnUIEventMate(uiNode, uiEventType, param)
             p.layerShowOrHide(MATE_LAYER, false);
         elseif(tag == TAG_MATE_SELL) then           --出售
             p.layerShowOrHide(MATE_LAYER, false);
+            ShowLoadBar();
             
             local btn = ConverToButton(uiNode);
             local nItemId = btn:GetParam1();
@@ -608,39 +588,37 @@ function p.OnUIEventGem(uiNode, uiEventType, param)
             
         elseif(tag == TAG_GEM_SELL) then            --出售
             p.layerShowOrHide(GEM_LAYER, false);
+            ShowLoadBar();
             
             local btn = ConverToButton(uiNode);
             local nItemId = btn:GetParam1();
             p.SellItemTip(nItemId);
             
         elseif(tag == TAG_GEM_SYNTHESIS) then       --合成
-            p.layerShowOrHide(GEM_LAYER, false); 
+             p.layerShowOrHide(GEM_LAYER, false); 
+            
+            --判断背包是否已满
+            if(ItemFunc.IsBagFull()) then
+                return false;
+            end
+            
             local btn = ConverToButton(uiNode);
             local nItemId = btn:GetParam1();
             
-            p.GemSynthesis(nItemId);
+            --宝石不足判断
+            local nItemType			= Item.GetItemInfoN(nItemId, Item.ITEM_TYPE);
+            local count             = Item.GetItemInfoN(nItemId, Item.ITEM_AMOUNT);
+            if(count<2) then
+                p.tipMateLack();
+                return;
+            end
+            
+            
+            ShowLoadBar();
+            MsgCompose.SendGenComposeAction(nItemId);
         end
     end
     return true;
-end
-
---宝石合成
-function p.GemSynthesis(nItemId)
-    --判断背包是否已满
-    if(ItemFunc.IsBagFull()) then
-        return false;
-    end
-    
-    --宝石不足判断
-    local nItemType			= Item.GetItemInfoN(nItemId, Item.ITEM_TYPE);
-    local count             = Item.GetItemInfoN(nItemId, Item.ITEM_AMOUNT);
-    if(count<2) then
-        p.tipMateLack();
-        return;
-    end
-    
-    MsgCompose.SendGenComposeAction(nItemId);
-    ShowLoadBar();
 end
 
 
@@ -666,16 +644,11 @@ function p.OnUIEventProp(uiNode, uiEventType, param)
             
             
             if(nType == 1) then     --礼包使用
-                
-                --local nNum = GetDataBaseDataN("box_type",nItemType,DB_BOX_TYPE.ID);
-                
                 --判断背包是否已满
-                --if(ItemFunc.IsBagFull(nNum)) then
                 if(ItemFunc.IsBagFull()) then
                     return false;
                 end
-                
-                
+        
                 local nPlayerId     = GetPlayerId();
                 local nPetId        = RolePetFunc.GetMainPetId(nPlayerId);
                 
@@ -684,7 +657,7 @@ function p.OnUIEventProp(uiNode, uiEventType, param)
                     return;
                 end
                 local count = Item.GetItemInfoN(nItemId, Item.ITEM_AMOUNT);
-                p.nTagId = CommonDlgNew.ShowInputDlg("请输入使用的数量!", p.OnUIEventUseNum, {nItemId}, count,2);
+                p.nTagId = CommonDlgNew.ShowInputDlg("请输入使用的数量!", p.OnUIEventUseNum, {nItemId}, count);
                 
             elseif(nType == 2) then     --任务物品
             
@@ -717,19 +690,17 @@ function p.OnUIEventProp(uiNode, uiEventType, param)
                     count = 1;
                 end
                 
-                p.nTagId = CommonDlgNew.ShowInputDlg("请输入使用的数量!", p.OnUIEventUseNum, {nItemId,nCurrPetId},count,2);
+                p.nTagId = CommonDlgNew.ShowInputDlg("请输入使用的数量!", p.OnUIEventUseNum, {nItemId,nCurrPetId},count);
             elseif(nType == 5) then     --神铸
                 local btn = ConverToButton(uiNode);
                 local nItemId   = btn:GetParam1();
                 PlayerEquipGlidUI.LoadUI(nItemId);
-            elseif(nType == 6) then     --神马鞭
-                CloseMainUI();
-                PetUI.LoadUI(true);
             end
             
             
         elseif(tag == TAG_PROP_SELL) then           --出售
             p.layerShowOrHide(PROP_LAYER, false);
+            ShowLoadBar();
             
             local btn = ConverToButton(uiNode);
             local nItemId = btn:GetParam1();
@@ -749,15 +720,11 @@ function p.OnUIEventUseNum(nEventType, param, val)
             local nItemType	= Item.GetItemInfoN(param[1], Item.ITEM_TYPE);
             local nType = ItemFunc.GetPropType(nItemType);
             local count = Item.GetItemInfoN(param[1], Item.ITEM_AMOUNT);
-            
-            
-            if(num>count) then
-                p.tipNumMaxVail(count);
-                return;
-            end
-            
             if(nType == 1) then
-                
+                if(num>count) then
+                    p.tipNumMaxVail(count);
+                    return;
+                end
             elseif(nType == 4) then
                 
                 --主角使用经验卡判断
@@ -828,19 +795,11 @@ end
 
 --获得装备查看层
 function p.GetEquipLayer()
-    local scene = GetSMGameScene();
-    if(scene == nil or p.parent == nil) then
-        return nil;
-    end
     return GetUiLayer(p.parent,EQUIP_LAYER);
 end
 
 --获得道具查看层
 function p.GetPropLayer()
-    local scene = GetSMGameScene();
-    if(scene == nil or p.parent == nil) then
-        return nil;
-    end
     return GetUiLayer(p.parent,PROP_LAYER);
 end
 
@@ -861,7 +820,7 @@ end
 
 --最大验证
 function p.tipNumMaxVail(nNum)
-    CommonDlgNew.ShowYesDlg(string.format(GetTxtPri("MaxExpUseLimit"),nNum));
+    CommonDlgNew.ShowYesDlg(GetTxtPri("MaxExpUseLimit"));
 end
 
 --层的显示和隐藏
@@ -870,9 +829,6 @@ function p.layerShowOrHide(tag, flag)
     layer:SetVisible(flag);
 end
 
-function p.DestoryLayer()
-    p.parent = nil;
-end
 
 --人物职业不符合
 function p.tipEquipProfessIrreg()
@@ -905,8 +861,6 @@ end
 
 function p.SellItemOk(nEventType, param)
     if(nEventType == CommonDlgNew.BtnOk) then
-        ShowLoadBar();
-        
         local nItemId = param;
         local nCount = Item.GetItemInfoN(nItemId, Item.ITEM_AMOUNT)
         MsgItem.SendShopAction(nItemId,nCount);

@@ -14,6 +14,7 @@ GAMEDATAEVENT =
 {
 	--用户相关
 	USERATTR							= GAMEDATAEVENT_USER_BEGIN + 1,
+    USERSTAGEATTR						= GAMEDATAEVENT_USER_BEGIN + 2,
 	--伙伴相关
 	PETINFO								= GAMEDATAEVENT_PET_BEGIN + 1,
 	PETATTR								= GAMEDATAEVENT_PET_BEGIN + 2,
@@ -23,6 +24,7 @@ GAMEDATAEVENT =
 	
 	--好友相关
 	FRIENDATTR							= GAMEDATAEVENT_FRIEND_BEGIN + 1,
+
 };
 
 ----------------------------------------用户数据
@@ -77,11 +79,11 @@ t =
 --[[ 好友属性更新
 t = 
 {
-	[1]		= friendId,
-	[2]		= enum1,
-	[3]		= val2,
-	[4]		= enum2,
-	[5]		= val3,
+	[1]		= enum1,
+	[2]		= val2,
+	[3]		= enum2,
+	[4]		= val3,
+	...
 };
 --]]
 

@@ -4,9 +4,6 @@
 --作者: chh
 ---------------------------------------------------
 
---刷新当前武将装备
---PlayerUIBackBag.RefreshCurrentBack();
-
 PlayerUIBackBag = {}
 local p = PlayerUIBackBag;
 
@@ -21,7 +18,6 @@ local ID_ROLEATTR_L_BG_CTRL_PICTURE_133					= 133;
 local ID_ROLEATTR_L_BG_CTRL_PICTURE_132					= 132;
 local ID_ROLEATTR_L_BG_CTRL_PICTURE_BG					= 200;
 local ID_ROLEATTR_L_BG_CTRL_PICTURE_BG2					= 151;
-
 
 --属性主界面tag
 local ID_ROLEATTR_L_CTRL_TEXT_HELP						= 100;
@@ -114,14 +110,10 @@ local Numbers_Rect = {
     CGRectMake(N_W*9,0.0,N_W,N_H),
 };
 local TAG_NUMBER_IMG = 156;
-
-
-
 local TAG_BEGIN_ARROW   = 1411;
 local TAG_END_ARROW     = 1412;
 
-local TAG_BEGIN_ARROW2   = 10;
-local TAG_END_ARROW2     = 9;
+
 
 -- 界面控件tag定义
 --local TAG_CONTAINER = 2;						--容器tag
@@ -161,6 +153,7 @@ local l_nCurOpenGridNum = 0;
 
 --往背包增加一个物品
 function p.AddItem(idItem)
+	--LogInfo("p.AddItem");
 	if not CheckN(idItem) then
 		return;
 	end
@@ -200,8 +193,6 @@ function p.AddItem(idItem)
 			end
 		end 
 	end
-    p.SetBagCapacity();
-    
 end
 
 --从背包删除一个物品
@@ -251,7 +242,6 @@ function p.DelItem(idItem)
 			end
 		end 
 	end
-    p.SetBagCapacity();
 end
 
 --在指定位置显示装备
@@ -307,7 +297,7 @@ function p.DelEquip(idPet, idItem, nPostion)
 	end
 end
 
-function p.LoadUI(tab,nPetId)
+function p.LoadUI(tab)
 	p.Init();
 	local scene = GetSMGameScene();	
 	if scene == nil then
@@ -341,8 +331,9 @@ function p.LoadUI(tab,nPetId)
     --==End(初始化左边背景)===================================================================
     
     
-    SetArrow(p.GetLayer(),p.GetPetNameSVC(),1,TAG_BEGIN_ARROW2,TAG_END_ARROW2);
     
+    
+
     
     
     
@@ -400,11 +391,10 @@ function p.LoadUI(tab,nPetId)
     
     
     
+    --
     --==初始化武将装备信息======================
 	p.RefreshContainer();
-    
-    --==刷新升阶状态======================
-    p.RefreshUpgradeStatu();
+
     
     --==初始化武将属性信息======================
 	p.UpdatePetAttr();--
@@ -445,22 +435,16 @@ function p.LoadUI(tab,nPetId)
    	local closeBtn=GetButton(layerGrid,ID_ROLEBAG_R_CTRL_BUTTON_CLOSE);
    	closeBtn:SetSoundEffect(Music.SoundEffect.CLOSEBTN);
    	
-    if(nPetId) then
-        p.ShowPetInfo(nPetId);
-    end
     
-    p.refreshMoney();
 	return true;
 end
 
 
 --物品更新事件
 function p.GoodUpdateEvent(data)
-    LogInfo("p.GoodUpdateEvent");
     if not IsUIShow(NMAINSCENECHILDTAG.PlayerBackBag) then
         return;
     end
-    
     local idItem = data[3];
     local container = p.GetBackBagContainer();
 	if not container then
@@ -481,8 +465,7 @@ function p.GoodUpdateEvent(data)
 			end
 		end
 	end
-    
-    PlayerUIBackBag.RefreshCurrentBack();
+
 end
 
 
@@ -539,7 +522,7 @@ function p.LoadBackBagUI()
     
     LogInfo("container:[%d]",container:GetViewCount());
     
-    SetArrow(p.GetGridLayer(),p.GetPageViewContainer(),1,TAG_BEGIN_ARROW,TAG_END_ARROW);
+    p.setArrow(p.GetPageViewContainer());
 end
 
 --内部接口
@@ -584,7 +567,6 @@ function p.OnUIEventViewChange(uiNode, uiEventType, param)
 	local tag = uiNode:GetTag();
 	LogInfo("p.OnUIEventViewChange[%d]", tag);
 	if uiEventType == NUIEventType.TE_TOUCH_SC_VIEW_IN_BEGIN then
-        LogInfo("param:[%d]",param);
 		local containter	= ConverToSVC(uiNode);
 		local nPetId		= 0;
 		if CheckP(containter) and CheckN(param) then
@@ -605,18 +587,14 @@ function p.OnUIEventViewChange(uiNode, uiEventType, param)
 		if ID_ROLEATTR_L_BG_CTRL_LIST_LEFT == tag then
 			containter	= p.GetPetNameSVC();
 			if CheckP(containter) then
-				containter:ShowViewById(nPetId);
+				containter:ScrollViewById(nPetId);
 			end
-            
-            LogInfo("p.OnUIEventViewChange p.BagPos.PAGE:[%d]",p.BagPos.PAGE);
-            
 		elseif ID_ROLEATTR_L_BG_CTRL_LIST_NAME == tag then
 			LogInfo("ID_ROLEATTR_L_BG_CTRL_LIST_NAME == tag");
 			containter = p.GetPetParent();
 			if CheckP(containter) then
-				containter:ShowViewById(nPetId);
+				containter:ScrollViewById(nPetId);
 			end
-            SetArrow(p.GetLayer(),p.GetPetNameSVC(),1,TAG_BEGIN_ARROW2,TAG_END_ARROW2);
 		end
 
 	end
@@ -629,12 +607,12 @@ function p.OnUIEventClickPetName(uiNode, uiEventType, param)
 			local nPetId		= ConvertN(view:GetViewId())
 			local containter	= p.GetPetNameSVC();
 			if CheckP(containter) then
-				containter:ShowViewById(nPetId);
+				containter:ScrollViewById(nPetId);
 			end
 			
 			containter = p.GetPetParent();
 			if CheckP(containter) then
-				containter:ShowViewById(nPetId);
+				containter:ScrollViewById(nPetId);
 			end
 		end
 	end
@@ -649,37 +627,51 @@ function p.OnUIEventRightPanel(uiNode, uiEventType, param)
 		if tag == ID_ROLEBAG_R_CTRL_BUTTON_CLOSE then
             p.freeData();
             CloseUI(NMAINSCENECHILDTAG.PlayerBackBag);
-            
         elseif(tag == ID_ROLEBAG_R_CTRL_BUTTON_EQUIP) then
-            if(Item.bTypeEquip ~= p.BagPos.TYPE) then
-                p.ChangeBagByType(Item.bTypeEquip);
-            end
+            p.ChangeBagByType(Item.bTypeEquip);
         elseif(tag == ID_ROLEBAG_R_CTRL_BUTTON_MATE) then
-            if(Item.bTypeMate ~= p.BagPos.TYPE) then
-                p.ChangeBagByType(Item.bTypeMate);
-            end
+            p.ChangeBagByType(Item.bTypeMate);
         elseif(tag == ID_ROLEBAG_R_CTRL_BUTTON_GEM) then
-            if(Item.bTypeGem ~= p.BagPos.TYPE) then
-                p.ChangeBagByType(Item.bTypeGem);
-            end
+            p.ChangeBagByType(Item.bTypeGem);
         elseif(tag == ID_ROLEBAG_R_CTRL_BUTTON_PROP) then
-            if(Item.bTypeProp ~= p.BagPos.TYPE) then
-                p.ChangeBagByType(Item.bTypeProp);
-            end
+            p.ChangeBagByType(Item.bTypeProp);
 		end
 	elseif uiEventType == NUIEventType.TE_TOUCH_SC_VIEW_IN_BEGIN then
 		if tag == ID_ROLEBAG_R_CTRL_HORIZON_LIST_M then
             local pageView =  p.GetBackBagContainer();
             local viewId = pageView:GetBeginIndex();
             p.SetFocusOnPage(viewId);
-            SetArrow(p.GetGridLayer(),p.GetPageViewContainer(),1,TAG_BEGIN_ARROW,TAG_END_ARROW);
             
-            p.BagPos.PAGE = param;
+            p.setArrow(pageView);
 		end 
     
 	end
 	return true;
 end
+
+function p.setArrow(pageView)
+    --设置箭头
+    local scene     = GetSMGameScene();	
+    local rlayer	= RecursiveUILayer(scene, {NMAINSCENECHILDTAG.PlayerBackBag, TAG_LAYER_GRID});
+    
+    local larrow    = GetButton(rlayer,TAG_BEGIN_ARROW);
+    local rarrow    = GetButton(rlayer,TAG_END_ARROW);
+            
+    local pageIndex = pageView:GetBeginIndex();
+    local pageCount = pageView:GetViewCount();
+    
+    larrow:EnalbeGray(false);
+    rarrow:EnalbeGray(false);
+    if(pageIndex == 0) then
+        larrow:EnalbeGray(true);
+    end
+    if(pageIndex == pageCount-1) then
+        rarrow:EnalbeGray(true);
+    end
+    
+    LogInfo("pageIndex:[%d],pageCount:[%d]",pageIndex,pageCount);
+end
+
 
 local flag = true;
 function p.ChangeBagByType(ntype)
@@ -687,8 +679,6 @@ function p.ChangeBagByType(ntype)
     p.BagPos.TYPE = ntype;
     p.BagPos.PAGE = 0;
     p.RefreshBackBag();
-    
-    LogInfo("p.ChangeBagByType p.BagPos.PAGE:[%d]",p.BagPos.PAGE);
 end
 
 function p.OnUIEvenPet(uiNode, uiEventType, param) 
@@ -723,10 +713,8 @@ function p.OnUIEvenPet(uiNode, uiEventType, param)
           
             
         elseif tag == ID_ROLEATTR_L_CTRL_BUTTON_ROLE_IMG then
-            local nPetId = p.GetCurPetId();
-            LogInfo("nPetId ss:[%d]",nPetId);
             CloseMainUI();
-            PlayerUIAttr.LoadUI(nPetId);
+            PlayerUIAttr.LoadUI(p.GetCurPetId());
             return true;
 		end
 
@@ -1014,7 +1002,7 @@ function p.OnUIEventClickPage(uiNode, uiEventType, param)
 		if tag >=1 and tag <= MAX_BACK_BAG_NUM then
 			local container		= p.GetBackBagContainer();
 			if CheckP(container) then
-				container:ShowViewById(tag);
+				container:ScrollViewById(tag);
 			end 
 		end
 	end
@@ -1101,17 +1089,6 @@ function p.refreshNumberListItem(view,i)
     img:SetPicture(norpic);
 end
 
-function p.GetGridLayer()
-    local scene = GetSMGameScene();	
-	if not CheckP(scene) then
-		LogInfo("not CheckP(scene),load p.LoadPageView failed!");
-		return;
-	end
-    
-    local layer	= RecursiveUILayer(scene, {NMAINSCENECHILDTAG.PlayerBackBag, TAG_LAYER_GRID});
-    return layer;
-end
-
 
 function p.GetPageViewContainer()
 	local scene = GetSMGameScene();	
@@ -1176,10 +1153,6 @@ function p.ContainerAddPetName(nPetId)
 	
 	local size	= view:GetFrameRect().size;
 	local btn	= _G.CreateButton("", "", strPetName, CGRectMake(0, 0, size.w, size.h), 15);
-    
-    local cColor = ItemPet.GetPetQuality(nPetId);
-    btn:SetFontColor(cColor);
-    
 	if CheckP(btn) then
 		btn:SetLuaDelegate(p.OnUIEventClickPetName);
 		view:AddChild(btn);
@@ -1289,7 +1262,10 @@ function p.RefreshContainer()
 	
 	--获取玩家宠物id列表
 	local idTable = RolePetUser.GetPetListPlayer(nPlayerId);
-    idTable = RolePet.OrderPets(idTable);
+	if nil == idTable then
+		LogInfo("nil == idTable");
+		return;
+	end
 	
 	LogInfo("p.RefreshContainer");
 	LogInfoT(idTable);
@@ -1349,155 +1325,24 @@ function p.RefreshContainer()
 		
         LogInfo("petId:v[%d]",v);
         
-		p.RefreshPetEquip(v);
+		--装备
+		local idlist	= ItemPet.GetEquipItemList(nPlayerId, v);
+		LogInfo("chh_LogInfoT(idlist);");
+		LogInfoT(idlist);
+		for i, v in ipairs(idlist) do
+            LogInfo("chh_test");
+			local nPos	= Item.GetItemInfoN(v, Item.ITEM_POSITION);
+			local nTag	= p.GetEquipTag(nPos);
+			LogInfo("nPos:[%d],nTag[%d]",nPos,nTag);
+            if nTag > 0 then
+				local equipBtn	= GetEquipButton(view, nTag);
+				if CheckP(equipBtn) then
+					equipBtn:ChangeItem(v);
+				end
+			end
+		end
 		
 	end
-end
-
---刷新当前背包
-function p.RefreshCurrentBack()
-    LogInfo("p.RefreshCurrentBack");
-    local layer = p.GetLayer();
-    if(layer == nil) then
-        return;
-    end
-
-    local nPetId = p.GetCurPetId();
-    p.RefreshPetEquip(nPetId);
-    p.RefreshBackBag();
-    p.RefreshUpgradeStatu();
-    p.SetBagCapacity();
-end
-
-function p.ShowPetInfo(nPetId)
-    LogInfo("p.ShowPetInfo");
-    local container = p.GetPetParent();
-    if(container == nil) then
-        LogInfo("p.RefreshPetEquip container is nil");
-        return;
-    end
-    if(nPetId == nil) then
-        LogInfo("p.RefreshPetEquip nPetId is nil");
-        return;
-    end
-    LogInfo("nPetId_ff:[%d]",nPetId);
-    container:ShowViewById(nPetId);
-end
-
---刷新武将装备
-function p.RefreshPetEquip(nPetId)
-    local nPlayerId = GetPlayerId();
-	if nil == nPlayerId then
-		LogInfo("nil == nPlayerId");
-		return;
-	end
-    
-    local container = p.GetPetParent();
-    if(container == nil) then
-        LogInfo("p.RefreshPetEquip container is nil");
-        return;
-    end
-    local view = container:GetViewById(nPetId);
-    if(view == nil) then
-        LogInfo("p.RefreshPetEquip view is nil");
-        return;
-    end
-    
-    --装备
-    local idlist	= ItemPet.GetEquipItemList(nPlayerId, nPetId);
-    for i, v in ipairs(idlist) do
-        local nPos	= Item.GetItemInfoN(v, Item.ITEM_POSITION);
-        local nTag	= p.GetEquipTag(nPos);
-        LogInfo("nPos:[%d],nTag[%d]",nPos,nTag);
-        if nTag > 0 then
-            local equipBtn	= GetEquipButton(view, nTag);
-            if CheckP(equipBtn) then
-                equipBtn:ChangeItem(v);
-                
-                --[[
-                if(_G.ItemFunc.IfItemCanUpStep(v, nPetId)) then
-                    
-                    local nItemtype = Item.GetItemInfoN(v, Item.ITEM_TYPE);
-                    if(PlayerEquipUpStepUI.IfUpStepMatrialEnough(nItemtype)) then
-                        equipBtn:SetUpgrade(1);
-                    else
-                        equipBtn:SetUpgrade(2);
-                    end
-                    
-                    if(i<=#idlist/2) then
-                        equipBtn:SetUpgradeIconPos(1);
-                    end
-                else
-                    equipBtn:SetUpgrade(0);
-                end
-                ]]
-            end
-        end
-    end
-
-end
-
---** 刷新升阶状态 **--
-function p.RefreshUpgradeStatu()
-    LogInfo("p.RefreshUpgradeStatu");
-    local nPlayerId = GetPlayerId();
-	if nil == nPlayerId then
-		LogInfo("nil == nPlayerId");
-		return;
-	end
-    
-    local container = p.GetPetParent();
-	if nil == container then
-		LogInfo("nil == container");
-		return;
-	end
-    local idTable = RolePetUser.GetPetListPlayer(nPlayerId);
-    for i,nPetId in ipairs(idTable) do
-        local view = container:GetViewById(nPetId);
-        local idlist	= ItemPet.GetEquipItemList(nPlayerId, nPetId);
-        
-        for j,nItemId in ipairs(idlist) do
-            local nPos	= Item.GetItemInfoN(nItemId, Item.ITEM_POSITION);
-            local nTag	= p.GetEquipTag(nPos);
-            local equipBtn	= GetEquipButton(view, nTag);
-            if nTag > 0 then
-                if CheckP(equipBtn) then
-                    local bIsEquip = ItemFunc.IsAlertEquipItem(nItemId);
-                    if(bIsEquip and _G.ItemFunc.IfItemCanUpStep(nItemId, nPetId)) then
-                        local nItemtype = Item.GetItemInfoN(nItemId, Item.ITEM_TYPE);
-                        if(PlayerEquipUpStepUI.IfUpStepMatrialEnough(nItemtype)) then
-                            equipBtn:SetUpgrade(1);
-                        else
-                            equipBtn:SetUpgrade(2);
-                        end
-                        if(nPos%10<=3) then
-                            equipBtn:SetUpgradeIconPos(1);
-                        end
-                    else
-                        equipBtn:SetUpgrade(0);
-                    end
-                    
-                end
-            end
-        end
-        local t = {};
-        --清空无装备的状态
-        table.insert(t,Item.POSITION_EQUIP_1);
-        table.insert(t,Item.POSITION_EQUIP_2);
-        table.insert(t,Item.POSITION_EQUIP_3);
-        table.insert(t,Item.POSITION_EQUIP_4);
-        table.insert(t,Item.POSITION_EQUIP_5);
-        table.insert(t,Item.POSITION_EQUIP_6);
-        
-        for i,v in ipairs(t) do
-            local nTag	= p.GetEquipTag(v);
-            local equipBtn	= GetEquipButton(view, nTag);
-            if(equipBtn:GetItemId()==0) then
-                equipBtn:SetUpgrade(0);
-            end
-        end
-        
-    end
 end
 
 function p.SetPetAttr(petView, nPetDataIndex, str)
@@ -1655,9 +1500,6 @@ function p.UpdatePetAttr()
 		return;
 	end
 	local idTable = RolePetUser.GetPetListPlayer(nPlayerId);
-    idTable = RolePet.OrderPets(idTable);
-    
-    
 	if not CheckT(idTable) then
 		return;
 	end
@@ -1768,6 +1610,10 @@ function p.RefreshBackBag()
 		return;
 	end
 	
+    if (p.BagPos.TYPE ~= p.BagPos.PRE_TYPE) then
+        container:ShowViewByIndex(p.BagPos.PAGE);
+    end
+    
     
     local scene = GetSMGameScene();	
     local rlayer	= RecursiveUILayer(scene, {NMAINSCENECHILDTAG.PlayerBackBag, TAG_LAYER_GRID});
@@ -1804,9 +1650,46 @@ function p.RefreshBackBag()
     
     LogInfo("idTypeListItem:#[%d]",#idTypeListItem);
     
-    idTypeListItem = Item.OrderItems(idTypeListItem);
+    --排序
+    local tempVar;
+    for i=1, #idTypeListItem do
+        local nItemTypeI	= Item.GetItemInfoN(idTypeListItem[i], Item.ITEM_TYPE);
+        for j=i,#idTypeListItem do
+            
+            local nItemTypeJ	= Item.GetItemInfoN(idTypeListItem[j], Item.ITEM_TYPE);
+            
+            
+            if(p.BagPos.TYPE == Item.bTypeEquip) then
+                if(nItemTypeI>nItemTypeJ) then
+                    tempVar = idTypeListItem[i];
+                    idTypeListItem[i] = idTypeListItem[j];
+                    idTypeListItem[j] = tempVar;
+                end
+            else
+                if(nItemTypeI<nItemTypeJ) then
+                    tempVar = idTypeListItem[i];
+                    idTypeListItem[i] = idTypeListItem[j];
+                    idTypeListItem[j] = tempVar;
+                end
+            end
+            
+            
+            
+            
+            
+            
+        end
+    end
+    
+    
+    for i=1,#idTypeListItem do
+        local nItemTypeI	= Item.GetItemInfoN(idTypeListItem[i], Item.ITEM_TYPE);
+        LogInfo("idTypeListItem[i]:[%d]",nItemTypeI);
+    end
+    
     
     local tSize			= table.getn(idTypeListItem);
+    
     
     MAX_BACK_BAG_NUM = tSize / MAX_GRID_NUM_PER_PAGE;
     if(tSize == 0) then
@@ -1822,6 +1705,7 @@ function p.RefreshBackBag()
     
     --==初始化背包UI最大为4页，每页16格物品框=======
 	p.LoadBackBagUI();
+    
     
     for i=1, MAX_BACK_BAG_NUM do
 		local view = container:GetViewById(i);
@@ -1858,18 +1742,12 @@ function p.RefreshBackBag()
 		end
 	end
     
-    LogInfo("p.BagPos.TYPE:[%d],p.BagPos.PRE_TYPE:[%d],p.BagPos.PAGE:[%d]",p.BagPos.TYPE,p.BagPos.PRE_TYPE,p.BagPos.PAGE);
-    
-    if (p.BagPos.TYPE ~= p.BagPos.PRE_TYPE) then
-        container:ShowViewByIndex(p.BagPos.PAGE);
-    end
-    
     p.SetBagCapacity();
 end
 
 --显示背包容量
 function p.SetBagCapacity()
-    LogInfo("PlayerUIBackBag.SetBagCapacity");
+
     if not IsUIShow(NMAINSCENECHILDTAG.PlayerBackBag) then
         return;
     end
@@ -2033,7 +1911,6 @@ function p.IsGridTag(nTag)
 end
 
 function p.Init()
-    p.BagPos = {TYPE = nil, PAGE = nil, PRE_TYPE = nil,};
 	p.InitGridTag();
 	p.InitEquipTag();
     p.InitData();
@@ -2082,7 +1959,7 @@ function p.InitData()
     end
     if(p.BagPos.PAGE == nil) then
         p.BagPos.PAGE = 0;
-        LogInfo("p.InitData p.BagPos.PAGE:[%d]",p.BagPos.PAGE);
+    
     end
     
     p.TAG_BAG_BTNS = {
@@ -2100,6 +1977,7 @@ function p.processNet(msgId, m)
 		LogInfo("processNet msgId == nil" );
 	end
 	if msgId == NMSG_Type._MSG_START_FORMULA_DATA then
+        LogInfo("rebg");
 		p.RefreshBackBag();
 	end
 	CloseLoadBar();
@@ -2108,7 +1986,6 @@ end
 function p.freeData()
     MsgCompose.mUIListener    = nil;
     p.TAG_BAG_BTNS = nil;
-    BackLevelThreeWin.DestoryLayer();
 end
 
 function p.IsEquipTag(nTag)
@@ -2130,22 +2007,6 @@ function p.GetEquipTag(nPos)
 		return 0;
 	end
 	return ConvertN(p.TAG_EQUIP_LIST[nPos]);
-end
-
-function p.GetLayer()
-    local scene     = GetSMGameScene();	
-    if(scene == nil) then
-        LogInfo("p.GetLayer scene is nil!");
-        return;
-    end
-    
-    local layer	= RecursiveUILayer(scene, {NMAINSCENECHILDTAG.PlayerBackBag});
-    if(layer == nil) then
-        LogInfo("p.GetLayer layer is nil!");
-        return;
-    end
-    
-    return layer;
 end
 
 function p.GameDataPetInfoRefresh(nPetId)
@@ -2206,32 +2067,6 @@ function p.GameDataUserInfoRefresh(datalist)
 			p.SetGridNum(GetPlayerId());
 		end
 	end
-    
-    p.refreshMoney();
-end
-
-
-
-local TAG_E_TMONEY      = 243;  --
-local TAG_E_TEMONEY     = 242;  --
---刷新金钱
-function p.refreshMoney()
-    LogInfo("p.refreshMoney BEGIN");
-    local nPlayerId     = GetPlayerId();
-    local scene = GetSMGameScene();
-    if(scene == nil) then
-        return;
-    end
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
-    if(layer == nil) then
-        return;
-    end
-    
-    local nmoney        = MoneyFormat(GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_MONEY));
-    local ngmoney        = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY).."";
-    
-    _G.SetLabel(layer, TAG_E_TMONEY, nmoney);
-    _G.SetLabel(layer, TAG_E_TEMONEY, ngmoney);
 end
 
 GameDataEvent.Register(GAMEDATAEVENT.ITEMATTR,"p.GoodUpdateEvent",p.GoodUpdateEvent);
@@ -2240,6 +2075,6 @@ GameDataEvent.Register(GAMEDATAEVENT.USERATTR, "PlayerUIBackBag.GameDataUserInfo
 GameDataEvent.Register(GAMEDATAEVENT.PETINFO, "PlayerUIBackBag.GameDataPetInfoRefresh", p.GameDataPetInfoRefresh);
 GameDataEvent.Register(GAMEDATAEVENT.PETATTR, "PlayerUIBackBag.GameDataPetAttrRefresh", p.GameDataPetAttrRefresh);
 
-GameDataEvent.Register(GAMEDATAEVENT.ITEMINFO,"PlayerUIBackBag.RefreshCurrentBack",p.RefreshCurrentBack);
+GameDataEvent.Register(GAMEDATAEVENT.ITEMINFO,"PlayerUIBackBag.SetBagCapacity",p.SetBagCapacity);
 
 

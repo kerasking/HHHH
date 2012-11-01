@@ -233,7 +233,7 @@ function p.RefreshCurrRank()
     tempstr1,tempstr2,tempstr3,tempstr4,tempstr5,tempstr6,tempstr7,tempstr8,tempstr9 = "-";
     tempstr1 = GetDataBaseDataS("rank_config",p.RandInfo.LEVEL,DB_RANK.RANK_NAME);
     tempstr2 = GetDataBaseDataN("rank_config",p.RandInfo.LEVEL,DB_RANK.REPUTE).."";
-    tempstr3 = MoneyFormat(GetDataBaseDataN("rank_config",p.RandInfo.LEVEL,DB_RANK.MONEY));
+    tempstr3 = GetDataBaseDataN("rank_config",p.RandInfo.LEVEL,DB_RANK.MONEY)..GetTxtPub("coin");
     tempstr4 = GetDataBaseDataN("rank_config",p.RandInfo.LEVEL,DB_RANK.MAX_OWN_PET)..GetTxtPub("Ming");
     tempstr5 = GetDataBaseDataN("rank_config",p.RandInfo.LEVEL,DB_RANK.MAX_FIGHT_PET)..GetTxtPub("Ming");
     tempstr6 = GetDataBaseDataN("rank_config",p.RandInfo.LEVEL,DB_RANK.STR).."";
@@ -283,7 +283,7 @@ function p.RefreshNextRank(level)
     if(level<=#p.RankIds) then
         tempstr1 = GetDataBaseDataS("rank_config",level,DB_RANK.RANK_NAME);
         tempstr2 = GetDataBaseDataN("rank_config",level,DB_RANK.REPUTE).."";
-        tempstr3 = MoneyFormat(GetDataBaseDataN("rank_config",level,DB_RANK.MONEY));
+        tempstr3 = GetDataBaseDataN("rank_config",level,DB_RANK.MONEY)..GetTxtPub("coin");
         tempstr4 = GetDataBaseDataN("rank_config",level,DB_RANK.MAX_OWN_PET)..GetTxtPub("Ming");
         tempstr5 = GetDataBaseDataN("rank_config",level,DB_RANK.MAX_FIGHT_PET)..GetTxtPub("Ming");
         tempstr6 = GetDataBaseDataN("rank_config",level,DB_RANK.STR).."";
@@ -301,44 +301,15 @@ function p.RefreshNextRank(level)
     SetLabel(layer,p.TagPropLabels.NWIT,tempstr7);
     SetLabel(layer,p.TagPropLabels.NQUICK,tempstr8);
     SetLabel(layer,p.TagPropLabels.NLIFE,tempstr9);
-    
-    p.SelectRankItem(level);
-end
-
---选中军衔项
-function p.SelectRankItem(level)
-    local container = p.GetListContainer();
-    for i, v in ipairs(p.RankIds) do
-        LogInfo("i:[%d],v:[%d]",i,v);
-        local view = container:GetViewById(v);
-        if(view == nil) then
-            LogInfo("p.SelectRankItem view:[%d] is nil",i);
-        else
-            LogInfo("p.SelectRankItem view:[%d]",i);
-            local btn = GetButton(view, p.TagRankItemLabel);
-            if(btn == nil) then
-                LogInfo("p.SelectRankItem btn:[%d] is nil",i);
-                return;
-            end
-            if(v == level) then
-                btn:SetFocus(true);
-                btn:TabSel(true);
-            else
-                btn:SetFocus(false);
-                btn:TabSel(false);
-            end
-        end
-	end
 end
 
 function p.RefreshRankList()
     local container = p.GetListContainer();
     container:RemoveAllView();
-    --container:EnableScrollBar(true);
     local rectview = container:GetFrameRect();
-    --container:SetViewSize(CGSizeMake(rectview.size.w, rectview.size.h));
+    container:SetViewSize(CGSizeMake(rectview.size.w, rectview.size.h));
     
-    --container:SetViewSize(RankItemSize);
+    container:SetViewSize(RankItemSize);
     
     for i, v in ipairs(p.RankIds) do
         if(i~=1) then
@@ -346,54 +317,40 @@ function p.RefreshRankList()
         end
 	end
     
-    p.SetRankShowPosition(p.RandInfo.LEVEL);
-end
-
-
-function p.SetRankShowPosition(nLevel)
-    local container = p.GetListContainer();
-    local offset = 3;
     --定位
-    local lv = nLevel+1-offset;
-    if(lv<2) then
-        LogInfo("chh_min");
-        lv = 2;
-    end
-    
+    local lv = p.RandInfo.LEVEL+1;
     LogInfo("lv:[%d],#p.RankIds:[%d]",lv,#p.RankIds);
-    if(lv>=#p.RankIds-RankListCount+1) then
-        LogInfo("chh_max");
-        lv =#p.RankIds-RankListCount+1;
+    if(lv>=#p.RankIds-RankListCount) then
+        lv =#p.RankIds-RankListCount + 1;
     end
     
     container:ShowViewById(lv);
 end
 
 function p.CreateRankItem(container,i)
-    local view = createUIScrollView();
-    
-    view:Init(false);
-    view:SetScrollStyle(UIScrollStyle.Verical);
-    view:SetViewId(i);
-    view:SetTag(i);
-    view:SetMovableViewer(container);
-    view:SetScrollViewer(container);
-    view:SetContainer(container);
-    
+        local view = createUIScrollView();
+        
+        view:Init(false);
+        view:SetScrollStyle(UIScrollStyle.Verical);
+        view:SetViewId(i);
+        view:SetTag(i);
+        view:SetMovableViewer(container);
+        view:SetScrollViewer(container);
+        view:SetContainer(container);
+        container:AddView(view);
 
-    --初始化ui
-    local uiLoad = createNDUILoad();
-    if nil == uiLoad then
-        return false;
-    end
-
-    uiLoad:Load("Rank_R.ini", view, p.OnUIRankItemEvent, 0, 0);
-       
-    --实例化每一项
-    p.RefreshRankItem(view,i);
-    
-    container:AddView(view);
-    uiLoad:Free();
+        --初始化ui
+        local uiLoad = createNDUILoad();
+        if nil == uiLoad then
+            return false;
+        end
+	
+        uiLoad:Load("Rank_R.ini", view, p.OnUIRankItemEvent, 0, 0);
+           
+        --实例化每一项
+        p.RefreshRankItem(view,i);
+        
+        uiLoad:Free();
 end
 
 function p.RefreshRankItem(view,num)  
@@ -401,11 +358,8 @@ function p.RefreshRankItem(view,num)
     btn:SetTitle(GetDataBaseDataS("rank_config",num,DB_RANK.RANK_NAME));
     btn:SetParam1(num);
     if(num<=p.RandInfo.LEVEL) then
-        btn:SetFontColor(ccc4(0,255,0,255));
+        btn:SetFontColor(ccc4(66,66,66,255));
     end
-    
-    local container = p.GetListContainer();
-    container:SetViewSize(btn:GetFrameRect().size);
 end
 
 function p.GetListContainer()
@@ -423,11 +377,8 @@ function p.processNet(msgId, data)
         --p.initRankInfo();
         --p.RefreshCurrRank();
     elseif(msgId == NMSG_Type._MSG_RANK_UPGRADE) then
-        --[[
         --军衔升级光效
-        PlayEffectAnimation.ShowAnimation( 1 );
-        Music.PlayEffectSound(Music.SoundEffect.RANK_UP);
-        ]]
+        PlayEffectAnimation.ShowAnimation( 1 )
         
         local idUser = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_ID);
         SetRoleBasicDataN(GetPlayerId(), USER_ATTR.USER_ATTR_RANK, data);
@@ -435,13 +386,13 @@ function p.processNet(msgId, data)
         p.initRankInfo();
         p.RefreshCurrRank();
         local container = p.GetListContainer();
-        --container:ShowViewById(p.RandInfo.LEVEL+1);
-        p.SetRankShowPosition(p.RandInfo.LEVEL);
+        container:ShowViewById(p.RandInfo.LEVEL+1);
+        
         
         local view = container:GetViewById(p.RandInfo.LEVEL);
         if(view) then
             local btn = GetButton(view, p.TagRankItemLabel);
-            btn:SetFontColor(ccc4(0,255,0,255));
+            btn:SetFontColor(ccc4(66,66,66,255));
         end
         
         p.RefreshNextRank(p.RandInfo.LEVEL+1);
@@ -453,113 +404,27 @@ function p.TipUpgrade()
     local scene = GetSMGameScene();
 	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.RankUI);
     local animate = RecursivUISprite(layer,{p.TagTip});
-    animate:SetVisible(p.IsUpgrade());
-end
-
---判断军衔是否可升级
-function p.IsUpgrade()
-    local scene = GetSMGameScene();
-	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.RankUI);
-    local animate = RecursivUISprite(layer,{p.TagTip});
     
-    local RankIds = GetDataBaseIdList("rank_config");
     local requte = GetDataBaseDataN("rank_config",p.RandInfo.LEVEL + 1,DB_RANK.REPUTE);
-    if(p.RandInfo.PRESTIGE<requte or p.RandInfo.LEVEL>=#RankIds) then
-        return false;
+    if(p.RandInfo.PRESTIGE<requte or p.RandInfo.LEVEL>=#p.RankIds) then
+        animate:SetVisible(false);
     else
-        return true;
+        animate:SetVisible(true);
     end
+    
 end
+
+
 --提示升级
-
 function p.RankUpTip()
-	--是否已经开启功能
-    local nPlayerStage      = _G.ConvertN(_G.GetRoleBasicDataN(GetPlayerId(), USER_ATTR.USER_ATTR_STAGE));
-    --军衔权限判断
-    if(nPlayerStage<StageFunc.Rank) then
-        return;
-    end
-
 	--是否满足升级条件
 	local ranklev = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_RANK);
     local requteNeed = GetDataBaseDataN("rank_config",ranklev + 1,DB_RANK.REPUTE);
     local requte = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_REPUTE);
-   
-    local RankIds = GetDataBaseIdList("rank_config");
-    if(ranklev<#RankIds and requte>=requteNeed) then
-    
-        --光效
-        local topbar = MainUI.GetTopBar();
-		local btn    =  RecursiveButton(topbar,{21});
-		
-		if btn == nil then
-			LogInfo("RankUpTip 1")
-			return;
-		end
-		
-        local pSpriteNode = ConverToSprite( GetUiNode( btn, 99 ) );
-    	if ( pSpriteNode ~= nil ) then
-    		return;
-    	end  
-
-		local pSpriteNode	= createUISpriteNode();
-		local btnrect = btn:GetFrameRect();
-		local btnWidth =btnrect.size.w;
-		local btnHeight = btnrect.size.h;
-
-		pSpriteNode:Init();
-		pSpriteNode:SetFrameRect( CGRectMake(-btnWidth*0.15,0,btnWidth,btnHeight) );
-		local szAniPath		= NDPath_GetAnimationPath();
-		local szSprFile		= "gongn01.spr";
-		pSpriteNode:ChangeSprite( szAniPath .. szSprFile );
-		pSpriteNode:SetTag(99);
-	
-		--加到星星node上
-    	btn:AddChild( pSpriteNode );
-    	p.EffectSprite = pSpriteNode;
-    	
-    	return;
+    if(requte>=requteNeed) then
+        --CommonDlgNew.ShowYesDlg("您有足够声望可以升级军衔!");
     end
-    
-    --移除光效
-    p.RemoveEffect();
 end
 
-function p.RemoveEffect()
-	if p.EffectSprite == nil then
-		return;
-	end
-    
-    local effectspr = p.EffectSprite;
-	effectspr:RemoveFromParent( true );
-    p.EffectSprite	= nil;	
-end
 
 RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "RankUI.RankUpTip", p.RankUpTip);
-GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"RankUI.RankUpTip",p.RankUpTip);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

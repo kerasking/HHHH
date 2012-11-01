@@ -49,6 +49,8 @@ p.POSITION_SYSTEM					= 93;--系统赠品
 p.POSITION_PETBAG					= 94;--宠物背包
 p.POSITION_SOLD					= 100;--已售物品
 
+
+--[[
 -- 物品属性枚举
 p.ATTR_TYPE_NONE				= 0;
 p.ATTR_TYPE_PHY					= p.ATTR_TYPE_NONE + 1;				-- 武力
@@ -71,6 +73,36 @@ p.ATTR_TYPE_HURT_ADD			= p.ATTR_TYPE_NONE + 17;			-- 必杀
 p.ATTR_TYPE_TENACITY			= p.ATTR_TYPE_NONE + 18;			-- 韧性
 p.ATTR_TYPE_DODGE				= p.ATTR_TYPE_NONE + 19;			-- 闪避
 p.ATTR_TYPE_BLOCK				= p.ATTR_TYPE_NONE + 20;			-- 格挡
+]]
+
+--** chh 2012-6-14 **--
+p.ATTR_TYPE_NONE				= 0;
+p.ATTR_TYPE_POWER				= p.ATTR_TYPE_NONE + 1;     --力量
+p.ATTR_TYPE_AGILITY             = p.ATTR_TYPE_NONE + 2;		--敏捷
+p.ATTR_TYPE_INTEL				= p.ATTR_TYPE_NONE + 3;		--智力
+p.ATTR_TYPE_LIFE				= p.ATTR_TYPE_NONE + 4;		--生命
+p.ATTR_TYPE_POWER_RATE			= p.ATTR_TYPE_NONE + 5;		--力量成长率
+p.ATTR_TYPE_AGILITY_RATE		= p.ATTR_TYPE_NONE + 6;		--敏捷成长率
+p.ATTR_TYPE_INTEL_RATE			= p.ATTR_TYPE_NONE + 7;		--智力成长率
+p.ATTR_TYPE_LIFE_RATE			= p.ATTR_TYPE_NONE + 8;		--生命成长率
+p.ATTR_TYPE_PHY_ATK             = p.ATTR_TYPE_NONE + 9;		--物攻
+p.ATTR_TYPE_PHY_DEF             = p.ATTR_TYPE_NONE + 10;	--物防
+p.ATTR_TYPE_MAGIC_ATK			= p.ATTR_TYPE_NONE + 11;	--法攻
+p.ATTR_TYPE_MAGIC_DEF			= p.ATTR_TYPE_NONE + 12;	--法防
+p.ATTR_TYPE_SPEED				= p.ATTR_TYPE_NONE + 13;	--速度
+p.ATTR_TYPE_HIT                 = p.ATTR_TYPE_NONE + 14;	--命中率
+p.ATTR_TYPE_DODGE				= p.ATTR_TYPE_NONE + 15;	--闪避率
+p.ATTR_TYPE_DRITICAL			= p.ATTR_TYPE_NONE + 16;	--暴击率
+p.ATTR_TYPE_TENACITY			= p.ATTR_TYPE_NONE + 17;	--格挡率
+p.ATTR_TYPE_BLOCK				= p.ATTR_TYPE_NONE + 18;	--格挡率
+p.ATTR_TYPE_WRECK				= p.ATTR_TYPE_NONE + 19;	--破击率
+p.ATTR_TYPE_UNION_ATK			= p.ATTR_TYPE_NONE + 20;	--合击率
+p.ATTR_TYPE_HELP				= p.ATTR_TYPE_NONE + 21;	--求援率
+p.ATTR_TYPE_MANA				= p.ATTR_TYPE_NONE + 22;	--士气
+
+
+
+
 
 --物品分类枚举
 p.TypeInvalid					= 0;
@@ -84,29 +116,12 @@ p.TypeComposeRoll				= 7; --合成卷
 p.TypeQuest						= 8; --任务物品
 p.TypeGift						= 9; --礼包
 
---属性类型枚举
 
-p.ATTR_TYPE_NONE				= 0;
-p.ATTR_TYPE_PHY					= 1			-- 武力
-p.ATTR_TYPE_SKILL              = 2;			-- 绝技
-p.ATTR_TYPE_MAGIC              = 3;		-- 法术
-p.ATTR_TYPE_LIFE              =	4;			-- 生命
-p.ATTR_TYPE_LIFE_LIMIT              = 5;		-- 生命上限
-p.ATTR_TYPE_MANA              =	6;			-- 气势
-p.ATTR_TYPE_MANA_LIMIT              = 7;		-- 气势上限
-p.ATTR_TYPE_PHY_ATK              = 8;			-- 普通攻击
-p.ATTR_TYPE_SKILL_ATK              = 9;		-- 绝技攻击
-p.ATTR_TYPE_MAGIC_ATK              = 10;		-- 法术攻击
-p.ATTR_TYPE_PHY_DEF              = 11;			-- 普通防御
-p.ATTR_TYPE_SKILL_DEF              = 12;		-- 绝技防御
-p.ATTR_TYPE_MAGIC_DEF              = 13;		-- 法术防御
-p.ATTR_TYPE_DRITICAL              =	14;		-- 暴击(%)
-p.ATTR_TYPE_HITRATE              = 15;			-- 命中(%)
-p.ATTR_TYPE_WRECK              = 16;			-- 破击(%)
-p.ATTR_TYPE_HURT_ADD              =	17;		-- 必杀(%)
-p.ATTR_TYPE_TENACITY              =	18;		-- 韧性(%)
-p.ATTR_TYPE_DODGE              = 19;			-- 闪避(%)
-p.ATTR_TYPE_BLOCK              = 20;			-- 格挡(%)
+p.bTypeEquip                    = 0; --装备
+p.bTypeGem						= 1; --宝石
+p.bTypeMate						= 2; --材料
+p.bTypeProp                     = 3; --道具
+
 
 --品质颜色
 p.QUALITY_WHITE					= 1; --白色
@@ -119,5 +134,45 @@ p.QUALITY_GOLDEN				= 5; --金色
 p.QL_QUALITY_BLUE				= 1; --蓝色
 p.QL_QUALITY_PURPLE				= 2; --紫色
 p.QL_QUALITY_GOLDEN				= 3; --金色
+
+--** chh 2012-08-08 **--
+--装备颜色
+ItemColor = 
+{
+    [0] = ccc4(255,255,255,255),    --白色
+    [1] = ccc4(36,255,0,255),       --蓝色
+    [2] = ccc4(25,193,255,255),     --紫色
+    [3] = ccc4(237,240,0,255),      --金色
+    [4] = ccc4(221,89,59,255),      --橙色
+}
+
+--祭祀反馈物品颜色
+FeteColor = {
+    [1] = ccc4(255,255,255,255),
+    [2] = ccc4(0,100,0,255),
+    [4] = ccc4(220,20,60,255),
+    [10] = ccc4(139,0,139,255),
+}
+
+--一般文本颜色
+FontColor = {
+    Text = ccc4(237,240,0,255 ),             --提示的文本
+    Reput = ccc4(36,255,0,255),            --声望
+    Stamina = ccc4(36,255,0,255),          --军令
+    Exp = ccc4(36,255,0,255),              --经验
+    Soul = ccc4(36,255,0,255),             --将魂
+    Silver = ccc4(237,240,0,255),           --银币
+    Coin = ccc4(237,240,0,255),             --金币
+}
+
+--名称颜色
+RoleNameColor = {
+    [0] = ccc4(255,255,255,255),    --白色
+    [1] = ccc4(36,255,0,255),       --蓝色
+    [2] = ccc4(25,193,255,255),     --紫色
+    [3] = ccc4(237,240,0,255),      --金色
+    [4] = ccc4(221,89,59,255),      --橙色
+}
+
 
 

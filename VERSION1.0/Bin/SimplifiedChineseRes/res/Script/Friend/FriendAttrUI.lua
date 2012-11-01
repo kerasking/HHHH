@@ -19,6 +19,37 @@ local ID_SM_JH_ROLEATTR_L_BG_CTRL_LIST_NAME			= 50;
 
 
 --L
+local ID_ROLEATTR_R_CTRL_TEXT_SPEED						= 27;
+local ID_ROLEATTR_L_CTRL_TEXT_HELP						= 100;
+local ID_ROLEATTR_L_CTRL_EXP_ROLE						= 33;
+local ID_ROLEATTR_L_CTRL_BUTTON_SHOES					= 62;
+local ID_ROLEATTR_L_CTRL_BUTTON_DRESS					= 61;
+local ID_ROLEATTR_L_CTRL_BUTTON_HELMET				= 60;
+local ID_ROLEATTR_L_CTRL_BUTTON_AMULET				= 59;
+local ID_ROLEATTR_L_CTRL_BUTTON_WEAPON				= 58;
+local ID_ROLEATTR_L_CTRL_BUTTON_SOUL					= 57;
+local ID_ROLEATTR_L_CTRL_BUTTON_INHERIT				= 56;
+local ID_ROLEATTR_L_CTRL_BUTTON_LEAVE					= 31;
+local ID_ROLEATTR_L_CTRL_BUTTON_PILL					= 30;
+local ID_ROLEATTR_L_CTRL_TEXT_DEX					= 28;
+local ID_ROLEATTR_L_CTRL_TEXT_MAGIC					= 29;
+local ID_ROLEATTR_L_CTRL_TEXT_SKILL					= 27;
+local ID_ROLEATTR_L_CTRL_TEXT_26						= 26;
+local ID_ROLEATTR_L_CTRL_TEXT_25						= 25;
+local ID_ROLEATTR_L_CTRL_TEXT_ABILITY					= 24;
+local ID_ROLEATTR_L_CTRL_TEXT_23						= 23;
+local ID_ROLEATTR_L_CTRL_TEXT_LIFE					= 22;
+local ID_ROLEATTR_L_CTRL_TEXT_21						= 21;
+local ID_ROLEATTR_L_CTRL_TEXT_FORCE					= 20;
+local ID_ROLEATTR_L_CTRL_TEXT_19						= 19;
+--local ID_ROLEATTR_L_CTRL_TEXT_JOB						= 17;
+local ID_ROLEATTR_L_CTRL_TEXT_JOB						= 16;
+local ID_ROLEATTR_L_CTRL_BUTTON_ROLE_IMG				= 9;
+local ID_ROLEATTR_L_CTRL_BUTTON_BAG					= 97;
+local ID_ROLEATTR_L_CTRL_BUTTON_FIRE					= 98;
+local ID_ROLEATTR_L_CTRL_TEXT_LEVEL						= 235;
+
+--[[
 local ID_ROLEATTR_L_CTRL_EXP_ROLE					= 33;
 local ID_ROLEATTR_L_CTRL_BUTTON_SHOES				= 62;
 local ID_ROLEATTR_L_CTRL_BUTTON_DRESS				= 61;
@@ -33,8 +64,11 @@ local ID_ROLEATTR_L_CTRL_TEXT_LIFE					= 22;
 local ID_ROLEATTR_L_CTRL_TEXT_FORCE					= 20;
 local ID_ROLEATTR_L_CTRL_TEXT_JOB					= 17;
 local ID_ROLEATTR_L_CTRL_BUTTON_ROLE_IMG			= 9;
+--]]
+
 
 --R
+--[[
 local ID_ROLEATTR_R_CTRL_BUTTON_95					= 96;
 local ID_ROLEATTR_R_CTRL_TEXT_CRIT					= 138;
 local ID_ROLEATTR_R_CTRL_TEXT_DODGE					= 135;
@@ -56,11 +90,70 @@ local ID_ROLEATTR_R_CTRL_TEXT_ROLE_NAME				= 103;
 local ID_ROLEATTR_R_CTRL_TEXT_FIGHTING				= 137;
 local ID_ROLEATTR_R_CTRL_TEXT_BLOCK					= 136;
 local ID_ROLEATTR_R_CTRL_PICTURE_ROLE_ICON			= 99;
+--]]
+local ID_ROLEATTR_R_CTRL_BUTTON_95					= 96;
+local ID_ROLEATTR_R_CTRL_TEXT_CRIT					= 124;
+local ID_ROLEATTR_R_CTRL_TEXT_DODGE					= 125;
+local ID_ROLEATTR_R_CTRL_TEXT_134						= 134;
+local ID_ROLEATTR_R_CTRL_TEXT_133						= 133;
+local ID_ROLEATTR_R_CTRL_TEXT_132						= 132;
+local ID_ROLEATTR_R_CTRL_TEXT_KILL					= 130;
+local ID_ROLEATTR_R_CTRL_TEXT_WRECK					= 129;
+local ID_ROLEATTR_R_CTRL_TEXT_HIT						= 138;
+local ID_ROLEATTR_R_CTRL_TEXT_128						= 128;
+local ID_ROLEATTR_R_CTRL_TEXT_127						= 127;
+local ID_ROLEATTR_R_CTRL_TEXT_126						= 126;
+local ID_ROLEATTR_R_CTRL_TEXT_TENACITY				= 121;
+local ID_ROLEATTR_R_CTRL_TEXT_MAGIC_ATTACK			= 117;
+local ID_ROLEATTR_R_CTRL_TEXT_123						= 123;
+local ID_ROLEATTR_R_CTRL_TEXT_122						= 122;
+local ID_ROLEATTR_R_CTRL_TEXT_MAGIC_DEFENSE			= 120;
+--local ID_ROLEATTR_R_CTRL_TEXT_STUNT_DEFENSE			= 120;
+local ID_ROLEATTR_R_CTRL_TEXT_NORMAL_DEFENSE			= 119;
+local ID_ROLEATTR_R_CTRL_TEXT_SPEED						= 27;
+local ID_ROLEATTR_R_CTRL_TEXT_NORMAL_ATTACK			= 116;
+local ID_ROLEATTR_R_CTRL_TEXT_115						= 115;
+local ID_ROLEATTR_R_CTRL_TEXT_114						= 114;
+local ID_ROLEATTR_R_CTRL_TEXT_113						= 113;
+local ID_ROLEATTR_R_CTRL_TEXT_112						= 112;
+local ID_ROLEATTR_R_CTRL_TEXT_111						= 111;
+local ID_ROLEATTR_R_CTRL_TEXT_110						= 110;
+local ID_ROLEATTR_R_CTRL_TEXT_ROLE_LIFE				= 109;
+local ID_ROLEATTR_R_CTRL_TEXT_ROLE_LEVEL				= 108;
+local ID_ROLEATTR_R_CTRL_TEXT_107						= 107;
+local ID_ROLEATTR_R_CTRL_TEXT_106						= 106;
+local ID_ROLEATTR_R_CTRL_TEXT_ROLE_SKILL				= 105;
+local ID_ROLEATTR_R_CTRL_TEXT_ROLE_JOB				= 104;
+local ID_ROLEATTR_R_CTRL_TEXT_ROLE_NAME				= 103;
+local ID_ROLEATTR_R_CTRL_TEXT_102						= 102;
+local ID_ROLEATTR_R_CTRL_TEXT_101						= 101;
+local ID_ROLEATTR_R_CTRL_PICTURE_151					= 151;
+local ID_ROLEATTR_R_CTRL_PICTURE_152					= 152;
+local ID_ROLEATTR_R_CTRL_PICTURE_153					= 153;
+local ID_ROLEATTR_R_CTRL_PICTURE_154					= 154;
+local ID_ROLEATTR_R_CTRL_PICTURE_155					= 155;
+local ID_ROLEATTR_R_CTRL_PICTURE_156					= 156;
+local ID_ROLEATTR_R_CTRL_PICTURE_157					= 157;
+local ID_ROLEATTR_R_CTRL_PICTURE_158					= 158;
+local ID_ROLEATTR_R_CTRL_PICTURE_159					= 159;
+local ID_ROLEATTR_R_CTRL_PICTURE_160					= 160;
+local ID_ROLEATTR_R_CTRL_PICTURE_161					= 161;
+local ID_ROLEATTR_R_CTRL_TEXT_FIGHTING				= 137;
+local ID_ROLEATTR_R_CTRL_TEXT_BLOCK					= 135;
+local ID_ROLEATTR_R_CTRL_PICTURE_165					= 165;
+local ID_ROLEATTR_R_CTRL_PICTURE_164					= 164;
+local ID_ROLEATTR_R_CTRL_PICTURE_162					= 162;
+local ID_ROLEATTR_R_CTRL_PICTURE_150					= 150;
+local ID_ROLEATTR_R_CTRL_PICTURE_163					= 163;
+local ID_ROLEATTR_R_CTRL_PICTURE_ROLE_ICON			= 99;
+local ID_ROLEATTR_R_CTRL_PICTURE_95					= 95;
+local ID_ROLEATTR_R_CTRL_PICTURE_94					= 94;
 
 
 local TAG_LAYER_ATTR = 12345;				--属性界面层tag
 -- 界面控件坐标定义
 local winsize = GetWinSize();
+local RectUILayer = CGRectMake(0, 0, winsize.w , winsize.h);
 
 local ATTR_OFFSET_X = RectUILayer.size.w / 2;
 local ATTR_OFFSET_Y = 0;
@@ -68,13 +161,16 @@ local ATTR_OFFSET_Y = 0;
 
 local friendId;
 local friendName = "";
+local parentLayerTag;
 local TAG_EQUIP_LIST = {};--装备Tag列表
 -----------------------
 -----------------------
 
-function p.LoadUI(nPlayerId,nPlayerName)
+function p.LoadUI(nPlayerId,nPlayerName,nTag)
+
 	friendId = nPlayerId;
 	friendName = nPlayerName;
+	parentLayerTag = nTag;
 	p.InitEquipTag();
 	local scene = GetSMGameScene();	
 	if scene == nil then
@@ -82,6 +178,7 @@ function p.LoadUI(nPlayerId,nPlayerName)
 		return;
 	end
 	
+
 	local layer = createNDUILayer();
 	if layer == nil then
 		return false;
@@ -89,7 +186,7 @@ function p.LoadUI(nPlayerId,nPlayerName)
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.FriendAttr);
 	layer:SetFrameRect(RectUILayer);
-	scene:AddChild(layer);
+	scene:AddChildZ(layer,5);
 	
 	--初始化ui
 	local uiLoad = createNDUILoad();
@@ -99,7 +196,9 @@ function p.LoadUI(nPlayerId,nPlayerName)
 	end
 	
 	--bg
-	uiLoad:Load("SM_JH_RoleAttr_L_BG.ini", layer, p.OnUIEventScroll, 0, 0);
+	uiLoad:Load("RoleAttr_L_BG.ini", layer, p.OnUIEventScroll, 0, 0);
+	--local AddFriendBtn	= RecursiveButton(layer, ID_SM_JH_ROLEATTR_L_BG_CTRL_BUTTON_66);
+	--AddFriendBtn:SetVisible(false);ID_ROLEATTR_L_CTRL_BUTTON_FIRE
 	
 	
 	local layerAttr = createNDUILayer();
@@ -108,6 +207,10 @@ function p.LoadUI(nPlayerId,nPlayerName)
 		layer:Free();
 		return false;
 	end
+	
+	
+
+	
 	layerAttr:Init();
 	layerAttr:SetTag(TAG_LAYER_ATTR);
 	layerAttr:SetFrameRect(CGRectMake(ATTR_OFFSET_X, ATTR_OFFSET_Y, RectUILayer.size.w / 2, RectUILayer.size.h));
@@ -122,24 +225,32 @@ function p.LoadUI(nPlayerId,nPlayerName)
 		layer:Free();
 		return false;
 	end
+	
+
 	containter:SetViewSize(containter:GetFrameRect().size);
 	containter:SetLuaDelegate(p.OnUIEventViewChange);
+
 	
 	local petNameContainer = p.GetPetNameSVC();
 	if CheckP(petNameContainer) then
+
+	
 		petNameContainer:SetCenterAdjust(true);
 		local size		= petNameContainer:GetFrameRect().size;
-		local viewsize	= CGSizeMake(size.w / 3, size.h)
+		local viewsize	= CGSizeMake(size.w, size.h)
 		petNameContainer:SetLeftReserveDistance(size.w / 2 + viewsize.w / 2);
 		petNameContainer:SetRightReserveDistance(size.w / 2 - viewsize.w / 2);
 		petNameContainer:SetViewSize(viewsize);
 		petNameContainer:SetLuaDelegate(p.OnUIEventViewChange);
 	end
 		
+
+		
 	p.RefreshContainer();
-	p.RefreshBtnText();
-	
+
+
 	local beginView	= containter:GetBeginView(0);
+
 	if CheckP(beginView) then
 		p.ChangePetAttr(beginView:GetViewId());
 	end
@@ -148,33 +259,33 @@ function p.LoadUI(nPlayerId,nPlayerName)
 		petNameContainer:ShowViewByIndex(0);
 	end
 	
+	--好友增加/删除 按钮刷新
+	p.RefreshBtnText();
+		
+    --装备信息窗口初始化
+    BackLevelThreeWin.LoadUI(layer);
+    		
 	return true;
 end
 
 
-function p.RefreshBtnText()
-	local scene = GetSMGameScene();
-	if nil == scene then
-		return nil;
-	end
-	
-	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.FriendAttr);
-	if nil == layer then
-		return nil;
-	end
-   
-    local btn = GetButton(layer,ID_SM_JH_ROLEATTR_L_BG_CTRL_BUTTON_66);
-	local str ="";
-	if FriendUI.IsExistFriend(friendId) then
-		str= "删除好友";
-	else
-	    str= "加为好友";
-	end		
-	LogInfo(str)
-	btn:SetTitle(str);
-          
-end
+------------------获取数据---------------------------------
 
+--获取展示中的宠物id
+function p.GetPetIdOnShow()
+		local containter =  p.GetPetParent()
+
+		local nPetId		= 0;
+		
+		if CheckP(containter) and CheckN(param) then
+			local beginView	= containter:GetBeginView();
+			if CheckP(beginView) then
+				nPetId	= beginView:GetViewId();
+				
+			end
+		end
+		return 0;
+end
 
 function p.GetEquipTag(nPos)
 	if not CheckT(TAG_EQUIP_LIST) or not CheckN(nPos) then
@@ -234,6 +345,8 @@ end
 
 
 function p.RefreshContainer()
+
+	
 	local container = p.GetPetParent();
 	if nil == container then
 		LogInfo("nil == container");
@@ -250,7 +363,7 @@ function p.RefreshContainer()
 		LogInfo("nil == friendId");
 		return;
 	end
-    LogInfo("查看好友资料，friendId[%d]",friendId)
+    LogInfo("qbw:查看好友资料，friendId[%d]",friendId)
 	
 	--获取玩家宠物id列表
 	local idTable = RolePetUser.GetPetListPlayer(friendId);
@@ -258,22 +371,23 @@ function p.RefreshContainer()
 		LogInfo("nil == idTable");
 		return;
 	end
-	LogInfo("p.RefreshContainer");
+	LogInfo("qbw:p.RefreshContainer:table count:"..table.getn(idTable));
 	LogInfoT(idTable);
-	LogInfo("p.RefreshContainer");
+	LogInfo("qbw:p.RefreshContainer");
 	
 	local rectview = container:GetFrameRect();
 	if nil == rectview then
-		LogInfo("nil == rectview");
+		LogInfo("qbw:nil == rectview");
 		return;
 	end
 	rectview.origin.x = 0;
 	rectview.origin.y = 0;
 	
+	
 	for i, v in ipairs(idTable) do
 		local view = createUIScrollView();
 		if view == nil then
-			LogInfo("view == nil");
+			LogInfo("qbw:view == nil");
 			continue;
 		end
 		view:Init(false);
@@ -282,7 +396,7 @@ function p.RefreshContainer()
 
 		local uiLoad = createNDUILoad();
 		if uiLoad ~= nil then
-			uiLoad:Load("SM_JH_RoleAttr_L.ini", view, nil, 0, 0);
+			uiLoad:Load("RoleAttr_L.ini", view, p.OnUIEventLeftView, 0, 0);
 			uiLoad:Free();
 		end
 		
@@ -319,7 +433,10 @@ function p.RefreshContainer()
 			end
 		end
 		
-		
+		local expUI = RecursivUIExp(view, {ID_ROLEATTR_L_CTRL_EXP_ROLE});
+		expUI:SetVisible(false);
+	
+		LogInfo("qbw:2233:"..i);
 	end
 end
 
@@ -356,6 +473,24 @@ function p.ContainerAddPetName(nPetId)
 	end
 end
 
+function p.RefreshBtnText()
+
+	local scene = GetSMGameScene();
+	local BagButton	= RecursiveButton(scene, {NMAINSCENECHILDTAG.FriendAttr,TAG_LAYER_ATTR,ID_ROLEATTR_L_CTRL_BUTTON_BAG});
+
+	--BagButton:SetVisible(false);
+	if FriendFunc.IsExistFriend(friendId) then
+
+		str = "删除好友"
+	else 
+
+		str = "加为好友"	
+	end	
+
+	BagButton:SetTitle(str);
+	
+end
+
 function p.SetPetAttr(petView, nPetDataIndex, str)
 	if not CheckP(petView) or
 		not CheckN(nPetDataIndex) or
@@ -364,13 +499,23 @@ function p.SetPetAttr(petView, nPetDataIndex, str)
 		return;
 	end
 	
+	--隐藏按钮
+	
+	local scene = GetSMGameScene();
+	local FireButton	= RecursiveButton(scene, {NMAINSCENECHILDTAG.FriendAttr,TAG_LAYER_ATTR,ID_ROLEATTR_L_CTRL_BUTTON_FIRE});
+	FireButton:SetVisible(false);
+
+
+
+
+
+	
+	
 	local nTag = 0;
 	if nPetDataIndex == PET_ATTR.PET_ATTR_TYPE then
 	--职业
 		nTag	= ID_ROLEATTR_L_CTRL_TEXT_JOB;
-	elseif nPetDataIndex == PET_ATTR.PET_ATTR_PHYSICAL then
-	--武力
-		nTag	= ID_ROLEATTR_L_CTRL_TEXT_FORCE;
+
 	elseif nPetDataIndex == PET_ATTR.PET_ATTR_LIFE then
 	--生命
 		nTag	= ID_ROLEATTR_L_CTRL_TEXT_LIFE;
@@ -380,9 +525,52 @@ function p.SetPetAttr(petView, nPetDataIndex, str)
 	elseif nPetDataIndex == PET_ATTR.PET_ATTR_SKILL then
 	--技能
 		nTag	= ID_ROLEATTR_L_CTRL_TEXT_SKILL;
-	elseif nPetDataIndex == PET_ATTR.PET_ATTR_MAGIC then
-	--法术
-		nTag	= ID_ROLEATTR_L_CTRL_TEXT_MAGIC;
+
+	elseif nPetDataIndex == PET_ATTR.PET_ATTR_NAME then
+	--名字
+		--todo
+		--nTag	= ID_ROLEATTR_L_CTRL_TEXT_PLAYER_NAME;
+	elseif nPetDataIndex == PET_ATTR.PET_ATTR_SPEED	then
+	--速度
+		nTag	= ID_ROLEATTR_R_CTRL_TEXT_SPEED;
+		
+
+   --[[    
+    elseif nPetDataIndex == PET_ATTR.PET_ATTR_PHYSICAL then
+	--力量
+		nTag	= ID_ROLEATTR_L_CTRL_TEXT_FORCE;    
+        
+   	elseif nPetDataIndex == PET_ATTR.PET_ATTR_MAGIC then
+	--智力
+		nTag	= ID_ROLEATTR_L_CTRL_TEXT_MAGIC;     
+        
+	elseif nPetDataIndex == PET_ATTR.PET_ATTR_DEX	then
+    --敏捷	
+		nTag	= ID_ROLEATTR_L_CTRL_TEXT_DEX;]]      
+
+      elseif nPetDataIndex == PET_ATTR.PET_ATTR_PHY_ATK then
+	--物理攻击
+		nTag	= ID_ROLEATTR_L_CTRL_TEXT_FORCE;    
+        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, "物理攻击");
+        
+   elseif nPetDataIndex == PET_ATTR.PET_ATTR_MAGIC_ATK then
+	--策略攻击
+		nTag	= ID_ROLEATTR_L_CTRL_TEXT_FORCE;    
+        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, "策略攻击");  
+    
+    
+    elseif nPetDataIndex == PET_ATTR.PET_ATTR_PHY_DEF	then
+    --物理防御
+		nTag	= ID_ROLEATTR_L_CTRL_TEXT_DEX;      
+        
+   	elseif nPetDataIndex == PET_ATTR.PET_ATTR_MAGIC_DEF then
+	--策略防御
+		nTag	= ID_ROLEATTR_L_CTRL_TEXT_MAGIC;            
+                     
+        
+	elseif nPetDataIndex == PET_ATTR.PET_ATTR_LEVEL	then
+	--等级
+		nTag	= ID_ROLEATTR_L_CTRL_TEXT_LEVEL;	
 	end
 	
 	if nTag > 0 then
@@ -413,19 +601,55 @@ function p.UpdatePetAttrById(nPetId)
 	if not CheckP(view) then
 		return;
 	end
+	
+	
+	--名字
+	p.SetPetAttr(view, PET_ATTR.PET_ATTR_NAME, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_NAME));
+
 	--职业
 	p.SetPetAttr(view, PET_ATTR.PET_ATTR_TYPE, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_TYPE));
-	--武力
-	p.SetPetAttr(view, PET_ATTR.PET_ATTR_PHYSICAL, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_PHYSICAL));
+
 	--生命
-	local strlife = RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LIFE) .. "/" .. RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LIFE_LIMIT);
+    local strlife = RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LIFE);-- .. "/" .. RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LIFE_LIMIT);
 	p.SetPetAttr(view, PET_ATTR.PET_ATTR_LIFE, strlife);
-	--绝技
-	p.SetPetAttr(view, PET_ATTR.PET_ATTR_SUPER_SKILL, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SUPER_SKILL));
-	--技能
-	p.SetPetAttr(view, PET_ATTR.PET_ATTR_SKILL, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SKILL));
-	--法术
+
+    --获取职业类型 主要有  猛将: 1   射手: 2  军师: 3
+    local nPetType = RolePet.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_TYPE);
+    local nActType = GetDataBaseDataN("pet_config", nPetType, DB_PET_CONFIG.ATK_TYPE);
+    if ( nActType == 3) then
+           --策略攻击
+        p.SetPetAttr(view, PET_ATTR.PET_ATTR_MAGIC_ATK, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_MAGIC_ATK)); 
+    else
+        --物理攻击
+        p.SetPetAttr(view, PET_ATTR.PET_ATTR_PHY_ATK, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_PHY_ATK));
+    end
+
+    --物理防御
+	p.SetPetAttr(view, PET_ATTR.PET_ATTR_PHY_DEF, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_PHY_DEF));  
+    
+    --策略防御
+	p.SetPetAttr(view, PET_ATTR.PET_ATTR_MAGIC_DEF, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_MAGIC_DEF));
+    
+   --[[ 
+    --力量
+	p.SetPetAttr(view, PET_ATTR.PET_ATTR_PHYSICAL, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_PHYSICAL));
+    
+    --法术
 	p.SetPetAttr(view, PET_ATTR.PET_ATTR_MAGIC, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_MAGIC));
+    
+	--敏捷
+	p.SetPetAttr(view, PET_ATTR.PET_ATTR_DEX, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_DEX));
+	]]  
+
+	--绝技
+	--p.SetPetAttr(view, PET_ATTR.PET_ATTR_SUPER_SKILL, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SUPER_SKILL));
+	p.SetPetAttr(view, PET_ATTR.PET_ATTR_SUPER_SKILL, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SKILL));
+
+	--速度
+	p.SetPetAttr(view, PET_ATTR.PET_ATTR_SPEED, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SPEED));
+	--SetLabel(view, 27, SafeN2S(99));
+	
+	p.SetPetAttr(view, PET_ATTR.PET_ATTR_LEVEL, "等级:"..RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LEVEL));
 	
 	local expUI	= RecursivUIExp(view, {ID_ROLEATTR_L_CTRL_EXP_ROLE});
 	if CheckP(expUI) then
@@ -436,6 +660,7 @@ end
 
 
 function p.ChangePetAttr(nPetId)
+	LogInfo("qbw:change attr"..nPetId)
 	if not CheckN(nPetId) then
 		return;
 	end
@@ -449,6 +674,7 @@ function p.ChangePetAttr(nPetId)
 		return;
 	end
 
+	
 	--姓名
 	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_ROLE_NAME, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_NAME));
 	--职业
@@ -457,20 +683,31 @@ function p.ChangePetAttr(nPetId)
 	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_ROLE_SKILL, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SKILL));
 	--等级
 	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_ROLE_LEVEL, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LEVEL));
+	--SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_ROLE_LEVEL, SafeN2S(99));
 	--生命
 	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_ROLE_LIFE, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LIFE));
-	--普攻
+	
+    --力量
+	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_NORMAL_ATTACK, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_PHYSICAL));
+    --敏捷
+	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_NORMAL_DEFENSE, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_DEX));
+    --智力
+	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_MAGIC_ATTACK, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_MAGIC));
+    --速度
+	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_MAGIC_DEFENSE, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SPEED));
+    
+    --[[
+	--物理攻击
 	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_NORMAL_ATTACK, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_PHY_ATK));
-	--普防
+	--物理防御
 	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_NORMAL_DEFENSE, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_PHY_DEF));
-	--绝攻
-	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_STUNT_ATTACK, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SKILL_ATK));
-	--绝防
-	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_STUNT_DEFENSE, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SKILL_DEF));
-	--法攻
+	--策略攻击
 	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_MAGIC_ATTACK, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_MAGIC_ATK));
-	--法防
-	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_MAGIC_DEFENSE, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_MAGIC_DEF));
+	--策略防御
+	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_MAGIC_DEFENSE, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_MAGIC_DEF));]]    
+    
+	--绝防
+	--SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_STUNT_DEFENSE, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SKILL_DEF));
 	--暴击
 	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_CRIT, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_DRITICAL));
 	--韧性
@@ -482,17 +719,48 @@ function p.ChangePetAttr(nPetId)
 	--破击
 	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_WRECK, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_WRECK));
 	--格档
+	--SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_BLOCK, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_BLOCK));
 	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_BLOCK, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_BLOCK));
 	--必杀
 	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_KILL, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_HURT_ADD));
-	--战力
+	--护驾
+	SetLabel(layer, ID_ROLEATTR_L_CTRL_TEXT_HELP, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_HELP));
+	--战力 todo
 	--SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_FIGHTING, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SKILL));
+
 end
 
 
 ---------------
 --UI事件处理回调函数
 ---------------
+function p.OnUIEventLeftView(uiNode, uiEventType, param)
+	local tag = uiNode:GetTag();
+	LogInfo("p.OnUIEventLeftView[%d]", tag);
+	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+		local equipBtn = ConverToEquipBtn(uiNode);
+		if not CheckP(equipBtn) then
+			LogInfo("click equipment not CheckP(itemBtn) ");
+			return true;
+		end
+		LogInfo("equip p.ChangeItemInfo[%d]", equipBtn:GetItemId());
+		
+		local nItemId = equipBtn:GetItemId();
+		--判断是否弹出框
+    	if(nItemId == 0) then
+        	return true;
+   	    end
+   	    local ChosedPetId = p.GetPetIdOnShow();
+   	    
+       -- BackLevelThreeWin.ShowUIEquip(nItemId, ChosedPetId, true);
+        BackLevelThreeWin.ShowUIEquip(nItemId, 0, true);
+
+	end
+	
+	return true;
+
+end
+
 
 function p.OnUIEvent(uiNode, uiEventType, param)
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
@@ -500,6 +768,17 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 		if tag == ID_ROLEATTR_R_CTRL_BUTTON_95 then
 			--关闭界面
 			CloseUI(NMAINSCENECHILDTAG.FriendAttr);
+			if parentLayerTag ~= nil then
+			    LogInfo("Set parent true")
+			    FriendFunc.SetLayerVisible(parentLayerTag,true);
+			end
+		elseif tag == ID_ROLEATTR_L_CTRL_BUTTON_BAG then
+			if FriendFunc.IsExistFriend(friendId) then
+				 CommonDlg.ShowNoPrompt(string.format("确定删除好友%s吗？",friendName), p.OnCommonDlgDelFriend, true);
+			else
+				FriendFunc.AddFriend(friendId,friendName); --加为好友 
+			end
+			
 	    end
 	end	
 	return true;
@@ -512,9 +791,9 @@ function p.OnUIEventScroll(uiNode, uiEventType, param)
 		if tag == ID_SM_JH_ROLEATTR_L_BG_CTRL_BUTTON_67 then
 		    --赠送鲜花 
 			
-			MsgFriend.SendOpenGiveFlower(friendId,friendName);
+			MsgFriend.SendOpenGiveFlower(friendId,friendName,NMAINSCENECHILDTAG.FriendAttr);
 		    --判断今天是否赠送过了
-		    --CommonDlg.ShowTipInfo("提示", "您今天已经赠送过鲜花了!", nil, 2); 
+		    --CommonDlg.ShowTipInfo("提示", "您今天已经赠送过鲜花了!", nil, 0.5); 
 			
 		elseif tag == ID_SM_JH_ROLEATTR_L_BG_CTRL_BUTTON_66 then
 		        if FriendUI.IsExistFriend(friendId)  then
@@ -596,5 +875,23 @@ function p.OnCommonDlgDelFriend(nId, nEvent, param)
 end	
 
 
+function p.ClickOtherPlayer(param1,param2,param3)
+	LogInfo("qbw:click other")
+	CheckOtherPlayerBtn.LoadUI(param1);
+	return;
+	--[[
+	if not _G.CheckN(param1) then
+		LogInfo("qbw:friend no param");
+		return
+	end
+	
+	local nFriendId = param1;
+	MsgFriend.SendFriendSel(nFriendId,"testid:"..nFriendId);
+	
+	--]]
+	
+end
+
+_G.RegisterGlobalEventHandler(_G.GLOBALEVENT.GE_CLICK_OTHERPLAYER,"FriendAttrUI.ClickOtherPlayer",p.ClickOtherPlayer);
 
 

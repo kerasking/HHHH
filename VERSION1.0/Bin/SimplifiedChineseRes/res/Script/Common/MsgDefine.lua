@@ -169,32 +169,4 @@ NMSG_Type =
     _MSG_GIFTPACK_ITEM_INFO         = _MSG_GENERAL + 6021,  --礼包物品反馈信息
     _MSG_ACHIEVEMENT_INFO_LIST = _MSG_GENERAL + 6025,  --大话兵法中兵法状态改变信息
     _MSG_ACHIEVEMENT_GET_PRIZE = _MSG_GENERAL + 6026,  --大话兵法中获取成就奖励信息
-    
-    _MSG_PLAYER_ACTION_INFO            =   _MSG_GENERAL + 7001,              --活动信息
-    _MSG_PLAYER_ACTION_OPERATE   =   _MSG_GENERAL + 7002,               --活动操作
-
-    
-
-
-    _MSG_CHAOSBATTLE_BOARD				= _MSG_GENERAL+8000,	--大乱斗活动板信息
-    _MSG_CHAOSBATTLE_ADDREPORT			= _MSG_GENERAL+8001,	--增加战报
-    _MSG_CHAOSBATTLE_CAMPLIST			= _MSG_GENERAL+8002,	--阵营列表
-    _MSG_CHAOSBATTLE_CAMPLISTCHANGE     = _MSG_GENERAL+8003,	--阵营列表变化
-    _MSG_CHAOSBATTLE_MAINREPORT         = _MSG_GENERAL+8004,	--总战报
-    _MSG_CHAOSBATTLE_RANKBOARD			= _MSG_GENERAL+8005,	--排行榜
-    _MSG_CHAOSBATTLE_USERREPORT         = _MSG_GENERAL+8006,	--个人战报
-    _MSG_CHAOSBATTLE_UPDATEPLAYERINFO	= _MSG_GENERAL+8007,	--更新玩家信息
-    
-    _MSG_CHAOSBATTLE_ACTION             = _MSG_GENERAL+8050,	--大乱斗操作
-    _MSG_CHAOSBATTLE_ACTION_RET         = _MSG_GENERAL+8051,	--大乱斗操作返回
-
-
-    _MSG_PLAYER_ACTION_LIST   =   _MSG_GENERAL + 7003,               --下发活动列表
-        
-
-    _MSG_RECIVE_TRANSPORT            =   _MSG_GENERAL + 6030,              --运送粮草信息
-    _MSG_SEND_TRANSPORT   =   _MSG_GENERAL + 6031,               --运送粮草操作信息
-    _MSG_RECV_INFO                =   _MSG_GENERAL + 6032,               --运粮过程中接收到的消息      
-    
-    
 };

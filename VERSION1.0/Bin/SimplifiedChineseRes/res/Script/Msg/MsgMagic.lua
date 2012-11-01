@@ -52,6 +52,8 @@ p.RoleMatrixList = {
 	S9		=	12,
 };
 
+
+
 p.RoleMatrixStation = {
 
 	ID		= 0,	
@@ -74,6 +76,12 @@ p.RoleAttackList = {
 }
 
 p.mUIListener = nil;
+
+p.RoleMainSkillList = {
+    [1]     = 12,
+    [2]     = 21,
+    [3]     = 33,
+};
 
 
 --=====逻辑
@@ -133,6 +141,10 @@ function p.getRoleMatrixList()
 	
 end
 
+
+
+
+
 function p.setRoleMatrixAdd(m)
 	
 	local i = m.id;
@@ -153,6 +165,14 @@ function p.setRoleMatrixAdd(m)
 	p.addMatrixId(i)
 	
 end
+
+function p.setMainRoleSkillAdd(m)
+	local i = m.id;
+    table.insert(p.RoleMainSkillList, m)
+	p.addSkillId(i);
+end
+
+
 
 function p.setRoleMatrixList(listTable, count)
 	
@@ -231,6 +251,13 @@ function p.setRoleMatixStation(m)
 	p.setRoleMatrixListDataN(index, p.RoleMatrixList.S9,  m[9]);
 	p.addMatrixId(index);
 end
+
+--==主将技能
+function p.getRoleMainSkillList()
+    return p.RoleMainSkillList;
+end
+
+
 
 --==功法
 
@@ -372,6 +399,38 @@ function p.sendSetStation(m)
 	return true;
 end
 
+
+
+
+--== 更发主将技能
+--更改(4577)
+function p.sendSkillUpdate(id)
+	if not CheckN(id) then
+		return false;
+	end
+
+	local netdata = createNDTransData(NMSG_Type._MSG_USER_CURRENT_SKILL);
+	if nil == netdata then
+		return false;
+	end
+
+	netdata:WriteInt(id);
+	SendMsg(netdata);
+	netdata:Free();
+	LogInfo("send id[%d] ", id);
+	return true;
+end
+
+function p.processSikllUpt(data)
+    local id = data:ReadInt();
+    LogInfo("p.processSikllUpt:data:[%s]",id);
+    if (p.mUIListener) then
+		p.mUIListener( NMSG_Type._MSG_USER_CURRENT_SKILL, id);
+	end
+	
+end
+
+
 function p.sendMatrixOpen(id)
 	local netdata = createNDTransData(NMSG_Type._MSG_MATRIX_STATION_OPEN);
 	if nil == netdata then
@@ -442,7 +501,7 @@ function p.processMatrixAdd(netdata)
 	m[8]		= netdata:ReadInt();
 	m[9]		= netdata:ReadInt();
 	
-	p.setRoleMatrixAdd(m);
+	
 	
 	if (p.mUIListener) then
 		p.mUIListener( NMSG_Type._MSG_MATRIX_ADDED, m);
@@ -453,7 +512,7 @@ end
 --upgrade
 function p.processMatrixUpgrade(netdata)
 	local idv 		= netdata:ReadInt();
-	local levelv		= netdata:ReadByte();
+	local levelv	= netdata:ReadByte();
 	
 	LogInfo("4502:%d,%d",idv,levelv);
 	p.setRoleMatrixUpdate(idv,levelv);
@@ -514,6 +573,25 @@ function p.processMatrixStation(netdata)
 	
 	return 1;
 end
+
+--==主将技能
+function p.processSikllList(netdata)
+    p.RoleMainSkillList = {};
+    LogInfo("4575");
+	
+	local count			= netdata:ReadByte();
+
+	LogInfo(" count:" .. count);
+	for i = 1, count do
+		local m = {}
+		m.id	= netdata:ReadInt();
+        m.skill = netdata:ReadInt();
+		LogInfo(" id:" .. m.id);
+		p.setMainRoleSkillAdd(m);
+	end
+	return 1;
+end
+
 
 --==功法
 function p.sendAttackUpgrade(id)
@@ -608,6 +686,13 @@ RegisterNetMsgHandler(NMSG_Type._MSG_MATRIX_ADDED, "p.processMatrixAdd", p.proce
 RegisterNetMsgHandler(NMSG_Type._MSG_MATRIX_UPGRADED, "p.processMatrixUpgrade", p.processMatrixUpgrade);
 RegisterNetMsgHandler(NMSG_Type._MSG_MATRIX_COOLDOWN, "p.processMatrixCoolDown", p.processMatrixCoolDown);
 RegisterNetMsgHandler(NMSG_Type._MSG_MATRIX_STATION, "p.processMatrixStation", p.processMatrixStation);
+
+--==主将技能
+RegisterNetMsgHandler(NMSG_Type._MSG_SKILL_INFO_LIST, "p.processSikllList", p.processSikllList);
+RegisterNetMsgHandler(NMSG_Type._MSG_USER_CURRENT_SKILL, "p.processSikllUpt", p.processSikllUpt);
+
+
+
 --==功法
 RegisterNetMsgHandler(NMSG_Type._MSG_ATTACK_LIST, "p.processAttackList", p.processAttackList);
 RegisterNetMsgHandler(NMSG_Type._MSG_ATTACK_ADDED, "p.processAttackAdd", p.processAttackAdd);
@@ -669,6 +754,9 @@ function p.getMatrixIds()
 	return _G.GetRoleDataIdTable(NScriptData.eMagic, p.RoleMagicCategory.CIDS, p.RoleMagicType.TIDS, 0, 0);
 end
 
+--== 主将技能
+
+
 --== 功法
 
 function p.getRoleAttackInfoDataN(key)
@@ -693,5 +781,17 @@ end
 function p.getAttackIds()
 	return _G.GetRoleDataIdTable(NScriptData.eMagic, p.RoleMagicCategory.CIDS, p.RoleMagicType.TIDS, 0, 1);
 end
+
+
+--==主将技能
+function p.addSkillId(id)
+	_G.DelRoleDataId(NScriptData.eMagic, p.RoleMagicCategory.CIDS, p.RoleMagicType.TIDS, 0, 2,id);
+	_G.AddRoleDataId(NScriptData.eMagic, p.RoleMagicCategory.CIDS, p.RoleMagicType.TIDS, 0, 2,id);
+end
+
+function p.getSkillIds()
+	return _G.GetRoleDataIdTable(NScriptData.eMagic, p.RoleMagicCategory.CIDS, p.RoleMagicType.TIDS, 0, 2);
+end
+
 
 	

@@ -10,7 +10,7 @@ local p = Login_ServerUI;
 p.curSel=0;
 p.Account=nil;
 p.Pwd="";
-p.UIN=154973702;
+p.UIN=317007835;
 
 --推荐服务器(15--21)
 local ID_SERVER_SELECT_1 = 15;
@@ -39,6 +39,7 @@ local TAG_CUR_SERVER_NAME       = 36;
 local TAG_CUR_SERVER_FLAG       = 38;
 local TAG_CUR_SERVER_RECOMMEND  = 15;
 local TAG_CUR_SERVER_TITLE      = 14;
+
 
 --按钮编号
 local ID_SERVER_SELECT_PAGE_UP                      = 22;

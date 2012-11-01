@@ -1,143 +1,294 @@
--------------------------------------------
----伙伴邀请界面
----2012.3.6
----creator cl
--------------------------------------------
+---------------------------------------------------
+--描述: 伙伴招募(客栈)界面
+--时间: 2012.5.30
+--作者: GUOSEN
+---------------------------------------------------
+-- 进入客栈界面接口：		RoleInvite.LoadUI()
+
+---------------------------------------------------
+-- 无界面招募武将接口：		RoleInvite.Invite( nPetType )
+-- 参数：武将类型ID
+
+---------------------------------------------------
 local _G = _G;
 
-RoleInvite={}
-local p=RoleInvite;
+RoleInvite	= {}
+local p		= RoleInvite;
 
----tag
-local ID_ROLEINVITE_CTRL_TEXT_INFO					= 63;
-local ID_ROLEINVITE_CTRL_TEXT_VOICE					= 62;
-local ID_ROLEINVITE_CTRL_TEXT_61						= 61;
-local ID_ROLEINVITE_CTRL_BUTTON_CLOSE					= 38;
-local ID_ROLEINVITE_CTRL_TEXT_37						= 37;
-local ID_ROLEINVITE_CTRL_LIST_M						= 65;
-local ID_ROLEINVITE_CTRL_PICTURE_66					= 66;
-local ID_ROLEINVITE_CTRL_PICTURE_BG					= 36;
+-- UI层
+p.pUILayer				= nil;
+-- 第几页图片 控件
+p.pPicCtrlPageNum		= nil;
+-- 左右箭头图片控件
+p.pPicCtrlLeftArrow		= nil;
+p.pPicCtrlRightArrow	= nil;
 
-local CONTAINTER_W = RectUILayer.size.w;
-local CONTAINTER_H = RectUILayer.size.h;
-local CONTAINTER_X = 0;
-local CONTAINTER_Y = 0;
+-- 当前显示的武将阵营/当前是哪个按钮按下
+p.nCurrentCamp			= 0;
 
----tag invite
-local ID_ROLEINVITE_M_INVITE_CTRL_PICTURE_RECOMMEND	= 40;
-local ID_ROLEINVITE_M_INVITE_CTRL_BUTTON_INVITE     = 67;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_SEE      = 60;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_MONEY     = 59;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_58      = 58;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_MAGIC     = 57;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_ABILITY     = 56;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_FORCE     = 55;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_LIFE      = 54;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_52      = 52;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_51      = 51;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_50      = 50;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_49      = 49;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_SKILL     = 48;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_47      = 47;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_JOB      = 46;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_45      = 45;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_44      = 44;
-local ID_ROLEINVITE_M_INVITE_CTRL_TEXT_43      = 43;
-local ID_ROLEINVITE_M_INVITE_CTRL_PICTURE_ROLE     = 39;
-local ID_ROLEINVITE_M_INVITE_CTRL_PICTURE_M_BG     = 42;
+-- 可被招募武将列表/没在队伍中的武将/当前显示的
+p.tPetEnInvList = {}; --{ {petID, petPos},... };元素是{武将ID/武将type,所处的状况(1离队,2在野)}--在野的时候是类型，离队的时候是ID-pet
 
--- 界面控件tag定义
-local TAG_CONTAINER = 2;			--容器tag
+-- 选中的武将索引
+p.nChoosenPetIndex		= 0;
 
-function p.Showing()
-	local scene = GetSMGameScene();
-	if scene == nil then
-		return false;
-	end
-	
-	local layer = scene:GetChild(NMAINSCENECHILDTAG.RoleInvite);
-	if layer == nil then
-		return false;
-	end
-	
-	return true;
-end
+-- 队伍武将人数上限
+p.pet_limit				= 0;
+-- 队伍武将数量
+p.pet_num				= 0;
+-- 玩家的军衔
+p.nPlayerRank			= 0;
+--
+p.nPlayerID				= 0;
 
+---------------------------------------------------
+-- 阵营
+local CAMP_NONE			= 0;	-- 群雄
+local CAMP_WEI			= 1;	-- 魏
+local CAMP_SHU			= 2;	-- 蜀
+local CAMP_WU			= 3;	-- 吴
+
+---------------------------------------------------
+-- 切换阵营的按钮的ID
+local ID_BTN_CAMP_NONE				= 52;	-- 群雄
+local ID_BTN_CAMP_WEI				= 53;	-- 魏
+local ID_BTN_CAMP_SHU				= 54;	-- 蜀
+local ID_BTN_CAMP_WU				= 55;	-- 吴
+
+--
+local ID_BTN_CLOSE					= 38;
+
+-- 队伍成员人数及上限控件的ID
+local ID_LABEL_TEAM_MEMBER			= 63;
+
+-- 玩家军衔称号标签控件ID
+local ID_LABEL_RANK_NAME			= 62;
+
+-- 伙伴列表的容器ID
+local ID_CTRL_CONTAINER				= 65;
+
+-- 左箭头和右箭头图形ID
+local ID_PIC_LEFT_ARROW				= 11;
+local ID_PIC_RIGHT_ARROW			= 12;
+
+-- 当前页数个位数图形控件ID
+local ID_PIC_PAGE_NUMBER			= 10;
+
+-- 武将信息窗口的TAG值--放在InviteLayer层里
+local TAG_PET_INFO_LAYER			= 100;
+
+---------------------------------------------------
+--每屏(每个列表项包含)显示的武将最大个数
+local PET_MAXNUM_PER_LISTITEM		= 10;
+
+--列表里武将选择按钮控件ID
+local ID_BTN_CHOOSE_PET_1			= 1;
+local ID_BTN_CHOOSE_PET_2			= 2;
+local ID_BTN_CHOOSE_PET_3			= 3;
+local ID_BTN_CHOOSE_PET_4			= 4;
+local ID_BTN_CHOOSE_PET_5			= 5;
+local ID_BTN_CHOOSE_PET_6			= 6;
+local ID_BTN_CHOOSE_PET_7			= 7;
+local ID_BTN_CHOOSE_PET_8			= 8;
+local ID_BTN_CHOOSE_PET_9			= 9;
+local ID_BTN_CHOOSE_PET_A			= 10;
+
+--列表里武将名标签控件ID
+local ID_LABEL_PET_NAME_1			= 11;
+local ID_LABEL_PET_NAME_2			= 12;
+local ID_LABEL_PET_NAME_3			= 13;
+local ID_LABEL_PET_NAME_4			= 14;
+local ID_LABEL_PET_NAME_5			= 15;
+local ID_LABEL_PET_NAME_6			= 16;
+local ID_LABEL_PET_NAME_7			= 17;
+local ID_LABEL_PET_NAME_8			= 18;
+local ID_LABEL_PET_NAME_9			= 19;
+local ID_LABEL_PET_NAME_A			= 20;
+
+--武将列表项里的控件ID表[10],{ 选择按钮，武将名 }
+p.tPetListCtrlID = {
+	{ ID_BTN_CHOOSE_PET_1, ID_LABEL_PET_NAME_1 },
+	{ ID_BTN_CHOOSE_PET_2, ID_LABEL_PET_NAME_2 },
+	{ ID_BTN_CHOOSE_PET_3, ID_LABEL_PET_NAME_3 },
+	{ ID_BTN_CHOOSE_PET_4, ID_LABEL_PET_NAME_4 },
+	{ ID_BTN_CHOOSE_PET_5, ID_LABEL_PET_NAME_5 },
+	{ ID_BTN_CHOOSE_PET_6, ID_LABEL_PET_NAME_6 },
+	{ ID_BTN_CHOOSE_PET_7, ID_LABEL_PET_NAME_7 },
+	{ ID_BTN_CHOOSE_PET_8, ID_LABEL_PET_NAME_8 },
+	{ ID_BTN_CHOOSE_PET_9, ID_LABEL_PET_NAME_9 },
+	{ ID_BTN_CHOOSE_PET_A, ID_LABEL_PET_NAME_A },
+};
+
+
+---------------------------------------------------
+-- 选中武将的弹出窗口
+local ID_TIPS_BTN_CLOSE						= 29;	-- "关闭"按钮
+local ID_TIPS_BTN_INVITE					= 67;	-- "招募"按钮
+local ID_TIPS_BTN_REJOIN					= 30;	-- "归队"按钮
+
+local ID_TIPS_PIC_PET_HEAD					= 39;	-- 武将头像
+local ID_TIPS_LABEL_PET_NAME				= 43;	-- 武将名字(+阵营)
+local ID_TIPS_LABEL_PET_LEVEL				= 44;	-- 武将等级
+local ID_TIPS_LABEL_PET_JOB					= 46;	-- 武将职业
+local ID_TIPS_LABEL_PET_STR					= 55;	-- 武将力量
+local ID_TIPS_LABEL_PET_AGI					= 48;	-- 武将敏捷
+local ID_TIPS_LABEL_PET_INT					= 57;	-- 武将智力
+local ID_TIPS_LABEL_PET_HP					= 54;	-- 武将生命
+local ID_TIPS_LABEL_PET_STR_I				= 24;	-- 武将成长加成力量
+local ID_TIPS_LABEL_PET_AGI_I				= 25;	-- 武将成长加成敏捷
+local ID_TIPS_LABEL_PET_INT_I				= 26;	-- 武将成长加成智力
+local ID_TIPS_LABEL_PET_HP_I				= 27;	-- 武将成长加成生命
+local ID_TIPS_LABEL_PET_SKILL				= 56;	-- 武将绝招
+local ID_TIPS_LABEL_PET_RANK				= 60;	-- 该武将招募需求军衔
+local ID_TIPS_LABEL_PET_SILVER 				= 59;	-- 该武将招募需求银币
+local ID_TIPS_LABEL_PET_GOLD				= 31;	-- 该武将招募需求金币
+local ID_TIPS_LABEL_SKILL_DESC				= 75;	-- 绝招介绍
+
+---------------------------------------------------
 function p.LoadUI()
 	local scene=GetSMGameScene();
 	if scene == nil then
-		LogInfo("scene = nil,load RoleInvite failed!");
+		LogInfo( "RoleInvite: load RoleInvite failed! scene is nil" );
 		return;
 	end
+
 	local layer = createNDUILayer();
 	if layer == nil then
-		LogInfo("scene = nil,2");
+		LogInfo( "RoleInvite: load RoleInvite failed! layer is nil" );
 		return  false;
 	end
 	layer:Init();
-	layer:SetTag(NMAINSCENECHILDTAG.RoleInvite);
-	layer:SetFrameRect(RectUILayer);
+	layer:SetTag( NMAINSCENECHILDTAG.RoleInvite );
+	layer:SetFrameRect( RectFullScreenUILayer );
 	layer:SetBackgroundColor(ccc4(125,125,125,125));
-	scene:AddChild(layer);
-	
+	--scene:AddChild(layer);
+	scene:AddChildZ( layer, 1 );--消息不穿透
+
 	local uiLoad=createNDUILoad();
 	if nil == uiLoad then
 		layer:Free();
-		LogInfo("scene = nil,4");
+		LogInfo( "RoleInvite: load RoleInvite failed! uiLoad is nil" );
 		return false;
 	end
-	uiLoad:Load("RoleInvite.ini",layer,p.OnUIEvent,0,0);
+	uiLoad:Load( "RoleInviteUI_Main.ini", layer, p.OnUIEvent, 0, 0 );
 	uiLoad:Free();
-	
-	--local containter = createUIScrollViewContainer();
-	local containter = GetScrollViewContainer(layer,ID_ROLEINVITE_CTRL_LIST_M);
-	if (nil == containter) then
+	p.pUILayer = layer;
+	p.pPicCtrlPageNum = GetImage( p.pUILayer, ID_PIC_PAGE_NUMBER );
+	p.pPicCtrlLeftArrow = GetImage( p.pUILayer, ID_PIC_LEFT_ARROW );
+	p.pPicCtrlRightArrow = GetImage( p.pUILayer, ID_PIC_RIGHT_ARROW );
+
+	-- 获得滚屏容器
+	local containter = GetScrollViewContainer( layer, ID_CTRL_CONTAINER );
+	if ( nil == containter ) then
 		layer:Free();
-		LogInfo("scene = nil,3");
+		LogInfo( "RoleInvite: load RoleInvite failed! containter is nil" );
 		return false;
 	end
-	--containter:Init();
 	containter:SetStyle(UIScrollStyle.Horzontal);
-	--containter:SetFrameRect(CGRectMake(CONTAINTER_X, CONTAINTER_Y, CONTAINTER_W, CONTAINTER_H));
-	containter:SetViewSize(CGSizeMake(containter:GetFrameRect().size.w/3, containter:GetFrameRect().size.h));
-	--containter:SetLeftReserveDistance(CONTAINTER_W);
-	--containter:SetRightReserveDistance(CONTAINTER_W);
-	--containter:SetTag(TAG_CONTAINER);
-	--layer:AddChild(containter);
-	
-	p.RefreshContainer();
+	containter:SetViewSize( containter:GetFrameRect().size );--	containter:SetViewSize( CGSizeMake( containter:GetFrameRect().size.w, containter:GetFrameRect().size.h ) );
+	containter:SetLuaDelegate( p.OnUIEventViewChange );--设置滚屏容器事件回调
+
+	p.nCurrentCamp = CAMP_NONE;
+	p.NewRefreshContainer( p.nCurrentCamp );
+	p.DisableButton( p.nCurrentCamp )
+	p.nChoosenPetIndex = 0;
+	return true;
+end
+
+---------------------------------------------------
+-- 响应滚屏容器事件，
+function p.OnUIEventViewChange( uiNode, uiEventType, param )
+	local tag = uiNode:GetTag();
+	--LogInfo( "RoleInvite: OnUIEventViewChange[%d]", param );
+
+	if uiEventType == NUIEventType.TE_TOUCH_SC_VIEW_IN_BEGIN then
+		-- 某视图跑到容器起始处,param 为索引
+		local containter	= ConverToSVC(uiNode);
+		--
+		p.ShowPageNum( param + 1 );
+		p.ShowArrow(  param + 1, containter:GetViewCount() );
+		--
+	end
 
 	return true;
 end
 
-function p.SendInviteAction()
-	if not CheckN(nPetId) or not CheckN(nAction) then
-		return false;
+-- 显示第几页(0~9)
+function p.ShowPageNum( nPageNum )
+	local pool = DefaultPicPool();
+	if not CheckP(pool) then
+		return;
 	end
-	if nTaskId <= 0 then
-		return false;
-	end
-	local netdata = createNDTransData(NMSG_Type._MSG_TASK_ACTION);
-	if nil == netdata then
-		return false;
-	end
-	netdata:WriteByte(nAction);
-	netdata:WriteInt(nTaskId);
-	SendMsg(netdata);
-	netdata:Free();
-	LogInfo("send task[%d] action[%d]", nTaskId, nAction);
-	return true;
+
+	-- 数字图像一个数字的宽高
+	local N_W = 42;
+	local N_H = 34;
+	local norpic = pool:AddPicture( GetSMImgPath( "number/num_1.png" ), false);
+	-- 数字图需要改
+	local tRect = CGRectMake( N_W*nPageNum, 0, N_W, N_H );
+	norpic:Cut( tRect );
+	p.pPicCtrlPageNum:SetPicture(norpic);
 end
 
+--显示箭头，nCurPageNum为0时全黑
+function p.ShowArrow( nCurPageNum, nMaxPageNum )
+	--
+	if ( 0 == nCurPageNum ) then
+		p.pPicCtrlLeftArrow:GetPicture():SetGrayState( true );
+		p.pPicCtrlRightArrow:GetPicture():SetGrayState( true );
+	else
+		if ( 1 == nCurPageNum ) then
+			p.pPicCtrlLeftArrow:GetPicture():SetGrayState( true );
+		else
+			p.pPicCtrlLeftArrow:GetPicture():SetGrayState( false );
+		end
+		if ( nMaxPageNum <= nCurPageNum ) then
+			p.pPicCtrlRightArrow:GetPicture():SetGrayState( true );
+		else
+			p.pPicCtrlRightArrow:GetPicture():SetGrayState( false );
+		end
+	end
+end
+
+---------------------------------------------------
+-- 客栈UI的按钮事件响应
 function p.OnUIEvent(uiNode,uiEventType,param)
 	local tag = uiNode:GetTag();
-	LogInfo("p.OnUIEvent[%d]",tag);
+	--LogInfo("RoleInvite: p.OnUIEvent[%d]",tag);
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-		if ID_ROLEINVITE_CTRL_BUTTON_CLOSE == tag then
+		if ( ID_BTN_CLOSE == tag ) then
 			local scene = GetSMGameScene();
 			if scene~= nil then
-				scene:RemoveChildByTag(NMAINSCENECHILDTAG.RoleInvite,true);
+				scene:RemoveChildByTag( NMAINSCENECHILDTAG.RoleInvite, true );
 				return true;
+			end
+		elseif ( ID_BTN_CAMP_NONE == tag ) then
+			if ( p.nCurrentCamp ~= CAMP_NONE ) then
+				p.EnableButton( p.nCurrentCamp );
+				p.nCurrentCamp = CAMP_NONE;
+				p.NewRefreshContainer( p.nCurrentCamp );
+				p.DisableButton( CAMP_NONE );
+			end
+		elseif ( ID_BTN_CAMP_WEI == tag ) then
+			if ( p.nCurrentCamp ~= CAMP_WEI ) then
+				p.EnableButton( p.nCurrentCamp );
+				p.nCurrentCamp = CAMP_WEI;
+				p.NewRefreshContainer( p.nCurrentCamp );
+				p.DisableButton( CAMP_WEI );
+			end
+		elseif ( ID_BTN_CAMP_SHU == tag ) then
+			if ( p.nCurrentCamp ~= CAMP_SHU ) then
+				p.EnableButton( p.nCurrentCamp );
+				p.nCurrentCamp = CAMP_SHU;
+				p.NewRefreshContainer( p.nCurrentCamp );
+				p.DisableButton( CAMP_SHU );
+			end
+		elseif ( ID_BTN_CAMP_WU == tag ) then
+			if ( p.nCurrentCamp ~= CAMP_WU ) then
+				p.EnableButton( p.nCurrentCamp );
+				p.nCurrentCamp = CAMP_WU;
+				p.NewRefreshContainer( p.nCurrentCamp );
+				p.DisableButton( CAMP_WU );
 			end
 		end
 	elseif uiEventType == NUIEventType.TE_TOUCH_TABLE_FOCUS then
@@ -145,317 +296,746 @@ function p.OnUIEvent(uiNode,uiEventType,param)
 	return true;
 end
 
-function p.OnInviteUIEvent(uiNode,uiEventType,param)
-	local tag = uiNode:GetTag();
-	LogInfo("p.OnInviteUIEven[%d]",tag);
-	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-		if ID_ROLEINVITE_M_INVITE_CTRL_BUTTON_INVITE == tag then
-			local view=PRecursiveSV(uiNode, 1);
-			if not CheckP(view) then
-				return true;
-			end
-			local id=view:GetViewId();
-			--LogInfo("petId:%d",id);
-			_G.MsgRolePet.SendBuyPet(id);
+-- 按钮失效--变灰色
+function p.DisableButton( nCamp )
+	local pInvUILayer = p.GetInvUILayer();
+    
+	if ( CAMP_NONE == nCamp ) then
+		local pBtn	= GetButton( pInvUILayer, ID_BTN_CAMP_NONE );
+		--pBtn:EnalbeGray( true );
+        pBtn:TabSel(true);
 
-		end
-	elseif uiEventType == NUIEventType.TE_TOUCH_TABLE_FOCUS then
+	elseif ( CAMP_WEI == nCamp ) then
+		local pBtn	= GetButton( pInvUILayer, ID_BTN_CAMP_WEI );
+		--pBtn:EnalbeGray( true );
+        pBtn:TabSel(true);
+        
+	elseif ( CAMP_SHU == nCamp ) then
+		local pBtn	= GetButton( pInvUILayer, ID_BTN_CAMP_SHU );
+		--pBtn:EnalbeGray( true );
+        pBtn:TabSel(true);
+        
+	elseif ( CAMP_WU == nCamp ) then
+		local pBtn	= GetButton( pInvUILayer, ID_BTN_CAMP_WU );
+		--pBtn:EnalbeGray( true );
+        pBtn:TabSel(true);
+        
 	end
-	return true;
 end
 
-function p.OnInviteBackUIEvent(uiNode,uiEventType,param)
-	local tag = uiNode:GetTag();
-	LogInfo("p.OnInviteBackUIEvent[%d]",tag);
-	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-		if ID_ROLEINVITE_M_INVITE_CTRL_BUTTON_INVITE == tag then
-			local view=PRecursiveSV(uiNode, 1);
-			if not CheckP(view) then
-				return true;
-			end
-			local id=view:GetViewId();
-			_G.MsgRolePet.SendBuyBackPet(id);
-			LogInfo("petId:%d",id);
-		end
-	elseif uiEventType == NUIEventType.TE_TOUCH_TABLE_FOCUS then
+-- 按钮恢复正常--恢复正常颜色
+function p.EnableButton( nCamp )
+	local pInvUILayer = p.GetInvUILayer();
+	if ( CAMP_NONE == nCamp ) then
+		local pBtn	= GetButton( pInvUILayer, ID_BTN_CAMP_NONE );
+		--pBtn:EnalbeGray( false );
+        pBtn:TabSel(false);
+	elseif ( CAMP_WEI == nCamp ) then
+		local pBtn	= GetButton( pInvUILayer, ID_BTN_CAMP_WEI );
+		--pBtn:EnalbeGray( false );
+        pBtn:TabSel(false);
+	elseif ( CAMP_SHU == nCamp ) then
+		local pBtn	= GetButton( pInvUILayer, ID_BTN_CAMP_SHU );
+		--pBtn:EnalbeGray( false );
+        pBtn:TabSel(false);
+	elseif ( CAMP_WU == nCamp ) then
+		local pBtn	= GetButton( pInvUILayer, ID_BTN_CAMP_WU );
+		--pBtn:EnalbeGray( false );
+        pBtn:TabSel(false);
 	end
-	return true;
 end
 
-function p.GetReputeLevel(repute)
-	if repute < 2000 then
-		return 1;
-	elseif repute < 5000 then
-		return 2;
-	elseif repute < 20000 then
-		return 3;
-	elseif repute < 60000 then
-		return 4;
-	elseif repute < 100000 then
-		return 5;
-	elseif repute < 150000 then
-		return 6;
-	elseif repute < 200000 then
-		return 7;
-	elseif repute < 260000 then
-		return 8;
-	elseif repute < 320000 then
-		return 9;
-	elseif repute < 400000 then
-		return 10;
-	elseif repute >= 400000 then
-		return 11;
-	end
-	return 0;
-end
-
-function p.GetPetParent()
+---------------------------------------------------
+-- 获得客栈的UI层
+function p.GetInvUILayer()
 	local scene = GetSMGameScene();
 	if nil == scene then
 		return nil;
 	end
-	
+
 	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.RoleInvite);
 	if nil == layer then
 		return nil;
 	end
-	
-	--local container = GetScrollViewContainer(layer, TAG_CONTAINER);
+
 	return layer;
 end
 
 
+---------------------------------------------------
+-- 显示指定阵营的可招募武将
+function p.NewRefreshContainer( nCamp )
+	--LogInfo( "RoleInvite: NewRefreshContainer()" );
+	-- 获得UI
+	local pInvUILayer = p.GetInvUILayer();
+	if nil == pInvUILayer then
+		LogInfo( "RoleInvite: NewRefreshContainer failed! pInvUILayer is nil" );
+		return false;
+	end
 
-function p.RefreshContainer()
-	local layer = p.GetPetParent();
-	if nil == layer then
-		return nil;
+	-- 获得滚屏容器
+	local pScrollViewContainer = GetScrollViewContainer( pInvUILayer,ID_CTRL_CONTAINER );
+	if nil == pScrollViewContainer then
+		LogInfo( "RoleInvite: NewRefreshContainer failed! pScrollViewContainer is nil" );
+		return false;
 	end
-	
-	
-	local container = GetScrollViewContainer(layer,ID_ROLEINVITE_CTRL_LIST_M);
-	if nil == container then
-		LogInfo("nil == container");
-		return;
+	pScrollViewContainer:ShowViewByIndex(0);
+	pScrollViewContainer:RemoveAllView();
+	--pScrollViewContainer:SetLeftReserveDistance( 20 );
+	--pScrollViewContainer:SetRightReserveDistance( 20 );
+
+	-- 获得玩家ID
+	p.nPlayerID = GetPlayerId();--User表中的ID
+	--LogInfo( "RoleInvite: nPlayerId:%d" ,p.nPlayerID  );
+	if nil == p.nPlayerID then
+		LogInfo( "RoleInvite: NewRefreshContainer failed! nPlayerId is nil" );
+		return false;
 	end
-	
-	container:RemoveAllView();
-	
-	local nPlayerId = GetPlayerId();
-	if nil == nPlayerId then
-		LogInfo("nil == nPlayerId");
-		return;
+
+	-- 获得玩家的军衔
+	p.nPlayerRank	= GetRoleBasicDataN( p.nPlayerID, USER_ATTR.USER_ATTR_RANK );
+	local szPlayerRank	= "浪迹天涯";
+	if ( 0 < p.nPlayerRank ) then
+		szPlayerRank	= GetDataBaseDataS( "rank_config", p.nPlayerRank, DB_RANK_CONFIG.RANK_NAME );
 	end
+	SetLabel( pInvUILayer, ID_LABEL_RANK_NAME, szPlayerRank );
 	
-	--设置我的声望
-	local repute = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_REPUTE);
-	local repute_lev=p.GetReputeLevel(repute);
-	SetLabel(layer,ID_ROLEINVITE_CTRL_TEXT_VOICE,SafeN2S(repute).."(Lv"..SafeN2S(repute_lev)..")");
+	-- 获得玩家的等级
+	--local nPlayerLevel	= GetRoleBasicDataN( p.nPlayerID, USER_ATTR.USER_ATTR_LEVEL );	-- user 表无更新
+	local nPlayerPetID	= RolePetFunc.GetMainPetId( p.nPlayerID );
+	local nPlayerLevel	= RolePet.GetPetInfoN( nPlayerPetID, PET_ATTR.PET_ATTR_LEVEL );
 	
-	--获得我当前的stage
-	local stage = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_STAGE);
-	
-	
-	--获得招募列表
-	local idList=GetDataBaseIdList("pet_config");
-	if nil == idList then
-		LogInfo("nil == idList");
-		return;
-	end
-	
+	-- 获得玩家的阶段
+	local nPlayerStage	= GetRoleBasicDataN( p.nPlayerID, USER_ATTR.USER_ATTR_STAGE );
+
+
 	--获取当前已招募的列表
-	local invited_idTable = RolePetUser.GetPetList(nPlayerId);
-	local inTeam_idTable = RolePetUser.GetPetListPlayer(nPlayerId);
-	local pet_num = 1;
+	local invited_idTable	= RolePetUser.GetPetList( p.nPlayerID );
+	local inTeam_idTable	= RolePetUser.GetPetListPlayer( p.nPlayerID );
+	p.pet_num				= 1;
 	if nil ~= invited_idTable then
-		pet_num = table.getn(inTeam_idTable);
+		p.pet_num = table.getn(inTeam_idTable);
 	end
-	
+
 	--显示招募上限
-	local pet_limit = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_PET_LIMIT);
-	SetLabel(layer,ID_ROLEINVITE_CTRL_TEXT_INFO,"队伍人数上限："..SafeN2S(pet_num).."/"..SafeN2S(pet_limit).."，人数上限随着剧情发展而增加");
+	p.pet_limit = GetRoleBasicDataN( p.nPlayerID, USER_ATTR.USER_ATTR_PET_LIMIT );
+	SetLabel( pInvUILayer, ID_LABEL_TEAM_MEMBER, " "..SafeN2S(p.pet_num).."/"..SafeN2S(p.pet_limit) );
+
+	--获得所有武将列表
+	local idList = GetDataBaseIdList( "pet_config" );
+	if nil == idList then
+		LogInfo( "RoleInvite: NewRefreshContainer failed! idList is nil" );
+		return false;
+	end
+
+	-- 可被招募武将列表
+	p.tPetEnInvList = {}; --{ {petID, petPos},... };元素是武将ID及所处的状况(在队,在野,离队)
 	for i, v in ipairs(idList) do
-		
-		LogInfo("idlist,%d",v);
-		
-		--筛选出不可招募的伙伴
-		local value=GetDataBaseDataN("pet_config",v,DB_PET_CONFIG.CAN_CALL);
-		--LogInfo("%d",value);
-		if 0==value then
-			continue;
-		end
-		
-		--筛选出声望不足无法查看的伙伴
-		value=GetDataBaseDataN("pet_config",v,DB_PET_CONFIG.REPUTE_LEV)-1;
-		if repute_lev < value then
-			--LogInfo("%d,%d",repute_lev,value);
-			continue;
-		end
-		
-		--判断已招募和招募过的伙伴
-		local position=2;
-		local petId=0;
-		
-		if nil ~= invited_idTable then
-			for ii,vv in ipairs(invited_idTable) do
-				--DumpGameData(NScriptData.eRole, nPlayerId, NRoleData.ePet, vv);
-				local type=RolePet.GetPetInfoN(vv,PET_ATTR.PET_ATTR_TYPE);
-				LogInfo("id=%d,type=%d",vv,type);
-				if v == type then
-					position=RolePet.GetPetInfoN(vv,PET_ATTR.PET_ATTR_POSITION);
-					petId=vv;
-					break;
+		local bBreakRepeat		= false;
+		repeat
+			local nPetType		= v;--
+			
+			-- 银币需求为0不显示
+			local nPetSilver	= GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.MONEY );
+			if ( 0 == nPetSilver ) then
+				break;
+			end
+			
+			-- 能否被招募，可被招募才显示
+			local value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.CAN_CALL );
+			if ( 0 == value ) then
+				break;
+			end
+			
+			-- 阵营
+			local camp = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.CAMP );
+			if ( camp ~= nCamp ) then
+				break
+			end
+        	
+			-- 军衔
+			--value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.REPUTE_LEV );
+			
+			--判断玩家当前的游戏进度是否可以开启这个伙伴
+			local need_stage = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.NEED_STAGE );
+			--LogInfo( "RoleInvite: PlayerStage:%d, PetNeedStage:%d", nPlayerStage, need_stage );
+			if nPlayerStage < need_stage then
+				break;
+			end
+			
+			--判断玩家当前的等级是否可以开启这个伙伴
+			local need_level = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.REQ_LEVEL );
+			--LogInfo( "RoleInvite: PlayerLevel:%d, PetNeedLevel:%d", nPlayerLevel, need_level );
+			if nPlayerLevel < need_level then
+				break;
+			end
+        	
+			-- 判断已招募和招募过的伙伴
+			local petPosition	= 2;		--0队伍中;1已离队;2未入队;
+			local nPetID		= 0;
+        	
+			if ( nil ~= invited_idTable ) then
+				for nIndex, nValue in ipairs( invited_idTable ) do
+					local petType = RolePet.GetPetInfoN( nValue, PET_ATTR.PET_ATTR_TYPE );
+					--LogInfo( "RoleInvite: id=%d,type=%d", nValue, pettype );
+					if ( nPetType == petType ) then
+						petPosition = RolePet.GetPetInfoN( nValue, PET_ATTR.PET_ATTR_POSITION );	-- 0/1
+						nPetID = nValue;
+						break;
+					end
 				end
 			end
+        	
+			-- 已招募的伙伴不显示
+			if petPosition == 0 then
+				break;
+			end
+			
+			if petPosition == 1 then
+				-- 离队
+				-- 保存ID及其位置
+				table.insert( p.tPetEnInvList, { nPetID, petPosition } );
+			elseif petPosition == 2 then
+				-- 在野
+				-- 保存Type及其位置
+				table.insert( p.tPetEnInvList, { nPetType, petPosition } );
+			end
+		until true
+		if ( bBreakRepeat ) then
+			break;
 		end
-		
-		--已招募的伙伴不显示
-		if position == 0 then
-			continue;
-		end
-		
-		--判断玩家当前的游戏进度是否可以开启这个伙伴
-		local need_stage = GetDataBaseDataN("pet_config",v,DB_PET_CONFIG.NEED_STAGE);
-		LogInfo("stage:%d/%d",stage,need_stage);
-		if stage < need_stage then
-			continue;
-		end
-		
-		local view = createUIScrollView();
-		if view == nil then
-			--LogInfo("view == nil");
-			continue;
-		end
-		view:Init(false);
-		--LogInfo("viewSize:%d ",container:GetViewSize().w);
-		local nOffsetX	= (container:GetViewSize().w - 140 * ScaleFactor) / 2;
-		local can_call=true;
-		if position == 2 then --从未招募过的伙伴显示
-		
-			
-			view:SetViewId(v);
-			container:AddView(view);
-			local uiLoad = createNDUILoad();
-			if uiLoad ~= nil then
-				uiLoad:Load("RoleInvite_M_invite.ini",view,p.OnInviteUIEvent,nOffsetX,0);
-				uiLoad:Free();
-			end
-			
-			--名称
-			local value=GetDataBaseDataS("pet_config",v,DB_PET_CONFIG.NAME);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_43,value);
-			--等级
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_44,"Lv1");
-			--职业
-			value=GetDataBaseDataS("pet_config",v,DB_PET_CONFIG.PRO_NAME);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_JOB,value);
-			--技能
-			local id=GetDataBaseDataN("pet_config",v,DB_PET_CONFIG.SKILL);
-			value=GetDataBaseDataS("skill_config",id,DB_SKILL_CONFIG.NAME);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_SKILL,value);
-			--血量
-			value=GetDataBaseDataN("pet_config",v,DB_PET_CONFIG.INIT_LIFE);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_LIFE,SafeN2S(value));
-			--武力
-			value=GetDataBaseDataN("pet_config",v,DB_PET_CONFIG.INIT_PHYSICAL);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_FORCE,SafeN2S(value));
-			--绝技
-			value=GetDataBaseDataN("pet_config",v,DB_PET_CONFIG.INIT_SUPER_SKILL);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_ABILITY,SafeN2S(value));
-			--法力
-			value=GetDataBaseDataN("pet_config",v,DB_PET_CONFIG.INIT_MAGIC);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_MAGIC,SafeN2S(value));
-			--金钱需求
-			value=GetDataBaseDataN("pet_config",v,DB_PET_CONFIG.MONEY);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_MONEY,"花费"..SafeN2S(value));
-			local money=GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_MONEY);
-			if money < value then
-				local label=GetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_MONEY);
-				if CheckP(label) then
-					local color=ccc4(255,0,0,255);
-					label:SetFontColor(color);
-					can_call=false;
-				end
-			end
-			--声望需求
-			value=GetDataBaseDataN("pet_config",v,DB_PET_CONFIG.REPUTE);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_SEE,"需要声望"..SafeN2S(value));
-			if repute < value then
-				local label=GetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_SEE);
-				if CheckP(label) then
-					local color=ccc4(255,0,0,255);
-					label:SetFontColor(color);
-					can_call=false;
-				end
-			end
-			
-			if pet_num >= pet_limit then
-				can_call = false;
-			end
-			
-			if not can_call then
-				local button=GetButton(view,ID_ROLEINVITE_M_INVITE_CTRL_BUTTON_INVITE);
-				if CheckP(button) then
-					button:EnalbeGray(true);
-				end
-			end
-			
-			value=GetDataBaseDataN("pet_config",v,DB_PET_CONFIG.RECOMMEND);
-			if value == 0 then
-				local node=GetUiNode(view,ID_ROLEINVITE_M_INVITE_CTRL_PICTURE_RECOMMEND);
-				if CheckP(node) then
-					node:SetVisible(false);
-				end
-			end
-			
-		elseif position == 1 then --已招募过的伙伴显示
-			view:SetViewId(petId);
-			container:AddView(view);
-			local uiLoad = createNDUILoad();
-			if uiLoad ~= nil then
-				uiLoad:Load("RoleInvite_M_Rejoin.ini",view,p.OnInviteBackUIEvent,nOffsetX,0);
-				uiLoad:Free();
-			end
-			--名称
-			local value=GetDataBaseDataS("pet_config",v,DB_PET_CONFIG.NAME);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_43,value);
-			--等级
-			value=RolePet.GetPetInfoN(petId,PET_ATTR.PET_ATTR_LEVEL);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_44,"Lv"..SafeN2S(value));
-			--职业
-			value=GetDataBaseDataS("pet_config",v,DB_PET_CONFIG.PRO_NAME);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_JOB,value);
-			--技能
-			local id=GetDataBaseDataN("pet_config",v,DB_PET_CONFIG.SKILL);
-			value=GetDataBaseDataS("skill_config",id,DB_SKILL_CONFIG.NAME);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_SKILL,value);
-			--血量
-			value=RolePet.GetPetInfoN(petId,PET_ATTR.PET_ATTR_LIFE);
-			local value2=RolePet.GetPetInfoN(petId,PET_ATTR.PET_ATTR_LIFE_LIMIT);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_LIFE,SafeN2S(value).."/"..SafeN2S(value2));
-			--武力
-			value=RolePet.GetTotalPhy(petId);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_FORCE,SafeN2S(value));
-			--绝技
-			value=RolePet.GetTotalSuperSkill(petId);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_ABILITY,SafeN2S(value));
-			--法力
-			value=RolePet.GetTotalMagic(petId);
-			SetLabel(view,ID_ROLEINVITE_M_INVITE_CTRL_TEXT_MAGIC,SafeN2S(value));
-			
-			
-			if pet_num >= pet_limit then
-				can_call = false;
-			end
-			
-			if not can_call then
-				local button=GetButton(view,ID_ROLEINVITE_M_INVITE_CTRL_BUTTON_INVITE);
-				if CheckP(button) then
-					button:EnalbeGray(true);
-				end
-			end
+	end
+
+	-- 得到显示的页数
+	local nPetAmount		= table.getn( p.tPetEnInvList );
+	--LogInfo( "RoleInvite: NewRefreshContainer() nPetAmount:%d",nPetAmount );
+	local view_page_amount	= ( nPetAmount + ( PET_MAXNUM_PER_LISTITEM - 1 ) ) / PET_MAXNUM_PER_LISTITEM;
+	--LogInfo( "RoleInvite: amount:%d, page:%d", nPetAmount, view_page_amount );
+
+	--
+	for i = 1, view_page_amount do
+		local viewListItem = createUIScrollView();
+
+		if not CheckP( viewListItem ) then
+			LogInfo( "RoleInvite: NewRefreshContainer failed! viewListItem is nil" );
+			return false;
 		end
 
+		viewListItem:Init( false );
+		--viewListItem:SetScrollStyle(UIScrollStyle.Horzontal);
+		viewListItem:SetViewId( i );
+		viewListItem:SetTag( i );
+		pScrollViewContainer:AddView( viewListItem );
+
+		--初始化ui
+		local uiLoad = createNDUILoad();
+		if not CheckP(uiLoad) then
+			LogInfo( "RoleInvite: NewRefreshContainer failed! uiLoad is nil" );
+			return false;
+		end
+
+		--local nOffsetX	= pScrollViewContainer:GetViewSize().w * ( view_page_amount - 1 );
+		-- 关联列表项UI与视图与事件响应
+		uiLoad:Load( "RoleInviteUI_ListItem.ini", viewListItem, p.OnListItemEvent, 0, 0 );
+		uiLoad:Free();
+
+		--LogInfo( "RroleInvite, cur_page:%d", i );
+		p.FillListItem( viewListItem, (i-1)*PET_MAXNUM_PER_LISTITEM+1 );
+   end
+
+	if ( 0 < nPetAmount ) then
+		p.ShowPageNum( 1 );
+		p.ShowArrow( 1, view_page_amount );
+		p.pPicCtrlPageNum:SetVisible(true);
+		p.pPicCtrlLeftArrow:SetVisible(true);
+		p.pPicCtrlRightArrow:SetVisible(true);
+	else
+		p.pPicCtrlPageNum:SetVisible(false);
+		p.pPicCtrlLeftArrow:SetVisible(false);
+		p.pPicCtrlRightArrow:SetVisible(false);
+	end
+
+	pScrollViewContainer:ShowViewByIndex(0);
+end
+
+---------------------------------------------------
+-- 填充列表视图，
+-- 列表项UI层, 起始索引(下标1开始)
+function p.FillListItem( layerListItem, nIndex )
+	local nPetAmount = table.getn( p.tPetEnInvList );
+	if ( nil == layerListItem ) or ( 0 == nPetAmount )
+		or ( 0 == nIndex ) or ( nIndex > nPetAmount ) then
+		return;
+	end
+
+	-- 当前列表视图可见到的武将数量
+	local nVisiblePetAmount = PET_MAXNUM_PER_LISTITEM;
+	if ( nIndex + PET_MAXNUM_PER_LISTITEM > nPetAmount ) then
+		nVisiblePetAmount = nPetAmount - nIndex + 1;
+	end
+
+	local nCount = 1;
+	for i = 1, nVisiblePetAmount do
+		local nPetType		= 0;
+		local nPetPos		= p.tPetEnInvList[nIndex+i-1][2];
+		if ( 1 == nPetPos ) then
+			-- 离队--PetID
+			nPetType = RolePet.GetPetInfoN( p.tPetEnInvList[nIndex+i-1][1], PET_ATTR.PET_ATTR_TYPE );
+		else
+			-- 在野--PetType
+			nPetType = p.tPetEnInvList[nIndex+i-1][1];
+		end
+		
+		-- 头像
+		local pBtnChoosePet	= GetButton( layerListItem, p.tPetListCtrlID[i][1] );
+        local pic			= GetPetBigPotraitTranPic(nPetType);
+        if CheckP(pic) then
+            pBtnChoosePet:SetImage( pic, true );
+        end
+        
+		-- 名字
+		--local value = GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.NAME );
+		--SetLabel( layerListItem, p.tPetListCtrlID[i][2], value );
+		nCount = i;
 	end
 	
+	if ( nCount < PET_MAXNUM_PER_LISTITEM ) then
+		--LogInfo( "RoleInvite: other space " );
+		for i = nCount+1, PET_MAXNUM_PER_LISTITEM do
+			local pBtnChoosePet		= GetButton( layerListItem, p.tPetListCtrlID[i][1] );
+			pBtnChoosePet:SetVisible(false);
+			--local pLabelPetName		= GetLabel( layerListItem, p.tPetListCtrlID[i][2] );
+			--pLabelPetName:SetVisible(false);
+		end
+	end
+
+end
+
+---------------------------------------------------
+-- 响应列表项UI的事件--点击武将
+function p.OnListItemEvent( uiNode, uiEventType, param )
+	local tagNode = uiNode:GetTag();
+	--LogInfo( "RoleInvite: touch item:%d", uiNode:GetParent() );
+	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+		local pParentNode = uiNode:GetParent();	--获得控件所在的列表项UI，
+		local tagParent = pParentNode:GetTag();	--获得该UI的tag(tag>=1)，即序列
+		local nPetIndex = ( tagParent - 1 ) * PET_MAXNUM_PER_LISTITEM + tagNode;
+		--LogInfo( "RoleInvite: tagParent:%d, petIndex:%d", tagParent, nPetIndex );
+		p.nChoosenPetIndex = nPetIndex;
+		p.CreatePetTipsLayer( nPetIndex );
+	end
+	return true;
+end
+
+---------------------------------------------------
+-- 创建“武将信息及招募/归队”窗口（"p.tPetEnInvList"表的索引）
+function p.CreatePetTipsLayer( nPetIndex )
+	--LogInfo( "RoleInvite: CreatePetTipsLayer begin" );
+	local layerTips = createNDUILayer();
+	if layerTips == nil then
+		LogInfo( "RoleInvite: CreatePetTipsLayer failed! layerTips is nil" );
+		return  false;
+	end
+	layerTips:Init();
+	layerTips:SetFrameRect( RectFullScreenUILayer );
+	layerTips:SetTag( TAG_PET_INFO_LAYER );
+	layerTips:SetBackgroundColor(ccc4(0,0,0,100));
+
+	local uiLoad = createNDUILoad();
+	if uiLoad ~= nil then
+		uiLoad:Load( "RoleInviteUI_PetInfo.ini", layerTips, p.OnPetInfoUIEvent, 0, 0 );
+		uiLoad:Free();
+	end
+
+	--local scene = GetSMGameScene();
+	local pInvUILayer = p.GetInvUILayer();
+	pInvUILayer:AddChildZ( layerTips, 2 );--触摸消息不穿透
+
+	local nPetIDType	= p.tPetEnInvList[nPetIndex][1];
+	local nPetPos		= p.tPetEnInvList[nPetIndex][2];
+	-- ( "RoleInvite: PetID/PetType:" .. nPetIDType  .. ",PetPos:" .. nPetPos ..",amount:" ..table.getn(p.tPetEnInvList) );
+	--LogInfo( "RoleInvite: PetID/PetType:%d, PetPos:%d", nPetIDType, nPetPos );
+	
+	if ( 1 == nPetPos ) then
+		-- 离队--PetID
+		p.InitPetInfoUIWithPetID( layerTips, nPetIDType );
+	else
+		-- 在野--PetType
+		p.InitPetInfoUIWithPetType( layerTips, nPetIDType );
+	end
+	
+	--LogInfo( "RoleInvite: CreatePetTipsLayer succeed" );
+	return true;
+end
+
+---------------------------------------------------
+-- 通过ID来初始化“武将信息及招募/归队”窗口(离队武将)
+function p.InitPetInfoUIWithPetID( pLayerTips, nPetID )
+	
+	local nPetType = RolePet.GetPetInfoN( nPetID, PET_ATTR.PET_ATTR_TYPE );
+
+	-- 头像
+	local pPetImage	= GetButton( pLayerTips, ID_TIPS_PIC_PET_HEAD );
+	local pic			= GetPetPotraitPic(nPetType);
+	if CheckP(pic) then
+	    pPetImage:SetImage( pic, true );
+	end
+    
+
+	-- 阵营
+	local nCamp = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.CAMP );
+	local szCamp = "";
+	if ( CAMP_NONE == nCamp ) then
+		szCamp = "(群雄)";
+	elseif ( CAMP_WEI == nCamp ) then
+		szCamp = "(魏国)";
+	elseif ( CAMP_SHU == nCamp ) then
+		szCamp = "(蜀国)";
+	elseif ( CAMP_WU == nCamp ) then
+		szCamp = "(吴国)";
+	end
+	-- 名称
+	local value = GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.NAME );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_NAME, value .. szCamp );
+
+	-- 等级
+	value = RolePet.GetPetInfoN( nPetID, PET_ATTR.PET_ATTR_LEVEL );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_LEVEL, SafeN2S(value).."级" );
+	
+	-- 站位类型
+	local nStandType = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.STAND_TYPE );
+	local szStandType = "(+)";
+	if ( 1 == nStandType ) then
+		szStandType = "(前军)";
+	elseif ( 2 == nStandType ) then
+		szStandType = "(中军)";
+	elseif ( 3 == nStandType ) then
+		szStandType = "(后军)";
+	end
+	-- 职业
+	value = GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.PRO_NAME );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_JOB, value .. szStandType );
+
+	-- 力量
+	value = RolePet.GetTotalPhy( nPetID );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_STR, SafeN2S(value) );
+	
+	-- 敏捷
+	value = RolePet.GetPetInfoN( nPetID, PET_ATTR.PET_ATTR_DEX );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_AGI, SafeN2S(value) );
+	
+	-- 智力
+	value = RolePet.GetTotalMagic( nPetID );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_INT, SafeN2S(value) );
+	
+	-- 生命
+	value = RolePet.GetPetInfoN( nPetID, PET_ATTR.PET_ATTR_LIFE_LIMIT );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_HP, value );
+
+	-- 力量加成
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.ADD_PHYSICAL );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_STR_I, SafeN2S(value/1000) );
+
+	-- 敏捷加成
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.ADD_SUPER_SKILL );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_AGI_I, SafeN2S(value/1000) );
+
+	-- 智力加成
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.ADD_MAGIC );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_INT_I, SafeN2S(value/1000) );
+
+	-- 生命加成
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.ADD_LIFE );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_HP_I, SafeN2S(value/1000) );
+	
+	-- 绝招
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.SKILL );
+	local szSkillName = GetDataBaseDataS( "skill_config", value, DB_SKILL_CONFIG.NAME );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_SKILL, szSkillName );
+	
+	-- 绝招描述
+	local szSkillDesc = GetDataBaseDataS( "skill_config", value, DB_SKILL_CONFIG.DESCRRIPTION );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_SKILL_DESC, szSkillDesc );
+	
+	
+	local pLabel = GetLabel( pLayerTips, ID_TIPS_LABEL_PET_RANK );
+	pLabel:SetText( " 无" );
+	pLabel = GetLabel( pLayerTips, ID_TIPS_LABEL_PET_SILVER );
+	pLabel:SetVisible(false);
+	pLabel = GetLabel( pLayerTips, ID_TIPS_LABEL_PET_GOLD );
+	pLabel:SetVisible(false);
+	
+	--隐藏"招募"按钮
+	local pBtnInvite	= GetButton( pLayerTips, ID_TIPS_BTN_INVITE );
+	if CheckP( pBtnInvite ) then
+		pBtnInvite:SetVisible(false);
+	end
+	
+end
+
+---------------------------------------------------
+-- 通过Type来初始化“武将信息及招募/归队”窗口(在野武将)
+function p.InitPetInfoUIWithPetType( pLayerTips, nPetType )
+	
+	-- 头像
+	local pPetImage	= GetButton( pLayerTips, ID_TIPS_PIC_PET_HEAD );
+	local pic			= GetPetPotraitPic(nPetType);
+	if CheckP(pic) then
+	    pPetImage:SetImage( pic, true );
+	end
+    
+    
+
+	-- 阵营
+	local nCamp = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.CAMP );
+	local szCamp = "";
+	if ( CAMP_NONE == nCamp ) then
+		szCamp = "(群雄)";
+	elseif ( CAMP_WEI == nCamp ) then
+		szCamp = "(魏国)";
+	elseif ( CAMP_SHU == nCamp ) then
+		szCamp = "(蜀国)";
+	elseif ( CAMP_WU == nCamp ) then
+		szCamp = "(吴国)";
+	end
+	-- 名称
+	local value = GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.NAME );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_NAME, value .. szCamp );
+
+	-- 等级
+	value = 1;
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_LEVEL, value .."级" );
+	
+	-- 站位类型
+	local nStandType = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.STAND_TYPE );
+	local szStandType = "(+)";
+	if ( 1 == nStandType ) then
+		szStandType = "(前军)";
+	elseif ( 2 == nStandType ) then
+		szStandType = "(中军)";
+	elseif ( 3 == nStandType ) then
+		szStandType = "(后军)";
+	end
+	-- 职业
+	value = GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.PRO_NAME );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_JOB, value .. szStandType );
+
+	--力量
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.INIT_PHYSICAL );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_STR, SafeN2S(value) );
+	
+	--敏捷
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.INIT_SUPER_SKILL );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_AGI, SafeN2S(value) );
+	
+	--智力
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.INIT_MAGIC );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_INT, SafeN2S(value) );
+	
+	--生命
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.INIT_LIFE );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_HP, SafeN2S(value) );
+
+	--力量加成
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.ADD_PHYSICAL );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_STR_I, SafeN2S(value/1000) );
+
+	--敏捷加成
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.ADD_SUPER_SKILL );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_AGI_I, SafeN2S(value/1000) );
+
+	--智力加成
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.ADD_MAGIC );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_INT_I, SafeN2S(value/1000) );
+
+	--生命加成
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.ADD_LIFE );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_HP_I, SafeN2S(value/1000) );
+	
+	--绝招
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.SKILL );
+	local szSkillName = GetDataBaseDataS( "skill_config", value, DB_SKILL_CONFIG.NAME );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_SKILL, szSkillName );
+	
+	-- 绝招描述
+	local szSkillDesc = GetDataBaseDataS( "skill_config", value, DB_SKILL_CONFIG.DESCRRIPTION );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_SKILL_DESC, szSkillDesc );
+	
+	--需要军衔
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.REPUTE_LEV );
+	local szPlayerRank	= GetDataBaseDataS( "rank_config", value, DB_RANK_CONFIG.RANK_NAME );
+	if ( "" == szPlayerRank ) then
+		szPlayerRank = "帝王";
+	end
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_RANK, szPlayerRank);
+	
+	--需要银币
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.MONEY );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_SILVER, SafeN2S(value).."银币" );
+	
+	-- VIP Level
+	local nVipLv = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.REQ_VIP );
+	--需要金币
+	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.EMONEY );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_GOLD, "(VIP"..nVipLv..":"..SafeN2S(value).."金币)" );
+	-- 不显示需要金币……
+	local pLabel = GetLabel( pLayerTips, ID_TIPS_LABEL_PET_GOLD );
+	pLabel:SetVisible(false);
+	
+	-- 隐藏"归队"按钮
+	local pBtnRejoin	= GetButton( pLayerTips, ID_TIPS_BTN_REJOIN );
+	if CheckP( pBtnRejoin ) then
+		pBtnRejoin:SetVisible(false);
+	end
+end
+
+---------------------------------------------------
+-- “武将信息及招募/归队”窗口事件响应
+function p.OnPetInfoUIEvent( uiNode, uiEventType, param )
+	local tag = uiNode:GetTag();
+	--LogInfo( "RoleInvite: p.OnPetInfoUIEvent[%d]",tag );
+	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+		if ID_TIPS_BTN_CLOSE == tag then
+			uiNode:GetParent():GetParent():RemoveChild( uiNode:GetParent(), true );
+			return true;
+		elseif ID_TIPS_BTN_INVITE == tag then
+			-- 招募
+			local nPetType	= p.tPetEnInvList[p.nChoosenPetIndex][1];
+			local nPetPos	= p.tPetEnInvList[p.nChoosenPetIndex][2];
+			if ( p.pet_num >= p.pet_limit ) then
+				-- 队伍满员
+				CommonDlg.ShowWithConfirm( "您的队伍满员了呀……", nil );
+			else
+				if ( p.nPlayerRank < GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.REPUTE_LEV ) ) then
+					-- 军衔低
+					CommonDlg.ShowWithConfirm( "您的军衔太低了呀……", nil );
+				else
+					local nPlayerSilver	= GetRoleBasicDataN( p.nPlayerID, USER_ATTR.USER_ATTR_MONEY );
+					local nPetSilver	= GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.MONEY );
+					--LogInfo( "RoleInvite: PlayerSilver:%d, PetSilver%d", nPlayerSilver, nPetSilver  );
+					if ( nPlayerSilver >= nPetSilver ) then
+						-- 银币足
+						CommonDlgNew.ShowYesOrNoDlg( "您确定要消耗"..nPetSilver.."银币招募这员武将？", p.InviteCallSilver);
+					else
+						-- 银币缺
+						local nPlayerVIPLv	= GetRoleBasicDataN( p.nPlayerID, USER_ATTR.USER_ATTR_VIP_RANK );
+						local nPetVIPLv		= GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.REQ_VIP );
+						--LogInfo( "RoleInvite: PetType:%d, PlayerVIP:%d, PetVIP%d", nPetType, nPlayerVIPLv, nPetVIPLv  );
+						if ( nPlayerVIPLv < nPetVIPLv ) then
+							CommonDlg.ShowWithConfirm( "您的银币不足，升级VIP后可以用金币招募……", nil );
+						else
+							local nPetGold = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.EMONEY );
+							local szName = GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.NAME );
+							local nGold = ( nPetSilver - nPlayerSilver ) * nPetGold / nPetSilver;
+							nGold = math.ceil( nGold );
+							CommonDlgNew.ShowYesOrNoDlg( "您的银币不足，您的VIP等级可以消耗"..nGold.."金币招募"..szName.."？", p.InviteCallBackGold );
+						end
+					end
+				end
+			end
+		elseif ID_TIPS_BTN_REJOIN == tag then
+			-- 归队
+			local nPetID	= p.tPetEnInvList[p.nChoosenPetIndex][1];
+			local nPetPos	= p.tPetEnInvList[p.nChoosenPetIndex][2];
+			if ( p.pet_num < p.pet_limit ) then
+				-- 发送归队消息给服务端
+				_G.MsgRolePet.SendBuyBackPet( nPetID );
+			else
+				CommonDlg.ShowWithConfirm( "您的队伍满员了呀……", nil );
+			end 
+		end
+	end
+	return true;
+end
+
+---------------------------------------------------
+-- 响应服务器消息刷新
+function p.RefreshContainer()
+	-- 关闭武将信息窗口
+	local pInvUILayer	= p.GetInvUILayer();
+	local pTipsLayer	= GetUiLayer( pInvUILayer, TAG_PET_INFO_LAYER )
+	pInvUILayer:RemoveChild( pTipsLayer, true );
+	local nPetPos		= p.tPetEnInvList[p.nChoosenPetIndex][2];
+	if ( 1 == nPetPos ) then
+		-- 归队
+		local nPetID	= p.tPetEnInvList[p.nChoosenPetIndex][1];
+		local nPetType	= RolePet.GetPetInfoN( nPetID, PET_ATTR.PET_ATTR_TYPE );
+		local szName 	= GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.NAME );
+		CommonDlg.ShowWithConfirm( szName.."重归您麾下!", nil );
+	else
+		-- 招募
+		local nPetType	= p.tPetEnInvList[p.nChoosenPetIndex][1];
+		local szName 	= GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.NAME );
+		CommonDlg.ShowWithConfirm( szName.."现归您麾下!", nil );
+	end
+	p.nChoosenPetIndex	= 0;
+	p.NewRefreshContainer( p.nCurrentCamp );	-- 该函数会改变 p.tPetEnInvList，所以放在后面
+end
+
+---------------------------------------------------
+-- 对话框回调事件-确定消耗银币招募--(点击确定，会回调该函数两次，取消则会回调一次)
+function p.InviteCallSilver(nEvent, param )
+	--LogInfo( "RoleInvite: p.InviteCallSilver: nId:%d,nEvent:%d",nId,nEvent );
+	if ( CommonDlgNew.BtnOk == nEvent ) then
+		--CommonDlg.ShowWithConfirm( "扣银币……", nil );
+		-- 发送招募消息给服务端
+		local nPetType	= p.tPetEnInvList[p.nChoosenPetIndex][1];
+		_G.MsgRolePet.SendBuyPet( nPetType );
+	end
+end
+
+-- 对话框回调事件-确定消耗金币招募
+function p.InviteCallBackGold(nEvent, param )
+	--LogInfo( "RoleInvite: p.InviteCallSilver: nId:%d,nEvent:%d",nId,nEvent );
+	if ( CommonDlgNew.BtnOk == nEvent ) then
+		local nPetType		= p.tPetEnInvList[p.nChoosenPetIndex][1];
+		local nPlayerSilver	= GetRoleBasicDataN( p.nPlayerID, USER_ATTR.USER_ATTR_MONEY );
+		local nPetSilver	= GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.MONEY );
+		local nPetGold		= GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.EMONEY );
+		local nGold			= ( nPetSilver - nPlayerSilver ) * nPetGold / nPetSilver;
+		local nPlayerGold	= GetRoleBasicDataN( p.nPlayerID, USER_ATTR.USER_ATTR_EMONEY );
+		nGold = math.ceil( nGold );
+		if ( nGold <= nPlayerGold ) then
+			--CommonDlg.ShowWithConfirm( "扣金币……", nil );
+			-- 发送招募消息给服务端
+			_G.MsgRolePet.SendBuyPet( nPetType );
+		else
+			--金币不足-充值什么的
+			CommonDlgNew.ShowYesOrNoDlg( "您的金币不足，先去充值？", p.InviteCallBackRecharge );
+		end
+	end
+end
+
+-- 对话框回调事件-充值
+function p.InviteCallBackRecharge(nEvent, param )
+	--LogInfo( "RoleInvite: p.InviteCallSilver: nId:%d,nEvent:%d",nId,nEvent );
+	if ( CommonDlgNew.BtnOk == nEvent ) then
+		CommonDlg.ShowWithConfirm( "转充值页面……", nil );
+		-- 跳转充值页面
+	end
+end
+
+---------------------------------------------------
+-- 没开启客栈界面招募武将申请
+function p.Invite( nPetType )
+	_G.MsgRolePet.SendBuyPet( nPetType );
+end
+
+---------------------------------------------------
+-- 没开启客栈界面招募到武将的消息处理
+function p.InviteSucess( tNewPets )
+	local szTitle	= "";
+	local nCount = table.getn( tNewPets );
+	if ( nCount > 0 ) then
+		for i=1, nCount do
+			if ( i > 1 ) then
+				szTitle = szTitle .. "、";
+			end
+			local nPetType	= RolePet.GetPetInfoN( tNewPets[i], PET_ATTR.PET_ATTR_TYPE );
+			local szName 	= GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.NAME );
+			szTitle = szTitle .. szName;
+		end
+		LogInfo( "RoleInvite: " .. szTitle );
+		CommonDlg.ShowWithConfirm( szTitle .. "归您麾下!", nil );
+	end
 end

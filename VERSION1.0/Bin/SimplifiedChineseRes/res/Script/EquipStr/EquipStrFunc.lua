@@ -20,6 +20,7 @@ function p.GetReqMoney(itemTypeId,equipLv)
 		local reqMoney2 = GetDataBaseDataN("enhanced", enhanceId + equipLv + 1 , DB_ENHANCED.REQ_MONEY);
 		reqMoney = reqMoney2 - reqMoney1;
 		
+        
 		LogInfo("money1:%d,money2:%d",reqMoney1,reqMoney2)
 	end
 	return reqMoney;
@@ -45,27 +46,6 @@ function p.CanEquipStr(nPetId,equipId)
 	end
 		
 	return 1;
-end
-
---根据装备等级获取名称（注：level=0 对应1级）
-local NAME_LV_LIST = {"法器","灵器","宝器","道器","下品仙器","中品仙器","上品仙器","王品仙器","圣品仙器","造化神器"};
-
-function p.GetLevelName(lv)
-    if not CheckN(lv) then
-	    return nil;
-	end
-	
-    lv = lv + 1;
-	
-    local i = Num2(lv) +1;
-	local j = Num1(lv);
-	if j == 0 then
-	    i = i - 1;
-		j= 10 ;
-	end
-	
-	local name = NAME_LV_LIST[i]..string.format("%d级",j);
-	return name;
 end
 
 

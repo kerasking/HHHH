@@ -35,6 +35,7 @@ local ID_DYNMAPGUIDE_CTRL_BUTTON_GUIDE5 = 265;
 p.battleId={0,0,0,0,0,}
 
 function p.LoadUI()
+    LogInfo("+++++++++++DynMapGuide.load++++++++++");
 	local scene=GetSMGameScene();
 	if scene == nil then
 		LogInfo("scene = nil,load DynMapGuide failed!");
@@ -48,10 +49,11 @@ function p.LoadUI()
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.DynMapGuide);
 	local winsize = GetWinSize();
-	layer:SetFrameRect( CGRectMake(winsize.w /4, winsize.h /8, winsize.w /2, winsize.h * 3 / 4));
+	--layer:SetFrameRect(RectUILayer);
+	layer:SetFrameRect( RectFullScreenUILayer );--++Guosen 2012.7.6
 	--layer:SetBackgroundColor(ccc4(125,125,125,125));
-	scene:AddChild(layer);
-	
+    scene:AddChildZ(layer,80);
+
 	local uiLoad=createNDUILoad();
 	if nil == uiLoad then
 		layer:Free();
@@ -62,33 +64,55 @@ function p.LoadUI()
 	uiLoad:Free();
 end
 
+function p.getUiLayer()
+    local scene = GetSMGameScene();
+    if not CheckP(scene) then
+        return nil;
+    end
+
+    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.DynMapGuide);
+    if not CheckP(layer) then
+        LogInfo("nil == layer")
+        return nil;
+    end
+
+    return layer;
+end
+
 function p.OnUIEvent(uiNode,uiEventType,param)
 	local tag = uiNode:GetTag();
 	LogInfo("p.OnUIEvent[%d]",tag);
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		if ID_DYNMAPGUIDE_CTRL_BUTTON_QUIT == tag then
+            local layer = p.getUiLayer()
+                layer:SetVisible(false);
 			local scene = GetSMGameScene();
 			if scene~= nil then
 				scene:RemoveChildByTag(NMAINSCENECHILDTAG.DynMapGuide,true);
 				return true;
 			end
 		elseif ID_DYNMAPGUIDE_CTRL_BUTTON_GUIDE1 == tag then
+            LogInfo("BUTTON_GUIDE1");
 			if p.battleId[1] ~= 0 then
 				_G.MsgArena.SendWatchBattle(p.battleId[1]);
 			end
 		elseif ID_DYNMAPGUIDE_CTRL_BUTTON_GUIDE2 == tag then
+            LogInfo("BUTTON_GUIDE2");
 			if p.battleId[2] ~= 0 then
 				_G.MsgArena.SendWatchBattle(p.battleId[2]);
 			end
 		elseif ID_DYNMAPGUIDE_CTRL_BUTTON_GUIDE3 == tag then
+            LogInfo("BUTTON_GUIDE3");
 			if p.battleId[3] ~= 0 then
 				_G.MsgArena.SendWatchBattle(p.battleId[3]);
 			end
 		elseif ID_DYNMAPGUIDE_CTRL_BUTTON_GUIDE4 == tag then
+            LogInfo("BUTTON_GUIDE4");
 			if p.battleId[4] ~= 0 then
 				_G.MsgArena.SendWatchBattle(p.battleId[4]);
 			end
 		elseif ID_DYNMAPGUIDE_CTRL_BUTTON_GUIDE5 == tag then
+            LogInfo("BUTTON_GUIDE5");
 			if p.battleId[5] ~= 0 then
 				_G.MsgArena.SendWatchBattle(p.battleId[5]);
 			end

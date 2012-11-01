@@ -46,12 +46,12 @@ p.BtnServerBtg={
 
 p.ServerList={
 --服务器ID,控件TAG,服务器别名,服务器名,服务器IP,服务器端口,内外服标记
-{1,42,'1服内部测试','server01','192.168.9.104',5877,1},
-{2,41,'2服内部测试','server02','192.168.9.104',5877,1},
-{3,40,'3服内部测试','server03','192.168.9.104',5877,1},
-{4,38,'4服内部测试','server04','192.168.9.104',5877,1},
-{5,37,'5服内部测试','server05','192.168.9.104',5877,1},
-{6,36,'6服内部测试','server06','192.168.9.104',5877,1},
+{1,42,'吕霖内部测试','server07','192.168.9.47',5877,1},
+{2,41,'2服内部测试','server02','192.168.9.42',5877,1},
+{3,40,'3服内部测试','server03','192.168.9.47',5877,1},
+{4,38,'11服内部测试','server11','192.168.9.47',5877,1},
+{5,37,'5服内部测试','server05','192.168.9.47',5877,1},
+{6,36,'6服内部测试','server06','192.168.9.47',5877,1},
 {7,35,'7服外网测试','lyol4','121.207.255.120',5877,2},
 };
 
@@ -84,13 +84,13 @@ function p.LoadUI()
 
     uiLoad:Load("ServerChange.ini", layer, p.OnUIEvent, 0, 0);--帐号和服务器选择
     uiLoad:Free();
-    p.InitUIData(); --error here
+    p.InitUIData();
     return true;
 end
 
 function p.getUiLayer()
     local scene = GetSMLoginScene();
-    if not CheckP(scene) then --error here
+    if not CheckP(scene) then
         return nil;
     end
 
@@ -105,7 +105,7 @@ end
 ------------初始化－－－－－－－－
 function p.InitUIData()
     --服务器列表排序，根据实际数量决定是否显示上一页和下一页的按钮
-    local layer = p.getUiLayer(); --error here
+    local layer = p.getUiLayer();
     local PageUp=GetButton(layer,ID_ACCOUNT_BTN_PAGE_UP);
     if CheckP(PageUp) then
         PageUp:SetVisible(false);
@@ -183,7 +183,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             g_Account_Pwd=nil;
             Login_AccountUI.LoadUI();
 --]]
-            Login_Main.LoadUI();
+            Login_ServerUI.LoadUI();
             return true;
         else
 --[[

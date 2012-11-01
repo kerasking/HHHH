@@ -1,58 +1,77 @@
 ---------------------------------------------------
---描述: 战斗信息UI
---时间: 2012.3.30
---作者: cl
+--描述: 战斗中查看交战者信息小窗口UI
+--时间: 2012.7.3
+--作者: Guosen
+---------------------------------------------------
+--战斗中创建查看信息窗口：		FighterInfo.LoadUI( iX, iY );
 
+---------------------------------------------------
+--设置名称绝技等级神马：		FighterInfo.SetFighterInfo( szName, szSkillName, nLevel );
+--参数： szName:名称, szSkillName:绝技名, nLevel:等级
+
+---------------------------------------------------
+--FighterInfo.UpdateHp(hp,maxHp)
+--FighterInfo.UpdateMp(mp,maxMp)
 ---------------------------------------------------
 local _G = _G;
 
 FighterInfo = {};
 local p = FighterInfo;
 
-local ID_SM_ZDBX_ROLE_STATE_CTRL_BUTTON_CLOSE	=	5;
-local ID_SM_ZDBX_ROLE_STATE_CTRL_TEXT_SKILL_NAME	=	11;
-local ID_SM_ZDBX_ROLE_STATE_CTRL_TEXT_ROLE_NAME		=	2;
-local ID_SM_ZDBX_ROLE_STATE_CTRL_EXP_BLOOD			=14;
-local ID_SM_ZDBX_ROLE_STATE_CTRL_EXP_MOMENTUM		= 15;
+---------------------------------------------------
+local ID_BTN_CLOSE						= 5;	-- X
+local ID_LABEL_ROLE_NAME				= 2;	-- 角色名空间ID
+local ID_LABEL_SKILL_NAME				= 11;	-- 技能名控件ID
+local ID_CTRL_BLOOD_BAR					= 14;	-- 血条
+local ID_CTRL_MOMENTUM_BAR				= 15;	-- 气条
 
-function p.GetParent()
+
+---------------------------------------------------
+-- 获得ui指针
+function p.GetFighterInfoUILayer()
 	local scene = GetSMGameScene();
-	if nil == scene then
+	if ( nil == scene ) then
+		LogInfo( "FighterInfo: GetFighterInfoUILayer() failed! scene = nil" );
 		return nil;
 	end
 	
 	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.FighterInfo);
-	if nil == layer then
+	if ( nil == layer ) then
+		LogInfo( "FighterInfo: GetFighterInfoUILayer() failed! layer = nil" );
 		return nil;
 	end
 
 	return layer;
 end
 
+---------------------------------------------------
+-- 事件响应
 function p.OnUIEvent(uiNode,uiEventType,param)
 	local tag = uiNode:GetTag();
 	LogInfo("p.OnUIEvent[%d]",tag);
-	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-		if ID_SM_ZDBX_ROLE_STATE_CTRL_BUTTON_CLOSE == tag then
+	if ( uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK ) then
+		if ( ID_BTN_CLOSE == tag ) then
 			local scene = GetSMGameScene();
-			if scene~= nil then
-				scene:RemoveChildByTag(NMAINSCENECHILDTAG.FighterInfo,true);
+			if ( scene~= nil ) then
+				scene:RemoveChildByTag( NMAINSCENECHILDTAG.FighterInfo, true );
 				return true;
 			end
 		end
 	end
 end
 
+---------------------------------------------------
+-- 创建信息窗口
 function p.LoadUI(x,y)
-	LogInfo("load fighterInfo");
+	LogInfo( "FighterInfo: p.LoadUI()" );
 	local scene=GetSMGameScene();
 	if scene == nil then
-		LogInfo("scene = nil,load FighterInfo failed!");
+		LogInfo( "FighterInfo: LoadUI() failed! scene = nil" );
 		return;
 	end
 	local layer = createNDUILayer();
 	if layer == nil then
-		LogInfo("scene = nil,2");
+		LogInfo( "FighterInfo: LoadUI() failed! layer = nil" );
 		return  false;
 	end
 	layer:Init();
@@ -73,28 +92,31 @@ function p.LoadUI(x,y)
 	local uiLoad=createNDUILoad();
 	if nil == uiLoad then
 		layer:Free();
-		LogInfo("scene = nil,4");
+		LogInfo( "FighterInfo: LoadUI() failed! uiLoad = nil" );
 		return false;
 	end
-	uiLoad:Load("SM_ZDBX_ROLE_STATE.ini",layer,p.OnUIEvent,0,0);
+	uiLoad:Load("FighterInfoUI.ini",layer,p.OnUIEvent,0,0);
 	uiLoad:Free();
-	
 end
 
+---------------------------------------------------
+-- 关闭信息窗口
 function p.CloseFighterInfo()
 	local scene = GetSMGameScene();
-	if scene~= nil then
+	if ( scene~= nil ) then
 		scene:RemoveChildByTag(NMAINSCENECHILDTAG.FighterInfo,true);
 		return true;
 	end
 end
 
+---------------------------------------------------
+-- 更新生命值进度条
 function p.UpdateHp(hp,maxHp)
-	local layer=p.GetParent();
+	local layer=p.GetFighterInfoUILayer();
 	if nil==layer then
 		return false;
 	end
-	local lifeBar = RecursivUIExp(layer, {ID_SM_ZDBX_ROLE_STATE_CTRL_EXP_BLOOD} );
+	local lifeBar = RecursivUIExp(layer, {ID_CTRL_BLOOD_BAR} );
 	if CheckP(lifeBar) then
 		--LogInfo("setBossHP:%d/%d",currentlife,totalLife);
 		lifeBar:SetProcess(hp);
@@ -105,12 +127,14 @@ function p.UpdateHp(hp,maxHp)
 	end
 end
 
+---------------------------------------------------
+-- 更新魔法值进度条
 function p.UpdateMp(mp,maxMp)
-	local layer=p.GetParent();
+	local layer=p.GetFighterInfoUILayer();
 	if nil==layer then
 		return false;
 	end
-	local manaBar = RecursivUIExp(layer, {ID_SM_ZDBX_ROLE_STATE_CTRL_EXP_MOMENTUM} );
+	local manaBar = RecursivUIExp(layer, {ID_CTRL_MOMENTUM_BAR} );
 	if CheckP(manaBar) then
 		--LogInfo("setBossHP:%d/%d",currentlife,totalLife);
 		manaBar:SetProcess(mp);
@@ -121,13 +145,16 @@ function p.UpdateMp(mp,maxMp)
 	end
 end
 
-function p.SetFighterInfo(name,skillName)
-	local layer=p.GetParent();
-	if nil==layer then
+---------------------------------------------------
+-- 设置信息，名称，技能，等级
+function p.SetFighterInfo( szName, szSkillName, nLevel )
+	local pLayer = p.GetFighterInfoUILayer();
+	if ( nil == pLayer ) then
+		LogInfo( "FighterInfo: SetFighterInfo() failed! pLayer = nil" );
 		return false;
 	end
-	--local skillName=GetDataBaseDataS("skill_config",skillId,DB_SKILL_CONFIG.NAME);
-	SetLabel(layer,ID_SM_ZDBX_ROLE_STATE_CTRL_TEXT_ROLE_NAME,name);
-	SetLabel(layer,ID_SM_ZDBX_ROLE_STATE_CTRL_TEXT_SKILL_NAME,skillName);
+	nLevel = nLevel or 1;
+	SetLabel( pLayer, ID_LABEL_ROLE_NAME, szName .. "("..nLevel.."级)" );
+	SetLabel( pLayer, ID_LABEL_SKILL_NAME, szSkillName );
 	return true;
 end

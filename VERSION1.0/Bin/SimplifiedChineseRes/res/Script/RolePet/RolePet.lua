@@ -112,7 +112,7 @@ function p.GetMedicinePhy(nPetId)
 end
 
 function p.GetTotalPhy(nPetId)
-	return p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_PHYSICAL)+p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_PHY_FOSTER)+p.GetMedicinePhy(nPetId);
+	return p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_PHYSICAL); --+p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_PHY_FOSTER)+p.GetMedicinePhy(nPetId);
 end
 
 function p.GetInheritMedSuperSkill(nPetId)
@@ -164,7 +164,7 @@ function p.GetMedicineMagic(nPetId)
 end
 
 function p.GetTotalMagic(nPetId)
-	return p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_MAGIC)+p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_MAGIC_FOSTER)+p.GetMedicineMagic(nPetId);
+	return p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_MAGIC);--+p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_MAGIC_FOSTER)+p.GetMedicineMagic(nPetId);
 end
 
 

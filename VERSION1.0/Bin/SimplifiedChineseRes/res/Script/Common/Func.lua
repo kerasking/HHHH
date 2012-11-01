@@ -1,3 +1,7 @@
+--** chh 2012-7-2 **--
+--开启随机
+math.randomseed(os.time());
+
 function LogInfo(fmt, ...)
     LuaLogInfo(string.format(fmt, unpack(arg)));
 end
@@ -249,6 +253,17 @@ end
 function GetCurrentTime()
 	return os.time()
 end
+function fomatBigNumber(value)
+	if value<10000 then
+		return SafeN2S(value);
+	elseif value<100000000 then
+		local v1=getIntPart(value/10000);
+		return SafeN2S(v1).."万";
+	else 
+		local v1=getIntPart(value/100000000);
+		return SafeN2S(v1).."亿";
+	end
+end
 
 function GetRunningScene()
     local pDirector = DefaultDirector();
@@ -265,10 +280,72 @@ function GetRunningScene()
     return pScene;
 end
 
-function GetSMAniPath(str)
-	if not CheckS(str) then
-		return ""
-	end
-	
-	return GetSMResPath("animation/" .. str);
+--功能stage
+StageFunc = {
+    Star = 31,              --将星
+    Matrix = 41,            --阵法
+    Strengthen = 71,        --强化
+    Levy = 161,             --征收
+    Rank = 171,             --军衔
+    Arena = 181,            --竞技场
+    EliteCoyp = 241,        --精英副本
+    Mount = 291,            --坐骑
+    Fete = 321,             --祭祀
+    RepeatCoyp = 541,       --副本扫荡
+};
+
+
+--** chh 2012-08-10 **--
+function IsFunctionOpen(nStage)
+    local nPlayerStage      = _G.ConvertN(_G.GetRoleBasicDataN(GetPlayerId(), USER_ATTR.USER_ATTR_STAGE));
+    if(nStage>nPlayerStage) then
+        return false;
+    end
+    return true;
 end
+
+
+--获得当前VIP的权限值
+function GetVipVal(nVipConfigId)
+    local nVipRank = GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_VIP_RANK);
+    return GetDataBaseDataN("vip_config",nVipRank,nVipConfigId);
+end
+
+--判断某功能是否开启
+function GetVipIsOpen(nVipConfigId)
+    local nVal = GetVipVal(nVipConfigId)
+    if(nVal == 0) then
+        return false;
+    end
+    return true;
+end
+
+
+--判断是否可洗炼
+function Is_EQUIP_EDU(nType)
+    LogInfo("Is_EQUIP_EDU()");
+    local nEduType = GetVipVal(DB_VIP_CONFIG.EQUIP_EDU);
+    
+    LogInfo("nEduType:[%d],nType:[%d]",nEduType,nType);
+    if (nEduType >= nType) then
+        return true;
+    end
+    return false;
+end
+
+
+--根据类型判断需要多少VIP才可洗炼
+function GetVipLevel_EQUIP_EDU(nType)
+    local ids = GetDataBaseIdList("vip_config");
+    for i,v in ipairs(ids) do
+        local val = GetDataBaseDataN("vip_config",v,DB_VIP_CONFIG.EQUIP_EDU);
+        if(val == nType) then
+            return v;
+        end
+    end
+end
+
+
+
+
+

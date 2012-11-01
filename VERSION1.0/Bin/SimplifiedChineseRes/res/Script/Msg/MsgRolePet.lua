@@ -31,6 +31,7 @@ function p.SendShopPetAction(nPetId, nAction)
 	SendMsg(netdata);
 	netdata:Free();
 	LogInfo("send pet[%d] action[%d]", nPetId, nAction);
+    ShowLoadBar();
 	return true;
 end
 
@@ -56,6 +57,7 @@ function p.SendImpartPet(idPet,idTarget,vip)
 	netdata:WriteInt(idTarget);
 	SendMsg(netdata);
 	netdata:Free();
+    ShowLoadBar();
 	return true;
 end
 
@@ -67,7 +69,11 @@ function p.SendDropPet(nPetId)
 	return p.SendShopPetAction(nPetId, MSG_PET_SHOP_ACT_DROP);
 end
 
+
+-- 更新曾招募过的所有武将
 function p.ProcessPetInfo(netdata)
+    CloseLoadBar();
+	--LogInfo("MsgRolePet: p.ProcessPetInfo" );
 	local btNum					= netdata:ReadByte();
 	
 	LogInfo("p.ProcessPetInfo btNum[%d]", btNum);
@@ -76,6 +82,16 @@ function p.ProcessPetInfo(netdata)
 		return 1;
 	end
 	
+	local nPlayerID		= GetPlayerId();--User表中的ID
+	local tInvitedPets	= RolePetUser.GetPetList( nPlayerID );	-- 旧武将表,为空则是Login时
+	local tNewPets		= {};	-- 新增的武将表
+	local nPlayerPetID	= RolePetFunc.GetMainPetId( nPlayerID );
+	local nPlayerLevel	= RolePet.GetPetInfoN( nPlayerPetID, PET_ATTR.PET_ATTR_LEVEL );
+	local nNewLevel		= nPlayerLevel;
+	
+    
+    
+    
 	for	i=1, btNum do
 		local idPet					= netdata:ReadInt();					-- ID
 		local idType				= netdata:ReadInt();					-- 类型
@@ -92,8 +108,10 @@ function p.ProcessPetInfo(netdata)
 		local unManaLimit			= netdata:ReadInt();			-- 气势上限
 		local idSkill				= netdata:ReadInt();				-- 技能
 		local usForce				= netdata:ReadShort();				-- 武力
-		local usSuperSkill			= netdata:ReadShort();			-- 绝技
-		local usMagic				= netdata:ReadShort();				-- 法术
+		local nDexterity			= netdata:ReadShort();			-- 敏捷
+		LogInfo("nDexterity"..nDexterity);
+		
+		local usMagic				= netdata:ReadShort();				-- 智力
 		local usForceFoster			= netdata:ReadShort();			-- 武力培养
 		local usSuperSkillFoster	= netdata:ReadShort();		-- 绝技培养
 		local usMagicFoster			= netdata:ReadShort();			-- 法术培养
@@ -118,25 +136,33 @@ function p.ProcessPetInfo(netdata)
 		local btImpart				= netdata:ReadByte();			-- 传承
 		local btObtain				= netdata:ReadByte();			-- 被传承
 		
-		local nPhysicalAtk			= netdata:ReadInt();			--武力攻击
-		local nSkillAtk				= netdata:ReadInt();			--绝技攻击
-		local nMagicAtk				= netdata:ReadInt();			--法术攻击
-		local nPhysicalDef			= netdata:ReadInt();			--武力防御
-		local nSkillDef				= netdata:ReadInt();			--绝技防御
-		local nMagicDef				= netdata:ReadInt();			--法术防御
+		local nPhysicalAtk			= netdata:ReadInt();			--武力攻击 物理攻击
+		local nSpeed				= netdata:ReadInt();			--绝技攻击 速度
+		--nSpeed = 99;
+		
+		local nMagicAtk				= netdata:ReadInt();			--法术攻击 策略攻击
+		local nPhysicalDef			= netdata:ReadInt();			--武力防御 物理防御
+		local nSkill_Def			= netdata:ReadInt();			--绝技防御
+		local nMagicDef				= netdata:ReadInt();			--法术防御 策略防御
 		
 		local btDritical			= netdata:ReadShort();				-- 暴击
 		local btHitrate				= netdata:ReadShort();				-- 命中
 		local btWreck				= netdata:ReadShort();				-- 破击
-		local btHurtAdd				= netdata:ReadShort();				-- 必杀
+		local btHurtAdd				= netdata:ReadShort();				-- 必杀  合击
 		local btTenacity			= netdata:ReadShort();				-- 韧性
 		local btDodge				= netdata:ReadShort();				-- 闪避
 		local btBlock				= netdata:ReadShort();				-- 格挡
 
+		local btHelp 					= netdata:ReadShort(); ----求援
+		local btAtkType              = netdata:ReadShort();              -- 武将的前中后军（0：前军， 1：中军， 2：后军）
+        	local btCamp 	  =netdata:ReadShort();	--阵营
+		
 		
 		local strName				= netdata:ReadUnicodeString();
 		
-		LogInfo("%d,%d,%d",usForce,usSuperSkill,usMagic);
+
+		
+		RolePet.SetPetInfoN(idPet,PET_ATTR.PET_ATTR_HELP, btHelp);
 		
 		RolePet.SetPetInfoN(idPet,PET_ATTR.PET_ATTR_ID, idPet);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_TYPE, idType);
@@ -152,7 +178,7 @@ function p.ProcessPetInfo(netdata)
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_MANA_LIMIT, unManaLimit);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_SKILL, idSkill);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_PHYSICAL, usForce);
-		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_SUPER_SKILL, usSuperSkill);
+		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_SUPER_SKILL,0); --绝技设定取消
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_MAGIC, usMagic);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_PHY_FOSTER, usForceFoster);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_SUPER_SKILL_FOSTER, usSuperSkillFoster);
@@ -178,10 +204,13 @@ function p.ProcessPetInfo(netdata)
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_IMPART, btImpart);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_OBTAIN, btObtain);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_PHY_ATK, nPhysicalAtk);
-		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_SKILL_ATK, nSkillAtk);
+		
+		
+		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_SPEED, nSpeed);
+		--RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_SPEED, nSpeed);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_MAGIC_ATK, nMagicAtk);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_PHY_DEF, nPhysicalDef);
-		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_SKILL_DEF, nSkillDef);
+		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_DEX, nDexterity);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_MAGIC_DEF, nMagicDef);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_DRITICAL, btDritical);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_HITRATE, btHitrate);
@@ -190,50 +219,179 @@ function p.ProcessPetInfo(netdata)
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_TENACITY, btTenacity);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_DODGE, btDodge);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_BLOCK, btBlock);
+        RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_STAND_TYPE, btAtkType);
 		RolePet.SetPetInfoS(idPet, PET_ATTR.PET_ATTR_NAME, strName);
 		
 		if not RolePetUser.IsExistPet(idOwner, idPet) then
 			RolePetUser.AddPet(idOwner, idPet);
 		end
-		LogInfo("宠物信息数据");
+		LogInfo(" PET_ATTR.PET_ATTR_DEX".. PET_ATTR.PET_ATTR_DEX);
 		RolePet.LogOutPet(idPet);
 		
 		--todo刷新跟宠物相关的界面
 		GameDataEvent.OnEvent(GAMEDATAEVENT.PETINFO, idPet);
+		
+		
+		
+		
+		-- tInvitedPets表空则是login时
+		if ( ( table.getn(tInvitedPets) > 0 ) and ( idOwner == nPlayerID ) ) then
+			
+			
+			if idPet == nPlayerPetID then
+				--引导任务事件触发 --选定技能事件
+				GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.EXCHANGE_SKILL,idSkill);				
+			end
+			
+		
+			local bNew = true;
+			for nIndex, nValue in ipairs( tInvitedPets ) do
+				if ( idPet == nValue ) then
+					bNew = false;
+					break;
+				end
+			end
+			if ( bNew ) then
+				table.insert( tNewPets, idPet );
+			end
+		end
+		
+		--
+		if ( idPet == nPlayerPetID ) then
+			nNewLevel	= usLevel;
+			
+			
+			
+		else
+			--武将升级事件
+			--引导任务事件触发
+			GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.STRENGTHEN_PET,usLevel);
+		end
 	end
 	
-	if IsUIShow(NMAINSCENECHILDTAG.RoleInvite) then
-		RoleInvite.RefreshContainer();
+	if ( table.getn( tNewPets ) > 0 ) then
+		if ( GetSMGameScene() ~= nil ) then
+			PlayEffectAnimation.ShowAnimation(6);
+    	    --音效
+    	    Music.PlayEffectSound(Music.SoundEffect.RECRUIT);
+    	    
+    	    --引导任务事件触发
+			GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.RECRUIT_PET);
+
+    	    
+    	    
+			if IsUIShow(NMAINSCENECHILDTAG.RoleInvite) then
+				RoleInvite.RefreshContainer();
+			else
+				-- 没开启招募界面的回调
+				RoleInvite.InviteSucess( tNewPets );
+			end
+		end
+	end
+	if ( nPlayerLevel < nNewLevel ) then
+		-- 主角升级
+    	local pScene = GetSMGameScene();
+    	if ( pScene ~= nil ) then
+    		local pLayer = GetUiLayer( pScene, NMAINSCENECHILDTAG.MainUITop );
+    		if ( pLayer ~= nil and pLayer:IsVisible() ) then
+				PlayEffectAnimation.ShowAnimation(2);
+    			Music.PlayEffectSound(Music.SoundEffect.LEVUP);
+    		else
+    			p.bShowLevelUpAnimation = true;--先置状态到特定界面里播放++Guosen 2012.8.6 有待判定战斗中
+    		end
+    	end
+	end
+	
+
+	
+end
+
+--++Guosen 2012.8.6 有待判定战斗中
+-- 播放升级光效和声音--当主角升级过却未播时--已升级，但是必须在特定的界面里播放提示光效和音效--比如战斗结算界面
+function p.ShowLevelUpAnimation()
+	if ( p.bShowLevelUpAnimation == true ) then
+		PlayEffectAnimation.ShowAnimation(2);
+    	Music.PlayEffectSound(Music.SoundEffect.LEVUP);
+		p.bShowLevelUpAnimation = nil;
 	end
 end
 
-
+--更新某个武将的信息
 function p.ProcessPetInfoUpdate(netdata)
+    CloseLoadBar();
+	LogInfo("MsgRolePet: p.ProcessPetInfoUpdate" );
+	
+	--获取主角等级
+	local nPlayerId     = GetPlayerId();
+	local mainpetid 	= RolePetUser.GetMainPetId(nPlayerId);
+	local nLevOrigin	= RolePet.GetPetInfoN(mainpetid, PET_ATTR.PET_ATTR_LEVEL);--RolePetFunc.GetPropDesc(mainpetid, PET_ATTR.PET_ATTR_LEVEL);
+	local nLevNow 		= 0;
+	local nNewSkillId	= 0;
+
+	
 	local petId					= netdata:ReadInt();
 	local btNum					= netdata:ReadByte();
 	
-	LogInfo("p.ProcessPetInfoUpdate btNum[%d]", btNum);
+	--LogInfo("p.ProcessPetInfoUpdate btNum[%d]", btNum);
 	
 	if btNum <= 0 then
 		return 1;
 	end
 	
 	local datalist				= {[1] = petId};
-	for	i=1, btNum do
+	for	i=1, btNum do	
 		local usType = netdata:ReadShort();
 		local unData = netdata:ReadInt();
+		
+		if usType == PET_ATTR.PET_ATTR_LEVEL then
+			LogInfo("p.ProcessPetInfoUpdate uplev unData"..unData)
+			nLevNow = unData;
+		end
+		
+		
+		if usType == PET_ATTR.PET_ATTR_SKILL then
+			LogInfo("p.ProcessPetInfoUpdate switch skill unData"..unData);
+			nNewSkillId = unData;
+		end
+		
 		RolePet.SetPetInfoN(petId,usType,unData);
 		table.insert(datalist, usType);
 		table.insert(datalist, unData);
+		LogInfo("p.ProcessPetInfoUpdate usType:%d unData:%d", usType,unData);
 	end
 	
 	if 1 < #datalist then
 		GameDataEvent.OnEvent(GAMEDATAEVENT.PETATTR, datalist);
 	end
 	
-	if IsUIShow(NMAINSCENECHILDTAG.RoleInvite) then
-		RoleInvite.RefreshContainer();
+	
+	
+	
+	if mainpetid == petId then
+		--主角升级
+		if nLevOrigin < nLevNow then
+			--成功光效
+			PlayEffectAnimation.ShowAnimation(2);
+			--成功音效    
+    		Music.PlayEffectSound(Music.SoundEffect.LEVUP);
+		end
+		
+		--主角切换技能
+		if nNewSkillId ~= 0 then
+			--引导任务事件触发
+			GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.EXCHANGE_SKILL,nNewSkillId);			
+		end
+		
+	else
+		--其他武将升级
+		--引导任务事件触发
+		GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.STRENGTHEN_PET,nLevNow);
 	end
+	
+	
+	
+	
+	
 end
 
 

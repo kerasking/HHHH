@@ -17,7 +17,8 @@ p.ITEM_POSITION						= 6;	-- 位置
 p.ITEM_ADDITION						= 7;	-- 强化等级
 p.ITEM_EXP							= 8;	-- 道法经验
 p.ITEM_ATTR_NUM						= 9;	-- 属性数量
-p.ITEM_ATTR_BEGIN					= 10;	-- 属性定义开始()
+p.ITEM_GEN_NUM                      = 10;   -- 宝石数量
+p.ITEM_ATTR_BEGIN					= 11;	-- 属性定义开始()
 -- type
 -- val
 -- ...
@@ -50,10 +51,14 @@ function p.SetItemInfoS(nItemId, nIndex, val)
 end
 
 function p.GetItemInfoN(nItemId, nIndex)
+
 	if	not CheckN(nItemId) or
 		not CheckN(nIndex) then
 		return 0;
 	end
+	
+	--LogInfo("qbw:Item:"..nItemId.."  ind:"..nIndex);
+	
 	return _G.GetGameDataN(NScriptData.eItemInfo, nItemId, NRoleData.eBasic, 0, nIndex);
 end
 

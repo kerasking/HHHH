@@ -103,6 +103,14 @@ function AttachTask(nNpcId)
 	local idlistUnComplete		= _G.TASK.GetUnCompleteTaskList();
 	local idlistCanAccept		= _G.TASK.GetCanAcceptTasks();
 	
+	--[[
+
+	LogInfo("finish task");
+	_G.LogInfoT(idlistComplete);
+	LogInfo("un finish task");
+	_G.LogInfoT(idlistUnComplete);
+	
+	--]]
 	LogInfo("can accept task");
 	_G.LogInfoT(idlistCanAccept);
 	LogInfo("attach task");
@@ -149,7 +157,6 @@ function AttachTask(nNpcId)
 		end
 	end
 	
-	--[[
 	for i, v in ipairs(idlistNpc) do
 		if 0 == nTaskOpt then
 			return;
@@ -164,22 +171,6 @@ function AttachTask(nNpcId)
 			end
 		end
 	end
-	--]]
-	
-		for m, n in ipairs(idlistUnComplete) do
-			local nFinishTaskNpcId = _G.TASK.GetTaskFinishNpcId(n);
-			
-			if nFinishTaskNpcId == nNpcId then
-				
-					local taskname		= _G.ConvertS(_G.TASK.GetTaskName(n));
-					taskname = "<cffff00" .. taskname .. "/e" .. "<cffffff(已接)/e";
-					AddOpt(taskname, n);
-					nTaskOpt = nTaskOpt - 1;
-				
-			end
-		end
-	
-	
 end
 
 -- 当点击npc界面选项时该脚本会先被调用然后再调具体某个npc选项的处理方法

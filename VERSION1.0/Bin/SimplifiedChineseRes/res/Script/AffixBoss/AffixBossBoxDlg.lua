@@ -7,8 +7,18 @@ AffixBossBoxDlg = {}
 local p = AffixBossBoxDlg;
 
 
+local ID_BOX_CTRL_BUTTON_194					= 194;
+local ID_BOX_CTRL_TEXT_EQUIP					= 193;
+local ID_BOX_CTRL_TEXT_GOLD						= 192;
+local ID_BOX_CTRL_TEXT_MONEY					= 191;
+local ID_BOX_CTRL_PICTURE_EQUIP					= 190;
+local ID_BOX_CTRL_PICTURE_GOLD					= 189;
+local ID_BOX_CTRL_PICTURE_MONEY					= 188;
+local ID_BOX_CTRL_PICTURE_187					= 187;
+
+
 p.TagUiLayer = NMAINSCENECHILDTAG.AffixBossBoxDlg;
-p.TagClose = 10;
+p.TagClose = ID_BOX_CTRL_BUTTON_194;
 p.TagContainer = 677;
 
 -- 界面控件坐标定义
@@ -16,15 +26,15 @@ local winsize = GetWinSize();
 p.data = {};
 
 p.TagPic = {
-	3,
-	6,
-	8,
+	money = ID_BOX_CTRL_PICTURE_MONEY,
+	gold = ID_BOX_CTRL_PICTURE_GOLD,
+	equip = ID_BOX_CTRL_PICTURE_EQUIP,
 }
 
 p.TagDes = {
-	5,
-	7,
-	9,
+	money = ID_BOX_CTRL_TEXT_MONEY,
+	gold = ID_BOX_CTRL_TEXT_GOLD,
+	equip = ID_BOX_CTRL_TEXT_EQUIP,
 }
 
 
@@ -68,51 +78,37 @@ function p.ShowDlg(data)
 		return 0;
 	end
 	
-	uiLoad:Load("SM_FB_BOX.ini", layer, p.OnUIEvent, 0, 0);
+	uiLoad:Load("Box.ini", layer, p.OnUIEvent, 0, 0);
 	uiLoad:Free();
+	
+	local moneyPicV = GetLabel(layer,p.TagPic.money);
+	local goldPicV = GetLabel(layer, p.TagPic.gold);
+	local equipPicV = GetLabel(layer, p.TagPic.equip);
+	
+	local moneyDesV = GetLabel(layer, p.TagDes.money);
+	local goldDesV = GetLabel(layer, p.TagDes.gold);
+	local equipDesV = GetLabel(layer, p.TagDes.equip);
 	
 	local m = data;
 	p.data = data;
-	
-	local index = 1;
-	if (m.money > 0 ) then
-		local btV = GetButton(layer, p.TagPic[index]);
-		local desV = GetHyperLinkText(layer, p.TagDes[index]);
-		btV:SetImage(p.getMoneyPic());
-		desV:SetLinkText(SafeN2S(m.money).."铜钱");
-		index = index + 1;
-	end
-
-	if (m.emoney > 0 ) then
-		local btV = GetButton(layer, p.TagPic[index]);
-		local desV = GetHyperLinkText(layer, p.TagDes[index]);
-		btV:SetImage(p.getEMoneyPic());
-		desV:SetLinkText(SafeN2S(m.emoney) .. "元宝");
-		index = index + 1;
+	if CheckP(moneyDesV) then
+		if (m.money >= 0 ) then
+			moneyDesV:SetText(SafeN2S(m.money) .. "银币");
+		end
 	end
 	
-	local itemId = m.equip or m.scoll;
-	if (itemId > 0) then
-		local btV = GetItemButton(layer, p.TagPic[index]);
-		local desV = GetHyperLinkText(layer, p.TagDes[index]);
-		btV:ChangeItemType(itemId);
-		btV:RefreshItemCount(1);
+	if (CheckP(goldDesV)) then
+		if (m.emoney >= 0 ) then
+			goldDesV:SetText(SafeN2S(m.emoney) .. "金币");
+		end
+	end
+	
+	if (CheckP(equipDesV)) then
+		local itemId = m.equip or m.scoll;
 		local name = ItemFunc.GetName(itemId);
 		name = name or "";
-		desV:SetLinkText(SafeN2S(name));
-		index = index + 1;
-	end
-	
-	for i = index, #p.TagPic do
-		local btV = GetItemButton(layer, p.TagPic[i]);
-		local desV = GetHyperLinkText(layer, p.TagDes[i]);
-		if (CheckP(btV)) then
-			btV:SetVisible(false);
-		end
-		if (CheckP(desV)) then
-			desV:SetVisible(false);
-		end
-		
+		name = name .. "X1"
+		equipDesV:SetText(SafeN2S(name));
 	end
 	
 	
@@ -216,16 +212,5 @@ function p.showRaiseGroupDlg(data)
 	data.skill = skill;
 	data.magic = magic
 	]]--
-end
-
-function p.getMoneyPic()
-	local pool = DefaultPicPool();
-	return pool:AddPicture(GetSMImgPath("mark_copper_single.png"), false)
-end
-	
-function p.getEMoneyPic()
-	local pool = DefaultPicPool();
-	return pool:AddPicture(GetSMImgPath("mark_ingot_single.png"), false)
-	
 end
 
