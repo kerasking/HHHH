@@ -3,7 +3,12 @@
 --时间: 2012.2.1
 --作者: jhzheng
 ---------------------------------------------------
-   
+
+--刷新当前武将装备
+--PlayerUIAttr.RefreshCurrentBack();
+
+
+
 PlayerUIAttr = {}
 local p = PlayerUIAttr;
 local ChosedPetId;
@@ -51,7 +56,7 @@ local ID_ROLEATTR_L_CTRL_BUTTON_TRAIN					= 43;  --快速训练
 local ID_ROLEATTR_L_CTRL_TEXT_LEVEL						= 235;
 
 local ID_ROLEATTR_R_CTRL_TEXT_39					= 39;
-local ID_ROLEATTR_R_CTRL_TEXT_37						= 37;
+local ID_ROLEATTR_R_CTRL_TEXT_38						= 38;
 
 --宠物信息界面tag
 local ID_ROLEATTR_R_CTRL_BUTTON_95					= 96;
@@ -112,7 +117,8 @@ local ID_ROLEATTR_R_CTRL_PICTURE_ROLE_ICON			= 99;
 local ID_ROLEATTR_R_CTRL_PICTURE_95					= 95;
 local ID_ROLEATTR_R_CTRL_PICTURE_94					= 94;
 
-
+local TAG_BEGIN_ARROW2   = 10;
+local TAG_END_ARROW2     = 9;
 
 -- 界面控件tag定义
 --local TAG_CONTAINER = 2;			--容器tag
@@ -192,6 +198,15 @@ function p.LoadUI(nPetId)
    	local closeBtn=GetButton(layerAttr,ID_ROLEATTR_R_CTRL_BUTTON_95);
    	closeBtn:SetSoundEffect(Music.SoundEffect.CLOSEBTN);
    	
+    
+    if(nPetId) then
+        p.ShowPetInfo(nPetId);
+    end
+    
+    SetArrow(p.GetLayer(),p.GetPetNameSVC(),1,TAG_BEGIN_ARROW2,TAG_END_ARROW2);
+    
+    p.refreshMoney();
+    
 	return true;
 end
 
@@ -221,6 +236,7 @@ function p.InitLeftView(layer, fCallBack, PetId)
 	end
 		
 	p.RefreshContainer();
+    p.RefreshUpgradeStatu();
 	p.UpdatePetAttr();
 			
    --[[                 		
@@ -235,7 +251,8 @@ function p.InitLeftView(layer, fCallBack, PetId)
 		LogInfo("nil == idTable");
 		return;
 	end
-
+    idTable = RolePet.OrderPets(idTable);
+    
     local iIndex = 0;
     LogInfo("iIndex = %d, PetId = %d", iIndex, PetId);
 	for i, v in ipairs(idTable) do
@@ -278,12 +295,14 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 			
 		elseif ID_ROLEATTR_L_CTRL_BUTTON_BAG == tag then	
 			--CloseUI(NMAINSCENECHILDTAG.PlayerAttr);
-			CloseMainUI();
-		    PlayerUIBackBag.LoadUI();
-		
+			
+		    local nPetId = p.GetCurPetId();
+            CloseMainUI();
+            PlayerUIBackBag.LoadUI(nil, nPetId);
 		elseif  ID_ROLEATTR_L_CTRL_BUTTON_FIRE == tag then  
 			p.FirePetId = ChosedPetId;
-			CommonDlg.ShowNoPrompt("您确定要让［"..ConvertS(RolePetFunc.GetPropDesc(ChosedPetId,PET_ATTR.PET_ATTR_NAME)).."］下野吗？",p.FirePet,true)
+			CommonDlgNew.ShowYesOrNoDlg("您确定要让［"..ConvertS(RolePetFunc.GetPropDesc(ChosedPetId,PET_ATTR.PET_ATTR_NAME)).."］下野吗？", p.FirePet, true);
+			
 			--MsgRolePet.SendPetLeaveAction(ChosedPetId);
 		    --if RolePetFunc.IsMainPet()
        	elseif  ID_ROLEATTR_L_CTRL_BUTTON_TRAIN	 == tag then   --快速训练
@@ -295,8 +314,9 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 	return true;
 end
 
-function p.FirePet(nId,nEvent,param)
-	if nEvent ~= CommonDlg.EventOK then
+
+function p.FirePet(nEventType , nEvent, param)
+	if nEventType ~= CommonDlgNew.BtnOk then
 		return;
 	end
 	
@@ -379,39 +399,85 @@ function p.OnUIEventScroll(uiNode, uiEventType, param)
         
         local equipBtn = ConverToItemButton(uiNode);
         LogInfo("equip p.ChangeItemInfo[%d]", equipBtn:GetItemId());
-
+        
         local nItemId = equipBtn:GetItemId();
-        local isEquip = true;
-        BackLevelThreeWin.EquipOperate(nItemId, ChosedPetId, isEquip);
-    
+            
+        if(nItemId == 0) then
+            return;
+        end
+        
+        local nPetId = p.GetCurPetId();
+        BackLevelThreeWin.EquipOperate(nItemId, nPetId, true);
+        
 	end
 	
 	return true;
 end
 
+--获得当前武将ID
+function p.GetCurPetId()
+	local view	= p.GetCurPetView();
+	if view == nil then
+        LogInfo("p.GetCurPetView view is nil!");
+		return 0;
+	end
+	
+	return view:GetViewId();
+end
+
+function p.GetCurPetView()
+	local parent	= p.GetPetParent();
+	if parent == nil then
+        LogInfo("p.GetCurPetView parent is nil!");
+		return nil;
+	end
+	
+	return parent:GetBeginView(); 
+end
+
+
 --下野按钮以及快速训练按钮等的显示控制
 function p.ChangeFireButton(nPetId)
-
 		local scene = GetSMGameScene();
 
 		local FireButton	= RecursiveButton(scene, {NMAINSCENECHILDTAG.PlayerAttr,TAG_LAYER_ATTR,ID_ROLEATTR_L_CTRL_BUTTON_FIRE});
 		local QuickTrainButton	= RecursiveButton(scene, {NMAINSCENECHILDTAG.PlayerAttr,TAG_LAYER_ATTR,ID_ROLEATTR_L_CTRL_BUTTON_TRAIN});
 		
+        local TrainTimeText = RecursiveLabel(scene, {NMAINSCENECHILDTAG.PlayerAttr,TAG_LAYER_ATTR,ID_ROLEATTR_R_CTRL_TEXT_38});
         local TrainText = RecursiveLabel(scene, {NMAINSCENECHILDTAG.PlayerAttr,TAG_LAYER_ATTR,ID_ROLEATTR_R_CTRL_TEXT_39});
-		local TrainTimeText = RecursiveLabel(scene, {NMAINSCENECHILDTAG.PlayerAttr,TAG_LAYER_ATTR,ID_ROLEATTR_R_CTRL_TEXT_37});
-
+        
+        --小于10级不能培养
+        local nPlayerId = GetPlayerId();
+        local nPlayerPetId = RolePetFunc.GetMainPetId(nPlayerId); 
+        local PlayerLever = SafeS2N(RolePetFunc.GetPropDesc(nPlayerPetId, PET_ATTR.PET_ATTR_LEVEL));
+        
+        LogInfo("p.ChangeFireButton PlayerLever = %d", PlayerLever);
+        
 		if RolePetFunc.IsMainPet(nPetId) then
 			FireButton:SetVisible(false);                 --下野按钮
             QuickTrainButton:SetVisible(false);     --快速训练按钮 
-            
             TrainText:SetVisible(false);               --快速训练文字
             TrainTimeText:SetVisible(false);     --时间       
             
 		else
 			FireButton:SetVisible(true);
-			QuickTrainButton:SetVisible(true);
-            TrainText:SetVisible(true);                
-            TrainTimeText:SetVisible(true);    
+            
+            --主角小于30级不显示下野
+            if PlayerLever < 30 then
+    			FireButton:SetVisible(false);                 --下野按钮 	
+            end
+            
+            
+            --小于10级不能培养
+            if PlayerLever < 10 then
+                QuickTrainButton:SetVisible(false);
+                TrainText:SetVisible(false);                
+                TrainTimeText:SetVisible(false);    
+            else
+                QuickTrainButton:SetVisible(true);
+                --TrainText:SetVisible(true);                
+                --TrainTimeText:SetVisible(true);  
+            end
 		end
 end
 
@@ -487,14 +553,15 @@ function p.OnUIEventViewChange(uiNode, uiEventType, param)
 			--p.RefreshArrowPic(nIndex,nViewCount);
 			
 			if CheckP(containter) then
-				containter:ScrollViewById(nPetId);
+				containter:ShowViewById(nPetId);
 			end
 		elseif ID_ROLEATTR_L_BG_CTRL_LIST_NAME == tag then
 			LogInfo("ID_ROLEATTR_L_BG_CTRL_LIST_NAME == tag");
 			containter = p.GetPetParent();
 			if CheckP(containter) then
-				containter:ScrollViewById(nPetId);
+				containter:ShowViewById(nPetId);
 			end
+            SetArrow(p.GetLayer(),p.GetPetNameSVC(),1,TAG_BEGIN_ARROW2,TAG_END_ARROW2);
 		end
 
 	end
@@ -509,12 +576,12 @@ function p.OnUIEventClickPetName(uiNode, uiEventType, param)
 			local nPetId		= ConvertN(view:GetViewId())
 			local containter	= p.GetPetNameSVC();
 			if CheckP(containter) then
-				containter:ScrollViewById(nPetId);
+				containter:ShowViewById(nPetId);
 			end
 			
 			containter = p.GetPetParent();
 			if CheckP(containter) then
-				containter:ScrollViewById(nPetId);
+				containter:ShowViewById(nPetId);
 			end
 		end
 	end
@@ -601,7 +668,11 @@ function p.ContainerAddPetName(nPetId)
 	
 	local size	= view:GetFrameRect().size;
 	local btn	= _G.CreateButton("", "", strPetName, CGRectMake(0, 0, size.w, size.h), 15);
+    
 	if CheckP(btn) then
+        local cColor = ItemPet.GetPetQuality(nPetId);
+        btn:SetFontColor(cColor);
+        
 		btn:SetLuaDelegate(p.OnUIEventClickPetName);
 		view:AddChild(btn);
 	end
@@ -663,6 +734,8 @@ function p.RefreshContainer()
 		LogInfo("nil == idTable");
 		return;
 	end
+    idTable = RolePet.OrderPets(idTable);
+    
 	LogInfo("p.RefreshContainer begin");
 	LogInfoT(idTable);
 	LogInfo("p.RefreshContainer begin");
@@ -677,67 +750,173 @@ function p.RefreshContainer()
 	
 	for i, v in ipairs(idTable) do
 		local view = createUIScrollView();
-		if view == nil then
-			LogInfo("view == nil");
-			continue;
-		end
-		view:Init(false);
-		view:SetViewId(v);
-		container:AddView(view);
-
-		local uiLoad = createNDUILoad();
-		if uiLoad ~= nil then
-			uiLoad:Load("RoleAttr_L.ini", view, p.OnUIEventScroll, 0, 0);
-			uiLoad:Free();
-		end
-		
-		--加上人物名字
-		p.ContainerAddPetName(v);
-		
-		--设置离队标签
-		local leaveBtn	= RecursiveButton(view, {ID_ROLEATTR_L_CTRL_BUTTON_LEAVE});
-		if CheckP(leaveBtn) then
-			p.SetPetLeaveText(leaveBtn, v);
-		end
-		
-		--如果是人物去掉传承按钮
-		if RolePetFunc.IsMainPet(v) then
-			local inheritBtn	= RecursiveButton(view, {ID_ROLEATTR_L_CTRL_BUTTON_INHERIT});
-			if CheckP(inheritBtn) then
-				inheritBtn:RemoveFromParent(true);
-			end
-		end
-		
-        --中间角色图片
-		local pRoleForm = GetUiNode(view, ID_ROLEATTR_L_CTRL_BUTTON_ROLE_IMG);
-		local rectForm	= pRoleForm:GetFrameRect();
-		if nil ~= pRoleForm then
-			local roleNode = createUIRoleNode();
-			if nil ~= roleNode then
-				roleNode:Init();
-				roleNode:SetFrameRect(CGRectMake(0, 0, rectForm.size.w, rectForm.size.h));
-				roleNode:ChangeLookFace(RolePetFunc.GetLookFace(v));
-				pRoleForm:AddChild(roleNode); 
-			end
-		end
         
-		--装备
-		local idlist	= ItemPet.GetEquipItemList(nPlayerId, v);
-		LogInfo("LogInfoT(idlist) begin ");
-		LogInfoT(idlist);
-    	LogInfo("LogInfoT(idlist);");
-		for i, v in ipairs(idlist) do
-			local nPos	= Item.GetItemInfoN(v, Item.ITEM_POSITION);
-			local nTag	= p.GetEquipTag(nPos);
-			if nTag > 0 then
-				local equipBtn	= GetEquipButton(view, nTag);
-				if CheckP(equipBtn) then
-					equipBtn:ChangeItem(v);
-				end
-			end
-		end
+		if view ~= nil then
+            view:Init(false);
+            view:SetViewId(v);
+            container:AddView(view);
+
+            local uiLoad = createNDUILoad();
+            if uiLoad ~= nil then
+                uiLoad:Load("RoleAttr_L.ini", view, p.OnUIEventScroll, 0, 0);
+                uiLoad:Free();
+            end
+            
+            --加上人物名字
+            p.ContainerAddPetName(v);
+            
+            --设置离队标签
+            local leaveBtn	= RecursiveButton(view, {ID_ROLEATTR_L_CTRL_BUTTON_LEAVE});
+            if CheckP(leaveBtn) then
+                p.SetPetLeaveText(leaveBtn, v);
+            end
+            
+            --如果是人物去掉传承按钮
+            if RolePetFunc.IsMainPet(v) then
+                local inheritBtn	= RecursiveButton(view, {ID_ROLEATTR_L_CTRL_BUTTON_INHERIT});
+                if CheckP(inheritBtn) then
+                    inheritBtn:RemoveFromParent(true);
+                end
+            end
+            
+            --中间角色图片
+            local pRoleForm = GetUiNode(view, ID_ROLEATTR_L_CTRL_BUTTON_ROLE_IMG);
+            local rectForm	= pRoleForm:GetFrameRect();
+            if nil ~= pRoleForm then
+                local roleNode = createUIRoleNode();
+                if nil ~= roleNode then
+                    roleNode:Init();
+                    roleNode:SetFrameRect(CGRectMake(0, 0, rectForm.size.w, rectForm.size.h));
+                    roleNode:ChangeLookFace(RolePetFunc.GetLookFace(v));
+                    pRoleForm:AddChild(roleNode); 
+                end
+            end
+            
+            p.RefreshPetEquip(v);
+        end
 	end
 end
+
+--刷新当前背包
+function p.RefreshCurrentBack()
+    local nPetId = p.GetCurPetId();
+    p.RefreshPetEquip(nPetId);
+    p.RefreshUpgradeStatu();
+end
+
+--显示当前武将信息
+function p.ShowPetInfo(nPetId)
+    local container = p.GetPetParent();
+    if(container == nil) then
+        LogInfo("p.RefreshPetEquip container is nil");
+        return;
+    end
+    if(nPetId == nil) then
+        LogInfo("p.RefreshPetEquip nPetId is nil");
+        return;
+    end
+    container:ShowViewById(nPetId);
+end
+
+--刷新武将装备
+function p.RefreshPetEquip(nPetId)
+    local nPlayerId = GetPlayerId();
+	if nil == nPlayerId then
+		LogInfo("nil == nPlayerId");
+		return;
+	end
+    
+    local container = p.GetPetParent();
+    if(container == nil) then
+        LogInfo("p.RefreshPetEquip container is nil");
+        return;
+    end
+    local view = container:GetViewById(nPetId);
+    if(view == nil) then
+        LogInfo("p.RefreshPetEquip view is nil");
+        return;
+    end
+    
+    --装备
+    local idlist	= ItemPet.GetEquipItemList(nPlayerId, nPetId);
+    for i, v in ipairs(idlist) do
+        local nPos	= Item.GetItemInfoN(v, Item.ITEM_POSITION);
+        local nTag	= p.GetEquipTag(nPos);
+        if nTag > 0 then
+            local equipBtn	= GetEquipButton(view, nTag);
+            if CheckP(equipBtn) then
+                equipBtn:ChangeItem(v);
+                --[[
+                if(_G.ItemFunc.IfItemCanUpStep(v, nPetId)) then
+                    
+                    local nItemtype = Item.GetItemInfoN(v, Item.ITEM_TYPE);
+                    if(PlayerEquipUpStepUI.IfUpStepMatrialEnough(nItemtype)) then
+                        equipBtn:SetUpgrade(1);
+                    else
+                        equipBtn:SetUpgrade(2);
+                    end
+                    
+                    if(i<=#idlist/2) then
+                        equipBtn:SetUpgradeIconPos(1);
+                    end
+                else
+                    equipBtn:SetUpgrade(0);
+                end
+                ]]
+            end
+        end
+    end
+end
+
+--** 刷新升阶状态 **--
+function p.RefreshUpgradeStatu()
+    LogInfo("p.RefreshUpgradeStatu");
+    local nPlayerId = GetPlayerId();
+	if nil == nPlayerId then
+		LogInfo("nil == nPlayerId");
+		return;
+	end
+    
+    local container = p.GetPetParent();
+	if nil == container then
+		LogInfo("nil == container");
+		return;
+	end
+    local idTable = RolePetUser.GetPetListPlayer(nPlayerId);
+    for i,nPetId in ipairs(idTable) do
+        local view = container:GetViewById(nPetId);
+        local idlist	= ItemPet.GetEquipItemList(nPlayerId, nPetId);
+        
+        for j,nItemId in ipairs(idlist) do
+            local nPos	= Item.GetItemInfoN(nItemId, Item.ITEM_POSITION);
+            local nTag	= p.GetEquipTag(nPos);
+            local equipBtn	= GetEquipButton(view, nTag);
+            if nTag > 0 then
+                if CheckP(equipBtn) then
+                    if(_G.ItemFunc.IfItemCanUpStep(nItemId, nPetId)) then
+                        local nItemtype = Item.GetItemInfoN(nItemId, Item.ITEM_TYPE);
+                        if(PlayerEquipUpStepUI.IfUpStepMatrialEnough(nItemtype)) then
+                            equipBtn:SetUpgrade(1);
+                        else
+                            equipBtn:SetUpgrade(2);
+                        end
+                        
+                        if(nPos%10<=3) then
+                            equipBtn:SetUpgradeIconPos(1);
+                        end
+                    else
+                        equipBtn:SetUpgrade(0);
+                    end
+                    
+                end
+            end
+            
+        end
+        
+    end
+end
+
+
 
 function p.SetPetAttr(petView, nPetDataIndex, str)
 	if not CheckP(petView) or
@@ -809,7 +988,7 @@ function p.SetPetAttr(petView, nPetDataIndex, str)
 	end
 	
 	if nTag > 0 then
-		SetLabel(petView, nTag, str);
+		return SetLabel(petView, nTag, str);
 	end
 end
 
@@ -842,6 +1021,9 @@ function p.UpdatePetAttrById(nPetId)
 	end
 	--名字
 	p.SetPetAttr(view, PET_ATTR.PET_ATTR_NAME, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_NAME));
+    
+    
+    
 	--职业
 	p.SetPetAttr(view, PET_ATTR.PET_ATTR_TYPE, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_TYPE));
     
@@ -853,6 +1035,7 @@ function p.UpdatePetAttrById(nPetId)
 	
     --获取职业类型 主要有  猛将: 1   射手: 2  军师: 3
     local nPetType = RolePet.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_TYPE);
+    
     local nActType = GetDataBaseDataN("pet_config", nPetType, DB_PET_CONFIG.ATK_TYPE);
     if ( nActType == 3) then
            --策略攻击
@@ -903,6 +1086,7 @@ function p.UpdatePetAttr()
 	if not CheckT(idTable) then
 		return;
 	end
+    idTable = RolePet.OrderPets(idTable);
 
 	for i, v in ipairs(idTable) do
 		p.UpdatePetAttrById(v);
@@ -947,8 +1131,10 @@ function p.ChangePetAttr(nPetId)
 	ChosedPetId = nPetId;
 	
 	--姓名
-	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_ROLE_NAME, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_NAME));
-	--职业
+	local l_name = SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_ROLE_NAME, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_NAME));
+	ItemPet.SetLabelColor(l_name, nPetId);
+    
+    --职业
 	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_ROLE_JOB, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_TYPE));
 	--技能
 	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_ROLE_SKILL, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SKILL));
@@ -995,10 +1181,6 @@ function p.ChangePetAttr(nPetId)
 	--护驾
 	SetLabel(layer, ID_ROLEATTR_L_CTRL_TEXT_HELP, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_HELP));
 	
-    if RolePetFunc.IsMainPet(nPetId) then
-        SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_37, "");
-	end
-    
 	--下野按钮显示
 	p.ChangeFireButton(nPetId);
 end
@@ -1077,6 +1259,34 @@ function p.GetEquipTag(nPos)
 	return ConvertN(TAG_EQUIP_LIST[nPos]);
 end
 
+function p.GetLayer()
+    local scene     = GetSMGameScene();	
+    if(scene == nil) then
+        LogInfo("p.GetLayer scene is nil!");
+        return;
+    end
+    
+    local layer	= RecursiveUILayer(scene, {NMAINSCENECHILDTAG.PlayerAttr});
+    if(layer == nil) then
+        LogInfo("p.GetLayer layer is nil!");
+        return;
+    end
+    
+    return layer;
+end
+
+function p.GetPetPageViewContainer()
+	local scene = GetSMGameScene();	
+	if not CheckP(scene) then
+		LogInfo("not CheckP(scene),load p.LoadPageView failed!");
+		return;
+	end
+	
+	local svc	= RecursiveSVC(scene, {NMAINSCENECHILDTAG.PlayerBackBag, ID_ROLEATTR_L_BG_CTRL_LIST_NAME});
+	return svc;
+end
+
+
 function p.GameDataPetInfoRefresh(nPetId)
 	if not CheckN(nPetId) then
 		return;
@@ -1127,6 +1337,29 @@ function p.GameDataPetAttrRefresh(datalist)
 		end
 	end
 end
+
+local TAG_E_TMONEY      = 243;  --
+local TAG_E_TEMONEY     = 242;  --
+--刷新金钱
+function p.refreshMoney()
+    LogInfo("p.refreshMoney BEGIN");
+    local nPlayerId     = GetPlayerId();
+    local scene = GetSMGameScene();
+    if(scene == nil) then
+        return;
+    end
+    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerAttr);
+    if(layer == nil) then
+        return;
+    end
+    
+    local nmoney        = MoneyFormat(GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_MONEY));
+    local ngmoney        = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY).."";
+    
+    _G.SetLabel(layer, TAG_E_TMONEY, nmoney);
+    _G.SetLabel(layer, TAG_E_TEMONEY, ngmoney);
+end
+GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"PlayerUIAttr.refreshMoney",p.refreshMoney);
 
 GameDataEvent.Register(GAMEDATAEVENT.PETINFO, "PlayerUIAttr.GameDataPetInfoRefresh", p.GameDataPetInfoRefresh);
 GameDataEvent.Register(GAMEDATAEVENT.PETATTR, "PlayerUIAttr.GameDataPetAttrRefresh", p.GameDataPetAttrRefresh);

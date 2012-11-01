@@ -89,15 +89,14 @@ function p.GetGift(id)
 
 	for i=1,4 do
 		local gift = p.gift_info[i];
-		if nill == gift then
-			continue;
-		end
-		
-		if gift[1] == id then
-			p.ShowGiftDialog(gift,i);
-			p.gift_info[i] =nil;
-			break;
-		end
+        
+		if nill ~= gift then
+		    if gift[1] == id then
+                p.ShowGiftDialog(gift,i);
+                p.gift_info[i] =nil;
+                break;
+            end
+        end
 	end
 	
 	p.CleanScroll();
@@ -153,32 +152,31 @@ function p.refreshBtns()
 	for i=1,4 do
 		local gift = p.gift_info[i];
 		LogInfo("refresh_gift");
-		if nill == gift then
-			continue;
-		end
-		LogInfo("gift_exist");
-		local btn = createNDUIButton();
-		if btn == nil then
-			LogInfo("btn[%d] == nil,load ActivitySpeedBar failed!", i);
-			container:RemoveFromParent(true);
-			break;
-		end
-		btn:Init();
-		local rect = CGRectMake((n+1) * p.Btninner + n * p.BtnWidth, p.BtnY, p.BtnWidth, p.BtnHeight);
-		btn:SetFrameRect(rect);
-		btn:SetTag(GiftTag_beginId+gift[1]);
-		btn:CloseFrame();
-		local pic		= pool:AddPicture(GetSMImgPath(giftFile), false);
-		local picSize	= pic:GetSize();
-		local rect		= CGRectMake((p.BtnWidth - picSize.w) / 2,
-									 (p.BtnHeight - picSize.h) / 2,
-									  picSize.w, picSize.h );
-		btn:SetBackgroundPicture(pic,
-								pool:AddPicture(GetSMImgPath(giftFile), false),
-								true, rect, true);
-		btn:SetLuaDelegate(p.OnUIEvent);
-		scroll:AddChild(btn);
-		n=n+1;
+		if nill ~= gift then
+            LogInfo("gift_exist");
+            local btn = createNDUIButton();
+            if btn == nil then
+                LogInfo("btn[%d] == nil,load ActivitySpeedBar failed!", i);
+                container:RemoveFromParent(true);
+                break;
+            end
+            btn:Init();
+            local rect = CGRectMake((n+1) * p.Btninner + n * p.BtnWidth, p.BtnY, p.BtnWidth, p.BtnHeight);
+            btn:SetFrameRect(rect);
+            btn:SetTag(GiftTag_beginId+gift[1]);
+            btn:CloseFrame();
+            local pic		= pool:AddPicture(GetSMImgPath(giftFile), false);
+            local picSize	= pic:GetSize();
+            local rect		= CGRectMake((p.BtnWidth - picSize.w) / 2,
+                                         (p.BtnHeight - picSize.h) / 2,
+                                          picSize.w, picSize.h );
+            btn:SetBackgroundPicture(pic,
+                                    pool:AddPicture(GetSMImgPath(giftFile), false),
+                                    true, rect, true);
+            btn:SetLuaDelegate(p.OnUIEvent);
+            scroll:AddChild(btn);
+            n=n+1;
+        end
 	end
 
 	local btnnum = table.getn(p.BtnText)+n;

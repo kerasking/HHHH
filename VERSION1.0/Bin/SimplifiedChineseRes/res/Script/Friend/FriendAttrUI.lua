@@ -150,6 +150,9 @@ local ID_ROLEATTR_R_CTRL_PICTURE_95					= 95;
 local ID_ROLEATTR_R_CTRL_PICTURE_94					= 94;
 
 
+local ID_ROLEATTR_R_CTRL_PICTURE_240					= 240;
+local ID_ROLEATTR_R_CTRL_PICTURE_241					= 241;
+
 local TAG_LAYER_ATTR = 12345;				--属性界面层tag
 -- 界面控件坐标定义
 local winsize = GetWinSize();
@@ -220,7 +223,17 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
 	
 	uiLoad:Free();	
 	
+	--隐藏快速培养按钮 训练中label
+	local trainButton = RecursiveButton(layerAttr, {43});
+	trainButton:SetVisible(false);
+	local xllabel = RecursiveLabel(layerAttr, {39});
+	local timelable = RecursiveLabel(layerAttr, {38});
+	xllabel:SetVisible(false);
+	timelable:SetVisible(false);
+	
 	local containter = RecursiveSVC(layer, {ID_ROLEATTR_L_BG_CTRL_LIST_LEFT});
+	
+	
 	if not CheckP(containter) then
 		layer:Free();
 		return false;
@@ -264,7 +277,22 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
 		
     --装备信息窗口初始化
     BackLevelThreeWin.LoadUI(layer);
-    		
+    
+    
+    
+    --隐藏金币银币
+    local ID_ROLEATTR_R_CTRL_PICTURE_240					= 240;
+    local ID_ROLEATTR_R_CTRL_PICTURE_241					= 241;
+    
+    local pic1 = GetImage(layer,ID_ROLEATTR_R_CTRL_PICTURE_240);
+    local pic2 = GetImage(layer,ID_ROLEATTR_R_CTRL_PICTURE_241);
+    if(pic1) then
+        pic1:SetVisible(false);
+    end
+    if(pic2) then
+        pic2:SetVisible(false);
+    end
+    
 	return true;
 end
 
@@ -371,6 +399,9 @@ function p.RefreshContainer()
 		LogInfo("nil == idTable");
 		return;
 	end
+    
+    idTable = RolePet.OrderPets(idTable,friendId);
+    
 	LogInfo("qbw:p.RefreshContainer:table count:"..table.getn(idTable));
 	LogInfoT(idTable);
 	LogInfo("qbw:p.RefreshContainer");
@@ -386,57 +417,54 @@ function p.RefreshContainer()
 	
 	for i, v in ipairs(idTable) do
 		local view = createUIScrollView();
-		if view == nil then
+		if view ~= nil then
 			LogInfo("qbw:view == nil");
-			continue;
-		end
-		view:Init(false);
-		view:SetViewId(v);
-		container:AddView(view);
-
-		local uiLoad = createNDUILoad();
-		if uiLoad ~= nil then
-			uiLoad:Load("RoleAttr_L.ini", view, p.OnUIEventLeftView, 0, 0);
-			uiLoad:Free();
+			view:Init(false);
+            view:SetViewId(v);
+            container:AddView(view);
+            local uiLoad = createNDUILoad();
+            if uiLoad ~= nil then
+                uiLoad:Load("RoleAttr_L.ini", view, p.OnUIEventLeftView, 0, 0);
+                uiLoad:Free();
+            end
+            --宠物名字
+            p.ContainerAddPetName(v);
+            
+            local pRoleForm = GetUiNode(view, ID_ROLEATTR_L_CTRL_BUTTON_ROLE_IMG);
+            local rectForm	= pRoleForm:GetFrameRect();
+            if nil ~= pRoleForm then
+                local roleNode = createUIRoleNode();
+                if nil ~= roleNode then
+                    roleNode:Init();
+                    roleNode:SetFrameRect(CGRectMake(0, 0, rectForm.size.w, rectForm.size.h));
+                    roleNode:ChangeLookFace(RolePetFunc.GetLookFace(v));
+                    pRoleForm:AddChild(roleNode);
+                end
+            end
+            --宠物Attr
+            p.UpdatePetAttrById(v);
+            --宠物装备
+            local idlist	= ItemPet.GetEquipItemList(friendId, v);
+            LogInfo("pet装备id列表");
+            LogInfoT(idlist);
+            for i, v in ipairs(idlist) do
+                local nPos	= Item.GetItemInfoN(v, Item.ITEM_POSITION);
+                local nTag	= p.GetEquipTag(nPos);
+                LogInfo("tag:[%d] position:[%d]",nTag,nPos)
+                if nTag > 0 then
+                    local equipBtn	= GetEquipButton(view, nTag);
+                    if CheckP(equipBtn) then
+                        LogInfo("aaa")
+                        equipBtn:ChangeItem(v);
+                    end
+                end
+            end
+            
+            local expUI = RecursivUIExp(view, {ID_ROLEATTR_L_CTRL_EXP_ROLE});
+            expUI:SetVisible(false);
+            LogInfo("qbw:2233:"..i);
 		end
 		
-		--宠物名字
-		p.ContainerAddPetName(v);
-		
-		local pRoleForm = GetUiNode(view, ID_ROLEATTR_L_CTRL_BUTTON_ROLE_IMG);
-		local rectForm	= pRoleForm:GetFrameRect();
-		if nil ~= pRoleForm then
-			local roleNode = createUIRoleNode();
-			if nil ~= roleNode then
-				roleNode:Init();
-				roleNode:SetFrameRect(CGRectMake(0, 0, rectForm.size.w, rectForm.size.h));
-				roleNode:ChangeLookFace(RolePetFunc.GetLookFace(v));
-				pRoleForm:AddChild(roleNode);
-			end
-		end
-		--宠物Attr
-		p.UpdatePetAttrById(v);
-		--宠物装备
-		local idlist	= ItemPet.GetEquipItemList(friendId, v);
-		LogInfo("pet装备id列表");
-		LogInfoT(idlist);
-		for i, v in ipairs(idlist) do
-			local nPos	= Item.GetItemInfoN(v, Item.ITEM_POSITION);
-			local nTag	= p.GetEquipTag(nPos);
-			LogInfo("tag:[%d] position:[%d]",nTag,nPos)
-			if nTag > 0 then
-				local equipBtn	= GetEquipButton(view, nTag);
-				if CheckP(equipBtn) then
-				    LogInfo("aaa")
-					equipBtn:ChangeItem(v);
-				end
-			end
-		end
-		
-		local expUI = RecursivUIExp(view, {ID_ROLEATTR_L_CTRL_EXP_ROLE});
-		expUI:SetVisible(false);
-	
-		LogInfo("qbw:2233:"..i);
 	end
 end
 
@@ -467,7 +495,17 @@ function p.ContainerAddPetName(nPetId)
 	
 	local size	= view:GetFrameRect().size;
 	local btn	= _G.CreateButton("", "", strPetName, CGRectMake(0, 0, size.w, size.h), 12);
+    
+    --local nQuality = RolePet.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_QUALITY);
+    
 	if CheckP(btn) then
+        --local cColor = ItemPet.GetPetQuality(nPetId);
+        --btn:SetFontColor(cColor);
+        
+        local nQuality = RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_QUALITY);
+        btn:SetFontColor(ItemPet.GetQuality(nQuality));
+        
+        
 		btn:SetLuaDelegate(p.OnUIEventClickPetName);
 		view:AddChild(btn);
 	end
@@ -676,7 +714,14 @@ function p.ChangePetAttr(nPetId)
 
 	
 	--姓名
-	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_ROLE_NAME, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_NAME));
+	local l_name = SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_ROLE_NAME, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_NAME));
+    
+    
+    local nQuality = RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_QUALITY);
+    ItemPet.SetLabelByQuality(l_name, nQuality)
+    
+    
+    
 	--职业
 	SetLabel(layer, ID_ROLEATTR_R_CTRL_TEXT_ROLE_JOB, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_TYPE));
 	--技能
@@ -816,17 +861,35 @@ function p.OnUIEventClickPetName(uiNode, uiEventType, param)
 			local nPetId		= ConvertN(view:GetViewId())
 			local containter	= p.GetPetNameSVC();
 			if CheckP(containter) then
-				containter:ScrollViewById(nPetId);
+				containter:ShowViewById(nPetId);
 			end
 			
 			containter = p.GetPetParent();
 			if CheckP(containter) then
-				containter:ScrollViewById(nPetId);
+				containter:ShowViewById(nPetId);
 			end
 		end
 	end
 	
 	return true;
+end
+
+function p.ChangePetHeadPic(nId)
+	if not CheckN(nId) then
+		return nil;
+	end
+	
+	local nPetType = RolePet.GetPetInfoN(nId,PET_ATTR.PET_ATTR_TYPE);
+	
+    if(nPetType == 0) then
+        return nil;
+    end
+    
+    local layer = p.GetDetailParent();
+    
+    local pic = GetPetPotraitPic(nPetType);
+    local HeadPic = GetImage(layer, ID_ROLEATTR_R_CTRL_PICTURE_ROLE_ICON);
+	HeadPic:SetPicture(pic,true);
 end
 
 
@@ -841,6 +904,8 @@ function p.OnUIEventViewChange(uiNode, uiEventType, param)
 			if CheckP(beginView) then
 				nPetId	= beginView:GetViewId()
 				p.ChangePetAttr(nPetId);
+				p.ChangePetHeadPic(nPetId);
+				
 			end
 		end
 		
@@ -851,13 +916,13 @@ function p.OnUIEventViewChange(uiNode, uiEventType, param)
 		if ID_ROLEATTR_L_BG_CTRL_LIST_LEFT == tag then
 			containter	= p.GetPetNameSVC();
 			if CheckP(containter) then
-				containter:ScrollViewById(nPetId);
+				containter:ShowViewById(nPetId);
 			end
 		elseif ID_ROLEATTR_L_BG_CTRL_LIST_NAME == tag then
 			LogInfo("ID_ROLEATTR_L_BG_CTRL_LIST_NAME == tag");
 			containter = p.GetPetParent();
 			if CheckP(containter) then
-				containter:ScrollViewById(nPetId);
+				containter:ShowViewById(nPetId);
 			end
 		end
 
@@ -877,7 +942,7 @@ end
 
 function p.ClickOtherPlayer(param1,param2,param3)
 	LogInfo("qbw:click other")
-	CheckOtherPlayerBtn.LoadUI(param1);
+	--CheckOtherPlayerBtn.LoadUI(param1);
 	return;
 	--[[
 	if not _G.CheckN(param1) then

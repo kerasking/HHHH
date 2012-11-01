@@ -41,6 +41,8 @@ function p.InitDataBaseTable()
     
     p.CreateServerListTable();
     p.CreateRoleInfoTable();
+    
+    --p.InsertServerList({nServerID=222,sServerName="zzj",nServerIP="192.168.65.7",nServePort=9528,nServerStatus=2,sRecommend="ss"});
 end
 
 --创建服务器列表

@@ -29,7 +29,6 @@ function p.SendDynMapGuide(round,nTypeId)
 end
 
 function p.ProcessDynMapGuide(netdata)
-
 	if not IsUIShow(NMAINSCENECHILDTAG.DynMapGuide) then
 		DynMapGuide.LoadUI();
 	end

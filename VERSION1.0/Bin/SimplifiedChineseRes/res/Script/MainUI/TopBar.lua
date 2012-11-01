@@ -8,7 +8,7 @@ MainUI = {}
 local p = MainUI;
 --UI坐标配置
 local winsize	= GetWinSize();
-local RectTopUILayer = CGRectMake(0, 0, winsize.w, 150.0);
+local RectTopUILayer = CGRectMake(0, 0, winsize.w, 120.0*ScaleFactor);
 
 local CONTAINTER_X  = 0;
 local CONTAINTER_Y  = 0;
@@ -18,6 +18,10 @@ local TOOL_BTN = {
     {Tag=20,Rect=CGRectMake(305*ScaleFactor,30*ScaleFactor,40*ScaleFactor,40*ScaleFactor)},--征收
     {Tag=35,Rect=CGRectMake(265*ScaleFactor,30*ScaleFactor,40*ScaleFactor,40*ScaleFactor)},--祭祀 
     {Tag=19,Rect=CGRectMake(225*ScaleFactor,30*ScaleFactor,40*ScaleFactor,40*ScaleFactor)},--礼包
+    {Tag=29,Rect=CGRectMake(185*ScaleFactor,30*ScaleFactor,40*ScaleFactor,40*ScaleFactor)},--每日签到  
+    {Tag=38,Rect=CGRectMake(345*ScaleFactor,70*ScaleFactor,40*ScaleFactor,40*ScaleFactor)},--充值礼包  
+    {Tag=39,Rect=CGRectMake(305*ScaleFactor,70*ScaleFactor,40*ScaleFactor,40*ScaleFactor)},--在线礼包 
+    {Tag=40,Rect=CGRectMake(265*ScaleFactor,70*ScaleFactor,40*ScaleFactor,40*ScaleFactor)},--运粮活动   
 };
 
 local MAIN_UI_BUTTON_TOPUP = 17; 
@@ -43,6 +47,7 @@ local ID_MAINUI_BUTTON_DUEL						= 14;
 local ID_MAINUI_BUTTON_MISSION					= 9;
 local ID_MAINUI_BUTTON_MISSION2					= 98;
 local ID_MAINUI_BTN_NEW_EMAIL						= 36;	--新邮件提示按钮ID
+local ID_MAINUI_BTN_ACTIVITY						= 43;	--活动按钮ID
 
 
 local NUMBER_FILE = "/number/num_2.png";
@@ -62,6 +67,9 @@ local Numbers_Rect = {
 };
 local TAG_NUMBER_IMG_S = 25;
 local TAG_NUMBER_IMG_B = 34;
+
+--刷新引导图片定时器id
+p.nTimerID = nil;
 
 function p.LoadUI()
 
@@ -99,6 +107,8 @@ function p.LoadUI()
 	end
 
 	uiLoad:Load("MainUI.ini", layer, p.OnUIEvent, CONTAINTER_X, CONTAINTER_Y);
+	
+	--[[	
 	local pBtnNewEmail = GetUiNode( layer, ID_MAINUI_BTN_NEW_EMAIL );
 	if ( nil ~= pBtnNewEmail ) then
 		local rectForm		= pBtnNewEmail:GetFrameRect();
@@ -110,20 +120,54 @@ function p.LoadUI()
 		pSpriteNode:ChangeSprite( szAniPath .. szSprFile );
 		pBtnNewEmail:AddChild( pSpriteNode );
 	end
-	pBtnNewEmail:SetVisible( false );
+	pBtnNewEmail:SetVisible( MsgUserEmail.IsHaveNewEmail() );
+	--
+	local pBtnActivity = GetUiNode( layer, ID_MAINUI_BTN_ACTIVITY );
+	if ( nil ~= pBtnActivity ) then
+		local rectForm		= pBtnActivity:GetFrameRect();
+		local pSpriteNode	= createUISpriteNode();
+		pSpriteNode:Init();
+		pSpriteNode:SetFrameRect( CGRectMake(0, 0, rectForm.size.w, rectForm.size.h) );
+		local szAniPath		= NDPath_GetAnimationPath();
+		local szSprFile		= "activity01.spr";
+		pSpriteNode:ChangeSprite( szAniPath .. szSprFile );
+		pBtnActivity:AddChild( pSpriteNode );
+	end
 
+	
+	--在线礼包增加时间显示
+    local btnOL = 	GetButton(layer,TOOL_BTN[7].Tag);
+    
+	local OLGiftCDlabel = CreateLabel("",CGRectMake(-115,60,300,50),12,ccc4(255,255,255,255));
+    OLGiftCDlabel:SetTag(99);
+    OLGiftCDlabel:SetTextAlignment(1);
+    OLGiftCDlabel:SetVisible(true); 
+    btnOL:AddChildZ(OLGiftCDlabel,2);
+	------------------
 	
 	p.RefreshUserInfo();
     p.RefreshTaskPic();
 	GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"p.GameDataUserInfoRefresh",p.GameDataUserInfoRefresh);
     
     
-    p.RefreshFuncIsOpen();
+    --p.RefreshFuncIsOpen();
+    
+	if ( p.nTimerID	 ~= nil ) then
+    	UnRegisterTimer( p.nTimerID );
+		p.nTimerID			= nil;
+    end
+    
+    --p.SetTimerShowTrackTip()	
+     ]]
 	return;
 end
 
+
+
+
 function p.OnUIEvent(uiNode, uiEventType, param)
 	local tag = uiNode:GetTag();
+	LogInfo( "topbar: OnUIEvent tag:"..tag );
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		if tag == MAIN_UI_BUTTON_TOPUP then
 			if not IsUIShow(NMAINSCENECHILDTAG.PlayerVIPUI) then
@@ -133,6 +177,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 				return true;
             end
         elseif TOOL_BTN[1].Tag == tag then          --竞技
+            ShowLoadBar();
             _G.CloseMainUI();
             _G.MsgArena.SendOpenArena();
             return ture;
@@ -153,11 +198,36 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             GiftPackUI.LoadUI();
             return true;
             
+        elseif TOOL_BTN[5].Tag == tag then          --每日签到
+            LogInfo("tag"..tag);
+            DailyCheckInUI.LoadUI();      
+            --RechargeReward.LoadUI();      
+            return ture;
+        elseif TOOL_BTN[6].Tag == tag then          --充值礼包
+            RechargeReward.LoadUI();      
+            return ture;   
+        elseif TOOL_BTN[7].Tag == tag then          --在线领取
+        	--领取礼包
+        	LogInfo("领取礼包");
+        	OnlineCheckIn.GetGift();  
+            return ture;   
+            
+        elseif TOOL_BTN[8].Tag == tag then          --活动列表
+            if not IsUIShow(NMAINSCENECHILDTAG.DailyActionUI) then
+                DailyAction.LoadUI(); 
+            end
+            return ture;        
+
         elseif ID_MAINUI_BTN_NEW_EMAIL == tag then          -- 新邮件
             _G.CloseMainUI();
             EmailList.LoadUI();
             return true;
-            
+
+        elseif ID_MAINUI_BTN_ACTIVITY == tag then          -- 活动(公告)
+            _G.CloseMainUI();
+            ActivityNoticeUI.ShowUI();
+            return true;
+          
             
         elseif ID_MAINUI_BUTTON_HEAD == tag then    --军衔
             local nPlayerStage      = _G.ConvertN(_G.GetRoleBasicDataN(GetPlayerId(), USER_ATTR.USER_ATTR_STAGE));
@@ -175,6 +245,18 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 		elseif ID_MAINUI_BUTTON_MISSION == tag or tag == ID_MAINUI_BUTTON_MISSION2 then
 			--追踪主线任务
 			p.TrackMainTask();
+			
+		elseif tag == 37 then
+			local nPlayerId     = GetPlayerId();
+			local mainpetid 	= RolePetUser.GetMainPetId(nPlayerId);
+			local nLev			= _G.SafeS2N(RolePetFunc.GetPropDesc(mainpetid, PET_ATTR.PET_ATTR_LEVEL));
+		
+			if nLev <= 29 then
+				return;
+			end
+		
+			nLev = nLev + 1;
+			CommonDlgNew.ShowTipDlg("升级到"..nLev.."级可接任务。征战副本可提升等级");
         end
     end	
 end
@@ -189,6 +271,7 @@ function p.RefreshUserInfo()
 	local GoldLabel 	=  RecursiveLabel(topbar,{ID_MAINUI_TEXT_UI_5});
 	local SilverLabel 	=  RecursiveLabel(topbar,{ID_MAINUI_TEXT_UI_4});
 	--local VipRankLabel  =  RecursiveLabel(topbar,{ID_MAINUI_TEXT_UI_7});
+    
     local VipRankS  =  RecursiveImage(topbar,{TAG_NUMBER_IMG_S});
     local VipRankB  =  RecursiveImage(topbar,{TAG_NUMBER_IMG_B});
 	local NameLabel 	=  RecursiveLabel(topbar,{ID_MAINUI_TEXT_UI_6});
@@ -208,7 +291,7 @@ function p.RefreshUserInfo()
     local nPetId        = RolePetFunc.GetMainPetId(nPlayerId);
     local nPetType      = RolePet.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_TYPE);
    -- local headPic       = _G.GetPetPotraitTranPic(nPetType);
-    local headPic       = _G.GetPlayerPotraitTranPic(nPetType);
+    local headPic       = _G.GetPlayerMainUIPotraitPic(nPetType);
     
 	local nMilOrders    = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_STAMINA);
 	local nGold 		=  GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
@@ -231,7 +314,7 @@ function p.RefreshUserInfo()
 
 	MOLabel:SetText(""..nMilOrders);
 
-	local sGold = p.Coinformat(nGold);		
+	local sGold = nGold.."";		
 	GoldLabel:SetText(""..sGold);	
 	
 	local sSilverCoin = p.Coinformat(nSilverCoin);		
@@ -245,14 +328,16 @@ function p.RefreshUserInfo()
         ps:Cut(Numbers_Rect[nVipRank+1]);
         VipRankS:SetPicture(ps);
     else
-        local s = Num2(nVipRank);
-        local b = Num1(nVipRank);
+        local s = Num2(nVipRank)+1;
+        local b = Num1(nVipRank)+1;
         ps:Cut(Numbers_Rect[s]);
         VipRankS:SetPicture(ps);
         
         local pb = pool:AddPicture(GetSMImgPath(NUMBER_FILE), false);
         pb:Cut(Numbers_Rect[b]);
         VipRankB:SetPicture(pb);
+        
+        LogInfo("s:[%d],b:[%d]",s,b);
     end
     
     
@@ -297,16 +382,22 @@ end
 
 --开启功能判断
 function p.RefreshFuncIsOpen()
+	 LogInfo("RefreshFuncIsOpen")
     local topBarLayer = p.GetTopBar();
     if(topBarLayer == nil) then
         return;
     end
     
+    
     local btnArena = GetButton(topBarLayer,TOOL_BTN[1].Tag);
     local btnLevy = GetButton(topBarLayer,TOOL_BTN[2].Tag);
     local btnFete = GetButton(topBarLayer,TOOL_BTN[3].Tag);  
     local btnGift = GetButton(topBarLayer,TOOL_BTN[4].Tag);
-    
+    local btnSign = GetButton(topBarLayer,TOOL_BTN[5].Tag);
+    local btnRecharge = GetButton(topBarLayer,TOOL_BTN[6].Tag);
+    local btnOL = 	GetButton(topBarLayer,TOOL_BTN[7].Tag);
+    local btnDailyAct = 	GetButton(topBarLayer,TOOL_BTN[8].Tag); 
+            
     btnLevy:SetVisible(IsFunctionOpen(StageFunc.Levy));
     
     
@@ -319,11 +410,20 @@ function p.RefreshFuncIsOpen()
     
     btnArena:SetVisible(IsFunctionOpen(StageFunc.Arena));
     btnFete:SetVisible(IsFunctionOpen(StageFunc.Fete));
-
+    
+    local type = MsgPlayerAction.PLAYER_ACTION_TYPE.CHECK_IN;
+    btnSign:SetVisible(MsgPlayerAction.IsActionOpen(type));
+    btnRecharge:SetVisible(MsgPlayerAction.IsActionOpen(MsgPlayerAction.RechargeRewardActionType));
+    
     local nPlayerStage      = _G.ConvertN(_G.GetRoleBasicDataN(GetPlayerId(), USER_ATTR.USER_ATTR_STAGE));
  
-
+    type = MsgPlayerAction.PLAYER_ACTION_TYPE.ON_LINE;
+    local bShow = OnlineCheckIn.IsFunctionOpen()  and  MsgPlayerAction.IsActionOpen(type);
+	btnOL:SetVisible(bShow);
+    
+    btnDailyAct:SetVisible(true);
     p.AdjustToolPos();
+    
 end
 
 --调整位置
@@ -333,13 +433,13 @@ function p.AdjustToolPos()
     local btnLevy = GetButton(topBarLayer,TOOL_BTN[2].Tag);
     local btnFete = GetButton(topBarLayer,TOOL_BTN[3].Tag); 
     local btnGift = GetButton(topBarLayer,TOOL_BTN[4].Tag);
-    
+    local btnSign = GetButton(topBarLayer,TOOL_BTN[5].Tag);
+    local btnRecharge = GetButton(topBarLayer,TOOL_BTN[6].Tag);
+    local btnOL = GetButton(topBarLayer,TOOL_BTN[7].Tag);
+    local btnDailyAct = GetButton(topBarLayer,TOOL_BTN[8].Tag);
     local btns = {};
     if(btnArena:IsVisibled()) then
         table.insert(btns,btnArena);
-    end
-    if(btnGift:IsVisibled()) then
-        table.insert(btns,btnGift);
     end
     if(btnLevy:IsVisibled()) then
         table.insert(btns,btnLevy);
@@ -347,7 +447,26 @@ function p.AdjustToolPos()
     if(btnFete:IsVisibled()) then
         table.insert(btns,btnFete);
     end
-
+    if(btnGift:IsVisibled()) then
+        table.insert(btns,btnGift);
+    end
+    
+    if(btnSign:IsVisibled()) then
+        table.insert(btns, btnSign);
+    end
+    
+    if(btnRecharge:IsVisibled()) then
+        table.insert(btns, btnRecharge);
+    end
+ 
+    if(btnOL:IsVisibled()) then
+        table.insert(btns, btnOL);
+    end
+    
+     if(btnDailyAct:IsVisibled()) then
+        table.insert(btns, btnDailyAct);
+    end   
+       
     for i,v in ipairs(btns) do
         local rect = TOOL_BTN[i].Rect;
         LogInfo("x:[%d],y:[%d],w:[%d],h:[%d]",rect.origin.x,rect.origin.y,rect.size.w,rect.size.h);
@@ -374,6 +493,8 @@ end
 
 --追踪主线任务
 function p.TrackMainTask()
+	--TaskUI.NavigateNpc(20006);
+	
 	--有主线则自动寻路
 	local nTaskid = TASK.GetMainTaskId(); 
 	if nTaskid ~= nil then
@@ -390,21 +511,24 @@ function p.TrackMainTask()
 		LogInfo("TrackNextMainTask nTaskid:"..nTaskid)
 		return;
 	end
+	--]]
 end
 
 --刷新主线任务提示图片
 function p.RefreshTaskPic()
+	LogInfo("RefreshTaskPic 1")
 	local layer = p.GetTopBar() ;
 	local pool = DefaultPicPool();
 	local TipBtn = GetButton(layer, ID_MAINUI_BUTTON_MISSION);
 	local BattleBtn = GetButton(layer, ID_MAINUI_BUTTON_MISSION2);
-	
+	local tipLable =  RecursiveLabel(layer,{60});
+	local tipimg = GetButton(layer, 37);
+	--tipLable:SetText("");
 	
 	local nTaskid = TASK.GetMainTaskId(); 
-	LogInfo("RefreshTaskPic 1")
     -----======有主线======------	
     if nTaskid ~= nil then
-    	LogInfo("RefreshTaskPic 2")
+    		LogInfo("RefreshTaskPic 1 有主线"..nTaskid)
 		--获取任务目标类型
 		local nContenType,nVal  =	TASK.GetNextTaskTargetType(nTaskid);
 		if nContenType == nil then
@@ -413,7 +537,6 @@ function p.RefreshTaskPic()
 		
 		--根据类型刷新图片
 		if nContenType == TASK.SM_TASK_CONTENT_TYPE.NPC then
-			LogInfo("RefreshTaskPic 21")
 			local nNpcId = nVal;
 			--local Pic = NPC.GetNpcPotraitPic(nNpcId);
 			local Pic = GetNpcTaskPic(nNpcId);
@@ -423,40 +546,31 @@ function p.RefreshTaskPic()
 			local PicDown =  GetNpcTaskPic(nNpcId);
 			TipBtn:SetTouchDownImage(PicDown,true);			
 			TipBtn:SetVisible(true);
-
-			--local rect = TipBtn:GetFrameRect();
-			--local rectBattle =  CGRectMake(rect.origin.x,rect.origin.y,144,134);
-			--TipBtn:SetFrameRect(rectBattle);
+			tipimg:SetVisible(false);
 			BattleBtn:SetVisible(false);
+			tipLable:SetText("");
 						
 		elseif 	nContenType == TASK.SM_TASK_CONTENT_TYPE.ITEM or nContenType == TASK.SM_TASK_CONTENT_TYPE.MONSTER then
 			local nMapid = nVal;
-			LogInfo("qbw99 nMapid"..nMapid)
 			local Pic = GetMapPic(nMapid);
-			--local Pic =  pool:AddPicture(GetSMImgPath("icon_town_high_2.png"), false);
 			BattleBtn:SetImage(Pic,true);
 			
 			local PicDown = GetMapPic(nMapid);
-			--local PicDown =  pool:AddPicture(GetSMImgPath("icon_town_high_2.png"), false);
 			BattleBtn:SetTouchDownImage(PicDown,true);	
 			BattleBtn:SetVisible(true);
-			
-			--local rect = TipBtn:GetFrameRect();
-			--local rectBattle =  CGRectMake(rect.origin.x,rect.origin.y,178,154);
-			--TipBtn:SetFrameRect(rectBattle);
+			tipimg:SetVisible(false);
 			TipBtn:SetVisible(false);
+			tipLable:SetText("");
 			--]]
 		end
 		return;
 	end
-	
-	
-LogInfo("RefreshTaskPic 3")
 
 	local nTaskid = TASK.GetNextMainTaskId(); 
 	
-	--=======无主线======------		
+	--=======有主线,但是还没接======------		
 	if nTaskid ~= nil then
+		LogInfo("RefreshTaskPic 1 有主线,但是还没接")
 		--获取下一主线发布npc图片
 		local nNpcId = TASK.GetTaskStartNpcId(nTaskid);
 		local Pic = GetNpcTaskPic(nNpcId)--NPC.GetNpcPotraitPic(nNpcId);
@@ -466,13 +580,23 @@ LogInfo("RefreshTaskPic 3")
 		TipBtn:SetTouchDownImage(PicDown,true);	
 		TipBtn:SetVisible(true);
 		BattleBtn:SetVisible(false);
+		tipLable:SetText("");
+		tipimg:SetVisible(false);
 		return;
 	end
 	
 	
-	--未达到等级要求 不显示图片
-	TipBtn:SetVisible(false);
-	--Btnbg:SetVisible(false);
+	--未达到等级要求 不显示图片 显示tip
+	LogInfo("RefreshTaskPic 1 未达到等级要求")
+	TipBtn:SetVisible(false);	
+	if MsgPlayerTask.GetDataReady() == true then
+		tipimg:SetVisible(true);
+
+		--CommonDlgNew.ShowTipsDlg("升级到"..nLev.."级可接任务。征战副本可提升等级");
+		--tipLable:SetText("升级到"..nLev.."级可接任务。\n征战副本可提升等级");
+	else
+		tipimg:SetVisible(false);
+	end	
 end
 
 -- 获得新邮件提示按钮控件指针
@@ -491,6 +615,29 @@ function p.GetNewEmailButton()
     return pBtnNewEmail;
 end
 
+
+
+--============定时刷新任务引导图片============----------
+
+
+--设定定时器
+function p.SetTimerShowTrackTip()	
+	
+	--if ( p.nTimerID == nil ) then
+	--	p.nTimerID = RegisterTimer( p.OnTimerCoutDownCounter, 2 );
+	--end
+	
+    return true;
+end
+
+--获取界面层
+function p.OnTimerCoutDownCounter( nTimerID )
+	if not IsUIShow(NMAINSCENECHILDTAG.MainUITop) then
+		return;
+	end
+	
+	p.RefreshTaskPic();
+end
 
 
 RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "MainUI.LoadUI", p.LoadUI);

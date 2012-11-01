@@ -25,6 +25,7 @@ local container	=nil;
 local scroll	=nil;
 local contentHight=0;
 local ID_TALK_CTRL_INPUT_BUTTON_12 = 5;
+local ID_TALK_CTRL_BUTTON_7 = 7;
 local ID_CHAT_DOWN_CTRL_INPUT_BUTTON_ZONE = 4;
 
 local ID_CHAT_DOWN_CTRL_VERTICAL_LIST_DLG_WORDS =13;
@@ -121,6 +122,7 @@ function p.LoadUIbyFriendName(friendName)
 	p.LoadUI();
 	p.SetInputLayer(0);
 	p.SetCurrentChatType(ChatType.CHAT_CHANNEL_PRIVATE);
+	ChatTopBarUI.RefreshWithButtonTag(5);
 	
 	local layer=p.GetParent();
 	local edit = RecursivUIEdit(layer,{TAG_INPUTB,ID_TALK_INPUT_B_CTRL_INPUT_BUTTON_22});
@@ -312,6 +314,17 @@ function p.GetParent()
 	return layer;
 end
 
+
+
+--频道颜色列表
+p.ColorChannel = {}
+	p.ColorChannel[ChatType.CHAT_CHANNEL_ALL]=ccc4(25,193,255,255)
+	p.ColorChannel[ChatType.CHAT_CHANNEL_SYS]=ccc4(36,255,0,255)
+	p.ColorChannel[ChatType.CHAT_CHANNEL_WORLD]=ccc4(237,240,0,255)
+	p.ColorChannel[ChatType.CHAT_CHANNEL_FACTION]=ccc4(36,255,0,255)
+	p.ColorChannel[ChatType.CHAT_CHANNEL_PRIVATE]=ccc4(255,0,252,255)
+
+
 function p.AddChatText(speakerId,channel,speaker,text)
 	LogInfo("main channel:%d,speaker:%s,text:%s",channel,speaker,text);
 	
@@ -328,7 +341,13 @@ function p.AddChatText(speakerId,channel,speaker,text)
 		local chatText=createUIChatText();
 		chatText:Init();
 		chatText:SetContentWidth(winsize.w*0.85);
-		chatText:SetContent(speakerId,channel,speaker,text,1,9);
+		
+		local color = p.ColorChannel[channel];
+		chatText:SetContent(speakerId,channel,speaker,text,1,9,color);
+		
+		--chatText:SetContent(speakerId,channel,speaker,text,1,9,ccc4(0,0,255,255));
+		
+		
 		--local rect  = CGRectMake(0, contentHight, winsize.w*0.85, chatText:GetContentHeight()); 
 		local rect  = CGRectMake(0, contentHight, winsize.w*0.85, winsize.h*0.1); 
 		chatText:SetFrameRect(rect);
@@ -445,6 +464,19 @@ function p.OnUIEventInputA(uiNode, uiEventType, param)
 			if currentChatType==ChatType.CHAT_CHANNEL_PRIVATE then
 				LogInfo("p.sendtalk");
 				_G.MsgChat.SendTalkMsg(ChatDataFunc.GetChannelByChatType(ChatType.CHAT_CHANNEL_WORLD),text);
+			elseif currentChatType==ChatType.CHAT_CHANNEL_FACTION then
+				--未开放军团聊天
+				local nPlayerId = GetPlayerId();
+				local name = GetRoleBasicDataS(nPlayerId,USER_ATTR.USER_ATTR_NAME);
+				
+				if MsgArmyGroup.GetUserArmyGroupID(nPlayerId) == nil then
+					--无军团则提示
+					ChatDataFunc.AddChatRecord(nPlayerId,ChatDataFunc.GetChannelByChatType(currentChatType),0,"系统","您尚未加入军团！");
+				else
+					_G.MsgChat.SendTalkMsg(ChatDataFunc.GetChannelByChatType(currentChatType),text);
+				end
+				
+
 			else
 				_G.MsgChat.SendTalkMsg(ChatDataFunc.GetChannelByChatType(currentChatType),text);
 			end
@@ -507,6 +539,12 @@ function p.OnUIEventInputB(uiNode, uiEventType, param)
 			if currentChatType==ChatType.CHAT_CHANNEL_PRIVATE then
 				LogInfo("p.sendtalk name:"..PMname.." content"..PMtext);
 				--_G.MsgChat.SendTalkMsg(ChatDataFunc.GetChannelByChatType(ChatType.CHAT_CHANNEL_WORLD),PMtext);
+				
+				if PMname == nil or PMname == "" then
+					 CommonDlgNew.ShowYesDlg("私聊：名字不能为空");
+					 return;
+				end
+				
 				_G.MsgChat.SendPrivateTalk(currentPlayerId,PMname,PMtext);
 				
 			else
@@ -567,8 +605,10 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 	LogInfo("p.OnUIEvent[%d]", tag);
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		
-		
-		if tag == ID_TALK_BUTTON_AFFIRM then
+		LogInfo("qboy 1");
+		--if tag == ID_TALK_BUTTON_AFFIRM then
+			--[[
+			LogInfo("qboy 2");
 			if nil==text or
 				string.len(text)<=0 then
 				return;
@@ -596,7 +636,9 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 			layer:SetFrameRect(CGRectMake(0,0,winsize.w,winsize.h));
 			
 			p.currentChatInput=CHAT_INPUT_TEXT;
-		elseif tag==ID_CHAT_DOWN_CTRL_BUTTON_FACE then
+			--]]
+		if tag==ID_CHAT_DOWN_CTRL_BUTTON_FACE then
+			LogInfo("qboy 2");
 			if p.currentChatInput==CHAT_INPUT_TEXT then
 				LogInfo("showface");
 				p.ShowFaceUI();
@@ -613,6 +655,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 				p.ShowFaceUI();
 			end
 		elseif tag==ID_CHAT_DOWN_CTRL_BUTTON_ITEM then
+			LogInfo("qboy 3");
 			if p.currentChatInput==CHAT_INPUT_TEXT then
 				LogInfo("showItem");
 				p.ShowItemUI();
@@ -628,16 +671,20 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 				p.ClearInputStatus();
 				p.ShowItemUI();
 			end
-		elseif tag==9999 then
+		elseif tag==ID_TALK_CTRL_BUTTON_7 then
 			--关闭信息层
+			LogInfo("qboy 4");
+			LogInfo("qboy 关闭信息层");
 			p.CloseInfoLayer()
 
-			ChatPrivateUI.LoadUI();
-			ChatPrivateUI.SetChatPlayer(0,"XXX");
+			--ChatPrivateUI.LoadUI();
+			--ChatPrivateUI.SetChatPlayer(0,"XXX");
 		elseif tag == ID_TALK_LEFT_BUTTON_CLOSE then
+			LogInfo("qboy 5");
 			p.CloseChatUI();
 			return true;
 		elseif tag == ID_TALK_BUTTON_7 then
+			LogInfo("qboy 6");
 			local layer=p.GetParent();
 			local infolayer = RecursiveUILayer(layer, {TAG_INFO});
  	

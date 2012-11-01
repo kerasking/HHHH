@@ -145,7 +145,7 @@ end
 
 --军令更新事件
 function p.StaminaUpdateEvent()
-    if IsUIShow(NMAINSCENECHILDTAG.DragonTactic) then
+    if IsUIShow(NMAINSCENECHILDTAG.DailyActionUI) then
         LogInfo("p.StaminaUpdateEvent event!");
         p.initData();
         p.RefreshUI();
@@ -159,8 +159,7 @@ end
 
 --允许征收的次数
 function p.allowLevyCount()
-    local nVipRank = GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_VIP_RANK);
-    local total_levy = (nVipRank+1)*10;
+    local total_levy = GetVipVal(DB_VIP_CONFIG.LEVY_NUM);
     local alert_levy = GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_BUYED_LEVY);
     return total_levy-alert_levy;
 end
@@ -174,7 +173,7 @@ end
 
 --购买军令
 function p.buyMilitaryOrdersDeal()
-    PlayerVIPUI.buyMilOrderTip();
+    PlayerVIPUI.buyMilOrderTip(0);
     --ShowLoadBar();
 end
 

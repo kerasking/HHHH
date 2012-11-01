@@ -190,7 +190,7 @@ function TASK_KILL_MONSTER(param1, param2, param3)
 					local num = GetGameDataN(nTaskId, data);
 					SetGameDataN(nTaskId, data, num + 1);
 					TaskStateRefresh();
-					return;
+					--return;
 				end
 				data = data + 1;
 			end
@@ -205,7 +205,7 @@ function TASK_KILL_MONSTER(param1, param2, param3)
 					local num = GetGameDataN(nTaskId, data);
 					SetGameDataN(nTaskId, data, num + 1);
 					TaskStateRefresh();
-					return;
+					--return;
 				end
 				data = data + 1;
 			end
@@ -220,7 +220,7 @@ function TASK_KILL_MONSTER(param1, param2, param3)
 					local num = GetGameDataN(nTaskId, data);
 					SetGameDataN(nTaskId, data, num + 1);
 					TaskStateRefresh();
-					return;
+					--return;
 				end
 				data = data + 1;
 			end
@@ -234,7 +234,7 @@ function TASK_KILL_MONSTER(param1, param2, param3)
 					local num = GetGameDataN(nTaskId, data);
 					SetGameDataN(nTaskId, data, num + 1);
 					TaskStateRefresh();
-					return;
+					--return;
 				end
 				data = data + 1;
 			end
@@ -290,7 +290,20 @@ function TASK_GUIDETASK_ACTION(GuideType,nParam)
 	end	
 end
 
-
+function ClearUpKillMonster(nBossId)
+	
+	local nGenerateRuleID	= _G.GetDataBaseDataN( "mapzone", nBossId, _G.DB_MAPZONE.GENERATE_RULE_ID )
+	local nMonsterType	= 0;
+	
+	
+	for i=0,8 do
+		nMonsterType	= _G.GetDataBaseDataN( "monster_generate", nGenerateRuleID, _G.DB_MONSTER_GENERATE.STATIONS1 + i )
+		if ( nMonsterType ~= nil ) and ( nMonsterType > 0 ) then
+			TASK_KILL_MONSTER(nMonsterType);
+			LogInfo("TASK_KILL_MONSTER:"..nMonsterType);
+		end
+	end
+end
 
 
 _G.GlobalEvent.Register(_G.GLOBALEVENT.GE_ITEM_UPDATE, "TASK.TASK_ITEM_UPDATE", TASK_ITEM_UPDATE);

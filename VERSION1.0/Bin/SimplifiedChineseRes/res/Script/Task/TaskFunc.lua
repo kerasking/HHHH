@@ -4,6 +4,7 @@ local TaskUI = _G.TaskUI;
 setfenv(1, TASK);
 
 
+
 --游戏数据与DB数据接口
 function GetDataBaseN(nTaskId, e)
 	return _G.ConvertN(GetDataBaseDataN("task_type", nTaskId, e));
@@ -241,7 +242,19 @@ function GetTaskGUIDEDataProgressStr(nTaskId, nGuideType)
 			local nType = tTaskConfig[i][1];
 			local nGuideNum = tTaskConfig[i][2];
 			
+			
 			if  nType == nGuideType then
+				if  nGuideType == _G.TASK_GUIDE_PARAM.EXCHANGE_SKILL or 
+					nGuideType == _G.TASK_GUIDE_PARAM.BUY_ITEM or 
+					nGuideType == _G.TASK_GUIDE_PARAM.USE_ITEM then
+					
+					return "";				
+				end
+			
+			
+			
+			
+			
 				if bFinish then
 					retStr = retStr .. "(" .. SafeN2S(tTaskConfig[i][2]) .. "/" .. SafeN2S(tTaskConfig[i][2]) .. ")";
 				else
@@ -523,15 +536,27 @@ function CheckTaskCanFinish(nTaskId)
 			local data = _G.TASK_DATA.DATA1 + i - 1;
 			local nGuideType		= tTaskConfig[i][1];
 			local nGuideNum 	 	= tTaskConfig[i][2];
-
+			LogInfo("CheckTaskCanFinish guide nGuideType"..nGuideType.." nGuideNum"..nGuideNum);
+			LogInfo("CheckTaskCanFinish guide  GetGameDataN(nTaskId, data)"..GetGameDataN(nTaskId, data));
+			
+			
+			--升级任务做特殊处理
+			if nGuideType == _G.TASK_GUIDE_PARAM.STRENGTHEN_PET then
+				if 	nGuideNum >  GetGameDataN(nTaskId, data)  then
+					return false;
+				end	
+			else
+				if 	nGuideNum ~=  GetGameDataN(nTaskId, data)  then
+					return false
+				end			
+			end
 
 			
-			if 	nGuideNum ~=  GetGameDataN(nTaskId, data)  then
-				return false
-			end
+
 		end
 	end
-		
+	LogInfo("CheckTaskCanFinish return true:"..nTaskId);
+			
 
 	return true;
 end
@@ -543,6 +568,7 @@ function TaskStateRefresh()
 	local idAcceptTaskList = GetAcceptTasks();
 	if 0 == table.getn(idAcceptTaskList) then
 		--主界面任务提示刷新
+        
 		if  _G.IsUIShow(_G.NMAINSCENECHILDTAG.MainUITop) then
 			_G.MainUI.RefreshTaskPic();
 		end
@@ -674,7 +700,7 @@ function GetTaskPrize(nTaskId)
 	end
 	
 	if nMoney > 0 then
-		strAward = strAward .. "<cffff00金钱: /e" .. "<cffffff" .. tostring(nMoney) .. "/e";
+		strAward = strAward .. "<cffff00银币: /e" .. "<cffffff" .. tostring(nMoney) .. "/e";
 	end
 	
 	if repute > 0 then
@@ -1009,7 +1035,6 @@ function GetNextTaskTargetType(nTaskId)
 	return SM_TASK_CONTENT_TYPE.NPC,nNpcId;
 	
 end
-
 
 
 

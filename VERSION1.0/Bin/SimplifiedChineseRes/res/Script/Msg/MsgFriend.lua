@@ -188,6 +188,8 @@ function p.ProcessGoodFriendInfo(netdata)
 			      local name   = netdata:ReadUnicodeString();
 				  local online = netdata:ReadByte();  --0:离线 
 				  local pro = netdata:ReadInt(); 
+                  local nQuality = netdata:ReadInt();
+                  
 				 -- local lv     = netdata:ReadInt();  
 				 -- local pro       = netdata:ReadInt(); 
 				 -- local repute    = netdata:ReadInt(); 
@@ -203,7 +205,7 @@ function p.ProcessGoodFriendInfo(netdata)
 				  SetRoleFriendDataS(nRoleId, FRIEND_DATA.FRIEND_NAME, name,   idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_ONLINE,online,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_PROFESSION,pro,idFriend) 
-				  				  
+                    SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_QUALITY,nQuality,idFriend) 
 				  --
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_LEVEL,0,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_REPUTE	,0,idFriend) 
@@ -224,14 +226,18 @@ function p.ProcessGoodFriendInfo(netdata)
 				  local name   = netdata:ReadUnicodeString();
 				  local online = netdata:ReadByte();  --0:离线 
 				  local pro       = netdata:ReadInt(); 
-				 
+                    --** chh 2012-09-05 **--
+				  local nQuality  = netdata:ReadInt();  --品质
 				 
 				  local lv     = netdata:ReadInt(); 
 				   local repute    = netdata:ReadInt(); 
 				  local syndycate = netdata:ReadInt(); 
 				  local sports 	  = netdata:ReadInt(); 
 				  local capacity  = netdata:ReadInt(); 
-				  
+                  
+                  
+                  
+                  
 				  LogInfo("_FRIEND_INFO_UPDATE:[%d],name:[%s],lv:[%d],online:[%d],pro[%d]",idFriend,name,lv,online,pro)
 				  
 				  --新添加的好友
@@ -247,6 +253,9 @@ function p.ProcessGoodFriendInfo(netdata)
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_SYNDYCATE,syndycate,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_SPORTS	,sports,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_CAPACITY,capacity,idFriend) 
+                  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_QUALITY,nQuality,idFriend) 
+                  
+                  LogInfo("chh_nQuality2:[%d]",nQuality);
 			end	
 			
 			--[[
@@ -268,8 +277,10 @@ function p.ProcessGoodFriendInfo(netdata)
 			local name   = netdata:ReadUnicodeString();
 			local online = netdata:ReadByte();  --0:离线 
 			local pro       = netdata:ReadInt(); 
+              --** chh 2012-09-05 **--
+				  local nQuality  = netdata:ReadInt();  --品质
 				  
-				  local lv     = netdata:ReadInt(); 
+                  local lv     = netdata:ReadInt(); 
 				  local repute    = netdata:ReadInt(); 
 				  local syndycate = netdata:ReadInt(); 
 				  local sports 	  = netdata:ReadInt(); 
@@ -288,7 +299,7 @@ function p.ProcessGoodFriendInfo(netdata)
 			SetRoleFriendDataS(nRoleId, FRIEND_DATA.FRIEND_NAME, name,   idFriend) 
 			SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_LEVEL,lv,     idFriend) 
 			SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_ONLINE,online,idFriend) 
-			
+			SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_QUALITY,nQuality,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_PROFESSION,pro,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_REPUTE	,repute,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_SYNDYCATE,syndycate,idFriend) 
@@ -318,7 +329,7 @@ function p.ProcessGoodFriendInfo(netdata)
 			if IsUIShow(NMAINSCENECHILDTAG.FriendAttr) then
 			    --刷新好友按钮文字
 				FriendAttrUI.RefreshBtnText();
-			end	
+			end
 
 						
 	elseif nAction == _FRIEND_SEL then
@@ -394,4 +405,32 @@ end
 
 
 
+function p.SendSeeOtherPlayerList()
+    LogInfo("MsgFriend.SendSeeOtherPlayerList");
+    local netdata = createNDTransData(NMSG_Type._MSG_VIEW_PLAYER);
+    
+	SendMsg(netdata);	
+	netdata:Free();	
+    ShowLoadBar();
+   	
+	return true;
+end
+
+function p.ProcessOtherPlayerList( netdata )
+    LogInfo("MsgFriend.ProcessOtherPlayerList");
+    local m = {};
+    local nCount = netdata:ReadInt();
+    for i=1,nCount do
+        local mr = {};
+        mr.Id       = netdata:ReadInt();
+        mr.Level    = netdata:ReadInt();
+        mr.Quality  = netdata:ReadByte();
+        mr.Name     = netdata:ReadUnicodeString();
+        LogInfo( "nCount:[%d],i:[%d],mr.Id:[%d],mr.Level:[%d],mr.Quality:[%d],mr.Name:[%s]",nCount,i,mr.Id,mr.Quality,mr.Level,mr.Name );
+        table.insert(m,mr);
+    end
+    MainPlayerListUI.LoadUI(m);
+    CloseLoadBar();
+end
+RegisterNetMsgHandler(NMSG_Type._MSG_VIEW_PLAYER, "MsgFriend.ProcessOtherPlayerList", p.ProcessOtherPlayerList);
 RegisterNetMsgHandler(NMSG_Type._MSG_GOODFRIEND, "p.ProcessGoodFriendInfo", p.ProcessGoodFriendInfo);

@@ -49,10 +49,10 @@ function p.processNmlOpen(netdata)
 		status			= netdata:ReadByte();
 		cdtime			= netdata:ReadInt();
 		
-		--LogInfo("qbw9 typeId:" .. typeId.." status:"..status);
-		--LogInfo("qbw9 rank:" .. rank);
-		--LogInfo("qbw9 status:" .. status);
-        --LogInfo("qbw9 cdtime:" .. cdtime);
+		LogInfo("qbw9 typeId:" .. typeId.." status:"..status);
+		LogInfo("qbw9 rank:" .. rank);
+		LogInfo("qbw9 status:" .. status);
+        LogInfo("qbw9 cdtime:" .. cdtime);
 		
 		--local id = AffixBossFunc.GetDataBaseN(typeId,DB_MAP.ID);
 		--LogInfo("id:%d", id);
@@ -89,6 +89,7 @@ function p.sendAgainOpen(nId)
     netdata:WriteByte(1);
     netdata:WriteInt(nId);
     SendMsg(netdata);
+	netdata:Free();
 	
 	LogInfo("p.sendNmlOpen: %d", NMSG_Type._MSG_AFFIX_BOSS_NML_OPEN);
 	return true;
@@ -291,7 +292,7 @@ function p.sendNmlReset(nMapId)
 		return false;
 	end	
 	
-	local nGroupId = AffixBossEliteMapList.getGroupByMapId(nMapId);
+	local nGroupId = nMapId;
 	if (not nGroupId) or nGroupId <= 0 then
 		return false;
 	end

@@ -149,6 +149,15 @@ NMAINSCENECHILDTAG =
     ArenaFightReplayUI       = NUITAG_BEGIN + 110,                   --战斗查看以及副本攻略结果界面
     DragonTactic                   = NUITAG_BEGIN + 111,                   --龙将兵法界面
     BattleMapCtrl                   = NUITAG_BEGIN + 112,                   --战斗界面的控件处理层
+    DailyCheckIn                    = NUITAG_BEGIN + 113,                   --每日签到处理层   
+    RechargeReward              = NUITAG_BEGIN + 114,                   --充值奖励处理层       
+    DailyActionUI                    = NUITAG_BEGIN + 115,                   --每日活动处理层         
+    --TransportUI                           = NUITAG_BEGIN + 116,                   --运送粮草处理层   
+    TransportUI                           = 2015,                   --运送粮草处理层         
+    TransportPrepareUI              = NUITAG_BEGIN + 117,                   --运送粮草准备处理层
+    TransportLootUI                   = NUITAG_BEGIN + 118,                   --运送粮草准备处理层       
+    BattleBossUI                    = 2015,--NUITAG_BEGIN + 119,   
+    TransPlayerListUI                    = NUITAG_BEGIN + 120,                  --运送粮草玩家列表     
     
     TopBar                  = NUITAG_BEGIN + 158,
     BottomMsgBtn               = NUITAG_BEGIN + 159,
@@ -163,7 +172,16 @@ NMAINSCENECHILDTAG =
     Levy                    = NUITAG_BEGIN + 168,                   --征收
     Fete                    = NUITAG_BEGIN + 169,                   --祭祀
     Entry					= NUITAG_BEGIN + 170,					-- 入口界面
-    
+    GMProblemBtn            = NUITAG_BEGIN + 171,
+    OLGiftBtn               = NUITAG_BEGIN + 172,                   --在线奖励活动
+    RechargeGiftBtn               = NUITAG_BEGIN + 173,                   --充值奖励活动
+    ArmyGroup				= NUITAG_BEGIN + 174,					-- 军团界面
+    CreateOrJoinArmyGroup	= NUITAG_BEGIN + 175,					-- 创建或加入军团界面(含军团列表)
+	ActivityNoticeUI		= NUITAG_BEGIN + 176,					-- 活动公告界面--
+    LoginListUI          = NUITAG_BEGIN + 177,                    --登入等待界面
+    MainPlayerListUI        = NUITAG_BEGIN + 178,                   --主城查看其它玩家
+ 	CampBattle              = 2015,                   --阵营战
+   
     CommonDlg				= NDLGTAG_BEGIN,						--通用对话框
 	CommonDlgNew              = NDLGTAGNEW_BEGIN,                     --新通用对话框
 	--后面都被对话框占用了,请不要使用

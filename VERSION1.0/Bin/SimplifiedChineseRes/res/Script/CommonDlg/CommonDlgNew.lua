@@ -136,6 +136,7 @@ function p.ShowYesDlg(tip, callback, param, timeout,color,flag)
     --定时器
 	if CheckN(timeout) and 0 < timeout then
 		local nTimeTag	= _G.RegisterTimer(p.OnProcessTimer, timeout);
+        LogInfo("p.ShowYesDlg nTimeTag:[%d]",nTimeTag);
         if CheckN(nTimeTag) then
             tTimeTag2DlgId[nTimeTag] = nTag;
         end
@@ -451,6 +452,7 @@ end
 
 ------------------------------------------------------------------------------------------------
 function p.ShowTipDlg(sTip)
+    LogInfo("p.ShowTipDlg:[%s]",sTip);
     p.ShowTipsDlg({{sTip,FontColor.Text}});
 end
 
@@ -463,11 +465,12 @@ p.nSlideVanishSpeed = 60;                             --滑动消失速度
 p.nTimerTag         = nil;                            --定时器ID
 p.nTimerLoopTime    = 1/10;                           --定时器循环时间
 p.nShowCount        = 3;                              --同时能显示font的数量
-p.nVanishTime       = 2;                              --消失的时间
+p.nVanishTime       = 3;                              --消失的时间
 p.nLevtRightOffset  = 2*ScaleFactor;                  --左右便宜位置
 
 -- tTips格式{{nTip1,sColor1},{nTip2,sColor2},{nTip3,sColor3}}
 function p.ShowTipsDlg(tTips)
+    LogInfo("p.ShowTipsDlg:[%s]",tTips[1][1]);
     local scene = GetRunningScene();
 	if not CheckP(scene) then
 		LogInfo("not CheckP(scene),load CommonDlgNew.ShowTipsDlg failed!");
@@ -491,10 +494,12 @@ function p.ShowTipsDlg(tTips)
         
         if(sTip == nil) then
             LogInfo("sTip is nil!");
+            sTip = "";
         end
         
         if(sFontColor == nil) then
             LogInfo("sFontColor is nil!");
+            sFontColor = ItemColor[0];
         end
         
         local LabelRect = CGRectMake(-winsize.w ,-p.nFontHeight ,winsize.w, p.nFontHeight);
@@ -558,8 +563,10 @@ function p.DeleteFontByIndex(fonts)
         if(label) then
             LogInfo("p.DeleteFontByIndex success!");
             label:RemoveFromParent(true);
-            p.ReturnDlgId(v);
+        else
+            LogInfo("p.DeleteFontByIndex fail!");
         end
+        p.ReturnDlgId(v);
     end
     table.remove(p.FontLists,1);
 end
@@ -575,91 +582,97 @@ function p.OnProcessTextTimer(nTimeTag)
         
         if(v ~= nil) then
             
-        
-        
-        LogInfo("i:[%d]",i);
-        --当前字体应该在的中心位置
-        local nCurrShouldPos = winsize.h/2 - (#p.FontLists-1)*p.nFontHeight;
-        
-        --当前字体应该在的起始位置
-        local nBeginShouldPos = winsize.h/2 - (#p.FontLists-i)*p.nFontHeight;
-        LogInfo("nBeginShouldPos:[%d],#p.FontLists:[%d]",nBeginShouldPos,#p.FontLists);
-        
-        local bFlag = false;
-        for j,nTag in ipairs(v.tFont_tag) do
+            LogInfo("i:[%d]",i);
+            --当前字体应该在的中心位置
+            local nCurrShouldPos = winsize.h/2 - (#p.FontLists-1)*p.nFontHeight;
             
-            local scene = GetRunningScene();
-            local label = GetLabel(scene, nTag);
-            if(label) then
+            --当前字体应该在的起始位置
+            local nBeginShouldPos = winsize.h/2 - (#p.FontLists-i)*p.nFontHeight;
+            LogInfo("nBeginShouldPos:[%d],#p.FontLists:[%d]",nBeginShouldPos,#p.FontLists);
             
-                --最终位置计算
-                local rect = label:GetFrameRect();
-                
-                local nShouldPos = nBeginShouldPos - (j-1)*p.nFontHeight;
-                local nMovedPos  = 0;
-                local nMovedLR   = 0;
-                if(i==#p.FontLists) then
-                    LogInfo("i:=[%d]",i);
-                    nMovedPos = nShouldPos;
-                else
-                    nMovedPos  = rect.origin.y;
-                    nMovedPos = nMovedPos - p.nSlideSpeed;
-                    if(nMovedPos<nShouldPos) then
-                        nMovedPos = nShouldPos;
-                    end
-                end
-                
-                
-                --左右动画计算
-                local nMod = v.nStates % 3;
-                if(v.nStates<=3) then
-                    if(nMod == 0) then
-                        nMovedLR = 0;
-                    elseif(nMod == 1) then
-                        nMovedLR = -p.nLevtRightOffset;
-                    end
-                end
-                
-                
-                --超时消失计算
-                if(os.time()-v.nTime>=p.nVanishTime) then
+            local bFlag = false;
+            LogInfo( "#v.tFont_tag:[%d]",#v.tFont_tag );
+            for j,nTag in ipairs(v.tFont_tag) do
+                LogInfo( "j:[%d],nTag:[%d]",j,nTag );
+                local scene = GetRunningScene();
+                local label = GetLabel(scene, nTag);
+                if(label) then
+                    LogInfo( "label != nil!" );
+                    --最终位置计算
+                    local rect = label:GetFrameRect();
                     
-                    local color = label:GetFontColor();
-                    if(color.a ~= 0) then
-                        nMovedPos = rect.origin.y - p.nSlideSpeed;
-                        local colora = color.a - p.nSlideVanishSpeed;
-                        if(colora<0) then
-                            colora = 0;
-                        end
-                        color.a = colora;
-                        label:SetFontColor(color);
+                    local nShouldPos = nBeginShouldPos - (j-1)*p.nFontHeight;
+                    local nMovedPos  = 0;
+                    local nMovedLR   = 0;
+                    if(i==#p.FontLists) then
+                        --LogInfo("i:=[%d]",i);
+                        nMovedPos = nShouldPos;
                     else
-                        LogInfo("a==0");
-                        bFlag = true
+                        nMovedPos  = rect.origin.y;
+                        nMovedPos = nMovedPos - p.nSlideSpeed;
+                        if(nMovedPos<nShouldPos) then
+                            nMovedPos = nShouldPos;
+                        end
                     end
+                    
+                    
+                    --左右动画计算
+                    local nMod = v.nStates % 3;
+                    if(v.nStates<=3) then
+                        if(nMod == 0) then
+                            nMovedLR = 0;
+                        elseif(nMod == 1) then
+                            nMovedLR = -p.nLevtRightOffset;
+                        end
+                    end
+                    
+                    
+                    --超时消失计算
+                    if(os.time()-v.nTime>=p.nVanishTime) then
+                        
+                        local color = label:GetFontColor();
+                        if(color.a ~= 0) then
+                            nMovedPos = rect.origin.y - p.nSlideSpeed;
+                            local colora = color.a - p.nSlideVanishSpeed;
+                            if(colora<0) then
+                                colora = 0;
+                            end
+                            color.a = colora;
+                            label:SetFontColor(color);
+                        else
+                            --LogInfo("a==0");
+                            bFlag = true
+                        end
+                    end
+                    
+                    
+                    local LabelRect = CGRectMake(nMovedLR ,nMovedPos ,winsize.w, p.nFontHeight);
+                    label:SetFrameRect(LabelRect);
+                else
+                    LogInfo( "label == nil!" );
+                    
+                    bFlag = true;
+                    
                 end
                 
                 
-                local LabelRect = CGRectMake(nMovedLR ,nMovedPos ,winsize.w, p.nFontHeight);
-                label:SetFrameRect(LabelRect);
             end
             
+            v.nStates = v.nStates + 1;
             
-        end
-        
-        v.nStates = v.nStates + 1;
-        
-        if(bFlag) then
-            p.DeleteFontByIndex(v);
-        end
+            if(bFlag) then
+                p.DeleteFontByIndex(v);
+            end
         
         end
     end
     
     
     if(#p.FontLists == 0) then
-        _G.UnRegisterTimer(p.nTimerTag);
-        p.nTimerTag = nil;
+        if(p.nTimerTag) then
+            _G.UnRegisterTimer(p.nTimerTag);
+            p.nTimerTag = nil;
+        end
     end
     
 end
@@ -786,8 +799,9 @@ function p.OnProcessTimer(nTimeTag)
         
 		p.CloseDlg(nDlgTag, eventType);
 	end
-	
+	LogInfo("p.OnProcessTimer nTimeTag:[%d]",nTimeTag);
 	_G.UnRegisterTimer(nTimeTag);
+    tTimeTag2DlgId[nTimeTag] = nil;
 end
 
 --获得对话框根据节点
@@ -829,8 +843,11 @@ function p.OnDeConstruct(node, bClearUp)
         
         --销毁定时器
 		for i, v in pairs(tTimeTag2DlgId) do
+            LogInfo("p.OnDeConstruct i:[%d],v:[%d]",i,v);
 			if v == nTag then
 				_G.UnRegisterTimer(i);
+                LogInfo("tTimeTag2DlgId i:[%d]",i);
+                tTimeTag2DlgId[i] = nil;
 			end
 		end
 	end 

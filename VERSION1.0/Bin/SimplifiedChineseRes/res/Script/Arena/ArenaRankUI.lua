@@ -21,6 +21,8 @@ local ID_ARENARANK_CTRL_PICTURE_BG			= 23;
 local ID_ARENARANK_M_CTRL_TEXT_FIGHT     = 89;
 local ID_ARENARANK_M_CTRL_TEXT_LEVEL     = 84;
 local ID_ARENARANK_M_CTRL_TEXT_PLAYER     = 79;
+local ID_ARENARANK_M_CTRL_TEXT_5     = 5;
+
 local ID_ARENARANK_M_CTRL_TEXT_76      = 76;
 local ID_ARENARANK_M_CTRL_TEXT_75      = 75;
 local ID_ARENARANK_M_CTRL_TEXT_72      = 72;
@@ -136,11 +138,11 @@ function p.SetRankInfo(rank,name,level,power,id)
 		uiLoad:Load("SM_JJ_M.ini",view,p.OnRankUIEvent,0,0);
 		uiLoad:Free();
 	end
-	
-	SetLabel(view,ID_ARENARANK_M_CTRL_TEXT_PLAYER,SafeN2S(rank).." "..name);
+    
+    SetLabel(view,ID_ARENARANK_M_CTRL_TEXT_5,SafeN2S(rank));
+	SetLabel(view,ID_ARENARANK_M_CTRL_TEXT_PLAYER, name);
 	SetLabel(view,ID_ARENARANK_M_CTRL_TEXT_LEVEL,SafeN2S(level));
-	--SetLabel(view,ID_ARENARANK_M_CTRL_TEXT_FIGHT,SafeN2S(power));
-	
+
 end
 
 function p.CleanContainer()

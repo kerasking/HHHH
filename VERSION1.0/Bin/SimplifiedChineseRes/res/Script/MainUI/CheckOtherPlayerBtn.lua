@@ -9,12 +9,10 @@ local p = CheckOtherPlayerBtn;
 
 --UI坐标配置
 local winsize	= GetWinSize();
-local btnw		= winsize.w * 0.083;
-local btnh		= winsize.w * 0.083;
-p.Rect			= CGRectMake((winsize.w - 2*btnw), 0, btnw, btnh);
+local btnw		= 32*ScaleFactor;
+local btnh		= 40*ScaleFactor;
+p.LayerRect = CGRectMake(winsize.w-btnw*1.5, winsize.h-btnh-40*ScaleFactor, btnw, btnh); 
 
-local winsize = GetWinSize();
-local RectUILayer = CGRectMake(0, 0, winsize.w , winsize.h);
 
 local nOtherPlayerId = -1;
 
@@ -26,7 +24,12 @@ function p.LoadUI(param1)
 		LogInfo("scene == nil,load CheckOtherPlayerBtn failed!");
 		return;
 	end
-
+    
+    local layer = GetUiLayer(scene,NMAINSCENECHILDTAG.MilOrdersBtn);
+    if(layer) then
+        return;
+    end
+    
 	--
 	local pool = DefaultPicPool();
 	if not CheckP(pool) then
@@ -39,17 +42,17 @@ function p.LoadUI(param1)
 	end
 	
 	layer:Init();
-	layer:SetFrameRect(CGRectMake(winsize.w - btnw, winsize.h*0.72, btnw, btnh));
+	layer:SetFrameRect(p.LayerRect);
 	layer:SetTag(NMAINSCENECHILDTAG.MilOrdersBtn);
-	
-	local btn	= CreateButton("button_look_normal.png","button_look_select.png","",CGRectMake(0, 0, 80, 80),12);
-	
+
+	--[[
+	local btn	= CreateButton("","","",CGRectMake(0, 0, btnw, btnh),12);
 	local norPic = pool:AddPicture(GetSMImgPath("button_look.png"), false);
- 	norPic:Cut(CGRectMake(0.0,0.0,74.0, 80.0 ));
+ 	norPic:Cut(CGRectMake(0.0, 0.0, btnw, btnh));
 	btn:SetImage(norPic);
 	
 	local selpic = pool:AddPicture(GetSMImgPath("button_look.png"), false);
- 	selpic:Cut(CGRectMake(0.0,80.0,74.0, 80.0 ));
+ 	selpic:Cut(CGRectMake(0.0, btnh, btnw, btnh));
 	btn:SetTouchDownImage(selpic);
 	
 	
@@ -60,9 +63,16 @@ function p.LoadUI(param1)
 
 	btn:SetLuaDelegate(p.OnUIEvent);
 	layer:AddChild(btn);
+	]]
 	
 	scene:AddChild(layer);
-
+    
+    --** chh 2012-08-08 **--
+    --设置隐藏偏移
+    if(MainUIBottomSpeedBar.ShowHideState == 1) then
+        MainUIBottomSpeedBar.findSetOffset(1, MainUIBottomSpeedBar.ShowHideHeight);
+    end
+    
 	return;
 end
 
@@ -83,8 +93,10 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 	
 		local nFriendId = nOtherPlayerId;
 		
-		MsgFriend.SendFriendSel(nFriendId,"qbw:testid:"..nFriendId);
-	end
+		--chh 2012-07-17
+		--MsgFriend.SendFriendSel(nFriendId,"qbw:testid:"..nFriendId);
+        MsgFriend.SendSeeOtherPlayerList();
+    end
 	
 	return true;
 end

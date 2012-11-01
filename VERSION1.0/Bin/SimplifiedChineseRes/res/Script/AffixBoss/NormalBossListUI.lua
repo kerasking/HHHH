@@ -3,7 +3,7 @@
 --时间: 2012.7.17
 --作者: Guosen
 ---------------------------------------------------
--- 世界地图进入副本界面接口：		NormalBossListUI.LoadUI( nCampaignID );
+-- 世界地图进入副本界面接口：		NormalBossListUI.LoadUI( nCampaignID, nPromptType);
 -- 参数： nCampaignID:战役点ID
 
 ---------------------------------------------------
@@ -54,7 +54,8 @@ local ID_CFMDLG_LABEL_TITLE			= 966;	-- 标题
 ---------------------------------------------------
 local TAG_LAYER_ELITE				= 200;	-- 精英副本页面层的TAG值
 local TAG_LAYER_CONFDLG				= 300;	-- 确认对话框层的TAG值
-local N_GOLD_RESET					= 10;	-- 重置一次精英副本需要的金币
+--local N_GOLD_RESET					= 10;	-- 重置一次精英副本需要的金币
+local N_GOLD_RESET ={[0]=100,[1]=300,[2]=500}
 
 -- 副本提示类型
 PromptType = {
@@ -84,10 +85,11 @@ p.bEliteLayerVisible				= nil;	-- 显示精英副本页面--隐藏后恢复用
 p.bBattleInfoRank = 0;  --副本是否已经通关过
 ---------------------------------------------------
 -- 创建并显示副本界面--WithCampaignID
-function p.LoadUI( nCampaignID )
-	
+function p.LoadUI( nCampaignID, nPromptType)
+    ArenaUI.isInChallenge = 4;
     p.nCampaignID = nCampaignID;
-	
+    p.nPromptType = nPromptType;
+        
     local pDirector = DefaultDirector();
 	if ( pDirector == nil ) then
 		LogInfo( "NormalBossListUI.LoadUI: pDirector == nil" );
@@ -126,7 +128,7 @@ function p.OnUIEvent( uiNode, uiEventType, param )
 		elseif ( ID_BTN_NORMAL == tag ) then
 			p.pLayerElite:SetVisible( false );
 		elseif ( ID_BTN_ELITE == tag ) then
-			p.pLayerElite:SetVisible( true );
+                p.pLayerElite:SetVisible( true );
 		elseif ( ID_BTN_RESET == tag ) then
 			p.OnBtnReset();
 		elseif ( ID_BTN_CLEAR == tag ) then
@@ -182,15 +184,21 @@ end
 -- 响应重置按钮
 function p.OnBtnReset()
 	--判定VIP等级，
-	local nPlayerVIPLv	= GetRoleBasicDataN( GetPlayerId(), USER_ATTR.USER_ATTR_VIP_RANK );
-	if ( nPlayerVIPLv < 3 ) then
+	--local nPlayerVIPLv	= GetRoleBasicDataN( GetPlayerId(), USER_ATTR.USER_ATTR_VIP_RANK );
+	--if ( nPlayerVIPLv < 3 ) then
+    
+    if ( GetGetVipLevel_ELITE_MAP_RESET_NUM()<=0 ) then
 		CommonDlgNew.ShowYesDlg( "VIP等级3及以上者才可以重置冷却时间哦……", nil, nil, 3 );
 		return;
 	end
 	--获得可重置次数
-	local nResetNumber	= RolePetFunc.GetResetNumber();
+	local nResetCount	= GetRoleBasicDataN( GetPlayerId(), USER_ATTR.USER_ATTR_INSTANCING_RESET_COUNT );
+    nResetCount = ConvertReset(nResetCount, p.nCampaignID);
+    local nResetNumber	= RolePetFunc.GetResetNumber(p.nCampaignID);
+    
+    LogInfo("nResetCount:[%d],nResetNumber:[%d],p.nCampaignID:[%d]",nResetCount,nResetNumber,p.nCampaignID);
 	if ( nResetNumber > 0 ) then
-		CommonDlgNew.ShowYesOrNoDlg( "消耗"..N_GOLD_RESET.."金币重置精英副本？", p.Callback_CostGoldToReset, true );
+		CommonDlgNew.ShowYesOrNoDlg( "消耗"..N_GOLD_RESET[nResetCount].."金币重置精英副本？", p.Callback_CostGoldToReset, true );
 	else
 		CommonDlgNew.ShowYesDlg( "木有重置次数了……", nil, nil, 3 );
 	end
@@ -201,7 +209,11 @@ function p.Callback_CostGoldToReset( nId, param )
 	if ( CommonDlgNew.BtnOk == nId ) then
 		local nPlayerID		= GetPlayerId();--User表中的ID
 		local nPlayerGold	= GetRoleBasicDataN( nPlayerID, USER_ATTR.USER_ATTR_EMONEY );
-		if ( nPlayerGold < N_GOLD_RESET ) then
+        
+		local nResetCount	= GetRoleBasicDataN( GetPlayerId(), USER_ATTR.USER_ATTR_INSTANCING_RESET_COUNT );
+        nResetCount = ConvertReset(nResetCount, p.nCampaignID);
+        local nResetNumber	= RolePetFunc.GetResetNumber(p.nCampaignID);
+        if ( nPlayerGold < N_GOLD_RESET[nResetCount] ) then
 			CommonDlgNew.ShowYesDlg( "金币不足请充值……", nil, nil, nil );
 		else
 		-- 发送重置精英副本的消息
@@ -258,6 +270,14 @@ function p.GenerateNoramlLayer( pScene )
    	closeBtn:SetSoundEffect(Music.SoundEffect.CLOSEBTN);
 	--p.GenerateConfirmDialog( p.pLayerNormal );
 	--p.pLayerConfDlg:SetVisible( false );
+    
+    
+    SetArrow(p.pLayerNormal,p.GetPageContainer(),1,ID_BTN_LEFT_ARROW,ID_BTN_RIGHT_ARROW);
+end
+
+function p.GetPageContainer()
+    local pListContainer = GetScrollViewContainer( p.pLayerNormal, ID_LIST_CONTAINER );
+    return pListContainer;
 end
 
 
@@ -468,12 +488,15 @@ function p.FillListItem( pLayerListItem, tBattleIDList, nPageNum )
         
 		if ( tBattleInfo ~= nil ) then
         
-           local bCanShow = p.IsBattleCanShow(tBattleInfo.typeid);
-           if bCanShow == true then
+            local bCanShow = p.IsBattleCanShow(tBattleInfo.typeid);
+            if bCanShow == true then
             	--LogInfo( "GetMapPic tBattleInfo.typeid = %d, i = %d", tBattleInfo.typeid, i );
-				local pPic	= GetMapPic( tBattleInfo.typeid );
+				local pPic	= nil;
 				if ( tBattleInfo.elite == 1 ) and ( tBattleInfo.time ~= 0 ) then
-					pPic:SetGrayState( true );
+					--pPic:SetGrayState( true );
+                    pPic	= GetEliteGrayMapPic( tBattleInfo.typeid );
+                else
+                    pPic	= GetMapPic( tBattleInfo.typeid );
 				end
 				pBtnBattle:SetImage( pPic );
 			else
@@ -524,6 +547,9 @@ function p.ShowNormalPageNum( nPageNum )
     local tRect = CGRectMake( N_W*p.nNormalDispPageNum, 0, N_W, N_H );
 	norpic:Cut( tRect );
 	p.pCtrlNormalPageNum:SetPicture(norpic);
+    
+    
+    SetArrow(p.pLayerNormal,p.GetPageContainer(),1,ID_BTN_LEFT_ARROW,ID_BTN_RIGHT_ARROW);
 end
 
 --显示箭头-普通副本
@@ -580,6 +606,13 @@ function p.GenerateEliteLayer( pParentLayer )
 	--设置关闭音效
    	local closeBtn=GetButton(layer,ID_BTN_CLOSE);
    	closeBtn:SetSoundEffect(Music.SoundEffect.CLOSEBTN);
+    
+    SetArrow(p.pLayerElite,p.GetElitePageContainer(),1,ID_BTN_LEFT_ARROW,ID_BTN_RIGHT_ARROW);
+end
+
+function p.GetElitePageContainer()
+    local pListContainer = GetScrollViewContainer( p.pLayerElite, ID_LIST_CONTAINER );
+    return pListContainer;
 end
 
 ---------------------------------------------------
@@ -598,13 +631,27 @@ function p.InitializeEliteLayer()
 	p.pCtrlEliteRightArrow	= GetImage( p.pLayerElite, ID_BTN_RIGHT_ARROW );
 	p.pCtrlElitePageNum		= GetImage( p.pLayerElite, ID_PIC_PAGE_NUM );
 
+
+
+	local pBtnClear			= GetButton( p.pLayerElite, ID_BTN_CLEAR );
 	local pBtnReset			= GetButton( p.pLayerElite, ID_BTN_RESET );
-	local nResetNumber		= RolePetFunc.GetResetNumber();
+	local nResetNumber		= RolePetFunc.GetResetNumber(p.nCampaignID);
 	local szTitle			= "重置";
-	if ( nResetNumber > 0 ) then
-		szTitle				= szTitle .. "(" .. nResetNumber .. ")";
-	end
-	pBtnReset:SetTitle( szTitle );
+    
+    --扫荡功能开启之后才可以显示重置按钮以及扫荡按钮
+    if IsFunctionOpen(StageFunc.RepeatCoyp) then
+    	--重置次数小于等于0那么置灰
+        if ( nResetNumber > 0 ) then
+            szTitle				= szTitle .. "(" .. nResetNumber .. ")";
+        else
+            pBtnReset:EnalbeGray(true);
+        end
+        pBtnReset:SetTitle( szTitle );
+    else
+        pBtnReset:SetVisible(false);
+        pBtnClear:SetVisible(false);
+    end
+    
 	
 	---- 获得该战役的精英副本信息表
 	local tBattleIDList, nCount = AffixBossFunc.findBossList( p.nCampaignID, 1 );
@@ -684,6 +731,8 @@ function p.ShowElitePageNum( nPageNum )
 	local tRect = CGRectMake( N_W*nPageNum, 0, N_W, N_H );
 	norpic:Cut( tRect );
 	p.pCtrlElitePageNum:SetPicture(norpic);
+    
+    SetArrow(p.pLayerElite,p.GetElitePageContainer(),1,ID_BTN_LEFT_ARROW,ID_BTN_RIGHT_ARROW);
 end
 
 --显示箭头-精英副本
@@ -777,20 +826,26 @@ function p.OnUIEventConfirmDialog( uiNode, uiEventType, param )
 					MsgAffixBoss.sendNmlEnter( p.nChosenBattleID );
 					return true;
 				else
-					CommonDlgNew.ShowYesDlg( "军令不足", nil, nil, 3 );
-				end
+                    --先判断是否允许再买军令
+                    local allowBuyCount = AssistantUI.allowBuyStaminaCount();
+                    LogInfo( "allowBuyCount = %d", allowBuyCount ); 
+                    if(allowBuyCount > 0) then
+                        PlayerVIPUI.buyMilOrderTip( p.nChosenBattleID );
+                    else
+                        CommonDlgNew.ShowYesDlg( "军令不足", nil, nil, 3);
+                    end
+                end
             else
             	if ( tBattleInfo.time == 0 ) then
 					MsgAffixBoss.sendNmlEnter( p.nChosenBattleID );
 				else
-					CommonDlgNew.ShowYesDlg( "精英副本冷却中，VIP3以上有立即重置特权……", nil, nil, 3 );
+					CommonDlgNew.ShowYesDlg( "精英副本每日职能挑战一次，VIP3以上可以重置副本.", nil, nil, 3 );
 				end
             end
 		end
 	end
 	return true;
 end
-
 ---------------------------------------------------
 -- 显示确认对话框
 -- 参数：nBattleID:副本ID
@@ -815,7 +870,7 @@ function p.ShowConfirmDialog( nBattleID )
         local bIsCanShow = p.IsBattleCanShow(tBattleInfo.typeid );
 		--if ( nUserStage <= nNeedStage ) then
         if ( bIsCanShow ~= true ) then
-			CommonDlgNew.ShowYesDlg( "温馨提示：要完成任务关卡才可解锁哦，亲……", nil, nil, 3 );
+			CommonDlgNew.ShowYesDlg( "温馨提示：要完成前面任务关卡才可解锁哦，亲……", nil, nil, 3 );
 			return false;
 		end
         
@@ -828,7 +883,7 @@ function p.ShowConfirmDialog( nBattleID )
         p.bBattleInfoRank = tBattleInfo.rank;
         
 		if ( tBattleInfo.elite == 0 ) then
-			if ( tBattleInfo.rank == 0 ) then
+			if ( tBattleInfo.rank == 0 ) or not IsFunctionOpen(StageFunc.RepeatCoyp) then
 				pBtnClear:SetVisible( false );
 			else
 				pBtnClear:SetVisible( true );
@@ -844,8 +899,30 @@ function p.ShowConfirmDialog( nBattleID )
 end
 
 function p.GetIsBattleRank()
+	local tBattleInfo	= AffixBossFunc.getBossInfo( p.nChosenBattleID );
+    
+	if ( tBattleInfo == nil ) then
+		LogInfo( "NormalBossListUI: p.ShowConfirmDialog() tBattleInfo == nil " );
+		return false;
+	else
+        p.bBattleInfoRank = tBattleInfo.rank;
+    end
+
     return p.bBattleInfoRank;
 end
+
+--是否为精英副本
+function p.GetIsBattleType()
+	local tBattleInfo	= AffixBossFunc.getBossInfo( p.nChosenBattleID );
+    
+	if ( tBattleInfo == nil ) then
+		LogInfo( "NormalBossListUI: p.ShowConfirmDialog() tBattleInfo == nil " );
+		return 0;
+    end
+
+    return tBattleInfo.elite;
+end
+
 --
 -- 关闭确认对话框
 function p.CloseConfirmDialog()
@@ -912,6 +989,9 @@ function p.RedisplayWorldMap()
 	end
     WorldMap(p.nCampaignID);  
 end
+
+
+
 
 -- 重新显示--结束战斗，结束扫荡时调用
 function p.Redisplay()
@@ -983,7 +1063,7 @@ function p.LoadUIWithBattleID( nBattleID, nPromptType )
 		LogInfo( "NormalBossListUI: p.LoadUIWithBattleID() nCampaignID is nil " );
 		return;
 	end
-	p.LoadUI( nCampaignID );
+	p.LoadUI( nCampaignID, p.nPromptType);
 	
 	local tBattleIDList, nCount = AffixBossFunc.findBossList( p.nCampaignID, tBattleInfo.elite );
 	local nListItemLimit	= table.getn( tListItemBtnID );

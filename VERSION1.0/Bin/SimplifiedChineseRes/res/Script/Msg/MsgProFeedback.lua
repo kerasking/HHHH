@@ -74,6 +74,10 @@ LogInfo("p.ProcessCheckProFeedback....")
 	end
 	
 	GMProblemUI.ShowLayer(0);
+		
+	--清空信息
+	GMProblemUI.ResetContent();
+	
 	
 	for i=1, count do
 		local enquire = netdatas:ReadUnicodeString();  --询问内容

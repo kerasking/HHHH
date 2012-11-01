@@ -84,3 +84,16 @@ function p.LogOutItem(nItemId)
 	end
 	_G.DumpGameData(NScriptData.eItemInfo, nItemId, NRoleData.eBasic, 0);
 end
+
+
+--** chh 2012-08-22 物品排序**--
+function p.OrderItems(items)
+    table.sort(items,p.SortItemFunc);
+    return items;
+end
+function p.SortItemFunc(a, b)
+    local nItemTypeA=Item.GetItemInfoN(a, Item.ITEM_TYPE);
+    local nItemTypeB=Item.GetItemInfoN(b, Item.ITEM_TYPE);
+    return nItemTypeA < nItemTypeB;
+end
+

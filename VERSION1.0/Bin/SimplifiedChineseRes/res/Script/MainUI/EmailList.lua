@@ -47,6 +47,7 @@ local ID_ITEM_BTN_TOUCH				= 10;	-- 触摸按钮(透明)
 local ID_ITEM_LABEL_NAME			= 3;	-- 列表项-
 local ID_ITEM_LABEL_SUBJECT			= 4;	-- 列表项-主题
 local ID_ITEM_LABEL_DATE			= 5;	-- 列表项-删除时间
+local ID_ITEM_PIC_READED			= 6;	-- 未读图片标识
 
 -- 写邮件界面控件ID
 local ID_EDIT_INPUT_NAME			= 20;	-- 编辑控件-名字
@@ -60,9 +61,12 @@ local ID_READ_LABEL_NAME			= 10;	-- 名
 local ID_READ_LABEL_SUBJECT			= 11;	-- 标题
 local ID_READ_LABEL_CONTENT			= 12;	-- 内容
 local ID_READ_BTN_BACK				= 13;	-- 返回
+local ID_READ_BTN_REPLY				= 35;	-- 回复
 
 ---------------------------------------------------
-local LIST_ITEM_HEIGHT				= 60;	-- 列表项高(960*640:60 = 480*320:30)
+local szSEND_ERROR_00				= "收件人不可为空！";
+local szSEND_ERROR_01				= "主题不可为空！"
+local szSEND_ERROR_02				= "内容不可为空！"
 
 
 ---------------------------------------------------
@@ -75,9 +79,9 @@ local TAG_LAYER_DISP_RECEIVED_MAIL	= 104;	-- 显示收件箱收到的邮件
 local TAG_LAYER_DISP_SENT_MAIL		= 105;	-- 显示发件箱已发的邮件
 
 ---------------------------------------------------
-local NAME_LENGTH_LIMIT				= 15;	-- 收件人限制字数
-local SUBJECT_LENGTH_LIMIT			= 30;	-- 主题限制字数
-local CONTENT_LENGTH_LIMIT			= 300;	-- 内容限制字数
+local NAME_LENGTH_LIMIT				= 16;	-- 收件人限制字数
+local SUBJECT_LENGTH_LIMIT			= 20;	-- 主题限制字数
+local CONTENT_LENGTH_LIMIT			= 255;	-- 内容限制字数
 
 
 ---------------------------------------------------
@@ -209,7 +213,7 @@ end
 -- 菜单界面事件响应
 function p.OnUIEventMenu( uiNode, uiEventType, param )
 	local tag = uiNode:GetTag();
-	LogInfo("EmailList: p.OnUIEventMenu[%d]",tag);
+	--LogInfo("EmailList: p.OnUIEventMenu[%d]",tag);
 	if ( uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK ) then
 		if ( ID_BTN_CLOSE == tag ) then
 			local scene = GetSMGameScene();
@@ -380,38 +384,38 @@ end
 ---------------------------------------------------
 -- 填充收件箱邮件列表框- EmailID来初始化
 function p.FillInboxList()
-
 	if ( nil == p.pLayerInbox ) then
+		LogInfo( "EmailList: FillInboxList failed! p.pLayerInbox is nil" );
 		return false;
 	end
 	
 	local pListReceivedMails = GetScrollViewContainer( p.pLayerInbox, ID_LIST_MAILS );
 	if ( nil == pListReceivedMails ) then
+		LogInfo( "EmailList: FillInboxList failed! pListReceivedMails is nil" );
 		return false;
 	end
+	
+	local layer = createNDUILayer();
+	layer:Init();
+	local uiLoad=createNDUILoad();
+	uiLoad:Load( "MailBoxUI_ListItem.ini", layer, nil, 0, 0 );
+	uiLoad:Free();
+	local pBorder = GetButton( layer, ID_ITEM_BTN_TOUCH );
+	local nHeight = pBorder:GetFrameRect().size.h;
+	layer:Free();
+		
 	pListReceivedMails:SetStyle( UIScrollStyle.Verical );
-	pListReceivedMails:SetViewSize( CGSizeMake( pListReceivedMails:GetFrameRect().size.w, LIST_ITEM_HEIGHT ) );
+	pListReceivedMails:SetViewSize( CGSizeMake( pListReceivedMails:GetFrameRect().size.w, nHeight ) );
 	pListReceivedMails:ShowViewByIndex(0);
 	pListReceivedMails:RemoveAllView();
 	
-	local nRoleId		= ConvertN( GetPlayerId() );
-	local tEmailIDList	= GetGameDataIdList( NScriptData.eRole, nRoleId, NRoleData.eUserEmail );
-	local nEmailAmount	= table.getn( tEmailIDList );
-	if ( 0 == nEmailAmount ) then
+	local tReceiveMails = MsgUserEmail.GetReceivedEmails();
+	local nAmount		= table.getn( tReceiveMails );
+	if ( ( tReceiveMails == nil ) or ( nAmount == 0 ) ) then
 		return false;
 	end
-	
-	local nCount		= 0;
-	for nIndex, nEmailID in ipairs( tEmailIDList ) do
-		local szEmailType = GetGameDataS( NScriptData.eRole, nRoleId, NRoleData.eUserEmail, nEmailID, EmailDataIndex.EDI_TYPE );
-		if ( szEmailType == "0" ) then
-			nCount = nCount + 1;
-			p.CreateListItem( pListReceivedMails, nRoleId, nEmailID, p.OnUIEventReceivedMailsListItem );
-		end
-	end
-	
-	if ( 0 == nCount ) then
-		return false;
+	for i=1, nAmount do
+		p.CreateListItem( pListReceivedMails, tReceiveMails[i], i, p.OnUIEventReceivedMailsListItem );
 	end
 	
 	return true;
@@ -441,30 +445,32 @@ function p.DeleteInboxListItem( nEmailID )
 end
 
 ---------------------------------------------------
--- 添加收件箱列表项
-function p.AppendInboxListItem( nEmailID )
-	if ( nil == p.pLayerInbox ) then
+-- 创建列表项
+function p.CreateListItem( pListContainer, tMail, nIndex, pCallbackFunction  )
+	if ( pListContainer == nil ) then
+		LogInfo( "EmailList: CreateListItem failed! pListContainer is nil" );
+		return false;
+	end
+	if ( tMail == nil ) then
+		LogInfo( "EmailList: CreateListItem failed! tMail is nil" );
 		return false;
 	end
 	
-	local pListReceivedMails = GetScrollViewContainer( p.pLayerInbox, ID_LIST_MAILS );
-	if ( nil == pListReceivedMails ) then
-		return false;
-	end
-	local nRoleId		= ConvertN( GetPlayerId() );
-	p.CreateListItem( pListReceivedMails, nRoleId, nEmailID, p.OnUIEventReceivedMailsListItem );
-end
-
----------------------------------------------------
--- 创建列表项
-function p.CreateListItem( pListContainer, nRoleId, nEmailID, pCallbackFunction  )
-	-- 创建列表项
 	local pListItem = createUIScrollView();
-
 	if not CheckP( pListItem ) then
 		LogInfo( "EmailList: CreateListItem failed! pListItem is nil" );
 		return false;
 	end
+	
+	local nEmailType	= tMail[EmailDataIndex.EDI_TYPE];
+	local szName		= tMail[EmailDataIndex.EDI_NAME];
+	local szSubject		= tMail[EmailDataIndex.EDI_SUBJECT];
+	local nSendTime		= tMail[EmailDataIndex.EDI_SENDTIME];
+	local nFlag			= tMail[EmailDataIndex.EDI_FLAG];
+	local nEmailID		= tMail[EmailDataIndex.EDI_EMAILID];
+	local nTime			= nSendTime + 24*60*60*30;-- 失效时间为发送时间加上30天
+	local tTime			= os.date( "*t", nTime )
+	local szTime		= tTime["year"] .. "年" .. tTime["month"] .. "月" .. tTime["day"] .. "日  ";-- .. tTime["hour"] .. ":" .. tTime["min"];
 
 	pListItem:Init( false );
 	pListItem:SetScrollStyle( UIScrollStyle.Verical );
@@ -479,17 +485,21 @@ function p.CreateListItem( pListContainer, nRoleId, nEmailID, pCallbackFunction 
 	end
 	uiLoad:Load( "MailBoxUI_ListItem.ini", pListItem, pCallbackFunction, 0, 0 );
 	uiLoad:Free();
-		
-	-- 给几个文字标签赋值
-	local szName		= GetGameDataS( NScriptData.eRole, nRoleId, NRoleData.eUserEmail, nEmailID, EmailDataIndex.EDI_NAME );
+	
 	local pLabelName	= GetLabel( pListItem, ID_ITEM_LABEL_NAME );
-	pLabelName:SetText( szName );
-	local szSubject		= GetGameDataS( NScriptData.eRole, nRoleId, NRoleData.eUserEmail, nEmailID, EmailDataIndex.EDI_SUBJECT );
 	local pLabelSubject = GetLabel( pListItem,ID_ITEM_LABEL_SUBJECT );
+	local pLabelDate	= GetLabel( pListItem,ID_ITEM_LABEL_DATE );
+	local pPicCtrl		= GetUiNode( pListItem, ID_ITEM_PIC_READED );
+	
+	pLabelName:SetText( szName );
 	pLabelSubject:SetText( szSubject );
-	local szTime		= GetGameDataS( NScriptData.eRole, nRoleId, NRoleData.eUserEmail, nEmailID, EmailDataIndex.EDI_FAILTIME );
-	local pLabelDate = GetLabel( pListItem,ID_ITEM_LABEL_DATE );
 	pLabelDate:SetText( szTime );
+	-- 显示未读标识
+	if ( nFlag == 0 ) then
+		pPicCtrl:SetVisible( true );
+	else
+		pPicCtrl:SetVisible( false );
+	end
 end
 
 ---------------------------------------------------
@@ -497,20 +507,20 @@ end
 function p.OnUIEventReceivedMailsListItem( uiNode, uiEventType, param )
 	local tag = uiNode:GetTag();
 	local pParentNode = uiNode:GetParent();	--获得控件所在的列表项UI，
-	local nTag = pParentNode:GetTag();		--获得 EmailID
 	--LogInfo( "EmailList: touch item:%d", uiNode:GetParent() );
 	if ( uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK ) then
 		if ( tag == ID_ITEM_BTN_TOUCH ) then
-			local nEmailID	= nTag;
-			local nRoleId	= ConvertN( GetPlayerId() );
-			local szContent	= GetGameDataS( NScriptData.eRole, nRoleId, NRoleData.eUserEmail, nEmailID, EmailDataIndex.EDI_CONTENT );
-			if ( szContent == "" ) then
+			local nEmailID		= pParentNode:GetTag();
+			local tReceiveMails = MsgUserEmail.GetReceivedEmails();
+			local tEmail		= MsgUserEmail.GetEmail( tReceiveMails, nEmailID );
+			local szContent		= tEmail[EmailDataIndex.EDI_CONTENT];
+			if ( szContent == nil ) then
 				-- 内容为空，发送阅读邮件请求消息
 				MsgUserEmail.ReadEmailRequest( nEmailID );
 			else
+				local szName		= tEmail[EmailDataIndex.EDI_NAME];
+				local szSubject		= tEmail[EmailDataIndex.EDI_SUBJECT];
 				-- 内容非空，显示
-				local szName	= GetGameDataS( NScriptData.eRole, nRoleId, NRoleData.eUserEmail, nEmailID, EmailDataIndex.EDI_NAME );
-				local szSubject	= GetGameDataS( NScriptData.eRole, nRoleId, NRoleData.eUserEmail, nEmailID, EmailDataIndex.EDI_SUBJECT );
 				p.ShowReceivedMail( szName, szSubject, szContent );
 			end
 			--CommonDlg.ShowWithConfirm( szName.."发来:"..szSubject, nil );
@@ -611,6 +621,11 @@ function p.OnUIEventDispInEmail( uiNode, uiEventType, param )
 			-- 按下“返回”
 			p.pLayerInbox:SetVisible( true );
 			p.pLayerReceivedMail:SetVisible( false );
+		elseif ( tag == ID_READ_BTN_REPLY ) then
+			local pLabelName = GetLabel( p.pLayerReceivedMail, ID_READ_LABEL_NAME );
+			local szName = pLabelName:GetText();
+			p.RefreshWithButtonTag( ID_BTN_COMPOSE );
+			p.pEditName:SetText( szName );
 		end
 	end
 	return true;
@@ -721,37 +736,36 @@ end
 -- 填充发件箱邮件列表框- EmailID来初始化
 function p.FillOutboxList()
 	if ( nil == p.pLayerInbox ) then
+		LogInfo( "EmailList: FillOutboxList failed! p.pLayerInbox is nil" );
 		return false;
 	end
 	
 	local pListSentMails = GetScrollViewContainer( p.pLayerOutbox, ID_LIST_MAILS );
 	if ( nil == pListSentMails ) then
+		LogInfo( "EmailList: FillOutboxList failed! p.pListSentMails is nil" );
 		return false;
 	end
+	local layer = createNDUILayer();
+	layer:Init();
+	local uiLoad=createNDUILoad();
+	uiLoad:Load( "MailBoxUI_ListItem.ini", layer, nil, 0, 0 );
+	uiLoad:Free();
+	local pBorder = GetButton( layer, ID_ITEM_BTN_TOUCH );
+	local nHeight = pBorder:GetFrameRect().size.h;
+	layer:Free();
+	
 	pListSentMails:SetStyle( UIScrollStyle.Verical );
-	pListSentMails:SetViewSize( CGSizeMake( pListSentMails:GetFrameRect().size.w, LIST_ITEM_HEIGHT ) );
+	pListSentMails:SetViewSize( CGSizeMake( pListSentMails:GetFrameRect().size.w, nHeight ) );
 	pListSentMails:ShowViewByIndex(0);
 	pListSentMails:RemoveAllView();
 	
-	local nRoleId		= ConvertN( GetPlayerId() );
-	local tEmailIDList	= GetGameDataIdList( NScriptData.eRole, nRoleId, NRoleData.eUserEmail );
-	local nEmailAmount	= table.getn( tEmailIDList );
-	if ( 0 == nEmailAmount ) then
+	local tSentMails	= MsgUserEmail.GetSentEmails();
+	local nAmount		= table.getn( tSentMails );
+	if ( ( tSentMails == nil ) or ( nAmount == 0 ) ) then
 		return false;
 	end
-	
-	local nCount		= 0;
-	for nIndex, nEmailID in ipairs( tEmailIDList ) do
-		local szEmailType = GetGameDataS( NScriptData.eRole, nRoleId, NRoleData.eUserEmail, nEmailID, EmailDataIndex.EDI_TYPE );
-		if ( szEmailType == "1" ) then
-			nCount = nCount + 1;
-			-- 创建列表项
-			p.CreateListItem( pListSentMails, nRoleId, nEmailID, p.OnUIEventSentMailsListItem );
-		end
-	end
-	
-	if ( 0 == nCount ) then
-		return false;
+	for i=1, nAmount do
+		p.CreateListItem( pListSentMails, tSentMails[i], i, p.OnUIEventSentMailsListItem );
 	end
 	
 	return true;
@@ -781,42 +795,26 @@ function p.DeleteOutboxListItem( nEmailID )
 end
 
 ---------------------------------------------------
--- 添加发件箱列表项
-function p.AppendOutboxListItem( nEmailID )
-	if ( nil == p.pLayerInbox ) then
-		return false;
-	end
-	
-	local pListSentMails = GetScrollViewContainer( p.pLayerOutbox, ID_LIST_MAILS );
-	if ( nil == pListSentMails ) then
-		return false;
-	end
-	local nRoleId		= ConvertN( GetPlayerId() );
-	p.CreateListItem( pListSentMails, nRoleId, nEmailID, p.OnUIEventSentMailsListItem );
-end
-
----------------------------------------------------
 -- 响应发件箱列表项UI事件
 function p.OnUIEventSentMailsListItem( uiNode, uiEventType, param )
 	local tag = uiNode:GetTag();
 	local pParentNode = uiNode:GetParent();	--获得控件所在的列表项UI，
-	local nTag = pParentNode:GetTag();		--获得 EmailID
 	--LogInfo( "EmailList: touch item:%d", uiNode:GetParent() );
 	if ( uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK ) then
 		if ( tag == ID_ITEM_BTN_TOUCH ) then
-			local nEmailID	= nTag;
-			local nRoleId	= ConvertN( GetPlayerId() );
-			local szContent	= GetGameDataS( NScriptData.eRole, nRoleId, NRoleData.eUserEmail, nEmailID, EmailDataIndex.EDI_CONTENT );
-			if ( szContent == "" ) then
+			local nEmailID		= pParentNode:GetTag();
+			local tSentMails 	= MsgUserEmail.GetSentEmails();
+			local tEmail		= MsgUserEmail.GetEmail( tSentMails, nEmailID );
+			local szContent		= tEmail[EmailDataIndex.EDI_CONTENT];
+			if ( szContent == nil ) then
 				-- 内容为空，发送阅读邮件请求消息
 				MsgUserEmail.ReadEmailRequest( nEmailID );
 			else
+				local szName	= tEmail[EmailDataIndex.EDI_NAME];
+				local szSubject	= tEmail[EmailDataIndex.EDI_SUBJECT];
 				-- 内容非空，显示
-				local szName	= GetGameDataS( NScriptData.eRole, nRoleId, NRoleData.eUserEmail, nEmailID, EmailDataIndex.EDI_NAME );
-				local szSubject	= GetGameDataS( NScriptData.eRole, nRoleId, NRoleData.eUserEmail, nEmailID, EmailDataIndex.EDI_SUBJECT );
 				p.ShowSentMail( szName, szSubject, szContent );
 			end
-			--CommonDlg.ShowWithConfirm( szName.."发来:"..szSubject, nil );
 		end
 	elseif ( uiEventType == NUIEventType.TE_TOUCH_CHECK_CLICK ) then
 		if ( ID_ITEM_BTN_CHOOSE == tag ) then
@@ -882,7 +880,7 @@ function p.CreateReadSentMail( pParentLayer )
 		LogInfo( "EmailList: CreateReadSentMail failed! uiLoad is nil" );
 		return false;
 	end
-	uiLoad:Load( "MailBoxUI_ReceivedMail.ini", layer, p.OnUIEventDispOutEmail, 0, 0 );
+	uiLoad:Load( "MailBoxUI_SentMail.ini", layer, p.OnUIEventDispOutEmail, 0, 0 );
 	uiLoad:Free();
 	p.pLayerSentMail = layer;
 	return true;
@@ -984,7 +982,9 @@ function p.OnUIEventCompose( uiNode, uiEventType, param )
 				scene:RemoveChildByTag( NMAINSCENECHILDTAG.EmailList, true );
 			end
 			-- 装载好友界面
-			FriendUI.LoadUI();
+			if not IsUIShow(NMAINSCENECHILDTAG.Friend) then
+				FriendUI.LoadUI();
+			end
 			return true;
 		elseif ( tag == ID_BTN_SEND ) then
 			-- 按下“发送”
@@ -993,11 +993,11 @@ function p.OnUIEventCompose( uiNode, uiEventType, param )
 			local szSubject	= p.pEditSubject:GetText();
 			local szContent	= p.pEditContent:GetText();
 			if ( "" == szName ) then
-				CommonDlg.ShowWithConfirm( "收件人不可为空！", nil );
+				CommonDlg.ShowWithConfirm( szSEND_ERROR_00, nil );
 			elseif ( "" == szSubject ) then
-				CommonDlg.ShowWithConfirm( "主题不可为空！", nil );
+				CommonDlg.ShowWithConfirm( szSEND_ERROR_01, nil );
 			elseif ( "" == szContent ) then
-				CommonDlg.ShowWithConfirm( "内容不可为空！", nil );
+				CommonDlg.ShowWithConfirm( szSEND_ERROR_02, nil );
 			else
 				--CommonDlg.ShowWithConfirm( "发送中", nil );
 				MsgUserEmail.SendLetter( szName, szContent, szSubject );
@@ -1010,36 +1010,34 @@ end
 
 ---------------------------------------------------
 -- 阅读邮件
-function p.ReadEmail( nEmailID )
-	local nRoleId		= ConvertN( GetPlayerId() );
-	local szEmailType	= GetGameDataS( NScriptData.eRole, nRoleId, NRoleData.eUserEmail, nEmailID, EmailDataIndex.EDI_TYPE );
-	local szName		= GetGameDataS( NScriptData.eRole, nRoleId, NRoleData.eUserEmail, nEmailID, EmailDataIndex.EDI_NAME );
-	local szSubject		= GetGameDataS( NScriptData.eRole, nRoleId, NRoleData.eUserEmail, nEmailID, EmailDataIndex.EDI_SUBJECT );
-	local szContent		= GetGameDataS( NScriptData.eRole, nRoleId, NRoleData.eUserEmail, nEmailID, EmailDataIndex.EDI_CONTENT );
-	if ( "0" == szEmailType ) then
+function p.ShowEmail( tMail )
+	local nEmailType	= tMail[EmailDataIndex.EDI_TYPE];
+	local szName		= tMail[EmailDataIndex.EDI_NAME];
+	local szSubject		= tMail[EmailDataIndex.EDI_SUBJECT];
+	local nFlag			= tMail[EmailDataIndex.EDI_FLAG];
+	local nEmailID		= tMail[EmailDataIndex.EDI_EMAILID];
+	local szContent		= tMail[EmailDataIndex.EDI_CONTENT];
+	if ( nEmailType == EmailType.ET_RECEIVED ) then
 		-- 收件
 		p.ShowReceivedMail( szName, szSubject, szContent );
+		local pListReceivedMails = GetScrollViewContainer( p.pLayerInbox, ID_LIST_MAILS );
+		if ( nil ~= pListReceivedMails ) then
+			local pListItem = pListReceivedMails:GetViewById( nEmailID );
+			if ( nil ~= pListItem ) then
+				local pPicCtrl		= GetUiNode( pListItem, ID_ITEM_PIC_READED );
+				pPicCtrl:SetVisible( false );
+			end
+		end
 	else
 		-- 发件
 		p.ShowSentMail( szName, szSubject, szContent );
 	end
 end
 
--- 新邮件来，添加记录
-function p.Callback_AppendRecord( nEmailID, nEmailType )
-	if ( 0 == nEmailType ) then
-		-- 收件
-		p.AppendInboxListItem( nEmailID );
-	else
-		-- 发件
-		p.AppendOutboxListItem( nEmailID );
-	end
-end
-
 
 -- 删邮件，删除显示的记录
-function p.Callback_DeleteRecord( nEmailID, szEmailType )
-	if ( "0" == szEmailType ) then
+function p.Callback_DeleteRecord( nEmailID, nEmailType )
+	if ( EmailType.ET_RECEIVED == nEmailType ) then
 		-- 收件
 		p.DeleteInboxListItem( nEmailID );
 	else
@@ -1048,6 +1046,27 @@ function p.Callback_DeleteRecord( nEmailID, szEmailType )
 	end
 end
 
+
+---------------------------------------------------
+-- 刷新收件列表
+function p.RefreshReceivedMailList()
+	return p.FillInboxList();
+end
+
+---------------------------------------------------
+-- 刷新发件列表
+function p.RefreshSentMailList()
+	return p.FillOutboxList();
+end
+
+---------------------------------------------------
+-- 发送成功回调
+function p.Callback_SendLetterSuccess()
+	p.pEditName:SetText( "" );
+	p.pEditSubject:SetText( "" );
+	p.pEditContent:SetText( "" );
+	p.RefreshWithButtonTag( ID_BTN_OUTBOX );
+end
 
 ---------------------------------------------------
 -- 显示查看邮件失败（确认按钮）……
@@ -1064,4 +1083,3 @@ end
 ---------------------------------------------------
 
 
---RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "EmailList.LoadUI", p.LoadUI);

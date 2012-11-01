@@ -22,6 +22,9 @@ p.TAG = {
     MOSAIC        = 1003,     --镶嵌层
 };
 
+local GEMINFO       = 1004;     --宝石信息层
+
+
 p.TAG_CHANGE_BTNS = {[p.TAG.STRENGTHEN] = p.TagStreng, [p.TAG.BAPTIZE] = p.TagBaptize,[p.TAG.MOSAIC] = p.TagMosaic,};
 
 p.TagPetNameList    = 601;      --武将列表
@@ -43,11 +46,13 @@ local TAG_EQUIP_BUTTON  = 5;    --强化按钮
 
 --强化UI Tag
 local TAG_E_PIC         = 2;    --装备图片
---local TAG_E_NAME        = 3;    --装备名字
+--local TAG_E_NAME        = 3;  --装备名字
 local TAG_E_LEVEL       = 17;   --装备强化等级
 local TAG_E_ATTACK_TXT  = 15;   --装备说明
 local TAG_E_ATTACK      = 18;   --强化攻击
 local TAG_E_MONEY       = 19;   --强化费用
+local TAG_E_TMONEY      = 203;  --
+local TAG_E_TEMONEY     = 202;  --
 
 local TAG_E_WAIT_TIME_TIP = 6;  --冷却时间说明
 local TAG_E_WAIT_TIME   = 8;    --冷却时间
@@ -67,6 +72,13 @@ local TAG_B_NAME        = 3;                --名称
 local TAG_B_BTN_B       = 11;               --洗炼按钮
 local TAG_B_BTN_KEEP    = 12;               --保持按钮
 local TAG_B_BTN_RRPLACE = 13;               --替换按钮
+
+
+
+
+local TAG_E_TMONEY      = 203;  --
+local TAG_E_TEMONEY     = 202;  --
+
 
 local TAG_RadioJin5     = 31;
 local TAG_RadioJin10     = 32;
@@ -122,6 +134,15 @@ local TAG_M_GEM_BAG     = {4,5,6,7,8,9,10,11,12,13};    --宝石物品背包
 local TAG_M_GEM_EQUIP   = 13;
 local TAG_M_GEM_EQUIP_NAME = 15;
 
+local TAG_GEM_PIC          = 48;                --宝石图片
+local TAG_GEM_NAME         = 401;               --宝石名称
+local TAG_GEM_PRICE        = 201;               --宝石价格
+local TAG_GEM_DESC         = 402;               --宝石描述
+local TAG_GEM_USE          = 55;                --镶嵌
+local TAG_GEM_SYNTHESIS    = 19;                --合成
+local TAG_GEM_CLOSE        = 533;               --关闭
+--宝石操作类型
+local GEM_OPER_TYPE = {MOSAIC = 0, UNSNATCH = 1,};
 
 local CONTAINTER_X = 0;
 local CONTAINTER_Y = 0;
@@ -196,7 +217,7 @@ function p.LoadUI(page)
     uiLoad:Free();
     
     
-
+    SetArrow(p.GetLayer(),p.GetPetNameContainer(),1,TAG_BEGIN_ARROW,TAG_END_ARROW);
 
 
 
@@ -258,6 +279,10 @@ function p.LoadUI(page)
     btn:SetVisible(false);
     
     
+    
+    
+    
+    
 --------------------初始化镶嵌UI---------------------------------------
     local layerMosaic = createNDUILayer();
 	if layerMosaic == nil then
@@ -278,6 +303,29 @@ function p.LoadUI(page)
 	uiLoad:Load("foster_A_R3.ini", layerMosaic, p.OnUIEventUnMosaic, CONTAINTER_X, CONTAINTER_Y);
     uiLoad:Free();
     
+    
+    --查看宝石layer
+    local layerGemView = createNDUILayer();
+	if layerGemView == nil then
+		return false;
+	end
+	layerGemView:Init();
+	layerGemView:SetTag(GEMINFO);
+	layerGemView:SetFrameRect(RectFullScreenUILayer);
+    layerGemView:SetVisible(false);
+	layer:AddChildZ(layerGemView,1);
+    
+    local uiLoad = createNDUILoad();
+	if nil == uiLoad then
+		layer:Free();
+		return false;
+	end
+	uiLoad:Load("foster_A_R3_GEM.ini", layerGemView, p.OnUIEventGem, 0, 0);
+    uiLoad:Free();
+    
+    
+    
+-------------------------------初始化数据------------------------------------    
     p.initData();
     if(CheckN(page)) then
         p.ChangeTab(page);
@@ -285,25 +333,18 @@ function p.LoadUI(page)
         p.ChangeTab(p.TAG.STRENGTHEN);
     end
     
--------------------------------初始化数据------------------------------------    
-    
     p.setTrainRadio(p.TagRadioGroud.TONG);
     
-    
     --设置箭头
-    p.setArrow(p.GetLayerByTag(p.TAG.MOSAIC),p.GetGemViewContainer());
+    SetArrow(p.GetLayerByTag(p.TAG.MOSAIC),p.GetGemViewContainer(),1,TAG_BEGIN_ARROW,TAG_END_ARROW);
     
     p.SetFocusOnPage(0);
-    
-    
     
     --设置洗炼文本内容
     for i,v in ipairs(p.TrainTags) do
         local sDesc = GetDataBaseDataS("equip_edu_config",i,DB_EQUIP_EDU_CONFIG.DESCRIPT);
         SetLabel(layerBaptize,v,sDesc);
     end
-    
-    
     
     
     MsgEquipStr.mUIListener = p.processNet;
@@ -315,29 +356,76 @@ function p.LoadUI(page)
    	closeBtn:SetSoundEffect(Music.SoundEffect.CLOSEBTN);
    	
 
+    local userContainer = p.GetUserContainer();
+    userContainer:EnableScrollBar(true);
    	
     return true;
 end
 
 
-function p.setArrow(layer,pageView)
-    --设置箭头   
-    local larrow    = GetButton(layer,TAG_BEGIN_ARROW);
-    local rarrow    = GetButton(layer,TAG_END_ARROW);
-            
-    local pageIndex = pageView:GetBeginIndex();
-    local pageCount = pageView:GetViewCount();
+--nType 0.镶嵌 1.卸下
+function p.LoadGemInfo(nGemId, nType)
+    if(nGemId==0) then
+        return;
+    end
     
-    larrow:EnalbeGray(false);
-    rarrow:EnalbeGray(false);
-    if(pageIndex == 0) then
-        larrow:EnalbeGray(true);
+    local layer             = p.GetGemInfoLayer();
+    if(layer == nil) then
+        LogInfo("p.LoadGemInfo layer is nil!");
+        return;
     end
-    if(pageIndex == pageCount-1) then
-        rarrow:EnalbeGray(true);
+    
+    local l_pic = RecursiveItemBtn(layer,{TAG_GEM_PIC});
+    local l_name = RecursiveLabel(layer,{TAG_GEM_NAME});
+    local l_price = RecursiveLabel(layer,{TAG_GEM_PRICE});
+    local l_desc = RecursiveLabel(layer,{TAG_GEM_DESC});
+    local btnUse = RecursiveButton(layer,{TAG_GEM_USE});
+    local btnSyn = RecursiveButton(layer,{TAG_GEM_SYNTHESIS});
+    
+    
+    local nItemType			= 0;
+    local nAmount           = 0;
+    if(nType == GEM_OPER_TYPE.MOSAIC) then
+        nItemType			= Item.GetItemInfoN(nGemId, Item.ITEM_TYPE);
+        nAmount             = Item.GetItemInfoN(nGemId, Item.ITEM_AMOUNT);
+        l_pic:ChangeItem(nGemId);
+        
+        btnUse:SetTitle(GetTxtPri("GemXianQian"));
+        btnSyn:SetVisible(true);
+        
+        local nGemLevel = Num3(nItemType)*10+Num2(nItemType);
+        if(nGemLevel == 12) then
+            btnSyn:EnalbeGray(true);
+        else
+            btnSyn:EnalbeGray(false);
+        end
+        
+        
+    elseif(nType == GEM_OPER_TYPE.UNSNATCH) then
+        nItemType   = nGemId;
+        nAmount     = 1;
+        l_pic:ChangeItemType(nItemType);
+        
+        btnUse:SetTitle(GetTxtPri("GemXieXia"));
+        btnSyn:SetVisible(false);
     end
+    
+    local strName			= ItemFunc.GetName(nItemType);
+    local price             = ItemFunc.GetPrice(nItemType)*nAmount;
+    local desc              = ItemFunc.GetDesc(nItemType);
+    
+    l_name:SetText(strName);
+    l_price:SetText(SafeN2S(price));
+    l_desc:SetText(desc);
+    
+    btnUse:SetParam1(nGemId);
+    btnUse:SetParam2(nType);
+    
+    btnSyn:SetParam1(nGemId);
+    btnSyn:SetParam2(nType);
+    
+    layer:SetVisible(true);
 end
-
 
 
 ---------------------------初始化窗口--------------------------------------
@@ -359,20 +447,7 @@ function p.initData()
         end
     end
     
-    --排序宝石
-    local tempVar;
-    for i=1, #p.idGemListItem do
-        local nItemTypeI	= Item.GetItemInfoN(p.idGemListItem[i], Item.ITEM_TYPE);
-        for j=i,#p.idGemListItem do
-            
-            local nItemTypeJ	= Item.GetItemInfoN(p.idGemListItem[j], Item.ITEM_TYPE);
-            if(nItemTypeI<nItemTypeJ) then
-                tempVar = p.idGemListItem[i];
-                p.idGemListItem[i] = p.idGemListItem[j];
-                p.idGemListItem[j] = tempVar;
-            end
-        end
-    end
+    p.idGemListItem = Item.OrderItems(p.idGemListItem);
     
     
     
@@ -388,6 +463,7 @@ function p.freeData()
     MsgCompose.mUIListener = nil;
     p.idGemListItem = nil;
     p.idEquipListItem = nil;
+    p.pSpriteNode = nil;
 end
 
 
@@ -398,7 +474,6 @@ function p.processNet(msgId, m)
         return;
 	end
 	if msgId == NMSG_Type._MSG_EQUIPSTR_INFO then       --强化返回
-		LogInfo("testbbs:[%d]",m.StuffId);
         --修改用户信息
         local uContainer = p.GetUserContainer();
         for i=1, uContainer:GetViewCount() do
@@ -412,7 +487,7 @@ function p.processNet(msgId, m)
                 local view = clientView:GetView(j-1);
                 
                 if(view:GetViewId() == m.EquipId) then
-                    p.refreshEquipInfoListItem(view,m.EquipId);
+                    p.refreshEquipInfoListItem(clientView,view,m.EquipId);
                     break;
                 end
             end
@@ -432,7 +507,9 @@ function p.processNet(msgId, m)
         
         if m.StuffId == 1 then
             --暴击光效
-            
+            p.CreateBaoJiAnimate();
+        else
+             CommonDlgNew.ShowTipDlg(GetTxtPri("QiangHuaAdd"));
         end
         
         --强化成功音效
@@ -441,8 +518,8 @@ function p.processNet(msgId, m)
 		GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.STRENGTHEN_EQUIP);
    	
     elseif(msgId == NMSG_Type._MSG_STONE) then
-        p.initData();
-        p.LoadGemBagView();
+        p.RestartRefreshGemList();
+        
         LogInfo("m.EquipId:[%d]",m.EquipId);
         p.refreshMosaicView(m.EquipId);
         
@@ -453,7 +530,7 @@ function p.processNet(msgId, m)
    	
     elseif(msgId == NMSG_Type._MSG_EQUIP_EDU_INFO) then
         --洗炼成功音效    
-        Music.PlayEffectSound(Music.SoundEffect.WEAPON_BAPTIZE);
+        Music.PlayEffectSound(Music.SoundEffect.EQ_STR);
         
         --引导任务事件触发
 		GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.WASH_EQUIP);
@@ -462,17 +539,85 @@ function p.processNet(msgId, m)
     elseif(msgId == NMSG_Type._MSG_CONFIRM_EQUIP_EDU) then
         if(m.EquipId == p.nItemIdTemp) then
             p.refreshBaptizeView(p.nItemIdTemp);
+            p.resetEduBtnDisplay();
         end
 
 	end
 	CloseLoadBar();
 end
 
+function p.RestartRefreshGemList()
+    local scene = GetSMGameScene();
+    if(scene == nil) then
+        return;
+    end
+    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
+    if(layer == nil) then
+        return;
+    end
+    
+    local layerMosaic = p.GetLayerByTag(p.TAG.MOSAIC);
+    if(layerMosaic == nil) then
+        return;
+    end
+
+    p.initData();
+    p.RefreshGemInfo();
+end
+
+p.pSpriteNode = nil;
+p.nTimerID = nil;
+--创建暴击动画
+function p.CreateBaoJiAnimate()
+    p.DeleteBaoJiAnimate();
+    
+    local parent = p.GetLayer();
+    p.pSpriteNode = createUISpriteNode();
+    p.pSpriteNode:Init();
+    p.pSpriteNode:SetFrameRect( CGRectMake(240*ScaleFactor, 160*ScaleFactor, 2*ScaleFactor, 2*ScaleFactor) );
+    local szAniPath = NDPath_GetAnimationPath();
+    p.pSpriteNode:ChangeSprite( szAniPath .. "baoj04.spr" );
+    parent:AddChild(p.pSpriteNode);
+    
+    p.nTimerID = RegisterTimer( p.OnTimerCoutDownCounter, 1/24 );
+end
+--删除暴击动画
+function p.DeleteBaoJiAnimate()
+    if(p.pSpriteNode) then
+        p.pSpriteNode:RemoveFromParent(true);
+        p.pSpriteNode = nil;
+    end
+    
+    if(p.nTimerID) then
+        UnRegisterTimer( p.nTimerID );
+        p.nTimerID			= nil;
+    end
+end
+
+function p.OnTimerCoutDownCounter( nTimerID )
+    if ( p.pSpriteNode == nil ) then
+        LogInfo( "EquipUpgradeUI: OnTimerCoutDownCounter()  p.pSpriteNode is nil" );
+		UnRegisterTimer( p.nTimerID );
+		p.nTimerID	= nil;
+		return;
+    end
+    
+    if ( p.pSpriteNode:IsAnimationComplete() ) then
+        LogInfo( "Login_RegRoleUI: OnTimerCoutDownCounter()  IsAnimationComplete" );
+		UnRegisterTimer( p.nTimerID );
+		p.nTimerID			= nil;
+        
+        p.DeleteBaoJiAnimate();
+    end
+end
+
+
+
 function p.RefreshUI()
+    p.refreshMoney();
     p.RefreshPetInfo();
     p.RefreshEquipInfo();
     p.RefreshGemInfo();
-    
     p.RefreshEachView();
 end
 
@@ -585,7 +730,7 @@ function p.SelectEquipFouce(equipId)
         local clientView = uContainer:GetView(i-1);
         for j=1, clientView:GetViewCount() do
             local view = clientView:GetView(j-1);
-            local equipBtn = GetItemButton(view, TAG_EQUIP_PIC);
+            local equipBtn = GetButton(view, TAG_EQUIP_BUTTON);
             if(equipBtn == nil) then
                 LogInfo("p.SelectEquipFouce equipBtn is nil!");
                 return;
@@ -623,6 +768,8 @@ function p.RefreshPetInfo()
 		--return;
 	end
     
+    idTable = RolePet.OrderPets(idTable);
+    
     --遍历伙伴
 	for i, v in ipairs(idTable) do
         --顶部角色名称
@@ -646,7 +793,7 @@ function p.RefreshEquipInfo()
     
     local nPlayerId = GetPlayerId();
 	local idTable = RolePetUser.GetPetListPlayer(nPlayerId);
-    
+    idTable = RolePet.OrderPets(idTable);
     
     for i=1, #idTable do
         local petId = idTable[i];
@@ -655,7 +802,7 @@ function p.RefreshEquipInfo()
     
     p.AddPetEquipItem(0);
     
-    --userContainer:ShowViewByIndex(nIndex);
+    userContainer:ShowViewByIndex(nIndex);
 end
 
 
@@ -665,11 +812,9 @@ function p.AddPetEquipItem(petId)
         
         local clientLayer = createContainerClientLayerM();
         clientLayer:Init(false);
-        clientLayer:SetViewSize(CGSizeMake(rectview.size.w, p.TagEquipListItemHeight));
         userContainer:AddView(clientLayer);
         
         local nPlayerId = GetPlayerId();
-        
         
         local equipIdList = {};
         if(petId==0) then
@@ -677,8 +822,6 @@ function p.AddPetEquipItem(petId)
         else
             equipIdList = ItemPet.GetEquipItemList(nPlayerId, petId);
         end
-        
- 
         
         if(p.nCurrPage == p.TAG.BAPTIZE) then
         
@@ -694,12 +837,15 @@ function p.AddPetEquipItem(petId)
             equipIdList=fillEquip;
         end
         
+        
+        equipIdList = Item.OrderItems(equipIdList);
+        
         for j, v in ipairs(equipIdList) do
             local equipId = equipIdList[j];
             local view = createUIScrollViewM();
             view:Init(false);
             view:SetViewId(equipId);
-            clientLayer:AddView(view);
+            
     
             --初始化ui
             local uiLoad = createNDUILoad();
@@ -709,7 +855,14 @@ function p.AddPetEquipItem(petId)
             end
             
             uiLoad:Load("foster_A_L_Item.ini", view, nil, 0, 0);
-            p.refreshEquipInfoListItem(view,equipId);
+            
+            --[[
+            local rect = view:GetFrameRect();
+            view:SetFrameRect(CGRectMake(rect.origin.x,rect.origin.y,rectview.size.w, p.TagEquipListItemHeight));
+            ]]
+            p.refreshEquipInfoListItem(clientLayer,view,equipId);
+            
+            clientLayer:AddView(view);
         end
 end
 
@@ -787,7 +940,7 @@ end
 
 
 
-function p.refreshEquipInfoListItem(view,equipId)
+function p.refreshEquipInfoListItem(clientView,view,equipId)
     --set pic
     local pic = GetItemButton(view, TAG_EQUIP_PIC);
     pic:ChangeItem(equipId);
@@ -797,6 +950,8 @@ function p.refreshEquipInfoListItem(view,equipId)
     local equipName = ItemFunc.GetName(type);
     local name = GetLabel(view, TAG_EQUIP_NAME);
     name:SetText(equipName);
+    
+    ItemFunc.SetLabelColor(name,type);
     
     --set level
     local equipLv = Item.GetItemInfoN(equipId, Item.ITEM_ADDITION);
@@ -808,6 +963,9 @@ function p.refreshEquipInfoListItem(view,equipId)
     local btn = GetButton(view, TAG_EQUIP_BUTTON);
     btn:SetParam1(equipId);
     btn:SetLuaDelegate(p.OnUIEventSelectEquipBtn);
+    
+    --/*取每项大小*/
+    clientView:SetViewSize(btn:GetFrameRect().size);
 end
 
 
@@ -848,6 +1006,8 @@ function p.refreshPetInfoListItem(view,nPetId)
     else
         local strPetName = ConvertS(RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_NAME));
         labelName:SetText(strPetName);
+        
+        ItemPet.SetLabelColor(labelName, nPetId);
     end
 end
 
@@ -856,24 +1016,132 @@ function p.OnUIEventSelectEquipBtn(uiNode, uiEventType, param)
     local btn = ConverToButton(uiNode);
     p.nItemIdTemp = btn:GetParam1();
     
-    if(p.nCurrPage == p.TAG.STRENGTHEN)then
-        --强化
-        p.refreshStrengView(p.nItemIdTemp);
+    if(uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK) then
+        if(p.nCurrPage == p.TAG.STRENGTHEN)then
+            --强化
+            p.refreshStrengView(p.nItemIdTemp);
+        end
+        
+        if(p.nCurrPage == p.TAG.BAPTIZE)then
+            --洗炼
+            p.refreshBaptizeView(p.nItemIdTemp);
+        end
+        
+        if(p.nCurrPage == p.TAG.MOSAIC)then
+            --镶嵌
+            p.refreshMosaicView(p.nItemIdTemp);
+        end
+        
+        --选中装备
+        p.SelectEquipFouce(p.nItemIdTemp);
+    elseif(uiEventType == NUIEventType.TE_TOUCH_TABLE_FOCUS) then
+        --选中装备
+        p.SelectEquipFouce(p.nItemIdTemp);
     end
-    
-    if(p.nCurrPage == p.TAG.BAPTIZE)then
-        --洗炼
-        p.refreshBaptizeView(p.nItemIdTemp);
-    end
-    
-    if(p.nCurrPage == p.TAG.MOSAIC)then
-        --镶嵌
-        p.refreshMosaicView(p.nItemIdTemp);
-    end
-    
-    --选中装备
-    p.SelectEquipFouce(p.nItemIdTemp);
 end
+
+--查看宝石层事件
+function p.OnUIEventGem(uiNode, uiEventType, param)
+    local btn = ConverToButton(uiNode);
+    local nTag = btn:GetTag();
+    local nItemId = btn:GetParam1();
+    local nType = btn:GetParam2();
+    
+    LogInfo("p.OnUIEventGem nTag:[%d], uiEventType:[%d], nItemId:[%d], nType:[%d]",nTag, uiEventType, nItemId, nType);
+    
+    if(uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK) then
+        if(nTag == TAG_GEM_CLOSE)then
+            local layer = p.GetGemInfoLayer();
+            layer:SetVisible(false);
+        elseif(nTag == TAG_GEM_USE)then
+            if(nItemId == 0) then
+                return true;
+            end
+        
+            if(nType == GEM_OPER_TYPE.MOSAIC) then
+                p.GemMosaic(nItemId);
+            elseif(nType == GEM_OPER_TYPE.UNSNATCH) then
+                p.GemUnMosaic(nItemId)
+            end
+            
+            --关闭宝石信息层
+            local layer = p.GetGemInfoLayer();
+            layer:SetVisible(false);
+        elseif(nTag == TAG_GEM_SYNTHESIS)then
+            BackLevelThreeWin.GemSynthesis(nItemId);
+            
+            --关闭宝石信息层
+            local layer = p.GetGemInfoLayer();
+            layer:SetVisible(false);
+        end
+    end
+end
+
+--发送镶嵌消息
+function p.GemMosaic(nGemItemId)
+    LogInfo("p.GemMosaic nGemItemId:[%d]",nGemItemId);
+    if(nGemItemId == 0) then
+        LogInfo("not select gem!");
+        return;
+    end
+    
+    --未选择装备提示
+    if(not CheckN(p.nItemIdTemp) or p.nItemIdTemp<=0) then
+        p.tipNotSelectEquip();
+        return;
+    end
+    
+    --宝石类型已存在判断
+    if(p.GemIsExists(p.nItemIdTemp,nGemItemId)) then
+        p.tipNotSameEquip();
+        return;
+    end
+    
+    --宝石过多判断        
+    local nItemType = Item.GetItemInfoN(p.nItemIdTemp, Item.ITEM_TYPE);
+    local socketLimit = GetDataBaseDataN("itemtype", nItemType, DB_ITEMTYPE.SOCKET_LIMIT);
+    local gemCount = Item.GetItemInfoN(p.nItemIdTemp, Item.ITEM_GEN_NUM);
+    LogInfo("gemCount:[%d],socketLimit:[%d]",gemCount,socketLimit);
+    if(gemCount>=socketLimit) then
+        p.tipMaxGemEquip()
+        return;
+    end
+    
+    if(nGemItemId>0) then
+        LogInfo("p.nItemIdTemp:[%d],nGemItemId:[%d]",p.nItemIdTemp,nGemItemId);
+        MsgCompose.embedGem(p.nItemIdTemp,nGemItemId);
+    end
+end
+
+--发送宝石卸下消息
+function p.GemUnMosaic(nGemTypeId)
+    LogInfo("p.GemUnMosaic nGemTypeId:[%d]",nGemTypeId);
+    --判断背包是否已满
+    if(ItemFunc.IsBagFullGem(p.idGemListItem,nGemTypeId)) then
+        return false;
+    end
+            
+    if(nGemTypeId==0) then
+        LogInfo("p.OnUIEventUnMosaic nGemTypeId == 0");
+        return;
+    end
+    
+    --[[
+    if(p.isEquipGemList(tag) == false) then
+        LogInfo("p.OnUIEventUnMosaic not unmosaic!");
+        return;
+    end
+    ]]
+    
+    if(p.nItemIdTemp<=0) then
+        --未选择装备提示
+        p.tipNotSelectEquip();
+        return;
+    end
+
+    MsgCompose.unEmbedGem(p.nItemIdTemp,nGemTypeId);
+end
+
 
 
 function p.GetStrangPic()
@@ -887,10 +1155,36 @@ function p.GetStrangPic()
     return pic:GetItemId();
 end
 
+
+function p.refreshMoney()
+    LogInfo("p.refreshMoney BEGIN");
+    local nPlayerId     = GetPlayerId();
+    local scene = GetSMGameScene();
+    if(scene == nil) then
+        return;
+    end
+    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
+    if(layer == nil) then
+        return;
+    end
+    
+    local nmoney        = MoneyFormat(GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_MONEY));
+    local ngmoney        = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY).."";
+    
+    local strangLayer = p.GetLayerByTag(p.TAG.STRENGTHEN);
+    _G.SetLabel(strangLayer, TAG_E_TMONEY, nmoney);
+    _G.SetLabel(strangLayer, TAG_E_TEMONEY, ngmoney);
+    
+    local baptizeLayer = p.GetLayerByTag(p.TAG.BAPTIZE);
+    _G.SetLabel(baptizeLayer, TAG_E_TMONEY, nmoney);
+    _G.SetLabel(baptizeLayer, TAG_E_TEMONEY, ngmoney);
+end
+
+
+
 --强化view填充
 function p.refreshStrengView(equipId)
     local strangLayer = p.GetLayerByTag(p.TAG.STRENGTHEN);
-    
     
     local pic = GetItemButton(strangLayer, TAG_EQUIP_PIC);
     --local name = GetLabel(strangLayer, TAG_E_NAME);
@@ -938,14 +1232,28 @@ function p.refreshStrengView(equipId)
     --set money
     
     LogInfo("chh_typeid1:[%d]",type);
-    local reqMoney = EquipStrFunc.GetReqMoney(type,equipLv);
+    local reqMoney = p.GetStreangMoney(equipId);
     money:SetText(reqMoney..GetTxtPub("coin"));
     
+end
+
+function p.GetStreangMoney(nItemId)
+    local nItemType = Item.GetItemInfoN(nItemId, Item.ITEM_TYPE);
+    local nEquipLv = Item.GetItemInfoN(nItemId, Item.ITEM_ADDITION) + 1;
+    local reqMoney = EquipStrFunc.GetReqMoney(nItemType,nEquipLv);
+    
+    LogInfo("reqMoney:[%d]",reqMoney);
+    
+    reqMoney = reqMoney - reqMoney*GetVipVal(DB_VIP_CONFIG.ENHANCE_REDUCE_PECENT)/100;
+    LogInfo("p.GetStreangMoney nItemId:[%d],nEquipLv:[%d],reqMoney:[%d],GetVipVal(DB_VIP_CONFIG.ENHANCE_REDUCE_PECENT):[%d]",nItemId,nEquipLv,reqMoney,GetVipVal(DB_VIP_CONFIG.ENHANCE_REDUCE_PECENT));
+    return reqMoney;
 end
 
 --洗炼view填充
 function p.refreshBaptizeView(equipId)
     local baptizeLayer = p.GetLayerByTag(p.TAG.BAPTIZE);
+    
+    
     local nAttrBegin = Item.ITEM_ATTR_BEGIN;
     --附加属性显示
     local btAttrAmount = Item.GetItemInfoN(equipId, Item.ITEM_ATTR_NUM);
@@ -1063,6 +1371,10 @@ function p.refreshMosaicView(equipId)
     local btnName = GetLabel(mosaicLayer, TAG_M_GEM_EQUIP_NAME);
     btnItem:ChangeItem(equipId);
     local nItemTypeId =Item.GetItemInfoN(equipId, Item.ITEM_TYPE);
+    
+    --装备颜色
+    ItemFunc.SetLabelColor(btnName,nItemTypeId);
+    
     local sEquipName = ItemFunc.GetName(nItemTypeId);
     btnName:SetText(sEquipName);
     
@@ -1071,6 +1383,7 @@ end
 
 -----------------------------切换UI---------------------------------
 function p.ChangeTab(tab)
+    p.nItemIdTemp = 0;
     local layerMain = p.GetLayer();
 
     --面板
@@ -1192,12 +1505,11 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 		if tag == p.TagUserList then
             LogInfo("p.OnUIEvent NUIEventType.TE_TOUCH_SC_VIEW_IN_BEGIN");
             local pageContainer = p.GetPetNameContainer();
-        
             local userContainer = p.GetUserContainer();
-            
-            LogInfo("userContainer:GetBeginIndex():[%d]",userContainer:GetBeginIndex());
-            
             pageContainer:ShowViewByIndex(userContainer:GetBeginIndex());
+            
+        elseif tag == p.TagPetNameList then
+            SetArrow(p.GetLayer(),p.GetPetNameContainer(),1,TAG_BEGIN_ARROW,TAG_END_ARROW);
 		end 
 
 	end
@@ -1263,8 +1575,10 @@ end
 --加速提示2
 function p.tipQuickTip2()
     local needgmoney = p.GetCdMoney();
-    local tipInfo = string.format(GetTxtPri("QiangHuaQuick2"),needgmoney);
-    p.nTagQuick = CommonDlgNew.ShowYesOrNoDlg(tipInfo, p.quickCallback);
+    if(needgmoney) then
+        local tipInfo = string.format(GetTxtPri("QiangHuaQuick2"),needgmoney);
+        p.nTagQuick = CommonDlgNew.ShowYesOrNoDlg(tipInfo, p.quickCallback);
+    end
 end
 
 
@@ -1274,13 +1588,15 @@ function p.GetCdMoney()
     local gmoney        = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
     local WaitTime = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME1);
     local needgmoney    = math.ceil(WaitTime / 60);
-            
+    
+    local bIsMoneyNot = false;
     if(needgmoney>gmoney) then
-        p.tipMaxJin();
-        return nil;
+        --p.tipMaxJin();
+        --return nil;
+        bIsMoneyNot = true;
     end
     
-    return needgmoney;
+    return needgmoney,bIsMoneyNot;
 end
 
 
@@ -1312,8 +1628,8 @@ function p.OnUIEventStreng(uiNode, uiEventType, param)
             local mainLv        = RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_LEVEL);
             local money         = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_MONEY);
             local type          = Item.GetItemInfoN(equipId, Item.ITEM_TYPE);
-            local moneyLv       = EquipStrFunc.GetReqMoney(type,equipLv+1);
-            
+            --local moneyLv       = EquipStrFunc.GetReqMoney(type,equipLv+1);
+            local moneyLv       = p.GetStreangMoney(equipId);
             if(equipLv>=mainLv) then
                 p.tipLevel();
                 return;
@@ -1342,6 +1658,14 @@ end
 --加速
 function p.quickCallback(nEventType, param)
     if(CommonDlgNew.BtnOk == nEventType) then
+        
+        --金币不足
+        local needgmoney,bIsMoneyNot = p.GetCdMoney();
+        if(bIsMoneyNot) then
+            p.tipMaxJin();
+            return;
+        end
+        
         MsgEquipStr.SendClearStrQueneTimeAction(1);
         ShowLoadBar();
     end
@@ -1438,6 +1762,7 @@ function p.LoadGemPageView()
     local container = p.GetGemPageViewContainer();
     if(container == nil) then
         LogInfo("container is nil!");
+        return;
     end
     
     local index = container:GetBeginIndex();
@@ -1475,6 +1800,7 @@ function p.LoadGemBagView()
     local container = p.GetGemViewContainer();
     if(container == nil) then
         LogInfo("container is nil!");
+        return;
     end
     
     local startPage = container:GetBeginIndex();
@@ -1524,7 +1850,6 @@ function p.OnUIEventBaptize(uiNode, uiEventType, param)
         elseif (TAG_B_BTN_KEEP == tag) then
             p.resetEduBtnDisplay();
         elseif (TAG_B_BTN_RRPLACE == tag) then
-            p.resetEduBtnDisplay();
             local btn = ConverToButton(uiNode);
             p.replaceEdu(btn:GetParam1());
         end
@@ -1689,7 +2014,6 @@ end
 function p.replaceEdu(nEquip)
     LogInfo("p.replaceEdu nEquip:[%d]",nEquip);
     MsgEquipStr.SendConfirmEdu(nEquip);
-    p.resetEduBtnDisplay();
 end
 
 --镶嵌事件
@@ -1702,45 +2026,12 @@ function p.OnUIEventMosaic(uiNode, uiEventType, param)
             LogInfo("p.OnUIEventMosaic not mosaic!");
             return;
         end
-    
+        
         local btn = ConverToItemButton(uiNode);
         local nGemItemId = btn:GetItemId();
         
-        if(nGemItemId == 0) then
-            LogInfo("not select gem!");
-            return;
-        end
-        
-        --未选择装备提示
-        if(not CheckN(p.nItemIdTemp) or p.nItemIdTemp<=0) then
-            p.tipNotSelectEquip();
-            return;
-        end
-        
-        --宝石类型已存在判断
-        if(p.GemIsExists(p.nItemIdTemp,nGemItemId)) then
-            p.tipNotSameEquip();
-            return;
-        end
-        
-        
-        --宝石过多判断        
-        local nItemType = Item.GetItemInfoN(p.nItemIdTemp, Item.ITEM_TYPE);
-        local socketLimit = GetDataBaseDataN("itemtype", nItemType, DB_ITEMTYPE.SOCKET_LIMIT);
-        local gemCount = Item.GetItemInfoN(p.nItemIdTemp, Item.ITEM_GEN_NUM);
-        LogInfo("gemCount:[%d],socketLimit:[%d]",gemCount,socketLimit);
-        if(gemCount>=socketLimit) then
-            p.tipMaxGemEquip()
-            return;
-        end
-        
-    
-        if(nGemItemId>0) then
-            LogInfo("p.nItemIdTemp:[%d],nGemItemId:[%d]",p.nItemIdTemp,nGemItemId);
-            MsgCompose.embedGem(p.nItemIdTemp,nGemItemId);
-        end
-
-        
+        --查看宝石信息
+        p.LoadGemInfo(nGemItemId, GEM_OPER_TYPE.MOSAIC);
     end
 end
 
@@ -1779,33 +2070,17 @@ function p.OnUIEventUnMosaic(uiNode, uiEventType, param)
 	LogInfo("p.OnUIEventUnMosaic[%d], event:%d", tag, uiEventType);
     
     if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+    
+        if tag == TAG_M_GEM_EQUIP then
+            return;
+        end
+    
         local btn = ConverToItemButton(uiNode);
         local nGemTypeId = btn:GetItemType();
         
-        --判断背包是否已满
-        if(ItemFunc.IsBagFullGem(p.idGemListItem,nGemTypeId)) then
-            return false;
-        end
-                
+        --查看宝石信息
+        p.LoadGemInfo(nGemTypeId, GEM_OPER_TYPE.UNSNATCH);
         
-    
-        if(nGemTypeId==0) then
-            LogInfo("p.OnUIEventUnMosaic nGemTypeId == 0");
-            return;
-        end
-    
-        if(p.isEquipGemList(tag) == false) then
-            LogInfo("p.OnUIEventUnMosaic not unmosaic!");
-            return;
-        end
-    
-        if(p.nItemIdTemp<=0) then
-            --未选择装备提示
-            p.tipNotSelectEquip();
-            return;
-        end
-    
-        MsgCompose.unEmbedGem(p.nItemIdTemp,nGemTypeId);
     elseif(uiEventType == NUIEventType.TE_TOUCH_SC_VIEW_IN_BEGIN) then
         
         if(tag == TAG_M_GEM_LIST) then
@@ -1813,7 +2088,7 @@ function p.OnUIEventUnMosaic(uiNode, uiEventType, param)
             local viewIndex = pageView:GetBeginIndex();
             p.SetFocusOnPage(viewIndex);
                 
-            p.setArrow(p.GetLayerByTag(p.TAG.MOSAIC),p.GetGemViewContainer());
+            SetArrow(p.GetLayerByTag(p.TAG.MOSAIC),p.GetGemViewContainer(),1,TAG_BEGIN_ARROW,TAG_END_ARROW);
         end
     end
 end
@@ -1863,18 +2138,40 @@ end
 function p.GetLayer()
     local scene = GetSMGameScene();	
 	if scene == nil then
-		return;
+		return nil;
 	end
     
     local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
     return layer;
 end
 
+
+--获得宝石信息层
+function p.GetGemInfoLayer()
+    local layer = p.GetLayer();
+    if(layer == nil) then
+        LogInfo("p.GetLayerByTag layer is nil!");
+        return nil;
+    end
+    local taglayer = GetUiLayer(layer, GEMINFO);
+    if(taglayer == nil) then
+        LogInfo("p.GetLayerByTag taglayer is nil!");
+        return nil;
+    end
+    return taglayer;
+end
+
 function p.GetLayerByTag(tag)
     local layer = p.GetLayer();
+    if(layer == nil) then
+        LogInfo("p.GetLayerByTag layer is nil!");
+        return nil;
+    end
+    
     local taglayer = GetUiLayer(layer, tag);
     if(taglayer == nil) then
         LogInfo("taglayer:[%d] is nil!",tag);
+        return nil;
     end
     return taglayer;
 end
@@ -1913,5 +2210,10 @@ end
 if(p.TimerHander == nil) then
     p.TimerHander = RegisterTimer(p.OnProcessTimer, 1);
 end
+
+GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"EquipUpgradeUI.refreshMoney",p.refreshMoney);
+GameDataEvent.Register(GAMEDATAEVENT.ITEMINFO,"EquipUpgradeUI.RestartRefreshGemList",p.RestartRefreshGemList);
+GameDataEvent.Register(GLOBALEVENT.GE_ITEM_UPDATE,"EquipUpgradeUI.RestartRefreshGemList",p.RestartRefreshGemList);
+GameDataEvent.Register(GAMEDATAEVENT.ITEMATTR,"EquipUpgradeUI.RestartRefreshGemList",p.RestartRefreshGemList);
 
 

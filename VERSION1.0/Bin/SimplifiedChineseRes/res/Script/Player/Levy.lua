@@ -16,7 +16,7 @@ local nBuyedLevy = nil;
 local nAvailBuyTime = nil;
 
 local tGoldNeeded = {}
-for i=0,100 do
+for i=0,101 do
     if i <=9 then
         tGoldNeeded[i] = i*2 
     elseif i<=20 then
@@ -102,8 +102,11 @@ function p.refresh(nId)
     if CheckP(num) then
         num:SetText(string.format("%d", nLeftTime));
     end
-
-    local gmoneyX = tGoldNeeded[nBuyedLevy+1+nId];
+    LogInfo("nBuyedLevy:[%d],nId:[%d],nBuyedLevy+1+nId:[%d]",nBuyedLevy,nId,nBuyedLevy+1+nId);
+    local gmoneyX = tGoldNeeded[nBuyedLevy+1];
+    
+    LogInfo("gmoneyX:[%d]",gmoneyX);
+    
     local smoneyX = 20000+userLevel*750;
     
     local moneyText= GetLabel(p.getUiLayer(), p.TagMoneyText); 
@@ -156,8 +159,9 @@ end
 --征收事件
 function p.OnLevyEvent(nNum)
     LogInfo("nNum:[%d]",nNum);
+    LogInfo("nLeftTime:[%d]",nLeftTime);
     --征收次数判断
-    if nLeftTime < nNum then
+    if nLeftTime == 0 or nLeftTime < nNum then
         CommonDlgNew.ShowYesDlg(GetTxtPri("ZZ_CountBuZhu"),nil,nil,3);
         return;
     end
@@ -181,7 +185,8 @@ function p.OnLevyEvent(nNum)
         local nEMoney = p.CalculateEMoney(nNum);
         local nMoney = p.CalculateMoney(nNum);
         if(nNum==10) then
-            sTip = string.format(GetTxtPri("ZZ_ShiCount"),nNum,nEMoney,nMoney,0);
+            local nLevyDoneCount = nLeftTime - nNum;
+            sTip = string.format(GetTxtPri("ZZ_ShiCount"),nNum,nEMoney,nMoney,nLevyDoneCount);
         else
             sTip = string.format(GetTxtPri("ZZ_ShengYuCount"),nNum,nEMoney,nMoney);
         end
@@ -205,8 +210,8 @@ end
 
 --计算获得的银币
 function p.CalculateMoney(nNum)
-    local nPetId = ConvertN(RolePetFunc.GetMainPetId(nPlayerId));
-    local userLevel = ConvertN(RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_LEVEL))
+    local nPetId = ConvertN(RolePetFunc.GetMainPetId(GetPlayerId()));
+    local userLevel = RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_LEVEL);
     local smoneyX = (20000+userLevel*750)*nNum;
     
     return smoneyX;

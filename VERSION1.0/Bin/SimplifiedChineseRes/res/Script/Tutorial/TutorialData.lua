@@ -7,7 +7,7 @@
 TutorialData = {}
 local p = TutorialData;
 
-local HandleTime = 1/2;
+local HandleTime = 1/24;
 local Wait_Time    = 1200;
 p.HandleTimerBegin = nil;
 p.HandleTimerEnd = nil;
@@ -22,23 +22,34 @@ p.JtTagNum     = 2489;--前头Tag
 p.GxTagNum     = 2490;--光效Tag
 ]]
 
-p.JtTag     = nil;--前头Tag
-p.GxTag     = nil;--光效Tag
-p.BoxTag    = nil;--文本框
+--技能新手的stage在失败时提示
+p.SkillStages = {
+    90,130,200,
+}; 
+
+p.JtTag     = 4784321;--前头Tag
+p.GxTag     = 4784322;--光效Tag
+p.BoxTag    = 4784323;--文本框
 p.TxtTag    = 2;    
 p.TipSize   = CGSizeMake(80*ScaleFactor,40*ScaleFactor);
 
 TutorialType = {
-    UP = 1,
-    DOWN = 2,
-    LEFT = 3,
-    RIGHT = 4,
+    UP = "jiants03.spr",
+    DOWN = "jiantx03.spr",
+    LEFT = "jiantz03.spr",
+    RIGHT = "jianty03.spr",
 }
 
 --任务的开始判断
 function p.TaskBegin()
     LogInfo("p.TaskBegin");
-        
+    
+    if(p.IsPlaySkillTutorial()) then
+        LogInfo("技能新手引导，等待失败播放！");
+        return;
+    end
+    
+    
     local nPlayerid = GetPlayerId();
     local nPlayerStage      = _G.ConvertN(_G.GetRoleBasicDataN(nPlayerid, USER_ATTR.USER_ATTR_STAGE));
     local nPlayerGuideStage	= _G.ConvertN(_G.GetRoleBasicDataN(nPlayerid, USER_ATTR.USER_ATTR_GUIDE_STAGE));
@@ -67,6 +78,28 @@ function p.TaskBegin()
             
         end
     end
+end
+
+--战斗失败新手引导
+function p.BattleFailEvent()
+    LogInfo("p.BattleFailEvent");
+    if(p.IsPlaySkillTutorial()) then
+        LogInfo("p.BattleFailEvent true");
+        p.ClearTask();
+        local nPlayerStage      = _G.ConvertN(_G.GetRoleBasicDataN(GetPlayerId(), USER_ATTR.USER_ATTR_STAGE));
+        p.StartTutorial(nPlayerStage);
+    end
+end
+
+--是否播放切换技能新手引导
+function p.IsPlaySkillTutorial()
+    local nPlayerStage      = _G.ConvertN(_G.GetRoleBasicDataN(GetPlayerId(), USER_ATTR.USER_ATTR_STAGE));
+    for i,v in ipairs(p.SkillStages) do
+        if(v == nPlayerStage) then
+            return true;
+        end
+    end
+    return false;
 end
 
 --保存新手引导的数据
@@ -272,10 +305,10 @@ end
 
 
 
--------------------------------------引导 01 开始-----------------------------------------------
---stage == 0
-function p.Stage0Begin()
-    LogInfo("p.Stage0Begin");
+-------------------------------------引导 000 开始-----------------------------------------------
+
+function p.Stage000Begin()
+    LogInfo("p.Stage000Begin");
     if(p.InRuoYanCity()) then
         if(p.HandleTimerBegin) then
             UnRegisterTimer(p.HandleTimerBegin);
@@ -284,32 +317,37 @@ function p.Stage0Begin()
         end
     else
         if(p.HandleTimerBegin == nil) then
-            p.HandleTimerBegin = RegisterTimer(p.Stage0Begin, HandleTime);
+            p.HandleTimerBegin = RegisterTimer(p.Stage000Begin, HandleTime);
         end
     end
 end
 
----------01------------
-function p.Stage01Begin()
-    LogInfo("p.Stage01Begin");
+---------00------------
+function p.Stage00000Begin()
+    LogInfo("p.Stage00000Begin");
     local mapLayer=GetMapLayer();
     p.BeginTemplete(mapLayer);
 end
 
-function p.Stage01End()
-    LogInfo("p.Stage01End");
-    p.EndTemplete();
+function p.Stage00000End()
+    LogInfo("p.Stage00000End");
+    local mapLayer=GetMapLayer();
+    
+    if(mapLayer) then
+        p.EndTemplete(mapLayer);
+    else
+        p.ClearTemplete();
+    end
 end
 
-function p.Stage01IsComplete()
-    LogInfo("p.Stage01IsComplete");
+function p.Stage00000IsComplete()
+    LogInfo("p.Stage00000IsComplete");
     
     local nPlayerid = GetPlayerId();
     local nPlayerStage      = _G.ConvertN(_G.GetRoleBasicDataN(nPlayerid, USER_ATTR.USER_ATTR_STAGE));
     
     LogInfo("nPlayerStage:[%d]",nPlayerStage);
-    
-    if(nPlayerStage == 10) then
+    if(nPlayerStage and nPlayerStage == 10) then
         return true;
     end
     
@@ -317,8 +355,8 @@ function p.Stage01IsComplete()
 end
 
 
-function p.Stage01ExitCond()
-    LogInfo("p.Stage01ExitCond");
+function p.Stage00000ExitCond()
+    LogInfo("p.Stage00000ExitCond");
     
     if(p.InRuoYanCity() == false) then
         return true;
@@ -327,35 +365,32 @@ function p.Stage01ExitCond()
 end
 
 
------------02------------
-function p.Stage02Begin()
-    LogInfo("p.Stage02Begin");
-    
-    local scene = GetSMGameScene();
-    
-    p.BeginTemplete(scene);
+-----------01------------
+function p.Stage00001Begin()
+    LogInfo("p.Stage00001Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage02End()
-    LogInfo("p.Stage02End");
+function p.Stage00001End()
+    LogInfo("p.Stage00001End");
     p.EndTemplete();
 end
 
-function p.Stage02IsComplete()
-    LogInfo("p.Stage02IsComplete");
+function p.Stage00001IsComplete()
+    LogInfo("p.Stage00001IsComplete");
     
     local nPlayerid = GetPlayerId();
     local nPlayerStage      = _G.ConvertN(_G.GetRoleBasicDataN(nPlayerid, USER_ATTR.USER_ATTR_STAGE));
     
-    if(nPlayerStage == 11) then
+    if(nPlayerStage and nPlayerStage == 11) then
         return true;
     end
     
     return false;
 end
 
-function p.Stage02ExitCond()
-    LogInfo("p.Stage02ExitCond");
+function p.Stage00001ExitCond()
+    LogInfo("p.Stage00001ExitCond");
     
     if(p.InRuoYanCity() == false) then
         return true;
@@ -363,35 +398,40 @@ function p.Stage02ExitCond()
     return false;
 end
 
------------03-------------
-function p.Stage03Begin()
-    LogInfo("p.Stage02Begin");
-    
+-----------02-------------
+function p.Stage00002Begin()
+    LogInfo("p.Stage00002Begin");
     local mapLayer=GetMapLayer();
-    
     p.BeginTemplete(mapLayer);
 end
 
-function p.Stage03End()
-    LogInfo("p.Stage03End");
-    p.EndTemplete();
+function p.Stage00002End()
+    LogInfo("p.Stage00002End");
+    local mapLayer=GetMapLayer();
+    
+    if(mapLayer) then
+        p.EndTemplete(mapLayer);
+    else
+        p.ClearTemplete();
+    end
+    
 end
 
-function p.Stage03IsComplete()
-    LogInfo("p.Stage03IsComplete");
+function p.Stage00002IsComplete()
+    LogInfo("p.Stage00002IsComplete");
     
     local nPlayerid = GetPlayerId();
     local nPlayerStage      = _G.ConvertN(_G.GetRoleBasicDataN(nPlayerid, USER_ATTR.USER_ATTR_STAGE));
     
-    if(nPlayerStage == 20) then
+    if(nPlayerStage and nPlayerStage == 20) then
         return true;
     end
     
     return false;
 end
 
-function p.Stage03ExitCond()
-    LogInfo("p.Stage03ExitCond");
+function p.Stage00002ExitCond()
+    LogInfo("p.Stage00002ExitCond");
     
     if(p.InRuoYanCity() == false) then
         return true;
@@ -399,27 +439,25 @@ function p.Stage03ExitCond()
     return false;
 end
 
---------------04------------
-function p.Stage04Begin()
-    LogInfo("p.Stage04Begin");
-    
-    local scene = GetSMGameScene();
-    p.BeginTemplete(scene);
+--------------03------------
+function p.Stage00003Begin()
+    LogInfo("p.Stage00003Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage04End()
-    LogInfo("p.Stage04End");
+function p.Stage00003End()
+    LogInfo("p.Stage00003End");
     p.EndTemplete();
 end
 
-function p.Stage04IsComplete()
-    LogInfo("p.Stage04IsComplete");
+function p.Stage00003IsComplete()
+    LogInfo("p.Stage00003IsComplete");
     local isInCity = p.InRuoYanCity();
     return not isInCity;
 end
 
-function p.Stage04ExitCond()
-    LogInfo("p.Stage04ExitCond");
+function p.Stage00003ExitCond()
+    LogInfo("p.Stage00003ExitCond");
     
     if(p.InRuoYanCity() == false) then
         return true;
@@ -429,118 +467,139 @@ end
 
 
 
---------------05------------
-function p.Stage05Begin()
-    LogInfo("p.Stage05Begin");
+--------------04------------
+function p.Stage00004Begin()
+    LogInfo("p.Stage00004Begin");
 end
 
-function p.Stage05End()
-    LogInfo("p.Stage05End");
+function p.Stage00004End()
+    LogInfo("p.Stage00004End");
 end
 
-function p.Stage05IsComplete()
-    LogInfo("p.Stage05IsComplete");
+function p.Stage00004IsComplete()
+    LogInfo("p.Stage00004IsComplete");
     
-    
-    if(p.IsShowLayer({NMAINSCENECHILDTAG.MonsterReward})) then
-        local scene = GetSMGameScene();
+    local scene = GetSMGameScene();
+    if(scene) then
         local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.MonsterReward);
-        
         if(layer) then
             return layer:IsVisibled();
         end
     end
-    
     return false;
 end
 
-function p.Stage05ExitCond()
+function p.Stage00004ExitCond()
+    LogInfo("p.Stage00004ExitCond");
     return false;
 end
 
 
------------06------------
-function p.Stage06Begin()
-    LogInfo("p.Stage06Begin");
-    local scene = GetSMGameScene();
-    p.BeginTemplete(scene);
+-----------05------------
+function p.Stage00005Begin()
+    LogInfo("p.Stage00005Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage06End()
-    LogInfo("p.Stage06End");
-    p.JtTag = nil;
-    p.GxTag = nil;
-    --p.EndTemplete();
+function p.Stage00005End()
+    LogInfo("p.Stage00005End");
+    --p.ClearTemplete();
+    p.EndTemplete();
 end
 
-function p.Stage06IsComplete()
-    LogInfo("p.Stage06IsComplete");
+function p.Stage00005IsComplete()
+    LogInfo("p.Stage00005IsComplete");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.MonsterReward);
-        
-    if(layer) then
-        return not layer:IsVisibled();
-    else
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.MonsterReward);
+        if(layer) then
+            return not layer:IsVisibled();
+        else
+            return true;
+        end
     end
+    return false;
 end
 
-function p.Stage06ExitCond()
-    LogInfo("p.Stage06ExitCond");
+function p.Stage00005ExitCond()
+    LogInfo("p.Stage00005ExitCond");
     return false;
 end
 
 
---------------07------------
-function p.Stage07Begin()
-    LogInfo("p.Stage07Begin");
+--------------06------------
+function p.Stage00006Begin()
+    LogInfo("p.Stage00006Begin");
 end
 
-function p.Stage07End()
-    LogInfo("p.Stage07End");
+function p.Stage00006End()
+    LogInfo("p.Stage00006End");
 end
 
-function p.Stage07IsComplete()
-    LogInfo("p.Stage07IsComplete");
+function p.Stage00006IsComplete()
+    LogInfo("p.Stage00006IsComplete");
     return p.InRuoYanCity();
 end
 
-function p.Stage07ExitCond()
+function p.Stage00006ExitCond()
     return false;
 end
 
 
---------------08------------
-function p.Stage08IsComplete()
-    LogInfo("p.Stage08IsComplete");
+
+
+--------------07------------
+function p.Stage00007Begin()
+    LogInfo("p.Stage00007Begin");
+    p.BeginTemplete();
+end
+
+function p.Stage00007End()
+    LogInfo("p.Stage00007End");
+    p.EndTemplete();
+end
+
+function p.Stage00007IsComplete()
+    LogInfo("p.Stage00007IsComplete");
     
     local nPlayerid = GetPlayerId();
     local nPlayerStage      = _G.ConvertN(_G.GetRoleBasicDataN(nPlayerid, USER_ATTR.USER_ATTR_STAGE));
     
-    if(nPlayerStage == 21) then
+    if(nPlayerStage and nPlayerStage == 21) then
         return true;
     end
-    
+    return false;
+end
+
+function p.Stage00007ExitCond()
+    LogInfo("p.Stage00007ExitCond");
+    if(p.InRuoYanCity() == false) then
+        return true;
+    end
     return false;
 end
 
 
 
-function p.Stage0End(isComplete)
-    LogInfo("p.Stage0End");
+function p.Stage000End(isComplete)
+    LogInfo("p.Stage000End");
     if(isComplete == false) then
         p.CurrTaskEnd();
     end
 end
--------------------------------------引导 01 结束-----------------------------------------------
-
-
-
--------------------------------------引导 02 开始-----------------------------------------------
---stage == 31
-function p.Stage1Begin()
-    LogInfo("p.Stage1Begin");
+-------------------------------------引导 000 结束-----------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-------------------------------------引导 021 开始-----------------------------------------------
+function p.Stage021Begin()
+    LogInfo("p.Stage021Begin");
     if(p.InRuoYanCity()) then
         if(p.HandleTimerBegin) then
             UnRegisterTimer(p.HandleTimerBegin);
@@ -549,33 +608,393 @@ function p.Stage1Begin()
         p.DealProgress();
     else
         if(p.HandleTimerBegin == nil) then
-            p.HandleTimerBegin = RegisterTimer(p.Stage1Begin, HandleTime);
+            p.HandleTimerBegin = RegisterTimer(p.Stage021Begin, HandleTime);
+        end
+    end
+end
+
+
+
+
+
+---------01------------
+function p.Stage02101Begin()
+    LogInfo("p.Stage02101Begin");
+    p.BeginTemplete();
+end
+
+function p.Stage02101End()
+    LogInfo("p.Stage02101End");
+    p.EndTemplete();
+end
+
+function p.Stage02101IsComplete()
+    LogInfo("p.Stage02101IsComplete");
+    
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
+        
+        if(layer) then
+			LogInfo("p.Stage04105IsComplete true");
+            return layer:IsVisibled();
+        end
+    end
+	LogInfo("p.Stage02101IsComplete false");
+    return false;
+end
+
+
+function p.Stage02101ExitCond()
+    LogInfo("p.Stage02101ExitCond");
+    
+    if(p.InRuoYanCity() == false) then
+        LogInfo("p.Stage02101ExitCond true");
+        return true;
+    end
+    LogInfo("p.Stage02101ExitCond false");
+    return false;
+end
+
+
+
+---------02------------
+function p.Stage02102Begin()
+    LogInfo("p.Stage02102Begin");
+    p.BeginTemplete();
+    
+end
+
+function p.Stage02102End()
+    LogInfo("p.Stage02102End");
+    p.EndTemplete();
+end
+
+function p.Stage02102IsComplete()
+    LogInfo("p.Stage02102IsComplete");
+    
+    if PlayerUIBackBag.BagPos.TYPE == Item.bTypeProp then
+        return true;
+    end
+    return false;
+end
+
+
+function p.Stage02102ExitCond()
+    LogInfo("p.Stage02102ExitCond");
+    
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
+        if(layer == nil or not layer:IsVisibled()) then
+            return true;
+        end
+    end
+    return false;
+end
+
+
+---------03------------
+function p.Stage02103Begin()
+    LogInfo("p.Stage02103Begin");
+    p.BeginTemplete();
+end
+
+function p.Stage02103End()
+    LogInfo("p.Stage02103End");
+    p.EndTemplete();
+end
+
+function p.Stage02103IsComplete()
+    LogInfo("p.Stage02103IsComplete");
+    
+    local layer = BackLevelThreeWin.GetPropLayer();
+    if(layer and layer:IsVisibled()) then
+        LogInfo("p.Stage02103IsComplete true");
+        return true;
+    end
+    LogInfo("p.Stage02103IsComplete false");
+    return false;
+end
+
+
+function p.Stage02103ExitCond()
+    LogInfo("p.Stage02103ExitCond");
+    
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
+            
+        if(layer == nil or not layer:IsVisibled()) then
+            return true;
+        end
+    end
+    return false;
+end
+
+
+---------04------------
+function p.Stage02104Begin()
+    LogInfo("p.Stage02104Begin");
+    p.BeginTemplete();
+end
+
+function p.Stage02104End()
+    LogInfo("p.Stage02104End");
+    p.EndTemplete();
+end
+
+function p.Stage02104IsComplete()
+    LogInfo("p.Stage02104IsComplete");
+    
+    local layer = BackLevelThreeWin.GetPropLayer();
+    if(layer == nil or not layer:IsVisibled()) then
+        return true;
+    end
+    return false;
+end
+
+function p.Stage02104ExitCond()
+    LogInfo("p.Stage02104ExitCond");
+    
+    local layer = BackLevelThreeWin.GetPropLayer();
+    if(layer == nil or not layer:IsVisibled()) then
+        return true;
+    end
+    return false;
+end
+
+
+
+
+---------05------------
+function p.Stage02105Begin()
+    LogInfo("p.Stage02105Begin");
+    p.BeginTemplete();
+end
+
+function p.Stage02105End()
+    LogInfo("p.Stage02105End");
+    p.EndTemplete();
+end
+
+function p.Stage02105IsComplete()
+    LogInfo("p.Stage02105IsComplete");
+    
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene,BackLevelThreeWin.nTagId);
+        if(layer == nil) then
+            return true;
+        end
+    end
+    return false;
+end
+
+
+function p.Stage02105ExitCond()
+    LogInfo("p.Stage02105ExitCond");
+    
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
+        if(layer == nil or not layer:IsVisibled()) then
+            return true;
+        end
+    end
+    return false;
+end
+
+
+
+---------06------------
+function p.Stage02106Begin()
+    LogInfo("p.Stage02106Begin");
+    p.BeginTemplete();
+end
+
+function p.Stage02106End()
+    LogInfo("p.Stage02106End");
+    p.EndTemplete();
+end
+
+function p.Stage02106IsComplete()
+    LogInfo("p.Stage02106IsComplete");
+    
+    if PlayerUIBackBag.BagPos.TYPE == Item.bTypeEquip then
+        return true;
+    end
+    return false;
+end
+
+
+function p.Stage02106ExitCond()
+    LogInfo("p.Stage02106ExitCond");
+    
+    local scene = GetSMGameScene();
+    if (scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
+        if(layer == nil or not layer:IsVisibled()) then
+            return true;
+        end
+    end
+    
+    
+    return false;
+end
+
+
+
+
+---------07------------
+function p.Stage02107Begin()
+    LogInfo("p.Stage02107Begin");
+    p.BeginTemplete();
+end
+
+function p.Stage02107End()
+    LogInfo("p.Stage02107End");
+    p.EndTemplete();
+end
+
+function p.Stage02107IsComplete()
+    LogInfo("p.Stage02107IsComplete");
+    
+    local layer = BackLevelThreeWin.GetEquipLayer();
+    if(layer and layer:IsVisibled()) then
+        LogInfo("p.Stage02107IsComplete true");
+        return true;
+    end
+    
+    
+    --装备前移
+    local nPlayerId = GetPlayerId();
+    local nPetId = RolePetUser.GetMainPetId(nPlayerId);
+    local nPetType = ConvertN(RolePet.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_TYPE));
+    
+    local nEquipTypeId = 0;
+    local nJob = GetDataBaseDataN("pet_config", nPetType, DB_PET_CONFIG.PROFESSION);
+    if nJob == PROFESSION_TYPE.SWORD then
+		nEquipTypeId = 1101011;
+	elseif nJob == PROFESSION_TYPE.CHIVALROUS then
+		nEquipTypeId = 1102011;
+	elseif nJob == PROFESSION_TYPE.FIST then
+		nEquipTypeId = 1103011;
+	elseif nJob == PROFESSION_TYPE.AXE then
+		nEquipTypeId = 1101011;
+	end
+    LogInfo("nEquipTypeId:[%d]",nEquipTypeId);
+    p.OrderItem(nEquipTypeId, nEquipTypeId);
+    
+    
+    LogInfo("p.Stage02107IsComplete false");
+    return false;
+end
+
+
+function p.Stage02107ExitCond()
+    LogInfo("p.Stage02107ExitCond");
+    
+    local scene = GetSMGameScene();
+    
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
+        if(layer == nil or not layer:IsVisibled()) then
+            return true;
+        end
+    end
+    
+    return false;
+end
+
+
+---------08------------
+function p.Stage02108Begin()
+    LogInfo("p.Stage02108Begin");
+    p.BeginTemplete();
+end
+
+function p.Stage02108End()
+    LogInfo("p.Stage02108End");
+    p.EndTemplete();
+end
+
+function p.Stage02108IsComplete()
+    LogInfo("p.Stage02108IsComplete");
+    
+    local layer = BackLevelThreeWin.GetEquipLayer();
+    if(layer == nil or not layer:IsVisibled()) then
+        return true;
+    end
+    
+    return false;
+end
+
+
+function p.Stage02108ExitCond()
+    LogInfo("p.Stage02108ExitCond");
+    
+    local layer = BackLevelThreeWin.GetEquipLayer();
+    if(layer == nil or not layer:IsVisibled()) then
+        return true;
+    end
+    return false;
+end
+
+
+function p.Stage021End(isComplete)
+    LogInfo("p.Stage021End");
+    if(isComplete == false) then
+        p.CurrTaskEnd();
+    end
+end
+
+-------------------------------------引导 021 结束-----------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-------------------------------------引导 031 开始-----------------------------------------------
+
+function p.Stage031Begin()
+    LogInfo("p.Stage031Begin");
+    if(p.InRuoYanCity()) then
+        if(p.HandleTimerBegin) then
+            UnRegisterTimer(p.HandleTimerBegin);
+            p.HandleTimerBegin = nil;
+        end
+        p.DealProgress();
+    else
+        if(p.HandleTimerBegin == nil) then
+            p.HandleTimerBegin = RegisterTimer(p.Stage031Begin, HandleTime);
         end
     end
 end
 
 
 ---------01------------
-function p.Stage11Begin()
-    LogInfo("p.Stage11Begin");
-    local scene = GetSMGameScene();
-    p.BeginTemplete(scene);
+function p.Stage03101Begin()
+    LogInfo("p.Stage03101Begin");
+    p.BeginTemplete();
     --新功能声音提示
     Music.PlayEffectSound(Music.SoundEffect.REMIND);
 end
 
-function p.Stage11End()
-    LogInfo("p.Stage11End");
+function p.Stage03101End()
+    LogInfo("p.Stage03101End");
     p.EndTemplete();
 end
 
-function p.Stage11IsComplete()
-    LogInfo("p.Stage11IsComplete");
+function p.Stage03101IsComplete()
+    LogInfo("p.Stage03101IsComplete");
     
-    if(p.IsShowLayer({NMAINSCENECHILDTAG.HeroStarUI})) then
-        local scene = GetSMGameScene();
+    local scene = GetSMGameScene();
+    if(scene) then
         local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.HeroStarUI);
-        
         if(layer) then
             return layer:IsVisibled();
         end
@@ -584,8 +1003,8 @@ function p.Stage11IsComplete()
 end
 
 
-function p.Stage11ExitCond()
-    LogInfo("p.Stage11ExitCond");
+function p.Stage03101ExitCond()
+    LogInfo("p.Stage03101ExitCond");
     
     if(p.InRuoYanCity() == false) then
         return true;
@@ -596,52 +1015,46 @@ end
 
 
 ---------02------------
-function p.Stage12Begin()
-    LogInfo("p.Stage12Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.HeroStarUI);
-    if(layer == nil) then
-        LogInfo("error:p.Stage12Begin NMAINSCENECHILDTAG.HeroStarUI is nil!");
-        return;
-    end
-    p.BeginTemplete(layer);
+function p.Stage03102Begin()
+    LogInfo("p.Stage03102Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage12End()
-    LogInfo("p.Stage12End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.HeroStarUI);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+function p.Stage03102End()
+    LogInfo("p.Stage03102End");
+    p.EndTemplete();
 end
 
-function p.Stage12IsComplete()
-    LogInfo("p.Stage12IsComplete");
+function p.Stage03102IsComplete()
+    LogInfo("p.Stage03102IsComplete");
     
+    --监测是否可升级将星
+    return not HeroStar.CheckHeroStarCanUpLev();
+    
+    --[[
     local nStar = HeroStar.GetLevByGrade(GetPlayerId(),1);
     LogInfo("nStar:[%d]",nStar);
     if(nStar>0) then
         return true;
     end
-    return false;
+    ]]
+    --return false;
 end
 
 
-function p.Stage12ExitCond()
-    LogInfo("p.Stage12ExitCond");
+function p.Stage03102ExitCond()
+    LogInfo("p.Stage03102ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.HeroStarUI);
-    if(layer == nil) then
-        LogInfo("p.Stage12ExitCond true");
-        return true;
+    if(scene == nil) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.HeroStarUI);
+        if(layer == nil) then
+            LogInfo("p.Stage03102ExitCond true");
+            return true;
+        end
     end
-    LogInfo("p.Stage12ExitCond false");
+    
+    LogInfo("p.Stage03102ExitCond false");
     return false;
 end
 
@@ -650,44 +1063,28 @@ end
 
 
 ---------03------------
-function p.Stage13Begin()
-    LogInfo("p.Stage13Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.HeroStarUI);
-    
-    if(layer == nil) then
-        LogInfo("error:p.Stage13Begin NMAINSCENECHILDTAG.HeroStarUI is nil!");
-        return;
-    end
-    
-    p.BeginTemplete(layer);
+function p.Stage03103Begin()
+    LogInfo("p.Stage03103Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage13End()
-    LogInfo("p.Stage13End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.HeroStarUI);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+function p.Stage03103End()
+    LogInfo("p.Stage03103End");
+    p.EndTemplete();
 end
 
-function p.Stage13IsComplete()
-    LogInfo("p.Stage13IsComplete");
+function p.Stage03103IsComplete()
+    LogInfo("p.Stage03103IsComplete");
     
-   if(not p.IsShowLayer({NMAINSCENECHILDTAG.HeroStarUI})) then
+    if(not p.IsShowLayer({NMAINSCENECHILDTAG.HeroStarUI})) then
         return true;
     end
     return false;
 end
 
 
-function p.Stage13ExitCond()
-    LogInfo("p.Stage13ExitCond");
+function p.Stage03103ExitCond()
+    LogInfo("p.Stage03103ExitCond");
     
     if(p.InRuoYanCity() == false) then
         return true;
@@ -698,25 +1095,25 @@ end
 
 
 
-
-
-function p.Stage1End(isComplete)
-    LogInfo("p.Stage1End");
+function p.Stage031End(isComplete)
+    LogInfo("p.Stage031End");
     if(isComplete == false) then
         p.CurrTaskEnd();
     end
 end
 
--------------------------------------引导 02 结束-----------------------------------------------
-
-
-
-
-
--------------------------------------引导 03 开始-----------------------------------------------
---stage == 41
-function p.Stage2Begin()
-    LogInfo("p.Stage2Begin");
+-------------------------------------引导 031 结束-----------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-------------------------------------引导 041 开始-----------------------------------------------
+function p.Stage041Begin()
+    LogInfo("p.Stage041Begin");
     if(p.InRuoYanCity()) then
         if(p.HandleTimerBegin) then
             UnRegisterTimer(p.HandleTimerBegin);
@@ -725,43 +1122,42 @@ function p.Stage2Begin()
         p.DealProgress();
     else
         if(p.HandleTimerBegin == nil) then
-            p.HandleTimerBegin = RegisterTimer(p.Stage2Begin, HandleTime);
+            p.HandleTimerBegin = RegisterTimer(p.Stage041Begin, HandleTime);
         end
     end
 end
 
 
 ---------01------------
-function p.Stage21Begin()
-    LogInfo("p.Stage21Begin");
-    local scene = GetSMGameScene();
-    p.BeginTemplete(scene);
+function p.Stage04101Begin()
+    LogInfo("p.Stage04101Begin");
+    p.BeginTemplete();
     --新功能声音提示
     Music.PlayEffectSound(Music.SoundEffect.REMIND);
 end
 
-function p.Stage21End()
-    LogInfo("p.Stage21End");
+function p.Stage04101End()
+    LogInfo("p.Stage04101End");
     p.EndTemplete();
 end
 
-function p.Stage21IsComplete()
-    LogInfo("p.Stage21IsComplete");
+function p.Stage04101IsComplete()
+    LogInfo("p.Stage04101IsComplete");
     
-    if(p.IsShowLayer({NMAINSCENECHILDTAG.PlayerMartial})) then
-        local scene = GetSMGameScene();
+    local scene = GetSMGameScene();
+    if(scene) then
         local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerMartial);
-        
         if(layer) then
             return layer:IsVisibled();
         end
     end
+    
     return false;
 end
 
 
-function p.Stage21ExitCond()
-    LogInfo("p.Stage21ExitCond");
+function p.Stage04101ExitCond()
+    LogInfo("p.Stage04101ExitCond");
     
     if(p.InRuoYanCity() == false) then
         return true;
@@ -772,32 +1168,18 @@ end
 
 
 ---------02------------
-function p.Stage22Begin()
-    LogInfo("p.Stage22Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerMartial);
-    if(layer == nil) then
-        LogInfo("error:p.Stage22Begin NMAINSCENECHILDTAG.PlayerMartial is nil!");
-        return;
-    end
-    p.BeginTemplete(layer);
+function p.Stage04102Begin()
+    LogInfo("p.Stage04102Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage22End()
-    LogInfo("p.Stage22End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerMartial);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+function p.Stage04102End()
+    LogInfo("p.Stage04102End");
+    p.EndTemplete();
 end
 
-function p.Stage22IsComplete()
-    LogInfo("p.Stage22IsComplete");
+function p.Stage04102IsComplete()
+    LogInfo("p.Stage04102IsComplete");
     
     local petInfo = MartialUI.GetPetInfoLayer();
     if(petInfo) then
@@ -809,55 +1191,37 @@ function p.Stage22IsComplete()
 end
 
 
-function p.Stage22ExitCond()
-    LogInfo("p.Stage22ExitCond");
+function p.Stage04102ExitCond()
+    LogInfo("p.Stage04102ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerMartial);
-    if(layer == nil) then
-        LogInfo("p.Stage22ExitCond true");
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerMartial);
+        if(layer == nil) then
+            LogInfo("p.Stage04102ExitCond true");
+            return true;
+        end
     end
-    LogInfo("p.Stage22ExitCond false");
+    
+    LogInfo("p.Stage04102ExitCond false");
     return false;
 end
 
 
 
 ---------03------------
-function p.Stage23Begin()
-    LogInfo("p.Stage23Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerMartial);
-    if(layer == nil) then
-        LogInfo("error:p.Stage23Begin NMAINSCENECHILDTAG.PlayerMartial is nil!");
-        return;
-    end
-    
-    local petLayer = MartialUI.GetPetInfoLayer();
-    if(petLayer == nil) then
-        LogInfo("error:p.Stage23Begin NMAINSCENECHILDTAG.PlayerMartial petLayer is nil!");
-        return;
-    end
-    
-    p.BeginTemplete(petLayer);
+function p.Stage04103Begin()
+    LogInfo("p.Stage04103Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage23End()
-    LogInfo("p.Stage23End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerMartial);
-    local petInfo = MartialUI.GetPetInfoLayer();
-    if(layer and petInfo) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+function p.Stage04103End()
+    LogInfo("p.Stage04103End");
+    p.EndTemplete();
 end
 
-function p.Stage23IsComplete()
-    LogInfo("p.Stage23IsComplete");
+function p.Stage04103IsComplete()
+    LogInfo("p.Stage04103IsComplete");
     
     local petInfo = MartialUI.GetPetInfoLayer();
     if(petInfo == nil or not petInfo:IsVisibled()) then
@@ -867,48 +1231,37 @@ function p.Stage23IsComplete()
 end
 
 
-function p.Stage23ExitCond()
-    LogInfo("p.Stage23ExitCond");
+function p.Stage04103ExitCond()
+    LogInfo("p.Stage04103ExitCond");
     
-    if(p.InRuoYanCity() == false) then
-        return true;
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerMartial);
+        if(layer == nil) then
+            LogInfo("p.Stage04103ExitCond true");
+            return true;
+        end
     end
+    
+    LogInfo("p.Stage04102ExitCond false");
     return false;
 end
 
 
 
 ---------04------------
-function p.Stage24Begin()
-    LogInfo("p.Stage24Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerMartial);
-    
-    if(layer == nil) then
-        LogInfo("error:p.Stage24Begin NMAINSCENECHILDTAG.PlayerMartial is nil!");
-        return;
-    end
-    
-    p.BeginTemplete(layer);
+function p.Stage04104Begin()
+    LogInfo("p.Stage04104Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage24End()
-    LogInfo("p.Stage24End");
-    
-    LogInfo("p.Stage03Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerMartial);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+function p.Stage04104End()
+    LogInfo("p.Stage04104End");
+    p.EndTemplete();
 end
 
-function p.Stage24IsComplete()
-    LogInfo("p.Stage24IsComplete");
+function p.Stage04104IsComplete()
+    LogInfo("p.Stage04104IsComplete");
     
    if(not p.IsShowLayer({NMAINSCENECHILDTAG.PlayerMartial})) then
         return true;
@@ -917,8 +1270,8 @@ function p.Stage24IsComplete()
 end
 
 
-function p.Stage24ExitCond()
-    LogInfo("p.Stage24ExitCond");
+function p.Stage04104ExitCond()
+    LogInfo("p.Stage04104ExitCond");
     
     if(p.InRuoYanCity() == false) then
         return true;
@@ -932,79 +1285,85 @@ end
 
 
 ---------05------------
-function p.Stage25Begin()
-    LogInfo("p.Stage25Begin");
-    local scene = GetSMGameScene();
-    p.BeginTemplete(scene);
+function p.Stage04105Begin()
+    LogInfo("p.Stage04105Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage25End()
-    LogInfo("p.Stage25End");
+function p.Stage04105End()
+    LogInfo("p.Stage04105End");
     p.EndTemplete();
 end
 
-function p.Stage25IsComplete()
-    LogInfo("p.Stage25IsComplete");
+function p.Stage04105IsComplete()
+    LogInfo("p.Stage04105IsComplete");
     
-    if(p.IsShowLayer({NMAINSCENECHILDTAG.PlayerBackBag})) then
-        local scene = GetSMGameScene();
+    local scene = GetSMGameScene();
+    if(scene) then
         local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
-        
         if(layer) then
-			LogInfo("p.Stage25IsComplete true");
+			LogInfo("p.Stage04105IsComplete true");
             return layer:IsVisibled();
         end
     end
-	LogInfo("p.Stage25IsComplete false");
+	LogInfo("p.Stage04105IsComplete false");
     return false;
 end
 
 
-function p.Stage25ExitCond()
-    LogInfo("p.Stage25ExitCond");
+function p.Stage04105ExitCond()
+    LogInfo("p.Stage04105ExitCond");
     
     if(p.InRuoYanCity() == false) then
-        LogInfo("p.Stage25ExitCond true");
+        LogInfo("p.Stage04105ExitCond true");
         return true;
     end
-    LogInfo("p.Stage25ExitCond false");
+    LogInfo("p.Stage04105ExitCond false");
     return false;
 end
 
 
 
 ---------06------------
-function p.Stage26Begin()
-    LogInfo("p.Stage26Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
-    p.BeginTemplete(layer);
+function p.Stage04106Begin()
+    LogInfo("p.Stage04106Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage26End()
-    LogInfo("p.Stage26End");
+function p.Stage04106End()
+    LogInfo("p.Stage04106End");
     p.EndTemplete();
 end
 
-function p.Stage26IsComplete()
-    LogInfo("p.Stage26IsComplete");
+function p.Stage04106IsComplete()
+    LogInfo("p.Stage04106IsComplete");
     
-    local nMainPetId = RolePetFunc.GetMainPetId(GetPlayerId());
-    if(nMainPetId ~= PlayerUIBackBag.GetCurPetId()) then
+    return p.GetBackIsCurr(10000010);
+end
+
+function p.Stage10106IsComplete()
+    LogInfo("p.Stage04106IsComplete");
+    return p.GetBackIsCurr(10000008);
+end
+
+function p.GetBackIsCurr(nPetTypeId)
+    local nPetId = PlayerUIBackBag.GetCurPetId();
+    local ncPetTypeId = RolePet.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_TYPE);
+    if(ncPetTypeId == nPetTypeId) then
         return true;
     end
     return false;
 end
 
-
-function p.Stage26ExitCond()
-    LogInfo("p.Stage26ExitCond");
+function p.Stage04106ExitCond()
+    LogInfo("p.Stage04106ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
-        
-    if(layer == nil or not layer:IsVisibled()) then
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
+        if(layer == nil or not layer:IsVisibled()) then
+            return true;
+        end
     end
     return false;
 end
@@ -1012,20 +1371,19 @@ end
 
 
 ---------07------------
-function p.Stage27Begin()
-    LogInfo("p.Stage27Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
-    p.BeginTemplete(layer);
+function p.Stage04107Begin()
+    LogInfo("p.Stage04107Begin");
+    p.BeginTemplete();
+    p.OrderItem(34000000, 34000004);
 end
 
-function p.Stage27End()
-    LogInfo("p.Stage26End");
+function p.Stage04107End()
+    LogInfo("p.Stage04106End");
     p.EndTemplete();
 end
 
-function p.Stage27IsComplete()
-    LogInfo("p.Stage27IsComplete");
+function p.Stage04107IsComplete()
+    LogInfo("p.Stage04107IsComplete");
     
     if PlayerUIBackBag.BagPos.TYPE == Item.bTypeProp then
         return true;
@@ -1034,14 +1392,15 @@ function p.Stage27IsComplete()
 end
 
 
-function p.Stage27ExitCond()
-    LogInfo("p.Stage27ExitCond");
+function p.Stage04107ExitCond()
+    LogInfo("p.Stage04107ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
-        
-    if(layer == nil or not layer:IsVisibled()) then
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
+        if(layer == nil or not layer:IsVisibled()) then
+            return true;
+        end
     end
     return false;
 end
@@ -1049,11 +1408,9 @@ end
 
 
 ---------08------------
-function p.Stage28Begin()
-    LogInfo("p.Stage28Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
-    p.BeginTemplete(layer);
+function p.Stage04108Begin()
+    LogInfo("p.Stage04108Begin");
+    p.BeginTemplete();
 end
 
 function p.Stage28End()
@@ -1061,8 +1418,8 @@ function p.Stage28End()
     p.EndTemplete();
 end
 
-function p.Stage28IsComplete()
-    LogInfo("p.Stage28IsComplete");
+function p.Stage04108IsComplete()
+    LogInfo("p.Stage04108IsComplete");
     
     --[[
     local nPlayerId		= ConvertN(GetPlayerId());
@@ -1076,8 +1433,8 @@ function p.Stage28IsComplete()
     return true;
     ]]
     
+    --[[
     local nPlayerId = _G.ConvertN(_G.GetPlayerId());
-    
     local nPlayerPetId  = RolePetFunc.GetMainPetId(nPlayerId);
     local allUsers = RolePetUser.GetPetListPlayer(nPlayerId);
 	for i,v in ipairs(allUsers) do
@@ -1090,89 +1447,95 @@ function p.Stage28IsComplete()
             break;
         end
     end
+    ]]
+    
+    local layer = BackLevelThreeWin.GetPropLayer();
+    if(layer and layer:IsVisibled()) then
+        return true;
+    end
     
     return false;
-    
 end
 
 
-function p.Stage28ExitCond()
-    LogInfo("p.Stage28ExitCond");
+function p.Stage04108ExitCond()
+    LogInfo("p.Stage04108ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
-        
-    if(layer == nil or not layer:IsVisibled()) then
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
+        if(layer == nil or not layer:IsVisibled()) then
+            return true;
+        end
     end
     return false;
 end
+
+
+
+
 
 
 
 ---------09------------
-function p.Stage29Begin()
-    LogInfo("p.Stage29Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
-    p.BeginTemplete(layer);
+function p.Stage04109Begin()
+    LogInfo("p.Stage04109Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage29End()
-    LogInfo("p.Stage29End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
+function p.Stage04109End()
+    LogInfo("p.Stage04109End");
+    p.EndTemplete();
+end
+
+function p.Stage04109IsComplete()
+    LogInfo("p.Stage04109IsComplete");
     
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
+        if(layer == nil or not layer:IsVisibled()) then
+            LogInfo("p.Stage04109IsComplete true;");
+            return true;
+        end
     end
+    LogInfo("p.Stage04109IsComplete false;");
+    return false;
 end
 
-function p.Stage29IsComplete()
-    LogInfo("p.Stage29IsComplete");
-    
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
-    
-    if(layer == nil or not layer:IsVisibled()) then
-        LogInfo("p.Stage29IsComplete true;");
+
+function p.Stage04109ExitCond()
+    LogInfo("p.Stage04109ExitCond");
+    if(p.InRuoYanCity() == false) then
+        LogInfo("p.Stage04105ExitCond true");
         return true;
     end
-    LogInfo("p.Stage29IsComplete false;");
-    return false;
-end
-
-
-function p.Stage29ExitCond()
-    LogInfo("p.Stage29ExitCond");
+    LogInfo("p.Stage04109ExitCond false");
     return false;
 end
 
 
 
 
-
-
-function p.Stage2End(isComplete)
-    LogInfo("p.Stage2End");
+function p.Stage041End(isComplete)
+    LogInfo("p.Stage041End");
     if(isComplete == false) then
         p.CurrTaskEnd();
     end
 end
 
--------------------------------------引导 03 结束-----------------------------------------------
-
-
-
-
-
--------------------------------------引导 04 开始-----------------------------------------------
---stage == 71
-function p.Stage3Begin()
-    LogInfo("p.Stage3Begin");
+-------------------------------------引导 041 结束-----------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-------------------------------------引导 071 开始-----------------------------------------------
+function p.Stage071Begin()
+    LogInfo("p.Stage071Begin");
     if(p.InRuoYanCity()) then
         if(p.HandleTimerBegin) then
             UnRegisterTimer(p.HandleTimerBegin);
@@ -1181,37 +1544,36 @@ function p.Stage3Begin()
         p.DealProgress();
     else
         if(p.HandleTimerBegin == nil) then
-            p.HandleTimerBegin = RegisterTimer(p.Stage3Begin, HandleTime);
+            p.HandleTimerBegin = RegisterTimer(p.Stage071Begin, HandleTime);
         end
     end
 end
 
 
 ---------01------------
-function p.Stage31Begin()
-    LogInfo("p.Stage31Begin");
-    local scene = GetSMGameScene();
-    p.BeginTemplete(scene);
+function p.Stage07101Begin()
+    LogInfo("p.Stage07101Begin");
+    p.BeginTemplete();
     --新功能声音提示
     Music.PlayEffectSound(Music.SoundEffect.REMIND);
 end
 
-function p.Stage31End()
-    LogInfo("p.Stage31End");
+function p.Stage07101End()
+    LogInfo("p.Stage07101End");
     p.EndTemplete();
 end
 
-function p.Stage31IsComplete()
-    LogInfo("p.Stage31IsComplete");
+function p.Stage07101IsComplete()
+    LogInfo("p.Stage07101IsComplete");
     
-    if(p.IsShowLayer({NMAINSCENECHILDTAG.EquipUI})) then
-        local scene = GetSMGameScene();
+    local scene = GetSMGameScene();
+    if(scene) then
         local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-        
         if(layer) then
             return layer:IsVisibled();
         end
     end
+        
     return false;
 end
 
@@ -1228,35 +1590,20 @@ end
 
 
 ---------02------------
-function p.Stage32Begin()
-    LogInfo("p.Stage32Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-    if(layer == nil) then
-        LogInfo("error:p.Stage32Begin NMAINSCENECHILDTAG.EquipUI is nil!");
-        return;
-    end
-    p.BeginTemplete(layer);
+function p.Stage07102Begin()
+    LogInfo("p.Stage07102Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage32End()
-    LogInfo("p.Stage32End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+function p.Stage07102End()
+    LogInfo("p.Stage07102End");
+    p.EndTemplete();
 end
 
-function p.Stage32IsComplete()
-    LogInfo("p.Stage32IsComplete");
+function p.Stage07102IsComplete()
+    LogInfo("p.Stage07102IsComplete");
     
     local nEquipId = EquipUpgradeUI.GetStrangPic();
-    
     if(nEquipId>0) then
         return true;
     end
@@ -1265,52 +1612,44 @@ function p.Stage32IsComplete()
 end
 
 
-function p.Stage32ExitCond()
-    LogInfo("p.Stage32ExitCond");
+function p.Stage07102ExitCond()
+    LogInfo("p.Stage07102ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-    if(layer == nil) then
-        LogInfo("p.Stage32ExitCond true");
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
+        if(layer == nil) then
+            LogInfo("p.Stage07102ExitCond true");
+            return true;
+        end
     end
-    LogInfo("p.Stage32ExitCond false");
+    LogInfo("p.Stage07102ExitCond false");
     return false;
 end
 
 
 
 ---------03------------
-function p.Stage33Begin()
-    LogInfo("p.Stage33Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-    if(layer == nil) then
-        LogInfo("error:p.Stage33Begin NMAINSCENECHILDTAG.EquipUI is nil!");
-        return;
-    end
-    
-    p.BeginTemplete(layer);
+function p.Stage07103Begin()
+    LogInfo("p.Stage07103Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage33End()
-    LogInfo("p.Stage33End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+function p.Stage07103End()
+    LogInfo("p.Stage07103End");
+    p.EndTemplete();
 end
 
-function p.Stage33IsComplete()
-    LogInfo("p.Stage33IsComplete");
+function p.Stage07103IsComplete()
+    LogInfo("p.Stage07103IsComplete");
+    
+    local equipId = EquipUpgradeUI.GetStrangPic();
+    local nPetId        = RolePetFunc.GetMainPetId(GetPlayerId());
+    local equipLv       = Item.GetItemInfoN(equipId, Item.ITEM_ADDITION);
+    local mainLv        = RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_LEVEL);
     
     local WaitTime = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME1);
-    if(WaitTime>Wait_Time) then
+    if(WaitTime>Wait_Time or equipLv>=mainLv) then
         return true;
     end
     
@@ -1318,12 +1657,18 @@ function p.Stage33IsComplete()
 end
 
 
-function p.Stage33ExitCond()
-    LogInfo("p.Stage33ExitCond");
+function p.Stage07103ExitCond()
+    LogInfo("p.Stage07103ExitCond");
     
-    if(p.InRuoYanCity() == false) then
-        return true;
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
+        if(layer == nil) then
+            LogInfo("p.Stage07105ExitCond true");
+            return true;
+        end
     end
+    LogInfo("p.Stage07103ExitCond false");
     return false;
 end
 
@@ -1333,87 +1678,63 @@ end
 
 
 ---------05------------
-function p.Stage35Begin()
-    LogInfo("p.Stage35Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-    
-    if(layer == nil) then
-        LogInfo("error:p.Stage34Begin NMAINSCENECHILDTAG.EquipUI is nil!");
-        return;
-    end
-    
-    p.BeginTemplete(layer);
+function p.Stage07105Begin()
+    LogInfo("p.Stage07105Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage35End()
-    LogInfo("p.Stage35End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+function p.Stage07105End()
+    LogInfo("p.Stage07105End");
+    p.EndTemplete();
 end
 
-function p.Stage35IsComplete()
-    LogInfo("p.Stage35IsComplete");
+function p.Stage07105IsComplete()
+    LogInfo("p.Stage07105IsComplete");
     
     if(EquipUpgradeUI.nTagQuick) then
         local scene = GetSMGameScene();
         local layer = GetUiLayer(scene,EquipUpgradeUI.nTagQuick);
         if(layer) then
-            LogInfo("p.Stage35IsComplete true");
+            LogInfo("p.Stage07105IsComplete true");
             return true;
         end
     end
-    LogInfo("p.Stage35IsComplete false");
+    LogInfo("p.Stage07105IsComplete false");
     return false;
 end
 
 
-function p.Stage35ExitCond()
-    LogInfo("p.Stage35ExitCond");
+function p.Stage07105ExitCond()
+    LogInfo("p.Stage07105ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-    if(layer == nil) then
-        LogInfo("p.Stage35ExitCond true");
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
+        if(layer == nil) then
+            LogInfo("p.Stage07105ExitCond true");
+            return true;
+        end
     end
-    LogInfo("p.Stage35ExitCond false");
+    LogInfo("p.Stage07105ExitCond false");
     return false;
 end
 
 
 
 ---------06------------
-function p.Stage36Begin()
-    LogInfo("p.Stage36Begin");
-    
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene,EquipUpgradeUI.nTagQuick);
-    p.BeginTemplete(layer);
+function p.Stage07106Begin()
+    LogInfo("p.Stage07106Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage36End()
-    LogInfo("p.Stage36End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, EquipUpgradeUI.nTagQuick);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+function p.Stage07106End()
+    LogInfo("p.Stage07106End");
+    EquipUpgradeUI.refreshStrengView(0);
+    p.EndTemplete();
 end
 
-function p.Stage36IsComplete()
-    LogInfo("p.Stage36IsComplete");
+function p.Stage07106IsComplete()
+    LogInfo("p.Stage07106IsComplete");
     
     local WaitTime = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME1);
     if(WaitTime==0) then
@@ -1424,63 +1745,50 @@ function p.Stage36IsComplete()
 end
 
 
-function p.Stage36ExitCond()
-    LogInfo("p.Stage36ExitCond");
+function p.Stage07106ExitCond()
+    LogInfo("p.Stage07106ExitCond");
     
     local scene = GetSMGameScene();
     local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
     if(layer == nil) then
-        LogInfo("p.Stage36ExitCond true");
+        LogInfo("p.Stage07106ExitCond true");
         return true;
     end
-    LogInfo("p.Stage36ExitCond false");
+    LogInfo("p.Stage07106ExitCond false");
     return false;
 end
 
 
 
 ---------04------------
-function p.Stage34Begin()
-    LogInfo("p.Stage34Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-    
-    if(layer == nil) then
-        LogInfo("error:p.Stage34Begin NMAINSCENECHILDTAG.EquipUI is nil!");
-        return;
-    end
-    
-    p.BeginTemplete(layer);
+function p.Stage07104Begin()
+    LogInfo("p.Stage07104Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage34End()
-    LogInfo("p.Stage34End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
+function p.Stage07104End()
+    LogInfo("p.Stage07104End");
+    p.EndTemplete();
+end
+
+function p.Stage07104IsComplete()
+    LogInfo("p.Stage07104IsComplete");
     
-    if(layer) then
-        p.EndTemplete();
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
+        if(layer == nil or not layer:IsVisibled()) then
+            return true;
+        end
     else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
-end
-
-function p.Stage34IsComplete()
-    LogInfo("p.Stage34IsComplete");
-    
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-    
-    if(layer == nil or not layer:IsVisibled()) then
         return true;
     end
     return false;
 end
 
 
-function p.Stage34ExitCond()
-    LogInfo("p.Stage34ExitCond");
+function p.Stage07104ExitCond()
+    LogInfo("p.Stage07104ExitCond");
     
     if(p.InRuoYanCity() == false) then
         return true;
@@ -1490,27 +1798,26 @@ end
 
 
 
-function p.Stage3End(isComplete)
-    LogInfo("p.Stage3End");
+function p.Stage071End(isComplete)
+    LogInfo("p.Stage071End");
     if(isComplete == false) then
         p.CurrTaskEnd();
     end
 end
 
--------------------------------------引导 04 结束-----------------------------------------------
+-------------------------------------引导 071 结束-----------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-------------------------------------引导 081 开始-----------------------------------------------
 
-
-
-
-
-
-
-
-
--------------------------------------引导 05 开始-----------------------------------------------
---stage == 251
-function p.Stage4Begin()
-    LogInfo("p.Stage4Begin");
+function p.Stage081Begin()
+    LogInfo("p.Stage081Begin");
     if(p.InRuoYanCity()) then
         if(p.HandleTimerBegin) then
             UnRegisterTimer(p.HandleTimerBegin);
@@ -1519,33 +1826,218 @@ function p.Stage4Begin()
         p.DealProgress();
     else
         if(p.HandleTimerBegin == nil) then
-            p.HandleTimerBegin = RegisterTimer(p.Stage4Begin, HandleTime);
+            p.HandleTimerBegin = RegisterTimer(p.Stage081Begin, HandleTime);
         end
     end
 end
 
 
 ---------01------------
-function p.Stage41Begin()
-    LogInfo("p.Stage41Begin");
-    local scene = GetSMGameScene();
-    p.BeginTemplete(scene);
+function p.Stage08101Begin()
+    LogInfo("p.Stage08101Begin");
+    p.BeginTemplete();
     --新功能声音提示
     Music.PlayEffectSound(Music.SoundEffect.REMIND);
 end
 
-function p.Stage41End()
-    LogInfo("p.Stage41End");
+function p.Stage08101End()
+    LogInfo("p.Stage08101End");
     p.EndTemplete();
 end
 
-function p.Stage41IsComplete()
-    LogInfo("p.Stage41IsComplete");
+function p.Stage08101IsComplete()
+    LogInfo("p.Stage08101IsComplete");
     
-    if(p.IsShowLayer({NMAINSCENECHILDTAG.Levy})) then
-        local scene = GetSMGameScene();
-        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Levy);
-        
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerMartial);
+        if(layer) then
+            return layer:IsVisibled();
+        end
+    end
+    
+    return false;
+end
+
+
+function p.Stage08101ExitCond()
+    LogInfo("p.Stage08101ExitCond");
+    
+    if(p.InRuoYanCity() == false) then
+        return true;
+    end
+    return false;
+end
+
+
+
+
+---------02------------
+function p.Stage08102Begin()
+    LogInfo("p.Stage08102Begin");
+    p.BeginTemplete();
+end
+
+function p.Stage08102End()
+    LogInfo("p.Stage08102End");
+    p.EndTemplete();
+end
+
+function p.Stage08102IsComplete()
+    LogInfo("p.Stage08102IsComplete");
+    local skillInfo = MartialUI.GetSkillInfoLayer();
+    if(skillInfo) then
+        if(skillInfo:IsVisibled()) then
+            return true;
+        end
+    end
+    return false;
+end
+
+
+function p.Stage08102ExitCond()
+    LogInfo("p.Stage08102ExitCond");
+    
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerMartial);
+        if(layer == nil) then
+            LogInfo("p.Stage08102ExitCond true");
+            return true;
+        end
+    end
+    
+    LogInfo("p.Stage08102ExitCond false");
+    return false;
+end
+
+
+
+---------03------------
+function p.Stage08103Begin()
+
+    LogInfo("p.Stage08103Begin");
+    local skillInfo = MartialUI.GetSkillInfoLayer();
+    if(skillInfo == nil) then
+        LogInfo("error:p.Stage08103Begin MartialUI.GetSkillInfoLayer() is nil!");
+        return;
+    end
+    p.BeginTemplete(skillInfo);
+    
+end
+
+function p.Stage08103End()
+    LogInfo("p.Stage08103End");
+    p.EndTemplete();
+end
+
+function p.Stage08103IsComplete()
+    LogInfo("p.Stage08103IsComplete");
+    
+    local skillInfo = MartialUI.GetSkillInfoLayer();
+    if(skillInfo == nil or not skillInfo:IsVisibled()) then
+        return true;
+    end
+    return false;
+end
+
+
+function p.Stage08103ExitCond()
+    LogInfo("p.Stage08103ExitCond");
+    
+    local skillInfo = MartialUI.GetSkillInfoLayer();
+    if(skillInfo == nil or not skillInfo:IsVisibled()) then
+        return true;
+    end
+    return false;
+end
+
+
+
+---------04------------
+function p.Stage08104Begin()
+    LogInfo("p.Stage08104Begin");
+    p.BeginTemplete();
+end
+
+function p.Stage08104End()
+    LogInfo("p.Stage08104End");
+    p.EndTemplete();
+end
+
+function p.Stage08104IsComplete()
+    LogInfo("p.Stage08104IsComplete");
+    
+    if(not p.IsShowLayer({NMAINSCENECHILDTAG.PlayerMartial})) then
+        return true;
+    end
+    return false;
+end
+
+
+function p.Stage08104ExitCond()
+    LogInfo("p.Stage04104ExitCond");
+    
+    if(not p.IsShowLayer({NMAINSCENECHILDTAG.PlayerMartial})) then
+        return true;
+    end
+    return false;
+end
+
+
+
+
+
+
+function p.Stage081End(isComplete)
+    LogInfo("p.Stage081End");
+    if(isComplete == false) then
+        p.CurrTaskEnd();
+    end
+end
+
+-------------------------------------引导 081 结束-----------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-------------------------------------引导 121 开始-----------------------------------------------
+
+
+
+
+
+
+
+
+---------01------------
+function p.Stage12101Begin()
+    LogInfo("p.Stage12101Begin");
+    p.BeginTemplete();
+    --新功能声音提示
+    Music.PlayEffectSound(Music.SoundEffect.REMIND);
+end
+
+function p.Stage12101End()
+    LogInfo("p.Stage12101End");
+    p.EndTemplete();
+end
+
+function p.Stage12101IsComplete()
+    LogInfo("p.Stage12101IsComplete");
+    
+    --监测是否可升级
+    if(not HeroStar.CheckHeroStarCanUpLev()) then
+        return true;
+    end
+    
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.HeroStarUI);
         if(layer) then
             return layer:IsVisibled();
         end
@@ -1554,8 +2046,8 @@ function p.Stage41IsComplete()
 end
 
 
-function p.Stage41ExitCond()
-    LogInfo("p.Stage41ExitCond");
+function p.Stage12101ExitCond()
+    LogInfo("p.Stage12101ExitCond");
     
     if(p.InRuoYanCity() == false) then
         return true;
@@ -1566,79 +2058,101 @@ end
 
 
 ---------02------------
-function p.Stage42Begin()
-    LogInfo("p.Stage42Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Levy);
-    if(layer == nil) then
-        LogInfo("error:p.Stage32Begin NMAINSCENECHILDTAG.Levy is nil!");
-        return;
-    end
-    p.BeginTemplete(layer);
+function p.Stage12102Begin()
+    LogInfo("p.Stage12102Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage42End()
-    LogInfo("p.Stage42End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Levy);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+function p.Stage12102End()
+    LogInfo("p.Stage12102End");
+    p.EndTemplete();
 end
 
-function p.Stage42IsComplete()
-    LogInfo("p.Stage42IsComplete");
+function p.Stage12102IsComplete()
+    LogInfo("p.Stage12102IsComplete");
     
-    local nPlayerId = GetPlayerId();
-    local nVipRank = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_VIP_RANK);
-
-    local nBuyedLevy = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_BUYED_LEVY);   
-    local nAvailBuyTime = (nVipRank+1)*10; --每天可征收次数
-    local nLeftTime = nAvailBuyTime - nBuyedLevy;   --每天还可次征收数
-    if(nLeftTime == 0) then
+    --监测是否可升级将星
+    return not HeroStar.CheckHeroStarCanUpLev();
+    
+    --[[
+    local nStar = HeroStar.GetLevByGrade(GetPlayerId(),1);
+    LogInfo("nStar:[%d]",nStar);
+    if(nStar>0) then
         return true;
     end
+    ]]
+    --return false;
+end
+
+
+function p.Stage12102ExitCond()
+    LogInfo("p.Stage12102ExitCond");
     
+    local scene = GetSMGameScene();
+    if(scene == nil) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.HeroStarUI);
+        if(layer == nil) then
+            LogInfo("p.Stage12102ExitCond true");
+            return true;
+        end
+    end
+    
+    LogInfo("p.Stage12102ExitCond false");
     return false;
 end
 
 
-function p.Stage42ExitCond()
-    LogInfo("p.Stage42ExitCond");
+
+
+
+---------03------------
+function p.Stage12103Begin()
+    LogInfo("p.Stage12103Begin");
+    p.BeginTemplete();
+end
+
+function p.Stage12103End()
+    LogInfo("p.Stage12103End");
+    p.EndTemplete();
+end
+
+function p.Stage12103IsComplete()
+    LogInfo("p.Stage12103IsComplete");
     
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Levy);
-    if(layer == nil) then
-        LogInfo("p.Stage42ExitCond true");
+    if(not p.IsShowLayer({NMAINSCENECHILDTAG.HeroStarUI})) then
         return true;
     end
-    LogInfo("p.Stage42ExitCond false");
     return false;
 end
 
 
-function p.Stage4End(isComplete)
-    LogInfo("p.Stage4End");
-    if(isComplete == false) then
-        p.CurrTaskEnd();
+function p.Stage12103ExitCond()
+    LogInfo("p.Stage12103ExitCond");
+    
+    if(not p.IsShowLayer({NMAINSCENECHILDTAG.HeroStarUI})) then
+        return true;
     end
+    return false;
 end
 
--------------------------------------引导 05 结束-----------------------------------------------
 
 
 
 
 
 
--------------------------------------引导 06 开始-----------------------------------------------
---stage == 261
-function p.Stage5Begin()
-    LogInfo("p.Stage5Begin");
+-------------------------------------引导 121 结束-----------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-------------------------------------引导 161 开始-----------------------------------------------
+function p.Stage161Begin()
+    LogInfo("p.Stage161Begin");
     if(p.InRuoYanCity()) then
         if(p.HandleTimerBegin) then
             UnRegisterTimer(p.HandleTimerBegin);
@@ -1647,45 +2161,157 @@ function p.Stage5Begin()
         p.DealProgress();
     else
         if(p.HandleTimerBegin == nil) then
-            p.HandleTimerBegin = RegisterTimer(p.Stage5Begin, HandleTime);
+            p.HandleTimerBegin = RegisterTimer(p.Stage161Begin, HandleTime);
         end
     end
 end
 
 
 ---------01------------
-function p.Stage51Begin()
-    LogInfo("p.Stage51Begin");
-    local scene = GetSMGameScene();
-    p.BeginTemplete(scene);
+function p.Stage16101Begin()
+    LogInfo("p.Stage16101Begin");
+    p.BeginTemplete();
     --新功能声音提示
     Music.PlayEffectSound(Music.SoundEffect.REMIND);
 end
 
-function p.Stage51End()
-    LogInfo("p.Stage51End");
-    local scene = GetSMGameScene();
-    if(scene) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+function p.Stage16101End()
+    LogInfo("p.Stage16101End");
+    p.EndTemplete();
 end
 
-function p.Stage51IsComplete()
-    LogInfo("p.Stage51IsComplete");
+function p.Stage16101IsComplete()
+    LogInfo("p.Stage16101IsComplete");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.RankUI);
-    if(layer and layer:IsVisibled()) then
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Levy);
+        
+        if(layer) then
+            return layer:IsVisibled();
+        end
+    end
+    return false;
+end
+
+
+function p.Stage16101ExitCond()
+    LogInfo("p.Stage16101ExitCond");
+    
+    if(p.InRuoYanCity() == false) then
         return true;
     end
     return false;
 end
 
 
-function p.Stage51ExitCond()
+
+---------02------------
+function p.Stage16102Begin()
+    LogInfo("p.Stage16102Begin");
+    p.BeginTemplete();
+end
+
+function p.Stage16102End()
+    LogInfo("p.Stage16102End");
+    p.EndTemplete();
+end
+
+function p.Stage16102IsComplete()
+    LogInfo("p.Stage16102IsComplete");
+    
+    local nPlayerId = GetPlayerId();
+    local nVipRank = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_VIP_RANK);
+
+    local nBuyedLevy = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_BUYED_LEVY);   
+    local nAvailBuyTime = (nVipRank+1)*10; --每天可征收次数
+    local nLeftTime = nAvailBuyTime - nBuyedLevy;   --每天还可次征收数
+    if(nLeftTime + 1 == nAvailBuyTime) then
+        return true;
+    end
+    
+    return false;
+end
+
+
+function p.Stage16102ExitCond()
+    LogInfo("p.Stage16102ExitCond");
+    
+    local scene = GetSMGameScene();
+    if(scene) then
+    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Levy);
+        if(layer == nil) then
+            LogInfo("p.Stage16102ExitCond true");
+            return true;
+        end
+    end
+    LogInfo("p.Stage16102ExitCond false");
+    return false;
+end
+
+
+function p.Stage161End(isComplete)
+    LogInfo("p.Stage161End");
+    if(isComplete == false) then
+        p.CurrTaskEnd();
+    end
+end
+
+-------------------------------------引导 161 结束-----------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-------------------------------------引导 171 开始-----------------------------------------------
+function p.Stage171Begin()
+    LogInfo("p.Stage171Begin");
+    if(p.InRuoYanCity()) then
+        if(p.HandleTimerBegin) then
+            UnRegisterTimer(p.HandleTimerBegin);
+            p.HandleTimerBegin = nil;
+        end
+        p.DealProgress();
+    else
+        if(p.HandleTimerBegin == nil) then
+            p.HandleTimerBegin = RegisterTimer(p.Stage171Begin, HandleTime);
+        end
+    end
+end
+
+
+---------01------------
+function p.Stage17101Begin()
+    LogInfo("p.Stage17101Begin");
+    p.BeginTemplete();
+    --新功能声音提示
+    Music.PlayEffectSound(Music.SoundEffect.REMIND);
+end
+
+function p.Stage17101End()
+    LogInfo("p.Stage17101End");
+    p.EndTemplete();
+end
+
+function p.Stage17101IsComplete()
+    LogInfo("p.Stage17101IsComplete");
+    
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.RankUI);
+        if(layer and layer:IsVisibled()) then
+            return true;
+        end
+    end
+    
+    return false;
+end
+
+
+function p.Stage17101ExitCond()
     LogInfo("p.Stage54ExitCond");
     
     if(p.InRuoYanCity() == false) then
@@ -1697,47 +2323,38 @@ end
 
 
 ---------02------------
-function p.Stage52Begin()
-    LogInfo("p.Stage52Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.RankUI);
-    if(layer == nil) then
-        LogInfo("error:p.Stage55Begin NMAINSCENECHILDTAG.RankUI is nil!");
-        return;
-    end
-    p.BeginTemplete(layer);
+function p.Stage17102Begin()
+    LogInfo("p.Stage17102Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage52End()
-    LogInfo("p.Stage52End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.RankUI);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+function p.Stage17102End()
+    LogInfo("p.Stage17102End");
+    p.EndTemplete();
 end
 
-function p.Stage52IsComplete()
-    LogInfo("p.Stage52IsComplete");
-    
+function p.Stage17102IsComplete()
+    LogInfo("p.Stage17102IsComplete");
+    --[[
     local level = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_RANK);
     if(level>1) then
         return true;
     end
     return false;
+    ]]
+    return not RankUI.IsUpgrade();
 end
 
 
-function p.Stage52ExitCond()
-    LogInfo("p.Stage52ExitCond");
+function p.Stage17102ExitCond()
+    LogInfo("p.Stage17102ExitCond");
     
     local scene = GetSMGameScene();
+    if(scene == nil) then
+        return;
+    end
+    
     local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.RankUI);
-        
     if(layer == nil or not layer:IsVisibled()) then
         return true;
     end
@@ -1747,59 +2364,48 @@ end
 
 
 ---------03------------
-function p.Stage53Begin()
-    LogInfo("p.Stage53Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.RankUI);
-    if(layer == nil) then
-        LogInfo("error:p.Stage53Begin NMAINSCENECHILDTAG.RankUI is nil!");
-        return;
-    end
-    p.BeginTemplete(layer);
+function p.Stage17103Begin()
+    LogInfo("p.Stage17103Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage53End()
-    LogInfo("p.Stage53End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.RankUI);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+function p.Stage17103End()
+    LogInfo("p.Stage17103End");
+    p.EndTemplete();
 end
 
-function p.Stage53IsComplete()
-    LogInfo("p.Stage53IsComplete");
+function p.Stage17103IsComplete()
+    LogInfo("p.Stage17103IsComplete");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.RankUI);
-        
-    if(layer == nil or not layer:IsVisibled()) then
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.RankUI);
+        if(layer == nil or not layer:IsVisibled()) then
+            return true;
+        end
     end
     return false;
 end
 
 
-function p.Stage53ExitCond()
-    LogInfo("p.Stage53ExitCond");
+function p.Stage17103ExitCond()
+    LogInfo("p.Stage17103ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.RankUI);
-    if(layer == nil) then
-        LogInfo("p.Stage53ExitCond true");
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.RankUI);
+        if(layer == nil) then
+            LogInfo("p.Stage17103ExitCond true");
+            return true;
+        end
     end
-    LogInfo("p.Stage53ExitCond false");
+    LogInfo("p.Stage17103ExitCond false");
     return false;
 end
 
 
-function p.Stage5End(isComplete)
-    LogInfo("p.Stage5End");
+function p.Stage171End(isComplete)
+    LogInfo("p.Stage171End");
     if(isComplete == false) then
         p.CurrTaskEnd();
     end
@@ -1807,22 +2413,18 @@ end
 
 
 
--------------------------------------引导 06 结束-----------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
--------------------------------------引导 07 开始-----------------------------------------------
---stage == 271
-function p.Stage6Begin()
-    LogInfo("p.Stage6Begin");
+-------------------------------------引导 171 结束-----------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-------------------------------------引导 181 开始-----------------------------------------------
+function p.Stage181Begin()
+    LogInfo("p.Stage181Begin");
     if(p.InRuoYanCity()) then
         if(p.HandleTimerBegin) then
             UnRegisterTimer(p.HandleTimerBegin);
@@ -1831,32 +2433,34 @@ function p.Stage6Begin()
         p.DealProgress();
     else
         if(p.HandleTimerBegin == nil) then
-            p.HandleTimerBegin = RegisterTimer(p.Stage6Begin, HandleTime);
+            p.HandleTimerBegin = RegisterTimer(p.Stage181Begin, HandleTime);
         end
     end
 end
 
 
 ---------01------------
-function p.Stage61Begin()
-    LogInfo("p.Stage61Begin");
-    local scene = GetSMGameScene();
-    p.BeginTemplete(scene);
+function p.Stage18101Begin()
+    LogInfo("p.Stage18101Begin");
+    p.BeginTemplete();
     --新功能声音提示
     Music.PlayEffectSound(Music.SoundEffect.REMIND);
 end
 
-function p.Stage61End()
-    LogInfo("p.Stage61End");
+function p.Stage18101End()
+    LogInfo("p.Stage18101End");
     p.EndTemplete();
 end
 
-function p.Stage61IsComplete()
-    LogInfo("p.Stage61IsComplete");
+function p.Stage18101IsComplete()
+    LogInfo("p.Stage18101IsComplete");
     
     local scene = GetSMGameScene();
+    if(scene == nil) then
+        return;
+    end
+    
     local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
-        
     if(layer) then
         return layer:IsVisibled();
     end
@@ -1865,8 +2469,8 @@ function p.Stage61IsComplete()
 end
 
 
-function p.Stage61ExitCond()
-    LogInfo("p.Stage61ExitCond");
+function p.Stage18101ExitCond()
+    LogInfo("p.Stage18101ExitCond");
     
     if(p.InRuoYanCity() == false) then
         return true;
@@ -1881,32 +2485,18 @@ end
 
 
 ---------02------------
-function p.Stage62Begin()
-    LogInfo("p.Stage62Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
-    if(layer == nil) then
-        LogInfo("error:p.Stage62Begin NMAINSCENECHILDTAG.Arena is nil!");
-        return;
-    end
-    p.BeginTemplete(layer);
+function p.Stage18102Begin()
+    LogInfo("p.Stage18102Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage62End()
-    LogInfo("p.Stage62End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+function p.Stage18102End()
+    LogInfo("p.Stage18102End");
+    p.EndTemplete();
 end
 
-function p.Stage62IsComplete()
-    LogInfo("p.Stage62IsComplete");
+function p.Stage18102IsComplete()
+    LogInfo("p.Stage18102IsComplete");
     
     local nFirstRepute = GetDataBaseDataN("rank_config",2,DB_RANK.REPUTE);
     local nRepute = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_REPUTE);
@@ -1917,48 +2507,59 @@ function p.Stage62IsComplete()
 end
 
 
-function p.Stage62ExitCond()
-    LogInfo("p.Stage62ExitCond");
+function p.Stage18102ExitCond()
+    LogInfo("p.Stage18102ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
-    if(layer == nil) then
-        LogInfo("p.Stage62ExitCond true");
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
+        if(layer == nil) then
+            LogInfo("p.Stage18102ExitCond true");
+            return true;
+        end
     end
-    LogInfo("p.Stage62ExitCond false");
+    LogInfo("p.Stage18102ExitCond false");
     return false;
 end
 
 
----------4------------
-function p.Stage64Begin()
-    LogInfo("p.Stage64Begin");
+---------03------------
+function p.Stage18103Begin()
+    LogInfo("p.Stage18103Begin");
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
-    if(layer == nil) then
-        LogInfo("error:p.Stage64Begin NMAINSCENECHILDTAG.Arena is nil!");
+    if(scene == nil) then
         return;
     end
+    
+    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
+    if(layer == nil) then
+        LogInfo("error:p.Stage18103Begin NMAINSCENECHILDTAG.Arena is nil!");
+        return;
+    end
+    
     p.BeginTemplete(layer);
 end
 
-function p.Stage64End()
-    LogInfo("p.Stage64End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
+function p.Stage18103End()
+    LogInfo("p.Stage18103End");
     
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
+    local scene = GetSMGameScene();
+    if(scene == nil) then
+        return;
     end
+    
+    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
+    if(layer == nil) then
+        LogInfo("error:p.Stage18103Begin NMAINSCENECHILDTAG.Arena is nil!");
+        p.ClearTemplete();
+        return;
+    end
+    
+    p.EndTemplete(layer);
 end
 
-function p.Stage64IsComplete()
-    LogInfo("p.Stage64IsComplete");
-    
+function p.Stage18103IsComplete()
+    LogInfo("p.Stage18103IsComplete");
     
     if (ArenaUI.cdTime==0) then
         return true;
@@ -1968,85 +2569,77 @@ function p.Stage64IsComplete()
 end
 
 
-function p.Stage64ExitCond()
-    LogInfo("p.Stage64ExitCond");
+function p.Stage18103ExitCond()
+    LogInfo("p.Stage18103ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
-    if(layer == nil) then
-        LogInfo("p.Stage64ExitCond true");
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
+        if(layer == nil) then
+            LogInfo("p.Stage18103ExitCond true");
+            return true;
+        end
     end
-    LogInfo("p.Stage64ExitCond false");
+    LogInfo("p.Stage18103ExitCond false");
     return false;
 end
 
 
 
 
----------03------------
-function p.Stage63Begin()
-    LogInfo("p.Stage63Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
-    if(layer == nil) then
-        LogInfo("error:p.Stage63Begin NMAINSCENECHILDTAG.Arena is nil!");
-        return;
-    end
-    p.BeginTemplete(layer);
+---------04------------
+function p.Stage18104Begin()
+    LogInfo("p.Stage18104Begin");
+    p.BeginTemplete();
 end
 
-function p.Stage63End()
-    LogInfo("p.Stage63End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
+function p.Stage18104End()
+    LogInfo("p.Stage18104End");
+    p.EndTemplete();
+end
+
+function p.Stage18104IsComplete()
+    LogInfo("p.Stage18104IsComplete");
     
-    if(layer) then
-        p.EndTemplete();
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
+        if(layer==nil) then
+            LogInfo("p.Stage18104IsComplete true");
+            return true;
+        end
+    end
+    return false;
+end
+
+
+function p.Stage18104ExitCond()
+    LogInfo("p.Stage18104ExitCond");
+    
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
+        if(layer==nil) then
+            LogInfo("p.Stage18104IsComplete true");
+            return true;
+        end
     else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
-end
-
-function p.Stage63IsComplete()
-    LogInfo("p.Stage63IsComplete");
-    
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Arena);
-        
-    if(layer==nil) then
-        LogInfo("p.Stage63IsComplete true");
         return true;
     end
     
     return false;
-    
-end
-
-
-function p.Stage63ExitCond()
-    LogInfo("p.Stage63ExitCond");
-    
-    --[[
-    if(p.InRuoYanCity() == false) then
-        return true;
-    end
-    ]]
-    
-    return false;
 end
 
 
 
-function p.Stage6End(isComplete)
-    LogInfo("p.Stage6End");
+function p.Stage181End(isComplete)
+    LogInfo("p.Stage181End");
     if(isComplete == false) then
         p.CurrTaskEnd();
     end
 end
 
--------------------------------------引导 07 结束-----------------------------------------------
+-------------------------------------引导 181 结束-----------------------------------------------
 
 
 
@@ -2074,8 +2667,7 @@ end
 ---------01------------
 function p.Stage71Begin()
     LogInfo("p.Stage71Begin");
-    local scene = GetSMGameScene();
-    p.BeginTemplete(scene);
+    p.BeginTemplete();
     --新功能声音提示
     Music.PlayEffectSound(Music.SoundEffect.REMIND);
 end
@@ -2089,12 +2681,12 @@ function p.Stage71IsComplete()
     LogInfo("p.Stage71IsComplete");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PetUI);
-        
-    if(layer) then
-        return layer:IsVisibled();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PetUI);
+        if(layer) then
+            return layer:IsVisibled();
+        end
     end
-    
     return false;
 end
 
@@ -2117,38 +2709,34 @@ end
 ---------02------------
 function p.Stage72Begin()
     LogInfo("p.Stage72Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PetUI);
-    if(layer == nil) then
-        LogInfo("error:p.Stage62Begin NMAINSCENECHILDTAG.PetUI is nil!");
-        return;
-    end
-    p.BeginTemplete(layer);
+    p.BeginTemplete();
 end
 
 function p.Stage72End()
     LogInfo("p.Stage72End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PetUI);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+    p.EndTemplete();
 end
 
 function p.Stage72IsComplete()
     LogInfo("p.Stage72IsComplete");
     
+    --[[
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PetUI);
-    if(layer == nil) then
-        LogInfo("p.Stage72ExitCond true");
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PetUI);
+        if(layer == nil) then
+            LogInfo("p.Stage72IsComplete true");
+            return true;
+        end
+    end
+    ]]
+    
+    local MountInfo = MsgMount.getMountInfo();
+    if(MountInfo.star>1) then
+        LogInfo("p.Stage72IsComplete true");
         return true;
     end
-    LogInfo("p.Stage72ExitCond false");
+    LogInfo("p.Stage72IsComplete false");
     return false;
 end
 
@@ -2157,10 +2745,12 @@ function p.Stage72ExitCond()
     LogInfo("p.Stage72ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PetUI);
-    if(layer == nil) then
-        LogInfo("p.Stage72ExitCond true");
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PetUI);
+        if(layer == nil) then
+            LogInfo("p.Stage72ExitCond true");
+            return true;
+        end
     end
     LogInfo("p.Stage72ExitCond false");
     return false;
@@ -2175,6 +2765,41 @@ function p.Stage73IsComplete()
     end
     return false;
 end
+
+---------04------------
+function p.Stage74Begin()
+    LogInfo("p.Stage74Begin");
+    p.BeginTemplete();
+end
+
+function p.Stage74End()
+    LogInfo("p.Stage74End");
+    p.EndTemplete();
+end
+
+function p.Stage74IsComplete()
+    LogInfo("p.Stage74IsComplete");
+    
+    local scene = GetSMGameScene();
+    if(scene == nil) then
+        return false;
+    end
+    
+    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PetUI);
+    if(layer == nil or not layer:IsVisibled()) then
+        return true;
+    end
+    return false;
+end
+
+
+function p.Stage74ExitCond()
+    LogInfo("p.Stage74ExitCond");
+    return false;
+end
+
+
+
 
 
 
@@ -2211,8 +2836,7 @@ end
 ---------01------------
 function p.Stage81Begin()
     LogInfo("p.Stage81Begin");
-    local scene = GetSMGameScene();
-    p.BeginTemplete(scene);
+    p.BeginTemplete();
     --新功能声音提示
     Music.PlayEffectSound(Music.SoundEffect.REMIND);
 end
@@ -2225,10 +2849,9 @@ end
 function p.Stage81IsComplete()
     LogInfo("p.Stage81IsComplete");
     
-    if(p.IsShowLayer({NMAINSCENECHILDTAG.Fete})) then
-        local scene = GetSMGameScene();
+    local scene = GetSMGameScene();
+    if(scene) then
         local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Fete);
-        
         if(layer) then
             return layer:IsVisibled();
         end
@@ -2251,26 +2874,12 @@ end
 ---------02------------
 function p.Stage82Begin()
     LogInfo("p.Stage82Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Fete);
-    if(layer == nil) then
-        LogInfo("error:p.Stage82Begin NMAINSCENECHILDTAG.Fete is nil!");
-        return;
-    end
-    p.BeginTemplete(layer);
+    p.BeginTemplete();
 end
 
 function p.Stage82End()
     LogInfo("p.Stage82End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Fete);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+    p.EndTemplete();
 end
 
 function p.Stage82IsComplete()
@@ -2290,11 +2899,14 @@ function p.Stage82ExitCond()
     LogInfo("p.Stage82ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Fete);
-    if(layer == nil) then
-        LogInfo("p.Stage82ExitCond true");
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Fete);
+        if(layer == nil) then
+            LogInfo("p.Stage82ExitCond true");
+            return true;
+        end
     end
+    
     LogInfo("p.Stage82ExitCond false");
     return false;
 end
@@ -2304,39 +2916,25 @@ end
 ---------03------------
 function p.Stage83Begin()
     LogInfo("p.Stage83Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Fete);
-    if(layer == nil) then
-        LogInfo("p.Stage83Begin NMAINSCENECHILDTAG.Fete is nil!");
-        return;
-    end
-    p.BeginTemplete(layer);
+    p.BeginTemplete();
 end
 
 function p.Stage83End()
     LogInfo("p.Stage83End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Fete);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+    p.EndTemplete();
 end
 
 function p.Stage83IsComplete()
     LogInfo("p.Stage83IsComplete");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Fete);
-        
-    if(layer==nil) then
-        LogInfo("p.Stage83IsComplete true");
-        return true;
+        if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Fete);
+        if(layer==nil) then
+            LogInfo("p.Stage83IsComplete true");
+            return true;
+        end
     end
-    
     return false;
     
 end
@@ -2345,13 +2943,14 @@ end
 function p.Stage83ExitCond()
     LogInfo("p.Stage83ExitCond");
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Fete);
-        
-    if(layer==nil) then
-        LogInfo("p.Stage83ExitCond true");
-        return true;
-    end
     
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.Fete);
+        if(layer==nil) then
+            LogInfo("p.Stage83ExitCond true");
+            return true;
+        end
+    end
     return false;
 end
 
@@ -2370,47 +2969,12 @@ end
 --------------06------------
 
 function p.Stage86Begin()
-    p.Stage27Begin();
-    
+    p.Stage04107Begin();
     LogInfo("p.Stage86Begin");
     
-    local container		= PlayerUIBackBag.GetBackBagContainer();
-    
-    local nTags = {77,76,75,74,73,72,71,70,69,68,67,66,65,64,63,62};
-    
-    if(container) then
-        local nViewCount    = container:GetViewCount();
-        
-        LogInfo("nViewCount:[%d]",nViewCount);
-        
-        for i=1,nViewCount do
-            local view = container:GetView(i-1);
-            for j,v in ipairs(nTags) do
-                local btn = GetItemButton(view,v);
-                
-                if(btn and btn:GetItemId()>0) then
-                    local nItemType = Item.GetItemInfoN(btn:GetItemId(), Item.ITEM_TYPE);
-                    LogInfo("nItemType:[%d]",nItemType);
-                    if(nItemType>=31000001 and nItemType<=31000012) then
-                        
-                        local view0 = container:GetView(0);
-                        local btn0 = GetItemButton(view0,nTags[16]);
-                        
-                        local b = btn:GetItemId();
-                        local b0 = btn0:GetItemId();
-                        
-                        LogInfo("b:[%d],b0:[%d]",b,b0);
-                        
-                        btn:ChangeItem(b0);
-                        btn0:ChangeItem(b);
-                        return;
-                    end
-                end
-            end
-        end
-    end
-    
+    p.OrderItem(31000001, 31000012);
 end
+
 
 --------------07------------
 function p.Stage86IsComplete()
@@ -2429,12 +2993,7 @@ end
 
 function p.Stage87Begin()
     LogInfo("p.Stage87Begin");
-    local layer = BackLevelThreeWin.GetPropLayer();
-    if(layer == nil) then
-        LogInfo("error:p.Stage87Begin BackLevelThreeWin.GetPropLayer() is nil!");
-        return;
-    end
-    p.BeginTemplete(layer);
+    p.BeginTemplete();
 end
 
 
@@ -2443,10 +3002,12 @@ function p.Stage87IsComplete()
     LogInfo("p.Stage87IsComplete");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene,BackLevelThreeWin.nTagId);
-    if(layer) then
-        LogInfo("p.Stage87IsComplete true");
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene,BackLevelThreeWin.nTagId);
+        if(layer) then
+            LogInfo("p.Stage87IsComplete true");
+            return true;
+        end
     end
     LogInfo("p.Stage87IsComplete false");
     return false;
@@ -2468,34 +3029,26 @@ end
 ---------09------------
 function p.Stage88Begin()
     LogInfo("p.Stage88Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene,BackLevelThreeWin.nTagId);
-    p.BeginTemplete(layer);
+    p.BeginTemplete();
 end
 
 function p.Stage88End()
     LogInfo("p.Stage88End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene,BackLevelThreeWin.nTagId);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+    p.EndTemplete();
 end
 
 function p.Stage88IsComplete()
     LogInfo("p.Stage88IsComplete");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene,BackLevelThreeWin.nTagId);
-    
-    if layer == nil or not layer:IsVisibled() then
-        LogInfo("p.Stage88IsComplete true");
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene,BackLevelThreeWin.nTagId);
+        if layer == nil or not layer:IsVisibled() then
+            LogInfo("p.Stage88IsComplete true");
+            return true;
+        end
     end
+    
     LogInfo("p.Stage88IsComplete false");
     return false;
 end
@@ -2503,6 +3056,15 @@ end
 
 function p.Stage88ExitCond()
     LogInfo("p.Stage88ExitCond");
+    
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerBackBag);
+        if(layer == nil or not layer:IsVisibled()) then
+            return true;
+        end
+    end
+    
     return false;
 end
 
@@ -2518,6 +3080,7 @@ end
 
 function p.Stage811IsComplete()
     LogInfo("p.Stage811IsComplete");
+    
     if(EquipUpgradeUI.nItemIdTemp and EquipUpgradeUI.nItemIdTemp>0 
         and EquipUpgradeUI.nCurrPage == EquipUpgradeUI.TAG.MOSAIC) then
         
@@ -2525,6 +3088,7 @@ function p.Stage811IsComplete()
     end
     LogInfo("p.Stage811IsComplete false");
     return false;
+    
 end
 
 
@@ -2533,55 +3097,82 @@ end
 ---------10------------
 function p.Stage812Begin()
     LogInfo("p.Stage812Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-    p.BeginTemplete(layer);
+    p.BeginTemplete();
 end
 
 function p.Stage812End()
     LogInfo("p.Stage812End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+    p.EndTemplete();
 end
 
 function p.Stage812IsComplete()
     LogInfo("p.Stage812IsComplete");
     
-    local bGenCount = Item.GetItemInfoN(EquipUpgradeUI.nItemIdTemp, Item.ITEM_GEN_NUM);
-    if(bGenCount>0) then
-        LogInfo("p.Stage812IsComplete true");
+    local gemLayer = EquipUpgradeUI.GetGemInfoLayer();
+    if(gemLayer and gemLayer:IsVisibled()) then
         return true;
     end
-    LogInfo("p.Stage812IsComplete false");
     return false;
 end
 
 
 function p.Stage812ExitCond()
     LogInfo("p.Stage812ExitCond");
-    
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-        
-    if(layer == nil or not layer:IsVisibled()) then
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
+        if(layer == nil or not layer:IsVisibled()) then
+            return true;
+        end
     end
     return false;
 end
 
 
+---------11------------
+function p.Stage813Begin()
+    LogInfo("p.Stage813Begin");
+    p.BeginTemplete();
+end
+
+function p.Stage813End()
+    LogInfo("p.Stage813End");
+    p.EndTemplete();
+end
+
+function p.Stage813IsComplete()
+    LogInfo("p.Stage813IsComplete");
+    
+    --[[
+    local bGenCount = Item.GetItemInfoN(EquipUpgradeUI.nItemIdTemp, Item.ITEM_GEN_NUM);
+    if(bGenCount>0) then
+        LogInfo("p.Stage813IsComplete true");
+        return true;
+    end
+    LogInfo("p.Stage813IsComplete false");
+    ]]
+    
+    LogInfo("p.Stage813IsComplete");
+    local gemLayer = EquipUpgradeUI.GetGemInfoLayer();
+    if(gemLayer == nil or gemLayer:IsVisibled() == false) then
+        return true;
+    end
+    
+    return false;
+end
 
 
-
-
-
+function p.Stage813ExitCond()
+    LogInfo("p.Stage813ExitCond");
+    local scene = GetSMGameScene();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
+        if(layer == nil or not layer:IsVisibled()) then
+            return true;
+        end
+    end
+    return false;
+end
 
 
 
@@ -2598,198 +3189,6 @@ end
 -------------------------------------引导 09 结束-----------------------------------------------
 
 
--------------------------------------引导 10 开始-----------------------------------------------
-function p.Stage9Begin()
-    LogInfo("p.Stage9Begin");
-    if(p.InRuoYanCity()) then
-        if(p.HandleTimerBegin) then
-            UnRegisterTimer(p.HandleTimerBegin);
-            p.HandleTimerBegin = nil;
-        end
-        p.DealProgress();
-    else
-        if(p.HandleTimerBegin == nil) then
-            p.HandleTimerBegin = RegisterTimer(p.Stage9Begin, HandleTime);
-        end
-    end
-end
-
-
-function p.Stage92IsComplete()
-    LogInfo("p.Stage92IsComplete");
-    
-    if PlayerUIBackBag.BagPos.TYPE == Item.bTypeEquip then
-        return true;
-    end
-    return false;
-end
-
-function p.Stage93IsComplete()
-    LogInfo("p.Stage93IsComplete");
-    
-    local layer = BackLevelThreeWin.GetEquipLayer();
-    if(layer and layer:IsVisibled()) then
-        LogInfo("p.Stage93IsComplete true");
-        return true;
-    end
-    LogInfo("p.Stage93IsComplete false");
-    return false;
-end
-
----------04------------
-function p.Stage94Begin()
-    LogInfo("p.Stage94Begin");
-    local layer = BackLevelThreeWin.GetEquipLayer();
-    if(layer == nil) then
-        LogInfo("error:p.Stage94Begin BackLevelThreeWin.GetEquipLayer() is nil!");
-        return;
-    end
-    p.BeginTemplete(layer);
-end
-
-function p.Stage94End()
-    LogInfo("p.Stage94End");
-    
-    local layer = BackLevelThreeWin.GetEquipLayer();
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
-end
-
-function p.Stage94IsComplete()
-    LogInfo("p.Stage94IsComplete");
-    
-    local layer = BackLevelThreeWin.GetEquipLayer();
-    if(layer == nil or not layer:IsVisibled()) then
-        return true;
-    end
-    return false;
-end
-
-
-function p.Stage94ExitCond()
-    LogInfo("p.Stage94ExitCond");
-    
-    local layer = BackLevelThreeWin.GetEquipLayer();
-    if(layer == nil or not layer:IsVisibled()) then
-        return true;
-    end
-    return false;
-end
-
-
-
-function p.Stage9End(isComplete)
-    LogInfo("p.Stage9End");
-    if(isComplete == false) then
-        p.CurrTaskEnd();
-    end
-end
-
--------------------------------------引导 10 结束-----------------------------------------------
-
-
-
--------------------------------------引导 11 开始-----------------------------------------------
-
-function p.Stage10Begin()
-    LogInfo("p.Stage10Begin");
-    if(p.InRuoYanCity()) then
-        if(p.HandleTimerBegin) then
-            UnRegisterTimer(p.HandleTimerBegin);
-            p.HandleTimerBegin = nil;
-        end
-        p.DealProgress();
-    else
-        if(p.HandleTimerBegin == nil) then
-            p.HandleTimerBegin = RegisterTimer(p.Stage10Begin, HandleTime);
-        end
-    end
-end
-
----------02------------
-function p.Stage102IsComplete()
-    LogInfo("p.Stage102IsComplete");
-    local skillInfo = MartialUI.GetSkillInfoLayer();
-    if(skillInfo) then
-        if(skillInfo:IsVisibled()) then
-            return true;
-        end
-    end
-    return false;
-
-end
-
----------03------------
-function p.Stage103Begin()
-
-    LogInfo("p.Stage103Begin");
-    local skillInfo = MartialUI.GetSkillInfoLayer();
-    if(skillInfo == nil) then
-        LogInfo("error:p.Stage103Begin MartialUI.GetSkillInfoLayer() is nil!");
-        return;
-    end
-    p.BeginTemplete(skillInfo);
-    
-end
-
-function p.Stage103End()
-    LogInfo("p.Stage103End");
-    local skillInfo = MartialUI.GetSkillInfoLayer();
-    
-    if(skillInfo) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
-end
-
-function p.Stage103IsComplete()
-    LogInfo("p.Stage103IsComplete");
-    
-    local skillInfo = MartialUI.GetSkillInfoLayer();
-    if(skillInfo == nil or not skillInfo:IsVisibled()) then
-        return true;
-    end
-    return false;
-end
-
-
-function p.Stage103ExitCond()
-    LogInfo("p.Stage103ExitCond");
-    
-    local skillInfo = MartialUI.GetSkillInfoLayer();
-    if(skillInfo == nil or not skillInfo:IsVisibled()) then
-        return true;
-    end
-    return false;
-end
-
-
-function p.Stage10End(isComplete)
-    LogInfo("p.Stage10End");
-    if(isComplete == false) then
-        p.CurrTaskEnd();
-    end
-end
-
--------------------------------------引导 11 结束-----------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2800,26 +3199,12 @@ end
 ---------02------------
 function p.Stage012Begin()
     LogInfo("p.Stage012Begin");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-    if(layer == nil) then
-        LogInfo("error:p.Stage32Begin NMAINSCENECHILDTAG.EquipUI is nil!");
-        return;
-    end
-    p.BeginTemplete(layer);
+    p.BeginTemplete();
 end
 
 function p.Stage012End()
     LogInfo("p.Stage012End");
-    local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-    
-    if(layer) then
-        p.EndTemplete();
-    else
-        p.JtTag = nil;
-        p.GxTag = nil;
-    end
+    p.EndTemplete();
 end
 
 function p.Stage012IsComplete()
@@ -2835,9 +3220,11 @@ function p.Stage012ExitCond()
     LogInfo("p.Stage012ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
-    if(layer == nil or not layer:IsVisibled()) then
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipUI);
+        if(layer == nil or not layer:IsVisibled()) then
+            return true;
+        end
     end
     return false;
 end
@@ -2849,10 +3236,11 @@ end
 function p.Stage013IsComplete()
     LogInfo("p.Stage013IsComplete");
     local baptizeLayer = EquipUpgradeUI.GetLayerByTag(EquipUpgradeUI.TAG.BAPTIZE);
-    local pic = GetItemButton(baptizeLayer,EquipUpgradeUI.TAG_B_PIC);
-    
-    if(pic:GetItemId()>0) then
-        return true;
+    if(baptizeLayer) then
+        local pic = GetItemButton(baptizeLayer,EquipUpgradeUI.TAG_B_PIC);
+        if(pic and pic:GetItemId()>0) then
+            return true;
+        end
     end
     return false;
 end
@@ -2862,10 +3250,11 @@ end
 function p.Stage014IsComplete()
     LogInfo("p.Stage014IsComplete");
     local baptizeLayer = EquipUpgradeUI.GetLayerByTag(EquipUpgradeUI.TAG.BAPTIZE);
-    local btn = GetButton(baptizeLayer,EquipUpgradeUI.TAG_B_BTN_KEEP);
-    
-    if(btn and btn:IsVisibled()) then
-        return true;
+    if(baptizeLayer) then
+        local btn = GetButton(baptizeLayer,EquipUpgradeUI.TAG_B_BTN_KEEP);
+        if(btn and btn:IsVisibled()) then
+            return true;
+        end
     end
     return false;
 
@@ -2875,10 +3264,11 @@ end
 function p.Stage015IsComplete()
     LogInfo("p.Stage015IsComplete");
     local baptizeLayer = EquipUpgradeUI.GetLayerByTag(EquipUpgradeUI.TAG.BAPTIZE);
-    local btn = GetButton(baptizeLayer,EquipUpgradeUI.TAG_B_BTN_B);
-    
-    if(btn and btn:IsVisibled()) then
-        return true;
+    if(baptizeLayer) then
+        local btn = GetButton(baptizeLayer,EquipUpgradeUI.TAG_B_BTN_B);
+        if(btn and btn:IsVisibled()) then
+            return true;
+        end
     end
     return false;
 end
@@ -2911,8 +3301,7 @@ end
 ---------01------------
 function p.Stage2411Begin()
     LogInfo("p.Stage2411Begin");
-    local scene = GetSMGameScene();
-    p.BeginTemplete(scene);
+    p.BeginTemplete();
 end
 
 function p.Stage2411End()
@@ -2924,12 +3313,12 @@ function p.Stage2411IsComplete()
     LogInfo("p.Stage2411IsComplete");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.WorldMap);
-        
-    if(layer) then
-        return layer:IsVisibled();
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.WorldMap);
+        if(layer) then
+            return layer:IsVisibled();
+        end
     end
-    
     return false;
 end
 
@@ -2946,30 +3335,39 @@ end
 function p.Stage2412Begin()
     LogInfo("p.Stage2412Begin");
     local scene = GetSMGameScene();
+    if(scene == nil) then
+        return;
+    end
+    
     local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.WorldMap);
-    p.BeginTemplete(layer);
+    p.BeginTemplete();
 end
 
 function p.Stage2412End()
     LogInfo("p.Stage2412End");
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.WorldMap);
+    if(scene == nil) then
+        return;
+    end
     
+    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.WorldMap);
     if(layer) then
         p.EndTemplete();
     else
-        p.JtTag = nil;
-        p.GxTag = nil;
+        p.ClearTemplete();
     end
 end
 
 function p.Stage2412IsComplete()
     LogInfo("p.Stage2412IsComplete");
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.AffixNormalBoss);
-    if(layer) then
-        LogInfo("p.Stage2412IsComplete true");
-        return true;
+    
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.AffixNormalBoss);
+        if(layer) then
+            LogInfo("p.Stage2412IsComplete true");
+            return true;
+        end
     end
     LogInfo("p.Stage2412IsComplete false");
     return false;
@@ -2987,6 +3385,10 @@ end
 function p.Stage2413Begin()
     LogInfo("p.Stage2413Begin");
     local scene = GetSMGameScene();
+    if(scene == nil) then
+        return;
+    end
+    
     local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.AffixNormalBoss);
     p.BeginTemplete(layer);
 end
@@ -2994,13 +3396,15 @@ end
 function p.Stage2413End()
     LogInfo("p.Stage2413End");
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.AffixNormalBoss);
+    if(scene == nil) then
+        return;
+    end
     
+    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.AffixNormalBoss);
     if(layer) then
-        p.EndTemplete();
+        p.EndTemplete(layer);
     else
-        p.JtTag = nil;
-        p.GxTag = nil;
+        p.ClearTemplete();
     end
 end
 
@@ -3019,10 +3423,12 @@ function p.Stage2413ExitCond()
     LogInfo("p.Stage2413ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.AffixNormalBoss);
-    if(layer == nil) then
-        LogInfo("p.Stage2413ExitCond true");
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.AffixNormalBoss);
+        if(layer == nil) then
+            LogInfo("p.Stage2413ExitCond true");
+            return true;
+        end
     end
     LogInfo("p.Stage2413ExitCond false");
     return false;
@@ -3032,7 +3438,9 @@ end
 ---------04------------
 function p.Stage2414Begin()
     LogInfo("p.Stage2414Begin");
-    p.BeginTemplete(NormalBossListUI.pLayerElite);
+    if(NormalBossListUI.pLayerElite) then
+        p.BeginTemplete(NormalBossListUI.pLayerElite);
+    end
 end
 
 function p.Stage2414End()
@@ -3041,8 +3449,7 @@ function p.Stage2414End()
     if(NormalBossListUI.pLayerElite) then
         p.EndTemplete();
     else
-        p.JtTag = nil;
-        p.GxTag = nil;
+        p.ClearTemplete();
     end
 end
 
@@ -3061,10 +3468,12 @@ function p.Stage2414ExitCond()
     LogInfo("p.Stage2414ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.AffixNormalBoss);
-    if(layer == nil) then
-        LogInfo("p.Stage2414ExitCond true");
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.AffixNormalBoss);
+        if(layer == nil) then
+            LogInfo("p.Stage2414ExitCond true");
+            return true;
+        end
     end
     LogInfo("p.Stage2414ExitCond false");
     return false;
@@ -3103,7 +3512,9 @@ end
 ---------04------------
 function p.Stage5414Begin()
     LogInfo("p.Stage5414Begin");
-    p.BeginTemplete(NormalBossListUI.pLayerConfDlg);
+    if(NormalBossListUI.pLayerConfDlg) then
+        p.BeginTemplete(NormalBossListUI.pLayerConfDlg);
+    end
 end
 
 function p.Stage5414End()
@@ -3112,8 +3523,7 @@ function p.Stage5414End()
     if(NormalBossListUI.pLayerConfDlg) then
         p.EndTemplete();
     else
-        p.JtTag = nil;
-        p.GxTag = nil;
+        p.ClearTemplete();
     end
 end
 
@@ -3132,10 +3542,12 @@ function p.Stage5414ExitCond()
     LogInfo("p.Stage2414ExitCond");
     
     local scene = GetSMGameScene();
-    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.AffixNormalBoss);
-    if(layer == nil) then
-        LogInfo("p.Stage2414ExitCond true");
-        return true;
+    if(scene) then
+        local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.AffixNormalBoss);
+        if(layer == nil) then
+            LogInfo("p.Stage2414ExitCond true");
+            return true;
+        end
     end
     LogInfo("p.Stage2414ExitCond false");
     return false;
@@ -3146,17 +3558,18 @@ end
 ---------05------------
 function p.Stage6414Begin()
     LogInfo("p.Stage6414Begin");
-    p.BeginTemplete(ClearUpSettingUI.pLayerPrepare);
+    if(ClearUpSettingUI.pLayerPrepare) then
+        p.BeginTemplete(ClearUpSettingUI.pLayerPrepare);
+    end
 end
 
 function p.Stage6414End()
     LogInfo("p.Stage6414End");
     
     if(ClearUpSettingUI.pLayerPrepare) then
-        p.EndTemplete();
+        p.EndTemplete(ClearUpSettingUI.pLayerPrepare);
     else
-        p.JtTag = nil;
-        p.GxTag = nil;
+        p.ClearTemplete();
     end
 end
 
@@ -3182,17 +3595,18 @@ end
 ---------06------------
 function p.Stage7414Begin()
     LogInfo("p.Stage7414Begin");
-    p.BeginTemplete(ClearUpSettingUI.pLayerFighting);
+    if(ClearUpSettingUI.pLayerFighting) then
+        p.BeginTemplete(ClearUpSettingUI.pLayerFighting);
+    end
 end
 
 function p.Stage7414End()
     LogInfo("p.Stage7414End");
     
     if(ClearUpSettingUI.pLayerFighting) then
-        p.EndTemplete();
+        p.EndTemplete(ClearUpSettingUI.pLayerFighting);
     else
-        p.JtTag = nil;
-        p.GxTag = nil;
+        p.ClearTemplete();
     end
 end
 
@@ -3233,69 +3647,90 @@ end
 
 function p.BeginTemplete(layer)
     if(layer == nil) then
-        return;
+        local scene = GetSMGameScene();
+        if(scene == nil) then
+            return;
+        end
+        layer = scene;
     end
 
     local taskItem = p.GetCurrTaskItem();
     
-    p.JtTag = nil;
-    p.GxTag = nil;
+    p.ClearTemplete();
     
     --添加前头
     if(taskItem.Dir) then
-        p.JtTag = p.CreateAnimate(layer,taskItem.Dir.index,0,taskItem.Dir.x,taskItem.Dir.y);
         
         --添加提示文字
         if(taskItem.TxtPos) then
-            local nX,nY = p.GetJtRelativePos(taskItem.Dir.x, taskItem.Dir.y, taskItem.TxtPos.Type);
-            p.BoxTag = p.CreateText(layer,taskItem.TxtPos.Txt,taskItem.TxtPos.Align,0,nX,nY);
+            local nX,nY = p.GetJtRelativePos(taskItem.Dir.x, taskItem.Dir.y, taskItem.Dir.index);
+            p.CreateText(layer,taskItem.TxtPos.Txt,p.BoxTag,nX,nY,taskItem.Order);
         end
         
+        p.CreateAnimate(layer,taskItem.Dir.index,p.JtTag,taskItem.Dir.x,taskItem.Dir.y,taskItem.Order);
     end
     
     --添加光效
     if(taskItem.EffectPos) then
-        p.GxTag = p.CreateAnimate(layer,taskItem.EffectPos.index,0,taskItem.EffectPos.x,taskItem.EffectPos.y);
+        p.CreateAnimate(layer,taskItem.EffectPos.index,p.GxTag,taskItem.EffectPos.x,taskItem.EffectPos.y,taskItem.Order);
     end
     
 end
 
-function p.EndTemplete()
-    if(p.JtTag) then
-        p.JtTag:RemoveFromParent(true);
-        
-        if(p.BoxTag) then
-            p.BoxTag:RemoveFromParent(true);
+function p.EndTemplete(layer)
+    local scene = GetSMGameScene();
+    if(layer) then
+        scene = layer;
+    end
+	if scene then
+        --[[
+		if(p.JtTag) then
+            layer:RemoveChildByTag(p.JtTag,true);
+            p.JtTag:RemoveFromParent(true);
+            
+            if(p.BoxTag) then
+                p.BoxTag:RemoveFromParent(true);
+            end
         end
-    end
-    if(p.GxTag) then
-        p.GxTag:RemoveFromParent(true);
-    end
+        if(p.GxTag) then
+            p.GxTag:RemoveFromParent(true);
+        end
+        ]]
+        
+        scene:RemoveChildByTag(p.JtTag,true);
+        scene:RemoveChildByTag(p.BoxTag,true);
+        scene:RemoveChildByTag(p.GxTag,true);
+	end
     
+    p.ClearTemplete();
+end
+
+function p.ClearTemplete()
+    --[[
     p.JtTag = nil;
     p.GxTag = nil;
     p.BoxTag = nil;
+    ]]
 end
 
 --获得文本框相对位置根据箭头
 function p.GetJtRelativePos(nX, nY, nType)
-    
-    LogInfo("nType:[%d]",nType);
     local x,y;
-    x=0;
-    y=0;
+    x=0;y=0;
+    LogInfo("nType:[%s]",nType);
     if(nType == TutorialType.UP) then
         x = nX + 25*ScaleFactor;
-        y = nY + 0;
+        y = nY + 80*ScaleFactor;
     elseif(nType == TutorialType.DOWN) then
+         LogInfo("nTypedown:[%s]",nType);
         x = nX + 25*ScaleFactor;
-        y = nY + 95*ScaleFactor;
+        y = nY - 0*ScaleFactor;
     elseif(nType == TutorialType.LEFT) then
-        x = nX + 25*ScaleFactor;
-        y = nY - 20*ScaleFactor;
+        x = nX + 80*ScaleFactor;
+        y = nY + 45*ScaleFactor;
     elseif(nType == TutorialType.RIGHT) then
-        x = nX + 25*ScaleFactor;
-        y = nY + 100*ScaleFactor;
+        x = nX - 35*ScaleFactor;
+        y = nY + 45*ScaleFactor;
     end
     return x,y;
 end
@@ -3347,7 +3782,7 @@ function p.IsShowLayer(arrays)
 end
 
 --创建动画
-function p.CreateAnimate(parent, szSprFile, nTag, nX, nY)
+function p.CreateAnimate(parent, szSprFile, nTag, nX, nY, nOrder)
     if(not CheckS(szSprFile) or
         not CheckN(nX) or
         not CheckN(nY)) then
@@ -3359,12 +3794,17 @@ function p.CreateAnimate(parent, szSprFile, nTag, nX, nY)
     pSpriteNode:SetFrameRect( CGRectMake(nX, nY, p.JtWidth, p.JtHeight) );
     local szAniPath = NDPath_GetAnimationPath();
     pSpriteNode:ChangeSprite( szAniPath .. szSprFile );
-    parent:AddChild(pSpriteNode,0,nTag);
+    
+    if(nOrder == nil) then
+        nOrder = 99999999;
+    end
+    parent:AddChildZTag(pSpriteNode,nOrder,nTag);
+    
     return pSpriteNode;
 end
 
 --创建提示文本
-function p.CreateText(parent, sText, nAlign, nTag, nX, nY)
+function p.CreateText(parent, sText, nTag, nX, nY, nOrder)
     LogInfo("p.CreateText:nX:[%d], nY:[%d]", nX, nY);
     local layer = createNDUINode();
 	if layer == nil then
@@ -3372,7 +3812,11 @@ function p.CreateText(parent, sText, nAlign, nTag, nX, nY)
 	end
 	layer:Init();
 	layer:SetFrameRect(CGRectMake(nX,nY,p.TipSize.w,p.TipSize.h));
-	parent:AddChild(layer,0,nTag);
+    
+    if(nOrder == nil) then
+        nOrder = 99999999;
+    end
+    parent:AddChildZTag(layer,nOrder,nTag);
     
 -----------------初始化ui添加到 node 层上----------------------------------
     local uiLoad = createNDUILoad();
@@ -3386,7 +3830,7 @@ function p.CreateText(parent, sText, nAlign, nTag, nX, nY)
 --设置文本框属性
     local label = GetLabel(layer, p.TxtTag);
     if(label) then
-        label:SetTextAlignment(nAlign);
+        --label:SetTextAlignment(nAlign);
         label:SetText(sText);
         label:SetHasFontBoderColor(false);
     end
@@ -3397,6 +3841,42 @@ end
 
 
 
+--将物品放到第一位
+function p.OrderItem(nMinItemId, nMaxItemId)
+    local container		= PlayerUIBackBag.GetBackBagContainer();
+    local nTags = {77,76,75,74,73,72,71,70,69,68,67,66,65,64,63,62};
+    if(container) then
+        local nViewCount    = container:GetViewCount();
+        
+        LogInfo("nViewCount:[%d]",nViewCount);
+        
+        for i=1,nViewCount do
+            local view = container:GetView(i-1);
+            for j,v in ipairs(nTags) do
+                local btn = GetItemButton(view,v);
+                
+                if(btn and btn:GetItemId()>0) then
+                    local nItemType = Item.GetItemInfoN(btn:GetItemId(), Item.ITEM_TYPE);
+                    LogInfo("nItemType:[%d]",nItemType);
+                    if(nItemType>=nMinItemId and nItemType<=nMaxItemId) then
+                        
+                        local view0 = container:GetView(0);
+                        local btn0 = GetItemButton(view0,nTags[16]);
+                        
+                        local b = btn:GetItemId();
+                        local b0 = btn0:GetItemId();
+                        
+                        LogInfo("b:[%d],b0:[%d]",b,b0);
+                        
+                        btn:ChangeItem(b0);
+                        btn0:ChangeItem(b);
+                        return;
+                    end
+                end
+            end
+        end
+    end
+end
 
 
 
@@ -3409,187 +3889,254 @@ end
 p.CurrTask = { KeyItem = 0, SubItem = 0, };
 p.DataInfo = {
     [0]={
-        BeginFunc=TutorialData.Stage0Begin,      --判断任务是否开始
-        EndFunc=TutorialData.Stage0End,        --任务结束清理事件
+        BeginFunc=TutorialData.Stage000Begin,      --判断任务是否开始
+        EndFunc=TutorialData.Stage000End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index="jianty03.spr",x=70,y=160}, EffectPos=nil, TxtPos = {Txt="点击对话",Align = UITextAlignment.Center, Type = TutorialType.UP}, Begin=TutorialData.Stage01Begin, End=TutorialData.Stage01End, IsComplete=TutorialData.Stage01IsComplete, ExitCond = TutorialData.Stage01ExitCond},
-            {Dir={index="jianty03.spr",x=600,y=-20}, EffectPos=nil, TxtPos = {Txt="点击对话",Align = UITextAlignment.Center, Type = TutorialType.DOWN},  Begin=TutorialData.Stage02Begin, End=TutorialData.Stage02End, IsComplete=TutorialData.Stage02IsComplete, ExitCond = TutorialData.Stage02ExitCond},
-            {Dir={index="jianty03.spr",x=1320,y=160}, EffectPos=nil, TxtPos = {Txt="点击对话",Align = UITextAlignment.Center, Type = TutorialType.UP},  Begin=TutorialData.Stage03Begin, End=TutorialData.Stage03End, IsComplete=TutorialData.Stage03IsComplete, ExitCond = TutorialData.Stage03ExitCond},
-            {Dir={index="jianty03.spr",x=620,y=-40}, EffectPos=nil, TxtPos = {Txt="点击自动寻路战斗",Align = UITextAlignment.Left, Type = TutorialType.DOWN},   Begin=TutorialData.Stage04Begin, End=TutorialData.Stage04End, IsComplete=TutorialData.Stage04IsComplete, ExitCond = TutorialData.Stage04ExitCond},
-            {Dir=nil, EffectPos=nil, Begin=TutorialData.Stage05Begin, End=TutorialData.Stage05End, IsComplete=TutorialData.Stage05IsComplete, ExitCond = TutorialData.Stage05ExitCond},
-            {Dir={index="jiantx03.spr",x=680,y=380}, EffectPos=nil, TxtPos = {Txt="点击返回主城",Align = UITextAlignment.Left, Type = TutorialType.LEFT},  Begin=TutorialData.Stage06Begin, End=TutorialData.Stage06End, IsComplete=TutorialData.Stage06IsComplete, ExitCond = TutorialData.Stage06ExitCond},
-            {Dir=nil, EffectPos=nil, Begin=TutorialData.Stage07Begin, End=TutorialData.Stage07End, IsComplete=TutorialData.Stage07IsComplete, ExitCond = TutorialData.Stage07ExitCond},
-            {Dir={index="jianty03.spr",x=620,y=-25}, EffectPos=nil, TxtPos = {Txt="点击对话",Align = UITextAlignment.Center, Type = TutorialType.DOWN}, Begin=TutorialData.Stage02Begin, End=TutorialData.Stage02End, IsComplete=TutorialData.Stage08IsComplete, ExitCond = TutorialData.Stage02ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=80,y=160}, EffectPos=nil, TxtPos = {Txt="点击对话"}, Begin=TutorialData.Stage00000Begin, End=TutorialData.Stage00000End, IsComplete=TutorialData.Stage00000IsComplete, ExitCond = TutorialData.Stage00000ExitCond, Order=0,},
+            
+            {Dir={index=TutorialType.RIGHT,x=620,y=-25}, EffectPos=nil, TxtPos = {Txt="点击对话"},  Begin=TutorialData.Stage00001Begin, End=TutorialData.Stage00001End, IsComplete=TutorialData.Stage00001IsComplete, ExitCond = TutorialData.Stage00001ExitCond, Order=0,},
+            
+            {Dir={index=TutorialType.RIGHT,x=1335,y=160}, EffectPos=nil, TxtPos = {Txt="点击对话"},  Begin=TutorialData.Stage00002Begin, End=TutorialData.Stage00002End, IsComplete=TutorialData.Stage00002IsComplete, ExitCond = TutorialData.Stage00002ExitCond, Order=0,},
+            
+            {Dir={index=TutorialType.RIGHT,x=635,y=-40}, EffectPos=nil, TxtPos = {Txt="点击自动寻路战斗"},   Begin=TutorialData.Stage00003Begin, End=TutorialData.Stage00003End, IsComplete=TutorialData.Stage00003IsComplete, ExitCond = TutorialData.Stage00003ExitCond, Order=0,},
+            
+            {Dir=nil, EffectPos=nil, Begin=TutorialData.Stage00004Begin, End=TutorialData.Stage00004End, IsComplete=TutorialData.Stage00004IsComplete, ExitCond = TutorialData.Stage00004ExitCond},
+            
+            {Dir={index=TutorialType.DOWN,x=680,y=385}, EffectPos=nil, TxtPos = {Txt="点击返回主城"},  Begin=TutorialData.Stage00005Begin, End=TutorialData.Stage00005End, IsComplete=TutorialData.Stage00005IsComplete, ExitCond = TutorialData.Stage00005ExitCond},
+            
+            {Dir=nil, EffectPos=nil, Begin=TutorialData.Stage00006Begin, End=TutorialData.Stage00006End, IsComplete=TutorialData.Stage00006IsComplete, ExitCond = TutorialData.Stage00006ExitCond},
+            
+            {Dir={index=TutorialType.RIGHT,x=620,y=-25}, EffectPos=nil, TxtPos = {Txt="点击对话"}, Begin=TutorialData.Stage00007Begin, End=TutorialData.Stage00007End, IsComplete=TutorialData.Stage00007IsComplete, ExitCond = TutorialData.Stage00007ExitCond, Order=0,},
         },
     },
     
     [21] = {
-        BeginFunc=TutorialData.Stage9Begin,      --判断任务是否开始
-        EndFunc=TutorialData.Stage9End,        --任务结束清理事件
+        BeginFunc=TutorialData.Stage021Begin,      --判断任务是否开始
+        EndFunc=TutorialData.Stage021End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index="jiantx03.spr",x=110,y=380}, EffectPos={index="xingong01.spr",x=110,y=430}, TxtPos = {Txt="点击行囊按钮",Align = UITextAlignment.Center, Type = TutorialType.LEFT}, Begin=TutorialData.Stage25Begin, End=TutorialData.Stage25End, IsComplete=TutorialData.Stage25IsComplete, ExitCond = TutorialData.Stage25ExitCond},
-            {Dir={index="jiantx03.spr",x=350,y=390}, EffectPos=nil, TxtPos = {Txt="点击切换背包",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage27Begin, End=TutorialData.Stage27End, IsComplete=TutorialData.Stage92IsComplete, ExitCond = TutorialData.Stage27ExitCond},
-            {Dir={index="jiants03.spr",x=420,y=180}, EffectPos=nil, TxtPos = {Txt="点击选择装备",Align = UITextAlignment.Left, Type = TutorialType.RIGHT},  Begin=TutorialData.Stage28Begin, End=TutorialData.Stage28End, IsComplete=TutorialData.Stage93IsComplete, ExitCond = TutorialData.Stage28ExitCond},
+            --指引背包按钮
+            {Dir={index=TutorialType.DOWN,x=105,y=390}, EffectPos={index="xingong01.spr",x=110,y=430}, TxtPos = {Txt="点击行囊按钮"}, Begin=TutorialData.Stage02101Begin, End=TutorialData.Stage02101End, IsComplete=TutorialData.Stage02101IsComplete, ExitCond = TutorialData.Stage02101ExitCond, Order=0,},
             
-            {Dir={index="jiantx03.spr",x=520,y=310}, EffectPos=nil, TxtPos = {Txt="点击穿装备",Align = UITextAlignment.Center, Type = TutorialType.LEFT}, Begin=TutorialData.Stage94Begin, End=TutorialData.Stage94End, IsComplete=TutorialData.Stage94IsComplete, ExitCond = TutorialData.Stage94ExitCond},
+            --礼包使用
+            {Dir={index=TutorialType.DOWN,x=750,y=416}, EffectPos=nil, TxtPos = {Txt="点击选择道具"}, Begin=TutorialData.Stage02102Begin, End=TutorialData.Stage02102End, IsComplete=TutorialData.Stage02102IsComplete, ExitCond = TutorialData.Stage02102ExitCond},
+            
+            {Dir={index=TutorialType.UP,x=420,y=130}, EffectPos=nil, TxtPos = {Txt="点击选择礼包"}, Begin=TutorialData.Stage02103Begin, End=TutorialData.Stage02103End, IsComplete=TutorialData.Stage02103IsComplete, ExitCond = TutorialData.Stage02103ExitCond},
+            
+            {Dir={index=TutorialType.DOWN,x=515,y=320}, EffectPos=nil, TxtPos = {Txt="点击使用"}, Begin=TutorialData.Stage02104Begin, End=TutorialData.Stage02104End, IsComplete=TutorialData.Stage02104IsComplete, ExitCond = TutorialData.Stage02104ExitCond},
+            
+            {Dir={index=TutorialType.DOWN,x=274,y=220}, EffectPos=nil, TxtPos = {Txt="点击确定"}, Begin=TutorialData.Stage02105Begin, End=TutorialData.Stage02105End, IsComplete=TutorialData.Stage02105IsComplete, ExitCond = TutorialData.Stage02105ExitCond},
+            
+            --穿装备
+            {Dir={index=TutorialType.DOWN,x=430,y=416}, EffectPos=nil, TxtPos = {Txt="切换装备背包"}, Begin=TutorialData.Stage02106Begin, End=TutorialData.Stage02106End, IsComplete=TutorialData.Stage02106IsComplete, ExitCond = TutorialData.Stage02106ExitCond},
+            
+            {Dir={index=TutorialType.UP,x=420,y=130}, EffectPos=nil, TxtPos = {Txt="点击选择装备"},  Begin=TutorialData.Stage02107Begin, End=TutorialData.Stage02107End, IsComplete=TutorialData.Stage02107IsComplete, ExitCond = TutorialData.Stage02107ExitCond},
+            
+            {Dir={index=TutorialType.DOWN,x=515,y=320}, EffectPos=nil, TxtPos = {Txt="点击穿装备"}, Begin=TutorialData.Stage02108Begin, End=TutorialData.Stage02108End, IsComplete=TutorialData.Stage02108IsComplete, ExitCond = TutorialData.Stage02108ExitCond},
         }
     },
     
     [31] = {
-        BeginFunc=TutorialData.Stage1Begin,      --判断任务是否开始
-        EndFunc=TutorialData.Stage1End,        --任务结束清理事件
+        BeginFunc=TutorialData.Stage031Begin,      --判断任务是否开始
+        EndFunc=TutorialData.Stage031End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index="jiantx03.spr",x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt="点击将星按钮",Align = UITextAlignment.Left, Type = TutorialType.LEFT},  Begin=TutorialData.Stage11Begin, End=TutorialData.Stage11End, IsComplete=TutorialData.Stage11IsComplete, ExitCond = TutorialData.Stage11ExitCond},
-            {Dir={index="jiantx03.spr",x=20,y=380}, EffectPos=nil, TxtPos = {Txt="点击修炼星图",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage12Begin, End=TutorialData.Stage12End, IsComplete=TutorialData.Stage12IsComplete, ExitCond = TutorialData.Stage12ExitCond},
-            {Dir={index="jianty03.spr",x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭",Align = UITextAlignment.Center, Type = TutorialType.DOWN}, Begin=TutorialData.Stage13Begin, End=TutorialData.Stage13End, IsComplete=TutorialData.Stage13IsComplete, ExitCond = TutorialData.Stage13ExitCond},
+            {Dir={index=TutorialType.DOWN,x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt="点击将星按钮"},  Begin=TutorialData.Stage03101Begin, End=TutorialData.Stage03101End, IsComplete=TutorialData.Stage03101IsComplete, ExitCond = TutorialData.Stage03101ExitCond, Order=0,},
+            {Dir=nil, EffectPos=nil, TxtPos = {Txt="点击修炼星图"}, Begin=TutorialData.Stage03102Begin, End=TutorialData.Stage03102End, IsComplete=TutorialData.Stage03102IsComplete, ExitCond = TutorialData.Stage03102ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage03103Begin, End=TutorialData.Stage03103End, IsComplete=TutorialData.Stage03103IsComplete, ExitCond = TutorialData.Stage03103ExitCond},
         },
     },
     [41] = {
-        BeginFunc=TutorialData.Stage2Begin,      --判断任务是否开始
-        EndFunc=TutorialData.Stage2End,        --任务结束清理事件
+        BeginFunc=TutorialData.Stage041Begin,      --判断任务是否开始
+        EndFunc=TutorialData.Stage041End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index="jiantx03.spr",x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt="点击阵法按钮",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage21Begin, End=TutorialData.Stage21End, IsComplete=TutorialData.Stage21IsComplete, ExitCond = TutorialData.Stage21ExitCond},
-            {Dir={index="jiants03.spr",x=-30,y=180}, EffectPos=nil, TxtPos = {Txt="点击选择武将",Align = UITextAlignment.Right, Type = TutorialType.RIGHT}, Begin=TutorialData.Stage22Begin, End=TutorialData.Stage22End, IsComplete=TutorialData.Stage22IsComplete, ExitCond = TutorialData.Stage22ExitCond},
-            {Dir={index="jiantx03.spr",x=360,y=350}, EffectPos=nil, TxtPos = {Txt="点击上阵",Align = UITextAlignment.Center, Type = TutorialType.LEFT}, Begin=TutorialData.Stage23Begin, End=TutorialData.Stage23End, IsComplete=TutorialData.Stage23IsComplete, ExitCond = TutorialData.Stage23ExitCond},
-            {Dir={index="jianty03.spr",x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭",Align = UITextAlignment.Center, Type = TutorialType.DOWN},  Begin=TutorialData.Stage24Begin, End=TutorialData.Stage24End, IsComplete=TutorialData.Stage24IsComplete, ExitCond = TutorialData.Stage24ExitCond},
+            {Dir={index=TutorialType.DOWN,x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt="点击阵法按钮"}, Begin=TutorialData.Stage04101Begin, End=TutorialData.Stage04101End, IsComplete=TutorialData.Stage04101IsComplete, ExitCond = TutorialData.Stage04101ExitCond, Order=0,},
+            {Dir={index=TutorialType.UP,x=-36,y=160}, EffectPos=nil, TxtPos = {Txt="点击选择武将"}, Begin=TutorialData.Stage04102Begin, End=TutorialData.Stage04102End, IsComplete=TutorialData.Stage04102IsComplete, ExitCond = TutorialData.Stage04102ExitCond},
+            {Dir={index=TutorialType.DOWN,x=350,y=360}, EffectPos=nil, TxtPos = {Txt="点击上阵"}, Begin=TutorialData.Stage04103Begin, End=TutorialData.Stage04103End, IsComplete=TutorialData.Stage04103IsComplete, ExitCond = TutorialData.Stage04103ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"},  Begin=TutorialData.Stage04104Begin, End=TutorialData.Stage04104End, IsComplete=TutorialData.Stage04104IsComplete, ExitCond = TutorialData.Stage04104ExitCond},
+            {Dir={index=TutorialType.DOWN,x=110,y=380}, EffectPos={index="xingong01.spr",x=110,y=430}, TxtPos = {Txt="点击行囊按钮"}, Begin=TutorialData.Stage04105Begin, End=TutorialData.Stage04105End, IsComplete=TutorialData.Stage04105IsComplete, ExitCond = TutorialData.Stage04105ExitCond, Order=0,},
+            {Dir={index=TutorialType.RIGHT,x=100,y=-10}, EffectPos=nil, TxtPos = {Txt="滑动选择武将周仓"}, Begin=TutorialData.Stage04106Begin, End=TutorialData.Stage04106End, IsComplete=TutorialData.Stage04106IsComplete, ExitCond = TutorialData.Stage04106ExitCond},
+            {Dir={index=TutorialType.DOWN,x=750,y=400}, EffectPos=nil, TxtPos = {Txt="切换道具背包"}, Begin=TutorialData.Stage04107Begin, End=TutorialData.Stage04107End, IsComplete=TutorialData.Stage04107IsComplete, ExitCond = TutorialData.Stage04107ExitCond},
+                        
+            {Dir={index=TutorialType.UP,x=425,y=150}, EffectPos=nil, TxtPos = {Txt="点击选择道具"}, Begin=TutorialData.Stage04108Begin, End=TutorialData.Stage28End, IsComplete=TutorialData.Stage04108IsComplete, ExitCond = TutorialData.Stage04108ExitCond},
             
-            {Dir={index="jiantx03.spr",x=110,y=380}, EffectPos={index="xingong01.spr",x=110,y=430}, TxtPos = {Txt="点击行囊按钮",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage25Begin, End=TutorialData.Stage25End, IsComplete=TutorialData.Stage25IsComplete, ExitCond = TutorialData.Stage25ExitCond},
-            {Dir={index="jianty03.spr",x=100,y=-35}, EffectPos=nil, TxtPos = {Txt="滑动选择武将周仓",Align = UITextAlignment.Left, Type = TutorialType.DOWN}, Begin=TutorialData.Stage26Begin, End=TutorialData.Stage26End, IsComplete=TutorialData.Stage26IsComplete, ExitCond = TutorialData.Stage26ExitCond},
-            {Dir={index="jiantx03.spr",x=750,y=390}, EffectPos=nil, TxtPos = {Txt="点击选择道具",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage27Begin, End=TutorialData.Stage27End, IsComplete=TutorialData.Stage27IsComplete, ExitCond = TutorialData.Stage27ExitCond},
-            {Dir={index="jiants03.spr",x=410,y=180}, EffectPos=nil, TxtPos = {Txt="点击使用经验卡",Align = UITextAlignment.Right, Type = TutorialType.RIGHT}, Begin=TutorialData.Stage28Begin, End=TutorialData.Stage28End, IsComplete=TutorialData.Stage28IsComplete, ExitCond = TutorialData.Stage28ExitCond},
-            {Dir={index="jianty03.spr",x=710,y=-110}, EffectPos=nil, EffectPos=nil, TxtPos = {Txt="点击关闭",Align = UITextAlignment.Center, Type = TutorialType.DOWN}, Begin=TutorialData.Stage29Begin, End=TutorialData.Stage29End, IsComplete=TutorialData.Stage29IsComplete, ExitCond = TutorialData.Stage29ExitCond},
+            {Dir={index=TutorialType.DOWN,x=510,y=320}, EffectPos=nil, TxtPos = {Txt="点击使用"}, Begin=TutorialData.Stage87Begin, End=TutorialData.Stage02108End, IsComplete=TutorialData.Stage87IsComplete, ExitCond = TutorialData.Stage87ExitCond},
+            
+            {Dir={index=TutorialType.DOWN,x=274,y=220}, EffectPos=nil, TxtPos = {Txt="点击确定"}, Begin=TutorialData.Stage02105Begin, End=TutorialData.Stage02105End, IsComplete=TutorialData.Stage02105IsComplete, ExitCond = TutorialData.Stage02105ExitCond},
+            
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage04109Begin, End=TutorialData.Stage04109End, IsComplete=TutorialData.Stage04109IsComplete, ExitCond = TutorialData.Stage04109ExitCond},
         },
     },
     
     
     [71] = {
-        BeginFunc=TutorialData.Stage3Begin,      --判断任务是否开始
-        EndFunc=TutorialData.Stage3End,        --任务结束清理事件
+        BeginFunc=TutorialData.Stage071Begin,      --判断任务是否开始
+        EndFunc=TutorialData.Stage071End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index="jiantx03.spr",x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt="点击强化按钮",Align = UITextAlignment.Center, Type = TutorialType.LEFT},Begin=TutorialData.Stage31Begin, End=TutorialData.Stage31End, IsComplete=TutorialData.Stage31IsComplete, ExitCond = TutorialData.Stage31ExitCond},
-            {Dir={index="jiantz03.spr",x=40,y=80}, EffectPos=nil, TxtPos = {Txt="点击选择装备",Align = UITextAlignment.Left, Type = TutorialType.UP},  Begin=TutorialData.Stage32Begin, End=TutorialData.Stage32End, IsComplete=TutorialData.Stage32IsComplete, ExitCond = TutorialData.Stage32ExitCond},
-            {Dir={index="jianty03.spr",x=360,y=445}, EffectPos=nil, TxtPos = {Txt="点击强化装备",Align = UITextAlignment.Left, Type = TutorialType.UP},   Begin=TutorialData.Stage33Begin, End=TutorialData.Stage33End, IsComplete=TutorialData.Stage33IsComplete, ExitCond = TutorialData.Stage33ExitCond},
+            {Dir={index=TutorialType.DOWN,x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt="点击强化按钮"},Begin=TutorialData.Stage07101Begin, End=TutorialData.Stage07101End, IsComplete=TutorialData.Stage07101IsComplete, ExitCond = TutorialData.Stage31ExitCond, Order=0,},
+            {Dir={index=TutorialType.LEFT,x=40,y=80}, EffectPos=nil, TxtPos = {Txt="点击选择装备"},  Begin=TutorialData.Stage07102Begin, End=TutorialData.Stage07102End, IsComplete=TutorialData.Stage07102IsComplete, ExitCond = TutorialData.Stage07102ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=380,y=442}, EffectPos=nil, TxtPos = {Txt="点击强化装备"},   Begin=TutorialData.Stage07103Begin, End=TutorialData.Stage07103End, IsComplete=TutorialData.Stage07103IsComplete, ExitCond = TutorialData.Stage07103ExitCond},
             
-            
+            --[[
             --新添加(加速功能)
-            {Dir={index="jiantx03.spr",x=650,y=280}, EffectPos=nil, TxtPos = {Txt="点击加速秒CD",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage35Begin, End=TutorialData.Stage35End, IsComplete=TutorialData.Stage35IsComplete, ExitCond = TutorialData.Stage35ExitCond},
-            {Dir={index="jiantx03.spr",x=280,y=200}, EffectPos=nil, TxtPos = {Txt="点击确定",Align = UITextAlignment.Center, Type = TutorialType.LEFT}, Begin=TutorialData.Stage36Begin, End=TutorialData.Stage36End, IsComplete=TutorialData.Stage36IsComplete, ExitCond = TutorialData.Stage36ExitCond},
+            {Dir={index=TutorialType.DOWN,x=650,y=160}, EffectPos=nil, TxtPos = {Txt="点击加速秒CD"}, Begin=TutorialData.Stage07105Begin, End=TutorialData.Stage07105End, IsComplete=TutorialData.Stage07105IsComplete, ExitCond = TutorialData.Stage07105ExitCond},
+            {Dir={index=TutorialType.DOWN,x=274,y=220}, EffectPos=nil, TxtPos = {Txt="点击确定"}, Begin=TutorialData.Stage07106Begin, End=TutorialData.Stage07106End, IsComplete=TutorialData.Stage07106IsComplete, ExitCond = TutorialData.Stage07106ExitCond},
             
+            {Dir={index=TutorialType.LEFT,x=40,y=190}, EffectPos=nil, TxtPos = {Txt="点击选择装备"},  Begin=TutorialData.Stage07102Begin, End=TutorialData.Stage07102End, IsComplete=TutorialData.Stage07102IsComplete, ExitCond = TutorialData.Stage07102ExitCond},
             
-            {Dir={index="jianty03.spr",x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭",Align = UITextAlignment.Center, Type = TutorialType.DOWN}, Begin=TutorialData.Stage34Begin, End=TutorialData.Stage34End, IsComplete=TutorialData.Stage34IsComplete, ExitCond = TutorialData.Stage34ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=380,y=442}, EffectPos=nil, TxtPos = {Txt="点击强化装备"},   Begin=TutorialData.Stage07103Begin, End=TutorialData.Stage07103End, IsComplete=TutorialData.Stage07103IsComplete, ExitCond = TutorialData.Stage07103ExitCond},
+            
+            ]]
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage07104Begin, End=TutorialData.Stage07104End, IsComplete=TutorialData.Stage07104IsComplete, ExitCond = TutorialData.Stage07104ExitCond},
+            
         },
     },
     
-    [81] = {
-        BeginFunc=TutorialData.Stage10Begin,      --判断任务是否开始
-        EndFunc=TutorialData.Stage10End,            --任务结束清理事件
+    [90] = {
+        BeginFunc=TutorialData.Stage081Begin,      --判断任务是否开始
+        EndFunc=TutorialData.Stage081End,            --任务结束清理事件
         Task =  
         {
-            {Dir={index="jiantx03.spr",x=300,y=380}, EffectPos={index="xingong01.spr",x=300,y=430}, TxtPos = {Txt="点击阵法按钮",Align = UITextAlignment.Center, Type = TutorialType.LEFT},  Begin=TutorialData.Stage21Begin, End=TutorialData.Stage21End, IsComplete=TutorialData.Stage21IsComplete, ExitCond = TutorialData.Stage21ExitCond},
-            {Dir={index="jiantx03.spr",x=380,y=350}, EffectPos=nil, TxtPos = {Txt="点击选择技能",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage22Begin, End=TutorialData.Stage22End, IsComplete=TutorialData.Stage102IsComplete, ExitCond = TutorialData.Stage22ExitCond},
-            {Dir={index="jiantx03.spr",x=355,y=240}, EffectPos=nil, TxtPos = {Txt="点击更换技能",Align = UITextAlignment.Left, Type = TutorialType.LEFT},  Begin=TutorialData.Stage103Begin, End=TutorialData.Stage103End, IsComplete=TutorialData.Stage103IsComplete, ExitCond = TutorialData.Stage103ExitCond},
-            {Dir={index="jianty03.spr",x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭",Align = UITextAlignment.Center, Type = TutorialType.DOWN}, Begin=TutorialData.Stage24Begin, End=TutorialData.Stage24End, IsComplete=TutorialData.Stage24IsComplete, ExitCond = TutorialData.Stage24ExitCond},
+            {Dir={index=TutorialType.DOWN,x=400,y=380}, EffectPos={index="xingong01.spr",x=400,y=430}, TxtPos = {Txt="点击将星按钮"},  Begin=TutorialData.Stage12101Begin, End=TutorialData.Stage12101End, IsComplete=TutorialData.Stage12101IsComplete, ExitCond = TutorialData.Stage12101ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=20,y=380}, EffectPos=nil, TxtPos = {Txt="点击修炼星图"}, Begin=TutorialData.Stage12102Begin, End=TutorialData.Stage12102End, IsComplete=TutorialData.Stage12102IsComplete, ExitCond = TutorialData.Stage12102ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage12103Begin, End=TutorialData.Stage12103End, IsComplete=TutorialData.Stage12103IsComplete, ExitCond = TutorialData.Stage12103ExitCond},
+            
+            
+            {Dir={index=TutorialType.DOWN,x=300,y=380}, EffectPos={index="xingong01.spr",x=300,y=430}, TxtPos = {Txt="点击阵法按钮"},  Begin=TutorialData.Stage08101Begin, End=TutorialData.Stage08101End, IsComplete=TutorialData.Stage08101IsComplete, ExitCond = TutorialData.Stage08101ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=380,y=350}, EffectPos=nil, TxtPos = {Txt="点击选择技能"}, Begin=TutorialData.Stage08102Begin, End=TutorialData.Stage08102End, IsComplete=TutorialData.Stage08102IsComplete, ExitCond = TutorialData.Stage08102ExitCond},
+            {Dir={index=TutorialType.DOWN,x=355,y=240}, EffectPos=nil, TxtPos = {Txt="点击更换技能"},  Begin=TutorialData.Stage08103Begin, End=TutorialData.Stage08103End, IsComplete=TutorialData.Stage08103IsComplete, ExitCond = TutorialData.Stage08103ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage08104Begin, End=TutorialData.Stage08104End, IsComplete=TutorialData.Stage08104IsComplete, ExitCond = TutorialData.Stage08104ExitCond},
         }
     },
     
-    
-    [121] = {
-        BeginFunc=TutorialData.Stage10Begin,      --判断任务是否开始
-        EndFunc=TutorialData.Stage10End,            --任务结束清理事件
+    [111] = {
+        BeginFunc=TutorialData.Stage041Begin,      --判断任务是否开始
+        EndFunc=TutorialData.Stage041End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index="jiantx03.spr",x=300,y=380}, EffectPos={index="xingong01.spr",x=300,y=430}, TxtPos = {Txt="点击阵法按钮",Align = UITextAlignment.Center, Type = TutorialType.LEFT}, Begin=TutorialData.Stage21Begin, End=TutorialData.Stage21End, IsComplete=TutorialData.Stage21IsComplete, ExitCond = TutorialData.Stage21ExitCond},
-            {Dir={index="jiantx03.spr",x=260,y=350}, EffectPos=nil, TxtPos = {Txt="点击选择技能",Align = UITextAlignment.Left, Type = TutorialType.LEFT},  Begin=TutorialData.Stage22Begin, End=TutorialData.Stage22End, IsComplete=TutorialData.Stage102IsComplete, ExitCond = TutorialData.Stage22ExitCond},
-            {Dir={index="jiantx03.spr",x=355,y=240}, EffectPos=nil, TxtPos = {Txt="点击更换技能",Align = UITextAlignment.Left, Type = TutorialType.LEFT},  Begin=TutorialData.Stage103Begin, End=TutorialData.Stage103End, IsComplete=TutorialData.Stage103IsComplete, ExitCond = TutorialData.Stage103ExitCond},
-            {Dir={index="jianty03.spr",x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭",Align = UITextAlignment.Center, Type = TutorialType.DOWN}, Begin=TutorialData.Stage24Begin, End=TutorialData.Stage24End, IsComplete=TutorialData.Stage24IsComplete, ExitCond = TutorialData.Stage24ExitCond},
+    
+            {Dir={index=TutorialType.DOWN,x=300,y=380}, EffectPos={index="xingong01.spr",x=300,y=430}, TxtPos = {Txt="点击阵法按钮"}, Begin=TutorialData.Stage04101Begin, End=TutorialData.Stage04101End, IsComplete=TutorialData.Stage04101IsComplete, ExitCond = TutorialData.Stage04101ExitCond, Order=0,},
+            {Dir={index=TutorialType.UP,x=90,y=160}, EffectPos=nil, TxtPos = {Txt="点击选择武将"}, Begin=TutorialData.Stage04102Begin, End=TutorialData.Stage04102End, IsComplete=TutorialData.Stage04102IsComplete, ExitCond = TutorialData.Stage04102ExitCond},
+            {Dir={index=TutorialType.DOWN,x=350,y=360}, EffectPos=nil, TxtPos = {Txt="点击上阵"}, Begin=TutorialData.Stage04103Begin, End=TutorialData.Stage04103End, IsComplete=TutorialData.Stage04103IsComplete, ExitCond = TutorialData.Stage04103ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"},  Begin=TutorialData.Stage04104Begin, End=TutorialData.Stage04104End, IsComplete=TutorialData.Stage04104IsComplete, ExitCond = TutorialData.Stage04104ExitCond},
+            {Dir={index=TutorialType.DOWN,x=110,y=380}, EffectPos={index="xingong01.spr",x=110,y=430}, TxtPos = {Txt="点击行囊按钮"}, Begin=TutorialData.Stage04105Begin, End=TutorialData.Stage04105End, IsComplete=TutorialData.Stage04105IsComplete, ExitCond = TutorialData.Stage04105ExitCond, Order=0,},
+            {Dir={index=TutorialType.RIGHT,x=100,y=-10}, EffectPos=nil, TxtPos = {Txt="滑动选择武将马腾"}, Begin=TutorialData.Stage04106Begin, End=TutorialData.Stage04106End, IsComplete=TutorialData.Stage10106IsComplete, ExitCond = TutorialData.Stage04106ExitCond},
+            {Dir={index=TutorialType.DOWN,x=750,y=400}, EffectPos=nil, TxtPos = {Txt="切换道具背包"}, Begin=TutorialData.Stage04107Begin, End=TutorialData.Stage04107End, IsComplete=TutorialData.Stage04107IsComplete, ExitCond = TutorialData.Stage04107ExitCond},
+            
+            {Dir={index=TutorialType.UP,x=425,y=150}, EffectPos=nil, TxtPos = {Txt="点击选择道具"}, Begin=TutorialData.Stage04108Begin, End=TutorialData.Stage28End, IsComplete=TutorialData.Stage04108IsComplete, ExitCond = TutorialData.Stage04108ExitCond},
+            {Dir={index=TutorialType.DOWN,x=510,y=320}, EffectPos=nil, TxtPos = {Txt="点击使用"}, Begin=TutorialData.Stage87Begin, End=TutorialData.Stage02108End, IsComplete=TutorialData.Stage87IsComplete, ExitCond = TutorialData.Stage87ExitCond},
+            {Dir={index=TutorialType.DOWN,x=274,y=220}, EffectPos=nil, TxtPos = {Txt="点击确定"}, Begin=TutorialData.Stage02105Begin, End=TutorialData.Stage02105End, IsComplete=TutorialData.Stage02105IsComplete, ExitCond = TutorialData.Stage02105ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage04109Begin, End=TutorialData.Stage04109End, IsComplete=TutorialData.Stage04109IsComplete, ExitCond = TutorialData.Stage04109ExitCond},
+            
+        }
+    },
+    
+    [130] = {
+        BeginFunc=TutorialData.Stage081Begin,      --判断任务是否开始
+        EndFunc=TutorialData.Stage081End,            --任务结束清理事件
+        Task =  
+        {
+            {Dir={index=TutorialType.DOWN,x=400,y=380}, EffectPos={index="xingong01.spr",x=400,y=430}, TxtPos = {Txt="点击将星按钮"},  Begin=TutorialData.Stage12101Begin, End=TutorialData.Stage12101End, IsComplete=TutorialData.Stage12101IsComplete, ExitCond = TutorialData.Stage12101ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=20,y=380}, EffectPos=nil, TxtPos = {Txt="点击修炼星图"}, Begin=TutorialData.Stage12102Begin, End=TutorialData.Stage12102End, IsComplete=TutorialData.Stage12102IsComplete, ExitCond = TutorialData.Stage12102ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage12103Begin, End=TutorialData.Stage12103End, IsComplete=TutorialData.Stage12103IsComplete, ExitCond = TutorialData.Stage12103ExitCond},
+            
+            {Dir={index=TutorialType.DOWN,x=300,y=380}, EffectPos={index="xingong01.spr",x=300,y=430}, TxtPos = {Txt="点击阵法按钮"},  Begin=TutorialData.Stage08101Begin, End=TutorialData.Stage08101End, IsComplete=TutorialData.Stage08101IsComplete, ExitCond = TutorialData.Stage08101ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=260,y=350}, EffectPos=nil, TxtPos = {Txt="点击选择技能"}, Begin=TutorialData.Stage08102Begin, End=TutorialData.Stage08102End, IsComplete=TutorialData.Stage08102IsComplete, ExitCond = TutorialData.Stage08102ExitCond},
+            {Dir={index=TutorialType.DOWN,x=355,y=240}, EffectPos=nil, TxtPos = {Txt="点击更换技能"},  Begin=TutorialData.Stage08103Begin, End=TutorialData.Stage08103End, IsComplete=TutorialData.Stage08103IsComplete, ExitCond = TutorialData.Stage08103ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage08104Begin, End=TutorialData.Stage08104End, IsComplete=TutorialData.Stage08104IsComplete, ExitCond = TutorialData.Stage08104ExitCond},
         }
     },
     
     
     [161] = {
-        BeginFunc=TutorialData.Stage4Begin,     --判断任务是否开始
-        EndFunc=TutorialData.Stage4End,         --任务结束清理事件
+        BeginFunc=TutorialData.Stage161Begin,     --判断任务是否开始
+        EndFunc=TutorialData.Stage161End,         --任务结束清理事件
         Task =  
         {
-            {Dir={index="jiants03.spr",x=600,y=100}, EffectPos=nil, TxtPos = {Txt="点击征收按钮",Align = UITextAlignment.Left, Type = TutorialType.RIGHT}, Begin=TutorialData.Stage41Begin, End=TutorialData.Stage41End, IsComplete=TutorialData.Stage41IsComplete, ExitCond = TutorialData.Stage41ExitCond},
-            {Dir={index="jiantz03.spr",x=550,y=400}, EffectPos=nil, TxtPos = {Txt="点击征收获得银币",Align = UITextAlignment.Left, Type = TutorialType.UP},  Begin=TutorialData.Stage42Begin, End=TutorialData.Stage42End, IsComplete=TutorialData.Stage42IsComplete, ExitCond = TutorialData.Stage42ExitCond},
+            {Dir={index=TutorialType.UP,x=600,y=70}, EffectPos=nil, TxtPos = {Txt="点击征收按钮"}, Begin=TutorialData.Stage16101Begin, End=TutorialData.Stage16101End, IsComplete=TutorialData.Stage16101IsComplete, ExitCond = TutorialData.Stage16101ExitCond, Order=0,},
+            {Dir={index=TutorialType.LEFT,x=500,y=396}, EffectPos=nil, TxtPos = {Txt="点击征收获得银币"},  Begin=TutorialData.Stage16102Begin, End=TutorialData.Stage16102End, IsComplete=TutorialData.Stage16102IsComplete, ExitCond = TutorialData.Stage16102ExitCond},
         },
     },
     
     
     [171] = {
-        BeginFunc=TutorialData.Stage5Begin,     --判断任务是否开始
-        EndFunc=TutorialData.Stage5End,         --任务结束清理事件
+        BeginFunc=TutorialData.Stage171Begin,     --判断任务是否开始
+        EndFunc=TutorialData.Stage171End,         --任务结束清理事件
         Task =  
         {
-            {Dir={index="jiantz03.spr",x=160,y=-50}, EffectPos=nil, TxtPos = {Txt="点击查看军衔信息",Align = UITextAlignment.Left, Type = TutorialType.DOWN},  Begin=TutorialData.Stage51Begin, End=TutorialData.Stage51End, IsComplete=TutorialData.Stage51IsComplete, ExitCond = TutorialData.Stage51ExitCond},
-            {Dir={index="jiantx03.spr",x=360,y=360}, EffectPos=nil, TxtPos = {Txt="点击可升级军衔",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage52Begin, End=TutorialData.Stage52End, IsComplete=TutorialData.Stage52IsComplete, ExitCond = TutorialData.Stage52ExitCond},
-            {Dir={index="jianty03.spr",x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭",Align = UITextAlignment.Center, Type = TutorialType.DOWN}, Begin=TutorialData.Stage53Begin, End=TutorialData.Stage53End, IsComplete=TutorialData.Stage53IsComplete, ExitCond = TutorialData.Stage53ExitCond},
+            {Dir={index=TutorialType.LEFT,x=130,y=-50}, EffectPos=nil, TxtPos = {Txt="点击查看军衔信息"},  Begin=TutorialData.Stage17101Begin, End=TutorialData.Stage17101End, IsComplete=TutorialData.Stage17101IsComplete, ExitCond = TutorialData.Stage17101ExitCond, Order=0,},
+            
+            
+            {Dir=nil--[[{index=TutorialType.DOWN,x=360,y=360}]], EffectPos=nil, TxtPos = {Txt="点击可升级军衔"}, Begin=TutorialData.Stage17102Begin, End=TutorialData.Stage17102End, IsComplete=TutorialData.Stage17102IsComplete, ExitCond = TutorialData.Stage17102ExitCond},
+            
+            
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage17103Begin, End=TutorialData.Stage17103End, IsComplete=TutorialData.Stage17103IsComplete, ExitCond = TutorialData.Stage17103ExitCond},
         },
     },
     
     
     [181] = {
-        BeginFunc=TutorialData.Stage6Begin,     --判断任务是否开始
-        EndFunc=TutorialData.Stage6End,         --任务结束清理事件
+        BeginFunc=TutorialData.Stage181Begin,     --判断任务是否开始
+        EndFunc=TutorialData.Stage181End,         --任务结束清理事件
         Task =  
         {
-            {Dir={index="jiants03.spr",x=600,y=60}, EffectPos=nil, TxtPos = {Txt="点击竞技场按钮",Align = UITextAlignment.Left, Type = TutorialType.RIGHT},  Begin=TutorialData.Stage61Begin, End=TutorialData.Stage61End, IsComplete=TutorialData.Stage61IsComplete, ExitCond = TutorialData.Stage61ExitCond},
-            {Dir={index="jiantz03.spr",x=105,y=50}, EffectPos=nil, TxtPos = {Txt="点击进行挑战",Align = UITextAlignment.Left, Type = TutorialType.DOWN},  Begin=TutorialData.Stage62Begin, End=TutorialData.Stage62End, IsComplete=TutorialData.Stage62IsComplete, ExitCond = TutorialData.Stage62ExitCond},
+            {Dir={index=TutorialType.UP,x=600,y=60}, EffectPos=nil, TxtPos = {Txt="点击竞技场按钮"},  Begin=TutorialData.Stage18101Begin, End=TutorialData.Stage18101End, IsComplete=TutorialData.Stage18101IsComplete, ExitCond = TutorialData.Stage18101ExitCond, Order=0,},
             
+            {Dir={index=TutorialType.LEFT,x=290,y=60}, EffectPos=nil, TxtPos = {Txt="点击进行挑战"},  Begin=TutorialData.Stage18102Begin, End=TutorialData.Stage18102End, IsComplete=TutorialData.Stage18102IsComplete, ExitCond = TutorialData.Stage18102ExitCond},
             
-            {Dir={index="jiants03.spr",x=700,y=300}, EffectPos=nil, TxtPos = {Txt="点击加速去除CD",Align = UITextAlignment.Left, Type = TutorialType.RIGHT},   Begin=TutorialData.Stage64Begin, End=TutorialData.Stage64End, IsComplete=TutorialData.Stage64IsComplete, ExitCond = TutorialData.Stage64ExitCond},
+            --[[
+            {Dir={index=TutorialType.UP,x=716,y=290}, EffectPos=nil, TxtPos = {Txt="点击加速去除CD"},   Begin=TutorialData.Stage18103Begin, End=TutorialData.Stage18103End, IsComplete=TutorialData.Stage18103IsComplete, ExitCond = TutorialData.Stage18103ExitCond},
             
-            
-            {Dir={index="jianty03.spr",x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭",Align = UITextAlignment.Center, Type = TutorialType.DOWN}, Begin=TutorialData.Stage63Begin, End=TutorialData.Stage63End, IsComplete=TutorialData.Stage63IsComplete, ExitCond = TutorialData.Stage63ExitCond},
-            
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage18104Begin, End=TutorialData.Stage18104End, IsComplete=TutorialData.Stage18104IsComplete, ExitCond = TutorialData.Stage18104ExitCond},
+            ]]
         },
     },
     
     
     
-    [191] = {
-        BeginFunc=TutorialData.Stage10Begin,      --判断任务是否开始
-        EndFunc=TutorialData.Stage10End,            --任务结束清理事件
+    [200] = {
+        BeginFunc=TutorialData.Stage081Begin,      --判断任务是否开始
+        EndFunc=TutorialData.Stage081End,            --任务结束清理事件
         Task =  
         {
-            {Dir={index="jiantx03.spr",x=300,y=380}, EffectPos={index="xingong01.spr",x=300,y=430}, TxtPos = {Txt="点击阵法按钮",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage21Begin, End=TutorialData.Stage21End, IsComplete=TutorialData.Stage21IsComplete, ExitCond = TutorialData.Stage21ExitCond},
-            {Dir={index="jiantx03.spr",x=500,y=350}, EffectPos=nil, TxtPos = {Txt="点击选择技能",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage22Begin, End=TutorialData.Stage22End, IsComplete=TutorialData.Stage102IsComplete, ExitCond = TutorialData.Stage22ExitCond},
-            {Dir={index="jiantx03.spr",x=355,y=240}, EffectPos=nil, TxtPos = {Txt="点击更换技能",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage103Begin, End=TutorialData.Stage103End, IsComplete=TutorialData.Stage103IsComplete, ExitCond = TutorialData.Stage103ExitCond},
-            {Dir={index="jianty03.spr",x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭",Align = UITextAlignment.Center, Type = TutorialType.DOWN},  Begin=TutorialData.Stage24Begin, End=TutorialData.Stage24End, IsComplete=TutorialData.Stage24IsComplete, ExitCond = TutorialData.Stage24ExitCond},
+            {Dir={index=TutorialType.DOWN,x=400,y=380}, EffectPos={index="xingong01.spr",x=400,y=430}, TxtPos = {Txt="点击将星按钮"},  Begin=TutorialData.Stage12101Begin, End=TutorialData.Stage12101End, IsComplete=TutorialData.Stage12101IsComplete, ExitCond = TutorialData.Stage12101ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=20,y=380}, EffectPos=nil, TxtPos = {Txt="点击修炼星图"}, Begin=TutorialData.Stage12102Begin, End=TutorialData.Stage12102End, IsComplete=TutorialData.Stage12102IsComplete, ExitCond = TutorialData.Stage12102ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage12103Begin, End=TutorialData.Stage12103End, IsComplete=TutorialData.Stage12103IsComplete, ExitCond = TutorialData.Stage12103ExitCond},
+            
+            
+            {Dir={index=TutorialType.DOWN,x=300,y=380}, EffectPos={index="xingong01.spr",x=300,y=430}, TxtPos = {Txt="点击阵法按钮"},  Begin=TutorialData.Stage08101Begin, End=TutorialData.Stage08101End, IsComplete=TutorialData.Stage08101IsComplete, ExitCond = TutorialData.Stage08101ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=500,y=350}, EffectPos=nil, TxtPos = {Txt="点击选择技能"}, Begin=TutorialData.Stage08102Begin, End=TutorialData.Stage08102End, IsComplete=TutorialData.Stage08102IsComplete, ExitCond = TutorialData.Stage08102ExitCond},
+            {Dir={index=TutorialType.DOWN,x=355,y=240}, EffectPos=nil, TxtPos = {Txt="点击更换技能"},  Begin=TutorialData.Stage08103Begin, End=TutorialData.Stage08103End, IsComplete=TutorialData.Stage08103IsComplete, ExitCond = TutorialData.Stage08103ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage08104Begin, End=TutorialData.Stage08104End, IsComplete=TutorialData.Stage08104IsComplete, ExitCond = TutorialData.Stage08104ExitCond},
         }
     },
     
     [221] = {
-        BeginFunc=TutorialData.Stage3Begin,      --判断任务是否开始
-        EndFunc=TutorialData.Stage3End,        --任务结束清理事件
+        BeginFunc=TutorialData.Stage071Begin,      --判断任务是否开始
+        EndFunc=TutorialData.Stage071End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index="jiantx03.spr",x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt="点击强化按钮",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage31Begin, End=TutorialData.Stage31End, IsComplete=TutorialData.Stage31IsComplete, ExitCond = TutorialData.Stage31ExitCond},
+            {Dir={index=TutorialType.DOWN,x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt="点击强化按钮"}, Begin=TutorialData.Stage07101Begin, End=TutorialData.Stage07101End, IsComplete=TutorialData.Stage07101IsComplete, ExitCond = TutorialData.Stage31ExitCond, Order=0,},
             
             --切换选项卡
-            {Dir={index="jiants03.spr",x=400,y=-50}, EffectPos=nil, TxtPos = {Txt="点击武器洗炼",Align = UITextAlignment.Left, Type = TutorialType.RIGHT}, Begin=TutorialData.Stage012Begin, End=TutorialData.Stage012End, IsComplete=TutorialData.Stage012IsComplete, ExitCond = TutorialData.Stage012ExitCond},
+            {Dir={index=TutorialType.UP,x=380,y=-25}, EffectPos=nil, TxtPos = {Txt="点击武器洗炼"}, Begin=TutorialData.Stage012Begin, End=TutorialData.Stage012End, IsComplete=TutorialData.Stage012IsComplete, ExitCond = TutorialData.Stage012ExitCond},
             
             --点击装备
-            {Dir={index="jiantz03.spr",x=40,y=80}, EffectPos=nil, TxtPos = {Txt="点击选择武器",Align = UITextAlignment.Left, Type = TutorialType.DOWN}, Begin=TutorialData.Stage32Begin, End=TutorialData.Stage32End, IsComplete=TutorialData.Stage013IsComplete, ExitCond = TutorialData.Stage32ExitCond},
+            {Dir={index=TutorialType.LEFT,x=40,y=80}, EffectPos=nil, TxtPos = {Txt="点击选择武器"}, Begin=TutorialData.Stage07102Begin, End=TutorialData.Stage07102End, IsComplete=TutorialData.Stage013IsComplete, ExitCond = TutorialData.Stage07102ExitCond},
             
             --点击洗练
-            {Dir={index="jianty03.spr",x=360,y=445}, EffectPos=nil, TxtPos = {Txt="点击进行洗炼",Align = UITextAlignment.Left, Type = TutorialType.UP}, Begin=TutorialData.Stage33Begin, End=TutorialData.Stage33End, IsComplete=TutorialData.Stage014IsComplete, ExitCond = TutorialData.Stage33ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=384,y=448}, EffectPos=nil, TxtPos = {Txt="点击进行洗炼"}, Begin=TutorialData.Stage07103Begin, End=TutorialData.Stage07103End, IsComplete=TutorialData.Stage014IsComplete, ExitCond = TutorialData.Stage07103ExitCond},
             
             --替换
-            {Dir={index="jiantx03.spr",x=640,y=360}, EffectPos=nil, TxtPos = {Txt="点击替换",Align = UITextAlignment.Center, Type = TutorialType.UP},  Begin=TutorialData.Stage33Begin, End=TutorialData.Stage33End, IsComplete=TutorialData.Stage015IsComplete, ExitCond = TutorialData.Stage33ExitCond},
+            {Dir={index=TutorialType.DOWN,x=634,y=380}, EffectPos=nil, TxtPos = {Txt="点击替换"},  Begin=TutorialData.Stage07103Begin, End=TutorialData.Stage07103End, IsComplete=TutorialData.Stage015IsComplete, ExitCond = TutorialData.Stage07103ExitCond},
             
             --退出
-            {Dir={index="jianty03.spr",x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭",Align = UITextAlignment.Center, Type = TutorialType.DOWN},   Begin=TutorialData.Stage34Begin, End=TutorialData.Stage34End, IsComplete=TutorialData.Stage34IsComplete, ExitCond = TutorialData.Stage34ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"},   Begin=TutorialData.Stage07104Begin, End=TutorialData.Stage07104End, IsComplete=TutorialData.Stage07104IsComplete, ExitCond = TutorialData.Stage07104ExitCond},
             
         },
-    
-    
     },
     
     
@@ -3598,10 +4145,10 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage241End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index="jianty03.spr",x=780,y=150}, EffectPos=nil, TxtPos = {Txt="点击出城",Align = UITextAlignment.Center, Type = TutorialType.DOWN}, Begin=TutorialData.Stage2411Begin, End=TutorialData.Stage2411End, IsComplete=TutorialData.Stage2411IsComplete, ExitCond = TutorialData.Stage2411ExitCond},
-            {Dir={index="jianty03.spr",x=570,y=-30}, EffectPos=nil, TxtPos = {Txt="选择城池",Align = UITextAlignment.Center, Type = TutorialType.DOWN},  Begin=TutorialData.Stage2412Begin, End=TutorialData.Stage2412End, IsComplete=TutorialData.Stage2412IsComplete, ExitCond = TutorialData.Stage2412ExitCond},
-            {Dir={index="jiants03.spr",x=350,y=0}, EffectPos=nil, TxtPos = {Txt="点击精英副本",Align = UITextAlignment.Center, Type = TutorialType.RIGHT},  Begin=TutorialData.Stage2413Begin, End=TutorialData.Stage2413End, IsComplete=TutorialData.Stage2413IsComplete, ExitCond = TutorialData.Stage2413ExitCond},
-            {Dir={index="jiantx03.spr",x=0,y=0}, EffectPos=nil, TxtPos = {Txt="点击副本",Align = UITextAlignment.Center, Type = TutorialType.RIGHT},  Begin=TutorialData.Stage2414Begin, End=TutorialData.Stage2414End, IsComplete=TutorialData.Stage2414IsComplete, ExitCond = TutorialData.Stage2414ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=780,y=150}, EffectPos=nil, TxtPos = {Txt="点击出城"}, Begin=TutorialData.Stage2411Begin, End=TutorialData.Stage2411End, IsComplete=TutorialData.Stage2411IsComplete, ExitCond = TutorialData.Stage2411ExitCond, Order=0,},
+            {Dir={index=TutorialType.RIGHT,x=530,y=-50}, EffectPos=nil, TxtPos = {Txt="选择城池"},  Begin=TutorialData.Stage2412Begin, End=TutorialData.Stage2412End, IsComplete=TutorialData.Stage2412IsComplete, ExitCond = TutorialData.Stage2412ExitCond},
+            {Dir={index=TutorialType.UP,x=354,y=-20}, EffectPos=nil, TxtPos = {Txt="点击精英副本"},  Begin=TutorialData.Stage2413Begin, End=TutorialData.Stage2413End, IsComplete=TutorialData.Stage2413IsComplete, ExitCond = TutorialData.Stage2413ExitCond},
+            {Dir={index=TutorialType.DOWN,x=0,y=0}, EffectPos=nil, TxtPos = {Txt="点击精英副本关卡"},  Begin=TutorialData.Stage2414Begin, End=TutorialData.Stage2414End, IsComplete=TutorialData.Stage2414IsComplete, ExitCond = TutorialData.Stage2414ExitCond},
         }
     },
         
@@ -3611,11 +4158,14 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage7End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index="jiantx03.spr",x=510,y=380}, EffectPos={index="xingong01.spr",x=510,y=430}, TxtPos = {Txt="点击骑乘",Align = UITextAlignment.Center, Type = TutorialType.LEFT},  Begin=TutorialData.Stage71Begin, End=TutorialData.Stage71End, IsComplete=TutorialData.Stage71IsComplete, ExitCond = TutorialData.Stage71ExitCond},
+            {Dir={index=TutorialType.DOWN,x=510,y=380}, EffectPos={index="xingong01.spr",x=510,y=430}, TxtPos = {Txt="点击坐骑"},  Begin=TutorialData.Stage71Begin, End=TutorialData.Stage71End, IsComplete=TutorialData.Stage71IsComplete, ExitCond = TutorialData.Stage71ExitCond, Order=0,},
             
-            {Dir={index="jiantx03.spr",x=450,y=360}, EffectPos=nil, TxtPos = {Txt="点击进行骑乘",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage72Begin, End=TutorialData.Stage72End, IsComplete=TutorialData.Stage73IsComplete, ExitCond = TutorialData.Stage72ExitCond},
+            {Dir={index=TutorialType.DOWN,x=450,y=400}, EffectPos=nil, TxtPos = {Txt="点击进行骑乘"}, Begin=TutorialData.Stage72Begin, End=TutorialData.Stage72End, IsComplete=TutorialData.Stage73IsComplete, ExitCond = TutorialData.Stage72ExitCond},
             
-            {Dir={index="jiantx03.spr",x=670,y=360}, EffectPos=nil, TxtPos = {Txt="点击可培养坐骑",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage72Begin, End=TutorialData.Stage72End, IsComplete=TutorialData.Stage72IsComplete, ExitCond = TutorialData.Stage72ExitCond},
+            {Dir={index=TutorialType.DOWN,x=660,y=400}, EffectPos=nil, TxtPos = {Txt="点击可培养坐骑"}, Begin=TutorialData.Stage72Begin, End=TutorialData.Stage72End, IsComplete=TutorialData.Stage72IsComplete, ExitCond = TutorialData.Stage72ExitCond},
+            
+            --退出
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"},   Begin=TutorialData.Stage74Begin, End=TutorialData.Stage74End, IsComplete=TutorialData.Stage74IsComplete, ExitCond = TutorialData.Stage74ExitCond},
         },
     },
     [321] = {
@@ -3624,42 +4174,43 @@ p.DataInfo = {
         Task =  
         {
             --宝石祭祀
-            {Dir={index="jiants03.spr",x=340,y=70}, EffectPos=nil, TxtPos = {Txt="点击祭祀按钮",Align = UITextAlignment.Left, Type = TutorialType.RIGHT}, Begin=TutorialData.Stage81Begin, End=TutorialData.Stage81End, IsComplete=TutorialData.Stage81IsComplete, ExitCond = TutorialData.Stage81ExitCond},
-            {Dir={index="jiantx03.spr",x=700,y=60}, EffectPos=nil, TxtPos = {Txt="祭祀获得宝石",Align = UITextAlignment.Left, Type = TutorialType.LEFT},  Begin=TutorialData.Stage82Begin, End=TutorialData.Stage82End, IsComplete=TutorialData.Stage82IsComplete, ExitCond = TutorialData.Stage82ExitCond},
+            {Dir={index=TutorialType.UP,x=440,y=70}, EffectPos=nil, TxtPos = {Txt="点击祭祀按钮"}, Begin=TutorialData.Stage81Begin, End=TutorialData.Stage81End, IsComplete=TutorialData.Stage81IsComplete, ExitCond = TutorialData.Stage81ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=680,y=40}, EffectPos=nil, TxtPos = {Txt="祭祀获得宝石"},  Begin=TutorialData.Stage82Begin, End=TutorialData.Stage82End, IsComplete=TutorialData.Stage82IsComplete, ExitCond = TutorialData.Stage82ExitCond},
             
-            {Dir={index="jianty03.spr",x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭",Align = UITextAlignment.Center, Type = TutorialType.DOWN},    Begin=TutorialData.Stage83Begin, End=TutorialData.Stage83End, IsComplete=TutorialData.Stage83IsComplete, ExitCond = TutorialData.Stage83ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"},    Begin=TutorialData.Stage83Begin, End=TutorialData.Stage83End, IsComplete=TutorialData.Stage83IsComplete, ExitCond = TutorialData.Stage83ExitCond},
             
             
             --宝石礼包使用
-            {Dir={index="jiantx03.spr",x=110,y=380}, EffectPos={index="xingong01.spr",x=110,y=430}, TxtPos = {Txt="点击行囊按钮",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage25Begin, End=TutorialData.Stage25End, IsComplete=TutorialData.Stage25IsComplete, ExitCond = TutorialData.Stage25ExitCond},
+            {Dir={index=TutorialType.DOWN,x=110,y=380}, EffectPos={index="xingong01.spr",x=110,y=430}, TxtPos = {Txt="点击行囊按钮"}, Begin=TutorialData.Stage04105Begin, End=TutorialData.Stage04105End, IsComplete=TutorialData.Stage04105IsComplete, ExitCond = TutorialData.Stage04105ExitCond, Order=0,},
             
             --背包选项卡切换
-            {Dir={index="jiantx03.spr",x=750,y=390}, EffectPos=nil, TxtPos = {Txt="点击道具背包",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage27Begin, End=TutorialData.Stage27End, IsComplete=TutorialData.Stage27IsComplete, ExitCond = TutorialData.Stage27ExitCond},
+            {Dir={index=TutorialType.DOWN,x=750,y=400}, EffectPos=nil, TxtPos = {Txt="点击道具背包"}, Begin=TutorialData.Stage04107Begin, End=TutorialData.Stage04107End, IsComplete=TutorialData.Stage04107IsComplete, ExitCond = TutorialData.Stage04107ExitCond},
             
             --指向第一个道具
-            {Dir={index="jiantx03.spr",x=410,y=-40}, EffectPos=nil, TxtPos = {Txt="选择宝石礼包",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage86Begin, End=TutorialData.Stage28End, IsComplete=TutorialData.Stage86IsComplete, ExitCond = TutorialData.Stage28ExitCond},
+            {Dir={index=TutorialType.UP,x=420,y=130}, EffectPos=nil, TxtPos = {Txt="选择宝石礼包"}, Begin=TutorialData.Stage86Begin, End=TutorialData.Stage28End, IsComplete=TutorialData.Stage86IsComplete, ExitCond = TutorialData.Stage04108ExitCond},
             
             --使用礼包
-            {Dir={index="jiantx03.spr",x=520,y=310}, EffectPos=nil, TxtPos = {Txt="点击使用",Align = UITextAlignment.Center, Type = TutorialType.LEFT}, Begin=TutorialData.Stage87Begin, End=TutorialData.Stage94End, IsComplete=TutorialData.Stage87IsComplete, ExitCond = TutorialData.Stage87ExitCond},
+            {Dir={index=TutorialType.DOWN,x=510,y=320}, EffectPos=nil, TxtPos = {Txt="点击使用"}, Begin=TutorialData.Stage87Begin, End=TutorialData.Stage02108End, IsComplete=TutorialData.Stage87IsComplete, ExitCond = TutorialData.Stage87ExitCond},
             
             --确认框
-            {Dir={index="jiantx03.spr",x=270,y=200}, EffectPos=nil, TxtPos = {Txt="点击确定",Align = UITextAlignment.Center, Type = TutorialType.LEFT}, Begin=TutorialData.Stage88Begin, End=TutorialData.Stage88End, IsComplete=TutorialData.Stage88IsComplete, ExitCond = TutorialData.Stage88ExitCond},
+            {Dir={index=TutorialType.DOWN,x=274,y=220}, EffectPos=nil, TxtPos = {Txt="点击确定"}, Begin=TutorialData.Stage88Begin, End=TutorialData.Stage88End, IsComplete=TutorialData.Stage88IsComplete, ExitCond = TutorialData.Stage88ExitCond},
             
-            {Dir={index="jianty03.spr",x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭",Align = UITextAlignment.Center, Type = TutorialType.DOWN},  Begin=TutorialData.Stage29Begin, End=TutorialData.Stage29End, IsComplete=TutorialData.Stage29IsComplete, ExitCond = TutorialData.Stage29ExitCond},
-            
-            
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"},  Begin=TutorialData.Stage04109Begin, End=TutorialData.Stage04109End, IsComplete=TutorialData.Stage04109IsComplete, ExitCond = TutorialData.Stage04109ExitCond},
             
             
+            {Dir={index=TutorialType.DOWN,x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt="点击强化按钮"}, Begin=TutorialData.Stage07101Begin, End=TutorialData.Stage07101End, IsComplete=TutorialData.Stage07101IsComplete, ExitCond = TutorialData.Stage31ExitCond, Order=0,},
             
-            {Dir={index="jiantx03.spr",x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt="点击强化按钮",Align = UITextAlignment.Center, Type = TutorialType.LEFT}, Begin=TutorialData.Stage31Begin, End=TutorialData.Stage31End, IsComplete=TutorialData.Stage31IsComplete, ExitCond = TutorialData.Stage31ExitCond},
+            {Dir={index=TutorialType.UP,x=550,y=-30}, EffectPos=nil, TxtPos = {Txt="点击宝石镶嵌"}, Begin=TutorialData.Stage012Begin, End=TutorialData.Stage012End, IsComplete=TutorialData.Stage810IsComplete, ExitCond = TutorialData.Stage012ExitCond},
             
-            {Dir={index="jiants03.spr",x=530,y=-30}, EffectPos=nil, TxtPos = {Txt="点击宝石镶嵌",Align = UITextAlignment.Left, Type = TutorialType.RIGHT}, Begin=TutorialData.Stage012Begin, End=TutorialData.Stage012End, IsComplete=TutorialData.Stage810IsComplete, ExitCond = TutorialData.Stage012ExitCond},
+            {Dir={index=TutorialType.LEFT,x=40,y=80}, EffectPos=nil, TxtPos = {Txt="点击选择武器"}, Begin=TutorialData.Stage07102Begin, End=TutorialData.Stage07102End, IsComplete=TutorialData.Stage811IsComplete, ExitCond = TutorialData.Stage07102ExitCond},
             
-            {Dir={index="jiantz03.spr",x=40,y=80}, EffectPos=nil, TxtPos = {Txt="点击选择武器",Align = UITextAlignment.Left, Type = TutorialType.DOWN}, Begin=TutorialData.Stage32Begin, End=TutorialData.Stage32End, IsComplete=TutorialData.Stage811IsComplete, ExitCond = TutorialData.Stage32ExitCond},
+            {Dir={index=TutorialType.DOWN,x=274,y=0}, EffectPos=nil, TxtPos = {Txt="点击宝石"}, Begin=TutorialData.Stage812Begin, End=TutorialData.Stage812End, IsComplete=TutorialData.Stage812IsComplete, ExitCond = TutorialData.Stage812ExitCond},
             
-            {Dir={index="jiantx03.spr",x=300,y=280}, EffectPos=nil, TxtPos = {Txt="点击镶嵌按钮",Align = UITextAlignment.Left, Type = TutorialType.LEFT}, Begin=TutorialData.Stage812Begin, End=TutorialData.Stage812End, IsComplete=TutorialData.Stage812IsComplete, ExitCond = TutorialData.Stage812ExitCond},
+            {Dir={index=TutorialType.DOWN,x=430,y=330}, EffectPos=nil, TxtPos = {Txt="点击镶嵌"}, Begin=TutorialData.Stage813Begin, End=TutorialData.Stage813End, IsComplete=TutorialData.Stage813IsComplete, ExitCond = TutorialData.Stage813ExitCond},
             
-            {Dir={index="jianty03.spr",x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭",Align = UITextAlignment.Center, Type = TutorialType.DOWN}, Begin=TutorialData.Stage34Begin, End=TutorialData.Stage34End, IsComplete=TutorialData.Stage34IsComplete, ExitCond = TutorialData.Stage34ExitCond},
+            
+            
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage07104Begin, End=TutorialData.Stage07104End, IsComplete=TutorialData.Stage07104IsComplete, ExitCond = TutorialData.Stage07104ExitCond},
             
         },
     },
@@ -3670,12 +4221,14 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage241End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index="jianty03.spr",x=780,y=150}, EffectPos=nil, TxtPos = {Txt="点击出城",Align = UITextAlignment.Center, Type = TutorialType.DOWN},Begin=TutorialData.Stage2411Begin, End=TutorialData.Stage2411End, IsComplete=TutorialData.Stage2411IsComplete, ExitCond = TutorialData.Stage2411ExitCond},
-            {Dir={index="jianty03.spr",x=530,y=-50}, EffectPos=nil, TxtPos = {Txt="选择城池",Align = UITextAlignment.Center, Type = TutorialType.DOWN}, Begin=TutorialData.Stage2412Begin, End=TutorialData.Stage2412End, IsComplete=TutorialData.Stage2412IsComplete, ExitCond = TutorialData.Stage2412ExitCond},
-            {Dir={index="jiantx03.spr",x=0,y=0}, EffectPos=nil,TxtPos = {Txt="选择副本",Align = UITextAlignment.Center, Type = TutorialType.LEFT},Begin=TutorialData.Stage2413Begin, End=TutorialData.Stage2413End, IsComplete=TutorialData.Stage5413IsComplete, ExitCond = TutorialData.Stage2413ExitCond},
-            {Dir={index="jiantx03.spr",x=350,y=200}, EffectPos=nil,TxtPos = {Txt="点击扫荡",Align = UITextAlignment.Center, Type = TutorialType.LEFT},Begin=TutorialData.Stage5414Begin, End=TutorialData.Stage5414End, IsComplete=TutorialData.Stage5414IsComplete, ExitCond = TutorialData.Stage5414ExitCond},
-            {Dir={index="jiantx03.spr",x=630,y=380}, EffectPos=nil, TxtPos = {Txt="点击开始",Align = UITextAlignment.Center, Type = TutorialType.LEFT},Begin=TutorialData.Stage6414Begin, End=TutorialData.Stage6414End, IsComplete=TutorialData.Stage6414IsComplete, ExitCond = TutorialData.Stage6414ExitCond},
-            {Dir={index="jiantx03.spr",x=700,y=380}, EffectPos=nil,TxtPos = {Txt="点击加速",Align = UITextAlignment.Center, Type = TutorialType.LEFT},Begin=TutorialData.Stage7414Begin, End=TutorialData.Stage7414End, IsComplete=TutorialData.Stage7414IsComplete, ExitCond = TutorialData.Stage7414ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=780,y=150}, EffectPos=nil, TxtPos = {Txt="点击出城"},Begin=TutorialData.Stage2411Begin, End=TutorialData.Stage2411End, IsComplete=TutorialData.Stage2411IsComplete, ExitCond = TutorialData.Stage2411ExitCond, Order=0,},
+            {Dir={index=TutorialType.RIGHT,x=530,y=-50}, EffectPos=nil, TxtPos = {Txt="选择城池"}, Begin=TutorialData.Stage2412Begin, End=TutorialData.Stage2412End, IsComplete=TutorialData.Stage2412IsComplete, ExitCond = TutorialData.Stage2412ExitCond},
+            {Dir={index=TutorialType.DOWN,x=0,y=0}, EffectPos=nil,TxtPos = {Txt="选择副本"},Begin=TutorialData.Stage2413Begin, End=TutorialData.Stage2413End, IsComplete=TutorialData.Stage5413IsComplete, ExitCond = TutorialData.Stage2413ExitCond},
+            {Dir={index=TutorialType.DOWN,x=350,y=200}, EffectPos=nil,TxtPos = {Txt="点击扫荡"},Begin=TutorialData.Stage5414Begin, End=TutorialData.Stage5414End, IsComplete=TutorialData.Stage5414IsComplete, ExitCond = TutorialData.Stage5414ExitCond},
+            {Dir={index=TutorialType.DOWN,x=630,y=380}, EffectPos=nil, TxtPos = {Txt="点击开始"},Begin=TutorialData.Stage6414Begin, End=TutorialData.Stage6414End, IsComplete=TutorialData.Stage6414IsComplete, ExitCond = TutorialData.Stage6414ExitCond},
+            --[[
+            {Dir={index=TutorialType.DOWN,x=710,y=380}, EffectPos=nil,TxtPos = {Txt="点击加速"},Begin=TutorialData.Stage7414Begin, End=TutorialData.Stage7414End, IsComplete=TutorialData.Stage7414IsComplete, ExitCond = TutorialData.Stage7414ExitCond},
+            ]]
             
         },
     },
@@ -3686,5 +4239,9 @@ p.DataInfo = {
 GameDataEvent.Register(GAMEDATAEVENT.USERSTAGEATTR,"p.TaskBegin",p.TaskBegin);
 ------------------------------------------------------------------------------------
 
+------------------------------------------------------------------------------------
+--战斗失败事件
+GameDataEvent.Register(GAMEDATAEVENT.BATTLE_LOSE_INFO,"p.BattleFailEvent",p.BattleFailEvent);
+------------------------------------------------------------------------------------
 
 

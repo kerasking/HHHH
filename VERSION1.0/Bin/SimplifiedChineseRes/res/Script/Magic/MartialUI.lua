@@ -19,6 +19,8 @@ p.mAlertMatrixCount     = 0;        -- 已出战人数
 
 p.nMainPetId            = 0;        --主角武将的ID
 
+p.TagMartialDescLayer        = 9172;     --布阵说明层
+p.TagDescTagCloseBtn       = 6;        --布阵说明层关闭
 p.PanelType = {
     Users = 1,--武将列表
     Staff = 2,--出战武将
@@ -50,6 +52,8 @@ local TagStaffDis       = {5,6};    --禁止点击图片
 local TagClose          = 533;      --关闭
 local TagDes            = 649;      --已出战人数描述
 local TagSkillList      = 1000;     --技能控件列表
+local TagMartialDesc    = 28;       --布阵说明
+
 
 local SkillDescFormat   = "";
 local TagSkillDesc = 26;    --技能描述
@@ -115,7 +119,9 @@ local USER_FLAG     = 5748;
 local USER_FLAG_DIS = 5749;
 
 --Const
-local StaffListItemSize = CGSizeMake(130.0*ScaleFactor, 65.0*ScaleFactor);
+--local StaffListItemSize = CGSizeMake(130.0*ScaleFactor, 65.0*ScaleFactor);
+local TAG_STAFFLIST_SIZE_PIC    = 100;
+
 local SKILL_RECT = CGSizeMake((40+TagListItem.edge)*ScaleFactor, 40*ScaleFactor);               -- 技能框大小
 
 function p.LoadUI()
@@ -186,6 +192,30 @@ function p.LoadUI()
 	uiLoad:Load("LayOut_SkillInfo.ini", skillInfoLayer, p.OnUIEventSkill, 0, 0);
     skillInfoLayer:SetVisible(false);
     
+    
+--------------------初始化布阵说明层（窗口）---------------------------------------
+    local descInfoLayer = createNDUILayer();
+	if descInfoLayer == nil then
+		return false;
+	end
+	descInfoLayer:Init();
+	descInfoLayer:SetTag(p.TagMartialDescLayer);
+	descInfoLayer:SetFrameRect(RectFullScreenUILayer);
+	layer:AddChildZ(descInfoLayer,1);
+    
+    local uiLoad = createNDUILoad();
+	if nil == uiLoad then
+		petInfoLayer:Free();
+		return false;
+	end
+	uiLoad:Load("LayOut_List.ini", descInfoLayer, p.OnUIEventDesc, 0, 0);
+    descInfoLayer:SetVisible(false);
+    
+    
+    
+    
+    
+    
     p.initData();
     
     p.refreshUI();
@@ -237,10 +267,12 @@ function p.ShowPetInfo(nPetId)
 	local sSpeed = RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SPEED);    --速度
 	local sSkill = RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SKILL);    --技能
     
-	local sPhyRate = p.GetUpdageRate(nPetType,DB_PET_CONFIG.ADD_PHYSICAL);
-    local sDexRate = p.GetUpdageRate(nPetType,DB_PET_CONFIG.ADD_SUPER_SKILL);
-    local sMagicRate = p.GetUpdageRate(nPetType,DB_PET_CONFIG.ADD_MAGIC);
-    local sLifeRate = p.GetUpdageRate(nPetType,DB_PET_CONFIG.ADD_LIFE);
+    
+    local bIsMainPet = RolePetFunc.IsMainPet(nPetId);
+	local sPhyRate = p.GetUpdageRate(nPetType,DB_PET_CONFIG.ADD_PHYSICAL,bIsMainPet);
+    local sDexRate = p.GetUpdageRate(nPetType,DB_PET_CONFIG.ADD_SUPER_SKILL,bIsMainPet);
+    local sMagicRate = p.GetUpdageRate(nPetType,DB_PET_CONFIG.ADD_MAGIC,bIsMainPet);
+    local sLifeRate = p.GetUpdageRate(nPetType,DB_PET_CONFIG.ADD_LIFE,bIsMainPet);
     
     
     --local sDesc = GetDataBaseDataS("pet_config", nPetType, DB_PET_CONFIG.DESCRIBE);
@@ -248,7 +280,10 @@ function p.ShowPetInfo(nPetId)
     local sDesc = GetDataBaseDataS("skill_config", RolePet.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_SKILL), DB_SKILL_CONFIG.DESCRRIPTION);
     
     
-    SetLabel(layer,TagPetInfoName,sName);
+    local l_name = SetLabel(layer,TagPetInfoName,sName);
+    ItemPet.SetLabelColor(l_name, nPetId);
+    
+    
     SetLabel(layer,TagPetInfoProfess,sProfess);
     SetLabel(layer,TagPetInfoLevel,sLevel);
     SetLabel(layer,TagPetInfoPhysical,sPhy);
@@ -285,9 +320,22 @@ function p.ShowPetInfo(nPetId)
     layer:SetVisible(true);
 end
 
-function p.GetUpdageRate(nPetType,nIndex)
-    local sPhyRate = (GetDataBaseDataN("pet_config", nPetType, nIndex)/1000).."%";
-    return sPhyRate;
+function p.GetUpdageRate( nPetType,nIndex,bIsMainPet )
+    local sPhyRate = GetDataBaseDataN("pet_config", nPetType, nIndex);
+    
+    if(bIsMainPet) then
+        if(nIndex == DB_PET_CONFIG.ADD_PHYSICAL) then
+            sPhyRate = sPhyRate + HeroStarUI.GetAttrValByType(5);
+        elseif(nIndex == DB_PET_CONFIG.ADD_SUPER_SKILL) then
+            sPhyRate = sPhyRate + HeroStarUI.GetAttrValByType(6);
+        elseif(nIndex == DB_PET_CONFIG.ADD_MAGIC) then
+            sPhyRate = sPhyRate + HeroStarUI.GetAttrValByType(7);
+        elseif(nIndex == DB_PET_CONFIG.ADD_LIFE) then
+            sPhyRate = sPhyRate + HeroStarUI.GetAttrValByType(8);
+        end
+    end
+    
+    return (sPhyRate/1000).."";
 end
 
 
@@ -330,6 +378,7 @@ function p.OnUIEventPet(uiNode, uiEventType, param)
 			local layer = p.GetPetInfoLayer();
             layer:SetVisible(false);
             p.PutData = {};
+        
         elseif(TagPetInfBtn == tag) then  
             local btn = ConverToButton(uiNode);
             local nPetId = btn:GetParam1();
@@ -389,6 +438,18 @@ function p.GetUserIndexByPetId(nPetId)
 end
 
 
+function p.OnUIEventDesc(uiNode, uiEventType, param)
+    local tag = uiNode:GetTag();
+    LogInfo("p.OnUIEventDesc[%d], event:%d!", tag, uiEventType);
+    if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+        if p.TagDescTagCloseBtn == tag then     
+			local layer = p.GetMartialDescLayer();
+            layer:SetVisible(false);
+        end
+    end
+    return true;
+end
+
 function p.OnUIEventSkill(uiNode, uiEventType, param)
     local tag = uiNode:GetTag();
     LogInfo("p.OnUIEventSkill[%d], event:%d!", tag, uiEventType);
@@ -420,9 +481,15 @@ end
 --获得查看武将信息层
 function p.GetPetInfoLayer()
     local layer = p.GetCurrLayer();
+    
+    if(layer == nil) then
+        return nil;
+    end
+    
     local petInfoLayer = GetUiLayer(layer, TagPetInfoLayer);
     if(nil == petInfoLayer) then
         LogInfo("p.GetPetInfoLayer petInfoLayer is nil!");
+        return nil;
     end
     return petInfoLayer;
 end
@@ -430,6 +497,9 @@ end
 --获得查看技能信息层
 function p.GetSkillInfoLayer()
     local layer = p.GetCurrLayer();
+    if(layer == nil) then
+        return nil;
+    end
     local skillInfoLayer = GetUiLayer(layer, TagSkillInfoLayer);
     if(nil == skillInfoLayer) then
         LogInfo("p.GetSkillInfoLayer skillInfoLayer is nil!");
@@ -466,6 +536,11 @@ function p.OnUIEvent(uiNode, uiEventType, param)
         if TagClose == tag then                           
 			p.freeData();
 			CloseUI(NMAINSCENECHILDTAG.PlayerMartial);
+        elseif TagMartialDesc == tag then
+            local layer = p.GetMartialDescLayer();
+            if( layer ) then
+                layer:SetVisible(true);
+            end
         else
             --set data
             local nIndexUser = p.isUserListBtn(uiNode);
@@ -1049,6 +1124,8 @@ function p.initData()
         end
     end
     
+    p.AllUsers = RolePet.OrderPets(p.AllUsers);
+    
     
     --获得出战人员列表
 	local lst, count    = MsgMagic.getRoleMatrixList();
@@ -1091,6 +1168,7 @@ function p.refreshAllUser()
     local container = p.GetStaffListContainer();
     container:RemoveAllView();
     container:SetViewSize(StaffListItemSize);
+    container:EnableScrollBar(true);
     
     local rows = math.ceil(#p.AllUsers/2);
     
@@ -1108,7 +1186,6 @@ function p.refreshAllUser()
         view:SetMovableViewer(container);
         view:SetScrollViewer(container);
         view:SetContainer(container);
-        container:AddView(view);
         
         --初始化ui
         local uiLoad = createNDUILoad();
@@ -1117,9 +1194,14 @@ function p.refreshAllUser()
             return false;
         end
         uiLoad:Load("LayOut_L.ini", view, p.OnUIEvent, 0, 0);
+        
+        --设置大小
+        
         p.refreshUserItem(i*2-1, view);
         p.refreshUserItem(i*2, view);
         uiLoad:Free();
+        
+        container:AddView(view);
     end
 end
 
@@ -1138,6 +1220,8 @@ function p.refreshUserItem(index,view)
     local dispic = GetImage(view, TagStaffDis[itemPos]);
     --local disbtn = GetButton(view, TagStaffDisBtn[itemPos]);
     
+    local PicRect = GetImage(view, TAG_STAFFLIST_SIZE_PIC);
+    container:SetViewSize(PicRect:GetFrameRect().size);
     
     if(btn == nil) then
         return;
@@ -1283,10 +1367,10 @@ function p.setSkillChecked(skill)
         
         if(diff>=cols) then
             LogInfo("chh_tot:[%d],cur:[%d],diff:[%d],index1:[%d]",tot,cur,diff,cur-1);
-            container:ScrollViewByIndex(cur-1-2);
+            container:ShowViewByIndex(cur-1-2);
         else
             LogInfo("chh_tot:[%d],cur:[%d],diff:[%d],index2:[%d]",tot,cur,diff,tot-cols);
-            container:ScrollViewByIndex(tot-maxCols);
+            container:ShowViewByIndex(tot-maxCols);
         end
     end
     
@@ -1497,16 +1581,6 @@ end
 
 --获得出手顺序
 function p.GetOrderByPetId()
-    --[[
-    local nOrder = 0;
-    local nCurrPetIdSpeed = RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_SPEED);
-    for i,v in ipairs(p.MartialUsers) do
-        local nPetSpeed = RolePet.GetPetInfoN(v, PET_ATTR.PET_ATTR_SPEED);
-        if(nPetSpeed>nCurrPetIdSpeed) then
-            nOrder = nOrder + 1;
-        end
-    end
-    ]]
     
     local MartialPetIds = {};
     for i,v in ipairs(p.MartialUsers) do
@@ -1514,37 +1588,13 @@ function p.GetOrderByPetId()
             table.insert(MartialPetIds,v);
         end
     end
-    
-    --只有主角一个人
-    if(#MartialPetIds<=1) then
-        OrderPetIds = {};
-        OrderPetIds[MartialPetIds[1]]=1;
-        return OrderPetIds;
-    end
-    
-    
-    LogInfo("MartialPetIds Begin");
-    for i,v in ipairs(MartialPetIds) do
-        LogInfo("v:[%d]",v);
-    end
-    LogInfo("MartialPetIds End");
-    
-    local nTempPetId;
-    for i,v in ipairs(MartialPetIds) do
-        local nPetSpeedI = RolePet.GetPetInfoN(v, PET_ATTR.PET_ATTR_SPEED);
-        for j=i,#MartialPetIds do
-            local nPetSpeedJ = RolePet.GetPetInfoN(MartialPetIds[j], PET_ATTR.PET_ATTR_SPEED);
-            if(nPetSpeedI<nPetSpeedJ) then
-                nTempPetId = MartialPetIds[i];
-                MartialPetIds[i] = MartialPetIds[j];
-                MartialPetIds[j] = nTempPetId;
-            end
-        end
-    end
+        
+    MartialPetIds = RolePet.OrderSpeedPets(MartialPetIds);
     
     local OrderPetIds = {};
     for i,v in ipairs(MartialPetIds) do
         OrderPetIds[v] = i;
+        LogInfo("chh_i:[%d],speed:[%d],v:[%d]",i,v,RolePet.GetPetInfoN(v, PET_ATTR.PET_ATTR_SPEED));
     end
     
     return OrderPetIds;
@@ -1651,5 +1701,21 @@ function p.GetCurrLayer()
 		return nil;
 	end
     return layer;
+end
+
+--获得布阵说明层
+function p.GetMartialDescLayer()
+    
+    local layer = p.GetCurrLayer();
+    if( layer == nil ) then
+        return nil;
+    end
+    
+    local desc_layer = GetUiLayer(layer, p.TagMartialDescLayer);
+    if( desc_layer == nil ) then
+        return nil;
+    end
+    
+    return desc_layer;
 end
 

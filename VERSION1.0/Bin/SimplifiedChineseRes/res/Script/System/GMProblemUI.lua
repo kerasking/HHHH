@@ -141,7 +141,7 @@ function p.LoadUI()
 
 	uiLoad:Free();
 	
-	p.SetBtnSelStatus(layer);
+	--p.SetBtnSelStatus(layer);
 	
 	p.GetSendGMLayer();
 	
@@ -152,6 +152,8 @@ function p.LoadUI()
    	local closeBtn=GetButton(layer,ID_GM_CTRL_BUTTON_14);
    	closeBtn:SetSoundEffect(Music.SoundEffect.CLOSEBTN);
  
+ 	p.RefreshWithButtonTag( ID_GM_CTRL_CHECK_BUTTON_16 );
+
 end
 
 
@@ -261,7 +263,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 			
 			local sendlayer = p.GetSendGMLayer();
 			sendlayer:SetVisible(true);
-			
+			p.RefreshWithButtonTag( tag )
 			
 		elseif tag == ID_GM_CTRL_CHECK_BUTTON_17 then
 			--查看问题回复
@@ -270,6 +272,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 			
 			local sendlayer = p.GetSendGMLayer();
 			sendlayer:SetVisible(false);
+			p.RefreshWithButtonTag( tag )
 			
 			--发送msg查看消息
 			_G.MsgProFeedback.CheckProFeedback();
@@ -277,6 +280,30 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 	end
 	
 	return true;
+end
+
+
+function p.RefreshWithButtonTag( nTag )
+
+	local layer = p.GetParent();
+	local btnSelStatus = RecursiveCheckBox(layer, {ID_GM_CTRL_CHECK_BUTTON_16});
+	local btnUnSelStatus = RecursiveCheckBox(layer, {ID_GM_CTRL_CHECK_BUTTON_17});
+	
+	if CheckP(btnSelStatus) == false then
+		LogInfo("p.RefreshWithButtonTag btnSelStatus nil")
+	end
+
+	if CheckP(btnUnSelStatus) == false then
+		LogInfo("p.RefreshWithButtonTag btnUnSelStatus nil")
+	end 
+		
+	if ( ID_GM_CTRL_CHECK_BUTTON_16 == nTag ) then
+		btnSelStatus:SetSelect( true );
+		btnUnSelStatus:SetSelect( false );
+	elseif ( ID_GM_CTRL_CHECK_BUTTON_17 == nTag ) then
+		btnSelStatus:SetSelect( false );
+		btnUnSelStatus:SetSelect( true );
+	end
 end
 
 
@@ -534,7 +561,22 @@ function p.GetCheckGMLayer()
 	end	
 end
 
+function p.ResetContent()
+	if CheckP(scroll) then
+		scroll:RemoveFromParent(true);
+	end
+	
+	local rect  = CGRectMake(69*ScaleFactor, 35*ScaleFactor, 330*ScaleFactor, 182*ScaleFactor);
+	local scrollrect = CGRectMake(0.0, 0.0, 330*ScaleFactor, 182*ScaleFactor);
+	scroll = createUIScroll();
 
+	scroll:Init(true);
+	scroll:SetFrameRect(scrollrect);
+	scroll:SetScrollStyle(UIScrollStyle.Verical);
+	scroll:SetMovableViewer(container);
+	scroll:SetContainer(container);
+	container:AddChild(scroll);				
+end
 
 function p.ShowPlayerName(strPlayerName)
 	p.CreateText(strPlayerName, 192)

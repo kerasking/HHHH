@@ -78,13 +78,13 @@ function p.ProcessUserInfo(netdata)
 	local usRecharge	= netdata:ReadInt();                            --充值金币数	 
     local usGuideStage	= netdata:ReadInt();
 
-    local nResetCount			= netdata:ReadByte();                 --精英副本已重置的次数--与服务端同步更新--
+    local nResetCount			= netdata:ReadInt();                 --精英副本已重置的次数--与服务端同步更新--
     
     
     
     local usSaveMoney			= netdata:ReadInt();                    --装备强化暴击节省银币数	
     local usCritCount			= netdata:ReadInt();                    --装备强化暴击累加次数
-    
+    local usQuality             = netdata:ReadByte();
     
     
     
@@ -118,6 +118,7 @@ function p.ProcessUserInfo(netdata)
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_HAVE_BUY_STAMINA, usBoughtStamina);
     SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_RANK, unRank);
     SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_INSTANCING_RESET_COUNT, nResetCount);	
+
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_BUYED_GEM, usBuyedGem);
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_EQUIP_QUEUE_COUNT, cEquipCdCount);
 	SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME1, usEquipTime1);
@@ -128,18 +129,22 @@ function p.ProcessUserInfo(netdata)
     --** chh 2012-08-17 **--
     SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_EQUIP_CRIT_SAVE_MONEY, usSaveMoney);
     SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_EQUIP_CRIT_COUNT, usCritCount);
-    
+    SetRoleBasicDataN(idUser, USER_ATTR.USER_ATTR_AUTO_EXERCISE, usQuality);
 	
 	--++Guosen 2012.7.15
 	local nRideStatus	= usEquipTime2;
 	local nMountType	= usEquipTime3;
-	CreatePlayerWithMount( idLookface, usRecordX, usRecordY, idUser, strName, nRideStatus, nMountType );
+	CreatePlayerWithMount( idLookface, usRecordX, usRecordY, idUser, "★"..strName, nRideStatus, nMountType );
 	
     GameDataEvent.OnEvent(GAMEDATAEVENT.USERSTAGEATTR);
     
-    MsgLoginSuc.setMobileKey( GetDeviceToken() );
-
+    local szDeviceToken = GetDeviceToken();
+    if ( szDeviceToken ~= nil and szDeviceToken ~= "" ) then
+    	MsgLoginSuc.setMobileKey( GetDeviceToken() );
+    end
     
+    --** 设置主角名称颜色 *＊--
+    SetPlayerNameColorByQuality(usQuality);
 	return 1;
 end
 
@@ -176,6 +181,11 @@ function p.ProcessUserInfoUpdate(netdata)
 			end
 			
 		end
+        
+        if nAttr ==  USER_ATTR.USER_ATTR_AUTO_EXERCISE then
+             --** 设置主角名称颜色 *＊--
+            SetPlayerNameColorByQuality(nAttrData);
+        end
 
 
 		LogInfo("qbw: user info update nAttr"..nAttr.."  DATA:"..nAttrData);
@@ -192,6 +202,8 @@ function p.ProcessUserInfoUpdate(netdata)
 	if 0 < #datalist then
 		GameDataEvent.OnEvent(GAMEDATAEVENT.USERATTR, datalist);
 	end
+    
+   
 end
 
 RegisterNetMsgHandler(NMSG_Type._MSG_USERINFO, "p.ProcessUserInfo", p.ProcessUserInfo);

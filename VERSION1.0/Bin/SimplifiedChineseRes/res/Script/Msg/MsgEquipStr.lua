@@ -32,13 +32,15 @@ function p.ProcessEquipStrInfo(netdatas)
 	    LogInfo("Recv equipId[%d] actionId[%d]", nEquipId, nAction);  
 	end	
     
-    nStuffId = Item.GetItemInfoN(nEquipId, Item.ITEM_ADDITION);
+    --nStuffId = Item.GetItemInfoN(nEquipId, Item.ITEM_ADDITION);
     --Item.SetItemInfoN(nEquipId, Item.ITEM_ADDITION, nStuffId);
     
     
     local m = {};
     m.EquipId = nEquipId;
     m.StuffId = nStuffId;
+    
+    LogInfo("m.StuffId:[%d]",m.StuffId);
     
     CloseLoadBar();
 	if nAction == MSG_EQUIP_IM_ENHANCE then

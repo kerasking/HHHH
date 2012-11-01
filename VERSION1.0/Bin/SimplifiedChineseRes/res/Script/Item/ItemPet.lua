@@ -86,3 +86,60 @@ function p.GetItemList(nRoleId, nPetId, e)
 	idlist = _G.GetRoleDataIdTable(NScriptData.eRole, nRoleId, NRoleData.ePet, nPetId, e);
 	return idlist;
 end
+
+--获得武将品质
+function p.GetPetQualityCCC4(nPetTypeId)
+    return GetDataBaseDataN("pet_config", nPetTypeId, DB_PET_CONFIG.QUALITY);
+end
+
+--** 获得武将颜色 **--
+function p.GetPetQuality(nPetId)
+    LogInfo("ItemPet.GetPetQuality");
+    local bIsMainPet = RolePetFunc.IsMainPet(nPetId);
+    local cColor4;
+    local nQuality;
+    if(bIsMainPet) then
+        --nQuality = GetRoleBasicDataN(GetPlayerId(), USER_ATTR.USER_ATTR_AUTO_EXERCISE);
+        nQuality = RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_QUALITY);
+        LogInfo("chh_p.GetPetQuality nQuality:[%d]",nQuality);
+    else
+        local nPetTypeId = RolePet.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_TYPE);
+        nQuality = p.GetPetQualityCCC4(nPetTypeId);
+    end
+    
+    LogInfo("ItemPet.GetPetQuality nQuality:[%d]",nQuality);
+    cColor4 = p.GetQuality(nQuality);
+    return cColor4;
+end
+
+function p.GetPetConfigQuality(nPetTypeId)
+    local nQuality = p.GetPetQualityCCC4(nPetTypeId);
+    local cColor4 = p.GetQuality(nQuality);
+    return cColor4;
+end
+
+function p.SetLabelColor(label, nPetId) 
+    if(label == nil) then
+        LogInfo("p.SetLabelColor label is nil!");
+        return;
+    end
+    label:SetFontColor(p.GetPetQuality(nPetId));
+end
+
+function p.SetLabelByQuality(label, nQuality)
+    if(label == nil) then
+        LogInfo("p.SetLabelByQuality label is nil!");
+        return;
+    end
+    local cColor4 = p.GetQuality(nQuality);
+    label:SetFontColor(cColor4);
+end
+
+
+function p.GetQuality(nQuality)
+    local cColor4 = ItemColor[nQuality];
+    if(cColor4 == nil) then
+        cColor4 = ItemColor[0];
+    end
+    return cColor4;
+end

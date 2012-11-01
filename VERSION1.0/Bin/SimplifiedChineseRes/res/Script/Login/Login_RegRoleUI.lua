@@ -170,7 +170,7 @@ function p.InitUI()
     local pNameEditUiNode = RecursiveUINode(p.getUiLayer(),{ID_ROLE_EDIT_NAME});
     local pNameEdit = ConverToEdit(pNameEditUiNode);
     if CheckP(pNameEdit) then
-        pNameEdit:SetMaxLength(10);
+        pNameEdit:SetMaxLength(5);
         pNameEdit:SetMinLength(2);
     end
 
@@ -226,6 +226,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             p.RandName();
         elseif tag == ID_ROLE_BACK then
             Login_ServerUI.LoadUI();
+            Login_ServerUI.LoginGameNew()
         else
             local nProfNum = table.getn(p.BtnTagList);
             for i=1, nProfNum do

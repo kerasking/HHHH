@@ -111,7 +111,10 @@ function p.GetTaskDataProcessStr(nTaskId, nIndex)
 end
 
 function p.GetTaskDataTip(nTaskId, nIndex)
+	
 	local cellDatas = p.GetTaskConfigData(nTaskId, nIndex);
+
+	
 	if not CheckT(cellDatas) or 0 == table.getn(cellDatas) then
 		LogInfo("p.GetTaskDataTip null");
 		return "";
@@ -152,7 +155,7 @@ function p.GetTaskConfigData(nTaskId, nIndex)
 		LogInfo("p.GetTaskConfigData invalid arg");
 		return cellDatas;
 	end
-	
+
 	cellDatas[TASK_CEL_DATA.SM_TASK_CELL_TYPE] = 
 	GetGameDataN(NScriptData.eTaskConfig, nTaskId, NRoleData.ePet, nIndex, TASK_CEL_DATA.SM_TASK_CELL_TYPE);
 
@@ -311,13 +314,17 @@ function p.GoToDynMap(nMapId,nState,nTrackType)
 			local nDesMapId, nPassWayIndex	= AffixBossFunc.GetDynMapPassWay(nPlayerMapId);
 			
 			local nCellX, nCellY	= AffixBossFunc.GetMapPortal(nPlayerMapId, nPassWayIndex);
+			
+			
 			if CheckN(nCellX) and CheckN(nCellY) and 0 ~= nCellX and 0 ~= nCellY then
 				mInGoToState		= false;
 				mInGoToStateSwitch	= true;
 				mPassWayIndex		= nPassWayIndex;
 				mGoToDynMapId		= nMapId;
 				
-				if nTrackType == 1 then
+				
+				if g_nTrackType == 1 or g_nTrackType == 2 then
+					LogInfo("p.GoToDynMap set maintaskboss:"..nMapId)
 					mMainTaskBossId		= nMapId;
 				end
 				

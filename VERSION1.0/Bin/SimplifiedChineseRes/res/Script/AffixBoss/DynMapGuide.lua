@@ -94,26 +94,51 @@ function p.OnUIEvent(uiNode,uiEventType,param)
 		elseif ID_DYNMAPGUIDE_CTRL_BUTTON_GUIDE1 == tag then
             LogInfo("BUTTON_GUIDE1");
 			if p.battleId[1] ~= 0 then
+               if IsUIShow(NMAINSCENECHILDTAG.BattleFail) then
+                    CloseUI(NMAINSCENECHILDTAG.BattleFail);
+                    MsgAffixBoss.sendNmlLeave();
+               end
+               ShowLoadBar();
 				_G.MsgArena.SendWatchBattle(p.battleId[1]);
 			end
 		elseif ID_DYNMAPGUIDE_CTRL_BUTTON_GUIDE2 == tag then
             LogInfo("BUTTON_GUIDE2");
 			if p.battleId[2] ~= 0 then
+                if IsUIShow(NMAINSCENECHILDTAG.BattleFail) then
+                    CloseUI(NMAINSCENECHILDTAG.BattleFail);
+                    MsgAffixBoss.sendNmlLeave();
+                end
+                ShowLoadBar();
 				_G.MsgArena.SendWatchBattle(p.battleId[2]);
 			end
 		elseif ID_DYNMAPGUIDE_CTRL_BUTTON_GUIDE3 == tag then
             LogInfo("BUTTON_GUIDE3");
 			if p.battleId[3] ~= 0 then
+                if IsUIShow(NMAINSCENECHILDTAG.BattleFail) then
+                    CloseUI(NMAINSCENECHILDTAG.BattleFail);
+                    MsgAffixBoss.sendNmlLeave();
+                end
+                ShowLoadBar();
 				_G.MsgArena.SendWatchBattle(p.battleId[3]);
 			end
 		elseif ID_DYNMAPGUIDE_CTRL_BUTTON_GUIDE4 == tag then
             LogInfo("BUTTON_GUIDE4");
 			if p.battleId[4] ~= 0 then
+                if IsUIShow(NMAINSCENECHILDTAG.BattleFail) then
+                    CloseUI(NMAINSCENECHILDTAG.BattleFail);
+                    MsgAffixBoss.sendNmlLeave();
+                end
+                ShowLoadBar();
 				_G.MsgArena.SendWatchBattle(p.battleId[4]);
 			end
 		elseif ID_DYNMAPGUIDE_CTRL_BUTTON_GUIDE5 == tag then
             LogInfo("BUTTON_GUIDE5");
 			if p.battleId[5] ~= 0 then
+                if IsUIShow(NMAINSCENECHILDTAG.BattleFail) then
+                    CloseUI(NMAINSCENECHILDTAG.BattleFail);
+                    MsgAffixBoss.sendNmlLeave();
+                end
+                ShowLoadBar();
 				_G.MsgArena.SendWatchBattle(p.battleId[5]);
 			end
 		end

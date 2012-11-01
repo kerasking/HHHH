@@ -122,7 +122,8 @@ function p.GetAttrDesc(nPlayerId, nIndex,nFriendId)
 		strRes	= GetRoleFriendDataN(nPlayerId, FRIEND_DATA.FRIEND_SPORTS,nFriendId);
 	elseif 	nIndex == FRIEND_DATA.FRIEND_CAPACITY then
 		strRes	= GetRoleFriendDataN(nPlayerId, FRIEND_DATA.FRIEND_CAPACITY,nFriendId);
-		
+    elseif 	nIndex == FRIEND_DATA.FRIEND_QUALITY then
+		strRes	= GetRoleFriendDataN(nPlayerId, FRIEND_DATA.FRIEND_QUALITY,nFriendId);
 	end
 	
 	return strRes;

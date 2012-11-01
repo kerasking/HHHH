@@ -8,12 +8,38 @@ MsgShop = {};
 local p = MsgShop;
 local _G = _G;
 
+p.GroupType = {
+    MYSTERIOUS      = 1,        --商人
+    SMITH           = 2,        --铁匠
+}
+
+
 p.mUIListener = nil;
 
 p.mGoodsList = {};
 
 function p.getGoodsList()
     return p.mGoodsList;
+end
+
+function p.GetMySteriousGoodsList()
+    local m = {};
+    for i,v in ipairs(p.mGoodsList) do
+        if(v.GROUP == p.GroupType.MYSTERIOUS) then
+            table.insert(m,v);
+        end
+    end
+    return m;
+end
+
+function p.GetSmithGoodsList()
+    local m = {};
+    for i,v in ipairs(p.mGoodsList) do
+        if(v.GROUP == p.GroupType.SMITH) then
+            table.insert(m,v);
+        end
+    end
+    return m;
 end
 
 function p.processRefreshShop(netdata)
@@ -29,6 +55,7 @@ function p.processRefreshShop(netdata)
 		item.TYPE = netdata:ReadInt();
 		item.ID = netdata:ReadInt();
         item.BUY_TYPE = netdata:ReadByte();  --够买类型（0.银币 1.金币）
+        item.GROUP = netdata:ReadByte();    --购买类型
         table.insert(lst,item);
 	end
 	
@@ -47,8 +74,8 @@ function p.sendBuy(nItemType, nNum)
 	end
 	
 	netdata:WriteInt(nItemType);
-	netdata:WriteInt(-2);
-	netdata:WriteByte(1);
+	netdata:WriteInt(-2);       --购买地方 -1铁匠 -2神秘商人
+	netdata:WriteInt(1);
 	nNum = nNum or 1;
 	netdata:WriteInt(nNum);
 	SendMsg(netdata);
@@ -63,19 +90,24 @@ function p.sendBuyResult(netdata)
     local nItemType = netdata:ReadInt();
     local nIdGood = netdata:ReadInt();
     local nNpc = netdata:ReadInt();
-    
-    local nBuy = netdata:ReadByte();
-    local nCount = netdata:ReadByte();
+    local nBuy = netdata:ReadInt();
+    local nCount = netdata:ReadInt();
     LogInfo("nItemType:[%d],nIdGood:[%d],nNpc:[%d],nBuy:[%d],nCount:[%d]",nItemType,nIdGood,nNpc,nBuy,nCount);
+    
+    nCount = nBuy;
+    
     local m = {};
     m.nItemType = nItemType;
     m.nBuy = nBuy;
     m.nCount = nCount;
     
+    
+    
     if(p.mUIListener) then
 		p.mUIListener(NMSG_Type._MSG_SHOP,m);
 	end
 	
+    
 	--引导任务事件触发
 	GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.BUY_ITEM,nItemType);
 

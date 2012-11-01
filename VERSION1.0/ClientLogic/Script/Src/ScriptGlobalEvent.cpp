@@ -45,6 +45,12 @@ bool RegisterGlobalEventHandler(int nEvent, const char* funcname, LuaObject func
 		nEvent,
 		funcname);
 
+	static int i = 0;
+	if (nEvent == 100)
+	{
+		i ++;
+	}
+
 	mapGlobalEventHandler.insert(GLOBALEVENTVT(GLOBALEVENT(nEvent), func));
 
 		return true;
@@ -66,6 +72,10 @@ void ScriptGlobalEvent::OnEvent(GLOBALEVENT eEvent, int param1, int param2, int 
 	std::pair<GLOBALEVENTCIT, GLOBALEVENTCIT> range;
 	range = mapGlobalEventHandler.equal_range(eEvent);
 
+	if (eEvent == 100)
+	{
+		int i = 2;
+	}
 	for (GLOBALEVENTCIT i = range.first; i != range.second; i++) 
 	{
 		LuaObject fun = i->second;

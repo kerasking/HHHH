@@ -374,7 +374,8 @@ function p.LoginOK_Guest2Normal( nAccountID )
 end
 
 function p.LoginError( nErrorCode )
-	if ( p.GetUILayer() == nil ) then
+	
+    --[[if ( p.GetUILayer() == nil ) then
 		LogInfo( "Update: LoginError() failed! layer is nil" );
 		return;
 	end
@@ -382,6 +383,8 @@ function p.LoginError( nErrorCode )
 	p.pLabelPromtp:SetVisible(true);
 	p.pLabelPromtp:SetText( szError );
 	p.pLabelPromtp:SetFontColor( ccc4(255,0,0,255) );
+    --]]
+    LogInfo( "Update: LoginError() failed! "..nErrorCode );
 end
 
 ---------------------------------------------------
@@ -390,6 +393,6 @@ end
 --RegisterGlobalEventHandler( GLOBALEVENT.GE_LOGINOK_GUEST, "Update.LoginOK_Guest", p.LoginOK_Guest );
 --RegisterGlobalEventHandler( GLOBALEVENT.GE_LOGINOK_NORMAL, "Update.LoginOK_Normal", p.LoginOK_Normal );
 --RegisterGlobalEventHandler( GLOBALEVENT.GE_LOGINOK_GUEST2NORMAL, "Update.LoginOK_Guest2Normal", p.LoginOK_Guest2Normal );
---RegisterGlobalEventHandler( GLOBALEVENT.GE_LOGINERROR, "Update.LoginError", p.LoginError);
+RegisterGlobalEventHandler( GLOBALEVENT.GE_LOGINERROR, "Update.LoginError", p.LoginError);
 
 --RegisterNetMsgHandler( NMSG_Type._MSG_CLIENT_VERSION, "Update.OnMsg_CheckVersion", p.OnMsg_CheckVersion );

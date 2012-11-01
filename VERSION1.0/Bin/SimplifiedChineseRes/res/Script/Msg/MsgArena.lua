@@ -41,10 +41,8 @@ function p.ProcessArenaInfo(netdatas)
     LogInfo("+++++++++++++++cdTime[%d]+++++++++++++++++",cdTime);
 	local awardTime=netdatas:ReadInt();
     --LogInfo("+++++++++++++++awardTime[%d]+++++++++++++++++",awardTime);
-	local awardMoney=netdatas:ReadInt();
-    --LogInfo("+++++++++++++++awardMoney[%d]+++++++++++++++++",awardMoney);
-	local awardRepute=netdatas:ReadInt();
-    --LogInfo("+++++++++++++++awardRepute[%d]+++++++++++++++++",awardRepute);
+	netdatas:ReadInt();
+	netdatas:ReadInt();
     local winCount=netdatas:ReadInt();
     --LogInfo("+++++++++++++++winCount[%d]+++++++++++++++++",winCount);
 	local userCount=netdatas:ReadByte();
@@ -61,11 +59,12 @@ function p.ProcessArenaInfo(netdatas)
     end
         
 	if not IsUIShow(NMAINSCENECHILDTAG.Arena) then
+        CloseLoadBar();
 		ArenaUI.LoadUI();		
 	end
 	
     ArenaUI.RefreshUI();
-	ArenaUI.SetAwardInfo(awardTime,awardMoney,awardRepute);
+	ArenaUI.SetTimerNum(awardTime);
 	
 	ArenaUI.SetSelfInfo(rank,restCount,addedCount,cdTime,winCount);
 	
@@ -110,19 +109,21 @@ end
 
 function p.ProcessArenaRankInfo(netdatas)
      LogInfo("+++++++++++++++p.ProcessArenaRankInfop.ProcessArenaRankInfo+++++++++++++++++")
+    if not IsUIShow(NMAINSCENECHILDTAG.ArenaRank) then   
         ArenaRankUI.LoadUI();
+    end
 
 	local flag = netdatas:ReadByte();
 	local count = netdatas:ReadByte();
 	--count=4;
-	for i=1,count do
+	for i=1, count do
 		LogInfo("ArenaRank:%d",i);
 		local id = netdatas:ReadInt();
 		local level = netdatas:ReadShort();
 		local rank = netdatas:ReadInt();
 		local power = netdatas:ReadInt();
 		local name = netdatas:ReadUnicodeString();
-		LogInfo(name..":%d,%d,%d,%d",id,level,rank,power);
+		LogInfo("count = %d, name = %s, id = %d, level = %d, rank = %d, power = %d",count, name, id,level,rank,power);
 		ArenaRankUI.SetRankInfo(rank,name,level,power,id);
 	end
 end

@@ -755,7 +755,8 @@ DB_ITEMTYPE=
 	FORMULA_EMONEY	=30,
 	ORIGIN_MAP	=31,
 	ENHANCED_ID	=32,
-	SOCKET_LIMIT = 33
+	SOCKET_LIMIT = 33,
+    QUALITY     = 34
 };
 
 DB_LEAVEWORD=
@@ -1285,11 +1286,16 @@ DB_SKILL_RESULT_CFG=
 };
 
 
+--静态表sports_prize
 DB_SPORTS_PRIZE=
 {
-	RANKING	=0,
-	MONEY	=1,
-	REPUTE	=2
+    ID = 0,       
+	RANKING	= 1,       --排名
+	MONEY	    = 2,        --银币
+	REPUTE	    = 3,        --声望
+    STAMINA    = 4,        --军令
+    ITEM           = 5,        --物品
+    EMONEY    = 6        --金币 
 };
 
 DB_SPORTS_REPORT=
@@ -1780,6 +1786,7 @@ DB_PET_CONFIG=
 	REQ_VIP				=36,	-- VIPµ»º∂
 	REQ_LEVEL			=37,	
 	BODY_PIC			=38,	--半身像
+    QUALITY             =39,    --武将品质
 };
 --++ Guosen ++-- 2012.6.2
 DB_RANK_CONFIG=
@@ -1842,6 +1849,7 @@ DB_VIP_CONFIG=
     BAG_NUM                 =12,    --背包
     ENHANCE_CRIT_FLAG       =13,    --是否开启暴击功能
     ENHANCE_REDUCE_PECENT   =14,    --节约强化费的百分比
+    FIGHT_AUTO              =15,    --自动战斗（boss战，大乱斗等自动战斗开启）
 };
 
 DB_VIP_CONFIG_EQUIP_EDU = {
@@ -1882,4 +1890,137 @@ PriceType = {
     Sliver  = 0,        --银币
     Coin    = 1,        --金币
 };
+
+--礼包类型表
+DB_BOX_TYPE=
+{
+    ID              = 0,
+    NAME            = 1,
+    MONEY           = 2,
+    EMONEY          = 3,
+    ITEMNUM         = 4,
+    BIND_FLAG       = 5,
+};
+
+
+--静态表event_config 字段说明表
+DB_EVENT_CONFIG = 
+{
+	ID = 0,			                --活动ID
+    NAME = 1,                  --活动名字
+	TYPE = 2,                    --活动类型
+    UI_GROUP = 3,         --分类(值相同都同时在一个界面当中)
+	TIME_TYPE = 4,	       --活动时间类型
+	TIME_BEGIN = 5,	   --活动开始时间
+	TIME_END = 6,	       --活动结束时间
+	CONTENT = 7,	           --活动内容
+	BROAD = 8,		          --活动开始广播内容
+    SERVERID = 9,            --活动对应的服务器id
+};
+
+
+--静态表 event_award字段说明表
+DB_EVENT_AWARD = 
+{
+	ID = 0,
+	CONFIG_ID = 1,		              --对应DB_EVENT_CONFIG表ID
+	STAGE = 2,		                      --活动阶段
+    STAGE_CONDITION = 3,     --阶段条件
+	ITEM_TYPE = 4,		              --物品奖励
+	ITEM_AMOUNT = 5,	              --物品数
+	EMONEY = 6,		                  --金币
+	STAMINA = 7,		                  --军令
+	MONEY = 8,		                      --银币
+	SOPH = 9,		                          --将魂
+	REPUTE = 10,		                      --声望
+	PARAM1 = 11,	                          --活动参数
+	PARAM2 = 12,
+	PARAM3 = 13,
+};
+
+
+--静态表 grain_static 字段说明表
+DB_GRAIN_STATIC = 
+{
+	ID = 0,
+	LOOT_MAX = 1,		                            --截粮次数上限
+	BE_LOOT_MAX = 2,		                    --单次被截上限
+    ESCORT_MAX = 3,                            --护送次数上限
+	REFRESH_MAX = 4,		                    --刷新粮车品质次数上限
+	QUICK_ESCORT_AWARD_BASE = 5,	   --快速护送所需金币基础值
+	QUICK_ESCORT_AWARD_GROW = 6,  --快速护送所需金币乘以时间的基础值
+	REFRESH_CAR_NEED_BASE = 7,	--刷新粮车所需金币基础值
+	REFRESH_CAR_NEED_GROW = 8,  --刷新粮车所需金币乘以时间的基础值    
+ 	CLEAE_ESCORT_CDTIME_BASE = 9,	   --去除拦截冷却时间所需金币基础值
+	CLEAE_ESCORT_CDTIME_GROW = 10,  --去除拦截冷却时间所需金币乘以时间的基础值
+    CALL_MAX_CAR_NEED_BASE = 11,               --召唤粮车所需金币
+    ENCOURAGE_PER_PERCENT = 12,                --每次鼓舞士气加成百分比
+    ENCOURAGE_MAX = 13,                                  --士气加成最高点  
+    ENCOURAGE_NEED_BASE = 14,                    --每次鼓舞士气所需金币
+    BE_LOOT_BENIFIT_PERCENT = 15,              --每次被截粮降收益百分比
+    LOOT_GRAIN_CD = 16,                                  --拦截冷却时间
+    SEE_PERSON_NUM = 17,                              --屏幕可视人数   
+    FUNC_REQ_LEVEL = 18,                              --运粮活动所需等级       
+};
+
+--静态表 grain_config字段说明表
+DB_GRAIN_CONFIG = 
+{
+	ID = 0,                                             --粮车类型
+	NAME = 1,		                                --粮车名字
+	UP_PECENT = 2,		                    --成功刷新几率
+    LAST_TIME = 3,                             --运送粮车持续时间
+	AWARD_REPUTE = 4,		              --奖励声望
+	AWARD_MONEY_BASE = 5,	           --奖励银币基础
+	AWARD_MONEY_GROW = 6,		   --奖励银币因子
+	AWARD_EMONEY_BASE = 7,		   --奖励金币基础
+	AWARD_EMONEY_GROW = 8,		   --奖励金币因子
+	AWARD_SOPH = 9,		                  --奖励将魂
+	AWARD_STAMINA = 10,		         --奖励军令
+	AWARD_ITEM_TYPE = 11,	          --奖励物品类型
+	AWARD_ITEM_COUNT = 12,          --奖励物品数量
+	BE_LOOT_ITEM_ODDS_PERCENT = 13,   --物品被截时掉落概率
+};
+
+
+--静态表 event_activity字段说明表
+DB_EVENT_ACTIVITY = 
+{
+	ID = 0,                                              --活动id
+	NAME = 1,		                                 --活动名字
+	ICON = 2,                                         --活动图标
+    TYPE = 3,                                         --活动类型
+	GROUP = 4,		                              --活动分组  1:世界活动  2:帮派活动
+	TIME_TYPE = 5,	                              --时间类型  0:指定日期 1:每天 2:每周 3:每月
+	BEGIN_DAY = 6,		                          --时间点  如果time_type为0则为起始日期 其他...
+    END_DAY = 7,                                  --结束时间点
+    POINT_TIME = 8,                             --开始的时间点
+    CONTINOUANS = 9,                        --持续的时间
+    DATA1 = 10,              
+    DATA2 = 11,    
+    DATA3 = 12,    
+    DESCRIBE= 13,                               --活动说明          
+};
+
+
+--boss战活动 字段说明
+DB_EVENT_ACTIVITY_CONFIG = {
+    ID          = 0,
+    NAME        = 1,
+    ICON        = 2,
+    TYPE        = 3,
+    GROUP       = 4,
+    TIME_TYPE   = 5,
+    BEGIN_DAY   = 6,
+    END_DAY     = 7,
+    POINT_TYPE  = 8,
+    CONTINOUANS = 9,
+    BOSS_TYPE_ID= 10,        --boss id
+    DATA2       = 11,
+    DATA3       = 12,
+    DESCRIBE    = 13,
+};
+
+
+
 

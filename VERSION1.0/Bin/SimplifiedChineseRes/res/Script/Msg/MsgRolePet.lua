@@ -10,6 +10,7 @@ local p = MsgRolePet;
 local MSG_PET_SHOP_ACT_BUY			=1; --初次招募
 local MSG_PET_SHOP_ACT_BUY_BACK		=2;	--归队
 local MSG_PET_SHOP_ACT_DROP			=3;	--离队
+local MSG_PET_SHOP_ACT_BUY_GOLD		=4; --直接用金币购买
 
 function p.SendPetLeaveAction(nPetId)
 	p.SendShopPetAction(nPetId, MSG_PET_SHOP_ACT_DROP);
@@ -36,8 +37,14 @@ function p.SendShopPetAction(nPetId, nAction)
 end
 
 
+-- 银币购买
 function p.SendBuyPet(nPetId)
 	return p.SendShopPetAction(nPetId, MSG_PET_SHOP_ACT_BUY);
+end
+
+-- 金币购买
+function p.SendBuyPetWithGold(nPetId)
+	return p.SendShopPetAction(nPetId, MSG_PET_SHOP_ACT_BUY_GOLD);
 end
 
 function p.SendImpartPet(idPet,idTarget,vip)
@@ -72,7 +79,7 @@ end
 
 -- 更新曾招募过的所有武将
 function p.ProcessPetInfo(netdata)
-    CloseLoadBar();
+    --CloseLoadBar();
 	--LogInfo("MsgRolePet: p.ProcessPetInfo" );
 	local btNum					= netdata:ReadByte();
 	
@@ -84,7 +91,6 @@ function p.ProcessPetInfo(netdata)
 	
 	local nPlayerID		= GetPlayerId();--User表中的ID
 	local tInvitedPets	= RolePetUser.GetPetList( nPlayerID );	-- 旧武将表,为空则是Login时
-	local tNewPets		= {};	-- 新增的武将表
 	local nPlayerPetID	= RolePetFunc.GetMainPetId( nPlayerID );
 	local nPlayerLevel	= RolePet.GetPetInfoN( nPlayerPetID, PET_ATTR.PET_ATTR_LEVEL );
 	local nNewLevel		= nPlayerLevel;
@@ -135,8 +141,9 @@ function p.ProcessPetInfo(netdata)
 		local btMagicElixir6		= netdata:ReadByte();			-- 六品法术丹
 		local btImpart				= netdata:ReadByte();			-- 传承
 		local btObtain				= netdata:ReadByte();			-- 被传承
+		local nQuality              = netdata:ReadByte();			-- 品质
 		
-		local nPhysicalAtk			= netdata:ReadInt();			--武力攻击 物理攻击
+        local nPhysicalAtk			= netdata:ReadInt();			--武力攻击 物理攻击
 		local nSpeed				= netdata:ReadInt();			--绝技攻击 速度
 		--nSpeed = 99;
 		
@@ -203,6 +210,10 @@ function p.ProcessPetInfo(netdata)
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_MAGIC_ELIXIR6, btMagicElixir6);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_IMPART, btImpart);
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_OBTAIN, btObtain);
+        RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_QUALITY, nQuality);
+        
+        LogInfo("chh_nQuality1:[%d]",nQuality);
+        
 		RolePet.SetPetInfoN(idPet, PET_ATTR.PET_ATTR_PHY_ATK, nPhysicalAtk);
 		
 		
@@ -232,36 +243,17 @@ function p.ProcessPetInfo(netdata)
 		GameDataEvent.OnEvent(GAMEDATAEVENT.PETINFO, idPet);
 		
 		
-		
-		
 		-- tInvitedPets表空则是login时
 		if ( ( table.getn(tInvitedPets) > 0 ) and ( idOwner == nPlayerID ) ) then
-			
-			
 			if idPet == nPlayerPetID then
 				--引导任务事件触发 --选定技能事件
 				GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.EXCHANGE_SKILL,idSkill);				
-			end
-			
-		
-			local bNew = true;
-			for nIndex, nValue in ipairs( tInvitedPets ) do
-				if ( idPet == nValue ) then
-					bNew = false;
-					break;
-				end
-			end
-			if ( bNew ) then
-				table.insert( tNewPets, idPet );
 			end
 		end
 		
 		--
 		if ( idPet == nPlayerPetID ) then
 			nNewLevel	= usLevel;
-			
-			
-			
 		else
 			--武将升级事件
 			--引导任务事件触发
@@ -269,31 +261,12 @@ function p.ProcessPetInfo(netdata)
 		end
 	end
 	
-	if ( table.getn( tNewPets ) > 0 ) then
-		if ( GetSMGameScene() ~= nil ) then
-			PlayEffectAnimation.ShowAnimation(6);
-    	    --音效
-    	    Music.PlayEffectSound(Music.SoundEffect.RECRUIT);
-    	    
-    	    --引导任务事件触发
-			GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.RECRUIT_PET);
-
-    	    
-    	    
-			if IsUIShow(NMAINSCENECHILDTAG.RoleInvite) then
-				RoleInvite.RefreshContainer();
-			else
-				-- 没开启招募界面的回调
-				RoleInvite.InviteSucess( tNewPets );
-			end
-		end
-	end
 	if ( nPlayerLevel < nNewLevel ) then
 		-- 主角升级
     	local pScene = GetSMGameScene();
     	if ( pScene ~= nil ) then
     		local pLayer = GetUiLayer( pScene, NMAINSCENECHILDTAG.MainUITop );
-    		if ( pLayer ~= nil and pLayer:IsVisible() ) then
+    		if ( pLayer ~= nil and pLayer:IsVisibled() ) then
 				PlayEffectAnimation.ShowAnimation(2);
     			Music.PlayEffectSound(Music.SoundEffect.LEVUP);
     		else
@@ -306,8 +279,8 @@ function p.ProcessPetInfo(netdata)
 	
 end
 
---++Guosen 2012.8.6 有待判定战斗中
--- 播放升级光效和声音--当主角升级过却未播时--已升级，但是必须在特定的界面里播放提示光效和音效--比如战斗结算界面
+--++Guosen 2012.8.6 
+-- 播放升级光效和声音--当主角升级过却当时未能播升级光效此时播放--已升级，但是必须在特定的界面里播放提示光效和音效--比如战斗结算界面
 function p.ShowLevelUpAnimation()
 	if ( p.bShowLevelUpAnimation == true ) then
 		PlayEffectAnimation.ShowAnimation(2);
@@ -318,7 +291,7 @@ end
 
 --更新某个武将的信息
 function p.ProcessPetInfoUpdate(netdata)
-    CloseLoadBar();
+    --CloseLoadBar();
 	LogInfo("MsgRolePet: p.ProcessPetInfoUpdate" );
 	
 	--获取主角等级
@@ -364,9 +337,6 @@ function p.ProcessPetInfoUpdate(netdata)
 		GameDataEvent.OnEvent(GAMEDATAEVENT.PETATTR, datalist);
 	end
 	
-	
-	
-	
 	if mainpetid == petId then
 		--主角升级
 		if nLevOrigin < nLevNow then
@@ -387,12 +357,31 @@ function p.ProcessPetInfoUpdate(netdata)
 		--引导任务事件触发
 		GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.STRENGTHEN_PET,nLevNow);
 	end
-	
-	
-	
-	
-	
 end
+
+--** chh 2012-08-25 **--
+--处理招募下野反馈()
+function p.ProcessPetShop(netdata)
+    local btAction			= netdata:ReadByte();   --1,2,3
+    local nPetId			= netdata:ReadInt();
+	
+	LogInfo( "MsgRolePet: ProcessPetShop() btAction:%d, nPetId:%d", btAction,nPetId );
+    if( btAction == MSG_PET_SHOP_ACT_BUY or btAction == MSG_PET_SHOP_ACT_BUY_BACK ) then
+        --PlayEffectAnimation.ShowAnimation(6);
+		if ( GetSMGameScene() ~= nil ) then
+			RoleInvite.InviteSucess( btAction, nPetId  );
+    	    --音效
+    	    Music.PlayEffectSound(Music.SoundEffect.RECRUIT);
+    	    --引导任务事件触发
+			GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.RECRUIT_PET);
+		end
+    end
+    
+    CloseLoadBar();
+end
+
+
+RegisterNetMsgHandler(NMSG_Type._MSG_PET_SHOP_ACTION, "p.ProcessPetShop", p.ProcessPetShop);
 
 
 RegisterNetMsgHandler(NMSG_Type._MSG_PETINFO_UPDATE, "p.ProcessPetInfoUpdate", p.ProcessPetInfoUpdate);

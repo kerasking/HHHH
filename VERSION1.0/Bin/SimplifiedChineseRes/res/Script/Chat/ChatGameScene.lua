@@ -13,6 +13,10 @@ local container	=nil;
 local scroll	=nil;
 local contentHight=0;
 
+local gRectScaleY = 0.225;
+--延迟显示ui时间
+p.mTimerTaskTag = nil;
+
 p.currentChatType=ChatType.CHAT_CHANNEL_ALL;
 
 local text="";
@@ -38,7 +42,7 @@ function p.LoadUI()
 	layer:SetTouchEnabled(false);
 
 	--layer:SetFrameRect(CGRectMake(winsize.w*0.1, winsize.h*0.5, winsize.w*0.3, winsize.h*0.3));
-	layer:SetFrameRect(CGRectMake(winsize.w*0.1, winsize.h*0.7, winsize.w*0.7, winsize.h*0.13));
+	layer:SetFrameRect(CGRectMake(winsize.w*0.1, winsize.h*0.6, winsize.w*0.7, winsize.h*gRectScaleY));
 	layer:SetBackgroundColor(ccc4(0,0,0,30));
 	
 	scene:AddChild(layer);
@@ -47,7 +51,7 @@ function p.LoadUI()
 	local rectX = winsize.w*0.1;
 	local rectW	= winsize.w*0.7;
 
-	local rect  = CGRectMake(0, 0, rectW, winsize.h*0.13); 
+	local rect  = CGRectMake(0, 0, rectW, winsize.h*gRectScaleY); 
 	
 	container = createUIScrollContainer();
 	if container == nil then
@@ -64,7 +68,7 @@ function p.LoadUI()
 	layer:AddChild(container);
 	
 		
-	local scrollrect = CGRectMake(0.0, 0.0, rectW, winsize.h*0.13);
+	local scrollrect = CGRectMake(0.0, 0.0, rectW, winsize.h*gRectScaleY);
 	scroll = createUIScroll();
 	if (scroll == nil) then
 		LogInfo("scroll == nil,load ChatGameScene failed!");
@@ -92,6 +96,11 @@ function p.LoadUI()
         MainUIBottomSpeedBar.messSetOffset(1, MainUIBottomSpeedBar.ShowHideHeight);
     end
     
+    if p.mTimerTaskTag == nil then
+    	LogInfo("gamescene loadui p.mTimerTaskTag nil")
+    	layer:SetVisible(false);
+    end
+    LogInfo("gamescene loadui p.mTimerTaskTag 2")
 end
 
 
@@ -102,7 +111,9 @@ function p.GetParent()
 	end
 	
 	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.ChatGameScene);
+	
 	if nil == layer then
+		LogInfo("DelayShowUI GetParent return parent nil")
 		return nil;
 	end
 
@@ -127,7 +138,11 @@ function p.AddChatText(speakerId,channel,speaker,text)
 		local chatText=createUIChatText();
 		chatText:Init();
 		chatText:SetContentWidth(winsize.w*0.7);
-		chatText:SetContent(speakerId,channel,speaker,text,1,6);
+		
+		local color = ChatMainUI.ColorChannel[channel];
+		chatText:SetContent(speakerId,channel,speaker,text,1,6,color);
+		
+		--chatText:SetContent(speakerId,channel,speaker,text,1,6,ccc4(0,0,255,255));
 		local rect  = CGRectMake(0, contentHight, winsize.w*0.7, winsize.h*0.05); 
 		chatText:SetFrameRect(rect);
 		contentHight=contentHight+chatText:GetContentHeight();
@@ -137,33 +152,70 @@ function p.AddChatText(speakerId,channel,speaker,text)
 		local scrollrect = CGRectMake(0.0, 0.0, winsize.w*0.7, contentHight);
 		scroll:SetFrameRect(scrollrect);
 		scroll:AddChild(chatText);
+		
+		if OnlineCheckIn.InInCity() == false then
+			LogInfo("gamescene chat not InInCity")
+			layer:SetVisible(false);
+		else
+			LogInfo("gamescene chat InInCity ")
+			layer:SetVisible(true);
+		end
 	end
 	
 	container:ScrollToBottom();
 	return true;
 end
 
---延迟显示ui时间
-p.mTimerTaskTag = nil;
+local gCount =0;
 function p.DelayShowUI()
-	p.LoadUI()
+	
+
+	LogInfo("DelayShowUI OnlineCheckIn.InInCity() true")
+	if CheckP(p.GetParent()) == false then
+		LogInfo("DelayShowUI parent nil loadui")
+		p.LoadUI()		
+	else
+		local Chatlayer = p.GetParent();
+		if OnlineCheckIn.InInCity()  then
+		--不在主城则不显示
+			Chatlayer:SetVisible(true);	
+		end	
+	end
 	
 	if (p.mTimerTaskTag) then
 		UnRegisterTimer(p.mTimerTaskTag);
 		p.mTimerTaskTag = nil;
 	end
-
-	p.mTimerTaskTag = RegisterTimer(p.SetUIInvisible, 8);
+	gCount = 0;
+	p.mTimerTaskTag = RegisterTimer(p.SetUIInvisible, 1);
 
 end
 
+
 --设置隐藏ui
 function p.SetUIInvisible()
-
-	if  IsUIShow(NMAINSCENECHILDTAG.ChatGameScene) then
-		CloseUI(NMAINSCENECHILDTAG.ChatGameScene,false);	
-	end		
+	if CheckP(p.GetParent()) == false then
+		return;	
+	end
+	local Chatlayer = p.GetParent();
 	
+	if OnlineCheckIn.InInCity() == false then
+		Chatlayer:SetVisible(false);
+		return;				
+	end
+	
+	
+	gCount = gCount +1;
+	
+	if gCount < 8 then
+		Chatlayer:SetVisible(true);
+		return;
+	end
+	
+	gCount = 0;
+	Chatlayer:SetVisible(false);
+	
+	--不在主城则不显示	
 	if (p.mTimerTaskTag) then
 		UnRegisterTimer(p.mTimerTaskTag);
 		p.mTimerTaskTag = nil;
@@ -171,5 +223,5 @@ function p.SetUIInvisible()
 end
 
 
-RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "ChatGameScene.LoadUI", p.DelayShowUI);
+--RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "ChatGameScene.LoadUI", p.DelayShowUI);
 

@@ -54,59 +54,71 @@ for i=1,10 do
 	tVipInfo[i] = {}
 end
 
-tVipInfo[1][1] = "开启白金训练模式"
-tVipInfo[1][2] = "每日可以征收20次"
-tVipInfo[1][3] = "每日可以购买12个额外军令"
-tVipInfo[1][4] = "背包容量增加至72"
-tVipInfo[1][5] = "强化装备的冷却时间缩短10%"
+tVipInfo[1][1] = "开启伙伴武将白金训练模式	"
+tVipInfo[1][2] = "每日可征收20次"
+tVipInfo[1][3] = "每日可购买20个额外军令"
+tVipInfo[1][4] = "背包容量增加至72格"
 
-tVipInfo[2][1] = "开启白金训练模式"
-tVipInfo[2][2] = "每日可以征收20次"
-tVipInfo[2][3] = "每日可以购买12个额外军令"
+tVipInfo[2][1] = "开启速战速决功能"
+tVipInfo[2][2] = "可以使用金币购买30级紫色武将	"
+tVipInfo[2][3] = "背包容量增加至80格"
+tVipInfo[2][4] = "包含VIP1所有功能"
 
-tVipInfo[3][1] = "挑战次数增加：金币购买竞技场挑战次数；"
-tVipInfo[3][2] = "精英副本每日可用金币重置1次"
-tVipInfo[3][3] = "开启自动战斗的加速功能"
-tVipInfo[3][4] = "开启白金洗练功能"
+tVipInfo[3][1] = "开启武器白金洗炼功能"
+tVipInfo[3][2] = "开启强化装备暴击功能"
+tVipInfo[3][3] = "精英副本每日可用金币重置1次"
+tVipInfo[3][4] = "可以使用金币购买50级和70级紫色武将"
 tVipInfo[3][5] = "包含VIP2所有功能"
 
-tVipInfo[4][1] = "每日可以征收30次"
-tVipInfo[4][2] = "开放骑宠高级培养功能"
-tVipInfo[4][3] = "开启金钻训练模式"
-tVipInfo[4][4] = "战斗可直接查看结果（除第一次战斗）。"
-tVipInfo[4][5] = "包含VIP3所有功能"
+tVipInfo[4][1] = "开启伙伴武将金钻训练模式	"
+tVipInfo[4][2] = "每日可征收30次"
+tVipInfo[4][3] = "背包容量增加至90格"
+tVipInfo[4][4] = "开启批量征收功能"
+tVipInfo[4][5] = "开启金币购买70级金色武将"
+tVipInfo[4][6] = "降低装备强化费用10%"
+tVipInfo[4][7] = "包含VIP3所有功能"
 
 tVipInfo[5][1] = "每日可以征收40次"
-tVipInfo[5][2] = "每日可以购买16个额外军令"
-tVipInfo[5][3] = "精英副本每日可用金币重置2次"
-tVipInfo[5][4] = "包含VIP4所有功能"
+tVipInfo[5][2] = "背包容量增加至100格"
+tVipInfo[5][3] = "每日可购买25个额外军令"
+tVipInfo[5][4] = "精英副本每日可用金币重置2次"
+tVipInfo[5][5] = "开启金币购买80级金色武将"
+tVipInfo[5][6] = "永久取消强化冷却时间"
+tVipInfo[5][7] = "包含VIP4所有功能"
 
 
-tVipInfo[6][1] = "每日可以购买24个额外军令"
-tVipInfo[6][2] = "开启至尊洗练功能"
-tVipInfo[6][3] = "包含VIP5所有功能"
+tVipInfo[6][1] = "背包容量增加至110格"
+tVipInfo[6][2] = "每日可购买30个额外军令"
+tVipInfo[6][3] = "开启武器至尊洗炼功能"
+tVipInfo[6][4] = "开启金币购买90级金色武将"
+tVipInfo[6][5] = "降低装备强化费用12%"
+tVipInfo[6][6] = "包含VIP5所有功能"
 
 
-tVipInfo[7][1] = "每日可以征收50次"
-tVipInfo[7][2] = "每日可以购买32个额外军令"
-tVipInfo[7][3] = "包含VIP6所有功能"
+tVipInfo[7][1] = "背包容量增加至120格"
+tVipInfo[7][2] = "每日可征收50次"
+tVipInfo[7][3] = "每日可购买35个额外军令"
+tVipInfo[7][4] = "开启金币购买100级金色武将"
+tVipInfo[7][5] = "包含VIP6所有功能"
 
 
-tVipInfo[8][1] = "每日可以征收70次"
-tVipInfo[8][2] = "每日可以购买40个额外军令"
-tVipInfo[8][3] = "开启至尊训练模式"
-tVipInfo[8][4] = "包含VIP7所有功能"
+tVipInfo[8][1] = "背包容量增加至128格"
+tVipInfo[8][2] = "每日可征收70次"
+tVipInfo[8][3] = "每日可购买40个额外军令"
+tVipInfo[8][4] = "开启伙伴武将至尊训练模式"
+tVipInfo[8][5] = "降低装备强化费用15%"
+tVipInfo[8][6] = "包含VIP7所有功能"
 
 
-tVipInfo[9][1] = "每日可以征收100次"
-tVipInfo[9][2] = "包含VIP8所有功能"
+tVipInfo[9][1] = "背包容量增加至136格"
+tVipInfo[9][2] = "每日可征收100次"
+tVipInfo[9][3] = "每日可购买48个额外军令"
+tVipInfo[9][4] = "包含VIP8所有功能"
 
 
-tVipInfo[10][1] = "每日可以征收100次"
-tVipInfo[10][2] = "每日可以购买48个额外军令"
-tVipInfo[10][3] = "花费金币突飞伙伴"
-tVipInfo[10][4] = "包含VIP9所有功能"
-
+tVipInfo[10][1] = "背包容量增加至144格"
+tVipInfo[10][2] = "降低装备强化费用20%"
+tVipInfo[10][3] = "包含VIP9所有功能"
 
 
 
@@ -141,9 +153,7 @@ local scene = GetSMGameScene();
 	--bg
 	uiLoad:Load("VIP.ini", layer, p.OnUIEventBg, 0, 0);
 	
-	
-	--初始化星图界面
-	--
+
 	local containter = RecursiveSVC(layer, {VIP_CTRL_LIST_1});
 	containter:SetViewSize(containter:GetFrameRect().size);
 	containter:SetLuaDelegate(p.OnUIEventSVC)
@@ -170,7 +180,9 @@ local scene = GetSMGameScene();
 	end	
 	
 	
-	local nVIPRank = p.GetPlayerVipRank();
+	--local nVIPRank = p.GetPlayerVipRank();
+	local nPlayerId = GetPlayerId();
+	local nVIPRank 		= GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_VIP_RANK);
 	if tVipInfo[nVIPRank] ~= nil then
 		containter:ShowViewById(nVIPRank);
 	end
@@ -179,17 +191,38 @@ local scene = GetSMGameScene();
 	GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"p.GameDataUserInfoRefresh",p.GameDataUserInfoRefresh);
     
     --向Mobage获取访问证书
-    sendMsgCreateTempCredential();
+    sendMsgCreateTempCredential();-- 91测试的话关闭掉
+    --local pBtn = GetButton( layer, ID_BTN_AGIOTAGE );-- 91测试的话关闭掉
+    --if ( pBtn ~= nil ) then
+    --	pBtn:SetVisible( false );
+    --end
+    --pBtn = GetButton( layer, ID_VIP_CTRL_BUTTON_MONEY );
+    --if ( pBtn ~= nil ) then
+    --	pBtn:SetVisible( false );
+    --end
+    --local pLabel = GetLabel( layer, 90 );
+    --if ( pLabel ~= nil ) then
+    --	pLabel:SetText( "内测版本暂不提供兑换金币功能，金币可从礼包中获得。" );
+    --	local tRect = pLabel:GetFrameRect();
+    --	pLabel:SetFrameRect( CGRectMake(tRect.origin.x, tRect.origin.y, tRect.size.w, tRect.size.h*2) );
+    --end
     
     --设置关闭音效
    	local closeBtn=GetButton(layer,ID_VIP_CTRL_BUTTON_3);
    	closeBtn:SetSoundEffect(Music.SoundEffect.CLOSEBTN);
-
+    
+    --** chh 2012-09-02 **--
+    --设置箭头显示
+    SetArrow(p.GetBgLayer(),p.GetVipViewList(),1,ID_VIP_CTRL_PICTURE_12,ID_VIP_CTRL_PICTURE_13);
+    
 	return true;
 end
-		
-		
-		
+
+--** chh 2012-09-02 **--
+function p.GetVipViewList()
+    local containter = RecursiveSVC(p.GetBgLayer(), {VIP_CTRL_LIST_1});
+    return containter;
+end
 		
 --ui事件
 
@@ -201,7 +234,7 @@ function p.OnUIEventBg(uiNode, uiEventType, param)
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 	
 		if tag == ID_VIP_CTRL_BUTTON_3 then
-            
+            doHideMobageBalance();
             RemoveChildByTagNew(NMAINSCENECHILDTAG.PlayerVIPUI, true,true);
             return true;
 
@@ -218,6 +251,13 @@ function p.OnUIEventBg(uiNode, uiEventType, param)
 end
 
 function p.OnUIEventSVC(uiNode, uiEventType, param)
+    local tag = uiNode:GetTag();
+    if VIP_CTRL_LIST_1 == tag then
+        --** chh 2012-09-02 **--
+        --设置箭头显示
+        SetArrow(p.GetBgLayer(),p.GetVipViewList(),1,ID_VIP_CTRL_PICTURE_12,ID_VIP_CTRL_PICTURE_13);
+    end
+    
 	return true;
 end
 	
@@ -307,34 +347,45 @@ function p.GameDataUserInfoRefresh()
 	LogInfo("Recharge:"..Recharge);
 	
 	local nVipRank = 0;
+	--[[
 	for viplev,nNeedRecharge in pairs(VipCfg) do
 		if Recharge < nNeedRecharge then
 			 nVipRank = viplev - 1;
 			break;
 		end
-	end 	
+	end 	--]]
+	
+	local nVipRank 		= GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_VIP_RANK);
+		
 	VipLevLable:SetText("VIP"..nVipRank.."会员");
 	
 	
 	--vip经验条
 	if CheckP(VipexpUI) then
 		LogInfo("vipexp ui ");
-		VipexpUI:SetProcess(Recharge);--ConvertN(RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_EXP)));
-		VipexpUI:SetTotal(VipCfg[nVipRank+1]);--ConvertN(RolePetFunc.GetNextLvlExp(nPetId)));
+        
+        --** chh 2012-08-29 **--
+        if(nVipRank == #VipCfg) then
+            VipexpUI:SetProcess(VipCfg[nVipRank]);
+            VipexpUI:SetTotal(VipCfg[nVipRank]);
+        else
+            VipexpUI:SetProcess(Recharge);--ConvertN(RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_EXP)));
+            VipexpUI:SetTotal(VipCfg[nVipRank+1]);--ConvertN(RolePetFunc.GetNextLvlExp(nPetId)));
+        end
 	end	
 	
 	
 	--充值提示信息
 	if nVipRank == 10 then
-		tipLabel:SetText("恭喜您变为VIP10!");
+		tipLabel:SetText("恭喜您成为VIP10会员!");
 	else
-		tipLabel:SetText(string.format("再充值%d金币，您将成为VIP%d会员。",VipCfg[nVipRank+1]-Recharge,nVipRank+1));
+        tipLabel:SetText(string.format("再充值%d金币，您将成为VIP%d会员。",VipCfg[nVipRank+1]-Recharge,nVipRank+1));
 	end
 	
 	--军令
 	local nAvailBuyTime = tVIPMilOrder[nVipRank]; --每天可购买次数
 	local nBought = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_HAVE_BUY_STAMINA);
-	local nLeftTime = nAvailBuyTime - nBought;	--剩余军令购买次数
+	local nLeftTime = p.allowBuyCount(); --nAvailBuyTime - nBought;	--剩余军令购买次数
 	local nMilOrders = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_STAMINA);
 	local nGold =  GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
 	MOlabel:SetText(string.format("您今天还可以购买军令%d次。",nLeftTime));
@@ -368,6 +419,8 @@ end
 
 
 function p.BuyMilOrders(nEventType ,nEvent,param)	
+
+   
     if(CommonDlgNew.BtnOk == nEventType) then
         _G.MsgMilOrder.SendMsgBuyMilOrder();
     end
@@ -387,12 +440,14 @@ function p.OnClickBuyMilOrderBtn()
 		
 		
         --** chh 2012-07-10 **--
-		p.buyMilOrderTip();
+		p.buyMilOrderTip(0);
 end	
 
---** chh 2012-07-10 **--
---购买军令提示
-function p.buyMilOrderTip()
+
+p.battleId = nil;
+--购买军令提示         nType为0是每日活动中购买军令    1为副本战斗军令不足购买军令
+function p.buyMilOrderTip(nType)
+    p.battleId = nType;
     local nLeftTime = p.allowBuyCount();
     local nBought = GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_HAVE_BUY_STAMINA);
     
@@ -400,10 +455,12 @@ function p.buyMilOrderTip()
         CommonDlgNew.ShowYesDlg("剩余购买次数不足！");
         return;
     end
-
-    if tGoldNeeded[nBought+1] >  GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_EMONEY) then
-        CommonDlgNew.ShowYesDlg("金币不足！");
-        return;
+    
+    if nType == 0 then
+        if tGoldNeeded[nBought+1] >  GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_EMONEY) then
+            CommonDlgNew.ShowYesDlg("金币不足！");
+            return;
+        end
     end
 
     if   GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_STAMINA) >= 48 then
@@ -412,10 +469,25 @@ function p.buyMilOrderTip()
         return;
     end
     
-    CommonDlgNew.ShowYesOrNoDlg("今日可购买"..nLeftTime.."次。花费"..tGoldNeeded[nBought+1].."金币购买1个军令",p.BuyMilOrders,true)
+    if nType == 0 then
+        CommonDlgNew.ShowYesOrNoDlg("今日可购买"..nLeftTime.."次。花费"..tGoldNeeded[nBought+1].."金币购买1个军令",p.BuyMilOrders,true);
+    else
+        CommonDlgNew.ShowYesOrNoDlg("您当前的军令不足,是否花费"..tGoldNeeded[nBought+1].."金币购买1个军令", p.OnNormalBossBuyAtomatic,true);
+    end
 
 end
 
+function p.OnNormalBossBuyAtomatic(nEventType ,nEvent, param)	
+    if(CommonDlgNew.BtnOk == nEventType) then
+        local nBought = GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_HAVE_BUY_STAMINA);
+        if tGoldNeeded[nBought+1] >  GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_EMONEY) then
+            CommonDlgNew.ShowYesDlg("您的金币不足以购买一次军令,请充值！");
+            return;
+        end 
+        _G.MsgMilOrder.SendMsgBuyMilOrder();
+        MsgAffixBoss.sendNmlEnter( p.battleId );
+    end
+end
 
 function p.GetBgLayer()
 	local scene = GetSMGameScene();	

@@ -883,7 +883,7 @@ function p.MainDrama_12()
 	DramaCloseLChatDlg();
 	DramaOpenRChatDlg();
 	DramaSetRChatName("张角", 9, 0xffde00);
-	DramaSetRChatContent("哼,此次是我小看了你~不过我天公将军自会让你们为此付出代价的!", 7, 0xffffff);
+	DramaSetRChatContent("哼,此次是我小看了你～不过我天公将军自会让你们为此付出代价的!", 7, 0xffffff);
 	p.DramaSetRChatHead(421);
 	DramaWaitPrevActionFinishAndClick();
 	DramaCloseRChatDlg();

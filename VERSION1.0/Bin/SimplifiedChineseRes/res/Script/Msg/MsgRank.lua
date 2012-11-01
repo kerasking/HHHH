@@ -28,12 +28,12 @@ function p.sendRankUpgrade()
 end
 
 function p.receiveSendRankUpgradeResult(netdata)
-    CloseLoadBar();
     LogInfo("p.receiveSendRankUpgradeResult");
     local status = netdata:ReadInt();
     if (p.mUIListener) then
 		p.mUIListener( NMSG_Type._MSG_RANK_UPGRADE,status);
 	end
+    CloseLoadBar();
 end
 
 --==声望

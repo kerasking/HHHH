@@ -292,6 +292,8 @@ StageFunc = {
     Mount = 291,            --坐骑
     Fete = 321,             --祭祀
     RepeatCoyp = 541,       --副本扫荡
+    Sign = 0;     --每日签到
+    Recharge = 0; --充值礼包
 };
 
 
@@ -343,9 +345,45 @@ function GetVipLevel_EQUIP_EDU(nType)
             return v;
         end
     end
+    return 0;
+end
+
+--根据类型判断需要多少VIP才可重置精英副本 
+function GetGetVipLevel_ELITE_MAP_RESET_NUM()
+    local ids = GetDataBaseIdList("vip_config");
+    for i,v in ipairs(ids) do
+        local val = GetDataBaseDataN("vip_config",v,DB_VIP_CONFIG.ELITE_MAP_RESET_NUM);
+        if(val > 0) then
+            return v;
+        end
+    end
+    return 0;
+end
+
+--获得需要多少VIP才可自动战斗 
+function GetGetVipLevel_FIGHT_AUTO()
+    local ids = GetDataBaseIdList("vip_config");
+    for i,v in ipairs(ids) do
+        local val = GetDataBaseDataN("vip_config",v,DB_VIP_CONFIG.FIGHT_AUTO);
+        if(val > 0) then
+            return v;
+        end
+    end
+    return 0;
 end
 
 
+--金钱格式化
+function MoneyFormat(nMoney)
+    if(nMoney == nil) then
+        LogInfo("MoneyFormat not num!");
+        return "";
+    end
+    if(nMoney>=10000) then
+        nMoney = math.floor(nMoney/10000)..GetTxtPub("ten");
+    end
+    return nMoney.."";
+end
 
 
 

@@ -46,6 +46,11 @@ function GetPetBigPotraitTranPic( petTypeId )
     return GetPotraitPic( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigPortrait", 179, 215 );
 end
 
+--获得招募界面的灰色武将头像
+function GetPetBigGrayPotraitTranPic( petTypeId )
+    return GetPotraitPic( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigGrayPortrait", 179, 215 );
+end
+
 --获得主角高清头像带背景
 function GetPlayerPotraitPic(petTypeId)
     return GetPotraitPic(petTypeId, "pet_config", DB_PET_CONFIG.ICON, "PlayerHeadNew", 120, 120);
@@ -53,13 +58,30 @@ end
 
 --获得主角高清头像不带背景
 function GetPlayerPotraitTranPic(petTypeId)
-    return GetPotraitPic(petTypeId, "pet_config", DB_PET_CONFIG.ICON, "PlayerHeadNew", 120, 120, -1, 0);
+    return GetPotraitPic(petTypeId, "pet_config", DB_PET_CONFIG.ICON, "PlayerHeadNew", 120, 118, -1, 0);
+end
+
+
+--获得主角高清主界面头像
+function GetPlayerMainUIPotraitPic(petTypeId)
+return GetPotraitPic(petTypeId, "pet_config", DB_PET_CONFIG.ICON, "PlayerHeadMainUI", 150, 126, -1, 0);
+end
+
+
+--获得竞技场头像
+function GetArenaUIPlayerHeadPic(petTypeId)
+    return GetPotraitPic(petTypeId, "pet_config", DB_PET_CONFIG.ICON, "ArenaPlayerHead", 136, 136, -1, 0);
 end
 
 
 --取大地图的图标在副本里使用
 function GetMapPic(mapId)
     return GetPotraitPic(mapId, "map", DB_DYNAMAP.TITLE, "Map", 178, 154);
+end
+
+--取大地图的图标在副本里使用(精英副本由于要加灰色图片导致实现不同修改）
+function GetEliteGrayMapPic(mapId)
+    return GetPotraitPic(mapId, "map", DB_DYNAMAP.TITLE, "MapGray", 178, 154);
 end
 
 --获取物品图片
@@ -71,6 +93,11 @@ end
 function GetGiftPic(id)
     return GetPotraitPic(id, "itemtype", DB_ITEMTYPE.ICONINDEX, "Goods", 80, 80);
     --return GetPotraitPic(id, "giftpack_config", DB_GIFTPACK_CONFIG.ICON, "Gifts", 80, 80);
+end
+
+--获得boss战图片
+function GetBossTypePic( nActivity )
+	return GetPotraitPic( nActivity, "event_activity", DB_EVENT_ACTIVITY_CONFIG.ICON, "boss", 424, 430 );
 end
 
 function GetPotraitPic(id, configfilename, index, picfilename, w, h, offsetRows, offsetCols)
@@ -90,9 +117,8 @@ function GetPotraitPic(id, configfilename, index, picfilename, w, h, offsetRows,
 	if not _G.CheckN(nIcon) then
 		return nil;
 	end
-    LogInfo("GetPotraitPic:nIcon:[%d],id[%d],index:[%d]",nIcon,id,index);
-    LogInfo("GetPotraitPic:nIcon:[%d],index:[%d]",nIcon,index);
-	
+    LogInfo("GetPotraitPic:nIcon:[%d],id[%d],index:[%d]",nIcon, id, index);
+
 	--千位,百位标识图片资源文件编号
 	--十位标识所在文件行,个位标识所在文件列
 	local filename		= picfilename;

@@ -16,10 +16,12 @@ local TAG_LIST_IMG       = 102;
 local TAG_LIST_NAME      = 103;
 local TAG_LIST_DESC      = 104;
 local TAG_LIST_TAKE      = 105;
+local TAG_LIST_ITEMSIZE       = 5;
+
 
 p.GiftBackList = {};    --礼包列表
 
-p.GifeItemSize = CGSizeMake(260*ScaleFactor, 45*ScaleFactor);
+p.GifeItemSize = CGSizeMake(260*ScaleFactor, 42*ScaleFactor);
 
 function p.LoadUI()
 --------------------获得游戏主场景------------------------------------------
@@ -167,7 +169,7 @@ function p.ShowGetGiftInfo(id)
             LogInfo("获得军衔参数错误name and 。gift.param0");
             return;
         end
-        info = string.format(GetTxtPri("FF_Rank"),name, gift.param0);
+        info = string.format(GetTxtPri("FF_Rank"),name, gift.aux_param0, gift.param0);
     elseif(gift.type == 3 ) then
         
     elseif(gift.type == 4 ) then
@@ -202,7 +204,9 @@ function p.ShowGetGiftInfo(id)
         end
     end
     
-    CommonDlgNew.ShowYesDlg(info,nil,nil,3);
+    if(gift.type ~= 0) then
+        CommonDlgNew.ShowYesDlg(info,nil,nil,3);
+    end
 end
 
 
@@ -211,7 +215,7 @@ function p.RefreshUI()
     local container = p.GetGiftListContainer();
     container:RemoveAllView();
     local rectview = container:GetFrameRect();
-    container:SetViewSize(p.GifeItemSize);
+    --container:SetViewSize(p.GifeItemSize);
     
     for i, v in ipairs(p.GiftBackList) do
         p.CreateGiftItem(container,i);
@@ -227,7 +231,7 @@ function p.CreateGiftItem(container,i)
         view:SetMovableViewer(container);
         view:SetScrollViewer(container);
         view:SetContainer(container);
-        container:AddView(view);
+        
 
         --初始化ui
         local uiLoad = createNDUILoad();
@@ -239,7 +243,7 @@ function p.CreateGiftItem(container,i)
            
         --实例化每一项
         p.RefreshGiftItem(view,i);
-        
+        container:AddView(view);
         uiLoad:Free();
 end
 
@@ -259,11 +263,18 @@ function p.RefreshGiftItem(view,i)
     pic:SetPicture(GetGiftPic(GetDataBaseDataN("giftpack_config",gift.type,DB_GIFTPACK_CONFIG.ICON)));
     
     SetLabel(view,TAG_LIST_NAME,GetDataBaseDataS("giftpack_config",gift.type,DB_GIFTPACK_CONFIG.NAME));
-    SetLabel(view,TAG_LIST_DESC,GetDataBaseDataS("giftpack_config",gift.type,DB_GIFTPACK_CONFIG.DESCRIBE));
+    
+    local name = GetDataBaseDataS("rank_config",gift.aux_param0,DB_RANK.RANK_NAME);
+    SetLabel(view,TAG_LIST_DESC,string.format(GetDataBaseDataS("giftpack_config",gift.type,DB_GIFTPACK_CONFIG.DESCRIBE),name,gift.param0));
     
     local btn = GetButton(view, TAG_LIST_TAKE);
     btn:SetParam1(i);
     
+    
+    --设置大小
+    local pic = GetImage(view, TAG_LIST_ITEMSIZE);
+    local container = p.GetGiftListContainer();
+    container:SetViewSize(pic:GetFrameRect().size);
 end
 
 --获得礼包列表

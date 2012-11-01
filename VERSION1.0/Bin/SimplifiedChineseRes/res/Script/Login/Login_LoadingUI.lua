@@ -81,7 +81,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 end
 
 function p.OnProcessTimer(nTag)
-	LogInfo("Login_LoadingUI: OnProcessTimer()");
+	--LogInfo("Login_LoadingUI: OnProcessTimer()");
 	if not CheckN(nProcessTimeTag) or
 		not CheckN(nTag) or
 		nTag ~= nProcessTimeTag then
@@ -94,10 +94,13 @@ function p.OnProcessTimer(nTag)
 	end
 	
 	local nCurProcess	= ConvertN(LoadingProcess:GetProcess());
-	local nToatl		= ConvertN(LoadingProcess:GetTotal());
-	LogInfo("Login_LoadingUI: OnProcessTimer() nCurProcess:%d",nCurProcess);
-	
-	p.SetProcess((nCurProcess + 5) % nToatl);
+	local nTotal		= ConvertN(LoadingProcess:GetTotal());
+	--LogInfo("Login_LoadingUI: OnProcessTimer() nCurProcess:%d",nCurProcess);
+	nCurProcess			= nCurProcess + 5;--(nCurProcess + 5) % nTotal
+	if ( nCurProcess > nTotal ) then
+		nCurProcess = nTotal;
+	end
+	p.SetProcess( nCurProcess );
 end
 
 function p.OnConstruct()

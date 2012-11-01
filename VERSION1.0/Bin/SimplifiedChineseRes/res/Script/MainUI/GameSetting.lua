@@ -3,7 +3,10 @@
 --时间: 2012.7.26
 --作者: Guosen
 ---------------------------------------------------
-
+--进入界面				GameSetting.ShowUI()
+---------------------------------------------------
+--是否显示其他玩家		GameSetting.IsShowOtherRole()
+---------------------------------------------------
 
 GameSetting = {}
 local p = GameSetting;
@@ -24,7 +27,7 @@ local szGameSettingCreate			= "CREATE TABLE GameSetting ( SettingID INTEGER, BGM
 local szGameSettingUpdate			= "UPDATE GameSetting SET SettingID=1, BGMusic=%d, SoundEffect=%d, ViewOtherPlayer=%d WHERE SettingID=1";
 local szGameSettingInsert			= "INSERT INTO GameSetting VALUES(1, %d, %d, %d)";
 local szGameSettingSelect			= "Select * From GameSetting";
-local szGameForumURL				= "http://mobage.com.cn/";--论坛地址，先测试
+local szGameForumURL				= "http://bbs.18183.com/forum-54-1.html"--"http://mobage.com.cn/";--论坛地址，先测试
 
 ---------------------------------------------------
 local DEFAULT_BGMUSIC				= 1;	-- 缺省设置播放背景音乐
@@ -95,6 +98,10 @@ function p.ShowUI()
 	uiLoad:Load( "GameSettingUI.ini", pLayer, p.OnUIEvent, 0, 0 );
 	uiLoad:Free();
 	p.InitializeUI( pLayer );
+	local pBtn = GetButton( pLayer, ID_BTN_CALL_GM );
+	if ( pBtn ~= nil ) then
+		pBtn:SetVisible( false );
+	end
 
     local closeBtn=GetButton(pLayer,ID_BTN_CLOSE);
     closeBtn:SetSoundEffect(Music.SoundEffect.CLOSEBTN);
@@ -104,7 +111,7 @@ end
 
 ---------------------------------------------------
 function p.CloseUI()
-	local scene = p.GetCurrentScene();
+	local scene = p.GetCurrentScene(); 
 	if scene ~= nil then
 		scene:RemoveChildByTag( NMAINSCENECHILDTAG.GameSetting, true );
 		return true;
@@ -209,9 +216,41 @@ end
 
 ---------------------------------------------------
 function p.OnBtnCallGM()
-	p.CloseUI();
-	GMProblemUI.LoadUI();
+	--p.CloseUI();
+	--GMProblemUI.LoadUI();
+    p.TestButtonClick();
+    
 end
+
+
+function p.TestButtonClick()
+	CommonDlgNew.ShowYesOrNoDlg("警告，确定要删除角色吗？", p.SendMsgDelPlayer1, true);	
+end
+
+function p.SendMsgDelPlayer1(nEventType , nEvent, param)
+	if(CommonDlgNew.BtnOk == nEventType) then
+		LogInfo("p.SendMsgDelPlayer1")	
+		
+   		CommonDlgNew.ShowYesOrNoDlg("删除帐号后将不能找回？", p.SendMsgDelPlayer2, true);	
+   	end
+end
+
+function p.SendMsgDelPlayer2(nEventType , nEvent, param)
+	if(CommonDlgNew.BtnOk == nEventType) then
+		local netdata = createNDTransData(1053);
+		if nil == netdata then
+			return false;
+		end
+		--netdata:WriteByte(nAction);
+		netdata:WriteInt(GetPlayerId());
+		SendMsg(netdata);
+		netdata:Free();
+		LogInfo("p.SendMsgDelPlayer");
+        QuitGame();
+	end
+end
+
+
 
 ---------------------------------------------------
 function p.OnBtnVisitGameForum()
@@ -252,6 +291,11 @@ function p.LoadData()
     ShowOtherRole( p.iShowOtherPlayerEnable == 1 );
 end
 
+-- 是否显示其他玩家
+function p.IsShowOtherRole()
+	return ( p.iShowOtherPlayerEnable == 1 );
+end
+
 ---------------------------------------------------
 function p.SaveData()
     --local isExists = Sqlite_IsExistTable(szGameSettingTableName);
@@ -262,3 +306,5 @@ function p.SaveData()
     else
     end
 end
+
+

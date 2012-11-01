@@ -57,7 +57,6 @@ local friendNameList = {};   --存储好友id及名字
 --当前操作的对象（好友）
 local friendId;
 local friendName;
-
 --搜索文本
 local g_SearchName = ""
 
@@ -106,7 +105,7 @@ function p.LoadUI()
 
 	container:SetStyle(UIScrollStyle.Verical);
 	container:SetViewSize(CGSizeMake(container:GetFrameRect().size.w, container:GetFrameRect().size.h/5));
-	
+	container:EnableScrollBar(true);
 
 	--玩家信息
 	local layerInfo = createNDUILayer();
@@ -136,6 +135,7 @@ function p.LoadUI()
 		 --LogInfo("qbw3:"..friendId)
 		MsgFriend.SendGetFriendInfo(friendId);
 		friendName = FriendFunc.GetAttrDesc(GetPlayerId(),FRIEND_DATA.FRIEND_NAME,friendId);
+        
 		p.RefreshInfoLayer();
 		
 	end
@@ -431,7 +431,10 @@ function p.RefreshFriendContainer()
 	     end	
 
 		
-		SetLabel(view,ID_FRIEND_LIST_CTRL_HYPER_TEXT_NAME,friendItem[2]);
+		local l_name = SetLabel(view,ID_FRIEND_LIST_CTRL_HYPER_TEXT_NAME,friendItem[2]);
+        ItemPet.SetLabelByQuality(l_name,FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_QUALITY,friendItem[1]));
+        
+        
 		--SetLabel(view,ID_FRIEND_LIST_CTRL_HYPER_TEXT_LEVEL,string.format("等级:%d",friendItem[3]));
 		SetLabel(view,ID_FRIEND_LIST_CTRL_HYPER_TEXT_LEVEL,"");
 
@@ -446,6 +449,8 @@ function p.RefreshFriendContainer()
 			--离线的好友字体为灰色
 			local nameText = GetLabel(view,ID_FRIEND_LIST_CTRL_HYPER_TEXT_NAME);
 			local levelText = GetLabel(view,ID_FRIEND_LIST_CTRL_HYPER_TEXT_LEVEL);
+            
+            
 		   	nameText:SetFontColor(ccc4(88,88,88,255));
 		   	levelText:SetFontColor(ccc4(88,88,88,255));
 		   	--HeadBtn:EnalbeGray(true);
@@ -512,7 +517,13 @@ function p.RefreshInfoLayer()
 		
 		--LogInfo("QBW1 info layer 2")
 		local nPlayerid = GetPlayerId();
-        SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_NAME, friendName);
+        local l_name = SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_NAME, friendName);
+         
+         
+        --设置好友玩家颜色
+        --local nQuality = GetRoleFriendDataN(nPlayerId, FRIEND_DATA.FRIEND_QUALITY,friendId);
+        ItemPet.SetLabelByQuality(l_name,FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_QUALITY,friendId));
+        
          
         SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_LEVEL,SafeN2S(FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_LEVEL,friendId)).."级");
 	
@@ -520,10 +531,18 @@ function p.RefreshInfoLayer()
         
         local sProfession = GetDataBaseDataS("pet_config",nPetType,DB_PET_CONFIG.PRO_NAME);
         SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_13,sProfession);
-	 	--SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_13,SafeN2S(FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_PROFESSION,friendId)));	
 	 	
-	 	SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_14,SafeN2S(FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_REPUTE	,friendId)));	
-		SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_15,SafeN2S(FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_SYNDYCATE,friendId)));
+	 	local nRanklevel =FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_REPUTE,friendId);
+	 	LogInfo("QBW1 RefreshInfoLayer nRanklevel:"..nRanklevel)
+	 	local stempstr = GetDataBaseDataS("rank_config",nRanklevel,DB_RANK.RANK_NAME);
+	 	SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_14,stempstr);	
+		--SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_14,SafeN2S(FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_REPUTE	,friendId)));	
+		
+		
+		--帮派不显示
+		--SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_15,SafeN2S(FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_SYNDYCATE,friendId)));
+	 	SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_15,"");
+	 	
 	 	SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_16,SafeN2S(FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_SPORTS	,friendId)));
 		SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_17,SafeN2S(FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_CAPACITY	,friendId)));	
 	

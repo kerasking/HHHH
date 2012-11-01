@@ -34,10 +34,7 @@ local ID_DYNMAPSUCCESS_CTRL_TEXT_SPOIL1_NUM	= 96;
 
 local ID_DYNMAPSUCCESS_CTRL_PICTURE_18     = 18;
 local ID_DYNMAPSUCCESS_CTRL_PICTURE_15     = 15;
-local ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE4_EXP    = 14;
-local ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE3_EXP    = 13;
-local ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE2_EXP    = 12;
-local ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE1_EXP    = 11;
+
 local ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE4     = 10;
 local ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE3     = 9;
 local ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE2     = 8;
@@ -53,8 +50,15 @@ local TAG_ITEM_INFO_CONTAINER = 9997;			--物品信息与操作
 local TAG_ITEM_INFO = 9998;						--物品信息与操作
 
 
+local ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE4_EXP    = 14;
+local ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE3_EXP    = 13;
+local ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE2_EXP    = 12;
+local ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE1_EXP    = 11;
 local TAG_PET_HEAD = {64,65,66,67,68,};         --人物头像
+local TAG_PET_EXP = {11,12,13,14,27,};         --人物经验
 
+
+local PetShowList = {};         --要显示的部将列表
 
 function p.GetParent()
 	local scene = GetSMGameScene();
@@ -114,6 +118,7 @@ function p.OnUIEvent(uiNode,uiEventType,param)
 				scene:RemoveChildByTag(NMAINSCENECHILDTAG.MonsterReward,true);
 				return true;
 			end
+           --[[ 
 		elseif ID_DYNMAPSUCCESS_CTRL_OBJECT_BUTTON_SPOILS1==tag then
 			if p.rewardItemTypes[1] ~= 0 then 
 				p.ShowItemInfo(p.rewardItemTypes[1]);
@@ -132,12 +137,13 @@ function p.OnUIEvent(uiNode,uiEventType,param)
 			else
 				p.CloseItemInfo();
 			end
+        ]]
 		end
 	end
 	return true;
 end
 
-function p.SetRewardExp(exp)
+function p.SetRewardExp(npetId, exp)
 	local nPlayerId = GetPlayerId();
 	if nil == nPlayerId then
 		LogInfo("nil == nPlayerId");
@@ -148,43 +154,58 @@ function p.SetRewardExp(exp)
 	if nil == layer then
 		return nil;
 	end
-	
-	local name=GetRoleBasicDataS(nPlayerId, USER_ATTR.USER_ATTR_NAME);
-	LogInfo("award "..name);
-	SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE1,name);
-	SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE1_EXP,"经验+"..SafeN2S(exp));
-	
-	local teamList = MatrixConfigFunc.GetCurrentMatrix();
-	if nil == teamList then
-		LogInfo("Matrix nil");
-		return nil;
-	end
-	local n=2;
-	for i=1, 9 do
-		local id=teamList[i];
-		if id~=0 then
-			local ismain=RolePet.GetPetInfoN(id,PET_ATTR.PET_ATTR_MAIN);
-			if ismain==1 then
-				continue;
-			end
-			local name= RolePet.GetPetInfoS(id,PET_ATTR.PET_ATTR_NAME);
-			if n==2 then
-				SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE2,name);
-				SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE2_EXP,"经验+"..SafeN2S(exp));
-			elseif n==3 then
-				SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE3,name);
-				SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE3_EXP,"经验+"..SafeN2S(exp));
-			elseif n==4 then
-				SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE4,name);
-				SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE4_EXP,"经验+"..SafeN2S(exp));
-			elseif n==5 then
-				SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE5,name);
-				SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ROLE5_EXP,"经验+"..SafeN2S(exp));
-			end
-			n=n+1;
-		end
-	end
+    
+    local record = {};
+    record.nPetId = npetId;
+    record.nExp   = exp;
+    LogInfo("p.SetRewardExp petid = %d, exp = %d", npetId, exp);
+    table.insert(PetShowList, record);
 end
+
+--显示人物头像以及经验值
+function p.Refresh()
+	local layer = p.GetParent();
+    LogInfo("function p.Refresh() begin");
+    if PetShowList ~= nil then
+        table.sort(PetShowList, function(a,b) return a.nExp  > b.nExp  end);
+    end
+    
+    local nIndex = 2;
+    for i, v in pairs(PetShowList) do
+        local isMain = RolePet.GetPetInfoN(v.nPetId, PET_ATTR.PET_ATTR_MAIN);
+        if isMain == 1 then
+            --排第一个
+            SetLabel(layer, TAG_PET_EXP[1],"经验+"..SafeN2S(v.nExp));
+            local btn = GetButton(layer, TAG_PET_HEAD[1]);
+             btn:SetImage(p.getPetPicture(v.nPetId));
+        else
+            SetLabel(layer, TAG_PET_EXP[nIndex], "经验+"..SafeN2S(v.nExp));
+            local btn = GetButton(layer, TAG_PET_HEAD[nIndex]);
+            btn:SetImage(p.getPetPicture(v.nPetId));
+            nIndex = nIndex + 1;
+        end
+        LogInfo("isMain = %d, i = %d, petid = %d, exp = %d", isMain, i,  v.nPetId, v.nExp);
+    end
+    
+    for i=1,#TAG_PET_HEAD do
+        local btn = GetButton(layer, TAG_PET_HEAD[i]);
+        if(i>#PetShowList) then
+            btn:SetVisible(false);
+        end
+    end
+end
+
+
+
+
+
+
+
+
+
+
+
+
 
 function p.addSophMoney(iSoph, iMoney)
 	local layer = p.GetParent();
@@ -213,22 +234,31 @@ function p.addRewardItem(index,itemType,amount)
 		SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_SPOIL1_NUM,"x"..SafeN2S(amount));
 		local button1 = GetItemButton(layer,ID_DYNMAPSUCCESS_CTRL_OBJECT_BUTTON_SPOILS1);
 		button1:ChangeItemType(itemType);
-		SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ITEM_NAME1,ItemFunc.GetName(itemType))
+		local l_name = SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ITEM_NAME1,ItemFunc.GetName(itemType))
         button1:SetVisible(true);
+        
+        --设置装备颜色
+        ItemFunc.SetLabelColor(l_name,itemType);
 	elseif index == 2 then
 		p.rewardItemTypes[2]=itemType;
 		SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_SPOIL2_NUM,"x"..SafeN2S(amount));
 		local button2 = GetItemButton(layer,ID_DYNMAPSUCCESS_CTRL_OBJECT_BUTTON_SPOILS2);
 		button2:ChangeItemType(itemType);
-		SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ITEM_NAME2,ItemFunc.GetName(itemType))
+		local l_name = SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ITEM_NAME2,ItemFunc.GetName(itemType))
         button2:SetVisible(true);
+        
+        --设置装备颜色
+        ItemFunc.SetLabelColor(l_name,itemType);
 	elseif index ==3 then
 		p.rewardItemTypes[3]=itemType;
 		SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_SPOIL3_NUM,"x"..SafeN2S(amount));
 		local button3 = GetItemButton(layer,ID_DYNMAPSUCCESS_CTRL_OBJECT_BUTTON_SPOILS3);
 		button3:ChangeItemType(itemType);
-		SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ITEM_NAME3,ItemFunc.GetName(itemType))
+		local l_name = SetLabel(layer,ID_DYNMAPSUCCESS_CTRL_TEXT_ITEM_NAME3,ItemFunc.GetName(itemType))
         button3:SetVisible(true);
+        
+        --设置装备颜色
+        ItemFunc.SetLabelColor(l_name,itemType);
 	end
 end
 
@@ -325,7 +355,13 @@ function p.LoadUI(money,repute)
 	end
 	uiLoad:Load("DynMapSuccess.ini",layer,p.OnUIEvent,0,0);
 	uiLoad:Free();
-            
+           
+    --经验副本不能再次挑战
+    local nEnergy = PlayerFunc.GetStamina(GetPlayerId());
+    if (NormalBossListUI.GetIsBattleType() == 1) or (nEnergy == 0) then
+        local button37 = GetButton(layer, ID_DYNMAPSUCCESS_CTRL_ANGIN_BATTLE);
+        button37:SetVisible(false);  
+    end     
 	
 	--物品信息层初始化
 	local containerItem = createUIScrollContainer();
@@ -351,7 +387,8 @@ function p.LoadUI(money,repute)
 	containerItem:AddChild(scroll);
 	
     --设置武将头像
-    p.SetPetHead();
+    PetShowList = {};   --要显示的部将列表清空
+    --p.SetPetHead();
     
     
     
@@ -373,6 +410,9 @@ end
 --设置用户头像
 function p.SetPetHead()
     local lst, count    = MsgMagic.getRoleMatrixList();
+    
+    LogInfo("function p.SetPetHead() count = %d", count);
+    
 	local currentMatrix    = lst[1];
     if (currentMatrix == nil) then
 		currentMatrix = {0,0,0,0,0,0,0,0};
@@ -382,14 +422,19 @@ function p.SetPetHead()
     --查找出战人数
     for i=1,#currentMatrix do
         if(currentMatrix[i]~=0) then
+            LogInfo("function p.SetPetHead() currentMatrix[i = %d] = %d", i, currentMatrix[i]);
             table.insert(PetList,currentMatrix[i]);
         end
     end
     
+    local Num = table.getn( PetList );
+    LogInfo("Num= %d", Num);
+                
     for i=1,#PetList do
         for j=i,#PetList do
             local PetIExp = RolePet.GetPetInfoN(PetList[i],PET_ATTR.PET_ATTR_EXP);
             local PetJExp = RolePet.GetPetInfoN(PetList[i],PET_ATTR.PET_ATTR_EXP);
+            LogInfo("PetIExp= %d, PetJExp = %d", PetIExp, PetJExp);
             if(PetIExp<PetJExp) then
                 PetList[i] = PetList[j];
             end

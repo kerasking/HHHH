@@ -14,6 +14,7 @@ p.TagRide       = 502;
 p.TagTrain      = 503;
 p.TagClose      = 533;
 p.TAG_EXP       = 42;
+p.TAG_ITEMSIZE       = 4;
 
 p.TagIllsionLayer       = 1000;
 p.TagIllsionClose       = 533;
@@ -26,7 +27,19 @@ p.TagIllsionItemDis     = 12;
 local TAG_BEGIN_ARROW   = 1411;
 local TAG_END_ARROW     = 1412;
 
-local MountListCount     = 3;
+local TAG_E_TMONEY      = 243;  --
+local TAG_E_TEMONEY     = 242;  --
+local TAG_E_TSMB        = 106;  --神马鞭数量
+
+local TAG_E_ZY1         = 107;  --幻化指引1
+local TAG_E_ZY2         = 116;  --幻化指引2
+
+local TAG_C_SPEED_LBL   = 24;
+local TAG_N_SPEED_LBL   = 25;
+
+local TAG_MOUNT_DESC    = 5;    --坐骑说明
+
+local MountListCount     = 2;
 
 p.TagMountLevel = {
 	NAME = 601,
@@ -45,7 +58,7 @@ p.TagRadioGroud = {
 
 p.TagMountPic	= 100;
 
-local IllsionSize = CGSizeMake((120+20)*ScaleFactor, 140*ScaleFactor);
+local IllsionSize = CGSizeMake((120+10)*ScaleFactor, 140*ScaleFactor);
 
 p.MountModelIds = {}        --坐骑模型ID
 
@@ -62,7 +75,7 @@ p.TagCurrProp	= {
 	NSPEED	= 305,
 };
 
-p.MaxStarLevel = 60;
+p.MaxStarLevel = 0;
 
 --金钱不足
 function p.MoneyNotEnough()
@@ -89,17 +102,55 @@ end
 
 --爆击
 function p.TipKnocking(data)
+    --[[
     local nExp = p.MountInfo.exp - p.MountInfo.pre_exp;
-    local nStr = string.format("%s +%d",GetTxtPub("exp"),nExp);
-    if(data == 1 )then
+    ]]
+    
+    
+    if(data.nTrainType == 1 or data.nTrainType == 2) then
+        local nStr = "";
+        if(data.nSmallCrit > 0) then
+            nStr = string.format(GetTxtPri("DanChiBaoJiX10Exp"),data.nTrainExp);
+        else
+            nStr = string.format("%s +%d",GetTxtPub("exp"),data.nTrainExp);
+        end
+        CommonDlgNew.ShowTipDlg(nStr);
+        
+    elseif(data.nTrainType == 3) then
+    
+        local sTotal = string.format(GetTxtPri("MaxBaoJiX1Level2"),data.nTrainExp);
+        CommonDlgNew.ShowTipDlg(sTotal);
+        
+        
+        local nStr = "";
+        if(data.nSmallCrit > 0) then
+            nStr = string.format(GetTxtPri("BaoJiX10Exp"),data.nSmallCrit);
+        end
+        
+        if(data.nBigCrit > 0) then
+            local sXun = "";
+            if(data.nSmallCrit > 0) then
+                sXun = ",";
+            end
+            local sBigCrit = string.format(GetTxtPri("MaxBaoJiX1Level"),data.nBigCrit);
+            nStr = string.format("%s%s%s",nStr,sXun,sBigCrit);
+        end
+        
+        CommonDlgNew.ShowTipDlg(nStr);
+        
+    end
+    
+    --[[
+    if(data.nCritType == 1 )then
         nStr = string.format("%s %s",GetTxtPri("BaoJiX10Exp"),nStr);
-    elseif data == 2 then
+    elseif data.nCritType == 2 then
         nStr = string.format("%s",GetTxtPri("MaxBaoJiX1Level"));
     end
-    CommonDlgNew.ShowTipDlg(nStr);
+    ]]
 end
 
-function p.LoadUI()
+--bIsSMB:是否是从背包中的使用神马鞭连接过来的，如果是那么默认选中金币培养选项
+function p.LoadUI(bIsSMB)
     local scene = GetSMGameScene();
 	if scene == nil then
 		return;
@@ -144,15 +195,54 @@ function p.LoadUI()
     uiLoad2:Load("Mount_Illusion.ini", layerIllsion, p.OnUIIllsionEvent, CONTAINTER_X, CONTAINTER_Y);
     uiLoad2:Free();
     
-    p.setTrainRadio(p.TagRadioGroud.TONG);
+    if(bIsSMB) then
+        p.setTrainRadio(p.TagRadioGroud.JIN10);
+    else
+        p.setTrainRadio(p.TagRadioGroud.TONG);
+    end
     
     p.initData();
     
     p.refreshUI();
     
-    p.setArrow(p.GetIllusionLayer(),p.GetListContainer());
+    SetArrow(p.GetIllusionLayer(),p.GetListContainer(),MountListCount,TAG_BEGIN_ARROW,TAG_END_ARROW);
+    
+    --坐骑文字说明
+    p.CreateMountDesc();
+    
+    
+    local TAG_C_SPEED_TXT   = 24;
+    local TAG_N_SPEED_TXT   = 25;
+    
+    local c_s_lbl = GetLabel( layer, TAG_C_SPEED_LBL );
+    local n_s_lbl = GetLabel( layer, TAG_N_SPEED_LBL );
+    
+    local c_s_txt = GetLabel( layer, p.TagCurrProp.SPEED );
+    local n_s_txt = GetLabel( layer, p.TagCurrProp.NSPEED );
+    
+    c_s_lbl:SetVisible( false );
+    n_s_lbl:SetVisible( false );
+    c_s_txt:SetVisible( false );
+    n_s_txt:SetVisible( false );
     
     return true;
+end
+
+--坐骑说明
+function p.CreateMountDesc()
+    local layer = p.getMainLayer();
+    
+    --坐骑说明
+    local l_desc = GetLabel(layer, TAG_MOUNT_DESC);
+    l_desc:SetVisible(false);
+    
+    
+    local pLabelTips = _G.CreateColorLabel( "  坐骑加成的属性在竞技场、军团战等PVP活动中有效<cff0000(加成的属性受宝石加成)/e。每提升10个星级，坐骑即可转生。每转生一次，坐骑将解锁新的幻化造型。", l_desc:GetFontSize()/2, l_desc:GetFrameRect().size.w );
+   
+     if CheckP(pLabelTips) then
+		pLabelTips:SetFrameRect(l_desc:GetFrameRect());
+		layer:AddChild(pLabelTips);
+	end
 end
 
 --幻化信息层事件
@@ -196,35 +286,17 @@ function p.OnUIIllsionEvent(uiNode, uiEventType, param)
     if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		if p.TagIllsionClose == tag then
             local layerIllsion = p.GetIllusionLayer()
-            layerIllsion:SetVisible(false);        
+            layerIllsion:SetVisible(false);
+            p.CloseTutorial();
         end
 	elseif uiEventType == NUIEventType.TE_TOUCH_SC_VIEW_IN_BEGIN then
         if p.TagIllusionList == tag then 
-            p.setArrow(p.GetIllusionLayer(),p.GetListContainer());
+            SetArrow(p.GetIllusionLayer(),p.GetListContainer(),MountListCount,TAG_BEGIN_ARROW,TAG_END_ARROW);
         end
 	end
+    
 	return true;
 end
-
-
-function p.setArrow(layer,pageView)
-    --设置箭头   
-    local larrow    = GetButton(layer,TAG_BEGIN_ARROW);
-    local rarrow    = GetButton(layer,TAG_END_ARROW);
-            
-    local pageIndex = pageView:GetBeginIndex();
-    local pageCount = pageView:GetViewCount();
-    
-    larrow:EnalbeGray(false);
-    rarrow:EnalbeGray(false);
-    if(pageIndex == 0) then
-        larrow:EnalbeGray(true);
-    end
-    if(pageIndex >= pageCount-1-MountListCount) then
-        rarrow:EnalbeGray(true);
-    end
-end
-
 
 
 function p.OnUIIllsionItemEvent(uiNode, uiEventType, param)
@@ -234,6 +306,7 @@ function p.OnUIIllsionItemEvent(uiNode, uiEventType, param)
         if(tag == p.TagIllsionItemBtn) then
             local btn = ConverToButton(uiNode);
             p.illusionData(btn:GetParam1());
+            p.CloseTutorial();
         end
 	end
     return true;
@@ -295,17 +368,33 @@ function p.clickTrain()
             return;
         end
     elseif(selectid==2)then
-        if(p.EoneyNotEnough(10) == false) then
+        
+        if(p.EoneyNotEnough(10-p.GetSMBCount()*10) == false) then
            return;
         end
     elseif(selectid==3)then
-        if(p.EoneyNotEnough(500) == false) then
+        if(p.EoneyNotEnough(500-p.GetSMBCount()*10) == false) then
            return;
         end
     end
     --tx
     MsgMount.sendTrain(p.getSelectRadio());
 end
+
+--获得神马鞭数量
+function p.GetSMBCount()
+    local nCount = 0;
+    local nPlayerId		= ConvertN(GetPlayerId());
+	local idlistItem	= ItemUser.GetBagItemList(nPlayerId);
+    for i,v in ipairs(idlistItem) do
+        local nItemType = Item.GetItemInfoN(v, Item.ITEM_TYPE);
+        if(nItemType == 36000000) then
+            nCount = nCount + Item.GetItemInfoN(v, Item.ITEM_AMOUNT);
+        end
+    end
+    return nCount;
+end
+
 
 --处理幻化事件
 function p.illusionData(mountModelId)
@@ -315,6 +404,9 @@ end
 
 function p.initData()
 	p.initConst();
+    
+    
+    
     
     --[[
 	p.MountInfo = {
@@ -330,6 +422,9 @@ function p.initData()
     
     p.MountModelIds = GetDataBaseIdList("mount_model_config");
     
+    p.MaxStarLevel  = #GetDataBaseIdList("mount_config");
+    
+    
     MsgMount.mUIListener = p.processNet;
 end
 
@@ -341,6 +436,9 @@ function p.refreshUI()
     p.refreshInfo();
     p.refreshIllsion();
     p.refreshRideButton(p.MountInfo.ride);
+    
+    p.refreshSMB();
+    p.refreshMoney();
 end
 
 function p.refreshInfo()
@@ -368,19 +466,12 @@ function p.refreshInfo()
         tempstr9 = GetDataBaseDataN("mount_config",nextStar,DB_MOUNT.LIFE).."";
         tempstr10 = GetDataBaseDataN("mount_config",nextStar,DB_MOUNT.SPEED).."%";
     end
-
-    --local l_name = GetLabel(layer, p.TagMountLevel.NAME);
-    --l_name:SetText(GetDataBaseDataS("mount_model_config",p.MountInfo.illusionId,DB_MOUNT_MODEL.NAME));
     
 	local l_turn = GetLabel(layer, p.TagMountLevel.TURN);
     l_turn:SetText(p.GetTurn(p.MountInfo.star).."转");
 
 	local l_star = GetLabel(layer, p.TagMountLevel.STAR);
     l_star:SetText(p.GetStar(p.MountInfo.star).."星");
-    
-    
-	--local p_pic   = GetImage(layer, p.TagMountPic);
-	--p_pic:SetPicture(GetMountModelPotraitPic(p.MountInfo.illusionId));
     
     p.refreshMountAnimate(p.MountInfo.illusionId);
     
@@ -413,6 +504,12 @@ function p.refreshInfo()
     
     local l_nspeed = GetLabel(layer, p.TagCurrProp.NSPEED);
     l_nspeed:SetText(tempstr10);
+    
+    
+    if p.MountInfo.star >= p.MaxStarLevel then
+        local btn = GetButton(layer, p.TagTrain);
+        btn:EnalbeGray(true);
+    end
     
     p.refreshExpBar();
 end
@@ -475,11 +572,14 @@ function p.refreshExpBar()
     
     local t = GetDataBaseDataN("mount_config",p.MountInfo.star,DB_MOUNT.EXP);
     local c = p.MountInfo.exp;
-    
-    if p.MountInfo.star > p.MaxStarLevel then
-		c = t;
-	end
     local startExp = GetDataBaseDataN("mount_config",p.MountInfo.star-1,DB_MOUNT.EXP);
+    
+    if p.MountInfo.star >= p.MaxStarLevel then
+        t = GetDataBaseDataN("mount_config",p.MountInfo.star-1,DB_MOUNT.EXP);
+        c = t;
+        startExp = GetDataBaseDataN("mount_config",p.MountInfo.star-2,DB_MOUNT.EXP);
+    end
+    
     
     local expUI	= RecursivUIExp(layer, {p.TAG_EXP});
     
@@ -503,7 +603,7 @@ function p.refreshIllsion()
 		return;
 	end
     container:RemoveAllView();
-    container:SetViewSize(IllsionSize);
+    --container:SetViewSize(IllsionSize);
     
     LogInfo("mcount:[%d]",#p.MountModelIds);
     
@@ -520,7 +620,7 @@ function p.refreshIllsion()
         view:SetMovableViewer(container);
         view:SetScrollViewer(container);
         view:SetContainer(container);
-        container:AddView(view);
+        
         --初始化ui
         local uiLoad = createNDUILoad();
         if nil == uiLoad then
@@ -529,6 +629,7 @@ function p.refreshIllsion()
         uiLoad:Load("Mount_Illusion_Item.ini", view, p.OnUIIllsionItemEvent, 0, 0);
 		
         p.refreshIllsionItem(v,view);
+        container:AddView(view);
         uiLoad:Free();
 	end
     
@@ -564,10 +665,55 @@ function p.refreshIllsionItem(num, view)
         lock_btn:SetVisible(false);
     end
     
+    local pic = GetImage(view, p.TAG_ITEMSIZE);
+    local container = p.GetListContainer();
+    container:SetViewSize(pic:GetFrameRect().size);
 end
+
+function p.OpenTutorial()
+    LogInfo("p.OpenTutorial");
+    --光效1
+    local layer = p.getMainLayer();
+    if(layer == nil) then
+        LogInfo("p.OpenTutorial layer is nil");
+        return false;
+    end
+    local animate = RecursivUISprite(layer,{TAG_E_ZY1});
+    local szAniPath = NDPath_GetAnimationPath();
+    animate:ChangeSprite(szAniPath.."jiantx03.spr");
+    animate:SetVisible(true);
+    
+    --光效2
+    local illusionLayer = p.GetIllusionLayer();
+    if(illusionLayer == nil) then
+        LogInfo("p.OpenTutorial illusionLayer is nil");
+        return false;
+    end
+    local animate = RecursivUISprite(illusionLayer,{TAG_E_ZY2});
+    local szAniPath = NDPath_GetAnimationPath();
+    animate:ChangeSprite(szAniPath.."jiantx03.spr");
+    animate:SetVisible(true);
+end
+
+function p.CloseTutorial()
+    LogInfo("p.CloseTutorial");
+    local layer = p.getMainLayer();
+    local animate = RecursivUISprite(layer,{TAG_E_ZY1});
+    animate:SetVisible(false);
+    
+    local illusionLayer = p.GetIllusionLayer();
+    local animate = RecursivUISprite(illusionLayer,{TAG_E_ZY2});
+    animate:SetVisible(false);  
+end
+
+local TAG_E_ZY1         = 107;  --幻化指引1
+local TAG_E_ZY2         = 116;  --幻化指引2
 
 function p.getMainLayer()
     local scene = GetSMGameScene();
+    if(scene == nil) then
+        return nil;
+    end
 	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PetUI);
     return layer;
 end
@@ -610,8 +756,12 @@ function p.processNet(msgId, data)
         
         --引导任务事件触发
         GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.HORSE);
-
+        
+        --爆击提示
         p.TipKnocking(data);
+        
+        --刷新神马鞭
+        p.refreshSMB();
 	end
 end
 
@@ -664,7 +814,32 @@ function p.isTrainCheck(tag)
 end
 
 
+--刷新神马鞭
+function p.refreshSMB()
+    LogInfo("p.refreshSMB");
+    local nPlayerId     = GetPlayerId();
+    local layer = p.getMainLayer();
+    if(layer == nil) then
+        return;
+    end
+    local nSMB = p.GetSMBCount();
+    _G.SetLabel(layer, TAG_E_TSMB, nSMB.."");
+end
 
 
+--刷新金钱
+function p.refreshMoney()
+    local nPlayerId     = GetPlayerId();
+    local layer = p.getMainLayer();
+    if(layer == nil) then
+        return;
+    end
+    
+    local nmoney        = MoneyFormat(GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_MONEY));
+    local ngmoney        = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY).."";
+    
+    _G.SetLabel(layer, TAG_E_TMONEY, nmoney);
+    _G.SetLabel(layer, TAG_E_TEMONEY, ngmoney);
+end
 
-
+GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"PetUI.refreshMoney",p.refreshMoney);

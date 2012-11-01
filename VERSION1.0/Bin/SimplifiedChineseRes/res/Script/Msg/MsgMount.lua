@@ -12,7 +12,7 @@ p.mUIListener = nil;
 
 
 p.RolePetInfo = {   
-    pre_exp = nil;        --上一次经验
+    pre_exp = nil;      --上一次经验
     exp     = 0,        --经验
     star    = 0,        --星级
     ride    = 0,        --0.休息 1.骑
@@ -49,7 +49,57 @@ function p.processMountInfo(netdata)
     
     if(p.RolePetInfo.star>0 and p.RolePetInfo.star ~= star) then
         --坐骑升级光效
-        PlayEffectAnimation.ShowAnimation( 3 )
+        PlayEffectAnimation.ShowAnimation( 3 );
+        
+        --提示属性增加
+        local tempstr1,tempstr2,tempstr3,tempstr4,tempstr5,tempstr6,tempstr7,tempstr8,tempstr9,tempstr10;
+        
+        tempstr1 = GetDataBaseDataN("mount_config",p.RolePetInfo.star,DB_MOUNT.STR);
+        tempstr2 = GetDataBaseDataN("mount_config",p.RolePetInfo.star,DB_MOUNT.AGI);
+        tempstr3 = GetDataBaseDataN("mount_config",p.RolePetInfo.star,DB_MOUNT.INI);
+        tempstr4 = GetDataBaseDataN("mount_config",p.RolePetInfo.star,DB_MOUNT.LIFE);
+        tempstr5 = GetDataBaseDataN("mount_config",p.RolePetInfo.star,DB_MOUNT.SPEED);
+        
+        tempstr6 = GetDataBaseDataN("mount_config",star,DB_MOUNT.STR);
+        tempstr7 = GetDataBaseDataN("mount_config",star,DB_MOUNT.AGI);
+        tempstr8 = GetDataBaseDataN("mount_config",star,DB_MOUNT.INI);
+        tempstr9 = GetDataBaseDataN("mount_config",star,DB_MOUNT.LIFE);
+        tempstr10 = GetDataBaseDataN("mount_config",star,DB_MOUNT.SPEED);
+        
+        tempstr1 = tempstr6 - tempstr1;
+        tempstr2 = tempstr7 - tempstr2;
+        tempstr3 = tempstr8 - tempstr3;
+        tempstr4 = tempstr9 - tempstr4;
+        tempstr5 = tempstr10 - tempstr5;
+        
+        local tips = {};
+        if(tempstr1>0) then
+            table.insert(tips,{"力量 +"..tempstr1,FontColor.Text});
+        end
+        if(tempstr2>0) then
+            table.insert(tips,{"敏捷 +"..tempstr2,FontColor.Text});
+        end
+        if(tempstr3>0) then
+            table.insert(tips,{"智力 +"..tempstr3,FontColor.Text});
+        end
+        if(tempstr4>0) then
+            table.insert(tips,{"生命 +"..tempstr4,FontColor.Text});
+        end
+        if(tempstr5>0) then
+            table.insert(tips,{string.format("速度 +%d%s",tempstr5,"%"),FontColor.Text});
+        end
+        
+        CommonDlgNew.ShowTipsDlg(tips);
+        
+        
+        
+        local nTrun1 = PetUI.GetTurn(p.RolePetInfo.star);
+        local nTrun2 = PetUI.GetTurn(star);
+        
+        if(nTrun1 ~= nTrun2) then
+            PetUI.OpenTutorial();
+        end
+        
     end
     
     p.RolePetInfo.star = star;
@@ -156,11 +206,18 @@ function p.sendTrain(tp)
 end
 
 function p.receiveSendTrainResult(netdata)
+    local m = {};
     LogInfo("p.receiveSendTrainResult");
-    local status = netdata:ReadInt();       --培养类型
-    local status = netdata:ReadByte();      --0无 1.暴击
+    m.nTrainType = netdata:ReadInt();           --培养类型
+    m.nBigCrit = netdata:ReadByte();            --大暴击次数
+    m.nSmallCrit = netdata:ReadByte();          --小暴击次数
+    m.nTrainExp = netdata:ReadInt();            --培养经验
+    
+    LogInfo("m.nTrainType:[%d],m.nBigCrit:[%d],m.nSmallCrit:[%d],m.nTrainExp:[%d],",m.nTrainType,m.nBigCrit,m.nSmallCrit,m.nTrainExp);
+    
+    
     if (p.mUIListener) then
-		p.mUIListener( NMSG_Type._MSG_USER_CHANGE_MOUNT_UPGRUDE,status);
+		p.mUIListener( NMSG_Type._MSG_USER_CHANGE_MOUNT_UPGRUDE,m);
 	end
     CloseLoadBar();
 end

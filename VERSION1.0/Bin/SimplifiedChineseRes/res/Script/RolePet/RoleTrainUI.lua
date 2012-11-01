@@ -37,7 +37,7 @@ local tIconIDInListItem = { 2, 3 };
 local ID_LIST_ITEM_BORDER				= 4;	-- 列表项的外框控件
 
 local PET_NUM_PER_LISTITEM				= 2;	-- 每个列表项可显示的武将个数
-local TRAIN_LIMIT_TIME					= 60*60*24;--训练的限制时间
+local TRAIN_LIMIT_TIME					= 60*60*24;--训练的限制时间(s)
 
 ---------------------------------------------------
 -- 培养类型
@@ -57,10 +57,10 @@ TRAIN_INFO = {
 };
 -- 各类训练简介-{ nGold, szIntro, nVIP, szDetail }
 local tTrainInfo = {
-	{ 5, "消耗5金币，该武将可获得24小时高级训练经验；若是上阵武将在训练时间内通关副本或完成任务获得经验将增加20%。", 0, "普通训练进行中……", 20 },
-	{ 10, "消耗10金币，该武将可获得24小时高级训练经验；若是上阵武将在训练时间内通关副本或完成任务获得经验将增加50%。需VIP1。", 1, "高级训练进行中……", 50 },
-	{ 20, "消耗20金币，该武将可获得24小时金钻训练经验；若是上阵武将在训练时间内通关副本或完成任务获得经验将增加100%。需VIP4。", 4, "白金训练进行中……", 100 },
-	{ 50, "消耗50金币，该武将可获得24小时至尊训练经验；若是上阵武将在训练时间内通关副本或完成任务获得经验将增加150%。需VIP8。", 8, "金钻训练进行中……", 150 },
+	{ 5, "消耗5金币，该武将可获得24小时高级训练经验；若是上阵武将在训练时间内通关副本或完成任务获得经验将增加20%。", 0, "高级训练进行中……", 20 },
+	{ 10, "消耗10金币，该武将可获得24小时高级训练经验；若是上阵武将在训练时间内通关副本或完成任务获得经验将增加50%。需VIP1。", 1, "白金训练进行中……", 40 },
+	{ 20, "消耗20金币，该武将可获得24小时金钻训练经验；若是上阵武将在训练时间内通关副本或完成任务获得经验将增加100%。需VIP4。", 4, "金钻训练进行中……", 60 },
+	{ 50, "消耗50金币，该武将可获得24小时至尊训练经验；若是上阵武将在训练时间内通关副本或完成任务获得经验将增加150%。需VIP8。", 8, "至尊训练进行中……", 100 },
 };
 
 
@@ -79,6 +79,7 @@ p.pLabelExp				= nil;	-- 经验数值标签
 p.pLabelIntro			= nil;	-- 简介标签
 p.pLabelDetail			= nil;	-- 某训练进行中提示标签--倒计时标签
 p.pLabelTimer			= nil;	-- 倒计时标签
+p.pFocusBtn				= nil;	-- 选中的高亮的按钮
 
 p.nCheckedPetID			= nil;	-- 选中的武将ID
 p.nPetTrainType			= nil;	-- 选中武将的训练类型,0=无
@@ -133,6 +134,13 @@ function p.LoadUI( nChosenPetID)
 	
 	-- 队伍中的武将PetID列表
 	local tPetIDsInTeam		= RolePetUser.GetPetListPlayer( GetPlayerId() );
+	local nPlayerPetID		= RolePetFunc.GetMainPetId( GetPlayerId() );
+	for i, v in ipairs(tPetIDsInTeam) do
+		if ( v == nPlayerPetID ) then
+			table.remove( tPetIDsInTeam, i );--移除主角的PetID
+			break;
+		end
+	end
 	local nPetAmount		= table.getn( tPetIDsInTeam );
 	if ( nPetAmount == 0 ) then
 		CommonDlgNew.ShowYesDlg( "无武将！", nil, nil, 3 );
@@ -176,6 +184,7 @@ function p.LoadUI( nChosenPetID)
 	
 	p.nCheckedPetID	= nChosenPetID;--tPetIDsInTeam[2];
 	p.RefreshRightZone( p.nCheckedPetID );
+	p.ShowFocus( layer, p.nCheckedPetID );
 	return true;
 end
 
@@ -257,11 +266,15 @@ function p.RefreshRightZone( nPetID )
 			szDetail		= szDetail .. "\n剩余时间：\n";
 			p.pLabelDetail:SetText( szDetail );
 			p.nEndMoment = tRecord.nEndMoment;
-			p.pLabelTimer:SetText( p.GetTimeString( p.nEndMoment - GetCurrentTime() ) );
+			local nTime = p.nEndMoment - GetCurrentTime();
+			if ( nTime < 0 ) then
+				nTime = 0;
+			end
+			p.pLabelTimer:SetText( p.GetTimeString( nTime ) );
 			-- 经验
 			local nPlayerNextLvlExp	= RolePetFunc.GetNextLvlExp( RolePetFunc.GetMainPetId( GetPlayerId() ) );
 			--LogInfo( "RefreshRightZone: RefreshRightZone() nPlayerNextLvlExp:%d", nPlayerNextLvlExp );
-			local nValidTime		= TRAIN_LIMIT_TIME - ( tRecord.nEndMoment - GetCurrentTime() ) - tRecord.nPickUpTime;
+			local nValidTime		= TRAIN_LIMIT_TIME - nTime - tRecord.nPickUpTime;
 			local nScale			= tTrainInfo[tRecord.nTrainType][TRAIN_INFO.EXPADD];
 			local nPetExp			= nPlayerNextLvlExp * nValidTime * nScale / TRAIN_LIMIT_TIME / 100;
 			nPetExp					= math.ceil( nPetExp );
@@ -318,18 +331,21 @@ p.pLabelExp				= nil;
 p.pLabelIntro			= nil;
 p.pLabelDetail			= nil;
 p.pLabelTimer			= nil;
+p.pFocusBtn				= nil;
 p.nCheckedPetID			= nil;
 p.nPetTrainType			= nil;
 p.nCheckedTrainType		= nil;
 p.nTimerID				= nil;
 p.nEndMoment			= nil;
 			MsgRoleTrain.mUIListener = nil;
+            PlayerUIAttr.UpdatePetAttr();
 		elseif ( ID_BTN_START_TRAIN == tag ) then
 			p.OnBtnStartTrain();
 		elseif ( ID_BTN_STOP_TRAIN == tag ) then
 			p.OnBtnStopTrain();
 		elseif ( ID_BTN_PICK_UP_EXP == tag ) then
 			MsgRoleTrain.SetMsgPickUpExp( p.nCheckedPetID );
+            --PlayerUIAttr.UpdatePetAttrById(p.nCheckedPetID);
 		end
 	elseif ( uiEventType == NUIEventType.TE_TOUCH_CHECK_CLICK ) then
 		if ( p.nPetTrainType == nil ) then
@@ -460,16 +476,28 @@ function p.FillListContainer( pParentLayer, tPetTable )
 	if ( nPetAmount == 0 ) then
 		return false;
 	end
+    
+	local layer = createNDUILayer();
+	layer:Init();
+	local uiLoad=createNDUILoad();
+	uiLoad:Load( "RoleTrainUI_ListItem.ini", layer, nil, 0, 0 );
+	uiLoad:Free();
+	local pBorder = GetImage( layer, ID_LIST_ITEM_BORDER );
+	local tSize = pBorder:GetFrameRect().size;
+	layer:Free();
+    
 	-- 获得滚屏容器
 	local pScrollViewContainer = GetScrollViewContainer( pParentLayer,ID_LIST_CONTAINER );
 	if nil == pScrollViewContainer then
 		LogInfo( "RoleTrainUI: FillListContainer() failed! pScrollViewContainer is nil" );
 		return false;
 	end
+    pScrollViewContainer:EnableScrollBar(true);
 	pScrollViewContainer:SetStyle( UIScrollStyle.Verical );
-	pScrollViewContainer:SetViewSize( CGSizeMake( 58*2*2, 59*2*2 ) );-- 设置列表项的宽高--待定
+	pScrollViewContainer:SetViewSize( tSize );
 	
-	local nListItemAmount	= ( nPetAmount + ( PET_NUM_PER_LISTITEM - 1 ) ) / PET_NUM_PER_LISTITEM;
+	local nListItemAmount	= ( nPetAmount + 1 ) / PET_NUM_PER_LISTITEM;
+	LogInfo( "RoleTrainUI:" .. " nPetAmount:"..nPetAmount.." nListItemAmount:"..nListItemAmount );
 	for i = 1, nListItemAmount do
 		local pListItem = createUIScrollView();
 	
@@ -495,8 +523,8 @@ function p.FillListContainer( pParentLayer, tPetTable )
 		
 		local pLeftBtn		= GetButton( pListItem, tIconIDInListItem[1] );
 		local pRightBtn 	= GetButton( pListItem, tIconIDInListItem[2] );
-		local nLeftPetID	= tPetTable[PET_NUM_PER_LISTITEM*i];
-		local nRightPetID	= tPetTable[PET_NUM_PER_LISTITEM*i+1];
+		local nLeftPetID	= tPetTable[PET_NUM_PER_LISTITEM*(i-1)+1];
+		local nRightPetID	= tPetTable[PET_NUM_PER_LISTITEM*(i-1)+2];
 		
 		if ( nLeftPetID ~= nil ) then
 			local nPetType	= RolePet.GetPetInfoN( nLeftPetID, PET_ATTR.PET_ATTR_TYPE )
@@ -520,11 +548,6 @@ function p.FillListContainer( pParentLayer, tPetTable )
 			pRightBtn:SetVisible( false );
 		end
 		
-		local pBorder = GetImage( pListItem, ID_LIST_ITEM_BORDER );
-		if ( pBorder ~= nil ) then
-			pScrollViewContainer:SetViewSize( pBorder:GetFrameRect().size );
-		end
-		
 	end
 end
 
@@ -534,6 +557,11 @@ function p.OnListItemEvent( uiNode, uiEventType, param )
 	local nTag = uiNode:GetTag();
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		--LogInfo( "RoleTrainUI: OnListItemEvent() nTag:%d", nTag );
+		if ( p.pFocusBtn ~= nil ) then
+			ConverToButton(p.pFocusBtn):SetFocus( false );
+		end
+		p.pFocusBtn = ConverToButton(uiNode);
+		p.pFocusBtn:SetFocus( true );
 		if ( p.nCheckedPetID ~= nTag ) then
 			p.nCheckedPetID = nTag;
 			p.RefreshRightZone( p.nCheckedPetID );
@@ -559,4 +587,23 @@ function p.HandleNetMsg( nMsgID, param )
 end
 
 ---------------------------------------------------
+function p.ShowFocus( pParentLayer, nPetID )
+	-- 获得滚屏容器
+	local pScrollViewContainer	= GetScrollViewContainer( pParentLayer,ID_LIST_CONTAINER );
+	local nViewAmount			= pScrollViewContainer:GetViewCount()
+	if ( nViewAmount == 0 ) then
+		return;
+	end
+	for i=1, nViewAmount do
+		local pView = pScrollViewContainer:GetViewById( i );
+		if ( pView ~= nil ) then
+			local pBtn = GetButton( pView, nPetID );
+			if ( pBtn ~= nil ) then
+				ConverToButton(pBtn):SetFocus( true );
+				p.pFocusBtn = pBtn;
+				break;
+			end
+		end
+	end
+end
 

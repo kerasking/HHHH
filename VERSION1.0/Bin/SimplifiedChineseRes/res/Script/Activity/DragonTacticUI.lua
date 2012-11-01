@@ -7,7 +7,6 @@ DragonTacticUI = {}
 local p = DragonTacticUI;
 
 
-
 p.CurFocusBtnId   = 0;    --当前的焦点按钮
 p.TabInfo = { TacticTabInfo      =     {LayerTag = 1001, tabBtnId = 24,  focusIndex = 1, FucInit = nil, 
                                                             FucRefresh = nil, FucOnEvent = nil, viewId = 7,},
@@ -15,8 +14,9 @@ p.TabInfo = { TacticTabInfo      =     {LayerTag = 1001, tabBtnId = 24,  focusIn
                        GameAssisInfo  =    {LayerTag = 1002,  tabBtnId = 25,  focusIndex = 2, FucInit = nil, 
                                                            FucRefresh = nil, FucOnEvent = nil, viewId = 7,},
                        
+                       --[[
                        EveryDayActInfo  =  {LayerTag = 1003,  tabBtnId = 26,  focusIndex = 1, FucInit = nil, 
-                                                            FucRefresh = nil, FucOnEvent = nil, },
+                                                            FucRefresh = nil, FucOnEvent = nil, },]]
 }
 
 --获取记录类型   1为大话兵法  2为没钱了怎么办  3为我要升级   4打不过敌军怎么办 5 如何获得装备  6其他功能说明
@@ -24,11 +24,11 @@ p.TypeTitleDes = {"没钱了怎么办", "我要升级", "打不过敌军怎么�
 
 p.TacticInfoList = {};                 --大话兵法要显示的信息列表
 p.GameAssisInfoList = {};       --游戏助手要显示的信息列表
-p.EveryDayActList = {};           --日常活动要显示的信息列表
+--p.EveryDayActList = {};           --日常活动要显示的信息列表
 
 p.TacticStatusList = {};                 --大话兵法列表项更新状态表
 local RectSubUILayer = CGRectMake(0, 39*ScaleFactor, 480*ScaleFactor, 275.0*ScaleFactor);
-local TacticListSize = CGSizeMake(230*ScaleFactor, 35*ScaleFactor);
+local TacticListSize = CGSizeMake(230*ScaleFactor, 36*ScaleFactor);
 
 local CONTAINTER_X = 0;
 local CONTAINTER_Y = 0;
@@ -39,6 +39,9 @@ local CTR_BTN_22 = 22;
 local CTR_TEXT_3        = 3;
 local CTR_TEXT_23       = 23;
 local CTR_TEXT_21       = 21;
+local CTRL_SPRITE_87    = 87;
+local CTR_BTN_26 = 26;
+
 
 --加载龙将兵法主界面
 function p.LoadUI()
@@ -58,7 +61,7 @@ function p.LoadUI()
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.DragonTactic);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,2);
 
     local uiLoad = createNDUILoad();
 	if nil == uiLoad then
@@ -67,8 +70,11 @@ function p.LoadUI()
 	end
 	uiLoad:Load("achieve_BG.ini", layer, p.OnUIEvent, CONTAINTER_X, CONTAINTER_Y);
 
+    local BtnEveryDay = GetButton(layer, CTR_BTN_26);
+    BtnEveryDay:SetVisible(false);
     --初始化标签页面的基本信息
     p.InitTabInfo();
+    
 
    ------------------------------------------------------------------添加大话兵法层-----------------------------------------------------------------------
     local layerTactic = createNDUILayer();
@@ -93,7 +99,9 @@ function p.LoadUI()
     
     local BtnClose = GetButton(layerTactic, CTR_BTN_22);
     BtnClose:EnalbeGray(true);
-
+    
+    p.GetTutorial(false);
+    
     ------------------------------------------------------------------添加游戏助手层-----------------------------------------------------------------------
     local layerGameAssis = createNDUILayer();
 	if layerGameAssis == nil then
@@ -116,6 +124,7 @@ function p.LoadUI()
     uiLoad:Free();
 
     ------------------------------------------------------------------添加日常活动层-----------------------------------------------------------------------
+    --[[
     local layerEveryDayAct = createNDUILayer();
 	if layerEveryDayAct == nil then
 		return false;
@@ -136,7 +145,7 @@ function p.LoadUI()
 
 	uiLoad:Load("achieve_3.ini", layerEveryDayAct,  p.TabInfo.EveryDayActInfo.FucOnEvent, CONTAINTER_X, CONTAINTER_Y);
     uiLoad:Free(); 
-    
+    ]]
      -------------------------------初始化数据------------------------------------     
     p.initData();
     p.ChangeTab(p.TabInfo.TacticTabInfo.tabBtnId);
@@ -148,6 +157,15 @@ function p.LoadUI()
     return true;
 end
 
+function p.GetTutorial(nFlag)
+    local layer = p.GetLayerByTag(p.TabInfo.TacticTabInfo.LayerTag);   
+    local animate = RecursivUISprite(layer,{CTRL_SPRITE_87});
+    local szAniPath = NDPath_GetAnimationPath();
+    animate:ChangeSprite(szAniPath.."jiantx03.spr");
+    animate:SetVisible(nFlag);
+end
+
+
 -----------------------------初始化标签页面的基本信息---------------------------------
 function p.InitTabInfo()
 --[[
@@ -157,7 +175,7 @@ p.TabInfo = { TacticTabInfo      =     {LayerTag = 1001, tabBtnId = 24,  focusIn
 }]]
     p.TabInfo.TacticTabInfo.focusIndex = 1;
     p.TabInfo.GameAssisInfo.focusIndex = 2;
-    p.TabInfo.EveryDayActInfo.focusIndex = 1;
+    --p.TabInfo.EveryDayActInfo.focusIndex = 1;
         
    p.TabInfo.TacticTabInfo.FucInit = p.TacticInit;
    p.TabInfo.TacticTabInfo.FucRefresh = p.TacticRefresh;
@@ -167,9 +185,10 @@ p.TabInfo = { TacticTabInfo      =     {LayerTag = 1001, tabBtnId = 24,  focusIn
    p.TabInfo.GameAssisInfo.FucRefresh = p.GameAssisRefresh;
    p.TabInfo.GameAssisInfo.FucOnEvent = p.GameAssisOnEvent;
    
+   --[[
    p.TabInfo.EveryDayActInfo.FucInit = p.EveryDayActicInit;
    p.TabInfo.EveryDayActInfo.FucRefresh = p.EveryDayActRefresh;
-   p.TabInfo.EveryDayActInfo.FucOnEvent = p.EveryDayActOnEvent;
+   p.TabInfo.EveryDayActInfo.FucOnEvent = p.EveryDayActOnEvent;]]
 end
 
 -----------------------------背景层事件处理---------------------------------
@@ -243,7 +262,7 @@ end
 function p.initData()
     p.TacticInfoList = {};                 --大话兵法要显示的信息列表
     p.GameAssisInfoList = {};       --游戏助手要显示的信息列表
-    p.EveryDayActList = {};           --日常活动要显示的信息列表
+    --p.EveryDayActList = {};           --日常活动要显示的信息列表
     p.CurFocusBtnId   = 0;             --默认的当前page页面
    
     for i, v in pairs(p.TabInfo) do 
@@ -288,6 +307,7 @@ function p.AddViewItem(container, nIndex, uiFile)
     
     view:Init(false);
     view:SetViewId(nIndex);
+    view:SetTag(nIndex);  
     container:AddView(view);
     
     --初始化ui
@@ -299,7 +319,7 @@ function p.AddViewItem(container, nIndex, uiFile)
     
     --游戏助手的标题界面添加不同的ini
     if (p.CurFocusBtnId == p.TabInfo.GameAssisInfo.tabBtnId) and (p.GameAssisInfoList[nIndex].Type > 10) then
-        LogInfo("tangzishun Type = %d, nIndex = %d", p.GameAssisInfoList[nIndex].Type, nIndex);  
+        LogInfo("Type = %d, nIndex = %d", p.GameAssisInfoList[nIndex].Type, nIndex);  
         uiLoad:Load("achieve_2_L.ini", view, 0, 0, 0);
     else
         uiLoad:Load(uiFile, view, p.OnViewUIEvent, 0, 0);
@@ -316,8 +336,9 @@ function p.GetCurDataInfoList()
         List = p.TacticInfoList;
     elseif p.CurFocusBtnId == p.TabInfo.GameAssisInfo.tabBtnId then
         List = p.GameAssisInfoList;
+        --[[
     elseif p.CurFocusBtnId == p.TabInfo.EveryDayActInfo.tabBtnId then    
-        List = p.EveryDayActList;
+        List = p.EveryDayActList;]]
     end
     
     return List;
@@ -361,6 +382,9 @@ function p.OnViewUIEvent(uiNode, uiEventType, param)
     
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
         local btn = ConverToButton(uiNode);
+        --btn:TabSel(true);            --当前按钮设置为常亮
+        --btn:SetFocus(true);
+        
         if(btn == nil) then
             LogInfo("btn is nil!");
             return;
@@ -371,6 +395,7 @@ function p.OnViewUIEvent(uiNode, uiEventType, param)
        for i, v in pairs(p.TabInfo) do
            if v.tabBtnId == p.CurFocusBtnId then
                layer = p.GetLayerByTag(v.LayerTag);
+               p.SetListFocus(btn:GetParam1());
                v.focusIndex = btn:GetParam1();
                FocusIndex = v.focusIndex;
                break;
@@ -395,8 +420,10 @@ function p.OnViewUIEvent(uiNode, uiEventType, param)
             local BtnClose = GetButton(layer, CTR_BTN_22);
             if Info.Status == 1 then
                 BtnClose:EnalbeGray(false);
+                p.GetTutorial(true);
             else 
                 BtnClose:EnalbeGray(true);
+                p.GetTutorial(false);
             end
         end
         
@@ -430,7 +457,7 @@ function p.TacticInit()
     --获取id集合
     local ids = GetDataBaseIdList("achievement_config");
     
-    for i,v in ipairs(ids) do
+    for i,v in pairs(ids) do
         --获取记录类型   1为大话兵法  2为没钱了怎么办  3为我要升级   4打不过敌军怎么办 5 如何获得装备  6其他功能说明
         local nType = GetDataBaseDataN("achievement_config", v, DB_ACHIEVEMENT_CONFIG.TYPE);
 
@@ -459,8 +486,39 @@ function p.TacticInit()
             end
         end
     end
-        
+end
+
+
+
+
+--设置大话兵法当前焦点
+function p.TacticSetCurFocus()
+    local CurFocus = 1;
+    local DataList = p.GetCurDataInfoList();
+    if DataList == nil then
+        return
+    end
     
+    LogInfo("p.TacticSetCurFocus begin"); 
+    CurFocus = 1;
+
+    --先获取第一个可领取的
+    for i, v in pairs(DataList) do
+        if v.Status == 1 then
+            CurFocus = i;
+            return CurFocus;
+        end
+    end
+    
+    --没有可领取的获取第一个未完成的
+    for i, v in pairs(DataList) do
+        if v.Status == 0 then
+            CurFocus = i;
+            return CurFocus;
+        end
+    end
+    
+    return CurFocus;
 end
 
 function p.TacticRefresh()
@@ -478,10 +536,18 @@ function p.TacticRefresh()
     --设置当前要显示的说明信息
     local ToltalNum = table.getn(p.TacticInfoList);
     
-    if p.TabInfo.TacticTabInfo.focusIndex > ToltalNum then
-        return
+    --添加list列表元素
+    for i = 1, ToltalNum do
+      p.AddViewItem(ListContainer, i, "achieve_1_L.ini");
     end
 
+    LogInfo("begin focusindex = %d", p.TabInfo.TacticTabInfo.focusIndex); 
+    local CurFocus  = p.TacticSetCurFocus();
+    LogInfo("sec CurFocus = %d", CurFocus); 
+        
+    p.SetListFocus(CurFocus); 
+    
+    p.TabInfo.TacticTabInfo.focusIndex = CurFocus;
     --显示当前的提示信息
     local Info = p.TacticInfoList[p.TabInfo.TacticTabInfo.focusIndex];
     SetLabel(layer, CTR_TEXT_23, Info.Describe);
@@ -497,16 +563,57 @@ function p.TacticRefresh()
     local BtnClose = GetButton(layer, CTR_BTN_22);
     if Info.Status == 1 then
         BtnClose:EnalbeGray(false);
+        p.GetTutorial(true);
     else 
         BtnClose:EnalbeGray(true);
+        p.GetTutorial(false);
     end
-    
-    --添加list列表元素
-    for i = 1, ToltalNum do
-      p.AddViewItem(ListContainer, i, "achieve_1_L.ini");
+
+    if p.TabInfo.TacticTabInfo.focusIndex > 7 then
+        ListContainer:ShowViewByIndex(6); 
+    else
+        ListContainer:ShowViewByIndex(p.TabInfo.TacticTabInfo.focusIndex - 1); 
     end
 
 end
+
+function p.SetListFocus(nIndex)
+    local ListContainer  = p.GetViewContainer(p.CurFocusBtnId);
+    local ScrollView = nil;
+    local BtnFocus = nil; 
+    
+    LogInfo("p.SetListFocus newIndex = %d", nIndex); 
+        
+    if p.CurFocusBtnId == p.TabInfo.TacticTabInfo.tabBtnId then
+
+        if p.TabInfo.TacticTabInfo.focusIndex ~= nIndex then
+            ScrollView = ListContainer:GetViewById(p.TabInfo.TacticTabInfo.focusIndex);
+            BtnFocus = GetButton(ScrollView, CTR_BTN_2);
+            BtnFocus: TabSel(false);
+            BtnFocus: SetFocus(false);
+            LogInfo("p.SetListFocus  oldIndex = %d set false", p.TabInfo.TacticTabInfo.focusIndex); 
+        end
+        
+         LogInfo("p.SetListFocus  newindex = %d set true", nIndex); 
+        ScrollView = ListContainer:GetViewById(nIndex);
+        BtnFocus = GetButton(ScrollView, CTR_BTN_2);
+        BtnFocus: TabSel(true);
+        BtnFocus: SetFocus(true);  
+        
+    elseif p.CurFocusBtnId == p.TabInfo.GameAssisInfo.tabBtnId then
+        ScrollView = ListContainer:GetViewById(p.TabInfo.GameAssisInfo.focusIndex);
+        BtnFocus = GetButton(ScrollView, CTR_BTN_2);
+        BtnFocus: TabSel(false);
+        BtnFocus: SetFocus(false);   
+        
+        ScrollView = ListContainer:GetViewById(nIndex);
+        BtnFocus = GetButton(ScrollView, CTR_BTN_2);
+        BtnFocus: TabSel(true);  
+        BtnFocus: SetFocus(true);  
+        
+    end    
+end
+
 
 function p.TacticOnEvent(uiNode, uiEventType, param)
 
@@ -518,10 +625,20 @@ function p.TacticOnEvent(uiNode, uiEventType, param)
             --获取按键是否可以响应
             local DataList = p.GetCurDataInfoList();
             local Info = DataList[p.TabInfo.TacticTabInfo.focusIndex];
-                
-            LogInfo("p.OnViewUIEvent, focusIndex = %d, Status = %d", p.TabInfo.TacticTabInfo.focusIndex, Info.Status); 
-            --判断当前按钮是否可响应
+            
+            LogInfo("focusIndex = %d, Status = %d, Type = %d, count = %d", 
+                            p.TabInfo.TacticTabInfo.focusIndex, Info.Status, Info.AwardItem, Info.AwardItemCount); 
+                            
+              --判断当前按钮是否可响应
             if Info.Status == 1 then
+               --判断背包是否已经满
+                if Info.AwardItem ~= 0 then
+                     local nAmountLimit = GetDataBaseDataN("itemtype", Info.AwardItem, DB_ITEMTYPE.AMOUNT_LIMIT);
+                     if (ItemFunc.IsBagFull(math.ceil(Info.AwardItemCount/nAmountLimit)-1)) then
+                        return;
+                     end
+                end
+            
                 p.SendTacticListViewStatus(Info.id);
                 Info.Status = 2;
                 return true;
@@ -548,13 +665,13 @@ function p.GameAssisInitDataList(nTypeIndex)
                 Record.Describe = "";
                 nTitleAddFlag = 1;
                 table.insert(p.GameAssisInfoList, Record);
-                LogInfo("tangzishun p.GameAssisInit() nType = %d, Title = %s, Describe = %s", Record.Type, Record.Title, Record.Describe);          
+                LogInfo("p.GameAssisInit() nType = %d, Title = %s, Describe = %s", Record.Type, Record.Title, Record.Describe);          
             end
             local Record = {};
             Record.Type = nType;
             Record.Title = GetDataBaseDataS("achievement_config", v, DB_ACHIEVEMENT_CONFIG.TITLE);   
             Record.Describe = GetDataBaseDataS("achievement_config", v, DB_ACHIEVEMENT_CONFIG.DESCRIBE);             
-            LogInfo("tangzishun p.GameAssisInit() nType = %d, Title = %s, Describe = %s", Record.Type, Record.Title, Record.Describe);          
+            LogInfo("p.GameAssisInit() nType = %d, Title = %s, Describe = %s", Record.Type, Record.Title, Record.Describe);          
             table.insert(p.GameAssisInfoList, Record);
         end
     end
@@ -580,7 +697,7 @@ end
 function p.GetGameAssisViewInfoFromIndex(nIndex)
     local nNum = 1;
     for i, v in pairs(p.GameAssisInfoList) do
-        LogInfo("tangzishun p.GetGameAssisViewInfoFromIndex v.Type = %d", v.Type);
+        LogInfo("p.GetGameAssisViewInfoFromIndex v.Type = %d", v.Type);
         if v.Type < 10 then
             if nNum == nIndex then
                 return v;
@@ -592,9 +709,32 @@ function p.GetGameAssisViewInfoFromIndex(nIndex)
     return nil;
 end
 
+--------------------------------------是否有可以领取奖励的东西--------------------------------
+function p.IsCanGetRewards()
+    LogInfo("functionp.IsCanGetRewards"); 
+    
+    if p.TacticStatusList == nil then
+        LogInfo("functionp.IsCanGetRewards nil"); 
+        return false;
+    end
+    
+    for i, v in pairs(p.TacticStatusList) do
+        LogInfo("function p.TacticStatusList Status = %d",  v.Status); 
+        if v.Status == 1 then
+            LogInfo("return true");
+            return true;
+        end
+    end
+    
+    LogInfo("return false");
+    return false;
+end
+
+
+
 
 function p.GameAssisRefresh()
-    LogInfo("tangzishun p.GameAssisRefresh begin");
+    LogInfo("p.GameAssisRefresh begin");
     local layer = p.GetLayerByTag(p.TabInfo.GameAssisInfo.LayerTag);    
     local ListContainer  = p.GetViewContainer(p.TabInfo.GameAssisInfo.tabBtnId);
    
@@ -611,20 +751,22 @@ function p.GameAssisRefresh()
     if p.TabInfo.GameAssisInfo.focusIndex > ToltalNum then
         return
     end
-    LogInfo("tangzishun p.GameAssisRefresh begin ToltalNum = %d", ToltalNum);
+    LogInfo("p.GameAssisRefresh begin ToltalNum = %d", ToltalNum);
     
     --显示当前的提示信息
     local Info = p.GameAssisInfoList[p.TabInfo.GameAssisInfo.focusIndex];
-    LogInfo("tangzishun p.GameAssisRefresh begin focusIndex = %d", p.TabInfo.GameAssisInfo.focusIndex);
+    LogInfo("p.GameAssisRefresh begin focusIndex = %d", p.TabInfo.GameAssisInfo.focusIndex);
     --local Info = p.GetGameAssisViewInfoFromIndex(p.TabInfo.GameAssisInfo.focusIndex); 
     
     SetLabel(layer, CTR_TEXT_23, Info.Describe);
-    LogInfo("tangzishun p.GameAssisRefresh ToltalNum = %d, focusIndex = %d, Describe = %s",ToltalNum, p.TabInfo.GameAssisInfo.focusIndex, Info.Describe);
+    LogInfo("p.GameAssisRefresh ToltalNum = %d, focusIndex = %d, Describe = %s",ToltalNum, p.TabInfo.GameAssisInfo.focusIndex, Info.Describe);
     
     --添加list列表元素
     for i = 1, ToltalNum do
       p.AddViewItem(ListContainer, i, "achieve_2_LL.ini");
     end
+    
+    p.SetListFocus(p.TabInfo.GameAssisInfo.focusIndex);
 
 end
 
@@ -633,6 +775,7 @@ end
 
 
 --------------------------------------日常活动基本函数定义--------------------------------
+--[[
 function p.EveryDayActicInit()
     AssistantUI.initData();
     
@@ -643,6 +786,7 @@ end
 function p.EveryDayActRefresh()
     AssistantUI.RefreshUI();
 end
+]]
 
 function p.EveryDayActOnEvent(uiNode, uiEventType, param)
 end
@@ -650,7 +794,7 @@ end
 
 --------------------------------------当大话兵法中具体兵法项状态改变的时候信息刷新 --------------------------------
 function p.RefreshTacticListInfo(netdata)  
-    LogInfo("tangzishun function p.RefreshTacticListInfo begin"); 
+    LogInfo("function p.RefreshTacticListInfo begin"); 
     
     local count		= netdata:ReadByte();
     p.TacticStatusList = {};
@@ -659,7 +803,7 @@ function p.RefreshTacticListInfo(netdata)
         record.Type = netdata:ReadInt();
         record.Status = netdata:ReadInt();   
         table.insert(p.TacticStatusList, record);
-        LogInfo("tangzishun function p.RefreshTacticListInfo count = %d, Type = %d, Status = %d", count, record.Type,  record.Status); 
+        LogInfo("msg  count = %d, Type = %d, Status = %d", count, record.Type,  record.Status); 
     end
     
     --更新大话兵法界面,前提是已经进入大话兵法界面
@@ -679,6 +823,9 @@ function p.RefreshTacticListInfo(netdata)
             p.TabInfo.TacticTabInfo.FucRefresh(); --刷新大话兵法标签页面
         end
     end
+
+    p.DTStarTip();
+
 end
 
 function p.SendTacticListViewStatus(nId)  
@@ -693,12 +840,62 @@ function p.SendTacticListViewStatus(nId)
 end
 
 
+--助手任务完成但还没领取奖励
+function p.DTStarTip()
+    LogInfo("DragonTacticUI.DTStarTip");
+	if p.IsCanGetRewards() then
+        LogInfo("DragonTacticUI.IsCanGetRewards true");
+		local btn = MainUIBottomSpeedBar.GetFuncBtn(119);
+		
+		if btn == nil then
+			LogInfo("p.DTStarTip 1")
+			return;
+		end
+		
+        local pSpriteNode = ConverToSprite( GetUiNode( btn, 99 ) );
+    	if ( pSpriteNode ~= nil ) then
+    		return;
+    	end  
+
+		local pSpriteNode	= createUISpriteNode();
+		
+		
+		local btnrect = btn:GetFrameRect();
+		local btnWidth =btnrect.size.w;
+		local btnHeight = btnrect.size.h;
+
+		pSpriteNode:Init();
+		local szAniPath		= NDPath_GetAnimationPath();
+		local szSprFile		= "gongn01.spr";
+		
+		pSpriteNode:ChangeSprite( szAniPath .. szSprFile );
+		pSpriteNode:SetFrameRect( CGRectMake(-btnWidth*0.1,0,btnWidth,btnHeight) );
+		pSpriteNode:SetScale(0.7);
+		
+		pSpriteNode:SetTag( 99 );
+	
+		--加到星星node上
+    	btn:AddChild( pSpriteNode );
+    	p.EffectSprite = pSpriteNode;
+	else
+		LogInfo("DragonTacticUI.IsCanGetRewards false");
+		p.RemoveEffect();
+	end
+end
+p.EffectSprite	= nil;
+function p.RemoveEffect()
+	if p.EffectSprite == nil then
+		return;
+	end
+    
+    local effectspr = p.EffectSprite;
+    LogInfo("DragonTacticUI RemoveEffect 1");
+    effectspr:RemoveFromParent( true );
+    p.EffectSprite	= nil;
+end
+
+RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "DragonTacticUI.DTStarTip", p.DTStarTip);
+
 --注册当大话兵法中具体兵法项状态改变的时候信息刷新  消息格式  
 --byte count 更新条数  ｛int type类型,  int status 状态值 0初始状态, 1可领取状态,  2已领取状态 }
 RegisterNetMsgHandler(NMSG_Type._MSG_ACHIEVEMENT_INFO_LIST, "p.RefreshTacticListInfo", p.RefreshTacticListInfo);
-
-
---RegisterNetMsgHandler(NMSG_Type._MSG_AFFIX_BOSS_NML_OPEN, "p.processNmlOpen", p.processNmlOpen);
-
-    --_MSG_ACHIEVEMENT_GET_PRIZE = _MSG_GENERAL + 6026,  --大话兵法中获取成就奖励信息
-

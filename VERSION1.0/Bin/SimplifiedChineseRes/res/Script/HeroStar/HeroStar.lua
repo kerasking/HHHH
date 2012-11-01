@@ -143,27 +143,44 @@ end
 
 --获取对应星星消耗将魂数值 （配置gsconfig.ini）
 function p.GetStarSoulNeed(nGrade,nLev)	
+	
 	local tIdlist = _G.GetDataBaseIdList("gsconfig"); 
 	local nStarid = p.GetIdByPosition(nGrade,nLev);
 	if(nStarid == nil ) then
-
+		LogInfo(" p.GetStarSoulNeed1 nStarid nil")
 		return nil;
 	end
+
+
 	
 	local nSoul  =  _G.GetDataBaseDataN("gsconfig", nStarid, DB_GSCONFIG.COST_GHOST);
+	
+	if CheckN(nSoul) then
+		LogInfo(" p.GetStarSoulNeed soul not N");
+	end
+	
+	if nSoul == nil then
+		LogInfo(" p.GetStarSoulNeed soul nil")
+		return 0;
+	end
+	
 	return nSoul;			
 end
+
 
 --获取对应星星的id
 function p.GetIdByPosition(nGrade,nLev)
 	local tIdlist = _G.GetDataBaseIdList("gsconfig"); 
-	
+
 	
 	for i,id in pairs(tIdlist) do
 		--LEV
+
 		local  nRank  = _G.GetDataBaseDataN("gsconfig",id,DB_GSCONFIG.RANK);
 		--GRADE
+
 		local  nType  = _G.GetDataBaseDataN("gsconfig",id,DB_GSCONFIG.TYPE);
+
 		if nRank == nLev and nType == nGrade then
 			return id;
 		end
@@ -198,21 +215,22 @@ end
 --提示升级
 p.UserInfoReady = false;
 p.HeroInfoReady = false;
-
+p.EffectSprite	= nil;
 function p.HeroStarTip()
-
-	--检测数据是否更新
-	if p.UserInfoReady == true and p.HeroInfoReady == true then
-		p.UserInfoReady = false;
-		--p.HeroInfoReady = false;
-	else
-		return;	
+	if p.HeroInfoReady == false then
+		return;
 	end
 	
 	--是否满足升级条件
 	local nRoleId =  GetPlayerId();
 	
-	local nGrade,nLev = HeroStarUI.GetNextStarPosition();
+	local nGrade,nLev,bTopLev = HeroStarUI.GetNextStarPosition();
+	
+	--满级则不提示
+	if bTopLev then
+		return;
+	end
+	
 	local nSoulNeed = HeroStar.GetStarSoulNeed(nGrade,nLev);
 	local nSoul = GetRoleBasicDataN(nRoleId, USER_ATTR.USER_ATTR_SOPH);
 	
@@ -220,19 +238,52 @@ function p.HeroStarTip()
 	if false == MainUIBottomSpeedBar.GetFuncIsOpen(115) then
 		return;
 	end
-	
+
 	
 	if nSoul >= nSoulNeed then
-		CommonDlgNew.ShowYesDlg("您现在有足够将魂点亮将星");
-        
+
+		local btn = MainUIBottomSpeedBar.GetFuncBtn(115);
+		
+		if btn == nil then
+			LogInfo("HeroStarTip 1")
+			return;
+		end
+		
+        local pSpriteNode = ConverToSprite( GetUiNode( btn, 99 ) );
+    	if ( pSpriteNode ~= nil ) then
+    		return;
+    	end  
+
+		local pSpriteNode	= createUISpriteNode();
+		
+		
+		local btnrect = btn:GetFrameRect();
+		local btnWidth =btnrect.size.w;
+		local btnHeight = btnrect.size.h;
+
+		pSpriteNode:Init();
+		local szAniPath		= NDPath_GetAnimationPath();
+		local szSprFile		= "gongn01.spr";
+		
+		pSpriteNode:ChangeSprite( szAniPath .. szSprFile );
+		pSpriteNode:SetFrameRect( CGRectMake(-btnWidth*0.1,0,btnWidth,btnHeight) );
+		pSpriteNode:SetScale(0.7);
+		
+		pSpriteNode:SetTag( 99 );
+	
+		--加到星星node上
+    	btn:AddChild( pSpriteNode );
+    	p.EffectSprite = pSpriteNode;
 	else
 		LogInfo("HeroStarTip nGrade nLev nSoulNeed nSoul"..nGrade.." "..nLev.." "..nSoulNeed.." "..nSoul);
+		p.RemoveEffect();
+		
 	end
 end
 
 function p.UserInfoUpdate()
 	p.UserInfoReady = true;
-	---p.HeroStarTip();
+	p.HeroStarTip();
 end
 
 function p.HeroInfoUpdate()
@@ -243,11 +294,46 @@ end
 function p.Reset()
 	p.UserInfoReady = false;
 	p.HeroInfoReady = false;
+	p.EffectSprite = nil;
 end
 
 
+function p.RemoveEffect()
+	if p.EffectSprite == nil then
+		return;
+	end
+    
+    local effectspr = p.EffectSprite;
+    LogInfo("HeroStarTip RemoveEffect 1");
+    effectspr:RemoveFromParent( true );
+    p.EffectSprite	= nil;
+	
+	
+end
+
+--检测将星是否可以升级
+function p.CheckHeroStarCanUpLev()
+	--是否满足升级条件
+	local nRoleId =  GetPlayerId();
+	local nGrade,nLev = HeroStarUI.GetNextStarPosition();
+	local nSoulNeed = HeroStar.GetStarSoulNeed(nGrade,nLev);
+	local nSoul = GetRoleBasicDataN(nRoleId, USER_ATTR.USER_ATTR_SOPH);
+	LogInfo("p.CheckHeroStarCanUpLev nSoul"..nSoul.." nSoulNeed"..nSoulNeed.." nGrade nlev"..nGrade.." "..nLev);
+	--未开启功能 返回
+	if false == MainUIBottomSpeedBar.GetFuncIsOpen(115) then
+		return false;
+	end
+	
+	if nSoul < nSoulNeed then
+		return false;
+	end
+	
+		
+	return true;
+end
+
 RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "HeroStar.HeroStarTip", p.HeroStarTip);
-GameDataEvent.Register(GAMEDATAEVENT.USERSTAGEATTR,"HeroStar.UserInfoUpdate",p.UserInfoUpdate);
+GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"HeroStar.UserInfoUpdate",p.UserInfoUpdate);
 _G.RegisterGlobalEventHandler(_G.GLOBALEVENT.GE_LOGIN_GAME, "HeroStar.Reset", p.Reset);
 
 

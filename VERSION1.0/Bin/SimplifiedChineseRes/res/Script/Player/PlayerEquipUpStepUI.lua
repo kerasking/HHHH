@@ -53,6 +53,9 @@ local TAG_MATERIAL_IMG_LIST = {};				--合成材料图标tag列表
 local TAG_MATERIAL_TEXT_LIST = {};				--合成材料完成度文本tag列表
 local TAG_LAYER_COMPOSE = 12345;				--合成信息界面层tag
 
+local TAG_E_TMONEY      = 243;  --银币
+local TAG_E_TEMONEY     = 242;  --金币
+
 -- 界面控件坐标定义
 local winsize = GetWinSize();
 
@@ -156,7 +159,7 @@ function p.LoadUI(itemID)
 	p.RefreshMatirialContainer();
 	p.RefreshComposeInfoLayer()
 	
-	
+	p.refreshMoney();
 	
 	   	--设置关闭音效
    	local closeBtn=GetButton(layer,ID_FOSTER_B_CTRL_BUTTON_CLOSE);
@@ -351,10 +354,16 @@ function p.RefreshComposeInfoLayer()
 	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_34,""..nAttackNew 	);
 	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_36,""..nNeedMoney.."银币");
 		
-	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_3,""..sItemName 	);
-	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_4,""..sItemNameNew 	);
+	local l_name = SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_3,""..sItemName 	);
+    
+    --设置装备颜色
+    ItemFunc.SetLabelColor(l_name,nItemType);
+    
+    
+	local l_newName = SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_4,""..sItemNameNew 	);
 	
-
+    --设置装备颜色
+    ItemFunc.SetLabelColor(l_newName,productItemType);
 			
 	--强化等级		
 			
@@ -455,6 +464,35 @@ function p.OnUIEventRightPanel(uiNode, uiEventType, param)
 end
 
 
+
+--升阶材料是否足够  false:不足 true:足够
+function p.IfUpStepMatrialEnough(nItemtype)
+  
+  local nformulaID = ItemFunc.GetFormulaIdByItemType(nItemtype,1);
+
+
+  local formulaEmoney2 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL2,DB_FORMULATYPE.NUM2,nformulaID);
+  local formulaEmoney3 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL3,DB_FORMULATYPE.NUM3,nformulaID);
+  local formulaEmoney4 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL4,DB_FORMULATYPE.NUM4,nformulaID);
+  local formulaEmoney5 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL5,DB_FORMULATYPE.NUM5,nformulaID);
+  local formulaEmoney6 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL6,DB_FORMULATYPE.NUM6,nformulaID);
+  if formulaEmoney2 > 0 
+	 or formulaEmoney3 > 0 
+	 or formulaEmoney4 > 0 
+	 or formulaEmoney5 > 0 
+	 or formulaEmoney6 > 0 then
+	local needEmoney =  formulaEmoney2 + formulaEmoney3 + formulaEmoney4 + formulaEmoney5 + formulaEmoney6;
+	--CommonDlgNew.ShowYesOrNoDlg("将花费"..needEmoney.."金币弥补缺失的材料", p.OnCommonDlg, true);
+		return false;
+	  else
+    	--MsgCompose.SendUpstepAction(formulaID,g_ItemId);
+    	return true;
+  end		
+		
+	
+end
+
+
 --升阶按钮
 function p.EquipUpStep()
 	--qbw 检测武器是否存在
@@ -464,41 +502,57 @@ function p.EquipUpStep()
        return false;
    end
 
+	--判断银币是否足够
+	local nNeedMoney 		= GetDataBaseDataN("formulatype",formulaID,DB_FORMULATYPE.FEE_MONEY);
+	if  PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_MONEY) < nNeedMoney  then
+		 CommonDlgNew.ShowTipDlg("升阶所需银币不足!"); 
+		return;
+	end
 
-  --local formulaEmoney1 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL1,DB_FORMULATYPE.NUM1);
-  local formulaEmoney2 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL2,DB_FORMULATYPE.NUM2);
-  local formulaEmoney3 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL3,DB_FORMULATYPE.NUM3);
-  local formulaEmoney4 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL4,DB_FORMULATYPE.NUM4);
-  local formulaEmoney5 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL5,DB_FORMULATYPE.NUM5);
-  local formulaEmoney6 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL6,DB_FORMULATYPE.NUM6);
-  if formulaEmoney2 > 0 
-	 or formulaEmoney3 > 0 
-	 or formulaEmoney4 > 0 
-	 or formulaEmoney5 > 0 
-	 or formulaEmoney6 > 0 then
-	local needEmoney =  formulaEmoney2 + formulaEmoney3 + formulaEmoney4 + formulaEmoney5 + formulaEmoney6;
-	CommonDlg.ShowNoPrompt("将花费"..needEmoney.."金币弥补缺失的材料", p.OnCommonDlg,true);
-  else
-    MsgCompose.SendUpstepAction(formulaID,g_ItemId);
-  end	
+
+    --local formulaEmoney1 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL1,DB_FORMULATYPE.NUM1);
+    local needEmoney = p.NeedUpsterEMoney(formulaID);
+  
+    if needEmoney > 0 then
+        CommonDlgNew.ShowYesOrNoDlg("将花费"..needEmoney.."金币弥补缺失的材料", p.OnCommonDlg, true);
+    else
+        MsgCompose.SendUpstepAction(formulaID,g_ItemId);
+    end	
 
 end
 
-
-
-function p.OnCommonDlg(nId, nEvent, param)
-  if nEvent == CommonDlg.EventOK then
-    MsgCompose.SendUpstepAction(formulaID,g_ItemId);
-  end
+--** chh 2012-09-03 **--
+--获得升级需要的EMoney
+function p.NeedUpsterEMoney(formulaID)
+    --local formulaEmoney1 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL1,DB_FORMULATYPE.NUM1);
+    local formulaEmoney2 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL2,DB_FORMULATYPE.NUM2,formulaID);
+    local formulaEmoney3 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL3,DB_FORMULATYPE.NUM3,formulaID);
+    local formulaEmoney4 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL4,DB_FORMULATYPE.NUM4,formulaID);
+    local formulaEmoney5 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL5,DB_FORMULATYPE.NUM5,formulaID);
+    local formulaEmoney6 = p.GetFormulaEmoney(DB_FORMULATYPE.MATERIAL6,DB_FORMULATYPE.NUM6,formulaID);
+    local needEmoney =  formulaEmoney2 + formulaEmoney3 + formulaEmoney4 + formulaEmoney5 + formulaEmoney6;
+    return needEmoney;
+end
+    
+function p.OnCommonDlg(nEventType , nEvent, param)
+    if nEventType == CommonDlgNew.BtnOk then
+        local needEmoney = p.NeedUpsterEMoney(formulaID);
+        local emoney        = GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_EMONEY);
+        if(needEmoney>emoney) then
+            CommonDlgNew.ShowYesDlg(GetTxtPub("JinBiBuZhu"));
+            return;
+        end
+        MsgCompose.SendUpstepAction(formulaID,g_ItemId);
+    end
 end
 
-function p.GetFormulaEmoney(material,num)
+function p.GetFormulaEmoney(material,num,nformulaID)
   local formulaEmoney = 0;
 
-  local materialItemType = GetDataBaseDataN("formulatype",formulaID,material); 
+  local materialItemType = GetDataBaseDataN("formulatype",nformulaID,material); 
   --LogInfo("qbw1: emoney materialItemType"..materialItemType);
   if materialItemType ~= 0 then
-  	local needNum = GetDataBaseDataN("formulatype",formulaID,num);
+  	local needNum = GetDataBaseDataN("formulatype",nformulaID,num);
 	---LogInfo("qbw1: emoney needNum"..needNum);
 	local owerNum = ItemFunc.GetItemCount(materialItemType);
     if owerNum < needNum then
@@ -574,7 +628,41 @@ function p.SuccGetProduct(nProductType)
     Music.PlayEffectSound(Music.SoundEffect.EQ_UPSTEP);
 	
 	scene:RemoveChildByTag(NMAINSCENECHILDTAG.PlayerEquipUpStepUI, true);
+    
+    if(IsUIShow(NMAINSCENECHILDTAG.PlayerBackBag)) then
+        PlayerUIBackBag.RefreshCurrentBack();
+    elseif(IsUIShow(NMAINSCENECHILDTAG.PlayerAttr)) then
+        PlayerUIAttr.RefreshCurrentBack();
+    end
 
 end
 
+
+function p.getMainLayer()
+    local scene = GetSMGameScene();
+    if(scene == nil) then
+        return nil;
+    end
+	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerEquipUpStepUI);
+    return layer;
+end
+
+
+--刷新金钱
+function p.refreshMoney()
+    LogInfo("PlayerEquipUpStepUI.refreshMoney");
+    local nPlayerId     = GetPlayerId();
+    local layer = p.getMainLayer();
+    if(layer == nil) then
+        return;
+    end
+    
+    local nmoney        = MoneyFormat(GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_MONEY));
+    local ngmoney        = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY).."";
+    
+    _G.SetLabel(layer, TAG_E_TMONEY, nmoney);
+    _G.SetLabel(layer, TAG_E_TEMONEY, ngmoney);
+end
+
 GameDataEvent.Register(GAMEDATAEVENT.PETATTR, "PlayerUIBackBag.GameDataPetAttrRefresh", p.GameDataPetAttrRefresh);
+GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"PlayerEquipUpStepUI.refreshMoney",p.refreshMoney);

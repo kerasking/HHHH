@@ -16,6 +16,7 @@ ChatType={
 	CHAT_CHANNEL_FACTION=3,
 	CHAT_CHANNEL_PRIVATE=4,
 	CHAT_CHANNEL_SMALL=5,
+	CHAT_CHANNEL_SYSTIP = 20, --用于动画提示
 }
 
 ChatInputTarget={
@@ -106,13 +107,15 @@ function p.AddChatRecord(sID,cID,tID,spk,txt)
 		ChatMainUI.AddChatText(sID,cID,spk,txt);
 	end
 	
-	if IsUIShow(NMAINSCENECHILDTAG.ChatGameScene) then
-		LogInfo("gamescene chat AddChatTextbbb")
-		ChatGameScene.AddChatText(sID,cID,spk,txt);
-	else
-		ChatGameScene.DelayShowUI();
-		--ChatGameScene.AddChatText(sID,cID,spk,txt);	
+    
+ 	if  cID==ChatType.CHAT_CHANNEL_SYSTIP then
+		--ChatMainUI.AddChatText(sID,cID,spk,txt);
+		CommonDlgNew.ShowTipDlg(txt);
 	end
+	   
+    ChatGameScene.AddChatText(sID,cID,spk,txt);
+    ChatGameScene.DelayShowUI();
+    
 		
 end
 
@@ -151,12 +154,10 @@ function p.ParseItemInfo(text)
 			local name=ItemFunc.GetName(itemType);
 			local quality=ItemFunc.GetQuality(itemType);
 			item_str="<b"..name.."/"..SafeN2S(quality).."/"..SafeN2S(itemid).."~";
-			
-		else
-			continue;
+            text=pre_str..item_str..after_str;
+            i=i+string.len(item_str);
 		end
-		text=pre_str..item_str..after_str;
-		i=i+string.len(item_str);
+
 	end
 	return text;
 end
@@ -218,6 +219,10 @@ function p.OnChatNodeClick(type,contentID,content)
 			--return;
 		end
 		
+        if contentID==0 then
+            return;
+        end       
+
 		if CheckS(content) then
 			ChatMainUI.OpenInfoList(contentID,content); 
 		end
@@ -260,6 +265,8 @@ function p.GetChatTypeFromChannel(channel)
 		type = ChatType.CHAT_CHANNEL_FACTION;
 	elseif channel== 1 then
 		type = ChatType.CHAT_CHANNEL_PRIVATE;
+	elseif channel==23 then
+		type = ChatType.CHAT_CHANNEL_SYSTIP;
 	end
 	return type;
 end

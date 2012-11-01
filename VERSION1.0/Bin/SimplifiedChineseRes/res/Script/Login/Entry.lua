@@ -15,8 +15,9 @@ local ID_BTN_LOCAL_SERVER				= 2;	-- 内服按钮控件ID
 
 ---------------------------------------------------
 local LOCAL_WORLD_SERVER_IP				= "192.168.9.47"	-- 内网世界服务器IP
-local EXTERNAL_WORLD_SERVER_IP			= "222.77.177.209"	-- 外网世界服务器IP
-
+--local EXTERNAL_WORLD_SERVER_IP			= "222.77.177.209"	-- 外网世界服务器IP
+local EXTERNAL_WORLD_SERVER_IP				= "192.168.9.47"	-- 内网世界服务器IP
+--local EXTERNAL_WORLD_SERVER_IP			= "222.77.177.176"	-- 外网世界服务器IP mobage测试
 ---------------------------------------------------
 p.nAccountID	= nil;
 
@@ -70,6 +71,11 @@ function p.ShowUI( nAccountID )
 	end
 	uiLoad:Load( "EntryUI.ini", pLayer, p.OnUIEvent, 0, 0 );
 	uiLoad:Free();
+	
+	local pBtn = GetButton( pLayer, ID_BTN_LOCAL_SERVER );
+	if ( pBtn ~= nil ) then
+		pBtn:SetVisible( false );
+	end
 	
 	p.nAccountID = nAccountID;
 	--播放背景音乐

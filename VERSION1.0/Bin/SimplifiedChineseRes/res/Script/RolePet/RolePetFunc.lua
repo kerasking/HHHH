@@ -191,16 +191,27 @@ end
 ---------------------------------------------------
 --++Guoen 2012.7.19
 -- 获得可重置次数值
-function p.GetResetNumber()
+function p.GetResetNumber( nCampaignID )
 	local nPlayerVIPLv	= GetRoleBasicDataN( GetPlayerId(), USER_ATTR.USER_ATTR_VIP_RANK );
-	if ( nPlayerVIPLv < 3 ) then
+    
+	if ( GetGetVipLevel_ELITE_MAP_RESET_NUM()<=0 ) then
 		return 0;
 	end
+    
+    
 	local nResetCount	= GetRoleBasicDataN( GetPlayerId(), USER_ATTR.USER_ATTR_INSTANCING_RESET_COUNT );	--已重置次数
-	local nResetLimit	= 1;	-- 限制的重置次數( 3~4:1, 5~xxx:2 )
+
+    nResetCount = ConvertReset(nResetCount, nCampaignID);
+    
+    
+    local nResetLimit   = GetVipVal(DB_VIP_CONFIG.ELITE_MAP_RESET_NUM);
+    --[[
+    local nResetLimit	= 1;	-- 限制的重置次數( 3~4:1, 5~xxx:2 )
 	if ( nPlayerVIPLv > 5 ) then
 		nResetLimit		= 2;
 	end
+    ]]
+    
 	local nResetNumber	= nResetLimit - nResetCount;
 	if ( nResetNumber < 0 ) then
 		nResetNumber	= 0;

@@ -639,34 +639,32 @@ function p.RefreshContainer()
 		p.AddPetName(v);
 	
 		local view = createUIScrollView();
-		if view == nil then
-			LogInfo("view == nil");
-			continue;
-		end
-		view:Init(false);
-		view:SetViewId(v);
-		container:AddView(view);
+		if view ~= nil then
+            view:Init(false);
+            view:SetViewId(v);
+            container:AddView(view);
 
-		local uiLoad = createNDUILoad();
-		if uiLoad ~= nil then
-			uiLoad:Load("EquipStr_L.ini", view, p.OnUIEventScroll, 0, 0);
-			uiLoad:Free();
+            local uiLoad = createNDUILoad();
+            if uiLoad ~= nil then
+                uiLoad:Load("EquipStr_L.ini", view, p.OnUIEventScroll, 0, 0);
+                uiLoad:Free();
+            end
+            
+            --装备
+            local equipIdList = ItemPet.GetEquipItemList(nPlayerId, v);
+            LogInfo("p.RefreshContainer,装备id列表 equipIdList：");
+            LogInfoT(equipIdList);
+            
+            local equipIndex = Item.POSITION_EQUIP_1;
+            --遍历装备
+            for i, v in ipairs(equipIdList) do
+                p.AddEquipViewContent(view,equipIndex,v);	
+                equipIndex = equipIndex + 1;   	
+            end
+            
+            --设置控件隐藏
+            p.setEquipItemVisiable(view,equipIndex);	
 		end
-		
-		--装备
-		local equipIdList = ItemPet.GetEquipItemList(nPlayerId, v);
-	    LogInfo("p.RefreshContainer,装备id列表 equipIdList：");
-		LogInfoT(equipIdList);
-		
-		local equipIndex = Item.POSITION_EQUIP_1;
-		--遍历装备
-		for i, v in ipairs(equipIdList) do
-			p.AddEquipViewContent(view,equipIndex,v);	
-			equipIndex = equipIndex + 1;   	
-		end
-		
-		--设置控件隐藏
-        p.setEquipItemVisiable(view,equipIndex);		
 	end   
 	
 	

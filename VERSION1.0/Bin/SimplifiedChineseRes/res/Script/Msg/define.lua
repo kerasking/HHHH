@@ -18,7 +18,7 @@ DoFile("Msg/MsgRealize.lua");
 DoFile("Msg/MsgRolePet.lua");
 
 --boss
-DoFile("Msg/MsgBoss.lua");
+--DoFile("Msg/MsgBoss.lua");
 
 --排行榜
 DoFile("Msg/MsgArena.lua");
@@ -82,4 +82,24 @@ DoFile("Msg/MsgTutorial.lua");
 
 --登陆成功后逻辑处理
 DoFile("Msg/MsgLoginSuc.lua");
+
+--玩家活动信息处理
+DoFile("Msg/MsgPlayerAction.lua");
+
+
+--阵营战
+DoFile("Msg/MsgCampBattle.lua");
+
+--运送粮草信息处理
+DoFile("Msg/MsgTransport.lua");
+--运送粮草信息处理
+DoFile("Msg/MsgDailyAction.lua");
+
+
+--** chh 2012-09-29 **--
+--boss战信息处理
+DoFile("Msg/MsgBossBattle.lua");
+
+
+
 

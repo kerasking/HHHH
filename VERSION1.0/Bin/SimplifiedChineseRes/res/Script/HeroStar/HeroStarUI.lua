@@ -160,10 +160,15 @@ local ID_TALENT_TIPS_CTRL_PICTURE_31					= 31;
 local TAG_LAYER_STAR = 1000;--星图tag
 local TAG_LAYER_ATTR = 1001;--加成属性
 
+local TAG_LAYER_JT   = 89;  --提示升级箭头
+
+
 --星星状态
 local STAR_STATE_LIGHT = 1; --已经点亮
 local STAR_STATE_CHOSED = 2;--选中
 local STAR_STATE_DARK = 3;--未点亮
+
+
 
 
 -- 界面控件坐标定义
@@ -291,7 +296,7 @@ function p.LoadUI()
 local scene = GetSMGameScene();	
 
 	if scene == nil then
-		LogInfo("scene == nil,load PlayerStar failed!");
+		--LogInfo("scene == nil,load PlayerStar failed!");
 		return;
 	end
 
@@ -317,6 +322,10 @@ local scene = GetSMGameScene();
 	--bg
 	uiLoad:Load("talent/talent.ini", layer, p.OnUIEventStarBg, 0, 0);
 	
+    local animate = RecursivUISprite(layer,{TAG_LAYER_JT});
+    local szAniPath = NDPath_GetAnimationPath();
+    animate:ChangeSprite(szAniPath.."jiantx03.spr");
+    
 	
 	--初始化星图界面
 	--
@@ -374,14 +383,14 @@ local scene = GetSMGameScene();
 
 	--自动切换页面
     g_Grade,g_Lev = p.GetNextStarPosition();
-	LogInfo("NEXT"..g_Grade.."  "..g_Lev);
+	--LogInfo("NEXT"..g_Grade.."  "..g_Lev);
 	p.ChangePage(g_Grade);	
 	
 	
 	p.RefreshStarVC();
 	p.RefreshStarInfo();
 	
-
+	--[[
 	--设置玩家头像
 	local nPlayerId     = GetPlayerId();
     local nPetId        = RolePetFunc.GetMainPetId(nPlayerId);
@@ -389,8 +398,10 @@ local scene = GetSMGameScene();
     local pic       = _G.GetPlayerPotraitTranPic(nPetType);
 	local HeadPic = GetImage(layer, ID_TALENT_CTRL_PICTURE_4);
 	
+
 	HeadPic:SetPicture(pic,true);
-		
+	--]]	
+
 
 	
 	GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"p.RefreshStarInfo",p.RefreshStarInfo);
@@ -402,7 +413,13 @@ local scene = GetSMGameScene();
    	
    	--星星响应扩大
    	p.SetAllStarBoundScale()
-   	
+   
+    --** chh 2012-08-22 将星升级箭头提示**--
+    p.TipUpgrade();
+    --** 左右前头 **--
+    SetArrow(p.GetLayer(),p.GetContainter(),1,ID_TALENT_CTRL_PICTURE_18,ID_TALENT_CTRL_PICTURE_19);
+    
+    
 	return true;
 end
 
@@ -420,15 +437,17 @@ function p.ChangePage(nGrade)
 	if nGrade > 0 then
 		container:ShowViewByIndex(nGrade-1);
 	else
-		LogInfo("p.ChangePage(nGrade) 错误星图:"..nGrade)	
+		--LogInfo("p.ChangePage(nGrade) 错误星图:"..nGrade)	
 	end	
 end
 
 --显示将星加成属性
 function p.desplayAttr()
 	local scene = GetSMGameScene();	
+	
 	local bglayer = RecursiveUILayer(scene,{NMAINSCENECHILDTAG.HeroStarUI})
 	
+	--[[
 	local layer = createNDUILayer();
 	if layer == nil then
 		return false;
@@ -449,47 +468,27 @@ function p.desplayAttr()
 	end
 
 	uiLoad:Load("talent/talent_tips.ini", layer, p.OnUIEventHeroStarAttr, 0, 0);
-	
-	--[[
-	local sMainPetBuffstr,sFront,sMid,sBack = p.GetHeroStarBuff();
-	
-	
-	
-	local MainPetLable = RecursiveLabel(layer,{ID_TALENT_TIPS_CTRL_TEXT_ATR_1});
-	MainPetLable:SetFontSize(11);	
-	MainPetLable:SetText(sMainPetBuffstr);
-	
-	
-	local FrontLable = RecursiveLabel(layer,{ID_TALENT_TIPS_CTRL_TEXT_ATR_5});
-	FrontLable:SetFontSize(11);	
-	FrontLable:SetText(sFront);
-
-	local MidLable = RecursiveLabel(layer,{ID_TALENT_TIPS_CTRL_TEXT_ATR_8});
-	MidLable:SetFontSize(11);	
-	MidLable:SetText(sMid);
-
-	local BackLable = RecursiveLabel(layer,{ID_TALENT_TIPS_CTRL_TEXT_ATR_9});
-	BackLable:SetFontSize(11);	
-	BackLable:SetText(sBack);
 	--]]
+	local MainPetLable = RecursiveLabel(bglayer,{45});
+	
+	
 	local sMainPetBuffstr,sFront,sMid,sBack = p.GetHeroStarBuff();
 	
-	local MainPetLable = RecursiveLabel(layer,{ID_TALENT_TIPS_CTRL_TEXT_ATR_9});
 	MainPetLable:SetFontSize(11);	
 	MainPetLable:SetText(sMainPetBuffstr);
 	
-	local NextStarLable = RecursiveLabel(layer,{ID_TALENT_TIPS_CTRL_TEXT_21});
-	NextStarLable:SetFontSize(11);	
-		
-	local nGrade,nLev = p.GetNextStarPosition();
-	
-	
-	LogInfo("qbw  nLevel:"..nLev.." nGrade:"..nGrade);
-	local sAttrDesc = p.GetAttrDescByStar(nGrade,nLev);
-	NextStarLable:SetText(sAttrDesc);
-	
+
 end
 
+
+--** chh 提示将星升级 **--
+--提示升级将星
+function p.TipUpgrade()
+    local scene = GetSMGameScene();
+	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.HeroStarUI);
+    local animate = RecursivUISprite(layer,{TAG_LAYER_JT});
+    animate:SetVisible(HeroStar.CheckHeroStarCanUpLev());
+end
 
 
 
@@ -497,47 +496,20 @@ end
 function p.GetHeroStarBuff()
 	local nRoleId =  GetPlayerId();
 	
-	local tAttrAll = {}
-	for i=0,22 do
-		tAttrAll[i] = 0;
-	end
-	
 	local tStationAll = {}
 	for i=0,5 do
 		tStationAll[i] = 0;
 	end	
 		
+	local tAttrAll = p.GetHeroStarBuffTable();	
+	
 	for nGrade,v in pairs(tStarList) do
 		for nLevel,nTag in pairs(v) do			
 			local lev = HeroStar.GetLevByGrade(nRoleId,nGrade)
 			if  nLevel <= HeroStar.GetLevByGrade(nRoleId,nGrade) then
-				--LogInfo("qbw 已经点亮 nLevel:"..nLevel.." nGrade:"..nGrade);
+				----LogInfo("qbw 已经点亮 nLevel:"..nLevel.." nGrade:"..nGrade);
 				--已经点亮 将值加入表
 				local tCell = HeroStar.GetStarAttr(nGrade,nLevel);
-				
-				
-				--===========主将=========================================-----
-				--类型1
-				local type1 = math.floor(tCell[DB_GSCONFIG.ATTR1]/10);
-				--修正方式1
-				local adj1	= tCell[DB_GSCONFIG.ATTR1]%10
-				--修正值1
-				local val1  = tCell[DB_GSCONFIG.VALUE1];
-				
-				--类型2
-				local type2 = math.floor(tCell[DB_GSCONFIG.ATTR2]/10);
-				--修正方式2
-				local adj2	= tCell[DB_GSCONFIG.ATTR2]%10;
-				--修正值2
-				local val2  = tCell[DB_GSCONFIG.VALUE2];
-				LogInfo("type1 "..type1.." "..adj1.." "..val1);
-				
-				--修正
-				tAttrAll[type1] = HeroStar.AdjAttr(tAttrAll[type1],val1,adj1);
-				tAttrAll[type2] = HeroStar.AdjAttr(tAttrAll[type2],val2,adj2);
-				
-				LogInfo("tAttrAll[type1]  "..tAttrAll[type1]);
-				
 		
 
 				--===========阵型奖励======================================-----
@@ -555,7 +527,7 @@ function p.GetHeroStarBuff()
 	--将表转换为字符串
 	local strMainPet = "";
 	
-	_G.LogInfoT(tAttrAll);
+	--_G.LogInfoT(tAttrAll);
 	
 	for nAttrType,nVal in pairs(tAttrAll) do
 		if nVal > 0 then
@@ -575,7 +547,7 @@ function p.GetHeroStarBuff()
 	tStationStr[HeroStar.BackPosition] = "";		
 	
 	for neffect,val in pairs(tStationAll) do 
-		LogInfo("qbw 属性:"..neffect.."   val"..val);
+		--LogInfo("qbw 属性:"..neffect.."   val"..val);
 		local sEffectDesc,nPos = HeroStar.GetStationBuffDesc(neffect);
 	
 		if sEffectDesc ~= nil and nPos 	~= nil and neffect ~= 0 then
@@ -585,6 +557,65 @@ function p.GetHeroStarBuff()
 	
 	
 	return strMainPet,tStationStr[HeroStar.FrontPosition],tStationStr[HeroStar.MidPosition],tStationStr[HeroStar.BackPosition];
+end
+
+
+--获取主角累积buff表
+function p.GetHeroStarBuffTable()
+	local nRoleId =  GetPlayerId();
+	
+	local tAttrAll = {}
+	for i=0,22 do
+		tAttrAll[i] = 0;
+	end
+			
+	for nGrade,v in pairs(tStarList) do
+		for nLevel,nTag in pairs(v) do			
+			local lev = HeroStar.GetLevByGrade(nRoleId,nGrade)
+			if  nLevel <= HeroStar.GetLevByGrade(nRoleId,nGrade) then
+				----LogInfo("qbw 已经点亮 nLevel:"..nLevel.." nGrade:"..nGrade);
+				--已经点亮 将值加入表
+				local tCell = HeroStar.GetStarAttr(nGrade,nLevel);
+				
+				
+				--===========主将=========================================-----
+				--类型1
+				local type1 = math.floor(tCell[DB_GSCONFIG.ATTR1]/10);
+				--修正方式1
+				local adj1	= tCell[DB_GSCONFIG.ATTR1]%10
+				--修正值1
+				local val1  = tCell[DB_GSCONFIG.VALUE1];
+				
+				--类型2
+				local type2 = math.floor(tCell[DB_GSCONFIG.ATTR2]/10);
+				--修正方式2
+				local adj2	= tCell[DB_GSCONFIG.ATTR2]%10;
+				--修正值2
+				local val2  = tCell[DB_GSCONFIG.VALUE2];
+		
+				--修正
+				tAttrAll[type1] = HeroStar.AdjAttr(tAttrAll[type1],val1,adj1);
+				tAttrAll[type2] = HeroStar.AdjAttr(tAttrAll[type2],val2,adj2);
+			end
+		end		
+	end
+	
+	return tAttrAll;
+	
+	--for nAttrType,nVal in pairs(tAttrAll) do
+	--HeroStar.GetAttrName(nAttrType).."加成+"..nVal.."";
+	--end
+end
+
+--根据属性类型获得当前将星的属性值
+function p.GetAttrValByType(nType)
+    local tAttrAll = p.GetHeroStarBuffTable();
+	for nAttrType,nVal in pairs(tAttrAll) do
+		if(nType == nAttrType) then
+			return nVal;
+		end
+	end
+	return 0;
 end
 
 --刷新星图列表
@@ -612,7 +643,7 @@ function p.RefreshStarVC()
 			
 		end
 	end
-	LogInfo("选定星星SetStarState:"..g_Grade.."   "..g_Lev);
+	--LogInfo("选定星星SetStarState:"..g_Grade.."   "..g_Lev);
 	--设置选定星星
 	p.SetStarState(STAR_STATE_CHOSED,g_Grade,g_Lev);
 	
@@ -633,17 +664,20 @@ end
 
 --刷新左边信息
 function p.RefreshStarInfo()
-	
-	local scene = GetSMGameScene();
-	
 	if not IsUIShow(NMAINSCENECHILDTAG.HeroStarUI) then
 		return;
 	end
 	
-	local Infotxt = RecursiveLabel(scene,{NMAINSCENECHILDTAG.HeroStarUI,ID_TALENT_CTRL_TEXT_21});
-		
-	Infotxt:SetFontSize(12);
+	--累积属性层刷新
+	p.desplayAttr();
 	
+	local scene = GetSMGameScene();
+	
+
+	
+	local Infotxt = RecursiveLabel(scene,{NMAINSCENECHILDTAG.HeroStarUI,ID_TALENT_CTRL_TEXT_21});
+	local Soultxt = RecursiveLabel(scene,{NMAINSCENECHILDTAG.HeroStarUI,24});
+	Infotxt:SetFontSize(12);
 	
 		
 
@@ -651,17 +685,17 @@ function p.RefreshStarInfo()
 	
 		local tAttr = HeroStar.GetStarAttr(g_Grade,g_Lev);
 		if tAttr == nil  then
-			LogInfo("配置文件gs_config.ini错误. g_Grade:"..g_Grade.." g_Lev:"..g_Lev);
+			--LogInfo("配置文件gs_config.ini错误. g_Grade:"..g_Grade.." g_Lev:"..g_Lev);
 			return;
 		end
 		
-		_G.LogInfoT(tAttr);
+		--_G.--LogInfoT(tAttr);
 		
 		local sAttr1 = "";
 		local sAttr2 = "";
 	
 		
-		LogInfo("DB_GSCONFIG.ATTR1:"..DB_GSCONFIG.ATTR1);
+		--LogInfo("DB_GSCONFIG.ATTR1:"..DB_GSCONFIG.ATTR1);
 		local sAttrDesc1 = HeroStar.GetAttrDesc(tAttr[DB_GSCONFIG.ATTR1]);
 		local sAttrDesc2 = HeroStar.GetAttrDesc(tAttr[DB_GSCONFIG.ATTR2]);
 		local nAttr1 = tAttr[DB_GSCONFIG.VALUE1];
@@ -677,8 +711,10 @@ function p.RefreshStarInfo()
 		local nRoleId =  GetPlayerId();
 		local nSoulNeed = HeroStar.GetStarSoulNeed(g_Grade,g_Lev);
 		local nLevNeed =tAttr[DB_GSCONFIG.LEVEL_LIMIT];
-	
-		sShowText = "将魂:                "..GetRoleBasicDataN(nRoleId, USER_ATTR.USER_ATTR_SOPH).."\n需要消耗将魂:  "..nSoulNeed.."\n等级需求:         "..nLevNeed.."\n星图:"..g_Grade.."  星点:"..g_Lev;
+		
+		Soultxt:SetText("   "..GetRoleBasicDataN(nRoleId, USER_ATTR.USER_ATTR_SOPH));
+		
+		sShowText = "需要将魂:  "..nSoulNeed;--.."\n等级需求:  "..nLevNeed;
 		
 		
 		if sAttrDesc1 ~= nil  then
@@ -714,7 +750,7 @@ function p.RefreshStarInfo()
 				sShowText = sShowText.."\n开启技能:"..sSkilldesc;
 				
 			else
-				LogInfo("sSkilldesc nil  nSkillId:"..nSkillId);
+				--LogInfo("sSkilldesc nil  nSkillId:"..nSkillId);
 			end
 		end				
 		 
@@ -723,7 +759,7 @@ function p.RefreshStarInfo()
 		Infotxt:SetText(sShowText);
 
 	else
-		Infotxt:SetText("将魂:"..GetRoleBasicDataN(nRoleId, USER_ATTR.USER_ATTR_SOPH).."\n星图:".."  星点:");	
+		Soultxt:SetText("将魂:"..GetRoleBasicDataN(nRoleId, USER_ATTR.USER_ATTR_SOPH));	
 	end
 end
 
@@ -737,7 +773,7 @@ function p.GetAttrDescByStar(nGrade,nLev)
 			return;
 		end
 		
-		_G.LogInfoT(tAttr);
+		--_G.--LogInfoT(tAttr);
 		
 		local sAttr1 = "";
 		local sAttr2 = "";
@@ -794,7 +830,7 @@ function p.GetAttrDescByStar(nGrade,nLev)
 				sShowText = sShowText.."\n开启技能:"..sSkilldesc;
 				
 			else
-				LogInfo("sSkilldesc nil  nSkillId:"..nSkillId);
+				--LogInfo("sSkilldesc nil  nSkillId:"..nSkillId);
 			end
 		end				
 		 
@@ -806,6 +842,32 @@ function p.GetAttrDescByStar(nGrade,nLev)
 
 
 
+end
+
+--获取对应星星技能描述
+function p.GetSkillDescByStar(nGrade,nLev)
+	if nGrade ~= 0 and nLev ~= 0  then
+	
+		local tAttr = HeroStar.GetStarAttr(nGrade,nLev);
+		if tAttr == nil  then
+			return "";
+		end
+
+		local nSkillId = tAttr[DB_GSCONFIG.SKILL];
+		local sShowText = "";
+		local nRoleId =  GetPlayerId();
+				
+		if nSkillId ~= nil and nSkillId ~= 0 then
+			local sSkilldesc = GetDataBaseDataS("skill_config",nSkillId,DB_SKILL_CONFIG.NAME);
+			if sSkilldesc ~= nil then
+				sShowText = "开启技能:"..sSkilldesc;
+			end
+		end		
+		 
+		return sShowText;
+	else
+		return "";	
+	end
 end
 
 ------------------------------UI事件处理回调函数-----------------------------------
@@ -826,7 +888,7 @@ end
 --背景事件
 function p.OnUIEventStarBg(uiNode, uiEventType, param)
 	local tag = uiNode:GetTag();
-	LogInfo("p.OnUIEventStarBg[%d]", tag);
+	--LogInfo("p.OnUIEventStarBg[%d]", tag);
 	
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 	
@@ -845,7 +907,7 @@ function p.OnUIEventStarBg(uiNode, uiEventType, param)
 			
 			p.LightStar();
 		elseif tag == 	ID_TALENT_CTRL_BUTTON_22 then
-			p.desplayAttr();
+			--p.desplayAttr();
 		end	
 	
 		
@@ -857,9 +919,9 @@ end
 function p.LightStar()
 	--越级点击提示
 	local nextGrade,nextLev = p.GetNextStarPosition();
-	--LogInfo("next"..nextGrade.."  "..nextLev.."   g:"..g_Grade.." "..g_Lev)
+	----LogInfo("next"..nextGrade.."  "..nextLev.."   g:"..g_Grade.." "..g_Lev)
 	if nextGrade == 0  and nextLev == 0 then
-		LogInfo("no available star!")
+		--LogInfo("no available star!")
 		return;
 	end
 
@@ -870,7 +932,7 @@ function p.LightStar()
 	
 	--已经是点亮的星星	
 	if  g_Lev <= lev then
-		LogInfo("already light star! return")
+		--LogInfo("already light star! return")
 		CommonDlgNew.ShowYesDlg("这是已经学习过的将星点！");
 		return;
 	end
@@ -881,7 +943,7 @@ function p.LightStar()
 	local nSoulNeed = HeroStar.GetStarSoulNeed(g_Grade,g_Lev);
 	--将魂不足
 	if nSoulNeed == nil then
-		LogInfo("配置文件缺少对应星点");
+		--LogInfo("配置文件缺少对应星点");
 		return;
 	end	
 	local nSoul = GetRoleBasicDataN(nRoleId, USER_ATTR.USER_ATTR_SOPH);
@@ -920,20 +982,23 @@ end
 
 --星图容器事件回调
 function p.OnUIEventStarVC(uiNode, uiEventType, param)
-	LogInfo("p.OnUIEventStarVC uiEventType:"..uiEventType)
+	--LogInfo("p.OnUIEventStarVC uiEventType:"..uiEventType)
 	
 	--刷新星图背景
 	if  uiEventType == NUIEventType.TE_TOUCH_SC_VIEW_IN_BEGIN then
 		local scene = GetSMGameScene();
 		local container = RecursiveSVC(scene, {NMAINSCENECHILDTAG.HeroStarUI,ID_TALENT_CTRL_LIST_23});
 		local nGrade = container:GetBeginIndex()+1;	
-		LogInfo("刷新背景图 nGrade:"..nGrade)
+		--LogInfo("刷新背景图 nGrade:"..nGrade)
 		p.RefreshStarBg(nGrade)
 		
 		--标题容器刷新
 		local Titlecontainer = RecursiveSVC(scene, {NMAINSCENECHILDTAG.HeroStarUI,ID_TALENT_CTRL_LIST_20});
 		Titlecontainer:ShowViewByIndex(nGrade-1);
 		
+        --** 左右前头 **--
+        SetArrow(p.GetLayer(),p.GetContainter(),1,ID_TALENT_CTRL_PICTURE_18,ID_TALENT_CTRL_PICTURE_19);
+        
 		return;
 	end
 	
@@ -951,7 +1016,7 @@ function p.OnUIEventStarVC(uiNode, uiEventType, param)
 	local nGrade = container:GetBeginIndex()+1;
 	
 	if tStarList[nGrade] == nil then
-		LogInfo("map of nGrade:["..nGrade.."] dont exist!");
+		--LogInfo("map of nGrade:["..nGrade.."] dont exist!");
 		return;
 	end
 	
@@ -964,13 +1029,13 @@ function p.OnUIEventStarVC(uiNode, uiEventType, param)
 	end 
 	
 	if btnLev == 0 then
-		LogInfo("btn (tag:"..btnClickTag..") dont exist!")
+		--LogInfo("btn (tag:"..btnClickTag..") dont exist!")
 		return;
 	end	
 
 
 	
-	LogInfo("btn chose  nGrade:"..nGrade.."   btnLev:"..btnLev)
+	--LogInfo("btn chose  nGrade:"..nGrade.."   btnLev:"..btnLev)
 	g_Grade = nGrade;
 	g_Lev = btnLev;
 	
@@ -991,16 +1056,37 @@ function p.GetNextStarPosition()
 		if lev < levelMax then
 			if lev+1 <= levelMax then
 			
-				return nGrade,lev+1;
+				return nGrade,lev+1,false;
 			end
-			
-			
+		
+		elseif 	nGrade == #tStarList then
+			--最后一个星点
+			return nGrade,lev,true;
 		end
 	end
 	
-	return 0,0
+	return 0,0,false
 end
 
+function p.GetLayer()
+    local scene = GetSMGameScene();
+    if(scene == nil) then
+        --LogInfo("p.GetLayer scene is nil");
+        return nil;
+    end
+	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.HeroStarUI);
+	return layer;
+end
+
+function p.GetContainter()
+    local layer = p.GetLayer();
+    if(layer == nil) then
+        --LogInfo("p.GetContainter layer is nil");
+        return nil;
+    end
+	local containter = RecursiveSVC(layer, {ID_TALENT_CTRL_LIST_23});
+	return containter;
+end
 
 --根据档次获取星星视图
 function p.GetStarViewByGrade(nGrade)
@@ -1013,12 +1099,12 @@ end
 --获取对应星图星星按钮
 function p.GetStarBtn(nGrade,nLev)
 	if tStarList[nGrade] == nil then
-		LogInfo("p.GetStarBtn fail grade[%d]",nGrade);
+		--LogInfo("p.GetStarBtn fail grade[%d]",nGrade);
 		return;
 	end
 	
 	if tStarList[nGrade][nLev] == nil then
-		LogInfo("p.GetStarBtn fail nLev[%d]",nLev);
+		--LogInfo("p.GetStarBtn fail nLev[%d]",nLev);
 		return;
 	end	
 	
@@ -1040,12 +1126,12 @@ function p.SetStarState(nState,nGrade,nLev)
 	local nRoleId =  GetPlayerId();
 
 	if tStarList[nGrade] == nil then
-		LogInfo("p.SetStarState fail grade[%d]",nGrade);
+		--LogInfo("p.SetStarState fail grade[%d]",nGrade);
 		return;
 	end
 	
 	if tStarList[nGrade][nLev] == nil then
-		LogInfo("p.SetStarState fail nLev[%d]",nLev);
+		--LogInfo("p.SetStarState fail nLev[%d]",nLev);
 		return;
 	end
 	
@@ -1058,18 +1144,18 @@ function p.SetStarState(nState,nGrade,nLev)
  	StarBtn:SetParam1(nState);
  	
 	if nState == STAR_STATE_LIGHT then
-		--LogInfo("LIGHT  GRADE:"..nGrade.." LEV:"..nLev);
+		----LogInfo("LIGHT  GRADE:"..nGrade.." LEV:"..nLev);
 		local picLight = pool:AddPicture(GetSMImgPath("talent/icon_tale3.png"), false);
 		StarBtn:SetImage(picLight);
 		StarBtn:EnableEvent(true);	
 			
 	elseif nState == STAR_STATE_DARK then
-		--LogInfo("DARK GRADE:"..nGrade.." LEV:"..nLev);
+		----LogInfo("DARK GRADE:"..nGrade.." LEV:"..nLev);
 		local picDark = pool:AddPicture(GetSMImgPath("talent/icon_tale2.png"), false);
 		StarBtn:SetImage(picDark);		
 		StarBtn:EnableEvent(true);		
 	elseif nState == STAR_STATE_CHOSED then
-		--LogInfo("CHOSED GRADE:"..nGrade.." LEV:"..nLev);
+		----LogInfo("CHOSED GRADE:"..nGrade.." LEV:"..nLev);
 		local picChosed = pool:AddPicture(GetSMImgPath("talent/icon_talen1.png"), false);
 		StarBtn:SetImage(picChosed);		
 		StarBtn:EnableEvent(true);		
@@ -1090,8 +1176,12 @@ function p.LightSuccCallback()
 		p.ShowAnimation(StarBtn);
     end
     
-
-	
+    --技能提示动画
+	local sTip = p.GetSkillDescByStar(g_AniGrade,g_AniLev)
+	CommonDlgNew.ShowTipDlg(sTip);
+    
+    --** chh 2012-08-22 将星升级箭头提示**--
+    p.TipUpgrade();
 end
 
 function p.StarDataRefreshCallback()
@@ -1099,7 +1189,7 @@ function p.StarDataRefreshCallback()
 
 	--选中下一张图 无则取消选中
 	g_Grade,g_Lev = p.GetNextStarPosition();
-	LogInfo("NEXT"..g_Grade.."  "..g_Lev);
+	--LogInfo("NEXT"..g_Grade.."  "..g_Lev);
 	p.ChangePage(g_Grade);
 	p.RefreshStarVC();
 	p.RefreshStarInfo();	
@@ -1111,6 +1201,8 @@ end
 p.AniStarBtn = nil;
 p.nEffectKey = nil;
 p.nTimerID = nil;
+p.tTimerID = {};
+
 --设置星星响应范围
 function p.SetAllStarBoundScale()
 	local pool = DefaultPicPool();
@@ -1127,10 +1219,10 @@ function p.SetAllStarBoundScale()
 				local StarBtn =  RecursiveButton(StarView, {nTag});	
 			
 				if CheckP(StarBtn) then
-					--LogInfo("SetAllStarBoundScale "..nTag.." view:"..nGrade);
+					----LogInfo("SetAllStarBoundScale "..nTag.." view:"..nGrade);
 					StarBtn:SetBoundScale(200);
 				else
-				    LogInfo("SetAllStarBoundScale fail nTag"..nTag.." view:"..nGrade);
+				    --LogInfo("SetAllStarBoundScale fail nTag"..nTag.." view:"..nGrade);
 				end
 			
 		end
@@ -1142,7 +1234,7 @@ end
 
 --播放点亮动画
 function p.ShowAnimation(StarBtn)
-	p.AniStarBtn = StarBtn;
+	--p.AniStarBtn = StarBtn;
 	-- 创建精灵NODE
 	local tWinSize		= GetWinSize();
 	local pSpriteNode	= createUISpriteNode();
@@ -1150,7 +1242,7 @@ function p.ShowAnimation(StarBtn)
 	local starWidth =starrect.size.w;
 	local starHeight = starrect.size.h;
 	pSpriteNode:Init();
-	pSpriteNode:SetFrameRect( CGRectMake(0,0,starWidth,starHeight) );
+	pSpriteNode:SetFrameRect( CGRectMake(-starWidth*0.05,-starWidth*0.1,starWidth,starHeight) );
 	local szAniPath		= NDPath_GetAnimationPath();
 	local szSprFile		= "jiangx03.spr";
 	pSpriteNode:ChangeSprite( szAniPath .. szSprFile );
@@ -1161,37 +1253,40 @@ function p.ShowAnimation(StarBtn)
     
     local nEffectKey = 99;
     pSpriteNode:SetTag( nEffectKey );
-	p.nEffectKey	= nEffectKey;
+	--p.nEffectKey	= nEffectKey;
 
-	if ( p.nTimerID == nil ) then
-		p.nTimerID = RegisterTimer( p.OnTimerCoutDownCounter, 1/24 );
-	end
+	--if ( p.nTimerID == nil ) then
+	
+		local nTimerID = RegisterTimer( p.OnTimerCoutDownCounter, 1/24 );
+		p.tTimerID[nTimerID] = StarBtn;
+	--end
     return true;
 end
 
 
 --获取界面层
 function p.OnTimerCoutDownCounter( nTimerID )
-	if p.AniStarBtn == nil then
+	if p.tTimerID[nTimerID] == nil then
 		return;
 	end
+	local AniStarBtn = p.tTimerID[nTimerID];
 	
-    local pSpriteNode = ConverToSprite( GetUiNode( p.AniStarBtn, 99 ) );
+    local pSpriteNode = ConverToSprite( GetUiNode( AniStarBtn, 99 ) );
     if ( pSpriteNode == nil ) then
-    	LogInfo("OnTimerCoutDownCounter 3");
-        p.nEffectKey	= nil;
+    	--LogInfo("OnTimerCoutDownCounter 3");
+        --p.nEffectKey	= nil;
     	UnRegisterTimer( nTimerID );
-		p.nTimerID			= nil;
+		p.tTimerID[nTimerID] = nil;
 		return;
     end
     
-    LogInfo("OnTimerCoutDownCounter 1");
+    --LogInfo("OnTimerCoutDownCounter 1");
     if ( pSpriteNode:IsAnimationComplete() ) then
-    	LogInfo("OnTimerCoutDownCounter 2");
+    	--LogInfo("OnTimerCoutDownCounter 2");
         pSpriteNode:RemoveFromParent( true );
-    	p.nEffectKey	= nil;
-		UnRegisterTimer( nTimerID );
-		p.nTimerID			= nil;
+    	--p.nEffectKey	= nil;
+    	UnRegisterTimer( nTimerID );
+		p.tTimerID[nTimerID] = nil;
     end
 end
 

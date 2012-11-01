@@ -56,7 +56,7 @@ local TAG_LAYER_TASK_PROGRESS						= 1002;
 local winsize = GetWinSize();
 local MAIN_OFFSET_X								= 0;
 local MAIN_OFFSET_Y								= 0;
-local TASK_NAME_FONT_SIZE							= 18;
+local TASK_NAME_FONT_SIZE							= 14;
 local TASK_NAME_FONT_HEIGHT							= winsize.h * 0.04375
 
 -- 配置数据
@@ -152,7 +152,9 @@ function p.LoadUI()
 			if i == 1 then
 				btnAbandon:SetTitle("放弃任务");
 			elseif i == 2 then
-				btnAbandon:SetTitle("接受任务");
+				--屏蔽自动接任务功能
+				btnAbandon:SetVisible(false);
+				--btnAbandon:SetTitle("接受任务");
 			end
 		end
 
@@ -179,6 +181,12 @@ function p.LoadUI()
 				taskList:EnableScrollBar(true);
 			end
 		end--]]
+		
+		
+		-- 屏蔽测试按钮
+		local btnTest = GetButton(layerDetail, ID_TASKLIST_D_CTRL_BUTTON_TASK_FINISH);
+		btnTest:SetVisible(false);
+		
 	end
 	
 
@@ -217,11 +225,11 @@ function p.LoadUI()
    	local closeBtn=GetButton(layer,ID_TASKLIST_CTRL_BUTTON_CLOSE);
    	closeBtn:SetSoundEffect(Music.SoundEffect.CLOSEBTN);
    	
-   	
-   		--测试用
-		--DoFile("Drama/define.lua");
-		-------
-			
+   	--增加选中光效
+   	p.AddSelectEffect(true);
+   	--增加选中光效
+   	p.AddSelectEffect(false);
+   		
 end
 
 function p.NavigateNpc(nNpcId)
@@ -288,24 +296,90 @@ end
 
 function p.OnTaskDataUIEvent(uiNode, uiEventType, param)
 	return true;
-	--[[
-	local tag = uiNode:GetTag();
-	CloseUI(NMAINSCENECHILDTAG.PlayerTask);
-	p.DealTaskData(nSelAcceptTaskId, tag);
-	return true;--]]
+
 end
+
+function p.DelSelectEffect(bAccept)
+	local taskList = p.GetTaskList(bAccept);
+	local nTaskId = nSelAcceptTaskId;
+	
+	if bAccept == false then
+		nTaskId = nSelUnAcceptTaskId;
+	end
+	
+	local pool = DefaultPicPool();
+	
+	if nTaskId == 0 then
+		return;
+	end
+	
+	local scrollView = taskList:GetViewById(nTaskId);
+	
+	local linePicImage =  RecursiveImage(scrollView, {999});
+	
+	if CheckP(linePicImage) == false then
+		LogInfo("p.DelSelectEffect linePicImage nil:"..nTaskId);
+		return;
+	end
+	
+	--增加背景图
+	local linePic  = pool:AddPicture(GetSMImgPath("General/texture/texture1.png"),true);
+	linePicImage:SetPicture(linePic,true);
+end
+
+function p.AddSelectEffect(bAccept)
+	local taskList = p.GetTaskList(bAccept);
+	
+	local nTaskId = nSelAcceptTaskId;
+	
+	if bAccept == false then
+		nTaskId = nSelUnAcceptTaskId;
+	end
+	
+	local pool = DefaultPicPool();
+	
+	if nTaskId == 0 then
+		return;
+	end
+	LogInfo("p.AddSelectEffect GetViewById:"..nTaskId);
+		
+	local scrollView = taskList:GetViewById(nTaskId);
+	
+	local linePicImage =  RecursiveImage(scrollView, {999});
+	
+	if CheckP(linePicImage) == false then
+		LogInfo("p.AddSelectEffect linePicImage nil:"..nTaskId);
+		return;
+	end
+	--增加背景图
+	local linePic  = pool:AddPicture(GetSMImgPath("General/texture/texture7.png"),true);
+	linePicImage:SetPicture(linePic,true);
+end
+
 
 function p.OnAcceptTaskListUIEvent(uiNode, uiEventType, param)
 	local tag = uiNode:GetTag();
 	LogInfo("p.OnAcceptTaskListUIEvent[%d]", tag);
+	--取消选中按钮状态
+	p.DelSelectEffect(true)
+	
 	p.RefreshTaskDetail(true, tag);
+	
+	--添加选中状态
+	p.AddSelectEffect(true);
+	
 	return true;
 end
 
 function p.OnUnAcceptTaskListUIEvent(uiNode, uiEventType, param)
 	local tag = uiNode:GetTag();
 	LogInfo("p.OnUnAcceptTaskListUIEvent[%d]", tag);
+	p.DelSelectEffect(false)
+	
 	p.RefreshTaskDetail(false, tag);
+	
+	p.AddSelectEffect(false);
+	
 	return true;
 end
 
@@ -551,6 +625,7 @@ function p.RefreshTaskList(bAccept)
 	p.RefreshTaskDetail(bAccept, idlistAcceptTask[1]);
 end
 
+
 -- 增加任务
 -- bAccept:是否是已接任务
 -- nTaskId:任务id;
@@ -558,6 +633,8 @@ function p.AddTask(bAccept, nTaskId)
 	if not CheckB(bAccept) or not CheckN(nTaskId) then
 		return;
 	end
+
+
 
 	local taskName = TASK.GetTaskName(nTaskId);
 	if "" == taskName then
@@ -569,33 +646,74 @@ function p.AddTask(bAccept, nTaskId)
 		return;
 	end
 
-	local pool = DefaultPicPool();
 
+	--完成则加上标识
+	local bFinish = false;
+	if bAccept == true then
+		bFinish = TASK.CheckTaskCanFinish(nTaskId);
+	end
+	
+	if bFinish then
+		taskName = taskName.."(完成)";	
+	end
+	
+	
+	local pool = DefaultPicPool();
+	
+	LogInfo("p.AddTask 1");
 	local view = createUIScrollView();
 	if view ~= nil then
 		view:Init(false);
 		view:SetViewId(nTaskId);
 		
-		--增加线条
-		--[[
-		--local linePic  = pool:AddPicture(GetSMImgPath("General/line/icon_cutoff2.png"),false);
-		local linePic  = pool:AddPicture(GetSMImgPath("mark_up.png"),true);
+		--增加背景图
+		local linePic  = pool:AddPicture(GetSMImgPath("General/texture/texture1.png"),true);
 		local linePicImage = createNDUIImage();
 		linePicImage:Init();
 		linePicImage:SetTag(999);
 		linePicImage:SetPicture(linePic,true);	
 		local sizeview		= view:GetFrameRect().size;
-		linePicImage:SetFrameRect(CGRectMake(0, 0, sizeview.w , sizeview.h));
-		view:AddChildZ(linePicImage,2);
-		--]]
+		LogInfo("sizeview "..sizeview.w.."  "..sizeview.h);
+		local width = taskList:GetFrameRect().size.w*0.9
+		local Height = width*0.16;
+		linePicImage:SetFrameRect(CGRectMake(width*0.05, Height*0.25, width , Height));
+		view:AddChildZ(linePicImage,1);
+
+		--增加个背景按钮
+		local bgBtn = createNDUIButton();
+		bgBtn:Init();
+		bgBtn:SetTag(nTaskId);
+		local sizeview		= view:GetFrameRect().size;
+		local width = taskList:GetFrameRect().size.w*0.9
+		local Height = width*0.16;
+		bgBtn:SetFrameRect(CGRectMake(width*0.05, Height*0.25, width , Height));
+		view:AddChildZ(bgBtn,1);
+		if bAccept then
+			bgBtn:SetLuaDelegate((p.OnAcceptTaskListUIEvent));
+		else
+			bgBtn:SetLuaDelegate((p.OnUnAcceptTaskListUIEvent));
+		end
 		
 		
+		
+		LogInfo("p.AddTask AddChildZ 999 nTaskId:"..nTaskId);
 		taskList:AddView(view);
 		local sizeview		= view:GetFrameRect().size;
-		local hyperlinkBtn	= CreateHyperlinkButton(taskName, 
-					CGRectMake(0, 0, sizeview.w , sizeview.h),
-					TASK_NAME_FONT_SIZE,
-					ccc4(255, 255, 0, 255));
+		
+		local hyperlinkBtn = nil;
+		if bFinish then
+			 hyperlinkBtn	= CreateHyperlinkButton(taskName, 
+						CGRectMake(width*0.2, 0, sizeview.w , sizeview.h),
+						TASK_NAME_FONT_SIZE,
+						ccc4(0, 255, 0, 255));
+		else
+			 hyperlinkBtn	= CreateHyperlinkButton(taskName, 
+						CGRectMake(width*0.2, 0, sizeview.w , sizeview.h),
+						TASK_NAME_FONT_SIZE,
+						ccc4(255, 255, 0, 255));											
+		end		
+		
+			
 		if not hyperlinkBtn then
 			taskList:RemoveViewById(nTaskId);
 		else
@@ -617,10 +735,17 @@ function p.AddTask(bAccept, nTaskId)
 			--]]
 			
 			
-			view:AddChild(hyperlinkBtn);
+			view:AddChildZ(hyperlinkBtn,2);
+			
+			--取消选中
+			p.DelSelectEffect(bAccept);
+			
 			if taskList:GetViewCount() <= 1 then
 				p.RefreshTaskDetail(bAccept, nTaskId);
 			end
+			
+			--选中
+			p.AddSelectEffect(bAccept);
 		end
 	end
 	
@@ -648,8 +773,13 @@ function p.DelAcceptTask(bAccept,nTaskId)
 	end
 	
 	p.ShowAccept(true)
-	--taskList:SetVisible(taskList:IsVisibled());
+	
+	--显示选中光效
+	p.AddSelectEffect(bAccept);
+
+	
 end
+
 -- 刷新任务详细
 -- bAccept:是否是已接任务
 -- nTaskId:任务id;
@@ -666,6 +796,20 @@ function p.RefreshTaskDetail(bAccept, nTaskId)
 		pNodeDetailParent = p.GetUnAcceptDetailParent();
 	end
 
+
+	--如果是引导任务且未完成 则不显示自动寻路按钮
+	local TrackBtn  = GetButton(pNodeDetailParent, ID_TASKLIST_D_CTRL_BUTTON_TASK_TRACKTASK);
+	TrackBtn:SetVisible(true);
+	if bAccept == true then
+		local nTaskType		= TASK.GetDataBaseN(nTaskId, DB_TASK_TYPE.TYPE);
+		if nTaskType == TASK_TYPE.GUIDE then
+			if TASK.CheckTaskCanFinish(nTaskId) then
+				TrackBtn:SetVisible(true);
+			else
+				TrackBtn:SetVisible(false);
+			end
+		end
+	end
 
 	--无任务则不显示子界面
 

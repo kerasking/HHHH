@@ -116,7 +116,7 @@ function p.ProcessNotifyClient(netdata)
         layer:SetVisible(false);
         
         --播放视频
-        p.mTimerTaskTag = RegisterTimer(p.PlayVideoIntro, 0.1);
+        p.mTimerTaskTag = RegisterTimer(p.PlayVideoIntro, 0.01);
         
     elseif ret == 2 then
         --重名

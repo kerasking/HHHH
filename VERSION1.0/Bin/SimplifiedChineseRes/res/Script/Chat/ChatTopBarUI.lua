@@ -40,8 +40,7 @@ function p.LoadUI()
 	layer:SetFrameRect(CGRectMake(0, 0, winsize.w*0.8, winsize.h*0.1));
 	--layer:SetBackgroundColor(ccc4(0,0,0,125));
 	scene:AddChildZ(layer,3);
-	--_G.AddChild(scene, layer, NMAINSCENECHILDTAG.ChatMainBar);
-	--LogInfo("load chat ui");
+
 	local uiLoad=createNDUILoad();
 	if nil == uiLoad then
 		layer:Free();
@@ -52,50 +51,7 @@ function p.LoadUI()
 	uiLoad:Free();
 	
 	LogInfo("load tab ");
-	
-	--[[local btn_tab=createUITabLogic();
-	btn_tab:Init();
-	local btnWidth=53*ScaleFactor;
-	local btnHeight=23*ScaleFactor;
-	local spacer=5*ScaleFactor;
-	
-	local tab_width=4*spacer+4*btnWidth;
-	local tab_height=btnHeight;
-	
-	btn_tab:SetFrameRect(CGRectMake(0,0,tab_width,tab_height));
-
-	local pool = DefaultPicPool();--]]
-	
-	--[[
-	for	i, v in ipairs(p.BtnTag) do
-		local btn = createNDUIButton();
-		if btn == nil then
-			LogInfo("btn[%d] == nil,load chatTopr failed!", i);
-			container:RemoveFromParent(true);
-			break;
-		end
-		btn:Init();
-		local rect = CGRectMake(i * spacer + (i-1) * btnWidth, spacer, btnWidth, btnHeight);
-		btn:SetFrameRect(rect);
-		btn:SetTag(v);
-		btn:CloseFrame();
-		btn:SetTitle(p.btn_txt[i]);
-		local pic_nor=pool:AddPicture(GetSMImgPath("UI/UI_IMG_FRAME_1.png"),false);
-		local pic_sel=pool:AddPicture(GetSMImgPath("UI/UI_IMG_FRAME_1.png"),false);
-		local pic_foc=pool:AddPicture(GetSMImgPath("UI/UI_IMG_FRAME_1.png"),false);
-		pic_nor:Cut(CGRectMake(0,365,107,46));
-		pic_sel:Cut(CGRectMake(0,410,107,46));
-		pic_foc:Cut(CGRectMake(0,410,107,46));
-		btn:SetBackgroundPicture(pic_nor,pic_sel,
-									false, RectZero(), true);
-		btn:SetFocusImage(pic_foc);
-		btn:SetLuaDelegate(p.OnUIEvent);
-		btn_tab:AddTab(btn,nil);
-		layer:AddChild(btn);
-	end
-	--]]
-	--layer:AddChild(btn_tab);
-	--btn_tab:SelectWithIndex(0);
+	p.RefreshWithButtonTag(ID_TALK_LEFT_BUTTON_TALK_ZH);
 end
 
 function p.CloseChatUI()
@@ -123,15 +79,66 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 			return true;
 		elseif ID_TALK_LEFT_BUTTON_TALK_SJ == tag then
 			ChatMainUI.SetCurrentChatType(ChatType.CHAT_CHANNEL_WORLD);
+			p.RefreshWithButtonTag(tag)
 		elseif ID_TALK_LEFT_BUTTON_TALK_JT == tag then
 			ChatMainUI.SetCurrentChatType(ChatType.CHAT_CHANNEL_FACTION);
+			p.RefreshWithButtonTag(tag)
 		elseif ID_TALK_LEFT_BUTTON_TALK_SL == tag then
 			ChatMainUI.SetCurrentChatType(ChatType.CHAT_CHANNEL_PRIVATE);
+			p.RefreshWithButtonTag(tag)
 			ChatMainUI.SetInputLayer(0);
 		elseif ID_TALK_LEFT_BUTTON_TALK_ZH == tag then
 			ChatMainUI.SetCurrentChatType(ChatType.CHAT_CHANNEL_ALL);
+			p.RefreshWithButtonTag(tag)
 		end
 		-- btn2:SetFocus(false);
 		
 	end
 end
+
+
+function p.RefreshWithButtonTag(nTag)
+
+	local layer = p.GetParent();
+	local worldbtn 	= GetButton( layer, ID_TALK_LEFT_BUTTON_TALK_SJ ); 
+	local facbtn 	= GetButton( layer, ID_TALK_LEFT_BUTTON_TALK_JT ); 
+	local pribtn 	= GetButton( layer, ID_TALK_LEFT_BUTTON_TALK_SL ); 
+	local allbtn 	= GetButton( layer, ID_TALK_LEFT_BUTTON_TALK_ZH ); 
+	
+	worldbtn:SetChecked( false );
+	facbtn:SetChecked( false );
+	pribtn:SetChecked( false );
+	allbtn:SetChecked( false );
+		
+	local selBtn 	= GetButton( layer, nTag ); 
+		
+	selBtn:SetChecked( true );
+
+end
+
+
+function p.GetParent()
+	local scene = GetSMGameScene();
+	if nil == scene then   
+		return nil;
+	end
+	
+	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.ChatMainBar);
+	if nil == layer then
+		return nil;
+	end
+	
+	return layer;
+end
+
+
+
+
+
+
+
+
+
+
+
+

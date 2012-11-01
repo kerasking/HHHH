@@ -28,7 +28,7 @@ function SetUIVisible(visible)
 			if ui then
 				ui:SetVisible(false);
 			else
-				LogInfo("can not find ui:[%d]",v);
+				LogInfo("SetUIVisible can not find ui:[%d]",v);
 			end
 		end
 	elseif visible == 1 then --显示所有UI
@@ -37,12 +37,14 @@ function SetUIVisible(visible)
 			return;
 		end
 		for i, v in pairs(NMAINSCENECHILDTAG) do
-			local ui = GetUI(v)
-			if ui then
-				ui:SetVisible(true);
-			else
-				LogInfo("can not find ui");
-			end
+            if i ~= "ChatGameScene" then
+                local ui = GetUI(v)
+                if ui then
+                    ui:SetVisible(true);
+                else
+                    LogInfo("SetUIVisible can not find ui");
+                end
+            end    
 		end
 	end
 end
@@ -54,7 +56,7 @@ function hideDynMapUI()
 			if ui then
 				ui:SetVisible(false);
 			else
-				LogInfo("can not find ui");
+				LogInfo("hideDynMapUI can not find ui");
 			end
 		end
 	end
@@ -67,7 +69,7 @@ function showCityMapUI()
 			if ui then
 				ui:SetVisible(false);
 			else
-				LogInfo("can not find ui");
+				LogInfo("showCityMapUI can not find ui1");
 			end
 		elseif i=="TopSpeedBar"
 			or i=="WorldMapBtn"
@@ -76,7 +78,7 @@ function showCityMapUI()
 			if ui then
 				ui:SetVisible(true);
 			else
-				LogInfo("can not find ui");
+				LogInfo("showCityMapUI can not find ui2");
 			end
 		end
 	end
@@ -92,7 +94,7 @@ function showBossMapUI()
 			if ui then
 				ui:SetVisible(false);
 			else
-				LogInfo("can not find ui");
+				LogInfo("showBossMapUI can not find ui");
 			end
 		end
 	end
@@ -105,7 +107,7 @@ function showDynMapUI()
 			if ui then
 				ui:SetVisible(true);
 			else
-				LogInfo("can not find ui");
+				LogInfo("showDynMapUI can not find ui1");
 			end
 		elseif i=="TopSpeedBar"
 			or i=="WorldMapBtn"
@@ -114,28 +116,48 @@ function showDynMapUI()
 			if ui then
 				ui:SetVisible(false);
 			else
-				LogInfo("can not find ui");
+				LogInfo("showDynMapUI can not find ui2");
 			end
 		end
 	end
 end
 
 --bTrack =0 则不是寻路状态
-function showBattleMapUI(mapid,bTrack) 
-   if 0 == TaskUI.GetTrackingBossId() then
-   		--Guosen 2012.7.20
-        local nBattleID		= TaskUI.GetMainBossId();--TaskUI.GetTrackingBossId();--获得当前任务副本ID，已完成的话为空---麻烦博威给接口
-        local nPromptType	= PromptType.TASK;--获得当前任务类型--麻烦博威给接口
-        if ( nBattleID ~= nil and nBattleID ~= 0 ) then
-			LogInfo("showBattleMapUI nBattleID:%d",nBattleID);
-        	NormalBossListUI.LoadUIWithBattleID( nBattleID, nPromptType );
-        else
-        	NormalBossListUI.LoadUI(mapid);  
-        end
+function showBattleMapUI(mapid, bTrack) 
+
+   local  bTracking = TaskUI.GetTrackingBossId(); --是否为寻路状态  0为非寻路  1为寻路
+   local nBattleID		= TaskUI.GetMainBossId();   --获得当前任务副本ID，已完成的话为空
+    LogInfo("nBattleID:"..nBattleID);
+  
+   
+   --当前任务为空直接为非寻路
+   if ( nBattleID == nil or nBattleID == 0 ) then
+     NormalBossListUI.LoadUI(mapid, 0);  
+     return;
+   end
+   
+   --获取副本战斗信息获取不到直接为非寻路
+   local tBattleInfo	= AffixBossFunc.getBossInfo( nBattleID );       
+    if ( tBattleInfo == nil ) then
+         NormalBossListUI.LoadUI(mapid,  0);  
+         return;
+    end
+   
+    --获取副本信息所属的地图id,如果与传入的不同直接为非寻路
+    local nCampaignID	= AffixBossFunc.findMapId( tBattleInfo.elite, tBattleInfo.typeid );
+    if ( nCampaignID == nil ) or (nCampaignID ~= mapid) then
+        NormalBossListUI.LoadUI(mapid,  0);  
+        return;
+    end  
+   
+   --非寻路处理
+   if 0 == bTracking then
+        LogInfo("can not find ui");
+        NormalBossListUI.LoadUI(mapid,  0);  
+        return;
    else
-        --NormalBossListUI.LoadUIWithBattleID( TaskUI.GetTrackingBossId(), PromptType.TASK );--Guosen 2012.7.20
-        NormalBossListUI.LoadUIWithBattleID( TaskUI.GetTrackingBossId(), TaskUI.GetTrackType() );
-        
+        LogInfo("can not find ui nBattleID = %d, task = %d", nBattleID, TaskUI.GetTrackType());
+        NormalBossListUI.LoadUIWithBattleID( nBattleID, TaskUI.GetTrackType() );
         TaskUI.ResetTrackingBossId()
    end 
 end
@@ -184,6 +206,7 @@ function CloseMainUI()
 			and i ~= "MilOrdersDisPTxt"
 			and i ~= "MainUITop" 
             and i ~= "BottomMsgBtn"
+            and i ~= "MilOrdersBtn" 
             and i ~= "BottomControlBtn" 
             and i ~= "BottomFind"
             and i ~= "BottomMsg"
@@ -191,7 +214,10 @@ function CloseMainUI()
             and i ~= "AffixNormalBoss" --++Guosen 2012.7.6
             and i ~= "Arena" --++Guosen 2012.7.6
             and i ~= "ChatGameScene"
-            and i ~= "TestDelPlayer" then
+            and i ~= "GMProblemBtn"
+            and i ~= "TestDelPlayer" 
+            and i ~= "OLGiftBtn" 
+            and i ~= "RechargeGiftBtn" then
             
             
 			if CloseUI(v) then
@@ -313,13 +339,17 @@ function SetGameDataSToLabel(pParent, nTag, nScriptData, nRoleData, nRoleId, nId
 end
 
 function SetLabel(pParent, nTag, str)
-	if not CheckP(pParent) or not CheckS(str) then
-		LogInfo("SetLabel invalid arg1");
+	if not CheckP(pParent) then
+		LogInfo("SetLabel invalid pParent");
+		return;
+	end
+    if not CheckS(str) then
+		LogInfo("SetLabel invalid str");
 		return;
 	end
 
 	if not CheckN(nTag) then
-		LogInfo("SetLabel invalid arg2");
+		LogInfo("SetLabel invalid nTag");
 		return;
 	end
 	
@@ -329,6 +359,7 @@ function SetLabel(pParent, nTag, str)
 	end
 	
 	lb:SetText(str);
+    return lb;
 end
 
 function SetHyperlinkText(pParent, nTag, str)
@@ -532,3 +563,68 @@ function HideLoginUI(nTag)
     end
     return false;
 end
+
+--引导购买金币
+function EMoneyNotEnough(nMoney)
+    local nPlayerId     = GetPlayerId();
+    local ngmoney       = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
+    if(nMoney>ngmoney) then
+        CommonDlgNew.ShowYesOrNoDlg(GetTxtPub("JinBiBuZhu2"),MoneySellItemOk);
+    end
+end
+
+function MoneySellItemOk(nEventType, param)
+    if(nEventType == CommonDlgNew.BtnOk) then
+        PlayerVIPUI.LoadUI();
+    end
+end
+
+
+local BtnLeft   = "/General/arrows/icon_arrows2.png";
+local BtnRight  = "/General/arrows/icon_arrows1.png";
+local BtnLeftS   = "/General/arrows/icon_arrows7.png";
+local BtnRightS  = "/General/arrows/icon_arrows8.png";
+
+--设置箭头显示
+function SetArrow(layer,pageView,nShowCount,nTagBegin,nTagEnd)
+    LogInfo("SetArrow nTagBegin:[%d]",nTagBegin);
+    local btnL = GetImage(layer,nTagBegin);
+    local btnR = GetImage(layer,nTagEnd);
+    local index = pageView:GetBeginIndex();
+    local pageCount = pageView:GetViewCount();
+    local pool = DefaultPicPool();
+	if not CheckP(pool) then
+		return;
+	end
+    
+    --left
+    local norpic;
+    if (index==0) then
+        norpic = pool:AddPicture(GetSMImgPath(BtnLeftS), true);
+    else
+        norpic = pool:AddPicture(GetSMImgPath(BtnLeft), true);
+    end
+    if(btnL) then
+        btnL:SetPicture(norpic);
+    else
+        LogInfo("SetArrow btnL is nil!");
+    end
+    
+    --right
+    local norpic;
+    if (index + nShowCount >= pageCount) then
+        norpic = pool:AddPicture(GetSMImgPath(BtnRightS), true);
+    else
+        norpic = pool:AddPicture(GetSMImgPath(BtnRight), true);
+    end
+    if(btnR) then
+        btnR:SetPicture(norpic);
+    else
+        LogInfo("SetArrow btnR is nil!");
+    end
+    
+    LogInfo("index:[%d],index + nShowCount:[%d],pageCount:[%d]",index,index + nShowCount,pageCount);
+end
+
+
+

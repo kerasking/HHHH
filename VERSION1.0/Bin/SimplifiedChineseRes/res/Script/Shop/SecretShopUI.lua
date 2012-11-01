@@ -68,7 +68,7 @@ local Numbers_Rect = {
 local TAG_NUMBER_IMG = 156;
 local TAG_BEGIN_ARROW   = 1411;
 local TAG_END_ARROW     = 1412;
-
+local TAG_E_TEMONEY     = 242;
 -- 格子界面tag
 local ID_ROLEBAG_R_LIST_CTRL_OBJECT_BUTTON_16				= 77;
 local ID_ROLEBAG_R_LIST_CTRL_OBJECT_BUTTON_15				= 76;
@@ -93,10 +93,12 @@ function p.Close()
 	CloseUI(p.TagUiLayer);
 end
 
-
-function p.LoadUI(npcId)
-
-    
+p.ShopType = 0;
+function p.LoadUI(ShopType)
+    p.ShopType = ShopType;
+    if(p.ShopType == nil) then
+        p.ShopType = MsgShop.GroupType.MYSTERIOUS;
+    end
 
 	local scene = GetSMGameScene();
 	local layer = createNDUILayer();
@@ -114,7 +116,7 @@ function p.LoadUI(npcId)
 	uiLoad:Load("SM_NPC_ShopSecret.ini", layer, p.OnUIEvent, 0, 0);
 	uiLoad:Free();
     
-	p.initData();
+	p.initData(ShopType);
     
     p.LoadPageView();
     
@@ -125,27 +127,11 @@ function p.LoadUI(npcId)
     
 	p.RefreshUI();
     
-    p.setArrow(p.getUiLayer(),p.GetGoodsViewContainer());
+    SetArrow(p.getUiLayer(),p.GetGoodsViewContainer(),1,TAG_BEGIN_ARROW,TAG_END_ARROW);
+    
+    p.refreshMoney();
     
 	return true;
-end
-
-function p.setArrow(layer,pageView)
-    --设置箭头   
-    local larrow    = GetButton(layer,TAG_BEGIN_ARROW);
-    local rarrow    = GetButton(layer,TAG_END_ARROW);
-            
-    local pageIndex = pageView:GetBeginIndex();
-    local pageCount = pageView:GetViewCount();
-    
-    larrow:EnalbeGray(false);
-    rarrow:EnalbeGray(false);
-    if(pageIndex == 0) then
-        larrow:EnalbeGray(true);
-    end
-    if(pageIndex == pageCount-1) then
-        rarrow:EnalbeGray(true);
-    end
 end
 
 --银币不足
@@ -154,8 +140,8 @@ function p.tipMoneyNotEnough()
 end
 
 --金币不足
-function p.tipEMoneyNotEnough()
-    CommonDlgNew.ShowYesDlg(GetTxtPri("JinBiBuZhuWuFaGouMai"));
+function p.tipEMoneyNotEnough(nPrice)
+    EMoneyNotEnough(nPrice);
 end
 
 --数字验证
@@ -170,25 +156,44 @@ function p.OnUIEventBuyNum(nEventType, param, val)
             
             local layer = p.getUiLayer();
             local itemBtn = GetItemButton(layer, p.TAG_GOODS_INFO.PIC);           
-            local nitemType = itemBtn:GetItemType();
+            local nItemType = itemBtn:GetItemType();
             
-            local price = ItemFunc.GetPrice(nitemType)*num;
+            
+            local nAmountLimit = GetDataBaseDataN("itemtype", nItemType, DB_ITEMTYPE.AMOUNT_LIMIT);
+            --判断背包是否已满
+            if(nAmountLimit~=0) then
+                LogInfo("nAmountLimit:[%d]",nAmountLimit);
+                if(ItemFunc.IsBagFull(math.ceil(num/nAmountLimit)-1)) then
+                    return false;
+                end
+            end
+            
+            local nPrice    = 0;
+            local nMoney	= GetDataBaseDataN("itemtype", nItemType, DB_ITEMTYPE.PRICE);
+            local nEMoney	= GetDataBaseDataN("itemtype", nItemType, DB_ITEMTYPE.EMONEY);
+            if(nBuyType == 0) then
+                nPrice = nMoney;
+            else
+                nPrice = nEMoney;
+            end
+            nPrice = nPrice*num;
+            
             local money = GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_MONEY);
             local emoney= GetRoleBasicDataN( GetPlayerId(), USER_ATTR.USER_ATTR_EMONEY );
             
             if(itemBtn:GetParam1()==0) then
-                if(price>money) then
+                if(nPrice>money) then
                     p.tipMoneyNotEnough();
                     return;
                 end
             elseif(itemBtn:GetParam1()==1) then
-                 if(price>emoney) then
-                    p.tipEMoneyNotEnough();
+                 if(nPrice>emoney) then
+                    p.tipEMoneyNotEnough(nPrice);
                     return;
                 end
             end
             
-            MsgShop.sendBuy(nitemType,num);
+            MsgShop.sendBuy(nItemType,num);
             ShowLoadBar();
         else
             p.tipNumVail();
@@ -201,7 +206,12 @@ end
 function p.initData()
     p.initConst();
     p.pageSize = math.ceil(#p.GoodsShowId/MAX_GRID_NUM_PER_PAGE);
-    p.GoodsShowId = MsgShop.getGoodsList();
+    
+    if(p.ShopType == MsgShop.GroupType.MYSTERIOUS) then
+        p.GoodsShowId = MsgShop.GetMySteriousGoodsList();
+    else
+        p.GoodsShowId = MsgShop.GetSmithGoodsList();
+    end
     
     MAX_BACK_BAG_NUM	= table.getn(p.GoodsShowId);
     if(MAX_BACK_BAG_NUM == 0) then
@@ -307,7 +317,7 @@ function p.OnUIEventGoods(uiNode, uiEventType, param)
             local viewId = pageView:GetBeginIndex();
             p.SetFocusOnPage(viewId);
             
-            p.setArrow(p.getUiLayer(),p.GetGoodsViewContainer());
+            SetArrow(p.getUiLayer(),p.GetGoodsViewContainer(),1,TAG_BEGIN_ARROW,TAG_END_ARROW);
 		end
     elseif uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
         local btn = ConverToItemButton(uiNode);
@@ -352,6 +362,7 @@ function p.SetGoodsInfo(nItemType, nBuyType)
     --物品名称
     local l_name = GetLabel(layer, p.TAG_GOODS_INFO.NAME);
     l_name:SetText(ItemFunc.GetName(nItemType));
+    ItemFunc.SetLabelColor(l_name,nItemType);
     
     --local l_level = GetLabel(layer, p.TAG_GOODS_INFO.LEVEL);
     --l_level:SetText(ItemFunc.GetLvlReq(nItemType)..GetTxtPub("Level"));
@@ -364,7 +375,18 @@ function p.SetGoodsInfo(nItemType, nBuyType)
     LogInfo("nBuyType:[%d]",nBuyType);
     
     local l_price = GetLabel(layer, p.TAG_GOODS_INFO.PRICE);
-    l_price:SetText(ItemFunc.GetPrice(nItemType)..MoneyTypes[nBuyType+1]);
+    
+    
+    local nPrice    = 0;
+    local nMoney	= GetDataBaseDataN("itemtype", nItemType, DB_ITEMTYPE.PRICE);
+    local nEMoney	= GetDataBaseDataN("itemtype", nItemType, DB_ITEMTYPE.EMONEY);
+    
+    if(nBuyType == 0) then
+        nPrice = nMoney;
+    else
+        nPrice = nEMoney;
+    end
+    l_price:SetText(nPrice..MoneyTypes[nBuyType+1]);
 end
 
 
@@ -471,7 +493,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             if(itemBtn:GetItemType()==0) then
                 return;
             end
-            CommonDlgNew.ShowInputDlg("请输入购买数量!", p.OnUIEventBuyNum,nil,1,2);
+            CommonDlgNew.ShowInputDlg("请输入购买数量!", p.OnUIEventBuyNum,nil,1,3);
         end
     end
     return true;
@@ -543,3 +565,39 @@ function p.processNet(msgId, data)
 	end
     CloseLoadBar();
 end
+--刷新金钱
+function p.refreshMoney()
+    local nPlayerId     = GetPlayerId();
+    local layer = p.getUiLayer();
+    if(layer == nil) then
+        return;
+    end
+    
+    local ngmoney        = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY).."";
+    _G.SetLabel(layer, TAG_E_TEMONEY, ngmoney);
+end
+
+local TAG_E_TMONEY      = 243;  --
+local TAG_E_TEMONEY     = 242;  --
+--刷新金钱
+function p.refreshMoney()
+    LogInfo("p.refreshMoney BEGIN");
+    local nPlayerId     = GetPlayerId();
+    local scene = GetSMGameScene();
+    if(scene == nil) then
+        return;
+    end
+    local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.ShopScretUI);
+    if(layer == nil) then
+        return;
+    end
+    
+    local nmoney        = MoneyFormat(GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_MONEY));
+    local ngmoney        = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY).."";
+    
+    _G.SetLabel(layer, TAG_E_TMONEY, nmoney);
+    _G.SetLabel(layer, TAG_E_TEMONEY, ngmoney);
+end
+GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"PetUI.refreshMoney",p.refreshMoney);
+
+GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"PetUI.refreshMoney",p.refreshMoney);

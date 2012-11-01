@@ -10,7 +10,8 @@ local p=MsgChat;
 
 function p.ProcessTalkInfo(netdatas)
 	LogInfo("receive_talk");
-	CloseLoadBar();
+    LogInfo("receive p.ProcessTalkInfo");
+    
 	netdatas:ReadByte();
 	local channel = netdatas:ReadByte();
 	netdatas:ReadInt();
@@ -29,6 +30,14 @@ function p.ProcessTalkInfo(netdatas)
 			nProId =netdatas:ReadInt();
 		end
 	end
+    
+    LogInfo("channel = %d, text = %s", channel, text);
+    if channel == 17 then
+        CommonDlgNew.ShowYesDlg(text,nil,nil,3);
+        return;
+    end
+    CloseLoadBar();
+    
 	local speakerID=netdatas:ReadInt();
 	--LogInfo("receive_talk,channel:%d,speaker:%s,text:%s speakerID:%d nProId:%d",channel,speaker,text,speakerID,nProId);--nProId==nil??
 	if string.len(speaker)<=0 then
@@ -36,9 +45,13 @@ function p.ProcessTalkInfo(netdatas)
 	end
 	
 	if string.find(speaker,"SYSTEM")~=nil then
-		speaker="系统";
+		speaker="【系统】";
 	end
-	
+
+	if string.find(speaker,"系统")~=nil then
+		speaker="【系统】";
+	end
+		
 	ChatDataFunc.AddChatRecord(speakerID,channel,0,speaker,text);
 	
 end
@@ -67,7 +80,7 @@ function p.SendPrivateTalk(tid,name,text)
 	
 	local playername = GetRoleBasicDataS(nPlayerId,USER_ATTR.USER_ATTR_NAME);
 	
-	ChatDataFunc.AddChatRecord(nPlayerId,1,tid,"["..playername.."]对["..name.."]说",text);
+	ChatDataFunc.AddChatRecord(nPlayerId,1,tid,"【"..playername.."】对【"..name.."】说",text);
 end
 
 function p.SendTalkMsg(channel,text)

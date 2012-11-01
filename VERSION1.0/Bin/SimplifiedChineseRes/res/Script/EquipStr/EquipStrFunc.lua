@@ -16,8 +16,8 @@ function p.GetReqMoney(itemTypeId,equipLv)
 		LogInfo("enhanceId:%d",enhanceId)
 		LogInfo("equipLv:%d",equipLv)
 	
-		local reqMoney1 = GetDataBaseDataN("enhanced", enhanceId + equipLv  , DB_ENHANCED.REQ_MONEY);
-		local reqMoney2 = GetDataBaseDataN("enhanced", enhanceId + equipLv + 1 , DB_ENHANCED.REQ_MONEY);
+		local reqMoney1 = GetDataBaseDataN("enhanced", enhanceId + equipLv - 1 , DB_ENHANCED.REQ_MONEY);
+		local reqMoney2 = GetDataBaseDataN("enhanced", enhanceId + equipLv + 0 , DB_ENHANCED.REQ_MONEY);
 		reqMoney = reqMoney2 - reqMoney1;
 		
         

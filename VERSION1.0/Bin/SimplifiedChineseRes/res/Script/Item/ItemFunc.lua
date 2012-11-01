@@ -48,6 +48,10 @@ function p.GetPropType(nItemType)
 	return nType;
 end
 
+function p.GetQualityCCC4(nItemType)
+    return GetDataBaseDataN("itemtype", nItemType, DB_ITEMTYPE.QUALITY);
+end
+
 function p.GetLvlReq(nItemType)
 	local nRes	= 0;
 	if CheckN(nItemType) then
@@ -192,9 +196,12 @@ function p.GetAttrDesc(itemTypeId, level)
     
     txt = p.GetAttrTypeDesc(attr_type_1);
     
-    
     txt = txt.."：";
-    num = "+"..attr_value_1.."("..(level*attr_grow_1)..")";
+    num = attr_value_1.."";
+    if(level>0) then
+        num = num.."(+"..(level*attr_grow_1)..")"
+    end
+    
     return txt,num;
 end
 
@@ -380,11 +387,11 @@ function p.GetAttrTypeValueDesc(nAttr, value)
     elseif(nAttr == 2) then
         val = "-"..value;
     elseif(nAttr == 3) then
-        val = "+"..value;
+        val = "+"..(value/10);
         val = val.."%";
     elseif(nAttr == 4) then
-        val = "-"..value;
-        val = val.."%";
+        val = "-"..(value/10);
+        val = (val/10).."%";
     end
     str = des..val;
     return str;
@@ -399,6 +406,14 @@ function p.GetItemIdByPosition(idlist,nPosition)
 	 end
    end
    return 0;
+end
+
+function p.IsAlertEquipItem(nEquipId)
+    local usPosition = Item.GetItemInfoN(nEquipId, Item.ITEM_POSITION);
+    if usPosition >= Item.POSITION_EQUIP_1 and usPosition <= Item.POSITION_EQUIP_6 then
+            return true;
+    end
+    return false;
 end
 
 --获取对应升阶公式id   (nItemType：改造装备id   ,nType：改造类型升阶/神铸/升星)
@@ -464,14 +479,16 @@ end
 
 --]]
 --判定装备是否可以升阶
-function p.IfItemCanUpStep(itemID)
+function p.IfItemCanUpStep(itemID,nPetId)
 
 	local nItemTypeId= Item.GetItemInfoN(itemID,Item.ITEM_TYPE);
 	  
 	local formulaID = ItemFunc.GetFormulaIdByItemType(nItemTypeId,1)
 	LogInfo("IfItemCanUpStep nItemTypeId"..nItemTypeId);
 	LogInfo("IfItemCanUpStep formulaID"..formulaID);
-	 --不存在公式 
+    
+    
+    --不存在公式 
 	if formulaID == 0 then
 		return false;
 	end
@@ -481,16 +498,37 @@ function p.IfItemCanUpStep(itemID)
 		LogInfo("IfItemCanUpStep f")
 		return false;		
 	end
+    
+    --判断武将等级是否达到可升级
+    if(nPetId == nil) then
+        local nPlayerId = GetPlayerId();
+        if nil == nPlayerId then
+            LogInfo("nil == nPlayerId");
+            return;
+        end
+        nPetId = RolePetFunc.GetMainPetId(nPlayerId);
+    end
+    local nPetLevel = RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_LEVEL);
+    local nFormulatypeLevel = _G.GetDataBaseDataN("formulatype",formulaID,DB_FORMULATYPE.LEVEL);
+    LogInfo("nPetLevel:[%d],nFormulatypeLevel:[%d]",nPetLevel,nFormulatypeLevel);
+    
+    if(nPetLevel<nFormulatypeLevel) then
+        return false;
+    end
+    
 	LogInfo("IfItemCanUpStep true")
 	return true;
 end
 
 --判断背包是否已满
-function p.IsBagFull()
+function p.IsBagFull( nNum )
+    if(nNum == nil) then
+        nNum = 0;
+    end
     local nPlayerId		= ConvertN(GetPlayerId());
 	local idlistItems	= ItemUser.GetBagItemList(nPlayerId);
     
-    if(#idlistItems >= ItemFunc.getBackBagCapability()) then
+    if(#idlistItems+nNum >= ItemFunc.getBackBagCapability()) then
         CommonDlgNew.ShowYesDlg(GetTxtPub("BagFull"));
         return true;
     end
@@ -541,3 +579,25 @@ function p.IsBagFullGem(GemItemList, nGemTypeId)
     end
     return false;
 end
+
+
+
+--** 获得物品颜色 **--
+function p.GetItemColor(nItemType)
+    local nQuality = p.GetQualityCCC4(nItemType);
+    local cColor4 = ItemColor[nQuality];
+    if(cColor4 == nil) then
+        cColor4 = ItemColor[0];
+    end
+    return cColor4;
+end
+
+function p.SetLabelColor(label, nItemType) 
+    if(label == nil) then
+        LogInfo("p.SetLabelColor is nil!");
+        return;
+    end
+    label:SetFontColor(p.GetItemColor(nItemType));
+end
+
+

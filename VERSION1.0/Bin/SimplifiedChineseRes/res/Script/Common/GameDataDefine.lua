@@ -140,7 +140,7 @@ USER_ATTR =
      USER_ATTR_IP	=	20,					--玩家注册时的IP地址	
      USER_ATTR_REBORN_MAPID	=	21,			--玩家复活的地图id			
      USER_ATTR_ONLINE_TIME	=	22,			--在线时间			
-     USER_ATTR_AUTO_EXERCISE	=	23,		--环保练功的标志				
+     USER_ATTR_AUTO_EXERCISE	=	23,		--品质				
      USER_ATTR_LEVEL	=	24,				--等级		
      USER_ATTR_EXP	=	25,					--经验值	
      USER_ATTR_PK	=	26,					--PK值	
@@ -212,7 +212,7 @@ USER_ATTR =
 
 PET_ATTR =
 {
-	PET_ATTR_HELP 						= 40,						--护驾
+	PET_ATTR_HELP 						= 54,						--护驾
 	PET_ATTR_ID							= 0,						-- ID
 	PET_ATTR_NAME						= 1,						-- 名字
 	PET_ATTR_TYPE						= 2,						-- 类型
@@ -253,7 +253,7 @@ PET_ATTR =
 	PET_ATTR_MAGIC_ELIXIR6				= 37,				-- 六品法术丹	
 	PET_ATTR_IMPART						= 38,				-- 传承
 	PET_ATTR_OBTAIN						= 39,				-- 被传承
-	
+	PET_ATTR_QUALITY                    = 40,               -- 品质
 	
 	PET_ATTR_LOGIC_BEGIN				= 1000,		-- 逻辑定义起点
 	PET_ATTR_PHY_ATK					= 1001,					-- 普通攻击
@@ -284,7 +284,7 @@ FRIEND_DATA =
 	FRIEND_SYNDYCATE					=8,						--帮派
 	FRIEND_SPORTS						=9,						--竞技场排行
 	FRIEND_CAPACITY						=10,					--战斗力
-	
+	FRIEND_QUALITY						=11,					--品质颜色
 }
 
 HEROSTAR_DATA =

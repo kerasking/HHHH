@@ -45,9 +45,21 @@ LoadDataBaseTable("giftpack_config","giftpack_configTable");
 LoadDataBaseTable("guide_config","guide_configTable");
 LoadDataBaseTable("vip_config","vip_configTable");
 
+--** chh 2012-10-09 **--
+LoadDataBaseTable("event_activity","event_activityTable");
+
 --** tzq 2012-8-15 **--
 LoadDataBaseTable("achievement_config","achievement_configTable");
 
 LoadDataBaseTable("mount_train_config","mount_train_configTable");
 LoadDataBaseTable("equip_edu_config","equip_edu_configTable");
+LoadDataBaseTable("box_type","box_typeTable");
 
+
+LoadDataBaseTable("event_config","event_configTable");
+LoadDataBaseTable("event_award","event_awardTable");
+
+LoadDataBaseTable("grain_static","grain_staticTable");
+LoadDataBaseTable("grain_config","grain_configTable");
+LoadDataBaseTable("event_activity","event_activityTable");
+LoadDataBaseTable("sports_prize","sports_prizeTable");
