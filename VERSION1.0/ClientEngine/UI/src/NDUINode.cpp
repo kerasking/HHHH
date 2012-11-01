@@ -128,11 +128,6 @@ namespace NDEngine
 		}
 		*/
 	}
-
-	void NDUINode::SetBoundScale(int nScale)
-	{
-		m_fBoundScale = (float)nScale/100;
-	}
 	
 	bool NDUINode::IsVisibled()
 	{
@@ -318,6 +313,11 @@ namespace NDEngine
 				break;
 		}
 		printf("Change From[%f][%f] To [%f][%f] Step[%f]",m_kFrameRect.origin.x,m_kFrameRect.origin.y,rect.origin.x,rect.origin.y, m_fStep);
+	}
+
+	void NDUINode::SetBoundScale( int nScale )
+	{
+		m_fBoundScale = static_cast<float>(nScale);	
 	}
 
 }
