@@ -258,7 +258,7 @@ bool NDGameApplication::processPM(const char* cmd)
 	if (stricmp(cmd, "opt help") == 0)
 	{
 		TCHAR help[] =	L"syntax: opt arg 0/1\r\n"
-			L"arg can be: tick, script, network, mainloop, drawhud, drawui, drawrole, drawmap\r\n";
+			L"arg can be: tick, script, network, mainloop, drawhud, drawui, drawmap, drawrole, drawrolenpc, drawrolemonster, drawroleplayer, drawrolemanual.\r\n";
 
 		DWORD n = 0;
 		WriteConsoleW( hOut, help, sizeof(help)/sizeof(TCHAR), &n, NULL );
@@ -283,11 +283,23 @@ bool NDGameApplication::processPM(const char* cmd)
 		else if (stricmp(szDebugOpt, "drawui") == 0)
 			NDDebugOpt::setDrawUIEnabled( val != 0 );
 
+		else if (stricmp(szDebugOpt, "drawmap") == 0)
+			NDDebugOpt::setDrawMapEnabled( val != 0 );
+
 		else if (stricmp(szDebugOpt, "drawrole") == 0)
 			NDDebugOpt::setDrawRoleEnabled( val != 0 );
 
-		else if (stricmp(szDebugOpt, "drawmap") == 0)
-			NDDebugOpt::setDrawMapEnabled( val != 0 );
+		else if (stricmp(szDebugOpt, "drawrolenpc") == 0)
+			NDDebugOpt::setDrawRoleNpcEnabled( val != 0 );
+
+		else if (stricmp(szDebugOpt, "drawrolemonster") == 0)
+			NDDebugOpt::setDrawRoleMonsterEnabled( val != 0 );
+
+		else if (stricmp(szDebugOpt, "drawroleplayer") == 0)
+			NDDebugOpt::setDrawRolePlayerEnabled( val != 0 );
+
+		else if (stricmp(szDebugOpt, "drawrolemanual") == 0)
+			NDDebugOpt::setDrawRoleManualEnabled( val != 0 );
 	}
 	else if (sscanf(cmd, "openmap %d", &val) == 1)
 	{

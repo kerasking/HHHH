@@ -252,7 +252,7 @@ void NDMonster::SetType(int type)
 
 bool NDMonster::OnDrawBegin(bool bDraw)
 {
-	if (!NDDebugOpt::getDrawRoleEnabled()) return false;
+	if (!NDDebugOpt::getDrawRoleMonsterEnabled()) return false;
 
 	if (m_nFigure == 0)
 	{

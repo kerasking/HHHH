@@ -21,16 +21,21 @@ class NDDebugOpt : private NDObject
 {
 	DECLARE_CLASS(NDDebugOpt)
 
-	DECL_STATIC_PROPERTY(bool, bTick,		TickEnabled);
-	DECL_STATIC_PROPERTY(bool, bScript,		ScriptEnabled);
-	DECL_STATIC_PROPERTY(bool, bNetwork,	NetworkEnabled);
+	DECL_STATIC_PROPERTY(bool, bTick,			TickEnabled);
+	DECL_STATIC_PROPERTY(bool, bScript,			ScriptEnabled);
+	DECL_STATIC_PROPERTY(bool, bNetwork,		NetworkEnabled);
 
-	DECL_STATIC_PROPERTY(bool, bMainLoop,	MainLoopEnabled);
-	DECL_STATIC_PROPERTY(bool, bDrawHud,	DrawHudEnabled);
-	DECL_STATIC_PROPERTY(bool, bDrawUI,		DrawUIEnabled);
-	DECL_STATIC_PROPERTY(bool, bDrawUILabel,DrawUILabelEnabled);
-	DECL_STATIC_PROPERTY(bool, bDrawRole,	DrawRoleEnabled);
-	DECL_STATIC_PROPERTY(bool, bDrawMap,	DrawMapEnabled);
+	DECL_STATIC_PROPERTY(bool, bMainLoop,		MainLoopEnabled);
+	DECL_STATIC_PROPERTY(bool, bDrawHud,		DrawHudEnabled);
+	DECL_STATIC_PROPERTY(bool, bDrawUI,			DrawUIEnabled);
+	DECL_STATIC_PROPERTY(bool, bDrawUILabel,	DrawUILabelEnabled);
+	DECL_STATIC_PROPERTY(bool, bDrawMap,		DrawMapEnabled);
+
+	DECL_STATIC_PROPERTY(bool, bDrawRole,		DrawRoleEnabled);//for all roles
+	DECL_STATIC_PROPERTY(bool, bDrawRoleNpc,	DrawRoleNpcEnabled);
+	DECL_STATIC_PROPERTY(bool, bDrawRoleMonster,DrawRoleMonsterEnabled);
+	DECL_STATIC_PROPERTY(bool, bDrawRolePlayer,	DrawRolePlayerEnabled);
+	DECL_STATIC_PROPERTY(bool, bDrawRoleManual,	DrawRoleManualEnabled);
 
 	DECL_STATIC_PROPERTY(bool, bLightEffect,DrawLightEffectEnabled);
 };
