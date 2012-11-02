@@ -269,8 +269,6 @@ public:
 	virtual bool TouchEnd(NDTouch* touch);override
 	void draw();override
 	void drawSubAniGroup();
-	void OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
-			unsigned int cellIndex, NDSection* section);
 
 	void AddFighter(Fighter* f);
 
@@ -293,6 +291,8 @@ public:
 
 	void StartFight();
 
+	void BattleContinue();
+
 	void RestartFight();
 
 	void dealWithCommand();
@@ -301,9 +301,19 @@ public:
 
 	void AddActionCommand(FightAction* action);
 
+	void SetIsPlayBack(bool isPlayBack)
+	{
+		m_bIsBattlePlayBack = isPlayBack;
+	}
+
+	bool isPlayBack()
+	{
+		return m_bIsBattlePlayBack;
+	}
+
 	virtual void OnTimer(OBJID tag);
 
-//	virtual void OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);
+	virtual void OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);
 //	
 //	virtual void OnTableLayerCellFocused(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section);
 
@@ -316,17 +326,13 @@ public:
 	void setBattleMap(int mapId, int posX, int posY);
 	void setSceneCetner(int center_x, int center_y)
 	{
-		this->sceneCenterX = center_x;
-		this->sceneCenterY = center_y;
+		sceneCenterX = center_x;
+		sceneCenterY = center_y;
 	}
-	NDPicture* GetBaoJiPic()
-	{
-		return m_picBaoJi;
-	}
-//	
-//	NDPicture* GetBojiPic() {
-//		return m_picBoji;
-//	}
+// 	NDPicture* GetBaoJiPic()
+// 	{
+// 		return m_picBaoJi;
+// 	}
 
 	int getServerBattleResult()
 	{
@@ -340,7 +346,8 @@ public:
 
 	void setBattleStatus(BATTLE_STATUS status);
 
-	NDPicture* getActionWord(ACTION_WORD index);
+	//--Guosen 2012.6.28//不显示动作名称（防御，逃跑，闪避）
+	//NDPicture* getActionWord(ACTION_WORD index);
 
 	void setRewardContent(const char* pszContent)
 	{
@@ -375,6 +382,8 @@ public:
 
 	bool CanPetFreeUseSkill();
 	void FinishBattle();
+	Fighter* GetFighter(int idFighter);
+	void SetBattleOver(void);
 private:
 	Battle(const Battle& rhs)
 	{
@@ -483,13 +492,12 @@ private:
 
 	bool watchBattle;
 
-	NDPicture* m_picBaoJi;
-//	NDPicture* m_picBoji;
+	//NDPicture* m_picBaoJi;
 
 	BATTLE_COMPLETE battleCompleteResult;
 
 	int serverBattleResult;	// 服务器返回的战斗结果
-
+	bool m_bIsBattlePlayBack;
 	NDUIDialog* m_dlgBattleResult;
 	//NDUIDialog* m_dlgHint; // 提示对话框
 	StatusDialog* m_dlgStatus;
@@ -525,8 +533,7 @@ private:
 	void CloseChatInput();
 
 	void Init();
-	void addSkillEffectToFighter(Fighter* fighter, NDAnimationGroup* effect,
-			int delay);
+	void addSkillEffectToFighter(Fighter* fighter,NDAnimationGroup* effect,int delay,int pos, bool bRevers = true);//++Guosen 2012.6,28//bRevers特效动画是否更随角色翻转而翻转
 	void battleRefresh();
 
 	bool sideRightAtk();
@@ -559,8 +566,6 @@ private:
 	void SendBattleAction(const BattleAction& action);
 
 	void ReleaseCommandList();
-
-	Fighter* GetFighter(int idFighter);
 
 	void AddAnActionFighter(Fighter* fAction);
 

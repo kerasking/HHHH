@@ -409,11 +409,29 @@ public:
 		m_nSlot = nSlot;
 	}
 
-	void setLookface(int act, int lookface, int lookface_target)
+	int getSelfEffect()
+	{
+		return lookface_id;
+	}
+
+	int getTargetEffect()
+	{
+		return lookface_target_id;
+	}
+
+	void setSelfEffect(int lookface)
+	{
+		lookface_id=lookface;
+	}
+
+	void setTargetEffect(int lookface_target)
+	{
+		lookface_target_id=lookface_target;
+	}
+
+	void SetActId(int act)
 	{
 		act_id = act;
-		lookface_id = lookface;
-		lookface_target_id = lookface_target;
 	}
 
 	int GetActId()

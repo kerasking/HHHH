@@ -50,11 +50,18 @@ public:
 		m_nEMoney = 0;
 		m_nRepute = 0;
 		m_nEXP = 0;
+		m_nSoph = 0;
 
 		for (int i = 0; i < 5; i++)
 		{
 			m_nItemTypes[i] = 0;
 			m_nItemAmount[i] = 0;
+		}
+
+		for (int i = 0; i < 5; i++)
+		{
+			m_nPetId[i] = 0;
+			m_nPetGainExp[i] = 0;
 		}
 	}
 
@@ -70,13 +77,47 @@ public:
 			}
 		}
 	}
+	//add by tangziqin 2012.7.21
+	BattleReward &operator = (const BattleReward &other)
+	{
+		if(this == &other)
+		{
+			return *this;
+		}
+		m_nMoney   = other.m_nMoney;
+		m_nEMoney = other.m_nEMoney;
+		m_nRepute   = other.m_nRepute;
+		m_nSoph     = other.m_nSoph;
+		m_nEXP        = other.m_nEXP;
+		m_nBattleResult = other.m_nBattleResult;
+
+		for (int i = 0; i < 5; i++)
+		{
+			m_nItemTypes[i] = other.m_nItemTypes[i] ;
+			m_nItemAmount[i] = other.m_nItemAmount[i] ;
+		} 
+
+		for (int i = 0; i < 5; i++)
+		{
+			m_nPetId[i] = other.m_nPetId[i];
+			m_nPetGainExp[i] = other.m_nPetGainExp[i];
+		}
+
+		return *this;
+	}
+	//add end
 public:
 	int m_nMoney;
 	int m_nEMoney;
 	int m_nRepute;
+	int m_nSoph;
 	int m_nEXP;
 	int m_nItemTypes[5];
 	int m_nItemAmount[5];
+
+	int m_nPetId[5];                         //人物id
+	int m_nPetGainExp[5];             //人物获得的经验数
+
 	int m_nBattleResult;
 };
 
@@ -126,6 +167,8 @@ public:
 	FIGHT_ACTION_STATUS m_eActionStatus;
 	int m_nData;
 	bool m_bIsCombo;
+	bool m_bIsCriticalHurt;
+	bool m_bIsDritical;
 	VEC_FIGHTER m_kFighterList;
 	FightAction(Fighter* f1, Fighter* f2, BATTLE_EFFECT_TYPE type)
 	{
@@ -146,6 +189,8 @@ public:
 		m_eEffectType = type;
 		m_eActionStatus = ACTION_STATUS_WAIT;
 		m_bIsCombo = false;
+		m_bIsCriticalHurt = false;
+		m_bIsDritical = false;
 		m_pkSkill = NULL;
 	}
 	VEC_FIGHTERCOMMAND m_vCmdList;
@@ -170,7 +215,7 @@ public:
 	virtual bool process(MSGID msgID, NDEngine::NDTransData* bao, int len);
 	// 退出战斗
 	void quitBattle(bool bEraseOut = true);
-
+	void loadRewardUI();
 	BattleSkill* GetBattleSkill(OBJID idSkill);
 	void ReleaseAllBattleSkill();
 	MAP_BATTLE_SKILL& GetBattleSkills()
@@ -184,6 +229,7 @@ public:
 	}
 	void showBattleScene();
 	void OnTimer(OBJID tag);override
+	void OnDramaFinish(); override
 	void restartLastBattle();
 	void showBattleResult();
 	BattleReward* GetBattleReward()
@@ -193,6 +239,12 @@ public:
 	VEC_FIGHTACTION m_vActionList1; //1队战斗指令
 	VEC_FIGHTACTION m_vActionList2; //2队战斗指令
 	VEC_FIGHTACTION m_vActionList3; //3队战斗指令
+
+
+	void BattleContinue();//剧情返回 战斗继续
+
+public:   
+	void SetBattleOver(void);
 private:
 
 	void processBattleStart(NDEngine::NDTransData& bao);
@@ -212,9 +264,11 @@ private:
 	MAP_BATTLE_SKILL m_mapBattleSkill;
 	CSMBattleScene* m_pkBattleScene;
 	NDTimer* m_pkQuitTimer;
+	NDTimer *m_pkStartDramaTimer;
 	int m_nCurrentTeamId;
 
 	BattleReward* m_pkBattleReward;
+	BattleReward* m_pkPrebattleReward;   //记录最近一次的信息
 
 	VEC_FIGHTER m_vFighter;
 
@@ -223,6 +277,21 @@ private:
 	int m_nBattleY;
 	int m_nLastBattleType;
 	int m_nLastBattleTeamCount;
+
+	//进入战斗前的场景地图数据ID及窗口位置备份//++Guosen 2012.7.5
+	int m_nLastSceneMapDocID;
+	int m_nLastSceneScreenX;
+	int m_nLastSceneScreenY;
+
+private:
+	//处理显示战斗胜利的结果 （包括副本战斗以及竞技场战斗）
+	void ShowBattleWinResult(int nBattleType);
+	//处理显示战斗失败的结果 （包括副本战斗以及竞技场战斗）
+	void ShowBattleLoseResult(int nBattleType);	
+	//处理显示战斗胜利回放的结果 （包括副本战斗以及竞技场战斗）
+	void ShowReplayWinResult(int nBattleType);	
+	//处理显示战斗失败回放的结果 （包括副本战斗以及竞技场战斗）
+	void ShowReplayLoseResult(int nBattleType);
 };
 
 #endif

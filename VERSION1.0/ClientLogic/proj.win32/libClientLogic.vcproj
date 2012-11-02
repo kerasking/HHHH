@@ -814,10 +814,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\Module\Battle\inc\NDSubAniGroup.h"
-						>
-					</File>
-					<File
 						RelativePath="..\Module\Battle\inc\StatusDialog.h"
 						>
 					</File>
@@ -851,10 +847,6 @@
 					</File>
 					<File
 						RelativePath="..\Module\Battle\src\NDEraseInOutEffect.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\Module\Battle\src\NDSubAniGroup.cpp"
 						>
 					</File>
 					<File

@@ -100,7 +100,7 @@ string BattleSkill::getFullDes() {
 	ss << getSimpleDes(true);
 	/*
 	<< "需要等级：" << getLvRequire() << "\n"
-	<< "需要银两：" << getMoney() << "\n"
+	<< "需要银币：" << getMoney() << "\n"
 	<< "需要SP：" << getSpRequire() << "\n";
 	*/
 	

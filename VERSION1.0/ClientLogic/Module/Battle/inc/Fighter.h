@@ -12,10 +12,9 @@
 #include <set>
 #include "BattleSkill.h"
 #include "NDSprite.h"
-#include "NDSubAniGroup.h"
 #include <map>
-//#include "../../TempClass/NDBaseFighter.h"
 #include "../../TempClass/NDBaseFighter.h"
+#include "UIExp.h"
 
 using namespace std;
 using namespace NDEngine;
@@ -47,11 +46,13 @@ public:
 		m_pkAniGroup = NULL;
 	}
 
-	FighterStatus(int id, int startEffectID, int lastEffectID)
+	FighterStatus(int id, int startEffectID, int lastEffectID, int pos1, int pos2)
 	{
 		m_nID = id;
 		m_nStartEffectID = startEffectID;
 		m_nLastEffectID = lastEffectID;
+		m_nStartPos = pos1;
+		m_nLastPos = pos2;
 		m_pkAniGroup = NULL;
 	}
 
@@ -81,10 +82,20 @@ public:
 	int m_nID;
 	int m_nStartEffectID;
 	int m_nLastEffectID;
-	int startPos;
-	int lastPos;
+	int m_nStartPos;
+	int m_nLastPos;
 	NDSubAniGroup* m_pkAniGroup;
 };
+
+typedef vector<FighterStatus*> VEC_FIGHTER_STATUS;
+typedef VEC_FIGHTER_STATUS::iterator VEC_FIGHTER_STATUS_IT;
+
+//++Guosen 2012.7.10
+//状态小图标
+typedef struct _tagFighterStatusIcon{
+	unsigned int	nIconID;
+	NDUIImage *		pIconImage;
+}TFighterStatusIcon;
 
 class StatusAction
 {
@@ -112,7 +123,7 @@ typedef SET_STATUS_PERSIST::iterator SET_STATUS_PERSIST_IT;
 typedef vector<Hurt> VEC_HURT;
 typedef VEC_HURT::iterator VEC_HURT_IT;
 
-typedef vector<int> VEC_PAS_STASUS;
+typedef vector<int> VEC_PAS_STASUS; // 被施加的被动状态
 typedef VEC_PAS_STASUS::iterator VEC_PAS_STASUS_IT;
 
 typedef vector<HurtNumber> VEC_HURT_NUM;
@@ -122,9 +133,6 @@ typedef pair<bool/*bFind*/, Hurt> PAIR_GET_HURT;
 
 typedef vector<StatusAction> VEC_STATUS_ACTION;
 typedef VEC_STATUS_ACTION::iterator VEC_STATUS_ACTION_IT;
-
-typedef vector<FighterStatus*> VEC_FIGHTER_STATUS;
-typedef VEC_FIGHTER_STATUS::iterator VEC_FIGHTER_STATUS_IT;
 
 int countX(int teamAmount, BATTLE_GROUP group, int team, int pos);
 int countY(int teamAmount, BATTLE_GROUP group, int team, int pos);
@@ -191,7 +199,15 @@ public:
 
 	int GetNormalAtkType() const
 	{
-		return m_nNormalAtkType;
+		int atk_type = m_kInfo.atk_type;
+		if(atk_type == 2 || atk_type == 3)
+		{
+			return ATKTYPE_DISTANCE;
+		}
+		else
+		{
+			return ATKTYPE_NEAR;
+		}
 	}
 
 	void AddAHurt(Fighter* actor, int btType, int hurtHP, int hurtMP,
@@ -374,7 +390,7 @@ public:
 
 	void drawHurtNumber();
 
-	void drawActionWord();
+//	void drawActionWord();//--Guosen 2012.6.28//不显示动作名称（防御，逃跑，闪避）
 
 	void drawHPMP();
 
@@ -400,6 +416,22 @@ public:
 	{
 		m_strSkillName = name;
 	}
+
+	void showAtkDritical()
+	{
+		m_bIsAtkDritical = true;
+	}
+
+	void showDodge()
+	{
+		m_bIsDodge = true;
+	}
+
+	void showBlock()
+	{
+		m_bIsBlock = true;
+	}
+
 	void addAStatus(FighterStatus* fs);
 
 	VEC_FIGHTER_STATUS& getFighterStatus()
@@ -408,6 +440,8 @@ public:
 	}
 
 public:
+	FIGHTER_INFO m_info;
+
 	USHORT m_nAttackPoint;
 	USHORT m_nDefencePoint;
 	USHORT m_nDistancePoint;
@@ -419,11 +453,11 @@ public:
 	Fighter* m_pkMainTarget;
 	Fighter* m_pkActor;
 
-
+	/** 保护对象 */
 	Fighter* m_pkProtectTarget;
-
+	/** 保护者 */
 	Fighter* m_pkProtector;
-
+	/** 保护对象时去的血临时存等保护对象去血的时候显示出来 */
 	int m_nHurtInprotect;
 
 	bool m_bMissAtk;
@@ -435,7 +469,7 @@ public:
 	bool isVisibleStatus;
 
 	FIGHTER_ACTION m_action;
-	ACTION_TYPE m_actionType;
+	ACTION_TYPE m_actionType;// 动作类型，普通攻击0，技能攻击1，道具使用2, 捕捉宠物3。对应使用的动作
 
 	void drawRareMonsterEffect(bool bVisible);
 
@@ -447,16 +481,18 @@ private:
 	int m_nOriginX;
 	int m_nOriginY;
 
+	// role原来的父节点
 	NDNode* m_pkRoleParent;
 	CGPoint m_kRoleInParentPoint;
 
+	// 绘制动画组
 	NDBaseRole* m_pkRole;
 	NDSprite* m_pkRareMonsterEffect;
-
+	// 是否要主动释放role
 	bool m_bRoleShouldDelete;
 
-	int m_nNormalAtkType;
-	int m_nActionTime;
+	int m_nNormalAtkType;// 普通攻击是进程还是远程
+	int m_nActionTime;// fighter开始行动的时间
 
 	VEC_HURT m_vHurt;
 	VEC_STATUS_ACTION m_kArrayStatusTarget;
@@ -465,8 +501,8 @@ private:
 	VEC_HURT_NUM m_vHurtNum;
 
 	bool m_bBeginAction;
-	bool m_bIsEscape;
-	bool m_bIsAlive;
+	bool m_bIsEscape;// 完全脱离战斗
+	bool m_bIsAlive;// 战士是否存活，死亡时暂时脱离战斗，可以被复活再回到战斗
 	bool m_bIsDodgeOK;
 	bool m_bIsHurtOK;
 	bool m_bIsDieOK;
@@ -483,17 +519,32 @@ private:
 	ATKTYPE m_eSkillAtkType;
 	bool m_bWillBeAttack;
 
+	ImageNumber* m_pkImgHurtNum;
 	NDUIImage* m_pkCritImage;
 	NDUIImage* m_pkActionWordImage;
 	NDUIImage* m_pkBojiImage;
 
+	NDSprite* mana_full_ani;
+	NDSprite* dritical_ani;
+	NDSprite* dodge_ani;
+	NDSprite* block_ani;
+
 	Battle* m_pkParent;
+	bool m_bIsCriticalHurt;
+	bool m_bIsAtkDritical;
+	bool m_bIsDodge;
+	bool m_bIsBlock;
 
 	VEC_FIGHTER_STATUS m_vBattleStatusList;
 	std::string m_strFighterName;
 
 	string m_strMsgStatus;
-	int m_testVa;
+	
+	unsigned int	m_nRoleInitialHeight;	//++Guosen 2012.6.29//固定一个显示名字，血条，技能名称==与角色高度相关的变量//实时去取角色高度存在不同组动画的宽高不一样……
+	int				m_iIconsXOffset;		//++Guosen 2012.7.10//设置状态小图标的放置位置,角色背后
+	std::deque<TFighterStatusIcon>		m_queStatusIcons;//状态小图标队列//++Guosen 2012.7.8
+	CUIExp *		m_pHPBar;
+	CUIExp *		m_pMPBar;
 
 private:
 	Fighter(const Fighter& rhs)
@@ -504,10 +555,26 @@ private:
 		return *this;
 	}
 
-	void showActionWord(ACTION_WORD index);
+//	void showActionWord(ACTION_WORD index);//--Guosen 2012.6.28//不显示动作名称（防御，逃跑，闪避）
 	void drawStatusAniGroup();
 	void releaseStatus();
 	void showHoverMsg(const char* str);
+
+	//++Guosen 2012.7.11
+	//
+	TFighterStatusIcon * GetighterStatusIcon( unsigned int nIconID );
+	//
+	void UpdateStatusIconsPosition();
+public:
+	// 功能：添加状态图标，
+	// 参数：nIconID,图标的ID号
+	bool AppendStatusIcon( unsigned int nIconID );
+
+	// 功能：移除状态图标
+	// 参数：nIconID,图标的ID号
+	bool RemoveStatusIcon( unsigned int nIconID );
+	//
+	void ClearAllStatusIcons();
 };
 
 #endif
