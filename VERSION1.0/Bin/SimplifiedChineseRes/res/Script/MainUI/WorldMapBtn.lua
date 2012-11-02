@@ -72,4 +72,4 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 	return true;
 end
 
---RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "MainUIWorldMapBtn.LoadUI", p.LoadUI);
+RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "MainUIWorldMapBtn.LoadUI", p.LoadUI);

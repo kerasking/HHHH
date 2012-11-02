@@ -1117,50 +1117,42 @@ NDNpc* NDMapMgr::GetNpcByID(int nID)
 
 void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 {
-	if (0 == pkData || 0 == nLength)
+	if (NULL == pkData || 0 == nLength)
 	{
 		return;
 	}
 
 	m_nCurrentMonsterBound = 0;
 
+	//版本验证
 	if (m_bVerifyVersion)
 	{
 		m_bVerifyVersion = false;
 		//NDBeforeGameMgrObj.VerifyVersion();
 	}
+	
+	BattleMgrObj.quitBattle(false);
 
 	m_nRoadBlockX = -1;
 	m_nRoadBlockY = -1;
 
-	BattleMgrObj.quitBattle(false);
-
-	pkData->ReadShort();
-	pkData->ReadInt();
+	pkData->ReadShort();  //未使用
+	pkData->ReadInt();    //未使用
 
 	int nMapID = pkData->ReadInt();
 	int nMapDocID = pkData->ReadInt();
+	int dwPortalX = pkData->ReadShort();  //出生地X坐标
+	int dwPortalY = pkData->ReadShort();  //出生地Y坐标
 
-	int dwPortalX = pkData->ReadShort();
-	int dwPortalY = pkData->ReadShort();
-
-	pkData->ReadShort();
-	pkData->ReadShort();
-	pkData->ReadShort();
-	pkData->ReadShort();
+	pkData->ReadShort();    //未使用
+	pkData->ReadShort();    //未使用
+	pkData->ReadShort();    //未使用
+	pkData->ReadShort();    //未使用
 
 	m_nMapType = pkData->ReadInt();
-
 	m_strMapName = pkData->ReadUnicodeString();
 
-	NDPlayer& kPlayer = NDPlayer::defaultHero(1);
-// 
-// 	if (kPlayer.IsInState(USERSTATE_DEAD))
-// 	{
-// 		NDUISynLayer::Close (SYN_RELIEVE);
-// 	}
-// 
-// 	NDUISynLayer::Close (SYN_CREATE_ROLE);
+	NDPlayer& kPlayer = NDPlayer::defaultHero();
 
 	NDMapMgrObj.ClearManualRole();
 

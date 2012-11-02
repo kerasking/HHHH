@@ -198,4 +198,4 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 end
 
 
-RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "ChatSmallUI.LoadUI", p.LoadUI);
+--RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "ChatSmallUI.LoadUI", p.LoadUI);
