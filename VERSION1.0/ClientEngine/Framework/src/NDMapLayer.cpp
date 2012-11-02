@@ -30,12 +30,17 @@
 #include "NDDataTransThread.h"
 #include "NDMsgDefine.h"
 #include "..\..\MapAndRole\inc\NDMonster.h"
+#include "..\..\Module\Battle\inc\BattleMgr.h"
+#include "ScriptMgr.h"
 
 using namespace cocos2d;
 
 #define IMAGE_PATH										\
 				[NSString stringWithUTF8String:				\
 				NDEngine::NDPath::GetImagePath().c_str()]
+
+#define MAP_NAME_SIZE_BIG (30*NDDirector::DefaultDirector()->GetScaleFactor())
+#define MAP_NAME_SIZE_SMALL (15*NDDirector::DefaultDirector()->GetScaleFactor())
 
 bool GetIntersectRect(CGRect first, CGRect second, CGRect& ret)
 {
@@ -80,11 +85,13 @@ NDMapLayer::NDMapLayer()
 	m_nMapIndex = -1;
 	m_pkPicMap = NULL;
 	//m_texMap = NULL;
+	m_nBattleType = 0;
 	m_pkSwitchAniGroup = NULL;
 	m_pkMapData = NULL;
 	m_lbTime = NULL;
 	m_lbTitle = NULL;
 	m_lbTitleBg = NULL;
+	m_pkSwitchSpriteNode = 0;
 	m_pkOrders = CCArray::array();
 	m_pkOrders->retain();
 	m_pkOrdersOfMapscenesAndMapanimations = CCArray::array();
@@ -95,7 +102,7 @@ NDMapLayer::NDMapLayer()
 	m_bNeedShow = true;
 	m_ndBlockTimer = NULL;
 	m_ndTitleTimer = NULL;
-	//switchSpriteNode=NULL;
+	//m_pkSwitchSpriteNode=NULL;
 	//isAutoBossFight = false;
 	m_nRoadBlockTimeCount = 0;
 	m_nTitleAlpha = 0;
@@ -425,22 +432,44 @@ void NDMapLayer::PlayNDSprite(const char* pszSpriteFile, int nPosx, int nPosy,
 void NDMapLayer::showSwitchSprite(MAP_SWITCH_TYPE type)
 {
 	m_eSwitchType = type;
-	string strAnimationPath = NDPath::GetAnimationPath();
+	NSString* aniPath = new NSString(NDPath::GetAnimationPath().c_str());
+
 	if (m_pkSwitchSpriteNode)
 	{
 		m_pkSwitchSpriteNode->RemoveFromParent(true);
 		m_pkSwitchSpriteNode = NULL;
 	}
+
 	m_pkSwitchSpriteNode = new CUISpriteNode;
 	m_pkSwitchSpriteNode->Initialization();
-	NSString* strTemp = NSString::stringWithFormat("%sscene_switch.spr",
-			strAnimationPath.c_str());
-	m_pkSwitchSpriteNode->ChangeSprite(strTemp->toStdString().c_str());
-	SAFE_DELETE(strTemp);
+	NSString* szAniFile = 0;
+
+	switch (m_eSwitchType)
+	{
+	case SWITCH_NONE:
+		break;
+	case SWITCH_TO_BATTLE:
+		szAniFile = new NSString("switchmask01.spr");
+		break;
+	case SWITCH_BACK_FROM_BATTLE:
+		break;
+	case SWITCH_START_BATTLE:
+		szAniFile = new NSString("switchmask02.spr");
+		break;
+	default:
+		szAniFile = new NSString("switchmask03.spr");
+		break;
+	}
+
+	NSString* pStr = NSString::stringWithFormat("%s%s",
+		aniPath->toStdString().c_str(), szAniFile);
+
+	m_pkSwitchSpriteNode->ChangeSprite(pStr->toStdString().c_str());
 	m_pkSwitchSpriteNode->SetFrameRect(
-			CGRectMake(0, 0, NDDirector::DefaultDirector()->GetWinSize().width,
-					NDDirector::DefaultDirector()->GetWinSize().height));
-	GetParent()->AddChild(m_pkSwitchSpriteNode);
+		CGRectMake(0, 0, NDDirector::DefaultDirector()->GetWinSize().width,
+		NDDirector::DefaultDirector()->GetWinSize().height)); //++Guosen 2012.7.6
+	m_pkSwitchSpriteNode->SetScale(2.0); //原 480×320 => 960×640
+	this->GetParent()->AddChild(m_pkSwitchSpriteNode, ZORDER_MASK_ANI);
 }
 
 bool NDMapLayer::isTouchTreasureBox(CGPoint touchPoint)
@@ -495,91 +524,105 @@ void NDMapLayer::RefreshBoxAnimation()
 
 void NDMapLayer::draw()
 {
-	if (!NDDebugOpt::getDrawMapEnabled()) return;
-
-	//PerformanceTestName("地图层draw");
-
 	if (m_pkMapData && m_bNeedShow)
 	{
-		//COCOS2D场景渲染时颜色数组默认被设置启用
-		//在此要关闭
-		//glDisableClientState(GL_COLOR_ARRAY);
-		//NDLog("start draw map");
-		//PerformanceTestBeginName("地表");
-		//draw map tiles.......
-		//DrawMapTiles();
-		//PerformanceTestEndName("背景");
 		DrawBgs();
-		//PerformanceTestBeginName("场景动画");
-		//draw map scenes and animations......
 		DrawScenesAndAnimations();
-		//PerformanceTestEndName("场景动画");
-		//NDLog("done draw map");
-		//启用颜色数组
-		//glEnableClientState(GL_COLOR_ARRAY);
-		/*if(switchSpriteNode)
-		 {
-		 if (switchSpriteNode->isAnimationComplete())
-		 {
-		 switchSpriteNode->RemoveFromParent(true);
-		 switchSpriteNode=NULL;
-		 switch(switch_type){
-		 case SWITCH_NONE:
-		 break;
-		 case SWITCH_TO_BATTLE:
-		 BattleMgrObj.showBattleScene();
-		 break;
-		 case SWITCH_BACK_FROM_BATTLE:
-		 break;
-		 }
-		 switch_type=SWITCH_NONE;
-		 }
 
-		 }*/
+		if(m_pkSwitchSpriteNode)
+		{
+			if (m_pkSwitchSpriteNode->IsAnimationComplete())
+			{
+				m_pkSwitchSpriteNode->RemoveFromParent(true);
+				m_pkSwitchSpriteNode = NULL;
+				switch(m_eSwitchType)
+				{
+				case SWITCH_NONE:
+					break;
+				case SWITCH_TO_BATTLE:
+					{
+						BattleMgrObj.showBattleScene();
+						ScriptMgrObj.excuteLuaFunc("Hide", "NormalBossListUI",0);//调用Hide方法后，调用Redisplay恢复
+						//切换音效
+						ScriptMgrObj.excuteLuaFunc("PlayEffectSound", "Music",3);
+
+						//等于3为竞技场挑战
+						if(m_nBattleType != 3)
+						{
+							int nIsRank = ScriptMgrObj.excuteLuaFuncRetN("GetIsBattleRank", "NormalBossListUI");
+
+							//等于1表示副本已经打通过
+							if (1 == nIsRank)
+							{
+								//显示速战速决按钮
+								ScriptMgrObj.excuteLuaFunc("LoadUI", "BattleMapCtrl");
+							}
+						}
+						else
+						{
+							//显示速战速决按钮
+							ScriptMgrObj.excuteLuaFunc("LoadUI", "BattleMapCtrl");
+						}
+
+						showSwitchSprite(SWITCH_START_BATTLE);
+					}
+					break;
+				case SWITCH_BACK_FROM_BATTLE:
+					break;
+				case SWITCH_START_BATTLE:
+					break;
+				default:
+					break;
+				}
+
+				m_eSwitchType = SWITCH_NONE;
+			}
+
+		}
+
 		refreshTitle();
+
 		RefreshBoxAnimation();
-//			if(m_pkTreasureBox){
-//				m_pkTreasureBox->RunAnimation(true);
-//			}
+
 		if (m_nRoadBlockTimeCount > 0 && !m_bBattleBackground)
 		{
-			//NDLog("showTime");
 			if(!m_lbTime)
 			{
 				m_lbTime = new NDUILabel;
 				m_lbTime->Initialization();
-				m_lbTime->SetFontSize(15);
+				m_lbTime->SetFontSize(/*15*/MAP_NAME_SIZE_SMALL);
 
 			}
 
 			int mi = m_nRoadBlockTimeCount / 60;
-			tq::CString str_mi;
+			NSString* str_mi = 0;
 
 			if(mi < 10)
 			{
-				str_mi.Format("0%d",mi);
+				str_mi = NSString::stringWithFormat("%0d",mi);
 			}
 			else
 			{
-				str_mi.Format("%d",mi);
+				str_mi = NSString::stringWithFormat("%d",mi);
 			}
 
 			int se = m_nRoadBlockTimeCount % 60;
-			tq::CString str_se;
+			NSString* str_se = 0;
 
 			if(se < 10)
 			{
-				str_se.Format("0%d",se);
+				str_se = NSString::stringWithFormat("%0d",mi);
 			}
 			else
 			{
-				str_se.Format("%d",se);
+				str_se = NSString::stringWithFormat("%d",mi);
 			}
 
-			tq::CString str_time("%s:%s",str_mi,str_se);
-			m_lbTime->SetText(str_time);
+			NSString* str_time = NSString::stringWithFormat("%s:%s",
+				str_mi->toStdString().c_str(),str_se->toStdString().c_str());
+			m_lbTime->SetText(str_time->toStdString().c_str());
 
-			CGSize kSize = getStringSize(str_time, 30);
+			CGSize size = getStringSize(str_time->toStdString().c_str(), 30);
 
 			if (!m_lbTime->GetParent() && m_pkSubNode)
 			{
@@ -587,14 +630,13 @@ void NDMapLayer::draw()
 			}
 
 			m_lbTime->SetFontColor(ccc4(255,0,0,255));
-			m_lbTime->SetFontSize(30);
+			m_lbTime->SetFontSize(MAP_NAME_SIZE_BIG/*30*/);
+			int x = m_kScreenCenter.x - (size.width) / 2;
+			int y = m_kScreenCenter.y - GetContentSize().height - (size.height) / 2 + NDDirector::DefaultDirector()->GetWinSize().height;
 
-			int x = m_kScreenCenter.x - (kSize.width) / 2;
-			int y = m_kScreenCenter.y - GetContentSize().height - (kSize.height) / 2 +
-			NDDirector::DefaultDirector()->GetWinSize().height;
-			//NDLog("x:%d,y:%d",x,y);
-			m_lbTime->SetFrameRect(CGRectMake(x, y, kSize.width, kSize.height + 5));
+			m_lbTime->SetFrameRect(CGRectMake(x, y, size.width, size.height + 5));
 			m_lbTime->draw();
+
 		}
 
 		if (m_pkRoadSignLightEffect)
@@ -602,7 +644,6 @@ void NDMapLayer::draw()
 			m_pkRoadSignLightEffect->Run(GetContentSize());
 		}
 	}
-
 }
 
 // 	void NDMapLayer::SetBattleBackground(bool bBattleBackground)
@@ -1029,9 +1070,9 @@ void NDMapLayer::setStartRoadBlockTimer(int time, int x, int y)
 	}
 }
 
- void NDMapLayer::setAutoBossFight(bool isAuto)
- {
-	 ///< 又调用到Logic了 郭浩
+void NDMapLayer::setAutoBossFight(bool isAuto)
+{
+	///< 又调用到Logic了 郭浩
 //  isAutoBossFight = isAuto;
 //  if(isAuto)
 //  {
@@ -1040,11 +1081,11 @@ void NDMapLayer::setStartRoadBlockTimer(int time, int x, int y)
 //  NDPlayer::defaultHero().stopMoving(false, false);
 //  }
 
- }
+}
 
- void NDMapLayer::walkToBoss()
- {
-	 ///< 又调用到Logic了 郭浩
+void NDMapLayer::walkToBoss()
+{
+	///< 又调用到Logic了 郭浩
 //  NDMonster* boss = NDMapMgrObj.GetBoss();
 //  if (boss!=NULL)
 //  {
@@ -1052,8 +1093,8 @@ void NDMapLayer::setStartRoadBlockTimer(int time, int x, int y)
 //  NDLog("boss:%d,%d",point.x,point.y);
 //  NDPlayer::defaultHero().Walk(point, SpriteSpeedStep4);
 //  }
- }
- 
+}
+
 void NDMapLayer::OnTimer(OBJID tag)
 {
 	if (blockTimerTag == tag)
@@ -1833,7 +1874,7 @@ void NDMapLayer::ShowTreasureBox()
 // 						NDPlayer::defaultHero().GetPosition().y));
 // 		m_pkTreasureBox->SetScale(0.5f * SCREEN_SCALE);
 // 		m_pkTreasureBox->SetCurrentAnimation(0, false);
-// 		this->AddChild(m_pkTreasureBox);
+// 		AddChild(m_pkTreasureBox);
 	}
 }
 

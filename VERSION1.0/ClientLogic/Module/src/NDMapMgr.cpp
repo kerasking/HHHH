@@ -4798,6 +4798,28 @@ void NDMapMgr::processShopInfo(NDTransData& data)
 	//}
 }
 
+bool NDMapMgr::isMonsterClear()
+{
+	if (m_vMonster.empty())
+	{
+		return true;
+	}
+
+	bool bRet = true;
+
+	for (VEC_MONSTER::iterator it = m_vMonster.begin();it != m_vMonster.end();it++)
+	{
+		NDMonster* pkTemp = *it;
+
+		if (pkTemp->getState() != MONSTER_STATE_DEAD)
+		{
+			bRet = false;
+		}
+	}
+
+	return bRet;
+}
+
 // LifeSkill* NDMapMgr::getLifeSkill( OBJID idSkill )
 // {
 // 

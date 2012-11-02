@@ -278,6 +278,8 @@ public:
 	virtual void Update(unsigned long ulDiff);
 	NDMonster* GetMonster(int nID);
 
+	bool isMonsterClear();
+
 	bool canChangeMap()
 	{
 		return (mapType & MAPTYPE_CHGMAP_DISABLE) == 0;
