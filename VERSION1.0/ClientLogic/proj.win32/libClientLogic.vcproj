@@ -491,6 +491,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\MapAndRole\inc\NDNpcLogic.h"
+					>
+				</File>
+				<File
 					RelativePath="..\MapAndRole\inc\NDPlayer.h"
 					>
 				</File>
@@ -524,6 +528,10 @@
 				</File>
 				<File
 					RelativePath="..\MapAndRole\src\NDNpc.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\MapAndRole\src\NDNpcLogic.cpp"
 					>
 				</File>
 				<File

@@ -31,8 +31,7 @@ class NDAnimationGroup;
 class NDSPrite;
 class Fighter;
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
 
 #define		WEAPON_NONE				0
 #define		ONE_HAND_WEAPON			6
@@ -443,7 +442,16 @@ public:
 	virtual void BeforeRunAnimation(bool bDraw)
 	{
 	}
+
+#if 1
 	void RunAnimation(bool bDraw);
+private:
+	void RunAnimation_WithFrames(bool bDraw);
+	void RunAnimation_WithOnePic(bool bDraw);
+	bool TickAnim();
+#endif
+
+public:
 	CGRect GetSpriteRect();
 	void SetCurrentAnimation(int nAnimationIndex, bool bReverse);
 
@@ -543,6 +551,7 @@ private:
 	ISpriteEvent* m_pkSpriteEvent;
 	NSTimeInterval m_dBeginTime;
 };
-}
+
+NS_NDENGINE_END
 
 #endif
