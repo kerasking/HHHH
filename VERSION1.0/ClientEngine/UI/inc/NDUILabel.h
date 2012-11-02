@@ -22,7 +22,8 @@ namespace NDEngine
 		LabelTextAlignmentLeft = 0, //左对齐
 		LabelTextAlignmentCenter,	//居中
 		LabelTextAlignmentRight,	//右对齐
-
+		LabelTextAlignmentHorzCenter,//水平居中
+		LabelTextAlignmentVertCenter,//竖直居中
 		LabelTextAlignmentLeftCenter    //水平左对齐，垂直居中对齐
 	}LabelTextAlignment;
 	
