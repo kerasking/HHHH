@@ -108,7 +108,7 @@ function p.LoadUI()
 
 	uiLoad:Load("MainUI.ini", layer, p.OnUIEvent, CONTAINTER_X, CONTAINTER_Y);
 	
-	--[[	
+	
 	local pBtnNewEmail = GetUiNode( layer, ID_MAINUI_BTN_NEW_EMAIL );
 	if ( nil ~= pBtnNewEmail ) then
 		local rectForm		= pBtnNewEmail:GetFrameRect();
@@ -158,7 +158,7 @@ function p.LoadUI()
     end
     
     --p.SetTimerShowTrackTip()	
-     ]]
+  
 	return;
 end
 

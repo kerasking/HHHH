@@ -1435,9 +1435,9 @@ bool NDMapMgr::loadSceneByMapDocID(int nMapID)
 	NDDirector::DefaultDirector()->ReplaceScene(NDScene::Scene());
 
 	CSMGameScene* pkScene = CSMGameScene::Scene();
-	NDDirector::DefaultDirector()->ReplaceScene(pkScene);
 	pkScene->Initialization(nMapID);
 	pkScene->SetTag(SMGAMESCENE_TAG);
+	NDDirector::DefaultDirector()->ReplaceScene(pkScene);
 
 	NDMapLayer* pkMapLayer = getMapLayerOfScene(pkScene);
 
