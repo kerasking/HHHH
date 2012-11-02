@@ -1,0 +1,9 @@
+--军团
+DoFile("ArmyGroup/ArmyGroup.lua");
+DoFile("ArmyGroup/ArmyGroupList.lua");
+DoFile("ArmyGroup/MsgArmyGroup.lua");
+DoFile("ArmyGroup/Solicit.lua");
+DoFile("ArmyGroup/Member.lua");
+DoFile("ArmyGroup/HandleMember.lua");
+DoFile("ArmyGroup/CreateOrJoinArmyGroup.lua");
+DoFile("ArmyGroup/ArmyGroupInfor.lua");

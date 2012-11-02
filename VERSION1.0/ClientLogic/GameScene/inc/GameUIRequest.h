@@ -18,7 +18,7 @@
  
  using namespace NDEngine;
  
- struct RequsetInfo : public SocialInfo
+ struct RequsetInfo // : public SocialInfo
  {
 	 enum { REQUEST_LIST_MAX = 20, };
 	 enum  
@@ -41,19 +41,25 @@
 	 
 	 void set(int iID, std::string name, int action)
 	 {
-		 iRoleID = iID;
+	#if 0
+	 iRoleID = iID;
 		 this->name = name;
 		 setMAction(action);
 		 this->nTime = ::time(NULL);
+#endif
 	 }
 	 int getMAction(){ return iAction; }
-	 void setMAction(int action){ 
-			if( action < ACTION_BEGIN || action >= ACTION_END )
-			 info = NDCommonCString("RequestErr"); 
-			else
+	 void setMAction(int action)
+	 { 
+	#if 0
+	 if( action < ACTION_BEGIN || action >= ACTION_END )
+			 //info = NDCommonCString("RequestErr"); 
+			 ;
+		 else
 			 info = text[action]; 
-			iAction = action;
-		 }
+		 iAction = action;
+#endif
+	}
 		 
 	bool isValid()
 	{
@@ -62,11 +68,10 @@
  };
 	 
  ///////////////////////////////////
- 
 class GameUIRequest : 
 public NDUIMenuLayer,
 public NDUIButtonDelegate,
-//public NDUITableLayerDelegate ///< 临时性注释 郭浩
+//public NDUITableLayerDelegate,
 public NDUIDialogDelegate
 {
 	DECLARE_CLASS(GameUIRequest)
@@ -89,7 +94,7 @@ private:
 	NDUIDialog *m_dlgDeal;
 };
 
-#pragma mark 新的请求列表
+//#pragma mark 新的请求列表
 
 class NDRequestCell : public NDUINode
 {
@@ -127,7 +132,7 @@ private:
 
 class NewGameUIRequest : 
 public NDUILayer
-//public NDUITableLayerDelegate ///< 临时性注释 郭浩
+//public NDUITableLayerDelegate
 {
 	DECLARE_CLASS(NewGameUIRequest)
 	

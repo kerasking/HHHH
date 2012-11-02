@@ -1286,11 +1286,16 @@ DB_SKILL_RESULT_CFG=
 };
 
 
+--静态表sports_prize
 DB_SPORTS_PRIZE=
 {
-	RANKING	=0,
-	MONEY	=1,
-	REPUTE	=2
+    ID = 0,       
+	RANKING	= 1,       --排名
+	MONEY	    = 2,        --银币
+	REPUTE	    = 3,        --声望
+    STAMINA    = 4,        --军令
+    ITEM           = 5,        --物品
+    EMONEY    = 6        --金币 
 };
 
 DB_SPORTS_REPORT=
@@ -1844,6 +1849,7 @@ DB_VIP_CONFIG=
     BAG_NUM                 =12,    --背包
     ENHANCE_CRIT_FLAG       =13,    --是否开启暴击功能
     ENHANCE_REDUCE_PECENT   =14,    --节约强化费的百分比
+    FIGHT_AUTO              =15,    --自动战斗（boss战，大乱斗等自动战斗开启）
 };
 
 DB_VIP_CONFIG_EQUIP_EDU = {
@@ -1909,6 +1915,7 @@ DB_EVENT_CONFIG =
 	TIME_END = 6,	       --活动结束时间
 	CONTENT = 7,	           --活动内容
 	BROAD = 8,		          --活动开始广播内容
+    SERVERID = 9,            --活动对应的服务器id
 };
 
 
@@ -1975,6 +1982,7 @@ DB_GRAIN_CONFIG =
 	BE_LOOT_ITEM_ODDS_PERCENT = 13,   --物品被截时掉落概率
 };
 
+
 --静态表 event_activity字段说明表
 DB_EVENT_ACTIVITY = 
 {
@@ -1993,6 +2001,7 @@ DB_EVENT_ACTIVITY =
     DATA3 = 12,    
     DESCRIBE= 13,                               --活动说明          
 };
+
 
 --boss战活动 字段说明
 DB_EVENT_ACTIVITY_CONFIG = {

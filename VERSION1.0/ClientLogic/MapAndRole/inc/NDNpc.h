@@ -16,8 +16,12 @@
 #include "NDPicture.h"
 #include "globaldef.h"
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
+using namespace NDEngine;
+
+class NDNpcLogic;
+
 /** btState为1时灰色叹号,2彩色叹号,3灰色问号,4彩色问号 */
 enum
 {
@@ -151,14 +155,16 @@ private:
 	bool m_bUnpassTurn;
 
 	CGRect m_kRectState;
+
 private:
 	bool IsUnpassNeedTurn();
-
-	void RefreshTaskState();
 	bool GetTaskList(ID_VEC& idVec);
 	int GetDataBaseData(int nIndex);
-	bool GetPlayerCanAcceptList(ID_VEC& idVec);
+
+private:
+	NDNpcLogic*	m_npcLogic;	
 };
-}
+
+NS_NDENGINE_END
 
 #endif

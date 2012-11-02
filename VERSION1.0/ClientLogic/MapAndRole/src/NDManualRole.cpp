@@ -28,6 +28,7 @@
 #include "CPet.h"
 #include "SMGameScene.h"
 #include "DramaScene.h"
+#include "NDDebugOpt.h"
 
 /* 玩家寻路八个方向值,无效的方向值-1
     7  0  4
@@ -262,103 +263,15 @@ void NDManualRole::Update(unsigned long ulDiff)
 void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 {
 	NDLog("lookface:%d", lookface);
-// 	if (bSetLookFace)
-// 	{
-// 		NDBaseRole::InitRoleLookFace(lookface);
-// 	}
 
-	//SetArmorImageWithEquipmentId(11253);
-	//SetCloakImageWithEquipmentId(11253);
-	//test
-	/*
-	 SetArmorImageWithEquipmentId(11253);
-	 SetCloakImageWithEquipmentId(11253);
-	 SetFaceImageWithEquipmentId(11253);
-	 */
-	//SetFaceImageWithEquipmentId();
-	//初始设置
-	/*
-	 if (sex % 2 == SpriteSexMale)
-	 {
-	 SetCamp(CAMP_TANG);
-	 //SetHairImageWithEquipmentId(10000);
-	 SetExpressionImageWithEquipmentId(10400);
-	 }
-	 else
-	 {
-	 SetCamp(CAMP_TANG);
-	 //SetHairImageWithEquipmentId(10000);
-	 SetExpressionImageWithEquipmentId(10401);
-	 }
-
-	 */
-
-	//-----Set Hair Image
-	/*
-	 int hairId = m_lookfaceInfo.sex;
-	 hairId = (hairId - 1) / 2 - 1;
-	 if (hairId < 0 || hairId > 2)
-	 {
-	 hairId = 0;
-	 }
-	 switch (hairId) {
-	 case 0:
-	 SetHairImageWithEquipmentId(10000);
-	 break;
-	 case 1:
-	 SetHairImageWithEquipmentId(10001);
-	 break;
-	 case 2:
-	 SetHairImageWithEquipmentId(10002);
-	 break;
-	 default:
-	 break;
-	 }
-	 */
-
-	//-----Set ...
-	//m_camp = CAMP_NEUTRAL;
-	/*
-	 if (m_lookfaceInfo.hair > 0 )
-	 {
-	 if (m_lookfaceInfo.hair < 5) {
-	 SetCamp(m_lookfaceInfo.hair);
-	 }
-	 else
-	 {
-	 SetEquipment((m_lookfaceInfo.hair + 1995) * 10, 0);
-	 }
-	 }
-	 */
-
-	/*
-	 //-----Set Equipment Weapon
-	 SetEquipment(GetEquipmentId(0), 0);
-
-	 //-----Set Equipment Cap
-	 SetEquipment(GetEquipmentId(1), 0);
-
-	 //-----Set Equipment Armor
-	 SetEquipment(GetEquipmentId(2), 0);
-	 */
-
-	//Load Animation Group
-	//sex = lookface / 100000000 % 10; // 人物性别，1-男性，2-女性；
-	//m_nDirect = 2;
-
-//		if (sex % 2 == SpriteSexMale) 
+	//根据lookface获取人物图像
 	int nModelID = lookface % 1000;
-	//	if (sex % 2 == SpriteSexMale)
 
 	NSString* pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
-	CCString* pString = CCString::stringWithFormat("%smodel_%d.spr",
-			pstrAniPath->toStdString().c_str(), nModelID);
+	CCString* pString = CCString::stringWithFormat("%smodel_%d.spr", pstrAniPath->toStdString().c_str(), nModelID);
 	NDSprite::Initialization(pString->toStdString().c_str());
 	SAFE_DELETE(pstrAniPath);
 	m_nLookface = lookface;
-//		else 
-//			NDSprite::Initialization(MANUELROLE_HUMAN_FEMALE);
-
 	m_bFaceRight = m_nDirect == 2;
 
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
@@ -1232,6 +1145,8 @@ void NDManualRole::OnMoveTurning(bool bXTurnigToY, bool bInc)
 
 bool NDManualRole::OnDrawBegin(bool bDraw)
 {
+	if (!NDDebugOpt::getDrawRoleManualEnabled()) return false;
+
 	NDNode* pkNode = GetParent();
 
 	//if (!node

@@ -53,6 +53,9 @@ local TAG_MATERIAL_IMG_LIST = {};				--合成材料图标tag列表
 local TAG_MATERIAL_TEXT_LIST = {};				--合成材料完成度文本tag列表
 local TAG_LAYER_COMPOSE = 12345;				--合成信息界面层tag
 
+local TAG_E_TMONEY      = 243;  --银币
+local TAG_E_TEMONEY     = 242;  --金币
+
 -- 界面控件坐标定义
 local winsize = GetWinSize();
 
@@ -156,7 +159,7 @@ function p.LoadUI(itemID)
 	p.RefreshMatirialContainer();
 	p.RefreshComposeInfoLayer()
 	
-	
+	p.refreshMoney();
 	
 	   	--设置关闭音效
    	local closeBtn=GetButton(layer,ID_FOSTER_B_CTRL_BUTTON_CLOSE);
@@ -634,4 +637,32 @@ function p.SuccGetProduct(nProductType)
 
 end
 
+
+function p.getMainLayer()
+    local scene = GetSMGameScene();
+    if(scene == nil) then
+        return nil;
+    end
+	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.PlayerEquipUpStepUI);
+    return layer;
+end
+
+
+--刷新金钱
+function p.refreshMoney()
+    LogInfo("PlayerEquipUpStepUI.refreshMoney");
+    local nPlayerId     = GetPlayerId();
+    local layer = p.getMainLayer();
+    if(layer == nil) then
+        return;
+    end
+    
+    local nmoney        = MoneyFormat(GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_MONEY));
+    local ngmoney        = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY).."";
+    
+    _G.SetLabel(layer, TAG_E_TMONEY, nmoney);
+    _G.SetLabel(layer, TAG_E_TEMONEY, ngmoney);
+end
+
 GameDataEvent.Register(GAMEDATAEVENT.PETATTR, "PlayerUIBackBag.GameDataPetAttrRefresh", p.GameDataPetAttrRefresh);
+GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"PlayerEquipUpStepUI.refreshMoney",p.refreshMoney);

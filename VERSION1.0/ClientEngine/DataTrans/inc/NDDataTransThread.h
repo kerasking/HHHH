@@ -38,7 +38,7 @@ namespace NDEngine
 		//		参数：无
 		//		返回值：
 		static NDDataTransThread* DefaultThread();
-		static void               ResetDefaultThread();
+		static NDDataTransThread* ResetDefaultThread();
 		//		
 		//		函数：Start
 		//		作用：启动线程

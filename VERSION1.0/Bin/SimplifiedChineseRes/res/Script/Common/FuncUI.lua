@@ -206,6 +206,7 @@ function CloseMainUI()
 			and i ~= "MilOrdersDisPTxt"
 			and i ~= "MainUITop" 
             and i ~= "BottomMsgBtn"
+            and i ~= "MilOrdersBtn" 
             and i ~= "BottomControlBtn" 
             and i ~= "BottomFind"
             and i ~= "BottomMsg"

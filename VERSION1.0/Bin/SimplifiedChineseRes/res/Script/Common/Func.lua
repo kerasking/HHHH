@@ -360,6 +360,19 @@ function GetGetVipLevel_ELITE_MAP_RESET_NUM()
     return 0;
 end
 
+--获得需要多少VIP才可自动战斗 
+function GetGetVipLevel_FIGHT_AUTO()
+    local ids = GetDataBaseIdList("vip_config");
+    for i,v in ipairs(ids) do
+        local val = GetDataBaseDataN("vip_config",v,DB_VIP_CONFIG.FIGHT_AUTO);
+        if(val > 0) then
+            return v;
+        end
+    end
+    return 0;
+end
+
+
 --金钱格式化
 function MoneyFormat(nMoney)
     if(nMoney == nil) then

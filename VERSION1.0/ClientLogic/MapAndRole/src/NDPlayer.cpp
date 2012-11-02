@@ -175,8 +175,7 @@ NDPlayer::~NDPlayer()
 	SAFE_DELETE(m_pkTimer);
 }
 
-NDPlayer& NDPlayer::defaultHero(int lookface/* = 0*/,
-		bool bSetLookFace/*=false*/)
+NDPlayer& NDPlayer::defaultHero(int lookface, bool bSetLookFace)
 {
 	if (ms_bFirstUse)
 	{

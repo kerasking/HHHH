@@ -1,2 +1,2 @@
 --属性UI
-DoFile("BOSS/bossUI.lua");
+DoFile("BOSS/Battle_Boss.lua")

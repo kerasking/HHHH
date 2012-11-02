@@ -48,7 +48,7 @@ p.TagMountLevel = {
 };
 
 p.RideStateEnum = { rest = 0, ride = 1,}
-p.RideState = {[p.RideStateEnum.rest] = '骑乘', [p.RideStateEnum.ride] = '休息',};
+p.RideState = {[p.RideStateEnum.rest] = GetTxtPri("RideMount"), [p.RideStateEnum.ride] = GetTxtPri("RestMount"),};
 
 p.TagRadioGroud = {
     TONG    = 401,

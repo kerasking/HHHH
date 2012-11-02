@@ -405,4 +405,32 @@ end
 
 
 
+function p.SendSeeOtherPlayerList()
+    LogInfo("MsgFriend.SendSeeOtherPlayerList");
+    local netdata = createNDTransData(NMSG_Type._MSG_VIEW_PLAYER);
+    
+	SendMsg(netdata);	
+	netdata:Free();	
+    ShowLoadBar();
+   	
+	return true;
+end
+
+function p.ProcessOtherPlayerList( netdata )
+    LogInfo("MsgFriend.ProcessOtherPlayerList");
+    local m = {};
+    local nCount = netdata:ReadInt();
+    for i=1,nCount do
+        local mr = {};
+        mr.Id       = netdata:ReadInt();
+        mr.Level    = netdata:ReadInt();
+        mr.Quality  = netdata:ReadByte();
+        mr.Name     = netdata:ReadUnicodeString();
+        LogInfo( "nCount:[%d],i:[%d],mr.Id:[%d],mr.Level:[%d],mr.Quality:[%d],mr.Name:[%s]",nCount,i,mr.Id,mr.Quality,mr.Level,mr.Name );
+        table.insert(m,mr);
+    end
+    MainPlayerListUI.LoadUI(m);
+    CloseLoadBar();
+end
+RegisterNetMsgHandler(NMSG_Type._MSG_VIEW_PLAYER, "MsgFriend.ProcessOtherPlayerList", p.ProcessOtherPlayerList);
 RegisterNetMsgHandler(NMSG_Type._MSG_GOODFRIEND, "p.ProcessGoodFriendInfo", p.ProcessGoodFriendInfo);

@@ -66,6 +66,7 @@ local TAG_EQUIP_PIC_LIST = {};			                --装备图片tag列表
 local TAG_EQUIP_BTN_LIST = {};			                --装备按钮tag列表
 local TAG_EQUIP_TEXT_LIST = {};			                --装备名称tag列表
 local TAG_EQUIP_LV_TEXT_LIST = {};	                	--装备等级tag列表
+local NAME_LV_LIST = {"法器","灵器","宝器","道器","下品仙器","中品仙器","上品仙器","王品仙器","圣品仙器","造化神器"};
 
 --装备id列表
 local currentEquipIdList = {};
@@ -99,6 +100,8 @@ local nProcessTimeTag1 = 0;
 local nProcessTimeTag2 = 0;
 local nProcessTimeTag3 = 0;
 
+--强化队列是否冷却中
+local queneCDList = {false,false,false};
 --当前队列
 local currentQuene = 1;
 local currentMin = 1; 
@@ -110,9 +113,28 @@ local lastOsTime3 = 0;
 
 ----------------------
 
+
+function p.GetLevelName(lv)
+    if not CheckN(lv) then
+	    return nil;
+	end
+	
+    lv = lv + 1;
+	
+    local i = Num2(lv) +1;
+	local j = Num1(lv);
+	if j == 0 then
+	    i = i - 1;
+		j= 10 ;
+	end
+	
+	local name = NAME_LV_LIST[i]..string.format("%d级",j);
+	return name;
+end
+
 --响应增加强化队列
 function p.ResAddQuene()
-	CommonDlg.ShowTipInfo("提示", "开启队列成功!", nil, 2);
+	--CommonDlg.ShowTipInfo("提示", "开启队列成功!", nil, 2);
 	queneNum = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EQUIP_QUEUE_COUNT);
 	queneNum = queneNum + 1;
 	LogInfo("增加成功，已开通强化队列数queneNum：%d",queneNum)
@@ -120,6 +142,7 @@ function p.ResAddQuene()
 	if not enhanceEnable then
 	    enhanceEnable = true;
 		p.SetEquipStrBtnTitle("强化")
+		queneCDList[queneNum] = false;
 		currentQuene = queneNum;
 	end
 	local scene = GetSMGameScene();
@@ -130,32 +153,27 @@ function p.ResAddQuene()
 	if nil == layer then
 		return nil;
 	end
-		
+	
+	
 	if queneNum == 2 then
+	    p.SetEquipStrQueneInfo("2:可强化",ID_EQUIPSTR_CTRL_TEXT_LIST2);
 		--显示强化队列2
-		local equipStrQueneText2 = GetLabel(layer,ID_EQUIPSTR_CTRL_TEXT_LIST2);
-		equipStrQueneText2:SetFontColor(ccc4(255,255,255,255));
-		equipStrQueneText2:SetText("2:可强化")
 	    local equipStrQueneBtn2 = GetButton(layer,ID_EQUIPSTR_CTRL_BUTTON_LIST2);
 		equipStrQueneBtn2:SetVisible(true);
 		equipStrQueneBtn2:SetLuaDelegate(p.OnUIEventClearQueneCD);
 		
 		local newStrQueneText = GetLabel(layer,ID_EQUIPSTR_CTRL_TEXT_LIST3);
-		newStrQueneText:SetVisible(true);
-	    newStrQueneText:SetText("开启更多队列");
-	    newStrQueneText:SetFontColor(ccc4(0,0,255,255));
+	    newStrQueneText:SetText("开启更多");
+	    --newStrQueneText:SetFontColor(ccc3(0,255,0));
 
 	elseif queneNum == 3 then
-		--显示强化队列3   
-		local equipStrQueneText3 = GetLabel(layer,ID_EQUIPSTR_CTRL_TEXT_LIST3);
-		equipStrQueneText3:SetFontColor(ccc4(255,255,255,255));
-		equipStrQueneText3:SetText("3:可强化")
-		local equipStrQueneBtn3 = GetButton(layer,ID_EQUIPSTR_CTRL_BUTTON_LIST3);
-		equipStrQueneBtn3:SetVisible(true);
-		equipStrQueneBtn3:SetLuaDelegate(p.OnUIEventClearQueneCD);
+	        p.SetEquipStrQueneInfo("3:可强化",ID_EQUIPSTR_CTRL_TEXT_LIST3);
+			local equipStrQueneBtn3 = GetButton(layer,ID_EQUIPSTR_CTRL_BUTTON_LIST3);
+		    equipStrQueneBtn3:SetVisible(true);
+		    equipStrQueneBtn3:SetLuaDelegate(p.OnUIEventClearQueneCD);
 			
-		local btn = GetButton(layer, ID_EQUIPSTR_CTRL_BUTTON_QUESTR);
-		btn:SetTitle("永久消除CD");   
+			local btn = GetButton(layer, ID_EQUIPSTR_CTRL_BUTTON_QUESTR);
+	       	btn:SetTitle("永久消除CD");   
 	end	  
 end
 
@@ -184,7 +202,7 @@ end
 
 --响应清除强化队列时间
 function p.ResClearTime(nParam)
-	CommonDlg.ShowTipInfo("提示", "清除强化队列冷却时间成功!", nil, 2);
+	--CommonDlg.ShowTipInfo("提示", "清除强化队列冷却时间成功!", nil, 2);
 	if nParam  == 1 then
 	    timeNum1 = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME1);
 		lastOsTime1 = 0;
@@ -197,40 +215,6 @@ function p.ResClearTime(nParam)
 	end
 end
 
---强化队列i是否冷却中
-function p.IsStrFree(num)
-    if not CheckN(num) then
-	    return false;
-	end
-	
-	if num == 1 then 
-	    if timeNum1 == 0 then
-		    return true;
-		else
-		    return false;
-		end
-		
-	elseif num == 2 then
-		if timeNum1 == 0 then
-		    return true;
-		else
-		    return false;
-		end  
-		 
-	elseif num == 3 then
-		if timeNum1 == 0 then
-		    return true;
-		else
-		    return false;
-		end
-	 
-	else
-	    return false; 
-	end		
-
-end
-
-
 --响应装备强化
 function p.ResEquipStr()
     LogInfo("响应强化成功")
@@ -242,7 +226,7 @@ function p.ResEquipStr()
 	if lvTextTag > 0 then
 		local equipLv = Item.GetItemInfoN(currentEquipId, Item.ITEM_ADDITION);
 		LogInfo("强化后装备等级：%d",equipLv+1);		
-		SetLabel(currentView, lvTextTag, EquipStrFunc.GetLevelName(equipLv));
+		SetLabel(currentView, lvTextTag, p.GetLevelName(equipLv));
 	end
 	
     p.RefreshEquipRight();	
@@ -264,6 +248,7 @@ function p.ResEquipStr()
 	--end
 	
 	LogInfo("当前使用的的强化队列:%d",currentQuene)
+	queneCDList[currentQuene] = true;--设置强化队列变为cd中
 	if currentQuene == 1 then
 	    timeNum1 = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME1);
 		lastOsTime1 = timeNum1 + GetCurrentTime();
@@ -290,7 +275,7 @@ function p.ResEquipStr()
 	elseif queneNum == 2 or queneNum == 3 then
 	        currentQuene  = -1 ;
 	        for i = 1,queneNum do 
-			     if p.IsStrFree(i) then
+			     if not queneCDList[i] then
 				     currentQuene = i ;
 				     break;
 				 end
@@ -331,7 +316,8 @@ function p.OnProcessTimer1(nTag)
 	    if nProcessTimeTag1 ~= 0 then
           UnRegisterTimer(nProcessTimeTag1);
 		end
-		if queneNum == 2 or queneNum == 3 or stage >= 281 then 
+		queneCDList[1] = false;
+		if queneNum == 2 or queneNum == 3 or stage >= 21 then 
 		    p.SetEquipStrQueneInfo("1:可强化",ID_EQUIPSTR_CTRL_TEXT_LIST1);
 		end	
 		return;
@@ -344,7 +330,7 @@ function p.OnProcessTimer1(nTag)
 		    p.SetEquipStrBtnTitle("冷却时间"..timeStr);
 	end
 	
-	if queneNum > 1 or stage >= 281 then 
+	if queneNum > 1 or stage >= 21 then 
 		local timeStr = "1:CD"..timeStr;
 	    p.SetEquipStrQueneInfo(timeStr,ID_EQUIPSTR_CTRL_TEXT_LIST1);
 	end	
@@ -362,6 +348,7 @@ function p.OnProcessTimer2(nTag)
 	    if nProcessTimeTag2 ~= 0 then
           UnRegisterTimer(nProcessTimeTag2);
 		end
+		queneCDList[2] = false;
 		p.SetEquipStrQueneInfo("2:可强化",ID_EQUIPSTR_CTRL_TEXT_LIST2);
 		return;
 	end
@@ -390,6 +377,7 @@ function p.OnProcessTimer3(nTag)
 	    if nProcessTimeTag3 ~= 0 then
           UnRegisterTimer(nProcessTimeTag3);
 		end
+		queneCDList[3] = false;
 		p.SetEquipStrQueneInfo("3:可强化",ID_EQUIPSTR_CTRL_TEXT_LIST3);
 		return;
 	end
@@ -552,9 +540,9 @@ function p.AddPetName(nPetId)
 	local strPetName = ConvertS(RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_NAME));
 	
 	local size	= view:GetFrameRect().size;
-	local btn	= _G.CreateButton("", "", strPetName, CGRectMake(0, 0, size.w, size.h), 15);
+	local btn	= _G.CreateButton("", "", strPetName, CGRectMake(0, 0, size.w, size.h), 12);
 	if CheckP(btn) then
-		btn:SetLuaDelegate(p.OnUIEventClickPetName);
+		--btn:SetLuaDelegate(p.OnUIEventClickPetName);
 		view:AddChild(btn);
 		LogInfo(strPetName);
 	end
@@ -582,10 +570,9 @@ function p.AddBagToPetNameContainer()
 	container:AddView(view);
 	
 	local size	= view:GetFrameRect().size;
-	local btn	= _G.CreateButton("", "", "背包", CGRectMake(0, 0, size.w, size.h), 15);
+	local btn	= _G.CreateButton("", "", "背包", CGRectMake(0, 0, size.w, size.h), 12);
 	if CheckP(btn) then
 		view:AddChild(btn);
-		btn:SetLuaDelegate(p.OnUIEventClickPetName);
 	end
 end 
 
@@ -652,34 +639,32 @@ function p.RefreshContainer()
 		p.AddPetName(v);
 	
 		local view = createUIScrollView();
-		if view == nil then
-			LogInfo("view == nil");
-			continue;
-		end
-		view:Init(false);
-		view:SetViewId(v);
-		container:AddView(view);
+		if view ~= nil then
+            view:Init(false);
+            view:SetViewId(v);
+            container:AddView(view);
 
-		local uiLoad = createNDUILoad();
-		if uiLoad ~= nil then
-			uiLoad:Load("EquipStr_L.ini", view, p.OnUIEventScroll, 0, 0);
-			uiLoad:Free();
+            local uiLoad = createNDUILoad();
+            if uiLoad ~= nil then
+                uiLoad:Load("EquipStr_L.ini", view, p.OnUIEventScroll, 0, 0);
+                uiLoad:Free();
+            end
+            
+            --装备
+            local equipIdList = ItemPet.GetEquipItemList(nPlayerId, v);
+            LogInfo("p.RefreshContainer,装备id列表 equipIdList：");
+            LogInfoT(equipIdList);
+            
+            local equipIndex = Item.POSITION_EQUIP_1;
+            --遍历装备
+            for i, v in ipairs(equipIdList) do
+                p.AddEquipViewContent(view,equipIndex,v);	
+                equipIndex = equipIndex + 1;   	
+            end
+            
+            --设置控件隐藏
+            p.setEquipItemVisiable(view,equipIndex);	
 		end
-		
-		--装备
-		local equipIdList = ItemPet.GetEquipItemList(nPlayerId, v);
-	    LogInfo("p.RefreshContainer,装备id列表 equipIdList：");
-		LogInfoT(equipIdList);
-		
-		local equipIndex = Item.POSITION_EQUIP_1;
-		--遍历装备
-		for i, v in ipairs(equipIdList) do
-			p.AddEquipViewContent(view,equipIndex,v);	
-			equipIndex = equipIndex + 1;   	
-		end
-		
-		--设置控件隐藏
-        p.setEquipItemVisiable(view,equipIndex);		
 	end   
 	
 	
@@ -730,42 +715,18 @@ end
 function p.setStrQuene()
 	p.setStrQueneButtonVisiable();
 	
-	--服务器下发的（0/1/2/255）对应玩家开通了(1/2/3/永久)强化队列
 	queneNum = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EQUIP_QUEUE_COUNT);
 	queneNum = queneNum + 1;
-	LogInfo("已开通强化队列数queneNum：%d",queneNum)
-	
-	--读取三个强化队列的冷却时间
-	--第一次打开强化面板，读取服务端下发的数据
-	if lastOsTime1 == 0 then		
-		timeNum1 = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME1);
-		lastOsTime1 = GetCurrentTime() + timeNum1;
-	else
-		timeNum1 = lastOsTime1 - GetCurrentTime();	 
-	end	
-	
-	if lastOsTime2 == 0 then		
-		timeNum2 = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME2);
-		lastOsTime2 = GetCurrentTime() + timeNum2;
-	else
-		timeNum2 = lastOsTime2 - GetCurrentTime();	 
-	end	
-	
-	if lastOsTime3 == 0 then		
-		timeNum3 = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME3);
-		lastOsTime3 = GetCurrentTime() + timeNum3;
-	else
-		timeNum3 = lastOsTime3 - GetCurrentTime();	 
-	end	
 
-    --设置左侧三个强化队列的文字信息
+	LogInfo("已开通强化队列数queneNum：%d",queneNum)
+
 	if queneNum == 1 then
 		p.IntroNewEquipStrQuene(ID_EQUIPSTR_CTRL_TEXT_LIST2,ID_EQUIPSTR_CTRL_BUTTON_LIST2); 
 	elseif queneNum == 2 then
 			p.IntroNewEquipStrQuene(ID_EQUIPSTR_CTRL_TEXT_LIST3,ID_EQUIPSTR_CTRL_BUTTON_LIST3); 
 	elseif queneNum == 3 then
 			--显示三个强化队列信息
-			p.ShowThreeStrQuene();
+			p.ShowEquipStrQuene();
 	elseif queneNum == 256 then		
 			--永久清除强化cd 
 			return;
@@ -824,116 +785,70 @@ function p.IntroNewEquipStrQuene(queneTextId,queneButtonId)
 	
 	local stage = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_STAGE);
 	LogInfo("玩家阶段stage:%d",stage)
-
-    --玩家stage到达281开启更多强化队列功能
-	if stage >= 281 or queneNum == 2 then
-		--显示强化队列1
-	    local equipStrQueneText = GetLabel(layer,ID_EQUIPSTR_CTRL_TEXT_LIST1);	
-		equipStrQueneText:SetVisible(true);				 
-		if timeNum1 > 0 then
-			--队列1未冷却
-			LogInfo("队列1剩余时间：%d",timeNum1)
-			nProcessTimeTag1 = RegisterTimer(p.OnProcessTimer1, 1); 
-		else
-			timeNum1 = 0;
-			equipStrQueneText:SetText("1:可强化");
-		end
-		local equipStrQueneBtn = GetButton(layer,ID_EQUIPSTR_CTRL_BUTTON_LIST1);
-		equipStrQueneBtn:SetVisible(true);
-		equipStrQueneBtn:SetLuaDelegate(p.OnUIEventClearQueneCD);
-		
-		--显示引导开通更多队列的text
+	--stage = 21;
+	if stage >= 21 or queneNum == 2 then
 		local newStrQueneText = GetLabel(layer,queneTextId);
-		newStrQueneText:SetVisible(true);
-	    newStrQueneText:SetText("开启更多队列");
-	    newStrQueneText:SetFontColor(ccc4(0,0,255,255));
+	    newStrQueneText:SetText("开启更多");
+	    --newStrQueneText:SetFontColor(ccc3(0,255,0));
 					
 	    --显示增加强化队列按钮
 	    local btn = GetButton(layer, ID_EQUIPSTR_CTRL_BUTTON_QUESTR);
 	    btn:SetVisible(true);
 	    btn:SetLuaDelegate(p.OnUIEventAddEquipStrQuene); 	  
-	end
 	
+	    local equipStrQueneText = GetLabel(layer,ID_EQUIPSTR_CTRL_TEXT_LIST1);
+		if not equipStrQueneText:IsVisibled() then
+				--显示强化队列1	
+				if lastOsTime1 == 0 then		
+	                 timeNum1 = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME1);
+					 lastOsTime1 = GetCurrentTime() + timeNum1;
+				else
+				     timeNum1 = lastOsTime1 - GetCurrentTime();	 
+			    end		 
+				if timeNum1 > 0 then
+	                --队列1未冷却
+	                queneCDList[1] = true;
+	                nProcessTimeTag1 = RegisterTimer(p.OnProcessTimer1, 1); 
+	            else
+					timeNum1 = 0;
+	  	            equipStrQueneText:SetText("1:可强化");
+	            end
+				LogInfo("队列1剩余时间：%d",timeNum1)
+	            equipStrQueneText:SetVisible(true);
+	            local equipStrQueneBtn = GetButton(layer,ID_EQUIPSTR_CTRL_BUTTON_LIST1);
+	            equipStrQueneBtn:SetVisible(true);
+	            equipStrQueneBtn:SetLuaDelegate(p.OnUIEventClearQueneCD);	
+	   end			
+	
+	end
 	if queneNum == 2 then
 		--显示强化队列2
 		local equipStrQueneText2 = GetLabel(layer,ID_EQUIPSTR_CTRL_TEXT_LIST2);
-		equipStrQueneText2:SetVisible(true);
+		if lastOsTime2 == 0 then		
+			timeNum2 = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME2);
+			lastOsTime2 = GetCurrentTime() + timeNum2;
+		else
+			timeNum2 = lastOsTime2 - GetCurrentTime();	 
+		end	
 		if timeNum2 > 0 then
 			--队列2未冷却
+			queneCDList[2] = true;
 			nProcessTimeTag2 = RegisterTimer(p.OnProcessTimer2, 1); 
 		else
 			timeNum2 = 0;
 			equipStrQueneText2:SetText("2:可强化");
-		end		
+		end
+
+		equipStrQueneText2:SetVisible(true);
 	    local equipStrQueneBtn2 = GetButton(layer,ID_EQUIPSTR_CTRL_BUTTON_LIST2);
 		equipStrQueneBtn2:SetVisible(true);
 		equipStrQueneBtn2:SetLuaDelegate(p.OnUIEventClearQueneCD);
 	end
-		
+	
+
+	
 end
 
---显示三个强化队列
-function p.ShowThreeStrQuene() 
-	local scene = GetSMGameScene();
-	if nil == scene then
-		return nil;
-	end
-	
-	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipStr);
-	if nil == layer then
-		return nil;
-	end
-	
-	--显示强化队列1	
-	local equipStrQueneText = GetLabel(layer,ID_EQUIPSTR_CTRL_TEXT_LIST1);
-	equipStrQueneText:SetVisible(true);
-	if timeNum1 > 0 then
-		--队列1未冷却
-		nProcessTimeTag1 = RegisterTimer(p.OnProcessTimer1, 1); 
-	else
-		timeNum1 = 0;
-		equipStrQueneText:SetText("1:可强化");
-	end
-	local equipStrQueneBtn = GetButton(layer,ID_EQUIPSTR_CTRL_BUTTON_LIST1);
-	equipStrQueneBtn:SetVisible(true);
-	equipStrQueneBtn:SetLuaDelegate(p.OnUIEventClearQueneCD);
-	
-	--显示强化队列2
-	local equipStrQueneText2 = GetLabel(layer,ID_EQUIPSTR_CTRL_TEXT_LIST2);
-	equipStrQueneText2:SetVisible(true);
-	if timeNum2 > 0 then
-		--队列2未冷却
-		nProcessTimeTag2 = RegisterTimer(p.OnProcessTimer2, 1); 
-	else
-		timeNum2 = 0;
-		equipStrQueneText2:SetText("2:可强化");
-	end
-	local equipStrQueneBtn2 = GetButton(layer,ID_EQUIPSTR_CTRL_BUTTON_LIST2);
-	equipStrQueneBtn2:SetVisible(true);
-	equipStrQueneBtn2:SetLuaDelegate(p.OnUIEventClearQueneCD);
-	
-	--显示强化队列3
-	local equipStrQueneText3 = GetLabel(layer,ID_EQUIPSTR_CTRL_TEXT_LIST3);
-	equipStrQueneText3:SetVisible(true);
-	if timeNum3 > 0 then
-		--队列3未冷却
-		nProcessTimeTag3 = RegisterTimer(p.OnProcessTimer3, 1); 
-	else
-		timeNum3 = 0;
-		equipStrQueneText3:SetText("3:可强化");
-	end
-	local equipStrQueneBtn3 = GetButton(layer,ID_EQUIPSTR_CTRL_BUTTON_LIST3);
-	equipStrQueneBtn3:SetVisible(true);
-	equipStrQueneBtn3:SetLuaDelegate(p.OnUIEventClearQueneCD);
-
-	--显示永久消除CD按钮
-	local btn = GetButton(layer, ID_EQUIPSTR_CTRL_BUTTON_QUESTR);
-	btn:SetVisible(true);
-	btn:SetLuaDelegate(p.OnUIEventAddEquipStrQuene); 	
-	btn:SetTitle("永久消除CD");   
-end
-
---设置当前能否进行强化
 function p.SetCanEnhance() 
     if queneNum == 256 then
 	    return;
@@ -945,11 +860,10 @@ function p.SetCanEnhance()
 	enhanceEnable = false ;
 	
 	for i = 1,queneNum  do
-	     if p.IsStrFree(i) then
-	         LogInfo("强化队列%d is Free",i)
-	     end
-	
-	     if not p.IsStrFree(i) then
+	if queneCDList[i] then
+	LogInfo("i=%d",i)
+	end
+	     if queneCDList[i] then
 		     if i == 2 and timeNum2 < minTime then
 			     minTime = timeNum2;		
 				 currentMin = 2;	
@@ -964,7 +878,7 @@ function p.SetCanEnhance()
  		 end
 	end
 
-    LogInfo("当前可以进行装备强化的队列currentQuene:%d",currentQuene);
+   LogInfo("currentQuene:%d",currentQuene);
    
 end
 
@@ -980,7 +894,84 @@ function  p.GetMinTime()
 	return minTime;
 end
 
-
+function p.ShowEquipStrQuene() 
+	local scene = GetSMGameScene();
+	if nil == scene then
+		return nil;
+	end
+	
+	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.EquipStr);
+	if nil == layer then
+		return nil;
+	end
+		
+	local equipStrQueneText = GetLabel(layer,ID_EQUIPSTR_CTRL_TEXT_LIST1);
+	if lastOsTime1 == 0 then		
+		timeNum1 = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME1);
+		lastOsTime1 = GetCurrentTime() + timeNum1;
+	else
+		timeNum1 = lastOsTime1 - GetCurrentTime();	 
+	end	
+	if timeNum1 > 0 then
+		--队列1未冷却
+		queneCDList[1] = true;
+		nProcessTimeTag1 = RegisterTimer(p.OnProcessTimer1, 1); 
+	else
+		timeNum1 = 0;
+		equipStrQueneText:SetText("1:可强化");
+	end
+	equipStrQueneText:SetVisible(true);
+	local equipStrQueneBtn = GetButton(layer,ID_EQUIPSTR_CTRL_BUTTON_LIST1);
+	equipStrQueneBtn:SetVisible(true);
+	equipStrQueneBtn:SetLuaDelegate(p.OnUIEventClearQueneCD);
+	
+	local equipStrQueneText2 = GetLabel(layer,ID_EQUIPSTR_CTRL_TEXT_LIST2);
+	if lastOsTime2 == 0 then		
+		timeNum2 = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME2);
+		lastOsTime2 = GetCurrentTime() + timeNum2;
+	else
+		timeNum2 = lastOsTime2 - GetCurrentTime();	 
+	end	
+	if timeNum2 > 0 then
+		--队列2未冷却
+		queneCDList[2] = true;
+		nProcessTimeTag2 = RegisterTimer(p.OnProcessTimer2, 1); 
+	else
+		timeNum2 = 0;
+		equipStrQueneText2:SetText("2:可强化");
+	end
+	equipStrQueneText2:SetVisible(true);
+	local equipStrQueneBtn2 = GetButton(layer,ID_EQUIPSTR_CTRL_BUTTON_LIST2);
+	equipStrQueneBtn2:SetVisible(true);
+	equipStrQueneBtn2:SetLuaDelegate(p.OnUIEventClearQueneCD);
+	
+	local equipStrQueneText3 = GetLabel(layer,ID_EQUIPSTR_CTRL_TEXT_LIST3);
+	if lastOsTime3 == 0 then		
+		timeNum3 = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME3);
+		lastOsTime3 = GetCurrentTime() + timeNum3;
+	else
+		timeNum3 = lastOsTime3 - GetCurrentTime();	 
+	end	
+	if timeNum3 > 0 then
+		--队列3未冷却
+		queneCDList[3] = true;
+		nProcessTimeTag3 = RegisterTimer(p.OnProcessTimer3, 1); 
+	else
+		timeNum3 = 0;
+		equipStrQueneText3:SetText("3:可强化");
+	end
+	equipStrQueneText3:SetVisible(true);
+	local equipStrQueneBtn3 = GetButton(layer,ID_EQUIPSTR_CTRL_BUTTON_LIST3);
+	equipStrQueneBtn3:SetVisible(true);
+	equipStrQueneBtn3:SetLuaDelegate(p.OnUIEventClearQueneCD);
+	
+	lastOsTime = GetCurrentTime();
+	
+	local btn = GetButton(layer, ID_EQUIPSTR_CTRL_BUTTON_QUESTR);
+	btn:SetVisible(true);
+	btn:SetLuaDelegate(p.OnUIEventAddEquipStrQuene); 	
+	btn:SetTitle("永久消除CD");   
+end
 
 
 --设置装备控件隐藏
@@ -1018,7 +1009,7 @@ function p.AddEquipViewContent(view,equipIndex,equipId)
 	if lvTextTag > 0 then
 		local equipLv = Item.GetItemInfoN(equipId, Item.ITEM_ADDITION);
 		--LogInfo("装备等级：");
-		SetLabel(view, lvTextTag, EquipStrFunc.GetLevelName(equipLv));
+		SetLabel(view, lvTextTag, p.GetLevelName(equipLv));
 	end
 			
 	if btnTag > 0 then
@@ -1132,7 +1123,7 @@ function p.RefreshEquipRight()
 	LogInfo("name: %s Lv:%d state:%s",equipName,equipLv+1,state)
 	
 	SetLabel(layer, ID_EQUIPSTR_CTRL_TEXT_NAME_R1, equipName);
-	SetLabel(layer, ID_EQUIPSTR_CTRL_TEXT_LEVEL_R1, EquipStrFunc.GetLevelName(equipLv));
+	SetLabel(layer, ID_EQUIPSTR_CTRL_TEXT_LEVEL_R1, p.GetLevelName(equipLv));
 	SetLabel(layer, ID_EQUIPSTR_CTRL_TEXT_STATE_R1, state);
 	
 	local equipAfterBtn = GetItemButton(layer,ID_EQUIPSTR_CTRL_OBJECT_BUTTON_R2);	
@@ -1142,17 +1133,17 @@ function p.RefreshEquipRight()
 	
 	state = p.GetStateText(equipLv+1,itemTypeId);
 	reqMoney = EquipStrFunc.GetReqMoney(itemTypeId,equipLv);
-	state = state..string.format("消耗铜钱 %d",reqMoney);
+	state = state..string.format("消耗银币 %d",reqMoney);
 	LogInfo(state);
 	SetLabel(layer, ID_EQUIPSTR_CTRL_TEXT_NAME_R2, equipName);
-	SetLabel(layer, ID_EQUIPSTR_CTRL_TEXT_LEVEL_R2, EquipStrFunc.GetLevelName(equipLv+1));
+	SetLabel(layer, ID_EQUIPSTR_CTRL_TEXT_LEVEL_R2, p.GetLevelName(equipLv+1));
 	SetLabel(layer, ID_EQUIPSTR_CTRL_TEXT_STATE_R2, state);
 	
 	local money = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_MONEY);
-	LogInfo("选中装备时，玩家身上铜钱:%d",money);
+	LogInfo("选中装备时，玩家身上银币:%d",money);
 	local equipStrBtn =  GetButton(layer,ID_EQUIPSTR_CTRL_BUTTON_STRENGTHEN);
 	if money < reqMoney then
-		equipStrBtn:SetTitle("铜钱不足！");
+		equipStrBtn:SetTitle("银币不足！");
 		equipStrBtn:SetFontColor(ccc4(255,0,0,255));
 		enhanceEnable = false;
 	elseif queneNum == 256 or currentQuene ~= -1 then
@@ -1220,7 +1211,7 @@ function p.OnUIEventSelectEquipStrBtn(uiNode, uiEventType, param)
 		else
 			local money = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_MONEY);
           	if money >= reqMoney then
-			    --弹出花费元宝清除冷却时间的对话框
+			    --弹出花费金币清除冷却时间的对话框
 				local timeNum = 0;
 			    if queneNum == 1 then
 			        timeNum = timeNum1;
@@ -1234,7 +1225,7 @@ function p.OnUIEventSelectEquipStrBtn(uiNode, uiEventType, param)
 	            end	
 			
 			    nParam = currentMin;
-                CommonDlg.ShowNoPrompt(string.format("你愿意花费%d元宝清除cd吗？",reqEMoney), p.OnCommonDlgClearStrQueneTime , true);
+                CommonDlg.ShowNoPrompt(string.format("你愿意花费%d金币清除cd吗？",reqEMoney), p.OnCommonDlgClearStrQueneTime , true);
 			end	
 		end
 	end	
@@ -1245,7 +1236,7 @@ function p.OnCommonDlgClearStrQueneTime(nId, nEvent, param)
 	if nEvent == CommonDlg.EventOK then
 	    local eMoney = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EMONEY);
 		if eMoney < reqEMoney then
-		    CommonDlg.ShowTipInfo("提示", "元宝不足!", nil, 2);
+		    CommonDlg.ShowTipInfo("提示", "金币不足!", nil, 2);
 	    else
            MsgEquipStr.SendClearStrQueneTimeAction(nParam);
 		end   
@@ -1261,10 +1252,10 @@ function p.OnCommonDlgEliminateCD(nId, nEvent, param)
 			return;
 		end					
 
-        LogInfo("永久消除cd需要元宝:%d,玩家身上元宝：%d",reqEMoney,eMoney)		
+        LogInfo("永久消除cd需要金币:%d,玩家身上金币：%d",reqEMoney,eMoney)		
 	
 	    if eMoney < reqEMoney then
-		    CommonDlg.ShowTipInfo("提示", "元宝不足!", nil, 2);
+		    CommonDlg.ShowTipInfo("提示", "金币不足!", nil, 2);
 		else
 			MsgEquipStr.SendEliminateUpdateCDAction();
 		end
@@ -1282,10 +1273,10 @@ function p.OnCommonDlgAddQuene(nId, nEvent, param)
 			return;
 		end	
 	   
-		LogInfo("增加队列需要元宝:%d,玩家身上元宝：%d",reqEMoney,eMoney)		
+		LogInfo("增加队列需要金币:%d,玩家身上金币：%d",reqEMoney,eMoney)		
 	  
 	    if eMoney < reqEMoney then
-		    CommonDlg.ShowTipInfo("提示", "元宝不足!", nil, 2);
+		    CommonDlg.ShowTipInfo("提示", "金币不足!", nil, 2);
 		else
 	        MsgEquipStr.SendAddEquipStrQueneAction();
 	    end
@@ -1332,11 +1323,17 @@ function p.OnUIEventViewChange(uiNode, uiEventType, param)
 			end
 		end
 
-		if not nPetId then
+		if not nPetId or nPetId <= 0 then
 			return true;
 		end
 	
 		if ID_EQUIPSTR_CTRL_LIST_EQUIP == tag then
+			--[[
+			containter	= p.GetPetParent();
+			if CheckP(containter) then
+				containter:ScrollViewById(nPetId);
+		    end		
+			--]]
 			local petNameContainter = p.GetPetNameContainer();
 	
 			if CheckP(petNameContainter) then
@@ -1349,6 +1346,13 @@ function p.OnUIEventViewChange(uiNode, uiEventType, param)
 			if CheckP(containter) then
 				containter:ScrollViewById(nPetId);
 		    end		
+			
+			--[[
+			local petNamecontainter = p.GetPetNameContainer();
+			if CheckP(petNameContainter) then
+				petNameContainter:ScrollViewById(nPetId);
+			end
+			--]]
 		end
 
 	end
@@ -1365,7 +1369,7 @@ function p.OnUIEventAddEquipStrQuene(uiNode, uiEventType, param)
 	    vipLevel = 0;
 	end
 				
-	--弹出花费元宝开通强化队列的对话框
+	--弹出花费金币开通强化队列的对话框
 	if queneNum == 1 then
 		reqEMoney = 100;
 	elseif queneNum == 2 then	
@@ -1375,9 +1379,9 @@ function p.OnUIEventAddEquipStrQuene(uiNode, uiEventType, param)
 	end
 
 	if queneNum == 3 then
-		CommonDlg.ShowNoPrompt(string.format("你愿意花费%d元宝永久清除强化cd吗？",reqEMoney), p.OnCommonDlgEliminateCD , true);
+		CommonDlg.ShowNoPrompt(string.format("你愿意花费%d金币永久清除强化cd吗？",reqEMoney), p.OnCommonDlgEliminateCD , true);
 	else
-		CommonDlg.ShowNoPrompt(string.format("你愿意花费%d元宝增加强化队列吗？",reqEMoney), p.OnCommonDlgAddQuene, true);	
+		CommonDlg.ShowNoPrompt(string.format("你愿意花费%d金币增加强化队列吗？",reqEMoney), p.OnCommonDlgAddQuene, true);	
 	end	
 
 end
@@ -1411,36 +1415,16 @@ function p.OnUIEventClearQueneCD(uiNode, uiEventType, param)
 		end
 		
 		if need then
-			--弹出花费元宝清除冷却时间的对话框
+			--弹出花费金币清除冷却时间的对话框
 	        reqEMoney = timeNum / 60;
 	        if timeNum % 60 ~= 0 then
 		        reqEMoney = reqEMoney + 1;
 	        end	
-            CommonDlg.ShowNoPrompt(string.format("你愿意花费%d元宝清除cd吗？",reqEMoney), p.OnCommonDlgClearStrQueneTime , true);
+            CommonDlg.ShowNoPrompt(string.format("你愿意花费%d金币清除cd吗？",reqEMoney), p.OnCommonDlgClearStrQueneTime , true);
 		end
 	end					
 end
 
-function p.OnUIEventClickPetName(uiNode, uiEventType, param)
-	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-	    --获取按钮所在的view
-		local view	= PRecursiveSV(uiNode, 1);
-		if CheckP(view) then
-			local nPetId		= ConvertN(view:GetViewId())
-			local containter	= p.GetPetNameContainer();
-			if CheckP(containter) then
-				containter:ScrollViewById(nPetId);
-			end
-			
-			containter = p.GetPetParent();
-			if CheckP(containter) then
-				containter:ScrollViewById(nPetId);
-			end
-		end
-	end
-	
-	return true;
-end
 
 
 function p.GameDataUserInfoRefresh(datalist)
@@ -1462,7 +1446,7 @@ function p.GameDataUserInfoRefresh(datalist)
 					return;
 			end		
 		elseif datalist[i] and datalist[i] == USER_ATTR.USER_ATTR_MONEY then
-				LogInfo("玩家铜钱数更新为：%d",datalist[i+1])
+				LogInfo("玩家银币数更新为：%d",datalist[i+1])
 		elseif datalist[i] and datalist[i] == USER_ATTR.USER_ATTR_EQUIP_UPGRADE_TIME1 and datalist[i+1] == 0  then
 		        --清除队列1冷却时间
                 p.ResClearTime(1);

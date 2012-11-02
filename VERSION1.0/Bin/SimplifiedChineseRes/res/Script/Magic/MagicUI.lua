@@ -505,7 +505,7 @@ function p.clickCoolDown()
 		local curTime = GetCurrentTime();
 		local time = cool - curTime;
 		local money = MatrixConfigFunc.getEmoneyForCleanCoolDown(time);
-		local tip = "消除冷却时间需消耗".. SafeN2S(money) .. "元宝，是否继续？";
+		local tip = "消除冷却时间需消耗".. SafeN2S(money) .. "金币，是否继续？";
 		CommonDlg.ShowNoPrompt(tip, p.onConfirmCoolDown);
 	else
 		p.sendMatrixCoolDown();

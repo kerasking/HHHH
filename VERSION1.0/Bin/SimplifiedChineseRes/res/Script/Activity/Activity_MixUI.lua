@@ -91,6 +91,11 @@ function p.LoadUI()
 	--p.AddActivity(2,1,0,1,0);
 	--p.AddActivity(3,2,100,2,1);
 	--p.AddActivity(4,2,100,0,0,0);
+	
+	--设置关闭音效
+   	local closeBtn=GetButton(layer,ID_ACTIVITYFIXED_CTRL_BUTTON_CLOSE);
+   	closeBtn:SetSoundEffect(Music.SoundEffect.CLOSEBTN);
+   
 end
 
 function p.OnUIEvent(uiNode,uiEventType,param)
@@ -98,8 +103,9 @@ function p.OnUIEvent(uiNode,uiEventType,param)
 	LogInfo("p.OnUIEvent[%d]",tag);
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		if ID_ACTIVITYFIXED_CTRL_BUTTON_CLOSE == tag then
-			local scene = GetSMGameScene();
-			scene:RemoveChildByTag(NMAINSCENECHILDTAG.ActivityMix,true);
+			--local scene = GetSMGameScene();
+			--scene:RemoveChildByTag(NMAINSCENECHILDTAG.ActivityMix,true);
+            RemoveChildByTagNew(NMAINSCENECHILDTAG.ActivityMix, true,true);
 			return true;
 		end
 	end
@@ -117,8 +123,9 @@ function p.OnActivityUIEvent(uiNode,uiEventType,param)
 			local id=view:GetViewId();
 			_G.MsgActivityMix.SendStartBossFight(id);
 			
-			local scene = GetSMGameScene();
-			scene:RemoveChildByTag(NMAINSCENECHILDTAG.ActivityMix,true);
+			--local scene = GetSMGameScene();
+			--scene:RemoveChildByTag(NMAINSCENECHILDTAG.ActivityMix,true);
+            RemoveChildByTagNew(NMAINSCENECHILDTAG.ActivityMix, true,true);
 			return true;
 		elseif ID_ACTIVITYFIXED_M_CTRL_BUTTON_REPLACER ==tag then
 			

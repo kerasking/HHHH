@@ -18,7 +18,7 @@ local AffixBossSubClass_MAX = 3;
 local AffixBoss_MAX_NORMAL = 1;
 local AffixBoss_MAX_ELITE = 2;
 
-local AffixBossListIndex = {
+AffixBossListIndex = {
 	typeid = 1,
 	rank = 2,
 	status = 3,
@@ -158,12 +158,14 @@ function f.GetMapPortal(nMapId, nPortalIndex)
 end
 
 function f.IsMapCanOpen(nMapId)
+	--LogInfo("AffixBossFunc: IsMapCanOpen() nMapId:%d",nMapId);
 	if not CheckN(nMapId) then
 		return false;
 	end
 	
 	local nNeedStage	= _G.ConvertN(_G.GetDataBaseDataN("map", nMapId, DB_MAP.NEED_STAGE));
 	local nPlayerStage	= _G.ConvertN(_G.GetRoleBasicDataN(_G.GetPlayerId(), USER_ATTR.USER_ATTR_STAGE));
+	--LogInfo("AffixBossFunc: IsMapCanOpen() nPlayerStage:%d, nNeedStage:%d", nPlayerStage, nNeedStage );
 	
 	return nPlayerStage >= nNeedStage;
 end
@@ -171,20 +173,31 @@ end
 --lstId
 -- return lst:t{typeid,name, rank, status, time, pic, order},count
 function f.findBossList(nParentMap, nPassway)
+    
 	local ids = f.getIdListByPassway(nParentMap, nPassway);
 	local count = #ids;
+    
+    --LogInfo("f.findBossList ids")
+    --_G.LogInfoT(ids)
+        
 	local lst = {};
 	for i = 1,count do
 		lst[i] = f.getBossInfo(ids[i]);
 	end
 	
-	table.sort(lst, function(a,b) return a.order < b.order end);
+	--table.sort(lst, function(a,b) return a.order < b.order end);
+	table.sort(lst, function(a,b) return a.typeid  < b.typeid  end);
 	local rtn = {};
 	local i = 1;
 	for k, v in pairs(lst) do
+       -- LogInfo("i:"..i.." v[1]:"..v.typeid);
 		rtn[i] = v;
 		i = i +1;
 	end
+    
+   -- LogInfo("f.findBossList")
+
+    
 	return rtn, count;
 	
 end
@@ -194,7 +207,7 @@ function f.getBossInfo(nTypeId)
 	local name	= f.findName(nTypeId);
 	local pic	= f.findPic(nTypeId);
 	local order = f.findOrder(nTypeId);
-	LogInfo("name:%s order:%d", name, order);
+	--LogInfo("name:%s order:%d", name, order);
 	local elite = f.findElite(nTypeId);
 	local id, rank, status, time = f.getBossInfoCache(elite,nTypeId);
 	local rtn = {};
@@ -254,6 +267,10 @@ function f.findStage(nId)
 	return f.GetDataBaseN(nId, DB_MAP.NEED_STAGE);
 end
 
+function f.findPreId(nId)
+	return f.GetDataBaseN(nId, DB_MAP.INSTANCING_PRE_CONDITION);
+end
+
 function f.findMapId(nElite, nBossId)
 	return f.getBossInfoColumnN(nElite, nBossId, AffixBossListIndex.nParentMapId);
 end
@@ -299,6 +316,7 @@ function f.setBossInfoColumnN(nElite, nTypeId, key, value)
 end
 
 function f.getBossInfoColumnN(nElite, nTypeId, key)
+	--LogInfo( "AffixBossFunc: getBossInfoColumnN nElite:%d, nTypeId:%d", nElite,nTypeId );
 	return GetGameDataN(NScriptData.eAffixBoss, nElite, AffixBossSubClass_LIST, nTypeId, key);
 end
 
@@ -311,7 +329,7 @@ function f.InitPassway()
 		local mid = f.GetDataBasePasswayN(v, DB_PASSWAY.MAPID);
 		local passway	= f.GetDataBasePasswayN(v, DB_PASSWAY.INDEX);
 		local dmid = f.GetDataBasePasswayN(v, DB_PASSWAY.DEST_MAPID);
-		LogInfo("mid%d, passway,%d dmid%d" ,mid, passway, dmid);
+		--LogInfo("mid%d, passway,%d dmid%d" ,mid, passway, dmid);
 		f.setBossInfoColumnN(passway, dmid, AffixBossListIndex.nParentMapId, mid); -- 给boss保存父地图
 		f.addId(mid, passway, dmid);
 	end
@@ -327,12 +345,12 @@ function f.getIdListByPassway(nMapId, nPassway)
 	idList = _G.GetRoleDataIdTable(NScriptData.eAffixBoss, nMapId, AffixBossSubClass_IDList, f.DefaultKey, nPassway);
 	if not idList or #idList == 0 then
 	end
-	LogInfo("idsCount:%d", #idList );
+	--LogInfo("idsCount:%d", #idList );
 	return idList;
 end
 
 function f.addId(nMapId, nPassway, nId)
-	LogInfo("add nMapId %d, nPassway %d, nId %d", nMapId, nPassway, nId);
+	--LogInfo("add nMapId %d, nPassway %d, nId %d", nMapId, nPassway, nId);
 	_G.DelRoleDataId(NScriptData.eAffixBoss, nMapId, AffixBossSubClass_IDList, f.DefaultKey, nPassway, nId);
 	_G.AddRoleDataId(NScriptData.eAffixBoss, nMapId, AffixBossSubClass_IDList, f.DefaultKey, nPassway, nId);
 end

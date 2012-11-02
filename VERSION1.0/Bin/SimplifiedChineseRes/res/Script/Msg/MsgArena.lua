@@ -41,10 +41,8 @@ function p.ProcessArenaInfo(netdatas)
     LogInfo("+++++++++++++++cdTime[%d]+++++++++++++++++",cdTime);
 	local awardTime=netdatas:ReadInt();
     --LogInfo("+++++++++++++++awardTime[%d]+++++++++++++++++",awardTime);
-	local awardMoney=netdatas:ReadInt();
-    --LogInfo("+++++++++++++++awardMoney[%d]+++++++++++++++++",awardMoney);
-	local awardRepute=netdatas:ReadInt();
-    --LogInfo("+++++++++++++++awardRepute[%d]+++++++++++++++++",awardRepute);
+	netdatas:ReadInt();
+	netdatas:ReadInt();
     local winCount=netdatas:ReadInt();
     --LogInfo("+++++++++++++++winCount[%d]+++++++++++++++++",winCount);
 	local userCount=netdatas:ReadByte();
@@ -66,7 +64,7 @@ function p.ProcessArenaInfo(netdatas)
 	end
 	
     ArenaUI.RefreshUI();
-	ArenaUI.SetAwardInfo(awardTime,awardMoney,awardRepute);
+	ArenaUI.SetTimerNum(awardTime);
 	
 	ArenaUI.SetSelfInfo(rank,restCount,addedCount,cdTime,winCount);
 	

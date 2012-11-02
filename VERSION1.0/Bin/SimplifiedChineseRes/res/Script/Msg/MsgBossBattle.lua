@@ -30,6 +30,7 @@ ACTIVITY_STATUS = {
     NONE        = 0,    --活动未开始
     START       = 1,    --活动已开始
     END         = 2,    --活动结束
+    CONDITION_UNABEL = 3, --条件不满足
 };
 
 ACTIVITY_TYPE = {
@@ -97,17 +98,15 @@ function p.ProcessActivity( netdata )
     local nActivityStatus   = netdata:ReadInt();   -- 活动状态
     
     LogInfo( "MsgBossBattle.ProcessActivity nAction:[%d],nActivityId:[%d],nActivityStatus:[%d]", nAction, nActivityId, nActivityStatus );
-    
     if nAction == ACTION_OPERATE.ACTIVITY_ANSWER then
-        if nActivityStatus == ACTIVITY_STATUS.NONE then
-            CommonDlgNew.ShowYesDlg( "活动还未开启" );
-        elseif nActivityStatus == ACTIVITY_STATUS.START then
+        if nActivityStatus == ACTIVITY_STATUS.START then
+            if IsUIShow(NMAINSCENECHILDTAG.DailyActionUI) then
+                CloseUI(NMAINSCENECHILDTAG.DailyActionUI);
+            end
             
             local nType = GetDataBaseDataN("event_activity", nActivityId, DB_EVENT_ACTIVITY_CONFIG.TYPE);
             if ACTIVITY_TYPE.BOSS == nType then
                 Battle_Boss.LoadUI( nActivityId );
-            elseif ACTIVITY_TYPE.GRAIN == nType then    --运粮
-            	
             elseif ACTIVITY_TYPE.CHAOS == nType then    --大乱斗
             	CampBattle.LoadUI();
             end
@@ -125,13 +124,15 @@ function p.ProcessActivity( netdata )
 end
 
 function p.TimerCloseActivityWin()
+
     LogInfo("p.TimerCloseActivityWin");
+
     local layer = Battle_Boss.GetCurrLayer();
     if( layer ) then
         LogInfo("p.TimerCloseActivityWin layer != nil!");
         if( layer:IsVisibled() ) then
             LogInfo("p.TimerCloseActivityWin layer destory!");
-            CommonDlgNew.ShowYesDlg( "活动已结束1" );
+            CommonDlgNew.ShowYesDlg( "活动已结束" );
             Battle_Boss.UnLoadUI( 0 );
         end
     else

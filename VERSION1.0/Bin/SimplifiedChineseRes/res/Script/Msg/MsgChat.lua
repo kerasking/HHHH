@@ -10,7 +10,7 @@ local p=MsgChat;
 
 function p.ProcessTalkInfo(netdatas)
 	LogInfo("receive_talk");
-    LogInfo("tzq receive p.ProcessTalkInfo");
+    LogInfo("receive p.ProcessTalkInfo");
     
 	netdatas:ReadByte();
 	local channel = netdatas:ReadByte();
@@ -31,7 +31,7 @@ function p.ProcessTalkInfo(netdatas)
 		end
 	end
     
-    LogInfo("tzq channel = %d, text = %s", channel, text);
+    LogInfo("channel = %d, text = %s", channel, text);
     if channel == 17 then
         CommonDlgNew.ShowYesDlg(text,nil,nil,3);
         return;

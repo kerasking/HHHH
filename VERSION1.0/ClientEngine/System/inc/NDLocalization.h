@@ -57,11 +57,12 @@ _NDLOCAL_INNER_CString_STRING(NDString(__FILE__).getFileName(), cStringKeyName)
 
 // key_name type NSString
 #define NDCommonNSString(NSKeyName) \
-_NDLOCAL_INNER_NS_STRING(@"Common", NSKeyName)
+_NDLOCAL_INNER_NS_STRING("Common", NSKeyName)
 
 // key_name type cString(null end)
 #define NDCommonCString(cStringKeyName) __NDLOCAL_INNER_C_STRING("Common", cStringKeyName)
 
+#define NDCommonCString2(cStringKeyName) __NDLOCAL_INNER_C_STRING("", cStringKeyName)
 ////////////////////////////////////////////////////////////////////////////////
 // 本地方接口(返回NSString),用法同上
 // 1.NDNSString_RETNS
@@ -90,10 +91,10 @@ _NDLOCAL_INNER_CString_STRING_RETNS(NSString(__FILE__).getFileName(), cStringKey
 
 // key_name type NSString
 #define NDCommonNSString_RETNS(NSKeyName) \
-_NDLOCAL_INNER_NS_STRING_RETNS(@"Common", NSKeyName)
+_NDLOCAL_INNER_NS_STRING_RETNS("Common", NSKeyName)
 
 // key_name type cString(null end)
 #define NDCommonCString_RETNS(cStringKeyName) \
-_NDLOCAL_INNER_CString_STRING_RETNS(@"Common", cStringKeyName)
+_NDLOCAL_INNER_CString_STRING_RETNS("Common", cStringKeyName)
 
 #endif // _ND_LOCALIZATION_H_ZJH_

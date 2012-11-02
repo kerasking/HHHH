@@ -21,6 +21,7 @@ p.BtnHeight		= p.BtnWidth;
 p.rectW         = (p.BtnWidth+buffDistance) * maxStateShow; 
 
 function p.LoadUI()	
+--[[
   local scene = GetSMGameScene();
   if not CheckP(scene) then
 	LogInfo("scene is nil,loadUserStateList failed!");
@@ -37,8 +38,9 @@ function p.LoadUI()
   
   p.refreshUserStateList();			
   return;
+  ]]
 end
-
+--[[
 function p.OnUIEvent(uiNode, uiEventType, param)
   local tag = uiNode:GetTag();
   if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then 
@@ -134,3 +136,4 @@ function p.GetDatasByType(nType)
 end
 
 RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "UserStateList.LoadUI", p.LoadUI);
+]]

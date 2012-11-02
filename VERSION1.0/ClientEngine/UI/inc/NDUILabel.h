@@ -126,6 +126,7 @@ namespace NDEngine
 		GLfloat m_pfVerticesBoder[12];
 		GLfloat m_pfCoordinates[8];
 		GLbyte m_pbColors[16];
+		CCRect m_cutRect;
 		GLbyte m_pbColorsBorder[16];
 	};
 }

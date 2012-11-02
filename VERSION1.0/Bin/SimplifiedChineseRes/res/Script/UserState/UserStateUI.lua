@@ -38,14 +38,16 @@ local timeLableTag = 999;
 --保存的stateId;
 p.nStateId = 0;
 --UI坐标配置
+--[[
 local winsize	    = GetWinSize();
 local rectX         = UserStateList.rectX;
 local rectY         = UserStateList.rectY+UserStateList.BtnHeight+distance;
 local Width			= UserStateList.rectW;
 local labelWidth    = Width - margin*2;
 local timeLableRect = nil;
-
+]]
 function p.LoadUI(stateId)
+--[[
   LogInfo("UserStateUI.LoadUI(%d)",stateId);
   p.nStateId = stateId;
   local scene = GetSMGameScene();
@@ -57,8 +59,9 @@ function p.LoadUI(stateId)
   if not CheckP(container) then
 	LogInfo("container is nil,UserStateUI LoadUI failed!");
 	return;
+    ]]
   end
-
+--[[
   container:Init();
   container:SetTag(NMAINSCENECHILDTAG.UserStateUI);
   container:SetLeftReserveDistance(0);
@@ -205,7 +208,7 @@ end
 
 --根据typeId得到状态的inconindex
 function p.GetStateconIndexByTypeId(typeId)
-   return GetDataBaseDataN("user_state_config",typeId,DB_USER_STATE_CONFIG.ICONINDEX);
+   return GetDataBaseDataN("user_state_config",typeId,DB_USER_STATE_TYPE.ICONINDEX);
 end
 
 --根据状态id获得inconindex
@@ -247,15 +250,15 @@ function p.GetStateEndTime(nRoleId,stateId)
 end
 
 function p.GetStateName(typeId)
-   return GetDataBaseDataS("user_state_config",typeId,DB_USER_STATE_CONFIG.NAME);
+   return GetDataBaseDataS("user_state_config",typeId,DB_USER_STATE_TYPE.NAME);
 end
 
 function p.GetStateDescript(typeId)
-   return GetDataBaseDataS("user_state_config",typeId,DB_USER_STATE_CONFIG.DESCRIPT);
+   return GetDataBaseDataS("user_state_config",typeId,DB_USER_STATE_TYPE.DESCRIPT);
 end
 
 function p.GetStateType(typeId)
-   return GetDataBaseDataN("user_state_config",typeId,DB_USER_STATE_CONFIG.TYPE);
+   return GetDataBaseDataN("user_state_config",typeId,DB_USER_STATE_TYPE.TYPE);
 end
 
 --更新状态
@@ -278,3 +281,4 @@ end
 function p.SetSateEndTime(nRoleId,stateId,endTime)
    SetGameDataN(NScriptData.eRole, nRoleId, NRoleData.eUserState,stateId,p.SM_STATE_END_TIME,endTime);
 end
+]]

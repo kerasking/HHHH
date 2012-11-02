@@ -27,7 +27,7 @@ DoFile("Common/VipConfig.lua");
 DoFile("Common/IconConfigUI.lua");
 
 --初始化数据库
---DoFile("Common/SqliteConfig.lua");
+DoFile("Common/SqliteConfig.lua");
 
 
 

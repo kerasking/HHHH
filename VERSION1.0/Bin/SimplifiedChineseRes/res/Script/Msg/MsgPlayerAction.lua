@@ -1,3 +1,4 @@
+
 ---------------------------------------------------
 --描述: 玩家活动信息
 --时间: 2012.8.31
@@ -53,8 +54,23 @@ p.StrActionInfo = {
                                 iBeginTime = nil;                        --距离1900年1月1日0点0分多少秒
      };
 
+function p.ClearActionInfo()
+    for i, v in pairs(p.PLAYER_ACTION_STATION) do
+        v.IsExit = 0;   
+    end 
+end
+
 --获取玩家活动信息接口(服务器下发)     
 function p.MsgGetPlayerActionInfo(netdatas)
+    
+    local nPreSerId, nCurSerId = Login_ServerUI.GetPreCurSerId();
+    LogInfo("tzq p.MsgGetPlayerActionInfo nPreSerId= %d, nCurSerId = %d begin", nPreSerId, nCurSerId);   
+    if nPreSerId ~= nCurSerId then
+        for i, v in pairs(p.PLAYER_ACTION_STATION) do
+            v.IsExit = 0;   
+        end 
+        Login_ServerUI.SetPreCurSerId(nCurSerId, nCurSerId);
+    end
     
     --活动的类型(例如 玩家活动信息 ,目前只有一种)
     local cActionType = netdatas:ReadByte();
@@ -158,9 +174,6 @@ end
 
 --注册消息获取玩家活动信息
 RegisterNetMsgHandler(NMSG_Type._MSG_PLAYER_ACTION_INFO,  "p.MsgGetPlayerActionInfo", p.MsgGetPlayerActionInfo);
-
---注册消息获取玩家活动操作
---RegisterNetMsgHandler(NMSG_Type._MSG_PLAYER_ACTION_OPERATE, "p.MsgSendPlayerActionOperate", p.MsgSendPlayerActionOperate);
 
 --注册收到系统消息弹出处理
 --RegisterNetMsgHandler(NMSG_Type._MSG_TALK, "p.MsgPopDlg", p.MsgPopDlg);

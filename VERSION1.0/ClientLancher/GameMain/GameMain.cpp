@@ -26,7 +26,7 @@ int WINAPI WinMain (HINSTANCE hInstance,
  	UNREFERENCED_PARAMETER(hPrevInstance);
  	UNREFERENCED_PARAMETER(szCmdLine);
  
- 	InitGameInstance();
+ 	//InitGameInstance();
  
 	NDConsole kConsole;
 	kConsole.BeginReadLoop();

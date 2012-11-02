@@ -28,6 +28,8 @@
 #include "ScriptTask.h"
 #include "TableDef.h"
 #include "ScriptGameLogic.h"
+#include "NDDebugOpt.h"
+#include "NDNpcLogic.h"
 
 #define NPC_NAME_FONT_SIZE 14
 
@@ -80,6 +82,8 @@ m_eNPCState(NPC_STATE_NO_MARK)
 	m_bUnpassTurn = false;
 
 	m_kRectState = CGRectZero;
+
+	m_npcLogic = new NDNpcLogic(this);
 }
 
 NDNpc::~NDNpc()
@@ -162,6 +166,8 @@ void NDNpc::OnMoveEnd()
 
 bool NDNpc::OnDrawBegin(bool bDraw)
 {
+	if (!NDDebugOpt::getDrawRoleNpcEnabled()) return false;
+
 	NDNode* pkNode = this->GetParent();
 	CGSize kSizeMap;
 
@@ -174,7 +180,7 @@ bool NDNpc::OnDrawBegin(bool bDraw)
 		return true;
 	}
 
-	RefreshTaskState();
+	m_npcLogic->RefreshTaskState(); //logic
 
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
 
@@ -242,6 +248,8 @@ bool NDNpc::OnDrawBegin(bool bDraw)
 
 void NDNpc::OnDrawEnd(bool bDraw)
 {
+	return; //@todo
+
 	NDNode* pkNode = this->GetParent();
 
 	CGSize kSizeMap;
@@ -270,14 +278,16 @@ void NDNpc::OnDrawEnd(bool bDraw)
 
 	CGSize kSize = getStringSize(m_strName.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
 
-	int nShowX = kNPCPos.x;
+	int nShowX = kNPCPos.x - 30;		///< 临时性调整 郭浩
 	//高度临时调整，后续应该修改为在缩放时进行数据处理，否则坐标外部需要处理HJQ
 	int nShowY = kNPCPos.y - kSize.height
 			- ((m_pkCurrentAnimation ?
 					(m_pkCurrentAnimation->getBottomY()
-							- m_pkCurrentAnimation->getY()) : 0)*0.5*fScaleFactor);
+							- m_pkCurrentAnimation->getY()) : 0)
+											 * 0.5f * fScaleFactor + 45.0f);	///< 临时性调整 + 10.0f 郭浩
 
 	bool isEmemy = false;
+
 	if (kPlayer.IsInState(USERSTATE_FIGHTING))
 	{
 		isEmemy = (GetCamp() != CAMP_NEUTRAL && kPlayer.GetCamp() != CAMP_NEUTRAL
@@ -290,8 +300,8 @@ void NDNpc::OnDrawEnd(bool bDraw)
 	{
 		InitNameLable(m_pkNameLabel[0]);
 		InitNameLable(m_pkNameLabel[1]);
-//  		SetLable(eLableName, nShowX, nShowY, m_strName, INTCOLORTOCCC4(uiColor),
-//  				ccc4(0, 0, 0, 255));
+  		SetLable(eLableName, nShowX, nShowY, m_strName, INTCOLORTOCCC4(uiColor),
+  				ccc4(0, 0, 0, 255));
 		DrawLable(m_pkNameLabel[1], bDraw);
 		DrawLable(m_pkNameLabel[0], bDraw);
 		//showY -= 5 * fScaleFactor;
@@ -783,111 +793,6 @@ bool NDNpc::getNearestPoint(CGPoint srcPoint, CGPoint& dstPoint)
 	return true;
 }
 
-void NDNpc::RefreshTaskState()
-{
-	bool bIfSetState = false;
-	// 玩家已接任务列表
-	ID_VEC idlistAccept;
-	ScriptGameDataObj.GetDataIdList(eScriptDataRole,
-			NDPlayer::defaultHero().m_nID, eRoleDataTask, idlistAccept);
-	if (!idlistAccept.empty())
-	{
-		for (ID_VEC::iterator it = idlistAccept.begin();
-				it != idlistAccept.end(); it++)
-		{
-			// 可交
-			int nState = ScriptGetTaskState(*it);
-			if (TASK_STATE_COMPLETE == nState)
-			{
-				if (m_nID
-						== ScriptDBObj.GetN("task_type", *it,
-								DB_TASK_TYPE_FINISH_NPC))
-				{
-					//主线则返回
-					if (*it /10000 == 5){
-						this->SetNpcState((NPC_STATE)QUEST_FINISH);
-						return;
-					}else {
-						//支线优先级低于主线，若无主线则返回
-						this->SetNpcState((NPC_STATE)QUEST_FINISH_SUB);
-						bIfSetState = true;
-					}
-
-				}
-			}
-		}
-	}
-
-	if (bIfSetState == true) return;
-
-	ID_VEC idVec;
-	GetTaskList(idVec);
-
-	ID_VEC idCanAccept;
-	if (GetPlayerCanAcceptList(idCanAccept))
-	{
-		for (ID_VEC::iterator it = idVec.begin(); it != idVec.end(); it++)
-		{
-			// 可接
-			for (ID_VEC::iterator itCanAccept = idCanAccept.begin();
-					itCanAccept != idCanAccept.end(); itCanAccept++)
-			{
-				if (*it == *itCanAccept)
-				{
-					if (*it /10000 == 5){
-						this->SetNpcState((NPC_STATE)QUEST_CAN_ACCEPT);
-						return;
-					}
-					else {
-						this->SetNpcState((NPC_STATE)QUEST_CAN_ACCEPT_SUB);                
-						bIfSetState = true;
-					}
-
-				}
-			}
-		}
-	}
-
-	if (bIfSetState == true) return;
-
-	/*
-	for (ID_VEC::iterator it = idVec.begin(); it != idVec.end(); it++)
-	{
-		// 未完成
-		int nState = ScriptGetTaskState(*it);
-		if (TASK_STATE_UNCOMPLETE == nState)
-		{
-			this->SetNpcState((NPC_STATE) QUEST_NOT_FINISH);
-			return;
-		}
-	}
-	*/
-
-	//未完成任务
-	// 玩家已接任务列表
-	ScriptGameDataObj.GetDataIdList(eScriptDataRole, NDPlayer::defaultHero().m_nID, eRoleDataTask, idlistAccept);
-	if (!idlistAccept.empty())
-	{
-		for (ID_VEC::iterator it = idlistAccept.begin(); 
-			it != idlistAccept.end(); 
-			it++) 
-		{
-			//不可交
-			int nState = ScriptGetTaskState(*it);
-			if (TASK_STATE_UNCOMPLETE == nState)
-			{
-				if ( m_nID == ScriptDBObj.GetN("task_type", *it, DB_TASK_TYPE_FINISH_NPC))
-				{
-					SetNpcState((NPC_STATE)QUEST_NOT_FINISH);
-					return;
-				}
-			}
-		}
-	}
-
-	this->SetNpcState((NPC_STATE) QUEST_CANNOT_ACCEPT);
-}
-
 int NDNpc::GetDataBaseData(int nIndex)
 {
 	int nKey = ScriptDBObj.GetKey("npc");
@@ -947,38 +852,6 @@ bool NDNpc::GetTaskList(ID_VEC& idVec)
 	return !idVec.empty();
 }
 */
-ID_VEC idlist;
-bool NDNpc::GetTaskList(ID_VEC& idVec)
-{
-	int TASK_ID = 1;
-	int  NPC_ID = 2;
-	// ID_VEC idlist;
-	if(idlist.empty()){
-		ScriptDBObj.GetIdList("task_npc", idlist);
-	}
-	for(ID_VEC::iterator it = idlist.begin(); it!= idlist.end();it++)
-	{
-		int nNpcId = ScriptDBObj.GetN("task_npc", *it, NPC_ID); 
-		if(nNpcId == m_nID ){
-			int nTaskId = ScriptDBObj.GetN("task_npc", *it, TASK_ID); 
-			idVec.push_back(nTaskId);
-		}        
-	}
-	return !idVec.empty();
-}
-
-bool NDNpc::GetPlayerCanAcceptList(ID_VEC& idVec)
-{
-	idVec.clear();
-
-	if (!ScriptGameDataObj.GetDataIdList(eScriptDataRole,
-			NDPlayer::defaultHero().m_nID, eRoleDataTaskCanAccept, idVec))
-	{
-		return false;
-	}
-
-	return true;
-}
 
 void NDNpc::ShowHightLight(bool bShow)
 {

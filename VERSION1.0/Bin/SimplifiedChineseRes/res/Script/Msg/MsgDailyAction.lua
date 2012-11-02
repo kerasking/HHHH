@@ -13,7 +13,7 @@ p.tbActionListInfo = {};
 --活动列表(服务器下发)     
 function p.MsgReciveDailyAcionInfo(netdatas)
     
-    LogInfo("tzq actionlist recmsg begin");    
+    LogInfo("actionlist recmsg begin");    
 
     local actionType = netdatas:ReadByte();  --1:add  2:update   1的话为清空后更新  2为更新
     local nAmount = netdatas:ReadByte();  --活动数量 
@@ -24,14 +24,14 @@ function p.MsgReciveDailyAcionInfo(netdatas)
     end
     
     for i, v in pairs(DailyAction.WorldActions) do
-        LogInfo("tzq begin i = %d  nId = %d, bStatus = %d", i, v.nId, v.bStatus); 
+        LogInfo("begin i = %d  nId = %d, bStatus = %d", i, v.nId, v.bStatus); 
     end
     
     for i, v in pairs(DailyAction.ClassActions) do
-        LogInfo("tzq begin i = %d  nId = %d, bStatus = %d", i, v.nId, v.bStatus); 
+        LogInfo("begin i = %d  nId = %d, bStatus = %d", i, v.nId, v.bStatus); 
     end
     
-    LogInfo("tzq recmsg actionType = %d, nAmount = %d", actionType, nAmount); 
+    LogInfo("recmsg actionType = %d, nAmount = %d", actionType, nAmount); 
     
     --获取所有要更新的信息
     for i = 1, nAmount do
@@ -66,15 +66,15 @@ function p.MsgReciveDailyAcionInfo(netdatas)
             end
         end
         
-        LogInfo("tzq i = %d recmsg nId = %d, bStatus = %d, nGroup = %d", i, record.nId, record.bStatus, nGroup); 
+        LogInfo("i = %d recmsg nId = %d, bStatus = %d, nGroup = %d", i, record.nId, record.bStatus, nGroup); 
     end
     
     for i, v in pairs(DailyAction.WorldActions) do
-        LogInfo("tzq end i = %d  nId = %d, bStatus = %d", i, v.nId, v.bStatus); 
+        LogInfo("end i = %d  nId = %d, bStatus = %d", i, v.nId, v.bStatus); 
     end
     
     for i, v in pairs(DailyAction.ClassActions) do
-        LogInfo("tzq end i = %d  nId = %d, bStatus = %d", i, v.nId, v.bStatus); 
+        LogInfo("end i = %d  nId = %d, bStatus = %d", i, v.nId, v.bStatus); 
     end
     
     table.sort(DailyAction.WorldActions, function(a,b) return a.nId < b.nId   end);
@@ -82,7 +82,7 @@ function p.MsgReciveDailyAcionInfo(netdatas)
 
     if IsUIShow(NMAINSCENECHILDTAG.DailyActionUI) then
         --刷新活动页面
-        LogInfo("tzq refresh BtnId = %d", DailyAction.CurFocusBtnId); 
+        LogInfo("refresh BtnId = %d", DailyAction.CurFocusBtnId); 
         DailyAction.RefreshUI(DailyAction.CurFocusBtnId);
     end
 

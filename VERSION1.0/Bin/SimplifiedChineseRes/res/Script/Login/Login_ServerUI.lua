@@ -10,7 +10,11 @@ local p = Login_ServerUI;
 p.curSel=0;
 p.Account=nil;
 p.Pwd="";
-p.UIN=154973702;
+p.UIN=317007835;
+p.LoginWait = true;
+p.SerName = "";
+p.nCurSerId = -1;
+p.nPreSerId = -1;
 
 --推荐服务器(15--21)
 local ID_SERVER_SELECT_1 = 15;
@@ -39,6 +43,7 @@ local TAG_CUR_SERVER_NAME       = 36;
 local TAG_CUR_SERVER_FLAG       = 38;
 local TAG_CUR_SERVER_RECOMMEND  = 15;
 local TAG_CUR_SERVER_TITLE      = 14;
+
 
 --按钮编号
 local ID_SERVER_SELECT_PAGE_UP                      = 22;
@@ -446,6 +451,9 @@ function p.OnUIEvent(uiNode, uiEventType, param)
         --local sServerIp = StrInt2StrIP(info.nServerIP);
         local sServerIp = info.nServerIP;
         local nServerPort = info.nServePort;
+        p.SerName = sServerName;
+        p.nPreSerId = p.nCurSerId;
+        p.nCurSerId = info.nServerID;
         
         LogInfo("登录服务器名:[%s],ip:[%s],port:[%d]",sServerName,sServerIp,nServerPort);
         
@@ -552,7 +560,7 @@ function p.ProcessServerList(netdatas)
     LogInfo("nServerID:[%d],nServerStatus[%d],nServerIP[%s],nServePort[%d],sServerName:[%s],sRecommend:[%s]",record.nServerID,record.nServerStatus,record.nServerIP,record.nServePort,record.sServerName,record.sRecommend);
     
     --更新数据库
-    --local bIsAdd = SqliteConfig.InsertServerList(record);
+    local bIsAdd = SqliteConfig.InsertServerList(record);
     
     --更新变量
     local nIndex = p.GetServerIndexByServerId(record.nServerID);
@@ -601,7 +609,7 @@ function p.ProcessServerRole(netdatas)
     
     
     --更新数据库
-    --SqliteConfig.InsertServerRoleInsert(record);
+    SqliteConfig.InsertServerRoleInsert(record);
     
     
     --更新变量
@@ -638,6 +646,15 @@ function p.ExitGameChangeServer()
 
 end
 
+--获取服务器id,为了区分不同的服务器,活动配置不同
+function p.GetPreCurSerId()
+    return p.nPreSerId, p.nCurSerId;
+end
+
+function p.SetPreCurSerId(nPre, nCur)
+    p.nPreSerId = nPre;
+    p.nCurSerId = nCur;
+end
 
 
 
@@ -655,7 +672,7 @@ end
 --++Guosen 2012.8.4
 function p.LoginGameNew()
 		LogInfo( "Login_ServerUI: LoginGameNew()" );
-	--Music.PlayLoginMusic()
+	Music.PlayLoginMusic()
 	p.LoadUI();
 	p.LoginOK_Normal( p.UIN )
 end

@@ -112,7 +112,7 @@ function p.GetMedicinePhy(nPetId)
 end
 
 function p.GetTotalPhy(nPetId)
-	return p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_PHYSICAL)+p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_PHY_FOSTER)+p.GetMedicinePhy(nPetId);
+	return p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_PHYSICAL); --+p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_PHY_FOSTER)+p.GetMedicinePhy(nPetId);
 end
 
 function p.GetInheritMedSuperSkill(nPetId)
@@ -164,7 +164,7 @@ function p.GetMedicineMagic(nPetId)
 end
 
 function p.GetTotalMagic(nPetId)
-	return p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_MAGIC)+p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_MAGIC_FOSTER)+p.GetMedicineMagic(nPetId);
+	return p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_MAGIC);--+p.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_MAGIC_FOSTER)+p.GetMedicineMagic(nPetId);
 end
 
 
@@ -183,3 +183,67 @@ function p.LogOutPet(nPetId)
 	end
 	_G.DumpGameData(NScriptData.ePetInfo, nPetId, NRoleData.eBasic, 0);
 end
+
+--** chh 2012-08-22 武将排序**--
+
+p.nPlayerId = nil;
+function p.OrderPets(pets,nPlayerId)
+    if(nPlayerId) then
+        p.nPlayerId = nPlayerId;
+    else
+        p.nPlayerId = GetPlayerId();
+    end
+    
+    table.sort(pets,p.SortPetFunc);
+    return pets;
+end
+
+function p.SortPetFunc(a, b)
+    
+    local nMainPetId = ConvertN(RolePetFunc.GetMainPetId(p.nPlayerId));
+    if(a == nMainPetId) then
+        return true;
+    end
+    if(b == nMainPetId) then
+        return false;
+    end
+    
+    local nMarialA = p.IsMarial(a);
+    local nMarialB = p.IsMarial(b);
+    if(nMarialA==nMarialB) then
+        local nLevelA = RolePetFunc.GetPropDesc(a, PET_ATTR.PET_ATTR_LEVEL);
+        local nLevelB = RolePetFunc.GetPropDesc(b, PET_ATTR.PET_ATTR_LEVEL);
+        return nLevelA>nLevelB;
+    end
+    p.nPlayerId = nil;
+    return nMarialA>nMarialB;
+end
+
+function p.OrderSpeedPets(pets)
+    table.sort(pets,p.SortSpeedPetFunc);
+    return pets;
+end
+
+--** chh 2012-08-22 武将 速度排序**--
+function p.SortSpeedPetFunc(a, b)
+    local nLevelA = RolePet.GetPetInfoN(a, PET_ATTR.PET_ATTR_SPEED);
+    local nLevelB = RolePet.GetPetInfoN(b, PET_ATTR.PET_ATTR_SPEED);
+    return nLevelA>nLevelB;
+end
+
+
+--是否出阵
+function p.IsMarial(nPetId)
+    local lst, count    = MsgMagic.getRoleMatrixList();
+	local MartialUsers      = lst[1];
+    if(MartialUsers == nil) then
+        return 0;
+    end
+    for i,v in ipairs(MartialUsers) do
+        if(v == nPetId) then
+            return 1;
+        end
+    end
+    return 0;
+end
+

@@ -24,6 +24,7 @@
 #include "NDUtility.h"
 #include "define.h"
 #include "CCString.h"
+#include "NDDebugOpt.h"
 
 using namespace NDEngine;
 
@@ -201,40 +202,47 @@ int NDBaseRole::getFlagId(int index)
 
 void NDBaseRole::DrawRingImage(bool bDraw)
 {
-	if (IsKindOfClass (RUNTIME_CLASS(NDNpc))){
-	NDNpc* npc = (NDNpc*) this;
-	if (!npc->IsActionOnRing())
+	//change by tangziqin 不需要调用
+	return;
+#if 0
+	if (IsKindOfClass (RUNTIME_CLASS(NDNpc)))
 	{
-		return;
-	}
-}
-
-if (m_bFocus && bDraw)
-{
-	if (m_pkRingPic == NULL)
-	{
-		m_pkRingPic = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
-	}
-	CGSize sizeRing = m_pkRingPic->GetSize();
-
-	if (GetParent())
-	{
-		NDLayer *layer = (NDLayer*) GetParent();
-		CGSize sizemap = layer->GetContentSize();
-		if (!m_pkRidePet)
+		NDNpc* npc = (NDNpc*) this;
+		if (!npc->IsActionOnRing())
 		{
-			//m_picRing->DrawInRect(CGRectMake(GetPosition().x-13-8, GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
-		}
-		else
-		{
-			//m_picRing->DrawInRect(CGRectMake(ridepet->GetPosition().x-13-8, ridepet->GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
+			return;
 		}
 	}
-}
+
+	if (m_bFocus && bDraw)
+	{
+		if (m_pkRingPic == NULL)
+		{
+			m_pkRingPic = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
+		}
+		CGSize sizeRing = m_pkRingPic->GetSize();
+
+		if (GetParent())
+		{
+			NDLayer *layer = (NDLayer*) GetParent();
+			CGSize sizemap = layer->GetContentSize();
+			if (!m_pkRidePet)
+			{
+				//m_picRing->DrawInRect(CGRectMake(GetPosition().x-13-8, GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
+			}
+			else
+			{
+				//m_picRing->DrawInRect(CGRectMake(ridepet->GetPosition().x-13-8, ridepet->GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
+			}
+		}
+	}
+#endif
 }
 
 bool NDBaseRole::OnDrawBegin(bool bDraw)
 {
+	if (!NDDebugOpt::getDrawRoleEnabled()) return false;
+
 	NDNode *node = GetParent();
 	CGSize sizemap;
 
@@ -1272,6 +1280,10 @@ void NDBaseRole::SetShadowOffset(int iX, int iY)
 
 void NDBaseRole::HandleShadow(CGSize parentsize)
 {
+	//change by tangziqin 不存在shadow.png的图片
+	return;
+
+#if 0
 	if (!m_bShowShadow)
 	{
 		return;
@@ -1308,6 +1320,7 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 							+ NDDirector::DefaultDirector()->GetWinSize().height
 							- parentsize.height, sizeShadow.width,
 					sizeShadow.height));
+#endif
 }
 
 // void NDBaseRole::SetNormalAniGroup(int nLookface)

@@ -15,6 +15,7 @@
 #include <map>
 #include "NDPicture.h"
 #include "CCTextureCacheExt.h"
+#include "ScriptDefine.h"
 
 using namespace LuaPlus;
 namespace NDEngine {

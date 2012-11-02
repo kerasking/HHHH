@@ -590,6 +590,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\inc\NDUIEdit.h"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\inc\NDUIFrame.h"
 					>
 				</File>
@@ -731,6 +735,10 @@
 				</File>
 				<File
 					RelativePath="..\UI\src\NDUIDialog.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\src\NDUIEdit.cpp"
 					>
 				</File>
 				<File
