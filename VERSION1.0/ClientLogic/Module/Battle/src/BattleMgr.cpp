@@ -799,7 +799,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		m_pkBattle->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
 
 		mapLayer->showSwitchSprite(SWITCH_TO_BATTLE);
-		//mapLayer->SetBattleType(btBattleType);
+		mapLayer->setBattleType(btBattleType);
 
 		m_pkBattle->InitEudemonOpt();
 		m_pkBattle->sortFighterList();
@@ -1489,10 +1489,10 @@ void BattleMgr::quitBattle(bool bEraseOut/*=true*/)
 //		}
 		m_pkBattle = NULL;
 
-// 		if (NDMapMgrObj.isMonsterClear()&&battleType==BATTLE_TYPE_MONSTER){
-// 			NDLog("dynmap cleared");
-// 			//ScriptMgrObj.excuteLuaFunc("OnBattleFinish","AffixBossFunc",NDMapMgrObj.GetMotherMapID(), 1);
-// 		}
+		if (NDMapMgrObj.isMonsterClear()&&battleType==BATTLE_TYPE_MONSTER){
+			NDLog("dynmap cleared");
+			//ScriptMgrObj.excuteLuaFunc("OnBattleFinish","AffixBossFunc",NDMapMgrObj.GetMotherMapID(), 1);
+		}
 
 		NDPlayer::defaultHero().SetLocked(false);
 //		GameScene* gs = (GameScene*)NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene));
