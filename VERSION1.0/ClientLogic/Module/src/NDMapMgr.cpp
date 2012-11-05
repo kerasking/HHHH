@@ -1273,7 +1273,7 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 		(*pkData) >> btState; // 1¸ö×Ö½Ú±í×´Ì¬
 		unsigned char btCamp = 0;
 		(*pkData) >> btCamp;
-		CCString* pstrTemp = CCString::stringWithUTF8String(
+		NSString pstrTemp = CCString::stringWithUTF8String(
 				pkData->ReadUnicodeString().c_str());
 		std::string strName = pstrTemp->toStdString();
 

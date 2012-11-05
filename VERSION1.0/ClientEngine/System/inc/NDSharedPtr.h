@@ -87,7 +87,7 @@ public:
 		return (*this);
 	}
 
-	ThisType& operator=(const T* pkPointer)
+	ThisType& operator = (const T* pkPointer)
 	{
 		if (m_pkPointer != pkPointer)
 		{

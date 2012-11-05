@@ -1,7 +1,8 @@
-
 #include "ImageNumber.h"
 #include "NDUtility.h"
 #include "NDPath.h"
+#include "define.h"
+#include "NDSharedPtr.h"
 
 #define title_image (NDPath::GetImgPath("titles.png"))
 //#define title_image ([[NSString stringWithFormat:@"%s", NDPath::GetImgPath("titles.png")] UTF8String])
@@ -377,7 +378,7 @@ unsigned int ImageNumber::exp(unsigned int value, unsigned int n)
 void ImageNumber::NumberBits(unsigned int number, std::vector<unsigned int>& bits)
 {
 	bits.clear();
-	CCString *strNum = CCString::stringWithFormat("%u", number);
+	NSString strNum = CCString::stringWithFormat("%u", number);
 	unsigned int len = strNum->m_sString.length();
 
 	if (number == 0) 

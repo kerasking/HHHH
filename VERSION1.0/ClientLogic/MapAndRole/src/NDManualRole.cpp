@@ -271,7 +271,6 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 	NSString pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
 	NSString pString = CCString::stringWithFormat("%smodel_%d.spr", pstrAniPath->toStdString().c_str(), nModelID);
 	NDSprite::Initialization(pString->toStdString().c_str());
-	SAFE_DELETE(pstrAniPath);
 	m_bFaceRight = m_nDirect == 2;
 
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
