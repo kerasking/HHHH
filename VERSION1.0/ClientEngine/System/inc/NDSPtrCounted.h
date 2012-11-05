@@ -19,7 +19,7 @@ struct NDSPtrCounted
 	NDRefLong m_kUsed;
 	NDRefLong m_kWeak;
 
-	NDSPtrCounted(NDRefLong::count_type _use, NDRefLong::count_type _weak):
+	NDSPtrCounted(NDRefLong::CountType _use, NDRefLong::CountType _weak):
 	m_kUsed(_use),
 	m_kWeak(_weak)
 	{}

@@ -20,68 +20,65 @@ template<typename T> class NDWeakPtr;
 template<typename T>
 class NDWeakPtr
 {
-protected:
-	T* m_ptPointer;
-	NDSPtrCounted* m_pkCount;
 public:
 	NDWeakPtr()
 	{
-		m_ptPointer = NULL;
+		m_ptPointer = 0;
 		m_pkCount = 0;
 	}
 
 	NDWeakPtr(const NDSharedPtr<T>& right)
 	{
-		m_ptPointer = right.get();
+		m_ptPointer = right.GetPointer();
 		m_pkCount = NDSharedPtr<T>::_get_counted(right);
-		m_pkCount->m_kWeak.inc();
+		m_pkCount->m_kWeak.Increment();
 	}
 	NDWeakPtr(const NDWeakPtr<T>& right)
 	{
 		m_ptPointer = right.m_ptPointer;
 		m_pkCount = right.m_pkCount;
-		m_pkCount->m_kWeak.inc();
+		m_pkCount->m_kWeak.Increment();
 	}
 	~NDWeakPtr()
 	{
-		reset();
+		Reset();
 	}
 
-	NDWeakPtr<T>& operator=(const NDWeakPtr<T>& right)
+	NDWeakPtr<T>& operator=(const NDWeakPtr<T>& kRight)
 	{
-		reset();
-		m_ptPointer = right.m_ptPointer;
-		m_pkCount = right.m_pkCount;
-		m_pkCount->m_kWeak.inc();
+		Reset();
+		m_ptPointer = kRight.m_ptPointer;
+		m_pkCount = kRight.m_pkCount;
+		m_pkCount->m_kWeak.Increment();
 		return *this;
 	}
 
 	NDWeakPtr<T>& operator=(const NDSharedPtr<T>& right)
 	{
-		reset();
-		m_ptPointer = right.get();
+		Reset();
+		m_ptPointer = right.GetPointer();
 		m_pkCount = right._get_sp();
 
 		if(m_pkCount)
 		{
-			m_pkCount->m_kWeak.inc();
+			m_pkCount->m_kWeak.Increment();
 		}
 
 		return *this;
 	}
 
-	void reset()
+	void Reset()
 	{
-		if (m_pkCount && m_pkCount->m_kWeak.dec() == 0)
+		if (m_pkCount && m_pkCount->m_kWeak.Decrement() == 0)
 		{
 			delete m_pkCount;
 			m_pkCount = NULL;
 		}
 	}
 
-	T* get() const
+	T* GetPointer() const
 	{
-		if (!expired())
+		if (!Expired())
 		{
 			return m_ptPointer;
 		}
@@ -89,24 +86,31 @@ public:
 		return 0;
 	}
 
-	BOOL expired() const
+	bool Expired() const
 	{
-		return m_pkCount == NULL || m_pkCount->m_kUsed.get() == 0;
+		return m_pkCount == NULL || m_pkCount->m_kUsed.GetRef() == 0;
 	}
 
-	NDSharedPtr<T> lock() const
+	NDSharedPtr<T> Lock() const
 	{
-		if ( !expired() )
+		if ( !Expired() )
 		{
 			return NDSharedPtr<T>(*this);
 		}
-		return NDSharedPtr<T>(NULL);
+		return NDSharedPtr<T>(0);
 	}
 
 	NDSPtrCounted* _get_sp() const
 	{
 		return m_pkCount;
 	}
+
+protected:
+
+	T* m_ptPointer;
+	NDSPtrCounted* m_pkCount;
+
+private:
 };
 
 #endif

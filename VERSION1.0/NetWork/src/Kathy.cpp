@@ -67,7 +67,7 @@ KData convertToHex(const unsigned char *src, int len)
         int hi = (temp & 0xf0) / 16;
         int low = (temp & 0xf);
 		
-        char buf[4];
+		char buf[4] = {0};
         buf[0] = '\0';
 		
         sprintf( buf, "%x%x", hi, low );

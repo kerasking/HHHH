@@ -15,45 +15,45 @@
 class NDRefLong
 {
 public:
-	typedef volatile long count_type;
+	typedef volatile long CountType;
 
-	explicit NDRefLong(count_type ref)
+	explicit NDRefLong(CountType nRef)
 	{
-		m_nRef = ref;
+		m_nRef = nRef;
 	}
 
-	long inc()
+	long Increment()
 	{
 		return InterlockedIncrement(&m_nRef);
 	}
 	
-	long dec()
+	long Decrement()
 	{
 		return InterlockedDecrement(&m_nRef);
 	}
 	long operator++()
 	{
-		return 	inc();
+		return Increment();
 	}
 	long operator--()
 	{
-		return dec();
+		return Decrement();
 	}
 	long operator++(int)
 	{
-		return inc() - 1;
+		return Increment() - 1;
 	}
 	long operator--(int)
 	{
-		return dec() + 1;
+		return Decrement() + 1;
 	}
 public:
-	count_type get() const
+	CountType GetRef() const
 	{
 		return m_nRef;
 	}
 private:
-	count_type m_nRef;
+	CountType m_nRef;
 };
 
 #endif
