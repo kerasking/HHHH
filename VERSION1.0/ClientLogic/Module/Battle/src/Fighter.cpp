@@ -20,19 +20,68 @@
 #include <sstream>
 #include "CPet.h"
 #include "NDDirector.h"
+#include "NDPath.h"
 using namespace NDEngine;
 
-//IMPLEMENT_CLASS(Fighter,NDBaseFighter);
-
-const int LEFT_BACK_X = 120; // 左边后排 x 坐标
-const int LEFT_FRONT_X = 160; // 左边前排 x 坐标
-const int RIGHT_FRONT_X = 320; // 右边后排 x 坐标
-const int RIGHT_BACK_X = 360; // 右边前排 x 坐标
-
-const int POS_INTERVAL_Y = 53; // y 轴间隔
+// const int LEFT_BACK_X = 120; // 左边后排 x 坐标
+// const int LEFT_FRONT_X = 160; // 左边前排 x 坐标
+// const int RIGHT_FRONT_X = 320; // 右边后排 x 坐标
+// const int RIGHT_BACK_X = 360; // 右边前排 x 坐标
+// 
+// const int POS_INTERVAL_Y = 53; // y 轴间隔
 
 const int STEP = 64;
+//++Guosen 2012.6.29//
+// 7 4 1    1 4 7
+// 8 5 2    2 5 8
+// 9 6 3    3 6 9
+// g d a    a d g
+// h e b    b e h
+// i f c    c f i
+//设置作战位置时的偏移// a,b,c~g,h,i为施放移位技能后，各军移动的位置
+//以下坐标点是960*640时算出的位置  x=480±g_iXOffset[pos]
+static int g_iXOffset[] = { //
+	//3*3 九宫格
+	//160, 160, 160,
+	//280, 280, 280,
+	//400, 400, 400,
+	//-透视
+	100, 130, 160,
+	220, 250, 280,
+	340, 370, 400,
+	120, 150, 180,//新增各军移动的位置
+	240, 270, 300,
+	360, 390, 420,
+};
+//y=g_iYOffset[pos]
+static int g_iYOffset[] = { //
+	//3*3 九宫格
+	//360, 480, 600, 
+	//360, 480, 600, 
+	//360, 480, 600, 
+	//-透视
+	390, 480, 600, 
+	390, 480, 600, 
+	390, 480, 600, 
+	410, 500, 620,//新增各军移动的位置
+	410, 500, 620, 
+	410, 500, 620,
+};
+//状态小图标宽高
+#define STATUS_ICON_WIDTH		(32)
+#define STATUS_ICON_HEIGHT		(32)
 
+//交战者血条/气条的宽高
+#define HP_BAR_WIDTH	(120-STATUS_ICON_WIDTH)
+#define HP_BAR_HEIGHT	(12-4)
+
+#define STATUS_ICON_IMAGE		"Res00/StatusIcons1.png"
+
+#define HP_BAR_FRO_IMAGE		"Res00/General/line/icon_TGauge4.png"
+#define MP_BAR_FRO_IMAGE		"Res00/General/line/icon_TGauge5.png"
+#define HPMP_BAR_BG_IMAGE		"Res00/General/line/icon_TGauge3.png"
+
+//===========================================================================
 Fighter::Fighter()
 {
 	m_pkActionWordImage = NULL;
@@ -83,7 +132,7 @@ Fighter::Fighter()
 	m_bShowName = false;
 	m_pkSkillNameLabel = NULL;
 	m_pkFighterNameLabel = NULL;
-//	m_imgHurtNum = NULL;
+	m_pkImgHurtNum = NULL;
 	m_pkCritImage = NULL;
 	m_pkBojiImage = NULL;
 	m_eSkillAtkType = ATKTYPE_NEAR;
@@ -93,7 +142,19 @@ Fighter::Fighter()
 	m_nHurtInprotect = 0;
 
 	m_pkRareMonsterEffect = NULL;
-	m_testVa = 1;
+	
+	mana_full_ani=NULL;
+	dritical_ani=NULL;
+	dodge_ani=NULL;
+	block_ani=NULL;
+	m_bIsCriticalHurt=false;
+	m_bIsAtkDritical=false;
+	m_bIsDodge=false;
+	m_bIsBlock=false;
+	m_nRoleInitialHeight	= 0;
+	m_iIconsXOffset			= 0;
+	m_pHPBar				= NULL;
+	m_pMPBar				= NULL;
 }
 
 void Fighter::releaseStatus()
@@ -131,101 +192,95 @@ Fighter::~Fighter()
 		}
 	}
 
-//	CC_SAFE_DELETE(m_imgHurtNum); ///< 临时性注释 郭浩
+	CC_SAFE_DELETE(m_pkImgHurtNum);
 	CC_SAFE_DELETE (m_pkCritImage);
 	CC_SAFE_DELETE (m_pkBojiImage);
 }
 
-int countY(int teamAmount, BATTLE_GROUP group, int t, int pos)
-{
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
-	int st = pos - 1;
-	int team = t - 1;
-	if (teamAmount <= 2)
-	{
-
-		float h = winsize.height * 5 / 6;
-		return winsize.height / 6 + h / 4 + (h / 4) * (st % 3);
-
-	}
-	else
-	{
-		float teamH = (winsize.height - winsize.height / 10 - 5) / 3;
-		float teamY = winsize.height / 10 + 5 + teamH * (team % 3);
-
-		return teamY + teamH / 4 + teamH / 4 * (st % 3);
-
-		float teamW = winsize.width * 2 / 9;
-		float teamOffset = teamW / 4;
-		//		NDLog("team:%d,pos:%d",team,st);
-		//		NDLog("x:%d,y:%d",originX,originY);
-	}
+//++Guosen 2012.6.29//计算交战者位置的X坐标
+int countY(int teamAmount,BATTLE_GROUP group,int t,int pos ){
+	//	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	//    int wsh = winsize.height;
+	//    winsize.height /= 2;
+	//	int st=pos-1;
+	//	int team=t-1;
+	//	if(teamAmount<=2){
+	//		
+	//		float h=winsize.height*5/6;
+	//        int ti = winsize.height/6+h/4+(h/4)*(st%3);
+	//		return wsh-ti;
+	//
+	//	}else{
+	//		float teamH=(winsize.height-winsize.height/10-5)/3;
+	//		float teamY=winsize.height/10+5+teamH*(team%3);
+	//		
+	//		 return winsize.height-teamY+teamH/4+teamH/4*(st%3);
+	//		
+	//		float teamW=winsize.width*2/9;
+	//		float teamOffset=teamW/4;
+	//		//		NDLog(@"team:%d,pos:%d",team,st);
+	//		//		NDLog(@"x:%d,y:%d",this->originX,this->originY);
+	//	}
+	CGSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
+	int iY			= g_iYOffset[pos-1];
+	return iY*winsize.height/640;
 }
 
-int countX(int teamAmount, BATTLE_GROUP group, int t, int pos)
-{
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
-	int st = pos - 1;
-	int team = t - 1;
-	if (teamAmount <= 2)
+//++Guosen 2012.6.29//计算交战者位置的Y坐标
+int countX(int teamAmount,BATTLE_GROUP group,int t,int pos ){
+	//	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	//	int st=pos-1;
+	//	int team=t-1;
+	//	if(teamAmount<=2){
+	//
+	//		
+	//		if (group == BATTLE_GROUP_ATTACK) // 左边
+	//		{
+	//			return winsize.width/2-winsize.width/8-winsize.width/8*(st/3);
+	//		}
+	//		else // 右边
+	//		{
+	//			return winsize.width/2+winsize.width/8+winsize.width/8*(st/3);
+	//		}
+	//	}else{
+	//
+	//		float teamW=winsize.width*2/9;
+	//		float teamOffset=teamW/4;
+	//		if (group == BATTLE_GROUP_ATTACK) // 左边
+	//		{
+	//			
+	//			float teamX=teamOffset*(team%3);
+	//			
+	//			return teamX+teamW-teamW/4-teamW/4*(st/3);
+	//		}
+	//		else // 右边
+	//		{
+	//			float teamX=teamW+teamW*0.8+teamW*(team/3)+teamOffset*(team%3);
+	//			
+	//			return teamX+teamW/4+teamW/4*(st/3);
+	//			
+	//		}
+	//		//		NDLog(@"team:%d,pos:%d",team,st);
+	//		//		NDLog(@"x:%d,y:%d",this->originX,this->originY);
+	//	}
+	CGSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
+	int iXOffset	= g_iXOffset[pos-1];
+	int iX			= 0;
+	if (group == BATTLE_GROUP_ATTACK) // 左边
 	{
-
-		if (group == BATTLE_GROUP_ATTACK) // 左边
-		{
-			return winsize.width / 2 - winsize.width / 8
-					- winsize.width / 8 * (st / 3);
-		}
-		else // 右边
-		{
-			return winsize.width / 2 + winsize.width / 8
-					+ winsize.width / 8 * (st / 3);
-		}
+		iX = 480 - iXOffset;
 	}
 	else
 	{
-
-		float teamW = winsize.width * 2 / 9;
-		float teamOffset = teamW / 4;
-		if (group == BATTLE_GROUP_ATTACK) // 左边
-		{
-
-			float teamX = teamOffset * (team % 3);
-
-			return teamX + teamW - teamW / 4 - teamW / 4 * (st / 3);
-		}
-		else // 右边
-		{
-			float teamX = teamW + teamW * 0.8 + teamW * (team / 3)
-					+ teamOffset * (team % 3);
-
-			return teamX + teamW / 4 + teamW / 4 * (st / 3);
-
-		}
-		//		NDLog("team:%d,pos:%d",team,st);
-		//		NDLog("x:%d,y:%d",originX,originY);
+		iX = 480 + iXOffset;
 	}
+	return iX*winsize.width/960;
 }
 
 void Fighter::setPosition(int teamAmout)
 {
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
-//	int st=m_info.btStations-1;
-//	int team=m_info.btBattleTeam-1;
-	m_nOriginX = countX(teamAmout, m_kInfo.group, m_kInfo.btBattleTeam,
-			m_kInfo.btStations);
-	m_nOriginY = countY(teamAmout, m_kInfo.group, m_kInfo.btBattleTeam,
-			m_kInfo.btStations);
-
-//	if (m_info.fighterType == FIGHTER_TYPE_MONSTER || m_info.fighterType == FIGHTER_TYPE_ELITE_MONSTER) {// 怪物的话，要错开站位
-//		if (m_info.line == BATTLE_LINE_BACK) // 后排
-//		{
-//			originY -= 8;
-//		}
-//		else // 前排
-//		{
-//			originY += 8;
-//		}
-//	}
+	m_nOriginX = countX(teamAmout, m_kInfo.group, m_kInfo.btBattleTeam, m_kInfo.btStations);
+	m_nOriginY = countY(teamAmout, m_kInfo.group, m_kInfo.btBattleTeam, m_kInfo.btStations);
 
 	m_nX = m_nOriginX;
 	m_nY = m_nOriginY;
@@ -239,40 +294,39 @@ void Fighter::setPosition(int teamAmout)
 void Fighter::updatePos()
 {
 	m_pkRole->SetPositionEx(ccp(m_nX, m_nY));
-	if (!isVisibleStatus)
-	{
-		NDUILabel* lbHover = (NDUILabel*) m_pkParent->GetChild(
-				TAG_HOVER_MSG);
-		if (lbHover)
-		{
-			CGSize sizeStr = getStringSize(lbHover->GetText().c_str(),
-					DEFAULT_FONT_SIZE);
-			lbHover->SetFrameRect(
-					CGRectMake(m_nX - sizeStr.width / 2, m_nY - m_pkRole->GetHeight(),
-							sizeStr.width, sizeStr.height));
+	if (!isVisibleStatus) {
+		NDUILabel* lbHover = (NDUILabel*)m_pkParent->GetChild(TAG_HOVER_MSG);
+		if (lbHover) {
+			CGSize sizeStr = getStringSize(lbHover->GetText().c_str(), DEFAULT_FONT_SIZE * FONT_SCALE);
+			// 改成固定值
+			//lbHover->SetFrameRect(CGRectMake(x - sizeStr.width / 2, y - m_role->GetHeight(), sizeStr.width, sizeStr.height));
+			lbHover->SetFrameRect(CGRectMake(m_nX - sizeStr.width / 2, m_nY - m_nRoleInitialHeight, sizeStr.width, sizeStr.height));
 		}
 	}
-	//NDUILabel* lbName = (NDUILabel*)m_parent->GetChild(TAG_FIGHTER_NAME);
-	if (m_pkFighterNameLabel)
-	{
-		CGSize sizeStr = getStringSize(m_pkFighterNameLabel->GetText().c_str(),
-				DEFAULT_FONT_SIZE);
-		m_pkFighterNameLabel->SetFrameRect(
-				CGRectMake(m_nX - sizeStr.width / 2,
-						m_nY - m_pkRole->GetHeight() - sizeStr.height, sizeStr.width,
-						sizeStr.height));
+	//NDUILabel* lbName = (NDUILabel*)this->m_parent->GetChild(TAG_FIGHTER_NAME);
+	if (m_pkFighterNameLabel) {
+		CGSize sizeStr = getStringSize(m_pkFighterNameLabel->GetText().c_str(), DEFAULT_FONT_SIZE * FONT_SCALE);
+		// 所有怪物武将的姓名位置改成固定值
+		//--this->lb_FighterName->SetFrameRect(CGRectMake(x - sizeStr.width / 2, y - m_role->GetHeight() - sizeStr.height, sizeStr.width, sizeStr.height));
+		m_pkFighterNameLabel->SetFrameRect(CGRectMake(m_nX - sizeStr.width / 2, m_nY - m_nRoleInitialHeight - sizeStr.height - HP_BAR_HEIGHT - 2, sizeStr.width, sizeStr.height));
 	}
 
-	if (m_pkSkillNameLabel)
-	{
-		CGPoint pt = m_pkRole->GetPosition();
-		CGSize sizeStr = getStringSize(m_pkSkillNameLabel->GetText().c_str(),
-				DEFAULT_FONT_SIZE);
-		m_pkSkillNameLabel->SetFrameRect(
-				CGRectMake(pt.x + (m_pkRole->GetWidth() / 2),
-						pt.y - (m_pkRole->GetHeight() / 2) - sizeStr.height,
-						sizeStr.width, sizeStr.height));
+	if (m_pkSkillNameLabel){
+		//CGPoint pt = this->m_role->GetPosition();
+		CGSize sizeStr =getStringSize(m_pkSkillNameLabel->GetText().c_str(), DEFAULT_FONT_SIZE * FONT_SCALE);
+		//++Guosen 2012.6.28//设置技能名的显示位置
+		//if(this->m_info.group == BATTLE_GROUP_ATTACK)
+		//{
+		//	lb_skillName->SetFrameRect(CGRectMake(pt.x +(FIGHTER_WIDTH/2), pt.y - (FIGHTER_HEIGHT/2) - sizeStr.height, sizeStr.width, sizeStr.height));
+		//}else{
+		//	lb_skillName->SetFrameRect(CGRectMake(pt.x -(FIGHTER_WIDTH/2)-sizeStr.width, pt.y - (FIGHTER_HEIGHT/2) - sizeStr.height, sizeStr.width, sizeStr.height));
+		//}
+		// 所有怪物武将的技能名位置改成固定值
+		//--lb_skillName->SetFrameRect(CGRectMake(pt.x-sizeStr.width/2 , pt.y-FIGHTER_HEIGHT-sizeStr.height*2, sizeStr.width, sizeStr.height));
+		m_pkSkillNameLabel->SetFrameRect(CGRectMake(m_nX-sizeStr.width/2 , m_nY - m_nRoleInitialHeight - HP_BAR_HEIGHT - 2 - sizeStr.height*2, sizeStr.width, sizeStr.height));
+		//++
 	}
+	UpdateStatusIconsPosition();
 }
 
 void Fighter::reStoreAttr()
@@ -301,11 +355,22 @@ void Fighter::reStoreAttr()
 	m_bIsStatusOverOK = false;
 	m_bShowName = false;
 
+	m_bIsDodge = false;
+	m_bIsCriticalHurt = false;
+	m_bIsAtkDritical = false;
+	m_bIsBlock = false;
+
 	m_kInfo.nLife = m_kInfo.original_life;
+	m_kInfo.nMana = m_kInfo.original_mana;
 	GetRole()->m_nLife = m_kInfo.nLife;
 	GetRole()->m_nMaxLife = m_kInfo.nLifeMax;
 	GetRole()->m_nMana = m_kInfo.nMana;
 	GetRole()->m_nMaxMana = m_kInfo.nManaMax;
+
+	mana_full_ani = NULL;
+	dritical_ani = NULL;
+	dodge_ani = NULL;
+	block_ani = NULL;
 }
 
 void Fighter::LoadEudemon()
@@ -338,43 +403,46 @@ void Fighter::LoadRole(int nLookFace, int lev, const string& name)
 	m_bRoleShouldDelete = true;
 	NDManualRole *role = new NDManualRole;
 	role->InitRoleLookFace(nLookFace);
+	role->SetCurrentAnimation(MANUELROLE_BATTLE_STAND, role->m_bFaceRight);
 	m_pkRole = role;
 	m_pkRole->m_strName = name;
 	m_pkRole->m_nLevel = lev;
 	role->SetNonRole(false);
+	m_nRoleInitialHeight = m_pkRole->GetHeight();
+	if( this->m_info.group == BATTLE_GROUP_ATTACK )
+	{
+		m_iIconsXOffset = -HP_BAR_WIDTH/2 - STATUS_ICON_WIDTH;//-m_role->GetWidth()/2 - STATUS_ICON_WIDTH;
+	}
+	else
+	{
+		m_iIconsXOffset = HP_BAR_WIDTH/2;//m_role->GetWidth()/2;
+	}
 }
 
 void Fighter::LoadMonster(int nLookFace, int lev, const string& name)
 {
 	m_bRoleShouldDelete = true;
-	//nLookFace=4000000;
-
-//	if(nLookFace/100000000%10>0&&nLookFace/100000000%10<=2){//人物
 	NDManualRole *role = new NDManualRole;
 	role->Initialization(nLookFace, true);
+	role->SetCurrentAnimation(MANUELROLE_BATTLE_STAND, role->m_bFaceRight);
 	role->m_nLookface = nLookFace;
 	m_pkRole = role;
 	m_eLookfaceType = LOOKFACE_MANUAL;
-//	}else if (NDMonster::isRoleMonster(nLookFace)) {//人形怪
-//		NDMonster *role = new NDMonster;
-//		role->m_bRoleMonster = true;
-//		role->InitNonRoleData(name, nLookFace, lev);
-//		role->SetNonRole(false);
-//		m_role=role;
-//		m_lookfaceType=LOOKFACE_MANUAL;
-//	} else {
-//		NDMonster *role = new NDMonster;
-//		role->SetNormalAniGroup(nLookFace);
-//		role->SetNonRole(true);
-//		m_role=role;
-//		m_lookfaceType=LOOKFACE_MONSTER;
-//	}
 
 	m_strFighterName = name;
 	m_pkRole->m_strName = name;
 	m_pkRole->m_nLevel = lev;
 
-	//m_info.bRoleMonster = role->m_bRoleMonster;
+	//this->m_info.bRoleMonster = role->m_bRoleMonster;
+	m_nRoleInitialHeight = m_pkRole->GetHeight();
+	if( this->m_info.group == BATTLE_GROUP_ATTACK )
+	{
+		m_iIconsXOffset = -HP_BAR_WIDTH/2 - STATUS_ICON_WIDTH;//-m_role->GetWidth()/2 - STATUS_ICON_WIDTH;
+	}
+	else
+	{
+		m_iIconsXOffset = HP_BAR_WIDTH/2;//m_role->GetWidth()/2;
+	}
 }
 
 /*void Fighter::GetCurSubAniGroup(VEC_SAG& sagList)
@@ -438,14 +506,13 @@ void Fighter::draw()
 {
 	drawRareMonsterEffect (isVisibleStatus);
 	m_pkRole->RunAnimation(isVisibleStatus);
-	//RunBattleSubAnimation(m_pkRole, this); ///<没实现？ 郭浩
+	m_pkRole->RunBattleSubAnimation(this);
 	drawStatusAniGroup();
 }
 
 void Fighter::drawStatusAniGroup()
 {
-	for (VEC_FIGHTER_STATUS_IT it = m_vBattleStatusList.begin();
-			it != m_vBattleStatusList.end(); it++)
+	for (VEC_FIGHTER_STATUS_IT it = m_vBattleStatusList.begin(); it != m_vBattleStatusList.end(); it++)
 	{
 		if ((*it)->m_pkAniGroup)
 		{
@@ -454,8 +521,57 @@ void Fighter::drawStatusAniGroup()
 			{
 				continue;
 			}
-			//	NDEngine::DrawSubAnimation(role, *((*it)->m_aniGroup)); ///< 临时性注释 郭浩
+			role->DrawSubAnimation(*((*it)->m_pkAniGroup));
 		}
+	}
+
+	if ( m_info.nMana >= m_info.nManaMax )
+	{
+		if( !mana_full_ani )
+		{//气条满，爆气动画
+			mana_full_ani = new NDSprite;
+			stringstream ss;
+			ss << "sm_effect_20.spr";
+			mana_full_ani->Initialization((NDPath::GetAniPath(ss.str().c_str())).c_str());
+			mana_full_ani->SetCurrentAnimation(0, false);
+			m_pkRole->GetParent()->AddChild(mana_full_ani);
+            
+            //爆气音效
+            ScriptMgrObj.excuteLuaFunc("PlayEffectSound", "Music",1018);
+            
+			NDLog(@"add mana full ani");
+		}
+		mana_full_ani->SetPosition(ccp(m_nX, m_nY));
+		mana_full_ani->RunAnimation(true);
+	}
+	else if (mana_full_ani)
+	{
+		NDLog(@"delete mana_full_ani");
+		SAFE_DELETE(mana_full_ani);
+		mana_full_ani = NULL;
+	}
+	
+	if (m_bIsAtkDritical)
+	{
+		/*if(!dritical_ani)
+		{
+			dritical_ani = new NDSprite;
+			stringstream ss;
+			ss << "sm_effect_" << EFFECT_DRITICAL << ".spr";
+			dritical_ani->Initialization(NDPath::GetAniPath(ss.str().c_str()));
+			dritical_ani->SetCurrentAnimation(0, false);
+			m_role->GetParent()->AddChild(dritical_ani);
+			NDLog(@"add dritical ani");
+		}
+		dritical_ani->SetPosition(ccp(x,y-FIGHTER_HEIGHT));
+		dritical_ani->RunAnimation(true);
+		if (dritical_ani->IsAnimationComplete())
+		{
+			isAtkDritical=false;
+			NDLog(@"delete dritical_ani");
+			SAFE_DELETE(dritical_ani);
+			dritical_ani=NULL;
+		}*/
 	}
 }
 
@@ -676,7 +792,7 @@ void Fighter::setCurrentHP(int hp)
 	int currentId = BattleMgrObj.GetBattle()->GetCurrentShowFighterId();
 	if (currentId == m_kInfo.idObj)
 	{
-		//ScriptMgrObj.excuteLuaFunc("UpdateHp","FighterInfo",m_info.nLife,m_info.nLifeMax); ///< 临时性注释 郭浩
+		ScriptMgrObj.excuteLuaFunc("UpdateHp","FighterInfo",m_info.nLife,m_info.nLifeMax);
 	}
 }
 
@@ -686,10 +802,6 @@ void Fighter::setCurrentMP(int mp)
 	{
 		m_kInfo.nMana = 0;
 	}
-	else if (mp > m_kInfo.nManaMax)
-	{
-		m_kInfo.nMana = m_kInfo.nManaMax;
-	}
 	else
 	{
 		m_kInfo.nMana = mp;
@@ -698,7 +810,7 @@ void Fighter::setCurrentMP(int mp)
 	int currentId = BattleMgrObj.GetBattle()->GetCurrentShowFighterId();
 	if (currentId == m_kInfo.idObj)
 	{
-		//ScriptMgrObj.excuteLuaFunc("UpdateMp","FighterInfo",m_info.nMana,m_info.nManaMax); ///< 临时性注释 郭浩
+		ScriptMgrObj.excuteLuaFunc("UpdateMp","FighterInfo",m_info.nMana,m_info.nManaMax);
 	}
 }
 
@@ -717,17 +829,31 @@ void Fighter::showFighterName(bool b)
 			m_pkFighterNameLabel = new NDUILabel;
 			m_pkFighterNameLabel->Initialization();
 			//lb_FighterName->SetTag(TAG_FIGHTER_NAME);
-			m_pkFighterNameLabel->SetFontColor(ccc4(255, 255, 255, 255));
+
+			//** chh 2012-09-05 **//
+			//m_pkFighterNameLabel->SetFontColor(ccc4(255, 255, 255, 255));
+			ccColor4B cColor4 = ScriptMgrObj.excuteLuaFuncRetColor4("GetColor", "Item", m_info.nQuality);
+			m_pkFighterNameLabel->SetFontColor(cColor4);
+
 			m_pkFighterNameLabel->SetText(GetRole()->m_strName.c_str());
 			m_pkFighterNameLabel->SetFontSize(DEFAULT_FONT_SIZE);
-			CGSize sizefighterName = getStringSize(GetRole()->m_strName.c_str(),
-					DEFAULT_FONT_SIZE);
+			CGSize sizefighterName = getStringSize(GetRole()->m_strName.c_str(), DEFAULT_FONT_SIZE*FONT_SCALE);
 			//fighterName->SetTag(TAG_FIGHTER_NAME);
 			m_pkFighterNameLabel->SetFrameRect(
 					CGRectMake(pt.x - sizefighterName.width / 2,
-							pt.y - m_pkRole->GetHeight() - sizefighterName.height,
+							pt.y - FIGHTER_HEIGHT - sizefighterName.height,
 							sizefighterName.width, sizefighterName.height));
 			m_pkParent->AddChild(m_pkFighterNameLabel);
+			//在此创建生命条及士气条空间++Guosen 2012.7.27
+			this->m_pHPBar	= new CUIExp;
+			this->m_pHPBar->Initialization( NDPath::GetImgPath( HPMP_BAR_BG_IMAGE ).c_str(), NDPath::GetImgPath( HP_BAR_FRO_IMAGE ).c_str() );
+			this->m_pHPBar->SetStyle( 2 );
+			this->m_pMPBar	= new CUIExp;
+			this->m_pMPBar->Initialization( NDPath::GetImgPath( HPMP_BAR_BG_IMAGE ).c_str(), NDPath::GetImgPath( MP_BAR_FRO_IMAGE ).c_str() );
+			this->m_pMPBar->SetStyle( 2 );
+			m_pkParent->AddChild(m_pHPBar);
+			m_pkParent->AddChild(m_pMPBar);
+			drawHPMP();
 		}
 	}
 	else
@@ -737,6 +863,18 @@ void Fighter::showFighterName(bool b)
 			m_pkFighterNameLabel->RemoveFromParent(true);
 			m_pkFighterNameLabel = NULL;
 		}
+		if ( m_pHPBar )
+		{
+			this->m_pHPBar->RemoveFromParent(true);
+			this->m_pHPBar	= NULL;
+		}
+		if ( m_pMPBar )
+		{
+			this->m_pMPBar->RemoveFromParent(true);
+			this->m_pMPBar	= NULL;
+		}
+		ClearAllStatusIcons();
+
 	}
 	m_bShowName = b;
 }
@@ -748,16 +886,13 @@ void Fighter::showSkillName(bool b)
 		CGPoint pt = m_pkRole->GetPosition();
 		m_pkSkillNameLabel = new NDUILabel;
 		m_pkSkillNameLabel->Initialization();
-		m_pkSkillNameLabel->SetFontColor(ccc4(254, 3, 9, 255));
+		m_pkSkillNameLabel->SetFontColor(ccc4(0xff, 0xd7, 0, 255));//(ccc4(254, 3, 9, 255));//++Guosen 2012.6.28//设置技能名字体颜色
 		m_pkSkillNameLabel->SetText(m_strSkillName.c_str());
-		CGSize sizeSkillName = getStringSize(m_strSkillName.c_str(),
-				DEFAULT_FONT_SIZE);
-		//lb_skillName->SetTag(TAG_SKILL_NAME);
 		m_pkSkillNameLabel->SetFontSize(DEFAULT_FONT_SIZE);
-		m_pkSkillNameLabel->SetFrameRect(
-				CGRectMake(pt.x + (m_pkRole->GetWidth() / 2),
-						pt.y - (m_pkRole->GetHeight() / 2) - sizeSkillName.height,
-						sizeSkillName.width, sizeSkillName.height));
+		CGSize sizeSkillName = getStringSize(m_strSkillName.c_str(), DEFAULT_FONT_SIZE*FONT_SCALE);
+		//++Guosen 2012.6.28//设置技能名的显示位置
+		//lb_skillName->SetTag(TAG_SKILL_NAME);
+		m_pkSkillNameLabel->SetFrameRect(CGRectMake(pt.x-sizeSkillName.width/2 , pt.y-FIGHTER_HEIGHT-sizeSkillName.height*2, sizeSkillName.width, sizeSkillName.height));
 		m_pkParent->AddChild(m_pkSkillNameLabel);
 	}
 	else
@@ -770,90 +905,92 @@ void Fighter::showSkillName(bool b)
 	}
 }
 
-void Fighter::showActionWord(ACTION_WORD index)
-{
-	if (m_pkActionWordImage)
-	{
-		return;
-	}
+//--Guosen 2012.6.28//不显示动作名称（防御，逃跑，闪避）
+// void Fighter::showActionWord(ACTION_WORD index)
+// {
+// 	if (m_pkActionWordImage)
+// 	{
+// 		return;
+// 	}
+// 
+// 	NDPicture* pic = NULL;
+// 	switch (index)
+// 	{
+// 	case AW_DEF:
+// 		pic = (m_pkParent->getActionWord(AW_DEF));
+// 		break;
+// 	case AW_FLEE:
+// 		pic = (m_pkParent->getActionWord(AW_FLEE));
+// 		break;
+// 	case AW_DODGE:
+// 		pic = (m_pkParent->getActionWord(AW_DODGE));
+// 		break;
+// 	default:
+// 		break;
+// 	}
+// 
+// 	if (!pic)
+// 	{
+// 		return;
+// 	}
+// 
+// 	CGSize size = pic->GetSize();
+// 
+// 	m_pkActionWordImage = new NDUIImage;
+// 	m_pkActionWordImage->Initialization();
+// 	m_pkActionWordImage->SetPicture(pic);
+// 	m_pkActionWordImage->SetFrameRect(
+// 			CGRectMake(m_nX - size.width / 2, m_nY - m_pkRole->GetHeight(),
+// 					size.width, size.height));
+// 	m_pkParent->AddChild(m_pkActionWordImage);
+// }
 
-	NDPicture* pic = NULL;
-	switch (index)
-	{
-	case AW_DEF:
-		pic = (m_pkParent->getActionWord(AW_DEF));
-		break;
-	case AW_FLEE:
-		pic = (m_pkParent->getActionWord(AW_FLEE));
-		break;
-	case AW_DODGE:
-		pic = (m_pkParent->getActionWord(AW_DODGE));
-		break;
-	default:
-		break;
-	}
-
-	if (!pic)
-	{
-		return;
-	}
-
-	CGSize size = pic->GetSize();
-
-	m_pkActionWordImage = new NDUIImage;
-	m_pkActionWordImage->Initialization();
-	m_pkActionWordImage->SetPicture(pic);
-	m_pkActionWordImage->SetFrameRect(
-			CGRectMake(m_nX - size.width / 2, m_nY - m_pkRole->GetHeight(),
-					size.width, size.height));
-	m_pkParent->AddChild(m_pkActionWordImage);
-}
-
-void Fighter::drawActionWord()
-{
-	//if (!m_role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
-//	{
-//		NDLog("dfdsfdsf");
-//	}
-	if (isAlive())
-	{
-		switch (m_action)
-		{
-		case FLEE_FAIL:
-		case FLEE_SUCCESS:
-			if (isBeginAction() && !isActionOK())
-			{
-				showActionWord(AW_FLEE);
-				return;
-			}
-			break;
-		case DEFENCE:
-			showActionWord(AW_DEF);
-			return;
-		default:
-			break;
-		}
-
-		if (m_bIsDodgeOK)		//&& isBeginAction())
-		{
-			showActionWord(AW_DODGE);
-			return;
-		}
-
-		if (m_bIsDefenceOK)
-		{
-			showActionWord(AW_DEF);
-			return;
-		}
-	}
-
-	// 不显示
-	if (m_pkActionWordImage)
-	{
-		m_pkParent->RemoveChild(m_pkActionWordImage, true);
-		m_pkActionWordImage = NULL;
-	}
-}
+//--Guosen 2012.6.28//不显示动作名称（防御，逃跑，闪避）
+// void Fighter::drawActionWord()
+// {
+// 	//if (!m_role->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) 
+// //	{
+// //		NDLog("dfdsfdsf");
+// //	}
+// 	if (isAlive())
+// 	{
+// 		switch (m_action)
+// 		{
+// 		case FLEE_FAIL:
+// 		case FLEE_SUCCESS:
+// 			if (isBeginAction() && !isActionOK())
+// 			{
+// 				showActionWord(AW_FLEE);
+// 				return;
+// 			}
+// 			break;
+// 		case DEFENCE:
+// 			showActionWord(AW_DEF);
+// 			return;
+// 		default:
+// 			break;
+// 		}
+// 
+// 		if (m_bIsDodgeOK)		//&& isBeginAction())
+// 		{
+// 			showActionWord(AW_DODGE);
+// 			return;
+// 		}
+// 
+// 		if (m_bIsDefenceOK)
+// 		{
+// 			showActionWord(AW_DEF);
+// 			return;
+// 		}
+// 	}
+// 
+// 	// 不显示
+// 	if (m_pkActionWordImage)
+// 	{
+// 		m_pkParent->RemoveChild(m_pkActionWordImage, true);
+// 		m_pkActionWordImage = NULL;
+// 	}
+// }
 
 void Fighter::setDieOK(bool bOK)
 {
@@ -880,7 +1017,7 @@ void Fighter::drawHurtNumber()
 	{
 		HurtNumber& hn = m_vHurtNum.at(0);
 
-		int w = GetNumBits(abs(hn.getHurtNum())) * 11;
+		//int w = GetNumBits(abs(hn.getHurtNum())) * 11;
 
 		if (hn.isNew())
 		{
@@ -889,86 +1026,68 @@ void Fighter::drawHurtNumber()
 			// 初始化去血提示
 			if (hn.getHurtNumberY() > 0)
 			{
-
-				//m_imgHurtNum = new ImageNumber; ///< 临时性注释 郭浩
-				//m_imgHurtNum->Initialization(); ///< 临时性注释 郭浩
+				m_pkImgHurtNum = new ImageNumber;
+				m_pkImgHurtNum->Initialization();
 
 				if (m_bHardAtk)
 				{
-					NDPicture* picBaoJi = m_pkParent->GetBaoJiPic();
+					/*NDPicture* picBaoJi = m_pkParent->GetBaoJiPic();
 					m_pkCritImage = new NDUIImage;
 					m_pkCritImage->Initialization();
 					m_pkCritImage->SetPicture(picBaoJi);
-					m_pkParent->AddChild(m_pkCritImage);
+					m_pkParent->AddChild(m_pkCritImage);*/
 
-					//m_imgHurtNum->SetBigRedNumber(hn.getHurtNum(), false); ///< 临时性注释 郭浩
+					m_pkImgHurtNum->SetBigRedNumber(hn.getHurtNum(), false);
 
 				}
 				else
 				{
-
-					/***
-					 * 临时性注释 郭浩
-					 * begin
-					 */
-// 					if (hn.getHurtNum() > 0)
-// 					{ // 加血
-// 						m_imgHurtNum->SetBigGreenNumber(hn.getHurtNum(), false);
-// 					}
-// 					else
-// 					{ // 去血
-// 						m_imgHurtNum->SetBigRedNumber(hn.getHurtNum(), false);
-// 					}
-					/***
-					 * 临时性注释 郭浩
-					 * end
-					 */
+					if (hn.getHurtNum() > 0)
+					{ // 加血
+						m_pkImgHurtNum->SetBigGreenNumber(hn.getHurtNum(), false);
+					}
+					else
+					{ // 去血
+						m_pkImgHurtNum->SetBigRedNumber(hn.getHurtNum(), false);
+					}
 				}
 
-				//	m_parent->AddChild(m_imgHurtNum); ///< 临时性注释 郭浩
+				m_pkParent->AddChild(m_pkImgHurtNum);
 			}
 		}
 
 		if (hn.getHurtNumberY() > 0)
 		{
-			/***
-			 * 临时性注释 郭浩
-			 */
-			//if (m_bHardAtk)
-			//{
-			//	NDPicture* picBaoJi = m_parent->GetBaoJiPic();
-			//	int bjW = picBaoJi->GetSize().width;
-			//	int bjH = picBaoJi->GetSize().height;
-			//	if (m_imgBaoJi)
-			//	{
-			//		m_imgBaoJi->SetFrameRect(CGRectMake(x - (bjW >> 1),
-			//						    y - m_role->GetHeight() - bjH - hn.getHurtNumberY(),
-			//						    bjW,
-			//						    bjH));
-			//	}
-			//	if (m_imgHurtNum)
-			//	{
-			//		m_imgHurtNum->SetFrameRect(CGRectMake(x - (w >> 1),
-			//						      y - m_role->GetHeight() - hn.getHurtNumberY() - bjH * 13 / 20,
-			//						      m_imgHurtNum->GetNumberSize().width,
-			//						      m_imgHurtNum->GetNumberSize().height));
-			//	}
-			//	
-			//} 
-			//else 
-			//{
-			//	if (m_imgHurtNum) 
-			//	{
-			//		m_imgHurtNum->SetFrameRect(CGRectMake(x - (w >> 1),
-			//						      y - m_role->GetHeight() - hn.getHurtNumberY(),
-			//						      m_imgHurtNum->GetNumberSize().width,
-			//						      m_imgHurtNum->GetNumberSize().height));
-			//	}
-			//}
-			/***
-			 * 临时性注释 郭浩
-			 * end
-			 */
+			if (m_bHardAtk)
+			{
+				/*NDPicture* picBaoJi = m_parent->GetBaoJiPic();
+				int bjW = picBaoJi->GetSize().width;
+				int bjH = picBaoJi->GetSize().height;
+				if (m_imgBaoJi)
+				{
+					m_imgBaoJi->SetFrameRect(CGRectMake(x - (bjW >> 1),
+						y - m_role->GetHeight() - bjH - hn.getHurtNumberY(),
+						bjW,
+						bjH));
+				}*/
+				if (m_pkImgHurtNum)
+				{
+					m_pkImgHurtNum->SetFrameRect(CGRectMake(m_nX - (m_pkImgHurtNum->GetNumberSize().width /2),
+						m_nY - m_nRoleInitialHeight- hn.getHurtNumberY()*20,//++Guosen 2012.6.29 固定位置起始 //this->y - m_role->GetHeight() - hn.getHurtNumberY()*20,// - bjH * 13 / 20,
+						m_pkImgHurtNum->GetNumberSize().width,
+						m_pkImgHurtNum->GetNumberSize().height));
+				}
+
+			}
+			else
+			{
+				if (m_pkImgHurtNum) {
+					m_pkImgHurtNum->SetFrameRect(CGRectMake(m_nX - (m_pkImgHurtNum->GetNumberSize().width /2),
+						m_nY - m_nRoleInitialHeight- hn.getHurtNumberY()*10,//++Guosen 2012.6.29 固定位置起始 //this->y - m_role->GetHeight() - hn.getHurtNumberY()*20,
+						m_pkImgHurtNum->GetNumberSize().width,
+						m_pkImgHurtNum->GetNumberSize().height));
+				}
+			}
 
 			hn.timeLost();
 			bEraseHurtNum = hn.isDisappear();
@@ -985,19 +1104,11 @@ void Fighter::drawHurtNumber()
 			m_pkCritImage->RemoveFromParent(false);
 			CC_SAFE_DELETE (m_pkCritImage);
 		}
-		/***
-		 * 临时性注释 郭浩
-		 * begin
-		 */
-// 		if (m_imgHurtNum)
-// 		{
-// 			m_imgHurtNum->RemoveFromParent(false);
-// 			CC_SAFE_DELETE(m_imgHurtNum);
-// 		}
-		/***
-		 * 临时性注释 郭浩
-		 * end
-		 */
+		if (m_pkImgHurtNum)
+		{
+			m_pkImgHurtNum->RemoveFromParent(false);
+			CC_SAFE_DELETE(m_pkImgHurtNum);
+		}
 	}
 }
 
@@ -1010,27 +1121,28 @@ void Fighter::drawHPMP()
 	int drawx = m_pkRole->GetPosition().x;
 	int drawy = m_pkRole->GetPosition().y;
 
-	drawy -= m_pkRole->GetHeight();
+	drawy -= m_nRoleInitialHeight;//++Guosen 2012.6.29 固定位置//drawy -= this->m_role->GetHeight();
 
-	int w = 30;
-	int h = 7;
+	//战斗时血条的宽高
+	int iBarWidth	= HP_BAR_WIDTH;
+	int iBarHeight	= HP_BAR_HEIGHT;
 	int lifew = 0;
-//	int manaw=0;
+	int manaw = 0;
 
-	drawx -= w >> 1;
+	drawx -= iBarWidth >> 1;
 	if (m_kInfo.nLifeMax == 0)
 	{
 		lifew = 0;
 	}
 	else
 	{
-		if (m_kInfo.nLife >= m_kInfo.nLifeMax)
+		if (m_kInfo.nLife > m_kInfo.nLifeMax)
 		{
-			lifew = w - 4;
+			lifew = iBarWidth;
 		}
 		else
 		{
-			lifew = m_kInfo.nLife * (w - 4) / m_kInfo.nLifeMax;
+			lifew = m_kInfo.nLife * iBarWidth / m_kInfo.nLifeMax;
 		}
 
 		if (lifew == 0)
@@ -1046,32 +1158,40 @@ void Fighter::drawHPMP()
 		}
 	}
 
-//	if(m_info.nLifeMax==0){
-//		manaw=0;
-//	}else{
-//		manaw = m_info.nMana * (w - 4) / m_info.nManaMax;
-//		if (manaw == 0) {
-//			if (m_info.nMana == 0) {
-//				manaw = 0;
-//			} else {
-//				manaw = 1;
-//			}
-//		}
-//	}
+	if( m_kInfo.nLifeMax == 0 )
+	{
+		manaw = 0;
+	}
+	else
+	{
+		if( m_kInfo.nMana > m_kInfo.nManaMax )
+		{
+			manaw = iBarWidth;
+		}
+		else
+		{
+			manaw = m_kInfo.nMana * iBarWidth / m_kInfo.nManaMax;
+		}
+	}
 
-//	DrawRecttangle(CGRectMake(drawx, drawy, w, h), ccc4(247, 227, 231, 255));
-//	DrawRecttangle(CGRectMake(drawx + 1, drawy + 1, w - 2, h - 2), ccc4(57, 0, 41, 255));
-
-	/***
-	 * 临时性注释 郭浩
-	 * begin
-	 */
-// 	DrawRecttangle(CGRectMake(drawx + 2, drawy + 2, w - 4, h - 4), ccc4(148, 65, 74, 255));
-// 	DrawRecttangle(CGRectMake(drawx + 2, drawy + 2, lifew, h - 4), ccc4(237, 83, 15, 255));
-	/***
-	 * 临时性注释 郭浩
-	 * end
-	 */
+	//DrawRecttangle( CGRectMake(drawx, drawy, iBarWidth, iBarHeight), ccc4(0xcc, 0x99, 0x33, 255));
+	//DrawRecttangle( CGRectMake(drawx, drawy, manaw, iBarHeight), ccc4(0xff, 0xcc, 0, 255));
+	//DrawRecttangle( CGRectMake(drawx, drawy - iBarHeight - 2, iBarWidth, iBarHeight ), ccc4(148, 65, 74, 255) );
+	//DrawRecttangle( CGRectMake(drawx, drawy - iBarHeight - 2, lifew, iBarHeight ), ccc4(237, 83, 15, 255) );
+	if ( m_pMPBar )
+	{
+		m_pMPBar->SetFrameRect( CGRectMake(drawx, drawy, iBarWidth, iBarHeight) );
+		m_pMPBar->SetStart( 0 );
+		m_pMPBar->SetProcess( manaw );
+		m_pMPBar->SetTotal( iBarWidth );
+	}
+	if ( m_pHPBar )
+	{
+		m_pHPBar->SetFrameRect( CGRectMake(drawx, drawy - iBarHeight - 2, iBarWidth, iBarHeight) );
+		m_pHPBar->SetStart( 0 );
+		m_pHPBar->SetProcess( lifew );
+		m_pHPBar->SetTotal( iBarWidth );
+	}
 }
 
 void Fighter::clearFighterStatus()
@@ -1252,11 +1372,10 @@ void Fighter::showHoverMsg(const char* str)
 		lbHover = new NDUILabel;
 		lbHover->Initialization();
 		lbHover->SetFontColor(ccc4(0, 255, 100, 255));
-		CGSize sizeStr = getStringSize(str, DEFAULT_FONT_SIZE);
+		CGSize sizeStr = getStringSize(str, DEFAULT_FONT_SIZE*FONT_SCALE);
 		lbHover->SetTag(TAG_HOVER_MSG);
-		lbHover->SetFrameRect(
-				CGRectMake(pt.x - sizeStr.width / 2, pt.y - m_pkRole->GetHeight(),
-						sizeStr.width, sizeStr.height));
+		lbHover->SetFrameRect(CGRectMake(pt.x - sizeStr.width / 2, pt.y - m_nRoleInitialHeight, sizeStr.width, sizeStr.height));//++Guosen 2012.6.29 //lbHover->SetFrameRect(CGRectMake(pt.x - sizeStr.width / 2, pt.y - m_role->GetHeight(), sizeStr.width, sizeStr.height));
+
 		m_pkParent->AddChild(lbHover);
 	}
 	lbHover->SetText(str);
@@ -1285,4 +1404,117 @@ void Fighter::drawRareMonsterEffect(bool bVisible)
 	{
 		SAFE_DELETE_NODE (m_pkRareMonsterEffect);
 	}
+}
+
+
+//++Guosen 2012.7.11
+//===========================================================================
+//
+NDUIImage * GenerateIconImage( unsigned int nIconID )
+{
+	unsigned int	nRow	= nIconID % 10;
+	unsigned int	nCown	= nIconID / 10 %10;
+	unsigned int	nFile	= nIconID / 100;
+	if ( nIconID == 0 || nCown == 0 || nFile == 0 )
+	{
+		return NULL;
+	}
+	NDPicture *		pPicture	= new NDPicture;
+	if ( pPicture )
+	{
+		stringstream	ssFile;
+		ssFile << "Res00/StatusIcons" << nFile << ".png";
+		pPicture->Initialization( NDPath::GetImgPath( ssFile.str().c_str()).c_str() );
+		pPicture->Cut( CGRectMake( (nRow-1)*STATUS_ICON_WIDTH, (nCown-1)*STATUS_ICON_HEIGHT, STATUS_ICON_WIDTH, STATUS_ICON_HEIGHT ) );
+		NDUIImage *		pImage	= new NDUIImage;
+		if ( pImage )
+		{
+			pImage->Initialization();
+			pImage->SetPicture( pPicture );
+			return pImage;
+		}
+		delete pPicture;
+	}
+	return NULL;
+}
+
+//===========================================================================
+TFighterStatusIcon * Fighter::GetighterStatusIcon( unsigned int nIconID )
+{
+	for ( std::deque<TFighterStatusIcon>::iterator iter = m_queStatusIcons.begin(); iter != m_queStatusIcons.end(); iter++ )
+	{
+		if ( iter->nIconID == nIconID )
+		{
+			return &(*iter);
+		}
+	}
+	return NULL;
+}
+
+//===========================================================================
+// 添加状态图标，
+bool Fighter::AppendStatusIcon( unsigned int nIconID )
+{
+	if ( GetighterStatusIcon( nIconID ) != NULL )
+		return false;
+
+	NDUIImage *		pIconImage = GenerateIconImage( nIconID );
+	if ( pIconImage == NULL )
+		return false;
+
+	TFighterStatusIcon	tFighterStatusIcon;
+	tFighterStatusIcon.nIconID		= nIconID;
+	tFighterStatusIcon.pIconImage	= pIconImage;
+	m_queStatusIcons.push_back( tFighterStatusIcon );
+	m_pkParent->AddChild(pIconImage);
+	CGPoint pt	= m_pkRole->GetPosition();
+	pIconImage->SetFrameRect( CGRectMake( pt.x + m_iIconsXOffset, 
+		pt.y - m_nRoleInitialHeight + STATUS_ICON_HEIGHT * (m_queStatusIcons.size()-1), 
+		STATUS_ICON_WIDTH, STATUS_ICON_HEIGHT ) );
+	return true;
+}
+
+//===========================================================================
+// 移除状态图标
+bool Fighter::RemoveStatusIcon( unsigned int nIconID )
+{
+	for ( std::deque<TFighterStatusIcon>::iterator iter = m_queStatusIcons.begin(); iter != m_queStatusIcons.end(); iter++ )
+	{
+		if ( iter->nIconID == nIconID )
+		{
+			iter->pIconImage->RemoveFromParent(false);
+			SAFE_DELETE(iter->pIconImage);
+			m_queStatusIcons.erase(iter);
+			UpdateStatusIconsPosition();
+			return true;
+		}
+	}
+	return false;
+}
+
+//===========================================================================
+void Fighter::UpdateStatusIconsPosition()
+{
+	if ( m_queStatusIcons.empty() )
+		return;
+	CGPoint pt	= m_pkRole->GetPosition();
+	int	iCount	= 0;
+	for ( std::deque<TFighterStatusIcon>::iterator iter = m_queStatusIcons.begin(); iter != m_queStatusIcons.end(); iter++ )
+	{
+		iter->pIconImage->SetFrameRect( CGRectMake( pt.x + m_iIconsXOffset, 
+			pt.y - m_nRoleInitialHeight + STATUS_ICON_HEIGHT * iCount, 
+			STATUS_ICON_WIDTH, STATUS_ICON_HEIGHT ) );
+		iCount++;
+	}
+}
+//===========================================================================
+//清除状态小图标
+void Fighter::ClearAllStatusIcons()
+{
+	for ( std::deque<TFighterStatusIcon>::iterator iter = m_queStatusIcons.begin(); iter != m_queStatusIcons.end(); iter++ )
+	{
+		iter->pIconImage->RemoveFromParent(false);
+		SAFE_DELETE(iter->pIconImage);
+	}
+	m_queStatusIcons.clear();
 }

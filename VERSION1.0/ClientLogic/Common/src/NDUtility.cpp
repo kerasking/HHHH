@@ -12,6 +12,7 @@
 #include "NDDirector.h"
 #include "ccMacros.h"
 #include "NDString.h"
+#include "NDUIDialog.h"
 #include "CCPointExtension.h"
 #include "CCDrawingPrimitives.h"
 #include "Battle.h"
@@ -295,6 +296,18 @@ std::string changeToChineseSign(std::string old)
 	ndstr.replace(NDString("。。"), NDString(".."));
 
 	return std::string(ndstr.getData());
+}
+
+void showDialog(const char* title, const char* content)
+{
+	NDUIDialog *dialog = new NDUIDialog;
+	dialog->Initialization();
+	dialog->Show(title, content, NULL, NULL);
+}
+
+void showDialog(const char* content)
+{
+	showDialog(NDCommonCString("error"), content);
 }
 
 // 退出游戏,返回主界面时统一做释放及各模块初始化操作

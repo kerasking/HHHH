@@ -164,6 +164,8 @@ public:
 	virtual void TouchMoved( NDTouch* touch );
 	virtual bool TouchDoubleClick( NDTouch* touch );
 
+	CC_SYNTHESIZE(int,m_nBattleType,BattleType);
+
 	void PlayNDSprite(const char* pszSpriteFile, int nPosx, int nPosy,
 			int nAnimationNo, int nPlayTimes);
 private:

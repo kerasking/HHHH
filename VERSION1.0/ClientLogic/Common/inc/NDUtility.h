@@ -12,7 +12,6 @@
 
 #include "globaldef.h"
 #include "NDDirector.h"
-#include "NDUIDialog.h"
 
 #define MAP_UNITSIZE (16 * ((int)(NDDirector::DefaultDirector()->GetScaleFactor())))
 #define SCREEN_SCALE (NDDirector::DefaultDirector()->GetScaleFactor())
@@ -24,10 +23,8 @@ std::string getStringTime(long nSeconds);
 
 std::string changeToChineseSign(std::string old);
 
-NS_NDENGINE_BGN
 void showDialog(const char* title, const char* content);
 void showDialog(const char* content);
-NS_NDENGINE_END
 
 // opengl绘图函数；必须在draw方法里调用，否则将不会长久生效
 // 画矩形
