@@ -101,7 +101,8 @@ NDString::NDString(const string& str)
 
 NDString::NDString(int value)
 {
-	char str[256] = {0};
+	char str[256] =
+	{ 0 };
 	sprintf(str, "%d", value);
 	buf = str;
 }
@@ -948,4 +949,3 @@ void NDString::Format(const char* fmt, ...)
 }
 
 }
-
