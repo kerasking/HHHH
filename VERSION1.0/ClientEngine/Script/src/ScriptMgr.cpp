@@ -28,7 +28,7 @@
 #include "NDPicture.h"
 #include "NDPath.h"
 #include "NDUtility.h"
-
+#include "NDProfile.h"
 
 using namespace NDEngine;
 const unsigned char g_dekey[] = {0x80,0x12,0x97,0x67,0x24,0x88,0x89,0x98,0x55,0x34,0xBD,0x33,0x34,0x80,0x12,0x97,0x67,0x24,0x88,0x89,0x98,0x55,0x34,0xBD};
@@ -151,33 +151,77 @@ void ScriptMgr::update()
 
 void ScriptMgr::Load()
 {
-	LoadRegClassFuncs();
+	PROFILE_REGLUA();
+
+	TIME_SLICE("ScriptMgr::Load()");
+
+	{
+		TIME_SLICE("LoadRegClassFuncs()");
+		LoadRegClassFuncs();
+	}
 	
-	ScriptCommonLoad();
+	{
+		TIME_SLICE("ScriptCommonLoad()");
+		ScriptCommonLoad();
+	}
 	
-	ScriptGlobalEvent::Load();
+	{
+		TIME_SLICE("ScriptGlobalEvent::Load()");
+		ScriptGlobalEvent::Load();
+	}
 	
-	ScriptTimerMgrObj.Load();
+	{
+		TIME_SLICE("ScriptTimerMgrObj.Load()");
+		ScriptTimerMgrObj.Load();
+	}
 	
-	ScriptUiLoad();
+	{
+		TIME_SLICE("ScriptUiLoad()");
+		ScriptUiLoad();
+	}
 	
-	ScriptNetMsg::Load();
+	{
+		TIME_SLICE("ScriptNetMsg::Load()");
+		ScriptNetMsg::Load();
+	}
 	
-	ScriptGameDataObj.Load();
+	{
+		TIME_SLICE("ScriptGameDataObj.Load()");
+		ScriptGameDataObj.Load();
+	}
 	
-	ScriptDBObj.Load();
+	{
+		TIME_SLICE("ScriptDBObj.Load()");
+		ScriptDBObj.Load();
+	}
 	
-	ScriptTaskLoad();
+	{
+		TIME_SLICE("ScriptTaskLoad()");
+		ScriptTaskLoad();
+	}
 	
-	ScriptGameLogicLoad();
+	{
+		TIME_SLICE("ScriptGameLogicLoad()");
+		ScriptGameLogicLoad();
+	}
 	
-	ScriptDramaLoad();
+	{
+		TIME_SLICE("ScriptDramaLoad()");
+		ScriptDramaLoad();
+	}
 
 #ifndef UPDATE_RES 
-    LuaStateMgrObj.GetState()->DoFile(NDPath::GetScriptPath("entry.lua").c_str());
+	{
+		TIME_SLICE("DoFile(entry.lua)");
+		LuaStateMgrObj.GetState()->DoFile(NDPath::GetScriptPath("entry.lua").c_str());
+	}
 #else
-	this->LoadLuaFile(NDPath::GetScriptPath("entry.lua"));
+	{
+		TIME_SLICE("LoadLuaFile(entry.lua)");
+		this->LoadLuaFile(NDPath::GetScriptPath("entry.lua"));
+	}
 #endif
+
 	LuaStateMgrObj.SetExceptOutput(&luaExceptRunTimeOutPut);
 }
 ///////

@@ -25,6 +25,7 @@
 #include "NDDebugOpt.h"
 #include "NDClassFactory.h"
 #include "Battle.h"
+#include "NDProfile.h"
 
 NS_NDENGINE_BGN
 using namespace NDEngine;
@@ -133,7 +134,9 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 	pkDirector->Initialization();
 	pkDirector->RunScene(CSMLoginScene::Scene());
+
 	ScriptMgrObj.Load();
+
 	ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
 
 	//NDPlayer::pugeHero();
@@ -304,6 +307,14 @@ bool NDGameApplication::processPM(const char* cmd)
 	else if (sscanf(cmd, "openmap %d", &val) == 1)
 	{
 		//NDMapMgrObj.Hack_loadSceneByMapDocID( val );
+	}
+	else if (stricmp(cmd, "profile") == 0)
+	{
+		NDProfileReport::report();
+	}
+	else if (stricmp(cmd, "profile dump") == 0)
+	{
+		NDProfileReport::dump();
 	}
 	else
 	{

@@ -198,6 +198,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Framework\inc\NDProfile.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Framework\inc\NDScene.h"
 					>
 				</File>
