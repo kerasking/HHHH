@@ -340,11 +340,10 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 	int nModelID = 1;	//lookface / 1000000;
 	//	if (sex % 2 == SpriteSexMale)
 
-	NSString* pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
-	CCString* pString = CCString::stringWithFormat("%smodel_%d.spr",
+	NSString pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
+	NSString pString = CCString::stringWithFormat("%smodel_%d.spr",
 			pstrAniPath->toStdString().c_str(), nModelID);
 	NDSprite::Initialization(pString->toStdString().c_str());
-	SAFE_DELETE(pstrAniPath);
 //		else 
 //			NDSprite::Initialization(MANUELROLE_HUMAN_FEMALE);
 

@@ -755,7 +755,7 @@ void Battle::OnButtonClick(NDUIButton* button)
 	//		ShowQuickChat(m_imgQuickTalkBg->GetParent() == NULL);
 	//		
 	//	} else if (button == m_btnSendChat) {
-	//		NSString* msg = m_chatDelegate.tfChat.text;
+	//		NSString msg = m_chatDelegate.tfChat.text;
 	//		if ([msg length] > 0) {
 	//			ChatInput::SendChatDataToServer(ChatTypeSection, [msg UTF8String]);
 	//			m_chatDelegate.tfChat.text = @"";
@@ -4423,7 +4423,7 @@ void Battle::moveToTarget(FightAction* action)
 //						int delay=skill->GetLookfaceID()%100;
 //						stringstream ss;
 //						ss << "effect_" << effectId << ".spr";
-//						NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+//						NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 //						NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //						NDLog("add self effect");
 //						addSkillEffectToFighter(theActor,effect,delay);
@@ -4433,7 +4433,7 @@ void Battle::moveToTarget(FightAction* action)
 //						int delay=skill->GetLookfaceTargetID()%100;
 //						stringstream ss;
 //						ss << "effect_" << effectId << ".spr";
-//						NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+//						NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 //						NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //						for (int i = 0; i < action->m_FighterList.size(); i++)
 //						{	
@@ -4470,7 +4470,7 @@ void Battle::moveToTarget(FightAction* action)
 //					int delay=skill->GetLookfaceID()%100;
 //					stringstream ss;
 //					ss << "effect_" << effectId << ".spr";
-//					NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+//					NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 //					NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //					
 //					addSkillEffectToFighter(theActor,effect,delay);
@@ -4480,7 +4480,7 @@ void Battle::moveToTarget(FightAction* action)
 //					int delay=skill->GetLookfaceTargetID()%100;
 //					stringstream ss;
 //					ss << "effect_" << effectId << ".spr";
-//					NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+//					NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 //					NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //					for (int i = 0; i < action->m_FighterList.size(); i++)
 //					{	
@@ -4559,7 +4559,7 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 //					ss << "effect_" << cmd->status->m_LastEffectID  << ".spr";
 //					NDAsssert(cmd->status->m_aniGroup == NULL);
 //					//				ss << "effect_" << cmd->status->m_StartEffectID << ".spr";
-//					NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+//					NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 //					cmd->status->m_aniGroup=new NDSubAniGroup;
 //					NDAnimation* effect=[[NDAnimationGroup alloc] initWithSprFile:file];
 //					cmd->status->m_aniGroup->aniGroup = [effect retain];
@@ -4575,7 +4575,7 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 //				if(cmd->status->m_StartEffectID!=0){
 //					stringstream ss;
 //					ss << "effect_" << cmd->status->m_StartEffectID << ".spr";
-//					NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+//					NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 //					NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //					
 //					addSkillEffectToFighter(fighter,effect,0);
@@ -4695,7 +4695,7 @@ void Battle::addSkillEffectToFighter(Fighter* fighter, NDAnimationGroup* effect,
 
 	//	stringstream ss;
 	//	ss << "effect_" << effectId << ".spr";
-	//	NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+	//	NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 	//	NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 
 	NDLog("add skill effect");
@@ -4737,7 +4737,7 @@ void Battle::addSkillEffect(Fighter& theActor, bool user/*=false*/)
 //		
 //		stringstream ss;
 //		ss << "effect_" << effectId << ".spr";
-//		NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+//		NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 //		NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //		
 //		int target = skillId % 10;
@@ -4809,7 +4809,7 @@ void Battle::aimTarget(FightAction* action)
 //				int delay=skill->GetLookfaceID()%100;
 //				stringstream ss;
 //				ss << "effect_" << effectId << ".spr";
-//				NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+//				NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 //				NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //				
 //				addSkillEffectToFighter(theActor,effect,delay);
@@ -4819,7 +4819,7 @@ void Battle::aimTarget(FightAction* action)
 //				int delay=skill->GetLookfaceTargetID()%100;
 //				stringstream ss;
 //				ss << "effect_" << effectId << ".spr";
-//				NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+//				NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 //				NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //				for (int i = 0; i < action->m_FighterList.size(); i++)
 //				{	

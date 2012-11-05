@@ -41,12 +41,12 @@ bool NDColorPool::GetColorFromPool(const char* colorFile,
 void NDColorPool::LoadColor(const char* colorFile)
 {
 	/* todo
-	NSString* strColorFile = [NSString stringWithUTF8String:colorFile];
+	NSString strColorFile = [NSString stringWithUTF8String:colorFile];
 	strColorFile = [strColorFile stringByReplacingCharactersInRange:[strColorFile rangeOfString:@"image"] withString:@"animation"];
 	
-	NSString* strColor = [NSString stringWithContentsOfFile:strColorFile encoding:NSUTF16LittleEndianStringEncoding error:NULL];
+	NSString strColor = [NSString stringWithContentsOfFile:strColorFile encoding:NSUTF16LittleEndianStringEncoding error:NULL];
 	
-	NSString* lineSeparater = [NSString stringWithFormat:@"%s", "\r\n"];
+	NSString lineSeparater = [NSString stringWithFormat:@"%s", "\r\n"];
 	
 	// 分割颜色数组
 	NSArray* colorGroup = [strColor componentsSeparatedByString:lineSeparater];
@@ -57,12 +57,12 @@ void NDColorPool::LoadColor(const char* colorFile)
 	VEC_COLOR_ARRAY vColor;
 	
 	for (NSUInteger i = 0; i < [colorGroup count] - 1; i++) {
-		NSString* aGroup = [colorGroup objectAtIndex:i];
+		NSString aGroup = [colorGroup objectAtIndex:i];
 		NSArray* arrColor = [aGroup componentsSeparatedByString:@","];
 		vColor.clear();
 		
 		for (NSUInteger j = 0; j < [arrColor count]; j++) {
-			NSString* val = [arrColor objectAtIndex:j];
+			NSString val = [arrColor objectAtIndex:j];
 			if (j == 0) {
 				colorKey.second = atoi([val UTF8String]);
 			} else {

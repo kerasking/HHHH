@@ -26,33 +26,33 @@ template<class T>
 class NDSharedPtr
 {
 public:
-	typedef NDSharedPtr<T> this_type;
-	typedef NDRefLong::count_type count_type;
+	typedef NDSharedPtr<T> ThisType;
+	typedef NDRefLong::count_type CountType;
 private:
-	T* m_ptr;
+	T* m_pkPointer;
 	NDSPtrCounted*	m_pkCount;
 public:
 	NDSharedPtr(T * p = NULL)
 	{
-		m_ptr = p;
+		m_pkPointer = p;
 		m_pkCount = new NDSPtrCounted(1,1);
-		SP_Set_Shared_From_This(this, m_ptr);
+		SP_Set_Shared_From_This(this, m_pkPointer);
 	}
 
-	NDSharedPtr(const NDWeakPtr<T>& right)
+	NDSharedPtr(const NDWeakPtr<T>& kRight)
 	{
-		m_ptr = right.get();
-		m_pkCount = right._get_sp();
+		m_pkPointer = kRight.get();
+		m_pkCount = kRight._get_sp();
 		addref();
-		SP_Set_Shared_From_This(this, m_ptr);
+		SP_Set_Shared_From_This(this, m_pkPointer);
 	}
 
-	NDSharedPtr(const this_type& o)
+	NDSharedPtr(const ThisType& o)
 	{
-		m_ptr = o.m_ptr;
+		m_pkPointer = o.m_pkPointer;
 		m_pkCount = o.m_count;
 		addref();
-		SP_Set_Shared_From_This(this, m_ptr);
+		SP_Set_Shared_From_This(this, m_pkPointer);
 	}
 	
 	~NDSharedPtr()
@@ -60,79 +60,79 @@ public:
 		release();
 	}
 	
-	this_type& operator=(const this_type& o)
+	ThisType& operator=(const ThisType& o)
 	{
 		if(this!=&o)
 		{
-			if(m_ptr!=o.m_ptr)
+			if(m_pkPointer!=o.m_pkPointer)
 			{
 				release();
-				m_ptr = o.m_ptr;
+				m_pkPointer = o.m_pkPointer;
 				m_pkCount = o.m_count;
-				SP_Set_Shared_From_This(this, m_ptr);
+				SP_Set_Shared_From_This(this, m_pkPointer);
 				addref();
 			}
 		}
 		return (*this);
 	}
 
-	this_type& operator=(const T* p)
+	ThisType& operator=(const T* pkPointer)
 	{
-		if (m_ptr != p)
+		if (m_pkPointer != pkPointer)
 		{
 			release();
-			m_ptr = const_cast<T*>(p);
+			m_pkPointer = const_cast<T*>(pkPointer);
 			m_pkCount = new NDSPtrCounted(1,1);
-			SP_Set_Shared_From_This(this, m_ptr);
+			SP_Set_Shared_From_This(this, m_pkPointer);
 		}
 		return (*this);
 	}
 
-	BOOL operator == (const this_type& o) const
+	BOOL operator == (const ThisType& kObj) const
 	{
-		return m_ptr == o.m_ptr;
+		return m_pkPointer == kObj.m_pkPointer;
 	}
 
-	BOOL operator == (const T* p) const
+	BOOL operator == (const T* pkPointer) const
 	{
-		return m_ptr == p;
+		return m_pkPointer == pkPointer;
 	}
 
-	BOOL operator != (const this_type& o) const
+	BOOL operator != (const ThisType& kObj) const
 	{
-		return m_ptr != o.m_ptr;
+		return m_pkPointer != kObj.m_pkPointer;
 	}
 #if _MSC_VER < 1300
 	BOOL operator != (const T* p) const
 	{
-		return m_ptr != p;
+		return m_pkPointer != p;
 	}
 #endif
 
 	operator T*() const
 	{
-		return m_ptr;
+		return m_pkPointer;
 	}
 
 	T& operator*() const
 	{
-		return (*m_ptr);
+		return (*m_pkPointer);
 	}
 	
 	T* operator->() const
 	{
-		shared_ptr_assert(m_ptr);
-		return (m_ptr);
+		shared_ptr_assert(m_pkPointer);
+		return (m_pkPointer);
 	}
 
 	T* get() const
 	{
-		return m_ptr;
+		return m_pkPointer;
 	}
 
-	count_type use_count() const
+	CountType use_count() const
 	{
-		if (m_ptr)
+		if (m_pkPointer)
 		{
 			return m_pkCount->m_kUsed.get();
 		}
@@ -145,18 +145,19 @@ public:
 	}
 
 public:
-	void addref(void)
+
+	void addref()
 	{
 		m_pkCount->m_kUsed.inc();
 	}
 	
-	void release(void)
+	void release()
 	{
 		if (m_pkCount)
 		{
 			if(m_pkCount->m_kUsed.dec() == 0)
 			{
-				delete_object(m_ptr);
+				delete_object(m_pkPointer);
 				if( m_pkCount->m_kWeak.dec() == 0 )
 				{
 					delete m_pkCount;
@@ -164,7 +165,7 @@ public:
 			}
 			m_pkCount = NULL;
 		}
-		m_ptr = NULL;
+		m_pkPointer = NULL;
 	}
 public:
 	NDSPtrCounted* _get_sp() const

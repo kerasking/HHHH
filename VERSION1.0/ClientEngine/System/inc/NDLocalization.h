@@ -22,7 +22,7 @@
 
 #include "NDLocalXmlString.h"
 
-// inline const char* __NDLOCAL_INNER_STRING(NSString* nsKeyName)
+// inline const char* __NDLOCAL_INNER_STRING(NSString nsKeyName)
 // {
 // 	//return [NSLocalizedStringWithDefaultValue(nsKeyName, @"lyol", [NSBundle mainBundle], nsKeyName, NULL) UTF8String];
 // 	return [NDLocalXmlString::GetSingleton().GetString(nsKeyName) UTF8String];
@@ -68,7 +68,7 @@ _NDLOCAL_INNER_NS_STRING(@"Common", NSKeyName)
 // 2.NDCString_RETNS
 // 3.NDCommonNSString_RETNS
 // 4.NDCommonCString_RETNS
-// inline NSString* __NDLOCAL_INNER_STRING_RETNS(NSString* nsKeyName)
+// inline NSString __NDLOCAL_INNER_STRING_RETNS(NSString nsKeyName)
 // {
 // 	//return NSLocalizedStringWithDefaultValue(nsKeyName, @"lyol", [NSBundle mainBundle], nsKeyName, NULL);
 // 	return NDLocalXmlString::GetSingleton().GetString(nsKeyName);

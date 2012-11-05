@@ -495,7 +495,7 @@ void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 	//Load Animation Group
 	int model_id = lookface / 1000000;
 //	if (sex % 2 == SpriteSexMale) 
-	//NSString* aniPath = [NSString stringWithUTF8String:NDPath::GetAnimationPath().c_str()];  ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	//NSString aniPath = [NSString stringWithUTF8String:NDPath::GetAnimationPath().c_str()];  ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 //	Initialization([[NSString stringWithFormat:@"%@model_%d.spr",aniPath,model_id] UTF8String] ); ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 //	else 
 //		Initialization(MANUELROLE_HUMAN_FEMALE);
@@ -515,7 +515,7 @@ void NDBaseRole::SetEquipment(int equipmentId, int quality)
 //	if (equipmentId <= 0 ) 
 //		return;
 //	
-//	NSString* imagePath = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+//	NSString imagePath = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 //	CCString* imagePath = new CCString("");
 //	
 //	if (equipmentId >= 200 && equipmentId < 10000) //ÎäÆ÷
@@ -774,7 +774,7 @@ void NDBaseRole::SetHairImageWithEquipmentId(int equipmentId)
 		/**
 		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		 */
-// 		NSString* hairImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString hairImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		hairImageName = [NSString stringWithFormat:@"%@%d", hairImageName, equipmentId];
 // 		if (sex % 2 == SpriteSexMale) 
 // 		{
@@ -795,7 +795,7 @@ void NDBaseRole::SetFaceImageWithEquipmentId(int equipmentId)
 	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	 */
 
-// 	NSString* faceImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 	NSString faceImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 	faceImageName = [NSString stringWithFormat:@"%@skin.png", faceImageName];	
 // 	//faceImageName = [NSString stringWithFormat:@"%@skin@%d.png", faceImageName, skinColor];
 // 	SetFaceImage([faceImageName UTF8String]);
@@ -809,7 +809,7 @@ void NDBaseRole::SetExpressionImageWithEquipmentId(int equipmentId)
 		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		 */
 
-// 		NSString* expressionImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString expressionImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		expressionImageName = [NSString stringWithFormat:@"%@%d.png", expressionImageName, equipmentId];	
 // 		SetExpressionImage([expressionImageName UTF8String]);
 	}
@@ -823,7 +823,7 @@ void NDBaseRole::SetCapImageWithEquipmentId(int equipmentId)
 		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		 * begin
 		 */
-// 		NSString* capImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString capImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		capImageName = [NSString stringWithFormat:@"%@%d.png", capImageName, equipmentId];	
 // 		SetCapImage([capImageName UTF8String]);
 		/**
@@ -841,7 +841,7 @@ void NDBaseRole::SetArmorImageWithEquipmentId(int equipmentId)
 		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 		 * begin
 		 */
-// 		NSString* armorImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString armorImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		armorImageName = [NSString stringWithFormat:@"%@%d.png", armorImageName, equipmentId];	
 // 		SetArmorImage([armorImageName UTF8String]);
 		/**
@@ -856,7 +856,7 @@ void NDBaseRole::SetCloakImageWithEquipmentId(int equipmentId)
 	/*
 	 if (equipmentId >= 11200 && equipmentId < 11800) 
 	 {
-	 NSString* cloakImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+	 NSString cloakImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 	 cloakImageName = [NSString stringWithFormat:@"%@%d.png", cloakImageName, equipmentId];	
 	 SetCloakImage([cloakImageName UTF8String]);
 	 }
@@ -868,32 +868,32 @@ void NDBaseRole::SetCloakImageWithEquipmentId(int equipmentId)
 		 * begin
 		 */
 
-// 		NSString* cloakName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString cloakName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		cloakName = [NSString stringWithFormat:@"%@%d.png", cloakName, equipmentId+7];	
 // 		SetCloakImage([cloakName UTF8String]);
 // 		
 // 		
-// 		NSString* leftShoulderName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString leftShoulderName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		leftShoulderName = [NSString stringWithFormat:@"%@%d.png", leftShoulderName, equipmentId+1];	
 // 		SetLeftShoulderImage([leftShoulderName UTF8String]);
 // 		
-// 		NSString* rightShoulderName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString rightShoulderName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		rightShoulderName = [NSString stringWithFormat:@"%@%d.png", rightShoulderName, equipmentId+2];	
 // 		SetRightShoulderImage([rightShoulderName UTF8String]);
 // 		
-// 		NSString* skirtStandName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString skirtStandName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		skirtStandName = [NSString stringWithFormat:@"%@%d.png", skirtStandName, equipmentId+3];	
 // 		SetSkirtStandImage([skirtStandName UTF8String]);
 // 		
-// 		NSString* skirtWalkName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString skirtWalkName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		skirtWalkName = [NSString stringWithFormat:@"%@%d.png", skirtWalkName, equipmentId+4];	
 // 		SetSkirtWalkImage([skirtWalkName UTF8String]);
 // 		
-// 		NSString* skirtSitName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString skirtSitName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		skirtSitName = [NSString stringWithFormat:@"%@%d.png", skirtSitName, equipmentId+5];	
 // 		SetSkirtSitImage([skirtSitName UTF8String]);
 // 		
-// 		NSString* skirtLiftLegName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString skirtLiftLegName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		skirtLiftLegName = [NSString stringWithFormat:@"%@%d.png", skirtLiftLegName, equipmentId+6];	
 // 		SetSkirtLiftLegImage([skirtLiftLegName UTF8String]);
 		/**
@@ -1001,7 +1001,7 @@ void NDBaseRole::SetHair(int style, int color)
 	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	 * begin
 	 */
-// 	NSString* hairImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 	NSString hairImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 	hairImageName = [NSString stringWithFormat:@"%@%d", hairImageName, m_nHair];
 // 	if (sex % 2 == SpriteSexMale) 
 // 	{

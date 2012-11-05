@@ -1284,16 +1284,13 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 		CCString* pstrTemp = CCString::stringWithUTF8String(
 				pkData->ReadUnicodeString().c_str());
 		std::string strName = pstrTemp->toStdString();
-		SAFE_DELETE(pstrTemp);
 
 		pstrTemp = CCString::stringWithUTF8String(
 				pkData->ReadUnicodeString().c_str());
 		std::string dataStr = pstrTemp->toStdString();
-		SAFE_DELETE(pstrTemp);
 		pstrTemp = CCString::stringWithUTF8String(
 				pkData->ReadUnicodeString().c_str());
 		std::string talkStr = pstrTemp->toStdString();
-		SAFE_DELETE(pstrTemp);
 
 		NDNpc *pkNPC = new NDNpc;
 		pkNPC->m_nID = nID;
@@ -3843,7 +3840,7 @@ void NDMapMgr::processRoadBlock(NDTransData& kData)
 void NDMapMgr::ProcessTempCredential(NDTransData& kData)
 {
 	///< 这两行先注释掉 郭浩
-// 	NSString* temporaryCredential = kData.ReadUTF8NString();
+// 	NSString temporaryCredential = kData.ReadUTF8NString();
 // 	if(temporaryCredential == nil) return;
 
 #ifdef USE_MGSDK

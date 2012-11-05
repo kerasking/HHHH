@@ -19,6 +19,7 @@
 
 #include <cocos2d.h>
 #include "define.h"
+#include "NDSharedPtr.h"
 
 //#include "Singleton.h"
 //
@@ -28,18 +29,18 @@
 //
 //const char* DataFilePath();
 //
-#define pkDataFileName NSString::stringWithFormat("%s\\data.plist", DataFilePath()->toStdString().c_str())
+#define pkDataFileName CCString::stringWithFormat("%s\\data.plist", DataFilePath()->toStdString().c_str())
 //
 //// 上次登录信息
 #define kLoginData 0
 
-#define kLastServerName NSString("LastServerName")
-#define kLastServerIP NSString("LastServerIP")
-#define kLastServerPort NSString("LastServerPort")
-#define kLastAccountName NSString("LastAccountName")
-#define kLastAccountPwd NSString("LastAccountPwd")
-#define kLastServerSendName NSString("LastServerSendName")
-#define kLinkType NSString("LinkType")
+#define kLastServerName NSString(new CCString("LastServerName"))
+#define kLastServerIP NSString(new CCString("LastServerIP"))
+#define kLastServerPort NSString(new CCString("LastServerPort"))
+#define kLastAccountName NSString(new CCString("LastAccountName"))
+#define kLastAccountPwd NSString(new CCString("LastAccountPwd"))
+#define kLastServerSendName NSString(new CCString("LastServerSendName"))
+#define kLinkType NSString(new CCString("LinkType"))
 
 // NSString kLastServerName("LastServerName");
 // NSString kLastServerIP("LastServerIP");
@@ -51,7 +52,7 @@
 //
 //// 游戏设置
 #define kGameSettingData 1
-const static NSString kGameSetting("GameSetting");
+const static NSString kGameSetting(new cocos2d::CCString("GameSetting"));
 //
 //#ifdef CPLOG
 //
@@ -109,8 +110,8 @@ public:
 	void SaveGameSetting();
 	void SaveLoginData();
 	
- 	void SetData(unsigned int index, NSString* key, const char* data);
- 	const char* GetData(unsigned int index, NSString* type);
+ 	void SetData(unsigned int index, CCString* key, const char* data);
+ 	const char* GetData(unsigned int index, CCString* type);
 
 	void AddAcount(const char* account, const char* pwd);
 	void GetAccount(VEC_ACCOUNT& vAccount);
@@ -131,18 +132,18 @@ private:
 
 private:
 	void LoadData();
-	NSString* GetDataPath();
+	CCString* GetDataPath();
 	
 	// 获取配置信息
 	CCMutableDictionary<const char*>* LoadDataDiction(unsigned int index);
 	
 	void LoadAccountList();
-	NSString* GetAccountListPath();
+	CCString* GetAccountListPath();
 	
 	void LoadAccountDeviceList();
-	NSString* GetAccountDeviceListPath();
+	CCString* GetAccountDeviceListPath();
 	
-	bool NeedEncodeForKey(NSString* key);
+	bool NeedEncodeForKey(NSString key);
 };
 //
 /////////////////////////////////////////
@@ -164,7 +165,7 @@ private:
 //	NDEmailDataPersist();
 //	void LoadEmailData();
 //	void SaveEmailData();
-//	NSString* GetEmailPath();
+//	NSString GetEmailPath();
 //	NSMutableDictionary* LoadMailDiction();
 //	
 //private:
@@ -198,7 +199,7 @@ private:
 //	NDQuickTalkDataPersist();
 //	void LoadQuickTalkData();
 //	void SaveQuickTalkData();
-//	NSString* GetQuickTalkPath();
+//	NSString GetQuickTalkPath();
 //	NSMutableDictionary* LoadQuickTalkDiction();
 //	
 //private:
@@ -239,7 +240,7 @@ private:
 //	NDItemBarDataPersist();
 //	void LoadData();
 //	void SaveData();
-//	NSString* GetPath();
+//	NSString GetPath();
 //	NSMutableDictionary* LoadDictionInBattle();
 //	NSMutableDictionary* LoadDictionOutBattle();
 //	
@@ -256,7 +257,7 @@ private:
 //	virtual ~NDDataPlistBasic() = 0;
 //	
 //protected:
-//	NSString* GetPath(string filename);
+//	NSString GetPath(string filename);
 //	void LoadData();
 //	void SaveData();
 //protected:

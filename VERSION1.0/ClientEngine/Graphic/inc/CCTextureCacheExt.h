@@ -18,7 +18,7 @@
 // 
 // @interface CCTextureCache (ChangeColor)
 // 
-// -(CCTexture2D*) addColorImage: (NSString*)imageName;
+// -(CCTexture2D*) addColorImage: (NSString)imageName;
 // 
 // @end
 // 
