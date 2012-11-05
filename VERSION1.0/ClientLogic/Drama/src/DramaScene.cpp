@@ -23,7 +23,7 @@ public:
 	~DramaMapLayer()					{}
 	bool TouchBegin(NDTouch* touch) override
 	{
-		this->DispatchClickOfViewr(this);
+		DispatchClickOfViewr(this);
 		return true;
 	}
 };
@@ -56,7 +56,7 @@ void DramaScene::Init(int nMapId)
 	m_layerMap = new DramaMapLayer();
 	m_layerMap->Initialization(nMapId); 
 	m_layerMap->AddViewer(this);
-	this->AddChild(m_layerMap, MAPLAYER_Z, MAPLAYER_TAG);
+	AddChild(m_layerMap, MAPLAYER_Z, MAPLAYER_TAG);
 }
 
 bool DramaScene::SetCenter(CGPoint pos)
@@ -273,7 +273,7 @@ NDSprite* DramaScene::GetSprite(int nKey)
 
 bool DramaScene::RemoveSprite(int nKey)
 {
-	NDSprite* sprite = this->GetSprite(nKey);
+	NDSprite* sprite = GetSprite(nKey);
 
 	if (NULL == sprite)
 	{
@@ -373,7 +373,7 @@ void DramaScene::OpenChat(bool bLeft)
 		}
 		chat->Initialization();
 		chat->SetTargetDelegate(this);
-		this->AddChild(chat, 1);
+		AddChild(chat, 1);
 	}
 }
 
@@ -416,7 +416,7 @@ void DramaScene::SetChatTitleBySpriteKey(bool bLeft, int nKey, int nFontSize,
 		title = ((NDBaseRole*) sprite)->m_strName;
 	}
 
-	this->SetChatTitle(bLeft, title, nFontSize, nFontColor);
+	SetChatTitle(bLeft, title, nFontSize, nFontColor);
 }
 
 void DramaScene::SetChatContent(bool bLeft, std::string content, int nFontSize,
@@ -437,7 +437,7 @@ void DramaScene::ShowTipDlg(std::string content)
 		m_dlgConfirm = new DramaConfirmdlg;
 		m_dlgConfirm->Initialization();
 		m_dlgConfirm->SetTargetDelegate(this);
-		this->AddChild(m_dlgConfirm, 2);
+		AddChild(m_dlgConfirm, 2);
 	}
 
 	m_dlgConfirm->SetContent(content);

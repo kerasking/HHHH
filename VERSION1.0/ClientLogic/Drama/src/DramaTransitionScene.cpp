@@ -37,7 +37,7 @@ void DramaTransitionScene::Init()
 	m_pkLayerBack->SetBackgroundColor(ccc4(0, 0, 0, 255));
 	m_pkLayerBack->SetFrameRect(
 			CGRectMake(0, 0, winsize.width, winsize.height));
-	this->AddChild(m_pkLayerBack);
+	AddChild(m_pkLayerBack);
 
 	m_pkLabelText = new NDUILabel;
 	m_pkLabelText->Initialization();

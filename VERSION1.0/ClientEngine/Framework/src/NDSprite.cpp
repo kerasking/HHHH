@@ -24,6 +24,7 @@
 #include "define.h"
 #include "NDClassFactory.h"
 #include "NDDebugOpt.h"
+#include "NDSharedPtr.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -1071,14 +1072,13 @@ void NDSprite::SetNormalAniGroup(int nLookface)
 		return;
 	}
 
-	NSString* strString = NSString::stringWithFormat("%smodel_%d%s",
-		NDPath::GetAnimationPath().c_str(), ".spr");
+	NSString strString = CCString::stringWithFormat("%smodel_%d%s",
+			NDPath::GetAnimationPath().c_str(), ".spr");
 
 	Initialization(strString->toStdString().c_str());
 
 	m_bFaceRight = true;
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
-	SAFE_DELETE(strString);
 }
 
 void NDSprite::reloadAni( const char* pszSprFile )

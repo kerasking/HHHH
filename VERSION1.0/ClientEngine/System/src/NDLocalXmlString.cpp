@@ -10,6 +10,7 @@
 #include "NDLocalXmlString.h"
 #include "globaldef.h"
 #include "NDPath.h"
+#include "NDSharedPtr.h"
 
 static NDLocalXmlString* s_NDLocalXmlString = NULL;
 
@@ -30,7 +31,7 @@ void NDLocalXmlString::purge()
 	CC_SAFE_DELETE(s_NDLocalXmlString);
 }
 
-// NSString* NDLocalXmlString::GetString(NSString* nsKeyName)
+// NSString NDLocalXmlString::GetString(NSString nsKeyName)
 // {
 // 	if (!nsKeyName)
 // 	{
@@ -218,7 +219,7 @@ bool NDLocalXmlString::GetValue(const std::string str, bool& isKey, std::string&
 	return true;
 }
 
- NSString* NDLocalXmlString::GetDocumensDirectory()
+CCString* NDLocalXmlString::GetDocumensDirectory()
  {
 	 /***
 	 * 暂时没找到实现替代方案
@@ -226,7 +227,7 @@ bool NDLocalXmlString::GetValue(const std::string str, bool& isKey, std::string&
 	 */
 	//NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
 	
-	NSString *documentsDirectory = 0;//[paths objectAtIndex:0]; 
-	
+	NSString documentsDirectory = 0;//[paths objectAtIndex:0]; 
+
 	return documentsDirectory;
 }
