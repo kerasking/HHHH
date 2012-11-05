@@ -101,4 +101,17 @@ do \
 #define NS_NDENGINE_BGN	namespace NDEngine{
 #define NS_NDENGINE_END }
 
+#define ND_ASSERT_NO_RETURN(bValue) \
+	if (bValue) \
+	{ \
+		return; \
+	}
+
+#define ND_ASSERT_HAS_RETURN(bValue, returnValue) \
+	if (bValue) \
+	{ \
+		return returnValue; \
+	}
+
+
 #endif // __DEFINE_H__

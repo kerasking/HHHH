@@ -275,19 +275,26 @@ class NDMapMgr:
 	public ITimerCallback
 {
 public:
-
-	typedef map<int,NDManualRole*> map_manualrole;
-	typedef map_manualrole::iterator map_manualrole_it;
-	typedef vector<NDNpc*> VEC_NPC;
-	typedef vector<NDMonster*> VEC_MONSTER;
-	//typedef vector<RequsetInfo> VEC_REQUST; ///< ÒÀÀµÌÀ×ÔÇÚµÄGameUIRequest ¹ùºÆ
-	typedef VEC_NPC::iterator vec_npc_it;
-	typedef VEC_MONSTER::iterator vec_monster_it;
-
 	DECLARE_CLASS(NDMapMgr);
-
 	NDMapMgr();
 	virtual ~NDMapMgr();
+
+
+
+
+public:
+	typedef vector<NDNpc*> VEC_NPC;
+	typedef vector<NDMonster*> VEC_MONSTER;
+	typedef VEC_NPC::iterator vec_npc_it;
+	typedef VEC_MONSTER::iterator vec_monster_it;
+	typedef map<int,NDManualRole*> map_manualrole;
+	typedef map_manualrole::iterator map_manualrole_it;
+	typedef pair<int,NDManualRole*> map_manualrole_pair;
+
+	//typedef vector<RequsetInfo> VEC_REQUST; ///< ÒÀÀµÌÀ×ÔÇÚµÄGameUIRequest ¹ùºÆ
+
+
+
 
 	virtual void Update(unsigned long ulDiff);
 	NDMonster* GetMonster(int nID);

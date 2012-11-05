@@ -205,38 +205,23 @@ void NDMapLayer::Initialization(const char* mapFile)
 	NDLayer::Initialization();
 	SetTouchEnabled(true);
 
-	m_pkSwitchAniGroup =
-			NDAnimationGroupPool::defaultPool()->addObjectWithModelId(switch_ani_modelId);
+	m_pkSwitchAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithModelId(switch_ani_modelId);
 
 	m_pkMapData = new NDMapData;
+	ND_ASSERT_NO_RETURN(NULL == m_pkMapData);
 	m_pkMapData->initWithFile(mapFile);
 
-	if (m_pkMapData)
-	{
-		SetContentSize(
-				CGSizeMake(
-						m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
-						m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
+	SetContentSize(CGSizeMake(m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
+		                    m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
 
-		MakeOrdersOfMapscenesAndMapanimations();
-		MakeFrameRunRecords();
+	MakeOrdersOfMapscenesAndMapanimations();
+	MakeFrameRunRecords();
 
-		CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
-		m_kScreenCenter = ccp(kWinSize.width / 2,
-				GetContentSize().height - kWinSize.height / 2);
-		m_ccNode->setPosition(0, 0);
+	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	m_kScreenCenter = ccp(kWinSize.width / 2,
+			GetContentSize().height - kWinSize.height / 2);
+	m_ccNode->setPosition(0, 0);
 
-		/*
-		 m_texMap = [CCTexture2D alloc] initWithContentSize:winSize];
-		 m_picMap = new NDPicture();
-		 m_picMap->SetTexture(m_texMap);
-
-		 ReflashMapTexture(ccp(-winSize.width / 2, -winSize.height / 2), m_screenCenter);
-		 m_areaCamarkSplit = IntersectionAreaNone;
-		 m_ptCamarkSplit = ccp(0, 0);*/
-	}
-
-	DidFinishLaunching();
 }
 
 void NDMapLayer::Initialization(int mapIndex)
@@ -747,10 +732,10 @@ void NDMapLayer::DrawScenesAndAnimations()
 {
 	MakeOrders();
 
-	unsigned int orderCount = m_pkOrders->count(), uiSceneTileCount =
-			m_pkMapData->getSceneTiles()->count(), aniGroupCount =
-			m_pkMapData->getAnimationGroups()->count(), switchCount =
-			m_pkMapData->getSwitchs()->count();
+	unsigned int orderCount = m_pkOrders->count();
+	unsigned int uiSceneTileCount = m_pkMapData->getSceneTiles()->count();
+	unsigned int aniGroupCount = m_pkMapData->getAnimationGroups()->count();
+	unsigned int switchCount = m_pkMapData->getSwitchs()->count();
 
 	//PerformanceTestPerFrameBeginName(" NDMapLayer::DrawScenesAndAnimations");
 
@@ -1374,6 +1359,7 @@ void NDMapLayer::MakeOrders()
 	m_pkOrders->addObjectsFromArray(m_pkOrdersOfMapscenesAndMapanimations);
 	const std::vector<NDNode*>& kCLD = GetChildren();
 	std::map<int, NDNode*> kMapDrawlast;
+
 	//std::map<unsigned int, NDManualRole*> mapRoleCell;
 	for (int i = 0; i < (int) kCLD.size(); i++)
 	{
@@ -1505,7 +1491,13 @@ void NDMapLayer::MakeOrders()
 void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 {
 	m_pkOrdersOfMapscenesAndMapanimations->removeAllObjects();
-	for (int i = 0; i < (int) m_pkMapData->getSceneTiles()->count(); i++)
+	
+	int iNumSceneTitles = (int) m_pkMapData->getSceneTiles()->count();
+	int iNumAniGroupParams = (int) m_pkMapData->getAniGroupParams()->count();
+	int iNumSwitchs = (int) m_pkMapData->getSwitchs()->count();
+	
+
+	for (int i = 0; i < iNumSceneTitles; i++)
 	{
 		NDSceneTile *pkSceneTile =
 				(NDSceneTile *) m_pkMapData->getSceneTiles()->objectAtIndex(i);
@@ -1525,7 +1517,7 @@ void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 		m_pkOrdersOfMapscenesAndMapanimations->addObject(dict);
 		dict->release();
 	}
-	for (int i = 0; i < (int) m_pkMapData->getAniGroupParams()->count(); i++)
+	for (int i = 0; i < iNumAniGroupParams; i++)
 	{
 		//NSDictionary *dictAniGroupParam = [m_mapData.aniGroupParams objectAtIndex:i];
 		int nOrderID = GetMapDataAniParamOrderId(i);
@@ -1542,7 +1534,7 @@ void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 		m_pkOrdersOfMapscenesAndMapanimations->addObject(pkDict);
 		pkDict->release();
 	}
-	for (int i = 0; i < (int) m_pkMapData->getSwitchs()->count(); i++)
+	for (int i = 0; i < iNumSwitchs; i++)
 	{
 		if (m_pkSwitchAniGroup->getAnimations()->count() > 0)
 		{
