@@ -27,7 +27,7 @@ m_pkStringMap(0)
 	}
 
 	AllocConsole();
-	Attach(300, 80);
+	Attach(300, 120);
 	ms_bIsExistent = TRUE;
 	m_pkStringMap = new MAP_STRING;
 }
@@ -74,7 +74,7 @@ void NDConsole::Attach(SHORT ConsoleHeight, SHORT ConsoleWidth)
 	COORD kSize =
 	{ 0 };
 	kSize.X = ConsoleWidth;
-	kSize.Y = ConsoleHeight;
+	kSize.Y = 2000;//ConsoleHeight;
 	SetConsoleScreenBufferSize(m_hOutputHandle, kSize);
 	nFD = _open_osfhandle(reinterpret_cast<intptr_t>(m_hOutputHandle), _O_TEXT);
 	pkFile = _fdopen(nFD, "w");

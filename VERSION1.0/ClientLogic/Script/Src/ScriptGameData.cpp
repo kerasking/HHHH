@@ -9,7 +9,7 @@
 
 #include "ScriptGameData.h"
 #include "globaldef.h"
-/////////////////////////////////////////////////////////////////////////////////////////
+
 
 unsigned int Get_VecScriptGameData_Size(VecScriptGameData& data)
 {
@@ -921,13 +921,18 @@ NDScriptGameData::GetScriptGameDataByVec(VecScriptGameData& vSGD, unsigned short
 	
 	return vSGD[index];
 	*/
-	if (vSGD.find(index) == vSGD.end())
+
+	VecScriptGameData::iterator it = vSGD.find(index);
+	if (it != vSGD.end())
+	{	
+		return it->second;
+	}	
+	else
 	{
 		ScriptGameData sgd;
 		vSGD.insert(VecScriptGameDataVt(index, sgd));
+		return vSGD[index];
 	}
-	
-	return vSGD[index];
 }
 
 STSCRIPTGAMEDATA&		
@@ -1051,9 +1056,19 @@ NDScriptGameData::GetScriptGameData(eScriptData esd, unsigned int nKey, eRoleDat
 		NDAsssert(0);
 	}
 	
-	VecScriptGameData& vSGD = GetVecScriptGameData(esd, nKey, e, nId);
+	VecScriptGameData* vSGD = NULL;
+
+	static FAST_CACHE s_cache; //@db @cache
+	vSGD = (VecScriptGameData*) s_cache.getCachePtr( (int) esd, (int) nKey, (int)e, nId );
+
+	if (!vSGD)
+	{
+		vSGD = &GetVecScriptGameData(esd, nKey, e, nId);
 	
-	return GetScriptGameDataByVec(vSGD, index);	
+		s_cache.saveCache((int)esd, (int)nKey, (int)e, nId, (void*) vSGD); //@db @cache
+	}
+
+	return GetScriptGameDataByVec(*vSGD, index);	
 }
 
 VecScriptGameData& 
@@ -1064,46 +1079,58 @@ NDScriptGameData::GetVecScriptGameData(eScriptData esd, unsigned int nKey, eRole
 		NDAsssert(0);
 	}
 	
-	if ( (size_t)esd == m_vMapGameScriptDataObject.size())
+	MapScriptGameData* mapSGD = NULL;
+
+	static FAST_CACHE s_cache; //@db @cache
+	mapSGD = (MapScriptGameData*) s_cache.getCachePtr( (int) esd, (int) nKey, (int)e, 0 );
+	
+	if (!mapSGD)
 	{
-		m_vMapGameScriptDataObject.push_back(MapGameScriptObject());
+		if ( (size_t)esd == m_vMapGameScriptDataObject.size())
+		{
+			m_vMapGameScriptDataObject.push_back(MapGameScriptObject());
+		}
+		else if ( (size_t)esd > m_vMapGameScriptDataObject.size() )
+		{
+			m_vMapGameScriptDataObject.resize(esd+1);
+		}
+		
+		MapGameScriptObject& mapGSO = m_vMapGameScriptDataObject[esd];
+		
+		MapGameScriptObjectIt itMapSGO = mapGSO.find(nKey);
+		
+		if (itMapSGO == mapGSO.end())
+		{
+			GameScriptDataSet newGSDS;
+			mapGSO.insert(MapGameScriptObjectPair(nKey, newGSDS));
+		}
+		
+		GameScriptDataSet& gsds = mapGSO[nKey];
+		
+		if ( e == eRoleDataBasic )
+			return gsds.basicdata;
+		
+		VecMapScriptGameData& vMSGD = gsds.extradata;
+		
+		size_t eIndex = e - 1;	
+		
+		if ( eIndex == vMSGD.size() )
+		{
+			vMSGD.push_back(MapScriptGameData());
+		}
+		else if ( eIndex > vMSGD.size() )
+		{
+			vMSGD.resize(eIndex + 1);
+		}
+	
+		mapSGD = &(vMSGD[eIndex]);
+
+		//@cache
+		s_cache.saveCache( (int) esd, (int) nKey, (int)e, 0, (void*) mapSGD );
 	}
-	else if ( (size_t)esd > m_vMapGameScriptDataObject.size() )
-	{
-		m_vMapGameScriptDataObject.resize(esd+1);
-	}
 	
-	MapGameScriptObject& mapGSO = m_vMapGameScriptDataObject[esd];
-	
-	MapGameScriptObjectIt itMapSGO = mapGSO.find(nKey);
-	
-	if (itMapSGO == mapGSO.end())
-	{
-		GameScriptDataSet newGSDS;
-		mapGSO.insert(MapGameScriptObjectPair(nKey, newGSDS));
-	}
-	
-	GameScriptDataSet& gsds = mapGSO[nKey];
-	
-	if ( e == eRoleDataBasic )
-		return gsds.basicdata;
-	
-	VecMapScriptGameData& vMSGD = gsds.extradata;
-	
-	size_t eIndex = e - 1;	
-	
-	if ( eIndex == vMSGD.size() )
-	{
-		vMSGD.push_back(MapScriptGameData());
-	}
-	else if ( eIndex > vMSGD.size() )
-	{
-		vMSGD.resize(eIndex + 1);
-	}
-	
-	MapScriptGameData& mapSGD = vMSGD[eIndex];
-	
-	return GetVecScriptGameDataByMap(mapSGD, nId).vData;
+	CCAssert(mapSGD);
+	return GetVecScriptGameDataByMap(*mapSGD, nId).vData;
 }
 
 int						
