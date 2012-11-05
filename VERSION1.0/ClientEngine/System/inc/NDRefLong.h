@@ -1,3 +1,14 @@
+//
+//  NDClassFactory.h
+//  NDClassFactory
+//
+//  Copyright 2010 (网龙)DeNA. All rights reserved.
+//	
+//	@author 郭浩
+//
+//	－－介绍－－
+//  智能指针依赖引用类。
+
 #ifndef NDREFLONG
 #define NDREFLONG
 

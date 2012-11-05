@@ -9,7 +9,6 @@
 #include <LuaPlus.h>
 #include <NDBaseDirector.h>
 #include "NDConsole.h"
-#include "NDSmartPoint.h"
 #include "NDSharedPtr.h"
 
 using namespace cocos2d;

@@ -2,7 +2,6 @@
 //  NDClassFactory.h
 //  NDClassFactory
 //
-//  Created by xiezhenghai on 10-12-10.
 //  Copyright 2010 (ÍøÁú)DeNA. All rights reserved.
 //	
 //	@author ¹ùºÆ

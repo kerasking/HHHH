@@ -482,10 +482,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\System\inc\NDSmartPoint.h"
-					>
-				</File>
-				<File
 					RelativePath="..\System\inc\NDSPtrCounted.h"
 					>
 				</File>

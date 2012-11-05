@@ -1,7 +1,16 @@
-#pragma once
+//
+//  NDClassFactory.h
+//  NDClassFactory
+//
+//  Copyright 2010 (网龙)DeNA. All rights reserved.
+//	
+//	@author 郭浩
+//
+//	－－介绍－－
+//  这个类是可以被继承的。
 
-#ifndef _ENABLE_SHARED_FROM_THIS_H_
-#define _ENABLE_SHARED_FROM_THIS_H_
+#ifndef NDENABLESHAREDFROMTHIS_H
+#define NDENABLESHAREDFROMTHIS_H
 
 #include "NDSharedPtr.h"
 #include "NDWeakPtr.h"
@@ -10,12 +19,12 @@ template<typename T>
 class NDEnableSharedFromThis
 {
 public:
-	NDSharedPtr<T> shared_from_this()
+	NDSharedPtr<T> SharedFromThis()
 	{
 		return NDSharedPtr<T>( m_kWeakThis );
 	}
 public:
-	void _internal_accept_owner(const NDSharedPtr<T>& p)
+	void InternalAcceptOwner(const NDSharedPtr<T>& p)
 	{
 		m_kWeakThis = p;
 	}

@@ -1,7 +1,16 @@
-#pragma once
+//
+//  NDClassFactory.h
+//  NDClassFactory
+//
+//  Copyright 2010 (网龙)DeNA. All rights reserved.
+//	
+//	@author 郭浩
+//
+//	－－介绍－－
+//  智能指针计数。
 
-#ifndef _SP_COUNTED_H_
-#define _SP_COUNTED_H_
+#ifndef NDSPTRCOUNTED_H
+#define NDSPTRCOUNTED_H
 
 #include "NDRefLong.h"
 

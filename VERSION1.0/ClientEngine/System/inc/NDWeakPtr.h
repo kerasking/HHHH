@@ -1,3 +1,14 @@
+//
+//  NDClassFactory.h
+//  NDClassFactory
+//
+//  Copyright 2010 (网龙)DeNA. All rights reserved.
+//	
+//	@author 郭浩
+//
+//	－－介绍－－
+//  弱引用智能指针类。
+
 #ifndef NDWEAKPTR_H
 #define NDWEAKPTR_H
 

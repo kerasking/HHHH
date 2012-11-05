@@ -1,3 +1,14 @@
+//
+//  NDClassFactory.h
+//  NDClassFactory
+//
+//  Copyright 2010 (网龙)DeNA. All rights reserved.
+//	
+//	@author 郭浩
+//
+//	－－介绍－－
+//  强引用智能指针类。
+
 #ifndef NDSHAREDPTR_H
 #define NDSHAREDPTR_H
 
