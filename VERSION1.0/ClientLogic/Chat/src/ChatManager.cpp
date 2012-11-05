@@ -78,7 +78,7 @@ bool ChatManager::process(MSGID msgID, NDEngine::NDTransData* bao, int len)
 	switch (msgID)
 	{
 	case _MSG_TALK:
-		this->processChatTalk(*bao);
+		processChatTalk(*bao);
 		break;
 	default:
 		break;
@@ -235,5 +235,5 @@ void ChatManager::AddAllRecord()
 }
 void ChatManager::SetMaxRecoudCount(int maxCount)
 {
-	this->maxRecordCount = maxCount;
+	maxRecordCount = maxCount;
 }

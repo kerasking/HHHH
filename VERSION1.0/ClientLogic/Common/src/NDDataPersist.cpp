@@ -15,7 +15,7 @@
 #include "..\..\TinyXML\inc\tinyxml.h"
 #include "XMLReader.h"
 
-NSString* DataFilePath()
+NSString DataFilePath()
 {
 	/***
 	* 临时性注释 郭浩
@@ -143,12 +143,12 @@ NDDataPersist::~NDDataPersist()
 // 	[accountDeviceList release];
 }
 
-bool NDDataPersist::NeedEncodeForKey(NSString* key)
+bool NDDataPersist::NeedEncodeForKey(NSString key)
 {
-	if (key->isEqual(&kLastServerIP) ||
-		key->isEqual(&kLastServerPort) ||
-		key->isEqual(&kLastAccountName) ||
-		key->isEqual(&kLastAccountPwd))
+	if (key->isEqual(kLastServerIP) ||
+		key->isEqual(kLastServerPort) ||
+		key->isEqual(kLastAccountName) ||
+		key->isEqual(kLastAccountPwd))
 	{
 		return true;
 	}
@@ -158,20 +158,20 @@ bool NDDataPersist::NeedEncodeForKey(NSString* key)
 	}
 }
 
-void NDDataPersist::SetData(unsigned int index, NSString* key, const char* data)
+void NDDataPersist::SetData(unsigned int index, CCString* key, const char* data)
 {
 	CCMutableDictionary<const char*>* dic = LoadDataDiction(index);
 	NDAsssert(dic != nil);
 	if (data) 
 	{
 //		NSString *nsObj = [NSString stringWithUTF8String:data];
-		NSString* nsObj = NSString::stringWithUTF8String(data);
+		NSString nsObj = CCString::stringWithUTF8String(data);
 		
 		if (NeedEncodeForKey(key)) 
 		{
 			unsigned char encData[1024] = {0x00};
 			simpleEncode((const unsigned char*)data, encData);
-			nsObj = NSString::stringWithUTF8String((const char*)encData);
+			nsObj = CCString::stringWithUTF8String((const char*)encData);
 			//nsObj = [NSString stringWithUTF8String:(const char*)encData];
 		}
 		
@@ -181,14 +181,14 @@ void NDDataPersist::SetData(unsigned int index, NSString* key, const char* data)
 	
 }
 
-const char* NDDataPersist::GetData(unsigned int index, NSString* key)
+const char* NDDataPersist::GetData(unsigned int index, CCString* key)
 {
 	static char decData[1024] = {0};
 	memset(decData, 0x00, sizeof(decData));
 	
 	CCMutableDictionary<const char*>* dic = LoadDataDiction(index);
 	NDAsssert(dic != nil);
-	NSString* nsStr = (NSString*)dic->objectForKey(key->toStdString().c_str());
+	NSString nsStr = (CCString*)dic->objectForKey(key->toStdString().c_str());
 
 	if (nsStr == nil) // 键值对不存在, 加入
 	{ 
@@ -249,7 +249,7 @@ CCMutableDictionary<const char*>* NDDataPersist::LoadDataDiction(unsigned int in
 
 void NDDataPersist::LoadData()
 {
- 	NSString *filePath = this->GetDataPath();
+ 	NSString filePath = this->GetDataPath();
 
 	XMLReader kReader;
 	m_pkDataArray = new CCMutableArray<CCObject*>;
@@ -298,11 +298,11 @@ void NDDataPersist::LoadData()
 // 	}
 }
 
-NSString* NDDataPersist::GetDataPath()
+CCString* NDDataPersist::GetDataPath()
 {
-//	NSString* dir = [kDataFileName stringByDeletingLastPathComponent];
+//	NSString dir = [kDataFileName stringByDeletingLastPathComponent];
 
-	// 	NSString* dir = new NSString("");
+	// 	NSString dir = new CCString("");
 	// 
 	// 	if (!KDirectory::isDirectoryExist(dir->toStdString().c_str())) 
 	// 	{
@@ -320,9 +320,9 @@ NSString* NDDataPersist::GetDataPath()
 //	return [documentsDirectory stringByAppendingPathComponent:kDataFileName];
 }
 
-NSString* NDDataPersist::GetAccountListPath()
+CCString* NDDataPersist::GetAccountListPath()
 {
-// 	NSString* dir = [kFavoriteAccountListFileName stringByDeletingLastPathComponent] ;
+// 	NSString dir = [kFavoriteAccountListFileName stringByDeletingLastPathComponent] ;
 // 	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
 // 	{
 // 		if (!KDirectory::createDir([dir UTF8String]))
@@ -336,7 +336,7 @@ NSString* NDDataPersist::GetAccountListPath()
 	//	NSString *documentsDirectory = [paths objectAtIndex:0];
 	//	return [documentsDirectory stringByAppendingPathComponent:kFavoriteAccountListFileName];
 
-	return new NSString("");
+	return new CCString("");
 }
 
 void NDDataPersist::LoadAccountList()
@@ -365,7 +365,7 @@ void NDDataPersist::AddAcount(const char* account, const char* pwd)
 		
 		CCMutableArray<CCObject*>* accountNode = new CCMutableArray<CCObject*>;
 
-		accountNode->addObject(&NSString((const char*)encAccount));
+		accountNode->addObject(NSString(new CCString((const char*)encAccount)));
 		//[accountNode addObject:[NSString stringWithUTF8String:(const char*)encAccount]];
 		
 		if (pwd)
@@ -374,15 +374,15 @@ void NDDataPersist::AddAcount(const char* account, const char* pwd)
 			simpleEncode((const unsigned char*)pwd, encPwd);
 			//[accountNode addObject:[NSString stringWithUTF8String:(const char*)encPwd]];
 
-			accountNode->addObject(&NSString((const char*)encPwd));
+			accountNode->addObject(NSString(new CCString((const char*)encPwd)));
 		}
 		
 		for (int i = 0; i < m_pkAccountList->count(); i++) 
 		{
 			CCArray* tmpAccountNode = (CCArray*)m_pkAccountList->objectAtIndex(i);
-			NSString *tmpAccount = (NSString*)tmpAccountNode->objectAtIndex(0);
+			NSString tmpAccount = (CCString*)tmpAccountNode->objectAtIndex(0);
 
-			if (tmpAccount->isEqual(new NSString((const char*) encAccount)))
+			if (tmpAccount->isEqual(NSString(new CCString((const char*) encAccount))))
 			{
 				m_pkAccountList->removeObject(tmpAccount);
 			}
@@ -419,12 +419,12 @@ void NDDataPersist::GetAccount(VEC_ACCOUNT& vAccount)
 	for (int i = 0;i < m_pkAccountList->count();i++)
 	{
 		account = (CCArray*)m_pkAccountList->objectAtIndex(i);
-		string acc = ((NSString*)(account->objectAtIndex(0)))->toStdString();
+		string acc = ((CCString*)(account->objectAtIndex(0)))->toStdString();
 		string pwd = "";
 
 		if (account->count() > 1)
 		{
-			pwd = ((NSString*)(account->objectAtIndex(1)))->toStdString();
+			pwd = ((CCString*)(account->objectAtIndex(1)))->toStdString();
 		}
 
 		unsigned char decAcc[1024] = {0x00};
@@ -442,11 +442,11 @@ void NDDataPersist::GetAccount(VEC_ACCOUNT& vAccount)
 	*/
 // 	while ((account = accountList->) != nil)
 // 	{
-// 		string acc = [(NSString*)[(NSArray*)account objectAtIndex:0] UTF8String];
+// 		string acc = [(NSString)[(NSArray*)account objectAtIndex:0] UTF8String];
 // 		string pwd;
 // 		if ([account count] > 1) 
 // 		{
-// 			pwd = [(NSString*)[(NSArray*)account objectAtIndex:1] UTF8String];
+// 			pwd = [(NSString)[(NSArray*)account objectAtIndex:1] UTF8String];
 // 		}
 // 		
 // 		unsigned char decAcc[1024] = {0x00};
@@ -463,14 +463,14 @@ void NDDataPersist::SaveAccountList()
 	m_pkAccountList->writeToFile(GetAccountListPath(),YES);
 }
 
-NSString* NDDataPersist::GetAccountDeviceListPath()
+CCString* NDDataPersist::GetAccountDeviceListPath()
 {
 /***
 * 临时性注释 郭浩
 * begin
 */
 
-	// 	NSString* dir = [kFavoriteAccountDeviceListFileName stringByDeletingLastPathComponent];
+	// 	NSString dir = [kFavoriteAccountDeviceListFileName stringByDeletingLastPathComponent];
 	// 
 	// 	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
 	// 	{
@@ -495,7 +495,7 @@ NSString* NDDataPersist::GetAccountDeviceListPath()
 
 void NDDataPersist::LoadAccountDeviceList()
 {
-	NSString* filePath = GetAccountDeviceListPath();
+	NSString filePath = GetAccountDeviceListPath();
 
 	/***
 	* 以下为旧代码 郭浩
@@ -520,9 +520,9 @@ void NDDataPersist::AddAccountDevice(const char* account)
 		
 		for (NSUInteger i = 0; i < m_pkAccountList->count(); i++) 
 		{
-			NSString* tmpAccountNode = (NSString*)m_pkAccountList->objectAtIndex(i);
+			NSString tmpAccountNode = (CCString*)m_pkAccountList->objectAtIndex(i);
 
-			if (tmpAccountNode->isEqual(NSString::stringWithUTF8String((const char*)encAccount)))
+			if (tmpAccountNode->isEqual(CCString::stringWithUTF8String((const char*)encAccount)))
 			{
 				return;
 			}
@@ -534,7 +534,7 @@ void NDDataPersist::AddAccountDevice(const char* account)
 		}
 		
 		//[accountDeviceList addObject:[NSString stringWithUTF8String:(const char*)encAccount]];
-		m_pkAccountDeviceList->addObject(NSString::stringWithUTF8String((const char*)encAccount));
+		m_pkAccountDeviceList->addObject(CCString::stringWithUTF8String((const char*)encAccount));
 	}	
 }
 
@@ -549,23 +549,23 @@ bool NDDataPersist::HasAccountDevice(const char* account)
 		return true;
 	}
 	
-	NSString* tmpAccountNode = NSString::stringWithUTF8String(account);
+	NSString tmpAccountNode = CCString::stringWithUTF8String(account);
 
 // 	NSEnumerator *enumerator;
 // 	enumerator = [accountDeviceList objectEnumerator];
 // 	
-// 	NSString* tmpAccountNode = [NSString stringWithUTF8String:account];
+// 	NSString tmpAccountNode = [NSString stringWithUTF8String:account];
 	
 	id object = 0;
 
 	for (int i = 0;i < m_pkAccountDeviceList->count();i++)
 	{
-		string acc = ((NSString*)object)->UTF8String();
+		string acc = ((CCString*)object)->UTF8String();
 		unsigned char decAcc[1024] = {0};
 
 		simpleDecode((const unsigned char*)acc.c_str(),decAcc);
 
-		if (tmpAccountNode->isEqual(NSString::stringWithUTF8String((const char*)decAcc)))
+		if (tmpAccountNode->isEqual(CCString::stringWithUTF8String((const char*)decAcc)))
 		{
 			return true;
 		}
@@ -573,7 +573,7 @@ bool NDDataPersist::HasAccountDevice(const char* account)
 
 // 	while ((object = [enumerator nextObject]) != nil)
 // 	{
-// 		string acc = [(NSString*)object UTF8String];
+// 		string acc = [(NSString)object UTF8String];
 // 		
 // 		unsigned char decAcc[1024] = {0x00};
 // 		simpleDecode((const unsigned char*)acc.c_str(), decAcc);
@@ -611,16 +611,16 @@ bool NDDataPersist::IsGameSettingOn(GAME_SETTING type)
 
 void NDDataPersist::SaveGameSetting()
 {
-	NSString* strGameSetting = NSString::stringWithFormat("%d",ms_nGameSetting);
+	NSString strGameSetting = CCString::stringWithFormat("%d",ms_nGameSetting);
 
-	NSString* strTemp = new NSString(kGameSetting);
+	NSString strTemp = new CCString(kGameSetting->toStdString().c_str());
 	SetData(kGameSettingData,strTemp,strGameSetting->UTF8String());
 	SaveData();
 
 	/***
 	* 以下为旧代码 郭浩
 	*/
-// 	NSString* strGameSetting = [NSString stringWithFormat:@"%d", s_gameSetting];
+// 	NSString strGameSetting = [NSString stringWithFormat:@"%d", s_gameSetting];
 // 	this->SetData(kGameSettingData, kGameSetting, [strGameSetting UTF8String]);
 // 	this->SaveData();
 }
@@ -760,7 +760,7 @@ const NSUInteger max_mail_save_count = 20;
 //
 //void NDEmailDataPersist::LoadEmailData()
 //{
-//	NSString* filePath = GetEmailPath();
+//	NSString filePath = GetEmailPath();
 //	if (!filePath) 
 //	{
 //		emailArray = [[NSMutableArray alloc] init];
@@ -780,7 +780,7 @@ const NSUInteger max_mail_save_count = 20;
 //
 //void NDEmailDataPersist::SaveEmailData()
 //{
-//	NSString* filePath = GetEmailPath();
+//	NSString filePath = GetEmailPath();
 //	if (filePath) 
 //	{
 //		[emailArray writeToFile:filePath atomically:YES];
@@ -790,9 +790,9 @@ const NSUInteger max_mail_save_count = 20;
 //	emailArray = nil;
 //}
 //
-//NSString* NDEmailDataPersist::GetEmailPath()
+//NSString NDEmailDataPersist::GetEmailPath()
 //{
-//	NSString* dir = [kEmailFileName stringByDeletingLastPathComponent] ;
+//	NSString dir = [kEmailFileName stringByDeletingLastPathComponent] ;
 //	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
 //	{
 //		if (!KDirectory::createDir([dir UTF8String]))
@@ -883,7 +883,7 @@ const NSUInteger max_mail_save_count = 20;
 //	}
 //	
 //	for (NSUInteger i = 0; i < [arrMsg count]; i++) {
-//		NSString* msg = (NSString*)[arrMsg objectAtIndex:i];
+//		NSString msg = (NSString)[arrMsg objectAtIndex:i];
 //		vMsg.push_back(string([msg UTF8String]));
 //	}
 //}
@@ -899,7 +899,7 @@ const NSUInteger max_mail_save_count = 20;
 //	string str;
 //	
 //	if (uIdx < [arrMsg count]) {
-//		str = [(NSString*)[arrMsg objectAtIndex:uIdx] UTF8String];
+//		str = [(NSString)[arrMsg objectAtIndex:uIdx] UTF8String];
 //	}
 //	
 //	return str;
@@ -920,7 +920,7 @@ const NSUInteger max_mail_save_count = 20;
 //
 //void NDQuickTalkDataPersist::LoadQuickTalkData()
 //{
-//	NSString* filePath = this->GetQuickTalkPath();
+//	NSString filePath = this->GetQuickTalkPath();
 //	if (!filePath) 
 //	{
 //		quickTalkArray = [[NSMutableArray alloc] init];
@@ -939,16 +939,16 @@ const NSUInteger max_mail_save_count = 20;
 //
 //void NDQuickTalkDataPersist::SaveQuickTalkData()
 //{
-//	NSString* filePath = this->GetQuickTalkPath();
+//	NSString filePath = this->GetQuickTalkPath();
 //	if (filePath) 
 //	{
 //		[quickTalkArray writeToFile:filePath atomically:YES];
 //	}
 //}
 //
-//NSString* NDQuickTalkDataPersist::GetQuickTalkPath()
+//NSString NDQuickTalkDataPersist::GetQuickTalkPath()
 //{
-//	NSString* dir = [kQuickTalkFileName stringByDeletingLastPathComponent] ;
+//	NSString dir = [kQuickTalkFileName stringByDeletingLastPathComponent] ;
 //	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
 //	{
 //		if (!KDirectory::createDir([dir UTF8String]))
@@ -1132,7 +1132,7 @@ const NSUInteger max_mail_save_count = 20;
 //
 //void NDItemBarDataPersist::LoadData()
 //{
-//	NSString* filePath = this->GetPath();
+//	NSString filePath = this->GetPath();
 //	if (!filePath) 
 //	{
 //		itemBarArray = [[NSMutableArray alloc] init];
@@ -1151,16 +1151,16 @@ const NSUInteger max_mail_save_count = 20;
 //
 //void NDItemBarDataPersist::SaveData()
 //{
-//	NSString* filePath = this->GetPath();
+//	NSString filePath = this->GetPath();
 //	if (filePath) 
 //	{
 //		[itemBarArray writeToFile:filePath atomically:YES];
 //	}
 //}
 //
-//NSString* NDItemBarDataPersist::GetPath()
+//NSString NDItemBarDataPersist::GetPath()
 //{
-//	NSString* dir = [kItemBarFileName stringByDeletingLastPathComponent];
+//	NSString dir = [kItemBarFileName stringByDeletingLastPathComponent];
 //	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
 //	{
 //		if (!KDirectory::createDir([dir UTF8String]))
@@ -1229,10 +1229,10 @@ const NSUInteger max_mail_save_count = 20;
 //	dataArray = nil;
 //}
 //
-//NSString* NDDataPlistBasic::GetPath(string filename)
+//NSString NDDataPlistBasic::GetPath(string filename)
 //{
-//	NSString* name = [NSString stringWithFormat:@"%@%s.plist", DataFilePath(), filename.c_str()];
-//	NSString* dir = [name stringByDeletingLastPathComponent] ;
+//	NSString name = [NSString stringWithFormat:@"%@%s.plist", DataFilePath(), filename.c_str()];
+//	NSString dir = [name stringByDeletingLastPathComponent] ;
 //	if (!KDirectory::isDirectoryExist([dir UTF8String])) 
 //	{
 //		if (!KDirectory::createDir([dir UTF8String]))
@@ -1246,7 +1246,7 @@ const NSUInteger max_mail_save_count = 20;
 //
 //void NDDataPlistBasic::LoadData()
 //{
-//	NSString* filePath = GetPath(m_filename);
+//	NSString filePath = GetPath(m_filename);
 //	if (!filePath) 
 //	{
 //		dataArray = [[NSMutableArray alloc] init];
@@ -1265,7 +1265,7 @@ const NSUInteger max_mail_save_count = 20;
 //
 //void NDDataPlistBasic::SaveData()
 //{
-//	NSString* filePath = GetPath(m_filename);
+//	NSString filePath = GetPath(m_filename);
 //	if (filePath && dataArray) 
 //	{
 //		[dataArray writeToFile:filePath atomically:YES];

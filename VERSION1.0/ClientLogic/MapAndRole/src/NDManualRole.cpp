@@ -29,6 +29,7 @@
 #include "SMGameScene.h"
 #include "DramaScene.h"
 #include "NDDebugOpt.h"
+#include "NDSharedPtr.h"
 
 /* 玩家寻路八个方向值,无效的方向值-1
     7  0  4
@@ -267,11 +268,9 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 	//根据lookface获取人物图像
 	int nModelID = lookface % 1000;
 
-	NSString* pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
-	CCString* pString = CCString::stringWithFormat("%smodel_%d.spr", pstrAniPath->toStdString().c_str(), nModelID);
+	NSString pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
+	NSString pString = CCString::stringWithFormat("%smodel_%d.spr", pstrAniPath->toStdString().c_str(), nModelID);
 	NDSprite::Initialization(pString->toStdString().c_str());
-	SAFE_DELETE(pstrAniPath);
-	m_nLookface = lookface;
 	m_bFaceRight = m_nDirect == 2;
 
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);

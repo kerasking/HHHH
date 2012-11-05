@@ -313,7 +313,6 @@ const string& NDPath::GetUIImgPath(const char* uiFileNameWithPath)
 
 	//return pszTemp;
 	ret = pszTemp;
-	SAFE_DELETE(pszTemp);
 	return ret;
 #endif        
 }

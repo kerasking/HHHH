@@ -159,7 +159,7 @@ public:
 	bool UseItem(Item* item);
 	
 	VEC_ITEM& GetPlayerBagItems() {
-		return this->m_vecBag;
+		return m_vecBag;
 	}
 	int GetPlayerBagNum(){ return  m_iBags; }
 	

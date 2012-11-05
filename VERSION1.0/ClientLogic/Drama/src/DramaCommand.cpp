@@ -99,7 +99,7 @@ void DramaCommandDlg::InitWithTip(std::string content)
 
 void DramaCommandDlg::excute()
 {
-	this->SetFinish(true);
+	SetFinish(true);
 
 	DramaScene* dramaScene = GetDramaScene();
 
@@ -246,7 +246,7 @@ void DramaCommandSprite::ExcuteAddSprite()
 {
 	NDAsssert(DCT_ADDSPRITE == m_kParam.type);
 
-	this->SetFinish(true);
+	SetFinish(true);
 
 	DramaScene* pkDramaScene = GetDramaScene();
 
@@ -308,7 +308,7 @@ void DramaCommandSprite::ExcuteRemoveSprite()
 {
 	NDAsssert(DCT_REMOVESPRITE == m_kParam.type);
 
-	this->SetFinish(true);
+	SetFinish(true);
 
 	DramaScene* pkDramaScene = GetDramaScene();
 
@@ -325,7 +325,7 @@ void DramaCommandSprite::ExcuteSetAnimation()
 {
 	NDAsssert(DCT_SETSPRITEANI == m_kParam.type);
 
-	this->SetFinish(true);
+	SetFinish(true);
 
 	DramaScene* dramaScene = GetDramaScene();
 
@@ -348,7 +348,7 @@ void DramaCommandSprite::ExcuteSetPostion()
 {
 	NDAsssert(DCT_SETSPRITEPOS == m_kParam.type);
 
-	this->SetFinish(true);
+	SetFinish(true);
 
 	DramaScene* dramaScene = GetDramaScene();
 
@@ -369,7 +369,7 @@ void DramaCommandSprite::ExcuteSetPostion()
 void DramaCommandSprite::ExcuteSpriteReverse()
 {
 	NDAsssert(DCT_SPRITE_REVERSE == m_kParam.type);
-	this->SetFinish(true);
+	SetFinish(true);
 	DramaScene* dramaScene	= GetDramaScene();
 
 	if (!dramaScene)
@@ -388,7 +388,7 @@ void DramaCommandSprite::ExcuteSpriteReverse()
 void DramaCommandSprite::ExcuteSpriteEffect()
 {
 	NDAsssert(DCT_SETSPRITEPOS == m_kParam.type);
-	this->SetFinish(true);
+	SetFinish(true);
 
 	DramaScene* dramaScene	= GetDramaScene();
 	if (!dramaScene)
@@ -407,14 +407,14 @@ void DramaCommandSprite::ExcuteMoveSprite()
 
 	if (!dramaScene)
 	{
-		this->SetFinish(true);
+		SetFinish(true);
 		return;
 	}
 
 	NDSprite* sprite = dramaScene->GetSprite(m_kParam.nKey);
 	if (!sprite)
 	{
-		this->SetFinish(true);
+		SetFinish(true);
 		return;
 	}
 	
@@ -458,7 +458,7 @@ void DramaCommandSprite::ExcuteMoveSprite()
 	if (bXArrive && bYArrive)
 	{
 		sprite->SetCurrentAnimation(0, m_kParam.bRightTmp ? 2 : 0);
-		this->SetFinish(true);
+		SetFinish(true);
 		return;
 	}
 	m_kParam.bRightTmp = bRight;
@@ -517,7 +517,7 @@ void DramaCommandScene::ExcuteLoadDramaScene()
 {
 	NDAsssert(DCT_LOADMAPSCENE == m_kParam.type);
 
-	this->SetFinish(true);
+	SetFinish(true);
 
 	DramaScene* scene = new DramaScene;
 	scene->Init(m_kParam.u1.nMapId);
@@ -535,7 +535,7 @@ void DramaCommandScene::ExcuteFinishDrama()
 {
 	NDAsssert(DCT_OVER == m_kParam.type);
 
-	this->SetFinish(true);
+	SetFinish(true);
 
 	NDDirector* director = NDDirector::DefaultDirector();
 	if (!director)
@@ -575,7 +575,7 @@ void DramaCommandScene::ExcuteLoadEraseScene()
 {
 	NDAsssert(DCT_LOADERASESCENE == m_kParam.type);
 
-	this->SetFinish(true);
+	SetFinish(true);
 
 	DramaScene* dramaScene = GetDramaScene();
 
@@ -598,7 +598,7 @@ void DramaCommandScene::ExcuteRemoveEraseScene()
 {
 	NDAsssert(DCT_REMOVEERASESCENE == m_kParam.type);
 
-	this->SetFinish(true);
+	SetFinish(true);
 
 	DramaScene* pkDramaScene = GetDramaScene();
 
@@ -643,7 +643,7 @@ void DramaCommandCamera::ExcuteSetPosition()
 {
 	NDAsssert(DCT_SETCAMERA == m_kParam.type);
 
-	this->SetFinish(true);
+	SetFinish(true);
 
 	DramaScene* dramaScene = GetDramaScene();
 
@@ -663,7 +663,7 @@ void DramaCommandCamera::ExcuteMovePostion()
 
 	if (!dramaScene)
 	{
-		this->SetFinish(true);
+		SetFinish(true);
 		return;
 	}
 
@@ -703,7 +703,7 @@ void DramaCommandCamera::ExcuteMovePostion()
 
 	if ((bXArrive && bYArrive) || bOverBoder)
 	{
-		this->SetFinish(true);
+		SetFinish(true);
 	}
 }
 
@@ -717,21 +717,21 @@ void DramaCommandWait::InitWithWait(float fTime)
 	m_kParam.u2.bTimeStart = false;
 	m_kParam.u3.bTimeout = false;
 
-	this->SetCanExcuteNextCommand(false);
+	SetCanExcuteNextCommand(false);
 }
 
 void DramaCommandWait::InitWithWaitPreActionFinish()
 {
 	m_kParam.type = DCT_WAITPREACTFINISH;
 
-	this->SetCanExcuteNextCommand(false);
+	SetCanExcuteNextCommand(false);
 }
 
 void DramaCommandWait::InitWithWaitPreActFinishAndClick()
 {
 	m_kParam.type = DCT_WAITPREACTFINISHANDCLICK;
 
-	this->SetCanExcuteNextCommand(false);
+	SetCanExcuteNextCommand(false);
 }
 
 void DramaCommandWait::OnTimer(OBJID tag)
@@ -769,8 +769,8 @@ void DramaCommandWait::ExcuteWaitTime()
 
 	if (!dramaScene || m_kParam.u3.bTimeout)
 	{
-		this->SetFinish(true);
-		this->SetCanExcuteNextCommand(true);
+		SetFinish(true);
+		SetCanExcuteNextCommand(true);
 		return;
 	}
 
@@ -788,10 +788,10 @@ void DramaCommandWait::ExcuteWaitPreAction()
 
 	DramaScene* dramaScene = GetDramaScene();
 
-	if (!dramaScene || this->IsPreCommandsFinish())
+	if (!dramaScene || IsPreCommandsFinish())
 	{
-		this->SetFinish(true);
-		this->SetCanExcuteNextCommand(true);
+		SetFinish(true);
+		SetCanExcuteNextCommand(true);
 	}
 	else
 	{
@@ -807,11 +807,11 @@ void DramaCommandWait::ExcuteWaitPreActionAndClick()
 
 	if (!dramaScene)
 	{
-		this->SetFinish(true);
-		this->SetCanExcuteNextCommand(true);
+		SetFinish(true);
+		SetCanExcuteNextCommand(true);
 	}
 
-	if (!this->IsPreCommandsFinish())
+	if (!IsPreCommandsFinish())
 	{
 		dramaScene->ConsumeClick();
 		return;
@@ -819,8 +819,8 @@ void DramaCommandWait::ExcuteWaitPreActionAndClick()
 
 	if (dramaScene->ConsumeClick())
 	{
-		this->SetFinish(true);
-		this->SetCanExcuteNextCommand(true);
+		SetFinish(true);
+		SetCanExcuteNextCommand(true);
 	}
 }
 //qbwÒôÐ§²¥·Å
@@ -832,6 +832,6 @@ void DramaCommandSoundEffect::InitWithSoundEffectId(int nId)
 void DramaCommandSoundEffect::excute()
 {
 	ScriptMgrObj.excuteLuaFunc("PlayEffectSound", "Music", m_kParam.nKey);
-	this->SetFinish(true);
-	this->SetCanExcuteNextCommand(true);
+	SetFinish(true);
+	SetCanExcuteNextCommand(true);
 }

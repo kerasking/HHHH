@@ -802,7 +802,7 @@ void Battle::OnButtonClick(NDUIButton* button)
 	//		ShowQuickChat(m_imgQuickTalkBg->GetParent() == NULL);
 	//		
 	//	} else if (button == m_btnSendChat) {
-	//		NSString* msg = m_chatDelegate.tfChat.text;
+	//		NSString msg = m_chatDelegate.tfChat.text;
 	//		if ([msg length] > 0) {
 	//			ChatInput::SendChatDataToServer(ChatTypeSection, [msg UTF8String]);
 	//			m_chatDelegate.tfChat.text = @"";
@@ -4490,7 +4490,7 @@ void Battle::moveToTarget(FightAction* action)
 //						int delay=skill->GetLookfaceID()%100;
 //						stringstream ss;
 //						ss << "effect_" << effectId << ".spr";
-//						NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+//						NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 //						NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //						NDLog("add self effect");
 //						addSkillEffectToFighter(theActor,effect,delay);
@@ -4500,7 +4500,7 @@ void Battle::moveToTarget(FightAction* action)
 //						int delay=skill->GetLookfaceTargetID()%100;
 //						stringstream ss;
 //						ss << "effect_" << effectId << ".spr";
-//						NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+//						NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 //						NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //						for (int i = 0; i < action->m_FighterList.size(); i++)
 //						{	
@@ -4532,6 +4532,7 @@ void Battle::moveToTarget(FightAction* action)
 //					petAction(*theActor, 0);
 //				}
 				//处理技能光效
+
 				int effectId = skill->getSelfEffect();///1000;
 				NDLog("add effect:%d",effectId);
 				if(effectId != 0)
@@ -4884,7 +4885,7 @@ void Battle::addSkillEffect(Fighter& theActor, bool user/*=false*/)
 //		
 //		stringstream ss;
 //		ss << "effect_" << effectId << ".spr";
-//		NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+//		NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 //		NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //		
 //		int target = skillId % 10;

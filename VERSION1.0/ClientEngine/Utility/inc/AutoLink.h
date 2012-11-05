@@ -12,7 +12,7 @@ public:
 	//explicit CAutoLink(T* ptr)								{ Init(); Insert(&ptr->QueryLink(CAutoLink<T>())); }
 	CAutoLink&	operator=(const CAutoLink<T>& link)	{ Break(); Insert(&const_cast<CAutoLink<T>&>(link)); return *this; }
 	CAutoLink&	operator=(T* ptr);
-	void	Init(T* pOwner)							{ NDAsssert(!IsValid()); m_pOwner=pOwner; }
+	void	Init(T* pOwner)							{ NDAsssert(!IsValid()); m_pOwner = pOwner; }
 	void	Clear()									{ Break(); }
 	bool operator==( CAutoLink &objRight ) const { return m_pOwner == objRight.m_pOwner ; }
 	
@@ -89,14 +89,14 @@ void CAutoLink<T>::Insert(CAutoLink<T>* pPrev)		// insert to next
 	if (IsMaster()) return;
 	Erase();
 
-	this->m_pOwner			= pPrev->m_pOwner;
+	m_pOwner			= pPrev->m_pOwner;
 	if(IsValid())
 	{
-		this->m_pPrev			= pPrev;
-		this->m_pNext			= pPrev->m_pNext;
+		m_pPrev			= pPrev;
+		m_pNext			= pPrev->m_pNext;
 		if(pPrev->m_pNext)
 			pPrev->m_pNext->m_pPrev	= this;
-		pPrev->m_pNext			= this;
+		pPrev->m_pNext = this;
 	}
 }
 
@@ -109,15 +109,15 @@ void CAutoLink<T>::Erase()						// erase from list
 		//CHECK(!IsMaster());
 		if (IsMaster()) return;
 
-		m_pPrev->m_pNext	= this->m_pNext;
+		m_pPrev->m_pNext	= m_pNext;
 		if(m_pNext)
-			m_pNext->m_pPrev	= this->m_pPrev;
+			m_pNext->m_pPrev	= m_pPrev;
 
 		Init();
 	}
 }
 template<typename T>
-CAutoLink<T>&	CAutoLink<T>::operator=(T* ptr)					
+CAutoLink<T>& CAutoLink<T>::operator=(T* ptr)					
 { 
 	Break(); 
 	if( NULL== ptr ) 

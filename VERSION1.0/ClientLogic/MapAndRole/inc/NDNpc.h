@@ -63,7 +63,7 @@ public:
 
 	NPC_STATE GetNpcState() const
 	{
-		return this->m_eNPCState;
+		return m_eNPCState;
 	}
 
 	void SetStatus(int status);
@@ -95,7 +95,7 @@ public:
 
 	bool IsRoleNpc()
 	{
-		return this->m_bRoleNpc;
+		return m_bRoleNpc;
 	}
 
 	bool IsFarmNpc()

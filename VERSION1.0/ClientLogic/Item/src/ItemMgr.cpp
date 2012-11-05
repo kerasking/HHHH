@@ -80,10 +80,10 @@ ItemMgr::ItemMgr()
 	NDNetMsgPoolObj.RegMsg(_MSG_SHOP_CENTER_GOODS_TYPE, this);
 	
 	
-	//this->LoadItemTypeIndex();
+	//LoadItemTypeIndex();
 	//SuitTypeObj::LoadSuitTypeIndex();
 	//LoadItemAddtion();
-	//this->LoadEnhancedTypeIndex();
+	//LoadEnhancedTypeIndex();
 	
 	m_iBags = 0;
 	m_iStorages = 0;
@@ -122,7 +122,7 @@ ItemMgr::~ItemMgr()
 	}
 	m_vecStorage.clear();
 	
-	this->RemoveSoldItems();
+	RemoveSoldItems();
 	ItemMgrObj.repackEquip();
 }
 
@@ -156,7 +156,7 @@ void ItemMgr::quitGame()
 	}
 	m_vecStorage.clear();
 	
-	this->RemoveSoldItems();
+	RemoveSoldItems();
 	
 	m_iBags = 0;
 	m_iStorages = 0;
@@ -224,8 +224,8 @@ bool ItemMgr::process(MSGID msgID, NDTransData* data, int len)
 
 Item* ItemMgr::QueryOtherItem(int idItem)
 {
-	for (VEC_ITEM_IT it = this->m_vOtherItems.begin();
-		it != this->m_vOtherItems.end(); it++)
+	for (VEC_ITEM_IT it = m_vOtherItems.begin();
+		it != m_vOtherItems.end(); it++)
 	{
 		if ((*it)->m_nID == idItem)
 		{
@@ -237,13 +237,13 @@ Item* ItemMgr::QueryOtherItem(int idItem)
 
 void ItemMgr::RemoveOtherItems()
 {
-	for (VEC_ITEM_IT it = this->m_vOtherItems.begin();
-		it != this->m_vOtherItems.end(); it++)
+	for (VEC_ITEM_IT it = m_vOtherItems.begin();
+		it != m_vOtherItems.end(); it++)
 	{
 		SAFE_DELETE(*it);
 	}
 	
-	this->m_vOtherItems.clear();
+	m_vOtherItems.clear();
 }
 
 void ItemMgr::processItemInfo(NDTransData* data, int len)
@@ -334,13 +334,13 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 			NDPlayer& role = NDPlayer::defaultHero();
 			if (role.m_nID != item->m_nOwnerID)
 			{ // 其他玩家物品
-				this->m_vOtherItems.push_back(item);
+				m_vOtherItems.push_back(item);
 			}
 			else
 			{
 				bool bolHandle = false;
 
-				for (VEC_ITEM_IT it = this->m_vecBag.begin(); it != m_vecBag.end(); it++)
+				for (VEC_ITEM_IT it = m_vecBag.begin(); it != m_vecBag.end(); it++)
 				{
 					if (item->m_nID == (*it)->m_nID) {
 						int nItemTypeUseInScript = item->m_nItemType;
@@ -577,7 +577,7 @@ void ItemMgr::processItemAttrib(NDTransData* data, int len)
 		}
 		case ITEMDATA_POSITION: 
 		{ // action==2时,穿上装备 amount表示物品的位置相当于postion
-			if (this->ChangeItemPosSold(itemID, amount))
+			if (ChangeItemPosSold(itemID, amount))
 			{
 				return;
 			}
@@ -1094,7 +1094,7 @@ void ItemMgr::processQueryDesc(NDTransData* data, int len)
 		int idItem = 0; (*data) >> idItem;
 		std::string strContent = data->ReadUnicodeString();
 		
-		Item *item = this->QueryOtherItem(idItem);
+		Item *item = QueryOtherItem(idItem);
 		if (!item)
 		{
 			HasItemByType(ITEM_BAG, idItem, item);
@@ -2364,7 +2364,7 @@ Item* ItemMgr::QueryItem(OBJID idItem)
 		return itSold->second;
 	}
 
-	return this->QueryOtherItem((int)idItem);
+	return QueryOtherItem((int)idItem);
 }
 
 void ItemMgr::RemoveSoldItems()
@@ -2392,14 +2392,14 @@ bool ItemMgr::ChangeItemPosSold(OBJID idItem, int nPos)
 {
 	Item* pItem = NULL;
 	if (nPos == POSITION_SOLD) {
-		if (this->HasItemByType(ITEM_BAG, idItem, pItem)) {
-			this->DelItem(ITEM_BAG, idItem, false);
+		if (HasItemByType(ITEM_BAG, idItem, pItem)) {
+			DelItem(ITEM_BAG, idItem, false);
 			m_mapSoldItems[idItem] = pItem;
 		}
 	}
 	else if (nPos == POSITION_PACK) {
-		if (this->HasItemByType(ITEM_SOLD, idItem, pItem)) {
-			this->DelItem(ITEM_SOLD, idItem, false);
+		if (HasItemByType(ITEM_SOLD, idItem, pItem)) {
+			DelItem(ITEM_SOLD, idItem, false);
 			m_vecBag.push_back(pItem);
 		}
 	}

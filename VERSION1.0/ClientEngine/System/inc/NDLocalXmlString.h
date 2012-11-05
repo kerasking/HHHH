@@ -12,6 +12,9 @@
 #include <map>
 #include <string>
 #include "define.h"
+#include "CCString.h"
+
+using namespace cocos2d;
 
 class NDLocalXmlString
 {
@@ -22,7 +25,7 @@ public:
 	
 	~NDLocalXmlString();
 	
-	//NSString *GetString(NSString* nsKeyName);
+	//NSString *GetString(NSString nsKeyName);
 	std::string GetCString(const char* szKeyName);
 private:
 	NDLocalXmlString();
@@ -30,7 +33,7 @@ private:
 	void Init();
 	
 	//todo(zjh)
-	NSString* GetDocumensDirectory();
+	CCString* GetDocumensDirectory();
 	
 	bool GetValue(const std::string str, bool& isKey, std::string& resValue);
 	

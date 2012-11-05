@@ -25,7 +25,7 @@ bool ClickLayer::TouchBegin(NDTouch* touch)
 
 bool ClickLayer::TouchEnd(NDTouch* touch)
 {
-	NDUITargetDelegate* delegate = this->GetTargetDelegate();
+	NDUITargetDelegate* delegate = GetTargetDelegate();
 
 	if (delegate)
 	{
@@ -49,7 +49,7 @@ void DramaConfirmdlg::Initialization()
 
 	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 
-	this->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
+	SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
 
 	NDUILoad uiload;
 	uiload.Load("dramaini/SM_MSG.ini", this, NULL);
@@ -57,7 +57,7 @@ void DramaConfirmdlg::Initialization()
 
 void DramaConfirmdlg::SetContent(std::string content)
 {
-	NDNode* node = this->GetChild(ID_UNTITLED_CTRL_TEXT_WORDS);
+	NDNode* node = GetChild(ID_UNTITLED_CTRL_TEXT_WORDS);
 
 	if (node && node->IsKindOfClass(RUNTIME_CLASS(NDUILabel)))
 	{
@@ -82,7 +82,7 @@ DramaChatLayer::~DramaChatLayer()
 
 void DramaChatLayer::SetFigure(std::string filename, bool bReverse, int nCol, int nRow)
 {
-	NDNode* node = this->GetChild(m_nTagFigure);
+	NDNode* node = GetChild(m_nTagFigure);
 
 	if (node && node->IsKindOfClass(RUNTIME_CLASS(NDUIImage)))
 	{
@@ -100,7 +100,7 @@ void DramaChatLayer::SetFigure(std::string filename, bool bReverse, int nCol, in
 
 void DramaChatLayer::SetTitle(std::string title, int nFontSize, int nFontColor)
 {
-	NDNode* node = this->GetChild(m_nTagTitle);
+	NDNode* node = GetChild(m_nTagTitle);
 
 	if (node && node->IsKindOfClass(RUNTIME_CLASS(NDUILabel)))
 	{
@@ -114,7 +114,7 @@ void DramaChatLayer::SetTitle(std::string title, int nFontSize, int nFontColor)
 void DramaChatLayer::SetContent(std::string content, int nFontSize,
 		int nFontColor)
 {
-	NDNode* pkNode = this->GetChild(m_nTagContent);
+	NDNode* pkNode = GetChild(m_nTagContent);
 
 	if (pkNode && pkNode->IsKindOfClass(RUNTIME_CLASS(NDUILabel)))
 	{
@@ -154,21 +154,21 @@ void DramaLeftChat::Initialization()
 
 	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 
-	this->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
+	SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
 
 	//ÉèÖÃ±³¾°
 	NDUILayer *backlayer = new NDUILayer;
 	backlayer->Initialization();
 	backlayer->SetFrameRect(CGRectMake(winsize.width*0.1, winsize.height*0.7, winsize.width*0.9, winsize.height*0.3));
 	backlayer->SetBackgroundColor(ccc4(0,0,0,60));
-	this->AddChild(backlayer, -1);
+	AddChild(backlayer, -1);
 
 	NDUILoad uiload;
 	uiload.Load("dramaini/DLG_L.ini", this, NULL);
 
-	this->SetFigureTag(ID_DLG_CTRL_PICTURE_PLAYER);
-	this->SetTitleTag(ID_DLG_CTRL_TEXT_TITAL);
-	this->SetContentTag(ID_DLG_CTRL_TEXT_DLG);
+	SetFigureTag(ID_DLG_CTRL_PICTURE_PLAYER);
+	SetTitleTag(ID_DLG_CTRL_TEXT_TITAL);
+	SetContentTag(ID_DLG_CTRL_TEXT_DLG);
 }
 
 ///////////////////////////////////////////////
@@ -184,19 +184,19 @@ void DramaRightChat::Initialization()
 
 	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 
-	this->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
+	SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
 	
 	//ÉèÖÃ±³¾°
 	NDUILayer *backlayer = new NDUILayer;
 	backlayer->Initialization();
 	backlayer->SetFrameRect(CGRectMake(0, 0, winsize.width*0.9, winsize.height*0.3));
 	backlayer->SetBackgroundColor(ccc4(0,0,0,60));
-	this->AddChild(backlayer, -1);
+	AddChild(backlayer, -1);
 
 	NDUILoad uiload;
 	uiload.Load("dramaini/DLG_R.ini", this, NULL);
 
-	this->SetFigureTag(ID_DLG_R_CTRL_PICTURE_PLAYER);
-	this->SetTitleTag(ID_DLG_R_CTRL_TEXT_TITAL);
-	this->SetContentTag(ID_DLG_R_CTRL_TEXT_DLG);
+	SetFigureTag(ID_DLG_R_CTRL_PICTURE_PLAYER);
+	SetTitleTag(ID_DLG_R_CTRL_TEXT_TITAL);
+	SetContentTag(ID_DLG_R_CTRL_TEXT_DLG);
 }

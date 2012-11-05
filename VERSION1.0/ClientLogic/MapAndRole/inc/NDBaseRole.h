@@ -15,8 +15,8 @@
 #include "NDPath.h"
 #include "NDRidePet.h"
 
-#define FIGHTER_HEIGHT 70*(NDDirector::DefaultDirector()->GetScaleFactor())
-#define FIGHTER_WIDTH  45*(NDDirector::DefaultDirector()->GetScaleFactor())
+#define FIGHTER_HEIGHT 70 * (NDDirector::DefaultDirector()->GetScaleFactor())
+#define FIGHTER_WIDTH  45 * (NDDirector::DefaultDirector()->GetScaleFactor())
 
 namespace NDEngine
 {
@@ -123,19 +123,19 @@ public:
 	void SetMaxLife(int nMaxLife);
 	int GetMaxLife() const
 	{
-		return this->m_nMaxLife;
+		return m_nMaxLife;
 	}
 
 	void SetMaxMana(int nMaxMana);
 	int GetMaxMana() const
 	{
-		return this->m_nMaxMana;
+		return m_nMaxMana;
 	}
 
 	void SetCamp(CAMP_TYPE btCamp);
 	CAMP_TYPE GetCamp() const
 	{
-		return this->m_eCamp;
+		return m_eCamp;
 	}
 
 	void SetFocus(bool bFocus)
@@ -154,10 +154,10 @@ public:
 
 	void updateRidePetEffect();
 	void SetRidePet(int lookface,int stand_action,int run_action,int acc);
-	int GetPetStandAction() { return this->m_nPetStandAction; }
-	int GetPetWalkAction() { return this->m_nPetRunAction; }
-	int GetPetAccLevel() { return this->m_nAccLevel; }
-	int GetPetLookface() { return this->m_nPetLookface; }
+	int GetPetStandAction() { return m_nPetStandAction; }
+	int GetPetWalkAction() { return m_nPetRunAction; }
+	int GetPetAccLevel() { return m_nAccLevel; }
+	int GetPetLookface() { return m_nPetLookface; }
 protected:
 	void SafeClearEffect(NDSprite*& sprite);
 	void SafeAddEffect(NDSprite*& sprite, std::string file);

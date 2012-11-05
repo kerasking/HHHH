@@ -331,8 +331,8 @@ void quitGame(bool bTipNet/*=false*/)
 // string getStringTime(long nSeconds)
 // {
 // 	NSDate* endTime = [NSDate dateWithTimeIntervalSince1970:nSeconds];
-// 	NSString* strEndTime = [endTime description];
-// 	NSString* retStr = [strEndTime substringWithRange:NSMakeRange(5, 11)];
+// 	NSString strEndTime = [endTime description];
+// 	NSString retStr = [strEndTime substringWithRange:NSMakeRange(5, 11)];
 // 	return [retStr UTF8String];
 // }
 //
