@@ -199,7 +199,7 @@ void NDMapLayer::Initialization(const char* mapFile)
 	SetTouchEnabled(true);
 
 	m_pkSwitchAniGroup =
-			NDAnimationGroupPool::defaultPool()->addObjectWithModelId(106);
+			NDAnimationGroupPool::defaultPool()->addObjectWithModelId(switch_ani_modelId);
 
 	m_pkMapData = new NDMapData;
 	m_pkMapData->initWithFile(mapFile);

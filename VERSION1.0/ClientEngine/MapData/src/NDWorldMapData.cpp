@@ -63,75 +63,21 @@ NDWorldMapData * NDWorldMapData::SharedData()
 		std::string mapFile = NDPath::GetMapPath() + "map_99999.map";
 		NDWorldMapData_SharedData = new NDWorldMapData;
 		NDWorldMapData_SharedData->initWithFile(mapFile.c_str());
-
-		if (m_passWayInfos.empty())
-		{
-			m_passWayInfos.push_back(PassWay(21001, 0, 23002));
-			m_passWayInfos.push_back(PassWay(21001, 1, 23001));
-			m_passWayInfos.push_back(PassWay(21002, 2, 23003));
-			m_passWayInfos.push_back(PassWay(21002, 1, 23005));
-			m_passWayInfos.push_back(PassWay(21002, 0, 23006));
-			m_passWayInfos.push_back(PassWay(21003, 0, 23013));
-			m_passWayInfos.push_back(PassWay(21003, 1, 23014));
-			m_passWayInfos.push_back(PassWay(21003, 2, 23011));
-			m_passWayInfos.push_back(PassWay(21005, 0, 23001));
-			m_passWayInfos.push_back(PassWay(21006, 0, 23011));
-			m_passWayInfos.push_back(PassWay(21006, 1, 23012));
-			m_passWayInfos.push_back(PassWay(21006, 2, 23009));
-			m_passWayInfos.push_back(PassWay(21007, 0, 23017));
-			m_passWayInfos.push_back(PassWay(21007, 1, 23018));
-			m_passWayInfos.push_back(PassWay(22001, 0, 23022));
-			m_passWayInfos.push_back(PassWay(22003, 0, 23024));
-			m_passWayInfos.push_back(PassWay(22004, 0, 23023));
-			m_passWayInfos.push_back(PassWay(23001, 0, 21001));
-			m_passWayInfos.push_back(PassWay(23001, 1, 21005));
-			m_passWayInfos.push_back(PassWay(23002, 0, 23004));
-			m_passWayInfos.push_back(PassWay(23002, 1, 21001));
-			m_passWayInfos.push_back(PassWay(23003, 1, 23004));
-			m_passWayInfos.push_back(PassWay(23003, 0, 21002));
-			m_passWayInfos.push_back(PassWay(23004, 0, 23003));
-			m_passWayInfos.push_back(PassWay(23004, 1, 23002));
-			m_passWayInfos.push_back(PassWay(23005, 0, 21002));
-			m_passWayInfos.push_back(PassWay(23005, 1, 23007));
-			m_passWayInfos.push_back(PassWay(23006, 0, 21002));
-			m_passWayInfos.push_back(PassWay(23007, 0, 23005));
-			m_passWayInfos.push_back(PassWay(23007, 1, 23008));
-			m_passWayInfos.push_back(PassWay(23008, 0, 23009));
-			m_passWayInfos.push_back(PassWay(23008, 1, 23007));
-			m_passWayInfos.push_back(PassWay(23009, 0, 21006));
-			m_passWayInfos.push_back(PassWay(23009, 1, 23008));
-			m_passWayInfos.push_back(PassWay(23009, 2, 23010));
-			m_passWayInfos.push_back(PassWay(23010, 0, 23009));
-			m_passWayInfos.push_back(PassWay(23010, 1, 23025));
-			m_passWayInfos.push_back(PassWay(23011, 0, 21003));
-			m_passWayInfos.push_back(PassWay(23011, 1, 21006));
-			m_passWayInfos.push_back(PassWay(23012, 0, 21006));
-			m_passWayInfos.push_back(PassWay(23013, 0, 23022));
-			m_passWayInfos.push_back(PassWay(23013, 1, 23023));
-			m_passWayInfos.push_back(PassWay(23013, 2, 23024));
-			m_passWayInfos.push_back(PassWay(23013, 3, 21003));
-			m_passWayInfos.push_back(PassWay(23014, 0, 23015));
-			m_passWayInfos.push_back(PassWay(23014, 1, 21003));
-			m_passWayInfos.push_back(PassWay(23014, 2, 23016));
-			m_passWayInfos.push_back(PassWay(23015, 0, 23014));
-			m_passWayInfos.push_back(PassWay(23016, 0, 23014));
-			m_passWayInfos.push_back(PassWay(23016, 1, 23017));
-			m_passWayInfos.push_back(PassWay(23017, 0, 23016));
-			m_passWayInfos.push_back(PassWay(23017, 1, 21007));
-			m_passWayInfos.push_back(PassWay(23018, 0, 21007));
-			m_passWayInfos.push_back(PassWay(23018, 1, 23025));
-			m_passWayInfos.push_back(PassWay(23022, 0, 22001));
-			m_passWayInfos.push_back(PassWay(23022, 1, 23013));
-			m_passWayInfos.push_back(PassWay(23023, 0, 22004));
-			m_passWayInfos.push_back(PassWay(23023, 1, 23013));
-			m_passWayInfos.push_back(PassWay(23024, 0, 23013));
-			m_passWayInfos.push_back(PassWay(23024, 1, 22003));
-			m_passWayInfos.push_back(PassWay(23025, 0, 23018));
-			m_passWayInfos.push_back(PassWay(23025, 1, 23010));
-		}
 	}
 	return NDWorldMapData_SharedData;
 }
+
+NDWorldMapData::~NDWorldMapData()
+{
+	CC_SAFE_RELEASE (m_MapTiles);
+	CC_SAFE_RELEASE (m_SceneTiles);
+	CC_SAFE_RELEASE (m_BgTiles);
+	CC_SAFE_RELEASE (m_AnimationGroups);
+	CC_SAFE_RELEASE (m_AniGroupParams);
+	CC_SAFE_RELEASE (m_PlaceNodes);
+	CC_SAFE_DELETE(NDWorldMapData_SharedData);
+}
+
 
 /*通过地图文件(不包含路径)加载地图数据
  参数:mapFile-地图文件名
@@ -144,16 +90,6 @@ void NDWorldMapData::initWithFile(const char* mapFile)
 		this->decode(stream);
 		fclose(stream);
 	}
-}
-
-NDWorldMapData::~NDWorldMapData()
-{
-	CC_SAFE_RELEASE (m_MapTiles);
-	CC_SAFE_RELEASE (m_SceneTiles);
-	CC_SAFE_RELEASE (m_BgTiles);
-	CC_SAFE_RELEASE (m_AnimationGroups);
-	CC_SAFE_RELEASE (m_AniGroupParams);
-	CC_SAFE_RELEASE (m_PlaceNodes);
 }
 
 /*  地图文件解析
