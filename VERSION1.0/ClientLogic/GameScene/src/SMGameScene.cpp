@@ -50,8 +50,8 @@ void CSMGameScene::Initialization(int mapID)
 	
 	m_pkMapLayerLogic = new NDMapLayerLogic();
 	m_pkMapLayerLogic->Initialization(mapID); 
-	this->AddChild(m_pkMapLayerLogic, MAPLAYER_Z, MAPLAYER_TAG);
-	//this->ShowMiniMap(true);
+	AddChild(m_pkMapLayerLogic, MAPLAYER_Z, MAPLAYER_TAG);
+	//ShowMiniMap(true);
 	
 	/*
 	NDUILayer *layerMapButton	= new NDUILayer;
@@ -60,7 +60,7 @@ void CSMGameScene::Initialization(int mapID)
 			(winsize.width - WORLD_MAP_BTN_W * fScaleFactor), 0,
 			WORLD_MAP_BTN_W * fScaleFactor, WORLD_MAP_BTN_H * fScaleFactor));
 	layerMapButton->SetTag(TAG_WORLD_MAP_BTN_LAYER);
-	this->AddChild(layerMapButton);
+	AddChild(layerMapButton);
 	
 	NDUIButton *btnMap	= new NDUIButton;
 	btnMap->Initialization();
@@ -81,20 +81,20 @@ void CSMGameScene::ShowMiniMap(bool bShow)
 	*/
 // 	if (bShow) 
 // 	{
-// 		if (!this->m_miniMap)
+// 		if (!m_miniMap)
 // 		{
 // 			m_miniMap = new NDMiniMap();
 // 			m_miniMap->Initialization();
 // 			m_miniMap->SetGameScene(this);
 // 			m_miniMap->SetFrameRect(CGRectMake(308.0f, 0.0f, 172.0f, 84.0f));
-// 			this->AddChild(m_miniMap);
+// 			AddChild(m_miniMap);
 // 		}
 // 	} 
 // 	else
 // 	{
-// 		if (this->m_miniMap)
+// 		if (m_miniMap)
 // 		{
-// 			this->RemoveChild(m_miniMap, true);
+// 			RemoveChild(m_miniMap, true);
 // 			m_miniMap = NULL;
 // 		}
 // 	}
@@ -102,12 +102,12 @@ void CSMGameScene::ShowMiniMap(bool bShow)
 
 CGSize CSMGameScene::GetSize()
 {
-	return this->m_pkMapLayerLogic->GetContentSize();
+	return m_pkMapLayerLogic->GetContentSize();
 }
 
 cocos2d::CCArray* CSMGameScene::GetSwitchs()
 {
-	return this->m_pkMapLayerLogic->GetMapData()->getSwitchs();
+	return m_pkMapLayerLogic->GetMapData()->getSwitchs();
 }
 
 void CSMGameScene::OnButtonClick(NDUIButton* button)
@@ -117,7 +117,7 @@ void CSMGameScene::OnButtonClick(NDUIButton* button)
 	{
 		WorldMapLayer* world	= new WorldMapLayer;
 		world->Initialization(GetMapId());
-		this->AddChild(world);
+		AddChild(world);
 	}
 	*/
 }

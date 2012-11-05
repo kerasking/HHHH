@@ -101,7 +101,7 @@ namespace NDEngine
 		{
 			case ScrollTextFromRightToLeft:
 			{
-				//NSString* text = [NSString stringWithUTF8String:m_lblText->GetText().c_str()];
+				//NSString text = [NSString stringWithUTF8String:m_lblText->GetText().c_str()];
 				//size = [text sizeWithFont:[UIFont fontWithName:FONT_NAME size:m_lblText->GetFontSize()]];
 				size	= getStringSize(m_lblText->GetText().c_str(), m_lblText->GetFontSize());
 			}

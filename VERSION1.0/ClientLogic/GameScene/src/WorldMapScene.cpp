@@ -60,9 +60,9 @@ void WorldMapLayer::Initialization(int nMapId)
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
 
 	NDUILayer::Initialization();
-	this->SetTag(ScriptMgrObj.excuteLuaFuncRetN("GetWorldMapUITag", ""));
+	SetTag(ScriptMgrObj.excuteLuaFuncRetN("GetWorldMapUITag", ""));
 	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
-	this->SetFrameRect(CGRectMake(0, 0, width, height));
+	SetFrameRect(CGRectMake(0, 0, width, height));
 
 	m_mapFilename.insert(
 			std::make_pair(3, GetSMImgPath("icon_town_high_2.png")));
@@ -157,7 +157,7 @@ void WorldMapLayer::Initialization(int nMapId)
 	m_roleNode->Initialization();
 	m_roleNode->ChangeLookFace(GetPlayerLookface());
 	m_roleNode->SetRoleScale(0.6f);
-	this->AddChild(m_roleNode);
+	AddChild(m_roleNode);
 
 	NDPicture* picClose = NDPicturePool::DefaultPool()->AddPicture(
 			GetSMImgPath("btn_close.png"));
@@ -172,7 +172,7 @@ void WorldMapLayer::Initialization(int nMapId)
 	imgClose->SetFrameRect(
 			CGRectMake(rectClose.origin.x, rectClose.origin.y - 128,
 					rectClose.size.width, rectClose.size.height));
-	this->AddChild(imgClose);
+	AddChild(imgClose);
 
 	//rectClose.origin = ConvertToMapPoint(rectClose.origin);
 	m_btnClose = new NDUIButton();
@@ -181,7 +181,7 @@ void WorldMapLayer::Initialization(int nMapId)
 	m_btnClose->CloseFrame();
 	//m_btnClose->SetImage(picClose);
 	m_btnClose->SetFrameRect(rectClose);
-	this->AddChild(m_btnClose);
+	AddChild(m_btnClose);
 
 	/*
 	 m_btnRet = new NDUIButton();
@@ -191,7 +191,7 @@ void WorldMapLayer::Initialization(int nMapId)
 	 CGRectMake((winsize.width - BTN_W * fScaleFactor),
 	 (winsize.height - BTN_H * fScaleFactor),
 	 BTN_W * fScaleFactor, BTN_H * fScaleFactor));
-	 this->AddChild(m_btnRet);
+	 AddChild(m_btnRet);
 	 */
 
 	SetCenterAtPos(ccp(winsize.width / 2, winsize.height / 2));
@@ -493,7 +493,7 @@ void WorldMapLayer::OnButtonClick(NDUIButton* button)
 {
 	if (button == m_btnRet || button == m_btnClose)
 	{
-		this->RemoveFromParent(true);
+		RemoveFromParent(true);
 	}
 }
 

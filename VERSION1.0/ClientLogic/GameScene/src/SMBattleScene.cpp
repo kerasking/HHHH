@@ -38,15 +38,15 @@ void CSMBattleScene::Initialization(int mapID)
 	
 	m_mapLayer = new NDMapLayerLogic();
 	m_mapLayer->Initialization(mapID); 
-	this->AddChild(m_mapLayer, MAPLAYER_Z, BATTLEMAPLAYER_TAG);
+	AddChild(m_mapLayer, MAPLAYER_Z, BATTLEMAPLAYER_TAG);
 }
 
 CGSize CSMBattleScene::GetSize()
 {
-	return this->m_mapLayer->GetContentSize();
+	return m_mapLayer->GetContentSize();
 }
 
 cocos2d::CCArray* CSMBattleScene::GetSwitchs()
 {
-	return this->m_mapLayer->GetMapData()->getSwitchs();
+	return m_mapLayer->GetMapData()->getSwitchs();
 }

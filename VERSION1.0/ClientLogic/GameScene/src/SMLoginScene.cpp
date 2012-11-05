@@ -528,7 +528,7 @@ bool CSMLoginScene::CreateUpdateUILayer()
 	pLayer->Initialization();
 	pLayer->SetFrameRect( CGRectMake(0, 0, winSize.width, winSize.height) );
 	pLayer->SetTag( TAG_UPDATE_LAYER );
-	this->AddChild(pLayer);
+	AddChild(pLayer);
 	m_pLayerUpdate		= pLayer;
 	
 	NDUILoad tmpUILoad;
@@ -812,7 +812,7 @@ bool CSMLoginScene::CreatConfirmDlg( const char * szTip )
 	pLayer->Initialization();
 	pLayer->SetFrameRect( CGRectMake(0, 0, winSize.width, winSize.height) );
 	pLayer->SetTag( TAG_DLG_CONFIRM );
-	this->AddChild(pLayer);	
+	AddChild(pLayer);	
 	
 	NDUILoad tmpUILoad2;
 	tmpUILoad2.Load( "ShowYesOrNoDlg.ini", pLayer, this, CGSizeMake(0, 0) );
@@ -826,7 +826,7 @@ bool CSMLoginScene::CreatConfirmDlg( const char * szTip )
 }
 void CSMLoginScene::CloseConfirmDlg()
 {
-	this->RemoveChild( TAG_DLG_CONFIRM, true );
+	RemoveChild( TAG_DLG_CONFIRM, true );
 }
 
 //===========================================================================
@@ -861,12 +861,12 @@ void CSMLoginScene::ShowWaitingAni()
 	node->ChangeSprite(NDPath::GetAniPath("busy.spr"));
 	node->SetTag( TAG_SPRITE_NODE );
 	node->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
-	this->AddChild(node);
+	AddChild(node);
 #endif
 }
 void CSMLoginScene::CloseWaitingAni()
 {
-	this->RemoveChild( TAG_SPRITE_NODE, true );
+	RemoveChild( TAG_SPRITE_NODE, true );
 }
 
 //===========================================================================
@@ -880,7 +880,7 @@ void CSMLoginScene::ShowCheckWIFIOff()
 	//	return;
 	//pLayer->Initialization();
 	//pLayer->SetFrameRect( CGRectMake(0, 0, winSize.width, winSize.height) );
-	//this->AddChild(pLayer);
+	//AddChild(pLayer);
 	//m_pLayerCheckWIFI = pLayer;
 	//NDUILoad tmpUILoad;
 	//tmpUILoad.Load( "CheckWIFIDlg.ini", pLayer, this, CGSizeMake(0, 0) );

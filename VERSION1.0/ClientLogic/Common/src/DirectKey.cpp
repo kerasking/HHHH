@@ -67,8 +67,8 @@ void NDUIDirectKeyTop::OnBeforeNodeRemoveFromParent(NDNode* node, bool bCleanUp)
 		}
 	}
 	
-	if (this->GetDelegate() == node)
-		this->SetDelegate(NULL);
+	if (GetDelegate() == node)
+		SetDelegate(NULL);
 		
 }
 
@@ -107,7 +107,7 @@ DirectKey::DirectKey()
 
 DirectKey::~DirectKey()
 {
-	s_Rect = this->GetFrameRect();
+	s_Rect = GetFrameRect();
 	
 	SAFE_DELETE(m_picNormal);
 	
@@ -163,7 +163,7 @@ void DirectKey::Initialization()
 // 	
 // 	m_picCenterShrink->Initialization(vImgFiles, vImgCustomRect, vOffsetPoint);
 // 	
-// 	this->SetBackgroundImage(m_picNormal);
+// 	SetBackgroundImage(m_picNormal);
 	
 	/*
 	CGSize sizeCenter = picCenter->GetSize(),
@@ -189,7 +189,7 @@ void DirectKey::Initialization()
 //	m_btnLeft->SetFrameRect(CGRectMake(0, horizontalY, horizontalW, horizontalH));
 //	m_btnLeft->SetTouchDownColor(ccc4(255, 255, 255, 0));
 //	m_btnLeft->SetDelegate(this);
-//	this->AddChild(m_btnLeft);	
+//	AddChild(m_btnLeft);	
 	
 	/*
 	 right direct key
@@ -201,7 +201,7 @@ void DirectKey::Initialization()
 //	m_btnRight->SetFrameRect(CGRectMake(rightStartX, horizontalY, horizontalW, horizontalH));
 //	m_btnRight->SetTouchDownColor(ccc4(255, 255, 255, 0));
 //	m_btnRight->SetDelegate(this);
-//	this->AddChild(m_btnRight);	
+//	AddChild(m_btnRight);	
 	
 	/*
 	 up direct key
@@ -213,7 +213,7 @@ void DirectKey::Initialization()
 //	m_btnUp->SetFrameRect(CGRectMake(verticalStartX, 0, verticalW, verticalH));
 //	m_btnUp->SetTouchDownColor(ccc4(255, 255, 255, 0));
 //	m_btnUp->SetDelegate(this);
-//	this->AddChild(m_btnUp);	
+//	AddChild(m_btnUp);	
 	
 	/*
 	 down direct key
@@ -225,7 +225,7 @@ void DirectKey::Initialization()
 //	m_btnDown->SetFrameRect(CGRectMake(verticalStartX, downStartY, verticalW, verticalH));
 //	m_btnDown->SetTouchDownColor(ccc4(255, 255, 255, 0));
 //	m_btnDown->SetDelegate(this);
-//	this->AddChild(m_btnDown);
+//	AddChild(m_btnDown);
 	
 	m_btnShrink = new NDUIButton();
 	m_btnShrink->Initialization();
@@ -244,11 +244,11 @@ void DirectKey::Initialization()
 		s_Rect = CGRectMake(0, 200, DIRECTKEY_W, DIRECTKEY_H);
 	}
 	
-	this->SetFrameRect(s_Rect);
+	SetFrameRect(s_Rect);
 	
 //	if (s_shink) 
 //	{
-//		this->ReverseShrinkState();
+//		ReverseShrinkState();
 //	}
 }
 
@@ -286,7 +286,7 @@ void DirectKey::OnButtonDown(NDUIButton* button)
 	{
 		m_picDown->Rotation(rota);
 		
-		this->SetBackgroundImage(m_picDown);
+		SetBackgroundImage(m_picDown);
 	}
 	
 	DealKey(m_keyDirect);
@@ -344,7 +344,7 @@ void DirectKey::OnButtonUp(NDUIButton* button)
 	m_dequeDir.clear();
 	
 	if (m_picNormal) 
-		this->SetBackgroundImage(m_picNormal);
+		SetBackgroundImage(m_picNormal);
 	
 	if (m_btnShrink) 
 	{
@@ -365,7 +365,7 @@ void DirectKey::OnTouchUp()
 	//NDPlayer::defaultHero().stopMoving(true);
 	
 	if (m_picNormal) 
-		this->SetBackgroundImage(m_picNormal);
+		SetBackgroundImage(m_picNormal);
 		
 	if (m_picCenterNormal) 
 	{
@@ -423,8 +423,8 @@ void DirectKey::OnBeforeNodeRemoveFromParent(NDNode* node, bool bCleanUp)
 {
 	if (!bCleanUp || node != m_btnLayer) return;
 	
-	if (this->GetDelegate() == m_btnLayer)
-		this->SetDelegate(NULL);
+	if (GetDelegate() == m_btnLayer)
+		SetDelegate(NULL);
 }
 
 void DirectKey::DealKey(KeyDirect type)
@@ -584,7 +584,7 @@ void DirectKey::ReverseShrinkState()
 {
 	s_shink = !s_shink;
 
-	this->SetVisible(!s_shink);
+	SetVisible(!s_shink);
 	
 	if (m_btnShrink)
 	{
@@ -600,12 +600,12 @@ void DirectKey::ReverseShrinkState()
 		
 		m_btnLeft->SetVisible(!state);
 		
-		this->SetBackgroundImage(!state ? m_picNormal : NULL);
+		SetBackgroundImage(!state ? m_picNormal : NULL);
 		
 		s_shink = state;
 		
 		
-		this->SetVisible(!state);
+		SetVisible(!state);
 	}
 	
 	if (m_btnRight) 
@@ -639,19 +639,19 @@ void DirectKey::ReverseShrinkState()
 
 void DirectKey::RefreshPosition(CGPoint pos)
 {
-	CGRect rect = this->GetFrameRect();
+	CGRect rect = GetFrameRect();
 	
 	rect.origin.x = pos.x-rect.size.width/2;
 	
 	rect.origin.y = pos.y-rect.size.height/2;
 	
-	this->SetFrameRect(rect);
+	SetFrameRect(rect);
 	
 	s_Rect = rect;
 	
 	if (m_btnLayer) 
 	{
-		CGRect scrRect = this->GetScreenRect();
+		CGRect scrRect = GetScreenRect();
 		
 		CGRect btnRect = m_btnLayer->GetFrameRect();
 		
@@ -675,7 +675,7 @@ void DirectKey::ShowFinish(NDScene* scene)
 		m_btnLayer->Initialization(this);
 		m_btnLayer->SetBackgroundColor(ccc4(255, 255, 255, 0));
 		m_btnLayer->SetDelegate(this);
-		this->SetDelegate(m_btnLayer);
+		SetDelegate(m_btnLayer);
 	} 
 	
 	if (m_btnLayer->GetParent()) 
@@ -683,7 +683,7 @@ void DirectKey::ShowFinish(NDScene* scene)
 		m_btnLayer->RemoveFromParent(false);
 	}
 	
-	CGPoint origin = this->GetScreenRect().origin;
+	CGPoint origin = GetScreenRect().origin;
 	
 	CGRect rect = m_btnShrink->GetFrameRect();
 	
@@ -778,7 +778,7 @@ bool DirectKey::TouchEnd(NDTouch* touch)
 
 DirectKey::KeyDirect DirectKey::GetPointAtDirect(CGPoint pos)
 {
-	CGRect scrRect = this->GetScreenRect();
+	CGRect scrRect = GetScreenRect();
 	
 	KeyDirect direct = KeyDirectNone;
 	
@@ -851,6 +851,6 @@ void DirectKey::UpdateDownPicture()
 	{
 		m_picDown->Rotation(rota);
 		
-		this->SetBackgroundImage(m_picDown);
+		SetBackgroundImage(m_picDown);
 	}
 }

@@ -69,9 +69,9 @@ void GameUIRequest::Initialization()
 	#if 0
 NDUIMenuLayer::Initialization();
 	
-	if ( this->GetCancelBtn() ) 
+	if ( GetCancelBtn() ) 
 	{
-		this->GetCancelBtn()->SetDelegate(this);
+		GetCancelBtn()->SetDelegate(this);
 	}
 	
 	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
@@ -83,13 +83,13 @@ NDUIMenuLayer::Initialization();
 	m_lbTitle->SetFontColor(ccc4(255, 245, 0, 255));
 	m_lbTitle->SetFrameRect(CGRectMake((winsize.width-dim.width)/2, (title_height-dim.height)/2, dim.width, dim.height));
 	m_lbTitle->SetText("请求列表");
-	this->AddChild(m_lbTitle);
+	AddChild(m_lbTitle);
 	
 	NDUILayer *tmpLayer = new NDUILayer;
 	tmpLayer->Initialization();
 	tmpLayer->SetFrameRect(CGRectMake(MAIN_TB_X, title_height+2, winsize.width-2*MAIN_TB_X, 20));
 	tmpLayer->SetBackgroundColor(ccc4(119,119,119,255));
-	this->AddChild(tmpLayer);
+	AddChild(tmpLayer);
 	
 	NDUILabel *tmpName = new NDUILabel;
 	tmpName->Initialization();
@@ -115,7 +115,7 @@ NDUIMenuLayer::Initialization();
 	m_tlMain->SetVisible(false);
 	m_tlMain->VisibleSectionTitles(false);
 	m_tlMain->SetBackgroundColor(ccc4(255, 255, 255, 0));
-	this->AddChild(m_tlMain);
+	AddChild(m_tlMain);
 	
 	UpdateMainUI();
 #endif
@@ -124,12 +124,12 @@ NDUIMenuLayer::Initialization();
 void GameUIRequest::OnButtonClick(NDUIButton* button)
 {
 	#if 0
-if (button == this->GetCancelBtn())
+if (button == GetCancelBtn())
 	{
-		if (this->GetParent() && this->GetParent()->IsKindOfClass(RUNTIME_CLASS(GameScene))) 
+		if (GetParent() && GetParent()->IsKindOfClass(RUNTIME_CLASS(GameScene))) 
 		{
-			((GameScene*)(this->GetParent()))->SetUIShow(false);
-			this->RemoveFromParent(true);
+			((GameScene*)(GetParent()))->SetUIShow(false);
+			RemoveFromParent(true);
 		}
 	}
 #endif
@@ -452,7 +452,7 @@ NDUINode::Initialization();
 	
 	m_picBg = pool.AddPicture(NDPath::GetImgPathNew("attr_listitem_bg.png"), 436, 28);
 	
-	this->SetFrameRect(CGRectMake(0, 0, 436, 28));
+	SetFrameRect(CGRectMake(0, 0, 436, 28));
 	
 	m_lbKey = new NDUILabel;
 	m_lbKey->Initialization();
@@ -460,7 +460,7 @@ NDUINode::Initialization();
 	m_lbKey->SetFontSize(14);
 	m_lbKey->SetFontColor(ccc4(136, 42, 42, 255));
 	m_lbKey->SetFrameRect(CGRectMake(34, 7, 436, 28));
-	this->AddChild(m_lbKey);
+	AddChild(m_lbKey);
 	
 	m_lbValue = new NDUILabel;
 	m_lbValue->Initialization();
@@ -468,7 +468,7 @@ NDUINode::Initialization();
 	m_lbValue->SetFontSize(14);
 	m_lbValue->SetFontColor(ccc4(79, 77, 78, 255));
 	m_lbValue->SetFrameRect(CGRectMake(0, 7, 436, 28));
-	this->AddChild(m_lbValue);
+	AddChild(m_lbValue);
 	
 	m_picOk = pool.AddPicture(NDPath::GetImgPathNew("request_ok.png"));
 	
@@ -558,11 +558,11 @@ RequsetInfo* NDRequestCell::GetRequest()
 void NDRequestCell::draw()
 {
 #if 0
-	if (!this->IsVisibled()) return;
+	if (!IsVisibled()) return;
 	
 	if (!m_request || !m_request->isValid()) return;
 	
-	CGRect scrRect = this->GetScreenRect();
+	CGRect scrRect = GetScreenRect();
 	
 	if (m_picBg)
 		m_picBg->DrawInRect(scrRect);
@@ -584,7 +584,7 @@ void NDRequestCell::draw()
 
 CGRect NDRequestCell::GetOkScreenRect()
 {
-	CGRect rect = this->GetScreenRect();
+	CGRect rect = GetScreenRect();
 	
 	rect.origin.x += 360;
 	rect.size.width = 31;
@@ -594,7 +594,7 @@ CGRect NDRequestCell::GetOkScreenRect()
 
 CGRect NDRequestCell::GetCancelScreenRect()
 {
-	CGRect rect = this->GetScreenRect();
+	CGRect rect = GetScreenRect();
 	
 	rect.origin.x += 400;
 	rect.size.width = 31;
@@ -675,7 +675,7 @@ void NewGameUIRequest::Initialization()
 	
 	dataSource->AddSection(section);
 	m_tlMain->SetDataSource(dataSource);
-	this->AddChild(m_tlMain);
+	AddChild(m_tlMain);
 	
 	refresh();
 }

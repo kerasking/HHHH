@@ -43,9 +43,9 @@
 	 {
 	#if 0
 	 iRoleID = iID;
-		 this->name = name;
+		 name = name;
 		 setMAction(action);
-		 this->nTime = ::time(NULL);
+		 nTime = ::time(NULL);
 #endif
 	 }
 	 int getMAction(){ return iAction; }

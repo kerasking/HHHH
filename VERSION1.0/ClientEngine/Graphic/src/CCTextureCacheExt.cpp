@@ -80,7 +80,7 @@
 // 
 // @implementation CCTextureCache(ChangeColor)
 // 
-// -(CCTexture2D*) addColorImage: (NSString*)imageName
+// -(CCTexture2D*) addColorImage: (NSString)imageName
 // {
 // 	NSAssert(imageName != NULL, @"TextureCache: imageName MUST not be nill");
 // 
@@ -89,12 +89,12 @@
 // 		return [self addImage:imageName];
 // 	}
 // 	
-// 	int colorIndex = [(NSString*)[arrName objectAtIndex:1] intValue];
+// 	int colorIndex = [(NSString)[arrName objectAtIndex:1] intValue];
 // 	if (colorIndex < 1) {
 // 		return [self addImage:[arrName objectAtIndex:0]];
 // 	}
 // 	
-// 	NSString* colorFile = [(NSString*)[arrName objectAtIndex:0] stringByReplacingOccurrencesOfString:@".png" withString:@".ini"];
+// 	NSString colorFile = [(NSString)[arrName objectAtIndex:0] stringByReplacingOccurrencesOfString:@".png" withString:@".ini"];
 // 	const char* pColorFile = [colorFile UTF8String];
 // 	CCTexture2D * tex = NULL;
 // 	
@@ -275,7 +275,7 @@
 // 	
 // 	for (NSUInteger i = 0; i < [allKeys count]; i++) 
 // 	{
-// 		NSString* key	= [allKeys objectAtIndex:i];
+// 		NSString key	= [allKeys objectAtIndex:i];
 // 		if (NULL == key)
 // 		{
 // 			continue;

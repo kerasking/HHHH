@@ -66,7 +66,7 @@ typedef enum
 	PlayerBackBag
 }NMAINSCENECHILDTAG;
 
-#define NSString cocos2d::CCString
+#define NSString NDSharedPtr<cocos2d::CCString>
 
 #define SAFE_DELETE(pObject)\
 do \

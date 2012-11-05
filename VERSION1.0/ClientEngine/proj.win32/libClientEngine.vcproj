@@ -462,6 +462,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\System\inc\NDEnableSharedFromThis.h"
+					>
+				</File>
+				<File
 					RelativePath="..\System\inc\NDLocalization.h"
 					>
 				</File>
@@ -474,11 +478,27 @@
 					>
 				</File>
 				<File
+					RelativePath="..\System\inc\NDRefLong.h"
+					>
+				</File>
+				<File
+					RelativePath="..\System\inc\NDSharedPtr.h"
+					>
+				</File>
+				<File
+					RelativePath="..\System\inc\NDSPtrCounted.h"
+					>
+				</File>
+				<File
 					RelativePath="..\System\inc\NDTimer.h"
 					>
 				</File>
 				<File
 					RelativePath="..\System\inc\NDTouch.h"
+					>
+				</File>
+				<File
+					RelativePath="..\System\inc\NDWeakPtr.h"
 					>
 				</File>
 				<File

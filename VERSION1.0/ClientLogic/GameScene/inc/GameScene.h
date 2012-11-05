@@ -63,12 +63,12 @@ typedef struct _tagMarriageInfo
 	int iId;
 	_tagMarriageInfo(std::string name, int iId)
 	{
-		this->name = name;
-		this->iId = iId;
+		name = name;
+		iId = iId;
 	}
 	_tagMarriageInfo()
 	{
-		this->iId = 0;
+		iId = 0;
 	}
 } MarriageInfo;
 
