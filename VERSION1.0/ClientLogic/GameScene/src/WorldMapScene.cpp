@@ -10,15 +10,14 @@
 #include "CCPointExtension.h"
 #include "NDUtility.h"
 #include "NDDirector.h"
-//#include "ItemMgr.h"
+#include "ItemMgr.h"
 #include "NDPlayer.h"
-///< #include "NDMapMgr.h" ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+#include "NDMapMgr.h"
 #include "GameScene.h"
 #include "NDUIImage.h"
 #include "NDPath.h"
 #include <stdlib.h>
 #include "CCTextureCache.h"
-#include "CCTexture2D.h"
 
 #include "CCPointExtension.h"
 #include "ScriptGameLogic.h"
@@ -51,6 +50,7 @@ WorldMapLayer::~WorldMapLayer()
 {
 	m_buttons->release();
 	m_buttonsFocus->release();
+
 }
 
 void WorldMapLayer::Initialization(int nMapId)
@@ -61,24 +61,20 @@ void WorldMapLayer::Initialization(int nMapId)
 
 	NDUILayer::Initialization();
 	SetTag(ScriptMgrObj.excuteLuaFuncRetN("GetWorldMapUITag", ""));
+     ScriptMgrObj.excuteLuaFunc("PlayWorldMusic", "Music");
 	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 	SetFrameRect(CGRectMake(0, 0, width, height));
-
-	m_mapFilename.insert(
-			std::make_pair(3, GetSMImgPath("icon_town_high_2.png")));
-	m_mapFilename.insert(
-			std::make_pair(1, GetSMImgPath("icon_town_low_2.png")));
-	m_mapFilename.insert(
-			std::make_pair(2, GetSMImgPath("icon_town_mid_2.png")));
-	m_mapFilename.insert(
-			std::make_pair(4, GetSMImgPath("icon_town_mid_2.png")));
-	m_mapFilename.insert(
-			std::make_pair(5, GetSMImgPath("icon_town_mid_2.png")));
-	m_mapFilename.insert(
-			std::make_pair(6, GetSMImgPath("icon_town_mid_2.png")));
-	m_mapFilename.insert(
-			std::make_pair(7, GetSMImgPath("icon_town_mid_2.png")));
-
+	/*
+    	m_mapFilename.insert(std::make_pair(1, GetSMImgPath("o11.png")));
+        m_mapFilename.insert(std::make_pair(2, GetSMImgPath("icon_town_low_2.png")));
+        m_mapFilename.insert(std::make_pair(3, GetSMImgPath("icon_town_high_2.png")));
+        m_mapFilename.insert(std::make_pair(4, GetSMImgPath("icon_town_high_2.png")));
+        m_mapFilename.insert(std::make_pair(5, GetSMImgPath("icon_town_high_2.png")));
+        m_mapFilename.insert(std::make_pair(6, GetSMImgPath("icon_town_high_2.png")));
+        m_mapFilename.insert(std::make_pair(7, GetSMImgPath("icon_town_high_2.png")));
+        m_mapFilename.insert(std::make_pair(8, GetSMImgPath("icon_town_high_2.png")));
+        m_mapFilename.insert(std::make_pair(9, GetSMImgPath("icon_town_high_2.png")));
+	*/
 	m_buttons = cocos2d::CCArray::array();
 	m_buttonsFocus = cocos2d::CCArray::array();
 	for (unsigned int i = 0; i < m_mapData->getPlaceNodes()->count(); i++)
@@ -91,20 +87,20 @@ void WorldMapLayer::Initialization(int nMapId)
 		{
 			continue;
 		}
-
-		if (m_mapFilename.end() == m_mapFilename.find(pkNode->getPlaceId()))
+		/*
+		if (m_mapFilename.end() == m_mapFilename.find(node.placeId))
 		{
 			continue;
 		}
-
-		const char* path = m_mapFilename[pkNode->getPlaceId()].c_str();
-		if (NULL == path)
+		
+		NSString* path	= [NSString stringWithUTF8String:m_mapFilename[node.placeId].c_str()];
+		if (nil == path)
 		{
 			continue;
 		}
-
-		cocos2d::CCTexture2D* tex =
-				cocos2d::CCTextureCache::sharedTextureCache()->addImage(path);
+		CCTexture2D* tex	= [[CCTextureCache sharedTextureCache] addImage:path];
+		*/
+		CCTexture2D* tex = pkNode->getTexture();
 		if (NULL == tex)
 		{
 			continue;
@@ -265,6 +261,15 @@ void WorldMapLayer::SetFilter(ID_VEC idVec)
 
 bool WorldMapLayer::IsInFilterList(int nMapId)
 {
+	bool bFilter = ScriptMgrObj.excuteLuaFunc("IsMapCanOpen", "AffixBossFunc", nMapId);
+    
+   
+    
+    
+    if (!bFilter)
+	{
+		return true;
+	}
 	if (m_vIdFilter.empty())
 	{
 		return false;
@@ -351,21 +356,27 @@ void WorldMapLayer::OnTimer(OBJID tag)
 		m_timer.KillTimer(this, TAG_TIMER_MOVE);
 		SetMove(false);
 		// todo move
-//		NDMapMgrObj.WorldMapSwitch(GetTargetMapId()); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+        int mapid = GetTargetMapId();
+        
+        if(mapid==1 || mapid == 2)
+            //NDMapMgrObj.WorldMapSwitch(GetTargetMapId());
+			;
+        else
+            ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "",mapid);
 		return;
 	}
 
 	if (m_roleNode)
 	{
 		CGRect rectRole = m_roleNode->GetFrameRect();
-		float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
+		//float	fScaleFactor	= NDDirector::DefaultDirector()->GetScaleFactor();
 		CGPoint posRole = rectRole.origin;
 		CGPoint posTarget = GetTarget();
 
 		float fDiffX = posTarget.x - posRole.x;
 		float fDiffY = posTarget.y - posRole.y;
 		float fDis = sqrt(pow(fDiffX, 2) + pow(fDiffY, 2));
-		float fStep = MOVE_STEP * fScaleFactor;
+		float fStep		= MOVE_STEP; //* fScaleFactor;
 
 		if (fDis < fStep)
 		{

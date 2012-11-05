@@ -21,9 +21,7 @@
 //#include "SimpleAudioEngine_objc.h"
 #include "NDWorldMapData.h"
 #include "UIRoleNode.h"
-#include "CCArray.h"
-#include "globaldef.h"
-#include "define.h"
+#include "typedef.h"
 
 using namespace NDEngine;
 
@@ -76,7 +74,7 @@ private:
 	CGPoint m_posTarget;
 	int m_nTargetMapId;
 	bool m_bInMoving;
-	std::map<int, std::string> m_mapFilename;
+	//std::map<int, std::string> m_mapFilename;
 };
 
 #endif
