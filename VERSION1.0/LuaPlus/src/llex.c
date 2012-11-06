@@ -32,7 +32,7 @@ static int next(LexState *ls)
   {
 	lua_WChar w;
 	unsigned char b[2];
-  } s;
+  } s = {0};
   int c = zgetc(ls->z);
   if (c == EOZ) {
     ls->current = EOZ;
@@ -233,14 +233,16 @@ static void buffreplace (LexState *ls, char from, char to) {
 static void trydecpoint (LexState *ls, SemInfo *seminfo) {
   /* format error: try to update decimal point separator */
   struct lconv *cv = localeconv();
+#ifdef _WINDOWS			///< 因为NDK下lconv是空的。 add by 郭浩
   char old = ls->decpoint;
   ls->decpoint = (cv ? cv->decimal_point[0] : '.');
   buffreplace(ls, old, ls->decpoint);  /* try updated decimal separator */
   if (!luaO_str2d(luaZ_buffer(ls->buff), &seminfo->r)) {
-    /* format error with correct decimal point: no more options */
-    buffreplace(ls, ls->decpoint, '.');  /* undo change (for error message) */
-    luaX_lexerror(ls, "malformed number", TK_NUMBER);
+	  /* format error with correct decimal point: no more options */
+	  buffreplace(ls, ls->decpoint, '.');  /* undo change (for error message) */
+	  luaX_lexerror(ls, "malformed number", TK_NUMBER);
   }
+#endif
 }
 
 
