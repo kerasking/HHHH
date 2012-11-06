@@ -6,6 +6,8 @@ LOCAL_MODULE := luaplus
 
 LOCAL_MODULE_FILENAME := luaplus
 
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../
+
 LOCAL_SRC_FILES := \
 ../../LuaCall.cpp \
 ../../LuaObject.cpp \
