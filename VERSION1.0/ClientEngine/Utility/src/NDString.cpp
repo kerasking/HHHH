@@ -64,39 +64,38 @@ NDString::NDString()
 {
 }
 
-NDString::NDString(const char* str, int length) :
-		buf(str, length)
+NDString::NDString(const char* str, int length)
 {
-
+	m_sString = string(str, length);
 }
 
 NDString::NDString(const char* str)
 {
-	buf = str;
+	m_sString = str;
 }
 
 NDString::NDString(const char ch)
 {
-	buf = ch;
+	m_sString = ch;
 }
 
 NDString::NDString(unsigned int value)
 {
 	char buff[16];
 	sprintf(buff, "%u", value);
-	buf = buff;
+	m_sString = buff;
 }
 
 NDString::NDString(float fvalue)
 {
 	char buff[16];
 	sprintf(buff, "%f", fvalue);
-	buf = buff;
+	m_sString = buff;
 }
 
 NDString::NDString(const string& str)
 {
-	buf = str.c_str();
+	m_sString = str.c_str();
 }
 
 NDString::NDString(int value)
@@ -104,17 +103,17 @@ NDString::NDString(int value)
 	char str[256] =
 	{ 0 };
 	sprintf(str, "%d", value);
-	buf = str;
+	m_sString = str;
 }
 
 NDString::NDString(const NDString& data)
 {
-	buf = data.buf;
+	m_sString = data.m_sString;
 }
 
 NDString& NDString::operator=(const char* str)
 {
-	buf = str;
+	m_sString = str;
 	return (*this);
 }
 
@@ -123,7 +122,7 @@ NDString::operator=(const NDString& data)
 {
 	if (this != &data)
 	{
-		buf = data.buf;
+		m_sString = data.m_sString;
 	}
 
 	return (*this);
@@ -132,18 +131,18 @@ NDString::operator=(const NDString& data)
 const char*
 NDString::getData() const
 {
-	return buf.c_str();
+	return m_sString.c_str();
 }
 
 const char*
 NDString::getDataBuf() const
 {
-	return buf.c_str();
+	return m_sString.c_str();
 }
 
 void NDString::operator+=(char ch)
 {
-	buf += ch;
+	m_sString += ch;
 }
 
 NDString NDString::substr(int start, int length) const
@@ -154,23 +153,23 @@ NDString NDString::substr(int start, int length) const
 	}
 	else
 	{
-		return NDString(buf.substr(start, length));
+		return NDString(m_sString.substr(start, length));
 	}
 }
 
 char NDString::getChar(unsigned int i) const
 {
-	if (i > buf.size())
+	if (i > m_sString.size())
 		return 0;
-	return buf[i];
+	return m_sString[i];
 }
 
 void NDString::setchar(unsigned int i, char c)
 {
-	if (i > buf.size())
+	if (i > m_sString.size())
 		return;
 	else
-		buf[i] = c;
+		m_sString[i] = c;
 }
 
 char NDString::operator[](unsigned int i)
@@ -182,27 +181,27 @@ char NDString::operator[](unsigned int i)
 
 unsigned int NDString::length() const
 {
-	return buf.size();
+	return m_sString.size();
 }
 
 bool NDString::operator==(const char* str) const
 {
-	return (buf == str);
+	return (m_sString == str);
 }
 
 bool NDString::operator==(const NDString& data) const
 {
-	return (buf == data.buf);
+	return (m_sString == data.m_sString);
 }
 
 bool NDString::operator!=(const char* str) const
 {
-	return (buf != str);
+	return (m_sString != str);
 }
 
 bool NDString::operator!=(const NDString& data) const
 {
-	return (buf != data.buf);
+	return (m_sString != data.m_sString);
 }
 
 void getDataSection(const NDString& data, unsigned int& start, NDString& dtRet,
@@ -333,50 +332,50 @@ void getDataSection(const NDString& data, unsigned int& start, NDString& dtRet,
 
 NDString NDString::operator+(const NDString& data) const
 {
-	return (buf + data.buf);
+	return (m_sString + data.m_sString);
 }
 
 NDString NDString::operator+(int val) const
 {
 	char buff[10];
 	sprintf(buff, "%d", val);
-	return buf + buff;
+	return m_sString + buff;
 }
 
 NDString NDString::operator+(unsigned int val) const
 {
 	char buff[10];
 	sprintf(buff, "%u", val);
-	return buf + buff;
+	return m_sString + buff;
 }
 
 NDString NDString::operator+(const char* str) const
 {
-	return (buf + str);
+	return (m_sString + str);
 }
 
 void NDString::operator+=(const NDString& data)
 {
-	buf += data.buf;
+	m_sString += data.m_sString;
 }
 
 void NDString::operator+=(const char* str)
 {
-	buf += str;
+	m_sString += str;
 }
 
 void NDString::operator+=(int val)
 {
 	char buff[10];
 	sprintf(buff, "%d", val);
-	buf += buff;
+	m_sString += buff;
 }
 
 void NDString::operator+=(unsigned int val)
 {
 	char buff[10];
 	sprintf(buff, "%u", val);
-	buf += buff;
+	m_sString += buff;
 }
 
 NDString::~NDString()
@@ -385,22 +384,22 @@ NDString::~NDString()
 
 void NDString::erase()
 {
-	buf.erase();
+	m_sString.erase();
 }
 
 NDString::operator string() const
 {
-	return buf;
+	return m_sString;
 }
 
 NDString::operator const char*() const
 {
-	return buf.c_str();
+	return m_sString.c_str();
 }
 
 NDString::operator int() const
 {
-	return atoi(buf.c_str());
+	return atoi(m_sString.c_str());
 }
 
 int NDString::HexToInt()
@@ -409,14 +408,14 @@ int NDString::HexToInt()
 	int j = 0;
 	string buff;
 	bool bNega = false;
-	if (buf[0] == '-')
+	if (m_sString[0] == '-')
 	{
-		buff = buf.substr(1);
+		buff = m_sString.substr(1);
 		bNega = true;
 	}
 	else
 	{
-		buff = buf;
+		buff = m_sString;
 	}
 	for (int i = buff.length() - 1; i >= 0; i--, j++)
 	{
@@ -446,7 +445,7 @@ int NDString::HexToInt()
 
 int NDString::find(const NDString& match, int start) const
 {
-	return buf.find(match.buf, start);
+	return m_sString.find(match.m_sString, start);
 }
 
 int NDString::findNoCase(const NDString& match, int start/*=0*/)
@@ -465,30 +464,30 @@ int NDString::findNoCase(const NDString& match, int start/*=0*/)
 
 void NDString::removeQuo()
 {
-	unsigned int first = 0, end = buf.length();
+	unsigned int first = 0, end = m_sString.length();
 	unsigned int i = 0;
-	for (i = 0; i < buf.length() - 1; i++)
+	for (i = 0; i < m_sString.length() - 1; i++)
 	{
-		if (buf[i] == '"')
+		if (m_sString[i] == '"')
 			first = i + 1;
 		else
 			break;
 	}
-	for (i = buf.length(); i > first; i--)
+	for (i = m_sString.length(); i > first; i--)
 	{
-		if (buf[i] == '"')
+		if (m_sString[i] == '"')
 			end = i;
 		else
 			break;
 	}
-	buf = buf.substr(first, end - first);
+	m_sString = m_sString.substr(first, end - first);
 }
 
 int NDString::match(NDString match, NDString* retModifiedData, bool replace,
 		NDString replaceWith)
 {
 	int retVal = FIRST;
-	int pos = buf.find(match.buf);
+	int pos = m_sString.find(match.m_sString);
 	if (pos == -1)
 	{
 		return NOT_FOUND;
@@ -501,13 +500,13 @@ int NDString::match(NDString match, NDString* retModifiedData, bool replace,
 	unsigned int replacePos = pos + match.length();
 	if (retModifiedData)
 	{
-		(*retModifiedData) = buf.substr(0, pos);
+		(*retModifiedData) = m_sString.substr(0, pos);
 	}
 	if (replace)
 	{
-		if (replacePos <= buf.size())
+		if (replacePos <= m_sString.size())
 		{
-			buf.replace(0, replacePos, replaceWith.buf);
+			m_sString.replace(0, replacePos, replaceWith.m_sString);
 		}
 	}
 	return retVal;
@@ -516,7 +515,7 @@ int NDString::match(NDString match, NDString* retModifiedData, bool replace,
 
 void NDString::replace(int startpos, int len, const NDString& replaceStr)
 {
-	buf.replace(startpos, len, replaceStr.buf);
+	m_sString.replace(startpos, len, replaceStr.m_sString);
 }
 
 void NDString::replace(const NDString& from, const NDString to)
@@ -530,14 +529,14 @@ void NDString::replace(const NDString& from, const NDString to)
 
 int NDString::findlast(const NDString& match, int stop) const
 {
-	return buf.find_last_of(match.buf, stop);
+	return m_sString.find_last_of(match.m_sString, stop);
 }
 
 int NDString::findlastNoCase(const NDString& match, int stop/*=-1*/) const
 {
-	if (stop >= (int) buf.size() || stop <= 0)
-		stop = buf.size() - 1;
-	const char* pStr = buf.c_str();
+	if (stop >= (int) m_sString.size() || stop <= 0)
+		stop = m_sString.size() - 1;
+	const char* pStr = m_sString.c_str();
 	const char* pCompare = match.getDataBuf();
 	int len = match.length();
 	for (int i = stop - len + 1; i >= 0; i--)
@@ -562,13 +561,13 @@ bool isEqualNoCase(const NDString& left, const NDString& right)
 
 void NDString::removeSpaces()
 {
-	if (buf.length() == 0)
+	if (m_sString.length() == 0)
 		return;
 	while (true)
 	{
-		if (buf[0] == ' ')
+		if (m_sString[0] == ' ')
 		{
-			buf.replace(0, strlen(SPACE), "");
+			m_sString.replace(0, strlen(SPACE), "");
 		}
 		else
 		{
@@ -578,9 +577,9 @@ void NDString::removeSpaces()
 	}
 	while (true)
 	{
-		if (buf[buf.length() - 1] == ' ')
+		if (m_sString[m_sString.length() - 1] == ' ')
 		{
-			buf.replace(buf.length() - 1, strlen(SPACE), "");
+			m_sString.replace(m_sString.length() - 1, strlen(SPACE), "");
 		}
 		else
 		{
@@ -591,39 +590,39 @@ void NDString::removeSpaces()
 
 void NDString::clearSpaces()
 {
-	if (buf.length() == 0)
+	if (m_sString.length() == 0)
 	{
 		return;
 	}
 	int beforeval;
 	do
 	{
-		beforeval = buf.find(SPACE);
+		beforeval = m_sString.find(SPACE);
 		if (beforeval == -1)
 		{
 			break;
 		}
-		buf.replace(beforeval, strlen(SPACE), "");
+		m_sString.replace(beforeval, strlen(SPACE), "");
 	} while (beforeval == 0);
 }
 
 void NDString::expand(NDString startFrom, NDString findstr, NDString replstr,
 		NDString delimiter)
 {
-	int startPos = buf.find(startFrom.getData());
+	int startPos = m_sString.find(startFrom.getData());
 	if (startPos < -1)
 	{
-		int delimPos = buf.find(delimiter.getData(), startPos);
-		int findPos = buf.find(findstr.getData(), startPos);
+		int delimPos = m_sString.find(delimiter.getData(), startPos);
+		int findPos = m_sString.find(findstr.getData(), startPos);
 		while (findPos < delimPos)
 		{
 			//found replstr, replace
-			buf.replace(findPos, strlen(findstr.getData()), replstr.getData());
+			m_sString.replace(findPos, strlen(findstr.getData()), replstr.getData());
 			//find next.
 			//delimPos = buf.find( delimiter.getData(), findPos);
-			delimPos = buf.find(delimiter.getData(),
+			delimPos = m_sString.find(delimiter.getData(),
 					findPos + static_cast<string>(replstr.getData()).size());
-			findPos = buf.find(findstr.getData(), findPos);
+			findPos = m_sString.find(findstr.getData(), findPos);
 		}
 	}
 }
@@ -636,10 +635,10 @@ void NDString::deepCopy(const NDString &src, char ** bufPtr, int *bufLenPtr)
 	// 2)  This might be better.  This should perserve strings like "\0\0a".
 	//     Why this?  Binary data handling.
 	// Shallow copy first.
-	buf = src.buf;
+	m_sString = src.m_sString;
 	// This will force string to do a deep copy.
-	char p = src.buf[0];
-	buf[0] = p;
+	char p = src.m_sString[0];
+	m_sString[0] = p;
 	// 3) Using memcpy.  About the same as using char*
 	/*
 	 strBufLen = strlen(src.getData());
@@ -655,16 +654,16 @@ void NDString::deepCopy(const NDString &src, char ** bufPtr, int *bufLenPtr)
 
 bool NDString::isEmpty() const
 {
-	return buf.empty();
+	return m_sString.empty();
 }
 
 void NDString::removeCRLF()
 {
 	unsigned int i = 0;
-	while (i < buf.length())
+	while (i < m_sString.length())
 	{
-		if (buf[i] == '\r' || buf[i] == '\n')
-			buf.replace(i, 1, "");
+		if (m_sString[i] == '\r' || m_sString[i] == '\n')
+			m_sString.replace(i, 1, "");
 		else
 			i++;
 	}
@@ -673,10 +672,10 @@ void NDString::removeCRLF()
 void NDString::removeTab()
 {
 	unsigned int i = 0;
-	while (i < buf.length())
+	while (i < m_sString.length())
 	{
-		if (buf[i] == '\t')
-			buf.replace(i, 1, "");
+		if (m_sString[i] == '\t')
+			m_sString.replace(i, 1, "");
 		else
 			i++;
 	}
@@ -730,12 +729,12 @@ map<int, NDString> NDString::split(const NDString& sp, bool bCut) const
 
 void NDString::inflate(int size, const NDString &fillval, bool before)
 {
-	if ((int) buf.length() >= size)
+	if ((int) m_sString.length() >= size)
 	{
 		return;
 	}
 	NDString dtVal;
-	int iInflateSize = size - buf.length();
+	int iInflateSize = size - m_sString.length();
 
 	for (unsigned int i = 0; i < iInflateSize / fillval.length(); i++)
 	{
@@ -761,13 +760,13 @@ bool NDString::tobcd(char fillch)
 {
 	int len = 0;
 
-	if (buf.size() % 2 > 0)
+	if (m_sString.size() % 2 > 0)
 	{
-		len = buf.size() + 1;
+		len = m_sString.size() + 1;
 	}
 	else
 	{
-		len = buf.size();
+		len = m_sString.size();
 	}
 
 	int bcdLen = len >> 1;
@@ -776,9 +775,9 @@ bool NDString::tobcd(char fillch)
 
 	memset(buff, 0, sizeof(char) * len);
 	memset(buff1, 0, sizeof(char) * bcdLen);
-	memcpy(buff, buf.c_str(), buf.size());
+	memcpy(buff, m_sString.c_str(), m_sString.size());
 
-	if (len != (int) buf.size())
+	if (len != (int) m_sString.size())
 	{
 		buff[len - 1] = fillch;
 	}
@@ -787,7 +786,7 @@ bool NDString::tobcd(char fillch)
 
 	if (bRet = ascBcd(buff, (unsigned char*) buff1, bcdLen))
 	{
-		buf.assign(buff1, bcdLen);
+		m_sString.assign(buff1, bcdLen);
 	}
 
 	delete[] buff;
@@ -798,11 +797,11 @@ bool NDString::tobcd(char fillch)
 
 bool NDString::isNumeric()
 {
-	if (buf.size() == 0)
+	if (m_sString.size() == 0)
 		return false;
-	for (unsigned int i = 0; i < buf.size(); i++)
+	for (unsigned int i = 0; i < m_sString.size(); i++)
 	{
-		if (buf[i] > '9' || buf[i] < '0')
+		if (m_sString[i] > '9' || m_sString[i] < '0')
 			return false;
 	}
 	return true;
@@ -810,21 +809,21 @@ bool NDString::isNumeric()
 
 void NDString::removeLastChar(char ch)
 {
-	int index = buf.length() - 1;
+	int index = m_sString.length() - 1;
 	while (true)
 	{
-		if (buf[index] != '#')
+		if (m_sString[index] != '#')
 			break;
 		index--;
 	}
-	buf = buf.substr(0, index + 1);
+	m_sString = m_sString.substr(0, index + 1);
 }
 
 bool NDString::isEndWith(const NDString& str, bool bCase) const
 {
-	if (buf.length() < str.length())
+	if (m_sString.length() < str.length())
 		return false;
-	NDString subStr = buf.substr(buf.length() - str.length());
+	NDString subStr = m_sString.substr(m_sString.length() - str.length());
 	if (bCase)
 	{
 		if (subStr == str)
@@ -843,38 +842,38 @@ bool NDString::isEndWith(const NDString& str, bool bCase) const
 
 void NDString::fillFilePath()
 {
-	if (buf.empty())
+	if (m_sString.empty())
 		return;
-	if ((int) buf.find("/") != -1)
+	if ((int) m_sString.find("/") != -1)
 	{
-		if (buf[buf.length() - 1] != '/')
+		if (m_sString[m_sString.length() - 1] != '/')
 		{
-			buf += "/";
+			m_sString += "/";
 			return;
 		}
 	}
-	else if ((int) buf.find("\\") != -1)
+	else if ((int) m_sString.find("\\") != -1)
 	{
-		if (buf[buf.length() - 1] != '\\')
+		if (m_sString[m_sString.length() - 1] != '\\')
 		{
-			buf += "\\";
+			m_sString += "\\";
 			return;
 		}
 	}
 	else
 	{
-		buf += "/";
+		m_sString += "/";
 	}
 }
 
 NDString NDString::getFilePath() const
 {
-	int index = buf.find_last_of("\\");
+	int index = m_sString.find_last_of("\\");
 	if (index == -1)
 	{
-		index = buf.find_last_of("/");
+		index = m_sString.find_last_of("/");
 	}
-	if (index == -1 || index == ((int) buf.length() - 1))
+	if (index == -1 || index == ((int) m_sString.length() - 1))
 	{
 		return *this;
 	}
@@ -887,36 +886,36 @@ NDString NDString::getFilePath() const
 
 void NDString::makePath(bool bUrl)
 {
-	if (buf.length() == 0)
+	if (m_sString.length() == 0)
 		return;
-	char ch = buf[buf.length() - 1];
+	char ch = m_sString[m_sString.length() - 1];
 	if (ch != '\\' && ch != '/')
 	{
 		if (bUrl)
 		{
-			if ((int) buf.find("\\") != -1)
-				buf += '\\';
+			if ((int) m_sString.find("\\") != -1)
+				m_sString += '\\';
 			else
-				buf += '/';
+				m_sString += '/';
 		}
 		else
 		{
-			if ((int) buf.find("/") != -1)
-				buf += '/';
+			if ((int) m_sString.find("/") != -1)
+				m_sString += '/';
 			else
-				buf += '\\';
+				m_sString += '\\';
 		}
 	}
 }
 
 NDString NDString::getFileName() const
 {
-	int index = buf.find_last_of("\\");
+	int index = m_sString.find_last_of("\\");
 	if (index == -1)
-		index = buf.find_last_of("/");
+		index = m_sString.find_last_of("/");
 	if (index == -1)
 		return *this;
-	if (index == ((int) buf.length() - 1))
+	if (index == ((int) m_sString.length() - 1))
 		return "";
 	return substr(index + 1);
 }
@@ -940,7 +939,7 @@ void NDString::Format(const char* fmt, ...)
 			va_list arglist;
 			va_start(arglist, fmt);
 			::vsprintf(buffer, fmt, arglist);
-			buf = buffer;
+			m_sString = buffer;
 		} catch (...)
 		{
 			// log

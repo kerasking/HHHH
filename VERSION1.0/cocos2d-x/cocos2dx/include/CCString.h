@@ -34,7 +34,8 @@ THE SOFTWARE.
 #endif
 
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 #if ND_MOD
 	static char g_GBKConvUTF8Buf[5000] = {0};
@@ -244,7 +245,11 @@ namespace cocos2d {
 		static CCString* stringWithFormat(const char* pszFormat,...)
 		{
 			char szBuf[255] = {0};
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 			va_list kAp = 0;
+#else
+			va_list kAp = {0};
+#endif
 
 			va_start(kAp, pszFormat);
 			vsnprintf_s(szBuf, 255, 255, pszFormat, kAp);

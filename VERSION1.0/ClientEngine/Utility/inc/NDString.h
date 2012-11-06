@@ -11,7 +11,9 @@
 
 #include <map>
 #include <string>
+#include "cocos2d.h"
 
+using namespace cocos2d;
 using namespace std;
 
 namespace NDEngine
@@ -22,7 +24,7 @@ namespace NDEngine
 
 	static const char SPACE[] = " ";
 
-	class NDString
+	class NDString:public CCString
 	{
 	public:
 		NDString();
@@ -134,7 +136,7 @@ namespace NDEngine
 		void Format(const char* fmt, ...);
 
 	private:
-		string buf;
+//		string m_sString; ///< 因为要和CCString合并，所以m_sString(原buf)全部用父类的。 郭浩
 
 	public:
 		void removeLastChar(char ch);

@@ -13,7 +13,7 @@
 using namespace NDEngine;
 
 #ifdef WIN32
-static char g_GBKConvUTF8Buf[5000] = {0};
+static char g_GBKConvUTF8Buffer[5000] = {0};
 const char* GBKToUTF8(const char *strChar)
 {
 
@@ -26,7 +26,7 @@ const char* GBKToUTF8(const char *strChar)
 	size_t strLength = strlen(strChar);
 	size_t outLength = strLength<<2;
 	size_t copyLength = outLength;
-	memset(g_GBKConvUTF8Buf, 0, 5000);
+	memset(g_GBKConvUTF8Buffer, 0, 5000);
 
 	char* outbuf = (char*) malloc(outLength);
 	char* pBuff = outbuf;
@@ -37,10 +37,10 @@ const char* GBKToUTF8(const char *strChar)
 		iconv_close(iconvH);
 		return NULL;
 	}
-	memcpy(g_GBKConvUTF8Buf,pBuff,copyLength);
+	memcpy(g_GBKConvUTF8Buffer,pBuff,copyLength);
 	free(pBuff);
 	iconv_close(iconvH);
-	return g_GBKConvUTF8Buf;
+	return g_GBKConvUTF8Buffer;
 }
 #endif
 
