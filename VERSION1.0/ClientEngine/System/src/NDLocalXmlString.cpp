@@ -80,7 +80,7 @@ void NDLocalXmlString::Init()
 {
 	const char* pszTemp = NDEngine::NDPath::GetResPath("lyol.strings").c_str();
 
-	FILE *fp_in = fopen("../../SMYS_CLIENT_IPHONE/SimplifiedChineseRes/res/lyol.strings", "rt");
+	FILE *fp_in = fopen("../../SMYS_CLIENT_IPHONE/SimplifiedChineseRes/res/lyol.strings", "rb");
 	
 	if (!fp_in) return;
 	
@@ -125,7 +125,7 @@ void NDLocalXmlString::Init()
 	fclose(p);
 	fclose(fp_in);
 	
-	fp_in = fopen(tmpFileName, "rt");
+	fp_in = fopen(tmpFileName, "rb");
 	
 	if (!fp_in) return;
 	

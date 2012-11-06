@@ -11,6 +11,7 @@
 #include "NDPath.h"
 #include "CCTextureCache.h"
 #include "NDAnimationGroupPool.h"
+#include "NDPicture.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -84,7 +85,7 @@ NDWorldMapData::~NDWorldMapData()
  */
 void NDWorldMapData::initWithFile(const char* mapFile)
 {
-	FILE* stream = fopen(mapFile, "rt");
+	FILE* stream = fopen(mapFile, "rb");
 	if (stream)
 	{
 		this->decode(stream);
@@ -121,7 +122,7 @@ void NDWorldMapData::decode(FILE* stream)
 		{ 0 };
 		sprintf(imageName, "%st%d.png",
 				NDEngine::NDPath::GetImagePath().c_str(), idx);
-		FILE* f = fopen(imageName, "rt");
+		FILE* f = fopen(imageName, "rb");
 		if (f)
 		{
 			_tileImages.push_back(imageName);
@@ -189,7 +190,7 @@ void NDWorldMapData::decode(FILE* stream)
 		{ 0 };
 		sprintf(imageName, "%sb%d.png",
 				NDEngine::NDPath::GetImagePath().c_str(), idx);
-		FILE* f = fopen(imageName, "rt");
+		FILE* f = fopen(imageName, "rb");
 		if (f)
 		{
 			kImages.push_back(imageName);
@@ -250,9 +251,9 @@ void NDWorldMapData::decode(FILE* stream)
 		int idx = kFileOp.readShort(stream);
 		char imageName[256] =
 		{ 0 };
-		sprintf(imageName, "%s%d.png", NDEngine::NDPath::GetImagePath().c_str(),
+		sprintf(imageName, "%ss%d.png", NDEngine::NDPath::GetImagePath().c_str(),
 				idx);
-		FILE* f = fopen(imageName, "rt");
+		FILE* f = fopen(imageName, "rb");
 		if (f)
 		{
 			_sceneImages.push_back(imageName);
@@ -285,9 +286,10 @@ void NDWorldMapData::decode(FILE* stream)
 
 		NDSceneTile *pkTile = new NDSceneTile;
 		pkTile->setOrderID(_sceneOrders[resourceIndex] + y);
-		pkTile->setTexture(
-				CCTextureCache::sharedTextureCache()->addImage(
-						_sceneImages[resourceIndex].c_str()));
+		NDPicture *pTile_pic = NDPicturePool::DefaultPool()->AddPicture(_sceneImages[resourceIndex].c_str());
+		pkTile->setTexture(pTile_pic->GetTexture());
+				
+
 		int picWidth = pkTile->getTexture()->getPixelsWide()
 				* pkTile->getTexture()->getMaxS();
 		int picHeight = pkTile->getTexture()->getPixelsHigh()
@@ -359,11 +361,14 @@ void NDWorldMapData::decode(FILE* stream)
 		{ 0 };
 		sprintf(imageName, "%so%d.png",
 				NDEngine::NDPath::GetImagePath().c_str(), imageIndex);
-		FILE* pkFile = fopen(imageName, "rt");
+		FILE* pkFile = fopen(imageName, "rb");
 		if (pkFile)
 		{
-			pkPlaceNode->setTexture(
-					CCTextureCache::sharedTextureCache()->addImage(imageName));
+			NDPicture *pTile_pic = NDPicturePool::DefaultPool()->AddPicture(imageName);
+			pkPlaceNode->setTexture(pTile_pic->GetTexture());
+
+			//pkPlaceNode->setTexture(
+					//CCTextureCache::sharedTextureCache()->addImage(imageName));
 		}
 		pkPlaceNode->setX(kFileOp.readShort(stream));
 		pkPlaceNode->setY(kFileOp.readShort(stream));

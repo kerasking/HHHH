@@ -31,6 +31,7 @@
 //#include "GameUIRequest.h"			///< ÐèÒªºÏ²¢ºó
 #include "AutoPathTip.h"
 #include "NDDataTransThread.h"
+#include "GameSceneLoading.h"
 
 NS_NDENGINE_BGN
 
@@ -443,11 +444,10 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 		{
 			NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
 
-			///< ÒÀÀµÌÀ×ÔÇÚµÄGameSceneLoading ¹ùºÆ
-	// 		if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
-	// 		{
-	// 			NDDirector::DefaultDirector()->PopScene();
-	// 		}
+			if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
+	 		{
+	 			NDDirector::DefaultDirector()->PopScene();
+	 		}
 		}
 			break;
 		case _MSG_USERINFO_SEE:
@@ -543,15 +543,12 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 			break;
 		case _MSG_TIP:
 		{
-			/***
-			 * ÒÀÀµÌÀ×ÔÇÚµÄGameSceneLoading ¹ùºÆ
-			 */
-	// 			NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
-	// 			if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
-	// 			{
-	// 				GameSceneLoading* pkGameSceneLoading = (GameSceneLoading*)pkScene;
-	// 				pkGameSceneLoading->UpdateTitle(kData->ReadUnicodeString());
-	// 			}
+ 			NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
+ 			if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
+ 			{
+ 				GameSceneLoading* pkGameSceneLoading = (GameSceneLoading*)pkScene;
+ 				pkGameSceneLoading->UpdateTitle(pkData->ReadUnicodeString());
+ 			}
 		}
 			break;
 		case _MSG_NAME:
@@ -1480,6 +1477,23 @@ void NDMapMgr::AddSwitch()
 int NDMapMgr::GetMapID()
 {
 	return m_nMapID;
+}
+
+void NDMapMgr::WorldMapSwitch(int mapId)
+{
+	NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
+	if (!scene) 
+	{
+		return;
+	}
+
+	NDDirector::DefaultDirector()->PushScene(GameSceneLoading::Scene());
+
+	NDPlayer& player = NDPlayer::defaultHero();
+	NDTransData bao(_MSG_POSITION);
+	bao << player.m_nID << (unsigned short)0 << (unsigned short)0 
+		<< mapId << (unsigned short)_WORD_MAPCHANGE << int(0);
+	SEND_DATA(bao);
 }
 
 int NDMapMgr::GetMotherMapID()
@@ -3701,7 +3715,7 @@ void NDMapMgr::processVersionMsg(NDTransData& kData)
 					SMLOGINSCENE_TAG);
 	if (pkScene)
 	{
-		//return pkScene->OnMsg_ClientVersion(kData); ///< ÒÀÀµÌÀ×ÔÇÚµÄCSMLoginScene ¹ùºÆ
+		return pkScene->OnMsg_ClientVersion(kData); ///< ÒÀÀµÌÀ×ÔÇÚµÄCSMLoginScene ¹ùºÆ
 	}
 }
 
@@ -4119,19 +4133,19 @@ NDBaseRole* NDMapMgr::GetRoleNearstPlayer(int iDistance)
 
 void NDMapMgr::throughMap(int mapX, int mapY, int mapId)
 {
-	//NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
-	//if (!scene) 
-	//{
-	//	return;
-	//}
+	NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
+	if (!scene) 
+	{
+		return;
+	}
 
-	//NDDirector::DefaultDirector()->PushScene(GameSceneLoading::Scene());	///< ÒÀÀµÌÀ×ÔÇÚ GameSceneLoading ¹ùºÆ
+	NDDirector::DefaultDirector()->PushScene(GameSceneLoading::Scene());	
 
-	//NDPlayer& player = NDPlayer::defaultHero();
-	//NDTransData bao(_MSG_POSITION);
-	//bao << player.m_nID << (unsigned short)mapX << (unsigned short)mapY
-	//	<< mapId << (unsigned short)_POSITION_TRANS_FLY << int(0);
-	//SEND_DATA(bao);
+	NDPlayer& player = NDPlayer::defaultHero();
+	NDTransData bao(_MSG_POSITION);
+	bao << player.m_nID << (unsigned short)mapX << (unsigned short)mapY
+		<< mapId << (unsigned short)_POSITION_TRANS_FLY << int(0);
+	SEND_DATA(bao);
 }
 
 //void NDMapMgr::addRequst( RequsetInfo& request )

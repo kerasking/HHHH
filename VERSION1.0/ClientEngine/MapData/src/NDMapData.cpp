@@ -400,7 +400,7 @@ void NDMapData::decode(FILE* pkStream)
 		{ 0 };
 		sprintf(pszImageName, "%st%d.png",
 				NDEngine::NDPath::GetImagePath().c_str(), nIDx);
-		FILE* pkFile = fopen(pszImageName, "rt");
+		FILE* pkFile = fopen(pszImageName, "rb");
 
 		if (pkFile)
 		{
@@ -572,7 +572,7 @@ void NDMapData::decode(FILE* pkStream)
 		{ 0 };
 		sprintf(szImageName, "%ss%d.png",
 				NDEngine::NDPath::GetImagePath().c_str(), nIDx);
-		FILE* pkFile = fopen(szImageName, "rt");
+		FILE* pkFile = fopen(szImageName, "rb");
 
 		if (pkFile)
 		{

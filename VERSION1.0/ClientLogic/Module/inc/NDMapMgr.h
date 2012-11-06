@@ -429,7 +429,7 @@ public:
 	std::vector<NDManualRole*> GetPlayerTeamList();
 
 	string changeNpcString(string str);
-
+	void WorldMapSwitch(int mapId);  //世界地图中地图切换
 	NDNpc* GetNpcByID(int nID);
 	void ClearNPCChat();
 	NDMapLayer* getMapLayerOfScene(NDScene* pkScene);

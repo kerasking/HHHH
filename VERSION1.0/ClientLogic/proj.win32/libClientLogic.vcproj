@@ -343,6 +343,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\GameScene\inc\GameSceneLoading.h"
+					>
+				</File>
+				<File
 					RelativePath="..\GameScene\inc\GameUIRequest.h"
 					>
 				</File>
@@ -372,6 +376,10 @@
 				</File>
 				<File
 					RelativePath="..\GameScene\src\GameScene.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GameScene\src\GameSceneLoading.cpp"
 					>
 				</File>
 				<File
