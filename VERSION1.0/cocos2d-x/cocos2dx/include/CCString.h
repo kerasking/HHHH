@@ -263,8 +263,8 @@ namespace cocos2d
 			CCString* pstrString = new CCString(szBuf);
 
 			return pstrString;
-		}
 #endif //ND_MOD
+		}
 		
 	};
 }// namespace cocos2d
