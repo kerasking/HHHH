@@ -49,10 +49,14 @@ THE SOFTWARE.
 
 #if ND_MOD
 #include "png.h"
+#ifdef WIN32
 #include "pnginfo.h"
 #include "pngstruct.h"
 #endif
+#endif
+#ifdef WIN32
 #define int_p_NULL (int*)NULL
+#endif
 
 #if ND_MOD
 	#define PNG_BYTES_TO_CHECK 8
@@ -66,6 +70,7 @@ namespace   cocos2d {
 	(composite) = (u_char)((temp + (temp >> 8)) >> 8);                   \
 }
 
+#ifdef WIN32
 void ConvertPalette(png_color *pSrc, RGBQUAD *pDst, int nCount, png_bytep transalpha) 
 {
 	for(int i = 0 ; i< nCount; i++)
@@ -88,8 +93,9 @@ void ConvertPalette(png_color *pSrc, RGBQUAD *pDst, int nCount, png_bytep transa
 		alpha_composite(pDst->rgbRed, pSrc->red, pDst->rgbReserved, 0);
 		pSrc++;
 		pDst++;
-	} 
+	}
 }
+#endif
 
 #if CC_FONT_LABEL_SUPPORT
 // FontLabel support
@@ -815,6 +821,7 @@ CCTexture2D* CCTexture2D::initWithPaletteData(const void* pData,
 
 bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 {
+#ifdef WIN32
 	if (0 == pszPNGFile || !*pszPNGFile)
 	{
 		return false;
@@ -839,7 +846,7 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 	}
 
 	if (0 != png_sig_cmp((unsigned char*) szBuffer, (png_size_t) 0,
-					PNG_BYTES_TO_CHECK))
+		PNG_BYTES_TO_CHECK))
 	{
 		fclose(pkFile);
 		return false;
@@ -879,7 +886,7 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 
 	png_read_info(pkPNGPointer, pkPNGInfo);
 	png_get_IHDR(pkPNGPointer, pkPNGInfo, &dwWidth, &dwHeight, &nPixelCount,
-			&nColorType, &nInterlaceType, &nCompressionType, &nFilterType);
+		&nColorType, &nInterlaceType, &nCompressionType, &nFilterType);
 	CCConfiguration* pkConfig = CCConfiguration::sharedConfiguration();
 
 	nPOTWide = dwWidth;
@@ -897,7 +904,7 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 	png_set_packing(pkPNGPointer);
 
 	if ((PNG_COLOR_TYPE_GRAY == nColorType && nPixelCount < 8)
-			|| PNG_COLOR_TYPE_PALETTE == nColorType)
+		|| PNG_COLOR_TYPE_PALETTE == nColorType)
 	{
 		png_set_expand(pkPNGPointer);
 	}
@@ -1027,6 +1034,9 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 	fclose(pkFile);
 
 	return true;
+#else
+	return true;
+#endif
 }
 
 // void CCTexture2D::SaveToBitmap(const char* pszPngFile,
