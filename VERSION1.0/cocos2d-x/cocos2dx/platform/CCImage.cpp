@@ -28,8 +28,8 @@ THE SOFTWARE.
 #include "CCStdC.h"
 #include "CCFileUtils.h"
 #include "png.h"
-#include "pnginfo.h"
-#include "pngstruct.h"
+#include "../../libpng/pnginfo.h"
+#include "../../libpng/pngstruct.h"
 #include <string>
 #include <ctype.h>
 

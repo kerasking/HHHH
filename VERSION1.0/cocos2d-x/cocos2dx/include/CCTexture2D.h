@@ -144,10 +144,10 @@ public:
 	bool initWithData(const void* data, CCTexture2DPixelFormat pixelFormat, unsigned int pixelsWide, unsigned int pixelsHigh, const CCSize& contentSize);
 
 #if ND_MOD
-	void SaveToBitmap(const char* pszPngFile,unsigned char** pBMPColorBuf,int rowByteWidth,
-		int width,int height,int colorDepth,RGBQUAD* pPalette,int nPaletteLen);
+// 	void SaveToBitmap(const char* pszPngFile,unsigned char** pBMPColorBuf,int rowByteWidth,
+// 		int width,int height,int colorDepth,RGBQUAD* pPalette,int nPaletteLen);
 		
-	void WriteToBMPFile(char* pFileName,BYTE* pBmpBuf,int nBmplen);
+	void WriteToBMPFile(char* pFileName,unsigned char* pBmpBuf,int nBmplen);
 	
 	CCTexture2D* initWithPaletteData(const void* pData,
 			CCTexture2DPixelFormat ePixelFormat,int nWidth,

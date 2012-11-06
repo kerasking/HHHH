@@ -111,7 +111,8 @@ touch_dispatcher/CCTouchHandler.cpp
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/ \
                            $(LOCAL_PATH)/include \
-                           $(LOCAL_PATH)/platform
+                           $(LOCAL_PATH)/platform \
+						   $(LOCAL_PATH)/../libpng
 
 LOCAL_EXPORT_LDLIBS := -llog\
                        -lz \
@@ -231,6 +232,20 @@ support/zip_support/unzip.cpp \
 text_input_node/CCIMEDispatcher.cpp \
 text_input_node/CCTextFieldTTF.cpp \
 textures/CCTexture2D.cpp \
+../libpng/png.c \
+../libpng/pngerror.c \
+../libpng/pngget.c \
+../libpng/pngmem.c \
+../libpng/pngread.c \
+../libpng/pngrio.c \
+../libpng/pngrtran.c \
+../libpng/pngrutil.c \
+../libpng/pngset.c \
+../libpng/pngtrans.c \
+../libpng/pngwio.c \
+../libpng/pngwrite.c \
+../libpng/pngwtran.c \
+../libpng/pngwutil.c \
 textures/CCTextureAtlas.cpp \
 textures/CCTextureCache.cpp \
 textures/CCTexturePVR.cpp \
@@ -253,13 +268,14 @@ LOCAL_EXPORT_LDLIBS := -llog\
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/ \
                     $(LOCAL_PATH)/include \
-                    $(LOCAL_PATH)/platform
+                    $(LOCAL_PATH)/platform \
+					$(LOCAL_PATH)/libpng
 
 LOCAL_LDLIBS := -lGLESv1_CM \
                 -llog \
                 -lz 
 
-LOCAL_WHOLE_STATIC_LIBRARIES := cocos_libpng_static
+
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos_jpeg_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos_libxml2_static
 
