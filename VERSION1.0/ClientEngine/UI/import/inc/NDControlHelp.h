@@ -262,17 +262,18 @@ public:
 		Init(info, sizeOffset);
 		
 		CUICheckBox *checkBox = new CUICheckBox;
-		const char* fileUnCheck	= NULL;
-		const char* fileCheck	= NULL;
+		NDPicture* fileUnCheck	= NULL;
+		NDPicture* fileCheck	= NULL;
 		if (!m_info.strNormalFile.empty())
 		{
-			fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str();
+			//fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str();
+			fileUnCheck = GetNormalPicture();
 		}
 		if (!m_info.strSelectedFile.empty())
 		{
-			fileCheck	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str()).c_str();
+			fileCheck = GetSelectedPicture();
 		}
-	//	checkBox->Initialization(fileUnCheck, fileCheck);
+		checkBox->Initialization(fileUnCheck, fileCheck);
 		checkBox->SetFrameRect(this->GetFrameRect());
 		checkBox->SetText(info.strText.c_str());
 		checkBox->SetTextFontSize(info.nTextFontSize);
