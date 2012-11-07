@@ -54,6 +54,8 @@ CGSize getStringSize(const char* pszStr, uint fontSize)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		NSString str = [NSString stringWithUTF8String:pszStr];
 		sz = [str sizeWithFont:[UIFont fontWithName:FONT_NAME size:fontSize]];
+#else
+		sz = CGSizeMake(24.0f, 29.0f);
 #endif
 	}
 
