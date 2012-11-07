@@ -30,11 +30,11 @@ void AutoPathTip::work(std::string des)
 	if (m_bWork) 
 	{
 		
-		kStringStream << NDCommonCString("AutoPathTipGo") << "[";
+		//kStringStream << NDCommonCString("AutoPathTipGo") << "[";
 	}
 	else
 	{
-		kStringStream << NDCommonCString("AutoPathTipGo2") << "[";
+		//kStringStream << NDCommonCString("AutoPathTipGo2") << "[";
 	}
 	
 	kStringStream << des << "] ";
