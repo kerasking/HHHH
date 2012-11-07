@@ -692,7 +692,17 @@ NDPicturePool* NDPicturePool::DefaultPool()
 
 void NDPicturePool::PurgeDefaultPool()
 {
-	delete NDPicturePool_DefaultPool;
+//	delete NDPicturePool_DefaultPool;
+}
+void NDPicturePool::RemoveTexture(CCTexture2D* tex)
+{
+	std::map<CCTexture2D*, std::string>::iterator it = m_mapTex2Str.find(tex);
+	if(it != m_mapTex2Str.end())
+	{
+		std::string str = it->second;
+		m_mapTex2Str.erase(it);
+		RemovePicture(str.c_str());
+	}
 }
 
 NDPicture* NDPicturePool::AddPicture(const char* imageFile, bool gray/*=false*/)
@@ -710,6 +720,10 @@ NDPicture* NDPicturePool::AddPicture(const char* imageFile, bool gray/*=false*/)
 		pkPicture->Initialization(imageFile);
 
 		m_pkTextures->SetObject(pkPicture, ss.str().c_str());
+
+		CCTexture2D* tex = pkPicture->GetTexture();
+		tex->setContainerType(ContainerTypeAddPic);
+		m_mapTex2Str.insert(std::map<CCTexture2D*, std::string>::value_type(tex, imageFile));
 	}
 
 	return pkPicture->Copy();
@@ -738,8 +752,11 @@ NDPicture* NDPicturePool::AddPicture(const char* imageFile, int hrizontalPixel,
 	{
 		pic = new NDPicture(gray);
 		pic->Initialization(imageFile, hrizontalPixel, verticalPixel);
-
 		m_pkTextures->SetObject(pic, ss.str().c_str());
+		CCTexture2D* tex = pic->GetTexture();
+		tex->setContainerType(ContainerTypeAddPic);	
+		m_mapTex2Str.insert(std::map<CCTexture2D*, std::string>::value_type(tex, imageFile));
+
 	}
 
 	return pic->Copy();
@@ -807,10 +824,10 @@ CCTexture2D* NDPicturePool::AddTexture( const char* pszImageFile )
 		CCTexture2D* pkTexture = pkNewPicture->getTexture();
 		pkTexture->setContainerType(ContainerTypeAddPic);
 		m_mapTex2Str.insert(MAP_STRING::value_type(pkTexture,string(pszImageFile)));
-		pkPicture->getTexture();
+		pkPicture->GetTextureRetain();
 	}
 
-	return pkPicture->getTexture();
+	return pkPicture->GetTextureRetain();
 }
 
 
@@ -838,9 +855,10 @@ void NDTexture::Initialization( const char* pszImageFile )
 	}
 }
 
-unsigned int NDTexture::GetTextureRetain()
+CCTexture2D* NDTexture::GetTextureRetain()
 {
-	return m_pkTexture->retainCount();
+	m_pkTexture->retain();
+	return m_pkTexture;
 }
 
 }

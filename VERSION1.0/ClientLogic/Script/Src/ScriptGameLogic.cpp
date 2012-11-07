@@ -255,8 +255,10 @@ namespace NDEngine {
 	}
     void BackCity()
 	{
+#if 0
 		int nMapId = NDMapMgrObj.GetMapID();
 		NDMapMgrObj.WorldMapSwitch(nMapId);
+#endif 
 	}
 	
 	void NavigateToNpc(int nNpcId)

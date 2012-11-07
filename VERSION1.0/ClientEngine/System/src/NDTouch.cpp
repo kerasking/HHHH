@@ -51,17 +51,15 @@ namespace NDEngine
 		// todo(zjh)
 		m_location = CCTouchDispatcher::sharedDispatcher()->getCurPos();
 		m_previousLocation = CCTouchDispatcher::sharedDispatcher()->getPrePos();
-// 		if( CC_CONTENT_SCALE_FACTOR() == 1 )
-// 		{
-// 
-// 		}
-// 		else
-// 		{
-// 			m_location.x=m_location.x*2;
-// 			m_location.y=m_location.y*2;
-// 			m_previousLocation.x=m_previousLocation.x*2;
-// 			m_previousLocation.y=m_previousLocation.y*2;
-// 		}	
+
+#if 0
+		int iFactor = CC_CONTENT_SCALE_FACTOR();
+ 	
+		m_location.x = m_location.x*iFactor;
+		m_location.y = m_location.y*iFactor;
+		m_previousLocation.x = m_previousLocation.x*iFactor;
+		m_previousLocation.y = m_previousLocation.y*iFactor;
+#endif 
 // 		m_location = CGPointMake(m_location.y , NDDirector::DefaultDirector()->GetWinSize().height - m_location.x ); 
 // 
 // 		m_previousLocation = CGPointMake(m_previousLocation.y , NDDirector::DefaultDirector()->GetWinSize().height - m_previousLocation.x);

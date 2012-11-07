@@ -95,14 +95,6 @@ void WorldMapLayer::Initialization(int nMapId)
 		pkTile->release();
 	}
 
-	m_roleNode = new CUIRoleNode;
-	m_roleNode->Initialization();
-	m_roleNode->ChangeLookFace(GetPlayerLookface());
-	NDPlayer& player = NDPlayer::defaultHero();
-	m_roleNode->GetRole()->ChangeModelWithMount(player.m_nRideStatus, player.m_nMountType);
-	m_roleNode->SetRoleScale(0.5f);
-	AddChild(m_roleNode);
-
 	NDPicture* picClose	= NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("btn_close.png"));
 	NDPicture* picCloseSelect	= NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("btn_close.png"));    
 	CGSize sizeClose	= picClose->GetSize();
@@ -132,6 +124,13 @@ void WorldMapLayer::Initialization(int nMapId)
 
 	SetCenterAtPos(ccp(winsize.width / 2, winsize.height / 2));
 
+	m_roleNode = new CUIRoleNode;
+	m_roleNode->Initialization();
+	m_roleNode->ChangeLookFace(GetPlayerLookface());
+	NDPlayer& player = NDPlayer::defaultHero();
+	m_roleNode->GetRole()->ChangeModelWithMount(player.m_nRideStatus, player.m_nMountType);
+	m_roleNode->SetRoleScale(0.5f);
+	AddChild(m_roleNode);
 	ShowRoleAtPlace(nMapId);
 }
 void WorldMapLayer::draw()
@@ -253,6 +252,10 @@ int WorldMapLayer::GetPlaceIdByIndex(int nIndex)
 
 void WorldMapLayer::OnTimer(OBJID tag)
 {
+	int mapid = GetTargetMapId();
+	ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "",mapid);
+
+#if 0
 	if (tag != TAG_TIMER_MOVE)
 	{
 		return NDUILayer::OnTimer(tag);
@@ -299,6 +302,7 @@ void WorldMapLayer::OnTimer(OBJID tag)
 
 		m_roleNode->SetFrameRect(rectRole);
 	}
+#endif 
 }
 
 void WorldMapLayer::ShowRoleAtPlace(int placeId)
@@ -378,9 +382,19 @@ CGPoint WorldMapLayer::ConvertToScreenPoint(CGPoint mapPoint)
 }
 
 bool WorldMapLayer::TouchBegin(NDTouch* touch)
-{
-	CGPoint pt = ConvertToMapPoint(touch->GetLocation());
+{	
+	CGPoint m_Touch = touch->GetLocation();
+	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+	CGPoint tmpTouch = CGPointMake(m_Touch.x * fScale,
+							   m_Touch.y * fScale);
+	m_Touch = tmpTouch;
+
+
+	CGPoint pt = ConvertToMapPoint(m_Touch);
 	int iPlaceNodeNum = m_mapData->getPlaceNodes()->count();
+
+
+
 
 	for (unsigned int i = 0; i < iPlaceNodeNum; i++)
 	{
@@ -393,7 +407,7 @@ bool WorldMapLayer::TouchBegin(NDTouch* touch)
 		if (CGRectContainsPoint(btnRect, pt))
 		{
 			OnNodeClick(node);
-			NDUILayer::TouchBegin(touch);
+			//NDUILayer::TouchBegin(touch);
 			return true;
 		}
 	}
@@ -404,7 +418,8 @@ void WorldMapLayer::OnNodeClick(PlaceNode* button)
 {
 	if (button && !IsInFilterList(button->getPlaceId()))
 	{
-		Goto(button->getPlaceId());
+		ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", button->getPlaceId());
+		//Goto(button->getPlaceId());
 	}
 }
 
@@ -431,7 +446,9 @@ void WorldMapLayer::Goto(int nMapId)
 		SetRoleDirect(pos.x > m_roleNode->GetFrameRect().origin.x);
 		SetTarget(pos);
 		SetTargetMapId(node->getPlaceId());
-		m_timer.SetTimer(this, TAG_TIMER_MOVE, float(1) / 24);
+
+		ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", nMapId);
+		//m_timer.SetTimer(this, TAG_TIMER_MOVE, float(1) / 24);
 	}
 }
 
@@ -521,7 +538,7 @@ CGPoint WorldMapLayer::GetPlaceIdScreenPos(int placeId)
 		int iWidth  = node->getTexture()->getContentSizeInPixels().width;
 		int iHeight  = node->getTexture()->getContentSizeInPixels().height;
 
-		CGPoint pos = CGPointMake(-(iStartX + iWidth/4), -(iStartY - iHeight/8));
+		CGPoint pos = CGPointMake((iStartX + iWidth/4), (iStartY - iHeight/8));
 		posRet = ConvertToScreenPoint(pos);
 		//posRet = ccpSub(posRet, ccp(fScaleFactor * 75, fScaleFactor * 120));
 	}

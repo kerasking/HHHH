@@ -41,7 +41,7 @@ NDAnimationGroupPool* NDAnimationGroupPool::defaultPool()
 
 void NDAnimationGroupPool::purgeDefaultPool()
 {
-	CC_SAFE_RELEASE_NULL (gs_pkNDAnimationGroupPool_DefaultPool);
+	//CC_SAFE_RELEASE_NULL (gs_pkNDAnimationGroupPool_DefaultPool);
 }
 
 NDAnimationGroup* NDAnimationGroupPool::addObjectWithSpr(const char*sprFile)
