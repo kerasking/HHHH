@@ -13,10 +13,6 @@
 #include "globaldef.h"
 #include "NDUIDialog.h"
 
-#define MAP_UNITSIZE (16 * ((int)(NDDirector::DefaultDirector()->GetScaleFactor())))
-#define SCREEN_SCALE (NDDirector::DefaultDirector()->GetScaleFactor())
-
-bool IsPointInside(CGPoint pt, CGRect rect);
 int GetNumBits(int num);
 bool VerifyUnsignedNum(const std::string strnum);
 std::string getStringTime(long nSeconds);

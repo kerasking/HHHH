@@ -12,7 +12,6 @@
 #include "NDUILabel.h"
 #include "NDPicture.h"
 #include "NDTextNode.h"
-#include "NDUtility.h"
 #include "ScriptUI.h"
 #include "NDTargetEvent.h"
 #include "NDDirector.h"

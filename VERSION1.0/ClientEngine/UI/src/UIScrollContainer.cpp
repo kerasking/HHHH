@@ -11,7 +11,6 @@
 #include "NDDirector.h"
 #include "UIScroll.h"
 #include "CCPointExtension.h"
-#include "NDUtility.h"
 #include "ScriptGameLogic.h"
 
 IMPLEMENT_CLASS(CUIScrollContainer, NDUILayer)

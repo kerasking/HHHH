@@ -63,7 +63,7 @@ typedef std::map<OBJID, OBJID> ID_MAP;
 
 #define NDLog(str, ...)  
 
-//#include "NDUtility.h"
+
 //#include "NDMsgDefine.h"
 
 #endif //_GLOBAL_DEF_H_ZJH_

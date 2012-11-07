@@ -9,7 +9,6 @@
 
 #include "UIHyperlink.h"
 #include "CCPointExtension.h"
-#include "NDUtility.h"
 
 IMPLEMENT_CLASS(CUIHyperlinkText, NDUINode)
 

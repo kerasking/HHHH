@@ -71,7 +71,7 @@ private:
  	static	int ConstructorHelper(LuaState* state, Object* pObj)
  	{
  		std::string metaname("MetaClass_");
- 	#ifdef __APPLE__
+ 	#ifndef WIN32	///< 為適應安卓，作了修改。 郭浩
  		metaname += typeid(Object).name();
  	#else
  		metaname += typeid(Object).raw_name();
@@ -87,7 +87,7 @@ public:
 	static int ConstructorStruct(LuaState* state)
 	{
 		std::string metaname("MetaClass_");
-#ifdef __APPLE__
+#ifndef WIN32	///< 為適應安卓，作了修改。 郭浩
 		metaname += typeid(Object).name();
 #else
 		metaname += typeid(Object).raw_name();
@@ -195,7 +195,7 @@ public:
 		luaGlobals = state->GetGlobals();
 		
 		std::string metaname("MetaClass_");
-	#ifdef __APPLE__
+	#ifndef WIN32  ///< 為適應安卓，作了修改。 郭浩
 		metaname += typeid(Object).name();
 	#else
 		metaname += typeid(Object).raw_name();

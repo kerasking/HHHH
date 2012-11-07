@@ -67,7 +67,6 @@ NDDirector* NDDirector::DefaultDirector()
 void NDDirector::Initialization()
 {
 	m_pkDirector->setOpenGLView(&CCEGLView::sharedOpenGLView());
-
 	m_pkDirector->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
 
 	CC_GLVIEW* pkView = m_pkDirector->getOpenGLView();

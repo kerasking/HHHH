@@ -11,7 +11,6 @@
 
 #include "NDDirector.h"
 #include "CCPointExtension.h"
-#include "NDUtility.h"
 #include "NDSprite.h"
 
 IMPLEMENT_CLASS(CUISpriteNode, NDUINode)

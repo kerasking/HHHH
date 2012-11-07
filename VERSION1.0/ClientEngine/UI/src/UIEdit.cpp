@@ -11,7 +11,6 @@
 #include "ScriptUI.h"
 #include "IphoneInput.h"
 #include "NDDirector.h"
-#include "NDUtility.h"
 #include "define.h"
 //#include "I_Analyst.h"
 

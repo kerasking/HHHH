@@ -18,10 +18,10 @@
 //#include "NDUITableLayer.h"
 #include "NDBaseLayer.h"
 //#include "NDUIMemo.h"
-//#include "NDUtility.h"
+
 //#include "cpLog.h"
 //#include "NDTextNode.h"
-//#include "NDUtility.h"
+
 //#include "NDUIOptionButtonEx.h"
 //#include "NDUIDefaultTableLayer.h"
 #include "NDTargetEvent.h"

@@ -13,6 +13,7 @@
 #include "CCMutableArray.h"
 #include "NDTile.h"
 #include "NDAnimationGroup.h"
+#include "define.h"
 
 class NDFrameRunRecord: public cocos2d::CCObject
 {

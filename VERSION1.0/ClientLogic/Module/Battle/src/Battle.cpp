@@ -38,6 +38,7 @@
 #include "GameScene.h"
 #include "NDPath.h"
 #include "GlobalDialog.h"
+#include "NDUtil.h"
 
 IMPLEMENT_CLASS(QuickTalkCell, NDUINode)
 

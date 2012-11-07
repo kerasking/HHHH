@@ -25,7 +25,7 @@
 //#include "NDMapMgr.h"
 //#include "Performance.h"
 //#include "BattleMgr.h"
-#include "NDUtility.h"
+
 #include "NDDebugOpt.h"
 #include "NDDataTransThread.h"
 #include "NDMsgDefine.h"
@@ -33,6 +33,7 @@
 #include "..\..\Module\Battle\inc\BattleMgr.h"
 #include "ScriptMgr.h"
 #include "NDSharedPtr.h"
+#include "NDUtil.h"
 
 using namespace cocos2d;
 

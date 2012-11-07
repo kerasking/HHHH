@@ -8,9 +8,10 @@
  */
 
 #include "UIChatText.h"
-#include "NDUtility.h"
 #include "NDDirector.h"
 #include "NDPath.h"
+#include "NDLocalization.h"
+#include "NDUtil.h"
 
 IMPLEMENT_CLASS(CUIChatText, NDUINode)
 
@@ -34,7 +35,8 @@ void CUIChatText::Initialization()
 
 std::string CUIChatText::GetChannelStr(CHAT_CHANNEL_TYPE channel)
 {
-	switch (channel) {
+	switch (channel)
+	{
 		case CHAT_CHANNEL_ALL:
 			return "";
 		case CHAT_CHANNEL_SYS:
@@ -49,11 +51,6 @@ std::string CUIChatText::GetChannelStr(CHAT_CHANNEL_TYPE channel)
 			return "";
 	}
 }
-
-
-
-
-//void CUIChatText::SetContent(int speakerID,int channel,const char* speaker,const char* text)
 
 void CUIChatText::SetContent(int speakerID, int channel, const char* speaker, 
 							 const char* text, int style, int fontSizelua, ccColor4B color)
@@ -154,13 +151,16 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 			text += 3;
 		}
 		
-		if (type == ChatItem) {
-				textNodeList.push_back(ChatNode(brk, CreateLabel(word, fontSize,clr, m_idItem),ChatItem,m_idItem,""));
-		} else if (type == ChatRole){
-				textNodeList.push_back(ChatNode(brk, CreateLabel(word, fontSize,clr, m_idRole),ChatRole,m_idRole,this->m_roleName));
+		if (type == ChatItem)
+		{
+			textNodeList.push_back(ChatNode(brk, CreateLabel(word, fontSize,clr, m_idItem),ChatItem,m_idItem,""));
+		}
+		else if (type == ChatRole)
+		{
+			textNodeList.push_back(ChatNode(brk, CreateLabel(word, fontSize,clr, m_idRole),ChatRole,m_idRole,this->m_roleName));
 		}else 
 		{
-				textNodeList.push_back(ChatNode(brk, CreateLabel(word, fontSize, clr,0),ChatNone,0,""));
+			textNodeList.push_back(ChatNode(brk, CreateLabel(word, fontSize, clr,0),ChatNone,0,""));
 		}
 		
 		brk = false;

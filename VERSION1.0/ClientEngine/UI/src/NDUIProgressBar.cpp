@@ -7,7 +7,6 @@
 //
 
 #include "NDUIProgressBar.h"
-#include "NDUtility.h"
 #include "I_Analyst.h"
 #include "NDUIBaseGraphics.h"
 
