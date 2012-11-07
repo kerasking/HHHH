@@ -5,6 +5,7 @@
  *  
  *****************************************************************************/
 
+#ifdef WIN32
 #include "NDWideString.h"
 #include "windows.h"
 
@@ -161,15 +162,15 @@ void NDWideString::ConvertUnicodeToUTF8()
 		}
 		else if ( unicode >= 0x0800 && unicode <= 0xffff )
 		{
- 			//cUTF8 = 0xe0 | ( ( unicode & 0xf000 ) >> 12 );
- 			//m_szUTF8 += cUTF8;
- 			//cUTF8 = 0x80 | ( ( unicode & 0x0fc0 ) >> 6 & 0x00ff );
- 			//m_szUTF8 += cUTF8;
- 			//cUTF8 = 0x80 | ( unicode & 0x3f );
- 			//m_szUTF8 += cUTF8;
+			//cUTF8 = 0xe0 | ( ( unicode & 0xf000 ) >> 12 );
+			//m_szUTF8 += cUTF8;
+			//cUTF8 = 0x80 | ( ( unicode & 0x0fc0 ) >> 6 & 0x00ff );
+			//m_szUTF8 += cUTF8;
+			//cUTF8 = 0x80 | ( unicode & 0x3f );
+			//m_szUTF8 += cUTF8;
 
 			char* pchar = (char *)&unicode;
- 			m_szUTF8 += (0xE0 | ((pchar[1] & 0xF0) >> 4));
+			m_szUTF8 += (0xE0 | ((pchar[1] & 0xF0) >> 4));
 			m_szUTF8 += (0x80 | ((pchar[1] & 0x0F) << 2)) + ((pchar[0] & 0xC0) >> 6);
 			m_szUTF8 += (0x80 | (pchar[0] & 0x3F));
 		}
@@ -186,7 +187,7 @@ bool NDWideString::IsEqual_UTF8_Ansi( const char* utf8, const char* ansi )
 
 	static wchar_t wbuf[1024] = {0};
 	static char buf[1024] = {0};
-	
+
 	// multiBytes -> wide
 	if (MultiByteToWideChar( CP_UTF8, 0, (LPCSTR)utf8, -1, wbuf, sizeof(wbuf)/sizeof(wchar_t)) > 0)
 	{
@@ -200,6 +201,7 @@ bool NDWideString::IsEqual_UTF8_Ansi( const char* utf8, const char* ansi )
 	}
 	return false;
 }
+#endif
 
 //===========================================================================
 

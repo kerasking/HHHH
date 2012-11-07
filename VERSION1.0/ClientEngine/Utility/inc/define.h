@@ -22,7 +22,10 @@
 }while(0)
 
 #ifndef WIN32		///< 為適應安卓，作了修改。 郭浩
-#define BOOL bool
+
+typedef unsigned short USHORT;
+typedef bool BOOL;
+
 #endif
 
 #define ShowProgressBar (NDUISynLayer::Show())

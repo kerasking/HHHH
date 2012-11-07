@@ -30,7 +30,21 @@ using namespace NDEngine;
 
 namespace NDEngine
 {
-	IMPLEMENT_CLASS(NDSprite, NDNode)
+	IMPLEMENT_CLASS(NDSprite, NDNode);
+
+#ifndef WIN32
+	unsigned int GetTickCount()
+	{
+		struct timeval tv = {0};
+
+		if(gettimeofday(&tv,0) != 0)
+		{
+			return 0;
+		}
+
+		return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+	}
+#endif
 
 	NDSprite::NDSprite()
 	{

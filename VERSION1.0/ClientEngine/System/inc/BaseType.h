@@ -49,7 +49,6 @@
 typedef int					INT;
 typedef unsigned int		UINT;
 
-typedef unsigned int		DWORD;
 typedef unsigned short		WORD;
 typedef float				FLOAT;
 typedef long long			__int64;
@@ -80,6 +79,10 @@ typedef LPCSTR PCTSTR, LPCTSTR, PCUTSTR, LPCUTSTR;
 
 typedef CHAR *LPSTR, *PSTR;
 typedef LPSTR PTSTR, LPTSTR, PUTSTR, LPUTSTR;
+
+#ifndef WIN32
+typedef unsigned int DWORD;
+#endif
 
 UINT GetPrivateProfileInt(LPCTSTR lpAppName, LPCTSTR lpKeyName, INT nDefalut, LPCSTR lpFileName);
 DWORD GetPrivateProfileString(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR lpDefault, LPTSTR lpReturnedString, DWORD nSize, LPCTSTR lpFileName);
@@ -158,15 +161,7 @@ typedef struct tagPOINT
 
 DWORD timeGetTime();
 
-
 #endif
-
-
-
-
-
-
-
 
 #include <map>
 #include <list>
@@ -185,8 +180,7 @@ using namespace std;
 #undef IN_OUT
 #define IN_OUT
 
-typedef unsigned __int64 EID;
-typedef unsigned long       DWORD;
+typedef unsigned long long EID;
 //typedef UINT64 EID;
 const EID EID_NONE = 0;
 
@@ -197,7 +191,7 @@ typedef std::set<std::string> STRING_SET;
 typedef std::map<int, int> INT_INT_MAP;
 typedef std::map<int, std::string> INT_STR_MAP;
 typedef std::map<std::string, std::string> STR_STR_MAP;
-typedef std::vector<DWORD> DWORD_VEC;
+typedef std::vector<unsigned int> DWORD_VEC;
 #if 0
 
 class CPos2D

@@ -27,36 +27,36 @@ public:
 public:
 
 	// res path
-	static const string& GetAppPath();
-	static const string& GetResourcePath();
-	static const string& GetImagePath();
-	static const string& GetMapPath();
-	static const string& GetMapResPath();
-	static const string& GetAnimationPath();
-	static const string& GetResPath();
-	static const string& GetSoundPath();
-	static const string& GetImgPathBattleUI(const char* fileName);
-	static const string& GetImgPathBattleUI();
-	static const string& GetImgPath(const char* fileName);
-	static const string& GetImgPathNew(const char* fileName);
-	static const string& GetImgPathNewAdvance(const char* fileName);
-	static const string& GetAniPath(const char* fileName);
-	static const string& GetMapPath(const char* fileName);
-	static const string& GetUIConfigPath(const char* filename);
-	static const string& GetUIImgPath(const char* uiFileNameWithPath);
-	static const string& GetResPath(const char* fileName);
-	static const string& GetSMImgPath(const char* fileName);
-	static const string& GetRootResPath();
-	static const string& GetScriptPath(const char* filename);
-	static const string& GetScriptPath();
-	static const string& GetAppResFilePath(const char* filename);
-	static const string& GetResourceFilePath(const char* filename);
-	static const string& GetSMVideoPath(const char* fileName);
-	static const string& GetImgPathUINew(const char* fileName);
-	static const string& GetImgPathUINewAdvance(const char* fileName);
- 	static const string& GetFullImagepath(const char* fileName);
- 	static const string& GetUIPath(const char* fileName);
-	static const string& GetUIPath();
+	static string GetAppPath();
+	static string GetResourcePath();
+	static string GetImagePath();
+	static string GetMapPath();
+	static string GetMapResPath();
+	static string GetAnimationPath();
+	static string GetResPath();
+	static string GetSoundPath();
+	static string GetImgPathBattleUI(const char* fileName);
+	static string GetImgPathBattleUI();
+	static string GetImgPath(const char* fileName);
+	static string GetImgPathNew(const char* fileName);
+	static string GetImgPathNewAdvance(const char* fileName);
+	static string GetAniPath(const char* fileName);
+	static string GetMapPath(const char* fileName);
+	static string GetUIConfigPath(const char* filename);
+	static string GetUIImgPath(const char* uiFileNameWithPath);
+	static string GetResPath(const char* fileName);
+	static string GetSMImgPath(const char* fileName);
+	static string GetRootResPath();
+	static string GetScriptPath(const char* filename);
+	static string GetScriptPath();
+	static string GetAppResFilePath(const char* filename);
+	static string GetResourceFilePath(const char* filename);
+	static string GetSMVideoPath(const char* fileName);
+	static string GetImgPathUINew(const char* fileName);
+	static string GetImgPathUINewAdvance(const char* fileName);
+ 	static string GetFullImagepath(const char* fileName);
+ 	static string GetUIPath(const char* fileName);
+	static string GetUIPath();
 	//－－－end
 	static void SetImagePath(const char* szPath);
 	static void SetResDirPos( int iPos );//

@@ -13,6 +13,7 @@
 #include <string>
 
 
+#ifdef WIN32
 /////////////////////////////////////////////////////////////////////////////
 
 #define UTF8CHR	unsigned char		//UTF8 char//
@@ -67,6 +68,6 @@ protected:
 public:
 	static bool IsEqual_UTF8_Ansi( const char* utf8, const char* ansi ); //@zwq
 };
-
+#endif
 /////////////////////////////////////////////////////////////////////////////
 #endif //_NDWideString_H_2012_04_10_18_41_09_

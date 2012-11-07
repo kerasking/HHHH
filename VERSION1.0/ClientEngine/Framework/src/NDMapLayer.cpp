@@ -369,9 +369,10 @@ void NDMapLayer::ShowTitle(int name_row, int name_col)
 	{
 		m_lbTitle = new NDUIImage;
 		m_lbTitle->Initialization();
-		NDPicture* picture = NDPicturePool::DefaultPool()->AddPicture(
-				tq::CString("%smap_title.png",
-						NDEngine::NDPath::GetImagePath()));
+
+		NSString strString = CCString::stringWithFormat("%smap_title.png",NDEngine::NDPath::GetImagePath().c_str());
+
+		NDPicture* picture = NDPicturePool::DefaultPool()->AddPicture(strString->toStdString().c_str());
 		//picture->SetColor(ccc4(0, 0, 0,0));
 		int col = name_col;
 		int row = name_row;
@@ -383,9 +384,8 @@ void NDMapLayer::ShowTitle(int name_row, int name_col)
 	{
 		m_lbTitleBg = new NDUIImage;
 		m_lbTitleBg->Initialization();
-		NDPicture* bg = NDPicturePool::DefaultPool()->AddPicture(
-				tq::CString("%map_title_bg.png",
-						NDEngine::NDPath::GetImagePath()));
+		NSString strString = CCString::stringWithFormat("%smap_title_bg.png",NDEngine::NDPath::GetImagePath().c_str());
+		NDPicture* bg = NDPicturePool::DefaultPool()->AddPicture(strString->toStdString().c_str());
 		m_lbTitleBg->SetPicture(bg, true);
 	}
 
@@ -464,7 +464,7 @@ void NDMapLayer::showSwitchSprite(MAP_SWITCH_TYPE type)
 	}
 
 	NSString pStr = CCString::stringWithFormat("%s%s",
-		aniPath->toStdString().c_str(), szAniFile);
+		aniPath->toStdString().c_str(), szAniFile->toStdString().c_str());
 
 	m_pkSwitchSpriteNode->ChangeSprite(pStr->toStdString().c_str());
 	m_pkSwitchSpriteNode->SetFrameRect(

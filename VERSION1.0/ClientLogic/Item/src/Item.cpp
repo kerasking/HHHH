@@ -1980,7 +1980,7 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 			// iCreateTime YYMMDDHHmm
 			if (m_nCreateTime != 0)
 			{
-				uint recycle = m_nCreateTime / 100; // YYMMDDHH
+				unsigned int recycle = m_nCreateTime / 100; // YYMMDDHH
 				sb << "20" << (recycle / 1000000) << NDCommonCString("year")
 						<< (recycle % 1000000 / 10000)
 						<< NDCommonCString("month") << (recycle % 10000 / 100)
@@ -1995,7 +1995,7 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 		{
 			std::string strDelTime;
 
-			uint unDelTime = 0;
+			unsigned int unDelTime = 0;
 			int nSaveTime = itemtype->m_data.m_save_time;
 			if (nSaveTime > 0)
 			{
@@ -2009,7 +2009,7 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 				strDelTime = ssDelTime.str();
 			}
 
-			uint unRecycleTime = itemtype->m_data.m_recycle_time;
+			unsigned int unRecycleTime = itemtype->m_data.m_recycle_time;
 			if (unRecycleTime > 0)
 			{
 				unRecycleTime = unRecycleTime % 100000000 * 100;
@@ -2017,7 +2017,7 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 				{
 					std::stringstream ssDelTime;
 
-					uint recycle = itemtype->m_data.m_recycle_time % 100000000; // YYMMDDHH
+					unsigned int recycle = itemtype->m_data.m_recycle_time % 100000000; // YYMMDDHH
 					ssDelTime << "20" << (recycle / 1000000)
 							<< NDCommonCString("year")
 							<< (recycle % 1000000 / 10000)

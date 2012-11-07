@@ -44,7 +44,7 @@ const char* GBKToUTF8(const char *strChar)
 }
 #endif
 
-CGSize getStringSize(const char* pszStr, uint fontSize)
+CGSize getStringSize(const char* pszStr, unsigned int fontSize)
 {
 	CGSize sz = CGSizeMake(0.0f, 0.0f);
 
@@ -60,7 +60,7 @@ CGSize getStringSize(const char* pszStr, uint fontSize)
 	return sz;
 }
 
-CGSize getStringSizeMutiLine(const char* pszStr, uint fontSize, CGSize contentSize)
+CGSize getStringSizeMutiLine(const char* pszStr, unsigned int fontSize, CGSize contentSize)
 {
 	CGSize sz = CGSizeZero;
 

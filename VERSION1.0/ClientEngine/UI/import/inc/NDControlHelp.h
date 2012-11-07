@@ -135,6 +135,7 @@ protected:
 		
 		LabelTextAlignment align = LabelTextAlignmentLeft;
 		
+#ifdef WIN32
 		if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "×ó¶ÔÆë" ))
 			align = LabelTextAlignmentLeft;
 
@@ -149,7 +150,7 @@ protected:
 
 		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "ÊúÖ±¾ÓÖÐ" ))
 			align = LabelTextAlignmentVertCenter;
-
+#endif
 		return align;
 	}
 private:	

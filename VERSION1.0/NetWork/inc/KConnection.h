@@ -8,9 +8,11 @@
 #ifdef WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#elif defined(__IOS__)
+#else
 #include <sys/socket.h>
 #include <sys/uio.h>
+#include "netdb.h"
+#include "netinet/in.h"
 #endif
 
 #include "KData.h"

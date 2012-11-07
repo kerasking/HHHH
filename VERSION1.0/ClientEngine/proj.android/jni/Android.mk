@@ -99,10 +99,14 @@ $(LOCAL_PATH)/../../Script/inc \
 $(LOCAL_PATH)/../../System/inc \
 $(LOCAL_PATH)/../../TempClass \
 $(LOCAL_PATH)/../../UI/inc \
+$(LOCAL_PATH)/../../Platform/inc \
+$(LOCAL_PATH)/../../UI/import/inc \
 $(LOCAL_PATH)/../../Utility/inc \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/third_party/win32 \
 $(LOCAL_PATH)/../../../luaplus \
 $(LOCAL_PATH)/../../../ClientLogic/MsgDefine/inc \
+$(LOCAL_PATH)/../../../ClientLogic/Script/inc \
+$(LOCAL_PATH)/../../../ClientLogic/GameScene/inc \
 $(LOCAL_PATH)/../../../NetWork/inc
 
 LOCAL_LDLIBS := -L$(call host-path, $(LOCAL_PATH)/../../proj.android/libs/$(TARGET_ARCH_ABI)) \

@@ -12,6 +12,10 @@
 #ifndef NDREFLONG
 #define NDREFLONG
 
+#ifndef WIN32
+#include <asm/atomic.h>
+#endif
+
 class NDRefLong
 {
 public:
@@ -24,12 +28,20 @@ public:
 
 	long Increment()
 	{
+#ifdef WIN32
 		return InterlockedIncrement(&m_nRef);
+#else
+		return 0;//atomic_inc(&m_nRef); ///< atomic_inc不知道在哪个头文件 郭浩
+#endif
 	}
 	
 	long Decrement()
 	{
+#ifdef WIN32
 		return InterlockedDecrement(&m_nRef);
+#else
+		return 0;//atomic_dec(&m_nRef);///< atomic_dec不知道在哪个头文件 郭浩
+#endif
 	}
 	long operator++()
 	{

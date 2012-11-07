@@ -12,6 +12,7 @@
 #include "UIScroll.h"
 #include "CCPointExtension.h"
 #include "ScriptGameLogic.h"
+#include "define.h"
 
 IMPLEMENT_CLASS(CUIScrollContainer, NDUILayer)
 

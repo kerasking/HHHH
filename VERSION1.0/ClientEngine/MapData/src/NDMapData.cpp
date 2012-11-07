@@ -416,9 +416,9 @@ void NDMapData::decode(FILE* pkStream)
 	m_kMapTiles = CCArray::array();
 	for (int lay = 0; lay < m_nLayerCount; lay++)
 	{
-		for (uint r = 0; r < m_nRows; r++)
+		for (unsigned int r = 0; r < m_nRows; r++)
 		{
-			for (uint c = 0; c < m_nColumns; c++)
+			for (unsigned int c = 0; c < m_nColumns; c++)
 			{
 				int nImageIndex = kFileOp.readByte(pkStream) - 1;	//资源下标
 

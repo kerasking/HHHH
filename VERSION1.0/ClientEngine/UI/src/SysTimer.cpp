@@ -16,28 +16,29 @@ void Sys_TickInit()
     s_bInit = true;
 }
 
-DWORD Sys_GetTicks()
+unsigned int Sys_GetTicks()
 {
-    if(!s_bInit) {
+    if(!s_bInit)
+	{
         Sys_TickInit();
     }
 	float ticks = 0.f;
     struct timeval now;
     gettimeofday( &now, NULL);
 
-    ticks = (now.tv_sec - ticks_start.tv_sec)*10000 + (now.tv_usec - ticks_start.tv_usec) / 100.0f;
+    ticks = (now.tv_sec - ticks_start.tv_sec) * 10000 + (now.tv_usec - ticks_start.tv_usec) / 100.0f;
     ticks = MAX(0,ticks);
 
 	return ticks;
 }
 
-DWORD Sys_TicksToMS(DWORD ticks)
+unsigned int Sys_TicksToMS(unsigned int ticks)
 {
 	// Low resolution is ms already.
 	return ticks;
 }
 
-DWORD Sys_Milliseconds()
+unsigned int Sys_Milliseconds()
 {
 	return Sys_GetTicks();
 }

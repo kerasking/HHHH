@@ -13,9 +13,9 @@
 #include "BaseType.h"
 
 void	Sys_TickInit();
-DWORD	Sys_GetTicks();
-DWORD	Sys_TicksToMS(DWORD ticks);
-DWORD	Sys_Milliseconds();				// Get the milliseconds from init
+unsigned int	Sys_GetTicks();
+unsigned int	Sys_TicksToMS(unsigned int ticks);
+unsigned int	Sys_Milliseconds();				// Get the milliseconds from init
 
 // helper
 

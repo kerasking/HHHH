@@ -20,8 +20,8 @@ public:
 	int		GetUsedTicks();
 	int		GetUsedMS();
 private:
-	DWORD	_tickStart;
-	DWORD	_tickEnd;
+	unsigned int	_tickStart;
+	unsigned int	_tickEnd;
 	int		_analystIdx;
 	
 };
@@ -34,8 +34,8 @@ public:
 	int		GetUsedTicks();	
 	int		GetUsedMS();	
 private:
-	DWORD	tick_start;
-	DWORD	tick_end;
+	unsigned int	tick_start;
+	unsigned int	tick_end;
 };
 
 extern CAnalyst* Analyst();

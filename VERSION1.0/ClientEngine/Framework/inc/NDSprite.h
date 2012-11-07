@@ -22,6 +22,7 @@
 #include "NDFrame.h"
 #include "define.h"
 #include "NDConstant.h"
+#include "BaseType.h"
 #include "NDBaseFighter.h"
 
 #define FIGHTER_HEIGHT	70 * (NDDirector::DefaultDirector()->GetScaleFactor())
@@ -131,8 +132,6 @@ public:
 	virtual void DisplayFrameEvent(int nCurrentAnimation, int nCurrentFrame) =0;
 	virtual void DisplayCompleteEvent(int nCurrentAnimation, int nDispCount)=0;
 };
-
-//class NDEngine::NDPicture;
 
 class NDSprite: public NDNode
 {

@@ -19,6 +19,7 @@
 #include "CCPointExtension.h"
 #include "NDUtility.h"
 #include "NDPath.h"
+#include "NDUIBaseGraphics.h"
 
 #define TAG_ITEM_COUNT (34567)
 #define TAG_ITEM_LOCK (34568)

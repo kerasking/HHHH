@@ -4,13 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include "define.h"
 
 
 #define UNUSED_ARG(a) (a)
 
 namespace net
 {
-	class  IEncryptor
+	class IEncryptor
 	{
 	protected:
 		virtual ~IEncryptor()	{};
