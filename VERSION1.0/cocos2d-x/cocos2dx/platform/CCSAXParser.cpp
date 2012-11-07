@@ -50,7 +50,7 @@ bool CCSAXParser::init(const char *pszEncoding)
 
 bool CCSAXParser::parse(const char *pszFile)
 {
-	CCFileData data(pszFile, "rt");
+	CCFileData data(pszFile, "rb");
 	unsigned long size = data.getSize();
 	char *pBuffer = (char*) data.getBuffer();
 	

@@ -21,6 +21,9 @@
 //#pragma mark set role data 
 //#pragma mark (设置角色数据,包括主角跟其它玩家)
 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 设置角色基本数据
 #define SRDBasic(nRoleId, dataIndex, val) \
 NDScriptGameData::GetSingleton().SetRoleBasicData(nRoleId, dataIndex, val)
@@ -157,6 +160,9 @@ NDScriptGameData::GetSingleton().GetData<std::string>(eScriptDataMonster, nMonst
 #define DMonsterD(nMonsterId) \
 NDScriptGameData::GetSingleton().DelData(eScriptDataMonster, nMonsterId)
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // together use with lua
 typedef enum
 {
@@ -236,6 +242,9 @@ _tagScriptGameData
 	}
 }ScriptGameData;
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 // 把存储类型由map改成vector
 typedef std::map<unsigned int, ScriptGameData>				VecScriptGameData;
 typedef VecScriptGameData::iterator							VecScriptGameDataIt;
@@ -280,31 +289,39 @@ typedef VecMapGameScriptDataObject::iterator				VecMapGameScriptDataObjectIt;
 typedef std::vector<char*>                                  VecGlobalStr;
 typedef VecGlobalStr::iterator                              VecGlobalStrIt;
 
-template<typename T>
-inline GameDataType GetGameDataType(T data)											{ return GDT_None; }
-template<>
-inline GameDataType GetGameDataType<char>(char data)								{ return GDT_Char; }
-template<>
-inline GameDataType GetGameDataType<unsigned char>(unsigned char data)				{ return GDT_UChar; }
-template<>
-inline GameDataType GetGameDataType<short>(short data)								{ return GDT_Short; }
-template<>
-inline GameDataType GetGameDataType<unsigned short>(unsigned short data)			{ return GDT_UShort; }
-template<>
-inline GameDataType GetGameDataType<int>(int data)									{ return GDT_Int; }
-template<>
-inline GameDataType GetGameDataType<unsigned int>(unsigned int data)				{ return GDT_UInt; }
-template<>
-inline GameDataType GetGameDataType<float>(float data)								{ return GDT_Float; }
-template<>
-inline GameDataType GetGameDataType<double>(double data)							{ return GDT_Double; }
-template<>
-inline GameDataType GetGameDataType<long long>(long long data)						{ return GDT_Int64; }
-template<>
-inline GameDataType GetGameDataType<unsigned long long>(unsigned long long data)	{ return GDT_UInt64; }
-template<>
-inline GameDataType GetGameDataType<std::string>(std::string data)					{ return GDT_String; }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+template<typename T>
+inline GameDataType GetGameDataType(const T& data)											{ return GDT_None; }
+template<typename T>
+inline GameDataType GetGameDataType(const T* data)											{ return GDT_None; }
+template<>
+inline GameDataType GetGameDataType<char>(const char& data)								{ return GDT_Char; }
+template<>
+inline GameDataType GetGameDataType<unsigned char>(const unsigned char& data)				{ return GDT_UChar; }
+template<>
+inline GameDataType GetGameDataType<short>(const short& data)								{ return GDT_Short; }
+template<>
+inline GameDataType GetGameDataType<unsigned short>(const unsigned short& data)			{ return GDT_UShort; }
+template<>
+inline GameDataType GetGameDataType<int>(const int& data)									{ return GDT_Int; }
+template<>
+inline GameDataType GetGameDataType<unsigned int>(const unsigned int& data)				{ return GDT_UInt; }
+template<>
+inline GameDataType GetGameDataType<float>(const float& data)								{ return GDT_Float; }
+template<>
+inline GameDataType GetGameDataType<double>(const double& data)							{ return GDT_Double; }
+template<>
+inline GameDataType GetGameDataType<long long>(const long long& data)						{ return GDT_Int64; }
+template<>
+inline GameDataType GetGameDataType<unsigned long long>(const unsigned long long& data)	{ return GDT_UInt64; }
+template<>
+inline GameDataType GetGameDataType<std::string>(const std::string& data)					{ return GDT_String; }
+template<>
+inline GameDataType GetGameDataType<char>(const char* data)								{ return GDT_String; }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 class NDScriptGameData  : public TSingleton<NDScriptGameData>
 {
 public:
@@ -331,7 +348,7 @@ public:
 	
 //#pragma mark 脚本数据接口
 	template<typename T>
-	void			SetData(eScriptData esd, unsigned int nKey, eRoleData e,  int nId, unsigned short index, T data);
+	void			SetData(eScriptData esd, unsigned int nKey, eRoleData e,  int nId, unsigned short index, const T& data);
 	
 	template<typename RT>
 	RT				GetData(eScriptData esd, unsigned int nKey, eRoleData e,  int nId, unsigned short index);
@@ -349,7 +366,7 @@ public:
 
 //#pragma mark 角色基础数据接口
 	template<typename T>
-	void			SetRoleBasicData(unsigned int nKey, unsigned short index, T data);
+	void			SetRoleBasicData(unsigned int nKey, unsigned short index, const T& data);
 	template<typename RT>
 	RT				GetRoleBasicData(unsigned int nKey, unsigned short index);
 	int				GetRoleBasicIntData(unsigned int nKey, unsigned short index);
@@ -360,7 +377,7 @@ public:
 	
 //#pragma mark 角色技能数据接口
 	template<typename T>
-	void			SetRoleSkillData(unsigned int nKey, int nId, unsigned short index, T data);
+	void			SetRoleSkillData(unsigned int nKey, int nId, unsigned short index, const T& data);
 	template<typename RT>
 	RT				GetRoleSkillData(unsigned int nKey, int nId, unsigned short index);
 	int				GetRoleSkillIntData(unsigned int nKey, int nId, unsigned short index);
@@ -372,7 +389,7 @@ public:
 	
 //#pragma mark 角色状态数据接口
 	template<typename T>
-	void			SetRoleStateData(unsigned int nKey, int nId, unsigned short index, T data);
+	void			SetRoleStateData(unsigned int nKey, int nId, unsigned short index, const T& data);
 	template<typename RT>
 	RT				GetRoleStateData(unsigned int nKey, int nId, unsigned short index);
 	int				GetRoleStateIntData(unsigned int nKey, int nId, unsigned short index);
@@ -384,7 +401,7 @@ public:
 
 //#pragma mark 角色物品数据接口
 	template<typename T>
-	void			SetRoleItemData(unsigned int nKey, int nId, unsigned short index, T data);
+	void			SetRoleItemData(unsigned int nKey, int nId, unsigned short index, const T& data);
 	template<typename RT>
 	RT				GetRoleItemData(unsigned int nKey, int nId, unsigned short index);
 	int				GetRoleItemIntData(unsigned int nKey, int nId, unsigned short index);
@@ -396,7 +413,7 @@ public:
 	
 //#pragma mark 角色宠物数据接口
 	template<typename T>
-	void			SetRolePetData(unsigned int nKey, int nId, unsigned short index, T data);
+	void			SetRolePetData(unsigned int nKey, int nId, unsigned short index, const T& data);
 	template<typename RT>
 	RT				GetRolePetData(unsigned int nKey, int nId, unsigned short index);
 	int				GetRolePetIntData(unsigned int nKey, int nId, unsigned short index);
@@ -408,7 +425,7 @@ public:
 
 //#pragma mark 角色任务数据接口
 	template<typename T>
-	void			SetRoleTaskData(unsigned int nKey, int nId, unsigned short index, T data);
+	void			SetRoleTaskData(unsigned int nKey, int nId, unsigned short index, const T& data);
 	template<typename RT>
 	RT				GetRoleTaskData(unsigned int nKey, int nId, unsigned short index);
 	int				GetRoleTaskIntData(unsigned int nKey, int nId, unsigned short index);
@@ -431,8 +448,11 @@ private:
 	VecScriptGameData&		GetVecScriptGameData(eScriptData esd, unsigned int nKey, eRoleData e, int nId);
 	
 	template<typename T>
-	void					SetScriptData(ScriptGameData& sgd, T& data);
+	void					SetScriptData(ScriptGameData& sgd, const T& data);
 	
+	template<typename T>
+	void					SetScriptData(ScriptGameData& sgd, const T* data);
+
 	int						GetScriptDataInt(ScriptGameData& sgd);
 	double					GetScriptDataFloat(ScriptGameData& sgd);
 	long long				GetScriptDataBigInt(ScriptGameData& sgd);
@@ -441,10 +461,10 @@ public:
 	NDScriptGameData();
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template<typename T>
-void NDScriptGameData::SetRoleBasicData(unsigned int nKey, unsigned short index, T data)
+void NDScriptGameData::SetRoleBasicData(unsigned int nKey, unsigned short index, const T& data)
 {
 	SetData(eScriptDataRole, nKey, eRoleDataBasic, 0, index, data);
 }
@@ -456,7 +476,7 @@ RT NDScriptGameData::GetRoleBasicData(unsigned int nKey, unsigned short index)
 }
 
 template<typename T>
-void NDScriptGameData::SetRoleSkillData(unsigned int nKey, int nId, unsigned short index, T data)
+void NDScriptGameData::SetRoleSkillData(unsigned int nKey, int nId, unsigned short index, const T& data)
 {
 	SetData(eScriptDataRole, nKey, eRoleDataSkill, nId, index, data);
 }
@@ -468,7 +488,7 @@ RT NDScriptGameData::GetRoleSkillData(unsigned int nKey, int nId, unsigned short
 }
 
 template<typename T>
-void NDScriptGameData::SetRoleStateData(unsigned int nKey, int nId, unsigned short index, T data)
+void NDScriptGameData::SetRoleStateData(unsigned int nKey, int nId, unsigned short index, const T& data)
 {
 	SetData(eScriptDataRole, nKey, eRoleDataState, nId, index, data);
 }
@@ -480,7 +500,7 @@ RT NDScriptGameData::GetRoleStateData(unsigned int nKey, int nId, unsigned short
 }
 
 template<typename T>
-void NDScriptGameData::SetRoleItemData(unsigned int nKey, int nId, unsigned short index, T data)
+void NDScriptGameData::SetRoleItemData(unsigned int nKey, int nId, unsigned short index, const T& data)
 {
 	SetData(eScriptDataRole, nKey, eRoleDataItem, nId, index, data);
 }
@@ -492,7 +512,7 @@ RT NDScriptGameData::GetRoleItemData(unsigned int nKey, int nId, unsigned short 
 }
 
 template<typename T>
-void NDScriptGameData::SetRolePetData(unsigned int nKey, int nId, unsigned short index, T data)
+void NDScriptGameData::SetRolePetData(unsigned int nKey, int nId, unsigned short index, const T& data)
 {
 	SetData(eScriptDataRole, nKey, eRoleDataPet, nId, index, data);
 }
@@ -504,7 +524,7 @@ RT NDScriptGameData::GetRolePetData(unsigned int nKey, int nId, unsigned short i
 }
 
 template<typename T>
-void NDScriptGameData::SetRoleTaskData(unsigned int nKey, int nId, unsigned short index, T data)
+void NDScriptGameData::SetRoleTaskData(unsigned int nKey, int nId, unsigned short index, const T& data)
 {
 	SetData(eScriptDataRole, nKey, eRoleDataTask, nId, index, data);
 }
@@ -514,25 +534,25 @@ RT NDScriptGameData::GetRoleTaskData(unsigned int nKey, int nId, unsigned short 
 {
 	return GetData<RT>(eScriptDataRole, nKey, eRoleDataTask, nId, index);
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template<typename T>
-void NDScriptGameData::SetData(eScriptData esd, unsigned int nKey, eRoleData e, int nId, unsigned short index, T data)
+void NDScriptGameData::SetData(eScriptData esd, unsigned int nKey, eRoleData e, int nId, unsigned short index, const T& data)
 {	
 	if (esd < eScriptDataBegin || e < eRoleDataBasic)
 	{
 		NDAsssert(0);
 		return;
 	}
-	
+
 	ScriptGameData& sgd = GetScriptGameData(esd, nKey, e, nId, index);
-	
+
 	SetScriptData(sgd, data);
 }
 
+//default version
 template<typename T>
-inline void NDScriptGameData::SetScriptData(ScriptGameData& sgd, T& data)
+inline void NDScriptGameData::SetScriptData(ScriptGameData& sgd, const T& data)
 {
 	GameDataType gdt = GetGameDataType(data);
 	if (gdt >= GDT_End || gdt <= GDT_None)
@@ -540,18 +560,18 @@ inline void NDScriptGameData::SetScriptData(ScriptGameData& sgd, T& data)
 		NDAsssert(0);
 		return;
 	}
-	
+
 	sgd.typeOfData = gdt;
-	
+
 	if (gdt == GDT_String)
-    {
-        int len = sizeof(T);
-        sgd.valueOfStr = (char*)malloc(len+1);
-        memcpy(sgd.valueOfStr, &data, len);
-        sgd.valueOfStr[len] = 0;
-        m_vGlobalStr.push_back(sgd.valueOfStr);
+	{
+		int len = sizeof(T);
+		sgd.valueOfStr = (char*)malloc(len+1);
+		memcpy(sgd.valueOfStr, &data, len);
+		sgd.valueOfStr[len] = 0;
+		m_vGlobalStr.push_back(sgd.valueOfStr);
 		//sgd.valueOfStr				= data;
-    }
+	}
 	else if (gdt == GDT_Float)
 		sgd.valueOfNumber.fVal		= data;
 	else if (gdt == GDT_Double)
@@ -560,49 +580,54 @@ inline void NDScriptGameData::SetScriptData(ScriptGameData& sgd, T& data)
 		sgd.valueOfNumber.ubigVal	= (unsigned long long)data;	
 }
 
+//string version
 template<>
-inline void NDScriptGameData::SetScriptData<std::string>(ScriptGameData& sgd, std::string& data)
+inline void NDScriptGameData::SetScriptData<std::string>(ScriptGameData& sgd, const std::string& data)
 {	
 	sgd.typeOfData = GDT_String;
-	
-    int len = data.length();
-    sgd.valueOfStr = (char*)malloc(len+1);
-    if(len > 0)
-        memcpy(sgd.valueOfStr, data.c_str(), len);
-    sgd.valueOfStr[len] = 0;
-    m_vGlobalStr.push_back(sgd.valueOfStr);
+
+	int len = data.length();
+	sgd.valueOfStr = (char*)malloc(len+1);
+	if(len > 0)
+		memcpy(sgd.valueOfStr, data.c_str(), len);
+	sgd.valueOfStr[len] = 0;
+	m_vGlobalStr.push_back(sgd.valueOfStr);
 }
 
+//char* version
 template<>
-inline void NDScriptGameData::SetScriptData<const char*>(ScriptGameData& sgd, const char*& data)
+inline void NDScriptGameData::SetScriptData<char>(ScriptGameData& sgd, const char* data)
 {	
-	sgd.typeOfData = GDT_String;
-	
-    int len = strlen(data);
+	if (!data) return;
 
-    sgd.valueOfStr = (char*)malloc(len+1);
-    if(len > 0)
-        memcpy(sgd.valueOfStr, data, len);
-    sgd.valueOfStr[len] = 0;
-    m_vGlobalStr.push_back(sgd.valueOfStr);
+	sgd.typeOfData = GDT_String;
+
+	int len = strlen(data);
+	sgd.valueOfStr = (char*)malloc(len+1);
+	if(len > 0)
+	{
+		memcpy(sgd.valueOfStr, data, len);
+	}
+	sgd.valueOfStr[len] = 0;
+	m_vGlobalStr.push_back(sgd.valueOfStr);
 }
 
 template<typename RT>
 inline RT NDScriptGameData::GetData(eScriptData esd, unsigned int nKey, eRoleData e,  int nId, unsigned short index)
 {
 	ScriptGameData sgd;
-	
+
 	if (!GetScriptGameData(esd, nKey, e, nId, index, sgd))
 		return 0;
-	
+
 	GameDataType gdt = sgd.typeOfData;
-	
+
 	if (gdt == GDT_Float || gdt == GDT_Double)
 		return GetScriptDataFloat(sgd);
-		
+
 	if (gdt == GDT_UInt64 || gdt == GDT_Int64)
 		return GetScriptDataBigInt(sgd);
-	
+
 	return GetScriptDataInt(sgd);
 }
 
@@ -610,14 +635,53 @@ template<>
 inline std::string NDScriptGameData::GetData(eScriptData esd, unsigned int nKey, eRoleData e,  int nId, unsigned short index)
 {
 	ScriptGameData sgd;
-	
+
 	if (!GetScriptGameData(esd, nKey, e, nId, index, sgd))
 		return "";
-		
+
 	GameDataType gdt = sgd.typeOfData;
-	
+
 	if (gdt != GDT_String)
 		return "";
-	
+
 	return GetScriptDataStr(sgd);
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//@dirty @db
+class FAST_CACHE 
+{
+public:
+	FAST_CACHE() { memset( this, 0, sizeof(FAST_CACHE)); }
+
+	struct PARAM {
+		int p1, p2, p3, p4;
+		void* ptr;
+	} param;
+
+	bool isMatch(int p1, int p2, int p3, int p4) {
+		return p1 == param.p1
+			&& p2 == param.p2
+			&& p3 == param.p3
+			&& p4 == param.p4;
+	}
+
+	void saveCache(int p1, int p2, int p3, int p4, void* ptr) {
+		param.p1 = p1;
+		param.p2 = p2;
+		param.p3 = p3;
+		param.p4 = p4;
+		param.ptr = ptr;
+	}
+
+	void* getCachePtr(int p1, int p2, int p3, int p4) {
+		if (this->isMatch(p1, p2, p3, p4))
+			return param.ptr;
+		return NULL;
+	}
+
+	void* getRawPtr() {
+		return param.ptr;
+	}
+};
+/////////////////////////////////////////////////////////////////////////////////////////

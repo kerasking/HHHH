@@ -286,7 +286,6 @@ using namespace NDEngine;
 //帐号注册　end
 ///////////////////////////////////////////////////////////////////
 
-
 //static NDRegisterAccount	*ndRegisterAccount = NULL;
 //static std::string servername = "lyol4";//"server02";//"Server06";//
 
@@ -297,7 +296,7 @@ NDBeforeGameMgr::NDBeforeGameMgr()
 	NDNetMsgPoolObj.RegMsg(MB_SERVER_INFO_REQUEST, this);
 	//NDNetMsgPoolObj.RegMsg(_MSG_NOTIFY_CLIENT, this);
 	//NDNetMsgPoolObj.RegMsg(_MSG_MPF_VERSION, this);
-	
+
 	//ndRegisterAccount = [[NDRegisterAccount alloc] init];
 #if USE_ROBOT == 0
 // 	NDDataPersist loginData;
@@ -334,7 +333,7 @@ NDBeforeGameMgr::NDBeforeGameMgr()
 // 	}
 
 	m_serverName = "";
-	
+
 // 	const char* port =  loginData.GetData(kLoginData, &kLastServerPort);
 // 	string strPort;
 // 	if (port) 
@@ -357,20 +356,20 @@ NDBeforeGameMgr::NDBeforeGameMgr()
 
 #endif	
 	m_LoginState = eLS_Login;
-	
+
 	m_dlgWait = NULL;
-	
+
 	m_uiDlgCheckFail = -1;
-	
+
 	//m_httpCheckVersion = NULL;
-	
+
 	//m_bNeedCheck = true;
-	
+
 	//m_timerCheckVersion = new NDTimer;
 	m_timerCheckVersion = NULL;
-	
+
 	m_bInSwithCMNetState = false;
-	
+
 	//m_sdkLogin = NULL;
 }
 
@@ -385,13 +384,13 @@ NDBeforeGameMgr::~NDBeforeGameMgr()
 // 	{
 // 		[m_httpCheckVersion release];
 // 	}
-	
-	if (m_timerCheckVersion) 
+
+	if (m_timerCheckVersion)
 	{
 		m_timerCheckVersion->KillTimer(this, TIMER_CHECK_VERSION_TAG);
 		delete m_timerCheckVersion;
 	}
-	
+
 // 	if (m_sdkLogin)
 // 	{
 // 		[m_sdkLogin release];
@@ -404,30 +403,32 @@ bool NDBeforeGameMgr::Load()
 	return DownLoadServerList();
 }
 
-void NDBeforeGameMgr::SetServerInfo(const char* serverIP, const char* serverName, const char* serverSendName, int serverPort)
+void NDBeforeGameMgr::SetServerInfo(const char* serverIP,
+		const char* serverName, const char* serverSendName, int serverPort)
 {
 	if (serverIP)
 	{
-		this->m_serverIP = serverIP;
+		m_serverIP = serverIP;
 	}
-	
+
 	if (serverName)
 	{
-		this->m_serverName = serverSendName;
+		m_serverName = serverSendName;
 	}
-	
-	if (serverSendName) {
-		this->m_serverDisplayName = serverName;
+
+	if (serverSendName)
+	{
+		m_serverDisplayName = serverName;
 	}
-	this->m_serverPort = serverPort;
+	m_serverPort = serverPort;
 }
 
-void NDBeforeGameMgr::generateClientKey() 
+void NDBeforeGameMgr::generateClientKey()
 {
- 	// ------ 产生随机key ------
+	// ------ 产生随机key ------
 	//获取自2001年1月1号零时到当前时间的秒数
 	tm timeStrt20010101;
-	timeStrt20010101.tm_year = 2001-1900;
+	timeStrt20010101.tm_year = 2001 - 1900;
 	timeStrt20010101.tm_mon = 0;
 	timeStrt20010101.tm_mday = 1;
 	timeStrt20010101.tm_hour = 0;
@@ -444,9 +445,9 @@ void NDBeforeGameMgr::generateClientKey()
 	_snprintf(tmpArr, 32, "%d", diff);
 	string tmpStr(tmpArr);
 
-	srandom(time(NULL));
+	srandom (time(NULL));
 	//tmpStr总长度为24，后面用a-z的随机串补齐，目的是得到一个24位的唯一key，注意：key的第一位必须是数字，否则发送的数据包会被服务端直接丢弃
-	for (int i = tmpStr.length(); i < 24; i++)
+for(	int i = tmpStr.length(); i < 24; i++)
 	{
 		char tmpChar = (char) ((random()%100 +1) % 26 + 97);
 		char tmpCharArr[2];
@@ -463,81 +464,81 @@ void NDBeforeGameMgr::generateClientKey()
 }
 
 /** 交换密钥 */
-void NDBeforeGameMgr::sendClientKey() 
+void NDBeforeGameMgr::sendClientKey()
 {
 	NDTransData data(MB_LOGINSYSTEM_NORSA_EXCHANGE_KEY);
-	
+
 	int version = VERSION_IPHONE;
 	data << version;
-	data.Write((unsigned char*)(phoneKey.c_str()), phoneKey.size());
+	data.Write((unsigned char*) (phoneKey.c_str()), phoneKey.size());
 	NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
 }
 
-void NDBeforeGameMgr::sendMsgConnect(int idAccount) 
+void NDBeforeGameMgr::sendMsgConnect(int idAccount)
 {
 	NDTransData data(_MSG_CONNECT);
 
 	int dwAuthorize = 0;
 	data << idAccount;
 	data << dwAuthorize;
-	data.Write((unsigned char*)(phoneKey.c_str()), phoneKey.size());
+	data.Write((unsigned char*) (phoneKey.c_str()), phoneKey.size());
 	NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
 }
 
-void NDBeforeGameMgr::RegisterAccout( string username, string password )
+void NDBeforeGameMgr::RegisterAccout(string username, string password)
 {
-	if ( username.empty() || password.empty() ) 
+	if (username.empty() || password.empty())
 	{
 		return;
 	}
-	
+
 	SetUserName(username);
 	SetPassWord(password);
-	
+
 	//[ndRegisterAccount connectUserName:username.c_str() andPassWord:password.c_str()];
 }
 
-void NDBeforeGameMgr::RegiserCallBack( int errCode, std::string strtip  )/* errCode=(1,注册成功),(2,注册失败),(3,网络问题)*/
+void NDBeforeGameMgr::RegiserCallBack(int errCode, std::string strtip)/* errCode=(1,注册成功),(2,注册失败),(3,网络问题)*/
 {
 	CloseProgressBar;
-	
-	switch (errCode) 
+
+	switch (errCode)
 	{
-		case 1:
-		{ // 注册成功
-			
-			NDDataPersist loginData;
-			
-			loginData.SetData(kLoginData, &kLastAccountName, username.c_str());			
-			loginData.SetData(kLoginData, &kLastAccountPwd, password.c_str());			
-			loginData.SaveLoginData();
-			loginData.AddAcount(username.c_str(), password.c_str());
-			
-			loginData.SaveAccountList();
-			
-			//NDDirector::DefaultDirector()->ReplaceScene(ServerListScene::Scene(), true);
-			m_LoginState = eLS_Register;
-			return;
-		}
+	case 1:
+	{ // 注册成功
+
+		NDDataPersist loginData;
+
+		loginData.SetData(kLoginData, kLastAccountName, username.c_str());
+		loginData.SetData(kLoginData, kLastAccountPwd, password.c_str());
+		loginData.SaveLoginData();
+		loginData.AddAcount(username.c_str(), password.c_str());
+
+		loginData.SaveAccountList();
+
+		//NDDirector::DefaultDirector()->ReplaceScene(ServerListScene::Scene(), true);
+		m_LoginState = eLS_Register;
+		return;
+	}
 		break;
-		case 2:
-		{ // 注册失败
-			
-		}
+	case 2:
+	{ // 注册失败
+
+	}
 		break;
-		case 3:
-		{ // 网络问题
-			
-		}
-			break;	
-		default:
-			break;
+	case 3:
+	{ // 网络问题
+
+	}
+		break;
+	default:
+		break;
 	}
 	SetUserName("");
 	SetPassWord("");
-	
+
 	showDialog(NDCommonCString("tip"), strtip.c_str());
-	
+
 	//NDDirector::DefaultDirector()->ReplaceScene(RegisterAccountScene::Scene());
 }
 
@@ -545,162 +546,169 @@ void NDBeforeGameMgr::FastGameOrRegister(int iType)
 {
 	//[ndRegisterAccount connectFast:iType];
 }
-void NDBeforeGameMgr::FastCallBack(int errCode, string username, int iType, std::string strtip)
+void NDBeforeGameMgr::FastCallBack(int errCode, string username, int iType,
+		std::string strtip)
 {
 	CloseProgressBar;
-	switch (errCode) 
+	switch (errCode)
 	{
-		case 1:
-		{ // 注册成功
-			if ( iType == 1) 
-			{ //快速注册
-				// 弹出确定对话框
-				//转到注册帐号界面
-				//RegisterAccountScene *scene = RegisterAccountScene::Scene();
+	case 1:
+	{ // 注册成功
+		if (iType == 1)
+		{ //快速注册
+		  // 弹出确定对话框
+		  //转到注册帐号界面
+		  //RegisterAccountScene *scene = RegisterAccountScene::Scene();
 //				scene->SetAccountText(username.c_str());
 //				NDDirector::DefaultDirector()->ReplaceScene(scene);
-				
-				SetUserName(username);
+
+			SetUserName(username);
 // 				NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 // 				if (scene->IsKindOfClass(RUNTIME_CLASS(InitMenuScene))) 
 // 				{
 // 					InitMenuScene *menuscene = (InitMenuScene *)scene;
 // 					menuscene->FastGameOrRegisterTip(1);
 // 				}
-			}
-			else 
-			{ // 快速游戏
-				// 弹出确定对话框
-				//转到注册帐号界面
-				//RegisterAccountScene *scene = RegisterAccountScene::Scene();
+		}
+		else
+		{ // 快速游戏
+		  // 弹出确定对话框
+		  //转到注册帐号界面
+		  //RegisterAccountScene *scene = RegisterAccountScene::Scene();
 //				scene->SetAccountText(username.c_str());
 //				scene->SetPasswordText(password.c_str());
 //				NDDirector::DefaultDirector()->ReplaceScene(scene);
-				
-				SetUserName(username);
-				SetPassWord(username);
+
+			SetUserName(username);
+			SetPassWord(username);
 // 				NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 // 				if (scene->IsKindOfClass(RUNTIME_CLASS(InitMenuScene))) 
 // 				{
 // 					InitMenuScene *menuscene = (InitMenuScene *)scene;
 // 					menuscene->FastGameOrRegisterTip(2);
 // 				}
-				
-			}
 
-			return;
 		}
-			break;
-		case 2:
-		{ // 注册失败
-			
-		}
-			break;
-		case 3:
-		{ // 网络问题
-			
-		}
-			break;	
-		default:
-			break;
+
+		return;
 	}
-	
+		break;
+	case 2:
+	{ // 注册失败
+
+	}
+		break;
+	case 3:
+	{ // 网络问题
+
+	}
+		break;
+	default:
+		break;
+	}
+
 	//showDialog(NDCommonCString("tip"), strtip.c_str());
-	
+
 }
 
-bool NDBeforeGameMgr::ConnectServer(const char* ip, unsigned int port, bool wapFlag, bool switchNet/*=false*/)
+bool NDBeforeGameMgr::ConnectServer(const char* ip, unsigned int port,
+		bool wapFlag, bool switchNet/*=false*/)
 {
-	if (!ip) return false;
-	
+	if (!ip)
+		return false;
+
 	NDSocket socServerList;
 	// 套接字初始化,并连接
-	
-	if (!socServerList.Connect(ip, port, true) ) 
+
+	if (!socServerList.Connect(ip, port, true))
 	//if (!socServerList.Connect("192.168.55.58", 8888, true) ) // test
 	{
 		//#ifdef DEBUG
 		//		NDLog("连接服务器列表失败");
 		//		return false;
 		//#else
-	
+
 //		if ( !socServerList.Connect(AREA_IP_2, AREA_PORT_2, true)) 
 //		{
 //			NDLog("AREA_IP_2..连接服务器列表失败");
 //			return false;
 //		}
 		//#endif
-		
+
 		NDLog("连接服务器列表失败,ip:%s, port:%d", ip, port);
-		
+
 		return false;
 	}
-	
+
 	NDTransData data(MB_SERVER_INFO_REQUEST);
 	//data << (MSGID)MB_SERVER_INFO_REQUEST;
-	data << (unsigned short)(!wapFlag);
+	data << (unsigned short) (!wapFlag);
 	socServerList.Send(&data);
-	
+
 	int iMsgLen = 0;
-	
-	do 
+
+	do
 	{
 		// 先读4个字节
-		unsigned char buf[4]={0};
+		unsigned char buf[4] =
+		{ 0 };
 		unsigned char* ptr = buf;
 		int iLen = 0;
-		if ( -1 == socServerList.Receive(ptr, iLen, 4) || iLen != 4 )
+		if (-1 == socServerList.Receive(ptr, iLen, 4) || iLen != 4)
 		{
 			NDLog("获取服务器列表读消息头出错");
 			socServerList.Close();
 			return false;
 		}
-		
+
 		// 校验
-		if ((unsigned char)0xff == buf[0] && (unsigned char)0xfe == buf[1]) 
+		if ((unsigned char) 0xff == buf[0] && (unsigned char) 0xfe == buf[1])
 		{
-		}else 
+		}
+		else
 		{
 			// 校验不对,扔吧
 			NDLog("获取服务器列表校验不对");
 			socServerList.Close();
 			return false;
 		}
-		
-		iMsgLen  = (buf[2] & 0xff) + ((buf[3] & 0xff) << 8);
-		
-		if (iMsgLen < 0 || iMsgLen >= 1046) 
+
+		iMsgLen = (buf[2] & 0xff) + ((buf[3] & 0xff) << 8);
+
+		if (iMsgLen < 0 || iMsgLen >= 1046)
 		{
 			NDLog("获取服务器列表消息长度不对");
 			socServerList.Close();
 			return false;
 		}
 	} while (0);
-	
-	do 
+
+	do
 	{
-		unsigned char buf[1046]={0};
+		unsigned char buf[1046] =
+		{ 0 };
 		unsigned char* ptr = buf;
-		int iLen=0;
-		if ( -1 == socServerList.Receive(ptr, iLen, iMsgLen-4) || iLen != iMsgLen-4 )
+		int iLen = 0;
+		if (-1 == socServerList.Receive(ptr, iLen, iMsgLen - 4)
+				|| iLen != iMsgLen - 4)
 		{
 			NDLog("获取服务器列表读消息体出错");
 			socServerList.Close();
 			return false;
 		}
-		
+
 		m_bInSwithCMNetState = switchNet;
-		
+
 		//处理消息了
 		NDTransData recvdata;
-		recvdata.Write(buf, iMsgLen-4);
-		int nMsgID  = recvdata.ReadShort();
-		NDNetMsgPoolObj.Process(nMsgID, &recvdata, iMsgLen-6);
-		
+		recvdata.Write(buf, iMsgLen - 4);
+		int nMsgID = recvdata.ReadShort();
+		NDNetMsgPoolObj.Process(nMsgID, &recvdata, iMsgLen - 6);
+
 		socServerList.Close();
-		
+
 	} while (0);
-	
+
 	//CloseProgressBar;
 	return true;
 }
@@ -711,26 +719,32 @@ bool NDBeforeGameMgr::DownLoadServerList(bool switchNet/*=false*/)
 	int iPort;
 #if USE_ROBOT == 0
 	NDDataPersist loginData;
-	std::string strLinkType(loginData.GetData(kLoginData, &kLinkType));
-	
-	if (strLinkType == "i_dd") {
+	std::string strLinkType(loginData.GetData(kLoginData, kLinkType));
+
+	if (strLinkType == "i_dd")
+	{
 		server = "121.207.255.120";
 		iPort = 5877;
-	}else if (strLinkType == "o" || strLinkType == ""){
+	}
+	else if (strLinkType == "o" || strLinkType == "")
+	{
 		server = AREA_IP_1;
 		iPort = AREA_PORT_1;
-		
-		if (strLinkType == "") {
-			loginData.SetData(kLoginData, &kLinkType, "o");
+
+		if (strLinkType == "")
+		{
+			loginData.SetData(kLoginData, kLinkType, "o");
 			loginData.SaveLoginData();
 		}
-	}else {
+	}
+	else
+	{
 		return false;
 	}
 #else
 	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(RobotScene));
 	if (!scene) return false;
-	if (((RobotScene*)scene)->IsOuterNet()) 
+	if (((RobotScene*)scene)->IsOuterNet())
 	{
 		server = AREA_IP_1;
 		iPort = AREA_PORT_1;
@@ -741,7 +755,7 @@ bool NDBeforeGameMgr::DownLoadServerList(bool switchNet/*=false*/)
 		iPort = 5877;
 	}
 #endif
-	
+
 	//const char* server = "117.135.145.134";
 //	const int iPort = 5051;
 
@@ -753,30 +767,30 @@ bool NDBeforeGameMgr::DownLoadServerList(bool switchNet/*=false*/)
 
 /*处理感兴趣的网络消息*/
 bool NDBeforeGameMgr::process(MSGID msgID, NDTransData* data, int len)
-{ 
-	switch (msgID) 
+{
+	switch (msgID)
 	{
-		case MB_LOGINSYSTEM_EXCHANG_KEY:
-			processLogin(data, len);
-			break;
-		case MB_LOGINSYSTEM_MOBILE_SERVER_NOTIFY:
-			//processNotify(data, len);
-			break;
-		case MB_SERVER_INFO_REQUEST:
-			processAcquireServerInfoRecieve(data, len);
-			break;
-		case _MSG_NOTIFY_CLIENT:
-			//processNotifyClient(data, len);
-			break;
+	case MB_LOGINSYSTEM_EXCHANG_KEY:
+		processLogin(data, len);
+		break;
+	case MB_LOGINSYSTEM_MOBILE_SERVER_NOTIFY:
+		//processNotify(data, len);
+		break;
+	case MB_SERVER_INFO_REQUEST:
+		processAcquireServerInfoRecieve(data, len);
+		break;
+	case _MSG_NOTIFY_CLIENT:
+		//processNotifyClient(data, len);
+		break;
 		/*
-		case _MSG_MPF_VERSION:
-			processMPFVersionMsg(*data);
-			break;
-		*/
-		default:
-			break;
+		 case _MSG_MPF_VERSION:
+		 processMPFVersionMsg(*data);
+		 break;
+		 */
+	default:
+		break;
 	}
-	
+
 	return true;
 }
 
@@ -785,16 +799,17 @@ bool NDBeforeGameMgr::process(MSGID msgID, NDTransData* data, int len)
 
 void NDBeforeGameMgr::processLogin(NDTransData* data, int len)
 {
-	if (!data) return;
-	
+	if (!data)
+		return;
+
 	if (!data->decrypt(phoneKey))
 	{
 		NDLog("解密失败,NDMsgLogin::Process");
 		return;
 	}
-	
-	len = data->GetSize()-6;
-	
+
+	len = data->GetSize() - 6;
+
 // 	srandom(time(NULL));
 // 	int nRandNum = random()%16 +1; //1~16
 // 	
@@ -804,20 +819,20 @@ void NDBeforeGameMgr::processLogin(NDTransData* data, int len)
 // 		[str appendString:sb];
 // 	}
 	string str("random");
-	
-	
-	char buf[1024] = {0x00};
-	data->Read((unsigned char*)buf, len);
-	
+
+	char buf[1024] =
+	{ 0x00 };
+	data->Read((unsigned char*) buf, len);
+
 	serverPhoneKey.clear();
 
-	for (int i=0; i < len; i++) {
+	for (int i = 0; i < len; i++)
+	{
 		serverPhoneKey.push_back(buf[i]);
-	} 
-	
-	
+	}
+
 	NDTransData SEND_DATA;
-	
+
 	SEND_DATA.WriteShort(MB_LOGINSYSTEM_LOGIN_GAME_SERVER);
 	SEND_DATA.WriteUnicodeString(GetUserName());
 	SEND_DATA.WriteUnicodeString(GetPassWord());
@@ -829,16 +844,16 @@ void NDBeforeGameMgr::processLogin(NDTransData* data, int len)
 	//SEND_DATA.WriteUnicodeString(std::string("1"));
 	//SEND_DATA.WriteUnicodeString(std::string("server06"));
 	SEND_DATA.WriteShort(str.length());
-	SEND_DATA.Write((unsigned char*)str.c_str(), str.length());
-	
+	SEND_DATA.Write((unsigned char*) str.c_str(), str.length());
+
 	//[str release];
-	
-	if ( !SEND_DATA.encrypt(serverPhoneKey) )
+
+	if (!SEND_DATA.encrypt(serverPhoneKey))
 	{
 		NDLog("消息发送加密失败,NDMsgLogin::Process");
 		return;
 	}
-	
+
 	NDDataTransThread::DefaultThread()->GetSocket()->Send(&SEND_DATA);
 }
 
@@ -847,88 +862,102 @@ void NDBeforeGameMgr::processNotify(NDTransData* data, int len)
 	int action = data->ReadShort();
 	int code = data->ReadShort();
 	int count = data->ReadShort();
-	
+
 	std::stringstream ss;
-	for (int i = 0; i < count; i++) {
+	for (int i = 0; i < count; i++)
+	{
 		ss << data->ReadUnicodeString();
 	}
 
-	if (action == MB_LOGINSYSTEM_LOGIN_GAME_SERVER) 
+	if (action == MB_LOGINSYSTEM_LOGIN_GAME_SERVER)
 	{
 		std::string strTip = "", strTitle = "";
-		
+
 		bool bSucess = true;
-		switch (code) 
+		switch (code)
 		{
-			case 0: // <帐号>服务器认证失败
-				strTitle = NDCommonCString("RegisterFail");
-				strTip += ss.str().empty() ? NDCommonCString("RenZhengFailNoneRet") : ss.str();
-				bSucess = false;
-				break;
-			case 1: // 登录<游戏>服务器成功
-				break;
-			case 2: // 登录<游戏>服务器失败
-			case 3: // 连接<帐号>服务器失败
-			case 4: // 连接<游戏>服务器失败
-				strTitle = NDCommonCString("ConnectFail");
-				strTip += ss.str().empty() ? NDCommonCString("ConnectFailNoneRet") : ss.str();
-				bSucess = false;
-				break;
-			case 5: // 登录<帐号>服务器超时
-			case 6: // 登录<游戏>服务器超时
-				strTitle = NDCommonCString("ConnectFail");
-				strTip += NDCommonCString("ServerTimeOut");
-				bSucess = false;
-				break;
-			case 7: // <代理服务器>繁忙
-				strTitle = NDCommonCString("ConnectFail");
-				strTip += NDCommonCString("ServerPlayerUpMax");
-				bSucess = false;
-				break;
-			case 8: // <代理服务器>已达到人数上限
-				strTitle = NDCommonCString("ConnectFail");
-				strTip += NDCommonCString("ServerPlayerUpMax");
-				bSucess = false;
-				break;
-			case 9: // 登录<游戏>服务器成功 无角色
-				//NDDirector::DefaultDirector()->ReplaceScene(CreateRoleScene::Scene(), true);
-                //this->CreateRole();
-				break;
-			case 10: // 继续登录需要等待,由玩家选择
-			{
-				m_dlgWait = new NDUIDialog;
-				m_dlgWait->Initialization();
-				m_dlgWait->SetDelegate(this);
-				m_dlgWait->Show(NDCommonCString("LoginTip"), ss.str().empty() ? NDCommonCString("WaitServerDeal") : ss.str().c_str(), NDCommonCString("quit"), NDCommonCString("ContinueWait"), NULL);
-			}
-				break;
-			default: // 登录<游戏>服务器失败
-				NDLog("连接失败");//, str);
-				strTitle = NDCommonCString("ConnectFail");
-				strTip += NDCommonCString("ConnectFail");
-				bSucess = false;
-				break;
+		case 0: // <帐号>服务器认证失败
+			strTitle = NDCommonCString("RegisterFail");
+			strTip +=
+					ss.str().empty() ?
+							NDCommonCString("RenZhengFailNoneRet") : ss.str();
+			bSucess = false;
+			break;
+		case 1: // 登录<游戏>服务器成功
+			break;
+		case 2: // 登录<游戏>服务器失败
+		case 3: // 连接<帐号>服务器失败
+		case 4: // 连接<游戏>服务器失败
+			strTitle = NDCommonCString("ConnectFail");
+			strTip +=
+					ss.str().empty() ?
+							NDCommonCString("ConnectFailNoneRet") : ss.str();
+			bSucess = false;
+			break;
+		case 5: // 登录<帐号>服务器超时
+		case 6: // 登录<游戏>服务器超时
+			strTitle = NDCommonCString("ConnectFail");
+			strTip += NDCommonCString("ServerTimeOut");
+			bSucess = false;
+			break;
+		case 7: // <代理服务器>繁忙
+			strTitle = NDCommonCString("ConnectFail");
+			strTip += NDCommonCString("ServerPlayerUpMax");
+			bSucess = false;
+			break;
+		case 8: // <代理服务器>已达到人数上限
+			strTitle = NDCommonCString("ConnectFail");
+			strTip += NDCommonCString("ServerPlayerUpMax");
+			bSucess = false;
+			break;
+		case 9: // 登录<游戏>服务器成功 无角色
+			//NDDirector::DefaultDirector()->ReplaceScene(CreateRoleScene::Scene(), true);
+			//CreateRole();
+			break;
+		case 10: // 继续登录需要等待,由玩家选择
+		{
+			m_dlgWait = new NDUIDialog;
+			m_dlgWait->Initialization();
+			m_dlgWait->SetDelegate(this);
+			m_dlgWait->Show(NDCommonCString("LoginTip"),
+					ss.str().empty() ?
+							NDCommonCString("WaitServerDeal") :
+							ss.str().c_str(), NDCommonCString("quit"),
+					NDCommonCString("ContinueWait"), NULL);
 		}
-		CloseProgressBar;        
-		if (!bSucess) 
+			break;
+		default: // 登录<游戏>服务器失败
+			NDLog("连接失败"); //, str);
+			strTitle = NDCommonCString("ConnectFail");
+			strTip += NDCommonCString("ConnectFail");
+			bSucess = false;
+			break;
+		}
+		CloseProgressBar;
+		if (!bSucess)
 		{
-			if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
-			{	
-				NDDataTransThread::DefaultThread()->Start(NDBeforeGameMgrObj.GetServerIP().c_str(), NDBeforeGameMgrObj.GetServerPort());
+			if (NDDataTransThread::DefaultThread()->GetThreadStatus()
+					!= ThreadStatusRunning)
+			{
+				NDDataTransThread::DefaultThread()->Start(
+						NDBeforeGameMgrObj.GetServerIP().c_str(),
+						NDBeforeGameMgrObj.GetServerPort());
 			}
-			
-			if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
-			{	
+
+			if (NDDataTransThread::DefaultThread()->GetThreadStatus()
+					!= ThreadStatusRunning)
+			{
 				exit(0);
 			}
-			
+
 			NDBeforeGameMgrObj.Login();
 			return;
-			
+
 			if (!(IsInRegisterState() || IsInAccountListState()))
 			{
 //				NDDirector::DefaultDirector()->ReplaceScene(LoginScene::Scene());
-			}else 
+			}
+			else
 			{
 // 				NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 // 				if (scene->IsKindOfClass(RUNTIME_CLASS(LoginScene)))
@@ -942,162 +971,168 @@ void NDBeforeGameMgr::processNotify(NDTransData* data, int len)
 
 			NDUIDialog *dialog = new NDUIDialog;
 			dialog->Initialization();
-			dialog->Show(strTitle.c_str(), strTip.c_str(), NULL,NULL);
+			dialog->Show(strTitle.c_str(), strTip.c_str(), NULL, NULL);
 		}
 	}
 }
 
-void NDBeforeGameMgr::processAcquireServerInfoRecieve(NDTransData* data, int len)
+void NDBeforeGameMgr::processAcquireServerInfoRecieve(NDTransData* data,
+		int len)
 {
 	m_vecBigArea.clear();
-	int size = 0; (*data) >> size;
-	for (int i = 0; i < size; i++) 
-	{	
+	int size = 0;
+	(*data) >> size;
+	for (int i = 0; i < size; i++)
+	{
 		big_area area;
 		std::string bigArea;
 		bigArea = data->ReadUnicodeString(); //大区名(String)
 		area.name = bigArea;
-		
+
 		std::string ips;
 		ips = data->ReadUnicodeString(); //大区的ip地址
 		area.ip = ips;
-		
-		int iPort = 0; (*data) >> iPort; //大区的ip端口
+
+		int iPort = 0;
+		(*data) >> iPort; //大区的ip端口
 		area.iPort = iPort;
-		int available = 0; (*data) >> available; //可用服务器个数(int)
+		int available = 0;
+		(*data) >> available; //可用服务器个数(int)
 		area.iLines = available;
-		for (int j = 0; j < available; j++) 
+		for (int j = 0; j < available; j++)
 		{
 			big_area::line line;
 			std::string serverNameDisplay = data->ReadUnicodeString(); //具体服务器名显示(String)
 			line.displayName = serverNameDisplay;
-		
-		
+
 			std::string serverNameTrans = data->ReadUnicodeString(); //具体服务器名传输(String)
 			line.sendName = serverNameTrans;
-			
+
 			if (m_bInSwithCMNetState)
 			{
 				if (serverNameTrans == m_serverName)
 				{
 					m_serverIP = ips;
-					
+
 					m_serverPort = iPort;
-					
+
 					m_bInSwithCMNetState = false;
-					
+
 					return;
 				}
 			}
-			
-			unsigned char cState = 0; (*data) >> cState;
+
+			unsigned char cState = 0;
+			(*data) >> cState;
 			line.iState = cState;
 			area.vec_lines.push_back(line);
 		}
 		m_vecBigArea.push_back(area);
 	}
-	
+
 	m_bInSwithCMNetState = false;
 }
 
 void NDBeforeGameMgr::processNotifyClient(NDTransData* data, int len)
 {
-	unsigned char ret = 0; (*data) >> ret;
+	unsigned char ret = 0;
+	(*data) >> ret;
 	std::string strTip = "";
-	switch (ret) 
+	switch (ret)
 	{ // 0：创建失败 1：创建成功 2：人物名已存在 3：人物名不合法
-		case 0:
-			strTip += NDCommonCString("RoleCreateFail");
-			break;
-		case 1:
-			NDLog("创建成功");
-			break;
-		case 2:
-			strTip += NDCommonCString("PlayerNameExist");
-			break;
-		case 3:
-			strTip += NDCommonCString("PlayerNameInvalid");
-			break;
-		default:
-			strTip += NDCommonCString("RoleCreateFailUnknown");
-			break;
+	case 0:
+		strTip += NDCommonCString("RoleCreateFail");
+		break;
+	case 1:
+		NDLog("创建成功");
+		break;
+	case 2:
+		strTip += NDCommonCString("PlayerNameExist");
+		break;
+	case 3:
+		strTip += NDCommonCString("PlayerNameInvalid");
+		break;
+	default:
+		strTip += NDCommonCString("RoleCreateFailUnknown");
+		break;
 	}
-	
+
 	NDUIDialog *dialog = new NDUIDialog;
 	dialog->Initialization();
-	dialog->Show(NDCommonCString("tip"), strTip.c_str(), NULL,NULL);
-	NDUISynLayer::Close(SYN_CREATE_ROLE);
+	dialog->Show(NDCommonCString("tip"), strTip.c_str(), NULL, NULL);
+	NDUISynLayer::Close (SYN_CREATE_ROLE);
 }
 
 /*
-void NDBeforeGameMgr::processMPFVersionMsg(NDTransData& data)
-{
-	int verisonID = data.ReadByte();
-	std::string strVersion = data.ReadUnicodeString();
-	
-	if (verisonID != VERSION_IPHONE)
-	{
-		NDDirector::DefaultDirector()->ReplaceScene(InitMenuScene::Scene(), true);
-		return;
-	}
-	
-	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
-	
-	if (strVersion == GetSoftVersion())
-	{
-		if (scene && scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading)))
-			((GameSceneLoading*)scene)->CheckVersionSucess();
-		else
-			NDDirector::DefaultDirector()->ReplaceScene(InitMenuScene::Scene(), true);
-		return;
-	}
-	
-	if (scene && scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading)))
-	{
-		((GameSceneLoading*)scene)->UpdateTitle("检测版本更新...");
-		CheckVersion();
-	}
-	else
-		NDDirector::DefaultDirector()->ReplaceScene(InitMenuScene::Scene(), true);
-	
-}
-*/
+ void NDBeforeGameMgr::processMPFVersionMsg(NDTransData& data)
+ {
+ int verisonID = data.ReadByte();
+ std::string strVersion = data.ReadUnicodeString();
+ 
+ if (verisonID != VERSION_IPHONE)
+ {
+ NDDirector::DefaultDirector()->ReplaceScene(InitMenuScene::Scene(), true);
+ return;
+ }
+ 
+ NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
+ 
+ if (strVersion == GetSoftVersion())
+ {
+ if (scene && scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading)))
+ ((GameSceneLoading*)scene)->CheckVersionSucess();
+ else
+ NDDirector::DefaultDirector()->ReplaceScene(InitMenuScene::Scene(), true);
+ return;
+ }
+ 
+ if (scene && scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading)))
+ {
+ ((GameSceneLoading*)scene)->UpdateTitle("检测版本更新...");
+ CheckVersion();
+ }
+ else
+ NDDirector::DefaultDirector()->ReplaceScene(InitMenuScene::Scene(), true);
+ 
+ }
+ */
 
 bool NDBeforeGameMgr::CanFastLogin()
 {
 	NDDataPersist loginData;
-	string lastAccountName = loginData.GetData(kLoginData, &kLastAccountName);
-	string lastAccountPwd = loginData.GetData(kLoginData, &kLastAccountPwd);
-	string lastServerIP = loginData.GetData(kLoginData, &kLastServerIP);
-	string lastServerPort = loginData.GetData(kLoginData, &kLastServerPort);
-	string lastServerName = loginData.GetData(kLoginData, &kLastServerName);
-	string lastServerSendName = loginData.GetData(kLoginData, &kLastServerSendName);
-	
-	if (!lastServerIP.empty() &&
-	    !lastServerPort.empty() &&
-	    !lastAccountPwd.empty() &&
-	    !lastAccountName.empty() &&
-	    !lastServerName.empty() &&
-	    !lastServerSendName.empty()) {
-		
-		this->SetUserName(lastAccountName);
-		this->SetPassWord(lastAccountPwd);
-		this->SetServerInfo(lastServerIP.c_str(), lastServerName.c_str(), lastServerSendName.c_str(), atoi(lastServerPort.c_str()));
-		
+	string lastAccountName = loginData.GetData(kLoginData, kLastAccountName);
+	string lastAccountPwd = loginData.GetData(kLoginData, kLastAccountPwd);
+	string lastServerIP = loginData.GetData(kLoginData, kLastServerIP);
+	string lastServerPort = loginData.GetData(kLoginData, kLastServerPort);
+	string lastServerName = loginData.GetData(kLoginData, kLastServerName);
+	string lastServerSendName = loginData.GetData(kLoginData,
+			kLastServerSendName);
+
+	if (!lastServerIP.empty() && !lastServerPort.empty()
+			&& !lastAccountPwd.empty() && !lastAccountName.empty()
+			&& !lastServerName.empty() && !lastServerSendName.empty())
+	{
+
+		SetUserName(lastAccountName);
+		SetPassWord(lastAccountPwd);
+		SetServerInfo(lastServerIP.c_str(), lastServerName.c_str(),
+				lastServerSendName.c_str(), atoi(lastServerPort.c_str()));
+
 		return true;
 	}
-	
+
 	return false;
 }
 
 void NDBeforeGameMgr::OnDialogClose(NDUIDialog* dialog)
 {
-	if (dialog == m_dlgWait) 
+	if (dialog == m_dlgWait)
 	{
 		if (!(IsInRegisterState() || IsInAccountListState()))
 		{
 //			NDDirector::DefaultDirector()->ReplaceScene(LoginScene::Scene());
-		}else 
+		}
+		else
 		{
 // 			NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 // 			if (scene->IsKindOfClass(RUNTIME_CLASS(LoginScene)))
@@ -1120,9 +1155,10 @@ void NDBeforeGameMgr::OnDialogClose(NDUIDialog* dialog)
 	}
 }
 
-void NDBeforeGameMgr::OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex)
+void NDBeforeGameMgr::OnDialogButtonClick(NDUIDialog* dialog,
+		unsigned int buttonIndex)
 {
-	if (dialog == m_dlgWait) 
+	if (dialog == m_dlgWait)
 	{
 // 		NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 // 		if (scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading)))
@@ -1131,23 +1167,23 @@ void NDBeforeGameMgr::OnDialogButtonClick(NDUIDialog* dialog, unsigned int butto
 // 		}
 // 		dialog->Close();
 	}
-	else if (dialog->GetTag() == TAG_DLG_UPDATE_ERR) 
+	else if (dialog->GetTag() == TAG_DLG_UPDATE_ERR)
 	{
 		exit(0);
 	}
-	else if (dialog->GetTag() == TAG_DLG_UPDATE) 
+	else if (dialog->GetTag() == TAG_DLG_UPDATE)
 	{
-		if (buttonIndex == 0) 
+		if (buttonIndex == 0)
 		{
 			/*
-			char buff[100] = {0x00};
-			sprintf(buff, "最新版本：%s", m_latestVersion.c_str());
-			
-			UpdateScene* scene = new UpdateScene();
-			scene->Initialization(m_fileUrl.c_str(), buff);
-			NDDirector::DefaultDirector()->PushScene(scene);
-			*/
-			
+			 char buff[100] = {0x00};
+			 sprintf(buff, "最新版本：%s", m_latestVersion.c_str());
+			 
+			 UpdateScene* scene = new UpdateScene();
+			 scene->Initialization(m_fileUrl.c_str(), buff);
+			 NDDirector::DefaultDirector()->PushScene(scene);
+			 */
+
 // 			bool res = [[UIApplication sharedApplication] openURL:
 // 											 [NSURL URLWithString:
 // 								   [NSString stringWithUTF8String:m_fileUrl.c_str()]]];
@@ -1160,7 +1196,7 @@ void NDBeforeGameMgr::OnDialogButtonClick(NDUIDialog* dialog, unsigned int butto
 // 				dlg->Show(NDCommonCString("tip"), NDCommonCString("UpdateErr"), NULL, NULL);
 // 			}
 		}
-		else 
+		else
 		{
 			exit(0);
 		}
@@ -1170,12 +1206,12 @@ void NDBeforeGameMgr::OnDialogButtonClick(NDUIDialog* dialog, unsigned int butto
 void NDBeforeGameMgr::OnTimer(OBJID tag)
 {
 	/*
-	if (tag == TIMER_CHECK_VERSION_TAG && m_timerCheckVersion) 
-	{
-		m_timerCheckVersion->KillTimer(this, TIMER_CHECK_VERSION_TAG);
-		m_bNeedCheck = true;
-	}
-	*/
+	 if (tag == TIMER_CHECK_VERSION_TAG && m_timerCheckVersion) 
+	 {
+	 m_timerCheckVersion->KillTimer(this, TIMER_CHECK_VERSION_TAG);
+	 m_bNeedCheck = true;
+	 }
+	 */
 }
 //
 //void NDBeforeGameMgr::OnRecvData(id http, char* data, unsigned int len)
@@ -1190,8 +1226,8 @@ void NDBeforeGameMgr::OnTimer(OBJID tag)
 //		cpLog(LOG_DEBUG, "xml return success");
 //		m_fileUrl = [[reader getStringWithPath:[NSString stringWithUTF8String:"/result/data/filelist/file"] andIndexs:NULL size:0] UTF8String];
 //		
-//		NSString* latestVer = [reader getStringWithPath:[NSString stringWithUTF8String:"/result/data/version"] andIndexs:NULL size:0];
-//		NSString* localVersion = [NSString stringWithUTF8String:GetSoftVersion().c_str()];
+//		NSString latestVer = [reader getStringWithPath:[NSString stringWithUTF8String:"/result/data/version"] andIndexs:NULL size:0];
+//		NSString localVersion = [NSString stringWithUTF8String:GetSoftVersion().c_str()];
 //		if ([latestVer isEqualToString:localVersion]) 
 //			res = true;
 //		else 
@@ -1295,13 +1331,14 @@ void NDBeforeGameMgr::CheckVersion()
 
 bool NDBeforeGameMgr::IsCMNet()
 {
-	return m_serverIP == AREA_IP_1; 
+	return m_serverIP == AREA_IP_1;
 }
 
 bool NDBeforeGameMgr::SwitchToCMNet()
 {
-	if (IsCMNet()) return true;
-		
+	if (IsCMNet())
+		return true;
+
 	return ConnectServer(AREA_IP_1, AREA_PORT_1, false, true);
 }
 
@@ -1309,7 +1346,7 @@ void NDBeforeGameMgr::Login()
 {
 	generateClientKey();
 	sendClientKey();
-	
+
 	// 处理nd sdk login
 	doNDSdkLogin();
 }
@@ -1355,38 +1392,40 @@ void NDBeforeGameMgr::doNDSdkLogin()
 
 bool NDBeforeGameMgr::SynConnect()
 {
-	if (m_SynSocket.Connected()) 
+	if (m_SynSocket.Connected())
 	{
 		return false;
 	}
 	/*
-	//..test
-	if (!m_SynSocket.Connect("192.168.55.58", 8888, true))
-	{
-		return false;
-	}
-	
-	return true;
-	//.. test end
-	*/
-	
+	 //..test
+	 if (!m_SynSocket.Connect("192.168.55.58", 8888, true))
+	 {
+	 return false;
+	 }
+	 
+	 return true;
+	 //.. test end
+	 */
+
 	std::string server;
 	int iPort;
-	
+
 	NDDataPersist loginData;
-	std::string strLinkType(loginData.GetData(kLoginData, &kLinkType));
-	
-	if (strLinkType == "i_dd") {
+	std::string strLinkType(loginData.GetData(kLoginData, kLinkType));
+
+	if (strLinkType == "i_dd")
+	{
 		server = "121.207.255.120";
 		iPort = 5877;
-	}else 
+	}
+	else
 	{
 		server = AREA_IP_1;
 		iPort = AREA_PORT_1;
 	}
-	
+
 	// 套接字初始化,并连接
-	
+
 	if (!m_SynSocket.Connect(server.c_str(), iPort, true))
 	{
 		if (!m_SynSocket.Connect(AREA_IP_2, AREA_PORT_2, true))
@@ -1394,133 +1433,139 @@ bool NDBeforeGameMgr::SynConnect()
 			return false;
 		}
 	}
-	
+
 	return true;
 }
 
 bool NDBeforeGameMgr::SynSEND_DATA(NDTransData& data)
 {
-	if (!m_SynSocket.Connected()) 
+	if (!m_SynSocket.Connected())
 	{
 		return false;
 	}
-	
+
 	m_SynSocket.Send(&data);
-	
+
 	return true;
 }
 
 bool NDBeforeGameMgr::SynProcessData()
 {
-	if (!m_SynSocket.Connected()) 
+	if (!m_SynSocket.Connected())
 	{
 		return false;
 	}
-	
+
 	int iMsgLen = 0;
-	
-	do 
+
+	do
 	{
 		// 先读4个字节
-		unsigned char buf[4]={0};
+		unsigned char buf[4] =
+		{ 0 };
 		unsigned char* ptr = buf;
 		int iLen = 0;
-		if ( -1 == m_SynSocket.Receive(ptr, iLen, 4) || iLen != 4 )
+		if (-1 == m_SynSocket.Receive(ptr, iLen, 4) || iLen != 4)
 		{
 			NDLog("获取服务器列表读消息头出错");
 			SynConnectClose();
 			return false;
 		}
-		
+
 		// 校验
-		if ((unsigned char)0xff == buf[0] && (unsigned char)0xfe == buf[1]) 
+		if ((unsigned char) 0xff == buf[0] && (unsigned char) 0xfe == buf[1])
 		{
-		}else 
+		}
+		else
 		{
 			// 校验不对,扔吧
 			NDLog("获取服务器列表校验不对");
 			SynConnectClose();
 			return false;
 		}
-		
-		iMsgLen  = (buf[2] & 0xff) + ((buf[3] & 0xff) << 8);
-		
-		if (iMsgLen < 0 || iMsgLen >= 1046) 
+
+		iMsgLen = (buf[2] & 0xff) + ((buf[3] & 0xff) << 8);
+
+		if (iMsgLen < 0 || iMsgLen >= 1046)
 		{
 			NDLog("获取服务器列表消息长度不对");
 			SynConnectClose();
 			return false;
 		}
 	} while (0);
-	
-	do 
+
+	do
 	{
-		unsigned char buf[1046]={0};
+		unsigned char buf[1046] =
+		{ 0 };
 		unsigned char* ptr = buf;
-		int iLen=0;
-		if ( -1 == m_SynSocket.Receive(ptr, iLen, iMsgLen-4) || iLen != iMsgLen-4 )
+		int iLen = 0;
+		if (-1 == m_SynSocket.Receive(ptr, iLen, iMsgLen - 4)
+				|| iLen != iMsgLen - 4)
 		{
 			NDLog("获取服务器列表读消息体出错");
 			SynConnectClose();
 			return false;
 		}
-		
 
-		
 		//处理消息了
 		NDTransData recvdata;
-		recvdata.Write(buf, iMsgLen-4);
-		int nMsgID  = recvdata.ReadShort();
-		NDNetMsgPoolObj.Process(nMsgID, &recvdata, iMsgLen-6);
-		
+		recvdata.Write(buf, iMsgLen - 4);
+		int nMsgID = recvdata.ReadShort();
+		NDNetMsgPoolObj.Process(nMsgID, &recvdata, iMsgLen - 6);
+
 	} while (0);
-	
+
 	return true;
 }
 
 void NDBeforeGameMgr::SynConnectClose()
 {
-	if (m_SynSocket.Connected()) 
+	if (m_SynSocket.Connected())
 	{
 		return;
 	}
-	
+
 	m_SynSocket.Close();
 }
 
 void NDBeforeGameMgr::VerifyVesion()
 {
 	NDTransData bao(_MSG_MPF_VERSION);
-	
+
 	bao.WriteShort(VERSION_IPHONE);
-	
+
 	bao.WriteUnicodeString(GetSoftVersion());
-	
+
 	SEND_DATA(bao);
 }
 
 ///////////////////////////////////////////////////////////////
-bool 
-NDBeforeGameMgr::SwichKeyToServer(const char* pszIp, int nPort,const char* pszAccountName,const char* pszPwd,const char* pszServerName)
+bool NDBeforeGameMgr::SwichKeyToServer(const char* pszIp, int nPort,
+		const char* pszAccountName, const char* pszPwd,
+		const char* pszServerName)
 {
-    if(strlen(pszIp) < 6 || pszAccountName[0]==0x00 || pszServerName[0]==0x00){
-        return false;
-    }
-    
+	if (strlen(pszIp) < 6 || pszAccountName[0] == 0x00
+			|| pszServerName[0] == 0x00)
+	{
+		return false;
+	}
+
 	//**chh 2012-08-27 启动线程时要先停止其它线程 **//
 	NDDataTransThread::DefaultThread()->Stop();
 	NDDataTransThread::ResetDefaultThread();
 
-    NDDataTransThread::DefaultThread()->Start(pszIp, nPort);
-	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
+	NDDataTransThread::DefaultThread()->Start(pszIp, nPort);
+	if (NDDataTransThread::DefaultThread()->GetThreadStatus()
+			!= ThreadStatusRunning)
 	{
 		return false;
 	}
-    
-    this->SetUserName(pszAccountName);
-    this->SetServerInfo(pszIp,pszServerName,pszServerName,nPort);
-    this->SetPassWord(pszPwd);
-    //this->Login();
+
+	SetUserName(pszAccountName);
+	SetServerInfo(pszIp, pszServerName, pszServerName, nPort);
+	SetPassWord(pszPwd);
+	//Login();
 	generateClientKey();
 	int idAccount = atoi(pszAccountName);
 	sendMsgConnect(idAccount);
@@ -1528,11 +1573,11 @@ NDBeforeGameMgr::SwichKeyToServer(const char* pszIp, int nPort,const char* pszAc
 	DWORD dwAuthorize = 0;
 	DWORD dwData = dwAuthorize ^ (nSalt % idAccount);
 	dwAuthorize = dwData;
-	DWORD dwEncryptCode = (idAccount+dwAuthorize)^0x4321;
+	DWORD dwEncryptCode = (idAccount + dwAuthorize) ^ 0x4321;
 	dwAuthorize = dwAuthorize ^ dwEncryptCode;
 	NDDataTransThread::DefaultThread()->ChangeCode(dwAuthorize);
 
-    //登陆成功纪录登陆信息
+	//登陆成功纪录登陆信息
 //     NDDataPersist loginData;
 //     loginData.SetData(kLoginData, &kLastAccountName, username.c_str());
 //     loginData.SetData(kLoginData, &kLastAccountPwd, password.c_str());
@@ -1540,97 +1585,104 @@ NDBeforeGameMgr::SwichKeyToServer(const char* pszIp, int nPort,const char* pszAc
 //     loginData.SetData(kLoginData, &kLastServerIP, NDBeforeGameMgrObj.GetServerIP().c_str());
 //     loginData.SetData(kLoginData, &kLastServerName, NDBeforeGameMgrObj.GetServerDisplayName().c_str());	
 //     loginData.SetData(kLoginData, &kLastServerSendName, NDBeforeGameMgrObj.GetServerName().c_str());	
-// 	NSString* strPort = NSString::stringWithFormat("%d", NDBeforeGameMgrObj.GetServerPort());
+// 	NSString strPort = CCString::stringWithFormat("%d", NDBeforeGameMgrObj.GetServerPort());
 //     loginData.SetData(kLoginData, &kLastServerPort, strPort->UTF8String());
 //     loginData.SaveLoginData();
 //     loginData.SaveAccountList();
-    return true;
+	return true;
 }
 
 ////////////////////////////////////////////////////////////
-void 
-NDBeforeGameMgr::SetRole(unsigned long ulLookFace, const char* pszRoleName, int nProfession)
+void NDBeforeGameMgr::SetRole(unsigned long ulLookFace, const char* pszRoleName,
+		int nProfession)
 {
-    m_ulLookFace = ulLookFace;
-    m_strRoleName= pszRoleName;
-    m_nProfession= nProfession;
+	m_ulLookFace = ulLookFace;
+	m_strRoleName = pszRoleName;
+	m_nProfession = nProfession;
 }
 
 ////////////////////////////////////////////////////////////
-void
-NDBeforeGameMgr::CreateRole(const char* pszName, Byte nProfession, int nLookFace, const char* pszAccountName)
+void NDBeforeGameMgr::CreateRole(const char* pszName, Byte nProfession,
+		int nLookFace, const char* pszAccountName)
 {
-    // 发送创建角色消息
-    Byte camp = 0;
-    Byte sex = 1;
-    Byte model = 1;
-    Byte hairColor = 1;
-    Byte career = nProfession;
-    int dwLook =nLookFace;
-    NDTransData data(MB_LOGINSYSTEM_CREATE_NEWBIE);
-    data << dwLook // 人物模型 4个字节
-    << career // 职业 1个字节 // 1,2,3
-    << camp; // 阵营 1个字节 // 1,2
-    
-    data.WriteUnicodeString(pszName);
-    
-    // 增加帐号名、手机机型、渠道号
-    data.WriteUnicodeString(pszAccountName);
-    data.WriteUnicodeString(platformString());
-    data.WriteUnicodeString(loadPackInfo(STRPARAM));
-    
-    NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
+	// 发送创建角色消息
+	Byte camp = 0;
+	Byte sex = 1;
+	Byte model = 1;
+	Byte hairColor = 1;
+	Byte career = nProfession;
+	int dwLook = nLookFace;
+	NDTransData data(MB_LOGINSYSTEM_CREATE_NEWBIE);
+	data << dwLook // 人物模型 4个字节
+			<< career // 职业 1个字节 // 1,2,3
+			<< camp; // 阵营 1个字节 // 1,2
+
+	data.WriteUnicodeString(pszName);
+
+	// 增加帐号名、手机机型、渠道号
+	data.WriteUnicodeString(pszAccountName);
+	data.WriteUnicodeString(platformString());
+	data.WriteUnicodeString(loadPackInfo(STRPARAM));
+
+	NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
 }
 
 ///////////////////////////////////////////////////////////////
-bool 
-NDBeforeGameMgr::LoginByLastData()
+bool NDBeforeGameMgr::LoginByLastData()
 {
-    NDDataPersist loginData;
-    return  this->SwichKeyToServer(loginData.GetData(kLoginData,&kLastServerIP), ::atoi(loginData.GetData(kLoginData,&kLastServerPort)),loginData.GetData(kLoginData,&kLastAccountName),loginData.GetData(kLoginData,&kLastAccountPwd)
-        ,loginData.GetData(kLoginData,&kLastServerName));
+	NDDataPersist loginData;
+	return SwichKeyToServer(loginData.GetData(kLoginData, kLastServerIP),
+			::atoi(loginData.GetData(kLoginData, kLastServerPort)),
+			loginData.GetData(kLoginData, kLastAccountName),
+			loginData.GetData(kLoginData, kLastAccountPwd),
+			loginData.GetData(kLoginData, kLastServerName));
 }
 
 /////////////////////////////////////////////////////////////
-int  
-NDBeforeGameMgr::GetAccountListNum(void)
+int NDBeforeGameMgr::GetAccountListNum(void)
 {
-    NDDataPersist loginData;
-    VEC_ACCOUNT setAccount;
-    loginData.GetAccount(setAccount);
-    return setAccount.size();
+	NDDataPersist loginData;
+	VEC_ACCOUNT setAccount;
+	loginData.GetAccount(setAccount);
+	return setAccount.size();
 }
 
 ////////////////////////////////////////////////////////////
-const char* 
+const char*
 NDBeforeGameMgr::GetRecAccountNameByIdx(int idx)
 {
-    NDDataPersist loginData;
-    VEC_ACCOUNT vAccount;
-    loginData.GetAccount(vAccount);
-    int nIdx = 0;
-    for (VEC_ACCOUNT::reverse_iterator it = vAccount.rbegin(); it != vAccount.rend(); it++,nIdx++) {
-        if(nIdx == idx){
-            return (*it).first.c_str();
-        }
+	NDDataPersist loginData;
+	VEC_ACCOUNT vAccount;
+	loginData.GetAccount(vAccount);
+	int nIdx = 0;
+	for (VEC_ACCOUNT::reverse_iterator it = vAccount.rbegin();
+			it != vAccount.rend(); it++, nIdx++)
+	{
+		if (nIdx == idx)
+		{
+			return (*it).first.c_str();
+		}
 	}
-    return NULL;
+	return NULL;
 }
 
 ////////////////////////////////////////////////////////////
-const char* 
+const char*
 NDBeforeGameMgr::GetRecAccountPwdByIdx(int idx)
 {
-    VEC_ACCOUNT vAccount;
-    NDDataPersist loginData;
-    loginData.GetAccount(vAccount);
-    int nIdx = 0;
-    for (VEC_ACCOUNT::reverse_iterator it = vAccount.rbegin(); it != vAccount.rend(); it++,nIdx++) {
-        if(nIdx == idx){
-            return (*it).second.c_str();
-        }
+	VEC_ACCOUNT vAccount;
+	NDDataPersist loginData;
+	loginData.GetAccount(vAccount);
+	int nIdx = 0;
+	for (VEC_ACCOUNT::reverse_iterator it = vAccount.rbegin();
+			it != vAccount.rend(); it++, nIdx++)
+	{
+		if (nIdx == idx)
+		{
+			return (*it).second.c_str();
+		}
 	}
-    return NULL;
+	return NULL;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -1639,5 +1691,5 @@ NDBeforeGameMgr::GetRecAccountPwdByIdx(int idx)
 // 根据seed值，产生一个salt值，直接采用vc crt库的srand和rand算法
 int NDEngine::GetEncryptSalt(unsigned int seed)
 {
-	return( ((seed * 214013L + 2531011L) >> 16) & 0x7fff );
+	return (((seed * 214013L + 2531011L) >> 16) & 0x7fff);
 }

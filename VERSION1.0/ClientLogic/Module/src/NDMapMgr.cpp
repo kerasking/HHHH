@@ -31,6 +31,7 @@
 //#include "GameUIRequest.h"			///< ÐèÒªºÏ²¢ºó
 #include "AutoPathTip.h"
 #include "NDDataTransThread.h"
+#include "GameSceneLoading.h"
 
 NS_NDENGINE_BGN
 
@@ -157,420 +158,416 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 {
 	switch (usMsgID)
 	{
-	case _MSG_REQUEST_ACCESS_TOKEN_RET:
-	{
-		ProcessTempCredential(*pkData);
-	}
-		break;
-	case _MSG_ROADBLOCK:
-	{
-		processRoadBlock(*pkData);
-	}
-		break;
-	case _MSG_QUERY_PETCKILL:
-	{
-		processQueryPetSkill(*pkData);
-	}
-		break;
-	case _MSG_CHARGE_GIFT_INFO:
-	{
-		//RechargeUI::ProcessGiftInfo(*kData); ///< ÒÀÀµÌÀ×ÔÇÚµÄ NewRecharge ¹ùºÆ
-	}
-		break;
-	case _MSG_KICK_OUT_TIP:
-	{
-		processKickOutTip(*pkData);
-	}
-		break;
-	case 3003: //_MSG_RESPOND_TREASURE_HUNT_PR0B: ´ËºêÕÒ²»µ½£¿£¿£¿£¿¹ùºÆ
-	{
-		processRespondTreasureHuntProb(*pkData);
-	}
-		break;
-	case 3005: //_MSG_RESPOND_TREASURE_HUNT_INFO:	´ËºêÕÒ²»µ½£¿£¿£¿£¿¹ùºÆ
-	{
-		processRespondTreasureHuntInfo(*pkData);
-	}
-		break;
-	case _MSG_SHOW_TREASURE_HUNT_AWARD:
-	{
-		processShowTreasureHuntAward(*pkData);
-	}
-		break;
-	case _MSG_MARRIAGE:
-	{
-		processMarriage(*pkData);
-	}
-		break;
-	case 2562:	///< ÎªÊ²Ã´_MSG_PORTALÕÒ²»µ½
-	{
-		processPortal(*pkData);
-	}
-		break;
-	case _MSG_DELETEROLE:
-	{
-		processDeleteRole(*pkData);
-	}
-		break;
-	case _MSG_ACTIVITY:
-	{
-		processActivity(*pkData);
-	}
-		break;
-	case _MSG_CLIENT_VERSION:
-	{
-		processVersionMsg(*pkData);
-	}
-		break;
-	case MB_MSG_RECHARGE_RETURN:
-	{
-		processRechargeReturn(*pkData);
-	}
-		break;
-	case MB_MSG_CHANGE_PASS:
-	{
-		CloseProgressBar;
-		GlobalShowDlg(NDCommonCString("SysTip"), pkData->ReadUnicodeString());
-	}
-		break;
-	case _MSG_SEE:
-	{
-		processSee(*pkData);
-	}
-		break;
-	case _MSG_SYSTEM_DIALOG:
-	{
-		m_strNoteTitle = pkData->ReadUnicodeString();
-		m_strNoteContent = pkData->ReadUnicodeString();
-		GlobalDialogObj.Show(NULL, m_strNoteTitle.c_str(),
-				m_strNoteContent.c_str(), NULL, NULL);
-	}
-		break;
-	case _MSG_TALK:
-	{
-		processTalk(*pkData);
-	}
-		break;
-	case _MSG_GAME_QUIT:
-	{
-		processGameQuit(pkData, nLength);
-	}
-		break;
-	case MB_MSG_RECHARGE:
-	{
-		processReCharge(*pkData);
-	}
-		break;
-	case _MSG_PLAYERLEVELUP:
-	{
-		processPlayerLevelUp(*pkData);
-	}
-		break;
-	case _MSG_COLLECTION:
-	{
-		processCollection(*pkData);
-	}
-		break;
-	case _MSG_AUCTION:
-	{
-		///< ÒÀÀµÕÅµÏ AuctionUILayer ¹ùºÆ
-		//AuctionUILayer::processAuction(*kData);
-	}
-		break;
-	case _MSG_AUCTIONINFO:
-	{
-		///< ÒÀÀµÕÅµÏ AuctionUILayer ¹ùºÆ
-		//AuctionUILayer::processAuctionInfo(*pkData);
-	}
-		break;
-	case _MSG_PETINFO:
-	{
-		processPetInfo(pkData, nLength);
-	}
-		break;
-	case _MSG_COMPETITION:
-	{
-		processCompetition(*pkData);
-	}
-		break;
-	case _MSG_KICK_BACK:
-	{
-		processKickBack(pkData, nLength);
-	}
-		break;
-	case MB_MSG_DISAPPEAR:
-	{
-		processDisappear(pkData, nLength);
-	}
-		break;
-	case _MSG_CHGPOINT:
-	{
-		processChgPoint(pkData, nLength);
-	}
-		break;
-	case _MSG_REPUTE:
-	{
-		NDPlayer& kRole = NDPlayer::defaultHero();
-		kRole.m_nSWCountry = pkData->ReadInt();
-		kRole.m_nSWCamp = pkData->ReadInt();
-		kRole.m_nHonour = pkData->ReadInt();
-		kRole.m_nExpendHonour = pkData->ReadInt();
-		kRole.m_strRank = pkData->ReadUnicodeString();
-
-		updateTaskRepData(kRole.m_nSWCamp, false);
-		updateTaskHrData(kRole.m_nHonour, false);
-	}
-		break;
-	case _MSG_NPC_STATUS:
-	{
-		processNpcStatus(pkData, nLength);
-	}
-		break;
-	case _MSG_MONSTER_INFO_LIST:
-	{
-		processMonsterInfo(pkData, nLength);
-	}
-		break;
-	case _MSG_COMMON_LIST:
-	{
-		processMsgCommonList(*pkData);
-	}
-		break;
-	case _MSG_COMMON_LIST_RECORD:
-	{
-		processMsgCommonListRecord(*pkData);
-	}
-		break;
-	case _MSG_CHG_PET_POINT:
-	{
-		int nBtAnswer = pkData->ReadByte();
-	}
-		break;
-	case _MSG_PLAYER:
-	{
-		processPlayer(pkData, nLength);
-	}
-		break;
-	case _MSG_LOGIN_SUC:
-	{
-		ProcessLoginSuc(*pkData);
-	}
-		break;
-	case _MSG_PLAYER_EXT:
-	{
-		processPlayerExt(pkData, nLength);
-	}
-		break;
-	case _MSG_ITEM_TYPE_INFO:
-	{
-		processItemTypeInfo(*pkData);
-	}
-		break;
-	case _MSG_NPC_TALK:
-	{
-		processNpcTalk(*pkData);
-	}
-		break;
-	case _MSG_WALK_TO:
-	{
-		processWalkTo(*pkData);
-	}
-		break;
-	case _MSG_NPCINFO_LIST:
-	{
-		processNPCInfoList(pkData, nLength);
-	}
-		break;
-	case _MSG_ROOM:
-	{
-		processChangeRoom(pkData, nLength);
-	}
-		break;
-	case _MSG_WALK:
-	{
-		processWalk(pkData, nLength);
-	}
-		break;
-	case _MSG_TASKINFO:
-	case _MSG_DOING_TASK_LIST:
-	case _MSG_QUERY_TASK_LIST:
-	case _MSG_TASK_ITEM_OPT:
-	case _MSG_QUERY_TASK_LIST_EX:
-	{
-		processTask(usMsgID, pkData);
-	}
-		break;
-	case _MSG_NPCINFO:
-	{
-		processNPCInfo(*pkData);
-	}
-		break;
-	case _MSG_REHEARSE:
-	{
-		processRehearse(*pkData);
-	}
-		break;
-	case _MSG_GOODFRIEND:
-	{
-		processGoodFriend(*pkData);
-	}
-		break;
-	case _MSG_TUTOR:
-	{
-		///< ÒÀÀµÕÅµÏµÄTutorUILayer ¹ùºÆ
-		//TutorUILayer::processMsgTutor(*kData);
-	}
-		break;
-	case _MSG_REG_TUTOR_INFO:
-	{
-		///< ÒÀÀµÕÅµÏµÄMasterUILayer ¹ùºÆ
-		//MasterUILayer::refreshScroll(*kData);
-	}
-		break;
-	case _MSG_TUTOR_INFO:
-	{
-		///< ÒÀÀµÕÅµÏµÄTutorUILayer ¹ùºÆ
-		//TutorUILayer::processTutorList(*kData);
-	}
-		break;
-	case _MSG_USER_POS:
-	{
-		///< ÒÀÀµÕÅµÏµÄTutorUILayer ¹ùºÆ
-		//TutorUILayer::processUserPos(*kData);
-	}
-		break;
-	case _MSG_CHG_MAP_FAIL:
-	{
-		NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
-
-		///< ÒÀÀµÌÀ×ÔÇÚµÄGameSceneLoading ¹ùºÆ
-// 		if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
-// 		{
-// 			NDDirector::DefaultDirector()->PopScene();
-// 		}
-	}
-		break;
-	case _MSG_USERINFO_SEE:
-	{
-		processUserInfoSee(*pkData);
-	}
-		break;
-	case _MSG_POS_TEXT:
-	{
-		GameScene* pkGameScene = GameScene::GetCurGameScene();
-
-		if (pkGameScene)
+		case _MSG_REQUEST_ACCESS_TOKEN_RET:
 		{
-			pkGameScene->processMsgPosText(*pkData);
+			ProcessTempCredential(*pkData);
 		}
-	}
-		break;
-	case _MSG_FORMULA:
-	{
-		processFormula(*pkData);
-	}
-		break;
-	case _MSG_BOOTH:
-	{
-		//VendorUILayer::processMsgBooth(*kData);	///< ÒÀÀµÕÅµÏµÄVendorUILayer ¹ùºÆ
-	}
-		break;
-	case _MSG_BOOTH_GOODS:
-	{
-		//VendorBuyUILayer::Show(*kData);		///< ÒÀÀµÕÅµÏµÄVendorBuyUILayer ¹ùºÆ
-	}
-		break;
-	case _MSG_QUERY_REG_SYN_LIST:
-	{
-		//SyndicateRegListUILayer::refreshScroll(*kData); ///< Õâ¸ö²»ÖªµÀÊÇË­µÄ ¹ùºÆ
-	}
-		break;
-	case _MSG_SYNDICATE:
-	{
-		processSyndicate(*pkData);
-	}
-		break;
-	case _MSG_SYN_INFO:
-	{
-		int nRank = pkData->ReadByte(); // ¸öÈËÔÚ°ïÅÉÖÐµÄÖ°Î»
-		string strSynName = pkData->ReadUnicodeString(); // °ïÅÉÃû×Ö
-		NDPlayer& kRole = NDPlayer::defaultHero();
-		kRole.setSynRank(nRank);
-		kRole.m_strSynName = (strSynName);
-		break;
-	}
-		break;
-	case _MSG_SYN_ANNOUNCE:
-	{
-		/***
-		 * ÒÀÀµÕÅµÏµÄSynInfoUILayer
-		 * ¹ùºÆ
-		 */
-		//SynInfoUILayer* synInfo = SynInfoUILayer::GetCurInstance();
-		//if (synInfo) {
-		//	synInfo->processSynBraodcast(*kData);
-		//}
-	}
-		break;
-	case _MSG_APPLY_LIST:
-	{
-		/***
-		 * ÒÀÀµÕÅµÏµÄ SynApproveUILayer
-		 * ¹ùºÆ
-		 */
-		//SynApproveUILayer* approve = SynApproveUILayer::GetCurInstance();
-		//if (approve) {
-		//	approve->processApproveList(*kData);
-		//}
-	}
-		break;
-	case _MSG_DIGOUT:
-	{
-		processDigout(*pkData);
-	}
-		break;
-	case _MSG_MBR_LIST:
-	{
-		/***
-		 * ÒÀÀµÕÅµÏµÄ SynMbrListUILayer
-		 * ¹ùºÆ
-		 */
-		//SynMbrListUILayer* mbrList = SynMbrListUILayer::GetCurInstance();
-		//if (mbrList) {
-		//	mbrList->processMbrList(*kData);
-		//}
-	}
-		break;
-	case _MSG_TIP:
-	{
-		/***
-		 * ÒÀÀµÌÀ×ÔÇÚµÄGameSceneLoading ¹ùºÆ
-		 */
-// 			NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
-// 			if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
-// 			{
-// 				GameSceneLoading* pkGameSceneLoading = (GameSceneLoading*)pkScene;
-// 				pkGameSceneLoading->UpdateTitle(kData->ReadUnicodeString());
-// 			}
-	}
-		break;
-	case _MSG_NAME:
-	{
-		//showDialog(NDCommonCString("tip"), NDCommonCString("RenameSucc")); ///< ÒÀÀµshowDialog ¹ùºÆ
-	}
-		break;
-	case _MSG_NPC_POSITION:
-	{
-		processNpcPosition(*pkData);
-	}
-		break;
-	case _MSG_NPC:
-	{
-		processNPC(*pkData);
-	}
-		break;
-	default:
-		break;
+			break;
+		case _MSG_ROADBLOCK:
+		{
+			processRoadBlock(*pkData);
+		}
+			break;
+		case _MSG_QUERY_PETCKILL:
+		{
+			processQueryPetSkill(*pkData);
+		}
+			break;
+		case _MSG_CHARGE_GIFT_INFO:
+		{
+			//RechargeUI::ProcessGiftInfo(*kData); ///< ÒÀÀµÌÀ×ÔÇÚµÄ NewRecharge ¹ùºÆ
+		}
+			break;
+		case _MSG_KICK_OUT_TIP:
+		{
+			processKickOutTip(*pkData);
+		}
+			break;
+		case 3003: //_MSG_RESPOND_TREASURE_HUNT_PR0B: ´ËºêÕÒ²»µ½£¿£¿£¿£¿¹ùºÆ
+		{
+			processRespondTreasureHuntProb(*pkData);
+		}
+			break;
+		case 3005: //_MSG_RESPOND_TREASURE_HUNT_INFO:	´ËºêÕÒ²»µ½£¿£¿£¿£¿¹ùºÆ
+		{
+			processRespondTreasureHuntInfo(*pkData);
+		}
+			break;
+		case _MSG_SHOW_TREASURE_HUNT_AWARD:
+		{
+			processShowTreasureHuntAward(*pkData);
+		}
+			break;
+		case _MSG_MARRIAGE:
+		{
+			processMarriage(*pkData);
+		}
+			break;
+		case 2562:	///< ÎªÊ²Ã´_MSG_PORTALÕÒ²»µ½
+		{
+			processPortal(*pkData);
+		}
+			break;
+		case _MSG_DELETEROLE:
+		{
+			processDeleteRole(*pkData);
+		}
+			break;
+		case _MSG_ACTIVITY:
+		{
+			processActivity(*pkData);
+		}
+			break;
+		case _MSG_CLIENT_VERSION:
+		{
+			processVersionMsg(*pkData);
+		}
+			break;
+		case MB_MSG_RECHARGE_RETURN:
+		{
+			processRechargeReturn(*pkData);
+		}
+			break;
+		case MB_MSG_CHANGE_PASS:
+		{
+			CloseProgressBar;
+			GlobalShowDlg(NDCommonCString("SysTip"), pkData->ReadUnicodeString());
+		}
+			break;
+		case _MSG_SEE:
+		{
+			processSee(*pkData);
+		}
+			break;
+		case _MSG_SYSTEM_DIALOG:
+		{
+			m_strNoteTitle = pkData->ReadUnicodeString();
+			m_strNoteContent = pkData->ReadUnicodeString();
+			GlobalDialogObj.Show(NULL, m_strNoteTitle.c_str(),
+					m_strNoteContent.c_str(), NULL, NULL);
+		}
+			break;
+		case _MSG_TALK:
+		{
+			processTalk(*pkData);
+		}
+			break;
+		case _MSG_GAME_QUIT:
+		{
+			processGameQuit(pkData, nLength);
+		}
+			break;
+		case MB_MSG_RECHARGE:
+		{
+			processReCharge(*pkData);
+		}
+			break;
+		case _MSG_PLAYERLEVELUP:
+		{
+			processPlayerLevelUp(*pkData);
+		}
+			break;
+		case _MSG_COLLECTION:
+		{
+			processCollection(*pkData);
+		}
+			break;
+		case _MSG_AUCTION:
+		{
+			///< ÒÀÀµÕÅµÏ AuctionUILayer ¹ùºÆ
+			//AuctionUILayer::processAuction(*kData);
+		}
+			break;
+		case _MSG_AUCTIONINFO:
+		{
+			///< ÒÀÀµÕÅµÏ AuctionUILayer ¹ùºÆ
+			//AuctionUILayer::processAuctionInfo(*pkData);
+		}
+			break;
+		case _MSG_PETINFO:
+		{
+			processPetInfo(pkData, nLength);
+		}
+			break;
+		case _MSG_COMPETITION:
+		{
+			processCompetition(*pkData);
+		}
+			break;
+		case _MSG_KICK_BACK:
+		{
+			processKickBack(pkData, nLength);
+		}
+			break;
+		case MB_MSG_DISAPPEAR:
+		{
+			processDisappear(pkData, nLength);
+		}
+			break;
+		case _MSG_CHGPOINT:
+		{
+			processChgPoint(pkData, nLength);
+		}
+			break;
+		case _MSG_REPUTE:
+		{
+			NDPlayer& kRole = NDPlayer::defaultHero();
+			kRole.m_nSWCountry = pkData->ReadInt();
+			kRole.m_nSWCamp = pkData->ReadInt();
+			kRole.m_nHonour = pkData->ReadInt();
+			kRole.m_nExpendHonour = pkData->ReadInt();
+			kRole.m_strRank = pkData->ReadUnicodeString();
+
+			updateTaskRepData(kRole.m_nSWCamp, false);
+			updateTaskHrData(kRole.m_nHonour, false);
+		}
+			break;
+		case _MSG_NPC_STATUS:
+		{
+			processNpcStatus(pkData, nLength);
+		}
+			break;
+		case _MSG_MONSTER_INFO_LIST:
+		{
+			processMonsterInfo(pkData, nLength);
+		}
+			break;
+		case _MSG_COMMON_LIST:
+		{
+			processMsgCommonList(*pkData);
+		}
+			break;
+		case _MSG_COMMON_LIST_RECORD:
+		{
+			processMsgCommonListRecord(*pkData);
+		}
+			break;
+		case _MSG_CHG_PET_POINT:
+		{
+			int nBtAnswer = pkData->ReadByte();
+		}
+			break;
+		case _MSG_PLAYER:
+		{
+			processPlayer(pkData, nLength);
+		}
+			break;
+		case _MSG_LOGIN_SUC:
+		{
+			ProcessLoginSuc(*pkData);
+		}
+			break;
+		case _MSG_PLAYER_EXT:
+		{
+			processPlayerExt(pkData, nLength);
+		}
+			break;
+		case _MSG_ITEM_TYPE_INFO:
+		{
+			processItemTypeInfo(*pkData);
+		}
+			break;
+		case _MSG_NPC_TALK:
+		{
+			processNpcTalk(*pkData);
+		}
+			break;
+		case _MSG_WALK_TO:
+		{
+			processWalkTo(*pkData);
+		}
+			break;
+		case _MSG_NPCINFO_LIST:
+		{
+			processNPCInfoList(pkData, nLength);
+		}
+			break;
+		case _MSG_ROOM:
+		{
+			processChangeRoom(pkData, nLength);
+		}
+			break;
+		case _MSG_WALK:
+		{
+			processWalk(pkData, nLength);
+		}
+			break;
+		case _MSG_TASKINFO:
+		case _MSG_DOING_TASK_LIST:
+		case _MSG_QUERY_TASK_LIST:
+		case _MSG_TASK_ITEM_OPT:
+		case _MSG_QUERY_TASK_LIST_EX:
+		{
+			processTask(usMsgID, pkData);
+		}
+			break;
+		case _MSG_NPCINFO:
+		{
+			processNPCInfo(*pkData);
+		}
+			break;
+		case _MSG_REHEARSE:
+		{
+			processRehearse(*pkData);
+		}
+			break;
+		case _MSG_GOODFRIEND:
+		{
+			processGoodFriend(*pkData);
+		}
+			break;
+		case _MSG_TUTOR:
+		{
+			///< ÒÀÀµÕÅµÏµÄTutorUILayer ¹ùºÆ
+			//TutorUILayer::processMsgTutor(*kData);
+		}
+			break;
+		case _MSG_REG_TUTOR_INFO:
+		{
+			///< ÒÀÀµÕÅµÏµÄMasterUILayer ¹ùºÆ
+			//MasterUILayer::refreshScroll(*kData);
+		}
+			break;
+		case _MSG_TUTOR_INFO:
+		{
+			///< ÒÀÀµÕÅµÏµÄTutorUILayer ¹ùºÆ
+			//TutorUILayer::processTutorList(*kData);
+		}
+			break;
+		case _MSG_USER_POS:
+		{
+			///< ÒÀÀµÕÅµÏµÄTutorUILayer ¹ùºÆ
+			//TutorUILayer::processUserPos(*kData);
+		}
+			break;
+		case _MSG_CHG_MAP_FAIL:
+		{
+			NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
+
+			if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
+	 		{
+	 			NDDirector::DefaultDirector()->PopScene();
+	 		}
+		}
+			break;
+		case _MSG_USERINFO_SEE:
+		{
+			processUserInfoSee(*pkData);
+		}
+			break;
+		case _MSG_POS_TEXT:
+		{
+			GameScene* pkGameScene = GameScene::GetCurGameScene();
+
+			if (pkGameScene)
+			{
+				pkGameScene->processMsgPosText(*pkData);
+			}
+		}
+			break;
+		case _MSG_FORMULA:
+		{
+			processFormula(*pkData);
+		}
+			break;
+		case _MSG_BOOTH:
+		{
+			//VendorUILayer::processMsgBooth(*kData);	///< ÒÀÀµÕÅµÏµÄVendorUILayer ¹ùºÆ
+		}
+			break;
+		case _MSG_BOOTH_GOODS:
+		{
+			//VendorBuyUILayer::Show(*kData);		///< ÒÀÀµÕÅµÏµÄVendorBuyUILayer ¹ùºÆ
+		}
+			break;
+		case _MSG_QUERY_REG_SYN_LIST:
+		{
+			//SyndicateRegListUILayer::refreshScroll(*kData); ///< Õâ¸ö²»ÖªµÀÊÇË­µÄ ¹ùºÆ
+		}
+			break;
+		case _MSG_SYNDICATE:
+		{
+			processSyndicate(*pkData);
+		}
+			break;
+		case _MSG_SYN_INFO:
+		{
+			int nRank = pkData->ReadByte(); // ¸öÈËÔÚ°ïÅÉÖÐµÄÖ°Î»
+			string strSynName = pkData->ReadUnicodeString(); // °ïÅÉÃû×Ö
+			NDPlayer& kRole = NDPlayer::defaultHero();
+			kRole.setSynRank(nRank);
+			kRole.m_strSynName = (strSynName);
+			break;
+		}
+			break;
+		case _MSG_SYN_ANNOUNCE:
+		{
+			/***
+			 * ÒÀÀµÕÅµÏµÄSynInfoUILayer
+			 * ¹ùºÆ
+			 */
+			//SynInfoUILayer* synInfo = SynInfoUILayer::GetCurInstance();
+			//if (synInfo) {
+			//	synInfo->processSynBraodcast(*kData);
+			//}
+		}
+			break;
+		case _MSG_APPLY_LIST:
+		{
+			/***
+			 * ÒÀÀµÕÅµÏµÄ SynApproveUILayer
+			 * ¹ùºÆ
+			 */
+			//SynApproveUILayer* approve = SynApproveUILayer::GetCurInstance();
+			//if (approve) {
+			//	approve->processApproveList(*kData);
+			//}
+		}
+			break;
+		case _MSG_DIGOUT:
+		{
+			processDigout(*pkData);
+		}
+			break;
+		case _MSG_MBR_LIST:
+		{
+			/***
+			 * ÒÀÀµÕÅµÏµÄ SynMbrListUILayer
+			 * ¹ùºÆ
+			 */
+			//SynMbrListUILayer* mbrList = SynMbrListUILayer::GetCurInstance();
+			//if (mbrList) {
+			//	mbrList->processMbrList(*kData);
+			//}
+		}
+			break;
+		case _MSG_TIP:
+		{
+ 			NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
+ 			if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
+ 			{
+ 				GameSceneLoading* pkGameSceneLoading = (GameSceneLoading*)pkScene;
+ 				pkGameSceneLoading->UpdateTitle(pkData->ReadUnicodeString());
+ 			}
+		}
+			break;
+		case _MSG_NAME:
+		{
+			//showDialog(NDCommonCString("tip"), NDCommonCString("RenameSucc")); ///< ÒÀÀµshowDialog ¹ùºÆ
+		}
+			break;
+		case _MSG_NPC_POSITION:
+		{
+			processNpcPosition(*pkData);
+		}
+			break;
+		case _MSG_NPC:
+		{
+			processNPC(*pkData);
+		}
+			break;
+		default:
+			break;
 	}
 
 	return true;
@@ -1182,9 +1179,7 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 //   		kPlayer.RemoveFromParent(false);
 //   	}
 
-	while (NDDirector::DefaultDirector()->PopScene())
-	{
-	}
+	while (NDDirector::DefaultDirector()->PopScene());
 
 	NDMapMgrObj.ClearNPC();
 	NDMapMgrObj.ClearMonster();
@@ -1273,19 +1268,16 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 		(*pkData) >> btState; // 1¸ö×Ö½Ú±í×´Ì¬
 		unsigned char btCamp = 0;
 		(*pkData) >> btCamp;
-		CCString* pstrTemp = CCString::stringWithUTF8String(
+		NSString pstrTemp = CCString::stringWithUTF8String(
 				pkData->ReadUnicodeString().c_str());
 		std::string strName = pstrTemp->toStdString();
-		SAFE_DELETE(pstrTemp);
 
 		pstrTemp = CCString::stringWithUTF8String(
 				pkData->ReadUnicodeString().c_str());
 		std::string dataStr = pstrTemp->toStdString();
-		SAFE_DELETE(pstrTemp);
 		pstrTemp = CCString::stringWithUTF8String(
 				pkData->ReadUnicodeString().c_str());
 		std::string talkStr = pstrTemp->toStdString();
-		SAFE_DELETE(pstrTemp);
 
 		NDNpc *pkNPC = new NDNpc;
 		pkNPC->m_nID = nID;
@@ -1454,11 +1446,9 @@ void NDMapMgr::AddSwitch()
 	NDMapLayer* pkLayer = 0;
 	NDMapData* pkMapData = 0;
 
-	if (0 != pkScene || 0 == (pkLayer = getMapLayerOfScene(pkScene))
-			|| 0 == (pkMapData = pkLayer->GetMapData()))
-	{
-		return;
-	}
+	ND_ASSERT_NO_RETURN(NULL == pkScene);
+	ND_ASSERT_NO_RETURN(NULL == (pkLayer = getMapLayerOfScene(pkScene)));
+	ND_ASSERT_NO_RETURN(NULL == (pkMapData = pkLayer->GetMapData()));
 
 	ScriptDB& kScriptDB = ScriptDBObj;
 	ID_VEC kIDList;
@@ -1487,6 +1477,23 @@ void NDMapMgr::AddSwitch()
 int NDMapMgr::GetMapID()
 {
 	return m_nMapID;
+}
+
+void NDMapMgr::WorldMapSwitch(int mapId)
+{
+	NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
+	if (!scene) 
+	{
+		return;
+	}
+
+	NDDirector::DefaultDirector()->PushScene(GameSceneLoading::Scene());
+
+	NDPlayer& player = NDPlayer::defaultHero();
+	NDTransData bao(_MSG_POSITION);
+	bao << player.m_nID << (unsigned short)0 << (unsigned short)0 
+		<< mapId << (unsigned short)_WORD_MAPCHANGE << int(0);
+	SEND_DATA(bao);
 }
 
 int NDMapMgr::GetMotherMapID()
@@ -3708,7 +3715,7 @@ void NDMapMgr::processVersionMsg(NDTransData& kData)
 					SMLOGINSCENE_TAG);
 	if (pkScene)
 	{
-		//return pkScene->OnMsg_ClientVersion(kData); ///< ÒÀÀµÌÀ×ÔÇÚµÄCSMLoginScene ¹ùºÆ
+		return pkScene->OnMsg_ClientVersion(kData); ///< ÒÀÀµÌÀ×ÔÇÚµÄCSMLoginScene ¹ùºÆ
 	}
 }
 
@@ -3835,7 +3842,7 @@ void NDMapMgr::processRoadBlock(NDTransData& kData)
 void NDMapMgr::ProcessTempCredential(NDTransData& kData)
 {
 	///< ÕâÁ½ÐÐÏÈ×¢ÊÍµô ¹ùºÆ
-// 	NSString* temporaryCredential = kData.ReadUTF8NString();
+// 	NSString temporaryCredential = kData.ReadUTF8NString();
 // 	if(temporaryCredential == nil) return;
 
 #ifdef USE_MGSDK
@@ -4126,19 +4133,19 @@ NDBaseRole* NDMapMgr::GetRoleNearstPlayer(int iDistance)
 
 void NDMapMgr::throughMap(int mapX, int mapY, int mapId)
 {
-	//NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
-	//if (!scene) 
-	//{
-	//	return;
-	//}
+	NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
+	if (!scene) 
+	{
+		return;
+	}
 
-	//NDDirector::DefaultDirector()->PushScene(GameSceneLoading::Scene());	///< ÒÀÀµÌÀ×ÔÇÚ GameSceneLoading ¹ùºÆ
+	NDDirector::DefaultDirector()->PushScene(GameSceneLoading::Scene());	
 
-	//NDPlayer& player = NDPlayer::defaultHero();
-	//NDTransData bao(_MSG_POSITION);
-	//bao << player.m_nID << (unsigned short)mapX << (unsigned short)mapY
-	//	<< mapId << (unsigned short)_POSITION_TRANS_FLY << int(0);
-	//SEND_DATA(bao);
+	NDPlayer& player = NDPlayer::defaultHero();
+	NDTransData bao(_MSG_POSITION);
+	bao << player.m_nID << (unsigned short)mapX << (unsigned short)mapY
+		<< mapId << (unsigned short)_POSITION_TRANS_FLY << int(0);
+	SEND_DATA(bao);
 }
 
 //void NDMapMgr::addRequst( RequsetInfo& request )

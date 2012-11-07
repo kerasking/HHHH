@@ -225,12 +225,12 @@ typedef struct  _tagSTScriptGameData
 	std::map<int, ID_VEC> mapIDList;
 	_tagSTScriptGameData(unsigned int nId, VecScriptGameData& vData)
 	{
-		this->nId			= nId;
-		this->vData			= vData;
+		nId			= nId;
+		vData			= vData;
 	}
 	_tagSTScriptGameData()
 	{
-		this->nId			= 0;
+		nId			= 0;
 	}
 }STSCRIPTGAMEDATA;
 typedef std::vector<STSCRIPTGAMEDATA>						MapScriptGameData;

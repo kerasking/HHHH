@@ -62,7 +62,7 @@ void NDAnimationGroup::initWithSprFile(const char* sprFile)
 		char sprtFile[256] =
 		{ 0 };
 		sprintf(sprtFile, "%st", sprFile);
-		FILE* pkSprtStream = fopen(sprtFile, "rt");
+		FILE* pkSprtStream = fopen(sprtFile, "rb");
 
 		if (pkSprtStream)
 		{
@@ -70,7 +70,7 @@ void NDAnimationGroup::initWithSprFile(const char* sprFile)
 			fclose(pkSprtStream);
 		}
 
-		FILE* pkSprStream = fopen(sprFile, "rt");
+		FILE* pkSprStream = fopen(sprFile, "rb");
 
 		if (pkSprStream)
 		{

@@ -15,6 +15,7 @@
 #include "CCString.h"
 #include "NDDebugOpt.h"
 #include "define.h"
+#include "NDSharedPtr.h"
 
 using namespace cocos2d;
 
@@ -34,7 +35,7 @@ namespace NDEngine
 		m_texture = NULL;
 		m_kCutRect = CGRectZero;
 		m_uiRenderTimes = 2;
-		this->SetFontColor(m_kColor);
+		SetFontColor(m_kColor);
 		
 		m_bHasFontBoderColor = false;
 		m_kColorFontBoder = ccc4(0, 0, 0, 0);
@@ -59,16 +60,15 @@ namespace NDEngine
 		m_bNeedMakeCoo = true;
 		m_bNeedMakeVer = true;
 
-		CCString *pstrString = 0;
+		NSString pstrString = 0;
 
 		pstrString = CCString::stringWithUTF8String(text);
 		m_strText = pstrString->toStdString();
-		SAFE_DELETE(pstrString);
 	}
 	
 	void NDUILabel::OnFrameRectChange(CGRect srcRect, CGRect dstRect)
 	{
-		CGRect thisRect = this->GetFrameRect();
+		CGRect thisRect = GetFrameRect();
 
 		if (srcRect.size.width != dstRect.size.width ||
 			srcRect.size.height != dstRect.size.height)
@@ -143,7 +143,7 @@ namespace NDEngine
 		CCLog( "@NDUILabel::MakeTexture(): %s", m_strText.c_str());
 #endif
 
-		CGRect thisRect = this->GetFrameRect();	
+		CGRect thisRect = GetFrameRect();	
 		/*
 		CGSize dim = [text sizeWithFont:[UIFont fontWithName:FONT_NAME size:m_fontSize] 
 					  constrainedToSize:CGSizeMake(thisRect.size.width, thisRect.size.height)];		
@@ -159,7 +159,7 @@ namespace NDEngine
 			return;
 		}
 
-		CCString* strString = new CCString(m_strText.c_str());
+		NSString strString = new CCString(m_strText.c_str());
 
 		m_texture = new CCTexture2D;
 		m_texture->initWithString(strString->UTF8String(),
@@ -173,15 +173,13 @@ namespace NDEngine
 // 											  alignment:UITextAlignmentLeft
 // 											   fontName:FONT_NAME 
 // 											   fontSize:m_fontSize];
-
-		delete strString;
 	}
 	
 	void NDUILabel::MakeCoordinates()
 	{
 		if (m_texture) 
 		{
-			CGRect thisRect = this->GetFrameRect();	
+			CGRect thisRect = GetFrameRect();	
 			
 			m_kCutRect = CGRectZero;
 			m_kCutRect.size.width = m_texture->getContentSizeInPixels().width;
@@ -204,7 +202,7 @@ namespace NDEngine
 	{
 		if (m_texture) 
 		{
-			CGRect scrRect = this->GetScreenRect();
+			CGRect scrRect = GetScreenRect();
 			
 			CGRect drawRect = CGRectZero;
 			drawRect.origin.y = scrRect.origin.y;
@@ -275,23 +273,23 @@ namespace NDEngine
 
 		NDUINode::draw();
 		
-		if (this->IsVisibled()) 
+		if (IsVisibled()) 
 		{
 			if (m_bNeedMakeTex) 
 			{
-				this->MakeTexture();
+				MakeTexture();
 				m_bNeedMakeTex = false;
 			}
 			
 			if (m_bNeedMakeCoo) 
 			{
-				this->MakeCoordinates();
+				MakeCoordinates();
 				m_bNeedMakeCoo = false;
 			}
 			
 			if (m_bNeedMakeVer) 
 			{
-				this->MakeVertices();
+				MakeVertices();
 				m_bNeedMakeVer = false;
 			}
 			
@@ -331,7 +329,7 @@ namespace NDEngine
 			
 			// use to debug
 			
-			CGRect scrRect = this->GetScreenRect();
+			CGRect scrRect = GetScreenRect();
 			
 // 			DrawLine(scrRect.origin, 
 // 					 ccpAdd(scrRect.origin, ccp(scrRect.size.width, 0)),

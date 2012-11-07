@@ -64,7 +64,7 @@ void EquipUpgradeScene::Initialization(int iType)
 	m_menulayerBG = new NDUIMenuLayer;
 	m_menulayerBG->Initialization();
 	m_menulayerBG->ShowOkBtn();
-	this->AddChild(m_menulayerBG);
+	AddChild(m_menulayerBG);
 	
 	if ( m_menulayerBG->GetOkBtn() ) 
 	{
@@ -202,7 +202,7 @@ void EquipUpgradeScene::Initialization(int iType)
 	m_itemfocus = new ItemFocus;
 	m_itemfocus->Initialization();
 	m_itemfocus->SetFrameRect(CGRectZero);
-	this->AddChild(m_itemfocus,1);
+	AddChild(m_itemfocus,1);
 }
 
 void EquipUpgradeScene::OnButtonClick(NDUIButton* button)
@@ -295,7 +295,7 @@ void EquipUpgradeScene::OnButtonClick(NDUIButton* button)
 					}
 					else 
 					{
-						this->ResetGui();
+						ResetGui();
 					}
 				}
 				else 

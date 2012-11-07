@@ -21,9 +21,7 @@
 //#include "SimpleAudioEngine_objc.h"
 #include "NDWorldMapData.h"
 #include "UIRoleNode.h"
-#include "CCArray.h"
-#include "globaldef.h"
-#include "define.h"
+#include "typedef.h"
 
 using namespace NDEngine;
 
@@ -37,7 +35,7 @@ class WorldMapLayer: public NDUILayer, public NDUIButtonDelegate
 public:
 	void Initialization(int nMapId);override
 	void OnButtonClick(NDUIButton* button);override
-	void draw();override
+	void draw();
 	void OnTimer(OBJID tag);override
 	bool TouchBegin(NDTouch* touch);override
 	void ShowRoleAtPlace(int placeId);
@@ -67,7 +65,6 @@ private:
 	PlaceNode* m_curBtn;
 	NDTimer m_timer;
 	cocos2d::CCArray *m_buttons;
-	cocos2d::CCArray *m_buttonsFocus;
 	CGPoint m_screenCenter, m_posMapOffset;
 	ID_VEC m_vIdFilter;
 	CUIRoleNode *m_roleNode;
@@ -76,7 +73,7 @@ private:
 	CGPoint m_posTarget;
 	int m_nTargetMapId;
 	bool m_bInMoving;
-	std::map<int, std::string> m_mapFilename;
+	//std::map<int, std::string> m_mapFilename;
 };
 
 #endif

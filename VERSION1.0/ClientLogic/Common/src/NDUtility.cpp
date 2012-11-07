@@ -331,8 +331,8 @@ void quitGame(bool bTipNet/*=false*/)
 // string getStringTime(long nSeconds)
 // {
 // 	NSDate* endTime = [NSDate dateWithTimeIntervalSince1970:nSeconds];
-// 	NSString* strEndTime = [endTime description];
-// 	NSString* retStr = [strEndTime substringWithRange:NSMakeRange(5, 11)];
+// 	NSString strEndTime = [endTime description];
+// 	NSString retStr = [strEndTime substringWithRange:NSMakeRange(5, 11)];
 // 	return [retStr UTF8String];
 // }
 //
@@ -447,7 +447,7 @@ std::string loadPackInfo(int param)
 
 	std::string channelIni = NDEngine::NDPath::GetResPath();
 	channelIni.append("channel.ini");
-	FILE* pkFile = fopen(channelIni.c_str(), "rt");
+	FILE* pkFile = fopen(channelIni.c_str(), "rb");
 
 	if (!pkFile)
 		return "IPHONE_BYWX";
@@ -503,7 +503,7 @@ std::string GetChannelInfo()
 	std::string channelIni = NDEngine::NDPath::GetResPath();
 	channelIni.append("channel.ini");
 
-	FILE* f = fopen(channelIni.c_str(), "rt");
+	FILE* f = fopen(channelIni.c_str(), "rb");
 	if (f)
 	{
 		char buf[1025] =
@@ -531,7 +531,7 @@ std::string GetUpdateUrl()
 	std::string channelIni = NDEngine::NDPath::GetResPath();
 	channelIni.append("channel.ini");
 
-	FILE* f = fopen(channelIni.c_str(), "rt");
+	FILE* f = fopen(channelIni.c_str(), "rb");
 	if (f)
 	{
 		char buf[1025] =

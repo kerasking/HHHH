@@ -32,6 +32,7 @@
 #include "..\..\MapAndRole\inc\NDMonster.h"
 #include "..\..\Module\Battle\inc\BattleMgr.h"
 #include "ScriptMgr.h"
+#include "NDSharedPtr.h"
 
 using namespace cocos2d;
 
@@ -205,38 +206,23 @@ void NDMapLayer::Initialization(const char* mapFile)
 	NDLayer::Initialization();
 	SetTouchEnabled(true);
 
-	m_pkSwitchAniGroup =
-			NDAnimationGroupPool::defaultPool()->addObjectWithModelId(106);
+	m_pkSwitchAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithModelId(switch_ani_modelId);
 
 	m_pkMapData = new NDMapData;
+	ND_ASSERT_NO_RETURN(NULL == m_pkMapData);
 	m_pkMapData->initWithFile(mapFile);
 
-	if (m_pkMapData)
-	{
-		SetContentSize(
-				CGSizeMake(
-						m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
-						m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
+	SetContentSize(CGSizeMake(m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
+		                    m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
 
-		MakeOrdersOfMapscenesAndMapanimations();
-		MakeFrameRunRecords();
+	MakeOrdersOfMapscenesAndMapanimations();
+	MakeFrameRunRecords();
 
-		CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
-		m_kScreenCenter = ccp(kWinSize.width / 2,
-				GetContentSize().height - kWinSize.height / 2);
-		m_ccNode->setPosition(0, 0);
+	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	m_kScreenCenter = ccp(kWinSize.width / 2,
+			GetContentSize().height - kWinSize.height / 2);
+	m_ccNode->setPosition(0, 0);
 
-		/*
-		 m_texMap = [CCTexture2D alloc] initWithContentSize:winSize];
-		 m_picMap = new NDPicture();
-		 m_picMap->SetTexture(m_texMap);
-
-		 ReflashMapTexture(ccp(-winSize.width / 2, -winSize.height / 2), m_screenCenter);
-		 m_areaCamarkSplit = IntersectionAreaNone;
-		 m_ptCamarkSplit = ccp(0, 0);*/
-	}
-
-	DidFinishLaunching();
 }
 
 void NDMapLayer::Initialization(int mapIndex)
@@ -337,7 +323,7 @@ void NDMapLayer::refreshTitle()
  {
  box_status=BOX_SHOWING;
  m_pkTreasureBox = new NDSprite;
- NSString* aniPath=[NSString stringWithUTF8String:NDEngine::NDPath::GetAnimationPath().c_str()];
+ NSString aniPath=[CCString::stringWithUTF8String:NDEngine::NDPath::GetAnimationPath().c_str()];
  m_pkTreasureBox->Initialization([[NSString stringWithFormat:@"%@treasure_box.spr", aniPath] UTF8String]);
  m_pkTreasureBox->SetPosition(CGPointMake(NDPlayer::defaultHero().GetPosition().x+64,NDPlayer::defaultHero().GetPosition().y));
 
@@ -406,7 +392,7 @@ void NDMapLayer::PlayNDSprite(const char* pszSpriteFile, int nPosx, int nPosy,
 		int nAniNo, int nPlayTimes)
 {
 	NDSprite* pSprite = new NDSprite;
-	//NSString* aniPath=[NSString stringWithUTF8String:NDEngine::NDPath::GetAnimationPath().c_str()];
+	//NSString aniPath=[NSString stringWithUTF8String:NDEngine::NDPath::GetAnimationPath().c_str()];
 	pSprite->Initialization(
 			tq::CString("%s%s", NDEngine::NDPath::GetAnimationPath().c_str(),
 					pszSpriteFile));
@@ -432,7 +418,7 @@ void NDMapLayer::PlayNDSprite(const char* pszSpriteFile, int nPosx, int nPosy,
 void NDMapLayer::showSwitchSprite(MAP_SWITCH_TYPE type)
 {
 	m_eSwitchType = type;
-	NSString* aniPath = new NSString(NDPath::GetAnimationPath().c_str());
+	NSString aniPath = new CCString(NDPath::GetAnimationPath().c_str());
 
 	if (m_pkSwitchSpriteNode)
 	{
@@ -442,26 +428,26 @@ void NDMapLayer::showSwitchSprite(MAP_SWITCH_TYPE type)
 
 	m_pkSwitchSpriteNode = new CUISpriteNode;
 	m_pkSwitchSpriteNode->Initialization();
-	NSString* szAniFile = 0;
+	NSString szAniFile = 0;
 
 	switch (m_eSwitchType)
 	{
 	case SWITCH_NONE:
 		break;
 	case SWITCH_TO_BATTLE:
-		szAniFile = new NSString("switchmask01.spr");
+		szAniFile = new CCString("switchmask01.spr");
 		break;
 	case SWITCH_BACK_FROM_BATTLE:
 		break;
 	case SWITCH_START_BATTLE:
-		szAniFile = new NSString("switchmask02.spr");
+		szAniFile = new CCString("switchmask02.spr");
 		break;
 	default:
-		szAniFile = new NSString("switchmask03.spr");
+		szAniFile = new CCString("switchmask03.spr");
 		break;
 	}
 
-	NSString* pStr = NSString::stringWithFormat("%s%s",
+	NSString pStr = CCString::stringWithFormat("%s%s",
 		aniPath->toStdString().c_str(), szAniFile);
 
 	m_pkSwitchSpriteNode->ChangeSprite(pStr->toStdString().c_str());
@@ -595,30 +581,30 @@ void NDMapLayer::draw()
 			}
 
 			int mi = m_nRoadBlockTimeCount / 60;
-			NSString* str_mi = 0;
+			NSString str_mi = 0;
 
 			if(mi < 10)
 			{
-				str_mi = NSString::stringWithFormat("%0d",mi);
+				str_mi = CCString::stringWithFormat("%0d",mi);
 			}
 			else
 			{
-				str_mi = NSString::stringWithFormat("%d",mi);
+				str_mi = CCString::stringWithFormat("%d",mi);
 			}
 
 			int se = m_nRoadBlockTimeCount % 60;
-			NSString* str_se = 0;
+			NSString str_se = 0;
 
 			if(se < 10)
 			{
-				str_se = NSString::stringWithFormat("%0d",mi);
+				str_se = CCString::stringWithFormat("%0d",mi);
 			}
 			else
 			{
-				str_se = NSString::stringWithFormat("%d",mi);
+				str_se = CCString::stringWithFormat("%d",mi);
 			}
 
-			NSString* str_time = NSString::stringWithFormat("%s:%s",
+			NSString str_time = CCString::stringWithFormat("%s:%s",
 				str_mi->toStdString().c_str(),str_se->toStdString().c_str());
 			m_lbTime->SetText(str_time->toStdString().c_str());
 
@@ -747,10 +733,10 @@ void NDMapLayer::DrawScenesAndAnimations()
 {
 	MakeOrders();
 
-	unsigned int orderCount = m_pkOrders->count(), uiSceneTileCount =
-			m_pkMapData->getSceneTiles()->count(), aniGroupCount =
-			m_pkMapData->getAnimationGroups()->count(), switchCount =
-			m_pkMapData->getSwitchs()->count();
+	unsigned int orderCount = m_pkOrders->count();
+	unsigned int uiSceneTileCount = m_pkMapData->getSceneTiles()->count();
+	unsigned int aniGroupCount = m_pkMapData->getAnimationGroups()->count();
+	unsigned int switchCount = m_pkMapData->getSwitchs()->count();
 
 	//PerformanceTestPerFrameBeginName(" NDMapLayer::DrawScenesAndAnimations");
 
@@ -1374,6 +1360,7 @@ void NDMapLayer::MakeOrders()
 	m_pkOrders->addObjectsFromArray(m_pkOrdersOfMapscenesAndMapanimations);
 	const std::vector<NDNode*>& kCLD = GetChildren();
 	std::map<int, NDNode*> kMapDrawlast;
+
 	//std::map<unsigned int, NDManualRole*> mapRoleCell;
 	for (int i = 0; i < (int) kCLD.size(); i++)
 	{
@@ -1505,7 +1492,13 @@ void NDMapLayer::MakeOrders()
 void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 {
 	m_pkOrdersOfMapscenesAndMapanimations->removeAllObjects();
-	for (int i = 0; i < (int) m_pkMapData->getSceneTiles()->count(); i++)
+	
+	int iNumSceneTitles = (int) m_pkMapData->getSceneTiles()->count();
+	int iNumAniGroupParams = (int) m_pkMapData->getAniGroupParams()->count();
+	int iNumSwitchs = (int) m_pkMapData->getSwitchs()->count();
+	
+
+	for (int i = 0; i < iNumSceneTitles; i++)
 	{
 		NDSceneTile *pkSceneTile =
 				(NDSceneTile *) m_pkMapData->getSceneTiles()->objectAtIndex(i);
@@ -1525,7 +1518,7 @@ void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 		m_pkOrdersOfMapscenesAndMapanimations->addObject(dict);
 		dict->release();
 	}
-	for (int i = 0; i < (int) m_pkMapData->getAniGroupParams()->count(); i++)
+	for (int i = 0; i < iNumAniGroupParams; i++)
 	{
 		//NSDictionary *dictAniGroupParam = [m_mapData.aniGroupParams objectAtIndex:i];
 		int nOrderID = GetMapDataAniParamOrderId(i);
@@ -1542,7 +1535,7 @@ void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 		m_pkOrdersOfMapscenesAndMapanimations->addObject(pkDict);
 		pkDict->release();
 	}
-	for (int i = 0; i < (int) m_pkMapData->getSwitchs()->count(); i++)
+	for (int i = 0; i < iNumSwitchs; i++)
 	{
 		if (m_pkSwitchAniGroup->getAnimations()->count() > 0)
 		{
@@ -1865,7 +1858,7 @@ void NDMapLayer::ShowTreasureBox()
 // 		m_eBoxStatus = BOX_SHOWING;
 // 		m_pkTreasureBox = new NDSprite;
 // 		string aniPath = NDPath::GetAnimationPath().c_str();
-// 		NSString* pstrString = NSString::stringWithFormat("%streasure_box.spr",
+// 		NSString pstrString = NSString::stringWithFormat("%streasure_box.spr",
 // 				aniPath.c_str());
 // 		m_pkTreasureBox->Initialization(pstrString->toStdString().c_str());
 // 		SAFE_DELETE(pstrString);

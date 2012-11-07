@@ -5,8 +5,10 @@
 #include "NDPath.h"
 //#include "I_Analyst.h"
 #include "NDUIBaseGraphics.h"
+#include "NDSharedPtr.h"
+#include "CCString.h"
 
-NSString* side_image = new NSString(""); //NSString::stringWithFormat("%s",NDPath::GetImgPath("frame_coner.png"));///< 找不到NDPath?? 郭浩
+NSString side_image = new CCString(""); //NSString::stringWithFormat("%s",NDPath::GetImgPath("frame_coner.png"));///< 找不到NDPath?? 郭浩
 
 namespace NDEngine
 {

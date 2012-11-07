@@ -50,8 +50,8 @@ typedef struct _tagGlobalDialogBtnContent
 	bool bArrow;
 	_tagGlobalDialogBtnContent(std::string str, bool bArrow = false)
 	{
-		this->str = str;
-		this->bArrow = bArrow;
+		str = str;
+		bArrow = bArrow;
 	}
 } GlobalDialogBtnContent;
 
@@ -70,7 +70,7 @@ public:
 	bool OnDialogTimeOut(NDEngine::NDUIDialog* dialog);override
 	void SetInBattle(bool bInBattle)
 	{
-		this->m_bInBattle = bInBattle;
+		m_bInBattle = bInBattle;
 	}
 public:
 	// �??全局对话框列表中加入对话�??,返回该对话框的tag

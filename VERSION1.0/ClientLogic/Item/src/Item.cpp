@@ -25,13 +25,13 @@
 
 Item::Item()
 {
-	this->init();
+	init();
 }
 
 Item::Item(int iItemType)
 {
-	this->init();
-	this->m_nItemType = iItemType;
+	init();
+	m_nItemType = iItemType;
 }
 
 Item::Item(const Item& rhs)
@@ -46,17 +46,17 @@ Item& Item::operator =(const Item& rhs)
 		return *this;
 	}
 
-	this->m_nID = rhs.m_nID;						// 物品的Id
-	this->m_nOwnerID = rhs.m_nOwnerID;			// 物品的所有�??�id
-	this->m_nItemType = rhs.m_nItemType;			// 物品类型 id
-	this->m_nAmount = rhs.m_nAmount;				// 物品数量/耐久�??
-	this->m_nPosition = rhs.m_nPosition;				// 物品位置
-	this->m_nAddition = rhs.m_nAddition;				// 装备追加
-	this->m_nBindState = rhs.m_nBindState;		// 绑定状�????
-	this->m_nHole = rhs.m_nHole;				// 装备有几个洞
-	this->m_nCreateTime = rhs.m_nCreateTime;			// 创建时间
-	this->m_nAge = rhs.m_nAge;					// 骑宠寿命
-	this->m_bIsActive = rhs.m_bIsActive;
+	m_nID = rhs.m_nID;						// 物品的Id
+	m_nOwnerID = rhs.m_nOwnerID;			// 物品的所有�??�id
+	m_nItemType = rhs.m_nItemType;			// 物品类型 id
+	m_nAmount = rhs.m_nAmount;				// 物品数量/耐久�??
+	m_nPosition = rhs.m_nPosition;				// 物品位置
+	m_nAddition = rhs.m_nAddition;				// 装备追加
+	m_nBindState = rhs.m_nBindState;		// 绑定状�????
+	m_nHole = rhs.m_nHole;				// 装备有几个洞
+	m_nCreateTime = rhs.m_nCreateTime;			// 创建时间
+	m_nAge = rhs.m_nAge;					// 骑宠寿命
+	m_bIsActive = rhs.m_bIsActive;
 
 	for (std::vector<Item*>::iterator it = m_vStone.begin();
 			it != m_vStone.end(); it++)
@@ -70,7 +70,7 @@ Item& Item::operator =(const Item& rhs)
 	{
 		Item* stone = new Item;
 		(*stone) = *(*it);
-		this->m_vStone.push_back(stone);
+		m_vStone.push_back(stone);
 	}
 
 	return *this;
@@ -1893,7 +1893,7 @@ std::string Item::makeItemDes(bool bolIncludeName, bool bolShowColor)
 		sb << NDCommonCString("ShouMing") << ":";
 		if (m_nID != 0)
 		{
-			sb << ((this->m_nAge + 99) / 100);
+			sb << ((m_nAge + 99) / 100);
 		}
 		else
 		{
@@ -2362,14 +2362,14 @@ string Item::makeItemName()
 {
 	stringstream ss;
 
-	ss << this->getItemNameWithAdd();
+	ss << getItemNameWithAdd();
 
-	if (!this->isRidePet())
+	if (!isRidePet())
 	{
-		int type = this->m_nItemType / 10000000;
-		if (type > 0 && this->m_nAmount > 1)
+		int type = m_nItemType / 10000000;
+		if (type > 0 && m_nAmount > 1)
 		{
-			ss << " × " << this->m_nAmount;
+			ss << " × " << m_nAmount;
 		}
 	}
 	return ss.str();
@@ -2899,7 +2899,7 @@ bool Item::IsPetUseItem()
 {
 	if (m_nItemType == 28000005 || m_nItemType == 28000006
 			|| (28000015 <= m_nItemType && m_nItemType <= 28000017)
-			|| m_nItemType / 100000 == 262 || this->IsPetSkillItem())
+			|| m_nItemType / 100000 == 262 || IsPetSkillItem())
 	{
 		return true;
 	}
