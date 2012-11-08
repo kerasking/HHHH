@@ -14,41 +14,34 @@
 #include "NDTransData.h"
 #include <map>
 #include "NDMsgDefine.h"
+#include "NDBaseNetMgr.h"
 
 using namespace std;
 
-class NDMsgObject
-{
-public:
-	NDMsgObject()
-	{
-	}
-	virtual ~NDMsgObject()
-	{
-	}
-	virtual bool process(MSGID msgID, NDEngine::NDTransData*, int len) = 0;
-};
+NS_NDENGINE_BGN
 
-class NDNetMsgPool: public TSingleton<NDNetMsgPool>
+class NDNetMsgPool:public NDBaseNetMgr
 {
-	typedef map<MSGID, NDMsgObject*> map_class_callback;
+	DECLARE_CLASS(NDNetMsgPool)
+
+	typedef map<unsigned short, NDMsgObject*> map_class_callback;
 	typedef map_class_callback::iterator map_class_callback_it;
-	typedef pair<MSGID, NDMsgObject*> map_class_callback_pair;
+	typedef pair<unsigned short, NDMsgObject*> map_class_callback_pair;
 
 public:
 	NDNetMsgPool();
 	~NDNetMsgPool();
 
 	bool Process(NDEngine::NDTransData* data);
-	bool Process(MSGID msgID, NDEngine::NDTransData* data, int len);
-	bool RegMsg(MSGID msgID, NDMsgObject* msgObj);
-	void UnRegMsg(MSGID msgID);
+	bool Process(unsigned short msgID, NDEngine::NDTransData* data, int len);
+	bool RegMsg(unsigned short msgID, NDMsgObject* msgObj);
+	void UnRegMsg(unsigned short msgID);
 private:
 	map_class_callback m_mapCallBack;
 private:
 
 };
 
-#define NDNetMsgPoolObj NDNetMsgPool::GetSingleton()
+NS_NDENGINE_END
 
 #endif // _ND_NET_MSG_H_

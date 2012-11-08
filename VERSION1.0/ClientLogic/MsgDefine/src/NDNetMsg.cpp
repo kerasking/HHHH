@@ -17,6 +17,10 @@
 
 using namespace NDEngine;
 
+NS_NDENGINE_BGN
+
+IMPLEMENT_CLASS(NDNetMsgPool,NDBaseNetMgr)
+
 #define REG_MSG(ID, OBJ)													\
 do																			\
 {																			\
@@ -129,3 +133,5 @@ void NDNetMsgPool::UnRegMsg(MSGID msgID)
 {
 	m_mapCallBack.erase(msgID);
 }
+
+NS_NDENGINE_END

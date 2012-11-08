@@ -19,6 +19,7 @@ LOCAL_SRC_FILES := \
 ../../Framework/src/NDObject.cpp \
 ../../Framework/src/NDScene.cpp \
 ../../Framework/src/NDSprite.cpp \
+../../Framework/src/NDDebugOpt.cpp \
 ../../Graphic/src/CCTexture2DExt.cpp \
 ../../Graphic/src/CCTextureCacheExt.cpp \
 ../../Graphic/src/NDAnimation.cpp \
@@ -115,8 +116,10 @@ LOCAL_LDLIBS := -L$(call host-path, $(LOCAL_PATH)/../../proj.android/libs/$(TARG
 
 LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += luaplus
+LOCAL_WHOLE_STATIC_LIBRARIES += tinyxml
 
 include $(BUILD_SHARED_LIBRARY)
 
+$(call import-module,LuaPlus/proj.android/jni)
 $(call import-module,cocos2dx)
-$(call import-module,luaplus)
+$(call import-module,tinyxml/proj.android/jni)

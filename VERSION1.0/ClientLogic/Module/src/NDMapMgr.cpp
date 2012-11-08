@@ -129,7 +129,7 @@ m_nMapID(0),
 m_nMapDocID(0),
 m_nCurrentMonsterRound(0)
 {
-	NDNetMsgPool& kNetPool = NDNetMsgPoolObj;
+	NDBaseNetMgr& kNetPool = NDNetMsgPoolObj;
 	kNetPool.RegMsg(_MSG_NPCINFO_LIST, this);
 	kNetPool.RegMsg(_MSG_ROOM, this);
 	m_iCurDlgNpcID = 0;

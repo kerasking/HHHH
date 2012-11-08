@@ -25,6 +25,7 @@
 #include "NDDebugOpt.h"
 #include "NDClassFactory.h"
 #include "Battle.h"
+#include "NDNetMsg.h"
 
 NS_NDENGINE_BGN
 
@@ -122,8 +123,6 @@ bool NDGameApplication::applicationDidFinishLaunching()
 {
 	REGISTER_CLASS(NDBaseBattle,Battle);
 	REGISTER_CLASS(NDBaseFighter,Fighter);
-
-	NDSprite* pkSprite = CREATE_CLASS(NDSprite,"NDBaseRole");
 
 	NDMapMgr& kMapMgr = NDMapMgrObj;
 	NDDirector* pkDirector = NDDirector::DefaultDirector();

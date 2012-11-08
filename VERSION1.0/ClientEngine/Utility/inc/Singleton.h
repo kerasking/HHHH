@@ -11,6 +11,7 @@
 #define __SINGLETON_H__
 
 #include "basedefine.h"
+#include "NDClassFactory.h"
 
 template<typename T>
 class TSingleton
@@ -34,6 +35,15 @@ public:
 		//return *_singleton;
 		if (NULL == ms_pkSingleton)
 			new T();
+		return *ms_pkSingleton;
+	}
+
+	static T& GetBackSingleton(const char* pszSubClassName)
+	{
+		assert(pszSubClassName && *pszSubClassName);
+
+		if (NULL == ms_pkSingleton)
+			ms_pkSingleton = CREATE_CLASS(T,pszSubClassName);
 		return *ms_pkSingleton;
 	}
 	

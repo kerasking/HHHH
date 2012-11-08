@@ -162,6 +162,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Framework\inc\NDBaseNetMgr.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Framework\inc\NDBaseNode.h"
 					>
 				</File>
@@ -215,6 +219,10 @@
 				</File>
 				<File
 					RelativePath="..\Framework\src\NDBaseLayer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Framework\src\NDBaseNetMgr.cpp"
 					>
 				</File>
 				<File

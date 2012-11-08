@@ -36,7 +36,7 @@ using namespace NDEngine;
 BattleMgr::BattleMgr() :
 m_pkBattle(NULL)
 {
-	NDNetMsgPool& kPool = NDNetMsgPoolObj;
+	NDBaseNetMgr& kPool = NDNetMsgPoolObj;
 	kPool.RegMsg(_MSG_BATTLE, this);
 	kPool.RegMsg(_MSG_CONTROLPOINT, this);
 	kPool.RegMsg(_MSG_EFFECT, this);
