@@ -16,11 +16,13 @@
 #include "NDDictionary.h"
 #include "CCTexture2D.h"
 #include "ccTypes.h"
+#include "shaders/ccGLStateCache.h"
+#include "shaders/ccGLProgram.h"
 
 using namespace cocos2d;
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
 typedef enum
 {
 	PictureRotation0,
@@ -92,6 +94,13 @@ public:
 	cocos2d::CCTexture2D *GetTexture();
 
 	void SetTexture(cocos2d::CCTexture2D* tex);
+
+public: //@shader
+	CC_SYNTHESIZE_RETAIN(CCGLProgram*, m_pShaderProgram, ShaderProgram);
+	CC_SYNTHESIZE(ccGLServerState, m_glServerState, GLServerState);
+protected:
+	void DrawSetup( const char* shaderType = kCCShader_PositionTexture_uColor );
+
 private:
 	cocos2d::CCTexture2D* m_pkTexture;
 	CGRect m_kCutRect;
@@ -167,6 +176,6 @@ private:
 	CGSize GetImageSize(std::string filename);
 };
 
-}
+NS_NDENGINE_END
 
 #endif

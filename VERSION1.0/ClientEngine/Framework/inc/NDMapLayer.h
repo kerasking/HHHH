@@ -140,6 +140,7 @@ public:
 	void ShowRoadSign(bool bShow, int nX = 0, int nY = 0);
 public:
 	virtual void draw();
+	virtual void debugDraw();
 	NDMapData *GetMapData();
 	void setStartRoadBlockTimer(int time, int x, int y);
 	
@@ -195,8 +196,12 @@ private:
 	cocos2d::CCArray* m_pkOrders;
 	cocos2d::CCArray* m_pkOrdersOfMapscenesAndMapanimations;
 	NDMapData *m_pkMapData;
-	cocos2d::CCMutableArray<cocos2d::CCMutableArray<NDFrameRunRecord*>*>* m_pkFrameRunRecordsOfMapAniGroups;
-	cocos2d::CCMutableArray<NDFrameRunRecord*>* m_pkFrameRunRecordsOfMapSwitch;
+
+	//cocos2d::CCMutableArray<cocos2d::CCMutableArray<NDFrameRunRecord*>*>* m_pkFrameRunRecordsOfMapAniGroups;
+	//cocos2d::CCMutableArray<NDFrameRunRecord*>* m_pkFrameRunRecordsOfMapSwitch;
+	cocos2d::CCArray* m_pkFrameRunRecordsOfMapAniGroups;
+	cocos2d::CCArray* m_pkFrameRunRecordsOfMapSwitch;
+
 	NDAnimationGroup* m_pkSwitchAniGroup;
 	NDSprite* m_pkTreasureBox;
 	NDUILabel* m_lbTime;

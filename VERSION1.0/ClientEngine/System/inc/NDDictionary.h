@@ -10,7 +10,7 @@
 #define __NDDictionary_H
 
 #include "NDObject.h"
-#include "CCMutableDictionary.h"
+#include "cocoa/CCDictionary.h"
 
 class DictionaryObject: public cocos2d::CCObject
 {
@@ -34,7 +34,7 @@ public:
 	void RemoveAllObjects();
 
 protected:
-	cocos2d::CCMutableDictionary<std::string, cocos2d::CCObject*> *m_nsDictionary;
+	cocos2d::CCDictionary* m_nsDictionary;
 };
 }
 

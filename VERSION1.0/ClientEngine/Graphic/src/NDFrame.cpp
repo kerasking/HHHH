@@ -124,9 +124,12 @@ m_pkSubAnimationGroups(NULL),
 m_pkFrameTiles(NULL),
 m_bNeedInitTitles(true)
 {
-	m_pkSubAnimationGroups = new CCMutableArray<NDAnimationGroup*>();
-	m_pkFrameTiles = new CCMutableArray<NDFrameTile*>();
-	m_pkTiles = new CCMutableArray<NDTile*>();
+// 	m_pkSubAnimationGroups = new CCMutableArray<NDAnimationGroup*>();
+// 	m_pkFrameTiles = new CCMutableArray<NDFrameTile*>();
+// 	m_pkTiles = new CCMutableArray<NDTile*>();
+	m_pkSubAnimationGroups = new CCArray();
+	m_pkFrameTiles = new CCArray();
+	m_pkTiles = new CCArray();
 }
 
 NDFrame::~NDFrame()
@@ -186,12 +189,13 @@ void NDFrame::run(float fScale)
 
 	for (int i = 0; i < nCount; i++)
 	{
-		NDFrameTile* pkFrameTile = m_pkFrameTiles->getObjectAtIndex(i);
+		NDFrameTile* pkFrameTile = (NDFrameTile*)m_pkFrameTiles->objectAtIndex(i);
+		
 		NDTileTableRecord *pkRecord =
-			(NDTileTableRecord *) pkAnimationGroup->getTileTable()->objectAtIndex(
-			pkFrameTile->getTableIndex());
+			(NDTileTableRecord *) pkAnimationGroup->getTileTable()->objectAtIndex( 
+				pkFrameTile->getTableIndex());
 
-		NDTile *pkTile = m_pkTiles->getObjectAtIndex(i);
+		NDTile *pkTile = (NDTile*)m_pkTiles->objectAtIndex(i);
 
 		pkTile->setTexture(
 			getTileTextureWithImageIndex(pkRecord->getImageIndex(),
@@ -260,9 +264,15 @@ void NDFrame::run(float fScale)
 			x = x + pkFrameTile->getX() * fScale - pkAnimation->getX() * fScale;
 		}
 
-		pkTile->setDrawRect(
-			CGRectMake(x, y, pkTile->getCutRect().size.width * fScale,
-			pkTile->getCutRect().size.height * fScale));
+#if 0
+ 		pkTile->setDrawRect(
+ 			CGRectMake(x, y, pkTile->getCutRect().size.width * fScale,
+ 			pkTile->getCutRect().size.height * fScale));
+#else
+		pkTile->setDrawRect( CGRectMake(x, y, 
+			pkRecord->getW() * fScale, pkRecord->getH() * fScale ));
+#endif
+
 		pkTile->setMapSize(pkAnimationGroup->getRunningMapSize());
 		pkTile->make();
 		pkTile->draw();

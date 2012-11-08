@@ -11,11 +11,13 @@
 #include <cocos2d.h>
 #include "CCPointExtension.h"
 #include "define.h"
+#include "shaders/CCShaderCache.h"
+#include "NDDebugOpt.h"
 
 using namespace cocos2d;
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
 IMPLEMENT_CLASS(NDNode, NDCommonProtocol)
 
 NDNode::NDNode():
@@ -27,6 +29,9 @@ m_nPosy(-1)
 	m_bDrawEnabled = true;
 	m_nParam1 = 0;
 	m_nParam2 = 0;
+
+	m_pShaderProgram = NULL; //@shader
+	m_glServerState = CC_GL_BLEND;
 }
 
 NDNode::~NDNode()
@@ -37,6 +42,7 @@ NDNode::~NDNode()
 		this->RemoveFromParent(false);
 	}
 	CC_SAFE_RELEASE (m_ccNode);
+	CC_SAFE_RELEASE(m_pShaderProgram); //@shader
 }
 
 NDNode* NDNode::Node()
@@ -181,7 +187,7 @@ void NDNode::AddChild(NDNode* pkNode, int nZBuffer, int nTag)
 
 	m_ccNode->addChild(pkCCNode, nZBuffer, nTag);
 
-	m_kChildrenList.push_back(pkNode);
+	m_kChildrenList.push_back(pkNode); 
 }
 
 void NDNode::RemoveChild(NDNode* pkNode, bool bCleanUp)
@@ -351,7 +357,8 @@ void NDNode::EnableDraw(bool enabled)
 
 bool NDNode::DrawEnabled()
 {
-	return m_bDrawEnabled;
+	return m_bDrawEnabled
+		&& NDDebugOpt::getDrawUIEnabled();
 }
 
 void NDNode::SetParam1(int nParam1)
@@ -447,4 +454,19 @@ void NDNode::Destroy()
 	delete this;
 }
 
+//@shader
+void NDNode::DrawSetup( const char* shaderType /*=kCCShader_PositionTexture_uColor*/ )
+{
+	if (getShaderProgram() == NULL)
+	{
+		setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(shaderType));
+	}
+
+	ccGLEnable( m_glServerState );
+	CCAssert(getShaderProgram(), "No shader program set for this node");
+
+	getShaderProgram()->use();
+	getShaderProgram()->setUniformForModelViewProjectionMatrix();
 }
+
+NS_NDENGINE_END

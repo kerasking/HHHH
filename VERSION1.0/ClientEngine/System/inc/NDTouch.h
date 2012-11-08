@@ -9,6 +9,7 @@
 #define __NDTouch_H
 
 #include "NDObject.h"
+#include "CCTouch.h"
 
 namespace NDEngine
 {

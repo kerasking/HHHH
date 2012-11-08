@@ -10,7 +10,7 @@
 #pragma once
 
 #include "NDUINode.h"
-
+#include "UIData.h"
 
 using namespace NDEngine;
 
@@ -30,4 +30,9 @@ class NDUILoad : public NDObject
 		  LuaObject luaDelegate,
 		  float sizeOffsetW = 0.0f,
 		  float sizeOffsetH = 0.0f);
+
+private:
+	void AdjustCtrlPosByAnchor( UIINFO& uiInfo, const CCPoint& CtrlAnchorPos );
+	NDUINode* CreateCtrl( UIINFO& uiInfo, CGSize sizeOffset, const char*& ctrlTypeName );
+	bool IsAnchorValid( const float anchor );
 };

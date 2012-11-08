@@ -33,7 +33,7 @@ MapTexturePool::MapTexturePool() :
 m_pkDict(NULL)
 {
 	NDAsssert(g_pkMapTexturePoolDefaultPool == NULL);
-	m_pkDict = new CCMutableDictionary<std::string, CCTexture2D*>();
+	m_pkDict = new CCDictionary();
 }
 
 MapTexturePool::~MapTexturePool()
@@ -65,7 +65,7 @@ CCTexture2D* MapTexturePool::addImage(const char* path, bool keep)
 	// MUTEX:
 	// Needed since addImageAsync calls this method from a different thread
 
-	pkTexture = m_pkDict->objectForKey(path);
+	pkTexture = (CCTexture2D*)m_pkDict->objectForKey(path);
 
 	if (!pkTexture)
 	{

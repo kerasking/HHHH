@@ -8,14 +8,16 @@
 
 #include "NDPicture.h"
 #include "CCTextureCache.h"
+#include "shaders/CCShaderCache.h"
 #include "NDDirector.h"
 #include "CCImage.h"
+#include "CCPointExtension.h"
 #include <sstream>
 
 using namespace cocos2d;
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
 IMPLEMENT_CLASS(NDPicture, NDObject)
 IMPLEMENT_CLASS(NDTexture,NDObject)
 
@@ -34,10 +36,14 @@ NDPicture::NDPicture(bool canGray/*=false*/)
 	m_verticalPixel = 0;
 	m_fScale = 1.0f;
 	m_bIsTran = false;
+
+	m_pShaderProgram = NULL; //@shader
+	m_glServerState = CC_GL_BLEND;
 }
 
 NDPicture::~NDPicture()
 {
+	CC_SAFE_RELEASE(m_pShaderProgram); //@shader
 	CC_SAFE_RELEASE (m_pkTexture);
 	if (m_bCanGray)
 	{
@@ -247,6 +253,22 @@ void NDPicture::Initialization(const char* imageFile, int hrizontalPixel,
 	}
 }
 
+//@shader
+void NDPicture::DrawSetup( const char* shaderType /*=kCCShader_PositionTexture_uColor*/ )
+{
+	if (getShaderProgram() == NULL)
+	{
+		setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(shaderType));
+	}
+
+	ccGLEnable( m_glServerState );
+	CCAssert(getShaderProgram(), "No shader program set for this node");
+
+	getShaderProgram()->use();
+	getShaderProgram()->setUniformForModelViewProjectionMatrix();
+}
+
+
 CCTexture2D *NDPicture::GetTexture()
 {
 	return m_pkTexture;
@@ -298,22 +320,35 @@ void NDPicture::SetCoorinates()
 
 void NDPicture::SetVertices(CGRect drawRect)
 {
-	CGSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
+	CGSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinPoint();//GetWinSize();
 
 	switch (m_kRotation)
 	{
-	case PictureRotation0:
-		m_pfVertices[0] = drawRect.origin.x;
-		m_pfVertices[1] = winSize.height - drawRect.origin.y
-				- drawRect.size.height;
-		m_pfVertices[2] = drawRect.origin.x + drawRect.size.width;
-		m_pfVertices[3] = m_pfVertices[1];
-		m_pfVertices[4] = drawRect.origin.x;
-		m_pfVertices[5] = winSize.height - drawRect.origin.y;
-		m_pfVertices[6] = m_pfVertices[2];
-		m_pfVertices[7] = m_pfVertices[5];
+	case PictureRotation0://@todo
+// 		m_pfVertices[0] = drawRect.origin.x;
+// 		m_pfVertices[1] = winSize.height - drawRect.origin.y - drawRect.size.height;
+// 		m_pfVertices[2] = drawRect.origin.x + drawRect.size.width;
+// 		m_pfVertices[3] = m_pfVertices[1];
+// 		m_pfVertices[4] = drawRect.origin.x;
+// 		m_pfVertices[5] = winSize.height - drawRect.origin.y;
+// 		m_pfVertices[6] = m_pfVertices[2];
+// 		m_pfVertices[7] = m_pfVertices[5];
+
+		{
+			float l,r,t,b;
+			SCREEN2GL_RECT(drawRect,l,r,t,b);
+
+			m_pfVertices[0] = l;
+			m_pfVertices[1] = b;
+			m_pfVertices[2] = r;
+			m_pfVertices[3] = b;
+			m_pfVertices[4] = l;
+			m_pfVertices[5] = t;
+			m_pfVertices[6] = r;
+			m_pfVertices[7] = t;
+		}
 		break;
-	case PictureRotation90:
+	case PictureRotation90://@todo
 		m_pfVertices[0] = drawRect.origin.x;
 		m_pfVertices[1] = winSize.height - drawRect.origin.y;
 		m_pfVertices[2] = m_pfVertices[0];
@@ -323,7 +358,7 @@ void NDPicture::SetVertices(CGRect drawRect)
 		m_pfVertices[6] = m_pfVertices[4];
 		m_pfVertices[7] = m_pfVertices[3];
 		break;
-	case PictureRotation180:
+	case PictureRotation180://@todo
 		m_pfVertices[0] = drawRect.origin.x + drawRect.size.width;
 		m_pfVertices[1] = winSize.height - drawRect.origin.y;
 		m_pfVertices[2] = drawRect.origin.x;
@@ -334,7 +369,7 @@ void NDPicture::SetVertices(CGRect drawRect)
 		m_pfVertices[6] = m_pfVertices[2];
 		m_pfVertices[7] = m_pfVertices[5];
 		break;
-	case PictureRotation270:
+	case PictureRotation270://@todo
 		m_pfVertices[0] = drawRect.origin.x + drawRect.size.width;
 		m_pfVertices[1] = winSize.height
 				- (drawRect.origin.y + drawRect.size.height);
@@ -439,23 +474,43 @@ void NDPicture::DrawInRect(CGRect kRect)
 
 	if (pkTempTexture)
 	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+		DrawSetup( kCCShader_PositionTextureColor );
 
 		SetVertices(kRect);
 
 		if (m_bIsTran)
 		{
-			glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+			ccGLBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 		}
 
-		glBindTexture(GL_TEXTURE_2D, pkTempTexture->getName());
-		glVertexPointer(2, GL_FLOAT, 0, m_pfVertices);
-		glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_colors);
-		glTexCoordPointer(2, GL_FLOAT, 0, m_coordinates);
+		ccGLBindTexture2D(pkTempTexture->getName());
+
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+
+		// attribute
+		ccGLEnableVertexAttribs( kCCVertexAttribFlag_PosColorTex );
+
+		glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, m_pfVertices);
+		glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, m_coordinates);
+		glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, m_colors);
+		
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+// 		glBindTexture(GL_TEXTURE_2D, pkTempTexture->getName());
+// 
+// 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+// 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+// 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+// 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+// 
+// 		glVertexPointer(2, GL_FLOAT, 0, m_pfVertices);
+// 		glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_colors);
+// 		glTexCoordPointer(2, GL_FLOAT, 0, m_coordinates);
+// 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
 	}
 }
 
@@ -604,9 +659,10 @@ void NDPictureDictionary::Recyle()
 		return;
 	}
 
-	std::vector<std::string> allKeys = m_nsDictionary->allKeys();
+	//std::vector<std::string> allKeys = m_nsDictionary->allKeys();
+	CCArray* allKeys = m_nsDictionary->allKeys();
 
-	if (allKeys.empty())
+	if (allKeys->count() == 0)
 	{
 		return;
 	}
@@ -836,4 +892,4 @@ unsigned int NDTexture::GetTextureRetain()
 	return m_pkTexture->retainCount();
 }
 
-}
+NS_NDENGINE_END

@@ -10,7 +10,7 @@
 #define _ND_ANIMATION_GROUP_POOL_H_
 
 #include "NDAnimationGroup.h"
-#include "CCMutableDictionary.h"
+#include "cocoa/CCDictionary.h"
 
 class NDAnimationGroupPool: public cocos2d::CCObject
 {
@@ -33,7 +33,8 @@ private:
 
 	NDAnimationGroupPool();
 
-	cocos2d::CCMutableDictionary<std::string, NDAnimationGroup*>* m_pkAnimationGroups;
+	//cocos2d::CCMutableDictionary<std::string, NDAnimationGroup*>* m_pkAnimationGroups;
+	cocos2d::CCDictionary* m_pkAnimationGroups;
 };
 
 #endif

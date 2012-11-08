@@ -12,6 +12,7 @@
 
 #include "CCPlatformConfig.h"
 #include "CCGeometry.h"
+#include "ccTypes.h"
 
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
 #define CGPoint					cocos2d::CCPoint
@@ -26,8 +27,6 @@
 #define CGRectContainsPoint		cocos2d::CCRect::CCRectContainsPoint
 #define CGRectIntersectsRect	cocos2d::CCRect::CCRectIntersectsRect
 #endif
-
-#define ccc4					cocos2d::ccc4f
 
 #ifdef WIN32
 	#define uint				unsigned int

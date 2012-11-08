@@ -939,7 +939,7 @@ namespace NDEngine
 
 	NDFrame* NDSprite::GetCurrentFrame()
 	{
-		NDFrame *frame = m_pkCurrentAnimation->getFrames()->getObjectAtIndex(
+		NDFrame *frame = (NDFrame*)m_pkCurrentAnimation->getFrames()->objectAtIndex(
 			m_pkFrameRunRecord->getCurrentFrameIndex());
 		return frame;
 	}

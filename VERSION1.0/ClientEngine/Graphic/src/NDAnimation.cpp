@@ -27,7 +27,8 @@ m_pkBelongAnimationGroup(NULL),
 m_nCurIndexInAniGroup(-1),
 m_nPlayCount(0)
 {
-	m_pkFrames = new cocos2d::CCMutableArray<NDFrame*>();
+	//m_pkFrames = new cocos2d::CCMutableArray<NDFrame*>();
+	m_pkFrames = new cocos2d::CCArray();
 }
 
 NDAnimation::~NDAnimation()
@@ -77,7 +78,7 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 
 			if (m_nType == ANIMATION_TYPE_ONCE_END)
 			{
-				pkFrame = m_pkFrames->getLastObject();
+				pkFrame = (NDFrame*)m_pkFrames->lastObject();
 
 				if (bNeedDraw)
 				{
@@ -88,7 +89,7 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 			}
 			else if (m_nType == ANIMATION_TYPE_ONCE_START)
 			{
-				pkFrame = m_pkFrames->getObjectAtIndex(0);
+				pkFrame = (NDFrame*)m_pkFrames->objectAtIndex(0);
 
 				if (bNeedDraw)
 				{
@@ -100,7 +101,7 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 		}
 
 		//获取动画的当前帧
-		NDFrame *pkFrame = m_pkFrames->getObjectAtIndex(
+		NDFrame *pkFrame = (NDFrame*) m_pkFrames->objectAtIndex(
 				pkRunFrameRecord->getCurrentFrameIndex());
 
 		pkRunFrameRecord->setTotalFrame((int) uiFrameCount);
@@ -111,7 +112,7 @@ void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 		{
 			//runFrameRecord.isCompleted = NO;	
 			//取下一帧
-			pkFrame = m_pkFrames->getObjectAtIndex(
+			pkFrame = (NDFrame*) m_pkFrames->objectAtIndex(
 					pkRunFrameRecord->getNextFrameIndex());
 
 			pkRunFrameRecord->NextFrame(uiFrameCount);
@@ -142,7 +143,7 @@ void NDAnimation::SlowDown(unsigned int multi)
 	{
 		for (unsigned int i = 0; i < m_pkFrames->count(); i++)
 		{
-			NDFrame *pkFrame = m_pkFrames->getObjectAtIndex(i);
+			NDFrame *pkFrame = (NDFrame*) m_pkFrames->objectAtIndex(i);
 			pkFrame->setEnduration(pkFrame->getEnduration() * multi);
 		}
 	}
@@ -159,12 +160,14 @@ bool NDAnimation::lastFrameEnd( NDFrameRunRecord* pkRunRecord )
 	return false;
 }
 
-void NDAnimation::setFrames(cocos2d::CCMutableArray<NDFrame*>* pkFrames)
+//void NDAnimation::setFrames(cocos2d::CCMutableArray<NDFrame*>* pkFrames)
+void NDAnimation::setFrames(cocos2d::CCArray* pkFrames)
 {
 	m_pkFrames = pkFrames;
 }
 
-cocos2d::CCMutableArray<NDFrame*>* NDAnimation::getFrames()
+//cocos2d::CCMutableArray<NDFrame*>* NDAnimation::getFrames()
+cocos2d::CCArray* NDAnimation::getFrames()
 {
 	return m_pkFrames;
 }

@@ -1,9 +1,6 @@
-[submodule "cocos2dx/platform/third_party/android/source/libjpeg"]
-	path = cocos2dx/platform/third_party/android/source/libjpeg
-	url = git://github.com/folecr/jpeg8d.git
-[submodule "cocos2dx/platform/third_party/android/source/libpng"]
-	path = cocos2dx/platform/third_party/android/source/libpng
-	url = git://github.com/folecr/platform_external_libpng.git
-[submodule "cocos2dx/platform/third_party/android/source/libxml2"]
-	path = cocos2dx/platform/third_party/android/source/libxml2
-	url = git://github.com/folecr/platform_external_libxml2.git
+[submodule "tools/cxx-generator"]
+	path = tools/cxx-generator
+	url = git://github.com/funkaster/cxx-generator.git
+[submodule "scripting/javascript/bindings/generated"]
+	path = scripting/javascript/bindings/generated
+	url = git://github.com/folecr/cocos2dx-autogen-bindings.git

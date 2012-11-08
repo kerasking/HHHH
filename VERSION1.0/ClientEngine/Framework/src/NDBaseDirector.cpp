@@ -78,9 +78,9 @@ void NDBaseDirector::mainLoop(void)
 			this->DispatchOneMessage();
 		}
 
-		//NDDirector::DefaultDirector()->DisibleScissor(); // ÔÝÊ±ÏÈ×¢ÊÍµô
+		NDDirector::DefaultDirector()->DisibleScissor(); // ÔÝÊ±ÏÈ×¢ÊÍµô
 
-		CCScheduler::sharedScheduler()->setTickEnabled( NDDebugOpt::getTickEnabled() );
+		m_pScheduler->setTickEnabled( NDDebugOpt::getTickEnabled() );
 
 		CCDisplayLinkDirector::mainLoop();
 	}

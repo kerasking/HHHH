@@ -28,7 +28,7 @@ IMPLEMENT_CLASS(NDDictionary, NDObject)
 
 NDDictionary::NDDictionary()
 {
-	m_nsDictionary = new CCMutableDictionary<std::string, cocos2d::CCObject*>();
+	m_nsDictionary = new CCDictionary();
 }
 
 NDDictionary::~NDDictionary()

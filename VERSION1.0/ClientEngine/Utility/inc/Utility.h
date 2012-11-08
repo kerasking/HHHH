@@ -8,6 +8,6 @@
 #include "NDString.h"
 #include "TQString.h"
 #include "CCPlatformConfig.h"
-#include "CCMutableArray.h"
+#include "CCArray.h"
 
 #endif // _UTILITY_H_ZJH_

@@ -10,7 +10,7 @@
 #define _ND_ANIMATION_H_
 
 //#include "NDFrame.h"
-#include "CCMutableArray.h"
+#include "CCArray.h"
 #include "Utility.h"
 #include "NDFrame.h"
 
@@ -22,7 +22,8 @@ class NDFrameRunRecord;
 class NDAnimationGroup;
 class NDAnimation: public cocos2d::CCObject
 {
-	CC_PROPERTY(cocos2d::CCMutableArray<NDFrame*>*, m_pkFrames, Frames)
+	//CC_PROPERTY(cocos2d::CCMutableArray<NDFrame*>*, m_pkFrames, Frames)
+	CC_PROPERTY(cocos2d::CCArray*, m_pkFrames, Frames)
 	CC_SYNTHESIZE(int, m_nX, X)
 	CC_SYNTHESIZE(int, m_nY, Y)
 	CC_SYNTHESIZE(int, m_nW, W)

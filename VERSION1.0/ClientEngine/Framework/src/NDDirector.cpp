@@ -17,11 +17,12 @@
 //#include "NDMapData.h"
 #include "NDPicture.h"
 #include "NDAnimationGroupPool.h"
+#include "define.h"
 
 using namespace cocos2d;
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
 IMPLEMENT_CLASS(NDDirector, NDObject)
 
 static NDDirector* gs_pkNDDirectorDefaultDirector = NULL;
@@ -34,24 +35,18 @@ NDDirector::NDDirector()
 	m_pkDirector = CCDirector::sharedDirector();
 	m_pkSetViewRectNode = NULL;
 	m_bResetViewRect = false;
-	m_fXScaleFactor = 1.0f;
-	m_fYScaleFactor = 1.0f;
-
-	m_bEnableRetinaDisplay = false;
-
+// 	m_fXScaleFactor = 1.0f;
+// 	m_fYScaleFactor = 1.0f;
 	m_pkTransitionSceneWait = NULL;
-
 	m_eTransitionSceneType = eTransitionSceneNone;
 }
 
 NDDirector::~NDDirector()
 {
-	if (m_pkTransitionSceneWait)
-	{
-		delete m_pkTransitionSceneWait;
-	}
+	SAFE_DELETE (m_pkTransitionSceneWait);
 
-	m_pkDirector->release();
+	SAFE_RELEASE( m_pkDirector );
+
 	gs_pkNDDirectorDefaultDirector = NULL;
 }
 
@@ -64,38 +59,15 @@ NDDirector* NDDirector::DefaultDirector()
 	return gs_pkNDDirectorDefaultDirector;
 }
 
-void NDDirector::Initialization()
-{
-	m_pkDirector->setOpenGLView(&CCEGLView::sharedOpenGLView());
+// void NDDirector::Initialization()
+// {
+// // 	CCTexture2D::setDefaultAlphaPixelFormat (kTexture2DPixelFormat_RGBA8888);//@todo.
+// }
 
-	m_pkDirector->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
-
-	CC_GLVIEW* pkView = m_pkDirector->getOpenGLView();
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	//view->setMultipleTouchEnabled(false);
-#endif
-	
-	if (m_pkDirector->enableRetinaDisplay(true))
-	{
-		m_bEnableRetinaDisplay = true;
-	}
-
-	m_pkDirector->setAnimationInterval(1.0f / 24.0f); //@zwq
-
-	CCTexture2D::setDefaultAlphaPixelFormat (kTexture2DPixelFormat_RGBA8888);
-
-	//#if ND_DEBUG_STATE == 1
-	m_pkDirector->setDisplayFPS(true);
-	//#else
-	//m_director.displayFPS = NO;
-	//#endif
-}
-
-void NDDirector::AddDelegate(NDObject* receiver)
-{
-	m_delegates.push_back(receiver);
-}
+// void NDDirector::AddDelegate(NDObject* receiver)
+// {
+// 	m_delegates.push_back(receiver);
+// }
 
 void NDDirector::RemoveDelegate(NDObject* receiver)
 {
@@ -156,11 +128,10 @@ void NDDirector::SetTransitionScene(NDScene *scene, TransitionSceneType type)
 	 */
 }
 
-void NDDirector::EnableDispatchEvent(bool enable)
-{
-	CCTouchDispatcher::sharedDispatcher()->setDispatchEvents(
-			enable ? true : false);
-}
+// void NDDirector::EnableDispatchEvent(bool enable)
+// {
+// 	CCDirector::sharedDirector()->getTouchDispatcher()->setDispatchEvents( enable );
+// }
 
 void NDDirector::RunScene(NDScene* scene)
 {
@@ -275,25 +246,26 @@ void NDDirector::PurgeCachedData()
 	NDAnimationGroupPool::purgeDefaultPool();
 }
 
-void NDDirector::Pause()
-{
-	m_pkDirector->pause();
-}
+// 
+// void NDDirector::Pause()
+// {
+// 	m_pkDirector->pause();
+// }
 
-void NDDirector::Resume()
-{
-	m_pkDirector->resume();
-}
+// void NDDirector::Resume()
+// {
+// 	m_pkDirector->resume();
+// }
 
-void NDDirector::StopAnimation()
-{
-	m_pkDirector->stopAnimation();
-}
-
-void NDDirector::StartAnimation()
-{
-	m_pkDirector->startAnimation();
-}
+// void NDDirector::StopAnimation()
+// {
+// 	m_pkDirector->stopAnimation();
+// }
+// 
+// void NDDirector::StartAnimation()
+// {
+// 	m_pkDirector->startAnimation();
+// }
 
 void NDDirector::Stop()
 {
@@ -306,10 +278,10 @@ void NDDirector::Stop()
 	}
 }
 
-bool NDDirector::isPaused()
-{
-	return (bool) m_pkDirector->isPaused();
-}
+// bool NDDirector::isPaused()
+// {
+// 	return (bool) m_pkDirector->isPaused();
+// }
 
 NDScene* NDDirector::GetScene(const NDRuntimeClass* runtimeClass)
 {
@@ -335,15 +307,15 @@ NDScene* NDDirector::GetRunningScene()
 	return NULL;
 }
 
-void NDDirector::SetDisplayFPS(bool bDisplayed)
-{
-	m_pkDirector->setDisplayFPS(bDisplayed);
-}
+// void NDDirector::SetDisplayFPS(bool bDisplayed)
+// {
+// 	m_pkDirector->setDisplayStats(bDisplayed);
+// }
 
-CGSize NDDirector::GetWinSize()
-{
-	return m_pkDirector->getWinSizeInPixels();
-}
+// CGSize NDDirector::GetWinSize()
+// {
+// 	return m_pkDirector->getWinSizeInPixels();
+// }
 
 void NDDirector::SetViewRect(CGRect kRect, NDNode* pkNode)
 {
@@ -354,11 +326,13 @@ void NDDirector::SetViewRect(CGRect kRect, NDNode* pkNode)
 
 	CGSize kWinSize = m_pkDirector->getWinSizeInPixels();
 
+#if 0 //@todo
 	glEnable (GL_SCISSOR_TEST);
 
 	glScissor(kWinSize.height - kRect.origin.y - kRect.size.height,
 			kWinSize.width - kRect.origin.x - kRect.size.width, kRect.size.height,
 			kRect.size.width);
+#endif
 
 	/***
 	*	这里略有不同，但是可以接受，因为Mac上是调用UIDevice.h中的，这里不需要。
@@ -476,34 +450,38 @@ NDScene* NDDirector::GetSceneByTag(int nSceneTag)
 	return NULL;
 }
 
-float NDDirector::GetScaleFactor()
-{
-	return m_pkDirector->getContentScaleFactor();
-}
+// 
+// float NDDirector::GetScaleFactor()
+// {
+// // 	if (m_pkDirector->enableRetinaDisplay(true))
+// // 	{
+// // 		m_bEnableRetinaDisplay = true;
+// // 	}
+// 	return m_pkDirector->getContentScaleFactor();
+// }
 
-cocos2d::CCSize NDDirector::GetWinPoint()
-{
-	return m_pkDirector->getWinSize();
-}
+// cocos2d::CCSize NDDirector::GetWinPoint()
+// {
+// 	return m_pkDirector->getWinSize();
+// }
 
-float NDDirector::GetScaleFactorY()
-{
-	return CC_CONTENT_SCALE_FACTOR();
-}
+// float NDDirector::GetScaleFactorY()
+// {
+// 	return CC_CONTENT_SCALE_FACTOR();
+// }
 
-bool NDDirector::IsEnableRetinaDisplay()
-{
-	return m_bEnableRetinaDisplay;
-}
+// bool NDDirector::IsEnableRetinaDisplay()
+// {
+// 	return CCEGLView::sharedOpenGLView()->isRetinaEnabled();
+// }
 
-void NDDirector::SetDelegate( NDObject* pkReceiver )
-{
+// void NDDirector::SetDelegate( NDObject* pkReceiver )
+// {
+// }
 
-}
+// NDObject* NDDirector::GetDelegate()
+// {
+// 	return NULL;
+// }
 
-NDObject* NDDirector::GetDelegate()
-{
-	return NULL;
-}
-
-}
+NS_NDENGINE_END

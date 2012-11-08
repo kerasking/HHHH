@@ -49,8 +49,8 @@ namespace NDEngine
 		//m_location = [touch locationInView:[[CCDirector sharedDirector] openGLView]];
 		//m_previousLocation = [touch previousLocationInView:[[CCDirector sharedDirector] openGLView]];
 		// todo(zjh)
-		m_location = CCTouchDispatcher::sharedDispatcher()->getCurPos();
-		m_previousLocation = CCTouchDispatcher::sharedDispatcher()->getPrePos();
+		m_location = CCDirector::sharedDirector()->getTouchDispatcher()->getCurPos();
+		m_previousLocation = CCDirector::sharedDirector()->getTouchDispatcher()->getPrePos();
 // 		if( CC_CONTENT_SCALE_FACTOR() == 1 )
 // 		{
 // 

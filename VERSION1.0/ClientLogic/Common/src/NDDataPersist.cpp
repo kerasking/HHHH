@@ -160,7 +160,9 @@ bool NDDataPersist::NeedEncodeForKey(NSString* key)
 
 void NDDataPersist::SetData(unsigned int index, NSString* key, const char* data)
 {
-	CCMutableDictionary<const char*>* dic = LoadDataDiction(index);
+	//CCMutableDictionary<const char*>* dic = LoadDataDiction(index);
+	CCDictionary* dic = LoadDataDiction(index);
+
 	NDAsssert(dic != nil);
 	if (data) 
 	{
@@ -186,7 +188,9 @@ const char* NDDataPersist::GetData(unsigned int index, NSString* key)
 	static char decData[1024] = {0};
 	memset(decData, 0x00, sizeof(decData));
 	
-	CCMutableDictionary<const char*>* dic = LoadDataDiction(index);
+	//CCMutableDictionary<const char*>* dic = LoadDataDiction(index);
+	CCDictionary* dic = LoadDataDiction(index);
+
 	NDAsssert(dic != nil);
 	NSString* nsStr = (NSString*)dic->objectForKey(key->toStdString().c_str());
 
@@ -221,23 +225,27 @@ void NDDataPersist::SaveLoginData()
 	this->SaveData();
 }
 
-CCMutableDictionary<const char*>* NDDataPersist::LoadDataDiction(unsigned int index)
+//CCMutableDictionary<const char*>* NDDataPersist::LoadDataDiction(unsigned int index)
+CCDictionary* NDDataPersist::LoadDataDiction(unsigned int index)
 {
 	NDAsssert(m_pkDataArray != nil);
 	
-	CCMutableDictionary<const char*>* dic = nil;
+	//CCMutableDictionary<const char*>* dic = nil;
+	CCDictionary* dic = nil;
 	
 	if (m_pkDataArray->count() > index)
 	{
-		dic = (CCMutableDictionary<const char*>*)m_pkDataArray->getObjectAtIndex(index);
+		//dic = (CCMutableDictionary<const char*>*)m_pkDataArray->getObjectAtIndex(index);
+		dic = (CCDictionary*)m_pkDataArray->objectAtIndex(index);
 	}
 	
 	if (dic == nil)
 	{ // 数据不存在,初始化
 		for (unsigned int i = m_pkDataArray->count(); i <= index; i++) 
 		{
-			dic = new CCMutableDictionary<const char*>;
-			m_pkDataArray->insertObjectAtIndex(dic,i);
+			//dic = new CCMutableDictionary<const char*>;
+			dic = new CCDictionary();
+			m_pkDataArray->insertObject(dic,i);
 			SAFE_DELETE(dic);
 // 			[dataArray insertObject:dic atIndex:i];
 // 			[dic release];
@@ -252,7 +260,9 @@ void NDDataPersist::LoadData()
  	NSString *filePath = this->GetDataPath();
 
 	XMLReader kReader;
-	m_pkDataArray = new CCMutableArray<CCObject*>;
+
+	//m_pkDataArray = new CCMutableArray<CCObject*>;
+	m_pkDataArray = new CCArray();
 	
 	if (!kReader.initWithFile(filePath->toStdString().c_str()))
 	{
@@ -269,15 +279,16 @@ void NDDataPersist::LoadData()
 	for (XMLReader::FileData::iterator it = pkMap->begin();
 		it != pkMap->end();it++)
 	{
-		CCMutableDictionary<CCObject*,CCObject*>* pkDic = 
-			new CCMutableDictionary<CCObject*,CCObject*>;
+		//CCMutableDictionary<CCObject*,CCObject*>* pkDic =  new CCMutableDictionary<CCObject*,CCObject*>;
+		CCDictionary* pkDic =  new CCDictionary();
+
 		string strKey = "";
-		string strString = "";
+		string strVal = "";
 		
 		strKey = it->first;
-		strString = it->second;
+		strVal = it->second;
 
-		pkDic->setObject(new CCString(strKey.c_str()),new CCString(strString.c_str()));
+		pkDic->setObject(new CCString(strVal.c_str()), strKey);
 
 		m_pkDataArray->addObject(pkDic);
 	}
@@ -363,7 +374,8 @@ void NDDataPersist::AddAcount(const char* account, const char* pwd)
 		unsigned char encAccount[1024] = {0x00};
 		simpleEncode((const unsigned char*)account, encAccount);
 		
-		CCMutableArray<CCObject*>* accountNode = new CCMutableArray<CCObject*>;
+		//CCMutableArray<CCObject*>* accountNode = new CCMutableArray<CCObject*>;
+		CCArray* accountNode = new CCArray();
 
 		accountNode->addObject(&NSString((const char*)encAccount));
 		//[accountNode addObject:[NSString stringWithUTF8String:(const char*)encAccount]];

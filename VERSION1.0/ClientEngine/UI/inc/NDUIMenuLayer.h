@@ -47,7 +47,9 @@ namespace NDEngine
 		
 		void ShowOkBtn();
 	private:
-		CCMutableArray<NDTile*> *m_tiles;
+		//CCMutableArray<NDTile*> *m_tiles;
+		CCArray *m_tiles;
+
 		NDPicture* m_picCancel;
 		NDPicture* m_picOk;
 		NDUIButton	   *m_btnCancel;

@@ -29,7 +29,7 @@ class Timer: public CCObject
 
 public:
 	Timer();
-	void onTimer(ccTime elapsed);
+	void onTimer(float elapsed);
 };
 
 class NDTimer
@@ -40,6 +40,9 @@ public:
 
 	void SetTimer(ITimerCallback* timerCallback, OBJID tag, float interval);
 	void KillTimer(ITimerCallback* timerCallback, OBJID tag);
+
+protected:
+	CCScheduler* GetScheduler();
 
 private:
 	struct IMP_CALLBACK

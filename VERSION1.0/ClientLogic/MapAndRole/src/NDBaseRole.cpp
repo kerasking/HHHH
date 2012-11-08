@@ -1339,12 +1339,16 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 	int x = m_kPosition.x - DISPLAY_POS_X_OFFSET;
 	int y = m_kPosition.y - DISPLAY_POS_Y_OFFSET;
 
+// 	pic->DrawInRect(
+// 			CGRectMake(x + m_iShadowOffsetX,
+// 					y + m_iShadowOffsetY
+// 							+ NDDirector::DefaultDirector()->GetWinSize().height
+// 							- parentsize.height, sizeShadow.width,
+// 					sizeShadow.height));
+
 	pic->DrawInRect(
-			CGRectMake(x + m_iShadowOffsetX,
-					y + m_iShadowOffsetY
-							+ NDDirector::DefaultDirector()->GetWinSize().height
-							- parentsize.height, sizeShadow.width,
-					sizeShadow.height));
+		CGRectMake(x + m_iShadowOffsetX, y + m_iShadowOffsetY,
+		sizeShadow.width, sizeShadow.height));
 }
 
 // void NDBaseRole::SetNormalAniGroup(int nLookface)

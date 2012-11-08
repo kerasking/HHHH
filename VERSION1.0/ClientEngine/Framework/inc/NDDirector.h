@@ -18,12 +18,14 @@
 #include "NDObject.h"
 #include <vector>
 #include "CCDirector.h"
+#include "CCEGLView.h"
 #include "NDNode.h"
+#include "CCTouchDispatcher.h"
 
 #define FONT_SCALE (NDDirector::DefaultDirector()->GetScaleFactor())
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
 class NDDirector;
 class NDDirectorDelegate
 {
@@ -85,7 +87,7 @@ public:
 //		作用：导演对象在使用之初需要初始化一次用于完成游戏配置，该方法在整个程序中只被调用一次
 //		参数：无
 //		返回值：无
-	void Initialization();
+	void Initialization() {}
 //		
 //		函数：RunScene
 //		作用：运行场景，该场景是游戏的第一个场景；在做游戏场景切换的时候不要使用该方法
@@ -134,16 +136,17 @@ public:
 //		作用：暂停运行当前场景
 //		参数：无
 //		返回值：无
-	void Pause();
+	void Pause() { m_pkDirector->pause(); }
 //		
 //		函数：Resume
 //		作用：恢复运行当前场景
 //		参数：无
 //		返回值：无
-	void Resume();
+	void Resume() { m_pkDirector->resume(); }
 
-	void StopAnimation();
-	void StartAnimation();
+	void StopAnimation() { m_pkDirector->stopAnimation(); }
+	void StartAnimation() { m_pkDirector->startAnimation(); }
+
 //		
 //		函数：Stop
 //		作用：停止游戏
@@ -161,25 +164,41 @@ public:
 //		作用：显示游戏运行时的帧数
 //		参数：bDisplayed如果true显示，否则不显示
 //		返回值：无
-	void SetDisplayFPS(bool bDisplayed);
+	void SetDisplayFPS(bool bDisplayed) { m_pkDirector->setDisplayStats(bDisplayed); }
+
 //		
 //		函数：isPaused
 //		作用：判断游戏是否处于暂停状态
 //		参数：无
 //		返回值：true是 false否
-	bool isPaused();
+	bool isPaused() { return m_pkDirector->isPaused(); }
+
+//@dirty
 //		
 //		函数：GetWinSize
 //		作用：获取屏幕大小
 //		参数：无
 //		返回值：屏幕大小
-	CGSize GetWinSize();
+	CCSize GetWinSize() 
+	{
+		//return m_pkDirector->getWinSizeInPixels();
+		return m_pkDirector->getWinSize();
+	}
 
+	CCSize GetWinSizeInPixels()
+	{
+		return m_pkDirector->getWinSizeInPixels();
+	}
+
+//@dirty
 //		函数：GetWinPoint
 //		作用：获取屏幕点大小
 //		参数：无
 //		返回值：屏幕点大小
-	CCSize GetWinPoint();
+	CCSize GetWinPoint() 
+	{
+		return m_pkDirector->getWinSize();
+	}
 //
 //		函数：SetViewRect
 //		作用：设置节点的绘制区域，一旦设置了节点的绘制区域，则子节点的绘制区域也不会超过该区域范围；
@@ -198,7 +217,7 @@ public:
 //		作用：添加对象委托，注意：对象注册完委托，释放时请注销RemoveDelegate()
 //		参数：receiver委托事件接收者
 //		返回值：无	
-	void AddDelegate(NDObject* receiver);
+	void AddDelegate(NDObject* receiver) { m_delegates.push_back(receiver); }
 //		
 //		函数：RemoveDelegate
 //		作用：注销对象的委托
@@ -208,14 +227,16 @@ public:
 
 	void TransitionAnimateComplete();
 
-	void EnableDispatchEvent(bool enable);
+	void EnableDispatchEvent(bool enable) {
+		CCDirector::sharedDirector()->getTouchDispatcher()->setDispatchEvents( enable );
+	}
 
 	NDScene* GetSceneByTag(int nSceneTag);
 
-	float GetScaleFactor();
-	float GetScaleFactorY();
+	float GetScaleFactor() { return m_pkDirector->getContentScaleFactor(); }
+//	float GetScaleFactorY() { CCDirector::sharedDirector()->getContentScaleFactor(); }
 
-	bool IsEnableRetinaDisplay();
+	bool IsEnableRetinaDisplay() { return CCEGLView::sharedOpenGLView()->isRetinaEnabled(); }
 
 	void DisibleScissor();
 
@@ -238,20 +259,21 @@ private:
 	bool m_bResetViewRect;
 	std::vector<NDObject*> m_delegates;
 
-	void SetDelegate(NDObject* pkReceiver);
-	NDObject* GetDelegate();
+	void SetDelegate(NDObject* pkReceiver) {}
+	NDObject* GetDelegate() { return NULL; }
 
 	void BeforeDirectorPopScene(NDScene* scene, bool cleanScene);
 	void AfterDirectorPopScene(bool cleanScene);
 	void BeforeDirectorPushScene(NDScene* scene);
 	void AfterDirectorPushScene(NDScene* scene);
 
-	float m_fXScaleFactor;			///< 这俩变量压根就没用上啊！何解？ 郭浩
-	float m_fYScaleFactor;			///< 这俩变量压根就没用上啊！何解？ 郭浩
+// 	float m_fXScaleFactor;			///< 这俩变量压根就没用上啊！何解？ 郭浩
+// 	float m_fYScaleFactor;			///< 这俩变量压根就没用上啊！何解？ 郭浩
+	
 	NDScene* m_pkTransitionSceneWait;
 	TransitionSceneType m_eTransitionSceneType;
-	bool m_bEnableRetinaDisplay;
 };
-}
+
+NS_NDENGINE_END
 
 #endif

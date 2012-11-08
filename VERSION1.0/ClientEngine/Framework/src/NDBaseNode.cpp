@@ -25,3 +25,23 @@ void NDBaseNode::draw(void)
 		m_ndNode->draw();
 	}
 }
+
+void NDBaseNode::preDraw(void)
+{
+	if (m_ndNode && m_ndNode->DrawEnabled())
+	{
+		NDDirector::DefaultDirector()->ResumeViewRect(m_ndNode);
+		m_ndNode->preDraw();
+	}
+}
+
+void NDBaseNode::postDraw(void)
+{
+	//drawDebug();
+
+	if (m_ndNode && m_ndNode->DrawEnabled())
+	{
+		NDDirector::DefaultDirector()->ResumeViewRect(m_ndNode);
+		m_ndNode->postDraw();
+	}
+}

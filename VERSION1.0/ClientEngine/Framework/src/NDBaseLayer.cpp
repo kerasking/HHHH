@@ -67,7 +67,7 @@ void NDBaseLayer::registerWithTouchDispatcher(void)
 		pkNode = pkNode->GetParent();
 	}
 
-	CCTouchDispatcher::sharedDispatcher()->addTargetedDelegate(this, 0, true);
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 }
 
 bool NDBaseLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)

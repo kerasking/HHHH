@@ -23,6 +23,9 @@
 #include "CCNode.h"
 #include "CCObject.h"
 
+#include "shaders/ccGLStateCache.h"
+#include "shaders/CCGLProgram.h"
+
 #define DECLARE_AUTOLINK(class_name) \
 private: CAutoLink<class_name> m_autolink##class_name;
 
@@ -88,6 +91,9 @@ public:
 	//		参数：无
 	//		返回值：无
 	virtual void draw();
+	virtual void preDraw() {}
+	virtual void postDraw() {}
+
 	//		
 	//		函数：GetParent
 	//		作用：获取父亲节点
@@ -207,11 +213,16 @@ public:
 	//		返回值：true允许访问，false不允许访问，默认为true
 	bool DrawEnabled();
 
-
 	void SetParam1(int nParam1);
 	void SetParam2(int nParam2);
 	int GetParam1();
 	int GetParam2();
+
+public: //@shader
+	CC_SYNTHESIZE_RETAIN(CCGLProgram*, m_pShaderProgram, ShaderProgram);
+	CC_SYNTHESIZE(ccGLServerState, m_glServerState, GLServerState);
+protected:
+	void DrawSetup( const char* shaderType = kCCShader_PositionTexture_uColor );
 
 protected:
 	int m_nParam1;

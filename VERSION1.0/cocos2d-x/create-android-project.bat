@@ -15,11 +15,11 @@ set _CYGBIN=e:\cygwin\bin
 if not exist "%_CYGBIN%" echo Couldn't find Cygwin at "%_CYGBIN%" & pause & exit 4
 
 :: modify it to work under your environment
-set _ANDROIDTOOLS=c:\Program Files\android\android-sdk\tools
+set _ANDROIDTOOLS=e:\android\android-sdk\tools
 if not exist "%_ANDROIDTOOLS%" echo Couldn't find android sdk tools at "%_ANDROIDTOOLS%" & pause & exit 5
 
 :: modify it to work under your environment
-set _NDKROOT=d:\android-ndk-r8b
+set _NDKROOT=e:\android\android-ndk-r8
 if not exist "%_NDKROOT%" echo Couldn't find ndk at "%_NDKROOT%" & pause & exit 6
 
 :: create android project
@@ -33,8 +33,10 @@ set /P _TARGETID=Please input target id:
 set _PROJECTDIR=%CD%\%_PROJECTNAME%
 
 echo Create android project
-call "%_ANDROIDTOOLS%\android.bat" create project -n %_PROJECTNAME% -t %_TARGETID% -k %_PACKAGEPATH% -a %_PROJECTNAME% -p %_PROJECTDIR%
-	 
+mkdir %_PROJECTDIR%
+echo Create Android project inside proj.android
+call "%_ANDROIDTOOLS%\android.bat" create project -n %_PROJECTNAME% -t %_TARGETID% -k %_PACKAGEPATH% -a %_PROJECTNAME% -p %_PROJECTDIR%\proj.android
+call "%_ANDROIDTOOLS%\android.bat" update project -l ../../cocos2dx/platform/android/java -p %_PROJECTDIR%\proj.android
 :: Resolve ___.sh to /cygdrive based *nix path and store in %_CYGSCRIPT%
 for /f "delims=" %%A in ('%_CYGBIN%\cygpath.exe "%~dpn0.sh"') do set _CYGSCRIPT=%%A
 
@@ -45,6 +47,6 @@ for /f "delims=" %%A in ('%_CYGBIN%\cygpath.exe "%cd%"') do set _CURRENTDIR=%%A
 for /f "delims=" %%A in ('%_CYGBIN%\cygpath.exe "%_NDKROOT%"') do set _NDKROOT=%%A
 	 
 :: Throw away temporary env vars and invoke script, passing any args that were passed to us
-endlocal & %_CYGBIN%\bash --login "%_CYGSCRIPT%" %_CURRENTDIR% %_PROJECTNAME% %_NDKROOT% %_PACKAGEPATH% "windows" -l -b
+endlocal & %_CYGBIN%\bash --login "%_CYGSCRIPT%" %_CURRENTDIR% %_PROJECTNAME% %_NDKROOT% %_PACKAGEPATH% "windows"
 
 pause

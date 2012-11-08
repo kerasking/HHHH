@@ -11,6 +11,15 @@
 
 #include "Utility.h"
 #include "CCTexture2D.h"
+#include "CCDirector.h"
+#include "shaders/ccGLStateCache.h"
+#include "shaders/ccGLProgram.h"
+#include "ccTypes.h"
+#include "CCPlatformMacros.h"
+#include "UsePointPls.h"
+
+USING_NS_CC;
+using namespace NDEngine;
 
 typedef enum
 {
@@ -47,11 +56,41 @@ bool IsTileHightLight();
 class NDTile : public cocos2d::CCObject 
 {
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCTexture2D*, m_pkTexture, Texture)
-	CC_SYNTHESIZE(CGRect, m_kCutRect, CutRect)
-	CC_SYNTHESIZE(CGRect, m_kDrawRect, DrawRect)
 	CC_SYNTHESIZE(bool, m_bReverse, Reverse)
 	CC_SYNTHESIZE(NDRotationEnum, m_Rotation, Rotation)
+#if 0
 	CC_SYNTHESIZE(CGSize, m_kMapSize, MapSize)
+	CC_SYNTHESIZE(CGRect, m_kCutRect, CutRect)
+	CC_SYNTHESIZE(CGRect, m_kDrawRect, DrawRect)
+#else
+	protected:
+		CGRect m_kCutRect, m_kDrawRect;
+		CGSize m_kMapSize;
+	public:
+		//
+		virtual CGRect getCutRect() { return m_kCutRect; }
+		virtual void setCutRect( CGRect var ) 
+		{ 
+			m_kCutRect = var; 
+			ConvertUtil::convertToPointCoord(m_kCutRect);
+		}
+
+		//
+		virtual CGRect getDrawRect() { return m_kDrawRect; }
+		virtual void setDrawRect( CGRect var ) 
+		{ 
+			m_kDrawRect = var; 
+			ConvertUtil::convertToPointCoord(m_kDrawRect);
+		}
+
+		//
+		virtual CGSize getMapSize() { return m_kMapSize; }
+		virtual void setMapSize( CGSize var ) 
+		{ 
+			m_kMapSize = var;
+			ConvertUtil::convertToPointCoord(m_kMapSize);
+		}
+#endif
 
 public:
 	NDTile();
@@ -63,10 +102,18 @@ public:
 	void makeTex(float* pData);
 	void makeVetex(float* pData, CGRect kRect);
 
+public: //@shader
+	CC_SYNTHESIZE_RETAIN(CCGLProgram*, m_pShaderProgram, ShaderProgram);
+	CC_SYNTHESIZE(ccGLServerState, m_glServerState, GLServerState);
+
+protected:
+	void DrawSetup( const char* shaderType = kCCShader_PositionTextureColor );
+	virtual void debugDraw();
+
 private:
 
-	float* m_pfVertices;
-	float* m_pfCoordinates;
+	float m_pfVertices[12];
+	float m_pfCoordinates[8];
 };
 
 #endif

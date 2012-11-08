@@ -22,6 +22,8 @@ public:
 
 protected:
 	virtual void draw(void);
+	virtual void preDraw(void);
+	virtual void postDraw(void);
 };
 
 #endif

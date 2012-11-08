@@ -9,6 +9,7 @@
 
 #include "NDTimer.h"
 #include "CCScheduler.h"
+#include "CCDirector.h"
 
 using namespace cocos2d;
 
@@ -16,7 +17,7 @@ Timer::Timer()
 {
 }
 
-void Timer::onTimer(ccTime elapsed)
+void Timer::onTimer(float elapsed)
 {
 	if (m_TimerCallback)
 	{
@@ -29,9 +30,14 @@ NDTimer::NDTimer()
 
 }
 
+CCScheduler* NDTimer::GetScheduler()
+{
+	return CCDirector::sharedDirector()->getScheduler();
+}
+
 NDTimer::~NDTimer()
 {
-	CCScheduler *sch = CCScheduler::sharedScheduler();
+	CCScheduler *sch = GetScheduler();
 	MAP_TIMER::iterator it = m_mapTimer.begin();
 	for (; it != m_mapTimer.end(); it++)
 	{
@@ -51,7 +57,7 @@ void NDTimer::SetTimer(ITimerCallback* timerCallback, OBJID tag, float interval)
 
 		if (m_mapTimer.count(cbImp) <= 0)
 		{
-			CCScheduler *sch = CCScheduler::sharedScheduler();
+			CCScheduler *sch = GetScheduler();
 			Timer *timer = new Timer;
 			timer->setTag(tag);
 			timer->setTimerCallback(timerCallback);
@@ -72,7 +78,7 @@ void NDTimer::KillTimer(ITimerCallback* timerCallback, OBJID tag)
 
 	if (it != m_mapTimer.end())
 	{
-		CCScheduler *sch = CCScheduler::sharedScheduler();
+		CCScheduler *sch = GetScheduler();
 		Timer *timer = it->second;
 		sch->unscheduleSelector(schedule_selector(Timer::onTimer), timer);
 		timer->release();

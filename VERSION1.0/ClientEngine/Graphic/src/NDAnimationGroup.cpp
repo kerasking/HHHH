@@ -243,6 +243,6 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 void NDAnimationGroup::drawHeadAt(CGPoint pos)
 {
 	NDAnimation* pkFirstAni = (NDAnimation*) m_pkAnimations->objectAtIndex(0);
-	NDFrame* pkFirstFrame = pkFirstAni->getFrames()->getObjectAtIndex(0);
+	NDFrame* pkFirstFrame = (NDFrame*)pkFirstAni->getFrames()->objectAtIndex(0);
 	pkFirstFrame->drawHeadAt(pos);
 }

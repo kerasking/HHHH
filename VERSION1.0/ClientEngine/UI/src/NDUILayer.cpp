@@ -9,7 +9,7 @@
 #include "NDUILayer.h"
 #include "NDUINode.h"
 #include "CCPointExtension.h"
-#include <GLES/gl.h>
+//#include <GLES/gl.h>
 //#include "NDIphoneEdit.h"
 #include "NDUIButton.h"
 #include "cocos2dExt.h"
@@ -117,7 +117,7 @@ void NDUILayer::Initialization()
 
 	NDBaseLayer *layer = (NDBaseLayer *) m_ccNode;
 	layer->SetUILayer(this);
-	layer->setIsTouchEnabled(true);
+	layer->setTouchEnabled(true);
 
 	this->SetFrameRect(CGRectZero);
 }
@@ -126,7 +126,7 @@ void NDUILayer::SetTouchEnabled(bool bEnabled)
 	NDAsssert(m_ccNode != NULL);
 
 	NDBaseLayer *layer = (NDBaseLayer *) m_ccNode;
-	layer->setIsTouchEnabled(bEnabled);
+	layer->setTouchEnabled(bEnabled);
 }
 
 void NDUILayer::SwallowDragInEvent(bool swallow)
@@ -246,6 +246,7 @@ void NDUILayer::draw()
 
 		if (pic)
 		{
+			DrawSetup( kCCShader_PositionColor );
 			DrawRecttangle(scrRect, m_kBackgroudColor);
 
 			pic->DrawInRect(scrRect);
@@ -256,8 +257,9 @@ void NDUILayer::draw()
 // 			{ 0 };
 // 
 // 			m_kBackgroudColor = kColor;
+			DrawSetup( kCCShader_PositionColor );
 			DrawRecttangle(scrRect, m_kBackgroudColor);
-
+			
 			if (m_pkBackgroudTexture)
 			{
 				//glDisableClientState(GL_COLOR_ARRAY);
@@ -359,10 +361,10 @@ bool NDUILayer::TouchBegin(NDTouch* touch)
 
 	m_bDispatchTouchEndEvent = true;
 	m_kBeginTouch = touch->GetLocation();
+
 	//add by zhangdi 20120828
 	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
-	CGPoint tmpTouch = CGPointMake(m_kBeginTouch.x * fScale,
-			m_kBeginTouch.y * fScale);
+	CGPoint tmpTouch = CGPointMake(m_kBeginTouch.x * fScale, m_kBeginTouch.y * fScale);//@todo
 	m_kBeginTouch = tmpTouch;
 
 	//	if (CGRectContainsPoint(this->GetScreenRect(), m_beginTouch) && this->IsVisibled() && this->EventEnabled())
@@ -387,10 +389,10 @@ bool NDUILayer::TouchBegin(NDTouch* touch)
 bool NDUILayer::TouchEnd(NDTouch* touch)
 {
 	m_kEndTouch = touch->GetLocation();
+
 	//add by zhangdi 20120828
 	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
-	CGPoint tmpTouch = CGPointMake(m_kEndTouch.x * fScale,
-			m_kEndTouch.y * fScale);
+	CGPoint tmpTouch = CGPointMake(m_kEndTouch.x * fScale, m_kEndTouch.y * fScale);//@todo
 	m_kEndTouch = tmpTouch;
 
 	if (m_pkDragOverNode)

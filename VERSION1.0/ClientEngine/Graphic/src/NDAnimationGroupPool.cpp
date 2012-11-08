@@ -20,8 +20,7 @@ NDAnimationGroupPool::NDAnimationGroupPool() :
 m_pkAnimationGroups(NULL)
 {
 	NDAsssert(gs_pkNDAnimationGroupPool_DefaultPool == NULL);
-	m_pkAnimationGroups =
-			new CCMutableDictionary<std::string, NDAnimationGroup*>();
+	m_pkAnimationGroups = new CCDictionary();
 }
 
 NDAnimationGroupPool::~NDAnimationGroupPool()
@@ -48,7 +47,7 @@ NDAnimationGroup* NDAnimationGroupPool::addObjectWithSpr(const char*sprFile)
 {
 	NDAnimationGroup *pkGroup = NULL;
 
-	pkGroup = m_pkAnimationGroups->objectForKey(sprFile);
+	pkGroup = (NDAnimationGroup*) m_pkAnimationGroups->objectForKey(sprFile);
 
 	if (!pkGroup)
 	{
@@ -110,9 +109,10 @@ void NDAnimationGroupPool::Recyle()
 		return;
 	}
 
-	std::vector < std::string > kAllKeys = m_pkAnimationGroups->allKeys();
+	//std::vector < std::string > kAllKeys = m_pkAnimationGroups->allKeys();
+	CCArray* kAllKeys = m_pkAnimationGroups->allKeys();
 
-	if (kAllKeys.empty())
+	if (kAllKeys->count() == 0)
 	{
 		return;
 	}
@@ -121,12 +121,12 @@ void NDAnimationGroupPool::Recyle()
 
 	std::vector < std::string > kRecyle;
 
-	for (unsigned int i = 0; i < kAllKeys.size(); i++)
+	for (unsigned int i = 0; i < kAllKeys->count(); i++)
 	{
-		std::string strKey = kAllKeys[i];
+		CCString* strKey1 = (CCString*) kAllKeys->objectAtIndex(i);
+		std::string strKey = strKey1->getCString();
 
-		NDAnimationGroup *pkAnimationGroup = m_pkAnimationGroups->objectForKey(
-				strKey);
+		NDAnimationGroup *pkAnimationGroup = (NDAnimationGroup*) m_pkAnimationGroups->objectForKey(strKey);
 
 		if (NULL == pkAnimationGroup)
 		{

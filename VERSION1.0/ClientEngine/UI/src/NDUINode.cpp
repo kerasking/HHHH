@@ -43,7 +43,7 @@ namespace NDEngine
 		m_kFrameRect = CGRectZero;		
 		m_bVisibled = true;
 		m_bEventEnabled = true;
-		m_kScrRect = CGRectZero;
+		m_kScrRectCache = CGRectZero;
 	}
 
 	////////////////////////////////////////////////////////////
@@ -114,7 +114,7 @@ namespace NDEngine
 		m_bVisibled = visible;
 		if (NULL != m_ccNode)
 		{
-			m_ccNode->setIsVisible(visible);
+			m_ccNode->setVisible(visible);
 		}
 		/*
 		for (int i = this->GetChildren().size() - 1; i >= 0; i--) 
@@ -200,13 +200,16 @@ namespace NDEngine
 			}
 			m_nStepNum--;
 		}
-		
+
+		// check screen rect changed.
 		CGRect scrRect = this->GetScreenRect();
-		if (scrRect.origin.x != m_kScrRect.origin.x || scrRect.origin.y != m_kScrRect.origin.y ||
-			scrRect.size.width != m_kScrRect.size.width || scrRect.size.height != m_kScrRect.size.height) 
+		if (scrRect.origin.x != m_kScrRectCache.origin.x 
+			|| scrRect.origin.y != m_kScrRectCache.origin.y 
+			|| scrRect.size.width != m_kScrRectCache.size.width 
+			|| scrRect.size.height != m_kScrRectCache.size.height) 
 		{
-			this->OnFrameRectChange(m_kScrRect, scrRect);
-			m_kScrRect = scrRect;
+			this->OnFrameRectChange(m_kScrRectCache, scrRect);
+			m_kScrRectCache = scrRect;
 		}
 	}
 	

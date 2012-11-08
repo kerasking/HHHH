@@ -77,7 +77,6 @@ protected:
 		if (m_info.nCtrlWidth != 0 && m_info.nCtrlHeight != 0)
 		{
 			rect.size = CGSizeMake(m_info.nCtrlWidth, m_info.nCtrlHeight);
-			
 			return rect;
 		}
 		

@@ -7,6 +7,10 @@
 //
 
 #include "NDTile.h"
+#include "shaders/CCShaderCache.h"
+#include "CCDrawingPrimitives.h"
+#include "CCPointExtension.h"
+#include "UsePointPls.h"
 
 using namespace cocos2d;
 
@@ -25,53 +29,63 @@ bool IsTileHightLight()
 NDTile::NDTile() :
 m_pkTexture(NULL),
 m_bReverse(false),
-m_Rotation(NDRotationEnumRotation0),
-m_pfVertices(NULL),
-m_pfCoordinates(NULL)
+m_Rotation(NDRotationEnumRotation0)//,
+// m_pfVertices(NULL),
+// m_pfCoordinates(NULL)
 {
 	m_kCutRect = CGRectMake(0, 0, 0, 0);
 	m_kDrawRect = CGRectMake(0, 0, 0, 0);
 	m_kMapSize = CGSizeMake(0, 0);
 
-	m_pfCoordinates = (float *) malloc(sizeof(float) * 8);
-	m_pfVertices = (float *) malloc(sizeof(float) * 12);
+// 	m_pfCoordinates = (float *) malloc(sizeof(float) * 8);
+// 	m_pfVertices = (float *) malloc(sizeof(float) * 12);
+
+	m_pShaderProgram = NULL; //@shader
+	m_glServerState = CC_GL_BLEND;
 }
 
 NDTile::~NDTile()
 {
-	free (m_pfCoordinates);
-	free (m_pfVertices);
+// 	free (m_pfCoordinates);
+// 	free (m_pfVertices);
 	CC_SAFE_FREE (m_pkTexture);
+	CC_SAFE_RELEASE(m_pShaderProgram); //@shader
 }
 
 void NDTile::makeTex(float* pData)
 {
+	if (!m_pkTexture) return;
+
 	//<-------------------纹理坐标
 	float *pfCoordinates = pData;
+	CCSize texSize = ConvertUtil::getTextureSizeInPoints(*m_pkTexture);
+
 	//BOOL re=NO;
 	if (getReverse())
 	{
-		*pfCoordinates++ = (m_kCutRect.origin.x + m_kCutRect.size.width)
-				/ m_pkTexture->getPixelsWide();
-		*pfCoordinates++ = (m_kCutRect.origin.y + m_kCutRect.size.height)
-				/ m_pkTexture->getPixelsHigh();
-		*pfCoordinates++ = m_kCutRect.origin.x / m_pkTexture->getPixelsWide();
+		*pfCoordinates++ = (m_kCutRect.origin.x + m_kCutRect.size.width) / texSize.width;
+		*pfCoordinates++ = (m_kCutRect.origin.y + m_kCutRect.size.height) / texSize.height;
+
+		*pfCoordinates++ = m_kCutRect.origin.x / texSize.width;
 		*pfCoordinates++ = pData[1];
+
 		*pfCoordinates++ = pData[0];
-		*pfCoordinates++ = m_kCutRect.origin.y / m_pkTexture->getPixelsHigh();
+		*pfCoordinates++ = m_kCutRect.origin.y / texSize.height;
+		
 		*pfCoordinates++ = pData[2];
 		*pfCoordinates++ = pData[5];
 	}
 	else
 	{
-		*pfCoordinates++ = m_kCutRect.origin.x / m_pkTexture->getPixelsWide();
-		*pfCoordinates++ = (m_kCutRect.origin.y + m_kCutRect.size.height)
-				/ m_pkTexture->getPixelsHigh();
-		*pfCoordinates++ = (m_kCutRect.origin.x + m_kCutRect.size.width)
-				/ m_pkTexture->getPixelsWide();
+		*pfCoordinates++ = m_kCutRect.origin.x / texSize.width;
+		*pfCoordinates++ = (m_kCutRect.origin.y + m_kCutRect.size.height) / texSize.height;
+		
+		*pfCoordinates++ = (m_kCutRect.origin.x + m_kCutRect.size.width) / texSize.width;
 		*pfCoordinates++ = pData[1];
+		
 		*pfCoordinates++ = pData[0];
-		*pfCoordinates++ = m_kCutRect.origin.y / m_pkTexture->getPixelsHigh();
+		*pfCoordinates++ = m_kCutRect.origin.y / texSize.height;
+		
 		*pfCoordinates++ = pData[2];
 		*pfCoordinates++ = pData[5];
 	}
@@ -472,15 +486,33 @@ static GLbyte gs_nTileHightLightColors[] =
 
 void NDTile::draw()
 {
-	if (m_pkTexture)
-	{
-		glBindTexture(GL_TEXTURE_2D, m_pkTexture->getName());		//绑定纹理
-		glVertexPointer(3, GL_FLOAT, 0, m_pfVertices);		//绑定目标位置数组
-		glColorPointer(4, GL_UNSIGNED_BYTE, 0,
-				gs_bTileHightLight ? gs_nTileHightLightColors : gs_nTileColors);
-		glTexCoordPointer(2, GL_FLOAT, 0, m_pfCoordinates);	//绑定瓦片数组
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);				//由opengl组合画图
-	}
+	if (!m_pkTexture) return;
+
+	DrawSetup();
+
+	ccGLBindTexture2D(m_pkTexture->getName());		//绑定纹理
+
+	// attribute
+	ccGLEnableVertexAttribs( kCCVertexAttribFlag_PosColorTex );
+
+	glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, 0, m_pfVertices);
+	glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, m_pfCoordinates);
+	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 
+										gs_bTileHightLight ? gs_nTileHightLightColors : gs_nTileColors );
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+
+// 	{
+// 		glBindTexture(GL_TEXTURE_2D, m_pkTexture->getName());		//绑定纹理
+// 		glVertexPointer(3, GL_FLOAT, 0, m_pfVertices);		//绑定目标位置数组
+// 		glColorPointer(4, GL_UNSIGNED_BYTE, 0,
+// 				gs_bTileHightLight ? gs_nTileHightLightColors : gs_nTileColors);
+// 		glTexCoordPointer(2, GL_FLOAT, 0, m_pfCoordinates);	//绑定瓦片数组
+// 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);				//由opengl组合画图
+// 	}
+
+	this->debugDraw();
 }
 
 void NDTile::drawSubRect(CGRect kRect)
@@ -535,10 +567,51 @@ void NDTile::drawSubRect(CGRect kRect)
 
 	if (m_pkTexture)
 	{
-		glBindTexture(GL_TEXTURE_2D, m_pkTexture->getName());		//绑定纹理
-		glVertexPointer(3, GL_FLOAT, 0, fVertices);					//绑定目标位置数组
-		glColorPointer(4, GL_UNSIGNED_BYTE, 0, gs_nTileColors);
-		glTexCoordPointer(2, GL_FLOAT, 0, fCoordinates);			//绑定瓦片数组
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);						//由opengl组合画图
+// 		glBindTexture(GL_TEXTURE_2D, m_pkTexture->getName());		//绑定纹理
+// 		glVertexPointer(3, GL_FLOAT, 0, fVertices);					//绑定目标位置数组
+// 		glColorPointer(4, GL_UNSIGNED_BYTE, 0, gs_nTileColors);
+// 		glTexCoordPointer(2, GL_FLOAT, 0, fCoordinates);			//绑定瓦片数组
+// 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);						//由opengl组合画图
+
+
+		DrawSetup();
+
+		ccGLBindTexture2D(m_pkTexture->getName());		//绑定纹理
+
+		// attribute
+		ccGLEnableVertexAttribs( kCCVertexAttribFlag_PosColorTex );
+
+		glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, 0, fVertices);
+		glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, fCoordinates);
+		glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, gs_nTileColors);
+
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	}
+}
+
+//@shader
+void NDTile::DrawSetup( const char* shaderType /*=kCCShader_PositionTextureColor*/ )
+{
+	if (getShaderProgram() == NULL)
+	{
+		setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(shaderType));
+	}
+
+	ccGLEnable( m_glServerState );
+	CCAssert(getShaderProgram(), "No shader program set for this node");
+
+	getShaderProgram()->use();
+	getShaderProgram()->setUniformForModelViewProjectionMatrix();
+}
+
+void NDTile::debugDraw()
+{
+#if 1
+	glLineWidth(1);
+	ccDrawColor4F(1,0,0,1);
+	CCPoint lb = ccp(m_pfVertices[0],m_pfVertices[1]);
+	CCPoint rt = ccp(m_pfVertices[9],m_pfVertices[10]);
+	ccDrawRect( lb, rt );
+	ccDrawLine( lb, rt );
+#endif	
 }

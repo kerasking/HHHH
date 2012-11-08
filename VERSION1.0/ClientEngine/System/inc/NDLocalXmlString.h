@@ -11,6 +11,7 @@
 
 #include <map>
 #include <string>
+#include "CCString.h"
 #include "define.h"
 
 class NDLocalXmlString

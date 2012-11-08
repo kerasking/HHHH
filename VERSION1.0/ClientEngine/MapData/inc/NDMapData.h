@@ -11,7 +11,7 @@
 
 #include "NDTile.h"
 #include "NDUILabel.h"
-#include "CCMutableDictionary.h"
+#include "cocoa/CCDictionary.h"
 
 class MapTexturePool: public cocos2d::CCObject
 {
@@ -23,7 +23,7 @@ public:
 	cocos2d::CCTexture2D* addImage(const char* path, bool keep);
 
 private:
-	cocos2d::CCMutableDictionary<std::string, cocos2d::CCTexture2D*>* m_pkDict;
+	cocos2d::CCDictionary*	m_pkDict;
 
 private:
 	MapTexturePool();

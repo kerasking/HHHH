@@ -11,6 +11,7 @@
 #include "ScriptInc.h"
 #include <map>
 #include "LuaObject.h"
+#include "CCCommon.h"
 
 using namespace NDEngine; 
 using namespace LuaPlus;
@@ -44,6 +45,10 @@ bool RegisterGlobalEventHandler(int nEvent, const char* funcname, LuaObject func
 		nEvent,
 		funcname);
 
+#ifdef _DEBUG
+	cocos2d::CCLog("reg global envent [%d][%s] sucess!", nEvent, funcname);
+#endif
+
 	mapGlobalEventHandler.insert(GLOBALEVENTVT(GLOBALEVENT(nEvent), func));
 
 		return true;
@@ -62,6 +67,10 @@ void ScriptGlobalEvent::Load()
 
 void ScriptGlobalEvent::OnEvent(GLOBALEVENT eEvent, int param1, int param2, int param3)
 {
+#ifdef _DEBUG
+	cocos2d::CCLog("ScriptGlobalEvent::OnEvent, eEvent=%d", (int)eEvent);
+#endif
+
 	std::pair<GLOBALEVENTCIT, GLOBALEVENTCIT> range;
 	range = mapGlobalEventHandler.equal_range(eEvent);
 

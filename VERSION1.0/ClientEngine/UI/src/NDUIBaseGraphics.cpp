@@ -16,8 +16,41 @@ using namespace cocos2d;
 
 namespace NDEngine
 {
+#if 0
+	CCPoint& Screen2GL( CCPoint& pt )
+	{
+// 		CGSize winSize  = NDDirector::DefaultDirector()->GetWinSize(); //in points!
+// 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
+// 		scale = 1.f;
+// 
+// 		pt.x *= scale; pt.y *= scale;
+// 		pt.y = winSize.height - pt.y; //upside down
+// 		return pt;
+
+		CGSize winSize  = NDDirector::DefaultDirector()->GetWinSize(); //in points!
+		pt.y = winSize.height - pt.y;
+		return pt;
+	}
+
+	CCPoint& GL2Screen( CCPoint& pt )
+	{
+// 		CGSize winSize  = NDDirector::DefaultDirector()->GetWinSize();
+// 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
+// 		scale = 1.f;
+// 
+// 		pt.x /= scale; pt.y /= scale;
+// 		pt.y = winSize.height/2 - pt.y; //upside down
+// 		return pt;
+
+		CGSize winSize  = NDDirector::DefaultDirector()->GetWinSize();
+		pt.y = winSize.height - pt.y;
+		return pt;
+	}
+#endif
+
 	void DrawRecttangle(CGRect rect, ccColor4B color)
 	{
+#if 0
 		glDisable(GL_TEXTURE_2D);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -47,11 +80,21 @@ namespace NDEngine
 
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glEnable(GL_TEXTURE_2D);	
+#endif
 
+		ccColor4F cr = ccc4FFromccc4B(color);
+		ccDrawColor4F( cr.r, cr.g, cr.b, cr.a );
+
+		CCPoint destination = ccp( rect.origin.x + rect.size.width, 
+									rect.origin.y + rect.size.height );
+		
+		ccDrawRect( SCREEN2GL(rect.origin), SCREEN2GL(destination));
 	}
 
 	void DrawPolygon(CGRect rect, ccColor4B color, GLuint lineWidth)
 	{
+		CCAssert(0);//@todo: crash me!
+
 		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
 
@@ -84,27 +127,33 @@ namespace NDEngine
 
 	void DrawLine(CGPoint fromPoint, CGPoint toPoint, ccColor4B color, GLuint lineWidth)
 	{	
+		CCAssert(0);//@todo: crash me!
+
 		CGSize winSize	= NDDirector::DefaultDirector()->GetWinSize();
 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();
 
 		glLineWidth(lineWidth);
 		glColor4ub(color.r, color.g, color.b, color.a);
 
-		if (CompareEqualFloat(scale, 0.0f))
-		{
-			ccDrawLine(ccp(fromPoint.x,winSize.height - fromPoint.y), ccp(toPoint.x, winSize.height - toPoint.y));
-		}
-		else
-		{
-			ccDrawLine(ccp(fromPoint.x / scale, (winSize.height - fromPoint.y)  / scale), 
-				ccp(toPoint.x / scale, (winSize.height - toPoint.y) / scale));
-		}
+// 		if (CompareEqualFloat(scale, 0.0f))
+// 		{
+// 			ccDrawLine(ccp(fromPoint.x,winSize.height - fromPoint.y), ccp(toPoint.x, winSize.height - toPoint.y));
+// 		}
+// 		else
+// 		{
+// 			ccDrawLine(ccp(fromPoint.x / scale, (winSize.height - fromPoint.y)  / scale), 
+// 				ccp(toPoint.x / scale, (winSize.height - toPoint.y) / scale));
+// 		}
 
+		ccDrawLine( SCREEN2GL(fromPoint), SCREEN2GL(toPoint));
+		
 		glColor4ub(255, 255, 255, 255);
 	}
 
 	void DrawCircle(CGPoint center, float r, float a, int segs, ccColor4B color)
 	{
+		CCAssert(0);//@todo: crash me!
+
 		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 		CGPoint glCenter = ccp(center.x, winSize.height - center.y);
 
@@ -182,6 +231,8 @@ namespace NDEngine
 
 	void DrawTriangle(CGPoint first, CGPoint second, CGPoint third, ccColor4B color)
 	{
+		CCAssert(0);//@todo: crash me!
+
 		glDisable(GL_TEXTURE_2D);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 

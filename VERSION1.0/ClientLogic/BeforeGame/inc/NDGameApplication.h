@@ -10,8 +10,8 @@
 
 using namespace cocos2d;
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
 class NDGameApplication:
 	private CCApplication,
 	public NDConsoleListener
@@ -21,7 +21,6 @@ public:
 	NDGameApplication();
 	virtual ~NDGameApplication();
 
-	virtual bool initInstance();
 	virtual bool applicationDidFinishLaunching();
 	virtual void applicationDidEnterBackground();
 	virtual void applicationWillEnterForeground();
@@ -31,8 +30,9 @@ public:
 
 protected:
 private:
+	virtual void MyInit(); //after applicationDidFinishLaunching() called.
 };
 
-}
+NS_NDENGINE_END
 
 #endif

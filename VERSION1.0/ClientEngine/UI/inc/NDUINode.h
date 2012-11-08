@@ -102,12 +102,12 @@ namespace NDEngine
 		virtual void OnFrameRectChange(CGRect srcRect, CGRect dstRect);
 	public:		
 		void draw(); override
-	
+
 	private:		
 		bool m_bVisibled;
 		CGRect m_kFrameRect;
 		bool m_bEventEnabled;
-		CGRect m_kScrRect;
+		CGRect m_kScrRectCache; //for cache
 
 		float  m_fStep;  //步长
 		int  m_nStepNum; //步数

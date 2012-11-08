@@ -10,7 +10,7 @@
 #define _ND_FRAME_H_
 
 #include "platform/CCPlatformMacros.h"
-#include "CCMutableArray.h"
+#include "CCArray.h"
 #include "NDTile.h"
 #include "NDAnimationGroup.h"
 
@@ -67,8 +67,10 @@ class NDFrame: public cocos2d::CCObject
 {
 	CC_SYNTHESIZE(int, m_nEnduration, Enduration)
 	CC_SYNTHESIZE(NDAnimation*, m_pkBelongAnimation, BelongAnimation)
-	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDAnimationGroup*>*, m_pkSubAnimationGroups, SubAnimationGroups)
-	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDFrameTile*>*, m_pkFrameTiles, FrameTiles)
+// 	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDAnimationGroup*>*, m_pkSubAnimationGroups, SubAnimationGroups)
+// 	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDFrameTile*>*, m_pkFrameTiles, FrameTiles)
+	CC_SYNTHESIZE_RETAIN(cocos2d::CCArray*, m_pkSubAnimationGroups, SubAnimationGroups)
+	CC_SYNTHESIZE_RETAIN(cocos2d::CCArray*, m_pkFrameTiles, FrameTiles)
 
 public:
 	NDFrame();
@@ -87,7 +89,8 @@ public:
 private:
 
 	bool m_bNeedInitTitles;
-	cocos2d::CCMutableArray<NDTile*>* m_pkTiles;
+	//cocos2d::CCMutableArray<NDTile*>* m_pkTiles;
+	cocos2d::CCArray* m_pkTiles;
 
 private:
 

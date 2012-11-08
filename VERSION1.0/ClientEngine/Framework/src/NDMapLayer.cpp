@@ -70,8 +70,10 @@ bool GetRectPercent(CGRect kRect, CGRect kSubRect, CGRect& kRet)
 	return true;
 }
 
-namespace NDEngine
-{
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+NS_NDENGINE_BGN
+
 IMPLEMENT_CLASS(NDMapLayer, NDLayer)
 
 NDMapLayer::NDMapLayer()
@@ -89,8 +91,12 @@ NDMapLayer::NDMapLayer()
 	m_pkOrders->retain();
 	m_pkOrdersOfMapscenesAndMapanimations = CCArray::array();
 	m_pkOrdersOfMapscenesAndMapanimations->retain();
-	m_pkFrameRunRecordsOfMapAniGroups = new CCMutableArray< CCMutableArray<NDFrameRunRecord*>* >();
-	m_pkFrameRunRecordsOfMapSwitch = new CCMutableArray< NDFrameRunRecord* >();
+
+	//m_pkFrameRunRecordsOfMapAniGroups = new CCMutableArray< CCMutableArray<NDFrameRunRecord*>* >();
+	//m_pkFrameRunRecordsOfMapSwitch = new CCMutableArray< NDFrameRunRecord* >();
+	m_pkFrameRunRecordsOfMapAniGroups = new CCArray();
+	m_pkFrameRunRecordsOfMapSwitch = new CCArray();
+
 	m_bBattleBackground = false;
 	m_bNeedShow = true;
 	m_ndBlockTimer = NULL;
@@ -509,10 +515,14 @@ void NDMapLayer::draw()
 		//draw map tiles.......
 		//DrawMapTiles();
 		//PerformanceTestEndName("背景");
+
 		DrawBgs();
+
 		//PerformanceTestBeginName("场景动画");
 		//draw map scenes and animations......
+
 		DrawScenesAndAnimations();
+
 		//PerformanceTestEndName("场景动画");
 		//NDLog("done draw map");
 		//启用颜色数组
@@ -536,11 +546,14 @@ void NDMapLayer::draw()
 		 }
 
 		 }*/
+
 		refreshTitle();
 		RefreshBoxAnimation();
+
 //			if(m_pkTreasureBox){
 //				m_pkTreasureBox->RunAnimation(true);
 //			}
+
 		if (m_nRoadBlockTimeCount > 0 && !m_bBattleBackground)
 		{
 			//NDLog("showTime");
@@ -603,6 +616,7 @@ void NDMapLayer::draw()
 		}
 	}
 
+	debugDraw(); //@todo
 }
 
 // 	void NDMapLayer::SetBattleBackground(bool bBattleBackground)
@@ -624,8 +638,8 @@ void NDMapLayer::MapSwitchRefresh()
 	MakeOrdersOfMapscenesAndMapanimations();
 	CC_SAFE_RELEASE (m_pkFrameRunRecordsOfMapSwitch);
 
-	m_pkFrameRunRecordsOfMapSwitch = new cocos2d::CCMutableArray<
-			NDFrameRunRecord*>();
+	//m_pkFrameRunRecordsOfMapSwitch = new cocos2d::CCMutableArray<NDFrameRunRecord*>();
+	m_pkFrameRunRecordsOfMapSwitch = new cocos2d::CCArray();
 
 	for (int i = 0; i < (int) m_pkMapData->getSwitchs()->count(); i++)
 	{
@@ -706,10 +720,10 @@ void NDMapLayer::DrawScenesAndAnimations()
 {
 	MakeOrders();
 
-	unsigned int orderCount = m_pkOrders->count(), uiSceneTileCount =
-			m_pkMapData->getSceneTiles()->count(), aniGroupCount =
-			m_pkMapData->getAnimationGroups()->count(), switchCount =
-			m_pkMapData->getSwitchs()->count();
+	unsigned int orderCount = m_pkOrders->count(), 
+		uiSceneTileCount = m_pkMapData->getSceneTiles()->count(), 
+		aniGroupCount = m_pkMapData->getAnimationGroups()->count(), 
+		switchCount = m_pkMapData->getSwitchs()->count();
 
 	//PerformanceTestPerFrameBeginName(" NDMapLayer::DrawScenesAndAnimations");
 
@@ -728,12 +742,12 @@ void NDMapLayer::DrawScenesAndAnimations()
 			}
 		}
 
-		if (uiIndex < uiSceneTileCount) //布景
+		if (0) {}
+#if 1
+		else if (uiIndex < uiSceneTileCount) //布景
 		{
 			//PerformanceTestPerFrameBeginName("布景");
-			NDTile *pkTile =
-					(NDTile *) m_pkMapData->getSceneTiles()->objectAtIndex(
-							uiIndex);
+			NDTile *pkTile = (NDTile *) m_pkMapData->getSceneTiles()->objectAtIndex(uiIndex);
 
 			if (pkTile)
 			{
@@ -744,11 +758,13 @@ void NDMapLayer::DrawScenesAndAnimations()
 			}
 			//PerformanceTestPerFrameEndName("布景");
 		}
+#endif
 
 // 			else if (m_bBattleBackground) // 战斗状态，不绘制其他地表元素
 // 			{
 // 				continue;
 // 			}
+#if 1
 		else if (uiIndex < uiSceneTileCount + aniGroupCount) //地表动画
 		{
 			//PerformanceTestPerFrameBeginName("地表动画");
@@ -757,9 +773,9 @@ void NDMapLayer::DrawScenesAndAnimations()
 			NDAnimationGroup* pkAniGroup =
 					(NDAnimationGroup*) m_pkMapData->getAnimationGroups()->objectAtIndex(
 							uiIndex);
-			CCMutableArray<NDFrameRunRecord*>* pkFrameRunRecordList =
-					m_pkFrameRunRecordsOfMapAniGroups->getObjectAtIndex(
-							uiIndex);
+
+			//CCMutableArray<NDFrameRunRecord*>* pkFrameRunRecordList = m_pkFrameRunRecordsOfMapAniGroups->getObjectAtIndex(uiIndex);
+			CCArray* pkFrameRunRecordList = (CCArray*) m_pkFrameRunRecordsOfMapAniGroups->objectAtIndex(uiIndex);
 
 			pkAniGroup->setReverse(GetMapDataAniParamReverse(uiIndex));
 			pkAniGroup->setPosition(GetMapDataAniParamPos(uiIndex));
@@ -769,11 +785,11 @@ void NDMapLayer::DrawScenesAndAnimations()
 
 			for (unsigned int j = 0; j < uiAniCount; j++)
 			{
-				NDFrameRunRecord *pkFrameRunRecord =
-						pkFrameRunRecordList->getObjectAtIndex(j);
-				NDAnimation *pkAnimation =
-						(NDAnimation *) pkAniGroup->getAnimations()->objectAtIndex(
-								j);
+				NDFrameRunRecord *pkFrameRunRecord = 
+					(NDFrameRunRecord*) pkFrameRunRecordList->objectAtIndex(j);
+
+				NDAnimation *pkAnimation = 
+						(NDAnimation *) pkAniGroup->getAnimations()->objectAtIndex(j);
 
 				if (isMapRectIntersectScreen(pkAnimation->getRect()))
 				{
@@ -786,6 +802,8 @@ void NDMapLayer::DrawScenesAndAnimations()
 			}
 			//PerformanceTestPerFrameEndName("地表动画");
 		}
+#endif
+#if 1
 		else if (uiIndex < uiSceneTileCount + aniGroupCount + switchCount) //切屏点
 		{
 			//PerformanceTestPerFrameBeginName("切屏点");
@@ -795,8 +813,9 @@ void NDMapLayer::DrawScenesAndAnimations()
 			NDMapSwitch *pkMapSwitch =
 					(NDMapSwitch *) m_pkMapData->getSwitchs()->objectAtIndex(
 							uiIndex);
-			NDFrameRunRecord *pkFrameRunRecord =
-					m_pkFrameRunRecordsOfMapSwitch->getObjectAtIndex(uiIndex);
+
+			//NDFrameRunRecord *pkFrameRunRecord = m_pkFrameRunRecordsOfMapSwitch->getObjectAtIndex(uiIndex);
+			NDFrameRunRecord *pkFrameRunRecord = (NDFrameRunRecord*) m_pkFrameRunRecordsOfMapSwitch->objectAtIndex(uiIndex);
 
 			m_pkSwitchAniGroup->setReverse(false);
 
@@ -826,6 +845,8 @@ void NDMapLayer::DrawScenesAndAnimations()
 			}
 			//PerformanceTestPerFrameEndName("切屏点");
 		}
+#endif
+#if 1
 		else //精灵
 		{
 			//PerformanceTestPerFrameBeginName("精灵");
@@ -867,12 +888,13 @@ void NDMapLayer::DrawScenesAndAnimations()
 			}
 			//PerformanceTestPerFrameEndName("精灵");
 		}
-
+#endif
 		//PerformanceTestPerFrameEndName(" NDMapLayer::DrawScenesAndAnimations inner");
-	}
+	}//for
 
 	//PerformanceTestPerFrameEndName(" NDMapLayer::DrawScenesAndAnimations");
 }
+
 /*
  bool NDMapLayer::TouchBegin(NDTouch* touch)
  {
@@ -896,6 +918,8 @@ void NDMapLayer::DrawScenesAndAnimations()
  */
 CGPoint NDMapLayer::ConvertToMapPoint(CGPoint kScreenPoint)
 {
+//上层代码应该忽略分辨率，引擎会自适应！	
+#if 0
 	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 	CGPoint kTempScreen = ccpAdd(kScreenPoint, kScreenPoint); ///< 因分辨率成倍，所以对触发点的坐标进行2倍，郭浩
 	CGPoint kTempPoint = ccpSub(kTempScreen,
@@ -906,6 +930,12 @@ CGPoint NDMapLayer::ConvertToMapPoint(CGPoint kScreenPoint)
 	//kPoint.y = m_kScreenCenter.y - kPoint.y;
 
 	return kPoint;
+#else
+	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	CGPoint kTempPoint = ccpSub(kScreenPoint, CGPointMake(kWinSize.width / 2, kWinSize.height / 2));
+	CGPoint kPoint = ccpAdd(kTempPoint, m_kScreenCenter);
+	return kPoint;
+#endif
 }
 
 bool NDMapLayer::isMapPointInScreen(CGPoint mapPoint)
@@ -950,7 +980,8 @@ void NDMapLayer::SetPosition(CGPoint kPosition)
 		kPosition.y = kWinSize.height - GetContentSize().height;
 	}
 
-	m_ccNode->setPositionInPixels(kPosition);
+	//m_ccNode->setPositionInPixels(kPosition);
+	m_ccNode->setPosition(kPosition);//@todo.
 }
 
 bool NDMapLayer::SetScreenCenter(CGPoint kPoint)
@@ -1638,8 +1669,8 @@ void NDMapLayer::MakeFrameRunRecords()
 				(NDAnimationGroup *) m_pkMapData->getAnimationGroups()->objectAtIndex(
 						i);
 
-		cocos2d::CCMutableArray<NDFrameRunRecord*>* pkRunFrameRecordList =
-				new cocos2d::CCMutableArray<NDFrameRunRecord*>();
+		//cocos2d::CCMutableArray<NDFrameRunRecord*>* pkRunFrameRecordList = new cocos2d::CCMutableArray<NDFrameRunRecord*>();
+		cocos2d::CCArray* pkRunFrameRecordList = new cocos2d::CCArray();
 
 		for (int j = 0; j < (int) pkAniGroup->getAnimations()->count(); j++)
 		{
@@ -1850,4 +1881,18 @@ void NDMapLayer::OpenTreasureBox()
 	}
 }
 
+void NDMapLayer::debugDraw()
+{
+// #if 1
+// 	glLineWidth(2);
+// 	ccDrawColor4F(0,1,0,1);//green
+// // 	CCPoint lb = ccp(m_pfVertices[0],m_pfVertices[1]);
+// // 	CCPoint rt = ccp(m_pfVertices[9],m_pfVertices[10]);
+// // 	ccDrawRect( lb, rt );
+// // 	ccDrawLine( lb, rt );
+// 	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+// 	ccDrawLine( ccp(0,0), ccp(winSize.width, winSize.height));
+// #endif
 }
+
+NS_NDENGINE_END

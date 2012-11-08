@@ -1,7 +1,7 @@
 #include "NDGameApplication.h"
 #include "NDDirector.h"
 #include "SMLoginScene.h"
-#include "../../../cocos2d-x/cocos2dx/platform/CCEGLView_platform.h"
+#include "CCEGLView.h"
 #include "NDPath.h"
 #include "ScriptCommon.h"
 #include "ScriptGlobalEvent.h"
@@ -25,6 +25,8 @@
 #include "NDDebugOpt.h"
 #include "NDClassFactory.h"
 #include "Battle.h"
+#include "NDBaseDirector.h"
+#include "HelloWorldScene.h" //@todo
 
 NS_NDENGINE_BGN
 
@@ -32,93 +34,85 @@ NDGameApplication::NDGameApplication()
 {
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"script ");
 }
+
 NDGameApplication::~NDGameApplication()
 {
 }
 
-bool NDGameApplication::initInstance()
+bool NDGameApplication::applicationDidFinishLaunching()
 {
-	bool bRet = false;
-	do
+	CCDirector* pDirector = CCDirector::sharedDirector();
+	CCAssert(pDirector);
+	pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
+
+	TargetPlatform target = getTargetPlatform();
+
+	if (target == kTargetIpad)
 	{
+		// ipad
+
+		CCFileUtils::sharedFileUtils()->setResourceDirectory("iphonehd");
+
+		// don't enable retina because we don't have ipad hd resource
+		CCEGLView::sharedOpenGLView()->setDesignResolutionSize(960, 640, kResolutionNoBorder);
+	}
+	else if (target == kTargetIphone)
+	{
+		// iphone
+
+		// try to enable retina on device
+		if (true == CCDirector::sharedDirector()->enableRetinaDisplay(true))
+		{
+			// iphone hd
+			CCFileUtils::sharedFileUtils()->setResourceDirectory("iphonehd");
+		}
+		else 
+		{
+			CCFileUtils::sharedFileUtils()->setResourceDirectory("iphone");
+		}
+	}
+	else 
+	{
+		// android, windows, blackberry, linux or mac
+		// use 960*640 resources as design resolution size
+		//CCFileUtils::sharedFileUtils()->setResourceDirectory("iphonehd");
+		//CCEGLView::sharedOpenGLView()->setDesignResolutionSize(480*2, 320*2, kResolutionNoBorder);//@todo
+		//CCDirector::sharedDirector()->enableRetinaDisplay(true);//@retina
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
-        // initialize socket
-        InitSocket();
+		// initialize socket
+		InitSocket();
 
 		// Initialize OpenGLView instance, that release by CCDirector when application terminate.
 		// The HelloWorld is designed as HVGA.
-		NDPath::SetResPath(
-				"../../Bin/SimplifiedChineseRes/res/");
-		CCEGLView* pMainWnd = new CCEGLView();
-		CC_BREAK_IF(!pMainWnd || !pMainWnd->Create(L"大话龙将", 320, 480));
+		NDPath::SetResPath( "../../Bin/SimplifiedChineseRes/res/" );
+#endif
+	}
 
-#endif  // CC_PLATFORM_WIN32
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	// turn on display FPS
+	//pDirector->setDisplayStats(true); //@fps 
 
-		// OpenGLView initialized in testsAppDelegate.mm on ios platform, nothing need to do here.
+	// set FPS. the default value is 1.0/60 if you don't call this
+	//pDirector->setAnimationInterval(1.0 / 60);
+	pDirector->setAnimationInterval(1.0 / 24);
 
-#endif  // CC_PLATFORM_IOS
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-
-		// OpenGLView initialized in HelloWorld/android/jni/helloworld/main.cpp
-		// the default setting is to create a fullscreen view
-		// if you want to use auto-scale, please enable view->create(320,480) in main.cpp
-		// if the resources under '/sdcard" or other writeable path, set it.
-		// warning: the audio source should in assets/
-		// cocos2d::CCFileUtils::setResourcePath("/sdcard");
-
-#endif  // CC_PLATFORM_ANDROID
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WOPHONE)
-
-		// Initialize OpenGLView instance, that release by CCDirector when application terminate.
-		// The HelloWorld is designed as HVGA.
-		CCEGLView* pMainWnd = new CCEGLView(this);
-		CC_BREAK_IF(! pMainWnd || ! pMainWnd->Create(320,480, WM_WINDOW_ROTATE_MODE_CW));
-
-#ifndef _TRANZDA_VM_  
-		// on wophone emulator, we copy resources files to Work7/NEWPLUS/TDA_DATA/Data/ folder instead of zip file
-		cocos2d::CCFileUtils::setResource("HelloWorld.zip");
+#if 0 //@todo @hello
+ 	// create a scene. it's an autorelease object
+ 	CCScene *pScene = HelloWorld::scene();
+ 
+ 	// run
+ 	pDirector->runWithScene(pScene);
+	//////////////////////////////////////////////
+#else
+	this->MyInit();
 #endif
 
-#endif  // CC_PLATFORM_WOPHONE
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MARMALADE)
-		// MaxAksenov said it's NOT a very elegant solution. I agree, haha
-		CCDirector::sharedDirector()->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
-#endif
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 
-		// Initialize OpenGLView instance, that release by CCDirector when application terminate.
-		// The HelloWorld is designed as HVGA.
-		CCEGLView * pMainWnd = new CCEGLView();
-		CC_BREAK_IF(! pMainWnd
-				|| ! pMainWnd->Create("cocos2d: Hello World", 480, 320 ,480, 320));
-
-		CCFileUtils::setResourcePath("../Resources/");
-
-#endif  // CC_PLATFORM_LINUX
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_BADA)
-
-		CCEGLView * pMainWnd = new CCEGLView();
-		CC_BREAK_IF(! pMainWnd|| ! pMainWnd->Create(this, 480, 320));
-		pMainWnd->setDeviceOrientation(Osp::Ui::ORIENTATION_LANDSCAPE);
-		CCFileUtils::setResourcePath("/Res/");
-
-#endif  // CC_PLATFORM_BADA
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_QNX)
-		CCEGLView * pMainWnd = new CCEGLView();
-		CC_BREAK_IF(! pMainWnd|| ! pMainWnd->Create(1024, 600));
-		CCFileUtils::setResourcePath("app/native/Resources");
-#endif // CC_PLATFORM_QNX
-		bRet = true;
-	} while (0);
-
-    // 现在这里登陆
-   // SwichKeyToServer("192.168.9.47", 9500/*9528*/, "285929910", "", "xx");
-	return bRet;
+	return true;
 }
 
-bool NDGameApplication::applicationDidFinishLaunching()
+void NDGameApplication::MyInit()
 {
 	REGISTER_CLASS(NDBaseBattle,Battle);
 	REGISTER_CLASS(NDBaseFighter,Fighter);
@@ -126,12 +120,13 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	NDSprite* pkSprite = CREATE_CLASS(NDSprite,"NDBaseRole");
 
 	NDMapMgr& kMapMgr = NDMapMgrObj;
-	NDDirector* pkDirector = NDDirector::DefaultDirector();
 	ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();
 	NDBeforeGameMgrObj;
 
+	NDDirector* pkDirector = NDDirector::DefaultDirector();
 	pkDirector->Initialization();
 	pkDirector->RunScene(CSMLoginScene::Scene());
+
 //	kMapMgr.processChangeRoom(0,0);
 
 	ScriptNetMsg* pkNetMsg = new ScriptNetMsg;
@@ -246,17 +241,28 @@ bool NDGameApplication::applicationDidFinishLaunching()
  // 
  // 		NDPlayer::defaultHero().UpdateFocus();
  // 	}
- 
-	return true;
+
+	// 现在这里登陆
+	// SwichKeyToServer("192.168.9.47", 9500/*9528*/, "285929910", "", "xx");
 }
 
 void NDGameApplication::applicationDidEnterBackground()
 {
-}
-void NDGameApplication::applicationWillEnterForeground()
-{
+	CCDirector::sharedDirector()->stopAnimation();
+
+	// if you use SimpleAudioEngine, it must be pause
+	// SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
 }
 
+void NDGameApplication::applicationWillEnterForeground()
+{
+	CCDirector::sharedDirector()->startAnimation();
+
+	// if you use SimpleAudioEngine, it must resume here
+	// SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+}
+
+//@pm
 bool NDGameApplication::processConsole( const char* pszInput )
 {
 	if (0 == pszInput || !*pszInput)

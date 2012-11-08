@@ -3,7 +3,7 @@
 */
 
 #include "GameApp.h"
-#include "CCString.h"
+//#include "CCString.h"
 #include "XMLReader.h"
 #include <NDGameApplication.h>
 #include <LuaPlus.h>
@@ -33,7 +33,12 @@ int WINAPI WinMain (HINSTANCE hInstance,
 
     // 手机平台堆栈会比较小, 以后要改用new
  	NDGameApplication kApp;
-    NDBaseDirector kBaseDirector;
- 
- 	return CCApplication::sharedApplication().run();
+	NDBaseDirector kBaseDirector;
+
+	CCEGLView* eglView = CCEGLView::sharedOpenGLView();
+	eglView->SetTitle("大话龙将");
+	eglView->setFrameSize(480, 320); 
+	//eglView->setFrameSize(320, 480); 
+
+ 	return CCApplication::sharedApplication()->run();
 }

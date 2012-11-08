@@ -72,20 +72,20 @@ std::string CUIData::getCtrlName(int nIndex)
 
 bool CUIData::getCtrlData(char* szCtrlName)
 {
+	if (szCtrlName == 0 || szCtrlName[0] == 0) return false;
+	m_kInfo.reset();
+
 	//获取控件图片信息
 	m_kInfo.strNormalFile = m_kINIFile.GetValue(szCtrlName, NORMAL_FILE_KEY);
-	m_kInfo.strSelectedFile = m_kINIFile.GetValue(szCtrlName,
-			SELECTED_FILE_KEY);
+	m_kInfo.strSelectedFile = m_kINIFile.GetValue(szCtrlName, SELECTED_FILE_KEY);
 	m_kInfo.strDisableFile = m_kINIFile.GetValue(szCtrlName, DISABLE_FILE_KEY);
 	m_kInfo.strFocusFile = m_kINIFile.GetValue(szCtrlName, FOCUS_FILE_KEY);
 	m_kInfo.strBackFile = m_kINIFile.GetValue(szCtrlName, BACK_FILE_KEY);
 
-	const char* pszPos;
+	const char* pszPos = 0;
 
 	//获取POS 宽高，锚点信息
-
 	pszPos = m_kINIFile.GetValue(szCtrlName, CTRL_POS_KEY);
-
 	if (!pszPos)
 		return false;
 	sscanf(pszPos, "%f %f", &m_kInfo.CtrlPos.x, &m_kInfo.CtrlPos.y);

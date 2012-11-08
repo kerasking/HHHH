@@ -73,6 +73,10 @@ struct CTRL_UV
 	int y;
 	int w;
 	int h;
+
+	void reset() {
+		x = y = w = h = 0;
+	}
 };
 
 struct UIINFO
@@ -104,6 +108,36 @@ struct UIINFO
 	
 	unsigned long nTextFontSize;
 	unsigned long nTextFontColor;
+
+	void reset()
+	{
+		strNormalFile = "";
+		strSelectedFile = "";
+		strDisableFile = "";
+		strFocusFile = "";
+		strBackFile = "";
+
+		rectNormal.reset();
+		rectSelected.reset();
+		rectDisable.reset();
+		rectFocus.reset();
+		rectBack.reset();
+
+		CtrlPos.x = CtrlPos.y = 0.f;
+		CtrlAnchorPos.x = CtrlAnchorPos.y = 0.f;
+
+		nID = 0;
+		nType = 0;
+		nCtrlWidth = 0;
+		nCtrlHeight = 0;
+
+		strText = "";
+		strTextAlign = "";
+		strTextTradition = "";
+
+		nTextFontSize = 0;
+		nTextFontColor = 0;
+	}
 };
 
 class CUIData

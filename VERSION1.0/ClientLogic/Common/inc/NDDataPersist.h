@@ -122,7 +122,9 @@ public:
 	
 private:
 	// 上次登录帐号，密码及服务器地址, 游戏设置
-	CCMutableArray<CCObject*>* m_pkDataArray;
+	//CCMutableArray<CCObject*>* m_pkDataArray;
+	CCArray* m_pkDataArray;
+
 	// 常用帐号列表
 	CCArray* m_pkAccountList;
 	CCArray* m_pkAccountDeviceList;
@@ -134,7 +136,8 @@ private:
 	NSString* GetDataPath();
 	
 	// 获取配置信息
-	CCMutableDictionary<const char*>* LoadDataDiction(unsigned int index);
+	//CCMutableDictionary<const char*>* LoadDataDiction(unsigned int index);
+	CCDictionary* LoadDataDiction(unsigned int index);
 	
 	void LoadAccountList();
 	NSString* GetAccountListPath();

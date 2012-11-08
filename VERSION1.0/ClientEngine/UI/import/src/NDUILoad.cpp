@@ -7,6 +7,7 @@
  *
  */
 
+
 #include "NDUILoad.h"
 #include "NDControlHelp.h"
 #include "UIData.h"
@@ -14,6 +15,8 @@
 
 
 #pragma mark 加载ui
+#pragma mark 这个NDUILoad.cpp和ClientEngine/UI/import/src/NDUILoad.cpp重复了！后面删除！
+//额，这个类貌似给CU那套用的，界面两套CUI和NDUI所以这边重了！！
 
 IMPLEMENT_CLASS(NDUILoad, NDObject)
 
@@ -88,38 +91,42 @@ bool FilterStringName(UIINFO& uiInfo)
 
 bool FilterCtrlUV(CTRL_UV& uv)
 {
-	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-	uv.x	*= scale;
-	uv.y	*= scale;
-	uv.w	*= scale;
-	uv.h	*= scale;
-	
+//上层代码应该忽略分辨率，引擎会自适应！
+// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+// 	uv.x	*= scale;
+// 	uv.y	*= scale;
+// 	uv.w	*= scale;
+// 	uv.h	*= scale;
+// 	
 	return true;
 }
 
 bool FilterPos(CGPoint& pos)
 {
-	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-	pos.x	*= scale;
-	pos.y	*= scale;
-	
+//上层代码应该忽略分辨率，引擎会自适应！
+// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+// 	pos.x	*= scale;
+// 	pos.y	*= scale;
+// 	
 	return true;
 }
 
 bool FilterSize(UIINFO& uiInfo)
-{/*
-	FilterCtrlUV(uiInfo.rectNormal);
-	FilterCtrlUV(uiInfo.rectSelected);
-	FilterCtrlUV(uiInfo.rectDisable);
-	FilterCtrlUV(uiInfo.rectFocus);
-	FilterCtrlUV(uiInfo.rectBack);*/
-	
-	FilterPos(uiInfo.CtrlPos);
-
-	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-	uiInfo.nCtrlWidth		*= scale;
-	uiInfo.nCtrlHeight		*= scale;
-	
+{
+//上层代码应该忽略分辨率，引擎会自适应！	
+// 	/*
+// 	FilterCtrlUV(uiInfo.rectNormal);
+// 	FilterCtrlUV(uiInfo.rectSelected);
+// 	FilterCtrlUV(uiInfo.rectDisable);
+// 	FilterCtrlUV(uiInfo.rectFocus);
+// 	FilterCtrlUV(uiInfo.rectBack);*/
+// 	
+// 	FilterPos(uiInfo.CtrlPos);
+// 
+// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+// 	uiInfo.nCtrlWidth		*= scale;
+// 	uiInfo.nCtrlHeight		*= scale;
+// 	
 	
 	return true;
 }
@@ -389,7 +396,7 @@ bool NDUILoad::LoadLua(
 	
 	int nCtrlAmount = uiData.GetCtrlAmount();
 	
-	for(int i=0; i<nCtrlAmount; i++)
+	for(int i = 0; i < nCtrlAmount; i++)
 	{
 		std::string str = uiData.getCtrlName(i);
 		
