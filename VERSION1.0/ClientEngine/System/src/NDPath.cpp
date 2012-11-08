@@ -9,7 +9,6 @@
 #include "NDPath.h"
 #include "define.h"
 
-// todo
 
 NS_NDENGINE_BGN
 
@@ -36,7 +35,7 @@ NDPath::~NDPath()
 {
 }
 
-string ReplaceString( string inStr, const char* pSrc, const char* pReplace )
+string ReplaceString( const string& inStr, const char* pSrc, const char* pReplace )
 {
 	string str = inStr;
 	string::size_type stStart = 0;
@@ -59,7 +58,7 @@ string ReplaceString( string inStr, const char* pSrc, const char* pReplace )
 	return str;
 }
 
-string NDPath::GetResPath()
+const string& NDPath::GetResPath()
 {
 	return NDPath_ResPath;
 
@@ -74,13 +73,9 @@ string NDPath::GetResPath()
 // 		return string([path UTF8String]);
 }
 
-string NDPath::GetImagePath()
+const string& NDPath::GetImagePath()
 {
-#ifdef WIN32
 	return NDPath_ImgPath;
-#else
-	return string("../SimplifiedChineseRes/res/Image/");
-#endif
 
 // 		NSString *path = NULL;
 // 
@@ -95,7 +90,7 @@ string NDPath::GetImagePath()
 // 		return string([path UTF8String]);
 }
 
-string NDPath::GetMapPath()
+const string& NDPath::GetMapPath()
 {
 	return NDPath_MapPath;
 	//return "../SimplifiedChineseRes/res/map/";
@@ -108,7 +103,7 @@ string NDPath::GetMapPath()
 // 		return string([path UTF8String]);
 }
 
-string NDPath::GetSoundPath()
+const string& NDPath::GetSoundPath()
 {
 	return NDPath_SoundPath;
 	
@@ -120,7 +115,7 @@ string NDPath::GetSoundPath()
 // 		return string([path UTF8String]);ss
 }
 
-string NDPath::GetAnimationPath()
+const string& NDPath::GetAnimationPath()
 {
 	return NDPath_AniPath;
 	
@@ -134,17 +129,17 @@ string NDPath::GetAnimationPath()
 // 		return string([path UTF8String]);
 }
 
-string NDPath::GetUIPath()
+const string& NDPath::GetUIPath()
 {
 	return NDPath_UIPath;
 }
 
-string NDPath::GetUIPath( const char* fileName )
+const string& NDPath::GetUIPath( const char* fileName )
 {
 	return NDPath_UIPath += string(fileName);
 }
 
-string NDPath::GetImgPathBattleUI()
+const string& NDPath::GetImgPathBattleUI()
 {
 	return NDPath_ImgPath_BattleUI;
 }
@@ -198,12 +193,12 @@ void NDPath::SetResPath(const char* szPath)
 // 	NDPath_SoundPath = szPath;
 // }
 
-string NDPath::GetFullImagepath(const char* pszFileName)
+const string& NDPath::GetFullImagepath(const char* pszFileName)
 {
 	return GetImgPath(pszFileName);
 }
 
-string NDPath::GetImgPath(const char* filename)
+const string& NDPath::GetImgPath(const char* filename)
 {
 	static string ret;
 	return ret = NDPath_ImgPath + filename;
@@ -217,7 +212,7 @@ string NDPath::GetImgPath(const char* filename)
 // 	return pszTemp;
 }
 
-string NDPath::GetImgPathBattleUI(const char* fileName)
+const string& NDPath::GetImgPathBattleUI(const char* fileName)
 {
 	static string ret;
 	return ret = NDPath_ImgPath_BattleUI + fileName;
@@ -231,7 +226,7 @@ string NDPath::GetImgPathBattleUI(const char* fileName)
 }
 
 
-string NDPath::GetAniPath(const char* fileName)
+const string& NDPath::GetAniPath(const char* fileName)
 {
 	static string ret;
 	return ret = GetAnimationPath() + fileName;
@@ -240,7 +235,7 @@ string NDPath::GetAniPath(const char* fileName)
 }
 
 // 新界面资源统一放在 res/image/ui_new
-string NDPath::GetImgPathUINew(const char* fileName)
+const string& NDPath::GetImgPathUINew(const char* fileName)
 {
 	static string ret;
 	return ret = NDPath_ImgPath_UINew + fileName;
@@ -254,7 +249,7 @@ string NDPath::GetImgPathUINew(const char* fileName)
 }
 
 // 新界面高分辨率资源统一放在 res/image/ui_new/advance
-string NDPath::GetImgPathUINewAdvance(const char* fileName)
+const string& NDPath::GetImgPathUINewAdvance(const char* fileName)
 {
 	static string ret;
 	return ret = NDPath_ImgPath_UINew + "advance/" + fileName;
@@ -268,14 +263,14 @@ string NDPath::GetImgPathUINewAdvance(const char* fileName)
 //	//	return string(GetResPath()+"image/ui_new/advance/"+fileName).c_str();
 }
 
-string NDPath::GetMapPath(const char* fileName)
+const string& NDPath::GetMapPath(const char* fileName)
 {
 	static string ret;
 	return ret = NDPath_MapPath + fileName;
 //	return string(GetResPath() + "map/" + fileName).c_str();
 }
 
-string NDPath::GetUIConfigPath(const char* filename)
+const string& NDPath::GetUIConfigPath(const char* filename)
 {
 	static string ret;
 	return ret = NDPath_UIPath + filename;
@@ -288,7 +283,7 @@ string NDPath::GetUIConfigPath(const char* filename)
 }
 
 
-string NDPath::GetUIImgPath(const char* uiFileNameWithPath)
+const string& NDPath::GetUIImgPath(const char* uiFileNameWithPath)
 {
 	static string ret;
 
@@ -322,7 +317,7 @@ string NDPath::GetUIImgPath(const char* uiFileNameWithPath)
 #endif        
 }
 
-string NDPath::GetResPath(const char* fileName)
+const string& NDPath::GetResPath(const char* fileName)
 {
 	static string ret;
 	return ret = GetResPath() + fileName;
@@ -336,7 +331,7 @@ string NDPath::GetResPath(const char* fileName)
 // 	//return string(GetResPath()+fileName).c_str();
 }
 
-string NDPath::GetSMImgPath(const char* fileName)
+const string& NDPath::GetSMImgPath(const char* fileName)
 {
 	static string ret;
 	return ret = NDPath_ImgPath + "Res00/" + fileName;
@@ -349,26 +344,18 @@ string NDPath::GetSMImgPath(const char* fileName)
 // 	//	return string(GetResPath()+"image/Res00/"+fileName).c_str();
 }
 
-string NDPath::GetScriptPath(const char* filename)
+const string& NDPath::GetScriptPath(const char* filename)
 {
 	static string ret;
 	return ret = NDPath_ScriptPath + filename;
-
-// 	string strRes = string(
-// 			string("../SimplifiedChineseRes/res/") + "Script/" + filename);
-// 	char* pszTemp = new char[255];
-// 	memset(pszTemp, 0, sizeof(char) * 255);
-// 	strcpy(pszTemp, strRes.c_str());
-// 	return pszTemp;
-// 	//return string(GetResPath()+"Script/"+filename).c_str();
 }
 
-string NDPath::GetScriptPath()
+const string& NDPath::GetScriptPath()
 {
 	return NDPath_ScriptPath;
 }
 
-string NDPath::GetAppPath()
+const string& NDPath::GetAppPath()
 {
 #ifdef _DEBUG
 	return string("../");
@@ -377,22 +364,22 @@ string NDPath::GetAppPath()
 #endif
 }
 
-string NDPath::GetResourcePath()
+const string& NDPath::GetResourcePath()
 {
 	return string("");
 }
 
-string NDPath::GetImgPathNew( const char* fileName )
+const string& NDPath::GetImgPathNew( const char* fileName )
 {
 	return GetResPath() + string("/image/ui_new/") + string(fileName);
 }
 
-string NDPath::GetImgPathNewAdvance( const char* fileName )
+const string& NDPath::GetImgPathNewAdvance( const char* fileName )
 {
 	return GetResPath() + string("/image/ui_new/advance/") + string(fileName);
 }
 
-string NDPath::GetRootResPath()
+const string& NDPath::GetRootResPath()
 {
 	if ( s_iResDirPos == 0 )
 	{
