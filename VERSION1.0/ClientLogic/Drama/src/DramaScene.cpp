@@ -121,7 +121,7 @@ bool DramaScene::AddNpc(int nKey, int nLookFace, bool bFaceRight/*=true*/)
 	}
 
 	NDNpc *pkNPC = new NDNpc;
-	//pkNPC->Initialization(nLookFace, bFaceRight);
+	pkNPC->Initialization(nLookFace, bFaceRight);
 	if (!AddNodeToMap(pkNPC))
 	{
 		delete pkNPC;

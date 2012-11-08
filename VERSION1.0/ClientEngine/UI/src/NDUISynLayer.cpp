@@ -85,7 +85,7 @@ void NDUISynLayer::Initialization()
 	
 	CUISpriteNode *node = new CUISpriteNode;
 	node->Initialization();
-	node->ChangeSprite(tq::CString("%sloading.spr", NDPath::GetAnimationPath().c_str()));
+	node->ChangeSprite(tq::CString("%sbusy.spr", NDPath::GetAnimationPath().c_str()));
 	node->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
 	this->AddChild(node);
 	/*

@@ -210,7 +210,6 @@ void CUIChatText::Combiner(std::vector<ChatNode>& textNodeList)
 	int height_max=0;
 	float x = 0.0f, y = 0.0f;
 	std::vector<ChatNode>::iterator iter;
-	std::vector<ChatNode>::iterator iter_last_line_end=textNodeList.begin()-1;
 	int current_line=0;
 	for (iter = textNodeList.begin(); iter != textNodeList.end(); iter++) 
 	{
@@ -220,13 +219,19 @@ void CUIChatText::Combiner(std::vector<ChatNode>& textNodeList)
 		if (node.hasBreak || x + uiNodeRect.size.width > contentWidth) 
 		{
 			std::vector<ChatNode>::iterator line_iter;
-			for (line_iter = iter-1;line_iter !=iter_last_line_end;line_iter--)
+			if(iter != textNodeList.begin())
 			{
+				line_iter = iter - 1;
 				ChatNode line_node = *line_iter;
 				CGRect beforeRect = line_node.uiNode->GetFrameRect();
 				line_node.uiNode->SetFrameRect(CGRectMake(beforeRect.origin.x, beforeRect.origin.y+(height_max-beforeRect.size.height), beforeRect.size.width, beforeRect.size.height));
 			}
-			iter_last_line_end=iter-1;
+// 			for (line_iter = textNodeList.begin(); line_iter != iter; line_iter++)
+// 			{
+// 				ChatNode line_node = *line_iter;
+// 				CGRect beforeRect = line_node.uiNode->GetFrameRect();
+// 				line_node.uiNode->SetFrameRect(CGRectMake(beforeRect.origin.x, beforeRect.origin.y+(height_max-beforeRect.size.height), beforeRect.size.width, beforeRect.size.height));
+// 			}
 			
 			x = 0.0f; 
 			y += height_max;
@@ -246,7 +251,7 @@ void CUIChatText::Combiner(std::vector<ChatNode>& textNodeList)
 	}
 	
 	std::vector<ChatNode>::iterator line_iter;
-	for (line_iter = iter-1;line_iter !=iter_last_line_end;line_iter--)
+	for (line_iter = textNodeList.begin(); line_iter != textNodeList.end(); line_iter++)
 	{
 		ChatNode line_node = *line_iter;
 		CGRect beforeRect = line_node.uiNode->GetFrameRect();
