@@ -104,9 +104,10 @@ public:\
 		virtual NDRuntimeClass* GetRuntimeClass() const;
 		
 	public:
+
 		static NDRuntimeClass classNDObject;		
 		static NDObject* CreateObject();
-		
+
 	private:
 		NDObject* m_delegate;
 	};	
