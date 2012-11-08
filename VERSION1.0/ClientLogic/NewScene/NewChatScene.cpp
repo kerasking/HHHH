@@ -483,7 +483,7 @@ void NewChatScene::RemoveRecordBySpeaker(ChatTable* table, const string& speaker
 		return;
 	}
 	
-	uint i = 0;
+	unsigned int i = 0;
 	while (i < sec->Count()) {
 		ChatRecord* record = dynamic_cast<ChatRecord*> (sec->Cell(i));
 		i++;
@@ -638,7 +638,7 @@ string NewChatScene::FilterMessage(const string& msg)
 		
 		if (range.location + 4 <= [result length])
 		{
-			uint itemIndex = [[result substringWithRange:NSMakeRange(range.location + 2, 2)] intValue];			
+			unsigned int itemIndex = [[result substringWithRange:NSMakeRange(range.location + 2, 2)] intValue];			
 			SendItemInfo sendItemInfo;
 			bool ret = m_layerChooseFaceOrItem->GetSendItemInfo(itemIndex, sendItemInfo);
 			if (!ret) return "";

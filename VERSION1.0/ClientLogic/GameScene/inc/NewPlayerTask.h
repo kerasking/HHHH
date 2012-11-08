@@ -29,7 +29,7 @@ public:
 	
 	void Initialization();
 	
-	void RefreshAwardItem(int idItemType, uint num);
+	void RefreshAwardItem(int idItemType, unsigned int num);
 	
 private:
 	NDPicture* m_picItem;

@@ -12,7 +12,7 @@
 
 @interface NDPathNode : NSObject <NDCompare>
 {
-	uint			_x,_y;			
+	unsigned int			_x,_y;			
 	int			_h;				
 	int			_g;
 	int			_f;
@@ -22,8 +22,8 @@
 	NDPathNode  *_parent;
 }
 
-@property(nonatomic, assign)uint x;						//节点的x坐标
-@property(nonatomic, assign)uint y;						//节点的y坐标
+@property(nonatomic, assign)unsigned int x;						//节点的x坐标
+@property(nonatomic, assign)unsigned int y;						//节点的y坐标
 @property(nonatomic, assign)int	h;						//节点的估值
 @property(nonatomic, assign)int	g;						//路径的长度
 @property(nonatomic, assign)int f;						//g+h

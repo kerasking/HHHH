@@ -534,7 +534,7 @@ void NDUIDialog::Close()
 	}
 }
 
-void NDUIDialog::SetTime(uint sec)
+void NDUIDialog::SetTime(unsigned int sec)
 {
 	m_timer.KillTimer(this, TAG_TIMER_DLG_TIMECOUNT);
 

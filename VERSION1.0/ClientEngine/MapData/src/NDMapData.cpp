@@ -768,7 +768,7 @@ void NDMapData::moveBackGround(int x, int y)
 
 }
 
-//- (NDTile *)getTileAtRow:(uint)row column:(uint)column
+//- (NDTile *)getTileAtRow:(unsigned int)row column:(unsigned int)column
 // CustomCCTexture2D * NDMapData::getTileAtRow(unsigned int row, unsigned int column)
 // {
 // 	if (row >= _rows) 

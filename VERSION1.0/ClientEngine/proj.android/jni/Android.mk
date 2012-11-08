@@ -104,6 +104,7 @@ $(LOCAL_PATH)/../../UI/import/inc \
 $(LOCAL_PATH)/../../Utility/inc \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/third_party/win32 \
 $(LOCAL_PATH)/../../../luaplus \
+$(LOCAL_PATH)/../../../include/C3/win \
 $(LOCAL_PATH)/../../../ClientLogic/MsgDefine/inc \
 $(LOCAL_PATH)/../../../ClientLogic/Script/inc \
 $(LOCAL_PATH)/../../../ClientLogic/GameScene/inc \

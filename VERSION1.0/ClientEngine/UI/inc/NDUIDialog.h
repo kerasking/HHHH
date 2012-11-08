@@ -86,7 +86,7 @@ public:
 			cocos2d::ccColor4B color = ccc4(79, 79, 79, 255),
 			unsigned int fontsize = 13);
 	void SetTitle(const char *text);
-	void SetTime(uint sec);
+	void SetTime(unsigned int sec);
 	void OnTimer(OBJID tag);override
 private:
 	void InitUIData();

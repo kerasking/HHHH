@@ -73,7 +73,7 @@ typedef enum
 } TIME_TYPE;
 
 // long_time 以秒为单位
-uint TimeConvert(TIME_TYPE type /*=TIME_MILLISECOND*/, time_t long_time);
+unsigned int TimeConvert(TIME_TYPE type /*=TIME_MILLISECOND*/, time_t long_time);
 
 // long_time 以秒为单位
 std::string TimeConvertToStr(TIME_TYPE type, time_t long_time);

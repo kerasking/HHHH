@@ -192,8 +192,8 @@ private:
 //	static NDQuickTalkDataPersist& DefaultInstance();
 //	
 //	void GetAllQuickTalkString(int idPlayer, vector<string>& vMsg);
-//	string GetQuickTalkString(int idPlayer, uint uIdx);
-//	void SetQuickTalkString(int idPlayer, uint uIdx, const string& msg);
+//	string GetQuickTalkString(int idPlayer, unsigned int uIdx);
+//	void SetQuickTalkString(int idPlayer, unsigned int uIdx, const string& msg);
 //	
 //private:
 //	NDQuickTalkDataPersist();
@@ -231,10 +231,10 @@ private:
 //	static NDItemBarDataPersist& DefaultInstance();
 //	
 //	void GetItemBarConfigInBattle(int idPlayer, vector<ItemBarCellInfo>& vCellInfo);
-//	void SetItemAtIndexInBattle(int idPlayer, uint uIdx, int idItemtype);
+//	void SetItemAtIndexInBattle(int idPlayer, unsigned int uIdx, int idItemtype);
 //	
 //	void GetItemBarConfigOutBattle(int idPlayer, vector<ItemBarCellInfo>& vCellInfo);
-//	void SetItemAtIndexOutBattle(int idPlayer, uint uIdx, int idItemtype);
+//	void SetItemAtIndexOutBattle(int idPlayer, unsigned int uIdx, int idItemtype);
 //	
 //private:
 //	NDItemBarDataPersist();

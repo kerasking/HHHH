@@ -40,11 +40,11 @@ typedef struct _tagBFItemInfo
 				   int medalItemType, 
 				   int medalReq,
 				   int honourReq) {
-		this->goodType		= goodType;
-		this->itemType		= itemType;
-		this->medalItemType = medalItemType;
-		this->medalReq		= medalReq;
-		this->honourReq		= honourReq;
+		goodType		= goodType;
+		itemType		= itemType;
+		medalItemType = medalItemType;
+		medalReq		= medalReq;
+		honourReq		= honourReq;
 	}
 	
 }BFItemInfo;
@@ -56,13 +56,13 @@ typedef struct _tagBFPlayerInfo
 	std::string rank;
 	_tagBFPlayerInfo(std::string name, int lvl, std::string rank)
 	{
-		this->name = name;
-		this->lvl = lvl;
-		this->rank = rank;
+		name = name;
+		lvl = lvl;
+		rank = rank;
 	}
 	_tagBFPlayerInfo()
 	{
-		this->lvl = 0;
+		lvl = 0;
 	}
 }BFPlayerInfo;
 
@@ -86,33 +86,33 @@ typedef std::pair<std::string, BFPlayerInfo>		pair_bf_apply;
 
 typedef struct _tagBFApplyInfo
 {
-	uint typeId;
-	uint seqId;
-	uint timeLeft;
-	uint playerLimit;
-	uint applyCount;
+	unsigned int typeId;
+	unsigned int seqId;
+	unsigned int timeLeft;
+	unsigned int playerLimit;
+	unsigned int applyCount;
 	std::string rule;
 	map_bf_apply applyInfo;
-	_tagBFApplyInfo(uint typeId,
-							 uint seqId,
-							 uint timeLeft,
-							 uint playerLimit,
-							 uint applyCount )
+	_tagBFApplyInfo(unsigned int typeId,
+							 unsigned int seqId,
+							 unsigned int timeLeft,
+							 unsigned int playerLimit,
+							 unsigned int applyCount )
 	{
 		Init(typeId, seqId, timeLeft, playerLimit, applyCount);
 	}
 	
-	void Init(uint typeId,
-			 uint seqId,
-			 uint timeLeft,
-			 uint playerLimit,
-			 uint applyCount )
+	void Init(unsigned int typeId,
+			 unsigned int seqId,
+			 unsigned int timeLeft,
+			 unsigned int playerLimit,
+			 unsigned int applyCount )
 	{
-		this->typeId		= typeId;
-		this->seqId			= seqId;
-		this->timeLeft		= timeLeft;
-		this->playerLimit	= playerLimit;
-		this->applyCount	= applyCount;
+		typeId = typeId;
+		seqId = seqId;
+		timeLeft = timeLeft;
+		playerLimit	= playerLimit;
+		applyCount = applyCount;
 	} 
 	
 	_tagBFApplyInfo()
@@ -122,7 +122,7 @@ typedef struct _tagBFApplyInfo
 	
 	void SetRule(std::string rule)
 	{
-		this->rule = rule;
+		rule = rule;
 	}
 	
 	bool IsRuleEmpty()
@@ -139,9 +139,9 @@ typedef struct _tagBFApplyInfo
 
 
 // ket bfType
-typedef std::map<uint , BFApplyInfo>		map_bf_apply_info;
+typedef std::map<unsigned int , BFApplyInfo>		map_bf_apply_info;
 typedef map_bf_apply_info::iterator			map_bf_apply_info_it;
-typedef std::pair<uint , BFApplyInfo>		map_bf_apply_info_pair;
+typedef std::pair<unsigned int , BFApplyInfo>		map_bf_apply_info_pair;
 
 
 class BattleField

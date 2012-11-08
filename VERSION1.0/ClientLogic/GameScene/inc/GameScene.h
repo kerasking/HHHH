@@ -328,7 +328,7 @@ private:
 	OBJID m_dlgSyndicateResign; // 军团辞职
 	OBJID m_dlgSyndicateQuit; // 逄1�7出军囄1�7
 	OBJID m_dlgDelRoleTag;
-	uint m_curSelTaskAwardItemIndex;
+	unsigned int m_curSelTaskAwardItemIndex;
 
 	NDUIDialog *m_dlgFarm; // 庄园对话桄1�7
 

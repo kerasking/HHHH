@@ -29,8 +29,8 @@ void GlobalShowDlg(NDEngine::NDObject* delegate, std::string title,
 			NULL);
 }
 
-uint GlobalShowDlg(NDEngine::NDObject* delegate, const char* title,
-		const char* text, uint second,				// second-倒计�??,若为0则无倒计�??
+unsigned int GlobalShowDlg(NDEngine::NDObject* delegate, const char* title,
+		const char* text, unsigned int second,				// second-倒计�??,若为0则无倒计�??
 		const char* ortherButtons, .../*must NULL end*/
 		)
 {
@@ -127,7 +127,7 @@ CGlobalDialog::~CGlobalDialog()
 }
 
 unsigned int CGlobalDialog::Show(NDObject* delegate, const char* title,
-		const char* text, uint timeout, const char* ortherButtons,
+		const char* text, unsigned int timeout, const char* ortherButtons,
 		.../*must NULL end*/)
 {
 //	s_dlg_info *p = new s_dlg_info;
@@ -142,7 +142,7 @@ unsigned int CGlobalDialog::Show(NDObject* delegate, const char* title,
 
 	std::vector < GlobalDialogBtnContent > btns;
 	va_list argumentList;
-	char *eachObject;
+	char* eachObject = 0;
 
 	if (ortherButtons)
 	{
@@ -164,7 +164,7 @@ unsigned int CGlobalDialog::Show(NDObject* delegate, const char* title,
 }
 
 unsigned int CGlobalDialog::Show(NDEngine::NDObject* delegate,
-		const char* title, const char* text, uint timeout,
+		const char* title, const char* text, unsigned int timeout,
 		const std::vector<std::string>& ortherButtons)
 {
 	std::vector < GlobalDialogBtnContent > vec_btns;
@@ -178,7 +178,7 @@ unsigned int CGlobalDialog::Show(NDEngine::NDObject* delegate,
 }
 
 unsigned int CGlobalDialog::Show(NDEngine::NDObject* delegate,
-		const char* title, const char* text, uint timeout,
+		const char* title, const char* text, unsigned int timeout,
 		const std::vector<GlobalDialogBtnContent>& ortherButtons)
 {
 	s_dlg_info *p = new s_dlg_info;

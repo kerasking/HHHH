@@ -29,8 +29,6 @@
 
 #define ccc4					cocos2d::ccc4f
 
-
-	#define uint				unsigned int
 #ifdef WIN32
 	#define UTEXT(str)			GBKToUTF8(str)
 

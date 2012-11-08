@@ -28,6 +28,7 @@ using namespace std;
 #include "src/lstate.h"
 //#include "NDTextureMonitor.h"
 #include "NDPath.h"
+#include "uitypes.h"
 
 using namespace NDEngine;
 
@@ -153,7 +154,7 @@ void ScriptMgr::Load()
 	char szFileName[256] =
 	{ 0 };
 
-	_snprintf(szFileName, sizeof(szFileName), "%slog%ld.txt", m_strLogFilePath,
+	snprintf(szFileName, sizeof(szFileName), "%slog%ld.txt", m_strLogFilePath.c_str(),
 			time(NULL));
 
 	m_fDebugOutPut = fopen(szFileName, "a");

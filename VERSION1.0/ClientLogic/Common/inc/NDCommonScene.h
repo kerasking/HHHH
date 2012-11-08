@@ -97,7 +97,7 @@ class TabLayerDelegate
 {
 public:
 	virtual void OnTabLayerSelect(TabLayer* tab, unsigned int lastIndex, unsigned int curIndex) {}
-	virtual void OnTabLayerClick(TabLayer* tab, uint curIndex) {}
+	virtual void OnTabLayerClick(TabLayer* tab, unsigned int curIndex) {}
 	virtual void OnTabLayerNextPage(TabLayer* tab, unsigned int lastPage, unsigned int nextPage) {}
 };
 
@@ -329,7 +329,7 @@ public:
 protected:
 	
 	void OnTabLayerSelect(TabLayer* tab, unsigned int lastIndex, unsigned int curIndex); override
-	void OnTabLayerClick(TabLayer* tab, uint curIndex); override
+	void OnTabLayerClick(TabLayer* tab, unsigned int curIndex); override
 
 private:
 	VerticalTabLayer* m_tab;
@@ -383,7 +383,7 @@ class HFuncTabDelegate
 {
 public:
 	virtual void OnHFuncTabSelect(NDHFuncTab* tab, unsigned int lastIndex, unsigned int curIndex) {}
-	virtual void OnHFuncTabClick(NDHFuncTab* tab, uint curIndex) {}
+	virtual void OnHFuncTabClick(NDHFuncTab* tab, unsigned int curIndex) {}
 };
 
 class NDHFuncTab :
@@ -414,7 +414,7 @@ public:
 protected:
 	
 	void OnTabLayerSelect(TabLayer* tab, unsigned int lastIndex, unsigned int curIndex); override
-	void OnTabLayerClick(TabLayer* tab, uint curIndex); override
+	void OnTabLayerClick(TabLayer* tab, unsigned int curIndex); override
 	
 private:
 	HorizontalTabLayer* m_tab;

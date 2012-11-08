@@ -32,7 +32,7 @@ public:
 	void SetBigGreenNumber(int number, bool bWithSign = false);
 	void SetSmallWhiteNumber(int number, bool bWithSign = false);
 	void SetSmallRedNumber(int number, bool bWithSign = false);
-	void SetSmallRedTwoNumber(uint num1, uint num2);
+	void SetSmallRedTwoNumber(unsigned int num1, unsigned int num2);
 	void SetSmallGoldNumber(int num);
 
 	void Initialization();

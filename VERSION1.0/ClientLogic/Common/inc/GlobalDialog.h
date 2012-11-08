@@ -21,8 +21,8 @@ using namespace NDEngine;
 void GlobalShowDlg(std::string title, std::string content, float seconds = 0);
 void GlobalShowDlg(NDEngine::NDObject* delegate, std::string title,
 		std::string content, float seconds = 0);
-uint GlobalShowDlg(NDEngine::NDObject* delegate, const char* title,
-		const char* text, uint second,				// second-倒计�??,若为0则无倒计�??
+unsigned int GlobalShowDlg(NDEngine::NDObject* delegate, const char* title,
+		const char* text, unsigned int second,				// second-倒计�??,若为0则无倒计�??
 		const char* ortherButtons, .../*must NULL end*/
 		);
 
@@ -75,13 +75,13 @@ public:
 public:
 	// �??全局对话框列表中加入对话�??,返回该对话框的tag
 	unsigned int Show(NDEngine::NDObject* delegate, const char* title,
-			const char* text, uint timeout, const char* ortherButtons,
+			const char* text, unsigned int timeout, const char* ortherButtons,
 			.../*must NULL end*/);
 	unsigned int Show(NDEngine::NDObject* delegate, const char* title,
-			const char* text, uint timeout,
+			const char* text, unsigned int timeout,
 			const std::vector<std::string>& ortherButtons);
 	unsigned int Show(NDEngine::NDObject* delegate, const char* title,
-			const char* text, uint timeout,
+			const char* text, unsigned int timeout,
 			const std::vector<GlobalDialogBtnContent>& ortherButtons);
 	void quitGame();
 	void DisappearedAfterSeconds(float seconds);
@@ -100,7 +100,7 @@ private:
 		std::string cancelbtn;
 		bool bShowing;
 		unsigned char uiID;
-		uint timeout;
+		unsigned int timeout;
 	};
 
 	std::list<s_dlg_info*> m_listDlg;

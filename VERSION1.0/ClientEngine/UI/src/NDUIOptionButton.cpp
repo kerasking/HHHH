@@ -81,7 +81,7 @@ void NDUIOptionButton::SetFontSize(unsigned int fontSize)
 	m_title->SetFontSize(fontSize);
 }
 
-void NDUIOptionButton::SetOptIndex(uint index)
+void NDUIOptionButton::SetOptIndex(unsigned int index)
 {
 	if (index >= m_vOptions.size())
 	{

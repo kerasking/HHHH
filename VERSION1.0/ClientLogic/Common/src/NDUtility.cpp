@@ -413,9 +413,9 @@ void ShowAlert(const char* pszAlert)
 // 	[alert release];
 }
 
-uint TimeConvert(TIME_TYPE type /*=TIME_MILLISECOND*/, time_t long_time)
+unsigned int TimeConvert(TIME_TYPE type /*=TIME_MILLISECOND*/, time_t long_time)
 {
-	uint dwTime = 0;
+	unsigned int dwTime = 0;
 	switch (type)
 	{
 	case TIME_SECOND:

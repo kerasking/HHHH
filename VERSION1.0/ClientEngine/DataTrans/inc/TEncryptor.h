@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "define.h"
-
+#include "BaseType.h"
 
 #define UNUSED_ARG(a) (a)
 

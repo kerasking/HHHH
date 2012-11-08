@@ -60,7 +60,7 @@ public:
 	void NextOpt();
 	void PreOpt();
 	void OnFrameRectChange(CGRect srcRect, CGRect dstRect);override
-	void SetOptIndex(uint index);
+	void SetOptIndex(unsigned int index);
 
 protected:
 	NDTile *m_leftArrow;

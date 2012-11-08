@@ -142,10 +142,10 @@ bool NDAutoPath::autoFindPath(CGPoint kFromPosition, CGPoint kToPosition,
 	//		}
 	/*
 	 std::stringstream ss;
-	 uint nStartCellX = (uint)m_curPixelX / 16;
-	 uint nStartCellY = (uint)m_curPixelY / 16;
-	 uint nEndCellX = (uint)m_targetPixelX / 16;
-	 uint nEndCellY = (uint)m_targetPixelY / 16;
+	 unsigned int nStartCellX = (unsigned int)m_curPixelX / 16;
+	 unsigned int nStartCellY = (unsigned int)m_curPixelY / 16;
+	 unsigned int nEndCellX = (unsigned int)m_targetPixelX / 16;
+	 unsigned int nEndCellY = (unsigned int)m_targetPixelY / 16;
 
 	 ss << "\n本次寻路路径==================" << "\n";
 

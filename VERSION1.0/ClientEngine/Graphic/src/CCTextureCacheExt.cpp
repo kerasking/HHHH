@@ -47,9 +47,9 @@
 // }
 // 
 // int update_crc(char* buf, int off, int len) {
-// 	uint c = 0xffffffff;
+// 	unsigned int c = 0xffffffff;
 // 	int n, k;
-// 	uint xx;
+// 	unsigned int xx;
 // 	int crc_table[256] = { 0 };
 // 	
 // 	for (n = 0; n < 256; n++) {

@@ -888,7 +888,7 @@ const NSUInteger max_mail_save_count = 20;
 //	}
 //}
 //
-//string NDQuickTalkDataPersist::GetQuickTalkString(int idPlayer, uint uIdx)
+//string NDQuickTalkDataPersist::GetQuickTalkString(int idPlayer, unsigned int uIdx)
 //{
 //	NSMutableDictionary* dic = this->LoadQuickTalkDiction();
 //	NDAsssert(nil != dic);
@@ -905,7 +905,7 @@ const NSUInteger max_mail_save_count = 20;
 //	return str;
 //}
 //
-//void NDQuickTalkDataPersist::SetQuickTalkString(int idPlayer, uint uIdx, const string& msg)
+//void NDQuickTalkDataPersist::SetQuickTalkString(int idPlayer, unsigned int uIdx, const string& msg)
 //{
 //	NSMutableDictionary* dic = this->LoadQuickTalkDiction();
 //	NDAsssert(nil != dic);
@@ -1102,7 +1102,7 @@ const NSUInteger max_mail_save_count = 20;
 //	}
 //}
 //
-//void NDItemBarDataPersist::SetItemAtIndexInBattle(int idPlayer, uint uIdx, int idItemtype)
+//void NDItemBarDataPersist::SetItemAtIndexInBattle(int idPlayer, unsigned int uIdx, int idItemtype)
 //{
 //	NSMutableDictionary* dic = this->LoadDictionInBattle();
 //	NDAsssert(nil != dic);
@@ -1116,7 +1116,7 @@ const NSUInteger max_mail_save_count = 20;
 //	}
 //}
 //
-//void NDItemBarDataPersist::SetItemAtIndexOutBattle(int idPlayer, uint uIdx, int idItemtype)
+//void NDItemBarDataPersist::SetItemAtIndexOutBattle(int idPlayer, unsigned int uIdx, int idItemtype)
 //{
 //	NSMutableDictionary* dic = this->LoadDictionOutBattle();
 //	NDAsssert(nil != dic);

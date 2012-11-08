@@ -45,7 +45,7 @@ void ImageNumber::SetSmallRedNumber(int number, bool bWithSign /*= false*/)
 
 }
 
-void ImageNumber::SetSmallRedTwoNumber(uint num1, uint num2)
+void ImageNumber::SetSmallRedTwoNumber(unsigned int num1, unsigned int num2)
 {
 
 }

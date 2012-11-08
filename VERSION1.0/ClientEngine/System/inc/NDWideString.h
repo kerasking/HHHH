@@ -13,16 +13,16 @@
 #include <string>
 
 
-#ifdef WIN32
+
 /////////////////////////////////////////////////////////////////////////////
 
 #define UTF8CHR	unsigned char		//UTF8 char//
 #define UNICCHR	unsigned short		//UNICODE char//
 
-//UTF8±àÂëµÄ×Ö·û´®Àà
 typedef std::basic_string< UTF8CHR, std::char_traits<UTF8CHR>, std::allocator<UTF8CHR> >	UTF8String;
 typedef std::basic_string< UNICCHR, std::char_traits<UNICCHR>, std::allocator<UNICCHR> >	UNICString;
 
+//UTF8±àÂëµÄ×Ö·û´®Àà
 /////////////////////////////////////////////////////////////////////////////
 //UTF8 UNCODE ±àÂë×ª»»µÄ×Ö·û´®Àà
 class NDWideString
@@ -66,8 +66,9 @@ protected:
 	void ConvertUnicodeToUTF8();
 
 public:
+#ifdef WIN32
 	static bool IsEqual_UTF8_Ansi( const char* utf8, const char* ansi ); //@zwq
-};
 #endif
+};
 /////////////////////////////////////////////////////////////////////////////
 #endif //_NDWideString_H_2012_04_10_18_41_09_

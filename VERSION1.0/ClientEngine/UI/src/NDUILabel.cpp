@@ -317,7 +317,7 @@ namespace NDEngine
 				glVertexPointer(3, GL_FLOAT, 0, m_pfVertices);
 				glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_pbColors);
 
-				for (uint i = 0; i < m_uiRenderTimes; i++) 
+				for (unsigned int i = 0; i < m_uiRenderTimes; i++) 
 				{
 					glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 				}

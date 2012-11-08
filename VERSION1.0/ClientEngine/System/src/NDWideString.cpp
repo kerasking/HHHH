@@ -4,10 +4,11 @@
  *  Create Date:	2012-4-10
  *  
  *****************************************************************************/
+#include "NDWideString.h"
 
 #ifdef WIN32
-#include "NDWideString.h"
 #include "windows.h"
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -179,6 +180,7 @@ void NDWideString::ConvertUnicodeToUTF8()
 }
 
 //@zwq: 对比两个串是否相同（一个utf8编码，一个ansi）
+#ifdef WIN32
 bool NDWideString::IsEqual_UTF8_Ansi( const char* utf8, const char* ansi )
 {
 	// early out
@@ -202,6 +204,5 @@ bool NDWideString::IsEqual_UTF8_Ansi( const char* utf8, const char* ansi )
 	return false;
 }
 #endif
-
 //===========================================================================
 

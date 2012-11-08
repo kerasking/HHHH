@@ -221,7 +221,7 @@ std::string NDTransData::ReadUnicodeString2(bool bCareCode)
 
 	setlocale(LC_CTYPE, "UTF-8");
 
-	UNICCHR c;
+	unsigned short c = 0;
 	UNICString wStr;
 	for (int i = 0; i < nLen; i += 2)
 	{
