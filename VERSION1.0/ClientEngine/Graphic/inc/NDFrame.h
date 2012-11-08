@@ -69,7 +69,7 @@ class NDFrame: public cocos2d::CCObject
 	CC_SYNTHESIZE(NDAnimation*, m_pkBelongAnimation, BelongAnimation)
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDAnimationGroup*>*, m_pkSubAnimationGroups, SubAnimationGroups)
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDFrameTile*>*, m_pkFrameTiles, FrameTiles)
-
+//	CC_SYNTHESIZE_RETAIN(cocos2d::CCMutableArray<NDTile*>*, m_pkTiles, Tiles)
 public:
 	NDFrame();
 	~NDFrame();

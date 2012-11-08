@@ -13,11 +13,12 @@
 #include "ImageNumber.h"
 #include "NDPicture.h"
 #include "define.h"
-#include "NDPlayer.h"
+//#include "NDPlayer.h"
 #include "NDLayer.h"
-#include "Fighter.h"
+//#include "Fighter.h"
 #include "NDUIButton.h"
-#include "NDBattlePet.h"
+//#include "NDBattlePet.h"
+#include "..\..\MapAndRole\inc\NDManualRole.h"
 
 using namespace NDEngine;
 

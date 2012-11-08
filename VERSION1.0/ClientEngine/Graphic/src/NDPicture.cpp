@@ -692,7 +692,7 @@ NDPicturePool* NDPicturePool::DefaultPool()
 
 void NDPicturePool::PurgeDefaultPool()
 {
-//	delete NDPicturePool_DefaultPool;
+	delete NDPicturePool_DefaultPool;
 }
 void NDPicturePool::RemoveTexture(CCTexture2D* tex)
 {

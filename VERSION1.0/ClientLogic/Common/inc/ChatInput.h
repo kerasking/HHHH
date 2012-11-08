@@ -24,7 +24,6 @@
 class ChatInput : public NDUICustomView, 
 	public NDUIButtonDelegate, 
 	public GameItemBagDelegate,
-	public NDUITableLayerDelegate,
 	public NDNodeDelegate
 {
 	DECLARE_CLASS(ChatInput)

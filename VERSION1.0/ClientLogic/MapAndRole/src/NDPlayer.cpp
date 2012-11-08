@@ -924,6 +924,7 @@ bool NDPlayer::IsBattleSkillLearned(OBJID idSkill)
 			|| this->m_setPasSkill.count(idSkill) > 0;
 }
 
+#if 0
 bool NDPlayer::doGatherPointCollides(GatherPoint *se)
 {
 	if ( this->IsInState(USERSTATE_FIGHTING)
@@ -957,6 +958,7 @@ bool NDPlayer::doGatherPointCollides(GatherPoint *se)
 	}
 	return false;
 }
+#endif
 
 bool NDPlayer::DirectSwitch(int iSwitchCellX, int iSwitchCellY, int iPassIndex)
 {
@@ -1060,22 +1062,25 @@ bool NDPlayer::isRoleCanMove()
 void NDPlayer::OnDialogClose(NDUIDialog* dialog)
 {
 	m_bCollide = false;
-	m_gp = NULL;
+//	m_gp = NULL;
 }
 
 void NDPlayer::OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex)
 {
-	if (m_bCollide && m_gp)
+	#if 0
+if (m_bCollide && m_gp)
 	{
 		NDUISynLayer::ShowWithTitle(NDCommonCString("gathering"));
 		m_pkTimer->SetTimer(this, 101, 5.0f);
 		dialog->SetVisible(false);
 	}
+#endif
 }
 
 void NDPlayer::OnTimer(OBJID tag)
 {
-	if (m_bCollide && m_gp)
+	#if 0
+if (m_bCollide && m_gp)
 	{
 		m_pkTimer->KillTimer(this, 101);
 		m_gp->sendCollection();
@@ -1084,6 +1089,7 @@ void NDPlayer::OnTimer(OBJID tag)
 			m_kGatherDlg->Close();
 		}
 	}
+#endif
 }
 
 void NDPlayer::HandleDirectKey()

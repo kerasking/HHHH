@@ -43,12 +43,12 @@ NDTile::~NDTile()
 	free (m_pfCoordinates);
 	free (m_pfVertices);
 
-#if 0
 	if(m_pkTexture->getContainerType() == NDEngine::ContainerTypeAddPic 
 		|| m_pkTexture->getContainerType() == NDEngine::ContainerTypeAddTexture) 
 	{
 		NDEngine::NDPicturePool::DefaultPool()->RemoveTexture(m_pkTexture);
 	}
+#if 0
 	CC_SAFE_FREE (m_pkTexture);
 #endif 
 }

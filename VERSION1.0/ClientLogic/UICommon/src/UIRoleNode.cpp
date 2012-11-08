@@ -61,7 +61,7 @@ void CUIRoleNode::SetRidePet(int pet_look,int stand_action,int run_action)
 {
 	if(m_pRole)
 	{
-		//m_pRole->SetRidePet(pet_look, stand_action, run_action, 0);
+		m_pRole->SetRidePet(pet_look, stand_action, run_action, 0);
 	}
 }
 void CUIRoleNode::SetRoleScale(float scale)

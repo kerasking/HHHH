@@ -106,15 +106,6 @@ void WorldMapLayer::Initialization(int nMapId)
 	CGRect rectClose	= CGRectMake((winsize.width - sizeClose.width/iFlag), 0,
 									 sizeClose.width/iFlag, sizeClose.height/2/iFlag);
 
-#if 0
-	NDUIImage *imgClose = new NDUIImage;
-	imgClose->Initialization();
-	imgClose->SetPicture(picClose, true);
-	imgClose->SetFrameRect(
-			CGRectMake(rectClose.origin.x, rectClose.origin.y - 128,
-					rectClose.size.width, rectClose.size.height));
-	AddChild(imgClose);
-#endif 
 	m_btnClose = new NDUIButton();
 	m_btnClose->Initialization();
 	m_btnClose->SetDelegate(this);
@@ -174,6 +165,8 @@ void WorldMapLayer::draw()
 			tile->draw();
 		}
 	}
+
+	//m_roleNode->draw();
 }
 
 void WorldMapLayer::SetFilter(ID_VEC idVec)

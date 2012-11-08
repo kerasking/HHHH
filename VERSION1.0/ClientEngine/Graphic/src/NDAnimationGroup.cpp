@@ -137,6 +137,10 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 	for (int i = 0; i < nImageCount; i++)
 	{
 		std::string strImageName = kFileOp.readUTF8String(pkStream);
+		if (strstr(strImageName.c_str(), "fuck2") != NULL)
+		{
+			int i = 1;
+		}
 		std::string strImage = NDEngine::NDPath::GetImagePath() + strImageName;
 		m_pkImages->push_back(strImage);
 	}
