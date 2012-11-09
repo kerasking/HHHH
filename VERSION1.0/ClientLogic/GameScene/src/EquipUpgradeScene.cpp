@@ -1,12 +1,3 @@
-/*
- *  EquipUpgradeScene.mm
- *  DragonDrive
- *
- *  Created by jhzheng on 11-4-7.
- *  Copyright 2011 __MyCompanyName__. All rights reserved.
- *
- */
-
 #include "EquipUpgradeScene.h"
 #include "NDDirector.h"
 #include "ItemMgr.h"
@@ -238,7 +229,7 @@ void EquipUpgradeScene::OnButtonClick(NDUIButton* button)
 		{
 			case EQUIP_UPGRADE: 
 			{
-				Item *temp = checkHasItem(Item::EUQIP_QUALITIY);// 天魁石
+				Item *temp = checkHasItem(Item::EUQIP_QUALITIY);
 				if (temp != NULL) {
 					m_dlgSend = new NDUIDialog;
 					m_dlgSend->Initialization();
@@ -256,7 +247,7 @@ void EquipUpgradeScene::OnButtonClick(NDUIButton* button)
 				{
 					break;
 				}
-				Item *temp = checkHasItem(Item::EUQIP_ENHANCE); // 玄魔石
+				Item *temp = checkHasItem(Item::EUQIP_ENHANCE);
 				if (temp != NULL) {
 					if (checkItemCanEnhance(item)) {
 						m_dlgSend = new NDUIDialog;
@@ -434,7 +425,7 @@ void EquipUpgradeScene::OnDialogButtonClick(NDUIDialog* dialog, unsigned int but
 					break;
 				}
 				case EQUIP_ENHANCE: 
-				{ //强化
+				{
 					ShowProgressBar;
 					NDTransData bao(_MSG_EQUIPIMPROVE);
 					bao << (unsigned char)EQUIP_IM_ENHANCE << int(item->m_nID) << int(helpitem->m_nID);
@@ -530,7 +521,7 @@ bool EquipUpgradeScene::checkItemCanEnhance(Item* item)
 	{
 		return false;
 	}
-	// 物理攻击,魔法攻击,物理防御,魔法防御,生命,法力六个项才可以强化
+
 	if (item->getAtk() != 0 || item->getMag_atk() != 0 || item->getDef() != 0 || item->getMag_def() != 0 || item->getLife() != 0 || item->getMana() != 0) {
 		return true;
 	}
@@ -578,5 +569,3 @@ std::string GetDuanZhaoEffect(int iItemType)
 {
 	return "";
 }
-
-

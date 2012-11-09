@@ -1,12 +1,3 @@
-/*
- *  Item.mm
- *  DragonDrive
- *
- *  Created by jhzheng on 11-1-24.
- *  Copyright 2011 (网龙)DeNA. All rights reserved.
- *
- */
-
 #include "Item.h"
 #include "define.h"
 #include "ItemMgr.h"
@@ -46,16 +37,16 @@ Item& Item::operator =(const Item& rhs)
 		return *this;
 	}
 
-	this->m_nID = rhs.m_nID;						// 物品的Id
-	this->m_nOwnerID = rhs.m_nOwnerID;			// 物品的所有�??�id
-	this->m_nItemType = rhs.m_nItemType;			// 物品类型 id
-	this->m_nAmount = rhs.m_nAmount;				// 物品数量/耐久�??
-	this->m_nPosition = rhs.m_nPosition;				// 物品位置
-	this->m_nAddition = rhs.m_nAddition;				// 装备追加
-	this->m_nBindState = rhs.m_nBindState;		// 绑定状�????
-	this->m_nHole = rhs.m_nHole;				// 装备有几个洞
-	this->m_nCreateTime = rhs.m_nCreateTime;			// 创建时间
-	this->m_nAge = rhs.m_nAge;					// 骑宠寿命
+	this->m_nID = rhs.m_nID;
+	this->m_nOwnerID = rhs.m_nOwnerID;
+	this->m_nItemType = rhs.m_nItemType;
+	this->m_nAmount = rhs.m_nAmount;
+	this->m_nPosition = rhs.m_nPosition;
+	this->m_nAddition = rhs.m_nAddition;
+	this->m_nBindState = rhs.m_nBindState;
+	this->m_nHole = rhs.m_nHole;
+	this->m_nCreateTime = rhs.m_nCreateTime;
+	this->m_nAge = rhs.m_nAge;
 	this->m_bIsActive = rhs.m_bIsActive;
 
 	for (std::vector<Item*>::iterator it = m_vStone.begin();
@@ -2760,11 +2751,11 @@ bool Item::isItemCanStore()
 bool Item::isFormulaExt()
 {
 	std::vector<int> arr = getItemType(m_nItemType);
-	int item_type = arr[0]; // 千万
-	int item_equip = arr[1]; // 百万
-	int item_class = arr[2]; // 十万
+	int item_type = arr[0];
+	int item_equip = arr[1];
+	int item_class = arr[2];
 	if (item_type != 2 || (item_equip * 10 + item_class) != 51)
-	{ //2表消耗品,51
+	{
 		return false;
 	}
 	return true;
@@ -2813,12 +2804,6 @@ NDEngine::NDUIDialog* Item::makeItemDialog(std::vector<std::string>& vec_str)
 	return dlg;
 }
 
-/**
- * 丢弃是否有提�??
- * 
- * @param itemType
- * @return
- */
 bool Item::isItemDropReminder()
 {
 	if ((getMonopoly() & ITEMTYPE_MONOPOLY_DROP_REMINDER) != 0)
@@ -2881,17 +2866,6 @@ int Item::getIdRule(int nItemType, int rule)
 
 Item* Item::findItemByItemType(int idItem)
 {
-	/***
-	 * 临时性注�?? 郭浩
-	 * all
-	 */
-// 	NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
-// 	if (scene && scene->IsKindOfClass(RUNTIME_CLASS(ManualRoleEquipScene))) 
-// 	{
-// 		return ((ManualRoleEquipScene*)scene)->GetSuitItem(idItem);
-// 	}
-// 	
-// 	return ItemMgrObj.GetSuitItem(idItem);
 	return 0;
 }
 
