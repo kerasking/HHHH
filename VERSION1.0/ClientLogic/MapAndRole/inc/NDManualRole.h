@@ -103,10 +103,10 @@ public:
 
 	void Update(unsigned long ulDiff); override
 	void ReLoadLookface(int lookface);
-	void SetAction(bool bMove, bool bIgnoreFighting = false); hide
+	void SetAction(bool bMove, bool bIgnoreFighting = false);
 	bool AssuredRidePet();hide
 
-	void Initialization(int lookface, bool bSetLookFace = true); hide
+	void Initialization(int lookface, bool bSetLookFace = true);
 
 	virtual void Walk(CGPoint toPos, SpriteSpeed speed);
 	void OnMoving(bool bLastPos); override
@@ -272,10 +272,6 @@ protected:
 	{
 		return m_bToLastPos;
 	}
-
-protected: //@zwq
-	void InitNameLable( NDUILabel*& pLable );
-	void DrawLable( NDUILabel* pLable, bool bDraw );
 
 public:
 	void SetTeamToLastPos();

@@ -15,9 +15,10 @@
 #include <map>
 #include "NDPicture.h"
 #include "CCTextureCacheExt.h"
+#include "ScriptDefine.h"
 
 using namespace LuaPlus;
-using namespace NDEngine;
+namespace NDEngine {
 
 int LuaLogInfo(LuaState* state)
 {
@@ -28,7 +29,7 @@ int LuaLogInfo(LuaState* state)
 	{
 		ScriptMgrObj.DebugOutPut("%s", str.GetString());
 	}
-
+	
 	return 0;
 }
 
@@ -41,7 +42,7 @@ int LuaLogError(LuaState* state)
 	{
 		ScriptMgrObj.DebugOutPut("Error:%s", str.GetString());
 	}
-
+	
 	return 0;
 }
 
@@ -53,10 +54,13 @@ int DoFile(LuaState* state)
 	
 	if (str.IsString())
 	{
-		const char* pszPath = NDPath::GetScriptPath(str.GetString()).c_str();
-		nRet = state->DoFile(pszPath);
+#ifndef UPDATE_RES
+		nRet = state->DoFile(NDPath::GetScriptPath(str.GetString()).c_str());
+#else
+        nRet = ScriptMgrObj.LoadLuaFile(NDPath::GetScriptPath(str.GetString()));
+#endif
 	}
-
+	
 	return nRet;
 }
 
@@ -72,29 +76,23 @@ int RightShift(int x, int y)
 
 int BitwiseAnd(int x, int y)
 {
-	return x & y;
+	int nRes = x&y;
+	return nRes;
 }
-
-
-std::map<std::string, double> debug_str_double;
-
 
 int PicMemoryUsingLogOut(bool bNotPrintLog)
 {
 	int nSize = 0;
 	if (!bNotPrintLog)
 	{
-		ScriptMgrObj.DebugOutPut("\n============NDPicturePool Memory Report==============\n");
+		NDLog("\n============NDPicturePool Memory Report==============\n");
 	}
 	//nSize += NDPicturePool::DefaultPool()->Statistics(bNotPrintLog);
 	if (!bNotPrintLog)
 	{
-		ScriptMgrObj.DebugOutPut("\n============CCTextureCache Memory Report==============\n");
+		NDLog("\n============CCTextureCache Memory Report==============\n");
 	}
-
-	//nSize += CCTextureCache::sharedTextureCache()->Statistics
 	//nSize += [[CCTextureCache sharedTextureCache] Statistics:bNotPrintLog];
-
 	return nSize;
 }
 
@@ -102,13 +100,15 @@ int PicMemoryUsingLogOut(bool bNotPrintLog)
 //std::string g_strTmpWords;
 ////////////////////////////////////////////////////////////
 
-void ScriptObjectCommon::OnLoad()
+void ScriptCommonLoad()
 {
 	ETLUAFUNC("LuaLogInfo", LuaLogInfo);
 	ETLUAFUNC("LuaLogError", LuaLogError);
 	ETLUAFUNC("DoFile", DoFile);
-	ETCFUNC("LeftShift", LeftShift)
-	ETCFUNC("RightShift", RightShift)
-	ETCFUNC("BitwiseAnd", BitwiseAnd)
-	//ETCFUNC("PicMemoryUsingLogOut", PicMemoryUsingLogOut);
+	ETCFUNC("LeftShift", LeftShift);
+	ETCFUNC("RightShift", RightShift);
+	ETCFUNC("BitwiseAnd", BitwiseAnd);
+	ETCFUNC("PicMemoryUsingLogOut", PicMemoryUsingLogOut);
+}
+
 }

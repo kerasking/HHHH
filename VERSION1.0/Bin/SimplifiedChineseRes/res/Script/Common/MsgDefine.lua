@@ -161,6 +161,8 @@ NMSG_Type =
     _MSG_UPGRADE_GUIDE_STAGE        = _MSG_GENERAL+6020,    --接收教程进度信息
 
     
+    _MSG_AG_USERINFO					= 2338,		-- 玩家的军团的属性更改
+    _MSG_ARMYGROUP					= 2302,		-- 军团消息
     --
 	_MSG_CLIENT_VERSION				= 60008,	--版本验证
 	_MSG_MPF_VERSION				= 60009,	--新版本验证
@@ -172,7 +174,7 @@ NMSG_Type =
     
     _MSG_PLAYER_ACTION_INFO            =   _MSG_GENERAL + 7001,              --活动信息
     _MSG_PLAYER_ACTION_OPERATE   =   _MSG_GENERAL + 7002,               --活动操作
-
+    _MSG_VIEW_PLAYER                    =   _MSG_GENERAL + 6035,        --主城查看其它玩家列表
     
 
 
@@ -196,5 +198,6 @@ NMSG_Type =
     _MSG_SEND_TRANSPORT   =   _MSG_GENERAL + 6031,               --运送粮草操作信息
     _MSG_RECV_INFO                =   _MSG_GENERAL + 6032,               --运粮过程中接收到的消息      
     
-    
+    _MSG_QUEUE_BEGIN                =   _MSG_GENERAL + 2034,               --登入排队开始         
+    _MSG_QUEUE_END                =   _MSG_GENERAL + 2035,               --登入排队结束      
 };

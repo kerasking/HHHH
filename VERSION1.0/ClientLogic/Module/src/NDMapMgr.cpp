@@ -27,13 +27,51 @@
 #include "SMLoginScene.h"
 #include "GlobalDialog.h"
 #include "NDMonster.h"
+#include "NDSocket.h"
+//#include "GameUIRequest.h"			///< 需要合并后
+#include "AutoPathTip.h"
+#include "NDDataTransThread.h"
+#include "GameSceneLoading.h"
 
 NS_NDENGINE_BGN
+
+#define TAG_TIMER_KICK_OUT_TIP (1021) 
+
+const char* pszChannelID = "IPHONE_BYWX";
+
+enum
+{
+	TEXT_TEXT = 1,
+};
+
+int SHENGWANGMAX[7] =
+{ 5000, 1500, 500, 100, -100, -500, -1500 };
+int discount[7] =
+{ 70, 80, 90, 95, 100, 110, 120 };
 
 IMPLEMENT_CLASS(NDMapMgr, NDObject);
 
 bool NDMapMgr::m_bVerifyVersion = true;
 bool NDMapMgr::m_bFirstCreate = false;
+
+int getShengWangLevel(int v)
+{
+	int result = 7;
+	for (int i = 0; i < 7; i++)
+	{
+		if (v > SHENGWANGMAX[i])
+		{
+			result = i;
+			break;
+		}
+	}
+	return result;
+}
+
+int getDiscount(int v)
+{
+	return discount[getShengWangLevel(v)];
+}
 
 bool GetIntData(int& t, string strValue, string strType)
 {
@@ -83,7 +121,7 @@ bool GetCharData(char& t, string strValue, string strType)
 	return true;
 }
 
-NDMapMgr::NDMapMgr():
+NDMapMgr::NDMapMgr() :
 m_nCurrentMonsterBound(0),
 m_nRoadBlockX(0),
 m_nRoadBlockY(0),
@@ -95,12 +133,15 @@ m_nCurrentMonsterRound(0)
 	NDNetMsgPool& kNetPool = NDNetMsgPoolObj;
 	kNetPool.RegMsg(_MSG_NPCINFO_LIST, this);
 	kNetPool.RegMsg(_MSG_ROOM, this);
+	m_iCurDlgNpcID = 0;
 
 	mapType = MAPTYPE_NORMAL;
 
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this, "sim ");
 
 	m_kTimer.SetTimer(this, 1, 0.1);
+
+	memset(zhengYing, 0, sizeof(zhengYing));
 
 	isShowName = true;
 	isShowOther = true;
@@ -117,420 +158,416 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 {
 	switch (usMsgID)
 	{
-	case _MSG_REQUEST_ACCESS_TOKEN_RET:
-	{
-		ProcessTempCredential(*pkData);
-	}
-		break;
-	case _MSG_ROADBLOCK:
-	{
-		processRoadBlock(*pkData);
-	}
-		break;
-	case _MSG_QUERY_PETCKILL:
-	{
-		processQueryPetSkill(*pkData);
-	}
-		break;
-	case _MSG_CHARGE_GIFT_INFO:
-	{
-		//RechargeUI::ProcessGiftInfo(*kData); ///< 依赖汤自勤的 NewRecharge 郭浩
-	}
-		break;
-	case _MSG_KICK_OUT_TIP:
-	{
-		processKickOutTip(*pkData);
-	}
-		break;
-	case 3003: //_MSG_RESPOND_TREASURE_HUNT_PR0B: 此宏找不到？？？？郭浩
-	{
-		processRespondTreasureHuntProb(*pkData);
-	}
-		break;
-	case 3005: //_MSG_RESPOND_TREASURE_HUNT_INFO:	此宏找不到？？？？郭浩
-	{
-		processRespondTreasureHuntInfo(*pkData);
-	}
-		break;
-	case _MSG_SHOW_TREASURE_HUNT_AWARD:
-	{
-		processShowTreasureHuntAward(*pkData);
-	}
-		break;
-	case _MSG_MARRIAGE:
-	{
-		processMarriage(*pkData);
-	}
-		break;
-	case 2562:	///< 为什么_MSG_PORTAL找不到
-	{
-		processPortal(*pkData);
-	}
-		break;
-	case _MSG_DELETEROLE:
-	{
-		processDeleteRole(*pkData);
-	}
-		break;
-	case _MSG_ACTIVITY:
-	{
-		processActivity(*pkData);
-	}
-		break;
-	case _MSG_CLIENT_VERSION:
-	{
-		processVersionMsg(*pkData);
-	}
-		break;
-	case MB_MSG_RECHARGE_RETURN:
-	{
-		processRechargeReturn(*pkData);
-	}
-		break;
-	case MB_MSG_CHANGE_PASS:
-	{
-		CloseProgressBar;
-		GlobalShowDlg(NDCommonCString("SysTip"), pkData->ReadUnicodeString());
-	}
-		break;
-	case _MSG_SEE:
-	{
-		processSee(*pkData);
-	}
-		break;
-	case _MSG_SYSTEM_DIALOG:
-	{
-		m_strNoteTitle = pkData->ReadUnicodeString();
-		m_strNoteContent = pkData->ReadUnicodeString();
-		GlobalDialogObj.Show(NULL, m_strNoteTitle.c_str(),
-				m_strNoteContent.c_str(), NULL, NULL);
-	}
-		break;
-	case _MSG_TALK:
-	{
-		processTalk(*pkData);
-	}
-		break;
-	case _MSG_GAME_QUIT:
-	{
-		processGameQuit(pkData, nLength);
-	}
-		break;
-	case MB_MSG_RECHARGE:
-	{
-		processReCharge(*pkData);
-	}
-		break;
-	case _MSG_PLAYERLEVELUP:
-	{
-		processPlayerLevelUp(*pkData);
-	}
-		break;
-	case _MSG_COLLECTION:
-	{
-		processCollection(*pkData);
-	}
-		break;
-	case _MSG_AUCTION:
-	{
-		///< 依赖张迪 AuctionUILayer 郭浩
-		//AuctionUILayer::processAuction(*kData);
-	}
-		break;
-	case _MSG_AUCTIONINFO:
-	{
-		///< 依赖张迪 AuctionUILayer 郭浩
-		//AuctionUILayer::processAuctionInfo(*pkData);
-	}
-		break;
-	case _MSG_PETINFO:
-	{
-		processPetInfo(pkData, nLength);
-	}
-		break;
-	case _MSG_COMPETITION:
-	{
-		processCompetition(*pkData);
-	}
-		break;
-	case _MSG_KICK_BACK:
-	{
-		processKickBack(pkData, nLength);
-	}
-		break;
-	case MB_MSG_DISAPPEAR:
-	{
-		processDisappear(pkData, nLength);
-	}
-		break;
-	case _MSG_CHGPOINT:
-	{
-		processChgPoint(pkData, nLength);
-	}
-		break;
-	case _MSG_REPUTE:
-	{
-		NDPlayer& kRole = NDPlayer::defaultHero();
-		kRole.m_nSWCountry = pkData->ReadInt();
-		kRole.m_nSWCamp = pkData->ReadInt();
-		kRole.m_nHonour = pkData->ReadInt();
-		kRole.m_nExpendHonour = pkData->ReadInt();
-		kRole.m_strRank = pkData->ReadUnicodeString();
-
-		updateTaskRepData(kRole.m_nSWCamp, false);
-		updateTaskHrData(kRole.m_nHonour, false);
-	}
-		break;
-	case _MSG_NPC_STATUS:
-	{
-		processNpcStatus(pkData, nLength);
-	}
-		break;
-	case _MSG_MONSTER_INFO_LIST:
-	{
-		processMonsterInfo(pkData, nLength);
-	}
-		break;
-	case _MSG_COMMON_LIST:
-	{
-		processMsgCommonList(*pkData);
-	}
-		break;
-	case _MSG_COMMON_LIST_RECORD:
-	{
-		processMsgCommonListRecord(*pkData);
-	}
-		break;
-	case _MSG_CHG_PET_POINT:
-	{
-		int nBtAnswer = pkData->ReadByte();
-	}
-		break;
-	case _MSG_PLAYER:
-	{
-		processPlayer(pkData, nLength);
-	}
-		break;
-	case _MSG_LOGIN_SUC:
-	{
-		ProcessLoginSuc(*pkData);
-	}
-		break;
-	case _MSG_PLAYER_EXT:
-	{
-		processPlayerExt(pkData, nLength);
-	}
-		break;
-	case _MSG_ITEM_TYPE_INFO:
-	{
-		processItemTypeInfo(*pkData);
-	}
-		break;
-	case _MSG_NPC_TALK:
-	{
-		processNpcTalk(*pkData);
-	}
-		break;
-	case _MSG_WALK_TO:
-	{
-		processWalkTo(*pkData);
-	}
-		break;
-	case _MSG_NPCINFO_LIST:
-	{
-		processNPCInfoList(pkData, nLength);
-	}
-		break;
-	case _MSG_ROOM:
-	{
-		processChangeRoom(pkData, nLength);
-	}
-		break;
-	case _MSG_WALK:
-	{
-		processWalk(pkData, nLength);
-	}
-		break;
-	case _MSG_TASKINFO:
-	case _MSG_DOING_TASK_LIST:
-	case _MSG_QUERY_TASK_LIST:
-	case _MSG_TASK_ITEM_OPT:
-	case _MSG_QUERY_TASK_LIST_EX:
-	{
-		processTask(usMsgID, pkData);
-	}
-		break;
-	case _MSG_NPCINFO:
-	{
-		processNPCInfo(*pkData);
-	}
-		break;
-	case _MSG_REHEARSE:
-	{
-		processRehearse(*pkData);
-	}
-		break;
-	case _MSG_GOODFRIEND:
-	{
-		processGoodFriend(*pkData);
-	}
-		break;
-	case _MSG_TUTOR:
-	{
-		///< 依赖张迪的TutorUILayer 郭浩
-		//TutorUILayer::processMsgTutor(*kData);
-	}
-		break;
-	case _MSG_REG_TUTOR_INFO:
-	{
-		///< 依赖张迪的MasterUILayer 郭浩
-		//MasterUILayer::refreshScroll(*kData);
-	}
-		break;
-	case _MSG_TUTOR_INFO:
-	{
-		///< 依赖张迪的TutorUILayer 郭浩
-		//TutorUILayer::processTutorList(*kData);
-	}
-		break;
-	case _MSG_USER_POS:
-	{
-		///< 依赖张迪的TutorUILayer 郭浩
-		//TutorUILayer::processUserPos(*kData);
-	}
-		break;
-	case _MSG_CHG_MAP_FAIL:
-	{
-		NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
-
-		///< 依赖汤自勤的GameSceneLoading 郭浩
-// 		if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
-// 		{
-// 			NDDirector::DefaultDirector()->PopScene();
-// 		}
-	}
-		break;
-	case _MSG_USERINFO_SEE:
-	{
-		processUserInfoSee(*pkData);
-	}
-		break;
-	case _MSG_POS_TEXT:
-	{
-		GameScene* pkGameScene = GameScene::GetCurGameScene();
-
-		if (pkGameScene)
+		case _MSG_REQUEST_ACCESS_TOKEN_RET:
 		{
-			pkGameScene->processMsgPosText(*pkData);
+			ProcessTempCredential(*pkData);
 		}
-	}
-		break;
-	case _MSG_FORMULA:
-	{
-		processFormula(*pkData);
-	}
-		break;
-	case _MSG_BOOTH:
-	{
-		//VendorUILayer::processMsgBooth(*kData);	///< 依赖张迪的VendorUILayer 郭浩
-	}
-		break;
-	case _MSG_BOOTH_GOODS:
-	{
-		//VendorBuyUILayer::Show(*kData);		///< 依赖张迪的VendorBuyUILayer 郭浩
-	}
-		break;
-	case _MSG_QUERY_REG_SYN_LIST:
-	{
-		//SyndicateRegListUILayer::refreshScroll(*kData); ///< 这个不知道是谁的 郭浩
-	}
-		break;
-	case _MSG_SYNDICATE:
-	{
-		processSyndicate(*pkData);
-	}
-		break;
-	case _MSG_SYN_INFO:
-	{
-		int nRank = pkData->ReadByte(); // 个人在帮派中的职位
-		string strSynName = pkData->ReadUnicodeString(); // 帮派名字
-		NDPlayer& kRole = NDPlayer::defaultHero();
-		kRole.setSynRank(nRank);
-		kRole.m_strSynName = (strSynName);
-		break;
-	}
-		break;
-	case _MSG_SYN_ANNOUNCE:
-	{
-		/***
-		 * 依赖张迪的SynInfoUILayer
-		 * 郭浩
-		 */
-		//SynInfoUILayer* synInfo = SynInfoUILayer::GetCurInstance();
-		//if (synInfo) {
-		//	synInfo->processSynBraodcast(*kData);
-		//}
-	}
-		break;
-	case _MSG_APPLY_LIST:
-	{
-		/***
-		 * 依赖张迪的 SynApproveUILayer
-		 * 郭浩
-		 */
-		//SynApproveUILayer* approve = SynApproveUILayer::GetCurInstance();
-		//if (approve) {
-		//	approve->processApproveList(*kData);
-		//}
-	}
-		break;
-	case _MSG_DIGOUT:
-	{
-		processDigout(*pkData);
-	}
-		break;
-	case _MSG_MBR_LIST:
-	{
-		/***
-		 * 依赖张迪的 SynMbrListUILayer
-		 * 郭浩
-		 */
-		//SynMbrListUILayer* mbrList = SynMbrListUILayer::GetCurInstance();
-		//if (mbrList) {
-		//	mbrList->processMbrList(*kData);
-		//}
-	}
-		break;
-	case _MSG_TIP:
-	{
-		/***
-		 * 依赖汤自勤的GameSceneLoading 郭浩
-		 */
-// 			NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
-// 			if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
-// 			{
-// 				GameSceneLoading* pkGameSceneLoading = (GameSceneLoading*)pkScene;
-// 				pkGameSceneLoading->UpdateTitle(kData->ReadUnicodeString());
-// 			}
-	}
-		break;
-	case _MSG_NAME:
-	{
-		//showDialog(NDCommonCString("tip"), NDCommonCString("RenameSucc")); ///< 依赖showDialog 郭浩
-	}
-		break;
-	case _MSG_NPC_POSITION:
-	{
-		processNpcPosition(*pkData);
-	}
-		break;
-	case _MSG_NPC:
-	{
-		processNPC(*pkData);
-	}
-		break;
-	default:
-		break;
+			break;
+		case _MSG_ROADBLOCK:
+		{
+			processRoadBlock(*pkData);
+		}
+			break;
+		case _MSG_QUERY_PETCKILL:
+		{
+			processQueryPetSkill(*pkData);
+		}
+			break;
+		case _MSG_CHARGE_GIFT_INFO:
+		{
+			//RechargeUI::ProcessGiftInfo(*kData); ///< 依赖汤自勤的 NewRecharge 郭浩
+		}
+			break;
+		case _MSG_KICK_OUT_TIP:
+		{
+			processKickOutTip(*pkData);
+		}
+			break;
+		case 3003: //_MSG_RESPOND_TREASURE_HUNT_PR0B: 此宏找不到？？？？郭浩
+		{
+			processRespondTreasureHuntProb(*pkData);
+		}
+			break;
+		case 3005: //_MSG_RESPOND_TREASURE_HUNT_INFO:	此宏找不到？？？？郭浩
+		{
+			processRespondTreasureHuntInfo(*pkData);
+		}
+			break;
+		case _MSG_SHOW_TREASURE_HUNT_AWARD:
+		{
+			processShowTreasureHuntAward(*pkData);
+		}
+			break;
+		case _MSG_MARRIAGE:
+		{
+			processMarriage(*pkData);
+		}
+			break;
+		case 2562:	///< 为什么_MSG_PORTAL找不到
+		{
+			processPortal(*pkData);
+		}
+			break;
+		case _MSG_DELETEROLE:
+		{
+			processDeleteRole(*pkData);
+		}
+			break;
+		case _MSG_ACTIVITY:
+		{
+			processActivity(*pkData);
+		}
+			break;
+		case _MSG_CLIENT_VERSION:
+		{
+			processVersionMsg(*pkData);
+		}
+			break;
+		case MB_MSG_RECHARGE_RETURN:
+		{
+			processRechargeReturn(*pkData);
+		}
+			break;
+		case MB_MSG_CHANGE_PASS:
+		{
+			CloseProgressBar;
+			GlobalShowDlg(NDCommonCString("SysTip"), pkData->ReadUnicodeString());
+		}
+			break;
+		case _MSG_SEE:
+		{
+			processSee(*pkData);
+		}
+			break;
+		case _MSG_SYSTEM_DIALOG:
+		{
+			m_strNoteTitle = pkData->ReadUnicodeString();
+			m_strNoteContent = pkData->ReadUnicodeString();
+			GlobalDialogObj.Show(NULL, m_strNoteTitle.c_str(),
+					m_strNoteContent.c_str(), NULL, NULL);
+		}
+			break;
+		case _MSG_TALK:
+		{
+			processTalk(*pkData);
+		}
+			break;
+		case _MSG_GAME_QUIT:
+		{
+			processGameQuit(pkData, nLength);
+		}
+			break;
+		case MB_MSG_RECHARGE:
+		{
+			processReCharge(*pkData);
+		}
+			break;
+		case _MSG_PLAYERLEVELUP:
+		{
+			processPlayerLevelUp(*pkData);
+		}
+			break;
+		case _MSG_COLLECTION:
+		{
+			processCollection(*pkData);
+		}
+			break;
+		case _MSG_AUCTION:
+		{
+			///< 依赖张迪 AuctionUILayer 郭浩
+			//AuctionUILayer::processAuction(*kData);
+		}
+			break;
+		case _MSG_AUCTIONINFO:
+		{
+			///< 依赖张迪 AuctionUILayer 郭浩
+			//AuctionUILayer::processAuctionInfo(*pkData);
+		}
+			break;
+		case _MSG_PETINFO:
+		{
+			processPetInfo(pkData, nLength);
+		}
+			break;
+		case _MSG_COMPETITION:
+		{
+			processCompetition(*pkData);
+		}
+			break;
+		case _MSG_KICK_BACK:
+		{
+			processKickBack(pkData, nLength);
+		}
+			break;
+		case MB_MSG_DISAPPEAR:
+		{
+			processDisappear(pkData, nLength);
+		}
+			break;
+		case _MSG_CHGPOINT:
+		{
+			processChgPoint(pkData, nLength);
+		}
+			break;
+		case _MSG_REPUTE:
+		{
+			NDPlayer& kRole = NDPlayer::defaultHero();
+			kRole.m_nSWCountry = pkData->ReadInt();
+			kRole.m_nSWCamp = pkData->ReadInt();
+			kRole.m_nHonour = pkData->ReadInt();
+			kRole.m_nExpendHonour = pkData->ReadInt();
+			kRole.m_strRank = pkData->ReadUnicodeString();
+
+			updateTaskRepData(kRole.m_nSWCamp, false);
+			updateTaskHrData(kRole.m_nHonour, false);
+		}
+			break;
+		case _MSG_NPC_STATUS:
+		{
+			processNpcStatus(pkData, nLength);
+		}
+			break;
+		case _MSG_MONSTER_INFO_LIST:
+		{
+			processMonsterInfo(pkData, nLength);
+		}
+			break;
+		case _MSG_COMMON_LIST:
+		{
+			processMsgCommonList(*pkData);
+		}
+			break;
+		case _MSG_COMMON_LIST_RECORD:
+		{
+			processMsgCommonListRecord(*pkData);
+		}
+			break;
+		case _MSG_CHG_PET_POINT:
+		{
+			int nBtAnswer = pkData->ReadByte();
+		}
+			break;
+		case _MSG_PLAYER:
+		{
+			processPlayer(pkData, nLength);
+		}
+			break;
+		case _MSG_LOGIN_SUC:
+		{
+			ProcessLoginSuc(*pkData);
+		}
+			break;
+		case _MSG_PLAYER_EXT:
+		{
+			processPlayerExt(pkData, nLength);
+		}
+			break;
+		case _MSG_ITEM_TYPE_INFO:
+		{
+			processItemTypeInfo(*pkData);
+		}
+			break;
+		case _MSG_NPC_TALK:
+		{
+			processNpcTalk(*pkData);
+		}
+			break;
+		case _MSG_WALK_TO:
+		{
+			processWalkTo(*pkData);
+		}
+			break;
+		case _MSG_NPCINFO_LIST:
+		{
+			processNPCInfoList(pkData, nLength);
+		}
+			break;
+		case _MSG_ROOM:
+		{
+			processChangeRoom(pkData, nLength);
+		}
+			break;
+		case _MSG_WALK:
+		{
+			processWalk(pkData, nLength);
+		}
+			break;
+		case _MSG_TASKINFO:
+		case _MSG_DOING_TASK_LIST:
+		case _MSG_QUERY_TASK_LIST:
+		case _MSG_TASK_ITEM_OPT:
+		case _MSG_QUERY_TASK_LIST_EX:
+		{
+			processTask(usMsgID, pkData);
+		}
+			break;
+		case _MSG_NPCINFO:
+		{
+			processNPCInfo(*pkData);
+		}
+			break;
+		case _MSG_REHEARSE:
+		{
+			processRehearse(*pkData);
+		}
+			break;
+		case _MSG_GOODFRIEND:
+		{
+			processGoodFriend(*pkData);
+		}
+			break;
+		case _MSG_TUTOR:
+		{
+			///< 依赖张迪的TutorUILayer 郭浩
+			//TutorUILayer::processMsgTutor(*kData);
+		}
+			break;
+		case _MSG_REG_TUTOR_INFO:
+		{
+			///< 依赖张迪的MasterUILayer 郭浩
+			//MasterUILayer::refreshScroll(*kData);
+		}
+			break;
+		case _MSG_TUTOR_INFO:
+		{
+			///< 依赖张迪的TutorUILayer 郭浩
+			//TutorUILayer::processTutorList(*kData);
+		}
+			break;
+		case _MSG_USER_POS:
+		{
+			///< 依赖张迪的TutorUILayer 郭浩
+			//TutorUILayer::processUserPos(*kData);
+		}
+			break;
+		case _MSG_CHG_MAP_FAIL:
+		{
+			NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
+
+			if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
+	 		{
+	 			NDDirector::DefaultDirector()->PopScene();
+	 		}
+		}
+			break;
+		case _MSG_USERINFO_SEE:
+		{
+			processUserInfoSee(*pkData);
+		}
+			break;
+		case _MSG_POS_TEXT:
+		{
+			GameScene* pkGameScene = GameScene::GetCurGameScene();
+
+			if (pkGameScene)
+			{
+				pkGameScene->processMsgPosText(*pkData);
+			}
+		}
+			break;
+		case _MSG_FORMULA:
+		{
+			processFormula(*pkData);
+		}
+			break;
+		case _MSG_BOOTH:
+		{
+			//VendorUILayer::processMsgBooth(*kData);	///< 依赖张迪的VendorUILayer 郭浩
+		}
+			break;
+		case _MSG_BOOTH_GOODS:
+		{
+			//VendorBuyUILayer::Show(*kData);		///< 依赖张迪的VendorBuyUILayer 郭浩
+		}
+			break;
+		case _MSG_QUERY_REG_SYN_LIST:
+		{
+			//SyndicateRegListUILayer::refreshScroll(*kData); ///< 这个不知道是谁的 郭浩
+		}
+			break;
+		case _MSG_SYNDICATE:
+		{
+			processSyndicate(*pkData);
+		}
+			break;
+		case _MSG_SYN_INFO:
+		{
+			int nRank = pkData->ReadByte(); // 个人在帮派中的职位
+			string strSynName = pkData->ReadUnicodeString(); // 帮派名字
+			NDPlayer& kRole = NDPlayer::defaultHero();
+			kRole.setSynRank(nRank);
+			kRole.m_strSynName = (strSynName);
+			break;
+		}
+			break;
+		case _MSG_SYN_ANNOUNCE:
+		{
+			/***
+			 * 依赖张迪的SynInfoUILayer
+			 * 郭浩
+			 */
+			//SynInfoUILayer* synInfo = SynInfoUILayer::GetCurInstance();
+			//if (synInfo) {
+			//	synInfo->processSynBraodcast(*kData);
+			//}
+		}
+			break;
+		case _MSG_APPLY_LIST:
+		{
+			/***
+			 * 依赖张迪的 SynApproveUILayer
+			 * 郭浩
+			 */
+			//SynApproveUILayer* approve = SynApproveUILayer::GetCurInstance();
+			//if (approve) {
+			//	approve->processApproveList(*kData);
+			//}
+		}
+			break;
+		case _MSG_DIGOUT:
+		{
+			processDigout(*pkData);
+		}
+			break;
+		case _MSG_MBR_LIST:
+		{
+			/***
+			 * 依赖张迪的 SynMbrListUILayer
+			 * 郭浩
+			 */
+			//SynMbrListUILayer* mbrList = SynMbrListUILayer::GetCurInstance();
+			//if (mbrList) {
+			//	mbrList->processMbrList(*kData);
+			//}
+		}
+			break;
+		case _MSG_TIP:
+		{
+ 			NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
+ 			if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
+ 			{
+ 				GameSceneLoading* pkGameSceneLoading = (GameSceneLoading*)pkScene;
+ 				pkGameSceneLoading->UpdateTitle(pkData->ReadUnicodeString());
+ 			}
+		}
+			break;
+		case _MSG_NAME:
+		{
+			//showDialog(NDCommonCString("tip"), NDCommonCString("RenameSucc")); ///< 依赖showDialog 郭浩
+		}
+			break;
+		case _MSG_NPC_POSITION:
+		{
+			processNpcPosition(*pkData);
+		}
+			break;
+		case _MSG_NPC:
+		{
+			processNPC(*pkData);
+		}
+			break;
+		default:
+			break;
 	}
 
 	return true;
@@ -1058,7 +1095,7 @@ void NDMapMgr::processWalkTo(NDTransData& kData)
 	}
 }
 
-NDNpc* NDMapMgr::GetNPC(int nID)
+NDNpc* NDMapMgr::GetNpcByID(int nID)
 {
 	for (VEC_NPC::iterator it = m_vNPC.begin(); m_vNPC.end() != it; it++)
 	{
@@ -1077,50 +1114,42 @@ NDNpc* NDMapMgr::GetNPC(int nID)
 
 void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 {
-	if (0 == pkData || 0 == nLength)
+	if (NULL == pkData || 0 == nLength)
 	{
 		return;
 	}
 
 	m_nCurrentMonsterBound = 0;
 
+	//版本验证
 	if (m_bVerifyVersion)
 	{
 		m_bVerifyVersion = false;
 		//NDBeforeGameMgrObj.VerifyVersion();
 	}
+	
+	BattleMgrObj.quitBattle(false);
 
 	m_nRoadBlockX = -1;
 	m_nRoadBlockY = -1;
 
-	BattleMgrObj.quitBattle(false);
-
-	pkData->ReadShort();
-	pkData->ReadInt();
+	pkData->ReadShort();  //未使用
+	pkData->ReadInt();    //未使用
 
 	int nMapID = pkData->ReadInt();
 	int nMapDocID = pkData->ReadInt();
+	int dwPortalX = pkData->ReadShort();  //出生地X坐标
+	int dwPortalY = pkData->ReadShort();  //出生地Y坐标
 
-	int dwPortalX = pkData->ReadShort();
-	int dwPortalY = pkData->ReadShort();
-
-	pkData->ReadShort();
-	pkData->ReadShort();
-	pkData->ReadShort();
-	pkData->ReadShort();
+	pkData->ReadShort();    //未使用
+	pkData->ReadShort();    //未使用
+	pkData->ReadShort();    //未使用
+	pkData->ReadShort();    //未使用
 
 	m_nMapType = pkData->ReadInt();
-
 	m_strMapName = pkData->ReadUnicodeString();
 
-	NDPlayer& kPlayer = NDPlayer::defaultHero(1);
-// 
-// 	if (kPlayer.IsInState(USERSTATE_DEAD))
-// 	{
-// 		NDUISynLayer::Close (SYN_RELIEVE);
-// 	}
-// 
-// 	NDUISynLayer::Close (SYN_CREATE_ROLE);
+	NDPlayer& kPlayer = NDPlayer::defaultHero();
 
 	NDMapMgrObj.ClearManualRole();
 
@@ -1150,9 +1179,7 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 //   		kPlayer.RemoveFromParent(false);
 //   	}
 
-	while (NDDirector::DefaultDirector()->PopScene())
-	{
-	}
+	while (NDDirector::DefaultDirector()->PopScene());
 
 	NDMapMgrObj.ClearNPC();
 	NDMapMgrObj.ClearMonster();
@@ -1241,19 +1268,16 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 		(*pkData) >> btState; // 1个字节表状态
 		unsigned char btCamp = 0;
 		(*pkData) >> btCamp;
-		CCString* pstrTemp = CCString::stringWithUTF8String(
+		NSString pstrTemp = CCString::stringWithUTF8String(
 				pkData->ReadUnicodeString().c_str());
 		std::string strName = pstrTemp->toStdString();
-		SAFE_DELETE(pstrTemp);
 
 		pstrTemp = CCString::stringWithUTF8String(
 				pkData->ReadUnicodeString().c_str());
 		std::string dataStr = pstrTemp->toStdString();
-		SAFE_DELETE(pstrTemp);
 		pstrTemp = CCString::stringWithUTF8String(
 				pkData->ReadUnicodeString().c_str());
 		std::string talkStr = pstrTemp->toStdString();
-		SAFE_DELETE(pstrTemp);
 
 		NDNpc *pkNPC = new NDNpc;
 		pkNPC->m_nID = nID;
@@ -1395,9 +1419,9 @@ bool NDMapMgr::loadSceneByMapDocID(int nMapID)
 	NDDirector::DefaultDirector()->ReplaceScene(NDScene::Scene());
 
 	CSMGameScene* pkScene = CSMGameScene::Scene();
-	NDDirector::DefaultDirector()->ReplaceScene(pkScene);
 	pkScene->Initialization(nMapID);
 	pkScene->SetTag(SMGAMESCENE_TAG);
+	NDDirector::DefaultDirector()->ReplaceScene(pkScene);
 
 	NDMapLayer* pkMapLayer = getMapLayerOfScene(pkScene);
 
@@ -1422,11 +1446,9 @@ void NDMapMgr::AddSwitch()
 	NDMapLayer* pkLayer = 0;
 	NDMapData* pkMapData = 0;
 
-	if (0 != pkScene || 0 == (pkLayer = getMapLayerOfScene(pkScene))
-			|| 0 == (pkMapData = pkLayer->GetMapData()))
-	{
-		return;
-	}
+	ND_ASSERT_NO_RETURN(NULL == pkScene);
+	ND_ASSERT_NO_RETURN(NULL == (pkLayer = getMapLayerOfScene(pkScene)));
+	ND_ASSERT_NO_RETURN(NULL == (pkMapData = pkLayer->GetMapData()));
 
 	ScriptDB& kScriptDB = ScriptDBObj;
 	ID_VEC kIDList;
@@ -1455,6 +1477,23 @@ void NDMapMgr::AddSwitch()
 int NDMapMgr::GetMapID()
 {
 	return m_nMapID;
+}
+
+void NDMapMgr::WorldMapSwitch(int mapId)
+{
+	NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
+	if (!scene) 
+	{
+		return;
+	}
+
+	NDDirector::DefaultDirector()->PushScene(GameSceneLoading::Scene());
+
+	NDPlayer& player = NDPlayer::defaultHero();
+	NDTransData bao(_MSG_POSITION);
+	bao << player.m_nID << (unsigned short)0 << (unsigned short)0 
+		<< mapId << (unsigned short)_WORD_MAPCHANGE << int(0);
+	SEND_DATA(bao);
 }
 
 int NDMapMgr::GetMotherMapID()
@@ -1756,7 +1795,7 @@ void NDMapMgr::processNpcTalk(NDTransData& kData)
 	case 1:
 	{
 		CloseProgressBar;
-		NDNpc *pkNPC = GetNPC(nID);
+		NDNpc *pkNPC = GetNpcByID(nID);
 		if (pkNPC != NULL)
 		{
 			pkNPC->addTalkMsg(strMessage, nTime);
@@ -3676,7 +3715,7 @@ void NDMapMgr::processVersionMsg(NDTransData& kData)
 					SMLOGINSCENE_TAG);
 	if (pkScene)
 	{
-		//return pkScene->OnMsg_ClientVersion(kData); ///< 依赖汤自勤的CSMLoginScene 郭浩
+		return pkScene->OnMsg_ClientVersion(kData); ///< 依赖汤自勤的CSMLoginScene 郭浩
 	}
 }
 
@@ -3803,7 +3842,7 @@ void NDMapMgr::processRoadBlock(NDTransData& kData)
 void NDMapMgr::ProcessTempCredential(NDTransData& kData)
 {
 	///< 这两行先注释掉 郭浩
-// 	NSString* temporaryCredential = data.ReadUTF8NString();
+// 	NSString temporaryCredential = kData.ReadUTF8NString();
 // 	if(temporaryCredential == nil) return;
 
 #ifdef USE_MGSDK
@@ -3823,8 +3862,8 @@ NDMonster* NDMapMgr::GetBoss()
 	for (; it != m_vMonster.end(); it++)
 	{
 		NDMonster *pkMonster = *it;
-		if ( pkMonster && pkMonster->GetType() == MONSTER_BOSS &&
-			pkMonster->getState() != MONSTER_STATE_DEAD )
+		if (pkMonster && pkMonster->GetType() == MONSTER_BOSS
+				&& pkMonster->getState() != MONSTER_STATE_DEAD)
 		{
 			return pkMonster;
 		}
@@ -3832,7 +3871,7 @@ NDMonster* NDMapMgr::GetBoss()
 	return NULL;
 }
 
-NDManualRole* NDMapMgr::NearestDacoityManualrole( NDManualRole& role, int iDis )
+NDManualRole* NDMapMgr::NearestDacoityManualrole(NDManualRole& role, int iDis)
 {
 	int minDist = iDis;
 
@@ -3843,26 +3882,28 @@ NDManualRole* NDMapMgr::NearestDacoityManualrole( NDManualRole& role, int iDis )
 	{
 		NDManualRole* manualrole = it->second;
 
-		if (role.m_nID == manualrole->m_nID) continue;
+		if (role.m_nID == manualrole->m_nID)
+			continue;
 
-		if (!manualrole->IsInDacoity()) continue;
+		if (!manualrole->IsInDacoity())
+			continue;
 
-		if (manualrole->IsInState(USERSTATE_FIGHTING) 
-			|| manualrole->IsInState(USERSTATE_DEAD)
-			|| manualrole->IsInState(USERSTATE_PVE)
-			) 
+		if (manualrole->IsInState(USERSTATE_FIGHTING)
+				|| manualrole->IsInState(USERSTATE_DEAD)
+				|| manualrole->IsInState(USERSTATE_PVE))
 		{
 			continue;
 		}
 
-		if ( !(role.IsInState(USERSTATE_BATTLE_POSITIVE) && manualrole->IsInState(USERSTATE_BATTLE_NEGATIVE) ||
-			role.IsInState(USERSTATE_BATTLE_NEGATIVE) && manualrole->IsInState(USERSTATE_BATTLE_POSITIVE))
-			)
+		if (!(role.IsInState(USERSTATE_BATTLE_POSITIVE)
+				&& manualrole->IsInState(USERSTATE_BATTLE_NEGATIVE)
+				|| role.IsInState(USERSTATE_BATTLE_NEGATIVE)
+						&& manualrole->IsInState(USERSTATE_BATTLE_POSITIVE)))
 			continue;
 
 		int dis = getDistBetweenRole(manualrole, &role);
 
-		if ( dis <= minDist )
+		if (dis <= minDist)
 		{
 			resrole = manualrole;
 			minDist = dis;
@@ -3872,7 +3913,8 @@ NDManualRole* NDMapMgr::NearestDacoityManualrole( NDManualRole& role, int iDis )
 	return resrole;
 }
 
-NDManualRole* NDMapMgr::NearestBattleFieldManualrole( NDManualRole& role, int iDis )
+NDManualRole* NDMapMgr::NearestBattleFieldManualrole(NDManualRole& role,
+		int iDis)
 {
 	int minDist = iDis;
 
@@ -3883,20 +3925,22 @@ NDManualRole* NDMapMgr::NearestBattleFieldManualrole( NDManualRole& role, int iD
 	{
 		NDManualRole* manualrole = it->second;
 
-		if (role.m_nID == manualrole->m_nID) continue;
+		if (role.m_nID == manualrole->m_nID)
+			continue;
 
-		if (!manualrole->IsInState(USERSTATE_BATTLEFIELD)) 
+		if (!manualrole->IsInState(USERSTATE_BATTLEFIELD))
 		{
 			continue;
 		}
-
 
 		if (manualrole->IsInState(USERSTATE_BF_WAIT_RELIVE))
 		{
 			continue;
 		}
 
-		if (manualrole->IsInState(USERSTATE_FIGHTING) || manualrole->IsInState(USERSTATE_DEAD)) {
+		if (manualrole->IsInState(USERSTATE_FIGHTING)
+				|| manualrole->IsInState(USERSTATE_DEAD))
+		{
 			continue;
 		}
 
@@ -3907,7 +3951,7 @@ NDManualRole* NDMapMgr::NearestBattleFieldManualrole( NDManualRole& role, int iD
 
 		int dis = getDistBetweenRole(manualrole, &role);
 
-		if ( dis <= minDist )
+		if (dis <= minDist)
 		{
 			resrole = manualrole;
 			minDist = dis;
@@ -3917,29 +3961,33 @@ NDManualRole* NDMapMgr::NearestBattleFieldManualrole( NDManualRole& role, int iD
 	return resrole;
 }
 
-int NDMapMgr::getDistBetweenRole( NDBaseRole *firstrole, NDBaseRole *secondrole )
+int NDMapMgr::getDistBetweenRole(NDBaseRole *firstrole, NDBaseRole *secondrole)
 {
 	if (!firstrole || !secondrole)
 	{
 		return FOCUS_JUDGE_DISTANCE;
 	}
 
-
-	int w = (firstrole->GetPosition().x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE - (secondrole->GetPosition().x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE;
-	int h = (firstrole->GetPosition().y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE - (secondrole->GetPosition().y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE;
+	int w = (firstrole->GetPosition().x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE
+			- (secondrole->GetPosition().x - DISPLAY_POS_X_OFFSET)
+					/ MAP_UNITSIZE;
+	int h = (firstrole->GetPosition().y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE
+			- (secondrole->GetPosition().y - DISPLAY_POS_Y_OFFSET)
+					/ MAP_UNITSIZE;
 
 	return w * w + h * h;
 }
 
 void NDMapMgr::BattleStart()
 {
-	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene));
-	if (scene) 
+	NDScene *scene = NDDirector::DefaultDirector()->GetScene(
+			RUNTIME_CLASS(GameScene));
+	if (scene)
 	{
 		/***
-		* 等待张迪的 DirectKey
-		* 郭浩
-		*/
+		 * 等待张迪的 DirectKey
+		 * 郭浩
+		 */
 		//DirectKey* dk = ((GameScene*)scene)->GetDirectKey();
 		//if (dk) 
 		//{
@@ -3950,7 +3998,7 @@ void NDMapMgr::BattleStart()
 	NDPlayer::defaultHero().BattleStart();
 }
 
-NDBaseRole* NDMapMgr::GetNextTarget( int iDistance )
+NDBaseRole* NDMapMgr::GetNextTarget(int iDistance)
 {
 	NDPlayer *player = &NDPlayer::defaultHero();
 
@@ -3961,26 +4009,26 @@ NDBaseRole* NDMapMgr::GetNextTarget( int iDistance )
 		return resrole;
 	}
 
-	if (player->m_nTargetIndex >= int(m_vNPC.size()+m_mapManualRole.size()))
+	if (player->m_nTargetIndex >= int(m_vNPC.size() + m_mapManualRole.size()))
 	{
 		player->m_nTargetIndex = 0;
 	}
 
-	if (player->m_nTargetIndex < int(m_vNPC.size()) )
+	if (player->m_nTargetIndex < int(m_vNPC.size()))
 	{
-		VEC_NPC::iterator it = m_vNPC.begin()+ player->m_nTargetIndex;
+		VEC_NPC::iterator it = m_vNPC.begin() + player->m_nTargetIndex;
 		for (; it != m_vNPC.end(); it++)
 		{
 			player->m_nTargetIndex++;
 			NDNpc* npc = *it;
 
-			if (npc->m_nID == player->GetFocusNpcID() )
+			if (npc->m_nID == player->GetFocusNpcID())
 			{
 				continue;
 			}
 
 			int dis = getDistBetweenRole(player, npc);
-			if ( dis < iDistance )
+			if (dis < iDistance)
 			{
 				resrole = npc;
 				return resrole;
@@ -3995,7 +4043,7 @@ NDBaseRole* NDMapMgr::GetNextTarget( int iDistance )
 		iIndexManuRole = 0;
 	}
 
-	if (iIndexManuRole < (int)m_mapManualRole.size())
+	if (iIndexManuRole < (int) m_mapManualRole.size())
 	{
 		map_manualrole_it it = m_mapManualRole.begin();
 		for (int i = 0; i < iIndexManuRole; i++)
@@ -4009,13 +4057,13 @@ NDBaseRole* NDMapMgr::GetNextTarget( int iDistance )
 
 			NDManualRole *otherplayer = it->second;
 
-			if (otherplayer->m_nID == player->m_iFocusManuRoleID )
+			if (otherplayer->m_nID == player->m_iFocusManuRoleID)
 			{
 				continue;
 			}
 
 			int dis = getDistBetweenRole(player, otherplayer);
-			if ( dis < iDistance )
+			if (dis < iDistance)
 			{
 				resrole = otherplayer;
 				return resrole;
@@ -4026,7 +4074,7 @@ NDBaseRole* NDMapMgr::GetNextTarget( int iDistance )
 	return resrole;
 }
 
-NDBaseRole* NDMapMgr::GetRoleNearstPlayer( int iDistance )
+NDBaseRole* NDMapMgr::GetRoleNearstPlayer(int iDistance)
 {
 	int minDist = iDistance;
 
@@ -4039,14 +4087,14 @@ NDBaseRole* NDMapMgr::GetRoleNearstPlayer( int iDistance )
 		return resrole;
 	}
 
-	do 
+	do
 	{
 		VEC_NPC::iterator it = m_vNPC.begin();
 		for (; it != m_vNPC.end(); it++)
 		{
 			NDNpc *npc = *it;
 			int dis = getDistBetweenRole(player, npc);
-			if ( dis < minDist )
+			if (dis < minDist)
 			{
 				resrole = npc;
 				minDist = dis;
@@ -4058,20 +4106,21 @@ NDBaseRole* NDMapMgr::GetRoleNearstPlayer( int iDistance )
 		}
 	} while (0);
 
-	do 
+	do
 	{
 		map_manualrole_it it = m_mapManualRole.begin();
 		for (; it != m_mapManualRole.end(); it++)
 		{
 			NDManualRole *otherplayer = it->second;
 
-			if (player->m_nTeamID !=0 && player->m_nTeamID == otherplayer->m_nTeamID)
+			if (player->m_nTeamID != 0
+					&& player->m_nTeamID == otherplayer->m_nTeamID)
 			{
 				continue;
 			}
 
 			int dis = getDistBetweenRole(player, otherplayer);
-			if ( dis < minDist )
+			if (dis < minDist)
 			{
 				resrole = otherplayer;
 				minDist = dis;
@@ -4081,5 +4130,682 @@ NDBaseRole* NDMapMgr::GetRoleNearstPlayer( int iDistance )
 
 	return resrole;
 }
+
+void NDMapMgr::throughMap(int mapX, int mapY, int mapId)
+{
+	NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
+	if (!scene) 
+	{
+		return;
+	}
+
+	NDDirector::DefaultDirector()->PushScene(GameSceneLoading::Scene());	
+
+	NDPlayer& player = NDPlayer::defaultHero();
+	NDTransData bao(_MSG_POSITION);
+	bao << player.m_nID << (unsigned short)mapX << (unsigned short)mapY
+		<< mapId << (unsigned short)_POSITION_TRANS_FLY << int(0);
+	SEND_DATA(bao);
+}
+
+//void NDMapMgr::addRequst( RequsetInfo& request )
+//{
+///< 汤自勤已经完成 需要我这边合并后 郭浩
+// 	std::stringstream strBuf;
+// 	strBuf << NDCommonCString("YouHaveNew") << request.info << "," << NDCommonCString("OpenRequestList");
+// 	Chat::DefaultChat()->AddMessage(ChatTypeSystem, strBuf.str().c_str());
+// 
+// 	std::vector<RequsetInfo>::iterator it = m_vecRequest.begin();
+// 	for (; it != m_vecRequest.end(); it++)
+// 	{
+// 		RequsetInfo& info = *it;
+// 		if (info.iRoleID == request.iRoleID &&
+// 			info.iAction == request.iAction &&
+// 			(info.iAction != RequsetInfo::ACTION_NEWMAIL ||
+// 			info.iAction != RequsetInfo::ACTION_NEWCHAT))
+// 		{
+// 			DelRequest(info.iID);
+// 			break;
+// 		}
+// 	}
+// 	request.iID = m_idAlloc.GetID();
+// 	m_vecRequest.push_back(request);
+// 
+// 	NewGameUIRequest::refreshQuestList();
+// 
+// 	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene));
+// 	if (scene) 
+// 	{
+// 		GameScene* gamescene = (GameScene*)scene;
+// 		gamescene->flashAniLayer(0, true);
+// 
+// 		NDNode *node = gamescene->GetChild(UILAYER_REQUEST_LIST_TAG);
+// 		if (node && node->IsKindOfClass(RUNTIME_CLASS(GameUIRequest)))
+// 		{
+// 			GameUIRequest *request = (GameUIRequest*)node;
+// 			if (request->IsVisibled())
+// 			{
+// 				request->UpdateMainUI();
+// 			}
+// 		}
+// 	}
+//}
+
+void NDMapMgr::NavigateToNpc(int nNpcId)
+{
+	NDNpc* pkNPC = GetNpcByID(nNpcId);
+
+	if (!pkNPC)
+	{
+		return;
+	}
+
+	NDPlayer& kPlayer = NDPlayer::defaultHero();
+
+	CGPoint kDstPoint = ccp(pkNPC->m_nCol * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+			pkNPC->m_nRow * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
+
+	NDPlayer& player = NDPlayer::defaultHero();
+
+	CGPoint disPos = ccpSub(kDstPoint, player.GetPosition());
+
+	if (abs(int(disPos.x)) <= 32 && abs(int(disPos.y)) <= 32)
+	{
+		if (pkNPC && pkNPC->GetType() != 6)
+		{
+			player.SendNpcInteractionMessage(pkNPC->m_nID);
+		}
+	}
+	else
+	{
+		AutoPathTipObj.work(pkNPC->m_strName);
+		player.Walk(kDstPoint, SpriteSpeedStep4, true);
+	}
+
+	return;
+}
+
+std::vector<NDManualRole*> NDMapMgr::GetPlayerTeamList()
+{
+	std::vector<NDManualRole*> k;
+	return k;
+}
+
+void NDMapMgr::ClearNPCChat()
+{
+	usData = -1;
+	strLeaveMsg.clear();
+	strTitle.clear();
+	strNPCText.clear();
+	vecNPCOPText.clear();
+	m_iCurDlgNpcID = 0;
+}
+
+void NDMapMgr::processMsgDlg(NDTransData& kData)
+{
+	int npcID = kData.ReadInt();
+
+	usData = kData.ReadShort();
+
+	Byte iDx = kData.ReadByte();
+
+	Byte ucAction = kData.ReadByte();
+	string str;
+
+	// 防止消息延时过久，抛弃处理。
+	if (BattleMgrObj.GetBattle() != NULL)
+	{
+		return;
+	}
+
+	NDPlayer& player = NDPlayer::defaultHero();
+	switch (ucAction)
+	{
+	case MSGDIALOG_LEAVE:
+	{
+		strLeaveMsg = kData.ReadUnicodeString();
+		break;
+	}
+	case MSGDIALOG_TITLE:
+	{
+		strTitle = kData.ReadUnicodeString();
+		break;
+	}
+	case MSGDIALOG_TEXT:
+	{ // TEXT 文本信息；非
+		if (usData == TEXT_TEXT)
+		{
+			str = kData.ReadUnicodeString();
+			strNPCText += str;
+		}
+		break;
+	}
+	case MSGDIALOG_LINK:
+	{ // 选项框形式 //非
+		if (usData == TEXT_TEXT)
+		{
+			str = kData.ReadUnicodeString();
+			str = changeToChineseSign(str);
+			st_npc_op op;
+			op.idx = iDx;
+			op.str = str;
+			vecNPCOPText.push_back(op);
+		}
+
+		break;
+	}
+	case MSGDIALOG_NO_TALK:
+	{
+		NDUISynLayer::Close (CLOSE);
+		break;
+	}
+	case MSGDIALOG_DLG:
+	{ // 对话框形式
+		if (usData == TEXT_TEXT)
+		{
+			str = kData.ReadUnicodeString();
+			str = changeNpcString(str);
+
+			//NDUIDialog *dlg = new NDUIDialog;
+			//					dlg->Initialization();
+			std::string title = "";
+			if (strTitle.empty())
+			{
+				NDNpc *focusNpc = player.GetFocusNpc();
+				if (focusNpc)
+				{
+					title = focusNpc->m_strName;
+				}
+			}
+
+			//dlg->Show(title.c_str(), str.c_str(), "", NULL);
+			GlobalDialogObj.Show(NULL, title.c_str(), str.c_str(), 0, NULL);
+			CloseProgressBar;
+		}
+
+		break;
+	}
+	case MSGDIALOG_USER_OPEN_DLG:
+	{
+		switch (usData)
+		{
+		case 1:
+		{ // 打开商店界面
+			NDNpc *npc = player.GetFocusNpc();
+			if (!npc)
+			{
+				CloseProgressBar;
+				return;
+			}
+
+			CloseProgressBar;
+
+			int npcCamp = npc->GetCamp();
+			if (npcCamp - 1 >= 0 && npcCamp - 1 < 7)
+			{
+				int discount = getDiscount(zhengYing[npcCamp - 1]);
+				if (discount != 100)
+				{
+					std::stringstream ss;
+					ss << NDCommonCString("ShopEnjoy") << discount << "%"
+							<< NDCommonCString("discount");
+					//showDialog(NDCommonCString("tip"), ss.str().c_str());	///< 暂时没找到showDialog 郭浩
+				}
+			}
+
+			map_npc_store_it it = m_mapNpcStore.find(npc->m_nID);
+			if (it == m_mapNpcStore.end())
+			{
+				NDTransData bao(_MSG_SHOPINFO);
+				bao << int(npc->m_nID) << (unsigned char) 0;
+				NDSocket* skt = NDDataTransThread::DefaultThread()->GetSocket();
+				if (skt)
+				{
+					skt->Send(&bao);
+				}
+				ShowProgressBar;
+			}
+			else
+			{
+// 							GameUINpcStore::GenerateNpcItems(npc->m_nID); ///< 这个是张迪的 郭浩
+// 							GameScene::ShowShop();
+			}
+
+			break;
+		}
+		case 2:
+		case 3:
+		{ // 打开装备界面
+		  //T.addDialog(new EquipUIScreen(EquipUIScreen.SHOW_EQUIP_NORMAL));
+			break;
+		}
+		case 4:
+		{ // 打开仓库
+			if (!player.GetFocusNpc())
+			{
+				break;
+			}
+			CloseProgressBar;
+			int iNPCID = player.GetFocusNpcID();
+			if (ItemMgrObj.GetStorage().empty())
+			{
+				NDTransData bao(_MSG_ITEMKEEPER);
+				bao << int(0) << (unsigned char) MSG_STORAGE_ITEM_QUERY
+						<< iNPCID;
+				SEND_DATA(bao);
+				ShowProgressBar;
+			}
+			else
+			{
+				//NDDirector::DefaultDirector()->PushScene(GameStorageScene::Scene()); ///< 张迪的 郭浩
+			}
+			break;
+		}
+		case 5:
+		{ // todo 暂时没有 结婚或离婚
+
+			CloseProgressBar;
+
+			break;
+		}
+		case 6:
+		{ // 拍卖
+			break;
+		}
+		case 7:
+		{ // 公会
+		  //CreateSynDialog::Show(); ///< 貌似废弃 郭浩
+			break;
+		}
+		case 8:
+		{
+			int idCurNpc = 0;
+			if (player.IsFocusNpcValid())
+			{
+				idCurNpc = player.GetFocusNpcID();
+			}
+
+			if (idCurNpc == 0)
+			{
+				return;
+			}
+
+			MAP_NPC_SKILL_STORE_IT it = m_mapNpcSkillStore.find(idCurNpc);
+
+			if (it == m_mapNpcSkillStore.end())
+			{ // 没有存，就请求
+				NDTransData bao(_MSG_MAGIC_GOODS);
+				bao << idCurNpc;
+				SEND_DATA(bao);
+				ShowProgressBar;
+			}
+			else
+			{
+				//LearnSkillUILayer::Show(it->second); ///< 暂时不弄 郭浩
+			}
+			break;
+		}
+		case 9:
+		{ // 装备修理
+			CloseProgressBar;
+			//NDDirector::DefaultDirector()->PushScene(NewEquipRepairScene::Scene()); ///< 没有装备修理 郭浩
+			break;
+		}
+		case 11:
+		{ // 装备品质升级
+// 						CloseProgressBar;
+// 						EquipUpgradeScene *scene = new EquipUpgradeScene;
+// 						scene->Initialization(EQUIP_UPGRADE);
+// 						NDDirector::DefaultDirector()->PushScene(scene);
+			break;
+		}
+		case 12:
+		{ // 装备锻造
+// 						CloseProgressBar;
+// 						NDScene* runningScene = NDDirector::DefaultDirector()->GetRunningScene();
+// 						if (runningScene && runningScene->IsKindOfClass(RUNTIME_CLASS(EquipForgeScene))) {
+// 							return;
+// 						} else {
+// 							///< 暂时不需要 郭浩
+// // 							EquipForgeScene *scene = new EquipForgeScene;
+// // 							scene->Initialization();
+// // 							NDDirector::DefaultDirector()->PushScene(scene);
+// 						}
+// 						break;
+		}
+		case 13:
+		{ // 宝石摘除
+		  //T.addDialog(new RemoveStone());
+// 						CloseProgressBar;
+// 						RemoveStoneScene *scene = new RemoveStoneScene;
+// 						scene->Initialization();
+// 						NDDirector::DefaultDirector()->PushScene(scene);
+// 						break;
+		}
+		case 14:
+		{ // 装备开洞
+// 						CloseProgressBar;
+// 						OpenHoleScene *scene = new OpenHoleScene;
+// 						scene->Initialization();
+// 						NDDirector::DefaultDirector()->PushScene(scene);
+			break;
+		}
+		case 15:
+		{ // 领取礼包
+// 						NDUICustomView *view = new NDUICustomView;
+// 						view->Initialization();
+// 						view->SetDelegate(this);
+// 						std::vector<int> vec_id; vec_id.push_back(1);
+// 						std::vector<std::string> vec_str; vec_str.push_back(NDCommonCString("InputSeq"));
+// 						view->SetEdit(1, vec_id, vec_str);
+// 						view->SetTag(eCVOP_GiftNPC);
+// 						view->Show();
+// 						NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
+// 						if (scene)
+// 						{
+// 							scene->AddChild(view);
+// 						}
+// 						CloseProgressBar;					
+			break;
+		}
+		case 16:
+		{ // 16随机炼药，17按配方炼药，18随机合成，19按配方合成
+// 						CloseProgressBar;
+// 						LifeSkillRandomScene *scene = new LifeSkillRandomScene;
+// 						scene->Initialization(eChaoYao);
+// 						NDDirector::DefaultDirector()->PushScene(scene);
+// 						break;
+		}
+		case 17:
+		{
+			break;
+		}
+		case 18:
+		{
+			break;
+		}
+		case 19:
+		{ //19按配方合成
+// 						CloseProgressBar;
+// 						if ( getLifeSkill(GEM_IDSKILL) != NULL )
+// 						{
+// 							LifeSkillScene *scene = new LifeSkillScene;
+// 							scene->Initialization(GEM_IDSKILL, LifeSkillScene_Product);
+// 							NDDirector::DefaultDirector()->PushScene(scene);
+// 						}
+// 						else 
+// 						{
+// 							GlobalShowDlg(NDCommonCString("OperateFail"), NDCommonCString("NoBaoShiSkillTip"));
+// 						}
+			break;
+		}
+		case 20:
+			//		ForgetSkillUILayer::Show();
+			break;
+		case 21: // 许愿树
+		{
+// 						NDUICustomView *view = new NDUICustomView;
+// 						view->Initialization();
+// 						view->SetDelegate(this);
+// 						std::vector<int> vec_id; vec_id.push_back(1);
+// 						std::vector<std::string> vec_str; vec_str.push_back(NDCommonCString("InputWishTip"));
+// 						view->SetEdit(1, vec_id, vec_str);
+// 						view->SetTag(eCVOP_Wish);
+// 						view->Show();
+// 						NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
+// 						if (scene)
+// 						{
+// 							scene->AddChild(view);
+// 						}
+			CloseProgressBar;
+		}
+
+			break;
+		case 22: // 许愿树
+		{
+// 						NDUICustomView *view = new NDUICustomView;
+// 						view->Initialization();
+// 						view->SetDelegate(this);
+// 						std::vector<int> vec_id; vec_id.push_back(1);
+// 						std::vector<std::string> vec_str; vec_str.push_back(std::string("") + NDCommonCString("InputWishTip") + "\n" + NDCommonCString("ModifyWishTip"));
+// 						view->SetEdit(1, vec_id, vec_str);
+// 						view->SetEditMaxLength(40, 0);
+// 						view->SetTag(eCVOP_Wish);
+// 						view->Show();
+// 						NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
+// 						if (scene)
+// 						{
+// 							scene->AddChild(view);
+// 						}
+			CloseProgressBar;
+		}
+			break;
+		case 23: //打开技能合成界面
+		{
+			CloseProgressBar;
+		}
+			break;
+		case 24: // 种植
+		{
+			CloseProgressBar;
+			//showUseItemUI(npcID, 0);
+		}
+			break;
+		case 25: // 饲养
+		{
+			CloseProgressBar;
+			//showUseItemUI(npcID, 1);
+		}
+			break;
+		case 26: // 施肥
+		{
+			CloseProgressBar;
+			//showUseItemUI(npcID, 2);
+		}
+			break;
+		case 27: // 喂饲料
+		{
+			CloseProgressBar;
+			//	showUseItemUI(npcID, 3);
+		}
+			break;
+		case 28: //庄园改名
+		{
+			CloseProgressBar;
+			//ShowView(this, NDCommonCString("FarmRename"), eCVOP_FarmName, 15); ///< 暂时找不到ShowView 郭浩
+
+		}
+			break;
+		case 29: //庄园欢迎词
+		{
+			CloseProgressBar;
+			//	ShowView(this, NDCommonCString("ModifyWelcome"), eCVOP_FarmWelcomeName, 64);
+
+		}
+			break;
+		case 30: //加速升级
+		{
+			CloseProgressBar;
+			//	showUseItemUI(npcID, 4);
+		}
+			break;
+		case 31: //建筑改名
+		{
+			CloseProgressBar;
+			//	ShowView(this, NDCommonCString("ModifyBuildingName"), eCVOP_FarmBuildingName, 15);
+
+			m_iCurDlgNpcID = npcID;
+		}
+			break;
+		case 32: //村落改名
+		{
+			CloseProgressBar;
+			//ShowView(this, NDCommonCString("ModifyCunluoName"), eCVOP_FarmHarmletName, 15);  ///< ShowView暂时找不到 郭浩
+
+			m_iCurDlgNpcID = npcID;
+		}
+			break;
+		case 33: //装备升级
+		{
+// 						CloseProgressBar;
+// 						EquipUpgradeScene *scene = new EquipUpgradeScene;
+// 						scene->Initialization(EQUIP_UPLEVEL);
+// 						NDDirector::DefaultDirector()->PushScene(scene);
+		}
+			break;
+
+		}
+		break;
+	}
+	case MSGDIALOG_CREATE:
+	{ // npc对话 表结尾
+		m_iCurDlgNpcID = npcID;
+		NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
+		if (scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
+		{
+			GameScene *gamescene = (GameScene*) scene;
+			gamescene->ShowNPCDialog();
+		}
+		CloseProgressBar;
+		break;
+	}
+	case MSGDIALOG_MAGIC_EFFECT:
+	{ // todo 显示魔法特效
+		break;
+	}
+	case MSGDIALOG_LINK_EX:
+	{ // 选项（带提示箭头）
+		if (usData == TEXT_TEXT)
+		{
+			str = kData.ReadUnicodeString();
+			str = changeToChineseSign(str);
+			st_npc_op op;
+			op.idx = iDx;
+			op.str = str;
+			op.bArrow = true;
+			vecNPCOPText.push_back(op);
+		}
+		break;
+	}
+	case MSGDIALOG_CREATE_EX:
+	{ // 结束（无离开按钮）
+		{
+			m_iCurDlgNpcID = npcID;
+			NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
+			if (scene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
+			{
+				GameScene *gamescene = (GameScene*) scene;
+				gamescene->ShowNPCDialog(false);
+			}
+			CloseProgressBar;
+		}
+		break;
+	}
+	}
+}
+
+string NDMapMgr::changeNpcString(string str)
+{
+	if (str.empty())
+	{
+		return "";
+	}
+
+	NDString ndstrtmp(str);
+
+	ndstrtmp.replace(NDString("&n"),
+			NDString(NDPlayer::defaultHero().m_strName));
+	switch (NDPlayer::defaultHero().m_nSex)
+	{
+	case SpriteSexMale:
+	{
+		ndstrtmp.replace(NDString("&1"), NDString(NDCommonCString("XiaoMei")));
+		ndstrtmp.replace(NDString("&2"), NDString(NDCommonCString("DaJie")));
+		ndstrtmp.replace(NDString("&3"), NDString(NDCommonCString("NvXia")));
+		break;
+	}
+	case SpriteSexFemale:
+	default:
+	{
+		ndstrtmp.replace(NDString("&1"),
+				NDString(NDCommonCString("XiaoXiongDi")));
+		ndstrtmp.replace(NDString("&2"), NDString(NDCommonCString("DaGG")));
+		ndstrtmp.replace(NDString("&3"), NDString(NDCommonCString("ShaoXia")));
+		break;
+	}
+	}
+	return changeToChineseSign(std::string(ndstrtmp.getData()));
+}
+
+void NDMapMgr::processShopInfo(NDTransData& data)
+{
+	///< 貌似废弃掉了 郭浩
+	//int shopID = data.ReadInt();
+	//int itemNum = data.ReadByte();
+
+	//vector<ShopItemInfo>& vShopItemInfo = m_mapNpcStore[shopID];
+
+	//vShopItemInfo.clear();
+
+	//std::stringstream sb; sb << "商店ID" << shopID;
+	//sb << (" 物品ID列表为");
+	//for (int i = 0; i < itemNum; i++) {
+	//	int itemID = data.ReadInt();
+	//	int payType = data.ReadByte();
+
+	//	vShopItemInfo.push_back(ShopItemInfo(itemID, payType));
+
+	//	sb << itemID;
+	//	sb << ";";
+	//}
+
+	////m_mapNpcStore.insert(map_npc_store_pair(shopID, idList));
+	////if (DepolyCfg.debug) {
+	////			ChatUI.addChatRecodeChatList(new ChatRecord(1, "商店物品", sb
+	////														.toString()));
+	////		}
+
+	//GameUINpcStore::GenerateNpcItems(shopID);
+
+	//CloseProgressBar;
+	//if (shopID == 0) {
+	//	//T.addDialog(new VipStore(itemList));
+	//}
+	//else if (shopID == 99998)
+	//{
+	//	GameScene::ShowShop(shopID);
+	//} 
+	//else 
+	//{
+	//	GameScene::ShowShop();
+	//}
+}
+
+bool NDMapMgr::isMonsterClear()
+{
+	if (m_vMonster.empty())
+	{
+		return true;
+	}
+
+	bool bRet = true;
+
+	for (VEC_MONSTER::iterator it = m_vMonster.begin();it != m_vMonster.end();it++)
+	{
+		NDMonster* pkTemp = *it;
+
+		if (pkTemp->getState() != MONSTER_STATE_DEAD)
+		{
+			bRet = false;
+		}
+	}
+
+	return bRet;
+}
+
+// LifeSkill* NDMapMgr::getLifeSkill( OBJID idSkill )
+// {
+// 
+// }
 
 NS_NDENGINE_END

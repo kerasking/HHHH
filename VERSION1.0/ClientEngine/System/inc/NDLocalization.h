@@ -22,7 +22,7 @@
 
 #include "NDLocalXmlString.h"
 
-// inline const char* __NDLOCAL_INNER_STRING(NSString* nsKeyName)
+// inline const char* __NDLOCAL_INNER_STRING(NSString nsKeyName)
 // {
 // 	//return [NSLocalizedStringWithDefaultValue(nsKeyName, @"lyol", [NSBundle mainBundle], nsKeyName, NULL) UTF8String];
 // 	return [NDLocalXmlString::GetSingleton().GetString(nsKeyName) UTF8String];
@@ -57,18 +57,19 @@ _NDLOCAL_INNER_CString_STRING(NDString(__FILE__).getFileName(), cStringKeyName)
 
 // key_name type NSString
 #define NDCommonNSString(NSKeyName) \
-_NDLOCAL_INNER_NS_STRING(@"Common", NSKeyName)
+_NDLOCAL_INNER_NS_STRING("Common", NSKeyName)
 
 // key_name type cString(null end)
 #define NDCommonCString(cStringKeyName) __NDLOCAL_INNER_C_STRING("Common", cStringKeyName)
 
+#define NDCommonCString2(cStringKeyName) __NDLOCAL_INNER_C_STRING("", cStringKeyName)
 ////////////////////////////////////////////////////////////////////////////////
 // 本地方接口(返回NSString),用法同上
 // 1.NDNSString_RETNS
 // 2.NDCString_RETNS
 // 3.NDCommonNSString_RETNS
 // 4.NDCommonCString_RETNS
-// inline NSString* __NDLOCAL_INNER_STRING_RETNS(NSString* nsKeyName)
+// inline NSString __NDLOCAL_INNER_STRING_RETNS(NSString nsKeyName)
 // {
 // 	//return NSLocalizedStringWithDefaultValue(nsKeyName, @"lyol", [NSBundle mainBundle], nsKeyName, NULL);
 // 	return NDLocalXmlString::GetSingleton().GetString(nsKeyName);
@@ -90,10 +91,10 @@ _NDLOCAL_INNER_CString_STRING_RETNS(NSString(__FILE__).getFileName(), cStringKey
 
 // key_name type NSString
 #define NDCommonNSString_RETNS(NSKeyName) \
-_NDLOCAL_INNER_NS_STRING_RETNS(@"Common", NSKeyName)
+_NDLOCAL_INNER_NS_STRING_RETNS("Common", NSKeyName)
 
 // key_name type cString(null end)
 #define NDCommonCString_RETNS(cStringKeyName) \
-_NDLOCAL_INNER_CString_STRING_RETNS(@"Common", cStringKeyName)
+_NDLOCAL_INNER_CString_STRING_RETNS("Common", cStringKeyName)
 
 #endif // _ND_LOCALIZATION_H_ZJH_

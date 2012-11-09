@@ -199,6 +199,10 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\Common\inc\DirectKey.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Common\inc\GlobalDialog.h"
 					>
 				</File>
@@ -210,10 +214,18 @@
 					RelativePath="..\Common\inc\NDUtility.h"
 					>
 				</File>
+				<File
+					RelativePath="..\Common\inc\SMUpdate.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
 				>
+				<File
+					RelativePath="..\Common\src\DirectKey.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\Common\src\GlobalDialog.cpp"
 					>
@@ -323,7 +335,19 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\GameScene\inc\EquipUpgradeScene.h"
+					>
+				</File>
+				<File
 					RelativePath="..\GameScene\inc\GameScene.h"
+					>
+				</File>
+				<File
+					RelativePath="..\GameScene\inc\GameSceneLoading.h"
+					>
+				</File>
+				<File
+					RelativePath="..\GameScene\inc\GameUIRequest.h"
 					>
 				</File>
 				<File
@@ -347,7 +371,19 @@
 				Name="src"
 				>
 				<File
+					RelativePath="..\GameScene\src\EquipUpgradeScene.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\GameScene\src\GameScene.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GameScene\src\GameSceneLoading.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GameScene\src\GameUIRequest.cpp"
 					>
 				</File>
 				<File
@@ -463,6 +499,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\MapAndRole\inc\NDNpcLogic.h"
+					>
+				</File>
+				<File
 					RelativePath="..\MapAndRole\inc\NDPlayer.h"
 					>
 				</File>
@@ -499,6 +539,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\MapAndRole\src\NDNpcLogic.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\MapAndRole\src\NDPlayer.cpp"
 					>
 				</File>
@@ -520,6 +564,10 @@
 				</File>
 				<File
 					RelativePath="..\Script\Inc\ScriptDrama.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Script\Inc\ScriptGameDataLua.h"
 					>
 				</File>
 				<File
@@ -564,6 +612,10 @@
 				</File>
 				<File
 					RelativePath="..\Script\Src\ScriptGameData.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Script\Src\ScriptGameDataLua.cpp"
 					>
 				</File>
 				<File
@@ -806,10 +858,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\Module\Battle\inc\NDSubAniGroup.h"
-						>
-					</File>
-					<File
 						RelativePath="..\Module\Battle\inc\StatusDialog.h"
 						>
 					</File>
@@ -843,10 +891,6 @@
 					</File>
 					<File
 						RelativePath="..\Module\Battle\src\NDEraseInOutEffect.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\Module\Battle\src\NDSubAniGroup.cpp"
 						>
 					</File>
 					<File

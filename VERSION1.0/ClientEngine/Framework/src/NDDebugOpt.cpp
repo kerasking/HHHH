@@ -24,8 +24,13 @@ IMP_STATIC_PROPERTY(bool,bMainLoop,true,NDDebugOpt)
 IMP_STATIC_PROPERTY(bool,bDrawHud,true,NDDebugOpt)
 IMP_STATIC_PROPERTY(bool,bDrawUI,true,NDDebugOpt)
 IMP_STATIC_PROPERTY(bool,bDrawUILabel,true,NDDebugOpt)
-IMP_STATIC_PROPERTY(bool,bDrawRole,true,NDDebugOpt)
 IMP_STATIC_PROPERTY(bool,bDrawMap,true,NDDebugOpt)
+
+IMP_STATIC_PROPERTY(bool,bDrawRole,true,NDDebugOpt) //for all roles
+IMP_STATIC_PROPERTY(bool,bDrawRoleNpc,true,NDDebugOpt)
+IMP_STATIC_PROPERTY(bool,bDrawRoleMonster,true,NDDebugOpt)
+IMP_STATIC_PROPERTY(bool,bDrawRolePlayer,true,NDDebugOpt)
+IMP_STATIC_PROPERTY(bool,bDrawRoleManual,true,NDDebugOpt)
 
 IMP_STATIC_PROPERTY(bool,bLightEffect,true,NDDebugOpt)
 

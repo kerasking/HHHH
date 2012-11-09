@@ -12,18 +12,14 @@ end
 
 function OpenSecretShop()
     CloseDlg();
-    _G.SecretShopUI.LoadUI(_G.MsgShop.GroupType.MYSTERIOUS);
+    _G.SecretShopUI.LoadUI();
 end
 
 function OpenUpgradeUI()
-    --[[
    CloseDlg();
    --等级不够屏蔽对话
+   
 	_G.EquipUpgradeUI.LoadUI();
-    ]]
-    
-    CloseDlg();
-    _G.SecretShopUI.LoadUI(_G.MsgShop.GroupType.SMITH);
 end
 
 NpcOptionFunc = 
@@ -44,14 +40,12 @@ NpcOptionFunc =
 --开启功能条件判断
 function IfIsOpen_10004()
 	LogInfo("QBWQBW");
-    --[[
+        
 	if _G.MainUIBottomSpeedBar.GetFuncIsOpen(113) then
 		return true;
 	else
 		return false;	
 	end
-    ]]
-    return true;
 end
 
 

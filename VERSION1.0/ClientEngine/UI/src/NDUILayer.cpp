@@ -390,6 +390,7 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 {
 	m_kEndTouch = touch->GetLocation();
 
+
 	//add by zhangdi 20120828
 	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
 	CGPoint tmpTouch = CGPointMake(m_kEndTouch.x * fScale, m_kEndTouch.y * fScale);//@todo

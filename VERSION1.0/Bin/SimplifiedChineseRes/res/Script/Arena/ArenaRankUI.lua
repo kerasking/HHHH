@@ -6,10 +6,12 @@
 ---------------------------------------------------
 local _G = _G;
 
-p.userId = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,};
+
 
 ArenaRankUI={}
 local p=ArenaRankUI;
+
+p.userInfo = {};
 
 local ID_ARENARANK_CTRL_VERTICAL_LIST_M		= 50;
 local ID_ARENARANK_CTRL_BUTTON_CLOSE		= 49;
@@ -19,9 +21,13 @@ local ID_ARENARANK_CTRL_PICTURE_BG			= 23;
 local ID_ARENARANK_M_CTRL_TEXT_FIGHT     = 89;
 local ID_ARENARANK_M_CTRL_TEXT_LEVEL     = 84;
 local ID_ARENARANK_M_CTRL_TEXT_PLAYER     = 79;
+local ID_ARENARANK_M_CTRL_TEXT_5     = 5;
+
 local ID_ARENARANK_M_CTRL_TEXT_76      = 76;
 local ID_ARENARANK_M_CTRL_TEXT_75      = 75;
 local ID_ARENARANK_M_CTRL_TEXT_72      = 72;
+local ID_ARENARANK_M_CTRL_BUTTON_WATCH	=4;
+
 
 function p.GetParent()
 	local scene = GetSMGameScene();
@@ -39,6 +45,7 @@ function p.GetParent()
 end
 
 function p.LoadUI()
+    LogInfo("+++++++++++scene = nil,load ArenaRankUI+++++++");
 	local scene=GetSMGameScene();
 	if scene == nil then
 		LogInfo("scene = nil,load ArenaRankUI failed!");
@@ -52,9 +59,10 @@ function p.LoadUI()
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.ArenaRank);
 	local winsize = GetWinSize();
-	layer:SetFrameRect( CGRectMake(winsize.w /4, winsize.h /10, winsize.w /2, winsize.h * 4 / 5));
+	layer:SetFrameRect( CGRectMake(0, 0, winsize.w, winsize.h));
 	--layer:SetBackgroundColor(ccc4(125,125,125,125));
-	scene:AddChild(layer);
+	scene:AddChildZ(layer,1);
+	--_G.AddChild(scene, layer, NMAINSCENECHILDTAG.ArenaRank);
 	
 	local uiLoad=createNDUILoad();
 	if nil == uiLoad then
@@ -62,7 +70,7 @@ function p.LoadUI()
 		LogInfo("scene = nil,4");
 		return false;
 	end
-	uiLoad:Load("ArenaRank.ini",layer,p.OnUIEvent,0,0);
+	uiLoad:Load("SM_JJ_RANK.ini",layer,p.OnUIEvent,0,0);
 	uiLoad:Free();
 	
 	--local containter = createUIScrollViewContainer();
@@ -86,6 +94,21 @@ function p.LoadUI()
 end
 
 function p.OnRankUIEvent(uiNode,uiEventType,param)
+	local tag = uiNode:GetTag();
+	LogInfo("p.OnUIEvent[%d]",tag);
+	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+		if ID_ARENARANK_M_CTRL_BUTTON_WATCH == tag then
+            LogInfo("ID_ARENARANK_M_CTRL_BUTTON_WATCH");
+			local view=PRecursiveSV(uiNode, 1);
+			if not CheckP(view) then
+				return true;
+			end
+			local rank=view:GetViewId();
+			local id=p.userInfo[rank][1];
+			local name=p.userInfo[rank][2];
+			MsgFriend.SendFriendSel(id,name,nil);
+		end
+	end
 end
 
 function p.SetRankInfo(rank,name,level,power,id)
@@ -93,7 +116,7 @@ function p.SetRankInfo(rank,name,level,power,id)
 	if nil == layer then
 		return nil;
 	end
-	
+	p.userInfo[rank]={id,name};
 	
 	local container = GetScrollViewContainer(layer,ID_ARENARANK_CTRL_VERTICAL_LIST_M);
 	if nil == container then
@@ -101,26 +124,25 @@ function p.SetRankInfo(rank,name,level,power,id)
 		return;
 	end
 	
-	
 	local view = createUIScrollView();
 	if view == nil then
 		LogInfo("view == nil");
 		return;
 	end
-	
+    
 	view:Init(false);
 	view:SetViewId(rank);
 	container:AddView(view);
 	local uiLoad = createNDUILoad();
 	if uiLoad ~= nil then
-		uiLoad:Load("ArenaRank_M.ini",view,p.OnRankUIEvent,0,0);
+		uiLoad:Load("SM_JJ_M.ini",view,p.OnRankUIEvent,0,0);
 		uiLoad:Free();
 	end
-	
-	SetLabel(view,ID_ARENARANK_M_CTRL_TEXT_PLAYER,SafeN2S(rank).." "..name);
+    
+    SetLabel(view,ID_ARENARANK_M_CTRL_TEXT_5,SafeN2S(rank));
+	SetLabel(view,ID_ARENARANK_M_CTRL_TEXT_PLAYER, name);
 	SetLabel(view,ID_ARENARANK_M_CTRL_TEXT_LEVEL,SafeN2S(level));
-	SetLabel(view,ID_ARENARANK_M_CTRL_TEXT_FIGHT,SafeN2S(power));
-	
+
 end
 
 function p.CleanContainer()
@@ -142,15 +164,15 @@ end
 
 
 function p.OnUIEvent(uiNode,uiEventType,param)
-	local tag = uiNode:GetTag();
-	LogInfo("p.OnUIEvent[%d]",tag);
-	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-		if ID_ARENARANK_CTRL_BUTTON_CLOSE == tag then
-			local scene = GetSMGameScene();
-			if scene~= nil then
-				scene:RemoveChildByTag(NMAINSCENECHILDTAG.ArenaRank,true);
-				return true;
-			end
-		end
-	end
+    local tag = uiNode:GetTag();
+    LogInfo("p.OnUIEvent[%d]",tag);
+    if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+        if ID_ARENARANK_CTRL_BUTTON_CLOSE == tag then
+            local scene = GetSMGameScene();
+        if scene~= nil then
+            scene:RemoveChildByTag(NMAINSCENECHILDTAG.ArenaRank,true);
+            return true;
+            end
+        end
+    end
 end

@@ -628,13 +628,13 @@ string NewChatScene::FilterMessage(const string& msg)
 	if (!m_layerChooseFaceOrItem) return "";
 	
 	VEC_ITEM& vItem = ItemMgrObj.GetPlayerBagItems();
-	NSString* result = [NSString stringWithUTF8String:msg.c_str()];
+	NSString result = [NSString stringWithUTF8String:msg.c_str()];
 	
 	NSRange range = [result rangeOfString:@"<b"];
 	while (range.location != NSNotFound) 
 	{
-		NSString* srcStr = [NSString stringWithUTF8String:"<b"]; 
-		NSString* dstStr = @"";
+		NSString srcStr = [NSString stringWithUTF8String:"<b"]; 
+		NSString dstStr = @"";
 		
 		if (range.location + 4 <= [result length])
 		{

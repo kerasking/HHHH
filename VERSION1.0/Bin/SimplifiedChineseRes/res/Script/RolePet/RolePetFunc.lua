@@ -229,15 +229,15 @@ function p.GetJobDesc(nJob)
 		return "";
 	end
 	if nJob == PROFESSION_TYPE.SWORD then
-		return '猛将';
+		return GetTxtPub("MenJian");
 	elseif nJob == PROFESSION_TYPE.CHIVALROUS then
-		return '射手';
+		return GetTxtPub("SheShou");
 	elseif nJob == PROFESSION_TYPE.FIST then
-		return '军师';
+		return GetTxtPub("JunShi");
 	elseif nJob == PROFESSION_TYPE.AXE then
-		return '守将';
+		return GetTxtPub("ShouJiang");
 	end
-	return '不限';
+	return GetTxtPub("BuXian");
 end
 
 

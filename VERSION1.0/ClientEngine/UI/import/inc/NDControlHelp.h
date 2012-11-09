@@ -134,7 +134,20 @@ protected:
 		
 		LabelTextAlignment align = LabelTextAlignmentLeft;
 		
-		if (m_info.strTextAlign == "右对齐")			align = LabelTextAlignmentRight;		else if (m_info.strTextAlign == "居中")			align = LabelTextAlignmentCenter;		//** chh 2012-07-21 **//		else if (m_info.strTextAlign == "竖直居中")			align = LabelTextAlignmentLeftCenter;
+		if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "左对齐" ))
+			align = LabelTextAlignmentLeft;
+
+		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "右对齐" ))
+			align = LabelTextAlignmentRight;
+
+		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "居中" ))
+			align = LabelTextAlignmentCenter;
+
+		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "水平居中" ))
+			align = LabelTextAlignmentHorzCenter;
+
+		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "竖直居中" ))
+			align = LabelTextAlignmentVertCenter;
 
 		return align;
 	}
@@ -248,17 +261,18 @@ public:
 		Init(info, sizeOffset);
 		
 		CUICheckBox *checkBox = new CUICheckBox;
-		const char* fileUnCheck	= NULL;
-		const char* fileCheck	= NULL;
+		NDPicture* fileUnCheck	= NULL;
+		NDPicture* fileCheck	= NULL;
 		if (!m_info.strNormalFile.empty())
 		{
-			fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str();
+			//fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str();
+			fileUnCheck = GetNormalPicture();
 		}
 		if (!m_info.strSelectedFile.empty())
 		{
-			fileCheck	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str()).c_str();
+			fileCheck = GetSelectedPicture();
 		}
-	//	checkBox->Initialization(fileUnCheck, fileCheck);
+		checkBox->Initialization(fileUnCheck, fileCheck);
 		checkBox->SetFrameRect(this->GetFrameRect());
 		checkBox->SetText(info.strText.c_str());
 		checkBox->SetTextFontSize(info.nTextFontSize);

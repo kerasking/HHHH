@@ -11,6 +11,8 @@
 #include "NDUIOptionButton.h"
 //#include "NDUISynLayer.h"
 #include "NDUIBaseGraphics.h"
+#include "NDPath.h"
+#include "NDDirector.h"
 
 using namespace cocos2d;
 
@@ -291,8 +293,8 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 
 		bRetAnalysis = AnalysisRuleEnd(pszText, eRule);
 
-		if (true == bRetAnalysis && BuildRuleLine == eRule
-				&& false != bHpyerLink)
+		if (bRetAnalysis && BuildRuleLine == eRule
+				&& !bHpyerLink)
 		{
 			bDrawLine = false;
 		}
@@ -301,7 +303,7 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 		{
 			if (eRule == BuildRuleItem)
 			{
-				if (bHpyerLink)
+				if (bDrawLine)
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
@@ -323,7 +325,10 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 		}
 
 		bRetAnalysis = AnalysisRuleHead(pszText, eRule, kColor);
-
+		if (bRetAnalysis && BuildRuleLine == eRule && !bHpyerLink)
+		{
+			bDrawLine = true;
+		}
 		if (eRule == BuildRuleExpression)
 		{
 			char szImageIndex[3] =
@@ -345,7 +350,7 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 		{
 			if (eRule == BuildRuleItem)
 			{
-				if (bHpyerLink)
+				if (bDrawLine)
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
@@ -378,7 +383,7 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 
 		if (eRule == BuildRuleItem)
 		{
-			if (bHpyerLink)
+			if (bDrawLine)
 			{
 				kTextNodeList.push_back(
 						TextNode(bHasBreak,
@@ -395,7 +400,7 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 		}
 		else
 		{
-			if (bHpyerLink)
+			if (bDrawLine)
 			{
 				kTextNodeList.push_back(
 						TextNode(bHasBreak,
@@ -423,7 +428,7 @@ unsigned int NDUITextBuilder::StringWidthAfterFilter(const char* text,
 	unsigned int result = 0;
 	if (text)
 	{
-		unsigned int fontHeight = getStringSize("a", fontSize).height;
+		unsigned int fontHeight = getStringSize("a", fontSize*NDDirector::DefaultDirector()->GetScaleFactor()).height;
 		result += fontHeight;
 		unsigned int curWidth = 0;
 		BuildRule rule = BuildRuleNone;
@@ -478,7 +483,7 @@ unsigned int NDUITextBuilder::StringWidthAfterFilter(const char* text,
 				memcpy(word, text, 3);
 				text += 3;
 			}
-			unsigned int temp = getStringSize(word, fontSize).width;
+			unsigned int temp = getStringSize(word, fontSize*NDDirector::DefaultDirector()->GetScaleFactor()).width;
 			if (curWidth + temp > textWidth)
 			{
 				if (fMaxWidth < curWidth)
@@ -502,7 +507,7 @@ unsigned int NDUITextBuilder::StringHeightAfterFilter(const char* text,
 	unsigned int result = 0;
 	if (text)
 	{
-		unsigned int fontHeight = getStringSize("a", fontSize).height;
+		unsigned int fontHeight = getStringSize("a", fontSize*NDDirector::DefaultDirector()->GetScaleFactor()).height;
 		result += fontHeight;
 		unsigned int curWidth = 0;
 		BuildRule rule = BuildRuleNone;
@@ -547,7 +552,7 @@ unsigned int NDUITextBuilder::StringHeightAfterFilter(const char* text,
 				memcpy(word, text, 3);
 				text += 3;
 			}
-			unsigned int temp = getStringSize(word, fontSize).width;
+			unsigned int temp = getStringSize(word, fontSize*NDDirector::DefaultDirector()->GetScaleFactor()).width;
 			if (curWidth + temp > textWidth)
 			{
 				curWidth = 0;
@@ -607,8 +612,14 @@ bool NDUITextBuilder::AnalysisRuleEnd(const char*& text, BuildRule rule)
 	}
 	else if (*text == '/')
 	{
-		if (*(++text) == 'e')
+		if (*(++text) == 'e') 
+		{				
+			text++;
+			result = true;
+		}
+		else if (*(text) == 'l') 
 		{
+			rule = BuildRuleLine;
 			text++;
 			result = true;
 		}
@@ -675,6 +686,12 @@ bool NDUITextBuilder::AnalysisRuleHead(const char*& pszText, BuildRule &eRole,
 			pszText++;
 			result = true;
 		}
+		else if (*pszText == 'l')
+		{
+			eRole = BuildRuleLine;
+			pszText++;	
+			result = true;
+		}
 		else
 			pszText--;
 	}
@@ -734,12 +751,10 @@ NDPicture* NDUITextBuilder::CreateFacePicture(unsigned int index)
 	NDPicture* result = NULL;
 	if (index < 25)
 	{
-		/*		这个需要加上，郭浩
 		 int row = index / 5;
 		 int col = index % 5;
-		 result = NDPicturePool::DefaultPool()->AddPicture(GetImgPath("face.png"));
+		 result = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("face.png"));
 		 result->Cut(CGRectMake(15 * col, 15 * row , 15, 15));
-		 */
 	}
 	return result;
 }
@@ -771,7 +786,7 @@ NDUILabel* NDUITextBuilder::CreateLabel(const char* pszText,
 	NDUILabel* pkResult = NULL;
 	if (pszText)
 	{
-		CGSize kTextSize = getStringSize(pszText, fontSize);
+		CGSize kTextSize = getStringSize(pszText, fontSize*NDDirector::DefaultDirector()->GetScaleFactor());
 		pkResult = new NDUILabel();
 		pkResult->Initialization();
 		pkResult->SetRenderTimes(1);
@@ -792,7 +807,7 @@ HyperLinkLabel* NDUITextBuilder::CreateLinkLabel(const char* pszText,
 
 	if (pszText)
 	{
-		CGSize kTextSize = getStringSize(pszText, uiFontSize);
+		CGSize kTextSize = getStringSize(pszText, uiFontSize*NDDirector::DefaultDirector()->GetScaleFactor());
 		pkResultLabel = new HyperLinkLabel();
 		pkResultLabel->Initialization();
 		pkResultLabel->SetRenderTimes(1);

@@ -574,8 +574,8 @@ void NDUIButton::drawButtonImage()
 			m_combinepicImg->SetColor(ccc4(255, 255, 255, 255));
 	}
 
-	if ((m_touchDownStatus != TouchDownImage || !m_touched
-		|| NULL == m_touchDownImage) && m_bChecked)
+	if (!IsTabSel() && (m_touchDownStatus != TouchDownImage || !m_touched
+		|| NULL == m_touchDownImage))
 	{
 		if (m_useCustomRect)
 		{

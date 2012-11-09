@@ -40,7 +40,7 @@ public:
 	void Stop();
 	
 	// 有服务端消息到达
-	//void HadServerMsgArrive(); ///< 临时性注释 郭浩
+	void HadServerMsgArrive();
 	
 	void OnTimer(OBJID tag); override
 	

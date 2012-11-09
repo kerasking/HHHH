@@ -39,6 +39,19 @@ function p.GetJobReq(nItemType)
 	return nJobReq;
 end
 
+--获得道具的类别
+function p.GetPropType(nItemType)
+    local nType	= 0;
+	if CheckN(nItemType) then
+		nType	= Num7(nItemType);
+	end
+	return nType;
+end
+
+function p.GetQualityCCC4(nItemType)
+    return GetDataBaseDataN("itemtype", nItemType, DB_ITEMTYPE.QUALITY);
+end
+
 function p.GetLvlReq(nItemType)
 	local nRes	= 0;
 	if CheckN(nItemType) then
@@ -84,6 +97,15 @@ function p.CanEquipByItemType(nItemType)
 	end
 	
 	return false;
+end
+
+
+function p.GetBigType(nItemType)
+    if not CheckN(nItemType) then
+		return Item.bTypeInvalid;
+	end
+	local nNum8 = Num8(nItemType);
+    return nNum8;
 end
 
 function p.GetType(nItemType)
@@ -133,6 +155,8 @@ function p.GetType(nItemType)
 	--礼包
 		return Item.TypeGift;
 	end
+    
+    
 	
 	return Item.TypeInvalid;
 end
@@ -160,6 +184,41 @@ function p.GetAttrTypeAndValueAndGrow(itemTypeId)
 		   attr_type_2,attr_value_2,attr_grow_2,
 		   attr_type_3,attr_value_3,attr_grow_3;
 end
+
+function p.GetAttrDesc(itemTypeId, level)
+    local attr_type_1 = GetDataBaseDataN("itemtype", itemTypeId, DB_ITEMTYPE.ATTR_TYPE_1);
+    local attr_value_1 = GetDataBaseDataN("itemtype", itemTypeId, DB_ITEMTYPE.ATTR_VALUE_1);
+    local attr_grow_1 = GetDataBaseDataN("itemtype", itemTypeId, DB_ITEMTYPE.ATTR_GROW_1);
+    
+    local txt = "";
+    local num = "";
+    
+    
+    txt = p.GetAttrTypeDesc(attr_type_1);
+    
+    txt = txt.."：";
+    num = attr_value_1.."";
+    if(level>0) then
+        num = num.."(+"..(level*attr_grow_1)..")"
+    end
+    
+    return txt,num;
+end
+
+--获得宝石属性的描述
+function p.GetGemPropDesc(itemTypeId)
+    local attr_type_1 = GetDataBaseDataN("itemtype", itemTypeId, DB_ITEMTYPE.ATTR_TYPE_1);
+    local attr_value_1 = GetDataBaseDataN("itemtype", itemTypeId, DB_ITEMTYPE.ATTR_VALUE_1);
+    
+    LogInfo("attr_type_1:[%d],attr_value_1:[%d]",attr_type_1,attr_value_1);
+    
+    local txt = p.GetAttrTypeValueDesc(attr_type_1,attr_value_1);
+    
+    LogInfo("txt:[%s]",txt);
+    
+    return txt;
+end
+
 
 function p.GetEnhancedId(itemTypeId)
 	local nId;
@@ -266,49 +325,76 @@ function p.GetAttrTypeDesc(nAttr)
 	if not CheckN(nAttr) then
 		return str;
 	end
-	
-	if nAttr == Item.ATTR_TYPE_PHY then
-		str = "武力";
-	elseif nAttr == Item.ATTR_TYPE_SKILL then
-		str = "绝技";
-	elseif nAttr == Item.ATTR_TYPE_MAGIC then
-		str = "法术";
+    nAttr = math.floor(nAttr/10);
+	if nAttr == Item.ATTR_TYPE_POWER then
+		str = "力量";
+	elseif nAttr == Item.ATTR_TYPE_AGILITY then
+		str = "敏捷";
+	elseif nAttr == Item.ATTR_TYPE_INTEL then
+		str = "智力";
 	elseif nAttr == Item.ATTR_TYPE_LIFE then
 		str = "生命";
-	elseif nAttr == Item.ATTR_TYPE_LIFE_LIMIT then
-		str = "生命上限";
-	elseif nAttr == Item.ATTR_TYPE_MANA then
-		str = "气势";
-	elseif nAttr == Item.ATTR_TYPE_MANA_LIMIT then
-		str = "气势上限";
+	elseif nAttr == Item.ATTR_TYPE_POWER_RATE then
+		str = "力量成长率";
+	elseif nAttr == Item.ATTR_TYPE_AGILITY_RATE then
+		str = "敏捷成长率";
+	elseif nAttr == Item.ATTR_TYPE_INTEL_RATE then
+		str = "智力成长率";
+	elseif nAttr == Item.ATTR_TYPE_LIFE_RATE then
+		str = "生命成长率";
 	elseif nAttr == Item.ATTR_TYPE_PHY_ATK then
-		str = "普通攻击";
-	elseif nAttr == Item.ATTR_TYPE_SKILL_ATK then
-		str = "绝技攻击";
-	elseif nAttr == Item.ATTR_TYPE_MAGIC_ATK then
-		str = "法术攻击";
+		str = "物理攻击";
 	elseif nAttr == Item.ATTR_TYPE_PHY_DEF then
-		str = "普通防御";
-	elseif nAttr == Item.ATTR_TYPE_SKILL_DEF then
-		str = "绝技防御";
+		str = "物理防御";
+	elseif nAttr == Item.ATTR_TYPE_MAGIC_ATK then
+		str = "策略攻击";
 	elseif nAttr == Item.ATTR_TYPE_MAGIC_DEF then
-		str = "法术防御";
-	elseif nAttr == Item.ATTR_TYPE_DRITICAL then
-		str = "暴击";
-	elseif nAttr == Item.ATTR_TYPE_HITRATE then
-		str = "命中";
-	elseif nAttr == Item.ATTR_TYPE_WRECK then
-		str = "破击";
-	elseif nAttr == Item.ATTR_TYPE_HURT_ADD then
-		str = "必杀";
-	elseif nAttr == Item.ATTR_TYPE_TENACITY then
-		str = "韧性";
+		str = "策略防御";
+	elseif nAttr == Item.ATTR_TYPE_SPEED then
+		str = "速度";
+	elseif nAttr == Item.ATTR_TYPE_HIT then
+		str = "命中率";
 	elseif nAttr == Item.ATTR_TYPE_DODGE then
-		str = "闪避";
+		str = "闪避率";
+	elseif nAttr == Item.ATTR_TYPE_DRITICAL then
+		str = "暴击率";
+	elseif nAttr == Item.ATTR_TYPE_TENACITY then
+		str = "格挡率";
 	elseif nAttr == Item.ATTR_TYPE_BLOCK then
-		str = "格挡";
+		str = "格挡率";
+	elseif nAttr == Item.ATTR_TYPE_WRECK then
+		str = "破击率";
+	elseif nAttr == Item.ATTR_TYPE_UNION_ATK then
+		str = "合击率";
+    elseif nAttr == Item.ATTR_TYPE_HELP then
+		str = "求援率";
+    elseif nAttr == Item.ATTR_TYPE_MANA then
+		str = "士气";
 	end
+    
 	return str;
+end
+
+function p.GetAttrTypeValueDesc(nAttr, value)
+    LogInfo("ItemFunc.GetAttrTypeValueDesc:nAttr:[%d],value:[%d]",nAttr, value);
+    local str = "";
+    value = value.."";
+    local des = p.GetAttrTypeDesc(nAttr);
+    local val = ""
+    nAttr = Num1(nAttr);
+    if(nAttr == 1) then
+        val = "+"..value;
+    elseif(nAttr == 2) then
+        val = "-"..value;
+    elseif(nAttr == 3) then
+        val = "+"..(value/10);
+        val = val.."%";
+    elseif(nAttr == 4) then
+        val = "-"..(value/10);
+        val = (val/10).."%";
+    end
+    str = des..val;
+    return str;
 end
 
 --根据位置获得物品id(传入物品列表和位置索引)
@@ -322,16 +408,196 @@ function p.GetItemIdByPosition(idlist,nPosition)
    return 0;
 end
 
-function p.IsPercent(nAttr)
-  local isPercent = false;
-  if nAttr == Item.ATTR_TYPE_DRITICAL 
-     or nAttr == Item.ATTR_TYPE_TENACITY 
-	 or nAttr == Item.ATTR_TYPE_HITRATE
-	 or nAttr == Item.ATTR_TYPE_DODGE
-	 or nAttr == Item.ATTR_TYPE_WRECK
-	 or nAttr == Item.ATTR_TYPE_BLOCK
-	 or nAttr == Item.ATTR_TYPE_HURT_ADD  then
-    isPercent = true;
-  end
-  return isPercent;
+function p.IsAlertEquipItem(nEquipId)
+    local usPosition = Item.GetItemInfoN(nEquipId, Item.ITEM_POSITION);
+    if usPosition >= Item.POSITION_EQUIP_1 and usPosition <= Item.POSITION_EQUIP_6 then
+            return true;
+    end
+    return false;
 end
+
+--获取对应升阶公式id   (nItemType：改造装备id   ,nType：改造类型升阶/神铸/升星)
+function p.GetFormulaIdByItemType(nItemType,nType)
+	local idList	= {};
+	local idFormulaType = _G.GetDataBaseIdList("formulatype");  
+	--_G.LogInfoT(idNpcTask)
+	
+	for i,v  in ipairs(idFormulaType) do
+		
+
+		local nEquipTypeId = _G.GetDataBaseDataN("formulatype",v,DB_FORMULATYPE.MATERIAL1);
+		--LogInfo(nNpcId.."  "..nMatchNpcId)
+		
+		if nEquipTypeId == nItemType then
+			
+			local nDataBaseType = _G.GetDataBaseDataN("formulatype",v,DB_FORMULATYPE.TYPE);
+			if nDataBaseType == nType then
+				return v;
+			end			
+		end				
+
+	end
+	
+	return 0;
+end
+
+--[[
+--获取对应升阶公式id   (nItemType：改造装备id   ,nType：改造类型升阶/神铸/升星)
+function p.GetFormulaIdByItemType(nItemType,nType)
+	local idList	= {};
+	local idFormulaType = _G.GetDataBaseIdList("formulatype");  
+	--_G.LogInfoT(idNpcTask)
+	
+	for i,v  in ipairs(idFormulaType) do
+		
+		--升阶
+		if nType == 1 then
+			if v ==  nItemType then
+				return v;
+			end
+		end
+		
+		--神铸
+		if nType == 2 then
+			local nEquipTypeId = _G.GetDataBaseDataN("formulatype",v,DB_FORMULATYPE.MATERIAL1);
+			--LogInfo(nNpcId.."  "..nMatchNpcId)
+		
+		
+			if nEquipTypeId == nItemType then
+			
+				local nDataBaseType = _G.GetDataBaseDataN("formulatype",v,DB_FORMULATYPE.TYPE);
+				if nDataBaseType == nType then
+					return v;
+				end			
+			end		
+		end			
+
+	end
+	
+	return 0;
+end
+
+--]]
+--判定装备是否可以升阶
+function p.IfItemCanUpStep(itemID,nPetId)
+
+	local nItemTypeId= Item.GetItemInfoN(itemID,Item.ITEM_TYPE);
+	  
+	local formulaID = ItemFunc.GetFormulaIdByItemType(nItemTypeId,1)
+	LogInfo("IfItemCanUpStep nItemTypeId"..nItemTypeId);
+	LogInfo("IfItemCanUpStep formulaID"..formulaID);
+    
+    
+    --不存在公式 
+	if formulaID == 0 then
+		return false;
+	end
+	
+	--不存在卷子
+	if ItemFunc.GetItemCount(formulaID) <= 0 then
+		LogInfo("IfItemCanUpStep f")
+		return false;		
+	end
+    
+    --判断武将等级是否达到可升级
+    if(nPetId == nil) then
+        local nPlayerId = GetPlayerId();
+        if nil == nPlayerId then
+            LogInfo("nil == nPlayerId");
+            return;
+        end
+        nPetId = RolePetFunc.GetMainPetId(nPlayerId);
+    end
+    local nPetLevel = RolePet.GetPetInfoN(nPetId, PET_ATTR.PET_ATTR_LEVEL);
+    local nFormulatypeLevel = _G.GetDataBaseDataN("formulatype",formulaID,DB_FORMULATYPE.LEVEL);
+    LogInfo("nPetLevel:[%d],nFormulatypeLevel:[%d]",nPetLevel,nFormulatypeLevel);
+    
+    if(nPetLevel<nFormulatypeLevel) then
+        return false;
+    end
+    
+	LogInfo("IfItemCanUpStep true")
+	return true;
+end
+
+--判断背包是否已满
+function p.IsBagFull( nNum )
+    if(nNum == nil) then
+        nNum = 0;
+    end
+    local nPlayerId		= ConvertN(GetPlayerId());
+	local idlistItems	= ItemUser.GetBagItemList(nPlayerId);
+    
+    if(#idlistItems+nNum >= ItemFunc.getBackBagCapability()) then
+        CommonDlgNew.ShowYesDlg(GetTxtPub("BagFull"));
+        return true;
+    end
+    return false;
+end
+
+--判断背包是否满，穿装备使用
+function p.IsBagFullEquip(nPetId, nEquipId)
+
+    local nPlayerId		= ConvertN(GetPlayerId());
+	local idlistItems	= ItemUser.GetBagItemList(nPlayerId);
+    
+    if(#idlistItems >= ItemFunc.getBackBagCapability()) then
+        
+        LogInfo("nPetId:[%d],nEquipId:[%d]",nPetId,nEquipId);
+        local nItemTypeId = Item.GetItemInfoN(nEquipId, Item.ITEM_TYPE);
+    
+        local nPosIndex = Num6(nItemTypeId);
+        local TAG_EQUIP_LIST = {57,58,59,60,61,62};
+        local unPosition = TAG_EQUIP_LIST[nPosIndex];
+        local view = PlayerUIBackBag.GetPetView(nPetId);
+        local equipBtn = _G.GetEquipButton(view, unPosition);
+    
+        if(equipBtn:GetItemId() ~= 0) then
+            CommonDlgNew.ShowYesDlg(GetTxtPub("BagFull"));
+            return true;
+        end
+    end
+    return false;
+end
+
+
+--判断背包是否满，宝石卸下使用
+function p.IsBagFullGem(GemItemList, nGemTypeId)
+    local nPlayerId		= ConvertN(GetPlayerId());
+	local idlistItems	= ItemUser.GetBagItemList(nPlayerId);
+    
+    if(#idlistItems >= ItemFunc.getBackBagCapability()) then
+        for i,v in ipairs(GemItemList) do
+            local total = Item.GetItemInfoN(v, Item.ITEM_AMOUNT);
+            local nItemType = Item.GetItemInfoN(v, Item.ITEM_TYPE);
+            if(nItemType == nGemTypeId and total<99) then
+                return false;
+            end
+        end
+        CommonDlgNew.ShowYesDlg(GetTxtPub("BagFull"));
+        return true;
+    end
+    return false;
+end
+
+
+
+--** 获得物品颜色 **--
+function p.GetItemColor(nItemType)
+    local nQuality = p.GetQualityCCC4(nItemType);
+    local cColor4 = ItemColor[nQuality];
+    if(cColor4 == nil) then
+        cColor4 = ItemColor[0];
+    end
+    return cColor4;
+end
+
+function p.SetLabelColor(label, nItemType) 
+    if(label == nil) then
+        LogInfo("p.SetLabelColor is nil!");
+        return;
+    end
+    label:SetFontColor(p.GetItemColor(nItemType));
+end
+
+

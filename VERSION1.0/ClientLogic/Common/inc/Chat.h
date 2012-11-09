@@ -19,18 +19,17 @@
 #include "NDTextNode.h"
 
 using namespace NDEngine;
-using namespace cocos2d;
 
 typedef enum{
-	ChatTypeAll,
-	ChatTypeTip,
-	ChatTypeImportant,
-	ChatTypeWorld,
-	ChatTypeSection,
-	ChatTypeQueue,
-	ChatTypeArmy,
-	ChatTypeSecret,
-	ChatTypeSystem
+	ChatTypeAll,		//全部
+	ChatTypeTip,		//小贴士
+	ChatTypeImportant,	//重要提示
+	ChatTypeWorld,		//世
+	ChatTypeSection,	//区
+	ChatTypeQueue,		//队
+	ChatTypeArmy,		//军
+	ChatTypeSecret,		//密
+	ChatTypeSystem		//系
 }ChatType;
 
 /*
@@ -82,7 +81,8 @@ class Chat : public NDObject, public ITimerCallback, public NDDirectorDelegate
 	~Chat();
 public:
 	//单例对象指针
-	//static Chat* DefaultChat(); ///< 临时性注释 郭浩
+	static Chat* DefaultChat();
+    static void  Release();
 	//设置最多同时显示聊天记录数
 	void SetRecordCount(unsigned int count);
 	//设置每条记录的显示时长，单位：秒

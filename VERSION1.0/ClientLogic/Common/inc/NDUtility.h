@@ -23,8 +23,25 @@ std::string getStringTime(long nSeconds);
 
 std::string changeToChineseSign(std::string old);
 
-//void showDialog(const char* title,const char* content){}
-//void showDialog(const char* content){}
+void showDialog(const char* title, const char* content);
+void showDialog(const char* content);
+
+// opengl绘图函数；必须在draw方法里调用，否则将不会长久生效
+// 画矩形
+// void DrawRecttangle(CGRect rect, ccColor4B color);
+// 画多边形
+// void DrawPolygon(CGRect rect, ccColor4B color, GLuint lineWidth);
+// 画线
+// void DrawLine(CGPoint fromPoint, CGPoint toPoint, ccColor4B color, GLuint lineWidth);
+// 画圆
+// void DrawCircle(CGPoint center, float r, float a, int segs, ccColor4B color);
+// 画边框
+// void DrawFrame(int borderColor, int x, int y, int width, int height);
+// 画三角形
+// void DrawTriangle(CGPoint first, CGPoint second, CGPoint third, ccColor4B color);
+// CGSize getStringSize(const char* pszStr, uint fontSize);
+// 
+// CGSize getStringSizeMutiLine(const char* pszStr, uint fontSize, CGSize contentSize = CGSizeMake(480, 320));
 
 void quitGame(bool bTipNet = false);
 

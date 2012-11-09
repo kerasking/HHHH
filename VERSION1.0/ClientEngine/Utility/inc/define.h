@@ -13,6 +13,7 @@
 //typedef unsigned int OBJID;
 
 #include "CCObject.h"
+#include "NDObject.h"
 
 #define SEND_DATA(bao) do{\
 	NDSocket* skt = NDEngine::NDDataTransThread::DefaultThread()->GetSocket();\
@@ -65,7 +66,7 @@ typedef enum
 	PlayerBackBag
 }NMAINSCENECHILDTAG;
 
-#define NSString cocos2d::CCString
+#define NSString NDSharedPtr<cocos2d::CCString>
 
 #define SAFE_DELETE(pObject)\
 do \
@@ -100,5 +101,18 @@ do \
 #define NS_NDENGINE_BGN		namespace NDEngine{
 #define NS_NDENGINE_END		}
 #define USING_NS_ND			using namespace NDEngine;
+
+#define ND_ASSERT_NO_RETURN(bValue) \
+	if (bValue) \
+	{ \
+		return; \
+	}
+
+#define ND_ASSERT_HAS_RETURN(bValue, returnValue) \
+	if (bValue) \
+	{ \
+		return returnValue; \
+	}
+
 
 #endif // __DEFINE_H__

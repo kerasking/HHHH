@@ -25,16 +25,20 @@
 #include "NDDebugOpt.h"
 #include "NDClassFactory.h"
 #include "Battle.h"
+#include "NDProfile.h"
 #include "NDBaseDirector.h"
+
+#if 0
 #include "HelloWorldScene.h" //@todo
+#endif
 
 NS_NDENGINE_BGN
+using namespace NDEngine;
 
 NDGameApplication::NDGameApplication()
 {
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"script ");
 }
-
 NDGameApplication::~NDGameApplication()
 {
 }
@@ -129,6 +133,7 @@ void NDGameApplication::MyInit()
 
 //	kMapMgr.processChangeRoom(0,0);
 
+#if 0 //@todo
 	ScriptNetMsg* pkNetMsg = new ScriptNetMsg;
 	ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
 	NDScriptGameData* pkData = new NDScriptGameData;
@@ -147,12 +152,15 @@ void NDGameApplication::MyInit()
 	ScriptGlobalEvent::Load();
 	//pkGlobalEvent->OnLoad();
 	pkScriptUI->OnLoad();
+#endif
 
-	kScriptManager.Load();
+	//kScriptManager.Load();
+	ScriptMgrObj.Load();
 
 	//CC_SAFE_DELETE(pkNetMsg);
 
 	//ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
+	
 	ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
 
 	//NDPlayer::pugeHero();
@@ -288,7 +296,7 @@ bool NDGameApplication::processPM(const char* cmd)
 	if (stricmp(cmd, "opt help") == 0)
 	{
 		TCHAR help[] =	L"syntax: opt arg 0/1\r\n"
-			L"arg can be: tick, script, network, mainloop, drawhud, drawui, drawrole, drawmap\r\n";
+			L"arg can be: tick, script, network, mainloop, drawhud, drawui, drawmap, drawrole, drawrolenpc, drawrolemonster, drawroleplayer, drawrolemanual.\r\n";
 
 		DWORD n = 0;
 		WriteConsoleW( hOut, help, sizeof(help)/sizeof(TCHAR), &n, NULL );
@@ -313,15 +321,35 @@ bool NDGameApplication::processPM(const char* cmd)
 		else if (stricmp(szDebugOpt, "drawui") == 0)
 			NDDebugOpt::setDrawUIEnabled( val != 0 );
 
+		else if (stricmp(szDebugOpt, "drawmap") == 0)
+			NDDebugOpt::setDrawMapEnabled( val != 0 );
+
 		else if (stricmp(szDebugOpt, "drawrole") == 0)
 			NDDebugOpt::setDrawRoleEnabled( val != 0 );
 
-		else if (stricmp(szDebugOpt, "drawmap") == 0)
-			NDDebugOpt::setDrawMapEnabled( val != 0 );
+		else if (stricmp(szDebugOpt, "drawrolenpc") == 0)
+			NDDebugOpt::setDrawRoleNpcEnabled( val != 0 );
+
+		else if (stricmp(szDebugOpt, "drawrolemonster") == 0)
+			NDDebugOpt::setDrawRoleMonsterEnabled( val != 0 );
+
+		else if (stricmp(szDebugOpt, "drawroleplayer") == 0)
+			NDDebugOpt::setDrawRolePlayerEnabled( val != 0 );
+
+		else if (stricmp(szDebugOpt, "drawrolemanual") == 0)
+			NDDebugOpt::setDrawRoleManualEnabled( val != 0 );
 	}
 	else if (sscanf(cmd, "openmap %d", &val) == 1)
 	{
 		//NDMapMgrObj.Hack_loadSceneByMapDocID( val );
+	}
+	else if (stricmp(cmd, "profile") == 0)
+	{
+		NDProfileReport::report();
+	}
+	else if (stricmp(cmd, "profile dump") == 0)
+	{
+		NDProfileReport::dump();
 	}
 	else
 	{

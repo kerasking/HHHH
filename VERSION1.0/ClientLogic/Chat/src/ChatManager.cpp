@@ -10,6 +10,7 @@
 #include "ChatManager.h"
 #include "NDUISynLayer.h"
 #include "NDLocalization.h"
+#include "NDUtility.h"
 
 using namespace NDEngine;
 
@@ -77,7 +78,7 @@ bool ChatManager::process(MSGID msgID, NDEngine::NDTransData* bao, int len)
 	switch (msgID)
 	{
 	case _MSG_TALK:
-		this->processChatTalk(*bao);
+		processChatTalk(*bao);
 		break;
 	default:
 		break;
@@ -151,7 +152,7 @@ void ChatManager::processChatTalk(NDEngine::NDTransData& data)
 		// msg.append("内容" + c);
 
 	}
-	// showDialog("聊天回复", msg.toString());
+//	showDialog("聊天回复", msg.toString());
 
 	CloseProgressBar;
 
@@ -234,5 +235,5 @@ void ChatManager::AddAllRecord()
 }
 void ChatManager::SetMaxRecoudCount(int maxCount)
 {
-	this->maxRecordCount = maxCount;
+	maxRecordCount = maxCount;
 }

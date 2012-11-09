@@ -20,11 +20,17 @@ SM_TASK_CONTENT_TYPE  =
 	MONSTER									= 1,
 	ITEM									= 2,
 	NPC										= 3,
+    GUIDE									= 4,
+    
 	-- ...
 };
 
 SM_TASK_OPTION_ACTION =
 {
+    
 	ACCEPT									= 10000,
 	REJECT									= 10001,
+	FINISH									= 10002,
+    TASKOPTION1								= 10003,
+
 };

@@ -87,80 +87,87 @@ void NDPicture::Initialization(const char* imageFile)
 	}
 }
 
-// 	void NDPicture::Initialization(vector<const char*>& vImgFiles)
-// 	{
-// 		// »ÒÉ«Í¼ todo
-// 		if (vImgFiles.size() < 1) {
-// 			return;
-// 		}
-// 		
-// 		[m_texture release];
-// 		
-// 		vector<UIImage*> vImgs;
-// 		for (uint i = 0; i < vImgFiles.size(); i++) {
-// 			UIImage *img = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithUTF8String:vImgFiles.at(i)]];
-// 			vImgs.push_back(img);
-// 			
-// 			if (0 == i) {
-// 				UIGraphicsBeginImageContext(img.size);
-// 			}
-// 		}
-// 		
-// 		for (uint i = 0; i < vImgs.size(); i++) {
-// 			UIImage* img = vImgs.at(i);
-// 			[img drawInRect:CGRectMake(0, 0, img.size.width, img.size.height)];
-// 			[img release];
-// 		}
-// 		
-// 		UIImage *resultImg = UIGraphicsGetImageFromCurrentImageContext();
-// 		
-// 		UIGraphicsEndImageContext();
-// 		
-// 		m_texture = [[CCTexture2D alloc] initWithImage:resultImg];
-// 		
-// 		m_cutRect = CGRectMake(0, 0, m_texture->getContentSizeInPixels().width, m_texture->getContentSizeInPixels().height);
-// 		SetCoorinates();		
-// 		SetColor(ccc4(255, 255, 255, 255));
+void NDPicture::Initialization(vector<const char*>& vImgFiles)
+{
+	// »ÒÉ«Í¼ todo
+// 	if (vImgFiles.size() < 1) {
+// 		return;
 // 	}
+// 	
+// 	m_texture->release();
+// 	
+// 	vector<CCImage*> vImgs;
+// 	for (uint i = 0; i < vImgFiles.size(); i++)
+// 	{
+// 		CCTexture2D* img = new CCTexture2D;
+// 		if (!img->initWithPVRFile(vImgFiles.at(i)))
+// 		{
+// 			continue;
+// 		}
+// 		vImgs.push_back(img);
+		
+// 		if (0 == i)
+// 		{
+// 			UIGraphicsBeginImageContext(img.size);
+// 		}
+//	}
+	
+// 	for (uint i = 0; i < vImgs.size(); i++)
+// 	{
+// 		CCImage* img = vImgs.at(i);
+// 		[img drawInRect:CGRectMake(0, 0, img.size.width, img.size.height)];
+// 		[img release];
+// 	}
+	
+	CCImage* resultImg = 0;//UIGraphicsGetImageFromCurrentImageContext(); ¹ùºÆ
+	
+	//UIGraphicsEndImageContext();
+	
+// 	m_texture = CCTexture2D::initWithImage(resultImg);
+// 	
+// 	m_cutRect = CGRectMake(0, 0, m_texture->getContentSizeInPixels().width, m_texture->getContentSizeInPixels().height);
+// 	SetCoorinates();		
+// 	SetColor(ccc4(255, 255, 255, 255));
+}
 
-// 	void NDPicture::Initialization(vector<const char*>& vImgFiles, vector<CGRect>& vImgCustomRect, vector<CGPoint>&vOffsetPoint)
-// 	{
-// 		if (vImgFiles.size() < 1 || vImgCustomRect.size() < 1 || vOffsetPoint.size() < 1
-// 			|| vImgFiles.size() != vImgCustomRect.size() || vImgFiles.size() != vOffsetPoint.size())
-// 			return;
+void NDPicture::Initialization(vector<const char*>& vImgFiles, vector<CGRect>& vImgCustomRect, vector<CGPoint>&vOffsetPoint)
+{
+// 	if (vImgFiles.size() < 1 || vImgCustomRect.size() < 1 || vOffsetPoint.size() < 1
+// 		|| vImgFiles.size() != vImgCustomRect.size() || vImgFiles.size() != vOffsetPoint.size())
+// 		return;
+// 	
+// 	m_pkTexture->release();
+// 	
+// 	vector<CCTexture2D*> vImgs;
+// 	for (uint i = 0; i < vImgFiles.size(); i++) {
+// 		CCTexture2D* img = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithUTF8String:vImgFiles.at(i)]];
+// 		CCTexture2D* imgCut = [img getSubImageFromWithRect:vImgCustomRect[i]];
+// 		vImgs.push_back(imgCut);
 // 		
-// 		[m_texture release];
-// 		
-// 		vector<UIImage*> vImgs;
-// 		for (uint i = 0; i < vImgFiles.size(); i++) {
-// 			UIImage *img = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithUTF8String:vImgFiles.at(i)]];
-// 			UIImage *imgCut = [img getSubImageFromWithRect:vImgCustomRect[i]];
-// 			vImgs.push_back(imgCut);
-// 			
-// 			if (0 == i) {
-// 				UIGraphicsBeginImageContext(imgCut.size);
-// 			}
-// 			
-// 			[img release];
+// 		if (0 == i) {
+// 			UIGraphicsBeginImageContext(imgCut.size);
 // 		}
 // 		
-// 		for (uint i = 0; i < vImgs.size(); i++) {
-// 			UIImage* img = vImgs.at(i);
-// 			[img drawInRect:CGRectMake(vOffsetPoint[i].x, vOffsetPoint[i].y, img.size.width, img.size.height)];
-// 			//[img release];
-// 		}
-// 		
-// 		UIImage *resultImg = UIGraphicsGetImageFromCurrentImageContext();
-// 		
-// 		UIGraphicsEndImageContext();
-// 		
-// 		m_texture = [[CCTexture2D alloc] initWithImage:resultImg];
-// 		
-// 		m_cutRect = CGRectMake(0, 0, m_texture->getContentSizeInPixels().width, m_texture->getContentSizeInPixels().height);
-// 		SetCoorinates();		
-// 		SetColor(ccc4(255, 255, 255, 255));	
-// 		
+// 		[img release];
 // 	}
+// 	
+// 	for (uint i = 0; i < vImgs.size(); i++) {
+// 		UIImage* img = vImgs.at(i);
+// 		[img drawInRect:CGRectMake(vOffsetPoint[i].x, vOffsetPoint[i].y, img.size.width, img.size.height)];
+// 		//[img release];
+// 	}
+// 	
+// 	UIImage *resultImg = UIGraphicsGetImageFromCurrentImageContext();
+// 	
+// 	UIGraphicsEndImageContext();
+// 	
+// 	m_texture = [[CCTexture2D alloc] initWithImage:resultImg];
+// 	
+// 	m_cutRect = CGRectMake(0, 0, m_texture->getContentSizeInPixels().width, m_texture->getContentSizeInPixels().height);
+// 	SetCoorinates();		
+// 	SetColor(ccc4(255, 255, 255, 255));	
+	
+}
 
 void NDPicture::Initialization(const char* imageFile, int hrizontalPixel,
 		int verticalPixel/*=0*/)
@@ -743,6 +750,16 @@ void NDPicturePool::PurgeDefaultPool()
 {
 	delete NDPicturePool_DefaultPool;
 }
+void NDPicturePool::RemoveTexture(CCTexture2D* tex)
+{
+	std::map<CCTexture2D*, std::string>::iterator it = m_mapTex2Str.find(tex);
+	if(it != m_mapTex2Str.end())
+	{
+		std::string str = it->second;
+		m_mapTex2Str.erase(it);
+		RemovePicture(str.c_str());
+	}
+}
 
 NDPicture* NDPicturePool::AddPicture(const char* imageFile, bool gray/*=false*/)
 {
@@ -759,6 +776,10 @@ NDPicture* NDPicturePool::AddPicture(const char* imageFile, bool gray/*=false*/)
 		pkPicture->Initialization(imageFile);
 
 		m_pkTextures->SetObject(pkPicture, ss.str().c_str());
+
+		CCTexture2D* tex = pkPicture->GetTexture();
+		tex->setContainerType(ContainerTypeAddPic);
+		m_mapTex2Str.insert(std::map<CCTexture2D*, std::string>::value_type(tex, imageFile));
 	}
 
 	return pkPicture->Copy();
@@ -787,8 +808,11 @@ NDPicture* NDPicturePool::AddPicture(const char* imageFile, int hrizontalPixel,
 	{
 		pic = new NDPicture(gray);
 		pic->Initialization(imageFile, hrizontalPixel, verticalPixel);
-
 		m_pkTextures->SetObject(pic, ss.str().c_str());
+		CCTexture2D* tex = pic->GetTexture();
+		tex->setContainerType(ContainerTypeAddPic);	
+		m_mapTex2Str.insert(std::map<CCTexture2D*, std::string>::value_type(tex, imageFile));
+
 	}
 
 	return pic->Copy();
@@ -856,10 +880,10 @@ CCTexture2D* NDPicturePool::AddTexture( const char* pszImageFile )
 		CCTexture2D* pkTexture = pkNewPicture->getTexture();
 		pkTexture->setContainerType(ContainerTypeAddPic);
 		m_mapTex2Str.insert(MAP_STRING::value_type(pkTexture,string(pszImageFile)));
-		pkPicture->getTexture();
+		pkPicture->GetTextureRetain();
 	}
 
-	return pkPicture->getTexture();
+	return pkPicture->GetTextureRetain();
 }
 
 
@@ -887,9 +911,10 @@ void NDTexture::Initialization( const char* pszImageFile )
 	}
 }
 
-unsigned int NDTexture::GetTextureRetain()
+CCTexture2D* NDTexture::GetTextureRetain()
 {
-	return m_pkTexture->retainCount();
+	m_pkTexture->retain();
+	return m_pkTexture;
 }
 
 NS_NDENGINE_END

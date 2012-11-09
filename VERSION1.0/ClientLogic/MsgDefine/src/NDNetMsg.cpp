@@ -44,7 +44,8 @@ bool NDNetMsgPool::Process(NDTransData* data)
 
 	int nMsgLen = data->GetSize();
 
-	if (nMsgLen < 6)
+
+	if (nMsgLen<ND_C_HEAD_SIZE)  //if (nMsgLen < 6)
 	{
 		return false;
 	}

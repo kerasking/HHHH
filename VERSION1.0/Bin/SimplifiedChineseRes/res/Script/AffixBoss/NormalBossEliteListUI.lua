@@ -65,14 +65,27 @@ p.TagNextArea = 7;
 p.TagCear = 8;
 p.TagTitle = 2;
 p.TagPower = 5;
+
 p.TagReset = 109;
 p.PerPageSize = 10;
-
+p.Fubenload = 787;
+--战斗
+p.Battle		= 78;
+--攻略
+p.Raiders		= 79;
+--自动战斗
+p.AutoBattle	= 81;
+--关闭
+p.TagClose2		= 80;
+--标签1
+p.TagDes1		= 76;
+--标签2
+p.TagDes1		= 77;
 
 local TagTip = 9999;
 local TagAim_MATERIAL = 1; -- 材料
 local TagAim_TASK = 0; -- 任务
-
+local BossID = 0;
 -- 界面控件坐标定义
 local winsize = GetWinSize();
 
@@ -256,7 +269,11 @@ function p.LoadUI(nParentMapId, nPassway, nBossId, nAim)
 	uiLoad:Load("HeroCopy.ini", layer, p.OnUIEvent, CONTAINTER_X, CONTAINTER_Y);
 	uiLoad:Free();
 	
-	
+	--设置关闭音效
+   	local closeBtn=GetButton(layer,p.TagClose);
+   	closeBtn:SetSoundEffect(Music.SoundEffect.CLOSEBTN);	
+   	
+   	
 	-- 体力值
 	local powerV = GetLabel(layer, p.TagPower)
 	local power = PlayerFunc.GetStamina(GetPlayerId());
@@ -270,7 +287,24 @@ function p.LoadUI(nParentMapId, nPassway, nBossId, nAim)
 	if (not PlayerVip.hasResetEliteBoss() and CheckP(resetV)) then
 		resetV:SetVisible(false);
 	end
-	
+    local layer2 = createNDUILayer();
+    if layer2 == nil then
+    return false;   
+    end
+    layer2:Init();
+    layer2:SetTag(p.Fubenload);
+    layer2:SetFrameRect(RectUILayer);
+    layer2:SetBackgroundColor(ccc4(125, 125, 125, 125));
+    layer2:SetVisible(false);
+    scene:AddChildZ(layer2,45);
+
+    local uiLoad = createNDUILoad();
+        if not CheckP(uiLoad) then
+        return false;
+    end
+
+uiLoad:Load("Fubenload.ini", layer2, p.OnUIEvent2, CONTAINTER_X, CONTAINTER_Y);
+uiLoad:Free();
 	
 	p.initData();
 	p.initSubUI();
@@ -280,7 +314,7 @@ function p.LoadUI(nParentMapId, nPassway, nBossId, nAim)
 		p.showItemInfoDlg(nBossId, nAim);
 	end
 
-	
+
 	return true;
 end
 
@@ -318,6 +352,31 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 	end
 	return true;
 end
+function p.OnUIEvent2(uiNode, uiEventType, param)
+    local tag = uiNode:GetTag();
+    -- LogInfo("tag:" .. tag);
+    if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+        if p.Battle == tag then
+                LogInfo("BossID:" .. BossID);
+                p.enterBoss(BossID);
+            return true;
+        elseif p.TagClose2 == tag then
+                p.close2();
+            return ture
+        elseif p.Raiders == tag then
+                _G.MsgDynMap.SendDynMapGuide(round);
+            return ture
+        elseif p.AutoBattle == tag then
+            local layer2 = p.getUiLayer2()
+                layer2:SetVisible(false);
+            local t = p.mList[(p.mCurrentPage - 1) * 10 + BossID];
+                if t then
+                    ClearUpSettingUI.LoadUI(t.typeid);
+                end
+        return ture      
+            end   
+        end
+    end
 
 function p.sendReset()
  ShowLoadBar();
@@ -457,7 +516,7 @@ function p.refresh()
 		clearV:SetVisible(false);
 	end
 	
-end
+end 
 
 function p.refreshTitle()
 	local layer = p.getUiLayer();
@@ -594,30 +653,60 @@ function p.refreshItemView(view, t, index, lstIndex)
 end
 
 function p.onListItemEvent(uiNode, uiEventType, param)
-	local tag = uiNode:GetTag();
-	LogInfo("tag:" .. tag);
-	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-		for i = 1, #TagBossListPic do
-			if (TagBossListPic[i] == tag) then
-				p.enterBoss(i);
-				return true;
-			end
-		end
-		
-		for i = 1, #TagListBt do
-			if (TagListBt[i] == tag) then
-				p.clear(i);
-				return true;
-			end
-		end
-		
-	end
-	return true;
+    local tag = uiNode:GetTag();
+    --LogInfo("tag:" .. tag);
+    if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+        if tag==138 then
+            return true;
+        end
+    local layer2 = p.getUiLayer2()
+    layer2:SetVisible(true);
+
+
+    for i = 1, #TagBossListPic do
+        if (TagBossListPic[i] == tag) then
+            BossID = i;
+            return true;
+        end
+    end
+        --[[
+        for i = 1, #TagBossListPic do
+            if (TagBossListPic[i] == tag) then
+                zd = i;
+                p.enterBoss(i);
+            return true;
+            end
+            end
+        ]]	
+            for i = 1, #TagListBt do
+                if (TagListBt[i] == tag) then
+                    p.clear(i);
+                return true;
+        end
+    end
+
+
+    elseif uiEventType == NUIEventType.TE_TOUCH_SC_VIEW_IN_BEGIN then
+        local layer = getUiLayer();
+            if (CheckP(layer)) then
+        local tip = GetImage(layer, TagTip);
+        if (CheckP(tip)) then
+            tip:SetVisible(false);
+        end
+        end
+    end
+    return true;
 end
 
 function p.close() 
 	p.freeData();
 	CloseUI(p.TagUiLayer);
+end
+
+function p.close2() 
+    --CloseUI(p.Fubenload);
+    local layer2 = p.getUiLayer2()
+    layer2:SetVisible(false);
 end
 
 function p.enterBoss(i)
@@ -655,6 +744,20 @@ function p.getUiLayer()
 	return layer;
 end
 
+function p.getUiLayer2()
+local scene = GetSMGameScene();
+if not CheckP(scene) then
+return nil;
+end
+
+local layer2 = GetUiLayer(scene, p.Fubenload);
+if not CheckP(layer2) then
+LogInfo("nil == layer")
+return nil;
+end
+
+return layer2;
+end
 
 function p.clickButton(node) 
 	
@@ -689,6 +792,8 @@ function p.processNet(msgId, m)
 	if (msgId == nil ) then
 		LogInfo("processNet msgId == nil" );
 	end
+
+    LogInfo("qbw test msgId:"..msgId);
 	--LogInfo(string.format("processNet%d" , msgId));
 	if msgId == NMSG_Type._MSG_AFFIX_BOSS_NML_RESET then
 		p.refreshCurPageItem();
@@ -719,10 +824,14 @@ function p.getBossPic(nId)
 		return nil;
 	end
 	
-	local pool = DefaultPicPool();
 	
-	rtn = pool:AddPicture(GetSMImgPath("boss_snake.png"), false)
-	
+    --** chh 2012-06-17 **--
+    --local pool = DefaultPicPool();
+	--rtn = pool:AddPicture(GetSMImgPath("boss_snake.png"), false)
+	rtn = GetMapPic(nId);
+    
+    
+    
 	return rtn;
 end
 
@@ -803,4 +912,10 @@ function p.refreshCurPageItem()
 		clearV:SetVisible(false);
 	end
 	
+end
+
+function p.getBossID()
+
+return BossID;
+
 end

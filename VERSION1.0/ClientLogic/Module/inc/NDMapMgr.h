@@ -9,7 +9,7 @@
 #include <string>
 #include <map>
 #include "NDObject.h"
-//#include "GatherPoint.h"
+#include "GatherPoint.h"
 #include "FriendElement.h"
 #include "NDScene.h"
 #include "NDManualRole.h"
@@ -232,9 +232,9 @@ typedef map<int,monster_type_info>			monster_info;
 typedef monster_info::iterator				monster_info_it;
 typedef pair<int, monster_type_info>		monster_info_pair;
 
-//typedef map<int,GatherPoint*>				map_gather_point;
-//typedef map_gather_point::iterator			map_gather_point_it;
-//typedef pair<int, GatherPoint*>				map_gather_point_pair;
+typedef map<int,GatherPoint*>				map_gather_point;
+typedef map_gather_point::iterator			map_gather_point_it;
+typedef pair<int, GatherPoint*>				map_gather_point_pair;
 
 typedef map<int, FriendElement>			MAP_FRIEND_ELEMENT;
 typedef MAP_FRIEND_ELEMENT::iterator		MAP_FRIEND_ELEMENT_IT;
@@ -260,6 +260,9 @@ typedef pair<int, vector<ShopItemInfo> >	map_npc_store_pair;
 typedef vector<int> VEC_BATTLE_SKILL;
 typedef VEC_BATTLE_SKILL::iterator VEC_BATTLE_SKILL_IT;
 
+typedef map<int ,vector<ShopItemInfo> >		map_npc_store;
+typedef map_npc_store::iterator				map_npc_store_it;
+
 // 邮件
 //typedef vector<EmailData*>	vec_email;
 //typedef vec_email::iterator	vec_email_it;
@@ -272,21 +275,31 @@ class NDMapMgr:
 	public ITimerCallback
 {
 public:
-
-	typedef map<int,NDManualRole*> map_manualrole;
-	typedef map_manualrole::iterator map_manualrole_it;
-	typedef vector<NDNpc*> VEC_NPC;
-	typedef vector<NDMonster*> VEC_MONSTER;
-	//typedef vector<RequsetInfo> VEC_REQUST; ///< 依赖汤自勤的GameUIRequest 郭浩
-	typedef VEC_MONSTER::iterator vec_monster_it;
-
 	DECLARE_CLASS(NDMapMgr);
-
 	NDMapMgr();
 	virtual ~NDMapMgr();
 
+
+
+
+public:
+	typedef vector<NDNpc*> VEC_NPC;
+	typedef vector<NDMonster*> VEC_MONSTER;
+	typedef VEC_NPC::iterator vec_npc_it;
+	typedef VEC_MONSTER::iterator vec_monster_it;
+	typedef map<int,NDManualRole*> map_manualrole;
+	typedef map_manualrole::iterator map_manualrole_it;
+	typedef pair<int,NDManualRole*> map_manualrole_pair;
+
+	//typedef vector<RequsetInfo> VEC_REQUST; ///< 依赖汤自勤的GameUIRequest 郭浩
+
+
+
+
 	virtual void Update(unsigned long ulDiff);
 	NDMonster* GetMonster(int nID);
+
+	bool isMonsterClear();
 
 	bool canChangeMap()
 	{
@@ -318,7 +331,6 @@ public:
 		return false;
 	}
 
-
 	NDManualRole* NearestDacoityManualrole(NDManualRole& role, int iDis);
 	NDManualRole* NearestBattleFieldManualrole(NDManualRole& role, int iDis);
 	int getDistBetweenRole(NDBaseRole *firstrole, NDBaseRole *secondrole);
@@ -340,6 +352,7 @@ public:
 	void processCompetition(NDTransData& kData);
 	void processShowTreasureHuntAward(NDTransData& kData);
 	void processRespondTreasureHuntProb(NDTransData& kData);
+	void processMsgDlg(NDTransData& kData);
 	void processRespondTreasureHuntInfo(NDTransData& kData);
 	void processKickOutTip(NDTransData& kData);
 	void processItemTypeInfo(NDTransData& kData);
@@ -361,6 +374,7 @@ public:
 	void processCollection(NDTransData& kData);
 	void processUserInfoSee(NDTransData& kData);
 	void processPlayerLevelUp(NDTransData& kData);
+	void processShopInfo(NDTransData& data);
 	void processNPC(NDTransData& kData);
 	void processPetInfo(NDTransData* pkData,int nLength);
 	void processMonsterInfo(NDTransData* pkData, int nLength);
@@ -372,6 +386,9 @@ public:
 	void processSyndicate(NDTransData& kData);
 	void BattleStart();
 	void BattleEnd(int iResult);
+	void throughMap(int mapX, int mapY, int mapId);
+	//void addRequst(RequsetInfo& request);		///< RequestInfo需要合并后 郭浩
+	void NavigateToNpc(int nNpcId);
 
 public:
 
@@ -380,7 +397,10 @@ public:
 	NDBaseRole* GetRoleNearstPlayer(int iDistance);
 	
 public:
+	typedef map<int/*idNpc*/, VEC_BATTLE_SKILL> MAP_NPC_SKILL_STORE;
+	typedef MAP_NPC_SKILL_STORE::iterator MAP_NPC_SKILL_STORE_IT;
 
+	MAP_NPC_SKILL_STORE m_mapNpcSkillStore;
 	void LoadSceneMonster();
 	void AddManualRole(int nID,NDManualRole* pkRole);
 	NDManualRole* GetManualRole(int nID);
@@ -405,9 +425,13 @@ public:
 	void AddSwitch();
 	int GetMapID();
 	int GetMotherMapID();
+	//LifeSkill* getLifeSkill(OBJID idSkill);
+	std::vector<NDManualRole*> GetPlayerTeamList();
 
-	NDNpc* GetNPC(int nID);
-
+	string changeNpcString(string str);
+	void WorldMapSwitch(int mapId);  //世界地图中地图切换
+	NDNpc* GetNpcByID(int nID);
+	void ClearNPCChat();
 	NDMapLayer* getMapLayerOfScene(NDScene* pkScene);
 
 	virtual void OnCustomViewRadioButtonSelected( NDUICustomView* customView,
@@ -421,12 +445,18 @@ public:
 	void SetBattleMonster(NDMonster* pkMonster);
 
 	CC_SYNTHESIZE(int,m_nCurrentMonsterRound,CurrentMonsterRound);		///< 貌似此变量没有什么引用，废弃掉？ 郭浩
+    int GetCurrentMonsterRound(){return m_nCurrentMonsterRound;}
 
 	static bool m_bFirstCreate;
 	static bool m_bVerifyVersion;
 
+	int m_iCurDlgNpcID;
+
+	int zhengYing[CAMP_TYPE_END];
+
 	map_manualrole m_mapManualRole;
 	monster_info m_mapMonsterInfo;
+	map_npc_store m_mapNpcStore;
 	VEC_NPC m_vNPC;
 	VEC_MONSTER m_vMonster;
 
@@ -441,10 +471,22 @@ public:
 	int m_nMapDocID;
 	int mapType;
 
+	OBJID m_idTradeDlg;
+	OBJID m_idAuctionDlg;
+	OBJID m_idDeMarry;
+	OBJID m_idDialogDemarry;
+	OBJID m_idDialogMarry;
+
 	bool isShowName;
 	bool isShowOther;
 
 	CCSize m_kMapSize;
+
+	struct st_npc_op
+	{
+		int idx; string str; bool bArrow;
+		st_npc_op() { bArrow = false; }
+	};
 
 	string m_strMapName;
 	/**npc聊天相关*/
@@ -454,6 +496,8 @@ public:
 	string strNPCText;
 	string m_strNoteTitle; // 公告
 	string m_strNoteContent;
+
+	vector<st_npc_op> vecNPCOPText;
 
 	CAutoLink<NDMonster> m_apWaitBattleMonster;
 //	VEC_REQUST m_vecRequest;		///< 依赖汤自勤的GameUIRequest 郭浩

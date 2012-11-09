@@ -4,7 +4,7 @@
 --作者: jhzheng
 ---------------------------------------------------
 Drama = {}
-
+ 
 local p = Drama;
 
 local LOOK_MAN = 1000000;
@@ -32,6 +32,12 @@ p.TITLE_TYPE_2 = 2;
 ---------玩家名称------------
 function p.GetPlayerName()
 	return NAME_MAN;
+end
+
+function p.GetPlayerPortrait()
+	local nLookface = p.GetPlayerLookFace();
+	local strfile	= "portrait/head_" .. getIntPart(nLookface / 100) .. ".png";
+	return GetSMImgPath(strfile);
 end
 
 p.TITLE_STR = 

@@ -6,7 +6,6 @@
  *  Copyright 2011 (网龙)DeNA. All rights reserved.
  *
  */
-
 #include "GameScene.h"
 #include "NDConstant.h"
 #include "NDDirector.h"
@@ -138,12 +137,12 @@ GameScene* GameScene::Scene()
 
 void GameScene::AddUserState(int idState, string& str)
 {
-	//this->m_userState->AddStateLabel(idState, str); ///< 临时性注�?? 郭浩
+	//m_userState->AddStateLabel(idState, str); ///< 临时性注�?? 郭浩
 }
 
 void GameScene::DelUserState(int idState)
 {
-//	this->m_userState->RemoveStateLabel(idState);
+//	m_userState->RemoveStateLabel(idState);
 }
 
 void GameScene::SetUIShow(bool bShow)
@@ -168,7 +167,7 @@ void GameScene::SetUIShow(bool bShow)
 			switch (menuType)
 			{
 			case MT_DUI_WU:
-				this->onClickTeam();
+				onClickTeam();
 				break;
 			default:
 				break;
@@ -203,7 +202,7 @@ void GameScene::SetTargetHead(NDBaseRole* target)
 // 
 // 			if (m_targetHead->GetParent() == NULL) 
 // 			{
-// 				this->AddUIChild(m_targetHead);
+// 				AddUIChild(m_targetHead);
 // 			}
 // 		}
 // 	}
@@ -370,30 +369,30 @@ GameScene::~GameScene()
 	 }
 	 */
 
-	if (this->m_uiLayer->GetParent() == NULL)
+	if (m_uiLayer->GetParent() == NULL)
 	{
-		SAFE_DELETE(this->m_uiLayer);
+		SAFE_DELETE(m_uiLayer);
 	}
 }
 
 void GameScene::AddUIChild(NDNode* node)
 {
-	this->m_uiLayer->AddChild(node);
+	m_uiLayer->AddChild(node);
 }
 
 void GameScene::AddUIChild(NDNode* node, int z)
 {
-	this->m_uiLayer->AddChild(node, z);
+	m_uiLayer->AddChild(node, z);
 }
 
 void GameScene::AddUIChild(NDNode* node, int z, int tag)
 {
-	this->m_uiLayer->AddChild(node, z, tag);
+	m_uiLayer->AddChild(node, z, tag);
 }
 
 void GameScene::OnBattleEnd()
 {
-	//this->AddChild(m_uiLayer);
+	//AddChild(m_uiLayer);
 	GlobalDialogObj.SetInBattle(false);
 
 //	if (m_directKey)
@@ -410,17 +409,17 @@ void GameScene::OnBattleBegin()
 {
 	GlobalDialogObj.SetInBattle(true);
 
-	this->RemoveChild(this->m_uiLayer, false);
+	RemoveChild(m_uiLayer, false);
 
 	std::vector<NDNode*> vDel;
 
-	std::vector<NDNode*>::iterator it = this->m_kChildrenList.begin();
+	std::vector<NDNode*>::iterator it = m_kChildrenList.begin();
 
 	/***
 	 * 临时性注�?? 郭浩
 	 * begin
 	 */
-	//for (; it != this->m_childrenList.end(); it++) 
+	//for (; it != m_childrenList.end(); it++) 
 	//{
 	//	if ((*it)->IsKindOfClass(RUNTIME_CLASS(NDMapLayerLogic)) ||
 	//	    (*it)->IsKindOfClass(RUNTIME_CLASS(TextControl)) ||
@@ -492,14 +491,14 @@ void GameScene::Initialization(int mapID)
 
 	m_pkMapLayerLogic = new NDMapLayerLogic();
 	m_pkMapLayerLogic->Initialization(mapID);
-	this->AddChild(m_pkMapLayerLogic, MAPLAYER_Z, MAPLAYER_TAG);
+	AddChild(m_pkMapLayerLogic, MAPLAYER_Z, MAPLAYER_TAG);
 
 	m_uiLayer = new MapUILayer;
 	m_uiLayer->Initialization();
-	this->AddChild(m_uiLayer, MAP_UILAYER_Z);
+	AddChild(m_uiLayer, MAP_UILAYER_Z);
 
 	// 确保方向键最先加入到uilayer
-	this->ShowDirectKey(true);
+	ShowDirectKey(true);
 	/*
 	 do
 	 {
@@ -533,7 +532,7 @@ void GameScene::Initialization(int mapID)
 
 	 m_hccOPItem->SetDelegate(this);
 
-	 this->AddUIChild(m_hccOPItem);
+	 AddUIChild(m_hccOPItem);
 	 } while (0);
 
 	 do
@@ -572,7 +571,7 @@ layer->AddChild(btn); \
 	 #undef fastinit
 
 	 m_hccOPMenu->SetDelegate(this);
-	 this->AddUIChild(m_hccOPMenu);
+	 AddUIChild(m_hccOPMenu);
 	 } while (0); */
 
 	/***
@@ -590,7 +589,7 @@ layer->AddChild(btn); \
 // //#endif
 // 	m_anilayerRequest->SetCurrentAnimation(0);
 // 	m_anilayerRequest->SetDelegate(this);
-// 	this->AddUIChild(m_anilayerRequest);
+// 	AddUIChild(m_anilayerRequest);
 	/***
 	 * 临时性注�?? 郭浩
 	 * end
@@ -607,7 +606,7 @@ layer->AddChild(btn); \
 	 #endif
 	 m_anilayerMail->SetCurrentAnimation(0);
 	 m_anilayerMail->SetDelegate(this);
-	 this->AddUIChild(m_anilayerMail);
+	 AddUIChild(m_anilayerMail);
 	 */
 
 	/***
@@ -619,7 +618,7 @@ layer->AddChild(btn); \
 // 	m_tlShare->VisibleSectionTitles(false);
 // 	m_tlShare->SetDelegate(this);
 // 	m_tlShare->SetVisible(false);
-// 	this->AddUIChild(m_tlShare);
+// 	AddUIChild(m_tlShare);
 	/***
 	 * 临时性注�?? 郭浩
 	 * end
@@ -630,34 +629,34 @@ layer->AddChild(btn); \
 	//m_tlInvitePlayers->VisibleSectionTitles(false);
 	//m_tlInvitePlayers->SetDelegate(this);
 	//m_tlInvitePlayers->SetVisible(false);
-	//this->AddUIChild(m_tlInvitePlayers);
+	//AddUIChild(m_tlInvitePlayers);
 	//m_tlKickPlayers = new NDUITableLayer;
 	//m_tlKickPlayers->Initialization();
 	//m_tlKickPlayers->VisibleSectionTitles(false);
 	//m_tlKickPlayers->SetDelegate(this);
 	//m_tlKickPlayers->SetVisible(false);
-	//this->AddUIChild(m_tlKickPlayers);
+	//AddUIChild(m_tlKickPlayers);
 	//
 	//m_tlTiShengPlayers = new NDUITableLayer;
 	//m_tlTiShengPlayers->Initialization();
 	//m_tlTiShengPlayers->VisibleSectionTitles(false);
 	//m_tlTiShengPlayers->SetDelegate(this);
 	//m_tlTiShengPlayers->SetVisible(false);
-	//this->AddUIChild(m_tlTiShengPlayers);
+	//AddUIChild(m_tlTiShengPlayers);
 	//
 	//m_tlPaiHang = new NDUITableLayer;
 	//m_tlPaiHang->Initialization();
 	//m_tlPaiHang->VisibleSectionTitles(false);
 	//m_tlPaiHang->SetDelegate(this);
 	//m_tlPaiHang->SetVisible(false);
-	//this->AddUIChild(m_tlPaiHang);
+	//AddUIChild(m_tlPaiHang);
 	//
 	//m_tlMarriage = new NDUITableLayer;
 	//m_tlMarriage->Initialization();
 	//m_tlMarriage->VisibleSectionTitles(false);
 	//m_tlMarriage->SetDelegate(this);
 	//m_tlMarriage->SetVisible(false);
-	//this->AddUIChild(m_tlMarriage);
+	//AddUIChild(m_tlMarriage);
 	do
 	{
 		//m_tlInteractive = new NDUITableLayer;
@@ -665,13 +664,13 @@ layer->AddChild(btn); \
 		//m_tlInteractive->VisibleSectionTitles(false);
 		//m_tlInteractive->SetVisible(false);
 		//m_tlInteractive->SetDelegate(this);
-		//this->AddUIChild(m_tlInteractive);
+		//AddUIChild(m_tlInteractive);
 	} while (0);
 
-	//this->ShowMiniMap(NDDataPersist::IsGameSettingOn(GS_SHOW_MINI_MAP));
-	//this->ShowPlayerHead(NDDataPersist::IsGameSettingOn(GS_SHOW_HEAD));
-	this->ShowMiniMap(true);
-	this->ShowPlayerHead(true);
+	//ShowMiniMap(NDDataPersist::IsGameSettingOn(GS_SHOW_MINI_MAP));
+	//ShowPlayerHead(NDDataPersist::IsGameSettingOn(GS_SHOW_HEAD));
+	ShowMiniMap(true);
+	ShowPlayerHead(true);
 
 	/***
 	 * 临时性注�?? 郭浩
@@ -679,7 +678,7 @@ layer->AddChild(btn); \
 	 */
 // 	m_userState = new UserStateLayer;
 // 	m_userState->Initialization();
-// 	this->AddUIChild(m_userState, 2);
+// 	AddUIChild(m_userState, 2);
 	/***
 	 * 临时性注�?? 郭浩
 	 * end
@@ -695,7 +694,7 @@ layer->AddChild(btn); \
 	m_pkHeadShowImage->Initialization();
 	m_pkHeadShowImage->SetPicture(pic, true);
 	m_pkHeadShowImage->SetFrameRect(CGRectMake(0, 0, 27, 46));
-	this->AddUIChild(m_pkHeadShowImage, 1);
+	AddUIChild(m_pkHeadShowImage, 1);
 
 	m_btnHeadShow = new NDUIButton;
 	m_btnHeadShow->Initialization();
@@ -707,7 +706,7 @@ layer->AddChild(btn); \
 	m_btnHeadShow->SetFrameRect(CGRectMake(0, 0, 27, 46));
 	m_btnHeadShow->SetDelegate(this);
 	pkLayer->AddChild(m_btnHeadShow);
-	this->AddUIChild(pkLayer, 1);
+	AddUIChild(pkLayer, 1);
 
 	/***
 	 * 临时性注�?? 郭浩
@@ -727,7 +726,7 @@ layer->AddChild(btn); \
 			NDPicturePool::DefaultPool()->AddPicture(
 					NDPath::GetImgPathBattleUI("bar_shrink.png"), false));
 	imgShrinkBg->SetFrameRect(CGRectMake(35.5, 284, 62, 36));
-	this->AddUIChild(imgShrinkBg);
+	AddUIChild(imgShrinkBg);
 
 	imgShrinkBg = new NDUIImage;
 	imgShrinkBg->Initialization();
@@ -736,7 +735,7 @@ layer->AddChild(btn); \
 					NDPath::GetImgPathBattleUI("bar_shrink.png"), false));
 	imgShrinkBg->SetFrameRect(
 			CGRectMake(kWinSize.width - 66.5 - 31, 284, 62, 36));
-	this->AddUIChild(imgShrinkBg);
+	AddUIChild(imgShrinkBg);
 
 	/***
 	 * 临时性注�?? 郭浩
@@ -748,7 +747,7 @@ layer->AddChild(btn); \
 // 	m_quickInteration->Initialization();
 // 	//m_quickInteration->SetBackgroundColor(ccc4(255, 0, 255, 255));
 // 	m_quickInteration->SetFrameRect(CGRectMake(66.5, 247.0f, 347, 75.0f));
-// 	this->AddUIChild(m_quickInteration);
+// 	AddUIChild(m_quickInteration);
 	/***
 	 * 临时性注�?? 郭浩
 	 * end
@@ -774,7 +773,7 @@ layer->AddChild(btn); \
 // 	m_quickItem = new QuickItem;
 // 	m_quickItem->Initialization();
 // 	m_quickItem->SetFrameRect(CGRectMake(66.5, 244.0f, 400.0f, 78.0f));
-// 	this->AddUIChild(m_quickItem);
+// 	AddUIChild(m_quickItem);
 //	RefreshQuickItem();
 	/***
 	 * 临时性注�?? 郭浩
@@ -792,41 +791,41 @@ layer->AddChild(btn); \
 	m_btnQuickInterationShrink->SetFrameRect(CGRectMake(13, 00, 62, 56));
 	m_btnQuickInterationShrink->SetDelegate(this);
 	pkLayer->AddChild(m_btnQuickInterationShrink);
-	this->AddUIChild(pkLayer);
+	AddUIChild(pkLayer);
 
 //	m_quickFunc = new QuickFunc; ///< 临时性注�?? 郭浩
 //	m_quickFunc->Initialization(true); ///< 临时性注�?? 郭浩
-//	this->AddUIChild(m_quickFunc); ///< 临时性注�?? 郭浩
+//	AddUIChild(m_quickFunc); ///< 临时性注�?? 郭浩
 
 	TeamRefreh(false);
 }
 
 CGSize GameScene::GetSize()
 {
-	return this->m_pkMapLayerLogic->GetContentSize();
+	return m_pkMapLayerLogic->GetContentSize();
 }
 
 cocos2d::CCArray* GameScene::GetSwitchs()
 {
-	return this->m_pkMapLayerLogic->GetMapData()->getSwitchs();
+	return m_pkMapLayerLogic->GetMapData()->getSwitchs();
 }
 
 void GameScene::SetMiniMapVisible(bool bVisible)
 {
 // 	if (m_miniMap)
 // 	{
-	//this->m_miniMap->EnableDraw(bVisible);
+	//m_miniMap->EnableDraw(bVisible);
 //	}
 
 	// 同时也设置头�??
 //	if (m_playerHead)
 //	{
-	//this->m_playerHead->EnableDraw(bVisible);
+	//m_playerHead->EnableDraw(bVisible);
 //	}
 
 //	if (m_petHead)
 //	{
-	//this->m_petHead->EnableDraw(bVisible);
+	//m_petHead->EnableDraw(bVisible);
 //	}
 }
 
@@ -844,14 +843,14 @@ void GameScene::ShowPetHead(bool bShow)
 // 		{
 // 			m_petHead = new PlayerHeadInMap(battlepet);
 // 			m_petHead->Initialization();
-// 			this->AddUIChild(m_petHead, 0);
+// 			AddUIChild(m_petHead, 0);
 // 		}
 // 		else
 // 		{
 // 			m_petHead->ChangeBattlePet(battlepet);
 // 		}
 // 	}
-// 	else if (this->m_petHead) 
+// 	else if (m_petHead) 
 // 	{
 // 		m_petHead->RemoveFromParent(true);
 // 		m_petHead = NULL;
@@ -866,23 +865,23 @@ void GameScene::ShowPlayerHead(bool bShow)
 	 */
 // 	if (bShow)
 // 	{
-// 		if (!this->m_playerHead)
+// 		if (!m_playerHead)
 // 		{
 // 			m_playerHead = new PlayerHeadInMap(&NDPlayer::defaultHero());
 // 			m_playerHead->Initialization();
-// 			this->AddUIChild(m_playerHead);
+// 			AddUIChild(m_playerHead);
 // 		}
 // 	} 
 // 	else
 // 	{
-// 		if (this->m_playerHead) 
+// 		if (m_playerHead) 
 // 		{
-// 			this->m_uiLayer->RemoveChild(m_playerHead, true);
+// 			m_uiLayer->RemoveChild(m_playerHead, true);
 // 			m_playerHead = NULL;
 // 		}
 // 	}
 // 
-// 	this->ShowPetHead(bShow);
+// 	ShowPetHead(bShow);
 }
 
 void GameScene::ShowDirectKey(bool bShow)
@@ -901,7 +900,7 @@ void GameScene::ShowDirectKey(bool bShow)
 // 		
 // 		if (m_directKey->GetParent() == NULL) 
 // 		{
-// 			this->AddUIChild(m_directKey);
+// 			AddUIChild(m_directKey);
 // 			
 // 			m_directKey->ShowFinish(this);
 // 		}
@@ -927,20 +926,20 @@ void GameScene::ShowMiniMap(bool bShow)
 	 */
 // 	if (bShow) 
 // 	{
-// 		if (!this->m_miniMap) 
+// 		if (!m_miniMap) 
 // 		{
 // 			m_miniMap = new NDMiniMap();
 // 			m_miniMap->Initialization();
 // 			//m_miniMap->SetGameScene(this);
 // 			m_miniMap->SetFrameRect(RECT_MINI_MAP);
-// 			this->AddUIChild(m_miniMap);
+// 			AddUIChild(m_miniMap);
 // 		}
 // 	} 
 // 	else
 // 	{
-// 		if (this->m_miniMap) 
+// 		if (m_miniMap) 
 // 		{
-// 			this->m_uiLayer->RemoveChild(m_miniMap, true);
+// 			m_uiLayer->RemoveChild(m_miniMap, true);
 // 			m_miniMap = NULL;
 // 		}
 // 	}
@@ -1075,13 +1074,13 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		}
 //		else if (strCurSel == "军团")
 //		{
-//			this->onClickSyndicate();
+//			onClickSyndicate();
 //		}
 //		else if (strCurSel == "玩家")
 //		{
 //			GameUIPlayerList *playerlist = new GameUIPlayerList;
 //			playerlist->Initialization();
-//			this->AddChild(playerlist, UILAYER_Z, UILAYER_PLAYER_LIST_TAG);
+//			AddChild(playerlist, UILAYER_Z, UILAYER_PLAYER_LIST_TAG);
 //			table->SetVisible(false);
 //			SetUIShow(true);
 //		}
@@ -1090,7 +1089,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			/*
 //			TutorUILayer *list = new TutorUILayer;
 //			list->Initialization();
-//			this->AddChild(list, UILAYER_Z);
+//			AddChild(list, UILAYER_Z);
 //			table->SetVisible(false);
 //			SetUIShow(true);
 //			*/
@@ -1099,7 +1098,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		{
 //			GoodFriendUILayer *friendList = new GoodFriendUILayer;
 //			friendList->Initialization();
-//			this->AddChild(friendList, UILAYER_Z, UILAYER_GOOD_FRIEND_LIST_TAG);
+//			AddChild(friendList, UILAYER_Z, UILAYER_GOOD_FRIEND_LIST_TAG);
 //			table->SetVisible(false);
 //			SetUIShow(true);
 //		}
@@ -1252,13 +1251,13 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		}
 //		else if (strCurSel == "辞职")
 //		{
-//			this->m_dlgSyndicateResign = GlobalDialogObj.Show(this, 
+//			m_dlgSyndicateResign = GlobalDialogObj.Show(this, 
 //									  "温馨提示",
 //									  "请您确认是否要辞掉当前官�??", 0, "确认辞职", NULL);
 //		}
 //		else if (strCurSel == "离开军团")
 //		{
-//			this->m_dlgSyndicateQuit = GlobalDialogObj.Show(this, 
+//			m_dlgSyndicateQuit = GlobalDialogObj.Show(this, 
 //									  "温馨提示",
 //									  "大侠您确定要离开本军�??", 0, NDCommonCString("Ok"), NULL);
 //		}
@@ -1267,7 +1266,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			//SetUIShow(true);
 ////			GameUIAttrib *attrib = new GameUIAttrib;
 ////			attrib->Initialization();
-////			this->AddChild(attrib, UILAYER_Z, UILAYER_ATTRIB_TAG);
+////			AddChild(attrib, UILAYER_Z, UILAYER_ATTRIB_TAG);
 //			NDDirector::DefaultDirector()->PushScene(GameAttribScene::Scene());
 //			table->SetVisible(false);
 //		}
@@ -1289,7 +1288,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		{
 //			UserStateUILayer *list = new UserStateUILayer;
 //			list->Initialization();
-//			this->AddChild(list, UILAYER_Z);
+//			AddChild(list, UILAYER_Z);
 //			table->SetVisible(false);
 //			SetUIShow(true);
 //		}
@@ -1299,7 +1298,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			//{
 //				//GameUIPetAttrib *attrib = new GameUIPetAttrib;
 ////				attrib->Initialization();
-////				this->AddChild(attrib, UILAYER_Z, UILAYER_PET_ATTRIB_TAG);
+////				AddChild(attrib, UILAYER_Z, UILAYER_PET_ATTRIB_TAG);
 //				//NDDirector::DefaultDirector()->PushScene(GamePetAttribScene::Scene());
 //			//}
 //			//else 
@@ -1323,7 +1322,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //		}
 //		else if (strCurSel == "删除角色")
 //		{
-//			this->m_dlgDelRoleTag = GlobalDialogObj.Show(this, "温馨提示", "大侠您确定要删除角色,删除后将无法找回�??有数�??.是否删除",
+//			m_dlgDelRoleTag = GlobalDialogObj.Show(this, "温馨提示", "大侠您确定要删除角色,删除后将无法找回�??有数�??.是否删除",
 //					     NULL, NDCommonCString("Cancel"), NDCommonCString("Ok"), NULL);
 //		}
 //		else if (strCurSel == "登录信息")
@@ -1355,7 +1354,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			std::vector<std::string> vec_str; vec_str.push_back("请输入内�??,�??多输�??个汉�??");
 //			view->SetEdit(1, vec_id, vec_str);
 //			view->Show();
-//			this->AddChild(view);
+//			AddChild(view);
 //		}
 //		else if (strCurSel == "修改密码")
 //		{
@@ -1376,7 +1375,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //			view->SetEdit(3, vec_id, vec_str);
 //			view->Show();
 //			
-//			this->AddChild(view);
+//			AddChild(view);
 //		}
 //		else if (strCurSel == "客服声明")
 //		{
@@ -1400,7 +1399,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 //				
 //				GameUIBattleSkill *battleskill = new GameUIBattleSkill;
 //				battleskill->Initialization();
-//				this->AddChild(battleskill, UILAYER_Z, UILAYER_BATTLE_SKILL_TAG);
+//				AddChild(battleskill, UILAYER_Z, UILAYER_BATTLE_SKILL_TAG);
 //				SetUIShow(true);
 //			}
 //			else
@@ -1660,7 +1659,7 @@ void GameScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
 ////			}
 ////		}
 //
-//	} else if (this->m_tlRelieve == table) {
+//	} else if (m_tlRelieve == table) {
 //		if (cellIndex == 0) { // 回城
 //			NDUISynLayer::Show(SYN_RELIEVE);
 //			NDTransData data(_MSG_REBORN);
@@ -1769,7 +1768,7 @@ void GameScene::OnButtonClick(NDUIButton* button)
 //	if (button == m_btnQuickInterationShrink) {
 //		m_bQuickInterationShow = !m_bQuickInterationShow;
 //		
-//		if (this->m_bQuickInterationShow) {
+//		if (m_bQuickInterationShow) {
 //			if (m_quickInteration) {
 //				m_quickInteration->SetShrink(false);
 //			}
@@ -1786,7 +1785,7 @@ void GameScene::OnButtonClick(NDUIButton* button)
 //		if (m_bQuickInterationShow)
 //			ShrinkQuickItem();
 //	} else if (button == m_btnHeadShow) {
-//		if (this->m_bHeadShow) {
+//		if (m_bHeadShow) {
 //			if (m_playerHead) {
 //				m_playerHead->SetShrink(true);
 //			}
@@ -1954,7 +1953,7 @@ void GameScene::OnButtonClick(NDUIButton* button)
 //	}
 //	else if (button == m_btnTeam)
 //	{	
-//		this->onClickTeam();
+//		onClickTeam();
 //	}
 //	else if (button == m_btnSocial)
 //	{
@@ -1968,7 +1967,7 @@ void GameScene::OnButtonClick(NDUIButton* button)
 //	{
 //		GameUITaskList *tasklist = new GameUITaskList;
 //		tasklist->Initialization();
-//		this->AddChild(tasklist, UILAYER_Z, UILAYER_TASK_LIST_TAG);
+//		AddChild(tasklist, UILAYER_Z, UILAYER_TASK_LIST_TAG);
 //		SetUIShow(true);
 //	}
 //	else if (button == m_btnBag)
@@ -2036,19 +2035,19 @@ void GameScene::ShowRelieve(bool bShow)
 {
 	if (bShow)
 	{
-		if (this->m_relieveLayer)
+		if (m_relieveLayer)
 		{
 			return;
 		}
 
-		this->m_relieveLayer = new NDUILayer;
+		m_relieveLayer = new NDUILayer;
 		m_relieveLayer->Initialization();
 		m_relieveLayer->SetFrameRect(CGRectMake(0, 0, 480, 320));
-		this->AddChild(m_relieveLayer, UIDIALOG_Z);
+		AddChild(m_relieveLayer, UIDIALOG_Z);
 
 		CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 
-		this->m_tlRelieve = new NDUITableLayer;
+		m_tlRelieve = new NDUITableLayer;
 		m_tlRelieve->Initialization();
 		m_tlRelieve->VisibleSectionTitles(false);
 		m_tlRelieve->SetDelegate(this);
@@ -2079,11 +2078,11 @@ void GameScene::ShowRelieve(bool bShow)
 	}
 	else
 	{
-		if (this->m_relieveLayer)
+		if (m_relieveLayer)
 		{
-			this->RemoveChild(this->m_relieveLayer, true);
-			this->m_relieveLayer = NULL;
-			this->m_tlRelieve = NULL;
+			RemoveChild(m_relieveLayer, true);
+			m_relieveLayer = NULL;
+			m_tlRelieve = NULL;
 			SetUIShow(false);
 		}
 	}
@@ -2125,7 +2124,7 @@ void GameScene::ShowPaiHang(const std::vector<std::string>& vec_str,
 //	{
 //		//GameUIRequest *request = new GameUIRequest;
 ////		request->Initialization();
-////		this->AddChild(request, UILAYER_Z, UILAYER_REQUEST_LIST_TAG);
+////		AddChild(request, UILAYER_Z, UILAYER_REQUEST_LIST_TAG);
 ////		SetUIShow(true);
 //		
 //		m_anilayerRequest->SetCurrentAnimation(0);
@@ -2176,10 +2175,10 @@ void GameScene::OnDialogButtonClick(NDUIDialog* dialog,
 //		dialog->Close();
 //		//m_dlgNPC = NULL;
 //		SetUIShow(false);
-//	} else if (tagDlg == this->m_dlgTaskAwardItemTag) {
+//	} else if (tagDlg == m_dlgTaskAwardItemTag) {
 //		Item* selItem = NULL;
-//		if (buttonIndex < this->m_vTaskAwardItem.size())
-//			selItem = this->m_vTaskAwardItem.at(buttonIndex);
+//		if (buttonIndex < m_vTaskAwardItem.size())
+//			selItem = m_vTaskAwardItem.at(buttonIndex);
 //		NDAsssert(selItem != NULL);
 //		
 //		if (selItem)
@@ -2187,28 +2186,28 @@ void GameScene::OnDialogButtonClick(NDUIDialog* dialog,
 //			m_curSelTaskAwardItemIndex = buttonIndex;
 //			
 //			dialog->Close();
-//			this->m_dlgTaskAwardItemTag = -1;
+//			m_dlgTaskAwardItemTag = -1;
 //			
-//			this->m_dlgTaskAwardItemConfirmTag = 
+//			m_dlgTaskAwardItemConfirmTag = 
 //				GlobalDialogObj.Show(this, 
 //									selItem->getItemName().c_str(),
 //									selItem->makeItemDes(false, false).c_str(), NULL, NDCommonCString("return"), NDCommonCString("GetAward"), NULL);
 //		}
-//	} else if (tagDlg == this->m_dlgTaskAwardItemConfirmTag) {
+//	} else if (tagDlg == m_dlgTaskAwardItemConfirmTag) {
 //		dialog->Close();
-//		this->m_dlgTaskAwardItemConfirmTag = -1;
+//		m_dlgTaskAwardItemConfirmTag = -1;
 //		if (buttonIndex == 0) {
 //			// 重新显示物品选择对话�??
-//			this->ReShowTaskAwardItemOpt();
+//			ReShowTaskAwardItemOpt();
 //		} else if (buttonIndex == 1) {
 //			// 发�??�物品�??�项,同时释放资源
 //			NDUISynLayer::Show();
 //			NDTransData bao(_MSG_TASK_ITEM_OPT);
-//			bao << (Byte)this->m_curSelTaskAwardItemIndex;
+//			bao << (Byte)m_curSelTaskAwardItemIndex;
 //			
 //			// SEND_DATA(bao);
 //			
-//			for (VEC_ITEM_IT it = this->m_vTaskAwardItem.begin(); it != m_vTaskAwardItem.end(); it++) {
+//			for (VEC_ITEM_IT it = m_vTaskAwardItem.begin(); it != m_vTaskAwardItem.end(); it++) {
 //				SAFE_DELETE(*it);
 //			}
 //			m_vTaskAwardItem.clear();
@@ -2498,10 +2497,11 @@ std::string GameScene::GetTLShareSelText(NDUINode* uinode)
 
 void GameScene::ReShowTaskAwardItemOpt()
 {
+#if 0
 	std::vector < std::string > strOP;
 
-	for (VEC_ITEM_IT it = this->m_vTaskAwardItem.begin();
-			it != this->m_vTaskAwardItem.end(); it++)
+	for (VEC_ITEM_IT it = m_vTaskAwardItem.begin();
+			it != m_vTaskAwardItem.end(); it++)
 	{
 		if (!*it)
 		{
@@ -2528,36 +2528,39 @@ void GameScene::ReShowTaskAwardItemOpt()
 		strOP.push_back(sb.str());
 	}
 
-	this->m_dlgTaskAwardItemTag = GlobalDialogObj.Show(this, NULL, NULL, NULL,
+	m_dlgTaskAwardItemTag = GlobalDialogObj.Show(this, NULL, NULL, NULL,
 			strOP);
+#endif
 }
 
 void GameScene::ShowTaskAwardItemOpt(Task* task)
 {
-	NDAsssert(task != NULL);
+	#if 0
+NDAsssert(task != NULL);
 
 	if (task->award_item1 != 0)
 	{
 		Item *item = new Item(task->award_item1);
 		item->m_nAmount = task->award_num1;
-		this->m_vTaskAwardItem.push_back(item);
+		m_vTaskAwardItem.push_back(item);
 	}
 
 	if (task->award_item2 != 0)
 	{
 		Item *item = new Item(task->award_item2);
 		item->m_nAmount = task->award_num2;
-		this->m_vTaskAwardItem.push_back(item);
+		m_vTaskAwardItem.push_back(item);
 	}
 
 	if (task->award_item3 != 0)
 	{
 		Item *item = new Item(task->award_item3);
 		item->m_nAmount = task->award_num3;
-		this->m_vTaskAwardItem.push_back(item);
+		m_vTaskAwardItem.push_back(item);
 	}
 
-	this->ReShowTaskAwardItemOpt();
+	ReShowTaskAwardItemOpt();
+#endif
 }
 
 void GameScene::ShowNPCDialog(bool bShowLeaveBtn/*=true*/)
@@ -2790,7 +2793,7 @@ void GameScene::onClickSyndicate()
 //			}
 //			string newPwd1 = customView->GetEditText(1);
 //			string newPwd2 = customView->GetEditText(2);
-//			if (!this->checkNewPwd(newPwd1)) {
+//			if (!checkNewPwd(newPwd1)) {
 //				customView->ShowAlert(NDCommonCString("OnlyAllowAlphaNum"));
 //				return false;
 //			}
@@ -3226,7 +3229,7 @@ void GameScene::TeamRefreh(bool newJoin)
 	//	
 	//	m_quickTeam->Initialization();
 	//	
-	//	this->AddUIChild(m_quickTeam);
+	//	AddUIChild(m_quickTeam);
 	//}
 	//
 	//m_quickTeam->Refresh();
@@ -3413,7 +3416,7 @@ bool GameScene::RemoveNpcNode( NDNode* node )
 
 bool GameScene::AddNodeToMap( NDNode* node )
 {
-	NDNode* pkNode = this->GetChild(MAPLAYER_TAG);
+	NDNode* pkNode = GetChild(MAPLAYER_TAG);
 	//asssert(pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer));
 	NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
 
@@ -3429,7 +3432,7 @@ bool GameScene::AddNodeToMap( NDNode* node )
 
 bool GameScene::RemoveNodeFromMap( NDNode* node )
 {
-	NDNode* pkNode = this->GetChild(MAPLAYER_TAG);
+	NDNode* pkNode = GetChild(MAPLAYER_TAG);
 	//asssert(pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer));
 	NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
 

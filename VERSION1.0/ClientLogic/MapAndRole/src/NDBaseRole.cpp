@@ -24,6 +24,7 @@
 #include "NDUtility.h"
 #include "define.h"
 #include "CCString.h"
+#include "NDDebugOpt.h"
 
 using namespace NDEngine;
 
@@ -201,40 +202,47 @@ int NDBaseRole::getFlagId(int index)
 
 void NDBaseRole::DrawRingImage(bool bDraw)
 {
-	if (IsKindOfClass (RUNTIME_CLASS(NDNpc))){
-	NDNpc* npc = (NDNpc*) this;
-	if (!npc->IsActionOnRing())
+	//change by tangziqin ²»ÐèÒªµ÷ÓÃ
+	return;
+#if 0
+	if (IsKindOfClass (RUNTIME_CLASS(NDNpc)))
 	{
-		return;
-	}
-}
-
-if (m_bFocus && bDraw)
-{
-	if (m_pkRingPic == NULL)
-	{
-		m_pkRingPic = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
-	}
-	CGSize sizeRing = m_pkRingPic->GetSize();
-
-	if (GetParent())
-	{
-		NDLayer *layer = (NDLayer*) GetParent();
-		CGSize sizemap = layer->GetContentSize();
-		if (!m_pkRidePet)
+		NDNpc* npc = (NDNpc*) this;
+		if (!npc->IsActionOnRing())
 		{
-			//m_picRing->DrawInRect(CGRectMake(GetPosition().x-13-8, GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
-		}
-		else
-		{
-			//m_picRing->DrawInRect(CGRectMake(ridepet->GetPosition().x-13-8, ridepet->GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
+			return;
 		}
 	}
-}
+
+	if (m_bFocus && bDraw)
+	{
+		if (m_pkRingPic == NULL)
+		{
+			m_pkRingPic = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
+		}
+		CGSize sizeRing = m_pkRingPic->GetSize();
+
+		if (GetParent())
+		{
+			NDLayer *layer = (NDLayer*) GetParent();
+			CGSize sizemap = layer->GetContentSize();
+			if (!m_pkRidePet)
+			{
+				//m_picRing->DrawInRect(CGRectMake(GetPosition().x-13-8, GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
+			}
+			else
+			{
+				//m_picRing->DrawInRect(CGRectMake(ridepet->GetPosition().x-13-8, ridepet->GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
+			}
+		}
+	}
+#endif
 }
 
 bool NDBaseRole::OnDrawBegin(bool bDraw)
 {
+	if (!NDDebugOpt::getDrawRoleEnabled()) return false;
+
 	NDNode *node = GetParent();
 	CGSize sizemap;
 
@@ -278,7 +286,7 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 		}
 	}
 
-//	updateRidePetEffect(); ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+//	updateRidePetEffect(); ///<ÁÙÊ±ÐÔ×¢ÊÍ
 
 // 	if (m_pkEffectRidePetAniGroup)
 // 	{
@@ -352,11 +360,11 @@ void NDBaseRole::setMoveActionWithRidePet()
 	AnimationListObj.moveAction(TYPE_RIDEPET, m_pkRidePet, m_bFaceRight);// Æï³èÒÆ¶¯
 	if(FACE_LEFT == m_bFaceRight)
 	{
-		this->SetCurrentAnimation(this->m_nPetRunAction, false);
+		SetCurrentAnimation(m_nPetRunAction, false);
 	}
 	else if(FACE_RIGHT == m_bFaceRight)
 	{
-		this->SetCurrentAnimation(this->m_nPetRunAction, true);
+		SetCurrentAnimation(m_nPetRunAction, true);
 	}
 // 	switch (m_pkRidePet->iType)
 // 	{
@@ -398,11 +406,11 @@ void NDBaseRole::setStandActionWithRidePet()
 	AnimationListObj.standAction(TYPE_RIDEPET, m_pkRidePet, m_bFaceRight);
 	if(FACE_LEFT == m_bFaceRight)
 	{
-		this->SetCurrentAnimation(this->m_nPetStandAction, false);
+		SetCurrentAnimation(m_nPetStandAction, false);
 	}
 	else if(FACE_RIGHT == m_bFaceRight)
 	{
-		this->SetCurrentAnimation(this->m_nPetStandAction, true);
+		SetCurrentAnimation(m_nPetStandAction, true);
 	}
 
 	// ×°±¸½çÃæ¡¢ÊôÐÔ½çÃæ¡¢Õ½¶·ÖÐ£¬ÈËÒªÕ¾Á¢×´Ì¬
@@ -498,6 +506,7 @@ void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 //	SetEquipment(armor, 0);//ÐØ¼×
 
 	//Load Animation Group
+
 	int model_id = lookface % 1000;
 	if(0 == model_id)
 		model_id = lookface / 1000000;
@@ -506,12 +515,8 @@ void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 	_snprintf(sprFilePath, 256, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(), model_id);
 	Initialization(sprFilePath);
 
-//	if (sex % 2 == SpriteSexMale) 
-	//NSString* aniPath = [NSString stringWithUTF8String:NDPath::GetAnimationPath().c_str()];  ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-//	Initialization([[NSString stringWithFormat:@"%@model_%d.spr",aniPath,model_id] UTF8String] ); ///<ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-//	else 
-//		Initialization(MANUELROLE_HUMAN_FEMALE);
-
+//  NSString* aniPath = [NSString stringWithUTF8String:NDPath::GetAnimationPath().c_str()];  
+//	Initialization([[NSString stringWithFormat:@"%@model_%d.spr",aniPath,model_id] UTF8String] );
 	m_bFaceRight = m_nDirect == 2;
 	//SetFaceImageWithEquipmentId (m_bFaceRight);
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
@@ -522,12 +527,12 @@ void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
 void NDBaseRole::SetEquipment(int equipmentId, int quality)
 {
 	/***
-	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	 * ÁÙÊ±ÐÔ×¢ÊÍ
 	 */
 //	if (equipmentId <= 0 ) 
 //		return;
 //	
-//	NSString* imagePath = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+//	NSString imagePath = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 //	CCString* imagePath = new CCString("");
 //	
 //	if (equipmentId >= 200 && equipmentId < 10000) //ÎäÆ÷
@@ -646,30 +651,30 @@ void NDBaseRole::SetEquipment(int equipmentId, int quality)
 void NDBaseRole::SetRidePet(int lookface, int stand_action, int run_action, int acc)
 {
 	SAFE_DELETE_NODE(m_pkRidePet);
-	this->m_nPetStandAction = stand_action;
-	this->m_nPetRunAction = run_action;
-	this->m_nPetLookface = lookface;
+	m_nPetStandAction = stand_action;
+	m_nPetRunAction = run_action;
+	m_nPetLookface = lookface;
 	m_nAccLevel = acc;
 	if (lookface != 0)
 	{
 		m_pkRidePet = new NDRidePet;
 		m_pkRidePet->Initialization(lookface);
 		//ridepet->quality = quality;
-		m_pkRidePet->SetPositionEx(this->GetPosition());
-		this->m_bIsRide = true;
-		//if (this->IsKindOfClass(RUNTIME_CLASS(NDManualRole))) 
+		m_pkRidePet->SetPositionEx(GetPosition());
+		m_bIsRide = true;
+		//if (IsKindOfClass(RUNTIME_CLASS(NDManualRole))) 
 		//{
-		//			if (this->GetParent() && this->GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+		//			if (GetParent() && GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		//			{
-		//				this->SetAction(false);
+		//				SetAction(false);
 		//			}
 		//m_pkRidePet->SetOwner(this);
-		//ridepet->SetScale(this->GetScale());
+		//ridepet->SetScale(GetScale());
 		setStandActionWithRidePet();
 	}
 	else
 	{
-		this->m_bIsRide = false;
+		m_bIsRide = false;
 	}
 	//}
 }
@@ -814,9 +819,6 @@ void NDBaseRole::SetHairImageWithEquipmentId(int equipmentId)
 {
 	if (equipmentId >= 10000 && equipmentId < 10400)
 	{
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 */
 // 		NSString* hairImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		hairImageName = [NSString stringWithFormat:@"%@%d", hairImageName, equipmentId];
 // 		if (sex % 2 == SpriteSexMale) 
@@ -849,10 +851,6 @@ void NDBaseRole::SetHairImageWithEquipmentId(int equipmentId)
 
 void NDBaseRole::SetFaceImageWithEquipmentId(int equipmentId)
 {
-	/**
-	 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-	 */
-
 // 	NSString* faceImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 	faceImageName = [NSString stringWithFormat:@"%@skin.png", faceImageName];	
 // 	//faceImageName = [NSString stringWithFormat:@"%@skin@%d.png", faceImageName, skinColor];
@@ -867,10 +865,6 @@ void NDBaseRole::SetExpressionImageWithEquipmentId(int equipmentId)
 {
 	if (equipmentId >= 10400 && equipmentId < 10600)
 	{
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 */
-
 // 		NSString* expressionImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		expressionImageName = [NSString stringWithFormat:@"%@%d.png", expressionImageName, equipmentId];	
 // 		SetExpressionImage([expressionImageName UTF8String]);
@@ -885,17 +879,9 @@ void NDBaseRole::SetCapImageWithEquipmentId(int equipmentId)
 {
 	if (equipmentId >= 10600 && equipmentId < 11200)
 	{
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 * begin
-		 */
 // 		NSString* capImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		capImageName = [NSString stringWithFormat:@"%@%d.png", capImageName, equipmentId];	
 // 		SetCapImage([capImageName UTF8String]);
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 * end
-		 */
 
 		char capImageName[256];
 		_snprintf(capImageName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId);
@@ -907,17 +893,9 @@ void NDBaseRole::SetArmorImageWithEquipmentId(int equipmentId)
 {
 	if (equipmentId >= 11200 && equipmentId < 11800)
 	{
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 * begin
-		 */
 // 		NSString* armorImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		armorImageName = [NSString stringWithFormat:@"%@%d.png", armorImageName, equipmentId];	
 // 		SetArmorImage([armorImageName UTF8String]);
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 * end
-		 */
 
 		char armorImageName[256];
 		_snprintf(armorImageName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId);
@@ -930,50 +908,41 @@ void NDBaseRole::SetCloakImageWithEquipmentId(int equipmentId)
 	/*
 	 if (equipmentId >= 11200 && equipmentId < 11800) 
 	 {
-	 NSString* cloakImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+	 NSString cloakImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 	 cloakImageName = [NSString stringWithFormat:@"%@%d.png", cloakImageName, equipmentId];	
 	 SetCloakImage([cloakImageName UTF8String]);
 	 }
 	 */
 	if (equipmentId >= 30000 && equipmentId < 40000)
 	{
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 * begin
-		 */
-
 // 		NSString* cloakName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		cloakName = [NSString stringWithFormat:@"%@%d.png", cloakName, equipmentId+7];	
 // 		SetCloakImage([cloakName UTF8String]);
 // 		
 // 		
-// 		NSString* leftShoulderName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString leftShoulderName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		leftShoulderName = [NSString stringWithFormat:@"%@%d.png", leftShoulderName, equipmentId+1];	
 // 		SetLeftShoulderImage([leftShoulderName UTF8String]);
 // 		
-// 		NSString* rightShoulderName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString rightShoulderName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		rightShoulderName = [NSString stringWithFormat:@"%@%d.png", rightShoulderName, equipmentId+2];	
 // 		SetRightShoulderImage([rightShoulderName UTF8String]);
 // 		
-// 		NSString* skirtStandName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString skirtStandName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		skirtStandName = [NSString stringWithFormat:@"%@%d.png", skirtStandName, equipmentId+3];	
 // 		SetSkirtStandImage([skirtStandName UTF8String]);
 // 		
-// 		NSString* skirtWalkName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString skirtWalkName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		skirtWalkName = [NSString stringWithFormat:@"%@%d.png", skirtWalkName, equipmentId+4];	
 // 		SetSkirtWalkImage([skirtWalkName UTF8String]);
 // 		
-// 		NSString* skirtSitName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString skirtSitName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		skirtSitName = [NSString stringWithFormat:@"%@%d.png", skirtSitName, equipmentId+5];	
 // 		SetSkirtSitImage([skirtSitName UTF8String]);
 // 		
-// 		NSString* skirtLiftLegName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
+// 		NSString skirtLiftLegName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 		skirtLiftLegName = [NSString stringWithFormat:@"%@%d.png", skirtLiftLegName, equipmentId+6];	
 // 		SetSkirtLiftLegImage([skirtLiftLegName UTF8String]);
-		/**
-		 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
-		 * end
-		 */
 
 		char cloakName[256];
 		_snprintf(cloakName, 256, "%s%d.png", NDPath::GetImagePath().c_str(), equipmentId+7);
@@ -1099,7 +1068,6 @@ void NDBaseRole::SetHair(int style, int color)
 	}
 	m_nHairColor = color;
 
-// 	NSString* hairImageName = [NSString stringWithUTF8String:NDPath::GetImagePath().c_str()];
 // 	hairImageName = [NSString stringWithFormat:@"%@%d", hairImageName, m_nHair];
 // 	if (sex % 2 == SpriteSexMale) 
 // 	{
@@ -1309,6 +1277,10 @@ void NDBaseRole::SetShadowOffset(int iX, int iY)
 
 void NDBaseRole::HandleShadow(CGSize parentsize)
 {
+	//change by tangziqin ²»´æÔÚshadow.pngµÄÍ¼Æ¬
+	//return;
+
+#if 0
 	if (!m_bShowShadow)
 	{
 		return;
@@ -1339,16 +1311,19 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 	int x = m_kPosition.x - DISPLAY_POS_X_OFFSET;
 	int y = m_kPosition.y - DISPLAY_POS_Y_OFFSET;
 
-// 	pic->DrawInRect(
-// 			CGRectMake(x + m_iShadowOffsetX,
-// 					y + m_iShadowOffsetY
-// 							+ NDDirector::DefaultDirector()->GetWinSize().height
-// 							- parentsize.height, sizeShadow.width,
-// 					sizeShadow.height));
+	pic->DrawInRect(
+			CGRectMake(x + m_iShadowOffsetX,
+					y + m_iShadowOffsetY
+							+ NDDirector::DefaultDirector()->GetWinSize().height
+							- parentsize.height, sizeShadow.width,
+					sizeShadow.height));
+#endif
 
+#if 1
 	pic->DrawInRect(
 		CGRectMake(x + m_iShadowOffsetX, y + m_iShadowOffsetY,
 		sizeShadow.width, sizeShadow.height));
+#endif
 }
 
 // void NDBaseRole::SetNormalAniGroup(int nLookface)
@@ -1441,7 +1416,7 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 // 
 // bool NDEngine::NDBaseRole::DrawSubAnimation(NDSubAniGroup& kSag)
 // {
-// 	NDNode* pkLayer = this->GetParent();
+// 	NDNode* pkLayer = GetParent();
 // 
 // 	if (!pkLayer)
 // 	{

@@ -50,7 +50,7 @@ public:
 
 	CC_SYNTHESIZE_READONLY(CCTexture2D*,m_pkTexture,Texture);
 	
-	unsigned int GetTextureRetain();
+	CCTexture2D* GetTextureRetain();
 
 protected:
 private:
@@ -64,8 +64,8 @@ class NDPicture: public NDObject
 public:
 
 	void Initialization(const char* imageFile);
-	//void Initialization(vector<const char*>& vImgFiles);
-	//void Initialization(vector<const char*>& vImgFiles, vector<CGRect>& vImgCustomRect, vector<CGPoint>&vOffsetPoint);
+	void Initialization(vector<const char*>& vImgFiles);
+	void Initialization(vector<const char*>& vImgFiles, vector<CGRect>& vImgCustomRect, vector<CGPoint>&vOffsetPoint);
 	void Initialization(const char* imageFile, int hrizontalPixel,
 			int verticalPixel = 0);
 
@@ -160,7 +160,7 @@ public:
 	NDPicture* AddPicture(const char* imageFile, int hrizontalPixel,
 			int verticalPixel = 0, bool gray = false);
 	CCTexture2D* AddTexture(const char* pszImageFile);
-
+	void RemoveTexture(CCTexture2D* tex);
 	void RemovePicture(const char* imageFile);
 
 	void Recyle();

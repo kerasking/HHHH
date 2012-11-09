@@ -37,13 +37,13 @@ local ID_40_40_16_CTRL_OBJECT_BUTTON_5			= 5;
 local ID_40_40_16_CTRL_OBJECT_BUTTON_1			= 1;
 --武器信息tag
 local ID_WEAPON_CTRL_TEXT_WEAPON_NAME			= 84;
-local ID_WEAPON_CTRL_EQUIP_BUTTON_SPIRIT6		= 10;
-local ID_WEAPON_CTRL_EQUIP_BUTTON_SPIRIT5		= 9;
-local ID_WEAPON_CTRL_EQUIP_BUTTON_SPIRIT4		= 8;
-local ID_WEAPON_CTRL_EQUIP_BUTTON_SPIRIT3		= 7;
-local ID_WEAPON_CTRL_EQUIP_BUTTON_SPIRIT2		= 5;
-local ID_WEAPON_CTRL_EQUIP_BUTTON_SPIRIT1		= 4;
-local ID_WEAPON_CTRL_SPRITE_9			        = 1;
+local ID_WEAPON_CTRL_OBJECT_BUTTON_SPIRIT6		= 10;
+local ID_WEAPON_CTRL_OBJECT_BUTTON_SPIRIT5		= 9;
+local ID_WEAPON_CTRL_OBJECT_BUTTON_SPIRIT4		= 8;
+local ID_WEAPON_CTRL_OBJECT_BUTTON_SPIRIT3		= 7;
+local ID_WEAPON_CTRL_OBJECT_BUTTON_SPIRIT2		= 5;
+local ID_WEAPON_CTRL_OBJECT_BUTTON_SPIRIT1		= 4;
+local ID_WEAPON_CTRL_PICTURE_WEAPON				= 1;
 --器灵信息tag
 local ID_SPIRIT_PROMPT_CTRL_BUTTON_CLOSE				= 76;
 local ID_SPIRIT_PROMPT_CTRL_BUTTON_SELL					= 10;
@@ -77,21 +77,17 @@ local ID_RECAST_CTRL_PICTURE_BG					= 1;
 local TAG_NIMBUS_BG     = 990               --器灵背景tag
 local TAG_NIMBUS_INFO   = 991               --器灵信息tag
 local TAG_NIMBUS_RECAST = 992               --器灵重铸tag
-local TAG_MOUSE         = 993               --鼠标图片tag 
 
 --自定义数据
 local selectItemId = 0;
-local dragWeapId = 0;
 local selectPetId = 0;
 local isWear = true;
 local choseTarget = {};
 local partsBagViewId = 1;
 local MAX_PARTS_NUM = 16;
 local sealIconFileName = "icon_role.png";
-local weapAniPath = "weapQLAni.spr";
-local aniSpace = 2;
 --table数据
-local CHIPS_LIST = {1,3,9};
+local REIKI_LIST = {1,3,9};
 
 local TAG_ATTR_LIST = 
 {
@@ -134,20 +130,20 @@ local TAG_CHECK_BUTTON_LIST =
   ID_RECAST_CTRL_CHECK_BUTTON_LOCK3
 };  
 
-local TAG_WEAPON_EQUIP_LIST = 
+local TAG_WEAPON_BUTTON_LIST = 
 {
-  ID_WEAPON_CTRL_EQUIP_BUTTON_SPIRIT1,
-  ID_WEAPON_CTRL_EQUIP_BUTTON_SPIRIT2,
-  ID_WEAPON_CTRL_EQUIP_BUTTON_SPIRIT3,
-  ID_WEAPON_CTRL_EQUIP_BUTTON_SPIRIT4,
-  ID_WEAPON_CTRL_EQUIP_BUTTON_SPIRIT5,
-  ID_WEAPON_CTRL_EQUIP_BUTTON_SPIRIT6
+  ID_WEAPON_CTRL_OBJECT_BUTTON_SPIRIT1,
+  ID_WEAPON_CTRL_OBJECT_BUTTON_SPIRIT2,
+  ID_WEAPON_CTRL_OBJECT_BUTTON_SPIRIT3,
+  ID_WEAPON_CTRL_OBJECT_BUTTON_SPIRIT4,
+  ID_WEAPON_CTRL_OBJECT_BUTTON_SPIRIT5,
+  ID_WEAPON_CTRL_OBJECT_BUTTON_SPIRIT6
 };
 local sellMoney ={10000,20000,50000};
 local sellLiQi ={1,3,9};
 
 --临时数据
-local maxNimbusNum = 6;
+local maxNimbusNum = 5;
 
 function p.LoadUI()
   LogInfo("PlayerNimbusUI.LoadUI()");
@@ -243,38 +239,27 @@ function p.LoadUI()
 	      weapView:SetViewId(v);
 		  local weapId = ItemFunc.GetItemIdByPosition(ItemPet.GetEquipItemList(nPlayerId, v),Item.POSITION_EQUIP_2);
 		  uiLoad:Load("SM_QL_Weapon.ini", weapView, p.OnUIEvenWeap, 0, 0);
-		  local weapSprite = RecursivUISprite(weapView,{ID_WEAPON_CTRL_SPRITE_9});
 		  if weapId ~= 0 then
-		    local itemType = Item.GetItemInfoN(weapId,Item.ITEM_TYPE);
 			local weapNameLabel = GetLabel(weapView,ID_WEAPON_CTRL_TEXT_WEAPON_NAME);
 			if CheckP(weapNameLabel) then
+			  local itemType = Item.GetItemInfoN(weapId,Item.ITEM_TYPE);
 			  local itemName = ItemFunc.GetName(itemType)
-			  local nEnhance = Item.GetItemInfoN(weapId, Item.ITEM_ADDITION);
-			  if nEnhance > 0 then
-			    itemName = itemName .." ".. EquipStrFunc.GetLevelName(nEnhance);
-			  end
 			  weapNameLabel:SetFontColor(ItemUI.GetEquipColor(itemType));
 			  weapNameLabel:SetText(itemName);
 			end
+			
 			local idlist = ItemInlay.GetQiLinItemList(weapId);
-			if CheckP(weapSprite) then
-			  weapSprite:ChangeSprite(GetSMAniPath(weapAniPath));
-			  local nJobReq	= ConvertN(ItemFunc.GetJobReq(itemType));
-			  weapSprite:SetAnimation(nJobReq-1,false);
-			  local curFrame = table.getn(idlist) * aniSpace;
-			  weapSprite:SetPlayFrameRange(curFrame,curFrame);
-			end 
 			for i, v in ipairs(idlist) do
 			  local itemType = Item.GetItemInfoN(v,Item.ITEM_TYPE);
 	          local index = Num6(itemType);
-			  local weapButton = GetEquipButton(weapView,TAG_WEAPON_EQUIP_LIST[index]);
+			  local weapButton = GetItemButton(weapView,TAG_WEAPON_BUTTON_LIST[index]);
 			  if CheckP(weapButton) then
 			    weapButton:SetShowAdapt(true);
 				weapButton:ChangeItem(v);
 			  end
 			end
-			for i, v in ipairs(TAG_WEAPON_EQUIP_LIST) do
-			local weapButton = GetEquipButton(weapView,v);
+			for i, v in ipairs(TAG_WEAPON_BUTTON_LIST) do
+			local weapButton = GetItemButton(weapView,v);
 			  if CheckP(weapButton) then
 			    if i > maxNimbusNum then
 				  local pic = EmailList.GetPicByFileName(sealIconFileName);
@@ -285,8 +270,13 @@ function p.LoadUI()
 			  end
 			end
           else
-			if CheckP(weapSprite) then
-			  weapSprite:SetVisible(false);
+			local weapNameLabel = GetLabel(weapView,ID_WEAPON_CTRL_TEXT_WEAPON_NAME);
+			if CheckP(weapNameLabel) then
+			  weapNameLabel:SetText("没有装备武器");
+			end
+			local weapImage = GetImage(weapView,ID_WEAPON_CTRL_PICTURE_WEAPON);
+			if CheckP(weapImage) then
+			  weapImage:SetVisible(false);
 			end  
 		  end
 	      weaponContainter:AddView(weapView);	 	  
@@ -333,48 +323,13 @@ function p.LoadUI()
 	recastLayer:SetVisible(false);
 	layer:AddChildZ(recastLayer, 3);
   end
- 
-  --鼠标图片初始化
-  local imgMouse = createNDUIImage();
-  if CheckP(imgMouse) then
-    imgMouse:Init();
-    imgMouse:SetTag(TAG_MOUSE);
-    layer:AddChildZ(imgMouse,4); 
-  end
-    
+  
+  
 
   uiLoad:Free();  
   
   p.RefreshPartsBag();
 
-end
-
-function SetMouse(pic, moveTouch)
-  LogInfo("SetMouse");
-  if not CheckStruct(moveTouch) then
-	LogInfo("SetMouse invalid arg");
-	return;
-  end	
-  local scene = GetSMGameScene();	
-  if scene == nil then
-	return;
-  end
-  local idlist = {};
-  local imgMouse = RecursiveImage(scene, {NMAINSCENECHILDTAG.PlayerNimbusUI,TAG_MOUSE});
-  if not CheckP(imgMouse) then
-	LogInfo("not CheckP(imgMouse)");
-	return;
-  end
-  imgMouse:SetPicture(pic, true);
-  if CheckP(pic) then
-	local size		= pic:GetSize();
-	local nMoveX	= moveTouch.x - size.w / 2 - RectUILayer.origin.x;
-	local nMoveY	= moveTouch.y - size.h / 2 - RectUILayer.origin.y;
-	imgMouse:SetFrameRect(CGRectMake(nMoveX, nMoveY, size.w, size.h));
-  else
-	LogInfo("imgMouse:SetFrameRect(RectZero)");
-	imgMouse:SetFrameRect(RectZero());
-  end
 end
 
 function GetNimbusInfoLayer()
@@ -412,15 +367,16 @@ function ShowRecastLayer()
   if CheckP(nimbusRecastLayer) then
     nimbusRecastLayer:SetVisible(true);
     local itemType = Item.GetItemInfoN(selectItemId, Item.ITEM_TYPE);
-	local nQulity = ItemFunc.GetQuality(itemType);
+	
 	local j = 1;
 	for i=1, 3 do
 	  local nAttrType = ConvertN(ItemFunc.GetAttrType(selectItemId, i - 1));
 	  if nAttrType > Item.ATTR_TYPE_NONE then
-	    local str = GetAttrDec(nQulity,nAttrType,selectItemId,i - 1);
+		local nVal = ConvertN(ItemFunc.GetAttrTypeVal(selectItemId, i - 1));
+		local desc = ItemFunc.GetAttrTypeDesc(nAttrType);
+		local str = desc.."+"..nVal;	
 		local attrInfoLabel = GetLabel(nimbusRecastLayer,TAG_RECAST_ATTR_LIST[j]);
 		if CheckP(attrInfoLabel) then
-		   attrInfoLabel:SetFontColor(ItemUI.GetQLValueColor(nQulity,nAttrType,selectItemId,i - 1));
 		   attrInfoLabel:SetText(str);  
 		end
 		local checkBox = RecursiveCheckBox(nimbusRecastLayer,{TAG_CHECK_BUTTON_LIST[j]});
@@ -435,7 +391,6 @@ function ShowRecastLayer()
 	for i=j, 3 do
 	  local attrInfoLabel = GetLabel(nimbusRecastLayer,TAG_RECAST_ATTR_LIST[i]);
 	  if CheckP(attrInfoLabel) then
-	    attrInfoLabel:SetFontColor(ccc4(255, 255,255, 255));
 	    attrInfoLabel:SetText("未激活");
 	  end
 	  local checkBox = RecursiveCheckBox(nimbusRecastLayer,{TAG_CHECK_BUTTON_LIST[i]});
@@ -479,8 +434,7 @@ function ShowNimbusInfo(itemId,nIsWear)
 	
     local itemType = Item.GetItemInfoN(itemId, Item.ITEM_TYPE);
     local itemName = ItemFunc.GetName(itemType);
-    local nQulity = ItemFunc.GetQuality(itemType);
- 
+
 	local itemNameLabel = GetLabel(nimbusInfoLayer,ID_SPIRIT_PROMPT_CTRL_TEXT_SPIRIT_NAME);
     if CheckP(itemNameLabel) then		
   	  itemNameLabel:SetFontColor(ItemUI.GetQLColor(itemType));  
@@ -492,9 +446,10 @@ function ShowNimbusInfo(itemId,nIsWear)
       local itemAttrLabel = GetLabel(nimbusInfoLayer,TAG_ATTR_LIST[j]);
 	  if CheckP(itemAttrLabel) then
 	    local nAttrType = ConvertN(ItemFunc.GetAttrType(itemId, i - 1));
-		if nAttrType > Item.ATTR_TYPE_NONE then		
-		  local str = GetAttrDec(nQulity,nAttrType,itemId,i-1);	  
-		  itemAttrLabel:SetFontColor(ItemUI.GetQLValueColor(nQulity,nAttrType,itemId,i - 1));
+		if nAttrType > Item.ATTR_TYPE_NONE then
+		  local nVal = ConvertN(ItemFunc.GetAttrTypeVal(itemId, i - 1));
+		  local desc = ItemFunc.GetAttrTypeDesc(nAttrType);
+		  local str = desc.."+"..nVal;
 		  itemAttrLabel:SetText(str);
 		  j = j + 1;
 		end
@@ -516,9 +471,9 @@ function ShowNimbusInfo(itemId,nIsWear)
 		if CheckP(weaponContainter) then
 		  local curPetView = weaponContainter:GetBeginView();
 		  if CheckP(curPetView) then
-			local weapSprite= RecursivUISprite(curPetView,{ID_WEAPON_CTRL_SPRITE_9});
-			if CheckP(weapSprite) then
-			  if weapSprite:IsVisibled() then
+			local weapImage = GetImage(curPetView,ID_WEAPON_CTRL_PICTURE_WEAPON);
+			if CheckP(weapImage) then
+			  if weapImage:IsVisibled() then
 			    itemWearButton:SetTitle("装备");
 			  else
 			    itemWearButton:SetVisible(false);	
@@ -537,42 +492,6 @@ function ShowNimbusInfo(itemId,nIsWear)
 	end
 
   end
-end
-
-function GetAttrDec(nQulity,nAttrType,itemId,index)
-  local attrDec = "";
-  local nVal = ConvertN(ItemFunc.GetAttrTypeVal(itemId, index));
-  local desc = ItemFunc.GetAttrTypeDesc(nAttrType);
-  local isPercent = false;
-  if ItemFunc.IsPercent(nAttrType) then
-    isPercent = true;
-  end
-  attrDec = desc.."+"..nVal;
-  if isPercent then
-    attrDec = attrDec.."%";
-  end
-  local partsGrowIdList = GetDataBaseIdList("parts_grow");
-  for i, v in ipairs(partsGrowIdList) do
-	local type = GetDataBaseDataN("parts_grow",v,DB_PARTS_GROW.TYPE);
-	local attrType = GetDataBaseDataN("parts_grow",v,DB_PARTS_GROW.ATTR_TYPE);
-	if type == nQulity and attrType == nAttrType then
-	  local attrLow =GetDataBaseDataN("parts_grow",v,DB_PARTS_GROW.ATTR_LOW);
-	  local attrTall =GetDataBaseDataN("parts_grow",v,DB_PARTS_GROW.ATTR_TALL);
-	  if nVal == attrTall then
-	    attrDec = attrDec .. "(满)";
-	  else
-		local attrLowStr = SafeN2S(attrLow);
-	    local attrTallStr = SafeN2S(attrTall);
-	    if isPercent then
-          attrLowStr = attrLowStr.."%";
-		  attrTallStr = attrTallStr.."%";
-        end
-	    attrDec = attrDec .. "("..attrLowStr.."-"..attrTallStr..")";
-	  end
-	  break;
-	end
-  end
-  return attrDec;
 end
 
 function CloseRecastLayer()
@@ -625,10 +544,10 @@ function p.DelInlayFrameWeap(idPet,idItem)
   end
   local petView = GetPetView(idPet);
   if CheckP(petView) then
-    for i, v in ipairs(TAG_WEAPON_EQUIP_LIST) do
-	  local weapButton = GetEquipButton(petView,v);
-	  if CheckP(weapButton) and idItem == weapButton:GetItemId() then
-	    weapButton:ChangeItem(0);
+    for i, v in ipairs(TAG_WEAPON_BUTTON_LIST) do
+	  local itemButton = GetItemButton(petView,v);
+	  if CheckP(itemButton) and idItem == itemButton:GetItemId() then
+	    itemButton:ChangeItem(0);
 	  end
 	end
   end  
@@ -650,20 +569,10 @@ function p.DelInlayWeap(weapId,idItem)
 	  if weapId ~= 0 and weapId == weapId then
 	    local petView = GetPetView(v);
 		if CheckP(petView) then
-		
-		  local weapSprite = RecursivUISprite(petView,{ID_WEAPON_CTRL_SPRITE_9});
-		  if CheckP(weapSprite) then
-		    if weapSprite:IsVisibled() then
-			  local idlist = ItemInlay.GetQiLinItemList(weapId);
-			  local curFrame = table.getn(idlist) * aniSpace;
-			  weapSprite:SetPlayFrameRange(curFrame + aniSpace,curFrame);
-			end
-		  end
-				
-		  for j, v in ipairs(TAG_WEAPON_EQUIP_LIST) do
-			local weapButton = GetEquipButton(petView,v);
-	        if CheckP(weapButton) and idItem == weapButton:GetItemId() then
-			  weapButton:ChangeItem(0);
+		  for j, v in ipairs(TAG_WEAPON_BUTTON_LIST) do
+			local itemButton = GetItemButton(petView,v);
+	        if CheckP(itemButton) and idItem == itemButton:GetItemId() then
+			  itemButton:ChangeItem(0);
 			  break;
 	        end
 		  end
@@ -690,21 +599,11 @@ function p.AddInlayWeap(weapId,idItem)
 	  if weapId ~= 0 and weapId == weapId then	  
 	    local petView = GetPetView(v);
 		if CheckP(petView) then
-		
-		  local weapSprite = RecursivUISprite(petView,{ID_WEAPON_CTRL_SPRITE_9});
-		  if CheckP(weapSprite) then
-		    if weapSprite:IsVisibled() then
-			  local idlist = ItemInlay.GetQiLinItemList(weapId);
-			  local curFrame = table.getn(idlist) * aniSpace;
-			  weapSprite:SetPlayFrameRange(curFrame - aniSpace,curFrame);
-			end
-		  end
-
 		  local itemType = Item.GetItemInfoN(idItem,Item.ITEM_TYPE);
 	      local index = Num6(itemType);
-		  local weapButton = GetEquipButton(petView,TAG_WEAPON_EQUIP_LIST[index]); 
-		  if CheckP(weapButton) then
-		    weapButton:ChangeItem(idItem);
+		  local itemButton = GetItemButton(petView,TAG_WEAPON_BUTTON_LIST[index]); 
+		  if CheckP(itemButton) then
+		    itemButton:ChangeItem(idItem);
 		  end		  
 		end
 		break;		
@@ -797,50 +696,18 @@ end
 function p.OnUIEvenWeap(uiNode, uiEventType, param) 
   local tag = uiNode:GetTag();
   LogInfo("p.OnUIEvenWeap[%d]", tag);
-  local equipBtn = ConverToEquipBtn(uiNode);
-  if CheckP(equipBtn) then
-     if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-	   local itemID = equipBtn:GetItemId();
-	   if itemID ~= 0 then
-		  ShowNimbusInfo(itemID,false);
-	    else 
-	      CloseNimbusInfo();	
-	    end  
-	 elseif uiEventType == NUIEventType.TE_TOUCH_BTN_DOUBLE_CLICK then
-	   local itemID = equipBtn:GetItemId();
-	   if itemID ~= 0 then
-		  CloseNimbusInfo();
-		  MsgItem.SendUnLoadSpirit(itemID,GetCurPetWeapId()); 
-		  ShowLoadBar();
-	   end 	  	
-	 elseif uiEventType == NUIEventType.TE_TOUCH_BTN_DRAG_OUT then
-	   local weapId = GetCurPetWeapId();
-	   if weapId ~= 0 then
-	     local itemID = equipBtn:GetItemId();
-		 if itemID ~= 0 then
-		   dragWeapId = weapId;
-		   SetMouse(equipBtn:GetImageCopy(), param);
-		 end
-	   end	 
-     elseif uiEventType == NUIEventType.TE_TOUCH_BTN_DRAG_OUT_COMPLETE then
-	   SetMouse(nil, SizeZero());
-     elseif uiEventType == NUIEventType.TE_TOUCH_BTN_DRAG_IN then
-	   local weapId = GetCurPetWeapId();
-	   if weapId ~= 0 then
-		 local inItemBtn = ConverToItemButton(param);
-		 local inEquipBtn = ConverToEquipBtn(param);
-		 if CheckP(inItemBtn) and not CheckP(inEquipBtn) then
-		   local itemId = inItemBtn:GetItemId();
-		   if itemId ~= 0 then
-			 MsgItem.SendLoadSpirit(inItemBtn:GetItemId(),weapId); 
-		     ShowLoadBar();
-		   end
-		 end
-		 
-	   end
-	 end
+  if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+    local itemBtn = ConverToItemButton(uiNode);
+	if CheckP(itemBtn) then
+	  local itemID = itemBtn:GetItemId();
+	  if itemID ~= 0 then
+		ShowNimbusInfo(itemID,false);
+	  else 
+	    CloseNimbusInfo();	
+	  end
+	end
   end
-  return true;
+  return true; 
 end
 
 function p.OnUIEventMain(uiNode, uiEventType, param)
@@ -858,40 +725,20 @@ end
 function p.OnUIEventPartsBag(uiNode, uiEventType, param)
   local tag = uiNode:GetTag();
   LogInfo("p.OnUIEventPartsBag[%d]", tag);
-  local itemBtn = ConverToItemButton(uiNode);
-  if CheckP(itemBtn) then
-     if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-	   local itemID = itemBtn:GetItemId();
-	   if itemID ~= 0 then
-		 ShowNimbusInfo(itemID,true);
-	   else 
-		 CloseNimbusInfo();	
-	   end  
-	 elseif uiEventType == NUIEventType.TE_TOUCH_BTN_DOUBLE_CLICK then
-	   local itemID = itemBtn:GetItemId();
-	   local weapId = GetCurPetWeapId();
-	    if itemID ~= 0 and weapId ~= 0 then
-		  CloseNimbusInfo();
-		  MsgItem.SendLoadSpirit(itemID,weapId); 
-		  ShowLoadBar();
-		end  
-	 elseif uiEventType == NUIEventType.TE_TOUCH_BTN_DRAG_OUT then
-	   local itemID = itemBtn:GetItemId();
-	   if itemID ~= 0 then
-	     SetMouse(itemBtn:GetImageCopy(), param);
-	   end
-     elseif uiEventType == NUIEventType.TE_TOUCH_BTN_DRAG_OUT_COMPLETE then
-	   SetMouse(nil, SizeZero());
-     elseif uiEventType == NUIEventType.TE_TOUCH_BTN_DRAG_IN then
-	   local equipBtn = ConverToEquipBtn(param);
-	   if CheckP(equipBtn) then
-	     local itemId = equipBtn:GetItemId();
-		 if itemId ~= 0 and dragWeapId ~= 0 then
-		   MsgItem.SendUnLoadSpirit(equipBtn:GetItemId(),dragWeapId); 
-		   ShowLoadBar();
-		 end
-	   end	   
-	 end
+  if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+    local itemBtn = ConverToItemButton(uiNode);
+	if CheckP(itemBtn) then
+	  local itemID = itemBtn:GetItemId();
+	  if itemID ~= 0 then
+		ShowNimbusInfo(itemID,true);
+	  else 
+	    CloseNimbusInfo();	
+	  end
+	end
+  elseif uiEventType == NUIEventType.TE_TOUCH_BTN_DRAG_OUT then
+  elseif uiEventType == NUIEventType.TE_TOUCH_BTN_DRAG_OUT_COMPLETE then
+  elseif uiEventType == NUIEventType.TE_TOUCH_BTN_DRAG_IN then
+  elseif uiEventType == NUIEventType.TE_TOUCH_BTN_DOUBLE_CLICK then
   end
   return true;
 end
@@ -971,7 +818,7 @@ function p.OnUIEventNimbusInfo(uiNode, uiEventType, param)
 	  CloseNimbusInfo();
 	  local weapId = ItemFunc.GetItemIdByPosition(ItemPet.GetEquipItemList(GetPlayerId(), selectPetId),Item.POSITION_EQUIP_2);
 	  if weapId ~= 0 then
-		if isWear then 
+		if isWear then
 		  MsgItem.SendLoadSpirit(selectItemId,weapId); 
 	    else
 		  MsgItem.SendUnLoadSpirit(selectItemId,weapId); 
@@ -983,7 +830,7 @@ function p.OnUIEventNimbusInfo(uiNode, uiEventType, param)
 	  local itemType = Item.GetItemInfoN(selectItemId,Item.ITEM_TYPE);
       local itemName = ItemFunc.GetName(itemType);
 	  local nQulity = ItemFunc.GetQuality(itemType);
-	  CommonDlg.ShowNoPrompt("买出"..itemName.."获得"..sellMoney[nQulity].."铜钱和"..sellLiQi[nQulity].."个器灵碎片", p.OnCommonDlg,true); 
+	  CommonDlg.ShowNoPrompt("买出"..itemName.."获得"..sellMoney[nQulity].."银币和"..sellLiQi[nQulity].."个器灵碎片", p.OnCommonDlg,true); 
 	end
   end
   return true;
@@ -1028,7 +875,7 @@ function p.OnUIEventRecast(uiNode, uiEventType, param)
 	  CommonDlg.ShowNoPrompt(GetRecastStr(), p.OnRecastDlg,true);
 	  CloseRecastLayer();
 	elseif tag == ID_RECAST_CTRL_BUTTON_ACTIVATION1 then
-	  CommonDlg.ShowNoPrompt("激活阵眼需花费20元宝", p.OnEyesEnableDlg,true); 
+	  CommonDlg.ShowNoPrompt("激活阵眼需花费20金币", p.OnEyesEnableDlg,true); 
 	end	
   elseif uiEventType == NUIEventType.TE_TOUCH_CHECK_CLICK then
     for i, v in ipairs(TAG_CHECK_BUTTON_LIST) do
@@ -1087,32 +934,25 @@ end
 function RefreshRecastCharge(nimbusRecastLayer,choiseAmount)
   local promptLable = GetLabel(nimbusRecastLayer,ID_RECAST_CTRL_TEXT_PROMPT);
   if CheckP(promptLable) then
-    local promptStr = "";
-    local nPlayerId = GetPlayerId();
-	--免费锻造数
-	local usPartsCastCount = GetRoleBasicDataN(nPlayerId, USER_ATTR.USER_ATTR_STAMINA_CAST_COUNT);
-	if usPartsCastCount > 0 then
-	  promptStr = "还可以免费重铸"..usPartsCastCount.."次";
-	else
-      promptStr = "本次重铸将消耗";
-	  local itemType = Item.GetItemInfoN(selectItemId, Item.ITEM_TYPE);
-	  local nQulity = ItemFunc.GetQuality(itemType);
-	  --玩家灵气值
-	  local chips = GetRoleBasicDataN(nPlayerId, USER_ATTR.USER_ATTR_STAMINA_PARTS_CHIPS);	
-	  local needChips = CHIPS_LIST[nQulity] + choiseAmount * CHIPS_LIST[nQulity];
-	  local needMoney = 10000 + choiseAmount * 10000;
-	  local trueChips = needChips;
-	  if chips < needChips then
-	    trueChips = chips; 
-	  end
-	  if trueChips > 0 then
-	    promptStr = promptStr..trueChips.."个器灵碎片,";
-	  end
-	  if chips < needChips then
-	    promptStr = promptStr..((needChips - chips) * 10).."元宝,";
-	  end
-	  promptStr = promptStr..needMoney.."铜钱";  
-	end	
+    local promptStr = "本次重铸将消耗";
+	local itemType = Item.GetItemInfoN(selectItemId, Item.ITEM_TYPE);
+	local nQulity = ItemFunc.GetQuality(itemType);
+	--玩家灵气值(临时测试数据)
+	local reiki = 0;	
+	
+	local needReiki = REIKI_LIST[nQulity] + choiseAmount * REIKI_LIST[nQulity];
+	local needMoney = 10000 + choiseAmount * 10000;
+	local trueReiki = needReiki;
+	if reiki < needReiki then
+	  trueReiki = reiki; 
+	end
+	if trueReiki > 0 then
+	  promptStr = promptStr..trueReiki.."个器灵碎片,";
+	end
+	if reiki < needReiki then
+	  promptStr = promptStr..((needReiki - reiki) * 10).."金币,";
+	end
+	promptStr = promptStr..needMoney.."银币";
     promptLable:SetText(promptStr);
   end  
 end

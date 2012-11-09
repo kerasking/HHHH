@@ -340,7 +340,7 @@ function p.Compose()
 	 or formulaEmoney5 > 0 
 	 or formulaEmoney6 > 0 then
 	local needEmoney =  formulaEmoney1 + formulaEmoney2 + formulaEmoney3 + formulaEmoney4 + formulaEmoney5 + formulaEmoney6;
-	CommonDlg.ShowNoPrompt("将花费"..needEmoney.."元宝弥补缺失的材料", p.OnCommonDlg,true);
+	CommonDlg.ShowNoPrompt("将花费"..needEmoney.."金币弥补缺失的材料", p.OnCommonDlg,true);
   else
     MsgCompose.SendComposeAction(formulaID);
   end

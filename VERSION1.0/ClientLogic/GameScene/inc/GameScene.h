@@ -6,7 +6,6 @@
  *  Copyright 2011 (网龙)DeNA. All rights reserved.
  *
  */
-
 #ifndef _GAME_SCENE_H_
 #define _GAME_SCENE_H_
 
@@ -22,7 +21,7 @@
 #include "NDTimer.h"
 #include "NDUILabel.h"
 #include <deque>
-#include "ItemMgr.h"
+//#include "ItemMgr.h"
 //#include "Chat.h"
 //#include "PlayerHead.h"
 //#include "NDUICustomView.h"
@@ -32,6 +31,9 @@
 #include "PlayerHead.h"
 #include "GameUIRootOperation.h"
 #include "DirectKey.h"
+#include "NDPlayer.h"
+#include "NDTransData.h"
+//#include "ItemMgr.h"
 
 class QuickItem;
 
@@ -64,12 +66,12 @@ typedef struct _tagMarriageInfo
 	int iId;
 	_tagMarriageInfo(std::string name, int iId)
 	{
-		this->name = name;
-		this->iId = iId;
+		name = name;
+		iId = iId;
 	}
 	_tagMarriageInfo()
 	{
-		this->iId = 0;
+		iId = 0;
 	}
 } MarriageInfo;
 
@@ -337,7 +339,7 @@ private:
 
 	MapUILayer* m_uiLayer;
 
-	VEC_ITEM m_vTaskAwardItem;
+	//VEC_ITEM m_vTaskAwardItem;
 
 	bool m_bUIShow;
 

@@ -9,6 +9,7 @@
 #include <LuaPlus.h>
 #include <NDBaseDirector.h>
 #include "NDConsole.h"
+#include "NDSharedPtr.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -26,8 +27,7 @@ int WINAPI WinMain (HINSTANCE hInstance,
  	UNREFERENCED_PARAMETER(hPrevInstance);
  	UNREFERENCED_PARAMETER(szCmdLine);
  
- 	InitGameInstance();
- 
+ 	//InitGameInstance();
 	NDConsole kConsole;
 	kConsole.BeginReadLoop();
 

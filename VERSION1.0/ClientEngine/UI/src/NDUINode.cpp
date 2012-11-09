@@ -318,4 +318,9 @@ namespace NDEngine
 		printf("Change From[%f][%f] To [%f][%f] Step[%f]",m_kFrameRect.origin.x,m_kFrameRect.origin.y,rect.origin.x,rect.origin.y, m_fStep);
 	}
 
+	void NDUINode::SetBoundScale( int nScale )
+	{
+		m_fBoundScale = static_cast<float>(nScale);	
+	}
+
 }

@@ -1,849 +1,832 @@
 ---------------------------------------------------
---描述: 普通副本
---时间: 2012.3.15
---作者: wjl
+--描述: 主线关卡扫荡（自动战斗）
+--时间: 2012.6.14
+--作者: Guosen
 ---------------------------------------------------
+--从副本界面进入接口：		
+--ClearUpSettingUI.LoadUI( nBattleID );
+-- 参数：怪物点ID
+
+--从登录时刻进入接口：		
+--ClearUpSettingUI.LoadUIForLogin( nBattleID, nRemain, nTotal );
+--参数： 怪物点ID, 剩余次数， 总数
+
+---------------------------------------------------
+
 ClearUpSettingUI = {}
 local p = ClearUpSettingUI;
 
-local ID_CLEARLIST_A_RIGHT_CTRL_CHECK_BUTTON_SELL			= 26;
-local ID_CLEARLIST_A_RIGHT_CTRL_RANDOM_BUTTON_C				= 25;
-local ID_CLEARLIST_A_RIGHT_CTRL_RANDOM_BUTTON_B				= 24;
-local ID_CLEARLIST_A_RIGHT_CTRL_RANDOM_BUTTON_A				= 21;
-local ID_CLEARLIST_A_RIGHT_CTRL_BUTTON_BEGIN				= 150;
-local ID_CLEARLIST_A_RIGHT_CTRL_TEXT_BLANK					= 11;
-local ID_CLEARLIST_A_RIGHT_CTRL_TEXT_10						= 10;
-local ID_CLEARLIST_A_RIGHT_CTRL_PICTURE_BLANK				= 70;
+p.nBattleID						= 0;	-- 怪物点ID
+p.nFightNumber					= 0;	-- 扫荡次数
+p.nClearStage					= 0;	-- 已扫荡次数
+p.nEndMoment					= 0;	-- 结束时刻（开始时刻+需要时间）
+p.nTimerID						= 0;	-- 倒计时计时器的ID号
+p.pEditFightNumber				= nil;	-- 输入扫荡次数的编辑控件
+p.pLayerPrepare					= nil;	-- 预备扫荡层
+p.pLayerFighting				= nil;	-- 正在扫荡层
+p.nCancelFlag					= 0;	-- 停止还是离开0:stop,1:X
+p.nExpAmount					= 0;	-- 累积奖励之经验
+p.nMoneyAmount					= 0;	-- 累积奖励之银币
+p.tItemsAmount					= {};	-- 累积奖励之道具--下标为道具名
 
+p.pLabelCoutDownCounter			= nil;	-- 倒计时时间标签
 
+---------------------------------------------------
+local ID_LIST_CONTANER			= 5;	-- 列表项容器ID，Prepare.ini Fighting.ini 里一样
+local ID_LABEL_TIME				= 12;	-- 显示时间"00:00:00"文本标签，Prepare.ini(预计时间) Fighting.ini(剩余时间) 里一样
+local ID_LABEL_ENEMY_INFO		= 17;	-- 显示战斗遇到的敌人信息
+local ID_LABEL_REWARD_INFO		= 17;	-- 显示战斗可获得的奖励累积信息
+local ID_LABEL_CLEAR_STAGE		= 44;	-- 显示通关累计次数
+local ID_EDIT_FIGHT_NUMBER		= 821;	-- 扫荡（自动战斗）次数
+local ID_LABEL_TASK_NAME		= 3;	-- 副本名称
+local ID_LIST_LABEL_CONT		= 148;	-- 右侧列表项容器ID--放文字
 
-local ID_CLEARLIST_B_CTRL_VERTICAL_LIST_LEFT			= 5;
-local ID_CLEARLIST_B_CTRL_BUTTON_CLOSE					= 4;
-local ID_CLEARLIST_B_CTRL_TEXT_TASK_NAME				= 3;
-local ID_CLEARLIST_B_CTRL_PICTURE_LEFT_BG				= 72;
-local ID_CLEARLIST_B_CTRL_LIST_RIGHT					= 248;
-local ID_CLEARLIST_B_CTRL_PICTURE_BG					= 1;
+local ID_BTN_CLOSE				= 4;	-- 关闭按钮ID，Prepare.ini Fighting.ini 里一样
+local ID_BTN_MAX				= 22;	-- 最大按钮ID，设置最大扫荡次数
+local ID_BTN_START				= 18;	-- 开始按钮ID，开始扫荡
+local ID_BTN_STOP				= 817;	-- 停止按钮ID，
+local ID_BTN_FINISH				= 16;	-- 加速按钮ID，
+local ID_BTN_BACK				= 18;	-- 返回按钮ID，
 
+local ID_LIST_ITEM_LABEL		= 1;	-- 列表项文字标签
+--** chh 2012-08-13 **--
+p.ID_BTN_FINISH = ID_BTN_FINISH;
 
-local ID_CLEARLIST_B_RIGHT_CTRL_BUTTON_FINISH				= 15;
-local ID_CLEARLIST_B_RIGHT_CTRL_BUTTON_CANCEL				= 14;
-local ID_CLEARLIST_B_RIGHT_CTRL_TEXT_MONSTER				= 13;
-local ID_CLEARLIST_B_RIGHT_CTRL_TEXT_BLANK					= 11;
-local ID_CLEARLIST_B_RIGHT_CTRL_TEXT_10						= 10;
-local ID_CLEARLIST_B_RIGHT_CTRL_TEXT_NUM					= 9;
-local ID_CLEARLIST_B_RIGHT_CTRL_TEXT_8						= 8;
-local ID_CLEARLIST_B_RIGHT_CTRL_TEXT_TIME					= 7;
-local ID_CLEARLIST_B_RIGHT_CTRL_TEXT_6						= 6;
-local ID_CLEARLIST_B_RIGHT_CTRL_PICTURE_NUM					= 69;
-local ID_CLEARLIST_B_RIGHT_CTRL_PICTURE_BLANK				= 70;
-local ID_CLEARLIST_B_RIGHT_CTRL_PICTURE_MONSTER_BG			= 71;
+--
+local SECONDS_PER_FIGHT			= 180;	-- 每次战斗的时间(单位秒)，3分钟
+local ZORDER_LAYER				= 200;	-- 扫荡层的Z次序
+local LIST_ITEM_HEIGHT			= 100;	-- 列表项高度
+local DEFAULT_FIGHT_NUM			= 10;	-- 缺省扫荡次数，若军令小于该值则为实际值
 
-p.TagAutoSell = ID_CLEARLIST_A_RIGHT_CTRL_CHECK_BUTTON_SELL;
-p.TagPhUseUp = ID_CLEARLIST_A_RIGHT_CTRL_RANDOM_BUTTON_A;
-p.TagPhUse30 = ID_CLEARLIST_A_RIGHT_CTRL_RANDOM_BUTTON_B;
-p.TagPhUse60 = ID_CLEARLIST_A_RIGHT_CTRL_RANDOM_BUTTON_C;
-p.TagBagNUmA = ID_CLEARLIST_A_RIGHT_CTRL_TEXT_BLANK;
-p.TagStartA  = ID_CLEARLIST_A_RIGHT_CTRL_BUTTON_BEGIN;
-
-p.TagUiLayer = NMAINSCENECHILDTAG.AffixBossClearUp;
-p.TagClose = ID_CLEARLIST_B_CTRL_BUTTON_CLOSE;
-p.TagContainer = ID_CLEARLIST_B_CTRL_VERTICAL_LIST_LEFT;
-p.TagRightContainer = ID_CLEARLIST_B_CTRL_LIST_RIGHT;
-p.TimeText = ID_CLEARLIST_B_RIGHT_CTRL_TEXT_TIME;
-p.TagTitle = ID_CLEARLIST_B_CTRL_TEXT_TASK_NAME;
-p.TagMonster = ID_CLEARLIST_B_RIGHT_CTRL_TEXT_MONSTER;
-p.TagBagNum = ID_CLEARLIST_B_RIGHT_CTRL_TEXT_BLANK;
-p.TagBout = ID_CLEARLIST_B_RIGHT_CTRL_TEXT_NUM;
-
--- 界面控件坐标定义
-local winsize = GetWinSize();
-
-local CONTAINTER_W = RectUILayer.size.w / 2;
-local CONTAINTER_H = RectUILayer.size.h;
-local CONTAINTER_X = 0;
-local CONTAINTER_Y = 0;
-
-local ATTR_OFFSET_X = RectUILayer.size.w / 2;
-local ATTR_OFFSET_Y = 0;
-
-local TagBtStart_Cancel = ID_CLEARLIST_B_RIGHT_CTRL_BUTTON_CANCEL;
-local TagBtClose_Finish = ID_CLEARLIST_B_RIGHT_CTRL_BUTTON_FINISH;
-
-local TagListBt ={
-	138,
-	139,
-	57,
-	58,
-	59,
-	55,
-	56,
-	60,
-	61,
-	62,
-}
-
-p.Flag = {
-	Prepare = 1,
-	Running = 2,
-}
-
-p.OpenText = {
-	"开始",
-	"取消",
-}
-
-p.FinishText = {
-	"关闭",
-	"立即完成",
-}
-
-p.UseType = {
-	UseUp = 1,
-	Use30 = 2,
-	Use60 = 3,
-}
-
-
-p.mList = {}
-p.mInstId = 0;
-p.mRunFlag = 1;
-p.mTimerTaskTag = nil;
-p.mTimeSeconds = 0;
-p.mTimeNeedSeconds = 0;
-p.mAutoSell = false;
-p.mPhUseType = p.UseType.UseUp;
-p.mItemCount = 0;
-p.mType = 1;
-p.mBossZone= {};
-
-
-function p.LoadUI(instId)
-	p.mInstId = instId;
-	p.mRunFlag = p.Flag.Prepare;
-	
+---------------------------------------------------
+-- 进入扫荡的接口，参数为怪物点ID
+function p.LoadUI( nBattleID )
+    p.nFightNumber				= 0;
+    p.nClearStage				= 0;
+    p.nEndMoment				= 0;
+    p.nTimerID					= 0;
+    p.pEditFightNumber			= nil;
+    p.pLayerPrepare				= nil;
+    p.pLayerFighting			= nil;
+    p.pLabelCoutDownCounter		= nil;
+    p.nCancelFlag				= 0;
+	--LogInfo("ClearUpSetting: nBattleID is %d",nBattleID);
+	p.nBattleID = nBattleID;
+    
 	local scene = GetSMGameScene();	
-	--local scene = director:GetRunningScene();
-	if scene == nil then
-		LogInfo("scene == nil,load PlayerAttr failed!");
+	if ( nil == scene ) then
+		LogInfo("ClearUpSetting: LoadUI() failed! scene is nil");
 		return;
 	end
-	
+    
 	local layer = createNDUILayer();
-	if layer == nil then
+	if ( nil == layer ) then
+		LogInfo("ClearUpSetting: LoadUI() failed! layer is nil");
+		return false;
+	end
+    
+	layer:Init();
+	layer:SetTag( NMAINSCENECHILDTAG.AffixBossClearUp );
+	layer:SetFrameRect( RectFullScreenUILayer );
+	--layer:SetBackgroundColor( ccc4(0, 0, 0, 0) );
+	scene:AddChildZ( layer,ZORDER_LAYER );
+	
+	--初始化ui
+	local uiLoad = createNDUILoad();
+	if not CheckP(uiLoad) then
+		LogInfo("ClearUpSetting: LoadUI() failed! uiLoad is nil");
+		return false;
+	end
+	
+	uiLoad:Load("AutoFightUI_Prepare.ini", layer, p.OnUIEventPrepare, 0, 0 );
+
+	MsgAffixBoss.mUIListener = p.HandleNetMsg;	-- 设置网络消息的响应
+	
+	p.InitPrepareUI( layer );
+	p.CreateFightingUI( layer );
+	p.BackToPrepareUI();
+end
+
+---------------------------------------------------
+function p.CloseUI()
+	CloseUI( NMAINSCENECHILDTAG.AffixBossClearUp );
+	MsgAffixBoss.mUIListener = nil;	-- 取消响应网络消息
+    p.pEditFightNumber			= nil;
+    p.pLayerPrepare				= nil;
+    p.pLayerFighting			= nil;
+    p.pLabelCoutDownCounter		= nil;
+end
+
+---------------------------------------------------
+-- 返回时间格式字符串"00:00:00"，参数XX秒
+function p.GetTimeString( nTime )
+	local nH = math.floor( nTime / 3600 );
+	local nM = math.floor( (nTime%3600) / 60 );
+	local nS = nTime % 60;
+	return string.format( "%02d:%02d:%02d", nH, nM, nS );
+end
+
+---------------------------------------------------
+-- 初始化 Prepare UI--准备扫荡
+function p.InitPrepareUI( pLayerPrepare )
+	p.pLayerPrepare = pLayerPrepare;
+	
+	-- 输入框
+	p.nFightNumber		= 0;
+	local pUINode		= GetUiNode( p.pLayerPrepare, ID_EDIT_FIGHT_NUMBER );
+	p.pEditFightNumber	= ConverToEdit( pUINode ) 
+	p.pEditFightNumber:SetFlag( 1 );		-- 仅可输入数字
+	p.pEditFightNumber:SetText( SafeN2S( p.nFightNumber ) );
+	
+	-- 时间标签
+	local nAmountTime	= p.nFightNumber * SECONDS_PER_FIGHT;
+	local pLabelTime	= GetLabel( p.pLayerPrepare, ID_LABEL_TIME );
+	pLabelTime:SetText( p.GetTimeString( nAmountTime ) );
+	
+	-- 副本名
+	local szName 		= AffixBossFunc.findName( p.nBattleID );
+	local pLabelTaskName= GetLabel( p.pLayerPrepare, ID_LABEL_TASK_NAME );
+	pLabelTaskName:SetText( szName );
+	
+	-- 左侧提示
+	-- 容器
+	local container 	= GetScrollViewContainer( p.pLayerPrepare, ID_LIST_CONTANER );
+	if not CheckP(container) then
+		LogInfo("ClearUpSetting: InitPrepareUI() failed! container is nil");
+		return;
+	end
+    --container:EnableScrollBar(true);
+	container:SetStyle( UIScrollStyle.Verical );
+	local rectview		= container:GetFrameRect();
+	container:SetViewSize( CGSizeMake(rectview.size.w, LIST_ITEM_HEIGHT) );
+	
+	-- 列表项
+	local view = createUIScrollView();
+	if not CheckP(view) then
+		LogInfo("ClearUpSetting: InitPrepareUI() failed! view is nil");
+		return;
+	end
+	view:Init(false);
+	view:SetScrollStyle(UIScrollStyle.Verical);
+	view:SetViewId(1);
+	view:SetMovableViewer(container);
+	view:SetScrollViewer(container);
+	view:SetContainer(container);
+	container:AddView(view);
+	local nWidthLimit = rectview.size.w;
+	local fontsize = 14;
+	local str = "<cffff00扫荡提示：\n<cffffff1、请保证背包有足够的空间来拾取战利品\n2、离线也可进行副本扫荡"
+	local pLabelTips = _G.CreateColorLabel( str, fontsize, nWidthLimit );
+	
+	if CheckP(pLabelTips) then
+		pLabelTips:SetFrameRect(CGRectMake(10, 20, nWidthLimit, 20 * ScaleFactor));
+		view:AddChild(pLabelTips);
+	end
+	
+	-- 敌军信息--
+	local pLabelEnemyInfo = GetLabel( p.pLayerPrepare, ID_LABEL_ENEMY_INFO );
+	if ( nil == pLabelEnemyInfo ) then
+		LogInfo("ClearUpSetting: InitPrepareUI() failed! pLabelEnemyInfo is nil");
+	end
+	
+	local szEnemyInfo	= "";
+	
+	local nGenerateRuleID	= GetDataBaseDataN( "mapzone", p.nBattleID, DB_MAPZONE.GENERATE_RULE_ID )
+	local nMonsterType	= 0;
+	local szMonsterName	= "";
+	nMonsterType	= GetDataBaseDataN( "monster_generate", nGenerateRuleID, DB_MONSTER_GENERATE.STATIONS1 )
+	if ( nMonsterType ~= nil ) and ( nMonsterType > 0 ) then
+		szMonsterName	= GetDataBaseDataS( "monstertype", nMonsterType, DB_MONSTERTYPE.NAME );
+		szEnemyInfo	= szEnemyInfo .. szMonsterName .."\n";
+	end
+	nMonsterType	= GetDataBaseDataN( "monster_generate", nGenerateRuleID, DB_MONSTER_GENERATE.STATIONS2 )
+	if ( nMonsterType ~= nil ) and ( nMonsterType > 0 ) then
+		szMonsterName	= GetDataBaseDataS( "monstertype", nMonsterType, DB_MONSTERTYPE.NAME );
+		szEnemyInfo	= szEnemyInfo .. szMonsterName .."\n";
+	end
+	nMonsterType	= GetDataBaseDataN( "monster_generate", nGenerateRuleID, DB_MONSTER_GENERATE.STATIONS3 )
+	if ( nMonsterType ~= nil ) and ( nMonsterType > 0 ) then
+		szMonsterName	= GetDataBaseDataS( "monstertype", nMonsterType, DB_MONSTERTYPE.NAME );
+		szEnemyInfo	= szEnemyInfo .. szMonsterName .."\n";
+	end
+	nMonsterType	= GetDataBaseDataN( "monster_generate", nGenerateRuleID, DB_MONSTER_GENERATE.STATIONS4 )
+	if ( nMonsterType ~= nil ) and ( nMonsterType > 0 ) then
+		szMonsterName	= GetDataBaseDataS( "monstertype", nMonsterType, DB_MONSTERTYPE.NAME );
+		szEnemyInfo	= szEnemyInfo .. szMonsterName .."\n";
+	end
+	nMonsterType	= GetDataBaseDataN( "monster_generate", nGenerateRuleID, DB_MONSTER_GENERATE.STATIONS5 )
+	if ( nMonsterType ~= nil ) and ( nMonsterType > 0 ) then
+		szMonsterName	= GetDataBaseDataS( "monstertype", nMonsterType, DB_MONSTERTYPE.NAME );
+		szEnemyInfo	= szEnemyInfo .. szMonsterName .."\n";
+	end
+	nMonsterType	= GetDataBaseDataN( "monster_generate", nGenerateRuleID, DB_MONSTER_GENERATE.STATIONS6 )
+	if ( nMonsterType ~= nil ) and ( nMonsterType > 0 ) then
+		szMonsterName	= GetDataBaseDataS( "monstertype", nMonsterType, DB_MONSTERTYPE.NAME );
+		szEnemyInfo	= szEnemyInfo .. szMonsterName .."\n";
+	end
+	nMonsterType	= GetDataBaseDataN( "monster_generate", nGenerateRuleID, DB_MONSTER_GENERATE.STATIONS7 )
+	if ( nMonsterType ~= nil ) and ( nMonsterType > 0 ) then
+		szMonsterName	= GetDataBaseDataS( "monstertype", nMonsterType, DB_MONSTERTYPE.NAME );
+		szEnemyInfo	= szEnemyInfo .. szMonsterName .."\n";
+	end
+	nMonsterType	= GetDataBaseDataN( "monster_generate", nGenerateRuleID, DB_MONSTER_GENERATE.STATIONS8 )
+	if ( nMonsterType ~= nil ) and ( nMonsterType > 0 ) then
+		szMonsterName	= GetDataBaseDataS( "monstertype", nMonsterType, DB_MONSTERTYPE.NAME );
+		szEnemyInfo	= szEnemyInfo .. szMonsterName .."\n";
+	end
+	nMonsterType	= GetDataBaseDataN( "monster_generate", nGenerateRuleID, DB_MONSTER_GENERATE.STATIONS9 )
+	if ( nMonsterType ~= nil ) and ( nMonsterType > 0 ) then
+		szMonsterName	= GetDataBaseDataS( "monstertype", nMonsterType, DB_MONSTERTYPE.NAME );
+		szEnemyInfo	= szEnemyInfo .. szMonsterName .."\n";
+	end
+		--LogInfo("ClearUpSetting: InitPrepareUI()  MonsterType:%d", nMonsterType);
+		--local nLookface	= GetDataBaseDataN( "monstertype", nMonsterType, DB_MONSTERTYPE.LOOKFACE );
+		--LogInfo("ClearUpSetting: InitPrepareUI()  MonsterName:%s, Lookface:%d", szMonsterName, nLookface);
+	pLabelEnemyInfo:SetText(szEnemyInfo);
+	
+end
+
+
+
+
+---------------------------------------------------
+-- 响应 Prepare 界面 UI 事件--准备扫荡
+function p.OnUIEventPrepare( uiNode, uiEventType, param )
+	local tag = uiNode:GetTag();	
+	local nStamina = PlayerFunc.GetStamina( GetPlayerId() );
+	if ( uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK ) then
+		if ( ID_BTN_CLOSE == tag ) then
+			p.CloseUI();
+			if ( NormalBossListUI.nCampaignID ~= nil ) then
+				WorldMap(NormalBossListUI.nCampaignID); 
+			end
+			NormalBossListUI.Redisplay();
+			return true;
+		elseif ( ID_BTN_MAX == tag ) then
+			-- 点击“最大”
+			p.nFightNumber		= nStamina;
+			p.pEditFightNumber:SetText( SafeN2S(p.nFightNumber) );
+			local nAmountTime	= p.nFightNumber * SECONDS_PER_FIGHT;
+			local pLabelTime	= GetLabel( p.pLayerPrepare, ID_LABEL_TIME );
+			pLabelTime:SetText( p.GetTimeString( nAmountTime ) );
+		elseif ( ID_BTN_START == tag ) then
+			-- 点击“开始”
+			p.OnBtnStart();
+		end
+	elseif ( uiEventType == NUIEventType.TE_TOUCH_EDIT_INPUT_FINISH ) then
+    	local pEdit = ConverToEdit(uiNode);
+    	if CheckP(pEdit) then
+			if tag == ID_EDIT_FIGHT_NUMBER then
+			    local nInputNumber = SafeS2N( pEdit:GetText() );
+			    if ( nStamina < nInputNumber ) then
+			    	p.nFightNumber = nStamina;
+			    else
+			    	p.nFightNumber = nInputNumber;
+			    end
+			    pEdit:SetText( SafeN2S(p.nFightNumber) );
+			    
+				local nAmountTime	= p.nFightNumber * SECONDS_PER_FIGHT;
+				local pLabelTime	= GetLabel( p.pLayerPrepare, ID_LABEL_TIME );
+				pLabelTime:SetText( p.GetTimeString( nAmountTime ) );
+			end 
+    	end
+	end
+	return true;
+end
+
+---------------------------------------------------
+-- 响应“开始”按钮
+function p.OnBtnStart()
+	if ( p.pLayerFighting == nil ) then
+		LogInfo("ClearUpSetting: OnBtnStart() failed! pLayerFighting is nil");
+		return;
+	end
+	local nStamina = PlayerFunc.GetStamina( GetPlayerId() );
+	if ( nStamina < 1  ) then
+		CommonDlgNew.ShowYesDlg( "军令不足！", nil, nil, nil );
+		return true;
+	end
+	if ( p.nFightNumber < 1 ) then
+		LogInfo("ClearUpSetting: OnBtnStart() failed! nFightNumber < 1");
+		CommonDlgNew.ShowYesDlg( "请输入扫荡次数！", nil, nil, 3 );
+		return;
+	end
+
+	--
+	p.nClearStage	= 0;
+	
+	-- 发送消息给服务端，开始扫荡
+	MsgAffixBoss.sendNmlClean( p.nBattleID, p.nFightNumber, true );
+	--p.ShowFightingUI();
+end
+	
+---------------------------------------------------
+--显示自动战斗界面
+function p.ShowFightingUI()
+	local container 	= GetScrollViewContainer( p.pLayerFighting, ID_LIST_CONTANER );
+	if not CheckP(container) then
+		LogInfo("ClearUpSetting: ShowFightingUI() failed! container is nil");
+		return;
+	end
+	local layer = createNDUILayer();
+	layer:Init();
+	local uiLoad=createNDUILoad();
+	uiLoad:Load( "AutoFightUI_Fighting_L.ini", layer, nil, 0, 0 );
+	uiLoad:Free();
+	local pBorder = GetLabel( layer, ID_LIST_ITEM_LABEL );
+	local tSize = pBorder:GetFrameRect().size;
+	layer:Free();
+	
+	container:SetStyle( UIScrollStyle.Verical );
+	--local rectview 		= container:GetFrameRect();
+	container:SetViewSize(tSize);--(CGSizeMake(rectview.size.w, 150));--rectview.size.h));
+	container:RemoveAllView();
+	container:EnableScrollBar(true);
+    
+	local pBtnStop		= GetButton( p.pLayerFighting, ID_BTN_STOP );
+	local pBtnFinish	= GetButton( p.pLayerFighting, ID_BTN_FINISH );
+	local pBtnBack		= GetButton( p.pLayerFighting, ID_BTN_BACK );
+	local pLabelClearStage		= GetLabel( p.pLayerFighting, ID_LABEL_CLEAR_STAGE );
+	p.pLabelCoutDownCounter	= GetLabel( p.pLayerFighting, ID_LABEL_TIME );
+	
+	pBtnStop:SetVisible( true );
+	pBtnFinish:SetVisible( true );
+	pBtnBack:SetVisible( false );
+	
+	p.nEndMoment	= p.nFightNumber * SECONDS_PER_FIGHT + GetCurrentTime();
+	
+	-- 累积奖励信息
+	p.nExpAmount			= 0;
+	p.nMoneyAmount			= 0;
+	p.tItemsAmount			= {};
+	local pLabelRewardInfo	= GetLabel( p.pLayerFighting, ID_LABEL_REWARD_INFO );
+	if ( nil == pLabelRewardInfo ) then
+		LogInfo("ClearUpEliteSettingUI: CreateFightingUI() failed! pLabelRewardInfo is nil");
+	end
+	local szRewardInfo = "";--"经验+XYZ\n银币+LMN\n待定";
+	pLabelRewardInfo:SetText( szRewardInfo );
+	
+	-- 已战斗次数统计
+	pLabelClearStage:SetText( p.nClearStage .. "/" .. p.nFightNumber );
+	p.pLabelCoutDownCounter:SetText( p.GetTimeString( p.nEndMoment - GetCurrentTime() ) );
+	
+	--
+	p.AppendListItemLabel( "～开始扫荡～", ccc4(0x10,0x33,0xcc,255) );
+	
+	-- 创建计时器，每1秒回调一次
+	p.nTimerID = RegisterTimer( p.OnTimerCoutDownCounter, 1 );
+	
+	--
+	p.pEditFightNumber:SetVisible( false );
+	p.pLayerFighting:SetVisible( true );
+end
+
+---------------------------------------------------
+-- 倒计时计时器的回调函数
+function p.OnTimerCoutDownCounter( nTimerID )
+	if not IsUIShow( NMAINSCENECHILDTAG.AffixBossClearUp ) then
+		UnRegisterTimer( nTimerID );
+		return;
+	end
+	local nTime	= p.nEndMoment - GetCurrentTime();
+	if ( nTime <= 0 ) then
+		nTime = 0;
+		UnRegisterTimer( p.nTimerID );
+		p.nTimerID = 0;
+		CommonDlgNew.CloseOneDlg();--关闭掉“加速”弹出的消耗金币对话框、或“停止”弹出的确认框
+	end
+	p.pLabelCoutDownCounter:SetText( p.GetTimeString( nTime ) );
+end
+
+---------------------------------------------------
+-- 创建 Fighting UI--正在扫荡
+function p.CreateFightingUI( pParentLayer )
+	local layer = createNDUILayer();
+	if ( nil == layer ) then
+		LogInfo("ClearUpSetting: CreateFightingUI() failed! layer is nil");
 		return false;
 	end
 	layer:Init();
-	layer:SetTag(p.TagUiLayer);
-	layer:SetFrameRect(RectUILayer);
-	layer:SetBackgroundColor(ccc4(125, 125, 125, 125));
-	scene:AddChild(layer);
+	layer:SetTag( NMAINSCENECHILDTAG.AffixBossClearUp );
+	layer:SetFrameRect( RectFullScreenUILayer );
+	--layer:SetBackgroundColor( ccc4(0, 0, 0, 0) );
+	pParentLayer:AddChildZ( layer,3 );
 	
 	--初始化ui
 	local uiLoad = createNDUILoad();
 	if not CheckP(uiLoad) then
+		LogInfo("ClearUpSetting: CreateFightingUI() failed! uiLoad is nil");
 		return false;
 	end
 	
-	uiLoad:Load("ClearList_B.ini", layer, p.OnUIEvent, CONTAINTER_X, CONTAINTER_Y);
-	uiLoad:Free();
+	uiLoad:Load("AutoFightUI_Fighting.ini", layer, p.OnUIEventFighting, 0, 0 );
 	
-	p.initData();
-	p.initSubUI();
-
+	-- 副本名
+	local szName 			= AffixBossFunc.findName( p.nBattleID );
+	local pLabelTaskName	= GetLabel( layer, ID_LABEL_TASK_NAME );
+	pLabelTaskName:SetText( szName );
 	
-	return true;
+	-- 累积奖励信息
+	p.nExpAmount			= 0;
+	p.nMoneyAmount			= 0;
+	p.tItemsAmount			= {};
+	local pLabelRewardInfo = GetLabel( layer, ID_LABEL_REWARD_INFO );
+	if ( nil == pLabelRewardInfo ) then
+		LogInfo("ClearUpSetting: CreateFightingUI() failed! pLabelRewardInfo is nil");
+	end
+	local szRewardInfo = "";--"经验+0\n银币+0";
+	pLabelRewardInfo:SetText( szRewardInfo );
+	
+	p.pLayerFighting = layer;
 end
 
-function p.OnUIEvent(uiNode, uiEventType, param)
-	local tag = uiNode:GetTag();
-	LogInfo("p.OnUIEvent:%d" , tag);
-	
-	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-		if p.TagClose == tag then
-			p.freeData();
-			CloseUI(p.TagUiLayer);
-			return true;
-		elseif (TagBtStart_Cancel == tag ) then
-			p.clickStarBt();
-			--MsgAffixBoss.sendNmlOpen();
-		elseif (TagBtClose_Finish == tag) then
-			p.clickFinishBt();
-		elseif (TagListBt[1] == tag) then
-			MsgAffixBoss.sendEnter(p.mList[1].typeId);
-		elseif (TagListBt[2] == tag) then
-			MsgAffixBoss.sendClean(p.mList[1].typeId, 2);
-		elseif (TagListBt[3] == tag) then
-			MsgAffixBoss.sendCancel(p.mList[1].typeId);
-		elseif (TagListBt[4] == tag) then
-			MsgAffixBoss.sendFinish(p.mList[1].typeId);
+---------------------------------------------------
+-- 响应 Fighting 界面 UI 事件--正在扫荡
+function p.OnUIEventFighting( uiNode, uiEventType, param )
+	local tag = uiNode:GetTag();	
+	if ( uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK ) then
+		if ( ID_BTN_CLOSE == tag ) then
+			--点击 "X"-- 从扫荡中返回到准备扫荡
+			local pBtnBack		= GetButton( p.pLayerFighting, ID_BTN_BACK );
+			if ( pBtnBack:IsVisibled() ) then
+				p.BackToPrepareUI();
+			else
+				CommonDlgNew.ShowYesOrNoDlg( "您确定要停止扫荡并返回？", p.Callback_StopAndBack, true );
+			end
+		elseif ( ID_BTN_STOP == tag ) then
+			-- 点击“停止”
+			p.OnBtnStop();
+		elseif ( ID_BTN_FINISH == tag ) then
+			-- 点击“加速”
+			p.OnBtnFinish();
+		elseif ( ID_BTN_BACK == tag ) then
+			-- 点击“返回”
+			p.BackToPrepareUI();
 		end
 	end
-	return true;
+	return false;
 end
 
-function p.OnSettingUIEvent(uiNode, uiEventType, param)
-	local tag = uiNode:GetTag();
-	LogInfo("p.OnUIEvent:%d" , tag);
+---------------------------------------------------
+-- 从正在扫荡界面返回到准备扫荡界面
+function p.BackToPrepareUI()
+	p.nFightNumber		= DEFAULT_FIGHT_NUM;
+	local nStamina		= PlayerFunc.GetStamina( GetPlayerId() );
+	if ( nStamina < DEFAULT_FIGHT_NUM  ) then
+		p.nFightNumber		= nStamina;
+	end
+	local nAmountTime	= p.nFightNumber * SECONDS_PER_FIGHT;
+	local pLabelTime	= GetLabel( p.pLayerPrepare, ID_LABEL_TIME );
+	pLabelTime:SetText( p.GetTimeString( nAmountTime ) );
+	p.pEditFightNumber:SetText( SafeN2S( p.nFightNumber ) );
 	
-	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
-		if p.TagStartA == tag then
-			local type = 1
-			p.mTimeNeedSeconds = 0;
-			if (p.mPhUseType == p.UseType.UseUp) then
-				p.mTimeNeedSeconds = 60;
-				type = 0;
-			elseif (p.mPhUseType == p.UseType.Use30) then
-				p.mTimeNeedSeconds = 30 * 60;
-				type = 1
-			elseif (p.mPhUseType == p.UseType.Use60) then
-				p.mTimeNeedSeconds = 60 * 60;
-				type = 2
-			end
-			
-			local st = PlayerFunc.GetUserTotalStamina();
-			if (st <= 0 or (type == 1 and st <20) or (type == 2 and st < 40) ) then
-				CommonDlg.ShowTipInfo("","体力不足无法挂机");
-				return true;
-			end
-			
-			p.mType = type
-		
-			if ( p.mAutoSell == false and p.mItemCount <=3 ) then
-				CommonDlg.ShowNoPrompt("背包剩余容量不多，是否继续清剿？",p.confirmSend, true);
-				return true;
-			elseif (p.mAutoSell == false and p.mItemCount <=0 ) then
-				CommonDlg.ShowTipInfo("","背包满无法挂机");
-				return true;
-			end
-			p.setCleanLayout();
-			MsgAffixBoss.sendNmlClean(p.mInstId, type, p.mAutoSell);
-			p.clickStarBt();
-		elseif (TagBtStart_Cancel == tag ) then
-			--p.clickStarBt();
-			--MsgAffixBoss.sendNmlOpen();
-		elseif (TagBtClose_Finish == tag) then
-			p.clickFinishBt();
-		elseif (TagListBt[1] == tag) then
-			MsgAffixBoss.sendEnter(p.mList[1].typeId);
-		elseif (TagListBt[2] == tag) then
-			MsgAffixBoss.sendClean(p.mList[1].typeId, 2);
-		elseif (TagListBt[3] == tag) then
-			MsgAffixBoss.sendCancel(p.mList[1].typeId);
-		elseif (TagListBt[4] == tag) then
-			MsgAffixBoss.sendFinish(p.mList[1].typeId);
+	if ( p.nTimerID ~= 0 ) then
+		UnRegisterTimer( p.nTimerID );
+		p.nTimerID = 0;
+	end
+	
+	p.pLayerFighting:SetVisible( false );
+	p.pEditFightNumber:SetVisible( true );
+end
+
+---------------------------------------------------
+-- 确定停止扫荡的回调
+function p.Callback_StopAndBack( nId, param )
+	if ( CommonDlgNew.BtnOk == nId ) then
+		-- 发送取消扫荡消息
+		p.nCancelFlag	= 1;
+		MsgAffixBoss.sendNmlCancel( p.nBattleID );
+		--以下改成在响应取消消息里执行
+		--p.nEndMoment		= GetCurrentTime();
+		--local pBtnStop		= GetButton( p.pLayerFighting, ID_BTN_STOP );
+		--local pBtnFinish	= GetButton( p.pLayerFighting, ID_BTN_FINISH );
+		--local pBtnBack		= GetButton( p.pLayerFighting, ID_BTN_BACK );
+		--pBtnStop:SetVisible( false );
+		--pBtnFinish:SetVisible( false );
+		--pBtnBack:SetVisible( true );
+		--p.BackToPrepareUI();
+	end
+end
+
+---------------------------------------------------
+-- 响应按下“停止”按钮，
+function p.OnBtnStop()
+	local pBtnBack		= GetButton( p.pLayerFighting, ID_BTN_BACK );
+	if ( pBtnBack:IsVisibled() ) then
+		return;
+	end
+	CommonDlgNew.ShowYesOrNoDlg( "您确定要停止扫荡？", p.Callback_StopAutoFight, true );
+end
+
+---------------------------------------------------
+-- 确定停止扫荡的回调
+function p.Callback_StopAutoFight( nId, param )
+	if ( CommonDlgNew.BtnOk == nId ) then
+		-- 发送取消扫荡消息
+		p.nCancelFlag	= 0;
+		MsgAffixBoss.sendNmlCancel( p.nBattleID );
+		--以下改成在响应取消消息里执行
+		--p.nEndMoment		= GetCurrentTime();
+		--local pBtnStop		= GetButton( p.pLayerFighting, ID_BTN_STOP );
+		--local pBtnFinish	= GetButton( p.pLayerFighting, ID_BTN_FINISH );
+		--local pBtnBack		= GetButton( p.pLayerFighting, ID_BTN_BACK );
+		--pBtnStop:SetVisible( false );
+		--pBtnFinish:SetVisible( false );
+		--pBtnBack:SetVisible( true );
+	end
+end
+
+
+---------------------------------------------------
+-- 响应按下“加速”按钮，实际上就是用金币换立即完成
+function p.OnBtnFinish()
+	local nTime = p.nEndMoment - GetCurrentTime();-- 剩余时间
+	if ( nTime < 1 ) then
+		return;
+	end
+	local nGold = ( nTime ) / 60;	-- 剩余时间转金币个数（每60秒1个）
+	nGold = math.ceil( nGold );
+	CommonDlgNew.ShowYesOrNoDlg( "消耗 "..nGold.." 金币直接完成扫荡？", p.Callback_CostGoldToFinish, true );
+end
+
+---------------------------------------------------
+-- 确定消耗金币完成扫荡的回调
+function p.Callback_CostGoldToFinish( nId, param )
+	if ( CommonDlgNew.BtnOk == nId ) then
+		local nPlayerID		= GetPlayerId();--User表中的ID
+		local nPlayerGold	= GetRoleBasicDataN( nPlayerID, USER_ATTR.USER_ATTR_EMONEY );
+		local nTime = p.nEndMoment - GetCurrentTime();-- 剩余时间
+		if ( nTime < 1 ) then
+			return;
 		end
-	elseif uiEventType == NUIEventType.TE_TOUCH_CHECK_CLICK then
-		local check = ConverToCheckBox(uiNode);
-		if (p.TagAutoSell == tag) then
-			local isSelect = check:IsSelect();
-			if (isSelect) then
-				p.mAutoSell = true;
-			else 
-				p.mAutoSell = false;
-			end
+		local nGold = ( nTime ) / 60;	-- 剩余时间转金币个数（每60秒1个）
+		nGold = math.ceil( nGold );
+		if ( nPlayerGold >= nGold ) then
+			MsgAffixBoss.sendNmlFinish( p.nBattleID );--发送"_MSG_AFFIX_BOSS_NML_FINISH"消息
 		else
-			local useUpV = p.getRadioButton(p.TagPhUseUp);
-			local use30V = p.getRadioButton(p.TagPhUse30);
-			local use60V = p.getRadioButton(p.TagPhUse60);
-			useUpV:SetSelect(false);
-			use30V:SetSelect(false);
-			use60V:SetSelect(false);
-			if (p.TagPhUseUp == tag) then
-				p.mPhUseType = p.UseType.UseUp;
-				useUpV:SetSelect(true);
-			elseif(p.TagPhUse30 == tag) then
-				p.mPhUseType = p.UseType.Use30;
-				use30V:SetSelect(true);
-			elseif(p.TagPhUse60 == tag) then
-				p.mPhUseType = p.UseType.Use60;
-				use60V:SetSelect(true);
-			end
+			CommonDlgNew.ShowYesDlg( "金币不足请充值……", nil, nil, nil );
 		end
 	end
-	return true;
 end
 
-function p.getRadioButton(tag)
-	local container = p.getContainerById(p.TagRightContainer);
-	local view = container:GetBeginView();
-	local nod = GetUiNode(view, tag);
-	if CheckP(nod) then
-		local check = ConverToCheckBox(nod);
-		return check;
+
+---------------------------------------------------
+-- 处理网络消息
+function p.HandleNetMsg( nMsgID, param )
+    LogInfo("function p.HandleNetMsg( nMsgID, param ) nMsgID = %d", nMsgID);
+	if ( nMsgID == nil ) then
+		return;
 	end
-	return nil;
-end
-
-function p.confirmSend(tag, event, parm)
-	if event == CommonDlg.EventOK then
-		p.setCleanLayout();
-		MsgAffixBoss.sendNmlClean(p.mInstId, p.mType, p.mAutoSell);
-		p.clickStarBt();
+	if ( nMsgID == NMSG_Type._MSG_AFFIX_BOSS_NML_CLEARUP ) then
+		-- 开始扫荡
+		p.ShowFightingUI();
+	elseif ( nMsgID == NMSG_Type._MSG_AFFIX_BOSS_CLEANUP_BATTLE ) then
+		-- 战斗奖励（完成一次战斗）
+		p.ShowRewardOnce( param );
+		p.ShowTotalReward( param );
+		-- 完成的战斗次数与时间从包里读取(待与服务器约定)/预定战斗次数也可从包里读，兼容之后Login进入
+		p.nClearStage 		= p.nClearStage + 1;
+		if ( p.nClearStage >= p.nFightNumber ) then
+			--全部完成
+			p.nClearStage	= p.nFightNumber;
+		end
+		p.nEndMoment		= GetCurrentTime()  + ( p.nFightNumber - p.nClearStage ) * SECONDS_PER_FIGHT;
+		local pLabelClearStage	= GetLabel( p.pLayerFighting, ID_LABEL_CLEAR_STAGE );
+		pLabelClearStage:SetText( p.nClearStage .. "/" .. p.nFightNumber );
+		
+		--杀怪事件 qbw
+		TASK.ClearUpKillMonster(p.nBattleID);
+		
+		
+	elseif ( nMsgID == NMSG_Type._MSG_AFFIX_BOSS_CLEANUP_RAISE ) then
+		-- 副本奖励
+	elseif ( nMsgID == NMSG_Type._MSG_AFFIX_BOSS_NML_FINISH ) then
+		-- 完成
+		local pBtnStop		= GetButton( p.pLayerFighting, ID_BTN_STOP );
+		local pBtnFinish	= GetButton( p.pLayerFighting, ID_BTN_FINISH );
+		local pBtnBack		= GetButton( p.pLayerFighting, ID_BTN_BACK );
+		pBtnStop:SetVisible( false );
+		pBtnFinish:SetVisible( false );
+		pBtnBack:SetVisible( true );
+		p.AppendListItemLabel( "～扫荡完毕～", ccc4(0x10,0x10,0xff,255) );
+	elseif ( nMsgID == NMSG_Type._MSG_AFFIX_BOSS_NML_CANCEL ) then
+		-- 取消
+		local nBattleID			= param:ReadInt();
+		local nServerCancelFlag	= param:ReadByte();--0普通，1背包满
+		if ( nServerCancelFlag == 1 ) then
+			p.AppendListItemLabel( "您的背包满咯～", ccc4(0xff,0x0,0x0,255) );
+		else
+			p.AppendListItemLabel( "～扫荡停止～", ccc4(0x10,0x10,0xff,255) );
+		end
+		p.nEndMoment		= GetCurrentTime();
+		local pBtnStop		= GetButton( p.pLayerFighting, ID_BTN_STOP );
+		local pBtnFinish	= GetButton( p.pLayerFighting, ID_BTN_FINISH );
+		local pBtnBack		= GetButton( p.pLayerFighting, ID_BTN_BACK );
+		pBtnStop:SetVisible( false );
+		pBtnFinish:SetVisible( false );
+		pBtnBack:SetVisible( true );
+		if ( p.nCancelFlag	== 1 ) then--0停止1退出
+			p.BackToPrepareUI();
+		end
 	end
 end
 
+---------------------------------------------------
+-- 显示奖励累积
+function p.ShowTotalReward( tData )
+	p.nExpAmount		= p.nExpAmount + tData.nExp;
+	p.nMoneyAmount		= p.nMoneyAmount + tData.nMoney;
+	for i = 1, #tData.tItems do
+		local nItemType		= tData.tItems[i].nItemType;
+		local nItemAmount	= tData.tItems[i].nItemAmount;
+		local szItemName	= ItemFunc.GetName( nItemType );
+		if ( p.tItemsAmount[szItemName] ~= nil ) then
+			nItemAmount = nItemAmount + p.tItemsAmount[szItemName];
+		end
+		p.tItemsAmount[szItemName] = nItemAmount;
+	end	
 
-function p.initSubUI()
-	--p.iniContainer();
-	p.setSettingLayout();
-	p.refreshRightLayout();
+	local szReward = "经验+" .. p.nExpAmount .. "\n银币+" .. p.nMoneyAmount; 
+	for key, value in pairs( p.tItemsAmount ) do
+		szReward	= szReward .. "\n" .. key .. " × " .. value ;
+	end
+	local pLabelRewardInfo	= GetLabel( p.pLayerFighting, ID_LABEL_REWARD_INFO );
+	pLabelRewardInfo:SetText( szReward );
 end
 
-function p.setSettingLayout()
-	local container = p.getContainerById(p.TagRightContainer);
+---------------------------------------------------
+-- 显示一次战斗奖励
+function p.ShowRewardOnce( tData )
+	local nExp			= tData.nExp;
+	local nMoney		= tData.nMoney;
+	local nItemCount	= table.getn( tData.tItems );
+	local szResult		= "战斗胜利！";
+	p.AppendListItemLabel( szResult, ccc4(0x0,0xff,0x0,255) );
+	local szResult		= "获得：" .. nExp .. "经验，" .. nMoney .. "银币";
+	p.AppendListItemLabel( szResult );
+	for i = 1, nItemCount do
+		local nItemType		= tData.tItems[i].nItemType;
+		local nItemAmount	= tData.tItems[i].nItemAmount;
+		local szItemName	= ItemFunc.GetName( nItemType );
+		szResult = szItemName .. " × " .. nItemAmount ;
+		p.AppendListItemLabel( szResult );
+	end	
+end
+
+---------------------------------------------------
+-- 获得战斗奖励信息字符串
+--function p.GetBattleItemInfo( tData )--d
+--	local nExp			= tData.nExp;
+--	local nMoney		= tData.nMoney;
+--	local nItemCount	= table.getn( tData.tItems );
+--	local szResult = "战斗胜利!\n获得：" .. nExp .. "经验，" .. nMoney .. "银币";
+--	for i = 1, nItemCount do
+--		local nItemType		= tData.tItems[i].nItemType;
+--		local nItemAmount	= tData.tItems[i].nItemAmount;
+--		local szItemName	= ItemFunc.GetName( nItemType );
+--		szResult = szResult .. "\n" .. szItemName .. " × " .. nItemAmount ;
+--	end	
+--	return szResult;
+--end
+
+
+---------------------------------------------------
+-- 获得副本奖励信息字符串（服务端未定该消息数据包结构）
+--function p.GetRaiseItemInfo( data )
+--	local rtn = "副本评价奖励\n"
+--	local soph = data.soph;
+--	local money = data.money;
+--	local itemId = data.item;
+--	local count = data.count;
+--	local lst = data.list;
+--	for i = 1, count do
+--		local strPetName = ConvertS(RolePetFunc.GetPropDesc(lst[i].petId, PET_ATTR.PET_ATTR_NAME));
+--		strPetName = strPetName or ""
+--		if (i ~= 1) then
+--		rtn = rtn ..","
+--		end
+--		local sexp = SafeN2S(lst[i].petExp);
+--	    --local SexP = SafeS2N(lst[i].petExp);
+--	    --LogInfo(sexp);
+--	    --LogInfo("SexP%d", SexP);
+--	        --allExp = SexP+allExp;
+--		rtn = rtn .. strPetName .."<c00ff00经验+" .. sexp .. "/e";
+--	end
+--	rtn = rtn .. "\n副本奖励 " ;
+--	if soph > 0 then
+--		local ssoph = SafeN2S(soph)
+--		rtn  = rtn .. "<cfb6003阅历+" .. ssoph .. "/e";
+--	end
+--	if money > 0 then
+--		local smoney = SafeN2S(money);
+--		rtn = rtn .. " <c00ff00银币+" .. smoney .. "/e";
+--	end
+--	rtn = rtn .."\n战利品 "
+--	if (itemId > 0) then
+--		local name = ItemFunc.GetName(itemId);
+--		name = name or "无";
+--		if name == "" then
+--			name = "无";
+--		end
+--		rtn = rtn .. name;
+--	else
+--		rtn = rtn .. "无"
+--	end
+--	
+--	LogInfo("rase boss rtn%s", rtn);
+--	
+--	return rtn;
+--	
+--end
+
+
+---------------------------------------------------
+-- 增加左侧的列表项()
+--function p.AppendLeftListItem( strData )
+--	
+--	if ( strData == nil or strData == "" ) then
+--		LogInfo("ClearUpSetting: AppendLeftListItem() failed! strData is nil");
+--		return;
+--	end
+--
+--	-- 左侧提示
+--	local container 	= GetScrollViewContainer( p.pLayerFighting, ID_LIST_CONTANER );
+--	if not CheckP(container) then
+--		LogInfo("ClearUpSetting: AppendLeftListItem() failed! container is nil");
+--		return;
+--	end
+--	container:SetStyle( UIScrollStyle.Verical );
+--	local rectview 		= container:GetFrameRect();
+--	container:SetViewSize(CGSizeMake(rectview.size.w, 150));--rectview.size.h));
+--	
+--	local nFontSize		= 12;
+--	local nWidthLimit	= rectview.size.w;
+--	local tTextSize		= _G.GetHyperLinkTextSize( strData, nFontSize, nWidthLimit );
+--	local pColorLabel	= _G.CreateColorLabel( strData, nFontSize, nWidthLimit );
+--	
+--	local view = createUIScrollView();
+--	view:Init(false);
+--	view:SetScrollStyle(UIScrollStyle.Verical);
+--	--view:SetViewId(i);
+--	view:SetMovableViewer(container);
+--	view:SetScrollViewer(container);
+--	view:SetContainer(container);
+--	container:AddView(view);
+--	pColorLabel:SetFrameRect( CGRectMake( 0, 0, nWidthLimit, tTextSize.h ) );
+--	view:AddChild(pColorLabel);
+--end
+
+
+---------------------------------------------------
+-- 添加列表项标签
+function p.AppendListItemLabel( szText, tColor )
+	if ( szText == nil or szText == "" ) then
+		LogInfo("ClearUpSetting: AppendListItemLabel() failed! szText is nil");
+		return;
+	end
+	local container 	= GetScrollViewContainer( p.pLayerFighting, ID_LIST_CONTANER );
 	if not CheckP(container) then
-		LogInfo("nil == container");
+		LogInfo("ClearUpSetting: AppendListItemLabel() failed! container is nil");
 		return;
 	end
-	container:RemoveAllView();
-	local rectview = container:GetFrameRect();
-	
-	container:SetViewSize(CGSizeMake(rectview.size.w, rectview.size.h));
-	
 	local view = createUIScrollView();
-	
-	if not CheckP(view) then
-		LogInfo("view == nil");
-		return;
-	end
 	view:Init(false);
-	view:SetScrollStyle(UIScrollStyle.Horzontal);
-	view:SetViewId(1);
+	view:SetScrollStyle(UIScrollStyle.Verical);
 	view:SetMovableViewer(container);
 	view:SetScrollViewer(container);
 	view:SetContainer(container);
 	container:AddView(view);
-	
-	--初始化ui
 	local uiLoad = createNDUILoad();
-	if not CheckP(uiLoad) then
-		return false;
-	end
-	
-	uiLoad:Load("ClearList_A_right.ini", view, p.OnSettingUIEvent, 0, 0);
+	uiLoad:Load( "AutoFightUI_Fighting_L.ini", view, nil, 0, 0 );
 	uiLoad:Free();
-	
-	local titleV = GetLabel(p.getUiLayer(), p.TagTitle);
-	--local mosterV = GetLabel(view, p.TagMonster);
-	--local boutV = GetLabel(view, p.TagBout);
-	local bagNum =  GetLabel(view, p.TagBagNUmA);
-	--local useUpV = RecursiveRadioBtn(view, {24})
-	--local  useUpV = ConverToRadioBtn(GetUiNode(view, p.TagPhUseUp));
-	--useUpV:SetSelect(true);
-	
-	local check = p.getRadioButton(p.TagPhUseUp);
-	check:SetSelect(true);
-	
-	local name = AffixBossFunc.findName(p.mInstId);
-	name = name or "普通副本"
-	local title = "扫荡"..name;
-	titleV:SetText(title);
-
-	
-	local items = ItemFunc.getBackBagCapability() - ItemFunc.getBackBagItemCount();
-	if not items or items < 1 then
-		items = 0;
-	end 
-	
-	p.mItemCount = items;
-	
-	--local lst, count = AffixBossFunc.findBossList(p.mInstId, 1);
-	--boutV:SetText(SafeN2S(count));
-	bagNum:SetText(SafeN2S(items));
-	p.setLeftLayout();
-	
-end
-
-function p.refreshBackNum()
-	local container = p.getContainerById(p.TagRightContainer);
-	local bagNum =  GetLabel(container, p.TagBagNUmA);
-	if not p.mItemCount or p.mItemCount < 1 then
-		p.mItemCount = 0;
-	end
-	bagNum:SetText(SafeN2S(p.mItemCount));
-end
-
-
-function p.setLeftLayout()
-	local container = p.getContainerById(p.TagContainer);
-	if not CheckP(container) then
-		LogInfo("nil == container");
+	local pLabel = GetLabel( view, ID_LIST_ITEM_LABEL );
+	if ( pLabel == nil ) then
+		LogInfo("ClearUpSetting: AppendListItemLabel() failed! pLabel is nil");
 		return;
 	end
-	local rectview = container:GetFrameRect();
-	container:SetViewSize(CGSizeMake(rectview.size.w, 100));--rectview.size.h));
-	
-	local lst, count = nil, 1;--MsgMagic.getRoleMatrixList();
-	p.mMatrixList = lst;
-	p.mCurrentPage = 1;
-	
-	
-	if (count == nil or count < 1) then
-		count = 1
+	pLabel:SetText( szText );
+	if ( tColor ~= nil ) then
+		pLabel:SetFontColor( tColor );
 	end
-	local page = 1;--math.ceil((count-1)/3);
-	
-	for i = 1,  page do
-	
-	local view = createUIScrollView();
-	
-	if not CheckP(view) then
-		LogInfo("view == nil");
-		return;
-	end
-	view:Init(false);
-	view:SetScrollStyle(UIScrollStyle.Horzontal);
-	view:SetViewId(i);
-	view:SetMovableViewer(container);
-	view:SetScrollViewer(container);
-	view:SetContainer(container);
-	container:AddView(view);
-	
-	local nWidthLimit = 220 * ScaleFactor;
-	local fontsize = 12;
-	local str = "挂机小提示：\n1、请保证背包有足够的空间来拾取战利品\n2、离线也可进行副本扫荡"
-	local lb = _G.CreateColorLabel(str, fontsize, nWidthLimit);
-	if CheckP(lb) then
-		lb:SetFrameRect(CGRectMake(10, 20, nWidthLimit, 20 * ScaleFactor));
-		view:AddChild(lb);
-		return true;
-	end
-	
-	end
-end
+	--view:SetBackgroundColor( ccc4(125, 125, 125, 0) );
 
-function p.setCleanLayout()
-	local leftC = p.getContainerById(p.TagContainer);
-	leftC:RemoveAllView();
-	local container = p.getContainerById(p.TagRightContainer);
-	if not CheckP(container) then
-		LogInfo("nil == container");
-		return;
-	end
-	container:RemoveAllView();
-	local rectview = container:GetFrameRect();
-	
-	container:SetViewSize(CGSizeMake(rectview.size.w, rectview.size.h));
-	
-	local view = createUIScrollView();
-	
-	if not CheckP(view) then
-		LogInfo("view == nil");
-		return;
-	end
-	view:Init(false);
-	view:SetScrollStyle(UIScrollStyle.Horzontal);
-	view:SetViewId(1);
-	view:SetMovableViewer(container);
-	view:SetScrollViewer(container);
-	view:SetContainer(container);
-	container:AddView(view);
-	
-	--初始化ui
-	local uiLoad = createNDUILoad();
-	if not CheckP(uiLoad) then
-		return false;
-	end
-	
-	uiLoad:Load("ClearList_B_right.ini", view, p.OnUIEvent, 0, 0);
-	uiLoad:Free();
-	
-	local mosterV = GetLabel(view, p.TagMonster);
-	local boutV = GetLabel(view, p.TagBout);
-	local bagNum =  GetLabel(view, p.TagBagNum);
-	
-	
-	p.mBossZone = {};
-	local ids	= _G.GetDataBaseIdList("mapzone");
-	for i = 1, #ids do
-		local mapid = GetDataBaseDataN("mapzone", ids[i], DB_MAPZONE.MAPID); -- GENERATE_RULE_ID
-		if (mapid == p.mInstId) then
-			local type = GetDataBaseDataN("mapzone", ids[i], DB_MAPZONE.MONSTER_TYPE)--DB_MAPZONE.GENERATE_RULE_ID); -- 
-			p.mBossZone[ids[i]] = GetDataBaseDataS("monstertype", type, DB_MONSTERTYPE.NAME);
-		end
-	end
-	
-	local bossName = "";
-	for k, v in pairs(p.mBossZone) do
-		bossName = bossName .. v;
-		bossName = bossName .. "\n"
-	end
-	
-	mosterV:SetText(bossName);
-	
-	local lst, count = AffixBossFunc.findBossList(p.mInstId, 1);
-	boutV:SetText(SafeN2S(count));
-	if (p.mItemCount < 0 ) then
-		p.mItemCount = 0;
-	end
-	bagNum:SetText(SafeN2S(p.mItemCount));
-	
-end
-
-function p.refreshRightLayout()
-	p.refreshButton();
-end
-
-function p.battleItemInfo(data)
-	local nameId = data.nameId;
-	local bossName = "";
-	local count = data.count;
-	local lst = data.list;
-	local rtn = "";
-	rtn = "打败:"..bossName .. "\n";
-	for i = 1, count do
-	local strPetName = ConvertS(RolePetFunc.GetPropDesc(lst[i].petId, PET_ATTR.PET_ATTR_NAME));
-	strPetName = strPetName or ""
-	if (i ~= 1) then
-		rtn = rtn ..","
-	end
-	rtn = rtn .. strPetName .."<c00ff00经验+" .. lst[i].petExp .. "/e";
-	end
-	
-	LogInfo("rtn%s", rtn);
-	
-	return rtn;
-	
-end
-
-function p.raiseItemInfo(data)
-	local rtn = "副本评价奖励\n"
-	local soph = data.soph;
-	local money = data.money;
-	local itemId = data.item;
-	local count = data.count;
-	local lst = data.list;
-	
-	for i = 1, count do
-		local strPetName = ConvertS(RolePetFunc.GetPropDesc(lst[i].petId, PET_ATTR.PET_ATTR_NAME));
-		strPetName = strPetName or ""
-		if (i ~= 1) then
-		rtn = rtn ..","
-		end
-		local sexp = SafeN2S(lst[i].petExp);
-		rtn = rtn .. strPetName .."<c00ff00经验+" .. sexp .. "/e";
-	end
-	rtn = rtn .. "\n副本奖励 " ;
-	if soph > 0 then
-		local ssoph = SafeN2S(soph)
-		rtn  = rtn .. "<cfb6003阅历+" .. ssoph .. "/e";
-	end
-	if money > 0 then
-		local smoney = SafeN2S(money);
-		rtn = rtn .. " <c00ff00铜钱+" .. smoney .. "/e";
-	end
-	rtn = rtn .."\n战利品 "
-	if (itemId > 0) then
-		local name = ItemFunc.GetName(itemId);
-		name = name or "无";
-		if name == "" then
-			name = "无";
-		end
-		rtn = rtn .. name;
-	else
-		rtn = rtn .. "无"
-	end
-	
-	LogInfo("rase boss rtn%s", rtn);
-	
-	return rtn;
-	
-end
-
-function p.addLeftItem(strData)
-	
-	if not strData then
-		LogInfo("addLeftItem strData is nil");
-		return;
-	end
-
-	local container = p.getContainerById(p.TagContainer);
-	if not CheckP(container) then
-		LogInfo("nil == container");
-		return;
-	end
-	local rectview = container:GetFrameRect();
-	container:SetViewSize(CGSizeMake(rectview.size.w, 150));--rectview.size.h));
-	
-	local lst, count = nil, 1;--MsgMagic.getRoleMatrixList();
-	p.mMatrixList = lst;
-	p.mCurrentPage = 1;
-	
-	
-	if (count == nil or count < 1) then
-		count = 1
-	end
-	local page = 1;--math.ceil((count-1)/3);
-	
-	for i = 1,  page do
-	
-	local view = createUIScrollView();
-	
-	if not CheckP(view) then
-		LogInfo("view == nil");
-		return;
-	end
-	view:Init(false);
-	view:SetScrollStyle(UIScrollStyle.Horzontal);
-	view:SetViewId(i);
-	view:SetMovableViewer(container);
-	view:SetScrollViewer(container);
-	view:SetContainer(container);
-	container:AddView(view);
-	
-	local nWidthLimit = 220 * ScaleFactor;
-	local fontsize = 12;
-	local str = strData;
-	local lb = _G.CreateColorLabel(str, fontsize, nWidthLimit);
-	if CheckP(lb) then
-		lb:SetFrameRect(CGRectMake(10, 20, nWidthLimit, 20 * ScaleFactor));
-		view:AddChild(lb);
-		return true;
-	end
-	--local label = createNDUILabel();
-	--label:SetText("myTextILLIU");
-	--view:AddChild(label);
-	end
-end
-
-function p.refreshButton()
-	local layer = p.getRightLayer();
-	local btSatr = GetButton(layer, TagBtStart_Cancel);
-	local btClose = GetButton(layer, TagBtClose_Finish);
-	if CheckP(btSatr) then
-		btSatr:SetTitle(p.OpenText[p.mRunFlag]);
-	end
-	
-	if CheckP(btClose) then
-		btClose:SetTitle(p.FinishText[p.mRunFlag]);
-	end
-end
-
-function p.iniContainer()
-	local container = p.getContainerById(p.TagContainer);
-	if not CheckP(container) then
-		LogInfo("nil == container");
-		return;
-	end
-	container:RemoveAllView();
-	local rectview = container:GetFrameRect();
-	
-	container:SetViewSize(CGSizeMake(rectview.size.w, rectview.size.h));
-	
-	local lst, count = MsgMagic.getRoleMatrixList();
-	p.mMatrixList = lst;
-	p.mCurrentPage = 1;
-	
-	
-	if (count == nil or count < 1) then
-		count = 1
-	end
-	local page = 1;--math.ceil((count-1)/3);
-	
-	for i = 1,  page do
-	
-	local view = createUIScrollView();
-	
-	if not CheckP(view) then
-		LogInfo("view == nil");
-		return;
-	end
-	view:Init(false);
-	view:SetScrollStyle(UIScrollStyle.Horzontal);
-	view:SetViewId(i);
-	view:SetMovableViewer(container);
-	view:SetScrollViewer(container);
-	view:SetContainer(container);
-	container:AddView(view);
-	
-	--初始化ui
-	local uiLoad = createNDUILoad();
-	if not CheckP(uiLoad) then
-		return false;
-	end
-	
-	uiLoad:Load("NormalCopy_M.ini", view, p.OnUIEvent, 0, 0);
-	
-	uiLoad:Free();
-   end
-end
-
-
-function p.getContainerById(nId)
-	local layer = p.getUiLayer();
-	local container = GetScrollViewContainer(layer, nId);
-	return container;
-	
-end
-
-function p.getUiLayer()
-	local scene = GetSMGameScene();
-	if not CheckP(scene) then
-		return nil;
-	end
-	
-	local layer = GetUiLayer(scene, p.TagUiLayer);
-	if not CheckP(layer) then
-		LogInfo("nil == layer")
-		return nil;
-	end
-	
-	return layer;
-end
-
-
-function p.clickButton(node) 
-	
-end
-
-function p.clickStarBt()
-	if (p.mRunFlag == p.Flag.Prepare) then
-		p.mRunFlag = p.Flag.Running;
-		--MsgAffixBoss.sendPickItem(1);
-		--MsgAffixBoss.sendNmlClean(p.mInstId, 0, true);
-		local time = GetCurrentTime();
-		LogInfo("time:%d", p.mTimeNeedSeconds);
-		p.mTimeSeconds =  time + p.mTimeNeedSeconds;
-		if (p.mTimerTaskTag) then
-			UnRegisterTimer(p.mTimerTaskTag);
-		end
-		p.refreshRightLayout();
-		p.mTimerTaskTag = RegisterTimer(p.timerCallback, 1);
-	else 
-		MsgAffixBoss.sendNmlCancel(p.mInstId);
-		p.mRunFlag = p.Flag.Prepare;
-		if (p.mTimerTaskTag) then
-			UnRegisterTimer(p.mTimerTaskTag);
-		end
-		p.mTimeSeconds = 0;
-		p.refreshRightLayout();
-	end
-	
-end
-
-function p.clickFinishBt()
-	--MsgAffixBoss.sendBoxList();
-	--MsgAffixBoss.sendPickItem(1);
-	if p.mRunFlag == p.Flag.Running then
-		MsgAffixBoss.sendNmlFinish(p.mInstId);
-		p.mTimeSeconds = 0;
-	else
-		p.freeData();
-		CloseUI(p.TagUiLayer);
+	-- 尽量显示末行
+	local rectview	= container:GetFrameRect();
+	local tSize		= pLabel:GetFrameRect().size;
+	local nLineNum	= rectview.size.h/tSize.h;
+	local nVewCount	= container:GetViewCount();
+	if ( nVewCount > nLineNum ) then
+		container:ShowViewByIndex( nVewCount-nLineNum );
 	end
 end
 
 
-function p.processNet(msgId, m)
-	if (msgId == nil ) then
-		LogInfo("processNet msgId == nil" );
-	end
-	--LogInfo(string.format("processNet%d" , msgId));
-	if msgId == NMSG_Type._MSG_AFFIX_BOSS_CLEANUP_BATTLE then
-		local str = p.battleItemInfo(m);
-		p.addLeftItem(str);
-		if (m and m.item and m.item > 0 ) then
-			p.mItemCount = p.mItemCount - 1;
-			p.refreshBackNum();
-		end
-	
-	elseif msgId == NMSG_Type._MSG_AFFIX_BOSS_CLEANUP_RAISE then
-		local str = p.raiseItemInfo(m);
-		p.addLeftItem(str);
-		if (m and m.item and m.item > 0 ) then
-			p.mItemCount = p.mItemCount - 1;
-			p.refreshBackNum();
-		end
-	end
-	
-	CloseLoadBar();
+---------------------------------------------------
+-- 登录时刻，有处于扫荡状态则进入扫荡界面
+function p.LoadUIForLogin( nBattleID, nRemain, nTotal )
+    LogInfo( "function p.LoadUIForLogin( nBattleID = %d, nRemain = %d, nTotal = %d ) ", nBattleID, nRemain, nTotal);
+	p.LoadUI( nBattleID );
+	p.nFightNumber = nTotal;
+	p.nClearStage	= nTotal - nRemain;
+	p.ShowFightingUI();
 end
-
-function p.initData()
-	MsgAffixBoss.mUIListener = p.processNet;
-end
-
-function p.freeData()
-	MsgAffixBoss.mUIListener = nil;
-	if (p.mTimerTaskTag) then
-		UnRegisterTimer(p.mTimerTaskTag);
-	end
-end
-
-function p.timerCallback(tag)
-	if (tag and tag == p.mTimerTaskTag) then
-		LogInfo("timerCallback");
-		p.refreshTimeUI();
-	end
-end
-
-function p.getRightLayer() 
-	local container = p.getContainerById(p.TagRightContainer);
-	
-	local layer = container:GetViewById(1);
-	if not CheckP(layer) then
-		return nil;
-	end
-	return layer;
-end
-
-function p.refreshTimeUI()
-	
-	local layer = p.getRightLayer();
-	local txtV = GetLabel(layer, p.TimeText);
-	local cool = p.mTimeSeconds;
-	local curTime = GetCurrentTime();
-	local time =  cool - curTime;
-	LogInfo("cool:%d,cur:%d,time:%d", cool, curTime,time);
-	--local isVisible = true;
-	if (time < 1) then
-		--isVisible = false;
-		p.timeFinish();
-	end
-	--if (txtV and isVisible) then
-	if (txtV) then
-		local s = p.formatTime(time);
-		LogInfo(s);
-		txtV:SetText(s);
-	end
-	
-	if (txtV) then
-		--txtV:SetVisible(isVisible);
-	end
-	
-	--p.addLeftItem("Test test");
-	
-end
-
-function p.timeFinish()
-	if ( p.mTimerTaskTag ) then
-		UnRegisterTimer(p.mTimerTaskTag);
-	end
-	p.mRunFlag = p.Flag.Prepare;
-	p.refreshRightLayout();
-end
-
---返回时间hh:mm:ss---
-function p.formatTime(timeNum, format)
-	if (timeNum < 0) then
-		timeNum = 0;
-	end
-	if format == nil then
-		format = "%02d:%02d:%02d"
-	end
-	return string.format(format, p.calculateTime(timeNum))
-end
-
-function p.calculateTime(timeNum)
-	local nSec=timeNum
-	local h=0
-	local m=0
-	local s=0
-	h=math.floor(nSec/ 3600)
-	m=math.floor((nSec%3600) /60)
-	s=nSec%60
-
-	return h,m,s
-end
-
-

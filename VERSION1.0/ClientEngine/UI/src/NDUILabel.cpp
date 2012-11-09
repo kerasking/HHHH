@@ -15,6 +15,8 @@
 #include "CCString.h"
 #include "ccTypes.h"
 #include "NDDebugOpt.h"
+#include "define.h"
+#include "NDSharedPtr.h"
 #include "CCDrawingPrimitives.h"
 
 using namespace cocos2d;
@@ -23,7 +25,7 @@ using namespace cocos2d;
 NS_NDENGINE_BGN
 
 IMPLEMENT_CLASS(NDUILabel, NDUINode)
-
+	
 NDUILabel::NDUILabel()
 {
 	m_bNeedMakeTex = false;
@@ -35,38 +37,40 @@ NDUILabel::NDUILabel()
 	m_texture = NULL;
 	m_kCutRect = CGRectZero;
 	m_uiRenderTimes = 2;
-	this->SetFontColor(m_kColor);
-	
+	SetFontColor(m_kColor);
+		
 	m_bHasFontBoderColor = false;
 	m_kColorFontBoder = ccc4(0, 0, 0, 0);
-
+	
 	memset(m_pfVerticesBoder, 0, sizeof(m_pfVerticesBoder));
 	memset(m_pbColorsBorder, 0, sizeof(m_pbColorsBorder));
 }
-
+	
 NDUILabel::~NDUILabel()
 {
 	CC_SAFE_RELEASE(m_texture);
 }
-
+	
 void NDUILabel::SetText(const char* text)
 {
 	if (0 == strcmp(text, m_strText.c_str())) 
 	{
 		return;
 	}
-	
+		
 	m_bNeedMakeTex = true;
 	m_bNeedMakeCoo = true;
 	m_bNeedMakeVer = true;
 
-	CCString *pstrString = CCString::stringWithUTF8String(text);
+	NSString pstrString = 0;
+
+	pstrString = CCString::stringWithUTF8String(text);
 	m_strText = pstrString->toStdString();
 }
-
+	
 void NDUILabel::OnFrameRectChange(CGRect srcRect, CGRect dstRect)
 {
-	CGRect thisRect = this->GetFrameRect();
+	CGRect thisRect = GetFrameRect();
 
 	if (srcRect.size.width != dstRect.size.width ||
 		srcRect.size.height != dstRect.size.height)
@@ -84,35 +88,35 @@ void NDUILabel::OnFrameRectChange(CGRect srcRect, CGRect dstRect)
 		m_bNeedMakeVer = true;
 	}
 }
-
+	
 void NDUILabel::SetFontColor(ccColor4B fontColor)
 {
 	m_kColor = fontColor;
-	
+		
 	m_pbColors[0] = fontColor.r; 
 	m_pbColors[1] = fontColor.g;
 	m_pbColors[2] = fontColor.b;
 	m_pbColors[3] = fontColor.a;
-	
+		
 	m_pbColors[4] = fontColor.r; 
 	m_pbColors[5] = fontColor.g;
 	m_pbColors[6] = fontColor.b;
 	m_pbColors[7] = fontColor.a;
-	
+		
 	m_pbColors[8] = fontColor.r; 
 	m_pbColors[9] = fontColor.g;
 	m_pbColors[10] = fontColor.b;
 	m_pbColors[11] = fontColor.a;
-	
+		
 	m_pbColors[12] = fontColor.r; 
 	m_pbColors[13] = fontColor.g;
 	m_pbColors[14] = fontColor.b;
 	m_pbColors[15] = fontColor.a;
 }
-
+	
 void NDUILabel::SetFontSize(unsigned int fontSize)
 {
-	//fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();//@todo
+	//fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
 
 	if (m_uiFontSize != fontSize)
 	{
@@ -120,31 +124,31 @@ void NDUILabel::SetFontSize(unsigned int fontSize)
 		m_bNeedMakeCoo = true;
 		m_bNeedMakeVer = true;
 	}
-	
+		
 	m_uiFontSize = fontSize;
 }
-
+	
 void NDUILabel::SetTextAlignment(int alignment)
 {
 	if (m_eTextAlignment != alignment) 
 	{
 		m_bNeedMakeVer = true;
 	}
-	
+		
 	m_eTextAlignment = (LabelTextAlignment)alignment;
 }
-
+	
 void NDUILabel::MakeTexture()
 {
 #ifdef _DEBUG
 	CCLog( "@NDUILabel::MakeTexture(): %s", m_strText.c_str());
 #endif
 
-	CGRect thisRect = this->GetFrameRect();	
+	CGRect thisRect = GetFrameRect();	
 	/*
 	CGSize dim = [text sizeWithFont:[UIFont fontWithName:FONT_NAME size:m_fontSize] 
 				  constrainedToSize:CGSizeMake(thisRect.size.width, thisRect.size.height)];		
-	
+		
 	//--test
 	dim.width = dim.width;
 	dim.height = dim.height;
@@ -156,7 +160,7 @@ void NDUILabel::MakeTexture()
 		return;
 	}
 
-	CCString* strString = new CCString(m_strText.c_str());
+	NSString strString = new CCString(m_strText.c_str());
 
 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
 	m_texture = new CCTexture2D;
@@ -165,18 +169,22 @@ void NDUILabel::MakeTexture()
 				kCCTextAlignmentLeft,
 				kCCVerticalTextAlignmentCenter,
 				FONT_NAME,
-				m_uiFontSize * scale
+				m_uiFontSize
 				);
-
-	delete strString;
+				
+// 			[[CCTexture2D alloc] initWithString:text 
+// 											 dimensions:dim 
+// 											  alignment:UITextAlignmentLeft
+// 											   fontName:FONT_NAME 
+// 											   fontSize:m_fontSize];
 }
-
+	
 void NDUILabel::MakeCoordinates()
 {
 	if (m_texture) 
 	{
-		CGRect thisRect = this->GetFrameRect();	
-		
+		CGRect thisRect = GetFrameRect();	
+			
 		m_kCutRect = CGRectZero;
 
 #if 0 //@todo
@@ -185,16 +193,13 @@ void NDUILabel::MakeCoordinates()
 #else
 		m_kCutRect.size = m_texture->getContentSizeInPixels();
 #endif
-		
+			
 		m_pfCoordinates[0] = m_kCutRect.origin.x / m_texture->getPixelsWide();
 		m_pfCoordinates[1] = (m_kCutRect.origin.y + m_kCutRect.size.height) / m_texture->getPixelsHigh();
-
 		m_pfCoordinates[2] = (m_kCutRect.origin.x + m_kCutRect.size.width) / m_texture->getPixelsWide();
 		m_pfCoordinates[3] = m_pfCoordinates[1];
-		
 		m_pfCoordinates[4] = m_pfCoordinates[0];
 		m_pfCoordinates[5] = m_kCutRect.origin.y / m_texture->getPixelsHigh();
-		
 		m_pfCoordinates[6] = m_pfCoordinates[2];
 		m_pfCoordinates[7] = m_pfCoordinates[5];
 	}
@@ -452,26 +457,26 @@ void NDUILabel::debugDraw()
 void NDUILabel::SetFontBoderColer(ccColor4B fontColor)
 {
 	m_bHasFontBoderColor = true;
-	
+		
 	m_kColorFontBoder = fontColor;
-	
+		
 	m_bNeedMakeVer = true;
-	
+		
 	m_pbColorsBorder[0] = fontColor.r;
 	m_pbColorsBorder[1] = fontColor.g;
 	m_pbColorsBorder[2] = fontColor.b;
 	m_pbColorsBorder[3] = fontColor.a;
-	
+		
 	m_pbColorsBorder[4] = fontColor.r;
 	m_pbColorsBorder[5] = fontColor.g;
 	m_pbColorsBorder[6] = fontColor.b;
 	m_pbColorsBorder[7] = fontColor.a;
-	
+		
 	m_pbColorsBorder[8] = fontColor.r;
 	m_pbColorsBorder[9] = fontColor.g;
 	m_pbColorsBorder[10] = fontColor.b;
 	m_pbColorsBorder[11] = fontColor.a;
-	
+		
 	m_pbColorsBorder[12] = fontColor.r;
 	m_pbColorsBorder[13] = fontColor.g;
 	m_pbColorsBorder[14] = fontColor.b;

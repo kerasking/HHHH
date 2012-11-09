@@ -11,6 +11,7 @@
 #include "NDUILabel.h"
 #include "NDDirector.h"
 #include <sstream>
+#include "ScriptCommon.h"
 
 using namespace std;
 
@@ -46,7 +47,7 @@ public:
 		if ((uiNumber % 48) == 0)
 		{
 			std::stringstream kStringStream;
-			int nSize = 0; //PicMemoryUsingLogOut(true); ///< 从缺少ScriptCommon，郭浩
+			int nSize = PicMemoryUsingLogOut(true);
 			kStringStream << nSize / 1024 << "K," << nSize / (1024 * 1024)
 					<< "M";
 			m_pkCurTextureSizeLabel->SetText(kStringStream.str().c_str());
@@ -57,6 +58,7 @@ private:
 	NDUILabel* m_pkCurTextureSizeLabel;
 };
 
+IMPLEMENT_CLASS(CTextLayer, NDUILayer)
 IMPLEMENT_CLASS(NDScene, NDNode)
 
 NDScene::NDScene()
@@ -76,11 +78,11 @@ void NDScene::Initialization()
 {
 	NDNode::Initialization();
 	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
-	
-	/***
-	* 这里缺少部分代码，因PicMemoryUsingLogOut没实现
-	* 郭浩
-	*/
+
+	CTextLayer *layer = new CTextLayer;
+	layer->Initialization();
+	layer->SetTouchEnabled(false);
+	AddChild(layer, 60000);
 }
 
 }

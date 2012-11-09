@@ -9,7 +9,7 @@
 
 #include "ScriptGameData.h"
 #include "globaldef.h"
-/////////////////////////////////////////////////////////////////////////////////////////
+
 
 unsigned int Get_VecScriptGameData_Size(VecScriptGameData& data)
 {
@@ -74,7 +74,7 @@ void NDScriptGameData::LogOutMemory()
 	//printf("\n*************cur game data size [%d] kbyte, [%d] mbyte", nTotal / 1024, nTotal / 1024 / 1024);
 }
 
-#pragma mark 打印游戏数据
+//#pragma mark 打印游戏数据
 
 void NDScriptGameData::LogOut(VecScriptGameData& vSGD)
 {
@@ -154,7 +154,7 @@ void NDScriptGameData::LogOut(eScriptData esd, unsigned int nKey, eRoleData e, i
 	}
 }
 
-#pragma mark 角色数据id列表管理
+//#pragma mark 角色数据id列表管理
 bool 
 NDScriptGameData::GetRoleDataIdList(eScriptData esd, unsigned int nKey, eRoleData e, int nRoleId, eIDList eList, ID_VEC& idVec)
 {
@@ -457,7 +457,7 @@ NDScriptGameData::LogOutRoleDataIdList(eScriptData esd, unsigned int nKey, eRole
 	}
 }
 
-#pragma mark 获取id列表
+//#pragma mark 获取id列表
 bool 
 NDScriptGameData::GetDataIdList(eScriptData esd, unsigned int nKey, eRoleData e, ID_VEC& idVec)
 {
@@ -495,7 +495,7 @@ NDScriptGameData::GetDataIdList(eScriptData esd, unsigned int nKey, eRoleData e,
 	return true;
 }
 
-#pragma mark 脚本数据接口
+//#pragma mark 脚本数据接口
 int				
 NDScriptGameData::GetIntData(eScriptData esd, unsigned int nKey, eRoleData e, int nId, unsigned short index)
 {
@@ -666,7 +666,7 @@ NDScriptGameData::DelAllData()
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma mark 角色基础数据接口
+//#pragma mark 角色基础数据接口
 int				
 NDScriptGameData::GetRoleBasicIntData(unsigned int nKey, unsigned short index)
 {
@@ -699,7 +699,7 @@ NDScriptGameData::DelRoleData(unsigned int nKey)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma mark 角色技能数据接口
+//#pragma mark 角色技能数据接口
 
 int				
 NDScriptGameData::GetRoleSkillIntData(unsigned int nKey, int nId, unsigned short index)
@@ -737,14 +737,9 @@ NDScriptGameData::DelRoleSkillData(unsigned int nKey)
 	DelData(eScriptDataRole, nKey, eRoleDataSkill);
 }
 
-void NDScriptGameData::Load()
-{
-
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma mark 角色状态数据接口
+//#pragma mark 角色状态数据接口
 int				
 NDScriptGameData::GetRoleStateIntData(unsigned int nKey, int nId, unsigned short index)
 {
@@ -783,7 +778,7 @@ NDScriptGameData::DelRoleStateData(unsigned int nKey)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma mark 角色物品数据接口
+//#pragma mark 角色物品数据接口
 
 int				
 NDScriptGameData::GetRoleItemIntData(unsigned int nKey, int nId, unsigned short index)
@@ -823,7 +818,7 @@ NDScriptGameData::DelRoleItemData(unsigned int nKey)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma mark 角色宠物数据接口
+//#pragma mark 角色宠物数据接口
 
 int				
 NDScriptGameData::GetRolePetIntData(unsigned int nKey, int nId, unsigned short index)
@@ -863,7 +858,7 @@ NDScriptGameData::DelRolePetData(unsigned int nKey)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma mark 角色任务数据接口
+//#pragma mark 角色任务数据接口
 
 int				
 NDScriptGameData::GetRoleTaskIntData(unsigned int nKey, int nId, unsigned short index)
@@ -903,7 +898,7 @@ NDScriptGameData::DelRoleTaskData(unsigned int nKey)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma mark 内部接口
+//#pragma mark 内部接口
 
 NDScriptGameData::NDScriptGameData()
 {
@@ -926,13 +921,18 @@ NDScriptGameData::GetScriptGameDataByVec(VecScriptGameData& vSGD, unsigned short
 	
 	return vSGD[index];
 	*/
-	if (vSGD.find(index) == vSGD.end())
+
+	VecScriptGameData::iterator it = vSGD.find(index);
+	if (it != vSGD.end())
+	{	
+		return it->second;
+	}	
+	else
 	{
 		ScriptGameData sgd;
 		vSGD.insert(VecScriptGameDataVt(index, sgd));
+		return vSGD[index];
 	}
-	
-	return vSGD[index];
 }
 
 STSCRIPTGAMEDATA&		
@@ -1056,9 +1056,19 @@ NDScriptGameData::GetScriptGameData(eScriptData esd, unsigned int nKey, eRoleDat
 		NDAsssert(0);
 	}
 	
-	VecScriptGameData& vSGD = GetVecScriptGameData(esd, nKey, e, nId);
+	VecScriptGameData* vSGD = NULL;
+
+	static FAST_CACHE s_cache; //@db @cache
+	vSGD = (VecScriptGameData*) s_cache.getCachePtr( (int) esd, (int) nKey, (int)e, nId );
+
+	if (!vSGD)
+	{
+		vSGD = &GetVecScriptGameData(esd, nKey, e, nId);
 	
-	return GetScriptGameDataByVec(vSGD, index);	
+		s_cache.saveCache((int)esd, (int)nKey, (int)e, nId, (void*) vSGD); //@db @cache
+	}
+
+	return GetScriptGameDataByVec(*vSGD, index);	
 }
 
 VecScriptGameData& 
@@ -1069,46 +1079,58 @@ NDScriptGameData::GetVecScriptGameData(eScriptData esd, unsigned int nKey, eRole
 		NDAsssert(0);
 	}
 	
-	if ( (size_t)esd == m_vMapGameScriptDataObject.size())
+	MapScriptGameData* mapSGD = NULL;
+
+	static FAST_CACHE s_cache; //@db @cache
+	mapSGD = (MapScriptGameData*) s_cache.getCachePtr( (int) esd, (int) nKey, (int)e, 0 );
+	
+	if (!mapSGD)
 	{
-		m_vMapGameScriptDataObject.push_back(MapGameScriptObject());
+		if ( (size_t)esd == m_vMapGameScriptDataObject.size())
+		{
+			m_vMapGameScriptDataObject.push_back(MapGameScriptObject());
+		}
+		else if ( (size_t)esd > m_vMapGameScriptDataObject.size() )
+		{
+			m_vMapGameScriptDataObject.resize(esd+1);
+		}
+		
+		MapGameScriptObject& mapGSO = m_vMapGameScriptDataObject[esd];
+		
+		MapGameScriptObjectIt itMapSGO = mapGSO.find(nKey);
+		
+		if (itMapSGO == mapGSO.end())
+		{
+			GameScriptDataSet newGSDS;
+			mapGSO.insert(MapGameScriptObjectPair(nKey, newGSDS));
+		}
+		
+		GameScriptDataSet& gsds = mapGSO[nKey];
+		
+		if ( e == eRoleDataBasic )
+			return gsds.basicdata;
+		
+		VecMapScriptGameData& vMSGD = gsds.extradata;
+		
+		size_t eIndex = e - 1;	
+		
+		if ( eIndex == vMSGD.size() )
+		{
+			vMSGD.push_back(MapScriptGameData());
+		}
+		else if ( eIndex > vMSGD.size() )
+		{
+			vMSGD.resize(eIndex + 1);
+		}
+	
+		mapSGD = &(vMSGD[eIndex]);
+
+		//@cache
+		s_cache.saveCache( (int) esd, (int) nKey, (int)e, 0, (void*) mapSGD );
 	}
-	else if ( (size_t)esd > m_vMapGameScriptDataObject.size() )
-	{
-		m_vMapGameScriptDataObject.resize(esd+1);
-	}
 	
-	MapGameScriptObject& mapGSO = m_vMapGameScriptDataObject[esd];
-	
-	MapGameScriptObjectIt itMapSGO = mapGSO.find(nKey);
-	
-	if (itMapSGO == mapGSO.end())
-	{
-		GameScriptDataSet newGSDS;
-		mapGSO.insert(MapGameScriptObjectPair(nKey, newGSDS));
-	}
-	
-	GameScriptDataSet& gsds = mapGSO[nKey];
-	
-	if ( e == eRoleDataBasic )
-		return gsds.basicdata;
-	
-	VecMapScriptGameData& vMSGD = gsds.extradata;
-	
-	size_t eIndex = e - 1;	
-	
-	if ( eIndex == vMSGD.size() )
-	{
-		vMSGD.push_back(MapScriptGameData());
-	}
-	else if ( eIndex > vMSGD.size() )
-	{
-		vMSGD.resize(eIndex + 1);
-	}
-	
-	MapScriptGameData& mapSGD = vMSGD[eIndex];
-	
-	return GetVecScriptGameDataByMap(mapSGD, nId).vData;
+	CCAssert(mapSGD);
+	return GetVecScriptGameDataByMap(*mapSGD, nId).vData;
 }
 
 int						

@@ -19,8 +19,9 @@
 #include "NDDataTransThread.h"
 #include "BattleUtil.h"
 #include "NDMapLayer.h"
-///< #include "NDMapMgr.h" 临时性注释 郭浩
-
+#include "NDMapMgr.h"
+#include "NDPath.h"
+#include "ScriptGlobalEvent.h"
 #include "ItemMgr.h"
 #include <sstream>
 //#include "NDUIMemo.h"
@@ -36,8 +37,67 @@
 #include "CPet.h"
 //#include "NewChatScene.h"
 #include "GameScene.h"
-#include "NDPath.h"
 #include "GlobalDialog.h"
+
+//===========================================================================
+typedef struct _tagEffectProp{
+	int		iPos;		//特效播放的位置;0:头顶,1:脚底,2:中间
+	bool	bRevers;	//特效播放是否需要翻转
+}TEffectProp;
+//所有特效播放属性
+TEffectProp		g_ArrayEfectProp[] = {
+	{ 0, true },	//0
+	{ 2, true },	//1
+	{ 2, true },	//2
+	{ 1, true },	//3
+	{ 1, true },	//4
+	{ 1, true },	//5
+	{ 1, true },	//6
+	{ 2, true },	//7
+	{ 2, true },	//8
+	{ 1, true },	//9
+	{ 1, true },	//10
+	{ 1, false },	//11
+	{ 1, false },	//12
+	{ 2, true },	//13
+	{ 1, true },	//14
+	{ 1, true },	//15
+	{ 1, true },	//16
+	{ 2, true },	//17
+	{ 2, false },	//18
+	{ 2, false },	//19
+	{ 1, false },	//20
+	{ 1, false },	//21
+	{ 1, false },	//22sd
+	{2,false},//{ 0, false },	//23
+	{2,false},//{ 0, false },	//24
+	{2,false},//{ 0, false },	//25
+	{2,false},//{ 0, false },	//26
+	{2,false},//{ 0, false },	//27
+	{2,false},//{ 0, false },	//28
+	{2,false},//{ 0, false },	//29
+	{2,false},//{ 0, false },	//30
+	{2,false},//{ 0, false },	//31
+	{2,false},//{ 2, false },	//32
+	{2,false},//{ 0, false },	//33
+	{1,false},//{ 0, false },	//34
+	{1,false},//{ 0, false },	//35
+	{1,false},//{ 0, false },	//36
+	{1,false},//{ 0, false },	//37
+	{1,false},//{ 0, false },	//38
+	{1,false},//{ 0, false },	//39
+	{1,false},//{ 0, false },	//40
+	{ 1, true },	//41
+	{ 1, true },	//42
+	{ 2, true },	//43
+	{ 1, true },	//44
+	{ 1, false },	//45
+	{ 2, false },	//46
+	{ 2, false },	//47
+	{ 2, false },	//48
+};
+
+//===========================================================================
 
 IMPLEMENT_CLASS(QuickTalkCell, NDUINode)
 
@@ -74,8 +134,7 @@ void QuickTalkCell::Initialization(const char* pszText, const CGSize& size)
 	img->SetFrameRect(CGRectMake(0.0f, size.height - 6.0f, size.width, 2.0f));
 	AddChild(img);
 
-	CGRect rectText = CGRectMake(15.0f, 5.0f, size.width - 15.0f,
-			size.height - 7.0f);
+	CGRect rectText = CGRectMake(15.0f, 5.0f, size.width - 15.0f, size.height - 7.0f);
 
 	m_lbText = new NDUILabel;
 	m_lbText->Initialization();
@@ -142,28 +201,22 @@ void HighlightTip::Initialization()
 
 	NDUIImage* pImgBubble = new NDUIImage;
 	pImgBubble->Initialization();
-	pImgBubble->SetFrameRect(
-			CGRectMake(0, 0, m_pkPicBubble->GetSize().width,
-					m_pkPicBubble->GetSize().height));
+	pImgBubble->SetFrameRect(CGRectMake(0, 0, m_pkPicBubble->GetSize().width, m_pkPicBubble->GetSize().height));
 	pImgBubble->SetPicture(m_pkPicBubble, false);
 	AddChild(pImgBubble);
 
 	NDUIImage* imgHp = new NDUIImage;
 	imgHp->Initialization();
-	NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture(
-			NDPath::GetImgPath("hp.png"));
+	NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("hp.png"));
 	imgHp->SetPicture(pic);
-	imgHp->SetFrameRect(
-			CGRectMake(2, 20, pic->GetSize().width, pic->GetSize().height));
+	imgHp->SetFrameRect(CGRectMake(2, 20, pic->GetSize().width, pic->GetSize().height));
 	AddChild(imgHp);
 
 	NDUIImage* imgMp = new NDUIImage;
 	imgMp->Initialization();
-	pic = NDPicturePool::DefaultPool()->AddPicture(
-			NDPath::GetImgPath("mp.png"));
+	pic = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("mp.png"));
 	imgMp->SetPicture(pic);
-	imgMp->SetFrameRect(
-			CGRectMake(2, 35, pic->GetSize().width, pic->GetSize().height));
+	imgMp->SetFrameRect(CGRectMake(2, 35, pic->GetSize().width, pic->GetSize().height));
 	AddChild(imgMp);
 
 	m_hpBar = new HighlightTipStatusBar(0xC7321A);
@@ -333,10 +386,10 @@ Battle::~Battle()
 		NDEraseInOutEffect *eioEffect = eraseInOutEffect.Pointer();
 		SAFE_DELETE_NODE(eioEffect);
 	}
-	CC_SAFE_DELETE (m_picActionWordDef);
-	CC_SAFE_DELETE (m_picActionWordDodge);
-	CC_SAFE_DELETE (m_picActionWordFlee);
-	CC_SAFE_DELETE (m_battleBg);
+	//CC_SAFE_DELETE (m_picActionWordDef);
+	//CC_SAFE_DELETE (m_picActionWordDodge);
+	//CC_SAFE_DELETE (m_picActionWordFlee);
+	//CC_SAFE_DELETE (m_battleBg);
 
 	//	SAFE_DELETE(m_picTalk);
 	//	SAFE_DELETE(m_picQuickTalk);
@@ -362,27 +415,20 @@ Battle::~Battle()
 //	director->PopScene(true);
 	GameScene* gameScene = (GameScene*) director->GetRunningScene();
 
-	/***
-	 * 临时性注释 郭浩 begin
-	 */
-// 	NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(gameScene);
-// 	if (mapLayer) {
-// 		//		mapLayer->SetScreenCenter(m_orignalPos);
-// 		//mapLayer->SetBattleBackground(false);
-// 		mapLayer->replaceMapData(sceneMapId, sceneCenterX, sceneCenterY);
-// 		ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",1);
-// 		int theId=NDMapMgrObj.GetMotherMapID();
-// 		if(theId/100000000==9){
-// 			ScriptMgrObj.excuteLuaFunc("showDynMapUI", "",0);
-// 		}else{
-// 			ScriptMgrObj.excuteLuaFunc("showCityMapUI", "",0);
-// 		}
-// 		//		mapLayer->AddChild(&(NDPlayer::defaultHero()));
-// 	}
-	/***
-	 * 临时性注释 郭浩
-	 * end
-	 */
+	NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(gameScene);
+	if (mapLayer) {
+		//		mapLayer->SetScreenCenter(m_orignalPos);
+		//mapLayer->SetBattleBackground(false);//不在此设置非战斗背景播放其他非战斗元素(NPC==)--Guosen 2012.7.5
+		//mapLayer->replaceMapData(sceneMapId, sceneCenterX, sceneCenterY);//不在此还原地图--Guosen 2012.7.5
+		//ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",0);//不在此显示UI--Guosen 2012.7.2
+		int theId=NDMapMgrObj.GetMotherMapID();
+		//if(theId/100000000==9){
+		//ScriptMgrObj.excuteLuaFunc("showDynMapUI", "",0);
+		//}else{
+		//ScriptMgrObj.excuteLuaFunc("showCityMapUI", "",0);
+		//}
+		//		mapLayer->AddChild(&(NDPlayer::defaultHero()));
+	}
 
 	gameScene->OnBattleEnd();
 	//	if (m_btnLeave) {
@@ -401,8 +447,7 @@ Battle::~Battle()
 
 	//	SAFE_DELETE(m_picWhoAmI);
 	//	SAFE_DELETE(m_picLingPai);
-	CC_SAFE_DELETE (m_picBaoJi);
-	//	SAFE_DELETE(m_picBoji);
+	//CC_SAFE_DELETE (m_picBaoJi);
 
 	//	if (s_bAuto) {
 	//		RemoveChild(m_lbAuto, false);
@@ -417,12 +462,14 @@ Battle::~Battle()
 	{
 		Fighter* fighter = *it;
 		fighter->GetRole()->RemoveFromParent(false);
+		fighter->ClearAllStatusIcons();
 	}
 
 	for (VEC_FIGHTER_IT it = m_vDefencer.begin(); it != m_vDefencer.end(); it++)
 	{
 		Fighter* fighter = *it;
 		fighter->GetRole()->RemoveFromParent(false);
+		fighter->ClearAllStatusIcons();
 	}
 
 	for (VEC_SUB_ANI_GROUP_IT it = m_vSubAniGroup.begin();
@@ -457,11 +504,11 @@ Battle::~Battle()
 		}
 	}
 
-	//if (player.IsInState(USERSTATE_BF_WAIT_RELIVE))
-	//{
-	//	BattleFieldRelive::Show();
-	//}
-	//
+// 	if (player.IsInState(USERSTATE_BF_WAIT_RELIVE))
+// 	{
+// 		BattleFieldRelive::Show();
+// 	}
+	
 	if (m_rewardContent.size() > 2)
 	{
 		GlobalShowDlg(NDCommonCString("BattleRes"), m_rewardContent.c_str(),3.0f);
@@ -524,12 +571,12 @@ void Battle::AddFighter(Fighter* f)
 	if (BATTLE_GROUP_DEFENCE == group)
 	{
 		role->m_bFaceRight = false;
-		m_vAttaker.push_back(f);
+		m_vDefencer.push_back(f);
 	}
 	else
 	{
 		role->m_bFaceRight = true;
-		m_vDefencer.push_back(f);
+		m_vAttaker.push_back(f);
 	}
 	f->setPosition(m_teamAmout);
 	f->showFighterName(true);
@@ -755,7 +802,7 @@ void Battle::OnButtonClick(NDUIButton* button)
 	//		ShowQuickChat(m_imgQuickTalkBg->GetParent() == NULL);
 	//		
 	//	} else if (button == m_btnSendChat) {
-	//		NSString* msg = m_chatDelegate.tfChat.text;
+	//		NSString msg = m_chatDelegate.tfChat.text;
 	//		if ([msg length] > 0) {
 	//			ChatInput::SendChatDataToServer(ChatTypeSection, [msg UTF8String]);
 	//			m_chatDelegate.tfChat.text = @"";
@@ -790,276 +837,18 @@ void Battle::Initialization(int action)
 	m_battleBg->SetBackgroundColor(ccc4(0, 0, 0, 188));
 	m_battleBg->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
 
-	//	m_picTalk = new NDPicture();
-	//	m_picTalk->Initialization(GetImgPathBattleUI("battle_chat.png"));
-	//	
-	//	m_picQuickTalk = new NDPicture;
-	//	m_picQuickTalk->Initialization(GetImgPathBattleUI("battle_fast_handle.png"));
-	//	
-	//	m_btnTalk = new NDUIButton();
-	//	m_btnTalk->Initialization();
-	//	m_btnTalk->SetImage(m_picTalk);
-	//	m_btnTalk->SetFrameRect(CGRectMake(0, 263, 47, 57));
-	//	m_btnTalk->SetTag(BTN_TALK);
-	//	m_btnTalk->SetDelegate(this);
-	//	AddChild(m_btnTalk);
-	//	
-	//	m_layerBtnQuitTalk = new NDUILayer;
-	//	m_layerBtnQuitTalk->Initialization();
-	//	m_layerBtnQuitTalk->SetBackgroundColor(ccc4(0, 0, 0, 0));
-	//	m_layerBtnQuitTalk->SetFrameRect(CGRectMake(40, 300, 48, 20));
-	//	AddChild(m_layerBtnQuitTalk, 1);
-	//	
-	//	m_btnQuickTalk = new NDUIButton();
-	//	m_btnQuickTalk->Initialization();
-	//	m_btnQuickTalk->SetImage(m_picQuickTalk);
-	//	m_btnQuickTalk->SetFrameRect(CGRectMake(0, 0, 48, 20));
-	//	m_btnQuickTalk->SetDelegate(this);
-	//	m_layerBtnQuitTalk->AddChild(m_btnQuickTalk);
-	//	
-	//	
-	//	if (m_bWatch) {
-	//		m_picLeave = new NDPicture();
-	//		m_picLeave->Initialization(GetImgPathBattleUI("battle_cancel.png"));
-	//		
-	//		m_btnLeave = new NDUIButton();
-	//		m_btnLeave->Initialization();
-	//		m_btnLeave->SetImage(m_picLeave);
-	//		m_btnLeave->SetDelegate(this);
-	//		m_btnLeave->SetFrameRect(CGRectMake(420, 260, 60, 60));
-	//		AddChild(m_btnLeave);
-	//	} else {
-	//		m_picAuto = new NDPicture();
-	//		m_picAuto->Initialization(GetImgPathBattleUI("battle_auto.png"));
-	//		
-	//		m_picAutoCancel = new NDPicture();
-	//		m_picAutoCancel->Initialization(GetImgPathBattleUI("battle_auto_cancel.png"));
-	//		
-	//		m_btnAuto = new NDUIButton();
-	//		m_btnAuto->Initialization();
-	//		m_btnAuto->SetImage(s_bAuto ? m_picAutoCancel : m_picAuto);
-	//		m_btnAuto->SetFrameRect(CGRectMake(420, 260, 60, 60));
-	//		m_btnAuto->SetDelegate(this);
-	//		AddChild(m_btnAuto);
-	//	}
-	//	
-	//	m_imgTimer = new NDUIImage;
-	//	m_imgTimer->Initialization();
-	//	NDPicture* pic = new NDPicture;
-	//	pic->Initialization(GetImgPathBattleUI("timerback.png"));
-	//	m_imgTimer->SetPicture(pic, true);
-	//	m_imgTimer->SetFrameRect(CGRectMake(185.0f, 75.0f, 111.0f, 46.0f));
-	//	AddChild(m_imgTimer);
-	//	
-	//	m_lbTimerTitle = new NDUILabel;
-	//	m_lbTimerTitle->?ialization();
-	//	m_lbTimerTitle->SetFontSize(14);
-	//	m_lbTimerTitle->SetFontColor(ccc4(255, 255, 255, 255));
-	//	m_lbTimerTitle->SetText(NDCommonCString("DaoJiShi"));
-	//	m_lbTimerTitle->SetFrameRect(CGRectMake(218.0f, 81.0f, 60.0f, 20.0f));
-	//	AddChild(m_lbTimerTitle);
-	//	
-	//	m_lbTimer = new NDUILabel;
-	//	m_lbTimer->Initialization();
-	//	m_lbTimer->SetFontSize(14);
-	//	m_lbTimer->SetFontColor(ccc4(255, 255, 255, 255));
-	//	m_lbTimer->SetText("30");
-	//	m_lbTimer->SetFrameRect(CGRectMake(233.0f, 103.0f, 60.0f, 20.0f));
-	//	AddChild(m_lbTimer);
-	//	
-	//	m_imgTurn = new NDUIImage;
-	//	m_imgTurn->Initialization();
-	//	pic = new NDPicture;
-	//	pic->Initialization(GetImgPathBattleUI("turnback.png"));
-	//	m_imgTurn->SetPicture(pic, true);
-	//	m_imgTurn->SetFrameRect(CGRectMake(185.0f, 155.0f, 111.0f, 46.0f));
-	//	AddChild(m_imgTurn);
-	//	
-	//	m_lbTurnTitle = new NDUILabel;
-	//	m_lbTurnTitle->Initialization();
-	//	m_lbTurnTitle->SetFontSize(14);
-	//	m_lbTurnTitle->SetFontColor(ccc4(255, 255, 255, 255));
-	//	m_lbTurnTitle->SetText(NDCommonCString("HuiHe"));
-	//	m_lbTurnTitle->SetFrameRect(CGRectMake(225.0f, 160.0f, 60.0f, 20.0f));
-	//	AddChild(m_lbTurnTitle);
-	//	
-	//	m_lbTurn = new NDUILabel;
-	//	m_lbTurn->Initialization();
-	//	m_lbTurn->SetFontSize(14);
-	//	m_lbTurn->SetFontColor(ccc4(255, 255, 255, 255));
-	//	m_lbTurn->SetText("1/30");
-	//	m_lbTurn->SetFrameRect(CGRectMake(226.0f, 177.0f, 60.0f, 20.0f));
-	//	AddChild(m_lbTurn);
-	//	
-	//	m_timer.SetTimer(this, TIMER_TIMELEFT, 1);
-	//	
-//		NDEraseInOutEffect *eioEffect = new NDEraseInOutEffect;
-//		eioEffect->Initialization();
-//		eraseInOutEffect = eioEffect->QueryLink();
-	//	
-	//	m_imgChat = new NDUIImage;
-	//	m_imgChat->Initialization();
-	//	pic = new NDPicture;
-	//	pic->Initialization(GetImgPathBattleUI("input_edit.png"));
-	//	m_imgChat->SetPicture(pic, true);
-	//	m_imgChat->SetFrameRect(CGRectMake(44.0f, 0.0f, 392.0f, 38.0f));
-	//	//AddChild(m_imgChat);
-	//	
-	//	m_btnSendChat = new NDUIButton;
-	//	m_btnSendChat->Initialization();
-	//	pic = new NDPicture;
-	//	pic->Initialization(GetImgPathBattleUI("chat_btn_normal.png"));
-	//	m_btnSendChat->SetImage(pic, false, CGRectMake(0, 0, 0, 0), true);
-	//	m_btnSendChat->SetFrameRect(CGRectMake(386.0f, 3.0f, 25.0f, 26.0f));
-	//	m_btnSendChat->SetDelegate(this);
-	//	//AddChild(m_btnSendChat);
-	//	
-	//	m_imgQuickTalkBg = new NDUIImage;
-	//	m_imgQuickTalkBg->Initialization();
-	//	pic = new NDPicture;
-	//	pic->Initialization(GetImgPathBattleUI("battle_fast_bg.png"), 10, 10);
-	//	m_imgQuickTalkBg->SetPicture(pic, true);
-	//	m_imgQuickTalkBg->SetFrameRect(CGRectMake(1.0f, 154.0f, 210.0f, 166.0f));
-	//	//AddChild(m_imgQuickTalkBg);
-	//	
-	//	m_tlQuickTalk = new NDUITableLayer;
-	//	m_tlQuickTalk->Initialization();
-	//	m_tlQuickTalk->VisibleSectionTitles(false);
-	//	
-	//	m_tlQuickTalk->SetBackgroundColor(ccc4(0, 0, 0, 0));
-	//	NDDataSource *ds = new NDDataSource;
-	//	NDSection *sec = new NDSection;
-	//	
-	//	//NDQuickTalkDataPersist& quickTalk = NDQuickTalkDataPersist::DefaultInstance();
-	//	//vector<string> vTalk;
-	//	//quickTalk.GetAllQuickTalkString(NDPlayer::defaultHero().m_id, vTalk);
-	//	
-	//	QuickTalkCell *talk = new QuickTalkCell;
-	//	talk->Initialization([kSysQuickTalk1 UTF8String], CGSizeMake(195.0f, 32.0f));
-	//	sec->AddCell(talk);
-	//	
-	//	talk = new QuickTalkCell;
-	//	talk->Initialization([kSysQuickTalk2 UTF8String], CGSizeMake(195.0f, 32.0f));
-	//	sec->AddCell(talk);
-	//	
-	//	talk = new QuickTalkCell;
-	//	talk->Initialization([kSysQuickTalk3 UTF8String], CGSizeMake(195.0f, 32.0f));
-	//	sec->AddCell(talk);
-	//	
-	//	talk = new QuickTalkCell;
-	//	talk->Initialization([kSysQuickTalk4 UTF8String], CGSizeMake(195.0f, 32.0f));
-	//	sec->AddCell(talk);
-	//	
-	//	talk = new QuickTalkCell;
-	//	talk->Initialization([kSysQuickTalk5 UTF8String], CGSizeMake(195.0f, 32.0f));
-	//	sec->AddCell(talk);
-	//	
-	//	sec->SetFocusOnCell(0);
-	//	m_tlQuickTalk->SetFrameRect(CGRectMake(3.0f, 160.0f, 204.0f, 165.0f));
-	//	
-	//	ds->AddSection(sec);
-	//	m_tlQuickTalk->SetDelegate(this);
-	//	m_tlQuickTalk->SetDataSource(ds);
-	//AddChild(m_tlQuickTalk);
-
 	if (m_bWatch)
 	{ // 观战不需要其他操作
 		return;
 	}
 
-	//	m_imgWhoAmI = new NDUIImage();
-	//	m_imgWhoAmI->Initialization();
-	//	m_picWhoAmI = NDPicturePool::DefaultPool()->AddPicture(GetImgPath("whoami.png"));
-	//	m_picLingPai = NDPicturePool::DefaultPool()->AddPicture(GetImgPath("lingpai.png"));
-	//	m_imgWhoAmI->SetFrameRect(CGRectMake(0, 0, m_picWhoAmI->GetSize().width, m_picWhoAmI->GetSize().height));
-	//	m_imgWhoAmI->SetPicture(m_picWhoAmI);
-	//	AddChild(m_imgWhoAmI);
 
-	/*m_battleOpt = new NDUITableLayer;
-	 m_battleOpt->Initialization();
-	 m_battleOpt->VisibleSectionTitles(false);
-	 NDDataSource *ds = new NDDataSource;
-	 NDSection *sec = new NDSection;
-	 
-	 // 攻击
-	 NDUIButton  *btnAttack = new NDUIButton;
-	 btnAttack->Initialization();
-	 btnAttack->SetTag(BTN_ATTATCK);
-	 btnAttack->SetFocusColor(ccc4(253, 253, 253, 255));
-	 btnAttack->SetTitle("攻  击");
-	 sec->AddCell(btnAttack);
-	 
-	 // 物品
-	 NDUIButton  *btnUseItem = new NDUIButton;
-	 btnUseItem->Initialization();
-	 btnUseItem->SetTitle("物  品");
-	 btnUseItem->SetTag(BTN_ITEM);
-	 btnUseItem->SetFocusColor(ccc4(253, 253, 253, 255));
-	 sec->AddCell(btnUseItem);
-	 
-	 // 技能
-	 NDUIButton  *btnSkill = new NDUIButton;
-	 btnSkill->Initialization();
-	 btnSkill->SetTitle("技  能");
-	 btnSkill->SetTag(BTN_SKILL);
-	 btnSkill->SetFocusColor(ccc4(253, 253, 253, 255));
-	 sec->AddCell(btnSkill);
-	 
-	 // 防御
-	 NDUIButton  *btnDefence = new NDUIButton;
-	 btnDefence->Initialization();
-	 btnDefence->SetTitle("防  御");
-	 btnDefence->SetTag(BTN_DEFENCE);
-	 btnDefence->SetFocusColor(ccc4(253, 253, 253, 255));
-	 sec->AddCell(btnDefence);
-	 
-	 // 自动
-	 NDUIButton  *btnAuto = new NDUIButton;
-	 btnAuto->Initialization();
-	 btnAuto->SetTitle("自  动");
-	 btnAuto->SetTag(BTN_AUTO);
-	 btnAuto->SetFocusColor(ccc4(253, 253, 253, 255));
-	 sec->AddCell(btnAuto);
-	 
-	 // 逃跑
-	 NDUIButton  *btnRun = new NDUIButton;
-	 btnRun->Initialization();
-	 if (m_battleType != BATTLE_TYPE_PRACTICE) {
-	 btnRun->SetTitle("逃  跑");
-	 } else {
-	 btnRun->SetTitle("退  出");
-	 }
-	 
-	 btnRun->SetTag(BTN_FLEE);
-	 btnRun->SetFocusColor(ccc4(253, 253, 253, 255));
-	 sec->AddCell(btnRun);
-	 
-	 // 捕捉
-	 if (m_battleType != BATTLE_TYPE_PRACTICE) {
-	 NDUIButton  *btnCatch = new NDUIButton;
-	 btnCatch->Initialization();
-	 btnCatch->SetTitle("捕  捉");
-	 btnCatch->SetTag(BTN_CATCH);
-	 btnCatch->SetFocusColor(ccc4(253, 253, 253, 255));
-	 sec->AddCell(btnCatch);
-	 }
-	 
-	 sec->SetFocusOnCell(0);
-	 m_battleOpt->SetFrameRect(CGRectMake((winSize.width / 2) - 30, winSize.height / 2 - 115, 60, TEXT_BTN_HEIGHT * sec->Count()));
-	 
-	 ds->AddSection(sec);
-	 m_battleOpt->SetDelegate(this);
-	 m_battleOpt->SetDataSource(ds);
-	 AddChild(m_battleOpt);*/
 
 	if (ms_bAuto)
 	{
 		SetAutoCount();
 	}
 
-	//	m_playerHead = new PlayerHead(&NDPlayer::defaultHero());
-	//	m_playerHead->Initialization(true);
-	//	AddChild(m_playerHead);
 
 	if (ms_bAuto)
 	{
@@ -1191,8 +980,7 @@ void Battle::InitEudemonOpt()
  }
  }*/
 
-void Battle::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell,
-		unsigned int cellIndex, NDSection* section)
+void Battle::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section)
 {
 	//	if (table == m_tlQuickTalk) {
 	//		if (cell->IsKindOfClass(RUNTIME_CLASS(QuickTalkCell))) {
@@ -1828,8 +1616,7 @@ void Battle::OnBtnAuto(bool bSendAction)
 		return;
 	}
 
-	if (!m_bSendCurTurnUserAction && GetMainUser()
-			&& GetMainUser()->isAlive())
+	if (!m_bSendCurTurnUserAction && GetMainUser() && GetMainUser()->isAlive())
 	{
 		bool bUserActionSend = false;
 		switch (ms_kLastTurnActionUser.btAction)
@@ -1843,8 +1630,7 @@ void Battle::OnBtnAuto(bool bSendAction)
 			break;
 		case BATTLE_ACT_MAG_ATK:
 		{
-			if (m_setBattleSkillList.count(
-					ms_kLastTurnActionUser.vData.at(0)) == 0)
+			if (m_setBattleSkillList.count(ms_kLastTurnActionUser.vData.at(0)) == 0)
 			{ // 该技能本回合已不可使用
 				BattleAction atk(BATTLE_ACT_PHY_ATK);
 				atk.vData.push_back(0);
@@ -2007,7 +1793,7 @@ void Battle::Init()
 	int sceneCenterX;
 	int sceneCenterY;
 	NDPlayer::defaultHero().UpdateState(USERSTATE_FIGHTING, true);
-//	dieAniGroup=NULL;
+	dieAniGroup=NULL;
 	m_bChatTextFieldShouldShow = false;
 	//	m_imgTurn = NULL;
 	//	m_imgTimer = NULL;
@@ -2034,15 +1820,18 @@ void Battle::Init()
 	//	m_petHead = NULL;
 	m_battleBg = NULL;
 	//m_eudemonOpt = NULL;
-	m_picActionWordDef = new NDPicture;
-	m_picActionWordDef->Initialization(NDPath::GetImgPath("actionWord.png").c_str());
-	m_picActionWordDef->Cut(CGRectMake(0.0f, 0.0f, 37.0f, 18.0f));
-	m_picActionWordFlee = new NDPicture;
-	m_picActionWordDodge = new NDPicture;
-	m_picActionWordDodge->Initialization(NDPath::GetImgPath("actionWord.png").c_str());
-	m_picActionWordDodge->Cut(CGRectMake(0.0f, 18.0f, 37.0f, 18.0f));
-	m_picActionWordFlee->Initialization(NDPath::GetImgPath("actionWord.png").c_str());
-	m_picActionWordFlee->Cut(CGRectMake(0.0f, 36.0f, 37.0f, 18.0f));
+
+	//--Guosen 2012.6.28//不显示动作名称（防御，逃跑，闪避），也就不加载图形文件
+	//m_picActionWordDef = new NDPicture;
+	//m_picActionWordDef->Initialization(NDPath::GetImgPath("actionWord.png"));
+	//m_picActionWordDef->Cut(CGRectMake(0.0f, 0.0f, 37.0f, 18.0f));
+	//m_picActionWordFlee = new NDPicture;
+	//m_picActionWordDodge = new NDPicture;
+	//m_picActionWordDodge->Initialization(NDPath::GetImgPath("actionWord.png"));
+	//m_picActionWordDodge->Cut(CGRectMake(0.0f, 18.0f, 37.0f, 18.0f));
+	//m_picActionWordFlee->Initialization(NDPath::GetImgPath("actionWord.png"));
+	//m_picActionWordFlee->Cut(CGRectMake(0.0f, 36.0f, 37.0f, 18.0f));
+	//--
 
 	//	m_picTalk = NULL;
 	//	m_picQuickTalk = NULL;
@@ -2088,11 +1877,8 @@ void Battle::Init()
 	m_foreBattleStatus = 0;
 	watchBattle = false;
 
-	m_picBaoJi = new NDPicture;
-	m_picBaoJi->Initialization(NDPath::GetImgPath("bo.png").c_str());
-	//	
-	//	m_picBoji = new NDPicture;
-	//	m_picBoji->Initialization(GetImgPath("boji.png"));
+// 	m_picBaoJi = new NDPicture;
+// 	m_picBaoJi->Initialization(NDPath::GetImgPath("bo.png").c_str());
 
 	m_defaultActionUser = BATTLE_ACT_PHY_ATK;
 	m_pkDefaultTargetUser = NULL;
@@ -2149,54 +1935,55 @@ Fighter* Battle::GetTouchedFighter(VEC_FIGHTER& fighterList, CGPoint pt)
 
 bool Battle::TouchEnd(NDTouch* touch)
 {
-	/***
-	 * 临时性注释 郭浩
-	 * begin
-	 */
-// 	if (m_dlgStatus)
-// 	{
-// 		CloseStatusDlg();
-// 	}
-// 	
-// 	if (touch && touch->GetLocation().x > 0.0001f && touch->GetLocation().y > 0.0001f) {
-// 		if (NDUILayer::TouchEnd(touch)) {
-// 			return false;
-// 		}
-// 	}
-// 	
-// 	Fighter* f = GetTouchedFighter(GetOurSideList(), touch->GetLocation());
-// 	if(!f){
-// 		f=GetTouchedFighter(GetEnemySideList(), touch->GetLocation());
-// 	}
-// 	
-// 	if(f)
-// 	{
-// 		NDLog("touch fighter");
-// 		if(currentShowFighter>0)
-// 		{
-// 			ScriptMgrObj.excuteLuaFunc("CloseFighterInfo","FighterInfo",0);
-// 		}
-// 		currentShowFighter=f->m_kInfo.idObj;
-// 		
-// 		int idType=f->m_kInfo.idType;
-// 		int skillId=-1;
-// 		if(f->m_kInfo.fighterType==FIGHTER_TYPE_PET)
-// 		{
-// 			skillId=ScriptDBObj.GetN("pet_config",idType,DB_PET_CONFIG_SKILL);
-// 		}else if(f->m_kInfo.fighterType==FIGHTER_TYPE_MONSTER)
-// 		{
-// 			skillId=ScriptDBObj.GetN("monstertype",idType,DB_MONSTERTYPE_SKILL);
-// 		}
-// 		std::string skillName=ScriptDBObj.GetS("skill_config",skillId,DB_SKILL_CONFIG_NAME);
-// 		ScriptMgrObj.excuteLuaFunc("LoadUI", "FighterInfo",f->getOriginX(),f->getOriginY());
-// 		ScriptMgrObj.excuteLuaFunc<bool>("SetFighterInfo","FighterInfo",f->GetRole()->m_name,skillName);
-// 		ScriptMgrObj.excuteLuaFunc("UpdateHp","FighterInfo",f->m_kInfo.nLife,f->m_kInfo.nLifeMax);
-// 		ScriptMgrObj.excuteLuaFunc("UpdateMp","FighterInfo",f->m_kInfo.nMana,f->m_kInfo.nManaMax);
-// 	}
-	/***
-	 * 临时性注释 郭浩
-	 * end
-	 */
+	if (m_dlgStatus)
+	{
+		CloseStatusDlg();
+	}
+	
+	if (touch && touch->GetLocation().x > 0.0001f && touch->GetLocation().y > 0.0001f) {
+		if (NDUILayer::TouchEnd(touch)) {
+			return false;
+		}
+	}
+	
+	Fighter* f = GetTouchedFighter(GetOurSideList(), touch->GetLocation());
+	if(!f){
+		f=GetTouchedFighter(GetEnemySideList(), touch->GetLocation());
+	}
+	
+	if(f)
+	{
+		NDLog("touch fighter");
+		if(currentShowFighter>0)
+		{
+			ScriptMgrObj.excuteLuaFunc("CloseFighterInfo","FighterInfo",0);
+		}
+		currentShowFighter=f->m_kInfo.idObj;
+		
+		//int nLevel = 0;
+		//if ( f->m_info.fighterType == FIGHTER_TYPE_PET )
+		//{
+		//    nLevel = ScriptDBObj.GetN( "pet_config", f->m_info.idType, DB_PET_CONFIG_SKILL );
+		//}
+		//else if( f->m_info.fighterType == FIGHTER_TYPE_MONSTER )
+		//{
+		//    nLevel = ScriptDBObj.GetN( "monstertype", f->m_info.idType, DB_MONSTERTYPE_LEVEL );
+		//}
+		ScriptMgrObj.excuteLuaFunc( "LoadUI", "FighterInfo", f->getOriginX(), f->getOriginY() );
+		std::string skillName = "";
+		if ( f->m_info.skillId > 0 )
+		{
+			skillName = ScriptDBObj.GetS( "skill_config", f->m_info.skillId, DB_SKILL_CONFIG_NAME );
+
+		}else
+		{
+			NDLog(@"fighter have no skill");
+		}
+		ScriptMgrObj.excuteLuaFunc<bool>( "SetFighterInfo", "FighterInfo", f->GetRole()->m_strName, skillName, f->m_kInfo.level );
+
+		ScriptMgrObj.excuteLuaFunc("UpdateHp","FighterInfo",f->m_kInfo.nLife,f->m_kInfo.nLifeMax);
+		ScriptMgrObj.excuteLuaFunc("UpdateMp","FighterInfo",f->m_kInfo.nMana,f->m_kInfo.nManaMax);
+	}
 
 //	switch (m_battleStatus)
 //	{
@@ -2338,9 +2125,7 @@ void Battle::SendBattleAction(const BattleAction& action)
 		waiting->SetTag(TAG_WAITING);
 		waiting->SetText(NDCommonCString("wait"));
 		CGSize sizeText = getStringSize(NDCommonCString("wait"), 15);
-		waiting->SetFrameRect(
-				CGRectMake(pt.x - sizeText.width / 2, pt.y, sizeText.width,
-						sizeText.height));
+		waiting->SetFrameRect(CGRectMake(pt.x - sizeText.width / 2, pt.y, sizeText.width, sizeText.height));
 		AddChild(waiting);
 	}
 
@@ -2408,27 +2193,17 @@ void Battle::setBattleMap(int mapId, int posX, int posY)
 	//	NDMapMgrObj.ClearMonster();
 	//	NDMapMgrObj.ClearGP();
 
-	/***
-	 * 临时性注释 郭浩
-	 * begin
-	 */
-	// 	NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
-// 	if(mapLayer){
-// 		sceneMapId = mapLayer->GetMapIndex();
-// 		sceneCenterX = mapLayer->GetScreenCenter().x;
-// 		sceneCenterY = mapLayer->GetScreenCenter().y;
-// 		//mapLayer->SetBattleBackground(true);
-// 		mapLayer->replaceMapData(mapId, posX, posY);
-	//mapLayer->SetNeedShowBackground(false);
-	//}
-	/***
-	 * 临时性注释 郭浩
-	 * end
-	 ***/
+	NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
+	if(mapLayer)
+	{
+		sceneMapId = mapLayer->GetMapIndex();
+		sceneCenterX = mapLayer->GetScreenCenter().x;
+		sceneCenterY = mapLayer->GetScreenCenter().y;
+		//mapLayer->SetBattleBackground(true);
+		mapLayer->replaceMapData(mapId, posX, posY);
 
-//	return NDMapMgrObj.loadBattleSceneByMapID(mapId,posX*MAP_UNITSIZE,posY*MAP_UNITSIZE);
-	//	mapLayer = NDMapMgrObj.getBattleMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
-	//	mapLayer->SetScreenCenter(ccp(posX*MAP_UNITSIZE,posY*MAP_UNITSIZE));
+		//mapLayer->SetNeedShowBackground(false);
+	}
 }
 
 void Battle::drawSubAniGroup()
@@ -2444,23 +2219,23 @@ void Battle::drawSubAniGroup()
 			continue;
 		}
 
-		if (!(it->isCanStart))
-		{
-			it->isCanStart = true;
-		}
-		if (!(it->isCanStart))
-		{
+// 		if (!(it->isCanStart))
+// 		{
+// 			it->isCanStart = true;
+// 		}
+// 		if (!(it->isCanStart))
+// 		{
+// 			continue;
+// 		}
+		if(it->startFrame>0){
+			it->startFrame--;
 			continue;
 		}
-//		if(it->startFrame>0){
-//			it->startFrame--;
-//			continue;
-//		}
 		//NDLog("draw subanigroup");
-//		it->bComplete = NDEngine::DrawSubAnimation(role, *it); ///< 临时性注释 郭浩
+		it->bComplete = role->DrawSubAnimation(*it);
 		if (it->bComplete)
 		{
-			NDLog("subanigroup complete");
+/*			NDLog("subanigroup complete");*/
 			bErase = true;
 			if (it->isFromOut)
 			{
@@ -2473,9 +2248,7 @@ void Battle::drawSubAniGroup()
 
 	if (bErase)
 	{
-		m_vSubAniGroup.erase(
-				remove_if(m_vSubAniGroup.begin(), m_vSubAniGroup.end(),
-						IsSubAniGroupComplete()), m_vSubAniGroup.end());
+		m_vSubAniGroup.erase(remove_if(m_vSubAniGroup.begin(), m_vSubAniGroup.end(), IsSubAniGroupComplete()), m_vSubAniGroup.end());
 	}
 }
 
@@ -2520,7 +2293,8 @@ void Battle::drawFighter()
 		{
 			f->updatePos();
 			f->draw();
-			f->drawActionWord();
+			//--Guosen 2012.6.28//不显示动作名称（防御，逃跑，闪避）
+			//f->drawActionWord();
 		}
 	}
 
@@ -2531,7 +2305,8 @@ void Battle::drawFighter()
 		{
 			f->updatePos();
 			f->draw();
-			f->drawActionWord();
+			//--Guosen 2012.6.28//不显示动作名称（防御，逃跑，闪避）
+			//f->drawActionWord();
 		}
 	}
 
@@ -2697,6 +2472,8 @@ void Battle::ReleaseCommandList()
 	for (; it != m_vCmdList.end(); it++)
 	{
 		//SAFE_DELETE((*it)->skill);
+		if ( (*it) == NULL )
+			continue;
 		Command* cmdNext = (*it)->cmdNext;
 		while (cmdNext)
 		{
@@ -2889,346 +2666,226 @@ void Battle::dealWithCommand()
 		for (int i = 0; i < m_vCmdList.size(); i++)
 		{
 			NDLog("%d action", i);
-			Command* pkCommand = m_vCmdList.at(i);
+			Command* cmd = this->m_vCmdList.at(i);
 
-			if (pkCommand->complete)
-			{	// 针对连锁cmd
+			if ( cmd == NULL )
+				continue;
+
+			if (cmd->complete)
+			{// 针对连锁cmd
 				continue;
 			}
-			FightAction* pkAction = NULL;
-			switch (pkCommand->btEffectType)
-			{
-			case BATTLE_EFFECT_TYPE_ATK:	//攻击
-				NDLog("%d effect_atk", pkCommand->idActor);
-				//					Fighter* theTarget =
-				//					theActor->m_effectType=BATTLE_EFFECT_TYPE(cmd->btEffectType);
-				//					theActor->m_mainTarget=GetFighter(cmd->idTarget);
-				//					if (theActor->GetNormalAtkType() == ATKTYPE_NEAR) {
-				//						theActor->m_action = (Fighter::MOVETOTARGET);
-				//					} else if (theActor->GetNormalAtkType() == ATKTYPE_DISTANCE) {
-				//						theActor->m_action = (Fighter::AIMTARGET);
-				//					}
-				//					theActor->m_actionType = (Fighter::ACTION_TYPE_NORMALATK);
-				//					AddAnActionFighter(theActor);
-				pkAction = new FightAction(GetFighter(pkCommand->idActor),
-						GetFighter(pkCommand->idTarget),
-						BATTLE_EFFECT_TYPE(pkCommand->btEffectType));
-				break;
-			case BATTLE_EFFECT_TYPE_SKILL:					//技能
-				NDLog("%d effect_skill", pkCommand->idActor);
-				pkAction = new FightAction(GetFighter(pkCommand->idActor),
-						GetFighter(pkCommand->idTarget),
-						BATTLE_EFFECT_TYPE(pkCommand->btEffectType));
-				pkAction->m_pkSkill = pkCommand->skill;
-				break;
-			case EFFECT_TYPE_TURN_END:
-				NDLog("turn end");
-				continue;
-			case EFFECT_TYPE_BATTLE_BEGIN:
-				NDLog("%d battle_begin", pkCommand->idTarget);
-				pkAction = new FightAction(pkCommand->idActor, pkCommand->idTarget,
-						EFFECT_TYPE_BATTLE_BEGIN);
-				break;
-			case EFFECT_TYPE_BATTLE_END:
-				NDLog("%d battle_end", pkCommand->idActor);
-				pkAction = new FightAction(pkCommand->idActor, pkCommand->idTarget,
-						EFFECT_TYPE_BATTLE_END);
-				break;
-			case BATTLE_EFFECT_TYPE_STATUS_LIFE:
-				NDLog("%d status_life", pkCommand->idActor);
-				pkAction = new FightAction(GetFighter(pkCommand->idActor),
-						GetFighter(pkCommand->idTarget),
-						BATTLE_EFFECT_TYPE(pkCommand->btEffectType));
-				pkAction->m_nData = pkCommand->nHpLost;
-				break;
-				//				case BATTLE_EFFECT_TYPE_DODGE:// 闪避
-				//					if (!theActor || !theTarget) {
-				//						return;
-				//					}
-				//
-				//					theActor->m_effectType = EFFECT_TYPE(cmd->btEffectType);
-				//					theActor->m_mainTarget = theTarget;
-				//					theTarget->m_actor = (theActor);
-				//					theActor->m_bMissAtk = (true);
-				//					if (theActor->GetNormalAtkType() == ATKTYPE_NEAR) {
-				//						theActor->m_action = (Fighter::MOVETOTARGET);
-				//					} else if (theActor->GetNormalAtkType() == ATKTYPE_DISTANCE) {
-				//						theActor->m_action = (Fighter::AIMTARGET);
-				//					}
-				//					theActor->m_actionType = (Fighter::ACTION_TYPE_NORMALATK);
-				//					theActor->m_changeLifeType = EFFECT_CHANGE_LIFE_TYPE(cmd->btType);
-				//					AddAnActionFighter(theActor);
-				//					break;
-				//
-				//				case EFFECT_TYPE_CHANGELIFE: // 去血
-				//					if (cmd->btType == EFFECT_CHANGE_LIFE_TYPE_PHY_ATK || cmd->btType == EFFECT_CHANGE_LIFE_TYPE_PHY_HARDATK) {
-				//						if (!theActor || !theTarget) {
-				//							return;
-				//						}
-				//
-				//						theActor->m_changeLifeType = EFFECT_CHANGE_LIFE_TYPE(cmd->btType);
-				//						theActor->m_effectType = EFFECT_TYPE(cmd->btEffectType);
-				//						theActor->m_actionType = (Fighter::ACTION_TYPE_NORMALATK);
-				//						theActor->m_mainTarget = theTarget;
-				//						theTarget->m_actor = (theActor);
-				//
-				//						theTarget->AddAHurt(theActor, cmd->btType, cmd->nHpLost, cmd->nMpLost, cmd->dwData, HURT_TYPE_ACTIVE);
-				//						AddAnActionFighter(theActor);
-				//
-				//						theTarget->m_bHardAtk = cmd->btType == EFFECT_CHANGE_LIFE_TYPE_PHY_HARDATK;
-				//
-				//						if (cmd->triggerProtect && theTarget->protector) {
-				//							theTarget->protector->m_action = (Fighter::MOVETOTARGET);
-				//							theTarget->protector->m_actionType = Fighter::ACTION_TYPE_PROTECT;
-				//						}
-				//
-				//						// 状态为移向目标（近身），或者攻击（远程）
-				//						if (theActor->GetNormalAtkType() == ATKTYPE_NEAR) {
-				//							theActor->m_action = (Fighter::MOVETOTARGET);
-				//						} else if (theActor->GetNormalAtkType() == ATKTYPE_DISTANCE) {
-				//							theActor->m_action = (Fighter::AIMTARGET);
-				//						}
-				//					} else if (cmd->btType == EFFECT_CHANGE_LIFE_TYPE_USE_SKILL) {
-				//						theActor->m_kInfo.nMana += cmd->nMpLost;
-				//						theActor->m_kInfo.nLife += cmd->nHpLost;
-				//
-				//					} else if (cmd->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_ATK || cmd->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_HARDATK) {
-				//						theActor->m_changeLifeType = EFFECT_CHANGE_LIFE_TYPE(cmd->btType);
-				//						theActor->m_effectType = EFFECT_TYPE(cmd->btEffectType);
-				//						theActor->m_actionType = (Fighter::ACTION_TYPE_SKILLATK);
-				//
-				//						theActor->m_mainTarget = theTarget;
-				//						theActor->AddATarget(theTarget);
-				//						theTarget->m_actor = (theActor);
-				//
-				//						AddAnActionFighter(theActor);
-				//
-				//						if (cmd->triggerProtect && theTarget->protector) {
-				//							theTarget->protector->m_action = (Fighter::MOVETOTARGET);
-				//							theTarget->protector->m_actionType = (Fighter::ACTION_TYPE_PROTECT);
-				//						}
-				//
-				//						theTarget->AddAHurt(theActor, cmd->btType, cmd->nHpLost, cmd->nMpLost, cmd->dwData, HURT_TYPE_ACTIVE);
-				//
-				//						BattleSkill* skill = cmd->skill;
-				//						if (skill) {
-				//							theActor->setUseSkill(skill);
-				//							if ((theActor->getUseSkill()->getAtkType() & SKILL_ATK_TYPE_NEAR) == SKILL_ATK_TYPE_NEAR) {
-				//								theActor->m_action = (Fighter::MOVETOTARGET);
-				//								theActor->setSkillAtkType(ATKTYPE_NEAR);
-				//							} else if ((theActor->getUseSkill()->getAtkType() & SKILL_ATK_TYPE_REMOTE) == SKILL_ATK_TYPE_REMOTE) {
-				//								theActor->m_action = (Fighter::AIMTARGET);
-				//								theActor->setSkillAtkType(ATKTYPE_DISTANCE);
-				//							}
-				//						}
-				//
-				//						theTarget->m_bHardAtk = cmd->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_HARDATK;
-				//
-				//						Command* nextCmd = cmd->cmdNext;
-				//						while (nextCmd) {
-				//							if ((nextCmd->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_HARDATK
-				//							     || nextCmd->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_ATK)
-				//							    && nextCmd->idActor == cmd->idActor) {
-				//								// 连锁技能
-				//								theTarget = GetFighter(nextCmd->idTarget);
-				//								theTarget->AddAHurt(theActor, cmd->btType,
-				//										   nextCmd->nHpLost, nextCmd->nMpLost,
-				//										   nextCmd->dwData, HURT_TYPE_ACTIVE);
-				//								theActor->AddATarget(theTarget);
-				//								theTarget->m_actor = (theActor);
-				//								nextCmd->complete = (true);
-				//							}
-				//							theTarget->m_bHardAtk = cmd->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_HARDATK;
-				//							nextCmd = nextCmd->cmdNext;
-				//						}
-				//					} else if (cmd->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_STATUS
-				//						   || cmd->btType == EFFECT_CHANGE_LIFE_TYPE_CHG_MAX) {
-				//
-				//						theTarget->m_changeLifeTypePas = EFFECT_CHANGE_LIFE_TYPE(cmd->btType);
-				//						theTarget->AddPasStatus(cmd->dwData);
-				//
-				//						theTarget->AddAHurt(NULL, cmd->btType, cmd->nHpLost, cmd->nMpLost, cmd->dwData, HURT_TYPE_PASSIVE);// 状态去血不要指定是被谁打的
-				//						AddAnActionFighter(theTarget);
-				//					} else if (cmd->btType == EFFECT_CHANGE_LIFE_TYPE_USE_ITEM) {
-				//
-				//						theActor->m_idUsedItem = (cmd->dwData);
-				//						theActor->m_changeLifeType = EFFECT_CHANGE_LIFE_TYPE(cmd->btType);
-				//						theActor->m_effectType = EFFECT_TYPE(cmd->btEffectType);
-				//
-				//						theActor->m_actionType = (Fighter::ACTION_TYPE_USEITEM);
-				//						theActor->m_action = (Fighter::AIMTARGET);
-				//						theActor->m_mainTarget = theTarget;
-				//						theTarget->m_actor = (theActor);
-				//
-				//						theTarget->AddAHurt(theActor, cmd->btType, cmd->nHpLost, cmd->nMpLost, cmd->dwData, HURT_TYPE_ACTIVE);
-				//						AddAnActionFighter(theActor);
-				//					} else if (cmd->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_STATUS_ADD
-				//						   || cmd->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_STATUS_LOST) {
-				//						// 在回合初收到状态消息，则马上处理
-				//						Fighter* target = GetFighter(cmd->idTarget);
-				//
-				//						target->addAStatus(cmd->status);
-				//						Command* c = cmd->cmdNext;
-				//						while (c) {
-				//							target = GetFighter(c->idTarget);
-				//							if (c->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_STATUS_ADD) {
-				//								target->addAStatus(c->status);
-				//							} else if (c->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_STATUS_LOST) {
-				//								target->removeAStatusAniGroup(c->dwData);
-				//							}
-				//							c = c->cmdNext;
-				//						}
-				//					}
-				//					if (cmd->btType == EFFECT_CHANGE_LIFE_TYPE_PROTECTED) {
-				//						theActor->m_changeLifeType = EFFECT_CHANGE_LIFE_TYPE(cmd->btType);
-				//						// 保护
-				//						theActor->protectTarget = theActor->m_mainTarget;
-				//						theActor->m_mainTarget->protector = theActor;
-				//						theActor->hurtInprotect = cmd->nHpLost;
-				//					}
-				//					break;
-				//
-				//				case EFFECT_TYPE_ESCAPE:
-				//					if (!theActor) {
-				//						return;
-				//					}
-				//					theActor->m_effectType = EFFECT_TYPE(cmd->btEffectType);
-				//
-				//					theActor->m_action = (Fighter::FLEE_SUCCESS);
-				//					AddAnActionFighter(theActor);
-				//					theActor->m_bFleeNoDie = (true);
-				//					break;
-				//
-				//				case EFFECT_TYPE_ESCAPE_FAIL:
-				//					if (!theActor) {
-				//						return;
-				//					}
-				//					theActor->m_effectType = EFFECT_TYPE(cmd->btEffectType);
-				//
-				//					theActor->m_action = (Fighter::FLEE_FAIL);
-				//					AddAnActionFighter(theActor);
-				//					break;
-				//
-				//				case EFFECT_TYPE_DEFENCE:
-				//					if (!theActor) {
-				//						return;
-				//					}
-				//					theActor->m_effectType = EFFECT_TYPE(cmd->btEffectType);
-				//
-				//					theActor->m_bDefenceOK = (true);
-				//					theActor->m_action = (Fighter::DEFENCE);
-				//					defenceAction(*theActor);
-				//					AddAnActionFighter(theActor);
-				//					break;
-				//
-				//				case EFFECT_TYPE_LEFT:
-				//					m_timeLeftMax = 29;
-				//					break;
-				//				case EFFECT_TYPE_CATCH:
-				//					theActor->m_effectType = (EFFECT_TYPE_CATCH);
-				//					theActor->m_actionType = (Fighter::ACTION_TYPE_CATCH);
-				//					theActor->m_action = (Fighter::AIMTARGET);
-				//					theActor->m_mainTarget = (theTarget);
-				//					theActor->AddATarget(theTarget);
-				//					theTarget->m_actor = (theActor);
-				//					AddAnActionFighter(theActor);
-				//					break;
-				//				case EFFECT_TYPE_CATCH_FAIL:
-				//					theActor->m_effectType = (EFFECT_TYPE_CATCH_FAIL);
-				//					theActor->m_actionType = (Fighter::ACTION_TYPE_CATCH);
-				//					theActor->m_action = (Fighter::AIMTARGET);
-				//					theActor->m_mainTarget = (theTarget);
-				//					theActor->AddATarget(theTarget);
-				//					theTarget->m_actor = (theActor);
-				//					AddAnActionFighter(theActor);
-				//					break;
-			default:
-				break;
+			FightAction* action=NULL;
+			switch (cmd->btEffectType) {
+				case BATTLE_EFFECT_TYPE_ATK://攻击
+					NDLog("%d atk",cmd->idActor);
+					//					Fighter* theTarget = 
+					//					theActor->m_effectType=BATTLE_EFFECT_TYPE(cmd->btEffectType);
+					//					theActor->m_mainTarget=this->GetFighter(cmd->idTarget);
+					//					if (theActor->GetNormalAtkType() == ATKTYPE_NEAR) {
+					//						theActor->m_action = (Fighter::MOVETOTARGET);
+					//					} else if (theActor->GetNormalAtkType() == ATKTYPE_DISTANCE) {
+					//						theActor->m_action = (Fighter::AIMTARGET);
+					//					}
+					//					theActor->m_actionType = (Fighter::ACTION_TYPE_NORMALATK);
+					//					this->AddAnActionFighter(theActor);
+					action = new FightAction(this->GetFighter(cmd->idActor),this->GetFighter(cmd->idTarget),BATTLE_EFFECT_TYPE(cmd->btEffectType));
+					break;
+				case BATTLE_EFFECT_TYPE_SKILL://技能
+					NDLog("%d skill",cmd->idActor);
+					action = new FightAction(this->GetFighter(cmd->idActor),this->GetFighter(cmd->idTarget),BATTLE_EFFECT_TYPE(cmd->btEffectType));
+					action->m_pkSkill = cmd->skill;
+					break;
+				case BATTLE_EFFECT_TYPE_SKILL_EFFECT://技能效果
+					NDLog("%d skill_effect",cmd->idActor);
+					action = new FightAction(this->GetFighter(cmd->idActor),this->GetFighter(cmd->idTarget),BATTLE_EFFECT_TYPE(cmd->btEffectType));
+					action->m_pkSkill = cmd->skill;
+					break;
+				case BATTLE_EFFECT_TYPE_STATUS_ADD: // 加状态
+					NDLog("%d status_add", cmd->idActor);
+					action = new FightAction(this->GetFighter(cmd->idActor),NULL,BATTLE_EFFECT_TYPE(cmd->btEffectType));
+					action->m_nData = cmd->idTarget;
+					break;
+				case BATTLE_EFFECT_TYPE_STATUS_LOST: // 取消状态
+					NDLog("%d status_cancel", cmd->idActor);
+					action = new FightAction(this->GetFighter(cmd->idActor),NULL,BATTLE_EFFECT_TYPE(cmd->btEffectType));
+					action->m_nData = cmd->idTarget;
+					break;
+				case BATTLE_EFFECT_TYPE_CTRL:
+					break;
+				case BATTLE_EFFECT_TYPE_ESCORTING://护驾//没有
+					NDLog("%d ESCORTING", cmd->idActor);
+					action = new FightAction(this->GetFighter(cmd->idActor),NULL,BATTLE_EFFECT_TYPE(cmd->btEffectType));
+					break;
+				case BATTLE_EFFECT_TYPE_COOPRATION_HIT://合击
+					NDLog("%d COOPRATION_HIT", cmd->idActor);
+					action = new FightAction(this->GetFighter(cmd->idActor),NULL,BATTLE_EFFECT_TYPE(cmd->btEffectType));
+					break;
+				case BATTLE_EFFECT_TYPE_RESIST://免疫
+					NDLog("%d RESIST", cmd->idActor);
+					action = new FightAction(this->GetFighter(cmd->idActor),NULL,BATTLE_EFFECT_TYPE(cmd->btEffectType));
+					break;
+				case BATTLE_EFFECT_TYPE_CHANGE_POSTION://移位
+					NDLog("%d CHANGE_POSTION", cmd->idActor);
+					action = new FightAction(this->GetFighter(cmd->idActor),NULL,BATTLE_EFFECT_TYPE(cmd->btEffectType));
+					action->m_nData = cmd->idTarget;//pos id
+					break;
+				case BATTLE_EFFECT_TYPE_PLAY_ANIMATION:// 对象身上播放指定动画
+					NDLog("%d PLAY_ANIMATION", cmd->idActor);
+					action = new FightAction(this->GetFighter(cmd->idActor),NULL,BATTLE_EFFECT_TYPE(cmd->btEffectType));
+					action->m_nData = cmd->idTarget;//ani id
+					break;
+				case EFFECT_TYPE_TURN_END:
+					NDLog("turn end");
+					continue;
+				case EFFECT_TYPE_BATTLE_BEGIN:
+					NDLog("%d battle_begin",cmd->idTarget);
+					action=new FightAction(cmd->idActor,cmd->idTarget,EFFECT_TYPE_BATTLE_BEGIN);
+					break;
+				case EFFECT_TYPE_BATTLE_END:
+					NDLog("%d battle_end",cmd->idActor);
+					action=new FightAction(cmd->idActor,cmd->idTarget,EFFECT_TYPE_BATTLE_END);
+					break;
+				case BATTLE_EFFECT_TYPE_STATUS_LIFE:
+					NDLog("%d status_life",cmd->idActor);
+					action=new FightAction(this->GetFighter(cmd->idActor),this->GetFighter(cmd->idTarget),BATTLE_EFFECT_TYPE(cmd->btEffectType));
+					action->m_nData=cmd->nHpLost;
+					break;
+				case BATTLE_EFFECT_TYPE_STATUS_MANA:
+					NDLog("%d status_mana",cmd->idActor);
+					action=new FightAction(this->GetFighter(cmd->idActor),this->GetFighter(cmd->idTarget),BATTLE_EFFECT_TYPE(cmd->btEffectType));
+					action->m_nData=cmd->nMpLost;
+					break;
+				case BATTLE_EFFECT_TYPE_LIFE:
+					action = new FightAction( this->GetFighter(cmd->idActor), this->GetFighter(cmd->idTarget), BATTLE_EFFECT_TYPE(cmd->btEffectType) );
+					action->m_nData = cmd->nHpLost;
+					break;
+				case BATTLE_EFFECT_TYPE_MANA:
+					action = new FightAction( this->GetFighter(cmd->idActor), this->GetFighter(cmd->idTarget), BATTLE_EFFECT_TYPE(cmd->btEffectType) );
+					action->m_nData = cmd->nMpLost;
+					break;
+				default:
+					NDLog("Battle::dealWithCommand() EffectType: %d ",cmd->btEffectType);
+					break;
 			}
 			//处理主要动作后的连锁动作
-			if (pkAction)
-			{
-				Command* nextCmd = pkCommand->cmdNext;
-				while (nextCmd)
-				{
+			if (action) {
+				Command* nextCmd = cmd->cmdNext;
+				while (nextCmd) {
 
 					FIGHTER_CMD* fcmd = new FIGHTER_CMD();
-
-					switch (nextCmd->btEffectType)
-					{
-					case BATTLE_EFFECT_TYPE_LIFE:
-						NDLog("%d chageLife", nextCmd->idActor);
-						fcmd->actor = nextCmd->idActor;
-						fcmd->effect_type = BATTLE_EFFECT_TYPE_LIFE;
-						fcmd->data = (int) nextCmd->nHpLost;
-						break;
-					case BATTLE_EFFECT_TYPE_MANA:
-						NDLog("%d chageMana", nextCmd->idActor);
-						fcmd->actor = nextCmd->idActor;
-						fcmd->effect_type = BATTLE_EFFECT_TYPE_MANA;
-						fcmd->data = (int) nextCmd->nMpLost;
-						break;
-					case BATTLE_EFFECT_TYPE_SKILL_TARGET:
-						NDLog("%d skill_target", nextCmd->idTarget);
-						if (pkAction->m_eEffectType == BATTLE_EFFECT_TYPE_SKILL)
-						{
-							pkAction->m_kFighterList.push_back(
-									GetFighter(nextCmd->idTarget));
-							if (pkAction->m_pkTarget == NULL)
+					switch(nextCmd->btEffectType){
+						case BATTLE_EFFECT_TYPE_LIFE:
+							NDLog("%d chageLife",nextCmd->idActor);
+							fcmd->actor			= nextCmd->idActor;
+							fcmd->effect_type	= BATTLE_EFFECT_TYPE_LIFE;
+							fcmd->data			= (int)nextCmd->nHpLost;
+							break;
+						case BATTLE_EFFECT_TYPE_MANA:
+							NDLog("%d chageMana",nextCmd->idActor);
+							fcmd->actor			= nextCmd->idActor;
+							fcmd->effect_type	= BATTLE_EFFECT_TYPE_MANA;
+							fcmd->data			= (int)nextCmd->nMpLost;
+							break;
+						case BATTLE_EFFECT_TYPE_SKILL_TARGET:
+							NDLog("%d skill_target %d",nextCmd->idActor,nextCmd->idTarget);
+							if( action->m_eEffectType == BATTLE_EFFECT_TYPE_SKILL )
 							{
-								pkAction->m_pkTarget = GetFighter(
-										nextCmd->idTarget);
+								action->m_kFighterList.push_back(GetFighter(nextCmd->idTarget));
+								if( action->m_pkTarget == NULL )
+								{
+									action->m_pkTarget = GetFighter(nextCmd->idTarget);
+								}
 							}
-						}
-						nextCmd = nextCmd->cmdNext;
-						continue;
-					case BATTLE_EFFECT_TYPE_DODGE:
-						NDLog("%d dodge", nextCmd->idActor);
-						fcmd->actor = nextCmd->idActor;
-						fcmd->effect_type = BATTLE_EFFECT_TYPE_DODGE;
-						break;
-					case BATTLE_EFFECT_TYPE_DRITICAL:
-						NDLog("%d dritical", nextCmd->idActor);
-						fcmd->actor = nextCmd->idActor;
-						fcmd->effect_type = BATTLE_EFFECT_TYPE_DRITICAL;
-						//							fcmd->data=(int)nextCmd->nHpLost;
-						break;
-					case BATTLE_EFFECT_TYPE_BLOCK:
-						NDLog("%d block", nextCmd->idActor);
-						fcmd->actor = nextCmd->idActor;
-						fcmd->effect_type = BATTLE_EFFECT_TYPE_BLOCK;
-						break;
-					case BATTLE_EFFECT_TYPE_COMBO:
-						NDLog("%d combo", nextCmd->idActor);
-						pkAction->m_bIsCombo = true;
-						AddActionCommand(pkAction);
-						pkAction = new FightAction(GetFighter(pkCommand->idActor),
-								GetFighter(pkCommand->idTarget),
-								BATTLE_EFFECT_TYPE(pkCommand->btEffectType));
-						fcmd->actor = pkCommand->idTarget;
-						fcmd->effect_type = BATTLE_EFFECT_TYPE_LIFE;
-						fcmd->data = (int) nextCmd->nHpLost;
-						pkAction->addCommand(fcmd);
-						nextCmd = nextCmd->cmdNext;
-						continue;
-					case BATTLE_EFFECT_TYPE_STATUS_ADD:
-						fcmd->actor = nextCmd->idActor;
-						fcmd->effect_type = BATTLE_EFFECT_TYPE_STATUS_ADD;
-						fcmd->status = nextCmd->status;
-						break;
-					case BATTLE_EFFECT_TYPE_STATUS_LOST:
-						fcmd->actor = nextCmd->idActor;
-						fcmd->effect_type = BATTLE_EFFECT_TYPE_STATUS_LOST;
-						fcmd->status = nextCmd->status;
-						break;
-					case BATTLE_EFFECT_TYPE_DEAD:
-						fcmd->actor = nextCmd->idActor;
-						fcmd->effect_type = BATTLE_EFFECT_TYPE_DEAD;
-						break;
-					default:
-						break;
+							nextCmd = nextCmd->cmdNext;
+							continue;
+
+						case BATTLE_EFFECT_TYPE_SKILL_EFFECT_TARGET:
+							nextCmd = nextCmd->cmdNext;
+							continue;
+						case BATTLE_EFFECT_TYPE_SKILL_EFFECT:
+							NDLog("%d skill_effect %d",nextCmd->idActor, nextCmd->idTarget);
+							if( action->m_eEffectType == BATTLE_EFFECT_TYPE_SKILL )
+							{
+								fcmd->actor			= nextCmd->idActor;//受击方
+								fcmd->effect_type	= BATTLE_EFFECT_TYPE_SKILL_EFFECT;
+								fcmd->data			= (int)nextCmd->idTarget;//受击表现skill_result_cfg.lookface
+								action->addCommand(fcmd);
+							}
+							nextCmd = nextCmd->cmdNext;
+							continue;
+
+						case BATTLE_EFFECT_TYPE_DODGE:
+							NDLog("%d dodge",nextCmd->idActor);
+							fcmd->actor			= nextCmd->idActor;
+							fcmd->effect_type	= BATTLE_EFFECT_TYPE_DODGE;
+							break;
+						case BATTLE_EFFECT_TYPE_DRITICAL:
+							//action->isDritical=true;
+							action->m_bIsCriticalHurt	= true;//改为受击方显示伤害数字，而不是上面的显示暴击光效
+							NDLog("%d dritical",nextCmd->idActor);
+							fcmd->actor			= nextCmd->idActor;
+							fcmd->effect_type	= BATTLE_EFFECT_TYPE_DRITICAL;
+							fcmd->data			= (int)nextCmd->nHpLost;
+							break;
+						case BATTLE_EFFECT_TYPE_BLOCK:
+							NDLog("%d block",nextCmd->idActor);
+							fcmd->actor			= nextCmd->idActor;
+							fcmd->effect_type	= BATTLE_EFFECT_TYPE_BLOCK;
+							break;
+						case BATTLE_EFFECT_TYPE_COMBO:
+							NDLog("%d combo",nextCmd->idActor);
+							action->m_bIsCombo		= true;
+							this->AddActionCommand(action);
+							action				= new FightAction(this->GetFighter(cmd->idActor),this->GetFighter(cmd->idTarget),BATTLE_EFFECT_TYPE(cmd->btEffectType));
+							fcmd->actor			= cmd->idTarget;
+							fcmd->effect_type	= BATTLE_EFFECT_TYPE_LIFE;
+							fcmd->data			= (int)nextCmd->nHpLost;
+							action->addCommand(fcmd);
+							nextCmd				= nextCmd->cmdNext;
+							continue;
+						case BATTLE_EFFECT_TYPE_STATUS_ADD://加状态
+							fcmd->actor			= nextCmd->idActor;
+							fcmd->effect_type	= BATTLE_EFFECT_TYPE_STATUS_ADD;
+							fcmd->data			= nextCmd->idTarget;
+							break;
+						case BATTLE_EFFECT_TYPE_STATUS_LOST://减状态
+							fcmd->actor			= nextCmd->idActor;
+							fcmd->effect_type	= BATTLE_EFFECT_TYPE_STATUS_LOST;
+							fcmd->data			= nextCmd->idTarget;
+							break;
+						case BATTLE_EFFECT_TYPE_CTRL:
+							break;
+						case BATTLE_EFFECT_TYPE_ESCORTING://护驾/援护
+							fcmd->actor			= nextCmd->idActor;
+							fcmd->effect_type	= BATTLE_EFFECT_TYPE_ESCORTING;
+							break;
+						case BATTLE_EFFECT_TYPE_COOPRATION_HIT://合击
+							fcmd->actor			= nextCmd->idActor;
+							fcmd->effect_type	= BATTLE_EFFECT_TYPE_COOPRATION_HIT;
+							break;
+						case BATTLE_EFFECT_TYPE_RESIST://免疫
+							fcmd->actor			= nextCmd->idActor;
+							fcmd->effect_type	= BATTLE_EFFECT_TYPE_RESIST;
+							break;
+						case BATTLE_EFFECT_TYPE_CHANGE_POSTION://移位
+							fcmd->actor			= nextCmd->idActor;
+							fcmd->effect_type	= BATTLE_EFFECT_TYPE_STATUS_LOST;
+							fcmd->data			= nextCmd->idTarget;//pos id
+							break;
+						case BATTLE_EFFECT_TYPE_PLAY_ANIMATION:// 对象身上播放指定动画
+							fcmd->actor			= nextCmd->idActor;
+							fcmd->effect_type	= BATTLE_EFFECT_TYPE_PLAY_ANIMATION;
+							fcmd->data			= nextCmd->idTarget;//ani id
+							break;
+						case BATTLE_EFFECT_TYPE_DEAD:
+							fcmd->actor			= nextCmd->idActor;
+							fcmd->effect_type	= BATTLE_EFFECT_TYPE_DEAD;
+							break;
+						default:
+							break;
 					}
-					pkAction->addCommand(fcmd);
+					action->addCommand(fcmd);
 					//					theTarget = GetFighter(nextCmd->idActor);
 
 					//					if (nextCmd->btType == EFFECT_CHANGE_LIFE_TYPE_SKILL_STATUS_ADD) {
@@ -3258,9 +2915,9 @@ void Battle::dealWithCommand()
 
 					nextCmd = nextCmd->cmdNext;
 				}
+				NDLog("addAction");
+				AddActionCommand(action);
 			}
-			NDLog("addAction");
-			AddActionCommand(pkAction);
 		}
 
 		//		if (m_vActionFighterList.size() > 0) {
@@ -3517,25 +3174,25 @@ VEC_FIGHTER& Battle::GetEnemySideList()
 
 Fighter* Battle::getMainEudemon()
 {
-	if (!m_mainEudemon)
-	{
-		//Fighter* user = GetMainUser();
-		//		if (user) {
-		//PetInfo* petInfo = PetMgrObj.GetMainPet(NDPlayer::defaultHero().m_id);
-		//if (petInfo) {
-		//	VEC_FIGHTER& euList = GetOurSideList();
-		//	for (size_t i = 0; i < euList.size(); i++) {
-		//		Fighter* f =  euList.at(i);
-		//		//					if (f->m_kInfo.idPet == petInfo->data.int_PET_ID) {
-		//		//						m_mainEudemon = f;
-		//		//						break;
-		//		//					}
-		//		
-		//	}
-		//}
-
-		//		}
-	}
+// 	if (!m_mainEudemon)
+// 	{
+// 		Fighter* user = GetMainUser();
+// 		if (user) {
+// 			PetInfo* petInfo = PetMgrObj.GetMainPet(NDPlayer::defaultHero().m_id);
+// 			if (petInfo) {
+// 				VEC_FIGHTER& euList = GetOurSideList();
+// 				for (size_t i = 0; i < euList.size(); i++) {
+// 					Fighter* f =  euList.at(i);
+// 					//					if (f->m_kInfo.idPet == petInfo->data.int_PET_ID) {
+// 					//						m_mainEudemon = f;
+// 					//						break;
+// 					//					}
+// 
+// 				}
+// 			}
+// 
+// 		}
+// 	}
 
 	return m_mainEudemon;
 }
@@ -3587,12 +3244,13 @@ void Battle::clearActionFighterStatus()
 
 void Battle::FinishBattle()
 {
-	/***
-	 * 临时性注释 郭浩
-	 */
-// 	NDMapMgrObj.BattleEnd(BattleMgrObj.GetBattleReward()->battleResult);
-// 	//m_timer.SetTimer(this, TIMER_BACKTOGAME, 1);
-// 	BattleMgrObj.quitBattle();
+	if(BattleMgrObj.GetBattleReward())
+	{
+		NDMapMgrObj.BattleEnd(BattleMgrObj.GetBattleReward()->m_nBattleResult);
+
+	}
+	//m_timer.SetTimer(this, TIMER_BACKTOGAME, 1);
+	BattleMgrObj.quitBattle();
 }
 
 void Battle::ShowPas()
@@ -3604,7 +3262,7 @@ void Battle::ShowPas()
 
 	if (currentShowFighter > 0)
 	{
-		//ScriptMgrObj.excuteLuaFunc("CloseFighterInfo","FighterInfo",0); ///< 临时性注释 郭浩
+		ScriptMgrObj.excuteLuaFunc("CloseFighterInfo","FighterInfo",0);
 	}
 	BattleMgrObj.showBattleResult();
 	//	if (isPasClear() && AllFighterActionOK()) {
@@ -3864,8 +3522,7 @@ bool Battle::isActionCanBegin(FightAction* action)
 VEC_FIGHTER& Battle::getDefFightersByTeam(int team)
 {
 	VEC_FIGHTER v_team;
-	for (VEC_FIGHTER::iterator it = m_vDefencer.begin();
-			it != m_vDefencer.end(); it++)
+	for (VEC_FIGHTER::iterator it = m_vDefencer.begin(); it != m_vDefencer.end(); it++)
 	{
 		Fighter* f = *it;
 		if (f->m_kInfo.btBattleTeam == team)
@@ -3892,7 +3549,19 @@ void Battle::startAction(FightAction* pkFighterAction)
 		}
 		break;
 	case BATTLE_EFFECT_TYPE_SKILL:
+		if(!pkFighterAction->m_pkActor)
+			break;
 		if (pkFighterAction->m_pkSkill->getAtkType() == SKILL_ATK_TYPE_REMOTE)
+		{
+			pkFighterAction->m_pkActor->m_action = Fighter::AIMTARGET;
+		}
+		else
+		{
+			pkFighterAction->m_pkActor->m_action = Fighter::MOVETOTARGET;
+		}
+		break;
+	case BATTLE_EFFECT_TYPE_SKILL_EFFECT://技能目标
+		if(pkFighterAction->m_pkSkill->getAtkType() == SKILL_ATK_TYPE_REMOTE)
 		{
 			pkFighterAction->m_pkActor->m_action = Fighter::AIMTARGET;
 		}
@@ -3903,8 +3572,7 @@ void Battle::startAction(FightAction* pkFighterAction)
 		break;
 	case EFFECT_TYPE_BATTLE_BEGIN:
 		//			NDLog("START_MOVE_TEAM");
-		for (VEC_FIGHTER_IT it = m_vAttaker.begin(); it != m_vAttaker.end();
-				it++)
+		for (VEC_FIGHTER_IT it = m_vAttaker.begin(); it != m_vAttaker.end(); it++)
 		{
 			Fighter* pkFighter = *it;
 			if (pkFighter->m_kInfo.btBattleTeam == pkFighterAction->m_nTeamDefense)
@@ -4090,6 +3758,20 @@ void Battle::runAction(int nTeamID)
 			//						}
 			//					}
 			break;
+		case BATTLE_EFFECT_TYPE_SKILL_EFFECT://技能目标
+			if(fa->m_pkSkill->getAtkType() == SKILL_ATK_TYPE_REMOTE)
+			{
+				aimTarget(fa);
+				distanceSkillAttack(fa);
+				distanceAttackOver(fa);
+			}
+			else
+			{
+				moveToTarget(fa);
+				skillAttack(fa);
+				moveBack(fa);
+			}
+			break;
 		case EFFECT_TYPE_BATTLE_BEGIN:				//战斗开始时，把队伍移动到战斗位
 			moveTeam(fa);
 			break;
@@ -4139,13 +3821,136 @@ void Battle::runAction(int nTeamID)
 				fa->m_pkActor->setDieOK(true);
 				stringstream ss;
 				ss << "die_action.spr";
+
+				//死亡音效
+				ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",1092);
+
+
 				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
 				NDAnimationGroup* dieAniGroup = new NDAnimationGroup;
 				dieAniGroup->initWithSprFile(file);
-				addSkillEffectToFighter(fa->m_pkActor, dieAniGroup, 0);
+				addSkillEffectToFighter(fa->m_pkActor, dieAniGroup, 0, 1);
+				CC_SAFE_DELETE(dieAniGroup);
 				fa->m_pkActor->showFighterName(false);
 				dieAction(*(fa->m_pkActor));
 			}
+			fa->m_eActionStatus = ACTION_STATUS_FINISH;
+			break;
+		case BATTLE_EFFECT_TYPE_STATUS_MANA://状态去气
+			fa->m_pkActor->setCurrentMP((fa->m_pkActor->m_kInfo.nMana)+(fa->m_nData));
+			fa->m_eActionStatus = ACTION_STATUS_FINISH;
+			break;
+		case BATTLE_EFFECT_TYPE_STATUS_ADD:
+
+			{
+				unsigned int	nIconID = ScriptDBObj.GetN( "skill_result_cfg", fa->m_nData, DB_SKILL_RESULT_CFG_ICON );
+				unsigned int	effectId = ScriptDBObj.GetN( "skill_result_cfg", fa->m_nData, DB_SKILL_RESULT_CFG_LOOKFACE );
+
+
+				fa->m_pkActor->AppendStatusIcon( nIconID );
+				fa->m_eActionStatus = ACTION_STATUS_FINISH;
+
+				ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",effectId,600);
+			}
+
+			break;
+		case BATTLE_EFFECT_TYPE_STATUS_LOST:
+			{
+				unsigned int	nIconID = ScriptDBObj.GetN( "skill_result_cfg", fa->m_nData, DB_SKILL_RESULT_CFG_ICON );
+				fa->m_pkActor->RemoveStatusIcon( nIconID);
+				fa->m_eActionStatus = ACTION_STATUS_FINISH;
+			}
+			break;
+		case BATTLE_EFFECT_TYPE_ESCORTING://护驾=援护
+			{//播放“援护”文字动画++Guosen 2012.7.9//
+				const char *file = NDPath::GetAniPath("sm_effect_47.spr").c_str();
+				NDAnimationGroup *effect = new NDAnimationGroup;
+				effect->initWithSprFile(file);
+
+				addSkillEffectToFighter(fa->m_pkActor,effect,0,g_ArrayEfectProp[47].iPos,g_ArrayEfectProp[47].bRevers);
+				CC_SAFE_DELETE(effect);
+			}
+			fa->m_eActionStatus = ACTION_STATUS_FINISH;
+			break;
+		case BATTLE_EFFECT_TYPE_COOPRATION_HIT://合击
+			{//播放“合击”文字动画++Guosen 2012.7.9
+				const char *file = NDPath::GetAniPath("sm_effect_46.spr").c_str();
+				NDAnimationGroup *effect = new NDAnimationGroup;
+				effect->initWithSprFile(file);
+				addSkillEffectToFighter(fa->m_pkActor,effect,0,g_ArrayEfectProp[46].iPos,g_ArrayEfectProp[46].bRevers);
+				CC_SAFE_DELETE(effect);
+			}
+			fa->m_eActionStatus = ACTION_STATUS_FINISH;
+			break;
+		case BATTLE_EFFECT_TYPE_RESIST://免疫
+			{//播放“免疫”文字动画++Guosen 2012.8.2
+				const char *file = NDPath::GetAniPath("sm_effect_32.spr").c_str();
+				NDAnimationGroup *effect = new NDAnimationGroup;
+				effect->initWithSprFile(file);
+				addSkillEffectToFighter(fa->m_pkActor,effect,0,g_ArrayEfectProp[32].iPos,g_ArrayEfectProp[32].bRevers);
+				CC_SAFE_DELETE(effect);
+			}
+			fa->m_eActionStatus = ACTION_STATUS_FINISH;
+			break;
+		case BATTLE_EFFECT_TYPE_CHANGE_POSTION://移位
+			{//++Guosen 2012.7.10
+				int targetX = countX( this->m_teamAmout, fa->m_pkActor->m_info.group, (fa->m_nTeamDefense-1)%3+1, fa->m_nData );
+				int targetY = countY( this->m_teamAmout, fa->m_pkActor->m_info.group, (fa->m_nTeamDefense-1)%3+1, fa->m_nData );
+				if ( fa->m_pkActor->moveTo( targetX, targetY ) )
+				{
+					fa->m_pkActor->m_info.btStations = fa->m_nData;
+					fa->m_pkActor->setOriginPos( targetX, targetY );
+					fa->m_eActionStatus = ACTION_STATUS_FINISH;
+				}
+			}
+			break;
+		case BATTLE_EFFECT_TYPE_PLAY_ANIMATION:// 对象身上播放指定动画
+			{
+				stringstream ss;
+				ss << "sm_effect_" << fa->m_nData << ".spr";
+				const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+				NDAnimationGroup *effect = new NDAnimationGroup;
+				effect->initWithSprFile(file);
+				addSkillEffectToFighter(fa->m_pkActor,effect,0,g_ArrayEfectProp[fa->m_nData].iPos,g_ArrayEfectProp[fa->m_nData].bRevers);
+				CC_SAFE_DELETE(effect);
+			}
+			fa->m_eActionStatus = ACTION_STATUS_FINISH;
+			break;
+		case BATTLE_EFFECT_TYPE_LIFE:
+			fa->m_pkActor->m_bHardAtk=false;
+			fa->m_pkActor->hurted(fa->m_nData);
+			NDLog("hurt %d",fa->m_nData);
+			fa->m_pkActor->setCurrentHP((fa->m_pkActor->m_info.nLife)+(fa->m_nData));
+			if (fa->m_pkActor->m_info.nLife > 0)
+			{
+				// hurt
+				fa->m_pkActor->setHurtOK(true);
+				if(fa->m_nData<0){
+					hurtAction(*(fa->m_pkActor));
+				}
+			} 
+			else
+			{
+				// die
+				fa->m_pkActor->setDieOK(true);
+				dieAction(*(fa->m_pkActor));
+				stringstream ss;
+				ss << "die_action.spr";
+
+				//死亡音效
+				ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",1092);
+
+				const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+				NDAnimationGroup *effect = new NDAnimationGroup;
+				effect->initWithSprFile(file);
+				fa->m_pkActor->showFighterName(false);
+				addSkillEffectToFighter(fa->m_pkActor,dieAniGroup,0,1);
+				CC_SAFE_DELETE(effect);
+			}
+			fa->m_eActionStatus = ACTION_STATUS_FINISH;
+			break;
+		case BATTLE_EFFECT_TYPE_MANA:
+			fa->m_pkActor->setCurrentMP((fa->m_pkActor->m_info.nMana)+(fa->m_nData));
 			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
 		default:
@@ -4226,10 +4031,10 @@ void Battle::useItem(Fighter& theActor)
 				int currentMP = target.m_kInfo.nMana;
 				int addMP = hurtMP;
 				currentMP += addMP;
-				if (currentMP > target.m_kInfo.nManaMax)
-				{
-					currentMP = target.m_kInfo.nManaMax;
-				}
+// 				if (currentMP > target.m_kInfo.nManaMax)
+// 				{
+// 					currentMP = target.m_kInfo.nManaMax;
+// 				}
 				target.hurted(addMP);
 				target.setCurrentMP(currentMP);
 			}
@@ -4409,11 +4214,15 @@ void Battle::moveToTarget(FightAction* action)
 					theActor->m_action = (Fighter::SKILLATTACK);
 					//处理技能动作
 					BattleSkill* skill = action->m_pkSkill;
+
+					//技能声效播放
+					ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",1099,500);
+
 					theActor->setSkillName(skill->getName());
 					theActor->showSkillName(true);
 					int actId = skill->GetActId();
 //					if(theActor->m_lookfaceType==LOOKFACE_MANUAL){
-					roleAction(*theActor, MANUELROLE_ATTACK);
+					roleAction(*theActor, actId);
 //					}else{
 //						petAction(*theActor, actId);
 //					}
@@ -4423,7 +4232,7 @@ void Battle::moveToTarget(FightAction* action)
 //						int delay=skill->GetLookfaceID()%100;
 //						stringstream ss;
 //						ss << "effect_" << effectId << ".spr";
-//						NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+//						NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 //						NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //						NDLog("add self effect");
 //						addSkillEffectToFighter(theActor,effect,delay);
@@ -4433,7 +4242,7 @@ void Battle::moveToTarget(FightAction* action)
 //						int delay=skill->GetLookfaceTargetID()%100;
 //						stringstream ss;
 //						ss << "effect_" << effectId << ".spr";
-//						NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+//						NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 //						NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //						for (int i = 0; i < action->m_FighterList.size(); i++)
 //						{	
@@ -4460,35 +4269,50 @@ void Battle::moveToTarget(FightAction* action)
 				BattleSkill* skill = action->m_pkSkill;
 				int actId = skill->GetActId();
 //				if(theActor->m_lookfaceType==LOOKFACE_MANUAL){
-				roleAction(*theActor, MANUELROLE_ATTACK);
+				roleAction(*theActor, actId);
 //				}else{
 //					petAction(*theActor, 0);
 //				}
 				//处理技能光效
-//				int effectId=skill->GetLookfaceID()/100;
-//				if(effectId!=0){//光效播放在自已身上
-//					int delay=skill->GetLookfaceID()%100;
-//					stringstream ss;
-//					ss << "effect_" << effectId << ".spr";
-//					NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
-//					NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
-//					
-//					addSkillEffectToFighter(theActor,effect,delay);
-//				}
-//				effectId=skill->GetLookfaceTargetID()/100;//光效播放在目标身上
-//				if(effectId!=0){
-//					int delay=skill->GetLookfaceTargetID()%100;
-//					stringstream ss;
-//					ss << "effect_" << effectId << ".spr";
-//					NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
-//					NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
-//					for (int i = 0; i < action->m_FighterList.size(); i++)
-//					{	
-//						NDLog("add effect");
-//						Fighter* f=action->m_FighterList.at(i);
-//						addSkillEffectToFighter(f, effect,delay);
-//					}
-//				}
+
+				int effectId = skill->getSelfEffect();///1000;
+				NDLog("add effect:%d",effectId);
+				if(effectId != 0)
+				{
+					//光效播放在自已身上
+					int delay = 0;//(skill->GetLookfaceID()/10)%100;
+					int pos = 0;//(skill->GetLookfaceID())%10;
+					stringstream ss;
+					ss << "sm_effect_" << effectId << ".spr";
+					const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+					NDAnimationGroup* effect = new NDAnimationGroup();
+					effect->initWithSprFile(file);
+
+					//++Guosen 2012.6.28//播放特效动画须指定的位置及翻转设定
+					//addSkillEffectToFighter(theActor,effect,delay,pos);
+					addSkillEffectToFighter(theActor,effect,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);
+					CC_SAFE_DELETE(effect);
+				}
+				effectId=skill->getTargetEffect();///1000;//光效播放在目标身上
+				if(effectId != 0)
+				{
+					int delay = 0;//(skill->GetLookfaceTargetID()/10)%100;
+					int pos = 0;//skill->GetLookfaceTargetID()%10;
+					stringstream ss;
+					ss << "sm_effect_" << effectId << ".spr";
+					const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+					NDAnimationGroup* effect = new NDAnimationGroup();
+					effect->initWithSprFile(file);
+					for (UInt32 i = 0; i < action->m_kFighterList.size(); i++)
+					{	
+						Fighter* f=action->m_kFighterList.at(i);
+
+						//++Guosen 2012.6.28//播放特效动画须指定的位置及翻转设定
+						//addSkillEffectToFighter(f, effect,delay,pos);
+						addSkillEffectToFighter(f,effect,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);
+					}
+					CC_SAFE_DELETE(effect);
+				}
 			}
 		}
 	}
@@ -4521,68 +4345,153 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 				dieAction(*fighter);
 				stringstream ss;
 				ss << "die_action.spr";
+
+				//死亡音效
+				ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",1092);
+
 				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
 				NDAnimationGroup* dieAniGroup = new NDAnimationGroup;
 				dieAniGroup->initWithSprFile(file);
 				fighter->showFighterName(false);
-				addSkillEffectToFighter(fighter, dieAniGroup, 0);
+				addSkillEffectToFighter(fighter, dieAniGroup, 0, 1);
+				CC_SAFE_DELETE(dieAniGroup);
 			}
 			break;
 		case BATTLE_EFFECT_TYPE_MANA:
 			fighter->setCurrentMP((fighter->m_kInfo.nMana) + (cmd->data));
 			break;
 		case BATTLE_EFFECT_TYPE_DODGE:
-			fighter->setDodgeOK(true);
+			//fighter->setDodgeOK(true);//显示"闪避"文字
+			{
+				//播放闪避文字动画++Guosen 2012.6.28
+				const char* file = NDPath::GetAniPath("sm_effect_25.spr").c_str();
+				NDAnimationGroup* effect = new NDAnimationGroup;
+				effect->initWithSprFile(file);
+				//addSkillEffectToFighter(fighter,effect,0,0, false);
+				addSkillEffectToFighter(fighter,effect,0,g_ArrayEfectProp[25].iPos,g_ArrayEfectProp[25].bRevers);
+				CC_SAFE_DELETE(effect);
+			}
 			dodgeAction(*fighter);
 			break;
 		case BATTLE_EFFECT_TYPE_DRITICAL:
 			fighter->m_bHardAtk = true;
-			//				fighter->hurted(cmd->data);
-			//				fighter->setCurrentHP((fighter->m_kInfo.nLife)+(cmd->data));
-			//				if (fighter->m_kInfo.nLife > 0) {// hurt
-			//					fighter->setHurtOK(true);
-			//					if(cmd->data<0){
-			//						hurtAction(*fighter);
-			//					}
-			//				} else {// die
-			//					fighter->setDieOK(true);
-			//					dieAction(*fighter);
-			//				}
+			fighter->hurted(cmd->data);
+			fighter->setCurrentHP((fighter->m_info.nLife)+(cmd->data));
+			if (fighter->m_kInfo.nLife > 0)
+			{
+				// hurt
+				fighter->setHurtOK(true);
+				if(cmd->data < 0)
+				{
+					hurtAction(*fighter);
+				}
+			}
+			else
+			{
+				// die
+				fighter->setDieOK(true);
+				dieAction(*fighter);
+				stringstream ss;
+
+				//死亡音效
+				ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",1092);
+
+				ss << "die_action.spr";
+				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+				NDAnimationGroup* dieAniGroup = new NDAnimationGroup;
+				dieAniGroup->initWithSprFile(file);
+				fighter->showFighterName(false);
+				addSkillEffectToFighter(fighter,dieAniGroup,0,1);
+				CC_SAFE_DELETE(dieAniGroup);
+			}
 			break;
 		case BATTLE_EFFECT_TYPE_BLOCK:
-			fighter->setDefenceOK(true);
+			//格挡……
+			//fighter->setDefenceOK(true);
 			defenceAction(*fighter);
+
 			break;
+			//++Guosen 2012.7.11//
 		case BATTLE_EFFECT_TYPE_STATUS_ADD:
-//				if (cmd->status->m_LastEffectID  != 999) {
-//					stringstream ss;
-//					ss << "effect_" << cmd->status->m_LastEffectID  << ".spr";
-//					NDAsssert(cmd->status->m_aniGroup == NULL);
-//					//				ss << "effect_" << cmd->status->m_StartEffectID << ".spr";
-//					NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
-//					cmd->status->m_aniGroup=new NDSubAniGroup;
-//					NDAnimation* effect=[[NDAnimationGroup alloc] initWithSprFile:file];
-//					cmd->status->m_aniGroup->aniGroup = [effect retain];
-//					//subAniGroup.aniGroup.position=CGPointMake(x, y);
-//					
-//					cmd->status->m_aniGroup->role = fighter->GetRole();
-//					
-//					cmd->status->m_aniGroup->fighter = fighter;
-//					cmd->status->m_aniGroup->frameRec = [[NDFrameRunRecord alloc] init];
-//					[effect release];
-//				}
-//				fighter->addAStatus(cmd->status);
-//				if(cmd->status->m_StartEffectID!=0){
-//					stringstream ss;
-//					ss << "effect_" << cmd->status->m_StartEffectID << ".spr";
-//					NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
-//					NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
-//					
-//					addSkillEffectToFighter(fighter,effect,0);
-//				}
+			{
+				unsigned int	nIconID = ScriptDBObj.GetN( "skill_result_cfg", cmd->data, DB_SKILL_RESULT_CFG_ICON );
+				fighter->AppendStatusIcon( nIconID );
+			}
 			break;
 		case BATTLE_EFFECT_TYPE_STATUS_LOST:
-//				fighter->removeAStatusAniGroup(cmd->status);
+			{
+				unsigned int	nIconID = ScriptDBObj.GetN( "skill_result_cfg", cmd->data, DB_SKILL_RESULT_CFG_ICON );
+				fighter->RemoveStatusIcon( nIconID );
+			}
+			break;
+		case BATTLE_EFFECT_TYPE_ESCORTING://护驾=援护
+			{
+				//播放“援护”文字动画
+				const char* file = NDPath::GetAniPath("sm_effect_47.spr").c_str();
+				NDAnimationGroup* effect = new NDAnimationGroup;
+				effect->initWithSprFile(file);
+				addSkillEffectToFighter(fighter,effect,0,g_ArrayEfectProp[47].iPos,g_ArrayEfectProp[47].bRevers);
+				CC_SAFE_DELETE(effect);
+			}
+			break;
+		case BATTLE_EFFECT_TYPE_COOPRATION_HIT://合击
+			{//播放“合击”文字动画
+				const char* file = NDPath::GetAniPath("sm_effect_46.spr").c_str();
+				NDAnimationGroup* effect = new NDAnimationGroup;
+				effect->initWithSprFile(file);
+				addSkillEffectToFighter(fighter,effect,0,g_ArrayEfectProp[46].iPos,g_ArrayEfectProp[46].bRevers);
+				CC_SAFE_DELETE(effect);
+			}
+		case BATTLE_EFFECT_TYPE_RESIST://免疫
+			{//播放“免疫”文字动画
+				const char* file = NDPath::GetAniPath("sm_effect_32.spr").c_str();
+				NDAnimationGroup* effect = new NDAnimationGroup;
+				effect->initWithSprFile(file);
+				addSkillEffectToFighter(fighter,effect,0,g_ArrayEfectProp[32].iPos,g_ArrayEfectProp[32].bRevers);
+				CC_SAFE_DELETE(effect);
+			}
+			break;
+		case BATTLE_EFFECT_TYPE_CHANGE_POSTION://移位
+			{
+				int targetX = countX( this->m_teamAmout, fighter->m_info.group, fighter->m_info.btBattleTeam, cmd->data );
+				int targetY = countY( this->m_teamAmout, fighter->m_info.group, fighter->m_info.btBattleTeam, cmd->data );
+				if ( fighter->moveTo( targetX, targetY ) )
+				{
+					fighter->m_kInfo.btStations = cmd->data;
+					fighter->setOriginPos( targetX, targetY );
+				}
+			}
+			break;
+		case BATTLE_EFFECT_TYPE_PLAY_ANIMATION:// 对象身上播放指定动画
+			{
+				stringstream ss;
+				ss << "sm_effect_" << cmd->data << ".spr";
+				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+				NDAnimationGroup* effect = new NDAnimationGroup;
+				effect->initWithSprFile(file);
+				addSkillEffectToFighter(fighter,effect,0,g_ArrayEfectProp[cmd->data].iPos,g_ArrayEfectProp[cmd->data].bRevers);
+				CC_SAFE_DELETE(effect);
+			}
+			break;
+		case BATTLE_EFFECT_TYPE_SKILL_EFFECT:
+			//处理技能光效
+			NDLog(@"add effect:%d",cmd->data);
+			if ( fighter->isDieOK() )
+				break;
+			if(cmd->data!=0){//光效播放在自已身上
+				int delay=0;//(skill->GetLookfaceID()/10)%100;
+				int pos=0;//skill->GetLookfaceID()%10;
+				stringstream ss;
+				ss << "sm_effect_" << cmd->data << ".spr";
+				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+				NDAnimationGroup* effect = new NDAnimationGroup;
+				effect->initWithSprFile(file);
+
+				//++Guosen 2012.6.28//播放特效动画须指定的位置及翻转设定
+				//addSkillEffectToFighter(fighter,effect,delay,pos);
+				addSkillEffectToFighter(fighter,effect,delay,g_ArrayEfectProp[cmd->data].iPos,g_ArrayEfectProp[cmd->data].bRevers);
+				CC_SAFE_DELETE(effect);
+			}
 			break;
 		default:
 			break;
@@ -4675,29 +4584,8 @@ void Battle::moveBack(FightAction* action)
 	}
 }
 
-void Battle::addSkillEffectToFighter(Fighter* fighter, NDAnimationGroup* effect,
-		int delay)
+void Battle::addSkillEffectToFighter(Fighter* fighter, NDAnimationGroup* effect, int delay, int pos, bool bRevers)
 {
-	//	Fighter* theActor=action->m_Actor;
-
-	//	//处理技能动作
-	//	int actId=0;
-	//	if(fighter>m_role->IsKindOfClass(RUNTIME_CLASS(NDManualRole))){
-	//		roleAction(*fighter, actId);
-	//	}else{
-	//		petAction(*fighter, actId);
-	//	}
-	//	   
-	//	//处理光效
-	//	int effectId=0;
-	//	int effectDelay=0;
-	//	if (effectId > 899) return;
-
-	//	stringstream ss;
-	//	ss << "effect_" << effectId << ".spr";
-	//	NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
-	//	NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
-
 	NDLog("add skill effect");
 	NDSubAniGroup sa;
 	sa.role = fighter->GetRole();
@@ -4706,6 +4594,8 @@ void Battle::addSkillEffectToFighter(Fighter* fighter, NDAnimationGroup* effect,
 	sa.frameRec = new NDFrameRunRecord;
 	sa.isFromOut = true;
 	sa.startFrame = delay;
+	sa.reverse = bRevers;
+	sa.pos = pos;
 	m_vSubAniGroup.push_back(sa);
 
 	//effect->release();
@@ -4737,7 +4627,7 @@ void Battle::addSkillEffect(Fighter& theActor, bool user/*=false*/)
 //		
 //		stringstream ss;
 //		ss << "effect_" << effectId << ".spr";
-//		NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
+//		NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
 //		NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //		
 //		int target = skillId % 10;
@@ -4783,6 +4673,10 @@ void Battle::addSkillEffect(Fighter& theActor, bool user/*=false*/)
 void Battle::aimTarget(FightAction* action)
 {
 	Fighter* theActor = action->m_pkActor;
+	if(action->m_bIsDritical)
+	{
+		theActor->showAtkDritical();//++Guosen显示暴击动画目前没有……
+	}
 	if (theActor->m_action == Fighter::AIMTARGET)
 	{
 		if (action->m_eEffectType == BATTLE_EFFECT_TYPE_ATK)
@@ -4799,34 +4693,66 @@ void Battle::aimTarget(FightAction* action)
 			theActor->showSkillName(true);
 			int actId = skill->GetActId();
 //			if(theActor->m_lookfaceType==LOOKFACE_MANUAL){
-			roleAction(*theActor, MANUELROLE_ATTACK);
+			roleAction(*theActor, actId);
 //			}else{
 //				petAction(*theActor, 0);
 //			}
 			//处理技能光效
-//			int effectId=skill->GetLookfaceID()/100;
-//			if(effectId!=0){//光效播放在自已身上
-//				int delay=skill->GetLookfaceID()%100;
-//				stringstream ss;
-//				ss << "effect_" << effectId << ".spr";
-//				NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
-//				NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
-//				
-//				addSkillEffectToFighter(theActor,effect,delay);
-//			}
-//			effectId=skill->GetLookfaceTargetID()/100;//光效播放在目标身上
-//			if(effectId!=0){
-//				int delay=skill->GetLookfaceTargetID()%100;
-//				stringstream ss;
-//				ss << "effect_" << effectId << ".spr";
-//				NSString* file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
-//				NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
-//				for (int i = 0; i < action->m_FighterList.size(); i++)
-//				{	
-//					Fighter* f=action->m_FighterList.at(i);
-//					addSkillEffectToFighter(f, effect,delay);
-//				}
-//			}
+			int effectId=skill->getSelfEffect();///1000;
+
+			//技能声效播放
+			int skillidSelf = skill->getId();
+			if(skillidSelf == 999999)
+			{
+				ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",1098,500);
+			}else
+			{
+				ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",effectId);
+			}
+
+
+			NDLog("add effect to self effectid:%d", effectId);
+			if(effectId != 0)
+			{
+				//光效播放在自已身上
+				int delay = 0;//(skill->GetLookfaceID()/10)%100;
+				int pos = 0;//skill->GetLookfaceID()%10;
+				stringstream ss;
+				ss << "sm_effect_" << effectId << ".spr";
+				const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+				NDAnimationGroup *effect = new NDAnimationGroup;
+				effect->initWithSprFile(file);
+
+				//addSkillEffectToFighter(theActor,effect,delay,pos);
+				addSkillEffectToFighter(theActor,effect,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);//++Guosen 2012.6.28
+				CC_SAFE_DELETE(effect);
+			}
+			effectId = skill->getTargetEffect();///1000;//光效播放在目标身上
+			NDLog("add effect to target effectid:%d",effectId);
+
+			//技能声效播放
+			int skillidTarget = skill->getId();
+			ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",effectId);
+
+
+			if(effectId != 0)
+			{
+				int delay = 0;//(skill->GetLookfaceTargetID()/10)%100;
+				int pos = 0;//skill->GetLookfaceTargetID()%10;
+				stringstream ss;
+				ss << "sm_effect_" << effectId << ".spr";
+				const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+				NDAnimationGroup *effect = new NDAnimationGroup;
+				effect->initWithSprFile(file);
+				for (UInt32 i = 0; i < action->m_kFighterList.size(); i++)
+				{	
+					Fighter* f=action->m_kFighterList.at(i);
+					//addSkillEffectToFighter(f, effect,delay,pos);
+					addSkillEffectToFighter(f,effect,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);//++Guosen 2012.6.28
+				}
+
+				CC_SAFE_DELETE(effect);
+			}
 
 			//			if (theActor.m_kInfo.fighterType == FIGHTER_TYPE_PET) { // 玩家
 			//				/*
@@ -5031,20 +4957,20 @@ void Battle::drawAllFighterHurtNumber()
 	drawFighterHurt (m_vDefencer);
 }
 
-NDPicture* Battle::getActionWord(ACTION_WORD index)
-{
-	switch (index)
-	{
-	case AW_DEF:
-		return m_picActionWordDef;
-	case AW_FLEE:
-		return m_picActionWordFlee;
-	case AW_DODGE:
-		return m_picActionWordDodge;
-	default:
-		return NULL;
-	}
-}
+//--Guosen 2012.6.28//不显示动作名称（防御，逃跑，闪避）
+//NDPicture* Battle::getActionWord(ACTION_WORD index)
+//{
+//	switch (index) {
+//		case AW_DEF:
+//			return this->m_picActionWordDef;
+//		case AW_FLEE:
+//			return this->m_picActionWordFlee;
+//		case AW_DODGE:
+//			return this->m_picActionWordDodge;
+//		default:
+//			return NULL;
+//	}
+//}
 
 void Battle::skillAttack(FightAction* action)
 {
@@ -5684,46 +5610,46 @@ void Battle::RefreshSkillBarPet()
 	if (petInfo)
 		return;
 
-	//SET_BATTLE_SKILL_LIST& petSkillList = PetMgrObj.GetSkillList(SKILL_TYPE_ATTACK, petInfo->data.int_PET_ID);
-	//SpeedBarInfo skillInfo;
-	//BattleMgr& bm = BattleMgrObj;
-	//BattleSkill* bs = NULL;
-	//SET_BATTLE_SKILL_LIST_IT itSkill = petSkillList.begin();
-	//
-	//int nPetMp = getMainEudemon()->m_kInfo.nMana;
-	//
-	//int nFocus = -1;
-	//for (int i = 0; i < MAX_SKILL_NUM; i++) {
-	//	if (itSkill != petSkillList.end()) {
-	//		skillInfo.push_back(SpeedBarCellInfo());
-	//		SpeedBarCellInfo& ci = skillInfo.back();
-	//		bs = bm.GetBattleSkill(*itSkill);
-	//		if (bs) {
-	//			ci.foreground = GetSkillIconByIconIndex(bs->getIconIndex(), true);;
-	//			
-	//			ci.gray = bs->getMpRequire() > nPetMp;
-	//			ci.param1 = bs->getId();
-	//			ci.param2 = bs->getCd();
-	//			
-	//			if (ci.param2 != 0 && !ci.gray)
-	//			{
-	//				CoolDownRecord_IT it = m_recordCoolDown.find(ci.param1);
-	//				if (it != m_recordCoolDown.end())
-	//					ci.gray = (it->second < ci.param2);
-	//			}
-	//			
-	//			// 上回合使用的技能
-	//			if (m_defaultSkillIDEudemon == ci.param1 && !ci.gray) {
-	//				nFocus = i;
-	//			} else {
-	//				// 上回合技能清零，表示该技能失效
-	//				m_defaultSkillIDEudemon = ID_NONE;
-	//			}
-	//			
-	//		}
-	//		itSkill++;
-	//	}
-	//}
+// 	SET_BATTLE_SKILL_LIST& petSkillList = PetMgrObj.GetSkillList(SKILL_TYPE_ATTACK, petInfo->data.int_PET_ID);
+// 	SpeedBarInfo skillInfo;
+// 	BattleMgr& bm = BattleMgrObj;
+// 	BattleSkill* bs = NULL;
+// 	SET_BATTLE_SKILL_LIST_IT itSkill = petSkillList.begin();
+// 
+// 	int nPetMp = getMainEudemon()->m_kInfo.nMana;
+// 
+// 	int nFocus = -1;
+// 	for (int i = 0; i < MAX_SKILL_NUM; i++) {
+// 		if (itSkill != petSkillList.end()) {
+// 			skillInfo.push_back(SpeedBarCellInfo());
+// 			SpeedBarCellInfo& ci = skillInfo.back();
+// 			bs = bm.GetBattleSkill(*itSkill);
+// 			if (bs) {
+// 				ci.foreground = GetSkillIconByIconIndex(bs->getIconIndex(), true);;
+// 
+// 				ci.gray = bs->getMpRequire() > nPetMp;
+// 				ci.param1 = bs->getId();
+// 				ci.param2 = bs->getCd();
+// 
+// 				if (ci.param2 != 0 && !ci.gray)
+// 				{
+// 					CoolDownRecord_IT it = m_recordCoolDown.find(ci.param1);
+// 					if (it != m_recordCoolDown.end())
+// 						ci.gray = (it->second < ci.param2);
+// 				}
+// 
+// 				// 上回合使用的技能
+// 				if (m_defaultSkillIDEudemon == ci.param1 && !ci.gray) {
+// 					nFocus = i;
+// 				} else {
+// 					// 上回合技能清零，表示该技能失效
+// 					m_defaultSkillIDEudemon = ID_NONE;
+// 				}
+// 
+// 			}
+// 			itSkill++;
+// 		}
+// 	}
 
 	//	m_fighterLeft->refresh(skillInfo);
 	//	if (nFocus > -1 && !s_bAuto) {
@@ -5894,6 +5820,7 @@ void Battle::RefreshItemBar()
 	//	m_fighterBottom->refresh(speedbarBottom);
 }
 
+//快捷栏
 // Battle::speed bar
 void Battle::InitSpeedBar()
 {
@@ -5928,47 +5855,47 @@ void Battle::InitSpeedBar()
 	//	m_fighterRight->SetDelegate(this);
 	//	m_fighterRight->Initialization();
 
-	//SpeedBarInfo speedbarRight;
-	//
-	//// 捕捉
-	//speedbarRight.push_back(SpeedBarCellInfo());
-	//SpeedBarCellInfo& ciCatch = speedbarRight.back();
-	//NDPicture* pic = new NDPicture(true);
-	//pic->Initialization(GetImgPathBattleUI("menucatch.png"));
-	//ciCatch.foreground = pic;
-	//ciCatch.param1 = CELL_TAG_CATCH;
-	//
-	//// 逃跑
-	//speedbarRight.push_back(SpeedBarCellInfo());
-	//SpeedBarCellInfo& ciFlee = speedbarRight.back();
-	//pic = new NDPicture(true);
-	//pic->Initialization(GetImgPathBattleUI("menuescape.png"));
-	//ciFlee.foreground = pic;
-	//ciFlee.param1 = CELL_TAG_FLEE;
-	//
-	//// 防御
-	//speedbarRight.push_back(SpeedBarCellInfo());
-	//SpeedBarCellInfo& ciDef = speedbarRight.back();
-	//pic = new NDPicture(true);
-	//pic->Initialization(GetImgPathBattleUI("menudefence.png"));
-	//ciDef.foreground = pic;
-	//ciDef.param1 = CELL_TAG_DEF;
-	//
-	//// 攻击
-	//speedbarRight.push_back(SpeedBarCellInfo());
-	//SpeedBarCellInfo& ciAtk = speedbarRight.back();
-	//pic = new NDPicture(true);
-	//pic->Initialization(GetImgPathBattleUI("menuattack.png"));
-	//ciAtk.foreground = pic;
-	//ciAtk.param1 = CELL_TAG_ATK;
-	//
-	//// 查看
-	//speedbarRight.push_back(SpeedBarCellInfo());
-	//SpeedBarCellInfo& ciViewStatus = speedbarRight.back();
-	//pic = new NDPicture(true);
-	//pic->Initialization(GetImgPathBattleUI("menuwatch.png"));
-	//ciViewStatus.foreground = pic;
-	//ciViewStatus.param1 = CELL_TAG_VIEWSTATUS;
+// 	SpeedBarInfo speedbarRight;
+// 
+// 	// 捕捉
+// 	speedbarRight.push_back(SpeedBarCellInfo());
+// 	SpeedBarCellInfo& ciCatch = speedbarRight.back();
+// 	NDPicture* pic = new NDPicture(true);
+// 	pic->Initialization(NDPath::GetImgPathBattleUI("menucatch.png").c_str());
+// 	ciCatch.foreground = pic;
+// 	ciCatch.param1 = CELL_TAG_CATCH;
+// 
+// 	// 逃跑
+// 	speedbarRight.push_back(SpeedBarCellInfo());
+// 	SpeedBarCellInfo& ciFlee = speedbarRight.back();
+// 	pic = new NDPicture(true);
+// 	pic->Initialization(NDPath::GetImgPathBattleUI("menuescape.png").c_str());
+// 	ciFlee.foreground = pic;
+// 	ciFlee.param1 = CELL_TAG_FLEE;
+// 
+// 	// 防御
+// 	speedbarRight.push_back(SpeedBarCellInfo());
+// 	SpeedBarCellInfo& ciDef = speedbarRight.back();
+// 	pic = new NDPicture(true);
+// 	pic->Initialization(NDPath::GetImgPathBattleUI("menudefence.png").c_str());
+// 	ciDef.foreground = pic;
+// 	ciDef.param1 = CELL_TAG_DEF;
+// 
+// 	// 攻击
+// 	speedbarRight.push_back(SpeedBarCellInfo());
+// 	SpeedBarCellInfo& ciAtk = speedbarRight.back();
+// 	pic = new NDPicture(true);
+// 	pic->Initialization(NDPath::GetImgPathBattleUI("menuattack.png").c_str());
+// 	ciAtk.foreground = pic;
+// 	ciAtk.param1 = CELL_TAG_ATK;
+// 
+// 	// 查看
+// 	speedbarRight.push_back(SpeedBarCellInfo());
+// 	SpeedBarCellInfo& ciViewStatus = speedbarRight.back();
+// 	pic = new NDPicture(true);
+// 	pic->Initialization(NDPath::GetImgPathBattleUI("menuwatch.png").c_str());
+// 	ciViewStatus.foreground = pic;
+// 	ciViewStatus.param1 = CELL_TAG_VIEWSTATUS;
 
 	//	m_fighterRight->refresh(speedbarRight);
 	//	
@@ -6515,4 +6442,11 @@ void Battle::setBattleStatus(BATTLE_STATUS status)
 		return;
 
 	m_battleStatus = status;
+}
+
+void Battle::SetBattleOver(void)
+{
+	m_Team1_status=TEAM_OVER;  
+	m_Team2_status=TEAM_OVER;
+	m_Team3_status=TEAM_OVER;
 }

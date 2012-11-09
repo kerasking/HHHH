@@ -52,16 +52,14 @@ local ID_FLOWERS_CTRL_PICTURE_BG					= 1;
 
 local giveFlowerNum = 0;
 local playerId ;
-local playerName ;
 local textIdList = {}
 
 -----------------------
 -----------------------
 
-function p.LoadUI(id,name,flowerNum,giveRecordList)
+function p.LoadUI(id,flowerNum,giveRecordList)
     p.Init();
 	playerId = id;
-	playerName = name;
 
 	local scene = GetSMGameScene();	
 	if scene == nil then
@@ -179,14 +177,14 @@ function p.OnUIEventGiveFlower(uiNode, uiEventType, param)
 		
 		if tag ==  ID_FLOWERS_CTRL_BUTTON_SEND_FLOWER1 then
 			giveFlowerNum = 1;
-			CommonDlg.ShowNoPrompt(string.format("是否花费1000铜钱，赠送玩家%s 1朵鲜花，获得10点声望？",playerName), p.OnCommonDlgSendGiveFlower , true);				
+			CommonDlg.ShowNoPrompt("是否花费1000银币，赠送1朵鲜花，获得10点声望？", p.OnCommonDlgSendGiveFlower , true);				
 
 		elseif tag == ID_FLOWERS_CTRL_BUTTON_SEND_FLOWER2 then
 				giveFlowerNum = 9;
-				CommonDlg.ShowNoPrompt(string.format("是否花费9元宝，赠送玩家%s 9朵鲜花，获得20点声望？",playerName), p.OnCommonDlgSendGiveFlower , true);	
+				CommonDlg.ShowNoPrompt("是否花费9金币，赠送9朵鲜花，获得20点声望？", p.OnCommonDlgSendGiveFlower , true);	
 		elseif tag == ID_FLOWERS_CTRL_BUTTON_SEND_FLOWER3 then
 				giveFlowerNum = 99;
-				CommonDlg.ShowNoPrompt(string.format("是否花费99元宝，赠送玩家%s 99朵鲜花，获得520点声望？",playerName), p.OnCommonDlgSendGiveFlower , true);	
+				CommonDlg.ShowNoPrompt("是否花费99金币，赠送99朵鲜花，获得520点声望？", p.OnCommonDlgSendGiveFlower , true);	
 		end
 	end	
 	
@@ -224,28 +222,28 @@ function p.OnCommonDlgSendGiveFlower(nId, nEvent, param)
 		local reqMoney;
 		local reqEMoney;	
 		local eMoney = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_EMONEY); 	
-		LogInfo("玩家身上元宝%d",eMoney)
+		LogInfo("玩家身上金币%d",eMoney)
 		
 		if giveFlowerNum ==  1 then
 		    reqMoney = 1000;
 		    local money = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_MONEY);
-			LogInfo("玩家身上铜钱%d",money) 
+			LogInfo("玩家身上银币%d",money) 
 		    if reqMoney  > money then
-		        CommonDlg.ShowTipInfo("提示", "铜钱不足!", nil, 2);
+		        CommonDlg.ShowTipInfo("提示", "银币不足!", nil, 2);
 			else
 				MsgFriend.SendGiveFlower(playerId,1);				
 		    end
 		elseif giveFlowerNum == 9 then
 		        reqEMoney = 9;
 		        if reqEMoney  > eMoney then
-		            CommonDlg.ShowTipInfo("提示", "元宝不足!", nil, 2);
+		            CommonDlg.ShowTipInfo("提示", "金币不足!", nil, 2);
 			    else
 					MsgFriend.SendGiveFlower(playerId,9);
 		        end
 		elseif giveFlowerNum == 99 then
 		        reqEMoney = 99;
 		        if reqEMoney  > eMoney then
-		            CommonDlg.ShowTipInfo("提示", "元宝不足!", nil, 2);
+		            CommonDlg.ShowTipInfo("提示", "金币不足!", nil, 2);
 			    else
 					MsgFriend.SendGiveFlower(playerId,99);
 		        end

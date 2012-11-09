@@ -11,6 +11,8 @@
 #include "CCDrawingPrimitives.h"
 #include "CCPointExtension.h"
 #include "UsePointPls.h"
+#include "NDPicture.h"
+
 
 using namespace cocos2d;
 
@@ -50,6 +52,17 @@ NDTile::~NDTile()
 // 	free (m_pfVertices);
 	CC_SAFE_FREE (m_pkTexture);
 	CC_SAFE_RELEASE(m_pShaderProgram); //@shader
+	free (m_pfCoordinates);
+	free (m_pfVertices);
+
+	if(m_pkTexture->getContainerType() == NDEngine::ContainerTypeAddPic 
+		|| m_pkTexture->getContainerType() == NDEngine::ContainerTypeAddTexture) 
+	{
+		NDEngine::NDPicturePool::DefaultPool()->RemoveTexture(m_pkTexture);
+	}
+#if 0
+	CC_SAFE_FREE (m_pkTexture);
+#endif 
 }
 
 void NDTile::makeTex(float* pData)

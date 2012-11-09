@@ -198,6 +198,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Framework\inc\NDProfile.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Framework\inc\NDScene.h"
 					>
 				</File>
@@ -458,6 +462,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\System\inc\NDEnableSharedFromThis.h"
+					>
+				</File>
+				<File
 					RelativePath="..\System\inc\NDLocalization.h"
 					>
 				</File>
@@ -470,11 +478,27 @@
 					>
 				</File>
 				<File
+					RelativePath="..\System\inc\NDRefLong.h"
+					>
+				</File>
+				<File
+					RelativePath="..\System\inc\NDSharedPtr.h"
+					>
+				</File>
+				<File
+					RelativePath="..\System\inc\NDSPtrCounted.h"
+					>
+				</File>
+				<File
 					RelativePath="..\System\inc\NDTimer.h"
 					>
 				</File>
 				<File
 					RelativePath="..\System\inc\NDTouch.h"
+					>
+				</File>
+				<File
+					RelativePath="..\System\inc\NDWeakPtr.h"
 					>
 				</File>
 				<File
@@ -590,6 +614,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\inc\NDUIEdit.h"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\inc\NDUIFrame.h"
 					>
 				</File>
@@ -655,6 +683,10 @@
 				</File>
 				<File
 					RelativePath="..\UI\inc\UIHyperlink.h"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\UIList.h"
 					>
 				</File>
 				<File
@@ -730,6 +762,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\src\NDUIEdit.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\src\NDUIFrame.cpp"
 					>
 				</File>
@@ -787,6 +823,10 @@
 				</File>
 				<File
 					RelativePath="..\UI\src\UIHyperlink.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\src\UIList.cpp"
 					>
 				</File>
 				<File

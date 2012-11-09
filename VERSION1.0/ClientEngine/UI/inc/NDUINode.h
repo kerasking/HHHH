@@ -100,6 +100,8 @@ namespace NDEngine
 //		参数：srcRect改变前的矩形范围，dstRect改变后的矩形范围，相对于屏幕
 //		返回值：无		
 		virtual void OnFrameRectChange(CGRect srcRect, CGRect dstRect);
+
+		void SetBoundScale(int nScale);
 	public:		
 		void draw(); override
 

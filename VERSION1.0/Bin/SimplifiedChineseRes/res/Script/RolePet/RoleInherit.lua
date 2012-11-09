@@ -159,50 +159,45 @@ function p.RefreshContainer()
 		LogInfo("idlist,%d",v);
 		
 		--判断是否是玩家
-		if v==nPlayerId then
-			continue;
-		end
-		
-		--判断是否已经传承过
-		local impart = RolePet.GetPetInfoN(v,PET_ATTR.PET_ATTR_IMPART);
-		
-		if impart == 0 then
-			local view = createUIScrollView();
-			if view == nil then
-				LogInfo("view == nil");
-				continue;
-			end
-			view:Init(false);
-			view:SetViewId(v);
-			container_left:AddView(view);
-			local uiLoad = createNDUILoad();
-			if uiLoad ~= nil then
-				uiLoad:Load("RoleInherit_M.ini",view,p.OnUIInheritUIEvent,0,0);
-				uiLoad:Free();
-			end
-			p.updateAttr(view,v);
-		end
-		
-		--判断是否已经被传承过
-		local obtain = RolePet.GetPetInfoN(v,PET_ATTR.PET_ATTR_OBTAIN);
-		
-		if obtain == 0 then
-			local view = createUIScrollView();
-			if view == nil then
-				LogInfo("view == nil");
-				continue;
-			end
-			view:Init(false);
-			view:SetViewId(v);
-			container_right:AddView(view);
-			local uiLoad = createNDUILoad();
-			if uiLoad ~= nil then
-				uiLoad:Load("RoleInherit_M.ini",view,p.OnUIInheritUIEvent,0,0);
-				uiLoad:Free();
-			end
-			p.updateAttr(view,v);
-		end
-		
+		if v~=nPlayerId then
+            --判断是否已经传承过
+            local impart = RolePet.GetPetInfoN(v,PET_ATTR.PET_ATTR_IMPART);
+            
+            if impart == 0 then
+                local view = createUIScrollView();
+                if view ~= nil then
+                    view:Init(false);
+                    view:SetViewId(v);
+                    container_left:AddView(view);
+                    local uiLoad = createNDUILoad();
+                    if uiLoad ~= nil then
+                        uiLoad:Load("RoleInherit_M.ini",view,p.OnUIInheritUIEvent,0,0);
+                        uiLoad:Free();
+                    end
+                    p.updateAttr(view,v);
+                end
+                
+            end
+            
+            --判断是否已经被传承过
+            local obtain = RolePet.GetPetInfoN(v,PET_ATTR.PET_ATTR_OBTAIN);
+            
+            if obtain == 0 then
+                local view = createUIScrollView();
+                if view ~= nil then
+                    view:Init(false);
+                    view:SetViewId(v);
+                    container_right:AddView(view);
+                    local uiLoad = createNDUILoad();
+                    if uiLoad ~= nil then
+                        uiLoad:Load("RoleInherit_M.ini",view,p.OnUIInheritUIEvent,0,0);
+                        uiLoad:Free();
+                    end
+                    p.updateAttr(view,v);
+                end
+                
+            end
+        end
 	end
 	
 	p.RefreshInheritAttr();
