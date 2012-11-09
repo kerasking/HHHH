@@ -50,19 +50,17 @@ NDTile::~NDTile()
 {
 // 	free (m_pfCoordinates);
 // 	free (m_pfVertices);
-	CC_SAFE_FREE (m_pkTexture);
-	CC_SAFE_RELEASE(m_pShaderProgram); //@shader
-	free (m_pfCoordinates);
-	free (m_pfVertices);
 
 	if(m_pkTexture->getContainerType() == NDEngine::ContainerTypeAddPic 
 		|| m_pkTexture->getContainerType() == NDEngine::ContainerTypeAddTexture) 
 	{
 		NDEngine::NDPicturePool::DefaultPool()->RemoveTexture(m_pkTexture);
 	}
+
 #if 0
 	CC_SAFE_FREE (m_pkTexture);
 #endif 
+	CC_SAFE_RELEASE(m_pShaderProgram); //@shader
 }
 
 void NDTile::makeTex(float* pData)
@@ -113,16 +111,19 @@ void NDTile::makeVetex(float* pData, CGRect kRect)
 	{
 	case NDRotationEnumRotation0:
 		*pfVector++ = kRect.origin.x;
-		*pfVector++ = m_kMapSize.height - kRect.origin.y - kRect.size.height;
+		*pfVector++ = SCREEN2GL_Y( kRect.origin.y + kRect.size.height );
 		*pfVector++ = 0;
+
 		*pfVector++ = kRect.origin.x + kRect.size.width;
-		*pfVector++ = pData[1];
+		*pfVector++ = SCREEN2GL_Y( kRect.origin.y + kRect.size.height );
 		*pfVector++ = 0;
+
 		*pfVector++ = kRect.origin.x;
-		*pfVector++ = m_kMapSize.height - kRect.origin.y;
+		*pfVector++ = SCREEN2GL_Y(kRect.origin.y);
 		*pfVector++ = 0;
-		*pfVector++ = pData[3];
-		*pfVector++ = pData[7];
+
+		*pfVector++ = kRect.origin.x + kRect.size.width;
+		*pfVector++ = SCREEN2GL_Y(kRect.origin.y);
 		*pfVector++ = 0;
 		break;
 	case NDRotationEnumRotation15:

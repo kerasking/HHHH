@@ -669,7 +669,7 @@ void NDPictureDictionary::Recyle()
 	//std::vector<std::string> allKeys = m_nsDictionary->allKeys();
 	CCArray* allKeys = m_nsDictionary->allKeys();
 
-	if (allKeys->count() == 0)
+	if (allKeys && allKeys->count() == 0)
 	{
 		return;
 	}

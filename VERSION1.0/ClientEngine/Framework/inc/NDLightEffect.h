@@ -25,10 +25,15 @@ DECLARE_CLASS(NDLightEffect)
 public:
 
 	void Initialization(const char* sprFile);
-	void SetPosition(CGPoint kNewPosition);
 	void SetRepeatTimes(unsigned int times);
 	void SetLightId(unsigned int uiLightID, bool bReverse = true);
 	void SlowDown(unsigned int mutli);
+
+//	void SetPosition(CGPoint kNewPosition);
+	void SetWorldPos( const CGPoint& worldPos );
+	void SetCellPos( const CGPoint& cellPos );
+	CGPoint GetWorldPos();
+	CGPoint GetCellPos();
 
 public:
 	//武状元光效使用
@@ -45,7 +50,7 @@ private:
 	NDFrameRunRecord* m_pkFrameRunRecord;
 	NDAnimationGroup* m_pkAniGroup;
 
-	CGPoint m_kPosition;
+	CGPoint m_kPosition; //世界坐标
 	unsigned int m_nLightID;
 
 	bool m_bIsStop;

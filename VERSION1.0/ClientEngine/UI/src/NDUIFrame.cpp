@@ -62,18 +62,21 @@ namespace NDEngine
 
 		m_tileLeftTop->setTexture(ptexpic->GetTexture());
 		SAFE_DELETE(ptexpic);
+
 		m_tileLeftTop->setCutRect(
 			CGRectMake(0, 0,
 			m_tileLeftTop->getTexture()->getMaxS()
 			* m_tileLeftTop->getTexture()->getPixelsWide(),
 			m_tileLeftTop->getTexture()->getMaxT()
 			* m_tileLeftTop->getTexture()->getPixelsHigh()));
+
 		m_tileLeftTop->setDrawRect(
 			CGRectMake(scrRect.origin.x, scrRect.origin.y,
 			m_tileLeftTop->getTexture()->getMaxS()
 			* m_tileLeftTop->getTexture()->getPixelsWide(),
 			m_tileLeftTop->getTexture()->getMaxT()
 			* m_tileLeftTop->getTexture()->getPixelsHigh()));
+
 		m_tileLeftTop->setReverse(false);
 		m_tileLeftTop->setRotation(NDRotationEnumRotation0);
 		m_tileLeftTop->setMapSize(CGSizeMake(winSize.width, winSize.height));
@@ -82,13 +85,16 @@ namespace NDEngine
 		NDPicture* ppic = NDPicturePool::DefaultPool()->AddPicture(
 			side_image->toStdString().c_str());
 		m_tileLeftTop->setTexture(ppic->GetTexture());
+
 		SAFE_DELETE(ppic);
+
 		m_tileRightTop->setCutRect(
 			CGRectMake(0, 0,
 			m_tileRightTop->getTexture()->getMaxS()
 			* m_tileRightTop->getTexture()->getPixelsWide(),
 			m_tileRightTop->getTexture()->getMaxT()
 			* m_tileRightTop->getTexture()->getPixelsHigh()));
+
 		m_tileRightTop->setDrawRect(
 			CGRectMake(
 			scrRect.origin.x + scrRect.size.width
@@ -99,6 +105,7 @@ namespace NDEngine
 			* m_tileRightTop->getTexture()->getPixelsHigh(),
 			m_tileRightTop->getTexture()->getMaxS()
 			* m_tileRightTop->getTexture()->getPixelsWide()));
+
 		m_tileRightTop->setReverse(false);
 		m_tileRightTop->setRotation(NDRotationEnumRotation90);
 		m_tileRightTop->setMapSize(CGSizeMake(winSize.width, winSize.height));
@@ -107,13 +114,16 @@ namespace NDEngine
 		NDPicture* pleftpic = NDPicturePool::DefaultPool()->AddPicture(
 			side_image->toStdString().c_str());
 		m_tileLeftBottom->setTexture(pleftpic->GetTexture());
+
 		SAFE_DELETE(pleftpic);
+
 		m_tileLeftBottom->setCutRect(
 			CGRectMake(0, 0,
 			m_tileLeftBottom->getTexture()->getMaxS()
 			* m_tileLeftBottom->getTexture()->getPixelsWide(),
 			m_tileLeftBottom->getTexture()->getMaxT()
 			* m_tileLeftBottom->getTexture()->getPixelsHigh()));
+
 		m_tileLeftBottom->setDrawRect(
 			CGRectMake(scrRect.origin.x,
 			scrRect.origin.y + scrRect.size.height
@@ -123,6 +133,7 @@ namespace NDEngine
 			* m_tileLeftBottom->getTexture()->getPixelsWide(),
 			m_tileLeftBottom->getTexture()->getMaxT()
 			* m_tileLeftBottom->getTexture()->getPixelsHigh()));
+
 		m_tileLeftBottom->setReverse(false);
 		m_tileLeftBottom->setRotation(NDRotationEnumRotation270);
 		m_tileLeftBottom->setMapSize(CGSizeMake(winSize.width, winSize.height));
@@ -131,13 +142,16 @@ namespace NDEngine
 		NDPicture* prightpic = NDPicturePool::DefaultPool()->AddPicture(
 			side_image->toStdString().c_str());
 		m_tileRightBottom->setTexture(prightpic->GetTexture());
+
 		SAFE_DELETE(prightpic);
+
 		m_tileRightBottom->setCutRect(
 			CGRectMake(0, 0,
 			m_tileRightBottom->getTexture()->getMaxS()
 			* m_tileRightBottom->getTexture()->getPixelsWide(),
 			m_tileRightBottom->getTexture()->getMaxT()
 			* m_tileRightBottom->getTexture()->getPixelsHigh()));
+
 		m_tileRightBottom->setDrawRect(
 			CGRectMake(
 			scrRect.origin.x + scrRect.size.width
@@ -150,6 +164,7 @@ namespace NDEngine
 			* m_tileRightBottom->getTexture()->getPixelsHigh(),
 			m_tileRightBottom->getTexture()->getMaxS()
 			* m_tileRightBottom->getTexture()->getPixelsWide()));
+
 		m_tileRightBottom->setReverse(false);
 		m_tileRightBottom->setRotation(NDRotationEnumRotation180);
 		m_tileRightBottom->setMapSize(CGSizeMake(winSize.width, winSize.height));

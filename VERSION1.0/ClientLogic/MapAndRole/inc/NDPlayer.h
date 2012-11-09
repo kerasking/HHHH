@@ -43,7 +43,8 @@ public:
 	static void pugeHero();
 	void Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive = false);
 
-	void SetPosition(CGPoint newPosition);
+//	void SetPosition(CGPoint newPosition);
+	void SetWorldPos(CGPoint newPosition);
 
 	void Update(unsigned long ulDiff);
 	//用于绘制
@@ -133,6 +134,10 @@ private:
 	void HandleStateBattleField();
 
 	void HandleStateDacoity();
+
+public:
+	override void RunAnimation(bool bDraw);
+
 private:
 	// 勿用
 	static bool ms_bFirstUse;

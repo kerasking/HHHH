@@ -16,6 +16,7 @@
 #include "NDSprite.h"
 #include "NDPath.h"
 #include "NDConstant.h"
+#include "NDPlayer.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -214,16 +215,16 @@ void NDFrame::run(float fScale)
 		NDEngine::NDSprite *pkSprite =
 			(NDEngine::NDSprite *) pkAnimationGroup->getRuningSprite();
 
+		//if (!pkSprite->IsKindOfClass(RUNTIME_CLASS(NDPlayer))) continue; //@todo @del
+
 		if (pkSprite && !pkSprite->IsCloakEmpty()
 			&& pkRecord->getReplace() >= REPLACEABLE_LEFT_SHOULDER
 			&& pkRecord->getReplace() <= REPLACEABLE_SKIRT_LIFT_LEG)
 		{
-			pkTile->setCutRect(
+			pkTile->setCutRectInPixels(
 				CGRectMake(0, 0,
-				pkTile->getTexture()->getMaxS()
-				* pkTile->getTexture()->getPixelsWide(),
-				pkTile->getTexture()->getMaxT()
-				* pkTile->getTexture()->getPixelsHigh()));
+				pkTile->getTexture()->getMaxS() * pkTile->getTexture()->getPixelsWide(),
+				pkTile->getTexture()->getMaxT() * pkTile->getTexture()->getPixelsHigh()));
 		}
 		else
 		{
@@ -232,12 +233,13 @@ void NDFrame::run(float fScale)
 			int nCutW = pkRecord->getW();
 			int nCutH = pkRecord->getH();
 
-			pkTile->setCutRect(CGRectMake(nCutX, nCutY, nCutW, nCutH));
+			pkTile->setCutRectInPixels(CGRectMake(nCutX, nCutY, nCutW, nCutH));
 		}
 
 		GLfloat x = pkAnimationGroup->getPosition().x;
 		GLfloat y = pkAnimationGroup->getPosition().y;
 
+#if 0 //@todo: ??
 		if (pkAnimation->getMidX() != 0)
 		{
 			x -= (pkAnimation->getMidX() - pkAnimation->getX()) * fScale;
@@ -252,25 +254,29 @@ void NDFrame::run(float fScale)
 
 		if (pkAnimation->getReverse())
 		{
-			int tileW = getTileW(pkRecord->getW(), pkRecord->getH(),
-				kReverseRotation.rotation);
+			int tileW = getTileW(pkRecord->getW(), pkRecord->getH(), kReverseRotation.rotation);
 
 			int newX = pkAnimation->getMidX()
 				+ (pkAnimation->getMidX() - pkFrameTile->getX() - tileW);
+
 			x = x + newX * fScale - pkAnimation->getX() * fScale;
 		}
 		else
 		{
 			x = x + pkFrameTile->getX() * fScale - pkAnimation->getX() * fScale;
 		}
+#endif
 
-#if 0
+#if 1
+		float w = pkTile->getCutRect().size.width * fScale;
+		float h = pkTile->getCutRect().size.height * fScale;
  		pkTile->setDrawRect(
- 			CGRectMake(x, y, pkTile->getCutRect().size.width * fScale,
- 			pkTile->getCutRect().size.height * fScale));
+ 			CGRectMake(x, GL2SCREEN_Y(y) - h, 
+			w, h ));
 #else
-		pkTile->setDrawRect( CGRectMake(x, y, 
-			pkRecord->getW() * fScale, pkRecord->getH() * fScale ));
+		pkTile->setDrawRectInPixels( CGRectMake(x, y, 
+			pkRecord->getW() * fScale, 
+			pkRecord->getH() * fScale ));
 #endif
 
 		pkTile->setMapSize(pkAnimationGroup->getRunningMapSize());

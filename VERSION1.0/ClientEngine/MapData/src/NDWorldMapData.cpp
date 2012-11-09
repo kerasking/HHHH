@@ -159,19 +159,24 @@ void NDWorldMapData::decode(FILE* stream)
 					std::string imageName = _tileImages[imageIndex];
 
 					NDTile *pkTile = new NDTile();
-					pkTile->setMapSize(m_MapSize);
+					pkTile->setMapSizeInPixels(m_MapSize);
+
 					pkTile->setTexture(
 							MapTexturePool::defaultPool()->addImage(
 									imageName.c_str(), true));
+
 					int PicParts = pkTile->getTexture()->getPixelsWide()
 							* pkTile->getTexture()->getMaxS() / TileWidth;
-					pkTile->setCutRect(
+
+					pkTile->setCutRectInPixels(
 							CGRectMake(TileWidth * (tileIndex % PicParts),
 									TileHeight * (tileIndex / PicParts),
 									TileWidth, TileHeight));
-					pkTile->setDrawRect(
+
+					pkTile->setDrawRectInPixels(
 							CGRectMake(TileWidth * c, TileHeight * r, TileWidth,
 									TileHeight));
+
 					//tile->setHorizontalReverse(reverse);				
 					m_MapTiles->addObject(pkTile);
 					pkTile->release();
@@ -226,19 +231,22 @@ void NDWorldMapData::decode(FILE* stream)
 		pkTile->setTexture(
 				CCTextureCache::sharedTextureCache()->addImage(
 						imageName.c_str()));
+
 		int picWidth = pkTile->getTexture()->getPixelsWide()
 				* pkTile->getTexture()->getMaxS();
+
 		int picHeight = pkTile->getTexture()->getPixelsHigh()
 				* pkTile->getTexture()->getMaxT();
 
-		pkTile->setMapSize(
+		pkTile->setMapSizeInPixels(
 				CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
-		pkTile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
-		pkTile->setDrawRect(CGRectMake(x, y, picWidth, picHeight));
+
+		pkTile->setCutRectInPixels(CGRectMake(0, 0, picWidth, picHeight));
+
+		pkTile->setDrawRectInPixels(CGRectMake(x, y, picWidth, picHeight));
 //		tile->setReverse(reverse);	 ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 
 		pkTile->make();
-
 		m_BgTiles->addObject(pkTile);
 		pkTile->release();
 	}
@@ -286,19 +294,23 @@ void NDWorldMapData::decode(FILE* stream)
 
 		NDSceneTile *pkTile = new NDSceneTile;
 		pkTile->setOrderID(_sceneOrders[resourceIndex] + y);
+
 		NDPicture *pTile_pic = NDPicturePool::DefaultPool()->AddPicture(_sceneImages[resourceIndex].c_str());
 		pkTile->setTexture(pTile_pic->GetTexture());
 				
 
 		int picWidth = pkTile->getTexture()->getPixelsWide()
 				* pkTile->getTexture()->getMaxS();
+
 		int picHeight = pkTile->getTexture()->getPixelsHigh()
 				* pkTile->getTexture()->getMaxT();
 
-		pkTile->setMapSize(
-				CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
-		pkTile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
-		pkTile->setDrawRect(CGRectMake(x, y, picWidth, picHeight));
+		pkTile->setMapSizeInPixels( CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
+
+		pkTile->setCutRectInPixels( CGRectMake(0, 0, picWidth, picHeight));
+
+		pkTile->setDrawRectInPixels( CGRectMake(x, y, picWidth, picHeight));
+
 		pkTile->setReverse(reverse);
 
 		pkTile->make();
@@ -359,8 +371,10 @@ void NDWorldMapData::decode(FILE* stream)
 
 		char imageName[256] =
 		{ 0 };
+
 		sprintf(imageName, "%so%d.png",
 				NDEngine::NDPath::GetImagePath().c_str(), imageIndex);
+
 		FILE* pkFile = fopen(imageName, "rb");
 		if (pkFile)
 		{
@@ -369,6 +383,7 @@ void NDWorldMapData::decode(FILE* stream)
 
 			//pkPlaceNode->setTexture(CCTextureCache::sharedTextureCache()->addImage(imageName));
 		}
+
 		pkPlaceNode->setX(kFileOp.readShort(stream));
 		pkPlaceNode->setY(kFileOp.readShort(stream));
 		pkPlaceNode->setLDir(kFileOp.readShort(stream));

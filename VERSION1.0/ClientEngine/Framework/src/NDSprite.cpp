@@ -25,6 +25,7 @@
 #include "NDClassFactory.h"
 #include "NDDebugOpt.h"
 #include "NDSharedPtr.h"
+#include "NDUtility.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -160,7 +161,8 @@ bool NDSprite::MoveByPath(const bool bFirstPath /*= false*/)
 	if (TAbs(GetTickCount() - m_dwLastMoveTickTime) > 1000 / MOVES_PER_SECOND)
 	{
 		CGPoint kPos = m_kPointList.at(m_nMovePathIndex++);
-		SetPosition(kPos);
+		//SetPosition(kPos);
+		SetWorldPos(SCREEN2GL(kPos));
 
 		m_dwLastMoveTickTime = GetTickCount();
 
@@ -255,12 +257,11 @@ void NDSprite::RunAnimation_WithOnePic(bool bDraw)
 			{
 				CGSize sizemap = layer->GetContentSize();
 				CGSize size = m_pkPicSprite->GetSize();
+				ConvertUtil::convertToPointCoord(size);
 
-				m_pkPicSprite->DrawInRect(
-					CGRectMake(GetPosition().x,
-					GetPosition().y + winsize.height
-					- sizemap.height, size.width,
-					size.height));
+				CGPoint screenPos = GL2SCREEN(GetWorldPos());
+				m_pkPicSprite->DrawInRect( 
+					CGRectMake( screenPos.x, screenPos.y, size.width, size.height ));
 			}
 
 			OnDrawEnd(bDraw);
@@ -283,11 +284,18 @@ void NDSprite::RunAnimation(bool bDraw)
 	}
 }
 
-void NDSprite::SetPosition(CGPoint newPosition)
-{
-	//		NDLog("new pos:%pkFighter,%pkFighter",newPosition.x, newPosition.y);
-	m_kPosition = CGPointMake(newPosition.x, newPosition.y);
-}
+//#if 0 //废弃
+// CGPoint NDSprite::GetPosition()
+// {
+// 	return m_kPosition;
+// }
+// 
+// void NDSprite::SetPosition(CGPoint newPosition)
+// {
+// 	//		NDLog("new pos:%pkFighter,%pkFighter",newPosition.x, newPosition.y);
+// 	m_kPosition = newPosition;
+// }
+//#endif 
 
 void NDSprite::MoveToPosition(std::vector<CGPoint> kToPos, SpriteSpeed speed,
 	bool moveMap, bool ignoreMask/*=false*/, bool mustArrive/*=false*/)
@@ -318,7 +326,9 @@ void NDSprite::MoveToPosition(std::vector<CGPoint> kToPos, SpriteSpeed speed,
 			m_nMovePathIndex = 0;
 			m_kPointList.clear();
 
-			CGPoint from = m_kPosition;
+			//CGPoint from = m_kPosition;
+			CGPoint from = GL2SCREEN(GetWorldPos());
+
 			for (int i = 0; i < iSize; i++)
 			{
 				CGPoint to = kToPos[i];
@@ -326,6 +336,7 @@ void NDSprite::MoveToPosition(std::vector<CGPoint> kToPos, SpriteSpeed speed,
 				NDAutoPath::sharedAutoPath()->autoFindPath(from, to,
 					(NDMapLayer*) pkLayer, m_nSpeed, mustArrive,
 					ignoreMask);
+
 				kPointList = NDAutoPath::sharedAutoPath()->getPathPointVetor();
 
 				if (!kPointList.empty())
@@ -362,11 +373,6 @@ void NDSprite::OnMoveEnd()
 	SetCurrentAnimation(RIDEPET_STAND, m_bReverse);
 }
 
-CGPoint NDSprite::GetPosition()
-{
-	return m_kPosition;
-}
-
 void NDSprite::stopMoving()
 {
 	m_bIsMoving = false;
@@ -385,8 +391,9 @@ void NDSprite::SetSprite(NDPicture* pkPicture)
 
 	if (pkPicture)
 	{
-		CGPoint point = GetPosition();
+		CGPoint point = GetWorldPos();
 		CGSize size = pkPicture->GetSize();
+		ConvertUtil::convertToPointCoord(size);
 		m_kRectSprite = CGRectMake(point.x, point.y, size.width, size.height);
 	}
 }
@@ -1089,6 +1096,58 @@ void NDSprite::reloadAni( const char* pszSprFile )
 	m_pkFrameRunRecord = 0;
 	m_pkCurrentAnimation = 0;
 	m_pkAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(pszSprFile);
+}
+
+CGPoint NDSprite::CellPos2WorldPos( const CGPoint& cellPos )
+{
+	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+
+#if 0
+	//格子坐标->屏幕像素坐标
+	float screenX = (cellPos.x * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET);
+	float screenY = (cellPos.y * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
+
+	//屏幕像素坐标->屏幕点坐标
+	CGPoint screenPos = ccp( screenX/fScale, screenY/fScale );
+#else
+	//格子坐标->屏幕像素坐标
+	float screenX = (cellPos.x * MAP_UNITSIZE);
+	float screenY = (cellPos.y * MAP_UNITSIZE);
+
+	//屏幕像素坐标->屏幕点坐标
+	CGPoint screenPos = ccp( 
+		DISPLAY_POS_X_OFFSET + screenX/fScale, 
+		DISPLAY_POS_Y_OFFSET + screenY/fScale );
+#endif
+
+	//屏幕点坐标->世界点坐标
+	CGPoint worldPos = SCREEN2GL(screenPos);
+	return worldPos;
+}
+
+CGPoint NDSprite::WorldPos2CellPos( const CGPoint& worldPos )
+{
+	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+
+	//世界点坐标->屏幕点坐标
+	CGPoint screenPos = GL2SCREEN(worldPos); 
+
+	//屏幕点坐标->屏幕像素坐标
+	screenPos = ccpMult( screenPos, fScale ); 
+
+	//像素坐标->格子坐标
+	const float cellX = (screenPos.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE; //x存列数
+	const float cellY = (screenPos.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE; //y存行数
+
+	return ccp(cellX, cellY);
+}
+
+//格子坐标转成GL世界坐标（不要用像素）
+//地图的尺寸用世界坐标来衡量，而不是像素大小
+void NDSprite::SetCellPos( const CGPoint& cellPos )
+{
+	CGPoint worldPos = CellPos2WorldPos( cellPos );
+	this->SetWorldPos( worldPos );
 }
 
 NS_NDENGINE_END

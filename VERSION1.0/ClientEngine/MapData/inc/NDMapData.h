@@ -35,13 +35,19 @@ class NDMapData;
 //ÇÐÆÁµã
 class NDMapSwitch: public cocos2d::CCObject
 {
-	CC_SYNTHESIZE(int, m_nX, X)
-	CC_SYNTHESIZE(int, m_nY, Y)
+// 	CC_SYNTHESIZE(int, m_nX, X)
+// 	CC_SYNTHESIZE(int, m_nY, Y)
 	CC_SYNTHESIZE(int, m_nMapIndex, MapIndex)
 	CC_SYNTHESIZE(int, m_nPassIndex, PassIndex)
 	CC_SYNTHESIZE(std::string, m_strNameDesMap, NameDesMap)
 	CC_SYNTHESIZE(std::string, m_strDescDesMap, DescDesMap)
 
+public:
+	const CGPoint& getWorldPos() { return m_worldPos; }
+	CGPoint getCellPos();
+	void setWorldPos( const CGPoint& worldPos ) { m_worldPos = worldPos; }
+	void setCellPos( const CGPoint& cellPos );
+	
 public:
 	NDMapSwitch();
 	~NDMapSwitch();
@@ -57,6 +63,7 @@ private:
 
 	NDEngine::NDUILabel* m_pkNameLabels[2];
 	NDEngine::NDUILabel* m_pkDesLabels[2];
+	CGPoint m_worldPos;
 };
 
 //²¼¾°

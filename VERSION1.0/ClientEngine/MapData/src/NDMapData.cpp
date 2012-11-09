@@ -23,6 +23,7 @@
 #include "NDConstant.h"
 #include "NDUtility.h"
 #include "NDPicture.h"
+#include "NDSprite.h"
 
 MapTexturePool* g_pkMapTexturePoolDefaultPool = NULL;
 
@@ -87,8 +88,8 @@ CCTexture2D* MapTexturePool::addImage(const char* path, bool keep)
 }
 
 NDMapSwitch::NDMapSwitch() :
-m_nX(0),
-m_nY(0),
+// m_nX(0),
+// m_nY(0),
 m_nMapIndex(0),
 m_nPassIndex(0)
 {
@@ -201,22 +202,25 @@ void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 	strName = m_strNameDesMap;
 
 	int tw = getStringSize(strName.c_str(), 15).width;
-	int tx = m_nX * pkMapdata->getUnitSize() + DISPLAY_POS_X_OFFSET - tw / 2;
-	int ty = m_nY * pkMapdata->getUnitSize() + DISPLAY_POS_Y_OFFSET
-			- 62 * fScaleFactor;
+	int tx = m_worldPos.x * pkMapdata->getUnitSize() + DISPLAY_POS_X_OFFSET - tw / 2;
+	int ty = m_worldPos.y * pkMapdata->getUnitSize() + DISPLAY_POS_Y_OFFSET - 62 * fScaleFactor; //??
 
 	if (!strDes.empty() && strDes != "")
 	{
-		int tx2 = m_nX * pkMapdata->getUnitSize() + 10 * fScaleFactor
+		int tx2 = m_worldPos.x * pkMapdata->getUnitSize() + 10 * fScaleFactor
 				- (getStringSize(strDes.c_str(), 15).width / 2);
-		int ty2 = m_nY * pkMapdata->getUnitSize() - 52 * fScaleFactor;	//ty;
+
+		int ty2 = m_worldPos.y * pkMapdata->getUnitSize() - 52 * fScaleFactor;	//ty;
+
 		//T.drawString2(g, introduce, tx2, ty2, 0xFFF5B4,0xC75900, 0);//后文字 0xFFF5B4, 0xC75900
 		this->SetLableByType(1, tx2, ty2, strDes.c_str(),
 				INTCOLORTOCCC4(0xFFF5B4), INTCOLORTOCCC4(0xC75900),
 				CGSizeMake(pkMapdata->getColumns() * pkMapdata->getUnitSize(),
 						pkMapdata->getRows() * pkMapdata->getUnitSize()));
+
 		ty -= 20 * fScaleFactor;
 	}
+
 	//T.drawString2(g, name, tx, ty, 0xFFFF00,0x2F4F4F,0);//0x2F4F4F
 	this->SetLableByType(0, tx, ty, strName.c_str(), INTCOLORTOCCC4(0xFFFF00),
 			INTCOLORTOCCC4(0x2F4F4F),
@@ -317,6 +321,19 @@ void NDMapSwitch::draw()
 	{
 		m_pkDesLabels[0]->draw();
 	}
+}
+
+//@cellpos
+void NDMapSwitch::setCellPos( const CGPoint& cellPos )
+{
+	CGPoint worldPos = NDSprite::CellPos2WorldPos( cellPos );
+	this->setWorldPos( worldPos );
+}
+
+//@cellpos
+CGPoint NDMapSwitch::getCellPos()
+{
+	return NDSprite::WorldPos2CellPos( m_worldPos );
 }
 
 NDSceneTile::NDSceneTile() :
@@ -443,15 +460,19 @@ void NDMapData::decode(FILE* pkStream)
 					pkTile->setTexture(
 							NDPicturePool::DefaultPool()->AddTexture(
 									strImageName.c_str()));
+
 					int nPicParts = pkTile->getTexture()->getPixelsWide()
 							* pkTile->getTexture()->getMaxS() / nTileWidth;
-					pkTile->setCutRect(
+
+					pkTile->setCutRectInPixels(
 							CGRectMake(nTileWidth * (nTileIndex % nPicParts),
 									nTileHeight * (nTileIndex / nPicParts),
 									nTileWidth, nTileHeight));
-					pkTile->setDrawRect(
+
+					pkTile->setDrawRectInPixels(
 							CGRectMake(nTileWidth * c, nTileHeight * r,
 									nTileWidth, nTileHeight));
+
 					pkTile->setReverse(reverse);
 					m_kMapTiles->addObject(pkTile);
 					pkTile->release();
@@ -539,19 +560,21 @@ void NDMapData::decode(FILE* pkStream)
 
 		std::string strImageName = kBackGroundImages[nResourceIndex];
 		NDSceneTile* pkTile = new NDSceneTile;
+
 		pkTile->setOrderID(_bgOrders[nResourceIndex] + nY);
 		pkTile->setTexture(
 				CCTextureCache::sharedTextureCache()->addImage(
 						strImageName.c_str()));
+
 		int picWidth = pkTile->getTexture()->getPixelsWide()
 				* pkTile->getTexture()->getMaxS();
+
 		int picHeight = pkTile->getTexture()->getPixelsHigh()
 				* pkTile->getTexture()->getMaxT();
 
-		pkTile->setMapSize(
-				CGSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
-		pkTile->setCutRect(CGRectMake(0, 0, picWidth, picHeight));
-		pkTile->setDrawRect(CGRectMake(nX, nY, picWidth, picHeight));
+		pkTile->setMapSizeInPixels(	CGSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
+		pkTile->setCutRectInPixels(	CGRectMake(0, 0, picWidth, picHeight));
+		pkTile->setDrawRectInPixels(CGRectMake(nX, nY, picWidth, picHeight));
 		pkTile->setReverse(nReverse);
 
 		pkTile->make();
@@ -595,10 +618,13 @@ void NDMapData::decode(FILE* pkStream)
 	for (int i = 0; i < nSceneCount; i++)
 	{
 		int nResourceIndex = kFileOp.readByte(pkStream);				//资源下标
+		
 		int x = (short) ((kFileOp.readByte(pkStream) << 8)
 				+ kFileOp.readByte(pkStream));	//x坐标
+		
 		int y = (short) ((kFileOp.readByte(pkStream) << 8)
 				+ kFileOp.readByte(pkStream));	//y坐标
+		
 		BOOL bReverse = kFileOp.readByte(pkStream) > 0;						//翻转
 
 		if (kSceneImages.size() <= nResourceIndex
@@ -618,13 +644,13 @@ void NDMapData::decode(FILE* pkStream)
 
 		int nPicWidth = pkTile->getTexture()->getPixelsWide()
 				* pkTile->getTexture()->getMaxS();
+
 		int nPicHeight = pkTile->getTexture()->getPixelsHigh()
 				* pkTile->getTexture()->getMaxT();
 
-		pkTile->setMapSize(
-				CGSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
-		pkTile->setCutRect(CGRectMake(0, 0, nPicWidth, nPicHeight));
-		pkTile->setDrawRect(CGRectMake(x, y, nPicWidth, nPicHeight));
+		pkTile->setMapSizeInPixels( CGSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
+		pkTile->setCutRectInPixels(	CGRectMake(0, 0, nPicWidth, nPicHeight));
+		pkTile->setDrawRectInPixels(CGRectMake(x, y, nPicWidth, nPicHeight));
 		pkTile->setReverse(bReverse);
 
 		pkTile->make();
@@ -746,7 +772,7 @@ NDSceneTile * NDMapData::getBackGroundTile(unsigned int index)
 	return NULL;
 }
 
-void NDMapData::moveBackGround(int x, int y)
+void NDMapData::moveBackGround(int x, int y) //x,y??
 {
 	if (0 == x)
 	{
@@ -761,11 +787,10 @@ void NDMapData::moveBackGround(int x, int y)
 		{
 			CGRect rect = pkTile->getDrawRect();
 			rect.origin.x -= -x / 3;
-			pkTile->setDrawRect(rect);
+			pkTile->setDrawRectInPixels(rect);
 			pkTile->make();
 		}
 	}
-
 }
 
 //- (NDTile *)getTileAtRow:(uint)row column:(uint)column
@@ -836,8 +861,9 @@ void NDMapData::addMapSwitch(unsigned int x,			// 切屏点 x
 {
 	NDMapSwitch* pkMapSwitch = new NDMapSwitch;
 
-	pkMapSwitch->setX(x); //切屏点x
-	pkMapSwitch->setY(y); //切屏点y
+// 	pkMapSwitch->setX(x); //切屏点x
+// 	pkMapSwitch->setY(y); //切屏点y
+	pkMapSwitch->setCellPos( ccp(x,y));
 	pkMapSwitch->setMapIndex(mapid); //目标地图
 	pkMapSwitch->setPassIndex(index); //目标点
 	pkMapSwitch->setNameDesMap(name);

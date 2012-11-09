@@ -91,7 +91,9 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 void NDMapLayerLogic::TouchEnd(NDTouch* touch)
 {
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
-	if (!kPlayer.ClickPoint(this->ConvertToMapPoint(touch->GetLocation()), false, IsPathing()))
+	CGPoint mapPos = this->ConvertToMapPoint( touch->GetLocation() ); //ÆÁÄ»×ø±ê->µØÍ¼×ø±ê
+
+	if (!kPlayer.ClickPoint( mapPos, false, IsPathing()) )
 	{
 		kPlayer.stopMoving();
 		if (ScriptMgrObj.excuteLuaFunc<bool>("IsInPractising", "PlayerFunc"))

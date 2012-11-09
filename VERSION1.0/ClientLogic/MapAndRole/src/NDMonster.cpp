@@ -147,8 +147,8 @@ void NDMonster::Initialization(int idType)
 	m_nSelfMoveRectH = NORMAL_MOVE_RECTH;
 //		}
 
-	m_nSelfMoveRectX = GetPosition().x - (m_nSelfMoveRectW - BASE_BOTTOM_WH) / 2;
-	m_nSelfMoveRectY = GetPosition().y - (m_nSelfMoveRectH - BASE_BOTTOM_WH) / 2;
+	m_nSelfMoveRectX = GetWorldPos().x - (m_nSelfMoveRectW - BASE_BOTTOM_WH) / 2;
+	m_nSelfMoveRectY = GetWorldPos().y - (m_nSelfMoveRectH - BASE_BOTTOM_WH) / 2;
 
 	srandom (time(NULL));
 
@@ -179,7 +179,7 @@ void NDMonster::setOriginalPosition(int o_x, int o_y)
 
 void NDMonster::restorePosition()
 {
-	SetPosition(ccp(m_nOriginal_x, m_nOriginal_y));
+	SetWorldPos(ccp(m_nOriginal_x, m_nOriginal_y));
 }
 
 void NDMonster::SetMoveRect(CGPoint point, int size)
@@ -227,8 +227,8 @@ void NDMonster::Initialization(int lookface, int idNpc, int lvl, bool bFaceRight
 	m_nSelfMoveRectW = BOSS_MOVE_RECTW;
 	m_nSelfMoveRectH = BOSS_MOVE_RECTH;
 
-	m_nSelfMoveRectX = GetPosition().x - (m_nSelfMoveRectW - BASE_BOTTOM_WH) / 2;
-	m_nSelfMoveRectY = GetPosition().y - (m_nSelfMoveRectH - BASE_BOTTOM_WH) / 2;
+	m_nSelfMoveRectX = GetWorldPos().x - (m_nSelfMoveRectW - BASE_BOTTOM_WH) / 2;
+	m_nSelfMoveRectY = GetWorldPos().y - (m_nSelfMoveRectH - BASE_BOTTOM_WH) / 2;
 
 	if (isUseAI())
 	{
@@ -287,7 +287,7 @@ bool NDMonster::OnDrawBegin(bool bDraw)
 			int iY = m_kPosition.y-DISPLAY_POS_Y_OFFSET;
 			iX += getGravityX()-GetWidth()/2;
 			iY += BASE_BOTTOM_WH + 8;
-			m_pkBossRing->SetPosition(ccp(iX, iY));
+			m_pkBossRing->SetWorldPos(ccp(iX, iY));
 			m_pkBossRing->RunAnimation(bDraw);
 		}
 	}
@@ -322,7 +322,7 @@ void NDMonster::MoveToPosition(CGPoint toPos,
 
 void NDMonster::WalkToPosition(CGPoint toPos)
 {
-	if (GetPosition().x > toPos.x)
+	if (GetWorldPos().x > toPos.x)
 	{
 		if (!m_bTurnFace)
 			m_bReverse = m_bFaceRight = true;
@@ -427,12 +427,12 @@ bool NDMonster::isUseAI()
 
 	if (m_bIsAutoAttack && m_nMonsterCatogary == MONSTER_NORMAL)
 	{
-// 		int monsterRow = GetPosition().y / MAP_UNITSIZE;
-// 		int monsterCol = GetPosition().x / MAP_UNITSIZE;
-// 		int roleRow = NDPlayer::defaultHero().GetPosition().y / MAP_UNITSIZE;
-// 		int roleCol = NDPlayer::defaultHero().GetPosition().x / MAP_UNITSIZE;
-		int roleX = NDPlayer::defaultHero().GetPosition().x;
-//		int roleY = NDPlayer::defaultHero().GetPosition().y;
+// 		int monsterRow = GetWorldPos().y / MAP_UNITSIZE;
+// 		int monsterCol = GetWorldPos().x / MAP_UNITSIZE;
+// 		int roleRow = NDPlayer::defaultHero().GetWorldPos().y / MAP_UNITSIZE;
+// 		int roleCol = NDPlayer::defaultHero().GetWorldPos().x / MAP_UNITSIZE;
+		int roleX = NDPlayer::defaultHero().GetWorldPos().x;
+//		int roleY = NDPlayer::defaultHero().GetWorldPos().y;
 
 		if (roleX >= m_nSelfMoveRectX && roleX <= m_nSelfMoveRectX + m_nSelfMoveRectW)
 		//&& roleY >= selfMoveRectY
@@ -461,10 +461,10 @@ bool NDMonster::isUseAI()
 int NDMonster::getRandomAIDirect()
 {
 	// 0表上,1表下,2左, 3右 ,-1表无方向
-	int monsterRow = GetPosition().y / MAP_UNITSIZE;
-	int monsterCol = GetPosition().x / MAP_UNITSIZE;
-	int roleRow = NDPlayer::defaultHero().GetPosition().y / MAP_UNITSIZE;
-	int roleCol = NDPlayer::defaultHero().GetPosition().x / MAP_UNITSIZE;
+	int monsterRow = GetWorldPos().y / MAP_UNITSIZE;
+	int monsterCol = GetWorldPos().x / MAP_UNITSIZE;
+	int roleRow = NDPlayer::defaultHero().GetWorldPos().y / MAP_UNITSIZE;
+	int roleCol = NDPlayer::defaultHero().GetWorldPos().x / MAP_UNITSIZE;
 
 	int xDirect = dir_invalid; // -1表无方向
 	int yDirect = dir_invalid; // -1表无方向
@@ -645,8 +645,8 @@ void NDMonster::runLogic()
 
 void NDMonster::directLogic()
 {
-// 	int x = GetPosition().x;
-// 	int y = GetPosition().y;
+// 	int x = GetWorldPos().x;
+// 	int y = GetWorldPos().y;
 // 	int row = y / MAP_UNITSIZE;
 // 	int col = x / MAP_UNITSIZE;
 // 
@@ -810,10 +810,10 @@ void NDMonster::doMonsterCollides()
 /*
 	int m_nScope = m_nAttackArea * 32;
 
-	CGRect kRectRole = CGRectMake(NDPlayer::defaultHero().GetPosition().x - 32,
-			NDPlayer::defaultHero().GetPosition().y - 32, 64, 64);
-	CGRect kRectMonster = CGRectMake(GetPosition().x - m_nScope,
-			GetPosition().y - m_nScope, getCollideW() + m_nScope * 2,
+	CGRect kRectRole = CGRectMake(NDPlayer::defaultHero().GetWorldPos().x - 32,
+			NDPlayer::defaultHero().GetWorldPos().y - 32, 64, 64);
+	CGRect kRectMonster = CGRectMake(GetWorldPos().x - m_nScope,
+			GetWorldPos().y - m_nScope, getCollideW() + m_nScope * 2,
 			getCollideH() + m_nScope * 2);
 
 	bool bCollides = CGRectIntersectsRect(kRectRole, kRectMonster);
@@ -1011,7 +1011,7 @@ void NDMonster::drawName(bool bDraw)
 	}
 
 // 	NDPlayer& player = NDPlayer::defaultHero();
-// 	CGPoint posPlayer = player.GetPosition();
+// 	CGPoint posPlayer = player.GetWorldPos();
 // 	CGRect rect1 = CGRectMake(posPlayer.x - SHOW_NAME_ROLE_W,
 // 			posPlayer.y - SHOW_NAME_ROLE_H, SHOW_NAME_ROLE_W << 1,
 // 			SHOW_NAME_ROLE_H << 1);

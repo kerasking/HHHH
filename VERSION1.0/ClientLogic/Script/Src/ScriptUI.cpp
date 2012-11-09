@@ -1892,7 +1892,7 @@ namespace NDEngine {
 	ETMEMBERFUNC("ResumeViewRect",					&NDDirector::ResumeViewRect)
 	ETMEMBERFUNC("GetSceneByTag",					&NDDirector::GetSceneByTag)
 	ETMEMBERFUNC("GetScaleFactor",					&NDDirector::GetScaleFactor)
-	ETMEMBERFUNC("GetScaleFactorY",					&NDDirector::GetScaleFactorY)
+	ETMEMBERFUNC("GetScaleFactorY",					&NDDirector::GetScaleFactor)
 	ETMEMBERFUNC("IsEnableRetinaDisplay",			&NDDirector::IsEnableRetinaDisplay)
 	ETCLASSEND(NDDirector)
 	

@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include <string>
 #include <functional>
 #include "CCObject.h"
-#include "CCFileUtils.h"
+//#include "CCFileUtils.h"
 
 #if ND_MOD
 	#include "..\platform\third_party\win32\iconv\iconv.h"
@@ -331,7 +331,7 @@ public:
 		*/
 		static bool isUTF8ChineseCharacter(const char* pszText)
 		{
-			UINT uiCharacterCodePage = 0;
+			unsigned int uiCharacterCodePage = 0;
 			int nLength = strlen(pszText);
 
 			if (3 <= nLength)

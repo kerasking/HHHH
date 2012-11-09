@@ -81,7 +81,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 		// use 960*640 resources as design resolution size
 		//CCFileUtils::sharedFileUtils()->setResourceDirectory("iphonehd");
 		//CCEGLView::sharedOpenGLView()->setDesignResolutionSize(480*2, 320*2, kResolutionNoBorder);//@todo
-		//CCDirector::sharedDirector()->enableRetinaDisplay(true);//@retina
+		CCDirector::sharedDirector()->enableRetinaDisplay(true);//@retina
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
@@ -350,6 +350,20 @@ bool NDGameApplication::processPM(const char* cmd)
 	else if (stricmp(cmd, "profile dump") == 0)
 	{
 		NDProfileReport::dump();
+	}
+	else if (stricmp(cmd, "dumprole") == 0)
+	{
+		NDScene* pScene = NDDirector::DefaultDirector()->GetRunningScene();
+		int childrenCount = pScene->GetChildren().size();
+		for (int i = 0; i < childrenCount; i++)
+		{
+			NDNode* pNode = pScene->GetChildren().at(i);
+			if (pNode && pNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+			{
+				NDMapLayer* pLayer = (NDMapLayer*)pNode;
+				pLayer->dumpRole();
+			}
+		}	
 	}
 	else
 	{

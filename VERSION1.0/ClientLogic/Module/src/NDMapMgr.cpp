@@ -661,9 +661,7 @@ void NDMapMgr::processPlayer(NDTransData* pkData, int nLength)
 			vEffect.push_back(pkData->ReadInt());
 		}
 
-		kPlayer.SetPosition(
-				ccp(usRecordX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-						usRecordY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+		kPlayer.SetCellPos( ccp(usRecordX,usRecordY));
 		kPlayer.SetState(dwState);
 		kPlayer.SetServerPositon(usRecordX, usRecordY);
 		kPlayer.SetAction(false);
@@ -723,9 +721,7 @@ void NDMapMgr::processPlayer(NDTransData* pkData, int nLength)
 	pkRole->m_strRank = strRank;
 	pkRole->m_strSynName = synName;
 	pkRole->m_nTeamID = dwArmorType;
-	pkRole->SetPosition(
-			ccp(usRecordX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-					usRecordY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+	pkRole->SetCellPos( ccp(usRecordX, usRecordY ));
 	pkRole->SetSpriteDir(btDir);
 	pkRole->SetServerPositon(usRecordX, usRecordY);
 
@@ -1198,9 +1194,7 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 		return;
 	}
 
-	kPlayer.SetPosition(
-			ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-					dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+	kPlayer.SetCellPos( ccp(dwPortalX,dwPortalY));
 	kPlayer.SetServerPositon(dwPortalX, dwPortalY);
 	kPlayer.SetShowPet(kPetInfoRerserve);
 	kPlayer.stopMoving();
@@ -1295,9 +1289,11 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 			pkNPC->m_strName = strName;
 		}
 
-		pkNPC->SetPosition(
-				ccp(usCellX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-						usCellY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+		pkNPC->SetCellPos( ccp(usCellX, usCellY ));
+// 		pkNPC->SetPosition(
+// 				ccp(usCellX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+// 						usCellY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+
 		pkNPC->m_strData = dataStr;
 		pkNPC->m_strTalk = talkStr;
 		pkNPC->SetType(uitype);
@@ -1345,7 +1341,7 @@ void NDMapMgr::AddAllNPCToMap()
 // 		if (0 != pkNPC->GetRidePet())
 // 		{
 // 			pkNPC->GetRidePet()->stopMoving();
-// 			pkNPC->GetRidePet()->SetPositionEx(pkNPC->GetPosition());
+// 			pkNPC->GetRidePet()->SetPositionEx(pkNPC->GetWorldPos());
 // 			pkNPC->GetRidePet()->SetCurrentAnimation(RIDEPET_STAND,
 // 					pkNPC->m_bFaceRight);
 // 		}
@@ -1981,7 +1977,7 @@ void NDMapMgr::processMonsterInfo(NDTransData* pkData, int nLength)
 
 			NDMonster* monster = new NDMonster;
 			monster->m_nID = idMonster;
-			monster->SetPosition(ccp(col * MAP_UNITSIZE, row * MAP_UNITSIZE));
+			monster->SetCellPos(ccp(col,row));
 			monster->Initialization(idType);
 			monster->SetType(MONSTER_ELITE);
 			if (idMonster > 0)
@@ -2078,7 +2074,7 @@ void NDMapMgr::processMonsterInfo(NDTransData* pkData, int nLength)
 			monster_type_info info;
 			NDMonster *monster = new NDMonster;
 			monster->m_nID = idMonster;
-			monster->SetPosition(ccp(col * MAP_UNITSIZE, row * MAP_UNITSIZE));
+			monster->SetCellPos(ccp(col,row));
 			monster->Initialization(idType);
 			monster->SetType(MONSTER_BOSS);
 			if (idMonster > 0)
@@ -2151,18 +2147,18 @@ void NDMapMgr::BattleEnd(int iResult)
 
 				NDPlayer& player = NDPlayer::defaultHero();
 
-				player.SetPosition(
+				player.SetWorldPos(
 						ccp(monster->m_nSelfMoveRectX - 64,
-								monster->GetPosition().y));
+								monster->GetWorldPos().y));
 				player.SetServerPositon(
 						(monster->m_nSelfMoveRectX - 64) / MAP_UNITSIZE,
-						(monster->GetPosition().y) / MAP_UNITSIZE);
+						(monster->GetWorldPos().y) / MAP_UNITSIZE);
 
 				Battle* battle = BattleMgrObj.GetBattle();
 				if (battle)
 				{
 					battle->setSceneCetner(monster->m_nSelfMoveRectX - 64,
-							monster->GetPosition().y);
+							monster->GetWorldPos().y);
 					player.stopMoving();
 				}
 				else
@@ -2174,7 +2170,7 @@ void NDMapMgr::BattleEnd(int iResult)
 					{
 						layer->SetScreenCenter(
 								ccp(monster->m_nSelfMoveRectX - 64,
-										monster->GetPosition().y));
+										monster->GetWorldPos().y));
 					}
 					player.stopMoving();
 				}
@@ -2248,9 +2244,7 @@ void NDMapMgr::processKickBack(NDTransData* pkData, int nLength)
 
 	NDPlayer& player = NDPlayer::defaultHero();
 
-	player.SetPosition(
-			ccp(usRecordX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-					usRecordY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+	player.SetCellPos(ccp(usRecordX,usRecordY));
 	player.SetServerPositon(usRecordX, usRecordY);
 	if (player.isTeamLeader())
 	{
@@ -2710,9 +2704,7 @@ void NDMapMgr::processNPCInfo(NDTransData& kData)
 	pkNPC->m_nRow = row;
 	pkNPC->m_nLook = usLook;
 	pkNPC->m_strName = strName;
-	pkNPC->SetPosition(
-			ccp(col * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-					row * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+	pkNPC->SetCellPos(ccp(col,row));
 	pkNPC->SetCamp(CAMP_TYPE(btCamp));
 	pkNPC->SetNpcState(NPC_STATE(btState));
 	pkNPC->m_strData = strData;
@@ -2787,11 +2779,9 @@ void NDMapMgr::AddOneNPC(NDNpc* pkNpc)
 	{
 		pkNpc->GetRidePet()->stopMoving();
 
-		pkNpc->GetRidePet()->SetPositionEx(pkNpc->GetPosition());
-		pkNpc->GetRidePet()->SetCurrentAnimation(RIDEPET_STAND,
-				pkNpc->m_bFaceRight);
-		pkNpc->SetCurrentAnimation(MANUELROLE_RIDE_PET_STAND,
-				pkNpc->m_bFaceRight);
+		pkNpc->GetRidePet()->SetWorldPos(pkNpc->GetWorldPos());
+		pkNpc->GetRidePet()->SetCurrentAnimation(RIDEPET_STAND, pkNpc->m_bFaceRight);
+		pkNpc->SetCurrentAnimation(MANUELROLE_RIDE_PET_STAND, pkNpc->m_bFaceRight);
 	}
 
 	//pkNpc->HandleNpcMask(true); ///< 此处依赖张迪的NDNpc
@@ -3968,11 +3958,11 @@ int NDMapMgr::getDistBetweenRole(NDBaseRole *firstrole, NDBaseRole *secondrole)
 		return FOCUS_JUDGE_DISTANCE;
 	}
 
-	int w = (firstrole->GetPosition().x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE
-			- (secondrole->GetPosition().x - DISPLAY_POS_X_OFFSET)
+	int w = (firstrole->GetWorldPos().x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE
+			- (secondrole->GetWorldPos().x - DISPLAY_POS_X_OFFSET)
 					/ MAP_UNITSIZE;
-	int h = (firstrole->GetPosition().y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE
-			- (secondrole->GetPosition().y - DISPLAY_POS_Y_OFFSET)
+	int h = (firstrole->GetWorldPos().y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE
+			- (secondrole->GetWorldPos().y - DISPLAY_POS_Y_OFFSET)
 					/ MAP_UNITSIZE;
 
 	return w * w + h * h;
@@ -4207,7 +4197,7 @@ void NDMapMgr::NavigateToNpc(int nNpcId)
 
 	NDPlayer& player = NDPlayer::defaultHero();
 
-	CGPoint disPos = ccpSub(kDstPoint, player.GetPosition());
+	CGPoint disPos = ccpSub(kDstPoint, player.GetWorldPos());
 
 	if (abs(int(disPos.x)) <= 32 && abs(int(disPos.y)) <= 32)
 	{

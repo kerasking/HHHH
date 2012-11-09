@@ -74,6 +74,7 @@ NS_NDENGINE_BGN
 		SUB_ANI_TYPE_SCREEN_CENTER = 5,
 	};
 
+
 class NDSubAniGroup
 {
 public:
@@ -166,18 +167,36 @@ public:
 	virtual void OnDrawEnd(bool bDraw)
 	{
 	}
-//		
-//		函数：SetPosition
-//		作用：设置精灵在地图上的坐标
-//		参数：newPosition地图坐标
-//		返回值：无
-	virtual void SetPosition(CGPoint newPosition);
-//		
-//		函数：GetPosition
-//		作用：获取精灵在地图上的坐标
-//		参数：无
-//		返回值：地图坐标
-	CGPoint GetPosition();
+
+// #if 0 //废弃了！
+// //		
+// //		函数：SetPosition
+// //		作用：设置精灵在地图上的坐标
+// //		参数：newPosition地图坐标
+// //		返回值：无
+// 	virtual void SetPosition(CGPoint newPosition); //GL世界坐标
+// 
+// //		
+// //		函数：GetPosition
+// //		作用：获取精灵在地图上的坐标
+// //		参数：无
+// //		返回值：地图坐标
+// 	CGPoint GetPosition();
+// #endif
+
+	//--------------------------------------------------------------------------------------
+#if 1 //单位都是Point(不用像素)
+public:
+	virtual CGPoint GetWorldPos() { return m_kPosition; }
+	virtual void SetWorldPos(CGPoint newPosition) { m_kPosition = newPosition; }
+
+	virtual CGPoint GetCellPos() { return WorldPos2CellPos( m_kPosition ); }
+	virtual void SetCellPos( const CGPoint& cellPos ); //设置格子坐标
+
+	static CGPoint CellPos2WorldPos( const CGPoint& cellPos );
+	static CGPoint WorldPos2CellPos( const CGPoint& worldPos );
+#endif
+	//--------------------------------------------------------------------------------------
 
 	int GetCol()
 	{
@@ -444,7 +463,7 @@ public:
 	}
 
 #if 1
-	void RunAnimation(bool bDraw);
+	virtual void RunAnimation(bool bDraw);
 private:
 	void RunAnimation_WithFrames(bool bDraw);
 	void RunAnimation_WithOnePic(bool bDraw);
@@ -521,7 +540,7 @@ protected:
 	int m_nArmorQuality;
 	int m_nCloakQuality;
 
-	CGPoint m_kPosition;
+	CGPoint m_kPosition; //GL世界坐标点
 	NDAnimation* m_pkCurrentAnimation;
 	NDFrameRunRecord* m_pkFrameRunRecord;
 	NDAnimationGroup* m_pkAniGroup;

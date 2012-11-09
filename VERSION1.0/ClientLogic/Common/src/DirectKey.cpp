@@ -521,7 +521,7 @@ bool DirectKey::GetPosList(dk_vec_pos& vpos)
 	
 	NDPlayer& player = NDPlayer::defaultHero();
 	
-	CGPoint pos = player.GetPosition();
+	CGPoint pos = player.GetWorldPos();
 	
 	int iCellX = (int)pos.x-DISPLAY_POS_X_OFFSET,
 		iCellY = (int)pos.y-DISPLAY_POS_Y_OFFSET;

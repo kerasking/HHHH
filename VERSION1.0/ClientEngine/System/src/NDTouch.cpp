@@ -63,8 +63,8 @@ namespace NDEngine
 // 			m_previousLocation.y=m_previousLocation.y*2;
 // 		}	
 
-		m_location = CCTouchDispatcher::sharedDispatcher()->getCurPos();
-		m_previousLocation = CCTouchDispatcher::sharedDispatcher()->getPrePos();
+		m_location = CCDirector::sharedDirector()->getTouchDispatcher()->getCurPos();
+		m_previousLocation = CCDirector::sharedDirector()->getTouchDispatcher()->getPrePos();
 
 #if 0
 		int iFactor = CC_CONTENT_SCALE_FACTOR();

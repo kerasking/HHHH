@@ -112,7 +112,7 @@ void NDAnimationGroupPool::Recyle()
 	//std::vector < std::string > kAllKeys = m_pkAnimationGroups->allKeys();
 	CCArray* kAllKeys = m_pkAnimationGroups->allKeys();
 
-	if (kAllKeys->count() == 0)
+	if (kAllKeys && kAllKeys->count() == 0)
 	{
 		return;
 	}

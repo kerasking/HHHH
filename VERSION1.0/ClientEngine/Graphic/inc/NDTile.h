@@ -53,6 +53,9 @@ typedef enum
 void TileSetHightLight(bool bHightLight);
 bool IsTileHightLight();
 
+
+//////////////////////////////////////////////////////////////////////////////
+// 备注：贴片渲染使用屏幕坐标，单位是Points（不是像素！）
 class NDTile : public cocos2d::CCObject 
 {
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCTexture2D*, m_pkTexture, Texture)
@@ -68,24 +71,39 @@ class NDTile : public cocos2d::CCObject
 		CGSize m_kMapSize;
 	public:
 		//
+		virtual CGSize getMapSize() { return m_kMapSize; }
 		virtual CGRect getCutRect() { return m_kCutRect; }
-		virtual void setCutRect( CGRect var ) 
+		virtual CGRect getDrawRect() { return m_kDrawRect; }
+
+		// cut rect
+		virtual void setCutRect( const CGRect& var ) //world size
+		{ 
+			m_kCutRect = var; 
+		}
+
+		virtual void setCutRectInPixels( const CGRect& var ) //pixel size
 		{ 
 			m_kCutRect = var; 
 			ConvertUtil::convertToPointCoord(m_kCutRect);
 		}
 
-		//
-		virtual CGRect getDrawRect() { return m_kDrawRect; }
-		virtual void setDrawRect( CGRect var ) 
+		// draw rect
+		virtual void setDrawRect( const CGRect& var ) //world size
+		{ 
+			m_kDrawRect = var; 
+		}
+		virtual void setDrawRectInPixels( const CGRect& var ) //pixel size
 		{ 
 			m_kDrawRect = var; 
 			ConvertUtil::convertToPointCoord(m_kDrawRect);
 		}
 
-		//
-		virtual CGSize getMapSize() { return m_kMapSize; }
-		virtual void setMapSize( CGSize var ) 
+		// map size
+		virtual void setMapSize( const CGSize& var ) //world size
+		{ 
+			m_kMapSize = var;
+		}
+		virtual void setMapSizeInPixels( const CGSize& var ) //pixel size
 		{ 
 			m_kMapSize = var;
 			ConvertUtil::convertToPointCoord(m_kMapSize);

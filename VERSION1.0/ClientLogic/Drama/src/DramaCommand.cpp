@@ -363,7 +363,8 @@ void DramaCommandSprite::ExcuteSetPostion()
 		return;
 	}
 
-	sprite->SetPosition(ccp(m_kParam.u1.nPosX, m_kParam.u2.nPoxY));
+	//sprite->SetPosition(ccp(m_kParam.u1.nPosX, m_kParam.u2.nPoxY));
+	sprite->SetWorldPos(ccp(m_kParam.u1.nPosX, m_kParam.u2.nPoxY));
 }
 
 void DramaCommandSprite::ExcuteSpriteReverse()
@@ -421,7 +422,7 @@ void DramaCommandSprite::ExcuteMoveSprite()
 	bool bRight   = false;
 	bool bXArrive = false;
 	bool bYArrive = false;
-	CGPoint curPos = sprite->GetPosition();
+	CGPoint curPos = sprite->GetWorldPos();
 	if (abs(int(curPos.x) - m_kParam.u1.nToPosX) <= m_kParam.u3.nMoveStep)
 	{
 		curPos.x = m_kParam.u1.nToPosX;
@@ -453,7 +454,7 @@ void DramaCommandSprite::ExcuteMoveSprite()
 
 	sprite->SetSpriteDir(bRight ? 0 : 2);
 	sprite->SetCurrentAnimation(MANUELROLE_WALK, sprite->IsReverse());
-	sprite->SetPosition(curPos);
+	sprite->SetWorldPos(curPos);
 
 	if (bXArrive && bYArrive)
 	{

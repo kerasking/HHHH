@@ -111,7 +111,7 @@ public:
 	virtual void Walk(CGPoint toPos, SpriteSpeed speed);
 	void OnMoving(bool bLastPos); override
 	void OnMoveEnd(); override 
-	void SetPosition(CGPoint newPosition); override
+	void SetWorldPos(CGPoint newPosition); override
 	void OnMoveTurning(bool bXTurnigToY, bool bInc); override
 
 	bool OnDrawBegin(bool bDraw); override

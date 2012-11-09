@@ -40,8 +40,8 @@
 #include "SMGameScene.h"
 #include "ScriptGlobalEvent.h"
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
 #define MAX_DACOITY_STEP (5)
 
 #define MAX_BATTLEFIELD_STEP (5)
@@ -319,7 +319,7 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 							SendNpcInteractionMessage(npc->m_nID);
 							return false;
 						}
-						else if (npc->getNearestPoint(this->GetPosition(), pos))
+						else if (npc->getNearestPoint(this->GetWorldPos(), pos))
 						{
 							point = ccpAdd(pos, CGPointMake(0, 30));
 
@@ -424,8 +424,8 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 // 				}
 
 			}while(0);
-		}
-	}
+		}//if
+	}//if
  		
 	if (bPath || bNpcPath)
 	{
@@ -463,7 +463,7 @@ void NDPlayer::stopMoving(bool bResetPos/*=true*/, bool bResetTeamPos/*=true*/)
 	if (scene) 
 	{
 		NDMapLayer* layer = NDMapMgrObj.getMapLayerOfScene(scene);
-		layer->SetScreenCenter(this->GetPosition());
+		layer->SetScreenCenter(this->GetWorldPos());
 	}
 
 	if (AutoPathTipObj.IsWorking()) 
@@ -508,15 +508,20 @@ void NDPlayer::Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 		return;
 	}
 
+	// roundup kPos
 	CGPoint kPos = CGPointMake(
 			int(toPos.x) / MAP_UNITSIZE * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
 			int(toPos.y) / MAP_UNITSIZE * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
 
-	CGPoint kCurrentPosition = GetPosition();
+	// check if last run finished
+	CGPoint kCurrentPosition = GetWorldPos();
 
-	if (((int) kCurrentPosition.x - DISPLAY_POS_X_OFFSET) % MAP_UNITSIZE != 0
-			|| ((int) kCurrentPosition.y - DISPLAY_POS_Y_OFFSET) % MAP_UNITSIZE != 0)
-	{ // Cell没走完,又设置新的目标
+	int xRemain = int(kCurrentPosition.x - DISPLAY_POS_X_OFFSET) % MAP_UNITSIZE;
+	int yRemain = int(kCurrentPosition.y - DISPLAY_POS_Y_OFFSET) % MAP_UNITSIZE;
+
+	if (xRemain != 0 || yRemain != 0)
+	{ 
+		// Cell没走完,又设置新的目标
 		m_kTargetPos = kPos;
 	}
 	else
@@ -530,23 +535,28 @@ void NDPlayer::Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 	ResetFocusRole();
 }
 
-void NDPlayer::SetPosition(CGPoint newPosition)
+void NDPlayer::SetWorldPos(CGPoint newPosition)
 {
-	int nNewCol = (newPosition.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
-	int nNewRow = (newPosition.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
-	int nOldCol = (GetPosition().x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
-	int nOldRow = (GetPosition().y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
+// 	int nNewCol = (newPosition.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
+// 	int nNewRow = (newPosition.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
+// 	int nOldCol = (GetWorldPos().x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
+// 	int nOldRow = (GetWorldPos().y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
 
-	NDManualRole::SetPosition(newPosition);
+	CGPoint newCellPos = WorldPos2CellPos( newPosition );
+	CGPoint oldCellPos = WorldPos2CellPos( GetWorldPos() );
+
+	NDManualRole::SetWorldPos(newPosition);
 
 	if (!isTeamLeader() && isTeamMember())
 	{
 		return;
 	}
 
-	if (nNewCol != nOldCol || nNewRow != nOldRow)
+	//if (nNewCol != nOldCol || nNewRow != nOldRow)
+	if (newCellPos.x != oldCellPos.x || newCellPos.y != oldCellPos.y)
 	{
-		if (nOldCol == 0 && nOldRow == 0)
+		//if (nOldCol == 0 && nOldRow == 0)
+		if (oldCellPos.x == 0 || oldCellPos.y == 0)
 		{
 		}
 		else
@@ -555,7 +565,8 @@ void NDPlayer::SetPosition(CGPoint newPosition)
 			 int dir = nNewCol != nOldCol ? ( nNewCol > nOldCol ? 3 : 2 ) :
 			 ( nNewRow != nOldRow ? (nNewRow > nOldRow ? 1 : 0 ) : -1 );
 			 */
-			int dir = this->GetPathDir(nOldCol, nOldRow, nNewCol, nNewRow);
+			//int dir = this->GetPathDir(nOldCol, nOldRow, nNewCol, nNewRow);
+			int dir = this->GetPathDir( (int)oldCellPos.x, (int)oldCellPos.y, (int)newCellPos.x, (int)newCellPos.y );
 
 			if (dir != -1)
 			{
@@ -563,13 +574,20 @@ void NDPlayer::SetPosition(CGPoint newPosition)
 				{
 					NDTransData data(_MSG_WALK_EX);
 
-					data << m_nID << (unsigned short)nNewCol 
-						<< (unsigned short)nNewRow << (unsigned char)dir;
+// 					data << m_nID << (unsigned short)nNewCol 
+// 						<< (unsigned short)nNewRow << (unsigned char)dir;
+
+					data << m_nID << (unsigned short)newCellPos.x
+						<< (unsigned short)newCellPos.y << (unsigned char)dir;
 
 					NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
 				}
-				m_nServerCol = nNewCol;
-				m_nServerRow = nNewRow;
+
+// 				m_nServerCol = nNewCol;
+// 				m_nServerRow = nNewRow;
+				m_nServerCol = newCellPos.x;
+				m_nServerRow = newCellPos.y;
+
 				//SetServerDir(dir);
 
 				if (isTeamLeader()) 
@@ -638,7 +656,7 @@ void NDPlayer::Update(unsigned long ulDiff)
 // 		}
 // 	}
 
-	CGPoint pos = GetPosition();
+	CGPoint pos = GetWorldPos();
 	if (int(m_kTargetPos.x) != 0 
 		&& int(m_kTargetPos.y) != 0
 		&& ( (int)pos.x-DISPLAY_POS_X_OFFSET) % 32 == 0
@@ -945,7 +963,7 @@ bool NDPlayer::doGatherPointCollides(GatherPoint *se)
 		return false;
 	}
 
-	bool collides = se->isCollides(GetPosition().x, GetPosition().y-8,
+	bool collides = se->isCollides(GetWorldPos().x, GetWorldPos().y-8,
 									 8, 8);
 
 	if (collides) {
@@ -994,8 +1012,8 @@ bool NDPlayer::DirectSwitch(int iSwitchCellX, int iSwitchCellY, int iPassIndex)
 
 bool NDPlayer::CanSwitch(int iSwitchCellX, int iSwitchCellY)
 {
-// 	int x = (int(this->GetPosition().x) - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
-// 	int y = (int(this->GetPosition().y) - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
+// 	int x = (int(this->GetWorldPos().x) - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
+// 	int y = (int(this->GetWorldPos().y) - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
 // 
 // 	/*
 // 	 if (x == iSwitchCellX && y == iSwitchCellY)
@@ -1019,8 +1037,8 @@ bool NDPlayer::CanSwitch(int iSwitchCellX, int iSwitchCellY)
 	float k = (iX2-iX1)/(iY2-iY1);
 	float b = iX1 - iY1 * k;
 	//
-	int iX = k * (this->GetPosition().y-DISPLAY_POS_Y_OFFSET) + b;
-	if ( iX < this->GetPosition().x-DISPLAY_POS_X_OFFSET )
+	int iX = k * (this->GetWorldPos().y-DISPLAY_POS_Y_OFFSET) + b;
+	if ( iX < this->GetWorldPos().x-DISPLAY_POS_X_OFFSET )
 		return true;
 	return false;
 }
@@ -1047,7 +1065,7 @@ void NDPlayer::processSwitch()
 			NDMapSwitch *mapswitch = (NDMapSwitch *)switchs->objectAtIndex(i);
 
 			if (!mapswitch) continue;
-			if (DirectSwitch(mapswitch->getX(), mapswitch->getY(), mapswitch->getPassIndex())) 
+			if (DirectSwitch(mapswitch->getCellPos().x, mapswitch->getCellPos().y, mapswitch->getPassIndex())) 
 				break;
 		}
 	}
@@ -1239,9 +1257,15 @@ bool NDPlayer::canUnpackRidePet()
 		if (!mapswitch) return true;
 
 		// 不能自动寻路到切屏点 todo
-		CGPoint from = ccp(m_nServerCol*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, m_nServerRow*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
-		CGPoint to = ccp(mapswitch->getX()*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, mapswitch->getY()*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
-		return NDAutoPath::sharedAutoPath()->autoFindPath(from, to , maplayer,IsInState(USERSTATE_SPEED_UP) ? SpriteSpeedStep8 : SpriteSpeedStep4, false);
+		//CGPoint from = ccp(m_nServerCol*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, m_nServerRow*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
+		CGPoint from = NDSprite::CellPos2WorldPos( ccp(m_nServerCol, m_nServerRow ));
+
+		//CGPoint to = ccp(mapswitch->getX()*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, mapswitch->getY()*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
+		CGPoint to = mapswitch->getWorldPos();
+
+		return NDAutoPath::sharedAutoPath()->autoFindPath(from, to , maplayer,
+			IsInState(USERSTATE_SPEED_UP) ? SpriteSpeedStep8 : SpriteSpeedStep4, 
+			false);
 	}
 
 	return true;
@@ -1282,4 +1306,10 @@ int NDPlayer::GetCanUseRepute()
 	return m_nExpendHonour;
 }
 
+//override for debuging sake
+void NDPlayer::RunAnimation(bool bDraw)
+{
+	NDManualRole::RunAnimation(bDraw);
 }
+
+NS_NDENGINE_END

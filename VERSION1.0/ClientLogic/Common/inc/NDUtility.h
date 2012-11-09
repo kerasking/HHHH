@@ -13,8 +13,8 @@
 #include "globaldef.h"
 #include "NDDirector.h"
 
-#define MAP_UNITSIZE (16 * ((int)(NDDirector::DefaultDirector()->GetScaleFactor())))
-#define SCREEN_SCALE (NDDirector::DefaultDirector()->GetScaleFactor())
+#define MAP_UNITSIZE	32 //Ò»¸ñ×Ó=32ÏñËØ	(16 * ((int)(NDDirector::DefaultDirector()->GetScaleFactor())))
+#define SCREEN_SCALE	(NDDirector::DefaultDirector()->GetScaleFactor())
 
 bool IsPointInside(CGPoint pt, CGRect rect);
 int GetNumBits(int num);

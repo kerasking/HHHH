@@ -470,7 +470,8 @@ void NDUIButton::draw()
 
 	if (m_pSprite)
 	{
-		m_pSprite->SetPosition(ccpAdd(scrRect.origin, m_posSprite));
+		//m_pSprite->SetPosition(ccpAdd(scrRect.origin, m_posSprite));
+		m_pSprite->SetWorldPos(ccpAdd(scrRect.origin, m_posSprite));
 		m_pSprite->Run(NDDirector::DefaultDirector()->GetWinSize());
 	}
 

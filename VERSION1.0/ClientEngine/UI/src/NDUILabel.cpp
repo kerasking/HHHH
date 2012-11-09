@@ -169,7 +169,7 @@ void NDUILabel::MakeTexture()
 				kCCTextAlignmentLeft,
 				kCCVerticalTextAlignmentCenter,
 				FONT_NAME,
-				m_uiFontSize
+				m_uiFontSize * scale
 				);
 				
 // 			[[CCTexture2D alloc] initWithString:text 

@@ -25,6 +25,7 @@
 #include "define.h"
 #include "CCString.h"
 #include "NDDebugOpt.h"
+#include "NDConsole.h"
 
 using namespace NDEngine;
 
@@ -133,11 +134,11 @@ CGRect NDBaseRole::GetFocusRect()
 
 	if (m_pkRidePet)
 	{
-		point = m_pkRidePet->GetPosition();
+		point = m_pkRidePet->GetWorldPos();
 	}
 	else
 	{
-		point = GetPosition();
+		point = GetWorldPos();
 	}
 
 	if (m_pkRingPic == NULL)
@@ -255,14 +256,14 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 			NDMapLayer *layer = (NDMapLayer*) node;
 			CGPoint screen = layer->GetScreenCenter();
 			CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-			m_kScreenPosition = ccpSub(GetPosition(),
+			m_kScreenPosition = ccpSub(GetWorldPos(),
 					ccpSub(screen,
 							CGPointMake(winSize.width / 2,
 									winSize.height / 2)));
 		}
 		else
 		{
-			m_kScreenPosition = GetPosition();
+			m_kScreenPosition = GetWorldPos();
 		}
 
 		sizemap = node->GetContentSize();
@@ -660,7 +661,7 @@ void NDBaseRole::SetRidePet(int lookface, int stand_action, int run_action, int 
 		m_pkRidePet = new NDRidePet;
 		m_pkRidePet->Initialization(lookface);
 		//ridepet->quality = quality;
-		m_pkRidePet->SetPositionEx(GetPosition());
+		m_pkRidePet->SetWorldPos(GetWorldPos());
 		m_bIsRide = true;
 		//if (IsKindOfClass(RUNTIME_CLASS(NDManualRole))) 
 		//{
@@ -1120,10 +1121,10 @@ void NDBaseRole::SetCamp(CAMP_TYPE btCamp)
 	}
 }
 
-void NDBaseRole::SetPositionEx(CGPoint newPosition)
-{
-	NDSprite::SetPosition(newPosition);
-}
+// void NDBaseRole::SetPositionEx(CGPoint newPosition)
+// {
+// 	NDSprite::SetPosition(newPosition);
+// }
 
 NDRidePet* NDBaseRole::GetRidePet()
 {
@@ -1219,7 +1220,7 @@ void NDBaseRole::drawEffects(bool bDraw)
 	if (m_pkEffectRidePetAniGroup != NULL
 			&& m_pkEffectRidePetAniGroup->GetParent())
 	{
-		m_pkEffectRidePetAniGroup->SetPosition(GetPosition());
+		m_pkEffectRidePetAniGroup->SetWorldPos(GetWorldPos());
 		m_pkEffectRidePetAniGroup->RunAnimation(bDraw);
 	}
 }
@@ -1311,15 +1312,13 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 	int x = m_kPosition.x - DISPLAY_POS_X_OFFSET;
 	int y = m_kPosition.y - DISPLAY_POS_Y_OFFSET;
 
-	pic->DrawInRect(
-			CGRectMake(x + m_iShadowOffsetX,
-					y + m_iShadowOffsetY
-							+ NDDirector::DefaultDirector()->GetWinSize().height
-							- parentsize.height, sizeShadow.width,
-					sizeShadow.height));
-#endif
+// 	pic->DrawInRect(
+// 			CGRectMake(x + m_iShadowOffsetX,
+// 					y + m_iShadowOffsetY
+// 							+ NDDirector::DefaultDirector()->GetWinSize().height
+// 							- parentsize.height, sizeShadow.width,
+// 					sizeShadow.height));
 
-#if 1
 	pic->DrawInRect(
 		CGRectMake(x + m_iShadowOffsetX, y + m_iShadowOffsetY,
 		sizeShadow.width, sizeShadow.height));
@@ -1516,3 +1515,49 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 // 	return pkRecord->getCurrentFrameIndex() != 0
 // 			&& pkRecord->getNextFrameIndex() == 0;
 // }
+
+
+//override
+void NDBaseRole::SetWorldPos(CGPoint newPosition)
+{
+	logSetPos( newPosition, "SetWorldPos" );
+	NDSprite::SetWorldPos( newPosition );
+}
+
+//override
+void NDBaseRole::SetCellPos( const CGPoint& cellPos )
+{
+	logSetPos( cellPos, "SetCellPos" );
+	NDSprite::SetCellPos( cellPos );
+}
+
+void NDBaseRole::logSetPos( const CGPoint& pos, const char* fromFunc )
+{
+	char str[1024] = "";
+	char* roleType = NULL;
+	HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
+
+	if (IsKindOfClass(RUNTIME_CLASS(NDNpc)))
+	{
+		roleType = "npc";
+	}
+	else if (IsKindOfClass(RUNTIME_CLASS(NDPlayer)))
+	{
+		roleType = "player";
+	}
+
+	if (roleType)
+	{
+		sprintf( str, "%-10s %-10s\t(%03d, %03d)\t%-10s\r\n", 
+			roleType, (fromFunc?fromFunc:""), (int)pos.x, (int)pos.y, m_strName.c_str() );
+
+		DWORD n = 0;
+		WriteConsoleA( hOut, str, strlen(str), &n, NULL );				
+	}
+}
+
+//动画+渲染，入口在这儿，重载方便测试
+void NDBaseRole::RunAnimation(bool bDraw)
+{
+	NDSprite::RunAnimation(bDraw);
+}

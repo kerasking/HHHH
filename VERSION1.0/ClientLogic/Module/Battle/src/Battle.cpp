@@ -1916,7 +1916,7 @@ Fighter* Battle::GetTouchedFighter(VEC_FIGHTER& fighterList, CGPoint pt)
 		}
 
 		NDBaseRole* pkRole = pkFighter->GetRole();
-		CGPoint fPos = pkRole->GetPosition();
+		CGPoint fPos = pkRole->GetWorldPos();
 
 		int w = pkRole->GetWidth();
 		int h = pkRole->GetHeight();
@@ -2118,7 +2118,7 @@ void Battle::SendBattleAction(const BattleAction& action)
 
 	if (!GetChild(TAG_WAITING) && m_mainFighter)
 	{
-		CGPoint pt = m_mainFighter->GetRole()->GetPosition();
+		CGPoint pt = m_mainFighter->GetRole()->GetWorldPos();
 		NDUILabel* waiting = new NDUILabel;
 		waiting->Initialization();
 		waiting->SetFontColor(ccc4(255, 255, 255, 255));
@@ -2313,7 +2313,7 @@ void Battle::drawFighter()
 	//	if (m_mainFighter && !watchBattle)
 	//	{
 	//		NDBaseRole* role = m_mainFighter->GetRole();
-	//		CGPoint pt = role->GetPosition();
+	//		CGPoint pt = role->GetWorldPos();
 	//		m_imgWhoAmI->SetFrameRect(CGRectMake(pt.x - 6, pt.y - role->GetHeight(), m_picWhoAmI->GetSize().width, m_picWhoAmI->GetSize().height));
 	//	}
 }

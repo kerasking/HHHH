@@ -562,13 +562,13 @@ void CCTouchDispatcher::touchesEnded(CCSet *touches, CCEvent *pEvent)
 void CCTouchDispatcher::touchesCancelled(CCSet *touches, CCEvent *pEvent)
 {
 #if ND_MOD
-	// 	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
-	// 	CCTouch *touch = (CCTouch *)touches->anyObject();
-	// 	CCPoint curPos = touch->locationInView();
-	// 	CCPoint prePos = touch->previousLocationInView();
-	// 
-	// 	m_curPos = CCPointMake(curPos.y, winSize.height - curPos.x);
-	// 	m_prePos = CCPointMake(prePos.y, winSize.height - prePos.x);
+ 	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+ 	CCTouch *touch = (CCTouch *)touches->anyObject();
+ 	CCPoint curPos = touch->locationInView();
+ 	CCPoint prePos = touch->previousLocationInView();
+// 
+// 	m_curPos = CCPointMake(curPos.y, winSize.height - curPos.x);
+// 	m_prePos = CCPointMake(prePos.y, winSize.height - prePos.x);
 #endif
 
     if (m_bDispatchEvents)
@@ -587,6 +587,7 @@ CCPoint CCTouchDispatcher::getPrePos()
 {
 	return m_prePos;
 }
+
 #endif
 
 NS_CC_END

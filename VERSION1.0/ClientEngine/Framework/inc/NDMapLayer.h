@@ -46,8 +46,8 @@ enum BOX_STATUS
 	BOX_OPENED,
 };
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
 class NDMapLayer: public NDLayer,public ITimerCallback
 {
 DECLARE_CLASS(NDMapLayer)
@@ -194,7 +194,7 @@ private:
 
 private:
 
-	CGPoint m_kScreenCenter;
+	CGPoint m_kScreenCenter; //屏幕中心对应的地图坐标（GL世界坐标）
 	cocos2d::CCArray* m_pkOrders;
 	cocos2d::CCArray* m_pkOrdersOfMapscenesAndMapanimations;
 	NDMapData *m_pkMapData;
@@ -251,8 +251,11 @@ private:
 	CGSize GetMapDataAniParamMapSize(int nIndex);
 	int GetMapDataAniParamOrderId(int nIndex);
 	int GetMapOrderId(MAP_ORDER *dict);
+
+public:
+	void dumpRole(); //for debug
 };
 
-}
+NS_NDENGINE_END
 
 #endif

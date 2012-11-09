@@ -189,7 +189,7 @@ void NDManualRole::Update(unsigned long ulDiff)
 		{
 			std::vector < CGPoint > vPosition;
 			deque<int>::iterator it = m_kDequeWalk.begin();
-			CGPoint kCurrentPosition = GetPosition();
+			CGPoint kCurrentPosition = GetWorldPos();
 
 			for (; it != m_kDequeWalk.end(); it++)
 			{
@@ -358,7 +358,7 @@ void NDManualRole::WalkToPosition(const std::vector<CGPoint>& kToPosVector,
 		return;
 	}
 
-	if (GetPosition().x > kToPosVector[0].x)
+	if (GL2SCREEN(GetWorldPos()).x > kToPosVector[0].x)
 	{
 		m_bFaceRight = false;
 	}
@@ -426,8 +426,8 @@ void NDManualRole::processTeamMemberMove(bool bDraw)
 // 		s_team_info info = *it;
 // 		if (info.team[0] == m_id) 
 // 		{
-// 			CGPoint posOld = m_oldPos;// ccp(GetPosition().x/16*16+DISPLAY_POS_X_OFFSET, GetPosition().y/16*16+DISPLAY_POS_Y_OFFSET);
-// 			CGPoint posNew = GetPosition();
+// 			CGPoint posOld = m_oldPos;// ccp(GetWorldPos().x/16*16+DISPLAY_POS_X_OFFSET, GetWorldPos().y/16*16+DISPLAY_POS_Y_OFFSET);
+// 			CGPoint posNew = GetWorldPos();
 // 			//CGPoint tmppos = pos;
 // 			if (int(posOld.x) == 0 && int(posOld.y) == 0) 
 // 			{
@@ -485,7 +485,7 @@ void NDManualRole::processTeamMemberMove(bool bDraw)
 // 
 // 						if (mdir != -1) 
 // 						{
-// 							posOld = mem->GetPosition();
+// 							posOld = mem->GetWorldPos();
 // 							mem->SetPosition(posNew);
 // 							bArrDraw[j] = true;
 // 						}
@@ -494,7 +494,7 @@ void NDManualRole::processTeamMemberMove(bool bDraw)
 // 							//NDLog("调和。。。。。");
 // 						}
 // 
-// 						  //CGPoint posMem = mem->GetPosition();
+// 						  //CGPoint posMem = mem->GetWorldPos();
 // //							CGPoint posOld = posMem;
 // //							int mdir = -1;
 // //							if (int(posMem.x) != int(pos.x) ) 
@@ -671,8 +671,8 @@ void NDManualRole::teamMemberWalkToPosition(const std::vector<CGPoint>& toPos)
 // 						continue;
 // 					}
 // 
-// 					CGPoint posCur = role->GetPosition();
-// 					CGPoint posLast  = rolelast->GetPosition();
+// 					CGPoint posCur = role->GetWorldPos();
+// 					CGPoint posLast  = rolelast->GetWorldPos();
 // 
 // 
 // 					role->WalkToPosition(toPos, SpriteSpeedStep4, false);
@@ -787,7 +787,7 @@ void NDManualRole::SetTeamToLastPos()
 // 	CGPoint kCurrentPosition;
 // 	if (m_kPointList.empty())
 // 	{
-// 		kCurrentPosition = GetPosition();
+// 		kCurrentPosition = GetWorldPos();
 // 	}
 // 	else
 // 	{
@@ -1075,45 +1075,67 @@ bool NDManualRole::AssuredRidePet()
 	return m_pkRidePet != NULL && m_bIsRide && !isTransformed();
 }
 
-void NDManualRole::SetPosition(CGPoint newPosition)
+//设置世界坐标
+void NDManualRole::SetWorldPos(CGPoint newPosition)
 {
 	//if (isTeamLeader())
 //		{
 	//int nNewCol = (newPosition.x-DISPLAY_POS_X_OFFSET)/16;
 //			int nNewRow = (newPosition.y-DISPLAY_POS_Y_OFFSET)/16;
-//			int nOldCol = (GetPosition().x-DISPLAY_POS_X_OFFSET)/16;
-//			int nOldRow = (GetPosition().y-DISPLAY_POS_Y_OFFSET)/16;
+//			int nOldCol = (GetWorldPos().x-DISPLAY_POS_X_OFFSET)/16;
+//			int nOldRow = (GetWorldPos().y-DISPLAY_POS_Y_OFFSET)/16;
 //			
 //			if ( nNewCol != nOldCol ||
 //				nNewRow != nOldRow ) 
 //			{
-	//m_oldPos = GetPosition();
+	//m_oldPos = GetWorldPos();
 	//}
 	//}
 
-	int nNewCol = (newPosition.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
-	int nNewRow = (newPosition.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
-	int nOldCol = (GetPosition().x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
-	int nOldRow = (GetPosition().y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
+#if 0
+// 	int nNewCol = (newPosition.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
+// 	int nNewRow = (newPosition.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
+// 	int nOldCol = (GetWorldPos().x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
+// 	int nOldRow = (GetWorldPos().y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
+//
+// 	if (nNewCol != nOldCol || nNewRow != nOldRow)
+// 	{
+// 		if (nNewCol < nOldCol)
+// 		{
+// 			m_bFaceRight = false;
+// 			m_bReverse = false;
+// 
+// 		}
+// 		else if (nNewCol > nOldCol)
+// 		{
+// 			m_bFaceRight = true;
+// 			m_bReverse = true;
+// 		}
+// 	}
+#else
+	CGPoint newCellPos = NDSprite::WorldPos2CellPos( newPosition );
+	CGPoint oldCellPos = NDSprite::WorldPos2CellPos( GetWorldPos() );
 
-	if (nNewCol != nOldCol || nNewRow != nOldRow)
+	if (newCellPos.y != oldCellPos.y || newCellPos.x != oldCellPos.x)
 	{
-		if (nNewCol < nOldCol)
+		if (newCellPos.y < oldCellPos.y)
 		{
 			m_bFaceRight = false;
 			m_bReverse = false;
 
 		}
-		else if (nNewCol > nOldCol)
+		else if (newCellPos.y > oldCellPos.y)
 		{
 			m_bFaceRight = true;
 			m_bReverse = true;
 		}
 	}
+#endif
 
-	m_nServerCol = nNewCol;
-	m_nServerRow = nNewRow;
-	NDSprite::SetPosition(newPosition);
+	m_nServerCol = newCellPos.x; //列数x，行数y
+	m_nServerRow = newCellPos.y;
+
+	NDBaseRole::SetWorldPos(newPosition);
 
 	/*if (m_pBattlePetShow)
 	 {
@@ -1189,7 +1211,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 			}
 		}
 	}
-	CGPoint pos = GetPosition();
+	CGPoint pos = GetWorldPos();
 
 	// 摆摊先处理
 	if (IsInState (USERSTATE_BOOTH))
@@ -1204,7 +1226,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 				NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
 				CGPoint screen = pkLayer->GetScreenCenter();
 				CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-				m_kScreenPosition = ccpSub(GetPosition(),
+				m_kScreenPosition = ccpSub(GetWorldPos(),
 						ccpSub(screen,
 								CGPointMake(winSize.width / 2,
 										winSize.height / 2)));
@@ -1302,7 +1324,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 
 	if (m_pkRidePet)
 	{
-		m_pkRidePet->SetPosition(pos);
+		m_pkRidePet->SetWorldPos(pos);
 
 		if (!m_pkRidePet->GetParent())
 		{
@@ -1339,7 +1361,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	if (m_pkAniGroupTransformed)
 	{
 		bDraw = !IsInState(USERSTATE_STEALTH);
-		m_pkAniGroupTransformed->SetPosition(pos);
+		m_pkAniGroupTransformed->SetWorldPos(pos);
 // 		m_pkAniGroupTransformed->SetCurrentAnimation(
 // 				m_bIsMoving ? MONSTER_MAP_MOVE : MONSTER_MAP_STAND,
 // 				!m_bFaceRight);
@@ -1410,7 +1432,7 @@ void NDManualRole::OnDrawEnd(bool bDraw)
 		if (node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
 			sizemap = node->GetContentSize();
-			CGPoint pos = GetPosition();
+			CGPoint pos = GetWorldPos();
 			pos.x -= DISPLAY_POS_X_OFFSET + 8;
 			pos.y -= DISPLAY_POS_Y_OFFSET + 48;
 			CGSize szBattle = m_pkBattlePicture->GetSize();
@@ -1423,9 +1445,9 @@ void NDManualRole::OnDrawEnd(bool bDraw)
 	if (m_pkEffectArmorAniGroup != NULL && m_pkEffectArmorAniGroup->GetParent()
 			&& !isTransformed())
 	{
-		CGPoint pos = GetPosition();
+		CGPoint pos = GetWorldPos();
 		pos.y += 6 - getGravityY() + m_pkEffectArmorAniGroup->GetHeight();
-		m_pkEffectArmorAniGroup->SetPosition(pos);
+		m_pkEffectArmorAniGroup->SetWorldPos(pos);
 		m_pkEffectArmorAniGroup->RunAnimation(bDraw);
 	}
 
@@ -1449,7 +1471,7 @@ void NDManualRole::RunNumberOneEffect()
 	}
 	if (m_pkNumberOneEffect)
 	{
-		m_pkNumberOneEffect->SetPosition(ccpAdd(GetPosition(), ccp(0, 10)));
+		m_pkNumberOneEffect->SetWorldPos(ccpAdd(GetWorldPos(), ccp(0, 10)));
 		NDNode* parent = GetParent();
 		if (parent && parent->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
@@ -1466,9 +1488,11 @@ void NDManualRole::stopMoving(bool bResetPos/*=true*/,
 
 	if (bResetPos)
 	{
-		NDManualRole::SetPosition(
-				ccp(m_nServerCol * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-						m_nServerRow * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+// 		NDManualRole::SetPosition(
+// 				ccp(m_nServerCol * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+// 						m_nServerRow * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+
+		NDManualRole::SetCellPos( ccp(m_nServerCol, m_nServerRow ));
 	}
 
 	SetAction(false);
@@ -1502,7 +1526,7 @@ void NDManualRole::drawEffects(bool bDraw)
 	if (!hasServerEffectFlag && m_pkEffectFlagAniGroup != NULL
 			&& m_pkEffectFlagAniGroup->GetParent())
 	{
-		CGPoint kPosition = GetPosition();
+		CGPoint kPosition = GetWorldPos();
 		int ty = 0;
 		if (isTransformed())
 		{
@@ -1521,20 +1545,20 @@ void NDManualRole::drawEffects(bool bDraw)
 		}
 
 		m_pkEffectFlagAniGroup->SetSpriteDir(m_bFaceRight ? 0 : 2);
-		m_pkEffectFlagAniGroup->SetPosition(ccp(tx, ty));
+		m_pkEffectFlagAniGroup->SetWorldPos(ccp(tx, ty));
 		m_pkEffectFlagAniGroup->RunAnimation(bDraw);
 	}
 
 // 	if (m_pkEffectFeedPetAniGroup != NULL && m_pkEffectFeedPetAniGroup->GetParent() && m_pBattlePetShow && !bTransform)
 // 	{
-// 		CGPoint pos = m_pBattlePetShow->GetPosition();
+// 		CGPoint pos = m_pBattlePetShow->GetWorldPos();
 // 		m_pkEffectFeedPetAniGroup->SetPosition(ccp(pos.x, pos.y+8));
 // 		m_pkEffectFeedPetAniGroup->RunAnimation(bDraw);
 // 	}
 
 	//if (effectArmorAniGroup != NULL && effectArmorAniGroup->GetParent() && !bTransform)
 //		{
-//			CGPoint pos = GetPosition();
+//			CGPoint pos = GetWorldPos();
 //			pos.y += 6-getGravityY()+effectArmorAniGroup->GetHeight();
 //			effectArmorAniGroup->SetPosition(pos);
 //			effectArmorAniGroup->RunAnimation(bDraw);
@@ -1828,7 +1852,7 @@ bool NDManualRole::isTransformed()
 
 void NDManualRole::playerLevelUp()
 {
-	CGPoint pos = GetPosition();
+	CGPoint pos = GetWorldPos();
 
 	if (IsKindOfClass(RUNTIME_CLASS(NDPlayer)) && GetParent()
 			&& !GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
@@ -1864,7 +1888,7 @@ void NDManualRole::playerLevelUp()
 
 void NDManualRole::playerMarry()
 {
-	CGPoint pos = GetPosition();
+	CGPoint pos = GetWorldPos();
 
 	if (IsKindOfClass(RUNTIME_CLASS(NDPlayer)) && GetParent()
 			&& !GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
@@ -1945,8 +1969,8 @@ void NDManualRole::ShowNameLabel(bool bDraw)
 	std::string names = m_strName;
 	NDPlayer& player = NDPlayer::defaultHero();
 	CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
-	int iX = GetPosition().x - DISPLAY_POS_X_OFFSET;
-	int iY = GetPosition().y; // - DISPLAY_POS_Y_OFFSET;
+	int iX = GetWorldPos().x - DISPLAY_POS_X_OFFSET;
+	int iY = GetWorldPos().y; // - DISPLAY_POS_Y_OFFSET;
 
 	if (IsInState (USERSTATE_CAMP))
 	{
@@ -2094,8 +2118,8 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 	NDAnimation *animate = (NDAnimation *)m_pkAniGroup->getAnimations()->objectAtIndex(0);
 	CGSize fontSize = getStringSize(lable[0]->GetText().c_str(), lable[0]->GetFontSize());
 	CGRect currAnimateRect = animate->getRect();
-	int newX = this->GetPosition().x - fontSize.width/2;
-	int newY = this->GetPosition().y - currAnimateRect.size.height - fontSize.height/2;
+	int newX = this->GetWorldPos().x - fontSize.width/2;
+	int newY = this->GetWorldPos().y - currAnimateRect.size.height - fontSize.height/2;
 	//int newX = x - fontSize.width/2;
 	//int newY = y;
 
@@ -2181,7 +2205,7 @@ void NDManualRole::refreshEquipmentEffectData()
 
 void NDManualRole::BackupPositon()
 {
-	m_kPosBackup = GetPosition();
+	m_kPosBackup = GetWorldPos();
 }
 
 CGPoint NDManualRole::GetBackupPosition()
@@ -2222,8 +2246,9 @@ void NDManualRole::HandleEffectDacoity()
 	if (m_pkEffectDacoityAniGroup != NULL
 			&& m_pkEffectDacoityAniGroup->GetParent())
 	{
-		m_pkEffectDacoityAniGroup->SetPosition(
-				ccpAdd(GetPosition(), ccp(0, 8)));
+		m_pkEffectDacoityAniGroup->SetWorldPos(
+				ccpAdd(GetWorldPos(), ccp(0, 8)));
+
 		m_pkEffectDacoityAniGroup->RunAnimation(true);
 	}
 }
@@ -2376,7 +2401,7 @@ void NDManualRole::drawServerEffect(std::vector<ServerEffect>& vEffect,
 			bool face = !isEffectTurn(serverEffect.severEffectId / 10000 % 10); // ０正向, 1~9反向
 
 			serverEffect.effect->SetLightId(aniID, face);
-			serverEffect.effect->SetPosition(ccp(tx, ty));
+			serverEffect.effect->SetWorldPos(ccp(tx, ty));
 			serverEffect.effect->Run(parentSize, draw);
 		}
 	}
@@ -2513,7 +2538,7 @@ void NDManualRole::ResetShowPetPosition()
 	/*if (!m_pBattlePetShow)
 	 return;
 
-	 m_pBattlePetShow->SetPosition(GetPosition());*/
+	 m_pBattlePetShow->SetPosition(GetWorldPos());*/
 }
 
 void NDManualRole::ResetShowPet()
@@ -2723,7 +2748,7 @@ bool NDManualRole::IsDirFaceRight(int nDir)
 		NDDirector* director		= NDDirector::DefaultDirector();
 		float fScaleFactor			= director->GetScaleFactor();
 		CGSize sizeEffectParent		= pParent->GetContentSize();
-		CGPoint posRole				= this->GetPosition();
+		CGPoint posRole				= this->GetWorldPos();
 		for (int j = eSM_EFFECT_ALIGNMENT_BEGIN; j < eSM_EFFECT_ALIGNMENT_END; j++) 
 		{
 			std::map<std::string, NDLightEffect*>& mapEffect	= m_kArrMapSMEffect[nDrawOrder][j];
@@ -2751,7 +2776,7 @@ bool NDManualRole::IsDirFaceRight(int nDir)
 				{
 					continue;
 				}
-				pEffect->SetPosition(ccpAdd(posRole, posOffect));
+				pEffect->SetWorldPos(ccpAdd(posRole, posOffect));
 				pEffect->Run(sizeEffectParent);
 			}
 		}

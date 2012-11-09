@@ -91,7 +91,10 @@ namespace NDEngine {
 		player.InitRoleLookFace(lookface);
 		
 		player.stopMoving();
-		player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+		
+		//player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+		player.SetCellPos(ccp(x,y));
+
 		player.SetServerPositon(x, y);
 		player.m_nID = userid;
 		player.m_strName = name;
@@ -112,7 +115,10 @@ namespace NDEngine {
 		NDPlayer& player = NDPlayer::defaultHero(lookface, true);
 		player.ChangeModelWithMount( nRideStatus, nMountType );
 		player.stopMoving();
-		player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+
+		//player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+		player.SetCellPos(ccp(x,y));
+
 		player.SetServerPositon(x, y);
 		player.m_nID = userid;
 		player.m_strName = name;

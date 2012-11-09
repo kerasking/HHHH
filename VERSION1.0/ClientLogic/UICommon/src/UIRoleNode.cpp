@@ -103,7 +103,7 @@ void CUIRoleNode::draw()
 							 ccp((scrRect.size.width - w) / 2 + m_pRole->getGravityX(),
 								 (scrRect.size.height - h) / 2 + m_pRole->getGravityY()) );
 	
-	m_pRole->SetPositionEx(pos);
+	m_pRole->SetWorldPos(pos);
 	m_pRole->RunAnimation(true);
 }
 

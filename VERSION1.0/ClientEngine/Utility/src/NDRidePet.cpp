@@ -74,16 +74,16 @@ namespace NDEngine
 		//m_moving = false;
 	}
 
-	void NDRidePet::SetPosition(CGPoint newPosition)
+	void NDRidePet::SetWorldPos(CGPoint newPosition)
 	{
-		NDSprite::SetPosition(newPosition);
+		NDSprite::SetWorldPos(newPosition);
 		return;
 		//		if (owner && owner->IsKindOfClass(RUNTIME_CLASS(NDManualRole)))
 		//		{
 		//			NDManualRole *role = (NDManualRole*)owner;
 		//			if (!role->IsInState(USERSTATE_SPEED_UP))
 		//			{
-		//				NDSprite::SetPosition(newPosition);
+		//				NDSprite::SetWorldPos(newPosition);
 		//				m_preSetPos = newPosition;
 		//				return;
 		//			}
@@ -95,26 +95,26 @@ namespace NDEngine
 		//			{ 
 		//				if (m_bInc)
 		//				{ // down
-		//					NDSprite::SetPosition(ccp(newPosition.x,newPosition.y+8));
+		//					NDSprite::SetWorldPos(ccp(newPosition.x,newPosition.y+8));
 		//				}
 		//				else
 		//				{ // up
-		//					NDSprite::SetPosition(ccp(newPosition.x,newPosition.y-8));
+		//					NDSprite::SetWorldPos(ccp(newPosition.x,newPosition.y-8));
 		//				}
 		//			}
 		//			else
 		//			{
 		//				if (m_bInc)
 		//				{ // right
-		//					NDSprite::SetPosition(ccp(newPosition.x+8,newPosition.y));
+		//					NDSprite::SetWorldPos(ccp(newPosition.x+8,newPosition.y));
 		//				}
 		//				else
 		//				{ // left
-		//					NDSprite::SetPosition(ccp(newPosition.x-8,newPosition.y));
+		//					NDSprite::SetWorldPos(ccp(newPosition.x-8,newPosition.y));
 		//				}
 		//			}
 		//
-		//			//NDSprite::SetPosition(newPosition);
+		//			//NDSprite::SetWorldPos(newPosition);
 		//			m_preSetPos = newPosition;
 		//			m_bMoveCorner = false;
 		//			return;
@@ -123,68 +123,68 @@ namespace NDEngine
 		{
 			if (m_preSetPos.x == newPosition.x && m_preSetPos.y == newPosition.y)
 			{
-				NDSprite::SetPosition(newPosition);
+				NDSprite::SetWorldPos(newPosition);
 			}
 			else if (m_preSetPos.x == newPosition.x)
 			{
 				if (m_preSetPos.y <= newPosition.y)
 				{ //down
-					NDSprite::SetPosition(ccp(newPosition.x,newPosition.y+8));
+					NDSprite::SetWorldPos(ccp(newPosition.x,newPosition.y+8));
 				}
 				else 
 				{
-					NDSprite::SetPosition(ccp(newPosition.x,newPosition.y-8));
+					NDSprite::SetWorldPos(ccp(newPosition.x,newPosition.y-8));
 				}
 			}
 			else if (m_preSetPos.y == newPosition.y)
 			{
 				//if(!m_faceRight)
 				//				{
-				//					NDSprite::SetPosition(ccp(newPosition.x-8,newPosition.y));
+				//					NDSprite::SetWorldPos(ccp(newPosition.x-8,newPosition.y));
 				//				}
 				//				else
 				//				{
-				//					NDSprite::SetPosition(ccp(newPosition.x+8,newPosition.y));
+				//					NDSprite::SetWorldPos(ccp(newPosition.x+8,newPosition.y));
 				//				}
 				if (m_preSetPos.x <= newPosition.x)
 				{ //right
-					NDSprite::SetPosition(ccp(newPosition.x+8,newPosition.y));
+					NDSprite::SetWorldPos(ccp(newPosition.x+8,newPosition.y));
 				}
 				else 
 				{
-					NDSprite::SetPosition(ccp(newPosition.x-8,newPosition.y));
+					NDSprite::SetWorldPos(ccp(newPosition.x-8,newPosition.y));
 				}
 			}
 			else
 			{
-				NDSprite::SetPosition(newPosition);
+				NDSprite::SetWorldPos(newPosition);
 			}
 
 
 			//if (m_faceRight)
 			//			{
-			//				NDSprite::SetPosition(CGPointMake(newPosition.x+8, newPosition.y));
+			//				NDSprite::SetWorldPos(CGPointMake(newPosition.x+8, newPosition.y));
 			//			}
 			//			else 
 			//			{
-			//				NDSprite::SetPosition(CGPointMake(newPosition.x-8, newPosition.y));
+			//				NDSprite::SetWorldPos(CGPointMake(newPosition.x-8, newPosition.y));
 			//			}
 		}
 		else 
 		{
 
-			NDSprite::SetPosition(newPosition);
+			NDSprite::SetWorldPos(newPosition);
 		}
 
 		m_preSetPos = newPosition;
 	}
 
-	void NDRidePet::SetPositionEx(CGPoint pos)
-	{
-		m_preSetPos = pos;
-		NDSprite::SetPosition(pos);
-	}
 
+// 	void NDRidePet::SetPositionEx(CGPoint pos)
+// 	{
+// 		m_preSetPos = pos;
+// 		NDSprite::SetWorldPos(pos);
+// 	}
 
 	bool NDRidePet::canRide()
 	{

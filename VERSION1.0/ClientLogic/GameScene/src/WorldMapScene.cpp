@@ -58,9 +58,11 @@ void WorldMapLayer::Initialization(int nMapId)
 
 	NDUILayer::Initialization();
 	SetTag(ScriptMgrObj.excuteLuaFuncRetN("GetWorldMapUITag", ""));
+
     //ScriptMgrObj.excuteLuaFunc("PlayWorldMusic", "Music");
 	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 	SetFrameRect(CGRectMake(0, 0, width, height));
+
 	m_buttons = cocos2d::CCArray::array();
 	m_buttons->retain();
 
@@ -79,18 +81,27 @@ void WorldMapLayer::Initialization(int nMapId)
 
 		NDTile* pkTile = new NDTile;
 		pkTile->setTexture(pkNode->getTexture());
-		int iWidth = pkNode->getTexture()->getContentSizeInPixels().width;
-		int iHeight = pkNode->getTexture()->getContentSizeInPixels().height;
+
+// 		int iWidth = pkNode->getTexture()->getContentSizeInPixels().width;
+// 		int iHeight = pkNode->getTexture()->getContentSizeInPixels().height;
+		CCSize texSize = ConvertUtil::getTextureSizeInPoints( *pkNode->getTexture() );
+		int iWidth = texSize.width;
+		int iHeight = texSize.height;
+		
 		pkTile->setCutRect(CGRectMake(0, 0, iWidth, iHeight));
 		int iX = pkNode->getX();
 		int iY = pkNode->getY();
+		
 		pkTile->setDrawRect(CGRectMake(iX, iY, iWidth, iHeight));
 		pkTile->setReverse((bool)NO);
 		pkTile->setRotation(NDRotationEnumRotation0);
+		
 		iWidth = m_mapData->getMapSize().width;
 		iHeight = m_mapData->getMapSize().height;
+		
 		pkTile->setMapSize(CGSizeMake(iWidth, iHeight));
 		pkTile->make();
+		
 		m_buttons->addObject(pkTile);
 		pkTile->release();
 	}
@@ -118,12 +129,15 @@ void WorldMapLayer::Initialization(int nMapId)
 	m_roleNode = new CUIRoleNode;
 	m_roleNode->Initialization();
 	m_roleNode->ChangeLookFace(GetPlayerLookface());
+
 	NDPlayer& player = NDPlayer::defaultHero();
 	m_roleNode->GetRole()->ChangeModelWithMount(player.m_nRideStatus, player.m_nMountType);
 	m_roleNode->SetRoleScale(0.5f);
+
 	AddChild(m_roleNode);
 	ShowRoleAtPlace(nMapId);
 }
+
 void WorldMapLayer::draw()
 {
 	NDUILayer::draw();
@@ -377,17 +391,13 @@ CGPoint WorldMapLayer::ConvertToScreenPoint(CGPoint mapPoint)
 bool WorldMapLayer::TouchBegin(NDTouch* touch)
 {	
 	CGPoint m_Touch = touch->GetLocation();
-	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
-	CGPoint tmpTouch = CGPointMake(m_Touch.x * fScale,
-							   m_Touch.y * fScale);
+// 	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+// 	CGPoint tmpTouch = CGPointMake(m_Touch.x * fScale, m_Touch.y * fScale);
+	CGPoint tmpTouch = CGPointMake(m_Touch.x, m_Touch.y);
 	m_Touch = tmpTouch;
-
 
 	CGPoint pt = ConvertToMapPoint(m_Touch);
 	int iPlaceNodeNum = m_mapData->getPlaceNodes()->count();
-
-
-
 
 	for (unsigned int i = 0; i < iPlaceNodeNum; i++)
 	{
