@@ -332,8 +332,7 @@ NDMapMonsterRange::NDMapMonsterRange() :
 
 NDMapData::NDMapData() :
 		m_nLayerCount(0), m_nColumns(0), m_nRows(0), m_nUnitSize(0), m_nRoadBlockX(
-				-1), m_nRoadBlockY(-1),
-//, m_MapTiles(NULL)
+				-1), m_nRoadBlockY(-1), m_kMapTiles(NULL),
 		m_pkObstacles(NULL), m_pkSceneTiles(NULL), m_pkBackgroundTiles(NULL), m_pkSwitchs(
 				NULL), m_pkAnimationGroups(NULL), m_pkAniGroupParams(NULL)
 {
@@ -341,7 +340,7 @@ NDMapData::NDMapData() :
 
 NDMapData::~NDMapData()
 {
-	//CC_SAFE_RELEASE(m_MapTiles);
+	CC_SAFE_RELEASE(m_kMapTiles);
 	CC_SAFE_DELETE (m_pkObstacles);
 	CC_SAFE_RELEASE (m_pkSceneTiles);
 	CC_SAFE_RELEASE (m_pkBackgroundTiles);
@@ -414,6 +413,7 @@ void NDMapData::decode(FILE* pkStream)
 
 	//------------------->ÍßÆ¬	
 	m_kMapTiles = CCArray::array();
+	m_kMapTiles->retain();
 	for (int lay = 0; lay < m_nLayerCount; lay++)
 	{
 		for (uint r = 0; r < m_nRows; r++)

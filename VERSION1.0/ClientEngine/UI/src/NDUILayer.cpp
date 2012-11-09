@@ -359,11 +359,13 @@ bool NDUILayer::TouchBegin(NDTouch* touch)
 
 	m_bDispatchTouchEndEvent = true;
 	m_kBeginTouch = touch->GetLocation();
+
 	//add by zhangdi 20120828
 	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
 	CGPoint tmpTouch = CGPointMake(m_kBeginTouch.x * fScale,
 			m_kBeginTouch.y * fScale);
 	m_kBeginTouch = tmpTouch;
+
 
 	//	if (CGRectContainsPoint(this->GetScreenRect(), m_beginTouch) && this->IsVisibled() && this->EventEnabled())
 	//if (CGRectContainsPoint(CGRectMake(0, 0, 960, 640), m_beginTouch) && this->IsVisibled() && this->EventEnabled())
@@ -387,6 +389,8 @@ bool NDUILayer::TouchBegin(NDTouch* touch)
 bool NDUILayer::TouchEnd(NDTouch* touch)
 {
 	m_kEndTouch = touch->GetLocation();
+
+
 	//add by zhangdi 20120828
 	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
 	CGPoint tmpTouch = CGPointMake(m_kEndTouch.x * fScale,

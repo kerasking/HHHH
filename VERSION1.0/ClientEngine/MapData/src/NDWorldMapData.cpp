@@ -367,8 +367,7 @@ void NDWorldMapData::decode(FILE* stream)
 			NDPicture *pTile_pic = NDPicturePool::DefaultPool()->AddPicture(imageName);
 			pkPlaceNode->setTexture(pTile_pic->GetTexture());
 
-			//pkPlaceNode->setTexture(
-					//CCTextureCache::sharedTextureCache()->addImage(imageName));
+			//pkPlaceNode->setTexture(CCTextureCache::sharedTextureCache()->addImage(imageName));
 		}
 		pkPlaceNode->setX(kFileOp.readShort(stream));
 		pkPlaceNode->setY(kFileOp.readShort(stream));

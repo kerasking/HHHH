@@ -2497,6 +2497,7 @@ std::string GameScene::GetTLShareSelText(NDUINode* uinode)
 
 void GameScene::ReShowTaskAwardItemOpt()
 {
+#if 0
 	std::vector < std::string > strOP;
 
 	for (VEC_ITEM_IT it = m_vTaskAwardItem.begin();
@@ -2529,11 +2530,13 @@ void GameScene::ReShowTaskAwardItemOpt()
 
 	m_dlgTaskAwardItemTag = GlobalDialogObj.Show(this, NULL, NULL, NULL,
 			strOP);
+#endif
 }
 
 void GameScene::ShowTaskAwardItemOpt(Task* task)
 {
-	NDAsssert(task != NULL);
+	#if 0
+NDAsssert(task != NULL);
 
 	if (task->award_item1 != 0)
 	{
@@ -2557,6 +2560,7 @@ void GameScene::ShowTaskAwardItemOpt(Task* task)
 	}
 
 	ReShowTaskAwardItemOpt();
+#endif
 }
 
 void GameScene::ShowNPCDialog(bool bShowLeaveBtn/*=true*/)

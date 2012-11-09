@@ -72,82 +72,23 @@ void GameSceneLoading::Initialization(bool connect/*=false*/, LoginType login/*=
 	m_layer->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
 	this->AddChild(m_layer);
 	
-	//NSString * nsstr = [NSString stringWithFormat:@"%@%s", [[NSBundle mainBundle] resourcePath], "/loading.png"];//--Guosem 2012.8.14 真机上该文件因处与XX.app目录下被自动压缩，解码出错，故用资源目录下的替换
-	NDPicturePool& pool		= *(NDPicturePool::DefaultPool());
+
 	NDUIImage* imgBack	= new NDUIImage;
 	imgBack->Initialization();
 	imgBack->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
-    NDPicture* pic = pool.AddPicture( NDPath::GetImgPath("Res00/Load/bg_load.png") );//([nsstr UTF8String]);//用资源目录下的替换
+    NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture( NDPath::GetImgPath("Res00/Load/bg_load.png") );
     if (pic) 
 	{
         //pic->Rotation(PictureRotation270);//--Guosem 2012.8.14 用资源目录下的图不旋转了
         imgBack->SetPicture(pic, true);
     }
 	m_layer->AddChild(imgBack);
-	
-	//m_lbTitle = new NDUILabel();
-//	m_lbTitle->Initialization();
-//	m_lbTitle->SetTextAlignment(LabelTextAlignmentCenter);
-//	m_lbTitle->SetFontSize(15);
-//	m_lbTitle->SetFontColor(ccc4(0, 255, 0, 255));
-//	if (!connect) 
-//	{
-//		m_lbTitle->SetText(NDCommonCString("ReadingGameInfo"));
-//	}
-//
-//	m_lbTitle->SetFrameRect(CGRectMake(0, 228, winSize.width, 16));
-//	m_layer->AddChild(m_lbTitle);
-	
-	/*
-	NDUIImage* imgLogo = new NDUIImage;
-	imgLogo->Initialization();
-	NDPicture* picLogo = new NDPicture;
-	picLogo->Initialization(GetImgPath("tradeMark.png"));
-	imgLogo->SetPicture(picLogo, true);
-	imgLogo->SetFrameRect(CGRectMake(190, 45, 100, 100));
-	m_layer->AddChild(imgLogo);
-	*/
-	
-	//m_suiRole = new NDManualRole;
-//	m_suiRole->InitNonRoleData("", 1000000, 1);
-//	//m_suiRole->SetEquipment(20020, 9);
-//	//m_suiRole->UpdateState(USERSTATE_CAMP, true);
-//	//m_suiRole->SetCamp(CAMP_TYPE_SUI);
-//	m_suiRole->SetPosition(CGPointMake(480, 193));
-//	m_suiRole->SetCurrentAnimation(MANUELROLE_WALK, YES);
-//	m_suiRole->DirectRight(false);
-//	//m_suiRole->updateFlagOfQiZhi();
-//	m_layer->AddChild(m_suiRole);
-	
-	//m_tangRole = new NDManualRole;
-//	m_tangRole->InitNonRoleData("", 1000000, 2);
-//	//m_tangRole->SetEquipment(20020, 9);
-//	//m_tangRole->UpdateState(USERSTATE_CAMP, true);
-//	//m_tangRole->SetCamp(CAMP_TYPE_TANG);
-//	m_tangRole->SetPosition(CGPointMake(0, 193));
-//	m_tangRole->SetCurrentAnimation(MANUELROLE_WALK, YES);
-//	m_tangRole->DirectRight(true);
-//	//m_tangRole->updateFlagOfQiZhi();
-//	m_layer->AddChild(m_tangRole);
-//	m_timer.SetTimer(this, 0, 60.0f);
-	
+
 	if (connect)
 	{
 		m_timerNet = new NDTimer;
 		m_timerNet->SetTimer(this, TIMER_TAG_NET, 0.5f);
 	}
-	
-	//m_curLoginType = login;
-//	
-//	m_picBg = new NDPicture;
-//	m_picBg->Initialization(GetImgPathNew("loading.png"));
-//	
-//	NDPicture*picProcess = new NDPicture;
-//	picProcess->Initialization(GetImgPathNew("login_progress.png"));
-//	m_imageProcess = new NDUIImage;
-//	m_imageProcess->Initialization();
-//	m_imageProcess->SetPicture(picProcess, true);
-//	m_imageProcess->SetFrameRect(CGRectMake(127, 275, picProcess->GetSize().width, picProcess->GetSize().height));
 }
 
 void GameSceneLoading::OnTimer(OBJID tag)

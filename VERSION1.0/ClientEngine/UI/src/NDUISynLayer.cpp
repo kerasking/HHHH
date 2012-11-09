@@ -15,6 +15,8 @@
 #include "UISpriteNode.h"
 #include "NDPath.h"
 #include "NDAnimationGroup.h"
+#include "GameScene.h"
+#include "NDPlayer.h"
 
 using namespace NDEngine;
 
@@ -46,13 +48,12 @@ NDUISynLayer::~NDUISynLayer()
 void NDUISynLayer::Show(SYN_TAG tag)
 {
 	// 玩家停止寻路
-	/* todo(zjh)
 	NDScene* parentScene = NDDirector::DefaultDirector()->GetRunningScene();
 	if (parentScene->IsKindOfClass(RUNTIME_CLASS(GameScene))) 
 	{
 		NDPlayer::defaultHero().stopMoving();
 	}
-	*/
+	
 	// 当前已经显示, 更新tag
 	if (NDUISynLayer_instances)
 	{
@@ -65,8 +66,11 @@ void NDUISynLayer::Show(SYN_TAG tag)
 			NDUISynLayer_instances = new NDUISynLayer();
 			NDUISynLayer_instances->Initialization();
 			NDUISynLayer_instances->m_tag = tag;
-			NDUISynLayer_instances->SetTimeOut(30);
-			parentScene->AddChild(NDUISynLayer_instances, UISYNLAYER_Z);
+			NDUISynLayer_instances->SetTimeOut(15);
+			
+            //** chh 2012-0-17 **//
+            //parentScene->AddChild(NDUISynLayer_instances, ScriptMgrObj.excuteLuaFuncRetN("GetProcessBarUIZOrder", ""),10000);
+            parentScene->AddChild(NDUISynLayer_instances,9000);
 		}
 	}
 
@@ -85,7 +89,7 @@ void NDUISynLayer::Initialization()
 	
 	CUISpriteNode *node = new CUISpriteNode;
 	node->Initialization();
-	node->ChangeSprite(tq::CString("%sbusy.spr", NDPath::GetAnimationPath().c_str()));
+	node->ChangeSprite(NDPath::GetAniPath("busy.spr").c_str());//"loading.spr"//“程序忙碌”动画
 	node->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
 	this->AddChild(node);
 	/*
@@ -126,7 +130,9 @@ void NDUISynLayer::OnTimer(OBJID tag)
 		dlgOverTime->Initialization();
 		dlgOverTime->Show(NDCommonCString("ConnectFail"), NDCommonCString("ConnectFailTip"), NULL, NULL);
 		*/
+		ScriptMgrObj.excuteLuaFunc<bool>("ShowYesDlg", "CommonDlgNew", NDCommonCString("ConnectFailTip"));
 		Close(CLOSE);
+		
 //		NDDataTransThread::DefaultThread()->GetSocket()->Close();
 //		NDDataTransThread::DefaultThread()->Stop();
 //		NDDataTransThread::DefaultThread()->Start(NDDataTransThread::DefaultThread()->GetSocket()->GetIpAddress().c_str(), 

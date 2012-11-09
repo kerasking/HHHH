@@ -21,7 +21,7 @@
 #include "NDTimer.h"
 #include "NDUILabel.h"
 #include <deque>
-#include "ItemMgr.h"
+//#include "ItemMgr.h"
 //#include "Chat.h"
 //#include "PlayerHead.h"
 //#include "NDUICustomView.h"
@@ -31,6 +31,9 @@
 #include "PlayerHead.h"
 #include "GameUIRootOperation.h"
 #include "DirectKey.h"
+#include "NDPlayer.h"
+#include "NDTransData.h"
+//#include "ItemMgr.h"
 
 class QuickItem;
 
@@ -336,7 +339,7 @@ private:
 
 	MapUILayer* m_uiLayer;
 
-	VEC_ITEM m_vTaskAwardItem;
+	//VEC_ITEM m_vTaskAwardItem;
 
 	bool m_bUIShow;
 
