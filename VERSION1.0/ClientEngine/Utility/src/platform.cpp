@@ -48,7 +48,7 @@ CGSize getStringSize(const char* pszStr, uint fontSize)
 {
 	CGSize sz = CGSizeMake(0.0f, 0.0f);
 
-	fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
+	//fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
 
 	if (pszStr) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -56,6 +56,15 @@ CGSize getStringSize(const char* pszStr, uint fontSize)
 		sz = [str sizeWithFont:[UIFont fontWithName:FONT_NAME size:fontSize]];
 #else
 		sz = CGSizeMake(24.0f, 29.0f);
+
+// 		string tmpStr(pszStr);
+// 		int strSize = tmpStr.size()/2;
+// 		float totalWidth = (fontSize)*strSize*1.0;
+// 		if(0 == strSize)
+// 			sz = CGSizeMake(0.0f, 0.0f);
+// 		else
+// 			sz = CGSizeMake(totalWidth, 29.0f);
+
 #endif
 	}
 
