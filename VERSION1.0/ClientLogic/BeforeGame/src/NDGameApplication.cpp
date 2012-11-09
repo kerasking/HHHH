@@ -296,11 +296,13 @@ bool NDGameApplication::processPM(const char* cmd)
 
 	if (stricmp(cmd, "opt help") == 0)
 	{
+#ifdef WIN32
 		TCHAR help[] =	L"syntax: opt arg 0/1\r\n"
 			L"arg can be: tick, script, network, mainloop, drawhud, drawui, drawrole, drawmap\r\n";
 
 		DWORD n = 0;
 		WriteConsoleW( hOut, help, sizeof(help)/sizeof(TCHAR), &n, NULL );
+#endif
 	}
 	else if (sscanf(cmd, "opt %s %d", szDebugOpt, &val) == 2)
 	{
@@ -334,9 +336,11 @@ bool NDGameApplication::processPM(const char* cmd)
 	}
 	else
 	{
+#ifdef WIN32
 		DWORD n = 0;
 		TCHAR msg[] = L"err: unknown cmd.\r\n";
 		WriteConsole( hOut, msg, sizeof(msg)/sizeof(TCHAR), &n, NULL );
+#endif
 	}
 	return true;
 }
