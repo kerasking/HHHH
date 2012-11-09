@@ -85,6 +85,7 @@ LOCAL_SRC_FILES := \
 ../../DataTrans/src/NDDataTransThread.cpp \
 ../../DataTrans/src/NDSocket.cpp \
 ../../DataTrans/src/NDTransData.cpp \
+../../DataTrans/src/NDMessageCenter.cpp \
 ../../Utility/src/ImageNumber.cpp \
 ../../Utility/src/NDUtil.cpp \
 ../../Utility/src/NDDataSource.cpp \

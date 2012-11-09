@@ -16,6 +16,7 @@
 #include <NDMessageCenter.h>
 #include "NDDebugOpt.h"
 #include "CCScheduler.h"
+#include "NDBaseNetMgr.h"
 
 
 // 帧数限制�??�??
