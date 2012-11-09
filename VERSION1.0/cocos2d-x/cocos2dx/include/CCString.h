@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "CCObject.h"
 #include "CCFileUtils.h"
 
-#if ND_MOD
+#ifdef WIN32
 	#include "..\platform\third_party\win32\iconv\iconv.h"
 	#include <stdarg.h>
 #endif
@@ -144,6 +144,7 @@ namespace cocos2d
 		*/
 		const char* UTF8String()
 		{
+#ifdef WIN32
 			const char* strChar = m_sString.c_str();
 			iconv_t iconvH = 0;
 			iconvH = iconv_open("utf-8","gb2312");
@@ -172,6 +173,9 @@ namespace cocos2d
 			iconv_close(iconvH);
 
 			return g_GBKConvUTF8Buf;
+#else
+			return m_sString.c_str();
+#endif
 		}
 
 
@@ -186,6 +190,7 @@ namespace cocos2d
 		*/
 		static CCString* stringWithUTF8String(const char* pszUTF8)
 		{
+#ifdef WIN32
 			if (0 == pszUTF8 || !*pszUTF8)
 			{
 				return new CCString("");
@@ -229,6 +234,9 @@ namespace cocos2d
 			iconv_close(pConvert);
 
 			return new CCString(pszOutBuffer);
+#else
+			return new CCString(pszUTF8);
+#endif
 		}
 
 		/***

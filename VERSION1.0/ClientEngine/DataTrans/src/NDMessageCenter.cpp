@@ -102,16 +102,6 @@ namespace NDEngine
 		}
 	}*/
 	
-#pragma mark �������Ϣ�������(�֧�ֶ��߳)
-	
-	// ����:�������Ϣ�������(�֧�ֶ��߳)
-	// ��ṩ�������ԭʼ��ݹ��
-	// ��ṩ��ȡ��������Ϣ���
-	// ��ṩ��ӻ��������Ϣ���
-	// ��ṩ�����������ԭʼ��ݹ��
-	// ��ṩ������������������
-	// jhzhen 2011.12.1
-	
 	static NDNetMsgMgr* s_NDNetMsgMgr = NULL;
 	
 	NDNetMsgMgr& NDNetMsgMgr::GetSingleton()
@@ -223,9 +213,9 @@ namespace NDEngine
 			return false;
 		}
 		
-#if (defined(USE_NDSDK) || defined(USE_MGSDK))
+#if (defined(USE_NDSDK) || defined(USE_MGSDK) || !defined(WIN32))
 		unsigned int msgLen = (pReadPtr[0] & 0xff) + ((pReadPtr[1] & 0xff) << 8);
-#else
+#elif defined(__APPLE__)
 		while(0xff != pReadPtr[0] || 0xfe != pReadPtr[1])
 		{
 			NDLog(@"NDNetMsgMgr::GetServerMsgPacket received message not match protocol of we defined!");

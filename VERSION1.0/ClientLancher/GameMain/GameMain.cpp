@@ -21,11 +21,6 @@ using namespace LuaPlus;
 #define CC_TARGET_PLATFORM CC_PLATFORM_WIN32
 #endif
 
-void initClass()
-{
-	REGISTER_CLASS(NDBaseNetMgr,NDNetMsgPool);
-}
-
 int WINAPI WinMain (HINSTANCE hInstance, 
 					HINSTANCE hPrevInstance, 
 					PSTR szCmdLine, 
@@ -33,10 +28,6 @@ int WINAPI WinMain (HINSTANCE hInstance,
 {
  	UNREFERENCED_PARAMETER(hPrevInstance);
  	UNREFERENCED_PARAMETER(szCmdLine);
-
-	initClass();
- 
- 	InitGameInstance();
 
 	NDConsole kConsole;
 	kConsole.BeginReadLoop();

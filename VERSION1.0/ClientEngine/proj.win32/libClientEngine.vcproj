@@ -154,6 +154,10 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\Framework\inc\NDBaseBattleMgr.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Framework\inc\NDBaseDirector.h"
 					>
 				</File>
@@ -209,10 +213,18 @@
 					RelativePath="..\Framework\inc\NDSprite.h"
 					>
 				</File>
+				<File
+					RelativePath="..\Framework\inc\NDUIBaseItemButton.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
 				>
+				<File
+					RelativePath="..\Framework\src\NDBaseBattleMgr.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\Framework\src\NDBaseDirector.cpp"
 					>
@@ -267,6 +279,10 @@
 				</File>
 				<File
 					RelativePath="..\Framework\src\NDSprite.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Framework\src\NDUIBaseItemButton.cpp"
 					>
 				</File>
 			</Filter>
@@ -1124,6 +1140,10 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\Platform\inc\AndroidInput.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Platform\inc\CommonInput.h"
 					>
 				</File>
@@ -1135,6 +1155,14 @@
 			<Filter
 				Name="src"
 				>
+				<File
+					RelativePath="..\Platform\src\AndroidInput.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Platform\src\CommonInput.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\Platform\src\IphoneInput.cpp"
 					>

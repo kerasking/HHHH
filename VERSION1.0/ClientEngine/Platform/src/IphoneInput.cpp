@@ -11,6 +11,8 @@
 #include "NDDirector.h"
 #include "define.h"
 
+NS_NDENGINE_BGN
+
 #if 0
 #include "CCDirectorIOS.h"
 using namespace NDEngine;
@@ -502,3 +504,5 @@ unsigned int CIphoneInput::GetLengthLimit(void)
 {
     return m_usLengthLimit;
 }
+
+NS_NDENGINE_END

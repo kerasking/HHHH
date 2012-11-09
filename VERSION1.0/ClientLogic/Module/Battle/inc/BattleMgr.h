@@ -20,17 +20,12 @@
 #include "ScriptDataBase.h"
 #include "SMBattleScene.h"
 #include "Fighter.h"
+#include "NDBaseBattleMgr.h"
 
 using std::map;
 using namespace NDEngine;
 
-#define BattleMgrObj BattleMgr::GetSingleton()
-
-typedef map<OBJID, BattleSkill*> MAP_BATTLE_SKILL;
-typedef MAP_BATTLE_SKILL::iterator MAP_BATTLE_SKILL_IT;
-
-class Battle;
-struct Command;
+#define BattleMgrObj BattleMgr::getBattleMgrRef()
 
 enum FIGHT_ACTION_STATUS
 {
@@ -41,51 +36,13 @@ enum FIGHT_ACTION_STATUS
 };
 
 //Õ½¶·½±Àø
-class BattleReward
-{
-public:
-	BattleReward()
-	{
-		m_nMoney = 0;
-		m_nEMoney = 0;
-		m_nRepute = 0;
-		m_nEXP = 0;
-
-		for (int i = 0; i < 5; i++)
-		{
-			m_nItemTypes[i] = 0;
-			m_nItemAmount[i] = 0;
-		}
-	}
-
-	void addItem(int itemType, int amount)
-	{
-		for (int i = 0; i < 5; i++)
-		{
-			if (m_nItemTypes[i] == 0)
-			{
-				m_nItemTypes[i] = itemType;
-				m_nItemAmount[i] = amount;
-				return;
-			}
-		}
-	}
-public:
-	int m_nMoney;
-	int m_nEMoney;
-	int m_nRepute;
-	int m_nEXP;
-	int m_nItemTypes[5];
-	int m_nItemAmount[5];
-	int m_nBattleResult;
-};
 
 enum FIGHTER_ROLE_ANI
 {
 	ROLE_ANI_NONE = ID_NONE,
 	ROLE_ANI_HURT,
 	ROLE_ANI_DODGE,
-	ROLE_ANI_BLOCK,
+	ROLE_ANI_BLOCK
 };
 
 struct FIGHTER_CMD
@@ -160,13 +117,62 @@ public:
 typedef vector<FightAction*> VEC_FIGHTACTION;
 typedef VEC_FIGHTACTION::iterator VEC_FIGHTACTION_IT;
 
-class BattleMgr: public TSingleton<BattleMgr>,
-		public NDMsgObject,
-		public ITimerCallback
+typedef map<OBJID, BattleSkill*> MAP_BATTLE_SKILL;
+typedef MAP_BATTLE_SKILL::iterator MAP_BATTLE_SKILL_IT;
+
+class Battle;
+struct Command;
+
+class BattleReward
+{
+public:
+	BattleReward()
+	{
+		m_nMoney = 0;
+		m_nEMoney = 0;
+		m_nRepute = 0;
+		m_nEXP = 0;
+
+		for (int i = 0; i < 5; i++)
+		{
+			m_nItemTypes[i] = 0;
+			m_nItemAmount[i] = 0;
+		}
+	}
+
+	void addItem(int itemType, int amount)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			if (m_nItemTypes[i] == 0)
+			{
+				m_nItemTypes[i] = itemType;
+				m_nItemAmount[i] = amount;
+				return;
+			}
+		}
+	}
+public:
+	int m_nMoney;
+	int m_nEMoney;
+	int m_nRepute;
+	int m_nEXP;
+	int m_nItemTypes[5];
+	int m_nItemAmount[5];
+	int m_nBattleResult;
+};
+
+class BattleMgr:public NDBaseBattleMgr
 {
 public:
 	BattleMgr();
 	~BattleMgr();
+
+	static BattleMgr& getBattleMgrRef()
+	{
+		return *((BattleMgr*)ms_pkSingleton);
+	}
+
 	virtual bool process(MSGID msgID, NDEngine::NDTransData* bao, int len);
 	// ÍË³öÕ½¶·
 	void quitBattle(bool bEraseOut = true);
@@ -183,7 +189,7 @@ public:
 		return this->m_pkBattle;
 	}
 	void showBattleScene();
-	void OnTimer(OBJID tag);override
+	void OnTimer(OBJID tag);
 	void restartLastBattle();
 	void showBattleResult();
 	BattleReward* GetBattleReward()

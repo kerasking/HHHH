@@ -9,10 +9,13 @@
 
 #include "UIEdit.h"
 #include "ScriptUI.h"
+#if (defined(WIN32) || defined(__APPLE__))
 #include "IphoneInput.h"
+#endif
 #include "NDDirector.h"
 #include "define.h"
 //#include "I_Analyst.h"
+#include "AndroidInput.h"
 
 CUIEdit* CUIEdit::g_pCurUIEdit = NULL;
 IMPLEMENT_CLASS(CUIEdit, NDUINode)
@@ -172,7 +175,11 @@ void CUIEdit::InitInput()
 	}
 	
 	// 加上平台处理,暂时先用iphone初始始 todo
-	m_pPlatformInput	= new CIphoneInput();
+#ifdef __APPLE__
+	m_pPlatformInput = new CIphoneInput();
+#else
+	m_pPlatformInput = new NDAndroidInput();
+#endif
 	m_pPlatformInput->Init();
 	m_pPlatformInput->SetInputDelegate(this);
 	m_pPlatformInput->Hide();

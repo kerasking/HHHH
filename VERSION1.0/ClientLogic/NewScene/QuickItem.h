@@ -22,12 +22,12 @@ public:
 	NDUIItemTypeButton();
 	~NDUIItemTypeButton();
 	
-	void Initialization(); override
-	void draw(); override
+	void Initialization();
+	void draw();
 	
 	void ChangeItemType(int itemtype);
 	
-	int GetItemType() {
+	unsigned int GetItemType() {
 		return this->m_itemType;
 	}
 	

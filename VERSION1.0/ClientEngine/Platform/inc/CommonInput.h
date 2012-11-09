@@ -18,25 +18,32 @@
 #endif
 #endif
 
+#include "define.h"
+#include "NDObject.h"
+
+NS_NDENGINE_BGN
+
 class CInputBase
 {
 public:
-	CInputBase() {}
-	virtual~CInputBase(){}
+	CInputBase();
+	virtual ~CInputBase();
 	
-	virtual bool OnInputReturn(CInputBase* base) { return true; };
-    virtual void OnInputFinish(CInputBase* base) {}
-	virtual bool OnInputTextChange(CInputBase* base, const char* inputString){ return true; }
+	virtual bool OnInputReturn(CInputBase* base);
+    virtual void OnInputFinish(CInputBase* base);
+	virtual bool OnInputTextChange(CInputBase* base, const char* inputString);
 };
 
-class IPlatformInput
+class IPlatformInput:public NDObject
 {
+	DECLARE_CLASS(IPlatformInput)
+
 public:
-	IPlatformInput(){}
-	virtual ~IPlatformInput(){}
+	IPlatformInput();
+	virtual ~IPlatformInput();
 	
-	virtual void Init()															{};
-	virtual void Show()															{};
+	virtual void Init();
+	virtual void Show();
 	virtual void Hide()															{};
 	virtual bool IsShow()														{return false;};
 	virtual void SetFrame(float fX, float fY, float fH, float fW)				{};
@@ -53,5 +60,7 @@ public:
 	virtual void SetTextColor(float fR, float fG, float fB, float fA)			{};
 	virtual void SetFontSize(int nFontSize)										{};
 };
+
+NS_NDENGINE_END
 
 #endif // _COMMON_INPUT_H_ZJH_

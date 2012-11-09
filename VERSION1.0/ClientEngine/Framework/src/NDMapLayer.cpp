@@ -30,10 +30,10 @@
 #include "NDDataTransThread.h"
 #include "NDMsgDefine.h"
 #include "..\..\MapAndRole\inc\NDMonster.h"
-#include "..\..\Module\Battle\inc\BattleMgr.h"
 #include "ScriptMgr.h"
 #include "NDSharedPtr.h"
 #include "NDUtil.h"
+#include "NDBaseBattleMgr.h"
 
 using namespace cocos2d;
 
@@ -543,7 +543,7 @@ void NDMapLayer::draw()
 					break;
 				case SWITCH_TO_BATTLE:
 					{
-						BattleMgrObj.showBattleScene();
+						NDBattleBaseMgrObj.showBattleScene();
 						ScriptMgrObj.excuteLuaFunc("Hide", "NormalBossListUI",0);//调用Hide方法后，调用Redisplay恢复
 						//切换音效
 						ScriptMgrObj.excuteLuaFunc("PlayEffectSound", "Music",3);

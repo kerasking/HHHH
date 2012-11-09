@@ -119,7 +119,7 @@ public:
 	
 	void ChangeItem(Item* item);
 	
-	int  GetItemType(); 
+	unsigned int  GetItemType(); 
 	
 	Item* GetItem();
 	

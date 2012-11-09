@@ -21,7 +21,7 @@ using namespace cocos2d;
 
 namespace NDEngine
 {
-	IMPLEMENT_CLASS(NDUIButton, NDUINode)
+	IMPLEMENT_CLASS(NDUIButton, NDUIBaseItemButton)
 
 	#define FONT_SIZE 15
 	#define FONT_COLOR (ccc4(255, 255, 255, 255))

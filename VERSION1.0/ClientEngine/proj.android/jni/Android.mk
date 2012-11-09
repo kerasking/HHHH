@@ -17,9 +17,11 @@ LOCAL_SRC_FILES := \
 ../../Framework/src/NDMapLayer.cpp \
 ../../Framework/src/NDNode.cpp \
 ../../Framework/src/NDObject.cpp \
+../../Framework/src/NDUIBaseItemButton.cpp \
 ../../Framework/src/NDScene.cpp \
 ../../Framework/src/NDSprite.cpp \
 ../../Framework/src/NDDebugOpt.cpp \
+../../Framework/src/NDBaseBattleMgr.cpp \
 ../../Graphic/src/CCTexture2DExt.cpp \
 ../../Graphic/src/CCTextureCacheExt.cpp \
 ../../Graphic/src/NDAnimation.cpp \
@@ -53,6 +55,7 @@ LOCAL_SRC_FILES := \
 ../../UI/src/NDUICheckBox.cpp \
 ../../UI/src/NDUIDialog.cpp \
 ../../UI/src/NDUIImage.cpp \
+../../UI/src/HyperLinkLabel.cpp \
 ../../UI/src/NDUILabel.cpp \
 ../../UI/src/NDUILayer.cpp \
 ../../UI/src/NDUINode.cpp \
@@ -90,6 +93,8 @@ LOCAL_SRC_FILES := \
 ../../Utility/src/NDUtil.cpp \
 ../../Utility/src/NDDataSource.cpp \
 ../../Utility/src/NDRidePet.cpp \
+../../Platform/src/CommonInput.cpp \
+../../Platform/src/AndroidInput.cpp \
 ../../TempClass/NDUITableLayer.cpp
 
 LOCAL_C_INCLUDES := \
@@ -118,9 +123,11 @@ LOCAL_LDLIBS := -L$(call host-path, $(LOCAL_PATH)/../../proj.android/libs/$(TARG
 LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += luaplus
 LOCAL_WHOLE_STATIC_LIBRARIES += tinyxml
+LOCAL_WHOLE_STATIC_LIBRARIES += NetWork
 
 include $(BUILD_SHARED_LIBRARY)
 
 $(call import-module,LuaPlus/proj.android/jni)
 $(call import-module,cocos2dx)
 $(call import-module,tinyxml/proj.android/jni)
+$(call import-module,NetWork/proj.android/jni)

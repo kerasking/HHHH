@@ -11,17 +11,30 @@
 #define _UI_ITEM_BUTTON_H_ZJH_
 
 #include "NDUIButton.h"
+#include "NDUIBaseItemButton.h"
 
 using namespace NDEngine;
 
 class CUIItemButton :
-public NDUIButton
+	public NDUIButton
 {
 	DECLARE_CLASS(CUIItemButton)
 	CUIItemButton();
 	~CUIItemButton();
 	
 public:
+
+	void InitializationItem();
+	virtual void SetItemFrameRect(CGRect rect);
+	virtual void CloseItemFrame();
+	virtual void SetItemBackgroundPicture(NDPicture *pic, NDPicture *touchPic = NULL,
+		bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);
+	virtual void SetItemBackgroundPictureCustom(NDPicture *pic, NDPicture *touchPic = NULL,
+		bool useCustomRect = false, CGRect customRect = CGRectZero);
+
+	virtual void SetItemFocusImage(NDPicture *pic, bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);
+	virtual void SetItemFocusImageCustom(NDPicture *pic, bool useCustomRect = false, CGRect customRect = CGRectZero);
+
 	void SetLock(bool bSet);
 	bool IsLock();
 

@@ -26,8 +26,23 @@
 #include "NDClassFactory.h"
 #include "Battle.h"
 #include "NDNetMsg.h"
+#include "GameApp.h"
+#include "NDBaseBattleMgr.h"
+#include "BattleMgr.h"
+#include "NDUIBaseItemButton.h"
+#include "UIItemButton.h"
 
 NS_NDENGINE_BGN
+
+void initClass()
+{
+	REGISTER_CLASS(NDBaseNetMgr,NDNetMsgPool);
+	REGISTER_CLASS(NDBaseBattleMgr,BattleMgr);
+	REGISTER_CLASS(NDUIBaseItemButton,CUIItemButton);
+
+	NDBattleBaseMgrObj;
+	BattleMgrObj;
+}
 
 NDGameApplication::NDGameApplication()
 {
@@ -44,7 +59,8 @@ bool NDGameApplication::initInstance()
 	{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
-        // initialize socket
+		initClass();
+		InitGameInstance();
         InitSocket();
 
 		// Initialize OpenGLView instance, that release by CCDirector when application terminate.

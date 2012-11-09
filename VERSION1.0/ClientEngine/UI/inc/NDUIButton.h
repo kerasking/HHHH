@@ -19,6 +19,7 @@
 #include "NDCombinePicture.h"
 //#include "NDLightEffect.h"
 #include "NDLightEffect.h"
+#include "NDUIBaseItemButton.h"
 
 
 namespace NDEngine
@@ -46,7 +47,7 @@ namespace NDEngine
 	};
 	//delegates end
 	
-	class NDUIButton : public NDUINode
+	class NDUIButton : public NDUIBaseItemButton
 	{
 		DECLARE_CLASS(NDUIButton)
 	public:
@@ -59,7 +60,7 @@ namespace NDEngine
 //		作用：初始化按钮，必须被显示或者隐式调用
 //		参数：无
 //		返回值：无
-		void Initialization(); override
+		void Initialization();
 //		
 //		函数：SetImage
 //		作用：设置按钮的图片

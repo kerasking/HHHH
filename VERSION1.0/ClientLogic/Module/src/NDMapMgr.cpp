@@ -31,6 +31,7 @@
 //#include "GameUIRequest.h"			///< 需要合并后
 #include "AutoPathTip.h"
 #include "NDDataTransThread.h"
+#include "NDBaseBattleMgr.h"
 
 NS_NDENGINE_BGN
 
@@ -1133,7 +1134,7 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 	m_nRoadBlockX = -1;
 	m_nRoadBlockY = -1;
 
-	BattleMgrObj.quitBattle(false);
+	NDBattleBaseMgrObj.quitBattle(false);
 
 	pkData->ReadShort();
 	pkData->ReadInt();

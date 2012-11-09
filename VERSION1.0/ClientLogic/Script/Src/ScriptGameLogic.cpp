@@ -174,18 +174,6 @@ void ShowChat()
 //{
 //return (int)([[NSDate date] timeIntervalSince1970] / 1000);
 //}
-const char* GetSMImgPath(const char* name)
-{
-	if (!name)
-	{
-		return "";
-	}
-
-	std::string str = "Res00/";
-	str += name;
-
-	return NDPath::GetImgPath(str.c_str()).c_str();
-}
 
 const char* GetSMResPath(const char* name)
 {

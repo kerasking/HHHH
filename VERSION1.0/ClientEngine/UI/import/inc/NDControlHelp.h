@@ -19,7 +19,6 @@
 #include "UIScrollView.h"
 #include "NDTextNode.h"
 #include "UIHyperlink.h"
-#include "UIItemButton.h"
 //#include "UIEquipItem.h"
 #include "UICheckBox.h"
 #include "UIRadioButton.h"
@@ -28,6 +27,8 @@
 #include "UISpriteNode.h"
 #include "NDPath.h"
 #include "NDWideString.h"
+#include "NDUIBaseItemButton.h"
+#include "NDClassFactory.h"
 
 using namespace NDEngine;
 
@@ -400,19 +401,25 @@ public:
 };
 
 template<>
-class CtrolTrait<CUIItemButton> : public CtrolBase
+class CtrolTrait<NDUIBaseItemButton> : public CtrolBase
 {
 public:
-	CUIItemButton* Create(UIINFO& info, CGSize& sizeOffset)
+	NDUIBaseItemButton* Create(UIINFO& info, CGSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
-		CGRect rect = this->GetFrameRect();
-		CUIItemButton *itemBtn = new CUIItemButton;
-		itemBtn->Initialization();
-		itemBtn->SetFrameRect(rect);
-		itemBtn->CloseFrame();
-		itemBtn->SetBackgroundPicture(GetNormalPicture(), NULL, false, CGRectZero, true);
-		itemBtn->SetFocusImage(GetFocusPicture(), false, CGRectZero, true);
+		CGRect rect = GetFrameRect();
+		NDUIBaseItemButton *itemBtn = CREATE_CLASS(NDUIBaseItemButton,"CUIItemButton");
+
+		if (0 == itemBtn)
+		{
+			return 0;
+		}
+
+		itemBtn->InitializationItem();
+		itemBtn->SetItemFrameRect(rect);
+		itemBtn->CloseItemFrame();
+		itemBtn->SetItemBackgroundPicture(GetNormalPicture(), NULL, false, CGRectZero, true);
+		itemBtn->SetItemFocusImage(GetFocusPicture(), false, CGRectZero, true);
 		return itemBtn;
 	}
 };
@@ -573,7 +580,7 @@ CtrolHelpDeclare(MY_CONTROL_TYPE_BACK, NDUIImage)
 CtrolHelpDeclare(MY_CONTROL_TYPE_UITEXT, NDUIText)
 CtrolHelpDeclare(MY_CONTROL_TYPE_HYPER_TEXT, CUIHyperlinkText)
 CtrolHelpDeclare(MY_CONTROL_TYPE_HYPER_TEXT_BUTTON, CUIHyperlinkButton)
-CtrolHelpDeclare(MY_CONTROL_TYPE_ITEM_BUTTON, CUIItemButton)
+CtrolHelpDeclare(MY_CONTROL_TYPE_ITEM_BUTTON, NDUIBaseItemButton)
 CtrolHelpDeclare(MY_CONTROL_TYPE_EXP, CUIExp)
 //CtrolHelpDeclare(MY_CONTROL_TYPE_EDIT, CUIEdit)
 CtrolHelpDeclare(MY_CONTROL_TYPE_SPRITE, CUISpriteNode)

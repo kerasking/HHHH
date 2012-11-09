@@ -10,12 +10,12 @@
 //#include "NewGameUIPetAttrib.h"
 #include "NDObject.h"
 #include "ScriptMgr.h"
+#include "NDUtil.h"
 
 unsigned long GetPlayerId();
 unsigned long GetMapId();
 int GetCurrentMonsterRound();
 int GetPlayerLookface();
-const char* GetSMImgPath(const char* name);
 
 bool SwichKeyToServer(const char* pszIp, int nPort, const char* pszAccountName,
 		const char* pszPwd, const char* pszServerName);

@@ -53,7 +53,7 @@ public:
 		return ms_pkSingleton;
 	}
 	
-private:
+protected:
 
 	static T* ms_pkSingleton;
 };
