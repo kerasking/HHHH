@@ -127,9 +127,6 @@ NDMapLayer::~NDMapLayer()
 	//CC_SAFE_RELEASE(m_texMap);
 	CC_SAFE_RELEASE (m_pkMapData);
 	CC_SAFE_RELEASE (m_pkSwitchAniGroup);
-	CC_SAFE_RELEASE(m_pkOrders);
-	CC_SAFE_RELEASE(m_pkOrders);
-	CC_SAFE_RELEASE(m_pkOrders);
 
 	delete m_pkPicMap;
 	CC_SAFE_DELETE (m_pkSubNode);

@@ -93,7 +93,7 @@ bool DramaScene::AddMonster(int nKey, int nLookFace, bool bFaceRight/*=true*/)
 	}
 
 	NDMonster* pkMonster = new NDMonster;
-	//pkMonster->Initialization(nLookFace, nKey, 1, bFaceRight);
+	pkMonster->Initialization(nLookFace, nKey, 1, bFaceRight);
 	if (!AddNodeToMap(pkMonster))
 	{
 		SAFE_DELETE(pkMonster);
@@ -187,7 +187,7 @@ bool DramaScene::AddSprite(int nKey, std::string filename, bool bFaceRight/*=tru
 	}
 
 	NDSprite *sprite = new NDSprite;
-	//sprite->Initialization(filename.c_str(), bFaceRight);
+	sprite->Initialization(filename.c_str(), bFaceRight);
 	if (!AddNodeToMap(sprite))
 	{
 		delete sprite;
@@ -463,7 +463,7 @@ bool DramaScene::AddNodeToMap(NDNode* node)
 		return false;
 	}
 
-	m_layerMap->AddChild(node, 0, 0);
+	m_layerMap->AddChild(node, 0, -1);
 
 	return true;
 }
