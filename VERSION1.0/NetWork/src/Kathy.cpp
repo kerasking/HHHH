@@ -59,7 +59,7 @@ KData convertToHex(const unsigned char *src, int len)
     KData data;
     unsigned char temp;
 	
-    int i;
+    int i = 0;
     for ( i = 0; i < len; i++ )
     {
         temp = src[i];

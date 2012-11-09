@@ -1,15 +1,15 @@
-#include <errno.h>
-
 #ifdef WIN32
 #include <winsock2.h>
-#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#else
 #include <unistd.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <stdio.h>
+#include <sys/types.h>
 #endif
 #include <stdio.h>
-
+#include <errno.h>
 
 #include "KTcpClientSocket.h"
 #include "KNetworkAddress.h"
@@ -117,7 +117,7 @@ KTcpClientSocket::connect()
         if(WSAGetLastError() != WSAEWOULDBLOCK)
         {
             closesocket(socketid);
-#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#else
 		if(errno != EINPROGRESS)
 		{
 			::close( socketid );
@@ -139,7 +139,7 @@ KTcpClientSocket::connect()
 		{
 #ifdef WIN32
             closesocket(socketid);
-#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#else
 			::close( socketid );
 #endif
 			return false;
@@ -148,7 +148,7 @@ KTcpClientSocket::connect()
 		{
 #ifdef WIN32
             closesocket(socketid);
-#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#else
 			::close( socketid );
 #endif
 			return false;
@@ -159,7 +159,7 @@ KTcpClientSocket::connect()
 			{
 #ifdef  WIN32
                 closesocket(socketid);
-#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#else
                 ::close( socketid );
 #endif
 				return false;
@@ -171,13 +171,13 @@ KTcpClientSocket::connect()
 			{
 #ifdef WIN32
                 closesocket(socketid);
-#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#else
 				::close( socketid );
 #endif
 				return false;
 			}
 
-#if defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#ifndef WIN32
 			if(error == ECONNREFUSED)
             {
 //#ifdef WIN32
@@ -190,11 +190,11 @@ KTcpClientSocket::connect()
 #endif
 		}
 	}
-	
-	
+
 	_conn._connId = socketid;
 	_conn.setBlocking( _blocking );
-    _conn.setState();
+	_conn.setState();
+
 	return true;
 }
 

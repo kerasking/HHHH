@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <ctype.h>
+#include <stdlib.h>
 #include "StringData.h"
 #include "KData.h"
 #include "Kathy.h"
