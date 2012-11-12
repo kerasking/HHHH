@@ -29,6 +29,7 @@
 #define switch_ani_modelId		(106)	//传送点动画的model ID
 #define ZORDER_MASK_ANI			(999)	//遮罩动画的Z次序，在game scene里
 
+
 enum MAP_SWITCH_TYPE
 {
 	SWITCH_NONE = 0,
@@ -141,6 +142,7 @@ public:
 public:
 	virtual void draw();
 	virtual void debugDraw();
+	virtual void drawCell();
 	NDMapData *GetMapData();
 	void setStartRoadBlockTimer(int time, int x, int y);
 	
@@ -181,6 +183,8 @@ private:
 	void DrawMapTiles();
 	void DrawScenesAndAnimations();
 	void DrawBgs();
+	void DrawSwitch();//绘制切屏点
+	void DrawLabelRoadBlockTime();
 
 	void MakeFrameRunRecords();
 

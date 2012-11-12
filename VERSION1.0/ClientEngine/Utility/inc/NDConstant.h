@@ -230,9 +230,11 @@
 #define UILAYER_NPCSHOP_TAG					10
 //战斗技能
 #define UILAYER_BATTLE_SKILL_TAG			11
+
 //角色显示时相对于Cell的偏移
 #define DISPLAY_POS_X_OFFSET					(MAP_UNITSIZE / 2)
 #define DISPLAY_POS_Y_OFFSET					(MAP_UNITSIZE)
+
 //地图单元格尺寸
 //#define MAP_UNITSIZE		(int)(32*(NDDirector::DefaultDirector()->GetScaleFactor()))
 //神魔主场景tag

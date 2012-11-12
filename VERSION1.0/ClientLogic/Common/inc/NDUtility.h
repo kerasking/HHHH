@@ -13,8 +13,9 @@
 #include "globaldef.h"
 #include "NDDirector.h"
 
-#define MAP_UNITSIZE	32 //一格子=32像素	(16 * ((int)(NDDirector::DefaultDirector()->GetScaleFactor())))
-#define SCREEN_SCALE	(NDDirector::DefaultDirector()->GetScaleFactor())
+#define MAP_UNITSIZE			32 //一格子=32点
+#define MAP_UNITSIZE_INPIXELS	(32*::DefaultDirector()->GetScaleFactor())
+#define SCREEN_SCALE			(NDDirector::DefaultDirector()->GetScaleFactor())
 
 bool IsPointInside(CGPoint pt, CGRect rect);
 int GetNumBits(int num);

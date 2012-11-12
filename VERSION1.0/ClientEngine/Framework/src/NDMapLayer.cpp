@@ -525,120 +525,18 @@ void NDMapLayer::RefreshBoxAnimation()
 void NDMapLayer::draw()
 {
 	if (!NDDebugOpt::getDrawMapEnabled()) return;
+
 	if (m_pkMapData && m_bNeedShow)
 	{
 		DrawBgs();
 		DrawScenesAndAnimations();
-
-		if(m_pkSwitchSpriteNode)
-		{
-			if (m_pkSwitchSpriteNode->IsAnimationComplete())
-			{
-				m_pkSwitchSpriteNode->RemoveFromParent(true);
-				m_pkSwitchSpriteNode = NULL;
-				switch(m_eSwitchType)
-				{
-				case SWITCH_NONE:
-					break;
-				case SWITCH_TO_BATTLE:
-					{
-						BattleMgrObj.showBattleScene();
-						ScriptMgrObj.excuteLuaFunc("Hide", "NormalBossListUI",0);//调用Hide方法后，调用Redisplay恢复
-						//切换音效
-						ScriptMgrObj.excuteLuaFunc("PlayEffectSound", "Music",3);
-
-						//等于3为竞技场挑战
-						if(m_nBattleType != 3)
-						{
-							int nIsRank = ScriptMgrObj.excuteLuaFuncRetN("GetIsBattleRank", "NormalBossListUI");
-
-							//等于1表示副本已经打通过
-							if (1 == nIsRank)
-							{
-								//显示速战速决按钮
-								ScriptMgrObj.excuteLuaFunc("LoadUI", "BattleMapCtrl");
-							}
-						}
-						else
-						{
-							//显示速战速决按钮
-							ScriptMgrObj.excuteLuaFunc("LoadUI", "BattleMapCtrl");
-						}
-
-						showSwitchSprite(SWITCH_START_BATTLE);
-					}
-					break;
-				case SWITCH_BACK_FROM_BATTLE:
-					break;
-				case SWITCH_START_BATTLE:
-					break;
-				default:
-					break;
-				}
-
-				m_eSwitchType = SWITCH_NONE;
-			}
-
-		}
+		DrawSwitch();
 
 		refreshTitle();
 
 		RefreshBoxAnimation();
 
-		if (m_nRoadBlockTimeCount > 0 && !m_bBattleBackground)
-		{
-			if(!m_lbTime)
-			{
-				m_lbTime = new NDUILabel;
-				m_lbTime->Initialization();
-				m_lbTime->SetFontSize(/*15*/MAP_NAME_SIZE_SMALL);
-
-			}
-
-			int mi = m_nRoadBlockTimeCount / 60;
-			NSString str_mi = 0;
-
-			if(mi < 10)
-			{
-				str_mi = CCString::stringWithFormat("%0d",mi);
-			}
-			else
-			{
-				str_mi = CCString::stringWithFormat("%d",mi);
-			}
-
-			int se = m_nRoadBlockTimeCount % 60;
-			NSString str_se = 0;
-
-			if(se < 10)
-			{
-				str_se = CCString::stringWithFormat("%0d",mi);
-			}
-			else
-			{
-				str_se = CCString::stringWithFormat("%d",mi);
-			}
-
-			NSString str_time = CCString::stringWithFormat("%s:%s",
-				str_mi->toStdString().c_str(),str_se->toStdString().c_str());
-			m_lbTime->SetText(str_time->toStdString().c_str());
-
-			CGSize size = getStringSize(str_time->toStdString().c_str(), 30);
-
-			if (!m_lbTime->GetParent() && m_pkSubNode)
-			{
-				m_pkSubNode->AddChild(m_lbTime);
-			}
-
-			m_lbTime->SetFontColor(ccc4(255,0,0,255));
-			m_lbTime->SetFontSize(MAP_NAME_SIZE_BIG/*30*/);
-			int x = m_kScreenCenter.x - (size.width) / 2;
-			int y = m_kScreenCenter.y - GetContentSize().height - (size.height) / 2 + NDDirector::DefaultDirector()->GetWinSize().height;
-
-			m_lbTime->SetFrameRect(CGRectMake(x, y, size.width, size.height + 5));
-			m_lbTime->draw();
-
-		}
+		DrawLabelRoadBlockTime();
 
 		if (m_pkRoadSignLightEffect)
 		{
@@ -646,7 +544,116 @@ void NDMapLayer::draw()
 		}
 	}
 
-	debugDraw(); //@todo
+	//debugDraw(); //@todo
+}
+
+void NDMapLayer::DrawLabelRoadBlockTime()
+{
+	if (m_nRoadBlockTimeCount > 0 && !m_bBattleBackground)
+	{
+		if(!m_lbTime)
+		{
+			m_lbTime = new NDUILabel;
+			m_lbTime->Initialization();
+			m_lbTime->SetFontSize(/*15*/MAP_NAME_SIZE_SMALL);
+
+		}
+
+		int mi = m_nRoadBlockTimeCount / 60;
+		NSString str_mi = 0;
+
+		if(mi < 10)
+		{
+			str_mi = CCString::stringWithFormat("%0d",mi);
+		}
+		else
+		{
+			str_mi = CCString::stringWithFormat("%d",mi);
+		}
+
+		int se = m_nRoadBlockTimeCount % 60;
+		NSString str_se = 0;
+
+		if(se < 10)
+		{
+			str_se = CCString::stringWithFormat("%0d",mi);
+		}
+		else
+		{
+			str_se = CCString::stringWithFormat("%d",mi);
+		}
+
+		NSString str_time = CCString::stringWithFormat("%s:%s",
+			str_mi->toStdString().c_str(),str_se->toStdString().c_str());
+		m_lbTime->SetText(str_time->toStdString().c_str());
+
+		CGSize size = getStringSize(str_time->toStdString().c_str(), 30);
+
+		if (!m_lbTime->GetParent() && m_pkSubNode)
+		{
+			m_pkSubNode->AddChild(m_lbTime);
+		}
+
+		m_lbTime->SetFontColor(ccc4(255,0,0,255));
+		m_lbTime->SetFontSize(MAP_NAME_SIZE_BIG/*30*/);
+		int x = m_kScreenCenter.x - (size.width) / 2;
+		int y = m_kScreenCenter.y - GetContentSize().height - (size.height) / 2 + NDDirector::DefaultDirector()->GetWinSize().height;
+
+		m_lbTime->SetFrameRect(CGRectMake(x, y, size.width, size.height + 5));
+		m_lbTime->draw();
+	}
+}
+
+void NDMapLayer::DrawSwitch()//绘制切屏点
+{
+	if(!m_pkSwitchSpriteNode || !m_pkSwitchSpriteNode->IsAnimationComplete()) return;
+	
+	m_pkSwitchSpriteNode->RemoveFromParent(true);
+	m_pkSwitchSpriteNode = NULL;
+
+	switch(m_eSwitchType)
+	{
+	case SWITCH_NONE:
+		break;
+
+	case SWITCH_TO_BATTLE:
+		{
+			BattleMgrObj.showBattleScene();
+			ScriptMgrObj.excuteLuaFunc("Hide", "NormalBossListUI",0);//调用Hide方法后，调用Redisplay恢复
+
+			//切换音效
+			ScriptMgrObj.excuteLuaFunc("PlayEffectSound", "Music",3);
+
+			//等于3为竞技场挑战
+			if(m_nBattleType != 3)
+			{
+				int nIsRank = ScriptMgrObj.excuteLuaFuncRetN("GetIsBattleRank", "NormalBossListUI");
+
+				//等于1表示副本已经打通过
+				if (1 == nIsRank)
+				{
+					//显示速战速决按钮
+					ScriptMgrObj.excuteLuaFunc("LoadUI", "BattleMapCtrl");
+				}
+			}
+			else
+			{
+				//显示速战速决按钮
+				ScriptMgrObj.excuteLuaFunc("LoadUI", "BattleMapCtrl");
+			}
+
+			showSwitchSprite(SWITCH_START_BATTLE);
+		}
+		break;
+	case SWITCH_BACK_FROM_BATTLE:
+		break;
+	case SWITCH_START_BATTLE:
+		break;
+	default:
+		break;
+	}
+
+	m_eSwitchType = SWITCH_NONE;
 }
 
 // 	void NDMapLayer::SetBattleBackground(bool bBattleBackground)
@@ -1932,6 +1939,35 @@ void NDMapLayer::debugDraw()
 // 	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
 // 	ccDrawLine( ccp(0,0), ccp(winSize.width, winSize.height));
 // #endif
+
+	drawCell();
+}
+
+void NDMapLayer::drawCell()
+{
+	NDMapData* pMapData = this->GetMapData();	
+	if (!pMapData) return;
+
+	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+
+	const int colAmount = pMapData->getColumns();
+	const int rowAmount = pMapData->getRows();
+
+	ccDrawColor4F(0,1,0,1);
+
+	for (int row = 0; row < rowAmount; row++)
+	{
+		for (int col = 0; col < colAmount; col++)
+		{
+			float x = col * MAP_UNITSIZE; //points
+			float y = row * MAP_UNITSIZE; //points
+	
+			//@todo: check visible
+			CGPoint org = ccp(x, y);//left top
+			CGPoint dest = ccp(x + MAP_UNITSIZE, y + MAP_UNITSIZE); //right bottom
+			ccDrawRect( org, dest );
+		}
+	}
 }
 
 void NDMapLayer::dumpRole()
