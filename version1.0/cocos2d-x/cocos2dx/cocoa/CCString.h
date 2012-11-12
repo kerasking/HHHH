@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include <string>
 #include <functional>
 #include "CCObject.h"
+//#include "CCFileUtils.h"
 
 #if ND_MOD
 	#include "..\platform\third_party\win32\iconv\iconv.h"
@@ -239,6 +240,8 @@ public:
 				return new CCString("");
 			}
 
+			if (isUTF8ChineseCharacter(pszUTF8))
+			{
 			iconv_t pConvert = 0;
 			const char* pszInbuffer = pszUTF8;
 			char* pszOutBuffer = new char[2048];
@@ -278,6 +281,11 @@ public:
 
 			return new CCString(pszOutBuffer);
 		}
+			else
+			{
+				return new CCString(pszUTF8);
+			}
+		}
 
 //@注释：引擎已经实现了相同的原型！
 // 		/***
@@ -310,6 +318,70 @@ public:
 // 			return pstrString;
 // 		}
 
+
+		/***
+		* @brief 能够判断一个字符串中汉字是否是UTF-8
+		*
+		* @param pszFormat 动态参数。
+		* @return bool 返回结果
+		* @retval false 非UTF-8
+		* @retval true 是UTF-8
+		* @author (DeNA)郭浩
+		* @date 20121101
+		*/
+		static bool isUTF8ChineseCharacter(const char* pszText)
+		{
+			unsigned int uiCharacterCodePage = 0;
+			int nLength = strlen(pszText);
+
+			if (3 <= nLength)
+			{
+				unsigned char ucCharacter_1 = 0;
+				unsigned char ucCharacter_2 = 0;
+				unsigned char ucCharacter_3 = 0;
+				int nNow = 0;
+
+				while (nNow < nLength)
+				{
+					ucCharacter_1 = (unsigned) pszText[nNow];
+					if ((ucCharacter_1 & 0x80) == 0x80)
+					{
+						if (nLength > nNow + 2)
+						{
+							ucCharacter_2 = (unsigned) pszText[nNow + 1];
+							ucCharacter_3 = (unsigned) pszText[nNow + 2];
+
+							if (((ucCharacter_1 & 0xE0) == 0XE0)
+								&& ((ucCharacter_2 & 0xC0) == 0x80)
+								&& ((ucCharacter_3 & 0xC0) == 0x80))
+							{
+								uiCharacterCodePage = 65001;
+								nNow = nNow + 3;
+
+								return true;
+							}
+							else
+							{
+								uiCharacterCodePage = 0;
+								break;
+							}
+						}
+						else
+						{
+							uiCharacterCodePage = 0;
+							break;
+						}
+					}
+					else
+					{
+						nNow++;
+					}
+				}
+			}
+
+			return false;
+		}
+		
 #endif //ND_MOD
 
 private:
