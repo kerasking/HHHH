@@ -1102,43 +1102,69 @@ CGPoint NDSprite::CellPos2WorldPos( const CGPoint& cellPos )
 {
 	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
 
-#if 0
-	//格子坐标->屏幕像素坐标
-	float screenX = (cellPos.x * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET);
-	float screenY = (cellPos.y * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
+// #if 0
+// 	//格子坐标->屏幕像素坐标
+// 	float screenX = (cellPos.x * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET);
+// 	float screenY = (cellPos.y * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
+// 
+// 	//屏幕像素坐标->屏幕点坐标
+// 	CGPoint screenPos = ccp( screenX/fScale, screenY/fScale );
+// 
+// 	//屏幕点坐标->世界点坐标
+// 	CGPoint worldPos = SCREEN2GL(screenPos);
+// 	return worldPos;
+// #endif
 
-	//屏幕像素坐标->屏幕点坐标
-	CGPoint screenPos = ccp( screenX/fScale, screenY/fScale );
-#else
-	//格子坐标->屏幕像素坐标
-	float screenX = (cellPos.x * MAP_UNITSIZE);
-	float screenY = (cellPos.y * MAP_UNITSIZE);
+// #if 0
+// 	//格子坐标->屏幕像素坐标
+// 	float screenX = (cellPos.x * MAP_UNITSIZE);
+// 	float screenY = (cellPos.y * MAP_UNITSIZE);
+// 
+// 	//屏幕像素坐标->屏幕点坐标
+// 	CGPoint screenPos = ccp( 
+// 		DISPLAY_POS_X_OFFSET + screenX/fScale, 
+// 		DISPLAY_POS_Y_OFFSET + screenY/fScale );
+// 
+// 	//屏幕点坐标->世界点坐标
+// 	CGPoint worldPos = SCREEN2GL(screenPos);
+// 	return worldPos;
+// #endif
 
-	//屏幕像素坐标->屏幕点坐标
-	CGPoint screenPos = ccp( 
-		DISPLAY_POS_X_OFFSET + screenX/fScale, 
-		DISPLAY_POS_Y_OFFSET + screenY/fScale );
-#endif
-
-	//屏幕点坐标->世界点坐标
-	CGPoint worldPos = SCREEN2GL(screenPos);
+#if 1
+	float screenX = (cellPos.x * MAP_UNITSIZE_INPOINTS);
+	float screenY = (cellPos.y * MAP_UNITSIZE_INPOINTS);
+	CGPoint worldPos = SCREEN2GL(ccp(screenX,screenY));
+	worldPos.x += MAP_UNITSIZE_INPOINTS*0.5;
 	return worldPos;
+#endif
 }
 
 CGPoint NDSprite::WorldPos2CellPos( const CGPoint& worldPos )
 {
 	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
 
+// #if 0
+// 	//世界点坐标->屏幕点坐标
+// 	CGPoint screenPos = GL2SCREEN(worldPos); 
+// 
+// 	//屏幕点坐标->屏幕像素坐标
+// 	screenPos = ccpMult( screenPos, fScale ); 
+// 
+// 	//像素坐标->格子坐标
+// 	const float cellX = (screenPos.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE; //x存列数
+// 	const float cellY = (screenPos.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE; //y存行数
+// 
+// 	return ccp(cellX, cellY);
+// #endif
+
 	//世界点坐标->屏幕点坐标
-	CGPoint screenPos = GL2SCREEN(worldPos); 
+	CGPoint worldPos_LB = worldPos;
+	worldPos_LB.x -= 0.5 * MAP_UNITSIZE_INPOINTS;
+	CGPoint screenPos = GL2SCREEN(worldPos_LB);
 
-	//屏幕点坐标->屏幕像素坐标
-	screenPos = ccpMult( screenPos, fScale ); 
-
-	//像素坐标->格子坐标
-	const float cellX = (screenPos.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE; //x存列数
-	const float cellY = (screenPos.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE; //y存行数
-
+	//屏幕点坐标->格子坐标
+	const float cellX = screenPos.x / MAP_UNITSIZE; //x存列数
+	const float cellY = screenPos.y / MAP_UNITSIZE; //y存行数
 	return ccp(cellX, cellY);
 }
 

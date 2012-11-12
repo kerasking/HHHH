@@ -1952,19 +1952,21 @@ void NDMapLayer::drawCell()
 
 	const int colAmount = pMapData->getColumns();
 	const int rowAmount = pMapData->getRows();
+	const int step = MAP_UNITSIZE_INPOINTS;
+	const float pad = 0.5f;
 
-	ccDrawColor4F(0,1,0,1);
+	ccDrawColor4F(1,1,1,1);
 
 	for (int row = 0; row < rowAmount; row++)
 	{
 		for (int col = 0; col < colAmount; col++)
 		{
-			float x = col * MAP_UNITSIZE; //points
-			float y = row * MAP_UNITSIZE; //points
+			float x = col * step; //points
+			float y = row * step; //points
 	
 			//@todo: check visible
-			CGPoint org = ccp(x, y);//left top
-			CGPoint dest = ccp(x + MAP_UNITSIZE, y + MAP_UNITSIZE); //right bottom
+			CGPoint org = ccp(x + pad, y + pad);//left top
+			CGPoint dest = ccp(x + step - pad, y + step + - pad); //right bottom
 			ccDrawRect( org, dest );
 		}
 	}
