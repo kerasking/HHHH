@@ -90,8 +90,7 @@ void CUISpriteNode::draw()
 							 ccp((scrRect.size.width ) / 2 ,
 								 (scrRect.size.height) / 2) );
 	
-	//m_pSprite->SetPosition(pos);
-	m_pSprite->SetWorldPos(pos);
+	m_pSprite->SetPosition(pos);
 	m_pSprite->RunAnimation(true);
 }
 

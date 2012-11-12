@@ -84,6 +84,7 @@ void WorldMapLayer::Initialization(int nMapId)
 
 // 		int iWidth = pkNode->getTexture()->getContentSizeInPixels().width;
 // 		int iHeight = pkNode->getTexture()->getContentSizeInPixels().height;
+		//@check
 		CCSize texSize = ConvertUtil::getTextureSizeInPoints( *pkNode->getTexture() );
 		int iWidth = texSize.width;
 		int iHeight = texSize.height;
@@ -262,7 +263,7 @@ void WorldMapLayer::OnTimer(OBJID tag)
 	int mapid = GetTargetMapId();
 	ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "",mapid);
 
-#if 0
+#if 1
 	if (tag != TAG_TIMER_MOVE)
 	{
 		return NDUILayer::OnTimer(tag);
@@ -286,7 +287,7 @@ void WorldMapLayer::OnTimer(OBJID tag)
 	if (m_roleNode)
 	{
 		CGRect rectRole = m_roleNode->GetFrameRect();
-		//float	fScaleFactor	= NDDirector::DefaultDirector()->GetScaleFactor();
+		//float	fScaleFactor	= NDDirector::DefaultDirector()->GetScaleFactor(); //@check
 		CGPoint posRole = rectRole.origin;
 		CGPoint posTarget = GetTarget();
 

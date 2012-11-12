@@ -63,6 +63,7 @@ NDTile::~NDTile()
 	CC_SAFE_RELEASE(m_pShaderProgram); //@shader
 }
 
+//@check
 void NDTile::makeTex(float* pData)
 {
 	if (!m_pkTexture) return;
@@ -102,6 +103,7 @@ void NDTile::makeTex(float* pData)
 	}
 }
 
+//@check
 void NDTile::makeVetex(float* pData, CGRect kRect)
 {
 	//--------------->фад╩вЬ╠Й

@@ -35,7 +35,7 @@ GatherPoint::GatherPoint(int iID, int iTypeID, int xx, int yy,bool isBoss ,std::
 	x = xx;
 	y = yy + DISPLAY_POS_Y_OFFSET;
 	
-	this->SetWorldPos(ccp(x,y));
+	this->SetPosition(ccp(x,y));
 	
 	m_iID = iID;
 	m_iTypeID = iTypeID;
@@ -124,9 +124,9 @@ bool GatherPoint::OnDrawBegin(bool bDraw)
 	
 	if (bossRing && m_pkAniGroup == nil)
 	{
-		//bossRing->SetPosition(GetWorldPos());
-		CGPoint p = this->GetWorldPos();
-		bossRing->SetWorldPos(CGPointMake(x-8, y+4-17));
+		//bossRing->SetPosition(GetPosition());
+		CGPoint p = this->GetPosition();
+		bossRing->SetPosition(CGPointMake(x-8, y+4-17));
 		if (!bossRing->GetParent())
 		{
 			m_pkSubNode->AddChild(bossRing);

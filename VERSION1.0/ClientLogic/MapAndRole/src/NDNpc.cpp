@@ -192,7 +192,7 @@ bool NDNpc::OnDrawBegin(bool bDraw)
 
 	if (m_pkRidePet)
 	{
-		m_pkRidePet->SetWorldPos(GetWorldPos());
+		m_pkRidePet->SetPosition(GetPosition());
 
 		if (!m_pkRidePet->GetParent())
 		{
@@ -263,8 +263,8 @@ void NDNpc::OnDrawEnd(bool bDraw)
 	}
 
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
-	CGPoint kPlayerPos = kPlayer.GetWorldPos();
-	CGPoint kNPCPos = this->GetWorldPos();
+	CGPoint kPlayerPos = kPlayer.GetPosition();
+	CGPoint kNPCPos = this->GetPosition();
 
 	CGRect kRectRole;
 	CGRect kRectNPC;
@@ -316,7 +316,7 @@ void NDNpc::OnDrawEnd(bool bDraw)
 			CGSize sizeBattle = m_pkPicBattle->GetSize();
 			m_pkPicBattle->DrawInRect(
 					CGRectMake(kNPCPos.x - 16,
-							GetWorldPos().y - 64
+							GetPosition().y - 64
 									+ NDDirector::DefaultDirector()->GetWinSize().height
 									- kSizeMap.height, sizeBattle.width,
 							sizeBattle.height));
@@ -491,7 +491,7 @@ void NDNpc::ShowUpdate(bool bshow, bool bDraw)
 
 	if (bshow) 
 	{
-		CGPoint pos = this->GetWorldPos();
+		CGPoint pos = this->GetPosition();
 		pos.x -= DISPLAY_POS_X_OFFSET;
 		pos.y -= DISPLAY_POS_Y_OFFSET;
 
@@ -508,7 +508,7 @@ void NDNpc::ShowUpdate(bool bshow, bool bDraw)
 		pos.x -= 5;
 		pos.y -= getGravityY();
 
-		m_pkUpdate->SetWorldPos(pos);
+		m_pkUpdate->SetPosition(pos);
 		m_pkUpdate->RunAnimation(bDraw);
 	}
 }
@@ -527,7 +527,7 @@ void NDNpc::HandleNpcMask(bool bSet)
 		return;
 	}
 
-	CGPoint point = this->GetWorldPos();
+	CGPoint point = this->GetPosition();
 	int iCellY = int((point.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), iCellX = int((point.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
 
 	vector<int>* unpass = m_pkAniGroup->getUnpassPoint();
@@ -618,7 +618,7 @@ void NDNpc::initUnpassPoint()
 	if (m_pkAniGroup == nil)
 		return;
 
-	CGPoint point = this->GetWorldPos();
+	CGPoint point = this->GetPosition();
 
 	vector<int>* unpass = m_pkAniGroup->getUnpassPoint();
 	int unpassCount = unpass->size();
@@ -784,8 +784,8 @@ bool NDNpc::getNearestPoint(CGPoint srcPoint, CGPoint& dstPoint)
 
 	if (resX == 0 && resY == 0)
 	{
-		resX = this->GetWorldPos().x;
-		resY = this->GetWorldPos().y;
+		resX = this->GetPosition().x;
+		resY = this->GetPosition().y;
 	}
 	
 	dstPoint = CGPointMake(resX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, resY*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET);

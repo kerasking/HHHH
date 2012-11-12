@@ -81,5 +81,5 @@ void CPetNode::refeshPosition()
 	
 	iH = iH < 7 ? iH + 15 : iH;
 	
-	m_role->SetWorldPos(cocos2d::CCPoint(m_pos.x, m_pos.y+iH));
+	m_role->SetPositionEx(cocos2d::CCPoint(m_pos.x, m_pos.y+iH));
 }

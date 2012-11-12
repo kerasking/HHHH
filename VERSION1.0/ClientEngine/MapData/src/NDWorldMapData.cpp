@@ -159,7 +159,7 @@ void NDWorldMapData::decode(FILE* stream)
 					std::string imageName = _tileImages[imageIndex];
 
 					NDTile *pkTile = new NDTile();
-					pkTile->setMapSizeInPixels(m_MapSize);
+					pkTile->setMapSizeInPixels(m_MapSize); //@check
 
 					pkTile->setTexture(
 							MapTexturePool::defaultPool()->addImage(
@@ -168,12 +168,12 @@ void NDWorldMapData::decode(FILE* stream)
 					int PicParts = pkTile->getTexture()->getPixelsWide()
 							* pkTile->getTexture()->getMaxS() / TileWidth;
 
-					pkTile->setCutRectInPixels(
+					pkTile->setCutRectInPixels( //@check
 							CGRectMake(TileWidth * (tileIndex % PicParts),
 									TileHeight * (tileIndex / PicParts),
 									TileWidth, TileHeight));
 
-					pkTile->setDrawRectInPixels(
+					pkTile->setDrawRectInPixels( //@check
 							CGRectMake(TileWidth * c, TileHeight * r, TileWidth,
 									TileHeight));
 
@@ -238,12 +238,12 @@ void NDWorldMapData::decode(FILE* stream)
 		int picHeight = pkTile->getTexture()->getPixelsHigh()
 				* pkTile->getTexture()->getMaxT();
 
-		pkTile->setMapSizeInPixels(
+		pkTile->setMapSizeInPixels( //@check
 				CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
 
-		pkTile->setCutRectInPixels(CGRectMake(0, 0, picWidth, picHeight));
+		pkTile->setCutRectInPixels(CGRectMake(0, 0, picWidth, picHeight)); //@check
 
-		pkTile->setDrawRectInPixels(CGRectMake(x, y, picWidth, picHeight));
+		pkTile->setDrawRectInPixels(CGRectMake(x, y, picWidth, picHeight)); //@check
 //		tile->setReverse(reverse);	 ///< ÁÙÊ±ĞÔ×¢ÊÍ ¹ùºÆ
 
 		pkTile->make();
@@ -305,11 +305,11 @@ void NDWorldMapData::decode(FILE* stream)
 		int picHeight = pkTile->getTexture()->getPixelsHigh()
 				* pkTile->getTexture()->getMaxT();
 
-		pkTile->setMapSizeInPixels( CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
+		pkTile->setMapSizeInPixels( CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight)); //@check
 
-		pkTile->setCutRectInPixels( CGRectMake(0, 0, picWidth, picHeight));
+		pkTile->setCutRectInPixels( CGRectMake(0, 0, picWidth, picHeight)); //@check
 
-		pkTile->setDrawRectInPixels( CGRectMake(x, y, picWidth, picHeight));
+		pkTile->setDrawRectInPixels( CGRectMake(x, y, picWidth, picHeight)); //@check
 
 		pkTile->setReverse(reverse);
 

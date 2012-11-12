@@ -167,36 +167,18 @@ public:
 	virtual void OnDrawEnd(bool bDraw)
 	{
 	}
-
-// #if 0 //废弃了！
-// //		
-// //		函数：SetPosition
-// //		作用：设置精灵在地图上的坐标
-// //		参数：newPosition地图坐标
-// //		返回值：无
-// 	virtual void SetPosition(CGPoint newPosition); //GL世界坐标
-// 
-// //		
-// //		函数：GetPosition
-// //		作用：获取精灵在地图上的坐标
-// //		参数：无
-// //		返回值：地图坐标
-// 	CGPoint GetPosition();
-// #endif
-
-	//--------------------------------------------------------------------------------------
-#if 1 //单位都是Point(不用像素)
-public:
-	virtual CGPoint GetWorldPos() { return m_kPosition; }
-	virtual void SetWorldPos(CGPoint newPosition) { m_kPosition = newPosition; }
-
-	virtual CGPoint GetCellPos() { return WorldPos2CellPos( m_kPosition ); }
-	virtual void SetCellPos( const CGPoint& cellPos ); //设置格子坐标
-
-	static CGPoint CellPos2WorldPos( const CGPoint& cellPos );
-	static CGPoint WorldPos2CellPos( const CGPoint& worldPos );
-#endif
-	//--------------------------------------------------------------------------------------
+//		
+//		函数：SetPosition
+//		作用：设置精灵在地图上的坐标
+//		参数：newPosition地图坐标
+//		返回值：无
+	virtual void SetPosition(CGPoint newPosition);
+//		
+//		函数：GetPosition
+//		作用：获取精灵在地图上的坐标
+//		参数：无
+//		返回值：地图坐标
+	CGPoint GetPosition();
 
 	int GetCol()
 	{
@@ -540,7 +522,7 @@ protected:
 	int m_nArmorQuality;
 	int m_nCloakQuality;
 
-	CGPoint m_kPosition; //GL世界坐标点
+	CGPoint m_kPosition;
 	NDAnimation* m_pkCurrentAnimation;
 	NDFrameRunRecord* m_pkFrameRunRecord;
 	NDAnimationGroup* m_pkAniGroup;

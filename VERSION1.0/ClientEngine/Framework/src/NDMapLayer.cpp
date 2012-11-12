@@ -220,7 +220,7 @@ void NDMapLayer::Initialization(const char* mapFile)
 	ND_ASSERT_NO_RETURN(NULL == m_pkMapData);
 	m_pkMapData->initWithFile(mapFile);
 
-	//地图的尺寸用世界坐标衡量（不是像素）
+	//地图的尺寸用世界坐标衡量（不是像素） //@check
 	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
 	SetContentSize(CGSizeMake(m_pkMapData->getColumns() * m_pkMapData->getUnitSize() / fScale,
 								m_pkMapData->getRows() * m_pkMapData->getUnitSize() / fScale));
@@ -228,6 +228,7 @@ void NDMapLayer::Initialization(const char* mapFile)
 	MakeOrdersOfMapscenesAndMapanimations();
 	MakeFrameRunRecords();
 
+	//@check
 	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 	//m_kScreenCenter = ccp(kWinSize.width / 2, GetContentSize().height - kWinSize.height / 2);
 	m_kScreenCenter = ccp(kWinSize.width / 2, GetContentSize().height / 2 );
@@ -405,8 +406,7 @@ void NDMapLayer::PlayNDSprite(const char* pszSpriteFile, int nPosx, int nPosy,
 	pSprite->Initialization(
 			tq::CString("%s%s", NDEngine::NDPath::GetAnimationPath().c_str(),
 					pszSpriteFile));
-
-	pSprite->SetWorldPos(CGPointMake(nPosx + 64, nPosy));
+	pSprite->SetPosition(CGPointMake(nPosx + 64, nPosy));
 	pSprite->SetCurrentAnimation(0, false);
 	bool bSet = isMapRectIntersectScreen(pSprite->GetSpriteRect());
 	pSprite->BeforeRunAnimation(bSet);
@@ -472,31 +472,27 @@ bool NDMapLayer::isTouchTreasureBox(CGPoint touchPoint)
 {
 	if (m_pkTreasureBox)
 	{
-		CGPoint worldPos = m_pkTreasureBox->GetWorldPos();
-		CGPoint screenPos = GL2SCREEN( worldPos );
-		CGSize  boxSize = CCSizeMake( m_pkTreasureBox->GetWidth(), m_pkTreasureBox->GetHeight() );
-		ConvertUtil::convertToPointCoord( boxSize );
-		
 		CGRect kRect = CGRectMake(
-			screenPos.x, screenPos.y, boxSize.width, boxSize.height );
-
-		return kRect.containsPoint( touchPoint );
-
-// 		CGRect kRect = CGRectMake(
-// 				m_pkTreasureBox->GetPosition().x - m_pkTreasureBox->GetWidth() / 2,
-// 				m_pkTreasureBox->GetPosition().y - m_pkTreasureBox->GetHeight(),
-// 				m_pkTreasureBox->GetWidth(), 
-// 				m_pkTreasureBox->GetHeight());
-
-// 		if (touchPoint.x >= kRect.origin.x
-// 				&& touchPoint.x <= kRect.origin.x + kRect.size.width
-// 				&& touchPoint.y >= kRect.origin.y
-// 				&& touchPoint.y <= kRect.origin.y + kRect.size.height)
-// 		{
-// 			return true;
-// 		}
+				m_pkTreasureBox->GetPosition().x
+						- m_pkTreasureBox->GetWidth() / 2,
+				m_pkTreasureBox->GetPosition().y - m_pkTreasureBox->GetHeight(),
+				m_pkTreasureBox->GetWidth(), m_pkTreasureBox->GetHeight());
+		if (touchPoint.x >= kRect.origin.x
+				&& touchPoint.x <= kRect.origin.x + kRect.size.width
+				&& touchPoint.y >= kRect.origin.y
+				&& touchPoint.y <= kRect.origin.y + kRect.size.height)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
-	return false;
+	else
+	{
+		return false;
+	}
 }
 
 void NDMapLayer::RefreshBoxAnimation()
@@ -856,10 +852,9 @@ void NDMapLayer::DrawScenesAndAnimations()
 
 			m_pkSwitchAniGroup->setReverse(false);
 
-// 			CGPoint kPos = ccp(
-// 					pkMapSwitch->getX() * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-// 					pkMapSwitch->getY() * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
-			CGPoint kPos = pkMapSwitch->getWorldPos();
+			CGPoint kPos = ccp(
+					pkMapSwitch->getX() * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+					pkMapSwitch->getY() * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
 
 			m_pkSwitchAniGroup->setPosition(kPos);
 
@@ -968,8 +963,11 @@ CGPoint NDMapLayer::ConvertToMapPoint(CGPoint kScreenPoint)
 	//kPoint.y = m_kScreenCenter.y - kPoint.y;
 
 	return kPoint;
-#else
+#else //@check
 	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+// 	kScreenPoint.x *= fScale;
+// 	kScreenPoint.y *= fScale;
 	return ccpAdd(	
 		ccpSub(kScreenPoint, ccp(winSize.width / 2, winSize.height / 2)),
 			m_kScreenCenter );
@@ -1019,7 +1017,7 @@ void NDMapLayer::SetPosition(CGPoint kPosition)
 	}
 
 	//m_ccNode->setPositionInPixels(kPosition);
-	m_ccNode->setPosition(kPosition);//@todo.
+	m_ccNode->setPosition(kPosition);//@todo. @check
 }
 
 bool NDMapLayer::SetScreenCenter(CGPoint kPoint)
@@ -1586,7 +1584,7 @@ void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 					(NDMapSwitch *) m_pkMapData->getSwitchs()->objectAtIndex(i);
 			//int orderId = mapSwitch.y * m_mapData.unitSize;
 
-			int orderId = pkMapSwitch->getCellPos().y * m_pkMapData->getUnitSize();	//+ 32 ;
+			int orderId = pkMapSwitch->getY() * m_pkMapData->getUnitSize();	//+ 32 ;
 
 			MAP_ORDER *dict = new MAP_ORDER;
 
@@ -1754,10 +1752,9 @@ void NDMapLayer::ShowRoadSign(bool bShow, int nX /*=0*/, int nY /*=0*/)
 		m_pkRoadSignLightEffect->SetLightId(0, false);
 	}
 
-// 	m_pkRoadSignLightEffect->SetPosition(
-// 			ccp(nX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-// 					nY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
-	m_pkRoadSignLightEffect->SetCellPos( ccp(nX, nY ));
+	m_pkRoadSignLightEffect->SetPosition(
+			ccp(nX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+					nY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
 }
 
 bool NDMapLayer::GetMapDataAniParamReverse(int nIndex)
@@ -1974,40 +1971,40 @@ void NDMapLayer::drawCell()
 
 void NDMapLayer::dumpRole()
 {
-	char str[1024] = "";
-	HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
-
-	int cnt = m_kChildrenList.size();
-	for (int i = 0; i < cnt; i++)
-	{
-		NDNode* pkNode = m_kChildrenList[i];
-		if (pkNode && pkNode->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)))
-		{
-			NDBaseRole* pRole = (NDBaseRole*) pkNode;
-			bool bVisible = isMapRectIntersectScreen(pRole->GetSpriteRect());
-			if (!bVisible) continue;
-			
-			char* roleType = 0;
-			if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDNpc)))
-				roleType = "npc";
-			if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDManualRole)))
-				roleType = "manual";
-			else if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDPlayer)))
-				roleType = "player";
-			else if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDMonster)))
-				roleType = "monster";
-			
-			if (roleType)
-			{
-				CGPoint pos = pRole->GetWorldPos();
-				sprintf( str, "%-10s %-20s pos(%d, %d)\r\n", 
-					roleType, pRole->m_strName.c_str(), (int)pos.x, (int)pos.y );
-
-				DWORD n = 0;
-				WriteConsoleA( hOut, str, strlen(str), &n, NULL );		
-			}
-		}
-	}
+// 	char str[1024] = "";
+// 	HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
+// 
+// 	int cnt = m_kChildrenList.size();
+// 	for (int i = 0; i < cnt; i++)
+// 	{
+// 		NDNode* pkNode = m_kChildrenList[i];
+// 		if (pkNode && pkNode->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)))
+// 		{
+// 			NDBaseRole* pRole = (NDBaseRole*) pkNode;
+// 			bool bVisible = isMapRectIntersectScreen(pRole->GetSpriteRect());
+// 			if (!bVisible) continue;
+// 			
+// 			char* roleType = 0;
+// 			if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDNpc)))
+// 				roleType = "npc";
+// 			if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDManualRole)))
+// 				roleType = "manual";
+// 			else if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDPlayer)))
+// 				roleType = "player";
+// 			else if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDMonster)))
+// 				roleType = "monster";
+// 			
+// 			if (roleType)
+// 			{
+// 				CGPoint pos = pRole->GetPosition();
+// 				sprintf( str, "%-10s %-20s pos(%d, %d)\r\n", 
+// 					roleType, pRole->m_strName.c_str(), (int)pos.x, (int)pos.y );
+// 
+// 				DWORD n = 0;
+// 				WriteConsoleA( hOut, str, strlen(str), &n, NULL );		
+// 			}
+// 		}
+// 	}
 }
 
 NS_NDENGINE_END

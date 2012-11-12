@@ -55,7 +55,6 @@ bool IsTileHightLight();
 
 
 //////////////////////////////////////////////////////////////////////////////
-// 备注：贴片渲染使用屏幕坐标，单位是Points（不是像素！）
 class NDTile : public cocos2d::CCObject 
 {
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCTexture2D*, m_pkTexture, Texture)
@@ -76,7 +75,7 @@ class NDTile : public cocos2d::CCObject
 		virtual CGRect getDrawRect() { return m_kDrawRect; }
 
 		// cut rect
-		virtual void setCutRect( const CGRect& var ) //world size
+		virtual void setCutRect( const CGRect& var ) //point size
 		{ 
 			m_kCutRect = var; 
 		}
@@ -88,7 +87,7 @@ class NDTile : public cocos2d::CCObject
 		}
 
 		// draw rect
-		virtual void setDrawRect( const CGRect& var ) //world size
+		virtual void setDrawRect( const CGRect& var ) //point size
 		{ 
 			m_kDrawRect = var; 
 		}
@@ -99,7 +98,7 @@ class NDTile : public cocos2d::CCObject
 		}
 
 		// map size
-		virtual void setMapSize( const CGSize& var ) //world size
+		virtual void setMapSize( const CGSize& var ) //point size
 		{ 
 			m_kMapSize = var;
 		}

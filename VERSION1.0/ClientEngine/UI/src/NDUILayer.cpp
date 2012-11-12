@@ -363,9 +363,9 @@ bool NDUILayer::TouchBegin(NDTouch* touch)
 	m_kBeginTouch = touch->GetLocation();
 
 	//add by zhangdi 20120828
-// 	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
-// 	CGPoint tmpTouch = CGPointMake(m_kBeginTouch.x * fScale, m_kBeginTouch.y * fScale);//@todo
-	CGPoint tmpTouch = CGPointMake(m_kBeginTouch.x, m_kBeginTouch.y);
+ 	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+ 	CGPoint tmpTouch = CGPointMake(m_kBeginTouch.x * fScale, m_kBeginTouch.y * fScale);//@todo
+	//CGPoint tmpTouch = CGPointMake(m_kBeginTouch.x, m_kBeginTouch.y);
 	m_kBeginTouch = tmpTouch;
 
 	//	if (CGRectContainsPoint(this->GetScreenRect(), m_beginTouch) && this->IsVisibled() && this->EventEnabled())
@@ -393,9 +393,9 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 
 
 	//add by zhangdi 20120828
-//	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
-//	CGPoint tmpTouch = CGPointMake(m_kEndTouch.x * fScale, m_kEndTouch.y * fScale);//@todo
-	CGPoint tmpTouch = CGPointMake(m_kEndTouch.x, m_kEndTouch.y);//@todo
+	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+	CGPoint tmpTouch = CGPointMake(m_kEndTouch.x * fScale, m_kEndTouch.y * fScale);//@todo
+	//CGPoint tmpTouch = CGPointMake(m_kEndTouch.x, m_kEndTouch.y);//@todo
 	m_kEndTouch = tmpTouch;
 
 	if (m_pkDragOverNode)

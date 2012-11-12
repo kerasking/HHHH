@@ -221,6 +221,7 @@ void NDFrame::run(float fScale)
 			&& pkRecord->getReplace() >= REPLACEABLE_LEFT_SHOULDER
 			&& pkRecord->getReplace() <= REPLACEABLE_SKIRT_LIFT_LEG)
 		{
+			//@check
 			pkTile->setCutRectInPixels(
 				CGRectMake(0, 0,
 				pkTile->getTexture()->getMaxS() * pkTile->getTexture()->getPixelsWide(),
@@ -233,13 +234,13 @@ void NDFrame::run(float fScale)
 			int nCutW = pkRecord->getW();
 			int nCutH = pkRecord->getH();
 
-			pkTile->setCutRectInPixels(CGRectMake(nCutX, nCutY, nCutW, nCutH));
+			pkTile->setCutRectInPixels(CGRectMake(nCutX, nCutY, nCutW, nCutH)); //@check
 		}
 
 		GLfloat x = pkAnimationGroup->getPosition().x;
 		GLfloat y = pkAnimationGroup->getPosition().y;
 
-#if 0 //@todo: ??
+#if 1 //@todo @check
 		if (pkAnimation->getMidX() != 0)
 		{
 			x -= (pkAnimation->getMidX() - pkAnimation->getX()) * fScale;
@@ -267,18 +268,14 @@ void NDFrame::run(float fScale)
 		}
 #endif
 
-#if 1
-		float w = pkTile->getCutRect().size.width * fScale;
-		float h = pkTile->getCutRect().size.height * fScale;
- 		pkTile->setDrawRect(
- 			CGRectMake(x, GL2SCREEN_Y(y) - h, 
-			w, h ));
-#else
-		pkTile->setDrawRectInPixels( CGRectMake(x, y, 
-			pkRecord->getW() * fScale, 
-			pkRecord->getH() * fScale ));
-#endif
-
+		//@check
+		const float fContentScale = CCDirector::sharedDirector()->getContentScaleFactor();
+		pkTile->setDrawRect(
+			CGRectMake(	x / fContentScale, y / fContentScale, 
+			//CGRectMake(	x, y,
+			pkTile->getCutRect().size.width * fScale,
+			pkTile->getCutRect().size.height * fScale));
+			
 		pkTile->setMapSize(pkAnimationGroup->getRunningMapSize());
 		pkTile->make();
 		pkTile->draw();

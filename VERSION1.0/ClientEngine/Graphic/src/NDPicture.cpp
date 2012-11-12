@@ -331,7 +331,7 @@ void NDPicture::SetVertices(CGRect drawRect)
 
 	switch (m_kRotation)
 	{
-	case PictureRotation0://@todo
+	case PictureRotation0://@todo @check
 // 		m_pfVertices[0] = drawRect.origin.x;
 // 		m_pfVertices[1] = winSize.height - drawRect.origin.y - drawRect.size.height;
 // 		m_pfVertices[2] = drawRect.origin.x + drawRect.size.width;

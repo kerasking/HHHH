@@ -88,8 +88,8 @@ CCTexture2D* MapTexturePool::addImage(const char* path, bool keep)
 }
 
 NDMapSwitch::NDMapSwitch() :
-// m_nX(0),
-// m_nY(0),
+m_nX(0),
+m_nY(0),
 m_nMapIndex(0),
 m_nPassIndex(0)
 {
@@ -202,16 +202,15 @@ void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 	strName = m_strNameDesMap;
 
 	int tw = getStringSize(strName.c_str(), 15).width;
-	int tx = m_worldPos.x * pkMapdata->getUnitSize() + DISPLAY_POS_X_OFFSET - tw / 2;
-	int ty = m_worldPos.y * pkMapdata->getUnitSize() + DISPLAY_POS_Y_OFFSET - 62 * fScaleFactor; //??
+	int tx = m_nX * pkMapdata->getUnitSize() + DISPLAY_POS_X_OFFSET - tw / 2;
+	int ty = m_nY * pkMapdata->getUnitSize() + DISPLAY_POS_Y_OFFSET
+			- 62 * fScaleFactor;
 
 	if (!strDes.empty() && strDes != "")
 	{
-		int tx2 = m_worldPos.x * pkMapdata->getUnitSize() + 10 * fScaleFactor
+		int tx2 = m_nX * pkMapdata->getUnitSize() + 10 * fScaleFactor
 				- (getStringSize(strDes.c_str(), 15).width / 2);
-
-		int ty2 = m_worldPos.y * pkMapdata->getUnitSize() - 52 * fScaleFactor;	//ty;
-
+		int ty2 = m_nY * pkMapdata->getUnitSize() - 52 * fScaleFactor;	//ty;
 		//T.drawString2(g, introduce, tx2, ty2, 0xFFF5B4,0xC75900, 0);//后文字 0xFFF5B4, 0xC75900
 		this->SetLableByType(1, tx2, ty2, strDes.c_str(),
 				INTCOLORTOCCC4(0xFFF5B4), INTCOLORTOCCC4(0xC75900),
@@ -321,19 +320,6 @@ void NDMapSwitch::draw()
 	{
 		m_pkDesLabels[0]->draw();
 	}
-}
-
-//@cellpos
-void NDMapSwitch::setCellPos( const CGPoint& cellPos )
-{
-	CGPoint worldPos = NDSprite::CellPos2WorldPos( cellPos );
-	this->setWorldPos( worldPos );
-}
-
-//@cellpos
-CGPoint NDMapSwitch::getCellPos()
-{
-	return NDSprite::WorldPos2CellPos( m_worldPos );
 }
 
 NDSceneTile::NDSceneTile() :
@@ -464,11 +450,13 @@ void NDMapData::decode(FILE* pkStream)
 					int nPicParts = pkTile->getTexture()->getPixelsWide()
 							* pkTile->getTexture()->getMaxS() / nTileWidth;
 
+//@check
 					pkTile->setCutRectInPixels(
 							CGRectMake(nTileWidth * (nTileIndex % nPicParts),
 									nTileHeight * (nTileIndex / nPicParts),
 									nTileWidth, nTileHeight));
 
+//@check
 					pkTile->setDrawRectInPixels(
 							CGRectMake(nTileWidth * c, nTileHeight * r,
 									nTileWidth, nTileHeight));
@@ -572,6 +560,8 @@ void NDMapData::decode(FILE* pkStream)
 		int picHeight = pkTile->getTexture()->getPixelsHigh()
 				* pkTile->getTexture()->getMaxT();
 
+
+//@check
 		pkTile->setMapSizeInPixels(	CGSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
 		pkTile->setCutRectInPixels(	CGRectMake(0, 0, picWidth, picHeight));
 		pkTile->setDrawRectInPixels(CGRectMake(nX, nY, picWidth, picHeight));
@@ -648,6 +638,7 @@ void NDMapData::decode(FILE* pkStream)
 		int nPicHeight = pkTile->getTexture()->getPixelsHigh()
 				* pkTile->getTexture()->getMaxT();
 
+//@check
 		pkTile->setMapSizeInPixels( CGSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
 		pkTile->setCutRectInPixels(	CGRectMake(0, 0, nPicWidth, nPicHeight));
 		pkTile->setDrawRectInPixels(CGRectMake(x, y, nPicWidth, nPicHeight));
@@ -787,7 +778,7 @@ void NDMapData::moveBackGround(int x, int y) //x,y??
 		{
 			CGRect rect = pkTile->getDrawRect();
 			rect.origin.x -= -x / 3;
-			pkTile->setDrawRectInPixels(rect);
+			pkTile->setDrawRectInPixels(rect); //@check
 			pkTile->make();
 		}
 	}
@@ -861,9 +852,8 @@ void NDMapData::addMapSwitch(unsigned int x,			// 切屏点 x
 {
 	NDMapSwitch* pkMapSwitch = new NDMapSwitch;
 
-// 	pkMapSwitch->setX(x); //切屏点x
-// 	pkMapSwitch->setY(y); //切屏点y
-	pkMapSwitch->setCellPos( ccp(x,y));
+	pkMapSwitch->setX(x); //切屏点x
+	pkMapSwitch->setY(y); //切屏点y
 	pkMapSwitch->setMapIndex(mapid); //目标地图
 	pkMapSwitch->setPassIndex(index); //目标点
 	pkMapSwitch->setNameDesMap(name);

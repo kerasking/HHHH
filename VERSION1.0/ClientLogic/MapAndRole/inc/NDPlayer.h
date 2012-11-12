@@ -43,8 +43,7 @@ public:
 	static void pugeHero();
 	void Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive = false);
 
-//	void SetPosition(CGPoint newPosition);
-	void SetWorldPos(CGPoint newPosition);
+	void SetPosition(CGPoint newPosition);
 
 	void Update(unsigned long ulDiff);
 	//ÓÃÓÚ»æÖÆ

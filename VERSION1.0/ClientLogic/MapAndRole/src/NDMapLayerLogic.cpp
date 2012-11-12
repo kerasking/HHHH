@@ -70,8 +70,12 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 	SetPathing(false);
 	SetLongTouch(false);
 
+	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
 	m_kPosTouch = touch->GetLocation();
-	CGPoint touchPoint = this->ConvertToMapPoint(m_kPosTouch);
+	m_kPosTouch.x *= fScale;
+	m_kPosTouch.y *= fScale;
+
+	CGPoint touchPoint = this->ConvertToMapPoint( m_kPosTouch );
 // 	if(isTouchTreasureBox(touchPoint))
 // 	{
 // 		NDLog("touch treasureBox");
@@ -91,9 +95,7 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 void NDMapLayerLogic::TouchEnd(NDTouch* touch)
 {
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
-	CGPoint mapPos = this->ConvertToMapPoint( touch->GetLocation() ); //ÆÁÄ»×ø±ê->µØÍ¼×ø±ê
-
-	if (!kPlayer.ClickPoint( mapPos, false, IsPathing()) )
+	if (!kPlayer.ClickPoint(this->ConvertToMapPoint(touch->GetLocation()), false, IsPathing()))
 	{
 		kPlayer.stopMoving();
 		if (ScriptMgrObj.excuteLuaFunc<bool>("IsInPractising", "PlayerFunc"))

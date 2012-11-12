@@ -183,7 +183,7 @@ Fighter::~Fighter()
 
 	if (m_pkRole && m_pkRoleParent)
 	{
-		m_pkRole->SetWorldPos(m_kRoleInParentPoint);
+		m_pkRole->SetPositionEx(m_kRoleInParentPoint);
 		m_pkRoleParent->AddChild(m_pkRole);
 		if (m_pkRole->IsKindOfClass(RUNTIME_CLASS(NDManualRole)))
 		{
@@ -293,9 +293,8 @@ void Fighter::setPosition(int teamAmout)
 
 void Fighter::updatePos()
 {
-	m_pkRole->SetWorldPos(ccp(m_nX, m_nY));
-
-	if (!isVisibleStatus) 
+	m_pkRole->SetPositionEx(ccp(m_nX, m_nY));
+	if (!isVisibleStatus)
 	{
 		NDUILabel* lbHover = (NDUILabel*)m_pkParent->GetChild(TAG_HOVER_MSG);
 		if (lbHover) 
@@ -322,7 +321,7 @@ void Fighter::updatePos()
 
 	if (m_pkSkillNameLabel)
 	{
-		//CGPoint pt = this->m_role->GetWorldPos();
+		//CGPoint pt = m_pkRole->GetPosition();
 		CGSize sizeStr =getStringSize(m_pkSkillNameLabel->GetText().c_str(), DEFAULT_FONT_SIZE * FONT_SCALE);
 
 		//++Guosen 2012.6.28//设置技能名的显示位置
@@ -557,7 +556,7 @@ void Fighter::drawStatusAniGroup()
             
 			NDLog(@"add mana full ani");
 		}
-		mana_full_ani->SetWorldPos(ccp(m_nX, m_nY));
+		mana_full_ani->SetPosition(ccp(m_nX, m_nY));
 		mana_full_ani->RunAnimation(true);
 	}
 	else if (mana_full_ani)
@@ -596,7 +595,7 @@ void Fighter::SetRole(NDBaseRole* role)
 	m_pkRole = role;
 
 	m_pkRoleParent = role->GetParent();
-	m_kRoleInParentPoint = role->GetWorldPos();
+	m_kRoleInParentPoint = role->GetPosition();
 
 	if (m_pkRoleParent)
 	{
@@ -841,7 +840,7 @@ void Fighter::showFighterName(bool b)
 		NDBaseRole* role = GetRole();
 		if (role)
 		{
-			CGPoint pt = m_pkRole->GetWorldPos();
+			CGPoint pt = m_pkRole->GetPosition();
 			m_pkFighterNameLabel = new NDUILabel;
 			m_pkFighterNameLabel->Initialization();
 			//lb_FighterName->SetTag(TAG_FIGHTER_NAME);
@@ -899,7 +898,7 @@ void Fighter::showSkillName(bool b)
 {
 	if (b)
 	{
-		CGPoint pt = m_pkRole->GetWorldPos();
+		CGPoint pt = m_pkRole->GetPosition();
 		m_pkSkillNameLabel = new NDUILabel;
 		m_pkSkillNameLabel->Initialization();
 		m_pkSkillNameLabel->SetFontColor(ccc4(0xff, 0xd7, 0, 255));//(ccc4(254, 3, 9, 255));//++Guosen 2012.6.28//设置技能名字体颜色
@@ -1134,8 +1133,8 @@ void Fighter::drawHPMP()
 	{
 		return;
 	}
-	int drawx = m_pkRole->GetWorldPos().x;
-	int drawy = m_pkRole->GetWorldPos().y;
+	int drawx = m_pkRole->GetPosition().x;
+	int drawy = m_pkRole->GetPosition().y;
 
 	drawy -= m_nRoleInitialHeight;//++Guosen 2012.6.29 固定位置//drawy -= this->m_role->GetHeight();
 
@@ -1384,7 +1383,7 @@ void Fighter::showHoverMsg(const char* str)
 	NDUILabel* lbHover = (NDUILabel*) m_pkParent->GetChild(TAG_HOVER_MSG);
 	if (!lbHover)
 	{
-		CGPoint pt = m_pkRole->GetWorldPos();
+		CGPoint pt = m_pkRole->GetPosition();
 		lbHover = new NDUILabel;
 		lbHover->Initialization();
 		lbHover->SetFontColor(ccc4(0, 255, 100, 255));
@@ -1483,7 +1482,7 @@ bool Fighter::AppendStatusIcon( unsigned int nIconID )
 	tFighterStatusIcon.pIconImage	= pIconImage;
 	m_queStatusIcons.push_back( tFighterStatusIcon );
 	m_pkParent->AddChild(pIconImage);
-	CGPoint pt	= m_pkRole->GetWorldPos();
+	CGPoint pt	= m_pkRole->GetPosition();
 	pIconImage->SetFrameRect( CGRectMake( pt.x + m_iIconsXOffset, 
 		pt.y - m_nRoleInitialHeight + STATUS_ICON_HEIGHT * (m_queStatusIcons.size()-1), 
 		STATUS_ICON_WIDTH, STATUS_ICON_HEIGHT ) );
@@ -1513,7 +1512,7 @@ void Fighter::UpdateStatusIconsPosition()
 {
 	if ( m_queStatusIcons.empty() )
 		return;
-	CGPoint pt	= m_pkRole->GetWorldPos();
+	CGPoint pt	= m_pkRole->GetPosition();
 	int	iCount	= 0;
 	for ( std::deque<TFighterStatusIcon>::iterator iter = m_queStatusIcons.begin(); iter != m_queStatusIcons.end(); iter++ )
 	{

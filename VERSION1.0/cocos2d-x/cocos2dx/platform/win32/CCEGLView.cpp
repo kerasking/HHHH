@@ -454,7 +454,7 @@ void CCEGLView::resize(int width, int height)
     const CCSize& frameSize = getFrameSize();
     if (frameSize.width > 0)
     {
-#if ND_MOD && 0 //重复使用scale了！
+#if ND_MOD && 1 //重复使用scale了！
         m_windowTouchScaleX = frameSize.width / width;
         m_windowTouchScaleY = frameSize.height / height;
 #endif

@@ -89,7 +89,7 @@ public:
 	void SetArmorImageWithEquipmentId(int equipmentId);
 	void SetCloakImageWithEquipmentId(int equipmentId);
 
-	//void SetPositionEx(CGPoint newPosition);
+	void SetPositionEx(CGPoint newPosition);
 
 	void unpackEquip(int iEquipPos);
 
@@ -171,19 +171,8 @@ protected:
 // 	virtual void RunBattleSubAnimation( Fighter* pkFighter );
 // 	virtual bool DrawSubAnimation( NDSubAniGroup& kSag );
 
-	//------------------------------------------------------------------
-#if 1
 public:
 	virtual void RunAnimation(bool bDraw);
-
-public:
-	override virtual void SetWorldPos(CGPoint newPosition);
-	override virtual void SetCellPos( const CGPoint& cellPos );
-
-private:
-	void logSetPos( const CGPoint& pos, const char* fromFunc );
-#endif
-	//------------------------------------------------------------------
 
 public:
 	int m_nID;

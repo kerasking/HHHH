@@ -42,8 +42,8 @@ namespace NDEngine
 
 		void OnMoveEnd();
 
-		void SetWorldPos(CGPoint newPosition);
-		//void SetPositionEx(CGPoint pos);
+		void SetPosition(CGPoint newPosition);
+		void SetPositionEx(CGPoint pos);
 
 		void OnMoveTurning(bool bXTurnigToY, bool bInc);
 

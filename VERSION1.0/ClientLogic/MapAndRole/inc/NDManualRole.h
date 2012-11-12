@@ -103,15 +103,15 @@ public:
 
 	void Update(unsigned long ulDiff); override
 	void ReLoadLookface(int lookface);
-	void SetAction(bool bMove, bool bIgnoreFighting = false);
+	void SetAction(bool bMove, bool bIgnoreFighting = false); hide
 	bool AssuredRidePet();hide
 
-	void Initialization(int lookface, bool bSetLookFace = true);
+	void Initialization(int lookface, bool bSetLookFace = true); hide
 
 	virtual void Walk(CGPoint toPos, SpriteSpeed speed);
 	void OnMoving(bool bLastPos); override
 	void OnMoveEnd(); override 
-	void SetWorldPos(CGPoint newPosition); override
+	void SetPosition(CGPoint newPosition); override
 	void OnMoveTurning(bool bXTurnigToY, bool bInc); override
 
 	bool OnDrawBegin(bool bDraw); override

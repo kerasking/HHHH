@@ -39,30 +39,9 @@ void NDLightEffect::Initialization(const char* sprFile)
 	m_pkFrameRunRecord = new NDFrameRunRecord();
 }
 
-// void NDLightEffect::SetPosition(CGPoint kNewPosition)
-// {
-// 	m_kPosition = kNewPosition;
-// }
-
-CGPoint NDLightEffect::GetWorldPos()
+void NDLightEffect::SetPosition(CGPoint kNewPosition)
 {
-	return m_kPosition;
-}
-
-void NDLightEffect::SetWorldPos( const CGPoint& worldPos )
-{
-	m_kPosition = worldPos;
-}
-
-void NDLightEffect::SetCellPos( const CGPoint& cellPos )
-{
-	CGPoint worldPos = NDSprite::CellPos2WorldPos( cellPos );
-	m_kPosition = worldPos;
-}
-
-CGPoint NDLightEffect::GetCellPos()
-{
-	return NDSprite::WorldPos2CellPos( m_kPosition );
+	m_kPosition = kNewPosition;
 }
 
 void NDLightEffect::SetRepeatTimes(unsigned int times)
