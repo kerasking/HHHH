@@ -1,12 +1,3 @@
-/*
- *  UIEquipItem.h
- *  SMYS
- *
- *  Created by jhzheng on 12-3-7.
- *  Copyright 2012 (网龙)DeNA. All rights reserved.
- *
- */
-
 #ifndef _UI_EQUIP_ITEM_H_ZJH_
 #define _UI_EQUIP_ITEM_H_ZJH_
 
@@ -14,36 +5,40 @@
 #include "UISpriteNode.h"
 
 class CUIEquipItem :
-public CUIItemButton
+	public CUIItemButton
 {
 	DECLARE_CLASS(CUIEquipItem)
 	
 	CUIEquipItem();
 	~CUIEquipItem();
     
-    void Initialization(); override
+    void Initialization();
     
-    void SetUpgradeIconPos(int nUpgradeIconPos){
+    void SetUpgradeIconPos(int nUpgradeIconPos)
+	{
         m_nUpgradeIconPos = nUpgradeIconPos;
         AdjustPos();
     };
-	int GetUpgradeIconPos(){
+
+	int GetUpgradeIconPos()
+	{
         return m_nUpgradeIconPos;
     };
     
-    void SetUpgrade(int nSet){
+    void SetUpgrade(int nSet)
+	{
         m_nIsUpgrade = nSet;
         AdjustPos();
     };
 	int GetUpgrade(){return m_nIsUpgrade;};
 
-private:
-    int m_nIsUpgrade;       //是否可升级 0.不显示 1.可升级 2.不可升级
-    int m_nUpgradeIconPos;  //0.左边 1.右边
+protected:
+    int m_nIsUpgrade;
+    int m_nUpgradeIconPos;
     CUISpriteNode *m_GUpgradeSprite;
     CUISpriteNode *m_RUpgradeSprite;
     
     void AdjustPos();
 };
 
-#endif // _UI_EQUIP_ITEM_H_ZJH_
+#endif

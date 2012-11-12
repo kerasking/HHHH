@@ -38,7 +38,7 @@ private:
 
 	int m_nStartFrame;
 	int m_nEndFrame;
-	BOOL m_bSetPlayRange;
+	bool m_bSetPlayRange;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ public:
 //////////////////////////////////////////////////////////////////////////
 typedef struct _TILE_REVERSE_ROTATION
 {
-	BOOL reverse;					//是否翻转
+	bool reverse;					//是否翻转
 	NDRotationEnum rotation;		//旋转角度
 	float tileW;
 } TILE_REVERSE_ROTATION;

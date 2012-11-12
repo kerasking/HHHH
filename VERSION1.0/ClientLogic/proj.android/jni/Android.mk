@@ -52,7 +52,6 @@ LOCAL_SRC_FILES := \
 ../../Script/Src/ScriptUI.cpp \
 ../../Pet/src/CPet.cpp \
 ../../Pet/src/CPetNode.cpp \
-../../UICommon/src/NDUILoad.cpp \
 ../../UICommon/src/UIEquipItem.cpp \
 ../../UICommon/src/UIItemButton.cpp \
 ../../UICommon/src/UINpcDlg.cpp \
@@ -101,6 +100,9 @@ $(LOCAL_PATH)/../../Item/inc \
 $(LOCAL_PATH)/../../MapAndRole/inc \
 $(LOCAL_PATH)/../../Module/inc \
 $(LOCAL_PATH)/../../MsgDefine/inc \
+$(LOCAL_PATH)/../../GameScene/inc \
+$(LOCAL_PATH)/../../NewScene/UIPet \
+$(LOCAL_PATH)/../../NewScene/ \
 $(LOCAL_PATH)/../../Pet/inc \
 $(LOCAL_PATH)/../../Script/inc \
 $(LOCAL_PATH)/../../Syndicate/inc \

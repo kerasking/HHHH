@@ -1202,11 +1202,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\TempClass\NDUITableLayer.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\TempClass\NDUITableLayer.h"
+			RelativePath="..\UI\inc\NDUITableLayer.h"
 			>
 		</File>
 		<File

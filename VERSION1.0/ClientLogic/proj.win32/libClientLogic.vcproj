@@ -635,10 +635,6 @@
 				Name="inc"
 				>
 				<File
-					RelativePath="..\UICommon\inc\NDUILoad.h"
-					>
-				</File>
-				<File
 					RelativePath="..\UICommon\inc\UIEquipItem.h"
 					>
 				</File>
@@ -662,10 +658,6 @@
 			<Filter
 				Name="src"
 				>
-				<File
-					RelativePath="..\UICommon\src\NDUILoad.cpp"
-					>
-				</File>
 				<File
 					RelativePath="..\UICommon\src\UIEquipItem.cpp"
 					>

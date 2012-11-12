@@ -16,23 +16,20 @@ IMPLEMENT_CLASS(CUIEquipItem, CUIItemButton)
 #define G_UPGRADE_SPRITE "shengjiejt01.spr"
 #define R_UPGRADE_SPRITE "shengjiejt02.spr"
 
-#define UPGRADE_ICON_W      (NDDirector::DefaultDirector()->GetScaleFactor()*15)
-#define UPGRADE_ICON_H      (NDDirector::DefaultDirector()->GetScaleFactor()*30)
+#define UPGRADE_ICON_W      (NDDirector::DefaultDirector()->GetScaleFactor() * 15)
+#define UPGRADE_ICON_H      (NDDirector::DefaultDirector()->GetScaleFactor() * 30)
 
 CUIEquipItem::CUIEquipItem()
 {
-    m_nUpgradeIconPos   = 0;
-    m_GUpgradeSprite    = NULL;
-    m_RUpgradeSprite    = NULL;
-    m_nIsUpgrade        = 0;
+
 }
 
 CUIEquipItem::~CUIEquipItem()
 {
-    m_GUpgradeSprite = NULL;
-    m_RUpgradeSprite = NULL;
+
 }
-void CUIEquipItem::Initialization(){
+void CUIEquipItem::Initialization()
+{
     CUIItemButton::Initialization();
     
     

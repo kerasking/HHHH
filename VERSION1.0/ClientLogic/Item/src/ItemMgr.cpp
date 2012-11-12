@@ -32,19 +32,22 @@
 #include "VendorUILayer.h"
 #include "VendorBuyUILayer.h"
 #include "TradeUILayer.h"
-#include "IniLoad.h"
+//#include "IniLoad.h"
 #include "GameNewItemBag.h"
 #include "NewGamePlayerBag.h"
-#include "EquipForgeScene.h"
-#include "NewEquipRepair.h"
+//#include "EquipForgeScene.h"
+//#include "NewEquipRepair.h"
 #include "BattleFieldScene.h"
-#include "NewVipStoreScene.h"
+//#include "NewVipStoreScene.h"
 #include "GameUINpcStore.h"
-#include "PlayerInfoScene.h"
+//#include "PlayerInfoScene.h"
 
 #include "ScriptGlobalEvent.h"
 #include "GameStorageScene.h"
 #include "NDUtility.h"
+#include "NewPetScene.h"
+#include "PlayerInfoScene.h"
+#include "NewEquipRepair.h"
 
 using std::stringstream;
 using namespace NDEngine;
@@ -2330,7 +2333,7 @@ Item* ItemMgr::QueryItem(OBJID idItem)
 	for (; it != m_vecBag.end(); it++)
 	{
 		Item *item = *it;
-		if (item && OBJID(item->m_nID) == idItem) 
+		if (item && (unsigned int)(item->m_nID) == idItem) 
 		{
 			return item;
 		}
@@ -2341,7 +2344,7 @@ Item* ItemMgr::QueryItem(OBJID idItem)
 	for (; it != m_vecStorage.end(); it++)
 	{
 		Item *item = *it;
-		if (item && OBJID(item->m_nID) == idItem) 
+		if (item && (unsigned int)(item->m_nID) == idItem) 
 		{
 			return item;
 		}
@@ -2351,7 +2354,7 @@ Item* ItemMgr::QueryItem(OBJID idItem)
 	for (int i = Item::eEP_Begin; i < Item::eEP_End; i++) 
 	{
 		Item *item = m_EquipList[i];
-		if (item && OBJID(item->m_nID) == idItem)
+		if (item && (unsigned int)(item->m_nID) == idItem)
 		{
 			return item;
 		}

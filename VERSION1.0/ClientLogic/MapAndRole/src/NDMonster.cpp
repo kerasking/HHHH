@@ -26,6 +26,7 @@
 #include "ScriptDataBase.h"
 #include "NDDebugOpt.h"
 #include "globaldef.h"
+#include "NDUtil.h"
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>

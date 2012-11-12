@@ -102,7 +102,8 @@ namespace NDEngine {
 	bool ETClassBegin##classname(){ \
 	LuaClass<classname>  LuaClassTmp(LuaStateMgrObj.GetState());
 
-	#define ETSUBCLASSBEGIN(classname, parentclassname) \
+#ifdef WIN32
+#define ETSUBCLASSBEGIN(classname, parentclassname) \
 	bool ETClassBegin##classname(){ \
 	LuaClass<classname>  LuaClassTmp(LuaStateMgrObj.GetState()); \
 	do \
@@ -117,9 +118,29 @@ namespace NDEngine {
 	{ \
 	pmeta = LuaStateMgrObj.GetState()->GetRegistry().CreateTable(pmetaname.c_str()); \
 	pmeta.SetObject("__index", pmeta); \
-	} \
+} \
 	meta.SetMetaTable(pmeta); \
-	} while (0);
+} while (0);
+#else
+#define ETSUBCLASSBEGIN(classname, parentclassname) \
+	bool ETClassBegin##classname(){ \
+	LuaClass<classname>  LuaClassTmp(LuaStateMgrObj.GetState()); \
+	do \
+	{ \
+	std::string metaname("MetaClass_"); \
+	metaname += typeid(classname).name(); \
+	LuaObject meta = LuaStateMgrObj.GetState()->GetRegistry()[metaname.c_str()]; \
+	std::string pmetaname("MetaClass_"); \
+	pmetaname += typeid(parentclassname).name(); \
+	LuaObject pmeta = LuaStateMgrObj.GetState()->GetRegistry()[pmetaname.c_str()]; \
+	if (pmeta.IsNil()) \
+	{ \
+	pmeta = LuaStateMgrObj.GetState()->GetRegistry().CreateTable(pmetaname.c_str()); \
+	pmeta.SetObject("__index", pmeta); \
+} \
+	meta.SetMetaTable(pmeta); \
+} while (0);
+#endif
 
 	#define ETCONSTRUCT(nameinlua) \
 	LuaClassTmp.create(nameinlua);

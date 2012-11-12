@@ -27,6 +27,7 @@
 #include "Fighter.h"
 #include "Battle.h"
 #include "NDDebugOpt.h"
+#include "NDUtil.h"
 
 using namespace NDEngine;
 

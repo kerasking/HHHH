@@ -39,6 +39,7 @@
 
 #include "SMGameScene.h"
 #include "ScriptGlobalEvent.h"
+#include "NDUtil.h"
 
 namespace NDEngine
 {

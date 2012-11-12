@@ -30,6 +30,7 @@
 #include "DramaScene.h"
 #include "NDDataPersist.h"
 #include "NDDebugOpt.h"
+#include "NDUtil.h"
 
 /* 玩家寻路八个方向值,无效的方向值-1
     7  0  4
