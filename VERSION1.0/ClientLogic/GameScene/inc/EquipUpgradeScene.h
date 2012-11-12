@@ -68,7 +68,7 @@ private:
 	void PushEquip(Item* item);
 private:
 	NDUIMenuLayer *m_menulayerBG;
-	NDUIItemButton *m_btnEquip, *m_btnEquip2;
+	//NDUIItemButton *m_btnEquip, *m_btnEquip2; ///< 没实现啊
 	GameItemBag *m_itemBag;
 	NDPicture *m_picTitle;
 	NDUILabel *m_lbName, *m_lbName2;

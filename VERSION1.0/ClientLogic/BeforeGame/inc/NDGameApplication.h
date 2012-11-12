@@ -13,8 +13,10 @@ using namespace cocos2d;
 namespace NDEngine
 {
 class NDGameApplication:
-	private CCApplication,
-	public NDConsoleListener
+	private CCApplication
+#ifdef WIN32
+	,public NDConsoleListener
+#endif
 {
 public:
 

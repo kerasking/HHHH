@@ -27,7 +27,8 @@ CSqliteDBMgr::CSqliteDBMgr()
 /////////////////////////////////////////////////////////
 CSqliteDBMgr::~CSqliteDBMgr()
 {
-#if 0  tangziqin暂时注释 
+#if 0
+	//tangziqin暂时注释 
     m_setRowData.clear();
     if(m_database){
       sqlite3_close(m_database);  
@@ -38,7 +39,8 @@ CSqliteDBMgr::~CSqliteDBMgr()
 void 
 CSqliteDBMgr::InitDataBase(const char* pszDBName)
 {
-#if 0  tangziqin暂时注释
+#if 0
+	//tangziqin暂时注释
     BOOL success;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error;
@@ -94,7 +96,8 @@ CSqliteDBMgr::SelectData(const char* pszSelectSql, int nColNum)
 bool 
 CSqliteDBMgr::IsExistTable(const char* pszTableName)
 {
-    #if 0    tangziqin暂时注释
+    #if 0
+	//tangziqin暂时注释
 if (!m_database) {
         return false;
     }
@@ -127,7 +130,8 @@ if (!m_database) {
 bool 
 CSqliteDBMgr::ExcuteSql(const char* pszSql)
 {
-    #if 0 tangziqin暂时注释
+    #if 0
+	//tangziqin暂时注释
 if (!pszSql) {
         return false;
     }
@@ -150,7 +154,8 @@ if (!pszSql) {
 int  
 CSqliteDBMgr::GetColDataN(int nIdx, int nFieldIdx)
 {
-#if 0 tangziqin暂时注释
+#if 0
+	//tangziqin暂时注释
 
     if (nIdx < m_setRowData.size()) {
         VEC_COL_DATA& rSetCol = m_setRowData[nIdx];
@@ -186,7 +191,8 @@ CSqliteDBMgr::ReleaseData(void)
 std::string 
 CSqliteDBMgr::GetDBPath(const char* pszDBName)
 {
-   #if 0 tangziqin暂时注释
+   #if 0
+	//tangziqin暂时注释
  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *nsPath = [NSString  stringWithUTF8String:pszDBName];

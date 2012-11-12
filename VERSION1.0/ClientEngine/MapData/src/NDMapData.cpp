@@ -599,7 +599,7 @@ void NDMapData::decode(FILE* pkStream)
 				+ kFileOp.readByte(pkStream));	//x坐标
 		int y = (short) ((kFileOp.readByte(pkStream) << 8)
 				+ kFileOp.readByte(pkStream));	//y坐标
-		BOOL bReverse = kFileOp.readByte(pkStream) > 0;						//翻转
+		bool bReverse = kFileOp.readByte(pkStream) > 0;						//翻转
 
 		if (kSceneImages.size() <= nResourceIndex
 				|| kSceneOrders.size() <= nResourceIndex)

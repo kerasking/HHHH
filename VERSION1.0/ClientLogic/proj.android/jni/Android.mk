@@ -79,6 +79,7 @@ LOCAL_SRC_FILES := \
 ../../Module/src/TutorUILayer.cpp
 
 LOCAL_C_INCLUDES := \
+$(LOCAL_PATH)/../../../KUtil \
 $(LOCAL_PATH)/../../../ClientEngine/DataTrans/inc \
 $(LOCAL_PATH)/../../../ClientEngine/Framework/inc \
 $(LOCAL_PATH)/../../../ClientEngine/Graphic/inc \

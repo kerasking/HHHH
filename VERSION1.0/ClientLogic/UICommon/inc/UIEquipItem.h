@@ -33,6 +33,7 @@ class CUIEquipItem :
 	int GetUpgrade(){return m_nIsUpgrade;};
 
 protected:
+
     int m_nIsUpgrade;
     int m_nUpgradeIconPos;
     CUISpriteNode *m_GUpgradeSprite;

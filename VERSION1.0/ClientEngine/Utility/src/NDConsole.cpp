@@ -6,6 +6,7 @@
 #include "NDDebugOpt.h"
 
 BEGIN_ND_NAMESPACE
+#if defined(WIN32)
 IMPLEMENT_CLASS(NDConsole, NDObject);
 
 bool NDConsole::ms_bIsExistent = false;
@@ -33,8 +34,8 @@ m_pkStringMap(0)
 }
 
 NDConsole::NDConsole(LPCTSTR lpszTitle, SHORT ConsoleHeight /*= 300*/,
-		SHORT ConsoleWidth /*= 80*/) :
-		m_hOutputHandle(0)
+					 SHORT ConsoleWidth /*= 80*/) :
+m_hOutputHandle(0)
 {
 	if (ms_bIsExistent)
 	{
@@ -113,7 +114,7 @@ void* NDConsole::ReadGameConsole(void* pData)
 		CONSOLE_READCONSOLE_CONTROL kControl =
 		{ 0 };
 		ReadConsoleA(NDConsole::GetSingletonPtr()->getInputHandle(),
-				(void*) ms_pszBuffer, 2048, &dwReadCount, &kControl);
+			(void*) ms_pszBuffer, 2048, &dwReadCount, &kControl);
 		pthread_mutex_unlock(&ms_pkAsyncStructQueueMutex);
 
 		if (*ms_pszBuffer)
@@ -132,7 +133,7 @@ void NDConsole::StopReadLoop()
 }
 
 bool NDConsole::RegisterConsoleHandler(NDConsoleListener* pkListener,
-		const char* pszKeyword)
+									   const char* pszKeyword)
 {
 	if (0 == pszKeyword || !*pszKeyword || 0 == pkListener)
 	{
@@ -155,7 +156,7 @@ void NDConsole::ProcessInput(const char* pszInput)
 	string strInput = pszInput;
 
 	for (MAP_LISTENER::iterator it = m_kListenerMap.begin();
-			it != m_kListenerMap.end(); it++)
+		it != m_kListenerMap.end(); it++)
 	{
 		string strListenerKey = it->first;
 		NDConsoleListener* pkListener = 0;
@@ -170,7 +171,7 @@ void NDConsole::ProcessInput(const char* pszInput)
 				char* pszTemp = new char[2048];
 				memset(pszTemp,0,sizeof(char) * 2048);
 				string strResult = strInput.substr(strListenerKey.length(),
-						strInput.length());
+					strInput.length());
 				strcpy_s(pszTemp,2048,strResult.c_str());
 				m_pkStringMap->insert(make_pair(strListenerKey,pszTemp));
 				pkListener->processConsole(strResult.c_str());
@@ -245,4 +246,5 @@ bool NDConsole::ClearSpecialCommand( const char* pszCommand )
 	return true;
 }
 
+#endif
 END_ND_NAMESPACE

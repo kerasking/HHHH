@@ -21,18 +21,20 @@ IMPLEMENT_CLASS(CUIEquipItem, CUIItemButton)
 
 CUIEquipItem::CUIEquipItem()
 {
-
+    m_nUpgradeIconPos   = 0;
+    m_GUpgradeSprite    = NULL;
+    m_RUpgradeSprite    = NULL;
+    m_nIsUpgrade        = 0;
 }
 
 CUIEquipItem::~CUIEquipItem()
 {
-
+    m_GUpgradeSprite = NULL;
+    m_RUpgradeSprite = NULL;
 }
 void CUIEquipItem::Initialization()
 {
-    CUIItemButton::Initialization();
-    
-    
+    CUIItemButton::Initialization();    
 }
 void CUIEquipItem::AdjustPos(){
     if( m_nIsUpgrade != 0 ) {

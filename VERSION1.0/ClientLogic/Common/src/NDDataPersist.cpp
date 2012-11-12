@@ -11,7 +11,7 @@
 #include "KDirectory.h"
 #include "define.h"
 #include "ItemMgr.h"
-#include <direct.h>
+//#include <direct.h>
 #include "..\..\TinyXML\inc\tinyxml.h"
 #include "XMLReader.h"
 
@@ -32,7 +32,7 @@ NSString DataFilePath()
 
 	char szTempPath[MAX_PATH] = {0};
 
-	getcwd(szTempPath,MAX_PATH);
+	//getcwd(szTempPath,MAX_PATH);
 
 	return new CCString("szTempPath");
 }

@@ -21,33 +21,35 @@ using namespace NDEngine;
 class NDUIItemButton : public NDUIButton {
 	DECLARE_CLASS(NDUIItemButton)
 public:
-	NDUIItemButton();
-	~NDUIItemButton();
+	NDUIItemButton(){}
+	~NDUIItemButton(){}
 	
-	void Initialization(); override
-	void draw(); override
+	void Initialization(){}
+	void draw(){}
 	
-	void ChangeItem(Item* item, bool gray=false);
+	void ChangeItem(Item* item, bool gray = false){}
 	
 	Item* GetItem()	{ return m_pItem; }
 	
-	void setBackDack(bool bSet){ 
-		if(m_backDackLayer){
+	void setBackDack(bool bSet)
+	{ 
+		if(m_backDackLayer)
+		{
 			m_backDackLayer->SetVisible(bSet);
 		}
 	}
 	
-	void SetDefaultItemPicture(NDPicture *pic);
+	void SetDefaultItemPicture(NDPicture *pic){}
 	
-	void EnalbeGray(bool gray) { if (m_picItem) m_picItem->SetGrayState(gray); } hide
+	void EnalbeGray(bool gray) { if (m_picItem) m_picItem->SetGrayState(gray); }
 	
-	bool IsGray() { if (m_picItem) return m_picItem->IsGrayState(); return false; } hide
+	bool IsGray() { if (m_picItem) return m_picItem->IsGrayState(); return false; }
 	
 	void ShowItemCount(bool show) { m_showItemCount = show; }
 	
-	void SetItemCount(unsigned int amount);
+	void SetItemCount(unsigned int amount){}
 	
-	void SetShowItemOnly(bool bShow);
+	void SetShowItemOnly(bool bShow){}
 	
 	bool IsShowItemOnly() { return m_ShowItemOnly; }
 private:

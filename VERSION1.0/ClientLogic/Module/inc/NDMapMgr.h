@@ -258,7 +258,9 @@ class NDMapMgr:
 	public NDObject,
 	public TSingleton<NDMapMgr>,
 	public NDMsgObject,
+#ifdef WIN32
 	public NDConsoleListener,
+#endif
 	public ITimerCallback
 {
 public:

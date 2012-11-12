@@ -95,7 +95,6 @@ LOCAL_SRC_FILES := \
 ../../Utility/src/NDRidePet.cpp \
 ../../Platform/src/CommonInput.cpp \
 ../../Platform/src/AndroidInput.cpp \
-../../TempClass/NDUITableLayer.cpp
 
 LOCAL_C_INCLUDES := \
 $(LOCAL_PATH)/../../DataTrans/inc \

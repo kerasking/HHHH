@@ -18,6 +18,7 @@ BEGIN_ND_NAMESPACE
 
 using namespace std;
 
+#if defined(WIN32)
 class NDConsoleListener
 {
 public:
@@ -76,6 +77,7 @@ protected:
 
 private:
 };
+#endif
 
 END_ND_NAMESPACE
 #endif

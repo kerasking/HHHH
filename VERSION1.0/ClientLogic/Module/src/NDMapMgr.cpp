@@ -32,6 +32,7 @@
 #include "AutoPathTip.h"
 #include "NDDataTransThread.h"
 #include "NDBaseBattleMgr.h"
+#include "NDUtil.h"
 
 NS_NDENGINE_BGN
 
@@ -137,7 +138,9 @@ m_nCurrentMonsterRound(0)
 
 	mapType = MAPTYPE_NORMAL;
 
+#ifdef WIN32
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this, "sim ");
+#endif
 
 	m_kTimer.SetTimer(this, 1, 0.1);
 
@@ -1373,7 +1376,7 @@ void NDMapMgr::AddAllNPCToMap()
 void NDMapMgr::OnCustomViewRadioButtonSelected(NDUICustomView* customView,
 		unsigned int radioButtonIndex, int ortherButtonTag)
 {
-	throw std::exception("The method or operation is not implemented.");
+	//throw std::exception("The method or operation is not implemented.");
 }
 
 void NDMapMgr::ClearManualRole()
@@ -1668,8 +1671,9 @@ bool NDMapMgr::processConsole(const char* pszInput)
 
 void NDMapMgr::OnTimer(OBJID tag)
 {
+#ifdef WIN32
 	const char* pszCommand = NDConsole::GetSingletonPtr()->GetSpecialCommand(
-			"sim ");
+		"sim ");
 
 	if (0 != pszCommand && *pszCommand)
 	{
@@ -1750,6 +1754,7 @@ void NDMapMgr::OnTimer(OBJID tag)
 
 		printf("·ÖÎöÍê®…!\n");
 	}
+#endif
 }
 
 NDMonster* NDMapMgr::GetBattleMonster()
@@ -2336,7 +2341,7 @@ void NDMapMgr::processPetInfo(NDTransData* pkData, int nLength)
 		NDPlayer & player = NDPlayer::defaultHero();
 		ShowPetInfo showPetInfo;
 		player.GetShowPetInfo(showPetInfo);
-		if (OBJID(idPet) == showPetInfo.idPet)
+		if ((unsigned int)(idPet) == showPetInfo.idPet)
 		{
 			player.ResetShowPet();
 		}
@@ -2573,7 +2578,7 @@ void NDMapMgr::processPetInfo(NDTransData* pkData, int nLength)
 	{
 		ShowPetInfo showPetInfo;
 		pkRole->GetShowPetInfo(showPetInfo);
-		if (OBJID(pkPet->int_PET_ID) == showPetInfo.idPet)
+		if ((unsigned int)(pkPet->int_PET_ID) == showPetInfo.idPet)
 		{
 			pkRole->ResetShowPet();
 		}

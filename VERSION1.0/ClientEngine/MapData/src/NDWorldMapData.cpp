@@ -339,7 +339,7 @@ void NDWorldMapData::decode(FILE* stream)
 		int resourceIndex = kFileOp.readByte(stream);					//资源下标
 		int x = kFileOp.readShort(stream);	//x坐标
 		int y = kFileOp.readShort(stream);	//y坐标
-		BOOL reverse = kFileOp.readByte(stream) > 0;						//翻转
+		bool reverse = kFileOp.readByte(stream) > 0;						//翻转
 
 		if (_sceneImages.size() <= resourceIndex
 				|| _sceneOrders.size() <= resourceIndex)

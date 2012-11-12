@@ -125,16 +125,16 @@ namespace NDEngine
 	public:	
 		void Initialization();
 		NDUISectionTitle* GetActiveSectionTitle();
-		void draw();override
-		void OnSectionTitleClick(NDUISectionTitle* sectionTitle); override
-		void OnVerticalScrollBarUpClick(NDUIVerticalScrollBar* scrollBar);override
-		void OnVerticalScrollBarDownClick(NDUIVerticalScrollBar* scrollBar);override
+		void draw();
+		void OnSectionTitleClick(NDUISectionTitle* sectionTitle);
+		void OnVerticalScrollBarUpClick(NDUIVerticalScrollBar* scrollBar){};
+		void OnVerticalScrollBarDownClick(NDUIVerticalScrollBar* scrollBar){};
 		bool TouchMoved(NDTouch* touch); override
-		bool DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch); override			
+		bool DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch);			
 		void UITouchEnd(NDTouch* touch); override
 		void SetVisible(bool visible); override
-		bool DispatchLongTouchEvent(CGPoint beginTouch, CGPoint endTouch); override
-		bool DispatchLayerMoveEvent(CGPoint beginPoint, NDTouch *moveTouch); override
+		bool DispatchLongTouchEvent(CGPoint beginTouch, CGPoint endTouch);
+		bool DispatchLayerMoveEvent(CGPoint beginPoint, NDTouch *moveTouch);
 	private:
 		NDDataSource* m_dataSource;
 		bool m_needReflash;

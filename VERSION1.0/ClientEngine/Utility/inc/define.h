@@ -28,6 +28,10 @@ typedef unsigned short USHORT;
 
 #endif
 
+#ifndef MAX_PATH
+#define MAX_PATH 65535
+#endif
+
 #define ShowProgressBar (NDUISynLayer::Show())
 #define CloseProgressBar (NDUISynLayer::Close())
 #define srandom(x) rand()

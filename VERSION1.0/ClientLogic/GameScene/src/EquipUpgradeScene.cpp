@@ -19,7 +19,7 @@ EquipUpgradeScene* EquipUpgradeScene::s_instance = NULL;
 EquipUpgradeScene::EquipUpgradeScene()
 {
 	m_menulayerBG = NULL;
-	m_btnEquip = NULL;
+//	m_btnEquip = NULL;
 	m_itemBag = NULL;
 	m_picTitle = NULL;
 	m_lbName = NULL;
@@ -33,7 +33,7 @@ EquipUpgradeScene::EquipUpgradeScene()
 	m_iCurOperateIndex = -1;
 	
 	m_lbName2 = NULL;
-	m_btnEquip2 = NULL;
+//	m_btnEquip2 = NULL;
 	 
 	s_instance = this;
 }
@@ -102,12 +102,12 @@ void EquipUpgradeScene::Initialization(int iType)
 		m_menulayerBG->AddChild(imageTitle);
 	}	
 	
-	m_btnEquip = new NDUIItemButton;
-	m_btnEquip->Initialization();
-	m_btnEquip->SetDelegate(this);
-	m_btnEquip->SetFrameRect(CGRectMake(14, 50, ITEM_CELL_W, ITEM_CELL_H));
-	m_menulayerBG->AddChild(m_btnEquip);
-	m_btnEquip->ChangeItem(NULL);
+//	m_btnEquip = new NDUIItemButton;
+//	m_btnEquip->Initialization();
+//	m_btnEquip->SetDelegate(this);
+//	m_btnEquip->SetFrameRect(CGRectMake(14, 50, ITEM_CELL_W, ITEM_CELL_H));
+//	m_menulayerBG->AddChild(m_btnEquip);
+//	m_btnEquip->ChangeItem(NULL);
 	
 	m_lbName = new NDUILabel;
 	m_lbName->Initialization();
@@ -128,12 +128,12 @@ void EquipUpgradeScene::Initialization(int iType)
 	
 	if (m_iType == EQUIP_UPLEVEL) 
 	{		
-		m_btnEquip2 = new NDUIItemButton;
-		m_btnEquip2->Initialization();
-		m_btnEquip2->SetDelegate(this);
-		m_btnEquip2->SetFrameRect(CGRectMake(14, 111, ITEM_CELL_W, ITEM_CELL_H));
-		m_menulayerBG->AddChild(m_btnEquip2);
-		m_btnEquip2->ChangeItem(NULL);
+// 		m_btnEquip2 = new NDUIItemButton;
+// 		m_btnEquip2->Initialization();
+// 		m_btnEquip2->SetDelegate(this);
+// 		m_btnEquip2->SetFrameRect(CGRectMake(14, 111, ITEM_CELL_W, ITEM_CELL_H));
+// 		m_menulayerBG->AddChild(m_btnEquip2);
+// 		m_btnEquip2->ChangeItem(NULL);
 		
 		m_lbName2 = new NDUILabel;
 		m_lbName2->Initialization();
@@ -141,7 +141,7 @@ void EquipUpgradeScene::Initialization(int iType)
 		m_lbName2->SetFontColor(ccc4(22, 30, 17, 255));
 		m_lbName2->SetText(NDCommonCString("UpLevEquip"));
 		m_lbName2->SetTextAlignment(LabelTextAlignmentLeft);
-		m_lbName2->SetFrameRect(CGRectMake(29+ITEM_CELL_W, 111+(ITEM_CELL_H-15)/2, winsize.width, 15));
+		m_lbName2->SetFrameRect(CGRectMake(29 + ITEM_CELL_W, 111 + (ITEM_CELL_H - 15) / 2, winsize.width, 15));
 		m_menulayerBG->AddChild(m_lbName2);
 		
 		NDUILine *line2 = new NDUILine;
@@ -198,22 +198,22 @@ void EquipUpgradeScene::Initialization(int iType)
 
 void EquipUpgradeScene::OnButtonClick(NDUIButton* button)
 {
-	if (button == m_btnEquip) 
+	if (button == 0/*m_btnEquip*/) 
 	{
 		if (!m_bFoucusEquip) 
 		{
 			m_bFoucusEquip = true;
-			if (m_itemfocus && m_btnEquip) 
-			{
-				m_itemfocus->SetFrameRect(m_btnEquip->GetFrameRect());
-			}
+// 			if (m_itemfocus && m_btnEquip) 
+// 			{
+// 				m_itemfocus->SetFrameRect(m_btnEquip->GetFrameRect());
+// 			}
 			if (m_itemBag) 
 			{
 				m_itemBag->DeFocus();
 			}
 		}else 
 		{
-			Item *item = m_btnEquip->GetItem();
+			Item *item = 0;//m_btnEquip->GetItem();
 			if (item) 
 			{
 				std::vector<std::string> vec_str;
@@ -242,7 +242,7 @@ void EquipUpgradeScene::OnButtonClick(NDUIButton* button)
 			}
 			case EQUIP_ENHANCE:
 			{
-				Item *item = m_btnEquip->GetItem();
+				Item *item = 0;//m_btnEquip->GetItem();
 				if (!item) 
 				{
 					break;
@@ -265,10 +265,10 @@ void EquipUpgradeScene::OnButtonClick(NDUIButton* button)
 			}
 			case EQUIP_UPLEVEL:
 			{
-				Item* item = m_btnEquip->GetItem();				
+				Item* item = 0;//m_btnEquip->GetItem();				
 				if (item) 
 				{
-					Item* item2 = m_btnEquip2->GetItem();
+					Item* item2 = 0;//m_btnEquip2->GetItem();
 					if (item2) 
 					{
 						Item* tls = checkHasItem(Item::EQUIP_TLS);
@@ -334,20 +334,20 @@ void EquipUpgradeScene::OnDialogClose(NDUIDialog* dialog)
 
 void EquipUpgradeScene::PushEquip(Item* item)
 {
-	if (m_btnEquip) 
-	{
-		if (m_btnEquip->GetItem() && m_itemBag) 
-			m_itemBag->AddItem(m_btnEquip->GetItem());
-		
-		m_btnEquip->ChangeItem(item);
-	}
+// 	if (m_btnEquip) 
+// 	{
+// 		if (m_btnEquip->GetItem() && m_itemBag) 
+// 			m_itemBag->AddItem(m_btnEquip->GetItem());
+// 		
+// 		m_btnEquip->ChangeItem(item);
+// 	}
 	
 	if (item && m_lbName) 
 	{
 		m_lbName->SetText(item->getItemNameWithAdd().c_str());
 	}
 	
-	if (item &&m_itemBag) 
+	if (item && m_itemBag) 
 	{
 		m_itemBag->DelItem(item->m_nID);
 	}	
@@ -370,7 +370,7 @@ void EquipUpgradeScene::OnDialogButtonClick(NDUIDialog* dialog, unsigned int but
 					if (itemtype) 
 					{
 						Item* newItem = new Item(item->getIdUpLev());
-						m_btnEquip2->ChangeItem(newItem);
+						//m_btnEquip2->ChangeItem(newItem);
 						m_lbName2->SetText(newItem->getItemNameWithAdd().c_str());
 					}
 				}
@@ -396,9 +396,9 @@ void EquipUpgradeScene::OnDialogButtonClick(NDUIDialog* dialog, unsigned int but
 			}
 		}		
 	}
-	else if (dialog == m_dlgSend && m_btnEquip)
+	else if (dialog == m_dlgSend/* && m_btnEquip*/)
 	{
-		Item* item = m_btnEquip->GetItem();
+		Item* item = 0;//m_btnEquip->GetItem();
 		Item* helpitem = NULL;
 		if (m_iType == EQUIP_UPGRADE) 
 		{
@@ -448,15 +448,15 @@ void EquipUpgradeScene::OnDialogButtonClick(NDUIDialog* dialog, unsigned int but
 	}
 	else 
 	{
-		Item *item = m_btnEquip->GetItem();
+		Item *item = 0;//m_btnEquip->GetItem();
 		if (m_itemBag && item) 
 		{
 			m_itemBag->AddItem(item);
 		}
-		if (m_btnEquip) 
-		{
-			m_btnEquip->ChangeItem(NULL);
-		}
+		//if (m_btnEquip) 
+	//	{
+		//	m_btnEquip->ChangeItem(NULL);
+		//}
 		if (m_lbName) 
 		{
 			m_lbName->SetText(NDCommonCString("FangRuEquip"));
@@ -479,15 +479,15 @@ void EquipUpgradeScene::ResetGui()
 		m_itemBag->UpdateTitle();
 	}
 	
-	if (m_btnEquip) 
-	{
-		m_btnEquip->ChangeItem(NULL);
-	}
+// 	if (m_btnEquip) 
+// 	{
+// 		m_btnEquip->ChangeItem(NULL);
+// 	}
 	
-	if (m_btnEquip2) 
-	{
-		m_btnEquip2->ChangeItem(NULL);
-	}
+// 	if (m_btnEquip2) 
+// 	{
+// 		m_btnEquip2->ChangeItem(NULL);
+// 	}
 	
 	if (m_lbName) 
 	{

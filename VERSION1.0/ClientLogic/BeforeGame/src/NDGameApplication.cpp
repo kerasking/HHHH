@@ -46,7 +46,9 @@ void initClass()
 
 NDGameApplication::NDGameApplication()
 {
+#ifdef WIN32
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"script ");
+#endif
 }
 NDGameApplication::~NDGameApplication()
 {
@@ -287,6 +289,7 @@ bool NDGameApplication::processConsole( const char* pszInput )
 //@pm
 bool NDGameApplication::processPM(const char* cmd) 
 {
+#ifdef WIN32
 	if (cmd == 0 || cmd[0] == 0) return false;
 
 	int val = 0;
@@ -296,13 +299,12 @@ bool NDGameApplication::processPM(const char* cmd)
 
 	if (stricmp(cmd, "opt help") == 0)
 	{
-#ifdef WIN32
+
 		TCHAR help[] =	L"syntax: opt arg 0/1\r\n"
 			L"arg can be: tick, script, network, mainloop, drawhud, drawui, drawrole, drawmap\r\n";
 
 		DWORD n = 0;
 		WriteConsoleW( hOut, help, sizeof(help)/sizeof(TCHAR), &n, NULL );
-#endif
 	}
 	else if (sscanf(cmd, "opt %s %d", szDebugOpt, &val) == 2)
 	{
@@ -336,12 +338,11 @@ bool NDGameApplication::processPM(const char* cmd)
 	}
 	else
 	{
-#ifdef WIN32
 		DWORD n = 0;
 		TCHAR msg[] = L"err: unknown cmd.\r\n";
 		WriteConsole( hOut, msg, sizeof(msg)/sizeof(TCHAR), &n, NULL );
-#endif
 	}
+#endif
 	return true;
 }
 
