@@ -25,7 +25,7 @@
 
 using namespace NDEngine;
 
-#define TAG_WORLD_MAP		(65535)
+#define TAG_WORLD_MAP		(2021)
 
 class WorldMapLayer: public NDUILayer, public NDUIButtonDelegate
 {

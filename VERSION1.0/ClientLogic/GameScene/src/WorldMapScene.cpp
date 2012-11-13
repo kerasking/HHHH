@@ -136,9 +136,41 @@ void WorldMapLayer::Initialization(int nMapId)
 	NDPlayer& player = NDPlayer::defaultHero();
 	m_roleNode->GetRole()->ChangeModelWithMount(player.m_nRideStatus, player.m_nMountType);
 	m_roleNode->SetRoleScale(0.5f);
-
 	AddChild(m_roleNode);
 	ShowRoleAtPlace(nMapId);
+
+/*	m_timer.SetTimer(this, TAG_TIMER_MOVE, 1.0/24.0);*/
+
+// 	NDUILabel *tmpLabel = new NDUILabel();
+// 	tmpLabel->Initialization();
+// 	tmpLabel->SetText("能不能显示出来呢？");
+// 	tmpLabel->SetFontSize(18);
+// 	tmpLabel->SetFrameRect(CGRectMake(200, 200, 300,100));
+// 	tmpLabel->SetTextAlignment(LabelTextAlignmentLeft);
+// 	AddChild(tmpLabel);
+
+// 	CUIRoleNode *tmpRoleNode = new CUIRoleNode;
+// 	tmpRoleNode->Initialization();
+// 	tmpRoleNode->ChangeLookFace(11200003);
+// 	tmpRoleNode->SetFrameRect(CGRectMake(200, 200, 300,150));
+// 	m_roleNode->SetVisible(true);
+// 	AddChild(tmpRoleNode);
+
+// 	NDUINode *tmpUINode = new NDUINode();
+// 	tmpUINode->Initialization();
+// 	tmpUINode->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
+// 	AddChild(tmpUINode);
+
+// 	NDManualRole *tmpRole = new NDManualRole;
+// 	tmpRole->m_nID = 103;
+// 	tmpRole->Initialization(12300006, true);
+// 	tmpRole->SetPositionEx(ccp(200, 200));
+// 	AddChild(tmpRole);
+/*	tmpUINode->AddChild(tmpRole);*/
+
+// 	NDScene *gameScene = NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
+// 	NDLayer *layer = (NDLayer *)gameScene->GetChild(MAPLAYER_TAG);
+// 	layer->AddChild(tmpRole);
 }
 
 void WorldMapLayer::draw()
@@ -453,8 +485,9 @@ void WorldMapLayer::Goto(int nMapId)
 		SetTarget(pos);
 		SetTargetMapId(node->getPlaceId());
 
-		ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", nMapId);
-		//m_timer.SetTimer(this, TAG_TIMER_MOVE, float(1) / 24);
+		//ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", nMapId);
+		m_timer.SetTimer(this, TAG_TIMER_MOVE, float(1) / 24);
+		m_curBtn = node;
 	}
 }
 

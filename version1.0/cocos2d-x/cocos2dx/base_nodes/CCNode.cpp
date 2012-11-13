@@ -1129,30 +1129,5 @@ CCPoint CCNode::convertTouchToNodeSpaceAR(CCTouch *touch)
     return this->convertToNodeSpaceAR(point);
 }
 
-
-#if ND_MOD
-void CCNode::drawDebug(void)
-{
-// 	glLineWidth(2);
-// 	{
-// 		const int len = 10;
-// 
-// 		ccDrawColor4F( 1,0,0,1 ); //red for x
-// 		ccDrawLine( m_tPosition, ccp(m_tPosition.x + len, m_tPosition.y ));
-// 
-// 		ccDrawColor4F( 0,1,0,1 ); //green for y
-// 		ccDrawLine( m_tPosition, ccp(m_tPosition.x, m_tPosition.y + len ));
-// 	}
-// 
-// 	glLineWidth(1);
-// 	{
-// 		ccDrawColor4F( 0,0,1,1 ); //blue for contentSize
-// 		ccDrawRect( m_tPosition, 
-// 					ccp(m_tPosition.x + m_tContentSize.width, 
-// 						m_tPosition.y + m_tContentSize.height ));
-// 	}
-}
-#endif
-
 NS_CC_END
 
