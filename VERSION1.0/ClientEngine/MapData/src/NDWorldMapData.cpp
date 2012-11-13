@@ -159,7 +159,8 @@ void NDWorldMapData::decode(FILE* stream)
 					std::string imageName = _tileImages[imageIndex];
 
 					NDTile *pkTile = new NDTile();
-					pkTile->setMapSizeInPixels(m_MapSize); //@check
+					//pkTile->setMapSizeInPixels(m_MapSize); //@check
+					pkTile->setMapSize(m_MapSize); //@check
 
 					pkTile->setTexture(
 							MapTexturePool::defaultPool()->addImage(
@@ -168,6 +169,7 @@ void NDWorldMapData::decode(FILE* stream)
 					int PicParts = pkTile->getTexture()->getPixelsWide()
 							* pkTile->getTexture()->getMaxS() / TileWidth;
 
+#if 0
 					pkTile->setCutRectInPixels( //@check
 							CGRectMake(TileWidth * (tileIndex % PicParts),
 									TileHeight * (tileIndex / PicParts),
@@ -176,6 +178,16 @@ void NDWorldMapData::decode(FILE* stream)
 					pkTile->setDrawRectInPixels( //@check
 							CGRectMake(TileWidth * c, TileHeight * r, TileWidth,
 									TileHeight));
+#else
+					pkTile->setCutRect( //@check
+						CGRectMake(TileWidth * (tileIndex % PicParts),
+						TileHeight * (tileIndex / PicParts),
+						TileWidth, TileHeight));
+
+					pkTile->setDrawRect( //@check
+						CGRectMake(TileWidth * c, TileHeight * r, TileWidth,
+						TileHeight));
+#endif
 
 					//tile->setHorizontalReverse(reverse);				
 					m_MapTiles->addObject(pkTile);
@@ -238,13 +250,21 @@ void NDWorldMapData::decode(FILE* stream)
 		int picHeight = pkTile->getTexture()->getPixelsHigh()
 				* pkTile->getTexture()->getMaxT();
 
-		pkTile->setMapSizeInPixels( //@check
+#if 0 //@check
+		pkTile->setMapSizeInPixels(
 				CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
 
-		pkTile->setCutRectInPixels(CGRectMake(0, 0, picWidth, picHeight)); //@check
+		pkTile->setCutRectInPixels(CGRectMake(0, 0, picWidth, picHeight));
 
-		pkTile->setDrawRectInPixels(CGRectMake(x, y, picWidth, picHeight)); //@check
+		pkTile->setDrawRectInPixels(CGRectMake(x, y, picWidth, picHeight));
 //		tile->setReverse(reverse);	 ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+#else //@check
+		pkTile->setMapSize( CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
+
+		pkTile->setCutRect(CGRectMake(0, 0, picWidth, picHeight)); 
+
+		pkTile->setDrawRect(CGRectMake(x, y, picWidth, picHeight));
+#endif
 
 		pkTile->make();
 		m_BgTiles->addObject(pkTile);
@@ -305,14 +325,17 @@ void NDWorldMapData::decode(FILE* stream)
 		int picHeight = pkTile->getTexture()->getPixelsHigh()
 				* pkTile->getTexture()->getMaxT();
 
-		pkTile->setMapSizeInPixels( CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight)); //@check
-
-		pkTile->setCutRectInPixels( CGRectMake(0, 0, picWidth, picHeight)); //@check
-
-		pkTile->setDrawRectInPixels( CGRectMake(x, y, picWidth, picHeight)); //@check
-
+#if 0 //@check
+		pkTile->setMapSizeInPixels( CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
+		pkTile->setCutRectInPixels( CGRectMake(0, 0, picWidth, picHeight)); 
+		pkTile->setDrawRectInPixels( CGRectMake(x, y, picWidth, picHeight));
 		pkTile->setReverse(reverse);
-
+#else
+		pkTile->setMapSize( CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
+		pkTile->setCutRect( CGRectMake(0, 0, picWidth, picHeight)); 
+		pkTile->setDrawRect( CGRectMake(x, y, picWidth, picHeight));
+		pkTile->setReverse(reverse);
+#endif
 		pkTile->make();
 
 		m_SceneTiles->addObject(pkTile);

@@ -291,6 +291,8 @@ void NDManualRole::ReLoadLookface(int lookface)
 
 void NDManualRole::Walk(CGPoint toPos, SpriteSpeed speed)
 {
+	WriteCon( "NDManualRole::Walk(%d, %d)\r\n", (int)toPos.x, (int)toPos.y );
+
 	std::vector < CGPoint > vec_pos;
 	vec_pos.push_back(toPos);
 	WalkToPosition(vec_pos, speed, false);
@@ -374,6 +376,7 @@ void NDManualRole::WalkToPosition(const std::vector<CGPoint>& kToPosVector,
 				IsInState(USERSTATE_SPEED_UP) ?
 						SpriteSpeedStep4 : SpriteSpeedStep8, bMoveMap,
 				bGnoreMask, bMustArrive);
+
 		if (isTeamLeader())
 		{
 			if (!m_kPointList.empty())
@@ -1946,7 +1949,7 @@ void NDManualRole::ShowNameLabel(bool bDraw)
 	NDPlayer& player = NDPlayer::defaultHero();
 	CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
 	int iX = GetPosition().x - DISPLAY_POS_X_OFFSET;
-	int iY = GetPosition().y; // - DISPLAY_POS_Y_OFFSET;
+	int iY = GetPosition().y; // - DISPLAY_POS_Y_OFFSET; //@check
 
 	if (IsInState (USERSTATE_CAMP))
 	{

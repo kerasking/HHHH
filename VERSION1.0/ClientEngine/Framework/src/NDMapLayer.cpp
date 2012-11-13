@@ -38,6 +38,7 @@
 #include "NDPlayer.h"
 #include "NDManualRole.h"
 #include "NDMonster.h"
+#include "UsePointPls.h"
 
 using namespace cocos2d;
 
@@ -47,6 +48,9 @@ using namespace cocos2d;
 
 #define MAP_NAME_SIZE_BIG (30*NDDirector::DefaultDirector()->GetScaleFactor())
 #define MAP_NAME_SIZE_SMALL (15*NDDirector::DefaultDirector()->GetScaleFactor())
+
+
+extern NDMapLayer* g_pMapLayer = NULL; //for debug only.
 
 bool GetIntersectRect(CGRect first, CGRect second, CGRect& ret)
 {
@@ -159,6 +163,8 @@ NDMapLayer::~NDMapLayer()
 // 		}
 
 	CC_SAFE_DELETE (m_pkRoadSignLightEffect);
+
+	g_pMapLayer = NULL;
 }
 
 void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)
@@ -209,30 +215,44 @@ void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)
 	ShowRoadSign(false);
 }
 
+//@check
 void NDMapLayer::Initialization(const char* mapFile)
 {
 	NDLayer::Initialization();
 	SetTouchEnabled(true);
 
-	m_pkSwitchAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithModelId(switch_ani_modelId);
+	m_pkSwitchAniGroup =
+			NDAnimationGroupPool::defaultPool()->addObjectWithModelId(106);
 
 	m_pkMapData = new NDMapData;
-	ND_ASSERT_NO_RETURN(NULL == m_pkMapData);
 	m_pkMapData->initWithFile(mapFile);
 
-	//地图的尺寸用世界坐标衡量（不是像素） //@check
-	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
-	SetContentSize(CGSizeMake(m_pkMapData->getColumns() * m_pkMapData->getUnitSize() / fScale,
-								m_pkMapData->getRows() * m_pkMapData->getUnitSize() / fScale));
+	if (m_pkMapData)
+	{
+		SetContentSize(
+				CGSizeMake(
+						m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
+						m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
 
-	MakeOrdersOfMapscenesAndMapanimations();
-	MakeFrameRunRecords();
+		MakeOrdersOfMapscenesAndMapanimations();
+		MakeFrameRunRecords();
 
-	//@check
-	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
-	//m_kScreenCenter = ccp(kWinSize.width / 2, GetContentSize().height - kWinSize.height / 2);
-	m_kScreenCenter = ccp(kWinSize.width / 2, GetContentSize().height / 2 );
-	m_ccNode->setPosition(0, 0);
+		CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+		m_kScreenCenter = ccp(kWinSize.width / 2,
+				GetContentSize().height - kWinSize.height / 2);
+		m_ccNode->setPosition(0, 0);
+
+		/*
+		 m_texMap = [CCTexture2D alloc] initWithContentSize:winSize];
+		 m_picMap = new NDPicture();
+		 m_picMap->SetTexture(m_texMap);
+
+		 ReflashMapTexture(ccp(-winSize.width / 2, -winSize.height / 2), m_screenCenter);
+		 m_areaCamarkSplit = IntersectionAreaNone;
+		 m_ptCamarkSplit = ccp(0, 0);*/
+	}
+
+	g_pMapLayer = this;
 }
 
 void NDMapLayer::Initialization(int mapIndex)
@@ -464,7 +484,7 @@ void NDMapLayer::showSwitchSprite(MAP_SWITCH_TYPE type)
 	m_pkSwitchSpriteNode->SetFrameRect(
 		CGRectMake(0, 0, NDDirector::DefaultDirector()->GetWinSize().width,
 		NDDirector::DefaultDirector()->GetWinSize().height)); //++Guosen 2012.7.6
-//	m_pkSwitchSpriteNode->SetScale(2.0); //原 480×320 => 960×640 //@todo
+	m_pkSwitchSpriteNode->SetScale(2.0); //原 480×320 => 960×640 //@todo
 	this->GetParent()->AddChild(m_pkSwitchSpriteNode, ZORDER_MASK_ANI);
 }
 
@@ -784,6 +804,7 @@ void NDMapLayer::DrawScenesAndAnimations()
 
 			if (pkTile)
 			{
+				CGRect rectInPoints = pkTile->getDrawRect();				
 				if (isMapRectIntersectScreen(pkTile->getDrawRect()))
 				{
 					pkTile->draw();
@@ -951,7 +972,6 @@ void NDMapLayer::DrawScenesAndAnimations()
  */
 CGPoint NDMapLayer::ConvertToMapPoint(CGPoint kScreenPoint)
 {
-//上层代码应该忽略分辨率，引擎会自适应！	
 #if 0
 	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 	CGPoint kTempScreen = ccpAdd(kScreenPoint, kScreenPoint); ///< 因分辨率成倍，所以对触发点的坐标进行2倍，郭浩
@@ -965,9 +985,9 @@ CGPoint NDMapLayer::ConvertToMapPoint(CGPoint kScreenPoint)
 	return kPoint;
 #else //@check
 	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-// 	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
-// 	kScreenPoint.x *= fScale;
-// 	kScreenPoint.y *= fScale;
+//  	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+//  	kScreenPoint.x *= fScale;
+//  	kScreenPoint.y *= fScale;
 	return ccpAdd(	
 		ccpSub(kScreenPoint, ccp(winSize.width / 2, winSize.height / 2)),
 			m_kScreenCenter );
@@ -1017,7 +1037,9 @@ void NDMapLayer::SetPosition(CGPoint kPosition)
 	}
 
 	//m_ccNode->setPositionInPixels(kPosition);
-	m_ccNode->setPosition(kPosition);//@todo. @check
+	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor(); //@check
+	kPosition.x /= fScale; kPosition.y /= fScale;
+	m_ccNode->setPosition(kPosition);
 }
 
 bool NDMapLayer::SetScreenCenter(CGPoint kPoint)
@@ -1949,7 +1971,7 @@ void NDMapLayer::drawCell()
 
 	const int colAmount = pMapData->getColumns();
 	const int rowAmount = pMapData->getRows();
-	const int step = MAP_UNITSIZE_INPOINTS;
+	const int step = MAP_UNITSIZE;
 	const float pad = 0.5f;
 
 	ccDrawColor4F(1,1,1,1);

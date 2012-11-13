@@ -82,12 +82,14 @@ void WorldMapLayer::Initialization(int nMapId)
 		NDTile* pkTile = new NDTile;
 		pkTile->setTexture(pkNode->getTexture());
 
-// 		int iWidth = pkNode->getTexture()->getContentSizeInPixels().width;
-// 		int iHeight = pkNode->getTexture()->getContentSizeInPixels().height;
-		//@check
+#if 1 //@check
+ 		int iWidth = pkNode->getTexture()->getContentSizeInPixels().width;
+ 		int iHeight = pkNode->getTexture()->getContentSizeInPixels().height;
+#else
 		CCSize texSize = ConvertUtil::getTextureSizeInPoints( *pkNode->getTexture() );
 		int iWidth = texSize.width;
 		int iHeight = texSize.height;
+#endif
 		
 		pkTile->setCutRect(CGRectMake(0, 0, iWidth, iHeight));
 		int iX = pkNode->getX();

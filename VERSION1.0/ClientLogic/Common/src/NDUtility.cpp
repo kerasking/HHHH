@@ -887,3 +887,21 @@ void showDialog( const char* content )
 }
 
 NS_NDENGINE_END
+
+
+void WriteCon(const char * pszFormat, ...)
+{
+	if (!pszFormat) return;
+
+	HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
+	if (!hOut) return;
+
+	static char szBuf[1024] = {0};
+	va_list ap;
+	va_start(ap, pszFormat);
+	vsnprintf_s(szBuf, 1024, 1024, pszFormat, ap);
+	va_end(ap);
+	
+	DWORD n = 0;
+	WriteConsoleA( hOut, szBuf, strlen(szBuf), &n, NULL );
+}

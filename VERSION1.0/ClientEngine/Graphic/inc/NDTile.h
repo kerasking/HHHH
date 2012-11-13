@@ -80,33 +80,39 @@ class NDTile : public cocos2d::CCObject
 			m_kCutRect = var; 
 		}
 
+#if 0
 		virtual void setCutRectInPixels( const CGRect& var ) //pixel size
 		{ 
 			m_kCutRect = var; 
 			ConvertUtil::convertToPointCoord(m_kCutRect);
 		}
+#endif
 
 		// draw rect
 		virtual void setDrawRect( const CGRect& var ) //point size
 		{ 
 			m_kDrawRect = var; 
 		}
+#if 1
 		virtual void setDrawRectInPixels( const CGRect& var ) //pixel size
 		{ 
 			m_kDrawRect = var; 
-			ConvertUtil::convertToPointCoord(m_kDrawRect);
+			//ConvertUtil::convertToPointCoord(m_kDrawRect);
 		}
+#endif
 
 		// map size
 		virtual void setMapSize( const CGSize& var ) //point size
 		{ 
 			m_kMapSize = var;
 		}
+#if 0
 		virtual void setMapSizeInPixels( const CGSize& var ) //pixel size
 		{ 
 			m_kMapSize = var;
 			ConvertUtil::convertToPointCoord(m_kMapSize);
 		}
+#endif
 #endif
 
 public:

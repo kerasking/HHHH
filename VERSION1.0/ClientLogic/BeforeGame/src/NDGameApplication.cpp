@@ -365,6 +365,53 @@ bool NDGameApplication::processPM(const char* cmd)
 			}
 		}	
 	}
+	else if (stricmp(cmd, "showhero") == 0)
+	{
+		CGPoint posScreen = NDPlayer::defaultHero().GetPosition();
+		DWORD n = 0;
+		char msg[500] = "";
+		sprintf( msg, "hero pos(%d, %d)\r\n", (int)posScreen.x, (int)posScreen.y );
+		WriteConsoleA( hOut, msg, sizeof(msg), &n, NULL );		
+	}
+	else if (stricmp(cmd, "info") == 0)
+	{
+		CGPoint posScreen = NDPlayer::defaultHero().GetPosition();
+		DWORD n = 0;
+		char msg[500] = "";
+		
+		extern NDMapLayer* g_pMapLayer; //for debug only.
+
+		sprintf( msg, 
+			"hero pos(%d, %d)\r\n"
+			"NDDirector content size(%d, %d)\r\n"
+			"CCDirector content size(%d, %d)\r\n"
+			"CCDirector content scale = %f\r\n",
+
+			(int)posScreen.x, (int)posScreen.y,
+			(int)NDDirector::DefaultDirector()->GetWinSize().width,
+			(int)NDDirector::DefaultDirector()->GetWinSize().height,
+			(int)CCDirector::sharedDirector()->getWinSize().width,
+			(int)CCDirector::sharedDirector()->getWinSize().height,
+			CCDirector::sharedDirector()->getContentScaleFactor()
+			);
+
+		WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );		
+
+		if (g_pMapLayer)
+		{
+			sprintf( msg, 
+				"map layer content size (%d, %d)\r\n"
+				"map layer screen center (%d, %d)\r\n", 
+
+				(int)g_pMapLayer->GetContentSize().width,
+				(int)g_pMapLayer->GetContentSize().height,
+				(int)g_pMapLayer->GetScreenCenter().x,
+				(int)g_pMapLayer->GetScreenCenter().y
+				);
+
+			WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );	
+		}
+	}
 	else
 	{
 		DWORD n = 0;

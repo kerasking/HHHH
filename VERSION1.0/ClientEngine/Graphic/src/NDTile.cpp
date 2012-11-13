@@ -70,7 +70,8 @@ void NDTile::makeTex(float* pData)
 
 	//<-------------------ÎÆÀí×ø±ê
 	float *pfCoordinates = pData;
-	CCSize texSize = ConvertUtil::getTextureSizeInPoints(*m_pkTexture);
+	//CCSize texSize = ConvertUtil::getTextureSizeInPoints(*m_pkTexture); //@check
+	CCSize texSize = CGSizeMake( m_pkTexture->getPixelsWide(), m_pkTexture->getPixelsHigh());
 
 	//BOOL re=NO;
 	if (getReverse())
@@ -488,8 +489,18 @@ void NDTile::makeVetex(float* pData, CGRect kRect)
 
 void NDTile::make()
 {
+#if 1 //@check ÏñËØ->µã
+	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+	CGRect rectInPoints = m_kDrawRect;
+	rectInPoints.origin.x /= fScale;
+	rectInPoints.origin.y /= fScale;
+	rectInPoints.size.width /= fScale;
+	rectInPoints.size.height /= fScale;
+#endif
+
 	makeTex(m_pfCoordinates);
-	makeVetex(m_pfVertices, m_kDrawRect);
+	//makeVetex(m_pfVertices, m_kDrawRect);
+	makeVetex(m_pfVertices, rectInPoints);
 }
 
 static GLbyte gs_nTileColors[] =

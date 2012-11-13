@@ -450,14 +450,16 @@ void NDMapData::decode(FILE* pkStream)
 					int nPicParts = pkTile->getTexture()->getPixelsWide()
 							* pkTile->getTexture()->getMaxS() / nTileWidth;
 
-//@check
-					pkTile->setCutRectInPixels(
+					//@check
+					//pkTile->setCutRectInPixels(
+					pkTile->setCutRect(
 							CGRectMake(nTileWidth * (nTileIndex % nPicParts),
 									nTileHeight * (nTileIndex / nPicParts),
 									nTileWidth, nTileHeight));
 
-//@check
-					pkTile->setDrawRectInPixels(
+					//@check
+					//pkTile->setDrawRectInPixels(
+					pkTile->setDrawRect(
 							CGRectMake(nTileWidth * c, nTileHeight * r,
 									nTileWidth, nTileHeight));
 
@@ -562,10 +564,18 @@ void NDMapData::decode(FILE* pkStream)
 
 
 //@check
+#if 0
 		pkTile->setMapSizeInPixels(	CGSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
 		pkTile->setCutRectInPixels(	CGRectMake(0, 0, picWidth, picHeight));
 		pkTile->setDrawRectInPixels(CGRectMake(nX, nY, picWidth, picHeight));
 		pkTile->setReverse(nReverse);
+#else
+		pkTile->setMapSize(	CGSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
+		pkTile->setCutRect(	CGRectMake(0, 0, picWidth, picHeight));
+		//pkTile->setDrawRect(CGRectMake(nX, nY, picWidth, picHeight));
+		pkTile->setDrawRectInPixels(CGRectMake(nX, nY, picWidth, picHeight));
+		pkTile->setReverse(nReverse);
+#endif
 
 		pkTile->make();
 
@@ -639,10 +649,18 @@ void NDMapData::decode(FILE* pkStream)
 				* pkTile->getTexture()->getMaxT();
 
 //@check
+#if 0
 		pkTile->setMapSizeInPixels( CGSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
 		pkTile->setCutRectInPixels(	CGRectMake(0, 0, nPicWidth, nPicHeight));
 		pkTile->setDrawRectInPixels(CGRectMake(x, y, nPicWidth, nPicHeight));
 		pkTile->setReverse(bReverse);
+#else
+		pkTile->setMapSize( CGSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
+		pkTile->setCutRect(	CGRectMake(0, 0, nPicWidth, nPicHeight));
+		//pkTile->setDrawRect(CGRectMake(x, y, nPicWidth, nPicHeight));
+		pkTile->setDrawRectInPixels(CGRectMake(x, y, nPicWidth, nPicHeight));
+		pkTile->setReverse(bReverse);
+#endif
 
 		pkTile->make();
 
@@ -779,6 +797,7 @@ void NDMapData::moveBackGround(int x, int y) //x,y??
 			CGRect rect = pkTile->getDrawRect();
 			rect.origin.x -= -x / 3;
 			pkTile->setDrawRectInPixels(rect); //@check
+			//pkTile->setDrawRect(rect); //@check
 			pkTile->make();
 		}
 	}

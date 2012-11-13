@@ -181,8 +181,8 @@ public:
 //		返回值：屏幕大小
 	CCSize GetWinSize() 
 	{
-		//return m_pkDirector->getWinSizeInPixels();
-		return m_pkDirector->getWinSize();
+		return m_pkDirector->getWinSizeInPixels();
+		//return m_pkDirector->getWinSize();
 	}
 
 	CCSize GetWinSizeInPixels()
