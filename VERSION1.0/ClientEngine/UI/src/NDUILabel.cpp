@@ -421,7 +421,7 @@ void NDUILabel::draw()
 
 void NDUILabel::postDraw()
 {
-	debugDraw();
+	//debugDraw();
 
 // 	CGRect scrRect = this->GetScreenRect();
 // 

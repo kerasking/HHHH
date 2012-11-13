@@ -539,7 +539,7 @@ void NDTile::draw()
 // 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);				//ÓÉopengl×éºÏ»­Í¼
 // 	}
 
-	this->debugDraw();
+	//this->debugDraw();
 }
 
 void NDTile::drawSubRect(CGRect kRect)

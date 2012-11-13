@@ -60,60 +60,9 @@ class NDTile : public cocos2d::CCObject
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCTexture2D*, m_pkTexture, Texture)
 	CC_SYNTHESIZE(bool, m_bReverse, Reverse)
 	CC_SYNTHESIZE(NDRotationEnum, m_Rotation, Rotation)
-#if 0
 	CC_SYNTHESIZE(CGSize, m_kMapSize, MapSize)
 	CC_SYNTHESIZE(CGRect, m_kCutRect, CutRect)
 	CC_SYNTHESIZE(CGRect, m_kDrawRect, DrawRect)
-#else
-	protected:
-		CGRect m_kCutRect, m_kDrawRect;
-		CGSize m_kMapSize;
-	public:
-		//
-		virtual CGSize getMapSize() { return m_kMapSize; }
-		virtual CGRect getCutRect() { return m_kCutRect; }
-		virtual CGRect getDrawRect() { return m_kDrawRect; }
-
-		// cut rect
-		virtual void setCutRect( const CGRect& var ) //point size
-		{ 
-			m_kCutRect = var; 
-		}
-
-#if 0
-		virtual void setCutRectInPixels( const CGRect& var ) //pixel size
-		{ 
-			m_kCutRect = var; 
-			ConvertUtil::convertToPointCoord(m_kCutRect);
-		}
-#endif
-
-		// draw rect
-		virtual void setDrawRect( const CGRect& var ) //point size
-		{ 
-			m_kDrawRect = var; 
-		}
-#if 1
-		virtual void setDrawRectInPixels( const CGRect& var ) //pixel size
-		{ 
-			m_kDrawRect = var; 
-			//ConvertUtil::convertToPointCoord(m_kDrawRect);
-		}
-#endif
-
-		// map size
-		virtual void setMapSize( const CGSize& var ) //point size
-		{ 
-			m_kMapSize = var;
-		}
-#if 0
-		virtual void setMapSizeInPixels( const CGSize& var ) //pixel size
-		{ 
-			m_kMapSize = var;
-			ConvertUtil::convertToPointCoord(m_kMapSize);
-		}
-#endif
-#endif
 
 public:
 	NDTile();

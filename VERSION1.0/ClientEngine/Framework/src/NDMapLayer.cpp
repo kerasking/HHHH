@@ -803,8 +803,7 @@ void NDMapLayer::DrawScenesAndAnimations()
 			NDTile *pkTile = (NDTile *) m_pkMapData->getSceneTiles()->objectAtIndex(uiIndex);
 
 			if (pkTile)
-			{
-				CGRect rectInPoints = pkTile->getDrawRect();				
+			{			
 				if (isMapRectIntersectScreen(pkTile->getDrawRect()))
 				{
 					pkTile->draw();

@@ -221,18 +221,10 @@ void NDFrame::run(float fScale)
 			&& pkRecord->getReplace() >= REPLACEABLE_LEFT_SHOULDER
 			&& pkRecord->getReplace() <= REPLACEABLE_SKIRT_LIFT_LEG)
 		{
-			//@check
-#if 0
-			pkTile->setCutRectInPixels(
-				CGRectMake(0, 0,
-				pkTile->getTexture()->getMaxS() * pkTile->getTexture()->getPixelsWide(),
-				pkTile->getTexture()->getMaxT() * pkTile->getTexture()->getPixelsHigh()));
-#else
 			pkTile->setCutRect(
 				CGRectMake(0, 0,
 				pkTile->getTexture()->getMaxS() * pkTile->getTexture()->getPixelsWide(),
 				pkTile->getTexture()->getMaxT() * pkTile->getTexture()->getPixelsHigh()));
-#endif
 		}
 		else
 		{
@@ -240,12 +232,7 @@ void NDFrame::run(float fScale)
 			int nCutY = pkRecord->getY();
 			int nCutW = pkRecord->getW();
 			int nCutH = pkRecord->getH();
-
-#if 0
-			pkTile->setCutRectInPixels(CGRectMake(nCutX, nCutY, nCutW, nCutH)); //@check
-#else
 			pkTile->setCutRect(CGRectMake(nCutX, nCutY, nCutW, nCutH)); //@check
-#endif
 		}
 
 		GLfloat x = pkAnimationGroup->getPosition().x;
@@ -279,20 +266,10 @@ void NDFrame::run(float fScale)
 		}
 #endif
 
-		//@check
-#if 0
-		const float fContentScale = CCDirector::sharedDirector()->getContentScaleFactor();
 		pkTile->setDrawRect(
-			CGRectMake(	x / fContentScale, y / fContentScale, 
-			pkTile->getCutRect().size.width * fScale,
-			pkTile->getCutRect().size.height * fScale));
-#else
-		//pkTile->setDrawRect(
-		pkTile->setDrawRectInPixels(
 			CGRectMake(	x, y, 
 			pkTile->getCutRect().size.width * fScale,
 			pkTile->getCutRect().size.height * fScale));
-#endif
 
 		pkTile->setMapSize(pkAnimationGroup->getRunningMapSize());
 		pkTile->make();

@@ -287,7 +287,7 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 	if (bLongTouch && bPath)
 	{
 		//长按不执行其它操作
-		WriteCon( "NDPlayer::ClickPoint(%d, %d), @1\r\n", (int)point.x, (int)point.y );
+		//WriteCon( "NDPlayer::ClickPoint(%d, %d), @1\r\n", (int)point.x, (int)point.y );
 		NDPlayer::defaultHero().Walk(point, SpriteSpeedStep8);
 		return true;
 	}
@@ -430,7 +430,7 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
  		
 	if (bPath || bNpcPath)
 	{
-		WriteCon( "NDPlayer::ClickPoint(%d, %d), @2\r\n", (int)point.x, (int)point.y );
+		//WriteCon( "NDPlayer::ClickPoint(%d, %d), @2\r\n", (int)point.x, (int)point.y );
 		NDPlayer::defaultHero().Walk(point, SpriteSpeedStep8);
 	}
 
@@ -517,9 +517,9 @@ void NDPlayer::Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 
 	CGPoint kCurrentPosition = GetPosition();
 
-	WriteCon( "NDPlayer::Walk(), (%d, %d)->(%d, %d)\r\n",
-		(int)kCurrentPosition.x, (int)kCurrentPosition.y,
-		(int)kPos.x, (int)kPos.y );
+// 	WriteCon( "NDPlayer::Walk(), (%d, %d)->(%d, %d)\r\n",
+// 		(int)kCurrentPosition.x, (int)kCurrentPosition.y,
+// 		(int)kPos.x, (int)kPos.y );
 
 	if (((int) kCurrentPosition.x - DISPLAY_POS_X_OFFSET) % MAP_UNITSIZE != 0
 			|| ((int) kCurrentPosition.y - DISPLAY_POS_Y_OFFSET) % MAP_UNITSIZE != 0)
