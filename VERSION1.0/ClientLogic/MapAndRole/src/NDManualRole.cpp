@@ -1668,9 +1668,9 @@ void NDManualRole::UpdateState(int nState, bool bSet)
 		if (bSet)
 		{
 			if (!m_pkBattlePicture)
-			{
-				m_pkBattlePicture = NDPicturePool::DefaultPool()->AddPicture(
-						NDPath::GetImgPath("battle.png"));
+			{//--Guosen 2012.11.9//
+				//m_pkBattlePicture = NDPicturePool::DefaultPool()->AddPicture(
+				//		NDPath::GetImgPath("battle.png"));
 			}
 		}
 		else

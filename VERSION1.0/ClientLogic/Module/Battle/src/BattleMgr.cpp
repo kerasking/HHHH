@@ -882,13 +882,13 @@ void BattleMgr::processBattleEffect(NDEngine::NDTransData& bao)
 					//
 					Fighter* pFighter = GetBattle()->GetFighter(idActor);
 					int nAtkType = 0;
-					if ( pFighter->m_info.fighterType == FIGHTER_TYPE_PET )
+					if ( pFighter->m_kInfo.fighterType == FIGHTER_TYPE_PET )
 					{
-						nAtkType = ScriptDBObj.GetN( "pet_config", pFighter->m_info.idType, DB_PET_CONFIG_ATK_TYPE );
+						nAtkType = ScriptDBObj.GetN( "pet_config", pFighter->m_kInfo.idType, DB_PET_CONFIG_ATK_TYPE );
 					}
-					else if( pFighter->m_info.fighterType == FIGHTER_TYPE_MONSTER )
+					else if( pFighter->m_kInfo.fighterType == FIGHTER_TYPE_MONSTER )
 					{
-						nAtkType = ScriptDBObj.GetN( "monstertype", pFighter->m_info.idType, DB_MONSTERTYPE_ATK_TYPE );
+						nAtkType = ScriptDBObj.GetN( "monstertype", pFighter->m_kInfo.idType, DB_MONSTERTYPE_ATK_TYPE );
 					}
 
 					if ( nAtkType == FIGHTER_ATK_TYPE_PHY )

@@ -1961,19 +1961,19 @@ bool Battle::TouchEnd(NDTouch* touch)
 		currentShowFighter=f->m_kInfo.idObj;
 		
 		//int nLevel = 0;
-		//if ( f->m_info.fighterType == FIGHTER_TYPE_PET )
+		//if ( f->m_kInfo.fighterType == FIGHTER_TYPE_PET )
 		//{
-		//    nLevel = ScriptDBObj.GetN( "pet_config", f->m_info.idType, DB_PET_CONFIG_SKILL );
+		//    nLevel = ScriptDBObj.GetN( "pet_config", f->m_kInfo.idType, DB_PET_CONFIG_SKILL );
 		//}
-		//else if( f->m_info.fighterType == FIGHTER_TYPE_MONSTER )
+		//else if( f->m_kInfo.fighterType == FIGHTER_TYPE_MONSTER )
 		//{
-		//    nLevel = ScriptDBObj.GetN( "monstertype", f->m_info.idType, DB_MONSTERTYPE_LEVEL );
+		//    nLevel = ScriptDBObj.GetN( "monstertype", f->m_kInfo.idType, DB_MONSTERTYPE_LEVEL );
 		//}
 		ScriptMgrObj.excuteLuaFunc( "LoadUI", "FighterInfo", f->getOriginX(), f->getOriginY() );
 		std::string skillName = "";
-		if ( f->m_info.skillId > 0 )
+		if ( f->m_kInfo.skillId > 0 )
 		{
-			skillName = ScriptDBObj.GetS( "skill_config", f->m_info.skillId, DB_SKILL_CONFIG_NAME );
+			skillName = ScriptDBObj.GetS( "skill_config", f->m_kInfo.skillId, DB_SKILL_CONFIG_NAME );
 
 		}else
 		{
@@ -3894,11 +3894,11 @@ void Battle::runAction(int nTeamID)
 			break;
 		case BATTLE_EFFECT_TYPE_CHANGE_POSTION://移位
 			{//++Guosen 2012.7.10
-				int targetX = countX( this->m_teamAmout, fa->m_pkActor->m_info.group, (fa->m_nTeamDefense-1)%3+1, fa->m_nData );
-				int targetY = countY( this->m_teamAmout, fa->m_pkActor->m_info.group, (fa->m_nTeamDefense-1)%3+1, fa->m_nData );
+				int targetX = countX( this->m_teamAmout, fa->m_pkActor->m_kInfo.group, (fa->m_nTeamDefense-1)%3+1, fa->m_nData );
+				int targetY = countY( this->m_teamAmout, fa->m_pkActor->m_kInfo.group, (fa->m_nTeamDefense-1)%3+1, fa->m_nData );
 				if ( fa->m_pkActor->moveTo( targetX, targetY ) )
 				{
-					fa->m_pkActor->m_info.btStations = fa->m_nData;
+					fa->m_pkActor->m_kInfo.btStations = fa->m_nData;
 					fa->m_pkActor->setOriginPos( targetX, targetY );
 					fa->m_eActionStatus = ACTION_STATUS_FINISH;
 				}
@@ -3920,8 +3920,8 @@ void Battle::runAction(int nTeamID)
 			fa->m_pkActor->m_bHardAtk=false;
 			fa->m_pkActor->hurted(fa->m_nData);
 			NDLog("hurt %d",fa->m_nData);
-			fa->m_pkActor->setCurrentHP((fa->m_pkActor->m_info.nLife)+(fa->m_nData));
-			if (fa->m_pkActor->m_info.nLife > 0)
+			fa->m_pkActor->setCurrentHP((fa->m_pkActor->m_kInfo.nLife)+(fa->m_nData));
+			if (fa->m_pkActor->m_kInfo.nLife > 0)
 			{
 				// hurt
 				fa->m_pkActor->setHurtOK(true);
@@ -3950,7 +3950,7 @@ void Battle::runAction(int nTeamID)
 			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
 		case BATTLE_EFFECT_TYPE_MANA:
-			fa->m_pkActor->setCurrentMP((fa->m_pkActor->m_info.nMana)+(fa->m_nData));
+			fa->m_pkActor->setCurrentMP((fa->m_pkActor->m_kInfo.nMana)+(fa->m_nData));
 			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
 		default:
@@ -4376,7 +4376,7 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 		case BATTLE_EFFECT_TYPE_DRITICAL:
 			fighter->m_bHardAtk = true;
 			fighter->hurted(cmd->data);
-			fighter->setCurrentHP((fighter->m_info.nLife)+(cmd->data));
+			fighter->setCurrentHP((fighter->m_kInfo.nLife)+(cmd->data));
 			if (fighter->m_kInfo.nLife > 0)
 			{
 				// hurt
@@ -4453,8 +4453,8 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 			break;
 		case BATTLE_EFFECT_TYPE_CHANGE_POSTION://移位
 			{
-				int targetX = countX( this->m_teamAmout, fighter->m_info.group, fighter->m_info.btBattleTeam, cmd->data );
-				int targetY = countY( this->m_teamAmout, fighter->m_info.group, fighter->m_info.btBattleTeam, cmd->data );
+				int targetX = countX( this->m_teamAmout, fighter->m_kInfo.group, fighter->m_kInfo.btBattleTeam, cmd->data );
+				int targetY = countY( this->m_teamAmout, fighter->m_kInfo.group, fighter->m_kInfo.btBattleTeam, cmd->data );
 				if ( fighter->moveTo( targetX, targetY ) )
 				{
 					fighter->m_kInfo.btStations = cmd->data;
@@ -4585,7 +4585,8 @@ void Battle::moveBack(FightAction* action)
 }
 
 void Battle::addSkillEffectToFighter(Fighter* fighter, NDAnimationGroup* effect, int delay, int pos, bool bRevers)
-{
+{//--Guosen 2012.11.9 //因效果动画未实现，暂时注释，--#################################################################################################
+return;
 	NDLog("add skill effect");
 	NDSubAniGroup sa;
 	sa.role = fighter->GetRole();

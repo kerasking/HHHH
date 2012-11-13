@@ -325,7 +325,7 @@ void Fighter::updatePos()
 		CGSize sizeStr =getStringSize(m_pkSkillNameLabel->GetText().c_str(), DEFAULT_FONT_SIZE * FONT_SCALE);
 
 		//++Guosen 2012.6.28//设置技能名的显示位置
-		//if(this->m_info.group == BATTLE_GROUP_ATTACK)
+		//if(this->m_kInfo.group == BATTLE_GROUP_ATTACK)
 		//{
 		//	lb_skillName->SetFrameRect(CGRectMake(pt.x +(FIGHTER_WIDTH/2), pt.y - (FIGHTER_HEIGHT/2) - sizeStr.height, sizeStr.width, sizeStr.height));
 		//}else{
@@ -392,11 +392,11 @@ void Fighter::LoadEudemon()
 {
 //	int idLookFace = 0;
 //	std::string strName = "";
-//	PetInfo* petInfo = PetMgrObj.GetPet(m_info.idPet);
+//	PetInfo* petInfo = PetMgrObj.GetPet(m_kInfo.idPet);
 //	if (!petInfo) 
 //	{
 //		// 其它玩家的
-//		Item item(m_info.idType);
+//		Item item(m_kInfo.idType);
 //		strName		= item.getItemName();
 //		idLookFace	= item.getLookFace();
 //	}
@@ -424,7 +424,7 @@ void Fighter::LoadRole(int nLookFace, int lev, const string& name)
 	m_pkRole->m_nLevel = lev;
 	role->SetNonRole(false);
 	m_nRoleInitialHeight = m_pkRole->GetHeight();
-	if( this->m_info.group == BATTLE_GROUP_ATTACK )
+	if( this->m_kInfo.group == BATTLE_GROUP_ATTACK )
 	{
 		m_iIconsXOffset = -HP_BAR_WIDTH/2 - STATUS_ICON_WIDTH;//-m_role->GetWidth()/2 - STATUS_ICON_WIDTH;
 	}
@@ -448,9 +448,9 @@ void Fighter::LoadMonster(int nLookFace, int lev, const string& name)
 	m_pkRole->m_strName = name;
 	m_pkRole->m_nLevel = lev;
 
-	//this->m_info.bRoleMonster = role->m_bRoleMonster;
+	//this->m_kInfo.bRoleMonster = role->m_bRoleMonster;
 	m_nRoleInitialHeight = m_pkRole->GetHeight();
-	if( this->m_info.group == BATTLE_GROUP_ATTACK )
+	if( this->m_kInfo.group == BATTLE_GROUP_ATTACK )
 	{
 		m_iIconsXOffset = -HP_BAR_WIDTH/2 - STATUS_ICON_WIDTH;//-m_role->GetWidth()/2 - STATUS_ICON_WIDTH;
 	}
@@ -540,7 +540,7 @@ void Fighter::drawStatusAniGroup()
 		}
 	}
 
-	if ( m_info.nMana >= m_info.nManaMax )
+	if ( m_kInfo.nMana >= m_kInfo.nManaMax )
 	{
 		if( !mana_full_ani )
 		{//气条满，爆气动画
@@ -683,7 +683,7 @@ bool Fighter::isCatchable()
 {
 //	bool ret = false;
 //	if (isVisiable()) {
-//		ret = m_info.catchFlag > 0 ? true : false;
+//		ret = m_kInfo.catchFlag > 0 ? true : false;
 //	}
 	return false;
 }
@@ -702,7 +702,7 @@ bool Fighter::isVisiable()
 {
 	bool result = false;
 
-//	if (m_info.fighterType == FIGHTER_TYPE_PET) {
+//	if (m_kInfo.fighterType == FIGHTER_TYPE_PET) {
 //		if (escape) {
 //			result = false;
 //		} else {
@@ -807,7 +807,7 @@ void Fighter::setCurrentHP(int hp)
 	int currentId = BattleMgrObj.GetBattle()->GetCurrentShowFighterId();
 	if (currentId == m_kInfo.idObj)
 	{
-		ScriptMgrObj.excuteLuaFunc("UpdateHp","FighterInfo",m_info.nLife,m_info.nLifeMax);
+		ScriptMgrObj.excuteLuaFunc("UpdateHp","FighterInfo",m_kInfo.nLife,m_kInfo.nLifeMax);
 	}
 }
 
@@ -825,7 +825,7 @@ void Fighter::setCurrentMP(int mp)
 	int currentId = BattleMgrObj.GetBattle()->GetCurrentShowFighterId();
 	if (currentId == m_kInfo.idObj)
 	{
-		ScriptMgrObj.excuteLuaFunc("UpdateMp","FighterInfo",m_info.nMana,m_info.nManaMax);
+		ScriptMgrObj.excuteLuaFunc("UpdateMp","FighterInfo",m_kInfo.nMana,m_kInfo.nManaMax);
 	}
 }
 
@@ -847,7 +847,7 @@ void Fighter::showFighterName(bool b)
 
 			//** chh 2012-09-05 **//
 			//m_pkFighterNameLabel->SetFontColor(ccc4(255, 255, 255, 255));
-			ccColor4B cColor4 = ScriptMgrObj.excuteLuaFuncRetColor4("GetColor", "Item", m_info.nQuality);
+			ccColor4B cColor4 = ScriptMgrObj.excuteLuaFuncRetColor4("GetColor", "Item", m_kInfo.nQuality);
 			m_pkFighterNameLabel->SetFontColor(cColor4);
 
 			m_pkFighterNameLabel->SetText(GetRole()->m_strName.c_str());
@@ -1308,7 +1308,7 @@ void Fighter::setWillBeAtk(bool bSet)
 	if (bSet)
 	{
 //		NDPicture* pic = m_parent->GetBojiPic();
-//		bool bReverse = m_info.group == BATTLE_GROUP_ATTACK;
+//		bool bReverse = m_kInfo.group == BATTLE_GROUP_ATTACK;
 //		pic->SetReverse(bReverse);
 //		
 //		CGRect rect = CGRectMake(x + m_role->GetWidth() / 2 + 5,
