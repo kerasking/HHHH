@@ -398,14 +398,12 @@ void NDSprite::SetSprite(NDPicture* pkPicture)
 
 bool NDSprite::IsAnimationComplete()
 {
-	return m_pkCurrentAnimation == NULL ?
-		true : m_pkFrameRunRecord->getIsCompleted();
+	return m_pkCurrentAnimation == NULL ? true : m_pkFrameRunRecord->getIsCompleted();
 }
 
 int NDSprite::GetCurFrameIndex()
 {
-	return m_pkFrameRunRecord == NULL ?
-		0 : m_pkFrameRunRecord->getCurrentFrameIndex();
+	return m_pkFrameRunRecord == NULL ? 0 : m_pkFrameRunRecord->getCurrentFrameIndex();
 }
 
 CGRect NDSprite::GetSpriteRect()

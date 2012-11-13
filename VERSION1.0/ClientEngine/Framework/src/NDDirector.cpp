@@ -18,6 +18,7 @@
 #include "NDPicture.h"
 #include "NDAnimationGroupPool.h"
 #include "define.h"
+#include "CCTransition.h"
 
 using namespace cocos2d;
 
@@ -111,11 +112,12 @@ void NDDirector::TransitionAnimateComplete()
 
 void NDDirector::SetTransitionScene(NDScene *scene, TransitionSceneType type)
 {
-// 		m_TransitionSceneWait = scene;
-// 		
-// 		m_TransitionSceneType = type;
-// 		
-// 		[m_director pushScene:[CCTransitionFadeTR transitionWithDuration:1.2f scene:(CCScene *)scene->m_ccNode]];
+	m_pkTransitionSceneWait = scene;
+
+	m_eTransitionSceneType = type;
+
+	m_pkDirector->pushScene(CCTransitionFade::transitionWithDuration(1.2f, (CCScene *)scene->m_ccNode));
+	//[m_director pushScene:[CCTransitionFadeTR transitionWithDuration:1.2f scene:(CCScene *)scene->m_ccNode]];
 
 	/*
 	 static bool right = true;
@@ -135,27 +137,30 @@ void NDDirector::SetTransitionScene(NDScene *scene, TransitionSceneType type)
 
 void NDDirector::RunScene(NDScene* scene)
 {
-	//@zwq
-	if (m_pkDirector->getRunningScene())
-	{
-		m_kScenesStack.push_back(scene);
-		m_pkDirector->replaceScene((CCScene *) scene->m_ccNode);
-	}
-	else
-	{
-		m_kScenesStack.push_back(scene);
-		m_pkDirector->runWithScene((CCScene *) scene->m_ccNode);
-	}
+// 	//@zwq
+// 	if (m_pkDirector->getRunningScene())
+// 	{
+// 		m_kScenesStack.push_back(scene);
+// 		m_pkDirector->replaceScene((CCScene *) scene->m_ccNode);
+// 	}
+// 	else
+// 	{
+// 		m_kScenesStack.push_back(scene);
+// 		m_pkDirector->runWithScene((CCScene *) scene->m_ccNode);
+// 	}
+
+	m_kScenesStack.push_back(scene);
+	m_pkDirector->runWithScene((CCScene *) scene->m_ccNode);
 }
 
 void NDDirector::ReplaceScene(NDScene* pkScene, bool bAnimate/*=false*/)
 {
-// 		if (bAnimate) 
-// 		{
-// 			SetTransitionScene(scene, eTransitionSceneReplace);
-// 			
-// 			return;
-// 		}
+// 	if (bAnimate) 
+// 	{
+// 		SetTransitionScene(pkScene, eTransitionSceneReplace);
+// 
+// 		return;
+// 	}
 
 	if (m_kScenesStack.size() > 0)
 		{
@@ -185,12 +190,12 @@ void NDDirector::ReplaceScene(NDScene* pkScene, bool bAnimate/*=false*/)
 
 void NDDirector::PushScene(NDScene* scene, bool bAnimate/*=false*/)
 {
-// 		if (bAnimate) 
-// 		{
-// 			SetTransitionScene(scene, eTransitionScenePush);
-// 			
-// 			return;
-// 		}
+// 	if (bAnimate) 
+// 	{
+// 		SetTransitionScene(scene, eTransitionScenePush);
+// 
+// 		return;
+// 	}
 
 	this->BeforeDirectorPushScene(scene);
 
@@ -204,12 +209,12 @@ void NDDirector::PushScene(NDScene* scene, bool bAnimate/*=false*/)
 
 bool NDDirector::PopScene(NDScene* scene/*=NULL*/, bool bAnimate/*=false*/)
 {
-// 		if (bAnimate && m_scenesStack.size() >= 2) 
-// 		{
-// 			SetTransitionScene(m_scenesStack[m_scenesStack.size()-2], eTransitionScenePop);
-// 			
-// 			return true;
-// 		}
+// 	if (bAnimate && m_kScenesStack.size() >= 2) 
+// 	{
+// 		SetTransitionScene(m_kScenesStack[m_kScenesStack.size()-2], eTransitionScenePop);
+// 
+// 		return true;
+// 	}
 
 	return this->PopScene(true);
 }

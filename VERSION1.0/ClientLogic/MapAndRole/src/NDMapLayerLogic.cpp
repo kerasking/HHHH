@@ -71,10 +71,10 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 	SetLongTouch(false);
 
 	//@check
-	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+/*	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();*/
 	m_kPosTouch = touch->GetLocation();
-	m_kPosTouch.x *= fScale * fScale; //cao
-	m_kPosTouch.y *= fScale * fScale;
+// 	m_kPosTouch.x *= fScale * fScale; //cao
+// 	m_kPosTouch.y *= fScale * fScale;
 	
 	CGPoint touchPoint = this->ConvertToMapPoint( m_kPosTouch );
 	
@@ -101,10 +101,10 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 void NDMapLayerLogic::TouchEnd(NDTouch* touch)
 {
 	//@check
-	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+/*	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();*/
 	CGPoint posTouch = touch->GetLocation();
-	posTouch.x *= fScale * fScale; //cao
-	posTouch.y *= fScale * fScale;
+// 	posTouch.x *= fScale * fScale; //cao
+// 	posTouch.y *= fScale * fScale;
 	CGPoint touchPoint = this->ConvertToMapPoint( posTouch );
 
 // 	WriteCon( "NDMapLayerLogic::TouchEnd, screenPos(%d, %d), mapPos(%d, %d)\r\n", 
