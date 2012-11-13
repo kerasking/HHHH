@@ -984,9 +984,9 @@ CGPoint NDMapLayer::ConvertToMapPoint(CGPoint kScreenPoint)
 	return kPoint;
 #else //@check
 	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-//  	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
-//  	kScreenPoint.x *= fScale;
-//  	kScreenPoint.y *= fScale;
+ 	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+ 	kScreenPoint.x *= fScale;
+ 	kScreenPoint.y *= fScale;
 	return ccpAdd(	
 		ccpSub(kScreenPoint, ccp(winSize.width / 2, winSize.height / 2)),
 			m_kScreenCenter );
