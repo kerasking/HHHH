@@ -81,6 +81,7 @@ public: //@shader
 protected:
 	void DrawSetup( const char* shaderType = kCCShader_PositionTextureColor );
 	virtual void debugDraw();
+	CGRect getDrawRectInPoints();
 
 private:
 

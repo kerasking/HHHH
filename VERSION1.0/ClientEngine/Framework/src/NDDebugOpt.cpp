@@ -33,5 +33,6 @@ IMP_STATIC_PROPERTY(bool,bDrawRolePlayer,true,NDDebugOpt)
 IMP_STATIC_PROPERTY(bool,bDrawRoleManual,true,NDDebugOpt)
 
 IMP_STATIC_PROPERTY(bool,bLightEffect,true,NDDebugOpt)
+IMP_STATIC_PROPERTY(bool,bDebugDraw,false,NDDebugOpt)
 
 NS_NDENGINE_END

@@ -106,9 +106,9 @@ public:
 	void preDraw();
 	void postDraw();
 	void debugDraw();
-		void MakeTexture();
-		void MakeCoordinates();
-		void MakeVertices();
+	void MakeTexture();
+	void MakeCoordinates();
+	void MakeVertices();
 		
 	private:
 		std::string m_strText;

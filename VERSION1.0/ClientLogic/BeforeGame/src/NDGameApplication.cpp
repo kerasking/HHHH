@@ -412,6 +412,12 @@ bool NDGameApplication::processPM(const char* cmd)
 			WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );	
 		}
 	}
+	else if (
+		sscanf(cmd, "debugdraw %d", &val) == 1 ||
+		sscanf(cmd, "enablefocus %d", &val) == 1)
+	{
+		NDDebugOpt::setDrawDebugEnabled(val);
+	}
 	else
 	{
 		DWORD n = 0;

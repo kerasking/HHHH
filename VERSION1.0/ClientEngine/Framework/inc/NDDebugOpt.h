@@ -38,6 +38,7 @@ class NDDebugOpt : private NDObject
 	DECL_STATIC_PROPERTY(bool, bDrawRoleManual,	DrawRoleManualEnabled);
 
 	DECL_STATIC_PROPERTY(bool, bLightEffect,DrawLightEffectEnabled);
+	DECL_STATIC_PROPERTY(bool, bDebugDraw,DrawDebugEnabled);
 };
 
 NS_NDENGINE_END

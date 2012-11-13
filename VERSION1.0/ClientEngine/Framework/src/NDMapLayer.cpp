@@ -560,7 +560,7 @@ void NDMapLayer::draw()
 		}
 	}
 
-	//debugDraw(); //@todo
+	debugDraw();
 }
 
 void NDMapLayer::DrawLabelRoadBlockTime()
@@ -1958,6 +1958,8 @@ void NDMapLayer::debugDraw()
 // 	ccDrawLine( ccp(0,0), ccp(winSize.width, winSize.height));
 // #endif
 
+	if (!NDDebugOpt::getDrawDebugEnabled()) return;
+
 	drawCell();
 }
 
@@ -1971,7 +1973,7 @@ void NDMapLayer::drawCell()
 	const int colAmount = pMapData->getColumns();
 	const int rowAmount = pMapData->getRows();
 	const int step = MAP_UNITSIZE;
-	const float pad = 0.5f;
+	const float pad = 0.25f;
 
 	ccDrawColor4F(1,1,1,1);
 
