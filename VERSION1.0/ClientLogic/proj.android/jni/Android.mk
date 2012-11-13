@@ -20,7 +20,6 @@ LOCAL_SRC_FILES := \
 ../../Drama/src/DramaUI.cpp \
 ../../GameData/src/GameData.cpp \
 ../../GameData/src/GameDataBase.cpp \
-../../GameScene/src/EquipUpgradeScene.cpp \
 ../../GameScene/src/GameScene.cpp \
 ../../GameScene/src/SMBattleScene.cpp \
 ../../GameScene/src/SMGameScene.cpp \

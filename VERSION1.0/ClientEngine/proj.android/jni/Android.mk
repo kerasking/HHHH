@@ -10,6 +10,7 @@ LOCAL_SRC_FILES := \
 ../../Framework/src/NDBaseDirector.cpp \
 ../../Framework/src/NDBaseLayer.cpp \
 ../../Framework/src/NDBaseNode.cpp \
+../../Framework/src/NDBaseNetMgr.cpp \
 ../../Framework/src/NDCommonProtocol.cpp \
 ../../Framework/src/NDDirector.cpp \
 ../../Framework/src/NDLayer.cpp \
@@ -50,6 +51,7 @@ LOCAL_SRC_FILES := \
 ../../System/src/SMString.cpp \
 ../../UI/src/NDScrollLayer.cpp \
 ../../UI/src/NDTextNode.cpp \
+../../UI/src/NDUITableLayer.cpp \
 ../../UI/src/NDUIBaseGraphics.cpp \
 ../../UI/src/NDUIButton.cpp \
 ../../UI/src/NDUICheckBox.cpp \
