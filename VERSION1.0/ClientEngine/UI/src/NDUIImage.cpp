@@ -71,6 +71,7 @@ namespace NDEngine
 	
 	void NDUIImage::draw()
 	{
+		if (!isDrawEnabled()) return;
 		NDUINode::draw();
 		
 		if (this->IsVisibled()) 

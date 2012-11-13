@@ -147,6 +147,7 @@ namespace NDEngine
 	
 	void NDUIEdit::draw()
 	{	
+		if (!isDrawEnabled()) return;
         TICK_ANALYST(ANALYST_NDUIEdit);
 		NDUINode::draw();
 		

@@ -140,6 +140,8 @@ namespace NDEngine
 	
 	void NDUIScrollText::draw()
 	{	
+		if (!isDrawEnabled()) return;
+
 		NDDirector::DefaultDirector()->SetViewRect(this->GetScreenRect(), this);
 		
 		NDUILayer::draw();

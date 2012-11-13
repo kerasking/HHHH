@@ -102,7 +102,9 @@ void NDUICheckBox::Initialization(NDPicture *checkPic, NDPicture *unCheckPic, bo
 
 void NDUICheckBox::draw()
 {
+	if (!isDrawEnabled()) return;
 	NDUINode::draw();
+
 	if (!this->IsVisibled()) 
 	{
 		return;

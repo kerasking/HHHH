@@ -130,27 +130,138 @@ m_nMapID(0),
 m_nMapDocID(0),
 m_nCurrentMonsterRound(0)
 {
-	NDNetMsgPool& kNetPool = NDNetMsgPoolObj;
-	kNetPool.RegMsg(_MSG_NPCINFO_LIST, this);
-	kNetPool.RegMsg(_MSG_ROOM, this);
 	m_iCurDlgNpcID = 0;
-
 	mapType = MAPTYPE_NORMAL;
-
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this, "sim ");
-
 	m_kTimer.SetTimer(this, 1, 0.1);
-
 	memset(zhengYing, 0, sizeof(zhengYing));
-
 	isShowName = true;
 	isShowOther = true;
+
+	RegisProcessMsg();
 }
 
 NDMapMgr::~NDMapMgr()
 {
 	m_vNPC.clear();
 	m_mapManualRole.clear();
+}
+
+void NDMapMgr::RegisProcessMsg()
+{
+	NDNetMsgPool& pool = NDNetMsgPoolObj;
+	pool.RegMsg(_MSG_NPCINFO_LIST, this);
+	pool.RegMsg(_MSG_ROOM, this);
+
+	pool.RegMsg(_MSG_USERINFO, this);
+	pool.RegMsg(_MSG_USERATTRIB, this);
+	pool.RegMsg(_MSG_PLAYER, this);
+	pool.RegMsg(_MSG_PLAYER_EXT, this);
+	pool.RegMsg(_MSG_NPC_STATUS, this);
+	pool.RegMsg(_MSG_MONSTER_INFO_LIST, this);
+	pool.RegMsg(MB_MSG_DISAPPEAR, this);
+	pool.RegMsg(_MSG_WALK, this);
+	pool.RegMsg(_MSG_KICK_BACK, this);
+	pool.RegMsg(_MSG_CHGPOINT, this);
+	pool.RegMsg(_MSG_PETINFO, this);
+	pool.RegMsg(_MSG_DIALOG, this);
+	pool.RegMsg(_MSG_LIFESKILL, this);
+	pool.RegMsg(_MSG_SYNTHESIZE, this);
+	pool.RegMsg(_MSG_COLLECTION, this);
+	pool.RegMsg(_MSG_LOGIN_SUC,this);
+	pool.RegMsg(_MSG_CREATE_TEMP_CREDENTIAL_RET,this);
+	pool.RegMsg(_MSG_REQUEST_ACCESS_TOKEN_RET,this);
+	pool.RegMsg(_MSG_CREATE_TRANSACTION_RET,this);
+	pool.RegMsg(_MSG_CLOSE_TRANSACTION_RET,this);
+	pool.RegMsg(_MSG_REHEARSE, this);
+	pool.RegMsg(_MSG_TEAM, this);
+	pool.RegMsg(_MSG_GOODFRIEND, this);
+	pool.RegMsg(_MSG_GAME_QUIT, this);
+	pool.RegMsg(_MSG_TASKINFO, this);
+	pool.RegMsg(_MSG_DOING_TASK_LIST, this);
+	pool.RegMsg(_MSG_QUERY_TASK_LIST, this);
+	pool.RegMsg(_MSG_TASK_ITEM_OPT, this);
+	pool.RegMsg(_MSG_QUERY_TASK_LIST_EX, this);
+	pool.RegMsg(_MSG_NPCINFO, this);
+	pool.RegMsg(_MSG_TRADE, this);
+	pool.RegMsg(_MSG_BILLBOARD, this);
+	pool.RegMsg(_MSG_BILLBOARD_FIELD, this);
+	pool.RegMsg(_MSG_BILLBOARD_LIST, this);
+	pool.RegMsg(_MSG_BILLBOARD_USER, this);
+	pool.RegMsg(_MSG_SHOPINFO, this);
+	pool.RegMsg(_MSG_SHOP, this);
+	pool.RegMsg(_MSG_REG_TUTOR_INFO, this);  
+	pool.RegMsg(_MSG_TUTOR_INFO, this);
+	pool.RegMsg(_MSG_USER_POS, this);
+	pool.RegMsg(_MSG_CHG_MAP_FAIL, this);
+	pool.RegMsg(_MSG_TUTOR, this);
+	pool.RegMsg(_MSG_USERINFO_SEE, this); 
+	pool.RegMsg(_MSG_EQUIP_INFO, this); 
+	pool.RegMsg(_MSG_USER_STATE, this);
+	pool.RegMsg(_MSG_USER_STATE_CHG, this);
+	pool.RegMsg(_MSG_POS_TEXT, this);
+	pool.RegMsg(_MSG_EQUIPIMPROVE, this);
+	pool.RegMsg(_MSG_FORMULA, this); 
+	pool.RegMsg(_MSG_BOOTH, this);
+	pool.RegMsg(_MSG_BOOTH_GOODS, this);
+	pool.RegMsg(_MSG_MAGIC_GOODS, this);
+	pool.RegMsg(_MSG_SKILL, this);
+	pool.RegMsg(_MSG_PET_SKILL, this);
+	pool.RegMsg(_MSG_MBR_LIST, this);
+	pool.RegMsg(_MSG_APPLY_LIST, this);
+	pool.RegMsg(_MSG_SYN_ANNOUNCE, this);
+	pool.RegMsg(_MSG_SYN_INFO, this);
+	pool.RegMsg(_MSG_QUERY_REG_SYN_LIST, this);
+	pool.RegMsg(_MSG_SYNDICATE, this);
+	pool.RegMsg(_MSG_SYN_LIST, this);
+	pool.RegMsg(_MSG_INVITE_LIST, this);
+	pool.RegMsg(_MSG_INVITE_LIST_EX, this);
+	pool.RegMsg(_MSG_SYN_INVITE, this);
+	pool.RegMsg(_MSG_SYN_LIST_EX, this);
+	pool.RegMsg(_MSG_LETTER, this);
+	pool.RegMsg(_MSG_LETTER_INFO, this);
+	pool.RegMsg(_MSG_LETTER_REQUEST, this);
+	pool.RegMsg(_MSG_AUCTION, this);
+	pool.RegMsg(_MSG_AUCTIONINFO, this);
+	pool.RegMsg(_MSG_DIGOUT, this);
+	pool.RegMsg(_MSG_CUSTOMER_SERVICE, this);
+	pool.RegMsg(_MSG_SYSTEM_DIALOG, this);
+	pool.RegMsg(MB_MSG_CHANGE_PASS, this);
+	pool.RegMsg(_MSG_NAME, this);
+	pool.RegMsg(_MSG_PLAYERLEVELUP, this);
+	pool.RegMsg(_MSG_NPC, this);
+	pool.RegMsg(_MSG_SEE, this);
+	pool.RegMsg(_MSG_REPUTE_ATTR, this);
+	pool.RegMsg(_MSG_CAMP_STORAGE, this);
+	pool.RegMsg(_MSG_NPC_POSITION, this);
+	pool.RegMsg(_MSG_NPC_TALK, this);
+	pool.RegMsg(_MSG_ITEM_TYPE_INFO, this);
+	pool.RegMsg(_MSG_COMPETITION, this);
+	pool.RegMsg(_MSG_WISH, this);
+	pool.RegMsg(_MSG_TIP, this);
+	pool.RegMsg(_MSG_WALK_TO, this);
+	pool.RegMsg(_MSG_REPUTE, this);
+	pool.RegMsg(_MSG_COMMON_LIST, this);
+	pool.RegMsg(_MSG_COMMON_LIST_RECORD, this);
+	pool.RegMsg(_MSG_LIGHT_EFFECT, this);
+	pool.RegMsg(_MSG_CHG_PET_POINT, this);
+	pool.RegMsg(MB_MSG_RECHARGE, this); 
+	pool.RegMsg(MB_MSG_RECHARGE_RETURN, this); 
+	pool.RegMsg(_MSG_CLIENT_VERSION, this);
+	pool.RegMsg(_MSG_ACTIVITY, this);
+	pool.RegMsg(_MSG_DELETEROLE, this);
+	//pool.RegMsg(_MSG_PORTAL, this);
+	pool.RegMsg(_MSG_QUERY_SOCIAL_INFO, this);
+	pool.RegMsg(MB_MSG_MOBILE_PWD, this);
+	pool.RegMsg(_MSG_MARRIAGE, this);
+	//pool.RegMsg(_MSG_RESPOND_TREASURE_HUNT_INFO, this);
+	//pool.RegMsg(_MSG_RESPOND_TREASURE_HUNT_PR0B, this);
+	pool.RegMsg(_MSG_SHOW_TREASURE_HUNT_AWARD, this);
+	pool.RegMsg(_MSG_KICK_OUT_TIP, this);
+	pool.RegMsg(_MSG_CHARGE_GIFT_INFO, this);
+	pool.RegMsg(_MSG_QUERY_PETCKILL, this);
+	pool.RegMsg(_MSG_ROADBLOCK,this);
+
 }
 
 bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
@@ -1149,8 +1260,8 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 	m_nMapType = pkData->ReadInt();
 	m_strMapName = pkData->ReadUnicodeString();
 
-	NDPlayer& kPlayer = NDPlayer::defaultHero();
 
+	NDUISynLayer::Close(SYN_CREATE_ROLE);
 	NDMapMgrObj.ClearManualRole();
 
 	m_nMapID = nMapID;
@@ -1159,61 +1270,41 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 	{
 		m_nSaveMapID = m_nMapID;
 	}
-
-	kPlayer.m_nCurMapID = nMapDocID;
-
 	ShowPetInfo kPetInfoRerserve;
-	// 	kPlayer.GetShowPetInfo(kPetInfoRerserve);
-	kPlayer.m_strName = string("efawfawe");
-	//	kPlayer.ResetShowPet();
-
-//   	if (kPlayer.GetParent() != 0)
-//   	{
-//   		NDRidePet* pkRidePet = NDPlayer::defaultHero().GetRidePet();
-//   
-//   		if (0 != pkRidePet && 0 != pkRidePet->GetParent())
-//   		{
-//   			pkRidePet->RemoveFromParent(false);
-//   		}
-//   
-//   		kPlayer.RemoveFromParent(false);
-//   	}
 
 	while (NDDirector::DefaultDirector()->PopScene());
+
 
 	NDMapMgrObj.ClearNPC();
 	NDMapMgrObj.ClearMonster();
 	NDMapMgrObj.ClearGP();
 	NDMapMgrObj.loadSceneByMapDocID(nMapDocID);
 
-	NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(
-			NDDirector::DefaultDirector()->GetRunningScene());
-
-	int nTheID = GetMotherMapID();
-	// 	int nTitleID = ScriptDBObj.GetN("map", nTheID, DB_MAP_TITLE);
-	//pkLayer->ShowTitle(nTitleID, 0);
-
-	if (0 == pkLayer)
-	{
-		return;
-	}
-
-	kPlayer.SetPosition(
-			ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-					dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+	NDPlayer& kPlayer = NDPlayer::defaultHero();
+	kPlayer.m_nCurMapID = nMapDocID;
+	kPlayer.m_strName = string("efawfawe");
+	kPlayer.SetPosition( ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET, 
+		                   dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+	kPlayer.stopMoving();
 	kPlayer.SetServerPositon(dwPortalX, dwPortalY);
 	kPlayer.SetShowPet(kPetInfoRerserve);
-	kPlayer.stopMoving();
 
-//   	NDRidePet* pkRidePet = kPlayer.GetRidePet();
-//   
-//   	if (0 != pkRidePet)
-//   	{
-//   		pkRidePet->stopMoving();
-//   		pkRidePet->SetPositionEx(
-//   				ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-//   						dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
-//   	}
+
+	NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
+	ND_ASSERT_NO_RETURN(NULL == pkLayer);
+
+	int nTheID = GetMotherMapID();
+
+
+#if 0
+   	NDRidePet* pkRidePet = kPlayer.GetRidePet();
+   	if (0 != pkRidePet)
+   	{
+   		pkRidePet->stopMoving();
+   		pkRidePet->SetPositionEx(ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+   									 dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+   	}
+#endif 
 
 	pkLayer->SetScreenCenter(
 			ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
@@ -1222,23 +1313,20 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 	kPlayer.SetAction(false);
 	kPlayer.SetLoadMapComplete();
 
-	//	ItemMgrObj.SortBag();
-
 	ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
 
 	if (nTheID / 100000000 > 0)
 	{
-		//	ScriptMgrObj.excuteLuaFunc("SetUIVisible","",0);
+		ScriptMgrObj.excuteLuaFunc("SetUIVisible", "", 0);
 	}
 	else
 	{
-		pkLayer->AddChild(&kPlayer, 111, 1000);
-		//	ScriptMgrObj.executeLuaFunc("SetUIVisible","",1);
+		pkLayer->AddChild(&kPlayer);
+		ScriptMgrObj.excuteLuaFunc("SetUIVisible", "", 1);
 	}
 
-//	CloseProgressBar;
-
-//	NDMapMgrObj.LoadSceneMonster();
+	CloseProgressBar;
+	NDMapMgrObj.LoadSceneMonster();
 }
 
 void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
@@ -1342,14 +1430,14 @@ void NDMapMgr::AddAllNPCToMap()
 
 		pkLayer->AddChild((NDNode*) pkNPC, 2, 100);
 
-// 		if (0 != pkNPC->GetRidePet())
-// 		{
-// 			pkNPC->GetRidePet()->stopMoving();
-// 			pkNPC->GetRidePet()->SetPositionEx(pkNPC->GetPosition());
-// 			pkNPC->GetRidePet()->SetCurrentAnimation(RIDEPET_STAND,
-// 					pkNPC->m_bFaceRight);
-// 		}
-
+#if 0
+ 		if (0 != pkNPC->GetRidePet())
+ 		{
+ 			pkNPC->GetRidePet()->stopMoving();
+ 			pkNPC->GetRidePet()->SetPositionEx(pkNPC->GetPosition());
+ 			pkNPC->GetRidePet()->SetCurrentAnimation(RIDEPET_STAND, pkNPC->m_bFaceRight);
+ 		}
+#endif 
 		pkNPC->HandleNpcMask(true);
 	}
 
@@ -1375,6 +1463,7 @@ void NDMapMgr::ClearManualRole()
 		NDManualRole* pkRole = it->second;
 		SAFE_DELETE_NODE(pkRole);
 	}
+	m_mapManualRole.clear();
 }
 
 void NDMapMgr::ClearNPC()
@@ -1389,6 +1478,8 @@ void NDMapMgr::ClearNPC()
 		NDNpc* pkRole = *it;
 		SAFE_DELETE_NODE(pkRole);
 	}
+
+	m_vNPC.clear(); 
 }
 
 void NDMapMgr::ClearMonster()
@@ -1416,7 +1507,7 @@ bool NDMapMgr::loadSceneByMapDocID(int nMapID)
 	m_nMapDocID = nMapID;
 
 	NDDirector::DefaultDirector()->PurgeCachedData();
-	NDDirector::DefaultDirector()->ReplaceScene(NDScene::Scene());
+	//NDDirector::DefaultDirector()->ReplaceScene(NDScene::Scene());
 
 	CSMGameScene* pkScene = CSMGameScene::Scene();
 	pkScene->Initialization(nMapID);

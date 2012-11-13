@@ -389,7 +389,7 @@ public:
 	void throughMap(int mapX, int mapY, int mapId);
 	//void addRequst(RequsetInfo& request);		///< RequestInfo需要合并后 郭浩
 	void NavigateToNpc(int nNpcId);
-
+	void RegisProcessMsg();
 public:
 
 	bool Hack_loadSceneByMapDocID(int nMapID) { return loadSceneByMapDocID(nMapID); }; //for debug purpose only.
