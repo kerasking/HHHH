@@ -351,6 +351,8 @@ void NDUIButton::SetFrameRect(CGRect rect)
 
 void NDUIButton::draw()
 {
+	if (!isDrawEnabled()) return;
+
 	NDUINode::draw();
 
 	if (!this->IsVisibled()) return;

@@ -1389,6 +1389,8 @@ void NDMapMgr::ClearNPC()
 		NDNpc* pkRole = *it;
 		SAFE_DELETE_NODE(pkRole);
 	}
+
+	m_vNPC.clear(); 
 }
 
 void NDMapMgr::ClearMonster()

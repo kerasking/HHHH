@@ -49,6 +49,7 @@ namespace NDEngine
 	
 	void NDUIProgressBar::draw()
 	{
+		if (!isDrawEnabled()) return;
         TICK_ANALYST(ANALYST_NDUIProgressBar);	
 		NDUINode::draw();
 		

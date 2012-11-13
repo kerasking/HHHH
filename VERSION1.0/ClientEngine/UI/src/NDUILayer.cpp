@@ -219,7 +219,7 @@ NDUINode* NDUILayer::GetFocus()
 
 void NDUILayer::draw()
 {
-	if (!NDDebugOpt::getDrawUIEnabled()) return;
+	if (!isDrawEnabled()) return;
 
 	NDUINode::draw();
 

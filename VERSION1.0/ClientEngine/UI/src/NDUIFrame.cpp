@@ -32,6 +32,7 @@ namespace NDEngine
 
 	void NDUIFrame::draw()
 	{
+		if (!isDrawEnabled()) return;
 		NDUILayer::draw();
 
 		if (IsVisibled())

@@ -176,6 +176,7 @@ void NDUISynLayer::SetTitle(std::string title)
 
 void NDUISynLayer::draw()
 {
+	if (!isDrawEnabled()) return;
 	NDUILayer::draw();
 	if (this->IsVisibled()) 
 	{

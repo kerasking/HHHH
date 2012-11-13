@@ -105,6 +105,9 @@ namespace NDEngine
 	public:		
 		void draw(); override
 
+	protected:
+		override bool isDrawEnabled();
+
 	private:		
 		bool m_bVisibled;
 		CGRect m_kFrameRect;
