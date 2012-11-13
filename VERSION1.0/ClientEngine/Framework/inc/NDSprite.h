@@ -23,6 +23,7 @@
 #include "define.h"
 #include "NDConstant.h"
 #include "NDBaseFighter.h"
+#include "NDDirector.h"
 
 #define FIGHTER_HEIGHT	70 * (NDDirector::DefaultDirector()->GetScaleFactor())
 #define FIGHTER_WIDTH	45 * (NDDirector::DefaultDirector()->GetScaleFactor())
@@ -182,25 +183,20 @@ public:
 
 	int GetCol()
 	{
-		return 0;//(m_kPosition.x - DISPLAY_POS_X_OFFSET) / 32.0f;	反向调用 郭浩
+		int iUint = 16 * ((int)(NDDirector::DefaultDirector()->GetScaleFactor()));
+		return (m_kPosition.x - iUint/2) / iUint;
 	}
 	
 	int GetRow()
 	{
-		return 0;//(m_kPosition.y - DISPLAY_POS_Y_OFFSET) / 32.0f; 反向调用 郭浩
+		int iUint = 16 * ((int)(NDDirector::DefaultDirector()->GetScaleFactor()));
+		return (m_kPosition.y - iUint) / iUint;
 	}
 
 	int GetCurFrameIndex();
 
 	virtual void OnMoveTurning(bool bXTurningToY,bool bInc){}
-
-//		
-//		函数：OnMoveTurning
-//		作用：
-//		参数：
-//		返回值：		
-//		virtual void OnMoveTurning(bool bXTurnigToY, bool bInc){};
-//		
+	
 //		函数：stopMoving
 //		作用：停止精灵在地图上的移动，如果精灵式停止的没有任何影响
 //		参数：无

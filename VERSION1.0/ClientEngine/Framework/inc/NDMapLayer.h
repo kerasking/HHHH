@@ -63,7 +63,7 @@ public:
 	~NDMapLayer();
 public:
 
-	virtual void AddChild(NDNode* node, int z, int tag);
+	//virtual void AddChild(NDNode* node, int z, int tag);
 //		
 //		函数：Initialization(const char* mapFile)
 //		作用：初始化地图
