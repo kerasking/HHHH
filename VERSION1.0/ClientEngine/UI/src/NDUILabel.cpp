@@ -421,7 +421,7 @@ void NDUILabel::draw()
 
 void NDUILabel::postDraw()
 {
-	//debugDraw();
+	debugDraw();
 
 // 	CGRect scrRect = this->GetScreenRect();
 // 
@@ -444,14 +444,13 @@ void NDUILabel::postDraw()
 
 void NDUILabel::debugDraw()
 {
-	//m_ccNode->drawDebug();
-#if 1
+	if (!NDDebugOpt::getDrawDebugEnabled()) return;
+
 	glLineWidth(1);
 	ccDrawColor4F(1,0,0,1);
 	CCPoint lb = ccp(m_pfVertices[0],m_pfVertices[1]);
 	CCPoint rt = ccp(m_pfVertices[9],m_pfVertices[10]);
 	ccDrawRect( lb, rt );
-#endif
 }
 
 void NDUILabel::SetFontBoderColer(ccColor4B fontColor)

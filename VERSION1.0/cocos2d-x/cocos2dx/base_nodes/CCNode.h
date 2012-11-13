@@ -438,7 +438,6 @@ public:
 #if ND_MOD
 	virtual void preDraw(void) {}
 	virtual void postDraw(void) {}
-	virtual void drawDebug(void);
 #endif 
 
     /** recursive method that visit its children and draw them */

@@ -37,8 +37,6 @@ void NDBaseNode::preDraw(void)
 
 void NDBaseNode::postDraw(void)
 {
-	//drawDebug();
-
 	if (m_ndNode && m_ndNode->DrawEnabled())
 	{
 		NDDirector::DefaultDirector()->ResumeViewRect(m_ndNode);

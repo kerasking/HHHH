@@ -11,6 +11,7 @@
 #include "CCDrawingPrimitives.h"
 #include "CCPointExtension.h"
 #include "UsePointPls.h"
+#include "NDDebugOpt.h"
 #include "NDPicture.h"
 
 
@@ -487,15 +488,23 @@ void NDTile::makeVetex(float* pData, CGRect kRect)
 	}
 }
 
-void NDTile::make()
+CGRect NDTile::getDrawRectInPoints()
 {
-#if 1 //@check 像素->点
 	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
 	CGRect rectInPoints = m_kDrawRect;
+
 	rectInPoints.origin.x /= fScale;
 	rectInPoints.origin.y /= fScale;
 	rectInPoints.size.width /= fScale;
 	rectInPoints.size.height /= fScale;
+
+	return rectInPoints;
+}
+
+void NDTile::make()
+{
+#if 1 //@check 像素->点
+	CGRect rectInPoints = this->getDrawRectInPoints();
 #endif
 
 	makeTex(m_pfCoordinates);
@@ -539,7 +548,7 @@ void NDTile::draw()
 // 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);				//由opengl组合画图
 // 	}
 
-	//this->debugDraw();
+	this->debugDraw();
 }
 
 void NDTile::drawSubRect(CGRect kRect)
@@ -549,9 +558,12 @@ void NDTile::drawSubRect(CGRect kRect)
 	float *pfCoordinates = fCoordinates;
 
 	float xl = m_kCutRect.origin.x + m_kCutRect.size.width * kRect.origin.x;
+	
 	float xr = m_kCutRect.origin.x
 			+ m_kCutRect.size.width * (kRect.size.width + kRect.origin.x);
+	
 	float yt = m_kCutRect.origin.y + m_kCutRect.size.height * kRect.origin.y;
+	
 	float yb = m_kCutRect.origin.y
 			+ m_kCutRect.size.height * (kRect.size.height + kRect.origin.y);
 
@@ -582,13 +594,18 @@ void NDTile::drawSubRect(CGRect kRect)
 	float fVertices[12] =
 	{ 0.0f };
 
+	CGRect drawRectInPoints = this->getDrawRectInPoints();
 	CGRect kDrawRect;
-	kDrawRect.origin.x = m_kDrawRect.origin.x
-			+ kRect.origin.x * m_kDrawRect.size.width;
-	kDrawRect.origin.y = m_kDrawRect.origin.y
-			+ kRect.origin.y * m_kDrawRect.size.height;
-	kDrawRect.size.width = kRect.size.width * m_kDrawRect.size.width;
-	kDrawRect.size.height = kRect.size.height * m_kDrawRect.size.height;
+
+	kDrawRect.origin.x = drawRectInPoints.origin.x
+			+ kRect.origin.x * drawRectInPoints.size.width;
+	
+	kDrawRect.origin.y = drawRectInPoints.origin.y
+			+ kRect.origin.y * drawRectInPoints.size.height;
+	
+	kDrawRect.size.width = kRect.size.width * drawRectInPoints.size.width;
+	
+	kDrawRect.size.height = kRect.size.height * drawRectInPoints.size.height;
 
 	makeVetex(fVertices, kDrawRect);
 
@@ -633,12 +650,12 @@ void NDTile::DrawSetup( const char* shaderType /*=kCCShader_PositionTextureColor
 
 void NDTile::debugDraw()
 {
-#if 1
+	if (!NDDebugOpt::getDrawDebugEnabled()) return;
+
 	glLineWidth(1);
 	ccDrawColor4F(1,0,0,1);
 	CCPoint lb = ccp(m_pfVertices[0],m_pfVertices[1]);
 	CCPoint rt = ccp(m_pfVertices[9],m_pfVertices[10]);
 	ccDrawRect( lb, rt );
 	ccDrawLine( lb, rt );
-#endif	
 }
