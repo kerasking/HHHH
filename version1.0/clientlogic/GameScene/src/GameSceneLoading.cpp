@@ -151,10 +151,10 @@ void GameSceneLoading::draw()
 	}
 	
 	
-	m_suiRole->SetWorldPos(CGPointMake(x, 193.0f));
+	m_suiRole->SetPosition(CGPointMake(x, 193.0f));
 	m_suiRole->RunAnimation(true);
 	
-	m_tangRole->SetWorldPos(CGPointMake(480.0f - x, 193.0f));
+	m_tangRole->SetPosition(CGPointMake(480.0f - x, 193.0f));
 	m_tangRole->RunAnimation(true);
 	
 	x += 5.0f;
