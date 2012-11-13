@@ -96,14 +96,13 @@ NDMapLayer::NDMapLayer()
 	m_pkMapData = NULL;
 	m_nMapIndex = -1;
 	m_pkPicMap = NULL;
-	//m_texMap = NULL;
 	m_nBattleType = 0;
 	m_pkSwitchAniGroup = NULL;
-	m_pkMapData = NULL;
 	m_lbTime = NULL;
 	m_lbTitle = NULL;
 	m_lbTitleBg = NULL;
 	m_pkSwitchSpriteNode = 0;
+
 	m_pkOrders = CCArray::array();
 	m_pkOrders->retain();
 	m_pkOrdersOfMapscenesAndMapanimations = CCArray::array();
@@ -113,7 +112,8 @@ NDMapLayer::NDMapLayer()
 	//m_pkFrameRunRecordsOfMapSwitch = new CCMutableArray< NDFrameRunRecord* >();
 	m_pkFrameRunRecordsOfMapAniGroups = new CCArray();
 	m_pkFrameRunRecordsOfMapSwitch = new CCArray();
-
+	m_pkFrameRunRecordsOfMapSwitch->retain();
+	m_pkFrameRunRecordsOfMapAniGroups->retain();
 	m_bBattleBackground = false;
 	m_bNeedShow = true;
 	m_ndBlockTimer = NULL;
@@ -143,7 +143,7 @@ NDMapLayer::~NDMapLayer()
 	CC_SAFE_RELEASE (m_pkMapData);
 	CC_SAFE_RELEASE (m_pkSwitchAniGroup);
 
-	delete m_pkPicMap;
+	CC_SAFE_DELETE(m_pkPicMap);
 	CC_SAFE_DELETE (m_pkSubNode);
 	if (m_ndBlockTimer)
 	{
@@ -221,44 +221,29 @@ void NDMapLayer::Initialization(const char* mapFile)
 	NDLayer::Initialization();
 	SetTouchEnabled(true);
 
-	m_pkSwitchAniGroup =
-			NDAnimationGroupPool::defaultPool()->addObjectWithModelId(106);
+	m_pkSwitchAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithModelId(switch_ani_modelId);
 
 	m_pkMapData = new NDMapData;
+	ND_ASSERT_NO_RETURN(NULL == m_pkMapData);
 	m_pkMapData->initWithFile(mapFile);
 
-	if (m_pkMapData)
-	{
-		SetContentSize(
-				CGSizeMake(
-						m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
-						m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
+	SetContentSize(CGSizeMake(m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
+		                    m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
 
-		MakeOrdersOfMapscenesAndMapanimations();
-		MakeFrameRunRecords();
+	MakeOrdersOfMapscenesAndMapanimations();
+	MakeFrameRunRecords();
 
-		CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
-		m_kScreenCenter = ccp(kWinSize.width / 2,
-				GetContentSize().height - kWinSize.height / 2);
-		m_ccNode->setPosition(0, 0);
-
-		/*
-		 m_texMap = [CCTexture2D alloc] initWithContentSize:winSize];
-		 m_picMap = new NDPicture();
-		 m_picMap->SetTexture(m_texMap);
-
-		 ReflashMapTexture(ccp(-winSize.width / 2, -winSize.height / 2), m_screenCenter);
-		 m_areaCamarkSplit = IntersectionAreaNone;
-		 m_ptCamarkSplit = ccp(0, 0);*/
-	}
+	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	m_kScreenCenter = ccp(kWinSize.width / 2,
+			GetContentSize().height - kWinSize.height / 2);
+	m_ccNode->setPosition(0, 0);
 
 	g_pMapLayer = this;
 }
 
 void NDMapLayer::Initialization(int mapIndex)
 {
-	tq::CString strMapFile("%smap_%d.map", NDPath::GetMapPath().c_str(),
-			mapIndex);
+	tq::CString strMapFile("%smap_%d.map", NDPath::GetMapPath().c_str(), mapIndex);
 	m_nMapIndex = mapIndex;
 	Initialization((const char*) strMapFile);
 	m_nTitleAlpha = 0;
@@ -1878,10 +1863,12 @@ int NDMapLayer::GetMapOrderId(MAP_ORDER * dict)
 	return nOrderId;
 }
 
+#if 0
 void NDMapLayer::AddChild(NDNode* node, int z, int tag)
 {
 	NDNode::AddChild(node, z, tag);
 }
+#endif
 
 bool NDMapLayer::TouchBegin(NDTouch* touch)
 {

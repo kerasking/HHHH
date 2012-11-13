@@ -485,8 +485,8 @@ void WorldMapLayer::Goto(int nMapId)
 		SetTarget(pos);
 		SetTargetMapId(node->getPlaceId());
 
-		//ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", nMapId);
-		m_timer.SetTimer(this, TAG_TIMER_MOVE, float(1) / 24);
+		ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", nMapId);
+		//m_timer.SetTimer(this, TAG_TIMER_MOVE, float(1) / 24);
 		m_curBtn = node;
 	}
 }

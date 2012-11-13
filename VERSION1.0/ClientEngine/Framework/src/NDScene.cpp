@@ -79,10 +79,10 @@ void NDScene::Initialization()
 	NDNode::Initialization();
 	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 
-	CTextLayer *layer = new CTextLayer;
-	layer->Initialization();
-	layer->SetTouchEnabled(false);
-	AddChild(layer, 60000);
+	//CTextLayer *layer = new CTextLayer;
+	//layer->Initialization();
+	//layer->SetTouchEnabled(false);
+	//AddChild(layer, 60000);
 }
 
 }
