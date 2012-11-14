@@ -93,6 +93,8 @@ IMPLEMENT_CLASS(NDMapLayer, NDLayer)
 
 NDMapLayer::NDMapLayer()
 {
+	WriteCon( "NDMapLayer::NDMapLayer()\r\n");
+
 	m_pkMapData = NULL;
 	m_nMapIndex = -1;
 	m_pkPicMap = NULL;
@@ -135,6 +137,8 @@ NDMapLayer::NDMapLayer()
 
 NDMapLayer::~NDMapLayer()
 {
+	WriteCon( "NDMapLayer::~NDMapLayer()\r\n");
+
 	CC_SAFE_RELEASE (m_pkOrders);
 	CC_SAFE_RELEASE (m_pkOrdersOfMapscenesAndMapanimations);
 	CC_SAFE_RELEASE (m_pkFrameRunRecordsOfMapAniGroups);
@@ -1945,7 +1949,8 @@ void NDMapLayer::debugDraw()
 // 	ccDrawLine( ccp(0,0), ccp(winSize.width, winSize.height));
 // #endif
 
-	if (!NDDebugOpt::getDrawDebugEnabled()) return;
+	if (!NDDebugOpt::getDrawDebugEnabled() ||
+		!NDDebugOpt::getDrawCellEnabled()) return;
 
 	drawCell();
 }

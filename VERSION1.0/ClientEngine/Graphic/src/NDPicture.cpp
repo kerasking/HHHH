@@ -13,6 +13,8 @@
 #include "CCImage.h"
 #include "CCPointExtension.h"
 #include <sstream>
+#include <NDDebugOpt.h>
+#include <CCDrawingPrimitives.h>
 
 using namespace cocos2d;
 
@@ -520,6 +522,8 @@ void NDPicture::DrawInRect(CGRect kRect)
 // 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 	}
+
+	this->debugDraw();
 }
 
 CGSize NDPicture::GetSize()
@@ -656,6 +660,17 @@ bool NDPicture::IsGrayState()
 	//if (!m_canGray) return false;
 
 	return m_bStateGray;
+}
+
+void NDPicture::debugDraw()
+{
+	if (!NDDebugOpt::getDrawDebugEnabled()) return;
+
+	glLineWidth(1);
+	ccDrawColor4F(1,0,0,1);
+	CCPoint lb = ccp(m_pfVertices[0],m_pfVertices[1]);
+	CCPoint rt = ccp(m_pfVertices[6],m_pfVertices[7]);
+	ccDrawRect( lb, rt );
 }
 
 /////////////////////////////
@@ -917,5 +932,6 @@ CCTexture2D* NDTexture::GetTextureRetain()
 	m_pkTexture->retain();
 	return m_pkTexture;
 }
+
 
 NS_NDENGINE_END

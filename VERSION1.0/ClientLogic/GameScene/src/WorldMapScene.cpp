@@ -35,6 +35,8 @@ IMPLEMENT_CLASS(WorldMapLayer, NDUILayer)
 
 WorldMapLayer::WorldMapLayer()
 {
+	WriteCon( "WorldMapLayer::WorldMapLayer()\r\n");
+
 	m_mapData = NDWorldMapData::SharedData();
 	m_curBtn = NULL;
 	m_buttons = NULL;
@@ -49,6 +51,8 @@ WorldMapLayer::WorldMapLayer()
 
 WorldMapLayer::~WorldMapLayer()
 {
+	WriteCon( "WorldMapLayer::~WorldMapLayer()\r\n");
+
 	m_buttons->release();
 	g_pWorldMapLayer = NULL;
 }

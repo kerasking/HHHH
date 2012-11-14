@@ -325,6 +325,9 @@ bool NDGameApplication::processPM(const char* cmd)
 		else if (stricmp(szDebugOpt, "drawmap") == 0)
 			NDDebugOpt::setDrawMapEnabled( val != 0 );
 
+		else if (stricmp(szDebugOpt, "drawcell") == 0)
+			NDDebugOpt::setDrawCellEnabled( val != 0 );
+
 		else if (stricmp(szDebugOpt, "drawrole") == 0)
 			NDDebugOpt::setDrawRoleEnabled( val != 0 );
 
