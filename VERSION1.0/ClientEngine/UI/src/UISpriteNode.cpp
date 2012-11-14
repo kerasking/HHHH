@@ -13,6 +13,7 @@
 #include "CCPointExtension.h"
 #include "NDUtility.h"
 #include "NDSprite.h"
+#include "NDDebugOpt.h"
 
 IMPLEMENT_CLASS(CUISpriteNode, NDUINode)
 
@@ -70,6 +71,8 @@ bool CUISpriteNode::IsAnimationComplete()
 
 void CUISpriteNode::draw()
 {
+	if (!NDDebugOpt::getDrawUIEnabled()) return;
+
 	if (!this->IsVisibled())
 	{
 		return;

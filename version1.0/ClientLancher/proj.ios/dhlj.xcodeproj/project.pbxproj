@@ -6589,6 +6589,7 @@
 					"../../cocos2d-x/cocos2dx/kazmath/include",
 				);
 				INFOPLIST_FILE = "dhlj/dhlj-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../cocos2d-x/cocos2dx/platform/third_party/ios/libraries\"",
@@ -6604,6 +6605,7 @@
 					"$(SRCROOT)/build/$(CONFIGURATION)/libClientLogic.a",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 				xx = "";
 			};
@@ -6625,6 +6627,7 @@
 					"../../cocos2d-x/cocos2dx/kazmath/include",
 				);
 				INFOPLIST_FILE = "dhlj/dhlj-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../cocos2d-x/cocos2dx/platform/third_party/ios/libraries\"",
@@ -6640,6 +6643,7 @@
 					"$(SRCROOT)/build/$(CONFIGURATION)/libClientLogic.a",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 				xx = "";
 			};

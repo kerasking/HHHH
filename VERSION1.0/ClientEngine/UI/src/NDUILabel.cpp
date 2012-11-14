@@ -343,6 +343,7 @@ void NDUILabel::preDraw()
 
 void NDUILabel::draw()
 {
+	if (!isDrawEnabled()) return;
 	if (!NDDebugOpt::getDrawUILabelEnabled()) return;
 
 	NDUINode::draw();

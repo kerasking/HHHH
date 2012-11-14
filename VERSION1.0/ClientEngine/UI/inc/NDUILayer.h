@@ -133,6 +133,9 @@ public:
 
 	void SetMoveOutListener(bool bSet);
 	bool IsTouchDown();
+
+	virtual void SetFrameRect(CCRect rect);
+
 public:
 	void draw();override
 	bool IsVisibled();override
@@ -147,6 +150,10 @@ public:
 	// touch node down or up
 	void DealTouchNodeState(bool down);
 	void DealLongTouchNodeState(bool down);
+
+protected:
+	virtual void debugDraw();
+
 private:
 	NDUINode* m_pkFocusNode;
 	NDUINode* m_pkTouchedNode;

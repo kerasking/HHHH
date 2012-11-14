@@ -440,7 +440,7 @@ public:
 	}
 
 public:
-	FIGHTER_INFO m_info;
+	//FIGHTER_INFO m_info;//--Guosen 2012.11.11 ∏∏¿‡“—”–m_kInfo
 
 	USHORT m_nAttackPoint;
 	USHORT m_nDefencePoint;

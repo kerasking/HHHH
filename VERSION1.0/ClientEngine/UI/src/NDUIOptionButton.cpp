@@ -135,6 +135,7 @@ void NDUIOptionButton::OnFrameRectChange(CCRect srcRect, CCRect dstRect)
 
 void NDUIOptionButton::draw()
 {
+	if (!isDrawEnabled()) return;
 	NDUINode::draw();
 
 	NDNode* parentNode = this->GetParent();

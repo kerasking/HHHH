@@ -43,8 +43,8 @@ using namespace cocos2d;
 
 #define LONG_TOUCH_TIMER_TAG (6951)
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
 IMPLEMENT_CLASS(NDUILayer, NDUINode)
 
 bool NDUILayer::ms_bPressing = false;
@@ -224,7 +224,7 @@ NDUINode* NDUILayer::GetFocus()
 
 void NDUILayer::draw()
 {
-	if (!NDDebugOpt::getDrawUIEnabled()) return;
+	if (!isDrawEnabled()) return;
 
 	NDUINode::draw();
 
@@ -275,6 +275,8 @@ void NDUILayer::draw()
 			}
 		}
 	}
+
+	debugDraw();
 }
 
 bool NDUILayer::IsVisibled()
@@ -1664,6 +1666,16 @@ CCRect NDUILayer::RectAdd(CCRect rect, int value)
 			rect.size.width + 2 * value, rect.size.height + 2 * value);
 }
 
+void NDUILayer::SetFrameRect(CCRect rect)
+{
+	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+	rect.origin.x /= fScale;
+	rect.origin.y /= fScale;
+//	rect.size.width /= fScale;
+//	rect.size.height /= fScale;
+	NDUINode::SetFrameRect(rect);
+}
+
 /*
  void NDUILayer::AfterEditClickEvent(NDUIEdit* edit)
  {
@@ -1700,26 +1712,39 @@ CCRect NDUILayer::RectAdd(CCRect rect, int value)
  delegate->OnEditInputCancle(edit);
  }
  */
-	bool NDUILayer::CanDispatchEvent()
-	{
-		return !ms_bPressing;
-	}
-	void NDUILayer::StartDispatchEvent()
-	{
-		ms_bPressing  = true;
-		
-		m_pkLayerPress = this;
-	}
-	
-	void NDUILayer::EndDispatchEvent()
-	{
-		ms_bPressing = false;
-		
-		m_pkLayerPress = NULL;
-	}
 
-	bool NDUILayer::IsTouchDown()
-	{
-		return m_bTouchDwon;
-	}
+bool NDUILayer::CanDispatchEvent()
+{
+	return !ms_bPressing;
 }
+void NDUILayer::StartDispatchEvent()
+{
+	ms_bPressing  = true;
+	
+	m_pkLayerPress = this;
+}
+
+void NDUILayer::EndDispatchEvent()
+{
+	ms_bPressing = false;
+	
+	m_pkLayerPress = NULL;
+}
+
+bool NDUILayer::IsTouchDown()
+{
+	return m_bTouchDwon;
+}
+
+void NDUILayer::debugDraw()
+{
+// 	if (!NDDebugOpt::getDrawDebugEnabled()) return;
+// 
+// 	glLineWidth(1);
+// 	ccDrawColor4F(1,0,0,1);
+// 	CCPoint lb = ccp(m_pfVertices[0],m_pfVertices[1]);
+// 	CCPoint rt = ccp(m_pfVertices[9],m_pfVertices[10]);
+// 	ccDrawRect( lb, rt );
+}
+
+NS_NDENGINE_END

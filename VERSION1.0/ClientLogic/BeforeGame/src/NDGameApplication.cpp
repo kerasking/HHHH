@@ -27,6 +27,7 @@
 #include "Battle.h"
 #include "NDProfile.h"
 #include "NDBaseDirector.h"
+#include "WorldMapScene.h"
 
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -333,20 +334,32 @@ bool NDGameApplication::processPM(const char* cmd)
 		else if (stricmp(szDebugOpt, "drawmap") == 0)
 			NDDebugOpt::setDrawMapEnabled( val != 0 );
 
+		else if (stricmp(szDebugOpt, "drawcell") == 0)
+			NDDebugOpt::setDrawCellEnabled( val != 0 );
+
 		else if (stricmp(szDebugOpt, "drawrole") == 0)
 			NDDebugOpt::setDrawRoleEnabled( val != 0 );
 
-		else if (stricmp(szDebugOpt, "drawrolenpc") == 0)
+		else if (stricmp(szDebugOpt, "drawrolenpc") == 0 ||
+					stricmp(szDebugOpt, "drawnpc") == 0)
+		{
 			NDDebugOpt::setDrawRoleNpcEnabled( val != 0 );
-
-		else if (stricmp(szDebugOpt, "drawrolemonster") == 0)
+		}
+		else if (stricmp(szDebugOpt, "drawrolemonster") == 0 ||
+					stricmp(szDebugOpt, "drawmonster") == 0)
+		{
 			NDDebugOpt::setDrawRoleMonsterEnabled( val != 0 );
-
-		else if (stricmp(szDebugOpt, "drawroleplayer") == 0)
+		}
+		else if (stricmp(szDebugOpt, "drawroleplayer") == 0 ||
+					stricmp(szDebugOpt, "drawplayer") == 0)
+		{
 			NDDebugOpt::setDrawRolePlayerEnabled( val != 0 );
-
-		else if (stricmp(szDebugOpt, "drawrolemanual") == 0)
+		}
+		else if (stricmp(szDebugOpt, "drawrolemanual") == 0 ||
+					stricmp(szDebugOpt, "drawmanual") == 0)
+		{
 			NDDebugOpt::setDrawRoleManualEnabled( val != 0 );
+		}
 	}
 	else if (sscanf(cmd, "openmap %d", &val) == 1)
 	{
@@ -388,8 +401,6 @@ bool NDGameApplication::processPM(const char* cmd)
 		DWORD n = 0;
 		char msg[500] = "";
 		
-		extern NDMapLayer* g_pMapLayer; //for debug only.
-
 		sprintf( msg, 
 			"hero pos(%d, %d)\r\n"
 			"NDDirector content size(%d, %d)\r\n"
@@ -406,11 +417,12 @@ bool NDGameApplication::processPM(const char* cmd)
 
 		WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );		
 
+		extern NDMapLayer* g_pMapLayer; //for debug only.
 		if (g_pMapLayer)
 		{
 			sprintf( msg, 
-				"map layer content size (%d, %d)\r\n"
-				"map layer screen center (%d, %d)\r\n", 
+				"[NDMapLayer] content size (%d, %d)\r\n"
+				"[NDMapLayer] screen center (%d, %d)\r\n", 
 
 				(int)g_pMapLayer->GetContentSize().width,
 				(int)g_pMapLayer->GetContentSize().height,
@@ -420,8 +432,26 @@ bool NDGameApplication::processPM(const char* cmd)
 
 			WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );	
 		}
+
+		extern WorldMapLayer* g_pWorldMapLayer; //for debug only.
+		if (g_pWorldMapLayer)
+		{
+			sprintf( msg, 
+				"[WorldMapLayer] content size (%d, %d)\r\n", 
+				(int)g_pWorldMapLayer->GetContentSize().width,
+				(int)g_pWorldMapLayer->GetContentSize().height
+				);
+
+			WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );	
+		}
+	}
+	else if (sscanf(cmd, "slowdown %d", &val) == 1)
+	{
+		extern int g_slowDownMul;
+		g_slowDownMul = max(1,val);
 	}
 	else if (
+		sscanf(cmd, "drawdebug %d", &val) == 1 ||
 		sscanf(cmd, "debugdraw %d", &val) == 1 ||
 		sscanf(cmd, "enablefocus %d", &val) == 1)
 	{

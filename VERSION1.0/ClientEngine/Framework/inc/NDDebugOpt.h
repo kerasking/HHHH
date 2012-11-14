@@ -30,6 +30,7 @@ class NDDebugOpt : private NDObject
 	DECL_STATIC_PROPERTY(bool, bDrawUI,			DrawUIEnabled);
 	DECL_STATIC_PROPERTY(bool, bDrawUILabel,	DrawUILabelEnabled);
 	DECL_STATIC_PROPERTY(bool, bDrawMap,		DrawMapEnabled);
+	DECL_STATIC_PROPERTY(bool, bDrawCell,		DrawCellEnabled);
 
 	DECL_STATIC_PROPERTY(bool, bDrawRole,		DrawRoleEnabled);//for all roles
 	DECL_STATIC_PROPERTY(bool, bDrawRoleNpc,	DrawRoleNpcEnabled);

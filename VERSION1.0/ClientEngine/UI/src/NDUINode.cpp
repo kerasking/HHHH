@@ -11,6 +11,7 @@
 #include "CCPointExtension.h"
 #include "ccMacros.h"
 #include "CCDrawingPrimitives.h"
+#include "NDDebugOpt.h"
 
 namespace NDEngine
 {	
@@ -177,6 +178,8 @@ namespace NDEngine
 	
 	void NDUINode::draw()
 	{	
+		if (!isDrawEnabled()) return;
+
 		NDNode::draw();
 
 		if (m_nStepNum)
@@ -323,4 +326,8 @@ namespace NDEngine
 		m_fBoundScale = static_cast<float>(nScale);	
 	}
 
+	bool NDUINode::isDrawEnabled()
+	{
+		return NDDebugOpt::getDrawUIEnabled();
+	}
 }

@@ -357,8 +357,7 @@ void NDNode::EnableDraw(bool enabled)
 
 bool NDNode::DrawEnabled()
 {
-	return m_bDrawEnabled
-		&& NDDebugOpt::getDrawUIEnabled();
+	return m_bDrawEnabled;
 }
 
 void NDNode::SetParam1(int nParam1)

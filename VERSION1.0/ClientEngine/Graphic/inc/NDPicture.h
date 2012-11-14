@@ -103,6 +103,7 @@ public: //@shader
 	CC_SYNTHESIZE(ccGLServerState, m_glServerState, GLServerState);
 protected:
 	void DrawSetup( const char* shaderType = kCCShader_PositionTexture_uColor );
+	virtual void debugDraw();
 
 private:
 	cocos2d::CCTexture2D* m_pkTexture;
