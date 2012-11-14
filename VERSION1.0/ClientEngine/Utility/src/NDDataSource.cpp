@@ -1,4 +1,4 @@
-#include "..\inc\NDDataSource.h"
+#include "NDDataSource.h"
 
 namespace NDEngine
 {

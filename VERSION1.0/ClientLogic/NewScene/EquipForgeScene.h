@@ -43,9 +43,9 @@ using namespace NDEngine;
 // 	
 // 	bool OnButtonDragIn(NDUIButton* desButton, NDUINode *uiSrcNode, bool longTouch);
 // 	
-// 	bool OnButtonDragOut(NDUIButton* button, CGPoint beginTouch, CGPoint moveTouch, bool longTouch);
+// 	bool OnButtonDragOut(NDUIButton* button, CCPoint beginTouch, CCPoint moveTouch, bool longTouch);
 // 	
-// 	bool OnButtonDragOutComplete(NDUIButton* button, CGPoint endTouch, bool outOfRange);
+// 	bool OnButtonDragOutComplete(NDUIButton* button, CCPoint endTouch, bool outOfRange);
 // 	
 // 	void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex);
 // 	

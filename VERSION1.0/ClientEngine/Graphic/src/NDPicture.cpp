@@ -24,7 +24,7 @@ IMPLEMENT_CLASS(NDTexture,NDObject)
 NDPicture::NDPicture(bool canGray/*=false*/)
 {
 	m_pkTexture = NULL;
-	m_kCutRect = CGRectZero;
+	m_kCutRect = CCRectZero;
 	m_bReverse = false;
 	m_kRotation = PictureRotation0;
 
@@ -76,7 +76,7 @@ void NDPicture::Initialization(const char* imageFile)
 	 }
 	 */
 
-	m_kCutRect = CGRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
+	m_kCutRect = CCRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
 			m_pkTexture->getContentSizeInPixels().height);
 	SetCoorinates();
 	SetColor(ccc4(255, 255, 255, 255));
@@ -115,7 +115,7 @@ void NDPicture::Initialization(vector<const char*>& vImgFiles)
 // 	for (uint i = 0; i < vImgs.size(); i++)
 // 	{
 // 		CCImage* img = vImgs.at(i);
-// 		[img drawInRect:CGRectMake(0, 0, img.size.width, img.size.height)];
+// 		[img drawInRect:CCRectMake(0, 0, img.size.width, img.size.height)];
 // 		[img release];
 // 	}
 	
@@ -125,12 +125,12 @@ void NDPicture::Initialization(vector<const char*>& vImgFiles)
 	
 // 	m_texture = CCTexture2D::initWithImage(resultImg);
 // 	
-// 	m_cutRect = CGRectMake(0, 0, m_texture->getContentSizeInPixels().width, m_texture->getContentSizeInPixels().height);
+// 	m_cutRect = CCRectMake(0, 0, m_texture->getContentSizeInPixels().width, m_texture->getContentSizeInPixels().height);
 // 	SetCoorinates();		
 // 	SetColor(ccc4(255, 255, 255, 255));
 }
 
-void NDPicture::Initialization(vector<const char*>& vImgFiles, vector<CGRect>& vImgCustomRect, vector<CGPoint>&vOffsetPoint)
+void NDPicture::Initialization(vector<const char*>& vImgFiles, vector<CCRect>& vImgCustomRect, vector<CCPoint>&vOffsetPoint)
 {
 // 	if (vImgFiles.size() < 1 || vImgCustomRect.size() < 1 || vOffsetPoint.size() < 1
 // 		|| vImgFiles.size() != vImgCustomRect.size() || vImgFiles.size() != vOffsetPoint.size())
@@ -153,7 +153,7 @@ void NDPicture::Initialization(vector<const char*>& vImgFiles, vector<CGRect>& v
 // 	
 // 	for (uint i = 0; i < vImgs.size(); i++) {
 // 		UIImage* img = vImgs.at(i);
-// 		[img drawInRect:CGRectMake(vOffsetPoint[i].x, vOffsetPoint[i].y, img.size.width, img.size.height)];
+// 		[img drawInRect:CCRectMake(vOffsetPoint[i].x, vOffsetPoint[i].y, img.size.width, img.size.height)];
 // 		//[img release];
 // 	}
 // 	
@@ -163,7 +163,7 @@ void NDPicture::Initialization(vector<const char*>& vImgFiles, vector<CGRect>& v
 // 	
 // 	m_texture = [[CCTexture2D alloc] initWithImage:resultImg];
 // 	
-// 	m_cutRect = CGRectMake(0, 0, m_texture->getContentSizeInPixels().width, m_texture->getContentSizeInPixels().height);
+// 	m_cutRect = CCRectMake(0, 0, m_texture->getContentSizeInPixels().width, m_texture->getContentSizeInPixels().height);
 // 	SetCoorinates();		
 // 	SetColor(ccc4(255, 255, 255, 255));	
 	
@@ -188,7 +188,7 @@ void NDPicture::Initialization(const char* imageFile, int hrizontalPixel,
 	bool bLoadStretchImageSucess = false;
 	if ((!(hrizontalPixel < 0 || verticalPixel < 0)) && bLoadImageSucess)
 	{		// todo
-// 			CGSize sizeImg = image.getSize();
+// 			CCSize sizeImg = image.getSize();
 // 			
 // 			//if (hrizontalPixel > sizeImg.width || verticalPixel > sizeImg.height) 
 // 			{
@@ -214,11 +214,11 @@ void NDPicture::Initialization(const char* imageFile, int hrizontalPixel,
 // 					
 // 					if (verticalPixel == 0) verticalPixel = sizeImg.height;
 // 					
-// 					CGSize newSize = CGSizeMake(hrizontalPixel, verticalPixel);
+// 					CCSize newSize = CCSizeMake(hrizontalPixel, verticalPixel);
 // 					
 // 					UIGraphicsBeginImageContext(newSize);
 // 					
-// 					[tmpImg drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+// 					[tmpImg drawInRect:CCRectMake(0, 0, newSize.width, newSize.height)];
 // 					
 // 					stretchImage = UIGraphicsGetImageFromCurrentImageContext();
 // 					
@@ -245,7 +245,7 @@ void NDPicture::Initialization(const char* imageFile, int hrizontalPixel,
 		//m_pkTexture->initWithPalettePNG(imageFile);
 	}
 
-	m_kCutRect = CGRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
+	m_kCutRect = CCRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
 			m_pkTexture->getContentSizeInPixels().height);
 	SetCoorinates();
 	SetColor(ccc4(255, 255, 255, 255));
@@ -286,7 +286,7 @@ void NDPicture::SetTexture(CCTexture2D* tex)
 	CC_SAFE_RETAIN(tex);
 	CC_SAFE_RELEASE (m_pkTexture);
 	m_pkTexture = tex;
-	m_kCutRect = CGRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
+	m_kCutRect = CCRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
 			m_pkTexture->getContentSizeInPixels().height);
 	SetCoorinates();
 	SetColor(ccc4(255, 255, 255, 255));
@@ -325,10 +325,10 @@ void NDPicture::SetCoorinates()
 	}
 }
 
-void NDPicture::SetVertices(CGRect drawRect)
+void NDPicture::SetVertices(CCRect drawRect)
 {
-	//CGSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinPoint();
-	CGSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
+	//CCSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinPoint();
+	CCSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
 
 	switch (m_kRotation)
 	{
@@ -393,7 +393,7 @@ void NDPicture::SetVertices(CGRect drawRect)
 	}
 }
 
-void NDPicture::Cut(CGRect kRect)
+void NDPicture::Cut(CCRect kRect)
 {
 	if (m_pkTexture)
 	{
@@ -412,7 +412,7 @@ void NDPicture::Cut(CGRect kRect)
 		{
 			bCutSucess = true;
 			m_kCutRect.origin = kRect.origin;
-			m_kCutRect.size = CGSizeMake(
+			m_kCutRect.size = CCSizeMake(
 					m_pkTexture->getContentSizeInPixels().width - kRect.origin.x,
 					m_pkTexture->getContentSizeInPixels().height - kRect.origin.y);
 		}
@@ -467,7 +467,7 @@ NDPicture* NDPicture::Copy()
 	return pkPicture;
 }
 
-void NDPicture::DrawInRect(CGRect kRect)
+void NDPicture::DrawInRect(CCRect kRect)
 {
 	CCTexture2D *pkTempTexture = NULL;
 
@@ -522,9 +522,9 @@ void NDPicture::DrawInRect(CGRect kRect)
 	}
 }
 
-CGSize NDPicture::GetSize()
+CCSize NDPicture::GetSize()
 {
-	CGSize kSize = CGSizeZero;
+	CCSize kSize = CCSizeZero;
 	if (m_pkTexture)
 	{
 		kSize = m_kCutRect.size;
@@ -589,7 +589,7 @@ bool NDPicture::SetGrayState(bool gray)
 // 			
 // 			if ((!(m_hrizontalPixel < 0 || m_verticalPixel < 0)) && image) 
 // 			{			
-// 				CGSize sizeImg = [image size];
+// 				CCSize sizeImg = [image size];
 // 				
 // 				//if (hrizontalPixel > sizeImg.width || verticalPixel > sizeImg.height) 
 // 				{
@@ -617,11 +617,11 @@ bool NDPicture::SetGrayState(bool gray)
 // 						if (hrizontalPixel == 0) hrizontalPixel = sizeImg.width;
 // 						if (verticalPixel == 0) verticalPixel = sizeImg.height;
 // 						
-// 						CGSize newSize = CGSizeMake(hrizontalPixel, verticalPixel);
+// 						CCSize newSize = CCSizeMake(hrizontalPixel, verticalPixel);
 // 						
 // 						UIGraphicsBeginImageContext(newSize);
 // 						
-// 						[tmpImg drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+// 						[tmpImg drawInRect:CCRectMake(0, 0, newSize.width, newSize.height)];
 // 						
 // 						stretchImage = UIGraphicsGetImageFromCurrentImageContext();
 // 						
@@ -791,7 +791,7 @@ NDPicture* NDPicturePool::AddPicture(const char* imageFile, int hrizontalPixel,
 {
 	NDAsssert(imageFile != NULL);
 
-	CGSize sizeImg = GetImageSize(imageFile ? imageFile : "");
+	CCSize sizeImg = GetImageSize(imageFile ? imageFile : "");
 
 	if (int(sizeImg.width) != 0 && int(sizeImg.height)
 			&& int(sizeImg.width) == hrizontalPixel
@@ -834,14 +834,14 @@ void NDPicturePool::Recyle()
 	}
 }
 
-CGSize NDPicturePool::GetImageSize(std::string filename)
+CCSize NDPicturePool::GetImageSize(std::string filename)
 {
 	if (filename.empty())
 	{
-		return CGSizeZero;
+		return CCSizeZero;
 	}
 
-	std::map<std::string, CGSize>::iterator it = m_mapStr2Size.find(filename);
+	std::map<std::string, CCSize>::iterator it = m_mapStr2Size.find(filename);
 
 	if (it != m_mapStr2Size.end())
 	{
@@ -851,11 +851,11 @@ CGSize NDPicturePool::GetImageSize(std::string filename)
 
 	if (!image.initWithImageFile(filename.c_str()))
 	{
-		return CGSizeZero;
+		return CCSizeZero;
 	}
 
 	//todo(zjh)
-	CGSize size = CGSizeZero;
+	CCSize size = CCSizeZero;
 	size.width			= image.getWidth();
 	size.height			= image.getHeight();
 

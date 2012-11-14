@@ -38,7 +38,7 @@ private:
 	NDTimer m_kTimer;
 	double m_dTimeStamp;
 	bool m_bLongTouch;
-	CGPoint m_kPosTouch;
+	CCPoint m_kPosTouch;
 	bool m_bPathing;
 
 private:

@@ -22,18 +22,18 @@ namespace NDEngine
 		//以下方法供逻辑层使用－－－begin
 		//......
 		unsigned int GetTapCount();
-		CGPoint GetLocation();
-		CGPoint GetPreviousLocation();
+		CCPoint GetLocation();
+		CCPoint GetPreviousLocation();
 		//－－－end
 		
 	public:
 		void Initialization(CCTouch *touch);
-		void Initialization(unsigned int tapCount, CGPoint location, CGPoint previousLocation);
+		void Initialization(unsigned int tapCount, CCPoint location, CCPoint previousLocation);
 		
 	private:
 		unsigned int m_tapCount;
-		CGPoint m_location;
-		CGPoint m_previousLocation;
+		CCPoint m_location;
+		CCPoint m_previousLocation;
 		
 	};
 }

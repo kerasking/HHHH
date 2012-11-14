@@ -1,5 +1,5 @@
 #include "XMLReader.h"
-#include "..\..\TinyXML\inc\tinyxml.h"
+#include "tinyxml.h"
 
 XMLReader::XMLReader() :
 		m_pkFileDataMap(0)

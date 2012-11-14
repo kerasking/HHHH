@@ -18,8 +18,8 @@ namespace NDEngine
 	typedef struct
 	{
 		UIImage* image;
-		CGRect cutRect;
-		CGPoint drawPoint;
+		CCRect cutRect;
+		CCPoint drawPoint;
 		bool reverse;
 		int rotation;
 		bool bReset;
@@ -42,7 +42,7 @@ namespace NDEngine
 		void AddUIImage(UIImageStruct* imageStruct);
 		void ClearUIImages();
 		
-		UIImage4* Combine(CGSize imageSize);
+		UIImage4* Combine(CCSize imageSize);
 	private:
 		std::vector<UIImageStruct*> m_images;
 	};

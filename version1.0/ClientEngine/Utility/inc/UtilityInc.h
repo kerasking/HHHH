@@ -4,7 +4,8 @@
 #include <stdlib.h>
 #include "Singleton.h"
 #include "basedefine.h"
-#include "platform.h"
+#include "BaseType.h"
+#include "TQPlatform.h"
 #include "NDString.h"
 #include "TQString.h"
 #include "CCPlatformConfig.h"

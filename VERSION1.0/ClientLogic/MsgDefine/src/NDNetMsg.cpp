@@ -11,7 +11,7 @@
 #include "NDNetMsg.h"
 #include "NDMsgDefine.h"
 #include "NDTransData.h"
-#include "BeatHeart.h"
+//#include "BeatHeart.h"
 #include "ScriptNetMsg.h"
 #include "globaldef.h"
 

@@ -23,8 +23,8 @@ class CUIHyperlinkText : public NDUINode
 	
 public:
 	void Initialization(); override
-	void SetLinkBoundRect(CGRect rectBound);
-	CGRect GetLinkBoundRect();
+	void SetLinkBoundRect(CCRect rectBound);
+	CCRect GetLinkBoundRect();
 	void SetLinkText(const char* text);
 	void SetLinkTextFontSize(unsigned int uiFontSize);
 	void SetLinkTextColor(ccColor4B color);
@@ -34,7 +34,7 @@ public:
 	bool IsLineEnable();
 	int  GetLinkTextAlignment();
 private:
-	CGRect					m_rectLinkRect;
+	CCRect					m_rectLinkRect;
 	unsigned int			m_uiLinkFontSize;
 	ccColor4B				m_colorLinkFont;
 	NDUIText*				m_uiLinkText;
@@ -55,7 +55,7 @@ class CUIHyperlinkButton : public NDUIButton
 	
 public:
 	void Initialization(); override
-	void SetLinkBoundRect(CGRect rectBound);
+	void SetLinkBoundRect(CCRect rectBound);
 	void SetLinkText(const char* text);
 	void SetLinkTextFontSize(unsigned int uiFontSize);
 	void SetLinkTextColor(ccColor4B color);
@@ -64,7 +64,7 @@ public:
 	int	 GetLinkTextAlignment();
 private:
 	CUIHyperlinkText*	m_hyperlinkText;
-	CGRect				m_rectLinkRect;
+	CCRect				m_rectLinkRect;
 	
 public:
 	void draw();

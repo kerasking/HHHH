@@ -38,9 +38,9 @@ void HyperLinkLabel::draw()
 
 	if (m_bIsLink)
 	{
-		CGRect kRect = this->GetScreenRect();
-		DrawLine(CGPointMake(kRect.origin.x, kRect.origin.y + kRect.size.height),
-				CGPointMake(kRect.origin.x + kRect.size.width,
+		CCRect kRect = this->GetScreenRect();
+		DrawLine(CCPointMake(kRect.origin.x, kRect.origin.y + kRect.size.height),
+				CCPointMake(kRect.origin.x + kRect.size.width,
 						kRect.origin.y + kRect.size.height), 
 						this->GetFontColor(),1);
 	}

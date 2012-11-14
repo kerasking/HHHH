@@ -88,31 +88,31 @@ namespace NDEngine
 //		作用：将屏幕坐标转化成地图坐标
 //		参数：screenPoint屏幕坐标
 //		返回值：地图坐标
-		CGPoint ConvertToMapPoint(CGPoint screenPoint);
+		CCPoint ConvertToMapPoint(CCPoint screenPoint);
 //		
 //		函数：isMapPointInScreen
 //		作用：判断地图坐标点是否在屏幕范围内
 //		参数：mapPoint地图坐标
 //		返回值：true是，false否
-		bool isMapPointInScreen(CGPoint mapPoint);
+		bool isMapPointInScreen(CCPoint mapPoint);
 //		
 //		函数：isMapRectIntersectScreen
 //		作用：判断地图上的矩形区域是否在屏幕范围内
 //		参数：mapRect地图上的矩形区域
 //		返回值：true是，false否
-		bool isMapRectIntersectScreen(CGRect mapRect);
+		bool isMapRectIntersectScreen(CCSize mapRect);
 //		
 //		函数：SetScreenCenter
 //		作用：设置地图坐标点对应屏幕中心；如果超出地图的表现范围，则该点并不对应于屏幕的中心
 //		参数：p地图坐标点
 //		返回值：true 到边界了, false 还没到边界
-		bool SetScreenCenter(CGPoint p);
+		bool SetScreenCenter(CCPoint p);
 //		
 //		函数：GetScreenCenter
 //		作用：获取屏幕中心点的地图坐标
 //		参数：无
 //		返回值：地图坐标
-		CGPoint GetScreenCenter();
+		CCPoint GetScreenCenter();
 //		
 //		函数：SetBattleBackground
 //		作用：设置进入战斗
@@ -140,7 +140,7 @@ namespace NDEngine
 		void showSwitchSprite(MAP_SWITCH_TYPE type);
 		void ShowTreasureBox();
 		void OpenTreasureBox();
-		bool isTouchTreasureBox(CGPoint touchPoint);
+		bool isTouchTreasureBox(CCPoint touchPoint);
 	//		void setRoadBlock(int x,int y){roadBlockX=x;roadBlockY=y;}
 	private:
 		void MakeOrders();
@@ -149,7 +149,7 @@ namespace NDEngine
 		void QuickSort(NSMutableArray *array, int low, int high);
 		int Partition(NSMutableArray *array, int low, int high);
 		
-		void SetPosition(CGPoint p);
+		void SetPosition(CCPoint p);
 		
 		void DrawMapTiles();
 		void DrawScenesAndAnimations();
@@ -157,14 +157,14 @@ namespace NDEngine
 
 		void MakeFrameRunRecords();
 		
-		void ReflashMapTexture(CGPoint oldScreenCenter, CGPoint newScreenCenter);
-		void ReplaceMapTexture(CCTexture2D* tex, CGRect replaceRect, CGRect tilesRect);	
+		void ReflashMapTexture(CCPoint oldScreenCenter, CCPoint newScreenCenter);
+		void ReplaceMapTexture(CCTexture2D* tex, CCSize replaceRect, CCSize tilesRect);	
 		void ScrollSplit(int x, int y);
-		void ScrollVertical(int y, CGRect newRect);
-		void ScrollHorizontal(int x, CGRect newRect);
+		void ScrollVertical(int y, CCSize newRect);
+		void ScrollHorizontal(int x, CCSize newRect);
 		void RefreshBoxAnimation();
 	private:
-		CGPoint m_screenCenter;
+		CCPoint m_screenCenter;
 		CCMutableArray<MAP_ORDER*> *m_orders;
 		CCMutableArray<MAP_ORDER*> *m_ordersOfMapscenesAndMapanimations;
 		NDMapData *m_mapData;
@@ -186,7 +186,7 @@ namespace NDEngine
 		int titleAlpha;
 		CCTexture2D *m_texMap;
 		NDPicture *m_picMap;
-		CGPoint m_ptCamarkSplit;
+		CCPoint m_ptCamarkSplit;
 		NDNode		*subnode; 
 		BOX_STATUS box_status;
 		typedef enum
@@ -197,7 +197,7 @@ namespace NDEngine
 			IntersectionAreaRB,
 			IntersectionAreaNone
 		}IntersectionArea;
-		void RectIntersectionRect(CGRect rect1, CGRect rect2, CGRect& intersectionRect, IntersectionArea& intersectionArea);
+		void RectIntersectionRect(CCSize rect1, CCSize rect2, CCSize& intersectionRect, IntersectionArea& intersectionArea);
 		IntersectionArea m_areaCamarkSplit;
 		
 		int m_mapIndex;

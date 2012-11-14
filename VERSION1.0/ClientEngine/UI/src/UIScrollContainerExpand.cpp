@@ -21,7 +21,7 @@ IMPLEMENT_CLASS(CUIScrollContainerExpand, NDUILayer)
 
 CUIScrollContainerExpand::CUIScrollContainerExpand()
 {
-	m_sizeView      = CGSizeMake(0, 0);
+	m_sizeView      = CCSizeMake(0, 0);
     m_unBeginIndex  = 0 ;
     m_unPreIndex    = 0;
     bIsMoveing      = false;
@@ -44,7 +44,7 @@ void CUIScrollContainerExpand::AddView(UIScrollViewExpand* pScrollViewCurrent){
     CalculatePosition();
     ResetCurrViewBg();
 }
-void CUIScrollContainerExpand::SetSizeView(CGSize size){
+void CUIScrollContainerExpand::SetSizeView(CCSize size){
     m_sizeView = size;
     m_fTranValue = m_fScrollToCenterSpeed/size.width;
 }
@@ -94,7 +94,7 @@ void CUIScrollContainerExpand::MovePosition(int nDistance){
     unsigned int nViewSize = GetViewCount();
     for (unsigned int i=0; i<nViewSize; i++) {
         UIScrollViewExpand* sve = m_pScrollViewUINodes[i];
-        CGRect rect = sve->GetFrameRect();
+        CCRect rect = sve->GetFrameRect();
         rect.origin.x += nDistance;
         sve->SetFrameRect(rect);
     }
@@ -120,7 +120,7 @@ void CUIScrollContainerExpand::SetViewScale(){
             nSpriteNode->SetScale(ANIMATE_ZOOM_MIN + (ANIMATE_ZOOM_MAX-ANIMATE_ZOOM_MIN)*m_fScale); 
             
             
-            CGRect rect = nSpriteNode->GetFrameRect();
+            CCRect rect = nSpriteNode->GetFrameRect();
             rect.origin.y = (ANIMATE_POSITION-ANIMATE_YOFFSET) + ANIMATE_YOFFSET*m_fScale;
             nSpriteNode->SetFrameRect(rect);
             
@@ -144,7 +144,7 @@ void CUIScrollContainerExpand::SetViewScale(){
             nSpriteNode->SetScale(ANIMATE_ZOOM_MIN + (ANIMATE_ZOOM_MAX-ANIMATE_ZOOM_MIN)*m_fScale);   
             
             
-            CGRect rect = nSpriteNode->GetFrameRect();
+            CCRect rect = nSpriteNode->GetFrameRect();
             rect.origin.y = (ANIMATE_POSITION-ANIMATE_YOFFSET) + ANIMATE_YOFFSET*m_fScale;
             nSpriteNode->SetFrameRect(rect);
         }
@@ -176,7 +176,7 @@ void CUIScrollContainerExpand::ResetCurrViewBg(){
                     nSpriteNode->SetScale(ANIMATE_ZOOM_MAX);
                     
                     
-                    CGRect rect = nSpriteNode->GetFrameRect();
+                    CCRect rect = nSpriteNode->GetFrameRect();
                     rect.origin.y = ANIMATE_POSITION;
                     nSpriteNode->SetFrameRect(rect);
                     
@@ -185,7 +185,7 @@ void CUIScrollContainerExpand::ResetCurrViewBg(){
                     nSpriteNode->SetScale(ANIMATE_ZOOM_MIN);
                     
                     
-                    CGRect rect = nSpriteNode->GetFrameRect();
+                    CCRect rect = nSpriteNode->GetFrameRect();
                     rect.origin.y = ANIMATE_POSITION - ANIMATE_YOFFSET;
                     nSpriteNode->SetFrameRect(rect);
                      
@@ -209,7 +209,7 @@ void CUIScrollContainerExpand::CalculatePosition(){
         
         int index = i%size;
         
-        CGRect rect;
+        CCRect rect;
         UIScrollViewExpand* sve = m_pScrollViewUINodes[index];
         
         rect = sve->GetFrameRect();

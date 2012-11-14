@@ -84,16 +84,16 @@ bool NDUISynLayer::IsShown()
 void NDUISynLayer::Initialization()
 {
 	NDUILayer::Initialization();
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-	this->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
+	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	this->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
 	
 	CUISpriteNode *node = new CUISpriteNode;
 	node->Initialization();
 	node->ChangeSprite(NDPath::GetAniPath("busy.spr").c_str());//"loading.spr"//¡°³ÌÐòÃ¦Âµ¡±¶¯»­
-	node->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
+	node->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
 	this->AddChild(node);
 	/*
-	this->m_ptLine = CGPointMake((winSize.width - 135) / 2, (winSize.height - 9) / 2);
+	this->m_ptLine = CCPointMake((winSize.width - 135) / 2, (winSize.height - 9) / 2);
 	this->m_ptBlock = this->m_ptLine;
 	this->m_cyclePosX = this->m_ptLine.x + 113.0f;
 	
@@ -101,7 +101,7 @@ void NDUISynLayer::Initialization()
 	m_lbText->Initialization();
 	m_lbText->SetFontSize(13);
 	m_lbText->SetFontColor(ccc4(255, 255, 255, 255));
-	m_lbText->SetFrameRect(CGRectMake((winSize.width - 135) / 2 + 10, (winSize.height - 9) / 2-20, winSize.width, 13));
+	m_lbText->SetFrameRect(CCRectMake((winSize.width - 135) / 2 + 10, (winSize.height - 9) / 2-20, winSize.width, 13));
 	m_lbText->SetText("");
 	this->AddChild(m_lbText);	
 	*/

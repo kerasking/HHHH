@@ -75,12 +75,12 @@ void NDUIDirectKeyTop::OnBeforeNodeRemoveFromParent(NDNode* node, bool bCleanUp)
 IMPLEMENT_CLASS(DirectKey, NDUILayer)
 
 bool DirectKey::s_shink = false;
-CGRect DirectKey::s_Rect = CGRectZero;
+CCRect DirectKey::s_Rect = CCRectZero;
 
 
-CGRect RectAdd(CGRect rect, int value)
+CCRect RectAdd(CCRect rect, int value)
 {
-	return CGRectMake(rect.origin.x - value, rect.origin.y - value, rect.size.width + 2 * value, rect.size.height + 2 * value);
+	return CCRectMake(rect.origin.x - value, rect.origin.y - value, rect.size.width + 2 * value, rect.size.height + 2 * value);
 }
 
 DirectKey::DirectKey()
@@ -140,15 +140,15 @@ void DirectKey::Initialization()
 // 	//NDPicture *picCenter = pool.AddPicture(GetImgPathNew("nav_center.png"));
 // 	
 // 	vector<const char*>vImgFiles;
-// 	vector<CGRect> vImgCustomRect;
-// 	vector<CGPoint>vOffsetPoint;
+// 	vector<CCRect> vImgCustomRect;
+// 	vector<CCPoint>vOffsetPoint;
 // 	
 // 	vImgFiles.push_back(NDPath::GetImgPathNew("nav_center.png")); 
-// 	vImgCustomRect.push_back(CGRectMake(0, 0, DIRECTKEY_DRAG_W, DIRECTKEY_DRAG_H));
+// 	vImgCustomRect.push_back(CCRectMake(0, 0, DIRECTKEY_DRAG_W, DIRECTKEY_DRAG_H));
 // 	vOffsetPoint.push_back(ccp(0.0f, 0.0f));
 // 	
 // 	vImgFiles.push_back(NDPath::GetImgPathNew("nav_fang.png")); 
-// 	vImgCustomRect.push_back(CGRectMake(0, 0, DIRECTKEY_SHRINK_W, DIRECTKEY_SHRINK_H));
+// 	vImgCustomRect.push_back(CCRectMake(0, 0, DIRECTKEY_SHRINK_W, DIRECTKEY_SHRINK_H));
 // 	vOffsetPoint.push_back(ccp((DIRECTKEY_DRAG_W-DIRECTKEY_SHRINK_W)/2, (DIRECTKEY_DRAG_H-DIRECTKEY_SHRINK_H)/2));
 // 	
 // 	m_picCenterNormal = new NDPicture;
@@ -166,7 +166,7 @@ void DirectKey::Initialization()
 // 	SetBackgroundImage(m_picNormal);
 	
 	/*
-	CGSize sizeCenter = picCenter->GetSize(),
+	CCSize sizeCenter = picCenter->GetSize(),
 		   sizeBg = m_picNormal->GetSize();
 	
 	int horizontalW = (sizeBg.width-sizeCenter.width)/2,
@@ -186,7 +186,7 @@ void DirectKey::Initialization()
 //	m_btnLeft = new NDUIButton();
 //	m_btnLeft->Initialization();
 //	m_btnLeft->CloseFrame();
-//	m_btnLeft->SetFrameRect(CGRectMake(0, horizontalY, horizontalW, horizontalH));
+//	m_btnLeft->SetFrameRect(CCRectMake(0, horizontalY, horizontalW, horizontalH));
 //	m_btnLeft->SetTouchDownColor(ccc4(255, 255, 255, 0));
 //	m_btnLeft->SetDelegate(this);
 //	AddChild(m_btnLeft);	
@@ -198,7 +198,7 @@ void DirectKey::Initialization()
 //	m_btnRight = new NDUIButton();
 //	m_btnRight->Initialization();
 //	m_btnRight->CloseFrame();
-//	m_btnRight->SetFrameRect(CGRectMake(rightStartX, horizontalY, horizontalW, horizontalH));
+//	m_btnRight->SetFrameRect(CCRectMake(rightStartX, horizontalY, horizontalW, horizontalH));
 //	m_btnRight->SetTouchDownColor(ccc4(255, 255, 255, 0));
 //	m_btnRight->SetDelegate(this);
 //	AddChild(m_btnRight);	
@@ -210,7 +210,7 @@ void DirectKey::Initialization()
 //	m_btnUp = new NDUIButton();
 //	m_btnUp->Initialization();
 //	m_btnUp->CloseFrame();
-//	m_btnUp->SetFrameRect(CGRectMake(verticalStartX, 0, verticalW, verticalH));
+//	m_btnUp->SetFrameRect(CCRectMake(verticalStartX, 0, verticalW, verticalH));
 //	m_btnUp->SetTouchDownColor(ccc4(255, 255, 255, 0));
 //	m_btnUp->SetDelegate(this);
 //	AddChild(m_btnUp);	
@@ -222,7 +222,7 @@ void DirectKey::Initialization()
 //	m_btnDown = new NDUIButton();
 //	m_btnDown->Initialization();
 //	m_btnDown->CloseFrame();
-//	m_btnDown->SetFrameRect(CGRectMake(verticalStartX, downStartY, verticalW, verticalH));
+//	m_btnDown->SetFrameRect(CCRectMake(verticalStartX, downStartY, verticalW, verticalH));
 //	m_btnDown->SetTouchDownColor(ccc4(255, 255, 255, 0));
 //	m_btnDown->SetDelegate(this);
 //	AddChild(m_btnDown);
@@ -230,7 +230,7 @@ void DirectKey::Initialization()
 	m_btnShrink = new NDUIButton();
 	m_btnShrink->Initialization();
 	m_btnShrink->SetImage(m_picCenterNormal);
-	m_btnShrink->SetFrameRect(CGRectMake((DIRECTKEY_W-DIRECTKEY_DRAG_W)/2, 
+	m_btnShrink->SetFrameRect(CCRectMake((DIRECTKEY_W-DIRECTKEY_DRAG_W)/2, 
 										 (DIRECTKEY_H-DIRECTKEY_DRAG_H)/2, 
 										  DIRECTKEY_DRAG_W, 
 										  DIRECTKEY_DRAG_H));
@@ -241,7 +241,7 @@ void DirectKey::Initialization()
 	
 	if (s_Rect.size.width == 0.0f || s_Rect.size.height == 0.0f) 
 	{
-		s_Rect = CGRectMake(0, 200, DIRECTKEY_W, DIRECTKEY_H);
+		s_Rect = CCRectMake(0, 200, DIRECTKEY_W, DIRECTKEY_H);
 	}
 	
 	SetFrameRect(s_Rect);
@@ -373,7 +373,7 @@ void DirectKey::OnTouchUp()
 	}
 }
 
-bool DirectKey::OnButtonDragOut(NDUIButton* button, CGPoint beginTouch, CGPoint moveTouch, bool longTouch)
+bool DirectKey::OnButtonDragOut(NDUIButton* button, CCPoint beginTouch, CCPoint moveTouch, bool longTouch)
 {
 	if (button == m_btnShrink) 
 	{
@@ -385,7 +385,7 @@ bool DirectKey::OnButtonDragOut(NDUIButton* button, CGPoint beginTouch, CGPoint 
 	return false;
 }
 
-bool DirectKey::OnButtonDragOutComplete(NDUIButton* button, CGPoint endTouch, bool outOfRange)
+bool DirectKey::OnButtonDragOutComplete(NDUIButton* button, CCPoint endTouch, bool outOfRange)
 {
 	if (button == m_btnShrink) 
 	{
@@ -406,15 +406,15 @@ void DirectKey::OnButtonClick(NDUIButton* button)
 	if (button == m_btnShrink && pNode && pNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer))) 
 	{
 		
-		CGRect scrRect = button->GetScreenRect();
+		CCRect scrRect = button->GetScreenRect();
 		//scrRect = ::RectAdd(scrRect, 2);
 		scrRect.origin.x += (DIRECTKEY_DRAG_W-DIRECTKEY_SHRINK_W)/2;
 		scrRect.origin.y += (DIRECTKEY_DRAG_H-DIRECTKEY_SHRINK_H)/2;
 		scrRect.size.width = DIRECTKEY_SHRINK_W;
 		scrRect.size.height = DIRECTKEY_SHRINK_H;
 		
-		CGPoint beginTouch = ((NDUILayer*)pNode)->m_kBeginTouch;
-		if (CGRectContainsPoint(scrRect, beginTouch))
+		CCPoint beginTouch = ((NDUILayer*)pNode)->m_kBeginTouch;
+		if (cocos2d::CCRect::CCRectContainsPoint(scrRect, beginTouch))
 			ReverseShrinkState();
 	}
 }
@@ -521,7 +521,7 @@ bool DirectKey::GetPosList(dk_vec_pos& vpos)
 	
 	NDPlayer& player = NDPlayer::defaultHero();
 	
-	CGPoint pos = player.GetPosition();
+	CCPoint pos = player.GetPosition();
 	
 	int iCellX = (int)pos.x-DISPLAY_POS_X_OFFSET,
 		iCellY = (int)pos.y-DISPLAY_POS_Y_OFFSET;
@@ -637,9 +637,9 @@ void DirectKey::ReverseShrinkState()
 	*/
 }
 
-void DirectKey::RefreshPosition(CGPoint pos)
+void DirectKey::RefreshPosition(CCPoint pos)
 {
-	CGRect rect = GetFrameRect();
+	CCRect rect = GetFrameRect();
 	
 	rect.origin.x = pos.x-rect.size.width/2;
 	
@@ -651,9 +651,9 @@ void DirectKey::RefreshPosition(CGPoint pos)
 	
 	if (m_btnLayer) 
 	{
-		CGRect scrRect = GetScreenRect();
+		CCRect scrRect = GetScreenRect();
 		
-		CGRect btnRect = m_btnLayer->GetFrameRect();
+		CCRect btnRect = m_btnLayer->GetFrameRect();
 		
 		btnRect.origin.x = scrRect.origin.x+(DIRECTKEY_W-DIRECTKEY_DRAG_W)/2;
 		
@@ -683,9 +683,9 @@ void DirectKey::ShowFinish(NDScene* scene)
 		m_btnLayer->RemoveFromParent(false);
 	}
 	
-	CGPoint origin = GetScreenRect().origin;
+	CCPoint origin = GetScreenRect().origin;
 	
-	CGRect rect = m_btnShrink->GetFrameRect();
+	CCRect rect = m_btnShrink->GetFrameRect();
 	
 	rect.origin = ccpAdd(origin, rect.origin);
 	
@@ -693,7 +693,7 @@ void DirectKey::ShowFinish(NDScene* scene)
 	
 	scene->AddChild(m_btnLayer, DIRECT_KEY_TOP_Z);
 	
-	rect.origin = CGPointZero;
+	rect.origin = CCPointZero;
 	
 	m_btnShrink->SetFrameRect(rect);
 	
@@ -776,18 +776,18 @@ bool DirectKey::TouchEnd(NDTouch* touch)
 	return NDUILayer::TouchEnd(touch);
 }
 
-DirectKey::KeyDirect DirectKey::GetPointAtDirect(CGPoint pos)
+DirectKey::KeyDirect DirectKey::GetPointAtDirect(CCPoint pos)
 {
-	CGRect scrRect = GetScreenRect();
+	CCRect scrRect = GetScreenRect();
 	
 	KeyDirect direct = KeyDirectNone;
 	
-	if (!CGRectContainsPoint(scrRect, pos))
+	if (!cocos2d::CCRect::CCRectContainsPoint(scrRect, pos))
 		return direct;
 		
-	CGPoint posInRect = ccpSub(pos, scrRect.origin);
+	CCPoint posInRect = ccpSub(pos, scrRect.origin);
 	
-	CGSize sizeRect = scrRect.size;
+	CCSize sizeRect = scrRect.size;
 	
 	if (posInRect.y < sizeRect.height / 2)
 	{ // left up right

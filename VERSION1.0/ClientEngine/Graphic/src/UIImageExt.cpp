@@ -23,7 +23,7 @@
 // }PIXELS;
 // 
 // - (UIImage *)convertToGrayscale {
-// 	CGSize size = [self size];
+// 	CCSize size = [self size];
 // 
 // 	int width = size.width;
 // 	int height = size.height;
@@ -36,7 +36,7 @@
 // 	CGContextRef context = CGBitmapContextCreate(pixels, width, height, 8, width * sizeof(uint32_t), colorSpace, 
 // 	kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedLast);
 // 	// paint the bitmap to our context which will fill in the pixels array
-// 	CGContextDrawImage(context, CGRectMake(0, 0, width, height), [self CGImage]);
+// 	CGContextDrawImage(context, CCRectMake(0, 0, width, height), [self CGImage]);
 // 	
 // 	for(int y = 0; y < height; y++) {
 // 		for(int x = 0; x < width; x++) {
@@ -65,15 +65,15 @@
 // 
 // 
 // // get sub image 
-// - (UIImage*) getSubImageFromWithRect: (CGRect) rect 
+// - (UIImage*) getSubImageFromWithRect: (CCRect) rect 
 // {
 // 	UIGraphicsBeginImageContext(rect.size);
 // 	CGContextRef context = UIGraphicsGetCurrentContext();
 // 	// translated rectangle for drawing sub image
-// 	CGRect drawRect = CGRectMake(-rect.origin.x, -rect.origin.y, self.size.width, self.size.height);
+// 	CCRect drawRect = CCRectMake(-rect.origin.x, -rect.origin.y, self.size.width, self.size.height);
 // 	// clip to the bounds of the image context
 // 	// not strictly necessary as it will get clipped anyway?
-// 	CGContextClipToRect(context, CGRectMake(0, 0, rect.size.width, rect.size.height));
+// 	CGContextClipToRect(context, CCRectMake(0, 0, rect.size.width, rect.size.height));
 // 	// draw image
 // 	[self drawInRect:drawRect];
 // 	// grab image

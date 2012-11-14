@@ -45,7 +45,7 @@ void CSMGameScene::Initialization(int mapID)
 {
 	NDScene::Initialization();
 	
-	//CGSize winsize			= NDDirector::DefaultDirector()->GetWinSize();
+	//CCSize winsize			= NDDirector::DefaultDirector()->GetWinSize();
 	//float fScaleFactor		= NDDirector::DefaultDirector()->GetScaleFactor();
 	
 	m_pkMapLayerLogic = new NDMapLayerLogic();
@@ -56,7 +56,7 @@ void CSMGameScene::Initialization(int mapID)
 	/*
 	NDUILayer *layerMapButton	= new NDUILayer;
 	layerMapButton->Initialization();
-	layerMapButton->SetFrameRect(CGRectMake(
+	layerMapButton->SetFrameRect(CCRectMake(
 			(winsize.width - WORLD_MAP_BTN_W * fScaleFactor), 0,
 			WORLD_MAP_BTN_W * fScaleFactor, WORLD_MAP_BTN_H * fScaleFactor));
 	layerMapButton->SetTag(TAG_WORLD_MAP_BTN_LAYER);
@@ -64,7 +64,7 @@ void CSMGameScene::Initialization(int mapID)
 	
 	NDUIButton *btnMap	= new NDUIButton;
 	btnMap->Initialization();
-	btnMap->SetFrameRect(CGRectMake(0, 0, WORLD_MAP_BTN_W * fScaleFactor, WORLD_MAP_BTN_H * fScaleFactor));
+	btnMap->SetFrameRect(CCRectMake(0, 0, WORLD_MAP_BTN_W * fScaleFactor, WORLD_MAP_BTN_H * fScaleFactor));
 	btnMap->SetDelegate(this);
 	btnMap->SetTag(TAG_WORLD_MAP_BTN);
 	layerMapButton->AddChild(btnMap);
@@ -86,7 +86,7 @@ void CSMGameScene::ShowMiniMap(bool bShow)
 // 			m_miniMap = new NDMiniMap();
 // 			m_miniMap->Initialization();
 // 			m_miniMap->SetGameScene(this);
-// 			m_miniMap->SetFrameRect(CGRectMake(308.0f, 0.0f, 172.0f, 84.0f));
+// 			m_miniMap->SetFrameRect(CCRectMake(308.0f, 0.0f, 172.0f, 84.0f));
 // 			AddChild(m_miniMap);
 // 		}
 // 	} 
@@ -100,7 +100,7 @@ void CSMGameScene::ShowMiniMap(bool bShow)
 // 	}
 }
 
-CGSize CSMGameScene::GetSize()
+CCSize CSMGameScene::GetSize()
 {
 	return m_pkMapLayerLogic->GetContentSize();
 }

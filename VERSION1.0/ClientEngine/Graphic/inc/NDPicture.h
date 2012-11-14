@@ -18,8 +18,11 @@
 #include "ccTypes.h"
 #include "shaders/ccGLStateCache.h"
 #include "shaders/ccGLProgram.h"
+#include <vector>
+#include <map>
 
 using namespace cocos2d;
+using namespace std;
 
 NS_NDENGINE_BGN
 
@@ -65,11 +68,11 @@ public:
 
 	void Initialization(const char* imageFile);
 	void Initialization(vector<const char*>& vImgFiles);
-	void Initialization(vector<const char*>& vImgFiles, vector<CGRect>& vImgCustomRect, vector<CGPoint>&vOffsetPoint);
+	void Initialization(vector<const char*>& vImgFiles, vector<CCRect>& vImgCustomRect, vector<CCPoint>&vOffsetPoint);
 	void Initialization(const char* imageFile, int hrizontalPixel,
 			int verticalPixel = 0);
 
-	void Cut(CGRect kRect);
+	void Cut(CCRect kRect);
 
 	void SetReverse(bool reverse);
 
@@ -77,9 +80,9 @@ public:
 
 	void SetColor(cocos2d::ccColor4B color);
 
-	void DrawInRect(CGRect kRect);
+	void DrawInRect(CCRect kRect);
 
-	CGSize GetSize();
+	CCSize GetSize();
 
 	NDPicture* Copy();
 
@@ -103,7 +106,7 @@ protected:
 
 private:
 	cocos2d::CCTexture2D* m_pkTexture;
-	CGRect m_kCutRect;
+	CCRect m_kCutRect;
 	bool m_bReverse;
 	bool m_bAdvance;
 	PictureRotation m_kRotation;
@@ -122,7 +125,7 @@ private:
 	int m_verticalPixel;
 
 	void SetCoorinates();
-	void SetVertices(CGRect drawRect);
+	void SetVertices(CCRect drawRect);
 };
 
 class NDPictureDictionary: public NDDictionary
@@ -169,11 +172,11 @@ private:
 
 	NDPictureDictionary* m_pkTextures;
 
-	std::map<std::string, CGSize> m_mapStr2Size;
+	std::map<std::string, CCSize> m_mapStr2Size;
 	MAP_STRING m_mapTex2Str;
 
 private:
-	CGSize GetImageSize(std::string filename);
+	CCSize GetImageSize(std::string filename);
 };
 
 NS_NDENGINE_END

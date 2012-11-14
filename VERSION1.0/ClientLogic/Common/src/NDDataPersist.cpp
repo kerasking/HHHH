@@ -11,32 +11,13 @@
 #include "KDirectory.h"
 #include "define.h"
 #include "ItemMgr.h"
-#include <direct.h>
-#include "..\..\TinyXML\inc\tinyxml.h"
+//#include <direct.h>
+#include "tinyxml.h"
 #include "XMLReader.h"
 
-NSString DataFilePath()
-{
-	/***
-	* 临时性注释 郭浩
-	* begin
-	*/
-// 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-// 	NSString *documentsDirectory = [paths objectAtIndex:0]; 
-// 	return [[documentsDirectory stringByAppendingPathComponent:@"/DragonDrive"] 
-// 								stringByAppendingPathComponent:@"/DragonDrive_" ];
-	/***
-	* 临时性注释
-	* end
-	*/
-
-	char szTempPath[MAX_PATH] = {0};
-
-	getcwd(szTempPath,MAX_PATH);
-
-	return new CCString("szTempPath");
-}
-
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#import <Foundation/Foundation.h>
+#endif
 
 /*
  简单的加密算法 
@@ -44,7 +25,7 @@ NSString DataFilePath()
  begin.....
  */
 
-static const char codeKey[] = {0x57, 0xf3, 0xa4, 0x38, 0xc0, 0x88, 0x7b, 0xac};
+static const unsigned char codeKey[] = {0x57, 0xf3, 0xa4, 0x38, 0xc0, 0x88, 0x7b, 0xac};
 void charToHex(unsigned char src, unsigned char *dest)
 {
 	int hi = src / 16;      //高位
@@ -143,7 +124,7 @@ NDDataPersist::~NDDataPersist()
 // 	[accountDeviceList release];
 }
 
-bool NDDataPersist::NeedEncodeForKey(NSString key)
+bool NDDataPersist::NeedEncodeForKey(CCString* key)
 {
 	if (key->isEqual(kLastServerIP) ||
 		key->isEqual(kLastServerPort) ||
@@ -167,7 +148,7 @@ void NDDataPersist::SetData(unsigned int index, CCString* key, const char* data)
 	if (data) 
 	{
 //		NSString *nsObj = [NSString stringWithUTF8String:data];
-		NSString nsObj = CCString::stringWithUTF8String(data);
+		CCStringRef nsObj = CCString::stringWithUTF8String(data);
 		
 		if (NeedEncodeForKey(key)) 
 		{
@@ -192,7 +173,7 @@ const char* NDDataPersist::GetData(unsigned int index, CCString* key)
 	CCDictionary* dic = LoadDataDiction(index);
 
 	NDAsssert(dic != nil);
-	NSString nsStr = (CCString*)dic->objectForKey(key->toStdString().c_str());
+	CCStringRef nsStr = (CCString*)dic->objectForKey(key->toStdString().c_str());
 
 	if (nsStr == nil) // 键值对不存在, 加入
 	{ 
@@ -257,7 +238,7 @@ CCDictionary* NDDataPersist::LoadDataDiction(unsigned int index)
 
 void NDDataPersist::LoadData()
 {
- 	NSString filePath = this->GetDataPath();
+ 	CCStringRef filePath = this->GetDataPath();
 
 	XMLReader kReader;
 
@@ -377,7 +358,7 @@ void NDDataPersist::AddAcount(const char* account, const char* pwd)
 		//CCMutableArray<CCObject*>* accountNode = new CCMutableArray<CCObject*>;
 		CCArray* accountNode = new CCArray();
 
-		accountNode->addObject(NSString(new CCString((const char*)encAccount)));
+		accountNode->addObject(new CCString((const char*)encAccount));
 		//[accountNode addObject:[NSString stringWithUTF8String:(const char*)encAccount]];
 		
 		if (pwd)
@@ -386,15 +367,15 @@ void NDDataPersist::AddAcount(const char* account, const char* pwd)
 			simpleEncode((const unsigned char*)pwd, encPwd);
 			//[accountNode addObject:[NSString stringWithUTF8String:(const char*)encPwd]];
 
-			accountNode->addObject(NSString(new CCString((const char*)encPwd)));
+			accountNode->addObject(new CCString((const char*)encPwd));
 		}
 		
 		for (int i = 0; i < m_pkAccountList->count(); i++) 
 		{
 			CCArray* tmpAccountNode = (CCArray*)m_pkAccountList->objectAtIndex(i);
-			NSString tmpAccount = (CCString*)tmpAccountNode->objectAtIndex(0);
+			CCStringRef tmpAccount = (CCString*)tmpAccountNode->objectAtIndex(0);
 
-			if (tmpAccount->isEqual(NSString(new CCString((const char*) encAccount))))
+			if (tmpAccount->isEqual(new CCString((const char*) encAccount)))
 			{
 				m_pkAccountList->removeObject(tmpAccount);
 			}
@@ -507,7 +488,7 @@ CCString* NDDataPersist::GetAccountDeviceListPath()
 
 void NDDataPersist::LoadAccountDeviceList()
 {
-	NSString filePath = GetAccountDeviceListPath();
+	CCStringRef filePath = GetAccountDeviceListPath();
 
 	/***
 	* 以下为旧代码 郭浩
@@ -532,7 +513,7 @@ void NDDataPersist::AddAccountDevice(const char* account)
 		
 		for (NSUInteger i = 0; i < m_pkAccountList->count(); i++) 
 		{
-			NSString tmpAccountNode = (CCString*)m_pkAccountList->objectAtIndex(i);
+			CCStringRef tmpAccountNode = (CCString*)m_pkAccountList->objectAtIndex(i);
 
 			if (tmpAccountNode->isEqual(CCString::stringWithUTF8String((const char*)encAccount)))
 			{
@@ -561,7 +542,7 @@ bool NDDataPersist::HasAccountDevice(const char* account)
 		return true;
 	}
 	
-	NSString tmpAccountNode = CCString::stringWithUTF8String(account);
+	CCStringRef tmpAccountNode = CCString::stringWithUTF8String(account);
 
 // 	NSEnumerator *enumerator;
 // 	enumerator = [accountDeviceList objectEnumerator];
@@ -572,7 +553,7 @@ bool NDDataPersist::HasAccountDevice(const char* account)
 
 	for (int i = 0;i < m_pkAccountDeviceList->count();i++)
 	{
-		string acc = ((CCString*)object)->UTF8String();
+		string acc = ((CCString*)m_pkAccountDeviceList->objectAtIndex(i))->UTF8String();
 		unsigned char decAcc[1024] = {0};
 
 		simpleDecode((const unsigned char*)acc.c_str(),decAcc);
@@ -623,9 +604,9 @@ bool NDDataPersist::IsGameSettingOn(GAME_SETTING type)
 
 void NDDataPersist::SaveGameSetting()
 {
-	NSString strGameSetting = CCString::stringWithFormat("%d",ms_nGameSetting);
+	CCStringRef strGameSetting = CCString::stringWithFormat("%d",ms_nGameSetting);
 
-	NSString strTemp = new CCString(kGameSetting->toStdString().c_str());
+	CCStringRef strTemp = new CCString(kGameSetting->toStdString().c_str());
 	SetData(kGameSettingData,strTemp,strGameSetting->UTF8String());
 	SaveData();
 

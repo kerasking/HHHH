@@ -51,7 +51,7 @@ public NDUIDialogDelegate
 	
 public:
 	
-	void Initialization(CGPoint pos); override
+	void Initialization(CCPoint pos); override
 	
 	void OnButtonClick(NDUIButton* button); override
 	

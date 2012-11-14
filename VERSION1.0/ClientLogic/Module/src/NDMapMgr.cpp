@@ -20,7 +20,7 @@
 #include "CPet.h"
 #include "NDMsgDefine.h"
 #include "NDUtility.h"
-#include "BeatHeart.h"
+//#include "BeatHeart.h"
 #include "NDDataPersist.h"
 // #include "Chat.h"
 // #include "NewChatScene.h"			///< 这俩包含需要汤哥和张迪的东西 郭浩
@@ -32,6 +32,13 @@
 #include "AutoPathTip.h"
 #include "NDDataTransThread.h"
 #include "GameSceneLoading.h"
+#include "NDBeforeGameMgr.h"
+
+#ifdef USE_MGSDK
+#import <Foundation/Foundation.h>
+#import  "MBGPlatform.h"
+#import  "MBGBankDebit.h"
+#endif
 
 NS_NDENGINE_BGN
 
@@ -132,7 +139,9 @@ m_nCurrentMonsterRound(0)
 {
 	m_iCurDlgNpcID = 0;
 	mapType = MAPTYPE_NORMAL;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this, "sim ");
+#endif
 	m_kTimer.SetTimer(this, 1, 0.1);
 	memset(zhengYing, 0, sizeof(zhengYing));
 	isShowName = true;
@@ -551,16 +560,16 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 			//TutorUILayer::processUserPos(*kData);
 		}
 			break;
-		case _MSG_CHG_MAP_FAIL:
-		{
-			NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
-
-			if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
-	 		{
-	 			NDDirector::DefaultDirector()->PopScene();
-	 		}
-		}
-			break;
+//		case _MSG_CHG_MAP_FAIL:
+//		{
+//			NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
+//
+//			if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
+//	 		{
+//	 			NDDirector::DefaultDirector()->PopScene();
+//	 		}
+//		}
+//			break;
 		case _MSG_USERINFO_SEE:
 		{
 			processUserInfoSee(*pkData);
@@ -652,16 +661,16 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 			//}
 		}
 			break;
-		case _MSG_TIP:
-		{
- 			NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
- 			if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
- 			{
- 				GameSceneLoading* pkGameSceneLoading = (GameSceneLoading*)pkScene;
- 				pkGameSceneLoading->UpdateTitle(pkData->ReadUnicodeString());
- 			}
-		}
-			break;
+//		case _MSG_TIP:
+//		{
+// 			NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
+// 			if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
+// 			{
+// 				GameSceneLoading* pkGameSceneLoading = (GameSceneLoading*)pkScene;
+// 				pkGameSceneLoading->UpdateTitle(pkData->ReadUnicodeString());
+// 			}
+//		}
+//			break;
 		case _MSG_NAME:
 		{
 			//showDialog(NDCommonCString("tip"), NDCommonCString("RenameSucc")); ///< 依赖showDialog 郭浩
@@ -1356,7 +1365,12 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 		(*pkData) >> btState; // 1个字节表状态
 		unsigned char btCamp = 0;
 		(*pkData) >> btCamp;
-		NSString pstrTemp = CCString::stringWithUTF8String(
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+		std::string strName = pkData->ReadUnicodeString();
+		std::string dataStr = pkData->ReadUnicodeString();
+		std::string talkStr = pkData->ReadUnicodeString();
+#else
+		CCStringRef pstrTemp = CCString::stringWithUTF8String(
 				pkData->ReadUnicodeString().c_str());
 		std::string strName = pstrTemp->toStdString();
 
@@ -1366,7 +1380,7 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 		pstrTemp = CCString::stringWithUTF8String(
 				pkData->ReadUnicodeString().c_str());
 		std::string talkStr = pstrTemp->toStdString();
-
+#endif
 		NDNpc *pkNPC = new NDNpc;
 		pkNPC->m_nID = nID;
 		pkNPC->m_nCol = usCellX;
@@ -1447,7 +1461,7 @@ void NDMapMgr::AddAllNPCToMap()
 void NDMapMgr::OnCustomViewRadioButtonSelected(NDUICustomView* customView,
 		unsigned int radioButtonIndex, int ortherButtonTag)
 {
-	throw std::exception("The method or operation is not implemented.");
+	//throw std::exception("The method or operation is not implemented.");
 }
 
 void NDMapMgr::ClearManualRole()
@@ -1576,7 +1590,7 @@ void NDMapMgr::WorldMapSwitch(int mapId)
 		return;
 	}
 
-	NDDirector::DefaultDirector()->PushScene(GameSceneLoading::Scene());
+//	NDDirector::DefaultDirector()->PushScene(GameSceneLoading::Scene());
 
 	NDPlayer& player = NDPlayer::defaultHero();
 	NDTransData bao(_MSG_POSITION);
@@ -1758,6 +1772,7 @@ bool NDMapMgr::processConsole(const char* pszInput)
 
 void NDMapMgr::OnTimer(OBJID tag)
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	const char* pszCommand = NDConsole::GetSingletonPtr()->GetSpecialCommand(
 			"sim ");
 
@@ -1840,6 +1855,7 @@ void NDMapMgr::OnTimer(OBJID tag)
 
 		printf("分析完畢!\n");
 	}
+#endif
 }
 
 NDMonster* NDMapMgr::GetBattleMonster()
@@ -2426,7 +2442,7 @@ void NDMapMgr::processPetInfo(NDTransData* pkData, int nLength)
 		NDPlayer & player = NDPlayer::defaultHero();
 		ShowPetInfo showPetInfo;
 		player.GetShowPetInfo(showPetInfo);
-		if (OBJID(idPet) == showPetInfo.idPet)
+		if ((OBJID)idPet == showPetInfo.idPet)
 		{
 			player.ResetShowPet();
 		}
@@ -2663,7 +2679,7 @@ void NDMapMgr::processPetInfo(NDTransData* pkData, int nLength)
 	{
 		ShowPetInfo showPetInfo;
 		pkRole->GetShowPetInfo(showPetInfo);
-		if (OBJID(pkPet->int_PET_ID) == showPetInfo.idPet)
+		if ((OBJID)pkPet->int_PET_ID == showPetInfo.idPet)
 		{
 			pkRole->ResetShowPet();
 		}
@@ -3927,7 +3943,44 @@ void NDMapMgr::processRoadBlock(NDTransData& kData)
 
 	pkLayer->setStartRoadBlockTimer(uiTime, nX, nY);
 }
+#ifdef USE_MGSDK
+void  NDMapMgr::VerifierError(MBGError *error)
+{
+    NSLog(@"VerifierError:%d,%s", [error code], [error description] );
+}
 
+void  NDMapMgr::CloseTransaction()
+{
+    int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
+    if(idAccount <= 0)
+        return;
+    NSString* transactionId = NDBeforeGameMgrObj.GetCurrentTransactionID();
+    if (transactionId == nil)
+        return;
+    const char* strTransactionID = [transactionId UTF8String];
+    const unsigned char* szUnSignedTransactionID = (const unsigned char*)strTransactionID;
+    NDTransData bao(_MSG_CLOSE_TRANSACTION);
+    bao << idAccount;
+    bao.Write(szUnSignedTransactionID, strlen(strTransactionID));
+    SEND_DATA(bao);
+    CloseProgressBar;
+}
+void  NDMapMgr::CancelTransaction()
+{
+    NSString* transactionId = NDBeforeGameMgrObj.GetCurrentTransactionID();
+    if (transactionId == nil)
+        return;
+    
+    [MBGBankDebit cancelTransaction:transactionId onSuccess:^(MBGTransaction *transaction) {
+    } onError:^(MBGError *error) {
+    }];
+}
+void  NDMapMgr::TransactionError(MBGError *error)
+{
+    NSLog(@"TransactionError:%d,%s", [error code], [error description] );
+    CancelTransaction();
+}
+#endif
 void NDMapMgr::ProcessTempCredential(NDTransData& kData)
 {
 	///< 这两行先注释掉 郭浩
@@ -3935,9 +3988,11 @@ void NDMapMgr::ProcessTempCredential(NDTransData& kData)
 // 	if(temporaryCredential == nil) return;
 
 #ifdef USE_MGSDK
+    NSString* temporaryCredential = kData.ReadUTF8NString();
+    if(temporaryCredential == nil) return;
 	[MBGSocialAuth authorizeToken:temporaryCredential onSuccess:^(NSString *verifier)
 	{
-		sendVerifier(verifier);
+		//sendVerifier(verifier);
 	}onError:^(MBGError *error)
 	{
 		VerifierError(error);
@@ -4224,7 +4279,7 @@ void NDMapMgr::throughMap(int mapX, int mapY, int mapId)
 		return;
 	}
 
-	NDDirector::DefaultDirector()->PushScene(GameSceneLoading::Scene());	
+//	NDDirector::DefaultDirector()->PushScene(GameSceneLoading::Scene());	
 
 	NDPlayer& player = NDPlayer::defaultHero();
 	NDTransData bao(_MSG_POSITION);
@@ -4287,12 +4342,12 @@ void NDMapMgr::NavigateToNpc(int nNpcId)
 
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
 
-	CGPoint kDstPoint = ccp(pkNPC->m_nCol * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+	CCPoint kDstPoint = ccp(pkNPC->m_nCol * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
 			pkNPC->m_nRow * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
 
 	NDPlayer& player = NDPlayer::defaultHero();
 
-	CGPoint disPos = ccpSub(kDstPoint, player.GetPosition());
+	CCPoint disPos = ccpSub(kDstPoint, player.GetPosition());
 
 	if (abs(int(disPos.x)) <= 32 && abs(int(disPos.y)) <= 32)
 	{

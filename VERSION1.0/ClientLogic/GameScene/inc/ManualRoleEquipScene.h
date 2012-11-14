@@ -37,7 +37,7 @@ public:
 	void uppackEquip(int iPos);
 	void unpackAllEquip();
 	void packEquip(Item* equip);
-	void setPosition(CGPoint pos);
+	void setPosition(CCPoint pos);
 	void setFace(bool bRight);
 	int getID();
 	

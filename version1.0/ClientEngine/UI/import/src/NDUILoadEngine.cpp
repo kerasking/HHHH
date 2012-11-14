@@ -8,7 +8,7 @@
  */
 
 
-#include "NDUILoad.h"
+#include "NDUILoadEngine.h"
 #include "NDControlHelp.h"
 #include "UIData.h"
 #include "NDDirector.h"
@@ -18,7 +18,7 @@
 #pragma mark 这个NDUILoad.cpp和ClientEngine/UI/import/src/NDUILoad.cpp重复了！后面删除！
 //额，这个类貌似给CU那套用的，界面两套CUI和NDUI所以这边重了！！
 
-IMPLEMENT_CLASS(NDUILoad, NDObject)
+IMPLEMENT_CLASS(NDUILoadEngine, NDObject)
 
 unsigned int inline findAndReplace(
 		std::string& source, 
@@ -89,53 +89,53 @@ bool FilterStringName(UIINFO& uiInfo)
 	return true;
 }
 
-bool FilterCtrlUV(CTRL_UV& uv)
-{
-//上层代码应该忽略分辨率，引擎会自适应！
-// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-// 	uv.x	*= scale;
-// 	uv.y	*= scale;
-// 	uv.w	*= scale;
-// 	uv.h	*= scale;
-// 	
-	return true;
-}
+//bool FilterCtrlUV(CTRL_UV& uv)
+//{
+////上层代码应该忽略分辨率，引擎会自适应！
+//// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+//// 	uv.x	*= scale;
+//// 	uv.y	*= scale;
+//// 	uv.w	*= scale;
+//// 	uv.h	*= scale;
+//// 	
+//	return true;
+//}
 
-bool FilterPos(CGPoint& pos)
-{
-//上层代码应该忽略分辨率，引擎会自适应！
-// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-// 	pos.x	*= scale;
-// 	pos.y	*= scale;
-// 	
-	return true;
-}
+//bool FilterPos(CCPoint& pos)
+//{
+////上层代码应该忽略分辨率，引擎会自适应！
+//// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+//// 	pos.x	*= scale;
+//// 	pos.y	*= scale;
+//// 	
+//	return true;
+//}
 
-bool FilterSize(UIINFO& uiInfo)
-{
-//上层代码应该忽略分辨率，引擎会自适应！	
-// 	/*
-// 	FilterCtrlUV(uiInfo.rectNormal);
-// 	FilterCtrlUV(uiInfo.rectSelected);
-// 	FilterCtrlUV(uiInfo.rectDisable);
-// 	FilterCtrlUV(uiInfo.rectFocus);
-// 	FilterCtrlUV(uiInfo.rectBack);*/
-// 	
-// 	FilterPos(uiInfo.CtrlPos);
-// 
-// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-// 	uiInfo.nCtrlWidth		*= scale;
-// 	uiInfo.nCtrlHeight		*= scale;
-// 	
-	
-	return true;
-}
+//bool FilterSize(UIINFO& uiInfo)
+//{
+////上层代码应该忽略分辨率，引擎会自适应！	
+//// 	/*
+//// 	FilterCtrlUV(uiInfo.rectNormal);
+//// 	FilterCtrlUV(uiInfo.rectSelected);
+//// 	FilterCtrlUV(uiInfo.rectDisable);
+//// 	FilterCtrlUV(uiInfo.rectFocus);
+//// 	FilterCtrlUV(uiInfo.rectBack);*/
+//// 	
+//// 	FilterPos(uiInfo.CtrlPos);
+//// 
+//// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+//// 	uiInfo.nCtrlWidth		*= scale;
+//// 	uiInfo.nCtrlHeight		*= scale;
+//// 	
+//	
+//	return true;
+//}
 
-bool NDUILoad::Load(
+bool NDUILoadEngine::Load(
 		  const char* uiname,
 		  NDUINode *parent, 
 		  NDUITargetDelegate* delegate, 
-		  CGSize sizeOffset /*= CGSizeZero*/)
+		  CCSize sizeOffset /*= CCSizeZero*/)
 {
 	if (!uiname || !parent)
 	{
@@ -177,14 +177,14 @@ bool NDUILoad::Load(
 //		}
 #endif
 		
-		FilterSize(uiInfo);
+		//FilterSize(uiInfo);
 		
-		CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 		
 		// 使用opengl坐标系
 		uiInfo.CtrlPos.y = winsize.height - uiInfo.CtrlPos.y;
 		
-		CGPoint CtrlAnchorPos = uiInfo.CtrlAnchorPos;
+		CCPoint CtrlAnchorPos = uiInfo.CtrlAnchorPos;
 		
 		if (!(0.0f == CtrlAnchorPos.x || 0.5f == CtrlAnchorPos.x || 1.0f == CtrlAnchorPos.x)
 			|| !(0.0f == CtrlAnchorPos.y || 0.5f == CtrlAnchorPos.y || 1.0f == CtrlAnchorPos.y))
@@ -369,7 +369,7 @@ bool NDUILoad::Load(
 	return true;
 }
 
-bool NDUILoad::LoadLua(
+bool NDUILoadEngine::LoadLua(
 		  const char* uiname,
 		  NDUINode *parent, 
 		  LuaObject luaDelegate,
@@ -392,7 +392,7 @@ bool NDUILoad::LoadLua(
 		return false;
 	}
 	
-	CGSize sizeOffset = CGSizeMake(sizeOffsetW, sizeOffsetH);
+	CCSize sizeOffset = CCSizeMake(sizeOffsetW, sizeOffsetH);
 	
 	int nCtrlAmount = uiData.GetCtrlAmount();
 	
@@ -418,14 +418,14 @@ bool NDUILoad::LoadLua(
 		//		}
 #endif
 
-		FilterSize(uiInfo);
+		//FilterSize(uiInfo);
 
-		CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 		
 		// 使用opengl坐标系
 		uiInfo.CtrlPos.y = winsize.height - uiInfo.CtrlPos.y;
 		
-		CGPoint CtrlAnchorPos = uiInfo.CtrlAnchorPos;
+		CCPoint CtrlAnchorPos = uiInfo.CtrlAnchorPos;
 		
 		if (!(0.0f == CtrlAnchorPos.x || 0.5f == CtrlAnchorPos.x || 1.0f == CtrlAnchorPos.x)
 			|| !(0.0f == CtrlAnchorPos.y || 0.5f == CtrlAnchorPos.y || 1.0f == CtrlAnchorPos.y))

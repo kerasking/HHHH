@@ -30,7 +30,7 @@ public:
 
 	void Initialization(int mapID); override
 	void ShowMiniMap(bool bShow);
-	CGSize GetSize();
+	CCSize GetSize();
 	
 	cocos2d::CCArray* GetSwitchs();
 private:

@@ -13,6 +13,9 @@
 
 #include <string>
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#import <Foundation/Foundation.h>
+#endif
 //////////////////////////////////////////////////////////////////////////
 
 namespace NDEngine
@@ -73,6 +76,10 @@ namespace NDEngine
 	
 		//std::string ReadString();
 		/**·µ»ØµÄ×Ö·û´®ÊÇutf8±àÂë*/
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+		NSString* ReadUnicodeNString();
+        NSString* ReadUTF8NString();
+#endif
 		std::string ReadUnicodeString();
 		std::string ReadUnicodeString2(bool bCareCode=true);
 		bool		ReadUnicodeString(char* out, unsigned int& outLen);

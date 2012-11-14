@@ -35,7 +35,7 @@ NDUILabel::NDUILabel()
 	m_kColor = ccc4(0, 0, 0, 255);
 	m_eTextAlignment = LabelTextAlignmentLeft;
 	m_texture = NULL;
-	m_kCutRect = CGRectZero;
+	m_kCutRect = CCRectZero;
 	m_uiRenderTimes = 2;
 	SetFontColor(m_kColor);
 		
@@ -62,15 +62,15 @@ void NDUILabel::SetText(const char* text)
 	m_bNeedMakeCoo = true;
 	m_bNeedMakeVer = true;
 
-	NSString pstrString = 0;
+	CCStringRef pstrString = 0;
 
 	pstrString = CCString::stringWithUTF8String(text);
 	m_strText = pstrString->toStdString();
 }
 	
-void NDUILabel::OnFrameRectChange(CGRect srcRect, CGRect dstRect)
+void NDUILabel::OnFrameRectChange(CCRect srcRect, CCRect dstRect)
 {
-	CGRect thisRect = GetFrameRect();
+	CCRect thisRect = GetFrameRect();
 
 	if (srcRect.size.width != dstRect.size.width ||
 		srcRect.size.height != dstRect.size.height)
@@ -144,10 +144,10 @@ void NDUILabel::MakeTexture()
 	CCLog( "@NDUILabel::MakeTexture(): %s", m_strText.c_str());
 #endif
 
-	CGRect thisRect = GetFrameRect();	
+	CCRect thisRect = GetFrameRect();	
 	/*
-	CGSize dim = [text sizeWithFont:[UIFont fontWithName:FONT_NAME size:m_fontSize] 
-				  constrainedToSize:CGSizeMake(thisRect.size.width, thisRect.size.height)];		
+	CCSize dim = [text sizeWithFont:[UIFont fontWithName:FONT_NAME size:m_fontSize] 
+				  constrainedToSize:CCSizeMake(thisRect.size.width, thisRect.size.height)];		
 		
 	//--test
 	dim.width = dim.width;
@@ -160,12 +160,12 @@ void NDUILabel::MakeTexture()
 		return;
 	}
 
-	NSString strString = new CCString(m_strText.c_str());
+	CCStringRef strString = new CCString(m_strText.c_str());
 
 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
 	m_texture = new CCTexture2D;
 	m_texture->initWithString(strString->UTF8String(),
-				CGSizeMake(thisRect.size.width * scale, thisRect.size.height * scale),
+				CCSizeMake(thisRect.size.width * scale, thisRect.size.height * scale),
 				kCCTextAlignmentLeft,
 				kCCVerticalTextAlignmentCenter,
 				FONT_NAME,
@@ -183,9 +183,9 @@ void NDUILabel::MakeCoordinates()
 {
 	if (m_texture) 
 	{
-		CGRect thisRect = GetFrameRect();	
+		CCRect thisRect = GetFrameRect();	
 			
-		m_kCutRect = CGRectZero;
+		m_kCutRect = CCRectZero;
 
 #if 0 //@todo
 		m_kCutRect.size.width = m_texture->getContentSizeInPixels().width;
@@ -209,11 +209,11 @@ void NDUILabel::MakeVertices()
 {
 	if (m_texture) 
 	{
-		CGRect scrRect = this->GetScreenRect();
-		CGRect drawRect = scrRect;
+		CCRect scrRect = this->GetScreenRect();
+		CCRect drawRect = scrRect;
 
 #if 0 //@todo
-		//CGRect drawRect = CGRectZero;
+		//CCRect drawRect = CCRectZero;
 		//drawRect.origin.y = scrRect.origin.y;
 		//drawRect.size.width = m_kCutRect.size.width;
 		//drawRect.size.height = m_kCutRect.size.height;
@@ -237,7 +237,7 @@ void NDUILabel::MakeVertices()
 		}
 #endif
 
-// 		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 // 		m_pfVertices[0] = drawRect.origin.x;
 // 		m_pfVertices[1] = winSize.height - drawRect.origin.y - drawRect.size.height;
 // 		m_pfVertices[2] = 0;
@@ -408,7 +408,7 @@ void NDUILabel::draw()
 	// color
 	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, m_pbColors);
 
-	for (uint i = 0; i < m_uiRenderTimes; i++) 
+	for (int i = 0; i < m_uiRenderTimes; i++)
 	{
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	}
@@ -423,7 +423,7 @@ void NDUILabel::postDraw()
 {
 	debugDraw();
 
-// 	CGRect scrRect = this->GetScreenRect();
+// 	CCRect scrRect = this->GetScreenRect();
 // 
 // 	DrawLine(scrRect.origin, 
 // 			 ccpAdd(scrRect.origin, ccp(scrRect.size.width, 0)),

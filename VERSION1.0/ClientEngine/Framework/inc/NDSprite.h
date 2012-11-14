@@ -18,12 +18,18 @@
 #include "NDPicture.h"
 // #include "basedefine.h"
 // #include "NDConstant.h"
+#include "NDDirector.h"
 
 #include "NDFrame.h"
 #include "define.h"
 #include "NDConstant.h"
 #include "NDBaseFighter.h"
-#include "NDDirector.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#include "BaseType.h"
+#include "TQPlatform.h"
+#include "platform.h"
+#import <Foundation/Foundation.h>
+#endif
 
 #define FIGHTER_HEIGHT	70 * (NDDirector::DefaultDirector()->GetScaleFactor())
 #define FIGHTER_WIDTH	45 * (NDDirector::DefaultDirector()->GetScaleFactor())
@@ -173,13 +179,13 @@ public:
 //		作用：设置精灵在地图上的坐标
 //		参数：newPosition地图坐标
 //		返回值：无
-	virtual void SetPosition(CGPoint newPosition);
+	virtual void SetPosition(CCPoint newPosition);
 //		
 //		函数：GetPosition
 //		作用：获取精灵在地图上的坐标
 //		参数：无
 //		返回值：地图坐标
-	CGPoint GetPosition();
+	CCPoint GetPosition();
 
 	int GetCol()
 	{
@@ -359,7 +365,7 @@ public:
 		m_bMoveMap = bSet;
 	}
 
-	void SetPointList(std::vector<CGPoint>& vec_point)
+	void SetPointList(std::vector<CCPoint>& vec_point)
 	{
 		m_kPointList = vec_point;
 		StartMoving();
@@ -449,7 +455,7 @@ private:
 #endif
 
 public:
-	CGRect GetSpriteRect();
+	CCRect GetSpriteRect();
 	void SetCurrentAnimation(int nAnimationIndex, bool bReverse);
 
 	void SetSpriteDir(int dir)
@@ -467,7 +473,7 @@ public:
 	{
 		return m_fScale;
 	}
-	bool GetLastPointOfPath(CGPoint& pos);
+	bool GetLastPointOfPath(CCPoint& pos);
 	bool IsReverse()
 	{
 		return m_bReverse;
@@ -476,7 +482,7 @@ public:
 protected:
 
 	bool MoveByPath( const bool bFirstPath = false );
-	void MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed,
+	void MoveToPosition(std::vector<CCPoint> toPos, SpriteSpeed speed,
 			bool moveMap, bool ignoreMask = false, bool mustArrive = false);
 	virtual void OnMoveBegin();
 	virtual void OnMoveEnd();
@@ -518,7 +524,7 @@ protected:
 	int m_nArmorQuality;
 	int m_nCloakQuality;
 
-	CGPoint m_kPosition;
+	CCPoint m_kPosition;
 	NDAnimation* m_pkCurrentAnimation;
 	NDFrameRunRecord* m_pkFrameRunRecord;
 	NDAnimationGroup* m_pkAniGroup;
@@ -532,10 +538,10 @@ protected:
 	int m_nColorInfo;
 	int m_nCloak;
 	int m_nSpeed;
-	DWORD m_dwLastMoveTickTime;
+	struct cc_timeval m_dwLastMoveTickTime;
 
-	std::vector<CGPoint> m_kPointList;
-	CGPoint m_kTargetPos;
+	std::vector<CCPoint> m_kPointList;
+	CCPoint m_kTargetPos;
 
 	bool m_bNonRole;
 	float m_fScale;
@@ -543,7 +549,7 @@ public:
 	bool m_bFaceRight;		// 精灵面部朝向
 private:
 	NDPicture* m_pkPicSprite;
-	CGRect m_kRectSprite;
+	CCRect m_kRectSprite;
 	bool m_bHightLight;
 	ISpriteEvent* m_pkSpriteEvent;
 	NSTimeInterval m_dBeginTime;

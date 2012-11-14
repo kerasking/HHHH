@@ -58,7 +58,7 @@ public:
 	ManufacturedType* Create(const ClassIDKey &classname) const
 	{
 		ManufacturedType* pkTheObject(0);
-		FunctionRegistry::const_iterator regEntry = m_kRegistry.find(classname);
+		typename FunctionRegistry::const_iterator regEntry = m_kRegistry.find(classname);
 		if (regEntry != m_kRegistry.end())
 		{
 			pkTheObject = regEntry->second();

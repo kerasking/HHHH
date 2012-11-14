@@ -10,7 +10,7 @@
 #include "CPetNode.h"
 #include "NDDirector.h"
 #include "CPet.h"
-//#include "CGPointExtension.h"
+//#include "CCPointExtension.h"
 #include "CCGeometry.h"
 
 IMPLEMENT_CLASS(CPetNode, NDUILayer)
@@ -19,7 +19,7 @@ CPetNode::CPetNode()
 {
 	m_role = NULL;
 	
-	m_pos = CGPointZero;
+	m_pos = CCPointZero;
 }
 
 CPetNode::~CPetNode()
@@ -30,9 +30,9 @@ void CPetNode::Initialization()
 {
 	NDUILayer::Initialization();
 	
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 	
-	this->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
+	this->SetFrameRect(CCRectMake(0, 0, winsize.width, winsize.height));
 	this->SetBackgroundColor(ccc4(255, 255, 255, 0));
 	this->SetTouchEnabled(false);
 }
@@ -66,7 +66,7 @@ void CPetNode::ChangePet(OBJID idPet)
 	// 更新宠物的装备 todo
 }
 
-void CPetNode::SetDisplayPos(CGPoint pos)
+void CPetNode::SetDisplayPos(CCPoint pos)
 {
 	m_pos = pos;
 	
@@ -81,5 +81,5 @@ void CPetNode::refeshPosition()
 	
 	iH = iH < 7 ? iH + 15 : iH;
 	
-	m_role->SetPositionEx(cocos2d::CCPoint(m_pos.x, m_pos.y+iH));
+	m_role->SetPositionEx(CCPointMake(m_pos.x, m_pos.y+iH));
 }

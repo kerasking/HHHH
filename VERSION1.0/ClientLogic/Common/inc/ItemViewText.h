@@ -28,7 +28,7 @@ public:
 	ItemViewText();
 	~ItemViewText();
 	
-	void Initialization(Item* item, const char* pszText, const CGSize& size);
+	void Initialization(Item* item, const char* pszText, const CCSize& size);
 	
 	void draw();
 	

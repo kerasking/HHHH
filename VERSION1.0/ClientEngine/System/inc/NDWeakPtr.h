@@ -16,6 +16,7 @@ template<typename T> class NDSharedPtr;
 template<typename T> class NDWeakPtr;
 
 #include "NDSharedPtr.h"
+#include "BaseType.h"
 
 template<typename T>
 class NDWeakPtr

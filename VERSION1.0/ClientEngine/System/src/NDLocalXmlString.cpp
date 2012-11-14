@@ -80,7 +80,7 @@ void NDLocalXmlString::Init()
 {
 	const char* pszTemp = NDEngine::NDPath::GetResPath("lyol.strings").c_str();
 
-	FILE *fp_in = fopen("../../SMYS_CLIENT_IPHONE/SimplifiedChineseRes/res/lyol.strings", "rb");
+	FILE *fp_in = fopen(pszTemp, "rb");
 	
 	if (!fp_in) return;
 	
@@ -227,7 +227,7 @@ CCString* NDLocalXmlString::GetDocumensDirectory()
 	 */
 	//NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
 	
-	NSString documentsDirectory = 0;//[paths objectAtIndex:0]; 
+	CCStringRef documentsDirectory = 0;//[paths objectAtIndex:0]; 
 
 	return documentsDirectory;
 }

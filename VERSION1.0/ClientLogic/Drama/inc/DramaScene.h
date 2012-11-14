@@ -33,9 +33,9 @@ class DramaScene: public NDScene, public NDUITargetDelegate
 public:
 	void Init(int nMapId);
 
-	bool SetCenter(CGPoint pos);
+	bool SetCenter(CCPoint pos);
 
-	CGPoint GetCenter();
+	CCPoint GetCenter();
 
 	bool AddMonster(int nKey, int nLookFace, bool bFaceRight=true);
 

@@ -17,7 +17,7 @@
 #include "NDNpc.h"
 #include "ScriptDrama.h"
 #include <ScriptGameLogic.h>
-#include <NDSocket.h>
+#include "NDSocket.h"
 #include "NDMapMgr.h"
 #include "LuaStateMgr.h"
 #include "NDBeforeGameMgr.h"
@@ -28,6 +28,12 @@
 #include "NDProfile.h"
 #include "NDBaseDirector.h"
 
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#include "Foundation/NSAutoreleasePool.h"
+#import "EAGLView.h"
+#endif
+
 #if 0
 #include "HelloWorldScene.h" //@todo
 #endif
@@ -37,7 +43,9 @@ using namespace NDEngine;
 
 NDGameApplication::NDGameApplication()
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"script ");
+#endif
 }
 NDGameApplication::~NDGameApplication()
 {
@@ -46,7 +54,7 @@ NDGameApplication::~NDGameApplication()
 bool NDGameApplication::applicationDidFinishLaunching()
 {
 	CCDirector* pDirector = CCDirector::sharedDirector();
-	CCAssert(pDirector);
+	CCAssert(pDirector, "applicationDidFinishLaunching");
 	pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
 
 	TargetPlatform target = getTargetPlatform();
@@ -288,6 +296,7 @@ bool NDGameApplication::processPM(const char* cmd)
 {
 	if (cmd == 0 || cmd[0] == 0) return false;
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	int val = 0;
 	char szDebugOpt[50] = {0};
 
@@ -367,7 +376,7 @@ bool NDGameApplication::processPM(const char* cmd)
 	}
 	else if (stricmp(cmd, "showhero") == 0)
 	{
-		CGPoint posScreen = NDPlayer::defaultHero().GetPosition();
+		CCPoint posScreen = NDPlayer::defaultHero().GetPosition();
 		DWORD n = 0;
 		char msg[500] = "";
 		sprintf( msg, "hero pos(%d, %d)\r\n", (int)posScreen.x, (int)posScreen.y );
@@ -375,7 +384,7 @@ bool NDGameApplication::processPM(const char* cmd)
 	}
 	else if (stricmp(cmd, "info") == 0)
 	{
-		CGPoint posScreen = NDPlayer::defaultHero().GetPosition();
+		CCPoint posScreen = NDPlayer::defaultHero().GetPosition();
 		DWORD n = 0;
 		char msg[500] = "";
 		
@@ -424,6 +433,7 @@ bool NDGameApplication::processPM(const char* cmd)
 		TCHAR msg[] = L"err: unknown cmd.\r\n";
 		WriteConsole( hOut, msg, sizeof(msg)/sizeof(TCHAR), &n, NULL );
 	}
+#endif
 	return true;
 }
 

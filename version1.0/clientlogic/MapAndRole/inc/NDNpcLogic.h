@@ -7,10 +7,12 @@
 
 #include "define.h"
 #include "typedef.h"
+#include "platform.h"
 
 NS_NDENGINE_BGN
 
 using namespace NDEngine;
+using namespace cocos2d;
 
 class NDNpc;
 class NDPlayer;
@@ -23,7 +25,8 @@ class NDHeroTaskLogic
 private:
 	NDHeroTaskLogic()
 	{
-		tickLastRefresh = 0;
+		tickLastRefresh.tv_sec = 0;
+		tickLastRefresh.tv_usec = 0;
 		idlistAccept = new ID_VEC();
 		idCanAccept = new ID_VEC();
 	}
@@ -54,13 +57,20 @@ public:
 public:
 	void tickHero() 
 	{
-		if (TAbs(GetTickCount() - tickLastRefresh) > 1000*3) //3 second
+        struct cc_timeval currentTime;
+        if (CCTime::gettimeofdayCocos2d(&currentTime, NULL) != 0)
+        {
+            return;
+        }
+        double fDeltaTime = (currentTime.tv_sec - tickLastRefresh.tv_sec)*1000.0f + (currentTime.tv_usec - tickLastRefresh.tv_usec) / 1000.0f;
+
+		if (TAbs(fDeltaTime) > 1000*3) //3 second
 		{
 			refreshListAccepted();
 
 			refreshCanAcceptList();
 
-			tickLastRefresh = GetTickCount();
+			tickLastRefresh = currentTime;
 		}
 	}
 
@@ -74,7 +84,7 @@ private:
 private:
 	ID_VEC* idlistAccept;
 	ID_VEC* idCanAccept;
-	DWORD tickLastRefresh;
+	struct cc_timeval tickLastRefresh;
 };
 
 
@@ -90,7 +100,8 @@ public:
 	{
 		Owner = inOwner;
 		idlist = new ID_VEC();
-		tickLastRefresh = 0;
+		tickLastRefresh.tv_sec = 0;
+		tickLastRefresh.tv_usec = 0;
 	}
 
 	~NDNpcLogic()
@@ -106,15 +117,17 @@ public:
 	void RefreshTaskState();
 
 private:
+public:
 	bool GetTaskListByNpc(ID_VEC& idVec);
 	bool GetPlayerCanAcceptList(ID_VEC& idVec);
 	
 private:
-	friend NDHeroTaskLogic;
+public:
+	friend class NDHeroTaskLogic;
 
 	NDNpc* Owner;
 	ID_VEC* idlist;
-	DWORD tickLastRefresh;
+	struct cc_timeval tickLastRefresh;
 };
 
 NS_NDENGINE_END

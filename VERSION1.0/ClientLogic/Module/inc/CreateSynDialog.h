@@ -50,7 +50,7 @@ private:
 	
 private:
 	bool m_bTouchBegin;
-	CGRect scrRect;
+	CCRect scrRect;
 	int m_tagCamp;
 	string m_synName;
 };

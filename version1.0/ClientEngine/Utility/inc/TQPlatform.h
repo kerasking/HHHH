@@ -14,6 +14,9 @@
 #include "CCGeometry.h"
 #include "ccTypes.h"
 
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+#import <CoreGraphics/CGGeometry.h>	// CGPoint
+#endif
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
 #define CGPoint					cocos2d::CCPoint
 #define CGSize					cocos2d::CCSize
@@ -27,6 +30,8 @@
 #define CGRectContainsPoint		cocos2d::CCRect::CCRectContainsPoint
 #define CGRectIntersectsRect	cocos2d::CCRect::CCRectIntersectsRect
 #endif
+#define ccc4					cocos2d::ccc4
+#define ccc4f					cocos2d::ccc4f
 
 #ifdef WIN32
 	#define uint				unsigned int
@@ -39,7 +44,7 @@
 	#define UTEXT(str) str
 #endif
 
-CGSize getStringSize(const char* pszStr, uint fontSize);
-CGSize getStringSizeMutiLine(const char* pszStr, uint fontSize, CGSize contentSize = CGSizeMake(480, 320));
+cocos2d::CCSize getStringSize(const char* pszStr, uint fontSize);
+cocos2d::CCSize getStringSizeMutiLine(const char* pszStr, uint fontSize, cocos2d::CCSize contentSize = cocos2d::CCSizeMake(480, 320));
 
 #endif // _PLATFORM_H_ZJH_

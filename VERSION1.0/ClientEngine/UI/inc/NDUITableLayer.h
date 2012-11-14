@@ -42,7 +42,7 @@ namespace NDEngine
 		void SetFontColor(ccColor4B fontColor);		
 		ccColor4B GetFontColor();
 		
-		void SetFrameRect(CGRect rect); override
+		void SetFrameRect(CCRect rect); override
 		
 		void Initialization(); override
 	public:
@@ -79,12 +79,12 @@ namespace NDEngine
 		float GetContentHeight(); 
 	public:
 		void draw(); override			
-		void OnClick(CGPoint touch);
-		void OnTouchDown(bool touched, CGPoint pos){ m_touched = touched; m_touchPos = pos; }
+		void OnClick(CCPoint touch);
+		void OnTouchDown(bool touched, CCPoint pos){ m_touched = touched; m_touchPos = pos; }
 	private:
 		float m_currentContentY, m_contentHeight;
 		bool m_touched;
-		CGPoint m_touchPos;
+		CCPoint m_touchPos;
 		NDPicture* m_picUp, *m_picDown;
 		
 	};
@@ -130,11 +130,11 @@ namespace NDEngine
 		void OnVerticalScrollBarUpClick(NDUIVerticalScrollBar* scrollBar);override
 		void OnVerticalScrollBarDownClick(NDUIVerticalScrollBar* scrollBar);override
 		bool TouchMoved(NDTouch* touch); override
-		bool DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch); override			
+		bool DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch); override			
 		void UITouchEnd(NDTouch* touch); override
 		void SetVisible(bool visible); override
-		bool DispatchLongTouchEvent(CGPoint beginTouch, CGPoint endTouch); override
-		bool DispatchLayerMoveEvent(CGPoint beginPoint, NDTouch *moveTouch); override
+		bool DispatchLongTouchEvent(CCPoint beginTouch, CCPoint endTouch); override
+		bool DispatchLayerMoveEvent(CCPoint beginPoint, NDTouch *moveTouch); override
 	private:
 		NDDataSource* m_dataSource;
 		bool m_needReflash;
@@ -159,7 +159,7 @@ namespace NDEngine
 		NDUIVerticalScrollBar* DrawScrollbar(unsigned int sectionIndex);		
 		void SetFocusOnCell(unsigned int cellIndex);
 		
-		CGRect GetCellRectWithIndex(unsigned int sectionIndex, unsigned int cellIndex);
+		CCRect GetCellRectWithIndex(unsigned int sectionIndex, unsigned int cellIndex);
 		
 	};
 	//---------------------------------------------

@@ -20,20 +20,33 @@
 #include <cocos2d.h>
 #include "define.h"
 #include "NDSharedPtr.h"
+#include "CCString.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#import <Foundation/Foundation.h>
+#endif
 //#include "Singleton.h"
 //
 //#ifdef DataFilePath
 //#undef DataFilePath
 //#endif
 //
-//const char* DataFilePath();
+//CCString* DataFilePath();
 //
-#define pkDataFileName CCString::stringWithFormat("%s\\data.plist", DataFilePath()->toStdString().c_str())
+#define pkDataFileName CCString::stringWithFormat("%s\\data.plist", DataFilePath())
 //
 //// 上次登录信息
 #define kLoginData 0
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#define kLastServerName new CCString("LastServerName")
+#define kLastServerIP new CCString("LastServerIP")
+#define kLastServerPort new CCString("LastServerPort")
+#define kLastAccountName new CCString("LastAccountName")
+#define kLastAccountPwd new CCString("LastAccountPwd")
+#define kLastServerSendName new CCString("LastServerSendName")
+#define kLinkType new CCString("LinkType")
+#else
 #define kLastServerName NSString(new CCString("LastServerName"))
 #define kLastServerIP NSString(new CCString("LastServerIP"))
 #define kLastServerPort NSString(new CCString("LastServerPort"))
@@ -41,7 +54,7 @@
 #define kLastAccountPwd NSString(new CCString("LastAccountPwd"))
 #define kLastServerSendName NSString(new CCString("LastServerSendName"))
 #define kLinkType NSString(new CCString("LinkType"))
-
+#endif
 // NSString kLastServerName("LastServerName");
 // NSString kLastServerIP("LastServerIP");
 // NSString kLastServerPort("LastServerPort");
@@ -52,7 +65,7 @@
 //
 //// 游戏设置
 #define kGameSettingData 1
-const static NSString kGameSetting(new cocos2d::CCString("GameSetting"));
+const static CCStringRef kGameSetting(new cocos2d::CCString("GameSetting"));
 //
 //#ifdef CPLOG
 //
@@ -146,7 +159,7 @@ private:
 	void LoadAccountDeviceList();
 	CCString* GetAccountDeviceListPath();
 	
-	bool NeedEncodeForKey(NSString key);
+	bool NeedEncodeForKey(CCString* key);
 };
 //
 /////////////////////////////////////////

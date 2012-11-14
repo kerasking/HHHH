@@ -24,14 +24,14 @@ typedef enum
 
 typedef struct tagUIMoveInfo
 {
-	CGPoint pos;
+	CCPoint pos;
 	double  time;
 	tagUIMoveInfo()
 	{
-		pos		= CGPointZero;
+		pos		= CCPointZero;
 		time	= 0.0f; 
 	}
-	tagUIMoveInfo(CGPoint pos, double time)
+	tagUIMoveInfo(CCPoint pos, double time)
 	{
 		this->pos		= pos;
 		this->time		= time; 

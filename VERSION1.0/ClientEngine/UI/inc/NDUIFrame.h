@@ -14,7 +14,7 @@ namespace NDEngine
 		~NDUIFrame();
 	public:		
 		void draw(); override 
-		void OnFrameRectChange(CGRect srcRect, CGRect dstRect); override
+		void OnFrameRectChange(CCRect srcRect, CCRect dstRect); override
 	private: 
 		NDTile* m_tileLeftTop;		
 		NDTile* m_tileRightTop;

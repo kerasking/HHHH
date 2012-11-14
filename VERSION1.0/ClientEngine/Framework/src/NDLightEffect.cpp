@@ -39,7 +39,7 @@ void NDLightEffect::Initialization(const char* sprFile)
 	m_pkFrameRunRecord = new NDFrameRunRecord();
 }
 
-void NDLightEffect::SetPosition(CGPoint kNewPosition)
+void NDLightEffect::SetPosition(CCPoint kNewPosition)
 {
 	m_kPosition = kNewPosition;
 }
@@ -73,7 +73,7 @@ void NDLightEffect::SlowDown(unsigned int mutli)
 	}
 }
 
-void NDLightEffect::Run(CGSize mapSize, bool draw/*=true*/)
+void NDLightEffect::Run(CCSize mapSize, bool draw/*=true*/)
 {
 	if (m_pkAniGroup->getAnimations()->count() > m_nLightID)
 	{

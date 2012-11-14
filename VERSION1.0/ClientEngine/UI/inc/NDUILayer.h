@@ -138,12 +138,12 @@ public:
 	bool IsVisibled();override
 
 public:
-	CGPoint m_kBeginTouch;
-	CGPoint m_kEndTouch;
+	CCPoint m_kBeginTouch;
+	CCPoint m_kEndTouch;
 	//touch event center
-	virtual bool DispatchTouchBeginEvent(CGPoint beginTouch);
-	virtual bool DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch);
-	virtual bool DispatchTouchDoubleClickEvent(CGPoint beginTouch);
+	virtual bool DispatchTouchBeginEvent(CCPoint beginTouch);
+	virtual bool DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch);
+	virtual bool DispatchTouchDoubleClickEvent(CCPoint beginTouch);
 	// touch node down or up
 	void DealTouchNodeState(bool down);
 	void DealLongTouchNodeState(bool down);
@@ -161,7 +161,7 @@ private:
 
 	bool m_bDispatchTouchEndEvent;
 
-	CGRect RectAdd(CGRect rect, int value);
+	CCRect RectAdd(CCRect rect, int value);
 	//NDUIEdit deals
 	//void AfterEditClickEvent(NDUIEdit* edit);
 public:
@@ -174,17 +174,17 @@ public:
 
 	void OnTimer(OBJID tag);
 
-	virtual bool DispatchLongTouchClickEvent(CGPoint beginTouch,
-			CGPoint endTouch);
-	virtual bool DispatchLongTouchEvent(CGPoint beginTouch, bool touch);
-	virtual bool DispatchDragOutEvent(CGPoint beginTouch, CGPoint moveTouch,
+	virtual bool DispatchLongTouchClickEvent(CCPoint beginTouch,
+			CCPoint endTouch);
+	virtual bool DispatchLongTouchEvent(CCPoint beginTouch, bool touch);
+	virtual bool DispatchDragOutEvent(CCPoint beginTouch, CCPoint moveTouch,
 			bool longTouch = false);
-	virtual bool DispatchDragOutCompleteEvent(CGPoint beginTouch,
-			CGPoint endTouch, bool longTouch = false);
-	virtual bool DispatchDragInEvent(NDUINode* dragOutNode, CGPoint beginTouch,
-			CGPoint endTouch, bool longTouch, bool dealByDefault = false);
-	virtual bool DispatchLayerMoveEvent(CGPoint beginPoint, NDTouch *moveTouch);
-	virtual bool DispatchDragOverEvent(CGPoint beginTouch, CGPoint moveTouch,
+	virtual bool DispatchDragOutCompleteEvent(CCPoint beginTouch,
+			CCPoint endTouch, bool longTouch = false);
+	virtual bool DispatchDragInEvent(NDUINode* dragOutNode, CCPoint beginTouch,
+			CCPoint endTouch, bool longTouch, bool dealByDefault = false);
+	virtual bool DispatchLayerMoveEvent(CCPoint beginPoint, NDTouch *moveTouch);
+	virtual bool DispatchDragOverEvent(CCPoint beginTouch, CCPoint moveTouch,
 			bool longTouch = false);
 
 private:
@@ -204,7 +204,7 @@ protected:
 	bool m_bSwallowDragOver;
 	bool m_bEnableDragOver;
 
-	CGPoint m_kMoveTouch;
+	CCPoint m_kMoveTouch;
 
 	bool m_bHorizontal;
 	bool m_bMoveOutListener;

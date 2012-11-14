@@ -36,9 +36,9 @@ m_Rotation(NDRotationEnumRotation0)//,
 // m_pfVertices(NULL),
 // m_pfCoordinates(NULL)
 {
-	m_kCutRect = CGRectMake(0, 0, 0, 0);
-	m_kDrawRect = CGRectMake(0, 0, 0, 0);
-	m_kMapSize = CGSizeMake(0, 0);
+	m_kCutRect = CCRectMake(0, 0, 0, 0);
+	m_kDrawRect = CCRectMake(0, 0, 0, 0);
+	m_kMapSize = CCSizeMake(0, 0);
 
 // 	m_pfCoordinates = (float *) malloc(sizeof(float) * 8);
 // 	m_pfVertices = (float *) malloc(sizeof(float) * 12);
@@ -72,7 +72,7 @@ void NDTile::makeTex(float* pData)
 	//<-------------------纹理坐标
 	float *pfCoordinates = pData;
 	//CCSize texSize = ConvertUtil::getTextureSizeInPoints(*m_pkTexture); //@check
-	CCSize texSize = CGSizeMake( m_pkTexture->getPixelsWide(), m_pkTexture->getPixelsHigh());
+	CCSize texSize = CCSizeMake( m_pkTexture->getPixelsWide(), m_pkTexture->getPixelsHigh());
 
 	//BOOL re=NO;
 	if (getReverse())
@@ -106,7 +106,7 @@ void NDTile::makeTex(float* pData)
 }
 
 //@check
-void NDTile::makeVetex(float* pData, CGRect kRect)
+void NDTile::makeVetex(float* pData, CCRect kRect)
 {
 	//--------------->屏幕坐标
 	float* pfVector = pData;
@@ -488,10 +488,10 @@ void NDTile::makeVetex(float* pData, CGRect kRect)
 	}
 }
 
-CGRect NDTile::getDrawRectInPoints()
+CCRect NDTile::getDrawRectInPoints()
 {
 	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
-	CGRect rectInPoints = m_kDrawRect;
+	CCRect rectInPoints = m_kDrawRect;
 
 	rectInPoints.origin.x /= fScale;
 	rectInPoints.origin.y /= fScale;
@@ -504,7 +504,7 @@ CGRect NDTile::getDrawRectInPoints()
 void NDTile::make()
 {
 #if 1 //@check 像素->点
-	CGRect rectInPoints = this->getDrawRectInPoints();
+	CCRect rectInPoints = this->getDrawRectInPoints();
 #endif
 
 	makeTex(m_pfCoordinates);
@@ -551,7 +551,7 @@ void NDTile::draw()
 	this->debugDraw();
 }
 
-void NDTile::drawSubRect(CGRect kRect)
+void NDTile::drawSubRect(CCRect kRect)
 {
 	/**纹理坐标*/
 	float fCoordinates[8] = {0.0f};
@@ -594,8 +594,8 @@ void NDTile::drawSubRect(CGRect kRect)
 	float fVertices[12] =
 	{ 0.0f };
 
-	CGRect drawRectInPoints = this->getDrawRectInPoints();
-	CGRect kDrawRect;
+	CCRect drawRectInPoints = this->getDrawRectInPoints();
+	CCRect kDrawRect;
 
 	kDrawRect.origin.x = drawRectInPoints.origin.x
 			+ kRect.origin.x * drawRectInPoints.size.width;

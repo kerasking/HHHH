@@ -32,6 +32,7 @@
 
 using namespace NDEngine;
 const unsigned char g_dekey[] = {0x80,0x12,0x97,0x67,0x24,0x88,0x89,0x98,0x55,0x34,0xBD,0x33,0x34,0x80,0x12,0x97,0x67,0x24,0x88,0x89,0x98,0x55,0x34,0xBD};
+std::string* s_DataDir = 0;
 void luaExceptRunTimeOutPut(const char *exceptinfo)
 {
 	ScriptMgrObj.DebugOutPut("run failed!!!");
@@ -73,28 +74,41 @@ LuaObject ScriptMgr::GetLuaFunc(const char* funcname, const char* modulename)
 
 	return funcObj;
 }
-/*
-const char* NDEngine::GetScriptPath(const char* fileName)
+
+const char* DataFilePath()
 {
-	size_t len = strlen(fileName);
-#ifdef TRADITION
-	return [[NSString stringWithFormat:@"%@/TraditionalChineseRes/res/Script/%@", [[NSBundle mainBundle] resourcePath], [NSString stringWithUTF8String:fileName]] UTF8String];
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if(0 == s_DataDir)
+    {
+        s_DataDir = new std::string;
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        [documentsDirectory stringByAppendingPathComponent:@"/DHLJ"];
+        *s_DataDir = ([documentsDirectory UTF8String]);
+    }
 #else
-	return [[NSString stringWithFormat:@"%@/SimplifiedChineseRes/res/Script/%@", [[NSBundle mainBundle] resourcePath], [NSString stringWithUTF8String:fileName]] UTF8String];
+    if(0 == s_DataDir)
+    {
+        s_DataDir = new std::string;
+        char szTempPath[MAX_PATH] = {0};
+        
+        getcwd(szTempPath,MAX_PATH);
+        
+        *s_DataDir =  "DHLJ";
+    }
 #endif
+    return s_DataDir->c_str();
 }
-*/
+
 ScriptMgr::ScriptMgr()
 {
-#if 0
 	char filename[256];
 	memset(filename, 0, sizeof(filename));
 	snprintf(filename, sizeof(filename), "%s/log%ld.txt", 
-			 [DataFilePath() UTF8String],
+			 DataFilePath(),
 			 time(NULL));
 	m_fDebugOutPut = fopen(filename, "a");
     printf(filename);
-#endif 
 }
 
 ScriptMgr::~ScriptMgr()
@@ -129,7 +143,9 @@ void ScriptMgr::DebugOutPut(const char* fmt, ...)
 	va_start(argumentList, fmt);
 	::vsprintf( buffer, fmt, argumentList);
 	va_end(argumentList);
-    NDLog(buffer);
+    //NDLog(buffer);
+    printf(buffer);
+    printf("\n");
 }
 
 //using namespace LuaPlus;

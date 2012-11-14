@@ -7,9 +7,14 @@
  *
  */
 
-#include "platform.h"
+#include "TQPlatform.h"
 #include "NDDirector.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#import "Foundation/Foundation.h"
+#import "UIKit/UIFont.h"
+#import "UIKit/UIStringDrawing.h"
+#endif
 using namespace NDEngine;
 
 #ifdef WIN32
@@ -44,48 +49,60 @@ const char* GBKToUTF8(const char *strChar)
 }
 #endif
 
-CGSize getStringSize(const char* pszStr, uint fontSize)
+CCSize getStringSize(const char* pszStr, uint fontSize)
 {
 	CGSize sz = CGSizeMake(0.0f, 0.0f);
+    CCSize CCSz = CCSizeMake(0.0f, 0.0f);
 
 	//fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
 
 	if (pszStr) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-		NSString str = [NSString stringWithUTF8String:pszStr];
-		sz = [str sizeWithFont:[UIFont fontWithName:FONT_NAME size:fontSize]];
+		NSString* str = [NSString stringWithUTF8String:pszStr];	
+        NSString* strfont = [NSString stringWithUTF8String:FONT_NAME];
+		sz = [str sizeWithFont:[UIFont fontWithName:strfont size:fontSize]];
 #else
-		sz = CGSizeMake(24.0f, 29.0f);
+		sz = CCSizeMake(24.0f, 29.0f);
 
 // 		string tmpStr(pszStr);
 // 		int strSize = tmpStr.size()/2;
 // 		float totalWidth = (fontSize)*strSize*1.0;
 // 		if(0 == strSize)
-// 			sz = CGSizeMake(0.0f, 0.0f);
+// 			sz = CCSizeMake(0.0f, 0.0f);
 // 		else
-// 			sz = CGSizeMake(totalWidth, 29.0f);
+// 			sz = CCSizeMake(totalWidth, 29.0f);
 
 #endif
 	}
 
-	return sz;
+    CCSz.width = sz.width;
+    CCSz.height = sz.height;
+    
+	return CCSz;     
 }
 
-CGSize getStringSizeMutiLine(const char* pszStr, uint fontSize, CGSize contentSize)
+CCSize getStringSizeMutiLine(const char* pszStr, uint fontSize, CCSize contentSize)
 {
 	CGSize sz = CGSizeZero;
+	CCSize CCSz = CCSizeZero;
+    
+    CGSize CGcontentSize = CGSizeZero;
+    CGcontentSize.width = contentSize.width;
+    CGcontentSize.height = contentSize.height;
 
 	if (!pszStr)
 	{
-		return sz;
+		return CCSz;
 	}
 
 	fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	NSString *nstext = [NSString stringWithUTF8String:pszStr];
-	sz = [nstext sizeWithFont:[UIFont fontWithName:FONT_NAME size:fontSize] 
-constrainedToSize:contentSize];
+    NSString* strfont = [NSString stringWithUTF8String:FONT_NAME];
+	sz = [nstext sizeWithFont:[UIFont fontWithName:strfont size:fontSize] constrainedToSize:CGcontentSize];
 #endif
-	return sz;
+    CCSz.width = sz.width;
+    CCSz.height = sz.height;
+	return CCSz;
 }

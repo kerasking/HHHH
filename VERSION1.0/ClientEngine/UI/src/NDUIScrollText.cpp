@@ -8,6 +8,7 @@
 
 #include "NDUIScrollText.h"
 #include "NDDirector.h"
+#include "TQPlatform.h"
 
 using namespace cocos2d;
 
@@ -21,8 +22,8 @@ namespace NDEngine
 		m_speed = 5;
 		m_scrollType = ScrollTextFromRightToLeft;
 		m_resetSize = false;
-		m_textSize = CGSizeZero;
-		m_startPos = CGPointZero;
+		m_textSize = CCSizeZero;
+		m_startPos = CCPointZero;
 		m_lblText = NULL;
 		m_setStartPos = false;
 		m_run = true;
@@ -86,7 +87,7 @@ namespace NDEngine
 		m_lblText->SetFontColor(color);
 	}
 	
-	void NDUIScrollText::OnFrameRectChange(CGRect srcRect, CGRect dstRect)
+	void NDUIScrollText::OnFrameRectChange(CCRect srcRect, CCRect dstRect)
 	{
 		if (srcRect.size.width != dstRect.size.width || srcRect.size.height != dstRect.size.height) 
 		{
@@ -94,9 +95,9 @@ namespace NDEngine
 		}
 	}
 	
-	CGSize NDUIScrollText::GetTextSize()
+	CCSize NDUIScrollText::GetTextSize()
 	{
-		CGSize size = CGSizeZero;		
+		CCSize size = CCSizeZero;		
 		switch (m_scrollType) 
 		{
 			case ScrollTextFromRightToLeft:
@@ -112,15 +113,15 @@ namespace NDEngine
 		return size;
 	}
 	
-	void NDUIScrollText::SetStartPos(CGPoint pos)
+	void NDUIScrollText::SetStartPos(CCPoint pos)
 	{
 		m_setStartPos = true;
 		m_startPos = pos;
 	}
 	
-	void NDUIScrollText::SetTextPos(CGPoint pos)
+	void NDUIScrollText::SetTextPos(CCPoint pos)
 	{
-		m_lblText->SetFrameRect(CGRectMake(pos.x, pos.y, m_lblText->GetFrameRect().size.width, m_lblText->GetFrameRect().size.height));
+		m_lblText->SetFrameRect(CCRectMake(pos.x, pos.y, m_lblText->GetFrameRect().size.width, m_lblText->GetFrameRect().size.height));
 	}
 	
 	void NDUIScrollText::Run()
@@ -146,7 +147,7 @@ namespace NDEngine
 		
 		if (this->IsVisibled()) 
 		{
-			CGRect thisRect = this->GetFrameRect();	
+			CCRect thisRect = this->GetFrameRect();	
 			static unsigned runCount = 0;			
 			if (runCount >= 60 - m_speed) 
 			{
@@ -159,19 +160,19 @@ namespace NDEngine
 							m_textSize = this->GetTextSize();
 							m_resetSize = false;
 							if (m_setStartPos) 
-								m_lblText->SetFrameRect(CGRectMake(m_startPos.x, m_startPos.y, m_textSize.width, m_textSize.height));
+								m_lblText->SetFrameRect(CCRectMake(m_startPos.x, m_startPos.y, m_textSize.width, m_textSize.height));
 							else 
-								m_lblText->SetFrameRect(CGRectMake(thisRect.size.width, 0, m_textSize.width, m_textSize.height));
+								m_lblText->SetFrameRect(CCRectMake(thisRect.size.width, 0, m_textSize.width, m_textSize.height));
 						}
 						
 						if (m_run) 
 						{
-							CGRect labelRect = m_lblText->GetFrameRect();
+							CCRect labelRect = m_lblText->GetFrameRect();
 							labelRect.origin.x -= 2;
-							m_lblText->SetFrameRect(CGRectMake(labelRect.origin.x, 0, m_textSize.width, m_textSize.height));
+							m_lblText->SetFrameRect(CCRectMake(labelRect.origin.x, 0, m_textSize.width, m_textSize.height));
 							if (labelRect.origin.x + m_textSize.width < 0) 
 							{
-								m_lblText->SetFrameRect(CGRectMake(thisRect.size.width, 0, m_textSize.width, m_textSize.height));
+								m_lblText->SetFrameRect(CCRectMake(thisRect.size.width, 0, m_textSize.width, m_textSize.height));
 							}
 						}
 						

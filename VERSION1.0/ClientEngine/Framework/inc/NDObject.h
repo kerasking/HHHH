@@ -14,7 +14,7 @@
 #ifndef __NDObject_H
 #define __NDObject_H
 
-#include "Utility.h"
+#include "UtilityInc.h"
 
 #define override
 #define hide

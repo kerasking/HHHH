@@ -14,7 +14,10 @@
 #include <vector>
 #include <map>
 #include <set>
+#include "CCPlatformConfig.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include <zlib/zconf.h>
+#endif
 
 #define OBJID			unsigned int
 //#define ID_VEC			std::vector<OBJID>

@@ -121,6 +121,13 @@ namespace NDEngine
         const char* GetRecAccountNameByIdx(int idx);
         const char* GetRecAccountPwdByIdx(int idx);
         
+        void  SetCurrentUser(unsigned int User_id) { m_CurrentUser_id = User_id; }
+        unsigned int  GetCurrentUser() { return m_CurrentUser_id; }
+        
+        void  SetOAuthTokenOK() { m_bOAuthTokenOK = true; }
+        bool  IsOAuthTokenOK() { return m_bOAuthTokenOK; }
+        void  SetCurrentTransactionID(NSString* idTransaction) { m_CurrentTransactionID = idTransaction; }
+        NSString*   GetCurrentTransactionID() { return m_CurrentTransactionID; }
 	private:
 		//void CheckFail(NDHttpErrCode errCode);
 		
@@ -131,6 +138,8 @@ namespace NDEngine
         unsigned long m_ulLookFace;
         std::string   m_strRoleName;
         int           m_nProfession;
+        unsigned int  m_CurrentUser_id;
+        NSString*     m_CurrentTransactionID;
 		//服务器列表相关
 	public:
 		struct big_area
@@ -189,6 +198,7 @@ namespace NDEngine
 		NDSocket m_SynSocket;
 		
 		//NDSdkLogin *m_sdkLogin;
+        bool m_bOAuthTokenOK;
 	public:
 		enum LoginState
 		{

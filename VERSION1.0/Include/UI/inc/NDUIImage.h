@@ -23,7 +23,7 @@ namespace NDEngine
 		void SetPicture(NDPicture* pic, bool clearPicOnFree = false);
 		NDPicture* GetPicture() { return m_pic;}
 		void SetPictureLua(NDPicture* pic);
-		CGSize GetPicSize();
+		CCSize GetPicSize();
 		void SetCombinePicture(NDCombinePicture* pic, bool clearPicOnFree = false);
 		void draw(); override
 	private:

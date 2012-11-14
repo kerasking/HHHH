@@ -168,7 +168,7 @@ void TextControl::SetFontColor(ccColor4B color)
 	m_color = color;
 }
 
-void TextControl::OnFrameRectChange(CGRect srcRect, CGRect dstRect)
+void TextControl::OnFrameRectChange(CCRect srcRect, CCRect dstRect)
 {
 	if (srcRect.size.width != dstRect.size.width || srcRect.size.height != dstRect.size.height) 
 	{
@@ -180,8 +180,8 @@ void TextControl::OnFrameRectChange(CGRect srcRect, CGRect dstRect)
 				delete m_textUI;
 		}
 		
-		m_textUI = NDUITextBuilder::DefaultBuilder()->Build(m_text.c_str(), 15, CGSizeMake(dstRect.size.width, dstRect.size.height), m_color);
-		m_textUI->SetFrameRect(CGRectMake(0, -20, dstRect.size.width, dstRect.size.height));
+		m_textUI = NDUITextBuilder::DefaultBuilder()->Build(m_text.c_str(), 15, CCSizeMake(dstRect.size.width, dstRect.size.height), m_color);
+		m_textUI->SetFrameRect(CCRectMake(0, -20, dstRect.size.width, dstRect.size.height));
 		this->AddChild(m_textUI);
 	}
 }
@@ -345,7 +345,7 @@ void Chat::CreateOneNormalText(ChatType type, const char* text, const char* spea
 	textControl->SetDelegate(this);
 	textControl->SetText(msg.c_str());
 	textControl->SetFontColor(GetColorWithChatType(type));
-    //textControl->SetFrameRect(CGRectMake(0,20,300 ,30));
+    //textControl->SetFrameRect(CCRectMake(0,20,300 ,30));
     
 	NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
 	if (scene && !scene->IsKindOfClass(RUNTIME_CLASS(ChatRecordManager))) 
@@ -374,7 +374,7 @@ void Chat::ReflashNormalData()
 {
 	if (m_recordCount > 0) 
 	{	
-		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 		
 		int i = m_textControls.size();
 		std::deque<TextControl*>::iterator iter;
@@ -390,7 +390,7 @@ void Chat::ReflashNormalData()
 				y = winSize.height - i * TextControl_Height;
 			}
 
-			textControl->SetFrameRect(CGRectMake(0, y, winSize.width, TextControl_Height - 1));
+			textControl->SetFrameRect(CCRectMake(0, y, winSize.width, TextControl_Height - 1));
 		}
 	}
 }
@@ -409,11 +409,11 @@ NDUIScrollText* Chat::CreateScrollText(ChatType type, const char* text)
 		scrollText->SetFontColor(GetColorWithChatType(type));
 		if (type == ChatTypeTip) 
 		{
-			scrollText->SetFrameRect(CGRectMake(0, 100, 480, TextControl_Height));
+			scrollText->SetFrameRect(CCRectMake(0, 100, 480, TextControl_Height));
 		}
 		else 
 		{
-			scrollText->SetFrameRect(CGRectMake(0, 200, 480, TextControl_Height));
+			scrollText->SetFrameRect(CCRectMake(0, 200, 480, TextControl_Height));
 		}
 		
 		NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();

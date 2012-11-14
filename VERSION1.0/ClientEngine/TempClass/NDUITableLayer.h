@@ -42,7 +42,7 @@ namespace NDEngine
 // 		void SetFontColor(ccColor4B fontColor);		
 // 		ccColor4B GetFontColor();
 // 		
-// 		void SetFrameRect(CGRect rect);  
+// 		void SetFrameRect(CCRect rect);  
 // 		
 // 		void Initialization();  
 // 	public:
@@ -79,12 +79,12 @@ namespace NDEngine
 // 		float GetContentHeight(); 
 // 	public:
 // 		void draw();  			
-// 		void OnClick(CGPoint touch);
-// 		void OnTouchDown(bool touched, CGPoint pos){ m_touched = touched; m_touchPos = pos; }
+// 		void OnClick(CCPoint touch);
+// 		void OnTouchDown(bool touched, CCPoint pos){ m_touched = touched; m_touchPos = pos; }
 // 	private:
 // 		float m_currentContentY, m_contentHeight;
 // 		bool m_touched;
-// 		CGPoint m_touchPos;
+// 		CCPoint m_touchPos;
 // 		NDPicture* m_picUp, *m_picDown;
 // 		
 // 	};
@@ -137,11 +137,11 @@ namespace NDEngine
 		void OnVerticalScrollBarUpClick(NDUIVerticalScrollBar* scrollBar);
 		void OnVerticalScrollBarDownClick(NDUIVerticalScrollBar* scrollBar);
 		bool TouchMoved(NDTouch* touch);  
-		bool DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch);
+		bool DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch);
 		void UITouchEnd(NDTouch* touch);  
 		void SetVisible(bool visible);  
-		bool DispatchLongTouchEvent(CGPoint beginTouch, CGPoint endTouch);
-		bool DispatchLayerMoveEvent(CGPoint beginPoint, NDTouch *moveTouch);
+		bool DispatchLongTouchEvent(CCPoint beginTouch, CCPoint endTouch);
+		bool DispatchLayerMoveEvent(CCPoint beginPoint, NDTouch *moveTouch);
 
 	private:
 
@@ -168,7 +168,7 @@ namespace NDEngine
 		NDUIVerticalScrollBar* DrawScrollbar(unsigned int sectionIndex);
 		void SetFocusOnCell(unsigned int cellIndex);
 		
-		CGRect GetCellRectWithIndex(unsigned int sectionIndex, unsigned int cellIndex);
+		CCRect GetCellRectWithIndex(unsigned int sectionIndex, unsigned int cellIndex);
 		
 	};
 	//---------------------------------------------

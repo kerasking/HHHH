@@ -59,16 +59,16 @@ enum MY_CONTROL_TYPE
 class CtrolBase
 {
 protected:
-	void Init(UIINFO& info, CGSize& sizeOffset)
+	void Init(UIINFO& info, CCSize& sizeOffset)
 	{
 		m_info = info;
 		
 		m_sizeOffset = sizeOffset;
 	}
 	
-	CGRect GetFrameRect()
+	CCRect GetFrameRect()
 	{
-		CGRect rect = CGRectZero;
+		CCRect rect = CCRectZero;
 		
 		rect.origin = ccpAdd(
 							 m_info.CtrlPos, 
@@ -76,7 +76,7 @@ protected:
 		
 		if (m_info.nCtrlWidth != 0 && m_info.nCtrlHeight != 0)
 		{
-			rect.size = CGSizeMake(m_info.nCtrlWidth, m_info.nCtrlHeight);
+			rect.size = CCSizeMake(m_info.nCtrlWidth, m_info.nCtrlHeight);
 			return rect;
 		}
 		
@@ -167,10 +167,10 @@ private:
 			NDPicture *pic = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetUIImgPath(filename.c_str()));
 			if (pic)
 			{
-				CGSize size = pic->GetSize();
+				CCSize size = pic->GetSize();
 				if (uv.w <= int(size.width) && uv.h <= int(size.height))
 				{
-					pic->Cut(CGRectMake(uv.x, uv.y, uv.w, uv.h ) );
+					pic->Cut(CCRectMake(uv.x, uv.y, uv.w, uv.h ) );
 					
 					return pic;
 				}
@@ -188,7 +188,7 @@ private:
 			
 			if (uv.w != 0 && uv.h != 0)
 			{
-				res->Cut(CGRectMake(
+				res->Cut(CCRectMake(
 									uv.x, uv.y, uv.w, uv.h ) );
 			}
 		}
@@ -198,14 +198,14 @@ private:
 	
 protected:
 	UIINFO m_info;
-	CGSize m_sizeOffset;
+	CCSize m_sizeOffset;
 };
 
 template<typename CTROL>
 class CtrolTrait : public CtrolBase
 {
 public:
-	CTROL* Create(UIINFO& info, CGSize& sizeOffset) 
+	CTROL* Create(UIINFO& info, CCSize& sizeOffset) 
 	{ 
 		Init(info, sizeOffset);
 		
@@ -217,7 +217,7 @@ template<>
 class CtrolTrait<NDUIImage> : public CtrolBase
 {
 public:
-	NDUIImage* Create(UIINFO& info, CGSize& sizeOffset)
+	NDUIImage* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
 		
@@ -233,7 +233,7 @@ template<>
 class CtrolTrait<NDUIButton> : public CtrolBase
 {
 public:
-	NDUIButton* Create(UIINFO& info, CGSize& sizeOffset)
+	NDUIButton* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
 		
@@ -241,10 +241,10 @@ public:
 		btn->Initialization();
 		btn->CloseFrame();
 		btn->SetFrameRect(this->GetFrameRect());
-		btn->SetImage(GetNormalPicture(), false, CGRectZero, true);
-		btn->SetBackgroundPicture(GetBackPicture(), NULL, false, CGRectZero, true);
-		btn->SetTouchDownImage(GetSelectedPicture(), false, CGRectZero, true);
-		btn->SetFocusImage(GetFocusPicture(), false, CGRectZero, true);
+		btn->SetImage(GetNormalPicture(), false, CCRectZero, true);
+		btn->SetBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);
+		btn->SetTouchDownImage(GetSelectedPicture(), false, CCRectZero, true);
+		btn->SetFocusImage(GetFocusPicture(), false, CCRectZero, true);
 		btn->SetTitle(info.strText.c_str());
 		btn->SetFontSize(info.nTextFontSize);
 		btn->SetFontColor(INTCOLORTOCCC4(info.nTextFontColor));
@@ -256,7 +256,7 @@ template<>
 class CtrolTrait<CUICheckBox> : public CtrolBase
 {
 public:
-	CUICheckBox* Create(UIINFO& info, CGSize& sizeOffset)
+	CUICheckBox* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
 		
@@ -285,7 +285,7 @@ template<>
 class CtrolTrait<NDUILabel> : public CtrolBase
 {
 public:
-	NDUILabel* Create(UIINFO& info, CGSize& sizeOffset)
+	NDUILabel* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
 		
@@ -304,11 +304,11 @@ template<>
 class CtrolTrait<CUIScrollViewContainer> : public CtrolBase
 {
 public:
-	CUIScrollViewContainer* Create(UIINFO& info, CGSize& sizeOffset)
+	CUIScrollViewContainer* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
 		// 水平型
-		CGRect rect = this->GetFrameRect();
+		CCRect rect = this->GetFrameRect();
 		CUIScrollViewContainer *container = new CUIScrollViewContainer;
 		container->Initialization();
 		container->SetStyle(UIScrollStyleHorzontal);
@@ -324,7 +324,7 @@ template<>
 class CtrolTrait<NDUITableLayer> : public CtrolBase
 {
 public:
-	NDUITableLayer* Create(UIINFO& info, CGSize& sizeOffset)
+	NDUITableLayer* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
 
@@ -345,7 +345,7 @@ template<>
 class CtrolTrait<NDUIText> : public CtrolBase
 {
 public:
-	NDUIText* Create(UIINFO& info, CGSize& sizeOffset)
+	NDUIText* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
 		
@@ -362,10 +362,10 @@ template<>
 class CtrolTrait<CUIHyperlinkText> : public CtrolBase
 {
 public:
-	CUIHyperlinkText* Create(UIINFO& info, CGSize& sizeOffset)
+	CUIHyperlinkText* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
-		CGRect rect = this->GetFrameRect();
+		CCRect rect = this->GetFrameRect();
 		CUIHyperlinkText *linktext = new CUIHyperlinkText;
 		linktext->Initialization();
 		linktext->SetFrameRect(rect);
@@ -382,10 +382,10 @@ template<>
 class CtrolTrait<CUIHyperlinkButton> : public CtrolBase
 {
 public:
-	CUIHyperlinkButton* Create(UIINFO& info, CGSize& sizeOffset)
+	CUIHyperlinkButton* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
-		CGRect rect = this->GetFrameRect();
+		CCRect rect = this->GetFrameRect();
 		CUIHyperlinkButton *linkbtn = new CUIHyperlinkButton;
 		linkbtn->Initialization();
 		linkbtn->SetFrameRect(rect);
@@ -402,16 +402,16 @@ template<>
 class CtrolTrait<CUIItemButton> : public CtrolBase
 {
 public:
-	CUIItemButton* Create(UIINFO& info, CGSize& sizeOffset)
+	CUIItemButton* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
-		CGRect rect = this->GetFrameRect();
+		CCRect rect = this->GetFrameRect();
 		CUIItemButton *itemBtn = new CUIItemButton;
 		itemBtn->Initialization();
 		itemBtn->SetFrameRect(rect);
 		itemBtn->CloseFrame();
-		itemBtn->SetBackgroundPicture(GetNormalPicture(), NULL, false, CGRectZero, true);
-		itemBtn->SetFocusImage(GetFocusPicture(), false, CGRectZero, true);
+		itemBtn->SetBackgroundPicture(GetNormalPicture(), NULL, false, CCRectZero, true);
+		itemBtn->SetFocusImage(GetFocusPicture(), false, CCRectZero, true);
 		return itemBtn;
 	}
 };
@@ -420,10 +420,10 @@ template<>
 class CtrolTrait<CUIEdit> : public CtrolBase
 {
 public:
-	CUIEdit* Create(UIINFO& info, CGSize& sizeOffset)
+	CUIEdit* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
-		CGRect rect = this->GetFrameRect();
+		CCRect rect = this->GetFrameRect();
 		CUIEdit *edit = new CUIEdit;
 		edit->Initialization();
 		edit->SetFrameRect(rect);
@@ -437,10 +437,10 @@ template<>
 class CtrolTrait<CUIExp> : public CtrolBase
 {
 public:
-	CUIExp* Create(UIINFO& info, CGSize& sizeOffset)
+	CUIExp* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
-		CGRect rect = this->GetFrameRect();
+		CCRect rect = this->GetFrameRect();
 		CUIExp *exp = new CUIExp;
 		const char* bgfile	= NULL;
 		const char* processfile	= NULL;
@@ -465,10 +465,10 @@ template<>
 class CtrolTrait<CUISpriteNode> : public CtrolBase
 {
 public:
-	CUISpriteNode* Create(UIINFO& info, CGSize& sizeOffset)
+	CUISpriteNode* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
-		CGRect rect = this->GetFrameRect();
+		CCRect rect = this->GetFrameRect();
 		CUISpriteNode *sprite = new CUISpriteNode;
 		sprite->Initialization();		
 		sprite->SetFrameRect(this->GetFrameRect());
@@ -489,11 +489,11 @@ template<>
 class ControlHelp<MY_CONTROL_TYPE_LIST_M> : public CtrolTrait<CUIScrollViewContainer>		
 {	
 public:
-	CUIScrollViewContainer* Create(UIINFO& info, CGSize& sizeOffset)
+	CUIScrollViewContainer* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
 		// 水平型
-		CGRect rect = this->GetFrameRect();
+		CCRect rect = this->GetFrameRect();
 		CUIScrollViewContainer *container = new CUIScrollViewContainer;
 		container->Initialization();
 		container->SetStyle(UIScrollStyleVerical);
@@ -509,16 +509,16 @@ template<>
 class ControlHelp<MY_CONTROL_TYPE_EQUIP_BUTTON> : public CtrolTrait<CUIItemButton>		
 {	
 public:
-	CUIEquipItem* Create(UIINFO& info, CGSize& sizeOffset)
+	CUIEquipItem* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
-		CGRect rect = this->GetFrameRect();
+		CCRect rect = this->GetFrameRect();
 		CUIEquipItem *equipBtn = new CUIEquipItem;
 		equipBtn->Initialization();
 		equipBtn->SetFrameRect(rect);
 		equipBtn->CloseFrame();
-		equipBtn->SetBackgroundPicture(GetNormalPicture(), NULL, false, CGRectZero, true);
-		equipBtn->SetFocusImage(GetFocusPicture(), false, CGRectZero, true);
+		equipBtn->SetBackgroundPicture(GetNormalPicture(), NULL, false, CCRectZero, true);
+		equipBtn->SetFocusImage(GetFocusPicture(), false, CCRectZero, true);
 		return equipBtn;
 	}
 };
@@ -527,10 +527,10 @@ template<>
 class ControlHelp<MY_CONTROL_TYPE_RADIO_BUTTON> : public CtrolTrait<CUICheckBox>		
 {	
 public:
-	CUIRadioButton* Create(UIINFO& info, CGSize& sizeOffset)
+	CUIRadioButton* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
-		CGRect rect = this->GetFrameRect();
+		CCRect rect = this->GetFrameRect();
 		CUIRadioButton *radio = new CUIRadioButton;
 		const char* fileUnCheck	= NULL;
 		const char* fileCheck	= NULL;

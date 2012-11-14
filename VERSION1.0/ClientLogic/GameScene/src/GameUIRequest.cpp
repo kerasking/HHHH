@@ -22,7 +22,7 @@
 #include "TaskListener.h"
 #include <sstream>
 #include "NDString.h"
-#include "SocialScene.h"
+//#include "SocialScene.h"
 #include "NewChatScene.h"
 #include "NDPath.h"
 
@@ -74,20 +74,20 @@ NDUIMenuLayer::Initialization();
 		GetCancelBtn()->SetDelegate(this);
 	}
 	
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 	
-	CGSize dim = getStringSizeMutiLine("请求列表", 15);
+	CCSize dim = getStringSizeMutiLine("请求列表", 15);
 	m_lbTitle = new NDUILabel;
 	m_lbTitle->Initialization();
 	m_lbTitle->SetFontSize(15);
 	m_lbTitle->SetFontColor(ccc4(255, 245, 0, 255));
-	m_lbTitle->SetFrameRect(CGRectMake((winsize.width-dim.width)/2, (title_height-dim.height)/2, dim.width, dim.height));
+	m_lbTitle->SetFrameRect(CCRectMake((winsize.width-dim.width)/2, (title_height-dim.height)/2, dim.width, dim.height));
 	m_lbTitle->SetText("请求列表");
 	AddChild(m_lbTitle);
 	
 	NDUILayer *tmpLayer = new NDUILayer;
 	tmpLayer->Initialization();
-	tmpLayer->SetFrameRect(CGRectMake(MAIN_TB_X, title_height+2, winsize.width-2*MAIN_TB_X, 20));
+	tmpLayer->SetFrameRect(CCRectMake(MAIN_TB_X, title_height+2, winsize.width-2*MAIN_TB_X, 20));
 	tmpLayer->SetBackgroundColor(ccc4(119,119,119,255));
 	AddChild(tmpLayer);
 	
@@ -97,7 +97,7 @@ NDUIMenuLayer::Initialization();
 	tmpName->SetText("玩家姓名");
 	tmpName->SetFontSize(15);
 	tmpName->SetFontColor(ccc4(0, 0, 0, 255));
-	tmpName->SetFrameRect(CGRectMake(10, (20-15)/2, winsize.width, 15));
+	tmpName->SetFrameRect(CCRectMake(10, (20-15)/2, winsize.width, 15));
 	tmpLayer->AddChild(tmpName);
 	
 	NDUILabel *tmpState = new NDUILabel;
@@ -106,7 +106,7 @@ NDUIMenuLayer::Initialization();
 	tmpState->SetText("请求");
 	tmpState->SetFontSize(15);
 	tmpState->SetFontColor(ccc4(0, 0, 0, 255));
-	tmpState->SetFrameRect(CGRectMake(260, (20-15)/2, winsize.width, 15));
+	tmpState->SetFrameRect(CCRectMake(260, (20-15)/2, winsize.width, 15));
 	tmpLayer->AddChild(tmpState);
 	
 	m_tlMain = new NDUITableLayer;
@@ -357,7 +357,7 @@ if (!m_tlMain)
 	}
 	
 
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 	int iVecSize = int(requestlist.size());
 	int iStart = 0;
 	int iEnd = DIS_COUNT >= iVecSize ? iVecSize : DIS_COUNT;
@@ -374,7 +374,7 @@ if (!m_tlMain)
 		info->SetPlayerNameColor(ccc4(119, 48, 0, 255));
 		info->SetPlayerInfo(requestinfo.info);
 		info->SetPlayerInfoColor(ccc4(119, 48, 0, 255));
-		info->SetFrameRect(CGRectMake(0, 0, winsize.width, 28));
+		info->SetFrameRect(CCRectMake(0, 0, winsize.width, 28));
 		info->SetTag(requestinfo.iID);
 		section->AddCell(info);
 	}
@@ -385,7 +385,7 @@ if (!m_tlMain)
 	int iHeighMax = winsize.height-title_height-bottom_height-2*2-20;
 	iHeigh = iHeigh < iHeighMax ? iHeigh : iHeighMax;
 	
-	m_tlMain->SetFrameRect(CGRectMake(MAIN_TB_X, title_height+2+20, winsize.width-2*MAIN_TB_X, iHeigh));
+	m_tlMain->SetFrameRect(CCRectMake(MAIN_TB_X, title_height+2+20, winsize.width-2*MAIN_TB_X, iHeigh));
 	
 	m_tlMain->SetVisible(true);
 	
@@ -452,14 +452,14 @@ NDUINode::Initialization();
 	
 	m_picBg = pool.AddPicture(NDPath::GetImgPathNew("attr_listitem_bg.png"), 436, 28);
 	
-	SetFrameRect(CGRectMake(0, 0, 436, 28));
+	SetFrameRect(CCRectMake(0, 0, 436, 28));
 	
 	m_lbKey = new NDUILabel;
 	m_lbKey->Initialization();
 	m_lbKey->SetTextAlignment(LabelTextAlignmentLeft);
 	m_lbKey->SetFontSize(14);
 	m_lbKey->SetFontColor(ccc4(136, 42, 42, 255));
-	m_lbKey->SetFrameRect(CGRectMake(34, 7, 436, 28));
+	m_lbKey->SetFrameRect(CCRectMake(34, 7, 436, 28));
 	AddChild(m_lbKey);
 	
 	m_lbValue = new NDUILabel;
@@ -467,7 +467,7 @@ NDUINode::Initialization();
 	m_lbValue->SetTextAlignment(LabelTextAlignmentLeft);
 	m_lbValue->SetFontSize(14);
 	m_lbValue->SetFontColor(ccc4(79, 77, 78, 255));
-	m_lbValue->SetFrameRect(CGRectMake(0, 7, 436, 28));
+	m_lbValue->SetFrameRect(CCRectMake(0, 7, 436, 28));
 	AddChild(m_lbValue);
 	
 	m_picOk = pool.AddPicture(NDPath::GetImgPathNew("request_ok.png"));
@@ -537,7 +537,7 @@ m_request = requestInfo;
 		if (m_lbKey)
 			keyWidth += m_lbKey->GetFrameRect().origin.x;
 			
-		CGRect rect = m_lbValue->GetFrameRect();
+		CCRect rect = m_lbValue->GetFrameRect();
 		
 		rect.origin.x = keyWidth;
 		
@@ -562,29 +562,29 @@ void NDRequestCell::draw()
 	
 	if (!m_request || !m_request->isValid()) return;
 	
-	CGRect scrRect = GetScreenRect();
+	CCRect scrRect = GetScreenRect();
 	
 	if (m_picBg)
 		m_picBg->DrawInRect(scrRect);
 		
 	if (m_picQuestType)
-		m_picQuestType->DrawInRect(CGRectMake(scrRect.origin.x+10, scrRect.origin.y+1, 26, 26));
+		m_picQuestType->DrawInRect(CCRectMake(scrRect.origin.x+10, scrRect.origin.y+1, 26, 26));
 		
 	if (m_request->iAction == RequsetInfo::ACTION_NEWMAIL
 		|| m_request->iAction == RequsetInfo::ACTION_NEWCHAT)
 		return;
 		
 	if (m_picOk)
-		m_picOk->DrawInRect(CGRectMake(scrRect.origin.x+364, scrRect.origin.y+3, 23, 23));
+		m_picOk->DrawInRect(CCRectMake(scrRect.origin.x+364, scrRect.origin.y+3, 23, 23));
 	
 	if (m_picCancel)
-		m_picCancel->DrawInRect(CGRectMake(scrRect.origin.x+404, scrRect.origin.y+3, 23, 23));
+		m_picCancel->DrawInRect(CCRectMake(scrRect.origin.x+404, scrRect.origin.y+3, 23, 23));
 #endif
 }
 
-CGRect NDRequestCell::GetOkScreenRect()
+CCRect NDRequestCell::GetOkScreenRect()
 {
-	CGRect rect = GetScreenRect();
+	CCRect rect = GetScreenRect();
 	
 	rect.origin.x += 360;
 	rect.size.width = 31;
@@ -592,9 +592,9 @@ CGRect NDRequestCell::GetOkScreenRect()
 	return rect;
 }
 
-CGRect NDRequestCell::GetCancelScreenRect()
+CCRect NDRequestCell::GetCancelScreenRect()
 {
-	CGRect rect = GetScreenRect();
+	CCRect rect = GetScreenRect();
 	
 	rect.origin.x += 400;
 	rect.size.width = 31;
@@ -656,13 +656,13 @@ void NewGameUIRequest::Initialization()
 {
 	NDUILayer::Initialization();
 	
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 	
 	m_tlMain = new NDUITableLayer;
 	m_tlMain->Initialization();
 	m_tlMain->SetBackgroundColor(ccc4(0, 0, 0, 0));
 	m_tlMain->VisibleSectionTitles(false);
-	m_tlMain->SetFrameRect(CGRectMake(9, 21, 436, 243));
+	m_tlMain->SetFrameRect(CCRectMake(9, 21, 436, 243));
 	m_tlMain->VisibleScrollBar(false);
 	m_tlMain->SetCellsInterval(2);
 	m_tlMain->SetCellsRightDistance(0);
@@ -717,11 +717,11 @@ void NewGameUIRequest::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode*
 	}
 	
 	
-	if (CGRectContainsPoint(requestCell->GetOkScreenRect(), table->m_beginTouch))
+	if (cocos2d::CCRect::CCRectContainsPoint(requestCell->GetOkScreenRect(), table->m_beginTouch))
 	{ // ok
 		DealRequest(*data, 0);
 	}
-	else if (CGRectContainsPoint(requestCell->GetCancelScreenRect(), table->m_beginTouch))
+	else if (cocos2d::CCRect::CCRectContainsPoint(requestCell->GetCancelScreenRect(), table->m_beginTouch))
 	{ // cancle
 		DealRequest(*data, 1);
 	}

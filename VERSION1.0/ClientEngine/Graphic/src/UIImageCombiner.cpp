@@ -42,7 +42,7 @@ namespace NDEngine
 		}
 	}
 	
-	UIImage4* UIImageCombiner::Combine(CGSize imageSize)
+	UIImage4* UIImageCombiner::Combine(CCSize imageSize)
 	{
 		UIImage4* result = new UIImage4();
 		result->leftTop = NULL;
@@ -85,7 +85,7 @@ namespace NDEngine
 				}
 				
 				CGImageRef cgImage = CGImageCreateWithImageInRect([uiImage->image CGImage], uiImage->cutRect);
-				CGContextDrawImage(contextSingle, CGRectMake(0, 0, CGImageGetWidth(cgImage), CGImageGetHeight(cgImage)), cgImage);	
+				CGContextDrawImage(contextSingle, CCRectMake(0, 0, CGImageGetWidth(cgImage), CGImageGetHeight(cgImage)), cgImage);	
 				CGImageRelease(cgImage);
 				
 				[uiImage->image release];
@@ -107,7 +107,7 @@ namespace NDEngine
 		//TEST//
 		
 		//make left top image	
-		CGSize ltImageSize;
+		CCSize ltImageSize;
 		ltImageSize.width = imageSize.width < 1024 ? imageSize.width : 1024;
 		ltImageSize.height = imageSize.height < 1024 ? imageSize.height : 1024;
 		UIGraphicsBeginImageContext(ltImageSize);
@@ -123,11 +123,11 @@ namespace NDEngine
 			{
 				CGImageRef cgImage;
 				if (uiImage->bReset) 
-					cgImage = CGImageCreateWithImageInRect([uiImage->image CGImage], CGRectMake(0, 0, uiImage->cutRect.size.width, uiImage->cutRect.size.height));
+					cgImage = CGImageCreateWithImageInRect([uiImage->image CGImage], CCRectMake(0, 0, uiImage->cutRect.size.width, uiImage->cutRect.size.height));
 				else
 					cgImage = CGImageCreateWithImageInRect([uiImage->image CGImage], uiImage->cutRect);
 				CGContextDrawImage(ltContext, 
-								   CGRectMake(uiImage->drawPoint.x, 
+								   CCRectMake(uiImage->drawPoint.x, 
 											  ltImageSize.height - uiImage->drawPoint.y - CGImageGetHeight(cgImage), 
 											  CGImageGetWidth(cgImage), 
 											  CGImageGetHeight(cgImage)), 
@@ -153,7 +153,7 @@ namespace NDEngine
 		//make right top image	
 		if (imageSize.width > 1024) 
 		{
-			CGSize rtImageSize;
+			CCSize rtImageSize;
 			rtImageSize.width = imageSize.width - 1024;
 			rtImageSize.height = imageSize.height < 1024 ? imageSize.height : 1024;
 			UIGraphicsBeginImageContext(rtImageSize);
@@ -169,11 +169,11 @@ namespace NDEngine
 				{
 					CGImageRef cgImage;
 					if (uiImage->bReset) 
-						cgImage = CGImageCreateWithImageInRect([uiImage->image CGImage], CGRectMake(0, 0, uiImage->cutRect.size.width, uiImage->cutRect.size.height));
+						cgImage = CGImageCreateWithImageInRect([uiImage->image CGImage], CCRectMake(0, 0, uiImage->cutRect.size.width, uiImage->cutRect.size.height));
 					else
 						cgImage = CGImageCreateWithImageInRect([uiImage->image CGImage], uiImage->cutRect);
 					CGContextDrawImage(rtContext, 
-									   CGRectMake(uiImage->drawPoint.x - 1024, 
+									   CCRectMake(uiImage->drawPoint.x - 1024, 
 												  rtImageSize.height - uiImage->drawPoint.y - CGImageGetHeight(cgImage), 
 												  CGImageGetWidth(cgImage), 
 												  CGImageGetHeight(cgImage)), 
@@ -196,7 +196,7 @@ namespace NDEngine
 		//make left bottom image
 		if (imageSize.height > 1024) 
 		{
-			CGSize lbImageSize;
+			CCSize lbImageSize;
 			lbImageSize.width = imageSize.width < 1024 ? imageSize.width : 1024;
 			lbImageSize.height = imageSize.height - 1024;
 			UIGraphicsBeginImageContext(lbImageSize);
@@ -212,11 +212,11 @@ namespace NDEngine
 				{
 					CGImageRef cgImage;
 					if (uiImage->bReset) 
-						cgImage = CGImageCreateWithImageInRect([uiImage->image CGImage], CGRectMake(0, 0, uiImage->cutRect.size.width, uiImage->cutRect.size.height));
+						cgImage = CGImageCreateWithImageInRect([uiImage->image CGImage], CCRectMake(0, 0, uiImage->cutRect.size.width, uiImage->cutRect.size.height));
 					else
 						cgImage = CGImageCreateWithImageInRect([uiImage->image CGImage], uiImage->cutRect);
 					CGContextDrawImage(lbContext, 
-									   CGRectMake(uiImage->drawPoint.x, 
+									   CCRectMake(uiImage->drawPoint.x, 
 												  lbImageSize.height + 1024 - uiImage->drawPoint.y - CGImageGetHeight(cgImage), 
 												  CGImageGetWidth(cgImage), CGImageGetHeight(cgImage)), 
 									   cgImage);
@@ -239,7 +239,7 @@ namespace NDEngine
 		//make right bottom image
 		if (imageSize.height > 1024 && imageSize.width > 1024) 
 		{
-			CGSize rbImageSize;
+			CCSize rbImageSize;
 			rbImageSize.width = imageSize.width - 1024;
 			rbImageSize.height = imageSize.height - 1024;
 			UIGraphicsBeginImageContext(rbImageSize);
@@ -255,11 +255,11 @@ namespace NDEngine
 				{
 					CGImageRef cgImage;
 					if (uiImage->bReset) 
-						cgImage = CGImageCreateWithImageInRect([uiImage->image CGImage], CGRectMake(0, 0, uiImage->cutRect.size.width, uiImage->cutRect.size.height));
+						cgImage = CGImageCreateWithImageInRect([uiImage->image CGImage], CCRectMake(0, 0, uiImage->cutRect.size.width, uiImage->cutRect.size.height));
 					else
 						cgImage = CGImageCreateWithImageInRect([uiImage->image CGImage], uiImage->cutRect);
 					CGContextDrawImage(rbContext, 
-									   CGRectMake(uiImage->drawPoint.x - 1024, 
+									   CCRectMake(uiImage->drawPoint.x - 1024, 
 												  rbImageSize.height + 1024 - uiImage->drawPoint.y - CGImageGetHeight(cgImage), 
 												  CGImageGetWidth(cgImage), 
 												  CGImageGetHeight(cgImage)), 

@@ -88,8 +88,8 @@ public:
 	void OnButtonClick(NDUIButton* button); override
 	
 	bool OnButtonLongClick(NDUIButton* button); override
-	bool OnButtonDragOut(NDUIButton* button, CGPoint beginTouch, CGPoint moveTouch, bool longTouch); override
-	bool OnButtonDragOutComplete(NDUIButton* button, CGPoint endTouch, bool outOfRange); override
+	bool OnButtonDragOut(NDUIButton* button, CCPoint beginTouch, CCPoint moveTouch, bool longTouch); override
+	bool OnButtonDragOutComplete(NDUIButton* button, CCPoint endTouch, bool outOfRange); override
 	bool OnButtonDragIn(NDUIButton* desButton, NDUINode *uiSrcNode, bool longTouch); override
 	
 	void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex); override

@@ -150,16 +150,16 @@ void ChatInput::ShowExpressions()
 		NDUIRecttangle* bkg = new NDUIRecttangle();
 		bkg->Initialization();
 		bkg->SetColor(ccc4(253, 253, 253, 255));
-		bkg->SetFrameRect(CGRectMake(0, m_expressionLayer->GetTitleHeight(), 480, m_expressionLayer->GetTextHeight()));
+		bkg->SetFrameRect(CCRectMake(0, m_expressionLayer->GetTitleHeight(), 480, m_expressionLayer->GetTextHeight()));
 		m_expressionLayer->AddChild(bkg);
 		
 		NDPicture* picExpression = NDPicturePool::DefaultPool()->AddPicture(GetImgPath("titles.png"));
-		picExpression->Cut(CGRectMake(180, 120, 100, 19));
+		picExpression->Cut(CCRectMake(180, 120, 100, 19));
 		
 		NDUIImage* image = new NDUIImage();
 		image->Initialization();
 		image->SetPicture(picExpression, true);
-		image->SetFrameRect(CGRectMake(190, 5, picExpression->GetSize().width, picExpression->GetSize().height));
+		image->SetFrameRect(CCRectMake(190, 5, picExpression->GetSize().width, picExpression->GetSize().height));
 		m_expressionLayer->AddChild(image);
 		
 		for (int index = 0; index < 25; index++) 
@@ -172,10 +172,10 @@ void ChatInput::ShowExpressions()
 			NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture(GetImgPath("face.png"));				
 			int row = index / 5;
 			int col = index % 5;
-			pic->Cut(CGRectMake(15 * col, 15 * row , 15, 15));
+			pic->Cut(CCRectMake(15 * col, 15 * row , 15, 15));
 			
-			btn->SetImage(pic, false, CGRectZero, true);
-			btn->SetFrameRect(CGRectMake(80 + col * 60, 35 + row * 50, 40, 40));			
+			btn->SetImage(pic, false, CCRectZero, true);
+			btn->SetFrameRect(CCRectMake(80 + col * 60, 35 + row * 50, 40, 40));			
 			m_expressionLayer->AddChild(btn);
 		}		
 	}
@@ -204,23 +204,23 @@ void ChatInput::ShowItems()
 		NDUIRecttangle* bkg = new NDUIRecttangle();
 		bkg->Initialization();
 		bkg->SetColor(ccc4(253, 253, 253, 255));
-		bkg->SetFrameRect(CGRectMake(0, m_itemLayer->GetTitleHeight(), 480, m_itemLayer->GetTextHeight()));
+		bkg->SetFrameRect(CCRectMake(0, m_itemLayer->GetTitleHeight(), 480, m_itemLayer->GetTextHeight()));
 		m_itemLayer->AddChild(bkg);
 		
 		NDPicture* picItem = NDPicturePool::DefaultPool()->AddPicture(GetImgPath("titles.png"));
-		picItem->Cut(CGRectMake(76, 120, 103, 19));
+		picItem->Cut(CCRectMake(76, 120, 103, 19));
 		
 		NDUIImage* image = new NDUIImage();
 		image->Initialization();
 		image->SetPicture(picItem, true);
-		image->SetFrameRect(CGRectMake(190, 5, picItem->GetSize().width, picItem->GetSize().height));
+		image->SetFrameRect(CCRectMake(190, 5, picItem->GetSize().width, picItem->GetSize().height));
 		m_itemLayer->AddChild(image);
 		
 		m_itemBag = new GameItemBag();
 		m_itemBag->Initialization(ItemMgrObj.GetPlayerBagItems());
 		m_itemBag->SetPageCount(ItemMgrObj.GetPlayerBagNum());
 		m_itemBag->SetDelegate(this);
-		m_itemBag->SetFrameRect(CGRectMake(100, 30, ITEM_BAG_W, ITEM_BAG_H));
+		m_itemBag->SetFrameRect(CCRectMake(100, 30, ITEM_BAG_W, ITEM_BAG_H));
 		m_itemLayer->AddChild(m_itemBag);
 	}
 	NDDirector::DefaultDirector()->GetRunningScene()->AddChild(m_itemLayer, CHAT_INPUT_Z);

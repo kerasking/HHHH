@@ -50,7 +50,7 @@ namespace NDEngine
 		unsigned int GetPageCount(){ return m_pageCount; }
 		unsigned int GetCurrentPageIndex();
 		void SetBackgroundColor(ccColor4B color);
-		bool OnTextClick(CGPoint touchPos);
+		bool OnTextClick(CCPoint touchPos);
 		NDUINode* AddNewPage();	
 		void SetFontSize(unsigned int uiFontSize);
 		void SetFontColor(ccColor4B color);
@@ -60,7 +60,7 @@ namespace NDEngine
 		void draw(); override
 		void OnOptionChange(NDUIOptionButton* option); override
 		void SetVisible(bool visible); override	
-		void SetFrameRect(CGRect rect); override
+		void SetFrameRect(CCSize rect); override
 		void ActivePage(unsigned int pageIndex);
 	private:
 		unsigned int m_pageCount, m_currentPageIndex;
@@ -82,7 +82,7 @@ namespace NDEngine
 		//单例
 		static NDUITextBuilder* DefaultBuilder();
 		//解析字符串
-		NDUIText* Build(const char* text, unsigned int fontSize, CGSize containerSize, ccColor4B defaultColor = ccc4(0, 0, 0, 255), bool withPageArrow = false, bool bHpyerLink = false);
+		NDUIText* Build(const char* text, unsigned int fontSize, CCSize containerSize, ccColor4B defaultColor = ccc4(0, 0, 0, 255), bool withPageArrow = false, bool bHpyerLink = false);
 		unsigned int StringHeightAfterFilter(const char* text, unsigned int textWidth, unsigned int fontSize);
 		unsigned int StringWidthAfterFilter(const char* text, unsigned int textWidth, unsigned int fontSize);
 	private:	
@@ -93,7 +93,7 @@ namespace NDEngine
 		//解析规则头部
 		bool AnalysisRuleHead(const char*& text, BuildRule &rule, ccColor4B &textColor);
 		//组合节点
-		NDUIText* Combiner(std::vector<TextNode>& textNodeList, CGSize containerSize, bool withPageArrow);
+		NDUIText* Combiner(std::vector<TextNode>& textNodeList, CCSize containerSize, bool withPageArrow);
 		//获取表情纹理
 		NDPicture* CreateFacePicture(unsigned int index);
 		//获取表情图片 格式如f00

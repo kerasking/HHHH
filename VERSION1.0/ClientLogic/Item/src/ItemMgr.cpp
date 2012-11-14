@@ -35,8 +35,8 @@
 #include "IniLoad.h"
 #include "GameNewItemBag.h"
 #include "NewGamePlayerBag.h"
-#include "EquipForgeScene.h"
-#include "NewEquipRepair.h"
+//#include "EquipForgeScene.h"
+//#include "NewEquipRepair.h"
 #include "BattleFieldScene.h"
 #include "NewVipStoreScene.h"
 #include "GameUINpcStore.h"
@@ -368,12 +368,12 @@ void ItemMgr::processItemInfo(NDTransData* data, int len)
 							bagscene->AddItemToBag(item);
 						}
 						
-						CUIPet* uiPet = PlayerInfoScene::QueryPetScene();
+//						CUIPet* uiPet = PlayerInfoScene::QueryPetScene();
 						
-						if (uiPet)
-						{
-							uiPet->PetBagAddItem(item->m_nID);
-						}
+//						if (uiPet)
+//						{
+//							uiPet->PetBagAddItem(item->m_nID);
+//						}
 						
 						GameStorageAddItem(eGameStorage_Bag, *item);
 						//updateTaskItemData(*item, true);
@@ -517,12 +517,12 @@ void ItemMgr::processItemAttrib(NDTransData* data, int len)
 					gamescene->RefreshQuickItem();
 				}
 				
-				CUIPet* uiPet = PlayerInfoScene::QueryPetScene();
+//				CUIPet* uiPet = PlayerInfoScene::QueryPetScene();
 				
-				if (uiPet)
-				{
-					uiPet->PetBagItemCount(itemBag->m_nID);
-				}
+//				if (uiPet)
+//				{
+//					uiPet->PetBagItemCount(itemBag->m_nID);
+//				}
 				
 				if (bagscene) 
 				{
@@ -1904,7 +1904,7 @@ void ItemMgr::refreshEquipAmount(int itemId, int type)
 					int equipAllAmount = item->getAmount_limit();
 					item->m_nAmount = equipAllAmount;
 					
-					NewEquipRepairLayer::refreshAmount();
+//					NewEquipRepairLayer::refreshAmount();
 					return;
 				}
 			}
@@ -1917,7 +1917,7 @@ void ItemMgr::refreshEquipAmount(int itemId, int type)
 				{
 					int equipAllAmount = item->getAmount_limit();
 					item->m_nAmount = equipAllAmount;
-					NewEquipRepairLayer::refreshAmount();
+//					NewEquipRepairLayer::refreshAmount();
 					return;
 				}
 			}
@@ -1934,7 +1934,7 @@ void ItemMgr::refreshEquipAmount(int itemId, int type)
 					item->m_nAmount = equipAllAmount;
 				}
 			}
-			NewEquipRepairLayer::refreshAmount();
+//			NewEquipRepairLayer::refreshAmount();
 			return;
 		}
 	}
@@ -2172,12 +2172,12 @@ bool ItemMgr::DelItem(int iType, int iItemID, bool bClear/*=true*/)
 				if (bagscene)
 					bagscene->DelBagItem(iItemID);
 					
-				CUIPet *uiPet = PlayerInfoScene::QueryPetScene();
+//				CUIPet *uiPet = PlayerInfoScene::QueryPetScene();
 				
-				if (uiPet)
-				{
-					uiPet->PetBagDelItem(iItemID);
-				}
+//				if (uiPet)
+//				{
+//					uiPet->PetBagDelItem(iItemID);
+//				}
 
 				/***
 				* 临时性注释 郭浩
@@ -2330,7 +2330,7 @@ Item* ItemMgr::QueryItem(OBJID idItem)
 	for (; it != m_vecBag.end(); it++)
 	{
 		Item *item = *it;
-		if (item && OBJID(item->m_nID) == idItem) 
+		if (item && ((OBJID)item->m_nID) == idItem)
 		{
 			return item;
 		}
@@ -2341,7 +2341,7 @@ Item* ItemMgr::QueryItem(OBJID idItem)
 	for (; it != m_vecStorage.end(); it++)
 	{
 		Item *item = *it;
-		if (item && OBJID(item->m_nID) == idItem) 
+		if (item && (OBJID)item->m_nID == idItem)
 		{
 			return item;
 		}
@@ -2351,7 +2351,7 @@ Item* ItemMgr::QueryItem(OBJID idItem)
 	for (int i = Item::eEP_Begin; i < Item::eEP_End; i++) 
 	{
 		Item *item = m_EquipList[i];
-		if (item && OBJID(item->m_nID) == idItem)
+		if (item && ((OBJID)item->m_nID) == idItem)
 		{
 			return item;
 		}

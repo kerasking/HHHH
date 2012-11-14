@@ -127,11 +127,18 @@ void NDHeroTaskLogic::tickNpc( NDNpcLogic* npcLogic )
 //wrapper for time control
 void NDNpcLogic::RefreshTaskState()
 {
-	if (TAbs(GetTickCount() - tickLastRefresh) > 1000*3) //3 second
-	{
+    struct cc_timeval currentTime;
+    if (CCTime::gettimeofdayCocos2d(&currentTime, NULL) != 0)
+    {
+        return;
+    }
+    double fDeltaTime = (currentTime.tv_sec - tickLastRefresh.tv_sec)*1000.0f + (currentTime.tv_usec - tickLastRefresh.tv_usec) / 1000.0f;
+    
+    if (TAbs(fDeltaTime) > 1000*3) //3 second
+    {
 		NDHeroTaskLogic::Instance().tickNpc( this );
 
-		tickLastRefresh = GetTickCount();
+		tickLastRefresh = currentTime;
 	}
 }
 

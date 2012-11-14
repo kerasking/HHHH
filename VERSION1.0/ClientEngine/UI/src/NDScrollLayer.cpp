@@ -165,7 +165,7 @@ bool NDScrollLayer::OnLayerMove(NDUILayer* uiLayer, UILayerMove move,
 	return true;
 }
 
-bool NDScrollLayer::DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch)
+bool NDScrollLayer::DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch)
 {
 	if (NDUILayer::DispatchTouchEndEvent(beginTouch, endTouch))
 		return true;
@@ -527,7 +527,7 @@ bool NDUILabelScrollLayer::refresh(float distance)
 		if (m_uiViewHeight)
 			height = m_uiViewHeight;
 
-		CGRect rect = m_lbText->GetFrameRect();
+		CCRect rect = m_lbText->GetFrameRect();
 
 		float y = rect.origin.y + distance;
 
@@ -544,13 +544,13 @@ bool NDUILabelScrollLayer::refresh(float distance)
 	return false;
 }
 
-void NDUILabelScrollLayer::SetFrameRect(CGRect rect)
+void NDUILabelScrollLayer::SetFrameRect(CCRect rect)
 {
 	NDUILayer::SetFrameRect(rect);
 
 	if (m_lbText)
 		m_lbText->SetFrameRect(
-				CGRectMake(0, 0, rect.size.width, rect.size.height));
+				CCRectMake(0, 0, rect.size.width, rect.size.height));
 }
 
 void NDUILabelScrollLayer::SetText(const char* text,
@@ -568,12 +568,12 @@ void NDUILabelScrollLayer::SetText(const char* text,
 			this->GetFrameRect().size.width - leftInterval - rightInterval, 13);
 
 	m_lbText = NDUITextBuilder::DefaultBuilder()->Build(text, 13,
-			CGSizeMake(
+			CCSizeMake(
 					this->GetFrameRect().size.width - leftInterval
 							- rightInterval, m_uiTextHeight), fontColor, false);
 
 	m_lbText->SetFrameRect(
-			CGRectMake(leftInterval, 0,
+			CCRectMake(leftInterval, 0,
 					this->GetFrameRect().size.width - leftInterval
 							- rightInterval, m_uiTextHeight));
 
@@ -588,7 +588,7 @@ void NDUILabelScrollLayer::draw()
 	if (!this->IsVisibled())
 		return;
 
-	CGRect scrRect = this->GetScreenRect();
+	CCRect scrRect = this->GetScreenRect();
 
 	if (m_uiViewHeight)
 		scrRect.size.height = m_uiViewHeight;
@@ -650,7 +650,7 @@ bool NDUIContainerScrollLayer::refresh(float distance)
 
 		NDUINode* node = (NDUINode*) (*it);
 
-		CGRect rect = node->GetFrameRect();
+		CCRect rect = node->GetFrameRect();
 
 		rect.origin.y += distance;
 
@@ -661,7 +661,7 @@ bool NDUIContainerScrollLayer::refresh(float distance)
 
 	if (m_bVisibleScroll && m_imageScroll && this->m_fMaxChange != 0.0f)
 	{
-		CGRect rect = m_imageScroll->GetFrameRect();
+		CCRect rect = m_imageScroll->GetFrameRect();
 
 		if (rect.size.height > 0.0f)
 		{
@@ -692,7 +692,7 @@ void NDUIContainerScrollLayer::refreshContainer(
 
 		NDUINode* node = (NDUINode*) (*it);
 
-		CGRect rect = node->GetFrameRect();
+		CCRect rect = node->GetFrameRect();
 
 		if (rect.origin.y < fMin)
 			fMin = rect.origin.y;
@@ -737,14 +737,14 @@ void NDUIContainerScrollLayer::refreshContainer(
 
 		m_imageScroll->SetPicture(pic, true);
 
-		m_imageScroll->SetFrameRect(CGRectMake(0, 0, pic->GetSize().width, 0));
+		m_imageScroll->SetFrameRect(CCRectMake(0, 0, pic->GetSize().width, 0));
 
 		m_imageScroll->EnableEvent(false);
 
 		this->AddChild(m_imageScroll, 1);
 		m_imageScroll->SetVisible(this->IsVisibled());
 
-		CGRect rect = m_imageScroll->GetFrameRect();
+		CCRect rect = m_imageScroll->GetFrameRect();
 		rect.origin.x = this->GetFrameRect().size.width - rect.size.width * 2;
 		rect.origin.y = 0.0f;
 		rect.size.height = fHeight;
@@ -774,7 +774,7 @@ void NDUIContainerScrollLayer::ScrollNodeToTop(NDUINode* node)
 		if (child != node)
 			continue;
 
-		CGRect rect = child->GetFrameRect();
+		CCRect rect = child->GetFrameRect();
 
 		float change = m_fMinY - rect.origin.y;
 
@@ -798,7 +798,7 @@ bool NDUIContainerScrollLayer::SetContent(const char *text,
 	if (m_bVisibleScroll)
 		width -= GetScrollBarWidth();
 
-	CGSize textSize;
+	CCSize textSize;
 	textSize.width = width - 4;
 	textSize.height =
 			NDUITextBuilder::DefaultBuilder()->StringHeightAfterFilter(text,
@@ -806,7 +806,7 @@ bool NDUIContainerScrollLayer::SetContent(const char *text,
 
 	NDUIText* memo = NDUITextBuilder::DefaultBuilder()->Build(text, fontsize,
 			textSize, color, true);
-	memo->SetFrameRect(CGRectMake(2, 8, textSize.width, textSize.height));
+	memo->SetFrameRect(CCRectMake(2, 8, textSize.width, textSize.height));
 	this->AddChild(memo);
 	memo->SetVisible(this->IsVisibled());
 
@@ -860,7 +860,7 @@ bool NDUIContainerHScrollLayer::refreshHorizonal(float distance)
 
 		NDUINode* node = (NDUINode*) (*it);
 
-		CGRect rect = node->GetFrameRect();
+		CCRect rect = node->GetFrameRect();
 
 		rect.origin.x += distance;
 
@@ -882,7 +882,7 @@ void NDUIContainerHScrollLayer::refreshContainer()
 
 		NDUINode* node = (NDUINode*) (*it);
 
-		CGRect rect = node->GetFrameRect();
+		CCRect rect = node->GetFrameRect();
 
 		float width = rect.origin.x + rect.size.width;
 

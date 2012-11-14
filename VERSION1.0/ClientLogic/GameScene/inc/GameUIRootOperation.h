@@ -44,14 +44,14 @@ public:
 	
 	void Initialization(); override
 	void draw(); override
-	void SetRectInit(CGRect rect);
+	void SetRectInit(CCRect rect);
 	void SetControls(int controls);
 	void ChangeStatus();
 	int GetStatus();
 private:
 	int m_iStatus;
 	int m_iVarLen;
-	CGRect m_rectInit;
+	CCRect m_rectInit;
 };
 
 ///////////////////////////////////////////////////////////
@@ -73,7 +73,7 @@ public:
 	bool TouchBegin(NDTouch* touch); override
 	void OnButtonClick(NDUIButton* button); override
 	void OnInStatus(NDUIHControlLayer* hcontrollayer, int status); override
-	void SetRectInit(CGRect rect);
+	void SetRectInit(CCRect rect);
 	void SetUINodeInterval(int interval);
 	void AddUINode(NDUINode* uinode);
 	void SetButtonName(const char* name);
@@ -90,8 +90,8 @@ private:
 	NDUIButton			*m_btnBasic;
 	NDUIHControlLayer	*m_hclBasic;
 	int					m_iUINodeInterval;
-	CGRect				m_InitRect;
-	CGRect				m_ButtonRect;
+	CCRect				m_InitRect;
+	CCRect				m_ButtonRect;
 };
 
 ///////////////////////////////////////////////////////////
@@ -115,11 +115,11 @@ public:
 	void TouchCancelled(NDTouch* touch); override
 	void draw(); override
 	
-	void SetAniRectXYSize(CGRect rect, CGSize size);
+	void SetAniRectXYSize(CCRect rect, CCSize size);
 	void SetCurrentAnimation(int aniID, int faceright=false);
 private:
 	NDSprite *sprite;
-	CGRect	 m_rectSprite;
+	CCRect	 m_rectSprite;
 	bool	 m_bTouchBegin;
 	NDPicture *m_picBg;
 };

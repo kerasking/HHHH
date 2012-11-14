@@ -24,7 +24,7 @@ public:
 	~NDUISearchButton();
 	
 	void Initialization(); override
-	void SetFrameRect(CGRect rect);
+	void SetFrameRect(CCRect rect);
 	void SetTitles(const string& title1, const string& title2);
 	
 private:

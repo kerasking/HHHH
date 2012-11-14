@@ -36,8 +36,8 @@ m_pkTileTable(NULL),
 m_pkRuningSprite(NULL),
 m_pkUnpassPoint(NULL)
 {
-	m_kPosition = CGPointMake(0, 0);
-	m_kRunningMapSize = CGSizeMake(0, 0);
+	m_kPosition = CCPointMake(0, 0);
+	m_kRunningMapSize = CCSizeMake(0, 0);
 	m_pkAnimations = CCArray::array();
 	m_pkTileTable = CCArray::array();
 	m_pkImages = new vector<std::string>();
@@ -192,7 +192,7 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 				pkSag->setIdentifer(kFileOp.readInt(pkStream));
 				CGFloat xx = kFileOp.readShort(pkStream);
 				CGFloat yy = kFileOp.readShort(pkStream);
-				pkSag->setPosition(CGPointMake(xx, yy));
+				pkSag->setPosition(CCPointMake(xx, yy));
 				pkSag->setReverse(kFileOp.readByte(pkStream));
 
 				pkFrame->getSubAnimationGroups()->addObject(pkSag);
@@ -240,7 +240,7 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 	}
 }
 
-void NDAnimationGroup::drawHeadAt(CGPoint pos)
+void NDAnimationGroup::drawHeadAt(CCPoint pos)
 {
 	NDAnimation* pkFirstAni = (NDAnimation*) m_pkAnimations->objectAtIndex(0);
 	NDFrame* pkFirstFrame = (NDFrame*)pkFirstAni->getFrames()->objectAtIndex(0);

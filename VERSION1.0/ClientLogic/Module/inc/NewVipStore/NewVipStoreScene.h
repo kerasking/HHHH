@@ -12,7 +12,7 @@
 
 #include "NDCommonScene.h"
 #include "NewVipStore.h"
-#include "NewRecharge.h"
+//#include "NewRecharge.h"
 
 using namespace NDEngine;
 

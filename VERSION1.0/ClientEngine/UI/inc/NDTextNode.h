@@ -55,7 +55,7 @@ public:
 	}
 	unsigned int GetCurrentPageIndex();
 	void SetBackgroundColor(cocos2d::ccColor4B color);
-	bool OnTextClick(CGPoint touchPos);
+	bool OnTextClick(CCPoint touchPos);
 	NDUINode* AddNewPage();
 	void SetFontSize(unsigned int uiFontSize);
 	void SetFontColor(cocos2d::ccColor4B color);
@@ -65,7 +65,7 @@ public:
 	void draw();
 	void OnOptionChange(NDUIOptionButton* option);
 	void SetVisible(bool visible);
-	void SetFrameRect(CGRect rect);
+	void SetFrameRect(CCRect rect);
 	void ActivePage(unsigned int pageIndex);
 private:
 	unsigned int m_uiPageCount;
@@ -89,7 +89,7 @@ public:
 	static NDUITextBuilder* DefaultBuilder();
 	//解析字符串
 	NDUIText* Build(const char* pszText, unsigned int uiFontSize,
-			CGSize kContainerSize,
+			CCSize kContainerSize,
 			cocos2d::ccColor4B kDefaultColor = ccc4(0, 0, 0, 255),
 			bool bWithPageArrow = false, bool bHpyerLink = false);
 	unsigned int StringHeightAfterFilter(const char* text,
@@ -106,7 +106,7 @@ private:
 			cocos2d::ccColor4B &kTextColor);
 	//组合节点
 	NDUIText* Combiner(std::vector<TextNode>& textNodeList,
-			CGSize containerSize, bool withPageArrow);
+			CCSize containerSize, bool withPageArrow);
 	//获取表情纹理
 	NDPicture* CreateFacePicture(unsigned int index);
 	//获取表情图片 格式如f00

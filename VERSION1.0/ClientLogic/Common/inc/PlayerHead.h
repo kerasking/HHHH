@@ -17,8 +17,7 @@
 #include "NDLayer.h"
 //#include "Fighter.h"
 #include "NDUIButton.h"
-//#include "NDBattlePet.h"
-#include "..\..\MapAndRole\inc\NDManualRole.h"
+#include "NDBattlePet.h"
 
 using namespace NDEngine;
 
@@ -33,7 +32,7 @@ public:
 	
 	void drawOfClipPos();
 	
-	void SetPos(CGPoint pos) {
+	void SetPos(CCPoint pos) {
 		this->m_pos = pos;
 	}
 	
@@ -46,7 +45,7 @@ private:
 	NDManualRole* m_role;
 	bool m_bBattle, m_drawInClipPos;
 	
-	CGPoint m_pos;
+	CCPoint m_pos;
 };
 
 
@@ -179,11 +178,11 @@ private:
 // 	
 // 	HeadNode* m_head;
 // 	
-// 	CGRect m_rectBase;
+// 	CCRect m_rectBase;
 // 	
-// 	CGRect m_rectHide;
+// 	CCRect m_rectHide;
 // 	
-// 	CGPoint m_ptHeadNode;
+// 	CCPoint m_ptHeadNode;
 // 	
 // 	SHOW_STATUS m_showStatus;
 // };

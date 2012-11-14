@@ -72,7 +72,7 @@ NDPicture* ItemImage::GetItem(int iIndex, bool gray/*=false*/, bool smallicon/*=
 		return NULL;
 	}
 
-	CGSize kSize = pkResource->GetSize();
+	CCSize kSize = pkResource->GetSize();
 
 	if ( iX + iItemSizeW > kSize.width || iY + iItemSizeH > kSize.height ) 
 	{
@@ -80,7 +80,7 @@ NDPicture* ItemImage::GetItem(int iIndex, bool gray/*=false*/, bool smallicon/*=
 		return NULL;
 	}
 	
-	pkResource->Cut(CGRectMake(iX, iY, iItemSizeW, iItemSizeH));
+	pkResource->Cut(CCRectMake(iX, iY, iItemSizeW, iItemSizeH));
 	
 	return pkResource;
 }
@@ -130,14 +130,14 @@ NDPicture* ItemImage::GetPinZhiPic(int iItemType, bool smallicon/*=false*/)
 		return NULL;
 	}
 	
-	CGSize size = pkResource->GetSize();
+	CCSize size = pkResource->GetSize();
 	if ( x + iItemSizeW > size.width || y + iItemSizeH > size.height ) 
 	{
 		delete pkResource;
 		return NULL;
 	}
 	
-	pkResource->Cut(CGRectMake(x, y, iItemSizeW, iItemSizeH));
+	pkResource->Cut(CCRectMake(x, y, iItemSizeW, iItemSizeH));
 	
 	return pkResource;
 
@@ -171,7 +171,7 @@ NDPicture* GetSkillIconByIconIndex(int iIconIndex, bool gray/*=false*/)
 	
 	if (pkResource)
 	{
-		CGSize size = pkResource->GetSize();
+		CCSize size = pkResource->GetSize();
 		if (nStartX < 0 || nStartY < 0 ||
 			nStartX + SKILL_SIZE_W > size.width ||
 			nStartY + SKILL_SIZE_H > size.height )
@@ -179,7 +179,7 @@ NDPicture* GetSkillIconByIconIndex(int iIconIndex, bool gray/*=false*/)
 			CC_SAFE_DELETE(pkResource);
 			return NULL;
 		}
-		pkResource->Cut(CGRectMake(nStartX, nStartY, SKILL_SIZE_W, SKILL_SIZE_H));
+		pkResource->Cut(CCRectMake(nStartX, nStartY, SKILL_SIZE_W, SKILL_SIZE_H));
 		return pkResource;
 	}
 
@@ -196,7 +196,7 @@ NDPicture* ItemImage::GetSMItem(int nIconVal)
 		return NULL;
 	}
 	
-	CGSize kSize = pkResource->GetSize();
+	CCSize kSize = pkResource->GetSize();
 	int nCol	= nIconVal % 100 - 1;
 	int nRow	= nIconVal / 100 - 1;
 	
@@ -207,7 +207,7 @@ NDPicture* ItemImage::GetSMItem(int nIconVal)
 		return NULL;
 	}
 	
-	pkResource->Cut(CGRectMake(ITEM_SIZE_W * nCol, ITEM_SIZE_H * nRow, ITEM_SIZE_W, ITEM_SIZE_H));
+	pkResource->Cut(CCRectMake(ITEM_SIZE_W * nCol, ITEM_SIZE_H * nRow, ITEM_SIZE_W, ITEM_SIZE_H));
 	
 	return pkResource;
 }

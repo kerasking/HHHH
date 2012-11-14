@@ -23,13 +23,13 @@ namespace NDEngine
 		~NDLightEffect();
 	public:
 		void Initialization(const char* sprFile); hide		
-		void SetPosition(CGPoint newPosition);
+		void SetPosition(CCPoint newPosition);
 		void SetRepeatTimes(unsigned int times);
 		void SetLightId(unsigned int lightId, bool reverse=true);
 		void SlowDown(unsigned int mutli);
 		
 	public: //武状元光效使用
-		void Run(CGSize mapSize, bool draw=true);
+		void Run(CCSize mapSize, bool draw=true);
 		
 	public:
 		void draw(); override
@@ -37,7 +37,7 @@ namespace NDEngine
 	private:
 		NDFrameRunRecord *m_frameRunRecord;
 		NDAnimationGroup *m_aniGroup;
-		CGPoint m_position;
+		CCPoint m_position;
 		unsigned int m_lightId;
 		bool m_stop;
 		bool m_reverse;

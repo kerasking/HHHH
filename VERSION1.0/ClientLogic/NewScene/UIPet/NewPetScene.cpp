@@ -12,7 +12,7 @@
 #include "ItemMgr.h"
 #include "ImageNumber.h"
 #include "GameRoleNode.h"
-#include "CGPointExtension.h"
+#include "CCPointExtension.h"
 #include "ItemImage.h"
 #include "NDUtility.h"
 #include "NDUIDialog.h"
@@ -53,21 +53,21 @@ bool CUIPetTip::Init(int nWidth)
 	if (!pPicBg) {
 		return false;
 	}
-	CGSize rSize = pPicBg->GetSize();
-	this->SetFrameRect(CGRectMake(200, 4, nWidth, rSize.height));
+	CCSize rSize = pPicBg->GetSize();
+	this->SetFrameRect(CCRectMake(200, 4, nWidth, rSize.height));
 	this->SetBackgroundImage(pPicBg, true);
 	
 	m_pLabelTitle = new NDUILabel;
 	m_pLabelTitle->Initialization();
 	m_pLabelTitle->SetFontSize(14);
 	m_pLabelTitle->SetFontColor(ccc4(0, 0, 0, 255));
-	m_pLabelTitle->SetFrameRect(CGRectMake(rSize.width/2-30, 10, 60, 20));
+	m_pLabelTitle->SetFrameRect(CCRectMake(rSize.width/2-30, 10, 60, 20));
 	m_pLabelTitle->SetText(NDCommonCString("tip"));
 	this->AddChild(m_pLabelTitle);
 	
 	m_pLabelTip = new NDUILabelScrollLayer;
 	m_pLabelTip->Initialization();
-	m_pLabelTip->SetFrameRect(CGRectMake(10, 30, rSize.width - 20, rSize.height - 40));
+	m_pLabelTip->SetFrameRect(CCRectMake(10, 30, rSize.width - 20, rSize.height - 40));
 	
 	NDString strText1, strText2, strText3, strText4, strText5, strText6, strText7, strText;
 	strText1.Format(NDCommonCString("PetTip1"), "\n    ");
@@ -135,7 +135,7 @@ bool CUIPet::Init(OBJID idUser, OBJID idFocusPet, bool bEnable)
 		return false;
 	}
 	int nTabCount = bEnable ? 4 : 3;
-	pTab->Initialization(nTabCount, CGPointMake(200, 5));
+	pTab->Initialization(nTabCount, CCPointMake(200, 5));
 	pTab->SetDelegate(this);
 	int i = 0;
 	this->AddAttrInTab(pTab, i++);
@@ -329,11 +329,11 @@ bool CUIPet::AddSkillInTab(NDFuncTab *pTab, int nIndex)
 		return false;
 	}
 	
-	CGSize sizeClient = pClient->GetFrameRect().size;
+	CCSize sizeClient = pClient->GetFrameRect().size;
 	m_pPetSkill = new CUIPetSkill;
 	m_pPetSkill->Init();
 	m_pPetSkill->SetDelegate(this);
-	m_pPetSkill->SetFrameRect(CGRectMake(0, 0, sizeClient.width, sizeClient.height));
+	m_pPetSkill->SetFrameRect(CCRectMake(0, 0, sizeClient.width, sizeClient.height));
 	pClient->AddChild(m_pPetSkill);
 	m_nSkillInfoIndex = nIndex;
 	this->RefreshSkillData();
@@ -360,7 +360,7 @@ bool CUIPet::AddBagInTab(NDFuncTab *pTab, int nIndex)
 	this->GetPetItems(vecItem);
 	m_pPetBag->Initialization(vecItem);
 	m_pPetBag->SetDelegate(this);
-	m_pPetBag->SetFrameRect(CGRectMake(5, 0, 275, 240));
+	m_pPetBag->SetFrameRect(CCRectMake(5, 0, 275, 240));
 	m_pPetBag->SetPageCount(ItemMgrObj.GetPlayerBagNum());
 	pTab->GetClientLayer(nIndex)->AddChild(m_pPetBag);
 	
@@ -378,8 +378,8 @@ bool CUIPet::SetTabNodePic(TabNode* pTabNode, int nStartX)
 	if (!pPic || !pPicFocus) {
 		return false;
 	}
-	pPic->Cut(CGRectMake(nStartX, 36, 18, 36));
-	pPicFocus->Cut(CGRectMake(nStartX, 0, 18, 36));
+	pPic->Cut(CCRectMake(nStartX, 36, 18, 36));
+	pPicFocus->Cut(CCRectMake(nStartX, 0, 18, 36));
 	pTabNode->SetTextPicture(pPic, pPicFocus);
 	return true;
 }

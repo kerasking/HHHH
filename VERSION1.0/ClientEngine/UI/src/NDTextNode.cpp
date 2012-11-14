@@ -13,6 +13,8 @@
 #include "NDUIBaseGraphics.h"
 #include "NDPath.h"
 #include "NDDirector.h"
+#include "TQString.h"
+#include "TQPlatform.h"
 
 using namespace cocos2d;
 
@@ -21,7 +23,7 @@ namespace NDEngine
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 IMPLEMENT_CLASS(NDUIText, NDUINode)
 
-#define PAGE_ARROW_SIZE CGSizeMake(60, 15)
+#define PAGE_ARROW_SIZE CCSizeMake(60, 15)
 
 NDUIText::NDUIText()
 {
@@ -130,13 +132,13 @@ NDUINode* NDUIText::AddNewPage()
 	return uiNode;
 }
 
-void NDUIText::SetFrameRect(CGRect rect)
+void NDUIText::SetFrameRect(CCRect rect)
 {
 	NDUINode::SetFrameRect(rect);
 	if (m_bUsePageArrowControl)
 	{
 		m_pkPageArrow->SetFrameRect(
-				CGRectMake((rect.size.width - PAGE_ARROW_SIZE.width) / 2,
+				CCRectMake((rect.size.width - PAGE_ARROW_SIZE.width) / 2,
 						rect.size.height - PAGE_ARROW_SIZE.height,
 						PAGE_ARROW_SIZE.width, PAGE_ARROW_SIZE.height));
 	}
@@ -146,7 +148,7 @@ void NDUIText::SetFrameRect(CGRect rect)
 	{
 		NDUINode* uiNode = *iter;
 		uiNode->SetFrameRect(
-				CGRectMake(0, 0, rect.size.width, rect.size.height));
+				CCRectMake(0, 0, rect.size.width, rect.size.height));
 	}
 }
 
@@ -186,7 +188,7 @@ void NDUIText::ActivePage(unsigned int pageIndex)
 	}
 }
 
-bool NDUIText::OnTextClick(CGPoint touchPos)
+bool NDUIText::OnTextClick(CCPoint touchPos)
 {
 	if (this->m_uiCurrentPageIndex - 1 >= 0
 			&& m_uiCurrentPageIndex - 1 < this->m_pkPages.size())
@@ -216,7 +218,7 @@ bool NDUIText::OnTextClick(CGPoint touchPos)
 	{
 		if (m_uiPageCount > 1)
 		{
-			CGRect scrRect = this->GetScreenRect();
+			CCRect scrRect = this->GetScreenRect();
 			if (touchPos.x < scrRect.origin.x + scrRect.size.width / 2)
 			{
 				m_pkPageArrow->PreOpt();
@@ -266,7 +268,7 @@ NDUITextBuilder* NDUITextBuilder::DefaultBuilder()
 }
 
 NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
-		CGSize kContainerSize, ccColor4B kDefaultColor, bool bWithPageArrow,
+		CCSize kContainerSize, ccColor4B kDefaultColor, bool bWithPageArrow,
 		bool bHpyerLink)
 {
 	if (!pszText)
@@ -699,7 +701,7 @@ bool NDUITextBuilder::AnalysisRuleHead(const char*& pszText, BuildRule &eRole,
 }
 
 NDUIText* NDUITextBuilder::Combiner(std::vector<TextNode>& textNodeList,
-		CGSize containerSize, bool withPageArrow)
+		CCSize containerSize, bool withPageArrow)
 {
 	NDUIText* result = new NDUIText();
 	if (withPageArrow)
@@ -714,7 +716,7 @@ NDUIText* NDUITextBuilder::Combiner(std::vector<TextNode>& textNodeList,
 	for (iter = textNodeList.begin(); iter != textNodeList.end(); iter++)
 	{
 		TextNode node = *iter;
-		CGRect uiNodeRect = node.uiNode->GetFrameRect();
+		CCRect uiNodeRect = node.uiNode->GetFrameRect();
 
 		if (node.hasBreak || x + uiNodeRect.size.width > containerSize.width)
 		{
@@ -735,7 +737,7 @@ NDUIText* NDUITextBuilder::Combiner(std::vector<TextNode>& textNodeList,
 		}
 
 		node.uiNode->SetFrameRect(
-				CGRectMake(x, y, uiNodeRect.size.width,
+				CCRectMake(x, y, uiNodeRect.size.width,
 						uiNodeRect.size.height));
 		curPage->AddChild(node.uiNode);
 
@@ -754,7 +756,7 @@ NDPicture* NDUITextBuilder::CreateFacePicture(unsigned int index)
 		 int row = index / 5;
 		 int col = index % 5;
 		 result = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("face.png"));
-		 result->Cut(CGRectMake(15 * col, 15 * row , 15, 15));
+		 result->Cut(CCRectMake(15 * col, 15 * row , 15, 15));
 	}
 	return result;
 }
@@ -773,7 +775,7 @@ NDUIImage* NDUITextBuilder::CreateFaceImage(const char* strIndex)
 			pkResult->Initialization();
 			pkResult->SetPicture(pkPic, true);
 			pkResult->SetFrameRect(
-					CGRectMake(0, 0, pkPic->GetSize().width,
+					CCRectMake(0, 0, pkPic->GetSize().width,
 							pkPic->GetSize().height));
 		}
 	}
@@ -786,7 +788,7 @@ NDUILabel* NDUITextBuilder::CreateLabel(const char* pszText,
 	NDUILabel* pkResult = NULL;
 	if (pszText)
 	{
-		CGSize kTextSize = getStringSize(pszText, fontSize*NDDirector::DefaultDirector()->GetScaleFactor());
+		CCSize kTextSize = getStringSize(pszText, fontSize*NDDirector::DefaultDirector()->GetScaleFactor());
 		pkResult = new NDUILabel();
 		pkResult->Initialization();
 		pkResult->SetRenderTimes(1);
@@ -795,7 +797,7 @@ NDUILabel* NDUITextBuilder::CreateLabel(const char* pszText,
 		pkResult->SetFontSize(fontSize);
 		pkResult->SetFontColor(color);
 		pkResult->SetFrameRect(
-				CGRectMake(0, 0, kTextSize.width, kTextSize.height));
+				CCRectMake(0, 0, kTextSize.width, kTextSize.height));
 	}
 	return pkResult;
 }
@@ -807,7 +809,7 @@ HyperLinkLabel* NDUITextBuilder::CreateLinkLabel(const char* pszText,
 
 	if (pszText)
 	{
-		CGSize kTextSize = getStringSize(pszText, uiFontSize*NDDirector::DefaultDirector()->GetScaleFactor());
+		CCSize kTextSize = getStringSize(pszText, uiFontSize*NDDirector::DefaultDirector()->GetScaleFactor());
 		pkResultLabel = new HyperLinkLabel();
 		pkResultLabel->Initialization();
 		pkResultLabel->SetRenderTimes(1);
@@ -816,7 +818,7 @@ HyperLinkLabel* NDUITextBuilder::CreateLinkLabel(const char* pszText,
 		pkResultLabel->SetFontSize(uiFontSize);
 		pkResultLabel->SetFontColor(kColor);
 		pkResultLabel->SetFrameRect(
-				CGRectMake(0, 0, kTextSize.width, kTextSize.height));
+				CCRectMake(0, 0, kTextSize.width, kTextSize.height));
 		pkResultLabel->SetIsLink(true);
 	}
 

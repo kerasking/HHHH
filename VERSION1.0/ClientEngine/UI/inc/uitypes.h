@@ -11,7 +11,7 @@
 #define CQ_PLATFORM_WIN32 2
 
 #include <deque>
-#include <C3Primitive.h>
+//#include <C3Primitive.h>
 #include "BaseType.h"
 #ifdef ANDROID
 extern void LogI(const char* pFormat, ...);
@@ -70,7 +70,31 @@ typedef long			LPARAM;
 typedef const wchar_t* LPCWSTR;
 typedef LONG LRESULT;
 
+typedef struct
+{
+	int	x;
+	int   y;
+}	C3_POS;
 
+typedef struct
+{
+	int  iWidth;
+	int  iHeight;
+}	C3_SIZE;
+
+typedef struct
+{
+	int left;
+	int top;
+	int right;
+	int bottom;
+}	C3_RECT;
+
+typedef struct
+{
+	float fHorizontal;
+	float fVertical;
+}	C3_DIR;
 //ด๓ะก
 class CSize : public C3_SIZE
 {

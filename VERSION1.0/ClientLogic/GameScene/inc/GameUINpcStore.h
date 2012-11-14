@@ -17,7 +17,7 @@
 #include "GameItemBag.h"
 #include "NDUITableLayer.h"
 #include "NDUICustomView.h"
-#include "NDTip.h"
+//#include "NDTip.h"
 #include <string>
 
 
@@ -113,7 +113,7 @@ private:
 		
 	ItemFocus *m_focus;
 	
-	LayerTip *m_tip;
+	//LayerTip *m_tip;
 	
 	struct s_focusinfo 
 	{

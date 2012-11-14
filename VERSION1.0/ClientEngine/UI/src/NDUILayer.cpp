@@ -9,7 +9,12 @@
 #include "NDUILayer.h"
 #include "NDUINode.h"
 #include "CCPointExtension.h"
-//#include <GLES/gl.h>
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#import <OpenGLES/ES2/gl.h>
+#import <OpenGLES/ES2/glext.h>
+#else
+#include <GLES/gl.h>
+#endif
 //#include "NDIphoneEdit.h"
 #include "NDUIButton.h"
 #include "cocos2dExt.h"
@@ -27,7 +32,7 @@
 #include "NDTargetEvent.h"
 #include "CCImage.h"
 #include "NDUIBaseGraphics.h"
-#include "Utility.h"
+#include "UtilityInc.h"
 #include "NDDirector.h"
 #include "NDUIImage.h"
 #include "NDDebugOpt.h"
@@ -71,7 +76,7 @@ NDUILayer::NDUILayer()
 
 	m_pkDragOverNode = NULL;
 
-	m_kMoveTouch = CGPointZero;
+	m_kMoveTouch = CCPointZero;
 
 	m_bHorizontal = false;
 
@@ -119,7 +124,7 @@ void NDUILayer::Initialization()
 	layer->SetUILayer(this);
 	layer->setTouchEnabled(true);
 
-	this->SetFrameRect(CGRectZero);
+	this->SetFrameRect(CCRectZero);
 }
 void NDUILayer::SetTouchEnabled(bool bEnabled)
 {
@@ -239,7 +244,7 @@ void NDUILayer::draw()
 				focus = true;
 		}
 
-		CGRect scrRect = this->GetScreenRect();
+		CCRect scrRect = this->GetScreenRect();
 
 		NDPicture* pic =
 				focus ? (m_pkPicFocus == NULL ? m_pkPic : m_pkPicFocus) : m_pkPic;
@@ -362,7 +367,7 @@ bool NDUILayer::TouchBegin(NDTouch* touch)
 	m_bDispatchTouchEndEvent = true;
 	m_kBeginTouch = touch->GetLocation();
 
-	if (CGRectContainsPoint(this->GetScreenRect(), m_kBeginTouch)
+	if (cocos2d::CCRect::CCRectContainsPoint(this->GetScreenRect(), m_kBeginTouch)
 			&& this->IsVisibled() && this->EventEnabled())
 	{
 		bool bRet = this->DispatchTouchBeginEvent(m_kBeginTouch);
@@ -482,7 +487,7 @@ void NDUILayer::TouchCancelled(NDTouch* touch)
 
 bool NDUILayer::TouchMoved(NDTouch* touch)
 {
-	CGPoint kMoveTouch = touch->GetLocation();
+	CCPoint kMoveTouch = touch->GetLocation();
 
 	if (m_pkTouchedNode && m_bDispatchTouchEndEvent)
 	{
@@ -503,11 +508,11 @@ bool NDUILayer::TouchMoved(NDTouch* touch)
 	{
 		DispatchDragOverEvent(m_kBeginTouch, kMoveTouch);
 
-		CGRect nodeFrame = m_pkTouchedNode->GetScreenRect();
+		CCRect nodeFrame = m_pkTouchedNode->GetScreenRect();
 		nodeFrame = RectAdd(nodeFrame, 2);
 
 		if (!m_bLayerMoved
-				&& (CGRectContainsPoint(nodeFrame, kMoveTouch) || m_bDragOutFlag))
+				&& (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, kMoveTouch) || m_bDragOutFlag))
 		{
 			if (m_pkLongTouchTimer)
 				m_pkLongTouchTimer->KillTimer(this, LONG_TOUCH_TIMER_TAG);
@@ -545,7 +550,7 @@ bool NDUILayer::TouchDoubleClick(NDTouch* touch)
 	m_bDispatchTouchEndEvent = true;
 	m_kBeginTouch = touch->GetLocation();
 
-	if (CGRectContainsPoint(this->GetScreenRect(), m_kBeginTouch)
+	if (cocos2d::CCRect::CCRectContainsPoint(this->GetScreenRect(), m_kBeginTouch)
 			&& this->IsVisibled() && this->EventEnabled())
 	{
 		this->DispatchTouchDoubleClickEvent(m_kBeginTouch);
@@ -555,7 +560,7 @@ bool NDUILayer::TouchDoubleClick(NDTouch* touch)
 	return false;
 }
 
-bool NDUILayer::DispatchTouchBeginEvent(CGPoint beginTouch)
+bool NDUILayer::DispatchTouchBeginEvent(CCPoint beginTouch)
 {
 	m_pkTouchedNode = NULL;
 
@@ -599,9 +604,9 @@ bool NDUILayer::DispatchTouchBeginEvent(CGPoint beginTouch)
 		}
 
 		//touch event deal.....
-		CGRect nodeFrame = uiNode->GetScreenRect();
+		CCRect nodeFrame = uiNode->GetScreenRect();
 
-		if (CGRectContainsPoint(nodeFrame, beginTouch))
+		if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, beginTouch))
 		{
 			//NDUILayer need dispatch event
 			if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
@@ -627,7 +632,7 @@ bool NDUILayer::DispatchTouchBeginEvent(CGPoint beginTouch)
 	return false;
 }
 
-bool NDUILayer::DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch)
+bool NDUILayer::DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch)
 {
 	if (m_pkTouchedNode)
 	{
@@ -669,12 +674,12 @@ bool NDUILayer::DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch)
 		}
 
 		//touch event deal
-		CGRect pkNodeFrame = uiNode->GetScreenRect();
+		CCRect pkNodeFrame = uiNode->GetScreenRect();
 		//pkNodeFrame = RectAdd(pkNodeFrame, 2);
 
-		if (CGRectContainsPoint(pkNodeFrame, endTouch))
+		if (cocos2d::CCRect::CCRectContainsPoint(pkNodeFrame, endTouch))
 		{
-			if (CGRectContainsPoint(pkNodeFrame, beginTouch))
+			if (cocos2d::CCRect::CCRectContainsPoint(pkNodeFrame, beginTouch))
 			{
 				//set focus
 				m_pkFocusNode = uiNode;
@@ -850,7 +855,7 @@ bool NDUILayer::DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch)
 	return false;
 }
 
-bool NDUILayer::DispatchTouchDoubleClickEvent(CGPoint beginTouch)
+bool NDUILayer::DispatchTouchDoubleClickEvent(CCPoint beginTouch)
 {
 	if (!this->IsVisibled())
 	{
@@ -887,10 +892,10 @@ bool NDUILayer::DispatchTouchDoubleClickEvent(CGPoint beginTouch)
 		}
 
 		//touch event deal
-		CGRect nodeFrame = uiNode->GetScreenRect();
+		CCRect nodeFrame = uiNode->GetScreenRect();
 		nodeFrame = RectAdd(nodeFrame, 2);
 
-		if (CGRectContainsPoint(nodeFrame, beginTouch))
+		if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, beginTouch))
 		{
 			//NDUILayer need dispatch event
 			if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
@@ -996,8 +1001,8 @@ void NDUILayer::OnTimer(OBJID tag)
 	}
 }
 
-bool NDUILayer::DispatchLongTouchClickEvent(CGPoint beginTouch,
-		CGPoint endTouch)
+bool NDUILayer::DispatchLongTouchClickEvent(CCPoint beginTouch,
+		CCPoint endTouch)
 {
 	if (m_pkTouchedNode)
 	{
@@ -1039,12 +1044,12 @@ bool NDUILayer::DispatchLongTouchClickEvent(CGPoint beginTouch,
 		}
 
 		//touch event deal
-		CGRect nodeFrame = uiNode->GetScreenRect();
+		CCRect nodeFrame = uiNode->GetScreenRect();
 		nodeFrame = RectAdd(nodeFrame, 2);
 
-		if (CGRectContainsPoint(nodeFrame, endTouch))
+		if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, endTouch))
 		{
-			if (CGRectContainsPoint(nodeFrame, beginTouch))
+			if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, beginTouch))
 			{
 				//set focus
 				m_pkFocusNode = uiNode;
@@ -1078,7 +1083,7 @@ bool NDUILayer::DispatchLongTouchClickEvent(CGPoint beginTouch,
 	return false;
 }
 
-bool NDUILayer::DispatchLongTouchEvent(CGPoint beginTouch, bool touch)
+bool NDUILayer::DispatchLongTouchEvent(CCPoint beginTouch, bool touch)
 {
 	if (!m_pkTouchedNode || m_bTouchMoved)
 		return false;
@@ -1117,10 +1122,10 @@ bool NDUILayer::DispatchLongTouchEvent(CGPoint beginTouch, bool touch)
 	}
 
 	//touch event deal
-	CGRect nodeFrame = uiNode->GetScreenRect();
+	CCRect nodeFrame = uiNode->GetScreenRect();
 	nodeFrame = RectAdd(nodeFrame, 2);
 
-	if (CGRectContainsPoint(nodeFrame, beginTouch))
+	if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, beginTouch))
 	{
 		//NDUILayer need dispatch event
 		if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
@@ -1154,7 +1159,7 @@ bool NDUILayer::DispatchLongTouchEvent(CGPoint beginTouch, bool touch)
 	return false;
 }
 
-bool NDUILayer::DispatchDragOutEvent(CGPoint beginTouch, CGPoint moveTouch,
+bool NDUILayer::DispatchDragOutEvent(CCPoint beginTouch, CCPoint moveTouch,
 		bool longTouch/*=false*/)
 {
 	if (!m_pkTouchedNode)
@@ -1194,12 +1199,12 @@ bool NDUILayer::DispatchDragOutEvent(CGPoint beginTouch, CGPoint moveTouch,
 	}
 
 	//touch event deal
-	CGRect nodeFrame = uiNode->GetScreenRect();
+	CCRect nodeFrame = uiNode->GetScreenRect();
 	nodeFrame = RectAdd(nodeFrame, 2);
 
-//		if (CGRectContainsPoint(nodeFrame, beginTouch)) 
+//		if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, beginTouch)) 
 //		{
-	if (CGRectContainsPoint(nodeFrame, moveTouch) || m_bDragOutFlag)
+	if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, moveTouch) || m_bDragOutFlag)
 	{
 //				//NDUILayer need dispatch event
 //				if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer))) 
@@ -1237,8 +1242,8 @@ bool NDUILayer::DispatchDragOutEvent(CGPoint beginTouch, CGPoint moveTouch,
 	return false;
 }
 
-bool NDUILayer::DispatchDragOutCompleteEvent(CGPoint beginTouch,
-		CGPoint endTouch, bool longTouch/*=false*/)
+bool NDUILayer::DispatchDragOutCompleteEvent(CCPoint beginTouch,
+		CCPoint endTouch, bool longTouch/*=false*/)
 {
 	if (!m_pkTouchedNode)
 		return false;
@@ -1275,7 +1280,7 @@ bool NDUILayer::DispatchDragOutCompleteEvent(CGPoint beginTouch,
 	}
 
 	//touch event deal
-	CGRect nodeFrame = uiNode->GetScreenRect();
+	CCRect nodeFrame = uiNode->GetScreenRect();
 	nodeFrame = RectAdd(nodeFrame, 2);
 
 	//onclick event......
@@ -1285,7 +1290,7 @@ bool NDUILayer::DispatchDragOutCompleteEvent(CGPoint beginTouch,
 				dynamic_cast<NDUIButtonDelegate*>(uiNode->GetDelegate());
 		if (delegate
 				&& delegate->OnButtonDragOutComplete((NDUIButton*) uiNode,
-						endTouch, !CGRectContainsPoint(nodeFrame, endTouch)))
+						endTouch, !cocos2d::CCRect::CCRectContainsPoint(nodeFrame, endTouch)))
 		{
 			return true;
 		}
@@ -1299,8 +1304,8 @@ bool NDUILayer::DispatchDragOutCompleteEvent(CGPoint beginTouch,
 	return false;
 }
 
-bool NDUILayer::DispatchDragInEvent(NDUINode* dragOutNode, CGPoint beginTouch,
-		CGPoint endTouch, bool longTouch, bool dealByDefault/*=false*/)
+bool NDUILayer::DispatchDragInEvent(NDUINode* dragOutNode, CCPoint beginTouch,
+		CCPoint endTouch, bool longTouch, bool dealByDefault/*=false*/)
 {
 	if (!this->IsVisibled())
 	{
@@ -1337,10 +1342,10 @@ bool NDUILayer::DispatchDragInEvent(NDUINode* dragOutNode, CGPoint beginTouch,
 		}
 
 		//touch event deal
-		CGRect nodeFrame = uiNode->GetScreenRect();
+		CCRect nodeFrame = uiNode->GetScreenRect();
 		nodeFrame = RectAdd(nodeFrame, 2);
 
-		if (CGRectContainsPoint(nodeFrame, endTouch))
+		if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, endTouch))
 		{
 			//set focus
 			//m_focusNode = uiNode;
@@ -1388,7 +1393,7 @@ bool NDUILayer::DispatchDragInEvent(NDUINode* dragOutNode, CGPoint beginTouch,
 	return false;
 }
 
-bool NDUILayer::DispatchDragOverEvent(CGPoint beginTouch, CGPoint moveTouch,
+bool NDUILayer::DispatchDragOverEvent(CCPoint beginTouch, CCPoint moveTouch,
 		bool longTouch/*=false*/)
 {
 	if (!m_bEnableDragOver)
@@ -1401,10 +1406,10 @@ bool NDUILayer::DispatchDragOverEvent(CGPoint beginTouch, CGPoint moveTouch,
 
 	if (m_pkDragOverNode)
 	{
-		CGRect nodeFrame = m_pkDragOverNode->GetScreenRect();
+		CCRect nodeFrame = m_pkDragOverNode->GetScreenRect();
 		nodeFrame = RectAdd(nodeFrame, 2);
 
-		bool isInRange = CGRectContainsPoint(nodeFrame, moveTouch);
+		bool isInRange = cocos2d::CCRect::CCRectContainsPoint(nodeFrame, moveTouch);
 		if (m_pkDragOverNode->IsKindOfClass(RUNTIME_CLASS(NDUIButton)))
 		{
 			NDUIButtonDelegate* delegate =
@@ -1450,10 +1455,10 @@ bool NDUILayer::DispatchDragOverEvent(CGPoint beginTouch, CGPoint moveTouch,
 		}
 
 		//touch event deal
-		CGRect nodeFrame = uiNode->GetScreenRect();
+		CCRect nodeFrame = uiNode->GetScreenRect();
 		nodeFrame = RectAdd(nodeFrame, 2);
 
-		if (CGRectContainsPoint(nodeFrame, moveTouch))
+		if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, moveTouch))
 		{
 			//set focus
 			//m_focusNode = uiNode;
@@ -1498,10 +1503,10 @@ bool NDUILayer::DispatchDragOverEvent(CGPoint beginTouch, CGPoint moveTouch,
 	return false;
 }
 
-bool NDUILayer::DispatchLayerMoveEvent(CGPoint beginPoint, NDTouch *moveTouch)
+bool NDUILayer::DispatchLayerMoveEvent(CCPoint beginPoint, NDTouch *moveTouch)
 {
 	if (!m_bMoveOutListener
-			&& !CGRectContainsPoint(this->GetScreenRect(),
+			&& !cocos2d::CCRect::CCRectContainsPoint(this->GetScreenRect(),
 					moveTouch->GetLocation()))
 	{
 		return false;
@@ -1548,11 +1553,11 @@ bool NDUILayer::DispatchLayerMoveEvent(CGPoint beginPoint, NDTouch *moveTouch)
 		 */
 
 		//touch event deal
-		CGRect nodeFrame = uiNode->GetScreenRect();
+		CCRect nodeFrame = uiNode->GetScreenRect();
 		nodeFrame = RectAdd(nodeFrame, 2);
 
-		if (CGRectContainsPoint(nodeFrame, beginPoint)
-				&& CGRectContainsPoint(nodeFrame, moveTouch->GetLocation()))
+		if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, beginPoint)
+				&& cocos2d::CCRect::CCRectContainsPoint(nodeFrame, moveTouch->GetLocation()))
 		{
 			//set focus
 			//m_focusNode = uiNode;
@@ -1577,8 +1582,8 @@ bool NDUILayer::DispatchLayerMoveEvent(CGPoint beginPoint, NDTouch *moveTouch)
 		return false;
 	}
 
-	CGPoint prePos = moveTouch->GetPreviousLocation();
-	CGPoint curPos = moveTouch->GetLocation();
+	CCPoint prePos = moveTouch->GetPreviousLocation();
+	CCPoint curPos = moveTouch->GetLocation();
 
 	m_kMoveTouch = curPos;
 
@@ -1653,9 +1658,9 @@ void NDUILayer::ResetEventParam()
 	m_pkDragOverNode = NULL;
 }
 
-CGRect NDUILayer::RectAdd(CGRect rect, int value)
+CCRect NDUILayer::RectAdd(CCRect rect, int value)
 {
-	return CGRectMake(rect.origin.x - value, rect.origin.y - value,
+	return CCRectMake(rect.origin.x - value, rect.origin.y - value,
 			rect.size.width + 2 * value, rect.size.height + 2 * value);
 }
 

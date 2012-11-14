@@ -16,17 +16,17 @@ namespace NDEngine
 {
 	//opengl绘图函数；必须在draw方法里调用，否则将不会长久生效
 	//画矩形
-	void DrawRecttangle(CGRect rect, cocos2d::ccColor4B color);
+	void DrawRecttangle(CCRect rect, cocos2d::ccColor4B color);
 	//画多边形
-	void DrawPolygon(CGRect rect, cocos2d::ccColor4B color, GLuint lineWidth);
+	void DrawPolygon(CCRect rect, cocos2d::ccColor4B color, GLuint lineWidth);
 	//画线
-	void DrawLine(CGPoint fromPoint, CGPoint toPoint, cocos2d::ccColor4B color, GLuint lineWidth);
+	void DrawLine(CCPoint fromPoint, CCPoint toPoint, cocos2d::ccColor4B color, GLuint lineWidth);
 	//画圆
-	void DrawCircle(CGPoint center, float r, float a, int segs, cocos2d::ccColor4B color);
+	void DrawCircle(CCPoint center, float r, float a, int segs, cocos2d::ccColor4B color);
 	// 画边框
 	void DrawFrame(int borderColor, int x, int y, int width, int height);
 	// 画三角形
-	void DrawTriangle(CGPoint first, CGPoint second, CGPoint third, cocos2d::ccColor4B color);
+	void DrawTriangle(CCPoint first, CCPoint second, CCPoint third, cocos2d::ccColor4B color);
 
 	class NDUILine : public NDUINode
 	{
@@ -36,15 +36,15 @@ namespace NDEngine
 	public:
 		void SetWidth(unsigned int lineWidth){ m_lineWidth = lineWidth; }
 		void SetColor(cocos2d::ccColor3B color){ m_color = ccc4(color.r, color.g, color.b, 255); }
-		void SetFromPoint(CGPoint from){ m_from = from; }
-		void SetToPoint(CGPoint to){ m_to = to; }
+		void SetFromPoint(CCPoint from){ m_from = from; }
+		void SetToPoint(CCPoint to){ m_to = to; }
 	public:
 		void draw();
 		
 	private:
 		unsigned int m_lineWidth;
 		cocos2d::ccColor4B m_color;
-		CGPoint m_from, m_to;
+		CCPoint m_from, m_to;
 	};
 	
 	class NDUIPolygon : public NDUINode
@@ -107,14 +107,14 @@ namespace NDEngine
 
 		void SetColor(cocos2d::ccColor4B color);
 		
-		void SetPoints(CGPoint first, CGPoint second, CGPoint third);
+		void SetPoints(CCPoint first, CCPoint second, CCPoint third);
 		
 		void draw();
 	private:
 		void recacul();
 	private:
 		cocos2d::ccColor4B m_color;
-		CGPoint m_pos[3];
+		CCPoint m_pos[3];
 		bool m_needRecacul;
 	};
 }

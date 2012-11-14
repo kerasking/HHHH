@@ -73,7 +73,7 @@
 #define SZ_WIFI_OFF						"必须下载更新包,但是未开启WIFI,是否继续？"
 #define SZ_UPDATE_OFF					"无法连接服务器,请检查网络"
 #define SZ_FIRST_INSTALL                "首次运行,初始化配置中……"
-#define SZ_CONNECT_SERVER               "连接接服务器……"
+#define SZ_CONNECT_SERVER               "连接服务器……"
 
 
 
@@ -444,8 +444,8 @@ void CSMLoginScene::DidDownloadStatus( DownloadPackage* downer, DownloadStatus s
 		m_pLabelPromtp->SetText( SZ_ERROR_04 );
 		m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
 		m_pLabelPromtp->SetFontSize( 20 );
-		CGRect tRect = m_pLabelPromtp->GetFrameRect();
-		m_pLabelPromtp->SetFrameRect( CGRectMake( tRect.origin.x, tRect.origin.y, tRect.size.width*3, tRect.size.height*2));
+		CCRect tRect = m_pLabelPromtp->GetFrameRect();
+		m_pLabelPromtp->SetFrameRect( CCRectMake( tRect.origin.x, tRect.origin.y, tRect.size.width*3, tRect.size.height*2));
 		m_pLabelPromtp->SetVisible( true );
 	}
 	else if (status == DownloadStatusFailed)
@@ -454,8 +454,8 @@ void CSMLoginScene::DidDownloadStatus( DownloadPackage* downer, DownloadStatus s
 		m_pLabelPromtp->SetText( SZ_ERROR_05 );
 		m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
 		m_pLabelPromtp->SetFontSize( 20 );
-        CGRect tRect = m_pLabelPromtp->GetFrameRect();
-		m_pLabelPromtp->SetFrameRect( CGRectMake( tRect.origin.x/2, tRect.origin.y, tRect.size.width*3, tRect.size.height*2));
+        CCRect tRect = m_pLabelPromtp->GetFrameRect();
+		m_pLabelPromtp->SetFrameRect( CCRectMake( tRect.origin.x/2, tRect.origin.y, tRect.size.width*3, tRect.size.height*2));
 		m_pLabelPromtp->SetVisible( true );
 	}
 	else 
@@ -517,7 +517,7 @@ bool CSMLoginScene::CreateUpdateUILayer()
 	if ( m_pLayerUpdate )
 		return false;
 	
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 	
 	NDUILayer *	pLayer	= new NDUILayer();
 	if ( !pLayer )
@@ -526,13 +526,13 @@ bool CSMLoginScene::CreateUpdateUILayer()
 		return false;
 	}
 	pLayer->Initialization();
-	pLayer->SetFrameRect( CGRectMake(0, 0, winSize.width, winSize.height) );
+	pLayer->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height) );
 	pLayer->SetTag( TAG_UPDATE_LAYER );
 	AddChild(pLayer);
 	m_pLayerUpdate		= pLayer;
 	
 	NDUILoad tmpUILoad;
-	tmpUILoad.Load( "UpdateUI.ini", pLayer, this, CGSizeMake(0, 0) );
+	tmpUILoad.Load( "UpdateUI.ini", pLayer, this, CCSizeMake(0, 0) );
 	
 	m_pCtrlProgress	= (CUIExp*)pLayer->GetChild( TAG_CTRL_PROGRESS );
 	if ( !m_pCtrlProgress )
@@ -592,8 +592,8 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& data)
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
     		m_pLabelPromtp->SetVisible( true );
     		m_pLabelPromtp->SetFontSize( 20 );
-            //CGRect tRect = m_pLabelPromtp->GetFrameRect();
-    		//m_pLabelPromtp->SetFrameRect( CGRectMake( tRect.origin.x, tRect.origin.y, tRect.size.width*3, tRect.size.height*2));
+            //CCRect tRect = m_pLabelPromtp->GetFrameRect();
+    		//m_pLabelPromtp->SetFrameRect( CCRectMake( tRect.origin.x, tRect.origin.y, tRect.size.width*3, tRect.size.height*2));
 		}
 		return ;
 	}
@@ -607,8 +607,8 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& data)
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
     		m_pLabelPromtp->SetVisible( true );
     		m_pLabelPromtp->SetFontSize( 20 );
-            //CGRect tRect = m_pLabelPromtp->GetFrameRect();
-    		//m_pLabelPromtp->SetFrameRect( CGRectMake( tRect.origin.x/2, tRect.origin.y, tRect.size.width*3, tRect.size.height*2));
+            //CCRect tRect = m_pLabelPromtp->GetFrameRect();
+    		//m_pLabelPromtp->SetFrameRect( CCRectMake( tRect.origin.x/2, tRect.origin.y, tRect.size.width*3, tRect.size.height*2));
 		}
 		return ;
 	}
@@ -622,8 +622,8 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& data)
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
     		m_pLabelPromtp->SetVisible( true );
     		m_pLabelPromtp->SetFontSize( 20 );
-            //CGRect tRect = m_pLabelPromtp->GetFrameRect();
-    		//m_pLabelPromtp->SetFrameRect( CGRectMake( tRect.origin.x/2, tRect.origin.y, tRect.size.width*3, tRect.size.height*2));
+            //CCRect tRect = m_pLabelPromtp->GetFrameRect();
+    		//m_pLabelPromtp->SetFrameRect( CCRectMake( tRect.origin.x/2, tRect.origin.y, tRect.size.width*3, tRect.size.height*2));
 		}
 		return ;
 	}
@@ -667,7 +667,8 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
 	if ( pImage )
 	{
 		NDPicture * pPicture = new NDPicture;
-		pPicture->Initialization( NDPath::GetUIImgPath( SZ_UPDATE_BG_PNG_PATH ) );
+        std::string str = SZ_UPDATE_BG_PNG_PATH;
+		pPicture->Initialization( NDPath::GetUIImgPath( str.c_str() ).c_str() );
 		pImage->SetPicture( pPicture, true );
 	}
 #endif
@@ -804,18 +805,18 @@ bool CSMLoginScene::OnTargetBtnEvent( NDUINode * uiNode, int targetEvent )
 //===========================================================================
 bool CSMLoginScene::CreatConfirmDlg( const char * szTip )
 {
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 	
 	NDUILayer *	pLayer	= new NDUILayer();
 	if ( !pLayer )
 		return false;
 	pLayer->Initialization();
-	pLayer->SetFrameRect( CGRectMake(0, 0, winSize.width, winSize.height) );
+	pLayer->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height) );
 	pLayer->SetTag( TAG_DLG_CONFIRM );
 	AddChild(pLayer);	
 	
 	NDUILoad tmpUILoad2;
-	tmpUILoad2.Load( "ShowYesOrNoDlg.ini", pLayer, this, CGSizeMake(0, 0) );
+	tmpUILoad2.Load( "ShowYesOrNoDlg.ini", pLayer, this, CCSizeMake(0, 0) );
 	
 	NDUILabel * pLabelTip	= (NDUILabel*)pLayer->GetChild( TAG_LABEL_TIP );
 	if ( pLabelTip && szTip )
@@ -855,12 +856,12 @@ void CSMLoginScene::ShowWaitingAni()
 	{
 		return;
 	}
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();	
+	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();	
 	CUISpriteNode *node = new CUISpriteNode;
 	node->Initialization();
 	node->ChangeSprite(NDPath::GetAniPath("busy.spr"));
 	node->SetTag( TAG_SPRITE_NODE );
-	node->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
+	node->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
 	AddChild(node);
 #endif
 }
@@ -873,17 +874,17 @@ void CSMLoginScene::CloseWaitingAni()
 //显示检测WIFI失败对话框
 void CSMLoginScene::ShowCheckWIFIOff()
 {
-	//CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	//CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 	//
 	//NDUILayer *	pLayer	= new NDUILayer();
 	//if ( !pLayer )
 	//	return;
 	//pLayer->Initialization();
-	//pLayer->SetFrameRect( CGRectMake(0, 0, winSize.width, winSize.height) );
+	//pLayer->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height) );
 	//AddChild(pLayer);
 	//m_pLayerCheckWIFI = pLayer;
 	//NDUILoad tmpUILoad;
-	//tmpUILoad.Load( "CheckWIFIDlg.ini", pLayer, this, CGSizeMake(0, 0) );
+	//tmpUILoad.Load( "CheckWIFIDlg.ini", pLayer, this, CCSizeMake(0, 0) );
 	CreatConfirmDlg( SZ_WIFI_OFF );
 	m_iState = 1;
 }

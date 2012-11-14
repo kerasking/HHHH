@@ -11,9 +11,9 @@
 
 // @implementation CCTexture2D(NDUI)
 // 
-// - (void)ndDrawInRect:(CGRect)rect
+// - (void)ndDrawInRect:(CCRect)rect
 // {
-// 	CGSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
+// 	CCSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
 // 	
 // 	GLfloat	 coordinates[] = {  0.0f,	maxT_,
 // 		maxS_,	maxT_,

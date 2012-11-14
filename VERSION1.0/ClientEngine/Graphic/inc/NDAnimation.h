@@ -41,7 +41,7 @@ public:
 	NDAnimation();
 	~NDAnimation();
 
-	CGRect getRect();
+	CCRect getRect();
 
 	void runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord, bool bNeedDraw);
 	void runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord, bool bNeedDraw,

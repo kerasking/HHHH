@@ -51,7 +51,7 @@ public:
 protected:
 	void draw(); override
 public:
-	void SetFrameRect(CGRect rect); override
+	void SetFrameRect(CCRect rect); override
 protected:
 	bool CanDestroyOnRemoveAllChildren(NDNode* pNode);override
 };

@@ -47,7 +47,7 @@ namespace NDEngine
 		//void Initialization(vector<const char*>& vImgFiles); hide
 		
 		// 将多张图片融合成1张, 大小以第一张为准 null end
-		//void Initialization(vector<const char*>& vImgFiles, vector<CGRect>& vImgCustomRect, vector<CGPoint>&vOffsetPoint); hide
+		//void Initialization(vector<const char*>& vImgFiles, vector<CCSize>& vImgCustomRect, vector<CCPoint>&vOffsetPoint); hide
 
 //		
 //		函数：Initialization
@@ -61,7 +61,7 @@ namespace NDEngine
 //		作用：剪切资源图片的特定矩形区域
 //		参数：rect剪切区域
 //		返回值：无
-		void Cut(CGRect rect);
+		void Cut(CCSize rect);
 //		
 //		函数：SetReverse
 //		作用：水平翻转图片
@@ -85,13 +85,13 @@ namespace NDEngine
 //		作用：将图片绘制于屏幕指定区域；该方法必须每帧都被调用
 //		参数：rect绘制区域
 //		返回值：无
-		void DrawInRect(CGRect rect);
+		void DrawInRect(CCSize rect);
 //		
 //		函数：GetSize
 //		作用：获取设置完后的图片的大小
 //		参数：无
 //		返回值：大小
-		CGSize GetSize();
+		CCSize GetSize();
 //		
 //		函数：Copy
 //		作用：拷贝一份设置
@@ -109,7 +109,7 @@ namespace NDEngine
 		void SetTexture(CCTexture2D* tex);
 	private:
 		CCTexture2D *m_texture;
-		CGRect m_cutRect;
+		CCSize m_cutRect;
 		bool m_reverse, m_bAdvance;
 		PictureRotation m_rotation;
 		
@@ -127,7 +127,7 @@ namespace NDEngine
 		int m_verticalPixel;
 		
 		void SetCoorinates();
-		void SetVertices(CGRect drawRect);
+		void SetVertices(CCSize drawRect);
 	};
 	
 	class NDPictureDictionary : public NDDictionary
@@ -176,10 +176,10 @@ namespace NDEngine
 	private:
 		NDPictureDictionary *m_textures;
 		
-		std::map<std::string, CGSize> m_mapStr2Size;
+		std::map<std::string, CCSize> m_mapStr2Size;
 		
 	private:
-		CGSize GetImageSize(std::string filename);
+		CCSize GetImageSize(std::string filename);
 	};
 }
 

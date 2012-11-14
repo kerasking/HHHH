@@ -15,6 +15,7 @@
 #include <vector>
 #include "ccTypes.h"
 
+const char* DataFilePath();
 #define ScriptMgrObj	NDEngine::ScriptMgr::GetSingleton()
 using namespace cocos2d;
 

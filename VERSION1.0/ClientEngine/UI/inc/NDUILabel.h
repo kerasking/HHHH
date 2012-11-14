@@ -96,11 +96,11 @@ public:
 		
 		void SetFontBoderColer(cocos2d::ccColor4B fontColor);
 		
-		CGSize GetTextureSize() { if (m_texture) return m_texture->getContentSizeInPixels(); return CGSizeZero; }
+		CCSize GetTextureSize() { if (m_texture) return m_texture->getContentSizeInPixels(); return CCSizeZero; }
 		void SetHasFontBoderColor(bool bIsBorder){m_bHasFontBoderColor = bIsBorder;};
 	public:
 		void draw(); override		
-		void OnFrameRectChange(CGRect srcRect, CGRect dstRect); override
+		void OnFrameRectChange(CCRect srcRect, CCRect dstRect); override
 		
 	private:
 	void preDraw();
@@ -116,7 +116,7 @@ public:
 		unsigned int m_uiFontSize;
 		unsigned int m_uiRenderTimes;
 		LabelTextAlignment m_eTextAlignment;
-		CGRect m_kCutRect;
+		CCRect m_kCutRect;
 		
 		bool m_bNeedMakeTex;
 		bool m_bNeedMakeCoo;

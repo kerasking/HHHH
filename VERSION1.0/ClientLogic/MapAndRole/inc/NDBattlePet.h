@@ -36,11 +36,11 @@ namespace NDEngine
 		
 		bool OnDrawBegin(bool bDraw); override
 		
-		void WalkToPosition(CGPoint toPos);
+		void WalkToPosition(CCPoint toPos);
 		
 		void OnMoveEnd(); override
 		
-		void SetPosition(CGPoint newPosition); override
+		void SetPosition(CCPoint newPosition); override
 		
 		int GetOrder(); override
 		
@@ -124,7 +124,7 @@ namespace NDEngine
 		
 		static int tmpRestPoint,tmpStrPoint,tmpStaPoint,tmpAgiPoint,tmpIniPoint;// 加减点完前临时的宠物属性
 	private:
-		CGPoint m_preSetPos;
+		CCPoint m_preSetPos;
 		SET_BATTLE_SKILL_LIST m_setActSkill;
 		SET_BATTLE_SKILL_LIST m_setPasSkill;
 		

@@ -227,13 +227,13 @@ void CUIEdit::draw()
 		return;
 	}
 	
-	CGRect	scrRect	= this->GetScreenRect();
+	CCRect	scrRect	= this->GetScreenRect();
 	
 	if (m_pPlatformInput)
 	{
         //** chh 2012-06-19 **//
-        CGRect scrRect = m_lbText->GetFrameRect();
-        CGSize textSize = getStringSize(TEST_TEXT,m_lbText->GetFontSize());
+        CCRect scrRect = m_lbText->GetFrameRect();
+        CCSize textSize = getStringSize(TEST_TEXT,m_lbText->GetFontSize());
         int HBorder = (this->GetScreenRect().size.height-textSize.height)/2;
         
         
@@ -261,11 +261,11 @@ void CUIEdit::draw()
 	}
 	if (m_pPlatformInput && !m_pPlatformInput->IsShow() && m_lbText)
 	{
-		CGRect rectText		= m_lbText->GetScreenRect();
+		CCRect rectText		= m_lbText->GetScreenRect();
 		if (!CompareEqualFloat(rectText.origin.x, scrRect.origin.x) || 
 			!CompareEqualFloat(rectText.origin.y, scrRect.origin.y))
 		{
-            CGRect rect = scrRect;
+            CCRect rect = scrRect;
             rect.origin.x += TEXT_LEFT_BORDER;
             m_lbText->SetFrameRect(rect);
 		}
@@ -290,12 +290,12 @@ void CUIEdit::SetVisible(bool visible)
 		}
 	}
 }
-void CUIEdit::SetFrameRect(CGRect rect)
+void CUIEdit::SetFrameRect(CCRect rect)
 {
 	NDUINode::SetFrameRect(rect);
 	if (m_lbText)
 	{
-        CGRect rect = this->GetScreenRect();
+        CCRect rect = this->GetScreenRect();
         rect.origin.x += TEXT_LEFT_BORDER;
 		m_lbText->SetFrameRect(rect);
 	}

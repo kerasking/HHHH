@@ -61,7 +61,7 @@ public:
 	NDSharedPtr(const ThisType& o)
 	{
 		m_pkPointer = o.m_pkPointer;
-		m_pkCount = o.m_count;
+		m_pkCount = o.m_pkCount;
 		addref();
 		SP_Set_Shared_From_This(this, m_pkPointer);
 	}

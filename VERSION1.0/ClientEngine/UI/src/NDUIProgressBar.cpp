@@ -54,12 +54,12 @@ namespace NDEngine
 		
 		if (this->IsVisibled()) 
 		{
-			CGRect scrRect = this->GetScreenRect();
+			CCRect scrRect = this->GetScreenRect();
 			if (scrRect.size.width > 0) 
 			{
-				DrawRecttangle(CGRectMake(scrRect.origin.x, scrRect.origin.y, scrRect.size.width, scrRect.size.height), ccc4(193, 193, 194, 200));
+				DrawRecttangle(CCRectMake(scrRect.origin.x, scrRect.origin.y, scrRect.size.width, scrRect.size.height), ccc4(193, 193, 194, 200));
 				float percent = m_step / m_count;
-				DrawRecttangle(CGRectMake(scrRect.origin.x, scrRect.origin.y, percent * scrRect.size.width, scrRect.size.height), ccc4(0, 255, 0, 200));
+				DrawRecttangle(CCRectMake(scrRect.origin.x, scrRect.origin.y, percent * scrRect.size.width, scrRect.size.height), ccc4(0, 255, 0, 200));
 			}
 		}		
 	}

@@ -1,3 +1,4 @@
+#define _LIBCPP_FUNCTIONAL
 #include <fstream>
 #include <assert.h>
 #include <errno.h>

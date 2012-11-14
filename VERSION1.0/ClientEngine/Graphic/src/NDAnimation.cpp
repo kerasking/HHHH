@@ -36,7 +36,7 @@ NDAnimation::~NDAnimation()
 	CC_SAFE_RELEASE (m_pkFrames);
 }
 
-CGRect NDAnimation::getRect()
+CCRect NDAnimation::getRect()
 {
 	if (m_pkBelongAnimationGroup)
 	{
@@ -53,10 +53,10 @@ CGRect NDAnimation::getRect()
 			nPosY -= m_nBottomY - m_nY;
 		}
 
-		return CGRectMake(nPosX, nPosY, m_nW, m_nH);
+		return CCRectMake(nPosX, nPosY, m_nW, m_nH);
 	}
 
-	return CGRectZero;
+	return CCRectZero;
 }
 
 void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,

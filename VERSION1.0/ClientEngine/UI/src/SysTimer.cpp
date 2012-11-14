@@ -2,8 +2,11 @@
 #include "SysTimer.h"
 #include <stdio.h>
 #include "I_Analyst.h"
-#include <WinSock2.h>
 #include "CCStdC.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#include <WinSock2.h>
+#endif
 
 // Low-resolution ticks value of the application
 static struct timeval ticks_start;

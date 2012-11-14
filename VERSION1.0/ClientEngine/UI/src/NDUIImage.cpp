@@ -46,11 +46,11 @@ namespace NDEngine
 		this->SetPicture(pic, true);
 	}
 	
-	CGSize NDUIImage::GetPicSize()
+	CCSize NDUIImage::GetPicSize()
 	{
 		if (!m_pic)
 		{
-			return CGSizeZero;
+			return CCSizeZero;
 		}
 		
 		return m_pic->GetSize();

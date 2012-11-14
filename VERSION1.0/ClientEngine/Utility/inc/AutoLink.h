@@ -1,6 +1,8 @@
 #ifndef	AUTO_LINK_H
 #define	AUTO_LINK_H
 
+#include "basedefine.h"
+
 ////////////////////////////////////////////////////////////////
 template<typename T>
 class	CAutoLink

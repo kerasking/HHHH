@@ -30,20 +30,20 @@ void DramaTransitionScene::Init()
 {
 	NDScene::Initialization();
 
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 
 	m_pkLayerBack = new NDUILayer;
 	m_pkLayerBack->Initialization();
 	m_pkLayerBack->SetBackgroundColor(ccc4(0, 0, 0, 255));
 	m_pkLayerBack->SetFrameRect(
-			CGRectMake(0, 0, winsize.width, winsize.height));
+			CCRectMake(0, 0, winsize.width, winsize.height));
 	AddChild(m_pkLayerBack);
 
 	m_pkLabelText = new NDUILabel;
 	m_pkLabelText->Initialization();
 	m_pkLabelText->SetTextAlignment(LabelTextAlignmentCenter);
 	m_pkLabelText->SetFrameRect(
-			CGRectMake(winsize.width / 6, winsize.height / 6,
+			CCRectMake(winsize.width / 6, winsize.height / 6,
 					winsize.width * 2 / 3, winsize.height * 2 / 3));
 	m_pkLayerBack->AddChild(m_pkLabelText);
 }

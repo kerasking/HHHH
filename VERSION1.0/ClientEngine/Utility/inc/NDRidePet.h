@@ -38,12 +38,12 @@ namespace NDEngine
 		//......	
 		void Initialization(int lookface);
 
-		void WalkToPosition(CGPoint toPos);
+		void WalkToPosition(CCPoint toPos);
 
 		void OnMoveEnd();
 
-		void SetPosition(CGPoint newPosition);
-		void SetPositionEx(CGPoint pos);
+		void SetPosition(CCPoint newPosition);
+		void SetPositionEx(CCPoint pos);
 
 		void OnMoveTurning(bool bXTurnigToY, bool bInc);
 
@@ -59,7 +59,7 @@ namespace NDEngine
 	private:
 		bool m_bLastPos;
 	private:
-		CGPoint m_preSetPos;
+		CCPoint m_preSetPos;
 		bool m_bMoveCorner;
 		bool m_bXTurnigToY;
 		bool m_bInc;

@@ -20,13 +20,13 @@ public:
 	static PictureNumber* SharedInstance();
 	//number must between 0 and 9
 	NDPicture* TitleGoldNumber(unsigned int number);
-	CGSize GetTitleGoldNumberSize();
+	CCSize GetTitleGoldNumberSize();
 
 	NDPicture* TitleRedNumber(unsigned int number);
-	CGSize GetTitleRedNumberSize();
+	CCSize GetTitleRedNumberSize();
 
 	NDPicture* TitleSplit();
-	CGSize GetTitleSplitSize();
+	CCSize GetTitleSplitSize();
 
 	// 0 ~ 9 / + -
 	NDPicture* BigRed(unsigned int index);
@@ -35,10 +35,10 @@ public:
 	NDPicture* SmallRed(unsigned int index);
 	NDPicture* SmallGreen(unsigned int index);
 	NDPicture* SmallGold(unsigned int index);
-	CGSize GetBigRedSize();
-	CGSize GetSmallWhiteSize();
-	CGSize GetSmallRedSize();
-	CGSize GetSmallGoldSize();
+	CCSize GetBigRedSize();
+	CCSize GetSmallWhiteSize();
+	CCSize GetSmallRedSize();
+	CCSize GetSmallGoldSize();
 
 private:
 	NDPicture* m_picTitleGlod[10];
@@ -79,7 +79,7 @@ public:
 	CCSize GetNumberSize();
 
 private:
-	CGSize m_size;
+	CCSize m_size;
 	void NumberBits(unsigned int number, /*out*/std::vector<unsigned int>& bits);
 	unsigned int exp(unsigned int value, unsigned int n);
 	unsigned int SetTitleRedNumber(bool cleanUp, unsigned int number, unsigned int interval, unsigned int startPos);

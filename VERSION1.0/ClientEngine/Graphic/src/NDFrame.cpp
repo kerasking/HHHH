@@ -167,7 +167,7 @@ void NDFrame::initTiles()
 	m_bNeedInitTitles = false;
 }
 
-void NDFrame::drawHeadAt(CGPoint pos)
+void NDFrame::drawHeadAt(CCPoint pos)
 {
 	///< 头像绘制已放于Lua，此处作废。郭浩
 }
@@ -222,7 +222,7 @@ void NDFrame::run(float fScale)
 			&& pkRecord->getReplace() <= REPLACEABLE_SKIRT_LIFT_LEG)
 		{
 			pkTile->setCutRect(
-				CGRectMake(0, 0,
+				CCRectMake(0, 0,
 				pkTile->getTexture()->getMaxS() * pkTile->getTexture()->getPixelsWide(),
 				pkTile->getTexture()->getMaxT() * pkTile->getTexture()->getPixelsHigh()));
 		}
@@ -232,7 +232,7 @@ void NDFrame::run(float fScale)
 			int nCutY = pkRecord->getY();
 			int nCutW = pkRecord->getW();
 			int nCutH = pkRecord->getH();
-			pkTile->setCutRect(CGRectMake(nCutX, nCutY, nCutW, nCutH)); //@check
+			pkTile->setCutRect(CCRectMake(nCutX, nCutY, nCutW, nCutH)); //@check
 		}
 
 		GLfloat x = pkAnimationGroup->getPosition().x;
@@ -267,7 +267,7 @@ void NDFrame::run(float fScale)
 #endif
 
 		pkTile->setDrawRect(
-			CGRectMake(	x, y, 
+			CCRectMake(	x, y, 
 			pkTile->getCutRect().size.width * fScale,
 			pkTile->getCutRect().size.height * fScale));
 

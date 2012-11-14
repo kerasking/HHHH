@@ -109,7 +109,7 @@ const INIDATA* IniLoad<INIDATA>::QueryData(int ID)
 	
 	std::string res = "";
 	//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResourcePath().c_str()];
-	CCString *table = new CCString(GetResPath(m_inifile.c_str()));
+	CCString *table = new CCString(NDPath::GetResPath(m_inifile.c_str()).c_str());
 	NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:table];
 	
 	if (!stream) //|| ![stream hasBytesAvailable]) 
@@ -146,7 +146,7 @@ template<typename INIDATA>
 void IniLoad<INIDATA>::LoadIndex(std::string indexfile)
 {
 	//NSString *resPath = [NSString stringWithUTF8String:NDPath::GetResourcePath().c_str()];
-	CCString *table = new CCString(GetResPath(indexfile.c_str()));
+	CCString *table = new CCString(NDPath::GetResPath(indexfile.c_str()).c_str());
 	NSInputStream *stream  = [NSInputStream inputStreamWithFileAtPath:table];
 	
 	if (stream)

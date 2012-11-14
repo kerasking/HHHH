@@ -47,7 +47,7 @@ for(int i=0; i<nCtrlAmount; i++)
 
 #include <string>
 #include "cocos2d.h"
-#include "CGPointExtension.h"
+#include "CCPointExtension.h"
 #include <IniFile.h>
 
 struct CTRL_UV
@@ -79,8 +79,8 @@ struct UIINFO
 	CTRL_UV rectFocus;
 	CTRL_UV rectBack;
 
-	CGPoint CtrlPos;
-	CGPoint CtrlAnchorPos;
+	CCPoint CtrlPos;
+	CCPoint CtrlAnchorPos;
 
 	unsigned long   nID;
 	unsigned long   nType;
@@ -158,13 +158,13 @@ public:
 
 
 	//取控件坐标，[注：锚点坐标]
-	CGPoint getPos()
+	CCPoint getPos()
 	{
 		return m_info.CtrlPos;
 	}
 
 	//取控件锚点值
-	CGPoint getAnchorPoint()
+	CCPoint getAnchorPoint()
 	{
 		return m_info.CtrlAnchorPos;
 	}

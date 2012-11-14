@@ -314,7 +314,7 @@ bool CCTexture2D::initWithImage(CCImage *uiImage)
     CCConfiguration *conf = CCConfiguration::sharedConfiguration();
     
     unsigned maxTextureSize = conf->getMaxTextureSize();
-    if (imageWidth > maxTextureSize || imageHeight > maxTextureSize) 
+    if (maxTextureSize > 0 && (imageWidth > maxTextureSize || imageHeight > maxTextureSize) )
     {
         CCLOG("cocos2d: WARNING: Image (%u x %u) is bigger than the supported %u x %u", imageWidth, imageHeight, maxTextureSize, maxTextureSize);
         this->release();
@@ -1114,6 +1114,7 @@ void CCTexture2D::SaveToBitmap(const char* pszPngFile,
 		unsigned char** pBMPColorBuf, int rowByteWidth, int width, int height,
 		int colorDepth, CCTexture2D::RGBQUAD* pPalette, int nPaletteLen)
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	int mPackedRowByteWidth = (rowByteWidth + 3) & 0xfffffffc;
 	BYTE *pBmpBuf = (BYTE*) malloc(
 			mPackedRowByteWidth * height + 54 + nPaletteLen * sizeof(CCTexture2D::RGBQUAD));
@@ -1164,6 +1165,7 @@ void CCTexture2D::SaveToBitmap(const char* pszPngFile,
 	WriteToBMPFile(szFileName, pBmpBuf,
 			mPackedRowByteWidth * height + 54 + nPaletteLen * sizeof(CCTexture2D::RGBQUAD));
 	free(pBmpBuf);
+#endif
 }
 
 void CCTexture2D::WriteToBMPFile(char* pFileName, BYTE* pBmpBuf, int nBmplen)

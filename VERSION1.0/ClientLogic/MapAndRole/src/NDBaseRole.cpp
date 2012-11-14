@@ -25,7 +25,9 @@
 #include "define.h"
 #include "CCString.h"
 #include "NDDebugOpt.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "NDConsole.h"
+#endif
 
 using namespace NDEngine;
 
@@ -66,7 +68,7 @@ NDBaseRole::NDBaseRole()
 	m_pkSubNode = NDNode::Node();
 	m_pkSubNode->SetContentSize(NDDirector::DefaultDirector()->GetWinSize());
 
-	m_kScreenPosition = CGPointZero;
+	m_kScreenPosition = CCPointZero;
 	m_pkRingPic = NULL;
 	m_pkPicShadow = NULL;
 	m_pkPicShadowBig = NULL;
@@ -121,16 +123,16 @@ NDBaseRole::~NDBaseRole()
 	//}
 }
 
-CGRect NDBaseRole::GetFocusRect()
+CCRect NDBaseRole::GetFocusRect()
 {
 	/*
 	 if (!IsFocus())
 	 {
-	 return CGRectZero;
+	 return CCRectZero;
 	 }
 	 */
 
-	CGPoint point;
+	CCPoint point;
 
 	if (m_pkRidePet)
 	{
@@ -146,9 +148,9 @@ CGRect NDBaseRole::GetFocusRect()
 		m_pkRingPic = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
 	}
 
-	CGSize sizeRing = m_pkRingPic->GetSize();
+	CCSize sizeRing = m_pkRingPic->GetSize();
 
-	return CGRectMake(point.x - 8 - 13, point.y - 16 - 5, sizeRing.width,
+	return CCRectMake(point.x - 8 - 13, point.y - 16 - 5, sizeRing.width,
 			sizeRing.height);
 }
 
@@ -221,19 +223,19 @@ void NDBaseRole::DrawRingImage(bool bDraw)
 		{
 			m_pkRingPic = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
 		}
-		CGSize sizeRing = m_pkRingPic->GetSize();
+		CCSize sizeRing = m_pkRingPic->GetSize();
 
 		if (GetParent())
 		{
 			NDLayer *layer = (NDLayer*) GetParent();
-			CGSize sizemap = layer->GetContentSize();
+			CCSize sizemap = layer->GetContentSize();
 			if (!m_pkRidePet)
 			{
-				//m_picRing->DrawInRect(CGRectMake(GetPosition().x-13-8, GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
+				//m_picRing->DrawInRect(CCRectMake(GetPosition().x-13-8, GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
 			}
 			else
 			{
-				//m_picRing->DrawInRect(CGRectMake(ridepet->GetPosition().x-13-8, ridepet->GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
+				//m_picRing->DrawInRect(CCRectMake(ridepet->GetPosition().x-13-8, ridepet->GetPosition().y-5-16+320-sizemap.height, sizeRing.width, sizeRing.height));
 			}
 		}
 	}
@@ -245,7 +247,7 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 	if (!NDDebugOpt::getDrawRoleEnabled()) return false;
 
 	NDNode *node = GetParent();
-	CGSize sizemap;
+	CCSize sizemap;
 
 	if (node)
 	{
@@ -254,11 +256,11 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 		{
 			//把baserole坐标转成屏幕坐标
 			NDMapLayer *layer = (NDMapLayer*) node;
-			CGPoint screen = layer->GetScreenCenter();
-			CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+			CCPoint screen = layer->GetScreenCenter();
+			CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 			m_kScreenPosition = ccpSub(GetPosition(),
 					ccpSub(screen,
-							CGPointMake(winSize.width / 2,
+							CCPointMake(winSize.width / 2,
 									winSize.height / 2)));
 		}
 		else
@@ -312,7 +314,7 @@ void NDBaseRole::OnDrawEnd(bool bDraw)
 	//
 }
 
-CGPoint NDBaseRole::GetScreenPoint()
+CCPoint NDBaseRole::GetScreenPoint()
 {
 	return m_kScreenPosition;
 }
@@ -975,7 +977,7 @@ void NDBaseRole::SetCloakImageWithEquipmentId(int equipmentId)
 	}
 }
 
-void NDBaseRole::DrawHead(const CGPoint& pos)
+void NDBaseRole::DrawHead(const CCPoint& pos)
 {
 	m_pkAniGroup->setRuningSprite(this);
 	m_pkAniGroup->drawHeadAt(pos);
@@ -1121,7 +1123,7 @@ void NDBaseRole::SetCamp(CAMP_TYPE btCamp)
 	}
 }
 
-void NDBaseRole::SetPositionEx(CGPoint newPosition)
+void NDBaseRole::SetPositionEx(CCPoint newPosition)
 {
 	NDSprite::SetPosition(newPosition);
 }
@@ -1276,7 +1278,7 @@ void NDBaseRole::SetShadowOffset(int iX, int iY)
 	m_iShadowOffsetY = iY;
 }
 
-void NDBaseRole::HandleShadow(CGSize parentsize)
+void NDBaseRole::HandleShadow(CCSize parentsize)
 {
 	//change by tangziqin 不存在shadow.png的图片
 	//return;
@@ -1307,21 +1309,21 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 		pic = m_pkPicShadowBig;
 	}
 
-	CGSize sizeShadow = pic->GetSize();
+	CCSize sizeShadow = pic->GetSize();
 
 	int x = m_kPosition.x - DISPLAY_POS_X_OFFSET;
 	int y = m_kPosition.y - DISPLAY_POS_Y_OFFSET;
 
 //@check
 // 	pic->DrawInRect(
-// 			CGRectMake(x + m_iShadowOffsetX,
+// 			CCRectMake(x + m_iShadowOffsetX,
 // 					y + m_iShadowOffsetY
 // 							+ NDDirector::DefaultDirector()->GetWinSize().height
 // 							- parentsize.height, sizeShadow.width,
 // 					sizeShadow.height));
 
 	pic->DrawInRect(
-		CGRectMake(x + m_iShadowOffsetX, y + m_iShadowOffsetY,
+		CCRectMake(x + m_iShadowOffsetX, y + m_iShadowOffsetY,
 		sizeShadow.width, sizeShadow.height));
 #endif
 }
@@ -1437,7 +1439,7 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 // 		return true;
 // 	}
 // 
-// 	CGPoint kPosition = pkAnimationGroup->getPosition();
+// 	CCPoint kPosition = pkAnimationGroup->getPosition();
 // 	pkAnimationGroup->setRunningMapSize(pkLayer->GetContentSize());
 // 
 // 	NDAnimation* pkAnimation = nil;
@@ -1453,7 +1455,7 @@ void NDBaseRole::HandleShadow(CGSize parentsize)
 // 		return true;
 // 	}
 // 
-// 	CGPoint kTargetPos = ccp(0, 0);
+// 	CCPoint kTargetPos = ccp(0, 0);
 // 	if (pkAnimationGroup->getType() == SUB_ANI_TYPE_NONE)
 // 	{
 // 		if (kSag.reverse)

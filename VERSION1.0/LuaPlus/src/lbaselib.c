@@ -18,6 +18,7 @@
 
 #include "lauxlib.h"
 #include "lualib.h"
+#include "wchar.h"
 
 
 NAMESPACE_LUA_BEGIN
@@ -64,7 +65,11 @@ static int luaB_print (lua_State *L) {
           *outPos++ = *ws++;
         }
         *outPos++ = 0;
-        fputws(out, stdout);
+#ifdef WIN32
+          OutputDebugStringW(out);
+#else
+          fputws(out, stdout);
+#endif
       }
     }
     lua_pop(L, 1);  /* pop result */

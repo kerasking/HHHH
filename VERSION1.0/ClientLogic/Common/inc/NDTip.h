@@ -36,7 +36,7 @@ public:
 	
 	void Initialization(); override
 	void draw(); override
-	void SetFrameRect(CGRect rect); override
+	void SetFrameRect(CCRect rect); override
 	
 	void Hide();
 	void Show();
@@ -44,13 +44,13 @@ public:
 	void SetText(std::string str);
 	void SetTextFontSize(unsigned int uisize);
 	void SetTextColor(ccColor4B color);
-	CGSize GetTipSize();
+	CCSize GetTipSize();
 	
 	void SetWidth(int iWidth);
 	
 	void SetTalkStyle(bool bSet);
 	
-	void SetTalkDisplayPos(CGPoint pos);
+	void SetTalkDisplayPos(CCPoint pos);
 	
 	void SetTriangleAlign(TipTriangleAlign align);
 	
@@ -65,7 +65,7 @@ private:
 	
 	NDUILine *m_line[2];
 	NDUITriangle *m_triangleNode;
-	CGPoint	m_posTalk;
+	CCPoint	m_posTalk;
 	bool m_bNeedCacl;
 	TipTriangleAlign m_alignTriangle;
 };
@@ -79,7 +79,7 @@ public:
 	
 	void addTalkMsg(std::string msg,int sec);
 	
-	void SetDisPlayPos(CGPoint pos);
+	void SetDisPlayPos(CCPoint pos);
 	
 	void SetFix();
 	
@@ -89,7 +89,7 @@ public:
 	
 	void SetTriangleAlign(TipTriangleAlign align);
 	
-	CGSize GetSize();
+	CCSize GetSize();
 	
 private:
 	void reset();
@@ -103,7 +103,7 @@ private:
 	long timeForTalkMsg;
 	int moveSpeed;
 	std::deque<std::string> talkMsgs;
-	CGPoint m_pos;
+	CCPoint m_pos;
 	LayerTip *m_tip[2];
 	bool m_bConstant;
 };
