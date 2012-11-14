@@ -4,7 +4,7 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := tinyxml
 
-LOCAL_MODULE_FILENAME := tinyxml
+LOCAL_MODULE_FILENAME := libtinyxml
 
 LOCAL_SRC_FILES := \
 ../../src/tinystr.cpp \

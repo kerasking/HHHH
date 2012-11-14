@@ -4,7 +4,7 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := ClientLogic
 
-LOCAL_MODULE_FILENAME := ClientLogic
+LOCAL_MODULE_FILENAME := libClientLogic
 
 LOCAL_SRC_FILES := \
 ../../BeforeGame/src/NDBeforeGameMgr.cpp \

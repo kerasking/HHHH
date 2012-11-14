@@ -4,7 +4,7 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := luaplus
 
-LOCAL_MODULE_FILENAME := luaplus
+LOCAL_MODULE_FILENAME := libluaplus
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../
 

@@ -4,7 +4,7 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := NetWork
 
-LOCAL_MODULE_FILENAME := NetWork
+LOCAL_MODULE_FILENAME := libNetWork
 
 LOCAL_SRC_FILES := \
 ../../src/Kathy.cpp \

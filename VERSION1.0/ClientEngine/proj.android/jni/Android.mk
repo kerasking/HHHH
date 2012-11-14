@@ -4,7 +4,7 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := ClientEngine
 
-LOCAL_MODULE_FILENAME := ClientEngine
+LOCAL_MODULE_FILENAME := libClientEngine
 
 LOCAL_SRC_FILES := \
 ../../Framework/src/NDBaseDirector.cpp \

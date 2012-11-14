@@ -30,3 +30,6 @@ obj/
 /*.PRI
 /*.PS
 /*.WK3
+gen/
+.settings
+.externalToolBuilders

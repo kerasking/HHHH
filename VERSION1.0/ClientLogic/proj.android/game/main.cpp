@@ -1,4 +1,4 @@
-#include "AppDelegate.h"
+#include "NDGameApplication.h"
 #include "cocos2d.h"
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
@@ -29,7 +29,7 @@ void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, jobject thi
         // view->create(480, 320);  Please change it to (320, 480) if you're in portrait mode.
         cocos2d::CCDirector::sharedDirector()->setOpenGLView(view);
 
-        AppDelegate *pAppDelegate = new AppDelegate();
+        NDEngine::NDGameApplication *pAppDelegate = new NDEngine::NDGameApplication();
         cocos2d::CCApplication::sharedApplication().run();
     }
     else
