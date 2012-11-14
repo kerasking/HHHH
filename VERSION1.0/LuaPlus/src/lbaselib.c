@@ -18,7 +18,9 @@
 
 #include "lauxlib.h"
 #include "lualib.h"
-//#include "wchar.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#include "wchar.h"
+#endif
 
 
 NAMESPACE_LUA_BEGIN

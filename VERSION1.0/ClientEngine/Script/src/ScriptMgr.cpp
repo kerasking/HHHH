@@ -29,7 +29,9 @@
 #include "NDPath.h"
 #include "NDUtility.h"
 #include "NDProfile.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "direct.h"
+#endif
 #include "uitypes.h"
 
 using namespace NDEngine;
