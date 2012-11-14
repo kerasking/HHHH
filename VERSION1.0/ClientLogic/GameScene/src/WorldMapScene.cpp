@@ -29,6 +29,8 @@
 #define REACH_Y				(8)
 #define MOVE_STEP			(8)
 
+extern WorldMapLayer* g_pWorldMapLayer = NULL; //for debug only.
+
 IMPLEMENT_CLASS(WorldMapLayer, NDUILayer)
 
 WorldMapLayer::WorldMapLayer()
@@ -48,10 +50,13 @@ WorldMapLayer::WorldMapLayer()
 WorldMapLayer::~WorldMapLayer()
 {
 	m_buttons->release();
+	g_pWorldMapLayer = NULL;
 }
 
 void WorldMapLayer::Initialization(int nMapId)
 {
+	g_pWorldMapLayer = this;
+
 	int width = m_mapData->getMapSize().width;
 	int height = m_mapData->getMapSize().height;
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
@@ -109,6 +114,7 @@ void WorldMapLayer::Initialization(int nMapId)
 		pkTile->release();
 	}
 
+	// load pictures for button
 	NDPicture* picClose	= NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("btn_close.png"));
 	NDPicture* picCloseSelect	= NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("btn_close.png"));    
 	CGSize sizeClose	= picClose->GetSize();
@@ -117,26 +123,38 @@ void WorldMapLayer::Initialization(int nMapId)
 	picClose->Cut(CGRectMake(0,  0,  sizeClose.width,  sizeClose.height/2 - 2));
 	picCloseSelect->Cut(CGRectMake(0,  sizeClose.height/2,  sizeClose.width,  sizeClose.height/2));
 
-	CGRect rectClose	= CGRectMake((winsize.width - sizeClose.width/iFlag), 0,
-									 sizeClose.width/iFlag, sizeClose.height/2/iFlag);
+	// init close button
+	{
+		const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+		const float oneOverScale = 1.0f / fScale;
+		CGRect rectClose = CGRectMake(
+			oneOverScale * (winsize.width - sizeClose.width/iFlag), 
+			0,
+			oneOverScale * sizeClose.width/iFlag, 
+			oneOverScale * sizeClose.height/2/iFlag
+			);
 
-	m_btnClose = new NDUIButton();
-	m_btnClose->Initialization();
-	m_btnClose->SetDelegate(this);
-	m_btnClose->SetImage(picClose);
-	m_btnClose->SetFrameRect(rectClose);
-	AddChild(m_btnClose);
+		m_btnClose = new NDUIButton();
+		m_btnClose->Initialization();
+		m_btnClose->SetDelegate(this);
+		m_btnClose->SetImage(picClose);
+		m_btnClose->SetFrameRect(rectClose);
+		AddChild(m_btnClose);
+	}
 
 	SetCenterAtPos(ccp(winsize.width / 2, winsize.height / 2));
 
-	m_roleNode = new CUIRoleNode;
-	m_roleNode->Initialization();
-	m_roleNode->ChangeLookFace(GetPlayerLookface());
+	// init role node
+	{
+		m_roleNode = new CUIRoleNode;
+		m_roleNode->Initialization();
+		m_roleNode->ChangeLookFace(GetPlayerLookface());
 
-	NDPlayer& player = NDPlayer::defaultHero();
-	m_roleNode->GetRole()->ChangeModelWithMount(player.m_nRideStatus, player.m_nMountType);
-	m_roleNode->SetRoleScale(0.5f);
-	AddChild(m_roleNode);
+		NDPlayer& player = NDPlayer::defaultHero();
+		m_roleNode->GetRole()->ChangeModelWithMount(player.m_nRideStatus, player.m_nMountType);
+		m_roleNode->SetRoleScale(0.5f);
+		AddChild(m_roleNode);
+	}
 	ShowRoleAtPlace(nMapId);
 
 /*	m_timer.SetTimer(this, TAG_TIMER_MOVE, 1.0/24.0);*/
@@ -214,8 +232,6 @@ void WorldMapLayer::draw()
 			tile->draw();
 		}
 	}
-
-	//m_roleNode->draw();
 }
 
 void WorldMapLayer::SetFilter(ID_VEC idVec)
@@ -456,8 +472,8 @@ void WorldMapLayer::OnNodeClick(PlaceNode* button)
 {
 	if (button && !IsInFilterList(button->getPlaceId()))
 	{
-		ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", button->getPlaceId());
-		//Goto(button->getPlaceId());
+		//ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", button->getPlaceId());
+		Goto(button->getPlaceId());
 	}
 }
 
@@ -485,8 +501,8 @@ void WorldMapLayer::Goto(int nMapId)
 		SetTarget(pos);
 		SetTargetMapId(node->getPlaceId());
 
-		ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", nMapId);
-		//m_timer.SetTimer(this, TAG_TIMER_MOVE, float(1) / 24);
+		//ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", nMapId);
+		m_timer.SetTimer(this, TAG_TIMER_MOVE, float(1) / 24);
 		m_curBtn = node;
 	}
 }

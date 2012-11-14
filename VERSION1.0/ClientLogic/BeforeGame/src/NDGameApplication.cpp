@@ -27,6 +27,7 @@
 #include "Battle.h"
 #include "NDProfile.h"
 #include "NDBaseDirector.h"
+#include "WorldMapScene.h"
 
 #if 0
 #include "HelloWorldScene.h" //@todo
@@ -388,8 +389,6 @@ bool NDGameApplication::processPM(const char* cmd)
 		DWORD n = 0;
 		char msg[500] = "";
 		
-		extern NDMapLayer* g_pMapLayer; //for debug only.
-
 		sprintf( msg, 
 			"hero pos(%d, %d)\r\n"
 			"NDDirector content size(%d, %d)\r\n"
@@ -406,16 +405,29 @@ bool NDGameApplication::processPM(const char* cmd)
 
 		WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );		
 
+		extern NDMapLayer* g_pMapLayer; //for debug only.
 		if (g_pMapLayer)
 		{
 			sprintf( msg, 
-				"map layer content size (%d, %d)\r\n"
-				"map layer screen center (%d, %d)\r\n", 
+				"[NDMapLayer] content size (%d, %d)\r\n"
+				"[NDMapLayer] screen center (%d, %d)\r\n", 
 
 				(int)g_pMapLayer->GetContentSize().width,
 				(int)g_pMapLayer->GetContentSize().height,
 				(int)g_pMapLayer->GetScreenCenter().x,
 				(int)g_pMapLayer->GetScreenCenter().y
+				);
+
+			WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );	
+		}
+
+		extern WorldMapLayer* g_pWorldMapLayer; //for debug only.
+		if (g_pWorldMapLayer)
+		{
+			sprintf( msg, 
+				"[WorldMapLayer] content size (%d, %d)\r\n", 
+				(int)g_pWorldMapLayer->GetContentSize().width,
+				(int)g_pWorldMapLayer->GetContentSize().height
 				);
 
 			WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );	
@@ -427,6 +439,7 @@ bool NDGameApplication::processPM(const char* cmd)
 		g_slowDownMul = max(1,val);
 	}
 	else if (
+		sscanf(cmd, "drawdebug %d", &val) == 1 ||
 		sscanf(cmd, "debugdraw %d", &val) == 1 ||
 		sscanf(cmd, "enablefocus %d", &val) == 1)
 	{

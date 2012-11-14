@@ -114,6 +114,7 @@ void NDSprite::Initlalization(const char* pszSprFile, ISpriteEvent* pkEvent,
 void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 {
 	if (isMoving()
+		&& m_pkCurrentAnimation
 		&& nAnimationIndex == m_pkCurrentAnimation->getCurIndexInAniGroup()
 		&& bReverse == m_bReverse) return;
 
@@ -129,20 +130,20 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 
 		m_bReverse = bReverse;
 
-		if (m_pkCurrentAnimation == NULL
-			|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_END
-			|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_START
-			|| m_pkCurrentAnimation->getCurIndexInAniGroup() != 1)
-		{
-			m_pkCurrentAnimation =
-				(NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(
-				nAnimationIndex);
-
-			m_pkCurrentAnimation->setCurIndexInAniGroup(nAnimationIndex);
-			CC_SAFE_RELEASE_NULL (m_pkFrameRunRecord);
-			SAFE_RELEASE(m_pkFrameRunRecord);
-			m_pkFrameRunRecord = new NDFrameRunRecord;
-		}
+// 		if (m_pkCurrentAnimation == NULL
+// 			|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_END
+// 			|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_START
+// 			|| m_pkCurrentAnimation->getCurIndexInAniGroup() != 1)
+// 		{
+// 			m_pkCurrentAnimation =
+// 				(NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(
+// 				nAnimationIndex);
+// 
+// 			m_pkCurrentAnimation->setCurIndexInAniGroup(nAnimationIndex);
+// 			CC_SAFE_RELEASE_NULL (m_pkFrameRunRecord);
+// 			SAFE_RELEASE(m_pkFrameRunRecord);
+// 			m_pkFrameRunRecord = new NDFrameRunRecord;
+// 		}
 
 		m_pkCurrentAnimation =
 			(NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(
@@ -215,10 +216,10 @@ void NDSprite::RunAnimation_WithFrames(bool bDraw)
 
 	m_pkAniGroup->setRuningSprite(this);
 	m_pkAniGroup->setRunningMapSize(pParentNode->GetContentSize());
-	if (bMoved)
-	{
+//	if (bMoved)
+//	{
 		m_pkAniGroup->setPosition(m_kPosition);
-	}
+//	}
 
 	m_pkCurrentAnimation->setReverse(m_bReverse);
 
