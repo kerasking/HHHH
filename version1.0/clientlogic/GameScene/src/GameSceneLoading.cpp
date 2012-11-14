@@ -69,13 +69,13 @@ void GameSceneLoading::Initialization(bool connect/*=false*/, LoginType login/*=
 	
 	m_layer = new NDUILayer();
 	m_layer->Initialization();
-	m_layer->SetFrameRect(CCSizeMake(0, 0, winSize.width, winSize.height));
+	m_layer->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
 	this->AddChild(m_layer);
 	
 
 	NDUIImage* imgBack	= new NDUIImage;
 	imgBack->Initialization();
-	imgBack->SetFrameRect(CCSizeMake(0, 0, winSize.width, winSize.height));
+	imgBack->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
     NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture( NDPath::GetImgPath("Res00/Load/bg_load.png") );
     if (pic) 
 	{
@@ -137,7 +137,7 @@ void GameSceneLoading::draw()
 	{
 		float percent = interval / (float)134;
 		
-		CCSize rect = m_imageProcess->GetFrameRect();
+		CCRect rect = m_imageProcess->GetFrameRect();
 		rect.size.width =  232 * percent;
 		
 		m_imageProcess->SetFrameRect(rect);
@@ -147,7 +147,7 @@ void GameSceneLoading::draw()
 	
 	if (m_picBg)
 	{
-		m_picBg->DrawInRect(CCSizeMake(0, 0, 480, 320));
+		m_picBg->DrawInRect(CCRectMake(0, 0, 480, 320));
 	}
 	
 	

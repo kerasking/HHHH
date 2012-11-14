@@ -399,7 +399,7 @@ public:
     void ProcessOAuthTokenRet(NDTransData& data);
     void ProcessCreateTransactionRet(NDTransData& data);
     void ProcessCloseTransactionRet(NDTransData& data);
-    void sendVerifier(NSString *verifier);
+    void sendVerifier(CCString *verifier);
     
 #ifdef USE_MGSDK
     void VerifierError(MBGError *error);

@@ -38,7 +38,6 @@
 //// 上次登录信息
 #define kLoginData 0
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #define kLastServerName new CCString("LastServerName")
 #define kLastServerIP new CCString("LastServerIP")
 #define kLastServerPort new CCString("LastServerPort")
@@ -46,22 +45,7 @@
 #define kLastAccountPwd new CCString("LastAccountPwd")
 #define kLastServerSendName new CCString("LastServerSendName")
 #define kLinkType new CCString("LinkType")
-#else
-#define kLastServerName NSString(new CCString("LastServerName"))
-#define kLastServerIP NSString(new CCString("LastServerIP"))
-#define kLastServerPort NSString(new CCString("LastServerPort"))
-#define kLastAccountName NSString(new CCString("LastAccountName"))
-#define kLastAccountPwd NSString(new CCString("LastAccountPwd"))
-#define kLastServerSendName NSString(new CCString("LastServerSendName"))
-#define kLinkType NSString(new CCString("LinkType"))
-#endif
-// NSString kLastServerName("LastServerName");
-// NSString kLastServerIP("LastServerIP");
-// NSString kLastServerPort("LastServerPort");
-// NSString kLastAccountName("LastAccountName");
-// NSString kLastAccountPwd("LastAccountPwd");
-// NSString kLastServerSendName("LastServerSendName");
-// NSString kLinkType("LinkType");
+
 //
 //// 游戏设置
 #define kGameSettingData 1

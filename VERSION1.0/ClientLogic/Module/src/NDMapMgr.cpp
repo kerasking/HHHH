@@ -1887,7 +1887,7 @@ void NDMapMgr::processNpcTalk(NDTransData& kData)
 	int nAction = kData.ReadByte();
 	int nID = kData.ReadInt();
 	int nTime = kData.ReadInt();
-	std::string strMessage = kData.ReadUnicodeString2();
+	std::string strMessage = kData.ReadUnicodeString();
 	switch (nAction)
 	{
 	case 0:

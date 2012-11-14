@@ -126,8 +126,8 @@ namespace NDEngine
         
         void  SetOAuthTokenOK() { m_bOAuthTokenOK = true; }
         bool  IsOAuthTokenOK() { return m_bOAuthTokenOK; }
-        void  SetCurrentTransactionID(NSString* idTransaction) { m_CurrentTransactionID = idTransaction; }
-        NSString*   GetCurrentTransactionID() { return m_CurrentTransactionID; }
+        void  SetCurrentTransactionID(CCString* idTransaction) { m_CurrentTransactionID = idTransaction; }
+        CCString*   GetCurrentTransactionID() { return m_CurrentTransactionID; }
 	private:
 		//void CheckFail(NDHttpErrCode errCode);
 		
@@ -139,7 +139,7 @@ namespace NDEngine
         std::string   m_strRoleName;
         int           m_nProfession;
         unsigned int  m_CurrentUser_id;
-        NSString*     m_CurrentTransactionID;
+        CCString*     m_CurrentTransactionID;
 		//服务器列表相关
 	public:
 		struct big_area

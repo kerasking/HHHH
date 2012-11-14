@@ -11,7 +11,7 @@
 
 //#include "NDFrame.h"
 #include "CCArray.h"
-#include "Utility.h"
+#include "UtilityInc.h"
 #include "NDFrame.h"
 
 #define ANIMATION_TYPE_ONCE_CYCLE 0

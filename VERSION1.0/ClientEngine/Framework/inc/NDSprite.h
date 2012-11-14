@@ -24,10 +24,10 @@
 #include "define.h"
 #include "NDConstant.h"
 #include "NDBaseFighter.h"
+#include "platform.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "BaseType.h"
 #include "TQPlatform.h"
-#include "platform.h"
 #import <Foundation/Foundation.h>
 #endif
 

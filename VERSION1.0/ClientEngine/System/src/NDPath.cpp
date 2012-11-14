@@ -79,8 +79,7 @@ const char* NDPath::GetResPath()
     return s_ResRootPath->c_str();
     
 #else
-	s_respath = NDPath_ResPath;
-    return s_respath;
+    return NDPath_ResPath.c_str();
 #endif
 }
 
@@ -331,11 +330,11 @@ const char* NDPath::GetResourcePath()
         s_ResBasePath = new string;
         NSString *path = [NSString stringWithFormat:@"%@/", [[NSBundle mainBundle] resourcePath]];
         *s_ResBasePath = [path UTF8String];
-    }
+	}
+	return s_ResBasePath->c_str();
 #else
-	*s_ResBasePath = "";
+	return "";
 #endif
-    return s_ResBasePath->c_str();
 }
 
 const string& NDPath::GetImgPathNew( const char* fileName )

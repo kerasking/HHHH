@@ -13,7 +13,7 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 #else
-#include <GLES/gl.h>
+//#include <GLES/gl.h>
 #endif
 //#include "NDIphoneEdit.h"
 #include "NDUIButton.h"
@@ -36,6 +36,7 @@
 #include "NDDirector.h"
 #include "NDUIImage.h"
 #include "NDDebugOpt.h"
+#include "BaseType.h"
 
 using namespace cocos2d;
 

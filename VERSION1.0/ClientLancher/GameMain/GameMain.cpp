@@ -1,7 +1,7 @@
 /*
 *
 */
-
+#include "windows.h"
 #include "GameApp.h"
 //#include "CCString.h"
 #include "XMLReader.h"
