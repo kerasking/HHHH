@@ -251,7 +251,7 @@ namespace NDEngine {
 	
 	void NavigateTo(int nMapId, int nMapX, int nMapY)
 	{
-		//NDMapMgrObj.NavigateTo(nMapX, nMapY, nMapId);
+		NDMapMgrObj.NavigateTo(nMapX, nMapY, nMapId);
 	}
     void BackCity()
 	{

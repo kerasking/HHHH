@@ -4187,6 +4187,24 @@ void NDMapMgr::throughMap(int mapX, int mapY, int mapId)
 // 	}
 //}
 
+void NDMapMgr::NavigateTo(int mapX, int mapY, int mapId)
+{
+	if (GetMapID() == mapId)
+	{
+		if(NDPlayer::defaultHero().CanSwitch(mapX, mapY))
+		{
+			AutoPathTipObj.work("");
+			NDPlayer::defaultHero().OnMoveEnd();
+			return;
+		}
+		NDPlayer::defaultHero().Walk(CGPointMake(mapX * MAP_UNITSIZE, mapY * MAP_UNITSIZE), SpriteSpeedStep4, true);
+		AutoPathTipObj.work("");
+		return;
+	}
+
+	throughMap(mapX, mapY, mapId);
+}
+
 void NDMapMgr::NavigateToNpc(int nNpcId)
 {
 	NDNpc* pkNPC = GetNpcByID(nNpcId);
