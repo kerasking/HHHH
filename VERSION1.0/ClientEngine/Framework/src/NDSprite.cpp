@@ -113,6 +113,10 @@ void NDSprite::Initlalization(const char* pszSprFile, ISpriteEvent* pkEvent,
 
 void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 {
+	if (isMoving()
+		&& nAnimationIndex == m_pkCurrentAnimation->getCurIndexInAniGroup()
+		&& bReverse == m_bReverse) return;
+
 	//NDLog("animationIndex%d",animationIndex);
 	if (m_pkAniGroup)
 	{
@@ -133,6 +137,7 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 			m_pkCurrentAnimation =
 				(NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(
 				nAnimationIndex);
+
 			m_pkCurrentAnimation->setCurIndexInAniGroup(nAnimationIndex);
 			CC_SAFE_RELEASE_NULL (m_pkFrameRunRecord);
 			SAFE_RELEASE(m_pkFrameRunRecord);
@@ -142,6 +147,7 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 		m_pkCurrentAnimation =
 			(NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(
 			nAnimationIndex);
+
 		m_pkCurrentAnimation->setCurIndexInAniGroup(nAnimationIndex);
 		CC_SAFE_RELEASE_NULL (m_pkFrameRunRecord);
 		SAFE_RELEASE(m_pkFrameRunRecord);

@@ -326,21 +326,30 @@ void NDBaseRole::SetAction(bool bMove)
 	{
 		if (AssuredRidePet())
 		{
+			//WriteCon( "NDBaseRole::SetAction() -- 骑宠移动\r\n" );
+			
 			setMoveActionWithRidePet();
 		}
 		else
 		{	// 人物普通移动
+			//WriteCon( "NDBaseRole::SetAction() -- 普通移动\r\n" );
+
 			AnimationListObj.moveAction(TYPE_MANUALROLE, this, m_bFaceRight);
 		}
 	}
 	else
 	{
 		if (AssuredRidePet())
-		{	// 骑宠站立
+		{	
+			//WriteCon( "NDBaseRole::SetAction() -- 骑宠站立\r\n" );
+
+			// 骑宠站立
 			setStandActionWithRidePet();
 		}
 		else
 		{
+			//WriteCon( "NDBaseRole::SetAction() -- 普通站立\r\n" );
+
 			AnimationListObj.standAction(TYPE_MANUALROLE, this, m_bFaceRight);
 		}
 	}

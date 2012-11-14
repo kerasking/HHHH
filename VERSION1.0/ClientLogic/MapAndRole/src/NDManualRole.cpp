@@ -1025,10 +1025,15 @@ void NDManualRole::SetAction(bool bMove, bool bIgnoreFighting/*=false*/)
 
 		if (AssuredRidePet() && !isTransformed())
 		{
+			//WriteCon( "NDManualRole::SetAction() -- 骑宠移动\r\n" );
+
 			setMoveActionWithRidePet();
 		}
 		else
-		{ // 人物普通移动
+		{ 
+			//WriteCon( "NDManualRole::SetAction() -- 普通移动\r\n" );
+
+			// 人物普通移动
 			if (isTransformed())
 			{
 				AnimationListObj.moveAction(TYPE_MANUALROLE,
@@ -1059,10 +1064,16 @@ void NDManualRole::SetAction(bool bMove, bool bIgnoreFighting/*=false*/)
 		else if (IsInState(USERSTATE_PRACTISE))
 		{
 			AnimationListObj.sitAction(this, m_bFaceRight);
-		}else if (AssuredRidePet() && !isTransformed())
-		{// 骑宠站立
+		}
+		else if (AssuredRidePet() && !isTransformed())
+		{
+			//WriteCon( "NDManualRole::SetAction() -- 骑宠站立\r\n" );
+
+			// 骑宠站立
 			this->setStandActionWithRidePet();
-		}else {
+		}
+		else 
+		{
 			NDPlayer& player = NDPlayer::defaultHero();
 			if(&player == this)
 				AnimationListObj.standAction(TYPE_MANUALROLE, this, m_bFaceRight);
@@ -1070,7 +1081,6 @@ void NDManualRole::SetAction(bool bMove, bool bIgnoreFighting/*=false*/)
 				this->standAction(true);
 		}
 	}
-
 }
 
 bool NDManualRole::AssuredRidePet()
