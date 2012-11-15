@@ -11,7 +11,7 @@
 #define _UI_SCROLL_VIEW_MUL_HAND_ZJH_
 
 #include "UIScroll.h"
-#include "UIScrollContainer.h"
+#include "NDUIScrollContainer.h"
 
 using namespace NDEngine;
 
