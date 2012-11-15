@@ -139,6 +139,8 @@ bool NDGameApplication::initInstance()
 
 bool NDGameApplication::applicationDidFinishLaunching()
 {
+	CCLog("Begin to exe applicationDidFinishLaunching");
+
 	REGISTER_CLASS(NDBaseBattle,Battle);
 	REGISTER_CLASS(NDBaseFighter,Fighter);
 

@@ -14,6 +14,7 @@ NS_NDENGINE_BGN
 
 #define SZ_ROOT_SOURCE_DIR					"SimplifiedChineseRes"	//按语种划分资源根目录名
 
+#if WIN32
 string NDPath::NDPath_ResPath			= "../SimplifiedChineseRes/res/";
 string NDPath::NDPath_ImgPath			= "../SimplifiedChineseRes/res/Image/";
 string NDPath::NDPath_ImgPath_BattleUI	= "../SimplifiedChineseRes/res/Image/battle_ui/";
@@ -23,6 +24,17 @@ string NDPath::NDPath_AniPath			= "../SimplifiedChineseRes/res/animation/";
 string NDPath::NDPath_SoundPath			= "../SimplifiedChineseRes/res/sound/";
 string NDPath::NDPath_UIPath			= "../SimplifiedChineseRes/res/UI/";
 string NDPath::NDPath_ScriptPath		= "../SimplifiedChineseRes/res/Script/";
+#else
+string NDPath::NDPath_ResPath			= "./SimplifiedChineseRes/res/";
+string NDPath::NDPath_ImgPath			= "./SimplifiedChineseRes/res/Image/";
+string NDPath::NDPath_ImgPath_BattleUI	= "./SimplifiedChineseRes/res/Image/battle_ui/";
+string NDPath::NDPath_ImgPath_UINew		= "./SimplifiedChineseRes/res/Image/ui_new/";
+string NDPath::NDPath_MapPath			= "./SimplifiedChineseRes/res/map/";
+string NDPath::NDPath_AniPath			= "./SimplifiedChineseRes/res/animation/";
+string NDPath::NDPath_SoundPath			= "./SimplifiedChineseRes/res/sound/";
+string NDPath::NDPath_UIPath			= "./SimplifiedChineseRes/res/UI/";
+string NDPath::NDPath_ScriptPath		= "./SimplifiedChineseRes/res/Script/";
+#endif
 
 IMPLEMENT_CLASS(NDPath, NDObject)
 

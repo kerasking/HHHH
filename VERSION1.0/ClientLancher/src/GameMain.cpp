@@ -12,6 +12,7 @@
 #include "NDSharedPtr.h"
 #include "NDBaseNetMgr.h"
 #include "MsgDefine\inc\NDNetMsg.h"
+#include "GameLauncher.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -23,7 +24,7 @@ using namespace LuaPlus;
 
 int WINAPI WinMain (HINSTANCE hInstance, 
 					HINSTANCE hPrevInstance, 
-					PSTR szCmdLine, 
+					PSTR szCmdLine,
 					int iCmdShow)
 {
  	UNREFERENCED_PARAMETER(hPrevInstance);
@@ -32,8 +33,9 @@ int WINAPI WinMain (HINSTANCE hInstance,
 	NDConsole kConsole;
 	kConsole.BeginReadLoop();
 
-    // 手机平台堆栈会比较小, 以后要改用new
- 	NDGameApplication kApp;
+    // 手机平台堆栈会比较小, 以后要改用new ///< 已经改为new 郭浩
+ 	NDSharedPtr<GameLauncher> spGameLauncher = new GameLauncher;
+	spGameLauncher->BeginGame();
     NDBaseDirector kBaseDirector;
  
  	return CCApplication::sharedApplication().run();
