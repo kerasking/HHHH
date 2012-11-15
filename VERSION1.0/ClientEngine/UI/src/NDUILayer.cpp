@@ -1739,13 +1739,23 @@ bool NDUILayer::IsTouchDown()
 
 void NDUILayer::debugDraw()
 {
-// 	if (!NDDebugOpt::getDrawDebugEnabled()) return;
-// 
-// 	glLineWidth(1);
-// 	ccDrawColor4F(1,0,0,1);
-// 	CCPoint lb = ccp(m_pfVertices[0],m_pfVertices[1]);
-// 	CCPoint rt = ccp(m_pfVertices[9],m_pfVertices[10]);
-// 	ccDrawRect( lb, rt );
+	if (!NDDebugOpt::getDrawDebugEnabled()) return;
+
+	CGRect rc = GetFrameRect();
+	float l = rc.origin.x;
+	float r = l + rc.size.width;
+	float t = rc.origin.y;
+	float b = t + rc.size.height;
+
+	const float pad = 0.25f;
+	l += pad; r -= pad;
+	t += pad; b -= pad;
+
+	glLineWidth(2);
+	ccDrawColor4F(0,1,0,1);
+	CCPoint lb = ccp(l,t);
+	CCPoint rt = ccp(r,b);
+	ccDrawRect( lb, rt );
 }
 
 NS_NDENGINE_END

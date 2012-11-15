@@ -207,10 +207,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\Common\inc\NDConstant.h"
-					>
-				</File>
-				<File
 					RelativePath="..\Common\inc\NDUtility.h"
 					>
 				</File>

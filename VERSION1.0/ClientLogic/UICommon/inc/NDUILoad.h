@@ -35,4 +35,19 @@ private:
 	void AdjustCtrlPosByAnchor( UIINFO& uiInfo, const CCPoint& CtrlAnchorPos );
 	NDUINode* CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& ctrlTypeName );
 	bool IsAnchorValid( const float anchor );
+
+private:
+	bool LoadAny( const char* uiname,
+		NDUINode *parent, 
+		NDUITargetDelegate* delegate, 
+		LuaObject* luaDelegate,
+		CCSize sizeOffset = CCSizeZero );
+
+	NDUINode* LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *parent, const CCSize& sizeOffset );
+	
+private:
+	void FilterCtrlUV(CTRL_UV& uv);
+	void FilterPos(CCPoint& pos);
+	void FilterSize(UIINFO& uiInfo);
+	void PostLoad(UIINFO& uiInfo);	
 };
