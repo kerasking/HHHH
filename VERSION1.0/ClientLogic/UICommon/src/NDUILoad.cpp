@@ -87,47 +87,6 @@ bool FilterStringName1(UIINFO& uiInfo)
 	return true;
 }
 
-void NDUILoad::FilterCtrlUV(CTRL_UV& uv)
-{
-	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-	uv.x	*= scale;
-	uv.y	*= scale;
-	uv.w	*= scale;
-	uv.h	*= scale;
-}
-
-void NDUILoad::FilterPos(CCPoint& pos)
-{
- 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
- 	pos.x	*= scale;
- 	pos.y	*= scale;
-}
-
-void NDUILoad::FilterSize(UIINFO& uiInfo)
-{
-	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-	uiInfo.nCtrlWidth		*= scale;
-	uiInfo.nCtrlHeight		*= scale;
-}
-
-//@check
-void NDUILoad::PostLoad(UIINFO& uiInfo)
-{
-//上层代码应该忽略分辨率，引擎会自适应！	
-#if 0
- 	FilterCtrlUV(uiInfo.rectNormal);
- 	FilterCtrlUV(uiInfo.rectSelected);
- 	FilterCtrlUV(uiInfo.rectDisable);
- 	FilterCtrlUV(uiInfo.rectFocus);
- 	FilterCtrlUV(uiInfo.rectBack);
-#endif
- 	
-#if 0
- 	FilterPos(uiInfo.CtrlPos);
-	FilterSize(uiInfo);
-#endif
-}
-
 //for cpp
 bool NDUILoad::Load(
 		  const char* uiname,
@@ -206,7 +165,6 @@ NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *pa
 	//		}
 #endif
 
-	// 备注：UI按480*320来配置的，LUA写脚本是按960*640的.
 	PostLoad(uiInfo);
 
 	// check anchor pos
@@ -217,8 +175,9 @@ NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *pa
 		return false;
 	}
 	
-	// 使用opengl坐标系
-	uiInfo.CtrlPos.y = SCREEN2GL_Y(uiInfo.CtrlPos.y);
+	// 上下对调一下（结果仍旧是像素单位，不是GL坐标，所以不能用SCREEN2GL转！）
+	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	uiInfo.CtrlPos.y = winsize.height - uiInfo.CtrlPos.y;
 
 	// 根据锚地调整控件位置
 	CtrlAnchorPos.y = 1.0f - CtrlAnchorPos.y;
@@ -428,4 +387,17 @@ NDUINode* NDUILoad::CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& 
 		break;
 	}
 	return node;
+}
+
+void NDUILoad::PostLoad(UIINFO& uiInfo)
+{
+	//@check
+	// 备注：UI按480*320来配置的，LUA写脚本是按960*640的.
+	//			这里乘个Scale，统一到980*640!	
+
+	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+	uiInfo.CtrlPos.x *= scale;
+	uiInfo.CtrlPos.y *= scale;
+	uiInfo.nCtrlWidth *= scale;
+	uiInfo.nCtrlHeight *= scale;
 }

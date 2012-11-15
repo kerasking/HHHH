@@ -1667,16 +1667,6 @@ CCRect NDUILayer::RectAdd(CCRect rect, int value)
 			rect.size.width + 2 * value, rect.size.height + 2 * value);
 }
 
-void NDUILayer::SetFrameRect(CCRect rect)
-{
-	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
-	rect.origin.x /= fScale;
-	rect.origin.y /= fScale;
-//	rect.size.width /= fScale;
-//	rect.size.height /= fScale;
-	NDUINode::SetFrameRect(rect);
-}
-
 /*
  void NDUILayer::AfterEditClickEvent(NDUIEdit* edit)
  {

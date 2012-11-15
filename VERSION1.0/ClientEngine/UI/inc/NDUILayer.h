@@ -134,8 +134,6 @@ public:
 	void SetMoveOutListener(bool bSet);
 	bool IsTouchDown();
 
-	virtual void SetFrameRect(CCRect rect);
-
 public:
 	void draw();override
 	bool IsVisibled();override
