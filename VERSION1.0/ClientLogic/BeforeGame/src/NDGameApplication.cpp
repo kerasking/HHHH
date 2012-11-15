@@ -28,7 +28,7 @@
 #include "NDProfile.h"
 #include "NDBaseDirector.h"
 #include "WorldMapScene.h"
-
+#include "NDUILoad.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "Foundation/NSAutoreleasePool.h"
@@ -503,6 +503,26 @@ bool NDGameApplication::processPM(const char* cmd)
 		sscanf(cmd, "enablefocus %d", &val) == 1)
 	{
 		NDDebugOpt::setDrawDebugEnabled(val);
+	}
+	else if (stricmp(cmd, "test") == 0) //open test ui (test.ini)
+	{
+		NDScene* pScene = NDDirector::DefaultDirector()->GetRunningScene();
+		if (pScene)
+		{
+			pScene->RemoveAllChildren( false );
+
+			NDUILayer *	pLayer	= new NDUILayer();
+			if (pLayer)
+			{
+				pLayer->Initialization();
+				pLayer->SetFrameRect( CCRectMake(0, 0, 960, 640));
+				pLayer->SetTag( 0x100 );
+				pScene->AddChild(pLayer,10);
+
+				NDUILoad loader;
+				loader.Load( "test.ini", pLayer, NULL );
+			}
+		}
 	}
 	else
 	{

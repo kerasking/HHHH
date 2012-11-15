@@ -32,11 +32,6 @@ class NDUILoad : public NDObject
 		  float sizeOffsetH = 0.0f);
 
 private:
-	void AdjustCtrlPosByAnchor( UIINFO& uiInfo, const CCPoint& CtrlAnchorPos );
-	NDUINode* CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& ctrlTypeName );
-	bool IsAnchorValid( const float anchor );
-
-private:
 	bool LoadAny( const char* uiname,
 		NDUINode *parent, 
 		NDUITargetDelegate* delegate, 
@@ -45,9 +40,11 @@ private:
 
 	NDUINode* LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *parent, const CCSize& sizeOffset );
 	
-private:
-	void FilterCtrlUV(CTRL_UV& uv);
-	void FilterPos(CCPoint& pos);
-	void FilterSize(UIINFO& uiInfo);
+	NDUINode* CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& ctrlTypeName );
+
 	void PostLoad(UIINFO& uiInfo);	
+
+	void AdjustCtrlPosByAnchor( UIINFO& uiInfo, const CCPoint& CtrlAnchorPos );
+
+	bool IsAnchorValid( const float anchor );
 };

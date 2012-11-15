@@ -100,7 +100,14 @@ namespace NDEngine
 	}
 	
 	void NDUINode::SetFrameRect(CCRect rect)
-	{			
+	{		
+#if 1 //从LUA或INI过来的分辨率都是960*640，这里除Scale后传给GL
+		const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+		rect.origin.x /= fScale;
+		rect.origin.y /= fScale;
+		rect.size.width /= fScale;
+		rect.size.height /= fScale;
+#endif
 		this->SetContentSize(CCSizeMake(rect.size.width, rect.size.height));	
 		m_kFrameRect = rect;
 	}
