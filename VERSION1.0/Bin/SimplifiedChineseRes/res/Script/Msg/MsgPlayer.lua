@@ -134,7 +134,7 @@ function p.ProcessUserInfo(netdata)
 	--++Guosen 2012.7.15
 	local nRideStatus	= usEquipTime2;
 	local nMountType	= usEquipTime3;
-	CreatePlayerWithMount( idLookface, usRecordX, usRecordY, idUser, "★"..strName, nRideStatus, nMountType );
+	CreatePlayerWithMount( idLookface, usRecordX, usRecordY, idUser, strName, nRideStatus, nMountType );
 	
     GameDataEvent.OnEvent(GAMEDATAEVENT.USERSTAGEATTR);
     
