@@ -7,16 +7,16 @@
  *
  */
 
-#include "UIScrollContainer.h"
+#include "NDUIScrollContainer.h"
 #include "NDDirector.h"
 #include "UIScroll.h"
 #include "CCPointExtension.h"
 #include "NDUtility.h"
 #include "ScriptGameLogic.h"
 
-IMPLEMENT_CLASS(CUIScrollContainer, NDUILayer)
+IMPLEMENT_CLASS(NDUIScrollContainer, NDUILayer)
 
-CUIScrollContainer::CUIScrollContainer()
+NDUIScrollContainer::NDUIScrollContainer()
 {
 	m_uiLeftDistance			= 0;
 	m_uiRightDistance			= 0;
@@ -28,7 +28,7 @@ CUIScrollContainer::CUIScrollContainer()
     m_picScrollBg               = NULL;
 }
 
-CUIScrollContainer::~CUIScrollContainer()
+NDUIScrollContainer::~NDUIScrollContainer()
 {
 	SAFE_DELETE(m_picScroll);
     SAFE_DELETE(m_picScrollBg);
@@ -36,32 +36,32 @@ CUIScrollContainer::~CUIScrollContainer()
     m_picScrollBg = NULL;
 }
 
-void CUIScrollContainer::Initialization()
+void NDUIScrollContainer::Initialization()
 {
 	NDUILayer::Initialization();
 }
 
-void CUIScrollContainer::SetLeftReserveDistance(unsigned int distance)
+void NDUIScrollContainer::SetLeftReserveDistance(unsigned int distance)
 {
 	m_uiLeftDistance			= distance; 
 }
 
-void CUIScrollContainer::SetRightReserveDistance(unsigned int distance)
+void NDUIScrollContainer::SetRightReserveDistance(unsigned int distance)
 {
 	m_uiRightDistance			= distance; 
 }
 
-void CUIScrollContainer::SetTopReserveDistance(unsigned int distance)
+void NDUIScrollContainer::SetTopReserveDistance(unsigned int distance)
 {
 	m_uiTopDistance				= distance; 
 }
 
-void CUIScrollContainer::SetBottomReserveDistance(unsigned int distance)
+void NDUIScrollContainer::SetBottomReserveDistance(unsigned int distance)
 {
 	m_uiBottomDistance			= distance; 
 }
 
-void CUIScrollContainer::ScrollToTop()
+void NDUIScrollContainer::ScrollToTop()
 {
 	const std::vector<NDNode*>& children	= this->GetChildren();
 	for(std::vector<NDNode*>::const_iterator it = children.begin();
@@ -79,7 +79,7 @@ void CUIScrollContainer::ScrollToTop()
 		break;
 	}
 }
-void CUIScrollContainer::ScrollToBottom()
+void NDUIScrollContainer::ScrollToBottom()
 {
 	CCRect selfRect							= this->GetFrameRect();
 	const std::vector<NDNode*>& children	= this->GetChildren();
@@ -103,7 +103,7 @@ void CUIScrollContainer::ScrollToBottom()
 		break;
 	}
 }
-void CUIScrollContainer::draw()
+void NDUIScrollContainer::draw()
 {
 	if (!this->IsVisibled())
 	{
@@ -119,7 +119,7 @@ void CUIScrollContainer::draw()
 	DrawScrollBar();
 }
 
-bool CUIScrollContainer::CanHorizontalMove(NDObject* object, float& hDistance)
+bool NDUIScrollContainer::CanHorizontalMove(NDObject* object, float& hDistance)
 {
 	if (!object || !object->IsKindOfClass(RUNTIME_CLASS(CUIMovableLayer)))
 	{
@@ -157,7 +157,7 @@ bool CUIScrollContainer::CanHorizontalMove(NDObject* object, float& hDistance)
 	return true;
 }
 
-bool CUIScrollContainer::CanVerticalMove(NDObject* object, float& vDistance)
+bool NDUIScrollContainer::CanVerticalMove(NDObject* object, float& vDistance)
 {
 	if (!object || !object->IsKindOfClass(RUNTIME_CLASS(CUIMovableLayer)))
 	{
@@ -193,7 +193,7 @@ bool CUIScrollContainer::CanVerticalMove(NDObject* object, float& vDistance)
 	return true;
 }
 
-bool CUIScrollContainer::TouchBegin(NDTouch* touch)
+bool NDUIScrollContainer::TouchBegin(NDTouch* touch)
 {
 	const std::vector<NDNode*>& childlist	= this->GetChildren();
 	std::vector<NDNode*>::const_iterator it	= childlist.begin();
@@ -213,7 +213,7 @@ bool CUIScrollContainer::TouchBegin(NDTouch* touch)
 	
 	return false;
 }
-void CUIScrollContainer::EnableScrollBar(bool bEnable)
+void NDUIScrollContainer::EnableScrollBar(bool bEnable)
 {
 	m_bOpenScrollBar	= bEnable;
     
@@ -235,7 +235,7 @@ void CUIScrollContainer::EnableScrollBar(bool bEnable)
     
     
 }
-void CUIScrollContainer::DrawScrollBar()
+void NDUIScrollContainer::DrawScrollBar()
 {
 	if (!(m_bOpenScrollBar && m_picScroll))
 	{

@@ -14,13 +14,12 @@
 
 using namespace NDEngine;
 
-class CUIScrollContainer :
-public NDUILayer
+class NDUIScrollContainer : public NDUILayer
 {
-	DECLARE_CLASS(CUIScrollContainer)
+	DECLARE_CLASS(NDUIScrollContainer)
 	
-	CUIScrollContainer();
-	~CUIScrollContainer();
+	NDUIScrollContainer();
+	~NDUIScrollContainer();
 	
 public:
 	void Initialization(); override

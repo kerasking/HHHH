@@ -363,7 +363,7 @@ void ContainerClientLayerM::draw() //  m_fScrollDistance += speed; only to zero;
 
 /////////////////////////////////////////////////////////
 
-IMPLEMENT_CLASS(CUIScrollViewContainerM, CUIScrollContainer)
+IMPLEMENT_CLASS(CUIScrollViewContainerM, NDUIScrollContainer)
 
 CUIScrollViewContainerM::CUIScrollViewContainerM()
 {
@@ -390,7 +390,7 @@ CUIScrollViewContainerM::~CUIScrollViewContainerM()
 
 void CUIScrollViewContainerM::Initialization()
 {
-	CUIScrollContainer::Initialization();
+	NDUIScrollContainer::Initialization();
 }
 
 void CUIScrollViewContainerM::SetStyle(int style)
@@ -1029,11 +1029,9 @@ void CUIScrollViewContainerM::refrehClientSize()
 
 void CUIScrollViewContainerM::draw() //  m_fScrollDistance += speed; only to zero;  clientnode speed;
 {
-    CUIScrollContainer::draw();
-    
-
+    NDUIScrollContainer::draw();
+  
     this->DrawScrollBar(m_pClientUINodes[m_unBeginIndex]);
-    
     
     if(m_fScrollDistance==0){
         return;
@@ -1060,7 +1058,7 @@ void CUIScrollViewContainerM::draw() //  m_fScrollDistance += speed; only to zer
 
 void CUIScrollViewContainerM::SetFrameRect(CCRect rect)
 {
-	CUIScrollContainer::SetFrameRect(rect);
+	NDUIScrollContainer::SetFrameRect(rect);
 	
 	m_bRecaclClientEventRect	= true;
 }
