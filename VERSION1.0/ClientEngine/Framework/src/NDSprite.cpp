@@ -170,8 +170,8 @@ bool NDSprite::MoveByPath(const bool bFirstPath /*= false*/)
 
     struct cc_timeval currentTime;
     CCTime::gettimeofdayCocos2d(&currentTime, NULL);
-    double duration = CCTime::timersubCocos2d(&currentTime, &m_dwLastMoveTickTime);
-	if (duration > 1000 / MOVES_PER_SECOND)
+    double duration = CCTime::timersubCocos2d(&m_dwLastMoveTickTime, &currentTime);
+	if (TAbs(duration) > 1000 / MOVES_PER_SECOND)
 	{
 		CCPoint kPos = m_kPointList.at(m_nMovePathIndex++);
 		SetPosition(kPos);
