@@ -87,284 +87,58 @@ bool FilterStringName1(UIINFO& uiInfo)
 	return true;
 }
 
-//bool FilterCtrlUV(CTRL_UV& uv)
-//{
-////上层代码应该忽略分辨率，引擎会自适应！	
-//// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-//// 	uv.x	*= scale;
-//// 	uv.y	*= scale;
-//// 	uv.w	*= scale;
-//// 	uv.h	*= scale;
-//	
-//	return true;
-//}
+void NDUILoad::FilterCtrlUV(CTRL_UV& uv)
+{
+	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+	uv.x	*= scale;
+	uv.y	*= scale;
+	uv.w	*= scale;
+	uv.h	*= scale;
+}
 
-//bool FilterPos(CCPoint& pos)
-//{
-////上层代码应该忽略分辨率，引擎会自适应！
-//// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-//// 	pos.x	*= scale;
-//// 	pos.y	*= scale;
-//// 	
-//	return true;
-//}
-//
-//bool FilterSize(UIINFO& uiInfo)
-//{
-////上层代码应该忽略分辨率，引擎会自适应！	
-//// 	/*
-//// 	FilterCtrlUV(uiInfo.rectNormal);
-//// 	FilterCtrlUV(uiInfo.rectSelected);
-//// 	FilterCtrlUV(uiInfo.rectDisable);
-//// 	FilterCtrlUV(uiInfo.rectFocus);
-//// 	FilterCtrlUV(uiInfo.rectBack);*/
-//// 	
-//// 	FilterPos(uiInfo.CtrlPos);
-//// 
-//// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-//// 	uiInfo.nCtrlWidth		*= scale;
-//// 	uiInfo.nCtrlHeight		*= scale;
-//// 	
-// 	
-// 	return true;
-//}
+void NDUILoad::FilterPos(CCPoint& pos)
+{
+ 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+ 	pos.x	*= scale;
+ 	pos.y	*= scale;
+}
 
+void NDUILoad::FilterSize(UIINFO& uiInfo)
+{
+	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+	uiInfo.nCtrlWidth		*= scale;
+	uiInfo.nCtrlHeight		*= scale;
+}
+
+//@check
+void NDUILoad::PostLoad(UIINFO& uiInfo)
+{
+//上层代码应该忽略分辨率，引擎会自适应！	
+#if 0
+ 	FilterCtrlUV(uiInfo.rectNormal);
+ 	FilterCtrlUV(uiInfo.rectSelected);
+ 	FilterCtrlUV(uiInfo.rectDisable);
+ 	FilterCtrlUV(uiInfo.rectFocus);
+ 	FilterCtrlUV(uiInfo.rectBack);
+#endif
+ 	
+#if 0
+ 	FilterPos(uiInfo.CtrlPos);
+	FilterSize(uiInfo);
+#endif
+}
+
+//for cpp
 bool NDUILoad::Load(
 		  const char* uiname,
 		  NDUINode *parent, 
 		  NDUITargetDelegate* delegate, 
-		  CCSize sizeOffset /*= CCSizeZero*/)
+		  CCSize sizeOffset /*= CGSizeZero*/)
 {
-	if (!uiname || !parent)
-	{
-		NDAsssert(0);
-
-		return false;
-	}
-	
-	CUIData  uiData;
-	
-	if ( !uiData.openUiFile(NDPath::GetUIConfigPath(uiname).c_str()) )
-	{
-		NDAsssert(0);
-		
-		return false;
-	}
-	
-	int nCtrlAmount = uiData.GetCtrlAmount();
-	
-	for(int i=0; i<nCtrlAmount; i++)
-	{
-		std::string str = uiData.getCtrlName(i);
-		
-		if (!uiData.getCtrlData((char*)str.c_str()))
-		{
-			NDAsssert(0);
-			continue;
-		}
-		
-		UIINFO& uiInfo = uiData.getCtrlUiInfo();
-	
-		
-		FilterStringName1(uiInfo);
-		
-#ifdef TRADITION		
-//		if (IsTraditionalChinese())
-//		{
-			uiInfo.strText = uiInfo.strTextTradition;
-//		}
-#endif
-		
-		//FilterSize(uiInfo);
-		
-		// 使用opengl坐标系
-		uiInfo.CtrlPos.y = SCREEN2GL_Y(uiInfo.CtrlPos.y);
-		
-		CCPoint CtrlAnchorPos = uiInfo.CtrlAnchorPos;
-		
-		if (!(0.0f == CtrlAnchorPos.x || 0.5f == CtrlAnchorPos.x || 1.0f == CtrlAnchorPos.x)
-			|| !(0.0f == CtrlAnchorPos.y || 0.5f == CtrlAnchorPos.y || 1.0f == CtrlAnchorPos.y))
-		{
-			NDAsssert(0);
-			continue;
-		}
-		
-		if (CtrlAnchorPos.y != 0.5f)
-		{
-			CtrlAnchorPos.y = CtrlAnchorPos.y == 0.0f ? 1.0f : 0.0f;
-		}
-		
-		if (0.0f == CtrlAnchorPos.x && 0.0f == CtrlAnchorPos.y)
-		{ // [0,0]
-		}
-		else if (0.0f == CtrlAnchorPos.x && 1.0f == CtrlAnchorPos.y)
-		{ // [0, 1]
-			uiInfo.CtrlPos.y = uiInfo.CtrlPos.y - uiInfo.nCtrlHeight;
-		}
-		else if (1.0f == CtrlAnchorPos.x && 0.0f == CtrlAnchorPos.y)
-		{ // [1, 0]
-			uiInfo.CtrlPos.x = uiInfo.CtrlPos.x - uiInfo.nCtrlWidth;
-		}
-		else if (1.0f == CtrlAnchorPos.x && 1.0f == CtrlAnchorPos.y)
-		{ // [1, 1]
-			uiInfo.CtrlPos.x = uiInfo.CtrlPos.x - uiInfo.nCtrlWidth;
-			uiInfo.CtrlPos.y = uiInfo.CtrlPos.y - uiInfo.nCtrlHeight;
-		}
-		else if (0.5f == CtrlAnchorPos.x && 0.5 == CtrlAnchorPos.y)
-		{ // [1, 1]
-			uiInfo.CtrlPos.x = uiInfo.CtrlPos.x - uiInfo.nCtrlWidth / 2;
-			uiInfo.CtrlPos.y = uiInfo.CtrlPos.y - uiInfo.nCtrlHeight / 2;
-		}
-		else
-		{
-			NDAsssert(0);
-			continue;
-		}
-		
-		NDUINode* node = NULL;
-		
-		switch (uiInfo.nType) 
-		{
-			case MY_CONTROL_TYPE_UNKNOWN:
-			{
-				ControlHelp<MY_CONTROL_TYPE_UNKNOWN> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_PICTURE:
-			{
-				ControlHelp<MY_CONTROL_TYPE_PICTURE> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_BUTTON:
-			{
-				ControlHelp<MY_CONTROL_TYPE_BUTTON> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_CHECK_BUTTON:
-			{
-				ControlHelp<MY_CONTROL_TYPE_CHECK_BUTTON> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_TEXT:
-			{
-				ControlHelp<MY_CONTROL_TYPE_TEXT> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_LIST:
-			{
-				ControlHelp<MY_CONTROL_TYPE_LIST> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_PROGRESS:
-			{
-				ControlHelp<MY_CONTROL_TYPE_PROGRESS> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_SLIDER:
-			{
-				ControlHelp<MY_CONTROL_TYPE_SLIDER> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_BACK:
-			{
-				ControlHelp<MY_CONTROL_TYPE_BACK> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_TABLE:
-			{
-				ControlHelp<MY_CONTROL_TYPE_TABLE> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_UITEXT:
-			{
-				ControlHelp<MY_CONTROL_TYPE_UITEXT> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_HYPER_TEXT:
-			{
-				ControlHelp<MY_CONTROL_TYPE_HYPER_TEXT> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_HYPER_TEXT_BUTTON:
-			{
-				ControlHelp<MY_CONTROL_TYPE_HYPER_TEXT_BUTTON> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_LIST_M:
-			{
-				ControlHelp<MY_CONTROL_TYPE_LIST_M> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_ITEM_BUTTON:
-			{
-				ControlHelp<MY_CONTROL_TYPE_ITEM_BUTTON> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_EQUIP_BUTTON:
-			{
-				ControlHelp<MY_CONTROL_TYPE_EQUIP_BUTTON> help;
-				node = (NDUINode*)(help.Create(uiInfo, sizeOffset));
-			}
-				break;
-			case MY_CONTROL_TYPE_RADIO_BUTTON:
-			{
-				ControlHelp<MY_CONTROL_TYPE_RADIO_BUTTON> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_EXP:
-			{
-				ControlHelp<MY_CONTROL_TYPE_EXP> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_EDIT:
-			{
-				ControlHelp<MY_CONTROL_TYPE_EDIT> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			case MY_CONTROL_TYPE_SPRITE:
-			{
-				ControlHelp<MY_CONTROL_TYPE_SPRITE> help;
-				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
-			}
-				break;
-			default:
-				break;
-		}
-		
-		if (!node)
-		{
-			//NDAsssert(0);
-			continue;
-		}
-		
-		node->SetTag(uiInfo.nID);
-		
-		parent->AddChild(node);
-		
-		node->SetTargetDelegate(delegate);
-	}
-	
-	return true;
+	return LoadAny( uiname, parent, delegate, NULL, sizeOffset );
 }
 
+//for LUA
 bool NDUILoad::LoadLua(
 		  const char* uiname,
 		  NDUINode *parent, 
@@ -372,94 +146,101 @@ bool NDUILoad::LoadLua(
 		  float sizeOffsetW /*= 0.0f*/,
 		  float sizeOffsetH /*= 0.0f*/)
 {
-	if (!uiname || !parent)
-	{
-		NDAsssert(0);
-		
-		return false;
-	}
-	
-	CUIData  uiData;
-	
+	return LoadAny( uiname, parent, NULL, &luaDelegate, CCSizeMake(sizeOffsetW, sizeOffsetH));
+}
+
+// forCpp & forLua都转这儿处理
+bool NDUILoad::LoadAny( const char* uiname, NDUINode *parent, 
+					   NDUITargetDelegate* delegate, LuaObject* luaDelegate,
+					   CCSize sizeOffset /*= CGSizeZero*/ )
+{
+	if (!uiname || !parent) return false;
+
+	// open ui file
+	CUIData  uiData;	
 	if ( !uiData.openUiFile(NDPath::GetUIConfigPath(uiname).c_str()) )
 	{
 		NDAsssert(0);
-		
+		return false;
+	}
+
+	// load all controlls
+	int nCtrlAmount = uiData.GetCtrlAmount();
+	for(int i = 0; i < nCtrlAmount; i++)
+	{
+		NDUINode* node = this->LoadCtrl( uiData, i, parent, sizeOffset );
+		if (node)
+		{
+			if (delegate)
+			{
+				node->SetTargetDelegate(delegate);
+			}
+			else if (luaDelegate && luaDelegate->IsFunction())
+			{
+				node->SetLuaDelegate( *luaDelegate );
+			}
+		}
+	}
+
+	return true;
+}
+
+NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *parent, const CCSize& sizeOffset )
+{
+	std::string str = uiData.getCtrlName( ctrlIndex );
+
+	if (!uiData.getCtrlData((char*)str.c_str()))
+	{
+		NDAsssert(0);
+		return false;
+	}
+
+	UIINFO& uiInfo = uiData.getCtrlUiInfo();
+
+	FilterStringName1(uiInfo);
+
+#ifdef TRADITION		
+	//		if (IsTraditionalChinese())
+	//		{
+	uiInfo.strText = uiInfo.strTextTradition;
+	//		}
+#endif
+
+	// 备注：UI按480*320来配置的，LUA写脚本是按960*640的.
+	PostLoad(uiInfo);
+
+	// check anchor pos
+	CCPoint CtrlAnchorPos = uiInfo.CtrlAnchorPos;
+	if (!IsAnchorValid(CtrlAnchorPos.x) || !IsAnchorValid(CtrlAnchorPos.y))
+	{
+		NDAsssert(0);
 		return false;
 	}
 	
-	CCSize sizeOffset = CCSizeMake(sizeOffsetW, sizeOffsetH);
-	
-	int nCtrlAmount = uiData.GetCtrlAmount();
-	
-	for(int i = 0; i < nCtrlAmount; i++)
+	// 使用opengl坐标系
+	uiInfo.CtrlPos.y = SCREEN2GL_Y(uiInfo.CtrlPos.y);
+
+	// 根据锚地调整控件位置
+	CtrlAnchorPos.y = 1.0f - CtrlAnchorPos.y;
+	AdjustCtrlPosByAnchor( uiInfo, CtrlAnchorPos );
+
+	// 创建控件
+	const char* ctrlTypeName = NULL;
+	NDUINode* node = this->CreateCtrl( uiInfo, sizeOffset, ctrlTypeName );
+
+	if (!node)
 	{
-		std::string str = uiData.getCtrlName(i);
-		
-		if (!uiData.getCtrlData((char*)str.c_str()))
-		{
-			NDAsssert(0);
-			continue;
-		}
-		
-		UIINFO& uiInfo = uiData.getCtrlUiInfo();
-		
-		
-		FilterStringName1(uiInfo);
-		
-#ifdef TRADITION		
-		//		if (IsTraditionalChinese()) 
-		//		{
-		uiInfo.strText = uiInfo.strTextTradition;
-		//		}
-#endif
-
-		//FilterSize(uiInfo);
-
-		// check anchor pos
-		CCPoint CtrlAnchorPos = uiInfo.CtrlAnchorPos;
-		if (!IsAnchorValid(CtrlAnchorPos.x) || !IsAnchorValid(CtrlAnchorPos.y))
-		{
-			NDAsssert(0);
-			continue;
-		}
-
-		// 使用opengl坐标系
-		uiInfo.CtrlPos.y = SCREEN2GL_Y(uiInfo.CtrlPos.y);
-		CtrlAnchorPos.y = 1.0f - CtrlAnchorPos.y;
-
-		// 根据锚地调整控件位置
-		AdjustCtrlPosByAnchor( uiInfo, CtrlAnchorPos );
-		
-		// 创建控件
-		const char* ctrlTypeName = NULL;
-		NDUINode* node = this->CreateCtrl( uiInfo, sizeOffset, ctrlTypeName );
-		
-		if (!node)
-		{
-			CCLog( "@@ CreateCtrl() failed: type=%d\r\n", uiInfo.nType );
-			//CCAssert(0);
-			continue;
-		}
-		else
-		{
-			CCLog( "@@ CreateCtrl() ok: rc=(%f, %f, %d, %d), type=%s\r\n", 
-				uiInfo.CtrlPos.x, uiInfo.CtrlPos.y, uiInfo.nCtrlWidth, uiInfo.nCtrlHeight,
-				ctrlTypeName?ctrlTypeName:"" );
-		}
-		
-		// 设置标签和脚本，加入父节点
-		node->SetTag(uiInfo.nID);
-		
-		parent->AddChild(node);
-		
-		if (luaDelegate.IsFunction())
-		{
-			node->SetLuaDelegate(luaDelegate);
-		}
+		CCLog( "@@ CreateCtrl() failed: type=%d\r\n", uiInfo.nType );
+		//NDAsssert(0);
+		return false;
 	}
-	
-	return true;
+
+	node->SetTag(uiInfo.nID);
+	if (parent)
+	{
+		parent->AddChild(node);
+	}
+	return node;
 }
 
 bool NDUILoad::IsAnchorValid( const float anchor )
