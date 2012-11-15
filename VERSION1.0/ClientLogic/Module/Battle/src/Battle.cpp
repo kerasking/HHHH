@@ -2791,10 +2791,14 @@ void Battle::dealWithCommand()
 							NDLog("%d skill_target %d",nextCmd->idActor,nextCmd->idTarget);
 							if( action->m_eEffectType == BATTLE_EFFECT_TYPE_SKILL )
 							{
-								action->m_kFighterList.push_back(GetFighter(nextCmd->idTarget));
-								if( action->m_pkTarget == NULL )
+								Fighter * pF = GetFighter(nextCmd->idTarget);
+								if ( pF )
 								{
-									action->m_pkTarget = GetFighter(nextCmd->idTarget);
+									action->m_kFighterList.push_back( pF );
+									if( action->m_pkTarget == NULL )
+									{
+										action->m_pkTarget = pF;
+									}
 								}
 							}
 							nextCmd = nextCmd->cmdNext;
@@ -4442,6 +4446,7 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 				addSkillEffectToFighter(fighter,effect,0,g_ArrayEfectProp[46].iPos,g_ArrayEfectProp[46].bRevers);
 				CC_SAFE_DELETE(effect);
 			}
+			break;
 		case BATTLE_EFFECT_TYPE_RESIST://√‚“ﬂ
 			{//≤•∑≈°∞√‚“ﬂ°±Œƒ◊÷∂Øª≠
 				const char* file = NDPath::GetAniPath("sm_effect_32.spr").c_str();
