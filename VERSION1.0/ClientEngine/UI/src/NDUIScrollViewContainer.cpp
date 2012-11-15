@@ -7,7 +7,7 @@
  *
  */
 
-#include "UIScrollView.h"
+#include "NDUIScrollView.h"
 #include "ScriptUI.h"
 #include "CCPointExtension.h"
 #include "NDDirector.h"
@@ -167,9 +167,9 @@ IMPLEMENT_CLASS(ContainerClientLayer, NDUILayer)
 
 /////////////////////////////////////////////////////////
 
-IMPLEMENT_CLASS(CUIScrollViewContainer, CUIScrollContainer)
+IMPLEMENT_CLASS(NDUIScrollViewContainer, NDUIScrollContainer)
 
-CUIScrollViewContainer::CUIScrollViewContainer()
+NDUIScrollViewContainer::NDUIScrollViewContainer()
 {
 	m_fScrollDistance				= 0.0f;
 	m_fScrollToCenterSpeed			= 100.0f;
@@ -182,14 +182,14 @@ CUIScrollViewContainer::CUIScrollViewContainer()
 	m_bRecaclClientEventRect		= false;
 }
 
-CUIScrollViewContainer::~CUIScrollViewContainer()
+NDUIScrollViewContainer::~NDUIScrollViewContainer()
 {
 	SAFE_DELETE_NODE(m_pClientUINode);
 }
 
-void CUIScrollViewContainer::Initialization()
+void NDUIScrollViewContainer::Initialization()
 {
-	CUIScrollContainer::Initialization();
+	NDUIScrollContainer::Initialization();
 	
 	m_pClientUINode = new ContainerClientLayer;
 	m_pClientUINode->Initialization();
@@ -198,7 +198,7 @@ void CUIScrollViewContainer::Initialization()
 	
 }
 
-void CUIScrollViewContainer::SetStyle(int style)
+void NDUIScrollViewContainer::SetStyle(int style)
 {
 	if (style < UIScrollStyleBegin || style >= UIScrollStyleEnd )
 	{
@@ -207,27 +207,27 @@ void CUIScrollViewContainer::SetStyle(int style)
 	m_style = (UIScrollStyle)style;
 }
 
-UIScrollStyle CUIScrollViewContainer::GetScrollStyle()
+UIScrollStyle NDUIScrollViewContainer::GetScrollStyle()
 {
 	return m_style;
 }
 
-void CUIScrollViewContainer::SetCenterAdjust(bool bSet)
+void NDUIScrollViewContainer::SetCenterAdjust(bool bSet)
 {
 	m_bCenterAdjust	= bSet;
 }
 
-bool CUIScrollViewContainer::IsCenterAdjust()
+bool NDUIScrollViewContainer::IsCenterAdjust()
 {
 	return m_bCenterAdjust;
 }
 
-void  CUIScrollViewContainer::SetViewSize(CCSize size)
+void  NDUIScrollViewContainer::SetViewSize(CCSize size)
 {
 	m_sizeView	= size;
 }
 
-int	CUIScrollViewContainer::GetViewCount()
+int	NDUIScrollViewContainer::GetViewCount()
 {
 	if (!m_pClientUINode)
 	{
@@ -236,12 +236,12 @@ int	CUIScrollViewContainer::GetViewCount()
 	return m_pClientUINode->GetChildren().size();
 }
 
-CCSize  CUIScrollViewContainer::GetViewSize()
+CCSize  NDUIScrollViewContainer::GetViewSize()
 {
 	return m_sizeView;
 }
 
-void CUIScrollViewContainer::AddView(CUIScrollView* view)
+void NDUIScrollViewContainer::AddView(CUIScrollView* view)
 {
 	if (!CheckView(view))
 	{
@@ -276,7 +276,7 @@ void CUIScrollViewContainer::AddView(CUIScrollView* view)
 	refrehClientSize();
 }
 
-void CUIScrollViewContainer::RemoveView(unsigned int uiIndex)
+void NDUIScrollViewContainer::RemoveView(unsigned int uiIndex)
 {	
 	if (!m_pClientUINode)
 	{
@@ -364,7 +364,7 @@ void CUIScrollViewContainer::RemoveView(unsigned int uiIndex)
 	}
 }
 
-void CUIScrollViewContainer::RemoveViewById(unsigned int uiViewId)
+void NDUIScrollViewContainer::RemoveViewById(unsigned int uiViewId)
 {	
 	size_t findIndex = ViewIndex(uiViewId);
 	
@@ -376,7 +376,7 @@ void CUIScrollViewContainer::RemoveViewById(unsigned int uiViewId)
 	RemoveView(findIndex);
 }
 
-void CUIScrollViewContainer::RemoveAllView()
+void NDUIScrollViewContainer::RemoveAllView()
 {
 	while (m_pClientUINode && m_pClientUINode->GetChildren().size() > size_t(0))
 	{
@@ -391,7 +391,7 @@ void CUIScrollViewContainer::RemoveAllView()
 	m_fScrollDistance		= 0.0f;
 }
 
-void CUIScrollViewContainer::ShowViewByIndex(unsigned int uiIndex)
+void NDUIScrollViewContainer::ShowViewByIndex(unsigned int uiIndex)
 {
 	CUIScrollView* view = GetView(uiIndex);
 	if (!view)
@@ -415,7 +415,7 @@ void CUIScrollViewContainer::ShowViewByIndex(unsigned int uiIndex)
 	ScrollView(uiIndex, true);
 }
 
-void CUIScrollViewContainer::ShowViewById(unsigned int uiViewId)
+void NDUIScrollViewContainer::ShowViewById(unsigned int uiViewId)
 {
 	size_t findIndex = ViewIndex(uiViewId);
 	if ((size_t)-1 != findIndex)
@@ -424,7 +424,7 @@ void CUIScrollViewContainer::ShowViewById(unsigned int uiViewId)
 	}
 }
 
-void CUIScrollViewContainer::ScrollViewByIndex(unsigned int uiIndex)
+void NDUIScrollViewContainer::ScrollViewByIndex(unsigned int uiIndex)
 {
 	CUIScrollView* view = GetView(uiIndex);
 	if (!view)
@@ -452,7 +452,7 @@ void CUIScrollViewContainer::ScrollViewByIndex(unsigned int uiIndex)
 	ScrollView(uiIndex);
 }
 
-void CUIScrollViewContainer::ScrollViewById(unsigned int uiViewId)
+void NDUIScrollViewContainer::ScrollViewById(unsigned int uiViewId)
 {
 	size_t findIndex = ViewIndex(uiViewId);
 	if ((size_t)-1 != findIndex)
@@ -461,7 +461,7 @@ void CUIScrollViewContainer::ScrollViewById(unsigned int uiViewId)
 	}
 }
 
-CUIScrollView* CUIScrollViewContainer::GetView(unsigned int uiIndex)
+CUIScrollView* NDUIScrollViewContainer::GetView(unsigned int uiIndex)
 {
 	if ((size_t)-1 == uiIndex)
 	{
@@ -490,13 +490,13 @@ CUIScrollView* CUIScrollViewContainer::GetView(unsigned int uiIndex)
 	return (CUIScrollView*)child;
 }
 
-CUIScrollView* CUIScrollViewContainer::GetViewById(unsigned int uiViewId)
+CUIScrollView* NDUIScrollViewContainer::GetViewById(unsigned int uiViewId)
 {
 	size_t findIndex = ViewIndex(uiViewId);
 	return GetView(findIndex);
 }
 
-bool CUIScrollViewContainer::CheckView(CUIScrollView* view)
+bool NDUIScrollViewContainer::CheckView(CUIScrollView* view)
 {
 	if (!view)
 	{
@@ -505,7 +505,7 @@ bool CUIScrollViewContainer::CheckView(CUIScrollView* view)
 	return true;
 }
 
-unsigned int CUIScrollViewContainer::ViewIndex(unsigned int uiViewId)
+unsigned int NDUIScrollViewContainer::ViewIndex(unsigned int uiViewId)
 {
 	size_t findIndex					= -1;
 	if (!m_pClientUINode)
@@ -535,7 +535,7 @@ unsigned int CUIScrollViewContainer::ViewIndex(unsigned int uiViewId)
 	return findIndex;
 }
 
-void CUIScrollViewContainer::AdjustView()
+void NDUIScrollViewContainer::AdjustView()
 {
 	StopAdjust();
 	
@@ -553,7 +553,7 @@ void CUIScrollViewContainer::AdjustView()
 	this->ScrollView(uiFindInex);
 }
 
-unsigned int CUIScrollViewContainer::WhichViewToScroll()
+unsigned int NDUIScrollViewContainer::WhichViewToScroll()
 {
 	unsigned int uiIndexFind = -1;
 	
@@ -608,7 +608,7 @@ unsigned int CUIScrollViewContainer::WhichViewToScroll()
 }
 
 // cacl view center and container center dis; m_fScrollDistance = dis; m_bIsViewScrolling = true;
-void CUIScrollViewContainer::ScrollView(unsigned int uiIndex, bool bImmediatelySet/*=false*/)
+void NDUIScrollViewContainer::ScrollView(unsigned int uiIndex, bool bImmediatelySet/*=false*/)
 {
 	if ( (size_t)-1 == uiIndex || !m_pClientUINode)
 	{
@@ -693,7 +693,7 @@ void CUIScrollViewContainer::ScrollView(unsigned int uiIndex, bool bImmediatelyS
 	return;
 }
 
-bool CUIScrollViewContainer::CaclViewCenter(CUIScrollView* view, float& fCenter, bool bJudeOver/*=false*/)
+bool NDUIScrollViewContainer::CaclViewCenter(CUIScrollView* view, float& fCenter, bool bJudeOver/*=false*/)
 {
 	if (!view || !m_pClientUINode)
 	{
@@ -719,7 +719,7 @@ bool CUIScrollViewContainer::CaclViewCenter(CUIScrollView* view, float& fCenter,
 	return true;
 }
 
-CCRect CUIScrollViewContainer::GetClientRect(bool judgeOver)
+CCRect NDUIScrollViewContainer::GetClientRect(bool judgeOver)
 {
 	if (!m_pClientUINode)
 	{
@@ -766,7 +766,7 @@ CCRect CUIScrollViewContainer::GetClientRect(bool judgeOver)
 	return rectClient;
 }
 
-float CUIScrollViewContainer::GetViewLen()
+float NDUIScrollViewContainer::GetViewLen()
 {
 	float fres	= 0.0f;
 	
@@ -784,7 +784,7 @@ float CUIScrollViewContainer::GetViewLen()
 	return fres;
 }
 
-float CUIScrollViewContainer::GetContainerCenter()
+float NDUIScrollViewContainer::GetContainerCenter()
 {
 	CCRect rect		= this->GetFrameRect();
 	float fCenter	= 0.0f;
@@ -801,14 +801,14 @@ float CUIScrollViewContainer::GetContainerCenter()
 	return fCenter;
 }
 
-void CUIScrollViewContainer::StopAdjust()
+void NDUIScrollViewContainer::StopAdjust()
 {
 	EnableViewToScroll(false);
 	//m_bIsViewScrolling		= false;
 	m_fScrollDistance			= 0.0f;
 }
 
-void CUIScrollViewContainer::MoveClient(float fMove)
+void NDUIScrollViewContainer::MoveClient(float fMove)
 {
 	if (!m_pClientUINode)
 	{
@@ -829,7 +829,7 @@ void CUIScrollViewContainer::MoveClient(float fMove)
 	m_pClientUINode->SetFrameRect(rect);
 }
 
-void CUIScrollViewContainer::refrehClientSize()
+void NDUIScrollViewContainer::refrehClientSize()
 {
 	if (!m_pClientUINode)
 	{
@@ -859,7 +859,7 @@ void CUIScrollViewContainer::refrehClientSize()
 	m_pClientUINode->SetFrameRect(rect);
 }
 
-void CUIScrollViewContainer::draw() //  m_fScrollDistance += speed; only to zero;  clientnode speed;
+void NDUIScrollViewContainer::draw() //  m_fScrollDistance += speed; only to zero;  clientnode speed;
 {
 	if (m_bRecaclClientEventRect)
 	{
@@ -877,7 +877,7 @@ void CUIScrollViewContainer::draw() //  m_fScrollDistance += speed; only to zero
 	
 	if (!IsViewScrolling() || !m_pClientUINode)
 	{
-		CUIScrollContainer::draw();
+		NDUIScrollContainer::draw();
 		DrawScrollBar();
 		return;
 	}
@@ -925,7 +925,7 @@ void CUIScrollViewContainer::draw() //  m_fScrollDistance += speed; only to zero
 	
 	MoveClient(fMove);
 	
-	CUIScrollContainer::draw();
+	NDUIScrollContainer::draw();
 	
 	DrawScrollBar();
 	
@@ -935,15 +935,15 @@ void CUIScrollViewContainer::draw() //  m_fScrollDistance += speed; only to zero
 	}
 }
 
-void CUIScrollViewContainer::SetFrameRect(CCRect rect)
+void NDUIScrollViewContainer::SetFrameRect(CCRect rect)
 {
-	CUIScrollContainer::SetFrameRect(rect);
+	NDUIScrollContainer::SetFrameRect(rect);
 	
 	m_bRecaclClientEventRect	= true;
 }
 
 // clientnode  can move.if can then, move clientnode. m_bIsViewScrolling = false;
-void CUIScrollViewContainer::OnScrollViewMove(NDObject* object, float fVertical, float fHorizontal)
+void NDUIScrollViewContainer::OnScrollViewMove(NDObject* object, float fVertical, float fHorizontal)
 {
 	if (!object || !object->IsKindOfClass(RUNTIME_CLASS(CUIScrollView)))
 	{
@@ -972,7 +972,7 @@ void CUIScrollViewContainer::OnScrollViewMove(NDObject* object, float fVertical,
 }
 
 // when call back, just call AdjustView
-void CUIScrollViewContainer::OnScrollViewScrollMoveStop(NDObject* object)
+void NDUIScrollViewContainer::OnScrollViewScrollMoveStop(NDObject* object)
 {
 	if (!object || !object->IsKindOfClass(RUNTIME_CLASS(CUIScrollView)))
 	{
@@ -1001,7 +1001,7 @@ void CUIScrollViewContainer::OnScrollViewScrollMoveStop(NDObject* object)
 	AdjustView();
 }
 
-bool CUIScrollViewContainer::CanHorizontalMove(NDObject* object, float& hDistance)
+bool NDUIScrollViewContainer::CanHorizontalMove(NDObject* object, float& hDistance)
 {
 	if (!object || !object->IsKindOfClass(RUNTIME_CLASS(CUIMovableLayer)))
 	{
@@ -1049,7 +1049,7 @@ bool CUIScrollViewContainer::CanHorizontalMove(NDObject* object, float& hDistanc
 	return true;
 }
 
-bool CUIScrollViewContainer::CanVerticalMove(NDObject* object, float& vDistance)
+bool NDUIScrollViewContainer::CanVerticalMove(NDObject* object, float& vDistance)
 {
 	if (!object || !object->IsKindOfClass(RUNTIME_CLASS(CUIMovableLayer)))
 	{
@@ -1098,17 +1098,17 @@ bool CUIScrollViewContainer::CanVerticalMove(NDObject* object, float& vDistance)
 	return true;
 }
 
-bool CUIScrollViewContainer::IsViewScrolling()
+bool NDUIScrollViewContainer::IsViewScrolling()
 {
 	return m_bIsViewScrolling;
 }
 
-void CUIScrollViewContainer::EnableViewToScroll(bool bEnable)
+void NDUIScrollViewContainer::EnableViewToScroll(bool bEnable)
 {
 	m_bIsViewScrolling	= bEnable;
 }
 
-void CUIScrollViewContainer::SetBeginViewIndex(unsigned int nIndex)
+void NDUIScrollViewContainer::SetBeginViewIndex(unsigned int nIndex)
 {
 	CUIScrollView* view = GetView(nIndex);
 	if (view && view != m_linkCurView)
@@ -1120,22 +1120,22 @@ void CUIScrollViewContainer::SetBeginViewIndex(unsigned int nIndex)
 	SetBeginIndex(nIndex);
 }
 
-void CUIScrollViewContainer::SetBeginIndex(unsigned int nIndex)
+void NDUIScrollViewContainer::SetBeginIndex(unsigned int nIndex)
 {
 	m_unBeginIndex	= nIndex;
 }
 
-CUIScrollView* CUIScrollViewContainer::GetBeginView()
+CUIScrollView* NDUIScrollViewContainer::GetBeginView()
 {
 	return GetView(GetBeginIndex());
 }
 
-unsigned int CUIScrollViewContainer::GetBeginIndex()
+unsigned int NDUIScrollViewContainer::GetBeginIndex()
 {
 	return m_unBeginIndex;
 }
 
-float CUIScrollViewContainer::GetAdjustCenter()
+float NDUIScrollViewContainer::GetAdjustCenter()
 {
 	if (!IsCenterAdjust())
 	{
@@ -1145,7 +1145,7 @@ float CUIScrollViewContainer::GetAdjustCenter()
 	return this->GetContainerCenter();
 }
 
-float CUIScrollViewContainer::GetOverDistance()
+float NDUIScrollViewContainer::GetOverDistance()
 {
 	if (!m_pClientUINode)
 	{
@@ -1172,7 +1172,7 @@ float CUIScrollViewContainer::GetOverDistance()
 }
 
 
-void CUIScrollViewContainer::DrawScrollBar()
+void NDUIScrollViewContainer::DrawScrollBar()
 {
 	if (m_bOpenScrollBar && m_picScroll && m_pClientUINode && 
 		GetScrollStyle() == UIScrollStyleVerical /*&& 
@@ -1264,7 +1264,7 @@ void CUIScrollViewContainer::DrawScrollBar()
         m_picScroll->DrawInRect(rect);
 	}	
 }
-bool CUIScrollViewContainer::CanDestroyOnRemoveAllChildren(NDNode* pNode)
+bool NDUIScrollViewContainer::CanDestroyOnRemoveAllChildren(NDNode* pNode)
 {
 	if (pNode == m_pClientUINode)
 	{
@@ -1274,7 +1274,7 @@ bool CUIScrollViewContainer::CanDestroyOnRemoveAllChildren(NDNode* pNode)
 }
 
 /*
-unsigned int CUIScrollViewContainer::GetPerPageViews()
+unsigned int NDUIScrollViewContainer::GetPerPageViews()
 {
 	unsigned int nViews		= 0;
 	
@@ -1293,7 +1293,7 @@ unsigned int CUIScrollViewContainer::GetPerPageViews()
 	return nViews;
 }
 
-bool CUIScrollViewContainer::IsViewCanCenter()
+bool NDUIScrollViewContainer::IsViewCanCenter()
 {
 	CCSize sizeContainer	= this->GetFrameRect().size;
 

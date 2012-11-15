@@ -462,6 +462,7 @@ SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
 		{
 			world	= new WorldMapLayer;
 			world->Initialization(GetMapId());
+			world->SetTag(TAG_WORLD_MAP);
 			scene->AddChild(world);
 		}
 

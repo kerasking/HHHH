@@ -13,7 +13,7 @@
 #include "NDUILayer.h"
 #include "UISpriteNode.h"
 #include "UIHyperlink.h"
-#include "UIScrollContainer.h"
+#include "NDUIScrollContainer.h"
 #include "typedef.h"
 
 

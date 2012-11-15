@@ -11,7 +11,7 @@
 #define _UI_SCROLL_VIEW_ZJH_
 
 #include "UIScroll.h"
-#include "UIScrollContainer.h"
+#include "NDUIScrollContainer.h"
 
 using namespace NDEngine;
 
@@ -42,18 +42,19 @@ protected:
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
 class ContainerClientLayer;
-class CUIScrollViewContainer : 
-public CUIScrollContainer
+class NDUIScrollViewContainer : public NDUIScrollContainer
 {
-	DECLARE_CLASS(CUIScrollViewContainer)
+	DECLARE_CLASS(NDUIScrollViewContainer)
 	
-	CUIScrollViewContainer();
-	~CUIScrollViewContainer();
+	NDUIScrollViewContainer();
+	~NDUIScrollViewContainer();
 	
 public:
 	void Initialization(); override
+
     //设置list控件的样式 水平或者垂直
 	void SetStyle(int style);
+
     //获取list控件的样式 水平或者垂直 
 	UIScrollStyle GetScrollStyle();
 	
@@ -65,6 +66,7 @@ public:
     
     //设置每个view的大小
 	void SetViewSize(CCSize size);
+
     //获取每个view的大小 
 	CCSize GetViewSize();
     
@@ -87,15 +89,16 @@ public:
 	void ShowViewById(unsigned int uiViewId);
 	void ScrollViewByIndex(unsigned int uiIndex);
 	void ScrollViewById(unsigned int uiViewId);
+	
 	CUIScrollView* GetView(unsigned int uiIndex);
 	CUIScrollView* GetViewById(unsigned int uiViewId);
 	CUIScrollView* GetBeginView();
 	unsigned int GetBeginIndex();
+
     void EnableScrollBar(bool bEnable)
     {
-        CUIScrollContainer::EnableScrollBar(bEnable);
+        NDUIScrollContainer::EnableScrollBar(bEnable);
     }
-	
 	
 private:
 	float					m_fScrollDistance;
@@ -108,7 +111,6 @@ private:
 	bool					m_bCenterAdjust;
 	bool					m_bRecaclClientEventRect;
 	CAutoLink<CUIScrollView> m_linkCurView;
-	
 	
 private:
 	bool CheckView(CUIScrollView* view);

@@ -159,13 +159,16 @@ void NDNode::SetTag(int tag)
 
 void NDNode::AddChild(NDNode* node)
 {
-	const char* pszTemp = GetRuntimeClass()->className;
+	if (node && node->m_ccNode)
+	{
+		const char* pszTemp = GetRuntimeClass()->className;
 
-	CCNode *ccNode = node->m_ccNode;
-	int z = ccNode->getZOrder();
-	int tag = ccNode->getTag();
+		CCNode *ccNode = node->m_ccNode;
+		int z = ccNode->getZOrder();
+		int tag = ccNode->getTag();
 
-	this->AddChild(node, z, tag);
+		this->AddChild(node, z, tag);
+	}
 }
 
 void NDNode::AddChild(NDNode* node, int z)

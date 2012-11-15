@@ -658,7 +658,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\inc\NDUIScrollContainer.h"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\inc\NDUIScrollText.h"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\NDUIScrollView.h"
 					>
 				</File>
 				<File
@@ -710,15 +718,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\UI\inc\UIScrollContainer.h"
-					>
-				</File>
-				<File
 					RelativePath="..\UI\inc\UIScrollContainerExpand.h"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\inc\UIScrollView.h"
 					>
 				</File>
 				<File
@@ -802,7 +802,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\src\NDUIScrollContainer.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\src\NDUIScrollText.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\src\NDUIScrollViewContainer.cpp"
 					>
 				</File>
 				<File
@@ -850,15 +858,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\UI\src\UIScrollContainer.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\UI\src\UIScrollContainerExpand.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\src\UIScrollView.cpp"
 					>
 				</File>
 				<File

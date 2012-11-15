@@ -16,7 +16,7 @@
 //#include "NDScrollLayer.h"
 //#include "NDUITableLayer.h"
 #include "NDPicture.h"
-#include "UIScrollView.h"
+#include "NDUIScrollView.h"
 #include "NDTextNode.h"
 #include "UIHyperlink.h"
 #include "UIItemButton.h"
@@ -301,15 +301,16 @@ public:
 };
 
 template<>
-class CtrolTrait<CUIScrollViewContainer> : public CtrolBase
+class CtrolTrait<NDUIScrollViewContainer> : public CtrolBase
 {
 public:
-	CUIScrollViewContainer* Create(UIINFO& info, CCSize& sizeOffset)
+	NDUIScrollViewContainer* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
+
 		// 水平型
 		CCRect rect = this->GetFrameRect();
-		CUIScrollViewContainer *container = new CUIScrollViewContainer;
+		NDUIScrollViewContainer *container = new NDUIScrollViewContainer;
 		container->Initialization();
 		container->SetStyle(UIScrollStyleHorzontal);
 		container->SetFrameRect(rect);
@@ -486,15 +487,16 @@ class ControlHelp : public CtrolTrait<void>
 };
 					
 template<>															
-class ControlHelp<MY_CONTROL_TYPE_LIST_M> : public CtrolTrait<CUIScrollViewContainer>		
+class ControlHelp<MY_CONTROL_TYPE_LIST_M> : public CtrolTrait<NDUIScrollViewContainer>		
 {	
 public:
-	CUIScrollViewContainer* Create(UIINFO& info, CCSize& sizeOffset)
+	NDUIScrollViewContainer* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
+
 		// 水平型
 		CCRect rect = this->GetFrameRect();
-		CUIScrollViewContainer *container = new CUIScrollViewContainer;
+		NDUIScrollViewContainer *container = new NDUIScrollViewContainer;
 		container->Initialization();
 		container->SetStyle(UIScrollStyleVerical);
 		container->SetFrameRect(rect);
@@ -564,7 +566,7 @@ CtrolHelpDeclare(MY_CONTROL_TYPE_PICTURE, NDUIImage)
 CtrolHelpDeclare(MY_CONTROL_TYPE_BUTTON, NDUIButton)
 CtrolHelpDeclare(MY_CONTROL_TYPE_CHECK_BUTTON, CUICheckBox)
 CtrolHelpDeclare(MY_CONTROL_TYPE_TEXT, NDUILabel)
-CtrolHelpDeclare(MY_CONTROL_TYPE_LIST, CUIScrollViewContainer)
+CtrolHelpDeclare(MY_CONTROL_TYPE_LIST, NDUIScrollViewContainer)
 CtrolHelpDeclare(MY_CONTROL_TYPE_PROGRESS, NDUINode)
 CtrolHelpDeclare(MY_CONTROL_TYPE_SLIDER, NDUINode)
 CtrolHelpDeclare(MY_CONTROL_TYPE_BACK, NDUIImage)

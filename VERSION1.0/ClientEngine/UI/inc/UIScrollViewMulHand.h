@@ -11,7 +11,7 @@
 #define _UI_SCROLL_VIEW_MUL_HAND_ZJH_
 
 #include "UIScroll.h"
-#include "UIScrollContainer.h"
+#include "NDUIScrollContainer.h"
 
 using namespace NDEngine;
 
@@ -165,8 +165,7 @@ protected:
 };
 
 
-class CUIScrollViewContainerM : 
-public CUIScrollContainer
+class CUIScrollViewContainerM : public NDUIScrollContainer
 {
 	DECLARE_CLASS(CUIScrollViewContainerM)
 	
@@ -201,7 +200,7 @@ public:
 	unsigned int GetBeginIndex();
     void EnableScrollBar(bool bEnable)
     {
-        CUIScrollContainer::EnableScrollBar(bEnable);
+        NDUIScrollContainer::EnableScrollBar(bEnable);
     }
 	
 private:

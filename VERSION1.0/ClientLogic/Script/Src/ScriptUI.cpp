@@ -34,7 +34,7 @@
 
 // smys begin
 #include "UIScroll.h"
-#include "UIScrollView.h"
+#include "NDUIScrollView.h"
 #include "UIScrollViewMulHand.h"
 #include "UIRoleNode.h"
 #include "UIHyperlink.h"
@@ -240,7 +240,7 @@ GetHScrollLayer(NDNode* pNode, int tag)
 	return (NDUIContainerHScrollLayer*)hsl;
 }
 
-CUIScrollViewContainer*			
+NDUIScrollViewContainer*			
 GetScrollViewContainer(NDNode* pNode, int tag)
 {
 	if (!pNode)
@@ -250,12 +250,12 @@ GetScrollViewContainer(NDNode* pNode, int tag)
 	
 	NDNode *sc = pNode->GetChild(tag);
 	
-	if (!sc || !sc->IsKindOfClass(RUNTIME_CLASS(CUIScrollViewContainer)))
+	if (!sc || !sc->IsKindOfClass(RUNTIME_CLASS(NDUIScrollViewContainer)))
 	{
 		return NULL;
 	}
 	
-	return (CUIScrollViewContainer*)sc;
+	return (NDUIScrollViewContainer*)sc;
 }
 
 
@@ -498,33 +498,33 @@ RecursiveScroll(NDNode* pParentNode, LuaObject tagTable)
 }
 
 //通过tag列表获取滚动层节点
-CUIScrollContainer*
+NDUIScrollContainer*
 RecursiveScrollContainer(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
 	
 	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollContainer)))
+		!pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUIScrollContainer)))
 	{
 		return NULL;
 	}
 	
-	return (CUIScrollContainer*)pResultNode; 
+	return (NDUIScrollContainer*)pResultNode; 
 }
 
 //通过tag列表获取视图容器节点
-CUIScrollViewContainer*							
+NDUIScrollViewContainer*							
 RecursiveSVC(NDNode* pParentNode, LuaObject tagTable)
 {
 	NDNode* pResultNode = RecursiveNode(pParentNode, tagTable);
 	
 	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollViewContainer)))
+		!pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUIScrollViewContainer)))
 	{
 		return NULL;
 	}
 	
-	return (CUIScrollViewContainer*)pResultNode; 
+	return (NDUIScrollViewContainer*)pResultNode; 
 }
 
 //通过tag列表获取视图节点
@@ -878,18 +878,18 @@ PRecursiveImage(NDNode* pChildNode, unsigned int nRecuriveCount)
 }
 
 //通过tag列表获取视图容器节点
-CUIScrollViewContainer*							
+NDUIScrollViewContainer*							
 PRecursiveSVC(NDNode* pChildNode, unsigned int nRecuriveCount)
 {
 	NDNode* pResultNode = PRecursiveNode(pChildNode, nRecuriveCount);
 	
 	if (!pResultNode || 
-		!pResultNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollViewContainer)))
+		!pResultNode->IsKindOfClass(RUNTIME_CLASS(NDUIScrollViewContainer)))
 	{
 		return NULL;
 	}
 	
-	return (CUIScrollViewContainer*)pResultNode; 
+	return (NDUIScrollViewContainer*)pResultNode; 
 }
 
 //通过tag列表获取视图节点
@@ -1220,15 +1220,15 @@ GetHScrollLayer(NDNode* pNode, int tag)
 }
 */
 
-CUIScrollViewContainer*			
+NDUIScrollViewContainer*			
 ConverToSVC(NDNode* pNode)
 {
-	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollViewContainer)))
+	if (!pNode || !pNode->IsKindOfClass(RUNTIME_CLASS(NDUIScrollViewContainer)))
 	{
 		return NULL;
 	}
 	
-	return (CUIScrollViewContainer*)pNode;
+	return (NDUIScrollViewContainer*)pNode;
 }
 
 CUIScrollView*			
@@ -2055,18 +2055,18 @@ namespace NDEngine {
 	ETCLASSEND(CUIScroll)
 	
 //#pragma mark 滚动容器导出"UIScrollContainer.h"
-	ETSUBCLASSBEGIN(CUIScrollContainer, NDUILayer)
+	ETSUBCLASSBEGIN(NDUIScrollContainer, NDUILayer)
 	ETCONSTRUCT("createUIScrollContainer")
 	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",							&CUIScrollContainer::Initialization)
-	ETMEMBERFUNC("SetLeftReserveDistance",			&CUIScrollContainer::SetLeftReserveDistance)
-	ETMEMBERFUNC("SetRightReserveDistance",			&CUIScrollContainer::SetRightReserveDistance)
-	ETMEMBERFUNC("SetTopReserveDistance",			&CUIScrollContainer::SetTopReserveDistance)
-	ETMEMBERFUNC("SetBottomReserveDistance",		&CUIScrollContainer::SetBottomReserveDistance)
-	ETMEMBERFUNC("ScrollToTop",						&CUIScrollContainer::ScrollToTop)
-	ETMEMBERFUNC("ScrollToBottom",					&CUIScrollContainer::ScrollToBottom)
-	ETMEMBERFUNC("EnableScrollBar",					&CUIScrollContainer::EnableScrollBar)
-	ETCLASSEND(CUIScrollContainer)
+	ETMEMBERFUNC("Init",							&NDUIScrollContainer::Initialization)
+	ETMEMBERFUNC("SetLeftReserveDistance",			&NDUIScrollContainer::SetLeftReserveDistance)
+	ETMEMBERFUNC("SetRightReserveDistance",			&NDUIScrollContainer::SetRightReserveDistance)
+	ETMEMBERFUNC("SetTopReserveDistance",			&NDUIScrollContainer::SetTopReserveDistance)
+	ETMEMBERFUNC("SetBottomReserveDistance",		&NDUIScrollContainer::SetBottomReserveDistance)
+	ETMEMBERFUNC("ScrollToTop",						&NDUIScrollContainer::ScrollToTop)
+	ETMEMBERFUNC("ScrollToBottom",					&NDUIScrollContainer::ScrollToBottom)
+	ETMEMBERFUNC("EnableScrollBar",					&NDUIScrollContainer::EnableScrollBar)
+	ETCLASSEND(NDUIScrollContainer)
 	
 //#pragma mark 滚动视图导出"UIScrollView.h"
 	ETSUBCLASSBEGIN(CUIScrollView, CUIScroll)
@@ -2078,31 +2078,31 @@ namespace NDEngine {
 	ETMEMBERFUNC("GetViewId",						&CUIScrollView::GetViewId)
 	ETCLASSEND(CUIScrollView)
 	
-	ETSUBCLASSBEGIN(CUIScrollViewContainer, CUIScrollContainer)
+	ETSUBCLASSBEGIN(NDUIScrollViewContainer, NDUIScrollContainer)
 	ETCONSTRUCT("createUIScrollViewContainer")
 	ETDESTRUCT("Free")
-	ETMEMBERFUNC("Init",						&CUIScrollViewContainer::Initialization)
-	ETMEMBERFUNC("SetStyle",					&CUIScrollViewContainer::SetStyle)
-	ETMEMBERFUNC("GetScrollStyle",				&CUIScrollViewContainer::GetScrollStyle)
-	ETMEMBERFUNC("SetCenterAdjust",				&CUIScrollViewContainer::SetCenterAdjust)
-	ETMEMBERFUNC("IsCenterAdjust",				&CUIScrollViewContainer::IsCenterAdjust)
-	ETMEMBERFUNC("GetViewCount",				&CUIScrollViewContainer::GetViewCount)
-	ETMEMBERFUNC("SetViewSize",				&CUIScrollViewContainer::SetViewSize)
-	ETMEMBERFUNC("GetViewSize",				&CUIScrollViewContainer::GetViewSize)
-	ETMEMBERFUNC("AddView",						&CUIScrollViewContainer::AddView)
-	ETMEMBERFUNC("RemoveView",					&CUIScrollViewContainer::RemoveView)
-	ETMEMBERFUNC("RemoveViewById",				&CUIScrollViewContainer::RemoveViewById)
-	ETMEMBERFUNC("RemoveAllView",				&CUIScrollViewContainer::RemoveAllView)
-	ETMEMBERFUNC("ShowViewByIndex",				&CUIScrollViewContainer::ShowViewByIndex)
-	ETMEMBERFUNC("ShowViewById",				&CUIScrollViewContainer::ShowViewById)
-	ETMEMBERFUNC("ScrollViewByIndex",			&CUIScrollViewContainer::ScrollViewByIndex)
-	ETMEMBERFUNC("ScrollViewById",				&CUIScrollViewContainer::ScrollViewById)
-	ETMEMBERFUNC("GetView",						&CUIScrollViewContainer::GetView)
-	ETMEMBERFUNC("GetViewById",					&CUIScrollViewContainer::GetViewById)
-	ETMEMBERFUNC("GetBeginView",				&CUIScrollViewContainer::GetBeginView)
-	ETMEMBERFUNC("GetBeginIndex",				&CUIScrollViewContainer::GetBeginIndex)
-	ETMEMBERFUNC("EnableScrollBar",				&CUIScrollViewContainer::EnableScrollBar)
-	ETCLASSEND(CUIScrollViewContainer)
+	ETMEMBERFUNC("Init",						&NDUIScrollViewContainer::Initialization)
+	ETMEMBERFUNC("SetStyle",					&NDUIScrollViewContainer::SetStyle)
+	ETMEMBERFUNC("GetScrollStyle",				&NDUIScrollViewContainer::GetScrollStyle)
+	ETMEMBERFUNC("SetCenterAdjust",				&NDUIScrollViewContainer::SetCenterAdjust)
+	ETMEMBERFUNC("IsCenterAdjust",				&NDUIScrollViewContainer::IsCenterAdjust)
+	ETMEMBERFUNC("GetViewCount",				&NDUIScrollViewContainer::GetViewCount)
+	ETMEMBERFUNC("SetViewSize",				&NDUIScrollViewContainer::SetViewSize)
+	ETMEMBERFUNC("GetViewSize",				&NDUIScrollViewContainer::GetViewSize)
+	ETMEMBERFUNC("AddView",						&NDUIScrollViewContainer::AddView)
+	ETMEMBERFUNC("RemoveView",					&NDUIScrollViewContainer::RemoveView)
+	ETMEMBERFUNC("RemoveViewById",				&NDUIScrollViewContainer::RemoveViewById)
+	ETMEMBERFUNC("RemoveAllView",				&NDUIScrollViewContainer::RemoveAllView)
+	ETMEMBERFUNC("ShowViewByIndex",				&NDUIScrollViewContainer::ShowViewByIndex)
+	ETMEMBERFUNC("ShowViewById",				&NDUIScrollViewContainer::ShowViewById)
+	ETMEMBERFUNC("ScrollViewByIndex",			&NDUIScrollViewContainer::ScrollViewByIndex)
+	ETMEMBERFUNC("ScrollViewById",				&NDUIScrollViewContainer::ScrollViewById)
+	ETMEMBERFUNC("GetView",						&NDUIScrollViewContainer::GetView)
+	ETMEMBERFUNC("GetViewById",					&NDUIScrollViewContainer::GetViewById)
+	ETMEMBERFUNC("GetBeginView",				&NDUIScrollViewContainer::GetBeginView)
+	ETMEMBERFUNC("GetBeginIndex",				&NDUIScrollViewContainer::GetBeginIndex)
+	ETMEMBERFUNC("EnableScrollBar",				&NDUIScrollViewContainer::EnableScrollBar)
+	ETCLASSEND(NDUIScrollViewContainer)
 
     
     
@@ -2132,7 +2132,7 @@ namespace NDEngine {
     ETCLASSEND(ContainerClientLayerM)
     
     
-	ETSUBCLASSBEGIN(CUIScrollViewContainerM, CUIScrollContainer)
+	ETSUBCLASSBEGIN(CUIScrollViewContainerM, NDUIScrollContainer)
 	ETCONSTRUCT("createUIScrollViewContainerM")
 	ETDESTRUCT("Free")
 	ETMEMBERFUNC("Init",						&CUIScrollViewContainerM::Initialization)
@@ -2157,7 +2157,7 @@ namespace NDEngine {
     
     
     //** chh 2012-07-24 **//
-    ETSUBCLASSBEGIN(CUIScrollContainerExpand, CUIScrollContainer)
+    ETSUBCLASSBEGIN(CUIScrollContainerExpand, NDUIScrollContainer)
 	ETCONSTRUCT("createUIScrollContainerExpand")
 	ETDESTRUCT("Free")
 	ETMEMBERFUNC("Init",						&CUIScrollContainerExpand::Initialization)
