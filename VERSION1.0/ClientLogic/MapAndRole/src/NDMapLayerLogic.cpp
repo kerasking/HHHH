@@ -24,9 +24,10 @@
 //#include "cpLog.h"
 //#include "SimpleAudioEngine_objc.h"
 #include "NDPath.h"
-
 #include "UIChatText.h"
 #include "ScriptInc.h"
+#include "WorldMapScene.h"
+
 #define TAG_MAP_UPDTAE (2046)
 #define	TAG_MAP_LONGTOUCH (2047)
 #define TAG_MAP_LONGTOUCH_STATE (2048)
@@ -67,21 +68,14 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 // 		}
 // 	}
 
+	if (IsWorldMapVisible()) return false;
+
 	SetPathing(false);
 	SetLongTouch(false);
 
-	//@check
-/*	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();*/
 	m_kPosTouch = touch->GetLocation();
-// 	m_kPosTouch.x *= fScale * fScale; //cao
-// 	m_kPosTouch.y *= fScale * fScale;
-	
 	CCPoint touchPoint = this->ConvertToMapPoint( m_kPosTouch );
 	
-// 	WriteCon( "\r\nNDMapLayerLogic::TouchBegin, posScreen(%d, %d), posMap(%d, %d)\r\n", 
-// 		(int)m_kPosTouch.x, (int)m_kPosTouch.y,
-// 		(int)touchPoint.x, (int)touchPoint.y );
-
 // 	if(isTouchTreasureBox(touchPoint))
 // 	{
 // 		NDLog("touch treasureBox");
@@ -100,20 +94,12 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 
 void NDMapLayerLogic::TouchEnd(NDTouch* touch)
 {
-	//@check
-/*	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();*/
+	if (IsWorldMapVisible()) return;
+
 	CCPoint posTouch = touch->GetLocation();
-// 	posTouch.x *= fScale * fScale; //cao
-// 	posTouch.y *= fScale * fScale;
 	CCPoint touchPoint = this->ConvertToMapPoint( posTouch );
 
-// 	WriteCon( "NDMapLayerLogic::TouchEnd, screenPos(%d, %d), mapPos(%d, %d)\r\n", 
-// 		(int)posTouch.x, (int)posTouch.y,
-// 		(int)touchPoint.x, (int)touchPoint.y
-// 		);
-
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
-	//if (!kPlayer.ClickPoint(this->ConvertToMapPoint(touch->GetLocation()), false, IsPathing()))
 	if (!kPlayer.ClickPoint(touchPoint, false, IsPathing()))
 	{
 		kPlayer.stopMoving();
@@ -148,6 +134,8 @@ void NDMapLayerLogic::TouchCancelled(NDTouch* touch)
 
 void NDMapLayerLogic::TouchMoved(NDTouch* touch)
 {
+	if (IsWorldMapVisible()) return;
+
 	m_kPosTouch = touch->GetLocation();
 }
 
@@ -213,4 +201,19 @@ void NDMapLayerLogic::SetPathing(bool bPathing)
 bool NDMapLayerLogic::IsPathing()
 {
 	return m_bPathing;
+}
+
+bool NDMapLayerLogic::IsWorldMapVisible()
+{
+	NDScene* pScene = NDDirector::DefaultDirector()->GetRunningScene();
+	if (pScene)
+	{
+		NDNode* pNode = pScene->GetChild(TAG_WORLD_MAP);
+		if (pNode && pNode->IsKindOfClass(RUNTIME_CLASS(WorldMapLayer)))
+		{
+			WorldMapLayer* pWorld = (WorldMapLayer*)pNode;
+			return pWorld && pWorld->IsVisibled();
+		}
+	}
+	return false;
 }

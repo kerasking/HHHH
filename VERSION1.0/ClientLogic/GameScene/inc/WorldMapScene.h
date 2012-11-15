@@ -37,7 +37,8 @@ public:
 	void OnButtonClick(NDUIButton* button);override
 	void draw();
 	void OnTimer(OBJID tag);override
-	bool TouchBegin(NDTouch* touch);override
+	virtual bool TouchBegin(NDTouch* touch);
+	virtual bool TouchEnd(NDTouch* touch);
 	void ShowRoleAtPlace(int placeId);
 	void Goto(int nMapId);
 	void SetFilter(ID_VEC idVec);
@@ -60,6 +61,9 @@ private:
 	void SetCenterAtPos(CCPoint pos);
 
 	CCPoint GetPlaceIdScreenPos(int placeId);
+	bool DoMove();
+	bool isTimeout();
+
 private:
 	NDWorldMapData* m_mapData;
 	PlaceNode* m_curBtn;
@@ -73,6 +77,7 @@ private:
 	CCPoint m_posTarget;
 	int m_nTargetMapId;
 	bool m_bInMoving;
+	struct cc_timeval m_tmStartMoving;
 	//std::map<int, std::string> m_mapFilename;
 };
 
