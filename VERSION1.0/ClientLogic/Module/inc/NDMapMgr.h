@@ -395,6 +395,7 @@ public:
 	void BattleEnd(int iResult);
 	void throughMap(int mapX, int mapY, int mapId);
 	//void addRequst(RequsetInfo& request);		///< RequestInfo需要合并后 郭浩
+	void NavigateTo(int mapX, int mapY, int mapId); 
 	void NavigateToNpc(int nNpcId);
     void ProcessOAuthTokenRet(NDTransData& data);
     void ProcessCreateTransactionRet(NDTransData& data);

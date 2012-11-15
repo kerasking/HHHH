@@ -1760,9 +1760,8 @@ void NDMapLayer::ShowRoadSign(bool bShow, int nX /*=0*/, int nY /*=0*/)
 	if (!m_pkRoadSignLightEffect)
 	{
 		m_pkRoadSignLightEffect = new NDLightEffect;
-		m_pkRoadSignLightEffect->Initialization(
-				tq::CString("%sbutton.spr",
-						NDPath::GetAnimationPath().c_str()));
+		m_pkRoadSignLightEffect->Initialization(NDPath::GetAniPath("click.spr").c_str());
+		m_pkRoadSignLightEffect->setScale(0.5f*SCREEN_SCALE);
 		m_pkRoadSignLightEffect->SetLightId(0, false);
 	}
 

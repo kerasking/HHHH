@@ -621,7 +621,9 @@ void NDNpc::initUnpassPoint()
 	CCPoint point = this->GetPosition();
 
 	vector<int>* unpass = m_pkAniGroup->getUnpassPoint();
-	int unpassCount = unpass->size();
+	int unpassCount = 0;
+	if(unpass)
+		unpassCount = unpass->size();
 	if (unpass == nil || unpassCount % 2 != 0) {
 		m_vUnpassRect.clear();
 
