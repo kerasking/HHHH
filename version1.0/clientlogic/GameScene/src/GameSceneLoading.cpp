@@ -65,17 +65,17 @@ void GameSceneLoading::Initialization(bool connect/*=false*/, LoginType login/*=
 {
 	NDScene::Initialization();
 	
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 	
 	m_layer = new NDUILayer();
 	m_layer->Initialization();
-	m_layer->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
+	m_layer->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
 	this->AddChild(m_layer);
 	
 
 	NDUIImage* imgBack	= new NDUIImage;
 	imgBack->Initialization();
-	imgBack->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
+	imgBack->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
     NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture( NDPath::GetImgPath("Res00/Load/bg_load.png") );
     if (pic) 
 	{
@@ -130,14 +130,14 @@ void GameSceneLoading::draw()
 		interval = 0;
 	else 
 		interval += 5;
-	//DrawRecttangle(CGRectMake(176, 210, 134, 10), ccc4(125, 125, 125, 255));
-	//DrawRecttangle(CGRectMake(176, 210, interval, 10), ccc4(0, 255, 0, 255));
+	//DrawRecttangle(CCSizeMake(176, 210, 134, 10), ccc4(125, 125, 125, 255));
+	//DrawRecttangle(CCSizeMake(176, 210, interval, 10), ccc4(0, 255, 0, 255));
 	
 	if (m_imageProcess)
 	{
 		float percent = interval / (float)134;
 		
-		CGRect rect = m_imageProcess->GetFrameRect();
+		CCRect rect = m_imageProcess->GetFrameRect();
 		rect.size.width =  232 * percent;
 		
 		m_imageProcess->SetFrameRect(rect);
@@ -147,14 +147,14 @@ void GameSceneLoading::draw()
 	
 	if (m_picBg)
 	{
-		m_picBg->DrawInRect(CGRectMake(0, 0, 480, 320));
+		m_picBg->DrawInRect(CCRectMake(0, 0, 480, 320));
 	}
 	
 	
-	m_suiRole->SetPosition(CGPointMake(x, 193.0f));
+	m_suiRole->SetPosition(CCPointMake(x, 193.0f));
 	m_suiRole->RunAnimation(true);
 	
-	m_tangRole->SetPosition(CGPointMake(480.0f - x, 193.0f));
+	m_tangRole->SetPosition(CCPointMake(480.0f - x, 193.0f));
 	m_tangRole->RunAnimation(true);
 	
 	x += 5.0f;

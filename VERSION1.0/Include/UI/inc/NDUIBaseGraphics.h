@@ -22,15 +22,15 @@ namespace NDEngine
 	public:
 		void SetWidth(unsigned int lineWidth){ m_lineWidth = lineWidth; }
 		void SetColor(ccColor3B color){ m_color = ccc4(color.r, color.g, color.b, 255); }
-		void SetFromPoint(CGPoint from){ m_from = from; }
-		void SetToPoint(CGPoint to){ m_to = to; }
+		void SetFromPoint(CCPoint from){ m_from = from; }
+		void SetToPoint(CCPoint to){ m_to = to; }
 	public:
 		void draw();
 		
 	private:
 		unsigned int m_lineWidth;
 		ccColor4B m_color;
-		CGPoint m_from, m_to;
+		CCPoint m_from, m_to;
 	};
 	
 	class NDUIPolygon : public NDUINode
@@ -93,14 +93,14 @@ namespace NDEngine
 
 		void SetColor(ccColor4B color);
 		
-		void SetPoints(CGPoint first, CGPoint second, CGPoint third);
+		void SetPoints(CCPoint first, CCPoint second, CCPoint third);
 		
 		void draw();
 	private:
 		void recacul();
 	private:
 		ccColor4B m_color;
-		CGPoint m_pos[3];
+		CCPoint m_pos[3];
 		bool m_needRecacul;
 	};
 }

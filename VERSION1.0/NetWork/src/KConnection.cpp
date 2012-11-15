@@ -9,7 +9,13 @@
 //#include <sys/ioctl.h> // renshk
 #include <assert.h>
 #include <signal.h>
-//#include <sys/time.h> // renshk
+#if defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#include <unistd.h> // renshk
+#include <sys/time.h> // renshk
+#include <netinet/in.h> // renshk
+#include <sys/socket.h> // renshk
+#include <sys/ioctl.h> // renshk
+#endif
 #include "KConnection.h"
 #include "cpLog.h"
 

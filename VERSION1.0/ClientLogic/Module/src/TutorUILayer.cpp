@@ -67,7 +67,7 @@
 // 	}
 // }
 // 
-// void TutorInfo::Initialization(CGPoint pos, bool daoshi/*=false*/)
+// void TutorInfo::Initialization(CCPoint pos, bool daoshi/*=false*/)
 // {
 // 	NDUILayer::Initialization();
 // 	
@@ -77,23 +77,23 @@
 // 	
 // 	NDPicture* picBg = pool.AddPicture(NDPath::GetImgPathNew("bag_left_bg.png"));
 // 	
-// 	CGSize sizeBg = picBg->GetSize();
+// 	CCSize sizeBg = picBg->GetSize();
 // 	
 // 	this->SetBackgroundImage(picBg, true);
 // 	
-// 	this->SetFrameRect(CGRectMake(pos.x, pos.y, sizeBg.width, sizeBg.height));
+// 	this->SetFrameRect(CCRectMake(pos.x, pos.y, sizeBg.width, sizeBg.height));
 // 	
 // 	m_figure = new SocialFigure;
 // 	
 // 	m_figure->Initialization(!m_daoshi);
 // 	
-// 	m_figure->SetFrameRect(CGRectMake(11, 9, 178, 112));
+// 	m_figure->SetFrameRect(CCRectMake(11, 9, 178, 112));
 // 	
 // 	this->AddChild(m_figure);
 // 	
 // 	m_info = new SocialEleInfo;
 // 	
-// 	m_info->Initialization(CGRectMake(0, 123, 197, 83));
+// 	m_info->Initialization(CCRectMake(0, 123, 197, 83));
 // 	
 // 	this->AddChild(m_info);
 // 	
@@ -101,16 +101,16 @@
 // 	{
 // 		NDPicture *picClose = pool.AddPicture(NDPath::GetImgPathNew("bag_left_close.png"));
 // 		
-// 		CGSize sizeClose = picClose->GetSize();
+// 		CCSize sizeClose = picClose->GetSize();
 // 		
 // 		m_btnClose = new NDUIButton;
 // 		
 // 		m_btnClose->Initialization();
 // 		
-// 		m_btnClose->SetFrameRect(CGRectMake(0, 209, sizeClose.width, sizeClose.height));
+// 		m_btnClose->SetFrameRect(CCRectMake(0, 209, sizeClose.width, sizeClose.height));
 // 		
 // 		
-// 		m_btnClose->SetImage(picClose, false, CGRectZero, true);
+// 		m_btnClose->SetImage(picClose, false, CCRectZero, true);
 // 		
 // 		m_btnClose->SetDelegate(this);
 // 		
@@ -254,13 +254,13 @@
 // 			
 // 			btn->SetBackgroundPicture(pool.AddPicture(NDPath::GetImgPathNew("bag_btn_normal.png"), btnw, 0),
 // 									  pool.AddPicture(NDPath::GetImgPathNew("bag_btn_click.png"), btnw, 0),
-// 									  false, CGRectZero, true);
+// 									  false, CCRectZero, true);
 // 			btn->SetDelegate(this);							 
 // 			
 // 			this->AddChild(btn);
 // 		}
 // 		
-// 		btn->SetFrameRect(CGRectMake(startx+(btnw+interval)*(i%col),
+// 		btn->SetFrameRect(CCRectMake(startx+(btnw+interval)*(i%col),
 // 									 starty+(btnh+interval)*(i/col), 
 // 									 btnw, 
 // 									 btnh));
@@ -361,7 +361,7 @@
 // 			
 // 		NDDirector::DefaultDirector()->PopScene();
 // 			
-// 		role.Walk(CGPointMake(destX * 16, destY * 16), SpriteSpeedStep4);
+// 		role.Walk(CCPointMake(destX * 16, destY * 16), SpriteSpeedStep4);
 // 	} else { // 不同地图的,飞过去
 // 		NDUIDialog* dlg = new NDUIDialog;
 // 		dlg->Initialization();
@@ -722,7 +722,7 @@
 // 		opt->VisibleSectionTitles(false);
 // 		opt->SetDelegate(this);
 // 		
-// 		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 // 		int nOptHeight = 0;
 // 		
 // 		NDDataSource* ds = new NDDataSource;
@@ -774,7 +774,7 @@
 // 			}
 // 		}
 // 
-// 		opt->SetFrameRect(CGRectMake((winSize.width - 94) / 2, (winSize.height - nOptHeight) / 2, 94, nOptHeight));
+// 		opt->SetFrameRect(CCRectMake((winSize.width - 94) / 2, (winSize.height - nOptHeight) / 2, 94, nOptHeight));
 // 		
 // 		this->m_optLayer = new NDOptLayer;
 // 		this->m_optLayer->Initialization(opt);
@@ -806,11 +806,11 @@
 // {
 // 	NDUILayer::Initialization();
 // 	
-// 	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+// 	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 // 	
 // 	m_infoDaoShi = new TutorInfo;
 // 	
-// 	m_infoDaoShi->Initialization(CGPointMake(0, 48), true);
+// 	m_infoDaoShi->Initialization(CCPointMake(0, 48), true);
 // 	
 // 	this->AddChild(m_infoDaoShi);
 // 
@@ -829,7 +829,7 @@
 // 		m_tlTudi->SetSelectEvent(false);
 // 		m_tlTudi->SetBackgroundColor(ccc4(0, 0, 0, 0));
 // 		m_tlTudi->VisibleSectionTitles(false);
-// 		m_tlTudi->SetFrameRect(CGRectMake(6+200, 17+37, width-10, 226));
+// 		m_tlTudi->SetFrameRect(CCRectMake(6+200, 17+37, width-10, 226));
 // 		m_tlTudi->VisibleScrollBar(false);
 // 		m_tlTudi->SetCellsInterval(2);
 // 		m_tlTudi->SetCellsRightDistance(0);
@@ -857,7 +857,7 @@
 // 	
 // 	m_infoTuDi = new TutorInfo;
 // 	
-// 	m_infoTuDi->Initialization(CGPointMake(0, 48));
+// 	m_infoTuDi->Initialization(CCPointMake(0, 48));
 // 	
 // 	this->AddChild(m_infoTuDi);
 // 	
@@ -1049,7 +1049,7 @@
 // 	
 // 	m_infoEquip->Initialization(lookface);
 // 	
-// 	m_infoEquip->SetFrameRect(CGRectMake(0, 0, 480, 320));
+// 	m_infoEquip->SetFrameRect(CCRectMake(0, 0, 480, 320));
 // 	
 // 	this->AddChild(m_infoEquip);
 // 	

@@ -61,7 +61,7 @@ namespace NDEngine
 		
 		void drawBackground();
 		
-		void SetFrameRect(CGRect rect){}hide
+		void SetFrameRect(CCRect rect){}hide
 		
 		
 	};

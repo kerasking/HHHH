@@ -12,7 +12,7 @@
 
 #include "NDCommonScene.h"
 #include "NewGamePlayerBag.h"
-#include "NewPetScene.h"
+//#include "NewPetScene.h"
 
 class PlayerSkillInfo;
 class PlayerInfoScene :
@@ -28,13 +28,13 @@ public:
 	
 	static PlayerInfoScene* Scene();
 	
-	static CUIPet* QueryPetScene() {return 0;}
+//	static CUIPet* QueryPetScene() {return 0;}
 	
 	void Initialization(); override
 	
 	void OnButtonClick(NDUIButton* button); override
 	
-	void DrawRole(bool draw, CGPoint pos=CGPointZero);
+	void DrawRole(bool draw, CCPoint pos=CCPointZero);
 		
 private:
 	void OnTabLayerSelect(TabLayer* tab, unsigned int lastIndex, unsigned int curIndex); override
@@ -58,7 +58,7 @@ private:
 	bool m_hasGetFarmInfo;
 	//bool m_hasGetCanAcceptTask;
 	
-	CUIPet* m_pUiPet;
+//	CUIPet* m_pUiPet;
 };
 
 #endif // _PLAYER_INFO_SCENE_H_

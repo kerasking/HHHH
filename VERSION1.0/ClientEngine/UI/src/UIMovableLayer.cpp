@@ -106,7 +106,7 @@ bool CUIMovableLayer::OnLayerMoveOfDistance(NDUILayer* uiLayer, float hDistance,
 		return true;
 	}
 	
-	CGRect rect = this->GetFrameRect();
+	CCRect rect = this->GetFrameRect();
 	
 	bool modify = false;
 	

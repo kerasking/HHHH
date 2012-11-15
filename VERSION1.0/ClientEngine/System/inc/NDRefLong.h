@@ -24,12 +24,20 @@ public:
 
 	long inc()
 	{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 		return InterlockedIncrement(&m_nRef);
+#else
+        return ++m_nRef;
+#endif
 	}
 	
 	long dec()
 	{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 		return InterlockedDecrement(&m_nRef);
+#else
+        return --m_nRef;
+#endif
 	}
 	long operator++()
 	{

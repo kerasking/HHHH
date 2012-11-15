@@ -119,7 +119,7 @@ void CUIExp::draw()
 		return;
 	}
 	
-	CGRect scrRect		= this->GetScreenRect();
+	CCRect scrRect		= this->GetScreenRect();
 	
 	if (m_bRecacl && !m_strProcessFile.empty())
 	{
@@ -175,7 +175,7 @@ void CUIExp::draw()
 
 	if (m_picProcess)
 	{
-		CGRect rect;
+		CCRect rect;
 		rect.origin		= scrRect.origin;
 		rect.size		= m_picProcess->GetSize();
 		m_picProcess->DrawInRect(rect);
@@ -187,9 +187,9 @@ void CUIExp::draw()
 	}
 }
 
-void CUIExp::SetFrameRect(CGRect rect)
+void CUIExp::SetFrameRect(CCRect rect)
 {
-	CGRect rectOld = this->GetFrameRect();
+	CCRect rectOld = this->GetFrameRect();
 
 	NDUINode::SetFrameRect(rect);
 	
@@ -211,7 +211,7 @@ void CUIExp::SetFrameRect(CGRect rect)
 	
 	if (m_lbText)
 	{
-		m_lbText->SetFrameRect(CGRectMake(0, 0, rect.size.width, rect.size.height*1.5));
+		m_lbText->SetFrameRect(CCRectMake(0, 0, rect.size.width, rect.size.height*1.5));
 	}
 }
 bool CUIExp::CanDestroyOnRemoveAllChildren(NDNode* pNode)

@@ -51,7 +51,7 @@ public:
 	bool OnDrawBegin(bool bDraw);override
  	void OnDrawEnd(bool bDraw); override
 
-	CGPoint GetScreenPoint();
+	CCPoint GetScreenPoint();
 	void DirectRight(bool bRight);
 
 public:
@@ -89,7 +89,7 @@ public:
 	void SetArmorImageWithEquipmentId(int equipmentId);
 	void SetCloakImageWithEquipmentId(int equipmentId);
 
-	void SetPositionEx(CGPoint newPosition);
+	void SetPositionEx(CCPoint newPosition);
 
 	void unpackEquip(int iEquipPos);
 
@@ -98,7 +98,7 @@ public:
 
 	void addTalkMsg(std::string msg, int timeForTalkMsg);
 public:
-	void DrawHead(const CGPoint& pos);
+	void DrawHead(const CCPoint& pos);
 	void SetWeaponType(int weaponType);
 	int GetWeaponType();
 
@@ -146,7 +146,7 @@ public:
 	{
 		return m_bFocus;
 	}
-	virtual CGRect GetFocusRect();
+	virtual CCRect GetFocusRect();
 
 	int getFlagId(int index);
 	// 勿用，如需获取请直接访问ridePet
@@ -164,7 +164,7 @@ protected:
 
 	void ShowShadow(bool bShow, bool bBig = false);
 	void SetShadowOffset(int iX, int iY);
-	void HandleShadow(CGSize parentsize);
+	void HandleShadow(CCSize parentsize);
 
 	void DrawRingImage(bool bDraw);
 
@@ -209,7 +209,7 @@ private:
 	bool m_bFocus;
 public:
 	NDNode* m_pkSubNode; // 角色对象的其它动画节点都挂在这个节点上
-	CGPoint m_kScreenPosition;
+	CCPoint m_kScreenPosition;
 protected:
 	NDPicture* m_pkRingPic;
 	NDSprite* m_pkEffectFlagAniGroup;

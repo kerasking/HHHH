@@ -34,16 +34,16 @@ NDUIOptionButton::NDUIOptionButton()
 	 
 	 m_leftArrow = [[NDTile alloc] init];
 	 m_leftArrow.texture = texture;
-	 m_leftArrow.cutRect = CGRectMake(0, 0, texture.maxS * texture.pixelsWide, texture.maxT * texture.pixelsHigh);
-	 CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-	 m_leftArrow.mapSize = CGSizeMake(winSize.width, winSize.height);
+	 m_leftArrow.cutRect = CCRectMake(0, 0, texture.maxS * texture.pixelsWide, texture.maxT * texture.pixelsHigh);
+	 CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	 m_leftArrow.mapSize = CCSizeMake(winSize.width, winSize.height);
 	 m_leftArrow.reverse = YES;
 	 m_leftArrow.rotation = NDRotationEnumRotation0;
 	 
 	 m_rightArrow = [[NDTile alloc] init];
 	 m_rightArrow.texture = texture;
-	 m_rightArrow.cutRect = CGRectMake(0, 0, texture.maxS * texture.pixelsWide, texture.maxT * texture.pixelsHigh);
-	 m_rightArrow.mapSize = CGSizeMake(winSize.width, winSize.height);
+	 m_rightArrow.cutRect = CCRectMake(0, 0, texture.maxS * texture.pixelsWide, texture.maxT * texture.pixelsHigh);
+	 m_rightArrow.mapSize = CCSizeMake(winSize.width, winSize.height);
 	 m_rightArrow.reverse = NO;
 	 m_rightArrow.rotation = NDRotationEnumRotation0;		
 	 
@@ -81,7 +81,7 @@ void NDUIOptionButton::SetFontSize(unsigned int fontSize)
 	m_title->SetFontSize(fontSize);
 }
 
-void NDUIOptionButton::SetOptIndex(uint index)
+void NDUIOptionButton::SetOptIndex(unsigned int index)
 {
 	if (index >= m_vOptions.size())
 	{
@@ -118,18 +118,18 @@ void NDUIOptionButton::SetBgClr(ccColor4B clr)
 	m_clrBg = clr;
 }
 
-void NDUIOptionButton::SetFrameRect(CGRect rect)
+void NDUIOptionButton::SetFrameRect(CCRect rect)
 {
 	NDUINode::SetFrameRect(rect);
-	m_title->SetFrameRect(CGRectMake(0, 0, rect.size.width, rect.size.height));
+	m_title->SetFrameRect(CCRectMake(0, 0, rect.size.width, rect.size.height));
 }
 
-void NDUIOptionButton::OnFrameRectChange(CGRect srcRect, CGRect dstRect)
+void NDUIOptionButton::OnFrameRectChange(CCRect srcRect, CCRect dstRect)
 {/*
- m_leftArrow.drawRect = CGRectMake(dstRect.origin.x + 3, dstRect.origin.y + 5, 5, 7);
+ m_leftArrow.drawRect = CCRectMake(dstRect.origin.x + 3, dstRect.origin.y + 5, 5, 7);
  [m_leftArrow make];
  
- m_rightArrow.drawRect = CGRectMake(dstRect.origin.x + dstRect.size.width - 8, dstRect.origin.y + 5, 5, 7);
+ m_rightArrow.drawRect = CCRectMake(dstRect.origin.x + dstRect.size.width - 8, dstRect.origin.y + 5, 5, 7);
  [m_rightArrow make];*/
 }
 
@@ -141,7 +141,7 @@ void NDUIOptionButton::draw()
 	NDNode* parentNode = this->GetParent();
 	if (parentNode && this->IsVisibled())
 	{
-		CGRect scrRect = this->GetScreenRect();
+		CCRect scrRect = this->GetScreenRect();
 
 		//draw context
 		DrawRecttangle(scrRect, m_clrBg);
@@ -149,7 +149,7 @@ void NDUIOptionButton::draw()
 		//draw frame
 		if (m_frameOpened)
 			DrawPolygon(
-					CGRectMake(scrRect.origin.x - 1, scrRect.origin.y - 1,
+					CCRectMake(scrRect.origin.x - 1, scrRect.origin.y - 1,
 							scrRect.size.width + 2, scrRect.size.height + 2),
 					ccc4(125, 125, 125, 255), 2);
 

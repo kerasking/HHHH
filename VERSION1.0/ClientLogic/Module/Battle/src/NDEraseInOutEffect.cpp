@@ -122,11 +122,11 @@ void NDEraseInOutEffect::draw()
 
 void NDEraseInOutEffect::drawScreenIn() {
 	// TODO Auto-generated method stub
-	CGSize size = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize size = NDDirector::DefaultDirector()->GetWinSize();
 	
 	for (int i = 0; i < 50 - inCount; i++) {
 		for (int j = 0; j < 50 - inCount; j++) {
-			DrawRecttangle(CGRectMake(size.width - (i << 4) - ((33 - inCount - i - j) >> 1), size.height - (j << 4) - ((33 - inCount - i - j) >> 1), 40 - inCount - i - j, 40 - inCount - i - j),
+			DrawRecttangle(CCRectMake(size.width - (i << 4) - ((33 - inCount - i - j) >> 1), size.height - (j << 4) - ((33 - inCount - i - j) >> 1), 40 - inCount - i - j, 40 - inCount - i - j),
 						    ccc4(0, 0, 0, 255));
 		}
 	}
@@ -138,7 +138,7 @@ void NDEraseInOutEffect::drawScreenOut() {
 //	g.setClip(0, 0, getScreenWidth(), getScreenHeight());
 	for (int i = 0; i < outCount; i++) {
 		for (int j = 0; j < outCount; j++) {
-			DrawRecttangle(CGRectMake((i << 4) - ((outCount - i - j) >> 1), (j << 4) - ((outCount - i - j) >> 1), (outCount - i - j), (outCount - i - j)),
+			DrawRecttangle(CCRectMake((i << 4) - ((outCount - i - j) >> 1), (j << 4) - ((outCount - i - j) >> 1), (outCount - i - j), (outCount - i - j)),
 						   ccc4(0, 0, 0, 255));
 		}
 	}

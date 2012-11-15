@@ -17,7 +17,7 @@
 #include "NDNpc.h"
 #include "ScriptDrama.h"
 #include <ScriptGameLogic.h>
-#include <NDSocket.h>
+#include "NDSocket.h"
 #include "NDMapMgr.h"
 #include "LuaStateMgr.h"
 #include "NDBeforeGameMgr.h"
@@ -27,6 +27,13 @@
 #include "Battle.h"
 #include "NDProfile.h"
 #include "NDBaseDirector.h"
+#include "WorldMapScene.h"
+
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#include "Foundation/NSAutoreleasePool.h"
+#import "EAGLView.h"
+#endif
 
 #if 0
 #include "HelloWorldScene.h" //@todo
@@ -37,7 +44,9 @@ using namespace NDEngine;
 
 NDGameApplication::NDGameApplication()
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"script ");
+#endif
 }
 NDGameApplication::~NDGameApplication()
 {
@@ -46,7 +55,7 @@ NDGameApplication::~NDGameApplication()
 bool NDGameApplication::applicationDidFinishLaunching()
 {
 	CCDirector* pDirector = CCDirector::sharedDirector();
-	CCAssert(pDirector);
+	CCAssert(pDirector, "applicationDidFinishLaunching");
 	pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
 
 	TargetPlatform target = getTargetPlatform();
@@ -288,6 +297,7 @@ bool NDGameApplication::processPM(const char* cmd)
 {
 	if (cmd == 0 || cmd[0] == 0) return false;
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	int val = 0;
 	char szDebugOpt[50] = {0};
 
@@ -323,6 +333,9 @@ bool NDGameApplication::processPM(const char* cmd)
 
 		else if (stricmp(szDebugOpt, "drawmap") == 0)
 			NDDebugOpt::setDrawMapEnabled( val != 0 );
+
+		else if (stricmp(szDebugOpt, "drawcell") == 0)
+			NDDebugOpt::setDrawCellEnabled( val != 0 );
 
 		else if (stricmp(szDebugOpt, "drawrole") == 0)
 			NDDebugOpt::setDrawRoleEnabled( val != 0 );
@@ -376,7 +389,7 @@ bool NDGameApplication::processPM(const char* cmd)
 	}
 	else if (stricmp(cmd, "showhero") == 0)
 	{
-		CGPoint posScreen = NDPlayer::defaultHero().GetPosition();
+		CCPoint posScreen = NDPlayer::defaultHero().GetPosition();
 		DWORD n = 0;
 		char msg[500] = "";
 		sprintf( msg, "hero pos(%d, %d)\r\n", (int)posScreen.x, (int)posScreen.y );
@@ -384,41 +397,99 @@ bool NDGameApplication::processPM(const char* cmd)
 	}
 	else if (stricmp(cmd, "info") == 0)
 	{
-		CGPoint posScreen = NDPlayer::defaultHero().GetPosition();
+		CCPoint posScreen = NDPlayer::defaultHero().GetPosition();
 		DWORD n = 0;
 		char msg[500] = "";
-		
-		extern NDMapLayer* g_pMapLayer; //for debug only.
 
-		sprintf( msg, 
-			"hero pos(%d, %d)\r\n"
-			"NDDirector content size(%d, %d)\r\n"
-			"CCDirector content size(%d, %d)\r\n"
-			"CCDirector content scale = %f\r\n",
-
-			(int)posScreen.x, (int)posScreen.y,
-			(int)NDDirector::DefaultDirector()->GetWinSize().width,
-			(int)NDDirector::DefaultDirector()->GetWinSize().height,
-			(int)CCDirector::sharedDirector()->getWinSize().width,
-			(int)CCDirector::sharedDirector()->getWinSize().height,
-			CCDirector::sharedDirector()->getContentScaleFactor()
-			);
-
-		WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );		
-
-		if (g_pMapLayer)
+		// dump NDDirector & CCDirector
 		{
 			sprintf( msg, 
-				"map layer content size (%d, %d)\r\n"
-				"map layer screen center (%d, %d)\r\n", 
+				"hero pos(%d, %d)\r\n"
+				"[NDDirector] content size    (%d, %d)\r\n"
+				"[CCDirector] size in Points  (%d, %d)\r\n"
+				"[CCDirector] size in Pixels  (%d, %d)\r\n"
+				"[CCDirector] content scale = %.1f\r\n"
+				,
+				(int)posScreen.x, (int)posScreen.y, //screen pos in pixels.
 
-				(int)g_pMapLayer->GetContentSize().width,
-				(int)g_pMapLayer->GetContentSize().height,
-				(int)g_pMapLayer->GetScreenCenter().x,
-				(int)g_pMapLayer->GetScreenCenter().y
+				(int)NDDirector::DefaultDirector()->GetWinSize().width,
+				(int)NDDirector::DefaultDirector()->GetWinSize().height,
+
+				(int)CCDirector::sharedDirector()->getWinSize().width,
+				(int)CCDirector::sharedDirector()->getWinSize().height,
+
+				(int)CCDirector::sharedDirector()->getWinSizeInPixels().width,
+				(int)CCDirector::sharedDirector()->getWinSizeInPixels().height,
+
+				CCDirector::sharedDirector()->getContentScaleFactor()
 				);
 
-			WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );	
+			WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );		
+		}
+
+		// dump EGL view
+		{
+			CCEGLView* eglView = CCDirector::sharedDirector()->getOpenGLView();
+			if (eglView)
+			{
+				sprintf( msg, 
+					"\r\n"
+					"[EGLVIEW] frame     size (%d, %d)\r\n"
+					"[EGLVIEW] designed  size (%d, %d)\r\n"
+					"[EGLVIEW] viewport  size (%d, %d)\r\n"
+					"[EGLVIEW] visible   org  (%d, %d)\r\n"
+					"[EGLVIEW] visible   size (%d, %d)\r\n"
+					"[EGLVIEW] scale (%.1f, %.1f)\r\n"
+					//"[EGLVIEW] resolution policy (%d)\r\n"
+					"[EGLVIEW] retina enabled (%d)\r\n"
+					,
+					/*frame*/	(int)eglView->getFrameSize().width,			(int)eglView->getFrameSize().height, 
+					/*designed*/(int)eglView->getSize().width,				(int)eglView->getSize().height, 
+					/*viewport*/(int)eglView->getViewPortRect().origin.x,	(int)eglView->getViewPortRect().origin.y, //in origin, not in size!
+					/*vis org*/	(int)eglView->getVisibleOrigin().x,			(int)eglView->getVisibleOrigin().y,
+					/*vis size*/(int)eglView->getVisibleSize().width,		(int)eglView->getVisibleSize().height,
+					/*scale*/	eglView->getScaleX(), eglView->getScaleY(),
+					/*policy*/
+					/*retina*/	(int)eglView->isRetinaEnabled()
+					);
+
+				WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );		
+			}
+		}
+
+		// dump map layer
+		{
+			extern NDMapLayer* g_pMapLayer; //for debug only.
+			if (g_pMapLayer)
+			{
+				sprintf( msg, 
+					"\r\n"
+					"[NDMapLayer] content size (%d, %d)\r\n"
+					"[NDMapLayer] screen center (%d, %d)\r\n", 
+					(int)g_pMapLayer->GetContentSize().width,
+					(int)g_pMapLayer->GetContentSize().height,
+					(int)g_pMapLayer->GetScreenCenter().x,
+					(int)g_pMapLayer->GetScreenCenter().y
+					);
+
+				WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );	
+			}
+		}
+
+		// dump world map layer
+		{
+			extern WorldMapLayer* g_pWorldMapLayer; //for debug only.
+			if (g_pWorldMapLayer)
+			{
+				sprintf( msg, 
+					"\r\n"
+					"[WorldMapLayer] content size (%d, %d)\r\n", 
+					(int)g_pWorldMapLayer->GetContentSize().width,
+					(int)g_pWorldMapLayer->GetContentSize().height
+					);
+
+				WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );	
+			}
 		}
 	}
 	else if (sscanf(cmd, "slowdown %d", &val) == 1)
@@ -427,6 +498,7 @@ bool NDGameApplication::processPM(const char* cmd)
 		g_slowDownMul = max(1,val);
 	}
 	else if (
+		sscanf(cmd, "drawdebug %d", &val) == 1 ||
 		sscanf(cmd, "debugdraw %d", &val) == 1 ||
 		sscanf(cmd, "enablefocus %d", &val) == 1)
 	{
@@ -438,6 +510,7 @@ bool NDGameApplication::processPM(const char* cmd)
 		TCHAR msg[] = L"err: unknown cmd.\r\n";
 		WriteConsole( hOut, msg, sizeof(msg)/sizeof(TCHAR), &n, NULL );
 	}
+#endif
 	return true;
 }
 

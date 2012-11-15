@@ -41,7 +41,7 @@ public:
 	
 	void SetItemColumn(int iCol);
 	int GetFormulaID();
-	CGSize GetInfoSize();
+	CCSize GetInfoSize();
 private:
 	void InitItemInfo(int itemType, int iRequireCount);
 	
@@ -103,7 +103,7 @@ public:
 	void draw(); override
 	void OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section); override
 	bool OnFormulaInfoClick(FormulaInfoLayer* layer); override
-	bool DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch); override
+	bool DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch); override
 	bool TouchBegin(NDTouch* touch); override
 	bool TouchEnd(NDTouch* touch); override
 private: 

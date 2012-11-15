@@ -70,8 +70,8 @@ public:
 	void Initialization(const SET_BATTLE_SKILL_LIST& battleSkills, CActSkillInfoLayer* skillInfoLayer, int nMaxSlot);
 	
 	void OnButtonClick(NDUIButton* button);
-	virtual bool OnButtonDragOut(NDUIButton* button, CGPoint beginTouch, CGPoint moveTouch, bool longTouch);
-	virtual bool OnButtonDragOutComplete(NDUIButton* button, CGPoint endTouch, bool outOfRange);
+	virtual bool OnButtonDragOut(NDUIButton* button, CCPoint beginTouch, CCPoint moveTouch, bool longTouch);
+	virtual bool OnButtonDragOutComplete(NDUIButton* button, CCPoint endTouch, bool outOfRange);
 	virtual bool OnButtonDragIn(NDUIButton* desButton, NDUINode *uiSrcNode, bool longTouch);
 	virtual void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex);
 	

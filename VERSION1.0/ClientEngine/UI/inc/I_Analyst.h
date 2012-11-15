@@ -6,8 +6,7 @@
 #include "AnalystType.h"
 
 //////////////////////////////////////////////////////////////////////////
-#define	TICK_ANALYST(x)		
-//CTickAnalyst _analyst##x(x)
+#define	TICK_ANALYST(x)		CTickAnalyst _analyst##x(x)
 
 class CTickAnalyst
 {

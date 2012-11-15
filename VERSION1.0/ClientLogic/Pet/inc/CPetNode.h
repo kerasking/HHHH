@@ -29,13 +29,13 @@ public:
 	
 	void ChangePet(OBJID idPet);
 	
-	void SetDisplayPos(CGPoint pos); // 相对于整个屏幕
+	void SetDisplayPos(CCPoint pos); // 相对于整个屏幕
 	
 private:
 	void refeshPosition();
 	
 private:
 	NDBaseRole* m_role;
-	CGPoint		m_pos;
+	CCPoint		m_pos;
 	
 };

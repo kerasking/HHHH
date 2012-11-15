@@ -29,7 +29,7 @@ using namespace NDEngine;
 
 #define USE_ADVANCE_PICTURE (1)
 
-bool IsPointInside(CGPoint pt, CGRect rect)
+bool IsPointInside(CCPoint pt, CCRect rect)
 {
 	return (pt.x >= rect.origin.x && pt.y >= rect.origin.y
 			&& pt.x <= rect.size.width + rect.origin.x
@@ -62,14 +62,14 @@ bool VerifyUnsignedNum(const std::string strnum)
 	return true;
 }
 
-// void DrawRecttangle(CGRect rect, ccColor4B color)
+// void DrawRecttangle(CCRect rect, ccColor4B color)
 // {
 // 	glDisable(GL_TEXTURE_2D);
 // 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 // 	
 // 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 // 	
-// 	CGSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
+// 	CCSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
 // 	
 // 	GLfloat vertices[8] = { 
 // 		rect.origin.x, winSize.height - rect.origin.y - rect.size.height, 
@@ -96,9 +96,9 @@ bool VerifyUnsignedNum(const std::string strnum)
 // 	
 // }
 // 
-// void DrawPolygon(CGRect rect, ccColor4B color, GLuint lineWidth)
+// void DrawPolygon(CCRect rect, ccColor4B color, GLuint lineWidth)
 // {
-// 	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 // 	float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
 // 	
 // 	glLineWidth(lineWidth);
@@ -108,7 +108,7 @@ bool VerifyUnsignedNum(const std::string strnum)
 // 	if (CompareEqualFloat(scale, 0.0f))
 // 	{
 //      */
-// 		CGPoint vertices[4] = {
+// 		CCPoint vertices[4] = {
 // 			ccp(rect.origin.x, winSize.height - rect.origin.y - rect.size.height), 
 // 			ccp(rect.origin.x + rect.size.width, winSize.height - rect.origin.y - rect.size.height),
 // 			ccp(rect.origin.x + rect.size.width, winSize.height - rect.origin.y),
@@ -119,7 +119,7 @@ bool VerifyUnsignedNum(const std::string strnum)
 // 	}
 // 	else
 // 	{
-// 		CGPoint vertices[4] = {
+// 		CCPoint vertices[4] = {
 // 			ccp(rect.origin.x / scale, (winSize.height - rect.origin.y - rect.size.height) / scale), 
 // 			ccp((rect.origin.x + rect.size.width) / scale, (winSize.height - rect.origin.y - rect.size.height) / scale),
 // 			ccp((rect.origin.x + rect.size.width) / scale, (winSize.height - rect.origin.y) / scale),
@@ -131,10 +131,10 @@ bool VerifyUnsignedNum(const std::string strnum)
 // 	glColor4ub(255, 255, 255, 255); 
 // }
 // 
-// void DrawLine(CGPoint fromPoint, CGPoint toPoint, ccColor4B color, GLuint lineWidth)
+// void DrawLine(CCPoint fromPoint, CCPoint toPoint, ccColor4B color, GLuint lineWidth)
 // {	
 // 	NDDirector& director	= *(NDDirector::DefaultDirector());
-// 	CGSize winSize			= director.GetWinSize();
+// 	CCSize winSize			= director.GetWinSize();
 // 	
 // 	glLineWidth(lineWidth);
 // 	glColor4ub(color.r, color.g, color.b, color.a);
@@ -164,10 +164,10 @@ bool VerifyUnsignedNum(const std::string strnum)
 // 	glColor4ub(255, 255, 255, 255);
 // }
 // 
-// void DrawCircle(CGPoint center, float r, float a, int segs, ccColor4B color)
+// void DrawCircle(CCPoint center, float r, float a, int segs, ccColor4B color)
 // {
-// 	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-// 	CGPoint glCenter = ccp(center.x, winSize.height - center.y);
+// 	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 	CCPoint glCenter = ccp(center.x, winSize.height - center.y);
 // 	
 // 	glColor4ub(color.r, color.g, color.b, color.a);
 // 	
@@ -218,37 +218,37 @@ bool VerifyUnsignedNum(const std::string strnum)
 // 	int y2 = y + height - 1, x2 = x + width - 1;
 // 	
 // 	ccColor4B clr = INTCOLORTOCCC4(borderColor);
-// 	DrawRecttangle(CGRectMake(x - 1, y - 1, 4, 4), clr); // å·¦ä¸Šè§’æ¡†
-// 	DrawRecttangle(CGRectMake(x2 - 3, y - 1, 4, 4), clr); // å³ä¸Šè§’æ¡†
+// 	DrawRecttangle(CCRectMake(x - 1, y - 1, 4, 4), clr); // å·¦ä¸Šè§’æ¡†
+// 	DrawRecttangle(CCRectMake(x2 - 3, y - 1, 4, 4), clr); // å³ä¸Šè§’æ¡†
 // 	
-// 	DrawRecttangle(CGRectMake(x - 1, y2 - 3, 4, 4), clr); // å·¦ä¸‹è§’æ¡†
-// 	DrawRecttangle(CGRectMake(x2 - 3, y2 - 3, 4, 4), clr); // å³ä¸‹è§’æ¡†
+// 	DrawRecttangle(CCRectMake(x - 1, y2 - 3, 4, 4), clr); // å·¦ä¸‹è§’æ¡†
+// 	DrawRecttangle(CCRectMake(x2 - 3, y2 - 3, 4, 4), clr); // å³ä¸‹è§’æ¡†
 // 	
-// 	DrawLine(CGPointMake(x, y + 5), CGPointMake(x + 5, y + 5), clr, 1);
-// 	DrawLine(CGPointMake(x + 5, y), CGPointMake(x + 5, y + 5), clr, 1);
-// 	DrawLine(CGPointMake(x2, y + 5), CGPointMake(x2 - 5, y + 5), clr, 1);
-// 	DrawLine(CGPointMake(x2 - 5, y), CGPointMake(x2 - 5, y + 5), clr, 1);
+// 	DrawLine(CCPointMake(x, y + 5), CCPointMake(x + 5, y + 5), clr, 1);
+// 	DrawLine(CCPointMake(x + 5, y), CCPointMake(x + 5, y + 5), clr, 1);
+// 	DrawLine(CCPointMake(x2, y + 5), CCPointMake(x2 - 5, y + 5), clr, 1);
+// 	DrawLine(CCPointMake(x2 - 5, y), CCPointMake(x2 - 5, y + 5), clr, 1);
 // 	
-// 	DrawLine(CGPointMake(x2, y2 - 5), CGPointMake(x2 - 5, y2 - 5), clr, 1);
-// 	DrawLine(CGPointMake(x2 - 5, y2), CGPointMake(x2 - 5, y2 - 5), clr, 1);
-// 	DrawLine(CGPointMake(x, y2 - 5), CGPointMake(x + 5, y2 - 5), clr, 1);
-// 	DrawLine(CGPointMake(x + 5, y2), CGPointMake(x + 5, y2 - 5), clr, 1);
+// 	DrawLine(CCPointMake(x2, y2 - 5), CCPointMake(x2 - 5, y2 - 5), clr, 1);
+// 	DrawLine(CCPointMake(x2 - 5, y2), CCPointMake(x2 - 5, y2 - 5), clr, 1);
+// 	DrawLine(CCPointMake(x, y2 - 5), CCPointMake(x + 5, y2 - 5), clr, 1);
+// 	DrawLine(CCPointMake(x + 5, y2), CCPointMake(x + 5, y2 - 5), clr, 1);
 // 	
-// 	DrawLine(CGPointMake(x + 5, y), CGPointMake(x + width - 6, y), clr, 1);
-// 	DrawLine(CGPointMake(x + 5, y2), CGPointMake(x + width - 6, y2), clr, 1);
+// 	DrawLine(CCPointMake(x + 5, y), CCPointMake(x + width - 6, y), clr, 1);
+// 	DrawLine(CCPointMake(x + 5, y2), CCPointMake(x + width - 6, y2), clr, 1);
 // 	
-// 	DrawLine(CGPointMake(x, y + 5), CGPointMake(x, y2 - 5), clr, 1);
-// 	DrawLine(CGPointMake(x2, y + 5), CGPointMake(x2, y2 - 5), clr, 1);
+// 	DrawLine(CCPointMake(x, y + 5), CCPointMake(x, y2 - 5), clr, 1);
+// 	DrawLine(CCPointMake(x2, y + 5), CCPointMake(x2, y2 - 5), clr, 1);
 // }
 // 
-// void DrawTriangle(CGPoint first, CGPoint second, CGPoint third, ccColor4B color)
+// void DrawTriangle(CCPoint first, CCPoint second, CCPoint third, ccColor4B color)
 // {
 // 	glDisable(GL_TEXTURE_2D);
 // 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 // 	
 // 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 // 	
-// 	CGSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
+// 	CCSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
 // 	
 // 	GLfloat vertices[6] = { 
 // 		first.x, winSize.height - first.y, 
@@ -607,7 +607,7 @@ std::string platformString()
 void drawRectBar2(int x, int y, int color, int num1, int num2, int width)
 {
 	int curColor = 0x0B2212;
-//	DrawPolygon(CGRectMake(x, y, width + 1, 5), INTCOLORTOCCC4(curColor), 1); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+//	DrawPolygon(CCRectMake(x, y, width + 1, 5), INTCOLORTOCCC4(curColor), 1); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 
 	if (num2 <= 0)
 	{
@@ -625,14 +625,14 @@ void drawRectBar2(int x, int y, int color, int num1, int num2, int width)
 		return;
 	}
 
-	//DrawRecttangle(CGRectMake(x, y, width1, 4), INTCOLORTOCCC4(color)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	//DrawRecttangle(CCRectMake(x, y, width1, 4), INTCOLORTOCCC4(color)); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 }
 
-CGRect getNewNumCut(unsigned int num, bool hightlight)
+CCRect getNewNumCut(unsigned int num, bool hightlight)
 {
 	if (num > 9)
-		return CGRectZero;
-	return CGRectMake(num * 14, (hightlight ? 14 : 0), 14, 14);
+		return CCRectZero;
+	return CCRectMake(num * 14, (hightlight ? 14 : 0), 14, 14);
 }
 
 void ShowAlert(const char* pszAlert)
@@ -893,6 +893,7 @@ void WriteCon(const char * pszFormat, ...)
 {
 	if (!pszFormat) return;
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
 	if (!hOut) return;
 
@@ -904,4 +905,5 @@ void WriteCon(const char * pszFormat, ...)
 	
 	DWORD n = 0;
 	WriteConsoleA( hOut, szBuf, strlen(szBuf), &n, NULL );
+#endif
 }

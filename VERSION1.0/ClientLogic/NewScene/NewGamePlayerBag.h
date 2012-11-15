@@ -122,8 +122,8 @@ public:
 	bool OnBagButtonDragIn(NDUIButton* desButton, NDUINode *uiSrcNode, bool longTouch, bool del); override
 	bool OnDropItem(NewGameItemBag* itembag, Item* item); override
 	
-	bool OnButtonDragOut(NDUIButton* button, CGPoint beginTouch, CGPoint moveTouch, bool longTouch); override
-	bool OnButtonDragOutComplete(NDUIButton* button, CGPoint endTouch, bool outOfRange); override
+	bool OnButtonDragOut(NDUIButton* button, CCPoint beginTouch, CCPoint moveTouch, bool longTouch); override
+	bool OnButtonDragOutComplete(NDUIButton* button, CCPoint endTouch, bool outOfRange); override
 	bool OnButtonDragIn(NDUIButton* desButton, NDUINode *uiSrcNode, bool longTouch); override
 	
 	void UpdateBagNum(int iNum) { if (m_itembagPlayer) m_itembagPlayer->SetPageCount(iNum); } 

@@ -11,7 +11,7 @@
 #include "NDDirector.h"
 #include "ItemMgr.h"
 #include "NDUIBaseGraphics.h"
-//#include "CGPointExtension.h"
+//#include "CCPointExtension.h"
 #include "NDUtility.h"
 #include "NDPath.h"
 #include "NDUISynLayer.h"
@@ -76,7 +76,7 @@ void EquipUpgradeScene::Initialization(int iType)
 		m_menulayerBG->GetCancelBtn()->SetDelegate(this);
 	}
 	
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 	
 	if (m_iType == EQUIP_UPLEVEL) 
 	{
@@ -87,7 +87,7 @@ void EquipUpgradeScene::Initialization(int iType)
 		lblTitle->SetFontColor(ccc4(255, 245, 0, 255));
 		lblTitle->SetTextAlignment(LabelTextAlignmentCenter);
 		lblTitle->SetText(NDCommonCString("EquipUpLev"));
-		lblTitle->SetFrameRect(CGRectMake(0, 0, winsize.width, m_menulayerBG->GetTitleHeight()));
+		lblTitle->SetFrameRect(CCRectMake(0, 0, winsize.width, m_menulayerBG->GetTitleHeight()));
 		m_menulayerBG->AddChild(lblTitle);
 	}
 	else 
@@ -95,26 +95,26 @@ void EquipUpgradeScene::Initialization(int iType)
 		m_picTitle = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("titles.png"));
 		if (m_iType == EQUIP_UPGRADE) 
 		{ 
-			m_picTitle->Cut(CGRectMake(200, 81, 80, 21));
+			m_picTitle->Cut(CCRectMake(200, 81, 80, 21));
 		}
 		else if (m_iType == EQUIP_ENHANCE) 
 		{
-			m_picTitle->Cut(CGRectMake(160, 160, 80, 20));
+			m_picTitle->Cut(CCRectMake(160, 160, 80, 20));
 		}
 		
-		CGSize sizeTitle = m_picTitle->GetSize();
+		CCSize sizeTitle = m_picTitle->GetSize();
 		
 		NDUIImage *imageTitle =  new NDUIImage;
 		imageTitle->Initialization();
 		imageTitle->SetPicture(m_picTitle);
-		imageTitle->SetFrameRect(CGRectMake((winsize.width-sizeTitle.width)/2, (title_height-sizeTitle.height)/2, sizeTitle.width, sizeTitle.height));
+		imageTitle->SetFrameRect(CCRectMake((winsize.width-sizeTitle.width)/2, (title_height-sizeTitle.height)/2, sizeTitle.width, sizeTitle.height));
 		m_menulayerBG->AddChild(imageTitle);
 	}	
 	
 	m_btnEquip = new NDUIItemButton;
 	m_btnEquip->Initialization();
 	m_btnEquip->SetDelegate(this);
-	m_btnEquip->SetFrameRect(CGRectMake(14, 50, ITEM_CELL_W, ITEM_CELL_H));
+	m_btnEquip->SetFrameRect(CCRectMake(14, 50, ITEM_CELL_W, ITEM_CELL_H));
 	m_menulayerBG->AddChild(m_btnEquip);
 	m_btnEquip->ChangeItem(NULL);
 	
@@ -124,7 +124,7 @@ void EquipUpgradeScene::Initialization(int iType)
 	m_lbName->SetFontColor(ccc4(22, 30, 17, 255));
 	m_lbName->SetText(NDCommonCString("FangRuEquip"));
 	m_lbName->SetTextAlignment(LabelTextAlignmentLeft);
-	m_lbName->SetFrameRect(CGRectMake(29+ITEM_CELL_W, 50+(ITEM_CELL_H-15)/2, winsize.width, 15));
+	m_lbName->SetFrameRect(CCRectMake(29+ITEM_CELL_W, 50+(ITEM_CELL_H-15)/2, winsize.width, 15));
 	m_menulayerBG->AddChild(m_lbName);
 	
 	NDUILine *line = new NDUILine;
@@ -140,7 +140,7 @@ void EquipUpgradeScene::Initialization(int iType)
 		m_btnEquip2 = new NDUIItemButton;
 		m_btnEquip2->Initialization();
 		m_btnEquip2->SetDelegate(this);
-		m_btnEquip2->SetFrameRect(CGRectMake(14, 111, ITEM_CELL_W, ITEM_CELL_H));
+		m_btnEquip2->SetFrameRect(CCRectMake(14, 111, ITEM_CELL_W, ITEM_CELL_H));
 		m_menulayerBG->AddChild(m_btnEquip2);
 		m_btnEquip2->ChangeItem(NULL);
 		
@@ -150,7 +150,7 @@ void EquipUpgradeScene::Initialization(int iType)
 		m_lbName2->SetFontColor(ccc4(22, 30, 17, 255));
 		m_lbName2->SetText(NDCommonCString("UpLevEquip"));
 		m_lbName2->SetTextAlignment(LabelTextAlignmentLeft);
-		m_lbName2->SetFrameRect(CGRectMake(29+ITEM_CELL_W, 111+(ITEM_CELL_H-15)/2, winsize.width, 15));
+		m_lbName2->SetFrameRect(CCRectMake(29+ITEM_CELL_W, 111+(ITEM_CELL_H-15)/2, winsize.width, 15));
 		m_menulayerBG->AddChild(m_lbName2);
 		
 		NDUILine *line2 = new NDUILine;
@@ -179,11 +179,11 @@ void EquipUpgradeScene::Initialization(int iType)
 	
 	if (m_iType == EQUIP_UPLEVEL) 
 	{
-		check->SetFrameRect(CGRectMake(14, 181, winsize.width, 30));
+		check->SetFrameRect(CCRectMake(14, 181, winsize.width, 30));
 	}
 	else 
 	{
-		check->SetFrameRect(CGRectMake(14, 112, winsize.width, 30));
+		check->SetFrameRect(CCRectMake(14, 112, winsize.width, 30));
 	}
 	check->SetFontColor(ccc3(22, 30, 17));
 	check->ChangeCBState();
@@ -196,12 +196,12 @@ void EquipUpgradeScene::Initialization(int iType)
 	m_itemBag->Initialization(itemlist);
 	m_itemBag->SetDelegate(this);
 	m_itemBag->SetPageCount(ItemMgrObj.GetPlayerBagNum());
-	m_itemBag->SetFrameRect(CGRectMake(203, 31, ITEM_BAG_W, ITEM_BAG_H));
+	m_itemBag->SetFrameRect(CCRectMake(203, 31, ITEM_BAG_W, ITEM_BAG_H));
 	m_menulayerBG->AddChild(m_itemBag);
 	
 	m_itemfocus = new ItemFocus;
 	m_itemfocus->Initialization();
-	m_itemfocus->SetFrameRect(CGRectZero);
+	m_itemfocus->SetFrameRect(CCRectZero);
 	AddChild(m_itemfocus,1);
 }
 
@@ -320,7 +320,7 @@ bool EquipUpgradeScene::OnClickCell(GameItemBag* itembag, int iPage, int iCellIn
 	if (m_bFoucusEquip) 
 	{
 		m_bFoucusEquip = false;
-		m_itemfocus->SetFrameRect(CGRectZero);
+		m_itemfocus->SetFrameRect(CCRectZero);
 	}
 	
 	if (itembag == m_itemBag && item && bFocused) 

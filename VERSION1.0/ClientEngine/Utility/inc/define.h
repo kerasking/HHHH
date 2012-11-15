@@ -45,6 +45,7 @@
 #define NO false
 #endif
 
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
 typedef double NSTimeInterval;
 
 #define NSUInteger int
@@ -57,6 +58,7 @@ typedef cocos2d::CCObject base,*id;
 typedef unsigned int UInt32;
 typedef unsigned short UInt16;
 typedef unsigned char UInt8;
+#endif
 
 typedef enum
 {
@@ -66,7 +68,7 @@ typedef enum
 	PlayerBackBag
 }NMAINSCENECHILDTAG;
 
-#define NSString NDSharedPtr<cocos2d::CCString>
+#define CCStringRef NDSharedPtr<cocos2d::CCString>
 
 #define SAFE_DELETE(pObject)\
 do \

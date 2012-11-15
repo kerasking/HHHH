@@ -471,7 +471,7 @@ private:
 	int m_nOriginY;
 
 	NDNode* m_pkRoleParent;
-	CGPoint m_kRoleInParentPoint;
+	CCPoint m_kRoleInParentPoint;
 
 	NDBaseRole* m_pkRole;
 	NDSprite* m_pkRareMonsterEffect;

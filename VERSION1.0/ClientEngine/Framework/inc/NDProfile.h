@@ -7,11 +7,14 @@
 //	功能：性能调优（消耗时间片跟踪）
 //-------------------------------------------------------------------------
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include <windows.h>
+#include <NDConsole.h>
+#endif
 #include <map>
 #include <vector>
-#include <NDConsole.h>
-#include <ScriptDefine.h>
+#include "ScriptDefine.h"
+#include "platform.h"
 
 NS_NDENGINE_BGN
 
@@ -26,25 +29,27 @@ private:
 public:
 	TimeSlice(const string& _name)
 		: name(_name)
-		, beginTime(GetTickCount())
-		, endTime(0)
-		, parent(NULL) {}
+		, parent(NULL) {
+            CCTime::gettimeofdayCocos2d(&beginTime, NULL);
+            endTime.tv_sec = 0;
+            endTime.tv_usec = 0;
+        }
 
 	string	name;
-	DWORD	beginTime;
-	DWORD	endTime;
+	struct cc_timeval	beginTime;
+	struct cc_timeval	endTime;
 	TimeSlice* parent;
 
-	DWORD getTick() const { return endTime ? (endTime - beginTime) : 999999; }
+	double getTick() { return (endTime.tv_sec > 0) ? CCTime::timersubCocos2d(&beginTime, &endTime) : 999999; }
 
-	string getTimeStr() const {
+	string getTimeStr() {
 		char str[100] = "";
-		DWORD t = getTick();
+		double t = getTick();
 		if (t >= 1000) {
 			sprintf( str, "%.2f (s)", t / 1000.f );
 		}
-		else {
-			sprintf( str, "%d (ms)", t );
+		else {   
+			sprintf( str, "%.0f (ms)", t );
 		}
 		return str;
 	}
@@ -97,7 +102,7 @@ public:
 		TimeSlice* slice = findSlice( name );
 		if (slice)
 		{
-			slice->endTime = GetTickCount();
+            CCTime::gettimeofdayCocos2d(&slice->endTime, NULL);
 		}
 	}
 
@@ -114,7 +119,7 @@ private:
 		for (int i = cnt - 1; i >= 0; i--)
 		{
 			TimeSlice* slice = vecTimeSlice[i];
-			if (slice && slice->endTime == 0) //not end.
+			if (slice && slice->endTime.tv_sec == 0) //not end.
 				return slice;
 		}
 		return NULL;
@@ -235,7 +240,7 @@ public:
 		for (int i = 0; i < cnt; i++)
 		{
 			TimeSlice* slice = data.vecTimeSlice[i];
-			CCAssert(slice && slice->endTime != 0);
+			CCAssert(slice && slice->endTime.tv_sec != 0, "NDProfileReport");
 
 			string name = getMargin( slice ) + slice->name;
 			char line[200] = "";
@@ -255,8 +260,8 @@ public:
 			if (slice)
 			{
 				char line[200] = "";
-				sprintf( line, "start=%u, end=%u, name=%s, time=%s\r\n", 
-					slice->beginTime, slice->endTime, slice->name.c_str(), slice->getTimeStr().c_str());
+				sprintf( line, "start=%u, end=%u, name=%s, time=%s\r\n",
+					slice->beginTime.tv_sec, slice->endTime.tv_sec, slice->name.c_str(), slice->getTimeStr().c_str());
 
 				writeLine(line);
 			}
@@ -287,9 +292,11 @@ public:
 
 	static void writeLine( const string& line )
 	{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 		DWORD n = 0;
 		HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
 		WriteConsoleA( hOut, line.c_str(), line.length(), &n, NULL );
+#endif
 	}
 };
 ///////////////////////////////////////////////////

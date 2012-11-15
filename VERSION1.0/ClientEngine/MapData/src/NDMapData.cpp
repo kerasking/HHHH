@@ -171,7 +171,7 @@ NDMapSwitch::~NDMapSwitch()
 // 								des.c_str(),
 // 						 INTCOLORTOCCC4(0xFFF5B4),
 // 						 INTCOLORTOCCC4(0xC75900),
-// 					 CGSizeMake(mapdata->getColumns()*mapdata.unitSize, mapdata->getRows()*mapdata.unitSize)
+// 					 CCSizeMake(mapdata->getColumns()*mapdata.unitSize, mapdata->getRows()*mapdata.unitSize)
 // 					 );
 // 			ty -= 20;
 // 		}
@@ -182,7 +182,7 @@ NDMapSwitch::~NDMapSwitch()
 // 						name.c_str(),
 // 					  INTCOLORTOCCC4(0xFFFF00),
 // 					  INTCOLORTOCCC4(0x2F4F4F),
-// 				 CGSizeMake(mapdata->getColumns()*mapdata.unitSize, mapdata->getRows()*mapdata.unitSize)
+// 				 CCSizeMake(mapdata->getColumns()*mapdata.unitSize, mapdata->getRows()*mapdata.unitSize)
 // 		 );
 // 	}
 // }
@@ -214,7 +214,7 @@ void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 		//T.drawString2(g, introduce, tx2, ty2, 0xFFF5B4,0xC75900, 0);//ºóÎÄ×Ö 0xFFF5B4, 0xC75900
 		this->SetLableByType(1, tx2, ty2, strDes.c_str(),
 				INTCOLORTOCCC4(0xFFF5B4), INTCOLORTOCCC4(0xC75900),
-				CGSizeMake(pkMapdata->getColumns() * pkMapdata->getUnitSize(),
+				CCSizeMake(pkMapdata->getColumns() * pkMapdata->getUnitSize(),
 						pkMapdata->getRows() * pkMapdata->getUnitSize()));
 
 		ty -= 20 * fScaleFactor;
@@ -223,13 +223,13 @@ void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 	//T.drawString2(g, name, tx, ty, 0xFFFF00,0x2F4F4F,0);//0x2F4F4F
 	this->SetLableByType(0, tx, ty, strName.c_str(), INTCOLORTOCCC4(0xFFFF00),
 			INTCOLORTOCCC4(0x2F4F4F),
-			CGSizeMake(pkMapdata->getColumns() * pkMapdata->getUnitSize(),
+			CCSizeMake(pkMapdata->getColumns() * pkMapdata->getUnitSize(),
 					pkMapdata->getRows() * pkMapdata->getUnitSize()));
 
 }
 
 void NDMapSwitch::SetLableByType(int eLableType, int x, int y, const char* pszText,
-		ccColor4B color1, ccColor4B color2, CGSize kParentSize)
+		ccColor4B color1, ccColor4B color2, CCSize kParentSize)
 {
 	if (!pszText)
 	{
@@ -289,13 +289,13 @@ void NDMapSwitch::SetLableByType(int eLableType, int x, int y, const char* pszTe
 	pkLabels[0]->SetFontSize(15);
 	pkLabels[1]->SetFontSize(15);
 
-	CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
 
 	pkLabels[1]->SetFrameRect(
-			CGRectMake(x + 1, y + sizewin.height + 1 - kParentSize.height,
+			CCRectMake(x + 1, y + sizewin.height + 1 - kParentSize.height,
 					sizewin.width, 20 * fScaleFactor));
 	pkLabels[0]->SetFrameRect(
-			CGRectMake(x, y + sizewin.height - kParentSize.height, sizewin.width,
+			CCRectMake(x, y + sizewin.height - kParentSize.height, sizewin.width,
 					20 * fScaleFactor));
 }
 
@@ -451,12 +451,12 @@ void NDMapData::decode(FILE* pkStream)
 							* pkTile->getTexture()->getMaxS() / nTileWidth;
 
 					pkTile->setCutRect(
-							CGRectMake(nTileWidth * (nTileIndex % nPicParts),
+							CCRectMake(nTileWidth * (nTileIndex % nPicParts),
 									nTileHeight * (nTileIndex / nPicParts),
 									nTileWidth, nTileHeight));
 
 					pkTile->setDrawRect(
-							CGRectMake(nTileWidth * c, nTileHeight * r,
+							CCRectMake(nTileWidth * c, nTileHeight * r,
 									nTileWidth, nTileHeight));
 
 					pkTile->setReverse(reverse);
@@ -559,9 +559,9 @@ void NDMapData::decode(FILE* pkStream)
 				* pkTile->getTexture()->getMaxT();
 
 
-		pkTile->setMapSize(	CGSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
-		pkTile->setCutRect(	CGRectMake(0, 0, picWidth, picHeight));
-		pkTile->setDrawRect(CGRectMake(nX, nY, picWidth, picHeight));
+		pkTile->setMapSize(	CCSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
+		pkTile->setCutRect(	CCRectMake(0, 0, picWidth, picHeight));
+		pkTile->setDrawRect(CCRectMake(nX, nY, picWidth, picHeight));
 		pkTile->setReverse(nReverse);
 		pkTile->make();
 
@@ -634,9 +634,9 @@ void NDMapData::decode(FILE* pkStream)
 		int nPicHeight = pkTile->getTexture()->getPixelsHigh()
 				* pkTile->getTexture()->getMaxT();
 
-		pkTile->setMapSize( CGSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
-		pkTile->setCutRect(	CGRectMake(0, 0, nPicWidth, nPicHeight));
-		pkTile->setDrawRect(CGRectMake(x, y, nPicWidth, nPicHeight));
+		pkTile->setMapSize( CCSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
+		pkTile->setCutRect(	CCRectMake(0, 0, nPicWidth, nPicHeight));
+		pkTile->setDrawRect(CCRectMake(x, y, nPicWidth, nPicHeight));
 		pkTile->setReverse(bReverse);
 		pkTile->make();
 
@@ -770,7 +770,7 @@ void NDMapData::moveBackGround(int x, int y) //x,y??
 
 		if (pkTile)
 		{
-			CGRect rect = pkTile->getDrawRect();
+			CCRect rect = pkTile->getDrawRect();
 			rect.origin.x -= -x / 3;
 			pkTile->setDrawRect(rect);
 			pkTile->make();

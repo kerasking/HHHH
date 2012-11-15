@@ -7,7 +7,7 @@
 //
 
 #include "JavaMethod.h"
-#include "Utility.h"
+#include "UtilityInc.h"
 
 int FileOp::readByte(FILE* pkFile)
 {
@@ -23,7 +23,7 @@ int FileOp::readByte(FILE* pkFile)
 	size_t read = fread(&ucData, 1, size, pkFile);
 	if (size != read)
 	{
-		NDAsssert(0);
+		//NDAsssert(0);
 		return 0;
 	}
 

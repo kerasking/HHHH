@@ -113,6 +113,8 @@ static voidpf ZCALLBACK fopen64_file_func (voidpf opaque, const void* filename, 
     {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MARMALADE || CC_TARGET_PLATFORM == CC_PLATFORM_BADA) || (CC_TARGET_PLATFORM == CC_PLATFORM_BLACKBERRY)
         file = NULL;
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	    file = fopen((const char*)filename, mode_fopen);
 #else
         file = fopen64((const char*)filename, mode_fopen);    
 #endif
@@ -149,6 +151,8 @@ static ZPOS64_T ZCALLBACK ftell64_file_func (voidpf opaque, voidpf stream)
     ZPOS64_T ret;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MARMALADE || CC_TARGET_PLATFORM == CC_PLATFORM_BADA) || (CC_TARGET_PLATFORM == CC_PLATFORM_BLACKBERRY)
     ret = NULL;
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ret = ftello((FILE *)stream);
 #else
     ret = ftello64((FILE *)stream);
 #endif
@@ -198,6 +202,9 @@ static long ZCALLBACK fseek64_file_func (voidpf  opaque, voidpf stream, ZPOS64_T
     ret = 0;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MARMALADE || CC_TARGET_PLATFORM == CC_PLATFORM_BADA) || (CC_TARGET_PLATFORM == CC_PLATFORM_BLACKBERRY)
+	ret = -1;
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if(fseeko((FILE *)stream, offset, fseek_origin) != 0)
     ret = -1;
 #else
     if(fseeko64((FILE *)stream, offset, fseek_origin) != 0)

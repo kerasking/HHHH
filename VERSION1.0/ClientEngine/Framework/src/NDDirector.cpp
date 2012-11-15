@@ -317,19 +317,19 @@ NDScene* NDDirector::GetRunningScene()
 // 	m_pkDirector->setDisplayStats(bDisplayed);
 // }
 
-// CGSize NDDirector::GetWinSize()
+// CCSize NDDirector::GetWinSize()
 // {
 // 	return m_pkDirector->getWinSizeInPixels();
 // }
 
-void NDDirector::SetViewRect(CGRect kRect, NDNode* pkNode)
+void NDDirector::SetViewRect(CCRect kRect, NDNode* pkNode)
 {
 	if (m_pkTransitionSceneWait)
 	{
 		return;
 	}
 
-	CGSize kWinSize = m_pkDirector->getWinSizeInPixels();
+	CCSize kWinSize = m_pkDirector->getWinSizeInPixels();
 
 #if 0 //@todo
 	glEnable (GL_SCISSOR_TEST);

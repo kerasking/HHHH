@@ -13,6 +13,11 @@
 #include "CCArray.h"
 #include "NDTile.h"
 #include "NDAnimationGroup.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+//#include "objc/objc.h"
+//typedef signed char		BOOL;
+#include "BaseType.h"
+#endif
 
 class NDFrameRunRecord: public cocos2d::CCObject
 {
@@ -84,7 +89,7 @@ public:
 	void run(float fScale);
 
 	// 绘制人物头像
-	void drawHeadAt(CGPoint pos);
+	void drawHeadAt(CCPoint pos);
 
 private:
 

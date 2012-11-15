@@ -28,7 +28,7 @@
 
 @synthesize nduiCustomView = _nduiCustomView;
 
-- (id)initWithFrame:(CGRect)frame
+- (id)initWithFrame:(CCRect)frame
 {
 	if ((self = [super initWithFrame:frame])) 
 	{	
@@ -40,13 +40,13 @@
 		m_activeRadioButtonIndex = -1;
 		
 		m_btnOk = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		m_btnOk.frame = CGRectMake(100, 280, 60, 30);
+		m_btnOk.frame = CCRectMake(100, 280, 60, 30);
 		[m_btnOk setTitle:NDCommonCString_RETNS("Ok") forState:UIControlStateNormal];
 		[m_btnOk addTarget:self action:@selector(okButtonClick:) forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:m_btnOk];
 		
 		m_btnCancle = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		m_btnCancle.frame = CGRectMake(300, 280, 60, 30);
+		m_btnCancle.frame = CCRectMake(300, 280, 60, 30);
 		[m_btnCancle setTitle:NDCommonCString_RETNS("Cancel") forState:UIControlStateNormal];
 		[m_btnCancle addTarget:self action:@selector(cancleButtonClick:) forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:m_btnCancle];
@@ -54,7 +54,7 @@
 		self.backgroundColor = [UIColor grayColor];
 		
 		CGAffineTransform transForm = CGAffineTransformMakeRotation(degreesToRadian(90));
-		[self setCenter:CGPointMake(160, 240)];
+		[self setCenter:CCPointMake(160, 240)];
 		[self setTransform:transForm];
 	}
 	return self;
@@ -71,17 +71,17 @@
 
 - (void)SetOkCancleButtonPosY:(NSUInteger)y
 {
-	CGRect rect = m_btnOk.frame;
-	m_btnOk.frame = CGRectMake(rect.origin.x, y, rect.size.width, rect.size.height);
+	CCRect rect = m_btnOk.frame;
+	m_btnOk.frame = CCRectMake(rect.origin.x, y, rect.size.width, rect.size.height);
 	rect = m_btnCancle.frame;
-	m_btnCancle.frame = CGRectMake(rect.origin.x, y, rect.size.width, rect.size.height);
+	m_btnCancle.frame = CCRectMake(rect.origin.x, y, rect.size.width, rect.size.height);
 }
 
 - (void)SetEditNumbers:(NSUInteger)numbers Tags:(NSArray *)tags Titles:(NSArray *)titles
 {
 	NDAsssert(numbers == [tags count] && numbers == [titles count]);
 	
-	CGPoint startPos = CGPointMake(CONTROL_INTERVAL, CONTROL_INTERVAL);
+	CCPoint startPos = CCPointMake(CONTROL_INTERVAL, CONTROL_INTERVAL);
 	
 	if ([m_edits count] > 0) 
 	{
@@ -107,7 +107,7 @@
 		nLines <= 0 ? nLines = 1 : 0;
 		
 		UILabel *label = [[UILabel alloc] initWithFrame:
-						  CGRectMake(startPos.x, 
+						  CCRectMake(startPos.x, 
 									 startPos.y + (LABEL_HEIGHT * nLines + CONTROL_INTERVAL + EDIT_HEIGHT + CONTROL_INTERVAL) * i,
 									 LABEL_WIDTH, 
 									 LABEL_HEIGHT * nLines)];
@@ -117,7 +117,7 @@
 		[label release];
 		
 		UITextField *textField = [[UITextField alloc] initWithFrame:
-								  CGRectMake(startPos.x, 
+								  CCRectMake(startPos.x, 
 											 label.frame.origin.y + LABEL_HEIGHT * nLines + CONTROL_INTERVAL, 
 											 EDIT_WIDTH, 
 											 EDIT_HEIGHT)];
@@ -234,16 +234,16 @@
 {
 	NDAsssert(numbers == [tags count] && numbers == [titles count]);
 	
-	CGPoint startPos;
+	CCPoint startPos;
 	if ([m_edits count] > 0) 
 	{
 		NSDictionary *dict = [m_edits lastObject];
 		UITextField *textField = [dict objectForKey:@"edit"];
-		startPos = CGPointMake(CONTROL_INTERVAL, textField.frame.origin.y + textField.frame.size.height + CONTROL_INTERVAL);
+		startPos = CCPointMake(CONTROL_INTERVAL, textField.frame.origin.y + textField.frame.size.height + CONTROL_INTERVAL);
 	}
 	else 
 	{
-		startPos = CGPointMake(CONTROL_INTERVAL, CONTROL_INTERVAL);
+		startPos = CCPointMake(CONTROL_INTERVAL, CONTROL_INTERVAL);
 	}
 	
 	
@@ -268,7 +268,7 @@
 		NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
 		
 		UIButton *button = [[UIButton alloc] initWithFrame:
-							CGRectMake(startPos.x, 
+							CCRectMake(startPos.x, 
 									   startPos.y + (RADIO_BUTTON_HEIGHT + CONTROL_INTERVAL) * i,
 									   RADIO_BUTTON_WIDTH, 
 									   RADIO_BUTTON_WIDTH)];
@@ -279,7 +279,7 @@
 		[button release];			
 		
 		UILabel *label = [[UILabel alloc] initWithFrame:
-						  CGRectMake(button.frame.origin.x + button.frame.size.width + CONTROL_INTERVAL, 
+						  CCRectMake(button.frame.origin.x + button.frame.size.width + CONTROL_INTERVAL, 
 									 button.frame.origin.y + (button.frame.size.height - LABEL_HEIGHT) / 2,
 									 LABEL_WIDTH, 
 									 LABEL_HEIGHT)];
@@ -344,22 +344,22 @@
 {
 	NDAsssert(numbers == [tags count] && numbers == [titles count]);
 	
-	CGPoint startPos;
+	CCPoint startPos;
 	if ([m_radioButtons count] > 0) 
 	{
 		NSDictionary *dict = [m_radioButtons lastObject];
 		UIButton *button = [dict objectForKey:@"radioButton"];
-		startPos = CGPointMake(CONTROL_INTERVAL, button.frame.origin.y + button.frame.size.height + CONTROL_INTERVAL);
+		startPos = CCPointMake(CONTROL_INTERVAL, button.frame.origin.y + button.frame.size.height + CONTROL_INTERVAL);
 	}
 	else if ([m_edits count] > 0) 
 	{
 		NSDictionary *dict = [m_edits lastObject];
 		UITextField *textField = [dict objectForKey:@"edit"];
-		startPos = CGPointMake(CONTROL_INTERVAL, textField.frame.origin.y + textField.frame.size.height + CONTROL_INTERVAL);
+		startPos = CCPointMake(CONTROL_INTERVAL, textField.frame.origin.y + textField.frame.size.height + CONTROL_INTERVAL);
 	}
 	else 
 	{
-		startPos = CGPointMake(CONTROL_INTERVAL, CONTROL_INTERVAL);
+		startPos = CCPointMake(CONTROL_INTERVAL, CONTROL_INTERVAL);
 	}
 	
 	if ([m_buttons count] > 0) 
@@ -380,7 +380,7 @@
 		NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
 		
 		UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		button.frame = CGRectMake(startPos.x + (BUTTON_WIDTH + CONTROL_INTERVAL * 10) * (i % 5), 
+		button.frame = CCRectMake(startPos.x + (BUTTON_WIDTH + CONTROL_INTERVAL * 10) * (i % 5), 
 								  startPos.y + (BUTTON_HEIGHT + CONTROL_INTERVAL) * (i / 5), 
 								  BUTTON_WIDTH, 
 								  BUTTON_HEIGHT);

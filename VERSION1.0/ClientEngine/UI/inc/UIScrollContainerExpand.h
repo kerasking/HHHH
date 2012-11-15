@@ -25,7 +25,7 @@ public:
     void Initialization(); override
     
     void AddView(UIScrollViewExpand* pScrollViewCurrent);
-    void SetSizeView(CGSize size);
+    void SetSizeView(CCSize size);
     
     UIScrollViewExpand* GetViewById(unsigned int nViewId);
     UIScrollViewExpand* GetViewByIndex(unsigned int nViewIndex);
@@ -38,7 +38,7 @@ public:
     
     
 protected:
-    CGSize                  m_sizeView;
+    CCSize                  m_sizeView;
     
     float                   m_fTranValue;
     float                   m_fScrollDistance;

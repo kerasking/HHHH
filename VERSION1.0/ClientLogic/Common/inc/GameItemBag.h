@@ -144,12 +144,12 @@ public:
 	
 	void Initialization(); override
 	void draw(); override
-	void SetFrameRect(CGRect rect);
+	void SetFrameRect(CCRect rect);
 private:
 	void ResetFocus();
 	void Update();
 private:
-	NDPicture *m_picFocus; NDPicture *m_picFocusMirror; CGSize m_sizeFocus;
+	NDPicture *m_picFocus; NDPicture *m_picFocusMirror; CCSize m_sizeFocus;
 	NDUIImage *m_imageFocus, *m_imageFocusMirror;
 	
 	unsigned int m_iFocusUpdateDif;

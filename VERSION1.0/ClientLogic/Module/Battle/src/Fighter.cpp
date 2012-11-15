@@ -86,7 +86,7 @@ Fighter::Fighter()
 {
 	m_pkActionWordImage = NULL;
 
-	m_kRoleInParentPoint = CGPointMake(0.0f, 0.0f);
+	m_kRoleInParentPoint = CCPointMake(0.0f, 0.0f);
 	m_pkRoleParent = NULL;
 	m_pkRole = NULL;
 	m_bRoleShouldDelete = false;
@@ -199,7 +199,7 @@ Fighter::~Fighter()
 
 //++Guosen 2012.6.29//计算交战者位置的X坐标
 int countY(int teamAmount,BATTLE_GROUP group,int t,int pos ){
-	//	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	//	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 	//    int wsh = winsize.height;
 	//    winsize.height /= 2;
 	//	int st=pos-1;
@@ -221,14 +221,14 @@ int countY(int teamAmount,BATTLE_GROUP group,int t,int pos ){
 	//		//		NDLog(@"team:%d,pos:%d",team,st);
 	//		//		NDLog(@"x:%d,y:%d",this->originX,this->originY);
 	//	}
-	CGSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
 	int iY			= g_iYOffset[pos-1];
 	return iY*winsize.height/640;
 }
 
 //++Guosen 2012.6.29//计算交战者位置的Y坐标
 int countX(int teamAmount,BATTLE_GROUP group,int t,int pos ){
-	//	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	//	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 	//	int st=pos-1;
 	//	int team=t-1;
 	//	if(teamAmount<=2){
@@ -263,7 +263,7 @@ int countX(int teamAmount,BATTLE_GROUP group,int t,int pos ){
 	//		//		NDLog(@"team:%d,pos:%d",team,st);
 	//		//		NDLog(@"x:%d,y:%d",this->originX,this->originY);
 	//	}
-	CGSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
 	int iXOffset	= g_iXOffset[pos-1];
 	int iX			= 0;
 	if (group == BATTLE_GROUP_ATTACK) // 左边
@@ -299,43 +299,43 @@ void Fighter::updatePos()
 		NDUILabel* lbHover = (NDUILabel*)m_pkParent->GetChild(TAG_HOVER_MSG);
 		if (lbHover) 
 		{
-			CGSize sizeStr = getStringSize(lbHover->GetText().c_str(), DEFAULT_FONT_SIZE * FONT_SCALE);
+			CCSize sizeStr = getStringSize(lbHover->GetText().c_str(), DEFAULT_FONT_SIZE * FONT_SCALE);
 			// 改成固定值
-			//lbHover->SetFrameRect(CGRectMake(x - sizeStr.width / 2, y - m_role->GetHeight(), sizeStr.width, sizeStr.height));
-			lbHover->SetFrameRect(CGRectMake(m_nX - sizeStr.width / 2, m_nY - m_nRoleInitialHeight, sizeStr.width, sizeStr.height));
+			//lbHover->SetFrameRect(CCRectMake(x - sizeStr.width / 2, y - m_role->GetHeight(), sizeStr.width, sizeStr.height));
+			lbHover->SetFrameRect(CCRectMake(m_nX - sizeStr.width / 2, m_nY - m_nRoleInitialHeight, sizeStr.width, sizeStr.height));
 		}
 	}
 
 	//NDUILabel* lbName = (NDUILabel*)this->m_parent->GetChild(TAG_FIGHTER_NAME);
 	if (m_pkFighterNameLabel) 
 	{
-		CGSize sizeStr = getStringSize(m_pkFighterNameLabel->GetText().c_str(), DEFAULT_FONT_SIZE * FONT_SCALE);
+		CCSize sizeStr = getStringSize(m_pkFighterNameLabel->GetText().c_str(), DEFAULT_FONT_SIZE * FONT_SCALE);
 
 		// 所有怪物武将的姓名位置改成固定值
-		//--this->lb_FighterName->SetFrameRect(CGRectMake(x - sizeStr.width / 2, y - m_role->GetHeight() - sizeStr.height, sizeStr.width, sizeStr.height));
+		//--this->lb_FighterName->SetFrameRect(CCRectMake(x - sizeStr.width / 2, y - m_role->GetHeight() - sizeStr.height, sizeStr.width, sizeStr.height));
 		m_pkFighterNameLabel->SetFrameRect(
-			CGRectMake(m_nX - sizeStr.width / 2, 
+			CCRectMake(m_nX - sizeStr.width / 2, 
 				m_nY - m_nRoleInitialHeight - sizeStr.height - HP_BAR_HEIGHT - 2, 
 					sizeStr.width, sizeStr.height ));
 	}
 
 	if (m_pkSkillNameLabel)
 	{
-		//CGPoint pt = m_pkRole->GetPosition();
-		CGSize sizeStr =getStringSize(m_pkSkillNameLabel->GetText().c_str(), DEFAULT_FONT_SIZE * FONT_SCALE);
+		//CCPoint pt = m_pkRole->GetPosition();
+		CCSize sizeStr =getStringSize(m_pkSkillNameLabel->GetText().c_str(), DEFAULT_FONT_SIZE * FONT_SCALE);
 
 		//++Guosen 2012.6.28//设置技能名的显示位置
 		//if(this->m_kInfo.group == BATTLE_GROUP_ATTACK)
 		//{
-		//	lb_skillName->SetFrameRect(CGRectMake(pt.x +(FIGHTER_WIDTH/2), pt.y - (FIGHTER_HEIGHT/2) - sizeStr.height, sizeStr.width, sizeStr.height));
+		//	lb_skillName->SetFrameRect(CCRectMake(pt.x +(FIGHTER_WIDTH/2), pt.y - (FIGHTER_HEIGHT/2) - sizeStr.height, sizeStr.width, sizeStr.height));
 		//}else{
-		//	lb_skillName->SetFrameRect(CGRectMake(pt.x -(FIGHTER_WIDTH/2)-sizeStr.width, pt.y - (FIGHTER_HEIGHT/2) - sizeStr.height, sizeStr.width, sizeStr.height));
+		//	lb_skillName->SetFrameRect(CCRectMake(pt.x -(FIGHTER_WIDTH/2)-sizeStr.width, pt.y - (FIGHTER_HEIGHT/2) - sizeStr.height, sizeStr.width, sizeStr.height));
 		//}
 		// 所有怪物武将的技能名位置改成固定值
-		//--lb_skillName->SetFrameRect(CGRectMake(pt.x-sizeStr.width/2 , pt.y-FIGHTER_HEIGHT-sizeStr.height*2, sizeStr.width, sizeStr.height));
+		//--lb_skillName->SetFrameRect(CCRectMake(pt.x-sizeStr.width/2 , pt.y-FIGHTER_HEIGHT-sizeStr.height*2, sizeStr.width, sizeStr.height));
 
 		m_pkSkillNameLabel->SetFrameRect(
-			CGRectMake(m_nX-sizeStr.width/2 , 
+			CCRectMake(m_nX-sizeStr.width/2 , 
 				m_nY - m_nRoleInitialHeight - HP_BAR_HEIGHT - 2 - sizeStr.height*2, 
 					sizeStr.width, sizeStr.height ));
 		//++
@@ -840,7 +840,7 @@ void Fighter::showFighterName(bool b)
 		NDBaseRole* role = GetRole();
 		if (role)
 		{
-			CGPoint pt = m_pkRole->GetPosition();
+			CCPoint pt = m_pkRole->GetPosition();
 			m_pkFighterNameLabel = new NDUILabel;
 			m_pkFighterNameLabel->Initialization();
 			//lb_FighterName->SetTag(TAG_FIGHTER_NAME);
@@ -852,10 +852,10 @@ void Fighter::showFighterName(bool b)
 
 			m_pkFighterNameLabel->SetText(GetRole()->m_strName.c_str());
 			m_pkFighterNameLabel->SetFontSize(DEFAULT_FONT_SIZE);
-			CGSize sizefighterName = getStringSize(GetRole()->m_strName.c_str(), DEFAULT_FONT_SIZE*FONT_SCALE);
+			CCSize sizefighterName = getStringSize(GetRole()->m_strName.c_str(), DEFAULT_FONT_SIZE*FONT_SCALE);
 			//fighterName->SetTag(TAG_FIGHTER_NAME);
 			m_pkFighterNameLabel->SetFrameRect(
-					CGRectMake(pt.x - sizefighterName.width / 2,
+					CCRectMake(pt.x - sizefighterName.width / 2,
 							pt.y - FIGHTER_HEIGHT - sizefighterName.height,
 							sizefighterName.width, sizefighterName.height));
 			m_pkParent->AddChild(m_pkFighterNameLabel);
@@ -898,16 +898,16 @@ void Fighter::showSkillName(bool b)
 {
 	if (b)
 	{
-		CGPoint pt = m_pkRole->GetPosition();
+		CCPoint pt = m_pkRole->GetPosition();
 		m_pkSkillNameLabel = new NDUILabel;
 		m_pkSkillNameLabel->Initialization();
 		m_pkSkillNameLabel->SetFontColor(ccc4(0xff, 0xd7, 0, 255));//(ccc4(254, 3, 9, 255));//++Guosen 2012.6.28//设置技能名字体颜色
 		m_pkSkillNameLabel->SetText(m_strSkillName.c_str());
 		m_pkSkillNameLabel->SetFontSize(DEFAULT_FONT_SIZE);
-		CGSize sizeSkillName = getStringSize(m_strSkillName.c_str(), DEFAULT_FONT_SIZE*FONT_SCALE);
+		CCSize sizeSkillName = getStringSize(m_strSkillName.c_str(), DEFAULT_FONT_SIZE*FONT_SCALE);
 		//++Guosen 2012.6.28//设置技能名的显示位置
 		//lb_skillName->SetTag(TAG_SKILL_NAME);
-		m_pkSkillNameLabel->SetFrameRect(CGRectMake(pt.x-sizeSkillName.width/2 , pt.y-FIGHTER_HEIGHT-sizeSkillName.height*2, sizeSkillName.width, sizeSkillName.height));
+		m_pkSkillNameLabel->SetFrameRect(CCRectMake(pt.x-sizeSkillName.width/2 , pt.y-FIGHTER_HEIGHT-sizeSkillName.height*2, sizeSkillName.width, sizeSkillName.height));
 		m_pkParent->AddChild(m_pkSkillNameLabel);
 	}
 	else
@@ -949,13 +949,13 @@ void Fighter::showSkillName(bool b)
 // 		return;
 // 	}
 // 
-// 	CGSize size = pic->GetSize();
+// 	CCSize size = pic->GetSize();
 // 
 // 	m_pkActionWordImage = new NDUIImage;
 // 	m_pkActionWordImage->Initialization();
 // 	m_pkActionWordImage->SetPicture(pic);
 // 	m_pkActionWordImage->SetFrameRect(
-// 			CGRectMake(m_nX - size.width / 2, m_nY - m_pkRole->GetHeight(),
+// 			CCRectMake(m_nX - size.width / 2, m_nY - m_pkRole->GetHeight(),
 // 					size.width, size.height));
 // 	m_pkParent->AddChild(m_pkActionWordImage);
 // }
@@ -1080,14 +1080,14 @@ void Fighter::drawHurtNumber()
 				int bjH = picBaoJi->GetSize().height;
 				if (m_imgBaoJi)
 				{
-					m_imgBaoJi->SetFrameRect(CGRectMake(x - (bjW >> 1),
+					m_imgBaoJi->SetFrameRect(CCRectMake(x - (bjW >> 1),
 						y - m_role->GetHeight() - bjH - hn.getHurtNumberY(),
 						bjW,
 						bjH));
 				}*/
 				if (m_pkImgHurtNum)
 				{
-					m_pkImgHurtNum->SetFrameRect(CGRectMake(m_nX - (m_pkImgHurtNum->GetNumberSize().width /2),
+					m_pkImgHurtNum->SetFrameRect(CCRectMake(m_nX - (m_pkImgHurtNum->GetNumberSize().width /2),
 						m_nY - m_nRoleInitialHeight- hn.getHurtNumberY()*20,//++Guosen 2012.6.29 固定位置起始 //this->y - m_role->GetHeight() - hn.getHurtNumberY()*20,// - bjH * 13 / 20,
 						m_pkImgHurtNum->GetNumberSize().width,
 						m_pkImgHurtNum->GetNumberSize().height));
@@ -1097,7 +1097,7 @@ void Fighter::drawHurtNumber()
 			else
 			{
 				if (m_pkImgHurtNum) {
-					m_pkImgHurtNum->SetFrameRect(CGRectMake(m_nX - (m_pkImgHurtNum->GetNumberSize().width /2),
+					m_pkImgHurtNum->SetFrameRect(CCRectMake(m_nX - (m_pkImgHurtNum->GetNumberSize().width /2),
 						m_nY - m_nRoleInitialHeight- hn.getHurtNumberY()*10,//++Guosen 2012.6.29 固定位置起始 //this->y - m_role->GetHeight() - hn.getHurtNumberY()*20,
 						m_pkImgHurtNum->GetNumberSize().width,
 						m_pkImgHurtNum->GetNumberSize().height));
@@ -1189,20 +1189,20 @@ void Fighter::drawHPMP()
 		}
 	}
 
-	//DrawRecttangle( CGRectMake(drawx, drawy, iBarWidth, iBarHeight), ccc4(0xcc, 0x99, 0x33, 255));
-	//DrawRecttangle( CGRectMake(drawx, drawy, manaw, iBarHeight), ccc4(0xff, 0xcc, 0, 255));
-	//DrawRecttangle( CGRectMake(drawx, drawy - iBarHeight - 2, iBarWidth, iBarHeight ), ccc4(148, 65, 74, 255) );
-	//DrawRecttangle( CGRectMake(drawx, drawy - iBarHeight - 2, lifew, iBarHeight ), ccc4(237, 83, 15, 255) );
+	//DrawRecttangle( CCRectMake(drawx, drawy, iBarWidth, iBarHeight), ccc4(0xcc, 0x99, 0x33, 255));
+	//DrawRecttangle( CCRectMake(drawx, drawy, manaw, iBarHeight), ccc4(0xff, 0xcc, 0, 255));
+	//DrawRecttangle( CCRectMake(drawx, drawy - iBarHeight - 2, iBarWidth, iBarHeight ), ccc4(148, 65, 74, 255) );
+	//DrawRecttangle( CCRectMake(drawx, drawy - iBarHeight - 2, lifew, iBarHeight ), ccc4(237, 83, 15, 255) );
 	if ( m_pMPBar )
 	{
-		m_pMPBar->SetFrameRect( CGRectMake(drawx, drawy, iBarWidth, iBarHeight) );
+		m_pMPBar->SetFrameRect( CCRectMake(drawx, drawy, iBarWidth, iBarHeight) );
 		m_pMPBar->SetStart( 0 );
 		m_pMPBar->SetProcess( manaw );
 		m_pMPBar->SetTotal( iBarWidth );
 	}
 	if ( m_pHPBar )
 	{
-		m_pHPBar->SetFrameRect( CGRectMake(drawx, drawy - iBarHeight - 2, iBarWidth, iBarHeight) );
+		m_pHPBar->SetFrameRect( CCRectMake(drawx, drawy - iBarHeight - 2, iBarWidth, iBarHeight) );
 		m_pHPBar->SetStart( 0 );
 		m_pHPBar->SetProcess( lifew );
 		m_pHPBar->SetTotal( iBarWidth );
@@ -1311,7 +1311,7 @@ void Fighter::setWillBeAtk(bool bSet)
 //		bool bReverse = m_kInfo.group == BATTLE_GROUP_ATTACK;
 //		pic->SetReverse(bReverse);
 //		
-//		CGRect rect = CGRectMake(x + m_role->GetWidth() / 2 + 5,
+//		CCRect rect = CCRectMake(x + m_role->GetWidth() / 2 + 5,
 //					 y - 15,
 //					 pic->GetSize().width,
 //					 pic->GetSize().height);
@@ -1383,13 +1383,13 @@ void Fighter::showHoverMsg(const char* str)
 	NDUILabel* lbHover = (NDUILabel*) m_pkParent->GetChild(TAG_HOVER_MSG);
 	if (!lbHover)
 	{
-		CGPoint pt = m_pkRole->GetPosition();
+		CCPoint pt = m_pkRole->GetPosition();
 		lbHover = new NDUILabel;
 		lbHover->Initialization();
 		lbHover->SetFontColor(ccc4(0, 255, 100, 255));
-		CGSize sizeStr = getStringSize(str, DEFAULT_FONT_SIZE*FONT_SCALE);
+		CCSize sizeStr = getStringSize(str, DEFAULT_FONT_SIZE*FONT_SCALE);
 		lbHover->SetTag(TAG_HOVER_MSG);
-		lbHover->SetFrameRect(CGRectMake(pt.x - sizeStr.width / 2, pt.y - m_nRoleInitialHeight, sizeStr.width, sizeStr.height));//++Guosen 2012.6.29 //lbHover->SetFrameRect(CGRectMake(pt.x - sizeStr.width / 2, pt.y - m_role->GetHeight(), sizeStr.width, sizeStr.height));
+		lbHover->SetFrameRect(CCRectMake(pt.x - sizeStr.width / 2, pt.y - m_nRoleInitialHeight, sizeStr.width, sizeStr.height));//++Guosen 2012.6.29 //lbHover->SetFrameRect(CCRectMake(pt.x - sizeStr.width / 2, pt.y - m_role->GetHeight(), sizeStr.width, sizeStr.height));
 
 		m_pkParent->AddChild(lbHover);
 	}
@@ -1440,7 +1440,7 @@ NDUIImage * GenerateIconImage( unsigned int nIconID )
 		stringstream	ssFile;
 		ssFile << "Res00/StatusIcons" << nFile << ".png";
 		pPicture->Initialization( NDPath::GetImgPath( ssFile.str().c_str()).c_str() );
-		pPicture->Cut( CGRectMake( (nRow-1)*STATUS_ICON_WIDTH, (nCown-1)*STATUS_ICON_HEIGHT, STATUS_ICON_WIDTH, STATUS_ICON_HEIGHT ) );
+		pPicture->Cut( CCRectMake( (nRow-1)*STATUS_ICON_WIDTH, (nCown-1)*STATUS_ICON_HEIGHT, STATUS_ICON_WIDTH, STATUS_ICON_HEIGHT ) );
 		NDUIImage *		pImage	= new NDUIImage;
 		if ( pImage )
 		{
@@ -1482,8 +1482,8 @@ bool Fighter::AppendStatusIcon( unsigned int nIconID )
 	tFighterStatusIcon.pIconImage	= pIconImage;
 	m_queStatusIcons.push_back( tFighterStatusIcon );
 	m_pkParent->AddChild(pIconImage);
-	CGPoint pt	= m_pkRole->GetPosition();
-	pIconImage->SetFrameRect( CGRectMake( pt.x + m_iIconsXOffset, 
+	CCPoint pt	= m_pkRole->GetPosition();
+	pIconImage->SetFrameRect( CCRectMake( pt.x + m_iIconsXOffset, 
 		pt.y - m_nRoleInitialHeight + STATUS_ICON_HEIGHT * (m_queStatusIcons.size()-1), 
 		STATUS_ICON_WIDTH, STATUS_ICON_HEIGHT ) );
 	return true;
@@ -1512,11 +1512,11 @@ void Fighter::UpdateStatusIconsPosition()
 {
 	if ( m_queStatusIcons.empty() )
 		return;
-	CGPoint pt	= m_pkRole->GetPosition();
+	CCPoint pt	= m_pkRole->GetPosition();
 	int	iCount	= 0;
 	for ( std::deque<TFighterStatusIcon>::iterator iter = m_queStatusIcons.begin(); iter != m_queStatusIcons.end(); iter++ )
 	{
-		iter->pIconImage->SetFrameRect( CGRectMake( pt.x + m_iIconsXOffset, 
+		iter->pIconImage->SetFrameRect( CCRectMake( pt.x + m_iIconsXOffset, 
 			pt.y - m_nRoleInitialHeight + STATUS_ICON_HEIGHT * iCount, 
 			STATUS_ICON_WIDTH, STATUS_ICON_HEIGHT ) );
 		iCount++;

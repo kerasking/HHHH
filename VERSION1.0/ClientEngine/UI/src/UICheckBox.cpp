@@ -174,19 +174,19 @@ void CUICheckBox::draw()
 	
 	if ( (!m_lbText || m_lbText->GetText() == "")  && m_bTextReCacl )
 	{
-		CGRect scrRect  = this->GetScreenRect();
+		CCRect scrRect  = this->GetScreenRect();
 		if (m_imgCheck)
 		{
-			CGRect rect		= m_imgCheck->GetFrameRect();
-			rect.origin		= CGPointZero;
+			CCRect rect		= m_imgCheck->GetFrameRect();
+			rect.origin		= CCPointZero;
 			rect.size		= scrRect.size;
 			m_imgCheck->SetFrameRect(rect);
 		}
 		
 		if (m_imgUnCheck)
 		{
-			CGRect rect		= m_imgUnCheck->GetFrameRect();
-			rect.origin		= CGPointZero;
+			CCRect rect		= m_imgUnCheck->GetFrameRect();
+			rect.origin		= CCPointZero;
 			rect.size		= scrRect.size;
 			m_imgUnCheck->SetFrameRect(rect);
 		}
@@ -198,7 +198,7 @@ void CUICheckBox::draw()
 		float	fBoundWidth		= 0;
 		if (m_imgUnCheck)
 		{
-			CGRect rect		= m_imgUnCheck->GetFrameRect();
+			CCRect rect		= m_imgUnCheck->GetFrameRect();
 			fBaseY			= rect.size.height + rect.origin.y;
 			fStartX			= rect.size.width + rect.origin.x;
 			fBoundWidth		= this->GetFrameRect().size.width - fStartX;
@@ -217,7 +217,7 @@ void CUICheckBox::draw()
 		//	fontsize	= fontsize / fScaleFactor; 
 		//}
 		
-		CGSize textSize;
+		CCSize textSize;
 		textSize.width	= fBoundWidth;
 		textSize.height = NDUITextBuilder::DefaultBuilder()->StringHeightAfterFilter(str, textSize.width, fontsize);
 		textSize.width	= NDUITextBuilder::DefaultBuilder()->StringWidthAfterFilter(str, textSize.width, fontsize);
@@ -226,7 +226,7 @@ void CUICheckBox::draw()
 		if (text)
 		{
 			this->RemoveChild(TAG_UITEXT, true);
-			text->SetFrameRect(CGRectMake(fStartX,  fBaseY - textSize.height, textSize.width, textSize.height));
+			text->SetFrameRect(CCRectMake(fStartX,  fBaseY - textSize.height, textSize.width, textSize.height));
 			text->SetTag(TAG_UITEXT);
 			this->AddChild(text);
 		}
@@ -245,28 +245,28 @@ void CUICheckBox::draw()
 	}
 }
 
-void CUICheckBox::SetFrameRect(CGRect rect)
+void CUICheckBox::SetFrameRect(CCRect rect)
 {
 	NDUINode::SetFrameRect(rect);
 	
 	if (m_imgCheck)
 	{
-		CGSize size	= m_imgCheck->GetPicSize();
+		CCSize size	= m_imgCheck->GetPicSize();
 		if (size.height > rect.size.height)
 		{
 			size.height = rect.size.height;
 		}
-		m_imgCheck->SetFrameRect(CGRectMake(0, (rect.size.height - size.height) / 2, size.width, size.height));
+		m_imgCheck->SetFrameRect(CCRectMake(0, (rect.size.height - size.height) / 2, size.width, size.height));
 	}
 	
 	if (m_imgUnCheck)
 	{
-		CGSize size	= m_imgUnCheck->GetPicSize();
+		CCSize size	= m_imgUnCheck->GetPicSize();
 		if (size.height > rect.size.height)
 		{
 			size.height = rect.size.height;
 		}
-		m_imgUnCheck->SetFrameRect(CGRectMake(0, (rect.size.height - size.height) / 2, size.width, size.height));
+		m_imgUnCheck->SetFrameRect(CCRectMake(0, (rect.size.height - size.height) / 2, size.width, size.height));
 	}
 }
 bool CUICheckBox::CanDestroyOnRemoveAllChildren(NDNode* pNode)

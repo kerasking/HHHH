@@ -15,5 +15,5 @@
 // @interface UIImage (grayscale)
 // 
 // - (UIImage *)convertToGrayscale;
-// - (UIImage*) getSubImageFromWithRect: (CGRect) rect;
+// - (UIImage*) getSubImageFromWithRect: (CCRect) rect;
 // @end

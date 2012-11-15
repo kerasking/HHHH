@@ -8,6 +8,18 @@ Copyright(c) 1999-2012, TQ Digital Entertainment, All Rights Reserved
 #include "FrameworkTypes.h"
 #include "Log.h"
 
+typedef enum
+{
+	RENDER_TEXT_SIMPLE = 0,
+	RENDER_TEXT_SHADOW = 1,			// 闃村奖鏁堟灉
+	RENDER_TEXT_SILHOUETTE = 2,		// 鍕捐竟鏁堟灉
+	RENDER_TEXT_ENGRAVE_BLOCK = 3,	// 闆曞埢鏁堟灉
+	RENDER_TEXT_COLORFUL = 4,		// 杩囨浮棰滆壊瀛椾綋
+}	RENDER_TEXT_STYLE;
+
+
+typedef void* HEAGLDRAWABLE;
+typedef void* HNATIVEWINDOW;
 
 //游戏初始化入口
 extern int InitGameInstance();

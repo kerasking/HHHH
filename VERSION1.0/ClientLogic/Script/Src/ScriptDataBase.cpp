@@ -14,7 +14,7 @@
 #include "NDPath.h"
 #include <stdio.h>
 #include <sstream>
-#include <NDProfile.h>
+#include "NDProfile.h"
 
 NS_NDENGINE_BGN
 	

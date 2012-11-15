@@ -40,7 +40,7 @@ public:
 private:
 	void UpdateEquipList();
 	void InitEquipItemList(int iEquipPos, Item* item);
-	void ShowHammerAni(bool show, CGRect rect=CGRectZero);
+	void ShowHammerAni(bool show, CCRect rect=CCRectZero);
 	void ShowHammerAllAni(bool show);
 	void repairItem(Item* item);
 	void repairAllItem();

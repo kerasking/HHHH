@@ -14,7 +14,7 @@ namespace NDEngine
 		iType = TYPE_RIDE;
 		quality = 0;
 		m_bLastPos = true;
-		m_preSetPos = CGPointZero;
+		m_preSetPos = CCPointZero;
 		m_bMoveCorner = false;
 		m_bXTurnigToY = false;
 		m_bInc = false;
@@ -62,7 +62,7 @@ namespace NDEngine
 		}
 	}
 
-	void NDRidePet::WalkToPosition(CGPoint toPos)
+	void NDRidePet::WalkToPosition(CCPoint toPos)
 	{
 		//this->SetCurrentAnimation(RIDEPET_MOVE, m_faceRight);
 		m_bLastPos = false; 
@@ -74,7 +74,7 @@ namespace NDEngine
 		//m_moving = false;
 	}
 
-	void NDRidePet::SetPosition(CGPoint newPosition)
+	void NDRidePet::SetPosition(CCPoint newPosition)
 	{
 		NDSprite::SetPosition(newPosition);
 		return;
@@ -163,11 +163,11 @@ namespace NDEngine
 
 			//if (m_faceRight)
 			//			{
-			//				NDSprite::SetPosition(CGPointMake(newPosition.x+8, newPosition.y));
+			//				NDSprite::SetPosition(CCPointMake(newPosition.x+8, newPosition.y));
 			//			}
 			//			else 
 			//			{
-			//				NDSprite::SetPosition(CGPointMake(newPosition.x-8, newPosition.y));
+			//				NDSprite::SetPosition(CCPointMake(newPosition.x-8, newPosition.y));
 			//			}
 		}
 		else 
@@ -179,7 +179,7 @@ namespace NDEngine
 		m_preSetPos = newPosition;
 	}
 
-	void NDRidePet::SetPositionEx(CGPoint pos)
+	void NDRidePet::SetPositionEx(CCPoint pos)
 	{
 		m_preSetPos = pos;
 		NDSprite::SetPosition(pos);

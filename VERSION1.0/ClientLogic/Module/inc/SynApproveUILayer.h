@@ -27,8 +27,8 @@ public:
 	
 	void Initialization();
 	
-	CGRect GetYesRect();
-	CGRect GetNoRect();
+	CCRect GetYesRect();
+	CCRect GetNoRect();
 	
 private:
 	NDUIImage* m_imgYes;

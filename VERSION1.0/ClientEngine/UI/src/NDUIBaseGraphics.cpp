@@ -10,6 +10,7 @@
 #include "CCPointExtension.h"
 #include "NDDirector.h"
 #include "CCDrawingPrimitives.h"
+#include "ccMacros.h"
 
 using namespace cocos2d;
 
@@ -19,7 +20,7 @@ namespace NDEngine
 #if 0
 	CCPoint& Screen2GL( CCPoint& pt )
 	{
-// 		CGSize winSize  = NDDirector::DefaultDirector()->GetWinSize(); //in points!
+// 		CCSize winSize  = NDDirector::DefaultDirector()->GetWinSize(); //in points!
 // 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
 // 		scale = 1.f;
 // 
@@ -27,14 +28,14 @@ namespace NDEngine
 // 		pt.y = winSize.height - pt.y; //upside down
 // 		return pt;
 
-		CGSize winSize  = NDDirector::DefaultDirector()->GetWinSize(); //in points!
+		CCSize winSize  = NDDirector::DefaultDirector()->GetWinSize(); //in points!
 		pt.y = winSize.height - pt.y;
 		return pt;
 	}
 
 	CCPoint& GL2Screen( CCPoint& pt )
 	{
-// 		CGSize winSize  = NDDirector::DefaultDirector()->GetWinSize();
+// 		CCSize winSize  = NDDirector::DefaultDirector()->GetWinSize();
 // 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
 // 		scale = 1.f;
 // 
@@ -42,13 +43,13 @@ namespace NDEngine
 // 		pt.y = winSize.height/2 - pt.y; //upside down
 // 		return pt;
 
-		CGSize winSize  = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winSize  = NDDirector::DefaultDirector()->GetWinSize();
 		pt.y = winSize.height - pt.y;
 		return pt;
 	}
 #endif
 
-	void DrawRecttangle(CGRect rect, ccColor4B color)
+	void DrawRecttangle(CCRect rect, ccColor4B color)
 	{
 #if 0
 		glDisable(GL_TEXTURE_2D);
@@ -56,7 +57,7 @@ namespace NDEngine
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 
 		GLfloat vertices[8] = { 
 			rect.origin.x, winSize.height - rect.origin.y - rect.size.height, 
@@ -91,19 +92,19 @@ namespace NDEngine
 		ccDrawRect( SCREEN2GL(rect.origin), SCREEN2GL(destination));
 	}
 
-	void DrawPolygon(CGRect rect, ccColor4B color, GLuint lineWidth)
+	void DrawPolygon(CCRect rect, ccColor4B color, GLuint lineWidth)
 	{
-		CCAssert(0);//@todo: crash me!
+		CCAssert(0,"crash me");//@todo: crash me!
 
-		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
 
 		glLineWidth(lineWidth);
-		glColor4ub(color.r, color.g, color.b, color.a); 
+		glColor4ub(color.r, color.g, color.b, color.a);
 
 		if (CompareEqualFloat(scale, 0.0f))
 		{
-			CGPoint vertices[4] = {
+			CCPoint vertices[4] = {
 				ccp(rect.origin.x, winSize.height - rect.origin.y - rect.size.height), 
 				ccp(rect.origin.x + rect.size.width, winSize.height - rect.origin.y - rect.size.height),
 				ccp(rect.origin.x + rect.size.width, winSize.height - rect.origin.y),
@@ -113,7 +114,7 @@ namespace NDEngine
 		}
 		else
 		{
-			CGPoint vertices[4] = {
+			CCPoint vertices[4] = {
 				ccp(rect.origin.x / scale, (winSize.height - rect.origin.y - rect.size.height) / scale), 
 				ccp((rect.origin.x + rect.size.width) / scale, (winSize.height - rect.origin.y - rect.size.height) / scale),
 				ccp((rect.origin.x + rect.size.width) / scale, (winSize.height - rect.origin.y) / scale),
@@ -125,11 +126,11 @@ namespace NDEngine
 		glColor4ub(255, 255, 255, 255); 
 	}
 
-	void DrawLine(CGPoint fromPoint, CGPoint toPoint, ccColor4B color, GLuint lineWidth)
+	void DrawLine(CCPoint fromPoint, CCPoint toPoint, ccColor4B color, GLuint lineWidth)
 	{	
-		CCAssert(0);//@todo: crash me!
+		CCAssert(0, "crash me");//@todo: crash me!
 
-		CGSize winSize	= NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winSize	= NDDirector::DefaultDirector()->GetWinSize();
 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();
 
 		glLineWidth(lineWidth);
@@ -150,12 +151,12 @@ namespace NDEngine
 		glColor4ub(255, 255, 255, 255);
 	}
 
-	void DrawCircle(CGPoint center, float r, float a, int segs, ccColor4B color)
+	void DrawCircle(CCPoint center, float r, float a, int segs, ccColor4B color)
 	{
-		CCAssert(0);//@todo: crash me!
+		CCAssert(0, "crash me");//@todo: crash me!
 
-		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-		CGPoint glCenter = ccp(center.x, winSize.height - center.y);
+		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+		CCPoint glCenter = ccp(center.x, winSize.height - center.y);
 
 		glColor4ub(color.r, color.g, color.b, color.a);
 
@@ -206,39 +207,39 @@ namespace NDEngine
 		int y2 = y + height - 1, x2 = x + width - 1;
 
 		ccColor4B clr = INTCOLORTOCCC4(borderColor);
-		DrawRecttangle(CGRectMake(x - 1, y - 1, 4, 4), clr); // ×óÉÏ½Ç¿ò
-		DrawRecttangle(CGRectMake(x2 - 3, y - 1, 4, 4), clr); // ÓÒÉÏ½Ç¿ò
+		DrawRecttangle(CCRectMake(x - 1, y - 1, 4, 4), clr); // ×óÉÏ½Ç¿ò
+		DrawRecttangle(CCRectMake(x2 - 3, y - 1, 4, 4), clr); // ÓÒÉÏ½Ç¿ò
 
-		DrawRecttangle(CGRectMake(x - 1, y2 - 3, 4, 4), clr); // ×óÏÂ½Ç¿ò
-		DrawRecttangle(CGRectMake(x2 - 3, y2 - 3, 4, 4), clr); // ÓÒÏÂ½Ç¿ò
+		DrawRecttangle(CCRectMake(x - 1, y2 - 3, 4, 4), clr); // ×óÏÂ½Ç¿ò
+		DrawRecttangle(CCRectMake(x2 - 3, y2 - 3, 4, 4), clr); // ÓÒÏÂ½Ç¿ò
 
-		DrawLine(CGPointMake(x, y + 5), CGPointMake(x + 5, y + 5), clr, 1);
-		DrawLine(CGPointMake(x + 5, y), CGPointMake(x + 5, y + 5), clr, 1);
-		DrawLine(CGPointMake(x2, y + 5), CGPointMake(x2 - 5, y + 5), clr, 1);
-		DrawLine(CGPointMake(x2 - 5, y), CGPointMake(x2 - 5, y + 5), clr, 1);
+		DrawLine(CCPointMake(x, y + 5), CCPointMake(x + 5, y + 5), clr, 1);
+		DrawLine(CCPointMake(x + 5, y), CCPointMake(x + 5, y + 5), clr, 1);
+		DrawLine(CCPointMake(x2, y + 5), CCPointMake(x2 - 5, y + 5), clr, 1);
+		DrawLine(CCPointMake(x2 - 5, y), CCPointMake(x2 - 5, y + 5), clr, 1);
 
-		DrawLine(CGPointMake(x2, y2 - 5), CGPointMake(x2 - 5, y2 - 5), clr, 1);
-		DrawLine(CGPointMake(x2 - 5, y2), CGPointMake(x2 - 5, y2 - 5), clr, 1);
-		DrawLine(CGPointMake(x, y2 - 5), CGPointMake(x + 5, y2 - 5), clr, 1);
-		DrawLine(CGPointMake(x + 5, y2), CGPointMake(x + 5, y2 - 5), clr, 1);
+		DrawLine(CCPointMake(x2, y2 - 5), CCPointMake(x2 - 5, y2 - 5), clr, 1);
+		DrawLine(CCPointMake(x2 - 5, y2), CCPointMake(x2 - 5, y2 - 5), clr, 1);
+		DrawLine(CCPointMake(x, y2 - 5), CCPointMake(x + 5, y2 - 5), clr, 1);
+		DrawLine(CCPointMake(x + 5, y2), CCPointMake(x + 5, y2 - 5), clr, 1);
 
-		DrawLine(CGPointMake(x + 5, y), CGPointMake(x + width - 6, y), clr, 1);
-		DrawLine(CGPointMake(x + 5, y2), CGPointMake(x + width - 6, y2), clr, 1);
+		DrawLine(CCPointMake(x + 5, y), CCPointMake(x + width - 6, y), clr, 1);
+		DrawLine(CCPointMake(x + 5, y2), CCPointMake(x + width - 6, y2), clr, 1);
 
-		DrawLine(CGPointMake(x, y + 5), CGPointMake(x, y2 - 5), clr, 1);
-		DrawLine(CGPointMake(x2, y + 5), CGPointMake(x2, y2 - 5), clr, 1);
+		DrawLine(CCPointMake(x, y + 5), CCPointMake(x, y2 - 5), clr, 1);
+		DrawLine(CCPointMake(x2, y + 5), CCPointMake(x2, y2 - 5), clr, 1);
 	}
 
-	void DrawTriangle(CGPoint first, CGPoint second, CGPoint third, ccColor4B color)
+	void DrawTriangle(CCPoint first, CCPoint second, CCPoint third, ccColor4B color)
 	{
-		CCAssert(0);//@todo: crash me!
+		CCAssert(0, "crash me");//@todo: crash me!
 
 		glDisable(GL_TEXTURE_2D);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		CGSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
 
 		GLfloat vertices[6] = { 
 			first.x, winSize.height - first.y, 
@@ -246,7 +247,7 @@ namespace NDEngine
 			third.x, winSize.height - third.y
 		};
 
-		GLbyte colors[12] = {
+		GLubyte colors[12] = {
 			color.r, color.g, color.b, color.a,
 			color.r, color.g, color.b, color.a,
 			color.r, color.g, color.b, color.a,
@@ -266,8 +267,8 @@ namespace NDEngine
 	IMPLEMENT_CLASS(NDUILine, NDUINode)
 	NDUILine::NDUILine()
 	{
-		m_from = CGPointZero;
-		m_to = CGPointZero;
+		m_from = CCPointZero;
+		m_to = CCPointZero;
 		m_color = ccc4(255, 255, 255, 255);
 		m_lineWidth = 0;
 	}
@@ -281,16 +282,16 @@ namespace NDEngine
 		NDUINode::draw();
 		if (this->IsVisibled()) 
 		{
-			CGRect rect = GetFrameRect();
+			CCRect rect = GetFrameRect();
 			if ( int(rect.origin.x) == 0 && int(rect.origin.y) == 0 ) 
 			{
 				DrawLine(this->m_from, this->m_to, this->m_color, this->m_lineWidth);
 			}
 			else
 			{
-				CGRect screenRect = GetScreenRect();
-				DrawLine(CGPointMake(m_from.x+screenRect.origin.x, m_from.y+screenRect.origin.y),
-							   CGPointMake(m_to.x+screenRect.origin.x, m_to.y+screenRect.origin.y),
+				CCRect screenRect = GetScreenRect();
+				DrawLine(CCPointMake(m_from.x+screenRect.origin.x, m_from.y+screenRect.origin.y),
+							   CCPointMake(m_to.x+screenRect.origin.x, m_to.y+screenRect.origin.y),
 							   m_color,
 							   m_lineWidth);
 			}
@@ -315,7 +316,7 @@ namespace NDEngine
 		NDUINode::draw();
 		if (this->IsVisibled()) 
 		{
-			CGRect rect = this->GetScreenRect();
+			CCRect rect = this->GetScreenRect();
 			DrawPolygon(rect, m_color, m_lineWidth);
 		}
 		
@@ -338,7 +339,7 @@ namespace NDEngine
 		NDUINode::draw();
 		if (this->IsVisibled()) 
 		{
-			CGRect rect = this->GetScreenRect();
+			CCRect rect = this->GetScreenRect();
 			DrawRecttangle(rect, m_color);
 		}
 		
@@ -361,7 +362,7 @@ namespace NDEngine
 	
 	void NDUICircleRect::SetRadius(unsigned int radius)
 	{
-		//CGRect rect = this->GetFrameRect();
+		//CCRect rect = this->GetFrameRect();
 //		if (rect.size.width < 2 * radius || rect.size.height < 2 *radius)
 //		{
 //			return;
@@ -386,7 +387,7 @@ namespace NDEngine
 		NDUINode::draw();
 		if (this->IsVisibled() && m_bFill && m_uiRadius >= 1) 
 		{
-			CGRect rect = this->GetScreenRect();
+			CCRect rect = this->GetScreenRect();
 			if (rect.size.width < 2 * m_uiRadius || rect.size.height < 2 *m_uiRadius)
 			{
 				return;
@@ -403,8 +404,8 @@ namespace NDEngine
 				DrawCircle(ccp(rect.origin.x+rect.size.width-m_uiRadius+1, rect.origin.y+rect.size.height-m_uiRadius+1),
 						   m_uiRadius, 0, 10, m_colorFrame);
 				
-				DrawRecttangle(CGRectMake(rect.origin.x+m_uiRadius-1, rect.origin.y-1, rect.size.width-2*m_uiRadius+2, rect.size.height+2), m_colorFrame);
-				DrawRecttangle(CGRectMake(rect.origin.x-1, rect.origin.y+m_uiRadius-1, rect.size.width+2, rect.size.height-2*m_uiRadius+2), m_colorFrame);
+				DrawRecttangle(CCRectMake(rect.origin.x+m_uiRadius-1, rect.origin.y-1, rect.size.width-2*m_uiRadius+2, rect.size.height+2), m_colorFrame);
+				DrawRecttangle(CCRectMake(rect.origin.x-1, rect.origin.y+m_uiRadius-1, rect.size.width+2, rect.size.height-2*m_uiRadius+2), m_colorFrame);
 			}
 			
 			DrawCircle(ccp(rect.origin.x+m_uiRadius, rect.origin.y+m_uiRadius),
@@ -416,8 +417,8 @@ namespace NDEngine
 			DrawCircle(ccp(rect.origin.x+rect.size.width-m_uiRadius, rect.origin.y+rect.size.height-m_uiRadius),
 					   m_uiRadius, 0, 10, m_colorFill);
 					   
-			DrawRecttangle(CGRectMake(rect.origin.x+m_uiRadius, rect.origin.y, rect.size.width-2*m_uiRadius, rect.size.height), m_colorFill);
-			DrawRecttangle(CGRectMake(rect.origin.x, rect.origin.y+m_uiRadius, rect.size.width, rect.size.height-2*m_uiRadius), m_colorFill);
+			DrawRecttangle(CCRectMake(rect.origin.x+m_uiRadius, rect.origin.y, rect.size.width-2*m_uiRadius, rect.size.height), m_colorFill);
+			DrawRecttangle(CCRectMake(rect.origin.x, rect.origin.y+m_uiRadius, rect.size.width, rect.size.height-2*m_uiRadius), m_colorFill);
 		}
 	}
 	
@@ -429,7 +430,7 @@ namespace NDEngine
 		m_color = ccc4(255, 255, 255, 255);
 		for (int i = 0; i < 3; i++) 
 		{
-			m_pos[i] = CGPointZero;
+			m_pos[i] = CCPointZero;
 		}
 		
 		m_needRecacul = false;
@@ -444,7 +445,7 @@ namespace NDEngine
 		m_color = color;
 	}
 	
-	void NDUITriangle::SetPoints(CGPoint first, CGPoint second, CGPoint third)
+	void NDUITriangle::SetPoints(CCPoint first, CCPoint second, CCPoint third)
 	{
 		m_pos[0] = first;
 		m_pos[1] = second;
@@ -459,7 +460,7 @@ namespace NDEngine
 		
 		if (this->IsVisibled()) 
 		{
-			CGPoint origin = this->GetScreenRect().origin;
+			CCPoint origin = this->GetScreenRect().origin;
 			
 			DrawTriangle(ccpAdd(origin, m_pos[0]), 
 						 ccpAdd(origin, m_pos[1]), 
@@ -471,8 +472,8 @@ namespace NDEngine
 	void NDUITriangle::recacul()
 	{
 		/*
-		this->SetFrameRect(CGRectZero);
-		CGRect scrRect = this->GetScreenRect();
+		this->SetFrameRect(CCRectZero);
+		CCRect scrRect = this->GetScreenRect();
 		
 		int iXMin = m_pos[0].x, iXMax = m_pos[0].x, iYMin = m_pos[0].y, iYMax = m_pos[0].y;
 		
@@ -484,7 +485,7 @@ namespace NDEngine
 			iYMax = MAX(iYMax, m_pos[i].y);			
 		}
 		
-		this->SetFrameRect(CGRectMake(iXMin, iYMin, iXMax-iXMin, iYMax-iYMin));
+		this->SetFrameRect(CCRectMake(iXMin, iYMin, iXMax-iXMin, iYMax-iYMin));
 		
 		for (int i = 0; i < 3; i++) 
 		{

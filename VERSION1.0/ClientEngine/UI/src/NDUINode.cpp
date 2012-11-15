@@ -41,10 +41,10 @@ namespace NDEngine
 	{
 		m_fStep = 0.0f;
 		m_nStepNum = 0;
-		m_kFrameRect = CGRectZero;		
+		m_kFrameRect = CCRectZero;		
 		m_bVisibled = true;
 		m_bEventEnabled = true;
-		m_kScrRectCache = CGRectZero;
+		m_kScrRectCache = CCRectZero;
 	}
 
 	////////////////////////////////////////////////////////////
@@ -95,17 +95,17 @@ namespace NDEngine
 		NDNode::Initialization();
 	}
 	
-	void NDUINode::OnFrameRectChange(CGRect srcRect, CGRect dstRect)
+	void NDUINode::OnFrameRectChange(CCRect srcRect, CCRect dstRect)
 	{
 	}
 	
-	void NDUINode::SetFrameRect(CGRect rect)
+	void NDUINode::SetFrameRect(CCRect rect)
 	{			
-		this->SetContentSize(CGSizeMake(rect.size.width, rect.size.height));	
+		this->SetContentSize(CCSizeMake(rect.size.width, rect.size.height));	
 		m_kFrameRect = rect;
 	}
 	
-	CGRect NDUINode::GetFrameRect()
+	CCRect NDUINode::GetFrameRect()
 	{
 		return m_kFrameRect;
 	}	
@@ -155,7 +155,7 @@ namespace NDEngine
 		return m_bEventEnabled;
 	}
 	
-	CGRect NDUINode::GetScreenRect()
+	CCRect NDUINode::GetScreenRect()
 	{
 		NDNode* node = this->GetParent();
 		
@@ -165,9 +165,9 @@ namespace NDEngine
 			{
 				NDUINode* node = (NDUINode*)this->GetParent();
 				
-				CGRect nodeRect = node->GetScreenRect();
+				CCRect nodeRect = node->GetScreenRect();
 				
-				return CGRectMake(nodeRect.origin.x + m_kFrameRect.origin.x, 
+				return CCRectMake(nodeRect.origin.x + m_kFrameRect.origin.x, 
 								  nodeRect.origin.y + m_kFrameRect.origin.y, 
 								  m_kFrameRect.size.width, m_kFrameRect.size.height);
 			}
@@ -205,7 +205,7 @@ namespace NDEngine
 		}
 
 		// check screen rect changed.
-		CGRect scrRect = this->GetScreenRect();
+		CCRect scrRect = this->GetScreenRect();
 		if (scrRect.origin.x != m_kScrRectCache.origin.x 
 			|| scrRect.origin.y != m_kScrRectCache.origin.y 
 			|| scrRect.size.width != m_kScrRectCache.size.width 
@@ -272,7 +272,7 @@ namespace NDEngine
 		return bRet;
 	}
 
-	void NDUINode::FlyToRect( CGRect rect, int nFrameNum, int nDirect )
+	void NDUINode::FlyToRect( CCRect rect, int nFrameNum, int nDirect )
 	{
 		if (nFrameNum <= 0)
 		{

@@ -11,6 +11,7 @@
 #include "NDUtility.h"
 #include "NDDirector.h"
 #include "NDPath.h"
+#include "TQPlatform.h"
 
 IMPLEMENT_CLASS(CUIChatText, NDUINode)
 
@@ -168,7 +169,7 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 	Combiner(textNodeList);
 }
 
-bool CUIChatText::OnTextClick(CGPoint touchPos)
+bool CUIChatText::OnTextClick(CCPoint touchPos)
 {
 	int index=0;
 	bool isfound=false;
@@ -214,7 +215,7 @@ void CUIChatText::Combiner(std::vector<ChatNode>& textNodeList)
 	for (iter = textNodeList.begin(); iter != textNodeList.end(); iter++) 
 	{
 		ChatNode node = *iter;
-		CGRect uiNodeRect = node.uiNode->GetFrameRect();	
+		CCRect uiNodeRect = node.uiNode->GetFrameRect();	
 		
 		if (node.hasBreak || x + uiNodeRect.size.width > contentWidth) 
 		{
@@ -223,14 +224,14 @@ void CUIChatText::Combiner(std::vector<ChatNode>& textNodeList)
 			{
 				line_iter = iter - 1;
 				ChatNode line_node = *line_iter;
-				CGRect beforeRect = line_node.uiNode->GetFrameRect();
-				line_node.uiNode->SetFrameRect(CGRectMake(beforeRect.origin.x, beforeRect.origin.y+(height_max-beforeRect.size.height), beforeRect.size.width, beforeRect.size.height));
+				CCRect beforeRect = line_node.uiNode->GetFrameRect();
+				line_node.uiNode->SetFrameRect(CCRectMake(beforeRect.origin.x, beforeRect.origin.y+(height_max-beforeRect.size.height), beforeRect.size.width, beforeRect.size.height));
 			}
 // 			for (line_iter = textNodeList.begin(); line_iter != iter; line_iter++)
 // 			{
 // 				ChatNode line_node = *line_iter;
-// 				CGRect beforeRect = line_node.uiNode->GetFrameRect();
-// 				line_node.uiNode->SetFrameRect(CGRectMake(beforeRect.origin.x, beforeRect.origin.y+(height_max-beforeRect.size.height), beforeRect.size.width, beforeRect.size.height));
+// 				CCRect beforeRect = line_node.uiNode->GetFrameRect();
+// 				line_node.uiNode->SetFrameRect(CCRectMake(beforeRect.origin.x, beforeRect.origin.y+(height_max-beforeRect.size.height), beforeRect.size.width, beforeRect.size.height));
 // 			}
 			
 			x = 0.0f; 
@@ -244,7 +245,7 @@ void CUIChatText::Combiner(std::vector<ChatNode>& textNodeList)
 			height_max=uiNodeRect.size.height*nScale;
 		}
 		//node->line_index=current_line;
-        node.uiNode->SetFrameRect(CGRectMake(x, y,uiNodeRect.size.width*nScale, uiNodeRect.size.height*nScale));
+        node.uiNode->SetFrameRect(CCRectMake(x, y,uiNodeRect.size.width*nScale, uiNodeRect.size.height*nScale));
 		AddChild(node.uiNode);
 		
 		x += uiNodeRect.size.width*nScale;			
@@ -254,8 +255,8 @@ void CUIChatText::Combiner(std::vector<ChatNode>& textNodeList)
 	for (line_iter = textNodeList.begin(); line_iter != textNodeList.end(); line_iter++)
 	{
 		ChatNode line_node = *line_iter;
-		CGRect beforeRect = line_node.uiNode->GetFrameRect();
-		line_node.uiNode->SetFrameRect(CGRectMake(beforeRect.origin.x, beforeRect.origin.y+(height_max-beforeRect.size.height), beforeRect.size.width, beforeRect.size.height));
+		CCRect beforeRect = line_node.uiNode->GetFrameRect();
+		line_node.uiNode->SetFrameRect(CCRectMake(beforeRect.origin.x, beforeRect.origin.y+(height_max-beforeRect.size.height), beforeRect.size.width, beforeRect.size.height));
 	}
 	contentHeight+=height_max;
 }
@@ -268,7 +269,7 @@ NDPicture* CUIChatText::CreateFacePicture(unsigned int index)
 		int row = index / 6;
 		int col = index % 6;
 		result = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("Res00/sm_face.png"));	
-		result->Cut(CGRectMake(80 * col, 80 * row , 80, 80));
+		result->Cut(CCRectMake(80 * col, 80 * row , 80, 80));
 	}
 	return result;
 }
@@ -286,7 +287,7 @@ NDUIImage* CUIChatText::CreateFaceImage(const char* strIndex)
 			result = new NDUIImage();
 			result->Initialization();
 			result->SetPicture(pic, true);
-			result->SetFrameRect(CGRectMake(0, 0, 30*NDDirector::DefaultDirector()->GetScaleFactor(), 30*NDDirector::DefaultDirector()->GetScaleFactor()));
+			result->SetFrameRect(CCRectMake(0, 0, 30*NDDirector::DefaultDirector()->GetScaleFactor(), 30*NDDirector::DefaultDirector()->GetScaleFactor()));
 		}			
 	}
 	return result;
@@ -297,7 +298,7 @@ NDUILabel* CUIChatText::CreateLabel(const char* text, unsigned int fontSize, ccC
 	NDUILabel* result = NULL;
 	if (text) 
 	{
-		CGSize textSize = getStringSize(text, fontSize);
+		CCSize textSize = getStringSize(text, fontSize);
 		result = new NDUILabel();
 		result->Initialization();
 		result->SetRenderTimes(1);
@@ -305,7 +306,7 @@ NDUILabel* CUIChatText::CreateLabel(const char* text, unsigned int fontSize, ccC
 		result->SetTag(idItem);
 		result->SetFontSize(fontSize);
 		result->SetFontColor(color);
-		result->SetFrameRect(CGRectMake(0, 0, textSize.width, textSize.height));
+		result->SetFrameRect(CCRectMake(0, 0, textSize.width, textSize.height));
 	}
 	return result;
 }

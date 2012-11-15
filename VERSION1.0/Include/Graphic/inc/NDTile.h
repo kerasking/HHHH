@@ -46,35 +46,35 @@ bool IsTileHightLight();
 class NDTile : public cocos2d::CCObject 
 {
 	CC_SYNTHESIZE_RETAIN(CCTexture2D*, m_Texture, Texture)
-	CC_PROPERTY(CGRect, m_CutRect, CutRect)
-	CC_PROPERTY(CGRect, m_DrawRect, DrawRect)
+	CC_PROPERTY(CCSize, m_CutRect, CutRect)
+	CC_PROPERTY(CCSize, m_DrawRect, DrawRect)
 	CC_PROPERTY(bool, m_bReverse, Reverse)
 	CC_PROPERTY(NDRotationEnum, m_Rotation, Rotation)
-	CC_PROPERTY(CGSize, m_MapSize, MapSize)
+	CC_PROPERTY(CCSize, m_MapSize, MapSize)
 
 public:
 	void make();
 	void draw();
-	void drawSubRect(CGRect rect);
+	void drawSubRect(CCSize rect);
 	void makeTex(float* pData);
-	void makeVetex(float* pData, CGRect rect);
+	void makeVetex(float* pData, CCSize rect);
 
 private:
 	float *m_vertices;
 	float *m_coordinates;
 };
 @property (nonatomic, retain)CCTexture2D *texture;
-@property (nonatomic, assign)CGRect cutRect;
-@property (nonatomic, assign)CGRect drawRect;
+@property (nonatomic, assign)CCSize cutRect;
+@property (nonatomic, assign)CCSize drawRect;
 @property (nonatomic, assign)BOOL reverse;
 @property (nonatomic, assign)NDRotationEnum rotation;
-@property (nonatomic, assign)CGSize mapSize;
+@property (nonatomic, assign)CCSize mapSize;
 
 - (void)make;
 - (void)draw;
-- (void)drawSubRect:(CGRect) rect;
+- (void)drawSubRect:(CCSize) rect;
 - (void)makeTex:(float*)pData;
-- (void)makeVetex:(float*)pData Rect:(CGRect)rect;
+- (void)makeVetex:(float*)pData Rect:(CCSize)rect;
 @end
 
 #endif

@@ -1,4 +1,4 @@
-#include <CCPlatformConfig.h>
+//#include "CCPlatformConfig.h"
 #include <string>
 
 #ifdef WIN32
@@ -12,6 +12,8 @@
 #include <sys/ioctl.h>
 #include <net/if.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
 #endif
 
 

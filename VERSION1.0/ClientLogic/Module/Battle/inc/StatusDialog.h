@@ -41,7 +41,7 @@ private:
 	NDPicture* m_picRightTop;
 	NDPicture* m_picLeftBottom;
 	NDPicture* m_picRightBottom;
-	CGRect scrRect;
+	CCRect scrRect;
 	NDUILabel* m_label;
 	NDUIText* m_memo;
 	NDUITableLayer* m_table;

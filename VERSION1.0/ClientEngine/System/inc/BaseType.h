@@ -7,6 +7,8 @@
 #include <math.h>
 #include <time.h>
 //#include "C3Primitive.h"
+#include "CCConfiguration.h"
+#include "TQPlatform.h"
 
 #ifdef IOS
 #define _vstprintf vsprintf
@@ -185,10 +187,15 @@ using namespace std;
 #undef IN_OUT
 #define IN_OUT
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 typedef unsigned __int64 EID;
 typedef unsigned long       DWORD;
 //typedef UINT64 EID;
 const EID EID_NONE = 0;
+#else
+typedef UINT64 EID;
+const EID EID_NONE = 0;
+#endif
 
 typedef std::vector<int> INT_VEC;
 typedef std::set<int> INT_SET;

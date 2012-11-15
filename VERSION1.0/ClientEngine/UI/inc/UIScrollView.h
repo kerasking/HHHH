@@ -64,9 +64,9 @@ public:
 	int	GetViewCount();
     
     //设置每个view的大小
-	void SetViewSize(CGSize size);
+	void SetViewSize(CCSize size);
     //获取每个view的大小 
-	CGSize GetViewSize();
+	CCSize GetViewSize();
     
     //list控件中添加view
 	void AddView(CUIScrollView* view);
@@ -103,7 +103,7 @@ private:
 	bool					m_bIsViewScrolling;
 	UIScrollStyle			m_style;
 	ContainerClientLayer*	m_pClientUINode; // all view's parent
-	CGSize					m_sizeView;
+	CCSize					m_sizeView;
 	unsigned int			m_unBeginIndex;
 	bool					m_bCenterAdjust;
 	bool					m_bRecaclClientEventRect;
@@ -118,7 +118,7 @@ private:
 	unsigned int WhichViewToScroll();
 	void ScrollView(unsigned int uiIndex, bool bImmediatelySet=false);
 	bool CaclViewCenter(CUIScrollView* view, float& fCenter, bool bJudeOver=false);
-	CGRect GetClientRect(bool judgeOver);
+	CCRect GetClientRect(bool judgeOver);
 	float GetContainerCenter();
 	float GetViewLen();
 	void StopAdjust();
@@ -138,7 +138,7 @@ private:
 	
 public:
 	void draw(); override
-	void SetFrameRect(CGRect rect); override
+	void SetFrameRect(CCRect rect); override
 	// CommonProtol
 	void OnScrollViewMove(NDObject* object, float fVertical, float fHorizontal); override
 	void OnScrollViewScrollMoveStop(NDObject* object); override

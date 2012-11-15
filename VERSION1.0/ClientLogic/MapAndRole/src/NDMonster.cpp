@@ -182,7 +182,7 @@ void NDMonster::restorePosition()
 	SetPosition(ccp(m_nOriginal_x, m_nOriginal_y));
 }
 
-void NDMonster::SetMoveRect(CGPoint point, int size)
+void NDMonster::SetMoveRect(CCPoint point, int size)
 {
 	m_nSelfMoveRectW = size * 2 * MAP_UNITSIZE;
 	m_nSelfMoveRectH = size * 2 * MAP_UNITSIZE;
@@ -294,7 +294,7 @@ bool NDMonster::OnDrawBegin(bool bDraw)
 
 // 	if (m_talkBox && m_talkBox->IsVisibled()) 
 // 	{
-// 		CGPoint scrPos = GetScreenPoint();
+// 		CCPoint scrPos = GetScreenPoint();
 // 		scrPos.x -= DISPLAY_POS_X_OFFSET;
 // 		scrPos.y -= DISPLAY_POS_Y_OFFSET;
 // 		m_talkBox->SetDisPlayPos(ccp(scrPos.x, scrPos.y-getGravityY()+20));
@@ -303,7 +303,7 @@ bool NDMonster::OnDrawBegin(bool bDraw)
 	return true;
 }
 
-void NDMonster::MoveToPosition(CGPoint toPos,
+void NDMonster::MoveToPosition(CCPoint toPos,
 		SpriteSpeed speed/* = SpriteSpeedStep4*/, bool moveMap/* = false*/)
 {
 	if (GetParent())
@@ -320,7 +320,7 @@ void NDMonster::MoveToPosition(CGPoint toPos,
 	}
 }
 
-void NDMonster::WalkToPosition(CGPoint toPos)
+void NDMonster::WalkToPosition(CCPoint toPos)
 {
 	if (GetPosition().x > toPos.x)
 	{
@@ -661,7 +661,7 @@ void NDMonster::directLogic()
 // 		return;
 // 	}
 // 
-// 	CGPoint pos; pos.x = x; pos.y = y;
+// 	CCPoint pos; pos.x = x; pos.y = y;
 // 
 // 	switch (m_nMoveDirect) 
 // 	{
@@ -810,13 +810,13 @@ void NDMonster::doMonsterCollides()
 /*
 	int m_nScope = m_nAttackArea * 32;
 
-	CGRect kRectRole = CGRectMake(NDPlayer::defaultHero().GetPosition().x - 32,
+	CCRect kRectRole = CCRectMake(NDPlayer::defaultHero().GetPosition().x - 32,
 			NDPlayer::defaultHero().GetPosition().y - 32, 64, 64);
-	CGRect kRectMonster = CGRectMake(GetPosition().x - m_nScope,
+	CCRect kRectMonster = CCRectMake(GetPosition().x - m_nScope,
 			GetPosition().y - m_nScope, getCollideW() + m_nScope * 2,
 			getCollideH() + m_nScope * 2);
 
-	bool bCollides = CGRectIntersectsRect(kRectRole, kRectMonster);
+	bool bCollides = CCRectIntersectsRect(kRectRole, kRectMonster);
 	*/
 
 	//if (bCollides)
@@ -1011,13 +1011,13 @@ void NDMonster::drawName(bool bDraw)
 	}
 
 // 	NDPlayer& player = NDPlayer::defaultHero();
-// 	CGPoint posPlayer = player.GetPosition();
-// 	CGRect rect1 = CGRectMake(posPlayer.x - SHOW_NAME_ROLE_W,
+// 	CCPoint posPlayer = player.GetPosition();
+// 	CCRect rect1 = CCRectMake(posPlayer.x - SHOW_NAME_ROLE_W,
 // 			posPlayer.y - SHOW_NAME_ROLE_H, SHOW_NAME_ROLE_W << 1,
 // 			SHOW_NAME_ROLE_H << 1);
-// 	CGRect rect2 = CGRectMake(m_kPosition.x - DISPLAY_POS_X_OFFSET,
+// 	CCRect rect2 = CCRectMake(m_kPosition.x - DISPLAY_POS_X_OFFSET,
 // 			m_kPosition.y - DISPLAY_POS_Y_OFFSET, 16, 16);
-// 	//if (CGRectIntersectsRect(rect1, rect2)) { // 显示区域内的怪物名字
+// 	//if (CCRectIntersectsRect(rect1, rect2)) { // 显示区域内的怪物名字
 	int iColor = 0;
 // 	if (m_nLevel - player.m_nLevel <= LEVEL_GRAY)
 // 	{
@@ -1056,8 +1056,8 @@ void NDMonster::drawName(bool bDraw)
 	//iY += BASE_BOTTOM_WH-getGravityY();
 	iY -= getGravityY();
 
-	CGSize size = getStringSize(m_strName.c_str(), MONSTER_NAME_SIZE);
-	CGSize sizemap;
+	CCSize size = getStringSize(m_strName.c_str(), MONSTER_NAME_SIZE);
+	CCSize sizemap;
 	sizemap = m_pkSubNode->GetContentSize();
 
 	if (!m_lbName)
@@ -1083,7 +1083,7 @@ void NDMonster::drawName(bool bDraw)
 	}
 
 	m_lbName->SetFrameRect(
-			CGRectMake(iX - size.width / 2,
+			CCRectMake(iX - size.width / 2,
 					iY + NDDirector::DefaultDirector()->GetWinSize().height
 							- sizemap.height, size.width, size.height + 5));
 
@@ -1154,9 +1154,15 @@ void NDMonster::changeLookface(int lookface)
 			CC_SAFE_DELETE (m_pkAniGroup);
 
 			if (m_nSex % 2 == SpriteSexMale)
-				m_pkAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(MANUELROLE_HUMAN_MALE);
+            {
+                std::string str = MANUELROLE_HUMAN_MALE;
+				m_pkAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(str.c_str());
+            }
 			else
-				m_pkAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(MANUELROLE_HUMAN_FEMALE);
+            {
+                std::string str = MANUELROLE_HUMAN_FEMALE;
+				m_pkAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(str.c_str());
+            }
 
 			m_bFaceRight = m_nDirect == 2;
 			SetFaceImageWithEquipmentId (m_bFaceRight);

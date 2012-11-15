@@ -72,7 +72,7 @@ NDPicture* ItemImage::GetItem(int iIndex, bool gray/*=false*/, bool smallicon/*=
 		return NULL;
 	}
 
-	CGSize kSize = pkResource->GetSize();
+	CCSize kSize = pkResource->GetSize();
 
 	if ( iX + iItemSizeW > kSize.width || iY + iItemSizeH > kSize.height ) 
 	{
@@ -80,7 +80,7 @@ NDPicture* ItemImage::GetItem(int iIndex, bool gray/*=false*/, bool smallicon/*=
 		return NULL;
 	}
 	
-	pkResource->Cut(CGRectMake(iX, iY, iItemSizeW, iItemSizeH));
+	pkResource->Cut(CCRectMake(iX, iY, iItemSizeW, iItemSizeH));
 	
 	return pkResource;
 }
@@ -130,14 +130,14 @@ NDPicture* ItemImage::GetPinZhiPic(int iItemType, bool smallicon/*=false*/)
 		return NULL;
 	}
 	
-	CGSize size = pkResource->GetSize();
+	CCSize size = pkResource->GetSize();
 	if ( x + iItemSizeW > size.width || y + iItemSizeH > size.height ) 
 	{
 		delete pkResource;
 		return NULL;
 	}
 	
-	pkResource->Cut(CGRectMake(x, y, iItemSizeW, iItemSizeH));
+	pkResource->Cut(CCRectMake(x, y, iItemSizeW, iItemSizeH));
 	
 	return pkResource;
 
@@ -169,13 +169,13 @@ NDPicture* GetSkillIconByIconIndex(int iIconIndex, bool gray/*=false*/)
 	NDPicture *res = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathNew("skillicon.png"), gray);
 	
 	if (res) {
-		CGSize size = res->GetSize();
+		CCSize size = res->GetSize();
 		if (nStartX < 0 || nStartY < 0 || nStartX + SKILL_SIZE_W > size.width || nStartY + SKILL_SIZE_H > size.height )
 		{
 			SAFE_DELETE(res);
 			return NULL;
 		}
-		res->Cut(CGRectMake(nStartX, nStartY, SKILL_SIZE_W, SKILL_SIZE_H));
+		res->Cut(CCRectMake(nStartX, nStartY, SKILL_SIZE_W, SKILL_SIZE_H));
 		return res;
 	}
 	return NULL;
@@ -189,6 +189,8 @@ NDPicture* ItemImage::GetSMItem(int nIconVal)
 	{
 		return NULL;
 	}
+	
+	CCSize kSize = pkResource->GetSize();
     
 	CGSize size = res->GetSize();
 	int nCol	= nIconVal % 100 - 1;
@@ -213,7 +215,7 @@ NDPicture* ItemImage::GetSMItem(int nIconVal)
 		return NULL;
 	}
     
-    CGSize size = res->GetSize();
+    CCSize size = res->GetSize();
     if (nRow < 0 || nCol < 0 ||
 		ITEM_SIZE_W * nCol > size.width || ITEM_SIZE_H * nRow > size.height)
 	{
@@ -221,7 +223,7 @@ NDPicture* ItemImage::GetSMItem(int nIconVal)
 		return NULL;
 	}
 	
-	res->Cut(CGRectMake(ITEM_SIZE_W * nCol, ITEM_SIZE_H * nRow, ITEM_SIZE_W, ITEM_SIZE_H));
+	res->Cut(CCRectMake(ITEM_SIZE_W * nCol, ITEM_SIZE_H * nRow, ITEM_SIZE_W, ITEM_SIZE_H));
 	return res;
 }
 

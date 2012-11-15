@@ -529,8 +529,8 @@ void BattleMgr::restartLastBattle()
 	mapLayer->showSwitchSprite(SWITCH_TO_BATTLE);
 	//mapLayer->SetBattleBackground(true);
 	RestoreActionList();
-	CGSize winSize = director->GetWinSize();
-	m_pkBattle->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
+	CCSize winSize = director->GetWinSize();
+	m_pkBattle->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
 
 	m_pkBattle->InitEudemonOpt();
 	m_pkBattle->sortFighterList();
@@ -709,7 +709,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		//				} else { // ÖÜÎ§Íæ¼Ò
 		//					NDManualRole* player = mapMgr.GetManualRole(idObj);
 		//					if (player) {
-		//						CGPoint pos = CGPointZeroON;
+		//						CCPoint pos = CCPointZeroON;
 		//						if (player->GetLastPointOfPath(pos))
 		//						{
 		//							player->SetPositionEx(pos);
@@ -795,8 +795,8 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 
 		//mapLayer->SetBattleBackground(true);
 
-		CGSize winSize = director->GetWinSize();
-		m_pkBattle->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
+		CCSize winSize = director->GetWinSize();
+		m_pkBattle->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
 
 		mapLayer->showSwitchSprite(SWITCH_TO_BATTLE);
 		mapLayer->setBattleType(btBattleType);

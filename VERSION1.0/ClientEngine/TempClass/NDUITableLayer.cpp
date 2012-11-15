@@ -27,17 +27,17 @@ namespace NDEngine
 		return false;
 	}
 
-	bool NDUITableLayer::DispatchTouchEndEvent( CGPoint beginTouch, CGPoint endTouch )
+	bool NDUITableLayer::DispatchTouchEndEvent( CCPoint beginTouch, CCPoint endTouch )
 	{
 		return true;
 	}
 
-	bool NDUITableLayer::DispatchLongTouchEvent( CGPoint beginTouch, CGPoint endTouch )
+	bool NDUITableLayer::DispatchLongTouchEvent( CCPoint beginTouch, CCPoint endTouch )
 	{
 		return true;
 	}
 
-	bool NDUITableLayer::DispatchLayerMoveEvent( CGPoint beginPoint, NDTouch *moveTouch )
+	bool NDUITableLayer::DispatchLayerMoveEvent( CCPoint beginPoint, NDTouch *moveTouch )
 	{
 		return true;
 	}

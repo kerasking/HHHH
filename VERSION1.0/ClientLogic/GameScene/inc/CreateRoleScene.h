@@ -17,7 +17,7 @@
 #include "NDUIFrame.h"
 #include "NDUIMenuLayer.h"
 #include "NDNode.h"
-#include "CGPointExtension.h"
+#include "CCPointExtension.h"
 #include "NDDirector.h"
 #include "NDManualRole.h"
 #include "NDUIOptionButton.h"
@@ -52,9 +52,9 @@ public:
 	bool OnEditClick(NDUIEdit* edit); override
 private:
 	enum { ePropSex, ePropStyle, eHair, eWeapon,};
-	void SetProptImage(int index, CGPoint orgin, NDUINode* parent);
+	void SetProptImage(int index, CCPoint orgin, NDUINode* parent);
 	void SetOptImage();
-	NDCombinePicture* GetCreateCombinePic(CGRect cut, ...);
+	NDCombinePicture* GetCreateCombinePic(CCRect cut, ...);
 	
 private:
 	NDUILayer* m_menuLayer;

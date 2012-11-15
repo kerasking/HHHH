@@ -29,7 +29,7 @@ public:
 	~SocialTextLayer();
 	
 	// 根据元素在线标志设置文本颜色
-	void Initialization(CGRect rectRoundRect, CGRect rectCol, SocialElement* socialEle);
+	void Initialization(CCRect rectRoundRect, CCRect rectCol, SocialElement* socialEle);
 	
 	void draw();
 	
@@ -45,7 +45,7 @@ public:
 		return this->m_socialElement;
 	}
 	
-	void SetFrameRect(CGRect rect); override
+	void SetFrameRect(CCRect rect); override
 	
 private:
 	SocialElement* m_socialElement;

@@ -80,10 +80,10 @@ public:
 
 	bool OnDrawBegin(bool bDraw);override
 
-	void MoveToPosition(CGPoint toPos, SpriteSpeed speed = SpriteSpeedStep4,
+	void MoveToPosition(CCPoint toPos, SpriteSpeed speed = SpriteSpeedStep4,
 			bool moveMap = false);hide
 
-	void WalkToPosition(CGPoint toPos);
+	void WalkToPosition(CCPoint toPos);
 
 	void Update(unsigned long ulDiff);override
 
@@ -109,7 +109,7 @@ public:
 	void restorePosition();
 	void changeLookface(int lookface);
 	void SetCanBattle(bool bCanBattle);
-	void SetMoveRect(CGPoint point, int size);
+	void SetMoveRect(CCPoint point, int size);
 	void SetRuleID(int rule_id)
 	{
 		m_nRuleId = rule_id;
@@ -118,7 +118,7 @@ public:
 	{
 		return m_nRuleId;
 	}
-	//CGRect GetMoveRect(){return CGRectMake(selfMoveRectX, selfMoveRectY, self_move_rectW, self_move_rectH);}
+	//CCRect GetMoveRect(){return CCRectMake(selfMoveRectX, selfMoveRectY, self_move_rectW, self_move_rectH);}
 	bool CanBattele();
 private:
 	bool isUseAI();
@@ -145,7 +145,7 @@ public:
 private:
 	int m_nAttackArea;					//怪物攻击范围
 	int m_nType;						//怪物类型
-	CGSize m_kMoveSize;
+	CCSize m_kMoveSize;
 	int m_nFigure;						// 体型：0-小只，1-大只。
 	NDSprite* m_pkBossRing;				//精英怪光环
 	NDUILabel *m_lbName;

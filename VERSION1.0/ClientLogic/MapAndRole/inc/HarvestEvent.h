@@ -26,7 +26,7 @@ public:
 	HarvestEvent();
 	~HarvestEvent();
 	
-	void Initialization(int iItemIconIndex, int iNum, CGSize container); hide
+	void Initialization(int iItemIconIndex, int iNum, CCSize container); hide
 	
 	void draw(int iX, int iY, bool bVisible); hide
 	
@@ -37,8 +37,8 @@ public:
 private:
 	NDPicture *m_picItem;
 	NDUILabel *m_lbNum;
-	CGSize m_sizeContainer;
-	CGSize m_sizeChildren;
+	CCSize m_sizeContainer;
+	CCSize m_sizeChildren;
 	int m_iFrameCount, m_iTotalFrameCount;
 	float m_fOffset;
 };

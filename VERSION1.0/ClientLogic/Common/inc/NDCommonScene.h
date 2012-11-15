@@ -115,7 +115,7 @@ public NDUILayer
 public:
 	void Initialization(unsigned int interval=0); hide
 	
-	void SetTabNodeSize(CGSize size);
+	void SetTabNodeSize(CCSize size);
 	
 	virtual TabNode* CreateTabNode();
 	
@@ -129,13 +129,13 @@ public:
 	
 	unsigned int GetFocusIndex();
 	
-	CGSize GetTabNodeSize();
+	CCSize GetTabNodeSize();
 	
 	TabNode* GetFoucusTabNode();
 
 protected:
 	
-	bool DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch); override
+	bool DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch); override
 	
 protected:
 	
@@ -143,7 +143,7 @@ protected:
 	
 	unsigned int m_uiInterval;
 	
-	CGSize m_tabNodeSize;
+	CCSize m_tabNodeSize;
 };
 
 //////////////////////////////////////////////////////////////
@@ -289,7 +289,7 @@ protected:
 	
 	unsigned int m_uiTabInterval;
 	
-	CGSize m_tabNodeSize;
+	CCSize m_tabNodeSize;
 	
 protected:
 	void InitTab(bool showPage=false, unsigned int perPageCount=0);
@@ -313,7 +313,7 @@ public TabLayerDelegate
 	
 public:
 	
-	void Initialization(unsigned int tabCount, CGPoint pos, CGSize sizeTabNode=CGSizeMake(25, 63), unsigned selHeight=0, unsigned unselHeight=0, bool bFullClient=false, int bgwidth=280); hide
+	void Initialization(unsigned int tabCount, CCPoint pos, CCSize sizeTabNode=CCSizeMake(25, 63), unsigned selHeight=0, unsigned unselHeight=0, bool bFullClient=false, int bgwidth=280); hide
 	
 	TabNode* GetTabNode(unsigned int index);
 	
@@ -352,7 +352,7 @@ public NDUIButtonDelegate
 public:
 	void Initialization(); override
 	
-	void InitTab(unsigned int tabCount, CGSize sizeTabNode=CGSizeMake(25, 63), unsigned selHeight=0, unsigned unselHeight=0);
+	void InitTab(unsigned int tabCount, CCSize sizeTabNode=CCSizeMake(25, 63), unsigned selHeight=0, unsigned unselHeight=0);
 	
 	void SetClientLayerBackground(unsigned int tabIndex, bool bFullClient=false, int bgwidth=280);
 	
@@ -398,7 +398,7 @@ public TabLayerDelegate
 	
 public:
 	
-	void Initialization(unsigned int tabCount, CGSize sizeTabNode=CGSizeMake(70, 34), unsigned int interval=5); hide
+	void Initialization(unsigned int tabCount, CCSize sizeTabNode=CCSizeMake(70, 34), unsigned int interval=5); hide
 	
 	TabNode* GetTabNode(unsigned int index);
 	
@@ -455,7 +455,7 @@ public:
 	// 如果该客户层需要支持多个功能,可以把加入节点的工作重心转移到NDUIClientLayer->GetFuncLayer
 	NDUIClientLayer* GetClientLayer(unsigned int tabIndex);
 	
-	CGSize GetClientSize();
+	CCSize GetClientSize();
 	
 	// 获取通用层
 	// 通用层与tab无关 
@@ -484,7 +484,7 @@ protected:
 	
 	unsigned int m_uiTabInterval;
 	
-	CGSize m_tabNodeSize;
+	CCSize m_tabNodeSize;
 	
 protected:
 	void InitTab(bool showPage=false, unsigned int perPageCount=0);

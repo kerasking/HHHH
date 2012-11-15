@@ -421,7 +421,7 @@ void DramaCommandSprite::ExcuteMoveSprite()
 	bool bRight   = false;
 	bool bXArrive = false;
 	bool bYArrive = false;
-	CGPoint curPos = sprite->GetPosition();
+	CCPoint curPos = sprite->GetPosition();
 	if (abs(int(curPos.x) - m_kParam.u1.nToPosX) <= m_kParam.u3.nMoveStep)
 	{
 		curPos.x = m_kParam.u1.nToPosX;
@@ -669,7 +669,7 @@ void DramaCommandCamera::ExcuteMovePostion()
 
 	bool bXArrive = false;
 	bool bYArrive = false;
-	CGPoint curPos = dramaScene->GetCenter();
+	CCPoint curPos = dramaScene->GetCenter();
 	if (abs(int(curPos.x) - m_kParam.u1.nToPosX) <= m_kParam.u3.nMoveStep)
 	{
 		curPos.x = m_kParam.u1.nToPosX;

@@ -29,8 +29,8 @@ public:
 	
 	int m_idSponsor;
 	
-	CGRect GetYesRect();
-	CGRect GetNoRect();
+	CCRect GetYesRect();
+	CCRect GetNoRect();
 	
 private:
 	NDUIImage* m_imgYes;

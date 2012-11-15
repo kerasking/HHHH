@@ -12,6 +12,7 @@
 #include "CCTextureCache.h"
 #include "NDAnimationGroupPool.h"
 #include "NDPicture.h"
+#include "BaseType.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -53,7 +54,7 @@ m_AnimationGroups(NULL),
 m_AniGroupParams(NULL),
 m_PlaceNodes(NULL)
 {
-	m_MapSize = CGSizeZero;
+	m_MapSize = CCSizeZero;
 }
 
 NDWorldMapData *NDWorldMapData_SharedData = NULL;
@@ -111,7 +112,7 @@ void NDWorldMapData::decode(FILE* stream)
 	m_nColumns = kFileOp.readByte(stream);
 	//------------------->行数
 	m_nRows = kFileOp.readByte(stream);
-	m_MapSize = CGSizeMake(m_nColumns << 5, m_nRows << 5);
+	m_MapSize = CCSizeMake(m_nColumns << 5, m_nRows << 5);
 	//<-------------------使用到的图块资源
 	std::vector < std::string > _tileImages;
 	int tileImageCount = kFileOp.readShort(stream);
@@ -169,12 +170,12 @@ void NDWorldMapData::decode(FILE* stream)
 							* pkTile->getTexture()->getMaxS() / TileWidth;
 
 					pkTile->setCutRect(
-						CGRectMake(TileWidth * (tileIndex % PicParts),
+						CCRectMake(TileWidth * (tileIndex % PicParts),
 						TileHeight * (tileIndex / PicParts),
 						TileWidth, TileHeight));
 
 					pkTile->setDrawRect(
-						CGRectMake(TileWidth * c, TileHeight * r, TileWidth,
+						CCRectMake(TileWidth * c, TileHeight * r, TileWidth,
 						TileHeight));
 
 					//tile->setHorizontalReverse(reverse);				
@@ -238,9 +239,9 @@ void NDWorldMapData::decode(FILE* stream)
 		int picHeight = pkTile->getTexture()->getPixelsHigh()
 				* pkTile->getTexture()->getMaxT();
 
-		pkTile->setMapSize( CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
-		pkTile->setCutRect(CGRectMake(0, 0, picWidth, picHeight)); 
-		pkTile->setDrawRect(CGRectMake(x, y, picWidth, picHeight));
+		pkTile->setMapSize( CCSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
+		pkTile->setCutRect(CCRectMake(0, 0, picWidth, picHeight)); 
+		pkTile->setDrawRect(CCRectMake(x, y, picWidth, picHeight));
 
 		pkTile->make();
 		m_BgTiles->addObject(pkTile);
@@ -301,9 +302,9 @@ void NDWorldMapData::decode(FILE* stream)
 		int picHeight = pkTile->getTexture()->getPixelsHigh()
 				* pkTile->getTexture()->getMaxT();
 
-		pkTile->setMapSize( CGSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
-		pkTile->setCutRect( CGRectMake(0, 0, picWidth, picHeight)); 
-		pkTile->setDrawRect( CGRectMake(x, y, picWidth, picHeight));
+		pkTile->setMapSize( CCSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
+		pkTile->setCutRect( CCRectMake(0, 0, picWidth, picHeight)); 
+		pkTile->setDrawRect( CCRectMake(x, y, picWidth, picHeight));
 		pkTile->setReverse(reverse);
 		pkTile->make();
 

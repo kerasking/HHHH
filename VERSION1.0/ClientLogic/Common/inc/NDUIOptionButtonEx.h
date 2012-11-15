@@ -62,9 +62,9 @@ namespace NDEngine
 		
 		void SetBgClr(ccColor4B clr);
 		
-		void SetFrameRect(CGRect rect); override
+		void SetFrameRect(CCRect rect); override
 		
-		void SetFocusImage(NDPicture *focusImage, bool bCustomRect = false, CGRect customRect = CGRectZero,bool bClearOnFree=true);
+		void SetFocusImage(NDPicture *focusImage, bool bCustomRect = false, CCRect customRect = CCRectZero,bool bClearOnFree=true);
 		
 		void SetReadyDispatchEvent(bool bReady);
 		
@@ -99,7 +99,7 @@ namespace NDEngine
 		
 		bool			m_bFocusImageCustomRect;
 		
-		CGRect			m_focusImageCustomRect;
+		CCRect			m_focusImageCustomRect;
 		
 		bool			m_bReadyDispatchEvent;
 		

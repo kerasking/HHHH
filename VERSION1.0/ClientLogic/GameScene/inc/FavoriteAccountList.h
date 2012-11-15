@@ -55,7 +55,7 @@ public:
 	
 	void Initialization(std::string text); hide
 	
-	void SetFrameRect(CGRect rect); override
+	void SetFrameRect(CCRect rect); override
 	
 	void draw();
 private:

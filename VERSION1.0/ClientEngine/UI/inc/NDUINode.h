@@ -56,14 +56,14 @@ namespace NDEngine
 //		作用：设置ui相对于父亲节点的矩形显示范围，默认值为（0， 0， 0， 0）
 //		参数：rect矩形显示范围
 //		返回值：无
-		virtual void SetFrameRect(CGRect rect);
-		virtual void FlyToRect(CGRect rect, int nFrameNum, int nDirect);
+		virtual void SetFrameRect(CCRect rect);
+		virtual void FlyToRect(CCRect rect, int nFrameNum, int nDirect);
 //		
 //		函数：GetFrameRect
 //		作用：获取ui节点相对于父亲节点的矩形范围，
 //		参数：无
 //		返回值：矩形范围
-		virtual CGRect GetFrameRect();		
+		virtual CCRect GetFrameRect();		
 //		
 //		函数：SetVisible
 //		作用：设置该节点是否可视，所有子节点也同时被设置
@@ -93,13 +93,13 @@ namespace NDEngine
 //		作用：获取节点相对于屏幕的矩形范围
 //		参数：无
 //		返回值：矩形范围		
-		CGRect GetScreenRect();	
+		CCRect GetScreenRect();	
 //		
 //		函数：OnFrameRectChange
 //		作用：当节点的矩形范围改变时被框架内部调用
 //		参数：srcRect改变前的矩形范围，dstRect改变后的矩形范围，相对于屏幕
 //		返回值：无		
-		virtual void OnFrameRectChange(CGRect srcRect, CGRect dstRect);
+		virtual void OnFrameRectChange(CCRect srcRect, CCRect dstRect);
 
 		void SetBoundScale(int nScale);
 	public:		
@@ -110,9 +110,9 @@ namespace NDEngine
 
 	private:		
 		bool m_bVisibled;
-		CGRect m_kFrameRect;
+		CCRect m_kFrameRect;
 		bool m_bEventEnabled;
-		CGRect m_kScrRectCache; //for cache
+		CCRect m_kScrRectCache; //for cache
 
 		float  m_fStep;  //步长
 		int  m_nStepNum; //步数

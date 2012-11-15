@@ -33,7 +33,7 @@
 #include "NDMapLayer.h"
 #include "SMBattleScene.h"
 #include "BattleMgr.h"
-#include "..\..\TempClass\NDBaseBattle.h"
+#include "NDBaseBattle.h"
 
 #define BTN_ATTATCK 1
 #define BTN_ITEM 2
@@ -109,7 +109,7 @@ public:
 	}
 	void draw()
 	{
-		CGRect rect = this->GetFrameRect();
+		CCRect rect = this->GetFrameRect();
 		drawRectBar2(rect.origin.x, rect.origin.y, m_color, m_nNum, m_nNumMax,
 				rect.size.width);
 	}
@@ -438,7 +438,7 @@ private:
 
 	BATTLE_GROUP m_ourGroup;
 	int m_orignalMapId;
-	CGPoint m_orignalPos;
+	CCPoint m_orignalPos;
 	NDMapLayer* m_mapLayer;
 	int m_turn;
 	int m_startWait;
@@ -561,7 +561,7 @@ private:
 
 	void HighlightFighter(Fighter* f);
 
-	Fighter* GetTouchedFighter(VEC_FIGHTER& fighterList, CGPoint pt);
+	Fighter* GetTouchedFighter(VEC_FIGHTER& fighterList, CCPoint pt);
 
 	void SendBattleAction(const BattleAction& action);
 
@@ -714,7 +714,7 @@ public:
 	QuickTalkCell();
 	~QuickTalkCell();
 
-	void Initialization(const char* pszText, const CGSize& size);
+	void Initialization(const char* pszText, const CCSize& size);
 
 	void draw();
 

@@ -94,9 +94,9 @@ private:
 //	
 //	bool IsShrink();
 //	
-//	bool OnButtonDragOut(NDUIButton* button, CGPoint beginTouch, CGPoint moveTouch, bool longTouch); override
+//	bool OnButtonDragOut(NDUIButton* button, CCPoint beginTouch, CCPoint moveTouch, bool longTouch); override
 //	
-//	bool OnButtonDragOutComplete(NDUIButton* button, CGPoint endTouch, bool outOfRange); override
+//	bool OnButtonDragOutComplete(NDUIButton* button, CCPoint endTouch, bool outOfRange); override
 //	
 //	bool OnButtonDragIn(NDUIButton* desButton, NDUINode *uiSrcNode, bool longTouch); override
 //	
@@ -119,7 +119,7 @@ private:
 //	void ShowMask(bool show, NDPicture* pic=NULL, int itemType=0);
 //private:
 //	void InitItemCell();
-//	CGRect GetCellRect(unsigned int index);
+//	CCRect GetCellRect(unsigned int index);
 //	NDPicture* GetCellBackGround(unsigned int index);
 //	
 //private:

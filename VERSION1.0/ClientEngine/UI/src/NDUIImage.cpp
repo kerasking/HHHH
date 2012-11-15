@@ -46,11 +46,11 @@ namespace NDEngine
 		this->SetPicture(pic, true);
 	}
 	
-	CGSize NDUIImage::GetPicSize()
+	CCSize NDUIImage::GetPicSize()
 	{
 		if (!m_pic)
 		{
-			return CGSizeZero;
+			return CCSizeZero;
 		}
 		
 		return m_pic->GetSize();
@@ -80,5 +80,6 @@ namespace NDEngine
 			//else if (m_combinePic) m_combinePic->DrawInRect(this->GetScreenRect()); ///< 临时性注释 郭浩
 		}		
 
+		//使用NDPicture了，这里不需要debugDraw()了.
 	}
 }

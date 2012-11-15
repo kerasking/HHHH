@@ -54,8 +54,8 @@ namespace TQFramework
 #endif
 
 #ifdef _DEBUG
-extern TQFramework::CLog g_logTq;
-#define TQLOG	g_logTq.Log
+//extern TQFramework::CLog g_logTq;
+#define TQLOG	//g_logTq.Log
 #else
 #define TQLOG	//
 #endif

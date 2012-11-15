@@ -41,17 +41,17 @@ public:
 	// 逻辑接口
 	static NDPlayer& defaultHero(int lookface = 0, bool bSetLookFace = false);
 	static void pugeHero();
-	void Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive = false);
+	void Walk(CCPoint toPos, SpriteSpeed speed, bool mustArrive = false);
 
-	void SetPosition(CGPoint newPosition);
+	void SetPosition(CCPoint newPosition);
 
 	void Update(unsigned long ulDiff);
 	//用于绘制
-	//void SetPositionEx(CGPoint newPosition);
+	//void SetPositionEx(CCPoint newPosition);
 public:
 	// true:寻路操作被执行,false:其它操作被执行
-	bool ClickPoint(CGPoint point, bool bLongTouch, bool bPath = true);
-	bool DealClickPointInSideNpc(CGPoint point);
+	bool ClickPoint(CCPoint point, bool bLongTouch, bool bPath = true);
+	bool DealClickPointInSideNpc(CCPoint point);
 	bool CancelClickPointInSideNpc();
 
 	void stopMoving(bool bResetPos = true, bool bResetTeamPos = true);

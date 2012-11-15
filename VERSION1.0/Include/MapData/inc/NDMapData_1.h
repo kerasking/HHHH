@@ -41,7 +41,7 @@ class NDMapSwitch : public cocos2d::CCObject
 public:
 	void SetLabel(NDMapData* mapdata); 
 	void SetLabelNew(NDMapData* mapdata);
-	void SetLableByType(int eLableType, int x, int y, char* text, ccColor4B color1, ccColor4B color2, CGSize sizeParent);
+	void SetLableByType(int eLableType, int x, int y, char* text, ccColor4B color1, ccColor4B color2, CCSize sizeParent);
 	void draw();
 
 private:

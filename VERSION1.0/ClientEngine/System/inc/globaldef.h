@@ -16,12 +16,12 @@
 #include <deque>
 #include <set>
 #include <map>
-#include <BaseType.h>
+#include "BaseType.h"
 
 #include "TableDef.h"
 #include "EnumDef.h"
 //client engine inc
-#include "Utility.h"
+#include "UtilityInc.h"
 #include "NDSocket.h"
 #include "NDDataTransThread.h"
 

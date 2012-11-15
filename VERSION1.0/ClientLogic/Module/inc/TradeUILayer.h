@@ -70,9 +70,9 @@ private:
 	static NewTradeLayer* s_instance;
 	
 private:
-	void InitItem(bool isSelf, CGRect rect,NDUINode *parent);
-	void ShowSelfCommitLayer(bool show, CGRect rect=CGRectZero);
-	void ShowOtherCommitLayer(bool show, CGRect rect=CGRectZero);
+	void InitItem(bool isSelf, CCRect rect,NDUINode *parent);
+	void ShowSelfCommitLayer(bool show, CCRect rect=CCRectZero);
+	void ShowOtherCommitLayer(bool show, CCRect rect=CCRectZero);
 	void ShowDialog(bool money, int itemID=0);
 	bool IsSelfBtnDragIn(NDUIButton* button);
 	int	 findEmptyIndex();

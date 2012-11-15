@@ -588,7 +588,7 @@ namespace NDEngine
 		static bool bFirstCreate, bVerifyVersion;
 		int m_iMapDocID;//地图资源ID
 		int m_mapID;//地图实际ID
-		CGSize m_sizeMap;
+		CCSize m_sizeMap;
 		std::string mapName;
 	private:
 		int m_nCurrentMonsterRound;

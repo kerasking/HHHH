@@ -99,22 +99,22 @@ class ContainerClientLayer : public NDUILayer
 	
 	ContainerClientLayer()
 	{
-		m_rectEvent	= CGRectZero;
+		m_rectEvent	= CCRectZero;
 	}
 	
 public:
-	void SetEventRect(CGRect rect)
+	void SetEventRect(CCRect rect)
 	{
 		m_rectEvent	= rect;
 	}
 	
 private:
-	CGRect m_rectEvent;
+	CCRect m_rectEvent;
 	
 private:
-	bool CanDealEvent(CGPoint pos)
+	bool CanDealEvent(CCPoint pos)
 	{
-		return CGRectContainsPoint(m_rectEvent, pos);
+		return cocos2d::CCRect::CCRectContainsPoint(m_rectEvent, pos);
 	}
 	
 protected:
@@ -126,7 +126,7 @@ protected:
 		}
 		return false;
 	}
-	virtual bool DispatchLongTouchClickEvent(CGPoint beginTouch, CGPoint endTouch)
+	virtual bool DispatchLongTouchClickEvent(CCPoint beginTouch, CCPoint endTouch)
 	{
 		if (CanDealEvent(endTouch))
 		{
@@ -135,7 +135,7 @@ protected:
 		return false;
 	}
 	
-	virtual bool DispatchLongTouchEvent(CGPoint beginTouch, bool touch)
+	virtual bool DispatchLongTouchEvent(CCPoint beginTouch, bool touch)
 	{
 		if (CanDealEvent(beginTouch))
 		{
@@ -144,7 +144,7 @@ protected:
 		return false;
 	}
 	
-	virtual bool DispatchDragOutEvent(CGPoint beginTouch, CGPoint moveTouch, bool longTouch=false)
+	virtual bool DispatchDragOutEvent(CCPoint beginTouch, CCPoint moveTouch, bool longTouch=false)
 	{
 		if (CanDealEvent(moveTouch))
 		{
@@ -153,7 +153,7 @@ protected:
 		return false;
 	}
 	
-	virtual bool DispatchDragInEvent(NDUINode* dragOutNode, CGPoint beginTouch, CGPoint endTouch, bool longTouch, bool dealByDefault=false)
+	virtual bool DispatchDragInEvent(NDUINode* dragOutNode, CCPoint beginTouch, CCPoint endTouch, bool longTouch, bool dealByDefault=false)
 	{
 		if (CanDealEvent(endTouch))
 		{
@@ -176,7 +176,7 @@ CUIScrollViewContainer::CUIScrollViewContainer()
 	m_bIsViewScrolling				= false;
 	m_style							= UIScrollStyleHorzontal;
 	m_pClientUINode					= NULL;
-	m_sizeView						= CGSizeMake(0, 0);
+	m_sizeView						= CCSizeMake(0, 0);
 	m_unBeginIndex					= 0;
 	m_bCenterAdjust					= false;
 	m_bRecaclClientEventRect		= false;
@@ -222,7 +222,7 @@ bool CUIScrollViewContainer::IsCenterAdjust()
 	return m_bCenterAdjust;
 }
 
-void  CUIScrollViewContainer::SetViewSize(CGSize size)
+void  CUIScrollViewContainer::SetViewSize(CCSize size)
 {
 	m_sizeView	= size;
 }
@@ -236,7 +236,7 @@ int	CUIScrollViewContainer::GetViewCount()
 	return m_pClientUINode->GetChildren().size();
 }
 
-CGSize  CUIScrollViewContainer::GetViewSize()
+CCSize  CUIScrollViewContainer::GetViewSize()
 {
 	return m_sizeView;
 }
@@ -254,7 +254,7 @@ void CUIScrollViewContainer::AddView(CUIScrollView* view)
 	}
 	
 	size_t childsize		= m_pClientUINode->GetChildren().size();	
-	CGRect rect				= view->GetFrameRect();
+	CCRect rect				= view->GetFrameRect();
 	if (UIScrollStyleHorzontal == GetScrollStyle())
 	{
 		rect.origin.x		= childsize * GetViewLen();
@@ -303,7 +303,7 @@ void CUIScrollViewContainer::RemoveView(unsigned int uiIndex)
 	m_pClientUINode->RemoveChild(m_pClientUINode->GetChildren()[uiIndex], true);
 	
 	/*
-	CGRect rect	= m_pClientUINode->GetFrameRect();
+	CCRect rect	= m_pClientUINode->GetFrameRect();
 	
 	
 	if (UIScrollStyleHorzontal == GetScrollStyle())
@@ -343,7 +343,7 @@ void CUIScrollViewContainer::RemoveView(unsigned int uiIndex)
 				continue;
 			}
 			CUIScrollView* view		= (CUIScrollView*)child;
-			CGRect rect				= view->GetFrameRect();
+			CCRect rect				= view->GetFrameRect();
 			if (UIScrollStyleHorzontal == GetScrollStyle())
 			{
 				rect.origin.x		= i * GetViewLen();
@@ -385,7 +385,7 @@ void CUIScrollViewContainer::RemoveAllView()
 	
 	if (m_pClientUINode)
 	{
-		m_pClientUINode->SetFrameRect(CGRectZero);
+		m_pClientUINode->SetFrameRect(CCRectZero);
 	}
 	EnableViewToScroll(false);
 	m_fScrollDistance		= 0.0f;
@@ -700,8 +700,8 @@ bool CUIScrollViewContainer::CaclViewCenter(CUIScrollView* view, float& fCenter,
 		return false;
 	}
 	
-	CGRect rectClient		= GetClientRect(bJudeOver);
-	CGRect viewrect			= view->GetFrameRect();
+	CCRect rectClient		= GetClientRect(bJudeOver);
+	CCRect viewrect			= view->GetFrameRect();
 	fCenter					= 0.0f;
 	if (UIScrollStyleHorzontal == GetScrollStyle())
 	{
@@ -719,14 +719,14 @@ bool CUIScrollViewContainer::CaclViewCenter(CUIScrollView* view, float& fCenter,
 	return true;
 }
 
-CGRect CUIScrollViewContainer::GetClientRect(bool judgeOver)
+CCRect CUIScrollViewContainer::GetClientRect(bool judgeOver)
 {
 	if (!m_pClientUINode)
 	{
-		return CGRectZero;
+		return CCRectZero;
 	}
 	
-	CGRect rectClient	= m_pClientUINode->GetFrameRect();
+	CCRect rectClient	= m_pClientUINode->GetFrameRect();
 	
 	if (!judgeOver)
 	{
@@ -738,7 +738,7 @@ CGRect CUIScrollViewContainer::GetClientRect(bool judgeOver)
 		return rectClient;
 	}
 	
-	CGRect selfRect		= this->GetFrameRect();
+	CCRect selfRect		= this->GetFrameRect();
 	
 	if (UIScrollStyleHorzontal == GetScrollStyle())
 	{
@@ -786,7 +786,7 @@ float CUIScrollViewContainer::GetViewLen()
 
 float CUIScrollViewContainer::GetContainerCenter()
 {
-	CGRect rect		= this->GetFrameRect();
+	CCRect rect		= this->GetFrameRect();
 	float fCenter	= 0.0f;
 	
 	if (UIScrollStyleHorzontal == GetScrollStyle())
@@ -815,7 +815,7 @@ void CUIScrollViewContainer::MoveClient(float fMove)
 		return;
 	}
 	
-	CGRect rect	= m_pClientUINode->GetFrameRect();
+	CCRect rect	= m_pClientUINode->GetFrameRect();
 	
 	if (m_style == UIScrollStyleHorzontal)
 	{
@@ -836,7 +836,7 @@ void CUIScrollViewContainer::refrehClientSize()
 		return;
 	}
 	
-	CGRect rect	= m_pClientUINode->GetFrameRect();
+	CCRect rect	= m_pClientUINode->GetFrameRect();
 	
 	if (m_style == UIScrollStyleHorzontal)
 	{
@@ -935,7 +935,7 @@ void CUIScrollViewContainer::draw() //  m_fScrollDistance += speed; only to zero
 	}
 }
 
-void CUIScrollViewContainer::SetFrameRect(CGRect rect)
+void CUIScrollViewContainer::SetFrameRect(CCRect rect)
 {
 	CUIScrollContainer::SetFrameRect(rect);
 	
@@ -1015,8 +1015,8 @@ bool CUIScrollViewContainer::CanHorizontalMove(NDObject* object, float& hDistanc
 		return false;
 	}
 	
-	CGRect rectself = this->GetFrameRect();
-	CGRect rectmove = m_pClientUINode->GetFrameRect();
+	CCRect rectself = this->GetFrameRect();
+	CCRect rectmove = m_pClientUINode->GetFrameRect();
 	
 	CGFloat fOver	= GetOverDistance();
 	
@@ -1063,8 +1063,8 @@ bool CUIScrollViewContainer::CanVerticalMove(NDObject* object, float& vDistance)
 		return false;
 	}
 	
-	CGRect rectself = this->GetFrameRect();
-	CGRect rectmove = m_pClientUINode->GetFrameRect();
+	CCRect rectself = this->GetFrameRect();
+	CCRect rectmove = m_pClientUINode->GetFrameRect();
 	
 	CGFloat fOver	= GetOverDistance();
 
@@ -1152,8 +1152,8 @@ float CUIScrollViewContainer::GetOverDistance()
 		return 0.0f;
 	}
 	
-	CGRect rectself = this->GetFrameRect();
-	CGRect rectmove = m_pClientUINode->GetFrameRect();
+	CCRect rectself = this->GetFrameRect();
+	CCRect rectmove = m_pClientUINode->GetFrameRect();
 	
 	CGFloat fOver	= 0.0f;
 	if (IsCenterAdjust())
@@ -1202,10 +1202,10 @@ void CUIScrollViewContainer::DrawScrollBar()
 		{
 			//return;
 		}
-		CGRect rectself;/*	= m_scrRect;*/
-		CGRect rectClient	= m_pClientUINode->GetFrameRect();
-		CGRect rect			= CGRectZero;
-		CGSize sizePic		= m_picScroll->GetSize();
+		CCRect rectself;/*	= m_scrRect;*/
+		CCRect rectClient	= m_pClientUINode->GetFrameRect();
+		CCRect rect			= CCRectZero;
+		CCSize sizePic		= m_picScroll->GetSize();
 		
         //** chh 2012-07-24 **//
         //rect.size.width		= sizePic.width * fScale;
@@ -1252,8 +1252,8 @@ void CUIScrollViewContainer::DrawScrollBar()
 		
         
         if(m_picScrollBg) {
-            CGSize sizePic		= m_picScrollBg->GetSize();
-            CGRect rt;
+            CCSize sizePic		= m_picScrollBg->GetSize();
+            CCRect rt;
             rt.origin.x = rect.origin.x;
             rt.origin.y = rectself.origin.y;
             rt.size.width = sizePic.width;
@@ -1278,7 +1278,7 @@ unsigned int CUIScrollViewContainer::GetPerPageViews()
 {
 	unsigned int nViews		= 0;
 	
-	CGSize sizeContainer	= this->GetFrameRect().size;
+	CCSize sizeContainer	= this->GetFrameRect().size;
 	
 	if (UIScrollStyleHorzontal == GetScrollStyle())
 	{
@@ -1295,7 +1295,7 @@ unsigned int CUIScrollViewContainer::GetPerPageViews()
 
 bool CUIScrollViewContainer::IsViewCanCenter()
 {
-	CGSize sizeContainer	= this->GetFrameRect().size;
+	CCSize sizeContainer	= this->GetFrameRect().size;
 
 	if (UIScrollStyleHorzontal == GetScrollStyle())
 	{

@@ -74,14 +74,14 @@ void CUIScrollContainer::ScrollToTop()
 			continue;
 		}
 		CUIScroll* scroll		= (CUIScroll*)node;
-		CGRect rect				= scroll->GetFrameRect();
-		scroll->SetFrameRect(CGRectMake(rect.origin.x, 0, rect.size.width, rect.size.height));
+		CCRect rect				= scroll->GetFrameRect();
+		scroll->SetFrameRect(CCRectMake(rect.origin.x, 0, rect.size.width, rect.size.height));
 		break;
 	}
 }
 void CUIScrollContainer::ScrollToBottom()
 {
-	CGRect selfRect							= this->GetFrameRect();
+	CCRect selfRect							= this->GetFrameRect();
 	const std::vector<NDNode*>& children	= this->GetChildren();
 	for(std::vector<NDNode*>::const_iterator it = children.begin();
 		it != children.end();
@@ -93,12 +93,12 @@ void CUIScrollContainer::ScrollToBottom()
 			continue;
 		}
 		CUIScroll* scroll		= (CUIScroll*)node;
-		CGRect rect				= scroll->GetFrameRect();
+		CCRect rect				= scroll->GetFrameRect();
 		if (rect.size.height < selfRect.size.height)
 		{
 			continue;
 		}
-		scroll->SetFrameRect(CGRectMake(rect.origin.x, selfRect.size.height - rect.size.height, 
+		scroll->SetFrameRect(CCRectMake(rect.origin.x, selfRect.size.height - rect.size.height, 
 										rect.size.width, rect.size.height));
 		break;
 	}
@@ -128,8 +128,8 @@ bool CUIScrollContainer::CanHorizontalMove(NDObject* object, float& hDistance)
 	
 	CUIMovableLayer *layer = (CUIMovableLayer*)object;
 	
-	CGRect rectself = this->GetFrameRect();
-	CGRect rectmove = layer->GetFrameRect();
+	CCRect rectself = this->GetFrameRect();
+	CCRect rectmove = layer->GetFrameRect();
 	
 	if (hDistance > 0.0f)
 	{
@@ -166,8 +166,8 @@ bool CUIScrollContainer::CanVerticalMove(NDObject* object, float& vDistance)
 	
 	CUIMovableLayer *layer = (CUIMovableLayer*)object;
 	
-	CGRect rectself = this->GetFrameRect();
-	CGRect rectmove = layer->GetFrameRect();
+	CCRect rectself = this->GetFrameRect();
+	CCRect rectmove = layer->GetFrameRect();
 	
 	if (vDistance > 0.0f)
 	{
@@ -205,7 +205,7 @@ bool CUIScrollContainer::TouchBegin(NDTouch* touch)
 		{
 			continue;
 		}
-		if (CGRectContainsPoint(((NDUINode*)pNode)->GetScreenRect(), touch->GetLocation()))
+		if (cocos2d::CCRect::CCRectContainsPoint(((NDUINode*)pNode)->GetScreenRect(), touch->GetLocation()))
 		{
 			return NDUILayer::TouchBegin(touch);
 		}
@@ -256,14 +256,14 @@ void CUIScrollContainer::DrawScrollBar()
 	{
 		return;
 	}
-	CGRect rectScroll	= scroll->GetFrameRect();
+	CCRect rectScroll	= scroll->GetFrameRect();
 	if(rectScroll.size.height > this->GetFrameRect().size.height)
 	{
-		CGRect rectself		= this->GetScreenRect();
-		CGRect rectClient	= rectScroll;
-		CGRect rect			= CGRectZero;
+		CCRect rectself		= this->GetScreenRect();
+		CCRect rectClient	= rectScroll;
+		CCRect rect			= CCRectZero;
 		//float fScale		= NDDirector::DefaultDirector()->GetScaleFactor();
-		CGSize sizePic		= m_picScroll->GetSize();
+		CCSize sizePic		= m_picScroll->GetSize();
 		rect.size.width		= sizePic.width;
 		rect.size.height	= rectself.size.height / rectClient.size.height * rectself.size.height;//sizePic.height * fScale;
 		rect.origin			= ccp(rectself.size.width - rect.size.width,

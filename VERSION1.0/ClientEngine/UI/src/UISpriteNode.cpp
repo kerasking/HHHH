@@ -32,11 +32,11 @@ void CUISpriteNode::Initialization()
 {
 	NDUINode::Initialization();
 	
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 	
 	m_pSpriteParentNode	= new NDUINode;
 	m_pSpriteParentNode->Initialization();
-	m_pSpriteParentNode->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
+	m_pSpriteParentNode->SetFrameRect(CCRectMake(0, 0, winsize.width, winsize.height));
 }
 
 void CUISpriteNode::ChangeSprite(const char* sprfile)
@@ -88,8 +88,8 @@ void CUISpriteNode::draw()
 	
 	//CGFloat w = m_pSprite->GetWidth();
 	//CGFloat h = m_pSprite->GetHeight();
-	CGRect scrRect	= this->GetScreenRect();
-	CGPoint pos		= ccpAdd(scrRect.origin, 
+	CCRect scrRect	= this->GetScreenRect();
+	CCPoint pos		= ccpAdd(scrRect.origin, 
 							 ccp((scrRect.size.width ) / 2 ,
 								 (scrRect.size.height) / 2) );
 	

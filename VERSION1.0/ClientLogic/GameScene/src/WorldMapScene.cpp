@@ -29,29 +29,38 @@
 #define REACH_Y				(8)
 #define MOVE_STEP			(8)
 
+extern WorldMapLayer* g_pWorldMapLayer = NULL; //for debug only.
+
 IMPLEMENT_CLASS(WorldMapLayer, NDUILayer)
 
 WorldMapLayer::WorldMapLayer()
 {
+	WriteCon( "WorldMapLayer::WorldMapLayer()\r\n");
+
 	m_mapData = NDWorldMapData::SharedData();
 	m_curBtn = NULL;
 	m_buttons = NULL;
-	m_screenCenter = CGPointZero;
+	m_screenCenter = CCPointZero;
 	m_roleNode = NULL;
 	m_btnClose = NULL;
 	m_btnRet = NULL;
-	m_posTarget = CGPointZero;
+	m_posTarget = CCPointZero;
 	m_bInMoving = false;
-	m_posMapOffset = CGPointZero;
+	m_posMapOffset = CCPointZero;
 }
 
 WorldMapLayer::~WorldMapLayer()
 {
+	WriteCon( "WorldMapLayer::~WorldMapLayer()\r\n");
+
 	m_buttons->release();
+	g_pWorldMapLayer = NULL;
 }
 
 void WorldMapLayer::Initialization(int nMapId)
 {
+	g_pWorldMapLayer = this;
+
 	int width = m_mapData->getMapSize().width;
 	int height = m_mapData->getMapSize().height;
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
@@ -60,8 +69,8 @@ void WorldMapLayer::Initialization(int nMapId)
 	SetTag(ScriptMgrObj.excuteLuaFuncRetN("GetWorldMapUITag", ""));
 
     //ScriptMgrObj.excuteLuaFunc("PlayWorldMusic", "Music");
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
-	SetFrameRect(CGRectMake(0, 0, width, height));
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	SetFrameRect(CCRectMake(0, 0, width, height));
 
 	m_buttons = cocos2d::CCArray::array();
 	m_buttons->retain();
@@ -91,33 +100,34 @@ void WorldMapLayer::Initialization(int nMapId)
 		int iHeight = texSize.height;
 #endif
 		
-		pkTile->setCutRect(CGRectMake(0, 0, iWidth, iHeight));
+		pkTile->setCutRect(CCRectMake(0, 0, iWidth, iHeight));
 		int iX = pkNode->getX();
 		int iY = pkNode->getY();
 		
-		pkTile->setDrawRect(CGRectMake(iX, iY, iWidth, iHeight));
+		pkTile->setDrawRect(CCRectMake(iX, iY, iWidth, iHeight));
 		pkTile->setReverse((bool)NO);
 		pkTile->setRotation(NDRotationEnumRotation0);
 		
 		iWidth = m_mapData->getMapSize().width;
 		iHeight = m_mapData->getMapSize().height;
 		
-		pkTile->setMapSize(CGSizeMake(iWidth, iHeight));
+		pkTile->setMapSize(CCSizeMake(iWidth, iHeight));
 		pkTile->make();
 		
 		m_buttons->addObject(pkTile);
 		pkTile->release();
 	}
 
+	// load pictures for button
 	NDPicture* picClose	= NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("btn_close.png"));
 	NDPicture* picCloseSelect	= NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("btn_close.png"));    
-	CGSize sizeClose	= picClose->GetSize();
+	CCSize sizeClose	= picClose->GetSize();
 
 	int iFlag =  fScaleFactor < 1.5 ? 2 : 1;
-	picClose->Cut(CGRectMake(0,  0,  sizeClose.width,  sizeClose.height/2 - 2));
-	picCloseSelect->Cut(CGRectMake(0,  sizeClose.height/2,  sizeClose.width,  sizeClose.height/2));
+	picClose->Cut(CCRectMake(0,  0,  sizeClose.width,  sizeClose.height/2 - 2));
+	picCloseSelect->Cut(CCRectMake(0,  sizeClose.height/2,  sizeClose.width,  sizeClose.height/2));
 
-	CGRect rectClose	= CGRectMake((winsize.width - sizeClose.width/iFlag), 0,
+	CCRect rectClose	= CCRectMake((winsize.width - sizeClose.width/iFlag), 0,
 									 sizeClose.width/iFlag, sizeClose.height/2/iFlag);
 
 	m_btnClose = new NDUIButton();
@@ -134,9 +144,42 @@ void WorldMapLayer::Initialization(int nMapId)
 	m_roleNode->ChangeLookFace(GetPlayerLookface());
 
 	NDPlayer& player = NDPlayer::defaultHero();
-	m_roleNode->GetRole()->ChangeModelWithMount(player.m_nRideStatus, player.m_nMountType);
+	//m_roleNode->GetRole()->ChangeModelWithMount(player.m_nRideStatus, player.m_nMountType);
+    player.ChangeModelWithMount(player.m_nRideStatus, player.m_nMountType);
 	m_roleNode->SetRoleScale(0.5f);
 	AddChild(m_roleNode);
+	// init close button
+	{
+		const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+		const float oneOverScale = 1.0f / fScale;
+		CCRect rectClose = CCRectMake(
+			oneOverScale * (winsize.width - sizeClose.width/iFlag), 
+			0,
+			oneOverScale * sizeClose.width/iFlag, 
+			oneOverScale * sizeClose.height/2/iFlag
+			);
+
+		m_btnClose = new NDUIButton();
+		m_btnClose->Initialization();
+		m_btnClose->SetDelegate(this);
+		m_btnClose->SetImage(picClose);
+		m_btnClose->SetFrameRect(rectClose);
+		AddChild(m_btnClose);
+	}
+
+	SetCenterAtPos(ccp(winsize.width / 2, winsize.height / 2));
+
+	// init role node
+	{
+		m_roleNode = new CUIRoleNode;
+		m_roleNode->Initialization();
+		m_roleNode->ChangeLookFace(GetPlayerLookface());
+
+		NDPlayer& player = NDPlayer::defaultHero();
+		player.ChangeModelWithMount(player.m_nRideStatus, player.m_nMountType);
+		m_roleNode->SetRoleScale(0.5f);
+		AddChild(m_roleNode);
+	}
 	ShowRoleAtPlace(nMapId);
 
 /*	m_timer.SetTimer(this, TAG_TIMER_MOVE, 1.0/24.0);*/
@@ -145,20 +188,20 @@ void WorldMapLayer::Initialization(int nMapId)
 // 	tmpLabel->Initialization();
 // 	tmpLabel->SetText("能不能显示出来呢？");
 // 	tmpLabel->SetFontSize(18);
-// 	tmpLabel->SetFrameRect(CGRectMake(200, 200, 300,100));
+// 	tmpLabel->SetFrameRect(CCRectMake(200, 200, 300,100));
 // 	tmpLabel->SetTextAlignment(LabelTextAlignmentLeft);
 // 	AddChild(tmpLabel);
 
 // 	CUIRoleNode *tmpRoleNode = new CUIRoleNode;
 // 	tmpRoleNode->Initialization();
 // 	tmpRoleNode->ChangeLookFace(11200003);
-// 	tmpRoleNode->SetFrameRect(CGRectMake(200, 200, 300,150));
+// 	tmpRoleNode->SetFrameRect(CCRectMake(200, 200, 300,150));
 // 	m_roleNode->SetVisible(true);
 // 	AddChild(tmpRoleNode);
 
 // 	NDUINode *tmpUINode = new NDUINode();
 // 	tmpUINode->Initialization();
-// 	tmpUINode->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
+// 	tmpUINode->SetFrameRect(CCRectMake(0, 0, winsize.width, winsize.height));
 // 	AddChild(tmpUINode);
 
 // 	NDManualRole *tmpRole = new NDManualRole;
@@ -176,7 +219,7 @@ void WorldMapLayer::Initialization(int nMapId)
 void WorldMapLayer::draw()
 {
 	NDUILayer::draw();
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 
 	int iNum = m_mapData->getBgTiles()->count();
 	for (unsigned int i = 0; i < iNum; i++)
@@ -214,8 +257,6 @@ void WorldMapLayer::draw()
 			tile->draw();
 		}
 	}
-
-	//m_roleNode->draw();
 }
 
 void WorldMapLayer::SetFilter(ID_VEC idVec)
@@ -320,10 +361,10 @@ void WorldMapLayer::OnTimer(OBJID tag)
 
 	if (m_roleNode)
 	{
-		CGRect rectRole = m_roleNode->GetFrameRect();
+		CCRect rectRole = m_roleNode->GetFrameRect();
 		//float	fScaleFactor	= NDDirector::DefaultDirector()->GetScaleFactor(); //@check
-		CGPoint posRole = rectRole.origin;
-		CGPoint posTarget = GetTarget();
+		CCPoint posRole = rectRole.origin;
+		CCPoint posTarget = GetTarget();
 
 		float fDiffX = posTarget.x - posRole.x;
 		float fDiffY = posTarget.y - posRole.y;
@@ -359,27 +400,27 @@ void WorldMapLayer::ShowRoleAtPlace(int placeId)
 	{
 		/*
 		 float fScaleFactor	= NDDirector::DefaultDirector()->GetScaleFactor();
-		 CGPoint pos = CGPointMake(node->getX() + node->texture.contentSizeInPixels.width / 2,
+		 CCPoint pos = CCPointMake(node->getX() + node->texture.contentSizeInPixels.width / 2,
 		 node->getY() - node->texture.contentSizeInPixels.height);
-		 CGRect rect	= m_roleNode->GetFrameRect();
+		 CCRect rect	= m_roleNode->GetFrameRect();
 		 rect.origin	= ConvertToScreenPoint(pos);
 		 rect.origin = ccpSub(rect.origin, ccp(fScaleFactor * 75, fScaleFactor * 150));
 		 */
 		float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
-		CGRect rect = m_roleNode->GetFrameRect();
+		CCRect rect = m_roleNode->GetFrameRect();
 		rect.origin = GetPlaceIdScreenPos(placeId);
-		rect.size = CGSizeMake(fScaleFactor*35, fScaleFactor*70);
+		rect.size = CCSizeMake(fScaleFactor*35, fScaleFactor*70);
 		m_roleNode->SetFrameRect(rect);
 		m_curBtn = node;
 	}
 }
 
-void WorldMapLayer::SetCenterAtPos(CGPoint pos)
+void WorldMapLayer::SetCenterAtPos(CCPoint pos)
 {
 	int width = m_mapData->getMapSize().width;
 	int height = m_mapData->getMapSize().height;
 
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 
 	if (pos.x > width - winSize.width / 2)
 		pos.x = width - winSize.width / 2;
@@ -391,7 +432,7 @@ void WorldMapLayer::SetCenterAtPos(CGPoint pos)
 	if (pos.y < winSize.height / 2)
 		pos.y = winSize.height / 2;
 
-	CGPoint posCenter = ccp(winSize.width / 2 - pos.x,
+	CCPoint posCenter = ccp(winSize.width / 2 - pos.x,
 			winSize.height / 2 + pos.y - m_mapData->getMapSize().height);
 
 	//m_posMapOffset	= posCenter;
@@ -408,41 +449,41 @@ void WorldMapLayer::SetCenterAtPos(CGPoint pos)
 	m_ccNode->setPosition(posCenter);
 }
 
-CGPoint WorldMapLayer::ConvertToMapPoint(CGPoint screenPoint)
+CCPoint WorldMapLayer::ConvertToMapPoint(CCPoint screenPoint)
 {
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 	return ccpAdd(
 			ccpSub(screenPoint, ccp(winSize.width / 2, winSize.height / 2)),
 			m_screenCenter);
 }
 
-CGPoint WorldMapLayer::ConvertToScreenPoint(CGPoint mapPoint)
+CCPoint WorldMapLayer::ConvertToScreenPoint(CCPoint mapPoint)
 {
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 	return ccpAdd(ccpSub(mapPoint, m_screenCenter),
 			ccp(winSize.width / 2, winSize.height / 2));
 }
 
 bool WorldMapLayer::TouchBegin(NDTouch* touch)
 {	
-	CGPoint m_Touch = touch->GetLocation();
+	CCPoint m_Touch = touch->GetLocation();
 // 	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
-// 	CGPoint tmpTouch = CGPointMake(m_Touch.x * fScale, m_Touch.y * fScale);
-	CGPoint tmpTouch = CGPointMake(m_Touch.x, m_Touch.y);
+// 	CCPoint tmpTouch = CCPointMake(m_Touch.x * fScale, m_Touch.y * fScale);
+	CCPoint tmpTouch = CCPointMake(m_Touch.x, m_Touch.y);
 	m_Touch = tmpTouch;
 
-	CGPoint pt = ConvertToMapPoint(m_Touch);
+	CCPoint pt = ConvertToMapPoint(m_Touch);
 	int iPlaceNodeNum = m_mapData->getPlaceNodes()->count();
 
 	for (unsigned int i = 0; i < iPlaceNodeNum; i++)
 	{
 		PlaceNode* node = (PlaceNode*) m_mapData->getPlaceNodes()->objectAtIndex(i);
 		
-		CGRect btnRect = CGRectMake(node->getX(), node->getY(),
+		CCRect btnRect = CCRectMake(node->getX(), node->getY(),
 									 node->getTexture()->getContentSizeInPixels().width,
 									 node->getTexture()->getContentSizeInPixels().height);
 
-		if (CGRectContainsPoint(btnRect, pt))
+		if (cocos2d::CCRect::CCRectContainsPoint(btnRect, pt))
 		{
 			OnNodeClick(node);
 			//NDUILayer::TouchBegin(touch);
@@ -456,8 +497,8 @@ void WorldMapLayer::OnNodeClick(PlaceNode* button)
 {
 	if (button && !IsInFilterList(button->getPlaceId()))
 	{
-		ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", button->getPlaceId());
-		//Goto(button->getPlaceId());
+		//ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", button->getPlaceId());
+		Goto(button->getPlaceId());
 	}
 }
 
@@ -479,14 +520,14 @@ void WorldMapLayer::Goto(int nMapId)
 	}
 	if (node && m_roleNode && m_curBtn != node)
 	{
-		CGPoint pos = GetPlaceIdScreenPos(nMapId);
+		CCPoint pos = GetPlaceIdScreenPos(nMapId);
 		SetMove(true);
 		SetRoleDirect(pos.x > m_roleNode->GetFrameRect().origin.x);
 		SetTarget(pos);
 		SetTargetMapId(node->getPlaceId());
 
-		ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", nMapId);
-		//m_timer.SetTimer(this, TAG_TIMER_MOVE, float(1) / 24);
+		//ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", nMapId);
+		m_timer.SetTimer(this, TAG_TIMER_MOVE, float(1) / 24);
 		m_curBtn = node;
 	}
 }
@@ -528,7 +569,7 @@ bool WorldMapLayer::IsMoveArrive()
 
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
 
-	CGPoint posRole = m_roleNode->GetFrameRect().origin;
+	CCPoint posRole = m_roleNode->GetFrameRect().origin;
 
 	if (fabs(posRole.x - m_posTarget.x) < REACH_X * fScaleFactor
 			&& fabs(posRole.y - m_posTarget.y) < REACH_Y * fScaleFactor)
@@ -539,12 +580,12 @@ bool WorldMapLayer::IsMoveArrive()
 	return false;
 }
 
-void WorldMapLayer::SetTarget(CGPoint pos)
+void WorldMapLayer::SetTarget(CCPoint pos)
 {
 	m_posTarget = pos;
 }
 
-CGPoint WorldMapLayer::GetTarget()
+CCPoint WorldMapLayer::GetTarget()
 {
 	return m_posTarget;
 }
@@ -559,9 +600,9 @@ int WorldMapLayer::GetTargetMapId()
 	return m_nTargetMapId;
 }
 
-CGPoint WorldMapLayer::GetPlaceIdScreenPos(int placeId)
+CCPoint WorldMapLayer::GetPlaceIdScreenPos(int placeId)
 {
-	CGPoint posRet = CGPointZero;
+	CCPoint posRet = CCPointZero;
 
 	PlaceNode* node = GetPlaceNodeWithId(placeId);
 	if (!node)
@@ -577,7 +618,7 @@ CGPoint WorldMapLayer::GetPlaceIdScreenPos(int placeId)
 		int iWidth  = node->getTexture()->getContentSizeInPixels().width;
 		int iHeight  = node->getTexture()->getContentSizeInPixels().height;
 
-		CGPoint pos = CGPointMake((iStartX + iWidth/4), (iStartY - iHeight/8));
+		CCPoint pos = CCPointMake((iStartX + iWidth/4), (iStartY - iHeight/8));
 		posRet = ConvertToScreenPoint(pos);
 		//posRet = ccpSub(posRet, ccp(fScaleFactor * 75, fScaleFactor * 120));
 	}

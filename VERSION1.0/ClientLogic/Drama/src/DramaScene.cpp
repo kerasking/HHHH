@@ -59,7 +59,7 @@ void DramaScene::Init(int nMapId)
 	AddChild(m_layerMap, MAPLAYER_Z, MAPLAYER_TAG);
 }
 
-bool DramaScene::SetCenter(CGPoint pos)
+bool DramaScene::SetCenter(CCPoint pos)
 {
 	if (!m_layerMap)
 	{
@@ -69,11 +69,11 @@ bool DramaScene::SetCenter(CGPoint pos)
 	return m_layerMap->SetScreenCenter(pos);
 }
 
-CGPoint DramaScene::GetCenter()
+CCPoint DramaScene::GetCenter()
 {
 	if (!m_layerMap)
 	{
-		return CGPointZero;
+		return CCPointZero;
 	}
 
 	return m_layerMap->GetScreenCenter();

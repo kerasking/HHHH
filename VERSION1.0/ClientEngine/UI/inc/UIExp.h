@@ -58,14 +58,14 @@ private:
     int                     m_nStyle;
 	
 	bool					m_bRecacl;
-	CGRect					processCutRect;
-	CGRect					bgCutRect;
+	CCRect					processCutRect;
+	CCRect					bgCutRect;
     
 protected:
 	void draw();override
 
 public:
-	void SetFrameRect(CGRect rect); override
+	void SetFrameRect(CCRect rect); override
 protected:
 	bool CanDestroyOnRemoveAllChildren(NDNode* pNode);override
 };

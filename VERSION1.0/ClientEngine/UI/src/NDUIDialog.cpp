@@ -15,6 +15,7 @@
 #include "NDConstant.h"
 #include "basedefine.h"
 //#include "NDUtility.h"
+#include "CCGeometry.h"
 
 #include <sstream>
 
@@ -66,14 +67,14 @@ void NDUIDialog::InitUIData()
 	m_uiIntervalBtnAndContent = 6;
 	m_uiTitleHeightFullScr = 44;
 	m_uiTitleHeightNotFullScr = 45;
-	m_sizeNotFullScr = CGSizeMake(367, 245);
-	m_sizeBtnFullScr = CGSizeMake(132, 42);
-	m_sizeBtnNotFullScr = CGSizeMake(298, 28);
+	m_sizeNotFullScr = CCSizeMake(367, 245);
+	m_sizeBtnFullScr = CCSizeMake(132, 42);
+	m_sizeBtnNotFullScr = CCSizeMake(298, 28);
 }
 
 void NDUIDialog::InitFullScrBtns(const std::vector<std::string>& ortherButtons)
 {
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 
 	NDPicturePool& pool = *(NDPicturePool::DefaultPool());
 
@@ -92,14 +93,14 @@ void NDUIDialog::InitFullScrBtns(const std::vector<std::string>& ortherButtons)
 		btn->Initialization();
 		btn->SetFontSize(14);
 		btn->SetFrameRect(
-				CGRectMake(x, y, m_sizeBtnFullScr.width,
+				CCRectMake(x, y, m_sizeBtnFullScr.width,
 						m_sizeBtnFullScr.height));
 		btn->SetDelegate(this);
 		btn->SetFontColor(COLOR_OPTION_FULLSCR);
 		btn->CloseFrame();
 		btn->SetTouchDownImage(
 				pool.AddPicture(NDPath::GetImgPathUINew("dlgfull_btn_click.png")),
-				false, CGRectZero, true);
+				false, CCRectZero, true);
 		this->AddChild(btn);
 
 		if ((unsigned int) i < ortherButtons.size())
@@ -134,14 +135,14 @@ void NDUIDialog::Show(const char* title, const char* text,
 
 	m_bFullScreen = ortherButtons.size() > 1 ? true : false;
 
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
-	CGSize sizeDialog;
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize sizeDialog;
 	sizeDialog.width = m_bFullScreen ? winsize.width : m_sizeNotFullScr.width;
 	sizeDialog.height =
 			m_bFullScreen ? winsize.height : m_sizeNotFullScr.height;
 
 	this->SetFrameRect(
-			CGRectMake((winsize.width - sizeDialog.width) / 2,
+			CCRectMake((winsize.width - sizeDialog.width) / 2,
 					(winsize.height - sizeDialog.height) / 2, sizeDialog.width,
 					sizeDialog.height));
 
@@ -157,7 +158,7 @@ void NDUIDialog::Show(const char* title, const char* text,
 	m_lbTime->SetFontColor(ccc4(255, 0, 0, 255));
 	m_lbTime->SetTextAlignment(LabelTextAlignmentLeft);
 	m_lbTime->SetFrameRect(
-			CGRectMake(10, m_bFullScreen ? 14.5f : 18.0f, sizeDialog.width,
+			CCRectMake(10, m_bFullScreen ? 14.5f : 18.0f, sizeDialog.width,
 					sizeDialog.height));
 	this->AddChild(m_lbTime);
 
@@ -168,14 +169,14 @@ void NDUIDialog::Show(const char* title, const char* text,
 	m_lbTitle->SetFontBoderColer(COLOR_TITLE_BODER);
 	m_lbTitle->SetTextAlignment(LabelTextAlignmentCenter);
 	m_lbTitle->SetFrameRect(
-			CGRectMake(0, 0, sizeDialog.width, m_bFullScreen ? 29 : 36));
+			CCRectMake(0, 0, sizeDialog.width, m_bFullScreen ? 29 : 36));
 	this->AddChild(m_lbTitle);
 
 	SetTitle(title);
 
 	m_btnClose = new NDUIButton;
 	m_btnClose->Initialization();
-	m_btnClose->SetFrameRect(CGRectMake(sizeDialog.width - 45, 0, 45, 45));
+	m_btnClose->SetFrameRect(CCRectMake(sizeDialog.width - 45, 0, 45, 45));
 	m_btnClose->SetDelegate(this);
 	m_btnClose->CloseFrame();
 	m_btnClose->SetImage(
@@ -183,14 +184,14 @@ void NDUIDialog::Show(const char* title, const char* text,
 					NDPath::GetImgPathUINew(
 							m_bFullScreen ?
 									"dlgfull_close_normal.png" :
-									"dlg_close_normal.png").c_str()), false, CGRectZero,
+									"dlg_close_normal.png").c_str()), false, CCRectZero,
 			true);
 	m_btnClose->SetTouchDownImage(
 			pool.AddPicture(
 					NDPath::GetImgPathUINew(
 							m_bFullScreen ?
 									"dlgfull_close_click.png" :
-									"dlg_close_click.png").c_str()), false, CGRectZero,
+									"dlg_close_click.png").c_str()), false, CCRectZero,
 			true);
 	this->AddChild(m_btnClose);
 
@@ -201,7 +202,7 @@ void NDUIDialog::Show(const char* title, const char* text,
 		m_contentScroll = new NDUIContainerScrollLayer;
 		m_contentScroll->Initialization();
 		m_contentScroll->SetFrameRect(
-				CGRectMake(18, m_uiTitleHeightNotFullScr,
+				CCRectMake(18, m_uiTitleHeightNotFullScr,
 						sizeDialog.width - 18 * 2,
 						m_uiContentHeightNotFullScr
 								+ (hasBtn ? 0 : m_sizeBtnNotFullScr.height + 6)));
@@ -226,15 +227,15 @@ void NDUIDialog::Show(const char* title, const char* text,
 			m_btnConfirm->SetImage(
 					pool.AddPicture(NDPath::GetImgPathUINew("dlg_btn_normal.png"),
 							m_sizeBtnNotFullScr.width,
-							m_sizeBtnNotFullScr.height), false, CGRectZero,
+							m_sizeBtnNotFullScr.height), false, CCRectZero,
 					true);
 			m_btnConfirm->SetTouchDownImage(
 					pool.AddPicture(NDPath::GetImgPathUINew("dlg_btn_click.png"),
 							m_sizeBtnNotFullScr.width,
-							m_sizeBtnNotFullScr.height), false, CGRectZero,
+							m_sizeBtnNotFullScr.height), false, CCRectZero,
 					true);
 			m_btnConfirm->SetFrameRect(
-					CGRectMake(
+					CCRectMake(
 							m_uiIntervalBtnAndContent
 									+ (sizeDialog.width
 											- m_uiIntervalBtnAndContent * 2
@@ -252,7 +253,7 @@ void NDUIDialog::Show(const char* title, const char* text,
 		m_contentScroll = new NDUIContainerScrollLayer;
 		m_contentScroll->Initialization();
 		m_contentScroll->SetFrameRect(
-				CGRectMake(m_uiIntervalBtnAndContent + m_sizeBtnFullScr.width,
+				CCRectMake(m_uiIntervalBtnAndContent + m_sizeBtnFullScr.width,
 						m_uiTitleHeightFullScr,
 						sizeDialog.width
 								- (m_uiIntervalBtnAndContent
@@ -417,7 +418,7 @@ bool NDUIDialog::TouchBegin(NDTouch* touch)
 	m_kBeginTouch = touch->GetLocation();
 
 	if (m_bFullScreen
-			|| CGRectContainsPoint(this->GetScreenRect(), m_kBeginTouch))
+			|| cocos2d::CCRect::CCRectContainsPoint(this->GetScreenRect(), m_kBeginTouch))
 	{
 		NDUILayer::TouchBegin(touch);
 
@@ -483,7 +484,7 @@ void NDUIDialog::SetContent(const char *text,
 	if (!text)
 		return;
 
-	CGSize textSize;
+	CCSize textSize;
 
 	textSize.width =
 			m_contentScroll->GetFrameRect().size.width
@@ -499,7 +500,7 @@ void NDUIDialog::SetContent(const char *text,
 			textSize, color, false);
 
 	uiText->SetFrameRect(
-			CGRectMake(
+			CCRectMake(
 					(m_bFullScreen ?
 							m_uiContentLeftWidthFullScr :
 							m_uiContentLeftWidthNotFullScr),
@@ -534,7 +535,7 @@ void NDUIDialog::Close()
 	}
 }
 
-void NDUIDialog::SetTime(uint sec)
+void NDUIDialog::SetTime(unsigned int sec)
 {
 	m_timer.KillTimer(this, TAG_TIMER_DLG_TIMECOUNT);
 
@@ -673,7 +674,7 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  m_table->SetDelegate(this);
  this->AddChild(m_table);
 
- this->SetFrameRect(CGRectMake(0, 0, NDDirector::DefaultDirector()->GetWinSize().width, NDDirector::DefaultDirector()->GetWinSize().height));
+ this->SetFrameRect(CCRectMake(0, 0, NDDirector::DefaultDirector()->GetWinSize().width, NDDirector::DefaultDirector()->GetWinSize().height));
  }
 
  void NDUIDialog::draw()
@@ -682,7 +683,7 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
 
  if (this->IsVisibled())
  {
- CGRect scrRect = this->GetScreenRect();
+ CCRect scrRect = this->GetScreenRect();
 
  // top frame
  //			this->DrawLine(ccp(scrRect.origin.x + 40, scrRect.origin.y + 3),
@@ -739,28 +740,28 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  //						   ccc4(107, 89, 74, 255), 1);
 
  //background
- DrawRecttangle(CGRectMake(scrRect.origin.x + 17, scrRect.origin.y + 5, scrRect.size.width - 34, scrRect.size.height - 10), ccc4(0, 0, 0, 188));//ccc4(196, 201, 181, 255));
+ DrawRecttangle(CCRectMake(scrRect.origin.x + 17, scrRect.origin.y + 5, scrRect.size.width - 34, scrRect.size.height - 10), ccc4(0, 0, 0, 188));//ccc4(196, 201, 181, 255));
 
 
  //title rect
  //			if (!m_label->GetText().empty())
  //			{
- //				DrawRecttangle(CGRectMake(scrRect.origin.x + 17, scrRect.origin.y + 5, scrRect.size.width - 34, m_titleHeight), ccc4(160, 177, 155, 255));
+ //				DrawRecttangle(CCRectMake(scrRect.origin.x + 17, scrRect.origin.y + 5, scrRect.size.width - 34, m_titleHeight), ccc4(160, 177, 155, 255));
  //			}
 
- m_picLeftTop->DrawInRect(CGRectMake(scrRect.origin.x+7,
+ m_picLeftTop->DrawInRect(CCRectMake(scrRect.origin.x+7,
  scrRect.origin.y,
  m_picLeftTop->GetSize().width,
  m_picLeftTop->GetSize().height));
- m_picRightTop->DrawInRect(CGRectMake(scrRect.origin.x + scrRect.size.width - m_picRightTop->GetSize().width - 7,
+ m_picRightTop->DrawInRect(CCRectMake(scrRect.origin.x + scrRect.size.width - m_picRightTop->GetSize().width - 7,
  scrRect.origin.y,
  m_picRightTop->GetSize().width,
  m_picRightTop->GetSize().height));
- m_picLeftBottom->DrawInRect(CGRectMake(scrRect.origin.x+7,
+ m_picLeftBottom->DrawInRect(CCRectMake(scrRect.origin.x+7,
  scrRect.origin.y + scrRect.size.height - m_picLeftBottom->GetSize().height,
  m_picLeftBottom->GetSize().width,
  m_picLeftBottom->GetSize().height));
- m_picRightBottom->DrawInRect(CGRectMake(scrRect.origin.x + scrRect.size.width - m_picRightBottom->GetSize().width - 7,
+ m_picRightBottom->DrawInRect(CCRectMake(scrRect.origin.x + scrRect.size.width - m_picRightBottom->GetSize().width - 7,
  scrRect.origin.y + scrRect.size.height - m_picRightBottom->GetSize().height,
  m_picRightBottom->GetSize().width,
  m_picRightBottom->GetSize().height));
@@ -780,15 +781,15 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  if (title && strlen(title) > 0)
  {
  m_label->SetText(title);
- m_label->SetFrameRect(CGRectMake(TEXT_START_WIDTH, 5, m_width - TEXT_START_WIDTH*2, m_titleHeight));
+ m_label->SetFrameRect(CCRectMake(TEXT_START_WIDTH, 5, m_width - TEXT_START_WIDTH*2, m_titleHeight));
  }
  else
  {
  m_label->SetText("");
- m_label->SetFrameRect(CGRectMake(TEXT_START_WIDTH, 5, 0, 0));
+ m_label->SetFrameRect(CCRectMake(TEXT_START_WIDTH, 5, 0, 0));
  }
 
- CGRect tb = m_table->GetFrameRect();
+ CCRect tb = m_table->GetFrameRect();
 
  std::string mmText;
  if (text && strlen(text) > 0)
@@ -801,17 +802,17 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  }
 
  if (mmText.size() > 0) {
- CGSize textSize;
+ CCSize textSize;
  textSize.width = m_width - TEXT_START_WIDTH*2;
  textSize.height = NDUITextBuilder::DefaultBuilder()->StringHeightAfterFilter(text, textSize.width, 13);
 
  float txtHeight = m_contextHeight < textSize.height ? m_contextHeight : textSize.height;
  m_memo = NDUITextBuilder::DefaultBuilder()->Build(mmText.c_str(),
  13,
- CGSizeMake(m_width - TEXT_START_WIDTH*2, txtHeight),
+ CCSizeMake(m_width - TEXT_START_WIDTH*2, txtHeight),
  ccc4(255, 255, 255, 255),
  true);
- m_memo->SetFrameRect(CGRectMake(TEXT_START_WIDTH-2, 10 + m_label->GetFrameRect().size.height, m_width - TEXT_START_WIDTH*2-4, txtHeight + 10));
+ m_memo->SetFrameRect(CCRectMake(TEXT_START_WIDTH-2, 10 + m_label->GetFrameRect().size.height, m_width - TEXT_START_WIDTH*2-4, txtHeight + 10));
  this->AddChild(m_memo);
  }
 
@@ -821,11 +822,11 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  dataSource->AddSection(section);
  m_table->SetDataSource(dataSource);
  int nMemoHeight = m_memo == NULL ? 0 : m_memo->GetFrameRect().size.height;
- m_table->SetFrameRect(CGRectMake(17, 15 + m_label->GetFrameRect().size.height + nMemoHeight,
+ m_table->SetFrameRect(CCRectMake(17, 15 + m_label->GetFrameRect().size.height + nMemoHeight,
  m_width - 34, 0));
  if (ortherButtons.size() > 0)
  {
- m_table->SetFrameRect(CGRectMake(17, 15 + m_label->GetFrameRect().size.height + nMemoHeight,
+ m_table->SetFrameRect(CCRectMake(17, 15 + m_label->GetFrameRect().size.height + nMemoHeight,
  m_width - 34, (m_buttonHeight + 1) * ortherButtons.size() + 1));
  }
 
@@ -854,8 +855,8 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  btn->SetTitle(cancleButton);
 
  section->AddCell(btn);
- CGRect rect = m_table->GetFrameRect();
- m_table->SetFrameRect(CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, m_buttonHeight + 2 + rect.size.height));
+ CCRect rect = m_table->GetFrameRect();
+ m_table->SetFrameRect(CCRectMake(rect.origin.x, rect.origin.y, rect.size.width, m_buttonHeight + 2 + rect.size.height));
  }
 
  if (section->Count() > 0)
@@ -868,14 +869,14 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  m_autoRemove = true;
  }
 
- CGSize frameSize = CGSizeMake(m_width, m_label->GetFrameRect().size.height + nMemoHeight + m_table->GetFrameRect().size.height + 30);
+ CCSize frameSize = CCSizeMake(m_width, m_label->GetFrameRect().size.height + nMemoHeight + m_table->GetFrameRect().size.height + 30);
  if (m_autoRemove)
  {
- frameSize = CGSizeMake(m_width, m_label->GetFrameRect().size.height + nMemoHeight + 15);
+ frameSize = CCSizeMake(m_width, m_label->GetFrameRect().size.height + nMemoHeight + 15);
  }
 
- CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
- this->SetFrameRect(CGRectMake((winSize.width - frameSize.width) / 2,
+ CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+ this->SetFrameRect(CCRectMake((winSize.width - frameSize.width) / 2,
  (winSize.height - frameSize.height) / 2,
  frameSize.width, frameSize.height));
 
@@ -926,15 +927,15 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  if (title && strlen(title) > 0)
  {
  m_label->SetText(title);
- m_label->SetFrameRect(CGRectMake(TEXT_START_WIDTH, 5, m_width - TEXT_START_WIDTH*2, m_titleHeight));
+ m_label->SetFrameRect(CCRectMake(TEXT_START_WIDTH, 5, m_width - TEXT_START_WIDTH*2, m_titleHeight));
  }
  else
  {
  m_label->SetText("");
- m_label->SetFrameRect(CGRectMake(TEXT_START_WIDTH, 5, 0, 0));
+ m_label->SetFrameRect(CCRectMake(TEXT_START_WIDTH, 5, 0, 0));
  }
 
- CGRect tb = m_table->GetFrameRect();
+ CCRect tb = m_table->GetFrameRect();
 
  std::string mmText;
  if (text && strlen(text) > 0)
@@ -947,17 +948,17 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  }
 
  if (mmText.size() > 0) {
- CGSize textSize;
+ CCSize textSize;
  textSize.width = m_width - TEXT_START_WIDTH*2;
  textSize.height = NDUITextBuilder::DefaultBuilder()->StringHeightAfterFilter(text, textSize.width, 13);
 
  float txtHeight = m_contextHeight < textSize.height ? m_contextHeight : textSize.height;
  m_memo = NDUITextBuilder::DefaultBuilder()->Build(mmText.c_str(),
  13,
- CGSizeMake(m_width - TEXT_START_WIDTH*2, txtHeight),
+ CCSizeMake(m_width - TEXT_START_WIDTH*2, txtHeight),
  ccc4(255, 255, 255, 255),
  true);
- m_memo->SetFrameRect(CGRectMake(TEXT_START_WIDTH-2, 10 + m_label->GetFrameRect().size.height, m_width - TEXT_START_WIDTH*2+4, txtHeight + 10));
+ m_memo->SetFrameRect(CCRectMake(TEXT_START_WIDTH-2, 10 + m_label->GetFrameRect().size.height, m_width - TEXT_START_WIDTH*2+4, txtHeight + 10));
  this->AddChild(m_memo);
  }
 
@@ -967,11 +968,11 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  dataSource->AddSection(section);
  m_table->SetDataSource(dataSource);
  int nMemoHeight = m_memo == NULL ? 0 : m_memo->GetFrameRect().size.height;
- m_table->SetFrameRect(CGRectMake(17, 15 + m_label->GetFrameRect().size.height + nMemoHeight,
+ m_table->SetFrameRect(CCRectMake(17, 15 + m_label->GetFrameRect().size.height + nMemoHeight,
  m_width - 34, 0));
  if (ortherButtons.size() > 0)
  {
- m_table->SetFrameRect(CGRectMake(17, 15 + m_label->GetFrameRect().size.height + nMemoHeight,
+ m_table->SetFrameRect(CCRectMake(17, 15 + m_label->GetFrameRect().size.height + nMemoHeight,
  m_width - 34, (m_buttonHeight + 1) * ortherButtons.size() + 1));
  }
 
@@ -1000,8 +1001,8 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  btn->SetTitle(cancleButton);
 
  section->AddCell(btn);
- CGRect rect = m_table->GetFrameRect();
- m_table->SetFrameRect(CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, m_buttonHeight + 2 + rect.size.height));
+ CCRect rect = m_table->GetFrameRect();
+ m_table->SetFrameRect(CCRectMake(rect.origin.x, rect.origin.y, rect.size.width, m_buttonHeight + 2 + rect.size.height));
  }
 
  if (section->Count() > 0)
@@ -1014,14 +1015,14 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  m_autoRemove = true;
  }
 
- CGSize frameSize = CGSizeMake(m_width, m_label->GetFrameRect().size.height + nMemoHeight + m_table->GetFrameRect().size.height + 30);
+ CCSize frameSize = CCSizeMake(m_width, m_label->GetFrameRect().size.height + nMemoHeight + m_table->GetFrameRect().size.height + 30);
  if (m_autoRemove)
  {
- frameSize = CGSizeMake(m_width, m_label->GetFrameRect().size.height + nMemoHeight + 15);
+ frameSize = CCSizeMake(m_width, m_label->GetFrameRect().size.height + nMemoHeight + 15);
  }
 
- CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
- this->SetFrameRect(CGRectMake((winSize.width - frameSize.width) / 2,
+ CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+ this->SetFrameRect(CCRectMake((winSize.width - frameSize.width) / 2,
  (winSize.height - frameSize.height) / 2,
  frameSize.width, frameSize.height));
 
@@ -1038,7 +1039,7 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  }
  }
 
- bool NDUIDialog::DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch)
+ bool NDUIDialog::DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch)
  {
  bool result = NDUILayer::DispatchTouchEndEvent(beginTouch, endTouch);
  //if (!result)
@@ -1047,8 +1048,8 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  //				|| (m_memo->GetCurrentPageNum() == m_memo->GetTotalPageCount() && m_memo->GetLastPageNum() == 1)
  //				|| (m_memo->GetCurrentPageNum() == m_memo->GetLastPageNum()))
  //			{
- //				CGRect mmScrRect = m_memo->GetScreenRect();
- //				if (CGRectContainsPoint(mmScrRect, endTouch) && CGRectContainsPoint(mmScrRect, beginTouch) && m_autoRemove)
+ //				CCRect mmScrRect = m_memo->GetScreenRect();
+ //				if (cocos2d::CCRect::CCRectContainsPoint(mmScrRect, endTouch) && cocos2d::CCRect::CCRectContainsPoint(mmScrRect, beginTouch) && m_autoRemove)
  //				{
  //					this->Close();
  //					result = true;
@@ -1085,7 +1086,7 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  }
  }
 
- m_bTouchBegin = CGRectContainsPoint(this->GetScreenRect(), m_beginTouch);
+ m_bTouchBegin = cocos2d::CCRect::CCRectContainsPoint(this->GetScreenRect(), m_beginTouch);
 
  return true;
  }
@@ -1094,7 +1095,7 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  {
  m_endTouch = touch->GetLocation();
 
- if (CGRectContainsPoint(this->GetScreenRect(), m_endTouch) && this->IsVisibled() && this->EventEnabled() && m_bTouchBegin)
+ if (cocos2d::CCRect::CCRectContainsPoint(this->GetScreenRect(), m_endTouch) && this->IsVisibled() && this->EventEnabled() && m_bTouchBegin)
  {
  this->DispatchTouchEndEvent(m_beginTouch, m_endTouch);
  }

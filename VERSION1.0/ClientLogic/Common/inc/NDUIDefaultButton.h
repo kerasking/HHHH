@@ -25,7 +25,7 @@ public:
 	
 	~NDUIOkCancleButton();
 	
-	void Initialization(CGRect rectFrame, bool bOk); hide
+	void Initialization(CCRect rectFrame, bool bOk); hide
 };
 
 class NDUIImageButton : public NDUIButton
@@ -38,7 +38,7 @@ public:
 	
 	~NDUIImageButton();
 	
-	void Initialization(CGRect rectFrame, NDPicture* picText); hide
+	void Initialization(CCRect rectFrame, NDPicture* picText); hide
 };
 
 //////////////////////////////////////////
@@ -53,7 +53,7 @@ public:
 	~NDUICustomEdit();
 	
 	
-	void Initialization(CGPoint origin, int width, int height=31, std::string normalfile="", std::string selfile=""); hide
+	void Initialization(CCPoint origin, int width, int height=31, std::string normalfile="", std::string selfile=""); hide
 };
 
 //////////////////////////////////////////
@@ -66,13 +66,13 @@ public:
 	
 	~NDUIMutexStateButton();
 	
-	void SetNormalImage(NDPicture* pic, bool useCustomRect = false, CGRect customRect = CGRectZero);
-	void SetFocusImage(NDPicture* pic, bool useCustomRect = false, CGRect customRect = CGRectZero);
+	void SetNormalImage(NDPicture* pic, bool useCustomRect = false, CCRect customRect = CCRectZero);
+	void SetFocusImage(NDPicture* pic, bool useCustomRect = false, CCRect customRect = CCRectZero);
 	
 	void draw(); override
 private:
-	NDPicture *m_pic; bool m_useCustomRect; CGRect m_rectCustomRect;
-	NDPicture *m_picFocus; bool m_useCustomRectFocus; CGRect m_rectCustomRectFocus;
+	NDPicture *m_pic; bool m_useCustomRect; CCRect m_rectCustomRect;
+	NDPicture *m_picFocus; bool m_useCustomRectFocus; CCRect m_rectCustomRectFocus;
 };
 
 

@@ -30,7 +30,7 @@ public:
 	~NDPageButton();
 	
 	void OnButtonClick(NDUIButton* button);
-	void Initialization(CGRect rectFrame);
+	void Initialization(CCRect rectFrame);
 	
 	void SetDelegate(IPageButtonDelegate* delegate) {
 		this->m_pageDelegate = delegate;

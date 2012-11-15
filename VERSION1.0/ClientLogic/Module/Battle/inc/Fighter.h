@@ -13,7 +13,7 @@
 #include "BattleSkill.h"
 #include "NDSprite.h"
 #include <map>
-#include "../../TempClass/NDBaseFighter.h"
+#include "NDBaseFighter.h"
 #include "UIExp.h"
 
 using namespace std;
@@ -483,7 +483,7 @@ private:
 
 	// role原来的父节点
 	NDNode* m_pkRoleParent;
-	CGPoint m_kRoleInParentPoint;
+	CCPoint m_kRoleInParentPoint;
 
 	// 绘制动画组
 	NDBaseRole* m_pkRole;

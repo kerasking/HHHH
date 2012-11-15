@@ -117,7 +117,7 @@ void CUIListCell::draw()
 		return;
 	}
 	
-	CGRect scrRect	= this->GetScreenRect();
+	CCRect scrRect	= this->GetScreenRect();
 	
 	bool bVisible	= true;
 	
@@ -141,12 +141,12 @@ void CUIListCell::draw()
 	}
 }
 
-void CUIListCell::SetFrameRect(CGRect rect)
+void CUIListCell::SetFrameRect(CCRect rect)
 {
 	NDUINode::SetFrameRect(rect);
 	if (m_lbText)
 	{
-		m_lbText->SetFrameRect(CGRectMake(0, 0, rect.size.width, rect.size.height));
+		m_lbText->SetFrameRect(CCRectMake(0, 0, rect.size.width, rect.size.height));
 	}
 }
 
@@ -208,13 +208,13 @@ void CUIListSection::SetAttr(LIST_ATTR_SEC attr)
 	{
 		if (m_picStateClose)
 		{
-			CGSize sizeClose = m_picStateClose->GetSize();
-			m_lbText->SetFrameRect(CGRectMake(sizeClose.width, 0, 
+			CCSize sizeClose = m_picStateClose->GetSize();
+			m_lbText->SetFrameRect(CCRectMake(sizeClose.width, 0, 
 											  m_attrSec.unSectionWidth - sizeClose.width, m_attrSec.unSectionHeight));
 		}
 		else
 		{
-			m_lbText->SetFrameRect(CGRectMake(0, 0, attr.unSectionWidth, attr.unSectionHeight));
+			m_lbText->SetFrameRect(CCRectMake(0, 0, attr.unSectionWidth, attr.unSectionHeight));
 		}
 	}
 }
@@ -272,8 +272,8 @@ void CUIListSection::SetStatePicture(NDPicture *picOpen, NDPicture *picClose)
 	{
 		if (m_picStateClose)
 		{
-			CGSize sizeClose = m_picStateClose->GetSize();
-			m_lbText->SetFrameRect(CGRectMake(sizeClose.width, 0, 
+			CCSize sizeClose = m_picStateClose->GetSize();
+			m_lbText->SetFrameRect(CCRectMake(sizeClose.width, 0, 
 			m_attrSec.unSectionWidth - sizeClose.width, m_attrSec.unSectionHeight));
 		}
 	}
@@ -343,7 +343,7 @@ void CUIListSection::AddCell(CUIListCell* cell)
 	
 	m_vecCell.push_back(cell);
 	
-	cell->SetFrameRect(CGRectZero);
+	cell->SetFrameRect(CCRectZero);
 	
 	this->AddChild(cell);
 }
@@ -411,7 +411,7 @@ void CUIListSection::expand()
 	m_bExpand			= true;
 	
 	int nCellCount	= m_vecCell.size();
-	CGRect rect			= this->GetFrameRect();
+	CCRect rect			= this->GetFrameRect();
 	rect.size.width		= m_attrSec.unSectionWidth;
 	rect.size.height	= m_attrSec.unSectionHeight;
 	if (nCellCount > 0)
@@ -446,7 +446,7 @@ void CUIListSection::shrink()
 	m_nFocusIndex		= -1;
 	
 	int nCellCount	= m_vecCell.size();
-	CGRect rect			= this->GetFrameRect();
+	CCRect rect			= this->GetFrameRect();
 	rect.size.width		= m_attrSec.unSectionWidth;
 	rect.size.height	= m_attrSec.unSectionHeight;
 	
@@ -454,20 +454,20 @@ void CUIListSection::shrink()
 	
 	for (int i = 0; i < nCellCount; i++) 
 	{
-		m_vecCell[i]->SetFrameRect(CGRectZero);
+		m_vecCell[i]->SetFrameRect(CCRectZero);
 		m_vecCell[i]->SetFocus(false);
 	}
 }
 
-bool CUIListSection::OnClickInSide(CGPoint posBegin, CGPoint posEnd, bool& bClickOnSec, bool& bClickOnCell, int& nCell)
+bool CUIListSection::OnClickInSide(CCPoint posBegin, CCPoint posEnd, bool& bClickOnSec, bool& bClickOnCell, int& nCell)
 {
-	CGRect scrRect	= this->GetScreenRect();
+	CCRect scrRect	= this->GetScreenRect();
 	
 	{
-		CGRect rectSec;
+		CCRect rectSec;
 		rectSec.origin		= scrRect.origin;
-		rectSec.size		= CGSizeMake(m_attrSec.unSectionWidth, m_attrSec.unSectionHeight);
-		if (CGRectContainsPoint(rectSec, posBegin) && CGRectContainsPoint(rectSec, posEnd))
+		rectSec.size		= CCSizeMake(m_attrSec.unSectionWidth, m_attrSec.unSectionHeight);
+		if (cocos2d::CCRect::CCRectContainsPoint(rectSec, posBegin) && cocos2d::CCRect::CCRectContainsPoint(rectSec, posEnd))
 		{
 			bClickOnSec		= true;
 			return true;
@@ -481,8 +481,8 @@ bool CUIListSection::OnClickInSide(CGPoint posBegin, CGPoint posEnd, bool& bClic
 			 it != m_vecCell.end(); 
 			 it++, nIndex++) 
 		{
-			CGRect rectCell		= (*it)->GetScreenRect();
-			if (CGRectContainsPoint(rectCell, posBegin) && CGRectContainsPoint(rectCell, posEnd))
+			CCRect rectCell		= (*it)->GetScreenRect();
+			if (cocos2d::CCRect::CCRectContainsPoint(rectCell, posBegin) && cocos2d::CCRect::CCRectContainsPoint(rectCell, posEnd))
 			{
 				bClickOnCell	= true;
 				nCell			= nIndex;
@@ -502,14 +502,14 @@ void CUIListSection::draw()
 		return;
 	}
 	
-	CGRect scrRect			= this->GetScreenRect();
+	CCRect scrRect			= this->GetScreenRect();
 	
 	//背景
 	if (m_picBg)
 	{
-		CGRect rect;
+		CCRect rect;
 		rect.origin			= scrRect.origin;
-		rect.size			= CGSizeMake(m_attrSec.unSectionWidth, m_attrSec.unSectionHeight);
+		rect.size			= CCSizeMake(m_attrSec.unSectionWidth, m_attrSec.unSectionHeight);
 		m_picBg->DrawInRect(rect);
 	}
 	
@@ -519,7 +519,7 @@ void CUIListSection::draw()
 	NDPicture* picState		= m_bExpand ? m_picStateOpen : m_picStateClose;
 	if (picState)
 	{
-		CGRect rect;
+		CCRect rect;
 		rect.size			= picState->GetSize();
 		rect.origin			= ccpAdd(scrRect.origin, 
 									 ccp(5 * NDDirector::DefaultDirector()->GetScaleFactor(),
@@ -533,7 +533,7 @@ void CUIListSection::draw()
 	//int nCellCount	= m_vecCell.size();
 	if (m_picInner && m_bExpand && nCellCount > 0)
 	{
-		CGRect rect;
+		CCRect rect;
 		rect.size		= m_picInner->GetSize();
 		rect.size.width	= m_attrSec.unSectionWidth - 
 							m_attrSec.unContentLInner - 
@@ -638,11 +638,11 @@ void CUIList::AddSection(CUIListSection* sec)
 
 	m_vecSection.push_back(sec);
 	
-	CGRect rectNew		= sec->GetFrameRect();
+	CCRect rectNew		= sec->GetFrameRect();
 	
 	if (m_vecSection.size() > 1)
 	{
-		CGRect rect		= m_vecSection[m_vecSection.size() - 2]->GetFrameRect();
+		CCRect rect		= m_vecSection[m_vecSection.size() - 2]->GetFrameRect();
 		rectNew.origin	= ccpAdd(rect.origin, ccp(0, rect.size.height + m_nInner));
 		sec->SetFrameRect(rectNew);
 	}
@@ -965,9 +965,9 @@ void CUIList::CaclAllSecPosition(int nStartAdjustIndex)
 		return;
 	}
 
-	CGRect	rect			= m_vecSection[nStartAdjustIndex]->GetFrameRect();
+	CCRect	rect			= m_vecSection[nStartAdjustIndex]->GetFrameRect();
 	
-	CGRect	rectList		= this->GetFrameRect();
+	CCRect	rectList		= this->GetFrameRect();
 	
 	if (rect.origin.y + rect.size.height > rectList.size.height && 
 		m_vecSection[nStartAdjustIndex]->IsExpand())
@@ -982,12 +982,12 @@ void CUIList::CaclAllSecPosition(int nStartAdjustIndex)
 	//刷新之前的位置
 	if (nStartAdjustIndex > 0)
 	{
-		CGPoint posStart = rect.origin;
+		CCPoint posStart = rect.origin;
 		
 		for (int i = nStartAdjustIndex - 1; i >= 0; i--)
 		{
 			CUIListSection* sec		= m_vecSection[i];
-			CGRect rect				= sec->GetFrameRect();
+			CCRect rect				= sec->GetFrameRect();
 			rect.origin				= ccpSub(posStart, ccp(0, rect.size.height + m_nInner));
 			posStart				= rect.origin;
 			
@@ -998,12 +998,12 @@ void CUIList::CaclAllSecPosition(int nStartAdjustIndex)
 	//刷新之后的位置
 	if (nStartAdjustIndex < int(nSize - 1))
 	{
-		CGPoint posStart = ccpAdd(rect.origin, ccp(0, rect.size.height + m_nInner));
+		CCPoint posStart = ccpAdd(rect.origin, ccp(0, rect.size.height + m_nInner));
 		
 		for (int i = nStartAdjustIndex + 1; i < nSize; i++) 
 		{
 			CUIListSection* sec		= m_vecSection[i];
-			CGRect rect				= sec->GetFrameRect();
+			CCRect rect				= sec->GetFrameRect();
 			rect.origin				= posStart;
 			posStart				= ccpAdd(posStart, ccp(0, rect.size.height + m_nInner));
 			
@@ -1019,7 +1019,7 @@ void CUIList::Move(float fDistance)
 		 it++) 
 	{
 		CUIListSection* sec		= *it;
-		CGRect rect				= sec->GetFrameRect();
+		CCRect rect				= sec->GetFrameRect();
 		rect.origin.y			+= fDistance;
 		sec->SetFrameRect(rect);
 	}
@@ -1041,7 +1041,7 @@ void CUIList::Adjust()
 		
 		//往下移
 		sec						= GetSectionByIndex(m_vecSection.size() - 1);
-		CGRect rect				= sec->GetFrameRect();
+		CCRect rect				= sec->GetFrameRect();
 		float fEnd				= rect.origin.y + rect.size.height;
 		float fHeight			= this->GetFrameRect().size.height;
 		float fDistance			= fHeight - fEnd;
@@ -1063,13 +1063,13 @@ bool CUIList::OnLayerMoveOfDistance(NDUILayer* uiLayer, float hDistance, float v
 		return true;
 	}
 	
-	CGRect rectList				= this->GetFrameRect();
+	CCRect rectList				= this->GetFrameRect();
 
 	if (vDistance > 0.0f)
 	{
 		//往下移
 		CUIListSection* sec		= GetSectionByIndex(0);
-		CGRect rect				= sec->GetFrameRect();
+		CCRect rect				= sec->GetFrameRect();
 		int nHeight				= rect.origin.y + vDistance;
 		if (nHeight > rectList.size.height * 0.2)
 		{
@@ -1080,7 +1080,7 @@ bool CUIList::OnLayerMoveOfDistance(NDUILayer* uiLayer, float hDistance, float v
 	{
 		//往上移
 		CUIListSection* sec		= GetSectionByIndex(m_vecSection.size() - 1);
-		CGRect rect				= sec->GetFrameRect();
+		CCRect rect				= sec->GetFrameRect();
 		int nHeight				= rect.origin.y + rect.size.height + vDistance;
 		if (nHeight < rectList.size.height * 0.8)
 		{
@@ -1093,7 +1093,7 @@ bool CUIList::OnLayerMoveOfDistance(NDUILayer* uiLayer, float hDistance, float v
 	return true;
 }
 
-bool CUIList::DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch)
+bool CUIList::DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch)
 {
 	int nIndex = 0;
 	for (VEC_SECTION_IT it = m_vecSection.begin(); 
@@ -1169,7 +1169,7 @@ void CUIList::DrawScrollBar()
 	{
 		float fHeight			= 0;
 		float fY				= m_vecSection[0]->GetFrameRect().origin.y;
-		CGRect rectself			= this->GetFrameRect();
+		CCRect rectself			= this->GetFrameRect();
 		
 		for (VEC_SECTION_IT it = m_vecSection.begin(); 
 			 it != m_vecSection.end(); 
@@ -1183,8 +1183,8 @@ void CUIList::DrawScrollBar()
 		
 		if (fHeight > rectself.size.height)
 		{
-			CGRect rect			= CGRectZero;
-			CGSize sizePic		= m_picScroll->GetSize();
+			CCRect rect			= CCRectZero;
+			CCSize sizePic		= m_picScroll->GetSize();
 			rect.size.width		= m_nScrollBarWidth;
 			rect.size.height	= rectself.size.height / fHeight * rectself.size.height;
 			rect.origin			= ccp(rectself.size.width - m_nScrollBarWidth,

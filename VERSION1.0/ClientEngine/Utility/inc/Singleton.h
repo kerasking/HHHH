@@ -18,13 +18,13 @@ class TSingleton
 public:
 	TSingleton() 
 	{
-		NDAsssert(NULL == ms_pkSingleton);
+		//NDAsssert(NULL == ms_pkSingleton);
 		ms_pkSingleton = static_cast<T*> (this);
 	}
 	
 	~TSingleton() 
 	{
-		NDAsssert(NULL != ms_pkSingleton);
+		//NDAsssert(NULL != ms_pkSingleton);
 		ms_pkSingleton = NULL;
 	}
 	

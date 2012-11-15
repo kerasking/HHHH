@@ -67,7 +67,7 @@ void NDUICheckBox::Initialization()
 	NDUIImage* image = new NDUIImage();
 	image->Initialization();
 	image->SetPicture(picCheckBkg, true);
-	image->SetFrameRect(CGRectMake(0, 0, CB_WIDTH, CB_HEIGHT));
+	image->SetFrameRect(CCRectMake(0, 0, CB_WIDTH, CB_HEIGHT));
 	this->AddChild(image);
 	
 	NDPicture *picChecked = new NDPicture();
@@ -76,7 +76,7 @@ void NDUICheckBox::Initialization()
 	m_imgChecked = new NDUIImage();
 	m_imgChecked->Initialization();
 	m_imgChecked->SetPicture(picChecked, true);
-	m_imgChecked->SetFrameRect(CGRectMake(0, 0, CB_WIDTH, CB_HEIGHT));
+	m_imgChecked->SetFrameRect(CCRectMake(0, 0, CB_WIDTH, CB_HEIGHT));
 	this->AddChild(m_imgChecked);
 	
 	m_imgChecked->SetVisible(m_bChecked);
@@ -112,14 +112,14 @@ void NDUICheckBox::draw()
 	
 	if (m_picCheck || m_picUnCheck) 
 	{
-		CGRect scrRect = this->GetScreenRect();
+		CCRect scrRect = this->GetScreenRect();
 		
 		if (GetCBState() && m_picCheck) 
 		{
-			m_picCheck->DrawInRect(CGRectMake(scrRect.origin.x, scrRect.origin.y, m_picCheck->GetSize().width, m_picCheck->GetSize().height));
+			m_picCheck->DrawInRect(CCRectMake(scrRect.origin.x, scrRect.origin.y, m_picCheck->GetSize().width, m_picCheck->GetSize().height));
 		} else if (!GetCBState() && m_picUnCheck) 
 		{
-			m_picUnCheck->DrawInRect(CGRectMake(scrRect.origin.x, scrRect.origin.y, m_picUnCheck->GetSize().width, m_picUnCheck->GetSize().height));
+			m_picUnCheck->DrawInRect(CCRectMake(scrRect.origin.x, scrRect.origin.y, m_picUnCheck->GetSize().width, m_picUnCheck->GetSize().height));
 		}
 	}
 	
@@ -127,7 +127,7 @@ void NDUICheckBox::draw()
 //	if (parentNode && parentNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer))) 
 //	{
 //		NDUILayer	*uiLayer = (NDUILayer*)parentNode;
-//		CGRect scrRect = this->GetScreenRect();	
+//		CCRect scrRect = this->GetScreenRect();	
 //		
 //		//draw focus 
 //		if (uiLayer->GetFocus() == this) 
@@ -138,11 +138,11 @@ void NDUICheckBox::draw()
 //	}
 }
 
-void NDUICheckBox::SetFrameRect(CGRect rect)
+void NDUICheckBox::SetFrameRect(CCRect rect)
 {
 	rect.size.height = CB_HEIGHT;
 	NDUINode::SetFrameRect(rect);
-	if (m_title) m_title->SetFrameRect(CGRectMake(CB_WIDTH + 10, 0, rect.size.width - CB_WIDTH - 10, rect.size.height));
+	if (m_title) m_title->SetFrameRect(CCRectMake(CB_WIDTH + 10, 0, rect.size.width - CB_WIDTH - 10, rect.size.height));
 }
 
 bool NDUICheckBox::GetCBState()

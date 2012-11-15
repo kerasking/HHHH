@@ -17,8 +17,8 @@ typedef struct _FIGHTER_INFO
 	int idObj;
 	int idType;
 	int idlookface;
-	Byte btBattleTeam;
-	Byte btStations;
+	BYTE btBattleTeam;
+	BYTE btStations;
 	FIGHTER_TYPE fighterType;
 	BATTLE_GROUP group;
 	int original_life;

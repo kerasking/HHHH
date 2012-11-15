@@ -35,14 +35,14 @@ public:
 	/* 从某一个像素点自动寻路到另外一个像素点(结果通过getPathPointArray方法获取)
 	 参数:fromPosition-起始像素点,toPoition-结束像素点,mapLayer-地图层指针,step-寻路间隔步数
 	 */
-	bool autoFindPath(CGPoint kFromPosition, CGPoint kToPosition,
+	bool autoFindPath(CCPoint kFromPosition, CCPoint kToPosition,
 			NDMapLayer* pkMapLayer, int nStep, bool bMustarrive = false,
 			bool bIgnoreMask = false);
 
 	/* 获取寻路后的得到的所有像素
-	 返回值:向量引用(元素为CGPoint)
+	 返回值:向量引用(元素为CCPoint)
 	 */
-	const std::vector<CGPoint>& getPathPointVetor();
+	const std::vector<CCPoint>& getPathPointVetor();
 
 	bool isIgnoreMask();
 
@@ -54,7 +54,7 @@ private:
 	void GetPath();
 
 private:
-	std::vector<CGPoint> m_kPointVector;					// 寻路结果后得到的像素Vector
+	std::vector<CCPoint> m_kPointVector;					// 寻路结果后得到的像素Vector
 	bool m_bIgnoreMask, m_bMustArrive;
 	CAStar* m_pkAStar;
 	int m_nStep;

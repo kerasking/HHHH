@@ -29,7 +29,6 @@ NAMESPACE_LUA_BEGIN
 #define fromstate(l)	(cast(lu_byte *, (l)) - LUAI_EXTRASPACE)
 #define tostate(l)   (cast(lua_State *, cast(lu_byte *, l) + LUAI_EXTRASPACE))
 
-
 /*
 ** Main thread combines a thread state and the global state
 */

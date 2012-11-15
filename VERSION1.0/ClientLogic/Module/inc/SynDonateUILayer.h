@@ -26,7 +26,7 @@ public:
 	DragBar();
 	~DragBar();
 	
-	void Initialization(CGRect rect, unsigned int slideWidth);
+	void Initialization(CCRect rect, unsigned int slideWidth);
 	void draw(); override
 	void SetScale(uint scale) {
 		this->m_scale = scale;

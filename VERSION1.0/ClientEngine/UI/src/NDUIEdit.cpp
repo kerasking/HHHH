@@ -1,10 +1,11 @@
 #include "NDUIEdit.h"
-#include "NDIphoneEdit.h"
+//#include "NDIphoneEdit.h"
 //#include <UIKit/UIKit.h>
-//#include "CGPointExtension.h"
+//#include "CCPointExtension.h"
 #include "NDUtility.h"
 #include "I_Analyst.h"
 #include "NDUIBaseGraphics.h"
+#include "NDUILayer.h"
 
 
 namespace NDEngine
@@ -139,10 +140,10 @@ namespace NDEngine
 		m_bClearPicOnFree = clearPicOnFree;
 	}
 	
-	void NDUIEdit::SetFrameRect(CGRect rect)
+	void NDUIEdit::SetFrameRect(CCRect rect)
 	{
 		NDUINode::SetFrameRect(rect);
-		m_label->SetFrameRect(CGRectMake(0, 0, rect.size.width, rect.size.height));
+		m_label->SetFrameRect(CCRectMake(0, 0, rect.size.width, rect.size.height));
 	}
 	
 	void NDUIEdit::draw()
@@ -156,7 +157,7 @@ namespace NDEngine
 			NDNode* parentNode = this->GetParent();
 			if (parentNode) 
 			{
-				CGRect scrRect = this->GetScreenRect();		
+				CCRect scrRect = this->GetScreenRect();		
 				
 				//draw context
 				if (!m_picImg) 
@@ -164,7 +165,7 @@ namespace NDEngine
 				
 				//draw frame
 				if (m_frameOpened) 
-					DrawPolygon(CGRectMake(scrRect.origin.x-1, scrRect.origin.y-1, scrRect.size.width+2, scrRect.size.height+2), 
+					DrawPolygon(CCRectMake(scrRect.origin.x-1, scrRect.origin.y-1, scrRect.size.width+2, scrRect.size.height+2), 
 									  ccc4(125, 125, 125, 255),	2);
 				
 				if (parentNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer))) 
@@ -198,7 +199,7 @@ namespace NDEngine
 					
 					if (m_picImg && m_label)
 					{
-						m_label->SetFrameRect(CGRectMake(7, (scrRect.size.height-FONT_SIZE)/2, scrRect.size.width, scrRect.size.height));
+						m_label->SetFrameRect(CCRectMake(7, (scrRect.size.height-FONT_SIZE)/2, scrRect.size.width, scrRect.size.height));
 					}
 				}
 			}

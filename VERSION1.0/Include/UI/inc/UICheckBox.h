@@ -50,7 +50,7 @@ public:
 protected:
 	void draw(); override
 public:
-	void SetFrameRect(CGRect rect); override
+	void SetFrameRect(CCSize rect); override
 };
 
 #endif // _CUI_CHECK_BOX_H_ZJH_

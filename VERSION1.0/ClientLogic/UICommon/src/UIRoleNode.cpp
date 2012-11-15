@@ -30,11 +30,11 @@ void CUIRoleNode::Initialization()
 {
 	NDUINode::Initialization();
 	
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 	
 	m_pRoleParentNode	= new NDUINode;
 	m_pRoleParentNode->Initialization();
-	m_pRoleParentNode->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
+	m_pRoleParentNode->SetFrameRect(CCRectMake(0, 0, winsize.width, winsize.height));
 }
 
 void CUIRoleNode::ChangeLookFace(int nLookFace)
@@ -98,8 +98,8 @@ void CUIRoleNode::draw()
 	
 	CGFloat w = m_pRole->GetWidth();
 	CGFloat h = m_pRole->GetHeight();
-	CGRect scrRect	= this->GetScreenRect();
-	CGPoint pos		= ccpAdd(scrRect.origin, 
+	CCRect scrRect	= this->GetScreenRect();
+	CCPoint pos		= ccpAdd(scrRect.origin, 
 							 ccp((scrRect.size.width - w) / 2 + m_pRole->getGravityX(),
 								 (scrRect.size.height - h) / 2 + m_pRole->getGravityY()) );
 	
