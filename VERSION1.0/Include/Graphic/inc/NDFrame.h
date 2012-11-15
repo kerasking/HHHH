@@ -70,7 +70,7 @@ public:
 	void run(float scale);
 
 	// 绘制人物头像
-	void drawHeadAt(CGPoint pos);
+	void drawHeadAt(CCPoint pos);
 
 private:
 	int						m_count;

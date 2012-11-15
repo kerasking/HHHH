@@ -13,7 +13,7 @@
 #include "BattleSkill.h"
 #include "NDSprite.h"
 #include <map>
-#include "../../TempClass/NDBaseFighter.h"
+#include "NDBaseFighter.h"
 #include "UIExp.h"
 
 using namespace std;
@@ -440,7 +440,7 @@ public:
 	}
 
 public:
-	FIGHTER_INFO m_info;
+	//FIGHTER_INFO m_info;//--Guosen 2012.11.11 父类已有m_kInfo
 
 	USHORT m_nAttackPoint;
 	USHORT m_nDefencePoint;
@@ -483,7 +483,7 @@ private:
 
 	// role原来的父节点
 	NDNode* m_pkRoleParent;
-	CGPoint m_kRoleInParentPoint;
+	CCPoint m_kRoleInParentPoint;
 
 	// 绘制动画组
 	NDBaseRole* m_pkRole;

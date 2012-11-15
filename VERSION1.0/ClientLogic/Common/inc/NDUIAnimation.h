@@ -43,13 +43,13 @@ public:
 	
 	void OnTimer(OBJID tag); override;
 	
-	unsigned int GetAnimationKey(NDUINode* node, CGSize range=CGSizeZero);
+	unsigned int GetAnimationKey(NDUINode* node, CCSize range=CCSizeZero);
 	
 	bool DelAnimation(unsigned int key);
 	
 	bool DelAllAnimation();
 	
-	bool AddAnimation(unsigned int key, CGPoint fromPosition, CGPoint toPosition, float needTime);
+	bool AddAnimation(unsigned int key, CCPoint fromPosition, CCPoint toPosition, float needTime);
 	
 	bool AddAnimation(unsigned int key, UIAnimationMove move, float needTime);
 	
@@ -78,10 +78,10 @@ private:
 		{
 			this->move			= move;
 			this->time			= time;
-			this->fromPosition	= CGPointZero;
-			this->toPosition	= CGPointZero;
+			this->fromPosition	= CCPointZero;
+			this->toPosition	= CCPointZero;
 		}
-		explicit MoveInfo(CGPoint fromPosition, CGPoint toPosition, float time)
+		explicit MoveInfo(CCPoint fromPosition, CCPoint toPosition, float time)
 		{
 			this->move			= UIAnimationMoveNone;
 			this->time			= time;
@@ -90,7 +90,7 @@ private:
 		}
 		
 		UIAnimationMove move;
-		CGPoint fromPosition, toPosition;
+		CCPoint fromPosition, toPosition;
 		float time;
 	};
 	
@@ -106,7 +106,7 @@ private:
 			
 			return true;
 		}
-		bool AddAnimation(CGPoint fromPosition, CGPoint toPosition, float time)
+		bool AddAnimation(CCPoint fromPosition, CCPoint toPosition, float time)
 		{
 			if (time < 0.0f) return false;
 			
@@ -142,9 +142,9 @@ private:
 	{
 		unsigned int uiID;
 		NDUINode* node;
-		CGRect orginScrRect;
+		CCRect orginScrRect;
 		MoveInfo curMove;
-		CGSize range;
+		CCSize range;
 		float pass;
 		UIAnimationSequence sequence;
 		
@@ -226,7 +226,7 @@ private:
 					break;
 			}
 			
-			if (node) node->SetFrameRect(CGRectMake(x, y, orginScrRect.size.width, orginScrRect.size.height));
+			if (node) node->SetFrameRect(CCRectMake(x, y, orginScrRect.size.width, orginScrRect.size.height));
 			
 			if (overange) 
 			{

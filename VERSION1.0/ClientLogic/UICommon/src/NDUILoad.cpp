@@ -37,7 +37,7 @@ unsigned int inline findAndReplace(
 	return num; 
 }
 
-bool FilterStringName(UIINFO& uiInfo)
+bool FilterStringName1(UIINFO& uiInfo)
 {
 	if (!uiInfo.strNormalFile.empty())
 	{
@@ -87,53 +87,53 @@ bool FilterStringName(UIINFO& uiInfo)
 	return true;
 }
 
-bool FilterCtrlUV(CTRL_UV& uv)
-{
-//上层代码应该忽略分辨率，引擎会自适应！	
-// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-// 	uv.x	*= scale;
-// 	uv.y	*= scale;
-// 	uv.w	*= scale;
-// 	uv.h	*= scale;
-	
-	return true;
-}
+//bool FilterCtrlUV(CTRL_UV& uv)
+//{
+////上层代码应该忽略分辨率，引擎会自适应！	
+//// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+//// 	uv.x	*= scale;
+//// 	uv.y	*= scale;
+//// 	uv.w	*= scale;
+//// 	uv.h	*= scale;
+//	
+//	return true;
+//}
 
-bool FilterPos(CGPoint& pos)
-{
-//上层代码应该忽略分辨率，引擎会自适应！
-// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-// 	pos.x	*= scale;
-// 	pos.y	*= scale;
+//bool FilterPos(CCPoint& pos)
+//{
+////上层代码应该忽略分辨率，引擎会自适应！
+//// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+//// 	pos.x	*= scale;
+//// 	pos.y	*= scale;
+//// 	
+//	return true;
+//}
+//
+//bool FilterSize(UIINFO& uiInfo)
+//{
+////上层代码应该忽略分辨率，引擎会自适应！	
+//// 	/*
+//// 	FilterCtrlUV(uiInfo.rectNormal);
+//// 	FilterCtrlUV(uiInfo.rectSelected);
+//// 	FilterCtrlUV(uiInfo.rectDisable);
+//// 	FilterCtrlUV(uiInfo.rectFocus);
+//// 	FilterCtrlUV(uiInfo.rectBack);*/
+//// 	
+//// 	FilterPos(uiInfo.CtrlPos);
+//// 
+//// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+//// 	uiInfo.nCtrlWidth		*= scale;
+//// 	uiInfo.nCtrlHeight		*= scale;
+//// 	
 // 	
-	return true;
-}
-
-bool FilterSize(UIINFO& uiInfo)
-{
-//上层代码应该忽略分辨率，引擎会自适应！	
-// 	/*
-// 	FilterCtrlUV(uiInfo.rectNormal);
-// 	FilterCtrlUV(uiInfo.rectSelected);
-// 	FilterCtrlUV(uiInfo.rectDisable);
-// 	FilterCtrlUV(uiInfo.rectFocus);
-// 	FilterCtrlUV(uiInfo.rectBack);*/
-// 	
-// 	FilterPos(uiInfo.CtrlPos);
-// 
-// 	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-// 	uiInfo.nCtrlWidth		*= scale;
-// 	uiInfo.nCtrlHeight		*= scale;
-// 	
- 	
- 	return true;
-}
+// 	return true;
+//}
 
 bool NDUILoad::Load(
 		  const char* uiname,
 		  NDUINode *parent, 
 		  NDUITargetDelegate* delegate, 
-		  CGSize sizeOffset /*= CGSizeZero*/)
+		  CCSize sizeOffset /*= CCSizeZero*/)
 {
 	if (!uiname || !parent)
 	{
@@ -166,7 +166,7 @@ bool NDUILoad::Load(
 		UIINFO& uiInfo = uiData.getCtrlUiInfo();
 	
 		
-		FilterStringName(uiInfo);
+		FilterStringName1(uiInfo);
 		
 #ifdef TRADITION		
 //		if (IsTraditionalChinese())
@@ -175,12 +175,12 @@ bool NDUILoad::Load(
 //		}
 #endif
 		
-		FilterSize(uiInfo);
+		//FilterSize(uiInfo);
 		
 		// 使用opengl坐标系
 		uiInfo.CtrlPos.y = SCREEN2GL_Y(uiInfo.CtrlPos.y);
 		
-		CGPoint CtrlAnchorPos = uiInfo.CtrlAnchorPos;
+		CCPoint CtrlAnchorPos = uiInfo.CtrlAnchorPos;
 		
 		if (!(0.0f == CtrlAnchorPos.x || 0.5f == CtrlAnchorPos.x || 1.0f == CtrlAnchorPos.x)
 			|| !(0.0f == CtrlAnchorPos.y || 0.5f == CtrlAnchorPos.y || 1.0f == CtrlAnchorPos.y))
@@ -342,7 +342,7 @@ bool NDUILoad::Load(
 			case MY_CONTROL_TYPE_SPRITE:
 			{
 				ControlHelp<MY_CONTROL_TYPE_SPRITE> help;
-				(NDUINode*)node = help.Create(uiInfo, sizeOffset);
+				node = (NDUINode*)help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			default:
@@ -388,7 +388,7 @@ bool NDUILoad::LoadLua(
 		return false;
 	}
 	
-	CGSize sizeOffset = CGSizeMake(sizeOffsetW, sizeOffsetH);
+	CCSize sizeOffset = CCSizeMake(sizeOffsetW, sizeOffsetH);
 	
 	int nCtrlAmount = uiData.GetCtrlAmount();
 	
@@ -405,7 +405,7 @@ bool NDUILoad::LoadLua(
 		UIINFO& uiInfo = uiData.getCtrlUiInfo();
 		
 		
-		FilterStringName(uiInfo);
+		FilterStringName1(uiInfo);
 		
 #ifdef TRADITION		
 		//		if (IsTraditionalChinese()) 
@@ -414,10 +414,10 @@ bool NDUILoad::LoadLua(
 		//		}
 #endif
 
-		FilterSize(uiInfo);
+		//FilterSize(uiInfo);
 
 		// check anchor pos
-		CGPoint CtrlAnchorPos = uiInfo.CtrlAnchorPos;
+		CCPoint CtrlAnchorPos = uiInfo.CtrlAnchorPos;
 		if (!IsAnchorValid(CtrlAnchorPos.x) || !IsAnchorValid(CtrlAnchorPos.y))
 		{
 			NDAsssert(0);
@@ -497,7 +497,7 @@ void NDUILoad::AdjustCtrlPosByAnchor( UIINFO& uiInfo, const CCPoint& CtrlAnchorP
 	}
 }
 
-NDUINode* NDUILoad::CreateCtrl( UIINFO& uiInfo, CGSize sizeOffset, const char*& ctrlTypeName )
+NDUINode* NDUILoad::CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& ctrlTypeName )
 {
 	NDUINode* node = NULL;
 

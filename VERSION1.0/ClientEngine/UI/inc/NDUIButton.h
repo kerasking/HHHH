@@ -39,8 +39,8 @@ public:
 	virtual void OnButtonDown(NDUIButton* button);
 	virtual void OnButtonUp(NDUIButton* button);
 	virtual bool OnButtonLongClick(NDUIButton* button);
-	virtual bool OnButtonDragOut(NDUIButton* button, CGPoint beginTouch, CGPoint moveTouch, bool longTouch);
-	virtual bool OnButtonDragOutComplete(NDUIButton* button, CGPoint endTouch, bool outOfRange);
+	virtual bool OnButtonDragOut(NDUIButton* button, CCPoint beginTouch, CCPoint moveTouch, bool longTouch);
+	virtual bool OnButtonDragOutComplete(NDUIButton* button, CCPoint endTouch, bool outOfRange);
 	virtual bool OnButtonDragIn(NDUIButton* desButton, NDUINode *uiSrcNode, bool longTouch);
 	virtual bool OnButtonDragOver(NDUIButton* overButton, bool inRange);
 	virtual bool OnButtonLongTouch(NDUIButton* button);
@@ -69,8 +69,8 @@ public:
 //		作用：设置按钮的图片
 //		参数：pic图片，useCustomRect图片是否显示在自定义范围（相对于按钮的显示范围），customRect自定义范围
 //		返回值：无
-	void SetImage(NDPicture* pic, bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);
-	void SetImageCustom(NDPicture* pic, bool useCustomRect = false, CGRect customRect = CGRectZero){
+	void SetImage(NDPicture* pic, bool useCustomRect = false, CCRect customRect = CCRectZero, bool clearPicOnFree = false);
+	void SetImageCustom(NDPicture* pic, bool useCustomRect = false, CCRect customRect = CCRectZero){
 		this->SetImage(pic, useCustomRect, customRect, true);
 	}
 	
@@ -80,14 +80,14 @@ public:
 //		作用：设置按钮的图片(组合)
 //		参数：pic图片(组合)，useCustomRect图片是否显示在自定义范围（相对于按钮的显示范围），customRect自定义范围
 //		返回值：无
-	void SetCombineImage(NDCombinePicture* combinepic, bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);
+	void SetCombineImage(NDCombinePicture* combinepic, bool useCustomRect = false, CCRect customRect = CCRectZero, bool clearPicOnFree = false);
 //		
 //		函数：SetTouchDownImage
 //		作用：设置按钮被按下时的图片，调用该方法将使得SetTouchDownColor方法失效
 //		参数：pic图片，useCustomRect图片是否显示在自定义范围（相对于按钮的显示范围），customRect自定义范围
 //		返回值：无
-	void SetTouchDownImage(NDPicture* pic, bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);	
-	void SetTouchDownImageCustom(NDPicture* pic, bool useCustomRect = false, CGRect customRect = CGRectZero){
+	void SetTouchDownImage(NDPicture* pic, bool useCustomRect = false, CCRect customRect = CCRectZero, bool clearPicOnFree = false);	
+	void SetTouchDownImageCustom(NDPicture* pic, bool useCustomRect = false, CCRect customRect = CCRectZero){
 		this->SetTouchDownImage(pic, useCustomRect, customRect, true);
 	}
 	
@@ -97,7 +97,7 @@ public:
 //		作用：设置按钮被按下时的图片(组合)，调用该方法将使得SetTouchDownColor方法失效
 //		参数：pic图片，useCustomRect图片是否显示在自定义范围（相对于按钮的显示范围），customRect自定义范围
 //		返回值：无
-	void SetTouchDownCombineImage(NDCombinePicture* combinepic, bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);
+	void SetTouchDownCombineImage(NDCombinePicture* combinepic, bool useCustomRect = false, CCRect customRect = CCRectZero, bool clearPicOnFree = false);
 	
 //		
 //		函数：SetTouchDownColor
@@ -130,14 +130,14 @@ public:
 //		作用：设置焦点时使用图片，调用该方法将使SetFocusColor,SetFocusNormal和SetFocusRimImage方法失效
 //		参数：无
 //		返回值：无
-	void SetFocusImage(NDPicture *pic, bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);
-	void SetFocusImageCustom(NDPicture *pic, bool useCustomRect = false, CGRect customRect = CGRectZero) {
+	void SetFocusImage(NDPicture *pic, bool useCustomRect = false, CCRect customRect = CCRectZero, bool clearPicOnFree = false);
+	void SetFocusImageCustom(NDPicture *pic, bool useCustomRect = false, CCRect customRect = CCRectZero) {
 		this->SetFocusImage(pic, useCustomRect, customRect, true);
 	}
 	
 	void SetFocusImageLua(NDPicture *pic);
 
-	void SetDisImage(NDPicture *pic, bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);
+	void SetDisImage(NDPicture *pic, bool useCustomRect = false, CCRect customRect = CCRectZero, bool clearPicOnFree = false);
 //		
 //		函数：OpenFrame
 //		作用：打开文字按钮的边框，如果时文字按钮则框架默认时打开的
@@ -191,8 +191,8 @@ public:
 //		作用：设置按钮的背景图
 //		参数：pic图片, clearPicOnFree托管释放
 //		返回值：无		
-	void SetBackgroundPicture(NDPicture *pic, NDPicture *touchPic = NULL, bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);
-	void SetBackgroundPictureCustom(NDPicture *pic, NDPicture *touchPic = NULL, bool useCustomRect = false, CGRect customRect = CGRectZero){
+	void SetBackgroundPicture(NDPicture *pic, NDPicture *touchPic = NULL, bool useCustomRect = false, CCRect customRect = CCRectZero, bool clearPicOnFree = false);
+	void SetBackgroundPictureCustom(NDPicture *pic, NDPicture *touchPic = NULL, bool useCustomRect = false, CCRect customRect = CCRectZero){
 		this->SetBackgroundPicture(pic, touchPic, useCustomRect, customRect, true);
 	}
 	
@@ -257,7 +257,7 @@ public:
 	NDPicture* GetImageCopy() { if (m_image) return m_image->Copy(); return NULL; }
 	void TabSel(bool bSel);
 	bool IsTabSel();
-	void ChangeSprite(const char* szSprite, CGPoint posOffset);
+	void ChangeSprite(const char* szSprite, CCPoint posOffset);
 	void SetFocus(bool bFocus);
 	void SetSoundEffect(int nId);
 	int GetSoundEffect();
@@ -269,7 +269,7 @@ public:
 	void drawButtonImage();
 	void drawButtonFrame();
 	void drawLongTouch();
-	void SetFrameRect(CGRect rect); 
+	void SetFrameRect(CCRect rect); 
 	void OnTouchDown(bool touched);
 	void OnLongTouchDown(bool touched);
 	void SetChecked( bool bChecked ){ m_bChecked = bChecked; m_bGray = bChecked; }
@@ -295,11 +295,11 @@ protected:
 	bool m_ClearFocusImageOnFree;
 	bool m_useBackgroundCustomRect;
 	int m_SoundEffectId;
-	CGRect m_backgroundCustomRect;
-	CGRect m_customRect;
-	CGRect m_touchDownImgCustomRect;
-	CGRect m_customFocusImageRect;
-	CGRect m_customDisImageRect;
+	CCRect m_backgroundCustomRect;
+	CCRect m_customRect;
+	CCRect m_touchDownImgCustomRect;
+	CCRect m_customFocusImageRect;
+	CCRect m_customDisImageRect;
 
 	bool m_bCustomDisImageRect;
 	bool m_ClearDisImageOnFree;
@@ -349,7 +349,7 @@ protected:
 	bool m_bChecked;
 	bool			 m_bTabSel;
 	NDLightEffect* m_pSprite;
-	CGPoint			m_posSprite;
+	CCPoint			m_posSprite;
 };
 
 NS_NDENGINE_END 

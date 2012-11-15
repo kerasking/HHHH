@@ -60,7 +60,7 @@ protected:
 	void draw(); override
 	
 public:
-	void SetFrameRect(CGRect rect); override
+	void SetFrameRect(CCSize rect); override
 };
 
 #endif // _UIEXP_H_ZJH_

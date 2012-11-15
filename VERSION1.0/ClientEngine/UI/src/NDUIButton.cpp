@@ -16,6 +16,8 @@
 #include "define.h"
 #include "basedefine.h"
 #include "NDPath.h"
+#include "ccMacros.h"
+#include "TQPlatform.h"
 
 using namespace cocos2d;
 
@@ -61,12 +63,12 @@ NDUIButton::NDUIButton()
 	m_normalImageColor = ccc4(255, 255, 255, 255);
 
 	m_useCustomRect = false;
-	m_customRect = CGRectZero;
+	m_customRect = CCRectZero;
 	m_touchDownImgUseCustomRect = false;
-	m_touchDownImgCustomRect = CGRectZero;
+	m_touchDownImgCustomRect = CCRectZero;
 
 	m_bCustomFocusImageRect = false;
-	m_customFocusImageRect = CGRectZero;
+	m_customFocusImageRect = CCRectZero;
 
 	m_clearUpPicOnFree = false;
 	m_clearDownPicOnFree = false;
@@ -103,7 +105,7 @@ NDUIButton::NDUIButton()
 
 	m_ClearFocusImageOnFree = false;
 
-	m_backgroundCustomRect = CGRectZero;
+	m_backgroundCustomRect = CCRectZero;
 
 	m_useBackgroundCustomRect = false;
 
@@ -166,10 +168,10 @@ void NDUIButton::Initialization()
 
 void NDUIButton::SetImageLua(NDPicture* pic)
 {
-	this->SetImage(pic, false, CGRectZero, true);
+	this->SetImage(pic, false, CCRectZero, true);
 }
 
-void NDUIButton::SetImage(NDPicture* pic, bool useCustomRect, CGRect customRect,
+void NDUIButton::SetImage(NDPicture* pic, bool useCustomRect, CCRect customRect,
 		bool clearPicOnFree)
 {
 	if (m_clearUpPicOnFree)
@@ -187,7 +189,7 @@ void NDUIButton::SetImage(NDPicture* pic, bool useCustomRect, CGRect customRect,
 }
 
 void NDUIButton::SetCombineImage(NDCombinePicture* combinepic,
-		bool useCustomRect, CGRect customRect, bool clearPicOnFree)
+		bool useCustomRect, CCRect customRect, bool clearPicOnFree)
 {
 	if (m_clearUpPicOnFree)
 	{
@@ -205,11 +207,11 @@ void NDUIButton::SetCombineImage(NDCombinePicture* combinepic,
 
 void NDUIButton::SetTouchDownImageLua(NDPicture* pic)
 {
-	this->SetTouchDownImage(pic, false, CGRectZero, true);
+	this->SetTouchDownImage(pic, false, CCRectZero, true);
 }
 
 void NDUIButton::SetTouchDownImage(NDPicture* pic, bool useCustomRect,
-		CGRect customRect, bool clearPicOnFree)
+		CCRect customRect, bool clearPicOnFree)
 {
 	if (m_clearDownPicOnFree)
 	{
@@ -227,7 +229,7 @@ void NDUIButton::SetTouchDownImage(NDPicture* pic, bool useCustomRect,
 }
 
 void NDUIButton::SetTouchDownCombineImage(NDCombinePicture* combinepic,
-		bool useCustomRect, CGRect customRect, bool clearPicOnFree)
+		bool useCustomRect, CCRect customRect, bool clearPicOnFree)
 {
 	if (m_clearDownPicOnFree)
 	{
@@ -282,11 +284,11 @@ void NDUIButton::SetFocusNormal()
 
 void NDUIButton::SetFocusImageLua(NDPicture *pic)
 {
-	this->SetFocusImage(pic, false, CGRectZero, true);
+	this->SetFocusImage(pic, false, CCRectZero, true);
 }
 
 void NDUIButton::SetFocusImage(NDPicture *pic, bool useCustomRect/*= false*/,
-		CGRect customRect/*= CGRectZero*/, bool clearPicOnFree/* = false*/)
+		CCRect customRect/*= CCRectZero*/, bool clearPicOnFree/* = false*/)
 {
 	if (m_ClearFocusImageOnFree && m_focusImage)
 	delete m_focusImage;
@@ -343,14 +345,16 @@ unsigned int NDUIButton::GetFontSize()
 	return m_uiTitleFontSize;
 }
 
-void NDUIButton::SetFrameRect(CGRect rect)
+void NDUIButton::SetFrameRect(CCRect rect)
 {
 	NDUINode::SetFrameRect(rect);
-	//m_title->SetFrameRect(CGRectMake(0, 0, rect.size.width, rect.size.height));
+	//m_title->SetFrameRect(CCRectMake(0, 0, rect.size.width, rect.size.height));
 }
 
 void NDUIButton::draw()
 {
+	if (!isDrawEnabled()) return;
+
 	NDUINode::draw();
 
 	if (!this->IsVisibled()) return;
@@ -374,7 +378,7 @@ void NDUIButton::draw()
 	NDUILayer* uiLayer = (NDUILayer*) parentNode;
 
 	// draw gray image
-	CGRect scrRect = this->GetScreenRect();
+	CCRect scrRect = this->GetScreenRect();
 	if(m_bGray && m_disImage)
 	{
 		m_disImage->DrawInRect(scrRect);
@@ -387,7 +391,7 @@ void NDUIButton::draw()
 		if (m_useBackgroundCustomRect)
 		{
 			m_picBG->DrawInRect(
-					CGRectMake(
+					CCRectMake(
 							scrRect.origin.x
 									+ m_backgroundCustomRect.origin.x,
 							scrRect.origin.y
@@ -429,7 +433,7 @@ void NDUIButton::draw()
 			if (m_scrtTitle->isRunning())
 			{
 				m_scrtTitle->Stop();
-				m_scrtTitle->SetTextPos(CGPointMake(5.0f, 0.0f));
+				m_scrtTitle->SetTextPos(CCPointMake(5.0f, 0.0f));
 			}
 
 			m_scrtTitle->SetFontColor(m_colorTitle);
@@ -500,14 +504,14 @@ void NDUIButton::drawLongTouch()
 
 		//** chh 2012-07-31 修改button放大效果 **//
 		/*
-		 CGRect rect = CGRectMake(scrRect.origin.x - 5 * fScale, 
+		 CCRect rect = CCRectMake(scrRect.origin.x - 5 * fScale, 
 		 scrRect.origin.y - 5 * fScale, 
 		 scrRect.size.width + 10 * fScale, 
 		 scrRect.size.height + 10 * fScale);
 		 
 		 */
 
-		CGRect scrRect = this->GetScreenRect();
+		CCRect scrRect = this->GetScreenRect();
 		pic->DrawInRect(scrRect);
 		pic->SetColor(m_normalImageColor);
 	}
@@ -515,12 +519,12 @@ void NDUIButton::drawLongTouch()
 
 void NDUIButton::drawButtonFrame()
 {
-	CGRect scrRect = this->GetScreenRect();
+	CCRect scrRect = this->GetScreenRect();
 
 	DrawPolygon(scrRect, ccc4(16, 56, 66, 255), 2);
 	
 	DrawPolygon(
-		CGRectMake(scrRect.origin.x + 3,
+		CCRectMake(scrRect.origin.x + 3,
 		scrRect.origin.y + 3,
 		scrRect.size.width - 6,
 		scrRect.size.height - 6),
@@ -561,9 +565,9 @@ void NDUIButton::drawButtonFrame()
 
 void NDUIButton::drawButtonImage()
 {
-	CGRect scrRect = this->GetScreenRect();
+	CCRect scrRect = this->GetScreenRect();
 	NDUILayer* uiLayer = (NDUILayer*) this->GetParent();
-	CCAssert(uiLayer);
+	CCAssert(uiLayer, "drawButtonImage");
 
 	if (!m_touched
 		|| NULL == m_touchDownImage && false == m_bChecked)
@@ -579,7 +583,7 @@ void NDUIButton::drawButtonImage()
 	{
 		if (m_useCustomRect)
 		{
-			CGRect rect = CGRectMake(
+			CCRect rect = CCRectMake(
 				scrRect.origin.x + m_customRect.origin.x,
 				scrRect.origin.y + m_customRect.origin.y,
 				m_customRect.size.width,
@@ -621,7 +625,7 @@ void NDUIButton::drawButtonImage()
 		}
 		else
 		{
-			CGRect rect = scrRect;
+			CCRect rect = scrRect;
 			if (m_touched && NULL == m_touchDownImage
 				&& m_touchDownStatus == TouchDownImage)
 			{
@@ -666,7 +670,7 @@ void NDUIButton::drawButtonImage()
 
 void NDUIButton::drawTouchDown()
 {
-	CGRect scrRect = this->GetScreenRect();
+	CCRect scrRect = this->GetScreenRect();
 
 	if (m_picTouchBG)
 	{
@@ -685,7 +689,7 @@ void NDUIButton::drawTouchDown()
 			if (m_touchDownImgUseCustomRect)
 			{
 				m_touchDownImage->DrawInRect(
-					CGRectMake(
+					CCRectMake(
 					scrRect.origin.x
 					+ m_touchDownImgCustomRect.origin.x,
 					scrRect.origin.y
@@ -703,7 +707,7 @@ void NDUIButton::drawTouchDown()
 			if (m_touchDownImgUseCustomRect)
 			{
 				m_combinepicTouchDownImg->DrawInRect(
-					CGRectMake(
+					CCRectMake(
 					scrRect.origin.x
 					+ m_touchDownImgCustomRect.origin.x,
 					scrRect.origin.y
@@ -731,7 +735,7 @@ void NDUIButton::drawTouchDown()
 
 void NDUIButton::drawFocus()
 {
-	CGRect scrRect = this->GetScreenRect();
+	CCRect scrRect = this->GetScreenRect();
 
 	if (m_focusStatus == FocusColor && m_bFocusEnable)
 	{
@@ -746,26 +750,26 @@ void NDUIButton::drawFocus()
 		DrawRecttangle(scrRect, ccc4(138, 8, 8, 255));
 
 		m_rimImageLT->DrawInRect(
-			CGRectMake(scrRect.origin.x - 2,
+			CCRectMake(scrRect.origin.x - 2,
 			scrRect.origin.y - 3,
 			m_rimImageLT->GetSize().width,
 			m_rimImageLT->GetSize().height));
 
 		m_rimImageRT->DrawInRect(
-			CGRectMake(
+			CCRectMake(
 			scrRect.origin.x + scrRect.size.width - m_rimImageRT->GetSize().width + 2, 
 			scrRect.origin.y - 3,
 			m_rimImageRT->GetSize().width,
 			m_rimImageRT->GetSize().height));
 
 		m_rimImageLB->DrawInRect(
-			CGRectMake(scrRect.origin.x - 2,
+			CCRectMake(scrRect.origin.x - 2,
 			scrRect.origin.y + scrRect.size.height - m_rimImageLB->GetSize().height + 3,
 			m_rimImageLB->GetSize().width,
 			m_rimImageLB->GetSize().height));
 
 		m_rimImageRB->DrawInRect(
-			CGRectMake(
+			CCRectMake(
 			scrRect.origin.x + scrRect.size.width - m_rimImageRT->GetSize().width + 2,
 			scrRect.origin.y + scrRect.size.height - m_rimImageLB->GetSize().height + 3,
 			m_rimImageRB->GetSize().width,
@@ -903,7 +907,7 @@ void NDUIButton::drawFocus()
 		if (m_bCustomFocusImageRect)
 		{
 			m_focusImage->DrawInRect(
-				CGRectMake(
+				CCRectMake(
 				scrRect.origin.x
 				+ m_customFocusImageRect.origin.x,
 				scrRect.origin.y
@@ -977,14 +981,14 @@ bool NDUIButtonDelegate::OnButtonLongClick(NDUIButton* button)
 	return false;
 }
 
-bool NDUIButtonDelegate::OnButtonDragOut(NDUIButton* button, CGPoint beginTouch,
-		CGPoint moveTouch, bool longTouch)
+bool NDUIButtonDelegate::OnButtonDragOut(NDUIButton* button, CCPoint beginTouch,
+		CCPoint moveTouch, bool longTouch)
 {
 	return false;
 }
 
 bool NDUIButtonDelegate::OnButtonDragOutComplete(NDUIButton* button,
-		CGPoint endTouch, bool outOfRange)
+		CCPoint endTouch, bool outOfRange)
 {
 	return false;
 }
@@ -1018,12 +1022,12 @@ void NDUIButton::SetBackgroundColor(ccColor4B color)
 void NDUIButton::SetBackgroundPictureLua(NDPicture *pic,
 		NDPicture *touchPic/*= NULL*/)
 {
-	this->SetBackgroundPicture(pic, touchPic, false, CGRectZero, true);
+	this->SetBackgroundPicture(pic, touchPic, false, CCRectZero, true);
 }
 
 void NDUIButton::SetBackgroundPicture(NDPicture *pic,
 		NDPicture *touchPic /*= NULL*/, bool useCustomRect/* = false*/,
-		CGRect customRect/* = CGRectZero*/, bool clearPicOnFree/* = false*/)
+		CCRect customRect/* = CCRectZero*/, bool clearPicOnFree/* = false*/)
 {
 	if (m_bClearBgOnFree)
 	{
@@ -1074,9 +1078,9 @@ void NDUIButton::SetTitle()
 //			return;
 //		}
 
-	CGRect rect = this->GetFrameRect();
+	CCRect rect = this->GetFrameRect();
 
-	CGSize sizetext = getStringSize(m_strTitle.c_str(), m_uiTitleFontSize);
+	CCSize sizetext = getStringSize(m_strTitle.c_str(), m_uiTitleFontSize);
 
 	//sizetext.width += 10;
 
@@ -1094,11 +1098,11 @@ void NDUIButton::SetTitle()
 		m_scrtTitle->SetScrollType(ScrollTextFromRightToLeft);
 		m_scrtTitle->SetScrollTextSpeed(60);
 		m_scrtTitle->SetFrameRect(
-				CGRectMake(5, (rect.size.height - m_uiTitleFontSize) / 2,
+				CCRectMake(5, (rect.size.height - m_uiTitleFontSize) / 2,
 						rect.size.width, rect.size.height));
 		m_scrtTitle->SetTouchEnabled(false);
 		// start pos
-		m_scrtTitle->SetStartPos(CGPointMake(5.0f, 0.0f));
+		m_scrtTitle->SetStartPos(CCPointMake(5.0f, 0.0f));
 		m_scrtTitle->Stop();
 		this->AddChild(m_scrtTitle);
 
@@ -1115,7 +1119,7 @@ void NDUIButton::SetTitle()
 		m_title->SetFontColor(m_colorTitle);
 		m_title->SetTextAlignment(LabelTextAlignmentCenter);
 		m_title->SetFrameRect(
-				CGRectMake(0 + m_uiTitleLeftWidth, 0,
+				CCRectMake(0 + m_uiTitleLeftWidth, 0,
 						rect.size.width - m_uiTitleLeftWidth
 								- m_uiTitleRightWidth, rect.size.height));
 		this->AddChild(m_title);
@@ -1145,7 +1149,7 @@ void NDUIButton::SetText(const char* text1, const char* text2,
 	m_lbTitle1->SetFontColor(color1);
 	m_lbTitle1->SetFontSize(fontSize1);
 	m_lbTitle1->SetTextAlignment(LabelTextAlignmentLeft);
-	m_lbTitle1->SetFrameRect(CGRectZero);
+	m_lbTitle1->SetFrameRect(CCRectZero);
 	this->AddChild(m_lbTitle1);
 
 	if (!m_lbTitle2)
@@ -1158,7 +1162,7 @@ void NDUIButton::SetText(const char* text1, const char* text2,
 	m_lbTitle2->SetFontColor(color2);
 	m_lbTitle2->SetFontSize(fontSize2);
 	m_lbTitle2->SetTextAlignment(LabelTextAlignmentLeft);
-	m_lbTitle2->SetFrameRect(CGRectZero);
+	m_lbTitle2->SetFrameRect(CCRectZero);
 	this->AddChild(m_lbTitle2);
 
 	m_uiTwoTitleInter = interaval;
@@ -1178,8 +1182,8 @@ void NDUIButton::SetTwoTitle()
 		return;
 	}
 
-	CGRect rect = this->GetFrameRect();
-	CGSize size1 = getStringSize(m_lbTitle1->GetText().c_str(),
+	CCRect rect = this->GetFrameRect();
+	CCSize size1 = getStringSize(m_lbTitle1->GetText().c_str(),
 			m_lbTitle1->GetFontSize()), size2 = getStringSize(
 			m_lbTitle2->GetText().c_str(), m_lbTitle2->GetFontSize());
 
@@ -1191,16 +1195,16 @@ void NDUIButton::SetTwoTitle()
 	}
 
 	m_lbTitle1->SetFrameRect(
-			CGRectMake(iStartX, (rect.size.height - size1.height) / 2,
+			CCRectMake(iStartX, (rect.size.height - size1.height) / 2,
 					size1.width, size1.height));
 	m_lbTitle2->SetFrameRect(
-			CGRectMake(iStartX + size1.width + m_uiTwoTitleInter,
+			CCRectMake(iStartX + size1.width + m_uiTwoTitleInter,
 					(rect.size.height - size2.height) / 2, size2.width,
 					size2.height));
 }
 
 void NDUIButton::SetDisImage(NDPicture *pic, bool useCustomRect /*= false*/,
-		CGRect customRect /*= CGRectZero*/, bool clearPicOnFree /*= false*/)
+		CCRect customRect /*= CCRectZero*/, bool clearPicOnFree /*= false*/)
 {
 	if (m_ClearDisImageOnFree && m_disImage)
 	delete m_disImage;
@@ -1220,7 +1224,7 @@ bool NDUIButton::IsTabSel()
 	return m_bTabSel;
 }
 
-void NDUIButton::ChangeSprite(const char* szSprite, CGPoint posOffset)
+void NDUIButton::ChangeSprite(const char* szSprite, CCPoint posOffset)
 {
 	SAFE_DELETE (m_pSprite);
 	if (!szSprite || szSprite == std::string(""))

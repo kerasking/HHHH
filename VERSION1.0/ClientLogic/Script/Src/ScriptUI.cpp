@@ -1431,31 +1431,31 @@ ConverToUIListCell(NDNode* pNode)
 #endif
 //#pragma mark 其它ui通用函数
 
-CGSize GetStringSize(const char* str, unsigned int fontsize)
+CCSize GetStringSize(const char* str, unsigned int fontsize)
 {
 	if (!str || 0 == strlen(str))
 	{
-		return CGSizeZero;
+		return CCSizeZero;
 	}
 	return getStringSize(str, fontsize);
 }
-CGSize GetMutiLineStringSize(const char* str, int fontsize, int nWidth)
+CCSize GetMutiLineStringSize(const char* str, int fontsize, int nWidth)
 {
 	if (!str || 0 == strlen(str))
 	{
-		return CGSizeZero;
+		return CCSizeZero;
 	}
-	CGSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
-	return getStringSizeMutiLine(str, fontsize, CGSizeMake(nWidth, winsize.height * 5));
+	CCSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
+	return getStringSizeMutiLine(str, fontsize, CCSizeMake(nWidth, winsize.height * 5));
 }
 
-CGSize GetHyperLinkTextSize(const char* str, unsigned int fontsize, int nBoundWidth)
+CCSize GetHyperLinkTextSize(const char* str, unsigned int fontsize, int nBoundWidth)
 {
 	if (!str)
 	{
-		return CGSizeZero;
+		return CCSizeZero;
 	}
-	CGSize textSize;
+	CCSize textSize;
 	textSize.width	= nBoundWidth;
 	textSize.height = NDUITextBuilder::DefaultBuilder()->StringHeightAfterFilter(str, textSize.width, fontsize);
 	textSize.width	= NDUITextBuilder::DefaultBuilder()->StringWidthAfterFilter(str, textSize.width, fontsize);
@@ -1468,7 +1468,7 @@ NDUINode* CreateColorLabel(const char* str, unsigned int fontsize, unsigned int 
 	{
 		return NULL;
 	}
-	CGSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
 	winsize.width	= nConstraitWidth;
 	return (NDUINode*)NDUITextBuilder::DefaultBuilder()->Build(str, fontsize, winsize, ccc4(255, 255, 255, 255));
 }
@@ -1482,24 +1482,24 @@ NDScene* GetSMLoginScene()
 	return NDDirector::DefaultDirector()->GetSceneByTag(SMLOGINSCENE_TAG);
 }
 
-CGSize GetWinSize()
+CCSize GetWinSize()
 {
 	return NDDirector::DefaultDirector()->GetWinSize();
 }
 
-CGRect RectZero()
+CCRect RectZero()
 {
-	return CGRectZero;
+	return CCRectZero;
 }
 
-CGSize SizeZero()
+CCSize SizeZero()
 {
-	return CGSizeZero;
+	return CCSizeZero;
 }
 
-CGPoint PointZero()
+CCPoint PointZero()
 {
-	return CGPointZero;
+	return CCPointZero;
 }
 #if 0
 LIST_ATTR_SEC MakeListSecAttr(
@@ -1604,17 +1604,17 @@ int RegisterLocalNotification(string Date,string Content)
 
 CCRect RectMake(float x, float y, float width, float height)
 {
-	return CCRect((x), (y), (width), (height));
+	return CCRectMake((x), (y), (width), (height));
 }
 
 CCPoint PointMake(float x, float y)
 {
-	return CCPoint((x), (y));
+	return CCPointMake((x), (y));
 }
 
 CCSize SizeMake(float width, float height)
 {
-	return CCSize((width), (height));
+	return CCSizeMake((width), (height));
 }
 
 namespace NDEngine {
@@ -1828,22 +1828,22 @@ namespace NDEngine {
 	
 //#pragma mark UI结构导出
 	// 大小结构导出
-	ETSTRUCTBEGIN(CGSize)
-	ETSTRUCTPROP("w",								&CGSize::width)
-	ETSTRUCTPROP("h",								&CGSize::height)
-	ETSTRUCTEND(CGSize)
+	ETSTRUCTBEGIN(CCSize)
+	ETSTRUCTPROP("w",								&CCSize::width)
+	ETSTRUCTPROP("h",								&CCSize::height)
+	ETSTRUCTEND(CCSize)
 	
 	// 点结构导出
-	ETSTRUCTBEGIN(CGPoint)
-	ETSTRUCTPROP("x",								&CGPoint::x)
-	ETSTRUCTPROP("y",								&CGPoint::y)
-	ETSTRUCTEND(CGPoint)
+	ETSTRUCTBEGIN(CCPoint)
+	ETSTRUCTPROP("x",								&CCPoint::x)
+	ETSTRUCTPROP("y",								&CCPoint::y)
+	ETSTRUCTEND(CCPoint)
 	
 	// 范围结构导出
-	ETSTRUCTBEGIN(CGRect)
-	ETSTRUCTPROP("origin",							&CGRect::origin)
-	ETSTRUCTPROP("size",							&CGRect::size)
-	ETSTRUCTEND(CGRect)
+	ETSTRUCTBEGIN(CCRect)
+	ETSTRUCTPROP("origin",							&CCRect::origin)
+	ETSTRUCTPROP("size",							&CCRect::size)
+	ETSTRUCTEND(CCRect)
 	
 //#pragma mark UI加载导出
 	ETCLASSBEGIN(NDUILoad)
@@ -1919,7 +1919,7 @@ namespace NDEngine {
 	ETMEMBERFUNC("GetScreenRect",					&NDUINode::GetScreenRect)
 	ETMEMBERFUNC("SetLuaDelegate",					&NDUINode::SetLuaDelegate)
     // 1-从左边飞入 2-从右边飞入 3-从上飞入 4-从下飞入
-    ETMEMBERFUNC("FlyToRect",                       &NDUINode::FlyToRect/*(CGRect rect, int nFrameNum, int nDirect)*/)
+    ETMEMBERFUNC("FlyToRect",                       &NDUINode::FlyToRect/*(CCRect rect, int nFrameNum, int nDirect)*/)
     ETMEMBERFUNC("SetBoundScale",					&NDUINode::SetBoundScale)
 	ETCLASSEND(NDUINode)
 	

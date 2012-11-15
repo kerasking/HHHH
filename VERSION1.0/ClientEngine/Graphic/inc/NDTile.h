@@ -9,7 +9,7 @@
 #ifndef _ND_TILE_H_
 #define _ND_TILE_H_
 
-#include "Utility.h"
+#include "UtilityInc.h"
 #include "CCTexture2D.h"
 #include "CCDirector.h"
 #include "shaders/ccGLStateCache.h"
@@ -60,9 +60,9 @@ class NDTile : public cocos2d::CCObject
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCTexture2D*, m_pkTexture, Texture)
 	CC_SYNTHESIZE(bool, m_bReverse, Reverse)
 	CC_SYNTHESIZE(NDRotationEnum, m_Rotation, Rotation)
-	CC_SYNTHESIZE(CGSize, m_kMapSize, MapSize)
-	CC_SYNTHESIZE(CGRect, m_kCutRect, CutRect)
-	CC_SYNTHESIZE(CGRect, m_kDrawRect, DrawRect)
+	CC_SYNTHESIZE(CCSize, m_kMapSize, MapSize)
+	CC_SYNTHESIZE(CCRect, m_kCutRect, CutRect)
+	CC_SYNTHESIZE(CCRect, m_kDrawRect, DrawRect)
 
 public:
 	NDTile();
@@ -70,9 +70,9 @@ public:
 
 	void make();
 	void draw();
-	void drawSubRect(CGRect kRect);
+	void drawSubRect(CCRect kRect);
 	void makeTex(float* pData);
-	void makeVetex(float* pData, CGRect kRect);
+	void makeVetex(float* pData, CCRect kRect);
 
 public: //@shader
 	CC_SYNTHESIZE_RETAIN(CCGLProgram*, m_pShaderProgram, ShaderProgram);
@@ -81,7 +81,7 @@ public: //@shader
 protected:
 	void DrawSetup( const char* shaderType = kCCShader_PositionTextureColor );
 	virtual void debugDraw();
-	CGRect getDrawRectInPoints();
+	CCRect getDrawRectInPoints();
 
 private:
 

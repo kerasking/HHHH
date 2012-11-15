@@ -43,34 +43,34 @@ public:
 	void SetFilter(ID_VEC idVec);
 private:
 	PlaceNode *GetPlaceNodeWithId(int placeId);
-	CGPoint ConvertToMapPoint(CGPoint screenPoint);
-	CGPoint ConvertToScreenPoint(CGPoint mapPoint);
+	CCPoint ConvertToMapPoint(CCPoint screenPoint);
+	CCPoint ConvertToScreenPoint(CCPoint mapPoint);
 	void OnNodeClick(PlaceNode* button);
 	void SetMove(bool bSet);
 	bool IsMoving();
 	bool IsMoveArrive();
-	void SetTarget(CGPoint pos);
-	CGPoint GetTarget();
+	void SetTarget(CCPoint pos);
+	CCPoint GetTarget();
 	void SetTargetMapId(int nMapId);
 	int GetTargetMapId();
 	void SetRoleDirect(bool directRight);
 	int GetCurPlaceIndex();
 	int GetPlaceIdByIndex(int nIndex);
 	bool IsInFilterList(int nMapId);
-	void SetCenterAtPos(CGPoint pos);
+	void SetCenterAtPos(CCPoint pos);
 
-	CGPoint GetPlaceIdScreenPos(int placeId);
+	CCPoint GetPlaceIdScreenPos(int placeId);
 private:
 	NDWorldMapData* m_mapData;
 	PlaceNode* m_curBtn;
 	NDTimer m_timer;
 	cocos2d::CCArray *m_buttons;
-	CGPoint m_screenCenter, m_posMapOffset;
+	CCPoint m_screenCenter, m_posMapOffset;
 	ID_VEC m_vIdFilter;
 	CUIRoleNode *m_roleNode;
 	NDUIButton *m_btnClose;
 	NDUIButton *m_btnRet;
-	CGPoint m_posTarget;
+	CCPoint m_posTarget;
 	int m_nTargetMapId;
 	bool m_bInMoving;
 	//std::map<int, std::string> m_mapFilename;

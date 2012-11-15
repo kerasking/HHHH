@@ -10,6 +10,12 @@
 #include "Des.h"
 #include "NDWideString.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#import "Foundation/Foundation.h"
+#include "CCCommon.h"
+#include "basedefine.h"
+#endif
+
 //////////////////////////////////////////////////////////////////////////
 namespace NDEngine
 {
@@ -191,6 +197,83 @@ long long NDTransData::ReadLong()
 	Read((unsigned char*) &lVal, sizeof(long long));
 	return lVal;
 }
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+NSString* NDTransData::ReadUnicodeNString()
+{
+    char buf = 0x00;
+    if( !Read((unsigned char*)&buf, 1) || (int)buf != ND_C_SET_UNCODE ) return nil;
+    
+    unsigned short nLen = 0;
+    nLen = ReadShort();
+    
+    if (nLen > 1024)
+    {
+        NDAsssert(0);
+        return nil;
+    }
+    
+    if (nLen == 0 || nLen % 2 != 0)
+    {
+        return nil;
+    }
+    
+    char tmp[1024]={0};
+    
+    if (!Read((unsigned char*)tmp, nLen))
+    {
+        NDAsssert(0);
+        return nil;
+    }
+    
+    /*
+     int n = (int)buf;
+     for (int i = 0; i < nLen;) {
+     int a = tmp[i++], b = tmp[i++];
+     if (b == 0) {
+     pOut[n++] = (unsigned char) a;
+     } else {
+     pOut[n++] = (unsigned char) (0xE0 | ((b & 0xF0) >> 4));
+     pOut[n++] = (unsigned char) ((0x80 | ((b & 0x0F) << 2)) + ((a & 0xC0) >> 6));
+     pOut[n++] = (unsigned char) (0x80 | (a & 0x3F));
+     }
+     }
+     */
+    
+    NSString *nsstr = [NSString stringWithCharacters:(unichar*)tmp length:nLen/2];
+    return nsstr;
+}
+NSString* NDTransData::ReadUTF8NString()
+{
+    char buf = 0x00;
+    if( !Read((unsigned char*)&buf, 1) || (int)buf != ND_C_SET_UTF8 ) return nil;
+    
+    unsigned short nLen = 0;
+    nLen = ReadShort();
+    
+    if (nLen > 1024)
+    {
+        NDAsssert(0);
+        return nil;
+    }
+    
+    if (nLen == 0)
+    {
+        return nil;
+    }
+    
+    char tmp[1024]={0};
+    
+    if (!Read((unsigned char*)tmp, nLen))
+    {
+        NDAsssert(0);
+        return nil;
+    }
+    
+    NSData* nsdata =[NSData dataWithBytes:tmp length:nLen];
+    NSString *nsstr = [[NSString alloc ]initWithData:nsdata encoding:NSUTF8StringEncoding];
+    return nsstr;
+}
 
 //======================================================================
 std::string NDTransData::ReadUnicodeString2(bool bCareCode)
@@ -236,6 +319,7 @@ std::string NDTransData::ReadUnicodeString2(bool bCareCode)
 	setlocale(LC_ALL, curLocale.c_str());
 	return std::string(szStr);
 }
+#endif
 
 //======================================================================
 //

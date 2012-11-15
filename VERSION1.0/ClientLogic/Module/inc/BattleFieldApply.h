@@ -27,7 +27,7 @@ public:
 	
 	~BFApplyCell();
 	
-	void Initialization(CGSize size=CGSizeMake(238, 23)); override
+	void Initialization(CCSize size=CCSizeMake(238, 23)); override
 	
 	void draw(); override
 	

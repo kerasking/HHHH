@@ -56,8 +56,8 @@ namespace NDEngine
 		/*
 		CCTexture2D* m_texLine;
 		CCTexture2D* m_texBlock;
-		CGPoint m_ptLine;
-		CGPoint m_ptBlock;
+		CCPoint m_ptLine;
+		CCPoint m_ptBlock;
 		GLfloat m_cyclePosX;
 		*/
 		NDTimer m_timer;

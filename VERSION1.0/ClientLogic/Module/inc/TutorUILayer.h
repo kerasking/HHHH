@@ -35,7 +35,7 @@
 // 	
 // public:
 // 	
-// 	void Initialization(CGPoint pos, bool daoshi=false); override
+// 	void Initialization(CCPoint pos, bool daoshi=false); override
 // 	
 // 	void OnButtonClick(NDUIButton* button); override
 // 	

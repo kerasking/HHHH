@@ -9,7 +9,7 @@
 #include "NDAnimationGroupPool.h"
 #include "NDPath.h"
 #include "JavaMethod.h"
-#include "Utility.h"
+#include "UtilityInc.h"
 
 using namespace NDEngine;
 using namespace cocos2d;

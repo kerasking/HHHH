@@ -65,14 +65,14 @@ NDPicture* ItemImage::GetItem(int iIndex, bool gray/*=false*/, bool smallicon/*=
 	
 	NDPicture* pkResource = NDPicturePool::DefaultPool()->AddPicture(
 		(smallicon ? NDPath::GetImgPathBattleUI("item_small.png") :
-		NDPath::GetSMImgPath("mix/mix_goods.png") ) , true);
+		NDPath::GetSMImgPath("portrait/Goods.png") ) , true);
 
 	if (!pkResource)
 	{
 		return NULL;
 	}
 
-	CGSize kSize = pkResource->GetSize();
+	CCSize kSize = pkResource->GetSize();
 
 	if ( iX + iItemSizeW > kSize.width || iY + iItemSizeH > kSize.height ) 
 	{
@@ -80,7 +80,7 @@ NDPicture* ItemImage::GetItem(int iIndex, bool gray/*=false*/, bool smallicon/*=
 		return NULL;
 	}
 	
-	pkResource->Cut(CGRectMake(iX, iY, iItemSizeW, iItemSizeH));
+	pkResource->Cut(CCRectMake(iX, iY, iItemSizeW, iItemSizeH));
 	
 	return pkResource;
 }
@@ -130,14 +130,14 @@ NDPicture* ItemImage::GetPinZhiPic(int iItemType, bool smallicon/*=false*/)
 		return NULL;
 	}
 	
-	CGSize size = pkResource->GetSize();
+	CCSize size = pkResource->GetSize();
 	if ( x + iItemSizeW > size.width || y + iItemSizeH > size.height ) 
 	{
 		delete pkResource;
 		return NULL;
 	}
 	
-	pkResource->Cut(CGRectMake(x, y, iItemSizeW, iItemSizeH));
+	pkResource->Cut(CCRectMake(x, y, iItemSizeW, iItemSizeH));
 	
 	return pkResource;
 
@@ -166,48 +166,91 @@ NDPicture* GetSkillIconByIconIndex(int iIconIndex, bool gray/*=false*/)
 	int nStartX = (iIconIndex % 100 - 1) * SKILL_SIZE_W;
 	int nStartY = (iIconIndex / 100 - 1) * SKILL_SIZE_H;
 	
-	NDPicture* pkResource = NDPicturePool::DefaultPool()->
-		AddPicture(NDPath::GetImgPathUINew("skillicon.png"), gray);
+	NDPicture *res = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPathNew("skillicon.png"), gray);
 	
-	if (pkResource)
-	{
-		CGSize size = pkResource->GetSize();
-		if (nStartX < 0 || nStartY < 0 ||
-			nStartX + SKILL_SIZE_W > size.width ||
-			nStartY + SKILL_SIZE_H > size.height )
+	if (res) {
+		CCSize size = res->GetSize();
+		if (nStartX < 0 || nStartY < 0 || nStartX + SKILL_SIZE_W > size.width || nStartY + SKILL_SIZE_H > size.height )
 		{
-			CC_SAFE_DELETE(pkResource);
+			SAFE_DELETE(res);
 			return NULL;
 		}
-		pkResource->Cut(CGRectMake(nStartX, nStartY, SKILL_SIZE_W, SKILL_SIZE_H));
-		return pkResource;
+		res->Cut(CCRectMake(nStartX, nStartY, SKILL_SIZE_W, SKILL_SIZE_H));
+		return res;
 	}
-
 	return NULL;
 }
 
 NDPicture* ItemImage::GetSMItem(int nIconVal)
 {
-	NDPicture* pkResource = NDPicturePool::DefaultPool()->
-		AddPicture(GetSMImgPath("mix/mix_goods.png"), true);
-
-	if (!pkResource)
+    /*
+	NDPicture *res = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImgPath("portrait/Goods.png"), true);
+	if (!res)
 	{
 		return NULL;
 	}
 	
-	CGSize kSize = pkResource->GetSize();
+	CCSize kSize = pkResource->GetSize();
+    
+	CGSize size = res->GetSize();
 	int nCol	= nIconVal % 100 - 1;
 	int nRow	= nIconVal / 100 - 1;
-	
 	if (nRow < 0 || nCol < 0 ||
-		ITEM_SIZE_W * nCol > kSize.width || ITEM_SIZE_H * nRow > kSize.height)
+		ITEM_SIZE_W * nCol > size.width || ITEM_SIZE_H * nRow > size.height)
 	{
-		delete pkResource;
+		delete res;
+		return NULL;
+	}
+	res->Cut(CGRectMake(ITEM_SIZE_W * nCol, ITEM_SIZE_H * nRow, ITEM_SIZE_W, ITEM_SIZE_H));
+	return res;
+    */
+    int nCol = nIconVal % 10 - 1;
+    int nRow = nIconVal / 10 % 10 - 1;
+    int bw = nIconVal / 100;
+    char keyString[255];
+    sprintf(keyString, "portrait/Goods%d.png",bw);
+    NDPicture *res = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImgPath(keyString), true);
+    if (!res)
+	{
+		return NULL;
+	}
+    
+    CCSize size = res->GetSize();
+    if (nRow < 0 || nCol < 0 ||
+		ITEM_SIZE_W * nCol > size.width || ITEM_SIZE_H * nRow > size.height)
+	{
+		delete res;
 		return NULL;
 	}
 	
-	pkResource->Cut(CGRectMake(ITEM_SIZE_W * nCol, ITEM_SIZE_H * nRow, ITEM_SIZE_W, ITEM_SIZE_H));
+	res->Cut(CCRectMake(ITEM_SIZE_W * nCol, ITEM_SIZE_H * nRow, ITEM_SIZE_W, ITEM_SIZE_H));
+	return res;
+}
+
+NDPicture* ItemImage::GetSMItemNew(int nIconVal)
+{
+	if (10000 <= nIconVal || 0 > nIconVal)
+	{
+		return NULL;
+	}
 	
-	return pkResource;
+	std::string str;
+	
+	if (nIconVal < 10)
+	{
+		str		= "000";
+	}
+	else if (nIconVal < 100)
+	{
+		str		= "00";
+	}
+	else if (nIconVal < 1000)
+	{
+		str		= "0";
+	}
+	
+	std::stringstream strVal;
+	strVal << "portrait/goods" << str << nIconVal << ".png";
+	
+	return	NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImgPath(strVal.str().c_str()), true);
 }

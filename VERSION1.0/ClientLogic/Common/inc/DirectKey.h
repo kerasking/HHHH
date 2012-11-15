@@ -18,7 +18,7 @@
 
 using namespace NDEngine;
 
-typedef std::vector<CGPoint> dk_vec_pos;
+typedef std::vector<CCPoint> dk_vec_pos;
 typedef dk_vec_pos::iterator dk_vec_pos_it;
 
 class NDUIDirectKeyTop : public NDUILayer, public NDNodeDelegate
@@ -64,8 +64,8 @@ public:
 	
 	void OnTimer(OBJID tag); override
 	
-	bool OnButtonDragOut(NDUIButton* button, CGPoint beginTouch, CGPoint moveTouch, bool longTouch); override
-	bool OnButtonDragOutComplete(NDUIButton* button, CGPoint endTouch, bool outOfRange); override
+	bool OnButtonDragOut(NDUIButton* button, CCPoint beginTouch, CCPoint moveTouch, bool longTouch); override
+	bool OnButtonDragOutComplete(NDUIButton* button, CCPoint endTouch, bool outOfRange); override
 	void OnButtonClick(NDUIButton* button);
 	void OnBeforeNodeRemoveFromParent(NDNode* node, bool bCleanUp); override
 	
@@ -85,7 +85,7 @@ public:
 	bool TouchEnd(NDTouch* touch); override
 private:
 	void ReverseShrinkState();
-	void RefreshPosition(CGPoint pos);
+	void RefreshPosition(CCPoint pos);
 	
 private:
 	
@@ -98,7 +98,7 @@ private:
 	bool CanDiretect(int iCellX, int iCellY, KeyDirect dir);
 	
 	// pos 屏幕坐标
-	KeyDirect GetPointAtDirect(CGPoint pos);
+	KeyDirect GetPointAtDirect(CCPoint pos);
 	void UpdateDownPicture();
 private:
 	NDUIButton *m_btnLeft, *m_btnRight, *m_btnUp, *m_btnDown;
@@ -117,7 +117,7 @@ private:
 	bool m_touchDown;
 	
 	static bool s_shink;
-	static CGRect s_Rect;
+	static CCRect s_Rect;
 };
 
 #endif

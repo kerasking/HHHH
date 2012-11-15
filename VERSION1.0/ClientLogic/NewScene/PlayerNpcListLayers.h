@@ -161,14 +161,14 @@ public:
 	void uppackEquip(int iPos);
 	void unpackAllEquip();
 	void packEquip(int idEquipType);
-	void SetOffset(CGPoint offset);
+	void SetOffset(CCPoint offset);
 	void setFace(bool bRight);
 	int getID();
 	
 private:
 	NDManualRole		*m_role;
 	
-	CGPoint m_ptOffset;
+	CCPoint m_ptOffset;
 };
 
 class PlayerNode :

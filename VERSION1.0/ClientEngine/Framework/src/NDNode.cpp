@@ -122,14 +122,14 @@ void NDNode::RemoveAllChildren(bool bCleanUp)
 	}
 }
 
-CGSize NDNode::GetContentSize()
+CCSize NDNode::GetContentSize()
 {
 	NDAsssert(m_ccNode != NULL);
 
 	return m_ccNode->getContentSize();
 }
 
-void NDNode::SetContentSize(CGSize size)
+void NDNode::SetContentSize(CCSize size)
 {
 	NDAsssert(m_ccNode != NULL);
 
@@ -357,8 +357,7 @@ void NDNode::EnableDraw(bool enabled)
 
 bool NDNode::DrawEnabled()
 {
-	return m_bDrawEnabled
-		&& NDDebugOpt::getDrawUIEnabled();
+	return m_bDrawEnabled;
 }
 
 void NDNode::SetParam1(int nParam1)

@@ -86,7 +86,7 @@ protected:
 	void draw(); override
 	void SetVisible(bool visible); override
 public:
-	void SetFrameRect(CGRect rect); override
+	void SetFrameRect(CCRect rect); override
 	bool AutoInputReturn(); 
 	
 protected:

@@ -27,11 +27,11 @@ public:
 	void SetScrollViewer(NDCommonProtocol* viewer);
 	void SetViewId(unsigned int uiId);
 	unsigned int GetViewId();
-	void SetViewPos(CGPoint uiPos);
-	CGPoint GetViewPos();
+	void SetViewPos(CCPoint uiPos);
+	CCPoint GetViewPos();
 private:
 	unsigned int				m_uiViewId;
-    CGPoint                     m_uiPos;
+    CCPoint                     m_uiPos;
 protected:
 	virtual bool OnHorizontalMove(float fDistance);
 	virtual bool OnVerticalMove(float fDistance);
@@ -48,15 +48,15 @@ class ContainerClientLayerM : public NDUILayer
 	
 	ContainerClientLayerM()
 	{
-		m_rectEvent	= CGRectZero;
+		m_rectEvent	= CCRectZero;
 	}
 	
 public:
     void Initialization();
-	void SetEventRect(CGRect rect);
+	void SetEventRect(CCRect rect);
     
-    void SetViewSize(CGSize size);
-	CGSize GetViewSize();
+    void SetViewSize(CCSize size);
+	CCSize GetViewSize();
     
     void AddView(CUIScrollViewM* view);
     CUIScrollViewM* GetView(unsigned int uiIndex);
@@ -77,7 +77,7 @@ public:
     void SetBeginViewIndex(unsigned int nIndex);
     
     
-    virtual void SetFrameRect(CGRect rect);
+    virtual void SetFrameRect(CCRect rect);
     
     float GetScrollDistance(){return m_fScrollDistance;};
     
@@ -86,9 +86,9 @@ public:
     virtual bool TouchMoved(NDTouch* touch); 
     virtual bool TouchEnd(NDTouch* touch);
 private:
-	CGRect m_rectEvent;
+	CCRect m_rectEvent;
 	UIScrollStyle			m_style;
-    CGSize m_sizeView;
+    CCSize m_sizeView;
     
     float                   m_fScrollDistance;
     float					m_fScrollToCenterSpeed;
@@ -98,9 +98,9 @@ private:
     
     std::vector<CUIScrollViewM*>    m_pScrollViewUINodes;
 private:
-	bool CanDealEvent(CGPoint pos)
+	bool CanDealEvent(CCPoint pos)
 	{
-		return CGRectContainsPoint(m_rectEvent, pos);
+		return cocos2d::CCRect::CCRectContainsPoint(m_rectEvent, pos);
 	}
 	
 protected:
@@ -123,7 +123,7 @@ protected:
     
     
     
-	virtual bool DispatchLongTouchClickEvent(CGPoint beginTouch, CGPoint endTouch)
+	virtual bool DispatchLongTouchClickEvent(CCPoint beginTouch, CCPoint endTouch)
 	{
 		if (CanDealEvent(endTouch))
 		{
@@ -132,7 +132,7 @@ protected:
 		return false;
 	}
 	
-	virtual bool DispatchLongTouchEvent(CGPoint beginTouch, bool touch)
+	virtual bool DispatchLongTouchEvent(CCPoint beginTouch, bool touch)
 	{
 		if (CanDealEvent(beginTouch))
 		{
@@ -141,7 +141,7 @@ protected:
 		return false;
 	}
 	
-	virtual bool DispatchDragOutEvent(CGPoint beginTouch, CGPoint moveTouch, bool longTouch=false)
+	virtual bool DispatchDragOutEvent(CCPoint beginTouch, CCPoint moveTouch, bool longTouch=false)
 	{
 		if (CanDealEvent(moveTouch))
 		{
@@ -150,7 +150,7 @@ protected:
 		return false;
 	}
 	
-	virtual bool DispatchDragInEvent(NDUINode* dragOutNode, CGPoint beginTouch, CGPoint endTouch, bool longTouch, bool dealByDefault=false)
+	virtual bool DispatchDragInEvent(NDUINode* dragOutNode, CCPoint beginTouch, CCPoint endTouch, bool longTouch, bool dealByDefault=false)
 	{
 		if (CanDealEvent(endTouch))
 		{
@@ -182,8 +182,8 @@ public:
 	bool IsCenterAdjust();
 	
 	int	GetViewCount();
-	void SetViewSize(CGSize size);
-	CGSize GetViewSize();
+	void SetViewSize(CCSize size);
+	CCSize GetViewSize();
 	void AddView(ContainerClientLayerM* container);
 	//void ReplaceView(unsigned int uiIndex, CUIScrollViewM* view);
 	//void ReplaceViewById(unsigned int uiViewId, CUIScrollViewM* view);
@@ -213,7 +213,7 @@ private:
     std::vector<ContainerClientLayerM*>    m_pClientUINodes;
     
     //ContainerClientLayerM*	m_pClientUINode; // all view's parent
-	CGSize					m_sizeView;
+	CCSize					m_sizeView;
     unsigned int			m_unPreIndex;
 	unsigned int			m_unBeginIndex;
 	bool					m_bCenterAdjust;
@@ -228,12 +228,12 @@ private:
 	int WhichViewToScroll();
 	void ScrollView(unsigned int uiIndex, bool bImmediatelySet=false);
 	bool CaclViewCenter(CUIScrollViewM* view, float& fCenter, bool bJudeOver=false);
-	CGRect GetClientRect(bool judgeOver);
+	CCRect GetClientRect(bool judgeOver);
 	float GetContainerCenter();
 	float GetViewLen();
     
     //** chh 2012-06-25 **//
-    CGPoint GetMaxRowAndCol(ContainerClientLayerM* m_pClientUINode);
+    CCPoint GetMaxRowAndCol(ContainerClientLayerM* m_pClientUINode);
     
 	void StopAdjust();
     void MoveClient(float fMove);
@@ -255,7 +255,7 @@ private:
     void SetDShowYPos(bool bIsAllShow = true);
 public:
 	void draw(); override
-	void SetFrameRect(CGRect rect); override
+	void SetFrameRect(CCRect rect); override
 	// CommonProtol
 	void OnScrollViewMove(NDObject* object, float fVertical, float fHorizontal); override
 	void OnScrollViewScrollMoveStop(NDObject* object); override

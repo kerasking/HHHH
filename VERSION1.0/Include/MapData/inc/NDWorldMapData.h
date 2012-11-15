@@ -54,7 +54,7 @@ public:
 	CC_PROPERTY_READONLY(unsigned int, m_nColumns, Columns)
 	CC_PROPERTY_READONLY(unsigned int, m_nRows, Rows)
 	CC_PROPERTY_READONLY(int, m_nUnitSize, UnitSize)
-	CC_PROPERTY_READONLY(CGSize, m_MapSize, MapSize)
+	CC_PROPERTY_READONLY(CCSize, m_MapSize, MapSize)
 
 	CC_PROPERTY_READONLY(CCArray<CustomCCTexture2D*>*, m_MapTiles, MapTiles)
 	CC_PROPERTY_READONLY(CCArray<NDSceneTile*>*, m_SceneTiles, SceneTiles)
@@ -78,7 +78,7 @@ private:
 	int				_layerCount;
 	uint			_columns;
 	uint			_rows;
-	CGSize			_mapSize;
+	CCSize			_mapSize;
 	int				_unitSize;
 	
 	NSMutableArray	*_mapTiles;
@@ -94,7 +94,7 @@ private:
 @property (nonatomic, assign, readonly)int layerCount;			//层数
 @property (nonatomic, assign, readonly)uint columns;			//列数
 @property (nonatomic, assign, readonly)uint rows;				//行数
-@property (nonatomic, assign, readonly)CGSize mapSize;
+@property (nonatomic, assign, readonly)CCSize mapSize;
 @property (nonatomic, assign, readonly)int unitSize;
 @property (nonatomic, readonly)NSArray *mapTiles;				//所有地表瓦片
 @property (nonatomic, readonly)NSArray *bgTiles;				//所有背景

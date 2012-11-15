@@ -24,11 +24,11 @@ public:
 	void Initialization(); override
 	void draw(); override
 	//设置玩家显示位置,相对于屏幕左上角
-	void SetDisplayPos(CGPoint pos);
+	void SetDisplayPos(CCPoint pos);
 	
-	CGPoint GetPlayerPositionOnMapLayer();
+	CCPoint GetPlayerPositionOnMapLayer();
 private:
-	CGPoint m_playerPostion;
+	CCPoint m_playerPostion;
 	bool	m_faceRight;
 	NDNode	*m_playerParent;
 };

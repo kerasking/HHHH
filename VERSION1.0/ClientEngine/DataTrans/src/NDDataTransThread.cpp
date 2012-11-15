@@ -8,6 +8,7 @@
 #include "NDDataTransThread.h"
 #include <NDMessageCenter.h>
 #include "NDTransData.h"
+#include "CCCommon.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #endif  // CC_PLATFORM_WIN32

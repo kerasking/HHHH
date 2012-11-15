@@ -52,7 +52,7 @@ public:
 	//颜色
 	void SetFontColor(ccColor4B color);
 	
-	void OnFrameRectChange(CGRect srcRect, CGRect dstRect); override
+	void OnFrameRectChange(CCRect srcRect, CCRect dstRect); override
 	void OnTimer(OBJID tag); override
 private:
 	NDUIText* m_textUI;

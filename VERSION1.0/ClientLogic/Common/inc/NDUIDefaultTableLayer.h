@@ -59,7 +59,7 @@ namespace NDEngine
 		void SetFontColor(ccColor4B fontColor);		
 		ccColor4B GetFontColor();
 		
-		void SetFrameRect(CGRect rect); override
+		void SetFrameRect(CCRect rect); override
 		
 		void Initialization(); override
 		
@@ -100,12 +100,12 @@ namespace NDEngine
 		float GetContentHeight(); 
 	public:
 		void draw(); override			
-		void OnClick(CGPoint touch);
-		void OnTouchDown(bool touched, CGPoint pos){ m_touched = touched; m_touchPos = pos; }
+		void OnClick(CCPoint touch);
+		void OnTouchDown(bool touched, CCPoint pos){ m_touched = touched; m_touchPos = pos; }
 	private:
 		float m_currentContentY, m_contentHeight;
 		bool m_touched;
-		CGPoint m_touchPos;
+		CCPoint m_touchPos;
 		NDPicture* m_picUp, *m_picDown;
 		
 	};
@@ -153,7 +153,7 @@ namespace NDEngine
 		void OnDefaultVerticalScrollBarUpClick(NDUIDefaultVerticalScrollBar* scrollBar);override
 		void OnDefaultVerticalScrollBarDownClick(NDUIDefaultVerticalScrollBar* scrollBar);override
 		bool TouchMoved(NDTouch* touch); override
-		bool DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch); override			
+		bool DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch); override			
 	private:
 		NDDataSource* m_dataSource;
 		bool m_needReflash;
@@ -175,10 +175,10 @@ namespace NDEngine
 		struct CellBG
 		{
 			NDPicture* pic;
-			CGRect drawRect;
+			CCRect drawRect;
 			
-			CellBG() { pic = NULL; drawRect = CGRectZero; }
-			CellBG(NDPicture *pic, CGRect drawRect) { this->pic = pic; this->drawRect = drawRect; }
+			CellBG() { pic = NULL; drawRect = CCRectZero; }
+			CellBG(NDPicture *pic, CCRect drawRect) { this->pic = pic; this->drawRect = drawRect; }
 		};
 		std::vector<CellBG> m_picCellBGPicture;
 		
@@ -188,7 +188,7 @@ namespace NDEngine
 		NDUIDefaultVerticalScrollBar* DrawScrollbar(unsigned int sectionIndex);		
 		void SetFocusOnCell(unsigned int cellIndex);
 		
-		CGRect GetCellRectWithIndex(unsigned int sectionIndex, unsigned int cellIndex);
+		CCRect GetCellRectWithIndex(unsigned int sectionIndex, unsigned int cellIndex);
 		void UpdateSection();
 	};
 	//---------------------------------------------

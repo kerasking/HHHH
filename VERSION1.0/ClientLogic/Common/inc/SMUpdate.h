@@ -8,7 +8,7 @@
 #define __SMUPDATE__HEAD__FILE__
 //#include <NetFactory.h>
 //#include <TQzip.h>
-#include <BaseType.h>
+#include "BaseType.h"
 //#include <IAsynTaskManager.h>
 //#include "NDTimer.h"
 

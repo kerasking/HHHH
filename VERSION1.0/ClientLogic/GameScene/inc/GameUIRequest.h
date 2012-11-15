@@ -115,9 +115,9 @@ public:
 	
 	static NDPicture* GetPicture(int iRequestType);
 	
-	CGRect GetOkScreenRect();
+	CCRect GetOkScreenRect();
 	
-	CGRect GetCancelScreenRect();
+	CCRect GetCancelScreenRect();
 
 private:
 	void reset();

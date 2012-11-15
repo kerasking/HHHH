@@ -19,13 +19,15 @@
 #include "CCPointExtension.h"
 #include "NDDirector.h"
 #include "NDLightEffect.h"
-#include "Utility.h"
+#include "UtilityInc.h"
 #include "NDConstant.h"
 #include "define.h"
 #include "NDClassFactory.h"
 #include "NDDebugOpt.h"
 #include "NDSharedPtr.h"
 #include "NDUtility.h"
+#include "platform.h"
+#include "TQString.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -44,7 +46,8 @@ NDSprite::NDSprite()
 	m_pkSpriteEvent = 0;
 	m_bIsMoving = false;
 	m_nMovePathIndex = 0;
-	m_dwLastMoveTickTime = 0;
+	m_dwLastMoveTickTime.tv_sec = 0;
+	m_dwLastMoveTickTime.tv_usec = 0;
 
 	//		NDLog("init pos");
 	m_kPosition.x = 0;
@@ -55,13 +58,13 @@ NDSprite::NDSprite()
 	m_nNPCLookface = -1;
 
 	m_nSpeed = 4;
-	m_kTargetPos = CGPointZero;
+	m_kTargetPos = CCPointZero;
 
 	m_pkAniGroup = NULL;
 
 	m_pkPicSprite = NULL;
 
-	m_kRectSprite = CGRectZero;
+	m_kRectSprite = CCRectZero;
 
 	m_bNonRole = false;
 
@@ -113,6 +116,11 @@ void NDSprite::Initlalization(const char* pszSprFile, ISpriteEvent* pkEvent,
 
 void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 {
+	if (isMoving()
+		&& m_pkCurrentAnimation
+		&& nAnimationIndex == m_pkCurrentAnimation->getCurIndexInAniGroup()
+		&& bReverse == m_bReverse) return;
+
 	//NDLog("animationIndex%d",animationIndex);
 	if (m_pkAniGroup)
 	{
@@ -125,30 +133,32 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 
 		m_bReverse = bReverse;
 
-		if (m_pkCurrentAnimation == NULL
-			|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_END
-			|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_START
-			|| m_pkCurrentAnimation->getCurIndexInAniGroup() != 1)
-		{
-			m_pkCurrentAnimation =
-				(NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(
-				nAnimationIndex);
-			m_pkCurrentAnimation->setCurIndexInAniGroup(nAnimationIndex);
-			CC_SAFE_RELEASE_NULL (m_pkFrameRunRecord);
-			SAFE_RELEASE(m_pkFrameRunRecord);
-			m_pkFrameRunRecord = new NDFrameRunRecord;
-		}
+// 		if (m_pkCurrentAnimation == NULL
+// 			|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_END
+// 			|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_START
+// 			|| m_pkCurrentAnimation->getCurIndexInAniGroup() != 1)
+// 		{
+// 			m_pkCurrentAnimation =
+// 				(NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(
+// 				nAnimationIndex);
+// 
+// 			m_pkCurrentAnimation->setCurIndexInAniGroup(nAnimationIndex);
+// 			CC_SAFE_RELEASE_NULL (m_pkFrameRunRecord);
+// 			SAFE_RELEASE(m_pkFrameRunRecord);
+// 			m_pkFrameRunRecord = new NDFrameRunRecord;
+// 		}
 
 		m_pkCurrentAnimation =
 			(NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(
 			nAnimationIndex);
+
 		m_pkCurrentAnimation->setCurIndexInAniGroup(nAnimationIndex);
 		CC_SAFE_RELEASE_NULL (m_pkFrameRunRecord);
 		SAFE_RELEASE(m_pkFrameRunRecord);
 		m_pkFrameRunRecord = new NDFrameRunRecord;
 
 		SetContentSize(
-			CGSizeMake(m_pkCurrentAnimation->getW(),
+			CCSizeMake(m_pkCurrentAnimation->getW(),
 			m_pkCurrentAnimation->getH()));
 	}
 }
@@ -158,12 +168,15 @@ bool NDSprite::MoveByPath(const bool bFirstPath /*= false*/)
 {
 	static int MOVES_PER_SECOND = 60;
 
-	if (TAbs(GetTickCount() - m_dwLastMoveTickTime) > 1000 / MOVES_PER_SECOND)
+    struct cc_timeval currentTime;
+    CCTime::gettimeofdayCocos2d(&currentTime, NULL);
+    double duration = CCTime::timersubCocos2d(&currentTime, &m_dwLastMoveTickTime);
+	if (duration > 1000 / MOVES_PER_SECOND)
 	{
-		CGPoint kPos = m_kPointList.at(m_nMovePathIndex++);
+		CCPoint kPos = m_kPointList.at(m_nMovePathIndex++);
 		SetPosition(kPos);
 
-		m_dwLastMoveTickTime = GetTickCount();
+		m_dwLastMoveTickTime = currentTime;
 
 		return true;
 	}
@@ -209,10 +222,10 @@ void NDSprite::RunAnimation_WithFrames(bool bDraw)
 
 	m_pkAniGroup->setRuningSprite(this);
 	m_pkAniGroup->setRunningMapSize(pParentNode->GetContentSize());
-	if (bMoved)
-	{
+//	if (bMoved)
+//	{
 		m_pkAniGroup->setPosition(m_kPosition);
-	}
+//	}
 
 	m_pkCurrentAnimation->setReverse(m_bReverse);
 
@@ -245,7 +258,7 @@ void NDSprite::RunAnimation_WithOnePic(bool bDraw)
 {
 	if (GetParent())
 	{
-		CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 		NDNode* layer = GetParent();
 
 		if (layer->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
@@ -254,11 +267,11 @@ void NDSprite::RunAnimation_WithOnePic(bool bDraw)
 
 			if (bDraw && bRet)
 			{
-				CGSize sizemap = layer->GetContentSize();
-				CGSize size = m_pkPicSprite->GetSize();
+				CCSize sizemap = layer->GetContentSize();
+				CCSize size = m_pkPicSprite->GetSize();
 
 				m_pkPicSprite->DrawInRect(
-					CGRectMake(GetPosition().x,
+					CCRectMake(GetPosition().x,
 					GetPosition().y + winsize.height
 					- sizemap.height, size.width,
 					size.height));
@@ -285,19 +298,19 @@ void NDSprite::RunAnimation(bool bDraw)
 }
 
 #if 1
-CGPoint NDSprite::GetPosition()
+CCPoint NDSprite::GetPosition()
 {
  	return m_kPosition;
 }
  
-void NDSprite::SetPosition(CGPoint newPosition)
+void NDSprite::SetPosition(CCPoint newPosition)
 {
 //		NDLog("new pos:%pkFighter,%pkFighter",newPosition.x, newPosition.y);
  	m_kPosition = newPosition;
 }
 #endif 
 
-void NDSprite::MoveToPosition(std::vector<CGPoint> kToPos, SpriteSpeed speed,
+void NDSprite::MoveToPosition(std::vector<CCPoint> kToPos, SpriteSpeed speed,
 	bool moveMap, bool ignoreMask/*=false*/, bool mustArrive/*=false*/)
 {
 	int iSize = kToPos.size();
@@ -315,7 +328,7 @@ void NDSprite::MoveToPosition(std::vector<CGPoint> kToPos, SpriteSpeed speed,
 			m_bIsMoving = true;
 			m_nSpeed = speed;
 
-			//CGPoint pos = GetPosition();
+			//CCPoint pos = GetPosition();
 			//				if ( ((int)pos.x-DISPLAY_POS_X_OFFSET) % 16 != 0 || 
 			//					 ((int)pos.y-DISPLAY_POS_Y_OFFSET) % 16 != 0)
 			//				{ // Cell没走完,又设置新的目标
@@ -326,12 +339,12 @@ void NDSprite::MoveToPosition(std::vector<CGPoint> kToPos, SpriteSpeed speed,
 			m_nMovePathIndex = 0;
 			m_kPointList.clear();
 
-			CGPoint from = m_kPosition;
+			CCPoint from = m_kPosition;
 
 			for (int i = 0; i < iSize; i++)
 			{
-				CGPoint to = kToPos[i];
-				std::vector < CGPoint > kPointList;
+				CCPoint to = kToPos[i];
+				std::vector < CCPoint > kPointList;
 				NDAutoPath::sharedAutoPath()->autoFindPath(from, to,
 					(NDMapLayer*) pkLayer, m_nSpeed, mustArrive,
 					ignoreMask);
@@ -359,7 +372,7 @@ void NDSprite::MoveToPosition(std::vector<CGPoint> kToPos, SpriteSpeed speed,
 
 void NDSprite::OnMoveBegin()
 {
-	m_dwLastMoveTickTime = GetTickCount();
+    CCTime::gettimeofdayCocos2d(&m_dwLastMoveTickTime, NULL);
 }
 
 void NDSprite::OnMoving(bool bLastPos)
@@ -390,25 +403,23 @@ void NDSprite::SetSprite(NDPicture* pkPicture)
 
 	if (pkPicture)
 	{
-		CGPoint point = GetPosition();
-		CGSize size = pkPicture->GetSize();
-		m_kRectSprite = CGRectMake(point.x, point.y, size.width, size.height);
+		CCPoint point = GetPosition();
+		CCSize size = pkPicture->GetSize();
+		m_kRectSprite = CCRectMake(point.x, point.y, size.width, size.height);
 	}
 }
 
 bool NDSprite::IsAnimationComplete()
 {
-	return m_pkCurrentAnimation == NULL ?
-		true : m_pkFrameRunRecord->getIsCompleted();
+	return m_pkCurrentAnimation == NULL ? true : m_pkFrameRunRecord->getIsCompleted();
 }
 
 int NDSprite::GetCurFrameIndex()
 {
-	return m_pkFrameRunRecord == NULL ?
-		0 : m_pkFrameRunRecord->getCurrentFrameIndex();
+	return m_pkFrameRunRecord == NULL ? 0 : m_pkFrameRunRecord->getCurrentFrameIndex();
 }
 
-CGRect NDSprite::GetSpriteRect()
+CCRect NDSprite::GetSpriteRect()
 {
 	if (m_pkCurrentAnimation)
 	{
@@ -420,7 +431,7 @@ CGRect NDSprite::GetSpriteRect()
 	{
 		return m_kRectSprite;
 	}
-	return CGRectZero;
+	return CCRectZero;
 }
 
 void NDSprite::SetHairImage(const char* imageFile, int colorIndex)
@@ -935,7 +946,7 @@ int NDSprite::getGravityX()
 	return m_pkCurrentAnimation->getMidX() - m_pkCurrentAnimation->getX();
 }
 
-bool NDSprite::GetLastPointOfPath(CGPoint& pos)
+bool NDSprite::GetLastPointOfPath(CCPoint& pos)
 {
 	size_t count = m_kPointList.size();
 
@@ -1077,7 +1088,7 @@ void NDSprite::SetNormalAniGroup(int nLookface)
 		return;
 	}
 
-	NSString strString = CCString::stringWithFormat("%smodel_%d%s",
+	CCStringRef strString = CCString::stringWithFormat("%smodel_%d%s",
 			NDPath::GetAnimationPath().c_str(), ".spr");
 
 	Initialization(strString->toStdString().c_str());

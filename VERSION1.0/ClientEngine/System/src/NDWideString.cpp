@@ -6,7 +6,11 @@
  *****************************************************************************/
 
 #include "NDWideString.h"
+#include "CCPlatformConfig.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "windows.h"
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -184,6 +188,7 @@ bool NDWideString::IsEqual_UTF8_Ansi( const char* utf8, const char* ansi )
 	if (!utf8 || !ansi) return false;
 	if (utf8[0] == 0 && ansi[0] == 0) return true;
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	static wchar_t wbuf[1024] = {0};
 	static char buf[1024] = {0};
 	
@@ -198,6 +203,11 @@ bool NDWideString::IsEqual_UTF8_Ansi( const char* utf8, const char* ansi )
 				return true;
 		}
 	}
+#else
+    // compare by both ansi
+    if (strcmp( utf8, ansi ) == 0)
+        return true;
+#endif
 	return false;
 }
 

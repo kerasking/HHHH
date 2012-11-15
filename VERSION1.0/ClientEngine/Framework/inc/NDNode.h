@@ -117,13 +117,13 @@ public:
 	//		作用：获取节点的内容大小
 	//		参数：无
 	//		返回值：内容大小
-	CGSize GetContentSize();
+	CCSize GetContentSize();
 	//		
 	//		函数：SetContentSize
 	//		作用：设置节点的内容大小，该内容的大小会影响到绘制，基本上外部不需要显示调用
 	//		参数：size内容大小
 	//		返回值：无
-	void SetContentSize(CGSize size);
+	void SetContentSize(CCSize size);
 	//		
 	//		函数：GetzOrder
 	//		作用：获取z轴大小

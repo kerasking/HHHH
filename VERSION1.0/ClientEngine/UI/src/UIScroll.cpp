@@ -116,7 +116,7 @@ void CUIScroll::draw()
 			SwitchStateTo(STATE_STOP);
 		}
 		
-		CGRect rect = this->GetFrameRect();
+		CCRect rect = this->GetFrameRect();
 		
 		if (UIScrollStyleHorzontal == m_style)
 		{
@@ -159,7 +159,7 @@ void CUIScroll::draw()
 bool CUIScroll::TouchBegin(NDTouch* touch)
 {
 	if (m_linkContainer &&
-		!CGRectContainsPoint(m_linkContainer->GetScreenRect(), touch->GetLocation()))
+		!cocos2d::CCRect::CCRectContainsPoint(m_linkContainer->GetScreenRect(), touch->GetLocation()))
 	{
 		return false;
 	}

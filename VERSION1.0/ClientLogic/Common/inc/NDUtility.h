@@ -18,7 +18,7 @@
 #define MAP_UNITSIZE_INPOINTS	(16)
 #define MAP_UNITSIZE_INPIXELS	MAP_UNITSIZE
 
-bool IsPointInside(CGPoint pt, CGRect rect);
+bool IsPointInside(CCPoint pt, CCRect rect);
 int GetNumBits(int num);
 bool VerifyUnsignedNum(const std::string strnum);
 std::string getStringTime(long nSeconds);
@@ -30,20 +30,20 @@ void showDialog(const char* content);
 
 // opengl绘图函数；必须在draw方法里调用，否则将不会长久生效
 // 画矩形
-// void DrawRecttangle(CGRect rect, ccColor4B color);
+// void DrawRecttangle(CCRect rect, ccColor4B color);
 // 画多边形
-// void DrawPolygon(CGRect rect, ccColor4B color, GLuint lineWidth);
+// void DrawPolygon(CCRect rect, ccColor4B color, GLuint lineWidth);
 // 画线
-// void DrawLine(CGPoint fromPoint, CGPoint toPoint, ccColor4B color, GLuint lineWidth);
+// void DrawLine(CCPoint fromPoint, CCPoint toPoint, ccColor4B color, GLuint lineWidth);
 // 画圆
-// void DrawCircle(CGPoint center, float r, float a, int segs, ccColor4B color);
+// void DrawCircle(CCPoint center, float r, float a, int segs, ccColor4B color);
 // 画边框
 // void DrawFrame(int borderColor, int x, int y, int width, int height);
 // 画三角形
-// void DrawTriangle(CGPoint first, CGPoint second, CGPoint third, ccColor4B color);
-// CGSize getStringSize(const char* pszStr, uint fontSize);
+// void DrawTriangle(CCPoint first, CCPoint second, CCPoint third, ccColor4B color);
+// CCSize getStringSize(const char* pszStr, uint fontSize);
 // 
-// CGSize getStringSizeMutiLine(const char* pszStr, uint fontSize, CGSize contentSize = CGSizeMake(480, 320));
+// CCSize getStringSizeMutiLine(const char* pszStr, uint fontSize, CCSize contentSize = CCSizeMake(480, 320));
 
 void quitGame(bool bTipNet = false);
 
@@ -78,7 +78,7 @@ std::string platformString();
 
 void drawRectBar2(int x, int y, int color, int num1, int num2, int width);
 
-CGRect getNewNumCut(unsigned int num, bool hightlight);
+CCRect getNewNumCut(unsigned int num, bool hightlight);
 
 void ShowAlert(const char* pszAlert);
 

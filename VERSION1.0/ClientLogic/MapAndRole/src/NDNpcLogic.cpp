@@ -127,11 +127,18 @@ void NDHeroTaskLogic::tickNpc( NDNpcLogic* npcLogic )
 //wrapper for time control
 void NDNpcLogic::RefreshTaskState()
 {
-	if (TAbs(GetTickCount() - tickLastRefresh) > 1000*3) //3 second
-	{
+    struct cc_timeval currentTime;
+    if (CCTime::gettimeofdayCocos2d(&currentTime, NULL) != 0)
+    {
+        return;
+    }
+    double fDeltaTime = (currentTime.tv_sec - tickLastRefresh.tv_sec)*1000.0f + (currentTime.tv_usec - tickLastRefresh.tv_usec) / 1000.0f;
+    
+    if (TAbs(fDeltaTime) > 1000*3) //3 second
+    {
 		NDHeroTaskLogic::Instance().tickNpc( this );
 
-		tickLastRefresh = GetTickCount();
+		tickLastRefresh = currentTime;
 	}
 }
 
@@ -142,6 +149,8 @@ bool NDNpcLogic::GetTaskListByNpc( ID_VEC& idVec )
 	
 	int TASK_ID = 1;
 	int  NPC_ID = 2;
+
+	idVec.clear();
 
 	// init npc task idlist
 	if(idlist->empty())
@@ -154,12 +163,11 @@ bool NDNpcLogic::GetTaskListByNpc( ID_VEC& idVec )
 			if(nNpcId == Owner->m_nID )
 			{
 				int nTaskId = ScriptDBObj.GetN("task_npc", *it, TASK_ID); 
-				idlist->push_back(nTaskId);
+				idVec.push_back(nTaskId);
 			}        
 		}
 	}
 	
-	idVec = *idlist; //just copy it, later: fitered by task id.
 	return !idVec.empty();
 }
 

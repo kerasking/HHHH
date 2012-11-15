@@ -27,8 +27,8 @@ class NDAnimationGroup : public cocos2d::CCObject
 {
 	CC_PROPERTY(int, m_nType, Type)
 	CC_PROPERTY(int, m_nIdentifer, Identifer)
-	CC_PROPERTY(CGPoint, m_Position, Position)
-	CC_PROPERTY(CGSize, m_RunningMapSize, RunningMapSize)
+	CC_PROPERTY(CCPoint, m_Position, Position)
+	CC_PROPERTY(CCSize, m_RunningMapSize, RunningMapSize)
 	CC_PROPERTY(NDSprite*, m_RuningSprite, RuningSprite)
 	
 	CC_PROPERTY_READONLY(bool, m_bReverse, Reverse)
@@ -40,7 +40,7 @@ class NDAnimationGroup : public cocos2d::CCObject
 public:
 	void initWithSprFile(const char* sprFile);
 
-	void drawHeadAt(CGPoint pos);
+	void drawHeadAt(CCPoint pos);
 
 private:
 	int _orderId;

@@ -20,12 +20,12 @@ static NDIphoneEdit *default_NDIphoneEdit = nil;
 {
 	if (default_NDIphoneEdit == nil) 
 	{
-		default_NDIphoneEdit = [[NDIphoneEdit alloc] initWithFrame:CGRectMake(0, 0, 480, 320)];
+		default_NDIphoneEdit = [[NDIphoneEdit alloc] initWithFrame:CCRectMake(0, 0, 480, 320)];
 	}
 	return default_NDIphoneEdit;
 }
 
-- (id)initWithFrame:(CGRect)frame
+- (id)initWithFrame:(CCRect)frame
 {
 	if ((self = [super initWithFrame:frame])) 
 	{
@@ -34,7 +34,7 @@ static NDIphoneEdit *default_NDIphoneEdit = nil;
 		_maxLength = -1;
 		_minLength = -1;
 		
-		_textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 10, 460, 30)];
+		_textField = [[UITextField alloc] initWithFrame:CCRectMake(10, 10, 460, 30)];
 		_textField.borderStyle = UITextBorderStyleRoundedRect;
 		_textField.clearButtonMode = UITextFieldViewModeWhileEditing;
 		_textField.returnKeyType = UIReturnKeyDone;
@@ -42,7 +42,7 @@ static NDIphoneEdit *default_NDIphoneEdit = nil;
 		[self addSubview:_textField];
 		[_textField release];
 		
-		m_lblNote = [[UILabel alloc] initWithFrame:CGRectMake(10, 50, 460, 30)];
+		m_lblNote = [[UILabel alloc] initWithFrame:CCRectMake(10, 50, 460, 30)];
 		m_lblNote.text = @"";
 		m_lblNote.textColor = [UIColor redColor];
 		m_lblNote.backgroundColor = [UIColor grayColor];
@@ -50,23 +50,23 @@ static NDIphoneEdit *default_NDIphoneEdit = nil;
 		[m_lblNote release];
 		
 		m_btnOk = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		m_btnOk.frame = CGRectMake(100, 100, 60, 30);
+		m_btnOk.frame = CCRectMake(100, 100, 60, 30);
 		[m_btnOk setTitle:NDCommonCString_RETNS("Ok") forState:UIControlStateNormal];
 		[m_btnOk addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:m_btnOk];
 		
 		m_btnCancle = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		m_btnCancle.frame = CGRectMake(300, 100, 60, 30);
+		m_btnCancle.frame = CCRectMake(300, 100, 60, 30);
 		[m_btnCancle setTitle:NDCommonCString_RETNS("Cancel") forState:UIControlStateNormal];
 		[m_btnCancle addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:m_btnCancle];
 		
 		self.backgroundColor = [UIColor grayColor];
 		
-		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 		
 		CGAffineTransform transForm = CGAffineTransformMakeRotation(degreesToRadian(90));
-		[self setCenter:CGPointMake(winSize.height / 2, winSize.width / 2)];
+		[self setCenter:CCPointMake(winSize.height / 2, winSize.width / 2)];
 		[self setTransform:transForm];
 	}
 	return self;

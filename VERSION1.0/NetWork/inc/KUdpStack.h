@@ -8,7 +8,10 @@
 #include "KNetworkAddress.h"
 #include "KFile.h"
 #include "KMutex.h"
-
+#if defined(TARGET_OS_IPHONE) || defined(__ANDROID_PALTFORM__)
+#include <sys/_select.h> // renshk
+#include <netinet/in.h>
+#endif
 
 template < class T >
 class Sptr

@@ -16,15 +16,15 @@
 
 using namespace NDEngine;
 
-class NDUILoad : public NDObject
+class NDUILoadEngine : public NDObject
 {
-	DECLARE_CLASS(NDUILoad)
+	DECLARE_CLASS(NDUILoadEngine)
 	
 	bool Load(
 		  const char* uiname,
 		  NDUINode *parent, 
 		  NDUITargetDelegate* delegate, 
-		  CGSize sizeOffset = CGSizeZero);
+		  CCSize sizeOffset = CCSizeZero);
 		  
 	bool LoadLua(
 		  const char* uiname,

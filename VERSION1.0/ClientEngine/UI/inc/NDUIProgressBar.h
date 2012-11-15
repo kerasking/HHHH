@@ -24,6 +24,7 @@ namespace NDEngine
 	public:
 		void draw(); override
 	private:
+    public:
 		float m_count, m_step;
 	};
 }

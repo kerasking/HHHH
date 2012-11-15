@@ -16,7 +16,7 @@
 #include "NDUISynLayer.h"
 #include "NewGamePlayerBag.h"
 #include "ItemImage.h"
-#include "CGPointExtension.h"
+//#include "CGPointExtension.h"
 #include <sstream>
 
 #define TRADE_LABEL_COLOR (ccc4(255, 255, 255, 255))

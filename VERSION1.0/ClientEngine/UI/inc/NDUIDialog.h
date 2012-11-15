@@ -86,7 +86,7 @@ public:
 			cocos2d::ccColor4B color = ccc4(79, 79, 79, 255),
 			unsigned int fontsize = 13);
 	void SetTitle(const char *text);
-	void SetTime(uint sec);
+	void SetTime(unsigned int sec);
 	void OnTimer(OBJID tag);override
 private:
 	void InitUIData();
@@ -104,7 +104,7 @@ protected:
 	unsigned int m_uiIntervalBtnAndContent;
 	unsigned int m_uiTitleHeightFullScr, m_uiTitleHeightNotFullScr;
 
-	CGSize m_sizeNotFullScr, m_sizeBtnFullScr, m_sizeBtnNotFullScr;
+	CCSize m_sizeNotFullScr, m_sizeBtnFullScr, m_sizeBtnNotFullScr;
 
 	enum
 	{
@@ -153,7 +153,7 @@ protected:
 //	void Initialization(); override
 //	void draw(); override
 //	void OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section); override
-//	bool DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch); override
+//	bool DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch); override
 //	bool TouchBegin(NDTouch* touch); override
 //	bool TouchEnd(NDTouch* touch); override
 //private: 

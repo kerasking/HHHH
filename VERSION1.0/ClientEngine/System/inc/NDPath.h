@@ -27,12 +27,13 @@ public:
 public:
 	// res path
 	static const string& GetAppPath();
-	static const string& GetResourcePath();
+	static const char*   GetResourcePath();
 	static const string& GetImagePath();
+    static const string& GetResPath2( const char* fileName );
 	static const string& GetMapPath();
 	static const string& GetMapResPath();
 	static const string& GetAnimationPath();
-	static const string& GetResPath();
+	static const char*   GetResPath();
 	static const string& GetSoundPath();
 	static const string& GetImgPathBattleUI(const char* fileName);
 	static const string& GetImgPathBattleUI();

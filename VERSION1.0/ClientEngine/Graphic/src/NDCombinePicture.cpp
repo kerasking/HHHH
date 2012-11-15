@@ -18,8 +18,8 @@ IMPLEMENT_CLASS(NDCombinePicture, NDObject)
 
 NDCombinePicture::NDCombinePicture()
 {
-	m_kRectLast = CGRectZero;
-	m_kSizeMax = CGSizeZero;
+	m_kRectLast = CCRectZero;
+	m_kSizeMax = CCSizeZero;
 }
 
 NDCombinePicture::~NDCombinePicture()
@@ -34,7 +34,7 @@ void NDCombinePicture::AddPicture(NDPicture* pic, CombintPictureAligment aligmen
 		return;
 	}
 	
-	CGRect rectDraw = CGRectZero;
+	CCRect rectDraw = CCRectZero;
 	
 	rectDraw.size = pic->GetSize();
 	
@@ -64,16 +64,16 @@ void NDCombinePicture::SetColor(ccColor4B color)
 	}
 }
 
-CGSize NDCombinePicture::GetSize()
+CCSize NDCombinePicture::GetSize()
 {
 	return m_kSizeMax;
 }
 
-void NDCombinePicture::DrawInRect(CGRect rect)
+void NDCombinePicture::DrawInRect(CCRect rect)
 {
 	for_vec(m_vecCombinePic, std::vector<CombinePicture>::iterator)
 	{
-		CGRect drawRect = (*it).rectDraw;
+		CCRect drawRect = (*it).rectDraw;
 		
 		drawRect.origin = ccpAdd(drawRect.origin, rect.origin);
 		
@@ -81,11 +81,11 @@ void NDCombinePicture::DrawInRect(CGRect rect)
 	}
 }
 
-CGPoint NDCombinePicture::caclNext(CGPoint origin,
+CCPoint NDCombinePicture::caclNext(CCPoint origin,
 								   CombintPictureAligment aligment,
-								   CGSize originSize, CGSize selfSize)
+								   CCSize originSize, CCSize selfSize)
 {
-	CGPoint res = origin;
+	CCPoint res = origin;
 	
 	if (m_vecCombinePic.empty() 
 		|| aligment < CombintPictureAligmentBegin 

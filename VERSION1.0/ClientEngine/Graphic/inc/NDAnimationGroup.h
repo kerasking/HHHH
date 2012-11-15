@@ -13,8 +13,10 @@
 #include "NDObject.h"
 #include "CCArray.h"
 //#include "NDSprite.h"
+#include <vector>
 
 //using namespace NDEngine;
+using namespace cocos2d;
 
 namespace NDEngine
 {
@@ -38,8 +40,8 @@ class NDAnimationGroup : public cocos2d::CCObject
 {
 	CC_SYNTHESIZE(int, m_nType, Type)
 	CC_SYNTHESIZE(int, m_nIdentifer, Identifer)
-	CC_SYNTHESIZE(CGPoint, m_kPosition, Position)
-	CC_SYNTHESIZE(CGSize, m_kRunningMapSize, RunningMapSize)
+	CC_SYNTHESIZE(CCPoint, m_kPosition, Position)
+	CC_SYNTHESIZE(CCSize, m_kRunningMapSize, RunningMapSize)
 	CC_SYNTHESIZE(NDEngine::NDSprite*, m_pkRuningSprite, RuningSprite)
 	
 	CC_PROPERTY(bool, m_bReverse, Reverse)
@@ -55,7 +57,7 @@ public:
 
 	void initWithSprFile(const char* sprFile);
 
-	void drawHeadAt(CGPoint pos);
+	void drawHeadAt(CCPoint pos);
 
 private:
 

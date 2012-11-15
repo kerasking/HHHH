@@ -79,8 +79,8 @@ GatherPoint::GatherPoint(int iID, int iTypeID, int xx, int yy,bool isBoss ,std::
 // 		
 // 		if (m_pic) 
 // 		{
-// 			CGSize sizePic = m_pic->GetSize();
-// 			this->SetPosition(CGPointMake(x-8, y-sizePic.height));
+// 			CCSize sizePic = m_pic->GetSize();
+// 			this->SetPosition(CCPointMake(x-8, y-sizePic.height));
 // 			SetSprite(m_pic);
 // 		}
 // 	}
@@ -110,7 +110,7 @@ bool GatherPoint::OnDrawBegin(bool bDraw)
 {
 	NDNode *node = this->GetParent();
 	
-	CGSize sizemap;
+	CCSize sizemap;
 	if (node && node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 	{
 		sizemap = node->GetContentSize();
@@ -125,8 +125,8 @@ bool GatherPoint::OnDrawBegin(bool bDraw)
 	if (bossRing && m_pkAniGroup == nil)
 	{
 		//bossRing->SetPosition(GetPosition());
-		CGPoint p = this->GetPosition();
-		bossRing->SetPosition(CGPointMake(x-8, y+4-17));
+		CCPoint p = this->GetPosition();
+		bossRing->SetPosition(CCPointMake(x-8, y+4-17));
 		if (!bossRing->GetParent())
 		{
 			m_pkSubNode->AddChild(bossRing);
@@ -143,7 +143,7 @@ void GatherPoint::OnDrawEnd(bool bDraw)
 {
 	NDNode *node = this->GetParent();
 	
-	CGSize sizemap;
+	CCSize sizemap;
 	if (node && node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 	{
 		sizemap = node->GetContentSize();
@@ -158,7 +158,7 @@ void GatherPoint::OnDrawEnd(bool bDraw)
 		if (!m_lbName->GetParent())
 		{
 			m_pkSubNode->AddChild(m_lbName);
-			m_lbName->SetFrameRect(CGRectMake(x-8, y-(m_pic ? m_pic->GetSize().height : 8)-13-5+320-sizemap.height, 480, 13));
+			m_lbName->SetFrameRect(CCRectMake(x-8, y-(m_pic ? m_pic->GetSize().height : 8)-13-5+320-sizemap.height, 480, 13));
 		}
 		
 		if (bDraw)
@@ -285,9 +285,9 @@ bool GatherPoint::isAlive() {
 }
 
 bool GatherPoint::isCollides(int x1,int y1, int w,int h) {
-	CGRect rectRole = CGRectMake(x1,y1,w,h);
-	CGRect rectMonster = CGRectMake(x+8,y-4,4,4);
-	return CGRectIntersectsRect(rectRole, rectMonster);
+	CCRect rectRole = CCRectMake(x1,y1,w,h);
+	CCRect rectMonster = CCRectMake(x+8,y-4,4,4);
+	return cocos2d::CCRect::CCRectIntersectsRect(rectRole, rectMonster);
 }
 
 void GatherPoint::setId(int id) {

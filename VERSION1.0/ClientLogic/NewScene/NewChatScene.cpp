@@ -16,7 +16,7 @@
 #include "NDDirector.h"
 #include "NDUtility.h"
 #include "NDUIBaseGraphics.h"
-#include "CGPointExtension.h"
+#include "CCPointExtension.h"
 #include "NDConstant.h"
 #include "ItemMgr.h"
 #include "ChatInput.h"
@@ -87,12 +87,12 @@ NewChatScene::NewChatScene() {
 	m_layerBg = new NDUILayer;
 	m_layerBg->Initialization();
 	m_layerBg->SetBackgroundImage(pool.AddPicture(GetImgPathNew("chat_bg.png")), true);
-	m_layerBg->SetFrameRect(CGRectMake(0, 0, 480, 320));
+	m_layerBg->SetFrameRect(CCRectMake(0, 0, 480, 320));
 	this->AddChild(m_layerBg);
 	
 	NDUILabel* lbTitle = new NDUILabel;
 	lbTitle->Initialization();
-	lbTitle->SetFrameRect(CGRectMake(0, 0, 480, 30));
+	lbTitle->SetFrameRect(CCRectMake(0, 0, 480, 30));
 	lbTitle->SetTextAlignment(LabelTextAlignmentCenter);
 	lbTitle->SetFontSize(20);
 	lbTitle->SetText(NDCommonCString("ChatContent"));
@@ -101,8 +101,8 @@ NewChatScene::NewChatScene() {
 	
 	NDUIButton* btn = new NDUIButton;
 	btn->Initialization();
-	btn->SetFrameRect(CGRectMake(435, 0, 45, 45));
-	btn->SetImage(pool.AddPicture(GetImgPathNew("dlgfull_close_normal.png")), false, CGRectZero, true);
+	btn->SetFrameRect(CCRectMake(435, 0, 45, 45));
+	btn->SetImage(pool.AddPicture(GetImgPathNew("dlgfull_close_normal.png")), false, CCRectZero, true);
 	btn->SetTag(eBtnClose);
 	btn->SetDelegate(this);
 	m_layerBg->AddChild(btn);
@@ -114,8 +114,8 @@ NewChatScene::NewChatScene() {
 	pic->SetReverse(true);
 	btn = new NDUIButton;
 	btn->Initialization();
-	btn->SetFrameRect(CGRectMake(startX, startY, 46, 42));
-	btn->SetImage(pic, false, CGRectZero, true);
+	btn->SetFrameRect(CCRectMake(startX, startY, 46, 42));
+	btn->SetImage(pic, false, CCRectZero, true);
 	btn->SetTag(eBtnFilter);
 	btn->SetDelegate(this);
 	btn->SetTitle(NDCommonCString("PingBi"));
@@ -128,8 +128,8 @@ NewChatScene::NewChatScene() {
 	pic->SetReverse(true);
 	btn = new NDUIButton;
 	btn->Initialization();
-	btn->SetFrameRect(CGRectMake(startX, startY, 46, 42));
-	btn->SetImage(pic, false, CGRectZero, true);
+	btn->SetFrameRect(CCRectMake(startX, startY, 46, 42));
+	btn->SetImage(pic, false, CCRectZero, true);
 	btn->SetTag(eBtnAddFriend);
 	btn->SetDelegate(this);
 	btn->SetTitle(NDCommonCString("friend"));
@@ -142,8 +142,8 @@ NewChatScene::NewChatScene() {
 	pic->SetReverse(true);
 	btn = new NDUIButton;
 	btn->Initialization();
-	btn->SetFrameRect(CGRectMake(startX, startY, 46, 42));
-	btn->SetImage(pic, false, CGRectZero, true);
+	btn->SetFrameRect(CCRectMake(startX, startY, 46, 42));
+	btn->SetImage(pic, false, CCRectZero, true);
 	btn->SetTag(eBtnRefresh);
 	btn->SetDelegate(this);
 	btn->SetTitle(NDCommonCString("stop"));
@@ -155,8 +155,8 @@ NewChatScene::NewChatScene() {
 	pic->SetReverse(true);
 	btn = new NDUIButton;
 	btn->Initialization();
-	btn->SetFrameRect(CGRectMake(startX, startY, 46, 42));
-	btn->SetImage(pic, false, CGRectZero, true);
+	btn->SetFrameRect(CCRectMake(startX, startY, 46, 42));
+	btn->SetImage(pic, false, CCRectZero, true);
 	btn->SetTag(eBtnSelItem);
 	btn->SetDelegate(this);
 	btn->SetTitle(NDCommonCString("item"));
@@ -168,8 +168,8 @@ NewChatScene::NewChatScene() {
 	pic->SetReverse(true);
 	btn = new NDUIButton;
 	btn->Initialization();
-	btn->SetFrameRect(CGRectMake(startX, startY, 46, 42));
-	btn->SetImage(pic, false, CGRectZero, true);
+	btn->SetFrameRect(CCRectMake(startX, startY, 46, 42));
+	btn->SetImage(pic, false, CCRectZero, true);
 	btn->SetTag(eBtnSelFace);
 	btn->SetDelegate(this);
 	btn->SetTitle(NDCommonCString("express"));
@@ -183,8 +183,8 @@ NewChatScene::NewChatScene() {
 	pic = pool.AddPicture(GetImgPathNew("chat_channel_normal.png"), true);
 	btn = new NDUIButton;
 	btn->Initialization();
-	btn->SetFrameRect(CGRectMake(startX, startY, 61, 32));
-	btn->SetImage(pic, true, CGRectMake(14, 0, 47, 32), true);
+	btn->SetFrameRect(CCRectMake(startX, startY, 61, 32));
+	btn->SetImage(pic, true, CCRectMake(14, 0, 47, 32), true);
 	btn->SetTag(eChannelAll);
 	btn->SetDelegate(this);
 	btn->SetTitle((std::string("   ") + NDCommonCString("ZhongHe")).c_str());
@@ -195,8 +195,8 @@ NewChatScene::NewChatScene() {
 	pic = pool.AddPicture(GetImgPathNew("chat_channel_normal.png"), true);
 	btn = new NDUIButton;
 	btn->Initialization();
-	btn->SetFrameRect(CGRectMake(startX, startY, 61, 32));
-	btn->SetImage(pic, true, CGRectMake(14, 0, 47, 32), true);
+	btn->SetFrameRect(CCRectMake(startX, startY, 61, 32));
+	btn->SetImage(pic, true, CCRectMake(14, 0, 47, 32), true);
 	btn->SetTag(eChannelSection);
 	btn->SetDelegate(this);
 	btn->SetTitle((std::string("   ") + NDCommonCString("QuYu")).c_str());
@@ -207,8 +207,8 @@ NewChatScene::NewChatScene() {
 	pic = pool.AddPicture(GetImgPathNew("chat_channel_normal.png"), true);
 	btn = new NDUIButton;
 	btn->Initialization();
-	btn->SetFrameRect(CGRectMake(startX, startY, 61, 32));
-	btn->SetImage(pic, true, CGRectMake(14, 0, 47, 32), true);
+	btn->SetFrameRect(CCRectMake(startX, startY, 61, 32));
+	btn->SetImage(pic, true, CCRectMake(14, 0, 47, 32), true);
 	btn->SetTag(eChannelTeam);
 	btn->SetDelegate(this);
 	btn->SetTitle((std::string("   ") + NDCommonCString("DuiWu")).c_str());
@@ -219,8 +219,8 @@ NewChatScene::NewChatScene() {
 	pic = pool.AddPicture(GetImgPathNew("chat_channel_normal.png"), true);
 	btn = new NDUIButton;
 	btn->Initialization();
-	btn->SetFrameRect(CGRectMake(startX, startY, 61, 32));
-	btn->SetImage(pic, true, CGRectMake(14, 0, 47, 32), true);
+	btn->SetFrameRect(CCRectMake(startX, startY, 61, 32));
+	btn->SetImage(pic, true, CCRectMake(14, 0, 47, 32), true);
 	btn->SetTag(eChannelSyndicate);
 	btn->SetDelegate(this);
 	btn->SetTitle((std::string("   ") + NDCommonCString("JunSpaceTuan")).c_str());
@@ -231,8 +231,8 @@ NewChatScene::NewChatScene() {
 	pic = pool.AddPicture(GetImgPathNew("chat_channel_normal.png"), true);
 	btn = new NDUIButton;
 	btn->Initialization();
-	btn->SetFrameRect(CGRectMake(startX, startY, 61, 32));
-	btn->SetImage(pic, true, CGRectMake(14, 0, 47, 32), true);
+	btn->SetFrameRect(CCRectMake(startX, startY, 61, 32));
+	btn->SetImage(pic, true, CCRectMake(14, 0, 47, 32), true);
 	btn->SetTag(eChannelPrivate);
 	btn->SetDelegate(this);
 	btn->SetTitle((std::string("   ") + NDCommonCString("PrivateSpaceChat")).c_str());
@@ -243,8 +243,8 @@ NewChatScene::NewChatScene() {
 	pic = pool.AddPicture(GetImgPathNew("chat_channel_normal.png"), true);
 	btn = new NDUIButton;
 	btn->Initialization();
-	btn->SetFrameRect(CGRectMake(startX, startY, 61, 32));
-	btn->SetImage(pic, true, CGRectMake(14, 0, 47, 32), true);
+	btn->SetFrameRect(CCRectMake(startX, startY, 61, 32));
+	btn->SetImage(pic, true, CCRectMake(14, 0, 47, 32), true);
 	btn->SetTag(eChannelSystem);
 	btn->SetDelegate(this);
 	btn->SetTitle((std::string("   ") + NDCommonCString("XiTong")).c_str());
@@ -255,17 +255,17 @@ NewChatScene::NewChatScene() {
 	btn = new NDUIButton;
 	btn->Initialization();
 	pic = pool.AddPicture(GetImgPathNew("text_back.png"), 359, 25);
-	btn->SetImage(pic, false, CGRectMake(0, 0, 0, 0), true);
+	btn->SetImage(pic, false, CCRectMake(0, 0, 0, 0), true);
 	pic = pool.AddPicture(GetImgPathNew("text_back_focus.png"), 359, 25); 
-	btn->SetFocusImage(pic, false, CGRectMake(0, 0, 0, 0), true);
-	btn->SetFrameRect(CGRectMake(104, 273, 276, 32));
+	btn->SetFocusImage(pic, false, CCRectMake(0, 0, 0, 0), true);
+	btn->SetFrameRect(CCRectMake(104, 273, 276, 32));
 	btn->SetDelegate(this);
 	btn->SetTag(eInputTalk);
 	m_layerBg->AddChild(btn);
 	
 	NDUILabel* lbTalk = new NDUILabel;
 	lbTalk->Initialization();
-	lbTalk->SetFrameRect(CGRectMake(111, 280, 276, 32));
+	lbTalk->SetFrameRect(CCRectMake(111, 280, 276, 32));
 	lbTalk->SetTextAlignment(LabelTextAlignmentLeft);
 	lbTalk->SetTag(eLbTalk);
 	m_layerBg->AddChild(lbTalk);
@@ -273,8 +273,8 @@ NewChatScene::NewChatScene() {
 	pic = pool.AddPicture(GetImgPathNew("channel_sel.png"), true);
 	btn = new NDUIButton;
 	btn->Initialization();
-	btn->SetFrameRect(CGRectMake(17, 273, 96, 32));
-	btn->SetImage(pic, false, CGRectZero, true);
+	btn->SetFrameRect(CCRectMake(17, 273, 96, 32));
+	btn->SetImage(pic, false, CCRectZero, true);
 	btn->SetTag(eSelectChannel);
 	btn->SetDelegate(this);
 	m_layerBg->AddChild(btn);
@@ -285,17 +285,17 @@ NewChatScene::NewChatScene() {
 	lbChannel->SetFontColor(ccc4(255, 233, 154, 255));
 	lbChannel->SetText(CHANNEL_ALL);
 	lbChannel->SetTextAlignment(LabelTextAlignmentCenter);
-	lbChannel->SetFrameRect(CGRectMake(17, 273, 70, 32));
+	lbChannel->SetFrameRect(CCRectMake(17, 273, 70, 32));
 	lbChannel->SetTag(eLbChannel);
 	m_layerBg->AddChild(lbChannel);
 	
 	btn = new NDUIButton;
 	btn->Initialization();
 	pic = pool.AddPicture(GetImgPathNew("send_normal.png"), 88, 32);
-	btn->SetImage(pic, false, CGRectMake(0, 0, 0, 0), true);
+	btn->SetImage(pic, false, CCRectMake(0, 0, 0, 0), true);
 	pic = pool.AddPicture(GetImgPathNew("send_touch_down.png"), 88, 32); 
-	btn->SetTouchDownImage(pic, false, CGRectZero, true);
-	btn->SetFrameRect(CGRectMake(379, 273, 88, 32));
+	btn->SetTouchDownImage(pic, false, CCRectZero, true);
+	btn->SetFrameRect(CCRectMake(379, 273, 88, 32));
 	btn->SetDelegate(this);
 	btn->SetTag(eSendTalk);
 	m_layerBg->AddChild(btn);
@@ -305,7 +305,7 @@ NewChatScene::NewChatScene() {
 	m_tbAll->SetDelegate(this);
 	m_tbAll->VisibleSectionTitles(false);
 	m_tbAll->SetBackgroundColor(ccc4(0, 0, 0, 0));
-	m_tbAll->SetFrameRect(CGRectMake(50, 50, 368, 211));
+	m_tbAll->SetFrameRect(CCRectMake(50, 50, 368, 211));
 	m_tbAll->SetMaxRecordCount(120);
 	
 	m_tbSection = new ChatTable();
@@ -313,7 +313,7 @@ NewChatScene::NewChatScene() {
 	m_tbSection->SetDelegate(this);
 	m_tbSection->VisibleSectionTitles(false);
 	m_tbSection->SetBackgroundColor(ccc4(0, 0, 0, 0));
-	m_tbSection->SetFrameRect(CGRectMake(50, 50, 368, 211));
+	m_tbSection->SetFrameRect(CCRectMake(50, 50, 368, 211));
 	m_tbSection->SetMaxRecordCount(60);
 	
 	m_tbQueue = new ChatTable();
@@ -321,7 +321,7 @@ NewChatScene::NewChatScene() {
 	m_tbQueue->SetDelegate(this);
 	m_tbQueue->VisibleSectionTitles(false);
 	m_tbQueue->SetBackgroundColor(ccc4(0, 0, 0, 0));
-	m_tbQueue->SetFrameRect(CGRectMake(50, 50, 368, 211));
+	m_tbQueue->SetFrameRect(CCRectMake(50, 50, 368, 211));
 	m_tbQueue->SetMaxRecordCount(60);
 	
 	m_tbArmy = new ChatTable();
@@ -329,7 +329,7 @@ NewChatScene::NewChatScene() {
 	m_tbArmy->SetDelegate(this);
 	m_tbArmy->VisibleSectionTitles(false);
 	m_tbArmy->SetBackgroundColor(ccc4(0, 0, 0, 0));
-	m_tbArmy->SetFrameRect(CGRectMake(50, 50, 368, 211));
+	m_tbArmy->SetFrameRect(CCRectMake(50, 50, 368, 211));
 	m_tbArmy->SetMaxRecordCount(60);
 	
 	m_tbSecret = new ChatTable();
@@ -337,7 +337,7 @@ NewChatScene::NewChatScene() {
 	m_tbSecret->SetDelegate(this);
 	m_tbSecret->VisibleSectionTitles(false);
 	m_tbSecret->SetBackgroundColor(ccc4(0, 0, 0, 0));
-	m_tbSecret->SetFrameRect(CGRectMake(50, 50, 368, 211));
+	m_tbSecret->SetFrameRect(CCRectMake(50, 50, 368, 211));
 	m_tbSecret->SetMaxRecordCount(60);
 	
 	m_tbSystem = new ChatTable();
@@ -345,7 +345,7 @@ NewChatScene::NewChatScene() {
 	m_tbSystem->SetDelegate(this);
 	m_tbSystem->VisibleSectionTitles(false);
 	m_tbSystem->SetBackgroundColor(ccc4(0, 0, 0, 0));
-	m_tbSystem->SetFrameRect(CGRectMake(50, 50, 368, 211));
+	m_tbSystem->SetFrameRect(CCRectMake(50, 50, 368, 211));
 	m_tbSystem->SetMaxRecordCount(60);
 	
 	this->ActiveChannel((NDUIButton*)m_layerBg->GetChild(eChannelAll));
@@ -466,10 +466,10 @@ void NewChatScene::ActiveChannel(NDUIButton* btnChannel)
 			break;
 	}
 	if (m_btnCurChannel) {
-		m_btnCurChannel->SetImage(NDPicturePool::DefaultPool()->AddPicture(GetImgPathNew("chat_channel_normal.png")), true, CGRectMake(14, 0, 47, 32), true);
+		m_btnCurChannel->SetImage(NDPicturePool::DefaultPool()->AddPicture(GetImgPathNew("chat_channel_normal.png")), true, CCRectMake(14, 0, 47, 32), true);
 	}
 	m_btnCurChannel = btnChannel;
-	m_btnCurChannel->SetImage(NDPicturePool::DefaultPool()->AddPicture(GetImgPathNew("chat_channel_focus.png")), false, CGRectZero, true);
+	m_btnCurChannel->SetImage(NDPicturePool::DefaultPool()->AddPicture(GetImgPathNew("chat_channel_focus.png")), false, CCRectZero, true);
 }
 
 void NewChatScene::RemoveRecordBySpeaker(ChatTable* table, const string& speaker)
@@ -736,7 +736,7 @@ void NewChatScene::ShowSelectChannel()
 	
 #define _init(channel, eTag) btnChannel = new NDUIButton; \
 btnChannel->Initialization(); \
-btnChannel->SetFrameRect(CGRectMake(0, 0, 72, 27)); \
+btnChannel->SetFrameRect(CCRectMake(0, 0, 72, 27)); \
 btnChannel->SetTitle(channel); \
 btnChannel->SetTag(eTag); \
 btnChannel->CloseFrame(); \
@@ -749,7 +749,7 @@ section->AddCell(btnChannel)
 	tlChannel->SetDelegate(this);
 	tlChannel->SetBackgroundImage(NDPicturePool::DefaultPool()->AddPicture(GetImgPathNew("choose_chat_channel.png")), true);
 	tlChannel->VisibleSectionTitles(false);
-	tlChannel->SetFrameRect(CGRectMake(20, 123, 72, 150));
+	tlChannel->SetFrameRect(CCRectMake(20, 123, 72, 150));
 	tlChannel->SetBackgroundColor(ccc4(0, 0, 0, 0));
 	tlChannel->SetTag(eTlSelChannel);
 	m_layerBg->AddChild(tlChannel, 1);
@@ -759,7 +759,7 @@ section->AddCell(btnChannel)
 	NDUIButton *btnChannel = new NDUIButton;
 	btnChannel->Initialization();
 	btnChannel->CloseFrame();
-	btnChannel->SetFrameRect(CGRectMake(0, 0, 72, 25));
+	btnChannel->SetFrameRect(CCRectMake(0, 0, 72, 25));
 	btnChannel->SetTitle(CHANNEL_ALL);
 	btnChannel->SetTag(eChannelAll);
 	btnChannel->SetFontColor(ccc4(211,166,99,255));
@@ -791,7 +791,7 @@ void NewChatScene::AddMessage(ChatType type, const char* msg, const char* speake
 	ChatRecord* record = new ChatRecord();
 	record->Initialization();
 	record->SetChatType(type);
-	record->SetFrameRect(CGRectMake(0, 0, 211, NDUITextBuilder::DefaultBuilder()->StringHeightAfterFilter(msg, 211, 15)));
+	record->SetFrameRect(CCRectMake(0, 0, 211, NDUITextBuilder::DefaultBuilder()->StringHeightAfterFilter(msg, 211, 15)));
 	record->SetTextFontColor(GetColorWithChatType(type));
 	record->SetText(msg);
 	
@@ -903,7 +903,7 @@ void NewChatScene::OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cel
 		ChatRecord* record = (ChatRecord*)cell;
 		string speaker = record->GetSpeaker();
 		
-		if (CGRectContainsPoint(record->GetTitleRect(), table->m_beginTouch))
+		if (cocos2d::CCRect::CCRectContainsPoint(record->GetTitleRect(), table->m_beginTouch))
 		{ // 点击名字
 			ChatType eChatType = record->GetChatType();
 			if (eChatType == ChatTypeImportant ||
@@ -987,13 +987,13 @@ void NewChatScene::AppendTalkText(const char* text)
 /////////////////////////////////////////////////////////////////////////////////
 IMPLEMENT_CLASS(ChatFaceOrItemLayer, NDUILayer)
 
-const CGRect RECT_FACE = CGRectMake(128, 320, 225, 225);
+const CCRect RECT_FACE = CCRectMake(128, 320, 225, 225);
 
 ChatFaceOrItemLayer::ChatFaceOrItemLayer()
 {
 	NDUILayer::Initialization();
 	
-	this->SetFrameRect(CGRectMake(0, 0, 480, 320));
+	this->SetFrameRect(CCRectMake(0, 0, 480, 320));
 	
 	m_layerFace = new NDUILayer;
 	m_layerFace->Initialization();
@@ -1013,17 +1013,17 @@ ChatFaceOrItemLayer::ChatFaceOrItemLayer()
 		NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture(GetImgPath("face.png"));				
 		int row = index / 5;
 		int col = index % 5;
-		pic->Cut(CGRectMake(15 * col, 15 * row , 15, 15));
+		pic->Cut(CCRectMake(15 * col, 15 * row , 15, 15));
 		
-		btn->SetImage(pic, true, CGRectMake(15, 15, 15, 15), true);
-		btn->SetFrameRect(CGRectMake(col * 45, row * 45, 45, 45));
+		btn->SetImage(pic, true, CCRectMake(15, 15, 15, 15), true);
+		btn->SetFrameRect(CCRectMake(col * 45, row * 45, 45, 45));
 		m_layerFace->AddChild(btn);
 	}
 	
 	m_bag = new NewGameItemBag;
 	m_bag->Initialization(ItemMgrObj.GetPlayerBagItems(), true, false);
 	m_bag->SetDelegate(this);
-	m_bag->SetFrameRect(CGRectMake(480, 26, NEW_ITEM_BAG_W, NEW_ITEM_BAG_H));
+	m_bag->SetFrameRect(CCRectMake(480, 26, NEW_ITEM_BAG_W, NEW_ITEM_BAG_H));
 	m_bag->SetPageCount(ItemMgrObj.GetPlayerBagNum());
 	//this->AddChild(m_bag);
 }
@@ -1055,7 +1055,7 @@ void ChatFaceOrItemLayer::Show(ShowType eType)
 			if (m_bag->GetParent() == NULL) {
 				this->AddChild(m_bag);
 			}
-			m_bag->SetFrameRect(CGRectMake(480, 26, NEW_ITEM_BAG_W, NEW_ITEM_BAG_H));
+			m_bag->SetFrameRect(CCRectMake(480, 26, NEW_ITEM_BAG_W, NEW_ITEM_BAG_H));
 			break;
 		default:
 			break;
@@ -1080,7 +1080,7 @@ void ChatFaceOrItemLayer::draw()
 		switch (m_eCurType) {
 			case eShowFace:
 			{
-				CGRect rectFace = m_layerFace->GetFrameRect();
+				CCRect rectFace = m_layerFace->GetFrameRect();
 				rectFace.origin.y -= STEP_Y;
 				if (rectFace.origin.y <= 48) {
 					m_bMoving = false;
@@ -1091,7 +1091,7 @@ void ChatFaceOrItemLayer::draw()
 				break;
 			case eShowItem:
 			{
-				CGRect rect = m_bag->GetFrameRect();
+				CCRect rect = m_bag->GetFrameRect();
 				rect.origin.x -= STEP_Y;
 				if (rect.origin.x <= 203) {
 					m_bMoving = false;

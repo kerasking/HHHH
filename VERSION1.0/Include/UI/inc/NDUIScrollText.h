@@ -37,16 +37,16 @@ namespace NDEngine
 		void SetFontColor(ccColor4B color);
 		std::string GetText();	
 		
-		void SetStartPos(CGPoint pos);
+		void SetStartPos(CCPoint pos);
 		void Run();
 		void Stop();
 		bool isRunning();
 		
-		void SetTextPos(CGPoint pos);
+		void SetTextPos(CCPoint pos);
 		
 	public:
 		void draw(); override
-		void OnFrameRectChange(CGRect srcRect, CGRect dstRect); override
+		void OnFrameRectChange(CCSize srcRect, CCSize dstRect); override
 		
 	private:
 		unsigned int m_speed;
@@ -55,11 +55,11 @@ namespace NDEngine
 		bool m_resetSize;
 		bool m_setStartPos;
 		bool m_run;
-		CGSize m_textSize;
+		CCSize m_textSize;
 		
-		CGSize GetTextSize();
+		CCSize GetTextSize();
 		
-		CGPoint m_startPos;
+		CCPoint m_startPos;
 	};	
 }
 #endif

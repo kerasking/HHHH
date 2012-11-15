@@ -18,7 +18,7 @@
 #include "NDUIFrame.h"
 #include "WorldMapScene.h"
 #include "NDUIButton.h"
-//#include "CGPointExtension.h"
+//#include "CCPointExtension.h"
 #include "GameSettingScene.h"
 #include "NDMiniMap.h"
 //#include "NDDataPersist.h"
@@ -64,17 +64,17 @@
 #include "RanchProductDlg.h"
 #include "PlayerInfoScene.h"
 #include "QuickInteraction.h"
-#include "QuickItem.h"
-#include "QuickFunc.h"
-#include "QuickTeam.h"
-#include "RequestListScene.h"
+//#include "QuickItem.h"
+//#include "QuickFunc.h"
+//#include "QuickTeam.h"
+//#include "RequestListScene.h"
 #include "NewVipStoreScene.h"
 #include "BattleFieldScene.h"
 #include "NDUISpecialLayer.h"
 
 #include <sstream>
 #include "NDPicture.h"
-#include "..\..\ClientEngine\Utility\inc\NDDataSource.h"
+#include "NDDataSource.h"
 
 const int TAG_CV_SEND_QUESTION = 1;
 const int TAG_CV_CHANG_PWD = 2;
@@ -487,7 +487,7 @@ void GameScene::Initialization(int mapID)
 
 	m_bHeadShow = true;
 
-	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 
 	m_pkMapLayerLogic = new NDMapLayerLogic();
 	m_pkMapLayerLogic->Initialization(mapID);
@@ -504,8 +504,8 @@ void GameScene::Initialization(int mapID)
 	 {
 	 m_hccOPItem = new NDUIHControlContainer;
 	 m_hccOPItem->Initialization();
-	 m_hccOPItem->SetFrameRect(CGRectMake(480-103, 120, 40, 200+2));
-	 m_hccOPItem->SetRectInit(CGRectMake(480-103, 120, 40, 200+2));
+	 m_hccOPItem->SetFrameRect(CCRectMake(480-103, 120, 40, 200+2));
+	 m_hccOPItem->SetRectInit(CCRectMake(480-103, 120, 40, 200+2));
 	 m_hccOPItem->SetButtonName("ui_menu_scroll.png");
 	 m_hccOPItem->SetUINodeInterval(20);
 
@@ -513,21 +513,21 @@ void GameScene::Initialization(int mapID)
 	 m_btnMap->Initialization();
 	 m_btnMap->SetImage(m_picMap);
 	 m_btnMap->SetDelegate(this);
-	 m_btnMap->SetFrameRect(CGRectMake(0, 0, 40, 40));
+	 m_btnMap->SetFrameRect(CCRectMake(0, 0, 40, 40));
 	 m_hccOPItem->AddUINode(m_btnMap);
 
 	 m_btnTarget = new NDUIButton;
 	 m_btnTarget->Initialization();
 	 m_btnTarget->SetImage(m_picTarget);
 	 m_btnTarget->SetDelegate(this);
-	 m_btnTarget->SetFrameRect(CGRectMake(0, 0, 40, 40));
+	 m_btnTarget->SetFrameRect(CCRectMake(0, 0, 40, 40));
 	 m_hccOPItem->AddUINode(m_btnTarget);
 
 	 m_btnInterative = new NDUIButton;
 	 m_btnInterative->Initialization();
 	 m_btnInterative->SetImage(m_picInterative);
 	 m_btnInterative->SetDelegate(this);
-	 m_btnInterative->SetFrameRect(CGRectMake(0, 0, 40, 40));
+	 m_btnInterative->SetFrameRect(CCRectMake(0, 0, 40, 40));
 	 m_hccOPItem->AddUINode(m_btnInterative);
 
 	 m_hccOPItem->SetDelegate(this);
@@ -539,8 +539,8 @@ void GameScene::Initialization(int mapID)
 	 {
 	 m_hccOPMenu = new NDUIHControlContainer;
 	 m_hccOPMenu->Initialization();
-	 m_hccOPMenu->SetFrameRect(CGRectMake(480-40, 0, 40, 320));
-	 m_hccOPMenu->SetRectInit(CGRectMake(480-40, 0, 40, 320));
+	 m_hccOPMenu->SetFrameRect(CCRectMake(480-40, 0, 40, 320));
+	 m_hccOPMenu->SetRectInit(CCRectMake(480-40, 0, 40, 320));
 	 m_hccOPMenu->SetButtonName("ui_item_scroll.png");
 	 m_hccOPMenu->SetUINodeInterval(0);
 	 m_hccOPMenu->SetBGImage("ui_menu_line.png");
@@ -550,14 +550,14 @@ do \
 { \
 NDUILayer *layer = new NDUILayer; \
 layer->Initialization(); \
-layer->SetFrameRect(CGRectMake(0, 0, 40, 40)); \
+layer->SetFrameRect(CCRectMake(0, 0, 40, 40)); \
 layer->SetBackgroundImage(GetImgPath("ui_btn_bg.png")); \
 m_hccOPMenu->AddUINode(layer); \
 btn = new NDUIButton; \
 btn->Initialization(); \
 btn->SetImage(pic); \
 btn->SetDelegate(this); \
-btn->SetFrameRect(CGRectMake(0, 0, 40, 40)); \
+btn->SetFrameRect(CCRectMake(0, 0, 40, 40)); \
 layer->AddChild(btn); \
 } while (0);
 
@@ -580,12 +580,12 @@ layer->AddChild(btn); \
 	 */
 // 	m_anilayerRequest = new NDUIAniLayer;
 // 	m_anilayerRequest->Initialization("cuebubble.spr");
-// 	m_anilayerRequest->SetFrameRect(CGRectMake(0, 0, 480, 320));
+// 	m_anilayerRequest->SetFrameRect(CCRectMake(0, 0, 480, 320));
 // 	//原先x坐标�??由于模拟器盲�??,无法测试,故把x坐标调为40
 // //#ifdef DEBUG
-// 	m_anilayerRequest->SetAniRectXYSize(CGRectMake(0, 320-53-9, 57, 53), CGSizeMake(17, 17));
+// 	m_anilayerRequest->SetAniRectXYSize(CCRectMake(0, 320-53-9, 57, 53), CCSizeMake(17, 17));
 // //#else
-// 	//m_anilayerRequest->SetAniRectXYSize(CGRectMake(0, 120, 25, 22), CGSizeMake(2, 2));
+// 	//m_anilayerRequest->SetAniRectXYSize(CCRectMake(0, 120, 25, 22), CCSizeMake(2, 2));
 // //#endif
 // 	m_anilayerRequest->SetCurrentAnimation(0);
 // 	m_anilayerRequest->SetDelegate(this);
@@ -598,11 +598,11 @@ layer->AddChild(btn); \
 	/*
 	 m_anilayerMail = new NDUIAniLayer;
 	 m_anilayerMail->Initialization("mail_flash.spr");
-	 m_anilayerMail->SetFrameRect(CGRectMake(0, 0, 480, 320));
+	 m_anilayerMail->SetFrameRect(CCRectMake(0, 0, 480, 320));
 	 #ifdef DEBUG
-	 m_anilayerMail->SetAniRectXYSize(CGRectMake(40, 160, 25, 17), CGSizeMake(2, 2));
+	 m_anilayerMail->SetAniRectXYSize(CCRectMake(40, 160, 25, 17), CCSizeMake(2, 2));
 	 #else
-	 m_anilayerMail->SetAniRectXYSize(CGRectMake(0, 160, 25, 17), CGSizeMake(2, 2));
+	 m_anilayerMail->SetAniRectXYSize(CCRectMake(0, 160, 25, 17), CCSizeMake(2, 2));
 	 #endif
 	 m_anilayerMail->SetCurrentAnimation(0);
 	 m_anilayerMail->SetDelegate(this);
@@ -686,14 +686,14 @@ layer->AddChild(btn); \
 
 	NDUILayer* pkLayer = new NDUILayer;
 	pkLayer->Initialization();
-	pkLayer->SetFrameRect(CGRectMake(0, 0, 36, 42));
+	pkLayer->SetFrameRect(CCRectMake(0, 0, 36, 42));
 
 	NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture(
 			NDPath::GetImgPathBattleUI("scenerolehandle.png"), false);
 	m_pkHeadShowImage = new NDUIImage;
 	m_pkHeadShowImage->Initialization();
 	m_pkHeadShowImage->SetPicture(pic, true);
-	m_pkHeadShowImage->SetFrameRect(CGRectMake(0, 0, 27, 46));
+	m_pkHeadShowImage->SetFrameRect(CCRectMake(0, 0, 27, 46));
 	AddUIChild(m_pkHeadShowImage, 1);
 
 	m_btnHeadShow = new NDUIButton;
@@ -701,9 +701,9 @@ layer->AddChild(btn); \
 	m_picHeadShow = NDPicturePool::DefaultPool()->AddPicture(
 			NDPath::GetImgPathBattleUI("handlearraw.png"), false);
 	m_picHeadShow->Rotation(PictureRotation180);
-	m_btnHeadShow->SetImage(m_picHeadShow, true, CGRectMake(10, 13, 9, 16),
+	m_btnHeadShow->SetImage(m_picHeadShow, true, CCRectMake(10, 13, 9, 16),
 			true);
-	m_btnHeadShow->SetFrameRect(CGRectMake(0, 0, 27, 46));
+	m_btnHeadShow->SetFrameRect(CCRectMake(0, 0, 27, 46));
 	m_btnHeadShow->SetDelegate(this);
 	pkLayer->AddChild(m_btnHeadShow);
 	AddUIChild(pkLayer, 1);
@@ -714,7 +714,7 @@ layer->AddChild(btn); \
 	 */
 // 	m_targetHead = new TargetHeadInMap;
 // 	m_targetHead->Initialization();
-// 	m_targetHead->SetFrameRect(CGRectMake(210.0f, 0.0f, 87.0f, 40.0f));
+// 	m_targetHead->SetFrameRect(CCRectMake(210.0f, 0.0f, 87.0f, 40.0f));
 	/***
 	 * 临时性注�?? 郭浩
 	 * end
@@ -725,7 +725,7 @@ layer->AddChild(btn); \
 	imgShrinkBg->SetPicture(
 			NDPicturePool::DefaultPool()->AddPicture(
 					NDPath::GetImgPathBattleUI("bar_shrink.png"), false));
-	imgShrinkBg->SetFrameRect(CGRectMake(35.5, 284, 62, 36));
+	imgShrinkBg->SetFrameRect(CCRectMake(35.5, 284, 62, 36));
 	AddUIChild(imgShrinkBg);
 
 	imgShrinkBg = new NDUIImage;
@@ -734,7 +734,7 @@ layer->AddChild(btn); \
 			NDPicturePool::DefaultPool()->AddPicture(
 					NDPath::GetImgPathBattleUI("bar_shrink.png"), false));
 	imgShrinkBg->SetFrameRect(
-			CGRectMake(kWinSize.width - 66.5 - 31, 284, 62, 36));
+			CCRectMake(kWinSize.width - 66.5 - 31, 284, 62, 36));
 	AddUIChild(imgShrinkBg);
 
 	/***
@@ -746,7 +746,7 @@ layer->AddChild(btn); \
 // 	m_quickInteration = new QuickInteraction;
 // 	m_quickInteration->Initialization();
 // 	//m_quickInteration->SetBackgroundColor(ccc4(255, 0, 255, 255));
-// 	m_quickInteration->SetFrameRect(CGRectMake(66.5, 247.0f, 347, 75.0f));
+// 	m_quickInteration->SetFrameRect(CCRectMake(66.5, 247.0f, 347, 75.0f));
 // 	AddUIChild(m_quickInteration);
 	/***
 	 * 临时性注�?? 郭浩
@@ -755,7 +755,7 @@ layer->AddChild(btn); \
 
 	pkLayer = new NDUILayer;
 	pkLayer->Initialization();
-	pkLayer->SetFrameRect(CGRectMake(35.5, 284, 62, 36));
+	pkLayer->SetFrameRect(CCRectMake(35.5, 284, 62, 36));
 
 	NDUIImage* imgQuickInterationShrink = new NDUIImage;
 	imgQuickInterationShrink->Initialization();
@@ -763,7 +763,7 @@ layer->AddChild(btn); \
 			NDPicturePool::DefaultPool()->AddPicture(
 					NDPath::GetImgPathBattleUI("bottom_shrink.png"), false),
 			true);
-	imgQuickInterationShrink->SetFrameRect(CGRectMake(14, 14, 34, 22));
+	imgQuickInterationShrink->SetFrameRect(CCRectMake(14, 14, 34, 22));
 	pkLayer->AddChild(imgQuickInterationShrink);
 
 	/***
@@ -772,7 +772,7 @@ layer->AddChild(btn); \
 	 */
 // 	m_quickItem = new QuickItem;
 // 	m_quickItem->Initialization();
-// 	m_quickItem->SetFrameRect(CGRectMake(66.5, 244.0f, 400.0f, 78.0f));
+// 	m_quickItem->SetFrameRect(CCRectMake(66.5, 244.0f, 400.0f, 78.0f));
 // 	AddUIChild(m_quickItem);
 //	RefreshQuickItem();
 	/***
@@ -787,8 +787,8 @@ layer->AddChild(btn); \
 			NDPath::GetImgPathBattleUI("handlearraw.png"), false);
 	m_picQuickInteration->Rotation(PictureRotation90);
 	m_btnQuickInterationShrink->SetImage(m_picQuickInteration, true,
-			CGRectMake(10, 20, 16, 9), true);
-	m_btnQuickInterationShrink->SetFrameRect(CGRectMake(13, 00, 62, 56));
+			CCRectMake(10, 20, 16, 9), true);
+	m_btnQuickInterationShrink->SetFrameRect(CCRectMake(13, 00, 62, 56));
 	m_btnQuickInterationShrink->SetDelegate(this);
 	pkLayer->AddChild(m_btnQuickInterationShrink);
 	AddUIChild(pkLayer);
@@ -800,7 +800,7 @@ layer->AddChild(btn); \
 	TeamRefreh(false);
 }
 
-CGSize GameScene::GetSize()
+CCSize GameScene::GetSize()
 {
 	return m_pkMapLayerLogic->GetContentSize();
 }
@@ -916,7 +916,7 @@ void GameScene::ShowDirectKey(bool bShow)
 //	}
 }
 
-const CGRect RECT_MINI_MAP = CGRectMake(308.0f, 0.0f, 172.0f, 84.0f);
+const CCRect RECT_MINI_MAP = CCRectMake(308.0f, 0.0f, 172.0f, 84.0f);
 
 void GameScene::ShowMiniMap(bool bShow)
 {
@@ -1892,13 +1892,13 @@ void GameScene::OnButtonClick(NDUIButton* button)
 ////					lbText->SetText((*it).c_str()); 
 ////					lbText->SetFontSize(13); 
 ////					lbText->SetTextAlignment(LabelTextAlignmentCenter); 
-////					lbText->SetFrameRect(CGRectMake(0, 8, 120, 13)); 
+////					lbText->SetFrameRect(CCRectMake(0, 8, 120, 13)); 
 ////					lbText->SetFontColor(ccc4(16, 56, 66,255)); 
 ////					section->AddCell(lbText);
 //					
 //					NDUIButton *button = new NDUIButton;
 //					button->Initialization();
-//					button->SetFrameRect(CGRectMake(0, 0, 120, 30));
+//					button->SetFrameRect(CCRectMake(0, 0, 120, 30));
 //					button->SetTitle((*it).c_str());
 //					//button->SetFontColor(ccc4(16, 56, 66,255));
 //					button->SetFontColor(ccc4(0, 0, 0,255));
@@ -1913,7 +1913,7 @@ void GameScene::OnButtonClick(NDUIButton* button)
 //				
 //				source->AddSection(section);
 //				
-//				m_tlInteractive->SetFrameRect(CGRectMake((480-200)/2, (320-vec_str.size()*30-vec_str.size()-1)/2, 200, vec_str.size()*30+vec_str.size()+1));
+//				m_tlInteractive->SetFrameRect(CCRectMake((480-200)/2, (320-vec_str.size()*30-vec_str.size()-1)/2, 200, vec_str.size()*30+vec_str.size()+1));
 //				
 //				m_tlInteractive->SetVisible(true);
 //				
@@ -2042,18 +2042,18 @@ void GameScene::ShowRelieve(bool bShow)
 
 		m_relieveLayer = new NDUILayer;
 		m_relieveLayer->Initialization();
-		m_relieveLayer->SetFrameRect(CGRectMake(0, 0, 480, 320));
+		m_relieveLayer->SetFrameRect(CCRectMake(0, 0, 480, 320));
 		AddChild(m_relieveLayer, UIDIALOG_Z);
 
-		CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 
 		m_tlRelieve = new NDUITableLayer;
 		m_tlRelieve->Initialization();
 		m_tlRelieve->VisibleSectionTitles(false);
 		m_tlRelieve->SetDelegate(this);
-		//m_tlRelieve->SetFrameRect(CGRectMake(30, 10, 120, 60));
+		//m_tlRelieve->SetFrameRect(CCRectMake(30, 10, 120, 60));
 		m_tlRelieve->SetFrameRect(
-				CGRectMake((winsize.width - 120) / 2, (winsize.height - 60) / 2,
+				CCRectMake((winsize.width - 120) / 2, (winsize.height - 60) / 2,
 						120, 60));
 		m_relieveLayer->AddChild(m_tlRelieve);
 
@@ -2062,13 +2062,13 @@ void GameScene::ShowRelieve(bool bShow)
 
 		NDUIButton *button = new NDUIButton;
 		button->Initialization();
-		button->SetFrameRect(CGRectMake(0, 0, 120, 30));
+		button->SetFrameRect(CCRectMake(0, 0, 120, 30));
 		button->SetTitle(NDCommonCString("ReliveInCity"));
 		section->AddCell(button);
 
 		button = new NDUIButton;
 		button->Initialization();
-		button->SetFrameRect(CGRectMake(0, 0, 120, 30));
+		button->SetFrameRect(CCRectMake(0, 0, 120, 30));
 		button->SetTitle(NDCommonCString("ReliveUseItem"));
 		section->AddCell(button);
 
@@ -2314,7 +2314,7 @@ do \
 { \
 NDUIButton *button = new NDUIButton; \
 button->Initialization(); \
-button->SetFrameRect(CGRectMake(0, 0, 120, 30)); \
+button->SetFrameRect(CCRectMake(0, 0, 120, 30)); \
 button->SetTitle(pszText); \
 button->SetFocusColor(ccc4(253, 253, 253, 255)); \
 section->AddCell(button); \
@@ -2343,7 +2343,7 @@ section->AddCell(button); \
 	dataSource->AddSection(section);
 
 	m_tlShare->SetFrameRect(
-			CGRectMake((480 - 200) / 2,
+			CCRectMake((480 - 200) / 2,
 					(320 - 30 * vec_str.size() - vec_str.size() - 1) / 2, 200,
 					30 * vec_str.size() + vec_str.size() + 1));
 
@@ -2371,7 +2371,7 @@ do \
 { \
 NDUIButton *button = new NDUIButton; \
 button->Initialization(); \
-button->SetFrameRect(CGRectMake(0, 0, 200, 30)); \
+button->SetFrameRect(CCRectMake(0, 0, 200, 30)); \
 button->SetTitle(pszText); \
 button->SetTag(iid); \
 button->SetFocusColor(ccc4(253, 253, 253, 255)); \
@@ -2417,7 +2417,7 @@ section->AddCell(button); \
 		iHeight = 30 * vec_str.size() + vec_str.size() + 1;
 	}
 
-	tl->SetFrameRect(CGRectMake((480 - 120) / 2, iHeightX, 120, iHeight));
+	tl->SetFrameRect(CCRectMake((480 - 120) / 2, iHeightX, 120, iHeight));
 	tl->SetVisible(true);
 	SetUIShow(true);
 

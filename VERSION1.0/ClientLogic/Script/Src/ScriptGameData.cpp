@@ -1129,7 +1129,7 @@ NDScriptGameData::GetVecScriptGameData(eScriptData esd, unsigned int nKey, eRole
 		s_cache.saveCache( (int) esd, (int) nKey, (int)e, 0, (void*) mapSGD );
 	}
 	
-	CCAssert(mapSGD);
+	CCAssert(mapSGD, "GetVecScriptGameData");
 	return GetVecScriptGameDataByMap(*mapSGD, nId).vData;
 }
 

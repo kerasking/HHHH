@@ -26,6 +26,7 @@ public:
 	static NDPicture* GetItemByIconIndex(int iIconIndex, bool gray=false, bool smallicon=false);
 	
 	static NDPicture* GetSMItem(int nIconVal);
+	static NDPicture* GetSMItemNew(int nIconVal);
 protected:
 	ItemImage();
 	~ItemImage();

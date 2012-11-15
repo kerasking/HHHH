@@ -193,11 +193,11 @@ namespace NDEngine
 		bool IsVisibled(); override
 		
 	public:
-		CGPoint m_beginTouch, m_endTouch;
+		CCPoint m_beginTouch, m_endTouch;
 		//touch event center
-		virtual bool DispatchTouchBeginEvent(CGPoint beginTouch);
-		virtual bool DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch);
-		virtual bool DispatchTouchDoubleClickEvent(CGPoint beginTouch);
+		virtual bool DispatchTouchBeginEvent(CCPoint beginTouch);
+		virtual bool DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch);
+		virtual bool DispatchTouchDoubleClickEvent(CCPoint beginTouch);
 		// touch node down or up
 		void DealTouchNodeState(bool down);
 		void DealLongTouchNodeState(bool down);
@@ -213,7 +213,7 @@ namespace NDEngine
 		
 		bool m_dispatchTouchEndEvent;
 		
-		CGRect RectAdd(CGRect rect, int value);
+		CCSize RectAdd(CCSize rect, int value);
 		//NDUIEdit deals
 		void AfterEditClickEvent(NDUIEdit* edit);		
 	public:
@@ -231,19 +231,19 @@ namespace NDEngine
 		
 		void OnTimer(OBJID tag); override
 	
-		virtual bool DispatchLongTouchClickEvent(CGPoint beginTouch, CGPoint endTouch);
+		virtual bool DispatchLongTouchClickEvent(CCPoint beginTouch, CCPoint endTouch);
 		
-		virtual bool DispatchLongTouchEvent(CGPoint beginTouch, bool touch);
+		virtual bool DispatchLongTouchEvent(CCPoint beginTouch, bool touch);
 		
-		virtual bool DispatchDragOutEvent(CGPoint beginTouch, CGPoint moveTouch, bool longTouch=false);
+		virtual bool DispatchDragOutEvent(CCPoint beginTouch, CCPoint moveTouch, bool longTouch=false);
 		
-		virtual bool DispatchDragOutCompleteEvent(CGPoint beginTouch, CGPoint endTouch, bool longTouch=false);
+		virtual bool DispatchDragOutCompleteEvent(CCPoint beginTouch, CCPoint endTouch, bool longTouch=false);
 		
-		virtual bool DispatchDragInEvent(NDUINode* dragOutNode, CGPoint beginTouch, CGPoint endTouch, bool longTouch, bool dealByDefault=false);
+		virtual bool DispatchDragInEvent(NDUINode* dragOutNode, CCPoint beginTouch, CCPoint endTouch, bool longTouch, bool dealByDefault=false);
 		
-		virtual bool DispatchLayerMoveEvent(CGPoint beginPoint, NDTouch *moveTouch);
+		virtual bool DispatchLayerMoveEvent(CCPoint beginPoint, NDTouch *moveTouch);
 		
-		virtual bool DispatchDragOverEvent(CGPoint beginTouch, CGPoint moveTouch, bool longTouch=false);
+		virtual bool DispatchDragOverEvent(CCPoint beginTouch, CCPoint moveTouch, bool longTouch=false);
 		
 	private:
 		
@@ -267,7 +267,7 @@ namespace NDEngine
 		
 		bool m_enableDragOver;
 		
-		CGPoint m_moveTouch;
+		CCPoint m_moveTouch;
 		
 		bool m_bHorizontal;
 		

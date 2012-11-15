@@ -37,7 +37,7 @@ public NDUIDialogDelegate
 	
 public:
 	
-	void Initialization(CGPoint pos); override
+	void Initialization(CCPoint pos); override
 	
 	void OnButtonClick(NDUIButton* button); override
 	
@@ -55,8 +55,8 @@ private:
 	void resetOperate();
 	void SetVisible(bool visible); override
 	void setLabel(NDUILabel*& lb, const char* text);
-	void setLabelAndFrame(NDUILabel*& lb, const char* text, CGRect rect);
-	void setImage(NDUIImage*& image, CGRect rect);
+	void setLabelAndFrame(NDUILabel*& lb, const char* text, CCRect rect);
+	void setImage(NDUIImage*& image, CCRect rect);
 	void SetMoney(NDUIImage*& image, NDUIImage*& imageBG, NDUILabel*& lb, int value, int startX, int startY);
 	void refreshOperate();
 	
@@ -166,9 +166,9 @@ private:
 	void SetMailContent(const char *text, ccColor4B color=ccc4(255, 0, 0, 255), unsigned int fontsize=12);
 	void InitMoney(bool emoney, NDUIImage *& imageMoney, NDUIButton*& btnMoneyBG, NDUILabel*& lbMoney);
 	void setLabel(NDUILabel*& lb, const char* text);
-	void setLabelAndFrame(NDUILabel*& lb, const char* text, CGRect rect);
-	void setBtn(NDUIButton*& btn, CGRect rect);
-	void setImage(NDUIImage*& image, CGRect rect);
+	void setLabelAndFrame(NDUILabel*& lb, const char* text, CCRect rect);
+	void setBtn(NDUIButton*& btn, CCRect rect);
+	void setImage(NDUIImage*& image, CCRect rect);
 	void SetMoney(NDUIImage*& image, NDUIButton*& btnBG, NDUILabel*& lb, int value, int startX, int startY);
 	bool SetTextContent(int textType , const char* text);
 	

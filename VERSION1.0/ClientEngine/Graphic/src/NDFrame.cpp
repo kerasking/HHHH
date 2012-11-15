@@ -21,6 +21,9 @@
 using namespace cocos2d;
 using namespace NDEngine;
 
+//控制动画慢动作方便调试
+int g_slowDownMul = 1;
+
 NDFrameRunRecord::NDFrameRunRecord() :
 m_nNextFrameIndex(0),
 m_nCurrentFrameIndex(0),
@@ -86,12 +89,13 @@ void NDFrameRunRecord::NextFrame(int nTotalFrames)
 
 bool NDFrameRunRecord::isThisFrameEnd()
 {
-	//@zwq: 动画逐帧控制，应该按时间来，而不是Tick次数，先打个补丁！
-	float fMultiple = (1.0f / 24.0f) / CCDirector::sharedDirector()->getAnimationInterval();
-	//fMultiple *= 1.0f; //目前动作效果不好，加个参数细条，这些最好能在动画编辑器里调整。
-
+#if 1
 	return (m_nEnduration > 0)
-		&& (m_nRunCount >= int(m_nEnduration * fMultiple + 0.5f));
+		&& (m_nRunCount >= int(m_nEnduration * max(1,g_slowDownMul) + 0.5f));
+#else
+	return (m_nEnduration > 0) 
+		&& (m_nRunCount >= int(m_nEnduration + 0.5f));
+#endif
 }
 
 void NDFrameRunRecord::Clear()
@@ -142,7 +146,11 @@ NDFrame::~NDFrame()
 
 bool NDFrame::enableRunNextFrame(NDFrameRunRecord* pkFrameRunRecord)
 {
+#if 1
+	if (pkFrameRunRecord->getRunCount() >= m_nEnduration * max(1,g_slowDownMul) - 1)
+#else
 	if (pkFrameRunRecord->getRunCount() >= m_nEnduration - 1)
+#endif
 	{
 		pkFrameRunRecord->setRunCount(0);
 		return true;
@@ -167,7 +175,7 @@ void NDFrame::initTiles()
 	m_bNeedInitTitles = false;
 }
 
-void NDFrame::drawHeadAt(CGPoint pos)
+void NDFrame::drawHeadAt(CCPoint pos)
 {
 	///< 头像绘制已放于Lua，此处作废。郭浩
 }
@@ -222,7 +230,7 @@ void NDFrame::run(float fScale)
 			&& pkRecord->getReplace() <= REPLACEABLE_SKIRT_LIFT_LEG)
 		{
 			pkTile->setCutRect(
-				CGRectMake(0, 0,
+				CCRectMake(0, 0,
 				pkTile->getTexture()->getMaxS() * pkTile->getTexture()->getPixelsWide(),
 				pkTile->getTexture()->getMaxT() * pkTile->getTexture()->getPixelsHigh()));
 		}
@@ -232,7 +240,7 @@ void NDFrame::run(float fScale)
 			int nCutY = pkRecord->getY();
 			int nCutW = pkRecord->getW();
 			int nCutH = pkRecord->getH();
-			pkTile->setCutRect(CGRectMake(nCutX, nCutY, nCutW, nCutH)); //@check
+			pkTile->setCutRect(CCRectMake(nCutX, nCutY, nCutW, nCutH)); //@check
 		}
 
 		GLfloat x = pkAnimationGroup->getPosition().x;
@@ -267,7 +275,7 @@ void NDFrame::run(float fScale)
 #endif
 
 		pkTile->setDrawRect(
-			CGRectMake(	x, y, 
+			CCRectMake(	x, y, 
 			pkTile->getCutRect().size.width * fScale,
 			pkTile->getCutRect().size.height * fScale));
 

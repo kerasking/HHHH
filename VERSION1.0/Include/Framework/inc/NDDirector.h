@@ -162,14 +162,14 @@ namespace NDEngine
 //		作用：获取屏幕大小
 //		参数：无
 //		返回值：屏幕大小
-		CGSize GetWinSize();		
+		CCSize GetWinSize();		
 //
 //		函数：SetViewRect
 //		作用：设置节点的绘制区域，一旦设置了节点的绘制区域，则子节点的绘制区域也不会超过该区域范围；
 //			 如果使用该方法通常时在draw方法里调用；慎用。
 //		参数：rect相对于屏幕的区域，node被设置绘制区域的节点
 //		返回值：无
-		void SetViewRect(CGRect rect, NDNode* node);
+		void SetViewRect(CCSize rect, NDNode* node);
 //		
 //		函数：ResumeViewRect
 //		作用：恢复初始绘制区域

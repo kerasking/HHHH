@@ -66,7 +66,7 @@ void NDAutoPath::init()
 /* 从某一个像素点自动寻路到另外一个像素点(结果通过getPathPointArray方法获取)
  参数:fromPosition-起始像素点,toPoition-结束像素点,mapLayer-地图层指针,step-寻路间隔步数
  */
-bool NDAutoPath::autoFindPath(CGPoint kFromPosition, CGPoint kToPosition,
+bool NDAutoPath::autoFindPath(CCPoint kFromPosition, CCPoint kToPosition,
 		NDMapLayer* pkMapLayer, int nStep, bool bMustArrive/*=false*/,
 		bool bIgnoreMask/*=false*/)
 {
@@ -159,9 +159,9 @@ bool NDAutoPath::autoFindPath(CGPoint kFromPosition, CGPoint kToPosition,
 }
 
 /* 获取寻路后的得到的所有像素
- 返回值:向量引用(元素为CGPoint)
+ 返回值:向量引用(元素为CCPoint)
  */
-const std::vector<CGPoint>& NDAutoPath::getPathPointVetor()
+const std::vector<CCPoint>& NDAutoPath::getPathPointVetor()
 {
 	return m_kPointVector;
 }
@@ -213,7 +213,7 @@ void NDAutoPath::GetPath()
 	{
 		int iTimes = MAP_UNITSIZE / m_nStep;
 
-		CGPoint kPos;
+		CCPoint kPos;
 		NodeInfo* pkNode = kPath[0];
 		kPos.x = pkNode->nX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
 		kPos.y = pkNode->nY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;

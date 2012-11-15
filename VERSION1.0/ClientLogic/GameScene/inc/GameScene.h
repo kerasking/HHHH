@@ -146,7 +146,7 @@ public:
 	void ShowPaiHang(const std::vector<std::string>& vec_str,
 			const std::vector<int>& vec_id);
 
-	CGSize GetSize();
+	CCSize GetSize();
 
 	cocos2d::CCArray* GetSwitchs();
 
@@ -345,7 +345,7 @@ private:
 
 	static bool bWeaponBroken, bDefBroken, bRidePetBroken;
 
-	CGPoint m_playerPosWithMap;
+	CCPoint m_playerPosWithMap;
 
 	deque<int> m_stackUIMenu;
 

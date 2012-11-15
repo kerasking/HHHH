@@ -67,8 +67,8 @@ m_nState(0)
 	m_bUpdateDiff = false;
 
 	//m_picRing = NDPicturePool::DefaultPool()->AddPicture(RING_IMAGE);
-	//CGSize size = m_picRing->GetSize();
-	//m_picRing->Cut(CGRectMake(0, 0, size.width, size.height));
+	//CCSize size = m_picRing->GetSize();
+	//m_picRing->Cut(CCRectMake(0, 0, size.width, size.height));
 
 	m_nTeamID = 0;
 
@@ -78,7 +78,7 @@ m_nState(0)
 
 	m_bClear = false;
 
-	m_kOldPos = CGPointZero;
+	m_kOldPos = CCPointZero;
 
 	m_nServerCol = -1;
 	m_nServerRow = -1;
@@ -102,7 +102,7 @@ m_nState(0)
 	m_pkEffectArmorAniGroup = NULL;
 	m_pkEffectDacoityAniGroup = NULL;
 
-	m_kPosBackup = CGPointZero;
+	m_kPosBackup = CCPointZero;
 
 	m_nMarriageID = 0;
 
@@ -187,9 +187,9 @@ void NDManualRole::Update(unsigned long ulDiff)
 	{
 		if (m_kDequeWalk.size())
 		{
-			std::vector < CGPoint > vPosition;
+			std::vector < CCPoint > vPosition;
 			deque<int>::iterator it = m_kDequeWalk.begin();
-			CGPoint kCurrentPosition = GetPosition();
+			CCPoint kCurrentPosition = GetPosition();
 
 			for (; it != m_kDequeWalk.end(); it++)
 			{
@@ -268,8 +268,8 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 	//根据lookface获取人物图像
 	int nModelID = lookface % 1000;
 
-	NSString pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
-	NSString pString = CCString::stringWithFormat("%smodel_%d.spr", pstrAniPath->toStdString().c_str(), nModelID);
+	CCStringRef pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
+	CCStringRef pString = CCString::stringWithFormat("%smodel_%d.spr", pstrAniPath->toStdString().c_str(), nModelID);
 	NDSprite::Initialization(pString->toStdString().c_str());
 	m_bFaceRight = m_nDirect == 2;
 	m_nLookface = lookface;
@@ -289,11 +289,11 @@ void NDManualRole::ReLoadLookface(int lookface)
 	//defaultDeal();
 }
 
-void NDManualRole::Walk(CGPoint toPos, SpriteSpeed speed)
+void NDManualRole::Walk(CCPoint toPos, SpriteSpeed speed)
 {
 	//WriteCon( "NDManualRole::Walk(%d, %d)\r\n", (int)toPos.x, (int)toPos.y );
 
-	std::vector < CGPoint > vec_pos;
+	std::vector < CCPoint > vec_pos;
 	vec_pos.push_back(toPos);
 	WalkToPosition(vec_pos, speed, false);
 
@@ -352,7 +352,7 @@ SpriteSpeed NDManualRole::GetSpeed()
 	}
 }
 
-void NDManualRole::WalkToPosition(const std::vector<CGPoint>& kToPosVector,
+void NDManualRole::WalkToPosition(const std::vector<CCPoint>& kToPosVector,
 		SpriteSpeed eSpeed, bool bMoveMap, bool bMustArrive/*=false*/)
 {
 	if (kToPosVector.empty())
@@ -429,9 +429,9 @@ void NDManualRole::processTeamMemberMove(bool bDraw)
 // 		s_team_info info = *it;
 // 		if (info.team[0] == m_id) 
 // 		{
-// 			CGPoint posOld = m_oldPos;// ccp(GetPosition().x/16*16+DISPLAY_POS_X_OFFSET, GetPosition().y/16*16+DISPLAY_POS_Y_OFFSET);
-// 			CGPoint posNew = GetPosition();
-// 			//CGPoint tmppos = pos;
+// 			CCPoint posOld = m_oldPos;// ccp(GetPosition().x/16*16+DISPLAY_POS_X_OFFSET, GetPosition().y/16*16+DISPLAY_POS_Y_OFFSET);
+// 			CCPoint posNew = GetPosition();
+// 			//CCPoint tmppos = pos;
 // 			if (int(posOld.x) == 0 && int(posOld.y) == 0) 
 // 			{
 // 				break;
@@ -497,8 +497,8 @@ void NDManualRole::processTeamMemberMove(bool bDraw)
 // 							//NDLog("调和。。。。。");
 // 						}
 // 
-// 						  //CGPoint posMem = mem->GetPosition();
-// //							CGPoint posOld = posMem;
+// 						  //CCPoint posMem = mem->GetPosition();
+// //							CCPoint posOld = posMem;
 // //							int mdir = -1;
 // //							if (int(posMem.x) != int(pos.x) ) 
 // //							{
@@ -631,7 +631,7 @@ void NDManualRole::resetTeamPos()
 
 }
 
-void NDManualRole::teamMemberWalkToPosition(const std::vector<CGPoint>& toPos)
+void NDManualRole::teamMemberWalkToPosition(const std::vector<CCPoint>& toPos)
 {
 // 	NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
 // 	if (!layer) 
@@ -651,12 +651,12 @@ void NDManualRole::teamMemberWalkToPosition(const std::vector<CGPoint>& toPos)
 // 			int iLastTeamMember = 0;
 // 
 // 			NDMapMgr& mapmgrobj = NDMapMgrObj;
-// 			std::vector<CGPoint> deque_point[eTeamLen];
+// 			std::vector<CCPoint> deque_point[eTeamLen];
 // 			if (int(m_kPointList.size()) < iDealCount) 
 // 			{
 // 				return;
 // 			}
-// 			//for (std::vector<CGPoint>::iterator it = m_pointList.begin(); it != m_pointList.end(); it++)
+// 			//for (std::vector<CCPoint>::iterator it = m_pointList.begin(); it != m_pointList.end(); it++)
 // 			//				{
 // 			//					deque_point[iLastTeamMember].push_back((*it));
 // 			//				}
@@ -674,8 +674,8 @@ void NDManualRole::teamMemberWalkToPosition(const std::vector<CGPoint>& toPos)
 // 						continue;
 // 					}
 // 
-// 					CGPoint posCur = role->GetPosition();
-// 					CGPoint posLast  = rolelast->GetPosition();
+// 					CCPoint posCur = role->GetPosition();
+// 					CCPoint posLast  = rolelast->GetPosition();
 // 
 // 
 // 					role->WalkToPosition(toPos, SpriteSpeedStep4, false);
@@ -786,8 +786,8 @@ void NDManualRole::SetTeamToLastPos()
 // 		return;
 // 	}
 // 
-// 	std::vector < CGPoint > vec_pos;
-// 	CGPoint kCurrentPosition;
+// 	std::vector < CCPoint > vec_pos;
+// 	CCPoint kCurrentPosition;
 // 	if (m_kPointList.empty())
 // 	{
 // 		kCurrentPosition = GetPosition();
@@ -1025,10 +1025,15 @@ void NDManualRole::SetAction(bool bMove, bool bIgnoreFighting/*=false*/)
 
 		if (AssuredRidePet() && !isTransformed())
 		{
+			//WriteCon( "NDManualRole::SetAction() -- 骑宠移动\r\n" );
+
 			setMoveActionWithRidePet();
 		}
 		else
-		{ // 人物普通移动
+		{ 
+			//WriteCon( "NDManualRole::SetAction() -- 普通移动\r\n" );
+
+			// 人物普通移动
 			if (isTransformed())
 			{
 				AnimationListObj.moveAction(TYPE_MANUALROLE,
@@ -1059,10 +1064,16 @@ void NDManualRole::SetAction(bool bMove, bool bIgnoreFighting/*=false*/)
 		else if (IsInState(USERSTATE_PRACTISE))
 		{
 			AnimationListObj.sitAction(this, m_bFaceRight);
-		}else if (AssuredRidePet() && !isTransformed())
-		{// 骑宠站立
+		}
+		else if (AssuredRidePet() && !isTransformed())
+		{
+			//WriteCon( "NDManualRole::SetAction() -- 骑宠站立\r\n" );
+
+			// 骑宠站立
 			this->setStandActionWithRidePet();
-		}else {
+		}
+		else 
+		{
 			NDPlayer& player = NDPlayer::defaultHero();
 			if(&player == this)
 				AnimationListObj.standAction(TYPE_MANUALROLE, this, m_bFaceRight);
@@ -1070,7 +1081,6 @@ void NDManualRole::SetAction(bool bMove, bool bIgnoreFighting/*=false*/)
 				this->standAction(true);
 		}
 	}
-
 }
 
 bool NDManualRole::AssuredRidePet()
@@ -1078,7 +1088,7 @@ bool NDManualRole::AssuredRidePet()
 	return m_pkRidePet != NULL && m_bIsRide && !isTransformed();
 }
 
-void NDManualRole::SetPosition(CGPoint newPosition)
+void NDManualRole::SetPosition(CCPoint newPosition)
 {
 	//if (isTeamLeader())
 //		{
@@ -1192,29 +1202,29 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 			}
 		}
 	}
-	CGPoint pos = GetPosition();
+	CCPoint pos = GetPosition();
 
 	// 摆摊先处理
 	if (IsInState (USERSTATE_BOOTH))
 	{ // 摆摊不画骑宠
 		if (m_pkVendorPicture)
 		{
-			CGSize sizemap;
+			CCSize sizemap;
 			if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 			{
-				CGSize szVendor = m_pkVendorPicture->GetSize();
+				CCSize szVendor = m_pkVendorPicture->GetSize();
 				//把baserole坐标转成屏幕坐标
 				NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
-				CGPoint screen = pkLayer->GetScreenCenter();
-				CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+				CCPoint screen = pkLayer->GetScreenCenter();
+				CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 				m_kScreenPosition = ccpSub(GetPosition(),
 						ccpSub(screen,
-								CGPointMake(winSize.width / 2,
+								CCPointMake(winSize.width / 2,
 										winSize.height / 2)));
 
 				sizemap = pkLayer->GetContentSize();
 				m_pkVendorPicture->DrawInRect(
-						CGRectMake(pos.x - 13 - 8,
+						CCRectMake(pos.x - 13 - 8,
 								pos.y - 10 + 320 - sizemap.height,
 								szVendor.width, szVendor.height));
 			}
@@ -1236,11 +1246,11 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 		{
 			if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 			{
-				CGSize sizemap;
+				CCSize sizemap;
 				NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
 				sizemap = pkLayer->GetContentSize();
-				CGSize sizeGraveStone = m_pkGraveStonePicture->GetSize();
-				CGRect rect = CGRectMake(pos.x - 13 - 8,
+				CCSize sizeGraveStone = m_pkGraveStonePicture->GetSize();
+				CCRect rect = CCRectMake(pos.x - 13 - 8,
 						pos.y - 10 + 320 - sizemap.height, sizeGraveStone.width,
 						sizeGraveStone.height);
 
@@ -1352,7 +1362,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 
 	//if (m_talkBox && m_talkBox->IsVisibled())
 	//{
-	//	CGPoint scrPos = GetScreenPoint();
+	//	CCPoint scrPos = GetScreenPoint();
 	//	scrPos.x -= DISPLAY_POS_X_OFFSET;
 	//	scrPos.y -= DISPLAY_POS_Y_OFFSET;
 	//	m_talkBox->SetDisPlayPos(ccp(scrPos.x+8, scrPos.y-getGravityY()+30));
@@ -1409,16 +1419,16 @@ void NDManualRole::OnDrawEnd(bool bDraw)
 
 	if (IsInState(USERSTATE_FIGHTING) && m_pkBattlePicture)
 	{
-		CGSize sizemap;
+		CCSize sizemap;
 		if (node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
 			sizemap = node->GetContentSize();
-			CGPoint pos = GetPosition();
+			CCPoint pos = GetPosition();
 			pos.x -= DISPLAY_POS_X_OFFSET + 8;
 			pos.y -= DISPLAY_POS_Y_OFFSET + 48;
-			CGSize szBattle = m_pkBattlePicture->GetSize();
+			CCSize szBattle = m_pkBattlePicture->GetSize();
 			m_pkBattlePicture->DrawInRect(
-					CGRectMake(pos.x, pos.y + 320 - sizemap.height,
+					CCRectMake(pos.x, pos.y + 320 - sizemap.height,
 							szBattle.width, szBattle.height));
 		}
 	}
@@ -1426,7 +1436,7 @@ void NDManualRole::OnDrawEnd(bool bDraw)
 	if (m_pkEffectArmorAniGroup != NULL && m_pkEffectArmorAniGroup->GetParent()
 			&& !isTransformed())
 	{
-		CGPoint pos = GetPosition();
+		CCPoint pos = GetPosition();
 		pos.y += 6 - getGravityY() + m_pkEffectArmorAniGroup->GetHeight();
 		m_pkEffectArmorAniGroup->SetPosition(pos);
 		m_pkEffectArmorAniGroup->RunAnimation(bDraw);
@@ -1505,7 +1515,7 @@ void NDManualRole::drawEffects(bool bDraw)
 	if (!hasServerEffectFlag && m_pkEffectFlagAniGroup != NULL
 			&& m_pkEffectFlagAniGroup->GetParent())
 	{
-		CGPoint kPosition = GetPosition();
+		CCPoint kPosition = GetPosition();
 		int ty = 0;
 		if (isTransformed())
 		{
@@ -1530,14 +1540,14 @@ void NDManualRole::drawEffects(bool bDraw)
 
 // 	if (m_pkEffectFeedPetAniGroup != NULL && m_pkEffectFeedPetAniGroup->GetParent() && m_pBattlePetShow && !bTransform)
 // 	{
-// 		CGPoint pos = m_pBattlePetShow->GetPosition();
+// 		CCPoint pos = m_pBattlePetShow->GetPosition();
 // 		m_pkEffectFeedPetAniGroup->SetPosition(ccp(pos.x, pos.y+8));
 // 		m_pkEffectFeedPetAniGroup->RunAnimation(bDraw);
 // 	}
 
 	//if (effectArmorAniGroup != NULL && effectArmorAniGroup->GetParent() && !bTransform)
 //		{
-//			CGPoint pos = GetPosition();
+//			CCPoint pos = GetPosition();
 //			pos.y += 6-getGravityY()+effectArmorAniGroup->GetHeight();
 //			effectArmorAniGroup->SetPosition(pos);
 //			effectArmorAniGroup->RunAnimation(bDraw);
@@ -1668,9 +1678,9 @@ void NDManualRole::UpdateState(int nState, bool bSet)
 		if (bSet)
 		{
 			if (!m_pkBattlePicture)
-			{
-				m_pkBattlePicture = NDPicturePool::DefaultPool()->AddPicture(
-						NDPath::GetImgPath("battle.png"));
+			{//--Guosen 2012.11.9//
+				//m_pkBattlePicture = NDPicturePool::DefaultPool()->AddPicture(
+				//		NDPath::GetImgPath("battle.png"));
 			}
 		}
 		else
@@ -1831,7 +1841,7 @@ bool NDManualRole::isTransformed()
 
 void NDManualRole::playerLevelUp()
 {
-	CGPoint pos = GetPosition();
+	CCPoint pos = GetPosition();
 
 	if (IsKindOfClass(RUNTIME_CLASS(NDPlayer)) && GetParent()
 			&& !GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
@@ -1867,7 +1877,7 @@ void NDManualRole::playerLevelUp()
 
 void NDManualRole::playerMarry()
 {
-	CGPoint pos = GetPosition();
+	CCPoint pos = GetPosition();
 
 	if (IsKindOfClass(RUNTIME_CLASS(NDPlayer)) && GetParent()
 			&& !GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
@@ -1947,7 +1957,7 @@ void NDManualRole::ShowNameLabel(bool bDraw)
 	bool isEnemy = false;
 	std::string names = m_strName;
 	NDPlayer& player = NDPlayer::defaultHero();
-	CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
 	int iX = GetPosition().x - DISPLAY_POS_X_OFFSET;
 	int iY = GetPosition().y; // - DISPLAY_POS_Y_OFFSET; //@check
 
@@ -2086,24 +2096,24 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 	lable[0]->SetFontColor(color1);
 /*	lable[1]->SetFontColor(color2);*/
 
-	CGSize sizemap;
+	CCSize sizemap;
 	sizemap = m_pkSubNode->GetContentSize();
-	CGSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
 	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
 
 	//** chh 2012-07-04 **//
-	//lable[1]->SetFrameRect(CGRectMake(x+1, y+sizewin.height+1-sizemap.height, sizewin.width, (LABLESIZE+5)*fScale));
-	//lable[0]->SetFrameRect(CGRectMake(x, y+sizewin.height-sizemap.height, sizewin.width, (LABLESIZE+5)*fScale));
+	//lable[1]->SetFrameRect(CCRectMake(x+1, y+sizewin.height+1-sizemap.height, sizewin.width, (LABLESIZE+5)*fScale));
+	//lable[0]->SetFrameRect(CCRectMake(x, y+sizewin.height-sizemap.height, sizewin.width, (LABLESIZE+5)*fScale));
 	NDAnimation *animate = (NDAnimation *)m_pkAniGroup->getAnimations()->objectAtIndex(0);
-	CGSize fontSize = getStringSize(lable[0]->GetText().c_str(), lable[0]->GetFontSize());
-	CGRect currAnimateRect = animate->getRect();
+	CCSize fontSize = getStringSize(lable[0]->GetText().c_str(), lable[0]->GetFontSize());
+	CCRect currAnimateRect = animate->getRect();
 	int newX = this->GetPosition().x - fontSize.width/2;
 	int newY = this->GetPosition().y - currAnimateRect.size.height - fontSize.height/2;
 	//int newX = x - fontSize.width/2;
 	//int newY = y;
 
-	lable[0]->SetFrameRect(CGRectMake(newX+1*fScale, newY, fontSize.width, fontSize.height));
-	lable[1]->SetFrameRect(CGRectMake(newX, newY, fontSize.width, fontSize.height));
+	lable[0]->SetFrameRect(CCRectMake(newX+1*fScale, newY, fontSize.width, fontSize.height));
+	lable[1]->SetFrameRect(CCRectMake(newX, newY, fontSize.width, fontSize.height));
 	lable[1]->SetVisible(false);
 // 	if(m_nQuality>-1){
 // 		ccColor4B cColor4 = ScriptMgrObj.excuteLuaFuncRetColor4("GetColor", "Item",m_nQuality);
@@ -2187,7 +2197,7 @@ void NDManualRole::BackupPositon()
 	m_kPosBackup = GetPosition();
 }
 
-CGPoint NDManualRole::GetBackupPosition()
+CCPoint NDManualRole::GetBackupPosition()
 {
 	return m_kPosBackup;
 }
@@ -2335,7 +2345,7 @@ void NDManualRole::drawServerEffect(std::vector<ServerEffect>& vEffect,
 		return;
 	}
 
-	CGSize parentSize = parent->GetContentSize();
+	CCSize parentSize = parent->GetContentSize();
 
 	for_vec(vEffect, std::vector < ServerEffect > ::iterator)
 	{
@@ -2422,7 +2432,7 @@ bool NDManualRole::IsServerEffectHasQiZhi()
 	return false;
 }
 
-CGRect NDManualRole::GetFocusRect()
+CCRect NDManualRole::GetFocusRect()
 {
 	int tx = m_kPosition.x - DISPLAY_POS_X_OFFSET - 4;
 	int ty = 0;
@@ -2431,7 +2441,7 @@ CGRect NDManualRole::GetFocusRect()
 
 	if (IsInGraveStoneState() && m_pkGraveStonePicture)
 	{
-		CGSize sizeGraveStone = m_pkGraveStonePicture->GetSize();
+		CCSize sizeGraveStone = m_pkGraveStonePicture->GetSize();
 		h = sizeGraveStone.height;
 		ty = m_kPosition.y - 16;
 		w = sizeGraveStone.width;
@@ -2450,7 +2460,7 @@ CGRect NDManualRole::GetFocusRect()
 		w = GetWidth();
 	}
 
-	return CGRectMake(tx, ty, w, h);
+	return CCRectMake(tx, ty, w, h);
 }
 
 bool NDManualRole::IsInGraveStoneState()
@@ -2725,8 +2735,8 @@ bool NDManualRole::IsDirFaceRight(int nDir)
 		}
 		NDDirector* director		= NDDirector::DefaultDirector();
 		float fScaleFactor			= director->GetScaleFactor();
-		CGSize sizeEffectParent		= pParent->GetContentSize();
-		CGPoint posRole				= this->GetPosition();
+		CCSize sizeEffectParent		= pParent->GetContentSize();
+		CCPoint posRole				= this->GetPosition();
 		for (int j = eSM_EFFECT_ALIGNMENT_BEGIN; j < eSM_EFFECT_ALIGNMENT_END; j++) 
 		{
 			std::map<std::string, NDLightEffect*>& mapEffect	= m_kArrMapSMEffect[nDrawOrder][j];
@@ -2734,7 +2744,7 @@ bool NDManualRole::IsDirFaceRight(int nDir)
 			{
 				continue;
 			}
-			CGPoint posOffect		= CGPointZero;
+			CCPoint posOffect		= CCPointZero;
 			if (eSM_EFFECT_ALIGNMENT_TOP == j)
 			{
 				posOffect			= ccp(0, -FIGHTER_HEIGHT * fScaleFactor);

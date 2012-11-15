@@ -8,7 +8,7 @@
  */
 
 #include "NDTip.h"
-#include "CGPointExtension.h"
+#include "CCPointExtension.h"
 #include "NDDirector.h"
 #include "NDUtility.h"
 
@@ -24,7 +24,7 @@ LayerTip::LayerTip()
 	
 	m_triangleNode = NULL;
 	
-	m_posTalk = CGPointZero;
+	m_posTalk = CCPointZero;
 	
 	m_bNeedCacl = true;
 	
@@ -80,7 +80,7 @@ void LayerTip::draw()
 	
 	if (!m_lbTip ) 
 	{
-		this->SetFrameRect(CGRectZero);
+		this->SetFrameRect(CCRectZero);
 		m_crRect->SetVisible(false);
 		m_line[0]->SetVisible(false);
 		m_line[1]->SetVisible(false);
@@ -91,7 +91,7 @@ void LayerTip::draw()
 	std::string str = m_lbTip->GetText();
 	if (str.empty()) 
 	{
-		this->SetFrameRect(CGRectZero);
+		this->SetFrameRect(CCRectZero);
 		m_crRect->SetVisible(false);
 		m_line[0]->SetVisible(false);
 		m_line[1]->SetVisible(false);
@@ -106,7 +106,7 @@ void LayerTip::draw()
 	}
 }
 
-void LayerTip::SetFrameRect(CGRect rect)
+void LayerTip::SetFrameRect(CCRect rect)
 {
 	NDUILayer::SetFrameRect(rect);
 	
@@ -151,28 +151,28 @@ void LayerTip::SetTextColor(ccColor4B color)
 	}
 }
 
-CGSize LayerTip::GetTipSize()
+CCSize LayerTip::GetTipSize()
 {
 	if (!m_lbTip) 
 	{
-		return CGSizeZero;
+		return CCSizeZero;
 	}
 	
 	std::string str = m_lbTip->GetText();
 	
 	if (str.empty()) 
 	{
-		return CGSizeZero;
+		return CCSizeZero;
 	}
 	
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 	
 	if (m_iWidth != 0) 
 	{
 		winsize.width = m_iWidth;
 	}
 	
-	CGSize dim;
+	CCSize dim;
 	dim = getStringSizeMutiLine(str.c_str(), m_lbTip->GetFontSize(), winsize);
 	dim.height = dim.height+6;
 	dim.width = dim.width+10;
@@ -198,7 +198,7 @@ void LayerTip::SetTalkStyle(bool bSet)
 	m_bNeedCacl = true;
 }
 
-void LayerTip::SetTalkDisplayPos(CGPoint pos)
+void LayerTip::SetTalkDisplayPos(CCPoint pos)
 {
 	m_posTalk = pos;
 	m_bNeedCacl = true;
@@ -206,8 +206,8 @@ void LayerTip::SetTalkDisplayPos(CGPoint pos)
 
 void LayerTip::recacl()
 {
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
-	CGRect rect = this->GetFrameRect();
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCRect rect = this->GetFrameRect();
 	
 	if (m_iWidth != 0) 
 	{
@@ -215,12 +215,12 @@ void LayerTip::recacl()
 	}
 	std::string str = m_lbTip->GetText();
 	
-	CGSize dim;
+	CCSize dim;
 	dim = getStringSizeMutiLine(str.c_str(), m_lbTip->GetFontSize(), winsize);
 	rect.size.height = dim.height+6;
 	rect.size.width = dim.width+10;
 	
-	CGRect rectFrame = rect;
+	CCRect rectFrame = rect;
 	if (m_bTalkStyle) 
 	{
 		rectFrame.size.height += 12;
@@ -234,18 +234,18 @@ void LayerTip::recacl()
 	
 	this->SetFrameRect(rectFrame);
 	
-	m_lbTip->SetFrameRect(CGRectMake(0, 3, rect.size.width, dim.height));
+	m_lbTip->SetFrameRect(CCRectMake(0, 3, rect.size.width, dim.height));
 	m_lbTip->SetVisible(true);
 	
 	if (m_crRect)
 	{
-		m_crRect->SetFrameRect(CGRectMake(0, 0, rect.size.width, rect.size.height));
+		m_crRect->SetFrameRect(CCRectMake(0, 0, rect.size.width, rect.size.height));
 		m_crRect->SetVisible(true);
 	}
 	
 	if (m_bTalkStyle) 
 	{
-		CGPoint first, second, third;
+		CCPoint first, second, third;
         first	= ccp(0, 0);
         second	= ccp(0, 0);
         third	= ccp(0, 0);
@@ -270,18 +270,18 @@ void LayerTip::recacl()
 				break;
 		}
 		
-		CGRect scrRect = this->GetScreenRect();
-		m_line[0]->SetFrameRect(CGRectMake(first.x, first.y, 0, 0));
+		CCRect scrRect = this->GetScreenRect();
+		m_line[0]->SetFrameRect(CCRectMake(first.x, first.y, 0, 0));
 		m_line[0]->SetFromPoint(ccp(0, 0));
 		m_line[0]->SetToPoint(third);
 		m_line[0]->SetVisible(true);
 		
-		m_line[1]->SetFrameRect(CGRectMake(second.x, second.y, 0, 0));
+		m_line[1]->SetFrameRect(CCRectMake(second.x, second.y, 0, 0));
 		m_line[1]->SetFromPoint(ccp(0, 0));
 		m_line[1]->SetToPoint(ccpSub(third, ccpSub(second, first)));
 		m_line[1]->SetVisible(true);
 		
-		m_triangleNode->SetFrameRect(CGRectMake(0, 0, 0, 0));
+		m_triangleNode->SetFrameRect(CCRectMake(0, 0, 0, 0));
 		m_triangleNode->SetPoints(first, second, ccpAdd(third, first));
 		m_triangleNode->SetVisible(true);
 	}
@@ -306,7 +306,7 @@ TalkBox::TalkBox()
 	isFirstNext=true;
 	timeForTalkMsg = 0;
 	moveSpeed = 13 >> 3;
-	m_pos = CGPointZero;
+	m_pos = CCPointZero;
 	memset(m_tip, 0, sizeof(m_tip));
 	
 	m_bConstant = false;
@@ -327,7 +327,7 @@ void TalkBox::addTalkMsg(std::string msg,int sec)
 	SetVisible(true);
 }
 
-void TalkBox::SetDisPlayPos(CGPoint pos)
+void TalkBox::SetDisPlayPos(CCPoint pos)
 {
 	if (!m_bConstant) {
 		nextShowY += pos.y-m_pos.y;
@@ -339,8 +339,8 @@ void TalkBox::Initialization()
 {
 	NDUILayer::Initialization();
 	
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
-	this->SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	this->SetFrameRect(CCRectMake(0, 0, winsize.width, winsize.height));
 	
 	this->SetBackgroundColor(ccc4(255, 255, 255, 0));
 	this->SetTouchEnabled(false);
@@ -397,7 +397,7 @@ void TalkBox::draw()
 		
 		m_tip[1]->SetTalkDisplayPos(ccp(m_pos.x, nextShowY));
 		
-		CGSize size = m_tip[1]->GetTipSize();
+		CCSize size = m_tip[1]->GetTipSize();
 		m_tip[0]->SetTalkDisplayPos(ccp(m_pos.x, nextShowY-size.height));
 		
 		
@@ -450,9 +450,9 @@ void TalkBox::SetTriangleAlign(TipTriangleAlign align)
 	if (m_tip[1]) m_tip[1]->SetTriangleAlign(align);
 }
 
-CGSize TalkBox::GetSize()
+CCSize TalkBox::GetSize()
 {
 	if (m_tip[0]) return m_tip[0]->GetTipSize();
 	
-	return CGSizeZero;
+	return CCSizeZero;
 }

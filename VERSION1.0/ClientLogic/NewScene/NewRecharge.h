@@ -78,7 +78,7 @@ public:
 	
 	~RechargeInfoBase();
 	
-	void Initialization(CGPoint point); override
+	void Initialization(CCPoint point); override
 	
 	void SetTitle(const char* title);
 	
@@ -109,7 +109,7 @@ public:
 	
 	virtual ~RechargeBaseInput();
 	
-	void Initialization(CGPoint point); override
+	void Initialization(CCPoint point); override
 	
 	void OnButtonClick(NDUIButton* button); override
 	
@@ -134,7 +134,7 @@ protected:
 	
 	void ShowCommitTipDialog();
 	
-	virtual CGSize InitInput();
+	virtual CCSize InitInput();
 	
 	virtual void OnCommit();
 	
@@ -171,7 +171,7 @@ public:
 	
 	~RechargeCardInput();
 	
-	CGSize InitInput(); override
+	CCSize InitInput(); override
 	
 	void OnCommit(); override
 	
@@ -193,7 +193,7 @@ public:
 	
 	~RechargeMessageInput();
 	
-	CGSize InitInput(); override
+	CCSize InitInput(); override
 	
 	void OnCommit(); override
 	
@@ -215,7 +215,7 @@ public:
 	
 	~CardBaseUI();
 	
-	void Initialization(CGRect rect); override
+	void Initialization(CCRect rect); override
 	
 	void draw(); override
 	

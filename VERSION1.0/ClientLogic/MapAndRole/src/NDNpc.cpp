@@ -81,7 +81,7 @@ m_eNPCState(NPC_STATE_NO_MARK)
 
 	m_bUnpassTurn = false;
 
-	m_kRectState = CGRectZero;
+	m_kRectState = CCRectZero;
 
 	m_npcLogic = new NDNpcLogic(this);
 }
@@ -139,9 +139,9 @@ void NDNpc::Initialization(int nLookface, bool bFaceRight/*true*/)
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);
 }
 
-void NDNpc::WalkToPosition(CGPoint toPos)
+void NDNpc::WalkToPosition(CCPoint toPos)
 {
-	std::vector<CGPoint> vec_pos; vec_pos.push_back(toPos);
+	std::vector<CCPoint> vec_pos; vec_pos.push_back(toPos);
 	this->MoveToPosition(vec_pos, SpriteSpeedStep4, false);
 }
 
@@ -157,10 +157,10 @@ void NDNpc::OnMoveEnd()
 		return;
 	}
 
-	CGPoint pos = m_dequePos.front();
+	CCPoint pos = m_dequePos.front();
 	m_dequePos.pop_front();
 
-	std::vector<CGPoint> vec_pos; vec_pos.push_back(pos);
+	std::vector<CCPoint> vec_pos; vec_pos.push_back(pos);
 	MoveToPosition(vec_pos, m_pkRidePet == NULL ? SpriteSpeedStep4 : SpriteSpeedStep8, false);
 }
 
@@ -169,7 +169,7 @@ bool NDNpc::OnDrawBegin(bool bDraw)
 	if (!NDDebugOpt::getDrawRoleNpcEnabled()) return false;
 
 	NDNode* pkNode = this->GetParent();
-	CGSize kSizeMap;
+	CCSize kSizeMap;
 
 	if (pkNode && pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 	{
@@ -209,12 +209,12 @@ bool NDNpc::OnDrawBegin(bool bDraw)
 
 // 	if (m_talkBox && m_talkBox->IsVisibled() && bDraw) 
 // 	{
-// 		CGPoint scrPos = GetScreenPoint();
+// 		CCPoint scrPos = GetScreenPoint();
 // 		scrPos.x -= DISPLAY_POS_X_OFFSET;
 // 		scrPos.y -= DISPLAY_POS_Y_OFFSET;
 // 		//NDLog(@"x=[%d],y=[%d]",int(scrPos.x), int(scrPos.y));
 // 
-// 		CGSize sizeTalk = m_talkBox->GetSize();
+// 		CCSize sizeTalk = m_talkBox->GetSize();
 // 
 // 		scrPos.x = scrPos.x-8+GetWidth()/2-sizeTalk.width/2;
 // 
@@ -222,7 +222,7 @@ bool NDNpc::OnDrawBegin(bool bDraw)
 // 
 // 		TipTriangleAlign align = TipTriangleAlignCenter;
 // 
-// 		CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+// 		CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 // 
 // 		if (scrPos.x + sizeTalk.width > winsize.width) 
 // 		{
@@ -252,7 +252,7 @@ void NDNpc::OnDrawEnd(bool bDraw)
 
 	NDNode* pkNode = this->GetParent();
 
-	CGSize kSizeMap;
+	CCSize kSizeMap;
 	if (pkNode && pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 	{
 		kSizeMap = pkNode->GetContentSize();
@@ -263,20 +263,20 @@ void NDNpc::OnDrawEnd(bool bDraw)
 	}
 
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
-	CGPoint kPlayerPos = kPlayer.GetPosition();
-	CGPoint kNPCPos = this->GetPosition();
+	CCPoint kPlayerPos = kPlayer.GetPosition();
+	CCPoint kNPCPos = this->GetPosition();
 
-	CGRect kRectRole;
-	CGRect kRectNPC;
-	kRectRole = CGRectMake(kPlayerPos.x - SHOW_NAME_ROLE_W,
+	CCRect kRectRole;
+	CCRect kRectNPC;
+	kRectRole = CCRectMake(kPlayerPos.x - SHOW_NAME_ROLE_W,
 			kPlayerPos.y - SHOW_NAME_ROLE_H, SHOW_NAME_ROLE_W << 1,
 			SHOW_NAME_ROLE_H << 1);
-	kRectNPC = CGRectMake(kNPCPos.x, kNPCPos.y, 16, 16);
-	bool bCollides = CGRectIntersectsRect(kRectRole, kRectNPC);
+	kRectNPC = CCRectMake(kNPCPos.x, kNPCPos.y, 16, 16);
+	bool bCollides = cocos2d::CCRect::CCRectIntersectsRect(kRectRole, kRectNPC);
 
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
 
-	CGSize kSize = getStringSize(m_strName.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
+	CCSize kSize = getStringSize(m_strName.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
 
 	int nShowX = kNPCPos.x - 30;		///< 临时性调整 郭浩
 	//高度临时调整，后续应该修改为在缩放时进行数据处理，否则坐标外部需要处理HJQ
@@ -313,9 +313,9 @@ void NDNpc::OnDrawEnd(bool bDraw)
 		{
 			m_pkPicBattle = NDPicturePool::DefaultPool()->AddPicture(
 					NDPath::GetImgPath("battle.png"));
-			CGSize sizeBattle = m_pkPicBattle->GetSize();
+			CCSize sizeBattle = m_pkPicBattle->GetSize();
 			m_pkPicBattle->DrawInRect(
-					CGRectMake(kNPCPos.x - 16,
+					CCRectMake(kNPCPos.x - 16,
 							GetPosition().y - 64
 									+ NDDirector::DefaultDirector()->GetWinSize().height
 									- kSizeMap.height, sizeBattle.width,
@@ -326,12 +326,12 @@ void NDNpc::OnDrawEnd(bool bDraw)
 	{
 		if (m_pkPicState != NULL)
 		{
-			CGSize sizeState = m_pkPicState->GetSize();
-			CGRect rect = CGRectMake(kNPCPos.x - sizeState.width / 2,
+			CCSize sizeState = m_pkPicState->GetSize();
+			CCRect rect = CCRectMake(kNPCPos.x - sizeState.width / 2,
 					nShowY + NDDirector::DefaultDirector()->GetWinSize().height
 							- kSizeMap.height - sizeState.height,
 					sizeState.width, sizeState.height);
-			m_kRectState = CGRectMake(kNPCPos.x - sizeState.width / 2,
+			m_kRectState = CCRectMake(kNPCPos.x - sizeState.width / 2,
 					nShowY - sizeState.height, sizeState.width,
 					sizeState.height);
 			m_pkPicState->DrawInRect(rect);
@@ -456,10 +456,10 @@ void NDNpc::AddWalkPoint(int col, int row)
 
 	if (!m_bIsMoving) 
 	{
-		CGPoint pos = m_dequePos.front();
+		CCPoint pos = m_dequePos.front();
 		m_dequePos.pop_front();
 
-		std::vector<CGPoint> vec_pos; vec_pos.push_back(pos);
+		std::vector<CCPoint> vec_pos; vec_pos.push_back(pos);
 		MoveToPosition(vec_pos, m_pkRidePet == NULL ? SpriteSpeedStep4 : SpriteSpeedStep8, false);
 	}
 }
@@ -491,7 +491,7 @@ void NDNpc::ShowUpdate(bool bshow, bool bDraw)
 
 	if (bshow) 
 	{
-		CGPoint pos = this->GetPosition();
+		CCPoint pos = this->GetPosition();
 		pos.x -= DISPLAY_POS_X_OFFSET;
 		pos.y -= DISPLAY_POS_Y_OFFSET;
 
@@ -527,7 +527,7 @@ void NDNpc::HandleNpcMask(bool bSet)
 		return;
 	}
 
-	CGPoint point = this->GetPosition();
+	CCPoint point = this->GetPosition();
 	int iCellY = int((point.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), iCellX = int((point.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
 
 	vector<int>* unpass = m_pkAniGroup->getUnpassPoint();
@@ -596,18 +596,18 @@ void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text,
 	pkLables[0]->SetFontColor(color1);
 	pkLables[1]->SetFontColor(color2);
 
-	CGSize kSizeMap;
+	CCSize kSizeMap;
 	kSizeMap = m_pkSubNode->GetContentSize();
-	CGSize kSizeWin = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize kSizeWin = NDDirector::DefaultDirector()->GetWinSize();
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
-	CGSize kSize = getStringSize(text.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
+	CCSize kSize = getStringSize(text.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
 	pkLables[1]->SetFrameRect(
-			CGRectMake(x - (kSize.width / 2) + 1,
+			CCRectMake(x - (kSize.width / 2) + 1,
 					y + NDDirector::DefaultDirector()->GetWinSize().height
 							- kSizeMap.height, kSizeWin.width,
 					30 * fScaleFactor));
 	pkLables[0]->SetFrameRect(
-			CGRectMake(x - (kSize.width / 2),
+			CCRectMake(x - (kSize.width / 2),
 					y + NDDirector::DefaultDirector()->GetWinSize().height
 							- kSizeMap.height, kSizeWin.width,
 					30 * fScaleFactor));
@@ -618,7 +618,7 @@ void NDNpc::initUnpassPoint()
 	if (m_pkAniGroup == nil)
 		return;
 
-	CGPoint point = this->GetPosition();
+	CCPoint point = this->GetPosition();
 
 	vector<int>* unpass = m_pkAniGroup->getUnpassPoint();
 	int unpassCount = 0;
@@ -627,7 +627,7 @@ void NDNpc::initUnpassPoint()
 	if (unpass == nil || unpassCount % 2 != 0) {
 		m_vUnpassRect.clear();
 
-		m_vUnpassRect.push_back(CGRectMake(point.x-4, point.y-16, 20, 16));
+		m_vUnpassRect.push_back(CCRectMake(point.x-4, point.y-16, 20, 16));
 
 		return;
 	}
@@ -638,12 +638,12 @@ void NDNpc::initUnpassPoint()
 		int cellX = unpass->at(i);
 		int cellY = unpass->at(i+1);
 
-		CGPoint pos;
+		CCPoint pos;
 		pos.x = (IsUnpassNeedTurn() ? (-cellX) : cellX) * 16 + point.x;
 		pos.y = cellY * 16 + 8 + point.y;
 
 
-		m_vUnpassRect.push_back(CGRectMake(pos.x, pos.y, 16, 16));
+		m_vUnpassRect.push_back(CCRectMake(pos.x, pos.y, 16, 16));
 	}
 }
 
@@ -652,15 +652,15 @@ bool NDNpc::IsUnpassNeedTurn()
 	return m_bUnpassTurn;
 }
 
-bool NDNpc::IsPointInside(CGPoint point)
+bool NDNpc::IsPointInside(CCPoint point)
 {
 	if (m_pkCurrentAnimation)
 	{
-		CGRect kRect = CGRectMake(this->m_kPosition.x - this->GetWidth() / 2,
+		CCRect kRect = CCRectMake(this->m_kPosition.x - this->GetWidth() / 2,
 				this->m_kPosition.y - this->GetHeight(), this->GetWidth(),
 				this->GetHeight());
 
-		if (CGRectContainsPoint(kRect, point))
+		if (cocos2d::CCRect::CCRectContainsPoint(kRect, point))
 		{
 			return true;
 		}
@@ -668,28 +668,28 @@ bool NDNpc::IsPointInside(CGPoint point)
 
 	if (m_pkPicState)
 	{
-		if (CGRectContainsPoint(m_kRectState, point))
+		if (cocos2d::CCRect::CCRectContainsPoint(m_kRectState, point))
 		{
 			return true;
 		}
 	}
 
-	std::vector<CGRect>::iterator it = m_vUnpassRect.begin();
+	std::vector<CCRect>::iterator it = m_vUnpassRect.begin();
 
 	for (; it != m_vUnpassRect.end(); it++) {
-		CGRect rect = *it;
+		CCRect rect = *it;
 		rect.origin.y -= 24;
 		rect.size.height += 24;
 		rect.origin.x -= 8;
 		rect.size.width += 8;
-		if (CGRectContainsPoint(rect, point))
+		if (cocos2d::CCRect::CCRectContainsPoint(rect, point))
 			return true;
 	}
 
 	return false;
 }
 
-bool NDNpc::getNearestPoint(CGPoint srcPoint, CGPoint& dstPoint)
+bool NDNpc::getNearestPoint(CCPoint srcPoint, CCPoint& dstPoint)
 {
 	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
 	if (!scene) return false;
@@ -790,7 +790,7 @@ bool NDNpc::getNearestPoint(CGPoint srcPoint, CGPoint& dstPoint)
 		resY = this->GetPosition().y;
 	}
 	
-	dstPoint = CGPointMake(resX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, resY*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET);
+	dstPoint = CCPointMake(resX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, resY*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET);
 
 	return true;
 }

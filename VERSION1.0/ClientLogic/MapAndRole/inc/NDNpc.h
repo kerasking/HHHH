@@ -53,7 +53,7 @@ public:
 	//......
 	void Initialization(int nLookface, bool bFaceRight=true); hide
 
-	void WalkToPosition(CGPoint toPos);
+	void WalkToPosition(CCPoint toPos);
 	//£­£­£­end
 	//void SetHairImage(int hair, int hairColor);
 	void SetExpresstionImage(int nExpresstion);
@@ -110,9 +110,9 @@ public:
 
 	void initUnpassPoint();
 
-	bool IsPointInside(CGPoint point);
+	bool IsPointInside(CCPoint point);
 
-	bool getNearestPoint(CGPoint srcPoint, CGPoint& dstPoint);
+	bool getNearestPoint(CCPoint srcPoint, CCPoint& dstPoint);
 
 	void ShowHightLight(bool bShow);
 public:
@@ -135,7 +135,7 @@ private:
 	NDPicture *m_pkPicBattle;
 	NDPicture *m_pkPicState;
 
-	std::deque<CGPoint> m_dequePos;
+	std::deque<CCPoint> m_dequePos;
 
 	bool m_bActionOnRing;
 	bool m_bDirectOnTalk;
@@ -150,11 +150,11 @@ private:
 
 	bool m_bFarmNpc;
 
-	std::vector<CGRect> m_vUnpassRect;
+	std::vector<CCRect> m_vUnpassRect;
 
 	bool m_bUnpassTurn;
 
-	CGRect m_kRectState;
+	CCRect m_kRectState;
 
 private:
 	bool IsUnpassNeedTurn();

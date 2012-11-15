@@ -98,7 +98,7 @@ public:
 	{
 		return contentHeight;
 	}
-	bool OnTextClick(CGPoint touchPos);
+	bool OnTextClick(CCPoint touchPos);
 protected:
 //		bool TouchEnd(NDTouch* touch); override
 

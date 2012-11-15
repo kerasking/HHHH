@@ -56,9 +56,9 @@ void CUIItemButton::SetLock(bool bSet)
 			return;
 		}
 		
-		CGSize picSize	= pic->GetSize();
-		CGRect rect	= this->GetFrameRect();
-		rect.origin	= CGPointZero;
+		CCSize picSize	= pic->GetSize();
+		CCRect rect	= this->GetFrameRect();
+		rect.origin	= CCPointZero;
 		if (picSize.width < rect.size.width)
 		{
 			rect.origin.x	= (rect.size.width - picSize.width) / 2;
@@ -107,7 +107,7 @@ unsigned int CUIItemButton::GetItemId()
 
 void CUIItemButton::ChangeItemType(unsigned int unItemType)
 {
-	this->SetImage(NULL, false, CGRectZero, true);
+	this->SetImage(NULL, false, CCRectZero, true);
 	
 	m_unItemType			= unItemType;
 	
@@ -120,16 +120,16 @@ void CUIItemButton::ChangeItemType(unsigned int unItemType)
            //pic->SetScale(0.5f*SCREEN_SCALE);
 			if (!m_bShowAdapt)
 			{
-				CGSize size = pic->GetSize();
-				CGRect frame = this->GetFrameRect();
-				CGRect rect	= CGRectMake((frame.size.width - size.width) / 2, 
+				CCSize size = pic->GetSize();
+				CCRect frame = this->GetFrameRect();
+				CCRect rect	= CCRectMake((frame.size.width - size.width) / 2, 
 										 (frame.size.height - size.height) / 2, 
 										 size.width, size.height);
 				this->SetImage(pic, true, rect, true);
 			}
 			else
 			{
-				this->SetImage(pic, false, CGRectZero, true);
+				this->SetImage(pic, false, CCRectZero, true);
 			}
 		}
 	}
@@ -173,7 +173,7 @@ void CUIItemButton::ChangeItemCount(unsigned int unItemCount)
 	{
 		this->RemoveChild(TAG_ITEM_COUNT, true);
 		
-		CGRect rect = this->GetFrameRect();
+		CCRect rect = this->GetFrameRect();
 		
 		pLabel		= new NDUILabel;
 		pLabel->Initialization();
@@ -181,7 +181,7 @@ void CUIItemButton::ChangeItemCount(unsigned int unItemCount)
 		pLabel->SetFontColor(ccc4(255, 204, 120, 255));
 		pLabel->SetTag(TAG_ITEM_COUNT);
 		pLabel->SetTextAlignment(LabelTextAlignmentRight);
-		pLabel->SetFrameRect(CGRectMake(
+		pLabel->SetFrameRect(CCRectMake(
 							 0.125 * rect.size.width, 
 							 0.5 * rect.size.height, 
 							 0.75 * rect.size.width,
@@ -235,13 +235,13 @@ void CUIItemButton::draw()
             {
                 NDUILayer* uiLayer = (NDUILayer*)parentNode;
                 
-                CGRect scrRect = this->GetScreenRect();					
+                CCRect scrRect = this->GetScreenRect();					
                 
                 //draw back ground
                 if (m_picBG)
                 {
                     if (m_useBackgroundCustomRect)
-                        m_picBG->DrawInRect(CGRectMake(scrRect.origin.x + m_backgroundCustomRect.origin.x, 
+                        m_picBG->DrawInRect(CCRectMake(scrRect.origin.x + m_backgroundCustomRect.origin.x, 
                                                        scrRect.origin.y + m_backgroundCustomRect.origin.y, 
                                                        m_backgroundCustomRect.size.width,
                                                        m_backgroundCustomRect.size.height));
@@ -273,7 +273,7 @@ void CUIItemButton::draw()
                         if (m_scrtTitle->isRunning()) 
                         {
                             m_scrtTitle->Stop();
-                            m_scrtTitle->SetTextPos(CGPointMake(5.0f, 0.0f));
+                            m_scrtTitle->SetTextPos(CCPointMake(5.0f, 0.0f));
                         }
                         
                         m_scrtTitle->SetFontColor(m_colorTitle);
@@ -293,7 +293,7 @@ void CUIItemButton::draw()
                     {
                         if (m_useCustomRect) 
                         {
-                            CGRect rect = CGRectMake(scrRect.origin.x + m_customRect.origin.x, 
+                            CCRect rect = CCRectMake(scrRect.origin.x + m_customRect.origin.x, 
                                                      scrRect.origin.y + m_customRect.origin.y, 
                                                      m_customRect.size.width, m_customRect.size.height);
                             if (m_touched && NULL == m_touchDownImage && m_touchDownStatus == TouchDownImage)
@@ -312,7 +312,7 @@ void CUIItemButton::draw()
                         }
                         else 
                         {
-                            CGRect rect		= scrRect;
+                            CCRect rect		= scrRect;
                             if (m_touched && NULL == m_touchDownImage && m_touchDownStatus == TouchDownImage)
                             {
                                 float fScale		= NDDirector::DefaultDirector()->GetScaleFactor();
@@ -335,7 +335,7 @@ void CUIItemButton::draw()
                     {
                      #if 0
    DrawPolygon(scrRect, ccc4(16, 56, 66, 255), 2);
-                        DrawPolygon(CGRectMake(scrRect.origin.x + 3, scrRect.origin.y + 3, scrRect.size.width - 6, scrRect.size.height - 6), 
+                        DrawPolygon(CCRectMake(scrRect.origin.x + 3, scrRect.origin.y + 3, scrRect.size.width - 6, scrRect.size.height - 6), 
                                    ccc4(134, 39, 0, 255), 1);						
                       
 						//×óÉÏ½Ç
@@ -374,7 +374,7 @@ void CUIItemButton::draw()
                         m_spriteArrow->SetPosition(ccpAdd(scrRect.origin, ccp(scrRect.size.width*5/6, scrRect.size.height*1/3)));
                     }
                     
-                    if (m_spriteArrow) m_spriteArrow->Run(CGSizeMake(480, 320));
+                    if (m_spriteArrow) m_spriteArrow->Run(CCSizeMake(480, 320));
 
                 }
                 
@@ -393,7 +393,7 @@ void CUIItemButton::draw()
                 //if (m_touched && !m_longTouched) 
                 {
                     float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-                    CGRect scrRectBig = scrRect;
+                    CCRect scrRectBig = scrRect;
                     
                     //±ß¿ò·Å´ó
                     
@@ -414,7 +414,7 @@ void CUIItemButton::draw()
                         {
                             if (m_touchDownImgUseCustomRect) 
                             {
-                                m_touchDownImage->DrawInRect(CGRectMake(scrRect.origin.x + m_touchDownImgCustomRect.origin.x, 
+                                m_touchDownImage->DrawInRect(CCRectMake(scrRect.origin.x + m_touchDownImgCustomRect.origin.x, 
                                                                         scrRect.origin.y + m_touchDownImgCustomRect.origin.y, 
                                                                         m_touchDownImgCustomRect.size.width, m_touchDownImgCustomRect.size.height));
                             }
@@ -427,7 +427,7 @@ void CUIItemButton::draw()
                         {
                             if (m_touchDownImgUseCustomRect) 
                             {
-                                m_combinepicTouchDownImg->DrawInRect(CGRectMake(scrRect.origin.x + m_touchDownImgCustomRect.origin.x, 
+                                m_combinepicTouchDownImg->DrawInRect(CCRectMake(scrRect.origin.x + m_touchDownImgCustomRect.origin.x, 
                                                                                 scrRect.origin.y + m_touchDownImgCustomRect.origin.y, 
                                                                                 m_touchDownImgCustomRect.size.width, m_touchDownImgCustomRect.size.height));
                             }
@@ -466,19 +466,19 @@ void CUIItemButton::draw()
                     {
                       //  DrawRecttangle(scrRect, ccc4(138, 8, 8, 255));
                         
-                        m_rimImageLT->DrawInRect(CGRectMake(scrRect.origin.x - 2, 
+                        m_rimImageLT->DrawInRect(CCRectMake(scrRect.origin.x - 2, 
                                                             scrRect.origin.y - 3, 
                                                             m_rimImageLT->GetSize().width, m_rimImageLT->GetSize().height));
                         
-                        m_rimImageRT->DrawInRect(CGRectMake(scrRect.origin.x + scrRect.size.width - m_rimImageRT->GetSize().width + 2, 
+                        m_rimImageRT->DrawInRect(CCRectMake(scrRect.origin.x + scrRect.size.width - m_rimImageRT->GetSize().width + 2, 
                                                             scrRect.origin.y - 3, 
                                                             m_rimImageRT->GetSize().width, m_rimImageRT->GetSize().height));
                         
-                        m_rimImageLB->DrawInRect(CGRectMake(scrRect.origin.x - 2, 
+                        m_rimImageLB->DrawInRect(CCRectMake(scrRect.origin.x - 2, 
                                                             scrRect.origin.y + scrRect.size.height - m_rimImageLB->GetSize().height + 3, 
                                                             m_rimImageLB->GetSize().width, m_rimImageLB->GetSize().height));
                         
-                        m_rimImageRB->DrawInRect(CGRectMake(scrRect.origin.x + scrRect.size.width - m_rimImageRT->GetSize().width + 2, 
+                        m_rimImageRB->DrawInRect(CCRectMake(scrRect.origin.x + scrRect.size.width - m_rimImageRT->GetSize().width + 2, 
                                                             scrRect.origin.y + scrRect.size.height - m_rimImageLB->GetSize().height +3, 
                                                             m_rimImageRB->GetSize().width, m_rimImageRB->GetSize().height));
                         
@@ -538,7 +538,7 @@ void CUIItemButton::draw()
                     {
                         if (m_bCustomFocusImageRect) 
                         {
-                            m_focusImage->DrawInRect(CGRectMake(scrRect.origin.x + m_customFocusImageRect.origin.x, 
+                            m_focusImage->DrawInRect(CCRectMake(scrRect.origin.x + m_customFocusImageRect.origin.x, 
                                                                 scrRect.origin.y + m_customFocusImageRect.origin.y, 
                                                                 m_customFocusImageRect.size.width, m_customFocusImageRect.size.height));
                         }
@@ -568,7 +568,7 @@ void CUIItemButton::draw()
                         
                         pic->SetColor(ccc4(255, 255, 255, 255));
                         float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
-                        CGRect rect = CGRectMake(scrRect.origin.x - 3 * fScale, 
+                        CCRect rect = CCRectMake(scrRect.origin.x - 3 * fScale, 
                                                  scrRect.origin.y - 3 * fScale, 
                                                  scrRect.size.width + 6 * fScale, 
                                                  scrRect.size.height + 6 * fScale);
@@ -586,7 +586,7 @@ void CUIItemButton::draw()
 						   if(m_touchDownImage){
                             
                             float scale = NDDirector::DefaultDirector()->GetScaleFactor();
-                            CGRect scrRectBig = rect;
+                            CCRect scrRectBig = rect;
                             scrRectBig.origin.x -= 1*scale;
                             scrRectBig.origin.y -= 1*scale;
                             scrRectBig.size.width +=2*scale;
@@ -615,7 +615,7 @@ void CUIItemButton::draw()
     
 	
 	/*
-	 CGRect scrRect = this->GetScreenRect();
+	 CCRect scrRect = this->GetScreenRect();
 	 
 	 DrawLine(scrRect.origin, 
 	 ccpAdd(scrRect.origin, ccp(scrRect.size.width, 0)),

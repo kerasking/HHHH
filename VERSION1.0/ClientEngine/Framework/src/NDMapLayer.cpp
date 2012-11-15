@@ -29,16 +29,20 @@
 #include "NDDebugOpt.h"
 #include "NDDataTransThread.h"
 #include "NDMsgDefine.h"
-#include "..\..\MapAndRole\inc\NDMonster.h"
-#include "..\..\Module\Battle\inc\BattleMgr.h"
+//#include "NDMonster.h"
+//#include "BattleMgr.h"
 #include "ScriptMgr.h"
 #include "NDSharedPtr.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "NDConsole.h"
+#endif
 #include "NDNpc.h"
 #include "NDPlayer.h"
 #include "NDManualRole.h"
 #include "NDMonster.h"
 #include "UsePointPls.h"
+#include "TQString.h"
+#include "TQPlatform.h"
 
 using namespace cocos2d;
 
@@ -52,20 +56,20 @@ using namespace cocos2d;
 
 extern NDMapLayer* g_pMapLayer = NULL; //for debug only.
 
-bool GetIntersectRect(CGRect first, CGRect second, CGRect& ret)
+bool GetIntersectRect(CCRect first, CCRect second, CCRect& ret)
 {
-	if (!CGRectIntersectsRect(first, second))
+	if (!cocos2d::CCRect::CCRectIntersectsRect(first, second))
 	{
 		return false;
 	}
 
 	//todo(zjh)
-	//ret = CGRectIntersection(first, second);
+	//ret = CCRectIntersection(first, second);
 
 	return true;
 }
 
-bool GetRectPercent(CGRect kRect, CGRect kSubRect, CGRect& kRet)
+bool GetRectPercent(CCRect kRect, CCRect kSubRect, CCRect& kRet)
 {
 	if (kRect.origin.x > kSubRect.origin.x || kRect.origin.y > kSubRect.origin.y
 			|| kRect.origin.x + kRect.size.width
@@ -93,17 +97,18 @@ IMPLEMENT_CLASS(NDMapLayer, NDLayer)
 
 NDMapLayer::NDMapLayer()
 {
+	WriteCon( "NDMapLayer::NDMapLayer()\r\n");
+
 	m_pkMapData = NULL;
 	m_nMapIndex = -1;
 	m_pkPicMap = NULL;
-	//m_texMap = NULL;
 	m_nBattleType = 0;
 	m_pkSwitchAniGroup = NULL;
-	m_pkMapData = NULL;
 	m_lbTime = NULL;
 	m_lbTitle = NULL;
 	m_lbTitleBg = NULL;
 	m_pkSwitchSpriteNode = 0;
+
 	m_pkOrders = CCArray::array();
 	m_pkOrders->retain();
 	m_pkOrdersOfMapscenesAndMapanimations = CCArray::array();
@@ -113,7 +118,8 @@ NDMapLayer::NDMapLayer()
 	//m_pkFrameRunRecordsOfMapSwitch = new CCMutableArray< NDFrameRunRecord* >();
 	m_pkFrameRunRecordsOfMapAniGroups = new CCArray();
 	m_pkFrameRunRecordsOfMapSwitch = new CCArray();
-
+	m_pkFrameRunRecordsOfMapSwitch->retain();
+	m_pkFrameRunRecordsOfMapAniGroups->retain();
 	m_bBattleBackground = false;
 	m_bNeedShow = true;
 	m_ndBlockTimer = NULL;
@@ -135,6 +141,8 @@ NDMapLayer::NDMapLayer()
 
 NDMapLayer::~NDMapLayer()
 {
+	WriteCon( "NDMapLayer::~NDMapLayer()\r\n");
+
 	CC_SAFE_RELEASE (m_pkOrders);
 	CC_SAFE_RELEASE (m_pkOrdersOfMapscenesAndMapanimations);
 	CC_SAFE_RELEASE (m_pkFrameRunRecordsOfMapAniGroups);
@@ -143,7 +151,7 @@ NDMapLayer::~NDMapLayer()
 	CC_SAFE_RELEASE (m_pkMapData);
 	CC_SAFE_RELEASE (m_pkSwitchAniGroup);
 
-	delete m_pkPicMap;
+	CC_SAFE_DELETE(m_pkPicMap);
 	CC_SAFE_DELETE (m_pkSubNode);
 	if (m_ndBlockTimer)
 	{
@@ -188,14 +196,14 @@ void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)
 	if (m_pkMapData)
 	{
 		SetContentSize(
-				CGSizeMake(
+				CCSizeMake(
 						m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
 						m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
 
 		MakeOrdersOfMapscenesAndMapanimations();
 		MakeFrameRunRecords();
 
-		CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 		m_kScreenCenter = ccp(kWinSize.width / 2,
 				GetContentSize().height - kWinSize.height / 2);
 		m_ccNode->setPosition(0, 0);
@@ -221,44 +229,29 @@ void NDMapLayer::Initialization(const char* mapFile)
 	NDLayer::Initialization();
 	SetTouchEnabled(true);
 
-	m_pkSwitchAniGroup =
-			NDAnimationGroupPool::defaultPool()->addObjectWithModelId(106);
+	m_pkSwitchAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithModelId(switch_ani_modelId);
 
 	m_pkMapData = new NDMapData;
+	ND_ASSERT_NO_RETURN(NULL == m_pkMapData);
 	m_pkMapData->initWithFile(mapFile);
 
-	if (m_pkMapData)
-	{
-		SetContentSize(
-				CGSizeMake(
-						m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
-						m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
+	SetContentSize(CCSizeMake(m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
+		                    m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
 
-		MakeOrdersOfMapscenesAndMapanimations();
-		MakeFrameRunRecords();
+	MakeOrdersOfMapscenesAndMapanimations();
+	MakeFrameRunRecords();
 
-		CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
-		m_kScreenCenter = ccp(kWinSize.width / 2,
-				GetContentSize().height - kWinSize.height / 2);
-		m_ccNode->setPosition(0, 0);
-
-		/*
-		 m_texMap = [CCTexture2D alloc] initWithContentSize:winSize];
-		 m_picMap = new NDPicture();
-		 m_picMap->SetTexture(m_texMap);
-
-		 ReflashMapTexture(ccp(-winSize.width / 2, -winSize.height / 2), m_screenCenter);
-		 m_areaCamarkSplit = IntersectionAreaNone;
-		 m_ptCamarkSplit = ccp(0, 0);*/
-	}
+	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	m_kScreenCenter = ccp(kWinSize.width / 2,
+			GetContentSize().height - kWinSize.height / 2);
+	m_ccNode->setPosition(0, 0);
 
 	g_pMapLayer = this;
 }
 
 void NDMapLayer::Initialization(int mapIndex)
 {
-	tq::CString strMapFile("%smap_%d.map", NDPath::GetMapPath().c_str(),
-			mapIndex);
+	tq::CString strMapFile("%smap_%d.map", NDPath::GetMapPath().c_str(), mapIndex);
 	m_nMapIndex = mapIndex;
 	Initialization((const char*) strMapFile);
 	m_nTitleAlpha = 0;
@@ -287,10 +280,10 @@ void NDMapLayer::refreshTitle()
 					int x = NDDirector::DefaultDirector()->GetWinSize().width / 2 - 150;
 					int y = 60;
 					//NDLog("x:%d,y:%d",x,y);
-					m_lbTitleBg->SetFrameRect(CGRectMake(NDDirector::DefaultDirector()->
+					m_lbTitleBg->SetFrameRect(CCRectMake(NDDirector::DefaultDirector()->
 							GetWinSize().width / 2 - 210, y, 420, 60));
 					//m_lbTitleBg->draw();
-					m_lbTitle->SetFrameRect(CGRectMake(x, y, 300, 60));
+					m_lbTitle->SetFrameRect(CCRectMake(x, y, 300, 60));
 
 					NDPicture* pkPicture1 = m_lbTitle->GetPicture();
 
@@ -318,10 +311,10 @@ void NDMapLayer::refreshTitle()
 					int nX = NDDirector::DefaultDirector()->GetWinSize().width / 2 - 150;
 					int nY = 60;
 					//NDLog("x:%d,y:%d",x,y);
-					m_lbTitleBg->SetFrameRect(CGRectMake(NDDirector::DefaultDirector()->
+					m_lbTitleBg->SetFrameRect(CCRectMake(NDDirector::DefaultDirector()->
 							GetWinSize().width / 2 - 210, nY, 420, 60));
 					//m_lbTitleBg->draw();
-					m_lbTitle->SetFrameRect(CGRectMake(nX, nY, 300, 60));
+					m_lbTitle->SetFrameRect(CCRectMake(nX, nY, 300, 60));
 
 					NDPicture* pkPicture_1 = m_lbTitle->GetPicture();
 
@@ -355,7 +348,7 @@ void NDMapLayer::refreshTitle()
  m_pkTreasureBox = new NDSprite;
  NSString aniPath=[CCString::stringWithUTF8String:NDEngine::NDPath::GetAnimationPath().c_str()];
  m_pkTreasureBox->Initialization([[NSString stringWithFormat:@"%@treasure_box.spr", aniPath] UTF8String]);
- m_pkTreasureBox->SetPosition(CGPointMake(NDPlayer::defaultHero().GetPosition().x+64,NDPlayer::defaultHero().GetPosition().y));
+ m_pkTreasureBox->SetPosition(CCPointMake(NDPlayer::defaultHero().GetPosition().x+64,NDPlayer::defaultHero().GetPosition().y));
 
  m_pkTreasureBox->SetCurrentAnimation(0, false);
  AddChild(m_pkTreasureBox);
@@ -385,11 +378,11 @@ void NDMapLayer::ShowTitle(int name_row, int name_col)
 		m_lbTitle->Initialization();
 		NDPicture* picture = NDPicturePool::DefaultPool()->AddPicture(
 				tq::CString("%smap_title.png",
-						NDEngine::NDPath::GetImagePath()));
+						NDEngine::NDPath::GetImagePath().c_str()));
 		//picture->SetColor(ccc4(0, 0, 0,0));
 		int col = name_col;
 		int row = name_row;
-		picture->Cut(CGRectMake(col * 300, row * 60, 300, 60));
+		picture->Cut(CCRectMake(col * 300, row * 60, 300, 60));
 		m_lbTitle->SetPicture(picture, true);
 	}
 
@@ -398,8 +391,8 @@ void NDMapLayer::ShowTitle(int name_row, int name_col)
 		m_lbTitleBg = new NDUIImage;
 		m_lbTitleBg->Initialization();
 		NDPicture* bg = NDPicturePool::DefaultPool()->AddPicture(
-				tq::CString("%map_title_bg.png",
-						NDEngine::NDPath::GetImagePath()));
+				tq::CString("%smap_title_bg.png",
+						NDEngine::NDPath::GetImagePath().c_str()));
 		m_lbTitleBg->SetPicture(bg, true);
 	}
 
@@ -426,7 +419,7 @@ void NDMapLayer::PlayNDSprite(const char* pszSpriteFile, int nPosx, int nPosy,
 	pSprite->Initialization(
 			tq::CString("%s%s", NDEngine::NDPath::GetAnimationPath().c_str(),
 					pszSpriteFile));
-	pSprite->SetPosition(CGPointMake(nPosx + 64, nPosy));
+	pSprite->SetPosition(CCPointMake(nPosx + 64, nPosy));
 	pSprite->SetCurrentAnimation(0, false);
 	bool bSet = isMapRectIntersectScreen(pSprite->GetSpriteRect());
 	pSprite->BeforeRunAnimation(bSet);
@@ -448,7 +441,7 @@ void NDMapLayer::PlayNDSprite(const char* pszSpriteFile, int nPosx, int nPosy,
 void NDMapLayer::showSwitchSprite(MAP_SWITCH_TYPE type)
 {
 	m_eSwitchType = type;
-	NSString aniPath = new CCString(NDPath::GetAnimationPath().c_str());
+	CCStringRef aniPath = new CCString(NDPath::GetAnimationPath().c_str());
 
 	if (m_pkSwitchSpriteNode)
 	{
@@ -458,7 +451,7 @@ void NDMapLayer::showSwitchSprite(MAP_SWITCH_TYPE type)
 
 	m_pkSwitchSpriteNode = new CUISpriteNode;
 	m_pkSwitchSpriteNode->Initialization();
-	NSString szAniFile = 0;
+	CCStringRef szAniFile = 0;
 
 	switch (m_eSwitchType)
 	{
@@ -477,22 +470,22 @@ void NDMapLayer::showSwitchSprite(MAP_SWITCH_TYPE type)
 		break;
 	}
 
-	NSString pStr = CCString::stringWithFormat("%s%s",
+	CCStringRef pStr = CCString::stringWithFormat("%s%s",
 		aniPath->toStdString().c_str(), szAniFile);
 
 	m_pkSwitchSpriteNode->ChangeSprite(pStr->toStdString().c_str());
 	m_pkSwitchSpriteNode->SetFrameRect(
-		CGRectMake(0, 0, NDDirector::DefaultDirector()->GetWinSize().width,
+		CCRectMake(0, 0, NDDirector::DefaultDirector()->GetWinSize().width,
 		NDDirector::DefaultDirector()->GetWinSize().height)); //++Guosen 2012.7.6
 	m_pkSwitchSpriteNode->SetScale(2.0); //原 480×320 => 960×640 //@todo
 	this->GetParent()->AddChild(m_pkSwitchSpriteNode, ZORDER_MASK_ANI);
 }
 
-bool NDMapLayer::isTouchTreasureBox(CGPoint touchPoint)
+bool NDMapLayer::isTouchTreasureBox(CCPoint touchPoint)
 {
 	if (m_pkTreasureBox)
 	{
-		CGRect kRect = CGRectMake(
+		CCRect kRect = CCRectMake(
 				m_pkTreasureBox->GetPosition().x
 						- m_pkTreasureBox->GetWidth() / 2,
 				m_pkTreasureBox->GetPosition().y - m_pkTreasureBox->GetHeight(),
@@ -576,7 +569,7 @@ void NDMapLayer::DrawLabelRoadBlockTime()
 		}
 
 		int mi = m_nRoadBlockTimeCount / 60;
-		NSString str_mi = 0;
+		CCStringRef str_mi = 0;
 
 		if(mi < 10)
 		{
@@ -588,7 +581,7 @@ void NDMapLayer::DrawLabelRoadBlockTime()
 		}
 
 		int se = m_nRoadBlockTimeCount % 60;
-		NSString str_se = 0;
+		CCStringRef str_se = 0;
 
 		if(se < 10)
 		{
@@ -599,11 +592,11 @@ void NDMapLayer::DrawLabelRoadBlockTime()
 			str_se = CCString::stringWithFormat("%d",mi);
 		}
 
-		NSString str_time = CCString::stringWithFormat("%s:%s",
+		CCStringRef str_time = CCString::stringWithFormat("%s:%s",
 			str_mi->toStdString().c_str(),str_se->toStdString().c_str());
 		m_lbTime->SetText(str_time->toStdString().c_str());
 
-		CGSize size = getStringSize(str_time->toStdString().c_str(), 30);
+		CCSize size = getStringSize(str_time->toStdString().c_str(), 30);
 
 		if (!m_lbTime->GetParent() && m_pkSubNode)
 		{
@@ -615,7 +608,7 @@ void NDMapLayer::DrawLabelRoadBlockTime()
 		int x = m_kScreenCenter.x - (size.width) / 2;
 		int y = m_kScreenCenter.y - GetContentSize().height - (size.height) / 2 + NDDirector::DefaultDirector()->GetWinSize().height;
 
-		m_lbTime->SetFrameRect(CGRectMake(x, y, size.width, size.height + 5));
+		m_lbTime->SetFrameRect(CCRectMake(x, y, size.width, size.height + 5));
 		m_lbTime->draw();
 	}
 }
@@ -634,7 +627,7 @@ void NDMapLayer::DrawSwitch()//绘制切屏点
 
 	case SWITCH_TO_BATTLE:
 		{
-			BattleMgrObj.showBattleScene();
+			//BattleMgrObj.showBattleScene();
 			ScriptMgrObj.excuteLuaFunc("Hide", "NormalBossListUI",0);//调用Hide方法后，调用Redisplay恢复
 
 			//切换音效
@@ -705,38 +698,38 @@ void NDMapLayer::MapSwitchRefresh()
 // 	void NDMapLayer::DrawMapTiles()
 // 	{
 // 		//draw map tile
-// 		CGSize winSize =  NDDirector::DefaultDirector()->GetWinSize();
-// 		CGPoint ptDraw = ccp(m_screenCenter.x - winSize.width / 2, m_screenCenter.y + winSize.height / 2 - GetContentSize().height);
+// 		CCSize winSize =  NDDirector::DefaultDirector()->GetWinSize();
+// 		CCPoint ptDraw = ccp(m_screenCenter.x - winSize.width / 2, m_screenCenter.y + winSize.height / 2 - GetContentSize().height);
 // 		if (m_areaCamarkSplit == IntersectionAreaNone)
 // 		{
-// 			[m_texMap ndDrawInRect:CGRectMake(ptDraw.x, ptDraw.y, winSize.width, winSize.height)];
+// 			[m_texMap ndDrawInRect:CCRectMake(ptDraw.x, ptDraw.y, winSize.width, winSize.height)];
 // 		}
 // 		else
 // 		{
-// 			CGRect rect1 = CGRectMake(0, 0, m_ptCamarkSplit.x, m_ptCamarkSplit.y);
-// 			CGRect rect2 = CGRectMake(rect1.size.width, 0,  winSize.width - rect1.size.width, rect1.size.height);
-// 			CGRect rect3 = CGRectMake(0, rect1.size.height, rect1.size.width, winSize.height - rect1.size.height);
-// 			CGRect rect4 = CGRectMake(rect1.size.width, rect1.size.height, rect2.size.width, rect3.size.height);
+// 			CCRect rect1 = CCRectMake(0, 0, m_ptCamarkSplit.x, m_ptCamarkSplit.y);
+// 			CCRect rect2 = CCRectMake(rect1.size.width, 0,  winSize.width - rect1.size.width, rect1.size.height);
+// 			CCRect rect3 = CCRectMake(0, rect1.size.height, rect1.size.width, winSize.height - rect1.size.height);
+// 			CCRect rect4 = CCRectMake(rect1.size.width, rect1.size.height, rect2.size.width, rect3.size.height);
 //
 // 			if (rect1.size.width != 0 && rect1.size.height != 0)
 // 			{
 // 				m_picMap->Cut(rect1);
-// 				m_picMap->DrawInRect(CGRectMake(ptDraw.x + winSize.width - m_ptCamarkSplit.x, ptDraw.y + winSize.height - m_ptCamarkSplit.y, rect1.size.width, rect1.size.height));
+// 				m_picMap->DrawInRect(CCRectMake(ptDraw.x + winSize.width - m_ptCamarkSplit.x, ptDraw.y + winSize.height - m_ptCamarkSplit.y, rect1.size.width, rect1.size.height));
 // 			}
 // 			if (rect2.size.width != 0 && rect2.size.height != 0)
 // 			{
 // 				m_picMap->Cut(rect2);
-// 				m_picMap->DrawInRect(CGRectMake(ptDraw.x, ptDraw.y + winSize.height - m_ptCamarkSplit.y, rect2.size.width + 1, rect2.size.height + 1));
+// 				m_picMap->DrawInRect(CCRectMake(ptDraw.x, ptDraw.y + winSize.height - m_ptCamarkSplit.y, rect2.size.width + 1, rect2.size.height + 1));
 // 			}
 // 			if (rect3.size.width != 0 && rect3.size.height != 0)
 // 			{
 // 				m_picMap->Cut(rect3);
-// 				m_picMap->DrawInRect(CGRectMake(ptDraw.x + winSize.width - m_ptCamarkSplit.x, ptDraw.y, rect3.size.width, rect3.size.height + 1));
+// 				m_picMap->DrawInRect(CCRectMake(ptDraw.x + winSize.width - m_ptCamarkSplit.x, ptDraw.y, rect3.size.width, rect3.size.height + 1));
 // 			}
 // 			if (rect4.size.width != 0 && rect4.size.height != 0)
 // 			{
 // 				m_picMap->Cut(rect4);
-// 				m_picMap->DrawInRect(CGRectMake(ptDraw.x, ptDraw.y, rect4.size.width + 1, rect4.size.height + 1));
+// 				m_picMap->DrawInRect(CCRectMake(ptDraw.x, ptDraw.y, rect4.size.width + 1, rect4.size.height + 1));
 // 			}
 // 		}
 //
@@ -746,8 +739,8 @@ void NDMapLayer::MapSwitchRefresh()
 
 void NDMapLayer::DrawBgs()
 {
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-	CGRect scrRect = CGRectMake(m_kScreenCenter.x - winSize.width / 2,
+	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCRect scrRect = CCRectMake(m_kScreenCenter.x - winSize.width / 2,
 			m_kScreenCenter.y - winSize.height / 2, winSize.width,
 			winSize.height);
 
@@ -755,11 +748,11 @@ void NDMapLayer::DrawBgs()
 	for (unsigned int i = 0; i < orderCount; i++)
 	{
 		NDTile* pkTile = (NDTile*) m_pkMapData->getBgTiles()->objectAtIndex(i);
-		if (pkTile && CGRectIntersectsRect(scrRect, pkTile->getDrawRect()))
+		if (pkTile && cocos2d::CCRect::CCRectIntersectsRect(scrRect, pkTile->getDrawRect()))
 		{
 			draw();
-// 				CGRect intersectRect	= CGRectZero;
-// 				CGRect drawRect			= CGRectZero;
+// 				CCRect intersectRect	= CCRectZero;
+// 				CCRect drawRect			= CCRectZero;
 // 				if(GetIntersectRect(scrRect, tile.drawRect, intersectRect) &&
 // 				   GetRectPercent(tile.drawRect, intersectRect, drawRect))
 // 				{
@@ -872,7 +865,7 @@ void NDMapLayer::DrawScenesAndAnimations()
 
 			m_pkSwitchAniGroup->setReverse(false);
 
-			CGPoint kPos = ccp(
+			CCPoint kPos = ccp(
 					pkMapSwitch->getX() * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
 					pkMapSwitch->getY() * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
 
@@ -969,21 +962,21 @@ void NDMapLayer::DrawScenesAndAnimations()
 
  }
  */
-CGPoint NDMapLayer::ConvertToMapPoint(CGPoint kScreenPoint)
+CCPoint NDMapLayer::ConvertToMapPoint(CCPoint kScreenPoint)
 {
 #if 0
-	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
-	CGPoint kTempScreen = ccpAdd(kScreenPoint, kScreenPoint); ///< 因分辨率成倍，所以对触发点的坐标进行2倍，郭浩
-	CGPoint kTempPoint = ccpSub(kTempScreen,
-			CGPointMake(kWinSize.width / 2, kWinSize.height / 2));
+	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCPoint kTempScreen = ccpAdd(kScreenPoint, kScreenPoint); ///< 因分辨率成倍，所以对触发点的坐标进行2倍，郭浩
+	CCPoint kTempPoint = ccpSub(kTempScreen,
+			CCPointMake(kWinSize.width / 2, kWinSize.height / 2));
 
-	CGPoint kPoint = ccpAdd(kTempPoint, m_kScreenCenter);
+	CCPoint kPoint = ccpAdd(kTempPoint, m_kScreenCenter);
 
 	//kPoint.y = m_kScreenCenter.y - kPoint.y;
 
 	return kPoint;
 #else //@check
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
  	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
  	kScreenPoint.x *= fScale;
  	kScreenPoint.y *= fScale;
@@ -993,27 +986,27 @@ CGPoint NDMapLayer::ConvertToMapPoint(CGPoint kScreenPoint)
 #endif
 }
 
-bool NDMapLayer::isMapPointInScreen(CGPoint mapPoint)
+bool NDMapLayer::isMapPointInScreen(CCPoint mapPoint)
 {
-	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
-	return CGRectContainsPoint(
-			CGRectMake(m_kScreenCenter.x - kWinSize.width / 2,
+	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	return cocos2d::CCRect::CCRectContainsPoint(
+			CCRectMake(m_kScreenCenter.x - kWinSize.width / 2,
 					m_kScreenCenter.y - kWinSize.height / 2, kWinSize.width,
 					kWinSize.height), mapPoint);
 }
 
-bool NDMapLayer::isMapRectIntersectScreen(CGRect mapRect)
+bool NDMapLayer::isMapRectIntersectScreen(CCRect mapRect)
 {
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-	CGRect scrRect = CGRectMake(m_kScreenCenter.x - winSize.width / 2,
+	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCRect scrRect = CCRectMake(m_kScreenCenter.x - winSize.width / 2,
 			m_kScreenCenter.y - winSize.height / 2, winSize.width,
 			winSize.height);
-	return CGRectIntersectsRect(scrRect, mapRect);
+	return cocos2d::CCRect::CCRectIntersectsRect(scrRect, mapRect);
 }
 
-void NDMapLayer::SetPosition(CGPoint kPosition)
+void NDMapLayer::SetPosition(CCPoint kPosition)
 {
-	CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 
 	if (kPosition.x > 0)
 	{
@@ -1041,7 +1034,7 @@ void NDMapLayer::SetPosition(CGPoint kPosition)
 	m_ccNode->setPosition(kPosition);
 }
 
-bool NDMapLayer::SetScreenCenter(CGPoint kPoint)
+bool NDMapLayer::SetScreenCenter(CCPoint kPoint)
 {
 // 		if(m_bBattleBackground){
 // 			return false;
@@ -1051,7 +1044,7 @@ bool NDMapLayer::SetScreenCenter(CGPoint kPoint)
 	int width = GetContentSize().width;
 	int height = GetContentSize().height;
 
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 
 	if (kPoint.x > width - winSize.width / 2)
 	{
@@ -1078,20 +1071,20 @@ bool NDMapLayer::SetScreenCenter(CGPoint kPoint)
 	//ReflashMapTexture(m_screenCenter, p);
 
 	//modify yay
-	CGPoint backOff = ccpSub(kPoint, m_kScreenCenter);
+	CCPoint backOff = ccpSub(kPoint, m_kScreenCenter);
 	m_pkMapData->moveBackGround(backOff.x, backOff.y);
 	//[m_mapData moveBackGround:backOff.x,backOff.y];
 
 	m_kScreenCenter = kPoint;
 	//NDLog("center:%f,%f",p.x,p.y);
 	SetPosition(
-			CGPointMake(winSize.width / 2 - kPoint.x,
+			CCPointMake(winSize.width / 2 - kPoint.x,
 					winSize.height / 2 + kPoint.y - height));
 
 	return bOverBoder;
 }
 
-CGPoint NDMapLayer::GetScreenCenter()
+CCPoint NDMapLayer::GetScreenCenter()
 {
 	return m_kScreenCenter;
 }
@@ -1136,7 +1129,7 @@ void NDMapLayer::walkToBoss()
 //  NDMonster* boss = NDMapMgrObj.GetBoss();
 //  if (boss!=NULL)
 //  {
-//  CGPoint point = boss->GetPosition();
+//  CCPoint point = boss->GetPosition();
 //  NDLog("boss:%d,%d",point.x,point.y);
 //  NDPlayer::defaultHero().Walk(point, SpriteSpeedStep4);
 //  }
@@ -1173,7 +1166,7 @@ void NDMapLayer::OnTimer(OBJID tag)
 	}
 }
 
-// 	void NDMapLayer::ReplaceMapTexture(CCTexture2D* tex, CGRect replaceRect, CGRect tilesRect)
+// 	void NDMapLayer::ReplaceMapTexture(CCTexture2D* tex, CCRect replaceRect, CCRect tilesRect)
 // 	{
 // 		if (replaceRect.size.width == 0 || replaceRect.size.height == 0)
 // 			return;
@@ -1199,13 +1192,13 @@ void NDMapLayer::OnTimer(OBJID tag)
 // 						newTile.horizontalReverse = tile.horizontalReverse;
 // 						newTile.reverseRect = tile.cutRect;
 //
-// 						CGRect rect; IntersectionArea area;
+// 						CCRect rect; IntersectionArea area;
 // 						RectIntersectionRect(tile.drawRect, tilesRect, rect, area);
 // 						if (area != IntersectionAreaNone)
 // 						{
-// 							rect = CGRectMake(rect.origin.x - tile.drawRect.origin.x, rect.origin.y - tile.drawRect.origin.y, rect.size.width, rect.size.height);
-// 							newTile.cutRect	= CGRectMake(tile.cutRect.origin.x + rect.origin.x, tile.cutRect.origin.y + rect.origin.y, rect.size.width, rect.size.height);
-// 							newTile.drawRect = CGRectMake(x, y, rect.size.width, rect.size.height);
+// 							rect = CCRectMake(rect.origin.x - tile.drawRect.origin.x, rect.origin.y - tile.drawRect.origin.y, rect.size.width, rect.size.height);
+// 							newTile.cutRect	= CCRectMake(tile.cutRect.origin.x + rect.origin.x, tile.cutRect.origin.y + rect.origin.y, rect.size.width, rect.size.height);
+// 							newTile.drawRect = CCRectMake(x, y, rect.size.width, rect.size.height);
 // 							[tex replaceWithCustomTexture:newTile commit:YES];
 //
 // 							x += rect.size.width;
@@ -1222,41 +1215,41 @@ void NDMapLayer::OnTimer(OBJID tag)
 // 		}
 // 	}
 
-// 	void NDMapLayer::ReflashMapTexture(CGPoint oldScreenCenter, CGPoint newScreenCenter)
+// 	void NDMapLayer::ReflashMapTexture(CCPoint oldScreenCenter, CCPoint newScreenCenter)
 // 	{
 // 		if (oldScreenCenter.x == newScreenCenter.x && oldScreenCenter.y == newScreenCenter.y)
 // 			return;
 //
 // 		if (m_texMap)
 // 		{
-// 			CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 			CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 //
-// 			CGRect oldRect = CGRectMake(oldScreenCenter.x - winSize.width / 2, oldScreenCenter.y - winSize.height / 2,
+// 			CCRect oldRect = CCRectMake(oldScreenCenter.x - winSize.width / 2, oldScreenCenter.y - winSize.height / 2,
 // 										winSize.width, winSize.height);
-// 			CGRect newRect = CGRectMake(newScreenCenter.x - winSize.width / 2, newScreenCenter.y - winSize.height / 2,
+// 			CCRect newRect = CCRectMake(newScreenCenter.x - winSize.width / 2, newScreenCenter.y - winSize.height / 2,
 // 										winSize.width, winSize.height);
 //
-// 			CGRect rect;
+// 			CCRect rect;
 // 			RectIntersectionRect(oldRect, newRect, rect, m_areaCamarkSplit);
 // 			if (m_areaCamarkSplit == IntersectionAreaNone)
 // 			{
 // 				m_ptCamarkSplit = ccp(0, 0);
 // 				ReplaceMapTexture(m_texMap,
-// 								  CGRectMake(0, 0, winSize.width, winSize.height),
-// 								  CGRectMake(newRect.origin.x, newRect.origin.y, winSize.width, winSize.height));
+// 								  CCRectMake(0, 0, winSize.width, winSize.height),
+// 								  CCRectMake(newRect.origin.x, newRect.origin.y, winSize.width, winSize.height));
 // 			}
 // 			else
 // 			{
-// 				CGRect nRect = CGRectZero;
+// 				CCRect nRect = CCRectZero;
 // 				if (newScreenCenter.x > oldScreenCenter.x)
 // 				{
-// 					nRect = CGRectMake(oldScreenCenter.x + winSize.width / 2,
+// 					nRect = CCRectMake(oldScreenCenter.x + winSize.width / 2,
 // 									   oldScreenCenter.y - winSize.height / 2,
 // 									   newScreenCenter.x - oldScreenCenter.x, winSize.height);
 // 				}
 // 				else
 // 				{
-// 					nRect = CGRectMake(newScreenCenter.x - winSize.width / 2,
+// 					nRect = CCRectMake(newScreenCenter.x - winSize.width / 2,
 // 									   oldScreenCenter.y - winSize.height / 2,
 // 									   oldScreenCenter.x - newScreenCenter.x, winSize.height);
 // 				}
@@ -1264,13 +1257,13 @@ void NDMapLayer::OnTimer(OBJID tag)
 //
 // 				if (newScreenCenter.y > oldScreenCenter.y)
 // 				{
-// 					nRect = CGRectMake(newScreenCenter.x - winSize.width / 2,
+// 					nRect = CCRectMake(newScreenCenter.x - winSize.width / 2,
 // 									   oldScreenCenter.y + winSize.height / 2,
 // 									   winSize.width, newScreenCenter.y - oldScreenCenter.y);
 // 				}
 // 				else
 // 				{
-// 					nRect = CGRectMake(newScreenCenter.x - winSize.width / 2,
+// 					nRect = CCRectMake(newScreenCenter.x - winSize.width / 2,
 // 									   newScreenCenter.y - winSize.height / 2,
 // 									   winSize.width, oldScreenCenter.y - newScreenCenter.y);
 // 				}
@@ -1282,7 +1275,7 @@ void NDMapLayer::OnTimer(OBJID tag)
 
 // 	void NDMapLayer::ScrollSplit(int x, int y)
 // 	{
-// 		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 //
 // 		m_ptCamarkSplit.x += x;
 // 		if (m_ptCamarkSplit.x < 0)
@@ -1297,21 +1290,21 @@ void NDMapLayer::OnTimer(OBJID tag)
 // 			m_ptCamarkSplit.y -= winSize.height;
 // 	}
 
-// 	void NDMapLayer::ScrollVertical(int y, CGRect newRect)
+// 	void NDMapLayer::ScrollVertical(int y, CCRect newRect)
 // 	{
 // 		if (y == 0)	return;
 //
-// 		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 //
 // 		if (y < 0 && abs(y) > m_ptCamarkSplit.y && m_ptCamarkSplit.y > 0 && m_ptCamarkSplit.y < winSize.height)
 // 		{
 // 			int y1 = -m_ptCamarkSplit.y;
 // 			int y2 = m_ptCamarkSplit.y + y;
 //
-// 			CGRect newRect1 = CGRectMake(newRect.origin.x, newRect.origin.y - y2, newRect.size.width, -y1);
+// 			CCRect newRect1 = CCRectMake(newRect.origin.x, newRect.origin.y - y2, newRect.size.width, -y1);
 // 			ScrollVertical(y1, newRect1);
 //
-// 			CGRect newRect2 = CGRectMake(newRect.origin.x, newRect.origin.y, newRect.size.width, y2);
+// 			CCRect newRect2 = CCRectMake(newRect.origin.x, newRect.origin.y, newRect.size.width, y2);
 // 			ScrollVertical(y2, newRect2);
 //
 // 			return ;
@@ -1322,10 +1315,10 @@ void NDMapLayer::OnTimer(OBJID tag)
 // 			int y1 = winSize.height - m_ptCamarkSplit.y;
 // 			int y2 = y - y1;
 //
-// 			CGRect newRect1 = CGRectMake(newRect.origin.x, newRect.origin.y, newRect.size.width, y1);
+// 			CCRect newRect1 = CCRectMake(newRect.origin.x, newRect.origin.y, newRect.size.width, y1);
 // 			ScrollVertical(y1, newRect1);
 //
-// 			CGRect newRect2 = CGRectMake(newRect.origin.x, newRect.origin.y + y1, newRect.size.width, y2);
+// 			CCRect newRect2 = CCRectMake(newRect.origin.x, newRect.origin.y + y1, newRect.size.width, y2);
 // 			ScrollVertical(y2, newRect2);
 //
 // 			return;
@@ -1335,31 +1328,31 @@ void NDMapLayer::OnTimer(OBJID tag)
 // 			ScrollSplit(0, y);
 //
 // 		ReplaceMapTexture(m_texMap,
-// 						  CGRectMake(0, m_ptCamarkSplit.y, m_ptCamarkSplit.x, abs(y)),
-// 						  CGRectMake(newRect.origin.x + winSize.width - m_ptCamarkSplit.x, newRect.origin.y, m_ptCamarkSplit.x, abs(y)));
+// 						  CCRectMake(0, m_ptCamarkSplit.y, m_ptCamarkSplit.x, abs(y)),
+// 						  CCRectMake(newRect.origin.x + winSize.width - m_ptCamarkSplit.x, newRect.origin.y, m_ptCamarkSplit.x, abs(y)));
 // 		ReplaceMapTexture(m_texMap,
-// 						  CGRectMake(m_ptCamarkSplit.x, m_ptCamarkSplit.y, winSize.width - m_ptCamarkSplit.x, abs(y)),
-// 						  CGRectMake(newRect.origin.x, newRect.origin.y, winSize.width - m_ptCamarkSplit.x, abs(y)));
+// 						  CCRectMake(m_ptCamarkSplit.x, m_ptCamarkSplit.y, winSize.width - m_ptCamarkSplit.x, abs(y)),
+// 						  CCRectMake(newRect.origin.x, newRect.origin.y, winSize.width - m_ptCamarkSplit.x, abs(y)));
 //
 // 		if (y > 0)
 // 			ScrollSplit(0, y);
 // 	}
 //
-// 	void NDMapLayer::ScrollHorizontal(int x, CGRect newRect)
+// 	void NDMapLayer::ScrollHorizontal(int x, CCRect newRect)
 // 	{
 // 		if (x == 0) return ;
 //
-// 		CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 //
 // 		if (x < 0 && abs(x) > m_ptCamarkSplit.x && m_ptCamarkSplit.x > 0 && m_ptCamarkSplit.x < winSize.width)
 // 		{
 // 			int x1 = -m_ptCamarkSplit.x;
 // 			int x2 = m_ptCamarkSplit.x + x;
 //
-// 			CGRect newRect1 = CGRectMake(newRect.origin.x - x2, newRect.origin.y, -x1, newRect.size.height);
+// 			CCRect newRect1 = CCRectMake(newRect.origin.x - x2, newRect.origin.y, -x1, newRect.size.height);
 // 			ScrollHorizontal(x1, newRect1);
 //
-// 			CGRect newRect2 = CGRectMake(newRect.origin.x, newRect.origin.y, -x2, newRect.size.height);
+// 			CCRect newRect2 = CCRectMake(newRect.origin.x, newRect.origin.y, -x2, newRect.size.height);
 // 			ScrollHorizontal(x2, newRect2);
 //
 // 			return;
@@ -1370,10 +1363,10 @@ void NDMapLayer::OnTimer(OBJID tag)
 // 			int x1 = winSize.width - m_ptCamarkSplit.x;
 // 			int x2 = x - x1;
 //
-// 			CGRect newRect1 = CGRectMake(newRect.origin.x, newRect.origin.y, x1, newRect.size.height);
+// 			CCRect newRect1 = CCRectMake(newRect.origin.x, newRect.origin.y, x1, newRect.size.height);
 // 			ScrollHorizontal(x1, newRect1);
 //
-// 			CGRect newRect2 = CGRectMake(newRect.origin.x + x1, newRect.origin.y, x2, newRect.size.height);
+// 			CCRect newRect2 = CCRectMake(newRect.origin.x + x1, newRect.origin.y, x2, newRect.size.height);
 // 			ScrollHorizontal(x2, newRect2);
 //
 // 			return;
@@ -1384,19 +1377,19 @@ void NDMapLayer::OnTimer(OBJID tag)
 // 			ScrollSplit(x, 0);
 //
 // 		ReplaceMapTexture(m_texMap,
-// 						  CGRectMake(m_ptCamarkSplit.x, 0, abs(x), m_ptCamarkSplit.y),
-// 						  CGRectMake(newRect.origin.x, newRect.origin.y + winSize.height - m_ptCamarkSplit.y, abs(x), m_ptCamarkSplit.y));
+// 						  CCRectMake(m_ptCamarkSplit.x, 0, abs(x), m_ptCamarkSplit.y),
+// 						  CCRectMake(newRect.origin.x, newRect.origin.y + winSize.height - m_ptCamarkSplit.y, abs(x), m_ptCamarkSplit.y));
 // 		ReplaceMapTexture(m_texMap,
-// 						  CGRectMake(m_ptCamarkSplit.x, m_ptCamarkSplit.y, abs(x), winSize.height - m_ptCamarkSplit.y),
-// 						  CGRectMake(newRect.origin.x, newRect.origin.y, abs(x), winSize.height - m_ptCamarkSplit.y));
+// 						  CCRectMake(m_ptCamarkSplit.x, m_ptCamarkSplit.y, abs(x), winSize.height - m_ptCamarkSplit.y),
+// 						  CCRectMake(newRect.origin.x, newRect.origin.y, abs(x), winSize.height - m_ptCamarkSplit.y));
 //
 // 		if (x > 0)
 // 			ScrollSplit(x, 0);
 // 	}
 
-// 	void NDMapLayer::RectIntersectionRect(CGRect rect1, CGRect rect2, CGRect& intersectionRect, IntersectionArea& intersectionArea)
+// 	void NDMapLayer::RectIntersectionRect(CCRect rect1, CCRect rect2, CCRect& intersectionRect, IntersectionArea& intersectionArea)
 // 	{
-// 		intersectionRect = CGRectIntersection(rect1, rect2);
+// 		intersectionRect = CCRectIntersection(rect1, rect2);
 // 		if (intersectionRect.size.width == 0 || intersectionRect.size.height == 0)
 // 		{
 // 			intersectionArea = IntersectionAreaNone;
@@ -1797,12 +1790,12 @@ bool NDMapLayer::GetMapDataAniParamReverse(int nIndex)
 	return bReverse;
 }
 
-CGPoint NDMapLayer::GetMapDataAniParamPos(int nIndex)
+CCPoint NDMapLayer::GetMapDataAniParamPos(int nIndex)
 {
 	anigroup_param *dictAniGroupParam =
 			(anigroup_param *) m_pkMapData->getAniGroupParams()->objectAtIndex(
 					nIndex);
-	CGPoint pos = CGPointZero;
+	CCPoint pos = CCPointZero;
 	if (dictAniGroupParam)
 	{
 		std::map<std::string, int>::iterator it = dictAniGroupParam->find(
@@ -1820,12 +1813,12 @@ CGPoint NDMapLayer::GetMapDataAniParamPos(int nIndex)
 	return pos;
 }
 
-CGSize NDMapLayer::GetMapDataAniParamMapSize(int nIndex)
+CCSize NDMapLayer::GetMapDataAniParamMapSize(int nIndex)
 {
 	anigroup_param *dictAniGroupParam =
 			(anigroup_param *) m_pkMapData->getAniGroupParams()->objectAtIndex(
 					nIndex);
-	CGSize size = CGSizeZero;
+	CCSize size = CCSizeZero;
 	if (dictAniGroupParam)
 	{
 		std::map<std::string, int>::iterator it = dictAniGroupParam->find(
@@ -1878,10 +1871,12 @@ int NDMapLayer::GetMapOrderId(MAP_ORDER * dict)
 	return nOrderId;
 }
 
+#if 0
 void NDMapLayer::AddChild(NDNode* node, int z, int tag)
 {
 	NDNode::AddChild(node, z, tag);
 }
+#endif
 
 bool NDMapLayer::TouchBegin(NDTouch* touch)
 {
@@ -1924,7 +1919,7 @@ void NDMapLayer::ShowTreasureBox()
 // 		m_pkTreasureBox->Initialization(pstrString->toStdString().c_str());
 // 		SAFE_DELETE(pstrString);
 // 		m_pkTreasureBox->SetPosition(
-// 				CGPointMake(NDPlayer::defaultHero().GetPosition().x + 64,
+// 				CCPointMake(NDPlayer::defaultHero().GetPosition().x + 64,
 // 						NDPlayer::defaultHero().GetPosition().y));
 // 		m_pkTreasureBox->SetScale(0.5f * SCREEN_SCALE);
 // 		m_pkTreasureBox->SetCurrentAnimation(0, false);
@@ -1958,7 +1953,8 @@ void NDMapLayer::debugDraw()
 // 	ccDrawLine( ccp(0,0), ccp(winSize.width, winSize.height));
 // #endif
 
-	if (!NDDebugOpt::getDrawDebugEnabled()) return;
+	if (!NDDebugOpt::getDrawDebugEnabled() ||
+		!NDDebugOpt::getDrawCellEnabled()) return;
 
 	drawCell();
 }
@@ -1985,8 +1981,8 @@ void NDMapLayer::drawCell()
 			float y = row * step; //points
 	
 			//@todo: check visible
-			CGPoint org = ccp(x + pad, y + pad);//left top
-			CGPoint dest = ccp(x + step - pad, y + step + - pad); //right bottom
+			CCPoint org = ccp(x + pad, y + pad);//left top
+			CCPoint dest = ccp(x + step - pad, y + step + - pad); //right bottom
 			ccDrawRect( org, dest );
 		}
 	}
@@ -2019,7 +2015,7 @@ void NDMapLayer::dumpRole()
 // 			
 // 			if (roleType)
 // 			{
-// 				CGPoint pos = pRole->GetPosition();
+// 				CCPoint pos = pRole->GetPosition();
 // 				sprintf( str, "%-10s %-20s pos(%d, %d)\r\n", 
 // 					roleType, pRole->m_strName.c_str(), (int)pos.x, (int)pos.y );
 // 

@@ -35,8 +35,10 @@ THE SOFTWARE.
 //#include "CCFileUtils.h"
 
 #if ND_MOD
-	#include "..\platform\third_party\win32\iconv\iconv.h"
-	#include <stdarg.h>
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#include "..\platform\third_party\win32\iconv\iconv.h"
+#endif
+#include <stdarg.h>
 #endif
 
 NS_CC_BEGIN
@@ -192,7 +194,8 @@ public:
 		* @date 20120731
 		*/
 		const char* UTF8String()
-		{
+    {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 			const char* strChar = m_sString.c_str();
 			iconv_t iconvH = 0;
 			iconvH = iconv_open("utf-8","gb2312");
@@ -221,6 +224,9 @@ public:
 			iconv_close(iconvH);
 
 			return g_GBKConvUTF8Buf;
+#else
+        return m_sString.c_str();
+#endif
 		}
 
 
@@ -234,57 +240,61 @@ public:
 		* @date 20120731
 		*/
 		static CCString* stringWithUTF8String(const char* pszUTF8)
-		{
-			if (0 == pszUTF8 || !*pszUTF8)
-			{
-				return new CCString("");
-			}
+        {
+    #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+                if (0 == pszUTF8 || !*pszUTF8)
+                {
+                    return new CCString("");
+                }
 
-			if (isUTF8ChineseCharacter(pszUTF8))
-			{
-			iconv_t pConvert = 0;
-			const char* pszInbuffer = pszUTF8;
-			char* pszOutBuffer = new char[2048];
+                if (isUTF8ChineseCharacter(pszUTF8))
+                {
+                iconv_t pConvert = 0;
+                const char* pszInbuffer = pszUTF8;
+                char* pszOutBuffer = new char[2048];
 
-			memset(pszOutBuffer,0,sizeof(char) * 2048);
+                memset(pszOutBuffer,0,sizeof(char) * 2048);
 
-			int nStatus = 0;
-			size_t sizOutBuffer = 2048;
-			size_t sizInBuffer = strlen(pszUTF8);
-			const char* pszInPtr = pszInbuffer;
-			size_t sizInSize = sizInBuffer;
-			char* pszOutPtr = pszOutBuffer;
-			size_t sizOutSize = sizOutBuffer;
+                int nStatus = 0;
+                size_t sizOutBuffer = 2048;
+                size_t sizInBuffer = strlen(pszUTF8);
+                const char* pszInPtr = pszInbuffer;
+                size_t sizInSize = sizInBuffer;
+                char* pszOutPtr = pszOutBuffer;
+                size_t sizOutSize = sizOutBuffer;
 
-			pConvert = iconv_open("GB2312","UTF-8");
+                pConvert = iconv_open("GB2312","UTF-8");
 
-			iconv(pConvert,0,0,0,0);
+                iconv(pConvert,0,0,0,0);
 
-			while (0 < sizInSize)
-			{
-				size_t sizRes = iconv(pConvert,(const char**)&pszInPtr,
-					&sizInSize,&pszOutPtr,&sizOutSize);
+                while (0 < sizInSize)
+                {
+                    size_t sizRes = iconv(pConvert,(const char**)&pszInPtr,
+                        &sizInSize,&pszOutPtr,&sizOutSize);
 
-				if (pszOutPtr != pszOutBuffer)
-				{
-					strncpy(pszOutBuffer,pszOutBuffer,sizOutSize);
-				}
+                    if (pszOutPtr != pszOutBuffer)
+                    {
+                        strncpy(pszOutBuffer,pszOutBuffer,sizOutSize);
+                    }
 
-				if ((size_t)-1 == sizRes)
-				{
-					int nOne = 1;
-					iconvctl(pConvert,ICONV_SET_DISCARD_ILSEQ,&nOne);
-				}
-			}
+                    if ((size_t)-1 == sizRes)
+                    {
+                        int nOne = 1;
+                        iconvctl(pConvert,ICONV_SET_DISCARD_ILSEQ,&nOne);
+                    }
+                }
 
-			iconv_close(pConvert);
+                iconv_close(pConvert);
 
-			return new CCString(pszOutBuffer);
-		}
+                return new CCString(pszOutBuffer);
+            }
 			else
 			{
 				return new CCString(pszUTF8);
 			}
+#else
+                return new CCString(pszUTF8);
+#endif
 		}
 
 //@注释：引擎已经实现了相同的原型！
@@ -317,7 +327,8 @@ public:
 // 
 // 			return pstrString;
 // 		}
-
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
 		/***
 		* @brief 能够判断一个字符串中汉字是否是UTF-8
@@ -381,6 +392,7 @@ public:
 
 			return false;
 		}
+#endif
 		
 #endif //ND_MOD
 

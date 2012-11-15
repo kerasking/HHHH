@@ -189,7 +189,7 @@ public:
 private:
 	typedef vector<string> VEC_OPT_STRING;
 	
-	void InitOption(CGPoint pos, VEC_OPT_STRING vOption, CommonOptionButton*& btn, const char* text);
+	void InitOption(CCPoint pos, VEC_OPT_STRING vOption, CommonOptionButton*& btn, const char* text);
 private:
 //	NDDataPersist m_gameSettingData;		///< 临时性注释 郭浩
 	//CommonOptionButton* m_headPicOpt;		// 头像显示

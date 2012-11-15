@@ -12,7 +12,7 @@
 #include <vector>
 #include <NDTransData.h>
 #include "ScriptMgr.h"
-#include <NDNetMsg.h>
+#include "NDNetMsg.h"
 #include <NDMessageCenter.h>
 #include "NDDebugOpt.h"
 #include "CCScheduler.h"

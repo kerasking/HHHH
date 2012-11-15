@@ -50,13 +50,13 @@ public:
 	
 	void SetColor(cocos2d::ccColor4B color);
 	
-	CGSize GetSize();
+	CCSize GetSize();
 	
-	void DrawInRect(CGRect rect);
+	void DrawInRect(CCRect rect);
 	
 private:
 	
-	CGPoint caclNext(CGPoint origin, CombintPictureAligment aligment, CGSize originSize, CGSize selfSize);
+	CCPoint caclNext(CCPoint origin, CombintPictureAligment aligment, CCSize originSize, CCSize selfSize);
 	
 	void Clear();
 	
@@ -68,9 +68,9 @@ private:
 		
 		CombintPictureAligment aligment;
 		
-		CGRect rectDraw;
+		CCRect rectDraw;
 		
-		CombinePicture(NDPicture* pic, CombintPictureAligment aligment, CGRect rectDraw)
+		CombinePicture(NDPicture* pic, CombintPictureAligment aligment, CCRect rectDraw)
 		{
 			this->pic = pic;
 			
@@ -80,8 +80,8 @@ private:
 		}
 	};
 	
-	CGRect m_kRectLast;
-	CGSize m_kSizeMax;
+	CCRect m_kRectLast;
+	CCSize m_kSizeMax;
 	
 	std::vector<CombinePicture> m_vecCombinePic;
 };

@@ -50,7 +50,7 @@ public:
 	void SetLabelNew(NDMapData* pkMapdata);
 	void SetLableByType(int eLableType, int x, int y, const char* pszText,
 			cocos2d::ccColor4B color1, cocos2d::ccColor4B color2,
-			CGSize kParentSize);
+			CCSize kParentSize);
 	void draw();
 
 private:

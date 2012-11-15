@@ -41,8 +41,8 @@ StatusDialog::StatusDialog()
 	m_picRightBottom = NDPicturePool::DefaultPool()->AddPicture(bottomImage);
 	m_picRightBottom->SetReverse(true);
 	
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-	scrRect = CGRectMake((winSize.width - DIALOG_WIDTH) / 2, 
+	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	scrRect = CCRectMake((winSize.width - DIALOG_WIDTH) / 2, 
 			     (winSize.height - MAX_DIALOG_HEIGHT) / 2, 
 			     DIALOG_WIDTH, MAX_DIALOG_HEIGHT);
 	
@@ -78,7 +78,7 @@ void StatusDialog::OnTableLayerCellFocused(NDUITableLayer* table, NDUINode* cell
 	//	this->AddChild(m_talkBox);
 	//}
 	
-	CGRect screen = cell->GetScreenRect();
+	CCRect screen = cell->GetScreenRect();
 	screen.origin.x += screen.size.width - 10;
 	screen.origin.y += 10;
 	//m_talkBox->SetDisPlayPos(screen.origin);
@@ -108,7 +108,7 @@ void StatusDialog::Initialization(Fighter* f)
 	m_label->Initialization();
 	m_label->SetTextAlignment(LabelTextAlignmentCenter);
 	m_label->SetText(ssTitle.str().c_str());
-	m_label->SetFrameRect(CGRectMake(scrRect.origin.x, scrRect.origin.y + 5, DIALOG_WIDTH, 20));
+	m_label->SetFrameRect(CCRectMake(scrRect.origin.x, scrRect.origin.y + 5, DIALOG_WIDTH, 20));
 	this->AddChild(m_label);
 	nHeight += 20;
 	
@@ -118,11 +118,11 @@ void StatusDialog::Initialization(Fighter* f)
 	
 	m_memo = NDUITextBuilder::DefaultBuilder()->Build(ss.str().c_str(), 
 							  13, 
-							  CGSizeMake(DIALOG_WIDTH, 40), 
+							  CCSizeMake(DIALOG_WIDTH, 40), 
 							  ccc4(0, 0, 0, 255),
 							  true);
 
-	m_memo->SetFrameRect(CGRectMake(scrRect.origin.x + 20,
+	m_memo->SetFrameRect(CCRectMake(scrRect.origin.x + 20,
 		scrRect.origin.y + nHeight + 5, DIALOG_WIDTH - 40, 40));		
 	this->AddChild(m_memo);
 	nHeight += 45;
@@ -136,7 +136,7 @@ void StatusDialog::Initialization(Fighter* f)
 		lbStatus->Initialization();
 		lbStatus->SetTextAlignment(LabelTextAlignmentCenter);
 		lbStatus->SetText(NDCommonCString("state"));
-		lbStatus->SetFrameRect(CGRectMake(scrRect.origin.x,
+		lbStatus->SetFrameRect(CCRectMake(scrRect.origin.x,
 			scrRect.origin.y + nHeight, DIALOG_WIDTH, 20));
 		this->AddChild(lbStatus);
 		nHeight += 20;
@@ -174,8 +174,8 @@ void StatusDialog::Initialization(Fighter* f)
 ////			}
 //			
 //			SocialTextLayer* st = new SocialTextLayer;
-//			st->Initialization(CGRectMake(0.0f, 0.0f, DIALOG_WIDTH - 38, 15.0f),
-//					   CGRectMake(0.0f, 0.0f, DIALOG_WIDTH - 38, 15.0f), se);
+//			st->Initialization(CCRectMake(0.0f, 0.0f, DIALOG_WIDTH - 38, 15.0f),
+//					   CCRectMake(0.0f, 0.0f, DIALOG_WIDTH - 38, 15.0f), se);
 //			
 //			if (bChangeClr) {
 //				st->SetBackgroundColor(INTCOLORTOCCC4(0xc3d2d5));
@@ -191,7 +191,7 @@ void StatusDialog::Initialization(Fighter* f)
 		nTableHeight = nTableHeight > MAX_DIALOG_HEIGHT - nHeight - 5 ?
 			MAX_DIALOG_HEIGHT - nHeight - 5 : nTableHeight;
 
-		m_table->SetFrameRect(CGRectMake(scrRect.origin.x +
+		m_table->SetFrameRect(CCRectMake(scrRect.origin.x +
 			20, scrRect.origin.y + nHeight + 5,
 			DIALOG_WIDTH - 40, nTableHeight));
 		nHeight += nTableHeight + 20;
@@ -251,25 +251,25 @@ void StatusDialog::draw()
 // 			 ccc4(115, 121, 90, 255), 8);
 // 		
 // 		//background
-// 		DrawRecttangle(CGRectMake(scrRect.origin.x + 17, scrRect.origin.y + 5, scrRect.size.width - 34, scrRect.size.height - 10), ccc4(196, 201, 181, 255));
+// 		DrawRecttangle(CCRectMake(scrRect.origin.x + 17, scrRect.origin.y + 5, scrRect.size.width - 34, scrRect.size.height - 10), ccc4(196, 201, 181, 255));
 /***
 * ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 * end
 */
 		
-		m_picLeftTop->DrawInRect(CGRectMake(scrRect.origin.x+7, 
+		m_picLeftTop->DrawInRect(CCRectMake(scrRect.origin.x+7, 
 						    scrRect.origin.y, 
 						    m_picLeftTop->GetSize().width, 
 						    m_picLeftTop->GetSize().height));
-		m_picRightTop->DrawInRect(CGRectMake(scrRect.origin.x + scrRect.size.width - m_picRightTop->GetSize().width - 7, 
+		m_picRightTop->DrawInRect(CCRectMake(scrRect.origin.x + scrRect.size.width - m_picRightTop->GetSize().width - 7, 
 						     scrRect.origin.y, 
 						     m_picRightTop->GetSize().width, 
 						     m_picRightTop->GetSize().height));
-		m_picLeftBottom->DrawInRect(CGRectMake(scrRect.origin.x+7, 
+		m_picLeftBottom->DrawInRect(CCRectMake(scrRect.origin.x+7, 
 						       scrRect.origin.y + scrRect.size.height - m_picLeftBottom->GetSize().height,
 						       m_picLeftBottom->GetSize().width, 
 						       m_picLeftBottom->GetSize().height));
-		m_picRightBottom->DrawInRect(CGRectMake(scrRect.origin.x + scrRect.size.width - m_picRightBottom->GetSize().width - 7,
+		m_picRightBottom->DrawInRect(CCRectMake(scrRect.origin.x + scrRect.size.width - m_picRightBottom->GetSize().width - 7,
 							scrRect.origin.y + scrRect.size.height - m_picRightBottom->GetSize().height,
 							m_picRightBottom->GetSize().width,
 							m_picRightBottom->GetSize().height));

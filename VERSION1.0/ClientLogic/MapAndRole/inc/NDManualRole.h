@@ -108,10 +108,10 @@ public:
 
 	void Initialization(int lookface, bool bSetLookFace = true); hide
 
-	virtual void Walk(CGPoint toPos, SpriteSpeed speed);
+	virtual void Walk(CCPoint toPos, SpriteSpeed speed);
 	void OnMoving(bool bLastPos); override
 	void OnMoveEnd(); override 
-	void SetPosition(CGPoint newPosition); override
+	void SetPosition(CCPoint newPosition); override
 	void OnMoveTurning(bool bXTurnigToY, bool bInc); override
 
 	bool OnDrawBegin(bool bDraw); override
@@ -201,7 +201,7 @@ public:
 	void refreshEquipmentEffectData();
 
 	void BackupPositon();
-	CGPoint GetBackupPosition();
+	CCPoint GetBackupPosition();
 
 	// 勿用,如需获取请直接访问ridePet
 	//NDRidePet* GetRidePet();
@@ -215,7 +215,7 @@ public:
 	void drawServerFrontEffect(bool draw);
 	bool IsServerEffectHasQiZhi();
 
-	CGRect GetFocusRect();override
+	CCRect GetFocusRect();override
 
 	bool IsInGraveStoneState();
 
@@ -251,7 +251,7 @@ private:
 			cocos2d::ccColor4B color1, cocos2d::ccColor4B color2);
 	SpriteSpeed GetSpeed();
 protected:
-	void WalkToPosition(const std::vector<CGPoint>& kToPosVector,
+	void WalkToPosition(const std::vector<CCPoint>& kToPosVector,
 			SpriteSpeed eSpeed, bool bMoveMap, bool bMustArrive = false);
 	void processTeamMemberMove(bool bDraw);
 
@@ -264,7 +264,7 @@ protected:
 	void processTeamMemberOnMove(int itype);
 
 	void resetTeamPos();
-	void teamMemberWalkToPosition(const std::vector<CGPoint>& toPos);
+	void teamMemberWalkToPosition(const std::vector<CCPoint>& toPos);
 	void teamMemberWalkResetPosition();
 	void teamMemberAction(bool bAction);
 	void teamMemberStopMoving(bool bResetPos);
@@ -349,7 +349,7 @@ protected:
 
 public:
 
-	CGPoint m_kOldPos;
+	CCPoint m_kOldPos;
 
 protected:
 
@@ -363,7 +363,7 @@ protected:
 	NDSprite* m_pkEffectArmorAniGroup;
 	NDSprite* m_pkEffectDacoityAniGroup;
 
-	CGPoint m_kPosBackup;
+	CCPoint m_kPosBackup;
 
 private:
 

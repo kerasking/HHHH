@@ -29,6 +29,7 @@
 #include "SystemSetMgr.h"
 #include "ItemImage.h"
 #ifdef USE_MGSDK
+#import <Foundation/Foundation.h>
 #include "MBGSocialService.h"
 #endif
 //#include "MobageViewController.h"
@@ -255,8 +256,8 @@ namespace NDEngine {
 	}
     void BackCity()
 	{
-		//int nMapId = NDMapMgrObj.GetMapID();
-		//NDMapMgrObj.WorldMapSwitch(nMapId);
+		int nMapId = NDMapMgrObj.GetMapID();
+		NDMapMgrObj.WorldMapSwitch(nMapId);
 	}
 	
 	void NavigateToNpc(int nNpcId)
@@ -562,7 +563,7 @@ SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
     {
         #if 0
 MobageViewController* pMobageView = [MobageViewController sharedViewController];
-        [pMobageView showBalanceButton:CGRectMake(200, 70, 100, 36)];
+        [pMobageView showBalanceButton:CCRectMake(200, 70, 100, 36)];
 #endif
     }
     

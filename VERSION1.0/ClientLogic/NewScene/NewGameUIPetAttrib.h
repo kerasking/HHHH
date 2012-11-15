@@ -84,9 +84,9 @@ namespace NDEngine
 		void Initialization(bool bSelf=true); hide
 		void draw(); override
 		//设置宠物显示位置,相对于屏幕左上角
-		void SetDisplayPos(CGPoint pos);
+		void SetDisplayPos(CCPoint pos);
 	private:
-		CGPoint m_petPostion;
+		CCPoint m_petPostion;
 		bool	m_faceRightPet;
 		NDNode	*m_petParent;
 		bool	m_bSelf;

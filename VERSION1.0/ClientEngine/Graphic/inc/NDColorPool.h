@@ -10,7 +10,7 @@
 #ifndef __ND_COLOR_POOL_H__
 #define __ND_COLOR_POOL_H__
 
-#include "Utility.h"
+#include "UtilityInc.h"
 
 #define NDColorPoolObj NDColorPool::GetSingleton()
 

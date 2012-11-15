@@ -159,7 +159,7 @@ namespace NDEngine
 		
 		if (hasWriteSize > s_maxHasWriteSize)
 		{
-			NDLog(@"\nNDNetMsgMgr::AddNetRawData net msg buffer has wite % space!!!", hasWriteSize);
+			//NDLog("\nNDNetMsgMgr::AddNetRawData net msg buffer has wite % space!!!", hasWriteSize);
 			
 			unsigned int newMaxWriteSize = (unsigned int)(float(s_maxHasWriteSize) * 1.2);
 			
@@ -315,8 +315,8 @@ namespace NDEngine
 		#ifdef DEBUG
 			
 			m_lockNetData.lock();
-			NDLog(@"\n---------------------------------------------");
-			NDLog(@"NDNetMsgMgr total recv data from net %u byte.", m_uiTotalNetData);
+			//NDLog(@"\n---------------------------------------------");
+			//NDLog(@"NDNetMsgMgr total recv data from net %u byte.", m_uiTotalNetData);
 			
 			m_lockNetData.unlock();
 		

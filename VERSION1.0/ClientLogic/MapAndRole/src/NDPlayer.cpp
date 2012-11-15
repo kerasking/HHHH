@@ -223,7 +223,7 @@ void NDPlayer::SendNpcInteractionMessage(unsigned int uiNPCID)
 	NDDataTransThread::DefaultThread()->GetSocket()->Send(&kTranslateData);
 }
 
-bool NDPlayer::DealClickPointInSideNpc(CGPoint point)
+bool NDPlayer::DealClickPointInSideNpc(CCPoint point)
 {
 	bool bDeal = false;
 
@@ -271,7 +271,7 @@ bool NDPlayer::CancelClickPointInSideNpc()
 
 }
 
-bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
+bool NDPlayer::ClickPoint(CCPoint point, bool bLongTouch, bool bPath/*=true*/)
 {
 	if (AutoPathTipObj.IsWorking())
 	{
@@ -313,7 +313,7 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 					{
 						int dis = NDMapMgrObj.getDistBetweenRole(this, npc);
 
-						CGPoint pos;
+						CCPoint pos;
 
 						if ( dis < FOCUS_JUDGE_DISTANCE )
 						{
@@ -322,7 +322,7 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 						}
 						else if (npc->getNearestPoint(this->GetPosition(), pos))
 						{
-							point = ccpAdd(pos, CGPointMake(0, 30));
+							point = ccpAdd(pos, CCPointMake(0, 30));
 
 							AutoPathTipObj.work(npc->m_strName);
 							bDealed = true;
@@ -344,7 +344,7 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 				if ( m_iFocusManuRoleID != -1 )
 				{
 					NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(m_iFocusManuRoleID);
-					if (otherplayer && CGRectContainsPoint(otherplayer->GetFocusRect(), point)) 
+					if (otherplayer && cocos2d::CCRect::CCRectContainsPoint(otherplayer->GetFocusRect(), point)) 
 					{
 						if ( otherplayer->IsInState(USERSTATE_BOOTH) )
 						{ //与其摆摊玩家交互
@@ -372,7 +372,7 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 						
 						if (role->bClear) continue;
 						
-						if ( !CGRectContainsPoint(role->GetFocusRect(), point)) continue;
+						if ( !cocos2d::CCRect::CCRectContainsPoint(role->GetFocusRect(), point)) continue;
 						
 						find = true;
 						
@@ -395,7 +395,7 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 
 						if (role->m_bClear) continue;
 
-						if ( !CGRectContainsPoint(role->GetFocusRect(), point)) continue;
+						if ( !cocos2d::CCRect::CCRectContainsPoint(role->GetFocusRect(), point)) continue;
 
 						//find = true;
 
@@ -406,7 +406,7 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 				}
 
 // 				NDManualRole *otherplayer = NDMapMgrObj.GetManualRole(m_iFocusManuRoleID);
-// 				if (otherplayer && CGRectContainsPoint(otherplayer->GetFocusRect(), point)) 
+// 				if (otherplayer && cocos2d::CCRect::CCRectContainsPoint(otherplayer->GetFocusRect(), point)) 
 // 				{
 // 					if ( otherplayer->IsInState(USERSTATE_BOOTH) )
 // 					{ //与其摆摊玩家交互
@@ -459,7 +459,7 @@ void NDPlayer::stopMoving(bool bResetPos/*=true*/, bool bResetTeamPos/*=true*/)
 
 	NDManualRole::stopMoving(bResetPos, bResetTeamPos);
 
-	m_kTargetPos = CGPointZero;
+	m_kTargetPos = CCPointZero;
 
 	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene));
 	if (scene) 
@@ -503,7 +503,7 @@ int NDPlayer::GetOrder()
 
 }
 
-void NDPlayer::Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
+void NDPlayer::Walk(CCPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 {
 	if (!isRoleCanMove())
 	{
@@ -511,11 +511,11 @@ void NDPlayer::Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 	}
 
 	// roundup kPos
-	CGPoint kPos = CGPointMake(
+	CCPoint kPos = CCPointMake(
 			int(toPos.x) / MAP_UNITSIZE * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
 			int(toPos.y) / MAP_UNITSIZE * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
 
-	CGPoint kCurrentPosition = GetPosition();
+	CCPoint kCurrentPosition = GetPosition();
 
 // 	WriteCon( "NDPlayer::Walk(), (%d, %d)->(%d, %d)\r\n",
 // 		(int)kCurrentPosition.x, (int)kCurrentPosition.y,
@@ -528,7 +528,7 @@ void NDPlayer::Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 	}
 	else
 	{
-		std::vector < CGPoint > vPos;
+		std::vector < CCPoint > vPos;
 		//kPos = ccpAdd(kPos,kPos);
 		vPos.push_back(kPos);
 		this->WalkToPosition(vPos, speed, true, mustArrive);
@@ -537,7 +537,7 @@ void NDPlayer::Walk(CGPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 	ResetFocusRole();
 }
 
-void NDPlayer::SetPosition(CGPoint newPosition)
+void NDPlayer::SetPosition(CCPoint newPosition)
 {
 	int nNewCol = (newPosition.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
 	int nNewRow = (newPosition.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
@@ -608,7 +608,7 @@ void NDPlayer::Update(unsigned long ulDiff)
 	NDMapMgr& mgr = NDMapMgrObj;
 	if (mgr.GetBattleMonster()) 
 	{
-		m_kTargetPos = CGPointZero;
+		m_kTargetPos = CCPointZero;
 		return;
 	}
 
@@ -645,7 +645,7 @@ void NDPlayer::Update(unsigned long ulDiff)
 // 		}
 // 	}
 
-	CGPoint pos = GetPosition();
+	CCPoint pos = GetPosition();
 	if (int(m_kTargetPos.x) != 0 
 		&& int(m_kTargetPos.y) != 0
 		&& ( (int)pos.x-DISPLAY_POS_X_OFFSET) % 32 == 0
@@ -660,12 +660,12 @@ void NDPlayer::Update(unsigned long ulDiff)
 		//					m_movePathIndex = 0;
 		//					NDAutoPath::sharedAutoPath()->autoFindPath(m_position, m_targetPos, (NDMapLayer*)layer, m_iSpeed);
 		//					m_pointList = NDAutoPath::sharedAutoPath()->getPathPointVetor();
-		//					m_targetPos = CGPointZero;
+		//					m_targetPos = CCPointZero;
 		//				}		
 		//			}
-		std::vector<CGPoint> vec_pos; vec_pos.push_back(m_kTargetPos);
+		std::vector<CCPoint> vec_pos; vec_pos.push_back(m_kTargetPos);
 		this->WalkToPosition(vec_pos, SpriteSpeedStep8, true);
-		m_kTargetPos = CGPointZero;
+		m_kTargetPos = CCPointZero;
 		ResetFocusRole();
 	}
 
@@ -689,7 +689,7 @@ void NDPlayer::OnMoveBegin()
 		return;
 	}
 
-	CGPoint pos = m_kPointList[m_kPointList.size() - 1];
+	CCPoint pos = m_kPointList[m_kPointList.size() - 1];
 	int nX = (pos.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
 	int nY = (pos.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
 
@@ -1246,8 +1246,8 @@ bool NDPlayer::canUnpackRidePet()
 		if (!mapswitch) return true;
 
 		// 不能自动寻路到切屏点 todo
-		CGPoint from = ccp(m_nServerCol*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, m_nServerRow*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
-		CGPoint to = ccp(mapswitch->getX()*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, mapswitch->getY()*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
+		CCPoint from = ccp(m_nServerCol*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, m_nServerRow*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
+		CCPoint to = ccp(mapswitch->getX()*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, mapswitch->getY()*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET);
 		return NDAutoPath::sharedAutoPath()->autoFindPath(from, to , maplayer,IsInState(USERSTATE_SPEED_UP) ? SpriteSpeedStep8 : SpriteSpeedStep4, false);
 	}
 

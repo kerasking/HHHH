@@ -65,15 +65,15 @@ void CUIEquipItem::AdjustPos(){
             m_RUpgradeSprite->SetVisible(true);
         }
         
-		CGRect rect = this->GetFrameRect();
-		CGRect rectT;
+		CCRect rect = this->GetFrameRect();
+		CCRect rectT;
 		if(m_nUpgradeIconPos == 0)
 		{
-			rectT = CGRectMake(-UPGRADE_ICON_W, rect.size.height-UPGRADE_ICON_H, UPGRADE_ICON_W, UPGRADE_ICON_H);
+			rectT = CCRectMake(-UPGRADE_ICON_W, rect.size.height-UPGRADE_ICON_H, UPGRADE_ICON_W, UPGRADE_ICON_H);
 		} 
 		else 
 		{
-			rectT = CGRectMake(rect.size.width, rect.size.height-UPGRADE_ICON_H, UPGRADE_ICON_W, UPGRADE_ICON_H);
+			rectT = CCRectMake(rect.size.width, rect.size.height-UPGRADE_ICON_H, UPGRADE_ICON_W, UPGRADE_ICON_H);
 		}
 		m_GUpgradeSprite->SetFrameRect(rectT);
 		m_RUpgradeSprite->SetFrameRect(rectT);

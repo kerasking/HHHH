@@ -64,7 +64,7 @@ namespace NDEngine
 		
 	public:
 		void draw(); override	
-		void SetFrameRect(CGRect rect); override		
+		void SetFrameRect(CCRect rect); override		
 	private:
 		std::string m_iphoneEditText, m_thisText;		
 		NDUILabel* m_label;

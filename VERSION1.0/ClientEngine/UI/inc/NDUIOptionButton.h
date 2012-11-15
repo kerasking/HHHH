@@ -48,7 +48,7 @@ public:
 	int GetOptionIndex();
 	void SetBgClr(cocos2d::ccColor4B clr);
 
-	void SetFrameRect(CGRect rect);override
+	void SetFrameRect(CCRect rect);override
 
 	void ShowFrame(bool show)
 	{
@@ -59,8 +59,8 @@ public:
 	void draw();override
 	void NextOpt();
 	void PreOpt();
-	void OnFrameRectChange(CGRect srcRect, CGRect dstRect);override
-	void SetOptIndex(uint index);
+	void OnFrameRectChange(CCRect srcRect, CCRect dstRect);override
+	void SetOptIndex(unsigned int index);
 
 protected:
 	NDTile *m_leftArrow;

@@ -25,6 +25,7 @@ class CUIRoleNode : public NDUINode
 public:
 	void Initialization(); override
 	void ChangeLookFace(int nLookFace);
+    void SetRidePet(int pet_look,int stand_action,int run_action);
 	void SetEquip(int nEquipId, int nQuality);
 	void SetMove(bool bSet, bool directRight=true);
 	void SetRoleScale(float scale);

@@ -19,11 +19,16 @@
 #include "NDBaseRole.h"
 #include "NDUICustomView.h"
 #include "NDMapLayer.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "NDConsole.h"
+#endif
 #include "NDTimer.h"
 #include "AutoLink.h"
 //#include "GameUIRequest.h"		///< 依赖汤自勤的GameUIRequest
 #include "GlobalDialog.h"
+#ifdef USE_MGSDK
+#import "MBGPlatform.h"
+#endif
 
 using namespace std;
 
@@ -271,7 +276,9 @@ class NDMapMgr:
 	public NDObject,
 	public TSingleton<NDMapMgr>,
 	public NDMsgObject,
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	public NDConsoleListener,
+#endif
 	public ITimerCallback
 {
 public:
@@ -390,7 +397,18 @@ public:
 	//void addRequst(RequsetInfo& request);		///< RequestInfo需要合并后 郭浩
 	void NavigateTo(int mapX, int mapY, int mapId); 
 	void NavigateToNpc(int nNpcId);
-
+    void ProcessOAuthTokenRet(NDTransData& data);
+    void ProcessCreateTransactionRet(NDTransData& data);
+    void ProcessCloseTransactionRet(NDTransData& data);
+    void sendVerifier(CCString *verifier);
+    
+#ifdef USE_MGSDK
+    void VerifierError(MBGError *error);
+    void CloseTransaction();
+    void CancelTransaction();
+    void TransactionError(MBGError *error);
+#endif
+	void RegisProcessMsg();
 public:
 
 	bool Hack_loadSceneByMapDocID(int nMapID) { return loadSceneByMapDocID(nMapID); }; //for debug purpose only.

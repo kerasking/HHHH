@@ -181,8 +181,8 @@ private:
 	
 protected:
 	// 派生类定制容器按钮(不包括设置与刷新)属性 begin ..
-	CGSize				m_sizeBtn;				// 按钮大小
-	CGPoint				m_pointBorder;			// 容器的内部坐标
+	CCSize				m_sizeBtn;				// 按钮大小
+	CCPoint				m_pointBorder;			// 容器的内部坐标
 	unsigned int		m_uiInterval;			// 容器内的间隔
 	SpeedBarAlignment	m_align;				// 排版
 	// 派生类定制属性 end ..

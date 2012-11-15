@@ -31,7 +31,7 @@ class NDAnimation : cocos2d::CCObject
 	CC_PROPERTY(int, m_nCurIndexInAniGroup, CurIndexInAniGroup)
 
 private:
-	CGRect getRect();
+	CCSize getRect();
 
 	void runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord, bool needDraw);
 	void runWithRunFrameRecord(NDFrameRunRecord* runFrameRecord, bool needDraw, float drawScale);

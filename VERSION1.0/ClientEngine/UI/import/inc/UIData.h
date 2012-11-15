@@ -48,7 +48,7 @@ for(int i=0; i<nCtrlAmount; i++)
 #include "cocos2d.h"
 #include "CCPointExtension.h"
 #include "IniFile.h"
-#include "Utility.h"
+#include "UtilityInc.h"
 
 enum DISPLAY_RESOLUTION
 {
@@ -93,8 +93,8 @@ struct UIINFO
 	CTRL_UV rectFocus;
 	CTRL_UV rectBack;
 
-	CGPoint CtrlPos;
-	CGPoint CtrlAnchorPos;
+    cocos2d::CCPoint CtrlPos;
+    cocos2d::CCPoint CtrlAnchorPos;
 
 	unsigned long   nID;
 	unsigned long   nType;
@@ -199,13 +199,13 @@ public:
 
 
 	//取控件坐标，[注：锚点坐标]
-	CGPoint getPos()
+    cocos2d::CCPoint getPos()
 	{
 		return m_kInfo.CtrlPos;
 	}
 
 	//取控件锚点值
-	CGPoint getAnchorPoint()
+	cocos2d::CCPoint getAnchorPoint()
 	{
 		return m_kInfo.CtrlAnchorPos;
 	}

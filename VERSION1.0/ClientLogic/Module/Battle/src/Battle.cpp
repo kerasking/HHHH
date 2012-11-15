@@ -114,7 +114,7 @@ QuickTalkCell::~QuickTalkCell()
 
 }
 
-void QuickTalkCell::Initialization(const char* pszText, const CGSize& size)
+void QuickTalkCell::Initialization(const char* pszText, const CCSize& size)
 {
 	NDUINode::Initialization();
 
@@ -123,7 +123,7 @@ void QuickTalkCell::Initialization(const char* pszText, const CGSize& size)
 	NDPicture* pic = new NDPicture;
 	pic->Initialization(NDPath::GetImgPathBattleUI("chat_icon_sys.png").c_str());
 	img->SetPicture(pic, true);
-	img->SetFrameRect(CGRectMake(3.0f, 9.0f, 9.0f, 9.0f));
+	img->SetFrameRect(CCRectMake(3.0f, 9.0f, 9.0f, 9.0f));
 	AddChild(img);
 
 	img = new NDUIImage;
@@ -131,10 +131,10 @@ void QuickTalkCell::Initialization(const char* pszText, const CGSize& size)
 	pic = new NDPicture;
 	pic->Initialization(NDPath::GetImgPathBattleUI("battle_chat_line.png").c_str(), 10,1);
 	img->SetPicture(pic, true);
-	img->SetFrameRect(CGRectMake(0.0f, size.height - 6.0f, size.width, 2.0f));
+	img->SetFrameRect(CCRectMake(0.0f, size.height - 6.0f, size.width, 2.0f));
 	AddChild(img);
 
-	CGRect rectText = CGRectMake(15.0f, 5.0f, size.width - 15.0f, size.height - 7.0f);
+	CCRect rectText = CCRectMake(15.0f, 5.0f, size.width - 15.0f, size.height - 7.0f);
 
 	m_lbText = new NDUILabel;
 	m_lbText->Initialization();
@@ -201,7 +201,7 @@ void HighlightTip::Initialization()
 
 	NDUIImage* pImgBubble = new NDUIImage;
 	pImgBubble->Initialization();
-	pImgBubble->SetFrameRect(CGRectMake(0, 0, m_pkPicBubble->GetSize().width, m_pkPicBubble->GetSize().height));
+	pImgBubble->SetFrameRect(CCRectMake(0, 0, m_pkPicBubble->GetSize().width, m_pkPicBubble->GetSize().height));
 	pImgBubble->SetPicture(m_pkPicBubble, false);
 	AddChild(pImgBubble);
 
@@ -209,14 +209,14 @@ void HighlightTip::Initialization()
 	imgHp->Initialization();
 	NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("hp.png"));
 	imgHp->SetPicture(pic);
-	imgHp->SetFrameRect(CGRectMake(2, 20, pic->GetSize().width, pic->GetSize().height));
+	imgHp->SetFrameRect(CCRectMake(2, 20, pic->GetSize().width, pic->GetSize().height));
 	AddChild(imgHp);
 
 	NDUIImage* imgMp = new NDUIImage;
 	imgMp->Initialization();
 	pic = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("mp.png"));
 	imgMp->SetPicture(pic);
-	imgMp->SetFrameRect(CGRectMake(2, 35, pic->GetSize().width, pic->GetSize().height));
+	imgMp->SetFrameRect(CCRectMake(2, 35, pic->GetSize().width, pic->GetSize().height));
 	AddChild(imgMp);
 
 	m_hpBar = new HighlightTipStatusBar(0xC7321A);
@@ -229,12 +229,12 @@ void HighlightTip::Initialization()
 
 	m_imgNumHp = new ImageNumber;
 	m_imgNumHp->Initialization();
-	m_imgNumHp->SetFrameRect(CGRectMake(16, 25, 40, 10));
+	m_imgNumHp->SetFrameRect(CCRectMake(16, 25, 40, 10));
 	AddChild(m_imgNumHp);
 
 	m_imgNumMp = new ImageNumber;
 	m_imgNumMp->Initialization();
-	m_imgNumMp->SetFrameRect(CGRectMake(16, 43, 40, 10));
+	m_imgNumMp->SetFrameRect(CCRectMake(16, 43, 40, 10));
 	AddChild(m_imgNumMp);
 
 	EnableEvent(false);
@@ -248,9 +248,9 @@ void HighlightTip::SetFighter(Fighter* pkFighter)
 	}
 
 	NDBaseRole* pkRole = pkFighter->GetRole();
-	CGPoint kPoint = CGPointMake(pkFighter->getX(), pkFighter->getY());
+	CCPoint kPoint = CCPointMake(pkFighter->getX(), pkFighter->getY());
 
-	CGRect kRect = CGRectMake(kPoint.x, kPoint.y, m_pkPicBubble->GetSize().width,
+	CCRect kRect = CCRectMake(kPoint.x, kPoint.y, m_pkPicBubble->GetSize().width,
 			m_pkPicBubble->GetSize().height);
 
 	kRect.origin.x -= kRect.size.width / 2;
@@ -271,12 +271,12 @@ void HighlightTip::SetFighter(Fighter* pkFighter)
 
 	m_hpBar->SetNum(pkFighter->m_kInfo.nLife, pkFighter->m_kInfo.nLifeMax);
 	m_hpBar->SetFrameRect(
-			CGRectMake(kRect.origin.x + 16, kRect.origin.y + 20, 40, 10));
+			CCRectMake(kRect.origin.x + 16, kRect.origin.y + 20, 40, 10));
 	m_imgNumHp->SetSmallRedTwoNumber(pkFighter->m_kInfo.nLife, pkFighter->m_kInfo.nLifeMax);
 
 	m_mpBar->SetNum(pkFighter->m_kInfo.nMana, pkFighter->m_kInfo.nManaMax);
 	m_mpBar->SetFrameRect(
-			CGRectMake(kRect.origin.x + 16, kRect.origin.y + 38, 40, 10));
+			CCRectMake(kRect.origin.x + 16, kRect.origin.y + 38, 40, 10));
 	m_imgNumMp->SetSmallRedTwoNumber(pkFighter->m_kInfo.nMana, pkFighter->m_kInfo.nManaMax);
 
 	NDUILabel* pkNameLabel = (NDUILabel*) GetChild(TAG_NAME);
@@ -296,9 +296,9 @@ void HighlightTip::SetFighter(Fighter* pkFighter)
 	//		ss << "【" << NDCommonCString("xiyou") << "】"; 
 	//	}
 	pkNameLabel->SetText(kStringStream.str().c_str());
-	CGSize sizeName = getStringSize(kStringStream.str().c_str(), 15);
+	CCSize sizeName = getStringSize(kStringStream.str().c_str(), 15);
 	pkNameLabel->SetFrameRect(
-			CGRectMake((kRect.size.width - sizeName.width) / 2, 0,
+			CCRectMake((kRect.size.width - sizeName.width) / 2, 0,
 					sizeName.width, sizeName.height));
 }
 
@@ -643,11 +643,11 @@ void Battle::ShowQuickChat(bool bShow)
 	//	if (bShow) {
 	//		AddChild(m_imgQuickTalkBg);
 	//		AddChild(m_tlQuickTalk);
-	//		m_layerBtnQuitTalk->SetFrameRect(CGRectMake(35, 136, 48, 20));
+	//		m_layerBtnQuitTalk->SetFrameRect(CCRectMake(35, 136, 48, 20));
 	//	} else {
 	//		RemoveChild(m_imgQuickTalkBg, false);
 	//		RemoveChild(m_tlQuickTalk, false);
-	//		m_layerBtnQuitTalk->SetFrameRect(CGRectMake(35, 300, 48, 20));
+	//		m_layerBtnQuitTalk->SetFrameRect(CCRectMake(35, 300, 48, 20));
 	//	}
 }
 
@@ -666,7 +666,7 @@ void Battle::ShowChatTextField(bool bShow)
 	//		if (NULL == m_chatDelegate.tfChat) {
 	//			UITextField* tfChat = [[UITextField alloc] init];
 	//			tfChat.transform = CGAffineTransformMakeRotation(3.141592f/2.0f);
-	//			tfChat.frame = CGRectMake(290.0f, 54.0f, 25.0f, 326.0f);
+	//			tfChat.frame = CCRectMake(290.0f, 54.0f, 25.0f, 326.0f);
 	//			tfChat.textColor = [UIColor whiteColor];
 	//			tfChat.returnKeyType = UIReturnKeyDone;
 	//			tfChat.delegate = m_chatDelegate;
@@ -720,14 +720,14 @@ void Battle::OnButtonClick(NDUIButton* button)
 	//						
 	//						HighlightFighter(*it);
 	//						
-	//						CGSize size = NDDirector::DefaultDirector()->GetWinSize();
+	//						CCSize size = NDDirector::DefaultDirector()->GetWinSize();
 	//						NDUILabel* lbViewFighter = new NDUILabel;
 	//						lbViewFighter->Initialization();
 	//						lbViewFighter->SetText(TEXT_VIEW_STATUS);
 	//						lbViewFighter->SetFontColor(ccc4(255, 255, 255, 255));
-	//						CGSize sizeText = getStringSize(TEXT_VIEW_STATUS, 15);
+	//						CCSize sizeText = getStringSize(TEXT_VIEW_STATUS, 15);
 	//						lbViewFighter->SetTag(TAG_VIEW_FIGHTER_STATUS);
-	//						lbViewFighter->SetFrameRect(CGRectMake((size.width - sizeText.width) / 2
+	//						lbViewFighter->SetFrameRect(CCRectMake((size.width - sizeText.width) / 2
 	//										       , 260, sizeText.width, sizeText.height));
 	//						AddChild(lbViewFighter);
 	//						return;
@@ -830,12 +830,12 @@ void Battle::Initialization(int action)
 		m_bWatch = true;
 	}
 
-	CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 
 	m_battleBg = new NDUILayer();
 	m_battleBg->Initialization();
 	m_battleBg->SetBackgroundColor(ccc4(0, 0, 0, 188));
-	m_battleBg->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
+	m_battleBg->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
 
 	if (m_bWatch)
 	{ // 观战不需要其他操作
@@ -863,11 +863,11 @@ void Battle::InitEudemonOpt()
 	getMainEudemon();
 
 	/*if (getMainEudemon()) {
-	 CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	 CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 	 m_eudemonOpt = new NDUITableLayer;
 	 m_eudemonOpt->Initialization();
 	 m_eudemonOpt->VisibleSectionTitles(false);
-	 m_eudemonOpt->SetFrameRect(CGRectMake((winSize.width / 2) - 30, winSize.height / 2 - 115, 60, TEXT_BTN_HEIGHT * 5));
+	 m_eudemonOpt->SetFrameRect(CCRectMake((winSize.width / 2) - 30, winSize.height / 2 - 115, 60, TEXT_BTN_HEIGHT * 5));
 	 NDDataSource *ds = new NDDataSource;
 	 NDSection *sec = new NDSection;
 	 
@@ -1255,7 +1255,7 @@ void Battle::processBattleSkillList(NDTransData& data, int len)
  // 打开技能列表
  NDAsssert (m_skillOpt == NULL);
  
- CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+ CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
  int height = 0;
  
  m_skillOpt = new NDUITableLayer;
@@ -1293,7 +1293,7 @@ void Battle::processBattleSkillList(NDTransData& data, int len)
  ds->AddSection(sec);
  m_skillOpt->SetDelegate(this);
  m_skillOpt->SetDataSource(ds);
- m_skillOpt->SetFrameRect(CGRectMake((winSize.width / 2) - 80, winSize.height / 2, 160, height));
+ m_skillOpt->SetFrameRect(CCRectMake((winSize.width / 2) - 80, winSize.height / 2, 160, height));
  AddChild(m_skillOpt);
  
  // 技能说明
@@ -1302,7 +1302,7 @@ void Battle::processBattleSkillList(NDTransData& data, int len)
  skillMemo->SetTag(TAG_SKILL_MEMO);
  skillMemo->SetBackgroundColor(ccc4(228, 219, 169, 255));
  skillMemo->SetText(firstSkill->getSimpleDes(true).c_str());
- skillMemo->SetFrameRect(CGRectMake((winSize.width / 2) - 80, 30, 160, winSize.height / 2 - 35));
+ skillMemo->SetFrameRect(CCRectMake((winSize.width / 2) - 80, 30, 160, winSize.height / 2 - 35));
  AddChild(skillMemo);
  }*/
 
@@ -1345,7 +1345,7 @@ void Battle::processBattleSkillList(NDTransData& data, int len)
  }
  }
  
- CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+ CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
  int height = 0;
  
  m_itemOpt = new NDUITableLayer;
@@ -1383,7 +1383,7 @@ void Battle::processBattleSkillList(NDTransData& data, int len)
  ds->AddSection(sec);
  m_itemOpt->SetDelegate(this);
  m_itemOpt->SetDataSource(ds);
- m_itemOpt->SetFrameRect(CGRectMake((winSize.width / 2) - 80, winSize.height / 2 - 115, 160, height));
+ m_itemOpt->SetFrameRect(CCRectMake((winSize.width / 2) - 80, winSize.height / 2 - 115, 160, height));
  AddChild(m_itemOpt);
  }*/
 
@@ -1451,7 +1451,7 @@ void Battle::OnBtnRun()
  // 打开技能列表
  NDAsssert (m_skillOpt == NULL);
  
- CGSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+ CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
  int height = 0;
  
  m_skillOpt = new NDUITableLayer;
@@ -1489,7 +1489,7 @@ void Battle::OnBtnRun()
  ds->AddSection(sec);
  m_skillOpt->SetDelegate(this);
  m_skillOpt->SetDataSource(ds);
- m_skillOpt->SetFrameRect(CGRectMake((winSize.width / 2) - 80, winSize.height / 2, 160, height));
+ m_skillOpt->SetFrameRect(CCRectMake((winSize.width / 2) - 80, winSize.height / 2, 160, height));
  AddChild(m_skillOpt);
  
  // 技能说明
@@ -1498,7 +1498,7 @@ void Battle::OnBtnRun()
  skillMemo->SetTag(TAG_SKILL_MEMO);
  skillMemo->SetBackgroundColor(ccc4(228, 219, 169, 255));
  skillMemo->SetText(firstSkill->getSimpleDes(true).c_str());
- skillMemo->SetFrameRect(CGRectMake((winSize.width / 2) - 80, 30, 160, winSize.height / 2 - 35));
+ skillMemo->SetFrameRect(CCRectMake((winSize.width / 2) - 80, 30, 160, winSize.height / 2 - 35));
  AddChild(skillMemo);
  }*/
 
@@ -1580,14 +1580,14 @@ void Battle::SetAutoCount()
 	//	m_lbAuto->Initialization();
 	//	m_lbAuto->SetText("自动");
 	//	m_lbAuto->SetFontColor(ccc4(255, 255, 255, 255));
-	//	CGSize sizeText = getStringSize("自动", 15);
-	//	m_lbAuto->SetFrameRect(CGRectMake(2, 2, sizeText.width, sizeText.height));
+	//	CCSize sizeText = getStringSize("自动", 15);
+	//	m_lbAuto->SetFrameRect(CCRectMake(2, 2, sizeText.width, sizeText.height));
 	//	AddChild(m_lbAuto);
 	//	
 	//	m_imgAutoCount = new ImageNumber();
 	//	m_imgAutoCount->Initialization();
 	//	m_imgAutoCount->SetBigRedNumber(m_autoCount, false);
-	//	m_imgAutoCount->SetFrameRect(CGRectMake(40, 2, m_imgAutoCount->GetNumberSize().width, m_imgAutoCount->GetNumberSize().height));
+	//	m_imgAutoCount->SetFrameRect(CCRectMake(40, 2, m_imgAutoCount->GetNumberSize().width, m_imgAutoCount->GetNumberSize().height));
 	//	AddChild(m_imgAutoCount);
 	//	
 	//	m_timer.SetTimer(this, TIMER_AUTOCOUNT, 1);
@@ -1681,7 +1681,7 @@ void Battle::HighlightFighter(Fighter* f)
 	NDUIImage *lingpai = (NDUIImage*) GetChild(TAG_LINGPAI);
 
 	NDBaseRole* role = f->GetRole();
-	CGPoint pt = CGPointMake(f->getX(), f->getY());
+	CCPoint pt = CCPointMake(f->getX(), f->getY());
 
 	if (!lingpai)
 	{
@@ -1694,7 +1694,7 @@ void Battle::HighlightFighter(Fighter* f)
 
 	//	if (m_picBoji) m_picBoji->SetReverse(f->GetGroup() == BATTLE_GROUP_DEFENCE);
 	//	
-	//	CGRect rect = CGRectMake(f->getX() + role->GetWidth() / 2 + 5,
+	//	CCRect rect = CCRectMake(f->getX() + role->GetWidth() / 2 + 5,
 	//							 f->getY() - 15,
 	//							 m_picBoji->GetSize().width,
 	//							 m_picBoji->GetSize().height);
@@ -1705,7 +1705,7 @@ void Battle::HighlightFighter(Fighter* f)
 	//	
 	//	lingpai->SetFrameRect(rect);
 
-	//CGRect frameLingpai = lingpai->GetFrameRect();
+	//CCRect frameLingpai = lingpai->GetFrameRect();
 	if (!name)
 	{
 		name = new NDUILabel;
@@ -1721,9 +1721,9 @@ void Battle::HighlightFighter(Fighter* f)
 	//		ss << "【" << NDCommonCString("xiyou") << "】"; 
 	//	}
 	name->SetText(ss.str().c_str());
-	CGSize sizeName = getStringSize(ss.str().c_str(), 15);
+	CCSize sizeName = getStringSize(ss.str().c_str(), 15);
 	name->SetFrameRect(
-			CGRectMake(pt.x - sizeName.width / 2,
+			CCRectMake(pt.x - sizeName.width / 2,
 					pt.y - role->getGravityY() - sizeName.height,
 					sizeName.width, sizeName.height));
 
@@ -1824,13 +1824,13 @@ void Battle::Init()
 	//--Guosen 2012.6.28//不显示动作名称（防御，逃跑，闪避），也就不加载图形文件
 	//m_picActionWordDef = new NDPicture;
 	//m_picActionWordDef->Initialization(NDPath::GetImgPath("actionWord.png"));
-	//m_picActionWordDef->Cut(CGRectMake(0.0f, 0.0f, 37.0f, 18.0f));
+	//m_picActionWordDef->Cut(CCRectMake(0.0f, 0.0f, 37.0f, 18.0f));
 	//m_picActionWordFlee = new NDPicture;
 	//m_picActionWordDodge = new NDPicture;
 	//m_picActionWordDodge->Initialization(NDPath::GetImgPath("actionWord.png"));
-	//m_picActionWordDodge->Cut(CGRectMake(0.0f, 18.0f, 37.0f, 18.0f));
+	//m_picActionWordDodge->Cut(CCRectMake(0.0f, 18.0f, 37.0f, 18.0f));
 	//m_picActionWordFlee->Initialization(NDPath::GetImgPath("actionWord.png"));
-	//m_picActionWordFlee->Cut(CGRectMake(0.0f, 36.0f, 37.0f, 18.0f));
+	//m_picActionWordFlee->Cut(CCRectMake(0.0f, 36.0f, 37.0f, 18.0f));
 	//--
 
 	//	m_picTalk = NULL;
@@ -1901,7 +1901,7 @@ void Battle::Init()
 	m_bShrinkBottom = false;
 }
 
-Fighter* Battle::GetTouchedFighter(VEC_FIGHTER& fighterList, CGPoint pt)
+Fighter* Battle::GetTouchedFighter(VEC_FIGHTER& fighterList, CCPoint pt)
 {
 	VEC_FIGHTER_IT itBegin = fighterList.begin();
 	VEC_FIGHTER_IT itEnd = fighterList.end();
@@ -1916,7 +1916,7 @@ Fighter* Battle::GetTouchedFighter(VEC_FIGHTER& fighterList, CGPoint pt)
 		}
 
 		NDBaseRole* pkRole = pkFighter->GetRole();
-		CGPoint fPos = pkRole->GetPosition();
+		CCPoint fPos = pkRole->GetPosition();
 
 		int w = pkRole->GetWidth();
 		int h = pkRole->GetHeight();
@@ -1924,7 +1924,7 @@ Fighter* Battle::GetTouchedFighter(VEC_FIGHTER& fighterList, CGPoint pt)
 		fPos.x -= (w >> 1);
 		fPos.y -= h;
 
-		if (IsPointInside(pt, CGRectMake(fPos.x, fPos.y, w, h)))
+		if (IsPointInside(pt, CCRectMake(fPos.x, fPos.y, w, h)))
 		{
 			return pkFighter;
 		}
@@ -1961,19 +1961,19 @@ bool Battle::TouchEnd(NDTouch* touch)
 		currentShowFighter=f->m_kInfo.idObj;
 		
 		//int nLevel = 0;
-		//if ( f->m_info.fighterType == FIGHTER_TYPE_PET )
+		//if ( f->m_kInfo.fighterType == FIGHTER_TYPE_PET )
 		//{
-		//    nLevel = ScriptDBObj.GetN( "pet_config", f->m_info.idType, DB_PET_CONFIG_SKILL );
+		//    nLevel = ScriptDBObj.GetN( "pet_config", f->m_kInfo.idType, DB_PET_CONFIG_SKILL );
 		//}
-		//else if( f->m_info.fighterType == FIGHTER_TYPE_MONSTER )
+		//else if( f->m_kInfo.fighterType == FIGHTER_TYPE_MONSTER )
 		//{
-		//    nLevel = ScriptDBObj.GetN( "monstertype", f->m_info.idType, DB_MONSTERTYPE_LEVEL );
+		//    nLevel = ScriptDBObj.GetN( "monstertype", f->m_kInfo.idType, DB_MONSTERTYPE_LEVEL );
 		//}
 		ScriptMgrObj.excuteLuaFunc( "LoadUI", "FighterInfo", f->getOriginX(), f->getOriginY() );
 		std::string skillName = "";
-		if ( f->m_info.skillId > 0 )
+		if ( f->m_kInfo.skillId > 0 )
 		{
-			skillName = ScriptDBObj.GetS( "skill_config", f->m_info.skillId, DB_SKILL_CONFIG_NAME );
+			skillName = ScriptDBObj.GetS( "skill_config", f->m_kInfo.skillId, DB_SKILL_CONFIG_NAME );
 
 		}else
 		{
@@ -2005,7 +2005,7 @@ bool Battle::TouchEnd(NDTouch* touch)
 //			if (m_highlightFighter) {
 //				m_dlgStatus = new StatusDialog;
 //				m_dlgStatus->Initialization(m_highlightFighter);
-//				m_dlgStatus->SetFrameRect(CGRectMake(0, 0, NDDirector::DefaultDirector()->GetWinSize().width,
+//				m_dlgStatus->SetFrameRect(CCRectMake(0, 0, NDDirector::DefaultDirector()->GetWinSize().width,
 //													 NDDirector::DefaultDirector()->GetWinSize().height));
 //				AddChild(m_dlgStatus);
 //			}
@@ -2118,14 +2118,14 @@ void Battle::SendBattleAction(const BattleAction& action)
 
 	if (!GetChild(TAG_WAITING) && m_mainFighter)
 	{
-		CGPoint pt = m_mainFighter->GetRole()->GetPosition();
+		CCPoint pt = m_mainFighter->GetRole()->GetPosition();
 		NDUILabel* waiting = new NDUILabel;
 		waiting->Initialization();
 		waiting->SetFontColor(ccc4(255, 255, 255, 255));
 		waiting->SetTag(TAG_WAITING);
 		waiting->SetText(NDCommonCString("wait"));
-		CGSize sizeText = getStringSize(NDCommonCString("wait"), 15);
-		waiting->SetFrameRect(CGRectMake(pt.x - sizeText.width / 2, pt.y, sizeText.width, sizeText.height));
+		CCSize sizeText = getStringSize(NDCommonCString("wait"), 15);
+		waiting->SetFrameRect(CCRectMake(pt.x - sizeText.width / 2, pt.y, sizeText.width, sizeText.height));
 		AddChild(waiting);
 	}
 
@@ -2313,8 +2313,8 @@ void Battle::drawFighter()
 	//	if (m_mainFighter && !watchBattle)
 	//	{
 	//		NDBaseRole* role = m_mainFighter->GetRole();
-	//		CGPoint pt = role->GetPosition();
-	//		m_imgWhoAmI->SetFrameRect(CGRectMake(pt.x - 6, pt.y - role->GetHeight(), m_picWhoAmI->GetSize().width, m_picWhoAmI->GetSize().height));
+	//		CCPoint pt = role->GetPosition();
+	//		m_imgWhoAmI->SetFrameRect(CCRectMake(pt.x - 6, pt.y - role->GetHeight(), m_picWhoAmI->GetSize().width, m_picWhoAmI->GetSize().height));
 	//	}
 }
 
@@ -3894,11 +3894,11 @@ void Battle::runAction(int nTeamID)
 			break;
 		case BATTLE_EFFECT_TYPE_CHANGE_POSTION://移位
 			{//++Guosen 2012.7.10
-				int targetX = countX( this->m_teamAmout, fa->m_pkActor->m_info.group, (fa->m_nTeamDefense-1)%3+1, fa->m_nData );
-				int targetY = countY( this->m_teamAmout, fa->m_pkActor->m_info.group, (fa->m_nTeamDefense-1)%3+1, fa->m_nData );
+				int targetX = countX( this->m_teamAmout, fa->m_pkActor->m_kInfo.group, (fa->m_nTeamDefense-1)%3+1, fa->m_nData );
+				int targetY = countY( this->m_teamAmout, fa->m_pkActor->m_kInfo.group, (fa->m_nTeamDefense-1)%3+1, fa->m_nData );
 				if ( fa->m_pkActor->moveTo( targetX, targetY ) )
 				{
-					fa->m_pkActor->m_info.btStations = fa->m_nData;
+					fa->m_pkActor->m_kInfo.btStations = fa->m_nData;
 					fa->m_pkActor->setOriginPos( targetX, targetY );
 					fa->m_eActionStatus = ACTION_STATUS_FINISH;
 				}
@@ -3920,8 +3920,8 @@ void Battle::runAction(int nTeamID)
 			fa->m_pkActor->m_bHardAtk=false;
 			fa->m_pkActor->hurted(fa->m_nData);
 			NDLog("hurt %d",fa->m_nData);
-			fa->m_pkActor->setCurrentHP((fa->m_pkActor->m_info.nLife)+(fa->m_nData));
-			if (fa->m_pkActor->m_info.nLife > 0)
+			fa->m_pkActor->setCurrentHP((fa->m_pkActor->m_kInfo.nLife)+(fa->m_nData));
+			if (fa->m_pkActor->m_kInfo.nLife > 0)
 			{
 				// hurt
 				fa->m_pkActor->setHurtOK(true);
@@ -3950,7 +3950,7 @@ void Battle::runAction(int nTeamID)
 			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
 		case BATTLE_EFFECT_TYPE_MANA:
-			fa->m_pkActor->setCurrentMP((fa->m_pkActor->m_info.nMana)+(fa->m_nData));
+			fa->m_pkActor->setCurrentMP((fa->m_pkActor->m_kInfo.nMana)+(fa->m_nData));
 			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
 		default:
@@ -4376,7 +4376,7 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 		case BATTLE_EFFECT_TYPE_DRITICAL:
 			fighter->m_bHardAtk = true;
 			fighter->hurted(cmd->data);
-			fighter->setCurrentHP((fighter->m_info.nLife)+(cmd->data));
+			fighter->setCurrentHP((fighter->m_kInfo.nLife)+(cmd->data));
 			if (fighter->m_kInfo.nLife > 0)
 			{
 				// hurt
@@ -4453,8 +4453,8 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 			break;
 		case BATTLE_EFFECT_TYPE_CHANGE_POSTION://移位
 			{
-				int targetX = countX( this->m_teamAmout, fighter->m_info.group, fighter->m_info.btBattleTeam, cmd->data );
-				int targetY = countY( this->m_teamAmout, fighter->m_info.group, fighter->m_info.btBattleTeam, cmd->data );
+				int targetX = countX( this->m_teamAmout, fighter->m_kInfo.group, fighter->m_kInfo.btBattleTeam, cmd->data );
+				int targetY = countY( this->m_teamAmout, fighter->m_kInfo.group, fighter->m_kInfo.btBattleTeam, cmd->data );
 				if ( fighter->moveTo( targetX, targetY ) )
 				{
 					fighter->m_kInfo.btStations = cmd->data;
@@ -4585,7 +4585,8 @@ void Battle::moveBack(FightAction* action)
 }
 
 void Battle::addSkillEffectToFighter(Fighter* fighter, NDAnimationGroup* effect, int delay, int pos, bool bRevers)
-{
+{//--Guosen 2012.11.9 //因效果动画未实现，暂时注释，--#################################################################################################
+return;
 	NDLog("add skill effect");
 	NDSubAniGroup sa;
 	sa.role = fighter->GetRole();
@@ -5343,7 +5344,7 @@ void Battle::SetFighterOnline(int idFighter, bool bOnline)
  {
  m_btnCancleAutoFight = new NDUIButton();
  m_btnCancleAutoFight->Initialization();
- m_btnCancleAutoFight->SetFrameRect(CGRectMake(0, 0, 60, 30));
+ m_btnCancleAutoFight->SetFrameRect(CCRectMake(0, 0, 60, 30));
  m_btnCancleAutoFight->SetDelegate(this);
  m_btnCancleAutoFight->SetTag(BTN_CANCLE_AUTO);
  m_btnCancleAutoFight->SetBackgroundColor(ccc4(107, 158, 156, 255));

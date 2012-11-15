@@ -52,19 +52,19 @@ protected:
 protected:
 	bool TouchBegin(NDTouch* touch);override
 	bool TouchEnd(NDTouch* touch);override
-	bool DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch);override
+	bool DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch);override
 
 private:
 	typedef struct tagMoveInfo
 	{
-		CGPoint pos;
+		CCPoint pos;
 		clock_t time;
 		tagMoveInfo()
 		{
-			pos = CGPointZero;
+			pos = CCPointZero;
 			time = 0.0f;
 		}
-		tagMoveInfo(CGPoint pos, clock_t time)
+		tagMoveInfo(CCPoint pos, clock_t time)
 		{
 			this->pos = pos;
 			this->time = time;
@@ -123,7 +123,7 @@ public:
 
 	bool refresh(float distance);override
 
-	void SetFrameRect(CGRect rect);override
+	void SetFrameRect(CCRect rect);override
 
 	void draw();override
 

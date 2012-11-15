@@ -55,6 +55,9 @@ int DoFile(LuaState* state)
 	if (str.IsString())
 	{
 #ifndef UPDATE_RES
+#if _DEBUG
+        cocos2d::CCLog("DoFile:%s", NDPath::GetScriptPath(str.GetString()).c_str());
+#endif
 		nRet = state->DoFile(NDPath::GetScriptPath(str.GetString()).c_str());
 #else
         nRet = ScriptMgrObj.LoadLuaFile(NDPath::GetScriptPath(str.GetString()));

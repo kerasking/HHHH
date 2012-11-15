@@ -9,10 +9,18 @@
 #include "NDPath.h"
 #include "define.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#import <Foundation/Foundation.h>
+#endif
 
 NS_NDENGINE_BGN
 
 #define SZ_ROOT_SOURCE_DIR					"SimplifiedChineseRes"	//按语种划分资源根目录名
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+string* s_ResRootPath = NULL;
+string* s_ResBasePath = NULL;
+#endif
 
 string NDPath::NDPath_ResPath			= "../SimplifiedChineseRes/res/";
 string NDPath::NDPath_ImgPath			= "../SimplifiedChineseRes/res/Image/";
@@ -58,89 +66,82 @@ string ReplaceString( const string& inStr, const char* pSrc, const char* pReplac
 	return str;
 }
 
-const string& NDPath::GetResPath()
+const char* NDPath::GetResPath()
 {
-	return NDPath_ResPath;
-
-//	string strPath = "../SimplifiedChineseRes/res/";
-//	return strPath;
-
-// #ifdef TRADITION
-// 		NSString *path = [NSString stringWithFormat:@"%@/TraditionalChineseRes/res/", [[NSBundle mainBundle] resourcePath]];
-// #else
-// 		NSString *path = [NSString stringWithFormat:@"%@/SimplifiedChineseRes/res/", [[NSBundle mainBundle] resourcePath]];
-// #endif
-// 		return string([path UTF8String]);
+    //TraditionalChineseRes
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if(0 == s_ResRootPath)
+    {
+        s_ResRootPath = new string;
+        NSString *path = [NSString stringWithFormat:@"%@/SimplifiedChineseRes/res/", [[NSBundle mainBundle] resourcePath]];
+        *s_ResRootPath = [path UTF8String];
+    }
+    return s_ResRootPath->c_str();
+    
+#else
+    return NDPath_ResPath.c_str();
+#endif
 }
 
 const string& NDPath::GetImagePath()
 {
+	static string ret;
+	ret = GetResPath()+string("Image/");
+    return ret;
 	return NDPath_ImgPath;
+}
 
-// 		NSString *path = NULL;
-// 
-// 		{
-// 		#ifdef TRADITION
-// 			path = [NSString stringWithFormat:@"%@/TraditionalChineseRes/res/image/", [[NSBundle mainBundle] resourcePath]];
-// 		#else
-// 			path = [NSString stringWithFormat:@"%@/SimplifiedChineseRes/res/image/", [[NSBundle mainBundle] resourcePath]];
-// 		#endif
-// 		}
-// 		
-// 		return string([path UTF8String]);
+const string& NDPath::GetResPath2( const char* fileName )
+{
+	static string ret;
+	ret = GetResPath() + string(fileName);
+    return ret;
 }
 
 const string& NDPath::GetMapPath()
 {
+	static string ret;
+    ret = GetResPath()+string("map/");
+    return ret;
 	return NDPath_MapPath;
-	//return "../SimplifiedChineseRes/res/map/";
-
-// 	#ifdef TRADITION
-// 		NSString *path = [NSString stringWithFormat:@"%@/TraditionalChineseRes/res/map/", [[NSBundle mainBundle] resourcePath]];
-// 	#else
-// 		NSString *path = [NSString stringWithFormat:@"%@/SimplifiedChineseRes/res/map/", [[NSBundle mainBundle] resourcePath]];
-// 	#endif
-// 		return string([path UTF8String]);
 }
 
 const string& NDPath::GetSoundPath()
 {
+	static string ret;
+    ret = GetResPath()+string("sound/");
+    return ret;
 	return NDPath_SoundPath;
-	
-// 	#ifdef TRADITION
-// 		NSString *path = [NSString stringWithFormat:@"%@/TraditionalChineseRes/res/sound/", [[NSBundle mainBundle] resourcePath]];
-// 	#else
-// 		NSString *path = [NSString stringWithFormat:@"%@/SimplifiedChineseRes/res/sound/", [[NSBundle mainBundle] resourcePath]];
-// 	#endif
-// 		return string([path UTF8String]);ss
 }
 
 const string& NDPath::GetAnimationPath()
 {
+	static string ret;
+    ret = GetResPath()+string("animation/");
+    return ret;
 	return NDPath_AniPath;
-	
-//	return string("../SimplifiedChineseRes/res/animation/");
-
-// 	#ifdef TRADITION
-// 		NSString *path = [NSString stringWithFormat:@"%@/TraditionalChineseRes/res/animation/", [[NSBundle mainBundle] resourcePath]] ;
-// 	#else
-// 		NSString *path = [NSString stringWithFormat:@"%@/SimplifiedChineseRes/res/animation/", [[NSBundle mainBundle] resourcePath]] ;
-// 	#endif
-// 		return string([path UTF8String]);
 }
 
 const string& NDPath::GetUIPath()
 {
+	static string ret;
+    ret = GetResPath()+string("UI/");
+    return ret;
 	return NDPath_UIPath;
 }
 
 const string& NDPath::GetUIPath( const char* fileName )
 {
-	return NDPath_UIPath += string(fileName);
+	static string ret;
+	ret = GetUIPath() + string(fileName);
+    return ret;
 }
 
 const string& NDPath::GetImgPathBattleUI()
 {
+	static string ret;
+    ret = GetResPath2("image/battle_ui/");
+    return ret;
 	return NDPath_ImgPath_BattleUI;
 }
 
@@ -195,34 +196,21 @@ void NDPath::SetResPath(const char* szPath)
 
 const string& NDPath::GetFullImagepath(const char* pszFileName)
 {
-	return GetImgPath(pszFileName);
+	static string ret;
+	ret = GetImgPath(pszFileName);
+    return ret;
 }
 
 const string& NDPath::GetImgPath(const char* filename)
 {
 	static string ret;
-	return ret = NDPath_ImgPath + filename;
-
-	//return string(GetResPath()+"image/"+filename).c_str();
-
-// 	string strRes = string(GetResPath() + "image/" + filename);
-// 	char* pszTemp = new char[255];
-// 	memset(pszTemp, 0, sizeof(char) * 255);
-// 	strcpy(pszTemp, strRes.c_str());
-// 	return pszTemp;
+	return ret = GetImagePath() + filename;
 }
 
 const string& NDPath::GetImgPathBattleUI(const char* fileName)
 {
 	static string ret;
-	return ret = NDPath_ImgPath_BattleUI + fileName;
-
-// 	string strRes = string(GetResPath() + "image/battle_ui/" + fileName);
-// 	char* pszTemp = new char[255];
-// 	memset(pszTemp, 0, sizeof(char) * 255);
-// 	strcpy(pszTemp, strRes.c_str());
-// 	return pszTemp;
-	//return string(GetResPath()+"image/battle_ui/"+fileName).c_str();
+	return ret = GetResPath2("image/battle_ui/") + fileName;
 }
 
 
@@ -230,62 +218,43 @@ const string& NDPath::GetAniPath(const char* fileName)
 {
 	static string ret;
 	return ret = GetAnimationPath() + fileName;
-
-//	return string(GetResPath() + "animation/" + fileName).c_str();
 }
 
 // 新界面资源统一放在 res/image/ui_new
 const string& NDPath::GetImgPathUINew(const char* fileName)
 {
 	static string ret;
-	return ret = NDPath_ImgPath_UINew + fileName;
-
-// 	string strRes = string(GetResPath() + "image/ui_new/" + fileName);
-// 	char* pszTemp = new char[255];
-// 	memset(pszTemp, 0, sizeof(char) * 255);
-// 	strcpy(pszTemp, strRes.c_str());
-// 	return pszTemp;
-// 	//return string(GetResPath()+"image/ui_new/"+fileName).c_str();
+	return ret = GetResPath2("image/ui_new/")+ fileName;
 }
 
 // 新界面高分辨率资源统一放在 res/image/ui_new/advance
 const string& NDPath::GetImgPathUINewAdvance(const char* fileName)
 {
 	static string ret;
-	return ret = NDPath_ImgPath_UINew + "advance/" + fileName;
-
-// 	string strRes = string(
-// 			GetResPath() + "image/ui_new/advance/" + fileName);
-// 	char* pszTemp = new char[255];
-// 	memset(pszTemp, 0, sizeof(char) * 255);
-// 	strcpy(pszTemp, strRes.c_str());
-// 	return pszTemp;
-//	//	return string(GetResPath()+"image/ui_new/advance/"+fileName).c_str();
+	return ret = GetResPath2("image/ui_new/advance/")+ fileName;
 }
 
 const string& NDPath::GetMapPath(const char* fileName)
 {
 	static string ret;
-	return ret = NDPath_MapPath + fileName;
-//	return string(GetResPath() + "map/" + fileName).c_str();
+	return ret = GetResPath2("map/")+ fileName;
 }
 
 const string& NDPath::GetUIConfigPath(const char* filename)
 {
 	static string ret;
-	return ret = NDPath_UIPath + filename;
-
-// 	string strRes = string(GetResPath() + "UI/" + filename);
-// 	char* pszTemp = new char[255];
-// 	memset(pszTemp, 0, sizeof(char) * 255);
-// 	strcpy(pszTemp, strRes.c_str());
-// 	return pszTemp;
+	return ret = GetUIPath() + filename;
 }
 
 
 const string& NDPath::GetUIImgPath(const char* uiFileNameWithPath)
 {
 	static string ret;
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ret = string(GetResourcePath())+"SimplifiedChineseRes"+uiFileNameWithPath;
+    return ret;
+#else
 
 #ifdef TRADITION
 	return ret = GetResPath() + "TraditionalChineseRes/" + uiFileNameWithPath;
@@ -315,43 +284,32 @@ const string& NDPath::GetUIImgPath(const char* uiFileNameWithPath)
 	ret = pszTemp;
 	return ret;
 #endif        
+#endif
 }
 
 const string& NDPath::GetResPath(const char* fileName)
 {
 	static string ret;
-	return ret = GetResPath() + fileName;
-	
-
-// 	string strRes = string(GetResPath() + fileName);
-// 	char* pszTemp = new char[255];
-// 	memset(pszTemp, 0, sizeof(char) * 255);
-// 	strcpy(pszTemp, strRes.c_str());
-// 	return pszTemp;
-// 	//return string(GetResPath()+fileName).c_str();
+	return ret = GetResPath() + string(fileName);
 }
 
 const string& NDPath::GetSMImgPath(const char* fileName)
 {
 	static string ret;
-	return ret = NDPath_ImgPath + "Res00/" + fileName;
-
-// 	string strRes = string(GetResPath() + "image/Res00/" + fileName);
-// 	char* pszTemp = new char[255];
-// 	memset(pszTemp, 0, sizeof(char) * 255);
-// 	strcpy(pszTemp, strRes.c_str());
-// 	return pszTemp;
-// 	//	return string(GetResPath()+"image/Res00/"+fileName).c_str();
+	return ret = GetImagePath() + "Res00/" + fileName;
 }
 
 const string& NDPath::GetScriptPath(const char* filename)
 {
 	static string ret;
-	return ret = NDPath_ScriptPath + filename;
+	return ret = GetScriptPath() + filename;
 }
 
 const string& NDPath::GetScriptPath()
 {
+	static string ret;
+    ret = GetResPath2("Script/");
+    return ret;
 	return NDPath_ScriptPath;
 }
 
@@ -364,45 +322,63 @@ const string& NDPath::GetAppPath()
 #endif
 }
 
-const string& NDPath::GetResourcePath()
+const char* NDPath::GetResourcePath()
 {
-	return string("");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if(0 == s_ResBasePath)
+    {
+        s_ResBasePath = new string;
+        NSString *path = [NSString stringWithFormat:@"%@/", [[NSBundle mainBundle] resourcePath]];
+        *s_ResBasePath = [path UTF8String];
+	}
+	return s_ResBasePath->c_str();
+#else
+	return "";
+#endif
 }
 
 const string& NDPath::GetImgPathNew( const char* fileName )
 {
-	return GetResPath() + string("/image/ui_new/") + string(fileName);
+	static string ret;
+	ret = GetResPath2("image/ui_new/") + string(fileName);
+    return ret;
 }
 
 const string& NDPath::GetImgPathNewAdvance( const char* fileName )
 {
-	return GetResPath() + string("/image/ui_new/advance/") + string(fileName);
+	static string ret;
+	ret = GetResPath2("image/ui_new/advance/") + string(fileName);
+    return ret;
 }
 
 const string& NDPath::GetRootResPath()
 {
+    static string ret;
 	if ( s_iResDirPos == 0 )
 	{
-		return NDPath::GetAppPath() + SZ_ROOT_SOURCE_DIR + "/";
+		ret = NDPath::GetAppPath() + SZ_ROOT_SOURCE_DIR + "/";
 	}
 	else
 	{
 #ifdef DOCUMENT
-		return NDPath::GetResourcePath() + SZ_ROOT_SOURCE_DIR + "/";
+		ret = NDPath::GetResourcePath() + SZ_ROOT_SOURCE_DIR + "/";
 #else
-		return NDPath::GetCashesPath() + SZ_ROOT_SOURCE_DIR + "/";
+		ret = NDPath::GetCashesPath() + SZ_ROOT_SOURCE_DIR + "/";
 #endif
 	}
+    return ret;
 }
 
 std::string NDPath::GetCashesPath()
 {
-//     // NSError *error;
-//     NSString *path1 = [NSHomeDirectory()stringByAppendingPathComponent:@"Library"];
-//     NSString *CashesDirectory = [path1 stringByAppendingPathComponent:@"/Caches"];
-//     return std::string([CashesDirectory UTF8String]) +"/";
-
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+     // NSError *error;
+     NSString *path1 = [NSHomeDirectory()stringByAppendingPathComponent:@"Library"];
+     NSString *CashesDirectory = [path1 stringByAppendingPathComponent:@"/Caches"];
+     return std::string([CashesDirectory UTF8String]) +"/";
+#else
 	return string("");
+#endif
 }
 
 NS_NDENGINE_END

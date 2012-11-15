@@ -13,7 +13,7 @@
 //todo
 // @interface CCTexture2D(NDUI)
 // 
-// - (void)ndDrawInRect:(CGRect)rect;
+// - (void)ndDrawInRect:(CCRect)rect;
 // 
 // @end
 

@@ -37,8 +37,8 @@ public NDUIButton
 	
 public:
 	void Initialization(); override
-	void SetFrameRect(CGRect rect); override
-	void SetBoundRect(CGRect rect);
+	void SetFrameRect(CCRect rect); override
+	void SetBoundRect(CCRect rect);
 	void SetLinkText(const char* text);
 	void SetLinkTextFontSize(unsigned int uiFontSize);
 	void SetLinkTextColor(ccColor4B color);

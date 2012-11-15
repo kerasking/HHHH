@@ -20,8 +20,8 @@ namespace NDEngine
 	NDTouch::NDTouch()
 	{
 		m_tapCount = 0;
-		m_location = CGPointMake(0, 0);
-		m_previousLocation = CGPointMake(0, 0);
+		m_location = CCPointMake(0, 0);
+		m_previousLocation = CCPointMake(0, 0);
 	}
 	
 	NDTouch::~NDTouch()
@@ -33,12 +33,12 @@ namespace NDEngine
 		return m_tapCount;
 	}
 	
-	CGPoint NDTouch::GetLocation()
+	CCPoint NDTouch::GetLocation()
 	{
 		return m_location;
 	}
 	
-	CGPoint NDTouch::GetPreviousLocation()
+	CCPoint NDTouch::GetPreviousLocation()
 	{
 		return m_previousLocation;
 	}
@@ -75,12 +75,12 @@ namespace NDEngine
 		m_previousLocation.y = m_previousLocation.y*iFactor;
 #endif 
 
-// 		m_location = CGPointMake(m_location.y , NDDirector::DefaultDirector()->GetWinSize().height - m_location.x ); 
+// 		m_location = CCPointMake(m_location.y , NDDirector::DefaultDirector()->GetWinSize().height - m_location.x ); 
 // 
-// 		m_previousLocation = CGPointMake(m_previousLocation.y , NDDirector::DefaultDirector()->GetWinSize().height - m_previousLocation.x);
+// 		m_previousLocation = CCPointMake(m_previousLocation.y , NDDirector::DefaultDirector()->GetWinSize().height - m_previousLocation.x);
 	}
 	
-	void NDTouch::Initialization(unsigned int tapCount, CGPoint location, CGPoint previousLocation)
+	void NDTouch::Initialization(unsigned int tapCount, CCPoint location, CCPoint previousLocation)
 	{
 		m_tapCount = tapCount;
 		m_location = location;

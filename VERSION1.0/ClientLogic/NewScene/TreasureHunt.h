@@ -68,9 +68,9 @@ public:
 	
 	bool OnButtonDragIn(NDUIButton* desButton, NDUINode *uiSrcNode, bool longTouch); override
 	
-	bool OnButtonDragOut(NDUIButton* button, CGPoint beginTouch, CGPoint moveTouch, bool longTouch); override
+	bool OnButtonDragOut(NDUIButton* button, CCPoint beginTouch, CCPoint moveTouch, bool longTouch); override
 	
-	bool OnButtonDragOutComplete(NDUIButton* button, CGPoint endTouch, bool outOfRange); override
+	bool OnButtonDragOutComplete(NDUIButton* button, CCPoint endTouch, bool outOfRange); override
 	
 	void StartTreasureHunt();
 	

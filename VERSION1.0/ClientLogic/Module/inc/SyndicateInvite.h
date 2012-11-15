@@ -44,7 +44,7 @@ private:
 	
 private:
 	bool m_bTouchBegin;
-	CGRect scrRect;
+	CCRect scrRect;
 	string m_strInvited;
 };
 

@@ -36,7 +36,7 @@ namespace NDEngine
 	public:	
 		void Initialization(); override		
 		void Initialization(NDPicture *checkPic, NDPicture *unCheckPic, bool bClearOnFree=false); hide
-		void SetFrameRect(CGRect rect); override
+		void SetFrameRect(CCRect rect); override
 	private:
 		void draw(); override
 	public:

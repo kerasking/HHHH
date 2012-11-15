@@ -18,7 +18,7 @@ CUIHyperlinkText::CUIHyperlinkText()
 	m_uiLinkText			= NULL;
 	m_uiLinkFontSize		= 14;
 	m_colorLinkFont			= ccc4(255, 255, 0, 255);
-	m_rectLinkRect			= CGRectZero;
+	m_rectLinkRect			= CCRectZero;
 	m_bLineEnabel			= true;
 	m_alignment				= LabelTextAlignmentLeft;
 }
@@ -32,7 +32,7 @@ void CUIHyperlinkText::Initialization()
 	NDUINode::Initialization();
 }
 
-void CUIHyperlinkText::SetLinkBoundRect(CGRect rectBound)
+void CUIHyperlinkText::SetLinkBoundRect(CCRect rectBound)
 {
 	m_rectLinkRect			= rectBound;
 	
@@ -49,22 +49,22 @@ void CUIHyperlinkText::SetLinkText(const char* text)
 	
 	m_strText = "";
 	
-	CGRect rect = CGRectZero;
+	CCRect rect = CCRectZero;
 	
 	if (!text || 0 == strlen(text))
 	{
-		rect.size = CGSizeZero;
+		rect.size = CCSizeZero;
 		this->SetFrameRect(rect);
 		return;
 	}
 	
-	CGSize textSize;
+	CCSize textSize;
 	textSize.width	= m_rectLinkRect.size.width;
 	textSize.height = NDUITextBuilder::DefaultBuilder()->StringHeightAfterFilter(text, textSize.width, m_uiLinkFontSize);
 	textSize.width	= NDUITextBuilder::DefaultBuilder()->StringWidthAfterFilter(text, textSize.width, m_uiLinkFontSize);
 	m_uiLinkText	= NDUITextBuilder::DefaultBuilder()->Build(text, m_uiLinkFontSize, textSize, 
 															   m_colorLinkFont, false, m_bLineEnabel); 
-	CGRect rectText	= CGRectMake(0, 0, textSize.width, textSize.height);
+	CCRect rectText	= CCRectMake(0, 0, textSize.width, textSize.height);
 	if ( LabelTextAlignmentLeft == m_alignment )
 	{
 		rect.origin.y	= (m_rectLinkRect.size.height - rectText.size.height) / 2;
@@ -138,7 +138,7 @@ IMPLEMENT_CLASS(CUIHyperlinkButton, NDUIButton)
 CUIHyperlinkButton::CUIHyperlinkButton()
 {	
 	m_hyperlinkText		= NULL;
-	m_rectLinkRect		= CGRectZero;
+	m_rectLinkRect		= CCRectZero;
 }
 
 CUIHyperlinkButton::~CUIHyperlinkButton()
@@ -156,7 +156,7 @@ void CUIHyperlinkButton::Initialization()
 	this->AddChild(m_hyperlinkText);
 }
 
-void CUIHyperlinkButton::SetLinkBoundRect(CGRect rectBound)
+void CUIHyperlinkButton::SetLinkBoundRect(CCRect rectBound)
 {
 	if (!m_hyperlinkText)
 	{
@@ -165,7 +165,7 @@ void CUIHyperlinkButton::SetLinkBoundRect(CGRect rectBound)
 	
 	m_rectLinkRect		= rectBound;
 	this->SetFrameRect(rectBound);
-	rectBound.origin	= CGPointZero;
+	rectBound.origin	= CCPointZero;
 	m_hyperlinkText->SetLinkBoundRect(rectBound);
 }
 
@@ -177,14 +177,14 @@ void CUIHyperlinkButton::SetLinkText(const char* text)
 	}
 	
 	m_hyperlinkText->SetLinkText(text);
-	CGRect rect		= this->GetFrameRect();
-	CGRect rectText = m_hyperlinkText->GetFrameRect();
+	CCRect rect		= this->GetFrameRect();
+	CCRect rectText = m_hyperlinkText->GetFrameRect();
 	rect.size		= rectText.size;
 	int nAlign		= m_hyperlinkText->GetLinkTextAlignment();
 	if (LabelTextAlignmentLeft != nAlign)
 	{
 		rect.origin	= ccpAdd(m_rectLinkRect.origin, rectText.origin);
-		m_hyperlinkText->SetFrameRect(CGRectMake(0, 0, rect.size.width, rect.size.height));
+		m_hyperlinkText->SetFrameRect(CCRectMake(0, 0, rect.size.width, rect.size.height));
 	}
 	this->SetFrameRect(rect);
 }

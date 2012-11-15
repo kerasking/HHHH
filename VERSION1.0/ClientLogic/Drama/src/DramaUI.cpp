@@ -47,9 +47,9 @@ void DramaConfirmdlg::Initialization()
 {
 	ClickLayer::Initialization();
 
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 
-	SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
+	SetFrameRect(CCRectMake(0, 0, winsize.width, winsize.height));
 
 	NDUILoad uiload;
 	uiload.Load("dramaini/SM_MSG.ini", this, NULL);
@@ -92,7 +92,7 @@ void DramaChatLayer::SetFigure(std::string filename, bool bReverse, int nCol, in
 
 		int nCutX= nCol * 256;
 		int nCutY= nRow * 256;
-		pic->Cut(CGRectMake(nCutX+1, nCutY+1, 255, 255));
+		pic->Cut(CCRectMake(nCutX+1, nCutY+1, 255, 255));
 
 		((NDUIImage*) node)->SetPicture(pic);
 	}
@@ -152,14 +152,14 @@ void DramaLeftChat::Initialization()
 {
 	DramaChatLayer::Initialization();
 
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 
-	SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
+	SetFrameRect(CCRectMake(0, 0, winsize.width, winsize.height));
 
 	//ÉèÖÃ±³¾°
 	NDUILayer *backlayer = new NDUILayer;
 	backlayer->Initialization();
-	backlayer->SetFrameRect(CGRectMake(winsize.width*0.1, winsize.height*0.7, winsize.width*0.9, winsize.height*0.3));
+	backlayer->SetFrameRect(CCRectMake(winsize.width*0.1, winsize.height*0.7, winsize.width*0.9, winsize.height*0.3));
 	backlayer->SetBackgroundColor(ccc4(0,0,0,60));
 	AddChild(backlayer, -1);
 
@@ -182,14 +182,14 @@ void DramaRightChat::Initialization()
 {
 	DramaChatLayer::Initialization();
 
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
 
-	SetFrameRect(CGRectMake(0, 0, winsize.width, winsize.height));
+	SetFrameRect(CCRectMake(0, 0, winsize.width, winsize.height));
 	
 	//ÉèÖÃ±³¾°
 	NDUILayer *backlayer = new NDUILayer;
 	backlayer->Initialization();
-	backlayer->SetFrameRect(CGRectMake(0, 0, winsize.width*0.9, winsize.height*0.3));
+	backlayer->SetFrameRect(CCRectMake(0, 0, winsize.width*0.9, winsize.height*0.3));
 	backlayer->SetBackgroundColor(ccc4(0,0,0,60));
 	AddChild(backlayer, -1);
 

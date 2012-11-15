@@ -53,7 +53,7 @@ public:
 	CC_SYNTHESIZE(unsigned int, m_nColumns, Columns)
 	CC_SYNTHESIZE(unsigned int, m_nRows, Rows)
 	CC_SYNTHESIZE(int, m_nUnitSize, UnitSize)
-	CC_SYNTHESIZE(CGSize, m_MapSize, MapSize)
+	CC_SYNTHESIZE(CCSize, m_MapSize, MapSize)
 
 	CC_SYNTHESIZE(cocos2d::CCArray*/*<CCTexture2D*>**/, m_MapTiles, MapTiles)
 	CC_SYNTHESIZE(cocos2d::CCArray*/*<NDSceneTile*>**/, m_SceneTiles, SceneTiles)

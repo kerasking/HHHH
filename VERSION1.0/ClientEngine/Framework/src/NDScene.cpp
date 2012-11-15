@@ -25,11 +25,11 @@ public:
 	void Initialization()
 	{
 		NDUILayer::Initialization();
-		CGSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 		m_pkCurTextureSizeLabel = new NDUILabel;
 		m_pkCurTextureSizeLabel->Initialization();
 		m_pkCurTextureSizeLabel->SetFrameRect(
-				CGRectMake(kWinSize.width * 0.75f, kWinSize.height * 0.9f,
+				CCRectMake(kWinSize.width * 0.75f, kWinSize.height * 0.9f,
 						kWinSize.width * 0.3f, kWinSize.height * 0.1f));
 		m_pkCurTextureSizeLabel->SetTextAlignment(LabelTextAlignmentCenter);
 		m_pkCurTextureSizeLabel->SetFontSize(10);
@@ -79,10 +79,10 @@ void NDScene::Initialization()
 	NDNode::Initialization();
 	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
 
-	CTextLayer *layer = new CTextLayer;
-	layer->Initialization();
-	layer->SetTouchEnabled(false);
-	AddChild(layer, 60000);
+	//CTextLayer *layer = new CTextLayer;
+	//layer->Initialization();
+	//layer->SetTouchEnabled(false);
+	//AddChild(layer, 60000);
 }
 
 }

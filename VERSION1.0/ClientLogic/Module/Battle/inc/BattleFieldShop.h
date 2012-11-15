@@ -123,7 +123,7 @@ public:
 	
 	Item* GetItem();
 	
-	CGSize GetContentStartSize();
+	CCSize GetContentStartSize();
 	
 protected:
 	NDUIItemButton		*m_btnItem;

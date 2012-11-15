@@ -95,7 +95,7 @@ public NDUIButtonDelegate
 	~SocialFigure();
 
 public:
-	void Initialization(bool showTutor, bool showOnline=true, CGSize size=CGSizeMake(178, 112)); override
+	void Initialization(bool showTutor, bool showOnline=true, CCSize size=CCSizeMake(178, 112)); override
 
 	void ChangeFigure(SocialElement* se);
 	
@@ -144,7 +144,7 @@ public NDUILayer
 	~SocialEleInfo();
 	
 public: 
-	void Initialization(CGRect rect); override
+	void Initialization(CCRect rect); override
 	
 	void ChaneSocialEle(SocialElement* se);
 	

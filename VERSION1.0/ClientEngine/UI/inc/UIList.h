@@ -67,7 +67,7 @@ private:
 	
 public:
 	void draw(); override
-	void SetFrameRect(CGRect rect); override
+	void SetFrameRect(CCRect rect); override
 	
 protected:
 	bool CanDestroyOnRemoveAllChildren(NDNode* pNode);override	
@@ -132,7 +132,7 @@ private:
 	void SetFocusIndex(int nIndex);
 	void expand(); // 需要计算出自己的w,h
 	void shrink(); // 需要计算出自己的w,h
-	bool OnClickInSide(CGPoint posBegin, CGPoint posEnd, bool& bClickOnSec, bool& bClickOnCell, int& nCell);
+	bool OnClickInSide(CCPoint posBegin, CCPoint posEnd, bool& bClickOnSec, bool& bClickOnCell, int& nCell);
 	
 public:
 	void draw(); override
@@ -197,7 +197,7 @@ private:
 	
 protected:
 	bool OnLayerMoveOfDistance(NDUILayer* uiLayer, float hDistance, float vDistance); override
-	bool DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch); override
+	bool DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch); override
 	bool TouchEnd(NDTouch* touch); override
 	void draw(); override
 	void DrawScrollBar();

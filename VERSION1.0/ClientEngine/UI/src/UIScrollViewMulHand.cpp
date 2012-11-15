@@ -49,10 +49,10 @@ unsigned int CUIScrollViewM::GetViewId()
 {
 	return m_uiViewId;
 }
-void CUIScrollViewM::SetViewPos(CGPoint uiPos){
+void CUIScrollViewM::SetViewPos(CCPoint uiPos){
     m_uiPos = uiPos;
 }
-CGPoint CUIScrollViewM::GetViewPos(){
+CCPoint CUIScrollViewM::GetViewPos(){
     return m_uiPos;
 }
 
@@ -112,11 +112,11 @@ void ContainerClientLayerM::Initialization()
     m_fScrollDistance = 0;
 }
 
-void ContainerClientLayerM::SetEventRect(CGRect rect)
+void ContainerClientLayerM::SetEventRect(CCRect rect)
 {
     m_rectEvent	= rect;
 }
-void ContainerClientLayerM::SetFrameRect(CGRect rect){
+void ContainerClientLayerM::SetFrameRect(CCRect rect){
     NDUILayer::SetFrameRect(rect);
     
     NDNode* parent = this->GetParent();
@@ -164,10 +164,10 @@ void ContainerClientLayerM::SetFrameRect(CGRect rect){
     SetEventRect(svm->GetFrameRect());*/
 }
 
-CGSize ContainerClientLayerM::GetViewSize(){
+CCSize ContainerClientLayerM::GetViewSize(){
     return m_sizeView;
 }
-void ContainerClientLayerM::SetViewSize(CGSize size){
+void ContainerClientLayerM::SetViewSize(CCSize size){
     m_sizeView = size;
 }
 
@@ -181,7 +181,7 @@ void ContainerClientLayerM::AddView(CUIScrollViewM* view)
     container = (CUIScrollViewContainerM*)parent;
     
 	size_t childsize		= this->GetChildren().size();	
-	CGRect rect;
+	CCRect rect;
     rect.origin.x = 0;
     rect.origin.y = m_sizeView.height * childsize;
     rect.size.width = m_sizeView.width;
@@ -212,7 +212,7 @@ void ContainerClientLayerM::MoveClient(float fMove){
     
     unsigned int size = m_pScrollViewUINodes.size();
     
-    CGRect rect     =   this->GetFrameRect();
+    CCRect rect     =   this->GetFrameRect();
     rect.origin.y += fMove;
     
     float fOverDistanceMin = 0.333 * m_sizeView.height;
@@ -306,8 +306,8 @@ int ContainerClientLayerM::WhichViewToScroll()
 }
 
 bool ContainerClientLayerM::TouchMoved(NDTouch* touch){
-    CGPoint prePos = touch->GetPreviousLocation();
-    CGPoint curPos = touch->GetLocation();
+    CCPoint prePos = touch->GetPreviousLocation();
+    CCPoint curPos = touch->GetLocation();
     
     float horizontal = curPos.x - prePos.x;
     
@@ -372,7 +372,7 @@ CUIScrollViewContainerM::CUIScrollViewContainerM()
 	m_bIsViewScrolling				= false;
 	m_style							= UIScrollStyleHorzontal;
 	//m_pClientUINode					= NULL;
-	m_sizeView						= CGSizeMake(0, 0);
+	m_sizeView						= CCSizeMake(0, 0);
 	m_unBeginIndex					= 0;
 	m_bCenterAdjust					= false;
 	m_bRecaclClientEventRect		= false;
@@ -417,7 +417,7 @@ bool CUIScrollViewContainerM::IsCenterAdjust()
 	return m_bCenterAdjust;
 }
 
-void  CUIScrollViewContainerM::SetViewSize(CGSize size)
+void  CUIScrollViewContainerM::SetViewSize(CCSize size)
 {
 	m_sizeView	= size;
 }
@@ -435,21 +435,21 @@ int	CUIScrollViewContainerM::GetViewCount()
      */
 }
 
-CGSize  CUIScrollViewContainerM::GetViewSize()
+CCSize  CUIScrollViewContainerM::GetViewSize()
 {
 	return m_sizeView;
 }
-CGPoint CUIScrollViewContainerM::GetMaxRowAndCol(ContainerClientLayerM* m_pClientUINode){
+CCPoint CUIScrollViewContainerM::GetMaxRowAndCol(ContainerClientLayerM* m_pClientUINode){
     
     const std::vector<NDNode*>& children	= m_pClientUINode->GetChildren();
 	unsigned int childsize					= m_pClientUINode->GetChildren().size();
-    CGPoint pos = CGPointMake(0, 0);
+    CCPoint pos = CCPointMake(0, 0);
     for (size_t i = 0; i < childsize; i++) 
     {
         NDNode *child			= children[i];
         if(child->IsKindOfClass(RUNTIME_CLASS(CUIScrollViewM))){
             CUIScrollViewM *view = (CUIScrollViewM*)child;
-            CGPoint temp = view->GetViewPos();
+            CCPoint temp = view->GetViewPos();
             if(pos.x<temp.x){
                 pos.x=temp.x;
             }
@@ -469,7 +469,7 @@ container->EnableEvent(false);
     
     //设置每组节点的大小
     unsigned int count = m_pClientUINodes.size();
-    CGRect rect;
+    CCRect rect;
     rect.origin.x = m_sizeView.width*count;
     rect.origin.y = 0;
     rect.size = m_sizeView;
@@ -519,7 +519,7 @@ void CUIScrollViewContainerM::RemoveView(unsigned int uiIndex)
      
      
 	/*
-	CGRect rect	= m_pClientUINode->GetFrameRect();
+	CCRect rect	= m_pClientUINode->GetFrameRect();
 	
 	
 	if (UIScrollStyleHorzontal == GetScrollStyle())
@@ -566,7 +566,7 @@ void CUIScrollViewContainerM::RemoveView(unsigned int uiIndex)
 				continue;
 			}
 			CUIScrollViewM* view		= (CUIScrollViewM*)child;
-			CGRect rect				= view->GetFrameRect();
+			CCRect rect				= view->GetFrameRect();
 			if (UIScrollStyleHorzontal == GetScrollStyle())
 			{
 				rect.origin.x		= i * GetViewLen();
@@ -618,7 +618,7 @@ void CUIScrollViewContainerM::RemoveAllView()
 	
 	if (m_pClientUINode)
 	{
-		m_pClientUINode->SetFrameRect(CGRectZero);
+		m_pClientUINode->SetFrameRect(CCRectZero);
 	}
 	EnableViewToScroll(false);
 	m_fScrollDistance		= 0.0f;
@@ -632,7 +632,7 @@ void CUIScrollViewContainerM::ShowViewByIndex(unsigned int uiIndex)
     
     for ( int i = 0; i < m_pClientUINodes.size(); i++ ){
         ContainerClientLayerM *ccl = m_pClientUINodes[i];
-        CGRect rect = ccl->GetFrameRect();
+        CCRect rect = ccl->GetFrameRect();
         int ind = i-((int)uiIndex);
         rect.origin.x = ind*m_sizeView.width;
         ccl->SetFrameRect(rect);
@@ -863,8 +863,8 @@ bool CUIScrollViewContainerM::CaclViewCenter(CUIScrollViewM* view, float& fCente
 		return false;
 	}
 	
-	CGRect rectClient		= GetClientRect(bJudeOver);
-	CGRect viewrect			= view->GetFrameRect();
+	CCRect rectClient		= GetClientRect(bJudeOver);
+	CCRect viewrect			= view->GetFrameRect();
 	fCenter					= 0.0f;
 	if (UIScrollStyleHorzontal == GetScrollStyle())
 	{
@@ -884,15 +884,15 @@ bool CUIScrollViewContainerM::CaclViewCenter(CUIScrollViewM* view, float& fCente
     return false;
 }
 
-CGRect CUIScrollViewContainerM::GetClientRect(bool judgeOver)
+CCRect CUIScrollViewContainerM::GetClientRect(bool judgeOver)
 {
     /*
 	if (!m_pClientUINode)
 	{
-		return CGRectZero;
+		return CCRectZero;
 	}
 	
-	CGRect rectClient	= m_pClientUINode->GetFrameRect();
+	CCRect rectClient	= m_pClientUINode->GetFrameRect();
 	
 	if (!judgeOver)
 	{
@@ -904,7 +904,7 @@ CGRect CUIScrollViewContainerM::GetClientRect(bool judgeOver)
 		return rectClient;
 	}
 	
-	CGRect selfRect		= this->GetFrameRect();
+	CCRect selfRect		= this->GetFrameRect();
 	
 	if (UIScrollStyleHorzontal == GetScrollStyle())
 	{
@@ -931,7 +931,7 @@ CGRect CUIScrollViewContainerM::GetClientRect(bool judgeOver)
 	
 	return rectClient;
      */
-    return CGRect();
+    return CCRect();
 }
 
 float CUIScrollViewContainerM::GetViewLen()
@@ -954,7 +954,7 @@ float CUIScrollViewContainerM::GetViewLen()
 
 float CUIScrollViewContainerM::GetContainerCenter()
 {
-	CGRect rect		= this->GetFrameRect();
+	CCRect rect		= this->GetFrameRect();
 	float fCenter	= 0.0f;
 	
 	if (UIScrollStyleHorzontal == GetScrollStyle())
@@ -986,7 +986,7 @@ void CUIScrollViewContainerM::MoveClient(float fMove)
     unsigned int childsize	= m_pClientUINodes.size();
     for (size_t i = 0; i < childsize; i++) {
         ContainerClientLayerM *m_pClientUINode = m_pClientUINodes[i];
-        CGRect rect     =   m_pClientUINode->GetFrameRect();
+        CCRect rect     =   m_pClientUINode->GetFrameRect();
         rect.origin.x	+=  fMove;
         rect.origin.y   = 0;
         
@@ -1011,9 +1011,9 @@ void CUIScrollViewContainerM::refrehClientSize()
 		return;
 	}
 	
-	CGRect rect	= m_pClientUINode->GetFrameRect();
+	CCRect rect	= m_pClientUINode->GetFrameRect();
 	
-    CGPoint pos = GetMaxRowAndCol();
+    CCPoint pos = GetMaxRowAndCol();
     rect.size.width		= (pos.x+1) * m_sizeView.width;
     rect.size.height	= (pos.y+1) * m_sizeView.height;
     
@@ -1058,7 +1058,7 @@ void CUIScrollViewContainerM::draw() //  m_fScrollDistance += speed; only to zer
     
 }
 
-void CUIScrollViewContainerM::SetFrameRect(CGRect rect)
+void CUIScrollViewContainerM::SetFrameRect(CCRect rect)
 {
 	CUIScrollContainer::SetFrameRect(rect);
 	
@@ -1180,8 +1180,8 @@ float CUIScrollViewContainerM::GetOverDistance()
 		return 0.0f;
 	}
 	
-	CGRect rectself = this->GetFrameRect();
-	CGRect rectmove = m_pClientUINode->GetFrameRect();
+	CCRect rectself = this->GetFrameRect();
+	CCRect rectmove = m_pClientUINode->GetFrameRect();
 	
 	CGFloat fOver	= 0.0f;
 	if (IsCenterAdjust())
@@ -1222,10 +1222,10 @@ void CUIScrollViewContainerM::DrawScrollBar(ContainerClientLayerM *layer)
     
     CUIScroll* itemView	= (CUIScroll*)pNode;
     
-    CGSize sizePic		= m_picScroll->GetSize();       //滚动条图片大小
-    CGRect itemRect     = itemView->GetFrameRect();     //每一项的区域
-    CGRect itemBoxRect  = layer->GetFrameRect();     //每一项的区域
-    CGRect boxRext     = m_scrRect;         //框的区域
+    CCSize sizePic		= m_picScroll->GetSize();       //滚动条图片大小
+    CCRect itemRect     = itemView->GetFrameRect();     //每一项的区域
+    CCRect itemBoxRect  = layer->GetFrameRect();     //每一项的区域
+    CCRect boxRext     = m_scrRect;         //框的区域
     
     
     
@@ -1237,7 +1237,7 @@ void CUIScrollViewContainerM::DrawScrollBar(ContainerClientLayerM *layer)
     }
     
     
-    CGRect rect			= CGRectZero;               //要显示滚动条的区域
+    CCRect rect			= CCRectZero;               //要显示滚动条的区域
     rect.size           = sizePic;
     
     float itemTotalHeight = layer->GetViewCount() * itemRect.size.height - itemBoxRect.size.height;
@@ -1256,8 +1256,8 @@ void CUIScrollViewContainerM::DrawScrollBar(ContainerClientLayerM *layer)
     }
     
     if(m_picScrollBg) {
-        CGSize sizePic		= m_picScrollBg->GetSize();
-        CGRect rt;
+        CCSize sizePic		= m_picScrollBg->GetSize();
+        CCRect rt;
         rt.origin.x = rect.origin.x;
         rt.origin.y = boxRext.origin.y;
         rt.size.width = sizePic.width;
@@ -1296,7 +1296,7 @@ unsigned int CUIScrollViewContainerM::GetPerPageViews()
 {
 	unsigned int nViews		= 0;
 	
-	CGSize sizeContainer	= this->GetFrameRect().size;
+	CCSize sizeContainer	= this->GetFrameRect().size;
 	
 	if (UIScrollStyleHorzontal == GetScrollStyle())
 	{
@@ -1313,7 +1313,7 @@ unsigned int CUIScrollViewContainerM::GetPerPageViews()
 
 bool CUIScrollViewContainerM::IsViewCanCenter()
 {
-	CGSize sizeContainer	= this->GetFrameRect().size;
+	CCSize sizeContainer	= this->GetFrameRect().size;
 
 	if (UIScrollStyleHorzontal == GetScrollStyle())
 	{

@@ -80,6 +80,7 @@
 #define NAMESPACE_LUA_END
 #define USING_NAMESPACE_LUA
 #define NAMESPACE_LUA_PREFIX
+
 #define LUA_EXTERN_C extern "C"
 #ifdef __cplusplus
 #define LUA_EXTERN_C_BEGIN extern "C" {
@@ -91,6 +92,14 @@
 #endif /* NAMESPACE_LUA_BEGIN */
 
 #define LUALIB_API LUA_API
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+//#undef LUA_EXTERN_C
+//#undef LUA_EXTERN_C_BEGIN
+//#undef LUA_EXTERN_C_END
+//#define LUA_EXTERN_C
+//#define LUA_EXTERN_C_BEGIN
+//#define LUA_EXTERN_C_END
+//#endif
 
 #endif /* LUALINK_H */
 

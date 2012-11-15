@@ -64,7 +64,7 @@ private:
 	
 	void OnButtonClick(NDUIButton* button);
 	void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex);
-	void DaoHang(std::string tip, CGPoint pos);
+	void DaoHang(std::string tip, CCPoint pos);
 private:
 	Task* m_task;
 	

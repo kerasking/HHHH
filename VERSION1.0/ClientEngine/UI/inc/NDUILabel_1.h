@@ -86,10 +86,10 @@ namespace NDEngine
 		
 		void SetFontBoderColer(ccColor4B fontColor);
 		
-		CGSize GetTextureSize() { if (m_texture) return m_texture.contentSizeInPixels; return CGSizeZero; }
+		CCSize GetTextureSize() { if (m_texture) return m_texture.contentSizeInPixels; return CCSizeZero; }
 	public:
 		void draw(); override		
-		void OnFrameRectChange(CGRect srcRect, CGRect dstRect); override
+		void OnFrameRectChange(CCRect srcRect, CCRect dstRect); override
 		
 	private:
 		void MakeTexture();
@@ -102,7 +102,7 @@ namespace NDEngine
 		unsigned int m_fontSize;
 		unsigned int m_renderTimes;
 		LabelTextAlignment m_textAlignment;
-		CGRect m_cutRect;
+		CCRect m_cutRect;
 		
 		bool m_needMakeTex, m_needMakeCoo, m_needMakeVer;
 		

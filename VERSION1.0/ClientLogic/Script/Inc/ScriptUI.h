@@ -14,9 +14,9 @@
 
 namespace NDEngine {
 
-//#define CGPointMake(x, y) CCPoint((x), (y))
-//#define CGSizeMake(width, height) CCSize((width), (height))
-//#define CGRectMake(x, y, width, height) CCRect((x), (y), (width), (height))
+//#define CCPointMake(x, y) CCPoint((x), (y))
+//#define CCSizeMake(width, height) CCSize((width), (height))
+//#define CCRectMake(x, y, width, height) CCRect((x), (y), (width), (height))
 
 	void ScriptUiLoad();
 	

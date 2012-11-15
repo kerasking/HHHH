@@ -53,10 +53,10 @@ public:
 	void SetChatType(ChatType type);
 	ChatType GetChatType();
 	void Initialization(); override;
-	void OnFrameRectChange(CGRect srcRect, CGRect dstRect); override
+	void OnFrameRectChange(CCRect srcRect, CCRect dstRect); override
 	void draw(); override
-	CGRect GetTitleRect();
-	bool OnClick(CGPoint touchPoint);
+	CCRect GetTitleRect();
+	bool OnClick(CCPoint touchPoint);
 private:
 	void ReCreateLabelText();
 private:
@@ -130,7 +130,7 @@ public:
 public:
 	void Initialization(); override
 	void OnButtonClick(NDUIButton* button);override
-	//bool DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch); override	
+	//bool DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch); override	
 	void OnTableLayerCellSelected(NDUITableLayer* table, NDUINode* cell, unsigned int cellIndex, NDSection* section); override
 	void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex); override
 	void OnTimer(OBJID tag); override

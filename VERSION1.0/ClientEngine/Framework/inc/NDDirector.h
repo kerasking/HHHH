@@ -205,7 +205,7 @@ public:
 //			 如果使用该方法通常时在draw方法里调用；慎用。
 //		参数：rect相对于屏幕的区域，node被设置绘制区域的节点
 //		返回值：无
-	void SetViewRect(CGRect kRect, NDNode* pkNode);
+	void SetViewRect(CCRect kRect, NDNode* pkNode);
 //		
 //		函数：ResumeViewRect
 //		作用：恢复初始绘制区域

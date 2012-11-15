@@ -54,7 +54,7 @@ class NDHPStateBar : public NDStateBar
 	DECLARE_CLASS(NDHPStateBar)
 public:
 	
-	void Initialization(CGPoint pos); override
+	void Initialization(CCPoint pos); override
 };
 
 
@@ -63,7 +63,7 @@ class NDMPStateBar : public NDHPStateBar
 	DECLARE_CLASS(NDMPStateBar)
 public:
 	
-	void Initialization(CGPoint pos); override
+	void Initialization(CCPoint pos); override
 };
 
 class NDExpStateBar : public NDHPStateBar
@@ -71,7 +71,7 @@ class NDExpStateBar : public NDHPStateBar
 	DECLARE_CLASS(NDExpStateBar)
 public:
 	
-	void Initialization(CGPoint pos); override
+	void Initialization(CCPoint pos); override
 };
 
 class NDPropAllocLayer : public NDUILayer
@@ -79,7 +79,7 @@ class NDPropAllocLayer : public NDUILayer
 	DECLARE_CLASS(NDPropAllocLayer)
 	NDPropAllocLayer();
 public:
-	void Initialization(CGRect rect); override
+	void Initialization(CCRect rect); override
 	void SetLayerFocus(bool focus);
 	bool IsFocus() { return m_focus; }
 private:
@@ -109,7 +109,7 @@ public:
 	
 	~NDPropSlideBar();
 	
-	void Initialization(CGRect rect, unsigned int slideWidth); hide
+	void Initialization(CCRect rect, unsigned int slideWidth); hide
 	
 	void SetMax(unsigned int uiMax, bool update=false);
 	
@@ -132,29 +132,29 @@ public:
 	void draw(); override
 	
 	// 不处理其它分发事件
-	bool DispatchTouchBeginEvent(CGPoint beginTouch) { return false; } override
-	bool DispatchTouchEndEvent(CGPoint beginTouch, CGPoint endTouch) { return false; } override
-	bool DispatchLongTouchEvent(CGPoint beginTouch, CGPoint endTouch) { return false; } override
-	bool DispatchDragOutEvent(CGPoint beginTouch, CGPoint moveTouch, bool longTouch=false) { return false; } override
-	bool DispatchDragOutCompleteEvent(CGPoint beginTouch, CGPoint endTouch, bool longTouch=false) { return false; } override
-	bool DispatchDragInEvent(NDUINode* dragOutNode, CGPoint beginTouch, CGPoint endTouch, bool longTouch, bool dealByDefault=false) { return false; } override
-	bool DispatchLayerMoveEvent(CGPoint beginPoint, NDTouch *moveTouch) { return false; } override
+	bool DispatchTouchBeginEvent(CCPoint beginTouch) { return false; } override
+	bool DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch) { return false; } override
+	bool DispatchLongTouchEvent(CCPoint beginTouch, CCPoint endTouch) { return false; } override
+	bool DispatchDragOutEvent(CCPoint beginTouch, CCPoint moveTouch, bool longTouch=false) { return false; } override
+	bool DispatchDragOutCompleteEvent(CCPoint beginTouch, CCPoint endTouch, bool longTouch=false) { return false; } override
+	bool DispatchDragInEvent(NDUINode* dragOutNode, CCPoint beginTouch, CCPoint endTouch, bool longTouch, bool dealByDefault=false) { return false; } override
+	bool DispatchLayerMoveEvent(CCPoint beginPoint, NDTouch *moveTouch) { return false; } override
 
 protected:
-	virtual void SetSlideBar(CGSize parent, unsigned int width);
+	virtual void SetSlideBar(CCSize parent, unsigned int width);
 	
 protected:
 	void UpdateMinValue();
 	void UpdateCurValue();
 	void UpdateProcess();
-	bool CheckCanMove(CGPoint scrPos);
+	bool CheckCanMove(CCPoint scrPos);
 	bool CheckChange(float change);
 	void MoveEvent(float change);
 protected:
 	NDUIImage* m_imageSlide, *m_imageSlideBg, *m_imageProcess;
 	NDUILabel* m_lbText;
 	
-	CGRect m_scrTouchRect; bool m_caclTouchRect;
+	CCRect m_scrTouchRect; bool m_caclTouchRect;
 	unsigned int m_uiMax, m_uiMin, m_uiCur;
 	float m_fProcessWidth, m_fCur, m_fMin;
 	bool m_slideMove;
@@ -165,7 +165,7 @@ class NDSlideBar : public NDPropSlideBar , public NDUIButtonDelegate
 	DECLARE_CLASS(NDSlideBar)
 	
 public:
-	void Initialization(CGRect rect, unsigned int slideWidth, bool hasBtn=true, NDPicture* slidePicture=NULL); hide
+	void Initialization(CCRect rect, unsigned int slideWidth, bool hasBtn=true, NDPicture* slidePicture=NULL); hide
 	
 	void OnButtonClick(NDUIButton* button); override
 };
@@ -179,7 +179,7 @@ class NDPropCell : public NDUINode
 	~NDPropCell();
 
 public:
-	void Initialization(bool hasinfo, CGSize size=CGSizeMake(238, 23)); hide
+	void Initialization(bool hasinfo, CCSize size=CCSizeMake(238, 23)); hide
 	
 	NDUILabel* GetKeyText();
 	
@@ -325,7 +325,7 @@ class PaiHangCell : public NDPropCell
 	~PaiHangCell();
 
 public:
-	void Initialization(CGSize size=CGSizeMake(432, 23)); hide
+	void Initialization(CCSize size=CCSizeMake(432, 23)); hide
 		
 	void SetOrder(unsigned int order);
 private:
@@ -350,8 +350,8 @@ public:
 	bool TouchBegin(NDTouch* touch); override
 	void SetTitle(const char * text);
 protected:
-	NDPicture* GetBtnNormalPic(CGSize size);
-	NDPicture* GetBtnClickPic(CGSize size);
+	NDPicture* GetBtnNormalPic(CCSize size);
+	NDPicture* GetBtnClickPic(CCSize size);
 protected:
 	NDUIButton *m_btnClose;
 	NDUILabel  *m_lbTitle;
@@ -372,7 +372,7 @@ public:
 	
 	void Initialization(const char* sprfile); override
 	
-	void SetSpritePosition(CGPoint pos);
+	void SetSpritePosition(CCPoint pos);
 	
 	void Show(bool show);
 	
@@ -380,7 +380,7 @@ public:
 	
 private:
 	NDLightEffect	*m_sprite;
-	CGSize			m_sizeRun;
+	CCSize			m_sizeRun;
 	bool			m_bShow;
 };
 

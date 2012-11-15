@@ -135,13 +135,13 @@ namespace NDEngine
 //		作用：设置精灵在地图上的坐标
 //		参数：newPosition地图坐标
 //		返回值：无
-		virtual void SetPosition(CGPoint newPosition);
+		virtual void SetPosition(CCPoint newPosition);
 //		
 //		函数：GetPosition
 //		作用：获取精灵在地图上的坐标
 //		参数：无
 //		返回值：地图坐标
-		CGPoint GetPosition();
+		CCPoint GetPosition();
 		
 		int GetCol() {
 			return (this->m_position.x - DISPLAY_POS_X_OFFSET) / 32.0f;
@@ -330,7 +330,7 @@ namespace NDEngine
 		
 		void SetMoveMap(bool bSet) { m_moveMap = bSet; }
 		
-		void SetPointList(std::vector<CGPoint>& vec_point){ m_pointList = vec_point; StartMoving(); }
+		void SetPointList(std::vector<CCPoint>& vec_point){ m_pointList = vec_point; StartMoving(); }
 		
 		void StartMoving(){ m_moving = true; m_movePathIndex = 0; }
 		
@@ -386,7 +386,7 @@ namespace NDEngine
 		
 		virtual void BeforeRunAnimation(bool bDraw) {}
 		void RunAnimation(bool bDraw);
-		CGRect GetSpriteRect();		
+		CCSize GetSpriteRect();		
 		void SetCurrentAnimation(int animationIndex, bool reverse);
 		
 		void SetSpriteDir(int dir){ dir == 2 ? (m_faceRight = m_reverse = false) : (m_faceRight = m_reverse = true);}
@@ -394,10 +394,10 @@ namespace NDEngine
 		int getGravityX();
 		void SetScale(float s){scale = s;}
 		float GetScale(){return scale;}
-		bool GetLastPointOfPath(CGPoint& pos);
+		bool GetLastPointOfPath(CCPoint& pos);
 		bool IsReverse() { return m_reverse; }
 	protected:
-		void MoveToPosition(std::vector<CGPoint> toPos, SpriteSpeed speed, bool moveMap, bool ignoreMask=false, bool mustArrive=false);
+		void MoveToPosition(std::vector<CCPoint> toPos, SpriteSpeed speed, bool moveMap, bool ignoreMask=false, bool mustArrive=false);
 		virtual void OnMoveBegin();
 		virtual void OnMoveEnd();
 		virtual void OnMoving(bool bLastPos);
@@ -412,7 +412,7 @@ namespace NDEngine
 		NSString *colorInfoImage;
 		
 		int m_weaponType, m_secWeaponType, m_weaponQuality, m_secWeaponQuality, m_capQuality, m_armorQuality, m_cloakQuality;
-		CGPoint m_position;		
+		CCPoint m_position;		
 		NDAnimation *m_currentAnimation;
 		NDFrameRunRecord *m_frameRunRecord;
 		NDAnimationGroup *m_aniGroup;
@@ -425,9 +425,9 @@ namespace NDEngine
 		int colorInfo;
 		int cloak;
 		
-		std::vector<CGPoint> m_pointList;
+		std::vector<CCPoint> m_pointList;
 		int m_iSpeed;
-		CGPoint m_targetPos;
+		CCPoint m_targetPos;
 		
 		bool m_bNonRole;
 		float scale;
@@ -435,7 +435,7 @@ namespace NDEngine
 		bool m_faceRight;		// 精灵面部朝向
 	private:
 		NDPicture *m_picSprite;
-		CGRect m_rectSprite;
+		CCSize m_rectSprite;
 		bool m_bHightLight;
 	};
 }
