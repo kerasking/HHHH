@@ -34,7 +34,7 @@
 
 // smys begin
 #include "UIScroll.h"
-#include "UIScrollView.h"
+#include "NDUIScrollView.h"
 #include "UIScrollViewMulHand.h"
 #include "UIRoleNode.h"
 #include "UIHyperlink.h"

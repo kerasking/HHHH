@@ -16,7 +16,7 @@
 //#include "NDScrollLayer.h"
 //#include "NDUITableLayer.h"
 #include "NDPicture.h"
-#include "UIScrollView.h"
+#include "NDUIScrollContainer.h"
 #include "NDTextNode.h"
 #include "UIHyperlink.h"
 #include "UIItemButton.h"
@@ -28,6 +28,7 @@
 #include "UISpriteNode.h"
 #include "NDPath.h"
 #include "NDWideString.h"
+#include "NDUIScrollView.h"
 
 using namespace NDEngine;
 
