@@ -14,8 +14,8 @@
 #include "NDUIDialog.h"
 #include "NDTimer.h"
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
 class NDMapLayerLogic:
 	public NDMapLayer,
 	public NDUIDialogDelegate
@@ -46,7 +46,9 @@ private:
 	bool IsLongTouch();
 	void SetPathing(bool bPathing);
 	bool IsPathing();
+	bool IsWorldMapVisible();
 };
-}
+
+NS_NDENGINE_END
 
 #endif // _ND_MAP_LAYER_LOGIC_H_

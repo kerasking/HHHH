@@ -964,18 +964,6 @@ void NDMapLayer::DrawScenesAndAnimations()
  */
 CCPoint NDMapLayer::ConvertToMapPoint(CCPoint kScreenPoint)
 {
-#if 0
-	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
-	CCPoint kTempScreen = ccpAdd(kScreenPoint, kScreenPoint); ///< 因分辨率成倍，所以对触发点的坐标进行2倍，郭浩
-	CCPoint kTempPoint = ccpSub(kTempScreen,
-			CCPointMake(kWinSize.width / 2, kWinSize.height / 2));
-
-	CCPoint kPoint = ccpAdd(kTempPoint, m_kScreenCenter);
-
-	//kPoint.y = m_kScreenCenter.y - kPoint.y;
-
-	return kPoint;
-#else //@check
 	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
  	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
  	kScreenPoint.x *= fScale;
@@ -983,7 +971,6 @@ CCPoint NDMapLayer::ConvertToMapPoint(CCPoint kScreenPoint)
 	return ccpAdd(	
 		ccpSub(kScreenPoint, ccp(winSize.width / 2, winSize.height / 2)),
 			m_kScreenCenter );
-#endif
 }
 
 bool NDMapLayer::isMapPointInScreen(CCPoint mapPoint)

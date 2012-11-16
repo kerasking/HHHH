@@ -17,6 +17,7 @@
 //#include "NDUITableLayer.h"
 #include "NDPicture.h"
 #include "NDUIScrollContainer.h"
+#include "NDUIScrollView.h"
 #include "NDTextNode.h"
 #include "UIHyperlink.h"
 #include "UIItemButton.h"
