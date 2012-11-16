@@ -18,6 +18,7 @@
 #include "define.h"
 #include "NDSharedPtr.h"
 #include "CCDrawingPrimitives.h"
+#include "UsePointPls.h"
 
 using namespace cocos2d;
 
@@ -116,7 +117,7 @@ void NDUILabel::SetFontColor(ccColor4B fontColor)
 	
 void NDUILabel::SetFontSize(unsigned int fontSize)
 {
-	//fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
+	fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
 
 	if (m_uiFontSize != fontSize)
 	{
@@ -162,21 +163,14 @@ void NDUILabel::MakeTexture()
 
 	CCStringRef strString = new CCString(m_strText.c_str());
 
-	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
 	m_texture = new CCTexture2D;
 	m_texture->initWithString(strString->UTF8String(),
-				CCSizeMake(thisRect.size.width * scale, thisRect.size.height * scale),
+				CCSizeMake(thisRect.size.width, thisRect.size.height),
 				kCCTextAlignmentLeft,
 				kCCVerticalTextAlignmentCenter,
 				FONT_NAME,
-				m_uiFontSize * scale
+				m_uiFontSize
 				);
-				
-// 			[[CCTexture2D alloc] initWithString:text 
-// 											 dimensions:dim 
-// 											  alignment:UITextAlignmentLeft
-// 											   fontName:FONT_NAME 
-// 											   fontSize:m_fontSize];
 }
 	
 void NDUILabel::MakeCoordinates()
@@ -212,7 +206,7 @@ void NDUILabel::MakeVertices()
 		CCRect scrRect = this->GetScreenRect();
 		CCRect drawRect = scrRect;
 
-#if 0 //@todo
+#if 1 //@todo
 		//CCRect drawRect = CCRectZero;
 		//drawRect.origin.y = scrRect.origin.y;
 		//drawRect.size.width = m_kCutRect.size.width;
@@ -220,7 +214,7 @@ void NDUILabel::MakeVertices()
 		
 		if (m_eTextAlignment == LabelTextAlignmentLeft) 
 		{
-			drawRect.origin.x = scrRect.origin.x;
+			//drawRect.origin.x = scrRect.origin.x;
 		}
 		else if (m_eTextAlignment == LabelTextAlignmentCenter)
 		{
@@ -230,12 +224,14 @@ void NDUILabel::MakeVertices()
 			drawRect.origin.y = scrRect.origin.y +
 				(scrRect.size.height - m_kCutRect.size.height) / 2;
 		}
-		else
+		else //align right
 		{
 			drawRect.origin.x = scrRect.origin.x + (scrRect.size.width - m_kCutRect.size.width);	
 			//drawRect.origin.y = scrRect.origin.y + scrRect.size.height - m_cutRect.size.height;
 		}
 #endif
+		//ÏñËØ->µã
+		ConvertUtil::convertToPointCoord( drawRect );
 
 // 		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 // 		m_pfVertices[0] = drawRect.origin.x;

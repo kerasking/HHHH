@@ -453,9 +453,6 @@ void WorldMapLayer::SetCenterAtPos(CCPoint pos)
 CCPoint WorldMapLayer::ConvertToMapPoint(CCPoint screenPoint)
 {
 	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
-	screenPoint.x *= fScale;
-	screenPoint.y *= fScale;
 	return ccpAdd(
 			ccpSub(screenPoint, ccp(winSize.width / 2, winSize.height / 2)),
 			m_screenCenter);
@@ -463,21 +460,10 @@ CCPoint WorldMapLayer::ConvertToMapPoint(CCPoint screenPoint)
 
 CCPoint WorldMapLayer::ConvertToScreenPoint(CCPoint mapPoint)
 {
-#if 0
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-	return ccpAdd(ccpSub(mapPoint, m_screenCenter),
-		ccp(winSize.width / 2, winSize.height / 2));
-#else
-	//备注：和上面的ConvertToMapPoint()互逆.
 	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 	CCPoint posScreen = ccpAdd(ccpSub(mapPoint, m_screenCenter),
 								ccp(winSize.width / 2, winSize.height / 2));
-
-	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
-	posScreen.x /= fScale;
-	posScreen.y /= fScale;	
 	return posScreen;
-#endif
 }
 
 //return true: 输入独占
@@ -661,11 +647,10 @@ bool WorldMapLayer::DoMove()
 	bool bArrive = (pow(posNext.x - posTarget.x, 2) 
 					+ pow(posNext.y - posTarget.y, 2) < MOVE_STEP*MOVE_STEP);
 
-	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
-	rectRole = CCRectMake( posNext.x * fScale,
-							posNext.y * fScale,
-							rectRole.size.width * fScale,
-							rectRole.size.height * fScale );
+	rectRole = CCRectMake( posNext.x,
+							posNext.y,
+							rectRole.size.width,
+							rectRole.size.height );
 
 	m_roleNode->SetFrameRect(rectRole);
 	return bArrive;
