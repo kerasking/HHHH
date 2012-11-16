@@ -63,6 +63,7 @@ private:
 	CCPoint GetPlaceIdScreenPos(int placeId);
 	bool DoMove();
 	bool isTimeout();
+	CCPoint CalcNextPoint( const CCPoint& posStart, const CCPoint& posEnd );
 
 private:
 	NDWorldMapData* m_mapData;

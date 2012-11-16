@@ -148,11 +148,14 @@ void WorldMapLayer::Initialization(int nMapId)
 		m_roleNode = new CUIRoleNode;
 		m_roleNode->Initialization();
 		m_roleNode->ChangeLookFace(GetPlayerLookface());
-
-		NDPlayer& player = NDPlayer::defaultHero();
-		player.ChangeModelWithMount(player.m_nRideStatus, player.m_nMountType);
 		m_roleNode->SetRoleScale(0.5f);
-		AddChild(m_roleNode);
+
+ 		NDPlayer& hero = NDPlayer::defaultHero();
+		if (m_roleNode->GetRole())
+		{
+			m_roleNode->GetRole()->ChangeModelWithMount( hero.m_nRideStatus, hero.m_nMountType );
+			AddChild(m_roleNode);
+		}
 	}
 	
 	ShowRoleAtPlace(nMapId);
@@ -321,6 +324,11 @@ void WorldMapLayer::OnTimer(OBJID tag)
 	else if (isTimeout() || this->DoMove()) //timeout or moving arrive?
 	{
 		WriteCon( "[WorldMapLayer] OnTimer, IsMoveArrive()=true\r\n" );
+		
+		if (m_roleNode && m_roleNode->GetRole())
+		{
+			m_roleNode->GetRole()->stopMoving(false);
+		}
 
 		m_timer.KillTimer(this, TAG_TIMER_MOVE);
 		SetMove(false);
@@ -633,7 +641,7 @@ CCPoint WorldMapLayer::GetPlaceIdScreenPos(int placeId)
 		int iWidth  = node->getTexture()->getContentSizeInPixels().width;
 		int iHeight = node->getTexture()->getContentSizeInPixels().height;
 
-		CCPoint pos = CCPointMake((iStartX + iWidth/4), (iStartY - iHeight/8));
+		CCPoint pos = ccpAdd( ccp(iStartX, iStartY), ccp(iWidth*0.5, -iHeight*0.5) ); //@tune
 		posRet = pos;
 	}
 
@@ -648,16 +656,10 @@ bool WorldMapLayer::DoMove()
 	CCRect rectRole = m_roleNode->GetFrameRect();
 	CCPoint posRole = rectRole.origin;
 	CCPoint posTarget = GetTarget();
-	
-	float deltaX = posTarget.x - posRole.x;
-	float deltaY = posTarget.y - posRole.y;
-	
-	bool bArrive = (TAbs(deltaX) <= MOVE_STEP && TAbs(deltaY) <= MOVE_STEP);
 
-	deltaX = min(TAbs(deltaX), MOVE_STEP) * (deltaX>0?1:-1);
-	deltaY = min(TAbs(deltaY), MOVE_STEP) * (deltaX>0?1:-1);
-	
-	CCPoint posNext = ccpAdd( posRole, ccp(deltaX,deltaY));
+	CCPoint posNext = CalcNextPoint( posRole, posTarget );
+	bool bArrive = (pow(posNext.x - posTarget.x, 2) 
+					+ pow(posNext.y - posTarget.y, 2) < MOVE_STEP*MOVE_STEP);
 
 	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
 	rectRole = CCRectMake( posNext.x * fScale,
@@ -675,4 +677,20 @@ bool WorldMapLayer::isTimeout()
 	CCTime::gettimeofdayCocos2d(&currentTime, NULL);
 	double duration = CCTime::timersubCocos2d(&m_tmStartMoving, &currentTime);
 	return (TAbs(duration) > 1000*5); //5 sec
+}
+
+CCPoint WorldMapLayer::CalcNextPoint( const CCPoint& posStart, const CCPoint& posEnd )
+{
+	kmVec2 vStart, vEnd;
+	kmVec2Fill( &vStart, posStart.x, posStart.y );
+	kmVec2Fill( &vEnd, posEnd.x, posEnd.y );
+
+	kmVec2 vSub, vNorm, vDelta;
+	kmVec2Subtract( &vSub, &vEnd, &vStart );
+	kmVec2Normalize( &vNorm, &vSub );
+	kmVec2Scale( &vDelta, &vNorm, MOVE_STEP );
+
+	kmVec2 vNext;
+	kmVec2Add( &vNext, &vStart, &vDelta );
+	return ccp(vNext.x, vNext.y);
 }
