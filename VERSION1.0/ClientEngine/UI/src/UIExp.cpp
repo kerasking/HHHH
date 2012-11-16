@@ -120,7 +120,6 @@ void CUIExp::draw()
 	}
 	
 	CCRect scrRect		= this->GetScreenRect();
-	scrRect = CCRectMake(scrRect.origin.x*2.0, scrRect.origin.y*2.0, scrRect.size.width*2.0, scrRect.size.height*2.0);
 	
 	if (m_bRecacl && !m_strProcessFile.empty())
 	{
