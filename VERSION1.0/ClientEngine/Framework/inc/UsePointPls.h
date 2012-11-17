@@ -24,8 +24,16 @@ NS_NDENGINE_BGN
 class ConvertUtil
 {
 public:
+	// pixel -> point
+	static void convertToPointCoord( CCPoint& pt );
 	static void convertToPointCoord( CCSize& sz );
 	static void convertToPointCoord( CCRect& rc );
+
+	// point -> pixel
+	static void convertToPixelCoord( CCPoint& pt );
+	static void convertToPixelCoord( CCSize& sz );
+	static void convertToPixelCoord( CCRect& rc );
+
 	static CCSize getTextureSizeInPoints( /*const*/ CCTexture2D& tex );
 };
 

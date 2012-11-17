@@ -18,6 +18,7 @@
 #include "define.h"
 #include "NDSharedPtr.h"
 #include "CCDrawingPrimitives.h"
+#include "UsePointPls.h"
 
 using namespace cocos2d;
 
@@ -57,15 +58,21 @@ void NDUILabel::SetText(const char* text)
 	{
 		return;
 	}
-		
+
+	// convert to utf8 and compare again.
+	CCStringRef pstrString = 0;
+	pstrString = CCString::stringWithUTF8String(text);
+	if (pstrString->toStdString() == m_strText)
+	{
+		return;
+	}
+
+	m_strText = pstrString->toStdString();
+
+	// dirty.
 	m_bNeedMakeTex = true;
 	m_bNeedMakeCoo = true;
 	m_bNeedMakeVer = true;
-
-	CCStringRef pstrString = 0;
-
-	pstrString = CCString::stringWithUTF8String(text);
-	m_strText = pstrString->toStdString();
 }
 	
 void NDUILabel::OnFrameRectChange(CCRect srcRect, CCRect dstRect)
@@ -116,7 +123,7 @@ void NDUILabel::SetFontColor(ccColor4B fontColor)
 	
 void NDUILabel::SetFontSize(unsigned int fontSize)
 {
-	//fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
+	fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
 
 	if (m_uiFontSize != fontSize)
 	{
@@ -160,23 +167,33 @@ void NDUILabel::MakeTexture()
 		return;
 	}
 
+	// get horz text alignment
+	CCTextAlignment eTextAlign = kCCTextAlignmentLeft;
+	if (m_eTextAlignment == LabelTextAlignmentLeft)
+	{
+		eTextAlign = kCCTextAlignmentLeft;
+	}
+	else if (m_eTextAlignment == LabelTextAlignmentCenter 
+				|| m_eTextAlignment == LabelTextAlignmentHorzCenter)
+	{
+		eTextAlign = kCCTextAlignmentCenter;
+	}
+	else if (m_eTextAlignment == LabelTextAlignmentRight)
+	{
+		eTextAlign = kCCTextAlignmentRight;
+	}
+
+	// init texture with string
 	CCStringRef strString = new CCString(m_strText.c_str());
 
-	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
 	m_texture = new CCTexture2D;
 	m_texture->initWithString(strString->UTF8String(),
-				CCSizeMake(thisRect.size.width * scale, thisRect.size.height * scale),
-				kCCTextAlignmentLeft,
+				CCSizeMake(thisRect.size.width, thisRect.size.height),
+				eTextAlign,
 				kCCVerticalTextAlignmentCenter,
 				FONT_NAME,
-				m_uiFontSize * scale
+				m_uiFontSize
 				);
-				
-// 			[[CCTexture2D alloc] initWithString:text 
-// 											 dimensions:dim 
-// 											  alignment:UITextAlignmentLeft
-// 											   fontName:FONT_NAME 
-// 											   fontSize:m_fontSize];
 }
 	
 void NDUILabel::MakeCoordinates()
@@ -207,115 +224,83 @@ void NDUILabel::MakeCoordinates()
 
 void NDUILabel::MakeVertices()
 {
-	if (m_texture) 
+	if (!m_texture) return;
+	
+	CCRect scrRect = this->GetScreenRect();
+	CCRect drawRect = scrRect;
+
+#if 1 //@todo
+	//CCRect drawRect = CCRectZero;
+	//drawRect.origin.y = scrRect.origin.y;
+	//drawRect.size.width = m_kCutRect.size.width;
+	//drawRect.size.height = m_kCutRect.size.height;
+	
+	if (m_eTextAlignment == LabelTextAlignmentLeft) 
 	{
-		CCRect scrRect = this->GetScreenRect();
-		CCRect drawRect = scrRect;
+		//drawRect.origin.x = scrRect.origin.x;
+	}
+	else if (m_eTextAlignment == LabelTextAlignmentCenter)
+	{
+		drawRect.origin.x = scrRect.origin.x +
+			(scrRect.size.width - m_kCutRect.size.width) / 2;
 
-#if 0 //@todo
-		//CCRect drawRect = CCRectZero;
-		//drawRect.origin.y = scrRect.origin.y;
-		//drawRect.size.width = m_kCutRect.size.width;
-		//drawRect.size.height = m_kCutRect.size.height;
-		
-		if (m_eTextAlignment == LabelTextAlignmentLeft) 
-		{
-			drawRect.origin.x = scrRect.origin.x;
-		}
-		else if (m_eTextAlignment == LabelTextAlignmentCenter)
-		{
-			drawRect.origin.x = scrRect.origin.x +
-				(scrRect.size.width - m_kCutRect.size.width) / 2;
-
-			drawRect.origin.y = scrRect.origin.y +
-				(scrRect.size.height - m_kCutRect.size.height) / 2;
-		}
-		else
-		{
-			drawRect.origin.x = scrRect.origin.x + (scrRect.size.width - m_kCutRect.size.width);	
-			//drawRect.origin.y = scrRect.origin.y + scrRect.size.height - m_cutRect.size.height;
-		}
+		drawRect.origin.y = scrRect.origin.y +
+			(scrRect.size.height - m_kCutRect.size.height) / 2;
+	}
+	else //align right
+	{
+		drawRect.origin.x = scrRect.origin.x + (scrRect.size.width - m_kCutRect.size.width);	
+		//drawRect.origin.y = scrRect.origin.y + scrRect.size.height - m_cutRect.size.height;
+	}
 #endif
 
-// 		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-// 		m_pfVertices[0] = drawRect.origin.x;
-// 		m_pfVertices[1] = winSize.height - drawRect.origin.y - drawRect.size.height;
-// 		m_pfVertices[2] = 0;
-// 		m_pfVertices[3] = drawRect.origin.x + drawRect.size.width;
-// 		m_pfVertices[4] = m_pfVertices[1];
-// 		m_pfVertices[5] = 0;
-// 		m_pfVertices[6] = m_pfVertices[0];
-// 		m_pfVertices[7] = winSize.height - drawRect.origin.y;
-// 		m_pfVertices[8] = 0;
-// 		m_pfVertices[9] = m_pfVertices[3];
-// 		m_pfVertices[10] = m_pfVertices[7];
-// 		m_pfVertices[11] = 0;	
+	//ÏñËØ->µã
+	ConvertUtil::convertToPointCoord( drawRect );
 
+	float l,r,t,b;
+	SCREEN2GL_RECT(drawRect,l,r,t,b);
+	{
+		m_pfVertices[0] = l;
+		m_pfVertices[1] = b;
+		m_pfVertices[2] = 0;
+
+		m_pfVertices[3] = r;
+		m_pfVertices[4] = b;
+		m_pfVertices[5] = 0;
+
+		m_pfVertices[6] = l;
+		m_pfVertices[7] = t;
+		m_pfVertices[8] = 0;
+
+		m_pfVertices[9] = r;
+		m_pfVertices[10] = t;
+		m_pfVertices[11] = 0;
+	}
+
+	if (m_bHasFontBoderColor) 
+	{
+		const float offset = 0.5f;
 		float l,r,t,b;
 		SCREEN2GL_RECT(drawRect,l,r,t,b);
 		{
-			m_pfVertices[0] = l;
-			m_pfVertices[1] = b;
-			m_pfVertices[2] = 0;
+			l -= offset; r -= offset;
+			t -= offset; b -= offset;
 
-			m_pfVertices[3] = r;
-			m_pfVertices[4] = b;
-			m_pfVertices[5] = 0;
+			m_pfVerticesBoder[0] = l;
+			m_pfVerticesBoder[1] = b;
+			m_pfVerticesBoder[2] = 0;
 
-			m_pfVertices[6] = l;
-			m_pfVertices[7] = t;
-			m_pfVertices[8] = 0;
+			m_pfVerticesBoder[3] = r;
+			m_pfVerticesBoder[4] = b;
+			m_pfVerticesBoder[5] = 0;
 
-			m_pfVertices[9] = r;
-			m_pfVertices[10] = t;
-			m_pfVertices[11] = 0;
-		}
+			m_pfVerticesBoder[6] = l;
+			m_pfVerticesBoder[7] = t;
+			m_pfVerticesBoder[8] = 0;
 
-		if (m_bHasFontBoderColor) 
-		{
-//			int sf = 0.5f*NDDirector::DefaultDirector()->GetScaleFactor();
-// 			m_pfVerticesBoder[0] = drawRect.origin.x + sf;
-// 			m_pfVerticesBoder[1] = winSize.height - drawRect.origin.y - drawRect.size.height - sf;
-// 			m_pfVerticesBoder[2] = 0;
-// 			m_pfVerticesBoder[3] = drawRect.origin.x + drawRect.size.width + sf;
-// 			m_pfVerticesBoder[4] = m_pfVerticesBoder[1];
-// 			m_pfVerticesBoder[5] = 0;
-// 			m_pfVerticesBoder[6] = m_pfVerticesBoder[0];
-// 			m_pfVerticesBoder[7] = winSize.height - drawRect.origin.y - sf;
-// 			m_pfVerticesBoder[8] = 0;
-// 			m_pfVerticesBoder[9] = m_pfVerticesBoder[3];
-// 			m_pfVerticesBoder[10] = m_pfVerticesBoder[7];
-// 			m_pfVerticesBoder[11] = 0;	
-
-
-			const float offset = 0.5f;
-			float l,r,t,b;
-			SCREEN2GL_RECT(drawRect,l,r,t,b);
-			{
-				l -= offset; r -= offset;
-				t -= offset; b -= offset;
-
-				m_pfVerticesBoder[0] = l;
-				m_pfVerticesBoder[1] = b;
-				m_pfVerticesBoder[2] = 0;
-
-				m_pfVerticesBoder[3] = r;
-				m_pfVerticesBoder[4] = b;
-				m_pfVerticesBoder[5] = 0;
-
-				m_pfVerticesBoder[6] = l;
-				m_pfVerticesBoder[7] = t;
-				m_pfVerticesBoder[8] = 0;
-
-				m_pfVerticesBoder[9] = r;
-				m_pfVerticesBoder[10] = t;
-				m_pfVerticesBoder[11] = 0;
-			}
-
-// 			for (int i = 0; i < 12; i++) {
-// 				//m_pfVerticesBoder[i] = m_vertices[i]+((i%3 == 2) ? 0.0f : 1.0f*NDDirector::DefaultDirector()->GetScaleFactor());
-// 				//m_pfVerticesBoder[i] = m_vertices[i]-1.0f*NDDirector::DefaultDirector()->GetScaleFactor();
-// 			}
+			m_pfVerticesBoder[9] = r;
+			m_pfVerticesBoder[10] = t;
+			m_pfVerticesBoder[11] = 0;
 		}
 	}
 }
@@ -343,14 +328,15 @@ void NDUILabel::preDraw()
 
 void NDUILabel::draw()
 {
-	if (!isDrawEnabled()) return;
-	if (!NDDebugOpt::getDrawUILabelEnabled()) return;
+	if (!isDrawEnabled()
+		|| !NDDebugOpt::getDrawUILabelEnabled()
+		|| !this->IsVisibled()) return;
 
-	NDUINode::draw();
-	
-	if (!this->IsVisibled()) return;
 	this->preDraw();
+
 	if (!m_texture) return;
+	
+	NDUINode::draw();
 	
 	DrawSetup( kCCShader_PositionTextureColor );
 
@@ -423,24 +409,6 @@ void NDUILabel::draw()
 void NDUILabel::postDraw()
 {
 	debugDraw();
-
-// 	CCRect scrRect = this->GetScreenRect();
-// 
-// 	DrawLine(scrRect.origin, 
-// 			 ccpAdd(scrRect.origin, ccp(scrRect.size.width, 0)),
-// 			 ccc4(255, 0, 0, 255), 1);
-// 			
-// 	DrawLine(ccpAdd(scrRect.origin, ccp(scrRect.size.width, 0)),
-// 			 ccpAdd(scrRect.origin, ccp(scrRect.size.width, scrRect.size.height)),
-// 			 ccc4(255, 0, 0, 255), 1);
-// 
-// 	DrawLine(ccpAdd(scrRect.origin, ccp(scrRect.size.width, scrRect.size.height)),
-// 			 ccpAdd(scrRect.origin, ccp(0, scrRect.size.height)),
-// 			 ccc4(255, 0, 0, 255), 1);
-// 			 
-// 	DrawLine(ccpAdd(scrRect.origin, ccp(0, scrRect.size.height)),
-// 			 scrRect.origin,
-// 			 ccc4(255, 0, 0, 255), 1);
 }
 
 void NDUILabel::debugDraw()
