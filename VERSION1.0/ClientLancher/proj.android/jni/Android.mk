@@ -7,7 +7,16 @@ LOCAL_MODULE := GameLauncher
 LOCAL_MODULE_FILENAME := libGameLauncher
 
 LOCAL_SRC_FILES := \
-../../src/GameLauncher.cpp
+../../src/GameLauncher.cpp \
+../../src/NDMonster.cpp \
+../../src/NDManualRole.cpp \
+../../src/NDBaseRole.cpp \
+../../src/NDNpc.cpp \
+../../src/AnimationList.cpp \
+../../src/NDPlayer.cpp \
+../../src/ScriptDataBase.cpp \
+../../src/ScriptGameData.cpp \
+../../src/AutoPathTip.cpp
 
 LOCAL_C_INCLUDES := \
 $(LOCAL_PATH)/../../include \
@@ -60,7 +69,6 @@ LOCAL_WHOLE_STATIC_LIBRARIES += luaplus
 LOCAL_WHOLE_STATIC_LIBRARIES += tinyxml
 LOCAL_WHOLE_STATIC_LIBRARIES += NetWork
 LOCAL_WHOLE_STATIC_LIBRARIES += ClientEngine
-LOCAL_WHOLE_STATIC_LIBRARIES += ClientLogic
 
 include $(BUILD_SHARED_LIBRARY)
 
@@ -69,4 +77,3 @@ $(call import-module,cocos2dx)
 $(call import-module,tinyxml/proj.android/jni)
 $(call import-module,NetWork/proj.android/jni)
 $(call import-module,ClientEngine/proj.android/jni)
-$(call import-module,ClientLogic/proj.android/jni)

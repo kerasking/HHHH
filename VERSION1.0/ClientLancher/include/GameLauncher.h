@@ -5,8 +5,6 @@
 #ifndef GAMELAUNCHER_H
 #define GAMELAUNCHER_H
 
-using namespace NDEngine;
-
 class GameLauncher
 {
 public:

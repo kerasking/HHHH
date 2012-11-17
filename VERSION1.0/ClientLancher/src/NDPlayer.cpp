@@ -24,7 +24,7 @@
 #include "BattleMgr.h"
 #include "BattleSkill.h"
 #include "EnumDef.h"
-#include "GameScene.h"
+//#include "GameScene.h"
 #include "VendorBuyUILayer.h"
 #include "HarvestEvent.h"
 #include "DirectKey.h"
@@ -366,14 +366,6 @@ bool NDPlayer::ClickPoint(CGPoint point, bool bLongTouch, bool bPath/*=true*/)
 	//bool bNpcPath = false;
 	//
 	NDScene* pkRunningScene = NDDirector::DefaultDirector()->GetRunningScene();
-	if (pkRunningScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene)))
-	{
-		CSMGameScene* gameScene = (CSMGameScene*)pkRunningScene;
-		if (!NDUISynLayer::IsShown())// && !gameScene->IsUIShow())
-		{
-			int a = 10;
-		}
-	}
 // 
 // 
 // 				if (bDealed)
@@ -704,7 +696,7 @@ void NDPlayer::OnMoving(bool bLastPos)
 {
 	NDManualRole::OnMoving(bLastPos);
 
-	ScriptGlobalEvent::OnEvent (GE_ONMOVE);
+//	ScriptGlobalEvent::OnEvent (GE_ONMOVE);
 }
 
 void NDPlayer::OnMoveBegin()
@@ -773,45 +765,6 @@ void NDPlayer::CaclEquipEffect()
 	m_eSkillHard = 0;
 	m_eDodge = 0;
 	m_ePhyHit = 0;
-
-	for (int i = Item::eEP_Begin; i < Item::eEP_End; i++)
-	{
-		if (ItemMgrObj.EquipHasNotEffect((Item::eEquip_Pos) i) == true)
-		{
-			continue;
-		}
-
-		Item* pkItem = ItemMgrObj.GetEquipItemByPos((Item::eEquip_Pos) i);
-		if (pkItem == NULL)
-		{
-			continue;
-		}
-
-		NDItemType *itemtype = ItemMgrObj.QueryItemType(pkItem->m_nItemType);
-		if (itemtype == NULL)
-		{
-			continue;
-		}
-
-		m_eAtkSpd += itemtype->m_data.m_atk_speed + pkItem->getInlayAtk_speed();
-
-		m_eAtk += pkItem->getAdditionResult(itemtype->m_data.m_enhancedId,
-				pkItem->m_nAddition, itemtype->m_data.m_atk) + pkItem->getInlayAtk();
-		m_eDef += pkItem->getAdditionResult(itemtype->m_data.m_enhancedId,
-				pkItem->m_nAddition, itemtype->m_data.m_def) + pkItem->getInlayDef();
-		m_eHardAtk += itemtype->m_data.m_hard_hitrate
-				+ pkItem->getInlayHard_hitrate();
-		m_eSkillAtk += pkItem->getAdditionResult(itemtype->m_data.m_enhancedId,
-				pkItem->m_nAddition, itemtype->m_data.m_mag_atk)
-				+ pkItem->getInlayMag_atk();
-		m_eSkillDef += pkItem->getAdditionResult(itemtype->m_data.m_enhancedId,
-				pkItem->m_nAddition, itemtype->m_data.m_mag_def)
-				+ pkItem->getInlayMag_def();
-		m_eSkillHard += itemtype->m_data.m_mana_limit
-				+ pkItem->getInlayMana_limit();
-		m_eDodge += itemtype->m_data.m_dodge + pkItem->getInlayDodge();
-		m_ePhyHit += itemtype->m_data.m_hitrate + pkItem->getInlayHitrate(); // ÎïÀíÃüÖÐ
-	}
 }
 
 void NDPlayer::NextFocusTarget()
@@ -941,22 +894,7 @@ void NDPlayer::ResetFocusRole()
 
 void NDPlayer::AddSkill(OBJID idSkill)
 {
-	BattleMgr& kBattleMgr = BattleMgrObj;
-	BattleSkill* pkSkill = kBattleMgr.GetBattleSkill(idSkill);
 
-	if (!pkSkill)
-	{
-		return;
-	}
-
-	if (pkSkill->getType() == SKILL_TYPE_ATTACK)
-	{
-		this->m_setActSkill.insert(idSkill);
-	}
-	else if (pkSkill->getType() == SKILL_TYPE_PASSIVE)
-	{
-		this->m_setPasSkill.insert(idSkill);
-	}
 }
 
 void NDPlayer::DelSkill(OBJID idSkill)
@@ -1032,7 +970,7 @@ bool NDPlayer::DirectSwitch(int iSwitchCellX, int iSwitchCellY, int iPassIndex)
 
 	AutoPathTipObj.Stop();
 	this->stopMoving();
-	ScriptGlobalEvent::OnEvent(GE_SWITCH, iPassIndex);
+//	ScriptGlobalEvent::OnEvent(GE_SWITCH, iPassIndex);
 	/*
 	 NDTransData // SEND_DATA;
 
@@ -1147,11 +1085,6 @@ void NDPlayer::OnTimer(OBJID tag)
 void NDPlayer::HandleDirectKey()
 {
 	NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
-
-	if (!pkScene || !pkScene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
-	{
-		return;
-	}
 
 	if (!this->GetParent()
 			|| !this->GetParent()->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))

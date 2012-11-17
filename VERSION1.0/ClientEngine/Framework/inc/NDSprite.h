@@ -445,11 +445,11 @@ public:
 	CGRect GetSpriteRect();
 	void SetCurrentAnimation(int nAnimationIndex, bool bReverse);
 
-	void SetSpriteDir(int dir)
-	{
-		dir == 2 ? (m_bFaceRight = m_bReverse = false) : (m_bFaceRight =
-							m_bReverse = true);
-	}
+// 	void SetSpriteDir(int dir)
+// 	{
+// 		dir == 2 ? (m_bFaceRight = m_bReverse = false) : (m_bFaceRight =
+// 							m_bReverse = true);
+// 	}
 	int getGravityY();
 	int getGravityX();
 	void SetScale(float s)
