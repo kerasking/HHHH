@@ -15,6 +15,7 @@
 #include <sstream>
 #include <NDDebugOpt.h>
 #include <CCDrawingPrimitives.h>
+#include <UsePointPls.h>
 
 using namespace cocos2d;
 
@@ -471,6 +472,9 @@ NDPicture* NDPicture::Copy()
 
 void NDPicture::DrawInRect(CCRect kRect)
 {
+	//ND上层传来的都是基于像素，转成基于点的
+	ConvertUtil::convertToPointCoord( kRect );
+
 	CCTexture2D *pkTempTexture = NULL;
 
 	if (m_bCanGray && m_bStateGray)
@@ -486,7 +490,7 @@ void NDPicture::DrawInRect(CCRect kRect)
 	{
 		DrawSetup( kCCShader_PositionTextureColor );
 
-		SetVertices(kRect);
+		SetVertices( kRect);
 
 		if (m_bIsTran)
 		{
@@ -932,6 +936,5 @@ CCTexture2D* NDTexture::GetTextureRetain()
 	m_pkTexture->retain();
 	return m_pkTexture;
 }
-
 
 NS_NDENGINE_END

@@ -1123,8 +1123,16 @@ void NDUIButton::SetTitle()
 						rect.size.width - m_uiTitleLeftWidth
 								- m_uiTitleRightWidth, rect.size.height));
 		this->AddChild(m_title);
-
 		m_bScrollTitle = false;
+
+#if 0 //for debug //@del
+		if (m_strTitle.length() > 0) 
+		{
+			m_title->MakeTexture();
+			m_title->MakeCoordinates();
+			m_title->MakeVertices();
+		}
+#endif
 	}
 }
 

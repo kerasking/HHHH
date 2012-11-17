@@ -102,13 +102,14 @@ public:
 		void draw(); override		
 		void OnFrameRectChange(CCRect srcRect, CCRect dstRect); override
 		
-	private:
+protected:
 	void preDraw();
 	void postDraw();
 	void debugDraw();
 	void MakeTexture();
 	void MakeCoordinates();
 	void MakeVertices();
+	friend class NDUIButton;
 		
 	private:
 		std::string m_strText;

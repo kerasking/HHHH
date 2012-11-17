@@ -18,7 +18,17 @@ USING_NS_CC;
 
 NS_NDENGINE_BGN
 
-//基于Point
+//Pixel -> Point
+void ConvertUtil::convertToPointCoord( CCPoint& pt )
+{
+	float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+	if (fScale != 0) {
+		pt.x /= fScale;
+		pt.y /= fScale;
+	}
+}
+
+//Pixel -> Point
 void ConvertUtil::convertToPointCoord( cocos2d::CCSize& sz )
 {
 	float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
@@ -28,7 +38,7 @@ void ConvertUtil::convertToPointCoord( cocos2d::CCSize& sz )
 	}
 }
 
-//基于Point
+//Pixel -> Point
 void ConvertUtil::convertToPointCoord( cocos2d::CCRect& rc )
 {
 	float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
@@ -37,6 +47,38 @@ void ConvertUtil::convertToPointCoord( cocos2d::CCRect& rc )
 		rc.origin.y /= fScale;
 		rc.size.width /= fScale;
 		rc.size.height /= fScale;
+	}
+}
+
+//Point -> Pixel
+void ConvertUtil::convertToPixelCoord( CCPoint& pt )
+{
+	float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+	if (fScale != 0) {
+		pt.x *= fScale;
+		pt.y *= fScale;
+	}
+}
+
+//Point -> Pixel
+void ConvertUtil::convertToPixelCoord( CCSize& sz )
+{
+	float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+	if (fScale != 0) {
+		sz.width *= fScale;
+		sz.height *= fScale;
+	}
+}
+
+//Point -> Pixel
+void ConvertUtil::convertToPixelCoord( CCRect& rc )
+{
+	float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+	if (fScale != 0) {
+		rc.origin.x *= fScale;
+		rc.origin.y *= fScale;
+		rc.size.width *= fScale;
+		rc.size.height *= fScale;
 	}
 }
 

@@ -148,11 +148,14 @@ void WorldMapLayer::Initialization(int nMapId)
 		m_roleNode = new CUIRoleNode;
 		m_roleNode->Initialization();
 		m_roleNode->ChangeLookFace(GetPlayerLookface());
-
-		NDPlayer& player = NDPlayer::defaultHero();
-		player.ChangeModelWithMount(player.m_nRideStatus, player.m_nMountType);
 		m_roleNode->SetRoleScale(0.5f);
-		AddChild(m_roleNode);
+
+ 		NDPlayer& hero = NDPlayer::defaultHero();
+		if (m_roleNode->GetRole())
+		{
+			m_roleNode->GetRole()->ChangeModelWithMount( hero.m_nRideStatus, hero.m_nMountType );
+			AddChild(m_roleNode);
+		}
 	}
 	
 	ShowRoleAtPlace(nMapId);
@@ -321,6 +324,11 @@ void WorldMapLayer::OnTimer(OBJID tag)
 	else if (isTimeout() || this->DoMove()) //timeout or moving arrive?
 	{
 		WriteCon( "[WorldMapLayer] OnTimer, IsMoveArrive()=true\r\n" );
+		
+		if (m_roleNode && m_roleNode->GetRole())
+		{
+			m_roleNode->GetRole()->stopMoving(false);
+		}
 
 		m_timer.KillTimer(this, TAG_TIMER_MOVE);
 		SetMove(false);
@@ -445,9 +453,6 @@ void WorldMapLayer::SetCenterAtPos(CCPoint pos)
 CCPoint WorldMapLayer::ConvertToMapPoint(CCPoint screenPoint)
 {
 	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
-	screenPoint.x *= fScale;
-	screenPoint.y *= fScale;
 	return ccpAdd(
 			ccpSub(screenPoint, ccp(winSize.width / 2, winSize.height / 2)),
 			m_screenCenter);
@@ -455,21 +460,10 @@ CCPoint WorldMapLayer::ConvertToMapPoint(CCPoint screenPoint)
 
 CCPoint WorldMapLayer::ConvertToScreenPoint(CCPoint mapPoint)
 {
-#if 0
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
-	return ccpAdd(ccpSub(mapPoint, m_screenCenter),
-		ccp(winSize.width / 2, winSize.height / 2));
-#else
-	//备注：和上面的ConvertToMapPoint()互逆.
 	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
 	CCPoint posScreen = ccpAdd(ccpSub(mapPoint, m_screenCenter),
 								ccp(winSize.width / 2, winSize.height / 2));
-
-	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
-	posScreen.x /= fScale;
-	posScreen.y /= fScale;	
 	return posScreen;
-#endif
 }
 
 //return true: 输入独占
@@ -633,7 +627,7 @@ CCPoint WorldMapLayer::GetPlaceIdScreenPos(int placeId)
 		int iWidth  = node->getTexture()->getContentSizeInPixels().width;
 		int iHeight = node->getTexture()->getContentSizeInPixels().height;
 
-		CCPoint pos = CCPointMake((iStartX + iWidth/4), (iStartY - iHeight/8));
+		CCPoint pos = ccpAdd( ccp(iStartX, iStartY), ccp(iWidth*0.5, -iHeight*0.5) ); //@tune
 		posRet = pos;
 	}
 
@@ -648,22 +642,15 @@ bool WorldMapLayer::DoMove()
 	CCRect rectRole = m_roleNode->GetFrameRect();
 	CCPoint posRole = rectRole.origin;
 	CCPoint posTarget = GetTarget();
-	
-	float deltaX = posTarget.x - posRole.x;
-	float deltaY = posTarget.y - posRole.y;
-	
-	bool bArrive = (TAbs(deltaX) <= MOVE_STEP && TAbs(deltaY) <= MOVE_STEP);
 
-	deltaX = min(TAbs(deltaX), MOVE_STEP) * (deltaX>0?1:-1);
-	deltaY = min(TAbs(deltaY), MOVE_STEP) * (deltaX>0?1:-1);
-	
-	CCPoint posNext = ccpAdd( posRole, ccp(deltaX,deltaY));
+	CCPoint posNext = CalcNextPoint( posRole, posTarget );
+	bool bArrive = (pow(posNext.x - posTarget.x, 2) 
+					+ pow(posNext.y - posTarget.y, 2) < MOVE_STEP*MOVE_STEP);
 
-	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
-	rectRole = CCRectMake( posNext.x * fScale,
-							posNext.y * fScale,
-							rectRole.size.width * fScale,
-							rectRole.size.height * fScale );
+	rectRole = CCRectMake( posNext.x,
+							posNext.y,
+							rectRole.size.width,
+							rectRole.size.height );
 
 	m_roleNode->SetFrameRect(rectRole);
 	return bArrive;
@@ -675,4 +662,20 @@ bool WorldMapLayer::isTimeout()
 	CCTime::gettimeofdayCocos2d(&currentTime, NULL);
 	double duration = CCTime::timersubCocos2d(&m_tmStartMoving, &currentTime);
 	return (TAbs(duration) > 1000*5); //5 sec
+}
+
+CCPoint WorldMapLayer::CalcNextPoint( const CCPoint& posStart, const CCPoint& posEnd )
+{
+	kmVec2 vStart, vEnd;
+	kmVec2Fill( &vStart, posStart.x, posStart.y );
+	kmVec2Fill( &vEnd, posEnd.x, posEnd.y );
+
+	kmVec2 vSub, vNorm, vDelta;
+	kmVec2Subtract( &vSub, &vEnd, &vStart );
+	kmVec2Normalize( &vNorm, &vSub );
+	kmVec2Scale( &vDelta, &vNorm, MOVE_STEP );
+
+	kmVec2 vNext;
+	kmVec2Add( &vNext, &vStart, &vDelta );
+	return ccp(vNext.x, vNext.y);
 }

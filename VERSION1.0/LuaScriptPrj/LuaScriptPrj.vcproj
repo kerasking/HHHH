@@ -758,6 +758,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\RolePet\PetUI.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\RolePet\RoleInherit.lua"
 				>
 			</File>
