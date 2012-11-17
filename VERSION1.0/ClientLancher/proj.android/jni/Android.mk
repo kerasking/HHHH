@@ -16,7 +16,26 @@ LOCAL_SRC_FILES := \
 ../../src/NDPlayer.cpp \
 ../../src/ScriptDataBase.cpp \
 ../../src/ScriptGameData.cpp \
-../../src/AutoPathTip.cpp
+../../src/AutoPathTip.cpp \
+../../src/BattleMgr.cpp \
+../../src/Battle.cpp \
+../../src/NDEraseInOutEffect.cpp \
+../../src/BattleSkill.cpp \
+../../src/GameScene.cpp \
+../../src/Fighter.cpp \
+../../src/ItemMgr.cpp \
+../../src/Item.cpp \
+../../src/GlobalDialog.cpp \
+../../src/BattleUtil.cpp \
+../../src/CPet.cpp \
+../../src/NDUtility.cpp \
+../../src/Hurt.cpp \
+../../src/ScriptGlobalEvent.cpp \
+../../src/DramaScene.cpp \
+../../src/Drama.cpp \
+../../src/DramaCommand.cpp \
+../../src/NDItemType.cpp \
+../../src/DramaCommandBase.cpp
 
 LOCAL_C_INCLUDES := \
 $(LOCAL_PATH)/../../include \
