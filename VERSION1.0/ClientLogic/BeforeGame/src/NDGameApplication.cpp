@@ -260,7 +260,7 @@ void NDGameApplication::MyInit()
  // 	}
 
 	// 现在这里登陆
-	// SwichKeyToServer("192.168.9.47", 9500/*9528*/, "285929910", "", "xx");
+	// SwichKeyToServer("121.207.239.91", 9500/*9528*/, "285929910", "", "xx");
 }
 
 void NDGameApplication::applicationDidEnterBackground()

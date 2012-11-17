@@ -131,8 +131,8 @@ public:
 //		作用：设置进入战斗
 //		参数：bBattleBackground如果为true就进入战斗，否则退出战斗
 //		返回值：无
-	//void SetBattleBackground(bool bBattleBackground);
-	//bool IsBattleBackground(){ return m_bBattleBackground;}
+	void SetBattleBackground(bool bBattleBackground);
+	bool IsBattleBackground(){ return m_bBattleBackground;}
 
 	void SetNeedShowBackground(bool bNeedShow);
 
