@@ -55,7 +55,7 @@ local ID_SERVER_BUTTON_END   = 22;
 local ServerItemSize = CGSizeMake(470*ScaleFactor,45*ScaleFactor);
 
 --p.worldIP='192.168.64.32';--qbw
-p.worldIP='192.168.9.47';--common
+p.worldIP='121.207.239.91';--common
 --p.worldIP='192.168.65.7';--qbw
 --p.worldIP='222.77.177.209';--外网
 p.worldPort=9500;
