@@ -1059,11 +1059,11 @@ void Fighter::drawHurtNumber()
 				{
 					if (hn.getHurtNum() > 0)
 					{ // ¼ÓÑª
-						m_pkImgHurtNum->SetBigGreenNumber(hn.getHurtNum(), false);
+						m_pkImgHurtNum->SetSmallGreenNumber(hn.getHurtNum(), false);
 					}
 					else
 					{ // È¥Ñª
-						m_pkImgHurtNum->SetBigRedNumber(hn.getHurtNum(), false);
+						m_pkImgHurtNum->SetSmallRedNumber(hn.getHurtNum(), false);
 					}
 				}
 
@@ -1157,7 +1157,7 @@ void Fighter::drawHPMP()
 		}
 		else
 		{
-			lifew = m_kInfo.nLife * iBarWidth / m_kInfo.nLifeMax;
+			lifew = m_kInfo.nLife * ( (float)iBarWidth / (float)m_kInfo.nLifeMax );
 		}
 
 		if (lifew == 0)
@@ -1185,7 +1185,7 @@ void Fighter::drawHPMP()
 		}
 		else
 		{
-			manaw = m_kInfo.nMana * iBarWidth / m_kInfo.nManaMax;
+			manaw = m_kInfo.nMana * ( (float)iBarWidth / (float)m_kInfo.nManaMax );
 		}
 	}
 
