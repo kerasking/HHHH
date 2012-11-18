@@ -45,7 +45,7 @@ using namespace NDEngine;
 #define DOMAIN_NAME	"panda.sj.91.com"
 
 // 前置机第一选择
-#define AREA_IP_1 "192.168.9.47"
+#define AREA_IP_1 "121.207.239.91"
 #define AREA_PORT_1 5818
 
 // 前置机第二选择
@@ -309,7 +309,7 @@ NDBeforeGameMgr::NDBeforeGameMgr()
 // 	{
 // 		m_serverIP = "";
 // 	}
-	m_serverIP = "192.168.9.47";
+	m_serverIP = "121.207.239.91";
 
 // 	const char* diplayName =  loginData.GetData(kLoginData, &kLastServerName);
 // 	if (diplayName) 

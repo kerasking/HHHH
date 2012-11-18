@@ -30,7 +30,7 @@
 #include "NDDataTransThread.h"
 #include "NDMsgDefine.h"
 //#include "NDMonster.h"
-//#include "BattleMgr.h"
+#include "BattleMgr.h"//
 #include "ScriptMgr.h"
 #include "NDSharedPtr.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
@@ -627,7 +627,7 @@ void NDMapLayer::DrawSwitch()//绘制切屏点
 
 	case SWITCH_TO_BATTLE:
 		{
-			//BattleMgrObj.showBattleScene();
+			BattleMgrObj.showBattleScene();
 			ScriptMgrObj.excuteLuaFunc("Hide", "NormalBossListUI",0);//调用Hide方法后，调用Redisplay恢复
 
 			//切换音效
@@ -665,12 +665,12 @@ void NDMapLayer::DrawSwitch()//绘制切屏点
 	m_eSwitchType = SWITCH_NONE;
 }
 
-// 	void NDMapLayer::SetBattleBackground(bool bBattleBackground)
-// 	{
-// 		m_bBattleBackground = bBattleBackground;
-// 		GameScene* gameScene =  (GameScene*)GetParent();
-// 		gameScene->SetMiniMapVisible(!bBattleBackground);
-// 	}
+ 	void NDMapLayer::SetBattleBackground(bool bBattleBackground)
+ 	{
+ 		m_bBattleBackground = bBattleBackground;
+ 		//GameScene* gameScene =  (GameScene*)GetParent();
+ 		//gameScene->SetMiniMapVisible(!bBattleBackground);
+ 	}
 //
 // 	void NDMapLayer::SetNeedShowBackground(bool bNeedShow)
 // 	{
@@ -806,10 +806,10 @@ void NDMapLayer::DrawScenesAndAnimations()
 		}
 #endif
 
-// 			else if (m_bBattleBackground) // 战斗状态，不绘制其他地表元素
-// 			{
-// 				continue;
-// 			}
+ 			else if (m_bBattleBackground) // 战斗状态，不绘制其他地表元素
+ 			{
+ 				continue;
+ 			}
 #if 1
 		else if (uiIndex < uiSceneTileCount + aniGroupCount) //地表动画
 		{
@@ -1020,9 +1020,9 @@ void NDMapLayer::SetPosition(CCPoint kPosition)
 
 bool NDMapLayer::SetScreenCenter(CCPoint kPoint)
 {
-// 		if(m_bBattleBackground){
-// 			return false;
-// 		}
+ 		if(m_bBattleBackground){
+ 			return false;
+ 		}
 
 	bool bOverBoder = false;
 	int width = GetContentSize().width;

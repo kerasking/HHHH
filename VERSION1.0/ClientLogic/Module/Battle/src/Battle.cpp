@@ -2199,7 +2199,7 @@ void Battle::setBattleMap(int mapId, int posX, int posY)
 		sceneMapId = mapLayer->GetMapIndex();
 		sceneCenterX = mapLayer->GetScreenCenter().x;
 		sceneCenterY = mapLayer->GetScreenCenter().y;
-		//mapLayer->SetBattleBackground(true);
+		mapLayer->SetBattleBackground(true);
 		mapLayer->replaceMapData(mapId, posX, posY);
 
 		//mapLayer->SetNeedShowBackground(false);

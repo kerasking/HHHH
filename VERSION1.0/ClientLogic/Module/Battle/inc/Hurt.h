@@ -58,7 +58,7 @@ public:
 		if (m_nExistTime < EXIST_TIME_MAX)
 		{
 			m_nExistTime--;
-			if (m_nExistTime > EXIST_TIME_MAX - 2)
+			if (m_nExistTime < EXIST_TIME_MAX - 2)
 			{
 				m_nHurtNumberY += 1;
 			}

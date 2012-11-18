@@ -1443,7 +1443,7 @@ void BattleMgr::quitBattle(bool bEraseOut/*=true*/)
 				NDMapLayer * pMapLayer = NDMapMgrObj.getMapLayerOfScene(pGameScene);//(NDDirector::DefaultDirector()->GetRunningScene());
 				if ( pMapLayer && m_nLastSceneMapDocID )
 				{//
-					//pMapLayer->SetBattleBackground(false);
+					pMapLayer->SetBattleBackground(false);
 					pMapLayer->replaceMapData( m_nLastSceneMapDocID, m_nLastSceneScreenX, m_nLastSceneScreenY );
 					NDMapMgrObj.AddSwitch();
 					m_nLastSceneMapDocID	= 0;
