@@ -533,7 +533,7 @@ private:
 	void CloseChatInput();
 
 	void Init();
-	void addSkillEffectToFighter(Fighter* fighter,NDAnimationGroup* effect,int delay,int pos, bool bRevers = true);//++Guosen 2012.6,28//bRevers特效动画是否更随角色翻转而翻转
+	void addSkillEffectToFighter(Fighter* fighter, const char* sprfile,int delay,int pos, bool bRevers = true);//++Guosen 2012.6,28//bRevers特效动画是否更随角色翻转而翻转
 	void battleRefresh();
 
 	bool sideRightAtk();
