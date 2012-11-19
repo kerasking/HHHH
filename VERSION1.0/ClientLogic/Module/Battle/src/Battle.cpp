@@ -3828,13 +3828,9 @@ void Battle::runAction(int nTeamID)
 
 				//死亡音效
 				ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",1092);
-
-
+				
 				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				NDAnimationGroup* dieAniGroup = new NDAnimationGroup;
-				dieAniGroup->initWithSprFile(file);
-				addSkillEffectToFighter(fa->m_pkActor, dieAniGroup, 0, 1);
-				CC_SAFE_DELETE(dieAniGroup);
+				addSkillEffectToFighter(fa->m_pkActor, file, 0, 1);
 				fa->m_pkActor->showFighterName(false);
 				dieAction(*(fa->m_pkActor));
 			}
@@ -3868,31 +3864,21 @@ void Battle::runAction(int nTeamID)
 		case BATTLE_EFFECT_TYPE_ESCORTING://护驾=援护
 			{//播放“援护”文字动画++Guosen 2012.7.9//
 				const char *file = NDPath::GetAniPath("sm_effect_47.spr").c_str();
-				NDAnimationGroup *effect = new NDAnimationGroup;
-				effect->initWithSprFile(file);
-
-				addSkillEffectToFighter(fa->m_pkActor,effect,0,g_ArrayEfectProp[47].iPos,g_ArrayEfectProp[47].bRevers);
-				CC_SAFE_DELETE(effect);
+				addSkillEffectToFighter(fa->m_pkActor,file,0,g_ArrayEfectProp[47].iPos,g_ArrayEfectProp[47].bRevers);
 			}
 			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
 		case BATTLE_EFFECT_TYPE_COOPRATION_HIT://合击
 			{//播放“合击”文字动画++Guosen 2012.7.9
 				const char *file = NDPath::GetAniPath("sm_effect_46.spr").c_str();
-				NDAnimationGroup *effect = new NDAnimationGroup;
-				effect->initWithSprFile(file);
-				addSkillEffectToFighter(fa->m_pkActor,effect,0,g_ArrayEfectProp[46].iPos,g_ArrayEfectProp[46].bRevers);
-				CC_SAFE_DELETE(effect);
+				addSkillEffectToFighter(fa->m_pkActor,file,0,g_ArrayEfectProp[46].iPos,g_ArrayEfectProp[46].bRevers);
 			}
 			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
 		case BATTLE_EFFECT_TYPE_RESIST://免疫
 			{//播放“免疫”文字动画++Guosen 2012.8.2
 				const char *file = NDPath::GetAniPath("sm_effect_32.spr").c_str();
-				NDAnimationGroup *effect = new NDAnimationGroup;
-				effect->initWithSprFile(file);
-				addSkillEffectToFighter(fa->m_pkActor,effect,0,g_ArrayEfectProp[32].iPos,g_ArrayEfectProp[32].bRevers);
-				CC_SAFE_DELETE(effect);
+				addSkillEffectToFighter(fa->m_pkActor,file,0,g_ArrayEfectProp[32].iPos,g_ArrayEfectProp[32].bRevers);
 			}
 			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
@@ -3913,10 +3899,7 @@ void Battle::runAction(int nTeamID)
 				stringstream ss;
 				ss << "sm_effect_" << fa->m_nData << ".spr";
 				const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				NDAnimationGroup *effect = new NDAnimationGroup;
-				effect->initWithSprFile(file);
-				addSkillEffectToFighter(fa->m_pkActor,effect,0,g_ArrayEfectProp[fa->m_nData].iPos,g_ArrayEfectProp[fa->m_nData].bRevers);
-				CC_SAFE_DELETE(effect);
+				addSkillEffectToFighter(fa->m_pkActor,file,0,g_ArrayEfectProp[fa->m_nData].iPos,g_ArrayEfectProp[fa->m_nData].bRevers);
 			}
 			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
@@ -3944,12 +3927,9 @@ void Battle::runAction(int nTeamID)
 				//死亡音效
 				ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",1092);
 
-				const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				NDAnimationGroup *effect = new NDAnimationGroup;
-				effect->initWithSprFile(file);
 				fa->m_pkActor->showFighterName(false);
-				addSkillEffectToFighter(fa->m_pkActor,dieAniGroup,0,1);
-				CC_SAFE_DELETE(effect);
+				const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+				addSkillEffectToFighter(fa->m_pkActor,file,0,1);
 			}
 			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
@@ -4237,9 +4217,8 @@ void Battle::moveToTarget(FightAction* action)
 //						stringstream ss;
 //						ss << "effect_" << effectId << ".spr";
 //						NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
-//						NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //						NDLog("add self effect");
-//						addSkillEffectToFighter(theActor,effect,delay);
+//						addSkillEffectToFighter(theActor,file,delay);
 //					}
 //					effectId=skill->GetLookfaceTargetID()/100;//光效播放在目标身上
 //					if(effectId!=0){
@@ -4247,11 +4226,10 @@ void Battle::moveToTarget(FightAction* action)
 //						stringstream ss;
 //						ss << "effect_" << effectId << ".spr";
 //						NSString file = [NSString stringWithUTF8String:GetAniPath(ss.str().c_str())];
-//						NDAnimationGroup* effect = [[NDAnimationGroup alloc] initWithSprFile:file];
 //						for (int i = 0; i < action->m_FighterList.size(); i++)
 //						{	
 //							Fighter* f=action->m_FighterList.at(i);
-//							addSkillEffectToFighter(f, effect,delay);
+//							addSkillEffectToFighter(f, file,delay);
 //						}
 //					}
 				}
@@ -4289,13 +4267,10 @@ void Battle::moveToTarget(FightAction* action)
 					stringstream ss;
 					ss << "sm_effect_" << effectId << ".spr";
 					const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-					NDAnimationGroup* effect = new NDAnimationGroup();
-					effect->initWithSprFile(file);
-
+					
 					//++Guosen 2012.6.28//播放特效动画须指定的位置及翻转设定
-					//addSkillEffectToFighter(theActor,effect,delay,pos);
-					addSkillEffectToFighter(theActor,effect,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);
-					CC_SAFE_DELETE(effect);
+					//addSkillEffectToFighter(theActor,file,delay,pos);
+					addSkillEffectToFighter(theActor,file,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);
 				}
 				effectId=skill->getTargetEffect();///1000;//光效播放在目标身上
 				if(effectId != 0)
@@ -4305,17 +4280,14 @@ void Battle::moveToTarget(FightAction* action)
 					stringstream ss;
 					ss << "sm_effect_" << effectId << ".spr";
 					const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-					NDAnimationGroup* effect = new NDAnimationGroup();
-					effect->initWithSprFile(file);
 					for (UInt32 i = 0; i < action->m_kFighterList.size(); i++)
 					{	
 						Fighter* f=action->m_kFighterList.at(i);
 
 						//++Guosen 2012.6.28//播放特效动画须指定的位置及翻转设定
-						//addSkillEffectToFighter(f, effect,delay,pos);
-						addSkillEffectToFighter(f,effect,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);
+						//addSkillEffectToFighter(f, file,delay,pos);
+						addSkillEffectToFighter(f,file,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);
 					}
-					CC_SAFE_DELETE(effect);
 				}
 			}
 		}
@@ -4353,12 +4325,9 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 				//死亡音效
 				ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",1092);
 
-				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				NDAnimationGroup* dieAniGroup = new NDAnimationGroup;
-				dieAniGroup->initWithSprFile(file);
 				fighter->showFighterName(false);
-				addSkillEffectToFighter(fighter, dieAniGroup, 0, 1);
-				CC_SAFE_DELETE(dieAniGroup);
+				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+				addSkillEffectToFighter(fighter, file, 0, 1);
 			}
 			break;
 		case BATTLE_EFFECT_TYPE_MANA:
@@ -4369,11 +4338,8 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 			{
 				//播放闪避文字动画++Guosen 2012.6.28
 				const char* file = NDPath::GetAniPath("sm_effect_25.spr").c_str();
-				NDAnimationGroup* effect = new NDAnimationGroup;
-				effect->initWithSprFile(file);
-				//addSkillEffectToFighter(fighter,effect,0,0, false);
-				addSkillEffectToFighter(fighter,effect,0,g_ArrayEfectProp[25].iPos,g_ArrayEfectProp[25].bRevers);
-				CC_SAFE_DELETE(effect);
+				//addSkillEffectToFighter(fighter,file,0,0, false);
+				addSkillEffectToFighter(fighter,file,0,g_ArrayEfectProp[25].iPos,g_ArrayEfectProp[25].bRevers);
 			}
 			dodgeAction(*fighter);
 			break;
@@ -4401,12 +4367,9 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 				ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",1092);
 
 				ss << "die_action.spr";
-				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				NDAnimationGroup* dieAniGroup = new NDAnimationGroup;
-				dieAniGroup->initWithSprFile(file);
 				fighter->showFighterName(false);
-				addSkillEffectToFighter(fighter,dieAniGroup,0,1);
-				CC_SAFE_DELETE(dieAniGroup);
+				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+				addSkillEffectToFighter(fighter,file,0,1);
 			}
 			break;
 		case BATTLE_EFFECT_TYPE_BLOCK:
@@ -4432,28 +4395,19 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 			{
 				//播放“援护”文字动画
 				const char* file = NDPath::GetAniPath("sm_effect_47.spr").c_str();
-				NDAnimationGroup* effect = new NDAnimationGroup;
-				effect->initWithSprFile(file);
-				addSkillEffectToFighter(fighter,effect,0,g_ArrayEfectProp[47].iPos,g_ArrayEfectProp[47].bRevers);
-				CC_SAFE_DELETE(effect);
+				addSkillEffectToFighter(fighter,file,0,g_ArrayEfectProp[47].iPos,g_ArrayEfectProp[47].bRevers);
 			}
 			break;
 		case BATTLE_EFFECT_TYPE_COOPRATION_HIT://合击
 			{//播放“合击”文字动画
 				const char* file = NDPath::GetAniPath("sm_effect_46.spr").c_str();
-				NDAnimationGroup* effect = new NDAnimationGroup;
-				effect->initWithSprFile(file);
-				addSkillEffectToFighter(fighter,effect,0,g_ArrayEfectProp[46].iPos,g_ArrayEfectProp[46].bRevers);
-				CC_SAFE_DELETE(effect);
+				addSkillEffectToFighter(fighter,file,0,g_ArrayEfectProp[46].iPos,g_ArrayEfectProp[46].bRevers);
 			}
 			break;
 		case BATTLE_EFFECT_TYPE_RESIST://免疫
 			{//播放“免疫”文字动画
 				const char* file = NDPath::GetAniPath("sm_effect_32.spr").c_str();
-				NDAnimationGroup* effect = new NDAnimationGroup;
-				effect->initWithSprFile(file);
-				addSkillEffectToFighter(fighter,effect,0,g_ArrayEfectProp[32].iPos,g_ArrayEfectProp[32].bRevers);
-				CC_SAFE_DELETE(effect);
+				addSkillEffectToFighter(fighter,file,0,g_ArrayEfectProp[32].iPos,g_ArrayEfectProp[32].bRevers);
 			}
 			break;
 		case BATTLE_EFFECT_TYPE_CHANGE_POSTION://移位
@@ -4472,10 +4426,7 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 				stringstream ss;
 				ss << "sm_effect_" << cmd->data << ".spr";
 				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				NDAnimationGroup* effect = new NDAnimationGroup;
-				effect->initWithSprFile(file);
-				addSkillEffectToFighter(fighter,effect,0,g_ArrayEfectProp[cmd->data].iPos,g_ArrayEfectProp[cmd->data].bRevers);
-				CC_SAFE_DELETE(effect);
+				addSkillEffectToFighter(fighter,file,0,g_ArrayEfectProp[cmd->data].iPos,g_ArrayEfectProp[cmd->data].bRevers);
 			}
 			break;
 		case BATTLE_EFFECT_TYPE_SKILL_EFFECT:
@@ -4489,13 +4440,9 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 				stringstream ss;
 				ss << "sm_effect_" << cmd->data << ".spr";
 				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				NDAnimationGroup* effect = new NDAnimationGroup;
-				effect->initWithSprFile(file);
-
 				//++Guosen 2012.6.28//播放特效动画须指定的位置及翻转设定
-				//addSkillEffectToFighter(fighter,effect,delay,pos);
-				addSkillEffectToFighter(fighter,effect,delay,g_ArrayEfectProp[cmd->data].iPos,g_ArrayEfectProp[cmd->data].bRevers);
-				CC_SAFE_DELETE(effect);
+				//addSkillEffectToFighter(fighter,file,delay,pos);
+				addSkillEffectToFighter(fighter,file,delay,g_ArrayEfectProp[cmd->data].iPos,g_ArrayEfectProp[cmd->data].bRevers);
 			}
 			break;
 		default:
@@ -4589,14 +4536,15 @@ void Battle::moveBack(FightAction* action)
 	}
 }
 
-void Battle::addSkillEffectToFighter(Fighter* fighter, NDAnimationGroup* effect, int delay, int pos, bool bRevers)
-{//--Guosen 2012.11.9 //因效果动画未实现，暂时注释，--#################################################################################################
-return;
+void Battle::addSkillEffectToFighter(Fighter* fighter, const char* sprfile, int delay, int pos, bool bRevers)
+{
 	NDLog("add skill effect");
+	NDAnimationGroup* effect = new NDAnimationGroup;
+	effect->initWithSprFile(sprfile);
 	NDSubAniGroup sa;
 	sa.role = fighter->GetRole();
 	sa.fighter = fighter;
-	sa.aniGroup = effect;
+	sa.aniGroup = effect;//
 	sa.frameRec = new NDFrameRunRecord;
 	sa.isFromOut = true;
 	sa.startFrame = delay;
@@ -4726,12 +4674,7 @@ void Battle::aimTarget(FightAction* action)
 				stringstream ss;
 				ss << "sm_effect_" << effectId << ".spr";
 				const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				NDAnimationGroup *effect = new NDAnimationGroup;
-				effect->initWithSprFile(file);
-
-				//addSkillEffectToFighter(theActor,effect,delay,pos);
-				addSkillEffectToFighter(theActor,effect,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);//++Guosen 2012.6.28
-				CC_SAFE_DELETE(effect);
+				addSkillEffectToFighter(theActor,file,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);//++Guosen 2012.6.28
 			}
 			effectId = skill->getTargetEffect();///1000;//光效播放在目标身上
 			NDLog("add effect to target effectid:%d",effectId);
@@ -4748,16 +4691,12 @@ void Battle::aimTarget(FightAction* action)
 				stringstream ss;
 				ss << "sm_effect_" << effectId << ".spr";
 				const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				NDAnimationGroup *effect = new NDAnimationGroup;
-				effect->initWithSprFile(file);
 				for (UInt32 i = 0; i < action->m_kFighterList.size(); i++)
 				{	
 					Fighter* f=action->m_kFighterList.at(i);
-					//addSkillEffectToFighter(f, effect,delay,pos);
-					addSkillEffectToFighter(f,effect,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);//++Guosen 2012.6.28
+					//addSkillEffectToFighter(f, file,delay,pos);
+					addSkillEffectToFighter(f,file,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);//++Guosen 2012.6.28
 				}
-
-				CC_SAFE_DELETE(effect);
 			}
 
 			//			if (theActor.m_kInfo.fighterType == FIGHTER_TYPE_PET) { // 玩家

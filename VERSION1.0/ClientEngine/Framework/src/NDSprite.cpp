@@ -1073,7 +1073,87 @@ void NDSprite::RunBattleSubAnimation(NDBaseFighter* pkFighter)
 
 bool NDSprite::DrawSubAnimation(NDSubAniGroup& kSag)
 {
-	return true;
+	NDNode* layer = this->GetParent();
+	
+	if ( !layer )
+	{
+		return true;
+	}
+	
+	NDFrameRunRecord* record = kSag.frameRec;
+	
+	if ( !record ) 
+	{
+		return true;
+	}
+	
+	NDAnimationGroup *aniGroup = kSag.aniGroup;
+	
+	if( !aniGroup )
+	{
+		return true;
+	}
+	
+	CGPoint pos = aniGroup->getPosition();
+	aniGroup->setRunningMapSize( layer->GetContentSize() );
+	
+	NDAnimation* ani = nil;
+	if ( aniGroup->getAnimations()->count() > 0)
+	{
+		ani = (NDAnimation*)aniGroup->getAnimations()->objectAtIndex(0);
+	}
+	
+	if (!ani)
+	{
+		return true;
+	}
+	
+	CGPoint posTarget = ccp(0, 0);
+	if ( aniGroup->getType() == SUB_ANI_TYPE_NONE ) 
+	{
+		if ( kSag.reverse )//允许翻转
+			aniGroup->setReverse( kSag.fighter->getFighterInfo().group == BATTLE_GROUP_DEFENCE ? false : true );
+		else
+			aniGroup->setReverse( false );
+		int coordx = 0;
+		
+		if ( aniGroup->getReverse() )
+		{// 向右释放技能
+			coordx += (240 - (aniGroup->getPosition().x + ani->getW())) * 2;//240?
+		}
+		
+		//posTarget.x = pos.x + ani.w / 2 + coordx + 20;
+		//posTarget.y = pos.y + ani.h / 2 + 45;
+		posTarget = ccp( pos.x + ani->getW() / 2 + coordx + 20, pos.y + ani->getH() / 2 + 45 );
+	
+	}
+	else if ( ( aniGroup->getType() == SUB_ANI_TYPE_TARGET ) || ( aniGroup->getType() == SUB_ANI_TYPE_SELF ) )
+	{
+		int posX	= kSag.fighter->getX();
+		int posY	= kSag.fighter->getY();
+		if ( kSag.pos == 0 )
+		{
+			posY -= FIGHTER_HEIGHT;
+		}
+		else if( kSag.pos == 2 )
+		{
+			posY -= FIGHTER_HEIGHT/2;
+		}
+		posTarget = ccp( posX, posY );
+		if ( kSag.reverse )//允许翻转
+			aniGroup->setReverse( kSag.fighter->getFighterInfo().group == BATTLE_GROUP_DEFENCE ? true : false );
+		else
+			aniGroup->setReverse( false );
+	}
+	
+	// 子动画播放位置设置
+	aniGroup->setPosition( posTarget );
+	
+	ani->runWithRunFrameRecord( record, true, m_fScale );
+	
+	aniGroup->setPosition( pos );
+	
+	return record->getCurrentFrameIndex() != 0 && record->getNextFrameIndex() == 0;
 }
 
 void NDSprite::SetWeaponImage(int weapon_lookface)
