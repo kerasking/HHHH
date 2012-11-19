@@ -41,7 +41,7 @@ fi
 mkdir $HELLOWORLD_ROOT/assets
 
 # copy resources
-for file in $CLIENT_LOCAL/bin*
+for file in $CLIENT_LOCAL/bin/*
 do
     if [ -d $file ]; then
         cp -rf $file $HELLOWORLD_ROOT/assets

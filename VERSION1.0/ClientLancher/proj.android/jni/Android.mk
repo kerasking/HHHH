@@ -7,7 +7,8 @@ LOCAL_MODULE := GameLauncher
 LOCAL_MODULE_FILENAME := libGameLauncher
 
 LOCAL_SRC_FILES := \
-../../src/GameLauncher.cpp
+../../src/GameLauncher.cpp \
+../game/main.cpp
 
 LOCAL_C_INCLUDES := \
 $(LOCAL_PATH)/../../include \

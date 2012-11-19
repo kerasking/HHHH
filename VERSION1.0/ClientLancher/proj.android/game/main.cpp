@@ -1,4 +1,5 @@
 #include "NDGameApplication.h"
+#include "GameLauncher.h"
 #include "NDSharedPtr.h"
 #include "cocos2d.h"
 #include "platform/android/jni/JniHelper.h"
@@ -9,6 +10,7 @@
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 
 using namespace cocos2d;
+using namespace NDEngine;
 
 extern "C"
 {
@@ -24,9 +26,17 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
 
 void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, jobject thiz, jint w, jint h)
 {
+	for(int i = 0;i < 100;i++)
+	{
+		LOGD("Come in !!!!!!!");
+	}
+
     if (!cocos2d::CCDirector::sharedDirector()->getOpenGLView())
     {
-    	printf("StartMain");
+    	for(int i = 0;i < 100;i++)
+    	{
+    		LOGD("cocos2d::CCDirector::sharedDirector()->getOpenGLView()");
+    	}
 
     	cocos2d::CCEGLView *view = &cocos2d::CCEGLView::sharedOpenGLView();
         view->setFrameWidthAndHeight(w, h);
