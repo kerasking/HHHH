@@ -490,6 +490,8 @@ protected:
 	void SetSprite(NDPicture* pic);
 	void reloadAni(const char* pszSprFile);
 
+	virtual void debugDraw();
+
 protected:
 
 	std::string m_strHairImage;
