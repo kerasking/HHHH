@@ -626,7 +626,7 @@ CCPoint WorldMapLayer::GetPlaceIdScreenPos(int placeId)
 		int iWidth  = node->getTexture()->getContentSizeInPixels().width;
 		int iHeight = node->getTexture()->getContentSizeInPixels().height;
 
-		CCPoint pos = ccpAdd( ccp(iStartX, iStartY), ccp(iWidth*0.5, -iHeight*0.5) ); //@tune
+		CCPoint pos = ccpAdd( ccp(iStartX, iStartY), ccp((iWidth)*0/4, -iHeight) ); //@tune
 		posRet = pos;
 	}
 
