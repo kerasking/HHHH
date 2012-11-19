@@ -97,7 +97,6 @@ namespace NDEngine {
 
 	//#define ETVAR(nameinlua, varaddr)
 	//LuaStateMgrObj.GetState()->GetGlobals()[nameinlua].SetInteger()
-
 	#define ETCLASSBEGIN(classname) \
 	bool ETClassBegin##classname(){ \
 	LuaClass<classname>  LuaClassTmp(LuaStateMgrObj.GetState());

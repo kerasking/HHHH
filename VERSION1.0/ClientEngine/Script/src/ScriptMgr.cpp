@@ -32,6 +32,8 @@ using namespace std;
 
 using namespace NDEngine;
 
+ScriptMgr* ScriptMgr::ms_pkScriptMgr = 0;
+
 void luaExceptRunTimeOutPut(const char *exceptinfo)
 {
 	ScriptMgrObj.DebugOutPut("run failed!!!");
@@ -359,4 +361,11 @@ int NDEngine::ScriptMgr::excuteLuaFuncRetN(const char* funcname,
 		const char* modulename)
 {
 	return 0;
+}
+
+ScriptMgr& NDEngine::ScriptMgr::GetSingleton()
+{
+	if (NULL == ms_pkScriptMgr)
+		ms_pkScriptMgr = new ScriptMgr;
+	return *ms_pkScriptMgr;
 }

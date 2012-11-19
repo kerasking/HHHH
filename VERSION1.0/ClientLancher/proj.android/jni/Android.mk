@@ -35,7 +35,15 @@ LOCAL_SRC_FILES := \
 ../../src/Drama.cpp \
 ../../src/DramaCommand.cpp \
 ../../src/NDItemType.cpp \
-../../src/DramaCommandBase.cpp
+../../src/DramaCommandBase.cpp \
+../../src/SMBattleScene.cpp \
+../../src/UIRoleNode.cpp \
+../../src/ScriptGameLogic.cpp \
+../../src/NDMapLayerLogic.cpp \
+../../src/SMGameScene.cpp \
+../../src/SMLoginScene.cpp \
+../../src/WorldMapScene.cpp \
+../../src/ScriptNetMsg.cpp
 
 LOCAL_C_INCLUDES := \
 $(LOCAL_PATH)/../../include \

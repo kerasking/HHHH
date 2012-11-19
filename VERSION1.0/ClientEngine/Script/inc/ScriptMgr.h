@@ -33,7 +33,7 @@ public:
 	}
 };
 
-class ScriptMgr: public TSingleton<ScriptMgr>
+class ScriptMgr// public TSingleton<ScriptMgr>
 {
 	typedef bool (*RegisterClassFunc)();
 
@@ -49,6 +49,8 @@ public:
 
 	ScriptMgr();
 	~ScriptMgr();
+
+	static ScriptMgr& GetSingleton();
 
 	void AddScriptObject(ScriptObject* object);
 	void DelScriptObject(ScriptObject* object);
@@ -139,6 +141,8 @@ private:
 	vec_script_object m_vScriptObject;
 	std::string m_strLogFilePath;
 	std::string m_strScriptFilePath;
+
+	static ScriptMgr* ms_pkScriptMgr;
 
 private:
 	void LoadRegClassFuncs();
