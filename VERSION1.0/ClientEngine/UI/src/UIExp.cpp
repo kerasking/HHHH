@@ -26,7 +26,7 @@ CUIExp::CUIExp()
     m_unStart           = 0;
 	m_bRecacl			= true;
     m_nStyle            = 0;
-	m_fPercent			= 0.f;
+	m_fPercent			= 0.0f;
 }
 
 CUIExp::~CUIExp()
@@ -137,8 +137,10 @@ void CUIExp::draw()
         
         unsigned int t_unProcess    = m_unProcess - m_unStart;
         unsigned int t_unTotal      = m_unTotal - m_unStart;
-        
-		m_fPercent = max(0, (float(t_unProcess) / float(t_unTotal)));
+		if(t_unTotal > 0)
+		{
+			m_fPercent = max(0.0f, (float(t_unProcess) / float(t_unTotal)));
+		}
 
 #if 0
 		if (t_unProcess <= t_unTotal && 0 != t_unTotal && 0 != t_unProcess)
