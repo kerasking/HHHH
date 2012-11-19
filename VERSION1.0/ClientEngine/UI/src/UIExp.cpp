@@ -11,7 +11,7 @@
 #include "SMString.h"
 #include <sstream>
 #include "define.h"
-
+#include "NDUtility.h"
 //using namespace cocos2d;
 
 IMPLEMENT_CLASS(CUIExp, NDUINode)
@@ -26,6 +26,7 @@ CUIExp::CUIExp()
     m_unStart           = 0;
 	m_bRecacl			= true;
     m_nStyle            = 0;
+	m_fPercent			= 0.f;
 }
 
 CUIExp::~CUIExp()
@@ -83,6 +84,8 @@ void CUIExp::SetStart(unsigned int unStart)
 
 void CUIExp::SetProcess(unsigned int unProcess)
 {
+	//WriteCon( "CUIExp::SetProcess(%d)\r\n", unProcess );
+
 	m_unProcess = unProcess;
 
 	m_bRecacl = true;
@@ -90,14 +93,16 @@ void CUIExp::SetProcess(unsigned int unProcess)
 
 void CUIExp::SetTotal(unsigned int unTotal)
 {
+	//WriteCon( "CUIExp::SetTotal(%d)\r\n", unTotal );
+
 	m_unTotal	= unTotal;
 	
 	m_bRecacl	= true;
 }
+
 unsigned int CUIExp::GetStart()
 {
     return m_unStart;
-    
 }
 
 unsigned int CUIExp::GetProcess()
@@ -119,15 +124,23 @@ void CUIExp::draw()
 		return;
 	}
 	
+	if (!m_picProcess && m_strProcessFile.length() > 0)
+	{
+		m_picProcess = NDPicturePool::DefaultPool()->AddPicture( m_strProcessFile.c_str(), false );
+	}
+
 	CCRect scrRect		= this->GetScreenRect();
 	
 	if (m_bRecacl && !m_strProcessFile.empty())
 	{
-		SAFE_DELETE(m_picProcess);
+		//SAFE_DELETE(m_picProcess);
         
         unsigned int t_unProcess    = m_unProcess - m_unStart;
         unsigned int t_unTotal      = m_unTotal - m_unStart;
         
+		m_fPercent = float(t_unProcess) / float(t_unTotal);
+
+#if 0
 		if (t_unProcess <= t_unTotal && 0 != t_unTotal && 0 != t_unProcess)
 		{
 			float fWidth	= scrRect.size.width * t_unProcess / t_unTotal;
@@ -139,32 +152,37 @@ void CUIExp::draw()
 			
 			if ((int)fWidth > 0)
 			{
-				m_picProcess	= NDPicturePool::DefaultPool()->AddPicture(
-								m_strProcessFile.c_str(), fWidth, scrRect.size.height);
+ 				m_picProcess	= NDPicturePool::DefaultPool()->AddPicture(
+ 								m_strProcessFile.c_str(), fWidth, scrRect.size.height);
 			}
 		}
+#endif
 	}
 	
 	if ( m_bRecacl && m_lbText )
 	{
 		if (0 != m_unTotal)
 		{
-            if(m_nStyle == 0){
+            if(m_nStyle == 0)
+			{
 				m_lbText->SetVisible(true);
                 std::stringstream ss;
                 ss << m_strText.c_str() << m_unProcess << "/" << m_unTotal;
                 //tq::CString str("%s%u/%u", m_strText.c_str(), m_unProcess, m_unTotal);
                 m_lbText->SetText(ss.str().c_str());
-            }else if(m_nStyle == 1){
+            }
+			else if(m_nStyle == 1)
+			{
 				m_lbText->SetVisible(true);
                 std::stringstream ss;
                 ss << m_strText.c_str() << m_unProcess/m_unTotal << "%";
                 //tq::CString str("%s%u/%u", m_strText.c_str(), m_unProcess, m_unTotal);
                 m_lbText->SetText(ss.str().c_str());
-            }else if (m_nStyle == 2){
+            }
+			else if (m_nStyle == 2)
+			{
 				m_lbText->SetVisible(false);
             }
-            
 		}
 	}
 	
@@ -175,9 +193,14 @@ void CUIExp::draw()
 
 	if (m_picProcess)
 	{
+		CCSize sizeCut = CCSizeMake( m_picProcess->GetTexture()->getPixelsWide() * m_fPercent,
+										m_picProcess->GetTexture()->getPixelsHigh());						
+		CCRect cut = CCRectMake( 0, 0, sizeCut.width, sizeCut.height );
+		m_picProcess->Cut( cut );
+
 		CCRect rect;
 		rect.origin		= scrRect.origin;
-		rect.size		= m_picProcess->GetSize();
+		rect.size		= CCSizeMake( scrRect.size.width * m_fPercent, scrRect.size.height );
 		m_picProcess->DrawInRect(rect);
 	}
 
