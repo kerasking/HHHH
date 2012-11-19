@@ -1295,4 +1295,9 @@ void NDPlayer::RunAnimation(bool bDraw)
 	NDManualRole::RunAnimation(bDraw);
 }
 
+void NDPlayer::debugDraw()
+{
+	NDManualRole::debugDraw();
+}
+
 NS_NDENGINE_END

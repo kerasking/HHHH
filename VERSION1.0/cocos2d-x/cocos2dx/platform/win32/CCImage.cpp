@@ -190,6 +190,31 @@ public:
         return bRet;
     }
 
+#if ND_MOD
+	//dwFmt: 1=left, 2=right, 3=center
+	void sizeWithText_Ansi(const char * pszText, DWORD dwFmt, LONG nWidthLimit,
+							int& outSizeWidth, int& outSizeHeight )
+	{
+		//dwFmt |= DT_WORDBREAK;
+		int nLen = strlen(pszText);
+
+		// utf-8 to utf-16
+		int nBufLen  = nLen + 1;
+		wchar_t * pwszBuffer = new wchar_t[nBufLen];
+		if (pwszBuffer)
+		{
+			memset(pwszBuffer, 0, sizeof(wchar_t)*nBufLen);
+			nLen = MultiByteToWideChar(CP_UTF8, 0, pszText, nLen, pwszBuffer, nBufLen);
+
+			SIZE retSize = sizeWithText( pwszBuffer, nLen, dwFmt, 0 );
+			outSizeWidth = retSize.cx;
+			outSizeHeight = retSize.cy;
+
+			delete[] pwszBuffer; 
+		}
+	}
+#endif
+
     SIZE sizeWithText(const wchar_t * pszText, int nLen, DWORD dwFmt, LONG nWidthLimit)
     {
         SIZE tRet = {0};
@@ -437,5 +462,38 @@ bool CCImage::initWithString(
 
     return bRet;
 }
+
+#if ND_MOD
+bool CCImage::getStringSize( const char *    pText, 
+							 ETextAlign      eAlignMask,
+							 const char *    pFontName,
+							 int             nSize,
+							 int&			outSizeWidth,
+							 int&			outSizeHeight)
+{
+	if (pText && pFontName && nSize > 0)
+	{
+		DWORD dwFmt = DT_LEFT;
+		switch (eAlignMask)
+		{
+		case kAlignLeft: dwFmt = DT_LEFT; break;
+		case kAlignRight: dwFmt = DT_RIGHT; break;
+		case kAlignCenter: dwFmt = DT_CENTER; break;
+		}
+
+		BitmapDC& dc = sharedBitmapDC();
+
+		if (dc.setFont(pFontName, nSize))
+		{
+			int width = 0, height = 0;
+			dc.sizeWithText_Ansi( pText, dwFmt, 0, outSizeWidth, outSizeHeight );
+			return true;
+		}
+	}
+	return false;
+}
+
+#endif
+
 
 NS_CC_END

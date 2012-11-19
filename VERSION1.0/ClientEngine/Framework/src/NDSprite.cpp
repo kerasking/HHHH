@@ -1187,4 +1187,9 @@ void NDSprite::reloadAni( const char* pszSprFile )
 	m_pkAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithSpr(pszSprFile);
 }
 
+void NDSprite::debugDraw()
+{
+	//empty.
+}
+
 NS_NDENGINE_END
