@@ -9,10 +9,8 @@
 
 #pragma once
 
-
 #include "NDUINode.h"
-
-#pragma mark 加载ui
+#include "UIData.h"
 
 using namespace NDEngine;
 
@@ -32,4 +30,21 @@ class NDUILoadEngine : public NDObject
 		  LuaObject luaDelegate,
 		  float sizeOffsetW = 0.0f,
 		  float sizeOffsetH = 0.0f);
+
+private:
+	bool LoadAny( const char* uiname,
+		NDUINode *parent, 
+		NDUITargetDelegate* delegate, 
+		LuaObject* luaDelegate,
+		CCSize sizeOffset = CCSizeZero );
+
+	NDUINode* LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *parent, const CCSize& sizeOffset );
+	
+	NDUINode* CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& ctrlTypeName );
+
+	void PostLoad(UIINFO& uiInfo);	
+
+	void AdjustCtrlPosByAnchor( UIINFO& uiInfo, const CCPoint& CtrlAnchorPos );
+
+	bool IsAnchorValid( const float anchor );
 };

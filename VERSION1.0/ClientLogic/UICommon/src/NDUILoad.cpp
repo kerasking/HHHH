@@ -18,74 +18,80 @@
 
 IMPLEMENT_CLASS(NDUILoad, NDObject)
 
-unsigned int inline findAndReplace(
+class NDUILoad_Util
+{
+public:
+	static unsigned int inline findAndReplace(
 		std::string& source, 
 		const std::string& find, 
 		const std::string& replace, 
 		unsigned int time=0 ) 
-{     
-	unsigned int num=0;     
-	size_t fLen = find.size();
-	size_t rLen = replace.size();     
-	for (size_t pos=0; (pos=source.find(find, pos))!=std::string::npos; pos+=rLen)     
-	{         
-		source.replace(pos, fLen, replace); 
-		
-		if (time > 0 && ++num >= time)
-			break;
-	}     
-	return num; 
-}
+	{     
+		unsigned int num=0;     
+		size_t fLen = find.size();
+		size_t rLen = replace.size();     
+		for (size_t pos=0; (pos=source.find(find, pos))!=std::string::npos; pos+=rLen)     
+		{         
+			source.replace(pos, fLen, replace); 
 
-bool FilterStringName1(UIINFO& uiInfo)
-{
-	if (!uiInfo.strNormalFile.empty())
-	{
-		findAndReplace(uiInfo.strNormalFile, ".", "", 1);
-		findAndReplace(uiInfo.strNormalFile, "\r", "", 1);
-		findAndReplace(uiInfo.strNormalFile, "\\", "/");
+			if (time > 0 && ++num >= time)
+				break;
+		}     
+		return num; 
 	}
-	
-	if (!uiInfo.strSelectedFile.empty())
+
+	static bool FilterStringName(UIINFO& uiInfo)
 	{
-		findAndReplace(uiInfo.strSelectedFile, ".", "", 1);
-		findAndReplace(uiInfo.strSelectedFile, "\r", "", 1);
-		findAndReplace(uiInfo.strSelectedFile, "\\", "/");
+		if (!uiInfo.strNormalFile.empty())
+		{
+			findAndReplace(uiInfo.strNormalFile, ".", "", 1);
+			findAndReplace(uiInfo.strNormalFile, "\r", "", 1);
+			findAndReplace(uiInfo.strNormalFile, "\\", "/");
+		}
+
+		if (!uiInfo.strSelectedFile.empty())
+		{
+			findAndReplace(uiInfo.strSelectedFile, ".", "", 1);
+			findAndReplace(uiInfo.strSelectedFile, "\r", "", 1);
+			findAndReplace(uiInfo.strSelectedFile, "\\", "/");
+		}
+
+		if (!uiInfo.strDisableFile.empty())
+		{
+			findAndReplace(uiInfo.strDisableFile, ".", "", 1);
+			findAndReplace(uiInfo.strDisableFile, "\r", "", 1);
+			findAndReplace(uiInfo.strDisableFile, "\\", "/");
+		}
+
+		if (!uiInfo.strFocusFile.empty())
+		{
+			findAndReplace(uiInfo.strFocusFile, ".", "", 1);
+			findAndReplace(uiInfo.strFocusFile, "\r", "", 1);
+			findAndReplace(uiInfo.strFocusFile, "\\", "/");
+		}
+
+		if (!uiInfo.strBackFile.empty())
+		{
+			findAndReplace(uiInfo.strBackFile, ".", "", 1);
+			findAndReplace(uiInfo.strBackFile, "\r", "", 1);
+			findAndReplace(uiInfo.strBackFile, "\\", "/");
+		}
+
+		if (!uiInfo.strText.empty())
+		{
+			findAndReplace(uiInfo.strText, "\r", "", 1);
+		}
+
+		if (!uiInfo.strTextAlign.empty())
+		{
+			findAndReplace(uiInfo.strTextAlign, "\r", "", 1);
+		}
+
+		return true;
 	}
-	
-	if (!uiInfo.strDisableFile.empty())
-	{
-		findAndReplace(uiInfo.strDisableFile, ".", "", 1);
-		findAndReplace(uiInfo.strDisableFile, "\r", "", 1);
-		findAndReplace(uiInfo.strDisableFile, "\\", "/");
-	}
-	
-	if (!uiInfo.strFocusFile.empty())
-	{
-		findAndReplace(uiInfo.strFocusFile, ".", "", 1);
-		findAndReplace(uiInfo.strFocusFile, "\r", "", 1);
-		findAndReplace(uiInfo.strFocusFile, "\\", "/");
-	}
-	
-	if (!uiInfo.strBackFile.empty())
-	{
-		findAndReplace(uiInfo.strBackFile, ".", "", 1);
-		findAndReplace(uiInfo.strBackFile, "\r", "", 1);
-		findAndReplace(uiInfo.strBackFile, "\\", "/");
-	}
-	
-	if (!uiInfo.strText.empty())
-	{
-		findAndReplace(uiInfo.strText, "\r", "", 1);
-	}
-	
-	if (!uiInfo.strTextAlign.empty())
-	{
-		findAndReplace(uiInfo.strTextAlign, "\r", "", 1);
-	}
-	
-	return true;
-}
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 //for cpp
 bool NDUILoad::Load(
@@ -156,7 +162,7 @@ NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *pa
 
 	UIINFO& uiInfo = uiData.getCtrlUiInfo();
 
-	FilterStringName1(uiInfo);
+	NDUILoad_Util::FilterStringName(uiInfo);
 
 #ifdef TRADITION		
 	//		if (IsTraditionalChinese())
