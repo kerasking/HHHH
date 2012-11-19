@@ -147,3 +147,8 @@ endTimeSlice("Tutorial/define.lua")
 bgnTimeSlice("Music/define.lua")
 	DoFile("Music/define.lua");
 endTimeSlice("Music/define.lua")
+
+--╬Эме
+bgnTimeSlice("ArmyGroup/define.lua")
+	DoFile("ArmyGroup/define.lua");
+endTimeSlice("ArmyGroup/define.lua")
