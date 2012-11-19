@@ -78,7 +78,7 @@ void NDBaseDirector::mainLoop(void)
 			this->DispatchOneMessage();
 		}
 
-		NDDirector::DefaultDirector()->DisibleScissor(); // ÔÝÊ±ÏÈ×¢ÊÍµô
+		//NDDirector::DefaultDirector()->DisibleScissor(); // ÔÝÊ±ÏÈ×¢ÊÍµô
 
 		m_pScheduler->setTickEnabled( NDDebugOpt::getTickEnabled() );
 
