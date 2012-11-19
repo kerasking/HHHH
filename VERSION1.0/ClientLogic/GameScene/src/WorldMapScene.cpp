@@ -337,8 +337,7 @@ void WorldMapLayer::OnTimer(OBJID tag)
 		int mapid = GetTargetMapId();
 
 		if(mapid==1 || mapid == 2)
-			//NDMapMgrObj.WorldMapSwitch(GetTargetMapId());
-			;
+			NDMapMgrObj.WorldMapSwitch(GetTargetMapId());
 		else
 			ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "",mapid);
 	}
@@ -627,7 +626,7 @@ CCPoint WorldMapLayer::GetPlaceIdScreenPos(int placeId)
 		int iWidth  = node->getTexture()->getContentSizeInPixels().width;
 		int iHeight = node->getTexture()->getContentSizeInPixels().height;
 
-		CCPoint pos = ccpAdd( ccp(iStartX, iStartY), ccp(iWidth*0.5, -iHeight*0.5) ); //@tune
+		CCPoint pos = ccpAdd( ccp(iStartX, iStartY), ccp((iWidth)*0/4, -iHeight) ); //@tune
 		posRet = pos;
 	}
 
