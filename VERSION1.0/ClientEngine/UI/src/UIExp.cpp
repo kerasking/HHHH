@@ -138,7 +138,7 @@ void CUIExp::draw()
         unsigned int t_unProcess    = m_unProcess - m_unStart;
         unsigned int t_unTotal      = m_unTotal - m_unStart;
         
-		m_fPercent = float(t_unProcess) / float(t_unTotal);
+		m_fPercent = max(0, (float(t_unProcess) / float(t_unTotal)));
 
 #if 0
 		if (t_unProcess <= t_unTotal && 0 != t_unTotal && 0 != t_unProcess)
@@ -193,15 +193,20 @@ void CUIExp::draw()
 
 	if (m_picProcess)
 	{
-		CCSize sizeCut = CCSizeMake( m_picProcess->GetTexture()->getPixelsWide() * m_fPercent,
-										m_picProcess->GetTexture()->getPixelsHigh());						
-		CCRect cut = CCRectMake( 0, 0, sizeCut.width, sizeCut.height );
-		m_picProcess->Cut( cut );
+		if (m_picProcess->GetTexture()->getPixelsWide() >= 0 && 
+			m_picProcess->GetTexture()->getPixelsHigh() >= 0)
+		{
+			CCSize sizeCut = CCSizeMake( m_picProcess->GetTexture()->getPixelsWide() * m_fPercent,
+				m_picProcess->GetTexture()->getPixelsHigh());			
 
-		CCRect rect;
-		rect.origin		= scrRect.origin;
-		rect.size		= CCSizeMake( scrRect.size.width * m_fPercent, scrRect.size.height );
-		m_picProcess->DrawInRect(rect);
+			CCRect cut = CCRectMake( 0, 0, sizeCut.width, sizeCut.height );
+			m_picProcess->Cut( cut );
+
+			CCRect rect;
+			rect.origin		= scrRect.origin;
+			rect.size		= CCSizeMake( scrRect.size.width * m_fPercent, scrRect.size.height );
+			m_picProcess->DrawInRect(rect);
+		}
 	}
 
 	if (m_bRecacl)
