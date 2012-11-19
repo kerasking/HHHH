@@ -276,7 +276,7 @@ void CUIScrollContainerExpand::draw(){
         bIsMoveing          = false;
         CalculatePosition();
         ResetCurrViewBg();
-        //OnScriptUiEvent(this, TE_TOUCH_SC_VIEW_IN_END, m_unBeginIndex);
+        OnScriptUiEvent(this, TE_TOUCH_SC_VIEW_IN_END, m_unBeginIndex);
         return;
     }
     

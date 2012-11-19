@@ -29,7 +29,8 @@
 #include "UISpriteNode.h"
 #include "NDPath.h"
 #include "NDWideString.h"
-#include "NDUIScrollView.h"
+#include "UIScrollViewMulHand.h"
+#include "UIScrollContainerExpand.h"
 
 using namespace NDEngine;
 
@@ -56,6 +57,8 @@ enum MY_CONTROL_TYPE
 	MY_CONTROL_TYPE_EQUIP_BUTTON,					// 装备按钮
 	MY_CONTROL_TYPE_EDIT,							// 输入框
 	MY_CONTROL_TYPE_SPRITE,							// 动画
+	MY_CONTROL_TYPE_LIST_HV,                        // 水平+垂直型列表20
+	MY_CONTROL_TYPE_LIST_LOOP,                      // 循环水平列表21
 };
 
 class CtrolBase
@@ -322,6 +325,47 @@ public:
 		return container;
 	}
 };
+
+template<>
+class CtrolTrait<CUIScrollViewContainerM> : public CtrolBase
+{
+public:
+	CUIScrollViewContainerM* Create(UIINFO& info, CCSize& sizeOffset)
+	{
+		Init(info, sizeOffset);
+
+		// 水平型
+		CCRect rect = this->GetFrameRect();
+		CUIScrollViewContainerM *container = new CUIScrollViewContainerM;
+		container->Initialization();
+		container->SetFrameRect(rect);
+		container->SetLeftReserveDistance(rect.size.width);
+		container->SetRightReserveDistance(rect.size.width);
+		container->SetBackgroundImage(GetNormalPicture(), true);
+		return container;
+	}
+};
+
+template<>
+class CtrolTrait<CUIScrollContainerExpand> : public CtrolBase
+{
+public:
+	CUIScrollContainerExpand* Create(UIINFO& info, CCSize& sizeOffset)
+	{
+		Init(info, sizeOffset);
+
+		// 水平型
+		CCRect rect = this->GetFrameRect();
+		CUIScrollContainerExpand *container = new CUIScrollContainerExpand;
+		container->Initialization();
+		container->SetFrameRect(rect);
+		//container->SetLeftReserveDistance(rect.size.width);
+		//container->SetRightReserveDistance(rect.size.width);
+		container->SetBackgroundImage(GetNormalPicture(), true);
+		return container;
+	}
+};
+
 /*
 template<>
 class CtrolTrait<NDUITableLayer> : public CtrolBase
@@ -569,6 +613,10 @@ CtrolHelpDeclare(MY_CONTROL_TYPE_BUTTON, NDUIButton)
 CtrolHelpDeclare(MY_CONTROL_TYPE_CHECK_BUTTON, CUICheckBox)
 CtrolHelpDeclare(MY_CONTROL_TYPE_TEXT, NDUILabel)
 CtrolHelpDeclare(MY_CONTROL_TYPE_LIST, NDUIScrollViewContainer)
+
+CtrolHelpDeclare(MY_CONTROL_TYPE_LIST_HV, CUIScrollViewContainerM)
+CtrolHelpDeclare(MY_CONTROL_TYPE_LIST_LOOP, CUIScrollContainerExpand)
+
 CtrolHelpDeclare(MY_CONTROL_TYPE_PROGRESS, NDUINode)
 CtrolHelpDeclare(MY_CONTROL_TYPE_SLIDER, NDUINode)
 CtrolHelpDeclare(MY_CONTROL_TYPE_BACK, NDUIImage)
