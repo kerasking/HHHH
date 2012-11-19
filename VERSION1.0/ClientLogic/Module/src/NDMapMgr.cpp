@@ -1291,7 +1291,7 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
 	kPlayer.m_nCurMapID = nMapDocID;
-	kPlayer.m_strName = string("efawfawe");
+/*	kPlayer.m_strName = string("efawfawe");*/
 	kPlayer.SetPosition( ccp(dwPortalX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET, 
 		                   dwPortalY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
 	kPlayer.stopMoving();
