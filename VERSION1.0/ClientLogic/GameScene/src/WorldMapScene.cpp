@@ -337,8 +337,7 @@ void WorldMapLayer::OnTimer(OBJID tag)
 		int mapid = GetTargetMapId();
 
 		if(mapid==1 || mapid == 2)
-			//NDMapMgrObj.WorldMapSwitch(GetTargetMapId());
-			;
+			NDMapMgrObj.WorldMapSwitch(GetTargetMapId());
 		else
 			ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "",mapid);
 	}
