@@ -33,7 +33,7 @@ public:
 	}
 };
 
-class ScriptMgr: public TSingleton<ScriptMgr>
+class ScriptMgr// public TSingleton<ScriptMgr>
 {
 	typedef bool (*RegisterClassFunc)();
 
@@ -49,6 +49,8 @@ public:
 
 	ScriptMgr();
 	~ScriptMgr();
+
+	static ScriptMgr& GetSingleton();
 
 	void AddScriptObject(ScriptObject* object);
 	void DelScriptObject(ScriptObject* object);
@@ -141,6 +143,9 @@ private:
 	std::string m_strScriptFilePath;
 
 private:
+
+	static ScriptMgr* ms_pkScriptMgr;
+
 	void LoadRegClassFuncs();
 
 	LuaObject GetLuaFunc(const char* funcname, const char* modulename);
