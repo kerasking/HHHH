@@ -1533,4 +1533,53 @@ void NDBaseRole::HandleShadow(CCSize parentsize)
 void NDBaseRole::RunAnimation(bool bDraw)
 {
 	NDSprite::RunAnimation(bDraw);
+
+	this->debugDraw();
+}
+
+CCPoint NDBaseRole::getFootPos()
+{
+	return GetPosition();
+}
+
+CCPoint NDBaseRole::getHeadPos()
+{
+	CCPoint posFoot = GetPosition();
+
+	NDAnimation* anim = (NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(0);
+	if (anim)
+	{
+		CCRect animRect = anim->getRect();
+		CCPoint posHead = ccp( GetPosition().x, 
+								GetPosition().y - animRect.size.height );	
+		return posHead;
+	}
+
+	return posFoot;
+}
+
+void NDBaseRole::debugDraw()
+{
+	if (!NDDebugOpt::getDrawDebugEnabled()) return;
+
+	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+	float offset = 1.0f * fScale;
+
+	CCPoint posFoot = this->getFootPos();
+	CCPoint posHead = this->getHeadPos();
+
+	ConvertUtil::convertToPointCoord( posFoot );
+	ConvertUtil::convertToPointCoord( posHead );
+
+	posFoot = SCREEN2GL(posFoot);
+	posHead = SCREEN2GL(posHead);
+
+	const float ofs = 10.f;
+	ccDrawColor4F( 0,0,1,1 );
+
+	ccDrawLine( posFoot, ccpAdd( posFoot, ccp( ofs, 0 )));
+	ccDrawLine( posFoot, ccpAdd( posFoot, ccp( 0, ofs )));
+
+	ccDrawLine( posHead, ccpAdd( posHead, ccp( ofs, 0 )));
+	ccDrawLine( posHead, ccpAdd( posHead, ccp( 0, ofs )));
 }

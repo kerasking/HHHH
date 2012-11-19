@@ -129,6 +129,15 @@ public:
     CC_SYNTHESIZE_READONLY(unsigned short,   m_nHeight,      Height);
     CC_SYNTHESIZE_READONLY(int,     m_nBitsPerComponent,   BitsPerComponent);
 
+#if ND_MOD
+	static bool getStringSize( const char *    pText, 
+								ETextAlign      eAlignMask,
+								const char *    pFontName,
+								int             nSize,
+								int&			outSizeWidth,
+								int&			outSizeHeight);
+#endif
+
 protected:
     bool _initWithJpgData(void *pData, int nDatalen);
     bool _initWithPngData(void *pData, int nDatalen);

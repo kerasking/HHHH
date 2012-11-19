@@ -9,6 +9,7 @@
 
 #include "TQPlatform.h"
 #include "NDDirector.h"
+#include "CCImage.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #import "Foundation/Foundation.h"
@@ -61,6 +62,13 @@ CCSize getStringSize(const char* pszStr, uint fontSize)
 		NSString* str = [NSString stringWithUTF8String:pszStr];	
         NSString* strfont = [NSString stringWithUTF8String:FONT_NAME];
 		sz = [str sizeWithFont:[UIFont fontWithName:strfont size:fontSize]];
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+		int width = 0, height = 0;
+		if (CCImage::getStringSize( pszStr, CCImage::kAlignLeft, FONT_NAME, fontSize,
+										width, height ))
+		{
+			return CCSizeMake( width, height );
+		}
 #else
 		sz = CCSizeMake(24.0f, 29.0f);
 
