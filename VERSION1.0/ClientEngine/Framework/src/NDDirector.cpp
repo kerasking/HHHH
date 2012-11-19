@@ -331,12 +331,18 @@ void NDDirector::SetViewRect(CCRect kRect, NDNode* pkNode)
 
 	CCSize kWinSize = m_pkDirector->getWinSizeInPixels();
 
-#if 0 //@todo
+#if 1 //@check
 	glEnable (GL_SCISSOR_TEST);
 
-	glScissor(kWinSize.height - kRect.origin.y - kRect.size.height,
-			kWinSize.width - kRect.origin.x - kRect.size.width, kRect.size.height,
-			kRect.size.width);
+// 	glScissor(kWinSize.height - kRect.origin.y - kRect.size.height,
+// 			kWinSize.width - kRect.origin.x - kRect.size.width, kRect.size.height,
+// 			kRect.size.width);
+	
+	glScissor(	kRect.origin.x,
+				kWinSize.height - (kRect.origin.y + kRect.size.height),
+	 			kRect.size.width, 
+				kRect.size.height );
+
 #endif
 
 	/***

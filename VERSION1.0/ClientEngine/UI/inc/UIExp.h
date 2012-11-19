@@ -54,6 +54,7 @@ private:
 	unsigned int			m_unTotal;
 	unsigned int			m_unProcess;
     unsigned int			m_unStart;
+	float					m_fPercent;
     
     int                     m_nStyle;
 	

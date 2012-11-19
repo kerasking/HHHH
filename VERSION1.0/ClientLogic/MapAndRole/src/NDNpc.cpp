@@ -248,8 +248,6 @@ bool NDNpc::OnDrawBegin(bool bDraw)
 
 void NDNpc::OnDrawEnd(bool bDraw)
 {
-	return; //@todo
-
 	NDNode* pkNode = this->GetParent();
 
 	CCSize kSizeMap;

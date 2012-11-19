@@ -33,6 +33,7 @@
 #include "NDDataTransThread.h"
 #include "GameSceneLoading.h"
 #include "NDBeforeGameMgr.h"
+#include "ScriptGameLogic.h"
 
 #ifdef USE_MGSDK
 #import <Foundation/Foundation.h>
@@ -1289,6 +1290,11 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 	NDMapMgrObj.ClearGP();
 	NDMapMgrObj.loadSceneByMapDocID(nMapDocID);
 
+	stuPlayerInfo stuInfo;
+	GetPlayerInfo(stuInfo);
+	CreatePlayerWithMount(stuInfo.m_iLookFace, stuInfo.m_iBornX, stuInfo.m_iBornY,
+		stuInfo.m_iId, stuInfo.m_strName, stuInfo.m_iRideStatus, stuInfo.m_iRideType);
+
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
 	kPlayer.m_nCurMapID = nMapDocID;
 /*	kPlayer.m_strName = string("efawfawe");*/
@@ -1592,7 +1598,7 @@ void NDMapMgr::WorldMapSwitch(int mapId)
 		return;
 	}
 
-//	NDDirector::DefaultDirector()->PushScene(GameSceneLoading::Scene());
+	NDDirector::DefaultDirector()->PushScene(GameSceneLoading::Scene());
 
 	NDPlayer& player = NDPlayer::defaultHero();
 	NDTransData bao(_MSG_POSITION);

@@ -126,11 +126,59 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Activity\AssistantUI.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Activity\BattleMapCtrl.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Activity\CampBattle.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Activity\DailyAction.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Activity\DailyCheckInUI.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Activity\define.lua"
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Activity\DragonTacticUI.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Activity\GiftPackUI.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Activity\OnlineCheckIn.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Activity\RechargeReward.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Activity\TransPLayerList.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Activity\Transport.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Activity\TransportLoot.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Activity\TransportPrepare.lua"
 				>
 			</File>
 		</Filter>
@@ -203,12 +251,20 @@
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\AffixBoss\NormalBossListUI.lua"
 				>
 			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\AffixBoss\RaidersLoad.lua"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Arena"
 			ParseFiles="false"
 			SourceControlFiles="false"
 			>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Arena\ArenaFightReplayUI.lua"
+				>
+			</File>
 			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Arena\ArenaRankUI.lua"
 				>
@@ -232,6 +288,10 @@
 			SourceControlFiles="false"
 			>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\BOSS\Battle_Boss.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\BOSS\bossUI.lua"
 				>
 			</File>
@@ -246,7 +306,31 @@
 			SourceControlFiles="false"
 			>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Chat\ChatDataFunc.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Chat\ChatFaceUI.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Chat\ChatGameScene.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Chat\ChatItemUI.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Chat\ChatMainUI.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Chat\ChatPrivateUI.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Chat\ChatSmallUI.lua"
 				>
 			</File>
 			<File
@@ -304,7 +388,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Common\IconConfigUI.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Common\MsgDefine.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Common\SqliteConfig.lua"
 				>
 			</File>
 			<File
@@ -330,6 +422,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\CommonDlg\CommonDlgNew.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\CommonDlg\define.lua"
 				>
 			</File>
@@ -344,11 +440,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Drama\DramaCall.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Drama\DramaEnum.lua"
 				>
 			</File>
 			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Drama\DramaExample.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Drama\MainDrama.lua"
 				>
 			</File>
 		</Filter>
@@ -401,6 +505,10 @@
 			</File>
 			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Friend\GiveFlowersUI.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Friend\MainPlayerListUI.lua"
 				>
 			</File>
 		</Filter>
@@ -456,11 +564,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Login\Entry.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Login\Login_AccountUI.lua"
 				>
 			</File>
 			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Login\Login_ActAndServerUI.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Login\Login_Choose.lua"
 				>
 			</File>
 			<File
@@ -481,6 +597,14 @@
 			</File>
 			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Login\Login_ServerUI.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Login\LoginListUI.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Login\Update.lua"
 				>
 			</File>
 		</Filter>
@@ -516,7 +640,15 @@
 			SourceControlFiles="false"
 			>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\MainUI\ActivityNoticeUI.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\MainUI\BottomSpeedBar.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\MainUI\CheckOtherPlayerBtn.lua"
 				>
 			</File>
 			<File
@@ -532,11 +664,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\MainUI\GameSetting.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\MainUI\PlayEffectAnimation.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\MainUI\Practise.lua"
 				>
 			</File>
 			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\MainUI\TopActivitySpeedBar.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\MainUI\TopBar.lua"
 				>
 			</File>
 			<File
@@ -570,11 +714,27 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgBossBattle.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgCampBattle.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgChat.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgCompose.lua"
 				>
 			</File>
 			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgConnectReply.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgDailyAction.lua"
 				>
 			</File>
 			<File
@@ -590,6 +750,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgHeroStar.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgItem.lua"
 				>
 			</File>
@@ -598,7 +762,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgLoginSuc.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgMagic.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgMilOrder.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgMonster.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgMount.lua"
 				>
 			</File>
 			<File
@@ -614,7 +794,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgPlayerAction.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgPractise.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgProFeedback.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgRank.lua"
 				>
 			</File>
 			<File
@@ -630,7 +822,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgShop.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgTask.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgTransport.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Msg\MsgTutorial.lua"
 				>
 			</File>
 			<File
@@ -690,11 +894,35 @@
 			SourceControlFiles="false"
 			>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Player\Agiotage.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Player\BackLevelThreeWin.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Player\define.lua"
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Player\Fete.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Player\Levy.lua"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Player\PlayerEnum.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Player\PlayerEquipGlidUI.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Player\PlayerEquipUpStepUI.lua"
 				>
 			</File>
 			<File
@@ -723,6 +951,14 @@
 			</File>
 			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Player\PlayerVip.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Player\PlayerVIPUI.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Player\RankUI.lua"
 				>
 			</File>
 		</Filter>
