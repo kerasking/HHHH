@@ -84,7 +84,7 @@ bool NDUISynLayer::IsShown()
 void NDUISynLayer::Initialization()
 {
 	NDUILayer::Initialization();
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	this->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
 	
 	CUISpriteNode *node = new CUISpriteNode;

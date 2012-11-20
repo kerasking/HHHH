@@ -34,7 +34,7 @@ void CSMBattleScene::Initialization(int mapID)
 {
 	NDScene::Initialization();
 	
-	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
 	m_mapLayer = new NDMapLayerLogic();
 	m_mapLayer->Initialization(mapID); 

@@ -122,12 +122,17 @@ void NDEraseInOutEffect::draw()
 
 void NDEraseInOutEffect::drawScreenIn() {
 	// TODO Auto-generated method stub
-	CCSize size = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize size = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
 	for (int i = 0; i < 50 - inCount; i++) {
 		for (int j = 0; j < 50 - inCount; j++) {
-			DrawRecttangle(CCRectMake(size.width - (i << 4) - ((33 - inCount - i - j) >> 1), size.height - (j << 4) - ((33 - inCount - i - j) >> 1), 40 - inCount - i - j, 40 - inCount - i - j),
-						    ccc4(0, 0, 0, 255));
+			DrawRecttangle(
+				CCRectMake(
+						size.width - (i << 4) - ((33 - inCount - i - j) >> 1), 
+						size.height - (j << 4) - ((33 - inCount - i - j) >> 1), 
+						40 - inCount - i - j, 
+						40 - inCount - i - j),
+				ccc4(0, 0, 0, 255));
 		}
 	}
 }

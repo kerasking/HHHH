@@ -36,7 +36,7 @@ void CUIDlgOptBtn::Initialization()
 	NDUIButton::Initialization();
 	this->CloseFrame();
 	
-	CCSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize	= CCDirector::sharedDirector()->getWinSizeInPixels();
 	CCRect rect		= CCRectMake(0, 0, winsize.width * 0.15, winsize.height * 0.15);
 	
 	m_sprTip = new CUISpriteNode;
@@ -77,7 +77,7 @@ void CUIDlgOptBtn::SetFrameRect(CCRect rect)
 
 void CUIDlgOptBtn::SetBoundRect(CCRect rect)
 {
-	CCSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize	= CCDirector::sharedDirector()->getWinSizeInPixels();
 
 	if (!m_textHpyerlink)
 	{
@@ -173,7 +173,7 @@ void CUIDialog::Initialization()
 // 		return;
 // 	}
 	
-	CCSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize	= CCDirector::sharedDirector()->getWinSizeInPixels();
 	CCRect rectNode = CCRectMake(0, 0, winsize.width, winsize.height);
 //	CCRect rectNode = node->GetFrameRect();
 	this->SetFrameRect(CCRectMake((winsize.width - rectNode.size.width) / 2,
@@ -296,7 +296,7 @@ void CUIDialog::AddOpt(const char* text, int nAction)
 	}
 	
 	CCRect rectNode		= node->GetFrameRect();
-	//CCSize winsize		= NDDirector::DefaultDirector()->GetWinSize();
+	//CCSize winsize		= CCDirector::sharedDirector()->getWinSizeInPixels();
 	
 	CCRect rect;
 	rect.origin			= ccpAdd(rectNode.origin, ccp(0, m_vUiOpt.size() * m_uiOptHeight));

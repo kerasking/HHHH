@@ -529,7 +529,7 @@ void BattleMgr::restartLastBattle()
 	mapLayer->showSwitchSprite(SWITCH_TO_BATTLE);
 	//mapLayer->SetBattleBackground(true);
 	RestoreActionList();
-	CCSize winSize = director->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	m_pkBattle->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
 
 	m_pkBattle->InitEudemonOpt();
@@ -795,7 +795,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 
 		//mapLayer->SetBattleBackground(true);
 
-		CCSize winSize = director->GetWinSize();
+		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 		m_pkBattle->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
 
 		mapLayer->showSwitchSprite(SWITCH_TO_BATTLE);

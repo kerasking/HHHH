@@ -330,8 +330,7 @@ void NDPicture::SetCoorinates()
 
 void NDPicture::SetVertices(CCRect drawRect)
 {
-	//CCSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinPoint();
-	CCSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 	switch (m_kRotation)
 	{

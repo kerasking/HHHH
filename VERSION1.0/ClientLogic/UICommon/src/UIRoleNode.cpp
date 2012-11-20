@@ -30,7 +30,7 @@ void CUIRoleNode::Initialization()
 {
 	NDUINode::Initialization();
 	
-	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
 	m_pRoleParentNode	= new NDUINode;
 	m_pRoleParentNode->Initialization();

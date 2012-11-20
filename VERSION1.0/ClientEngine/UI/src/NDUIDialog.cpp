@@ -74,7 +74,7 @@ void NDUIDialog::InitUIData()
 
 void NDUIDialog::InitFullScrBtns(const std::vector<std::string>& ortherButtons)
 {
-	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 	NDPicturePool& pool = *(NDPicturePool::DefaultPool());
 
@@ -135,7 +135,7 @@ void NDUIDialog::Show(const char* title, const char* text,
 
 	m_bFullScreen = ortherButtons.size() > 1 ? true : false;
 
-	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	CCSize sizeDialog;
 	sizeDialog.width = m_bFullScreen ? winsize.width : m_sizeNotFullScr.width;
 	sizeDialog.height =
@@ -674,7 +674,7 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  m_table->SetDelegate(this);
  this->AddChild(m_table);
 
- this->SetFrameRect(CCRectMake(0, 0, NDDirector::DefaultDirector()->GetWinSize().width, NDDirector::DefaultDirector()->GetWinSize().height));
+ this->SetFrameRect(CCRectMake(0, 0, CCDirector::sharedDirector()->getWinSizeInPixels().width, CCDirector::sharedDirector()->getWinSizeInPixels().height));
  }
 
  void NDUIDialog::draw()
@@ -875,7 +875,7 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  frameSize = CCSizeMake(m_width, m_label->GetFrameRect().size.height + nMemoHeight + 15);
  }
 
- CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+ CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
  this->SetFrameRect(CCRectMake((winSize.width - frameSize.width) / 2,
  (winSize.height - frameSize.height) / 2,
  frameSize.width, frameSize.height));
@@ -1021,7 +1021,7 @@ bool NDUIDialogDelegate::OnDialogTimeOut(NDUIDialog* dialog)
  frameSize = CCSizeMake(m_width, m_label->GetFrameRect().size.height + nMemoHeight + 15);
  }
 
- CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+ CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
  this->SetFrameRect(CCRectMake((winSize.width - frameSize.width) / 2,
  (winSize.height - frameSize.height) / 2,
  frameSize.width, frameSize.height));

@@ -475,7 +475,7 @@ void NDUIButton::draw()
 	if (m_pSprite)
 	{
 		m_pSprite->SetPosition(ccpAdd(scrRect.origin, m_posSprite));
-		m_pSprite->Run(NDDirector::DefaultDirector()->GetWinSize());
+		m_pSprite->Run( CCDirector::sharedDirector()->getWinSizeInPixels() );
 	}
 
 	if (m_longTouched)
@@ -776,7 +776,7 @@ void NDUIButton::drawFocus()
 			m_rimImageRB->GetSize().height));
 
 		int d = 0;
-		if (scrRect.origin.x < NDDirector::DefaultDirector()->GetWinSize().width / 2)
+		if (scrRect.origin.x < CCDirector::sharedDirector()->getWinSizeInPixels().width / 2)
 		{
 			d = 1;
 		}

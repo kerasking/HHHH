@@ -77,7 +77,7 @@ void WorldMapLayer::Initialization(int nMapId)
 	SetTag(ScriptMgrObj.excuteLuaFuncRetN("GetWorldMapUITag", ""));
 
     //ScriptMgrObj.excuteLuaFunc("PlayWorldMusic", "Music");
-	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	SetFrameRect(CCRectMake(0, 0, width, height));
 
 	m_buttons = cocos2d::CCArray::array();
@@ -165,7 +165,7 @@ void WorldMapLayer::Initialization(int nMapId)
 void WorldMapLayer::draw()
 {
 	NDUILayer::draw();
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 	int iNum = m_mapData->getBgTiles()->count();
 	for (unsigned int i = 0; i < iNum; i++)
@@ -353,7 +353,7 @@ void WorldMapLayer::SetCenterAtPos(CCPoint pos)
 	int width = m_mapData->getMapSize().width;
 	int height = m_mapData->getMapSize().height;
 
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 	if (pos.x > width - winSize.width / 2)
 		pos.x = width - winSize.width / 2;
@@ -385,7 +385,7 @@ void WorldMapLayer::SetCenterAtPos(CCPoint pos)
 //ºÍNDMapLayer::ConvertToMapPoint()Ò»Ñù
 CCPoint WorldMapLayer::ConvertToMapPoint(CCPoint screenPoint)
 {
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	return ccpAdd(
 			ccpSub(screenPoint, ccp(winSize.width / 2, winSize.height / 2)),
 			m_screenCenter);
@@ -393,7 +393,7 @@ CCPoint WorldMapLayer::ConvertToMapPoint(CCPoint screenPoint)
 
 CCPoint WorldMapLayer::ConvertToScreenPoint(CCPoint mapPoint)
 {
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	CCPoint posScreen = ccpAdd(ccpSub(mapPoint, m_screenCenter),
 								ccp(winSize.width / 2, winSize.height / 2));
 	return posScreen;

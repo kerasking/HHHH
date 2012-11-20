@@ -182,7 +182,7 @@ NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *pa
 	}
 	
 	// 上下对调一下（结果仍旧是像素单位，不是GL坐标，所以不能用SCREEN2GL转！）
-	CGSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CGSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	uiInfo.CtrlPos.y = winsize.height - uiInfo.CtrlPos.y;
 
 	// 根据锚地调整控件位置

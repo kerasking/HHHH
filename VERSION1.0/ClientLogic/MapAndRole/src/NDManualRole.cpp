@@ -1222,7 +1222,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 				//把baserole坐标转成屏幕坐标
 				NDMapLayer* pkLayer = (NDMapLayer*) pkParent;
 				CCPoint screen = pkLayer->GetScreenCenter();
-				CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+				CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 				m_kScreenPosition = ccpSub(GetPosition(),
 						ccpSub(screen,
@@ -1995,7 +1995,7 @@ void NDManualRole::DrawNameLabel(bool bDraw)
 	bool isEnemy = false;
 	std::string names = m_strName;
 	NDPlayer& player = NDPlayer::defaultHero();
-	CCSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize sizewin = CCDirector::sharedDirector()->getWinSizeInPixels();
 	int iX = GetPosition().x - DISPLAY_POS_X_OFFSET;
 	int iY = GetPosition().y; // - DISPLAY_POS_Y_OFFSET; //@check
 

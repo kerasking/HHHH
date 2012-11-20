@@ -258,7 +258,7 @@ void NDSprite::RunAnimation_WithOnePic(bool bDraw)
 {
 	if (GetParent())
 	{
-		CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 		NDNode* layer = GetParent();
 
 		if (layer->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))

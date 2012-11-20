@@ -199,7 +199,7 @@ Fighter::~Fighter()
 
 //++Guosen 2012.6.29//计算交战者位置的X坐标
 int countY(int teamAmount,BATTLE_GROUP group,int t,int pos ){
-	//	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	//	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	//    int wsh = winsize.height;
 	//    winsize.height /= 2;
 	//	int st=pos-1;
@@ -221,14 +221,14 @@ int countY(int teamAmount,BATTLE_GROUP group,int t,int pos ){
 	//		//		NDLog(@"team:%d,pos:%d",team,st);
 	//		//		NDLog(@"x:%d,y:%d",this->originX,this->originY);
 	//	}
-	CCSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize	= CCDirector::sharedDirector()->getWinSizeInPixels();
 	int iY			= g_iYOffset[pos-1];
 	return iY*winsize.height/640;
 }
 
 //++Guosen 2012.6.29//计算交战者位置的Y坐标
 int countX(int teamAmount,BATTLE_GROUP group,int t,int pos ){
-	//	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	//	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	//	int st=pos-1;
 	//	int team=t-1;
 	//	if(teamAmount<=2){
@@ -263,7 +263,7 @@ int countX(int teamAmount,BATTLE_GROUP group,int t,int pos ){
 	//		//		NDLog(@"team:%d,pos:%d",team,st);
 	//		//		NDLog(@"x:%d,y:%d",this->originX,this->originY);
 	//	}
-	CCSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize	= CCDirector::sharedDirector()->getWinSizeInPixels();
 	int iXOffset	= g_iXOffset[pos-1];
 	int iX			= 0;
 	if (group == BATTLE_GROUP_ATTACK) // 左边

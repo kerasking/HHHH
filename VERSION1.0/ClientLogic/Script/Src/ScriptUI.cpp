@@ -1445,7 +1445,7 @@ CCSize GetMutiLineStringSize(const char* str, int fontsize, int nWidth)
 	{
 		return CCSizeZero;
 	}
-	CCSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize	= CCDirector::sharedDirector()->getWinSizeInPixels();
 	return getStringSizeMutiLine(str, fontsize, CCSizeMake(nWidth, winsize.height * 5));
 }
 
@@ -1468,7 +1468,7 @@ NDUINode* CreateColorLabel(const char* str, unsigned int fontsize, unsigned int 
 	{
 		return NULL;
 	}
-	CCSize winsize	= NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize	= CCDirector::sharedDirector()->getWinSizeInPixels();
 	winsize.width	= nConstraitWidth;
 	return (NDUINode*)NDUITextBuilder::DefaultBuilder()->Build(str, fontsize, winsize, ccc4(255, 255, 255, 255));
 }
@@ -1484,7 +1484,7 @@ NDScene* GetSMLoginScene()
 
 CCSize GetWinSize()
 {
-	return NDDirector::DefaultDirector()->GetWinSize();
+	return CCDirector::sharedDirector()->getWinSizeInPixels();
 }
 
 CCRect RectZero()
@@ -1887,7 +1887,7 @@ namespace NDEngine {
 	ETMEMBERFUNC("PushScene",						&NDDirector::PushScene)
 	ETMEMBERFUNC("PopScene",						(bool (NDDirector::*)(bool))&NDDirector::PopScene)
 	ETMEMBERFUNC("GetRunningScene",					&NDDirector::GetRunningScene)
-	ETMEMBERFUNC("GetWinSize",						&NDDirector::GetWinSize)
+	ETMEMBERFUNC("GetWinSize",						&NDDirector::getWinSizeInPixels_Lua)
 	ETMEMBERFUNC("SetViewRect",						&NDDirector::SetViewRect)
 	ETMEMBERFUNC("ResumeViewRect",					&NDDirector::ResumeViewRect)
 	ETMEMBERFUNC("GetSceneByTag",					&NDDirector::GetSceneByTag)

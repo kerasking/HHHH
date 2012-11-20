@@ -55,7 +55,7 @@ namespace NDEngine
 
 	void NDUIFrame::Make()
 	{
-		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 		CCRect scrRect = GetScreenRect();
 
 		NDPicture* ptexpic = NDPicturePool::DefaultPool()->AddPicture(

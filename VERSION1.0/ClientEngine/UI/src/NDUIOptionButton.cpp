@@ -35,7 +35,7 @@ NDUIOptionButton::NDUIOptionButton()
 	 m_leftArrow = [[NDTile alloc] init];
 	 m_leftArrow.texture = texture;
 	 m_leftArrow.cutRect = CCRectMake(0, 0, texture.maxS * texture.pixelsWide, texture.maxT * texture.pixelsHigh);
-	 CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	 CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	 m_leftArrow.mapSize = CCSizeMake(winSize.width, winSize.height);
 	 m_leftArrow.reverse = YES;
 	 m_leftArrow.rotation = NDRotationEnumRotation0;

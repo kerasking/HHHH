@@ -66,7 +66,7 @@ NDBaseRole::NDBaseRole()
 	m_bFocus = false;
 
 	m_pkSubNode = NDNode::Node();
-	m_pkSubNode->SetContentSize(NDDirector::DefaultDirector()->GetWinSize());
+	m_pkSubNode->SetContentSize( CCDirector::sharedDirector()->getWinSizeInPixels() );
 
 	m_kScreenPosition = CCPointZero;
 	m_pkRingPic = NULL;
@@ -257,7 +257,7 @@ bool NDBaseRole::OnDrawBegin(bool bDraw)
 			//把baserole坐标转成屏幕坐标
 			NDMapLayer *layer = (NDMapLayer*) node;
 			CCPoint screen = layer->GetScreenCenter();
-			CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+			CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 			m_kScreenPosition = ccpSub(GetPosition(),
 					ccpSub(screen,
 							CCPointMake(winSize.width / 2,
@@ -1327,7 +1327,7 @@ void NDBaseRole::HandleShadow(CCSize parentsize)
 // 	pic->DrawInRect(
 // 			CCRectMake(x + m_iShadowOffsetX,
 // 					y + m_iShadowOffsetY
-// 							+ NDDirector::DefaultDirector()->GetWinSize().height
+// 							+ CCDirector::sharedDirector()->getWinSizeInPixels().height
 // 							- parentsize.height, sizeShadow.width,
 // 					sizeShadow.height));
 
