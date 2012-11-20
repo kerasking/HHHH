@@ -62,7 +62,7 @@ namespace NDEngine
 
 	void DrawPolygon(CCRect rect, ccColor4B color, GLuint lineWidth)
 	{
-		CCAssert(0,"crash me");//@todo: crash me!
+		//CCAssert(0,"crash me");//@todo: crash me!
 
 		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
@@ -96,7 +96,7 @@ namespace NDEngine
 
 	void DrawLine(CCPoint fromPoint, CCPoint toPoint, ccColor4B color, GLuint lineWidth)
 	{	
-		CCAssert(0, "crash me");//@todo: crash me!
+		//CCAssert(0, "crash me");//@todo: crash me!
 
 		CCSize winSize	= CCDirector::sharedDirector()->getWinSizeInPixels();
 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();
@@ -121,7 +121,7 @@ namespace NDEngine
 
 	void DrawCircle(CCPoint center, float r, float a, int segs, ccColor4B color)
 	{
-		CCAssert(0, "crash me");//@todo: crash me!
+		//CCAssert(0, "crash me");//@todo: crash me!
 
 		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 		CCPoint glCenter = ccp(center.x, winSize.height - center.y);
@@ -200,7 +200,7 @@ namespace NDEngine
 
 	void DrawTriangle(CCPoint first, CCPoint second, CCPoint third, ccColor4B color)
 	{
-		CCAssert(0, "crash me");//@todo: crash me!
+		//CCAssert(0, "crash me");//@todo: crash me!
 
 		glDisable(GL_TEXTURE_2D);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
