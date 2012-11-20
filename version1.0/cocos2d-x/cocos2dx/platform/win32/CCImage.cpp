@@ -204,7 +204,8 @@ public:
 		if (pwszBuffer)
 		{
 			memset(pwszBuffer, 0, sizeof(wchar_t)*nBufLen);
-			nLen = MultiByteToWideChar(CP_UTF8, 0, pszText, nLen, pwszBuffer, nBufLen);
+			//nLen = MultiByteToWideChar(CP_UTF8, 0, pszText, nLen, pwszBuffer, nBufLen);
+			nLen = MultiByteToWideChar(CP_ACP, 0, pszText, nLen, pwszBuffer, nBufLen);//++Guosen 2012.11.20 
 
 			SIZE retSize = sizeWithText( pwszBuffer, nLen, dwFmt, 0 );
 			outSizeWidth = retSize.cx;
