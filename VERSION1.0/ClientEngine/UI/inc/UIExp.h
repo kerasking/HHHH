@@ -40,8 +40,8 @@ public:
 	void SetText(const char* text);	
 	void SetTextFontColor(ccColor4B color);
 	void SetTextFontSize(unsigned int unSize);
-    void SetStyle(int nStyle) { m_nStyle = nStyle; }
-    
+	void SetStyle(int nStyle) { m_nStyle = nStyle; }
+
 private:
 	NDPicture*				m_picBg;
 	NDPicture*				m_picProcess;
