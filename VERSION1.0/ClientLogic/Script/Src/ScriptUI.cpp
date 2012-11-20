@@ -1821,7 +1821,7 @@ namespace NDEngine {
 	ETMEMBERFUNC("IsGrayState",						&NDPicture::IsGrayState)
     
     //** CHH 2012-08-01 **//
-    //ETMEMBERFUNC("SetIsTran",						&NDPicture::SetIsTran)
+    ETMEMBERFUNC("SetIsTran",						&NDPicture::setIsTran)
 	ETCLASSEND(NDPicture)
 	
 //#pragma mark UIµ¼³ö

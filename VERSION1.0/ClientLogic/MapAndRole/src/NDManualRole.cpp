@@ -42,8 +42,8 @@
  
  */
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
 
 #define UPDATAE_DIFF	(100)
 #define LABLESIZE		(12)
@@ -1160,7 +1160,8 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 {
 	if (!NDDebugOpt::getDrawRoleManualEnabled()) return false;
 
-	NDNode* pkNode = GetParent();
+	NDNode* pkParent = GetParent();
+	if (!pkParent) return true;
 
 	//if (!node
 //			|| !(node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)) 
@@ -1173,11 +1174,6 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	if (!(pkScene->IsKindOfClass(RUNTIME_CLASS(GameScene))
 			|| pkScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene))
 			|| pkScene->IsKindOfClass(RUNTIME_CLASS(DramaScene))))
-	{
-		return true;
-	}
-
-	if (!pkNode)
 	{
 		return true;
 	}
@@ -1204,19 +1200,23 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	}
 	CCPoint pos = GetPosition();
 
+#if 1
 	// 摆摊先处理
 	if (IsInState (USERSTATE_BOOTH))
-	{ // 摆摊不画骑宠
+	{ 
+		// 摆摊不画骑宠
 		if (m_pkVendorPicture)
 		{
 			CCSize sizemap;
-			if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+			if (pkParent->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 			{
 				CCSize szVendor = m_pkVendorPicture->GetSize();
+
 				//把baserole坐标转成屏幕坐标
-				NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
+				NDMapLayer* pkLayer = (NDMapLayer*) pkParent;
 				CCPoint screen = pkLayer->GetScreenCenter();
 				CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+
 				m_kScreenPosition = ccpSub(GetPosition(),
 						ccpSub(screen,
 								CCPointMake(winSize.width / 2,
@@ -1233,7 +1233,9 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 		DrawRingImage(true);
 		return true;
 	}
+#endif 
 
+#if 2
 	if (IsInGraveStoneState())
 	{
 		if (!m_pkGraveStonePicture)
@@ -1244,10 +1246,10 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 
 		if (m_pkGraveStonePicture)
 		{
-			if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+			if (pkParent->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 			{
 				CCSize sizemap;
-				NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
+				NDMapLayer* pkLayer = (NDMapLayer*) pkParent;
 				sizemap = pkLayer->GetContentSize();
 				CCSize sizeGraveStone = m_pkGraveStonePicture->GetSize();
 				CCRect rect = CCRectMake(pos.x - 13 - 8,
@@ -1260,7 +1262,10 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 			}
 		}
 	}
+#endif 
 
+
+#if 3
 	HandleEffectDacoity();
 
 	// 处理影子
@@ -1270,7 +1275,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 		{
 			SetShadowOffset(0, 10);
 			ShowShadow(true);
-			HandleShadow(pkNode->GetContentSize());
+			HandleShadow(pkParent->GetContentSize());
 		}
 		return true;
 	}
@@ -1285,12 +1290,15 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 // 		ShowShadow(false);
 // 	}
 
-	if (pkNode->IsKindOfClass(RUNTIME_CLASS(Battle)))
+	if (pkParent->IsKindOfClass(RUNTIME_CLASS(Battle)))
 	{
-		HandleShadow(pkNode->GetContentSize());
+		HandleShadow(pkParent->GetContentSize());
 		return true;
 	}
+#endif
 
+
+#if 4
 	// 特效数据先更新
 	updateBattlePetEffect();
 	refreshEquipmentEffectData();
@@ -1312,7 +1320,10 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	}
 
 	NDBaseRole::OnDrawBegin(bDraw);
+#endif
 
+
+#if 5
 	if (m_pkRidePet)
 	{
 		m_pkRidePet->SetPosition(pos);
@@ -1327,6 +1338,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	{
 		m_pkRidePet->SetScale(this->GetScale());
 	}
+
 	//NDLog(@"draw pet1");
 	//画骑宠
 	if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)))
@@ -1342,24 +1354,32 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 				m_pkRidePet->RunAnimation(bDraw);
 			}
 		}
-	}else if (AssuredRidePet() &&!IsInState(USERSTATE_PRACTISE))
+	}
+	else if (AssuredRidePet() &&!IsInState(USERSTATE_PRACTISE))
 	{
 		//NDLog(@"draw pet3");
 		m_pkRidePet->RunAnimation(bDraw);
 	}
+#endif
 
+
+#if 6
 	// 人物变形动画
 	if (m_pkAniGroupTransformed)
 	{
 		bDraw = !IsInState(USERSTATE_STEALTH);
 		m_pkAniGroupTransformed->SetPosition(pos);
+
 // 		m_pkAniGroupTransformed->SetCurrentAnimation(
 // 				m_bIsMoving ? MONSTER_MAP_MOVE : MONSTER_MAP_STAND,
 // 				!m_bFaceRight);
 // 		m_pkAniGroupTransformed->SetSpriteDir(m_bFaceRight ? 2 : 0);
 		m_pkAniGroupTransformed->RunAnimation(bDraw);
 	}
+#endif 
 
+
+#if 7
 	//if (m_talkBox && m_talkBox->IsVisibled())
 	//{
 	//	CCPoint scrPos = GetScreenPoint();
@@ -1368,10 +1388,12 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	//	m_talkBox->SetDisPlayPos(ccp(scrPos.x+8, scrPos.y-getGravityY()+30));
 	//	m_talkBox->SetVisible(true);
 	//}
+#endif
 
+#if 8
 	if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) || NDMapMgrObj.isShowName) 
 	{
-		ShowNameLabel(bDraw);
+		DrawNameLabel(bDraw);
 	}
 
 	if (bDraw)
@@ -1379,6 +1401,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 		RunSMEffect(eSM_EFFECT_DRAW_ORDER_BACK);
 	}
 
+#endif
 
 	return !isTransformed();
 }
@@ -1926,26 +1949,29 @@ bool NDManualRole::CheckToLastPos()
 	return bRet;
 }
 
-void NDManualRole::ShowNameLabel(bool bDraw)
+void NDManualRole::InitNameLable(NDUILabel*& label)
 {
-#define InitNameLable(lable) \
-	do \
-	{ \
-	if (!lable) \
-	{ \
-	lable = new NDUILabel; \
-	lable->Initialization(); \
-	lable->SetFontSize(LABLESIZE); \
-} \
-	if (!lable->GetParent() && m_pkSubNode) \
-	{ \
-	m_pkSubNode->AddChild(lable); \
-} \
-} while (0)
+	if (!label) 
+	{ 
+		label = new NDUILabel; 
+		label->Initialization(); 
+		label->SetFontSize(LABLESIZE); 
+	} 
+	if (!label->GetParent() && m_pkSubNode) 
+	{ 
+		m_pkSubNode->AddChild(label); 
+	}
+}
 
-#define DrawLable(lable, bDraw) do { if (bDraw && lable) lable->draw(); }while(0)
+void NDManualRole::DrawLable(NDUILabel* label, bool bDraw)
+{ 
+	if (bDraw && label) label->draw();
+}
 
+void NDManualRole::DrawNameLabel(bool bDraw)
+{
 	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
+	if (!scene) return;
 
 	if (!(scene->IsKindOfClass(RUNTIME_CLASS(GameScene))
 			|| scene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene))
@@ -2003,8 +2029,7 @@ void NDManualRole::ShowNameLabel(bool bDraw)
 		InitNameLable(m_lbSynName[0]);
 		InitNameLable(m_lbSynName[1]);
 
-		SetLableName(names, iX + 8 * fScale - iNameW, iY - LABLESIZE * fScale,
-			isEnemy);
+		SetLableName(names, iX + 8 * fScale - iNameW, iY - LABLESIZE * fScale, isEnemy);
 
 		std::stringstream ss;
 		ss << m_strSynName << " [" << m_strSynRank << "]";
@@ -2054,20 +2079,18 @@ void NDManualRole::ShowNameLabel(bool bDraw)
 		DrawLable(m_lbName[1], bDraw);
 		DrawLable(m_lbName[0], bDraw);
 	}
-
-#undef InitNameLable
-#undef DrawLable
 }
 
+//@label
 void NDManualRole::SetLable(LableType eLableType, int x, int y,
-		std::string text, cocos2d::ccColor4B color1, cocos2d::ccColor4B color2)
+		const std::string& text, cocos2d::ccColor4B color1, cocos2d::ccColor4B color2)
 {
 	if (!m_pkSubNode)
 	{
 		return;
 	}
 
-	NDUILabel *lable[2];
+	NDUILabel *lable[2] = {0};
 	memset(lable, 0, sizeof(lable));
 	if (eLableType == eLableName)
 	{
@@ -2090,40 +2113,32 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 		return;
 	}
 
-	lable[0]->SetText(text.c_str());
-	lable[1]->SetText(text.c_str());
-
-	lable[0]->SetFontColor(color1);
-/*	lable[1]->SetFontColor(color2);*/
-
-	CCSize sizemap;
-	sizemap = m_pkSubNode->GetContentSize();
-	CCSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
+	
+	CCSize fontSize = getStringSize(text.c_str(), lable[0]->GetFontSize());
 	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+	CCPoint posHead = this->getHeadPos();
 
-	//** chh 2012-07-04 **//
-	//lable[1]->SetFrameRect(CCRectMake(x+1, y+sizewin.height+1-sizemap.height, sizewin.width, (LABLESIZE+5)*fScale));
-	//lable[0]->SetFrameRect(CCRectMake(x, y+sizewin.height-sizemap.height, sizewin.width, (LABLESIZE+5)*fScale));
-	NDAnimation *animate = (NDAnimation *)m_pkAniGroup->getAnimations()->objectAtIndex(0);
-	CCSize fontSize = getStringSize(lable[0]->GetText().c_str(), lable[0]->GetFontSize());
-	CCRect currAnimateRect = animate->getRect();
-	int newX = this->GetPosition().x - fontSize.width/2;
-	int newY = this->GetPosition().y - currAnimateRect.size.height - fontSize.height/2;
-	//int newX = x - fontSize.width/2;
-	//int newY = y;
+	int newX = posHead.x - 0.5 * fontSize.width;
+	int newY = posHead.y - 1.0 * fontSize.height;
 
-	lable[0]->SetFrameRect(CCRectMake(newX+1*fScale, newY, fontSize.width, fontSize.height));
+	float offset = 1.0f * fScale;
+	lable[0]->SetFrameRect(CCRectMake(newX + offset, newY, fontSize.width, fontSize.height));
 	lable[1]->SetFrameRect(CCRectMake(newX, newY, fontSize.width, fontSize.height));
-	lable[1]->SetVisible(false);
+
 // 	if(m_nQuality>-1){
 // 		ccColor4B cColor4 = ScriptMgrObj.excuteLuaFuncRetColor4("GetColor", "Item",m_nQuality);
 // 		lable[0]->SetFontColor(cColor4);
 // 		//lable[1]->SetFontColor(cColor4);
 // 	}
 
+	lable[0]->SetText(text.c_str());
+	lable[1]->SetText(text.c_str());
+
+	lable[0]->SetFontColor(color1);
+/*	lable[1]->SetFontColor(color2);*/
 }
 
-void NDManualRole::SetLableName(std::string text, int x, int y, bool isEnemy)
+void NDManualRole::SetLableName( const std::string& text, int x, int y, bool isEnemy)
 {
 	if (isEnemy)
 	{
@@ -2133,21 +2148,22 @@ void NDManualRole::SetLableName(std::string text, int x, int y, bool isEnemy)
 	else
 	{
 		/*
-		 if (pkPoint < 1) {// 白色
-		 SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xffffff), INTCOLORTOCCC4(0x003300));
-		 } else if (pkPoint <= 500) {// 黄色
-		 SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xfd7e0d), INTCOLORTOCCC4(0x003300));
-		 } else if (pkPoint <= 2000) {// 红色
-		 SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xe30318), INTCOLORTOCCC4(0x003300));
-		 } else {// 紫色
-		 SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0x760387), INTCOLORTOCCC4(0x003300));
-		 }
-		 */
+		if (pkPoint < 1) {// 白色
+		SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xffffff), INTCOLORTOCCC4(0x003300));
+		} else if (pkPoint <= 500) {// 黄色
+		SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xfd7e0d), INTCOLORTOCCC4(0x003300));
+		} else if (pkPoint <= 2000) {// 红色
+		SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xe30318), INTCOLORTOCCC4(0x003300));
+		} else {// 紫色
+		SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0x760387), INTCOLORTOCCC4(0x003300));
+		}
+		*/
 
 		cocos2d::ccColor4B color = ccc4(255, 255, 255, 255);
-		if (IsKindOfClass (RUNTIME_CLASS(NDPlayer))){
-		color = ccc4(243, 144, 27, 255);
-	}
+		if (IsKindOfClass (RUNTIME_CLASS(NDPlayer)))
+		{
+			color = ccc4(243, 144, 27, 255);
+		}
 
 		SetLable(eLableName, x, y, text, color, INTCOLORTOCCC4(0x003300));
 	}
@@ -2660,156 +2676,197 @@ bool NDManualRole::IsDirFaceRight(int nDir)
 	return false;
 }
 
-	bool NDManualRole::AddSMEffect(std::string strEffectPath, int nSMEffectAlignment, int nDrawOrder)
+bool NDManualRole::AddSMEffect( const std::string& strEffectPath, int nSMEffectAlignment, int nDrawOrder)
+{
+	if (eSM_EFFECT_ALIGNMENT_BEGIN > nSMEffectAlignment 
+		|| eSM_EFFECT_ALIGNMENT_END <= nSMEffectAlignment
+		|| eSM_EFFECT_DRAW_ORDER_BEGIN > nDrawOrder
+		|| eSM_EFFECT_DRAW_ORDER_END <= nDrawOrder)
 	{
-		if (eSM_EFFECT_ALIGNMENT_BEGIN > nSMEffectAlignment 
-			|| eSM_EFFECT_ALIGNMENT_END <= nSMEffectAlignment
-			|| eSM_EFFECT_DRAW_ORDER_BEGIN > nDrawOrder
-			|| eSM_EFFECT_DRAW_ORDER_END <= nDrawOrder)
-		{
-			return false;
-		}
-		if ("" == strEffectPath)
-		{
-			return false;
-		}
-		std::map<std::string, NDLightEffect*>& mapEffect	= m_kArrMapSMEffect[nDrawOrder][nSMEffectAlignment];
-		if (mapEffect.find(strEffectPath) != mapEffect.end())
-		{
-			return false;
-		}
-		mapEffect[strEffectPath]	= new NDLightEffect();
-		mapEffect[strEffectPath]->Initialization(strEffectPath.c_str());
-		mapEffect[strEffectPath]->SetLightId(0);
+		return false;
 	}
-	bool NDManualRole::RemoveSMEffect(std::string strEffectPath)
+	if ("" == strEffectPath)
 	{
-		if ("" == strEffectPath)
-		{
-			return false;
-		}
-		bool bFind	= false;
-		for (int i = eSM_EFFECT_DRAW_ORDER_BEGIN; i < eSM_EFFECT_DRAW_ORDER_END; i++) 
-		{
-			for (int j = eSM_EFFECT_ALIGNMENT_BEGIN; j < eSM_EFFECT_ALIGNMENT_END; j++) 
-			{
-				std::map<std::string, NDLightEffect*>& mapEffect	= m_kArrMapSMEffect[i][j];
-				std::map<std::string, NDLightEffect*>::iterator it	= mapEffect.find(strEffectPath);
-				if (it != mapEffect.end())
-				{
-					SAFE_DELETE(it->second);
-					mapEffect.erase(it);
-					bFind	= true;
-				}
-			}
-		}
-		return bFind;
+		return false;
 	}
-	void NDManualRole::RemoveAllSMEffect()
+	std::map<std::string, NDLightEffect*>& mapEffect	= m_kArrMapSMEffect[nDrawOrder][nSMEffectAlignment];
+	if (mapEffect.find(strEffectPath) != mapEffect.end())
 	{
-		for (int i = eSM_EFFECT_DRAW_ORDER_BEGIN; i < eSM_EFFECT_DRAW_ORDER_END; i++) 
-		{
-			for (int j = eSM_EFFECT_ALIGNMENT_BEGIN; j < eSM_EFFECT_ALIGNMENT_END; j++) 
-			{
-				std::map<std::string, NDLightEffect*>& mapEffect	= m_kArrMapSMEffect[i][j];
-				std::map<std::string, NDLightEffect*>::iterator it	= mapEffect.begin();
-				for (; it != mapEffect.end(); it++) 
-				{
-					SAFE_DELETE(it->second);
-				}
-				mapEffect.clear();
-			}
-		}
+		return false;
 	}
-	void NDManualRole::RunSMEffect(int nDrawOrder)
+	mapEffect[strEffectPath]	= new NDLightEffect();
+	mapEffect[strEffectPath]->Initialization(strEffectPath.c_str());
+	mapEffect[strEffectPath]->SetLightId(0);
+}
+
+bool NDManualRole::RemoveSMEffect( const std::string& strEffectPath)
+{
+	if ("" == strEffectPath)
 	{
-		if (eSM_EFFECT_DRAW_ORDER_BEGIN > nDrawOrder
-			|| eSM_EFFECT_DRAW_ORDER_END <= nDrawOrder)
-		{
-			return;
-		}
-		NDNode* pParent = this->GetParent();
-		if (!pParent) 
-		{
-			return;
-		}
-		NDDirector* director		= NDDirector::DefaultDirector();
-		float fScaleFactor			= director->GetScaleFactor();
-		CCSize sizeEffectParent		= pParent->GetContentSize();
-		CCPoint posRole				= this->GetPosition();
+		return false;
+	}
+	bool bFind	= false;
+	for (int i = eSM_EFFECT_DRAW_ORDER_BEGIN; i < eSM_EFFECT_DRAW_ORDER_END; i++) 
+	{
 		for (int j = eSM_EFFECT_ALIGNMENT_BEGIN; j < eSM_EFFECT_ALIGNMENT_END; j++) 
 		{
-			std::map<std::string, NDLightEffect*>& mapEffect	= m_kArrMapSMEffect[nDrawOrder][j];
-			if (mapEffect.empty())
+			std::map<std::string, NDLightEffect*>& mapEffect	= m_kArrMapSMEffect[i][j];
+			std::map<std::string, NDLightEffect*>::iterator it	= mapEffect.find(strEffectPath);
+			if (it != mapEffect.end())
 			{
-				continue;
+				SAFE_DELETE(it->second);
+				mapEffect.erase(it);
+				bFind	= true;
 			}
-			CCPoint posOffect		= CCPointZero;
-			if (eSM_EFFECT_ALIGNMENT_TOP == j)
-			{
-				posOffect			= ccp(0, -FIGHTER_HEIGHT * fScaleFactor);
-			}
-			else if (eSM_EFFECT_ALIGNMENT_CENTER == j)
-			{
-				posOffect			= ccp(0, -FIGHTER_HEIGHT * fScaleFactor / 2);
-			}
-			else if (eSM_EFFECT_ALIGNMENT_BOTTOM == j)
-			{
-			}
+		}
+	}
+	return bFind;
+}
+
+void NDManualRole::RemoveAllSMEffect()
+{
+	for (int i = eSM_EFFECT_DRAW_ORDER_BEGIN; i < eSM_EFFECT_DRAW_ORDER_END; i++) 
+	{
+		for (int j = eSM_EFFECT_ALIGNMENT_BEGIN; j < eSM_EFFECT_ALIGNMENT_END; j++) 
+		{
+			std::map<std::string, NDLightEffect*>& mapEffect	= m_kArrMapSMEffect[i][j];
 			std::map<std::string, NDLightEffect*>::iterator it	= mapEffect.begin();
 			for (; it != mapEffect.end(); it++) 
 			{
-				NDLightEffect* pEffect	= it->second;
-				if (!pEffect)
-				{
-					continue;
-				}
-				pEffect->SetPosition(ccpAdd(posRole, posOffect));
-				pEffect->Run(sizeEffectParent);
+				SAFE_DELETE(it->second);
 			}
+			mapEffect.clear();
 		}
-	}
-    /************************************************************************************************************
-     Function:         ChangeModelWithMount
-     Description:    根据骑乘状态修改人物当前的信息
-     Input:   nRideStatus:    骑乘状态  0：步行     1：骑马
-                  nMountType:    骑乘的类型 
-     Output:     无
-     －－－－－－－－－－－－－－－－修改说明－－－－－－－－－－－－－－－－－－－－－－－－
-     Other:  1. add by tangziqin  2012.7.27   增加函数头注释      
-                  2.
-     ************************************************************************************************************/
-	bool NDManualRole::ChangeModelWithMount( int nRideStatus, int nMountType )
-	{
-		if  (m_nRideStatus == nRideStatus)
-		{
-			if (0 == m_nRideStatus)
-            {
-				return true;
-            }
-			else if ( m_nMountType == nMountType )
-            {
-				return true;
-            }
-		}
-		unsigned int nMountLookface	= ScriptDBObj.GetN( "mount_model_config", nMountType, DB_MOUNT_MODEL_LOOKFACE );
-		unsigned int nMountID		= nMountLookface%1000;     
-		unsigned int nPlayerID		= m_nLookface%1000;
-		char aniPath[256];
-		if ( nRideStatus == 0 )
-		{
-			_snprintf(aniPath, 256, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(), nPlayerID);
-		}
-		else
-		{
-			_snprintf(aniPath, 256, "%smodel_%d_%d.spr", NDPath::GetAnimationPath().c_str(), nPlayerID, nMountID);
-		}
-		reloadAni(aniPath);
-
-		m_nRideStatus	= nRideStatus;
-		m_nMountType	= nMountType;
-		
-		SetCurrentAnimation( MANUELROLE_STAND, m_bFaceRight );
-		return true;
 	}
 }
+
+void NDManualRole::RunSMEffect(int nDrawOrder)
+{
+	if (eSM_EFFECT_DRAW_ORDER_BEGIN > nDrawOrder
+		|| eSM_EFFECT_DRAW_ORDER_END <= nDrawOrder)
+	{
+		return;
+	}
+	NDNode* pParent = this->GetParent();
+	if (!pParent) 
+	{
+		return;
+	}
+	NDDirector* director		= NDDirector::DefaultDirector();
+	float fScaleFactor			= director->GetScaleFactor();
+	CCSize sizeEffectParent		= pParent->GetContentSize();
+	CCPoint posRole				= this->GetPosition();
+	for (int j = eSM_EFFECT_ALIGNMENT_BEGIN; j < eSM_EFFECT_ALIGNMENT_END; j++) 
+	{
+		std::map<std::string, NDLightEffect*>& mapEffect	= m_kArrMapSMEffect[nDrawOrder][j];
+		if (mapEffect.empty())
+		{
+			continue;
+		}
+		CCPoint posOffect		= CCPointZero;
+		if (eSM_EFFECT_ALIGNMENT_TOP == j)
+		{
+			posOffect			= ccp(0, -FIGHTER_HEIGHT * fScaleFactor);
+		}
+		else if (eSM_EFFECT_ALIGNMENT_CENTER == j)
+		{
+			posOffect			= ccp(0, -FIGHTER_HEIGHT * fScaleFactor / 2);
+		}
+		else if (eSM_EFFECT_ALIGNMENT_BOTTOM == j)
+		{
+		}
+		std::map<std::string, NDLightEffect*>::iterator it	= mapEffect.begin();
+		for (; it != mapEffect.end(); it++) 
+		{
+			NDLightEffect* pEffect	= it->second;
+			if (!pEffect)
+			{
+				continue;
+			}
+			pEffect->SetPosition(ccpAdd(posRole, posOffect));
+			pEffect->Run(sizeEffectParent);
+		}
+	}
+}
+
+/************************************************************************************************************
+ Function:         ChangeModelWithMount
+ Description:    根据骑乘状态修改人物当前的信息
+ Input:   nRideStatus:    骑乘状态  0：步行     1：骑马
+              nMountType:    骑乘的类型 
+ Output:     无
+ －－－－－－－－－－－－－－－－修改说明－－－－－－－－－－－－－－－－－－－－－－－－
+ Other:  1. add by tangziqin  2012.7.27   增加函数头注释      
+              2.
+ ************************************************************************************************************/
+bool NDManualRole::ChangeModelWithMount( int nRideStatus, int nMountType )
+{
+	if  (m_nRideStatus == nRideStatus)
+	{
+		if (0 == m_nRideStatus)
+        {
+			return true;
+        }
+		else if ( m_nMountType == nMountType )
+        {
+			return true;
+        }
+	}
+	unsigned int nMountLookface	= ScriptDBObj.GetN( "mount_model_config", nMountType, DB_MOUNT_MODEL_LOOKFACE );
+	unsigned int nMountID		= nMountLookface%1000;     
+	unsigned int nPlayerID		= m_nLookface%1000;
+	char aniPath[256];
+	if ( nRideStatus == 0 )
+	{
+		_snprintf(aniPath, 256, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(), nPlayerID);
+	}
+	else
+	{
+		_snprintf(aniPath, 256, "%smodel_%d_%d.spr", NDPath::GetAnimationPath().c_str(), nPlayerID, nMountID);
+	}
+	reloadAni(aniPath);
+
+	m_nRideStatus	= nRideStatus;
+	m_nMountType	= nMountType;
+	
+	SetCurrentAnimation( MANUELROLE_STAND, m_bFaceRight );
+	return true;
+}
+
+void NDManualRole::debugDraw()
+{
+	NDBaseRole::debugDraw();
+}
+
+//in screen pixels.
+CCPoint NDManualRole::getFootPos()
+{
+	CCPoint pos = NDBaseRole::getFootPos();
+
+	if (m_nRideStatus == 1)
+	{
+		int sign = (m_bFaceRight ? -1 : 1);
+		const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+		pos.x += DISPLAY_POS_X_OFFSET * fScale * sign;
+	}
+
+	return pos;
+}
+
+//in screen pixels.
+CCPoint NDManualRole::getHeadPos()
+{
+	CCPoint pos = NDBaseRole::getHeadPos();
+
+	if (m_nRideStatus == 1)
+	{
+		int sign = (m_bFaceRight ? -1 : 1);
+		const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+		pos.x += DISPLAY_POS_X_OFFSET * fScale * sign;
+		pos.y -= DISPLAY_POS_Y_OFFSET;
+	}
+
+	return pos;
+}
+
+NS_NDENGINE_END

@@ -20,8 +20,8 @@ using namespace std;
 
 #define FOCUS_JUDGE_DISTANCE (33)
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
 class NDNpc;
 class NDUIDialog;
 
@@ -136,6 +136,9 @@ private:
 
 public:
 	override void RunAnimation(bool bDraw);
+
+protected:
+	virtual void debugDraw();
 
 private:
 	// ÎðÓÃ
@@ -280,6 +283,7 @@ public:
 	} m_caclData;
 
 };
-}
+
+NS_NDENGINE_END
 
 #endif

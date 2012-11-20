@@ -5,12 +5,10 @@
 //  Created by xiezhenghai on 10-12-17.
 //  Copyright 2010 (网龙)DeNA. All rights reserved.
 //
-#ifndef __NDManualRole_H
-#define __NDManualRole_H
+#ifndef __NDMANUALROLE_H
+#define __NDMANUALROLE_H
 
 #include "NDBaseRole.h"
-//#include "NDBattlePet.h"
-//#include "NDRidePet.h"
 #include <string>
 #include <deque>
 #include "NDMonster.h"
@@ -22,8 +20,8 @@
 
 using namespace std;
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
 #define BEGIN_PROTECTED_TIME 3// 人物一开始的的保护时间,即不会遇怪
 #define SHOW_NAME_ROLE_W (64) // 在w(-64,64)区域内显示怪物和npc名字
 #define SHOW_NAME_ROLE_H (64)
@@ -67,6 +65,9 @@ enum eSM_EFFECT_DRAW_ORDER
 	eSM_EFFECT_DRAW_ORDER_BACK,
 	eSM_EFFECT_DRAW_ORDER_END,
 };
+
+
+//////////////////////////////////////////////////////////////////////////////////////
 class NDPicture;
 class NDManualRole: public NDBaseRole
 {
@@ -227,8 +228,8 @@ public:
 	int GetPathDir(int oldX, int oldY, int newX, int newY);
 	bool GetXYByDir(int oldX, int oldY, int dir, int& newX, int& newY);
 	bool IsDirFaceRight(int nDir);
-	bool AddSMEffect(std::string strEffectPath, int nSMEffectAlignment, int nDrawOrder);
-	bool RemoveSMEffect(std::string strEffectPath);
+	bool AddSMEffect( const std::string& strEffectPath, int nSMEffectAlignment, int nDrawOrder);
+	bool RemoveSMEffect( const std::string& strEffectPath);
 private:
 	void RemoveAllSMEffect();
 	void RunSMEffect(int nDrawOrder);
@@ -239,17 +240,23 @@ public:
 
 private:
 	bool CheckToLastPos();
-	void ShowNameLabel(bool bDraw);
+	
 	enum LableType
 	{
 		eLableName,
 		eLabelSynName,
 		eLablePeerage,
 	};
-	void SetLableName(std::string text, int x, int y, bool isEnemy);
-	void SetLable(LableType eLableType, int x, int y, std::string text,
+	void SetLableName( const std::string& text, int x, int y, bool isEnemy);
+	void SetLable(LableType eLableType, int x, int y, const std::string& text,
 			cocos2d::ccColor4B color1, cocos2d::ccColor4B color2);
+
 	SpriteSpeed GetSpeed();
+
+	void InitNameLable(NDUILabel*& label);
+	void DrawLable(NDUILabel* label, bool bDraw);
+	void DrawNameLabel(bool bDraw);
+
 protected:
 	void WalkToPosition(const std::vector<CCPoint>& kToPosVector,
 			SpriteSpeed eSpeed, bool bMoveMap, bool bMustArrive = false);
@@ -273,11 +280,16 @@ protected:
 		return m_bToLastPos;
 	}
 
+	virtual void debugDraw();
+	virtual CCPoint getFootPos(); //in screen pixels.
+	virtual CCPoint getHeadPos(); //in screen pixels.
+
 public:
 	void SetTeamToLastPos();
 	//++Guosen 2012.7.13
 	int GetLookface(){ return m_nLookface; }
 	bool ChangeModelWithMount( int nRideStatus, int nMountType );
+
 public:
 	int m_nState;								// 状态
 	int m_nMoney;								// 银两
@@ -324,6 +336,7 @@ public:
 	int	m_nMountType;	//坐骑类型
 	int	m_nLookface;	//
 	int m_nQuality;
+
 private:
 	// 战宠相关
 	//CAutoLink<NDBattlePet> m_pBattlePetShow;
@@ -366,15 +379,14 @@ protected:
 	CCPoint m_kPosBackup;
 
 private:
-
 	std::vector<ServerEffect> m_kServerEffectBack;
 	std::vector<ServerEffect> m_kServerEffectFront;
 
 private:
-
 	std::map<std::string, NDLightEffect*> m_kArrMapSMEffect[eSM_EFFECT_DRAW_ORDER_END][eSM_EFFECT_ALIGNMENT_END];
 };
-}
 
-#endif
+NS_NDENGINE_END
+
+#endif //__NDMANUALROLE_H
 

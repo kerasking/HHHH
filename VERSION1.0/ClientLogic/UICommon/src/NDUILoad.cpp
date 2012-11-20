@@ -389,6 +389,20 @@ NDUINode* NDUILoad::CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& 
 			ctrlTypeName = "MY_CONTROL_TYPE_SPRITE";
 		}
 		break;
+	case MY_CONTROL_TYPE_LIST_HV:
+		{
+			ControlHelp<MY_CONTROL_TYPE_LIST_HV> help;
+			node = (NDUINode*)help.Create(uiInfo, sizeOffset);
+			ctrlTypeName = "MY_CONTROL_TYPE_LIST_HV";
+		}
+		break;
+	case MY_CONTROL_TYPE_LIST_LOOP:
+		{
+			ControlHelp<MY_CONTROL_TYPE_LIST_LOOP> help;
+			node = (NDUINode*)help.Create(uiInfo, sizeOffset);
+			ctrlTypeName = "MY_CONTROL_TYPE_LIST_LOOP";
+		}
+		break;
 	default:
 		break;
 	}

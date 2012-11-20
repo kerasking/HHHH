@@ -561,6 +561,7 @@ int NDNpc::GetType()
 	return m_iType;
 }
 
+//@label
 void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text,
 		cocos2d::ccColor4B color1, cocos2d::ccColor4B color2)
 {
@@ -569,46 +570,67 @@ void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text,
 		return;
 	}
 
-	NDUILabel* pkLables[2] = {0};
-	memset(pkLables, 0, sizeof(pkLables));
+	NDUILabel* lable[2] = {0};
+	memset(lable, 0, sizeof(lable));
 
 	if (eLableType == eLableName)
 	{
-		pkLables[0] = m_pkNameLabel[0];
-		pkLables[1] = m_pkNameLabel[1];
+		lable[0] = m_pkNameLabel[0];
+		lable[1] = m_pkNameLabel[1];
 	}
 	else if (eLableType == eLabelDataStr)
 	{
-		pkLables[0] = m_pkDataStrLebel[0];
-		pkLables[1] = m_pkDataStrLebel[1];
+		lable[0] = m_pkDataStrLebel[0];
+		lable[1] = m_pkDataStrLebel[1];
 	}
 
-	if (!pkLables[0] || !pkLables[1])
+	if (!lable[0] || !lable[1])
 	{
 		return;
 	}
 
-	pkLables[0]->SetText(text.c_str());
-	pkLables[1]->SetText(text.c_str());
+#if 0
+	//CCSize fontSize = getStringSize(text.c_str(), lable[0]->GetFontSize());
+	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+	CCSize fontSize = getStringSize(text.c_str(), NPC_NAME_FONT_SIZE*fScale);
+	CCPoint posHead = this->getHeadPos();
 
-	pkLables[0]->SetFontColor(color1);
-	pkLables[1]->SetFontColor(color2);
+	int newX = posHead.x - 0.5 * fontSize.width;
+	int newY = posHead.y - 1.0 * fontSize.height;
 
+	float offset = 1.0f * fScale;
+	lable[0]->SetFrameRect(CCRectMake(newX + offset, newY, fontSize.width, fontSize.height));
+	lable[1]->SetFrameRect(CCRectMake(newX, newY, fontSize.width, fontSize.height));
+#else
 	CCSize kSizeMap;
 	kSizeMap = m_pkSubNode->GetContentSize();
+	
 	CCSize kSizeWin = NDDirector::DefaultDirector()->GetWinSize();
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
 	CCSize kSize = getStringSize(text.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
-	pkLables[1]->SetFrameRect(
-			CCRectMake(x - (kSize.width / 2) + 1,
-					y + NDDirector::DefaultDirector()->GetWinSize().height
-							- kSizeMap.height, kSizeWin.width,
-					30 * fScaleFactor));
-	pkLables[0]->SetFrameRect(
-			CCRectMake(x - (kSize.width / 2),
-					y + NDDirector::DefaultDirector()->GetWinSize().height
-							- kSizeMap.height, kSizeWin.width,
-					30 * fScaleFactor));
+
+	lable[1]->SetFrameRect(
+			CCRectMake(
+					x - (kSize.width / 2) + 1,
+					y + kSizeWin.height - kSizeMap.height, 
+					kSizeWin.width,
+					30 * fScaleFactor
+					));
+
+	lable[0]->SetFrameRect(
+			CCRectMake(
+					x - (kSize.width / 2),
+					y + kSizeWin.height - kSizeMap.height, 
+					kSizeWin.width,
+					30 * fScaleFactor
+					));
+#endif
+
+	lable[0]->SetText(text.c_str());
+	lable[1]->SetText(text.c_str());
+
+	lable[0]->SetFontColor(color1);
+	lable[1]->SetFontColor(color2);
 }
 
 void NDNpc::initUnpassPoint()

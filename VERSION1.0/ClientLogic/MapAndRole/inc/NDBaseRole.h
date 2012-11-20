@@ -18,8 +18,9 @@
 #define FIGHTER_HEIGHT 70 * (NDDirector::DefaultDirector()->GetScaleFactor())
 #define FIGHTER_WIDTH  45 * (NDDirector::DefaultDirector()->GetScaleFactor())
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
+
 #define RING_IMAGE			(NDPath::GetFullImagepath("ui_ring.png").c_str())
 #define SHADOW_IMAGE		(NDPath::GetFullImagepath("shadow.png").c_str())
 #define BIG_SHADOW_IMAGE	(NDPath::GetFullImagepath("shadowBig.png").c_str())
@@ -158,6 +159,7 @@ public:
 	int GetPetWalkAction() { return m_nPetRunAction; }
 	int GetPetAccLevel() { return m_nAccLevel; }
 	int GetPetLookface() { return m_nPetLookface; }
+
 protected:
 	void SafeClearEffect(NDSprite*& sprite);
 	void SafeAddEffect(NDSprite*& sprite, std::string file);
@@ -170,6 +172,10 @@ protected:
 
 // 	virtual void RunBattleSubAnimation( Fighter* pkFighter );
 // 	virtual bool DrawSubAnimation( NDSubAniGroup& kSag );
+
+	virtual CCPoint getFootPos(); //in screen pixels.
+	virtual CCPoint getHeadPos(); //in screen pixels.
+	virtual void debugDraw();
 
 public:
 	virtual void RunAnimation(bool bDraw);
@@ -230,6 +236,6 @@ public:
 	static bool ms_bGameSceneRelease;
 };
 
-}
+NS_NDENGINE_END
 
 #endif // _ND_BASE_ROLE_H

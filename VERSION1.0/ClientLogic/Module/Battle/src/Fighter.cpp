@@ -861,10 +861,15 @@ void Fighter::showFighterName(bool b)
 			m_pkParent->AddChild(m_pkFighterNameLabel);
 			//在此创建生命条及士气条空间++Guosen 2012.7.27
 			this->m_pHPBar	= new CUIExp;
-			this->m_pHPBar->Initialization( NDPath::GetImgPath( HPMP_BAR_BG_IMAGE ).c_str(), NDPath::GetImgPath( HP_BAR_FRO_IMAGE ).c_str() );
+			std::string szBGImage = NDPath::GetImgPath( HPMP_BAR_BG_IMAGE );
+			std::string szHPImage = NDPath::GetImgPath( HP_BAR_FRO_IMAGE );
+			std::string szMPImage = NDPath::GetImgPath( MP_BAR_FRO_IMAGE );
+			//this->m_pHPBar->Initialization( NDPath::GetImgPath( HPMP_BAR_BG_IMAGE ).c_str(), NDPath::GetImgPath( HP_BAR_FRO_IMAGE ).c_str() );
+			this->m_pHPBar->Initialization( szBGImage.c_str(), szHPImage.c_str() );
 			this->m_pHPBar->SetStyle( 2 );
 			this->m_pMPBar	= new CUIExp;
-			this->m_pMPBar->Initialization( NDPath::GetImgPath( HPMP_BAR_BG_IMAGE ).c_str(), NDPath::GetImgPath( MP_BAR_FRO_IMAGE ).c_str() );
+			//this->m_pMPBar->Initialization( NDPath::GetImgPath( HPMP_BAR_BG_IMAGE ).c_str(), NDPath::GetImgPath( MP_BAR_FRO_IMAGE ).c_str() );
+			this->m_pMPBar->Initialization( szBGImage.c_str(), szMPImage.c_str() );
 			this->m_pMPBar->SetStyle( 2 );
 			m_pkParent->AddChild(m_pHPBar);
 			m_pkParent->AddChild(m_pMPBar);
