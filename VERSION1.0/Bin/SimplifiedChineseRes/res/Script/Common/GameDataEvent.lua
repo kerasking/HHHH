@@ -54,18 +54,18 @@ end
 
 function p.OnEvent(nEvent, param)
 	if not CheckN(nEvent) then
-		LogError("GameDataEvent.OnEvent invalid arg");
+		LogError("tzq GameDataEvent.OnEvent invalid arg");
 		return;
 	end
 	
 	if not p.EventTable[nEvent] then
-		LogInfo("GameDataEvent.OnEvent[%d] no func", nEvent);
+		LogInfo("tzq GameDataEvent.OnEvent[%d] no func", nEvent);
 		return;
 	end
 	
 	for i, v in pairs(GAMEDATAEVENT) do
 		if v == nEvent and CheckS(i) then
-			LogInfo("GameDataEvent.OnEvent[%s]", i);
+			LogInfo("tzq GameDataEvent.OnEvent[%s]", i);
 			break;
 		end
 	end

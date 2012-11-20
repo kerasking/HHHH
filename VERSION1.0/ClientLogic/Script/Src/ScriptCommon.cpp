@@ -27,7 +27,8 @@ int LuaLogInfo(LuaState* state)
 	
 	if (str.IsString())
 	{
-		ScriptMgrObj.DebugOutPut("%s", str.GetString());
+		ScriptMgrObj.WriteLog("%s", str.GetString());
+		//ScriptMgrObj.DebugOutPut("%s", str.GetString());
 	}
 	
 	return 0;

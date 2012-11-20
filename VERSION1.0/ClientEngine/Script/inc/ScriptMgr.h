@@ -55,7 +55,7 @@ public:
 	//void DebugOutPut(const char* str);
 	void DebugOutPut(const char* fmt, ...);
 	void LoadLuaFile(const char* pszluaFile);
-	
+	void WriteLog(const char* fmt, ...);
 	template<typename RT>
 	RT excuteLuaFunc(const char* funcname, const char* modulename)
 	{
@@ -132,7 +132,7 @@ public:
 private:
 	vec_regclass_func vRegClassFunc;
 	FILE* m_fDebugOutPut;
-	
+	FILE* m_fTest;	
 private:
 	void LoadRegClassFuncs();
 

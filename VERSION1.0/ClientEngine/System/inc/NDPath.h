@@ -67,6 +67,8 @@ public:
 	static const char* GetRootResDirName();
 	static void SetResPath(const char* szPath);
 
+	static const string& GetLogPath();
+
 protected:
 
 	static string NDPath_ResPath;
@@ -80,6 +82,9 @@ protected:
 	static string NDPath_ScriptPath;
 
 	static int s_iResDirPos;
+
+	static string NDPath_LogPath;
+
 };
 
 NS_NDENGINE_END

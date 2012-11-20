@@ -106,13 +106,20 @@ const char* DataFilePath()
 
 ScriptMgr::ScriptMgr()
 {
-	char filename[256];
+	#if 0
+char filename[256];
 	memset(filename, 0, sizeof(filename));
 	snprintf(filename, sizeof(filename), "%s/log%ld.txt", 
 			 DataFilePath(),
 			 time(NULL));
 	m_fDebugOutPut = fopen(filename, "a");
     printf(filename);
+#endif
+
+	char filename[256];
+	memset(filename, 0, sizeof(filename));
+	snprintf(filename, sizeof(filename), "%s/name.txt", NDPath::GetLogPath().c_str());
+	m_fTest = fopen(filename, "w");
 }
 
 ScriptMgr::~ScriptMgr()
@@ -120,6 +127,10 @@ ScriptMgr::~ScriptMgr()
 	if (m_fDebugOutPut)
 	{
 		fclose(m_fDebugOutPut);
+	}
+	if (m_fTest)
+	{
+		fclose(m_fTest);
 	}
 }
 
@@ -136,8 +147,32 @@ void ScriptMgr::DebugOutPut(const char* str)
 }
 */
 
+void ScriptMgr::WriteLog(const char* fmt, ...)
+{
+	if (!fmt || !m_fTest)
+	{
+		return;
+	}
+
+	va_list argumentList;
+	char buffer[1024] = "";
+	va_start(argumentList, fmt);
+	::vsprintf( buffer, fmt, argumentList);
+	sprintf(buffer, "%s\0", buffer);
+	va_end(argumentList);
+
+	if(strstr(buffer, "tzq") != NULL)
+	{
+		fwrite(buffer, 1, strlen(buffer) + 1, m_fTest);
+		fwrite("\n", 1, 1, m_fTest);
+		fflush(m_fTest);
+	}
+}
+
 void ScriptMgr::DebugOutPut(const char* fmt, ...)
 {
+#if 0
+
 	if (!fmt || !m_fDebugOutPut)
 	{
 		return;
@@ -150,6 +185,7 @@ void ScriptMgr::DebugOutPut(const char* fmt, ...)
     //NDLog(buffer);
     printf(buffer);
     printf("\n");
+#endif
 }
 
 //using namespace LuaPlus;

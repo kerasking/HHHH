@@ -31,6 +31,7 @@ string NDPath::NDPath_AniPath			= "../SimplifiedChineseRes/res/animation/";
 string NDPath::NDPath_SoundPath			= "../SimplifiedChineseRes/res/sound/";
 string NDPath::NDPath_UIPath			= "../SimplifiedChineseRes/res/UI/";
 string NDPath::NDPath_ScriptPath		= "../SimplifiedChineseRes/res/Script/";
+string NDPath::NDPath_LogPath			= "../log";
 
 IMPLEMENT_CLASS(NDPath, NDObject)
 
@@ -379,6 +380,11 @@ std::string NDPath::GetCashesPath()
 #else
 	return string("");
 #endif
+}
+
+const string& NDPath::GetLogPath()
+{
+	return NDPath_LogPath;
 }
 
 NS_NDENGINE_END
