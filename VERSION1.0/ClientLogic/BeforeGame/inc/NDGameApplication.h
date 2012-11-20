@@ -5,7 +5,8 @@
 #ifndef NDGAMEAPPLICATION_H
 #define NDGAMEAPPLICATION_H
 
-#include <cocos2d.h>
+#include "android/CCApplication_android.h"
+
 #include "NDConsole.h"
 
 using namespace cocos2d;
@@ -13,7 +14,7 @@ using namespace cocos2d;
 namespace NDEngine
 {
 class NDGameApplication:
-	private CCApplication
+	public CCApplication
 #ifdef WIN32
 	,public NDConsoleListener
 #endif

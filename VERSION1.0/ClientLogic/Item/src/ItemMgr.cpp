@@ -48,6 +48,7 @@
 #include "NewPetScene.h"
 #include "PlayerInfoScene.h"
 #include "NewEquipRepair.h"
+#include "NDDebugOpt.h"
 
 using std::stringstream;
 using namespace NDEngine;

@@ -1,7 +1,7 @@
 #!/bin/bash
 # set params
-NDK_ROOT_LOCAL=/cygdrive/d/programe/android/ndk/android-ndk-r7b
-COCOS2DX_ROOT_LOCAL=/cygdrive/e/cocos2d-x
+NDK_ROOT_LOCAL=/cygdrive/d/android-ndk-r8b
+COCOS2DX_ROOT_LOCAL=/cygdrive/d/work/client/VERSION1.0/cocos2d-x
 
 buildexternalsfromsource=
 
@@ -28,17 +28,6 @@ while getopts "s" OPTION; do
 			;;
 	esac
 done
-
-# try to get global variable
-if [ $NDK_ROOT"aaa" != "aaa" ]; then
-    echo "use global definition of NDK_ROOT: $NDK_ROOT"
-    NDK_ROOT_LOCAL=$NDK_ROOT
-fi
-
-if [ $COCOS2DX_ROOT"aaa" != "aaa" ]; then
-    echo "use global definition of COCOS2DX_ROOT: $COCOS2DX_ROOT"
-    COCOS2DX_ROOT_LOCAL=$COCOS2DX_ROOT
-fi
 
 TESTS_ROOT=$COCOS2DX_ROOT_LOCAL/tests/test.android
 

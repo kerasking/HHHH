@@ -9,9 +9,42 @@
 
 #include "NDDebugOpt.h"
 
+#include "CCPlatformConfig.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "android/jni/SystemInfoJni.h"
+#include <android/log.h>
+#include <jni.h>
+#endif
+
 NS_NDENGINE_BGN
 
 IMPLEMENT_CLASS(NDDebugOpt, NDObject)
+
+void NDDebugOpt::Log(const char* pszTag, const char * pszFormat,... )
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	char buf[2048] = {0};
+
+	va_list args;
+	va_start(args, pszFormat);    	
+	vsprintf(buf, pszFormat, args);
+	va_end(args);
+
+	__android_log_print(ANDROID_LOG_DEBUG,pszTag,buf);
+
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+
+	char buf[2048] = {0};
+
+	va_list args = 0;
+	va_start(args, pszFormat);    	
+	vsprintf(buf, pszFormat, args);
+	va_end(args);
+
+	printf(buf);
+#endif
+}
 
 #define IMP_STATIC_PROPERTY(varType,varName,varVal,clsName)	\
 	varType clsName::varName = varVal;

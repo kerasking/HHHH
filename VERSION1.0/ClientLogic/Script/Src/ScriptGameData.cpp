@@ -9,7 +9,10 @@
 
 #include "ScriptGameData.h"
 #include "globaldef.h"
+#include "NDDebugOpt.h"
 /////////////////////////////////////////////////////////////////////////////////////////
+
+using namespace NDEngine;
 
 unsigned int Get_VecScriptGameData_Size(VecScriptGameData& data)
 {

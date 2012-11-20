@@ -50,6 +50,12 @@ THE SOFTWARE.
 #include "CCUserDefault.h"
 #include "extensions/CCNotificationCenter.h"
 
+#ifdef ANDROID
+#include "android/jni/SystemInfoJni.h"
+#include <android/log.h>
+#include <jni.h>
+#endif
+
 #if CC_ENABLE_PROFILERS
 #include "support/CCProfiling.h"
 #endif // CC_ENABLE_PROFILERS
@@ -76,7 +82,12 @@ extern const char* cocos2dVersion(void);
 CCDirector* CCDirector::sharedDirector(void)
 {
 #if ND_MOD
-	CCAssert(sm_pSharedDirector, "sm_pSharedDirector should not be null");
+
+#ifdef ANDROID
+	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","entry sharedDirector()");
+#endif
+
+	//CCAssert(sm_pSharedDirector, "sm_pSharedDirector should not be null");
 	if (s_bFirstRun && sm_pSharedDirector)
 	{
 		sm_pSharedDirector->init();

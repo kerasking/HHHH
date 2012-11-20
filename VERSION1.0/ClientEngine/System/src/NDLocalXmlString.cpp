@@ -11,8 +11,11 @@
 #include "globaldef.h"
 #include "NDPath.h"
 #include "NDSharedPtr.h"
+#include "NDDebugOpt.h"
 
 static NDLocalXmlString* s_NDLocalXmlString = NULL;
+
+using namespace NDEngine;
 
 NDLocalXmlString& NDLocalXmlString::GetSingleton()
 {
@@ -208,7 +211,7 @@ bool NDLocalXmlString::GetValue(const std::string str, bool& isKey, std::string&
 	
 	if (first >= second)
 	{
-		NDLog("\nerror first >= second");
+		NDLog("nerror first >= second");
 		return false;
 	}
 	

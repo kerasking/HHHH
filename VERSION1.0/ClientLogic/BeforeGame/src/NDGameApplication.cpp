@@ -32,6 +32,12 @@
 #include "NDUIBaseItemButton.h"
 #include "UIItemButton.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "android/jni/SystemInfoJni.h"
+#include <android/log.h>
+#include <jni.h>
+#endif
+
 NS_NDENGINE_BGN
 
 void initClass()
@@ -46,7 +52,7 @@ void initClass()
 
 NDGameApplication::NDGameApplication()
 {
-#ifdef WIN32
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"script ");
 #endif
 }
@@ -139,7 +145,9 @@ bool NDGameApplication::initInstance()
 
 bool NDGameApplication::applicationDidFinishLaunching()
 {
-	CCLog("Begin to exe applicationDidFinishLaunching");
+#ifdef ANDROID
+	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","Begin to exe applicationDidFinishLaunching");
+#endif
 
 	REGISTER_CLASS(NDBaseBattle,Battle);
 	REGISTER_CLASS(NDBaseFighter,Fighter);
@@ -149,8 +157,17 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();
 	NDBeforeGameMgrObj;
 
+#ifdef ANDROID
+	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","Begin to pkDirector->Initialization();");
+#endif
+
 	pkDirector->Initialization();
 	pkDirector->RunScene(CSMLoginScene::Scene());
+
+#ifdef ANDROID
+	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","End to pkDirector->Initialization();");
+#endif
+
 //	kMapMgr.processChangeRoom(0,0);
 
 	ScriptNetMsg* pkNetMsg = new ScriptNetMsg;
@@ -291,7 +308,7 @@ bool NDGameApplication::processConsole( const char* pszInput )
 //@pm
 bool NDGameApplication::processPM(const char* cmd) 
 {
-#ifdef WIN32
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	if (cmd == 0 || cmd[0] == 0) return false;
 
 	int val = 0;

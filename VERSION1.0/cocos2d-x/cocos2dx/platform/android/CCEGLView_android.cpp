@@ -32,6 +32,9 @@ THE SOFTWARE.
 
 #include <stdlib.h>
 
+#define  LOG_TAG    "DHLJ"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+
 namespace cocos2d {
 
 CCEGLView::CCEGLView()

@@ -26,6 +26,7 @@
 //#include "PlayerInfoScene.h"
 #include "ScriptDataBase.h"
 #include "NDConstant.h"
+#include "NDDebugOpt.h"
 
 #define QUIT_BATTLE_TIMER_TAG (13621)
 

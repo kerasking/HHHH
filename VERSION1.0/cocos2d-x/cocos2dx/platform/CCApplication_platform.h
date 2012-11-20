@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     #include "win32/CCApplication_win32.h"
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)//(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     #include "android/CCApplication_android.h"
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     # include "ios/CCApplication_ios.h"

@@ -22,6 +22,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity{
 		setContentView(R.layout.helloworld_demo);
         mGLView = (Cocos2dxGLSurfaceView) findViewById(R.id.helloworld_gl_surfaceview);
         mGLView.setTextField((Cocos2dxEditText)findViewById(R.id.textField));
+        
+		nativeInit(10,10);
 	}
 
 	 @Override
@@ -50,19 +52,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity{
     	 int b = 10;
     	 int c = a + b;
      }
-}
-
-class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{
-	
-	public LuaGLSurfaceView(Context context){
-		super(context);
-	}
-	
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-    	// exit program when key back is entered
-    	if (keyCode == KeyEvent.KEYCODE_BACK) {
-    		android.os.Process.killProcess(android.os.Process.myPid());
-    	}
-        return super.onKeyDown(keyCode, event);
-    }
+     
+     private static native void nativeInit(int w, int h);
 }

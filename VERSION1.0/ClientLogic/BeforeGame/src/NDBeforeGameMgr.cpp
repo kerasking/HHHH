@@ -31,6 +31,7 @@
 //#include "cpLog.h"
 #include "NDUtility.h"
 #include <sstream>
+#include "NDDebugOpt.h"
 #include "time.h"
 
 #ifdef USE_NDSDK

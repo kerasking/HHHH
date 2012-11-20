@@ -39,6 +39,7 @@
 #include "NDPath.h"
 #include "GlobalDialog.h"
 #include "NDUtil.h"
+#include "NDDebugOpt.h"
 
 IMPLEMENT_CLASS(QuickTalkCell, NDUINode)
 

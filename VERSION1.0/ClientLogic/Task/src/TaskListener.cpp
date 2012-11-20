@@ -32,6 +32,7 @@
 #include "PlayerNpcListLayers.h"
 #include "TaskInfoScene.h"
 #include "NDPath.h"
+#include "NDDebugOpt.h"
 
 #include "ScriptGlobalEvent.h"
 

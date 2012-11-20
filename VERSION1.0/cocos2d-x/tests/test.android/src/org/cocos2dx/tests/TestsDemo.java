@@ -41,7 +41,9 @@ public class TestsDemo extends Cocos2dxActivity{
 
         setContentView(R.layout.test_demo);
         mGLView = (Cocos2dxGLSurfaceView) findViewById(R.id.test_demo_gl_surfaceview);
-        mGLView.setTextField((Cocos2dxEditText)findViewById(R.id.textField));      
+        mGLView.setTextField((Cocos2dxEditText)findViewById(R.id.textField));
+        
+        nativeInit(10,10);
 	}
 
 	 @Override
@@ -60,5 +62,6 @@ public class TestsDemo extends Cocos2dxActivity{
 
      static {
          System.loadLibrary("tests");
-     }     
+     }
+     private static native void nativeInit(int w, int h);
 }

@@ -36,6 +36,11 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer {
 	private int screenWidth;
 	private int screenHeight;
 	
+	public Cocos2dxRenderer()
+	{
+		super();
+	}
+	
     public void onSurfaceCreated(GL10 gl, EGLConfig config) { 
     	nativeInit(screenWidth, screenHeight); 
     	last = System.nanoTime();

@@ -20,6 +20,8 @@ public:
     */
     virtual bool initInstance() = 0;
 
+	virtual bool setApplication(CCApplication* pkApp);
+
     /**
     @brief	Implement CCDirector and CCScene init code here.
     @return true    Initialize success, app continue.

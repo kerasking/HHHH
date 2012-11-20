@@ -181,7 +181,7 @@ NS_CC_BEGIN;
 
 void CCLog(const char * pszFormat, ...)
 {
-	char buf[MAX_LEN];
+	char buf[MAX_LEN] = {0};
 
 	va_list args;
 	va_start(args, pszFormat);    	

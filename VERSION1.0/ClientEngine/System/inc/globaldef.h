@@ -61,7 +61,8 @@ typedef std::map<OBJID, OBJID> ID_MAP;
 #include "NDLocalization.h"
 #include "ScriptInc.h"
 
-#define NDLog(str, ...)  
+#define NDLog(str, ...) \
+	NDDebugOpt::Log("DaHua",str,##__VA_ARGS__)
 
 
 //#include "NDMsgDefine.h"

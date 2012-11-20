@@ -23,7 +23,7 @@
 #define FRAME_LIMIT_SWITCH 1
 
 // 帧数限制:每秒�??�??
-#define FRAME_LIMIT (24) ssss
+#define FRAME_LIMIT (24)
 
 #if FRAME_LIMIT_SWITCH == 1
 #define FRAME_CACULATION \
@@ -70,7 +70,7 @@ using namespace NDEngine;
 
 void NDBaseDirector::mainLoop(void)
 {
-	if (NDDebugOpt::getMainLoopEnabled())
+	if (true)
 	{
 		this->OnIdle();
 

@@ -13,6 +13,7 @@
 #include "NDDirector.h"
 #include "GameScene.h"
 #include "NDUtility.h"
+#include "NDDebugOpt.h"
 
 using namespace NDEngine;
 

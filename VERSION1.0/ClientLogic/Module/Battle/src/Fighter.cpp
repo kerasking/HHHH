@@ -20,6 +20,7 @@
 #include <sstream>
 #include "CPet.h"
 #include "NDDirector.h"
+#include "NDDebugOpt.h"
 using namespace NDEngine;
 
 //IMPLEMENT_CLASS(Fighter,NDBaseFighter);

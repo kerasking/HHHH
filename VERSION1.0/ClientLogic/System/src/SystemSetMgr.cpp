@@ -11,8 +11,9 @@
 //#import "NDUISynLayer.h"
 #include "SqliteDBMgr.h"
 #include "globaldef.h"
+#include "NDDebugOpt.h"
 
-//using namespace NDEngine;
+using namespace NDEngine;
 
 SystemSetMgr::SystemSetMgr() {
 
@@ -24,9 +25,11 @@ SystemSetMgr::~SystemSetMgr() {
 
 bool SystemSetMgr::initSystemSetTable()
 {
-	if(!CSqliteDBMgr::shareInstance().IsExistTable("system_set")){
+	if(!CSqliteDBMgr::shareInstance().IsExistTable("system_set"))
+	{
         char *sql = "CREATE TABLE system_set(name text primary key,value1 integer,value2 text)";
-        if(!CSqliteDBMgr::shareInstance().ExcuteSql(sql)){
+        if(!CSqliteDBMgr::shareInstance().ExcuteSql(sql))
+		{
             NDLog("创建系统设置表失败!");
             return false;
         }
@@ -39,15 +42,15 @@ bool SystemSetMgr::Set(const char *key,int value)
 	{
 		char *sql = "REPLACE INTO system_set(name,value1,value2) VALUES";
 		
-		char str_value[256]="";
+		char str_value[256] = "";
 		
-		std::string str="";
+		std::string str = "";
 
 		sprintf(str_value,"(\'%s\',%d,\'%s\');",key,value,str.c_str());
 		
 		
 		std::string strSql = sql;
-		strSql+=str_value;
+		strSql += str_value;
 		
 		if(!CSqliteDBMgr::shareInstance().ExcuteSql(strSql.c_str())){
 			NDLog("系统设置失败!%s",key);

@@ -1,4 +1,6 @@
 #include "GameLauncher.h"
+#include "globaldef.h"
+#include "NDDebugOpt.h"
 
 GameLauncher::GameLauncher()
 {
@@ -12,7 +14,9 @@ GameLauncher::~GameLauncher()
 
 bool GameLauncher::BeginGame()
 {
+	NDLog("Entry BeginGame()");
 	m_pkGameApp = new NDGameApplication;
+	NDLog("m_pkGameApp value = %d",(int)m_pkGameApp);
 
 	return true;
 }

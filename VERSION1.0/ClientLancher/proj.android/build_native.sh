@@ -41,16 +41,7 @@ fi
 mkdir $HELLOWORLD_ROOT/assets
 
 # copy resources
-for file in $CLIENT_LOCAL/bin/*
-do
-    if [ -d $file ]; then
-        cp -rf $file $HELLOWORLD_ROOT/assets
-    fi
 
-    if [ -f $file ]; then
-        cp $file $HELLOWORLD_ROOT/assets
-    fi
-done
 
 if [[ $buildexternalsfromsource ]]; then
     echo "Building external dependencies from source"
