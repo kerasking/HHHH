@@ -341,4 +341,9 @@ namespace NDEngine
 	{
 		return NDDebugOpt::getDrawUIEnabled();
 	}
+
+	CCRect NDUINode::GetSrcRectCache(void)
+	{
+		return m_kScrRectCache;
+	}
 }

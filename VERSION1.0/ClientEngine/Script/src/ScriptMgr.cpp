@@ -119,7 +119,7 @@ char filename[256];
 	char filename[256];
 	memset(filename, 0, sizeof(filename));
 	snprintf(filename, sizeof(filename), "%s/name.txt", NDPath::GetLogPath().c_str());
-	m_fTest = fopen(filename, "w");
+	m_fTest = fopen(filename, "w+");
 }
 
 ScriptMgr::~ScriptMgr()

@@ -867,7 +867,7 @@ function p.SetPlayerInfo(info)
 
     local layer = p.GetParent();
     local num = table.getn(p.tbMsgInfo);
-    LogInfo("tzq Transport.SetPlayerInfo info = %s, num = %d", info, num);
+    LogInfo("Transport.SetPlayerInfo info = %s, num = %d", info, num);
     if num < p.TotalMsgNum then
         table.insert(p.tbMsgInfo, info);
     else
@@ -876,7 +876,7 @@ function p.SetPlayerInfo(info)
     end
     
     for i, v in pairs(p.tbMsgInfo) do
-        LogInfo("tzq i = %d, info = %s", i, v);
+        LogInfo("i = %d, info = %s", i, v);
     end
     
     p.RefreshMsg();
@@ -901,7 +901,7 @@ function p.RefreshMsg()
     
     --设置当前要显示的说明信息
     for i, v in pairs(p.tbMsgInfo) do
-        LogInfo("tzq refreshMsg i = %d  info = %s", i, v); 
+        LogInfo("refreshMsg i = %d  info = %s", i, v); 
         p.AddMsgViewItem(ListContainer, i, p.ImmutableCtr.List.viewIni);
     end
     
@@ -935,7 +935,7 @@ function p.AddMsgViewItem(container, nId, uiFile)
     end
     
     uiLoad:Load(uiFile, view, nil, 0, 0);
-    LogInfo("tzq p.AddMsgViewItem uiFile = %s", uiFile); 
+    LogInfo("p.AddMsgViewItem uiFile = %s", uiFile); 
     SetLabel(view, p.ImmutableCtr.List.txtInfo, p.tbMsgInfo[nId]);
 end
 

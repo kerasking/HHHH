@@ -42,7 +42,7 @@ end
 
 -----------------------------初始化数据---------------------------------
 function p.RefreshUI()
-    LogInfo("tzq RefreshUI begin"); 
+    LogInfo("RefreshUI begin"); 
 
     local layer = p.GetParent();
     local ListContainer  = GetScrollViewContainer(layer, p.CtrId.listId);
@@ -55,11 +55,11 @@ function p.RefreshUI()
     ListContainer:EnableScrollBar(true);
     ListContainer:RemoveAllView();
     
-    LogInfo("tzq RefreshUI show"); 
+    LogInfo("RefreshUI show"); 
     --设置当前要显示的说明信息
     local nPlayerId = GetPlayerId();  
     for i, v in pairs(Transport.tbOtherUserInfo) do
-        LogInfo("tzq p.RefreshUI i = %d", i);   
+        LogInfo("p.RefreshUI i = %d", i);   
         if v.nPlayerId ~= nPlayerId then
             p.AddViewItem(ListContainer, v.nPlayerId, "transport/Transport_playerList_L.ini", v);
         end
@@ -89,7 +89,7 @@ function p.AddViewItem(container, nId, uiFile, info)
         return false;
     end
     
-    LogInfo("tzq p.AddViewItem uiFile = %s", uiFile); 
+    LogInfo("p.AddViewItem uiFile = %s", uiFile); 
     uiLoad:Load(uiFile, view, p.OnUIEvent, 0, 0);
     
     p.refreshViewItem(view, nId, info);

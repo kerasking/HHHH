@@ -104,10 +104,9 @@ namespace NDEngine
 		void SetBoundScale(int nScale);
 	public:		
 		void draw(); override
-
+	
 	protected:
 		override bool isDrawEnabled();
-
 	private:		
 		bool m_bVisibled;
 		CCRect m_kFrameRect;
@@ -120,6 +119,7 @@ namespace NDEngine
 		float m_fBoundScale;
 		
 	public:
+		CCRect GetSrcRectCache(void);
 		void SetTargetDelegate(NDUITargetDelegate* targetDelegate);
 		NDUITargetDelegate* GetTargetDelegate();
 		

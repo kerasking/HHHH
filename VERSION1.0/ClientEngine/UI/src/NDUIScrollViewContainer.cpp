@@ -1202,7 +1202,10 @@ void NDUIScrollViewContainer::DrawScrollBar()
 		{
 			//return;
 		}
-		CCRect rectself;/*	= m_scrRect;*/
+		CCRect rectself = GetSrcRectCache();
+		//rectself.origin = m_kScrRectCache.origin;
+		//rectself.size = m_kScrRectCache.size;
+
 		CCRect rectClient	= m_pClientUINode->GetFrameRect();
 		CCRect rect			= CCRectZero;
 		CCSize sizePic		= m_picScroll->GetSize();

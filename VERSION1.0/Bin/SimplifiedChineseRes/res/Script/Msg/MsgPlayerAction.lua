@@ -64,7 +64,7 @@ end
 function p.MsgGetPlayerActionInfo(netdatas)
     
     local nPreSerId, nCurSerId = Login_ServerUI.GetPreCurSerId();
-    LogInfo("tzq p.MsgGetPlayerActionInfo nPreSerId= %d, nCurSerId = %d begin", nPreSerId, nCurSerId);   
+    LogInfo("p.MsgGetPlayerActionInfo nPreSerId= %d, nCurSerId = %d begin", nPreSerId, nCurSerId);   
     if nPreSerId ~= nCurSerId then
         for i, v in pairs(p.PLAYER_ACTION_STATION) do
             v.IsExit = 0;   
