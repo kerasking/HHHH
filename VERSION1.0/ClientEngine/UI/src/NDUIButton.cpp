@@ -441,7 +441,7 @@ void NDUIButton::draw()
 	}
 
 	//draw focus 
-	if (uiLayer->GetFocus() == this)
+	if (uiLayer->GetFocus() == this || IsTabSel())
 	{
 		drawFocus();
 	}

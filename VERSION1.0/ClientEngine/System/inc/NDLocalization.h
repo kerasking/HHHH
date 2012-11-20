@@ -38,7 +38,10 @@ inline const char* __NDLOCAL_INNER_C_STRING(const char* szModuleName, const char
 	
 	std::string str		= szModuleName;
 	str					+= szKeyName; 
-	return NDLocalXmlString::GetSingleton().GetCString(str.c_str()).c_str();
+
+	std::string strRet = NDLocalXmlString::GetSingleton().GetCString(str.c_str());
+	return strRet.c_str();
+	//return NDLocalXmlString::GetSingleton().GetCString(str.c_str()).c_str();
 }
 
 #define _NDLOCAL_INNER_NS_STRING( NSKeyFileName, NSKeyName) \

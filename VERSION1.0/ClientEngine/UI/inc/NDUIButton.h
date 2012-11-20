@@ -76,9 +76,9 @@ public:
 	
 	void SetImageLua(NDPicture* pic);
 //		
-//		函数：SetImage
+//		函数：SetCombineImage
 //		作用：设置按钮的图片(组合)
-//		参数：pic图片(组合)，useCustomRect图片是否显示在自定义范围（相对于按钮的显示范围），customRect自定义范围
+//		参数：combinepic图片(组合)，useCustomRect图片是否显示在自定义范围（相对于按钮的显示范围），customRect自定义范围
 //		返回值：无
 	void SetCombineImage(NDCombinePicture* combinepic, bool useCustomRect = false, CCRect customRect = CCRectZero, bool clearPicOnFree = false);
 //		
@@ -93,7 +93,7 @@ public:
 	
 	void SetTouchDownImageLua(NDPicture* pic);
 //		
-//		函数：SetTouchDownImage
+//		函数：SetTouchDownCombineImage
 //		作用：设置按钮被按下时的图片(组合)，调用该方法将使得SetTouchDownColor方法失效
 //		参数：pic图片，useCustomRect图片是否显示在自定义范围（相对于按钮的显示范围），customRect自定义范围
 //		返回值：无

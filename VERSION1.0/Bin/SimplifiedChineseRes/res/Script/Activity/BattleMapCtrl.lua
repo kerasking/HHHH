@@ -67,11 +67,11 @@ end
 function p.OnUIEvent(uiNode, uiEventType, param)
 
     local tag = uiNode:GetTag();
-    LogInfo("p.OnUIEvent tag = %d, uiEventType = %d", tag, uiEventType);  
+    LogInfo("tzq p.OnUIEvent tag = %d, uiEventType = %d", tag, uiEventType);  
     
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
         if CTRL_BTN_1 == tag then                 --速战速决            
-            LogInfo("hit in suzhansujue");  
+            LogInfo("tzq hit in suzhansujue");  
             FinishBattle();      
 			--CloseUI(NMAINSCENECHILDTAG.DragonTactic);
         end  

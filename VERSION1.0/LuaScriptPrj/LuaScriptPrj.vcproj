@@ -1098,6 +1098,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\lyol.strings"
+				>
+			</File>
+			<File
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\UserState\UserStateUI.lua"
 				>
 			</File>

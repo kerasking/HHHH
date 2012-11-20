@@ -541,9 +541,9 @@ function p.TacticRefresh()
       p.AddViewItem(ListContainer, i, "achieve_1_L.ini");
     end
 
-    LogInfo("begin focusindex = %d", p.TabInfo.TacticTabInfo.focusIndex); 
+    LogInfo("tzq begin focusindex = %d", p.TabInfo.TacticTabInfo.focusIndex); 
     local CurFocus  = p.TacticSetCurFocus();
-    LogInfo("sec CurFocus = %d", CurFocus); 
+    LogInfo("tzq sec CurFocus = %d", CurFocus); 
         
     p.SetListFocus(CurFocus); 
     
@@ -869,7 +869,7 @@ function p.DTStarTip()
 		local szSprFile		= "gongn01.spr";
 		
 		pSpriteNode:ChangeSprite( szAniPath .. szSprFile );
-		pSpriteNode:SetFrameRect( CGRectMake(-btnWidth*0.1,0,btnWidth,btnHeight) );
+		pSpriteNode:SetFrameRect( CGRectMake(-btnWidth*0.2,0,btnWidth,btnHeight) );
 		pSpriteNode:SetScale(0.7);
 		
 		pSpriteNode:SetTag( 99 );

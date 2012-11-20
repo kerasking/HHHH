@@ -171,8 +171,6 @@ void ScriptMgr::WriteLog(const char* fmt, ...)
 
 void ScriptMgr::DebugOutPut(const char* fmt, ...)
 {
-#if 0
-
 	if (!fmt || !m_fDebugOutPut)
 	{
 		return;
@@ -182,10 +180,10 @@ void ScriptMgr::DebugOutPut(const char* fmt, ...)
 	va_start(argumentList, fmt);
 	::vsprintf( buffer, fmt, argumentList);
 	va_end(argumentList);
+	
     //NDLog(buffer);
     printf(buffer);
     printf("\n");
-#endif
 }
 
 //using namespace LuaPlus;
