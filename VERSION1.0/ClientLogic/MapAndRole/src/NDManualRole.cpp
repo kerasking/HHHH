@@ -115,6 +115,8 @@ m_nState(0)
 	m_nMountType	= 0;
 	m_nLookface		= 0;
 	m_nQuality = -1;
+
+	m_bShowLabel = true;
 }
 
 NDManualRole::~NDManualRole()
@@ -1075,10 +1077,15 @@ void NDManualRole::SetAction(bool bMove, bool bIgnoreFighting/*=false*/)
 		else 
 		{
 			NDPlayer& player = NDPlayer::defaultHero();
-			if(&player == this)
+			if (&player == this 
+				|| 0 == strcmp( player.m_strName.c_str(), this->m_strName.c_str() )) //hum: no unique id !?
+			{
 				AnimationListObj.standAction(TYPE_MANUALROLE, this, m_bFaceRight);
+			}
 			else
+			{
 				this->standAction(true);
+			}
 		}
 	}
 }
@@ -1949,6 +1956,7 @@ bool NDManualRole::CheckToLastPos()
 	return bRet;
 }
 
+//@label
 void NDManualRole::InitNameLable(NDUILabel*& label)
 {
 	if (!label) 
@@ -1963,13 +1971,17 @@ void NDManualRole::InitNameLable(NDUILabel*& label)
 	}
 }
 
+//@label
 void NDManualRole::DrawLable(NDUILabel* label, bool bDraw)
 { 
 	if (bDraw && label) label->draw();
 }
 
+//@label
 void NDManualRole::DrawNameLabel(bool bDraw)
 {
+	if (!m_bShowLabel) return;
+
 	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 	if (!scene) return;
 

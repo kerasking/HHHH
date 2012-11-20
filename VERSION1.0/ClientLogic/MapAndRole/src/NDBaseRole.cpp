@@ -1562,24 +1562,19 @@ void NDBaseRole::debugDraw()
 {
 	if (!NDDebugOpt::getDrawDebugEnabled()) return;
 
-	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
-	float offset = 1.0f * fScale;
+	drawCoord( getFootPos() );
+	drawCoord( getHeadPos() );
+}
 
-	CCPoint posFoot = this->getFootPos();
-	CCPoint posHead = this->getHeadPos();
+// for debug purpose.
+// if bRightUp is false, the coord goes right-down.
+void NDBaseRole::drawCoord( const CCPoint& posScreen, bool bRightUp /*= true*/, const float ofs /*= 10.f*/ )
+{
+	CCPoint pos = posScreen;
+	ConvertUtil::convertToPointCoord( pos );
+	pos = SCREEN2GL( pos );
 
-	ConvertUtil::convertToPointCoord( posFoot );
-	ConvertUtil::convertToPointCoord( posHead );
-
-	posFoot = SCREEN2GL(posFoot);
-	posHead = SCREEN2GL(posHead);
-
-	const float ofs = 10.f;
-	ccDrawColor4F( 0,0,1,1 );
-
-	ccDrawLine( posFoot, ccpAdd( posFoot, ccp( ofs, 0 )));
-	ccDrawLine( posFoot, ccpAdd( posFoot, ccp( 0, ofs )));
-
-	ccDrawLine( posHead, ccpAdd( posHead, ccp( ofs, 0 )));
-	ccDrawLine( posHead, ccpAdd( posHead, ccp( 0, ofs )));
+	ccDrawColor4F( 0,0,1,1 );//blue
+	ccDrawLine( pos, ccpAdd( pos, ccp( ofs, 0 )));
+	ccDrawLine( pos, ccpAdd( pos, ccp( 0,ofs * (bRightUp?1:-1))));
 }

@@ -81,6 +81,37 @@ void CUIRoleNode::SetEquip(int nEquipId, int nQuality)
 	m_pRole->SetEquipment(nEquipId, nQuality);
 }
 
+//@fix
+CCPoint& CUIRoleNode::AdjustPos( CCPoint& pos )
+{
+	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
+
+	if (m_pRole->m_nRideStatus == 1)
+	{
+		if (m_pRole->m_bFaceRight)
+		{
+			pos = ccpAdd( pos, ccp( fScale * 38, fScale * (-20) ));
+		}
+		else
+		{
+			pos = ccpAdd( pos, ccp( fScale * 13, fScale * (-20) ));
+		}
+	}
+	else
+	{
+		if (m_pRole->m_bFaceRight)
+		{
+
+		}
+		else
+		{
+
+		}
+	}
+
+	return pos;
+}
+
 void CUIRoleNode::draw()
 {
 	if (!this->IsVisibled())
@@ -99,12 +130,13 @@ void CUIRoleNode::draw()
 	CGFloat w = m_pRole->GetWidth();
 	CGFloat h = m_pRole->GetHeight();
 	CCRect scrRect	= this->GetScreenRect();
-	CCPoint pos		= ccpAdd(scrRect.origin, 
-							 ccp((scrRect.size.width - w) / 2 + m_pRole->getGravityX(),
-								 (scrRect.size.height - h) / 2 + m_pRole->getGravityY()) );
-	
+	CCPoint pos		= ccpAdd(scrRect.origin, ccp(0,scrRect.size.height));
+
+	AdjustPos( pos );
 	m_pRole->SetPositionEx(pos);
 	m_pRole->RunAnimation(true);
+
+	//NDBaseRole::drawCoord( pos, false );
 }
 
 void CUIRoleNode::SetMove(bool bSet, bool directRight/*=true*/)
@@ -119,5 +151,10 @@ void CUIRoleNode::SetMove(bool bSet, bool directRight/*=true*/)
 	if (m_pRole->GetRidePet())
 	{
 		m_pRole->GetRidePet()->SetSpriteDir(directRight ? 0 : 2);
+	}
+
+	if (!bSet)
+	{
+		m_pRole->stopMoving();
 	}
 }

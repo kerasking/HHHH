@@ -284,6 +284,12 @@ protected:
 	virtual CCPoint getFootPos(); //in screen pixels.
 	virtual CCPoint getHeadPos(); //in screen pixels.
 
+public: //@label
+	void enableShowLabel( bool flag ) { m_bShowLabel = flag; }
+	bool isShowLabel() { return m_bShowLabel; }
+private:
+	bool m_bShowLabel;
+
 public:
 	void SetTeamToLastPos();
 	//++Guosen 2012.7.13

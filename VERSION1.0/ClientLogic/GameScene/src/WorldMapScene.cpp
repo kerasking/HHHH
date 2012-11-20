@@ -18,6 +18,7 @@
 #include "NDPath.h"
 #include <stdlib.h>
 #include "CCTextureCache.h"
+#include "NDDebugOpt.h"
 
 #include "CCPointExtension.h"
 #include "ScriptGameLogic.h"
@@ -51,6 +52,9 @@ WorldMapLayer::WorldMapLayer()
 
 	m_tmStartMoving.tv_sec = 0;
 	m_tmStartMoving.tv_usec = 0;
+
+	m_idMapCached = 0;
+	m_bArrive = false;
 }
 
 WorldMapLayer::~WorldMapLayer()
@@ -95,14 +99,8 @@ void WorldMapLayer::Initialization(int nMapId)
 		NDTile* pkTile = new NDTile;
 		pkTile->setTexture(pkNode->getTexture());
 
-#if 1 //@check
  		int iWidth = pkNode->getTexture()->getContentSizeInPixels().width;
  		int iHeight = pkNode->getTexture()->getContentSizeInPixels().height;
-#else
-		CCSize texSize = ConvertUtil::getTextureSizeInPoints( *pkNode->getTexture() );
-		int iWidth = texSize.width;
-		int iHeight = texSize.height;
-#endif
 		
 		pkTile->setCutRect(CCRectMake(0, 0, iWidth, iHeight));
 		int iX = pkNode->getX();
@@ -153,46 +151,15 @@ void WorldMapLayer::Initialization(int nMapId)
  		NDPlayer& hero = NDPlayer::defaultHero();
 		if (m_roleNode->GetRole())
 		{
+			m_roleNode->GetRole()->m_strName = hero.m_strName;
+			m_roleNode->GetRole()->enableShowLabel( false );
 			m_roleNode->GetRole()->ChangeModelWithMount( hero.m_nRideStatus, hero.m_nMountType );
 			AddChild(m_roleNode);
 		}
 	}
 	
-	ShowRoleAtPlace(nMapId);
+	SetRoleAtPlace(nMapId);
 	SetCenterAtPos(ccp(winsize.width / 2, winsize.height / 2));
-
-/*	m_timer.SetTimer(this, TAG_TIMER_MOVE, 1.0/24.0);*/
-
-// 	NDUILabel *tmpLabel = new NDUILabel();
-// 	tmpLabel->Initialization();
-// 	tmpLabel->SetText("能不能显示出来呢？");
-// 	tmpLabel->SetFontSize(18);
-// 	tmpLabel->SetFrameRect(CCRectMake(200, 200, 300,100));
-// 	tmpLabel->SetTextAlignment(LabelTextAlignmentLeft);
-// 	AddChild(tmpLabel);
-
-// 	CUIRoleNode *tmpRoleNode = new CUIRoleNode;
-// 	tmpRoleNode->Initialization();
-// 	tmpRoleNode->ChangeLookFace(11200003);
-// 	tmpRoleNode->SetFrameRect(CCRectMake(200, 200, 300,150));
-// 	m_roleNode->SetVisible(true);
-// 	AddChild(tmpRoleNode);
-
-// 	NDUINode *tmpUINode = new NDUINode();
-// 	tmpUINode->Initialization();
-// 	tmpUINode->SetFrameRect(CCRectMake(0, 0, winsize.width, winsize.height));
-// 	AddChild(tmpUINode);
-
-// 	NDManualRole *tmpRole = new NDManualRole;
-// 	tmpRole->m_nID = 103;
-// 	tmpRole->Initialization(12300006, true);
-// 	tmpRole->SetPositionEx(ccp(200, 200));
-// 	AddChild(tmpRole);
-/*	tmpUINode->AddChild(tmpRole);*/
-
-// 	NDScene *gameScene = NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
-// 	NDLayer *layer = (NDLayer *)gameScene->GetChild(MAPLAYER_TAG);
-// 	layer->AddChild(tmpRole);
 }
 
 void WorldMapLayer::draw()
@@ -236,6 +203,8 @@ void WorldMapLayer::draw()
 			tile->draw();
 		}
 	}
+
+	debugDraw();
 }
 
 void WorldMapLayer::SetFilter(ID_VEC idVec)
@@ -312,82 +281,54 @@ int WorldMapLayer::GetPlaceIdByIndex(int nIndex)
 	return 0;
 }
 
+//到达了
+void WorldMapLayer::onArrive()
+{	
+	m_timer.KillTimer(this, TAG_TIMER_MOVE);
+
+	SetMove(false);
+
+	if (m_roleNode && m_roleNode->GetRole())
+	{
+		m_roleNode->GetRole()->stopMoving(false);
+	}
+
+	// todo move
+	int mapid = m_nTargetMapId;
+
+	if(mapid==1 || mapid == 2)
+		NDMapMgrObj.WorldMapSwitch( m_nTargetMapId );
+	else
+		ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "",mapid);
+}
+
 void WorldMapLayer::OnTimer(OBJID tag)
 {
-// 	int mapid = GetTargetMapId();
+// 	int mapid = m_nTargetMapId;
 // 	ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "",mapid);
 
-	if (tag != TAG_TIMER_MOVE)
+	if (tag == TAG_TIMER_MOVE)
+	{
+		// check arrive
+		if (m_bArrive || isTimeout())
+		{
+			m_bArrive = true;
+			this->onArrive();
+		}
+		
+		// check move
+		if (!m_bArrive && !isTimeout())
+		{
+			this->DoMove();
+		}
+	}
+	else
 	{
 		NDUILayer::OnTimer(tag);
 	}
-	else if (isTimeout() || this->DoMove()) //timeout or moving arrive?
-	{
-		WriteCon( "[WorldMapLayer] OnTimer, IsMoveArrive()=true\r\n" );
-		
-		if (m_roleNode && m_roleNode->GetRole())
-		{
-			m_roleNode->GetRole()->stopMoving(false);
-		}
-
-		m_timer.KillTimer(this, TAG_TIMER_MOVE);
-		SetMove(false);
-
-		// todo move
-		int mapid = GetTargetMapId();
-
-		if(mapid==1 || mapid == 2)
-			NDMapMgrObj.WorldMapSwitch(GetTargetMapId());
-		else
-			ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "",mapid);
-	}
-
-// #if 0
-// 		if (IsMoveArrive())
-// 		{
-// 			WriteCon( "[WorldMapLayer] OnTimer, IsMoveArrive()=true\r\n" );
-// 
-// 			m_timer.KillTimer(this, TAG_TIMER_MOVE);
-// 			SetMove(false);
-// 
-// 			// todo move
-// 			int mapid = GetTargetMapId();
-// 
-// 			if(mapid==1 || mapid == 2)
-// 				//NDMapMgrObj.WorldMapSwitch(GetTargetMapId());
-// 				;
-// 			else
-// 				ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "",mapid);
-// 		}
-// 		else if (m_roleNode)
-// 		{
-// 			CCRect rectRole = m_roleNode->GetFrameRect();
-// 			//float	fScaleFactor	= NDDirector::DefaultDirector()->GetScaleFactor(); //@check
-// 			CCPoint posRole = rectRole.origin;
-// 			CCPoint posTarget = GetTarget();
-// 
-// 			float fDiffX = posTarget.x - posRole.x;
-// 			float fDiffY = posTarget.y - posRole.y;
-// 			float fDis = sqrt(pow(fDiffX, 2) + pow(fDiffY, 2));
-// 			float fStep		= MOVE_STEP; //* fScaleFactor;
-// 
-// 			if (fDis < fStep)
-// 			{
-// 				rectRole.origin = posTarget;
-// 			}
-// 			else
-// 			{
-// 				float fK = fStep / fDis;
-// 				float fX = fK * (fDiffX);
-// 				float fY = fK * (fDiffY);
-// 				rectRole.origin = ccpAdd(rectRole.origin, ccp(fX, fY));
-// 			}
-// 			m_roleNode->SetFrameRect(rectRole);
-// 		}
-// #endif
 }
 
-void WorldMapLayer::ShowRoleAtPlace(int placeId)
+void WorldMapLayer::SetRoleAtPlace(int placeId)
 {
 	PlaceNode* node = GetPlaceNodeWithId(placeId);
 	if (!node)
@@ -397,14 +338,7 @@ void WorldMapLayer::ShowRoleAtPlace(int placeId)
 	}
 	if (node && m_roleNode && node->getTexture())
 	{
-		/*
-		 float fScaleFactor	= NDDirector::DefaultDirector()->GetScaleFactor();
-		 CCPoint pos = CCPointMake(node->getX() + node->texture.contentSizeInPixels.width / 2,
-		 node->getY() - node->texture.contentSizeInPixels.height);
-		 CCRect rect	= m_roleNode->GetFrameRect();
-		 rect.origin	= ConvertToScreenPoint(pos);
-		 rect.origin = ccpSub(rect.origin, ccp(fScaleFactor * 75, fScaleFactor * 150));
-		 */
+		m_idMapCached = placeId;
 		float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
 		CCRect rect = m_roleNode->GetFrameRect();
 		rect.origin = GetPlaceIdScreenPos(placeId);
@@ -520,6 +454,8 @@ void WorldMapLayer::OnButtonClick(NDUIButton* button)
 
 void WorldMapLayer::Goto( int nMapId )
 {
+	m_bArrive = false;
+
 	PlaceNode* node = GetPlaceNodeWithId(nMapId);
 	if (!node)
 	{
@@ -527,13 +463,18 @@ void WorldMapLayer::Goto( int nMapId )
 	}
 	if (node && m_roleNode && m_curBtn != node)
 	{
-		CCPoint pos = GetPlaceIdScreenPos(nMapId);
+		CCPoint posTarget = GetTargetPos(nMapId);
+		
 		SetMove(true);
-		SetRoleDirect(pos.x > m_roleNode->GetFrameRect().origin.x);
-		SetTarget(pos);
-		SetTargetMapId(node->getPlaceId());
+		
+		SetRoleDirect(posTarget.x > m_roleNode->GetFrameRect().origin.x);
+		
+		m_posTarget = posTarget;
+		
+		m_nTargetMapId = node->getPlaceId();
 
 		m_timer.SetTimer(this, TAG_TIMER_MOVE, 1.0f/24);//@tune
+
 		m_curBtn = node;
 
 		CCTime::gettimeofdayCocos2d(&m_tmStartMoving, NULL);
@@ -554,60 +495,16 @@ void WorldMapLayer::SetRoleDirect(bool directRight)
 {
 	if (m_roleNode)
 	{
-		m_roleNode->SetMove(IsMoving(), directRight);
+		m_roleNode->SetMove( m_bInMoving, directRight );
 	}
 }
 
-bool WorldMapLayer::IsMoving()
+CCPoint WorldMapLayer::GetTargetPos(int placeId)
 {
-	return m_bInMoving;
+	return GetPlaceIdScreenPos(placeId);
 }
 
-bool WorldMapLayer::IsMoveArrive()
-{
-	if (!IsMoving())
-	{
-		return true;
-	}
-
-	if (!m_roleNode)
-	{
-		return true;
-	}
-
-	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
-
-	CCPoint posRole = m_roleNode->GetFrameRect().origin;
-
-	if (fabs(posRole.x - m_posTarget.x) < REACH_X * fScaleFactor
-			&& fabs(posRole.y - m_posTarget.y) < REACH_Y * fScaleFactor)
-	{
-		return true;
-	}
-
-	return false;
-}
-
-void WorldMapLayer::SetTarget(CCPoint pos)
-{
-	m_posTarget = pos;
-}
-
-CCPoint WorldMapLayer::GetTarget()
-{
-	return m_posTarget;
-}
-
-void WorldMapLayer::SetTargetMapId(int nMapId)
-{
-	m_nTargetMapId = nMapId;
-}
-
-int WorldMapLayer::GetTargetMapId()
-{
-	return m_nTargetMapId;
-}
-
+//备注：这个返回的是tile的左上角屏幕像素坐标
 CCPoint WorldMapLayer::GetPlaceIdScreenPos(int placeId)
 {
 	CCPoint posRet = CCPointZero;
@@ -620,14 +517,7 @@ CCPoint WorldMapLayer::GetPlaceIdScreenPos(int placeId)
 	}
 	if (node && m_roleNode && node->getTexture())
 	{
-		float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
-		int iStartX = node->getX();
-		int iStartY = node->getY();
-		int iWidth  = node->getTexture()->getContentSizeInPixels().width;
-		int iHeight = node->getTexture()->getContentSizeInPixels().height;
-
-		CCPoint pos = ccpAdd( ccp(iStartX, iStartY), ccp(iWidth*1.0/4.0, -iHeight*1.0/8.0) ); //@tune
-		posRet = pos;
+		return ccp( node->getX(), node->getY() );
 	}
 
 	return posRet;
@@ -639,12 +529,18 @@ bool WorldMapLayer::DoMove()
 	if (!m_roleNode) return false;
 
 	CCRect rectRole = m_roleNode->GetFrameRect();
+
 	CCPoint posRole = rectRole.origin;
-	CCPoint posTarget = GetTarget();
+
+	CCPoint posTarget = m_posTarget;
 
 	CCPoint posNext = CalcNextPoint( posRole, posTarget );
-	bool bArrive = (pow(posNext.x - posTarget.x, 2) 
-					+ pow(posNext.y - posTarget.y, 2) < MOVE_STEP*MOVE_STEP);
+
+	const float error = 2 * MOVE_STEP;
+	
+	m_bArrive = pow(posNext.x - posTarget.x, 2) 
+						+ pow(posNext.y - posTarget.y, 2) 
+							< pow(error,2);
 
 	rectRole = CCRectMake( posNext.x,
 							posNext.y,
@@ -652,7 +548,11 @@ bool WorldMapLayer::DoMove()
 							rectRole.size.height );
 
 	m_roleNode->SetFrameRect(rectRole);
-	return bArrive;
+
+	if (m_bArrive)
+		WriteCon( "[WorldMapLayer] OnTimer, IsMoveArrive()=true\r\n" );
+
+	return m_bArrive;
 }
 
 bool WorldMapLayer::isTimeout()
@@ -677,4 +577,13 @@ CCPoint WorldMapLayer::CalcNextPoint( const CCPoint& posStart, const CCPoint& po
 	kmVec2 vNext;
 	kmVec2Add( &vNext, &vStart, &vDelta );
 	return ccp(vNext.x, vNext.y);
+}
+
+void WorldMapLayer::debugDraw()
+{
+	if (!NDDebugOpt::getDrawDebugEnabled()) return;
+	if (0 == m_idMapCached || !m_roleNode) return;
+
+	CCPoint pos = GetPlaceIdScreenPos( m_idMapCached );
+	NDBaseRole::drawCoord( pos, false );
 }
