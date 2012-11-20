@@ -1031,7 +1031,7 @@ void CUIScrollViewContainerM::draw() //  m_fScrollDistance += speed; only to zer
 {
     NDUIScrollContainer::draw();
   
-    this->DrawScrollBar(m_pClientUINodes[m_unBeginIndex]);
+  //  this->DrawScrollBar(m_pClientUINodes[m_unBeginIndex]);
     
     if(m_fScrollDistance==0){
         return;
