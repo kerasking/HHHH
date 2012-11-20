@@ -484,7 +484,7 @@ void NDMapData::decode(FILE* pkStream)
 
 		if (m_pkObstacles->size() > nIndex)
 		{
-			(*m_pkObstacles)[nIndex] = true;	//false 临时性的都改为true 郭浩;
+			(*m_pkObstacles)[nIndex] = false;	
 		}
 	}
 	//------------------->切屏
