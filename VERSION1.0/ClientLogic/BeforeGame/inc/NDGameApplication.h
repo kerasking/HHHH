@@ -14,7 +14,7 @@
 #endif
 
 using namespace cocos2d;
-static NDBaseDirector s_NDBaseDirector;
+//static NDBaseDirector s_NDBaseDirector;
 NS_NDENGINE_BGN
 
 class NDGameApplication:

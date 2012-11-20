@@ -2122,8 +2122,8 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 	int newY = posHead.y - 1.0 * fontSize.height;
 
 	float offset = 1.0f * fScale;
-	lable[0]->SetFrameRect(CCRectMake(newX + offset, newY, fontSize.width, fontSize.height));
-	lable[1]->SetFrameRect(CCRectMake(newX, newY, fontSize.width, fontSize.height));
+	lable[0]->SetFrameRect(CCRectMake(newX, newY, fontSize.width, fontSize.height));//ио
+	lable[1]->SetFrameRect(CCRectMake(newX + offset, newY + offset, fontSize.width, fontSize.height));//╣в
 
 // 	if(m_nQuality>-1){
 // 		ccColor4B cColor4 = ScriptMgrObj.excuteLuaFuncRetColor4("GetColor", "Item",m_nQuality);
@@ -2135,7 +2135,7 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 	lable[1]->SetText(text.c_str());
 
 	lable[0]->SetFontColor(color1);
-/*	lable[1]->SetFontColor(color2);*/
+	lable[1]->SetFontColor(color2);
 }
 
 void NDManualRole::SetLableName( const std::string& text, int x, int y, bool isEnemy)

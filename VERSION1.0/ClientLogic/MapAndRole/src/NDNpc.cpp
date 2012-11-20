@@ -611,8 +611,8 @@ void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text,
 
 	lable[1]->SetFrameRect(
 			CCRectMake(
-					x - (kSize.width / 2) + 1,
-					y + kSizeWin.height - kSizeMap.height, 
+					x - (kSize.width / 2) + 1*fScaleFactor, //with 1 pixel offset
+					y + kSizeWin.height - kSizeMap.height + 1*fScaleFactor, //with 1 pixel offset
 					kSizeWin.width,
 					30 * fScaleFactor
 					));
