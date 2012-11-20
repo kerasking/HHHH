@@ -27,7 +27,7 @@ public:
 	~NDLocalXmlString();
 	
 	//NSString *GetString(NSString nsKeyName);
-	std::string GetCString(const char* szKeyName);
+	const char* GetCString(const char* szKeyName);
 private:
 	NDLocalXmlString();
 	

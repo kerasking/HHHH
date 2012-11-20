@@ -25,7 +25,7 @@
 #include "UICheckBox.h"
 #include "UIRadioButton.h"
 #include "UIExp.h"
-//#include "UIEdit.h"
+#include "UIEdit.h"
 #include "UISpriteNode.h"
 #include "NDPath.h"
 #include "NDWideString.h"
@@ -462,7 +462,7 @@ public:
 		return itemBtn;
 	}
 };
-/*
+
 template<>
 class CtrolTrait<CUIEdit> : public CtrolBase
 {
@@ -474,12 +474,17 @@ public:
 		CUIEdit *edit = new CUIEdit;
 		edit->Initialization();
 		edit->SetFrameRect(rect);
+		edit->SetTextSize(info.nTextFontSize);
+		edit->SetTextColor(INTCOLORTOCCC4(info.nTextFontColor));
 		edit->SetImage(GetNormalPicture());
-		edit->SetFocusImage(GetSelectedPicture());
+		if(!info.strSelectedFile.empty())
+		{
+			edit->SetFocusImage(GetSelectedPicture());
+		}
 		return edit;
 	}
 };
-*/
+
 template<>
 class CtrolTrait<CUIExp> : public CtrolBase
 {
@@ -626,5 +631,5 @@ CtrolHelpDeclare(MY_CONTROL_TYPE_HYPER_TEXT, CUIHyperlinkText)
 CtrolHelpDeclare(MY_CONTROL_TYPE_HYPER_TEXT_BUTTON, CUIHyperlinkButton)
 CtrolHelpDeclare(MY_CONTROL_TYPE_ITEM_BUTTON, CUIItemButton)
 CtrolHelpDeclare(MY_CONTROL_TYPE_EXP, CUIExp)
-//CtrolHelpDeclare(MY_CONTROL_TYPE_EDIT, CUIEdit)
+CtrolHelpDeclare(MY_CONTROL_TYPE_EDIT, CUIEdit)
 CtrolHelpDeclare(MY_CONTROL_TYPE_SPRITE, CUISpriteNode)
