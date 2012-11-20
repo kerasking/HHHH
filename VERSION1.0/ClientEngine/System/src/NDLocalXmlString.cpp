@@ -46,7 +46,7 @@ void NDLocalXmlString::purge()
 // 	return [NSString stringWithUTF8String:it->second.c_str()];
 // }
 
-std::string NDLocalXmlString::GetCString(const char* szKeyName)
+const char* NDLocalXmlString::GetCString(const char* szKeyName)
 {
 	if (!szKeyName)
 	{
@@ -58,7 +58,7 @@ std::string NDLocalXmlString::GetCString(const char* szKeyName)
 	if (it == m_data.end())
 		return szKeyName;
 		
-	return it->second;
+	return (it->second).c_str();
 }
 
 NDLocalXmlString::NDLocalXmlString()
