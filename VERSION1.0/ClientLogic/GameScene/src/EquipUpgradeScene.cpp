@@ -76,7 +76,7 @@ void EquipUpgradeScene::Initialization(int iType)
 		m_menulayerBG->GetCancelBtn()->SetDelegate(this);
 	}
 	
-	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
 	if (m_iType == EQUIP_UPLEVEL) 
 	{

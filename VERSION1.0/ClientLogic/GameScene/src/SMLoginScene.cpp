@@ -517,7 +517,7 @@ bool CSMLoginScene::CreateUpdateUILayer()
 	if ( m_pLayerUpdate )
 		return false;
 	
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
 	NDUILayer *	pLayer	= new NDUILayer();
 	if ( !pLayer )
@@ -805,7 +805,7 @@ bool CSMLoginScene::OnTargetBtnEvent( NDUINode * uiNode, int targetEvent )
 //===========================================================================
 bool CSMLoginScene::CreatConfirmDlg( const char * szTip )
 {
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
 	NDUILayer *	pLayer	= new NDUILayer();
 	if ( !pLayer )
@@ -856,7 +856,7 @@ void CSMLoginScene::ShowWaitingAni()
 	{
 		return;
 	}
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();	
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();	
 	CUISpriteNode *node = new CUISpriteNode;
 	node->Initialization();
 	node->ChangeSprite(NDPath::GetAniPath("busy.spr"));
@@ -874,7 +874,7 @@ void CSMLoginScene::CloseWaitingAni()
 //ÏÔÊ¾¼ì²âWIFIÊ§°Ü¶Ô»°¿ò
 void CSMLoginScene::ShowCheckWIFIOff()
 {
-	//CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	//CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	//
 	//NDUILayer *	pLayer	= new NDUILayer();
 	//if ( !pLayer )

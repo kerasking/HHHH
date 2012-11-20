@@ -115,6 +115,8 @@ m_nState(0)
 	m_nMountType	= 0;
 	m_nLookface		= 0;
 	m_nQuality = -1;
+
+	m_bShowLabel = true;
 }
 
 NDManualRole::~NDManualRole()
@@ -1075,10 +1077,15 @@ void NDManualRole::SetAction(bool bMove, bool bIgnoreFighting/*=false*/)
 		else 
 		{
 			NDPlayer& player = NDPlayer::defaultHero();
-			if(&player == this)
+			if (&player == this 
+				|| 0 == strcmp( player.m_strName.c_str(), this->m_strName.c_str() )) //hum: no unique id !?
+			{
 				AnimationListObj.standAction(TYPE_MANUALROLE, this, m_bFaceRight);
+			}
 			else
+			{
 				this->standAction(true);
+			}
 		}
 	}
 }
@@ -1215,7 +1222,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 				//把baserole坐标转成屏幕坐标
 				NDMapLayer* pkLayer = (NDMapLayer*) pkParent;
 				CCPoint screen = pkLayer->GetScreenCenter();
-				CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+				CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 				m_kScreenPosition = ccpSub(GetPosition(),
 						ccpSub(screen,
@@ -1949,6 +1956,7 @@ bool NDManualRole::CheckToLastPos()
 	return bRet;
 }
 
+//@label
 void NDManualRole::InitNameLable(NDUILabel*& label)
 {
 	if (!label) 
@@ -1963,13 +1971,17 @@ void NDManualRole::InitNameLable(NDUILabel*& label)
 	}
 }
 
+//@label
 void NDManualRole::DrawLable(NDUILabel* label, bool bDraw)
 { 
 	if (bDraw && label) label->draw();
 }
 
+//@label
 void NDManualRole::DrawNameLabel(bool bDraw)
 {
+	if (!m_bShowLabel) return;
+
 	NDScene *scene = NDDirector::DefaultDirector()->GetRunningScene();
 	if (!scene) return;
 
@@ -1983,7 +1995,7 @@ void NDManualRole::DrawNameLabel(bool bDraw)
 	bool isEnemy = false;
 	std::string names = m_strName;
 	NDPlayer& player = NDPlayer::defaultHero();
-	CCSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize sizewin = CCDirector::sharedDirector()->getWinSizeInPixels();
 	int iX = GetPosition().x - DISPLAY_POS_X_OFFSET;
 	int iY = GetPosition().y; // - DISPLAY_POS_Y_OFFSET; //@check
 
@@ -2122,8 +2134,8 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 	int newY = posHead.y - 1.0 * fontSize.height;
 
 	float offset = 1.0f * fScale;
-	lable[0]->SetFrameRect(CCRectMake(newX + offset, newY, fontSize.width, fontSize.height));
-	lable[1]->SetFrameRect(CCRectMake(newX, newY, fontSize.width, fontSize.height));
+	lable[0]->SetFrameRect(CCRectMake(newX, newY, fontSize.width, fontSize.height));//上
+	lable[1]->SetFrameRect(CCRectMake(newX + offset, newY + offset, fontSize.width, fontSize.height));//底
 
 // 	if(m_nQuality>-1){
 // 		ccColor4B cColor4 = ScriptMgrObj.excuteLuaFuncRetColor4("GetColor", "Item",m_nQuality);
@@ -2135,7 +2147,7 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 	lable[1]->SetText(text.c_str());
 
 	lable[0]->SetFontColor(color1);
-/*	lable[1]->SetFontColor(color2);*/
+	lable[1]->SetFontColor(color2);
 }
 
 void NDManualRole::SetLableName( const std::string& text, int x, int y, bool isEnemy)

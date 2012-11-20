@@ -30,7 +30,7 @@ void CPetNode::Initialization()
 {
 	NDUILayer::Initialization();
 	
-	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
 	this->SetFrameRect(CCRectMake(0, 0, winsize.width, winsize.height));
 	this->SetBackgroundColor(ccc4(255, 255, 255, 0));

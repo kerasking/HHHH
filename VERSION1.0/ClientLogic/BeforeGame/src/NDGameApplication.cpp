@@ -405,15 +405,11 @@ bool NDGameApplication::processPM(const char* cmd)
 		{
 			sprintf( msg, 
 				"hero pos(%d, %d)\r\n"
-				"[NDDirector] content size    (%d, %d)\r\n"
 				"[CCDirector] size in Points  (%d, %d)\r\n"
 				"[CCDirector] size in Pixels  (%d, %d)\r\n"
 				"[CCDirector] content scale = %.1f\r\n"
 				,
 				(int)posScreen.x, (int)posScreen.y, //screen pos in pixels.
-
-				(int)NDDirector::DefaultDirector()->GetWinSize().width,
-				(int)NDDirector::DefaultDirector()->GetWinSize().height,
 
 				(int)CCDirector::sharedDirector()->getWinSize().width,
 				(int)CCDirector::sharedDirector()->getWinSize().height,

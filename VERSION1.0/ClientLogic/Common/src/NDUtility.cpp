@@ -69,7 +69,7 @@ bool VerifyUnsignedNum(const std::string strnum)
 // 	
 // 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 // 	
-// 	CCSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
+// 	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 // 	
 // 	GLfloat vertices[8] = { 
 // 		rect.origin.x, winSize.height - rect.origin.y - rect.size.height, 
@@ -98,7 +98,7 @@ bool VerifyUnsignedNum(const std::string strnum)
 // 
 // void DrawPolygon(CCRect rect, ccColor4B color, GLuint lineWidth)
 // {
-// 	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 // 	float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
 // 	
 // 	glLineWidth(lineWidth);
@@ -166,7 +166,7 @@ bool VerifyUnsignedNum(const std::string strnum)
 // 
 // void DrawCircle(CCPoint center, float r, float a, int segs, ccColor4B color)
 // {
-// 	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 // 	CCPoint glCenter = ccp(center.x, winSize.height - center.y);
 // 	
 // 	glColor4ub(color.r, color.g, color.b, color.a);
@@ -248,7 +248,7 @@ bool VerifyUnsignedNum(const std::string strnum)
 // 	
 // 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 // 	
-// 	CCSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
+// 	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 // 	
 // 	GLfloat vertices[6] = { 
 // 		first.x, winSize.height - first.y, 

@@ -30,6 +30,10 @@ public:
 	void SetRoleScale(float scale);
 	void SetRidePet(int pet_look,int stand_action,int run_action);
 	NDManualRole* GetRole(){ return m_pRole; }
+
+private:
+	CCPoint& AdjustPos( CCPoint& pos );
+
 private:
 	NDUINode*				m_pRoleParentNode;
 	NDManualRole*			m_pRole;

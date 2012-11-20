@@ -289,7 +289,7 @@ void NDMapSwitch::SetLableByType(int eLableType, int x, int y, const char* pszTe
 	pkLabels[0]->SetFontSize(15);
 	pkLabels[1]->SetFontSize(15);
 
-	CCSize sizewin = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize sizewin = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 	pkLabels[1]->SetFrameRect(
 			CCRectMake(x + 1, y + sizewin.height + 1 - kParentSize.height,

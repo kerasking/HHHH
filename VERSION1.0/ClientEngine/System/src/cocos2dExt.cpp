@@ -13,7 +13,7 @@
 // 
 // - (void)ndDrawInRect:(CCRect)rect
 // {
-// 	CCSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
+// 	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 // 	
 // 	GLfloat	 coordinates[] = {  0.0f,	maxT_,
 // 		maxS_,	maxT_,

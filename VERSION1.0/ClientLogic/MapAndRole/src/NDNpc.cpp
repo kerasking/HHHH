@@ -222,7 +222,7 @@ bool NDNpc::OnDrawBegin(bool bDraw)
 // 
 // 		TipTriangleAlign align = TipTriangleAlignCenter;
 // 
-// 		CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+// 		CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 // 
 // 		if (scrPos.x + sizeTalk.width > winsize.width) 
 // 		{
@@ -315,7 +315,7 @@ void NDNpc::OnDrawEnd(bool bDraw)
 			m_pkPicBattle->DrawInRect(
 					CCRectMake(kNPCPos.x - 16,
 							GetPosition().y - 64
-									+ NDDirector::DefaultDirector()->GetWinSize().height
+									+ CCDirector::sharedDirector()->getWinSizeInPixels().height
 									- kSizeMap.height, sizeBattle.width,
 							sizeBattle.height));
 		}
@@ -326,7 +326,7 @@ void NDNpc::OnDrawEnd(bool bDraw)
 		{
 			CCSize sizeState = m_pkPicState->GetSize();
 			CCRect rect = CCRectMake(kNPCPos.x - sizeState.width / 2,
-					nShowY + NDDirector::DefaultDirector()->GetWinSize().height
+					nShowY + CCDirector::sharedDirector()->getWinSizeInPixels().height
 							- kSizeMap.height - sizeState.height,
 					sizeState.width, sizeState.height);
 			m_kRectState = CCRectMake(kNPCPos.x - sizeState.width / 2,
@@ -605,14 +605,14 @@ void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text,
 	CCSize kSizeMap;
 	kSizeMap = m_pkSubNode->GetContentSize();
 	
-	CCSize kSizeWin = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize kSizeWin = CCDirector::sharedDirector()->getWinSizeInPixels();
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
 	CCSize kSize = getStringSize(text.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
 
 	lable[1]->SetFrameRect(
 			CCRectMake(
-					x - (kSize.width / 2) + 1,
-					y + kSizeWin.height - kSizeMap.height, 
+					x - (kSize.width / 2) + 1*fScaleFactor, //with 1 pixel offset
+					y + kSizeWin.height - kSizeMap.height + 1*fScaleFactor, //with 1 pixel offset
 					kSizeWin.width,
 					30 * fScaleFactor
 					));

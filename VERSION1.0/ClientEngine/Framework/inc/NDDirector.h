@@ -11,8 +11,8 @@
 //	导演对象在初始化的时候默认为游戏配置了一种方案，
 //	游戏开发过程中可通过导演类提供的接口更改配置。
 //	导演通常只有一个。
-#ifndef __NDDirector_H
-#define __NDDirector_H
+#ifndef __NDDIRECTOR_H
+#define __NDDIRECTOR_H
 
 #include "NDScene.h"
 #include "NDObject.h"
@@ -68,6 +68,8 @@ public:
 	}
 };
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 class NDDirector: public NDObject
 {
 DECLARE_CLASS(NDDirector)
@@ -131,21 +133,6 @@ public:
 //		参数：runtimeClass 指定类型的场景
 //		返回值：失败返回null		
 	NDScene* GetScene(const NDRuntimeClass* runtimeClass);
-//		
-//		函数：Pause
-//		作用：暂停运行当前场景
-//		参数：无
-//		返回值：无
-	void Pause() { m_pkDirector->pause(); }
-//		
-//		函数：Resume
-//		作用：恢复运行当前场景
-//		参数：无
-//		返回值：无
-	void Resume() { m_pkDirector->resume(); }
-
-	void StopAnimation() { m_pkDirector->stopAnimation(); }
-	void StartAnimation() { m_pkDirector->startAnimation(); }
 
 //		
 //		函数：Stop
@@ -159,46 +146,8 @@ public:
 //		参数：无
 //		返回值：无
 	void PurgeCachedData();
-//		
-//		函数：SetDisplayFPS
-//		作用：显示游戏运行时的帧数
-//		参数：bDisplayed如果true显示，否则不显示
-//		返回值：无
-	void SetDisplayFPS(bool bDisplayed) { m_pkDirector->setDisplayStats(bDisplayed); }
 
-//		
-//		函数：isPaused
-//		作用：判断游戏是否处于暂停状态
-//		参数：无
-//		返回值：true是 false否
-	bool isPaused() { return m_pkDirector->isPaused(); }
 
-//@dirty
-//		
-//		函数：GetWinSize
-//		作用：获取屏幕大小
-//		参数：无
-//		返回值：屏幕大小
-	CCSize GetWinSize() 
-	{
-		return m_pkDirector->getWinSizeInPixels();
-		//return m_pkDirector->getWinSize();
-	}
-
-	CCSize GetWinSizeInPixels()
-	{
-		return m_pkDirector->getWinSizeInPixels();
-	}
-
-//@dirty
-//		函数：GetWinPoint
-//		作用：获取屏幕点大小
-//		参数：无
-//		返回值：屏幕点大小
-	CCSize GetWinPoint() 
-	{
-		return m_pkDirector->getWinSize();
-	}
 //
 //		函数：SetViewRect
 //		作用：设置节点的绘制区域，一旦设置了节点的绘制区域，则子节点的绘制区域也不会超过该区域范围；
@@ -240,10 +189,16 @@ public:
 
 	void DisibleScissor();
 
+	void SetDisplayFPS(bool bDisplayed) { m_pkDirector->setDisplayStats(bDisplayed); }
+
 	//UIWindow * GetWindow() { return window; } 这个UIWindow怎么处理? 郭浩
+public:
+	// only for LUA, don't try to call this.
+	CCSize getWinSizeInPixels_Lua() { 
+		return m_pkDirector->getWinSizeInPixels(); 
+	}
 
 private:
-
 	typedef enum
 	{
 		eTransitionSceneNone,
@@ -254,13 +209,6 @@ private:
 
 	void SetTransitionScene(NDScene *scene, TransitionSceneType type);
 
-private:
-	cocos2d::CCDirector* m_pkDirector;
-	std::vector<NDScene*> m_kScenesStack;
-	NDNode* m_pkSetViewRectNode;
-	bool m_bResetViewRect;
-	std::vector<NDObject*> m_delegates;
-
 	void SetDelegate(NDObject* pkReceiver) {}
 	NDObject* GetDelegate() { return NULL; }
 
@@ -269,13 +217,17 @@ private:
 	void BeforeDirectorPushScene(NDScene* scene);
 	void AfterDirectorPushScene(NDScene* scene);
 
-// 	float m_fXScaleFactor;			///< 这俩变量压根就没用上啊！何解？ 郭浩
-// 	float m_fYScaleFactor;			///< 这俩变量压根就没用上啊！何解？ 郭浩
-	
+private:
+	cocos2d::CCDirector* m_pkDirector;
+	std::vector<NDScene*> m_kScenesStack;
+	NDNode* m_pkSetViewRectNode;
+	bool m_bResetViewRect;
+	std::vector<NDObject*> m_delegates;
+
 	NDScene* m_pkTransitionSceneWait;
 	TransitionSceneType m_eTransitionSceneType;
 };
 
 NS_NDENGINE_END
 
-#endif
+#endif //__NDDIRECTOR_H

@@ -348,10 +348,16 @@ void NDUILabel::draw()
 	}
 	else
 	{
-		ccGLBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//ccGLBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		ccGLBlendFunc( CC_BLEND_SRC, CC_BLEND_DST );
 	}
 
 	ccGLBindTexture2D(m_texture->getName());
+
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
 
 #if 0
 	glTexCoordPointer(2, GL_FLOAT, 0, m_pfCoordinates);
@@ -402,8 +408,6 @@ void NDUILabel::draw()
 
 	CHECK_GL_ERROR_DEBUG();
 #endif
-
-	ccGLBlendFunc( CC_BLEND_SRC, CC_BLEND_DST );
 }
 
 void NDUILabel::postDraw()

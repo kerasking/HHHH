@@ -25,7 +25,7 @@ public:
 	void Initialization()
 	{
 		NDUILayer::Initialization();
-		CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 		m_pkCurTextureSizeLabel = new NDUILabel;
 		m_pkCurTextureSizeLabel->Initialization();
 		m_pkCurTextureSizeLabel->SetFrameRect(
@@ -77,7 +77,7 @@ NDScene* NDScene::Scene()
 void NDScene::Initialization()
 {
 	NDNode::Initialization();
-	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 	//CTextLayer *layer = new CTextLayer;
 	//layer->Initialization();

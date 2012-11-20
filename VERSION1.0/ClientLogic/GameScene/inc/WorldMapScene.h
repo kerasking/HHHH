@@ -32,6 +32,7 @@ class WorldMapLayer: public NDUILayer, public NDUIButtonDelegate
 	DECLARE_CLASS (WorldMapLayer)
 	WorldMapLayer();
 	~WorldMapLayer();
+
 public:
 	void Initialization(int nMapId);override
 	void OnButtonClick(NDUIButton* button);override
@@ -39,21 +40,16 @@ public:
 	void OnTimer(OBJID tag);override
 	virtual bool TouchBegin(NDTouch* touch);
 	virtual bool TouchEnd(NDTouch* touch);
-	void ShowRoleAtPlace(int placeId);
+	void SetRoleAtPlace(int placeId);
 	void Goto(int nMapId);
 	void SetFilter(ID_VEC idVec);
+
 private:
 	PlaceNode *GetPlaceNodeWithId(int placeId);
 	CCPoint ConvertToMapPoint(CCPoint screenPoint);
 	CCPoint ConvertToScreenPoint(CCPoint mapPoint);
 	void OnNodeClick(PlaceNode* button);
 	void SetMove(bool bSet);
-	bool IsMoving();
-	bool IsMoveArrive();
-	void SetTarget(CCPoint pos);
-	CCPoint GetTarget();
-	void SetTargetMapId(int nMapId);
-	int GetTargetMapId();
 	void SetRoleDirect(bool directRight);
 	int GetCurPlaceIndex();
 	int GetPlaceIdByIndex(int nIndex);
@@ -61,9 +57,13 @@ private:
 	void SetCenterAtPos(CCPoint pos);
 
 	CCPoint GetPlaceIdScreenPos(int placeId);
+	CCPoint GetTargetPos(int placeId);
+
 	bool DoMove();
 	bool isTimeout();
 	CCPoint CalcNextPoint( const CCPoint& posStart, const CCPoint& posEnd );
+	void onArrive();
+	void debugDraw();
 
 private:
 	NDWorldMapData* m_mapData;
@@ -80,6 +80,8 @@ private:
 	bool m_bInMoving;
 	struct cc_timeval m_tmStartMoving;
 	//std::map<int, std::string> m_mapFilename;
+	int m_idMapCached;
+	bool m_bArrive;
 };
 
 #endif

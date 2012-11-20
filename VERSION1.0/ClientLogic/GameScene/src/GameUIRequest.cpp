@@ -74,7 +74,7 @@ NDUIMenuLayer::Initialization();
 		GetCancelBtn()->SetDelegate(this);
 	}
 	
-	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
 	CCSize dim = getStringSizeMutiLine("请求列表", 15);
 	m_lbTitle = new NDUILabel;
@@ -357,7 +357,7 @@ if (!m_tlMain)
 	}
 	
 
-	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	int iVecSize = int(requestlist.size());
 	int iStart = 0;
 	int iEnd = DIS_COUNT >= iVecSize ? iVecSize : DIS_COUNT;
@@ -656,7 +656,7 @@ void NewGameUIRequest::Initialization()
 {
 	NDUILayer::Initialization();
 	
-	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
 	m_tlMain = new NDUITableLayer;
 	m_tlMain->Initialization();

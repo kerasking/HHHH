@@ -30,7 +30,7 @@ void DramaTransitionScene::Init()
 {
 	NDScene::Initialization();
 
-	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 	m_pkLayerBack = new NDUILayer;
 	m_pkLayerBack->Initialization();

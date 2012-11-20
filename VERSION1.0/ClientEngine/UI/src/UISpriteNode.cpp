@@ -32,7 +32,7 @@ void CUISpriteNode::Initialization()
 {
 	NDUINode::Initialization();
 	
-	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
 	m_pSpriteParentNode	= new NDUINode;
 	m_pSpriteParentNode->Initialization();

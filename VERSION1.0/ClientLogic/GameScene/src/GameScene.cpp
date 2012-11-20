@@ -487,7 +487,7 @@ void GameScene::Initialization(int mapID)
 
 	m_bHeadShow = true;
 
-	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 	m_pkMapLayerLogic = new NDMapLayerLogic();
 	m_pkMapLayerLogic->Initialization(mapID);
@@ -2045,7 +2045,7 @@ void GameScene::ShowRelieve(bool bShow)
 		m_relieveLayer->SetFrameRect(CCRectMake(0, 0, 480, 320));
 		AddChild(m_relieveLayer, UIDIALOG_Z);
 
-		CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 		m_tlRelieve = new NDUITableLayer;
 		m_tlRelieve->Initialization();

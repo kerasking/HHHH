@@ -47,7 +47,7 @@ void DramaConfirmdlg::Initialization()
 {
 	ClickLayer::Initialization();
 
-	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 	SetFrameRect(CCRectMake(0, 0, winsize.width, winsize.height));
 
@@ -152,7 +152,7 @@ void DramaLeftChat::Initialization()
 {
 	DramaChatLayer::Initialization();
 
-	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 	SetFrameRect(CCRectMake(0, 0, winsize.width, winsize.height));
 
@@ -182,7 +182,7 @@ void DramaRightChat::Initialization()
 {
 	DramaChatLayer::Initialization();
 
-	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 	SetFrameRect(CCRectMake(0, 0, winsize.width, winsize.height));
 	

@@ -1084,7 +1084,7 @@ void NDMonster::drawName(bool bDraw)
 
 	m_lbName->SetFrameRect(
 			CCRectMake(iX - size.width / 2,
-					iY + NDDirector::DefaultDirector()->GetWinSize().height
+					iY + CCDirector::sharedDirector()->getWinSizeInPixels().height
 							- sizemap.height, size.width, size.height + 5));
 
 	if (bDraw)

@@ -720,7 +720,7 @@ void Battle::OnButtonClick(NDUIButton* button)
 	//						
 	//						HighlightFighter(*it);
 	//						
-	//						CCSize size = NDDirector::DefaultDirector()->GetWinSize();
+	//						CCSize size = CCDirector::sharedDirector()->getWinSizeInPixels();
 	//						NDUILabel* lbViewFighter = new NDUILabel;
 	//						lbViewFighter->Initialization();
 	//						lbViewFighter->SetText(TEXT_VIEW_STATUS);
@@ -830,7 +830,7 @@ void Battle::Initialization(int action)
 		m_bWatch = true;
 	}
 
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 	m_battleBg = new NDUILayer();
 	m_battleBg->Initialization();
@@ -863,7 +863,7 @@ void Battle::InitEudemonOpt()
 	getMainEudemon();
 
 	/*if (getMainEudemon()) {
-	 CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	 CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	 m_eudemonOpt = new NDUITableLayer;
 	 m_eudemonOpt->Initialization();
 	 m_eudemonOpt->VisibleSectionTitles(false);
@@ -1255,7 +1255,7 @@ void Battle::processBattleSkillList(NDTransData& data, int len)
  // 打开技能列表
  NDAsssert (m_skillOpt == NULL);
  
- CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+ CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
  int height = 0;
  
  m_skillOpt = new NDUITableLayer;
@@ -1345,7 +1345,7 @@ void Battle::processBattleSkillList(NDTransData& data, int len)
  }
  }
  
- CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+ CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
  int height = 0;
  
  m_itemOpt = new NDUITableLayer;
@@ -1451,7 +1451,7 @@ void Battle::OnBtnRun()
  // 打开技能列表
  NDAsssert (m_skillOpt == NULL);
  
- CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+ CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
  int height = 0;
  
  m_skillOpt = new NDUITableLayer;
@@ -2005,8 +2005,8 @@ bool Battle::TouchEnd(NDTouch* touch)
 //			if (m_highlightFighter) {
 //				m_dlgStatus = new StatusDialog;
 //				m_dlgStatus->Initialization(m_highlightFighter);
-//				m_dlgStatus->SetFrameRect(CCRectMake(0, 0, NDDirector::DefaultDirector()->GetWinSize().width,
-//													 NDDirector::DefaultDirector()->GetWinSize().height));
+//				m_dlgStatus->SetFrameRect(CCRectMake(0, 0, CCDirector::sharedDirector()->getWinSizeInPixels().width,
+//													 CCDirector::sharedDirector()->getWinSizeInPixels().height));
 //				AddChild(m_dlgStatus);
 //			}
 //		}

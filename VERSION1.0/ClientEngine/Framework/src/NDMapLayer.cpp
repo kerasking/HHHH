@@ -129,7 +129,7 @@ NDMapLayer::NDMapLayer()
 	m_nRoadBlockTimeCount = 0;
 	m_nTitleAlpha = 0;
 	m_pkSubNode = NDNode::Node();
-	m_pkSubNode->SetContentSize(NDDirector::DefaultDirector()->GetWinSize());
+	m_pkSubNode->SetContentSize( CCDirector::sharedDirector()->getWinSizeInPixels());
 //		m_blockTimerTag=-1;
 //		m_titleTimerTag=-1;
 	m_bShowTitle = false;
@@ -203,7 +203,7 @@ void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)
 		MakeOrdersOfMapscenesAndMapanimations();
 		MakeFrameRunRecords();
 
-		CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 		m_kScreenCenter = ccp(kWinSize.width / 2,
 				GetContentSize().height - kWinSize.height / 2);
 		m_ccNode->setPosition(0, 0);
@@ -241,7 +241,7 @@ void NDMapLayer::Initialization(const char* mapFile)
 	MakeOrdersOfMapscenesAndMapanimations();
 	MakeFrameRunRecords();
 
-	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	m_kScreenCenter = ccp(kWinSize.width / 2,
 			GetContentSize().height - kWinSize.height / 2);
 	m_ccNode->setPosition(0, 0);
@@ -277,11 +277,13 @@ void NDMapLayer::refreshTitle()
 			{
 				if(m_lbTitle && m_lbTitleBg)
 				{
-					int x = NDDirector::DefaultDirector()->GetWinSize().width / 2 - 150;
+					int x = CCDirector::sharedDirector()->getWinSizeInPixels().width / 2 - 150;
 					int y = 60;
 					//NDLog("x:%d,y:%d",x,y);
-					m_lbTitleBg->SetFrameRect(CCRectMake(NDDirector::DefaultDirector()->
-							GetWinSize().width / 2 - 210, y, 420, 60));
+					m_lbTitleBg->SetFrameRect(CCRectMake(
+						CCDirector::sharedDirector()->getWinSizeInPixels().width / 2 - 210, 
+							y, 420, 60));
+
 					//m_lbTitleBg->draw();
 					m_lbTitle->SetFrameRect(CCRectMake(x, y, 300, 60));
 
@@ -308,11 +310,12 @@ void NDMapLayer::refreshTitle()
 			{
 				if(m_lbTitle && m_lbTitleBg)
 				{
-					int nX = NDDirector::DefaultDirector()->GetWinSize().width / 2 - 150;
+					int nX = CCDirector::sharedDirector()->getWinSizeInPixels().width / 2 - 150;
 					int nY = 60;
 					//NDLog("x:%d,y:%d",x,y);
-					m_lbTitleBg->SetFrameRect(CCRectMake(NDDirector::DefaultDirector()->
-							GetWinSize().width / 2 - 210, nY, 420, 60));
+					m_lbTitleBg->SetFrameRect(
+						CCRectMake(CCDirector::sharedDirector()->getWinSizeInPixels().width / 2 - 210, nY, 420, 60));
+
 					//m_lbTitleBg->draw();
 					m_lbTitle->SetFrameRect(CCRectMake(nX, nY, 300, 60));
 
@@ -475,8 +478,11 @@ void NDMapLayer::showSwitchSprite(MAP_SWITCH_TYPE type)
 
 	m_pkSwitchSpriteNode->ChangeSprite(pStr->toStdString().c_str());
 	m_pkSwitchSpriteNode->SetFrameRect(
-		CCRectMake(0, 0, NDDirector::DefaultDirector()->GetWinSize().width,
-		NDDirector::DefaultDirector()->GetWinSize().height)); //++Guosen 2012.7.6
+		CCRectMake(0, 0, 
+					CCDirector::sharedDirector()->getWinSizeInPixels().width,
+					CCDirector::sharedDirector()->getWinSizeInPixels().height
+					)); //++Guosen 2012.7.6
+
 	m_pkSwitchSpriteNode->SetScale(2.0); //Ô­ 480¡Á320 => 960¡Á640 //@todo
 	this->GetParent()->AddChild(m_pkSwitchSpriteNode, ZORDER_MASK_ANI);
 }
@@ -606,7 +612,8 @@ void NDMapLayer::DrawLabelRoadBlockTime()
 		m_lbTime->SetFontColor(ccc4(255,0,0,255));
 		m_lbTime->SetFontSize(MAP_NAME_SIZE_BIG/*30*/);
 		int x = m_kScreenCenter.x - (size.width) / 2;
-		int y = m_kScreenCenter.y - GetContentSize().height - (size.height) / 2 + NDDirector::DefaultDirector()->GetWinSize().height;
+		int y = m_kScreenCenter.y - GetContentSize().height - (size.height) / 2 
+					+ CCDirector::sharedDirector()->getWinSizeInPixels().height;
 
 		m_lbTime->SetFrameRect(CCRectMake(x, y, size.width, size.height + 5));
 		m_lbTime->draw();
@@ -698,7 +705,7 @@ void NDMapLayer::MapSwitchRefresh()
 // 	void NDMapLayer::DrawMapTiles()
 // 	{
 // 		//draw map tile
-// 		CCSize winSize =  NDDirector::DefaultDirector()->GetWinSize();
+// 		CCSize winSize =  CCDirector::sharedDirector()->getWinSizeInPixels();
 // 		CCPoint ptDraw = ccp(m_screenCenter.x - winSize.width / 2, m_screenCenter.y + winSize.height / 2 - GetContentSize().height);
 // 		if (m_areaCamarkSplit == IntersectionAreaNone)
 // 		{
@@ -739,7 +746,7 @@ void NDMapLayer::MapSwitchRefresh()
 
 void NDMapLayer::DrawBgs()
 {
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	CCRect scrRect = CCRectMake(m_kScreenCenter.x - winSize.width / 2,
 			m_kScreenCenter.y - winSize.height / 2, winSize.width,
 			winSize.height);
@@ -964,7 +971,7 @@ void NDMapLayer::DrawScenesAndAnimations()
  */
 CCPoint NDMapLayer::ConvertToMapPoint(CCPoint kScreenPoint)
 {
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	return ccpAdd(	
 		ccpSub(kScreenPoint, ccp(winSize.width / 2, winSize.height / 2)),
 			m_kScreenCenter );
@@ -972,7 +979,7 @@ CCPoint NDMapLayer::ConvertToMapPoint(CCPoint kScreenPoint)
 
 bool NDMapLayer::isMapPointInScreen(CCPoint mapPoint)
 {
-	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	return cocos2d::CCRect::CCRectContainsPoint(
 			CCRectMake(m_kScreenCenter.x - kWinSize.width / 2,
 					m_kScreenCenter.y - kWinSize.height / 2, kWinSize.width,
@@ -981,7 +988,7 @@ bool NDMapLayer::isMapPointInScreen(CCPoint mapPoint)
 
 bool NDMapLayer::isMapRectIntersectScreen(CCRect mapRect)
 {
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	CCRect scrRect = CCRectMake(m_kScreenCenter.x - winSize.width / 2,
 			m_kScreenCenter.y - winSize.height / 2, winSize.width,
 			winSize.height);
@@ -990,7 +997,7 @@ bool NDMapLayer::isMapRectIntersectScreen(CCRect mapRect)
 
 void NDMapLayer::SetPosition(CCPoint kPosition)
 {
-	CCSize kWinSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 	if (kPosition.x > 0)
 	{
@@ -1028,7 +1035,7 @@ bool NDMapLayer::SetScreenCenter(CCPoint kPoint)
 	int width = GetContentSize().width;
 	int height = GetContentSize().height;
 
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 	if (kPoint.x > width - winSize.width / 2)
 	{
@@ -1206,7 +1213,7 @@ void NDMapLayer::OnTimer(OBJID tag)
 //
 // 		if (m_texMap)
 // 		{
-// 			CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 			CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 //
 // 			CCRect oldRect = CCRectMake(oldScreenCenter.x - winSize.width / 2, oldScreenCenter.y - winSize.height / 2,
 // 										winSize.width, winSize.height);
@@ -1259,7 +1266,7 @@ void NDMapLayer::OnTimer(OBJID tag)
 
 // 	void NDMapLayer::ScrollSplit(int x, int y)
 // 	{
-// 		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 //
 // 		m_ptCamarkSplit.x += x;
 // 		if (m_ptCamarkSplit.x < 0)
@@ -1278,7 +1285,7 @@ void NDMapLayer::OnTimer(OBJID tag)
 // 	{
 // 		if (y == 0)	return;
 //
-// 		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 //
 // 		if (y < 0 && abs(y) > m_ptCamarkSplit.y && m_ptCamarkSplit.y > 0 && m_ptCamarkSplit.y < winSize.height)
 // 		{
@@ -1326,7 +1333,7 @@ void NDMapLayer::OnTimer(OBJID tag)
 // 	{
 // 		if (x == 0) return ;
 //
-// 		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 //
 // 		if (x < 0 && abs(x) > m_ptCamarkSplit.x && m_ptCamarkSplit.x > 0 && m_ptCamarkSplit.x < winSize.width)
 // 		{

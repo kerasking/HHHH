@@ -17,38 +17,6 @@ using namespace cocos2d;
 
 namespace NDEngine
 {
-#if 0
-	CCPoint& Screen2GL( CCPoint& pt )
-	{
-// 		CCSize winSize  = NDDirector::DefaultDirector()->GetWinSize(); //in points!
-// 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
-// 		scale = 1.f;
-// 
-// 		pt.x *= scale; pt.y *= scale;
-// 		pt.y = winSize.height - pt.y; //upside down
-// 		return pt;
-
-		CCSize winSize  = NDDirector::DefaultDirector()->GetWinSize(); //in points!
-		pt.y = winSize.height - pt.y;
-		return pt;
-	}
-
-	CCPoint& GL2Screen( CCPoint& pt )
-	{
-// 		CCSize winSize  = NDDirector::DefaultDirector()->GetWinSize();
-// 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
-// 		scale = 1.f;
-// 
-// 		pt.x /= scale; pt.y /= scale;
-// 		pt.y = winSize.height/2 - pt.y; //upside down
-// 		return pt;
-
-		CCSize winSize  = NDDirector::DefaultDirector()->GetWinSize();
-		pt.y = winSize.height - pt.y;
-		return pt;
-	}
-#endif
-
 	void DrawRecttangle(CCRect rect, ccColor4B color)
 	{
 #if 0
@@ -57,7 +25,7 @@ namespace NDEngine
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 		GLfloat vertices[8] = { 
 			rect.origin.x, winSize.height - rect.origin.y - rect.size.height, 
@@ -96,7 +64,7 @@ namespace NDEngine
 	{
 		CCAssert(0,"crash me");//@todo: crash me!
 
-		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
 
 		glLineWidth(lineWidth);
@@ -130,7 +98,7 @@ namespace NDEngine
 	{	
 		CCAssert(0, "crash me");//@todo: crash me!
 
-		CCSize winSize	= NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winSize	= CCDirector::sharedDirector()->getWinSizeInPixels();
 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();
 
 		glLineWidth(lineWidth);
@@ -155,7 +123,7 @@ namespace NDEngine
 	{
 		CCAssert(0, "crash me");//@todo: crash me!
 
-		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 		CCPoint glCenter = ccp(center.x, winSize.height - center.y);
 
 		glColor4ub(color.r, color.g, color.b, color.a);
@@ -239,7 +207,7 @@ namespace NDEngine
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		CCSize winSize = NDEngine::NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 		GLfloat vertices[6] = { 
 			first.x, winSize.height - first.y, 

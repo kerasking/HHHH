@@ -65,7 +65,7 @@ void GameSceneLoading::Initialization(bool connect/*=false*/, LoginType login/*=
 {
 	NDScene::Initialization();
 	
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
 	m_layer = new NDUILayer();
 	m_layer->Initialization();

@@ -722,7 +722,7 @@
 // 		opt->VisibleSectionTitles(false);
 // 		opt->SetDelegate(this);
 // 		
-// 		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+// 		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 // 		int nOptHeight = 0;
 // 		
 // 		NDDataSource* ds = new NDDataSource;
@@ -806,7 +806,7 @@
 // {
 // 	NDUILayer::Initialization();
 // 	
-// 	CCSize winsize = NDDirector::DefaultDirector()->GetWinSize();
+// 	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 // 	
 // 	m_infoDaoShi = new TutorInfo;
 // 	

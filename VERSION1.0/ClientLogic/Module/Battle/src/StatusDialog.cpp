@@ -41,7 +41,7 @@ StatusDialog::StatusDialog()
 	m_picRightBottom = NDPicturePool::DefaultPool()->AddPicture(bottomImage);
 	m_picRightBottom->SetReverse(true);
 	
-	CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	scrRect = CCRectMake((winSize.width - DIALOG_WIDTH) / 2, 
 			     (winSize.height - MAX_DIALOG_HEIGHT) / 2, 
 			     DIALOG_WIDTH, MAX_DIALOG_HEIGHT);
