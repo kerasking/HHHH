@@ -1564,17 +1564,22 @@ void NDBaseRole::debugDraw()
 
 	drawCoord( getFootPos() );
 	drawCoord( getHeadPos() );
+	drawCoord( GetPosition(), true, false );
 }
 
 // for debug purpose.
 // if bRightUp is false, the coord goes right-down.
-void NDBaseRole::drawCoord( const CCPoint& posScreen, bool bRightUp /*= true*/, const float ofs /*= 10.f*/ )
+void NDBaseRole::drawCoord( const CCPoint& posScreen, bool bRightUp /*= true*/, bool blue /*= true*/, const float ofs /*= 10.f*/ )
 {
 	CCPoint pos = posScreen;
 	ConvertUtil::convertToPointCoord( pos );
 	pos = SCREEN2GL( pos );
 
-	ccDrawColor4F( 0,0,1,1 );//blue
+	if (blue)
+		ccDrawColor4F( 0,0,1,1 );//blue
+	else
+		ccDrawColor4F( 1,0,0,1 );//red
+
 	ccDrawLine( pos, ccpAdd( pos, ccp( ofs, 0 )));
 	ccDrawLine( pos, ccpAdd( pos, ccp( 0,ofs * (bRightUp?1:-1))));
 }

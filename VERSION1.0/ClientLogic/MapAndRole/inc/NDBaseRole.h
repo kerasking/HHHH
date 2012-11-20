@@ -178,7 +178,7 @@ protected:
 	virtual void debugDraw();
 
 public:
-	static void drawCoord( const CCPoint& posScreen, bool bRightUp = true, const float ofs = 10.f );
+	static void drawCoord( const CCPoint& posScreen, bool bRightUp = true, bool blue = true, const float ofs = 10.f );
 	virtual void RunAnimation(bool bDraw);
 
 public:
