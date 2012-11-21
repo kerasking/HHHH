@@ -577,7 +577,14 @@ bool NDUILayer::DispatchTouchBeginEvent(CCPoint beginTouch)
 
 	for (int i = this->GetChildren().size() - 1; i >= 0; i--)
 	{
-		NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);
+
+		//NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);//--Guosen 2012.11.21
+		NDNode * pNode = this->GetChildren().at(i);
+		if ( !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
+		{
+			continue;
+		}
+		NDUINode* uiNode = (NDUINode*)pNode;
 
 		//un visibled node dont accept event
 		if (!uiNode->IsVisibled())
@@ -653,7 +660,13 @@ bool NDUILayer::DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch)
 	for (int i = this->GetChildren().size() - 1; i >= 0; i--)
 	{
 
-		NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);
+		//NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);//--Guosen 2012.11.21
+		NDNode * pNode = this->GetChildren().at(i);
+		if ( !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
+		{
+			continue;
+		}
+		NDUINode* uiNode = (NDUINode*)pNode;
 
 		//un visibled node dont accept event
 		if (!uiNode->IsVisibled())
@@ -871,7 +884,13 @@ bool NDUILayer::DispatchTouchDoubleClickEvent(CCPoint beginTouch)
 	for (int i = this->GetChildren().size() - 1; i >= 0; i--)
 	{
 
-		NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);
+		//NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);//--Guosen 2012.11.21
+		NDNode * pNode = this->GetChildren().at(i);
+		if ( !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
+		{
+			continue;
+		}
+		NDUINode* uiNode = (NDUINode*)pNode;
 
 		//un visibled node dont accept event
 		if (!uiNode->IsVisibled())
@@ -1023,7 +1042,13 @@ bool NDUILayer::DispatchLongTouchClickEvent(CCPoint beginTouch,
 	for (int i = this->GetChildren().size() - 1; i >= 0; i--)
 	{
 
-		NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);
+		//NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);//--Guosen 2012.11.21
+		NDNode * pNode = this->GetChildren().at(i);
+		if ( !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
+		{
+			continue;
+		}
+		NDUINode* uiNode = (NDUINode*)pNode;
 
 		//un visibled node dont accept event
 		if (!uiNode->IsVisibled())
@@ -1321,7 +1346,13 @@ bool NDUILayer::DispatchDragInEvent(NDUINode* dragOutNode, CCPoint beginTouch,
 	for (int i = this->GetChildren().size() - 1; i >= 0; i--)
 	{
 
-		NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);
+		//NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);//--Guosen 2012.11.21
+		NDNode * pNode = this->GetChildren().at(i);
+		if ( !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
+		{
+			continue;
+		}
+		NDUINode* uiNode = (NDUINode*)pNode;
 
 		//un visibled node dont accept event
 		if (!uiNode->IsVisibled())
@@ -1434,7 +1465,13 @@ bool NDUILayer::DispatchDragOverEvent(CCPoint beginTouch, CCPoint moveTouch,
 	for (int i = this->GetChildren().size() - 1; i >= 0; i--)
 	{
 
-		NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);
+		//NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);//--Guosen 2012.11.21
+		NDNode * pNode = this->GetChildren().at(i);
+		if ( !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
+		{
+			continue;
+		}
+		NDUINode* uiNode = (NDUINode*)pNode;
 
 		//un visibled node dont accept event
 		if (!uiNode->IsVisibled())
@@ -1526,7 +1563,13 @@ bool NDUILayer::DispatchLayerMoveEvent(CCPoint beginPoint, NDTouch *moveTouch)
 	for (int i = this->GetChildren().size() - 1; i >= 0; i--)
 	{
 
-		NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);
+		//NDUINode* uiNode = (NDUINode*) this->GetChildren().at(i);//--Guosen 2012.11.21
+		NDNode * pNode = this->GetChildren().at(i);
+		if ( !pNode->IsKindOfClass( RUNTIME_CLASS(NDUINode) ) )
+		{
+			continue;
+		}
+		NDUINode* uiNode = (NDUINode*)pNode;
 
 		//un visibled node dont accept event
 		if (!uiNode->IsVisibled())
