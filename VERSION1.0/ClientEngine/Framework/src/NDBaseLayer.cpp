@@ -11,10 +11,13 @@
 #include "NDLayer.h"
 #include "NDUILayer.h"
 #include "NDDirector.h"
+#include "WorldMapScene.h"
+#include "NDMapLayer.h"
+#include "NDUtility.h"
 
 using namespace cocos2d;
 
-#define PRIORITY_ADJUST (100)
+//#define PRIORITY_ADJUST (100)
 
 NDBaseLayer::NDBaseLayer()
 {
@@ -49,7 +52,7 @@ void NDBaseLayer::SetLayer(NDLayer* layer)
 
 void NDBaseLayer::registerWithTouchDispatcher(void)
 {
-	int iPriority = INT_MAX - PRIORITY_ADJUST;
+//	int iPriority = INT_MAX - PRIORITY_ADJUST;
 
 	NDNode* pkNode = NULL;
 	if (m_kUILayerNode.Pointer())
@@ -60,14 +63,36 @@ void NDBaseLayer::registerWithTouchDispatcher(void)
 	{
 		pkNode = m_kLayerNode.Pointer();
 	}
+	CCAssert(pkNode, "NDBaseLayer::m_k??Node NULL");
 
-	while (pkNode)
+//	while (pkNode)
+//	{
+//		iPriority -= pkNode->GetzOrder();
+//		pkNode = pkNode->GetParent();
+//	}
+
+	// ×¢²átouch·Ö·¢
+	CCTouchDispatcher* touchDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+	if (pkNode->IsKindOfClass(RUNTIME_CLASS(WorldMapLayer)))
 	{
-		iPriority -= pkNode->GetzOrder();
-		pkNode = pkNode->GetParent();
+		//WriteCon( "reg layer as: small map [0x12]\r\n" );
+		touchDispatcher->addTargetedDelegate(this, E_LAYER_PRIORITY_WORLDMAP, true);
 	}
-
-	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+	else if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
+	{
+		//WriteCon( "reg layer as: ui layer  [0x13]\r\n" );
+		touchDispatcher->addTargetedDelegate(this, E_LAYER_PRIORITY_UILAYER, true);
+	}
+	else if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
+	{
+		//WriteCon( "reg layer as: map layer [0x14]\r\n" );
+		touchDispatcher->addTargetedDelegate(this, E_LAYER_PRIORITY_MAPLAYER, true);
+	}
+	else
+	{
+		//WriteCon( "reg layer as: default   [0]\r\n" );
+		touchDispatcher->addTargetedDelegate(this, E_LAYER_PRIORITY_DEFAULT, true);
+	}
 }
 
 bool NDBaseLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
