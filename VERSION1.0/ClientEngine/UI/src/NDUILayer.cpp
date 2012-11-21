@@ -373,16 +373,17 @@ bool NDUILayer::TouchBegin(NDTouch* touch)
 	if (cocos2d::CCRect::CCRectContainsPoint(this->GetScreenRect(), m_kBeginTouch)
 			&& this->IsVisibled() && this->EventEnabled())
 	{
-		bool bRet = this->DispatchTouchBeginEvent(m_kBeginTouch);
+		m_bTouchDwon = true;
+		DispatchTouchBeginEvent(m_kBeginTouch);
 		//this->DispatchTouchEndEvent(m_beginTouch, m_beginTouch);
 
 		// 长按开始
-		if (bRet && m_pkTouchedNode && m_pkLongTouchTimer)
+		if (m_pkTouchedNode && m_pkLongTouchTimer)
 		{
 			m_pkLongTouchTimer->SetTimer(this, LONG_TOUCH_TIMER_TAG, LONG_TOUCH_TIME);
 		}
 
-		return bRet;
+		return true;
 	}
 	return false;
 }
@@ -390,6 +391,8 @@ bool NDUILayer::TouchBegin(NDTouch* touch)
 bool NDUILayer::TouchEnd(NDTouch* touch)
 {
 	m_kEndTouch = touch->GetLocation();
+
+	m_bTouchDwon = false;
 
 	if (m_pkDragOverNode)
 	{
