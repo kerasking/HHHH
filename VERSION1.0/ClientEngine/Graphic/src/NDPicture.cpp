@@ -43,7 +43,6 @@ NDPicture::NDPicture(bool canGray/*=false*/)
 	m_pShaderProgram = NULL; //@shader
 	m_glServerState = CC_GL_BLEND;
 }
-
 NDPicture::~NDPicture()
 {
 	CC_SAFE_RELEASE(m_pShaderProgram); //@shader
@@ -53,6 +52,13 @@ NDPicture::~NDPicture()
 		CC_SAFE_RELEASE (m_pkTextureGray);
 	}
 }
+
+#if 0
+void NDPicture::SetScale(float fScale)
+{
+	m_fScale = fScale;
+}
+#endif
 
 void NDPicture::Initialization(const char* imageFile)
 {

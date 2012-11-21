@@ -283,9 +283,7 @@ std::string GetTxtPub(const char* pszTableName)
 }
 std::string GetTxtPri(const char* pszTableName)
 {	
-	return "";
-	//string strName = NDCommonCString2(pszTableName);
-	//return strName;
+	return NDCommonCString2(pszTableName);
 }
 
 //NS_NDENGINE_BGN

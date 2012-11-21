@@ -19,6 +19,7 @@
 #include "CCPointExtension.h"
 #include "NDUtility.h"
 #include "NDPath.h"
+#include "NDUIBaseGraphics.h"
 
 #define TAG_ITEM_COUNT (34567)
 #define TAG_ITEM_LOCK (34568)
@@ -117,7 +118,7 @@ void CUIItemButton::ChangeItemType(unsigned int unItemType)
 		NDPicture* pic	= ItemImage::GetSMItem(nIconIndex);
 		if (pic)
 		{
-           //pic->SetScale(0.5f*SCREEN_SCALE);
+           pic->setScale(0.5f*SCREEN_SCALE);
 			if (!m_bShowAdapt)
 			{
 				CCSize size = pic->GetSize();
@@ -256,7 +257,7 @@ void CUIItemButton::draw()
                 
                 if (m_bScrollTitle && m_scrtTitle && m_scrtTitle->GetParent() == this) 
                 {
-                    if (uiLayer->GetFocus() == this /*|| IsTabSel()*/)
+                    if (uiLayer->GetFocus() == this || IsTabSel())
                     {
                         // !run -> start
                         if (!m_scrtTitle->isRunning()) 
@@ -333,9 +334,8 @@ void CUIItemButton::draw()
                 {
                     if (m_framed) 
                     {
-                     #if 0
-   DrawPolygon(scrRect, ccc4(16, 56, 66, 255), 2);
-                        DrawPolygon(CCRectMake(scrRect.origin.x + 3, scrRect.origin.y + 3, scrRect.size.width - 6, scrRect.size.height - 6), 
+					    DrawPolygon(scrRect, ccc4(16, 56, 66, 255), 2);
+                      DrawPolygon(CCRectMake(scrRect.origin.x + 3, scrRect.origin.y + 3, scrRect.size.width - 6, scrRect.size.height - 6), 
                                    ccc4(134, 39, 0, 255), 1);						
                       
 						//×óÉÏ½Ç
@@ -357,11 +357,11 @@ void CUIItemButton::draw()
 						DrawLine(ccp(scrRect.origin.x + scrRect.size.width - 3, scrRect.origin.y + scrRect.size.height - 8), 
 								 ccp(scrRect.origin.x + scrRect.size.width - 8, scrRect.origin.y + scrRect.size.height - 3), 
 								 ccc4(134, 39, 0, 255), 1);
-#endif
                     }						
                 }	
-#if 0                
-                if (m_bArrow) 
+            
+				 #if 0
+ if (m_bArrow) 
                 {
                     DrawPolygon(scrRect, ccc4(255, 0, 0, 255), 4);
                     
@@ -377,16 +377,14 @@ void CUIItemButton::draw()
                     if (m_spriteArrow) m_spriteArrow->Run(CCSizeMake(480, 320));
 
                 }
+#endif
                 
                 if (m_pSprite)
                 {
                     //m_pSprite->SetPosition(ccpAdd(scrRect.origin, m_posSprite));
                     m_pSprite->Run( CCDirector::sharedDirector()->getWinSizeInPixels() );
-                }
-#endif                 
+                }             
                 
-                
-                                
                 
                 
                 //draw touch down status
@@ -445,8 +443,8 @@ void CUIItemButton::draw()
                         else if (m_combinepicImg)
                             m_combinepicImg->SetColor(m_touchDownColor);
                         
-						//else							
-                        //    DrawRecttangle(scrRectBig, m_touchDownColor);
+						   else							
+                           DrawRecttangle(scrRectBig, m_touchDownColor);
                     }						
                 }	
                 
@@ -456,7 +454,7 @@ void CUIItemButton::draw()
                 {
                     if (m_focusStatus == FocusColor /*&& m_bFocusEnable*/) 
                     {
-                       // DrawRecttangle(scrRect, m_focusColor);
+                        DrawRecttangle(scrRect, m_focusColor);
                         if (m_title) 
                         {
                             m_title->SetFontColor(m_colorFocusTitle);
@@ -464,7 +462,7 @@ void CUIItemButton::draw()
                     }
                     else if (m_focusStatus == FocusRimImage /*&& m_bFocusEnable*/)
                     {
-                      //  DrawRecttangle(scrRect, ccc4(138, 8, 8, 255));
+                        DrawRecttangle(scrRect, ccc4(138, 8, 8, 255));
                         
                         m_rimImageLT->DrawInRect(CCRectMake(scrRect.origin.x - 2, 
                                                             scrRect.origin.y - 3, 
@@ -488,8 +486,7 @@ void CUIItemButton::draw()
                             d = 1;
                         }
                         //left frame
-                       #if 0
- DrawLine(ccp(scrRect.origin.x + d, scrRect.origin.y + m_rimImageLT->GetSize().height - 8), 
+							DrawLine(ccp(scrRect.origin.x + d, scrRect.origin.y + m_rimImageLT->GetSize().height - 8), 
                                  ccp(scrRect.origin.x + d, scrRect.origin.y + scrRect.size.height - m_rimImageLT->GetSize().height + 8), 
                                  ccc4(172, 159, 71, 255), 1);
                         DrawLine(ccp(scrRect.origin.x + d + 1, scrRect.origin.y + m_rimImageLT->GetSize().height - 8), 
@@ -531,7 +528,6 @@ void CUIItemButton::draw()
                         DrawLine(ccp(scrRect.origin.x + m_rimImageLT->GetSize().width - 8, scrRect.origin.y + scrRect.size.height - 3), 
                                  ccp(scrRect.origin.x + scrRect.size.width - m_rimImageLT->GetSize().width + 8, scrRect.origin.y + scrRect.size.height - 3), 
                                  ccc4(172, 159, 71, 255), 1);
-#endif
 						
                     }
                     else if (m_focusStatus == FocusImage && m_focusImage /*&& m_bFocusEnable*/)

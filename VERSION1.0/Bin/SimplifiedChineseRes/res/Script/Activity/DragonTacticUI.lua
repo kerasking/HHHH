@@ -42,7 +42,6 @@ local CTR_TEXT_21       = 21;
 local CTRL_SPRITE_87    = 87;
 local CTR_BTN_26 = 26;
 
-
 --加载龙将兵法主界面
 function p.LoadUI()
    
@@ -69,6 +68,8 @@ function p.LoadUI()
 		return false;
 	end
 	uiLoad:Load("achieve_BG.ini", layer, p.OnUIEvent, CONTAINTER_X, CONTAINTER_Y);
+
+
 
     local BtnEveryDay = GetButton(layer, CTR_BTN_26);
     BtnEveryDay:SetVisible(false);
@@ -153,7 +154,6 @@ function p.LoadUI()
     --关闭音效
     --local closeBtn=GetButton(layer, CTR_BTN_CLOSE);
     --closeBtn:SetSoundEffect(Music.SoundEffect.CLOSEBTN);
-    
     return true;
 end
 
@@ -238,9 +238,11 @@ function p.ChangeTab(nBtnId)
         
         if v.tabBtnId == nBtnId then
             btn:TabSel(true);            --当前按钮设置为常亮
+            btn:SetFocus(true);
             layer:SetVisible(true);   --设置当前层为活动层
         else
             btn:TabSel(false);           --其他按钮去掉常亮标志
+            btn:SetFocus(false);
             layer:SetVisible(false);   --设置当前层为非活动层
         end
     end

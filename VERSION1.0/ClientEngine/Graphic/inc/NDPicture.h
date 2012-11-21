@@ -89,7 +89,7 @@ public:
 	bool SetGrayState(bool gray);
 
 	bool IsGrayState();
-
+	//void SetScale(float fScale);
 	CC_SYNTHESIZE(float,m_fScale,Scale);
 	CC_SYNTHESIZE(bool,m_bIsTran,IsTran);
 
@@ -106,6 +106,7 @@ protected:
 	virtual void debugDraw();
 
 private:
+	//float m_fScale;
 	cocos2d::CCTexture2D* m_pkTexture;
 	CCRect m_kCutRect;
 	bool m_bReverse;

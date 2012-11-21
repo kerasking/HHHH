@@ -12,13 +12,13 @@
 
 #include "NDMsgDefine.h"
 #include "NDTransData.h"
-//#include "Task.h"
+#include "Task.h"
 //#include "Item.h"
 
 void processTask(MSGID msgID, NDEngine::NDTransData* data);
 //void updateTaskItemData(Item& item, bool isShow);
 void updateTaskMonsterData(int nMonId, bool bIsShow);
-//void dealWithFreshmanTask(Task* task);
+void dealWithFreshmanTask(Task* task);
 void sendTaskFinishMsg(int taskId);
 
 void updateTaskPrData(int nData, bool isShow);		// 爵位

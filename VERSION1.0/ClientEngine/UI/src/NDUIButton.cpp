@@ -454,7 +454,7 @@ void NDUIButton::draw()
 	}
 
 	//draw touch down status
-	if (m_bChecked | (m_touched && !m_longTouched))
+	if (m_bChecked || (m_touched && !m_longTouched))
 	{
 		drawTouchDown();
 	}
@@ -901,8 +901,7 @@ void NDUIButton::drawFocus()
 			1);
 
 	}
-	else if (m_focusStatus == FocusImage && m_focusImage
-		&& m_bFocusEnable)
+	else if (m_focusStatus == FocusImage && m_focusImage && m_bFocusEnable)
 	{
 		if (m_bCustomFocusImageRect)
 		{
