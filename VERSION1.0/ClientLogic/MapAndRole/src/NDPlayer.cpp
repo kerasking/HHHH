@@ -39,6 +39,7 @@
 
 #include "SMGameScene.h"
 #include "ScriptGlobalEvent.h"
+#include "Task.h"
 
 NS_NDENGINE_BGN
 
@@ -474,23 +475,23 @@ void NDPlayer::stopMoving(bool bResetPos/*=true*/, bool bResetTeamPos/*=true*/)
 	}
 }
 
-// Task* NDPlayer::GetPlayerTask(int idTask)
-// {
-// 	Task* task = NULL;
-// 
-// 	for (vec_task_it it = m_vPlayerTask.begin(); it != m_vPlayerTask.end();
-// 			it++)
-// 	{
-// 		task = *it;
-// 
-// 		if (task->m_nTaskID == idTask)
-// 		{
-// 			return task;
-// 		}
-// 	}
-// 
-// 	return NULL;
-// }
+Task* NDPlayer::GetPlayerTask(int idTask)
+{
+	Task* task = NULL;
+
+	for (vec_task_it it = m_vPlayerTask.begin(); it != m_vPlayerTask.end();
+			it++)
+	{
+		task = *it;
+
+		if (task->m_nTaskID == idTask)
+		{
+			return task;
+		}
+	}
+
+	return NULL;
+}
 
 int NDPlayer::GetOrder()
 {
