@@ -54,6 +54,14 @@ THE SOFTWARE.
 #include "android/jni/SystemInfoJni.h"
 #include <android/log.h>
 #include <jni.h>
+
+#define  LOG_TAG    "DaHua"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGDAHUA(...) __android_log_print(ANDROID_LOG_ERROR,"DaHua",__VA_ARGS__)
+#else
+#define  LOG_TAG
+#define  LOGD(...)
+#define  LOGDAHUA(...)
 #endif
 
 #if CC_ENABLE_PROFILERS
@@ -87,7 +95,6 @@ CCDirector* CCDirector::sharedDirector(void)
 	if (gs_bFirst)
 	{
 #ifdef ANDROID
-		__android_log_print(ANDROID_LOG_DEBUG,"DaHua","gs_bFirst address is %d",(int)(&gs_bFirst));
 		__android_log_print(ANDROID_LOG_DEBUG,"DaHua","entry sharedDirector(),sm_pSharedDirector value is %d",(int)sm_pSharedDirector);
 #endif
 		gs_bFirst = false;
@@ -96,6 +103,9 @@ CCDirector* CCDirector::sharedDirector(void)
 	//CCAssert(sm_pSharedDirector, "sm_pSharedDirector should not be null");
 	if (s_bFirstRun && sm_pSharedDirector)
 	{
+#ifdef ANDROID
+		__android_log_print(ANDROID_LOG_DEBUG,"DaHua","sm_pSharedDirector ready to init()");
+#endif
 		sm_pSharedDirector->init();
         s_bFirstRun = false;
 	}
@@ -115,6 +125,10 @@ CCDirector* CCDirector::sharedDirector(void)
 #if ND_MOD
 CCDirector::CCDirector(void) 
 {
+#ifdef ANDROID
+	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","entry CCDirector construct function");
+#endif
+
 	m_pobOpenGLView = NULL;
 	m_dAnimationInterval = 0;
 	m_dOldAnimationInterval = 0;
@@ -144,11 +158,19 @@ CCDirector::CCDirector(void)
 #if CC_ENABLE_PROFILERS
 	m_fAccumDtForProfiler = false;
 #endif
+
+#ifdef ANDROID
+	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","leave CCDirector construct function");
+#endif
 }
 #endif
 
 bool CCDirector::init(void)
 {
+#ifdef ANDROID
+	__android_log_print(ANDROID_LOG_DEBUG,"DaHua", cocos2dVersion());
+#endif
+
 	CCLOG("cocos2d: %s", cocos2dVersion());
 
 	// scenes
@@ -185,12 +207,20 @@ bool CCDirector::init(void)
 
 	m_pobOpenGLView = NULL;
 
+#ifdef ANDROID
+	__android_log_print(ANDROID_LOG_DEBUG,"DaHua", "the m_pobOpenGLView be set NULL");
+#endif
+
     m_bRetinaDisplay = false;
     m_fContentScaleFactor = 1;	
 	m_bIsContentScaleSupported = false;
 
 	// create autorelease pool
 	CCPoolManager::getInstance()->push();
+
+#ifdef ANDROID
+	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","CCDirector init over");
+#endif
 
 	return true;
 }
@@ -221,23 +251,39 @@ CCDirector::~CCDirector(void)
 
 void CCDirector::setGLDefaultValues(void)
 {
+	LOGD("entry CCDirector::setGLDefaultValues() value is %d",(int)m_pobOpenGLView);
+
 	// This method SHOULD be called only after openGLView_ was initialized
 	CCAssert(m_pobOpenGLView, "opengl view should not be null");
 
 	setAlphaBlending(true);
-	setDepthTest(true);
-	setProjection(m_eProjection);
 
+	LOGD("CCDirector::setAlphaBlending()");
+
+	setDepthTest(true);
+	LOGD("CCDirector::setDepthTest()");
+
+	setProjection(m_eProjection);
+	LOGD("CCDirector::setProjection()");
 	// set other opengl default values
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+	LOGD("CCDirector::glClearColor()");
 
 #if CC_DIRECTOR_FAST_FPS
 	if (! m_pFPSLabel)
 	{
-        m_pFPSLabel = CCLabelTTF::labelWithString("00.0", "Arial", 24);
+#ifndef ANDROID
+		LOGD("ready labelWithString");
+		m_pFPSLabel = CCLabelTTF::labelWithString("00.0", "Arial", 24);	///< ÄãÃÃ°¡£¡ÕâÀïandroid»áßÇµô£¡
+		LOGD("end labelWithString");
 		m_pFPSLabel->retain();
+		LOGD("m_pFPSLabel->retain();");
+#endif
 	}
 #endif
+
+	LOGD("leave CCDirector::setGLDefaultValues()");
 }
 
 // Draw the SCene
@@ -341,28 +387,53 @@ void CCDirector::calculateDeltaTime(void)
 
 void CCDirector::setOpenGLView(CC_GLVIEW *pobOpenGLView)
 {
+	LOGD("pobOpenGLView value = %d",(int)pobOpenGLView);
 	CCAssert(pobOpenGLView, "opengl view should not be null");
 
 	if (m_pobOpenGLView != pobOpenGLView)
 	{
 		// because EAGLView is not kind of CCObject
+		//LOGD("ready to delete m_pobOpenGLView value is %d",(int)m_pobOpenGLView);
 		delete m_pobOpenGLView; // [openGLView_ release]
 		m_pobOpenGLView = pobOpenGLView;
 
+		LOGD("m_pobOpenGLView value is %d",(int)m_pobOpenGLView);
+
 		// set size
-		m_obWinSizeInPoints = m_pobOpenGLView->getSize();
-		m_obWinSizeInPixels = CCSizeMake(m_obWinSizeInPoints.width * m_fContentScaleFactor, m_obWinSizeInPoints.height * m_fContentScaleFactor);
+		m_obWinSizeInPoints = CCSizeMake(480,320);
+
+		LOGD("m_obWinSizeInPoints be valued width %d height %d",(int)m_obWinSizeInPoints.width,(int)m_obWinSizeInPoints.height);
+
+		m_obWinSizeInPixels = CCSizeMake(m_obWinSizeInPoints.width * m_fContentScaleFactor,
+			m_obWinSizeInPoints.height * m_fContentScaleFactor);
+
+		LOGD("m_obWinSizeInPixels be valued width %d height %d",(int)m_obWinSizeInPixels.width,(int)m_obWinSizeInPixels.height);
+
         setGLDefaultValues();
+
+		LOGD("entry setGLDefaultValues();");
 
 		if (m_fContentScaleFactor != 1)
 		{
 			updateContentScaleFactor();
 		}
 
+		LOGD("Ready to set touch");
+
  		CCTouchDispatcher *pTouchDispatcher = CCTouchDispatcher::sharedDispatcher();
+
+		LOGD("pTouchDispatcher value is %d",(int)pTouchDispatcher);
+
  		m_pobOpenGLView->setTouchDelegate(pTouchDispatcher);
+
+		LOGD("m_pobOpenGLView->setTouchDelegate() over");
+
         pTouchDispatcher->setDispatchEvents(true);
+
+		LOGD("End to set touch");
 	}
+
+	LOGD("Leave CCDirector::setOpenGLView");
 }
 
 void CCDirector::setNextDeltaTimeZero(bool bNextDeltaTimeZero)

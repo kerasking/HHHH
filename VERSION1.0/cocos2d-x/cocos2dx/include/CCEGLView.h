@@ -25,6 +25,6 @@ THE SOFTWARE.
 #ifndef __CC_EGLVIEW_H__
 #define __CC_EGLVIEW_H__
 
-#include "../platform/CCEGLView_platform.h"
+#include "android/CCEGLView_android.h"
 
 #endif	// end of __CC_EGLVIEW_H__

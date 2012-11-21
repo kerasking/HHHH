@@ -12,8 +12,9 @@
 
 #include "basedefine.h"
 #include "NDClassFactory.h"
+#include "CCPlatformConfig.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#ifdef ANDROID
 #include "android/jni/SystemInfoJni.h"
 #include <android/log.h>
 #include <jni.h>
@@ -21,6 +22,11 @@
 #define  LOG_TAG    "CCApplication_android Debug"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 #define  LOGDAHUA(...) __android_log_print(ANDROID_LOG_ERROR,"DaHua",__VA_ARGS__)
+
+#else
+
+#define  LOGD(...)
+#define  LOGDAHUA(...)
 
 #endif
 

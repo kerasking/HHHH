@@ -71,6 +71,7 @@ public:
 	@brief	get the shared main open gl window
 	*/
 	static CCEGLView& sharedOpenGLView();
+	static CCEGLView* sharedOpenGLViewPtr();
     
 private:
 	CCSize m_sSizeInPixel;

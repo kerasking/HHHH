@@ -52,6 +52,8 @@ void initClass()
 
 NDGameApplication::NDGameApplication()
 {
+	NDLog("entry NDGameApplication construct function");
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"script ");
 #endif

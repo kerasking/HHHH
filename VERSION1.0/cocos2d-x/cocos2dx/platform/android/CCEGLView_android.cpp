@@ -29,18 +29,24 @@ THE SOFTWARE.
 #include "CCTouchDispatcher.h"
 #include "jni/IMEJni.h"
 #include "jni/MessageJni.h"
+#include "android/jni/SystemInfoJni.h"
+#include <android/log.h>
+#include <jni.h>
 
 #include <stdlib.h>
 
-#define  LOG_TAG    "DHLJ"
+#define  LOG_TAG	"DHLJ"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 
-namespace cocos2d {
+namespace cocos2d
+{
 
-CCEGLView::CCEGLView()
-    : m_bNotHVGA(false), 
-      m_pDelegate(NULL),
-      m_fScreenScaleFactor(1.0)  
+static CCEGLView* gs_pkInstance = 0;
+
+CCEGLView::CCEGLView():
+m_bNotHVGA(false), 
+m_pDelegate(NULL),
+m_fScreenScaleFactor(1.0)  
 {
 }
 
@@ -52,11 +58,13 @@ void CCEGLView::setFrameWidthAndHeight(int width, int height)
 
 bool CCEGLView::isIpad()
 {
-    return false;
+	return false;
 }
 
 void CCEGLView::create(int width, int height)
 {
+	LOGD("entry CCEGLView::create,witch = %d,height = %d",width,height);
+
 	if (width == 0 || height == 0)
 	{
 		return;
@@ -67,7 +75,7 @@ void CCEGLView::create(int width, int height)
 
 	// calculate the factor and the rect of viewport	
 	m_fScreenScaleFactor =  MIN((float)m_sSizeInPixel.width / m_sSizeInPoint.width, 
-		                         (float)m_sSizeInPixel.height / m_sSizeInPoint.height);
+								 (float)m_sSizeInPixel.height / m_sSizeInPoint.height);
 	int viewPortW = (int)(m_sSizeInPoint.width * m_fScreenScaleFactor);
 	int viewPortH = (int)(m_sSizeInPoint.height * m_fScreenScaleFactor);
 	m_rcViewPort.origin.x = (m_sSizeInPixel.width - viewPortW) / 2;
@@ -77,6 +85,7 @@ void CCEGLView::create(int width, int height)
 	
 	m_bNotHVGA = true;
 	
+	LOGD("end CCEGLView::create");
 }
 
 CCEGLView::~CCEGLView()
@@ -84,19 +93,22 @@ CCEGLView::~CCEGLView()
 	CC_SAFE_DELETE(m_pDelegate);
 }
 
-CCSize  CCEGLView::getSize()
+CCSize CCEGLView::getSize()
 {
-        if (m_bNotHVGA)
-        {
-                CCSize size(m_sSizeInPoint.width, m_sSizeInPoint.height);
-	        return size;
-        }
-        else
-        {
-                CCSize size(m_sSizeInPixel.width, m_sSizeInPixel.height);
-	        return size;
-        }
-	
+	if (m_bNotHVGA)
+	{
+		CCSize size(m_sSizeInPoint.width, m_sSizeInPoint.height);
+		LOGD("true CCEGLView::getSize() entry,m_sSizeInPoint value is w = %d,h = %d",
+			(int)m_sSizeInPoint.width, (int)m_sSizeInPoint.height);
+		return size;
+	}
+	else
+	{
+		CCSize size(m_sSizeInPixel.width, m_sSizeInPixel.height);
+		LOGD("false CCEGLView::getSize() entry,m_sSizeInPoint value is w = %d,h = %d",
+			(int)m_sSizeInPoint.width, (int)m_sSizeInPoint.height);
+		return size;
+	}
 }
 
 bool CCEGLView::isOpenGLReady()
@@ -125,8 +137,8 @@ void CCEGLView::swapBuffers()
 
 bool CCEGLView::canSetContentScaleFactor()
 {
-    // can scale content?
-    return false;
+	// can scale content?
+	return false;
 }
 
 void CCEGLView::setContentScaleFactor(float contentScaleFactor)
@@ -136,71 +148,101 @@ void CCEGLView::setContentScaleFactor(float contentScaleFactor)
 
 void CCEGLView::setViewPortInPoints(float x, float y, float w, float h)
 {
-    if (m_bNotHVGA)
-    {
-        float factor = m_fScreenScaleFactor / CC_CONTENT_SCALE_FACTOR();
-        glViewport((GLint)(x * factor) + m_rcViewPort.origin.x,
-            (GLint)(y * factor) + m_rcViewPort.origin.y,
-            (GLint)(w * factor),
-            (GLint)(h * factor));
-    }
-    else
-    {
-        glViewport((GLint)x,
-            (GLint)y,
-            (GLint)w,
-            (GLint)h);
-    }		
+	if (m_bNotHVGA)
+	{
+		float factor = m_fScreenScaleFactor / CC_CONTENT_SCALE_FACTOR();
+		glViewport((GLint)(x * factor) + m_rcViewPort.origin.x,
+			(GLint)(y * factor) + m_rcViewPort.origin.y,
+			(GLint)(w * factor),
+			(GLint)(h * factor));
+	}
+	else
+	{
+		glViewport((GLint)x,
+			(GLint)y,
+			(GLint)w,
+			(GLint)h);
+	}		
 }
 
 void CCEGLView::setScissorInPoints(float x, float y, float w, float h)
 {
-    if (m_bNotHVGA)
-    {
-        float factor = m_fScreenScaleFactor / CC_CONTENT_SCALE_FACTOR();
-        glScissor((GLint)(x * factor) + m_rcViewPort.origin.x,
-            (GLint)(y * factor) + m_rcViewPort.origin.y,
-            (GLint)(w * factor),
-            (GLint)(h * factor));
-    }
-    else
-    {
-        glScissor((GLint)x,
-            (GLint)y,
-            (GLint)w,
-            (GLint)h);
-    }		
+	if (m_bNotHVGA)
+	{
+		float factor = m_fScreenScaleFactor / CC_CONTENT_SCALE_FACTOR();
+		glScissor((GLint)(x * factor) + m_rcViewPort.origin.x,
+			(GLint)(y * factor) + m_rcViewPort.origin.y,
+			(GLint)(w * factor),
+			(GLint)(h * factor));
+	}
+	else
+	{
+		glScissor((GLint)x,
+			(GLint)y,
+			(GLint)w,
+			(GLint)h);
+	}		
 }
 
 CCEGLView& CCEGLView::sharedOpenGLView()
 {
-	static CCEGLView instance;
-	return instance;
+	LOGD("instance shall be create");
+
+	static bool bFirst = true;
+
+	if (0 == gs_pkInstance)
+	{
+		gs_pkInstance = new CCEGLView;
+	}
+
+	if (bFirst)
+	{
+		LOGD("instance is created,value is %d",(int)gs_pkInstance);
+	}
+
+	return *gs_pkInstance;
+}
+
+CCEGLView* CCEGLView::sharedOpenGLViewPtr()
+{
+	LOGD("entry sharedOpenGLViewPtr");
+
+	static bool bFirst = true;
+
+	if (0 == gs_pkInstance)
+	{
+		gs_pkInstance = new CCEGLView;
+	}
+
+	if (bFirst)
+	{
+		LOGD("instance is created,value is %d",(int)gs_pkInstance);
+	}
+
+	return gs_pkInstance;
 }
 
 float CCEGLView::getScreenScaleFactor()
 {
-        return m_fScreenScaleFactor;
+	return m_fScreenScaleFactor;
 }
 
 CCRect CCEGLView::getViewPort()
 {
-    if (m_bNotHVGA)
-    {
-        return m_rcViewPort;
-    }
-    else
-    {
-        CCRect rect(0, 0, 0, 0);
-        return rect;
-    }
+	if (m_bNotHVGA)
+	{
+		return m_rcViewPort;
+	}
+	else
+	{
+		CCRect rect(0, 0, 0, 0);
+		return rect;
+	}
 }
 
 void CCEGLView::setIMEKeyboardState(bool bOpen)
 {
-
-    setKeyboardStateJNI((int)bOpen);
+	setKeyboardStateJNI((int)bOpen);
 }
 
-}       // end of namespace cocos2d
-
+}	   // end of namespace cocos2d

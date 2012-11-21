@@ -47,12 +47,10 @@ THE SOFTWARE.
     #include "CCTextureCache.h"
 #endif
 
-#if ND_MOD
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
 #include "png.h"
-#ifdef WIN32
 #include "pnginfo.h"
 #include "pngstruct.h"
-#endif
 #endif
 #ifdef WIN32
 #define int_p_NULL (int*)NULL

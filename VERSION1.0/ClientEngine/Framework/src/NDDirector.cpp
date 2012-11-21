@@ -72,7 +72,23 @@ void NDDirector::Initialization()
 {
 	NDLog("Entry NDDirector::Initialization(),the m_pkDirector = %d",(int)m_pkDirector);
 
-	m_pkDirector->setOpenGLView(&CCEGLView::sharedOpenGLView());
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+	CCEGLView* pkEGLView = CCEGLView::sharedOpenGLViewPtr();
+
+	NDLog("kEGLView's address is %d",(int)pkEGLView);
+
+	m_pkDirector->setOpenGLView(pkEGLView);
+
+#else
+
+	CCEGLView& kEGLView = CCEGLView::sharedOpenGLView();
+
+	NDLog("kEGLView's address is %d",(int)&kEGLView);
+
+	m_pkDirector->setOpenGLView(&kEGLView);
+
+#endif
 
 	NDLog("end m_pkDirector->setOpenGLView(&CCEGLView::sharedOpenGLView());");
 

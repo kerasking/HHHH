@@ -40,12 +40,13 @@ void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, jobject thi
     		printf("StartMain");
     	}
 
+        NDBaseDirector* kBaseDirector = new NDBaseDirector;
+
     	cocos2d::CCEGLView *view = &cocos2d::CCEGLView::sharedOpenGLView();
         view->setFrameWidthAndHeight(w, h);
         // if you want to run in WVGA with HVGA resource, set it
         // view->create(480, 320);  Please change it to (320, 480) if you're in portrait mode.
         cocos2d::CCDirector::sharedDirector()->setOpenGLView(view);
-        NDBaseDirector* kBaseDirector = new NDBaseDirector;
 
         NDSharedPtr<GameLauncher> spGameLauncher = new GameLauncher;
 
@@ -62,16 +63,25 @@ void Java_org_DeNA_DHLJ_DaHuaLongJiang_nativeInit(JNIEnv*  env, jobject thiz, ji
 {
 	LOGD("Starting nativeInit");
 
-	NDGameApplication* pkGameLauncher = new NDGameApplication;
-	NDBaseDirector* pkBaseDirector = new NDBaseDirector;
-
 	LOGD("Starting set CCEGLView");
 
-	cocos2d::CCEGLView *view = &cocos2d::CCEGLView::sharedOpenGLView();
+	NDBaseDirector* pkBaseDirector = new NDBaseDirector;
+
+	cocos2d::CCEGLView* view = cocos2d::CCEGLView::sharedOpenGLViewPtr();
+
+	LOGD("view got! value is %d",(int)view);
+
     view->setFrameWidthAndHeight(w, h);
-    // if you want to run in WVGA with HVGA resource, set it
+    LOGD(" view->setFrameWidthAndHeight(w, h);! w = %d , h = %d",w,h);
     view->create(480, 320); // Please change it to (320, 480) if you're in portrait mode.
+
+    LOGD("view's width = %d,height = %d",view->getSize().width,view->getSize().height);
+
     cocos2d::CCDirector::sharedDirector()->setOpenGLView(view);
+
+    LOGD("cocos2d::CCDirector::sharedDirector()->setOpenGLView(view); called over");
+
+	NDGameApplication* pkGameLauncher = new NDGameApplication;
 
     LOGD("Starting set run");
 

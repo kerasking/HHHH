@@ -5,7 +5,11 @@
 #ifndef NDGAMEAPPLICATION_H
 #define NDGAMEAPPLICATION_H
 
+#ifdef ANDROID
 #include "android/CCApplication_android.h"
+#else
+#include "CCApplication.h"
+#endif
 
 #include "NDConsole.h"
 

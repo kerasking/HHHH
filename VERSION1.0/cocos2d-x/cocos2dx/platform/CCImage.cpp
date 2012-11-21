@@ -27,8 +27,8 @@ THE SOFTWARE.
 #include "CCCommon.h"
 #include "CCStdC.h"
 #include "CCFileUtils.h"
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID) 
 #include "png.h"
-#ifdef _WINDOWS
 #include "../../libpng/pnginfo.h"
 #include "../../libpng/pngstruct.h"
 #endif
@@ -55,6 +55,8 @@ typedef struct
     int offset;
 }tImageSource;
 
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
+
 static void pngReadCallback(png_structp png_ptr, png_bytep data, png_size_t length)
 {
     tImageSource* isource = (tImageSource*)png_get_io_ptr(png_ptr);
@@ -69,6 +71,8 @@ static void pngReadCallback(png_structp png_ptr, png_bytep data, png_size_t leng
         png_error(png_ptr, "pngReaderCallback failed");
     }
 }
+
+#endif
 
 NS_CC_BEGIN;
 
