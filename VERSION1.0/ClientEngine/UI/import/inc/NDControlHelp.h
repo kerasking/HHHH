@@ -21,7 +21,7 @@
 #include "NDTextNode.h"
 #include "UIHyperlink.h"
 #include "UIItemButton.h"
-//#include "UIEquipItem.h"
+#include "UIEquipItem.h"
 #include "UICheckBox.h"
 #include "UIRadioButton.h"
 #include "UIExp.h"
@@ -558,7 +558,7 @@ public:
 		return container;
 	}
 };
-/*
+
 template<>															
 class ControlHelp<MY_CONTROL_TYPE_EQUIP_BUTTON> : public CtrolTrait<CUIItemButton>		
 {	
@@ -571,12 +571,14 @@ public:
 		equipBtn->Initialization();
 		equipBtn->SetFrameRect(rect);
 		equipBtn->CloseFrame();
-		equipBtn->SetBackgroundPicture(GetNormalPicture(), NULL, false, CCRectZero, true);
+
+		equipBtn->SetBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);
+		equipBtn->SetTouchDownImage(GetSelectedPicture(), false, CCRectZero, true);
 		equipBtn->SetFocusImage(GetFocusPicture(), false, CCRectZero, true);
 		return equipBtn;
 	}
 };
-*/
+
 template<>															
 class ControlHelp<MY_CONTROL_TYPE_RADIO_BUTTON> : public CtrolTrait<CUICheckBox>		
 {	
