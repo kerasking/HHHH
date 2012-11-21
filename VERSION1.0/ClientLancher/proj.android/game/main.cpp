@@ -75,7 +75,7 @@ void Java_org_DeNA_DHLJ_DaHuaLongJiang_nativeInit(JNIEnv*  env, jobject thiz, ji
 
     LOGD("Starting set run");
 
-    NDGameApplication::sharedApplication().setApplication(0);
+    NDGameApplication::SetApp(pkGameLauncher);
     NDGameApplication::sharedApplication().run();
 }
 

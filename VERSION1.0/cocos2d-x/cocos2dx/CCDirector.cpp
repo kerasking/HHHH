@@ -79,13 +79,19 @@ static bool s_bFirstRun = true;
 #define kDefaultFPS		60  // 60 frames per second
 extern const char* cocos2dVersion(void);
 
+static bool gs_bFirst = true;
+
 CCDirector* CCDirector::sharedDirector(void)
 {
 #if ND_MOD
-
+	if (gs_bFirst)
+	{
 #ifdef ANDROID
-	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","entry sharedDirector()");
+		__android_log_print(ANDROID_LOG_DEBUG,"DaHua","gs_bFirst address is %d",(int)(&gs_bFirst));
+		__android_log_print(ANDROID_LOG_DEBUG,"DaHua","entry sharedDirector(),sm_pSharedDirector value is %d",(int)sm_pSharedDirector);
 #endif
+		gs_bFirst = false;
+	}
 
 	//CCAssert(sm_pSharedDirector, "sm_pSharedDirector should not be null");
 	if (s_bFirstRun && sm_pSharedDirector)
@@ -983,7 +989,15 @@ void CCDirector::setDeviceOrientation(ccDeviceOrientation kDeviceOrientation)
 CCDisplayLinkDirector::CCDisplayLinkDirector(void)
 	: m_bInvalid(false)
 {
+#ifdef ANDROID
+	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","entry CCDisplayLinkDirector constructed function,value is %d",(int)sm_pSharedDirector);
+#endif
+
     sm_pSharedDirector = this;
+
+#ifdef ANDROID
+	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","end evaluation sm_pSharedDirector,sm_pSharedDirector value is %d",(int)sm_pSharedDirector);
+#endif
 }
 #endif
 

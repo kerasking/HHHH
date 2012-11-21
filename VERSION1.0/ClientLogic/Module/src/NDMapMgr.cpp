@@ -33,12 +33,16 @@
 #include "NDDataTransThread.h"
 #include "NDBaseBattleMgr.h"
 #include "NDUtil.h"
+#include "globaldef.h"
+#include "NDDebugOpt.h"
 
 NS_NDENGINE_BGN
 
 #define TAG_TIMER_KICK_OUT_TIP (1021) 
 
 const char* pszChannelID = "IPHONE_BYWX";
+
+NDMapMgr* NDMapMgr::ms_pkMapMgr = 0;
 
 enum
 {
@@ -131,7 +135,9 @@ m_nMapID(0),
 m_nMapDocID(0),
 m_nCurrentMonsterRound(0)
 {
+	NDLog("NDBaseNetMgr");
 	NDBaseNetMgr& kNetPool = NDNetMsgPoolObj;
+	NDLog("kNetPool end");
 	kNetPool.RegMsg(_MSG_NPCINFO_LIST, this);
 	kNetPool.RegMsg(_MSG_ROOM, this);
 	m_iCurDlgNpcID = 0;
@@ -4821,6 +4827,22 @@ bool NDMapMgr::isMonsterClear()
 	}
 
 	return bRet;
+}
+
+NDMapMgr& NDMapMgr::GetSingleton()
+{
+	NDLog("Entry NDMapMgr GetSingleton()");
+
+	if (0 == ms_pkMapMgr)
+	{
+		NDLog("ready to new ms_pkMapMgr");
+		ms_pkMapMgr = new NDMapMgr;
+		NDLog("new ms_pkMapMgr");
+	}
+
+	NDLog("ms_pkMapMgr value is %d",ms_pkMapMgr);
+
+	return *ms_pkMapMgr;
 }
 
 // LifeSkill* NDMapMgr::getLifeSkill( OBJID idSkill )

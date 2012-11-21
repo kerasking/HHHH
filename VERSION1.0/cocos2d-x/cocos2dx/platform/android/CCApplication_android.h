@@ -20,6 +20,8 @@ public:
     */
     virtual bool initInstance() = 0;
 
+	static bool SetApp(CCApplication* pkApp);
+
 	virtual bool setApplication(CCApplication* pkApp);
 
     /**

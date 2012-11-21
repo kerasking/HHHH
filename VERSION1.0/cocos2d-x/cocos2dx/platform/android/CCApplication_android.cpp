@@ -81,7 +81,7 @@ void CCApplication::statusBarFrame(CCRect * rect)
 CCApplication& CCApplication::sharedApplication()
 {
 	LOGDAHUA("entry CCApplication::sharedApplication(),the sm_pSharedApplication value is %d.",(int)sm_pSharedApplication);
-    CC_ASSERT(sm_pSharedApplication);
+    //CC_ASSERT(sm_pSharedApplication);
     return *sm_pSharedApplication;
 }
 
@@ -124,8 +124,30 @@ ccLanguageType CCApplication::getCurrentLanguage()
 
 bool CCApplication::setApplication( CCApplication* pkApp )
 {
+	if (0 == pkApp)
+	{
+		LOGDAHUA("传递进来的参数pkApp为空值");
+		return false;
+	}
+	
+	LOGDAHUA("已经对sm_pSharedApplication赋值，value = %d",(int)sm_pSharedApplication);
+	sm_pSharedApplication = pkApp;
+
 	return true;
 }
 
+bool CCApplication::SetApp( CCApplication* pkApp )
+{
+	if (0 == pkApp)
+	{
+		LOGDAHUA("传递进来的参数pkApp为空值");
+		return false;
+	}
+
+	LOGDAHUA("已经对sm_pSharedApplication赋值，value = %d",(int)sm_pSharedApplication);
+	sm_pSharedApplication = pkApp;
+
+	return true;
+}
 
 NS_CC_END;

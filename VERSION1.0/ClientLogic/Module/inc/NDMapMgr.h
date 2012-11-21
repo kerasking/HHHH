@@ -256,7 +256,7 @@ typedef map_npc_store::iterator				map_npc_store_it;
 
 class NDMapMgr:
 	public NDObject,
-	public TSingleton<NDMapMgr>,
+	//public TSingleton<NDMapMgr>,
 	public NDMsgObject,
 #ifdef WIN32
 	public NDConsoleListener,
@@ -273,6 +273,8 @@ public:
 	typedef VEC_MONSTER::iterator vec_monster_it;
 
 	DECLARE_CLASS(NDMapMgr);
+
+	static NDMapMgr& GetSingleton();
 
 	NDMapMgr();
 	virtual ~NDMapMgr();
@@ -484,6 +486,8 @@ protected:
 	CAutoLink<NDMonster> m_apWaitBattleMonster;
 //	VEC_REQUST m_vecRequest;		///< ÒÀÀµÌÀ×ÔÇÚµÄGameUIRequest ¹ùºÆ
 	CIDFactory m_idAlloc;
+
+	static NDMapMgr* ms_pkMapMgr;
 
 private:
 };

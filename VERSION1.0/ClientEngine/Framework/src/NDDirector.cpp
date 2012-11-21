@@ -17,6 +17,8 @@
 //#include "NDMapData.h"
 #include "NDPicture.h"
 #include "NDAnimationGroupPool.h"
+#include "globaldef.h"
+#include "NDDebugOpt.h"
 
 using namespace cocos2d;
 
@@ -28,7 +30,7 @@ static NDDirector* gs_pkNDDirectorDefaultDirector = NULL;
 
 NDDirector::NDDirector()
 {
-	NDAsssert(gs_pkNDDirectorDefaultDirector == NULL);
+	//NDAsssert(gs_pkNDDirectorDefaultDirector == NULL);	///< 这里加Assert干嘛？？？？？？ 郭浩
 
 	//CC_DIRECTOR_INIT();
 	m_pkDirector = CCDirector::sharedDirector();
@@ -42,6 +44,8 @@ NDDirector::NDDirector()
 	m_pkTransitionSceneWait = NULL;
 
 	m_eTransitionSceneType = eTransitionSceneNone;
+
+	NDLog("End NDDirector constructed function");
 }
 
 NDDirector::~NDDirector()
@@ -66,10 +70,19 @@ NDDirector* NDDirector::DefaultDirector()
 
 void NDDirector::Initialization()
 {
+	NDLog("Entry NDDirector::Initialization(),the m_pkDirector = %d",(int)m_pkDirector);
+
 	m_pkDirector->setOpenGLView(&CCEGLView::sharedOpenGLView());
+
+	NDLog("end m_pkDirector->setOpenGLView(&CCEGLView::sharedOpenGLView());");
+
 	m_pkDirector->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
 
+	NDLog("end m_pkDirector->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);");
+
 	CC_GLVIEW* pkView = m_pkDirector->getOpenGLView();
+
+	NDLog("end pkView get value,the value is %d",(int)pkView);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	//view->setMultipleTouchEnabled(false);
@@ -80,12 +93,17 @@ void NDDirector::Initialization()
 		m_bEnableRetinaDisplay = true;
 	}
 
+	NDLog("end m_pkDirector->enableRetinaDisplay(true)");
+
 	m_pkDirector->setAnimationInterval(1.0f / 24.0f); //@zwq
 
 	CCTexture2D::setDefaultAlphaPixelFormat (kTexture2DPixelFormat_RGBA8888);
 
 	//#if ND_DEBUG_STATE == 1
 	m_pkDirector->setDisplayFPS(true);
+
+	NDLog("end m_pkDirector->setDisplayFPS(true)");
+
 	//#else
 	//m_director.displayFPS = NO;
 	//#endif

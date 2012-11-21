@@ -62,12 +62,13 @@ NDGameApplication::~NDGameApplication()
 
 bool NDGameApplication::initInstance()
 {
+	initClass();
+
 	bool bRet = false;
 	do
 	{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
-		initClass();
 		InitGameInstance();
         InitSocket();
 
@@ -145,20 +146,32 @@ bool NDGameApplication::initInstance()
 
 bool NDGameApplication::applicationDidFinishLaunching()
 {
-#ifdef ANDROID
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","Begin to exe applicationDidFinishLaunching");
 #endif
 
 	REGISTER_CLASS(NDBaseBattle,Battle);
 	REGISTER_CLASS(NDBaseFighter,Fighter);
 
+	NDLog("REGISTER_CLASS over");
+
 	NDMapMgr& kMapMgr = NDMapMgrObj;
+
+	NDLog("kMapMgr init over");
 	NDDirector* pkDirector = NDDirector::DefaultDirector();
+
+	NDLog("pkDirector get over");
+
 	ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();
+
+	NDLog("kScriptManager get over");
+
 	NDBeforeGameMgrObj;
 
-#ifdef ANDROID
-	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","Begin to pkDirector->Initialization();");
+	NDLog("NDBeforeGameMgrObj called over");
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","Begin to pkDirector->Initialization(); pkDirector value is %d",(int)pkDirector);
 #endif
 
 	pkDirector->Initialization();
