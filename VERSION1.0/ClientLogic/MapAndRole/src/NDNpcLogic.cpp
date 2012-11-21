@@ -52,6 +52,8 @@ void NDHeroTaskLogic::tickNpc( NDNpcLogic* npcLogic )
 	int idNpc = npcLogic->Owner->m_nID;
 	NDNpc* npc = npcLogic->Owner;
 
+	bool bIfSetState = false;
+
 #if 1
 	for (ID_VEC::iterator it = idlistAccept->begin();
 			it != idlistAccept->end(); it++)
@@ -65,15 +67,19 @@ void NDHeroTaskLogic::tickNpc( NDNpcLogic* npcLogic )
 			if (*it /10000 == 5)
 			{
 				npc->SetNpcState((NPC_STATE)QUEST_FINISH);
+				return;
 			}
 			else 
 			{
 				//支线优先级低于主线，若无主线则返回
 				npc->SetNpcState((NPC_STATE)QUEST_FINISH_SUB);
+				bIfSetState = true;
 			}
-			return;
 		}
 	}
+
+	if(bIfSetState)
+		return;
 #endif
 
 #if 2
@@ -96,10 +102,13 @@ void NDHeroTaskLogic::tickNpc( NDNpcLogic* npcLogic )
 			else 
 			{
 				npc->SetNpcState((NPC_STATE)QUEST_CAN_ACCEPT_SUB);                
-				return;
+				bIfSetState = true;
 			}
 		}
 	}
+
+	if(bIfSetState)
+		return;
 #endif
 
 #if 3
