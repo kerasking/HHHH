@@ -250,6 +250,7 @@ public:
 		btn->SetBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);
 		btn->SetTouchDownImage(GetSelectedPicture(), false, CCRectZero, true);
 		btn->SetFocusImage(GetFocusPicture(), false, CCRectZero, true);
+		btn->SetDisImage(GetDisablePicture(), false, CCRectZero, true);
 		btn->SetTitle(info.strText.c_str());
 		btn->SetFontSize(info.nTextFontSize);
 		btn->SetFontColor(INTCOLORTOCCC4(info.nTextFontColor));
