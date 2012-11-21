@@ -23,7 +23,7 @@ class NDUILoad : public NDObject
 		  NDUINode *parent, 
 		  NDUITargetDelegate* delegate, 
 		  CCSize sizeOffset = CCSizeZero);
-		  
+
 	bool LoadLua(
 		  const char* uiname,
 		  NDUINode *parent, 
