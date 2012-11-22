@@ -11,9 +11,12 @@
 #include "NDPath.h"
 #include "JavaMethod.h"
 #include "NDFrame.h"
+#include "globaldef.h"
+#include "NDDebugOpt.h"
 //#include "NDSprite.h"
 
 using namespace cocos2d;
+using namespace NDEngine;
 
 NDTileTableRecord::NDTileTableRecord() :
 m_nImageIndex(0),
@@ -56,6 +59,9 @@ NDAnimationGroup::~NDAnimationGroup()
 
 void NDAnimationGroup::initWithSprFile(const char* sprFile)
 {
+	NDLog("entry void NDAnimationGroup::initWithSprFile");
+	NDLog("sprFile is %s",sprFile);
+
 	if (sprFile)
 	{
 		char sprtFile[256] =
@@ -77,6 +83,8 @@ void NDAnimationGroup::initWithSprFile(const char* sprFile)
 			fclose(pkSprStream);
 		}
 	}
+
+	NDLog("leave void NDAnimationGroup::initWithSprFile");
 }
 
 void NDAnimationGroup::setReverse(bool bNewReverse)
@@ -97,6 +105,8 @@ bool NDAnimationGroup::getReverse()
 
 void NDAnimationGroup::decodeSprtFile(FILE* pkStream)
 {
+	NDLog("entry NDAnimationGroup::decodeSprtFile(FILE* pkStream)");
+
 	FileOp kFileOp;
 	int nCount = kFileOp.readByte(pkStream);
 
@@ -126,6 +136,8 @@ void NDAnimationGroup::decodeSprtFile(FILE* pkStream)
 
 		CCLog("the number is : %d",uiTemp);
 	}
+
+	NDLog("Leave NDAnimationGroup::decodeSprtFile(FILE* pkStream)");
 }
 
 void NDAnimationGroup::decodeSprFile(FILE* pkStream)

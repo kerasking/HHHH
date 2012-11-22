@@ -16,11 +16,17 @@ protected: static varType varName;\
 public: static varType get##funName(void) { return varName; } \
 public: static void set##funName(varType var) { varName = var; }
 
+typedef enum
+{
+	NDError,
+	NDInfo,
+}OutputInfoType;
+
 class NDDebugOpt : private NDObject
 {
 public:
 
-	static void Log(const char* pszTag, const char * pszFormat,... );
+	static void Log(OutputInfoType eType,const char* pszTag, const char * pszFormat,... );
 
 private:
 protected:

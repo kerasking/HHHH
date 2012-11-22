@@ -13,6 +13,8 @@
 #include "NDUtility.h"
 #include <map>
 #include <NDDataTransThread.h>
+#include "globaldef.h"
+#include "NDDebugOpt.h"
 
 using namespace NDEngine;
 using namespace LuaPlus;
@@ -74,8 +76,10 @@ void SendMsg(NDTransData* data)
 
 void ScriptNetMsg::OnLoad()
 {
+	NDLog("entry ScriptNetMsg::OnLoad()");
 	ETLUAFUNC("RegisterNetMsgHandler", RegisterNetMsgHandler)
 	ETCFUNC("SendMsg", SendMsg)
+	NDLog("leave ScriptNetMsg::OnLoad()");
 }
 
 bool ScriptNetMsg::Process(MSGID msgID, NDTransData* data)

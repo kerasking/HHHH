@@ -26,6 +26,8 @@
 #include "Battle.h"
 #include "ChatManager.h"
 #include "NDDataTransThread.h"
+#include "globaldef.h"
+#include "NDDebugOpt.h"
 
 using namespace NDEngine;
 
@@ -382,6 +384,7 @@ const char* GetImagePathNew(const char* pszPath)
 ///////////////////////////////////////////////
 void ScriptObjectGameLogic::OnLoad()
 {
+	NDLog("entry ScriptObjectGameLogic::OnLoad()");
 	ETCFUNC("QuitGame", QuitGame);
 	ETCFUNC("CreatePlayer", CreatePlayer);
 	ETCFUNC("PlayerStopMove", PlayerStopMove);
@@ -419,6 +422,7 @@ void ScriptObjectGameLogic::OnLoad()
 
 	ETCFUNC("Int2StrIP",Int2StrIP);
 	ETCFUNC("sendMsgConnect",sendMsgConnect);
+	NDLog("Leave ScriptObjectGameLogic::OnLoad()");
 }
 
 //地图层接口导出

@@ -11,7 +11,8 @@
 #include "NDControlHelp.h"
 #include "UIData.h"
 #include "NDDirector.h"
-
+#include "globaldef.h"
+#include "NDDebugOpt.h"
 
 #pragma mark 加载ui
 
@@ -369,12 +370,16 @@ bool NDUILoad::LoadLua(
 		  float sizeOffsetW /*= 0.0f*/,
 		  float sizeOffsetH /*= 0.0f*/)
 {
+	NDLog("Entry NDUILoad::LoadLua");
+
 	if (!uiname || !parent)
 	{
 		NDAsssert(0);
 		
 		return false;
 	}
+
+	NDLog("The UI Load is %s",uiname);
 	
 	CUIData  uiData;
 	
@@ -600,6 +605,8 @@ bool NDUILoad::LoadLua(
 		if (luaDelegate.IsFunction())
 			node->SetLuaDelegate(luaDelegate);
 	}
+
+	NDLog("Leave NDUILoad::LoadLua");
 	
 	return true;
 }

@@ -742,7 +742,7 @@ NDScriptGameData::DelRoleSkillData(unsigned int nKey)
 
 void NDScriptGameData::Load()
 {
-
+	NDLog("entry pkData->Load();");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

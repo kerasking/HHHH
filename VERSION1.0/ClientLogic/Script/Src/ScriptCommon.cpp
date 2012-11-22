@@ -15,6 +15,8 @@
 #include <map>
 #include "NDPicture.h"
 #include "CCTextureCacheExt.h"
+#include "globaldef.h"
+#include "NDDebugOpt.h"
 
 using namespace LuaPlus;
 using namespace NDEngine;
@@ -58,6 +60,19 @@ int DoFile(LuaState* state)
 	}
 
 	return nRet;
+}
+
+bool PrintLog(const char* pszText)
+{
+	NDLog("PrintLog");
+	if (0 == pszText || !*pszText)
+	{
+		return false;
+	}
+	
+	NDLog(pszText);
+
+	return true;
 }
 
 int LeftShift(int x, int y)
@@ -104,11 +119,14 @@ int PicMemoryUsingLogOut(bool bNotPrintLog)
 
 void ScriptObjectCommon::OnLoad()
 {
+	NDLog("entry ScriptObjectCommon::OnLoad()");
 	ETLUAFUNC("LuaLogInfo", LuaLogInfo);
 	ETLUAFUNC("LuaLogError", LuaLogError);
 	ETLUAFUNC("DoFile", DoFile);
+	ETCFUNC("PrintLog", PrintLog);
 	ETCFUNC("LeftShift", LeftShift)
 	ETCFUNC("RightShift", RightShift)
 	ETCFUNC("BitwiseAnd", BitwiseAnd)
 	//ETCFUNC("PicMemoryUsingLogOut", PicMemoryUsingLogOut);
+	NDLog("leave ScriptObjectCommon::OnLoad()");
 }

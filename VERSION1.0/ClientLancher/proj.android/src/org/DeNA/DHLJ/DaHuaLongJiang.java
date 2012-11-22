@@ -27,7 +27,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity{
 	}
 
 	 @Override
-	 protected void onPause() {		 
+	 protected void onPause() {
 	     super.onPause();
 	     
 	     mGLView.onPause();

@@ -62,7 +62,9 @@ typedef std::map<OBJID, OBJID> ID_MAP;
 #include "ScriptInc.h"
 
 #define NDLog(str, ...) \
-	NDDebugOpt::Log("DaHua",str,##__VA_ARGS__)
+	NDDebugOpt::Log(NDInfo,"DaHua",str,##__VA_ARGS__)
+#define NDError(str,...) \
+	NDDebugOpt::Log(NDError,"DaHua",str,##__VA_ARGS__)
 
 
 //#include "NDMsgDefine.h"

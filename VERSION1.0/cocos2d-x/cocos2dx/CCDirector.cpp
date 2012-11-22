@@ -103,12 +103,13 @@ CCDirector* CCDirector::sharedDirector(void)
 	//CCAssert(sm_pSharedDirector, "sm_pSharedDirector should not be null");
 	if (s_bFirstRun && sm_pSharedDirector)
 	{
-#ifdef ANDROID
-		__android_log_print(ANDROID_LOG_DEBUG,"DaHua","sm_pSharedDirector ready to init()");
-#endif
 		sm_pSharedDirector->init();
         s_bFirstRun = false;
 	}
+
+#ifdef ANDROID
+	__android_log_print(ANDROID_LOG_ERROR,"DaHua","LEAVE CCDirector::sharedDirector(void) value is %d",(int)sm_pSharedDirector);
+#endif
 
 	return sm_pSharedDirector;
 #else
@@ -393,8 +394,12 @@ void CCDirector::setOpenGLView(CC_GLVIEW *pobOpenGLView)
 	if (m_pobOpenGLView != pobOpenGLView)
 	{
 		// because EAGLView is not kind of CCObject
-		//LOGD("ready to delete m_pobOpenGLView value is %d",(int)m_pobOpenGLView);
-		delete m_pobOpenGLView; // [openGLView_ release]
+		LOGD("ready to delete m_pobOpenGLView value is %d",(int)m_pobOpenGLView);
+ 		if (0 != m_pobOpenGLView)
+ 		{
+ 			delete m_pobOpenGLView; // [openGLView_ release]
+ 		}
+ 		
 		m_pobOpenGLView = pobOpenGLView;
 
 		LOGD("m_pobOpenGLView value is %d",(int)m_pobOpenGLView);
@@ -641,6 +646,8 @@ void CCDirector::runWithScene(CCScene *pScene)
 {
 	CCAssert(pScene != NULL, "running scene should not be null");
 	CCAssert(m_pRunningScene == NULL, "m_pRunningScene should be null");
+
+	LOGDAHUA("entry void CCDirector::runWithScene(CCScene *pScene)");
 
 	pushScene(pScene);
 	startAnimation();
@@ -1031,6 +1038,8 @@ ccDeviceOrientation CCDirector::getDeviceOrientation(void)
 
 void CCDirector::setDeviceOrientation(ccDeviceOrientation kDeviceOrientation)
 {
+	LOGD("entry setDeviceOrientation");
+
 	ccDeviceOrientation eNewOrientation;
 
 	eNewOrientation = (ccDeviceOrientation)CCApplication::sharedApplication().setOrientation(
@@ -1039,9 +1048,11 @@ void CCDirector::setDeviceOrientation(ccDeviceOrientation kDeviceOrientation)
 	if (m_eDeviceOrientation != eNewOrientation)
 	{
 		m_eDeviceOrientation = eNewOrientation;
+		LOGD("entry if (m_eDeviceOrientation != eNewOrientation)");
 	}
     else
     {
+		LOGD("entry else (m_eDeviceOrientation != eNewOrientation)");
         // this logic is only run on win32 now
         // On win32,the return value of CCApplication::setDeviceOrientation is always kCCDeviceOrientationPortrait
         // So,we should calculate the Projection and window size again.
@@ -1050,7 +1061,6 @@ void CCDirector::setDeviceOrientation(ccDeviceOrientation kDeviceOrientation)
         setProjection(m_eProjection);
     }
 }
-
 
 /***************************************************
 * implementation of DisplayLinkDirector
@@ -1064,7 +1074,7 @@ CCDisplayLinkDirector::CCDisplayLinkDirector(void)
 	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","entry CCDisplayLinkDirector constructed function,value is %d",(int)sm_pSharedDirector);
 #endif
 
-    sm_pSharedDirector = this;
+	sm_pSharedDirector = this;
 
 #ifdef ANDROID
 	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","end evaluation sm_pSharedDirector,sm_pSharedDirector value is %d",(int)sm_pSharedDirector);

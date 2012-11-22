@@ -177,7 +177,18 @@ bool NDGameApplication::applicationDidFinishLaunching()
 #endif
 
 	pkDirector->Initialization();
-	pkDirector->RunScene(CSMLoginScene::Scene());
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","end to pkDirector->Initialization(); pkDirector value is %d",(int)pkDirector);
+#endif
+
+	CSMLoginScene* pkLoginScene = CSMLoginScene::Scene();
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","pkLoginScene value is %d",(int)pkLoginScene);
+#endif
+
+	pkDirector->RunScene(pkLoginScene);
 
 #ifdef ANDROID
 	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","End to pkDirector->Initialization();");

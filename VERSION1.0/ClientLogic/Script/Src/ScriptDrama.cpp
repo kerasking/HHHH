@@ -11,6 +11,8 @@
 #include "ScriptInc.h"
 #include "DramaCommand.h"
 #include "Drama.h"
+#include "globaldef.h"
+#include "NDDebugOpt.h"
 
 using namespace NDEngine;
 
@@ -528,6 +530,7 @@ void DramaPlaySoundEffect(int nSoundEffectId)
 
 void ScriptObjectDrama::OnLoad()
 {
+	NDLog("entry ScriptObjectDrama::OnLoad()");
 	ETCFUNC("DramaPlaySoundEffect", DramaPlaySoundEffect);
 	ETCFUNC("DramaOpenLChatDlg", DramaOpenLChatDlg);
 	ETCFUNC("DramaOpenLChatDlgNotCloseRight", DramaOpenLChatDlgNotCloseRight);
@@ -562,4 +565,5 @@ void ScriptObjectDrama::OnLoad()
 	ETCFUNC("DramaFinish", DramaFinish);
 	ETCFUNC("DramaShowTipDlg", DramaShowTipDlg);
 	ETCFUNC("DramaSetSpriteReverse", DramaSetSpriteReverse);
+	NDLog("entry ScriptObjectDrama::OnLoad()");
 }

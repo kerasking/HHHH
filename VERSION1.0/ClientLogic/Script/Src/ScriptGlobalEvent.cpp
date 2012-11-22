@@ -11,6 +11,8 @@
 #include "ScriptInc.h"
 #include <map>
 #include "LuaObject.h"
+#include "globaldef.h"
+#include "NDDebugOpt.h"
 
 using namespace NDEngine; 
 using namespace LuaPlus;
@@ -21,6 +23,9 @@ std::multimap<GLOBALEVENT, LuaObject> mapGlobalEventHandler;
 
 bool RegisterGlobalEventHandler(int nEvent, const char* funcname, LuaObject func)
 {
+	NDLog("Entry RegisterGlobalEventHandler");
+	NDLog("Rigister event id = %d,the function name is %s",nEvent,funcname);
+
 	if (nEvent < GLOBALEVENT_BEGIN || nEvent >= GLOBALEVENT_END)
 	{
 		if (funcname)
@@ -40,13 +45,11 @@ bool RegisterGlobalEventHandler(int nEvent, const char* funcname, LuaObject func
 		return false;
 	}
 
-	ScriptMgrObj.DebugOutPut("reg global envent [%d][%s] sucess!", 
-		nEvent,
-		funcname);
+	NDLog("reg global envent [%d][%s] sucess!", nEvent,funcname);
 
 	mapGlobalEventHandler.insert(GLOBALEVENTVT(GLOBALEVENT(nEvent), func));
 
-		return true;
+	return true;
 }
 
 //void SendGlobalEvent(int iEventID, int param1=0, int param2=0, int param3=0);
@@ -56,12 +59,15 @@ void SendGlobalEvent(int iEventID, int param1=0, int param2=0, int param3=0)
 }
 void ScriptGlobalEvent::Load() 
 {
+	NDLog("entry ScriptGlobalEvent::OnLoad()");
 	ETCFUNC( "RegisterGlobalEventHandler", RegisterGlobalEventHandler )
 	ETCFUNC( "SendGlobalEvent", SendGlobalEvent )
+	NDLog("leave ScriptGlobalEvent::OnLoad()");
 }
 
 void ScriptGlobalEvent::OnEvent(GLOBALEVENT eEvent, int param1, int param2, int param3)
 {
+	NDLog("Entry ScriptGlobalEvent::OnEvent()");
 	std::pair<GLOBALEVENTCIT, GLOBALEVENTCIT> range;
 	range = mapGlobalEventHandler.equal_range(eEvent);
 
@@ -75,6 +81,8 @@ void ScriptGlobalEvent::OnEvent(GLOBALEVENT eEvent, int param1, int param2, int 
 		LuaFunction<void> luaFunc(fun);
 		luaFunc(param1, param2, param3);
 	}
+
+	NDLog("leave ScriptGlobalEvent::OnEvent()");
 }
 
 void ScriptGlobalEventLoad()

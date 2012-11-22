@@ -47,6 +47,8 @@
 #include "NDConstant.h"
 #include "uitypes.h"
 #include "..\..\..\ClientEngine\Utility\inc\platform.h"
+#include "globaldef.h"
+#include "NDDebugOpt.h"
 //...
 // smys end
 
@@ -1173,6 +1175,7 @@ CCSize SizeMake(float width, float height)
 
 void ScriptObjectUI::OnLoad()
 {
+	NDLog("entry ScriptObjectUI::OnLoad()");
 	ETCFUNC("GetUiNode", GetUiNode)
 	ETCFUNC("GetLabel", GetLabel)
 	ETCFUNC("GetButton", GetButton)
@@ -1260,6 +1263,7 @@ void ScriptObjectUI::OnLoad()
 	ETCFUNC("ConverToRadioGroup", ConverToRadioGroup);
 	ETCFUNC("ConverToEdit", ConverToEdit);
 	ETCFUNC("ConverToSprite", ConverToSprite);
+	NDLog("leave ScriptObjectUI::OnLoad()");
 }
 
 // 颜色结构导出

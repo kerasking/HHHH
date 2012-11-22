@@ -56,18 +56,14 @@ $(LOCAL_PATH)/../../../NetWork/inc
 LOCAL_LDLIBS := -L$(call host-path, $(LOCAL_PATH)/../../proj.android/libs/$(TARGET_ARCH_ABI)) \
                 -L$(call host-path, $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/third_party/android/libraries/$(TARGET_ARCH_ABI))
 
-LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += luaplus
 LOCAL_WHOLE_STATIC_LIBRARIES += tinyxml
 LOCAL_WHOLE_STATIC_LIBRARIES += NetWork
-LOCAL_WHOLE_STATIC_LIBRARIES += ClientEngine
 LOCAL_WHOLE_STATIC_LIBRARIES += ClientLogic
 
 include $(BUILD_SHARED_LIBRARY)
 
 $(call import-module,LuaPlus/proj.android/jni)
-$(call import-module,cocos2dx)
 $(call import-module,tinyxml/proj.android/jni)
 $(call import-module,NetWork/proj.android/jni)
-$(call import-module,ClientEngine/proj.android/jni)
 $(call import-module,ClientLogic/proj.android/jni)

@@ -420,6 +420,7 @@ public:
 		itemBtn->CloseItemFrame();
 		itemBtn->SetItemBackgroundPicture(GetNormalPicture(), NULL, false, CGRectZero, true);
 		itemBtn->SetItemFocusImage(GetFocusPicture(), false, CGRectZero, true);
+
 		return itemBtn;
 	}
 };

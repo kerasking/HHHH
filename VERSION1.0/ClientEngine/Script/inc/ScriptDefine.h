@@ -13,7 +13,7 @@
 namespace NDEngine {
 
 // ET-EXPORT
-#ifdef __APPLE__
+#if (defined(ANDROID) || defined(__APPLE__))
 
 	#define ETLUAFUNC(nameinlua, funcaddr) \
 	LuaStateMgrObj.GetState()->GetGlobals().Register(nameinlua, funcaddr);
@@ -89,20 +89,20 @@ namespace NDEngine {
 	
 #else // __APPLE__
 	
-	#define ETLUAFUNC(nameinlua, funcaddr) \
+
+#define ETLUAFUNC(nameinlua, funcaddr) \
 	LuaStateMgrObj.GetState()->GetGlobals().Register(nameinlua, funcaddr);
 
-	#define ETCFUNC(nameinlua, funcaddr) \
+#define ETCFUNC(nameinlua, funcaddr) \
 	LuaStateMgrObj.GetState()->GetGlobals().RegisterDirect(nameinlua, funcaddr);
 
 	//#define ETVAR(nameinlua, varaddr)
 	//LuaStateMgrObj.GetState()->GetGlobals()[nameinlua].SetInteger()
 
-	#define ETCLASSBEGIN(classname) \
+#define ETCLASSBEGIN(classname) \
 	bool ETClassBegin##classname(){ \
 	LuaClass<classname>  LuaClassTmp(LuaStateMgrObj.GetState());
 
-#ifdef WIN32
 #define ETSUBCLASSBEGIN(classname, parentclassname) \
 	bool ETClassBegin##classname(){ \
 	LuaClass<classname>  LuaClassTmp(LuaStateMgrObj.GetState()); \
@@ -121,67 +121,47 @@ namespace NDEngine {
 } \
 	meta.SetMetaTable(pmeta); \
 } while (0);
-#else
-#define ETSUBCLASSBEGIN(classname, parentclassname) \
-	bool ETClassBegin##classname(){ \
-	LuaClass<classname>  LuaClassTmp(LuaStateMgrObj.GetState()); \
-	do \
-	{ \
-	std::string metaname("MetaClass_"); \
-	metaname += typeid(classname).name(); \
-	LuaObject meta = LuaStateMgrObj.GetState()->GetRegistry()[metaname.c_str()]; \
-	std::string pmetaname("MetaClass_"); \
-	pmetaname += typeid(parentclassname).name(); \
-	LuaObject pmeta = LuaStateMgrObj.GetState()->GetRegistry()[pmetaname.c_str()]; \
-	if (pmeta.IsNil()) \
-	{ \
-	pmeta = LuaStateMgrObj.GetState()->GetRegistry().CreateTable(pmetaname.c_str()); \
-	pmeta.SetObject("__index", pmeta); \
-} \
-	meta.SetMetaTable(pmeta); \
-} while (0);
-#endif
 
-	#define ETCONSTRUCT(nameinlua) \
+#define ETCONSTRUCT(nameinlua) \
 	LuaClassTmp.create(nameinlua);
 
-	#define ETCONSTRUCTARG1(nameinlua, argtype1) \
+#define ETCONSTRUCTARG1(nameinlua, argtype1) \
 	LuaClassTmp.create<argtype1>(nameinlua);
 
-	#define ETCONSTRUCTARG2(nameinlua, argtype1, argtype2) \
+#define ETCONSTRUCTARG2(nameinlua, argtype1, argtype2) \
 	LuaClassTmp.create<argtype1, argtype2>(nameinlua);
 
-	#define ETCONSTRUCTARG3(nameinlua, argtype1, argtype2, argtype3) \
+#define ETCONSTRUCTARG3(nameinlua, argtype1, argtype2, argtype3) \
 	LuaClassTmp.create<argtype1, argtype2, argtype3>(nameinlua);
 
-	#define ETCONSTRUCTARG4(nameinlua, argtype1, argtype2, argtype3, argtype4) \
+#define ETCONSTRUCTARG4(nameinlua, argtype1, argtype2, argtype3, argtype4) \
 	LuaClassTmp.create<argtype1, argtype2, argtype3, argtype4>(nameinlua);
 
-	#define ETCONSTRUCTARG5(nameinlua, argtype1, argtype2, argtype3, argtype5) \
+#define ETCONSTRUCTARG5(nameinlua, argtype1, argtype2, argtype3, argtype5) \
 	LuaClassTmp.create<argtype1, argtype2, argtype3, argtype4, argtype5>(nameinlua);
 
-	#define ETMEMBERFUNC(nameinlua, funcaddr) \
+#define ETMEMBERFUNC(nameinlua, funcaddr) \
 	LuaClassTmp.def(nameinlua, funcaddr);
 
-	#define ETDESTRUCT(nameinlua) \
+#define ETDESTRUCT(nameinlua) \
 	LuaClassTmp.destroy(nameinlua);
 
-	#define ETCLASSEND(classname) \
+#define ETCLASSEND(classname) \
 	return true;} \
- 	bool bool##classname = ScriptMgrObj.AddRegClassFunc(&(ETClassBegin##classname));
+	bool bool##classname = ScriptMgrObj.AddRegClassFunc(&(ETClassBegin##classname));
 
 
-	#define ETSTRUCTBEGIN(structname) \
- 	bool ETStructBegin##structname(){ \
- 	LuaClass<structname>  LuaClassTmp(LuaStateMgrObj.GetState()); \
- 	LuaClassTmp.createStruct(#structname);
+#define ETSTRUCTBEGIN(structname) \
+	bool ETStructBegin##structname(){ \
+	LuaClass<structname>  LuaClassTmp(LuaStateMgrObj.GetState()); \
+	LuaClassTmp.createStruct(#structname);
 
-	#define ETSTRUCTPROP(nameinlua, propaddr) \
+#define ETSTRUCTPROP(nameinlua, propaddr) \
 	LuaClassTmp.prop(nameinlua, propaddr);
 
-	#define ETSTRUCTEND(structname) \
- 	return true;} \
- 	bool bool##structname = ScriptMgrObj.AddRegClassFunc(&(ETStructBegin##structname));
+#define ETSTRUCTEND(structname) \
+	return true;} \
+	bool bool##structname = ScriptMgrObj.AddRegClassFunc(&(ETStructBegin##structname));
 
 #endif
 	

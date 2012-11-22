@@ -232,7 +232,7 @@ static void buffreplace (LexState *ls, char from, char to) {
 
 static void trydecpoint (LexState *ls, SemInfo *seminfo) {
   /* format error: try to update decimal point separator */
-#ifdef _WINDOWS			///< 因为NDK下lconv是空的。 add by 郭浩
+#if 0			///< 因为NDK下lconv是空的。 add by 郭浩
   struct lconv *cv = localeconv();
   char old = ls->decpoint;
   ls->decpoint = (cv ? cv->decimal_point[0] : '.');

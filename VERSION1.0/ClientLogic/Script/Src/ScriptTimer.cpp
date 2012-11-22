@@ -8,6 +8,8 @@
  */
 
 #include "ScriptTimer.h"
+#include "globaldef.h"
+#include "NDDebugOpt.h"
 
 unsigned int RegisterTimer(LuaObject func, float fInterval)
 {
@@ -21,8 +23,10 @@ void UnRegisterTimer(unsigned int nTag)
 
 void ScriptTimerMgr::OnLoad()
 {
+	NDLog("entry ScriptTimerMgr::OnLoad()");
 	ETCFUNC("RegisterTimer", RegisterTimer);
 	ETCFUNC("UnRegisterTimer", UnRegisterTimer);
+	NDLog("leave ScriptTimerMgr::OnLoad()");
 }
 
 void ScriptTimerMgr::OnTimer(OBJID tag)

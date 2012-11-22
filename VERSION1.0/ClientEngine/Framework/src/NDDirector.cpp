@@ -19,6 +19,7 @@
 #include "NDAnimationGroupPool.h"
 #include "globaldef.h"
 #include "NDDebugOpt.h"
+#include "NDBaseDirector.h"
 
 using namespace cocos2d;
 
@@ -33,7 +34,7 @@ NDDirector::NDDirector()
 	//NDAsssert(gs_pkNDDirectorDefaultDirector == NULL);	///< 这里加Assert干嘛？？？？？？ 郭浩
 
 	//CC_DIRECTOR_INIT();
-	m_pkDirector = CCDirector::sharedDirector();
+	m_pkDirector = NDBaseDirector::sharedDirector();
 	m_pkSetViewRectNode = NULL;
 	m_bResetViewRect = false;
 	m_fXScaleFactor = 1.0f;
@@ -45,7 +46,7 @@ NDDirector::NDDirector()
 
 	m_eTransitionSceneType = eTransitionSceneNone;
 
-	NDLog("End NDDirector constructed function");
+	NDLog("End NDDirector constructed function,m_pkDirector value is %d",(int)m_pkDirector);
 }
 
 NDDirector::~NDDirector()
@@ -76,7 +77,7 @@ void NDDirector::Initialization()
 
 	CCEGLView* pkEGLView = CCEGLView::sharedOpenGLViewPtr();
 
-	NDLog("kEGLView's address is %d",(int)pkEGLView);
+	NDLog("pkEGLView's address is %d",(int)pkEGLView);
 
 	m_pkDirector->setOpenGLView(pkEGLView);
 
@@ -197,6 +198,8 @@ void NDDirector::EnableDispatchEvent(bool enable)
 
 void NDDirector::RunScene(NDScene* scene)
 {
+	NDLog("entry RunScene(NDScene* scene)");
+
 	//@zwq
 	if (m_pkDirector->getRunningScene())
 	{
@@ -208,6 +211,8 @@ void NDDirector::RunScene(NDScene* scene)
 		m_kScenesStack.push_back(scene);
 		m_pkDirector->runWithScene((CCScene *) scene->m_ccNode);
 	}
+
+	NDLog("Leave RunScene(NDScene* scene)");
 }
 
 void NDDirector::ReplaceScene(NDScene* pkScene, bool bAnimate/*=false*/)

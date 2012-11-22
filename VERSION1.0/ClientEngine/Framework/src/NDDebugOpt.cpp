@@ -21,29 +21,65 @@ NS_NDENGINE_BGN
 
 IMPLEMENT_CLASS(NDDebugOpt, NDObject)
 
-void NDDebugOpt::Log(const char* pszTag, const char * pszFormat,... )
+void NDDebugOpt::Log(OutputInfoType eType,const char* pszTag, const char * pszFormat,...)
 {
+	switch (eType)
+	{
+	case NDInfo:
+		{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	char buf[2048] = {0};
+			char buf[2048] = {0};
 
-	va_list args;
-	va_start(args, pszFormat);    	
-	vsprintf(buf, pszFormat, args);
-	va_end(args);
+			va_list args;
+			va_start(args, pszFormat);    	
+			vsprintf(buf, pszFormat, args);
+			va_end(args);
 
-	__android_log_print(ANDROID_LOG_DEBUG,pszTag,buf);
+			__android_log_print(ANDROID_LOG_DEBUG,pszTag,buf);
 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
-	char buf[2048] = {0};
+			char buf[2048] = {0};
 
-	va_list args = 0;
-	va_start(args, pszFormat);    	
-	vsprintf(buf, pszFormat, args);
-	va_end(args);
+			va_list args = 0;
+			va_start(args, pszFormat);    	
+			vsprintf(buf, pszFormat, args);
+			va_end(args);
 
-	printf(buf);
+			printf(buf);
+			printf("\n");
 #endif
+		}
+		break;
+	case NDError:
+		{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+			char buf[2048] = {0};
+
+			va_list args;
+			va_start(args, pszFormat);    	
+			vsprintf(buf, pszFormat, args);
+			va_end(args);
+
+			__android_log_print(ANDROID_LOG_ERROR,pszTag,buf);
+
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+
+			char buf[2048] = {0};
+
+			va_list args = 0;
+			va_start(args, pszFormat);    	
+			vsprintf(buf, pszFormat, args);
+			va_end(args);
+
+			printf(buf);
+			printf("\n");
+#endif
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 #define IMP_STATIC_PROPERTY(varType,varName,varVal,clsName)	\

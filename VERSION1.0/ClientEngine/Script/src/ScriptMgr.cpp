@@ -21,6 +21,8 @@
 // #include "ScriptDataBase.h"
 // #include "ScriptTimer.h"
 // #include "ScriptDrama.h"
+#include "globaldef.h"
+#include "NDDebugOpt.h"
 
 using namespace std;
 //#include "NDDataPersist.h"
@@ -153,6 +155,7 @@ void ScriptMgr::update()
 
 void ScriptMgr::Load()
 {
+	NDLog("Entry ScriptMgr::OnLoad()");
 	char szFileName[256] =
 	{ 0 };
 
@@ -194,12 +197,16 @@ void ScriptMgr::Load()
 	// make sure load lua file last;
 	string strPath = NDPath::GetScriptPath("entry.lua");
 
-	if (0 != LuaStateMgrObj.GetState()->DoFile(strPath.c_str()))
+	NDLog("ready to exe entry.lua,path is %s",strPath.c_str());
+
+	if (0 != LuaStateMgrObj.GetState()->DoFile("entry.lua"))
 	{
+		NDError("Exe entry.lua faild");
 		return;
 	}
 
 	LuaStateMgrObj.SetExceptOutput(&luaExceptRunTimeOutPut);
+	NDLog("leave ScriptMgr::OnLoad()");
 }
 
 void ScriptMgr::AddScriptObject(ScriptObject* object)

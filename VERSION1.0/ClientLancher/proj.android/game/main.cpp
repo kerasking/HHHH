@@ -66,14 +66,15 @@ void Java_org_DeNA_DHLJ_DaHuaLongJiang_nativeInit(JNIEnv*  env, jobject thiz, ji
 	LOGD("Starting set CCEGLView");
 
 	NDBaseDirector* pkBaseDirector = new NDBaseDirector;
+	//NDBaseDirector::SetSharedDirector(pkBaseDirector);
 
 	cocos2d::CCEGLView* view = cocos2d::CCEGLView::sharedOpenGLViewPtr();
 
 	LOGD("view got! value is %d",(int)view);
 
     view->setFrameWidthAndHeight(w, h);
-    LOGD(" view->setFrameWidthAndHeight(w, h);! w = %d , h = %d",w,h);
-    view->create(480, 320); // Please change it to (320, 480) if you're in portrait mode.
+   // LOGD(" view->setFrameWidthAndHeight(w, h);! w = %d , h = %d",w,h);
+    //view->create(480, 320); // Please change it to (320, 480) if you're in portrait mode.
 
     LOGD("view's width = %d,height = %d",view->getSize().width,view->getSize().height);
 

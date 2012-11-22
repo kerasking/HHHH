@@ -385,6 +385,9 @@ public:
 	static bool setDirectorType(ccDirectorType obDirectorType);
 
 public:
+
+	static void SetSharedDirector(CCDirector* pkDir);
+
 	/** returns a shared instance of the director */
 	static CCDirector* sharedDirector(void);
 	void resetDirector();

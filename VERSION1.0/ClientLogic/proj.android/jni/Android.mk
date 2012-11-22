@@ -9,7 +9,6 @@ LOCAL_MODULE_FILENAME := libClientLogic
 LOCAL_SRC_FILES := \
 ../../BeforeGame/src/NDBeforeGameMgr.cpp \
 ../../BeforeGame/src/NDGameApplication.cpp \
-../../BeforeGame/src/main.cpp \
 ../../Chat/src/ChatManager.cpp \
 ../../Common/src/GlobalDialog.cpp \
 ../../Common/src/NDUtility.cpp \
