@@ -458,7 +458,8 @@ public:
 		itemBtn->Initialization();
 		itemBtn->SetFrameRect(rect);
 		itemBtn->CloseFrame();
-		itemBtn->SetBackgroundPicture(GetNormalPicture(), NULL, false, CCRectZero, true);
+		itemBtn->SetBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);
+		itemBtn->SetTouchDownImage(GetSelectedPicture(), false, CCRectZero, true);
 		itemBtn->SetFocusImage(GetFocusPicture(), false, CCRectZero, true);
 		return itemBtn;
 	}
