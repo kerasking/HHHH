@@ -144,7 +144,7 @@ void NDNpcLogic::RefreshTaskState()
     }
     double fDeltaTime = (currentTime.tv_sec - tickLastRefresh.tv_sec)*1000.0f + (currentTime.tv_usec - tickLastRefresh.tv_usec) / 1000.0f;
     
-    if (TAbs(fDeltaTime) > 1000*3) //3 second
+    if (TAbs(fDeltaTime) > 1000*1) //1 second
     {
 		NDHeroTaskLogic::Instance().tickHero();
 
