@@ -15,8 +15,8 @@
 #include "ScriptGameLogic.h"
 #include "NDPath.h"
 
-#define ITEM_SIZE_W	(40)
-#define ITEM_SIZE_H (40)
+#define ITEM_SIZE_W	(80)
+#define ITEM_SIZE_H (80)
 
 #define SMALL_ITEM_SIZE_W (23)
 #define SMALL_ITEM_SIZE_H (23)
