@@ -25,6 +25,7 @@ void NDHeroTaskLogic::refreshListAccepted()
 {
 	if (idlistAccept)
 	{
+		idlistAccept->clear();
 		ScriptGameDataObj.GetDataIdList( eScriptDataRole, getHeroID(), eRoleDataTask, *idlistAccept );
 	}
 }
@@ -145,6 +146,8 @@ void NDNpcLogic::RefreshTaskState()
     
     if (TAbs(fDeltaTime) > 1000*3) //3 second
     {
+		NDHeroTaskLogic::Instance().tickHero();
+
 		NDHeroTaskLogic::Instance().tickNpc( this );
 
 		tickLastRefresh = currentTime;
