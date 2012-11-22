@@ -391,7 +391,7 @@ namespace NDEngine {
 	}
     void FinishBattle(void)
 	{
-		//BattleMgrObj.SetBattleOver();
+		BattleMgrObj.SetBattleOver();
 	}
 	
 	void CloseBattle()

@@ -444,7 +444,6 @@ void NDMapLayer::PlayNDSprite(const char* pszSpriteFile, int nPosx, int nPosy,
 void NDMapLayer::showSwitchSprite(MAP_SWITCH_TYPE type)
 {
 	m_eSwitchType = type;
-	CCStringRef aniPath = new CCString(NDPath::GetAnimationPath().c_str());
 
 	if (m_pkSwitchSpriteNode)
 	{
@@ -454,29 +453,28 @@ void NDMapLayer::showSwitchSprite(MAP_SWITCH_TYPE type)
 
 	m_pkSwitchSpriteNode = new CUISpriteNode;
 	m_pkSwitchSpriteNode->Initialization();
-	CCStringRef szAniFile = 0;
+	char * szAniFile = NULL;
 
 	switch (m_eSwitchType)
 	{
 	case SWITCH_NONE:
 		break;
 	case SWITCH_TO_BATTLE:
-		szAniFile = new CCString("switchmask01.spr");
+		szAniFile = "switchmask01.spr";
 		break;
 	case SWITCH_BACK_FROM_BATTLE:
 		break;
 	case SWITCH_START_BATTLE:
-		szAniFile = new CCString("switchmask02.spr");
+		szAniFile = "switchmask02.spr";
 		break;
 	default:
-		szAniFile = new CCString("switchmask03.spr");
+		szAniFile = "switchmask03.spr";
 		break;
 	}
 
-	CCStringRef pStr = CCString::stringWithFormat("%s%s",
-		aniPath->toStdString().c_str(), szAniFile);
+	std::string aniPath = NDPath::GetAnimationPath() + szAniFile;
 
-	m_pkSwitchSpriteNode->ChangeSprite(pStr->toStdString().c_str());
+	m_pkSwitchSpriteNode->ChangeSprite(aniPath.c_str());
 	m_pkSwitchSpriteNode->SetFrameRect(
 		CCRectMake(0, 0, 
 					CCDirector::sharedDirector()->getWinSizeInPixels().width,
