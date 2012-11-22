@@ -59,6 +59,8 @@ m_pkBattle(NULL)
 	m_nLastSceneMapDocID	= 0;
 	m_nLastSceneScreenX		= 0;
 	m_nLastSceneScreenY		= 0;
+	//
+	m_pkStartDramaTimer = NULL;
 }
 
 BattleMgr::~BattleMgr()
