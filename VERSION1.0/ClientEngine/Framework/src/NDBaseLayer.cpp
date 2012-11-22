@@ -73,12 +73,16 @@ void NDBaseLayer::registerWithTouchDispatcher(void)
 
 	// ×¢²átouch·Ö·¢
 	CCTouchDispatcher* touchDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
-	if (pkNode->IsKindOfClass(RUNTIME_CLASS(WorldMapLayer)))
+
+	#if 0
+if (pkNode->IsKindOfClass(RUNTIME_CLASS(WorldMapLayer)))
 	{
 		//WriteCon( "reg layer as: small map [0x12]\r\n" );
 		touchDispatcher->addTargetedDelegate(this, E_LAYER_PRIORITY_WORLDMAP, true);
 	}
-	else if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
+#endif
+
+	if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
 	{
 		//WriteCon( "reg layer as: ui layer  [0x13]\r\n" );
 		touchDispatcher->addTargetedDelegate(this, E_LAYER_PRIORITY_UILAYER, true);
