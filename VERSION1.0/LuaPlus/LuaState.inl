@@ -315,7 +315,7 @@ LUAPLUS_INLINE int LuaState::DoFile(const char *filename)
 				GetExceptInfoOutHandler()(this, errorString);
 			}
 		}
-		return 0;
+		return 1;
 	}
 	
 	lua_State *L = this->GetCState();

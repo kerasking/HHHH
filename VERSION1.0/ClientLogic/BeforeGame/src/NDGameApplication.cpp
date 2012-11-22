@@ -148,6 +148,19 @@ bool NDGameApplication::initInstance()
 
 bool NDGameApplication::applicationDidFinishLaunching()
 {
+	CCImage* pkImage = new CCImage;
+	if (pkImage->initWithImageFile("test.png"))
+	{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		__android_log_print(ANDROID_LOG_DEBUG,"DaHua","Create pkImage failed!");
+#endif
+		return false;
+	}
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","Create pkImage succeeded!");
+#endif
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	__android_log_print(ANDROID_LOG_DEBUG,"DaHua","Begin to exe applicationDidFinishLaunching");
 #endif
