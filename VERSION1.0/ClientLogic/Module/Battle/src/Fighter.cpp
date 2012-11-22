@@ -386,6 +386,12 @@ void Fighter::reStoreAttr()
 	dritical_ani = NULL;
 	dodge_ani = NULL;
 	block_ani = NULL;
+	//--Guosen 2012.11.22 外部销已毁掉下述控件的父节点，so以下控件指针置空
+	m_pkSkillNameLabel		= NULL;
+	m_pkFighterNameLabel	= NULL;
+	m_pkImgHurtNum			= NULL;
+	m_pHPBar				= NULL;
+	m_pMPBar				= NULL;
 }
 
 void Fighter::LoadEudemon()

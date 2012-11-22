@@ -461,7 +461,7 @@ void WorldMapLayer::Goto( int nMapId )
 	{
 		return;
 	}
-	if (node && m_roleNode && m_curBtn != node)
+	if (node && m_roleNode )//Guosen 2012.11.22可响应脚下节点//if (node && m_roleNode && m_curBtn != node)
 	{
 		CCPoint posTarget = GetTargetPos(nMapId);
 		
