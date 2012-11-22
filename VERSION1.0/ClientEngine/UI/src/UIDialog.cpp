@@ -42,7 +42,7 @@ void CUIDlgOptBtn::Initialization()
 	m_sprTip = new CUISpriteNode;
 	m_sprTip->Initialization();
 	m_sprTip->SetFrameRect(rect);
-	m_sprTip->ChangeSprite(NDPath::GetAniPath("button.spr").c_str());
+	//m_sprTip->ChangeSprite(NDPath::GetAniPath("button.spr").c_str());//modified by ZhangDi 这个控件不需要做显示，但是其他地方有依赖到控件的框体大小，所以把显示的动画给屏蔽掉
 
 	//新增提示图片
 	NDPicture *test =  NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImgPath("General/arrows/icon_arrows4.png"));
