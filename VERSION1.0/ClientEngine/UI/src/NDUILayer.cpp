@@ -37,6 +37,7 @@
 #include "NDUIImage.h"
 #include "NDDebugOpt.h"
 #include "BaseType.h"
+#include "UIScrollViewMulHand.h"
 
 using namespace cocos2d;
 
@@ -1646,14 +1647,33 @@ bool NDUILayer::DispatchLayerMoveEvent(CCPoint beginPoint, NDTouch *moveTouch)
 
 	//tmpVertical = tmpVertical > 0.0f ? tmpVertical : -tmpVertical;
 
-// 	if(m_nIsHVFirestTemp)
-// 	{
-// 		NDNode *pNode = this->GetParent()->GetParent();
-// 		if(pNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollViewContainerM)))
-// 		{
-// 			//
-// 		}
-// 	}
+ 	if(m_bIsHVContainer)
+ 	{
+ 		NDNode *pNode = this->GetParent()->GetParent();
+ 		if(pNode->IsKindOfClass(RUNTIME_CLASS(CUIScrollViewContainerM)))
+ 		{
+ 			CUIScrollViewContainerM *svc = (CUIScrollViewContainerM*)pNode;
+
+			if(fabs(horizontal) > fabs((vertical)))
+			{
+				m_nIsHVFirestTemp = 1;
+			}
+			else
+			{
+				m_nIsHVFirestTemp = 2;
+			}
+
+			if(m_nIsHVFirestTemp == 1)
+			{
+				svc->OnScrollViewMove(this, 0, horizontal);
+			}
+			else if(m_nIsHVFirestTemp == 2)
+			{
+				svc->OnScrollViewMove(this, vertical, 0);
+			}
+			return true;
+		}
+	}
 
 	if (m_bHorizontal)
 	{ // Ë®Æ½¹ö¶¯

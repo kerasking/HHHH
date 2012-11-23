@@ -464,8 +464,7 @@ CCPoint CUIScrollViewContainerM::GetMaxRowAndCol(ContainerClientLayerM* m_pClien
 
 void CUIScrollViewContainerM::AddView(ContainerClientLayerM* container)
 {
-	#if 0
-container->EnableEvent(false);
+	container->EnableEvent(false);
     
     //设置每组节点的大小
     unsigned int count = m_pClientUINodes.size();
@@ -483,7 +482,6 @@ container->EnableEvent(false);
     m_pClientUINodes.push_back(container);
     refrehClientSize();
     this->SetDShowYPos(false);
-#endif
 }
 
 void CUIScrollViewContainerM::RemoveView(unsigned int uiIndex)
@@ -1031,7 +1029,7 @@ void CUIScrollViewContainerM::draw() //  m_fScrollDistance += speed; only to zer
 {
     NDUIScrollContainer::draw();
   
-  //  this->DrawScrollBar(m_pClientUINodes[m_unBeginIndex]);
+    this->DrawScrollBar(m_pClientUINodes[m_unBeginIndex]);
     
     if(m_fScrollDistance==0){
         return;
@@ -1203,12 +1201,12 @@ float CUIScrollViewContainerM::GetOverDistance()
 
 void CUIScrollViewContainerM::DrawScrollBar(ContainerClientLayerM *layer)
 {
-#if 0
     if (!(m_bOpenScrollBar && m_picScroll))
 	{
 		return;
 	}
-	if (0 == int(m_childrenList.size()))
+	
+	if (0 == int(m_kChildrenList.size()))
 	{
 		return;
 	}
@@ -1223,7 +1221,8 @@ void CUIScrollViewContainerM::DrawScrollBar(ContainerClientLayerM *layer)
     CCSize sizePic		= m_picScroll->GetSize();       //滚动条图片大小
     CCRect itemRect     = itemView->GetFrameRect();     //每一项的区域
     CCRect itemBoxRect  = layer->GetFrameRect();     //每一项的区域
-    CCRect boxRext     = m_scrRect;         //框的区域
+    CCRect boxRext     = GetSrcRectCache(); //m_scrRect;         //框的区域
+	
     
     
     
@@ -1264,7 +1263,6 @@ void CUIScrollViewContainerM::DrawScrollBar(ContainerClientLayerM *layer)
     }
     
     m_picScroll->DrawInRect(rect);
-#endif
 }
 bool CUIScrollViewContainerM::CanDestroyOnRemoveAllChildren(NDNode* pNode)
 {
