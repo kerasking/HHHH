@@ -365,11 +365,15 @@ NDScene* NDDirector::GetScene(const NDRuntimeClass* runtimeClass)
 
 NDScene* NDDirector::GetRunningScene()
 {
+	NDLog("Entry NDDirector::GetRunningScene()");
+
 	if (m_kScenesStack.size() > 0)
 	{
+		NDLog("return m_kScenesStack.back();");
 		return m_kScenesStack.back();
 	}
 
+	NDError("m_kScenesStack == 0,None scene");
 	return NULL;
 }
 

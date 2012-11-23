@@ -76,6 +76,7 @@ void ScriptGlobalEvent::OnEvent(GLOBALEVENT eEvent, int param1, int param2, int 
 		LuaObject fun = i->second;
 		if (!fun.IsFunction())
 		{
+			NDLog("the lua LuaObject is not a function");
 			continue;
 		}
 		LuaFunction<void> luaFunc(fun);

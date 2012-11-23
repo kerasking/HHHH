@@ -199,7 +199,24 @@ void ScriptMgr::Load()
 
 	NDLog("ready to exe entry.lua,path is %s",strPath.c_str());
 
-	if (0 != LuaStateMgrObj.GetState()->DoFile("entry.lua"))
+	unsigned long size = 0;
+	char *pFileContent = (char*)CCFileUtils::getFileData(strPath.c_str(), "r", &size);
+	char *pCodes = new char[size + 1];
+
+	if (pFileContent)
+	{
+		pCodes[size] = '\0';
+		memcpy(pCodes, pFileContent, size);
+		delete[] pFileContent;
+	}
+	else
+	{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		__android_log_print(ANDROID_LOG_DEBUG,"DaHua","entry.lua data is no data");
+#endif
+	}
+
+	if (0 != LuaStateMgrObj.GetState()->DoString(pCodes))
 	{
 		NDError("Exe entry.lua faild");
 		return;

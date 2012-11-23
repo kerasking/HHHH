@@ -1,1 +1,2 @@
-PrintLog("This is no problem");
+--登陆和角色创建
+DoFile("Login/define.lua");

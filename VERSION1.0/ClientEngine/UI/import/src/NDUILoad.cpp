@@ -381,10 +381,14 @@ bool NDUILoad::LoadLua(
 
 	NDLog("The UI Load is %s",uiname);
 	
-	CUIData  uiData;
+	CUIData uiData;
+	string strUIFilePath = NDPath::GetUIConfigPath(uiname);
+
+	NDLog("Ready read ui %s",strUIFilePath.c_str());
 	
-	if ( !uiData.openUiFile(NDPath::GetUIConfigPath(uiname).c_str()) )
+	if ( !uiData.openUiFile(strUIFilePath.c_str()) )
 	{
+		NDError("read ui error");
 		NDAsssert(0);
 		
 		return false;
@@ -393,20 +397,23 @@ bool NDUILoad::LoadLua(
 	CGSize sizeOffset = CGSizeMake(sizeOffsetW, sizeOffsetH);
 	
 	int nCtrlAmount = uiData.GetCtrlAmount();
+
+	NDLog("GetCtrlAmount,Amount =  %d",nCtrlAmount);
 	
-	for(int i=0; i<nCtrlAmount; i++)
+	for(int i = 0; i < nCtrlAmount; i++)
 	{
 		std::string str = uiData.getCtrlName(i);
+		NDError("ctrl name is %s",str.c_str());
 		
 		if (!uiData.getCtrlData((char*)str.c_str()))
 		{
+			NDError("can not get ctrl data");
 			NDAsssert(0);
 			continue;
 		}
 		
 		UIINFO& uiInfo = uiData.getCtrlUiInfo();
-		
-		
+
 		FilterStringName(uiInfo);
 		
 #ifdef TRADITION		
@@ -465,59 +472,70 @@ bool NDUILoad::LoadLua(
 		}
 		
 		NDUINode* node = NULL;
+
+		NDLog("ready to switch type and create UI");
 		
 		switch (uiInfo.nType) 
 		{
 			case MY_CONTROL_TYPE_UNKNOWN:
 			{
+				NDLog("Create MY_CONTROL_TYPE_UNKNOWN");
 				ControlHelp<MY_CONTROL_TYPE_UNKNOWN> help;
 				node = help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_PICTURE:
 			{
+				NDLog("Create MY_CONTROL_TYPE_PICTURE");
 				ControlHelp<MY_CONTROL_TYPE_PICTURE> help;
 				node = help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_BUTTON:
 			{
+				NDLog("Create MY_CONTROL_TYPE_BUTTON");
 				ControlHelp<MY_CONTROL_TYPE_BUTTON> help;
 				node = help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_CHECK_BUTTON:
 			{
+				NDLog("Create MY_CONTROL_TYPE_CHECK_BUTTON");
 				ControlHelp<MY_CONTROL_TYPE_CHECK_BUTTON> help;
 				node = help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_TEXT:
 			{
+				NDLog("Create MY_CONTROL_TYPE_TEXT");
 				ControlHelp<MY_CONTROL_TYPE_TEXT> help;
 				node = help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_LIST:
 			{
+				NDLog("Create MY_CONTROL_TYPE_LIST");
 				ControlHelp<MY_CONTROL_TYPE_LIST> help;
 				node = help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_PROGRESS:
 			{
+				NDLog("Create MY_CONTROL_TYPE_PROGRESS");
 				ControlHelp<MY_CONTROL_TYPE_PROGRESS> help;
 				node = help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_SLIDER:
 			{
+				NDLog("Create MY_CONTROL_TYPE_SLIDER");
 				ControlHelp<MY_CONTROL_TYPE_SLIDER> help;
 				node = help.Create(uiInfo, sizeOffset);
 			}
 				break;
 			case MY_CONTROL_TYPE_BACK:
 			{
+				NDLog("Create MY_CONTROL_TYPE_UNKNOWN");
 				ControlHelp<MY_CONTROL_TYPE_BACK> help;
 				node = help.Create(uiInfo, sizeOffset);
 			}
@@ -594,16 +612,19 @@ bool NDUILoad::LoadLua(
 		
 		if (!node)
 		{
-			//NDAsssert(0);
+			NDError("node is null");
 			continue;
 		}
-		
+
 		node->SetTag(uiInfo.nID);
 		
 		parent->AddChild(node);
+		NDLog("parent->AddChild over");
 		
 		if (luaDelegate.IsFunction())
+		{
 			node->SetLuaDelegate(luaDelegate);
+		}
 	}
 
 	NDLog("Leave NDUILoad::LoadLua");

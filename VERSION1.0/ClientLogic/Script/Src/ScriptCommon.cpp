@@ -56,7 +56,24 @@ int DoFile(LuaState* state)
 	if (str.IsString())
 	{
 		const char* pszPath = NDPath::GetScriptPath(str.GetString()).c_str();
-		nRet = state->DoFile(pszPath);
+
+		unsigned long size = 0;
+		char *pFileContent = (char*)CCFileUtils::getFileData(pszPath, "r", &size);
+		char *pCodes = new char[size + 1];
+
+		if (pFileContent)
+		{
+			pCodes[size] = '\0';
+			memcpy(pCodes, pFileContent, size);
+			delete[] pFileContent;
+			NDLog("%s data is read",pszPath);
+		}
+		else
+		{
+			NDError("%s data is can't find",pszPath);
+		}
+
+		nRet = state->DoString(pCodes);
 	}
 
 	return nRet;

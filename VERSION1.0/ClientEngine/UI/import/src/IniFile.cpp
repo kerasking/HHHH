@@ -257,16 +257,17 @@ using namespace std;
  		&& iter->second < m_sections.size() )
  	{
  		Section& s = m_sections[iter->second];
+
  		ValueVector::iterator iter_vv = FindValueVector( s.vv, valuename );
  		if ( iter_vv != s.vv.end() )
  		{
  			return (*iter_vv).value.c_str();
  		}
  		else
- 	{
+ 		{
  			error = "Unable to locate specified value.";
- 		return "";
- 	}
+ 			return "";
+ 		}
  	}
  	else
  	{
@@ -374,7 +375,7 @@ using namespace std;
  		Value v;
  		v.name = valuename;
  		v.value = value;
- 		v.line		= v.name + "=" + v.value;
+ 		v.line = v.name + "=" + v.value;
  		s.vv.push_back( v );
  		s.name = keyname;
  		m_sections.push_back( s );
@@ -472,8 +473,14 @@ using namespace std;
  void CIniFile::GetPos(const char* keyname, const char* valuename, int* x, int* y)
  {
  	const char* pPos = this->GetValue( keyname, valuename );
+
  	*x = 0;
  	*y = 0;
-         if(!pPos)return ;
- 	sscanf( pPos, "%d,%d", x, y );
+	
+	if(!pPos)
+	{
+		return;
+	}
+ 	
+	sscanf( pPos, "%d,%d", x, y );
  }
