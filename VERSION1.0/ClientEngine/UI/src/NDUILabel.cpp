@@ -49,7 +49,7 @@ NDUILabel::NDUILabel()
 	
 NDUILabel::~NDUILabel()
 {
-	CC_SAFE_RELEASE(m_texture);
+	CC_SAFE_DELETE(m_texture);
 }
 	
 void NDUILabel::SetText(const char* text)
@@ -160,7 +160,7 @@ void NDUILabel::MakeTexture()
 	dim.width = dim.width;
 	dim.height = dim.height;
 	*/
-	CC_SAFE_RELEASE(m_texture);
+	CC_SAFE_DELETE(m_texture);
 
 	if ("" == m_strText)
 	{
