@@ -44,9 +44,9 @@ function p.LoadUI(param1)
 	layer:Init();
 	layer:SetFrameRect(p.LayerRect);
 	layer:SetTag(NMAINSCENECHILDTAG.MilOrdersBtn);
-
-	--[[
-	local btn	= CreateButton("","","",CGRectMake(0, 0, btnw, btnh),12);
+	
+	local btn	= CreateButton("button_look.png","button_look.png","",CGRectMake(0, 0, btnw, btnh),12);
+	
 	local norPic = pool:AddPicture(GetSMImgPath("button_look.png"), false);
  	norPic:Cut(CGRectMake(0.0, 0.0, btnw, btnh));
 	btn:SetImage(norPic);
@@ -63,7 +63,6 @@ function p.LoadUI(param1)
 
 	btn:SetLuaDelegate(p.OnUIEvent);
 	layer:AddChild(btn);
-	]]
 	
 	scene:AddChild(layer);
     

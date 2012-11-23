@@ -28,7 +28,7 @@ local TAG_END_ARROW     = 1412;
 
 p.RankIds = {};
 
-p.TITLE_TXT = {'查看军衔','升级军衔'};
+p.TITLE_TXT = {GetTxtPri("ViewRank"),GetTxtPri("UpdageRank")};
 
 p.TagPropLabels = {
     TITLE   = 421,

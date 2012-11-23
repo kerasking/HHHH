@@ -13,8 +13,11 @@ local TAG_BG_PIC        = 4;    --列表项大小
 local TAG_NAME          = 2;    --玩家名字
 local TAG_LEVEL         = 3;    --玩家等级
 
+
+p.tFriendData = nil;
+
 function p.LoadUI( tFriendData )
-    
+    p.tFriendData = tFriendData;
 	local scene = GetSMGameScene();	
 	if scene == nil then
 		LogInfo("scene == nil,load UI failed!");
@@ -100,7 +103,16 @@ function p.OnItemEvent(uiNode, uiEventType, param)
     if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		if TAG_BG_PIC == tag then
             local btn = ConverToButton(uiNode);
-            MsgFriend.SendFriendSel(btn:GetParam1(),"chh:testid:");
+            
+            for i,v in ipairs(p.tFriendData) do
+                if( v.Id == btn:GetParam1() ) then
+                    MsgFriend.SendFriendSel(btn:GetParam1(),v.Name);
+                    break;
+                end
+            end
+            
+            
+            
         end
 	end
 	return true;
@@ -127,7 +139,7 @@ function p.refreshItem(v, view)
 end
 
 function p.FreeData()
-    
+    p.tFriendData = nil;
 end
 
 function p.Close()

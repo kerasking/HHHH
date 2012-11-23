@@ -52,20 +52,26 @@ local BOSS_BATTLE_ACT = {
     ]]
 };
 
+--活动鼓舞类型
+local ENCOURAGE_TYPE = {
+    GRAIN       = 1,        --运粮
+    BOSSBATTLE  = 2,        --BOSS战
+    CHAOSBATTLE = 3,        --大乱斗
+    SYNDICATEBATTLE = 4,    --军团战
+};
+
+--鼓舞类型
+local CONSUME_TYPE = {
+    SILVER  = 0,    --银币鼓舞
+    COIN    = 1,    --金币鼓舞
+}
+
+
 -- 打开活动
 -- 参数
 --    nActivityId:活动ID
 -- 返回:无
 function p.OpenBossBattle( nActivityId )
-    --[[
-    --测试Beg
-    Battle_Boss.LoadUI( 1 );
-    if(true) then
-        return;
-    end
-    --测试End
-    ]]
-    
     if not CheckN( nActivityId ) then
             LogInfo("MsgBossBattle.OpenBossBattle 参数错误！");
             return false;
@@ -158,7 +164,7 @@ function p.ProcessBossBattleInfo( netdata )
     m.nLeftTime     = netdata:ReadInt();    --BOSS战剩余时间（单位：秒）
     m.nCDTime       = netdata:ReadInt();    --剩余冷却时间（单位：秒）
     m.nDamage       = netdata:ReadInt();    --伤害
-    m.nUpData       = netdata:ReadByte();    --战力提升值
+    m.nUpData       = netdata:ReadShort();    --鼓舞星级，最大数读配置文件
     --m.nAuto         = netdata:ReadByte();   --自动战斗状态(0:未开启, 1:开启)
     local nAmount   = netdata:ReadByte();   --排名前N玩家数据个数
     
@@ -169,10 +175,10 @@ function p.ProcessBossBattleInfo( netdata )
     for i=1,nAmount do
         local rt = {};
         rt.sName   = netdata:ReadUnicodeString();   --玩家名称
-        rt.nRank   = netdata:ReadByte();            --排名
+        --rt.nRank   = netdata:ReadByte();            --排名
         rt.nDamage = netdata:ReadInt();             --伤害
         
-        LogInfo( "rt.sName:[%s],rt.nRank:[%d],rt.nDamage:[%d]",rt.sName,rt.nRank,rt.nDamage );
+        LogInfo( "rt.sName:[%s],rt.nDamage:[%d]",rt.sName,rt.nDamage );
         
         table.insert( m.RankTable, rt );
     end
@@ -242,7 +248,72 @@ function p.OperateBossBattle( nAction, nBossTypeId )
 end
 
 
+--boss战金币鼓舞
+function p.BossBattleCoinEncourage( nBossTypeId )
+    p.SendEncourageByType( ENCOURAGE_TYPE.BOSSBATTLE,  CONSUME_TYPE.COIN, nBossTypeId);
+end
 
+--boss战银币鼓舞
+function p.BossBattleSilverEncourage( nBossTypeId )
+    p.SendEncourageByType( ENCOURAGE_TYPE.BOSSBATTLE,  CONSUME_TYPE.SILVER, nBossTypeId);
+end
+
+--发送鼓舞消息
+--nEncourageType:鼓舞类型
+--nConsumeType:消耗类型
+--nBossTypeId:活动对应的Boss ID
+function p.SendEncourageByType( nEncourageType,  nConsumeType, nBossTypeId)
+    if not CheckN( nEncourageType ) or not CheckN( nConsumeType ) then
+            LogInfo("MsgBossBattle.SendEncourageByType 参数错误！");
+            return false;
+    end
+    
+    LogInfo( "MsgBossBattle.SendEncourageByType nEncourageType:[%d], nConsumeType:[%d]" , nEncourageType, nConsumeType );
+    
+    local netdata = createNDTransData(NMSG_Type._MSG_BATTLE_ENCOURAGE);
+    if nil == netdata then
+        LogInfo("发送删除状态消息,内存不够");
+        return false;
+    end
+    netdata:WriteByte( nEncourageType );
+    netdata:WriteByte( nConsumeType );
+    netdata:WriteInt( nBossTypeId );
+    SendMsg( netdata );
+    netdata:Free();
+    ShowLoadBar();
+    return true; 
+end
+
+function p.ProcessEncourage( netdata )
+    LogInfo( "MsgBossBattle.ProcessEncourage" );
+    
+    local bIsSuccess = netdata:ReadByte();
+    
+    if( bIsSuccess > 0 ) then
+        CommonDlgNew.ShowTipDlg("鼓舞成功，加一星！");
+    else
+        CommonDlgNew.ShowTipDlg("鼓舞失败，你什么好处也没得到。");
+    end
+    
+end
+
+
+function p.GetBossBattleMaxEncourageCount()
+    local nCount = GetDataBaseDataN("encourage_config",ENCOURAGE_TYPE.BOSSBATTLE,DB_ENCOURAGE_CONFIG.MAX_TIMES);
+    return nCount;
+end
+
+function p.GetBossBattleCoinCount()
+    local nCount = GetDataBaseDataN("encourage_config",ENCOURAGE_TYPE.BOSSBATTLE,DB_ENCOURAGE_CONFIG.COST_EMONEY);
+    return nCount;
+end
+
+function p.GetBossBattleSilverCount()
+    local nCount = GetDataBaseDataN("encourage_config",ENCOURAGE_TYPE.BOSSBATTLE,DB_ENCOURAGE_CONFIG.COST_MONEY);
+    return nCount;
+end
+
+RegisterNetMsgHandler(NMSG_Type._MSG_BATTLE_ENCOURAGE, "MsgBossBattle.ProcessEncourage", p.ProcessEncourage);
 RegisterNetMsgHandler(NMSG_Type._MSG_PLAYER_ACTION_OPERATE, "MsgBossBattle.ProcessActivity", p.ProcessActivity);
 RegisterNetMsgHandler(NMSG_Type._MSG_BOSS_BATTLE_INFO, "MsgBossBattle.ProcessBossBattleInfo", p.ProcessBossBattleInfo);
 

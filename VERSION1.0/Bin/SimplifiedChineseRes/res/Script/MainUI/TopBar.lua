@@ -107,8 +107,6 @@ function p.LoadUI()
 	end
 
 	uiLoad:Load("MainUI.ini", layer, p.OnUIEvent, CONTAINTER_X, CONTAINTER_Y);
-	
-	
 	local pBtnNewEmail = GetUiNode( layer, ID_MAINUI_BTN_NEW_EMAIL );
 	if ( nil ~= pBtnNewEmail ) then
 		local rectForm		= pBtnNewEmail:GetFrameRect();
@@ -150,7 +148,7 @@ function p.LoadUI()
 	GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"p.GameDataUserInfoRefresh",p.GameDataUserInfoRefresh);
     
     
-    --p.RefreshFuncIsOpen();
+    p.RefreshFuncIsOpen();
     
 	if ( p.nTimerID	 ~= nil ) then
     	UnRegisterTimer( p.nTimerID );

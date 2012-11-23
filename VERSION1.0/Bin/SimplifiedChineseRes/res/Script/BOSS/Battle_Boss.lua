@@ -35,6 +35,7 @@ local TAG_RANK_HURT             = 4;        -- 伤害
 
 
 p.nActivityId           = nil;  -- 活动ID
+p.nUpData               = nil;  -- 鼓舞星级
 p.nTimerGetInfoID       = nil;  -- 定时获得数据
 p.nTimerRefreshTimeID   = nil;  -- 刷新时间
 p.nCDTime               = nil;  -- 复活CD时间
@@ -104,9 +105,39 @@ function p.OnUIEvent(uiNode, uiEventType, param)
         if tag == TAG_CLOSE then
            p.UnLoadUI( p.nActivityId );
         elseif tag == TAG_SILVER_INSPIRE then       --银币鼓舞
-            CommonDlgNew.ShowYesDlg("暂不开放", nil, nil, 2);
+            --CommonDlgNew.ShowYesDlg("暂不开放", nil, nil, 2);
+            
+            
+            local nCount = MsgBossBattle.GetBossBattleMaxEncourageCount();
+            
+            if(p.nUpData<nCount) then
+                if( p.bIsTip ) then
+                    p.SendSilverGuWu();
+                else
+                    local nRequestCoin = MsgBossBattle.GetBossBattleSilverCount();
+                    CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("BB2_T1"),nRequestCoin), p.SilverGuwuConfirmCallBack);
+                end
+            else
+                CommonDlgNew.ShowYesDlg(GetTxtPri("BB2_T2"), nil, nil, 2);
+            end
+            
+            
         elseif tag == TAG_COIN_INSPIRE then         --金币鼓舞
-            CommonDlgNew.ShowYesDlg("暂不开放", nil, nil, 2);
+            --CommonDlgNew.ShowYesDlg("暂不开放", nil, nil, 2);
+            
+            local nCount = MsgBossBattle.GetBossBattleMaxEncourageCount();
+            if(p.nUpData<nCount) then
+                
+                if( p.bIsTip ) then
+                    p.SendCoinGuWu();
+                else
+                    local nRequestCoin = MsgBossBattle.GetBossBattleCoinCount();
+                    CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("BB2_T3"),nRequestCoin), p.CoinGuwuConfirmCallBack);
+                end
+            else
+                CommonDlgNew.ShowYesDlg(GetTxtPri("BB2_T2"), nil, nil, 2);
+            end
+            
         elseif tag == TAG_START_BATTLE then         --开始战斗
             p.StartBattle();
         end
@@ -119,13 +150,83 @@ function p.OnUIEvent(uiNode, uiEventType, param)
                 if( not bFightAuto ) then
                     pCheckAuto:SetSelect( false );
                     
-                    CommonDlgNew.ShowYesDlg(string.format("VIP%d可开启自动战斗",GetGetVipLevel_FIGHT_AUTO()), nil, nil, 2);
+                    CommonDlgNew.ShowYesDlg(string.format(GetTxtPri("BB2_T4"),GetGetVipLevel_FIGHT_AUTO()), nil, nil, 2);
                 end
             end
         end
     end
     return true;
 end
+
+p.bIsTip = nil;
+
+function p.CoinGuwuConfirmCallBack( nEventType, param, val )
+    LogInfo("p.CoinGuwuConfirmCallBack");
+    if(nEventType == CommonDlgNew.BtnOk) then
+        p.SendCoinGuWu();
+        p.bIsTip = val;
+    elseif(nEventType == CommonDlgNew.BtnNo) then
+        p.bIsTip = val;
+    end
+end
+
+function p.SilverGuwuConfirmCallBack( nEventType, param, val )
+    LogInfo("p.SilverGuwuConfirmCallBack");
+    if(nEventType == CommonDlgNew.BtnOk) then
+        p.SendSilverGuWu();
+        p.bIsTip = val;
+    elseif(nEventType == CommonDlgNew.BtnNo) then
+        p.bIsTip = val;
+    end
+end
+
+--发送金币鼓舞
+function p.SendCoinGuWu()
+    local nRequestCoin = MsgBossBattle.GetBossBattleCoinCount();
+    if( p.EMoneyNotEnough(nRequestCoin) == false ) then
+        return;
+    end
+    
+    local nBossTypeId = GetDataBaseDataN("event_activity", p.nActivityId, DB_EVENT_ACTIVITY_CONFIG.BOSS_TYPE_ID);
+    MsgBossBattle.BossBattleCoinEncourage( nBossTypeId );
+end
+
+--发送银币鼓舞
+function p.SendSilverGuWu()
+    local nRequestCoin = MsgBossBattle.GetBossBattleSilverCount();
+    if( p.MoneyNotEnough(nRequestCoin) == false ) then
+        return;
+    end
+    
+    local nBossTypeId = GetDataBaseDataN("event_activity", p.nActivityId, DB_EVENT_ACTIVITY_CONFIG.BOSS_TYPE_ID);
+    MsgBossBattle.BossBattleSilverEncourage( nBossTypeId );
+end
+
+--银币不足
+function p.MoneyNotEnough(m)
+    local nPlayerId     = GetPlayerId();
+    local money         = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_MONEY);
+    
+    if(money<m) then
+        CommonDlgNew.ShowYesDlg(GetTxtPub("TongQianBuZhu"), nil, nil, 2);
+        return false;
+    end
+    return true;
+end
+
+--金币不足
+function p.EMoneyNotEnough(em)
+    local nPlayerId     = GetPlayerId();
+    local emoney        = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
+    if(emoney<em) then
+        CommonDlgNew.ShowYesDlg(GetTxtPub("JinBiBuZhu"), nil, nil, 2);
+        return false;
+    end
+    return true;
+end
+
+
+
 
 p.nDlgId = nil;
 
@@ -134,11 +235,11 @@ function p.StartBattle()
     
     local btnBattle = GetButton( p.GetCurrLayer(), TAG_START_BATTLE );
             
-    if(btnBattle:GetTitle() == "开始战斗") then
+    if(btnBattle:GetTitle() == GetTxtPri("BB_T1")) then
         local nBossTypeId = GetDataBaseDataN("event_activity", p.nActivityId, DB_EVENT_ACTIVITY_CONFIG.BOSS_TYPE_ID);
         MsgBossBattle.StartBattle( nBossTypeId );
     else
-        p.nDlgId = CommonDlgNew.ShowYesOrNoDlg("是否消费10金币复活？", p.ReviveCallback);
+        p.nDlgId = CommonDlgNew.ShowYesOrNoDlg(GetTxtPri("BB_T3"), p.ReviveCallback);
     end
 
 end
@@ -163,9 +264,11 @@ end
 --退出释放数据
 function p.FreeData()
     p.nActivityId   = nil;
+    p.nUpData       = nil;
     p.nCDTime       = nil;
     p.nLeftTime     = nil;
     p.nDlgId        = nil;
+    p.nBossTotalLife = nil;
     MsgBossBattle.mUIListener = nil;
     
     if p.nTimerRefreshTimeID then
@@ -188,10 +291,12 @@ function p.ProcessNet(msgId, data)
 	end
 end
 
-
+p.nBossTotalLife = nil;
 --刷新UI
 function p.RefreshUI( data )
     LogInfo("Battle_Boss.RefreshUI");
+    
+    p.nBossTotalLife = data.nLifeLimit;
     
     local layer = p.GetCurrLayer();
     if( layer == nil ) then
@@ -210,7 +315,7 @@ function p.RefreshUI( data )
     
     -- 控件赋值
     SetLabel( layer, TAG_BOSS_TYPE_NAME, nBossTypeName );
-    SetLabel( layer, TAG_FIGHTING_CAPACITY, data.nUpData.."%" );
+    SetLabel( layer, TAG_FIGHTING_CAPACITY, data.nUpData..GetTxtPri("BB2_T5") );
     SetLabel( layer, TAG_COOLING_TIME, string.format("%d%s",data.nCDTime,GetTxtPub("second")) );
     SetLabel( layer, TAG_BOSS_ENDTIME, FormatTime( data.nLeftTime, 0 ) );
     SetLabel( layer, TAG_HURT_LIFT, data.nDamage.."" );
@@ -228,13 +333,14 @@ function p.RefreshUI( data )
     
     local RankTable = data.RankTable;
     for i,v in ipairs( RankTable ) do
+        v.nRank = i;
         p.CreateRankItem(container,v);
     end
     
     --设置数据
     p.nCDTime   = data.nCDTime;
     p.nLeftTime = data.nLeftTime;
-    
+    p.nUpData   = data.nUpData;
 end
 
 
@@ -284,7 +390,8 @@ function p.RefreshRankItem( view, v )
     end
     SetLabel( view, TAG_RANK_ORDER, v.nRank.."" );
     SetLabel( view, TAG_RANK_NAME, v.sName );
-    SetLabel( view, TAG_RANK_HURT, v.nDamage.."" );
+    --SetLabel( view, TAG_RANK_HURT, string.format("%d(%d\%)",v.nDamage,v.nDamage/p.nBossTotalLife));
+    SetLabel( view, TAG_RANK_HURT, v.nDamage.."");
 
     local pic   = GetImage( view, TAG_RANK_SIZE );
     if( pic ) then
@@ -329,9 +436,9 @@ function p.RefreshCdTime()
             MsgBossBattle.StartBattle( nBossTypeId );
         end
         
-        btnBattle:SetTitle("开始战斗");
+        btnBattle:SetTitle(GetTxtPri("BB_T1"));
     else    --消费金币可战斗显示
-        btnBattle:SetTitle("金币复活");
+        btnBattle:SetTitle(GetTxtPri("BB_T2"));
     end
     
     SetLabel( p.GetCurrLayer(), TAG_COOLING_TIME, string.format("%d%s",p.nCDTime,GetTxtPub("second")) );

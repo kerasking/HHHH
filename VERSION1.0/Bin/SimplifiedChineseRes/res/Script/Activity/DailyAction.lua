@@ -392,7 +392,7 @@ function p.WorldRefresh()
     
     --设置当前要显示的说明信息
     for i, v in pairs(p.WorldActions) do
-        LogInfo(" i = %d  nId = %d", i, v.nId); 
+        LogInfo("refresh i = %d  nId = %d", i, v.nId); 
         p.AddViewItem(ListContainer, v.nId, "event/event_1_L.ini");
     end
 end

@@ -7,6 +7,8 @@ endTimeSlice("DBLoad.lua")
 bgnTimeSlice("Common/define.lua")
 	DoFile("Common/define.lua");
 endTimeSlice("Common/define.lua")
+--登录清理数据
+DoFile("LogInClearData.lua");
 
 --通用对话框
 bgnTimeSlice("CommonDlg/define.lua")

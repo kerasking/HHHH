@@ -175,7 +175,7 @@ NMSG_Type =
     _MSG_PLAYER_ACTION_INFO            =   _MSG_GENERAL + 7001,              --活动信息
     _MSG_PLAYER_ACTION_OPERATE   =   _MSG_GENERAL + 7002,               --活动操作
     _MSG_VIEW_PLAYER                    =   _MSG_GENERAL + 6035,        --主城查看其它玩家列表
-    
+    _MSG_BATTLE_ENCOURAGE   =   _MSG_GENERAL + 7004,                    --鼓舞
 
 
     _MSG_CHAOSBATTLE_BOARD				= _MSG_GENERAL+8000,	--大乱斗活动板信息

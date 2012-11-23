@@ -41,11 +41,7 @@ local tArmyGroupErrorString = {
 	"很抱歉，您的军团的成员人数已达上限",
 	"很抱歉,您设置的公告内容不合法,请重新输入",
 	"您设置的公告内容过长...",
-    "您的军团最多只能设置2个副军团长",
-    "该成员不在线",
-    "分配数量超过上限",
-    "该成员背包已满，不可分配",
-    "该成员贡献度不足，不可分配",
+    "您的军团最多只能设置2个副军团长"
 };
 
 local tArmyGroupOnlineString = {
@@ -146,8 +142,6 @@ ArmyGroupMsgAction = {
 	AGMA_Abdicate				= 17,	-- 禅让军团长
 	AGMA_MemberList				= 18,	-- 成员列表
 	AGMA_AGUpgrade				= 19,	-- 军团信息变更
-	AGMA_GetStorage				= 20,	-- 军团仓库
-	AGMA_Delivery				= 21,	-- 发放
 	--AGMA_BeLegatus				= 19,	-- 莫名就成为军团长……
 	--AGMA_BeDeputy				= 100,	-- 被任命副军团长
 	--AGMA_BeRemoval				= 100,	-- 被解除副军团长
@@ -238,14 +232,6 @@ local tApplicantList = {
 	{ 1014, "邓平平", 40, 200, 400 },
 };
 
---
-local tStorage = {
-	{ 34000000, 1234 },
-	{ 34000001, 123 },
-	{ 34000002, 12 },
-	{ 34000003, 1 },
-};
-
 ---------------------------------------------------
 p.tUserInfor		= nil;
 p.tArmyGroupList	= nil;		-- 军团列表
@@ -253,7 +239,6 @@ p.tAGInformation	= nil;		-- 军团信息--当前玩家所在军团的军团信�
 p.tAGMemberList		= nil;		-- 成员列表--当前玩家所在军团的成员列表
 p.tAGApplicantList	= nil;		-- 申请者列表--当前玩家所在军团的申请者列表
 p.tmpMemberList		= nil;		-- 临时数据
-p.tStorage			= nil;		-- 
 
 function p.ClearBuffer()
 	p.tUserInfor		= nil;
@@ -262,7 +247,6 @@ function p.ClearBuffer()
 	p.tAGMemberList		= nil;
 	p.tAGApplicantList	= nil;
 	p.tmpMemberList		= nil;
-	p.tStorage			= nil;
 end
 
 ---------------------------------------------------
@@ -340,13 +324,6 @@ end
 function p.GetArmyGroupApplicantList( nArmyGroupID )
 	return p.tAGApplicantList;
 	--return tApplicantList;
-end
-
----------------------------------------------------
--- 获取玩家所在军团仓库
-function p.GetArmyGroupStorage( nArmyGroupID )
-	return p.tStorage;
-	--return tStorage;
 end
 
 
@@ -1331,95 +1308,6 @@ end
 --function p.HandleMsgBeLegatus( tNetDataPackete )
 --	LogInfo( "MsgArmyGroup: HandleMsgBeLegatus" );
 --end
-
----------------------------------------------------
--- 获得仓库
-function p.SendMsgGetStorage( nArmyGroupID )
-	LogInfo( "MsgArmyGroup: SendMsgGetStorage" );
-	local netdata = createNDTransData(NMSG_Type._MSG_ARMYGROUP);
-	if nil == netdata then
-		LogInfo("memory is not enough");
-		return false;
-	end
-	netdata:WriteByte( ArmyGroupMsgAction.AGMA_GetStorage );
-	netdata:WriteInt( nArmyGroupID );
-	SendMsg( netdata );
-	netdata:Free();
-	return true;
-end
-
----------------------------------------------------
--- 仓库
-function p.HandleMsgGetStorage( tNetDataPackete )
-	LogInfo( "MsgArmyGroup: HandleMsgGetStorage" );
-	local nAGID			= tNetDataPackete:ReadInt();
-	local nPacketFlag	= tNetDataPackete:ReadByte();
-	if ( nPacketFlag == PacketFlag.PF_BEGIN ) then
-		p.tStorage = {};
-	elseif ( nPacketFlag == PacketFlag.PF_CONTINUE ) then
-	elseif ( nPacketFlag == PacketFlag.PF_END ) then
-	elseif ( nPacketFlag == PacketFlag.PF_SINGLE ) then
-		p.tStorage = {};
-	end
-	local nAmount = tNetDataPackete:ReadShort();
-	for i=1, nAmount do
-		local nItemType	= tNetDataPackete:ReadInt();
-		local nAmount	= tNetDataPackete:ReadInt();
-		local tItem = {};
-		tItem[1] = nItemType;
-		tItem[2] = nAmount;
-		table.insert( p.tStorage, tItem );
-	end
-	if ( nPacketFlag == PacketFlag.PF_BEGIN ) then
-	elseif ( nPacketFlag == PacketFlag.PF_CONTINUE ) then
-	elseif ( nPacketFlag == PacketFlag.PF_END ) then
-		if IsUIShow( NMAINSCENECHILDTAG.ArmyGroup ) then
-			ArmyGroup.RefreshStorage( p.tStorage );
-		end
-	elseif ( nPacketFlag == PacketFlag.PF_SINGLE ) then
-		if IsUIShow( NMAINSCENECHILDTAG.ArmyGroup ) then
-			ArmyGroup.RefreshStorage( p.tStorage );
-		end
-	end
-end
-
----------------------------------------------------
--- 分配
-function p.SendMsgDelivery( nPlayerID, nItemType, nAmount )
-	LogInfo( "MsgArmyGroup: SendMsgGetStorage" );
-	local netdata = createNDTransData(NMSG_Type._MSG_ARMYGROUP);
-	if nil == netdata then
-		LogInfo("memory is not enough");
-		return false;
-	end
-	netdata:WriteByte( ArmyGroupMsgAction.AGMA_Delivery );
-	netdata:WriteInt( nPlayerID );
-	netdata:WriteInt( nItemType );
-	netdata:WriteInt( nAmount );
-	SendMsg( netdata );
-	netdata:Free();
-    ShowLoadBar();--
-	return true;
-end
-
----------------------------------------------------
--- 分配
-function p.HandleMsgDelivery( tNetDataPackete )
-	LogInfo( "MsgArmyGroup: HandleMsgDelivery" );
-    CloseLoadBar();--
-	local nFlag			= tNetDataPackete:ReadByte();
-	if ( nFlag == 0 ) then
-		local nLegatusID	= tNetDataPackete:ReadInt();
-		local nTargetID		= tNetDataPackete:ReadInt();
-		local nItemType		= tNetDataPackete:ReadInt();
-		local nAmount		= tNetDataPackete:ReadInt();
-		if IsUIShow( NMAINSCENECHILDTAG.ArmyGroup ) then
-			ArmyGroup.RefreshDelivery( );
-		end
-	else
-		CommonDlgNew.ShowYesDlg( tArmyGroupErrorString[nFlag], nil, nil, 3 );
-	end
-end
 	
 ---------------------------------------------------
 -- 玩家信息
@@ -1506,10 +1394,6 @@ function p.HandleNetMessage( tNetDataPackete )
 		p.HandleMsgSetNotice( tNetDataPackete );
 	elseif ( nActionID == ArmyGroupMsgAction.AGMA_AGUpgrade ) then
 		p.HandleMsgAGUpgrade( tNetDataPackete );
-	elseif ( nActionID == ArmyGroupMsgAction.AGMA_GetStorage ) then
-		p.HandleMsgGetStorage( tNetDataPackete );
-	elseif ( nActionID == ArmyGroupMsgAction.AGMA_Delivery ) then
-		p.HandleMsgDelivery( tNetDataPackete );
 	end
 end
 

@@ -9,6 +9,7 @@ function p.Clear()
     p.ClearMarial();
     p.ClearFete();
     p.ClearMount();
+    p.ClearBossBattle();
     MsgPlayerAction.ClearActionInfo();
 end
 

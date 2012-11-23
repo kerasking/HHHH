@@ -223,5 +223,5 @@ function p.SetUIInvisible()
 end
 
 
---RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "ChatGameScene.LoadUI", p.DelayShowUI);
+RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "ChatGameScene.LoadUI", p.DelayShowUI);
 

@@ -44,7 +44,6 @@ local TAG_CUR_SERVER_FLAG       = 38;
 local TAG_CUR_SERVER_RECOMMEND  = 15;
 local TAG_CUR_SERVER_TITLE      = 14;
 
-
 --按钮编号
 local ID_SERVER_SELECT_PAGE_UP                      = 22;
 local ID_SERVER_SELECT_PAGE_DOWN                    = 23;
@@ -64,15 +63,15 @@ p.recvIndex=0;
 
 p.szGameForumURL = "";
 local ServerStatus = {
-    {'[维护]',ccc4(138,138,138,255)},
-    {'[推荐]',ccc4(0,255,0,255)},
-    {'[拥挤]',ccc4(255,255,0,255)},
-    {'[爆满]',ccc4(255,0,0,255)},
+    {GetTxtPri("StateWeiHu"),ccc4(138,138,138,255)},
+    {GetTxtPri("StateTuiJian"),ccc4(0,255,0,255)},
+    {GetTxtPri("StateYongJi"),ccc4(255,255,0,255)},
+    {GetTxtPri("StateBaoMan"),ccc4(255,0,0,255)},
 };
 
 local LastLoginInfo = {
-    '最后登录',
-    '新服推荐',
+    GetTxtPri("LastLogin"),
+    GetTxtPri("NewServerTuiJian"),
 };
 
 p.ServerListTag = {
@@ -418,12 +417,15 @@ function p.LoginGame(strServerName,strServerIp,strServerPort)
     local bSucc=SwichKeyToServer(strServerIp,strServerPort,SafeN2S(p.UIN),p.Pwd,strServerName);
     
     if bSucc == false then
-        CommonDlgNew.ShowYesDlg('登录服务器失败请重新登录！');
+        CommonDlgNew.ShowYesDlg(GetTxtPri("LoginFailReLogin"));
     else
-        --进入Loading界面
-        Login_LoadingUI.LoadUI();
-        --Login_LoadingUI.SetStyle(2);
-        Login_LoadingUI.SetProcess(10);
+        if p.LoginWait then
+            ShowLoadBar();
+        else
+            --进入Loading界面
+            Login_LoadingUI.LoadUI();
+            Login_LoadingUI.SetProcess(10);
+        end
     end
 end
 
@@ -456,7 +458,6 @@ function p.OnUIEvent(uiNode, uiEventType, param)
         p.nCurSerId = info.nServerID;
         
         LogInfo("登录服务器名:[%s],ip:[%s],port:[%d]",sServerName,sServerIp,nServerPort);
-        
         p.LoginGame(sServerName,sServerIp,nServerPort);
 	end
 	return true;
@@ -523,7 +524,7 @@ end
 function p.LoginError(param)
     LogInfo("p.LoginError uin:[%d]",param);
     p.UIN = 0;
-    CommonDlgNew.ShowYesDlg('登录服务器失败请重新登录！');
+    CommonDlgNew.ShowYesDlg(GetTxtPri("LoginFailReLogin"));
 end
 
 function p.RefreshServer(nEventType)

@@ -96,13 +96,28 @@ function p.SetResult(result,money,repute)
         if layer then
             layer:SetVisible(false);
         end
-        
+        LogInfo("repute:[%d]",repute);
         local str = nil;
         if result ==1 then --胜利
-            str = string.format("你消灭了boss, 获得银币: %d, 获得将魂: %d", money, repute);
+            --str = string.format("你消灭了boss, 获得银币: %d, 获得将魂: %d", money, repute);
+            
+            if(repute>0) then
+                str = string.format("你消灭了boss, 获得银币: %d, 获得: [%s]", money, ItemFunc.GetName(repute));
+            else
+                str = string.format("你消灭了boss, 获得银币: %d", money);
+            end
+            
             Music.PlayEffectSound(1094);
         elseif result ==0 then --失败
-            str = string.format("战斗失败, 获得银币: %d, 获得将魂: %d", money, repute);
+            --str = string.format("战斗失败, 获得银币: %d, 获得将魂: %d", money, repute);
+            
+            if(repute>0) then
+                str = string.format("你战斗失败, 获得银币: %d, 获得: [%s]", money, ItemFunc.GetName(repute));
+            else
+                str = string.format("战斗失败, 获得银币: %d", money);
+            end
+            
+            
             Music.PlayEffectSound(1093);
         end
         CommonDlgNew.ShowYesDlg(str, p.ReviveCallback, nil, 5);

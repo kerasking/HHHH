@@ -1776,11 +1776,9 @@ function p.RefreshBackBag()
         local btn = GetButton(rlayer, v);
         --btn:EnalbeGray(false);
         btn:TabSel(false);
-        btn:SetChecked(false);
         if(p.BagPos.TYPE ~= nil and i == p.BagPos.TYPE) then
             --btn:EnalbeGray(true);
             btn:TabSel(true);
-            btn:SetChecked(true);
         end
     end
     

@@ -63,3 +63,6 @@ LoadDataBaseTable("grain_static","grain_staticTable");
 LoadDataBaseTable("grain_config","grain_configTable");
 LoadDataBaseTable("event_activity","event_activityTable");
 LoadDataBaseTable("sports_prize","sports_prizeTable");
+
+
+LoadDataBaseTable("encourage_config","encourage_configTable");

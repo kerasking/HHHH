@@ -2021,6 +2021,21 @@ DB_EVENT_ACTIVITY_CONFIG = {
     DESCRIBE    = 13,
 };
 
-
-
+--鼓舞配置表
+DB_ENCOURAGE_CONFIG = {
+    ID          = 0,
+    MAX_TIMES   = 1,
+    COST_EMONEY = 2,
+    EMONEY_RATE = 3,
+    COST_MONEY  = 4,
+    MONEY_RATE  = 5,
+    ARRT1       = 6,
+    MODIFY_VALUE1   = 7,
+    ARRT2       = 8,
+    MODIFY_VALUE2   = 9,
+    ARRT3       = 10,
+    MODIFY_VALUE3   = 11,
+    ARRT4       = 12,
+    MODIFY_VALUE4   = 13,
+}
 

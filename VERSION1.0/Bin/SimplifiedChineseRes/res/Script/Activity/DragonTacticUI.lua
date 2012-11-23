@@ -238,11 +238,9 @@ function p.ChangeTab(nBtnId)
         
         if v.tabBtnId == nBtnId then
             btn:TabSel(true);            --当前按钮设置为常亮
-            btn:SetFocus(true);
             layer:SetVisible(true);   --设置当前层为活动层
         else
             btn:TabSel(false);           --其他按钮去掉常亮标志
-            btn:SetFocus(false);
             layer:SetVisible(false);   --设置当前层为非活动层
         end
     end
@@ -543,9 +541,9 @@ function p.TacticRefresh()
       p.AddViewItem(ListContainer, i, "achieve_1_L.ini");
     end
 
-    LogInfo("tzq begin focusindex = %d", p.TabInfo.TacticTabInfo.focusIndex); 
+    LogInfo("begin focusindex = %d", p.TabInfo.TacticTabInfo.focusIndex); 
     local CurFocus  = p.TacticSetCurFocus();
-    LogInfo("tzq sec CurFocus = %d", CurFocus); 
+    LogInfo("sec CurFocus = %d", CurFocus); 
         
     p.SetListFocus(CurFocus); 
     

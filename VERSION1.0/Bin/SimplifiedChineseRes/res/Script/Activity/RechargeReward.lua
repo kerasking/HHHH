@@ -20,9 +20,9 @@ local RightListSize = CGSizeMake(100*ScaleFactor, 28*ScaleFactor);
 p.LeftTitleLIst = {};   --存储左边列表数据
 
 p.RechargeState = { First = {Num = 0, Flag = 0,},
-                                   OnceFlag = {0, 0 , 0, 0, 0, 0, 0, 0, 0, 0,}, 
-                                   TotalFlag = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,},
-                                   DailyFlag = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,},};
+                                   OnceFlag = {0, 0 , 0, 0, 0, 0, 0, 0, 0, 0,0, 0 , 0, 0, 0, 0, 0, 0, 0, 0,0, 0 , 0, 0, 0, 0, 0, 0, 0, 0,}, 
+                                   TotalFlag = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0 , 0, 0, 0, 0, 0, 0, 0, 0,},
+                                   DailyFlag = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0 , 0, 0, 0, 0, 0, 0, 0, 0,0, 0 , 0, 0, 0, 0, 0, 0, 0, 0,},};
 
 p.RechargeTimeBegin = {First = 0,  OnceFlag = 0, TotalFlag = 0, DailyFlag = 0,};                                
 
@@ -570,7 +570,7 @@ function p.SetOnceRechargeInfo(iData, iBeginTime)
     LogInfo("tangziqin Once ReceiveData = %d, temp = %d", ReceiveData, temp);
     p.RechargeTimeBegin.OnceFlag = iBeginTime;
 
-    for i = 10, 1, -1 do
+    for i = 25, 1, -1 do
         local num1 = 1;
         for j = i - 1, 1, -1 do
             num1 = num1*2;
@@ -601,7 +601,7 @@ function p.SetTotalRechargeInfo(iData, iBeginTime)
 
     LogInfo("Total ReceiveData = %d, temp = %d", ReceiveData, temp);
     
-    for i = 20, 1, -1 do
+    for i = 25, 1, -1 do
         local num1 = 1;
         for j = i - 1, 1, -1 do
             num1 = num1*2;
@@ -632,7 +632,7 @@ function p.SetDailyRechargeInfo(iData, iBeginTime)
 
     LogInfo("Total ReceiveData = %d, temp = %d", ReceiveData, temp);
     
-    for i = 10, 1, -1 do
+    for i = 25, 1, -1 do
         local num1 = 1;
         for j = i - 1, 1, -1 do
             num1 = num1*2;

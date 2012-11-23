@@ -212,8 +212,7 @@ function p.LoadUI()
 	-- 显示已接任务列表
 	p.ShowAccept(true)
     local pBtnAcc = GetButton( layer, ID_TASKLIST_CTRL_BUTTON_TASK_ACC );
-    pBtnAcc:TabSel(true);  
-    pBtnAcc:SetChecked(true);  
+    pBtnAcc:TabSel(true);    
 
 	
 	--刷新箭头按钮
@@ -271,18 +270,13 @@ function p.OnMainUIEvent(uiNode, uiEventType, param)
             local pBtnNot = GetButton( pUILayer, ID_TASKLIST_CTRL_BUTTON_TASK_NOT );     
             pBtnAcc:TabSel(true);    
             pBtnNot:TabSel(false);   
-            pBtnAcc:SetChecked(true);  
-            pBtnNot:SetChecked(false);  
                             
 		elseif ID_TASKLIST_CTRL_BUTTON_TASK_NOT == tag then
 			p.ShowAccept(false);
             local pBtnAcc = GetButton( pUILayer, ID_TASKLIST_CTRL_BUTTON_TASK_ACC );
             local pBtnNot = GetButton( pUILayer, ID_TASKLIST_CTRL_BUTTON_TASK_NOT );     
-            pBtnAcc:TabSel(false); 
-            pBtnAcc:SetChecked(false);         
+            pBtnAcc:TabSel(false);    
             pBtnNot:TabSel(true);   
-            pBtnNot:SetChecked(true);  
-            
 		end
 	elseif uiEventType == NUIEventType.TE_TOUCH_CHECK_CLICK then
 		local checkBox	= ConverToCheckBox(uiNode);

@@ -768,6 +768,11 @@ function p.OnUIEventUseNum(nEventType, param, val)
                     return;
                 end
                 
+                --****--
+                --判断宠物等级是否到达物品要求等级
+                if(p.equipMinimumLevel(param[2], param[1]) == false) then
+                    return;
+                end
                 
                 --伙伴等级超过主角判断
                 local nPlayerTotalExp, nPetTotalExp = p.GetExps(param[1],param[2]);

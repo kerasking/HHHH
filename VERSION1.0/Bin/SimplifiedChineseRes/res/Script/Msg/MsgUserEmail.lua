@@ -153,9 +153,7 @@ function p.ProcessReceivedLetter( netdata )
 	end
 	LogInfo( "MsgUserEmail: ProcessReceivedLetter btAction:%d, nReceivedMailCount:%d, nSentMailCount:%d",btAction,nReceivedMailCount,nSentMailCount  );
 	if ( nReceivedMailCount > 0 ) then
-		--p.Sort( p.tReceivedEmails, p.SortBySendTime );--
-		table.sort( p.tReceivedEmails, p.SortBySendTime );
-		p.Sort( p.tReceivedEmails, p.SortByEmailFlag );--table.sort( p.tReceivedEmails, p.SortByEmailFlag );
+		table.sort( p.tReceivedEmails, p.SortBySendTimeFlag );--==
 		if IsUIShow( NMAINSCENECHILDTAG.EmailList ) then
 			EmailList.RefreshReceivedMailList();
 		end
@@ -176,18 +174,29 @@ function p.ProcessReceivedLetter( netdata )
 	-- 测试用
 end
 
----
+---------------------------------------------------
+--- 按时间和未读标志排序（时间降序，未读升序） 函数子
+function p.SortBySendTimeFlag( a, b )
+	if ( a[EmailDataIndex.EDI_SENDTIME] >= b[EmailDataIndex.EDI_SENDTIME] ) then
+		return ( a[EmailDataIndex.EDI_FLAG] <= b[EmailDataIndex.EDI_FLAG] );
+	else
+		return ( a[EmailDataIndex.EDI_FLAG] < b[EmailDataIndex.EDI_FLAG] );
+	end
+end
+
+--- 仅按时间先后排序（降序） 函数子
 function p.SortBySendTime( a, b )
 	return ( a[EmailDataIndex.EDI_SENDTIME] >= b[EmailDataIndex.EDI_SENDTIME] );
 end
 
---
+-- 按未读标志排序（升序） 函数子
 function p.SortByEmailFlag( a, b )
-	--LogInfo( "MsgUserEmail: a:%d, b:%d",a[EmailDataIndex.EDI_FLAG],b[EmailDataIndex.EDI_FLAG]);
 	return ( a[EmailDataIndex.EDI_FLAG] <= b[EmailDataIndex.EDI_FLAG] );
 end
 -- function ( a, b ) return ( a[EmailDataIndex.EDI_FLAG] <= b[EmailDataIndex.EDI_FLAG] ) end
 
+-- 排序
+-- 待排序的表，函数子
 function p.Sort( tTable, pFunction )
 	if ( tTable == nil ) then
 		LogInfo( "MsgUserEmail: Sort tTable == nil" );
@@ -229,9 +238,7 @@ function p.ProcessLetterInfo( netdata )
 				p.tReceivedEmails[i][EmailDataIndex.EDI_CONTENT]	= szContent;
 				tMail	= p.tReceivedEmails[i];
 				if ( bSort ) then
-					--p.Sort( p.tReceivedEmails, p.SortBySendTime );--
-					table.sort( p.tReceivedEmails, p.SortBySendTime );
-					p.Sort( p.tReceivedEmails, p.SortByEmailFlag );--table.sort( p.tReceivedEmails, p.SortByEmailFlag );
+					table.sort( p.tReceivedEmails, p.SortBySendTimeFlag );--==
 				end
 				break;
 			end

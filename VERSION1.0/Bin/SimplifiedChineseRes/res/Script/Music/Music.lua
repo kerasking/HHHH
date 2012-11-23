@@ -190,10 +190,10 @@ end
 
 
 function p.OnEnterGameScene()
---[[
+
 	local nCurMapId			= ConvertN(_G.GetMapId());
 	_G.LogInfo("Music OnEnterGameScene nCurMapId:"..nCurMapId);
-	p.PlayBackGroundMusic(nCurMapId);]]
+	p.PlayBackGroundMusic(nCurMapId);
 	
 end
 
