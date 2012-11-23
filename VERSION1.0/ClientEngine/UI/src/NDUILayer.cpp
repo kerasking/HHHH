@@ -617,7 +617,7 @@ bool NDUILayer::DispatchTouchBeginEvent(CCPoint beginTouch)
 		}
 
 		//touch event deal.....
-		CCRect nodeFrame = uiNode->GetScreenRect();
+		CCRect nodeFrame = uiNode->GetBoundRect();//uiNode->GetScreenRect();
 
 		if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, beginTouch))
 		{
@@ -693,7 +693,7 @@ bool NDUILayer::DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch)
 		}
 
 		//touch event deal
-		CCRect pkNodeFrame = uiNode->GetScreenRect();
+		CCRect pkNodeFrame = uiNode->GetBoundRect();
 		//pkNodeFrame = RectAdd(pkNodeFrame, 2);
 
 		if (cocos2d::CCRect::CCRectContainsPoint(pkNodeFrame, endTouch))
