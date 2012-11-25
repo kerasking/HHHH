@@ -71,7 +71,7 @@ private:
  	static	int ConstructorHelper(LuaState* state, Object* pObj)
  	{
  		std::string metaname("MetaClass_");
- 	#ifdef __APPLE__
+ 	#if (defined(__APPLE__) || defined(ANDROID))
  		metaname += typeid(Object).name();
  	#else
  		metaname += typeid(Object).raw_name();
@@ -87,7 +87,7 @@ public:
 	static int ConstructorStruct(LuaState* state)
 	{
 		std::string metaname("MetaClass_");
-#ifdef __APPLE__
+#if (defined(__APPLE__) || defined(ANDROID))
 		metaname += typeid(Object).name();
 #else
 		metaname += typeid(Object).raw_name();
@@ -195,11 +195,11 @@ public:
 		luaGlobals = state->GetGlobals();
 		
 		std::string metaname("MetaClass_");
-	#ifdef __APPLE__
+#if (defined(__APPLE__) || defined(ANDROID))
 		metaname += typeid(Object).name();
-	#else
+#else
 		metaname += typeid(Object).raw_name();
-	#endif
+#endif
 		
 		metaTableObj = state->GetRegistry()[metaname.c_str()];
 		if (metaTableObj.IsNil())

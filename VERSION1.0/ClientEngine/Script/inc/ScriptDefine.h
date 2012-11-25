@@ -13,7 +13,7 @@
 namespace NDEngine {
 
 // ET-EXPORT
-#ifdef __APPLE__
+#if (defined(__APPLE__) || defined(ANDROID))
 
 	#define ETLUAFUNC(nameinlua, funcaddr) \
 	LuaStateMgrObj.GetState()->GetGlobals().Register(nameinlua, funcaddr);

@@ -229,20 +229,22 @@ static void buffreplace (LexState *ls, char from, char to) {
     if (p[n] == from) p[n] = to;
 }
 
-
-static void trydecpoint (LexState *ls, SemInfo *seminfo) {
-  /* format error: try to update decimal point separator */
-  struct lconv *cv = localeconv();
-  char old = ls->decpoint;
-  ls->decpoint = (cv ? cv->decimal_point[0] : '.');
-  buffreplace(ls, old, ls->decpoint);  /* try updated decimal separator */
-  if (!luaO_str2d(luaZ_buffer(ls->buff), &seminfo->r)) {
-    /* format error with correct decimal point: no more options */
-    buffreplace(ls, ls->decpoint, '.');  /* undo change (for error message) */
-    luaX_lexerror(ls, "malformed number", TK_NUMBER);
-  }
+static void trydecpoint(LexState *ls, SemInfo *seminfo)
+{
+#ifndef ANDROID		///< 安卓下没有这个貌似真不影响 郭浩
+	/* format error: try to update decimal point separator */
+	struct lconv *cv = localeconv();
+	char old = ls->decpoint;
+	ls->decpoint = (cv ? cv->decimal_point[0] : '.');
+	buffreplace(ls, old, ls->decpoint); /* try updated decimal separator */
+	if (!luaO_str2d(luaZ_buffer(ls->buff), &seminfo->r))
+	{
+		/* format error with correct decimal point: no more options */
+		buffreplace(ls, ls->decpoint, '.'); /* undo change (for error message) */
+		luaX_lexerror(ls, "malformed number", TK_NUMBER);
+	}
+#endif
 }
-
 
 /* LUA_NUMBER */
 static void read_numeral (LexState *ls, SemInfo *seminfo) {

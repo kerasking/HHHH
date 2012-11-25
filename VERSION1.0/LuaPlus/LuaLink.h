@@ -61,7 +61,7 @@
     #define LUAPLUS_API extern
 #endif // _MSC_VER
 
-#if defined(__APPLE__)  ||  defined(macintosh)
+#if (defined(__APPLE__) || defined(macintosh))
 #define LUA_USE_MACOSX
 #endif
 
