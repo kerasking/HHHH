@@ -8,10 +8,11 @@
 #ifdef WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#elif defined(TARGET_OS_IPHONE)
+#else
 #include <sys/socket.h>
 #include <sys/uio.h>
-#include <netinet/in.h>
+#include "netdb.h"
+#include "netinet/in.h"
 #endif
 
 #include "KData.h"
