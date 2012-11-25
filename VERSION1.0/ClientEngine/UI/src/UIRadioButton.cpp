@@ -9,7 +9,7 @@
 
 #include "UIRadioButton.h"
 #include "ScriptUI.h"
-#include "NDUtility.h"
+#include "NDUtil.h"
 
 IMPLEMENT_CLASS(CUIRadioButton,CUICheckBox)
 

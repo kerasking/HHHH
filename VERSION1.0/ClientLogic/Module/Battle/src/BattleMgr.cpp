@@ -39,15 +39,15 @@ using namespace NDEngine;
 BattleMgr::BattleMgr() :
 m_pkBattle(NULL)
 {
-	NDNetMsgPool& kPool = NDNetMsgPoolObj;
-	kPool.RegMsg(_MSG_BATTLE, this);
-	kPool.RegMsg(_MSG_CONTROLPOINT, this);
-	kPool.RegMsg(_MSG_EFFECT, this);
-	kPool.RegMsg(_MSG_BATTLEEND, this);
-	kPool.RegMsg(_MSG_SKILLINFO, this);
-	kPool.RegMsg(_MSG_BATTLE_SKILL_LIST, this);
-	kPool.RegMsg(_MSG_PLAYER_RECON, this);
-	kPool.RegMsg(_MSG_PLAYER_EXT_RECON, this);
+	NDNetMsgPool* kPool = NDNetMsgPoolObj;
+	kPool->RegMsg(_MSG_BATTLE, this);
+	kPool->RegMsg(_MSG_CONTROLPOINT, this);
+	kPool->RegMsg(_MSG_EFFECT, this);
+	kPool->RegMsg(_MSG_BATTLEEND, this);
+	kPool->RegMsg(_MSG_SKILLINFO, this);
+	kPool->RegMsg(_MSG_BATTLE_SKILL_LIST, this);
+	kPool->RegMsg(_MSG_PLAYER_RECON, this);
+	kPool->RegMsg(_MSG_PLAYER_EXT_RECON, this);
 	//	m_Db=new ScriptDB();
 	m_pkQuitTimer = NULL;
 	m_pkBattleReward = NULL;
@@ -1508,4 +1508,9 @@ void BattleMgr::OnDramaFinish()
 {
 	NDLog("drama call back dynmap cleared");
 	//ScriptMgrObj.excuteLuaFunc("OnBattleFinish","AffixBossFunc",NDMapMgrObj.GetMotherMapID(), 1);//--Guosen 2012.7.4 不再显示副本评价
+}
+
+BattleMgr& BattleMgr::GetBattleMgr()
+{
+	return *((BattleMgr*)ms_pkSingleton);
 }

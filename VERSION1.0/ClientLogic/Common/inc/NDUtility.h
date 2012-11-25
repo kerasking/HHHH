@@ -12,13 +12,11 @@
 
 #include "globaldef.h"
 #include "NDDirector.h"
+#include "NDUtil.h"
 
-#define SCREEN_SCALE			(NDDirector::DefaultDirector()->GetScaleFactor())
-#define MAP_UNITSIZE			(16 * ((int)(NDDirector::DefaultDirector()->GetScaleFactor())))
 #define MAP_UNITSIZE_INPOINTS	(16)
 #define MAP_UNITSIZE_INPIXELS	MAP_UNITSIZE
 
-bool IsPointInside(CCPoint pt, CCRect rect);
 int GetNumBits(int num);
 bool VerifyUnsignedNum(const std::string strnum);
 std::string getStringTime(long nSeconds);

@@ -14,7 +14,7 @@
 #include "NDDirector.h"
 #include "CCPointExtension.h"
 #include "NDUILabel.h"
-//#include "NDUtility.h"
+//#include "NDUtil.h"
 #include "NDPicture.h"
 #include "NDPath.h"
 

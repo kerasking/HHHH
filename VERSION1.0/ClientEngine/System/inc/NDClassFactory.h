@@ -19,15 +19,13 @@
 #include <map>
 
 #define REGISTER_CLASS(BASE_CLASS, DERIVED_CLASS) \
-RegisterInpFactory<BASE_CLASS, DERIVED_CLASS> Register##DERIVED_CLASS(#DERIVED_CLASS)
+	RegisterInpFactory<BASE_CLASS, DERIVED_CLASS> Register##DERIVED_CLASS(#DERIVED_CLASS)
 
 #define CREATE_CLASS(BASE_CLASS,DERIVED_CLASS) \
-NDClassFactory<BASE_CLASS>::instance().Create(DERIVED_CLASS)
+	NDClassFactory<BASE_CLASS>::instance().Create(DERIVED_CLASS)
 
 using std::string;
 using std::map;
-
-NS_NDENGINE_BGN
 
 template <class ManufacturedType, typename ClassIDKey = std::string>
 class NDClassFactory
@@ -80,7 +78,5 @@ public:
 		NDClassFactory<AncestorType,ClassIDKey>::instance().RegCreateFn(id, CreateInstance);
 	}
 };
-
-NS_NDENGINE_END
 
 #endif

@@ -32,6 +32,7 @@
 #include "NDUtility.h"
 #include <sstream>
 #include "time.h"
+#include <stdlib.h>
 
 #ifdef USE_NDSDK
 //// sdkÏà¹Ø
@@ -291,11 +292,11 @@ using namespace NDEngine;
 
 NDBeforeGameMgr::NDBeforeGameMgr()
 {
-	NDNetMsgPoolObj.RegMsg(MB_LOGINSYSTEM_EXCHANG_KEY, this);
-	//NDNetMsgPoolObj.RegMsg(MB_LOGINSYSTEM_MOBILE_SERVER_NOTIFY, this);
-	NDNetMsgPoolObj.RegMsg(MB_SERVER_INFO_REQUEST, this);
-	//NDNetMsgPoolObj.RegMsg(_MSG_NOTIFY_CLIENT, this);
-	//NDNetMsgPoolObj.RegMsg(_MSG_MPF_VERSION, this);
+	NDNetMsgPoolObj->RegMsg(MB_LOGINSYSTEM_EXCHANG_KEY, this);
+	//NDNetMsgPoolObj->RegMsg(MB_LOGINSYSTEM_MOBILE_SERVER_NOTIFY, this);
+	NDNetMsgPoolObj->RegMsg(MB_SERVER_INFO_REQUEST, this);
+	//NDNetMsgPoolObj->RegMsg(_MSG_NOTIFY_CLIENT, this);
+	//NDNetMsgPoolObj->RegMsg(_MSG_MPF_VERSION, this);
 
 	//ndRegisterAccount = [[NDRegisterAccount alloc] init];
 #if USE_ROBOT == 0
@@ -703,7 +704,7 @@ bool NDBeforeGameMgr::ConnectServer(const char* ip, unsigned int port,
 		NDTransData recvdata;
 		recvdata.Write(buf, iMsgLen - 4);
 		int nMsgID = recvdata.ReadShort();
-		NDNetMsgPoolObj.Process(nMsgID, &recvdata, iMsgLen - 6);
+		NDNetMsgPoolObj->Process(nMsgID, &recvdata, iMsgLen - 6);
 
 		socServerList.Close();
 
@@ -1512,7 +1513,7 @@ bool NDBeforeGameMgr::SynProcessData()
 		NDTransData recvdata;
 		recvdata.Write(buf, iMsgLen - 4);
 		int nMsgID = recvdata.ReadShort();
-		NDNetMsgPoolObj.Process(nMsgID, &recvdata, iMsgLen - 6);
+		NDNetMsgPoolObj->Process(nMsgID, &recvdata, iMsgLen - 6);
 
 	} while (0);
 

@@ -11,6 +11,8 @@
 #define __SINGLETON_H__
 
 #include "basedefine.h"
+#include "NDClassFactory.h"
+#include "CCPlatformConfig.h"
 
 template<typename T>
 class TSingleton
@@ -18,22 +20,31 @@ class TSingleton
 public:
 	TSingleton() 
 	{
-		//NDAsssert(NULL == ms_pkSingleton);
+		NDAsssert(NULL == ms_pkSingleton);
 		ms_pkSingleton = static_cast<T*> (this);
 	}
 	
 	~TSingleton() 
 	{
-		//NDAsssert(NULL != ms_pkSingleton);
+		NDAsssert(NULL != ms_pkSingleton);
 		ms_pkSingleton = NULL;
 	}
 	
 	static T& GetSingleton() 
 	{
-		//assert(NULL != _singleton);
-		//return *_singleton;
 		if (NULL == ms_pkSingleton)
 			new T();
+
+		return *ms_pkSingleton;
+	}
+
+	static T& GetBackSingleton(const char* pszSubClassName)
+	{
+		if (NULL == ms_pkSingleton)
+		{
+			ms_pkSingleton = CREATE_CLASS(T,pszSubClassName);
+		}
+
 		return *ms_pkSingleton;
 	}
 	
@@ -43,7 +54,7 @@ public:
 		return ms_pkSingleton;
 	}
 	
-private:
+protected:
 
 	static T* ms_pkSingleton;
 };

@@ -107,7 +107,7 @@ public:
 	void SetAction(bool bMove, bool bIgnoreFighting = false); hide
 	bool AssuredRidePet();hide
 
-	void Initialization(int lookface, bool bSetLookFace = true); hide
+	virtual void Initialization(int lookface, bool bSetLookFace = true);
 
 	virtual void Walk(CCPoint toPos, SpriteSpeed speed);
 	void OnMoving(bool bLastPos); override

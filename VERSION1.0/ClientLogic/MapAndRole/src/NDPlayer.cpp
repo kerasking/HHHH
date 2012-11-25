@@ -60,8 +60,6 @@ NDMapLayer* M_GetMapLayer()
 	return NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene)));
 }
 
-static NDPlayer* g_pkDefaultHero = NULL;
-
 IMPLEMENT_CLASS(NDPlayer, NDManualRole)
 
 bool NDPlayer::ms_bFirstUse = true;
@@ -185,12 +183,12 @@ NDPlayer& NDPlayer::defaultHero(int lookface, bool bSetLookFace)
 
 	if (!g_pkDefaultHero)
 	{
-		g_pkDefaultHero = new NDPlayer();
+		g_pkDefaultHero = CREATE_CLASS(NDSprite,"NDPlayer");
 		g_pkDefaultHero->SetNodeLevel(NODE_LEVEL_MAIN_ROLE);
-		g_pkDefaultHero->Initialization(lookface, false);
+		g_pkDefaultHero->InitializationFroLookFace(lookface, false);
 	}
 
-	return *g_pkDefaultHero;
+	return *((NDPlayer*)g_pkDefaultHero);
 }
 
 void NDPlayer::pugeHero()
@@ -1299,6 +1297,11 @@ void NDPlayer::RunAnimation(bool bDraw)
 void NDPlayer::debugDraw()
 {
 	NDManualRole::debugDraw();
+}
+
+void NDPlayer::InitializationFroLookFace( int lookface, bool bSetLookFace /*= true*/ )
+{
+	Initialization(lookface,bSetLookFace);
 }
 
 NS_NDENGINE_END

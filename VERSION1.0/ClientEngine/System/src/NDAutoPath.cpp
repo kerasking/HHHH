@@ -12,7 +12,7 @@
 #include <stdlib.h>
 //#include "Performance.h"
 #include "CCPointExtension.h"
-#include "NDUtility.h"
+#include "NDUtil.h"
 #include "NDDirector.h"
 
 namespace NDEngine

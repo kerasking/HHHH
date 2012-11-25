@@ -1,7 +1,7 @@
 #include "NDUIFrame.h"
 #include "NDDirector.h"
 #include "CCTextureCache.h"
-#include "NDUtility.h"
+#include "NDUtil.h"
 #include "NDPath.h"
 //#include "I_Analyst.h"
 #include "NDUIBaseGraphics.h"

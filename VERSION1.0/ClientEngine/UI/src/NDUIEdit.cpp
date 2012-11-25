@@ -2,7 +2,7 @@
 //#include "NDIphoneEdit.h"
 //#include <UIKit/UIKit.h>
 //#include "CCPointExtension.h"
-#include "NDUtility.h"
+#include "NDUtil.h"
 #include "I_Analyst.h"
 #include "NDUIBaseGraphics.h"
 #include "NDUILayer.h"

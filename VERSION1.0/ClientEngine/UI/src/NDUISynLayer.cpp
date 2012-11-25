@@ -15,8 +15,10 @@
 #include "UISpriteNode.h"
 #include "NDPath.h"
 #include "NDAnimationGroup.h"
-#include "GameScene.h"
-#include "NDPlayer.h"
+//#include "GameScene.h"
+//#include "NDPlayer.h"
+#include "NDSprite.h"
+#include "NDLocalization.h"
 
 using namespace NDEngine;
 
@@ -49,10 +51,12 @@ void NDUISynLayer::Show(SYN_TAG tag)
 {
 	// 玩家停止寻路
 	NDScene* parentScene = NDDirector::DefaultDirector()->GetRunningScene();
-	if (parentScene->IsKindOfClass(RUNTIME_CLASS(GameScene))) 
-	{
-		NDPlayer::defaultHero().stopMoving();
-	}
+// 	if (parentScene->IsKindOfClass(RUNTIME_CLASS(GameScene))) ///< 这里反向调用GameScene 郭浩
+// 	{
+	//NDPlayer::defaultHero().stopMoving();
+//	}
+
+	DefaultGlobalSprite->stopMoving();
 	
 	// 当前已经显示, 更新tag
 	if (NDUISynLayer_instances)

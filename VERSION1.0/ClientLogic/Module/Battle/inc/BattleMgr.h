@@ -20,11 +20,12 @@
 #include "ScriptDataBase.h"
 #include "SMBattleScene.h"
 #include "Fighter.h"
+#include "NDBaseBattleMgr.h"
 
 using std::map;
 using namespace NDEngine;
 
-#define BattleMgrObj BattleMgr::GetSingleton()
+#define BattleMgrObj BattleMgr::GetBattleMgr()
 
 typedef map<OBJID, BattleSkill*> MAP_BATTLE_SKILL;
 typedef MAP_BATTLE_SKILL::iterator MAP_BATTLE_SKILL_IT;
@@ -205,14 +206,16 @@ public:
 typedef vector<FightAction*> VEC_FIGHTACTION;
 typedef VEC_FIGHTACTION::iterator VEC_FIGHTACTION_IT;
 
-class BattleMgr: public TSingleton<BattleMgr>,
-		public NDMsgObject,
-		public ITimerCallback
+class BattleMgr: public NDBaseBattleMgr
 {
 public:
 	BattleMgr();
 	~BattleMgr();
+
 	virtual bool process(MSGID msgID, NDEngine::NDTransData* bao, int len);
+
+	static BattleMgr& GetBattleMgr();
+
 	// ÍË³öÕ½¶·
 	void quitBattle(bool bEraseOut = true);
 	void loadRewardUI();

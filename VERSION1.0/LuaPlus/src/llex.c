@@ -28,39 +28,36 @@ NAMESPACE_LUA_BEGIN
 
 static int next(LexState *ls)
 {
-  union
-  {
-	lua_WChar w;
-	unsigned char b[2];
-  } s;
-  int c = zgetc(ls->z);
-  if (c == EOZ) {
-    ls->current = EOZ;
-	return EOZ;
-  }
-  if (!ls->z->isWide) {
-    ls->current = c;
-    return ls->current;
-  }
+	union
+	{
+		lua_WChar w;
+		unsigned char b[2];
+	} s;
+	int c = zgetc(ls->z);
+	if (c == EOZ)
+	{
+		ls->current = EOZ;
+		return EOZ;
+	}
+	if (!ls->z->isWide)
+	{
+		ls->current = c;
+		return ls->current;
+	}
 
-  s.b[0] = (unsigned char)c;
-  c = zgetc(ls->z);
-  if (c == EOZ) {
-    ls->current = EOZ;
-    return EOZ;
-  }
-  s.b[1] = (unsigned char)c;
-  ls->current = s.w;
-  return ls->current;
+	s.b[0] = (unsigned char)c;
+	c = zgetc(ls->z);
+	if (c == EOZ)
+	{
+		ls->current = EOZ;
+		return EOZ;
+	}
+	s.b[1] = (unsigned char)c;
+	ls->current = s.w;
+	return ls->current;
 }
 
-
-
-
-
-
 #define currIsNewline(ls)	(ls->current == '\n' || ls->current == '\r')
-
 
 /* ORDER RESERVED */
 const char *const luaX_tokens [] = {
@@ -76,47 +73,48 @@ const char *const luaX_tokens [] = {
 
 #define save_and_next(ls) (save(ls, ls->current), next(ls))
 
-
-static void save (LexState *ls, int c) {
-  Mbuffer *b = ls->buff;
-  if (b->n + 1 > b->buffsize) {
-    size_t newsize;
-    if (b->buffsize >= MAX_SIZET/2)
-      luaX_lexerror(ls, "lexical element too long", 0);
-    newsize = b->buffsize * 2;
-    luaZ_resizebuffer(ls->L, b, newsize);
-  }
-  b->buffer[b->n++] = cast(char, c);
+static void save(LexState *ls, int c)
+{
+	Mbuffer *b = ls->buff;
+	if (b->n + 1 > b->buffsize)
+	{
+		size_t newsize = 0;
+		if (b->buffsize >= MAX_SIZET / 2)
+			luaX_lexerror(ls, "lexical element too long", 0);
+		newsize = b->buffsize * 2;
+		luaZ_resizebuffer(ls->L, b, newsize);
+	}
+	b->buffer[b->n++] = cast(char, c);
 }
-
 
 #define wsave_and_next(ls) (wsave(ls, ls->current), next(ls))
 
-
-static void wsave (LexState *ls, int c) {
-  Mbuffer *b = ls->buff;
-  if (b->n + 2 > b->buffsize) {
-    size_t newsize;
-    if (b->buffsize >= MAX_SIZET/2)
-      luaX_lexerror(ls, "lexical element too long", 0);
-    newsize = b->buffsize * 4;
-    luaZ_resizebuffer(ls->L, b, newsize);
-  }
-  *(lua_WChar*)(&b->buffer[b->n]) = cast(lua_WChar, c);
-  b->n += 2;
+static void wsave(LexState *ls, int c)
+{
+	Mbuffer *b = ls->buff;
+	if (b->n + 2 > b->buffsize)
+	{
+		size_t newsize;
+		if (b->buffsize >= MAX_SIZET / 2)
+			luaX_lexerror(ls, "lexical element too long", 0);
+		newsize = b->buffsize * 4;
+		luaZ_resizebuffer(ls->L, b, newsize);
+	}
+	*(lua_WChar*) (&b->buffer[b->n]) = cast(lua_WChar, c);
+	b->n += 2;
 }
 
-
-void luaX_init (lua_State *L) {
-  int i;
-  for (i=0; i<NUM_RESERVED; i++) {
-    TString *ts = luaS_new(L, luaX_tokens[i]);
-    luaS_fix(ts);  /* reserved words are never collected */
-    lua_assert(strlen(luaX_tokens[i])+1 <= TOKEN_LEN);
-    ts->tsv.reserved = cast_byte(i+1);  /* reserved word */
-  }
+void luaX_init(lua_State *L)
+{
+	int i = 0;
+	for (i = 0; i < NUM_RESERVED; i++)
+	{
+		TString *ts = luaS_new(L, luaX_tokens[i]);
+		luaS_fix(ts); /* reserved words are never collected */
+		lua_assert(strlen(luaX_tokens[i]) + 1 <= TOKEN_LEN);
+		ts->tsv.reserved = cast_byte(i + 1); /* reserved word */
+	}
 }
-
 
 #define MAXSRC          80
 

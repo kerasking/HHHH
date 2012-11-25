@@ -29,13 +29,6 @@ using namespace NDEngine;
 
 #define USE_ADVANCE_PICTURE (1)
 
-bool IsPointInside(CCPoint pt, CCRect rect)
-{
-	return (pt.x >= rect.origin.x && pt.y >= rect.origin.y
-			&& pt.x <= rect.size.width + rect.origin.x
-			&& pt.y <= rect.size.height + rect.origin.y);
-}
-
 int GetNumBits(int num)
 {
 	int bits = 0;

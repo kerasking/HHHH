@@ -25,7 +25,7 @@
 #include "NDClassFactory.h"
 #include "NDDebugOpt.h"
 #include "NDSharedPtr.h"
-#include "NDUtility.h"
+#include "NDUtil.h"
 #include "platform.h"
 #include "TQString.h"
 
@@ -33,6 +33,8 @@ using namespace cocos2d;
 using namespace NDEngine;
 
 NS_NDENGINE_BGN
+
+NDSprite* NDSprite::g_pkDefaultHero = NULL;
 
 IMPLEMENT_CLASS(NDSprite, NDNode)
 
@@ -385,7 +387,7 @@ void NDSprite::OnMoveEnd()
 	SetCurrentAnimation(RIDEPET_STAND, m_bReverse);
 }
 
-void NDSprite::stopMoving()
+void NDSprite::stopMoving( bool bResetPos /*= true*/, bool bResetTeamPos /*= true*/ )
 {
 	m_bIsMoving = false;
 	m_kPointList.clear();
@@ -1190,6 +1192,23 @@ void NDSprite::reloadAni( const char* pszSprFile )
 void NDSprite::debugDraw()
 {
 	//empty.
+}
+
+NDSprite* NDSprite::GetGlobalPlayerPointer(int lookface)
+{
+	if (0 == g_pkDefaultHero)
+	{
+		g_pkDefaultHero = CREATE_CLASS(NDSprite,"NDPlayer");
+		g_pkDefaultHero->SetNodeLevel(NODE_LEVEL_MAIN_ROLE);
+		g_pkDefaultHero->InitializationFroLookFace(lookface, false);
+	}
+
+	return g_pkDefaultHero;
+}
+
+void NDSprite::InitializationFroLookFace( int lookface, bool bSetLookFace /*= true*/ )
+{
+
 }
 
 NS_NDENGINE_END

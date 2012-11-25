@@ -25,24 +25,22 @@
 //#include "NDMapMgr.h"
 //#include "Performance.h"
 //#include "BattleMgr.h"
-#include "NDUtility.h"
+//#include "NDUtil.h"
 #include "NDDebugOpt.h"
 #include "NDDataTransThread.h"
 #include "NDMsgDefine.h"
 //#include "NDMonster.h"
-#include "BattleMgr.h"//
+//#include "BattleMgr.h"//
 #include "ScriptMgr.h"
 #include "NDSharedPtr.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "NDConsole.h"
 #endif
-#include "NDNpc.h"
-#include "NDPlayer.h"
-#include "NDManualRole.h"
-#include "NDMonster.h"
 #include "UsePointPls.h"
 #include "TQString.h"
 #include "TQPlatform.h"
+#include "NDUtil.h"
+#include "NDBaseBattleMgr.h"
 
 using namespace cocos2d;
 
@@ -97,7 +95,7 @@ IMPLEMENT_CLASS(NDMapLayer, NDLayer)
 
 NDMapLayer::NDMapLayer()
 {
-	WriteCon( "NDMapLayer::NDMapLayer()\r\n");
+//	WriteCon( "NDMapLayer::NDMapLayer()\r\n"); ///< 调用Logic的东西 郭浩
 
 	m_pkMapData = NULL;
 	m_nMapIndex = -1;
@@ -141,7 +139,7 @@ NDMapLayer::NDMapLayer()
 
 NDMapLayer::~NDMapLayer()
 {
-	WriteCon( "NDMapLayer::~NDMapLayer()\r\n");
+//	WriteCon( "NDMapLayer::~NDMapLayer()\r\n"); ///< 调用Logic的东西 郭浩
 
 	CC_SAFE_RELEASE (m_pkOrders);
 	CC_SAFE_RELEASE (m_pkOrdersOfMapscenesAndMapanimations);
@@ -632,7 +630,7 @@ void NDMapLayer::DrawSwitch()//绘制切屏点
 
 	case SWITCH_TO_BATTLE:
 		{
-			BattleMgrObj.showBattleScene();
+			NDBattleBaseMgrObj.showBattleScene();
 			ScriptMgrObj.excuteLuaFunc("Hide", "NormalBossListUI",0);//调用Hide方法后，调用Redisplay恢复
 
 			//切换音效
