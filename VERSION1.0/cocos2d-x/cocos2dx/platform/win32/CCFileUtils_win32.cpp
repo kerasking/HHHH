@@ -195,7 +195,7 @@ string CCFileUtils::getWriteablePath()
 {
 	// return the path that the exe file saved in
 
-	char full_path[_MAX_PATH + 1];
+	char full_path[_MAX_PATH + 1] = {0};
 	::GetModuleFileNameA(NULL, full_path, _MAX_PATH + 1);
 
 	string ret((char*)full_path);

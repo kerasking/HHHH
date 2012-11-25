@@ -1,6 +1,8 @@
 //#include "StdAfx.h"
 #include "UIData.h"
 #include <stdio.h>
+#include "globaldef.h"
+#include "NDDebugOpt.h"
 
 #define NORMAL_FILE_KEY  "NormalFile"
 #define SELECTED_FILE_KEY  "SelectFile"
@@ -27,6 +29,8 @@
 
 #define CTRL_TEXTFONTSIZE "TextSize"
 #define CTRL_TEXTFONTCOLOR "TextColor"
+
+using namespace NDEngine;
 
 CUIData::CUIData(void)
 {
@@ -55,6 +59,7 @@ CUIData::~CUIData(void)
 
 bool CUIData::openUiFile(const char* pszIniFile)
 {
+	NDLog("Entry openUiFile file name is %s",pszIniFile);
 	m_kINIFile.SetPath(pszIniFile);
 	return m_kINIFile.ReadFile();
 }

@@ -385,7 +385,7 @@ bool NDUILoad::LoadLua(
 	string strUIFilePath = NDPath::GetUIConfigPath(uiname);
 
 	NDLog("Ready read ui %s",strUIFilePath.c_str());
-	
+
 	if ( !uiData.openUiFile(strUIFilePath.c_str()) )
 	{
 		NDError("read ui error");

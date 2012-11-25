@@ -25,15 +25,15 @@ string NDPath::NDPath_SoundPath			= "../SimplifiedChineseRes/res/sound/";
 string NDPath::NDPath_UIPath			= "../SimplifiedChineseRes/res/UI/";
 string NDPath::NDPath_ScriptPath		= "../SimplifiedChineseRes/res/Script/";
 #else
-string NDPath::NDPath_ResPath			= "SimplifiedChineseRes/res/";
-string NDPath::NDPath_ImgPath			= "SimplifiedChineseRes/res/Image/";
-string NDPath::NDPath_ImgPath_BattleUI	= "SimplifiedChineseRes/res/Image/battle_ui/";
-string NDPath::NDPath_ImgPath_UINew		= "SimplifiedChineseRes/res/Image/ui_new/";
-string NDPath::NDPath_MapPath			= "SimplifiedChineseRes/res/map/";
-string NDPath::NDPath_AniPath			= "SimplifiedChineseRes/res/animation/";
-string NDPath::NDPath_SoundPath			= "SimplifiedChineseRes/res/sound/";
-string NDPath::NDPath_UIPath			= "SimplifiedChineseRes/res/UI/";
-string NDPath::NDPath_ScriptPath		= "SimplifiedChineseRes/res/Script/";
+string NDPath::NDPath_ResPath			= "assets/SimplifiedChineseRes/res/";
+string NDPath::NDPath_ImgPath			= "assets/SimplifiedChineseRes/res/Image/";
+string NDPath::NDPath_ImgPath_BattleUI	= "assets/SimplifiedChineseRes/res/Image/battle_ui/";
+string NDPath::NDPath_ImgPath_UINew		= "assets/SimplifiedChineseRes/res/Image/ui_new/";
+string NDPath::NDPath_MapPath			= "assets/SimplifiedChineseRes/res/map/";
+string NDPath::NDPath_AniPath			= "assets/SimplifiedChineseRes/res/animation/";
+string NDPath::NDPath_SoundPath			= "assets/SimplifiedChineseRes/res/sound/";
+string NDPath::NDPath_UIPath			= "assets/SimplifiedChineseRes/res/UI/";
+string NDPath::NDPath_ScriptPath		= "assets/SimplifiedChineseRes/res/Script/";
 #endif
 
 IMPLEMENT_CLASS(NDPath, NDObject)

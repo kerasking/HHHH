@@ -26,6 +26,13 @@ NS_CC_BEGIN;
 
 #include "CCCommon.h"
 #include "jni/SystemInfoJni.h"
+#include "android/jni/SystemInfoJni.h"
+#include <android/log.h>
+#include <jni.h>
+
+#define  LOG_TAG    "DaHua"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGDAHUA(...) __android_log_print(ANDROID_LOG_ERROR,"DaHua",__VA_ARGS__)
 
 // record the resource path
 static string s_strResourcePath = "";
@@ -76,6 +83,7 @@ unsigned char* CCFileUtils::getFileData(const char* pszFileName, const char* psz
 	{
 		// read from apk
 		fullPath.insert(0, "assets/");
+		LOGD("The full path is %s",fullPath.c_str());
 		pData =  CCFileUtils::getFileDataFromZip(s_strResourcePath.c_str(), fullPath.c_str(), pSize);
 	}
 	else
