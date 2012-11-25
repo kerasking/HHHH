@@ -17,9 +17,9 @@
 #include <vector>
 #include "NDLocalization.h"
 
-const std::string ELE_POWER = NDCommonCString("TiLi"); //·ÀÓù
-const std::string ELE_VITALITY = NDCommonCString("yuanqi"); //¹¥»÷
-const std::string ELE_SPIRIT = NDCommonCString("jingsheng"); //»ìÂÒ
+//const std::string ELE_POWER = NDCommonCString("TiLi"); //·ÀÓù
+//const std::string ELE_VITALITY = NDCommonCString("yuanqi"); //¹¥»÷
+//const std::string ELE_SPIRIT = NDCommonCString("jingsheng"); //»ìÂÒ
 
 enum
 {

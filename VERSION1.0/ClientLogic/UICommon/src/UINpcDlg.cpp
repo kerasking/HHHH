@@ -32,7 +32,7 @@ void CUINpcDlg::Initialization(int nNpcId)
 	SetId(nNpcId);
 	
 	//…Ë÷√Õº∆¨
-	NDPicture* picPortrait = ScriptMgrObj.excuteLuaFunc<NDPicture*>("GetNpcWholePic", "", nNpcId);
+	NDPicture* picPortrait = BaseScriptMgrObj.excuteLuaFunc<NDPicture*>("GetNpcWholePic", "", nNpcId);
 	this->SetPicture(picPortrait);
 }
 
@@ -65,7 +65,7 @@ void CUINpcDlg::OnClickOpt(int nOptIndex)
 
 void CUINpcDlg::OnNpcClick(int nAction)
 {
-	ScriptMgr& script = ScriptMgr::GetSingleton();
+	ScriptMgr& script = ScriptMgrObj;
 	bool bRet = script.excuteLuaFunc("NPC_OPTION_COMMON", "NPC", m_nId, nAction);
 	if (!bRet)
 	{
@@ -77,7 +77,7 @@ void CUINpcDlg::OnNpcClick(int nAction)
 
 void CUINpcDlg::OnTaskClick(int nAction)
 {
-	ScriptMgr& script = ScriptMgr::GetSingleton();
+	ScriptMgr& script = ScriptMgrObj;
 	bool bRet = script.excuteLuaFunc("TASK_OPTION_COMMON", "TASK", m_nId, nAction);
 	if (!bRet)
 	{

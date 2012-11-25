@@ -178,6 +178,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Framework\inc\NDBaseScriptMgr.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Framework\inc\NDCommonProtocol.h"
 					>
 				</File>
@@ -247,6 +251,10 @@
 				</File>
 				<File
 					RelativePath="..\Framework\src\NDBaseNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Framework\src\NDBaseScriptMgr.cpp"
 					>
 				</File>
 				<File
@@ -1073,20 +1081,12 @@
 					RelativePath="..\Script\inc\ScriptInc.h"
 					>
 				</File>
-				<File
-					RelativePath="..\Script\inc\ScriptMgr.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="src"
 				>
 				<File
 					RelativePath="..\Script\src\LuaStateMgr.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\Script\src\ScriptMgr.cpp"
 					>
 				</File>
 			</Filter>

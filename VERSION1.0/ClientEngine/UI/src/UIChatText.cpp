@@ -14,6 +14,7 @@
 #include "TQPlatform.h"
 #include <stdlib.h>
 #include "NDLocalization.h"
+#include "NDBaseScriptMgr.h"
 
 IMPLEMENT_CLASS(CUIChatText, NDUINode)
 
@@ -200,34 +201,42 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 
 bool CUIChatText::OnTextClick(CCPoint touchPos)
 {
-	int index=0;
-	bool isfound=false;
+	int index = 0;
+	bool isfound = false;
 	std::vector<NDNode*> vChildren = this->GetChildren();
-	for (std::vector<NDNode*>::iterator it = vChildren.begin(); it != vChildren.end(); it++) {
+	for (std::vector<NDNode*>::iterator it = vChildren.begin(); it != vChildren.end(); it++)
+	{
 		NDUINode* uinode = dynamic_cast<NDUINode*> (*it);
-		if (uinode && IsPointInside(touchPos, uinode->GetScreenRect())) {
+		if (uinode && IsPointInside(touchPos, uinode->GetScreenRect()))
+		{
 			//NDLog(@"click on chat ui node");
 			isfound=true;
 			break;
 		}
 		index++;
 	}
-	if(!isfound){
+	if(!isfound)
+	{
 		return false;
 	}
-	ChatNode cnode=this->textNodeList.at(index);
-	if (cnode.textType==ChatSpeaker){
+	ChatNode cnode = this->textNodeList.at(index);
+	if (cnode.textType==ChatSpeaker)
+	{
 		//NDLog(@"click on chat speaker:%d",cnode.content_id);
-		ScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",(int)cnode.textType,cnode.content_id,this->speakerName);
-	}else if(cnode.textType==ChatItem)
+		BaseScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",(int)cnode.textType,cnode.content_id,this->speakerName);
+	}
+	else if(cnode.textType==ChatItem)
 	{
 		//NDLog(@"click on chat item:%d",cnode.content_id);
-		ScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",(int)cnode.textType,cnode.content_id,"");
-	}else if (cnode.textType==ChatRole)
+		BaseScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",(int)cnode.textType,cnode.content_id,"");
+	}
+	else if (cnode.textType==ChatRole)
 	{
 		//NDLog(@"click on chat Role:%d",cnode.content_id);
-		ScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",(int)cnode.textType,cnode.content_id,cnode.content_str);
-	}else{
+		BaseScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",(int)cnode.textType,cnode.content_id,cnode.content_str);
+	}
+	else
+	{
 		//NDLog(@"click nothing");
 	}
 	return true;

@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <sstream>
 #include "NDProfile.h"
+#include "ScriptMgr.h"
 
 NS_NDENGINE_BGN
 	

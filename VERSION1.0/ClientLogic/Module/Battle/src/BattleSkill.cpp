@@ -90,11 +90,13 @@ BattleSkill::BattleSkill()
 	lookface_target_id=0;
 }
 
-BattleSkill::~BattleSkill() {
+BattleSkill::~BattleSkill()
+{
 	
 }
 
-string BattleSkill::getFullDes() {
+string BattleSkill::getFullDes()
+{
 	stringstream ss;
 	
 	ss << getSimpleDes(true);
@@ -107,80 +109,107 @@ string BattleSkill::getFullDes() {
 	return ss.str();
 }
 
-string BattleSkill::getSimpleDes(bool bIncludeName) {
+string BattleSkill::getSimpleDes(bool bIncludeName)
+{
 	stringstream ss;
-	
-	if (bIncludeName) {
-		ss << getName() << "£¨" << this->level << NDCommonCString("Ji") << "£©" << "\n";
-	} else {
+
+	if (bIncludeName)
+	{
+		ss << getName() << "£¨" << this->level << NDCommonCString("Ji") << "£©"
+			<< "\n";
+	}
+	else
+	{
 		ss << NDCommonCString("level") << ": " << this->level << "\n";
 	}
-	
-	ss << NDCommonCString("require") << NDCommonCString("level") << ": " << this->lvRequire << "\n";
-	
+
+	ss << NDCommonCString("require") << NDCommonCString("level") << ": "
+		<< this->lvRequire << "\n";
+
 	stringstream strArea;
 	strArea << this->area << NDCommonCString("ren");
-	
+
 	string strWeapon = NDCommonCString("wu");
-	if (this->weaponRequire == WEAPON_REQUIRE_SWORD) {
+	if (this->weaponRequire == WEAPON_REQUIRE_SWORD)
+	{
 		strWeapon = NDCommonCString("JianLei");
-	} else if (this->weaponRequire == WEAPON_REQUIRE_KNIFE) {
+	}
+	else if (this->weaponRequire == WEAPON_REQUIRE_KNIFE)
+	{
 		strWeapon = NDCommonCString("DaoLei");
-	} else if (this->weaponRequire == WEAPON_REQUIRE_BOW) {
+	}
+	else if (this->weaponRequire == WEAPON_REQUIRE_BOW)
+	{
 		strWeapon = NDCommonCString("GongLei");
-	} else if (this->weaponRequire == WEAPON_REQUIRE_DAGGER) {
+	}
+	else if (this->weaponRequire == WEAPON_REQUIRE_DAGGER)
+	{
 		strWeapon = NDCommonCString("BiShouLei");
-	}else if (this->weaponRequire == WEAPON_REQUIRE_GUN) {
+	}
+	else if (this->weaponRequire == WEAPON_REQUIRE_GUN)
+	{
 		strWeapon = NDCommonCString("GunLei");
-	}else if (this->weaponRequire == WEAPON_REQUIRE_BATTLE) {
+	}
+	else if (this->weaponRequire == WEAPON_REQUIRE_BATTLE)
+	{
 		strWeapon = NDCommonCString("ZhangLei");
 	}
-	
-	ss << NDCommonCString("WuQi") << NDCommonCString("require") << "£º" << strWeapon << "\n";
-	
+
+	ss << NDCommonCString("WuQi") << NDCommonCString("require") << "£º"
+		<< strWeapon << "\n";
+
 	string strTarget = NDCommonCString("wu");
-	if ((this->atkType & SKILL_ATK_TYPE_ENEMY) == SKILL_ATK_TYPE_ENEMY) {
+	if ((this->atkType & SKILL_ATK_TYPE_ENEMY) == SKILL_ATK_TYPE_ENEMY)
+	{
 		strTarget = NDCommonCString("DiFang");
-	} else if ((this->atkType & SKILL_ATK_TYPE_SELF) == SKILL_ATK_TYPE_SELF) {
+	}
+	else if ((this->atkType & SKILL_ATK_TYPE_SELF) == SKILL_ATK_TYPE_SELF)
+	{
 		strTarget = NDCommonCString("ZhiJi");
-	} else if ((this->atkType & SKILL_ATK_TYPE_FRIEND) == SKILL_ATK_TYPE_FRIEND) {
+	}
+	else if ((this->atkType & SKILL_ATK_TYPE_FRIEND) == SKILL_ATK_TYPE_FRIEND)
+	{
 		strTarget = NDCommonCString("YouFang");
 	}
-	
-	if (this->type != SKILL_TYPE_PASSIVE) {
-		ss << NDCommonCString("target") << "£º" << strTarget << strArea.str() << "\n"
-		<< NDCommonCString("ConsumeMp") << "£º" << getMpRequire() << "\n";
-		
-		if(getInjury() != 0) {
+
+	if (this->type != SKILL_TYPE_PASSIVE)
+	{
+		ss << NDCommonCString("target") << "£º" << strTarget << strArea.str()
+			<< "\n" << NDCommonCString("ConsumeMp") << "£º" << getMpRequire()
+			<< "\n";
+
+		if (getInjury() != 0)
+		{
 			ss << NDCommonCString("hurt") << "£º" << getInjury() << "\n";
 		}
-		
+
 		ss << NDCommonCString("speed") << "£º" << getSpeed() << "\n";
-		
-		if (getAtk_point() != 0)
-			ss << ELE_VITALITY << "£º"<<getAtk_point()<<"\n";
-		if (getAtk_point() != 0)
-			ss << ELE_POWER << "£º"<<getDef_point()<<"\n";
-		if (getAtk_point() != 0)
-			ss << ELE_SPIRIT <<"£º"<<getDis_point()<<"\n";
+
+// 		if (getAtk_point() != 0)
+// 			ss << ELE_VITALITY << "£º" << getAtk_point() << "\n";
+// 		if (getAtk_point() != 0)
+// 			ss << ELE_POWER << "£º" << getDef_point() << "\n";
+// 		if (getAtk_point() != 0)
+// 			ss << ELE_SPIRIT << "£º" << getDis_point() << "\n";
 	}
-	
+
 	if (getCd() != 0)
 	{
 		ss << NDCommonCString("CoolTurn") << ": " << getCd() << "\n";
-		
+
 		Battle* battle = BattleMgrObj.GetBattle();
 		if (!IsSkillOwnByPlayer() && battle && battle->CanPetFreeUseSkill())
 		{
 			ss << NDCommonCString("BattleNoLimit");
 		}
 	}
-	
+
 	ss << NDCommonCString("effect") << "£º" << getDes() << "\n";
-	
-	if (getStatusLast() != 0 && getStatusLast() != 255) {
-		ss << NDCommonCString("ChiXuTurn") << "£º" << getStatusLast()<<"\n";
+
+	if (getStatusLast() != 0 && getStatusLast() != 255)
+	{
+		ss << NDCommonCString("ChiXuTurn") << "£º" << getStatusLast() << "\n";
 	}
-	
+
 	return ss.str();
 }

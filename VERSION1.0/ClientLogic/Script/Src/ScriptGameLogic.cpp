@@ -28,6 +28,7 @@
 #include "NDPath.h"
 #include "SystemSetMgr.h"
 #include "ItemImage.h"
+#include "ScriptMgr.h"
 #ifdef USE_MGSDK
 #import <Foundation/Foundation.h>
 #include "MBGSocialService.h"

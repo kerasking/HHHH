@@ -13,10 +13,13 @@
 #include "pthread.h"
 #include "semaphore.h"
 #include "Singleton.h"
+#include "CCPlatformConfig.h"
 
 BEGIN_ND_NAMESPACE
 
 using namespace std;
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
 class NDConsoleListener
 {
@@ -76,6 +79,8 @@ protected:
 
 private:
 };
+
+#endif
 
 END_ND_NAMESPACE
 #endif

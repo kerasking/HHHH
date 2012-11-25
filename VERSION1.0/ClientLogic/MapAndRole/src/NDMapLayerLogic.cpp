@@ -27,6 +27,7 @@
 #include "UIChatText.h"
 #include "ScriptInc.h"
 #include "WorldMapScene.h"
+#include "ScriptMgr.h"
 
 #define TAG_MAP_UPDTAE (2046)
 #define	TAG_MAP_LONGTOUCH (2047)
@@ -103,7 +104,7 @@ void NDMapLayerLogic::TouchEnd(NDTouch* touch)
 	if (!kPlayer.ClickPoint(touchPoint, false, IsPathing()))
 	{
 		kPlayer.stopMoving();
-		if (ScriptMgrObj.excuteLuaFunc<bool>("IsInPractising", "PlayerFunc"))
+		if (BaseScriptMgrObj.excuteLuaFunc<bool>("IsInPractising", "PlayerFunc"))
 		{
 			kPlayer.SetCurrentAnimation(7, kPlayer.IsReverse());
 		}

@@ -1,6 +1,7 @@
 #include <fstream>
 #include <stdio.h>
 #include <cassert>
+#include <stdlib.h>
 #include "IniFile.h"
 
 #ifdef _DEBUG

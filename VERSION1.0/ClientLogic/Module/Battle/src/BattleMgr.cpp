@@ -28,6 +28,7 @@
 #include "ScriptGlobalEvent.h"
 #include "DramaScene.h"
 #include "NDConstant.h"
+#include "ScriptMgr.h"
 
 #define QUIT_BATTLE_TIMER_TAG (13621)
 #define QUIT_DRAMA_TIMER_TAG (13622)

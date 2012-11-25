@@ -16,6 +16,7 @@
 #include "ScriptGameData.h"
 
 #include <sstream>
+#include "ScriptMgr.h"
 
 using namespace LuaPlus;
 
@@ -166,7 +167,7 @@ bool CloseDlg()
 
 void OnDealTask(int nTaskId)
 {
-	ScriptMgr& script = ScriptMgr::GetSingleton();
+	ScriptMgr& script = ScriptMgrObj;
 	std::stringstream ssTaskFunc;
 	ssTaskFunc << "TASK_FUNCTION_" << nTaskId;
 	bool bRet = script.IsLuaFuncExist(ssTaskFunc.str().c_str(), "TASK");

@@ -31,7 +31,7 @@
 #include "NDMsgDefine.h"
 //#include "NDMonster.h"
 //#include "BattleMgr.h"//
-#include "ScriptMgr.h"
+#include "NDBaseScriptMgr.h"
 #include "NDSharedPtr.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "NDConsole.h"
@@ -631,27 +631,27 @@ void NDMapLayer::DrawSwitch()//绘制切屏点
 	case SWITCH_TO_BATTLE:
 		{
 			NDBattleBaseMgrObj.showBattleScene();
-			ScriptMgrObj.excuteLuaFunc("Hide", "NormalBossListUI",0);//调用Hide方法后，调用Redisplay恢复
+			BaseScriptMgrObj.excuteLuaFunc("Hide", "NormalBossListUI",0);//调用Hide方法后，调用Redisplay恢复
 
 			//切换音效
-			ScriptMgrObj.excuteLuaFunc("PlayEffectSound", "Music",3);
+			BaseScriptMgrObj.excuteLuaFunc("PlayEffectSound", "Music",3);
 
 			//等于3为竞技场挑战
 			if(m_nBattleType != 3)
 			{
-				int nIsRank = ScriptMgrObj.excuteLuaFuncRetN("GetIsBattleRank", "NormalBossListUI");
+				int nIsRank = BaseScriptMgrObj.excuteLuaFuncRetN("GetIsBattleRank", "NormalBossListUI");
 
 				//等于1表示副本已经打通过
 				if (1 == nIsRank)
 				{
 					//显示速战速决按钮
-					ScriptMgrObj.excuteLuaFunc("LoadUI", "BattleMapCtrl");
+					BaseScriptMgrObj.excuteLuaFunc("LoadUI", "BattleMapCtrl");
 				}
 			}
 			else
 			{
 				//显示速战速决按钮
-				ScriptMgrObj.excuteLuaFunc("LoadUI", "BattleMapCtrl");
+				BaseScriptMgrObj.excuteLuaFunc("LoadUI", "BattleMapCtrl");
 			}
 
 			showSwitchSprite(SWITCH_START_BATTLE);

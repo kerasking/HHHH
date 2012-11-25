@@ -21,6 +21,7 @@
 #include "CPet.h"
 #include "NDDirector.h"
 #include "NDPath.h"
+#include "ScriptMgr.h"
 using namespace NDEngine;
 
 // const int LEFT_BACK_X = 120; // ×ó±ßºóÅÅ x ×ø±ê

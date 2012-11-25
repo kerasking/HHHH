@@ -143,6 +143,7 @@ $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/text_input_node \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/textures \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/tileMap_parallax_nodes \
 $(LOCAL_PATH)/../../../luaplus \
+$(LOCAL_PATH)/../../../tinyxml/inc \
 $(LOCAL_PATH)/../../../include/C3/win \
 $(LOCAL_PATH)/../../../ClientLogic/MsgDefine/inc \
 $(LOCAL_PATH)/../../../ClientLogic/Script/inc \

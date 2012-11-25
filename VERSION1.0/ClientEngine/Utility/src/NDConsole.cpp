@@ -1,3 +1,7 @@
+#include "CCPlatformConfig.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+
 #include "NDConsole.h"
 #include <io.h>
 #include <windows.h>
@@ -6,6 +10,7 @@
 #include "NDDebugOpt.h"
 
 BEGIN_ND_NAMESPACE
+
 IMPLEMENT_CLASS(NDConsole, NDObject);
 
 bool NDConsole::ms_bIsExistent = false;
@@ -246,3 +251,5 @@ bool NDConsole::ClearSpecialCommand( const char* pszCommand )
 }
 
 END_ND_NAMESPACE
+
+#endif

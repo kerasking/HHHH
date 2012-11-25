@@ -14,9 +14,10 @@
 
 #include <vector>
 #include "ccTypes.h"
+#include "NDBaseScriptMgr.h"
 
 const char* DataFilePath();
-#define ScriptMgrObj	NDEngine::ScriptMgr::GetSingleton()
+#define ScriptMgrObj	NDEngine::ScriptMgr::GetScriptMgr()
 using namespace cocos2d;
 
 namespace NDEngine
@@ -24,17 +25,19 @@ namespace NDEngine
 
 //const char* GetScriptPath(const char* fileName);
 
-class ScriptMgr: public TSingleton<ScriptMgr>
+class ScriptMgr:public NDBaseScriptMgr
 {
-	typedef bool (*RegisterClassFunc)();
-
+	DECLARE_CLASS(ScriptMgr)
 	typedef std::vector<RegisterClassFunc> vec_regclass_func;
 
 	typedef vec_regclass_func::iterator vec_regclass_func_it;
 	
 public:
+
 	ScriptMgr();
 	~ScriptMgr();
+
+	static ScriptMgr& GetScriptMgr();
 	
 	void Load();
 	bool AddRegClassFunc(RegisterClassFunc func);
@@ -56,79 +59,7 @@ public:
 	void DebugOutPut(const char* fmt, ...);
 	void LoadLuaFile(const char* pszluaFile);
 	void WriteLog(const char* fmt, ...);
-	template<typename RT>
-	RT excuteLuaFunc(const char* funcname, const char* modulename)
-	{
-		LuaObject funcObj = GetLuaFunc(funcname, modulename);
-		
-		if (!funcObj.IsFunction())
-		{
-			return false;
-		}
-		
-		LuaFunction<RT> func = funcObj;
-		
-		return func();
-	}
-	
-	template<typename RT, typename T>
-	RT excuteLuaFunc(const char* funcname, const char* modulename, T param1)
-	{
-		LuaObject funcObj = GetLuaFunc(funcname, modulename);
-		
-		if (!funcObj.IsFunction())
-		{
-			return false;
-		}
-		
-		LuaFunction<RT> func = funcObj;
-		
-		return func(param1);
-	}
-	
-	template<typename RT, typename T1, typename T2>
-	RT excuteLuaFunc(const char* funcname, const char* modulename, T1 param1, T2 param2)
-	{
-		LuaObject funcObj = GetLuaFunc(funcname, modulename);
-		
-		if (!funcObj.IsFunction())
-		{
-			return false;
-		}
-		
-		LuaFunction<RT> func = funcObj;
-		
-		return func(param1, param2);
-	}
-	
-	template<typename RT, typename T1, typename T2, typename T3>
-	RT excuteLuaFunc(const char* funcname, const char* modulename, T1 param1, T2 param2, T3 param3)
-	{
-		LuaObject funcObj = GetLuaFunc(funcname, modulename);
-		
-		if (!funcObj.IsFunction())
-		{
-			return false;
-		}
-		
-		LuaFunction<RT> func = funcObj;
-		
-		return func(param1, param2, param3);
-	}
-    template<typename RT, typename T1, typename T2, typename T3,typename T4>
-    RT excuteLuaFunc(const char* funcname, const char* modulename, T1 param1, T2 param2, T3 param3,T4 param4)
-	{
-		LuaObject funcObj = GetLuaFunc(funcname, modulename);
-		
-		if (!funcObj.IsFunction())
-		{
-			return false;
-		}
-		
-		LuaFunction<RT> func = funcObj;
-		
-		return func(param1, param2, param3, param4);
-	}
+
 private:
 	vec_regclass_func vRegClassFunc;
 	FILE* m_fDebugOutPut;

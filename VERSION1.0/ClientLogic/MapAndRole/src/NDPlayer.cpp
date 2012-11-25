@@ -199,7 +199,7 @@ void NDPlayer::pugeHero()
 void NDPlayer::SendNpcInteractionMessage(unsigned int uiNPCID)
 {
 	// 转到脚本处理
-	ScriptMgr& kScript = ScriptMgr::GetSingleton();
+	ScriptMgr& kScript = ScriptMgrObj;
 	std::stringstream ssNpcFunc;
 	ssNpcFunc << "NPC_CLICK_" << uiNPCID;
 	bool bRet = kScript.IsLuaFuncExist(ssNpcFunc.str().c_str(), "NPC");

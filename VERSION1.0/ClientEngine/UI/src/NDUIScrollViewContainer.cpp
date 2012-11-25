@@ -13,6 +13,7 @@
 #include "NDDirector.h"
 #include "NDUtil.h"
 #include "ScriptGameLogic.h"
+#include "ScriptMgr.h"
 
 IMPLEMENT_CLASS(CUIScrollView, CUIScroll)
 

@@ -419,9 +419,9 @@ void NDMapData::decode(FILE* pkStream)
 	m_kMapTiles->retain();
 	for (int lay = 0; lay < m_nLayerCount; lay++)
 	{
-		for (uint r = 0; r < m_nRows; r++)
+		for (unsigned int r = 0; r < m_nRows; r++)
 		{
-			for (uint c = 0; c < m_nColumns; c++)
+			for (unsigned int c = 0; c < m_nColumns; c++)
 			{
 				int nImageIndex = kFileOp.readByte(pkStream) - 1;	//资源下标
 
@@ -778,7 +778,7 @@ void NDMapData::moveBackGround(int x, int y) //x,y??
 	}
 }
 
-//- (NDTile *)getTileAtRow:(uint)row column:(uint)column
+//- (NDTile *)getTileAtRow:(unsigned int)row column:(unsigned int)column
 // CustomCCTexture2D * NDMapData::getTileAtRow(unsigned int row, unsigned int column)
 // {
 // 	if (row >= _rows) 

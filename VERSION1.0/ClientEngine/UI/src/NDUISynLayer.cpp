@@ -134,7 +134,7 @@ void NDUISynLayer::OnTimer(OBJID tag)
 		dlgOverTime->Initialization();
 		dlgOverTime->Show(NDCommonCString("ConnectFail"), NDCommonCString("ConnectFailTip"), NULL, NULL);
 		*/
-		ScriptMgrObj.excuteLuaFunc<bool>("ShowYesDlg", "CommonDlgNew", NDCommonCString("ConnectFailTip"));
+		BaseScriptMgrObj.excuteLuaFunc<bool>("ShowYesDlg", "CommonDlgNew", NDCommonCString("ConnectFailTip"));
 		Close(CLOSE);
 		
 //		NDDataTransThread::DefaultThread()->GetSocket()->Close();

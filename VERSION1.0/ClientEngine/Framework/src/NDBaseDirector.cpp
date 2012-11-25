@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 #include <NDTransData.h>
-#include "ScriptMgr.h"
+#include "NDBaseScriptMgr.h"
 #include "NDBaseNetMgr.h"
 #include <NDMessageCenter.h>
 #include "NDDebugOpt.h"
@@ -90,7 +90,7 @@ void NDBaseDirector::mainLoop(void)
 void NDBaseDirector::OnIdle()
 {
 	if (NDDebugOpt::getScriptEnabled())
-		ScriptMgrObj.update();
+		BaseScriptMgrObj.update();
 }
 
 void NDBaseDirector::DispatchOneMessage()

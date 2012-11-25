@@ -13,6 +13,7 @@
 #include "LuaObject.h"
 #include "ScriptDefine.h"
 #include "CCCommon.h"
+#include "ScriptMgr.h"
 
 using namespace NDEngine; 
 using namespace LuaPlus;

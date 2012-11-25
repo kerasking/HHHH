@@ -14,6 +14,7 @@
 //#include <direct.h>
 #include "tinyxml.h"
 #include "XMLReader.h"
+#include "ScriptMgr.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #import <Foundation/Foundation.h>

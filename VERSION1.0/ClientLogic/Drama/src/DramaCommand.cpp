@@ -16,6 +16,7 @@
 #include "BattleMgr.h"
 #include "NDPath.h"
 #include "NDUtility.h"
+#include "ScriptMgr.h"
 
 ///////////////////////////////////////////////
 DramaScene* GetDramaScene()
