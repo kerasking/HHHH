@@ -19,7 +19,6 @@ MID/
 Debug.win32/
 assets/
 obj/
-libs/
 *.DS_Store
 /*.IAB
 /*.IAD
