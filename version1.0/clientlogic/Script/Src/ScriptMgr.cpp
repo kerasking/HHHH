@@ -502,7 +502,7 @@ ScriptMgr& NDEngine::ScriptMgr::GetScriptMgr()
 {
 	if (0 == ms_pkSingleton)
 	{
-		ms_pkSingleton = CREATE_CLASS(NDBaseScriptMgr,"ScriptMgr");
+		ms_pkSingleton = new ScriptMgr;
 	}
 
 	return *((ScriptMgr*)ms_pkSingleton);
