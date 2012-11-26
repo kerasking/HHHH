@@ -37,7 +37,7 @@ NDUILabel::NDUILabel()
 	m_eTextAlignment = LabelTextAlignmentLeft;
 	m_texture = NULL;
 	m_kCutRect = CCRectZero;
-	m_uiRenderTimes = 2;
+	m_uiRenderTimes = 1;
 	SetFontColor(m_kColor);
 		
 	m_bHasFontBoderColor = false;

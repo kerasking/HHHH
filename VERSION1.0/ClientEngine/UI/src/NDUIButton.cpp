@@ -656,11 +656,13 @@ void NDUIButton::drawButtonImage()
 			{
 				m_image->DrawInRect(rect);
 			}
-			if (m_title)
-			{
-				m_title->draw();
-			}
-			else if (m_combinepicImg)
+// 			if (m_title 
+// 				&& m_title->GetText().length() > 0)
+// 			{
+// 				m_title->draw();
+// 			}
+// 			else 
+				if (m_combinepicImg)
 			{
 				m_combinepicImg->DrawInRect(rect);
 			}

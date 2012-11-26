@@ -11,6 +11,7 @@
 #include "NDDirector.h"
 #include "CCDrawingPrimitives.h"
 #include "ccMacros.h"
+#include "UsePointPls.h"
 
 using namespace cocos2d;
 
@@ -57,6 +58,8 @@ namespace NDEngine
 		CCPoint destination = ccp( rect.origin.x + rect.size.width, 
 									rect.origin.y + rect.size.height );
 		
+		ConvertUtil::convertToPointCoord( rect.origin );
+		ConvertUtil::convertToPointCoord( rect.size );
 		ccDrawRect( SCREEN2GL(rect.origin), SCREEN2GL(destination));
 	}
 
