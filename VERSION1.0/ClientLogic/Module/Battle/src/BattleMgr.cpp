@@ -1513,5 +1513,10 @@ void BattleMgr::OnDramaFinish()
 
 BattleMgr& BattleMgr::GetBattleMgr()
 {
+	if (0 == ms_pkSingleton)
+	{
+		ms_pkSingleton = new BattleMgr;
+	}
+
 	return *((BattleMgr*)ms_pkSingleton);
 }
