@@ -1182,12 +1182,23 @@ void NDMapMgr::processWalk(NDTransData* pkData, int nLength)
 
 	if (NDPlayer::defaultHero().m_nID != nID)
 	{
-		NDManualRole* pkRole = 0;
-		pkRole = NDMapMgrObj.GetManualRole(nID);
-
-		if (pkRole->isTeamLeader())
+//		NDManualRole* pkRole = 0;
+//		pkRole = NDMapMgrObj.GetManualRole(nID);
+//
+//		if (pkRole->isTeamLeader())
+//		{
+//			pkRole->teamSetServerDir(ucDir);
+//		}
+		NDManualRole *role = NULL;
+		role = NDMapMgrObj.GetManualRole(nID);
+		if ( role && (!role->isTeamMember() || role->isTeamLeader())) 
 		{
-			pkRole->teamSetServerDir(ucDir);
+			role->AddWalkDir(ucDir);
+			role->SetServerDir(ucDir);
+			if (role->isTeamLeader()) 
+			{
+				role->teamSetServerDir(ucDir);
+			}
 		}
 	}
 }
@@ -4349,7 +4360,7 @@ void NDMapMgr::NavigateTo(int mapX, int mapY, int mapId)
 			NDPlayer::defaultHero().OnMoveEnd();
 			return;
 		}
-		NDPlayer::defaultHero().Walk(CGPointMake(mapX * MAP_UNITSIZE, mapY * MAP_UNITSIZE), SpriteSpeedStep4, true);
+		NDPlayer::defaultHero().Walk(CCPointMake(mapX * MAP_UNITSIZE, mapY * MAP_UNITSIZE), SpriteSpeedStep4, true);
 		AutoPathTipObj.work("");
 		return;
 	}

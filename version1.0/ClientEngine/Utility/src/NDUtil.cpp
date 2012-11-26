@@ -2,7 +2,7 @@
 
 NS_NDENGINE_BGN
 
-bool IsPointInside(CGPoint kPoint, CGRect kRect)
+bool IsPointInside(cocos2d::CCPoint kPoint, cocos2d::CCRect kRect)
 {
 	return (kPoint.x >= kRect.origin.x && kPoint.y >= kRect.origin.y
 		&& kPoint.x <= kRect.size.width + kRect.origin.x

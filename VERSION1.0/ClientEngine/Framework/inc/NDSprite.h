@@ -485,6 +485,7 @@ public:
 	{
 		return m_bReverse;
 	}
+	unsigned int GetAnimationAmount();
 
 protected:
 

@@ -76,7 +76,7 @@ public:
 
 	void OnDialogClose(NDUIDialog* dialog);
 	void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex);
-	void OnTimer(OBJID tag);
+	virtual void OnTimer(OBJID tag);
 
 	void NextFocusTarget();
 	void UpdateFocus();

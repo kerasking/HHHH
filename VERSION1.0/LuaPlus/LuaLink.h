@@ -91,6 +91,15 @@
 #endif /* NAMESPACE_LUA_BEGIN */
 
 #define LUALIB_API LUA_API
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#ifdef TARGET_OS_IPHONE
+#undef LUA_EXTERN_C
+#undef LUA_EXTERN_C_BEGIN
+#undef LUA_EXTERN_C_END
+#define LUA_EXTERN_C
+#define LUA_EXTERN_C_BEGIN
+#define LUA_EXTERN_C_END
+#endif
 
 #endif /* LUALINK_H */
 

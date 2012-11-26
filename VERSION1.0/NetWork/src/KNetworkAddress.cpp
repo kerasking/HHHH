@@ -1,4 +1,4 @@
-#include <CCPlatformConfig.h>
+#include "CCPlatformConfig.h"
 #include <string>
 
 #ifdef WIN32

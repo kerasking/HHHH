@@ -100,7 +100,7 @@ bool NDUILoadEngine::Load(
 					const char* uiname,
 					NDUINode *parent, 
 					NDUITargetDelegate* delegate, 
-					CCSize sizeOffset /*= CGSizeZero*/)
+					CCSize sizeOffset /*= CCSizeZero*/)
 {
 	return LoadAny( uiname, parent, delegate, NULL, sizeOffset );
 }
@@ -119,7 +119,7 @@ bool NDUILoadEngine::LoadLua(
 // forCpp & forLua都转这儿处理
 bool NDUILoadEngine::LoadAny( const char* uiname, NDUINode *parent, 
 					   NDUITargetDelegate* delegate, LuaObject* luaDelegate,
-					   CCSize sizeOffset /*= CGSizeZero*/ )
+					   CCSize sizeOffset /*= CCSizeZero*/ )
 {
 	if (!uiname || !parent) return false;
 
@@ -184,7 +184,7 @@ NDUINode* NDUILoadEngine::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINo
 	}
 
 	// 上下对调一下（结果仍旧是像素单位，不是GL坐标，所以不能用SCREEN2GL转！）
-	CGSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	uiInfo.CtrlPos.y = winsize.height - uiInfo.CtrlPos.y;
 
 	// 根据锚地调整控件位置

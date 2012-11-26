@@ -66,27 +66,27 @@ bool NDUIBaseItemButton::IsShowAdapt()
 
 void NDUIBaseItemButton::SetItemBackgroundPicture(NDPicture *pic,
 												  NDPicture *touchPic /*= NULL*/, bool useCustomRect /*= false*/,
-												  CGRect customRect /*= CGRectZero*/, bool clearPicOnFree /*= false*/)
+												  CCRect customRect /*= CCRectZero*/, bool clearPicOnFree /*= false*/)
 {
 
 }
 
 void NDUIBaseItemButton::SetItemBackgroundPictureCustom(NDPicture *pic,
 														NDPicture *touchPic /*= NULL*/, bool useCustomRect /*= false*/,
-														CGRect customRect /*= CGRectZero*/)
+														CCRect customRect /*= CCRectZero*/)
 {
 
 }
 
 void NDUIBaseItemButton::SetItemFocusImage(NDPicture *pic,
-										   bool useCustomRect /*= false*/, CGRect customRect /*= CGRectZero*/,
+										   bool useCustomRect /*= false*/, CCRect customRect /*= CCRectZero*/,
 										   bool clearPicOnFree /*= false*/)
 {
 
 }
 
 void NDUIBaseItemButton::SetItemFocusImageCustom(NDPicture *pic,
-												 bool useCustomRect /*= false*/, CGRect customRect /*= CGRectZero*/)
+												 bool useCustomRect /*= false*/, CCRect customRect /*= CCRectZero*/)
 {
 
 }
@@ -96,7 +96,7 @@ void NDUIBaseItemButton::InitializationItem()
 
 }
 
-void NDUIBaseItemButton::SetItemFrameRect(CGRect rect)
+void NDUIBaseItemButton::SetItemFrameRect(CCRect rect)
 {
 
 }

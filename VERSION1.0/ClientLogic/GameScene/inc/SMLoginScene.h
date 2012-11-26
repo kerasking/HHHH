@@ -70,7 +70,7 @@ public://NDUIDialogDelegate
 	void OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonIndex); override
 	
 private:
-    void OnTimer(OBJID idTag);
+    virtual void OnTimer(OBJID idTag);
 	
 public:// DownloadPackageDelegate//++Guosen 2012.8.7
 	//virtual void ReflashPercent( DownloadPackage* downer, int percent, int pos, int filelen ); override

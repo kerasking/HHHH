@@ -104,7 +104,7 @@ void CUIEquipItem::AdjustPos()
 	}
 }
 
-void CUIEquipItem::SetItemFrameRect(CGRect rect)
+void CUIEquipItem::SetItemFrameRect(CCRect rect)
 {
 	SetFrameRect(rect);
 }
@@ -116,7 +116,7 @@ void CUIEquipItem::CloseItemFrame()
 
 void CUIEquipItem::SetItemBackgroundPicture(NDPicture *pic,
 											 NDPicture *touchPic /*= NULL*/, bool useCustomRect /*= false*/,
-											 CGRect customRect /*= CGRectZero*/, bool clearPicOnFree /*= false*/)
+											 CCRect customRect /*= CGRectZero*/, bool clearPicOnFree /*= false*/)
 {
 	SetBackgroundPicture(pic, touchPic, useCustomRect, customRect,
 		clearPicOnFree);
@@ -124,20 +124,20 @@ void CUIEquipItem::SetItemBackgroundPicture(NDPicture *pic,
 
 void CUIEquipItem::SetItemBackgroundPictureCustom(NDPicture *pic,
 												   NDPicture *touchPic /*= NULL*/, bool useCustomRect /*= false*/,
-												   CGRect customRect /*= CGRectZero*/)
+												   CCRect customRect /*= CGRectZero*/)
 {
 	SetBackgroundPictureCustom(pic, touchPic, useCustomRect, customRect);
 }
 
 void CUIEquipItem::SetItemFocusImage(NDPicture *pic,
-									  bool useCustomRect /*= false*/, CGRect customRect /*= CGRectZero*/,
+									  bool useCustomRect /*= false*/, CCRect customRect /*= CGRectZero*/,
 									  bool clearPicOnFree /*= false*/)
 {
 	SetFocusImage(pic, useCustomRect, customRect, clearPicOnFree);
 }
 
 void CUIEquipItem::SetItemFocusImageCustom(NDPicture *pic,
-											bool useCustomRect /*= false*/, CGRect customRect /*= CGRectZero*/)
+											bool useCustomRect /*= false*/, CCRect customRect /*= CGRectZero*/)
 {
 	SetFocusImageCustom(pic, useCustomRect, customRect);
 }

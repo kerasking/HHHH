@@ -374,7 +374,7 @@ void Chat::ReflashNormalData()
 {
 	if (m_recordCount > 0) 
 	{	
-		CCSize winSize = NDDirector::DefaultDirector()->GetWinSize();
+		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 		
 		int i = m_textControls.size();
 		std::deque<TextControl*>::iterator iter;

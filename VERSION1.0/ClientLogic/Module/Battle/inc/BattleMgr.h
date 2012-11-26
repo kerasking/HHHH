@@ -10,6 +10,7 @@
 #ifndef __BATTLE_MGR_H__
 #define __BATTLE_MGR_H__
 
+#include <algorithm>
 #include "Singleton.h"
 #include "define.h"
 #include "EnumDef.h"
@@ -22,7 +23,7 @@
 #include "Fighter.h"
 #include "NDBaseBattleMgr.h"
 
-using std::map;
+using namespace std;
 using namespace NDEngine;
 
 #define BattleMgrObj BattleMgr::GetBattleMgr()
