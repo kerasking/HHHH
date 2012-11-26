@@ -79,9 +79,14 @@ NDLocalXmlString::~NDLocalXmlString()
 void NDLocalXmlString::Init()
 {
 	const char* pszTemp = NDEngine::NDPath::GetResPath("lyol.strings").c_str();
+
+#ifdef WIN32
 	string strTemp = string("../SimplifiedChineseRes/res/") + string("lyol.strings");
 
 	FILE *fp_in = fopen(strTemp.c_str(), "rb");
+#else
+	FILE *fp_in = fopen(pszTemp, "rb");
+#endif
 	
 	if (!fp_in) return;
 	
