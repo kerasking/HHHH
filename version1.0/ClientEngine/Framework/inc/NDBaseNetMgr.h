@@ -40,6 +40,8 @@ public:
 	virtual bool RegMsg(unsigned short msgID, NDMsgObject* msgObj);
 	virtual void UnRegMsg(unsigned short msgID);
 	virtual bool GetServerMsgPacket(NDTransData& data);
+	virtual bool AddNetRawData(const unsigned char* data, unsigned int uilen, bool net = true);
+	virtual bool AddBackToMenuPacket();
 
 protected:
 private:

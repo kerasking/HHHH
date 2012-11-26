@@ -114,15 +114,15 @@ namespace NDEngine
 	
 	static NDNetMsgMgr* s_NDNetMsgMgr = NULL;
 	
-	NDNetMsgMgr& NDNetMsgMgr::GetSingleton()
-	{
-		if (s_NDNetMsgMgr == NULL)
-		{
-			s_NDNetMsgMgr = new NDNetMsgMgr;
-		}
-		
-		return *s_NDNetMsgMgr;
-	}
+	//NDNetMsgMgr& NDNetMsgMgr::GetSingleton()
+	//{
+	//	if (s_NDNetMsgMgr == NULL)
+	//	{
+	//		s_NDNetMsgMgr = new NDNetMsgMgr;
+	//	}
+	//	
+	//	return *s_NDNetMsgMgr;
+	//}
 	
 	void NDNetMsgMgr::purge()
 	{

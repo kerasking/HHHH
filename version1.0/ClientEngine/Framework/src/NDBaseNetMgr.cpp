@@ -39,4 +39,15 @@ bool NDBaseNetMgr::GetServerMsgPacket( NDTransData& data )
 	return false;
 }
 
+
+bool NDBaseNetMgr::AddNetRawData(const unsigned char* data, unsigned int uilen, bool net/* = true*/)
+{
+	return false;
+}
+
+bool NDBaseNetMgr::AddBackToMenuPacket()
+{
+	return false;
+}
+
 NS_NDENGINE_END
