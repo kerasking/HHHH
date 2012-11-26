@@ -125,8 +125,8 @@ textures/CCTexturePVR.cpp \
 ../libpng/pngmem.c \
 ../libpng/pngpread.c \
 ../libpng/pngread.c \
-../libpng/pngrio.c \
 ../libpng/pngrtran.c \
+../libpng/pngrio.c \
 ../libpng/pngrutil.c \
 ../libpng/pngset.c \
 ../libpng/pngtrans.c \
@@ -162,11 +162,10 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
 					$(LOCAL_PATH)/../libpng
 
 LOCAL_LDLIBS := -lGLESv2 \
-                -lEGL \
+                -L$(SYSROOT)/usr/lib -lGLESv2\
                 -llog \
-                -lz 
+                -lz
 
-LOCAL_WHOLE_STATIC_LIBRARIES := cocos_libpng_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos_jpeg_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos_libxml2_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos_libtiff_static
@@ -178,6 +177,5 @@ LOCAL_EXPORT_CFLAGS := -DUSE_FILE32API
 include $(BUILD_STATIC_LIBRARY)
 
 $(call import-module,libjpeg)
-$(call import-module,libpng)
 $(call import-module,libxml2)
 $(call import-module,libtiff)

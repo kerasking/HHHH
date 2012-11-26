@@ -13,6 +13,7 @@
 #include "CCPointExtension.h"
 #include "NDUtil.h"
 #include "ScriptGameLogic.h"
+#include "NDPath.h"
 
 IMPLEMENT_CLASS(NDUIScrollContainer, NDUILayer)
 
@@ -214,28 +215,36 @@ bool NDUIScrollContainer::TouchBegin(NDTouch* touch)
 	
 	return false;
 }
+
 void NDUIScrollContainer::EnableScrollBar(bool bEnable)
 {
-	m_bOpenScrollBar	= bEnable;
-    
-    if(m_bOpenScrollBar){
-        if(m_picScroll == NULL) {
-            m_picScroll = NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("General/texture/texture5.png"));
-        }
-        
-        if(m_picScrollBg == NULL){
-            m_picScrollBg = NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("General/texture/texture4.png"));
-        }
-    }else{
-        delete	m_picScroll;
-        m_picScroll = NULL;
-        
-        delete	m_picScrollBg;
-        m_picScrollBg = NULL;
-    }
-    
-    
+	m_bOpenScrollBar = bEnable;
+
+	if (m_bOpenScrollBar)
+	{
+		if (m_picScroll == NULL)
+		{
+			m_picScroll = NDPicturePool::DefaultPool()->AddPicture(
+				NDPath::GetSMImgPath("General/texture/texture5.png"));
+		}
+
+		if (m_picScrollBg == NULL)
+		{
+			m_picScrollBg = NDPicturePool::DefaultPool()->AddPicture(
+				NDPath::GetSMImgPath("General/texture/texture4.png"));
+		}
+	}
+	else
+	{
+		delete m_picScroll;
+		m_picScroll = NULL;
+
+		delete m_picScrollBg;
+		m_picScrollBg = NULL;
+	}
+
 }
+
 void NDUIScrollContainer::DrawScrollBar()
 {
 	if (!(m_bOpenScrollBar && m_picScroll))

@@ -447,20 +447,28 @@ public:
 };
 
 template<>
-class CtrolTrait<CUIItemButton> : public CtrolBase
+class CtrolTrait<NDUIBaseItemButton> : public CtrolBase
 {
 public:
-	CUIItemButton* Create(UIINFO& info, CCSize& sizeOffset)
+	NDUIBaseItemButton* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
 		CCRect rect = this->GetFrameRect();
-		CUIItemButton *itemBtn = new CUIItemButton;
-		itemBtn->Initialization();
-		itemBtn->SetFrameRect(rect);
-		itemBtn->CloseFrame();
-		itemBtn->SetBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);
-		itemBtn->SetTouchDownImage(GetSelectedPicture(), false, CCRectZero, true);
-		itemBtn->SetFocusImage(GetFocusPicture(), false, CCRectZero, true);
+		NDUIBaseItemButton *itemBtn = CREATE_CLASS(NDUIBaseItemButton,"CUIItemButton");
+
+		itemBtn->InitializationItem();
+		itemBtn->SetItemFrameRect(rect);
+		itemBtn->CloseItemFrame();
+
+		itemBtn->SetItemBackgroundPicture(GetNormalPicture(), NULL, false, CGRectZero, true);
+		itemBtn->SetItemFocusImage(GetFocusPicture(), false, CGRectZero, true);
+
+// 		itemBtn->Initialization();
+// 		itemBtn->SetFrameRect(rect);
+// 		itemBtn->CloseFrame();
+// 		itemBtn->SetBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);
+// 		itemBtn->SetTouchDownImage(GetSelectedPicture(), false, CCRectZero, true);
+// 		itemBtn->SetFocusImage(GetFocusPicture(), false, CCRectZero, true);
 		return itemBtn;
 	}
 };

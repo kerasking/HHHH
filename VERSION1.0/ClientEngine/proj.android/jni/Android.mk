@@ -96,6 +96,7 @@ LOCAL_SRC_FILES := \
 ../../Utility/src/TQPlatform.cpp \
 ../../Utility/src/WjcDes.cpp \
 ../../Utility/src/XMLReader.cpp \
+../../Utility/src/NDUtil.cpp \
 ../../Script/src/LuaStateMgr.cpp \
 ../../Script/src/EngineScriptCommon.cpp \
 ../../DataTrans/src/NDDataTransThread.cpp \
@@ -155,8 +156,9 @@ $(LOCAL_PATH)/../../../ClientLogic/GameScene/inc \
 $(LOCAL_PATH)/../../../NetWork/inc
 
 LOCAL_LDLIBS := -L$(call host-path, $(LOCAL_PATH)/../../proj.android/libs/$(TARGET_ARCH_ABI)) \
-                -L$(call host-path, $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/third_party/android/libraries/$(TARGET_ARCH_ABI))
-
+                -L$(call host-path, $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/third_party/android/libraries/$(TARGET_ARCH_ABI)) \
+				-L$(SYSROOT)/usr/lib -lGLESv2
+				
 LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += luaplus
 LOCAL_WHOLE_STATIC_LIBRARIES += tinyxml
