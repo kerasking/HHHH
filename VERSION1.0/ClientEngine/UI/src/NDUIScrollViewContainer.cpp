@@ -13,7 +13,7 @@
 #include "NDDirector.h"
 #include "NDUtil.h"
 #include "ScriptGameLogic.h"
-#include "ScriptMgr.h"
+#include "NDBaseScriptMgr.h"
 
 IMPLEMENT_CLASS(CUIScrollView, CUIScroll)
 
@@ -997,7 +997,7 @@ void NDUIScrollViewContainer::OnScrollViewScrollMoveStop(NDObject* object)
 		}
 	}
 	
-    ScriptMgrObj.excuteLuaFunc("PlayEffectSound", "Music",15);
+    BaseScriptMgrObj.excuteLuaFunc("PlayEffectSound", "Music",15);
     
 	AdjustView();
 }

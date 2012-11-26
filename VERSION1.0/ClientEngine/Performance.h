@@ -11,10 +11,13 @@
 #define _PERFORMANCE_H_
 
 #include "Singleton.h"
-#include "GlobalDialog.h"
+#include "NDBaseGlobalDialog.h"
 #include <string>
 #include <stdio.h>
 #include <map>
+#include "NDSharedPtr.h"
+
+using namespace NDEngine;
 
 #ifdef VIEW_PERFORMACE
 #define PerformanceEnable \
@@ -157,6 +160,7 @@ struct time_cacl
 class CPerformanceTest: public TSingleton<CPerformanceTest>
 {
 public:
+
 	CPerformanceTest();
 	~CPerformanceTest();
 
@@ -174,7 +178,8 @@ public:
 	bool m_bStartFrameTest;
 	std::map<key64, performance_data> m_mapData;
 	std::map<VALUE, KEY> m_keyCache;
-	CIDFactory m_keyMain, m_keyHelp;
+	NDSharedPtr<NDBaseGlobalDialog> m_spKeyMain;
+	NDSharedPtr<NDBaseGlobalDialog> m_spKeyHelp;
 	std::map<key64, time_cacl> m_cacl;
 private:
 	void Output();

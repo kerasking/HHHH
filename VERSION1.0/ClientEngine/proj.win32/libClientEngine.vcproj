@@ -162,6 +162,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Framework\inc\NDBaseGlobalDialog.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Framework\inc\NDBaseLayer.h"
 					>
 				</File>
@@ -239,6 +243,10 @@
 				</File>
 				<File
 					RelativePath="..\Framework\src\NDBaseDirector.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Framework\src\NDBaseGlobalDialog.cpp"
 					>
 				</File>
 				<File

@@ -16,6 +16,8 @@
 
 using namespace NDEngine;
 
+IMPLEMENT_CLASS(CIDFactory,NDBaseGlobalDialog)
+
 void GlobalShowDlg(std::string title, std::string content,
 		float seconds/* = 0*/)
 {

@@ -94,7 +94,6 @@ LOCAL_SRC_FILES := \
 ../../Utility/src/WjcDes.cpp \
 ../../Utility/src/XMLReader.cpp \
 ../../Script/src/LuaStateMgr.cpp \
-../../Script/src/ScriptMgr.cpp \
 ../../DataTrans/src/NDDataTransThread.cpp \
 ../../DataTrans/src/NDMessageCenter.cpp \
 ../../DataTrans/src/NDSocket.cpp \
