@@ -22,15 +22,15 @@ public:
 	virtual ~NDUIBaseItemButton();
 
 	virtual void InitializationItem();
-	virtual void SetItemFrameRect(CCRect rect);
+	virtual void SetItemFrameRect(cocos2d::CCRect rect);
 	virtual void CloseItemFrame();
 	virtual void SetItemBackgroundPicture(NDPicture *pic, NDPicture *touchPic = NULL,
-		bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);
+		bool useCustomRect = false, cocos2d::CCRect customRect = cocos2d::CCRectZero, bool clearPicOnFree = false);
 	virtual void SetItemBackgroundPictureCustom(NDPicture *pic, NDPicture *touchPic = NULL,
-		bool useCustomRect = false, CGRect customRect = CGRectZero);
+                                                bool useCustomRect = false, cocos2d::CCRect customRect = CCRectZero);
 
-	virtual void SetItemFocusImage(NDPicture *pic, bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);
-	virtual void SetItemFocusImageCustom(NDPicture *pic, bool useCustomRect = false, CGRect customRect = CGRectZero);
+	virtual void SetItemFocusImage(NDPicture *pic, bool useCustomRect = false, cocos2d::CCRect customRect = CCRectZero, bool clearPicOnFree = false);
+	virtual void SetItemFocusImageCustom(NDPicture *pic, bool useCustomRect = false, cocos2d::CCRect customRect = CCRectZero);
 
 	virtual void SetLock(bool bSet);
 	virtual bool IsLock();

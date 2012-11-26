@@ -568,13 +568,13 @@ public:
 	{
 		Init(info, sizeOffset);
 		CCRect rect = this->GetFrameRect();
-		NDUIBaseItemButton *equipBtn = CREATE_CLASS(NDUIBaseItemButton,"CUIEquipItem");
+		NDUIBaseItemButton *equipBtn = CREATE_CLASS(CUIItemButton,"CUIEquipItem");
 		equipBtn->InitializationItem();
 		equipBtn->SetItemFrameRect(rect);
 		equipBtn->CloseItemFrame();
 
-		equipBtn->SetItemBackgroundPicture(GetNormalPicture(), NULL, false, CGRectZero, true);
-		equipBtn->SetItemFocusImage(GetFocusPicture(), false, CGRectZero, true);
+		equipBtn->SetItemBackgroundPicture(GetNormalPicture(), NULL, false, CCRectZero, true);
+		equipBtn->SetItemFocusImage(GetFocusPicture(), false, CCRectZero, true);
 
 // 		equipBtn->SetBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);
 // 		equipBtn->SetTouchDownImage(GetSelectedPicture(), false, CCRectZero, true);

@@ -1172,7 +1172,7 @@
 		5A1B3F92164AB5C100C94D7F /* NDScrollLayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDScrollLayer.h; sourceTree = "<group>"; };
 		5A1B3F93164AB5C100C94D7F /* NDTextNode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDTextNode.h; sourceTree = "<group>"; };
 		5A1B3F94164AB5C100C94D7F /* NDUIBaseGraphics.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUIBaseGraphics.h; sourceTree = "<group>"; };
-		5A1B3F95164AB5C100C94D7F /* NDUIButton.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUIButton.h; sourceTree = "<group>"; };
+		5A1B3F95164AB5C100C94D7F /* NDUIButton.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 2147483673; lineEnding = 2; path = NDUIButton.h; sourceTree = "<group>"; };
 		5A1B3F96164AB5C100C94D7F /* NDUICheckBox.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUICheckBox.h; sourceTree = "<group>"; };
 		5A1B3F97164AB5C100C94D7F /* NDUICustomView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUICustomView.h; sourceTree = "<group>"; };
 		5A1B3F98164AB5C100C94D7F /* NDUIDialog.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUIDialog.h; sourceTree = "<group>"; };
@@ -6354,6 +6354,7 @@
 				DSTROOT = /tmp/KUtil.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "TARGET_OS_IPHONE=1";
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -6440,6 +6441,13 @@
 				DSTROOT = /tmp/ClientEngine.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TARGET_OS_IPHONE=1",
+					"ND_MOD=1",
+					"USE_MGSDK=1",
+					"PROFILE_ENCRYPT_C2S=1",
+					"$(inherited)",
+				);
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				HEADER_SEARCH_PATHS = (
 					"../../cocos2d-x/TinyXML/inc",
@@ -6518,6 +6526,13 @@
 				DSTROOT = /tmp/ClientLogic.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TARGET_OS_IPHONE=1",
+					"ND_MOD=1",
+					"USE_MGSDK=1",
+					"PROFILE_ENCRYPT_C2S=1",
+					"$(inherited)",
+				);
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				HEADER_SEARCH_PATHS = (
 					"../../cocos2d-x/TinyXML/inc",
@@ -6554,6 +6569,7 @@
 				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGET_OS_IPHONE=1",
+					__IOS_PLATFORM__,
 					"DEBUG=1",
 					"$(inherited)",
 				);
@@ -6571,6 +6587,10 @@
 				DSTROOT = /tmp/NetWork.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TARGET_OS_IPHONE=1",
+					__IOS_PLATFORM__,
+				);
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -6681,6 +6701,9 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "dhlj/dhlj-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					LUA_USE_LINUX,
+				);
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
@@ -6756,7 +6779,10 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = "TARGET_OS_IPHONE=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TARGET_OS_IPHONE=1",
+					"ND_MOD=1",
+				);
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
@@ -6812,6 +6838,10 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					TARGET_OS_IPHONE,
+					LUA_USE_LINUX,
+				);
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				HEADER_SEARCH_PATHS = (
 					../../LuaPlus,
