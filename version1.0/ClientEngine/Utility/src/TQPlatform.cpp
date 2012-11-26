@@ -52,16 +52,18 @@ const char* GBKToUTF8(const char *strChar)
 
 CCSize getStringSize(const char* pszStr, unsigned int fontSize)
 {
-	CGSize sz = CGSizeMake(0.0f, 0.0f);
     CCSize CCSz = CCSizeMake(0.0f, 0.0f);
 
 	//fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
 
 	if (pszStr) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+        CGSize sz = CGSizeMake(0.0f, 0.0f);
 		NSString* str = [NSString stringWithUTF8String:pszStr];	
         NSString* strfont = [NSString stringWithUTF8String:FONT_NAME];
 		sz = [str sizeWithFont:[UIFont fontWithName:strfont size:fontSize]];
+        CCSz.width = sz.width;
+        CCSz.height = sz.height;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 		int width = 0, height = 0;
 		if (CCImage::getStringSize( pszStr, CCImage::kAlignLeft, FONT_NAME, fontSize,
@@ -70,8 +72,9 @@ CCSize getStringSize(const char* pszStr, unsigned int fontSize)
 			return CCSizeMake( width, height );
 		}
 #else
-		sz = CCSizeMake(24.0f, 29.0f);
-
+		CCSz = CCSizeMake(24.0f, 29.0f);
+        
+        return CCSz;
 // 		string tmpStr(pszStr);
 // 		int strSize = tmpStr.size()/2;
 // 		float totalWidth = (fontSize)*strSize*1.0;
@@ -82,9 +85,6 @@ CCSize getStringSize(const char* pszStr, unsigned int fontSize)
 
 #endif
 	}
-
-    CCSz.width = sz.width;
-    CCSz.height = sz.height;
     
 	return CCSz;     
 }

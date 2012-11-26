@@ -32,7 +32,7 @@
 #include "VendorUILayer.h"
 #include "VendorBuyUILayer.h"
 #include "TradeUILayer.h"
-#include "IniLoad.h"
+//#include "IniLoad.h"
 #include "GameNewItemBag.h"
 #include "NewGamePlayerBag.h"
 //#include "EquipForgeScene.h"

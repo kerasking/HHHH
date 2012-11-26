@@ -1797,7 +1797,7 @@ void NDUILayer::debugDraw()
 {
 	if (!NDDebugOpt::getDrawDebugEnabled()) return;
 
-	CGRect rc = GetFrameRect();
+	CCRect rc = GetFrameRect();
 	float l = rc.origin.x;
 	float r = l + rc.size.width;
 	float t = rc.origin.y;

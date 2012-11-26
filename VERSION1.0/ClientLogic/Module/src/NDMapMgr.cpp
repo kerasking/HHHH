@@ -4349,7 +4349,7 @@ void NDMapMgr::NavigateTo(int mapX, int mapY, int mapId)
 			NDPlayer::defaultHero().OnMoveEnd();
 			return;
 		}
-		NDPlayer::defaultHero().Walk(CGPointMake(mapX * MAP_UNITSIZE, mapY * MAP_UNITSIZE), SpriteSpeedStep4, true);
+		NDPlayer::defaultHero().Walk(CCPointMake(mapX * MAP_UNITSIZE, mapY * MAP_UNITSIZE), SpriteSpeedStep4, true);
 		AutoPathTipObj.work("");
 		return;
 	}

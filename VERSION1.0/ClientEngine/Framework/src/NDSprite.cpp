@@ -1096,7 +1096,7 @@ bool NDSprite::DrawSubAnimation(NDSubAniGroup& kSag)
 		return true;
 	}
 	
-	CGPoint pos = aniGroup->getPosition();
+	CCPoint pos = aniGroup->getPosition();
 	aniGroup->setRunningMapSize( layer->GetContentSize() );
 	
 	NDAnimation* ani = nil;
@@ -1110,7 +1110,7 @@ bool NDSprite::DrawSubAnimation(NDSubAniGroup& kSag)
 		return true;
 	}
 	
-	CGPoint posTarget = ccp(0, 0);
+	CCPoint posTarget = ccp(0, 0);
 	if ( aniGroup->getType() == SUB_ANI_TYPE_NONE ) 
 	{
 		if ( kSag.reverse )//ÔÊÐí·­×ª
