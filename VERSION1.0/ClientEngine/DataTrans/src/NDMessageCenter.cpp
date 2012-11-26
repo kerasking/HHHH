@@ -223,7 +223,7 @@ namespace NDEngine
 			return false;
 		}
 		
-#if (defined(USE_NDSDK) || defined(USE_MGSDK))
+#if (defined(USE_NDSDK) || defined(USE_MGSDK) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
 		unsigned int msgLen = (pReadPtr[0] & 0xff) + ((pReadPtr[1] & 0xff) << 8);
 #else
 		while(0xff != pReadPtr[0] || 0xfe != pReadPtr[1])

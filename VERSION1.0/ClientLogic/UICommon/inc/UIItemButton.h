@@ -15,7 +15,7 @@
 using namespace NDEngine;
 
 class CUIItemButton :
-public NDUIButton
+	public NDUIButton
 {
 	DECLARE_CLASS(CUIItemButton)
 	CUIItemButton();

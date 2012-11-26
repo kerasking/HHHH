@@ -1182,12 +1182,23 @@ void NDMapMgr::processWalk(NDTransData* pkData, int nLength)
 
 	if (NDPlayer::defaultHero().m_nID != nID)
 	{
-		NDManualRole* pkRole = 0;
-		pkRole = NDMapMgrObj.GetManualRole(nID);
-
-		if (pkRole->isTeamLeader())
+//		NDManualRole* pkRole = 0;
+//		pkRole = NDMapMgrObj.GetManualRole(nID);
+//
+//		if (pkRole->isTeamLeader())
+//		{
+//			pkRole->teamSetServerDir(ucDir);
+//		}
+		NDManualRole *role = NULL;
+		role = NDMapMgrObj.GetManualRole(nID);
+		if ( role && (!role->isTeamMember() || role->isTeamLeader())) 
 		{
-			pkRole->teamSetServerDir(ucDir);
+			role->AddWalkDir(ucDir);
+			role->SetServerDir(ucDir);
+			if (role->isTeamLeader()) 
+			{
+				role->teamSetServerDir(ucDir);
+			}
 		}
 	}
 }

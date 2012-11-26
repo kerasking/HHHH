@@ -21,7 +21,6 @@
 #include "NDTextNode.h"
 #include "UIHyperlink.h"
 #include "UIItemButton.h"
-#include "UIEquipItem.h"
 #include "UICheckBox.h"
 #include "UIRadioButton.h"
 #include "UIExp.h"
@@ -31,6 +30,7 @@
 #include "NDWideString.h"
 #include "UIScrollViewMulHand.h"
 #include "UIScrollContainerExpand.h"
+#include "NDUIBaseItemButton.h"
 
 using namespace NDEngine;
 
@@ -564,18 +564,21 @@ template<>
 class ControlHelp<MY_CONTROL_TYPE_EQUIP_BUTTON> : public CtrolTrait<CUIItemButton>		
 {	
 public:
-	CUIEquipItem* Create(UIINFO& info, CCSize& sizeOffset)
+	NDUIBaseItemButton* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
 		CCRect rect = this->GetFrameRect();
-		CUIEquipItem *equipBtn = new CUIEquipItem;
-		equipBtn->Initialization();
-		equipBtn->SetFrameRect(rect);
-		equipBtn->CloseFrame();
+		NDUIBaseItemButton *equipBtn = CREATE_CLASS(NDUIBaseItemButton,"CUIEquipItem");
+		equipBtn->InitializationItem();
+		equipBtn->SetItemFrameRect(rect);
+		equipBtn->CloseItemFrame();
 
-		equipBtn->SetBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);
-		equipBtn->SetTouchDownImage(GetSelectedPicture(), false, CCRectZero, true);
-		equipBtn->SetFocusImage(GetFocusPicture(), false, CCRectZero, true);
+		equipBtn->SetItemBackgroundPicture(GetNormalPicture(), NULL, false, CGRectZero, true);
+		equipBtn->SetItemFocusImage(GetFocusPicture(), false, CGRectZero, true);
+
+// 		equipBtn->SetBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);
+// 		equipBtn->SetTouchDownImage(GetSelectedPicture(), false, CCRectZero, true);
+// 		equipBtn->SetFocusImage(GetFocusPicture(), false, CCRectZero, true);
 		return equipBtn;
 	}
 };

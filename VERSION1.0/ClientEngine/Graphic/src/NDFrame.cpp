@@ -88,13 +88,17 @@ void NDFrameRunRecord::NextFrame(int nTotalFrames)
 
 bool NDFrameRunRecord::isThisFrameEnd()
 {
-#if 1
-	return (m_nEnduration > 0)
-		&& (m_nRunCount >= int(m_nEnduration * max(1,g_slowDownMul) + 0.5f));
-#else
-	return (m_nEnduration > 0) 
-		&& (m_nRunCount >= int(m_nEnduration + 0.5f));
-#endif
+	if ( m_nEnduration && m_nRunCount >= m_nEnduration-1 )//++Guosen 2012.11.26 
+		return true;
+	else
+		return false;
+// #if 1
+// 	return (m_nEnduration > 0)
+// 		&& (m_nRunCount >= int(m_nEnduration * max(1,g_slowDownMul) + 0.5f));
+// #else
+// 	return (m_nEnduration > 0) 
+// 		&& (m_nRunCount >= int(m_nEnduration + 0.5f));
+// #endif
 }
 
 void NDFrameRunRecord::Clear()

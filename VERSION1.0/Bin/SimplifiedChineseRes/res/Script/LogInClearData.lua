@@ -10,6 +10,7 @@ function p.Clear()
     p.ClearFete();
     p.ClearMount();
     p.ClearBossBattle();
+    p.ClearBuyMilOrder();
     MsgPlayerAction.ClearActionInfo();
 end
 
@@ -50,6 +51,16 @@ function p.ClearMount()
 };
 
 end
+
+
+function p.ClearBossBattle()
+    Battle_Boss.bIsTip = nil;
+end
+
+function p.ClearBuyMilOrder()
+    PlayerVIPUI.bTwiceConfirm = false;
+end
+
 
 
 RegisterGlobalEventHandler( GLOBALEVENT.GE_LOGIN_GAME,"LogInClearData.Clear", p.Clear );
