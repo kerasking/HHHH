@@ -7,10 +7,11 @@
  *
  */
  
- #pragma once
+#pragma once
 
-namespace NDEngine {
-	
+#include "EngineScriptCommon.h"
+
+namespace NDEngine
+{	
 	void ScriptCommonLoad();
-	int PicMemoryUsingLogOut(bool bNotPrintLog);
 }

@@ -21,6 +21,9 @@ LOCAL_SRC_FILES := \
 ../../Framework/src/NDScene.cpp \
 ../../Framework/src/NDSprite.cpp \
 ../../Framework/src/UsePointPls.cpp \
+../../Framework/src/NDBaseBattleMgr.cpp \
+../../Framework/src/NDBaseNetMgr.cpp \
+../../Framework/src/NDUIBaseItemButton.cpp \
 ../../Graphic/src/CCTexture2DExt.cpp \
 ../../Graphic/src/CCTextureCacheExt.cpp \
 ../../Graphic/src/NDAnimation.cpp \
@@ -94,6 +97,7 @@ LOCAL_SRC_FILES := \
 ../../Utility/src/WjcDes.cpp \
 ../../Utility/src/XMLReader.cpp \
 ../../Script/src/LuaStateMgr.cpp \
+../../Script/src/EngineScriptCommon.cpp \
 ../../DataTrans/src/NDDataTransThread.cpp \
 ../../DataTrans/src/NDMessageCenter.cpp \
 ../../DataTrans/src/NDSocket.cpp \
@@ -141,6 +145,7 @@ $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/support \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/text_input_node \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/textures \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/tileMap_parallax_nodes \
+$(LOCAL_PATH)/../../../cocos2d-x/libpng \
 $(LOCAL_PATH)/../../../luaplus \
 $(LOCAL_PATH)/../../../tinyxml/inc \
 $(LOCAL_PATH)/../../../include/C3/win \
@@ -152,7 +157,7 @@ $(LOCAL_PATH)/../../../NetWork/inc
 LOCAL_LDLIBS := -L$(call host-path, $(LOCAL_PATH)/../../proj.android/libs/$(TARGET_ARCH_ABI)) \
                 -L$(call host-path, $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/third_party/android/libraries/$(TARGET_ARCH_ABI))
 
-LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_shared
+LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += luaplus
 LOCAL_WHOLE_STATIC_LIBRARIES += tinyxml
 LOCAL_WHOLE_STATIC_LIBRARIES += NetWork

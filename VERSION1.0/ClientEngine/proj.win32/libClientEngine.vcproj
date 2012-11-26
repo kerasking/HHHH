@@ -230,6 +230,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Framework\inc\NDUIBaseItemButton.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Framework\inc\UsePointPls.h"
 					>
 				</File>
@@ -303,6 +307,10 @@
 				</File>
 				<File
 					RelativePath="..\Framework\src\NDSprite.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Framework\src\NDUIBaseItemButton.cpp"
 					>
 				</File>
 				<File
@@ -1074,6 +1082,10 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\Script\inc\EngineScriptCommon.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Script\inc\LuaPlusHelper.h"
 					>
 				</File>
@@ -1093,6 +1105,10 @@
 			<Filter
 				Name="src"
 				>
+				<File
+					RelativePath="..\Script\src\EngineScriptCommon.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\Script\src\LuaStateMgr.cpp"
 					>

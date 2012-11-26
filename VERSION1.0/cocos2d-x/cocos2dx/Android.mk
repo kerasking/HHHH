@@ -119,6 +119,21 @@ textures/CCTexture2D.cpp \
 textures/CCTextureAtlas.cpp \
 textures/CCTextureCache.cpp \
 textures/CCTexturePVR.cpp \
+../libpng/png.c \
+../libpng/pngerror.c \
+../libpng/pngget.c \
+../libpng/pngmem.c \
+../libpng/pngpread.c \
+../libpng/pngread.c \
+../libpng/pngrio.c \
+../libpng/pngrtran.c \
+../libpng/pngrutil.c \
+../libpng/pngset.c \
+../libpng/pngtrans.c \
+../libpng/pngwio.c \
+../libpng/pngwrite.c \
+../libpng/pngwtran.c \
+../libpng/pngwutil.c \
 tilemap_parallax_nodes/CCParallaxNode.cpp \
 tilemap_parallax_nodes/CCTMXLayer.cpp \
 tilemap_parallax_nodes/CCTMXObjectGroup.cpp \
@@ -132,7 +147,8 @@ touch_dispatcher/CCTouch.cpp
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH) \
                     $(LOCAL_PATH)/include \
                     $(LOCAL_PATH)/kazmath/include \
-                    $(LOCAL_PATH)/platform/android
+                    $(LOCAL_PATH)/platform/android \
+					$(LOCAL_PATH)/../libpng
 
 
 LOCAL_EXPORT_LDLIBS := -llog\
@@ -142,7 +158,8 @@ LOCAL_EXPORT_LDLIBS := -llog\
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
                     $(LOCAL_PATH)/include \
                     $(LOCAL_PATH)/kazmath/include \
-                    $(LOCAL_PATH)/platform/android
+                    $(LOCAL_PATH)/platform/android \
+					$(LOCAL_PATH)/../libpng
 
 LOCAL_LDLIBS := -lGLESv2 \
                 -lEGL \
