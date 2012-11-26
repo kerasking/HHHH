@@ -38,6 +38,7 @@
 //#include "NewChatScene.h"
 #include "GameScene.h"
 #include "GlobalDialog.h"
+#include "ScriptMgr.h"
 
 //===========================================================================
 typedef struct _tagEffectProp{
@@ -1939,27 +1940,31 @@ bool Battle::TouchEnd(NDTouch* touch)
 	{
 		CloseStatusDlg();
 	}
-	
-	if (touch && touch->GetLocation().x > 0.0001f && touch->GetLocation().y > 0.0001f) {
-		if (NDUILayer::TouchEnd(touch)) {
+
+	if (touch && touch->GetLocation().x > 0.0001f
+		&& touch->GetLocation().y > 0.0001f)
+	{
+		if (NDUILayer::TouchEnd(touch))
+		{
 			return false;
 		}
 	}
-	
+
 	Fighter* f = GetTouchedFighter(GetOurSideList(), touch->GetLocation());
-	if(!f){
-		f=GetTouchedFighter(GetEnemySideList(), touch->GetLocation());
+	if (!f)
+	{
+		f = GetTouchedFighter(GetEnemySideList(), touch->GetLocation());
 	}
-	
-	if(f)
+
+	if (f)
 	{
 		NDLog("touch fighter");
-		if(currentShowFighter>0)
+		if (currentShowFighter > 0)
 		{
-			ScriptMgrObj.excuteLuaFunc("CloseFighterInfo","FighterInfo",0);
+			BaseScriptMgrObj.excuteLuaFunc("CloseFighterInfo", "FighterInfo", 0);
 		}
-		currentShowFighter=f->m_kInfo.idObj;
-		
+		currentShowFighter = f->m_kInfo.idObj;
+
 		//int nLevel = 0;
 		//if ( f->m_kInfo.fighterType == FIGHTER_TYPE_PET )
 		//{
@@ -1969,145 +1974,151 @@ bool Battle::TouchEnd(NDTouch* touch)
 		//{
 		//    nLevel = ScriptDBObj.GetN( "monstertype", f->m_kInfo.idType, DB_MONSTERTYPE_LEVEL );
 		//}
-		ScriptMgrObj.excuteLuaFunc( "LoadUI", "FighterInfo", f->getOriginX(), f->getOriginY() );
+		BaseScriptMgrObj.excuteLuaFunc("LoadUI", "FighterInfo", f->getOriginX(),
+			f->getOriginY());
 		std::string skillName = "";
-		if ( f->m_kInfo.skillId > 0 )
+		if (f->m_kInfo.skillId > 0)
 		{
-			skillName = ScriptDBObj.GetS( "skill_config", f->m_kInfo.skillId, DB_SKILL_CONFIG_NAME );
+			skillName = ScriptDBObj.GetS("skill_config", f->m_kInfo.skillId,
+				DB_SKILL_CONFIG_NAME);
 
-		}else
+		}
+		else
 		{
 			NDLog(@"fighter have no skill");
 		}
-		ScriptMgrObj.excuteLuaFunc<bool>( "SetFighterInfo", "FighterInfo", f->GetRole()->m_strName, skillName, f->m_kInfo.level );
+		BaseScriptMgrObj.excuteLuaFunc<bool>("SetFighterInfo", "FighterInfo",
+			f->GetRole()->m_strName, skillName, f->m_kInfo.level);
 
-		ScriptMgrObj.excuteLuaFunc("UpdateHp","FighterInfo",f->m_kInfo.nLife,f->m_kInfo.nLifeMax);
-		ScriptMgrObj.excuteLuaFunc("UpdateMp","FighterInfo",f->m_kInfo.nMana,f->m_kInfo.nManaMax);
+		BaseScriptMgrObj.excuteLuaFunc("UpdateHp", "FighterInfo",
+			f->m_kInfo.nLife, f->m_kInfo.nLifeMax);
+		BaseScriptMgrObj.excuteLuaFunc("UpdateMp", "FighterInfo",
+			f->m_kInfo.nMana, f->m_kInfo.nManaMax);
 	}
 
-//	switch (m_battleStatus)
-//	{
-//		case BS_CHOOSE_VIEW_FIGHTER_STATUS:
-//		case BS_CHOOSE_VIEW_FIGHTER_STATUS_PET:
-//		{
-//			Fighter* f = GetTouchedFighter(GetEnemySideList(), touch->GetLocation());
-//			if (!f) {
-//				f = GetTouchedFighter(GetOurSideList(), touch->GetLocation());
-//			}
-//			
-//			if (f) {
-//				if (m_highlightFighter != f) {
-//					HighlightFighter(f);
-//					break;
-//				}
-//			}
-//			
-//			if (m_highlightFighter) {
-//				m_dlgStatus = new StatusDialog;
-//				m_dlgStatus->Initialization(m_highlightFighter);
-//				m_dlgStatus->SetFrameRect(CCRectMake(0, 0, CCDirector::sharedDirector()->getWinSizeInPixels().width,
-//													 CCDirector::sharedDirector()->getWinSizeInPixels().height));
-//				AddChild(m_dlgStatus);
-//			}
-//		}
-//			break;
-//		case BS_CHOOSE_ENEMY_PHY_ATK:
-//		case BS_CHOOSE_ENEMY_PHY_ATK_EUDEMON:
-//		case BS_CHOOSE_ENEMY_MAG_ATK:
-//		case BS_CHOOSE_ENEMY_MAG_ATK_EUDEMON:
-//		{
-//			Fighter* f = GetTouchedFighter(GetEnemySideList(), touch->GetLocation());
-//			if (f)
-//			{
-//				if (m_highlightFighter == f)
-//				{
-//					// ·¢ËÍ¹¥»÷Ö¸Áî
-//					m_curBattleAction->vData.push_back(m_highlightFighter->m_kInfo.idObj);
-//					SendBattleAction(*m_curBattleAction);
-//				}
-//				else
-//				{
-//					if (m_battleStatus == BS_CHOOSE_ENEMY_PHY_ATK || m_battleStatus == BS_CHOOSE_ENEMY_MAG_ATK) {
-//						m_defaultTargetUser = f;
-//					} else {
-//						m_defaultTargetEudemon = f;
-//					}
-//					HighlightFighter(f);
-//				}
-//			} else {
-//				if (m_highlightFighter) {
-//					// ·¢ËÍ¹¥»÷Ö¸Áî
-//					m_curBattleAction->vData.push_back(m_highlightFighter->m_kInfo.idObj);
-//					SendBattleAction(*m_curBattleAction);
-//				}
-//			}
-//			
-//		}
-//			break;
-//		case BS_CHOOSE_ENEMY_CATCH:
-//		{
-//			Fighter* f = GetTouchedFighter(GetEnemySideList(), touch->GetLocation());
-//			if (f)
-//			{
-//				if (f->isCatchable()) {
-//					// ·¢ËÍ²¶×½Ö¸Áî
-//					BattleAction actioin(BATTLE_ACT_CATCH);
-//					actioin.vData.push_back(f->m_kInfo.idObj);
-//					SendBattleAction(actioin);
-//				} else {
-//					Chat::DefaultChat()->AddMessage(ChatTypeSystem, NDCommonCString("DestCantCatch"));
-//				}
-//				
-//			} else {
-//				if (m_highlightFighter) {
-//					// ·¢ËÍ²¶×½Ö¸Áî
-//					BattleAction actioin(BATTLE_ACT_CATCH);
-//					actioin.vData.push_back(m_highlightFighter->m_kInfo.idObj);
-//					SendBattleAction(actioin);
-//				}
-//			}
-//			
-//		}
-//			break;
-//		case BS_CHOOSE_OUR_SIDE_USE_ITEM_USER:
-//		case BS_CHOOSE_OUR_SIDE_USE_ITEM_EUDEMON:
-//		case BS_CHOOSE_OUR_SIDE_MAG_ATK:
-//		case BS_CHOOSE_OUR_SIDE_MAG_ATK_EUDEMON:
-//		{
-//			Fighter* f = GetTouchedFighter(GetOurSideList(), touch->GetLocation());
-//			if (f)
-//			{
-//				if (m_highlightFighter == f)
-//				{
-//					m_curBattleAction->vData.push_back(m_highlightFighter->m_kInfo.idObj);
-//					SendBattleAction(*m_curBattleAction);
-//				}
-//				else
-//				{
-//					if (m_battleStatus == BS_CHOOSE_OUR_SIDE_MAG_ATK) {
-//						m_defaultTargetUser = f;
-//					} else if (m_battleStatus == BS_CHOOSE_OUR_SIDE_MAG_ATK_EUDEMON) {
-//						m_defaultTargetEudemon = f;
-//					}
-//					HighlightFighter(f);
-//				}
-//			} else {
-//				if (m_highlightFighter) {
-//					m_curBattleAction->vData.push_back(m_highlightFighter->m_kInfo.idObj);
-//					SendBattleAction(*m_curBattleAction);
-//				}
-//			}
-//		}
-//			break;
-//		case BS_CHOOSE_SELF_MAG_ATK:
-//		case BS_CHOOSE_SELF_MAG_ATK_EUDEMON:
-//			if (m_highlightFighter) {
-//				m_curBattleAction->vData.push_back(m_highlightFighter->m_kInfo.idObj);
-//				SendBattleAction(*m_curBattleAction);
-//			}
-//		default:
-//			break;
-//	}
+	//	switch (m_battleStatus)
+	//	{
+	//		case BS_CHOOSE_VIEW_FIGHTER_STATUS:
+	//		case BS_CHOOSE_VIEW_FIGHTER_STATUS_PET:
+	//		{
+	//			Fighter* f = GetTouchedFighter(GetEnemySideList(), touch->GetLocation());
+	//			if (!f) {
+	//				f = GetTouchedFighter(GetOurSideList(), touch->GetLocation());
+	//			}
+	//			
+	//			if (f) {
+	//				if (m_highlightFighter != f) {
+	//					HighlightFighter(f);
+	//					break;
+	//				}
+	//			}
+	//			
+	//			if (m_highlightFighter) {
+	//				m_dlgStatus = new StatusDialog;
+	//				m_dlgStatus->Initialization(m_highlightFighter);
+	//				m_dlgStatus->SetFrameRect(CCRectMake(0, 0, CCDirector::sharedDirector()->getWinSizeInPixels().width,
+	//													 CCDirector::sharedDirector()->getWinSizeInPixels().height));
+	//				AddChild(m_dlgStatus);
+	//			}
+	//		}
+	//			break;
+	//		case BS_CHOOSE_ENEMY_PHY_ATK:
+	//		case BS_CHOOSE_ENEMY_PHY_ATK_EUDEMON:
+	//		case BS_CHOOSE_ENEMY_MAG_ATK:
+	//		case BS_CHOOSE_ENEMY_MAG_ATK_EUDEMON:
+	//		{
+	//			Fighter* f = GetTouchedFighter(GetEnemySideList(), touch->GetLocation());
+	//			if (f)
+	//			{
+	//				if (m_highlightFighter == f)
+	//				{
+	//					// ·¢ËÍ¹¥»÷Ö¸Áî
+	//					m_curBattleAction->vData.push_back(m_highlightFighter->m_kInfo.idObj);
+	//					SendBattleAction(*m_curBattleAction);
+	//				}
+	//				else
+	//				{
+	//					if (m_battleStatus == BS_CHOOSE_ENEMY_PHY_ATK || m_battleStatus == BS_CHOOSE_ENEMY_MAG_ATK) {
+	//						m_defaultTargetUser = f;
+	//					} else {
+	//						m_defaultTargetEudemon = f;
+	//					}
+	//					HighlightFighter(f);
+	//				}
+	//			} else {
+	//				if (m_highlightFighter) {
+	//					// ·¢ËÍ¹¥»÷Ö¸Áî
+	//					m_curBattleAction->vData.push_back(m_highlightFighter->m_kInfo.idObj);
+	//					SendBattleAction(*m_curBattleAction);
+	//				}
+	//			}
+	//			
+	//		}
+	//			break;
+	//		case BS_CHOOSE_ENEMY_CATCH:
+	//		{
+	//			Fighter* f = GetTouchedFighter(GetEnemySideList(), touch->GetLocation());
+	//			if (f)
+	//			{
+	//				if (f->isCatchable()) {
+	//					// ·¢ËÍ²¶×½Ö¸Áî
+	//					BattleAction actioin(BATTLE_ACT_CATCH);
+	//					actioin.vData.push_back(f->m_kInfo.idObj);
+	//					SendBattleAction(actioin);
+	//				} else {
+	//					Chat::DefaultChat()->AddMessage(ChatTypeSystem, NDCommonCString("DestCantCatch"));
+	//				}
+	//				
+	//			} else {
+	//				if (m_highlightFighter) {
+	//					// ·¢ËÍ²¶×½Ö¸Áî
+	//					BattleAction actioin(BATTLE_ACT_CATCH);
+	//					actioin.vData.push_back(m_highlightFighter->m_kInfo.idObj);
+	//					SendBattleAction(actioin);
+	//				}
+	//			}
+	//			
+	//		}
+	//			break;
+	//		case BS_CHOOSE_OUR_SIDE_USE_ITEM_USER:
+	//		case BS_CHOOSE_OUR_SIDE_USE_ITEM_EUDEMON:
+	//		case BS_CHOOSE_OUR_SIDE_MAG_ATK:
+	//		case BS_CHOOSE_OUR_SIDE_MAG_ATK_EUDEMON:
+	//		{
+	//			Fighter* f = GetTouchedFighter(GetOurSideList(), touch->GetLocation());
+	//			if (f)
+	//			{
+	//				if (m_highlightFighter == f)
+	//				{
+	//					m_curBattleAction->vData.push_back(m_highlightFighter->m_kInfo.idObj);
+	//					SendBattleAction(*m_curBattleAction);
+	//				}
+	//				else
+	//				{
+	//					if (m_battleStatus == BS_CHOOSE_OUR_SIDE_MAG_ATK) {
+	//						m_defaultTargetUser = f;
+	//					} else if (m_battleStatus == BS_CHOOSE_OUR_SIDE_MAG_ATK_EUDEMON) {
+	//						m_defaultTargetEudemon = f;
+	//					}
+	//					HighlightFighter(f);
+	//				}
+	//			} else {
+	//				if (m_highlightFighter) {
+	//					m_curBattleAction->vData.push_back(m_highlightFighter->m_kInfo.idObj);
+	//					SendBattleAction(*m_curBattleAction);
+	//				}
+	//			}
+	//		}
+	//			break;
+	//		case BS_CHOOSE_SELF_MAG_ATK:
+	//		case BS_CHOOSE_SELF_MAG_ATK_EUDEMON:
+	//			if (m_highlightFighter) {
+	//				m_curBattleAction->vData.push_back(m_highlightFighter->m_kInfo.idObj);
+	//				SendBattleAction(*m_curBattleAction);
+	//			}
+	//		default:
+	//			break;
+	//	}
 	return true;
 }
 

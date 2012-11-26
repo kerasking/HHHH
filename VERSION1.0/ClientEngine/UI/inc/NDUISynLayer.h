@@ -11,7 +11,7 @@
 #define __NDUI_SYN_LAYER_H__
 
 #include "NDUILayer.h"
-//#include "NDUtility.h"
+//#include "NDUtil.h"
 #include "NDTimer.h"
 #include "NDLightEffect.h"
 #include <string>

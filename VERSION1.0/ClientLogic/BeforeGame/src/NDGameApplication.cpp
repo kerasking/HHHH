@@ -38,6 +38,12 @@
 #if 0
 #include "HelloWorldScene.h" //@todo
 #endif
+#include "BattleMgr.h"
+#include "NDBaseBattleMgr.h"
+#include "NDNetMsg.h"
+#include "NDBaseNetMgr.h"
+#include "NDBaseScriptMgr.h"
+#include "ScriptMgr.h"
 
 NS_NDENGINE_BGN
 using namespace NDEngine;
@@ -129,11 +135,13 @@ void NDGameApplication::MyInit()
 {
 	REGISTER_CLASS(NDBaseBattle,Battle);
 	REGISTER_CLASS(NDBaseFighter,Fighter);
-
-	NDSprite* pkSprite = CREATE_CLASS(NDSprite,"NDBaseRole");
+	REGISTER_CLASS(NDBaseBattleMgr,BattleMgr);
+	REGISTER_CLASS(NDSprite,NDPlayer);
+	REGISTER_CLASS(NDBaseNetMgr,NDNetMsgPool);
+	REGISTER_CLASS(NDBaseScriptMgr,ScriptMgr);
 
 	NDMapMgr& kMapMgr = NDMapMgrObj;
-	ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();
+	//ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();
 	NDBeforeGameMgrObj;
 
 	NDDirector* pkDirector = NDDirector::DefaultDirector();

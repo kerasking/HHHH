@@ -49,8 +49,8 @@ public:
 	//......
 	//£­£­£­end
 
-	bool OnDrawBegin(bool bDraw);override
- 	void OnDrawEnd(bool bDraw); override
+	bool OnDrawBegin(bool bDraw);
+ 	void OnDrawEnd(bool bDraw);
 
 	CCPoint GetScreenPoint();
 	void DirectRight(bool bRight);

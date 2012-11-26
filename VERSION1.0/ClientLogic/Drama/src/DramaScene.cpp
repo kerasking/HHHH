@@ -12,6 +12,7 @@
 #include "NDTargetEvent.h"
 #include "NDConstant.h"
 #include "define.h"
+#include "ScriptMgr.h"
 
 
 

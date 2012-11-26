@@ -10,5 +10,5 @@
 #pragma once
 
 #include "LuaStateMgr.h"
-#include "ScriptMgr.h"
+#include "NDBaseScriptMgr.h"
 #include "ScriptDefine.h"

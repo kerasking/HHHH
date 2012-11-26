@@ -11,7 +11,7 @@
 
 #include "NDDirector.h"
 #include "CCPointExtension.h"
-#include "NDUtility.h"
+#include "NDUtil.h"
 #include "NDSprite.h"
 #include "NDDebugOpt.h"
 

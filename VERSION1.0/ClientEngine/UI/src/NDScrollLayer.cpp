@@ -9,7 +9,7 @@
 
 #include "NDScrollLayer.h"
 #include "NDDirector.h"
-//#include "NDUtility.h"
+//#include "NDUtil.h"
 #include "NDPath.h"
 
 float ACCER_FIRST = -100.0f;

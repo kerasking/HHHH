@@ -12,6 +12,7 @@
 #include "NDTransData.h"
 #include "NDUtility.h"
 #include <map>
+#include "ScriptMgr.h"
 
 using namespace NDEngine;
 using namespace LuaPlus;

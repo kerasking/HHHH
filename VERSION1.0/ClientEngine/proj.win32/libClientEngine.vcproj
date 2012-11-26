@@ -154,6 +154,10 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\Framework\inc\NDBaseBattleMgr.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Framework\inc\NDBaseDirector.h"
 					>
 				</File>
@@ -162,7 +166,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Framework\inc\NDBaseMsgDefine.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Framework\inc\NDBaseNetMgr.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Framework\inc\NDBaseNode.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Framework\inc\NDBaseScriptMgr.h"
 					>
 				</File>
 				<File
@@ -218,6 +234,10 @@
 				Name="src"
 				>
 				<File
+					RelativePath="..\Framework\src\NDBaseBattleMgr.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\Framework\src\NDBaseDirector.cpp"
 					>
 				</File>
@@ -226,7 +246,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Framework\src\NDBaseNetMgr.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\Framework\src\NDBaseNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Framework\src\NDBaseScriptMgr.cpp"
 					>
 				</File>
 				<File
@@ -966,6 +994,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Utility\inc\NDUtil.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Utility\inc\platform.h"
 					>
 				</File>
@@ -1010,6 +1042,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Utility\src\NDUtil.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\Utility\src\TQPlatform.cpp"
 					>
 				</File>
@@ -1045,20 +1081,12 @@
 					RelativePath="..\Script\inc\ScriptInc.h"
 					>
 				</File>
-				<File
-					RelativePath="..\Script\inc\ScriptMgr.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="src"
 				>
 				<File
 					RelativePath="..\Script\src\LuaStateMgr.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\Script\src\ScriptMgr.cpp"
 					>
 				</File>
 			</Filter>

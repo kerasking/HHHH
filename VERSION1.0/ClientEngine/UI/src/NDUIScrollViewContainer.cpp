@@ -11,8 +11,9 @@
 #include "ScriptUI.h"
 #include "CCPointExtension.h"
 #include "NDDirector.h"
-#include "NDUtility.h"
+#include "NDUtil.h"
 #include "ScriptGameLogic.h"
+#include "ScriptMgr.h"
 
 IMPLEMENT_CLASS(CUIScrollView, CUIScroll)
 

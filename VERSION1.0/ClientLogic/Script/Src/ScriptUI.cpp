@@ -55,6 +55,7 @@
 #include "UIScrollContainerExpand.h"
 #include "UIScrollViewExpand.h"
 #include "CCGeometry.h"
+#include "ScriptMgr.h"
 
 using namespace cocos2d;
 using namespace NDEngine;

@@ -15,6 +15,11 @@
 #include "CCObject.h"
 #include "NDObject.h"
 
+#ifdef ANDROID
+#include <stdlib.h>
+#endif
+#include "CCPlatformConfig.h"
+
 #define SEND_DATA(bao) do{\
 	NDSocket* skt = NDEngine::NDDataTransThread::DefaultThread()->GetSocket();\
 	if (skt)\
@@ -58,6 +63,10 @@ typedef cocos2d::CCObject base,*id;
 typedef unsigned int UInt32;
 typedef unsigned short UInt16;
 typedef unsigned char UInt8;
+#endif
+
+#ifdef ANDROID
+#define Byte unsigned char
 #endif
 
 typedef enum

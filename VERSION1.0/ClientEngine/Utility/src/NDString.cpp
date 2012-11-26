@@ -1,4 +1,5 @@
 #include "NDString.h"
+#include <stdlib.h>
 #include <cstdio>
 #include <ctype.h>
 #include <stdarg.h>

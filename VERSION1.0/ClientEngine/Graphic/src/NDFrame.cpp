@@ -16,7 +16,6 @@
 #include "NDSprite.h"
 #include "NDPath.h"
 #include "NDConstant.h"
-#include "NDPlayer.h"
 
 using namespace cocos2d;
 using namespace NDEngine;

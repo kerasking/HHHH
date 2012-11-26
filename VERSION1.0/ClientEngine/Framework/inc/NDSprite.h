@@ -150,6 +150,9 @@ public:
 	~NDSprite();
 
 public:
+
+	static NDSprite* GetGlobalPlayerPointer(int lookface);
+
 //		
 //		函数：Initialization
 //		作用：初始化精灵，必须被显示或隐式调用
@@ -166,6 +169,8 @@ public:
 	{
 		return true;
 	}
+
+	virtual void stopMoving(bool bResetPos = true, bool bResetTeamPos = true);
 //		
 //		函数：OnDrawEnd
 //		作用：该方法在精灵绘制完成后被框架调用
@@ -206,8 +211,7 @@ public:
 //		函数：stopMoving
 //		作用：停止精灵在地图上的移动，如果精灵式停止的没有任何影响
 //		参数：无
-//		返回值：无		
-	virtual void stopMoving(); //{ m_moving = false; }
+//		返回值：无
 
 	virtual void standAction(bool bStand);
 //		
@@ -455,6 +459,9 @@ private:
 #endif
 
 public:
+
+	virtual void InitializationFroLookFace(int lookface, bool bSetLookFace = true);
+
 	CCRect GetSpriteRect();
 	void SetCurrentAnimation(int nAnimationIndex, bool bReverse);
 
@@ -491,6 +498,8 @@ protected:
 	void reloadAni(const char* pszSprFile);
 
 	virtual void debugDraw();
+
+	static NDSprite* g_pkDefaultHero;
 
 protected:
 
@@ -556,6 +565,8 @@ private:
 	ISpriteEvent* m_pkSpriteEvent;
 	NSTimeInterval m_dBeginTime;
 };
+
+#define DefaultGlobalSprite NDSprite::GetGlobalPlayerPointer(0)
 
 NS_NDENGINE_END
 

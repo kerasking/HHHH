@@ -42,6 +42,7 @@ http://www.angelcode.com/products/bmfont/ (Free, Windows only)
 #include "support/data_support/uthash.h"
 #include "CCDirector.h"
 #include "textures/CCTextureCache.h"
+#include <stdlib.h>
 
 using namespace std;
 

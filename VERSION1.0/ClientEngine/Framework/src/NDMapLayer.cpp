@@ -25,24 +25,22 @@
 //#include "NDMapMgr.h"
 //#include "Performance.h"
 //#include "BattleMgr.h"
-#include "NDUtility.h"
+//#include "NDUtil.h"
 #include "NDDebugOpt.h"
 #include "NDDataTransThread.h"
 #include "NDMsgDefine.h"
 //#include "NDMonster.h"
-#include "BattleMgr.h"//
-#include "ScriptMgr.h"
+//#include "BattleMgr.h"//
+#include "NDBaseScriptMgr.h"
 #include "NDSharedPtr.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "NDConsole.h"
 #endif
-#include "NDNpc.h"
-#include "NDPlayer.h"
-#include "NDManualRole.h"
-#include "NDMonster.h"
 #include "UsePointPls.h"
 #include "TQString.h"
 #include "TQPlatform.h"
+#include "NDUtil.h"
+#include "NDBaseBattleMgr.h"
 
 using namespace cocos2d;
 
@@ -97,7 +95,7 @@ IMPLEMENT_CLASS(NDMapLayer, NDLayer)
 
 NDMapLayer::NDMapLayer()
 {
-	WriteCon( "NDMapLayer::NDMapLayer()\r\n");
+//	WriteCon( "NDMapLayer::NDMapLayer()\r\n"); ///< 调用Logic的东西 郭浩
 
 	m_pkMapData = NULL;
 	m_nMapIndex = -1;
@@ -141,7 +139,7 @@ NDMapLayer::NDMapLayer()
 
 NDMapLayer::~NDMapLayer()
 {
-	WriteCon( "NDMapLayer::~NDMapLayer()\r\n");
+//	WriteCon( "NDMapLayer::~NDMapLayer()\r\n"); ///< 调用Logic的东西 郭浩
 
 	CC_SAFE_RELEASE (m_pkOrders);
 	CC_SAFE_RELEASE (m_pkOrdersOfMapscenesAndMapanimations);
@@ -632,28 +630,28 @@ void NDMapLayer::DrawSwitch()//绘制切屏点
 
 	case SWITCH_TO_BATTLE:
 		{
-			BattleMgrObj.showBattleScene();
-			ScriptMgrObj.excuteLuaFunc("Hide", "NormalBossListUI",0);//调用Hide方法后，调用Redisplay恢复
+			NDBattleBaseMgrObj.showBattleScene();
+			BaseScriptMgrObj.excuteLuaFunc("Hide", "NormalBossListUI",0);//调用Hide方法后，调用Redisplay恢复
 
 			//切换音效
-			ScriptMgrObj.excuteLuaFunc("PlayEffectSound", "Music",3);
+			BaseScriptMgrObj.excuteLuaFunc("PlayEffectSound", "Music",3);
 
 			//等于3为竞技场挑战
 			if(m_nBattleType != 3)
 			{
-				int nIsRank = ScriptMgrObj.excuteLuaFuncRetN("GetIsBattleRank", "NormalBossListUI");
+				int nIsRank = BaseScriptMgrObj.excuteLuaFuncRetN("GetIsBattleRank", "NormalBossListUI");
 
 				//等于1表示副本已经打通过
 				if (1 == nIsRank)
 				{
 					//显示速战速决按钮
-					ScriptMgrObj.excuteLuaFunc("LoadUI", "BattleMapCtrl");
+					BaseScriptMgrObj.excuteLuaFunc("LoadUI", "BattleMapCtrl");
 				}
 			}
 			else
 			{
 				//显示速战速决按钮
-				ScriptMgrObj.excuteLuaFunc("LoadUI", "BattleMapCtrl");
+				BaseScriptMgrObj.excuteLuaFunc("LoadUI", "BattleMapCtrl");
 			}
 
 			showSwitchSprite(SWITCH_START_BATTLE);

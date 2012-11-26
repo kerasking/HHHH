@@ -1,5 +1,5 @@
 #include "ImageNumber.h"
-#include "NDUtility.h"
+#include "NDUtil.h"
 #include "NDPath.h"
 #include "define.h"
 #include "NDSharedPtr.h"
@@ -445,7 +445,7 @@ void ImageNumber::SetSmallRedNumber(int number, bool bWithSign)
 	m_size.height = PictureNumber::SharedInstance()->GetSmallRedSize().height;
 }
 
-void ImageNumber::SetSmallRedTwoNumber(uint num1, uint num2)
+void ImageNumber::SetSmallRedTwoNumber(unsigned int num1, unsigned int num2)
 {
 	bool bVisible = this->IsVisibled();
 

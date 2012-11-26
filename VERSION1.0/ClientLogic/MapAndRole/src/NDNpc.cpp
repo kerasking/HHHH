@@ -30,6 +30,7 @@
 #include "ScriptGameLogic.h"
 #include "NDDebugOpt.h"
 #include "NDNpcLogic.h"
+#include "ScriptMgr.h"
 
 #define NPC_NAME_FONT_SIZE 14
 
@@ -437,7 +438,7 @@ void NDNpc::SetNpcState(NPC_STATE state)
 
 	if (!m_pkPicState)
 	{
-		m_pkPicState = ScriptMgrObj.excuteLuaFunc<NDPicture*>("GetNpcFuncPic", "NPC", m_nID);
+		m_pkPicState = BaseScriptMgrObj.excuteLuaFunc<NDPicture*>("GetNpcFuncPic", "NPC", m_nID);
 	}
 	if (m_pkPicState) {
 		//根据分辨率进行缩放

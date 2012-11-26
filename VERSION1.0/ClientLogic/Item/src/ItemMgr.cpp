@@ -63,21 +63,21 @@ ItemMgr::ItemMgr()
 		roleEuiptItemsOK[i] = false;
 	}
 	
-	NDNetMsgPoolObj.RegMsg(_MSG_ITEMINFO, this);
-	NDNetMsgPoolObj.RegMsg(_MSG_EQUIP_EFFECT, this); // 装备是否失效
-	NDNetMsgPoolObj.RegMsg(_MSG_ITEM_ATTRIB, this);
-	NDNetMsgPoolObj.RegMsg(_MSG_ITEM_DEL, this);
-	NDNetMsgPoolObj.RegMsg(_MSG_ITEM, this);
-	NDNetMsgPoolObj.RegMsg(_MSG_STONE, this);
-	NDNetMsgPoolObj.RegMsg(_MSG_STONEINFO, this);
-	NDNetMsgPoolObj.RegMsg(_MSG_LIMIT, this);
-	NDNetMsgPoolObj.RegMsg(_MSG_QUERY_DESC, this);
-	NDNetMsgPoolObj.RegMsg(_MSG_TIDY_UP_BAG, this);
-	NDNetMsgPoolObj.RegMsg(_MSG_ITEMKEEPER, this);
-	NDNetMsgPoolObj.RegMsg(_MSG_SHOP_CENTER, this); // 商城
-	NDNetMsgPoolObj.RegMsg(_MSG_EQUIP_SET_CFG, this);
-	NDNetMsgPoolObj.RegMsg(_MSG_EQUIP_BIND, this);
-	NDNetMsgPoolObj.RegMsg(_MSG_SHOP_CENTER_GOODS_TYPE, this);
+	NDNetMsgPoolObj->RegMsg(_MSG_ITEMINFO, this);
+	NDNetMsgPoolObj->RegMsg(_MSG_EQUIP_EFFECT, this); // 装备是否失效
+	NDNetMsgPoolObj->RegMsg(_MSG_ITEM_ATTRIB, this);
+	NDNetMsgPoolObj->RegMsg(_MSG_ITEM_DEL, this);
+	NDNetMsgPoolObj->RegMsg(_MSG_ITEM, this);
+	NDNetMsgPoolObj->RegMsg(_MSG_STONE, this);
+	NDNetMsgPoolObj->RegMsg(_MSG_STONEINFO, this);
+	NDNetMsgPoolObj->RegMsg(_MSG_LIMIT, this);
+	NDNetMsgPoolObj->RegMsg(_MSG_QUERY_DESC, this);
+	NDNetMsgPoolObj->RegMsg(_MSG_TIDY_UP_BAG, this);
+	NDNetMsgPoolObj->RegMsg(_MSG_ITEMKEEPER, this);
+	NDNetMsgPoolObj->RegMsg(_MSG_SHOP_CENTER, this); // 商城
+	NDNetMsgPoolObj->RegMsg(_MSG_EQUIP_SET_CFG, this);
+	NDNetMsgPoolObj->RegMsg(_MSG_EQUIP_BIND, this);
+	NDNetMsgPoolObj->RegMsg(_MSG_SHOP_CENTER_GOODS_TYPE, this);
 	
 	
 	//LoadItemTypeIndex();

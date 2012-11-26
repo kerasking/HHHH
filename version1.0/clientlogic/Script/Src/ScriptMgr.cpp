@@ -27,7 +27,7 @@
 #include "NDTextureMonitor.h"
 #include "NDPicture.h"
 #include "NDPath.h"
-#include "NDUtility.h"
+#include "NDUtil.h"
 #include "NDProfile.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "direct.h"
@@ -37,6 +37,9 @@
 using namespace NDEngine;
 const unsigned char g_dekey[] = {0x80,0x12,0x97,0x67,0x24,0x88,0x89,0x98,0x55,0x34,0xBD,0x33,0x34,0x80,0x12,0x97,0x67,0x24,0x88,0x89,0x98,0x55,0x34,0xBD};
 std::string* s_DataDir = 0;
+
+IMPLEMENT_CLASS(ScriptMgr,NDBaseScriptMgr)
+
 void luaExceptRunTimeOutPut(const char *exceptinfo)
 {
 	ScriptMgrObj.DebugOutPut("run failed!!!");
@@ -493,4 +496,14 @@ void ScriptMgr::LoadRegClassFuncs()
 	}
 	
 	vRegClassFunc.clear();
+}
+
+ScriptMgr& NDEngine::ScriptMgr::GetScriptMgr()
+{
+	if (0 == ms_pkSingleton)
+	{
+		ms_pkSingleton = new ScriptMgr;
+	}
+
+	return *((ScriptMgr*)ms_pkSingleton);
 }

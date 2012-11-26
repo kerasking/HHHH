@@ -8,10 +8,13 @@
  */
 
 #include "UIChatText.h"
-#include "NDUtility.h"
+#include "NDUtil.h"
 #include "NDDirector.h"
 #include "NDPath.h"
 #include "TQPlatform.h"
+#include <stdlib.h>
+#include "NDLocalization.h"
+#include "NDBaseScriptMgr.h"
 
 IMPLEMENT_CLASS(CUIChatText, NDUINode)
 
@@ -32,173 +35,208 @@ void CUIChatText::Initialization()
 	m_idRole=0;
 }
 
-
 std::string CUIChatText::GetChannelStr(CHAT_CHANNEL_TYPE channel)
 {
-	switch (channel) {
-		case CHAT_CHANNEL_ALL:
-			return "";
-		case CHAT_CHANNEL_SYS:
-			return NDCommonCString("system");
-		case CHAT_CHANNEL_WORLD:
-			return NDCommonCString("world");
-		case CHAT_CHANNEL_FACTION:
-			return NDCommonCString("faction");
-		case CHAT_CHANNEL_PRIVATE:
-			return NDCommonCString("PrivateChat");
-		default:
-			return "";
+	switch (channel)
+	{
+	case CHAT_CHANNEL_ALL:
+		return "";
+	case CHAT_CHANNEL_SYS:
+		return NDCommonCString("system");
+	case CHAT_CHANNEL_WORLD:
+		return NDCommonCString("world");
+	case CHAT_CHANNEL_FACTION:
+		return NDCommonCString("faction");
+	case CHAT_CHANNEL_PRIVATE:
+		return NDCommonCString("PrivateChat");
+	default:
+		return "";
 	}
 }
-
-
-
-
 //void CUIChatText::SetContent(int speakerID,int channel,const char* speaker,const char* text)
 
-void CUIChatText::SetContent(int speakerID, int channel, const char* speaker, 
+void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 							 const char* text, int style, int fontSizelua, ccColor4B color)
 {
 
 	this->RemoveAllChildren(true);
 	textNodeList.clear();
-	this->speakerName=speaker;
-	float fScaleFactor	= NDDirector::DefaultDirector()->GetScaleFactor();
-    int fontSize=fontSizelua*fScaleFactor;
-	text_style=style;
-	
+	this->speakerName = speaker;
+	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
+	int fontSize = fontSizelua * fScaleFactor;
+	text_style = style;
+
 	ChatTextType type = ChatNone;
-	ccColor4B clr= color;
-	std::string channel_str=GetChannelStr(CHAT_CHANNEL_TYPE(channel));
+	ccColor4B clr = color;
+	std::string channel_str = GetChannelStr(CHAT_CHANNEL_TYPE(channel));
 	if (!channel_str.empty())
 	{
-       textNodeList.push_back(ChatNode(false, CreateLabel("¡¾", fontSize, clr,0),ChatNone,0,""));
-		textNodeList.push_back(ChatNode(false, CreateLabel(channel_str.c_str(), fontSize, clr,0),ChatNone,0,""));
-		textNodeList.push_back(ChatNode(false, CreateLabel("¡¿", fontSize, clr,0),ChatNone,0,""));
-        
+		textNodeList.push_back(
+			ChatNode(false, CreateLabel("¡¾", fontSize, clr, 0), ChatNone, 0,
+			""));
+		textNodeList.push_back(
+			ChatNode(false,
+			CreateLabel(channel_str.c_str(), fontSize, clr, 0),
+			ChatNone, 0, ""));
+		textNodeList.push_back(
+			ChatNode(false, CreateLabel("¡¿", fontSize, clr, 0), ChatNone, 0,
+			""));
+
 	}
-	
-	if (CHAT_CHANNEL_TYPE(channel)!=CHAT_CHANNEL_SYS)
+
+	if (CHAT_CHANNEL_TYPE(channel) != CHAT_CHANNEL_SYS)
 	{
-		textNodeList.push_back(ChatNode(false, CreateLabel(speaker, fontSize, clr,0),ChatSpeaker,speakerID,""));
-		textNodeList.push_back(ChatNode(false, CreateLabel(":", fontSize, clr,0),ChatSpeaker,speakerID,""));
+		textNodeList.push_back(
+			ChatNode(false, CreateLabel(speaker, fontSize, clr, 0),
+			ChatSpeaker, speakerID, ""));
+		textNodeList.push_back(
+			ChatNode(false, CreateLabel(":", fontSize, clr, 0), ChatSpeaker,
+			speakerID, ""));
 	}
-	if (!text) 
+	if (!text)
 	{
 		return;
 	}
-	
+
 	bool brk = false;
-	
-	while (*text != '\0') 
-	{				
-		
+
+	while (*text != '\0')
+	{
+
 		bool retAnalysis = false;
-		
+
 		retAnalysis = AnalysisRuleEnd(text, type);
-		if (retAnalysis) 
+		if (retAnalysis)
 		{
-			if (type == ChatItem) 
+			if (type == ChatItem)
 			{
-				textNodeList.push_back(ChatNode(brk, CreateLabel("]", fontSize, clr, m_idItem), ChatItem,m_idItem,""));
+				textNodeList.push_back(
+					ChatNode(brk, CreateLabel("]", fontSize, clr, m_idItem),
+					ChatItem, m_idItem, ""));
 			}
-			
-			if (type == ChatRole) 
+
+			if (type == ChatRole)
 			{
-				textNodeList.push_back(ChatNode(brk, CreateLabel("]", fontSize, clr, m_idRole),ChatRole,m_idRole,this->m_roleName));
+				textNodeList.push_back(
+					ChatNode(brk, CreateLabel("]", fontSize, clr, m_idRole),
+					ChatRole, m_idRole, this->m_roleName));
 			}
-			
+
 			type = ChatNone;
-			clr = ccc4(255,255,255,255);
+			clr = ccc4(255, 255, 255, 255);
 			continue;
 		}
-		
+
 		retAnalysis = AnalysisRuleHead(text, type, clr);
-		if (type == ChatFace) 
+		if (type == ChatFace)
 		{
-			char imgIdx[3] = { 0x00 };
+			char imgIdx[3] =
+			{ 0x00 };
 			memcpy(imgIdx, text, 2);
-			
+
 			NDUIImage* image = CreateFaceImage(imgIdx);
-			if (image) 
+			if (image)
 			{
-				textNodeList.push_back(ChatNode(brk, image,ChatFace,0,""));
+				textNodeList.push_back(ChatNode(brk, image, ChatFace, 0, ""));
 				brk = false;
-				
+
 				text += 2;
 				continue;
-			}				
-		}
-		
-		if (retAnalysis) 
-		{
-			if (type == ChatItem) 
-			{
-				textNodeList.push_back(ChatNode(brk, CreateLabel("[", fontSize, clr, m_idItem),ChatItem,m_idItem,""));
 			}
-			
-			if (type == ChatRole) 
+		}
+
+		if (retAnalysis)
+		{
+			if (type == ChatItem)
 			{
-				textNodeList.push_back(ChatNode(brk, CreateLabel("[", fontSize, clr, m_idRole),ChatRole,m_idRole,this->m_roleName));
+				textNodeList.push_back(
+					ChatNode(brk, CreateLabel("[", fontSize, clr, m_idItem),
+					ChatItem, m_idItem, ""));
+			}
+
+			if (type == ChatRole)
+			{
+				textNodeList.push_back(
+					ChatNode(brk, CreateLabel("[", fontSize, clr, m_idRole),
+					ChatRole, m_idRole, this->m_roleName));
 			}
 			continue;
-		}	
-		char word[4] = { 0x00 };
-		if ((unsigned char)*text < 0x80) 
+		}
+		char word[4] =
+		{ 0x00 };
+		if ((unsigned char) *text < 0x80)
 		{
 			memcpy(word, text, 1);
 			text++;
 		}
-		else 
+		else
 		{
 			memcpy(word, text, 3);
 			text += 3;
 		}
-		
-		if (type == ChatItem) {
-				textNodeList.push_back(ChatNode(brk, CreateLabel(word, fontSize,clr, m_idItem),ChatItem,m_idItem,""));
-		} else if (type == ChatRole){
-				textNodeList.push_back(ChatNode(brk, CreateLabel(word, fontSize,clr, m_idRole),ChatRole,m_idRole,this->m_roleName));
-		}else 
+
+		if (type == ChatItem)
 		{
-				textNodeList.push_back(ChatNode(brk, CreateLabel(word, fontSize, clr,0),ChatNone,0,""));
+			textNodeList.push_back(
+				ChatNode(brk, CreateLabel(word, fontSize, clr, m_idItem),
+				ChatItem, m_idItem, ""));
 		}
-		
+		else if (type == ChatRole)
+		{
+			textNodeList.push_back(
+				ChatNode(brk, CreateLabel(word, fontSize, clr, m_idRole),
+				ChatRole, m_idRole, this->m_roleName));
+		}
+		else
+		{
+			textNodeList.push_back(
+				ChatNode(brk, CreateLabel(word, fontSize, clr, 0), ChatNone,
+				0, ""));
+		}
+
 		brk = false;
 	}
-	Combiner(textNodeList);
+	Combiner (textNodeList);
 }
 
 bool CUIChatText::OnTextClick(CCPoint touchPos)
 {
-	int index=0;
-	bool isfound=false;
+	int index = 0;
+	bool isfound = false;
 	std::vector<NDNode*> vChildren = this->GetChildren();
-	for (std::vector<NDNode*>::iterator it = vChildren.begin(); it != vChildren.end(); it++) {
+	for (std::vector<NDNode*>::iterator it = vChildren.begin(); it != vChildren.end(); it++)
+	{
 		NDUINode* uinode = dynamic_cast<NDUINode*> (*it);
-		if (uinode && IsPointInside(touchPos, uinode->GetScreenRect())) {
+		if (uinode && IsPointInside(touchPos, uinode->GetScreenRect()))
+		{
 			//NDLog(@"click on chat ui node");
 			isfound=true;
 			break;
 		}
 		index++;
 	}
-	if(!isfound){
+	if(!isfound)
+	{
 		return false;
 	}
-	ChatNode cnode=this->textNodeList.at(index);
-	if (cnode.textType==ChatSpeaker){
+	ChatNode cnode = this->textNodeList.at(index);
+	if (cnode.textType==ChatSpeaker)
+	{
 		//NDLog(@"click on chat speaker:%d",cnode.content_id);
-		ScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",(int)cnode.textType,cnode.content_id,this->speakerName);
-	}else if(cnode.textType==ChatItem)
+		BaseScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",(int)cnode.textType,cnode.content_id,this->speakerName);
+	}
+	else if(cnode.textType==ChatItem)
 	{
 		//NDLog(@"click on chat item:%d",cnode.content_id);
-		ScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",(int)cnode.textType,cnode.content_id,"");
-	}else if (cnode.textType==ChatRole)
+		BaseScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",(int)cnode.textType,cnode.content_id,"");
+	}
+	else if (cnode.textType==ChatRole)
 	{
 		//NDLog(@"click on chat Role:%d",cnode.content_id);
-		ScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",(int)cnode.textType,cnode.content_id,cnode.content_str);
-	}else{
+		BaseScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",(int)cnode.textType,cnode.content_id,cnode.content_str);
+	}
+	else
+	{
 		//NDLog(@"click nothing");
 	}
 	return true;

@@ -11,11 +11,12 @@
 #include <string>
 #include <vector>
 #include <NDTransData.h>
-#include "ScriptMgr.h"
-#include "NDNetMsg.h"
+#include "NDBaseScriptMgr.h"
+#include "NDBaseNetMgr.h"
 #include <NDMessageCenter.h>
 #include "NDDebugOpt.h"
 #include "CCScheduler.h"
+#include "NDBaseMsgDefine.h"
 
 
 // 帧数限制�??�??
@@ -89,7 +90,7 @@ void NDBaseDirector::mainLoop(void)
 void NDBaseDirector::OnIdle()
 {
 	if (NDDebugOpt::getScriptEnabled())
-		ScriptMgrObj.update();
+		BaseScriptMgrObj.update();
 }
 
 void NDBaseDirector::DispatchOneMessage()
@@ -98,9 +99,9 @@ void NDBaseDirector::DispatchOneMessage()
     //NDTransData* data = NDMessageCenter::DefaultMessageCenter()->GetMessage();
     for (int n = 0; n < 10; n++) 
     {
-        if (NDNetMsgMgr::GetSingleton().GetServerMsgPacket(bao))
+        if (NDBaseNetMsgPoolObj.GetServerMsgPacket(bao))
         {
-            NDNetMsgPoolObj.Process(&bao);
+            NDBaseNetMsgPoolObj.Process(&bao);
             if ( (bao.GetCode() != _MSG_WALK)			&& 
                 (bao.GetCode() != _MSG_PLAYER_EXT)		&&
                 (bao.GetCode() != _MSG_TALK)	

@@ -14,30 +14,23 @@
 #include "NDTransData.h"
 #include <map>
 #include "NDMsgDefine.h"
+#include "NDBaseNetMgr.h"
 
 using namespace std;
+using namespace NDEngine;
 
-class NDMsgObject
-{
-public:
-	NDMsgObject()
-	{
-	}
-	virtual ~NDMsgObject()
-	{
-	}
-	virtual bool process(MSGID msgID, NDEngine::NDTransData*, int len) = 0;
-};
-
-class NDNetMsgPool: public TSingleton<NDNetMsgPool>
+class NDNetMsgPool: public NDBaseNetMgr
 {
 	typedef map<MSGID, NDMsgObject*> map_class_callback;
 	typedef map_class_callback::iterator map_class_callback_it;
 	typedef pair<MSGID, NDMsgObject*> map_class_callback_pair;
 
 public:
+
 	NDNetMsgPool();
 	~NDNetMsgPool();
+
+	static NDNetMsgPool* GetNetMsgPool();
 
 	bool Process(NDEngine::NDTransData* data);
 	bool Process(MSGID msgID, NDEngine::NDTransData* data, int len);
@@ -49,6 +42,6 @@ private:
 
 };
 
-#define NDNetMsgPoolObj NDNetMsgPool::GetSingleton()
+#define NDNetMsgPoolObj NDNetMsgPool::GetNetMsgPool()
 
 #endif // _ND_NET_MSG_H_

@@ -9,7 +9,7 @@
 #if 0
 #include "NDDirector.h"
 #include "CCPointExtension.h"
-#include "NDUtility.h"
+#include "NDUtil.h"
 #include "NDTargetEvent.h"
 #include "ScriptUI.h"
 #include "ScriptGameLogic.h"

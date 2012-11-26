@@ -140,6 +140,8 @@ public:
 	override void RunAnimation(bool bDraw);
 
 protected:
+
+	virtual void InitializationFroLookFace(int lookface, bool bSetLookFace = true);
 	virtual void debugDraw();
 
 private:

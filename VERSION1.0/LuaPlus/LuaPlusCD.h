@@ -79,7 +79,7 @@ namespace LPCD
 		}
 		
 		std::string metaname("MetaClass_");
-#ifdef __APPLE__
+#if (defined(__APPLE__) || defined(ANDROID))
 		metaname += typeid(T).name();
 #else
 		metaname += typeid(T).raw_name();
@@ -111,7 +111,7 @@ namespace LPCD
 	inline void Push(lua_State* L, T classobj)
 	{
 		std::string metaname("MetaClass_");
-#ifdef __APPLE__
+#if (defined(__APPLE__) || defined(ANDROID))
 		metaname += typeid(T).name();
 #else
 		metaname += typeid(T).raw_name();

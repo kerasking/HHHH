@@ -11,7 +11,7 @@
 #include "SMString.h"
 #include <sstream>
 #include "define.h"
-#include "NDUtility.h"
+#include "NDUtil.h"
 //using namespace cocos2d;
 
 IMPLEMENT_CLASS(CUIExp, NDUINode)

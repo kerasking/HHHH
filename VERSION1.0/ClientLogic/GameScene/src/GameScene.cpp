@@ -75,6 +75,7 @@
 #include <sstream>
 #include "NDPicture.h"
 #include "NDDataSource.h"
+#include "ScriptMgr.h"
 
 const int TAG_CV_SEND_QUESTION = 1;
 const int TAG_CV_CHANG_PWD = 2;

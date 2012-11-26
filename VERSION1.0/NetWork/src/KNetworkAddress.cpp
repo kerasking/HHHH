@@ -1,9 +1,10 @@
-//#include "CCPlatformConfig.h"
+#include <CCPlatformConfig.h>
 #include <string>
 
 #ifdef WIN32
 #include <winsock2.h>
-#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#else
+//#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h> 
@@ -11,9 +12,9 @@
 #include <sys/param.h> 
 #include <sys/ioctl.h>
 #include <net/if.h>
+#include <stdlib.h>
 #include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
+#include <string.h>
 #endif
 
 
@@ -21,14 +22,11 @@
 #include <cassert>
 #include "KNetworkAddress.h"
 
-
-
 unsigned int KNetworkAddress::m_netmask = 0;
 
 KNetworkAddress::KNetworkAddress() : ipAddressSet( false )
 {
-	char hostname[256];
-	memset(hostname, 0, 256);
+	char hostname[256] = {0};
 #ifdef WIN32
 	strcpy_s( hostname, "localhost" );
 #elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)

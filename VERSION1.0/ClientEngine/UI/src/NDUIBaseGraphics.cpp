@@ -13,8 +13,11 @@
 #include "ccMacros.h"
 #include "UsePointPls.h"
 
-using namespace cocos2d;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <GLES/gl.h>
+#endif
 
+using namespace cocos2d;
 
 namespace NDEngine
 {

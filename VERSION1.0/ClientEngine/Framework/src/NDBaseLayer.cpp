@@ -11,9 +11,9 @@
 #include "NDLayer.h"
 #include "NDUILayer.h"
 #include "NDDirector.h"
-#include "WorldMapScene.h"
+//#include "WorldMapScene.h"
 #include "NDMapLayer.h"
-#include "NDUtility.h"
+//#include "NDUtil.h"
 
 using namespace cocos2d;
 

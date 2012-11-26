@@ -130,3 +130,13 @@ void NDNetMsgPool::UnRegMsg(MSGID msgID)
 {
 	m_mapCallBack.erase(msgID);
 }
+
+NDNetMsgPool* NDNetMsgPool::GetNetMsgPool()
+{
+	if (0 == ms_pkSingleton)
+	{
+		ms_pkSingleton = CREATE_CLASS(NDBaseNetMgr,"NDNetMsgPool");
+	}
+
+	return (NDNetMsgPool*)ms_pkSingleton;
+}

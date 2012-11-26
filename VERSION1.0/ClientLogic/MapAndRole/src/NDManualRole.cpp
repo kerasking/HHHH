@@ -30,6 +30,7 @@
 #include "DramaScene.h"
 #include "NDDebugOpt.h"
 #include "NDSharedPtr.h"
+#include "ScriptMgr.h"
 
 /* 玩家寻路八个方向值,无效的方向值-1
     7  0  4
@@ -1165,10 +1166,12 @@ void NDManualRole::OnMoveTurning(bool bXTurnigToY, bool bInc)
 
 bool NDManualRole::OnDrawBegin(bool bDraw)
 {
-	if (!NDDebugOpt::getDrawRoleManualEnabled()) return false;
+	if (!NDDebugOpt::getDrawRoleManualEnabled())
+		return false;
 
 	NDNode* pkParent = GetParent();
-	if (!pkParent) return true;
+	if (!pkParent)
+		return true;
 
 	//if (!node
 //			|| !(node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)) 
@@ -1194,12 +1197,13 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	 }
 	 */
 
-	if ( pkScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene) ) )
+	if (pkScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene)))
 	{
 		NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(pkScene);
-		if ( GetParent() == layer )
+		if (GetParent() == layer)
 		{
-			if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) && !NDMapMgrObj.isShowOther ) 
+			if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer))
+					&& !NDMapMgrObj.isShowOther)
 			{
 				return false;
 			}
@@ -1210,7 +1214,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 #if 1
 	// 摆摊先处理
 	if (IsInState (USERSTATE_BOOTH))
-	{ 
+	{
 		// 摆摊不画骑宠
 		if (m_pkVendorPicture)
 		{
@@ -1222,7 +1226,8 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 				//把baserole坐标转成屏幕坐标
 				NDMapLayer* pkLayer = (NDMapLayer*) pkParent;
 				CCPoint screen = pkLayer->GetScreenCenter();
-				CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+				CCSize winSize =
+						CCDirector::sharedDirector()->getWinSizeInPixels();
 
 				m_kScreenPosition = ccpSub(GetPosition(),
 						ccpSub(screen,
@@ -1271,26 +1276,24 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	}
 #endif 
 
-
 #if 3
 	HandleEffectDacoity();
 
 	// 处理影子
 	if (IsInState (USERSTATE_STEALTH))
 	{
-		if (IsKindOfClass (RUNTIME_CLASS(NDPlayer)))
-		{
-			SetShadowOffset(0, 10);
-			ShowShadow(true);
-			HandleShadow(pkParent->GetContentSize());
-		}
-		return true;
+		if (IsKindOfClass (RUNTIME_CLASS(NDPlayer))){
+		SetShadowOffset(0, 10);
+		ShowShadow(true);
+		HandleShadow(pkParent->GetContentSize());
 	}
-	else
-	{
-		SetShadowOffset(m_pkRidePet ? -8 : 0, 10);
-		ShowShadow(true, m_pkRidePet != NULL);
-	}
+	return true;
+}
+else
+{
+	SetShadowOffset(m_pkRidePet ? -8 : 0, 10);
+	ShowShadow(true, m_pkRidePet != NULL);
+}
 
 // 	if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
 // 	{
@@ -1303,7 +1306,6 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 		return true;
 	}
 #endif
-
 
 #if 4
 	// 特效数据先更新
@@ -1329,7 +1331,6 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	NDBaseRole::OnDrawBegin(bDraw);
 #endif
 
-
 #if 5
 	if (m_pkRidePet)
 	{
@@ -1341,7 +1342,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 		}
 	}
 
-	if(AssuredRidePet())
+	if (AssuredRidePet())
 	{
 		m_pkRidePet->SetScale(this->GetScale());
 	}
@@ -1351,24 +1352,24 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)))
 	{
 		//NDLog(@"draw pet2");
-		if(AssuredRidePet()) 
+		if (AssuredRidePet())
 		{
-			bool isSit=ScriptMgrObj.excuteLuaFunc<bool>("IsInPractising","PlayerFunc");
+			bool isSit = BaseScriptMgrObj.excuteLuaFunc<bool>("IsInPractising",
+					"PlayerFunc");
 			//NDLog(@"user draw ridepet");
-			if(!isSit)
+			if (!isSit)
 			{
 				//NDLog(@"user not sit,draw ridepet");
 				m_pkRidePet->RunAnimation(bDraw);
 			}
 		}
 	}
-	else if (AssuredRidePet() &&!IsInState(USERSTATE_PRACTISE))
+	else if (AssuredRidePet() && !IsInState(USERSTATE_PRACTISE))
 	{
 		//NDLog(@"draw pet3");
 		m_pkRidePet->RunAnimation(bDraw);
 	}
 #endif
-
 
 #if 6
 	// 人物变形动画
@@ -1385,7 +1386,6 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	}
 #endif 
 
-
 #if 7
 	//if (m_talkBox && m_talkBox->IsVisibled())
 	//{
@@ -1398,14 +1398,14 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 #endif
 
 #if 8
-	if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) || NDMapMgrObj.isShowName) 
+	if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) || NDMapMgrObj.isShowName)
 	{
 		DrawNameLabel(bDraw);
 	}
 
 	if (bDraw)
 	{
-		RunSMEffect(eSM_EFFECT_DRAW_ORDER_BACK);
+		RunSMEffect (eSM_EFFECT_DRAW_ORDER_BACK);
 	}
 
 #endif
@@ -1750,12 +1750,12 @@ void NDManualRole::SetState(int nState)
 	bool bNewInPractise	= IsInState(USERSTATE_PRACTISE);
 	if (!bOldInPractise && bNewInPractise)
 	{
-		AddSMEffect(ScriptMgrObj.excuteLuaFunc<std::string>("GetPractiseEffectPath", "PlayerFunc"), 
+		AddSMEffect(BaseScriptMgrObj.excuteLuaFunc<std::string>("GetPractiseEffectPath", "PlayerFunc"), 
 			eSM_EFFECT_ALIGNMENT_BOTTOM, eSM_EFFECT_DRAW_ORDER_FRONT);
 	}
 	else if (bOldInPractise && !bNewInPractise)
 	{
-		RemoveSMEffect(ScriptMgrObj.excuteLuaFunc<std::string>("GetPractiseEffectPath", "PlayerFunc"));
+		RemoveSMEffect(BaseScriptMgrObj.excuteLuaFunc<std::string>("GetPractiseEffectPath", "PlayerFunc"));
 	}
 }
 
@@ -2138,7 +2138,7 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 	lable[1]->SetFrameRect(CCRectMake(newX + offset, newY + offset, fontSize.width, fontSize.height));//底
 
 // 	if(m_nQuality>-1){
-// 		ccColor4B cColor4 = ScriptMgrObj.excuteLuaFuncRetColor4("GetColor", "Item",m_nQuality);
+// 		ccColor4B cColor4 = BaseScriptMgrObj.excuteLuaFuncRetColor4("GetColor", "Item",m_nQuality);
 // 		lable[0]->SetFontColor(cColor4);
 // 		//lable[1]->SetFontColor(cColor4);
 // 	}

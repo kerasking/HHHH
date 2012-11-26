@@ -22,6 +22,7 @@
 
 #include "CCPointExtension.h"
 #include "ScriptGameLogic.h"
+#include "ScriptMgr.h"
 
 
 #define TAG_TIMER_MOVE		(1024)

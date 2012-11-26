@@ -106,7 +106,7 @@ void NDPicture::Initialization(vector<const char*>& vImgFiles)
 // 	m_texture->release();
 // 	
 // 	vector<CCImage*> vImgs;
-// 	for (uint i = 0; i < vImgFiles.size(); i++)
+// 	for (unsigned int i = 0; i < vImgFiles.size(); i++)
 // 	{
 // 		CCTexture2D* img = new CCTexture2D;
 // 		if (!img->initWithPVRFile(vImgFiles.at(i)))
@@ -121,7 +121,7 @@ void NDPicture::Initialization(vector<const char*>& vImgFiles)
 // 		}
 //	}
 	
-// 	for (uint i = 0; i < vImgs.size(); i++)
+// 	for (unsigned int i = 0; i < vImgs.size(); i++)
 // 	{
 // 		CCImage* img = vImgs.at(i);
 // 		[img drawInRect:CCRectMake(0, 0, img.size.width, img.size.height)];
@@ -148,7 +148,7 @@ void NDPicture::Initialization(vector<const char*>& vImgFiles, vector<CCRect>& v
 // 	m_pkTexture->release();
 // 	
 // 	vector<CCTexture2D*> vImgs;
-// 	for (uint i = 0; i < vImgFiles.size(); i++) {
+// 	for (unsigned int i = 0; i < vImgFiles.size(); i++) {
 // 		CCTexture2D* img = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithUTF8String:vImgFiles.at(i)]];
 // 		CCTexture2D* imgCut = [img getSubImageFromWithRect:vImgCustomRect[i]];
 // 		vImgs.push_back(imgCut);
@@ -160,7 +160,7 @@ void NDPicture::Initialization(vector<const char*>& vImgFiles, vector<CCRect>& v
 // 		[img release];
 // 	}
 // 	
-// 	for (uint i = 0; i < vImgs.size(); i++) {
+// 	for (unsigned int i = 0; i < vImgs.size(); i++) {
 // 		UIImage* img = vImgs.at(i);
 // 		[img drawInRect:CCRectMake(vOffsetPoint[i].x, vOffsetPoint[i].y, img.size.width, img.size.height)];
 // 		//[img release];

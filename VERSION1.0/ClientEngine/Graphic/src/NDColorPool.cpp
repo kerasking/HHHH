@@ -13,7 +13,7 @@ NDColorPool::NDColorPool(){}
 NDColorPool::~NDColorPool(){}
 
 bool NDColorPool::GetColorFromPool(const char* colorFile, 
-								   uint colorIndex,
+								   unsigned int colorIndex,
 								   VEC_COLOR_ARRAY& colorArray)
 {
 	PAIR_COLOR_KEY key(colorFile, colorIndex);
