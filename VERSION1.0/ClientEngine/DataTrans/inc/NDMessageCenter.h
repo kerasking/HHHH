@@ -18,6 +18,7 @@
 #include "NDTransData.h"
 #include "CircleBuffer.h"
 #include "KMutex.h"
+#include "NDBaseNetMgr.h"
 
 namespace NDEngine
 {
@@ -75,20 +76,20 @@ namespace NDEngine
 	// 提供跟踪网络接收数据量功能
 	// jhzhen 2011.12.1
 	
-	class NDNetMsgMgr
+	class NDNetMsgMgr : public NDBaseNetMgr
 	{
 		public:
-			static NDNetMsgMgr&	GetSingleton();
+			//static NDNetMsgMgr&	GetSingleton();
 			
 			static void purge();
 			
 			~NDNetMsgMgr();
 			
-			bool AddNetRawData(const unsigned char* data, unsigned int uilen, bool net = true);
+			virtual bool AddNetRawData(const unsigned char* data, unsigned int uilen, bool net = true);
 			
-			bool GetServerMsgPacket(NDTransData& data);
+			virtual bool GetServerMsgPacket(NDTransData& data);
 			
-			bool AddBackToMenuPacket();
+			virtual bool AddBackToMenuPacket();
 			
 			bool ClearNetRawData();
 			
@@ -102,7 +103,7 @@ namespace NDEngine
 			unsigned int m_uiTotalNetData;
 			
 			KMutex m_lockNetData;
-		private:
+		public:
 			NDNetMsgMgr();
 			
 	};

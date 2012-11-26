@@ -111,7 +111,7 @@ void GameSceneLoading::OnTimer(OBJID tag)
 		/*
 		NDTransData *data = new NDTransData(_MSG_GAME_QUIT); //quit game message
 		NDMessageCenter::DefaultMessageCenter()->AddMessage(data);*/
-		NDNetMsgMgr::GetSingleton().AddBackToMenuPacket();
+		NDBaseNetMsgPoolObj.AddBackToMenuPacket();
 	}
 }
 

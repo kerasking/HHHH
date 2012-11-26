@@ -15,11 +15,12 @@
 #include <map>
 #include "NDMsgDefine.h"
 #include "NDBaseNetMgr.h"
+#include "NDMessageCenter.h"
 
 using namespace std;
 using namespace NDEngine;
 
-class NDNetMsgPool: public NDBaseNetMgr
+class NDNetMsgPool: public NDNetMsgMgr
 {
 	typedef map<MSGID, NDMsgObject*> map_class_callback;
 	typedef map_class_callback::iterator map_class_callback_it;
@@ -32,10 +33,10 @@ public:
 
 	static NDNetMsgPool* GetNetMsgPool();
 
-	bool Process(NDEngine::NDTransData* data);
-	bool Process(MSGID msgID, NDEngine::NDTransData* data, int len);
-	bool RegMsg(MSGID msgID, NDMsgObject* msgObj);
-	void UnRegMsg(MSGID msgID);
+	virtual bool Process(NDEngine::NDTransData* data);
+	virtual bool Process(MSGID msgID, NDEngine::NDTransData* data, int len);
+	virtual bool RegMsg(MSGID msgID, NDMsgObject* msgObj);
+	virtual void UnRegMsg(MSGID msgID);
 private:
 	map_class_callback m_mapCallBack;
 private:
