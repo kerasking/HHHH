@@ -13,7 +13,7 @@
  #include "GameUIPlayerList.h"
  #include "NDUIMenuLayer.h"
  #include "NDUIButton.h"
- #include "NDUITableLayer.h"
+ //#include "NDUITableLayer.h"
  #include "NDUIDialog.h"
  
  using namespace NDEngine;

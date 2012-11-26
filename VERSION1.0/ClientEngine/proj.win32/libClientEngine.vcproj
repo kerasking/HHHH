@@ -1242,6 +1242,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\UI\inc\NDUITableLayer.h"
+			>
+		</File>
+		<File
 			RelativePath="..\Performance.cpp"
 			>
 		</File>

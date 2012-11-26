@@ -78,7 +78,6 @@ LOCAL_SRC_FILES := \
 ../../Module/Battle/src/Hurt.cpp \
 ../../Module/Battle/src/NDEraseInOutEffect.cpp \
 ../../Module/Battle/src/StatusDialog.cpp \
-../../Module/Map/src/GatherPoint.cpp \
 ../../NewScene/NewChatScene.cpp \
 ../../System/src/SqliteDBMgr.cpp \
 ../../System/src/SystemSetMgr.cpp \
@@ -86,6 +85,30 @@ LOCAL_SRC_FILES := \
 ../../Module/src/TutorUILayer.cpp
 
 LOCAL_C_INCLUDES := \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/third_party/win32 \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/include \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/android \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/kazmath/include \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/cocoa \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/base_nodes \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/touch_dispatcher \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/layers_scenes_transitions_nodes \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/label_nodes \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/actions \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/effects \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/keypad_dispatcher \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/label_nodes \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/misc_nodes \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/menu_nodes \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/particle_nodes \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/shaders \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/sprite_nodes \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/support \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/text_input_node \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/textures \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/tileMap_parallax_nodes \
 $(LOCAL_PATH)/../../../KUtil \
 $(LOCAL_PATH)/../../../ClientEngine/DataTrans/inc \
 $(LOCAL_PATH)/../../../ClientEngine/Framework/inc \
@@ -107,6 +130,7 @@ $(LOCAL_PATH)/../../GameScene/inc \
 $(LOCAL_PATH)/../../Item/inc \
 $(LOCAL_PATH)/../../MapAndRole/inc \
 $(LOCAL_PATH)/../../Module/inc \
+$(LOCAL_PATH)/../../Module/inc/farm \
 $(LOCAL_PATH)/../../MsgDefine/inc \
 $(LOCAL_PATH)/../../GameScene/inc \
 $(LOCAL_PATH)/../../NewScene/UIPet \

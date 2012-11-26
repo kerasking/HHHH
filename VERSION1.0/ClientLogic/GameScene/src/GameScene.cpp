@@ -68,7 +68,7 @@
 //#include "QuickFunc.h"
 //#include "QuickTeam.h"
 //#include "RequestListScene.h"
-#include "NewVipStoreScene.h"
+//#include "NewVipStoreScene.h"
 #include "BattleFieldScene.h"
 #include "NDUISpecialLayer.h"
 

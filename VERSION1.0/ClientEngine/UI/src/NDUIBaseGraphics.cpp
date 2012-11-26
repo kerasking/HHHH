@@ -11,7 +11,6 @@
 #include "NDDirector.h"
 #include "CCDrawingPrimitives.h"
 #include "ccMacros.h"
-#include "CCPlatformConfig.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <GLES/gl.h>
