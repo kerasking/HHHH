@@ -24,6 +24,8 @@ LOCAL_SRC_FILES := \
 ../../Framework/src/NDBaseBattleMgr.cpp \
 ../../Framework/src/NDBaseNetMgr.cpp \
 ../../Framework/src/NDUIBaseItemButton.cpp \
+../../Framework/src/NDBaseGlobalDialog.cpp \
+../../Framework/src/NDBaseScriptMgr.cpp \
 ../../Graphic/src/CCTexture2DExt.cpp \
 ../../Graphic/src/CCTextureCacheExt.cpp \
 ../../Graphic/src/NDAnimation.cpp \

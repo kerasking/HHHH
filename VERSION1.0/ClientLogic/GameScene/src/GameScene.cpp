@@ -35,7 +35,7 @@
 #include "GlobalDialog.h"
 #include "Task.h"
 #include "GameUIPlayerList.h"
-#include "GameUIRequest.h"
+//#include "GameUIRequest.h"
 #include "GoodFriendUILayer.h"
 //#include "GameUIPaiHang.h" ///< 临时性注�?? 郭浩
 #include "TutorUILayer.h"

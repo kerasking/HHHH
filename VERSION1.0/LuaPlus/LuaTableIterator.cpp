@@ -46,8 +46,7 @@ LUA_EXTERN_C_BEGIN
 #include "src/lstate.h"
 
 NAMESPACE_LUA_BEGIN
-//LUA_API
-int luaH_findindex (lua_State *L, Table *t, StkId key);
+LUA_API int luaH_findindex (lua_State *L, Table *t, StkId key);
 NAMESPACE_LUA_END
 LUA_EXTERN_C_END
 

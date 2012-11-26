@@ -74,7 +74,8 @@ $(LOCAL_PATH)/../../../include/C3/win \
 $(LOCAL_PATH)/../../../ClientLogic/MsgDefine/inc \
 $(LOCAL_PATH)/../../../ClientLogic/Script/inc \
 $(LOCAL_PATH)/../../../ClientLogic/GameScene/inc \
-$(LOCAL_PATH)/../../../NetWork/inc
+$(LOCAL_PATH)/../../../NetWork/inc \
+$(LOCAL_PATH)/../../../TinyXML/inc
 
 
 LOCAL_LDLIBS := -L$(call host-path, $(LOCAL_PATH)/../../proj.android/libs/$(TARGET_ARCH_ABI)) \

@@ -21,10 +21,8 @@ LOCAL_SRC_FILES := \
 ../../Drama/src/DramaUI.cpp \
 ../../GameData/src/GameData.cpp \
 ../../GameData/src/GameDataBase.cpp \
-../../GameScene/src/EquipUpgradeScene.cpp \
 ../../GameScene/src/GameScene.cpp \
 ../../GameScene/src/GameSceneLoading.cpp \
-../../GameScene/src/GameUIRequest.cpp \
 ../../GameScene/src/SMBattleScene.cpp \
 ../../GameScene/src/SMGameScene.cpp \
 ../../GameScene/src/SMLoginScene.cpp \
@@ -149,7 +147,8 @@ $(LOCAL_PATH)/../../../include/C3/win \
 $(LOCAL_PATH)/../../../ClientLogic/MsgDefine/inc \
 $(LOCAL_PATH)/../../../ClientLogic/Script/inc \
 $(LOCAL_PATH)/../../../ClientLogic/GameScene/inc \
-$(LOCAL_PATH)/../../../NetWork/inc
+$(LOCAL_PATH)/../../../NetWork/inc \
+$(LOCAL_PATH)/../../../TinyXML/inc
 
 LOCAL_LDLIBS := -L$(call host-path, $(LOCAL_PATH)/../../proj.android/libs/$(TARGET_ARCH_ABI)) \
                 -L$(call host-path, $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/third_party/android/libraries/$(TARGET_ARCH_ABI))

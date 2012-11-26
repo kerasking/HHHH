@@ -20,7 +20,6 @@
 #include "NDUIScrollView.h"
 #include "NDTextNode.h"
 #include "UIHyperlink.h"
-#include "UIItemButton.h"
 #include "UICheckBox.h"
 #include "UIRadioButton.h"
 #include "UIExp.h"
@@ -569,7 +568,7 @@ public:
 };
 
 template<>															
-class ControlHelp<MY_CONTROL_TYPE_EQUIP_BUTTON> : public CtrolTrait<CUIItemButton>		
+class ControlHelp<MY_CONTROL_TYPE_EQUIP_BUTTON> : public CtrolTrait<NDUIBaseItemButton>		
 {	
 public:
 	NDUIBaseItemButton* Create(UIINFO& info, CCSize& sizeOffset)
@@ -644,7 +643,7 @@ CtrolHelpDeclare(MY_CONTROL_TYPE_BACK, NDUIImage)
 CtrolHelpDeclare(MY_CONTROL_TYPE_UITEXT, NDUIText)
 CtrolHelpDeclare(MY_CONTROL_TYPE_HYPER_TEXT, CUIHyperlinkText)
 CtrolHelpDeclare(MY_CONTROL_TYPE_HYPER_TEXT_BUTTON, CUIHyperlinkButton)
-CtrolHelpDeclare(MY_CONTROL_TYPE_ITEM_BUTTON, CUIItemButton)
+CtrolHelpDeclare(MY_CONTROL_TYPE_ITEM_BUTTON, NDUIBaseItemButton)
 CtrolHelpDeclare(MY_CONTROL_TYPE_EXP, CUIExp)
 CtrolHelpDeclare(MY_CONTROL_TYPE_EDIT, CUIEdit)
 CtrolHelpDeclare(MY_CONTROL_TYPE_SPRITE, CUISpriteNode)
