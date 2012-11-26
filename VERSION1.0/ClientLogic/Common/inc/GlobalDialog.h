@@ -13,6 +13,7 @@
 #include "NDUIDialog.h"
 #include <list>
 #include "NDTimer.h"
+#include "NDBaseGlobalDialog.h"
 
 using namespace NDEngine;
 
@@ -26,8 +27,12 @@ uint GlobalShowDlg(NDEngine::NDObject* delegate, const char* title,
 		const char* ortherButtons, .../*must NULL end*/
 		);
 
-class CIDFactory
+using namespace NDEngine;
+
+class CIDFactory:public NDBaseGlobalDialog
 {
+	DECLARE_CLASS(CIDFactory)
+
 	enum
 	{
 		max_id = 65535,
@@ -43,17 +48,6 @@ private:
 	std::vector<unsigned int> m_vecRecyle;
 	unsigned int m_uiCurID;
 };
-
-typedef struct _tagGlobalDialogBtnContent
-{
-	std::string str;
-	bool bArrow;
-	_tagGlobalDialogBtnContent(std::string str, bool bArrow = false)
-	{
-		str = str;
-		bArrow = bArrow;
-	}
-} GlobalDialogBtnContent;
 
 class CGlobalDialog: public NDEngine::NDObject,
 		public NDEngine::NDUIDialogDelegate

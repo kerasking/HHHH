@@ -19,6 +19,7 @@
 #include "NDCombinePicture.h"
 //#include "NDLightEffect.h"
 #include "NDLightEffect.h"
+#include "NDUIBaseItemButton.h"
 
 
 NS_NDENGINE_BGN
@@ -50,7 +51,7 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-class NDUIButton : public NDUINode
+class NDUIButton : public NDUIBaseItemButton
 {
 	DECLARE_CLASS(NDUIButton)
 public:
@@ -131,8 +132,9 @@ public:
 //		参数：无
 //		返回值：无
 	void SetFocusImage(NDPicture *pic, bool useCustomRect = false, CCRect customRect = CCRectZero, bool clearPicOnFree = false);
-	void SetFocusImageCustom(NDPicture *pic, bool useCustomRect = false, CCRect customRect = CCRectZero) {
-		this->SetFocusImage(pic, useCustomRect, customRect, true);
+	void SetFocusImageCustom(NDPicture *pic, bool useCustomRect = false, CCRect customRect = CCRectZero)
+	{
+		SetFocusImage(pic, useCustomRect, customRect, true);
 	}
 	
 	void SetFocusImageLua(NDPicture *pic);

@@ -11,7 +11,7 @@
 #include "NDUILabel.h"
 #include "NDDirector.h"
 #include <sstream>
-#include "ScriptCommon.h"
+#include "EngineScriptCommon.h"
 
 using namespace std;
 

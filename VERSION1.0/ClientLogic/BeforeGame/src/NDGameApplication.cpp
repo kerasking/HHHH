@@ -44,6 +44,12 @@
 #include "NDBaseNetMgr.h"
 #include "NDBaseScriptMgr.h"
 #include "ScriptMgr.h"
+#include "NDBaseGlobalDialog.h"
+#include "GlobalDialog.h"
+#include "UIItemButton.h"
+#include "UIEquipItem.h"
+#include "NDUIBaseItemButton.h"
+#include "UIItemButton.h"
 
 NS_NDENGINE_BGN
 using namespace NDEngine;
@@ -139,6 +145,9 @@ void NDGameApplication::MyInit()
 	REGISTER_CLASS(NDSprite,NDPlayer);
 	REGISTER_CLASS(NDBaseNetMgr,NDNetMsgPool);
 	REGISTER_CLASS(NDBaseScriptMgr,ScriptMgr);
+	REGISTER_CLASS(NDBaseGlobalDialog,CIDFactory);
+	REGISTER_CLASS(CUIItemButton,CUIEquipItem);
+	REGISTER_CLASS(NDUIBaseItemButton,CUIItemButton);
 
 	NDMapMgr& kMapMgr = NDMapMgrObj;
 	//ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();
