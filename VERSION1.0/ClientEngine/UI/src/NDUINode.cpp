@@ -45,6 +45,7 @@ namespace NDEngine
 		m_bVisibled = true;
 		m_bEventEnabled = true;
 		m_kScrRectCache = CCRectZero;
+		m_fBoundScale = 1.0f;
 	}
 
 	////////////////////////////////////////////////////////////
@@ -186,7 +187,33 @@ namespace NDEngine
 		}	
 		return m_kFrameRect;
 	}
+
+	CCRect NDUINode::GetBoundRect()
+	{
+		NDNode* node = this->GetParent();
+
+		if (node) 
+		{
+			if (node->IsKindOfClass(RUNTIME_CLASS(NDUINode))) 
+			{
+				NDUINode* node = (NDUINode*)this->GetParent();
+
+				CCRect nodeRect = node->GetScreenRect();
+
+				return CCRectMake(nodeRect.origin.x + m_kFrameRect.origin.x - (m_fBoundScale - 1)*m_kFrameRect.size.width*0.5, 
+					nodeRect.origin.y + m_kFrameRect.origin.y - (m_fBoundScale - 1)*m_kFrameRect.size.height*0.5, 
+					m_kFrameRect.size.width*m_fBoundScale, m_kFrameRect.size.height*m_fBoundScale);
+			}
+			return m_kFrameRect;
+		}	
+		return m_kFrameRect;
+	}
 	
+	void NDUINode::SetBoundScale( int nScale )
+	{
+		m_fBoundScale = (float)nScale/100;
+	}
+
 	void NDUINode::draw()
 	{	
 		if (!isDrawEnabled()) return;
@@ -330,11 +357,6 @@ namespace NDEngine
 				break;
 		}
 		printf("Change From[%f][%f] To [%f][%f] Step[%f]",m_kFrameRect.origin.x,m_kFrameRect.origin.y,rect.origin.x,rect.origin.y, m_fStep);
-	}
-
-	void NDUINode::SetBoundScale( int nScale )
-	{
-		m_fBoundScale = static_cast<float>(nScale);	
 	}
 
 	bool NDUINode::isDrawEnabled()
