@@ -33,6 +33,7 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "Foundation/NSAutoreleasePool.h"
 #import "EAGLView.h"
+static NDBaseDirector s_NDBaseDirector;
 #endif
 
 #if 0

@@ -22,7 +22,7 @@ public:
 	virtual ~NDUIBaseItemButton();
 
 	virtual void InitializationItem();
-	virtual void SetItemFrameRect(CGRect rect);
+	virtual void SetItemFrameRect(CCRect rect);
 	virtual void CloseItemFrame();
 	virtual void SetItemBackgroundPicture(NDPicture *pic, NDPicture *touchPic = NULL,
 		bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);

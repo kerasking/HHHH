@@ -984,6 +984,12 @@
 		5AF6F54116637A3D006834AF /* NDUIScrollViewContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F53F16637A3D006834AF /* NDUIScrollViewContainer.cpp */; };
 		5AF6F54316637DBC006834AF /* GameSceneLoading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F54216637DBC006834AF /* GameSceneLoading.cpp */; };
 		5AF6F5881663B298006834AF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AD601C01651514C00369185 /* libz.dylib */; };
+		5AF6F5991663BBD6006834AF /* NDBaseGlobalDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F5971663BBD6006834AF /* NDBaseGlobalDialog.h */; };
+		5AF6F59A1663BBD6006834AF /* NDUIBaseItemButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F5981663BBD6006834AF /* NDUIBaseItemButton.h */; };
+		5AF6F59E1663BBE0006834AF /* NDBaseGlobalDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F59C1663BBE0006834AF /* NDBaseGlobalDialog.cpp */; };
+		5AF6F59F1663BBE0006834AF /* NDUIBaseItemButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F59D1663BBE0006834AF /* NDUIBaseItemButton.cpp */; };
+		5AF6F5A11663BBF1006834AF /* EngineScriptCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F5A01663BBF1006834AF /* EngineScriptCommon.h */; };
+		5AF6F5A31663BBF8006834AF /* EngineScriptCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F5A21663BBF8006834AF /* EngineScriptCommon.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -2381,6 +2387,12 @@
 		5AF6F53E16637A3D006834AF /* NDUIScrollContainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDUIScrollContainer.cpp; sourceTree = "<group>"; };
 		5AF6F53F16637A3D006834AF /* NDUIScrollViewContainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDUIScrollViewContainer.cpp; sourceTree = "<group>"; };
 		5AF6F54216637DBC006834AF /* GameSceneLoading.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = GameSceneLoading.cpp; sourceTree = "<group>"; };
+		5AF6F5971663BBD6006834AF /* NDBaseGlobalDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDBaseGlobalDialog.h; sourceTree = "<group>"; };
+		5AF6F5981663BBD6006834AF /* NDUIBaseItemButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDUIBaseItemButton.h; sourceTree = "<group>"; };
+		5AF6F59C1663BBE0006834AF /* NDBaseGlobalDialog.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDBaseGlobalDialog.cpp; sourceTree = "<group>"; };
+		5AF6F59D1663BBE0006834AF /* NDUIBaseItemButton.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDUIBaseItemButton.cpp; sourceTree = "<group>"; };
+		5AF6F5A01663BBF1006834AF /* EngineScriptCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineScriptCommon.h; sourceTree = "<group>"; };
+		5AF6F5A21663BBF8006834AF /* EngineScriptCommon.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = EngineScriptCommon.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2537,6 +2549,8 @@
 		5A1B3F5E164AB5C100C94D7F /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				5AF6F5971663BBD6006834AF /* NDBaseGlobalDialog.h */,
+				5AF6F5981663BBD6006834AF /* NDUIBaseItemButton.h */,
 				5AF6F52816636477006834AF /* NDBaseBattleMgr.h */,
 				5AF6F52916636477006834AF /* NDBaseMsgDefine.h */,
 				5AF6F52A16636477006834AF /* NDBaseNetMgr.h */,
@@ -2566,6 +2580,8 @@
 		5A1B3F6F164AB5C100C94D7F /* src */ = {
 			isa = PBXGroup;
 			children = (
+				5AF6F59C1663BBE0006834AF /* NDBaseGlobalDialog.cpp */,
+				5AF6F59D1663BBE0006834AF /* NDUIBaseItemButton.cpp */,
 				5AF6F53016636482006834AF /* NDBaseBattleMgr.cpp */,
 				5AF6F53116636482006834AF /* NDBaseNetMgr.cpp */,
 				5AF6F53216636482006834AF /* NDBaseScriptMgr.cpp */,
@@ -2889,6 +2905,7 @@
 		5A1B4023164AB5C100C94D7F /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				5AF6F5A01663BBF1006834AF /* EngineScriptCommon.h */,
 				5A1B4024164AB5C100C94D7F /* LuaPlusHelper.h */,
 				5A1B4025164AB5C100C94D7F /* LuaStateMgr.h */,
 				5A1B4026164AB5C100C94D7F /* ScriptDefine.h */,
@@ -2900,6 +2917,7 @@
 		5A1B4029164AB5C100C94D7F /* src */ = {
 			isa = PBXGroup;
 			children = (
+				5AF6F5A21663BBF8006834AF /* EngineScriptCommon.cpp */,
 				5A1B402A164AB5C100C94D7F /* LuaStateMgr.cpp */,
 			);
 			path = src;
@@ -5274,6 +5292,9 @@
 				5AF6F52F16636477006834AF /* NDBaseScriptMgr.h in Headers */,
 				5AF6F53C1663752A006834AF /* NDUIScrollContainer.h in Headers */,
 				5AF6F53D1663752A006834AF /* NDUIScrollView.h in Headers */,
+				5AF6F5991663BBD6006834AF /* NDBaseGlobalDialog.h in Headers */,
+				5AF6F59A1663BBD6006834AF /* NDUIBaseItemButton.h in Headers */,
+				5AF6F5A11663BBF1006834AF /* EngineScriptCommon.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5952,6 +5973,9 @@
 				5AF6F53516636482006834AF /* NDBaseScriptMgr.cpp in Sources */,
 				5AF6F54016637A3D006834AF /* NDUIScrollContainer.cpp in Sources */,
 				5AF6F54116637A3D006834AF /* NDUIScrollViewContainer.cpp in Sources */,
+				5AF6F59E1663BBE0006834AF /* NDBaseGlobalDialog.cpp in Sources */,
+				5AF6F59F1663BBE0006834AF /* NDUIBaseItemButton.cpp in Sources */,
+				5AF6F5A31663BBF8006834AF /* EngineScriptCommon.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

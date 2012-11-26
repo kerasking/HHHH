@@ -47,15 +47,15 @@ class CUIEquipItem: public CUIItemButton
 
 	void InitializationItem();
 	virtual void CloseItemFrame();
-	virtual void SetItemFrameRect(CGRect rect);
+	virtual void SetItemFrameRect(CCRect rect);
 
 	virtual void SetItemBackgroundPicture(NDPicture *pic, NDPicture *touchPic = NULL,
-		bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);
+		bool useCustomRect = false, CCRect customRect = CCRectZero, bool clearPicOnFree = false);
 	virtual void SetItemBackgroundPictureCustom(NDPicture *pic, NDPicture *touchPic = NULL,
-		bool useCustomRect = false, CGRect customRect = CGRectZero);
+		bool useCustomRect = false, CCRect customRect = CCRectZero);
 
-	virtual void SetItemFocusImage(NDPicture *pic, bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);
-	virtual void SetItemFocusImageCustom(NDPicture *pic, bool useCustomRect = false, CGRect customRect = CGRectZero);
+	virtual void SetItemFocusImage(NDPicture *pic, bool useCustomRect = false, CCRect customRect = CCRectZero, bool clearPicOnFree = false);
+	virtual void SetItemFocusImageCustom(NDPicture *pic, bool useCustomRect = false, CCRect customRect = CCRectZero);
 
 private:
 

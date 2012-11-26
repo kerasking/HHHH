@@ -96,7 +96,7 @@ void NDUIBaseItemButton::InitializationItem()
 
 }
 
-void NDUIBaseItemButton::SetItemFrameRect(CGRect rect)
+void NDUIBaseItemButton::SetItemFrameRect(CCRect rect)
 {
 
 }
