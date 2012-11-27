@@ -265,18 +265,17 @@ const string& NDPath::GetUIConfigPath(const char* filename)
 const string& NDPath::GetUIImgPath(const char* uiFileNameWithPath)
 {
 	static string ret;
+	string strRes;
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ret = string(GetResourcePath())+"SimplifiedChineseRes"+uiFileNameWithPath;
     return ret;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	string strRes = string(
-		string("/sdcard/dhlj/SimplifiedChineseRes") + uiFileNameWithPath);
-	return strRes;
+	ret = string(string("/sdcard/dhlj/SimplifiedChineseRes") + uiFileNameWithPath);
+	return ret;
 #else
 
-	string strRes = string(
-		string("../SimplifiedChineseRes") + uiFileNameWithPath);
+	strRes = string(string("../SimplifiedChineseRes") + uiFileNameWithPath);
 #endif
 
 #ifdef TRADITION
