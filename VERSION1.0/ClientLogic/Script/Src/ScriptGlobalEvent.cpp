@@ -14,6 +14,20 @@
 #include "ScriptDefine.h"
 #include "CCCommon.h"
 #include "ScriptMgr.h"
+#include "CCPlatformConfig.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
 
 using namespace NDEngine; 
 using namespace LuaPlus;
@@ -72,6 +86,8 @@ void ScriptGlobalEvent::OnEvent(GLOBALEVENT eEvent, int param1, int param2, int 
 #ifdef _DEBUG
 	cocos2d::CCLog("ScriptGlobalEvent::OnEvent, eEvent=%d", (int)eEvent);
 #endif
+
+	LOGD("Entry OnEvent,Event ID is %d",(int)eEvent);
 
 	std::pair<GLOBALEVENTCIT, GLOBALEVENTCIT> range;
 	range = mapGlobalEventHandler.equal_range(eEvent);

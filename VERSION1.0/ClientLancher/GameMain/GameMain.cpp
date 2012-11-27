@@ -105,33 +105,9 @@ extern "C"
 
 	void Java_org_DeNA_DHLJ_DaHuaLongJiang_nativeInit(JNIEnv*  env, jobject thiz, jint w, jint h)
 	{
-		LOGD("Starting nativeInit");
-
-		LOGD("Starting set CCEGLView");
-
-		NDBaseDirector* pkBaseDirector = new NDBaseDirector;
-		//NDBaseDirector::SetSharedDirector(pkBaseDirector);
-
-		cocos2d::CCEGLView* view = cocos2d::CCEGLView::sharedOpenGLView();
-
-		LOGD("view got! value is %d",(int)view);
-
-		view->setFrameSize(w, h);
-		// LOGD(" view->setFrameWidthAndHeight(w, h);! w = %d , h = %d",w,h);
-		//view->create(480, 320); // Please change it to (320, 480) if you're in portrait mode.
-
-		LOGD("view's width = %d,height = %d",view->getSize().width,view->getSize().height);
-
-		cocos2d::CCDirector::sharedDirector()->setOpenGLView(view);
-
-		LOGD("cocos2d::CCDirector::sharedDirector()->setOpenGLView(view); called over");
-
-		NDGameApplication* pkGameLauncher = new NDGameApplication;
-
-		LOGD("Starting set run");
-
-		// NDGameApplication::SetApp(pkGameLauncher);
-		CCApplication::sharedApplication()->run();
+		NDBaseDirector* spDirector = 0;
+		spDirector = new NDBaseDirector;
+		LOGD("Leave Java_org_DeNA_DHLJ_DaHuaLongJiang_nativeInit,value is %d",(int)spDirector);
 	}
 
 }

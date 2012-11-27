@@ -13,6 +13,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 {
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		nativeInit(480,320);
 		super.onCreate(savedInstanceState);
 	}
 	
@@ -21,8 +22,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
         System.loadLibrary("luaplus");
         System.loadLibrary("NetWork");
         System.loadLibrary("tinyxml");
+        System.loadLibrary("cocos2d");
         System.loadLibrary("ClientEngine");
         System.loadLibrary("ClientLogic");
         System.loadLibrary("GameLauncher");
     }
+    
+    private static native void nativeInit(int w, int h);
 }

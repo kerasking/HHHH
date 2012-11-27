@@ -31,6 +31,20 @@
 #include "UIScrollContainerExpand.h"
 #include "NDUIBaseItemButton.h"
 
+#ifdef ANDROID
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+
+
 using namespace NDEngine;
 
 // 控件类型
@@ -158,6 +172,8 @@ protected:
 private:	
 	NDPicture*	GetPicture(std::string& filename, CTRL_UV& uv)
 	{
+		LOGD("GetPicture() filename is %s",filename.c_str());
+
 		NDPicture* res = NULL;
 		
 		if (filename.empty())
@@ -168,7 +184,12 @@ private:
 		if (m_info.nCtrlWidth != 0 && m_info.nCtrlHeight != 0)
 		{ // 拉伸 (拉伸后不进行u,v处理)
 			// 获取图片大小并与u,v比较,大小不一样说明是抠图,则不做拉伸,这一步以后可以放到UI编辑器(直接导出该信息)
-			NDPicture *pic = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetUIImgPath(filename.c_str()));
+			const string& strTemp = NDPath::GetUIImgPath(filename.c_str());
+			LOGD("NDPath::GetUIImgPath(filename.c_str() return value is %s",strTemp.c_str());
+			NDPicture *pic = NDPicturePool::DefaultPool()->AddPicture(strTemp.c_str());
+
+			LOGD("NDPicture *pic value is %d",(int)pic);
+
 			if (pic)
 			{
 				CCSize size = pic->GetSize();

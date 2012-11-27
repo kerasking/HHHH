@@ -57,6 +57,20 @@
 #include "CCGeometry.h"
 #include "ScriptMgr.h"
 #include "NDUITableLayer.h"
+#include "CCPlatformConfig.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -96,6 +110,20 @@ int GetChildrenTagList(LuaState* state)
 
 
 //#pragma mark 通过节点获取某节点的子节点
+
+void PrintLog(const char* pszText)
+{
+	if (pszText && *pszText)
+	{
+		LOGD("Script message:%s",pszText);
+		printf("Script message:%s",pszText);
+	}
+	else
+	{
+		LOGERROR("Error Script Message");
+		printf("Error Script Message");
+	}
+}
 
 NDUINode*							
 GetUiNode(NDNode* pNode, int tag)
@@ -1627,6 +1655,7 @@ namespace NDEngine {
 	void ScriptUiLoad()
 	{
 		ETLUAFUNC("GetChildrenTagList", GetChildrenTagList)
+		ETCFUNC("PrintLog",		PrintLog)
 		ETCFUNC("GetUiNode",		GetUiNode)
 		ETCFUNC("GetLabel",			GetLabel)
 		ETCFUNC("GetButton",		GetButton)

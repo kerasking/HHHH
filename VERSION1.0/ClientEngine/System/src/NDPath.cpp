@@ -22,6 +22,19 @@ string* s_ResRootPath = NULL;
 string* s_ResBasePath = NULL;
 #endif
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+string NDPath::NDPath_ResPath			= "/sdcard/dhlj/SimplifiedChineseRes/res/";
+string NDPath::NDPath_ImgPath			= "/sdcard/dhlj/SimplifiedChineseRes/res/Image/";
+string NDPath::NDPath_ImgPath_BattleUI	= "/sdcard/dhlj/SimplifiedChineseRes/res/Image/battle_ui/";
+string NDPath::NDPath_ImgPath_UINew		= "/sdcard/dhlj/SimplifiedChineseRes/res/Image/ui_new/";
+string NDPath::NDPath_MapPath			= "/sdcard/dhlj/SimplifiedChineseRes/res/map/";
+string NDPath::NDPath_AniPath			= "/sdcard/dhlj/SimplifiedChineseRes/res/animation/";
+string NDPath::NDPath_SoundPath			= "/sdcard/dhlj/SimplifiedChineseRes/res/sound/";
+string NDPath::NDPath_UIPath			= "/sdcard/dhlj/SimplifiedChineseRes/res/UI/";
+string NDPath::NDPath_ScriptPath		= "/sdcard/dhlj/SimplifiedChineseRes/res/Script/";
+string NDPath::NDPath_LogPath			= "/sdcard/dhlj/log";
+#else
 string NDPath::NDPath_ResPath			= "../SimplifiedChineseRes/res/";
 string NDPath::NDPath_ImgPath			= "../SimplifiedChineseRes/res/Image/";
 string NDPath::NDPath_ImgPath_BattleUI	= "../SimplifiedChineseRes/res/Image/battle_ui/";
@@ -32,6 +45,7 @@ string NDPath::NDPath_SoundPath			= "../SimplifiedChineseRes/res/sound/";
 string NDPath::NDPath_UIPath			= "../SimplifiedChineseRes/res/UI/";
 string NDPath::NDPath_ScriptPath		= "../SimplifiedChineseRes/res/Script/";
 string NDPath::NDPath_LogPath			= "../log";
+#endif
 
 IMPLEMENT_CLASS(NDPath, NDObject)
 
@@ -255,7 +269,15 @@ const string& NDPath::GetUIImgPath(const char* uiFileNameWithPath)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ret = string(GetResourcePath())+"SimplifiedChineseRes"+uiFileNameWithPath;
     return ret;
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	string strRes = string(
+		string("/sdcard/dhlj/SimplifiedChineseRes") + uiFileNameWithPath);
+	return strRes;
 #else
+
+	string strRes = string(
+		string("../SimplifiedChineseRes") + uiFileNameWithPath);
+#endif
 
 #ifdef TRADITION
 	return ret = GetResPath() + "TraditionalChineseRes/" + uiFileNameWithPath;
@@ -263,8 +285,6 @@ const string& NDPath::GetUIImgPath(const char* uiFileNameWithPath)
 
 	//return string(GetResourcePath()+"SimplifiedChineseRes/"+uiFileNameWithPath).c_str();GetResPath()+
 
-	string strRes = string(
-			string("../SimplifiedChineseRes") + uiFileNameWithPath);
 	NDString* pstrString = new NDString(strRes);
 
 	//strRes = ReplaceString(strRes,"/","\\");
@@ -285,7 +305,6 @@ const string& NDPath::GetUIImgPath(const char* uiFileNameWithPath)
 	ret = pszTemp;
 	return ret;
 #endif        
-#endif
 }
 
 const string& NDPath::GetResPath(const char* fileName)

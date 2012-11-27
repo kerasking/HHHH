@@ -36,6 +36,19 @@
 static NDBaseDirector s_NDBaseDirector;
 #endif
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+
 #if 0
 #include "HelloWorldScene.h" //@todo
 #endif
@@ -140,6 +153,8 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 void NDGameApplication::MyInit()
 {
+	LOGD("Start MyInit");
+
 	REGISTER_CLASS(NDBaseBattle,Battle);
 	REGISTER_CLASS(NDBaseFighter,Fighter);
 	REGISTER_CLASS(NDBaseBattleMgr,BattleMgr);
@@ -151,13 +166,27 @@ void NDGameApplication::MyInit()
 	REGISTER_CLASS(NDUIBaseItemButton,CUIItemButton);
 	REGISTER_CLASS(NDUIBaseItemButton,CUIEquipItem);
 
+	LOGD("REGISTER_CLASS Over");
+
 	NDMapMgr& kMapMgr = NDMapMgrObj;
+
+	LOGD("kMapMgr get Over");
 	//ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();
 	NDBeforeGameMgrObj;
 
+	LOGD("NDBeforeGameMgrObj Over");
+
 	NDDirector* pkDirector = NDDirector::DefaultDirector();
+
+	LOGD("pkDirector get Over,%d",(int)pkDirector);
+
 	pkDirector->Initialization();
+
+	LOGD("pkDirector Initialization Over");
+
 	pkDirector->RunScene(CSMLoginScene::Scene());
+
+	LOGD("pkDirector->RunScene(CSMLoginScene::Scene()); Over");
 
 //	kMapMgr.processChangeRoom(0,0);
 
@@ -185,11 +214,16 @@ void NDGameApplication::MyInit()
 	//kScriptManager.Load();
 	ScriptMgrObj.Load();
 
+	LOGD("ScriptMgrObj.Load(); Over");
+
 	//CC_SAFE_DELETE(pkNetMsg);
 
 	//ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
 	
+	LOGD("Start ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME)");
 	ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
+
+	LOGD("End MyInit");
 
 	//NDPlayer::pugeHero();
 	//NDPlayer& kPlayer = NDPlayer::defaultHero(1);
