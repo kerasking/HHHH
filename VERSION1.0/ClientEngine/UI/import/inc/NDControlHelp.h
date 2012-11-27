@@ -22,6 +22,7 @@
 #include "UIHyperlink.h"
 #include "UICheckBox.h"
 #include "UIRadioButton.h"
+#include "UIItemButton.h"
 #include "UIExp.h"
 #include "UIEdit.h"
 #include "UISpriteNode.h"
@@ -459,8 +460,8 @@ public:
 		itemBtn->SetItemFrameRect(rect);
 		itemBtn->CloseItemFrame();
 
-		itemBtn->SetItemBackgroundPicture(GetNormalPicture(), NULL, false, CGRectZero, true);
-		itemBtn->SetItemFocusImage(GetFocusPicture(), false, CGRectZero, true);
+		itemBtn->SetItemBackgroundPicture(GetNormalPicture(), NULL, false, CCRectZero, true);
+		itemBtn->SetItemFocusImage(GetFocusPicture(), false, CCRectZero, true);
 
 // 		itemBtn->Initialization();
 // 		itemBtn->SetFrameRect(rect);
@@ -575,7 +576,7 @@ public:
 	{
 		Init(info, sizeOffset);
 		CCRect rect = this->GetFrameRect();
-		NDUIBaseItemButton *equipBtn = CREATE_CLASS(NDUIBaseItemButton,"CUIEquipItem");
+		NDUIBaseItemButton *equipBtn = CREATE_CLASS(CUIItemButton,"CUIEquipItem");
 		equipBtn->InitializationItem();
 		equipBtn->SetItemFrameRect(rect);
 		equipBtn->CloseItemFrame();
