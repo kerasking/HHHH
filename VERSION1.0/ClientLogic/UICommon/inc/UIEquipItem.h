@@ -45,7 +45,7 @@ class CUIEquipItem: public CUIItemButton
 		return m_nIsUpgrade;
 	}
 
-	void InitializationItem();
+	virtual void InitializationItem();
 	virtual void CloseItemFrame();
 	virtual void SetItemFrameRect(CCRect rect);
 

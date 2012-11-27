@@ -147,8 +147,9 @@ void NDGameApplication::MyInit()
 	REGISTER_CLASS(NDBaseNetMgr,NDNetMsgPool);
 	REGISTER_CLASS(NDBaseScriptMgr,ScriptMgr);
 	REGISTER_CLASS(NDBaseGlobalDialog,CIDFactory);
-	REGISTER_CLASS(CUIItemButton,CUIEquipItem);
+	//REGISTER_CLASS(CUIItemButton,CUIEquipItem);
 	REGISTER_CLASS(NDUIBaseItemButton,CUIItemButton);
+	REGISTER_CLASS(NDUIBaseItemButton,CUIEquipItem);
 
 	NDMapMgr& kMapMgr = NDMapMgrObj;
 	//ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();

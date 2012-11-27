@@ -39,6 +39,48 @@ CUIItemButton::~CUIItemButton()
 {
 }
 
+void CUIItemButton::InitializationItem()
+{
+	Initialization();
+}
+
+void CUIItemButton::SetItemFrameRect(CCRect rect)
+{
+	SetFrameRect(rect);
+}
+
+void CUIItemButton::CloseItemFrame()
+{
+	CloseFrame();
+}
+
+void CUIItemButton::SetItemBackgroundPicture(NDPicture *pic,
+											NDPicture *touchPic /*= NULL*/, bool useCustomRect /*= false*/,
+											CCRect customRect /*= CGRectZero*/, bool clearPicOnFree /*= false*/)
+{
+	SetBackgroundPicture(pic, touchPic, useCustomRect, customRect,
+		clearPicOnFree);
+}
+
+void CUIItemButton::SetItemBackgroundPictureCustom(NDPicture *pic,
+												  NDPicture *touchPic /*= NULL*/, bool useCustomRect /*= false*/,
+												  CCRect customRect /*= CGRectZero*/)
+{
+	SetBackgroundPictureCustom(pic, touchPic, useCustomRect, customRect);
+}
+
+void CUIItemButton::SetItemFocusImage(NDPicture *pic,
+									 bool useCustomRect /*= false*/, CCRect customRect /*= CGRectZero*/,
+									 bool clearPicOnFree /*= false*/)
+{
+	SetFocusImage(pic, useCustomRect, customRect, clearPicOnFree);
+}
+
+void CUIItemButton::SetItemFocusImageCustom(NDPicture *pic,
+										   bool useCustomRect /*= false*/, CCRect customRect /*= CGRectZero*/)
+{
+	SetFocusImageCustom(pic, useCustomRect, customRect);
+}
 void CUIItemButton::SetLock(bool bSet)
 {
 	m_bLock			= bSet;

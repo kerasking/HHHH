@@ -22,7 +22,6 @@
 #include "UIHyperlink.h"
 #include "UICheckBox.h"
 #include "UIRadioButton.h"
-#include "UIItemButton.h"
 #include "UIExp.h"
 #include "UIEdit.h"
 #include "UISpriteNode.h"
@@ -576,7 +575,7 @@ public:
 	{
 		Init(info, sizeOffset);
 		CCRect rect = this->GetFrameRect();
-		NDUIBaseItemButton *equipBtn = CREATE_CLASS(CUIItemButton,"CUIEquipItem");
+		NDUIBaseItemButton *equipBtn = CREATE_CLASS(NDUIBaseItemButton,"CUIEquipItem");
 		equipBtn->InitializationItem();
 		equipBtn->SetItemFrameRect(rect);
 		equipBtn->CloseItemFrame();
