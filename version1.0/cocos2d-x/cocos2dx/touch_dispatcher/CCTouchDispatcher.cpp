@@ -44,7 +44,15 @@ NS_CC_BEGIN
  */
 static int less(const CCObject* p1, const CCObject* p2)
 {
+#if ND_MOD && 0
+	CCTouchHandler* h1 = (CCTouchHandler*)p1;
+	CCTouchHandler* h2 = (CCTouchHandler*)p2;
+	if (h1->getPriority() < h2->getPriority()) return 1;
+	if (h1->getPriority() == h2->getPriority() && h1->IsNewerThan( h2 )) return 1;
+	return 0;
+#else
     return ((CCTouchHandler*)p1)->getPriority() < ((CCTouchHandler*)p2)->getPriority();
+#endif
 }
 
 bool CCTouchDispatcher::isDispatchEvents(void)
