@@ -1930,6 +1930,7 @@ namespace NDEngine {
 	ETSUBCLASSBEGIN(NDUILayer, NDUINode)
 	ETCONSTRUCT("createNDUILayer")
 	ETDESTRUCT("Free")
+	ETMEMBERFUNC("SetPopupDlgFlag",					&NDUILayer::SetPopupDlgFlag)
 	ETMEMBERFUNC("Init",							&NDUILayer::Initialization)
 	ETMEMBERFUNC("SetBackgroundImage",				&NDUILayer::SetBackgroundImageLua)
 	ETMEMBERFUNC("SetBackgroundFocusImage",			&NDUILayer::SetBackgroundFocusImageLua)

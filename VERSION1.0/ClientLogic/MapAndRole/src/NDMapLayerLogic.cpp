@@ -95,7 +95,7 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 
 void NDMapLayerLogic::TouchEnd(NDTouch* touch)
 {
-	if (IsWorldMapVisible()) return;
+	//if (IsWorldMapVisible()) return;
 
 	CCPoint posTouch = touch->GetLocation();
 	CCPoint touchPoint = this->ConvertToMapPoint( posTouch );

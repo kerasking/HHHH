@@ -90,18 +90,23 @@ namespace NDEngine
 		bool EventEnabled();
 //		
 //		函数：GetScreenRect
-//		作用：获取节点相对于屏幕的矩形范围
+//		作用：获取节点相对于屏幕的矩形范围1
 //		参数：无
 //		返回值：矩形范围		
-		CCRect GetScreenRect();	
+		CCRect GetScreenRect();
+//		
+//		函数：GetBoundRect
+//		作用：获取节点相对于屏幕的矩形范围2
+//		参数：无
+//		返回值：矩形范围		
+		CCRect GetBoundRect();
+		void SetBoundScale(int nScale);
 //		
 //		函数：OnFrameRectChange
 //		作用：当节点的矩形范围改变时被框架内部调用
 //		参数：srcRect改变前的矩形范围，dstRect改变后的矩形范围，相对于屏幕
 //		返回值：无		
 		virtual void OnFrameRectChange(CCRect srcRect, CCRect dstRect);
-
-		void SetBoundScale(int nScale);
 	public:		
 		void draw(); override
 	

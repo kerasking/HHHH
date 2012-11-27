@@ -325,6 +325,7 @@ function p.LoadUI(tab,nPetId)
 		return false;
 	end
 	layer:Init();
+	layer:SetPopupDlgFlag( true );
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerBackBag);
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer,1);
@@ -353,6 +354,7 @@ function p.LoadUI(tab,nPetId)
 		return false;
 	end
 	layerGrid:Init();
+	layerGrid:SetPopupDlgFlag( true );
 	layerGrid:SetTag(TAG_LAYER_GRID);
 	layerGrid:SetFrameRect(CGRectMake(ATTR_OFFSET_X, ATTR_OFFSET_Y, RectFullScreenUILayer.size.w / 2, RectFullScreenUILayer.size.h));
 	layer:AddChild(layerGrid);
