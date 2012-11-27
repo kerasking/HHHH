@@ -1,8 +1,8 @@
 package org.DeNA.DHLJ;
 
-import org.cocos2dx.lib.Cocos2dxActivity;
-import org.cocos2dx.lib.Cocos2dxEditText;
-import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
+import org.cocos2dx.baselib.Cocos2dxActivity;
+import org.cocos2dx.baselib.Cocos2dxEditText;
+import org.cocos2dx.baselib.Cocos2dxGLSurfaceView;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
