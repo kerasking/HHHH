@@ -1,15 +1,18 @@
 /*
 *
 */
+#include <LuaPlus.h>
+#include <NDBaseDirector.h>
+#include <NDGameApplication.h>
+#include "NDSharedPtr.h"
+
+#ifdef WIN32
 #include "windows.h"
 #include "GameApp.h"
 //#include "CCString.h"
 #include "XMLReader.h"
-#include <NDGameApplication.h>
-#include <LuaPlus.h>
-#include <NDBaseDirector.h>
 #include "NDConsole.h"
-#include "NDSharedPtr.h"
+#include "NDBaseDirector.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -24,15 +27,15 @@ int WINAPI WinMain (HINSTANCE hInstance,
 					PSTR szCmdLine, 
 					int iCmdShow)
 {
- 	UNREFERENCED_PARAMETER(hPrevInstance);
- 	UNREFERENCED_PARAMETER(szCmdLine);
- 
- 	//InitGameInstance();
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(szCmdLine);
+
+	//InitGameInstance();
 	NDConsole kConsole;
 	kConsole.BeginReadLoop();
 
-    // 手机平台堆栈会比较小, 以后要改用new
- 	NDGameApplication kApp;
+	// 手机平台堆栈会比较小, 以后要改用new
+	NDGameApplication kApp;
 	NDBaseDirector kBaseDirector;
 
 	CCEGLView* eglView = CCEGLView::sharedOpenGLView();
@@ -40,5 +43,97 @@ int WINAPI WinMain (HINSTANCE hInstance,
 	eglView->setFrameSize(480, 320); 
 	//eglView->setFrameSize(320, 480); 
 
- 	return CCApplication::sharedApplication()->run();
+	return CCApplication::sharedApplication()->run();
 }
+#elif defined(ANDROID)
+
+#include "platform/android/jni/JniHelper.h"
+#include <jni.h>
+#include <android/log.h>
+#include "globaldef.h"
+#include "NDDebugOpt.h"
+
+#define  LOG_TAG    "DaHua"
+#define  LOGD(...)
+
+using namespace cocos2d;
+using namespace NDEngine;
+
+extern "C"
+{
+
+	jint JNI_OnLoad(JavaVM *vm, void *reserved)
+	{
+		JniHelper::setJavaVM(vm);
+
+		printf("StartMain");
+
+		return JNI_VERSION_1_4;
+	}
+
+	void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, jobject thiz, jint w, jint h)
+	{
+		for(int i = 0;i < 100;i++)
+		{
+			printf("StartMain");
+		}
+
+		if (!cocos2d::CCDirector::sharedDirector()->getOpenGLView())
+		{
+			for(int i = 0;i < 100;i++)
+			{
+				printf("StartMain");
+			}
+
+			NDBaseDirector* kBaseDirector = new NDBaseDirector;
+
+			cocos2d::CCEGLView* view = cocos2d::CCEGLView::sharedOpenGLView();
+			view->setFrameSize(w, h);
+			// if you want to run in WVGA with HVGA resource, set it
+			// view->create(480, 320);  Please change it to (320, 480) if you're in portrait mode.
+			cocos2d::CCDirector::sharedDirector()->setOpenGLView(view);
+			NDSharedPtr<NDGameApplication> spGameApp = new NDGameApplication;
+
+			CCApplication::sharedApplication()->run();
+		}
+		else
+		{
+			cocos2d::CCTextureCache::reloadAllTextures();
+			cocos2d::CCDirector::sharedDirector()->setGLDefaultValues();
+		}
+	}
+
+	void Java_org_DeNA_DHLJ_DaHuaLongJiang_nativeInit(JNIEnv*  env, jobject thiz, jint w, jint h)
+	{
+		LOGD("Starting nativeInit");
+
+		LOGD("Starting set CCEGLView");
+
+		NDBaseDirector* pkBaseDirector = new NDBaseDirector;
+		//NDBaseDirector::SetSharedDirector(pkBaseDirector);
+
+		cocos2d::CCEGLView* view = cocos2d::CCEGLView::sharedOpenGLView();
+
+		LOGD("view got! value is %d",(int)view);
+
+		view->setFrameSize(w, h);
+		// LOGD(" view->setFrameWidthAndHeight(w, h);! w = %d , h = %d",w,h);
+		//view->create(480, 320); // Please change it to (320, 480) if you're in portrait mode.
+
+		LOGD("view's width = %d,height = %d",view->getSize().width,view->getSize().height);
+
+		cocos2d::CCDirector::sharedDirector()->setOpenGLView(view);
+
+		LOGD("cocos2d::CCDirector::sharedDirector()->setOpenGLView(view); called over");
+
+		NDGameApplication* pkGameLauncher = new NDGameApplication;
+
+		LOGD("Starting set run");
+
+		// NDGameApplication::SetApp(pkGameLauncher);
+		CCApplication::sharedApplication()->run();
+	}
+
+}
+
+#endif

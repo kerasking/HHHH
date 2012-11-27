@@ -14,17 +14,10 @@
 #include <string.h>
 #include <assert.h>
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "src/lua.h"
 
 #include "src/lauxlib.h"
 #include "src/lualib.h"
-#include "LuaLink.h"
-#else
-#include "lua.h"
-#include "lauxlib.h"
-#include "lualib.h"
-#endif
 
 #include <wctype.h>
 #include <wchar.h>

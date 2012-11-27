@@ -9,7 +9,6 @@
 #include <string>
 #include <map>
 #include "NDObject.h"
-#include "GatherPoint.h"
 #include "FriendElement.h"
 #include "NDScene.h"
 #include "NDManualRole.h"
@@ -236,10 +235,6 @@ typedef struct _STRU_MONSTER_TYPE_INFO
 typedef map<int,monster_type_info>			monster_info;
 typedef monster_info::iterator				monster_info_it;
 typedef pair<int, monster_type_info>		monster_info_pair;
-
-typedef map<int,GatherPoint*>				map_gather_point;
-typedef map_gather_point::iterator			map_gather_point_it;
-typedef pair<int, GatherPoint*>				map_gather_point_pair;
 
 typedef map<int, FriendElement>			MAP_FRIEND_ELEMENT;
 typedef MAP_FRIEND_ELEMENT::iterator		MAP_FRIEND_ELEMENT_IT;

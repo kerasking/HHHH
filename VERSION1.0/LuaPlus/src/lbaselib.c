@@ -67,11 +67,7 @@ static int luaB_print (lua_State *L) {
           *outPos++ = *ws++;
         }
         *outPos++ = 0;
-//#ifdef WIN32
- //         OutputDebugStringW(out);
-//#else
-          fputws(out, stdout);
-//#endif
+        fputws(out, stdout);
       }
     }
     lua_pop(L, 1);  /* pop result */

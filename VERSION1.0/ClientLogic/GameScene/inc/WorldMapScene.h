@@ -43,6 +43,7 @@ public:
 	void SetRoleAtPlace(int placeId);
 	void Goto(int nMapId);
 	void SetFilter(ID_VEC idVec);
+	ND_LAYER_PRIORITY getPriority() { return E_LAYER_PRIORITY_WORLDMAP; } //@priority
 
 private:
 	PlaceNode *GetPlaceNodeWithId(int placeId);

@@ -152,7 +152,7 @@ unsigned int CUISpriteNode::GetAnimationAmount()
 {
 	if( m_pSprite )
 	{
-		//return m_pSprite->GetAnimationAmount();
+		return m_pSprite->GetAnimationAmount();
 	}
 	return 0;
 }

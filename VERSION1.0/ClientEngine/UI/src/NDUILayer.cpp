@@ -87,6 +87,7 @@ NDUILayer::NDUILayer()
 
 	m_nIsHVFirestTemp = 0;
 	m_bIsHVContainer = false;
+	m_bPopupDlg = false;
 }
 
 NDUILayer::~NDUILayer()
@@ -1797,7 +1798,7 @@ void NDUILayer::debugDraw()
 {
 	if (!NDDebugOpt::getDrawDebugEnabled()) return;
 
-	CGRect rc = GetFrameRect();
+	CCRect rc = GetFrameRect();
 	float l = rc.origin.x;
 	float r = l + rc.size.width;
 	float t = rc.origin.y;
@@ -1812,6 +1813,18 @@ void NDUILayer::debugDraw()
 	CCPoint lb = ccp(l,t);
 	CCPoint rt = ccp(r,b);
 	ccDrawRect( lb, rt );
+}
+
+//@priority
+ND_LAYER_PRIORITY NDUILayer::getPriority()
+{
+#if 0 //@todo
+	return m_bPopupDlg
+		? E_LAYER_PRIORITY_POPUPDLG
+		: E_LAYER_PRIORITY_UILAYER;
+#else
+	return E_LAYER_PRIORITY_UILAYER;
+#endif
 }
 
 NS_NDENGINE_END

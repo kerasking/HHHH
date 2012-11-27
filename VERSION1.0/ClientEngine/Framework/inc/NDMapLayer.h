@@ -150,7 +150,7 @@ public:
 	bool isAutoFight() {return isAutoBossFight;}
 	void walkToBoss();
 	 
-	void OnTimer(OBJID tag);
+	virtual void OnTimer(OBJID tag);
 	void replaceMapData(int mapId, int center_x, int center_y);
 	void ShowTitle(int name_col, int name_row);
 	void refreshTitle();
@@ -159,6 +159,9 @@ public:
 	void OpenTreasureBox();
 	bool isTouchTreasureBox(CCPoint touchPoint);
 	//		void setRoadBlock(int x,int y){roadBlockX=x;roadBlockY=y;}
+
+	virtual ND_LAYER_PRIORITY getPriority() { return E_LAYER_PRIORITY_MAPLAYER; } //@priority
+
 public:
 
 	virtual bool TouchBegin( NDTouch* touch );

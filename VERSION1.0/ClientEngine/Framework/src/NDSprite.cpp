@@ -167,18 +167,18 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 
 //@zwq: 移动应考虑时间速度，最好不要每个tick都移动.
 bool NDSprite::MoveByPath(const bool bFirstPath /*= false*/)
-{
-	static int MOVES_PER_SECOND = 60;
+{//--Guosen 2012.11.26 此处影响到 其他移动玩家在本机上显示皆为静止 故暂且注释部分代码
+	//static int MOVES_PER_SECOND = 60;
 
-    struct cc_timeval currentTime;
-    CCTime::gettimeofdayCocos2d(&currentTime, NULL);
-    double duration = CCTime::timersubCocos2d(&m_dwLastMoveTickTime, &currentTime);
-	if (TAbs(duration) > 1000 / MOVES_PER_SECOND)
+    //struct cc_timeval currentTime;
+    //CCTime::gettimeofdayCocos2d(&currentTime, NULL);
+    //double duration = CCTime::timersubCocos2d(&m_dwLastMoveTickTime, &currentTime);
+	//if (TAbs(duration) > 1000 / MOVES_PER_SECOND)
 	{
 		CCPoint kPos = m_kPointList.at(m_nMovePathIndex++);
 		SetPosition(kPos);
 
-		m_dwLastMoveTickTime = currentTime;
+		//m_dwLastMoveTickTime = currentTime;
 
 		return true;
 	}
@@ -374,7 +374,7 @@ void NDSprite::MoveToPosition(std::vector<CCPoint> kToPos, SpriteSpeed speed,
 
 void NDSprite::OnMoveBegin()
 {
-    CCTime::gettimeofdayCocos2d(&m_dwLastMoveTickTime, NULL);
+    //CCTime::gettimeofdayCocos2d(&m_dwLastMoveTickTime, NULL);//--Guosen 2012.11.26
 }
 
 void NDSprite::OnMoving(bool bLastPos)
@@ -1009,36 +1009,48 @@ cocos2d::CCTexture2D* NDSprite::getColorTexture(int imageIndex,
 	return pkTex;
 }
 
+unsigned int NDSprite::GetAnimationAmount()
+{
+	if (m_pkAniGroup) 
+	{
+		return m_pkAniGroup->getAnimations()->count();
+    }
+    return 0;
+}
+
+
 void NDSprite::standAction(bool bStand)
 {
 	bool bEnd = m_pkCurrentAnimation->lastFrameEnd(m_pkFrameRunRecord);
 
-	//  	if (bEnd)
-	//  	{
-	//  		int nAnimationMax = (int)m_pkAniGroup->getAnimations()->count();
-	//  
-	//  		if (m_pkCurrentAnimation->getCurIndexInAniGroup() == MANUELROLE_RELAX)
-	//  		{
-	//  			m_dBeginTime = (double)time(0);
-	//  		}
-	//  		else if (m_pkCurrentAnimation->getCurIndexInAniGroup() == MANUELROLE_STAND &&
-	//  			nAnimationMax > MANUELROLE_RELAX)
-	//  		{
-	//  			NSTimeInterval dCurTime = (double)time(0);
-	//  
-	//  			if ((dCurTime - m_dBeginTime) > 5 && rand() % 100 > 95)
-	//  			{
-	//  				m_dBeginTime = dCurTime;
-	//  				SetCurrentAnimation(MANUELROLE_RELAX,m_bReverse);
-	//  				m_pkCurrentAnimation->setReverse(m_bReverse);
-	//  			}
-	//  		}
-	//  		else if (bStand)
-	//  		{
-	//  			SetCurrentAnimation(MANUELROLE_STAND,m_bReverse);
-	//  			m_pkCurrentAnimation->setReverse(m_bReverse);
-	//  		}
-	//  	}
+	if (bEnd)
+	{
+		int nAnimationMax = (int)m_pkAniGroup->getAnimations()->count();
+	
+		if (m_pkCurrentAnimation->getCurIndexInAniGroup() == MANUELROLE_RELAX)
+		{
+			m_dBeginTime = (double)time(0);
+			SetCurrentAnimation(MANUELROLE_STAND,m_bReverse);
+			m_pkCurrentAnimation->setReverse(m_bReverse);
+		}
+		else if (m_pkCurrentAnimation->getCurIndexInAniGroup() == MANUELROLE_STAND &&
+			nAnimationMax > MANUELROLE_RELAX)
+		{
+			NSTimeInterval dCurTime = (double)time(0);
+	
+			if ((dCurTime - m_dBeginTime) > 5 && rand() % 100 > 95)
+			{
+				m_dBeginTime = dCurTime;
+				SetCurrentAnimation(MANUELROLE_RELAX,m_bReverse);
+				m_pkCurrentAnimation->setReverse(m_bReverse);
+			}
+		}
+		else if (bStand)
+		{
+			SetCurrentAnimation(MANUELROLE_STAND,m_bReverse);
+			m_pkCurrentAnimation->setReverse(m_bReverse);
+		}
+	}
 }
 
 void NDSprite::AddSubAniGroup(NDSubAniGroupEx& kGroup)
@@ -1096,7 +1108,7 @@ bool NDSprite::DrawSubAnimation(NDSubAniGroup& kSag)
 		return true;
 	}
 	
-	CGPoint pos = aniGroup->getPosition();
+	CCPoint pos = aniGroup->getPosition();
 	aniGroup->setRunningMapSize( layer->GetContentSize() );
 	
 	NDAnimation* ani = nil;
@@ -1110,7 +1122,7 @@ bool NDSprite::DrawSubAnimation(NDSubAniGroup& kSag)
 		return true;
 	}
 	
-	CGPoint posTarget = ccp(0, 0);
+	CCPoint posTarget = ccp(0, 0);
 	if ( aniGroup->getType() == SUB_ANI_TYPE_NONE ) 
 	{
 		if ( kSag.reverse )//允许翻转

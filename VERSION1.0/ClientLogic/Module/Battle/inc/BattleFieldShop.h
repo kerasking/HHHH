@@ -119,14 +119,14 @@ public:
 	
 	void ChangeItem(Item* item);
 	
-	int  GetItemType(); 
+	unsigned int GetItemType(); 
 	
 	Item* GetItem();
 	
 	CCSize GetContentStartSize();
 	
 protected:
-	NDUIItemButton		*m_btnItem;
+	NDUIItemButton*    m_btnItem;
 };
 
 class BFShopUIItem : public ShopUIItem

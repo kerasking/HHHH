@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "png.h"
 #include "jpeglib.h"
 #include "tiffio.h"
-#if ND_MOD
+#if (defined(ND_MOD))
 	#include "pnginfo.h"
 	#include "pngstruct.h"
 #endif

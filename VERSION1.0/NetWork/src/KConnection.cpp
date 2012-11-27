@@ -1,17 +1,19 @@
 #include <errno.h>
-//#include <unistd.h> // renshk
 #include <stdio.h>
 #include <sys/types.h>
-//#include <netinet/in.h> // renshk
-//#include <sys/socket.h> // renshk
 #include <string.h>
 #include <fcntl.h>
-//#include <sys/ioctl.h> // renshk
 #include <assert.h>
 #include <signal.h>
-//#include <sys/time.h> // renshk
 #include "KConnection.h"
 #include "cpLog.h"
+#if defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#include <unistd.h> // renshk
+#include <netinet/in.h> // renshk
+#include <sys/socket.h> // renshk
+#include <sys/ioctl.h> // renshk
+#include <sys/time.h> // renshk
+#endif
 
 
 KMutex KConnection::closeMutex;

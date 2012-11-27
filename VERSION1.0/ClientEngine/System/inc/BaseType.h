@@ -33,7 +33,7 @@
 #endif
 
 #ifndef WIN32
-#define BOOL	bool
+typedef signed char		BOOL; 
 #endif
 
 #ifdef WIN32 

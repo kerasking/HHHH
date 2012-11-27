@@ -23,7 +23,7 @@ using namespace cocos2d;
 
 NS_NDENGINE_BGN
 
-IMPLEMENT_CLASS(NDUIButton, NDUINode)
+IMPLEMENT_CLASS(NDUIButton, NDUIBaseItemButton)
 
 #define FONT_SIZE 15
 #define FONT_COLOR (ccc4(255, 255, 255, 255))
@@ -656,11 +656,13 @@ void NDUIButton::drawButtonImage()
 			{
 				m_image->DrawInRect(rect);
 			}
-			if (m_title)
-			{
-				m_title->draw();
-			}
-			else if (m_combinepicImg)
+// 			if (m_title 
+// 				&& m_title->GetText().length() > 0)
+// 			{
+// 				m_title->draw();
+// 			}
+// 			else 
+				if (m_combinepicImg)
 			{
 				m_combinepicImg->DrawInRect(rect);
 			}
