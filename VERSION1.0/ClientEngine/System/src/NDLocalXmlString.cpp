@@ -90,26 +90,8 @@ void NDLocalXmlString::Init()
 	
 	if (!fp_in) return;
 	
-	std::string document;
-	// todo(zjh)
-	/*
-	NSString *document = GetDocumensDirectory();
-	
-	if (!document) return;
-	
-	
-	NSFileManager *fm = [NSFileManager defaultManager];
-	NSError *error;
-	
-	NSString *tmpFileName = [NSString stringWithFormat:@"%@/%s", document, "xmltmp.txt"];
-	
-	if (!tmpFileName) return;
-	
-    if ([fm fileExistsAtPath: tmpFileName] &&
-        [fm removeItemAtPath: tmpFileName error:&error])
-    {}
-	*/
-	tq::CString tmpFileName("%sxmltmp.txt", document.c_str());
+	CCStringRef document = GetDocumensDirectory();
+	tq::CString tmpFileName("%sxmltmp.txt", document->getCString());
 
 	FILE *p = fopen(tmpFileName, "a");
 	if (!p) return;
@@ -231,9 +213,15 @@ CCString* NDLocalXmlString::GetDocumensDirectory()
 	 * 暂时没找到实现替代方案
 	 * 郭浩
 	 */
-	//NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
+     CCString* documentsDirectory = 0;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	
-	CCStringRef documentsDirectory = 0;//[paths objectAtIndex:0]; 
+    NSString* document = [paths objectAtIndex:0];
+    const char* pszDocument = [document UTF8String];
+    documentsDirectory = new CCString(pszDocument);
+#else
+#endif
 
 	return documentsDirectory;
 }

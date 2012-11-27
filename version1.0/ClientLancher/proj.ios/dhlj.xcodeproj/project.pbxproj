@@ -1322,7 +1322,7 @@
 		5A1B4050164AB5C100C94D7F /* NDPath.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDPath.cpp; sourceTree = "<group>"; };
 		5A1B4051164AB5C100C94D7F /* NDTimer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDTimer.cpp; sourceTree = "<group>"; };
 		5A1B4052164AB5C100C94D7F /* NDTouch.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDTouch.cpp; sourceTree = "<group>"; };
-		5A1B4053164AB5C100C94D7F /* NDWideString.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDWideString.cpp; sourceTree = "<group>"; };
+		5A1B4053164AB5C100C94D7F /* NDWideString.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 2147483673; path = NDWideString.cpp; sourceTree = "<group>"; };
 		5A1B4054164AB5C100C94D7F /* SMString.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = SMString.cpp; sourceTree = "<group>"; };
 		5A1B4056164AB5C100C94D7F /* NDBaseBattle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDBaseBattle.h; sourceTree = "<group>"; };
 		5A1B4057164AB5C100C94D7F /* NDBaseFighter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDBaseFighter.h; sourceTree = "<group>"; };
