@@ -87,6 +87,7 @@ NDUILayer::NDUILayer()
 
 	m_nIsHVFirestTemp = 0;
 	m_bIsHVContainer = false;
+	m_bPopupDlg = false;
 }
 
 NDUILayer::~NDUILayer()
@@ -618,7 +619,7 @@ bool NDUILayer::DispatchTouchBeginEvent(CCPoint beginTouch)
 		}
 
 		//touch event deal.....
-		CCRect nodeFrame = uiNode->GetScreenRect();
+		CCRect nodeFrame = uiNode->GetBoundRect();//uiNode->GetScreenRect();
 
 		if (cocos2d::CCRect::CCRectContainsPoint(nodeFrame, beginTouch))
 		{
@@ -694,7 +695,7 @@ bool NDUILayer::DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch)
 		}
 
 		//touch event deal
-		CCRect pkNodeFrame = uiNode->GetScreenRect();
+		CCRect pkNodeFrame = uiNode->GetBoundRect();
 		//pkNodeFrame = RectAdd(pkNodeFrame, 2);
 
 		if (cocos2d::CCRect::CCRectContainsPoint(pkNodeFrame, endTouch))
@@ -1812,6 +1813,18 @@ void NDUILayer::debugDraw()
 	CCPoint lb = ccp(l,t);
 	CCPoint rt = ccp(r,b);
 	ccDrawRect( lb, rt );
+}
+
+//@priority
+ND_LAYER_PRIORITY NDUILayer::getPriority()
+{
+#if 0 //@todo
+	return m_bPopupDlg
+		? E_LAYER_PRIORITY_POPUPDLG
+		: E_LAYER_PRIORITY_UILAYER;
+#else
+	return E_LAYER_PRIORITY_UILAYER;
+#endif
 }
 
 NS_NDENGINE_END

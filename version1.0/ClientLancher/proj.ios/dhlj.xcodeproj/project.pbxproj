@@ -909,6 +909,7 @@
 		5A3FC1A216529FF0002166DD /* NDUILoadEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A3FC1A116529FF0002166DD /* NDUILoadEngine.cpp */; };
 		5A3FC1A416529FF8002166DD /* NDUILoadEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A3FC1A316529FF8002166DD /* NDUILoadEngine.h */; };
 		5A3FC1AA1652A8A6002166DD /* SimplifiedChineseRes in Resources */ = {isa = PBXBuildFile; fileRef = 5A3FC1A91652A8A6002166DD /* SimplifiedChineseRes */; };
+		5A5831FF16646FF600B25A10 /* LiSu.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 5A5831FE16646FF600B25A10 /* LiSu.TTF */; };
 		5AC4563C1643D6FA0014B2E7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AC4563B1643D6FA0014B2E7 /* UIKit.framework */; };
 		5AC4563E1643D6FA0014B2E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AC4563D1643D6FA0014B2E7 /* Foundation.framework */; };
 		5AC456401643D6FA0014B2E7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AC4563F1643D6FA0014B2E7 /* CoreGraphics.framework */; };
@@ -1321,7 +1322,7 @@
 		5A1B4050164AB5C100C94D7F /* NDPath.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDPath.cpp; sourceTree = "<group>"; };
 		5A1B4051164AB5C100C94D7F /* NDTimer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDTimer.cpp; sourceTree = "<group>"; };
 		5A1B4052164AB5C100C94D7F /* NDTouch.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDTouch.cpp; sourceTree = "<group>"; };
-		5A1B4053164AB5C100C94D7F /* NDWideString.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDWideString.cpp; sourceTree = "<group>"; };
+		5A1B4053164AB5C100C94D7F /* NDWideString.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 2147483673; path = NDWideString.cpp; sourceTree = "<group>"; };
 		5A1B4054164AB5C100C94D7F /* SMString.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = SMString.cpp; sourceTree = "<group>"; };
 		5A1B4056164AB5C100C94D7F /* NDBaseBattle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDBaseBattle.h; sourceTree = "<group>"; };
 		5A1B4057164AB5C100C94D7F /* NDBaseFighter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDBaseFighter.h; sourceTree = "<group>"; };
@@ -2272,6 +2273,7 @@
 		5A3FC1A116529FF0002166DD /* NDUILoadEngine.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDUILoadEngine.cpp; sourceTree = "<group>"; };
 		5A3FC1A316529FF8002166DD /* NDUILoadEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDUILoadEngine.h; sourceTree = "<group>"; };
 		5A3FC1A91652A8A6002166DD /* SimplifiedChineseRes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SimplifiedChineseRes; path = ../../Bin/SimplifiedChineseRes; sourceTree = "<group>"; };
+		5A5831FE16646FF600B25A10 /* LiSu.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = LiSu.TTF; path = ../../Bin/LiSu.TTF; sourceTree = "<group>"; };
 		5AC456371643D6FA0014B2E7 /* dhlj.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = dhlj.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AC4563B1643D6FA0014B2E7 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		5AC4563D1643D6FA0014B2E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -4792,6 +4794,7 @@
 		5A3FC1AC1652A8B8002166DD /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5A5831FE16646FF600B25A10 /* LiSu.TTF */,
 				5A3FC1A91652A8A6002166DD /* SimplifiedChineseRes */,
 			);
 			name = Resources;
@@ -5796,6 +5799,7 @@
 				5A1A41AD1653807E00BD1510 /* Icon-72.png in Resources */,
 				5A1A41AE1653807E00BD1510 /* Icon-114.png in Resources */,
 				5A1A41AF1653807E00BD1510 /* Icon-144.png in Resources */,
+				5A5831FF16646FF600B25A10 /* LiSu.TTF in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

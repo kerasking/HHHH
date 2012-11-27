@@ -313,7 +313,10 @@ void quitGame(bool bTipNet/*=false*/)
 	/*BeatHeartMgrObj.Stop();*/
 	//NDMapMgrObj.quitGame(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	BattleMgrObj.ReleaseAllBattleSkill();
-
+	NDMapMgrObj.ClearManualRole();
+	NDMapMgrObj.ClearNPC();
+	NDMapMgrObj.ClearMonster();
+	NDMapMgrObj.ClearGP();
 	while (NDDirector::DefaultDirector()->PopScene());
 
 	NDDirector::DefaultDirector()->ReplaceScene(CSMLoginScene::Scene());

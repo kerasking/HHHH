@@ -1293,12 +1293,13 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 	}
 	ShowPetInfo kPetInfoRerserve;
 
-	while (NDDirector::DefaultDirector()->PopScene());
-
-
 	NDMapMgrObj.ClearNPC();
 	NDMapMgrObj.ClearMonster();
 	NDMapMgrObj.ClearGP();
+    
+	while (NDDirector::DefaultDirector()->PopScene());
+    
+    
 	NDMapMgrObj.loadSceneByMapDocID(nMapDocID);
 
 	stuPlayerInfo stuInfo;
