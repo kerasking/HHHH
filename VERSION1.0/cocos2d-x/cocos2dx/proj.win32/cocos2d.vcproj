@@ -101,8 +101,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName).win32"
-			IntermediateDirectory="$(ConfigurationName).win32"
+			OutputDirectory="..\..\..\Bin\$(ConfigurationName)"
+			IntermediateDirectory="..\..\..\Obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			>
