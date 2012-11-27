@@ -793,12 +793,9 @@ NDPicture* NDPicturePool::AddPicture(const char* imageFile, bool gray/*=false*/)
 
 	cocos2d::CCLog("entry Addpicture");
 
-	std::stringstream ss;
-	ss << imageFile;
-
 	cocos2d::CCLog("ss << imageFile end");
 
-	NDPicture* pkPicture = (NDPicture *) m_pkTextures->Object(ss.str().c_str());
+	NDPicture* pkPicture = (NDPicture *) m_pkTextures->Object(imageFile);
 
 	cocos2d::CCLog("NDPicture* pkPicture = (NDPicture *) m_pkTextures->Object(ss.str().c_str()); value %d",(int)pkPicture);
 
@@ -807,7 +804,7 @@ NDPicture* NDPicturePool::AddPicture(const char* imageFile, bool gray/*=false*/)
 		pkPicture = new NDPicture(gray);
 		pkPicture->Initialization(imageFile);
 
-		m_pkTextures->SetObject(pkPicture, ss.str().c_str());
+		m_pkTextures->SetObject(pkPicture, imageFile);
 
 		CCTexture2D* tex = pkPicture->GetTexture();
 		tex->setContainerType(ContainerTypeAddPic);

@@ -3223,6 +3223,7 @@ png_do_gray_to_rgb(png_row_infop row_info, png_bytep row)
  *  calculated to make the sum 32768.  This will result in different rounding
  *  to that used above.
  */
+#if 0
 int /* PRIVATE */
 png_do_rgb_to_gray(png_structp png_ptr, png_row_infop row_info, png_bytep row)
 
@@ -3416,6 +3417,7 @@ png_do_rgb_to_gray(png_structp png_ptr, png_row_infop row_info, png_bytep row)
    }
    return rgb_error;
 }
+#endif
 #endif
 #endif /* PNG_READ_TRANSFORMS_SUPPORTED */
 
