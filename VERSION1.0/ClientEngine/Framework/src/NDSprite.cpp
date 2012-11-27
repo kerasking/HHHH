@@ -1045,11 +1045,12 @@ void NDSprite::standAction(bool bStand)
 				m_pkCurrentAnimation->setReverse(m_bReverse);
 			}
 		}
-		else if (bStand)
-		{
-			SetCurrentAnimation(MANUELROLE_STAND,m_bReverse);
-			m_pkCurrentAnimation->setReverse(m_bReverse);
-		}
+		//--Guosen 2012.11.27 自动强制将精灵的状态置为站立战斗中出问题，先注释
+		//else if (bStand)
+		//{
+		//	SetCurrentAnimation(MANUELROLE_STAND,m_bReverse);
+		//	m_pkCurrentAnimation->setReverse(m_bReverse);
+		//}
 	}
 }
 

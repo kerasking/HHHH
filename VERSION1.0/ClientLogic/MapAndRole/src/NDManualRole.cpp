@@ -922,6 +922,9 @@ void NDManualRole::teamSetServerPosition(int iCol, int iRow)
 
 void NDManualRole::OnMoveEnd()
 {
+	SetCurrentAnimation(MANUELROLE_STAND,m_bReverse);
+	m_pkCurrentAnimation->setReverse(m_bReverse);
+
 	/*if (m_pBattlePetShow)
 	 {
 	 m_pBattlePetShow->OnMoveEnd();
