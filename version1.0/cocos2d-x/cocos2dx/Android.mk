@@ -7,6 +7,7 @@ LOCAL_MODULE := cocos2dx_static
 LOCAL_MODULE_FILENAME := libcocos2d
 
 LOCAL_SRC_FILES := \
+Main.cpp \
 CCConfiguration.cpp \
 CCDrawingPrimitives.cpp \
 CCScheduler.cpp \

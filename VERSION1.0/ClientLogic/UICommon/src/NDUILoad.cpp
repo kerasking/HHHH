@@ -247,6 +247,11 @@ NDUINode* NDUILoad::CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& 
 {
 	NDUINode* node = NULL;
 
+#ifdef ANDROID
+	uiInfo.nCtrlHeight = uiInfo.nCtrlHeight * 2;
+	uiInfo.nCtrlWidth = uiInfo.nCtrlWidth * 2;
+#endif
+
 	switch (uiInfo.nType) 
 	{
 	case MY_CONTROL_TYPE_UNKNOWN:

@@ -43,7 +43,7 @@ public:
 	static const string& GetAniPath(const char* fileName);
 	static const string& GetMapPath(const char* fileName);
 	static const string& GetUIConfigPath(const char* filename);
-	static const string& GetUIImgPath(const char* uiFileNameWithPath);
+	static const string GetUIImgPath(const char* uiFileNameWithPath);
 	static const string& GetResPath(const char* fileName);
 	static const string& GetSMImgPath(const char* fileName);
 	static const string& GetRootResPath();

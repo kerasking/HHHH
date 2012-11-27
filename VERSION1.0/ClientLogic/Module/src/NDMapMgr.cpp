@@ -34,6 +34,7 @@
 #include "GameSceneLoading.h"
 #include "NDBeforeGameMgr.h"
 #include "ScriptGameLogic.h"
+#include "SocialElement.h"
 
 #ifdef USE_MGSDK
 #import <Foundation/Foundation.h>

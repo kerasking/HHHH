@@ -25,7 +25,7 @@ THE SOFTWARE.
 #include <android/log.h>
 #include <string.h>
 
-#if 0
+#if 1
 #define  LOG_TAG    "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 #else

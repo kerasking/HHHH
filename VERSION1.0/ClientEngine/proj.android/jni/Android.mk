@@ -7,6 +7,7 @@ LOCAL_MODULE := ClientEngine
 LOCAL_MODULE_FILENAME := libClientEngine
 
 LOCAL_SRC_FILES := \
+../../main.cpp \
 ../../Framework/src/NDBaseDirector.cpp \
 ../../Framework/src/NDBaseLayer.cpp \
 ../../Framework/src/NDBaseNode.cpp \

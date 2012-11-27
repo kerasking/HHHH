@@ -57,19 +57,16 @@ int WINAPI WinMain (HINSTANCE hInstance,
 #include "NDDebugOpt.h"
 
 #define  LOG_TAG    "DaHua"
-#define  LOGD(...)
+#define  LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 
 using namespace cocos2d;
 using namespace NDEngine;
 
 extern "C"
 {
-
 	jint JNI_OnLoad(JavaVM *vm, void *reserved)
 	{
 		JniHelper::setJavaVM(vm);
-
-		printf("StartMain");
 
 		return JNI_VERSION_1_4;
 	}
