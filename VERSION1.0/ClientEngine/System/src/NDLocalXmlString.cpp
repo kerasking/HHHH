@@ -91,6 +91,12 @@ void NDLocalXmlString::Init()
 	if (!fp_in) return;
 	
 	CCStringRef document = GetDocumensDirectory();
+
+	if (0 == document)
+	{
+		return;
+	}
+
 	tq::CString tmpFileName("%sxmltmp.txt", document->getCString());
 
 	FILE *p = fopen(tmpFileName, "a");
