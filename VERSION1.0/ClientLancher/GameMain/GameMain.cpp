@@ -18,6 +18,9 @@ using namespace cocos2d;
 using namespace NDEngine;
 using namespace LuaPlus;
 
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+
 #ifndef CC_TARGET_PLATFORM
 #define CC_TARGET_PLATFORM CC_PLATFORM_WIN32
 #endif
