@@ -459,8 +459,8 @@ public:
 		itemBtn->SetItemFrameRect(rect);
 		itemBtn->CloseItemFrame();
 
-		itemBtn->SetItemBackgroundPicture(GetNormalPicture(), NULL, false, CGRectZero, true);
-		itemBtn->SetItemFocusImage(GetFocusPicture(), false, CGRectZero, true);
+		itemBtn->SetItemBackgroundPicture(GetNormalPicture(), NULL, false, CCRectZero, true);
+		itemBtn->SetItemFocusImage(GetFocusPicture(), false, CCRectZero, true);
 
 // 		itemBtn->Initialization();
 // 		itemBtn->SetFrameRect(rect);

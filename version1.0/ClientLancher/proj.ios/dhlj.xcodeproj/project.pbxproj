@@ -99,7 +99,6 @@
 		5A1B40BD164AB5C100C94D7F /* NDUIProgressBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B3FA3164AB5C100C94D7F /* NDUIProgressBar.h */; };
 		5A1B40BE164AB5C100C94D7F /* NDUIScrollText.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B3FA4164AB5C100C94D7F /* NDUIScrollText.h */; };
 		5A1B40BF164AB5C100C94D7F /* NDUISynLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B3FA5164AB5C100C94D7F /* NDUISynLayer.h */; };
-		5A1B40C0164AB5C100C94D7F /* NDUITableLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B3FA6164AB5C100C94D7F /* NDUITableLayer.h */; };
 		5A1B40C1164AB5C100C94D7F /* NDUITableLayer_1.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B3FA7164AB5C100C94D7F /* NDUITableLayer_1.h */; };
 		5A1B40C2164AB5C100C94D7F /* SysTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B3FA8164AB5C100C94D7F /* SysTimer.h */; };
 		5A1B40C3164AB5C100C94D7F /* TickAnalyst.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B3FA9164AB5C100C94D7F /* TickAnalyst.h */; };
@@ -479,7 +478,6 @@
 		5A1B48D5164ABC9800C94D7F /* CampDonateScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B474A164ABC9800C94D7F /* CampDonateScene.h */; };
 		5A1B48D6164ABC9800C94D7F /* CompeteListScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B474B164ABC9800C94D7F /* CompeteListScene.h */; };
 		5A1B48D7164ABC9800C94D7F /* CreateRoleScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B474C164ABC9800C94D7F /* CreateRoleScene.h */; };
-		5A1B48D8164ABC9800C94D7F /* EquipUpgradeScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B474D164ABC9800C94D7F /* EquipUpgradeScene.h */; };
 		5A1B48D9164ABC9800C94D7F /* FavoriteAccountList.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B474E164ABC9800C94D7F /* FavoriteAccountList.h */; };
 		5A1B48DA164ABC9800C94D7F /* FindBackPasswordScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B474F164ABC9800C94D7F /* FindBackPasswordScene.h */; };
 		5A1B48DB164ABC9800C94D7F /* FriendElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4750164ABC9800C94D7F /* FriendElement.h */; };
@@ -497,7 +495,6 @@
 		5A1B48E7164ABC9800C94D7F /* GameUIPaiHang_1.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B475C164ABC9800C94D7F /* GameUIPaiHang_1.h */; };
 		5A1B48E8164ABC9800C94D7F /* GameUIPetAttrib.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B475D164ABC9800C94D7F /* GameUIPetAttrib.h */; };
 		5A1B48E9164ABC9800C94D7F /* GameUIPlayerList.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B475E164ABC9800C94D7F /* GameUIPlayerList.h */; };
-		5A1B48EA164ABC9800C94D7F /* GameUIRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B475F164ABC9800C94D7F /* GameUIRequest.h */; };
 		5A1B48EB164ABC9800C94D7F /* GameUIRootOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4760164ABC9800C94D7F /* GameUIRootOperation.h */; };
 		5A1B48EC164ABC9800C94D7F /* GameUITaskList.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4761164ABC9800C94D7F /* GameUITaskList.h */; };
 		5A1B48ED164ABC9800C94D7F /* GoodFriendUILayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4762164ABC9800C94D7F /* GoodFriendUILayer.h */; };
@@ -528,9 +525,7 @@
 		5A1B4906164ABC9800C94D7F /* UpdateScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B477B164ABC9800C94D7F /* UpdateScene.h */; };
 		5A1B4907164ABC9800C94D7F /* VipStoreScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B477C164ABC9800C94D7F /* VipStoreScene.h */; };
 		5A1B4908164ABC9800C94D7F /* WorldMapScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B477D164ABC9800C94D7F /* WorldMapScene.h */; };
-		5A1B4909164ABC9800C94D7F /* EquipUpgradeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B477F164ABC9800C94D7F /* EquipUpgradeScene.cpp */; };
 		5A1B490A164ABC9800C94D7F /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B4780164ABC9800C94D7F /* GameScene.cpp */; };
-		5A1B490B164ABC9800C94D7F /* GameUIRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B4781164ABC9800C94D7F /* GameUIRequest.cpp */; };
 		5A1B490C164ABC9800C94D7F /* SMBattleScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B4782164ABC9800C94D7F /* SMBattleScene.cpp */; };
 		5A1B490D164ABC9800C94D7F /* SMGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B4783164ABC9800C94D7F /* SMGameScene.cpp */; };
 		5A1B490E164ABC9800C94D7F /* SMLoginScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B4784164ABC9800C94D7F /* SMLoginScene.cpp */; };
@@ -1189,7 +1184,6 @@
 		5A1B3FA3164AB5C100C94D7F /* NDUIProgressBar.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUIProgressBar.h; sourceTree = "<group>"; };
 		5A1B3FA4164AB5C100C94D7F /* NDUIScrollText.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUIScrollText.h; sourceTree = "<group>"; };
 		5A1B3FA5164AB5C100C94D7F /* NDUISynLayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUISynLayer.h; sourceTree = "<group>"; };
-		5A1B3FA6164AB5C100C94D7F /* NDUITableLayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUITableLayer.h; sourceTree = "<group>"; };
 		5A1B3FA7164AB5C100C94D7F /* NDUITableLayer_1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUITableLayer_1.h; sourceTree = "<group>"; };
 		5A1B3FA8164AB5C100C94D7F /* SysTimer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = SysTimer.h; sourceTree = "<group>"; };
 		5A1B3FA9164AB5C100C94D7F /* TickAnalyst.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = TickAnalyst.h; sourceTree = "<group>"; };
@@ -1570,7 +1564,6 @@
 		5A1B474A164ABC9800C94D7F /* CampDonateScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = CampDonateScene.h; sourceTree = "<group>"; };
 		5A1B474B164ABC9800C94D7F /* CompeteListScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = CompeteListScene.h; sourceTree = "<group>"; };
 		5A1B474C164ABC9800C94D7F /* CreateRoleScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = CreateRoleScene.h; sourceTree = "<group>"; };
-		5A1B474D164ABC9800C94D7F /* EquipUpgradeScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = EquipUpgradeScene.h; sourceTree = "<group>"; };
 		5A1B474E164ABC9800C94D7F /* FavoriteAccountList.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FavoriteAccountList.h; sourceTree = "<group>"; };
 		5A1B474F164ABC9800C94D7F /* FindBackPasswordScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FindBackPasswordScene.h; sourceTree = "<group>"; };
 		5A1B4750164ABC9800C94D7F /* FriendElement.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FriendElement.h; sourceTree = "<group>"; };
@@ -1588,7 +1581,6 @@
 		5A1B475C164ABC9800C94D7F /* GameUIPaiHang_1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = GameUIPaiHang_1.h; sourceTree = "<group>"; };
 		5A1B475D164ABC9800C94D7F /* GameUIPetAttrib.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = GameUIPetAttrib.h; sourceTree = "<group>"; };
 		5A1B475E164ABC9800C94D7F /* GameUIPlayerList.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = GameUIPlayerList.h; sourceTree = "<group>"; };
-		5A1B475F164ABC9800C94D7F /* GameUIRequest.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = GameUIRequest.h; sourceTree = "<group>"; };
 		5A1B4760164ABC9800C94D7F /* GameUIRootOperation.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = GameUIRootOperation.h; sourceTree = "<group>"; };
 		5A1B4761164ABC9800C94D7F /* GameUITaskList.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = GameUITaskList.h; sourceTree = "<group>"; };
 		5A1B4762164ABC9800C94D7F /* GoodFriendUILayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = GoodFriendUILayer.h; sourceTree = "<group>"; };
@@ -1619,9 +1611,7 @@
 		5A1B477B164ABC9800C94D7F /* UpdateScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = UpdateScene.h; sourceTree = "<group>"; };
 		5A1B477C164ABC9800C94D7F /* VipStoreScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = VipStoreScene.h; sourceTree = "<group>"; };
 		5A1B477D164ABC9800C94D7F /* WorldMapScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = WorldMapScene.h; sourceTree = "<group>"; };
-		5A1B477F164ABC9800C94D7F /* EquipUpgradeScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = EquipUpgradeScene.cpp; sourceTree = "<group>"; };
 		5A1B4780164ABC9800C94D7F /* GameScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = GameScene.cpp; sourceTree = "<group>"; };
-		5A1B4781164ABC9800C94D7F /* GameUIRequest.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = GameUIRequest.cpp; sourceTree = "<group>"; };
 		5A1B4782164ABC9800C94D7F /* SMBattleScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = SMBattleScene.cpp; sourceTree = "<group>"; };
 		5A1B4783164ABC9800C94D7F /* SMGameScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = SMGameScene.cpp; sourceTree = "<group>"; };
 		5A1B4784164ABC9800C94D7F /* SMLoginScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 2147483673; lineEnding = 2; path = SMLoginScene.cpp; sourceTree = "<group>"; };
@@ -2677,7 +2667,6 @@
 				5A1B3FA3164AB5C100C94D7F /* NDUIProgressBar.h */,
 				5A1B3FA4164AB5C100C94D7F /* NDUIScrollText.h */,
 				5A1B3FA5164AB5C100C94D7F /* NDUISynLayer.h */,
-				5A1B3FA6164AB5C100C94D7F /* NDUITableLayer.h */,
 				5A1B3FA7164AB5C100C94D7F /* NDUITableLayer_1.h */,
 				5A1B3FA8164AB5C100C94D7F /* SysTimer.h */,
 				5A1B3FA9164AB5C100C94D7F /* TickAnalyst.h */,
@@ -3671,7 +3660,6 @@
 				5A1B474A164ABC9800C94D7F /* CampDonateScene.h */,
 				5A1B474B164ABC9800C94D7F /* CompeteListScene.h */,
 				5A1B474C164ABC9800C94D7F /* CreateRoleScene.h */,
-				5A1B474D164ABC9800C94D7F /* EquipUpgradeScene.h */,
 				5A1B474E164ABC9800C94D7F /* FavoriteAccountList.h */,
 				5A1B474F164ABC9800C94D7F /* FindBackPasswordScene.h */,
 				5A1B4750164ABC9800C94D7F /* FriendElement.h */,
@@ -3689,7 +3677,6 @@
 				5A1B475C164ABC9800C94D7F /* GameUIPaiHang_1.h */,
 				5A1B475D164ABC9800C94D7F /* GameUIPetAttrib.h */,
 				5A1B475E164ABC9800C94D7F /* GameUIPlayerList.h */,
-				5A1B475F164ABC9800C94D7F /* GameUIRequest.h */,
 				5A1B4760164ABC9800C94D7F /* GameUIRootOperation.h */,
 				5A1B4761164ABC9800C94D7F /* GameUITaskList.h */,
 				5A1B4762164ABC9800C94D7F /* GoodFriendUILayer.h */,
@@ -3728,9 +3715,7 @@
 			isa = PBXGroup;
 			children = (
 				5AF6F54216637DBC006834AF /* GameSceneLoading.cpp */,
-				5A1B477F164ABC9800C94D7F /* EquipUpgradeScene.cpp */,
 				5A1B4780164ABC9800C94D7F /* GameScene.cpp */,
-				5A1B4781164ABC9800C94D7F /* GameUIRequest.cpp */,
 				5A1B4782164ABC9800C94D7F /* SMBattleScene.cpp */,
 				5A1B4783164ABC9800C94D7F /* SMGameScene.cpp */,
 				5A1B4784164ABC9800C94D7F /* SMLoginScene.cpp */,
@@ -5105,7 +5090,6 @@
 				5A1B40BD164AB5C100C94D7F /* NDUIProgressBar.h in Headers */,
 				5A1B40BE164AB5C100C94D7F /* NDUIScrollText.h in Headers */,
 				5A1B40BF164AB5C100C94D7F /* NDUISynLayer.h in Headers */,
-				5A1B40C0164AB5C100C94D7F /* NDUITableLayer.h in Headers */,
 				5A1B40C1164AB5C100C94D7F /* NDUITableLayer_1.h in Headers */,
 				5A1B40C2164AB5C100C94D7F /* SysTimer.h in Headers */,
 				5A1B40C3164AB5C100C94D7F /* TickAnalyst.h in Headers */,
@@ -5456,7 +5440,6 @@
 				5A1B48D5164ABC9800C94D7F /* CampDonateScene.h in Headers */,
 				5A1B48D6164ABC9800C94D7F /* CompeteListScene.h in Headers */,
 				5A1B48D7164ABC9800C94D7F /* CreateRoleScene.h in Headers */,
-				5A1B48D8164ABC9800C94D7F /* EquipUpgradeScene.h in Headers */,
 				5A1B48D9164ABC9800C94D7F /* FavoriteAccountList.h in Headers */,
 				5A1B48DA164ABC9800C94D7F /* FindBackPasswordScene.h in Headers */,
 				5A1B48DB164ABC9800C94D7F /* FriendElement.h in Headers */,
@@ -5474,7 +5457,6 @@
 				5A1B48E7164ABC9800C94D7F /* GameUIPaiHang_1.h in Headers */,
 				5A1B48E8164ABC9800C94D7F /* GameUIPetAttrib.h in Headers */,
 				5A1B48E9164ABC9800C94D7F /* GameUIPlayerList.h in Headers */,
-				5A1B48EA164ABC9800C94D7F /* GameUIRequest.h in Headers */,
 				5A1B48EB164ABC9800C94D7F /* GameUIRootOperation.h in Headers */,
 				5A1B48EC164ABC9800C94D7F /* GameUITaskList.h in Headers */,
 				5A1B48ED164ABC9800C94D7F /* GoodFriendUILayer.h in Headers */,
@@ -6036,9 +6018,7 @@
 				5A1B48CF164ABC9800C94D7F /* DramaUI.cpp in Sources */,
 				5A1B48D2164ABC9800C94D7F /* GameData.cpp in Sources */,
 				5A1B48D3164ABC9800C94D7F /* GameDataBase.cpp in Sources */,
-				5A1B4909164ABC9800C94D7F /* EquipUpgradeScene.cpp in Sources */,
 				5A1B490A164ABC9800C94D7F /* GameScene.cpp in Sources */,
-				5A1B490B164ABC9800C94D7F /* GameUIRequest.cpp in Sources */,
 				5A1B490C164ABC9800C94D7F /* SMBattleScene.cpp in Sources */,
 				5A1B490D164ABC9800C94D7F /* SMGameScene.cpp in Sources */,
 				5A1B490E164ABC9800C94D7F /* SMLoginScene.cpp in Sources */,
@@ -6701,9 +6681,7 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "dhlj/dhlj-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					LUA_USE_LINUX,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = LUA_USE_LINUX;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,

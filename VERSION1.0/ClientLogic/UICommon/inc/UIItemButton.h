@@ -36,7 +36,18 @@ public:
 	
 	void SetShowAdapt(bool bShowAdapt);
 	bool IsShowAdapt();
-	
+
+	virtual void InitializationItem();
+	virtual void CloseItemFrame();
+	virtual void SetItemFrameRect(CCRect rect);
+
+	virtual void SetItemBackgroundPicture(NDPicture *pic, NDPicture *touchPic = NULL,
+		bool useCustomRect = false, CCRect customRect = CCRectZero, bool clearPicOnFree = false);
+	virtual void SetItemBackgroundPictureCustom(NDPicture *pic, NDPicture *touchPic = NULL,
+		bool useCustomRect = false, CCRect customRect = CCRectZero);
+
+	virtual void SetItemFocusImage(NDPicture *pic, bool useCustomRect = false, CCRect customRect = CCRectZero, bool clearPicOnFree = false);
+	virtual void SetItemFocusImageCustom(NDPicture *pic, bool useCustomRect = false, CCRect customRect = CCRectZero);
 private:
 	unsigned int			m_unItemId;
 	unsigned int			m_unItemType;
