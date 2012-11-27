@@ -99,7 +99,6 @@
 		5A1B40BD164AB5C100C94D7F /* NDUIProgressBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B3FA3164AB5C100C94D7F /* NDUIProgressBar.h */; };
 		5A1B40BE164AB5C100C94D7F /* NDUIScrollText.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B3FA4164AB5C100C94D7F /* NDUIScrollText.h */; };
 		5A1B40BF164AB5C100C94D7F /* NDUISynLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B3FA5164AB5C100C94D7F /* NDUISynLayer.h */; };
-		5A1B40C0164AB5C100C94D7F /* NDUITableLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B3FA6164AB5C100C94D7F /* NDUITableLayer.h */; };
 		5A1B40C1164AB5C100C94D7F /* NDUITableLayer_1.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B3FA7164AB5C100C94D7F /* NDUITableLayer_1.h */; };
 		5A1B40C2164AB5C100C94D7F /* SysTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B3FA8164AB5C100C94D7F /* SysTimer.h */; };
 		5A1B40C3164AB5C100C94D7F /* TickAnalyst.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B3FA9164AB5C100C94D7F /* TickAnalyst.h */; };
@@ -151,9 +150,7 @@
 		5A1B40FA164AB5C100C94D7F /* UIMovableLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B3FE2164AB5C100C94D7F /* UIMovableLayer.cpp */; };
 		5A1B40FB164AB5C100C94D7F /* UIRadioButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B3FE3164AB5C100C94D7F /* UIRadioButton.cpp */; };
 		5A1B40FC164AB5C100C94D7F /* UIScroll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B3FE4164AB5C100C94D7F /* UIScroll.cpp */; };
-		5A1B40FD164AB5C100C94D7F /* UIScrollContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B3FE5164AB5C100C94D7F /* UIScrollContainer.cpp */; };
 		5A1B40FE164AB5C100C94D7F /* UIScrollContainerExpand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B3FE6164AB5C100C94D7F /* UIScrollContainerExpand.cpp */; };
-		5A1B40FF164AB5C100C94D7F /* UIScrollView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B3FE7164AB5C100C94D7F /* UIScrollView.cpp */; };
 		5A1B4100164AB5C100C94D7F /* UIScrollViewExpand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B3FE8164AB5C100C94D7F /* UIScrollViewExpand.cpp */; };
 		5A1B4101164AB5C100C94D7F /* UIScrollViewMulHand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B3FE9164AB5C100C94D7F /* UIScrollViewMulHand.cpp */; };
 		5A1B4102164AB5C100C94D7F /* UISpriteNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B3FEA164AB5C100C94D7F /* UISpriteNode.cpp */; };
@@ -204,9 +201,7 @@
 		5A1B412F164AB5C200C94D7F /* LuaStateMgr.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4025164AB5C100C94D7F /* LuaStateMgr.h */; };
 		5A1B4130164AB5C200C94D7F /* ScriptDefine.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4026164AB5C100C94D7F /* ScriptDefine.h */; };
 		5A1B4131164AB5C200C94D7F /* ScriptInc.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4027164AB5C100C94D7F /* ScriptInc.h */; };
-		5A1B4132164AB5C200C94D7F /* ScriptMgr.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4028164AB5C100C94D7F /* ScriptMgr.h */; };
 		5A1B4133164AB5C200C94D7F /* LuaStateMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B402A164AB5C100C94D7F /* LuaStateMgr.cpp */; };
-		5A1B4134164AB5C200C94D7F /* ScriptMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B402B164AB5C100C94D7F /* ScriptMgr.cpp */; };
 		5A1B4135164AB5C200C94D7F /* AStar.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B402E164AB5C100C94D7F /* AStar.h */; };
 		5A1B4136164AB5C200C94D7F /* BaseType.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B402F164AB5C100C94D7F /* BaseType.h */; };
 		5A1B4137164AB5C200C94D7F /* cocos2dExt.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4030164AB5C100C94D7F /* cocos2dExt.h */; };
@@ -435,12 +430,10 @@
 		5A1B489E164ABC9800C94D7F /* GlobalDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B470A164ABC9800C94D7F /* GlobalDialog.h */; };
 		5A1B489F164ABC9800C94D7F /* HyperLinkLabel1.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B470B164ABC9800C94D7F /* HyperLinkLabel1.h */; };
 		5A1B48A0164ABC9800C94D7F /* IniData.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B470C164ABC9800C94D7F /* IniData.h */; };
-		5A1B48A1164ABC9800C94D7F /* IniLoad.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B470D164ABC9800C94D7F /* IniLoad.h */; };
 		5A1B48A2164ABC9800C94D7F /* ItemViewText.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B470E164ABC9800C94D7F /* ItemViewText.h */; };
 		5A1B48A3164ABC9800C94D7F /* NDCombinePicture.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B470F164ABC9800C94D7F /* NDCombinePicture.h */; };
 		5A1B48A4164ABC9800C94D7F /* NDCommonControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4710164ABC9800C94D7F /* NDCommonControl.h */; };
 		5A1B48A5164ABC9800C94D7F /* NDCommonScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4711164ABC9800C94D7F /* NDCommonScene.h */; };
-		5A1B48A6164ABC9800C94D7F /* NDConstant.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4712164ABC9800C94D7F /* NDConstant.h */; };
 		5A1B48A7164ABC9800C94D7F /* NDCrashUpload_1.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4713164ABC9800C94D7F /* NDCrashUpload_1.h */; };
 		5A1B48A8164ABC9800C94D7F /* NDDataPersist.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4714164ABC9800C94D7F /* NDDataPersist.h */; };
 		5A1B48A9164ABC9800C94D7F /* NDDefaultHttp.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4715164ABC9800C94D7F /* NDDefaultHttp.h */; };
@@ -485,7 +478,6 @@
 		5A1B48D5164ABC9800C94D7F /* CampDonateScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B474A164ABC9800C94D7F /* CampDonateScene.h */; };
 		5A1B48D6164ABC9800C94D7F /* CompeteListScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B474B164ABC9800C94D7F /* CompeteListScene.h */; };
 		5A1B48D7164ABC9800C94D7F /* CreateRoleScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B474C164ABC9800C94D7F /* CreateRoleScene.h */; };
-		5A1B48D8164ABC9800C94D7F /* EquipUpgradeScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B474D164ABC9800C94D7F /* EquipUpgradeScene.h */; };
 		5A1B48D9164ABC9800C94D7F /* FavoriteAccountList.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B474E164ABC9800C94D7F /* FavoriteAccountList.h */; };
 		5A1B48DA164ABC9800C94D7F /* FindBackPasswordScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B474F164ABC9800C94D7F /* FindBackPasswordScene.h */; };
 		5A1B48DB164ABC9800C94D7F /* FriendElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4750164ABC9800C94D7F /* FriendElement.h */; };
@@ -503,7 +495,6 @@
 		5A1B48E7164ABC9800C94D7F /* GameUIPaiHang_1.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B475C164ABC9800C94D7F /* GameUIPaiHang_1.h */; };
 		5A1B48E8164ABC9800C94D7F /* GameUIPetAttrib.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B475D164ABC9800C94D7F /* GameUIPetAttrib.h */; };
 		5A1B48E9164ABC9800C94D7F /* GameUIPlayerList.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B475E164ABC9800C94D7F /* GameUIPlayerList.h */; };
-		5A1B48EA164ABC9800C94D7F /* GameUIRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B475F164ABC9800C94D7F /* GameUIRequest.h */; };
 		5A1B48EB164ABC9800C94D7F /* GameUIRootOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4760164ABC9800C94D7F /* GameUIRootOperation.h */; };
 		5A1B48EC164ABC9800C94D7F /* GameUITaskList.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4761164ABC9800C94D7F /* GameUITaskList.h */; };
 		5A1B48ED164ABC9800C94D7F /* GoodFriendUILayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B4762164ABC9800C94D7F /* GoodFriendUILayer.h */; };
@@ -534,9 +525,7 @@
 		5A1B4906164ABC9800C94D7F /* UpdateScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B477B164ABC9800C94D7F /* UpdateScene.h */; };
 		5A1B4907164ABC9800C94D7F /* VipStoreScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B477C164ABC9800C94D7F /* VipStoreScene.h */; };
 		5A1B4908164ABC9800C94D7F /* WorldMapScene.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A1B477D164ABC9800C94D7F /* WorldMapScene.h */; };
-		5A1B4909164ABC9800C94D7F /* EquipUpgradeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B477F164ABC9800C94D7F /* EquipUpgradeScene.cpp */; };
 		5A1B490A164ABC9800C94D7F /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B4780164ABC9800C94D7F /* GameScene.cpp */; };
-		5A1B490B164ABC9800C94D7F /* GameUIRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B4781164ABC9800C94D7F /* GameUIRequest.cpp */; };
 		5A1B490C164ABC9800C94D7F /* SMBattleScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B4782164ABC9800C94D7F /* SMBattleScene.cpp */; };
 		5A1B490D164ABC9800C94D7F /* SMGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B4783164ABC9800C94D7F /* SMGameScene.cpp */; };
 		5A1B490E164ABC9800C94D7F /* SMLoginScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B4784164ABC9800C94D7F /* SMLoginScene.cpp */; };
@@ -973,7 +962,29 @@
 		5AD601BB165150CE00369185 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AD601BA165150CD00369185 /* StoreKit.framework */; };
 		5AD601BD1651511200369185 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AD601BC1651511200369185 /* AudioToolbox.framework */; };
 		5AD601BF1651512F00369185 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AD601BE1651512F00369185 /* AVFoundation.framework */; };
-		5AD601C11651514C00369185 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AD601C01651514C00369185 /* libz.dylib */; };
+		5AF6F52516636452006834AF /* NDUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F52416636452006834AF /* NDUtil.h */; };
+		5AF6F5271663645C006834AF /* NDUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F5261663645C006834AF /* NDUtil.cpp */; };
+		5AF6F52C16636477006834AF /* NDBaseBattleMgr.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F52816636477006834AF /* NDBaseBattleMgr.h */; };
+		5AF6F52D16636477006834AF /* NDBaseMsgDefine.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F52916636477006834AF /* NDBaseMsgDefine.h */; };
+		5AF6F52E16636477006834AF /* NDBaseNetMgr.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F52A16636477006834AF /* NDBaseNetMgr.h */; };
+		5AF6F52F16636477006834AF /* NDBaseScriptMgr.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F52B16636477006834AF /* NDBaseScriptMgr.h */; };
+		5AF6F53316636482006834AF /* NDBaseBattleMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F53016636482006834AF /* NDBaseBattleMgr.cpp */; };
+		5AF6F53416636482006834AF /* NDBaseNetMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F53116636482006834AF /* NDBaseNetMgr.cpp */; };
+		5AF6F53516636482006834AF /* NDBaseScriptMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F53216636482006834AF /* NDBaseScriptMgr.cpp */; };
+		5AF6F5371663677D006834AF /* ScriptMgr.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F5361663677D006834AF /* ScriptMgr.h */; };
+		5AF6F53916636788006834AF /* ScriptMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F53816636788006834AF /* ScriptMgr.cpp */; };
+		5AF6F53C1663752A006834AF /* NDUIScrollContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F53A1663752A006834AF /* NDUIScrollContainer.h */; };
+		5AF6F53D1663752A006834AF /* NDUIScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F53B1663752A006834AF /* NDUIScrollView.h */; };
+		5AF6F54016637A3D006834AF /* NDUIScrollContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F53E16637A3D006834AF /* NDUIScrollContainer.cpp */; };
+		5AF6F54116637A3D006834AF /* NDUIScrollViewContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F53F16637A3D006834AF /* NDUIScrollViewContainer.cpp */; };
+		5AF6F54316637DBC006834AF /* GameSceneLoading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F54216637DBC006834AF /* GameSceneLoading.cpp */; };
+		5AF6F5881663B298006834AF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AD601C01651514C00369185 /* libz.dylib */; };
+		5AF6F5991663BBD6006834AF /* NDBaseGlobalDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F5971663BBD6006834AF /* NDBaseGlobalDialog.h */; };
+		5AF6F59A1663BBD6006834AF /* NDUIBaseItemButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F5981663BBD6006834AF /* NDUIBaseItemButton.h */; };
+		5AF6F59E1663BBE0006834AF /* NDBaseGlobalDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F59C1663BBE0006834AF /* NDBaseGlobalDialog.cpp */; };
+		5AF6F59F1663BBE0006834AF /* NDUIBaseItemButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F59D1663BBE0006834AF /* NDUIBaseItemButton.cpp */; };
+		5AF6F5A11663BBF1006834AF /* EngineScriptCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AF6F5A01663BBF1006834AF /* EngineScriptCommon.h */; };
+		5AF6F5A31663BBF8006834AF /* EngineScriptCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6F5A21663BBF8006834AF /* EngineScriptCommon.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1129,7 +1140,7 @@
 		5A1B3F6D164AB5C100C94D7F /* NDScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDScene.h; sourceTree = "<group>"; };
 		5A1B3F6E164AB5C100C94D7F /* NDSprite.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 2147483673; lineEnding = 2; path = NDSprite.h; sourceTree = "<group>"; };
 		5A1B3F70164AB5C100C94D7F /* NDBaseDirector.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDBaseDirector.cpp; sourceTree = "<group>"; };
-		5A1B3F71164AB5C100C94D7F /* NDBaseLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDBaseLayer.cpp; sourceTree = "<group>"; };
+		5A1B3F71164AB5C100C94D7F /* NDBaseLayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDBaseLayer.cpp; sourceTree = "<group>"; };
 		5A1B3F72164AB5C100C94D7F /* NDBaseNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDBaseNode.cpp; sourceTree = "<group>"; };
 		5A1B3F73164AB5C100C94D7F /* NDCommonProtocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDCommonProtocol.cpp; sourceTree = "<group>"; };
 		5A1B3F74164AB5C100C94D7F /* NDDebugOpt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDDebugOpt.cpp; sourceTree = "<group>"; };
@@ -1156,7 +1167,7 @@
 		5A1B3F92164AB5C100C94D7F /* NDScrollLayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDScrollLayer.h; sourceTree = "<group>"; };
 		5A1B3F93164AB5C100C94D7F /* NDTextNode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDTextNode.h; sourceTree = "<group>"; };
 		5A1B3F94164AB5C100C94D7F /* NDUIBaseGraphics.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUIBaseGraphics.h; sourceTree = "<group>"; };
-		5A1B3F95164AB5C100C94D7F /* NDUIButton.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUIButton.h; sourceTree = "<group>"; };
+		5A1B3F95164AB5C100C94D7F /* NDUIButton.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 2147483673; lineEnding = 2; path = NDUIButton.h; sourceTree = "<group>"; };
 		5A1B3F96164AB5C100C94D7F /* NDUICheckBox.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUICheckBox.h; sourceTree = "<group>"; };
 		5A1B3F97164AB5C100C94D7F /* NDUICustomView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUICustomView.h; sourceTree = "<group>"; };
 		5A1B3F98164AB5C100C94D7F /* NDUIDialog.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUIDialog.h; sourceTree = "<group>"; };
@@ -1173,7 +1184,6 @@
 		5A1B3FA3164AB5C100C94D7F /* NDUIProgressBar.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUIProgressBar.h; sourceTree = "<group>"; };
 		5A1B3FA4164AB5C100C94D7F /* NDUIScrollText.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUIScrollText.h; sourceTree = "<group>"; };
 		5A1B3FA5164AB5C100C94D7F /* NDUISynLayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUISynLayer.h; sourceTree = "<group>"; };
-		5A1B3FA6164AB5C100C94D7F /* NDUITableLayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUITableLayer.h; sourceTree = "<group>"; };
 		5A1B3FA7164AB5C100C94D7F /* NDUITableLayer_1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDUITableLayer_1.h; sourceTree = "<group>"; };
 		5A1B3FA8164AB5C100C94D7F /* SysTimer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = SysTimer.h; sourceTree = "<group>"; };
 		5A1B3FA9164AB5C100C94D7F /* TickAnalyst.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = TickAnalyst.h; sourceTree = "<group>"; };
@@ -1225,9 +1235,7 @@
 		5A1B3FE2164AB5C100C94D7F /* UIMovableLayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = UIMovableLayer.cpp; sourceTree = "<group>"; };
 		5A1B3FE3164AB5C100C94D7F /* UIRadioButton.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = UIRadioButton.cpp; sourceTree = "<group>"; };
 		5A1B3FE4164AB5C100C94D7F /* UIScroll.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = UIScroll.cpp; sourceTree = "<group>"; };
-		5A1B3FE5164AB5C100C94D7F /* UIScrollContainer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = UIScrollContainer.cpp; sourceTree = "<group>"; };
 		5A1B3FE6164AB5C100C94D7F /* UIScrollContainerExpand.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = UIScrollContainerExpand.cpp; sourceTree = "<group>"; };
-		5A1B3FE7164AB5C100C94D7F /* UIScrollView.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = UIScrollView.cpp; sourceTree = "<group>"; };
 		5A1B3FE8164AB5C100C94D7F /* UIScrollViewExpand.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = UIScrollViewExpand.cpp; sourceTree = "<group>"; };
 		5A1B3FE9164AB5C100C94D7F /* UIScrollViewMulHand.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = UIScrollViewMulHand.cpp; sourceTree = "<group>"; };
 		5A1B3FEA164AB5C100C94D7F /* UISpriteNode.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = UISpriteNode.cpp; sourceTree = "<group>"; };
@@ -1278,9 +1286,7 @@
 		5A1B4025164AB5C100C94D7F /* LuaStateMgr.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = LuaStateMgr.h; sourceTree = "<group>"; };
 		5A1B4026164AB5C100C94D7F /* ScriptDefine.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ScriptDefine.h; sourceTree = "<group>"; };
 		5A1B4027164AB5C100C94D7F /* ScriptInc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ScriptInc.h; sourceTree = "<group>"; };
-		5A1B4028164AB5C100C94D7F /* ScriptMgr.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ScriptMgr.h; sourceTree = "<group>"; };
 		5A1B402A164AB5C100C94D7F /* LuaStateMgr.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = LuaStateMgr.cpp; sourceTree = "<group>"; };
-		5A1B402B164AB5C100C94D7F /* ScriptMgr.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ScriptMgr.cpp; sourceTree = "<group>"; };
 		5A1B402E164AB5C100C94D7F /* AStar.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = AStar.h; sourceTree = "<group>"; };
 		5A1B402F164AB5C100C94D7F /* BaseType.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = BaseType.h; sourceTree = "<group>"; };
 		5A1B4030164AB5C100C94D7F /* cocos2dExt.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = cocos2dExt.h; sourceTree = "<group>"; };
@@ -1510,12 +1516,10 @@
 		5A1B470A164ABC9800C94D7F /* GlobalDialog.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = GlobalDialog.h; sourceTree = "<group>"; };
 		5A1B470B164ABC9800C94D7F /* HyperLinkLabel1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = HyperLinkLabel1.h; sourceTree = "<group>"; };
 		5A1B470C164ABC9800C94D7F /* IniData.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = IniData.h; sourceTree = "<group>"; };
-		5A1B470D164ABC9800C94D7F /* IniLoad.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = IniLoad.h; sourceTree = "<group>"; };
 		5A1B470E164ABC9800C94D7F /* ItemViewText.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = ItemViewText.h; sourceTree = "<group>"; };
 		5A1B470F164ABC9800C94D7F /* NDCombinePicture.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDCombinePicture.h; sourceTree = "<group>"; };
 		5A1B4710164ABC9800C94D7F /* NDCommonControl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDCommonControl.h; sourceTree = "<group>"; };
 		5A1B4711164ABC9800C94D7F /* NDCommonScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDCommonScene.h; sourceTree = "<group>"; };
-		5A1B4712164ABC9800C94D7F /* NDConstant.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDConstant.h; sourceTree = "<group>"; };
 		5A1B4713164ABC9800C94D7F /* NDCrashUpload_1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDCrashUpload_1.h; sourceTree = "<group>"; };
 		5A1B4714164ABC9800C94D7F /* NDDataPersist.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDDataPersist.h; sourceTree = "<group>"; };
 		5A1B4715164ABC9800C94D7F /* NDDefaultHttp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = NDDefaultHttp.h; sourceTree = "<group>"; };
@@ -1560,7 +1564,6 @@
 		5A1B474A164ABC9800C94D7F /* CampDonateScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = CampDonateScene.h; sourceTree = "<group>"; };
 		5A1B474B164ABC9800C94D7F /* CompeteListScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = CompeteListScene.h; sourceTree = "<group>"; };
 		5A1B474C164ABC9800C94D7F /* CreateRoleScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = CreateRoleScene.h; sourceTree = "<group>"; };
-		5A1B474D164ABC9800C94D7F /* EquipUpgradeScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = EquipUpgradeScene.h; sourceTree = "<group>"; };
 		5A1B474E164ABC9800C94D7F /* FavoriteAccountList.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FavoriteAccountList.h; sourceTree = "<group>"; };
 		5A1B474F164ABC9800C94D7F /* FindBackPasswordScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FindBackPasswordScene.h; sourceTree = "<group>"; };
 		5A1B4750164ABC9800C94D7F /* FriendElement.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FriendElement.h; sourceTree = "<group>"; };
@@ -1578,7 +1581,6 @@
 		5A1B475C164ABC9800C94D7F /* GameUIPaiHang_1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = GameUIPaiHang_1.h; sourceTree = "<group>"; };
 		5A1B475D164ABC9800C94D7F /* GameUIPetAttrib.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = GameUIPetAttrib.h; sourceTree = "<group>"; };
 		5A1B475E164ABC9800C94D7F /* GameUIPlayerList.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = GameUIPlayerList.h; sourceTree = "<group>"; };
-		5A1B475F164ABC9800C94D7F /* GameUIRequest.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = GameUIRequest.h; sourceTree = "<group>"; };
 		5A1B4760164ABC9800C94D7F /* GameUIRootOperation.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = GameUIRootOperation.h; sourceTree = "<group>"; };
 		5A1B4761164ABC9800C94D7F /* GameUITaskList.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = GameUITaskList.h; sourceTree = "<group>"; };
 		5A1B4762164ABC9800C94D7F /* GoodFriendUILayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = GoodFriendUILayer.h; sourceTree = "<group>"; };
@@ -1609,9 +1611,7 @@
 		5A1B477B164ABC9800C94D7F /* UpdateScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = UpdateScene.h; sourceTree = "<group>"; };
 		5A1B477C164ABC9800C94D7F /* VipStoreScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = VipStoreScene.h; sourceTree = "<group>"; };
 		5A1B477D164ABC9800C94D7F /* WorldMapScene.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = WorldMapScene.h; sourceTree = "<group>"; };
-		5A1B477F164ABC9800C94D7F /* EquipUpgradeScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = EquipUpgradeScene.cpp; sourceTree = "<group>"; };
 		5A1B4780164ABC9800C94D7F /* GameScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = GameScene.cpp; sourceTree = "<group>"; };
-		5A1B4781164ABC9800C94D7F /* GameUIRequest.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = GameUIRequest.cpp; sourceTree = "<group>"; };
 		5A1B4782164ABC9800C94D7F /* SMBattleScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = SMBattleScene.cpp; sourceTree = "<group>"; };
 		5A1B4783164ABC9800C94D7F /* SMGameScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = SMGameScene.cpp; sourceTree = "<group>"; };
 		5A1B4784164ABC9800C94D7F /* SMLoginScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 2147483673; lineEnding = 2; path = SMLoginScene.cpp; sourceTree = "<group>"; };
@@ -2361,6 +2361,28 @@
 		5AD601BC1651511200369185 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		5AD601BE1651512F00369185 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		5AD601C01651514C00369185 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		5AF6F52416636452006834AF /* NDUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDUtil.h; sourceTree = "<group>"; };
+		5AF6F5261663645C006834AF /* NDUtil.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDUtil.cpp; sourceTree = "<group>"; };
+		5AF6F52816636477006834AF /* NDBaseBattleMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDBaseBattleMgr.h; sourceTree = "<group>"; };
+		5AF6F52916636477006834AF /* NDBaseMsgDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDBaseMsgDefine.h; sourceTree = "<group>"; };
+		5AF6F52A16636477006834AF /* NDBaseNetMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDBaseNetMgr.h; sourceTree = "<group>"; };
+		5AF6F52B16636477006834AF /* NDBaseScriptMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDBaseScriptMgr.h; sourceTree = "<group>"; };
+		5AF6F53016636482006834AF /* NDBaseBattleMgr.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDBaseBattleMgr.cpp; sourceTree = "<group>"; };
+		5AF6F53116636482006834AF /* NDBaseNetMgr.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDBaseNetMgr.cpp; sourceTree = "<group>"; };
+		5AF6F53216636482006834AF /* NDBaseScriptMgr.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDBaseScriptMgr.cpp; sourceTree = "<group>"; };
+		5AF6F5361663677D006834AF /* ScriptMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScriptMgr.h; sourceTree = "<group>"; };
+		5AF6F53816636788006834AF /* ScriptMgr.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ScriptMgr.cpp; sourceTree = "<group>"; };
+		5AF6F53A1663752A006834AF /* NDUIScrollContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDUIScrollContainer.h; sourceTree = "<group>"; };
+		5AF6F53B1663752A006834AF /* NDUIScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDUIScrollView.h; sourceTree = "<group>"; };
+		5AF6F53E16637A3D006834AF /* NDUIScrollContainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDUIScrollContainer.cpp; sourceTree = "<group>"; };
+		5AF6F53F16637A3D006834AF /* NDUIScrollViewContainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDUIScrollViewContainer.cpp; sourceTree = "<group>"; };
+		5AF6F54216637DBC006834AF /* GameSceneLoading.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = GameSceneLoading.cpp; sourceTree = "<group>"; };
+		5AF6F5971663BBD6006834AF /* NDBaseGlobalDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDBaseGlobalDialog.h; sourceTree = "<group>"; };
+		5AF6F5981663BBD6006834AF /* NDUIBaseItemButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDUIBaseItemButton.h; sourceTree = "<group>"; };
+		5AF6F59C1663BBE0006834AF /* NDBaseGlobalDialog.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDBaseGlobalDialog.cpp; sourceTree = "<group>"; };
+		5AF6F59D1663BBE0006834AF /* NDUIBaseItemButton.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = NDUIBaseItemButton.cpp; sourceTree = "<group>"; };
+		5AF6F5A01663BBF1006834AF /* EngineScriptCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineScriptCommon.h; sourceTree = "<group>"; };
+		5AF6F5A21663BBF8006834AF /* EngineScriptCommon.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = EngineScriptCommon.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2368,7 +2390,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5AD601C11651514C00369185 /* libz.dylib in Frameworks */,
+				5AF6F5881663B298006834AF /* libz.dylib in Frameworks */,
 				5AD601BF1651512F00369185 /* AVFoundation.framework in Frameworks */,
 				5AD601BD1651511200369185 /* AudioToolbox.framework in Frameworks */,
 				5AD601BB165150CE00369185 /* StoreKit.framework in Frameworks */,
@@ -2517,6 +2539,12 @@
 		5A1B3F5E164AB5C100C94D7F /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				5AF6F5971663BBD6006834AF /* NDBaseGlobalDialog.h */,
+				5AF6F5981663BBD6006834AF /* NDUIBaseItemButton.h */,
+				5AF6F52816636477006834AF /* NDBaseBattleMgr.h */,
+				5AF6F52916636477006834AF /* NDBaseMsgDefine.h */,
+				5AF6F52A16636477006834AF /* NDBaseNetMgr.h */,
+				5AF6F52B16636477006834AF /* NDBaseScriptMgr.h */,
 				5A3FC19F16529512002166DD /* NDProfile.h */,
 				5A3FC19616528236002166DD /* UsePointPls.h */,
 				5A1B3F5F164AB5C100C94D7F /* FrameworkTypes.h */,
@@ -2542,6 +2570,11 @@
 		5A1B3F6F164AB5C100C94D7F /* src */ = {
 			isa = PBXGroup;
 			children = (
+				5AF6F59C1663BBE0006834AF /* NDBaseGlobalDialog.cpp */,
+				5AF6F59D1663BBE0006834AF /* NDUIBaseItemButton.cpp */,
+				5AF6F53016636482006834AF /* NDBaseBattleMgr.cpp */,
+				5AF6F53116636482006834AF /* NDBaseNetMgr.cpp */,
+				5AF6F53216636482006834AF /* NDBaseScriptMgr.cpp */,
 				5A3FC19316528229002166DD /* UsePointPls.cpp */,
 				5A1B3F70164AB5C100C94D7F /* NDBaseDirector.cpp */,
 				5A1B3F71164AB5C100C94D7F /* NDBaseLayer.cpp */,
@@ -2606,6 +2639,8 @@
 		5A1B3F89164AB5C100C94D7F /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				5AF6F53A1663752A006834AF /* NDUIScrollContainer.h */,
+				5AF6F53B1663752A006834AF /* NDUIScrollView.h */,
 				5A1B3F8A164AB5C100C94D7F /* Analyst.h */,
 				5A1B3F8B164AB5C100C94D7F /* AnalystType.h */,
 				5A1B3F8C164AB5C100C94D7F /* GameUITaskList.h */,
@@ -2632,7 +2667,6 @@
 				5A1B3FA3164AB5C100C94D7F /* NDUIProgressBar.h */,
 				5A1B3FA4164AB5C100C94D7F /* NDUIScrollText.h */,
 				5A1B3FA5164AB5C100C94D7F /* NDUISynLayer.h */,
-				5A1B3FA6164AB5C100C94D7F /* NDUITableLayer.h */,
 				5A1B3FA7164AB5C100C94D7F /* NDUITableLayer_1.h */,
 				5A1B3FA8164AB5C100C94D7F /* SysTimer.h */,
 				5A1B3FA9164AB5C100C94D7F /* TickAnalyst.h */,
@@ -2668,6 +2702,8 @@
 		5A1B3FC4164AB5C100C94D7F /* src */ = {
 			isa = PBXGroup;
 			children = (
+				5AF6F53E16637A3D006834AF /* NDUIScrollContainer.cpp */,
+				5AF6F53F16637A3D006834AF /* NDUIScrollViewContainer.cpp */,
 				5A1B3FC5164AB5C100C94D7F /* Analyst.cpp */,
 				5A1B3FC6164AB5C100C94D7F /* HyperLinkLabel.cpp */,
 				5A1B3FC7164AB5C100C94D7F /* NDDataSource.cpp */,
@@ -2698,9 +2734,7 @@
 				5A1B3FE2164AB5C100C94D7F /* UIMovableLayer.cpp */,
 				5A1B3FE3164AB5C100C94D7F /* UIRadioButton.cpp */,
 				5A1B3FE4164AB5C100C94D7F /* UIScroll.cpp */,
-				5A1B3FE5164AB5C100C94D7F /* UIScrollContainer.cpp */,
 				5A1B3FE6164AB5C100C94D7F /* UIScrollContainerExpand.cpp */,
-				5A1B3FE7164AB5C100C94D7F /* UIScrollView.cpp */,
 				5A1B3FE8164AB5C100C94D7F /* UIScrollViewExpand.cpp */,
 				5A1B3FE9164AB5C100C94D7F /* UIScrollViewMulHand.cpp */,
 				5A1B3FEA164AB5C100C94D7F /* UISpriteNode.cpp */,
@@ -2860,11 +2894,11 @@
 		5A1B4023164AB5C100C94D7F /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				5AF6F5A01663BBF1006834AF /* EngineScriptCommon.h */,
 				5A1B4024164AB5C100C94D7F /* LuaPlusHelper.h */,
 				5A1B4025164AB5C100C94D7F /* LuaStateMgr.h */,
 				5A1B4026164AB5C100C94D7F /* ScriptDefine.h */,
 				5A1B4027164AB5C100C94D7F /* ScriptInc.h */,
-				5A1B4028164AB5C100C94D7F /* ScriptMgr.h */,
 			);
 			path = inc;
 			sourceTree = "<group>";
@@ -2872,8 +2906,8 @@
 		5A1B4029164AB5C100C94D7F /* src */ = {
 			isa = PBXGroup;
 			children = (
+				5AF6F5A21663BBF8006834AF /* EngineScriptCommon.cpp */,
 				5A1B402A164AB5C100C94D7F /* LuaStateMgr.cpp */,
-				5A1B402B164AB5C100C94D7F /* ScriptMgr.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -2963,6 +2997,7 @@
 		5A1B405B164AB5C100C94D7F /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				5AF6F52416636452006834AF /* NDUtil.h */,
 				5A3FC19D165292D2002166DD /* UtilityInc.h */,
 				5A3FC19916528B21002166DD /* TQPlatform.h */,
 				5A1B405C164AB5C100C94D7F /* AutoLink.h */,
@@ -2986,6 +3021,7 @@
 		5A1B406D164AB5C100C94D7F /* src */ = {
 			isa = PBXGroup;
 			children = (
+				5AF6F5261663645C006834AF /* NDUtil.cpp */,
 				5A3FC19B16528B2B002166DD /* TQPlatform.cpp */,
 				5A1B406E164AB5C100C94D7F /* Des.cpp */,
 				5A1B406F164AB5C100C94D7F /* Des.mm */,
@@ -3268,6 +3304,7 @@
 		5A1B46AB164ABC9800C94D7F /* Inc */ = {
 			isa = PBXGroup;
 			children = (
+				5AF6F5361663677D006834AF /* ScriptMgr.h */,
 				5A1B46AC164ABC9800C94D7F /* ScriptCommon.h */,
 				5A1B46AD164ABC9800C94D7F /* ScriptDataBase.h */,
 				5A1B46AE164ABC9800C94D7F /* ScriptDrama.h */,
@@ -3286,6 +3323,7 @@
 		5A1B46B7164ABC9800C94D7F /* Src */ = {
 			isa = PBXGroup;
 			children = (
+				5AF6F53816636788006834AF /* ScriptMgr.cpp */,
 				5A1B46B8164ABC9800C94D7F /* ScriptCommon.cpp */,
 				5A1B46B9164ABC9800C94D7F /* ScriptDataBase.cpp */,
 				5A1B46BA164ABC9800C94D7F /* ScriptDrama.cpp */,
@@ -3502,12 +3540,10 @@
 				5A1B470A164ABC9800C94D7F /* GlobalDialog.h */,
 				5A1B470B164ABC9800C94D7F /* HyperLinkLabel1.h */,
 				5A1B470C164ABC9800C94D7F /* IniData.h */,
-				5A1B470D164ABC9800C94D7F /* IniLoad.h */,
 				5A1B470E164ABC9800C94D7F /* ItemViewText.h */,
 				5A1B470F164ABC9800C94D7F /* NDCombinePicture.h */,
 				5A1B4710164ABC9800C94D7F /* NDCommonControl.h */,
 				5A1B4711164ABC9800C94D7F /* NDCommonScene.h */,
-				5A1B4712164ABC9800C94D7F /* NDConstant.h */,
 				5A1B4713164ABC9800C94D7F /* NDCrashUpload_1.h */,
 				5A1B4714164ABC9800C94D7F /* NDDataPersist.h */,
 				5A1B4715164ABC9800C94D7F /* NDDefaultHttp.h */,
@@ -3624,7 +3660,6 @@
 				5A1B474A164ABC9800C94D7F /* CampDonateScene.h */,
 				5A1B474B164ABC9800C94D7F /* CompeteListScene.h */,
 				5A1B474C164ABC9800C94D7F /* CreateRoleScene.h */,
-				5A1B474D164ABC9800C94D7F /* EquipUpgradeScene.h */,
 				5A1B474E164ABC9800C94D7F /* FavoriteAccountList.h */,
 				5A1B474F164ABC9800C94D7F /* FindBackPasswordScene.h */,
 				5A1B4750164ABC9800C94D7F /* FriendElement.h */,
@@ -3642,7 +3677,6 @@
 				5A1B475C164ABC9800C94D7F /* GameUIPaiHang_1.h */,
 				5A1B475D164ABC9800C94D7F /* GameUIPetAttrib.h */,
 				5A1B475E164ABC9800C94D7F /* GameUIPlayerList.h */,
-				5A1B475F164ABC9800C94D7F /* GameUIRequest.h */,
 				5A1B4760164ABC9800C94D7F /* GameUIRootOperation.h */,
 				5A1B4761164ABC9800C94D7F /* GameUITaskList.h */,
 				5A1B4762164ABC9800C94D7F /* GoodFriendUILayer.h */,
@@ -3680,9 +3714,8 @@
 		5A1B477E164ABC9800C94D7F /* src */ = {
 			isa = PBXGroup;
 			children = (
-				5A1B477F164ABC9800C94D7F /* EquipUpgradeScene.cpp */,
+				5AF6F54216637DBC006834AF /* GameSceneLoading.cpp */,
 				5A1B4780164ABC9800C94D7F /* GameScene.cpp */,
-				5A1B4781164ABC9800C94D7F /* GameUIRequest.cpp */,
 				5A1B4782164ABC9800C94D7F /* SMBattleScene.cpp */,
 				5A1B4783164ABC9800C94D7F /* SMGameScene.cpp */,
 				5A1B4784164ABC9800C94D7F /* SMLoginScene.cpp */,
@@ -5057,7 +5090,6 @@
 				5A1B40BD164AB5C100C94D7F /* NDUIProgressBar.h in Headers */,
 				5A1B40BE164AB5C100C94D7F /* NDUIScrollText.h in Headers */,
 				5A1B40BF164AB5C100C94D7F /* NDUISynLayer.h in Headers */,
-				5A1B40C0164AB5C100C94D7F /* NDUITableLayer.h in Headers */,
 				5A1B40C1164AB5C100C94D7F /* NDUITableLayer_1.h in Headers */,
 				5A1B40C2164AB5C100C94D7F /* SysTimer.h in Headers */,
 				5A1B40C3164AB5C100C94D7F /* TickAnalyst.h in Headers */,
@@ -5106,7 +5138,6 @@
 				5A1B412F164AB5C200C94D7F /* LuaStateMgr.h in Headers */,
 				5A1B4130164AB5C200C94D7F /* ScriptDefine.h in Headers */,
 				5A1B4131164AB5C200C94D7F /* ScriptInc.h in Headers */,
-				5A1B4132164AB5C200C94D7F /* ScriptMgr.h in Headers */,
 				5A1B4135164AB5C200C94D7F /* AStar.h in Headers */,
 				5A1B4136164AB5C200C94D7F /* BaseType.h in Headers */,
 				5A1B4137164AB5C200C94D7F /* cocos2dExt.h in Headers */,
@@ -5238,6 +5269,16 @@
 				5A3FC19E165292D3002166DD /* UtilityInc.h in Headers */,
 				5A3FC1A016529513002166DD /* NDProfile.h in Headers */,
 				5A3FC1A416529FF8002166DD /* NDUILoadEngine.h in Headers */,
+				5AF6F52516636452006834AF /* NDUtil.h in Headers */,
+				5AF6F52C16636477006834AF /* NDBaseBattleMgr.h in Headers */,
+				5AF6F52D16636477006834AF /* NDBaseMsgDefine.h in Headers */,
+				5AF6F52E16636477006834AF /* NDBaseNetMgr.h in Headers */,
+				5AF6F52F16636477006834AF /* NDBaseScriptMgr.h in Headers */,
+				5AF6F53C1663752A006834AF /* NDUIScrollContainer.h in Headers */,
+				5AF6F53D1663752A006834AF /* NDUIScrollView.h in Headers */,
+				5AF6F5991663BBD6006834AF /* NDBaseGlobalDialog.h in Headers */,
+				5AF6F59A1663BBD6006834AF /* NDUIBaseItemButton.h in Headers */,
+				5AF6F5A11663BBF1006834AF /* EngineScriptCommon.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5364,12 +5405,10 @@
 				5A1B489E164ABC9800C94D7F /* GlobalDialog.h in Headers */,
 				5A1B489F164ABC9800C94D7F /* HyperLinkLabel1.h in Headers */,
 				5A1B48A0164ABC9800C94D7F /* IniData.h in Headers */,
-				5A1B48A1164ABC9800C94D7F /* IniLoad.h in Headers */,
 				5A1B48A2164ABC9800C94D7F /* ItemViewText.h in Headers */,
 				5A1B48A3164ABC9800C94D7F /* NDCombinePicture.h in Headers */,
 				5A1B48A4164ABC9800C94D7F /* NDCommonControl.h in Headers */,
 				5A1B48A5164ABC9800C94D7F /* NDCommonScene.h in Headers */,
-				5A1B48A6164ABC9800C94D7F /* NDConstant.h in Headers */,
 				5A1B48A7164ABC9800C94D7F /* NDCrashUpload_1.h in Headers */,
 				5A1B48A8164ABC9800C94D7F /* NDDataPersist.h in Headers */,
 				5A1B48A9164ABC9800C94D7F /* NDDefaultHttp.h in Headers */,
@@ -5401,7 +5440,6 @@
 				5A1B48D5164ABC9800C94D7F /* CampDonateScene.h in Headers */,
 				5A1B48D6164ABC9800C94D7F /* CompeteListScene.h in Headers */,
 				5A1B48D7164ABC9800C94D7F /* CreateRoleScene.h in Headers */,
-				5A1B48D8164ABC9800C94D7F /* EquipUpgradeScene.h in Headers */,
 				5A1B48D9164ABC9800C94D7F /* FavoriteAccountList.h in Headers */,
 				5A1B48DA164ABC9800C94D7F /* FindBackPasswordScene.h in Headers */,
 				5A1B48DB164ABC9800C94D7F /* FriendElement.h in Headers */,
@@ -5419,7 +5457,6 @@
 				5A1B48E7164ABC9800C94D7F /* GameUIPaiHang_1.h in Headers */,
 				5A1B48E8164ABC9800C94D7F /* GameUIPetAttrib.h in Headers */,
 				5A1B48E9164ABC9800C94D7F /* GameUIPlayerList.h in Headers */,
-				5A1B48EA164ABC9800C94D7F /* GameUIRequest.h in Headers */,
 				5A1B48EB164ABC9800C94D7F /* GameUIRootOperation.h in Headers */,
 				5A1B48EC164ABC9800C94D7F /* GameUITaskList.h in Headers */,
 				5A1B48ED164ABC9800C94D7F /* GoodFriendUILayer.h in Headers */,
@@ -5472,6 +5509,7 @@
 				5A1B492A164ABC9800C94D7F /* NDNpcLogic.h in Headers */,
 				5A1B492B164ABC9800C94D7F /* NDPlayer.h in Headers */,
 				5A1B492C164ABC9800C94D7F /* NpcList.h in Headers */,
+				5AF6F5371663677D006834AF /* ScriptMgr.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5857,9 +5895,7 @@
 				5A1B40FA164AB5C100C94D7F /* UIMovableLayer.cpp in Sources */,
 				5A1B40FB164AB5C100C94D7F /* UIRadioButton.cpp in Sources */,
 				5A1B40FC164AB5C100C94D7F /* UIScroll.cpp in Sources */,
-				5A1B40FD164AB5C100C94D7F /* UIScrollContainer.cpp in Sources */,
 				5A1B40FE164AB5C100C94D7F /* UIScrollContainerExpand.cpp in Sources */,
-				5A1B40FF164AB5C100C94D7F /* UIScrollView.cpp in Sources */,
 				5A1B4100164AB5C100C94D7F /* UIScrollViewExpand.cpp in Sources */,
 				5A1B4101164AB5C100C94D7F /* UIScrollViewMulHand.cpp in Sources */,
 				5A1B4102164AB5C100C94D7F /* UISpriteNode.cpp in Sources */,
@@ -5884,7 +5920,6 @@
 				5A1B412A164AB5C200C94D7F /* NDWorldMapData.cpp in Sources */,
 				5A1B412D164AB5C200C94D7F /* IphoneInput.cpp in Sources */,
 				5A1B4133164AB5C200C94D7F /* LuaStateMgr.cpp in Sources */,
-				5A1B4134164AB5C200C94D7F /* ScriptMgr.cpp in Sources */,
 				5A1B414E164AB5C200C94D7F /* AStar.cpp in Sources */,
 				5A1B414F164AB5C200C94D7F /* cocos2dExt.cpp in Sources */,
 				5A1B4150164AB5C200C94D7F /* JavaMethod.cpp in Sources */,
@@ -5914,6 +5949,15 @@
 				5A3FC19416528229002166DD /* UsePointPls.cpp in Sources */,
 				5A3FC19C16528B2B002166DD /* TQPlatform.cpp in Sources */,
 				5A3FC1A216529FF0002166DD /* NDUILoadEngine.cpp in Sources */,
+				5AF6F5271663645C006834AF /* NDUtil.cpp in Sources */,
+				5AF6F53316636482006834AF /* NDBaseBattleMgr.cpp in Sources */,
+				5AF6F53416636482006834AF /* NDBaseNetMgr.cpp in Sources */,
+				5AF6F53516636482006834AF /* NDBaseScriptMgr.cpp in Sources */,
+				5AF6F54016637A3D006834AF /* NDUIScrollContainer.cpp in Sources */,
+				5AF6F54116637A3D006834AF /* NDUIScrollViewContainer.cpp in Sources */,
+				5AF6F59E1663BBE0006834AF /* NDBaseGlobalDialog.cpp in Sources */,
+				5AF6F59F1663BBE0006834AF /* NDUIBaseItemButton.cpp in Sources */,
+				5AF6F5A31663BBF8006834AF /* EngineScriptCommon.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5974,9 +6018,7 @@
 				5A1B48CF164ABC9800C94D7F /* DramaUI.cpp in Sources */,
 				5A1B48D2164ABC9800C94D7F /* GameData.cpp in Sources */,
 				5A1B48D3164ABC9800C94D7F /* GameDataBase.cpp in Sources */,
-				5A1B4909164ABC9800C94D7F /* EquipUpgradeScene.cpp in Sources */,
 				5A1B490A164ABC9800C94D7F /* GameScene.cpp in Sources */,
-				5A1B490B164ABC9800C94D7F /* GameUIRequest.cpp in Sources */,
 				5A1B490C164ABC9800C94D7F /* SMBattleScene.cpp in Sources */,
 				5A1B490D164ABC9800C94D7F /* SMGameScene.cpp in Sources */,
 				5A1B490E164ABC9800C94D7F /* SMLoginScene.cpp in Sources */,
@@ -5997,6 +6039,8 @@
 				5A1B4934164ABC9800C94D7F /* NDNpc.cpp in Sources */,
 				5A1B4935164ABC9800C94D7F /* NDNpcLogic.cpp in Sources */,
 				5A1B4936164ABC9800C94D7F /* NDPlayer.cpp in Sources */,
+				5AF6F53916636788006834AF /* ScriptMgr.cpp in Sources */,
+				5AF6F54316637DBC006834AF /* GameSceneLoading.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6290,6 +6334,7 @@
 				DSTROOT = /tmp/KUtil.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "TARGET_OS_IPHONE=1";
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -6376,6 +6421,13 @@
 				DSTROOT = /tmp/ClientEngine.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TARGET_OS_IPHONE=1",
+					"ND_MOD=1",
+					"USE_MGSDK=1",
+					"PROFILE_ENCRYPT_C2S=1",
+					"$(inherited)",
+				);
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				HEADER_SEARCH_PATHS = (
 					"../../cocos2d-x/TinyXML/inc",
@@ -6454,6 +6506,13 @@
 				DSTROOT = /tmp/ClientLogic.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TARGET_OS_IPHONE=1",
+					"ND_MOD=1",
+					"USE_MGSDK=1",
+					"PROFILE_ENCRYPT_C2S=1",
+					"$(inherited)",
+				);
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				HEADER_SEARCH_PATHS = (
 					"../../cocos2d-x/TinyXML/inc",
@@ -6489,7 +6548,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"__IOS_PLATFORM__=1",
+					"TARGET_OS_IPHONE=1",
+					__IOS_PLATFORM__,
 					"DEBUG=1",
 					"$(inherited)",
 				);
@@ -6507,6 +6567,10 @@
 				DSTROOT = /tmp/NetWork.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TARGET_OS_IPHONE=1",
+					__IOS_PLATFORM__,
+				);
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -6607,7 +6671,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
-				xx = "";
 			};
 			name = Debug;
 		};
@@ -6618,6 +6681,7 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "dhlj/dhlj-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = LUA_USE_LINUX;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
@@ -6645,7 +6709,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
-				xx = "";
 			};
 			name = Release;
 		};
@@ -6694,7 +6757,10 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = "TARGET_OS_IPHONE=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TARGET_OS_IPHONE=1",
+					"ND_MOD=1",
+				);
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
@@ -6726,6 +6792,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					TARGET_OS_IPHONE,
 					LUA_USE_LINUX,
 					"$(inherited)",
 				);
@@ -6749,6 +6816,10 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					TARGET_OS_IPHONE,
+					LUA_USE_LINUX,
+				);
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				HEADER_SEARCH_PATHS = (
 					../../LuaPlus,

@@ -165,7 +165,7 @@ LUALIB_API void (luaL_pushresult) (luaL_Buffer *B);
 #define LUA_NOREF       (-2)
 #define LUA_REFNIL      (-1)
 
-#define lua_ref(L,lock) ((lock) ? luaL_ref(L, LUA_REGISTRYINDEX) : \
+#define lua_ref(L,Lock) ((Lock) ? luaL_ref(L, LUA_REGISTRYINDEX) : \
       (lua_pushstring(L, "unlocked references are obsolete"), lua_error(L), 0))
 
 #define lua_unref(L,ref)        luaL_unref(L, LUA_REGISTRYINDEX, (ref))

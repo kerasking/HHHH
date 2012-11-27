@@ -79,10 +79,10 @@ namespace LPCD
 		}
 		
 		std::string metaname("MetaClass_");
-#if (defined(__APPLE__) || defined(ANDROID))
-		metaname += typeid(T).name();
-#else
+#ifdef _WINDOWS
 		metaname += typeid(T).raw_name();
+#else
+		metaname += typeid(T).name();
 #endif
 		//lua_getglobal(L, metaname.c_str());
 		lua_getfield(L, LUA_REGISTRYINDEX, metaname.c_str());
@@ -111,10 +111,10 @@ namespace LPCD
 	inline void Push(lua_State* L, T classobj)
 	{
 		std::string metaname("MetaClass_");
-#if (defined(__APPLE__) || defined(ANDROID))
-		metaname += typeid(T).name();
-#else
+#ifdef _WINDOWS
 		metaname += typeid(T).raw_name();
+#else
+		metaname += typeid(T).name();
 #endif
 		
 		lua_getfield(L, LUA_REGISTRYINDEX, metaname.c_str());

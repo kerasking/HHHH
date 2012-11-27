@@ -14,6 +14,7 @@
 #include <set>
 #include <map>
 #include "BaseType.h"
+#include "basedefine.h"
 
 //typedef unsigned long			OBJID;
 

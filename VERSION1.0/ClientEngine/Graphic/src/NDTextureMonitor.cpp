@@ -12,7 +12,6 @@
 #include "NDDirector.h"
 #include "NDAnimationGroupPool.h"
 #include "CCTextureCacheExt.h"
-#include "ScriptMgr.h"
 
 using namespace NDEngine;
 

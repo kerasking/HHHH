@@ -85,22 +85,6 @@ int BitwiseAnd(int x, int y)
 	return nRes;
 }
 
-int PicMemoryUsingLogOut(bool bNotPrintLog)
-{
-	int nSize = 0;
-	if (!bNotPrintLog)
-	{
-		NDLog("\n============NDPicturePool Memory Report==============\n");
-	}
-	//nSize += NDPicturePool::DefaultPool()->Statistics(bNotPrintLog);
-	if (!bNotPrintLog)
-	{
-		NDLog("\n============CCTextureCache Memory Report==============\n");
-	}
-	//nSize += [[CCTextureCache sharedTextureCache] Statistics:bNotPrintLog];
-	return nSize;
-}
-
 ////////////////////////////////////////////////////////////
 //std::string g_strTmpWords;
 ////////////////////////////////////////////////////////////

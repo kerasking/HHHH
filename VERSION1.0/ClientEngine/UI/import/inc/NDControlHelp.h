@@ -20,8 +20,6 @@
 #include "NDUIScrollView.h"
 #include "NDTextNode.h"
 #include "UIHyperlink.h"
-#include "UIItemButton.h"
-#include "UIEquipItem.h"
 #include "UICheckBox.h"
 #include "UIRadioButton.h"
 #include "UIExp.h"
@@ -31,6 +29,7 @@
 #include "NDWideString.h"
 #include "UIScrollViewMulHand.h"
 #include "UIScrollContainerExpand.h"
+#include "NDUIBaseItemButton.h"
 
 using namespace NDEngine;
 
@@ -447,20 +446,28 @@ public:
 };
 
 template<>
-class CtrolTrait<CUIItemButton> : public CtrolBase
+class CtrolTrait<NDUIBaseItemButton> : public CtrolBase
 {
 public:
-	CUIItemButton* Create(UIINFO& info, CCSize& sizeOffset)
+	NDUIBaseItemButton* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
 		CCRect rect = this->GetFrameRect();
-		CUIItemButton *itemBtn = new CUIItemButton;
-		itemBtn->Initialization();
-		itemBtn->SetFrameRect(rect);
-		itemBtn->CloseFrame();
-		itemBtn->SetBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);
-		itemBtn->SetTouchDownImage(GetSelectedPicture(), false, CCRectZero, true);
-		itemBtn->SetFocusImage(GetFocusPicture(), false, CCRectZero, true);
+		NDUIBaseItemButton *itemBtn = CREATE_CLASS(NDUIBaseItemButton,"CUIItemButton");
+
+		itemBtn->InitializationItem();
+		itemBtn->SetItemFrameRect(rect);
+		itemBtn->CloseItemFrame();
+
+		itemBtn->SetItemBackgroundPicture(GetNormalPicture(), NULL, false, CCRectZero, true);
+		itemBtn->SetItemFocusImage(GetFocusPicture(), false, CCRectZero, true);
+
+// 		itemBtn->Initialization();
+// 		itemBtn->SetFrameRect(rect);
+// 		itemBtn->CloseFrame();
+// 		itemBtn->SetBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);
+// 		itemBtn->SetTouchDownImage(GetSelectedPicture(), false, CCRectZero, true);
+// 		itemBtn->SetFocusImage(GetFocusPicture(), false, CCRectZero, true);
 		return itemBtn;
 	}
 };
@@ -561,21 +568,24 @@ public:
 };
 
 template<>															
-class ControlHelp<MY_CONTROL_TYPE_EQUIP_BUTTON> : public CtrolTrait<CUIItemButton>		
+class ControlHelp<MY_CONTROL_TYPE_EQUIP_BUTTON> : public CtrolTrait<NDUIBaseItemButton>		
 {	
 public:
-	CUIEquipItem* Create(UIINFO& info, CCSize& sizeOffset)
+	NDUIBaseItemButton* Create(UIINFO& info, CCSize& sizeOffset)
 	{
 		Init(info, sizeOffset);
 		CCRect rect = this->GetFrameRect();
-		CUIEquipItem *equipBtn = new CUIEquipItem;
-		equipBtn->Initialization();
-		equipBtn->SetFrameRect(rect);
-		equipBtn->CloseFrame();
+		NDUIBaseItemButton *equipBtn = CREATE_CLASS(NDUIBaseItemButton,"CUIEquipItem");
+		equipBtn->InitializationItem();
+		equipBtn->SetItemFrameRect(rect);
+		equipBtn->CloseItemFrame();
 
-		equipBtn->SetBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);
-		equipBtn->SetTouchDownImage(GetSelectedPicture(), false, CCRectZero, true);
-		equipBtn->SetFocusImage(GetFocusPicture(), false, CCRectZero, true);
+		equipBtn->SetItemBackgroundPicture(GetNormalPicture(), NULL, false, CCRectZero, true);
+		equipBtn->SetItemFocusImage(GetFocusPicture(), false, CCRectZero, true);
+
+// 		equipBtn->SetBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);
+// 		equipBtn->SetTouchDownImage(GetSelectedPicture(), false, CCRectZero, true);
+// 		equipBtn->SetFocusImage(GetFocusPicture(), false, CCRectZero, true);
 		return equipBtn;
 	}
 };
@@ -633,7 +643,7 @@ CtrolHelpDeclare(MY_CONTROL_TYPE_BACK, NDUIImage)
 CtrolHelpDeclare(MY_CONTROL_TYPE_UITEXT, NDUIText)
 CtrolHelpDeclare(MY_CONTROL_TYPE_HYPER_TEXT, CUIHyperlinkText)
 CtrolHelpDeclare(MY_CONTROL_TYPE_HYPER_TEXT_BUTTON, CUIHyperlinkButton)
-CtrolHelpDeclare(MY_CONTROL_TYPE_ITEM_BUTTON, CUIItemButton)
+CtrolHelpDeclare(MY_CONTROL_TYPE_ITEM_BUTTON, NDUIBaseItemButton)
 CtrolHelpDeclare(MY_CONTROL_TYPE_EXP, CUIExp)
 CtrolHelpDeclare(MY_CONTROL_TYPE_EDIT, CUIEdit)
 CtrolHelpDeclare(MY_CONTROL_TYPE_SPRITE, CUISpriteNode)

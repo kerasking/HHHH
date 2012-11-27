@@ -512,11 +512,11 @@ void NDTile::make()
 	makeVetex(m_pfVertices, rectInPoints);
 }
 
-static GLbyte gs_nTileColors[] =
+static GLubyte gs_nTileColors[] =
 		{ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
 				255, 255 };
 
-static GLbyte gs_nTileHightLightColors[] =
+static GLubyte gs_nTileHightLightColors[] =
 		{ 255, 255, 255, 125, 255, 255, 255, 125, 255, 255, 255, 125, 255, 255,
 				255, 125 };
 

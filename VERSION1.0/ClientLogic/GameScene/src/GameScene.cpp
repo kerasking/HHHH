@@ -35,7 +35,7 @@
 #include "GlobalDialog.h"
 #include "Task.h"
 #include "GameUIPlayerList.h"
-#include "GameUIRequest.h"
+//#include "GameUIRequest.h"
 #include "GoodFriendUILayer.h"
 //#include "GameUIPaiHang.h" ///< 临时性注�?? 郭浩
 #include "TutorUILayer.h"
@@ -68,7 +68,7 @@
 //#include "QuickFunc.h"
 //#include "QuickTeam.h"
 //#include "RequestListScene.h"
-#include "NewVipStoreScene.h"
+//#include "NewVipStoreScene.h"
 #include "BattleFieldScene.h"
 #include "NDUISpecialLayer.h"
 

@@ -12,7 +12,6 @@
 
 #include "basedefine.h"
 #include "NDClassFactory.h"
-#include "CCPlatformConfig.h"
 
 template<typename T>
 class TSingleton

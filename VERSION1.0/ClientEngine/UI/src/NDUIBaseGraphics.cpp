@@ -68,173 +68,173 @@ namespace NDEngine
 
 	void DrawPolygon(CCRect rect, ccColor4B color, GLuint lineWidth)
 	{
-		//CCAssert(0,"crash me");//@todo: crash me!
-
-		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
-
-		glLineWidth(lineWidth);
-		glColor4ub(color.r, color.g, color.b, color.a);
-
-		if (CompareEqualFloat(scale, 0.0f))
-		{
-			CCPoint vertices[4] = {
-				ccp(rect.origin.x, winSize.height - rect.origin.y - rect.size.height), 
-				ccp(rect.origin.x + rect.size.width, winSize.height - rect.origin.y - rect.size.height),
-				ccp(rect.origin.x + rect.size.width, winSize.height - rect.origin.y),
-				ccp(rect.origin.x, winSize.height - rect.origin.y)			
-			}; 
-			ccDrawPoly(vertices, 4, true);
-		}
-		else
-		{
-			CCPoint vertices[4] = {
-				ccp(rect.origin.x / scale, (winSize.height - rect.origin.y - rect.size.height) / scale), 
-				ccp((rect.origin.x + rect.size.width) / scale, (winSize.height - rect.origin.y - rect.size.height) / scale),
-				ccp((rect.origin.x + rect.size.width) / scale, (winSize.height - rect.origin.y) / scale),
-				ccp(rect.origin.x / scale, (winSize.height - rect.origin.y) / scale)			
-			}; 
-			ccDrawPoly(vertices, 4, true);
-		}
-
-		glColor4ub(255, 255, 255, 255); 
+// 		//CCAssert(0,"crash me");//@todo: crash me!
+// 
+// 		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+// 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
+// 
+// 		glLineWidth(lineWidth);
+// 		glColor4ub(color.r, color.g, color.b, color.a);
+// 
+// 		if (CompareEqualFloat(scale, 0.0f))
+// 		{
+// 			CCPoint vertices[4] = {
+// 				ccp(rect.origin.x, winSize.height - rect.origin.y - rect.size.height), 
+// 				ccp(rect.origin.x + rect.size.width, winSize.height - rect.origin.y - rect.size.height),
+// 				ccp(rect.origin.x + rect.size.width, winSize.height - rect.origin.y),
+// 				ccp(rect.origin.x, winSize.height - rect.origin.y)			
+// 			}; 
+// 			ccDrawPoly(vertices, 4, true);
+// 		}
+// 		else
+// 		{
+// 			CCPoint vertices[4] = {
+// 				ccp(rect.origin.x / scale, (winSize.height - rect.origin.y - rect.size.height) / scale), 
+// 				ccp((rect.origin.x + rect.size.width) / scale, (winSize.height - rect.origin.y - rect.size.height) / scale),
+// 				ccp((rect.origin.x + rect.size.width) / scale, (winSize.height - rect.origin.y) / scale),
+// 				ccp(rect.origin.x / scale, (winSize.height - rect.origin.y) / scale)			
+// 			}; 
+// 			ccDrawPoly(vertices, 4, true);
+// 		}
+// 
+// 		glColor4ub(255, 255, 255, 255); 
 	}
 
 	void DrawLine(CCPoint fromPoint, CCPoint toPoint, ccColor4B color, GLuint lineWidth)
 	{	
-		//CCAssert(0, "crash me");//@todo: crash me!
-
-		CCSize winSize	= CCDirector::sharedDirector()->getWinSizeInPixels();
-		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();
-
-		glLineWidth(lineWidth);
-		glColor4ub(color.r, color.g, color.b, color.a);
-
-// 		if (CompareEqualFloat(scale, 0.0f))
-// 		{
-// 			ccDrawLine(ccp(fromPoint.x,winSize.height - fromPoint.y), ccp(toPoint.x, winSize.height - toPoint.y));
-// 		}
-// 		else
-// 		{
-// 			ccDrawLine(ccp(fromPoint.x / scale, (winSize.height - fromPoint.y)  / scale), 
-// 				ccp(toPoint.x / scale, (winSize.height - toPoint.y) / scale));
-// 		}
-
-		ccDrawLine( SCREEN2GL(fromPoint), SCREEN2GL(toPoint));
-		
-		glColor4ub(255, 255, 255, 255);
+// 		//CCAssert(0, "crash me");//@todo: crash me!
+// 
+// 		CCSize winSize	= CCDirector::sharedDirector()->getWinSizeInPixels();
+// 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();
+// 
+// 		glLineWidth(lineWidth);
+// 		glColor4ub(color.r, color.g, color.b, color.a);
+// 
+// // 		if (CompareEqualFloat(scale, 0.0f))
+// // 		{
+// // 			ccDrawLine(ccp(fromPoint.x,winSize.height - fromPoint.y), ccp(toPoint.x, winSize.height - toPoint.y));
+// // 		}
+// // 		else
+// // 		{
+// // 			ccDrawLine(ccp(fromPoint.x / scale, (winSize.height - fromPoint.y)  / scale), 
+// // 				ccp(toPoint.x / scale, (winSize.height - toPoint.y) / scale));
+// // 		}
+// 
+// 		ccDrawLine( SCREEN2GL(fromPoint), SCREEN2GL(toPoint));
+// 		
+// 		glColor4ub(255, 255, 255, 255);
 	}
 
 	void DrawCircle(CCPoint center, float r, float a, int segs, ccColor4B color)
 	{
-		//CCAssert(0, "crash me");//@todo: crash me!
-
-		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-		CCPoint glCenter = ccp(center.x, winSize.height - center.y);
-
-		glColor4ub(color.r, color.g, color.b, color.a);
-
-		int additionalSegment = 1;
-
-		const float coef = 2.0f * (float)M_PI/segs;
-
-		float *vertices = (float *)malloc( sizeof(float)*2*(segs+2));
-		if( ! vertices )
-			return;
-
-		memset( vertices,0, sizeof(float)*2*(segs+2));
-
-		for(int i=0;i<=segs;i++)
-		{
-			float rads = i*coef;
-			float j = r * cosf(rads + a) + glCenter.x;
-			float k = r * sinf(rads + a) + glCenter.y;
-
-			vertices[i*2] = j;
-			vertices[i*2+1] =k;
-		}
-		vertices[(segs+1)*2] = glCenter.x;
-		vertices[(segs+1)*2+1] = glCenter.y;
-
-		// Default GL states: GL_TEXTURE_2D, GL_VERTEX_ARRAY, GL_COLOR_ARRAY, GL_TEXTURE_COORD_ARRAY
-		// Needed states: GL_VERTEX_ARRAY, 
-		// Unneeded states: GL_TEXTURE_2D, GL_TEXTURE_COORD_ARRAY, GL_COLOR_ARRAY	
-		glDisable(GL_TEXTURE_2D);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_COLOR_ARRAY);
-
-		glVertexPointer(2, GL_FLOAT, 0, vertices);	
-		glDrawArrays(GL_TRIANGLE_FAN, 0, segs+additionalSegment);
-
-		// restore default state
-		glEnableClientState(GL_COLOR_ARRAY);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glEnable(GL_TEXTURE_2D);	
-
-		free( vertices );
-
-		glColor4ub(255, 255, 255, 255); 
+// 		//CCAssert(0, "crash me");//@todo: crash me!
+// 
+// 		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+// 		CCPoint glCenter = ccp(center.x, winSize.height - center.y);
+// 
+// 		glColor4ub(color.r, color.g, color.b, color.a);
+// 
+// 		int additionalSegment = 1;
+// 
+// 		const float coef = 2.0f * (float)M_PI/segs;
+// 
+// 		float *vertices = (float *)malloc( sizeof(float)*2*(segs+2));
+// 		if( ! vertices )
+// 			return;
+// 
+// 		memset( vertices,0, sizeof(float)*2*(segs+2));
+// 
+// 		for(int i=0;i<=segs;i++)
+// 		{
+// 			float rads = i*coef;
+// 			float j = r * cosf(rads + a) + glCenter.x;
+// 			float k = r * sinf(rads + a) + glCenter.y;
+// 
+// 			vertices[i*2] = j;
+// 			vertices[i*2+1] =k;
+// 		}
+// 		vertices[(segs+1)*2] = glCenter.x;
+// 		vertices[(segs+1)*2+1] = glCenter.y;
+// 
+// 		// Default GL states: GL_TEXTURE_2D, GL_VERTEX_ARRAY, GL_COLOR_ARRAY, GL_TEXTURE_COORD_ARRAY
+// 		// Needed states: GL_VERTEX_ARRAY, 
+// 		// Unneeded states: GL_TEXTURE_2D, GL_TEXTURE_COORD_ARRAY, GL_COLOR_ARRAY	
+// 		glDisable(GL_TEXTURE_2D);
+// 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+// 		glDisableClientState(GL_COLOR_ARRAY);
+// 
+// 		glVertexPointer(2, GL_FLOAT, 0, vertices);	
+// 		glDrawArrays(GL_TRIANGLE_FAN, 0, segs+additionalSegment);
+// 
+// 		// restore default state
+// 		glEnableClientState(GL_COLOR_ARRAY);
+// 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+// 		glEnable(GL_TEXTURE_2D);	
+// 
+// 		free( vertices );
+// 
+// 		glColor4ub(255, 255, 255, 255); 
 	}
 
 	void DrawFrame(int borderColor, int x, int y, int width, int height) {
 
-		int y2 = y + height - 1, x2 = x + width - 1;
-
-		ccColor4B clr = INTCOLORTOCCC4(borderColor);
-		DrawRecttangle(CCRectMake(x - 1, y - 1, 4, 4), clr); // ×óÉÏ½Ç¿ò
-		DrawRecttangle(CCRectMake(x2 - 3, y - 1, 4, 4), clr); // ÓÒÉÏ½Ç¿ò
-
-		DrawRecttangle(CCRectMake(x - 1, y2 - 3, 4, 4), clr); // ×óÏÂ½Ç¿ò
-		DrawRecttangle(CCRectMake(x2 - 3, y2 - 3, 4, 4), clr); // ÓÒÏÂ½Ç¿ò
-
-		DrawLine(CCPointMake(x, y + 5), CCPointMake(x + 5, y + 5), clr, 1);
-		DrawLine(CCPointMake(x + 5, y), CCPointMake(x + 5, y + 5), clr, 1);
-		DrawLine(CCPointMake(x2, y + 5), CCPointMake(x2 - 5, y + 5), clr, 1);
-		DrawLine(CCPointMake(x2 - 5, y), CCPointMake(x2 - 5, y + 5), clr, 1);
-
-		DrawLine(CCPointMake(x2, y2 - 5), CCPointMake(x2 - 5, y2 - 5), clr, 1);
-		DrawLine(CCPointMake(x2 - 5, y2), CCPointMake(x2 - 5, y2 - 5), clr, 1);
-		DrawLine(CCPointMake(x, y2 - 5), CCPointMake(x + 5, y2 - 5), clr, 1);
-		DrawLine(CCPointMake(x + 5, y2), CCPointMake(x + 5, y2 - 5), clr, 1);
-
-		DrawLine(CCPointMake(x + 5, y), CCPointMake(x + width - 6, y), clr, 1);
-		DrawLine(CCPointMake(x + 5, y2), CCPointMake(x + width - 6, y2), clr, 1);
-
-		DrawLine(CCPointMake(x, y + 5), CCPointMake(x, y2 - 5), clr, 1);
-		DrawLine(CCPointMake(x2, y + 5), CCPointMake(x2, y2 - 5), clr, 1);
+// 		int y2 = y + height - 1, x2 = x + width - 1;
+// 
+// 		ccColor4B clr = INTCOLORTOCCC4(borderColor);
+// 		DrawRecttangle(CCRectMake(x - 1, y - 1, 4, 4), clr); // ×óÉÏ½Ç¿ò
+// 		DrawRecttangle(CCRectMake(x2 - 3, y - 1, 4, 4), clr); // ÓÒÉÏ½Ç¿ò
+// 
+// 		DrawRecttangle(CCRectMake(x - 1, y2 - 3, 4, 4), clr); // ×óÏÂ½Ç¿ò
+// 		DrawRecttangle(CCRectMake(x2 - 3, y2 - 3, 4, 4), clr); // ÓÒÏÂ½Ç¿ò
+// 
+// 		DrawLine(CCPointMake(x, y + 5), CCPointMake(x + 5, y + 5), clr, 1);
+// 		DrawLine(CCPointMake(x + 5, y), CCPointMake(x + 5, y + 5), clr, 1);
+// 		DrawLine(CCPointMake(x2, y + 5), CCPointMake(x2 - 5, y + 5), clr, 1);
+// 		DrawLine(CCPointMake(x2 - 5, y), CCPointMake(x2 - 5, y + 5), clr, 1);
+// 
+// 		DrawLine(CCPointMake(x2, y2 - 5), CCPointMake(x2 - 5, y2 - 5), clr, 1);
+// 		DrawLine(CCPointMake(x2 - 5, y2), CCPointMake(x2 - 5, y2 - 5), clr, 1);
+// 		DrawLine(CCPointMake(x, y2 - 5), CCPointMake(x + 5, y2 - 5), clr, 1);
+// 		DrawLine(CCPointMake(x + 5, y2), CCPointMake(x + 5, y2 - 5), clr, 1);
+// 
+// 		DrawLine(CCPointMake(x + 5, y), CCPointMake(x + width - 6, y), clr, 1);
+// 		DrawLine(CCPointMake(x + 5, y2), CCPointMake(x + width - 6, y2), clr, 1);
+// 
+// 		DrawLine(CCPointMake(x, y + 5), CCPointMake(x, y2 - 5), clr, 1);
+// 		DrawLine(CCPointMake(x2, y + 5), CCPointMake(x2, y2 - 5), clr, 1);
 	}
 
 	void DrawTriangle(CCPoint first, CCPoint second, CCPoint third, ccColor4B color)
 	{
-		//CCAssert(0, "crash me");//@todo: crash me!
-
-		glDisable(GL_TEXTURE_2D);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-
-		GLfloat vertices[6] = { 
-			first.x, winSize.height - first.y, 
-			second.x, winSize.height - second.y, 
-			third.x, winSize.height - third.y
-		};
-
-		GLubyte colors[12] = {
-			color.r, color.g, color.b, color.a,
-			color.r, color.g, color.b, color.a,
-			color.r, color.g, color.b, color.a,
-		};
-
-		glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
-		glVertexPointer(2, GL_FLOAT, 0, vertices);		
-		glDrawArrays(GL_TRIANGLES, 0, 3);	
-
-		glBlendFunc( CC_BLEND_SRC, CC_BLEND_DST);
-
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glEnable(GL_TEXTURE_2D);
+// 		//CCAssert(0, "crash me");//@todo: crash me!
+// 
+// 		glDisable(GL_TEXTURE_2D);
+// 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+// 
+// 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+// 
+// 		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+// 
+// 		GLfloat vertices[6] = { 
+// 			first.x, winSize.height - first.y, 
+// 			second.x, winSize.height - second.y, 
+// 			third.x, winSize.height - third.y
+// 		};
+// 
+// 		GLubyte colors[12] = {
+// 			color.r, color.g, color.b, color.a,
+// 			color.r, color.g, color.b, color.a,
+// 			color.r, color.g, color.b, color.a,
+// 		};
+// 
+// 		glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
+// 		glVertexPointer(2, GL_FLOAT, 0, vertices);		
+// 		glDrawArrays(GL_TRIANGLES, 0, 3);	
+// 
+// 		glBlendFunc( CC_BLEND_SRC, CC_BLEND_DST);
+// 
+// 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+// 		glEnable(GL_TEXTURE_2D);
 	}
 
 	//////////////////////////////////////////////////////////////////////////

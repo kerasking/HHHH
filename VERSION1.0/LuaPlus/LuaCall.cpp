@@ -134,7 +134,7 @@ LuaStackObject LuaCall::operator<<(const LuaRun& run)
         }
         else
         {
-            char buf[200];
+			char buf[200] = {0};
             sprintf(buf, "unknown lua error, code: %d", err);
             luaplus_throw(buf);
         }

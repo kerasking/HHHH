@@ -150,7 +150,7 @@ public:
 	bool isAutoFight() {return isAutoBossFight;}
 	void walkToBoss();
 	 
-	void OnTimer(OBJID tag);
+	virtual void OnTimer(OBJID tag);
 	void replaceMapData(int mapId, int center_x, int center_y);
 	void ShowTitle(int name_col, int name_row);
 	void refreshTitle();

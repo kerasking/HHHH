@@ -1,10 +1,15 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
 
+#ifdef ANDROID
+#include "GLES\gl.h"
+#endif
+
 USING_NS_CC;
 
-AppDelegate::AppDelegate() {
-
+AppDelegate::AppDelegate()
+{
+	glColor4ub(255,255,255,255);
 }
 
 AppDelegate::~AppDelegate() 

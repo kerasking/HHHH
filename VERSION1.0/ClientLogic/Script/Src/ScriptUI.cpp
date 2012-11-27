@@ -12,7 +12,7 @@
 #include "ScriptInc.h"
 #include "NDUILabel.h"
 #include "NDUIButton.h"
-#include "NDUITableLayer.h"
+//#include "NDUITableLayer.h"
 #include "NDUIImage.h"
 #include "NDScrollLayer.h"
 
@@ -56,6 +56,7 @@
 #include "UIScrollViewExpand.h"
 #include "CCGeometry.h"
 #include "ScriptMgr.h"
+#include "NDUITableLayer.h"
 
 using namespace cocos2d;
 using namespace NDEngine;

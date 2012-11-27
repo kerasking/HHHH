@@ -26,7 +26,8 @@ using namespace NDPerformance;
 CPerformanceTest::CPerformanceTest()
 {
 	m_bStartFrameTest = false;
-
+	m_spKeyMain = CREATE_CLASS(NDBaseGlobalDialog,"CIDFactory");
+	m_spKeyHelp = CREATE_CLASS(NDBaseGlobalDialog,"CIDFactory");
 	m_bStart = false;
 }
 
@@ -209,7 +210,7 @@ KEY CPerformanceTest::GetMainKey(VALUE name)
 
 	if (it == m_keyCache.end())
 	{
-		KEY key = m_keyMain.GetID();
+		KEY key = m_spKeyMain->GetID();
 		m_keyCache.insert(std::pair<VALUE, KEY>(name, key));
 		return key;
 	}
@@ -219,7 +220,7 @@ KEY CPerformanceTest::GetMainKey(VALUE name)
 
 KEY CPerformanceTest::GetHelpKey()
 {
-	return m_keyHelp.GetID();
+	return m_spKeyHelp->GetID();
 }
 
 void CPerformanceTest::Clear()
@@ -228,13 +229,13 @@ void CPerformanceTest::Clear()
 
 	for (; it != m_keyCache.end(); it++)
 	{
-		m_keyMain.ReturnID(it->second);
+		m_spKeyMain->ReturnID(it->second);
 	}
 
 	std::map<key64, performance_data>::iterator data_it = m_mapData.begin();
 	for (; data_it != m_mapData.end(); data_it++)
 	{
-		m_keyHelp.ReturnID(data_it->first.keyLow);
+		m_spKeyHelp->ReturnID(data_it->first.keyLow);
 	}
 
 	m_keyCache.clear();
@@ -287,7 +288,7 @@ bool CPerformanceTest::dealPerFrame()
 				continue;
 
 			data.clear = true;
-			m_keyHelp.ReturnID(key.keyLow);
+			m_spKeyHelp->ReturnID(key.keyLow);
 
 			if (!allocKey)
 			{

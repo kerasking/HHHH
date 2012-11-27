@@ -15,7 +15,6 @@
 #include "BaseType.h"
 #ifdef ANDROID
 extern void LogI(const char* pFormat, ...);
-#define  printf LogI
 #endif
 
 

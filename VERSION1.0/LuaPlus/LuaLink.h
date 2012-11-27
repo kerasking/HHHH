@@ -61,7 +61,7 @@
     #define LUAPLUS_API extern
 #endif // _MSC_VER
 
-#if (defined(__APPLE__) || defined(macintosh))
+#if defined(__APPLE__)  ||  defined(macintosh)
 #define LUA_USE_MACOSX
 #endif
 
@@ -80,7 +80,6 @@
 #define NAMESPACE_LUA_END
 #define USING_NAMESPACE_LUA
 #define NAMESPACE_LUA_PREFIX
-
 #define LUA_EXTERN_C extern "C"
 #ifdef __cplusplus
 #define LUA_EXTERN_C_BEGIN extern "C" {
@@ -93,13 +92,14 @@
 
 #define LUALIB_API LUA_API
 //#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-//#undef LUA_EXTERN_C
-//#undef LUA_EXTERN_C_BEGIN
-//#undef LUA_EXTERN_C_END
-//#define LUA_EXTERN_C
-//#define LUA_EXTERN_C_BEGIN
-//#define LUA_EXTERN_C_END
-//#endif
+#ifdef TARGET_OS_IPHONE
+#undef LUA_EXTERN_C
+#undef LUA_EXTERN_C_BEGIN
+#undef LUA_EXTERN_C_END
+#define LUA_EXTERN_C
+#define LUA_EXTERN_C_BEGIN
+#define LUA_EXTERN_C_END
+#endif
 
 #endif /* LUALINK_H */
 

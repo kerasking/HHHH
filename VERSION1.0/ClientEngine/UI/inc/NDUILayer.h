@@ -182,7 +182,7 @@ public:
 public:
 	void SetScrollEnabled(bool bEnabled);
 
-	void OnTimer(OBJID tag);
+	virtual void OnTimer(OBJID tag);
 
 	virtual bool DispatchLongTouchClickEvent(CCPoint beginTouch,
 			CCPoint endTouch);

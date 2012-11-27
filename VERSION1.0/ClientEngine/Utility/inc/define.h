@@ -12,13 +12,12 @@
 
 //typedef unsigned int OBJID;
 
-#include "CCObject.h"
+#include "../../../cocos2d-x/cocos2dx/cocoa/CCObject.h"
 #include "NDObject.h"
 
 #ifdef ANDROID
 #include <stdlib.h>
 #endif
-#include "CCPlatformConfig.h"
 
 #define SEND_DATA(bao) do{\
 	NDSocket* skt = NDEngine::NDDataTransThread::DefaultThread()->GetSocket();\
@@ -66,7 +65,8 @@ typedef unsigned char UInt8;
 #endif
 
 #ifdef ANDROID
-#define Byte unsigned char
+#define MAX_PATH 2048
+typedef unsigned char Byte;
 #endif
 
 typedef enum
