@@ -71,31 +71,17 @@ void NDBaseLayer::registerWithTouchDispatcher(void)
 //		pkNode = pkNode->GetParent();
 //	}
 
-	// 注册touch分发
+	// 注册touch分发 //@priority
 	CCTouchDispatcher* touchDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
-
-	#if 0
-if (pkNode->IsKindOfClass(RUNTIME_CLASS(WorldMapLayer)))
+	if (m_kUILayerNode.Pointer())
 	{
-		//WriteCon( "reg layer as: small map [0x12]\r\n" );
-		touchDispatcher->addTargetedDelegate(this, E_LAYER_PRIORITY_WORLDMAP, true);
+		NDUILayer* Layer = m_kUILayerNode.Pointer();
+		touchDispatcher->addTargetedDelegate(this, Layer->getPriority(), true);
 	}
-#endif
-
-	if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDUILayer)))
+	else if (m_kLayerNode.Pointer())
 	{
-		//WriteCon( "reg layer as: ui layer  [0x13]\r\n" );
-		touchDispatcher->addTargetedDelegate(this, E_LAYER_PRIORITY_UILAYER, true);
-	}
-	else if (pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
-	{
-		//WriteCon( "reg layer as: map layer [0x14]\r\n" );
-		touchDispatcher->addTargetedDelegate(this, E_LAYER_PRIORITY_MAPLAYER, true);
-	}
-	else
-	{
-		//WriteCon( "reg layer as: default   [0]\r\n" );
-		touchDispatcher->addTargetedDelegate(this, E_LAYER_PRIORITY_DEFAULT, true);
+		NDLayer* Layer = m_kLayerNode.Pointer();
+		touchDispatcher->addTargetedDelegate(this, Layer->getPriority(), true);
 	}
 }
 

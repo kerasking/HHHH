@@ -104,7 +104,8 @@ namespace NDEngine
 		// 备注：从LUA或INI过来的分辨率都是960*640，这里做个特殊处理（和以前版本兼容）：
 		//	1）传给GL的用点坐标
 		//	2）NDUINode这套依旧用像素坐标
-#if 0	
+
+#if 1	// 不要修改这里！
 		const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
 		CCRect rectInPoints = CCRectMake( rect.origin.x / fScale, rect.origin.y / fScale,
 											rect.size.width / fScale, rect.size.height / fScale );

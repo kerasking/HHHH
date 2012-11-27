@@ -44,6 +44,8 @@ public:
 	virtual void TouchCancelled(NDTouch* touch);
 	virtual void TouchMoved(NDTouch* touch);
 	virtual bool TouchDoubleClick(NDTouch* touch);
+	
+	virtual ND_LAYER_PRIORITY getPriority() { return E_LAYER_PRIORITY_DEFAULT; } //@priority
 
 DECLARE_AUTOLINK(NDLayer)
 INTERFACE_AUTOLINK(NDLayer)

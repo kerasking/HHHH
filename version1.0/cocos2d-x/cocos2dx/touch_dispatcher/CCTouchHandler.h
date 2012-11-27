@@ -31,6 +31,10 @@ THE SOFTWARE.
 #include "cocoa/CCObject.h"
 #include "cocoa/CCSet.h"
 
+#if ND_MOD
+#include "platform/platform.h"
+#endif
+
 NS_CC_BEGIN
 
 /**
@@ -44,6 +48,23 @@ NS_CC_BEGIN
 */
 class CC_DLL  CCTouchHandler : public CCObject
 {
+#if ND_MOD
+public:
+	CCTouchHandler() 
+		: m_pDelegate(NULL)
+		, m_nPriority(0)
+		, m_nEnabledSelectors(0)
+	{
+		CCTime::gettimeofdayCocos2d(&m_createTime, NULL);
+	}
+	cc_timeval getCreateTime() { return m_createTime; }
+	bool IsNewerThan( CCTouchHandler* B ) {
+		return this->getCreateTime().tv_usec > B->getCreateTime().tv_usec;
+	}
+private:
+	struct cc_timeval m_createTime;
+#endif
+
 public:
     virtual ~CCTouchHandler(void);
 

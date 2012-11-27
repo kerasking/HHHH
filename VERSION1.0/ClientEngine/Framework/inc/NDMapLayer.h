@@ -159,6 +159,9 @@ public:
 	void OpenTreasureBox();
 	bool isTouchTreasureBox(CCPoint touchPoint);
 	//		void setRoadBlock(int x,int y){roadBlockX=x;roadBlockY=y;}
+
+	virtual ND_LAYER_PRIORITY getPriority() { return E_LAYER_PRIORITY_MAPLAYER; } //@priority
+
 public:
 
 	virtual bool TouchBegin( NDTouch* touch );

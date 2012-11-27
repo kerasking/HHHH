@@ -16,19 +16,6 @@
 #include "NDLayer.h"
 
 
-
-//按照cocos2d的规则，priority数值越小，实际优先级越高！
-//（参考CCTouchDispatcher::setPriority()函数的注释）
-//枚举的顺序即先后处理的顺序！
-enum ND_LAYER_PRIORITY
-{
-	E_LAYER_PRIORITY_DEFAULT	= 0x0,
-	E_LAYER_PRIORITY_POPUPDLG	= 0x11,	//弹出框
-	E_LAYER_PRIORITY_WORLDMAP	= 0x12,	//世界地图（WorldMapLayer）
-	E_LAYER_PRIORITY_UILAYER	= 0x13,	//非弹出式UI（如主界面等）
-	E_LAYER_PRIORITY_MAPLAYER	= 0x14,	//游戏地图
-};
-
 using namespace NDEngine;
 
 class NDBaseLayer: public cocos2d::CCLayer
@@ -49,6 +36,8 @@ public:
 
 	void SetUILayer(NDUILayer* uilayer);
 	void SetLayer(NDLayer* layer);
+	
+	virtual ND_LAYER_PRIORITY getPriority() { return E_LAYER_PRIORITY_DEFAULT; }
 
 public:
 	virtual void draw();

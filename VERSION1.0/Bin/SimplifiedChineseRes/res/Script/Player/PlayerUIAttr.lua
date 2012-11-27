@@ -154,6 +154,7 @@ function p.LoadUI(nPetId)
 		return false;
 	end
 	layer:Init();
+	layer:SetPopupDlgFlag( true );
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerAttr);
 	layer:SetFrameRect(RectFullScreenUILayer);
 	--layer:SetBackgroundColor(ccc4(125, 125, 125, 125));
