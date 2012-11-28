@@ -160,8 +160,6 @@ void NDUIButton::Initialization()
 {
 	NDUINode::Initialization();
 
-	cocos2d::CCLog("entry NDUIButton::Initialization()");
-
 // 		m_title = new NDUILabel();
 // 		m_title->Initialization();
 // 		m_title->SetFontSize(FONT_SIZE);
@@ -660,7 +658,6 @@ void NDUIButton::drawButtonImage()
 
 			if (m_image)
 			{
-				cocos2d::CCLog("ready m_image->DrawInRect(rect);");
 				m_image->DrawInRect(rect);
 			}
 // 			if (m_title 

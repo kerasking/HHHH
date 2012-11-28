@@ -38,7 +38,6 @@
 //#include "CCVideoPlayer.h"
 
 namespace NDEngine {
-	stuPlayerInfo g_stuPlayerInfo;
     void PlayVideo(const char* videofilepath,bool bSkip)
     {
      #if 0
@@ -104,24 +103,6 @@ namespace NDEngine {
 		NDPlayer& player = NDPlayer::defaultHero();
 		player.ReLoadLookface(lookface);
 	}
-    
-	void SetPlayerInfo(int iId, int iLookFace, int iBornX, int iBornY, int iRideStatus, int iRideType, std::string strName)
-	{
-		g_stuPlayerInfo.m_iId = iId;
-		g_stuPlayerInfo.m_iLookFace = iLookFace;
-		g_stuPlayerInfo.m_iBornX = iBornX;
-		g_stuPlayerInfo.m_iBornY = iBornY;
-		g_stuPlayerInfo.m_iRideStatus = iRideStatus;
-		g_stuPlayerInfo.m_iRideType = iRideType;
-		g_stuPlayerInfo.m_strName = strName;
-
-	}
-
-	void GetPlayerInfo(stuPlayerInfo &stuinfo)
-	{
-		stuinfo = g_stuPlayerInfo;
-	}
-
 
 	//++Guosen 2012.7.13
 	//创建玩家附加骑乘状态和坐骑类型
@@ -136,7 +117,6 @@ namespace NDEngine {
 		player.SetServerPositon(x, y);
 		player.m_nID = userid;
 		player.m_strName = name;
-		SetPlayerInfo(userid, lookface, x, y, nRideStatus, nMountType, name);
 	}
 	//玩家骑宠
 	void PlayerRideMount( int nRideStatus, int nMountType )
@@ -295,47 +275,42 @@ namespace NDEngine {
 	//备注：不要返回临时变量的指针！
 	//		这个函数提供LUA调用，因此需要一个指针类型，
 	//		暂时改为static确保兼容！
-	const char* GetSMImgPath(const char* name) //@lua
+	std::string GetSMImgPath(const char* name) //@lua
 	{
 		if (!name)
 		{
 			return "";
 		}
 
-		static string s_PathName;
-		s_PathName = NDPath::GetSMImgPath(name);
-		return s_PathName.c_str();
+		return NDPath::GetSMImgPath(name);
 	}
-	const char* GetImgResPath(const char* name) //@lua
+	std::string GetImgResPath(const char* name) //@lua
 	{
 		if (!name)
 		{
 			return "";
 		}
-		static string s_PathName;
-		s_PathName = NDPath::GetImgPath(name);
-		return s_PathName.c_str();
+		
+		return NDPath::GetImgPath(name);
 	}
-	const char* GetAniResPath(const char* name) //@lua
+	std::string GetAniResPath(const char* name) //@lua
 	{
 		if (!name)
 		{
 			return "";
 		}
-		static string s_PathName;
-		s_PathName = NDPath::GetAniPath(name);
-		return s_PathName.c_str();
+
+		return NDPath::GetAniPath(name);
 	}
 	
-	const char* GetSMResPath(const char* name) //@lua
+	std::string GetSMResPath(const char* name) //@lua
 	{
 		if (!name)
 		{
 			return "";
 		}
-		static string s_PathName;
-		s_PathName = NDPath::GetResPath(name);
-		return s_PathName.c_str();
+
+		return NDPath::GetResPath(name);
 	}
 	NDPicture* GetItemPicture(int nIconIndex)
 	{

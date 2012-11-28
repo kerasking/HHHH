@@ -34,7 +34,7 @@ private:
 	void Init();
 	
 	//todo(zjh)
-	CCString* GetDocumensDirectory();
+	string GetDocumensDirectory();
 	
 	bool GetValue(const std::string str, bool& isKey, std::string& resValue);
 	
