@@ -32,9 +32,9 @@ public:
 	static const string GetMapResPath();
 	static const string GetAnimationPath();
 	
-	static const char*  GetResPath();
+	static const string GetResPath();
 	static const string GetResPath(const char* fileName);
-	static const char*  GetResourcePath();
+	static const string GetResourcePath();
 
 	static const string GetSoundPath();
 	static const string GetImgPathBattleUI(const char* fileName);
@@ -66,22 +66,22 @@ public:
 	static std::string GetCashesPath();
 	static void SetAnimationPath(const char* szPath);
 	static void SetMapPath(const char* szPath);
-	static const char* GetRootResDirName();
+	static const string GetRootResDirName();
 	static void SetResPath(const char* szPath);
 
 	static const string GetLogPath();
 
 protected:
 
-	static string NDPath_ResPath;
-	static string NDPath_ImgPath;
-	static string NDPath_ImgPath_UINew;
-	static string NDPath_ImgPath_BattleUI;
-	static string NDPath_MapPath;
-	static string NDPath_AniPath;
-	static string NDPath_SoundPath;
-	static string NDPath_UIPath;
-	static string NDPath_ScriptPath;
+	//static string NDPath_ResPath;
+	//static string NDPath_ImgPath;
+	//static string NDPath_ImgPath_UINew;
+	//static string NDPath_ImgPath_BattleUI;
+	//static string NDPath_MapPath;
+	//static string NDPath_AniPath;
+	//static string NDPath_SoundPath;
+	//static string NDPath_UIPath;
+	//static string NDPath_ScriptPath;
 
 	static int s_iResDirPos;
 
