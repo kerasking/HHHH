@@ -1291,21 +1291,8 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 	{
 		m_nSaveMapID = m_nMapID;
 	}
+
 	ShowPetInfo kPetInfoRerserve;
-
-	NDMapMgrObj.ClearNPC();
-	NDMapMgrObj.ClearMonster();
-	NDMapMgrObj.ClearGP();
-    
-	while (NDDirector::DefaultDirector()->PopScene());
-    
-    
-	NDMapMgrObj.loadSceneByMapDocID(nMapDocID);
-
-	stuPlayerInfo stuInfo;
-	GetPlayerInfo(stuInfo);
-	CreatePlayerWithMount(stuInfo.m_iLookFace, stuInfo.m_iBornX, stuInfo.m_iBornY,
-		stuInfo.m_iId, stuInfo.m_strName, stuInfo.m_iRideStatus, stuInfo.m_iRideType);
 
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
 	kPlayer.m_nCurMapID = nMapDocID;
@@ -1315,7 +1302,17 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 	kPlayer.stopMoving();
 	kPlayer.SetServerPositon(dwPortalX, dwPortalY);
 	kPlayer.SetShowPet(kPetInfoRerserve);
+	if ( kPlayer.GetParent() )
+	{
+		kPlayer.RemoveFromParent(false);
+	}
 
+	while (NDDirector::DefaultDirector()->PopScene());
+
+	NDMapMgrObj.ClearNPC();
+	NDMapMgrObj.ClearMonster();
+	NDMapMgrObj.ClearGP();
+	NDMapMgrObj.loadSceneByMapDocID(nMapDocID);
 
 	NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
 	ND_ASSERT_NO_RETURN(NULL == pkLayer);

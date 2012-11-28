@@ -287,7 +287,7 @@ void WorldMapLayer::onArrive()
 {	
 	m_timer.KillTimer(this, TAG_TIMER_MOVE);
 
-	SetMove(false);
+	//SetMove(false);//--Guosen 2012.11.28
 
 	if (m_roleNode && m_roleNode->GetRole())
 	{
