@@ -127,10 +127,6 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 		// initialize socket
 		InitSocket();
-
-		// Initialize OpenGLView instance, that release by CCDirector when application terminate.
-		// The HelloWorld is designed as HVGA.
-		NDPath::SetResPath( "../../Bin/SimplifiedChineseRes/res/" );
 #endif
 	}
 

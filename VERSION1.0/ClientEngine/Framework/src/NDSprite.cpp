@@ -84,7 +84,7 @@ NDSprite::NDSprite()
 	m_nArmorQuality = 0;
 	m_nCloakQuality = 0;
 
-	m_bFaceRight = true;
+	m_bFaceRight = false;
 	m_fScale = 1.0f;
 
 	m_bHightLight = false;

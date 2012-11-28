@@ -38,7 +38,6 @@
 //#include "CCVideoPlayer.h"
 
 namespace NDEngine {
-	stuPlayerInfo g_stuPlayerInfo;
     void PlayVideo(const char* videofilepath,bool bSkip)
     {
      #if 0
@@ -104,24 +103,6 @@ namespace NDEngine {
 		NDPlayer& player = NDPlayer::defaultHero();
 		player.ReLoadLookface(lookface);
 	}
-    
-	void SetPlayerInfo(int iId, int iLookFace, int iBornX, int iBornY, int iRideStatus, int iRideType, std::string strName)
-	{
-		g_stuPlayerInfo.m_iId = iId;
-		g_stuPlayerInfo.m_iLookFace = iLookFace;
-		g_stuPlayerInfo.m_iBornX = iBornX;
-		g_stuPlayerInfo.m_iBornY = iBornY;
-		g_stuPlayerInfo.m_iRideStatus = iRideStatus;
-		g_stuPlayerInfo.m_iRideType = iRideType;
-		g_stuPlayerInfo.m_strName = strName;
-
-	}
-
-	void GetPlayerInfo(stuPlayerInfo &stuinfo)
-	{
-		stuinfo = g_stuPlayerInfo;
-	}
-
 
 	//++Guosen 2012.7.13
 	//创建玩家附加骑乘状态和坐骑类型
@@ -136,7 +117,6 @@ namespace NDEngine {
 		player.SetServerPositon(x, y);
 		player.m_nID = userid;
 		player.m_strName = name;
-		SetPlayerInfo(userid, lookface, x, y, nRideStatus, nMountType, name);
 	}
 	//玩家骑宠
 	void PlayerRideMount( int nRideStatus, int nMountType )

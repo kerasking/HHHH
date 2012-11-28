@@ -403,7 +403,8 @@ void NDUILoadEngine::PostLoad(UIINFO& uiInfo)
 	// 备注：UI按480*320来配置的，LUA写脚本是按960*640的.
 	//			这里乘个Scale，统一到980*640!	
 
-	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+	//float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+	float scale = 2.0f; //统一按960*640.
 	uiInfo.CtrlPos.x *= scale;
 	uiInfo.CtrlPos.y *= scale;
 	uiInfo.nCtrlWidth *= scale;
