@@ -14,7 +14,6 @@ release/
 Release/
 Obj/
 enc_temp_folder/
-Lib/
 MID/
 .externalToolBuilders/
 Debug.win32/
