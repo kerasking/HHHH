@@ -12,12 +12,19 @@
 
 #include "Singleton.h"
 
-#define TextureMonitorObj	CNDTextureMonitor::GetSingleton()
 
-class CNDTextureMonitor :
-public TSingleton<CNDTextureMonitor>
+
+class CNDTextureMonitor 
 {
 public:
+	static CNDTextureMonitor& GetSingleton() 
+	{
+		if (NULL == ms_pkSingleton)
+			ms_pkSingleton = new CNDTextureMonitor();
+
+		return *ms_pkSingleton;
+	}
+
 	void BeforeTextureAdd();
 	/** nSize byte*/
 	void TextureAdd(unsigned int nSize);
@@ -40,6 +47,7 @@ private:
 	void EndGC();
 	void GCStatistics();
 	bool IsGCState();
+	static CNDTextureMonitor* ms_pkSingleton;
 };
 
 #endif // _ND_TEXTURE_MONOITOR_H_ZJH_
