@@ -18,7 +18,7 @@ namespace NDEngine {
 	unsigned long GetMapId();
 	int GetCurrentMonsterRound();
 	int GetPlayerLookface();
-	const char* GetSMImgPath(const char* name);
+	std::string GetSMImgPath(const char* name);
 	void ScriptGameLogicLoad();
 	
 }

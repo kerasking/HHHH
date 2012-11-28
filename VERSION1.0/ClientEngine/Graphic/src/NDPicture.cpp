@@ -16,6 +16,7 @@
 #include <NDDebugOpt.h>
 #include <CCDrawingPrimitives.h>
 #include <UsePointPls.h>
+#include "CCCommon.h"
 
 using namespace cocos2d;
 
@@ -788,19 +789,22 @@ void NDPicturePool::RemoveTexture(CCTexture2D* tex)
 
 NDPicture* NDPicturePool::AddPicture(const char* imageFile, bool gray/*=false*/)
 {
-	NDAsssert(imageFile != NULL);
+	//NDAsssert(imageFile != NULL);
 
-	std::stringstream ss;
-	ss << imageFile;
+	cocos2d::CCLog("entry Addpicture,imageFile value is %s",imageFile);
 
-	NDPicture* pkPicture = (NDPicture *) m_pkTextures->Object(ss.str().c_str());
+	cocos2d::CCLog("ss << imageFile end,m_pkTextures value is %d",(int)m_pkTextures);
+
+	NDPicture* pkPicture = (NDPicture *) m_pkTextures->Object(imageFile);
+
+	cocos2d::CCLog("NDPicture* pkPicture = (NDPicture *) m_pkTextures->Object(ss.str().c_str()); value %d",(int)pkPicture);
 
 	if (!pkPicture)
 	{
 		pkPicture = new NDPicture(gray);
 		pkPicture->Initialization(imageFile);
 
-		m_pkTextures->SetObject(pkPicture, ss.str().c_str());
+		m_pkTextures->SetObject(pkPicture, imageFile);
 
 		CCTexture2D* tex = pkPicture->GetTexture();
 		tex->setContainerType(ContainerTypeAddPic);

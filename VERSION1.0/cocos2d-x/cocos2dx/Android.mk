@@ -7,6 +7,7 @@ LOCAL_MODULE := cocos2dx_static
 LOCAL_MODULE_FILENAME := libcocos2d
 
 LOCAL_SRC_FILES := \
+Main.cpp \
 CCConfiguration.cpp \
 CCDrawingPrimitives.cpp \
 CCScheduler.cpp \
@@ -174,7 +175,7 @@ LOCAL_WHOLE_STATIC_LIBRARIES += cocos_libtiff_static
 LOCAL_CFLAGS := -DUSE_FILE32API
 LOCAL_EXPORT_CFLAGS := -DUSE_FILE32API
 
-include $(BUILD_STATIC_LIBRARY)
+include $(BUILD_SHARED_LIBRARY)
 
 $(call import-module,libjpeg)
 $(call import-module,libxml2)

@@ -14,13 +14,48 @@
 #include "ScriptDefine.h"
 #include "CCCommon.h"
 #include "ScriptMgr.h"
+#include "CCPlatformConfig.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
 
 using namespace NDEngine; 
 using namespace LuaPlus;
 
-typedef std::multimap<GLOBALEVENT, LuaObject>::const_iterator	GLOBALEVENTCIT;
-typedef std::multimap<GLOBALEVENT, LuaObject>::value_type		GLOBALEVENTVT;
-std::multimap<GLOBALEVENT, LuaObject> mapGlobalEventHandler;
+struct LuaObjectWrapper
+{
+	LuaObjectWrapper( 
+		const LuaObject& in_luaObj,
+		const string& in_name )	
+	{
+		luaObj = in_luaObj;
+		name = in_name;
+	}
+	LuaObjectWrapper( 
+		const LuaObject& in_luaObj,
+		const char* in_name )	
+	{
+		luaObj = in_luaObj;
+		name = in_name?in_name:"";
+	}
+
+	LuaObject luaObj;
+	string	name;
+};
+
+typedef std::multimap<GLOBALEVENT, LuaObjectWrapper>::const_iterator	GLOBALEVENTCIT;
+typedef std::multimap<GLOBALEVENT, LuaObjectWrapper>::value_type		GLOBALEVENTVT;
+std::multimap<GLOBALEVENT, LuaObjectWrapper> mapGlobalEventHandler;
 
 bool RegisterGlobalEventHandler(int nEvent, const char* funcname, LuaObject func)
 {
@@ -51,9 +86,9 @@ bool RegisterGlobalEventHandler(int nEvent, const char* funcname, LuaObject func
 	cocos2d::CCLog("reg global envent [%d][%s] sucess!", nEvent, funcname);
 #endif
 
-	mapGlobalEventHandler.insert(GLOBALEVENTVT(GLOBALEVENT(nEvent), func));
-
-		return true;
+	mapGlobalEventHandler.insert(
+		GLOBALEVENTVT(GLOBALEVENT(nEvent), LuaObjectWrapper(func,funcname)));
+	return true;
 }
 
 //void SendGlobalEvent(int iEventID, int param1=0, int param2=0, int param3=0);
@@ -73,17 +108,19 @@ void ScriptGlobalEvent::OnEvent(GLOBALEVENT eEvent, int param1, int param2, int 
 	cocos2d::CCLog("ScriptGlobalEvent::OnEvent, eEvent=%d", (int)eEvent);
 #endif
 
+	LOGD("Entry OnEvent,Event ID is %d",(int)eEvent);
+
 	std::pair<GLOBALEVENTCIT, GLOBALEVENTCIT> range;
 	range = mapGlobalEventHandler.equal_range(eEvent);
 
 	for (GLOBALEVENTCIT i = range.first; i != range.second; i++) 
 	{
-		LuaObject fun = i->second;
-		if (!fun.IsFunction())
+		LuaObjectWrapper fun = i->second;
+		if (!fun.luaObj.IsFunction())
 		{
 			continue;
 		}
-		LuaFunction<void> luaFunc(fun);
+		LuaFunction<void> luaFunc(fun.luaObj);
 		luaFunc(param1, param2, param3);
 	}
 }

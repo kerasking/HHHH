@@ -25,6 +25,19 @@ THE SOFTWARE.
 #include "platform/CCCommon.h"
 #include "CCStdC.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+
 NS_CC_BEGIN
 
 #define MAX_LEN         (cocos2d::kMaxLogLen + 1)
@@ -32,7 +45,6 @@ NS_CC_BEGIN
 void CCLog(const char * pszFormat, ...)
 {
 #if ND_MOD 
-#ifdef _DEBUG
 	static char szBuf[MAX_LEN] = {0};
 
 	va_list ap;
@@ -42,7 +54,7 @@ void CCLog(const char * pszFormat, ...)
 
 	OutputDebugStringA(szBuf);
 	OutputDebugStringA("\n");
-#endif
+	LOGD(szBuf);
 #else
     char szBuf[MAX_LEN];
 

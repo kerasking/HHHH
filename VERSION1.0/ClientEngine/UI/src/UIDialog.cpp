@@ -188,7 +188,7 @@ void CUIDialog::Initialization()
 	
 	NDUIButton *node = (NDUIButton *)this->GetChild(ID_TASKCHAT_CTRL_BUTTON_CLOSE);
 	node->SetSoundEffect(0);
-	node->SetBoundScale(200);
+	node->SetBoundScale(2);
 }
 
 void CUIDialog::SetTitle(const char* title)

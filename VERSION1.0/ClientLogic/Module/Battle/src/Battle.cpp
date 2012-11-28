@@ -3840,8 +3840,10 @@ void Battle::runAction(int nTeamID)
 				//死亡音效
 				ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",1092);
 				
-				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				addSkillEffectToFighter(fa->m_pkActor, file, 0, 1);
+				addSkillEffectToFighter(fa->m_pkActor, 
+					NDPath::GetAniPath(ss.str().c_str()).c_str(), 
+					0, 1);
+
 				fa->m_pkActor->showFighterName(false);
 				dieAction(*(fa->m_pkActor));
 			}
@@ -3874,22 +3876,22 @@ void Battle::runAction(int nTeamID)
 			break;
 		case BATTLE_EFFECT_TYPE_ESCORTING://护驾=援护
 			{//播放“援护”文字动画++Guosen 2012.7.9//
-				const char *file = NDPath::GetAniPath("sm_effect_47.spr").c_str();
-				addSkillEffectToFighter(fa->m_pkActor,file,0,g_ArrayEfectProp[47].iPos,g_ArrayEfectProp[47].bRevers);
+				string file = NDPath::GetAniPath("sm_effect_47.spr");
+				addSkillEffectToFighter(fa->m_pkActor,file.c_str(),0,g_ArrayEfectProp[47].iPos,g_ArrayEfectProp[47].bRevers);
 			}
 			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
 		case BATTLE_EFFECT_TYPE_COOPRATION_HIT://合击
 			{//播放“合击”文字动画++Guosen 2012.7.9
-				const char *file = NDPath::GetAniPath("sm_effect_46.spr").c_str();
-				addSkillEffectToFighter(fa->m_pkActor,file,0,g_ArrayEfectProp[46].iPos,g_ArrayEfectProp[46].bRevers);
+				string file = NDPath::GetAniPath("sm_effect_46.spr");
+				addSkillEffectToFighter(fa->m_pkActor,file.c_str(),0,g_ArrayEfectProp[46].iPos,g_ArrayEfectProp[46].bRevers);
 			}
 			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
 		case BATTLE_EFFECT_TYPE_RESIST://免疫
 			{//播放“免疫”文字动画++Guosen 2012.8.2
-				const char *file = NDPath::GetAniPath("sm_effect_32.spr").c_str();
-				addSkillEffectToFighter(fa->m_pkActor,file,0,g_ArrayEfectProp[32].iPos,g_ArrayEfectProp[32].bRevers);
+				string file = NDPath::GetAniPath("sm_effect_32.spr");
+				addSkillEffectToFighter(fa->m_pkActor,file.c_str(),0,g_ArrayEfectProp[32].iPos,g_ArrayEfectProp[32].bRevers);
 			}
 			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
@@ -3909,8 +3911,8 @@ void Battle::runAction(int nTeamID)
 			{
 				stringstream ss;
 				ss << "sm_effect_" << fa->m_nData << ".spr";
-				const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				addSkillEffectToFighter(fa->m_pkActor,file,0,g_ArrayEfectProp[fa->m_nData].iPos,g_ArrayEfectProp[fa->m_nData].bRevers);
+				string file = NDPath::GetAniPath(ss.str().c_str());
+				addSkillEffectToFighter(fa->m_pkActor,file.c_str(),0,g_ArrayEfectProp[fa->m_nData].iPos,g_ArrayEfectProp[fa->m_nData].bRevers);
 			}
 			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
@@ -3939,8 +3941,8 @@ void Battle::runAction(int nTeamID)
 				ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",1092);
 
 				fa->m_pkActor->showFighterName(false);
-				const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				addSkillEffectToFighter(fa->m_pkActor,file,0,1);
+				string file = NDPath::GetAniPath(ss.str().c_str());
+				addSkillEffectToFighter(fa->m_pkActor,file.c_str(),0,1);
 			}
 			fa->m_eActionStatus = ACTION_STATUS_FINISH;
 			break;
@@ -4277,11 +4279,11 @@ void Battle::moveToTarget(FightAction* action)
 					int pos = 0;//(skill->GetLookfaceID())%10;
 					stringstream ss;
 					ss << "sm_effect_" << effectId << ".spr";
-					const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+					string file = NDPath::GetAniPath(ss.str().c_str());
 					
 					//++Guosen 2012.6.28//播放特效动画须指定的位置及翻转设定
 					//addSkillEffectToFighter(theActor,file,delay,pos);
-					addSkillEffectToFighter(theActor,file,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);
+					addSkillEffectToFighter(theActor,file.c_str(),delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);
 				}
 				effectId=skill->getTargetEffect();///1000;//光效播放在目标身上
 				if(effectId != 0)
@@ -4290,14 +4292,14 @@ void Battle::moveToTarget(FightAction* action)
 					int pos = 0;//skill->GetLookfaceTargetID()%10;
 					stringstream ss;
 					ss << "sm_effect_" << effectId << ".spr";
-					const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+					string file = NDPath::GetAniPath(ss.str().c_str());
 					for (UInt32 i = 0; i < action->m_kFighterList.size(); i++)
 					{	
 						Fighter* f=action->m_kFighterList.at(i);
 
 						//++Guosen 2012.6.28//播放特效动画须指定的位置及翻转设定
 						//addSkillEffectToFighter(f, file,delay,pos);
-						addSkillEffectToFighter(f,file,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);
+						addSkillEffectToFighter(f,file.c_str(),delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);
 					}
 				}
 			}
@@ -4337,8 +4339,8 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 				ScriptMgrObj.excuteLuaFunc("PlayBattleSoundEffect", "Music",1092);
 
 				fighter->showFighterName(false);
-				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				addSkillEffectToFighter(fighter, file, 0, 1);
+				string file = NDPath::GetAniPath(ss.str().c_str());
+				addSkillEffectToFighter(fighter, file.c_str(), 0, 1);
 			}
 			break;
 		case BATTLE_EFFECT_TYPE_MANA:
@@ -4348,9 +4350,9 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 			//fighter->setDodgeOK(true);//显示"闪避"文字
 			{
 				//播放闪避文字动画++Guosen 2012.6.28
-				const char* file = NDPath::GetAniPath("sm_effect_25.spr").c_str();
+				string file = NDPath::GetAniPath("sm_effect_25.spr");
 				//addSkillEffectToFighter(fighter,file,0,0, false);
-				addSkillEffectToFighter(fighter,file,0,g_ArrayEfectProp[25].iPos,g_ArrayEfectProp[25].bRevers);
+				addSkillEffectToFighter(fighter,file.c_str(),0,g_ArrayEfectProp[25].iPos,g_ArrayEfectProp[25].bRevers);
 			}
 			dodgeAction(*fighter);
 			break;
@@ -4379,8 +4381,8 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 
 				ss << "die_action.spr";
 				fighter->showFighterName(false);
-				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				addSkillEffectToFighter(fighter,file,0,1);
+				string file = NDPath::GetAniPath(ss.str().c_str());
+				addSkillEffectToFighter(fighter,file.c_str(),0,1);
 			}
 			break;
 		case BATTLE_EFFECT_TYPE_BLOCK:
@@ -4405,20 +4407,20 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 		case BATTLE_EFFECT_TYPE_ESCORTING://护驾=援护
 			{
 				//播放“援护”文字动画
-				const char* file = NDPath::GetAniPath("sm_effect_47.spr").c_str();
-				addSkillEffectToFighter(fighter,file,0,g_ArrayEfectProp[47].iPos,g_ArrayEfectProp[47].bRevers);
+				string file = NDPath::GetAniPath("sm_effect_47.spr");
+				addSkillEffectToFighter(fighter,file.c_str(),0,g_ArrayEfectProp[47].iPos,g_ArrayEfectProp[47].bRevers);
 			}
 			break;
 		case BATTLE_EFFECT_TYPE_COOPRATION_HIT://合击
 			{//播放“合击”文字动画
-				const char* file = NDPath::GetAniPath("sm_effect_46.spr").c_str();
-				addSkillEffectToFighter(fighter,file,0,g_ArrayEfectProp[46].iPos,g_ArrayEfectProp[46].bRevers);
+				string file = NDPath::GetAniPath("sm_effect_46.spr");
+				addSkillEffectToFighter(fighter,file.c_str(),0,g_ArrayEfectProp[46].iPos,g_ArrayEfectProp[46].bRevers);
 			}
 			break;
 		case BATTLE_EFFECT_TYPE_RESIST://免疫
 			{//播放“免疫”文字动画
-				const char* file = NDPath::GetAniPath("sm_effect_32.spr").c_str();
-				addSkillEffectToFighter(fighter,file,0,g_ArrayEfectProp[32].iPos,g_ArrayEfectProp[32].bRevers);
+				string file = NDPath::GetAniPath("sm_effect_32.spr");
+				addSkillEffectToFighter(fighter,file.c_str(),0,g_ArrayEfectProp[32].iPos,g_ArrayEfectProp[32].bRevers);
 			}
 			break;
 		case BATTLE_EFFECT_TYPE_CHANGE_POSTION://移位
@@ -4436,8 +4438,8 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 			{
 				stringstream ss;
 				ss << "sm_effect_" << cmd->data << ".spr";
-				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				addSkillEffectToFighter(fighter,file,0,g_ArrayEfectProp[cmd->data].iPos,g_ArrayEfectProp[cmd->data].bRevers);
+				string file = NDPath::GetAniPath(ss.str().c_str());
+				addSkillEffectToFighter(fighter,file.c_str(),0,g_ArrayEfectProp[cmd->data].iPos,g_ArrayEfectProp[cmd->data].bRevers);
 			}
 			break;
 		case BATTLE_EFFECT_TYPE_SKILL_EFFECT:
@@ -4450,10 +4452,10 @@ void Battle::dealWithFighterCmd(FIGHTER_CMD* cmd)
 				int pos=0;//skill->GetLookfaceID()%10;
 				stringstream ss;
 				ss << "sm_effect_" << cmd->data << ".spr";
-				const char* file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+				string file = NDPath::GetAniPath(ss.str().c_str());
 				//++Guosen 2012.6.28//播放特效动画须指定的位置及翻转设定
 				//addSkillEffectToFighter(fighter,file,delay,pos);
-				addSkillEffectToFighter(fighter,file,delay,g_ArrayEfectProp[cmd->data].iPos,g_ArrayEfectProp[cmd->data].bRevers);
+				addSkillEffectToFighter(fighter,file.c_str(),delay,g_ArrayEfectProp[cmd->data].iPos,g_ArrayEfectProp[cmd->data].bRevers);
 			}
 			break;
 		default:
@@ -4684,8 +4686,8 @@ void Battle::aimTarget(FightAction* action)
 				int pos = 0;//skill->GetLookfaceID()%10;
 				stringstream ss;
 				ss << "sm_effect_" << effectId << ".spr";
-				const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
-				addSkillEffectToFighter(theActor,file,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);//++Guosen 2012.6.28
+				string file = NDPath::GetAniPath(ss.str().c_str());
+				addSkillEffectToFighter(theActor,file.c_str(),delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);//++Guosen 2012.6.28
 			}
 			effectId = skill->getTargetEffect();///1000;//光效播放在目标身上
 			NDLog("add effect to target effectid:%d",effectId);
@@ -4701,12 +4703,12 @@ void Battle::aimTarget(FightAction* action)
 				int pos = 0;//skill->GetLookfaceTargetID()%10;
 				stringstream ss;
 				ss << "sm_effect_" << effectId << ".spr";
-				const char *file = NDPath::GetAniPath(ss.str().c_str()).c_str();
+				string file = NDPath::GetAniPath(ss.str().c_str());
 				for (UInt32 i = 0; i < action->m_kFighterList.size(); i++)
 				{	
 					Fighter* f=action->m_kFighterList.at(i);
 					//addSkillEffectToFighter(f, file,delay,pos);
-					addSkillEffectToFighter(f,file,delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);//++Guosen 2012.6.28
+					addSkillEffectToFighter(f,file.c_str(),delay,g_ArrayEfectProp[effectId].iPos,g_ArrayEfectProp[effectId].bRevers);//++Guosen 2012.6.28
 				}
 			}
 

@@ -7,6 +7,7 @@ LOCAL_MODULE := NetWork
 LOCAL_MODULE_FILENAME := libNetWork
 
 LOCAL_SRC_FILES := \
+../../src/Main.cpp \
 ../../src/Kathy.cpp \
 ../../src/KConnection.cpp \
 ../../src/KMutex.cpp \

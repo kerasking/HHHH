@@ -32,8 +32,8 @@ void RequestTutorInfo();
 
 void RequestTutorAndFriendInfo();
 
-static const string STRING_ONLINE = NDCommonCString("online");
-static const string STRING_OFFLINE = NDCommonCString("NotOnline");
+// static const string STRING_ONLINE = NDCommonCString("online");
+// static const string STRING_OFFLINE = NDCommonCString("NotOnline");
 
 enum ELEMENT_STATE {
 	ES_OFFLINE = 0,

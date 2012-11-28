@@ -1,4 +1,5 @@
 --数据库数据加载
+PrintLog("Begin Load");
 bgnTimeSlice("DBLoad.lua")
 	DoFile("DBLoad.lua");
 endTimeSlice("DBLoad.lua")
@@ -154,3 +155,4 @@ endTimeSlice("Music/define.lua")
 bgnTimeSlice("ArmyGroup/define.lua")
 	DoFile("ArmyGroup/define.lua");
 endTimeSlice("ArmyGroup/define.lua")
+PrintLog("End Load");

@@ -34,6 +34,19 @@
 #endif
 #include "uitypes.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+
 using namespace NDEngine;
 const unsigned char g_dekey[] = {0x80,0x12,0x97,0x67,0x24,0x88,0x89,0x98,0x55,0x34,0xBD,0x33,0x34,0x80,0x12,0x97,0x67,0x24,0x88,0x89,0x98,0x55,0x34,0xBD};
 std::string* s_DataDir = 0;
@@ -270,7 +283,18 @@ void ScriptMgr::Load()
 #ifndef UPDATE_RES 
 	{
 		TIME_SLICE("DoFile(entry.lua)");
-		LuaStateMgrObj.GetState()->DoFile(NDPath::GetScriptPath("entry.lua").c_str());
+		const string strPath = NDPath::GetScriptPath("entry.lua");
+		LOGD("ready to load script,%s",strPath.c_str());
+		
+		if (0 == LuaStateMgrObj.GetState()->DoFile(strPath.c_str()))
+		{
+			LOGD("Load %s succeeded!",strPath.c_str());
+		}
+		else
+		{
+			LOGERROR("Load %s failed!",strPath.c_str());
+
+		}
 	}
 #else
 	{

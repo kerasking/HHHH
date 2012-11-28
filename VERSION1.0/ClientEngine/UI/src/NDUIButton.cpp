@@ -18,6 +18,7 @@
 #include "NDPath.h"
 #include "ccMacros.h"
 #include "TQPlatform.h"
+#include "CCCommon.h"
 
 using namespace cocos2d;
 
@@ -158,6 +159,8 @@ NDUIButton::~NDUIButton()
 void NDUIButton::Initialization()
 {
 	NDUINode::Initialization();
+
+	cocos2d::CCLog("entry NDUIButton::Initialization()");
 
 // 		m_title = new NDUILabel();
 // 		m_title->Initialization();
@@ -353,6 +356,8 @@ void NDUIButton::SetFrameRect(CCRect rect)
 
 void NDUIButton::draw()
 {
+	//cocos2d::CCLog("Entry NDUIButton::draw()");
+
 	if (!isDrawEnabled()) return;
 
 	NDUINode::draw();
@@ -410,6 +415,7 @@ void NDUIButton::draw()
 	}
 	else
 	{
+		//cocos2d::CCLog("Entry DrawRecttangle()");
 		DrawRecttangle(scrRect, m_backgroundColor);
 	}
 
@@ -654,6 +660,7 @@ void NDUIButton::drawButtonImage()
 
 			if (m_image)
 			{
+				cocos2d::CCLog("ready m_image->DrawInRect(rect);");
 				m_image->DrawInRect(rect);
 			}
 // 			if (m_title 

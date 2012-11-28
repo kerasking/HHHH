@@ -3416,6 +3416,7 @@ png_do_rgb_to_gray(png_structp png_ptr, png_row_infop row_info, png_bytep row)
    }
    return rgb_error;
 }
+
 #endif
 #endif /* PNG_READ_TRANSFORMS_SUPPORTED */
 

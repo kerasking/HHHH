@@ -19,6 +19,19 @@
 
 using namespace cocos2d;
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+
 NS_NDENGINE_BGN
 
 IMPLEMENT_CLASS(NDDirector, NDObject)
@@ -129,7 +142,12 @@ void NDDirector::RunScene(NDScene* scene)
 // 		m_pkDirector->runWithScene((CCScene *) scene->m_ccNode);
 // 	}
 
+	LOGD("Entry run scene,scene value is %d",(int)scene);
+
 	m_kScenesStack.push_back(scene);
+
+	LOGD("ready to runwithscene,scene->m_ccNode value is %d",(int)(scene->m_ccNode));
+
 	m_pkDirector->runWithScene((CCScene *) scene->m_ccNode);
 }
 
