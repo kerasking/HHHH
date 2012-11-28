@@ -60,7 +60,7 @@ public class Cocos2dxHelper {
 		Cocos2dxHelper.sCocos2dxHelperListener = pCocos2dxHelperListener;
 
 		Cocos2dxHelper.sPackageName = applicationInfo.packageName;
-		Cocos2dxHelper.nativeSetApkPath("/data/app/org.DeNA.DHLJ-2.apk");
+		Cocos2dxHelper.nativeSetApkPath(applicationInfo.sourceDir);
 		Cocos2dxHelper.nativeSetExternalAssetPath(Cocos2dxHelper.getAbsolutePathOnExternalStorage(applicationInfo, "assets/"));
 
 		Cocos2dxHelper.sCocos2dxAccelerometer = new Cocos2dxAccelerometer(pContext);
@@ -107,6 +107,11 @@ public class Cocos2dxHelper {
 	public static void enableAccelerometer() {
 		Cocos2dxHelper.sAccelerometerEnabled = true;
 		Cocos2dxHelper.sCocos2dxAccelerometer.enable();
+	}
+
+
+	public static void setAccelerometerInterval(float interval) {
+		Cocos2dxHelper.sCocos2dxAccelerometer.setInterval(interval);
 	}
 
 	public static void disableAccelerometer() {
