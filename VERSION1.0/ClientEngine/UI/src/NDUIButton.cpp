@@ -413,7 +413,7 @@ void NDUIButton::draw()
 	}
 	else
 	{
-		//cocos2d::CCLog("Entry DrawRecttangle()");
+		cocos2d::CCLog("Entry DrawRecttangle()");
 		DrawRecttangle(scrRect, m_backgroundColor);
 	}
 
@@ -623,7 +623,10 @@ void NDUIButton::drawButtonImage()
 			}
 
 			if (m_image)
+			{
+				cocos2d::CCLog("entry m_image->DrawInRect(rect);");
 				m_image->DrawInRect(rect);
+			}
 			else if (m_combinepicImg)
 				m_combinepicImg->DrawInRect(rect);
 		}

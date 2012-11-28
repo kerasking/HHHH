@@ -29,6 +29,19 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_QNX)
 #endif // CC_PLATFORM_QNX\
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+
 #include "define.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -377,6 +390,7 @@ void NDDataTransThread::NotBlockDeal()
 			}
 			else if (readedLen)
 			{
+				LOGD("ready NDBaseNetMsgPoolObj.AddNetRawData,readedLen = %d",readedLen);
                 if (readedLen != 0 && !NDBaseNetMsgPoolObj.AddNetRawData(buffer, readedLen))	//???????????????
                 {
                     m_operate = ThreadStatusStoped;

@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define PROFILE_ENCRYPT_C2S 1
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include <unistd.h>
 #include <arpa/inet.h>
