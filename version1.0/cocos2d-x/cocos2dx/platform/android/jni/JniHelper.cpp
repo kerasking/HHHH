@@ -74,7 +74,7 @@ extern "C"
 
     static jclass getClassID_(const char *className, JNIEnv *env)
     {
-		LOGD("entry getClassID_");
+		LOGD("entry getClassID_,className = %s",className);
         JNIEnv *pEnv = env;
         jclass ret = 0;
 
@@ -168,8 +168,6 @@ extern "C"
     static string jstring2string_(jstring jstr)
     {
 		LOGD("entry jstring2string_");
-
-		return "";
 
         if (jstr == NULL)
         {

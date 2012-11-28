@@ -20,7 +20,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
     static
     {
         System.loadLibrary("luaplus");
-        System.loadLibrary("NetWork");
         System.loadLibrary("tinyxml");
         System.loadLibrary("cocos2d");
         System.loadLibrary("ClientEngine");
