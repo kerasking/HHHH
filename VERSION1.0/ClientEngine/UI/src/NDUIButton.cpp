@@ -356,7 +356,7 @@ void NDUIButton::SetFrameRect(CCRect rect)
 
 void NDUIButton::draw()
 {
-	cocos2d::CCLog("Entry NDUIButton::draw()");
+	//cocos2d::CCLog("Entry NDUIButton::draw()");
 
 	if (!isDrawEnabled()) return;
 
@@ -415,7 +415,7 @@ void NDUIButton::draw()
 	}
 	else
 	{
-		cocos2d::CCLog("Entry DrawRecttangle()");
+		//cocos2d::CCLog("Entry DrawRecttangle()");
 		DrawRecttangle(scrRect, m_backgroundColor);
 	}
 

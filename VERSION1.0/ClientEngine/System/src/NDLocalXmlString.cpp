@@ -78,7 +78,8 @@ NDLocalXmlString::~NDLocalXmlString()
 
 void NDLocalXmlString::Init()
 {
-	const char* pszTemp = NDEngine::NDPath::GetResPath("lyol.strings").c_str();
+	string str = NDEngine::NDPath::GetResPath("lyol.strings");
+	const char* pszTemp = str.c_str();
 
 #ifdef WIN32
 	string strTemp = string("../SimplifiedChineseRes/res/") + string("lyol.strings");

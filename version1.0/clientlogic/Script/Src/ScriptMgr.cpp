@@ -283,7 +283,7 @@ void ScriptMgr::Load()
 #ifndef UPDATE_RES 
 	{
 		TIME_SLICE("DoFile(entry.lua)");
-		const string& strPath = NDPath::GetScriptPath("entry.lua").c_str();
+		const string strPath = NDPath::GetScriptPath("entry.lua");
 		LOGD("ready to load script,%s",strPath.c_str());
 		
 		if (0 == LuaStateMgrObj.GetState()->DoFile(strPath.c_str()))

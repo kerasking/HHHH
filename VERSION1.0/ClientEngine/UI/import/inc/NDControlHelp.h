@@ -524,17 +524,17 @@ public:
 		Init(info, sizeOffset);
 		CCRect rect = this->GetFrameRect();
 		CUIExp *exp = new CUIExp;
-		const char* bgfile	= NULL;
-		const char* processfile	= NULL;
+		string bgfile;
+		string processfile;
 		if (!m_info.strNormalFile.empty())
 		{
-			bgfile	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str();
+			bgfile	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str());
 		}
 		if (!m_info.strSelectedFile.empty())
 		{
-			processfile	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str()).c_str();
+			processfile	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str());
 		}
-		exp->Initialization(bgfile, processfile);		
+		exp->Initialization(bgfile.c_str(), processfile.c_str());
 		exp->SetFrameRect(this->GetFrameRect());
 		exp->SetText(info.strText.c_str());
 		exp->SetTextFontSize(info.nTextFontSize);
@@ -620,17 +620,17 @@ public:
 		Init(info, sizeOffset);
 		CCRect rect = this->GetFrameRect();
 		CUIRadioButton *radio = new CUIRadioButton;
-		const char* fileUnCheck	= NULL;
-		const char* fileCheck	= NULL;
+		string fileUnCheck;
+		string fileCheck;
 		if (!m_info.strNormalFile.empty())
 		{
-			fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str();
+			fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str());
 		}
 		if (!m_info.strSelectedFile.empty())
 		{
-			fileCheck	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str()).c_str();
+			fileCheck	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str());
 		}
-		radio->Initialization(fileUnCheck, fileCheck);
+		radio->Initialization(fileUnCheck.c_str(), fileCheck.c_str());
 		radio->SetFrameRect(rect);
 		radio->SetText(info.strText.c_str());
 		radio->SetTextFontSize(info.nTextFontSize);

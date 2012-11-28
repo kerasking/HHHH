@@ -189,6 +189,7 @@ namespace NDEngine
 		return m_kFrameRect;
 	}
 
+	//获取屏幕响应点击区域
 	CCRect NDUINode::GetBoundRect()
 	{
 		NDNode* node = this->GetParent();
@@ -210,11 +211,6 @@ namespace NDEngine
 		return m_kFrameRect;
 	}
 	
-	void NDUINode::SetBoundScale( int nScale )
-	{
-		m_fBoundScale = (float)nScale/100;
-	}
-
 	void NDUINode::draw()
 	{	
 		if (!isDrawEnabled()) return;
