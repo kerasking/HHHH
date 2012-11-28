@@ -240,7 +240,7 @@ const string NDPath::GetUIConfigPath(const char* filename)
 
 const string NDPath::GetUIImgPath(const char* uiFileNameWithPath)
 {
-	static string ret;
+	string ret;
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ret = string(GetResourcePath())+"SimplifiedChineseRes"+uiFileNameWithPath;
@@ -251,16 +251,14 @@ const string NDPath::GetUIImgPath(const char* uiFileNameWithPath)
 	return strRes;
 #else
 
-	string strRes = string(
-		string("../SimplifiedChineseRes") + uiFileNameWithPath);
-#endif
-
 #ifdef TRADITION
 	return ret = GetResPath() + "TraditionalChineseRes/" + uiFileNameWithPath;
 #else
 
 	//return string(GetResourcePath()+"SimplifiedChineseRes/"+uiFileNameWithPath).c_str();GetResPath()+
 
+	string strRes = string(
+		string("../SimplifiedChineseRes") + uiFileNameWithPath);
 	NDString* pstrString = new NDString(strRes);
 
 	//strRes = ReplaceString(strRes,"/","\\");
@@ -280,6 +278,7 @@ const string NDPath::GetUIImgPath(const char* uiFileNameWithPath)
 	//return pszTemp;
 	ret = pszTemp;
 	return ret;
+#endif
 #endif        
 }
 

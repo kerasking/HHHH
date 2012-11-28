@@ -1669,7 +1669,7 @@ NDBeforeGameMgr::GetRecAccountNameByIdx(int idx)
 
 ////////////////////////////////////////////////////////////
 const char*
-NDBeforeGameMgr::GetRecAccountPwdByIdx(int idx)
+NDBeforeGameMgr::GetRecAccountPwdByIdx(int idx) //@bug
 {
 	VEC_ACCOUNT vAccount;
 	NDDataPersist loginData;
