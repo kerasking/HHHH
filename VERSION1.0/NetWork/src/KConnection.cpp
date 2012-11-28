@@ -7,12 +7,25 @@
 #include <signal.h>
 #include "KConnection.h"
 #include "cpLog.h"
-#if defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#if defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__) || defined(ANDROID)
 #include <unistd.h> // renshk
 #include <netinet/in.h> // renshk
 #include <sys/socket.h> // renshk
 #include <sys/ioctl.h> // renshk
 #include <sys/time.h> // renshk
+#endif
+
+#if (defined(ANDROID))
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
 #endif
 
 
@@ -135,7 +148,7 @@ KConnection::readn( void *dataRead, int nchar, int timeout )
 	}
 #ifdef WIN32
     iRead = recv(_connId, (char*)dataRead, nchar, 0);
-#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__) || defined(ANDROID)
 	iRead = read( _connId, dataRead, nchar );
 #endif
 	if ( iRead <= 0 )
@@ -143,8 +156,8 @@ KConnection::readn( void *dataRead, int nchar, int timeout )
 		//cpLog(LOG_ERR, "QQ failed read: %d", iRead);
 		if (iRead == -1)
 		{
-#if defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
-			cpLog(LOG_ERR, "errno: %d, note: %s", errno, strerror(errno));
+#if defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__) || defined(ANDROID)
+			LOGD("errno: %d, note: %s", errno, strerror(errno));
 #endif
 		}
 		return -1;
@@ -191,7 +204,7 @@ KConnection::writeData( const void* data, int n, int timeout )
 		}
 #ifdef WIN32
         if ( ( nwritten = ::send( _connId, ptr, nleft, 0) ) < 0 )
-#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__) || defined(ANDROID)
 		if ( ( nwritten = ::write( _connId, ptr, nleft ) ) < 0 )
 #endif
 		{
@@ -223,13 +236,13 @@ KConnection::getDescription() const
         char temp[256];
 #ifdef WIN32
         _snprintf_s( temp, sizeof(temp) - 1, "%d.%d.%d.%d", p[0], p[1], p[2], p[3] );
-#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)  || defined(ANDROID)
         snprintf( temp, sizeof(temp), "%d.%d.%d.%d", p[0], p[1], p[2], p[3] );
 #endif
         char pStr[56];
 #ifdef WIN32
         sprintf_s( pStr, ":%d", ntohs(_connAddr.sin_port) );
-#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)  || defined(ANDROID)
         sprintf( pStr, ":%d", ntohs(_connAddr.sin_port) );
 #endif
         retStr = temp;
@@ -256,7 +269,7 @@ KConnection::getIp() const
 #ifdef WIN32
         _snprintf_s( temp, sizeof(temp) - 1, "%d.%d.%d.%d",
             p[0], p[1], p[2], p[3] );
-#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__) || defined(ANDROID)
         snprintf( temp, sizeof(temp), "%d.%d.%d.%d",
             p[0], p[1], p[2], p[3] );
 #endif
@@ -300,7 +313,7 @@ KConnection::close()
 		assert( _connId >= 0 );
 #ifdef WIN32
             closesocket(_connId);
-#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__) || defined(ANDROID)
 			::close( _connId );
 #endif
 		delete useNum;
@@ -330,7 +343,7 @@ KConnection::setBlocking( bool block )
 	u_long non_blocking = _blocking ? 0 : 1;
 #ifdef WIN32
     if ( ioctlsocket( _connId, FIONBIO, &non_blocking ) < 0 )
-#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__) || defined(ANDROID)
 	if ( ioctl( _connId, FIONBIO, &non_blocking ) < 0 )
 #endif
 	{
