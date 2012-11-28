@@ -292,45 +292,50 @@ namespace NDEngine {
 		return 1;
 	}
 	
-	const char* GetSMImgPath(const char* name)
+	//备注：不要返回临时变量的指针！
+	//		这个函数提供LUA调用，因此需要一个指针类型，
+	//		暂时改为static确保兼容！
+	const char* GetSMImgPath(const char* name) //@lua
 	{
-
 		if (!name)
 		{
 			return "";
 		}
 
-		std::string str = "Res00/";
-		str += name;
-
-		return NDPath::GetImgPath(str.c_str()).c_str();
-
+		static string s_PathName;
+		s_PathName = NDPath::GetSMImgPath(name);
+		return s_PathName.c_str();
 	}
-	const char* GetImgResPath(const char* name)
+	const char* GetImgResPath(const char* name) //@lua
 	{
 		if (!name)
 		{
 			return "";
 		}
-		return NDPath::GetImgPath(name).c_str();
+		static string s_PathName;
+		s_PathName = NDPath::GetImgPath(name);
+		return s_PathName.c_str();
 	}
-	const char* GetAniResPath(const char* name)
+	const char* GetAniResPath(const char* name) //@lua
 	{
 		if (!name)
 		{
 			return "";
 		}
-		return NDPath::GetAniPath(name).c_str();
+		static string s_PathName;
+		s_PathName = NDPath::GetAniPath(name);
+		return s_PathName.c_str();
 	}
 	
-	const char* GetSMResPath(const char* name)
+	const char* GetSMResPath(const char* name) //@lua
 	{
 		if (!name)
 		{
 			return "";
 		}
-		
-		return NDPath::GetResPath(name).c_str();
+		static string s_PathName;
+		s_PathName = NDPath::GetResPath(name);
+		return s_PathName.c_str();
 	}
 	NDPicture* GetItemPicture(int nIconIndex)
 	{
@@ -721,14 +726,14 @@ CSMLoginScene* pScene = (CSMLoginScene*)NDDirector::DefaultDirector()->GetSceneB
     }
     
     //////////////////////////////////////////////
-    const char* GetRecAccountNameByIdx(int idx)
+    const char* GetRecAccountNameByIdx(int idx) //@lua
     {
         //return NDBeforeGameMgrObj.GetRecAccountNameByIdx(idx);
 		return "";
     }
     
     //////////////////////////////////////////////
-    const char* GetRecAccountPwdByIdx(int idx)
+    const char* GetRecAccountPwdByIdx(int idx) //@lua @bug
     {
         return NDBeforeGameMgrObj.GetRecAccountPwdByIdx(idx);
     }
