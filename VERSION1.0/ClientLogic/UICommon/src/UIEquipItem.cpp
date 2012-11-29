@@ -129,6 +129,19 @@ void CUIEquipItem::SetItemBackgroundPictureCustom(NDPicture *pic,
 	SetBackgroundPictureCustom(pic, touchPic, useCustomRect, customRect);
 }
 
+void CUIEquipItem::SetItemTouchDownImage(NDPicture *pic,
+									 bool useCustomRect /*= false*/, CCRect customRect /*= CGRectZero*/,
+									 bool clearPicOnFree /*= false*/)
+{
+	SetTouchDownImage(pic, useCustomRect, customRect, clearPicOnFree);
+}
+
+void CUIEquipItem::SetItemTouchDownImageCustom(NDPicture *pic,
+										   bool useCustomRect /*= false*/, CCRect customRect /*= CGRectZero*/)
+{
+	SetTouchDownImageCustom(pic, useCustomRect, customRect);
+}
+
 void CUIEquipItem::SetItemFocusImage(NDPicture *pic,
 									  bool useCustomRect /*= false*/, CCRect customRect /*= CGRectZero*/,
 									  bool clearPicOnFree /*= false*/)
