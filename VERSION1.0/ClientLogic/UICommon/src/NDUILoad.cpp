@@ -247,11 +247,6 @@ NDUINode* NDUILoad::CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& 
 {
 	NDUINode* node = NULL;
 
-#ifdef ANDROID
-	uiInfo.nCtrlHeight = uiInfo.nCtrlHeight * 2;
-	uiInfo.nCtrlWidth = uiInfo.nCtrlWidth * 2;
-#endif
-
 	switch (uiInfo.nType) 
 	{
 	case MY_CONTROL_TYPE_UNKNOWN:
@@ -420,7 +415,8 @@ void NDUILoad::PostLoad(UIINFO& uiInfo)
 	// 备注：UI按480*320来配置的，LUA写脚本是按960*640的.
 	//			这里乘个Scale，统一到980*640!	
 
-	float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+	//float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+	float scale = 2.0f; //统一按960*640.
 	uiInfo.CtrlPos.x *= scale;
 	uiInfo.CtrlPos.y *= scale;
 	uiInfo.nCtrlWidth *= scale;

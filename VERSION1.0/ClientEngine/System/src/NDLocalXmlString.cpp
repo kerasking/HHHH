@@ -11,6 +11,7 @@
 #include "globaldef.h"
 #include "NDPath.h"
 #include "NDSharedPtr.h"
+#include "CCFileUtils.h"
 
 static NDLocalXmlString* s_NDLocalXmlString = NULL;
 
@@ -78,26 +79,14 @@ NDLocalXmlString::~NDLocalXmlString()
 
 void NDLocalXmlString::Init()
 {
-	const char* pszTemp = NDEngine::NDPath::GetResPath("lyol.strings").c_str();
+	string str = NDEngine::NDPath::GetResPath("lyol.strings");
+	const char* pszTemp = str.c_str();
 
-#ifdef WIN32
-	string strTemp = string("../SimplifiedChineseRes/res/") + string("lyol.strings");
-
-	FILE *fp_in = fopen(strTemp.c_str(), "rb");
-#else
 	FILE *fp_in = fopen(pszTemp, "rb");
-#endif
-	
 	if (!fp_in) return;
 	
-	CCStringRef document = GetDocumensDirectory();
-
-	if (0 == document)
-	{
-		return;
-	}
-
-	tq::CString tmpFileName("%sxmltmp.txt", document->getCString());
+	string document = GetDocumensDirectory();
+	tq::CString tmpFileName("%sxmltmp.txt", document.c_str());
 
 	FILE *p = fopen(tmpFileName, "a");
 	if (!p) return;
@@ -213,21 +202,7 @@ bool NDLocalXmlString::GetValue(const std::string str, bool& isKey, std::string&
 	return true;
 }
 
-CCString* NDLocalXmlString::GetDocumensDirectory()
- {
-	 /***
-	 * 暂时没找到实现替代方案
-	 * 郭浩
-	 */
-     CCString* documentsDirectory = 0;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	
-    NSString* document = [paths objectAtIndex:0];
-    const char* pszDocument = [document UTF8String];
-    documentsDirectory = new CCString(pszDocument);
-#else
-#endif
-
-	return documentsDirectory;
+string NDLocalXmlString::GetDocumensDirectory()
+{
+	return CCFileUtils::sharedFileUtils()->getWriteablePath();
 }

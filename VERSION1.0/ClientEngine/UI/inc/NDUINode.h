@@ -94,13 +94,11 @@ namespace NDEngine
 //		参数：无
 //		返回值：矩形范围		
 		CCRect GetScreenRect();
-//		
-//		函数：GetBoundRect
-//		作用：获取节点相对于屏幕的矩形范围2
-//		参数：无
-//		返回值：矩形范围		
+
+//		BoundScale参数
+//		作用：屏幕点击区域（相对于ScreenRect的缩放系数，1.0表示无缩放）
 		CCRect GetBoundRect();
-		void SetBoundScale(int nScale);
+		void SetBoundScale(const float fScale) { m_fBoundScale = fScale; }
 //		
 //		函数：OnFrameRectChange
 //		作用：当节点的矩形范围改变时被框架内部调用

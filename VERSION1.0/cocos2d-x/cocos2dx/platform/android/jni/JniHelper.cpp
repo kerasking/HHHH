@@ -26,11 +26,10 @@ THE SOFTWARE.
 #include <string.h>
 
 #if 1
-#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOG_TAG    "JniHelper"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 #else
-#define  LOG_TAG    "DaHuaLongJiang"
-#define  LOGD(...)
+#define  LOGD(...) 
 #endif
 
 #define JAVAVM    cocos2d::JniHelper::getJavaVM()
@@ -46,7 +45,6 @@ extern "C"
 
     static bool getEnv(JNIEnv **env)
     {
-		LOGD("entry getEnv,env value is %d",(int)env);
         bool bRet = false;
 
         do 
@@ -57,8 +55,6 @@ extern "C"
                 break;
             }
 
-			LOGD("GetEnv over,value is %d",(int)env);
-
             if (JAVAVM->AttachCurrentThread(env, 0) < 0)
             {
                 LOGD("Failed to get the environment using AttachCurrentThread()");
@@ -66,15 +62,13 @@ extern "C"
             }
 
             bRet = true;
-        } while (0);
+        } while (0);        
 
-		LOGD("leave getEnv,return value is,%d",(int)bRet);
         return bRet;
     }
 
     static jclass getClassID_(const char *className, JNIEnv *env)
     {
-		LOGD("entry getClassID_");
         JNIEnv *pEnv = env;
         jclass ret = 0;
 
@@ -101,7 +95,6 @@ extern "C"
 
     static bool getStaticMethodInfo_(cocos2d::JniMethodInfo &methodinfo, const char *className, const char *methodName, const char *paramCode)
     {
-		LOGD("entry getStaticMethodInfo_");
         jmethodID methodID = 0;
         JNIEnv *pEnv = 0;
         bool bRet = false;
@@ -134,7 +127,6 @@ extern "C"
 
     static bool getMethodInfo_(cocos2d::JniMethodInfo &methodinfo, const char *className, const char *methodName, const char *paramCode)
     {
-		LOGD("entry getMethodInfo_");
         jmethodID methodID = 0;
         JNIEnv *pEnv = 0;
         bool bRet = false;
@@ -167,13 +159,8 @@ extern "C"
 
     static string jstring2string_(jstring jstr)
     {
-		LOGD("entry jstring2string_");
-
-		return "";
-
         if (jstr == NULL)
         {
-			LOGD("return none character");
             return "";
         }
         
@@ -181,14 +168,11 @@ extern "C"
 
         if (! getEnv(&env))
         {
-			LOGD("getEnv() failed");
             return 0;
         }
 
         const char* chars = env->GetStringUTFChars(jstr, NULL);
-		LOGD("get chars,value is %s",chars);
-		string ret(chars);
-		LOGD("get ret,value is %s",ret.c_str());
+        string ret(chars);
         env->ReleaseStringUTFChars(jstr, chars);
 
         return ret;
@@ -206,9 +190,7 @@ JavaVM* JniHelper::getJavaVM()
 
 void JniHelper::setJavaVM(JavaVM *javaVM)
 {
-	LOGD("entry javaVM ,value is %d",(int)javaVM);
     m_psJavaVM = javaVM;
-	LOGD("leave javaVM ,value is %d",(int)m_psJavaVM);
 }
 
 string JniHelper::m_externalAssetPath;

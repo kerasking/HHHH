@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define PROFILE_ENCRYPT_C2S 1
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -19,6 +21,19 @@
 #include <netdb.h>
 #include <sys/ioctl.h>
 #include "NDUIDialog.h"
+#endif
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
 #endif
 
 #include <vector>
@@ -73,15 +88,22 @@ namespace NDEngine
 	
 	bool NDSocket::Connect(const char* address, unsigned short port, bool blocking)
 	{
+		LOGD("Entry NDSocket::Connect,address = %s,port = %d",address,port);
+
 		m_blocking = blocking;
 		m_address = address;
 		m_port = port;
 		
 
 		m_socket->setServer(address, port, m_blocking);
+
+		LOGD("m_socket->setServer(address, port, m_blocking);");
+
 		if (!m_blocking) 
 		{
 			m_socket->getConn().setTimeout(0);
+
+			LOGD("m_socket->getConn().setTimeout(0);");
 			
 			int keepAlive = 1;
 			::setsockopt(m_socket->getConn().getConnId(), SOL_SOCKET, SO_KEEPALIVE, (const char*)&keepAlive, sizeof(keepAlive));	

@@ -10,6 +10,20 @@
 #include "basedefine.h"
 #include "define.h"
 #include "NDMsgDefine.h"
+#include "CCPlatformConfig.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
 
 namespace NDEngine
 {
@@ -138,6 +152,7 @@ namespace NDEngine
 	
 	bool NDNetMsgMgr::AddNetRawData(const unsigned char* data, unsigned int uilen, bool net /*= true*/)
 	{
+		LOGD("AddNetRawData,uilen = %d",uilen);
 		if (!data || uilen == 0)
 			return true;
 			
@@ -213,10 +228,14 @@ namespace NDEngine
 	
 	bool NDNetMsgMgr::GetServerMsgPacket(NDTransData& data)
 	{
+		LOGD("Entry GetServerMsgPacket.");
+
 		unsigned char* pReadPtr = NULL;
 		unsigned int uiReadSize = 0;
 		
 		m_buffer.GetReadPtr(pReadPtr, uiReadSize);
+
+		LOGD("Entry m_buffer.GetReadPtr. uiReadSize = %d",uiReadSize);
 		
 		if (uiReadSize < ND_C_MSGID_BEGIN)
 		{
@@ -225,6 +244,7 @@ namespace NDEngine
 		
 #if (defined(USE_NDSDK) || defined(USE_MGSDK) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
 		unsigned int msgLen = (pReadPtr[0] & 0xff) + ((pReadPtr[1] & 0xff) << 8);
+		LOGD("unsigned int msgLen, msgLen = %d",msgLen);
 #else
 		while(0xff != pReadPtr[0] || 0xfe != pReadPtr[1])
 		{
@@ -252,6 +272,7 @@ namespace NDEngine
 		
 		if (uiReadSize < msgLen)
 		{
+			LOGERROR("uiReadSize < msgLen");
 			return false;
 		}
 
@@ -259,6 +280,7 @@ namespace NDEngine
 
 		if (!data.Write(pReadPtr + ND_C_MSGID_BEGIN, msgLen - ND_C_MSGID_BEGIN))
 		{
+			LOGERROR("NDNetMsgMgr::GetServerMsgPacket write NDTransData failed!!!");
 			//NDLog(@"NDNetMsgMgr::GetServerMsgPacket write NDTransData failed!!!");
 			
 			return false;

@@ -47,6 +47,8 @@
 #define  LOGERROR(...)
 #endif
 
+#define TextureMonitorObj	CNDTextureMonitor::GetSingleton()
+
 using namespace NDEngine;
 const unsigned char g_dekey[] = {0x80,0x12,0x97,0x67,0x24,0x88,0x89,0x98,0x55,0x34,0xBD,0x33,0x34,0x80,0x12,0x97,0x67,0x24,0x88,0x89,0x98,0x55,0x34,0xBD};
 std::string* s_DataDir = 0;
@@ -283,7 +285,7 @@ void ScriptMgr::Load()
 #ifndef UPDATE_RES 
 	{
 		TIME_SLICE("DoFile(entry.lua)");
-		const string& strPath = NDPath::GetScriptPath("entry.lua").c_str();
+		const string strPath = NDPath::GetScriptPath("entry.lua");
 		LOGD("ready to load script,%s",strPath.c_str());
 		
 		if (0 == LuaStateMgrObj.GetState()->DoFile(strPath.c_str()))

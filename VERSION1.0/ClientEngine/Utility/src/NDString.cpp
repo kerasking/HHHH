@@ -7,7 +7,7 @@
 // #include "KData.h"
 // #include "Kathy.h"
 
-int ascCharToInt(unsigned char asc)
+int NDAscCharToInt(unsigned char asc)
 {
 	if (asc <= '9' && asc >= '0')
 		return asc - '0';
@@ -19,7 +19,7 @@ int ascCharToInt(unsigned char asc)
 		return -1;
 }
 
-int compareNoCase(const char *str1, const char *str2, int len)
+int NDCompareNoCase(const char *str1, const char *str2, int len)
 {
 	for (int i = 0; i < len; i++)
 	{
@@ -37,7 +37,7 @@ int compareNoCase(const char *str1, const char *str2, int len)
 	return 0;
 }
 
-bool ascBcd(const char *ascstr, unsigned char *bcdstr, int bcdlen)
+bool NDAscBcd(const char *ascstr, unsigned char *bcdstr, int bcdlen)
 {
 	int i, j, m, n;
 
@@ -48,8 +48,8 @@ bool ascBcd(const char *ascstr, unsigned char *bcdstr, int bcdlen)
 			return false;
 		else
 		{
-			m = ascCharToInt(ascstr[j - 1]);
-			n = ascCharToInt(ascstr[j]);
+			m = NDAscCharToInt(ascstr[j - 1]);
+			n = NDAscCharToInt(ascstr[j]);
 			if (m == -1 || n == -1)
 				return false;
 			bcdstr[i] = (m << 4) | n;
@@ -457,7 +457,7 @@ int NDString::findNoCase(const NDString& match, int start/*=0*/)
 	int iMaxLen = length();
 	for (int i = 0; i <= iMaxLen - iLen; i++)
 	{
-		if (!compareNoCase(pStr + i, pStrCompare, iLen))
+		if (!NDCompareNoCase(pStr + i, pStrCompare, iLen))
 			return i;
 	}
 	return -1;
@@ -542,7 +542,7 @@ int NDString::findlastNoCase(const NDString& match, int stop/*=-1*/) const
 	int len = match.length();
 	for (int i = stop - len + 1; i >= 0; i--)
 	{
-		if (!compareNoCase(pStr + i, pCompare, len))
+		if (!NDCompareNoCase(pStr + i, pCompare, len))
 			return i;
 	}
 	return -1;
@@ -785,7 +785,7 @@ bool NDString::tobcd(char fillch)
 
 	bool bRet = false;
 
-	if (bRet = ascBcd(buff, (unsigned char*) buff1, bcdLen))
+	if (bRet = NDAscBcd(buff, (unsigned char*) buff1, bcdLen))
 	{
 		buf.assign(buff1, bcdLen);
 	}
@@ -834,7 +834,7 @@ bool NDString::isEndWith(const NDString& str, bool bCase) const
 	}
 	else
 	{
-		if (compareNoCase(subStr.getData(), str.getData(), str.length()) == 0)
+		if (NDCompareNoCase(subStr.getData(), str.getData(), str.length()) == 0)
 			return true;
 		else
 			return false;

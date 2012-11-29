@@ -7,12 +7,26 @@
 #include <sys/socket.h>
 #include <stdio.h>
 #include <sys/types.h>
+#include <sys/errno.h>
 #endif
 #include <stdio.h>
 #include <errno.h>
 
 #include "KTcpClientSocket.h"
 #include "KNetworkAddress.h"
+
+#if (defined(ANDROID))
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
 
 KTcpClientSocket::KTcpClientSocket( const KData& hostName, bool blocking )
 					: _hostName( hostName ), _serverPort( -1 ), _blocking( blocking ), _bAddr(false)
@@ -73,13 +87,20 @@ KTcpClientSocket::~KTcpClientSocket()
 bool
 KTcpClientSocket::connect()
 {
+	LOGD("Entry KTcpClientSocket::connect()");
+
 	if ( _conn.isLive() )
 	{
+		LOGERROR("_conn.isLive() return false");
 		return false;
 	}
+
 	int socketid = ::socket( AF_INET, SOCK_STREAM, 0 );
+
 	if ( socketid == -1 )
 	{
+		int nError = errno;
+		LOGERROR("socketid == -1,nError = %d",nError);
 		return false;
 	}
 
@@ -87,16 +108,22 @@ KTcpClientSocket::connect()
 
 	if ( _bAddr )
 	{
+		LOGD("_bAddr = true");
 		memcpy( &_conn._connAddr, &_addr, sizeof(sockaddr) );
 	}
 	else
 	{
+		LOGD("_bAddr = false");
 		KNetworkAddress na( _hostName, _serverPort );	
 		_conn._connAddr.sin_family = AF_INET;
 		_conn._connAddr.sin_addr.s_addr = inet_addr( na.getIpName() );
 		_conn._connAddr.sin_port = htons( na.getPort() );
+
+		LOGD("_conn set over");
+
 		if ( !na.isValid() )
 		{
+			LOGERROR("na is invalid");
 			return false;
 		}
 	}
@@ -113,6 +140,8 @@ KTcpClientSocket::connect()
 
 	if(::connect( socketid, (SA*)&_conn._connAddr, sizeof(_conn._connAddr) ) == -1)
 	{
+		LOGD("entryu socket connect( socketid, (SA*)&_conn._connAddr, sizeof(_conn._connAddr) )");
+
 #ifdef WIN32
         if(WSAGetLastError() != WSAEWOULDBLOCK)
         {
@@ -120,6 +149,7 @@ KTcpClientSocket::connect()
 #else
 		if(errno != EINPROGRESS)
 		{
+			LOGERROR("errno != EINPROGRESS");
 			::close( socketid );
 #endif
 			return false;
@@ -137,6 +167,7 @@ KTcpClientSocket::connect()
 		int ret = select(FD_SETSIZE, NULL, &writeset, &exceptset, &timeout);
 		if (ret == 0)
 		{
+			LOGERROR(" ret = select(FD_SETSIZE, NULL, &writeset, &exceptset, &timeout) == 0");
 #ifdef WIN32
             closesocket(socketid);
 #else
@@ -149,6 +180,7 @@ KTcpClientSocket::connect()
 #ifdef WIN32
             closesocket(socketid);
 #else
+			LOGERROR("ret = select(FD_SETSIZE, NULL, &writeset, &exceptset, &timeout) < 0");
 			::close( socketid );
 #endif
 			return false;
@@ -160,6 +192,7 @@ KTcpClientSocket::connect()
 #ifdef  WIN32
                 closesocket(socketid);
 #else
+				LOGERROR("FD_ISSET(socketid, &exceptset) = true");
                 ::close( socketid );
 #endif
 				return false;
@@ -169,6 +202,7 @@ KTcpClientSocket::connect()
 			socklen_t len = sizeof(error);
 			if(getsockopt(socketid, SOL_SOCKET, SO_ERROR, (char*)&error, &len) < 0)
 			{
+				LOGERROR("getsockopt(socketid, SOL_SOCKET, SO_ERROR, (char*)&error, &len) < 0");
 #ifdef WIN32
                 closesocket(socketid);
 #else
@@ -194,6 +228,8 @@ KTcpClientSocket::connect()
 	_conn._connId = socketid;
 	_conn.setBlocking( _blocking );
 	_conn.setState();
+
+	LOGD("connect over!");
 
 	return true;
 }
