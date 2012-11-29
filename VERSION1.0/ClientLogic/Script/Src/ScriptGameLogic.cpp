@@ -33,8 +33,8 @@
 #ifdef USE_MGSDK
 #import <Foundation/Foundation.h>
 #include "MBGSocialService.h"
-#endif
 #include "MobageViewController.h"
+#endif
 
 //#include "CCVideoPlayer.h"
 

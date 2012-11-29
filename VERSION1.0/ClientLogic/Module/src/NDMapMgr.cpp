@@ -4036,6 +4036,7 @@ void  NDMapMgr::ProcessOAuthTokenRet(NDTransData& data)
 
 void  NDMapMgr::ProcessCreateTransactionRet(NDTransData& data)
 {
+#ifdef USE_MGSDK
     NSString* transactionId = data.ReadUTF8NString();
     if (transactionId == nil)
         return;
@@ -4044,7 +4045,6 @@ void  NDMapMgr::ProcessCreateTransactionRet(NDTransData& data)
     mgr.SetCurrentTransactionID(transactionId);
     CloseProgressBar;
     
-#ifdef USE_MGSDK
     [MBGBankDebit continueTransaction:transactionId onSuccess:^(MBGTransaction *transaction) {
         CloseTransaction();
     } onCancel:^{
@@ -4057,10 +4057,12 @@ void  NDMapMgr::ProcessCreateTransactionRet(NDTransData& data)
 }
 void  NDMapMgr::ProcessCloseTransactionRet(NDTransData& data)
 {
+#ifdef USE_MGSDK
     //to do add EMoney
     MobageViewController* pMobageView = [MobageViewController sharedViewController];
     [pMobageView showBalanceButton:CGRectMake(200, 70, 100, 36)];
     ScriptMgrObj.excuteLuaFunc( "HandleNetMsg", "Agiotage", 0 );
+#endif
 }
 
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

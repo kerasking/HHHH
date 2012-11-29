@@ -150,6 +150,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 {
 	if ( idTag == TAG_TIMER_UPDATE ) 
 	{		
+#if _DOWNLOAD_PACKAGE
 		if ([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithUTF8String:m_savePath.c_str()]]) 
 		{
 			NSError* err = nil;
@@ -161,7 +162,6 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 				return;
 			}
 		}
-#if _DOWNLOAD_PACKAGE
 		DownloadPackage* downer = new DownloadPackage();
 		downer->SetDelegate(this);
 		downer->FromUrl(m_updateURL.c_str());
@@ -208,11 +208,13 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		//查找下载队列
 		if (deqUpdateUrl.size()>0)
 		{                
+#if _DOWNLOAD_PACKAGE
 		    //定义保存路径
 		    m_updateURL = *deqUpdateUrl.begin();
 		    m_savePath = [[NSString stringWithFormat:@"%s/update%d.zip", m_cachPath.c_str(), PackageCount] UTF8String];
 		    m_pTimer->SetTimer( this, TAG_TIMER_UPDATE, 0.5f );
 		    StartDownload();
+#endif
 		}
 		else
 		{

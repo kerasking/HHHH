@@ -31,8 +31,11 @@
 #include <vector>
 #include "NDSocket.h"
 
+#if defined(USE_NDSDK)
 #include "NDSdkLogin.h"
+#elif defined(USE_MGSDK)
 #include "MobageSdkLogin.h"
+#endif
 
 using namespace std;
 #define NDBeforeGameMgrObj	NDEngine::NDBeforeGameMgr::GetSingleton()
@@ -206,7 +209,8 @@ namespace NDEngine
 		
 #if defined(USE_NDSDK)
 		NDSdkLogin *m_sdkLogin;
-#else if defined(USE_MGSDK))
+#endif
+#if defined(USE_MGSDK)
         MobageSdkLogin *m_sdkLogin;
 #endif
         bool m_bOAuthTokenOK;

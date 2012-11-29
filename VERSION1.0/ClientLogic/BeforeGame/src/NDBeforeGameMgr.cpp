@@ -36,7 +36,8 @@
 
 #ifdef USE_NDSDK
 #import <NdComPlatform/NdComPlatform.h>
-#else if defined(USE_MGSDK)
+#endif
+#if defined(USE_MGSDK)
 #import "MBGSocialService.h"
 #endif
 
@@ -1362,7 +1363,8 @@ bool NDBeforeGameMgr::doNDSdkLogin()
 	}
 	m_sdkLogin = [[NDSdkLogin alloc] init];
 	[m_sdkLogin LoginWithUser];
-#else if defined(USE_MGSDK)
+#endif
+#if defined(USE_MGSDK)
 	if (m_sdkLogin)
 	{
 		//[m_sdkLogin release];
@@ -1384,7 +1386,8 @@ bool NDBeforeGameMgr::doNDSdkChangeLogin()
 	}
 	m_sdkLogin = [[NDSdkLogin alloc] init];
 	[m_sdkLogin LoginWith];
-#else if defined(USE_MGSDK)
+#endif
+#if defined(USE_MGSDK)
     if(m_CurrentUser_id > 0) {
         NSString* strUserID = [NSString stringWithFormat:@"%ld",m_CurrentUser_id];
         [MBGSocialService openUserProfile:strUserID
