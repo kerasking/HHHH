@@ -277,7 +277,6 @@ const string NDPath::GetUIImgPath(const char* uiFileNameWithPath)
 
 	string strRes = string(
 		string("../SimplifiedChineseRes") + uiFileNameWithPath);
-#endif
 
 #ifdef TRADITION
 	return ret = GetResPath() + "TraditionalChineseRes/" + uiFileNameWithPath;
@@ -304,7 +303,8 @@ const string NDPath::GetUIImgPath(const char* uiFileNameWithPath)
 	//return pszTemp;
 	ret = pszTemp;
 	return ret;
-#endif        
+#endif      
+#endif
 }
 
 const string& NDPath::GetResPath(const char* fileName)

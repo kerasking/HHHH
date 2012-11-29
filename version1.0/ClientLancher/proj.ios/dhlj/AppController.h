@@ -22,11 +22,21 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#import "MobageViewController.h"
+#import "ND91SDKViewController.h"
+
 @class RootViewController;
 
-@interface AppController : NSObject <UIAccelerometerDelegate, UIAlertViewDelegate, UITextFieldDelegate,UIApplicationDelegate> {
+@interface AppController : NSObject <UIAccelerometerDelegate, UIAlertViewDelegate, UITextFieldDelegate,UIApplicationDelegate>
+{
     UIWindow *window;
-    RootViewController    *viewController;
+#ifdef USE_MGSDK
+    MobageViewController    *viewController;
+#elif USE_NDSDK
+    ND91SDKViewController    *viewController;
+#else 
+    RootViewController      *viewController;
+#endif
 }
 
 @end

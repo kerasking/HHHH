@@ -21,6 +21,8 @@
 #include "InstallSelf.h"
 #include "NDBeforeGameMgr.h"
 #include "NDTargetEvent.h"
+#include "NDLocalXmlString.h"
+#include "ScriptMgr.h"
 #include <iostream>
 #include <sstream>
 
@@ -130,19 +132,22 @@ void CSMLoginScene::Initialization(void)
 {
 	NDScene::Initialization();
 	//m_doucumentPath = NDPath::GetResourcePath() + "/";
-  #if 0
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
   m_cachPath = NDPath::GetCashesPath() + "/";
 	m_savePath = [[NSString stringWithFormat:@"%supdate.zip", m_cachPath.c_str()] UTF8String];
 	//m_resPath = NDPath::GetResPath();
 	PackageCount = 0;
 	m_pTimer = new NDTimer();
+    
+    //临时先加到这边登录
+    NDBeforeGameMgrObj.doNDSdkLogin();
+    ShowWaitingAni();
 #endif
 }
 
 //===========================================================================
 void CSMLoginScene::OnTimer( OBJID idTag )
 {
-#if 0
 	if ( idTag == TAG_TIMER_UPDATE ) 
 	{		
 		if ([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithUTF8String:m_savePath.c_str()]]) 
@@ -156,12 +161,13 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 				return;
 			}
 		}
-            
+#if _DOWNLOAD_PACKAGE
 		DownloadPackage* downer = new DownloadPackage();
 		downer->SetDelegate(this);
 		downer->FromUrl(m_updateURL.c_str());
 		downer->ToPath(m_savePath.c_str()); 
 		downer->Download();
+#endif
 		m_pTimer->KillTimer(this, TAG_TIMER_UPDATE);
 	}
 	else if ( idTag == TAG_TIMER_DOWNLOAD_SUCCESS )
@@ -173,8 +179,10 @@ void CSMLoginScene::OnTimer( OBJID idTag )
         //下载成功后解压文件
         //bool bUnzip =false;
         //bUnzip = CTQZip::UnCompress(m_savePath.c_str(),m_doucumentPath.c_str(), this );
+#if _DOWNLOAD_PACKAGE
         UnZipFile( m_savePath.c_str(), m_cachPath.c_str());
-        //if (UnZipFile(m_savePath.c_str(), m_doucumentPath.c_str())) 
+#endif
+        //if (UnZipFile(m_savePath.c_str(), m_doucumentPath.c_str()))
         //{
         //    bUnzip = true;
         //}  
@@ -215,12 +223,14 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 	else if ( TAG_TIMER_CHECK_WIFI == idTag )
 	{
 		//如果检测没开启WIFI则不断检测//
+#if _DOWNLOAD_PACKAGE
     	if ( NDBeforeGameMgrObj.isWifiNetWork() )
     	{
 			m_pTimer->KillTimer( this, TAG_TIMER_CHECK_WIFI );
 			CloseConfirmDlg();
 			StartUpdate();
     	}
+#endif
 	}
 	else if ( TAG_TIMER_CHECK_UPDATE == idTag )
 	{
@@ -229,6 +239,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 	}
 	else if ( TAG_TIMER_CHECK_COPY == idTag )
 	{
+#if _DOWNLOAD_PACKAGE
         int copyStatus = NDBeforeGameMgr::GetCopyStatus();
         switch (copyStatus) 
         {
@@ -247,12 +258,14 @@ void CSMLoginScene::OnTimer( OBJID idTag )
             default:
                 break;
         }
+#endif
 	}
     else if ( TAG_TIMER_FIRST_RUN == idTag )
     {
         m_pTimer->KillTimer( this, TAG_TIMER_FIRST_RUN );
     	CreateUpdateUILayer();
 #ifdef USE_MGSDK
+#if _DOWNLOAD_PACKAGE
 		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
 		if ( pImage )
 		{
@@ -260,6 +273,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ) );
 			pImage->SetPicture( pPicture, true );
 		}
+#endif
 #endif
 #if CACHE_MODE == 1
     	if ( NDBeforeGameMgrObj.CheckFirstTimeRuning() )
@@ -284,7 +298,6 @@ void CSMLoginScene::OnTimer( OBJID idTag )
     	//CreateUpdateUILayer();
 		//NDBeforeGameMgrObj.CheckClientVersion(SZ_UPDATE_URL);
     }
-#endif
 }
 
 //==========================================================
@@ -573,7 +586,6 @@ void CSMLoginScene::CloseUpdateUILayer()
 //===========================================================================
 void CSMLoginScene::OnMsg_ClientVersion(NDTransData& data)
 {
-#if 0
 	bool bUpdate = false;
 	
 	int bLatest				= data.ReadByte();
@@ -654,7 +666,6 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& data)
 			}
 		}
 	}
-#endif
 }
 
 //===========================================================================
@@ -663,14 +674,17 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
 {
 	m_iAccountID = iAccountID;
 #ifdef USE_MGSDK
-	NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
-	if ( pImage )
-	{
-		NDPicture * pPicture = new NDPicture;
-        std::string str = SZ_UPDATE_BG_PNG_PATH;
-		pPicture->Initialization( NDPath::GetUIImgPath( str.c_str() ).c_str() );
-		pImage->SetPicture( pPicture, true );
-	}
+    if(m_pLayerUpdate)
+    {
+        NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
+        if ( pImage )
+        {
+            NDPicture * pPicture = new NDPicture;
+            std::string str = SZ_UPDATE_BG_PNG_PATH;
+            pPicture->Initialization( NDPath::GetUIImgPath( str.c_str() ).c_str() );
+            pImage->SetPicture( pPicture, true );
+        }
+    }
 #endif
 	
 #if UPDATE_ON == 0
@@ -762,14 +776,12 @@ void CSMLoginScene::SetProgress( int nPercent )
 //===========================================================================
 void CSMLoginScene::StartEntry()
 {
-#if 0
-	NDLocalXmlString::GetSingleton().LoadData();
-    ScriptMgrObj.Load();
-    ScriptMgrObj.excuteLuaFunc( "LoadData", "GameSetting" ); 
+    //NDLocalXmlString::GetSingleton();
+    //ScriptMgrObj.Load();
+    ScriptMgrObj.excuteLuaFunc( "LoadData", "GameSetting" );
 	CloseUpdateUILayer();
 	ScriptMgrObj.excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
     ScriptMgrObj.excuteLuaFunc("ProecssLocalNotification", "MsgLoginSuc");
-#endif
 }
 
 //===========================================================================
