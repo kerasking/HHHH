@@ -390,7 +390,6 @@ void NDDataTransThread::NotBlockDeal()
 			}
 			else if (readedLen)
 			{
-				LOGD("ready NDBaseNetMsgPoolObj.AddNetRawData,readedLen = %d",readedLen);
                 if (readedLen != 0 && !NDBaseNetMsgPoolObj.AddNetRawData(buffer, readedLen))	//???????????????
                 {
                     m_operate = ThreadStatusStoped;
