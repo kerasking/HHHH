@@ -49,17 +49,17 @@
 
 /*!
  * @abstract gets the Button object which extends UIButon to show virtual currency balance and navigate to Bank UI
- * @param rect CCRect rectangle to draw
+ * @param rect CGRect rectangle to draw
  */
-+ (MBGBalanceButton *)getBalanceButton:(CCRect)rect;
++ (MBGBalanceButton *)getBalanceButton:(CGRect)rect;
 
 /*!
  * @abstract gets the ImageView object which extends UIImageView to show virtual currency balance
- * @param rect CCRect rectangle to draw
+ * @param rect CGRect rectangle to draw
  * @param color UIColor to draw
  * @param size integer value to specify font size 
  */
-+ (MBGBalanceImage *)getBalanceImage:(CCRect)rect
++ (MBGBalanceImage *)getBalanceImage:(CGRect)rect
 							   color:(UIColor *)color
 							fontSize:(NSInteger)size;
 

@@ -10,6 +10,8 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "windows.h"
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#import <Foundation/Foundation.h>
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
@@ -203,6 +205,13 @@ bool NDWideString::IsEqual_UTF8_Ansi( const char* utf8, const char* ansi )
 				return true;
 		}
 	}
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    NSString *sCompareUtf8 = [NSString stringWithUTF8String:utf8];
+    NSStringEncoding enc=CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    NSString *sAnsi2Utf8 = [NSString stringWithCString:ansi encoding:enc];
+
+    if([sCompareUtf8 isEqualToString:sAnsi2Utf8])
+        return true;
 #else
     // compare by both ansi
     if (strcmp( utf8, ansi ) == 0)

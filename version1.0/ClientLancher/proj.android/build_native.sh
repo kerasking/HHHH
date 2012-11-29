@@ -1,7 +1,12 @@
 # set params
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 NDK_ROOT_LOCAL=/cygdrive/d/android-ndk-r8b
-COCOS2DX_ROOT_LOCAL=/cygdrive/d/work/DHLJClient/VERSION1.0/cocos2d-x
-CLIENT_LOCAL=/cygdrive/d/work/DHLJClient/VERSION1.0/
+COCOS2DX_ROOT_LOCAL="$DIR/../../cocos2d-x"
+CLIENT_LOCAL="$DIR/../.."
+
+echo "NDK_ROOT_LOCAL = $NDK_ROOT_LOCAL"
+echo "COCOS2DX_ROOT_LOCAL = $COCOS2DX_ROOT_LOCAL"
+echo "CLIENT_LOCAL = $CLIENT_LOCAL"
 
 buildexternalsfromsource=
 

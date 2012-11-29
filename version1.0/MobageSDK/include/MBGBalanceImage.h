@@ -9,7 +9,7 @@
 @interface MBGBalanceImage : UIImageView {
     
 }
-- (id)initWithFrame:(CCRect)frame
+- (id)initWithFrame:(CGRect)frame
 			  color:(UIColor *)color
 		   fontSize:(NSInteger)size;
 

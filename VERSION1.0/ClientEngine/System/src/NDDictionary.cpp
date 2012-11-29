@@ -11,6 +11,19 @@
 using namespace NDEngine;
 using namespace cocos2d;
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+
 DictionaryObject::DictionaryObject() :
 m_NdObject(NULL)
 {
@@ -39,6 +52,8 @@ NDDictionary::~NDDictionary()
 
 void NDDictionary::SetObject(NDObject* obj, const char* key)
 {
+	LOGD("entry NDDictionary::SetObject,obj is %d",(int)obj);
+
 	if (obj)
 	{
 		DictionaryObject *dictObj = new DictionaryObject;
@@ -50,12 +65,19 @@ void NDDictionary::SetObject(NDObject* obj, const char* key)
 
 NDObject* NDDictionary::Object(const char* key)
 {
+	LOGD("entry NDDictionary::Object,key is %s",key);
+
 	DictionaryObject *dictObj =
 			(DictionaryObject *) m_nsDictionary->objectForKey(key);
+
+	LOGD("dictObj got,value is %d",(int)dictObj);
+
 	if (dictObj)
 	{
 		return dictObj->getNdObject();
 	}
+
+	LOGERROR("NDDictionary::Object(const char* key) return NULL!!!");
 	return NULL;
 }
 

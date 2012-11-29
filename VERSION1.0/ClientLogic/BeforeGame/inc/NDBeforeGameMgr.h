@@ -30,7 +30,12 @@
 #include <string>
 #include <vector>
 #include "NDSocket.h"
-//#include "NDSdkLogin.h"
+
+#if defined(USE_NDSDK)
+#include "NDSdkLogin.h"
+#elif defined(USE_MGSDK)
+#include "MobageSdkLogin.h"
+#endif
 
 using namespace std;
 #define NDBeforeGameMgrObj	NDEngine::NDBeforeGameMgr::GetSingleton()
@@ -105,7 +110,8 @@ namespace NDEngine
 		bool SwitchToCMNet();
 		void Login();
 		
-		void doNDSdkLogin();
+		bool doNDSdkLogin();
+        bool doNDSdkChangeLogin();
 		
 		bool SynConnect();
 		bool SynSEND_DATA(NDTransData& data);
@@ -201,7 +207,12 @@ namespace NDEngine
 		
 		NDSocket m_SynSocket;
 		
-		//NDSdkLogin *m_sdkLogin;
+#if defined(USE_NDSDK)
+		NDSdkLogin *m_sdkLogin;
+#endif
+#if defined(USE_MGSDK)
+        MobageSdkLogin *m_sdkLogin;
+#endif
         bool m_bOAuthTokenOK;
 	public:
 		enum LoginState
@@ -211,6 +222,9 @@ namespace NDEngine
 			eLS_AccountList,
 		};
 		LoginState m_LoginState;
+        
+    public:
+		bool isWifiNetWork();
 	};
 
 	// 根据seed值，产生一个salt值，直接采用vc crt库的srand和rand算法

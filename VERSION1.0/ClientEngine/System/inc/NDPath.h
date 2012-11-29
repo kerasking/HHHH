@@ -26,37 +26,39 @@ public:
 
 public:
 	// res path
-	static const string& GetAppPath();
-	static const char*   GetResourcePath();
-	static const string& GetImagePath();
-    static const string& GetResPath2( const char* fileName );
-	static const string& GetMapPath();
-	static const string& GetMapResPath();
-	static const string& GetAnimationPath();
-	static const char*   GetResPath();
-	static const string& GetSoundPath();
-	static const string& GetImgPathBattleUI(const char* fileName);
-	static const string& GetImgPathBattleUI();
-	static const string& GetImgPath(const char* fileName);
-	static const string& GetImgPathNew(const char* fileName);
-	static const string& GetImgPathNewAdvance(const char* fileName);
-	static const string& GetAniPath(const char* fileName);
-	static const string& GetMapPath(const char* fileName);
-	static const string& GetUIConfigPath(const char* filename);
-	static const string& GetUIImgPath(const char* uiFileNameWithPath);
-	static const string& GetResPath(const char* fileName);
-	static const string& GetSMImgPath(const char* fileName);
-	static const string& GetRootResPath();
-	static const string& GetScriptPath(const char* filename);
-	static const string& GetScriptPath();
-	static const string& GetAppResFilePath(const char* filename);
-	static const string& GetResourceFilePath(const char* filename);
-	static const string& GetSMVideoPath(const char* fileName);
-	static const string& GetImgPathUINew(const char* fileName);
-	static const string& GetImgPathUINewAdvance(const char* fileName);
- 	static const string& GetFullImagepath(const char* fileName);
- 	static const string& GetUIPath(const char* fileName);
-	static const string& GetUIPath();
+	static const string GetAppPath();
+	static const string GetImagePath();  
+	static const string GetMapPath();
+	static const string GetMapResPath();
+	static const string GetAnimationPath();
+	
+	static const string GetResPath();
+	static const string GetResPath(const char* fileName);
+	static const string GetResourcePath();
+
+	static const string GetSoundPath();
+	static const string GetImgPathBattleUI(const char* fileName);
+	static const string GetImgPathBattleUI();
+	static const string GetImgPath(const char* fileName);
+	static const string GetImgPathNew(const char* fileName);
+	static const string GetImgPathNewAdvance(const char* fileName);
+	static const string GetAniPath(const char* fileName);
+	static const string GetMapPath(const char* fileName);
+	static const string GetUIConfigPath(const char* filename);
+	static const string GetUIImgPath(const char* uiFileNameWithPath);
+	
+	static const string GetSMImgPath(const char* fileName);
+	static const string GetRootResPath();
+	static const string GetScriptPath(const char* filename);
+	static const string GetScriptPath();
+	static const string GetAppResFilePath(const char* filename);
+	static const string GetResourceFilePath(const char* filename);
+	static const string GetSMVideoPath(const char* fileName);
+	static const string GetImgPathUINew(const char* fileName);
+	static const string GetImgPathUINewAdvance(const char* fileName);
+ 	static const string GetFullImagepath(const char* fileName);
+ 	static const string GetUIPath(const char* fileName);
+	static const string GetUIPath();
 	//－－－end
 	static void SetImagePath(const char* szPath);
 	static void SetResDirPos( int iPos );//
@@ -64,22 +66,22 @@ public:
 	static std::string GetCashesPath();
 	static void SetAnimationPath(const char* szPath);
 	static void SetMapPath(const char* szPath);
-	static const char* GetRootResDirName();
+	static const string GetRootResDirName();
 	static void SetResPath(const char* szPath);
 
-	static const string& GetLogPath();
+	static const string GetLogPath();
 
 protected:
 
-	static string NDPath_ResPath;
-	static string NDPath_ImgPath;
-	static string NDPath_ImgPath_UINew;
-	static string NDPath_ImgPath_BattleUI;
-	static string NDPath_MapPath;
-	static string NDPath_AniPath;
-	static string NDPath_SoundPath;
-	static string NDPath_UIPath;
-	static string NDPath_ScriptPath;
+	//static string NDPath_ResPath;
+	//static string NDPath_ImgPath;
+	//static string NDPath_ImgPath_UINew;
+	//static string NDPath_ImgPath_BattleUI;
+	//static string NDPath_MapPath;
+	//static string NDPath_AniPath;
+	//static string NDPath_SoundPath;
+	//static string NDPath_UIPath;
+	//static string NDPath_ScriptPath;
 
 	static int s_iResDirPos;
 

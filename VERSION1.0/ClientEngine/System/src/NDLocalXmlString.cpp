@@ -11,6 +11,7 @@
 #include "globaldef.h"
 #include "NDPath.h"
 #include "NDSharedPtr.h"
+#include "CCFileUtils.h"
 
 static NDLocalXmlString* s_NDLocalXmlString = NULL;
 
@@ -78,37 +79,13 @@ NDLocalXmlString::~NDLocalXmlString()
 
 void NDLocalXmlString::Init()
 {
-	const char* pszTemp = NDEngine::NDPath::GetResPath("lyol.strings").c_str();
+	string str = NDEngine::NDPath::GetResPath("lyol.strings");
+	const char* pszTemp = str.c_str();
 
-#ifdef WIN32
-	string strTemp = string("../SimplifiedChineseRes/res/") + string("lyol.strings");
-
-	FILE *fp_in = fopen(strTemp.c_str(), "rb");
-#else
 	FILE *fp_in = fopen(pszTemp, "rb");
-#endif
-	
 	if (!fp_in) return;
 	
-	std::string document;
-	// todo(zjh)
-	/*
-	NSString *document = GetDocumensDirectory();
-	
-	if (!document) return;
-	
-	
-	NSFileManager *fm = [NSFileManager defaultManager];
-	NSError *error;
-	
-	NSString *tmpFileName = [NSString stringWithFormat:@"%@/%s", document, "xmltmp.txt"];
-	
-	if (!tmpFileName) return;
-	
-    if ([fm fileExistsAtPath: tmpFileName] &&
-        [fm removeItemAtPath: tmpFileName error:&error])
-    {}
-	*/
+	string document = GetDocumensDirectory();
 	tq::CString tmpFileName("%sxmltmp.txt", document.c_str());
 
 	FILE *p = fopen(tmpFileName, "a");
@@ -225,15 +202,7 @@ bool NDLocalXmlString::GetValue(const std::string str, bool& isKey, std::string&
 	return true;
 }
 
-CCString* NDLocalXmlString::GetDocumensDirectory()
- {
-	 /***
-	 * 暂时没找到实现替代方案
-	 * 郭浩
-	 */
-	//NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
-	
-	CCStringRef documentsDirectory = 0;//[paths objectAtIndex:0]; 
-
-	return documentsDirectory;
+string NDLocalXmlString::GetDocumensDirectory()
+{
+	return CCFileUtils::sharedFileUtils()->getWriteablePath();
 }

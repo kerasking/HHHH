@@ -7,6 +7,7 @@ LOCAL_MODULE := tinyxml
 LOCAL_MODULE_FILENAME := libtinyxml
 
 LOCAL_SRC_FILES := \
+../../src/Main.cpp \
 ../../src/tinystr.cpp \
 ../../src/tinyxml.cpp \
 ../../src/tinyxmlerror.cpp \

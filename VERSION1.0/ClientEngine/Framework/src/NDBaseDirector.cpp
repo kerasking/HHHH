@@ -70,7 +70,7 @@ using namespace NDEngine;
 
 void NDBaseDirector::mainLoop(void)
 {
-	if (NDDebugOpt::getMainLoopEnabled())
+	if (true)
 	{
 		this->OnIdle();
 

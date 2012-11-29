@@ -56,6 +56,17 @@ THE SOFTWARE.
 #include "CCEGLView.h"
 #include <string>
 
+#ifdef ANDROID
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#endif
+
 /**
  Position of the FPS
  
@@ -84,6 +95,14 @@ extern const char* cocos2dVersion(void);
 
 CCDirector* CCDirector::sharedDirector(void)
 {
+	static bool bFirst = true;
+
+	if (bFirst)
+	{
+		LOGD("entry sharedDirector() value is %d",(int)sm_pSharedDirector);
+		bFirst = false;
+	}
+
     static bool s_bFirstUseDirector = true;
 
 #if ND_MOD
@@ -557,6 +576,8 @@ void CCDirector::reshapeProjection(const CCSize& newWindowSize)
 
 void CCDirector::runWithScene(CCScene *pScene)
 {
+	LOGD("m_pRunningScene value is %d",(int)m_pRunningScene);
+
     CCAssert(pScene != NULL, "running scene should not be null");
     CCAssert(m_pRunningScene == NULL, "m_pRunningScene should be null");
 
@@ -1002,8 +1023,11 @@ CCAccelerometer* CCDirector::getAccelerometer()
 CCDisplayLinkDirector::CCDisplayLinkDirector(void)
 	: m_bInvalid(false)
 {
+	LOGD("entry CCDisplayLinkDirector(),sm_pSharedDirector is %d",(int)sm_pSharedDirector);
+
 #pragma message( "!! CCDisplayLinkDirector !! comipled, ND_MOD=1" )
     sm_pSharedDirector = this;
+	LOGD("Leave CCDisplayLinkDirector(),sm_pSharedDirector is %d",(int)sm_pSharedDirector);
 }
 #endif
 

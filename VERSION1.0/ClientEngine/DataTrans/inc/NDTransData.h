@@ -20,7 +20,7 @@
 
 namespace NDEngine
 {	
-#if (defined(USE_NDSDK) || defined(USE_MGSDK))
+#if (defined(USE_NDSDK) || defined(USE_MGSDK) || defined(ANDROID)) ///< ÐèÒªÐÞ¸Ä ¹ùºÆ
 	const int ND_C_MSGID_BEGIN  = 2;
 	const int ND_C_HEAD_SIZE   = 4;
 #else

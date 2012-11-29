@@ -36,6 +36,19 @@
 static NDBaseDirector s_NDBaseDirector;
 #endif
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+
 #if 0
 #include "HelloWorldScene.h" //@todo
 #endif
@@ -97,6 +110,11 @@ bool NDGameApplication::applicationDidFinishLaunching()
 			CCFileUtils::sharedFileUtils()->setResourceDirectory("iphone");
 		}
 	}
+	else if(target == kTargetAndroid)
+	{
+		CCLog("Entryu setDesignResolutionSize");
+		CCEGLView::sharedOpenGLView()->setDesignResolutionSize(1196, 720, kResolutionNoBorder);
+	}
 	else 
 	{
 		// android, windows, blackberry, linux or mac
@@ -109,10 +127,6 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 		// initialize socket
 		InitSocket();
-
-		// Initialize OpenGLView instance, that release by CCDirector when application terminate.
-		// The HelloWorld is designed as HVGA.
-		NDPath::SetResPath( "../../Bin/SimplifiedChineseRes/res/" );
 #endif
 	}
 
@@ -140,6 +154,8 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 void NDGameApplication::MyInit()
 {
+	LOGD("Start MyInit");
+
 	REGISTER_CLASS(NDBaseBattle,Battle);
 	REGISTER_CLASS(NDBaseFighter,Fighter);
 	REGISTER_CLASS(NDBaseBattleMgr,BattleMgr);
@@ -151,13 +167,27 @@ void NDGameApplication::MyInit()
 	REGISTER_CLASS(NDUIBaseItemButton,CUIItemButton);
 	REGISTER_CLASS(NDUIBaseItemButton,CUIEquipItem);
 
+	LOGD("REGISTER_CLASS Over");
+
 	NDMapMgr& kMapMgr = NDMapMgrObj;
+
+	LOGD("kMapMgr get Over");
 	//ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();
 	NDBeforeGameMgrObj;
 
+	LOGD("NDBeforeGameMgrObj Over");
+
 	NDDirector* pkDirector = NDDirector::DefaultDirector();
+
+	LOGD("pkDirector get Over,%d",(int)pkDirector);
+
 	pkDirector->Initialization();
+
+	LOGD("pkDirector Initialization Over");
+
 	pkDirector->RunScene(CSMLoginScene::Scene());
+
+	LOGD("pkDirector->RunScene(CSMLoginScene::Scene()); Over");
 
 //	kMapMgr.processChangeRoom(0,0);
 
@@ -185,11 +215,17 @@ void NDGameApplication::MyInit()
 	//kScriptManager.Load();
 	ScriptMgrObj.Load();
 
+	LOGD("ScriptMgrObj.Load(); Over");
+
 	//CC_SAFE_DELETE(pkNetMsg);
 
 	//ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
-	
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	LOGD("Start ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME)");
 	ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
+#endif
+
+	LOGD("End MyInit");
 
 	//NDPlayer::pugeHero();
 	//NDPlayer& kPlayer = NDPlayer::defaultHero(1);
@@ -284,6 +320,9 @@ void NDGameApplication::MyInit()
 
 void NDGameApplication::applicationDidEnterBackground()
 {
+#ifdef USE_MGSDK
+    [MBGPlatform pause];
+#endif
 	CCDirector::sharedDirector()->stopAnimation();
 
 	// if you use SimpleAudioEngine, it must be pause
@@ -292,6 +331,9 @@ void NDGameApplication::applicationDidEnterBackground()
 
 void NDGameApplication::applicationWillEnterForeground()
 {
+#ifdef USE_MGSDK
+    [MBGPlatform resume];
+#endif
 	CCDirector::sharedDirector()->startAnimation();
 
 	// if you use SimpleAudioEngine, it must resume here
@@ -422,6 +464,23 @@ bool NDGameApplication::processPM(const char* cmd)
 
 		// dump NDDirector & CCDirector
 		{
+			LOGD( msg, 
+				"hero pos(%d, %d)\r\n"
+				"[CCDirector] size in Points  (%d, %d)\r\n"
+				"[CCDirector] size in Pixels  (%d, %d)\r\n"
+				"[CCDirector] content scale = %.1f\r\n"
+				,
+				(int)posScreen.x, (int)posScreen.y, //screen pos in pixels.
+
+				(int)CCDirector::sharedDirector()->getWinSize().width,
+				(int)CCDirector::sharedDirector()->getWinSize().height,
+
+				(int)CCDirector::sharedDirector()->getWinSizeInPixels().width,
+				(int)CCDirector::sharedDirector()->getWinSizeInPixels().height,
+
+				CCDirector::sharedDirector()->getContentScaleFactor()
+				);
+
 			sprintf( msg, 
 				"hero pos(%d, %d)\r\n"
 				"[CCDirector] size in Points  (%d, %d)\r\n"
@@ -447,6 +506,26 @@ bool NDGameApplication::processPM(const char* cmd)
 			CCEGLView* eglView = CCDirector::sharedDirector()->getOpenGLView();
 			if (eglView)
 			{
+				LOGD(msg,
+					"\r\n"
+					"[EGLVIEW] frame     size (%d, %d)\r\n"
+					"[EGLVIEW] designed  size (%d, %d)\r\n"
+					"[EGLVIEW] viewport  size (%d, %d)\r\n"
+					"[EGLVIEW] visible   org  (%d, %d)\r\n"
+					"[EGLVIEW] visible   size (%d, %d)\r\n"
+					"[EGLVIEW] scale (%.1f, %.1f)\r\n"
+					//"[EGLVIEW] resolution policy (%d)\r\n"
+					"[EGLVIEW] retina enabled (%d)\r\n"
+					,
+					/*frame*/	(int)eglView->getFrameSize().width,			(int)eglView->getFrameSize().height, 
+					/*designed*/(int)eglView->getSize().width,				(int)eglView->getSize().height, 
+					/*viewport*/(int)eglView->getViewPortRect().origin.x,	(int)eglView->getViewPortRect().origin.y, //in origin, not in size!
+					/*vis org*/	(int)eglView->getVisibleOrigin().x,			(int)eglView->getVisibleOrigin().y,
+					/*vis size*/(int)eglView->getVisibleSize().width,		(int)eglView->getVisibleSize().height,
+					/*scale*/	eglView->getScaleX(), eglView->getScaleY(),
+					/*policy*/
+					/*retina*/	(int)eglView->isRetinaEnabled()
+					);
 				sprintf( msg, 
 					"\r\n"
 					"[EGLVIEW] frame     size (%d, %d)\r\n"

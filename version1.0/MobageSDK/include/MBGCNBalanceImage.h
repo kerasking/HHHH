@@ -10,7 +10,7 @@
 	NSInteger _fontSize;
 	UIColor * _color;
 }
--(id)initWithFrame:(CCRect)frame color:(UIColor *)color fontSize:(NSInteger)size;
+-(id)initWithFrame:(CGRect)frame color:(UIColor *)color fontSize:(NSInteger)size;
 -(void) update;
 
 @end

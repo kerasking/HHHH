@@ -35,9 +35,10 @@
 #include <stdlib.h>
 
 #ifdef USE_NDSDK
-//// sdk相关
-#define ENABLE_NDCP_CUSTOM_LOGIN_EXTENT 1
-#include <NdComPlatform/NdComPlatform+CustomLoginExtent.h>
+#import <NdComPlatform/NdComPlatform.h>
+#endif
+#if defined(USE_MGSDK)
+#import "MBGSocialService.h"
 #endif
 
 using namespace NDEngine;
@@ -1352,19 +1353,51 @@ void NDBeforeGameMgr::Login()
 	doNDSdkLogin();
 }
 
-void NDBeforeGameMgr::doNDSdkLogin()
+bool NDBeforeGameMgr::doNDSdkLogin()
 {
-// #ifdef USE_NDSDK
-// 	if (m_sdkLogin)
-// 	{
-// 		[m_sdkLogin release];
-// 		m_sdkLogin = NULL;
-// 	}
-// 	m_sdkLogin = [[NDSdkLogin alloc] init];
-// 	[m_sdkLogin LoginWithUser:GetUserName().c_str() AndPassword:GetPassWord().c_str()];
-// #endif
+#if defined(USE_NDSDK)
+	if (m_sdkLogin)
+	{
+		//[m_sdkLogin release];
+		m_sdkLogin = nil;
+	}
+	m_sdkLogin = [[NDSdkLogin alloc] init];
+	[m_sdkLogin LoginWithUser];
+#endif
+#if defined(USE_MGSDK)
+	if (m_sdkLogin)
+	{
+		//[m_sdkLogin release];
+		m_sdkLogin = nil;
+	}
+	m_sdkLogin = [[MobageSdkLogin alloc] init];
+	[m_sdkLogin LoginWithUser];
+#endif
+    return true;
 }
 
+bool NDBeforeGameMgr::doNDSdkChangeLogin()
+{
+#ifdef USE_NDSDK
+	if (m_sdkLogin)
+	{
+		[m_sdkLogin release];
+		m_sdkLogin = nil;
+	}
+	m_sdkLogin = [[NDSdkLogin alloc] init];
+	[m_sdkLogin LoginWith];
+#endif
+#if defined(USE_MGSDK)
+    if(m_CurrentUser_id > 0) {
+        NSString* strUserID = [NSString stringWithFormat:@"%ld",m_CurrentUser_id];
+        [MBGSocialService openUserProfile:strUserID
+                                onDismiss:^{
+                                    
+                                }];
+    }
+#endif
+    return true;
+}
 // void NDBeforeGameMgr::CheckFail(NDHttpErrCode errCode)
 // {
 // 	NDDataTransThread::DefaultThread()->Stop();
@@ -1669,7 +1702,7 @@ NDBeforeGameMgr::GetRecAccountNameByIdx(int idx)
 
 ////////////////////////////////////////////////////////////
 const char*
-NDBeforeGameMgr::GetRecAccountPwdByIdx(int idx)
+NDBeforeGameMgr::GetRecAccountPwdByIdx(int idx) //@bug
 {
 	VEC_ACCOUNT vAccount;
 	NDDataPersist loginData;
@@ -1686,6 +1719,17 @@ NDBeforeGameMgr::GetRecAccountPwdByIdx(int idx)
 	return NULL;
 }
 
+bool NDBeforeGameMgr::isWifiNetWork()
+{
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+//    Reachability *r = [Reachability reachabilityWithHostName:@"www.baidu.com"];
+//    if (r == nil || [r currentReachabilityStatus] != ReachableViaWiFi)
+//        return false;
+//    else
+//        return true;
+//#endif
+    return false;
+}
 ///////////////////////////////////////////////////////////////
 // 内部逻辑
 

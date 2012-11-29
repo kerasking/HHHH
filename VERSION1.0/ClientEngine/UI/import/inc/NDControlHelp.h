@@ -31,6 +31,20 @@
 #include "UIScrollContainerExpand.h"
 #include "NDUIBaseItemButton.h"
 
+#ifdef ANDROID
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+
+
 using namespace NDEngine;
 
 // 控件类型
@@ -158,6 +172,8 @@ protected:
 private:	
 	NDPicture*	GetPicture(std::string& filename, CTRL_UV& uv)
 	{
+		LOGD("GetPicture() filename is %s",filename.c_str());
+
 		NDPicture* res = NULL;
 		
 		if (filename.empty())
@@ -168,7 +184,12 @@ private:
 		if (m_info.nCtrlWidth != 0 && m_info.nCtrlHeight != 0)
 		{ // 拉伸 (拉伸后不进行u,v处理)
 			// 获取图片大小并与u,v比较,大小不一样说明是抠图,则不做拉伸,这一步以后可以放到UI编辑器(直接导出该信息)
-			NDPicture *pic = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetUIImgPath(filename.c_str()));
+			const string strTemp = NDPath::GetUIImgPath(filename.c_str());
+			LOGD("NDPath::GetUIImgPath(filename.c_str() return value is %s",strTemp.c_str());
+			NDPicture *pic = NDPicturePool::DefaultPool()->AddPicture(strTemp.c_str());
+
+			LOGD("NDPicture *pic value is %d",(int)pic);
+
 			if (pic)
 			{
 				CCSize size = pic->GetSize();
@@ -504,17 +525,17 @@ public:
 		Init(info, sizeOffset);
 		CCRect rect = this->GetFrameRect();
 		CUIExp *exp = new CUIExp;
-		const char* bgfile	= NULL;
-		const char* processfile	= NULL;
+		string bgfile;
+		string processfile;
 		if (!m_info.strNormalFile.empty())
 		{
-			bgfile	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str();
+			bgfile	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str());
 		}
 		if (!m_info.strSelectedFile.empty())
 		{
-			processfile	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str()).c_str();
+			processfile	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str());
 		}
-		exp->Initialization(bgfile, processfile);		
+		exp->Initialization(bgfile.c_str(), processfile.c_str());
 		exp->SetFrameRect(this->GetFrameRect());
 		exp->SetText(info.strText.c_str());
 		exp->SetTextFontSize(info.nTextFontSize);
@@ -601,17 +622,17 @@ public:
 		Init(info, sizeOffset);
 		CCRect rect = this->GetFrameRect();
 		CUIRadioButton *radio = new CUIRadioButton;
-		const char* fileUnCheck	= NULL;
-		const char* fileCheck	= NULL;
+		string fileUnCheck;
+		string fileCheck;
 		if (!m_info.strNormalFile.empty())
 		{
-			fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str()).c_str();
+			fileUnCheck	= NDPath::GetUIImgPath(m_info.strNormalFile.c_str());
 		}
 		if (!m_info.strSelectedFile.empty())
 		{
-			fileCheck	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str()).c_str();
+			fileCheck	= NDPath::GetUIImgPath(m_info.strSelectedFile.c_str());
 		}
-		radio->Initialization(fileUnCheck, fileCheck);
+		radio->Initialization(fileUnCheck.c_str(), fileCheck.c_str());
 		radio->SetFrameRect(rect);
 		radio->SetText(info.strText.c_str());
 		radio->SetTextFontSize(info.nTextFontSize);

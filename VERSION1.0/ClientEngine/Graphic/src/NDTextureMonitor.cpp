@@ -28,6 +28,8 @@ enum
 	TextureGCLvlError			= 2,
 };
 
+CNDTextureMonitor* CNDTextureMonitor::ms_pkSingleton = NULL;
+
 void CNDTextureMonitor::BeforeTextureAdd()
 {
 	if (m_nTotalSize >= WARRINGSIZE)

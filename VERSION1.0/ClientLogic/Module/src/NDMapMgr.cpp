@@ -1,3 +1,4 @@
+
 #include "NDMapMgr.h"
 #include "NDPlayer.h"
 #include "NDConstant.h"
@@ -34,11 +35,13 @@
 #include "GameSceneLoading.h"
 #include "NDBeforeGameMgr.h"
 #include "ScriptGameLogic.h"
+#include "SocialElement.h"
 
 #ifdef USE_MGSDK
 #import <Foundation/Foundation.h>
 #import  "MBGPlatform.h"
 #import  "MBGBankDebit.h"
+#include "MobageViewController.h"
 #endif
 
 NS_NDENGINE_BGN
@@ -279,11 +282,6 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 {
 	switch (usMsgID)
 	{
-		case _MSG_REQUEST_ACCESS_TOKEN_RET:
-		{
-			ProcessTempCredential(*pkData);
-		}
-			break;
 		case _MSG_ROADBLOCK:
 		{
 			processRoadBlock(*pkData);
@@ -687,6 +685,18 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 			processNPC(*pkData);
 		}
 			break;
+        case _MSG_CREATE_TEMP_CREDENTIAL_RET:
+            this->ProcessTempCredential(*pkData);
+            break;
+        case _MSG_REQUEST_ACCESS_TOKEN_RET:
+            this->ProcessOAuthTokenRet(*pkData);
+            break;
+        case _MSG_CREATE_TRANSACTION_RET:
+            this->ProcessCreateTransactionRet(*pkData);
+            break;
+        case _MSG_CLOSE_TRANSACTION_RET:
+            this->ProcessCloseTransactionRet(*pkData);
+            break;
 		default:
 			break;
 	}
@@ -1291,21 +1301,8 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 	{
 		m_nSaveMapID = m_nMapID;
 	}
+
 	ShowPetInfo kPetInfoRerserve;
-
-	NDMapMgrObj.ClearNPC();
-	NDMapMgrObj.ClearMonster();
-	NDMapMgrObj.ClearGP();
-    
-	while (NDDirector::DefaultDirector()->PopScene());
-    
-    
-	NDMapMgrObj.loadSceneByMapDocID(nMapDocID);
-
-	stuPlayerInfo stuInfo;
-	GetPlayerInfo(stuInfo);
-	CreatePlayerWithMount(stuInfo.m_iLookFace, stuInfo.m_iBornX, stuInfo.m_iBornY,
-		stuInfo.m_iId, stuInfo.m_strName, stuInfo.m_iRideStatus, stuInfo.m_iRideType);
 
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
 	kPlayer.m_nCurMapID = nMapDocID;
@@ -1315,7 +1312,17 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 	kPlayer.stopMoving();
 	kPlayer.SetServerPositon(dwPortalX, dwPortalY);
 	kPlayer.SetShowPet(kPetInfoRerserve);
+	if ( kPlayer.GetParent() )
+	{
+		kPlayer.RemoveFromParent(false);
+	}
 
+	while (NDDirector::DefaultDirector()->PopScene());
+
+	NDMapMgrObj.ClearNPC();
+	NDMapMgrObj.ClearMonster();
+	NDMapMgrObj.ClearGP();
+	NDMapMgrObj.loadSceneByMapDocID(nMapDocID);
 
 	NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
 	ND_ASSERT_NO_RETURN(NULL == pkLayer);
@@ -4012,13 +4019,68 @@ void NDMapMgr::ProcessTempCredential(NDTransData& kData)
     if(temporaryCredential == nil) return;
 	[MBGSocialAuth authorizeToken:temporaryCredential onSuccess:^(NSString *verifier)
 	{
-		//sendVerifier(verifier);
+		sendVerifier(verifier);
 	}onError:^(MBGError *error)
 	{
 		VerifierError(error);
 	}];
 #endif
 }
+
+
+void  NDMapMgr::ProcessOAuthTokenRet(NDTransData& data)
+{
+    NDBeforeGameMgr& mgr = NDBeforeGameMgrObj;
+    mgr.SetOAuthTokenOK();
+}
+
+void  NDMapMgr::ProcessCreateTransactionRet(NDTransData& data)
+{
+#ifdef USE_MGSDK
+    NSString* transactionId = data.ReadUTF8NString();
+    if (transactionId == nil)
+        return;
+    
+    NDBeforeGameMgr& mgr = NDBeforeGameMgrObj;
+    mgr.SetCurrentTransactionID(transactionId);
+    CloseProgressBar;
+    
+    [MBGBankDebit continueTransaction:transactionId onSuccess:^(MBGTransaction *transaction) {
+        CloseTransaction();
+    } onCancel:^{
+        CancelTransaction();
+        
+    } onError:^(MBGError *error) {
+        TransactionError(error);
+    }];
+#endif
+}
+void  NDMapMgr::ProcessCloseTransactionRet(NDTransData& data)
+{
+#ifdef USE_MGSDK
+    //to do add EMoney
+    MobageViewController* pMobageView = [MobageViewController sharedViewController];
+    [pMobageView showBalanceButton:CGRectMake(200, 70, 100, 36)];
+    ScriptMgrObj.excuteLuaFunc( "HandleNetMsg", "Agiotage", 0 );
+#endif
+}
+
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+void  NDMapMgr::sendVerifier(NSString *verifier)
+{
+    int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
+    if(idAccount <= 0)
+        return;
+    
+    const char* szVerifier = [verifier UTF8String];
+    const unsigned char* szUnSignedVerifier = (const unsigned char*)szVerifier;
+    
+    NDTransData bao(_MSG_REQUEST_ACCESS_TOKEN);
+    bao << idAccount;
+    bao.Write(szUnSignedVerifier, strlen(szVerifier));
+    SEND_DATA(bao);
+}
+#endif
 
 NDMonster* NDMapMgr::GetBoss()
 {

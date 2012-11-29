@@ -29,7 +29,7 @@ KNetworkAddress::KNetworkAddress() : ipAddressSet( false )
 	char hostname[256] = {0};
 #ifdef WIN32
 	strcpy_s( hostname, "localhost" );
-#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__)
+#elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__) || defined(ANDROID)
 	strcpy( hostname, "localhost" );
 #endif
 	

@@ -1,3 +1,4 @@
+
 /*
  *  ScriptGameLogic.mm
  *  SMYS
@@ -32,13 +33,12 @@
 #ifdef USE_MGSDK
 #import <Foundation/Foundation.h>
 #include "MBGSocialService.h"
+#include "MobageViewController.h"
 #endif
-//#include "MobageViewController.h"
 
 //#include "CCVideoPlayer.h"
 
 namespace NDEngine {
-	stuPlayerInfo g_stuPlayerInfo;
     void PlayVideo(const char* videofilepath,bool bSkip)
     {
      #if 0
@@ -104,24 +104,6 @@ namespace NDEngine {
 		NDPlayer& player = NDPlayer::defaultHero();
 		player.ReLoadLookface(lookface);
 	}
-    
-	void SetPlayerInfo(int iId, int iLookFace, int iBornX, int iBornY, int iRideStatus, int iRideType, std::string strName)
-	{
-		g_stuPlayerInfo.m_iId = iId;
-		g_stuPlayerInfo.m_iLookFace = iLookFace;
-		g_stuPlayerInfo.m_iBornX = iBornX;
-		g_stuPlayerInfo.m_iBornY = iBornY;
-		g_stuPlayerInfo.m_iRideStatus = iRideStatus;
-		g_stuPlayerInfo.m_iRideType = iRideType;
-		g_stuPlayerInfo.m_strName = strName;
-
-	}
-
-	void GetPlayerInfo(stuPlayerInfo &stuinfo)
-	{
-		stuinfo = g_stuPlayerInfo;
-	}
-
 
 	//++Guosen 2012.7.13
 	//创建玩家附加骑乘状态和坐骑类型
@@ -136,7 +118,6 @@ namespace NDEngine {
 		player.SetServerPositon(x, y);
 		player.m_nID = userid;
 		player.m_strName = name;
-		SetPlayerInfo(userid, lookface, x, y, nRideStatus, nMountType, name);
 	}
 	//玩家骑宠
 	void PlayerRideMount( int nRideStatus, int nMountType )
@@ -292,45 +273,45 @@ namespace NDEngine {
 		return 1;
 	}
 	
-	const char* GetSMImgPath(const char* name)
-	{
-
-		if (!name)
-		{
-			return "";
-		}
-
-		std::string str = "Res00/";
-		str += name;
-
-		return NDPath::GetImgPath(str.c_str()).c_str();
-
-	}
-	const char* GetImgResPath(const char* name)
+	//备注：不要返回临时变量的指针！
+	//		这个函数提供LUA调用，因此需要一个指针类型，
+	//		暂时改为static确保兼容！
+	std::string GetSMImgPath(const char* name) //@lua
 	{
 		if (!name)
 		{
 			return "";
 		}
-		return NDPath::GetImgPath(name).c_str();
+
+		return NDPath::GetSMImgPath(name);
 	}
-	const char* GetAniResPath(const char* name)
-	{
-		if (!name)
-		{
-			return "";
-		}
-		return NDPath::GetAniPath(name).c_str();
-	}
-	
-	const char* GetSMResPath(const char* name)
+	std::string GetImgResPath(const char* name) //@lua
 	{
 		if (!name)
 		{
 			return "";
 		}
 		
-		return NDPath::GetResPath(name).c_str();
+		return NDPath::GetImgPath(name);
+	}
+	std::string GetAniResPath(const char* name) //@lua
+	{
+		if (!name)
+		{
+			return "";
+		}
+
+		return NDPath::GetAniPath(name);
+	}
+	
+	std::string GetSMResPath(const char* name) //@lua
+	{
+		if (!name)
+		{
+			return "";
+		}
+
+		return NDPath::GetResPath(name);
 	}
 	NDPicture* GetItemPicture(int nIconIndex)
 	{
@@ -557,20 +538,20 @@ SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
     }
     bool doNDSdkLogin()
     {
-        //return NDBeforeGameMgrObj.doNDSdkLogin();
-		return false;
+        return NDBeforeGameMgrObj.doNDSdkLogin();
 	
 	}
     bool doNDSdkChangeLogin()
     {
-        //return NDBeforeGameMgrObj.doNDSdkChangeLogin();
-		return false;
+        return NDBeforeGameMgrObj.doNDSdkChangeLogin();
 
     }
     
     void HideMobageSplashScreen()//Guosen 2012.8.3
     {
-    	//[[MBGPlatform sharedPlatform] hideSplashScreen];
+#ifdef USE_MGSDK
+    	[[MBGPlatform sharedPlatform] hideSplashScreen];
+#endif
     }
     void doGoToMobageVipPage()
     {
@@ -582,15 +563,15 @@ SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
     
     void doShowMobageBalance()
     {
-        #if 0
+#ifdef USE_MGSDK
 MobageViewController* pMobageView = [MobageViewController sharedViewController];
-        [pMobageView showBalanceButton:CCRectMake(200, 70, 100, 36)];
+        [pMobageView showBalanceButton:CGRectMake(200, 70, 100, 36)];
 #endif
     }
     
     void doHideMobageBalance()
     {
-      #if 0
+#ifdef USE_MGSDK
   MobageViewController* pMobageView = [MobageViewController sharedViewController];
         [pMobageView hideBalanceButton];
 #endif
@@ -598,7 +579,7 @@ MobageViewController* pMobageView = [MobageViewController sharedViewController];
     
     void doExchangeEmoney(int nQuantity)
     {
-        #if 0
+#ifdef USE_MGSDK
 int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
         if(idAccount <= 0)
             return;
@@ -637,7 +618,7 @@ int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
     
     void sendMsgCreateTempCredential()
     {
-	#if 0
+#ifdef USE_MGSDK
 	int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
 		if(idAccount <= 0)
 			return;
@@ -721,14 +702,14 @@ CSMLoginScene* pScene = (CSMLoginScene*)NDDirector::DefaultDirector()->GetSceneB
     }
     
     //////////////////////////////////////////////
-    const char* GetRecAccountNameByIdx(int idx)
+    const char* GetRecAccountNameByIdx(int idx) //@lua
     {
         //return NDBeforeGameMgrObj.GetRecAccountNameByIdx(idx);
 		return "";
     }
     
     //////////////////////////////////////////////
-    const char* GetRecAccountPwdByIdx(int idx)
+    const char* GetRecAccountPwdByIdx(int idx) //@lua @bug
     {
         return NDBeforeGameMgrObj.GetRecAccountPwdByIdx(idx);
     }
@@ -891,3 +872,4 @@ CSMLoginScene* pScene = (CSMLoginScene*)NDDirector::DefaultDirector()->GetSceneB
 	ETCLASSEND(NDMapLayer)
 	
 }
+

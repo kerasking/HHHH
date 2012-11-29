@@ -9,6 +9,7 @@ LOCAL_MODULE_FILENAME := libluaplus
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../
 
 LOCAL_SRC_FILES := \
+../../Main.cpp \
 ../../LuaCall.cpp \
 ../../LuaObject.cpp \
 ../../LuaPlus.cpp \
