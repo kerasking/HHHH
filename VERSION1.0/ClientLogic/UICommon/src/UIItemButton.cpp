@@ -69,6 +69,19 @@ void CUIItemButton::SetItemBackgroundPictureCustom(NDPicture *pic,
 	SetBackgroundPictureCustom(pic, touchPic, useCustomRect, customRect);
 }
 
+void CUIItemButton::SetItemTouchDownImage(NDPicture *pic,
+									  bool useCustomRect /*= false*/, CCRect customRect /*= CGRectZero*/,
+									  bool clearPicOnFree /*= false*/)
+{
+	SetTouchDownImage(pic, useCustomRect, customRect, clearPicOnFree);
+}
+
+void CUIItemButton::SetItemTouchDownImageCustom(NDPicture *pic,
+											bool useCustomRect /*= false*/, CCRect customRect /*= CGRectZero*/)
+{
+	SetTouchDownImageCustom(pic, useCustomRect, customRect);
+}
+
 void CUIItemButton::SetItemFocusImage(NDPicture *pic,
 									 bool useCustomRect /*= false*/, CCRect customRect /*= CGRectZero*/,
 									 bool clearPicOnFree /*= false*/)
@@ -81,6 +94,7 @@ void CUIItemButton::SetItemFocusImageCustom(NDPicture *pic,
 {
 	SetFocusImageCustom(pic, useCustomRect, customRect);
 }
+
 void CUIItemButton::SetLock(bool bSet)
 {
 	m_bLock			= bSet;

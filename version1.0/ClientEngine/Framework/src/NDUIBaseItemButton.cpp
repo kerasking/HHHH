@@ -78,6 +78,19 @@ void NDUIBaseItemButton::SetItemBackgroundPictureCustom(NDPicture *pic,
 
 }
 
+void NDUIBaseItemButton::SetItemTouchDownImage(NDPicture *pic,
+										   bool useCustomRect /*= false*/, CCRect customRect /*= CCRectZero*/,
+										   bool clearPicOnFree /*= false*/)
+{
+
+}
+
+void NDUIBaseItemButton::SetItemTouchDownImageCustom(NDPicture *pic,
+												 bool useCustomRect /*= false*/, CCRect customRect /*= CCRectZero*/)
+{
+
+}
+
 void NDUIBaseItemButton::SetItemFocusImage(NDPicture *pic,
 										   bool useCustomRect /*= false*/, CCRect customRect /*= CCRectZero*/,
 										   bool clearPicOnFree /*= false*/)
