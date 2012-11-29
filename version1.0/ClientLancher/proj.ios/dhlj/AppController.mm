@@ -28,6 +28,10 @@
 #import "AppDelegate.h"
 
 #import "RootViewController.h"
+#ifdef USE_MGSDK
+#import "MBGPlatform.h"
+#import "MBGSocialService.h"
+#endif
 
 @implementation AppController
 
@@ -51,8 +55,16 @@ static AppDelegate s_sharedApplication;
                                                                           multiSampling:NO
                                                                     numberOfSamples:0];
     
-    // Use RootViewController manage EAGLView 
+    // Use RootViewController manage EAGLView
+#ifdef USE_MGSDK
+    viewController = [MobageViewController sharedViewController];
+    viewController.window = window;
+#elif USE_NDSDK
+    viewController = [ND91SDKViewController sharedViewController];
+#else
     viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
+#endif
+
     viewController.wantsFullScreenLayout = YES;
     viewController.view = __glView;
 

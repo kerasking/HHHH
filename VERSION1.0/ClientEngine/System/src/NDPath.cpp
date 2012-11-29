@@ -196,6 +196,7 @@ const string NDPath::GetUIImgPath(const char* uiFileNameWithPath)
 	return strRes;
 #else
 
+
 #ifdef TRADITION
 	return ret = GetResPath() + "TraditionalChineseRes/" + uiFileNameWithPath;
 #else

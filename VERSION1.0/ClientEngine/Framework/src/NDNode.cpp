@@ -323,7 +323,7 @@ NDNode* NDNode::GetChild(int tag)
 			iter++)
 	{
 		NDNode* pkNode = (NDNode*) *iter;
-		if (pkNode->m_ccNode->getTag() == tag)
+		if (pkNode && pkNode->m_ccNode->getTag() == tag)
 		{
 			return pkNode;
 		}

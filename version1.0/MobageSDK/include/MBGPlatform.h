@@ -3,13 +3,13 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIWindow.h>
 #import "MBGError.h"
 #import "MBGSocialPeople.h"
 #import "MBGSocialAppdata.h"
 #import "MBGSocialBlacklist.h"
 #import "MBGSocialProfanity.h"
 #import "MBGSocialAuth.h"
-#import <UIKit/UIWindow.h>
 
 /*!
  * @abstract Region Type

@@ -1,3 +1,4 @@
+
 /*
  *  ScriptGameLogic.mm
  *  SMYS
@@ -32,8 +33,8 @@
 #ifdef USE_MGSDK
 #import <Foundation/Foundation.h>
 #include "MBGSocialService.h"
+#include "MobageViewController.h"
 #endif
-//#include "MobageViewController.h"
 
 //#include "CCVideoPlayer.h"
 
@@ -537,20 +538,20 @@ SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
     }
     bool doNDSdkLogin()
     {
-        //return NDBeforeGameMgrObj.doNDSdkLogin();
-		return false;
+        return NDBeforeGameMgrObj.doNDSdkLogin();
 	
 	}
     bool doNDSdkChangeLogin()
     {
-        //return NDBeforeGameMgrObj.doNDSdkChangeLogin();
-		return false;
+        return NDBeforeGameMgrObj.doNDSdkChangeLogin();
 
     }
     
     void HideMobageSplashScreen()//Guosen 2012.8.3
     {
-    	//[[MBGPlatform sharedPlatform] hideSplashScreen];
+#ifdef USE_MGSDK
+    	[[MBGPlatform sharedPlatform] hideSplashScreen];
+#endif
     }
     void doGoToMobageVipPage()
     {
@@ -562,15 +563,15 @@ SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
     
     void doShowMobageBalance()
     {
-        #if 0
+#ifdef USE_MGSDK
 MobageViewController* pMobageView = [MobageViewController sharedViewController];
-        [pMobageView showBalanceButton:CCRectMake(200, 70, 100, 36)];
+        [pMobageView showBalanceButton:CGRectMake(200, 70, 100, 36)];
 #endif
     }
     
     void doHideMobageBalance()
     {
-      #if 0
+#ifdef USE_MGSDK
   MobageViewController* pMobageView = [MobageViewController sharedViewController];
         [pMobageView hideBalanceButton];
 #endif
@@ -578,7 +579,7 @@ MobageViewController* pMobageView = [MobageViewController sharedViewController];
     
     void doExchangeEmoney(int nQuantity)
     {
-        #if 0
+#ifdef USE_MGSDK
 int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
         if(idAccount <= 0)
             return;
@@ -617,7 +618,7 @@ int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
     
     void sendMsgCreateTempCredential()
     {
-	#if 0
+#ifdef USE_MGSDK
 	int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
 		if(idAccount <= 0)
 			return;
@@ -871,3 +872,4 @@ CSMLoginScene* pScene = (CSMLoginScene*)NDDirector::DefaultDirector()->GetSceneB
 	ETCLASSEND(NDMapLayer)
 	
 }
+

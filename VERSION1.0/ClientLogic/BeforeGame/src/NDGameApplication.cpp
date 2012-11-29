@@ -220,9 +220,10 @@ void NDGameApplication::MyInit()
 	//CC_SAFE_DELETE(pkNetMsg);
 
 	//ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
-	
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	LOGD("Start ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME)");
 	ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
+#endif
 
 	LOGD("End MyInit");
 
@@ -319,6 +320,9 @@ void NDGameApplication::MyInit()
 
 void NDGameApplication::applicationDidEnterBackground()
 {
+#ifdef USE_MGSDK
+    [MBGPlatform pause];
+#endif
 	CCDirector::sharedDirector()->stopAnimation();
 
 	// if you use SimpleAudioEngine, it must be pause
@@ -327,6 +331,9 @@ void NDGameApplication::applicationDidEnterBackground()
 
 void NDGameApplication::applicationWillEnterForeground()
 {
+#ifdef USE_MGSDK
+    [MBGPlatform resume];
+#endif
 	CCDirector::sharedDirector()->startAnimation();
 
 	// if you use SimpleAudioEngine, it must resume here

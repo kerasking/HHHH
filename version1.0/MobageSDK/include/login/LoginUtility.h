@@ -57,6 +57,5 @@
 - (void) viewToFrontFromLeft:(UIView *) view;
 - (void) viewToFrontFade:(UIView *) view;
 - (void) popWelcomeView:(NSString*)name;
-- (void) removeWelcomeView;
 
 @end
