@@ -413,7 +413,7 @@ void NDUIButton::draw()
 	}
 	else
 	{
-		cocos2d::CCLog("Entry DrawRecttangle()");
+		//cocos2d::CCLog("Entry DrawRecttangle()");
 		DrawRecttangle(scrRect, m_backgroundColor);
 	}
 
