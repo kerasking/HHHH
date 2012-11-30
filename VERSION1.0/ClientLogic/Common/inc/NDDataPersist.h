@@ -86,8 +86,8 @@ enum GAME_SETTING
 	GS_SHOW_DIRECT_KEY = 0x100,
 };
 
-//void simpleDecode(const unsigned char *src, unsigned char *dest);
-//void simpleEncode(const unsigned char *src, unsigned char *dest);
+void simpleDecode(const unsigned char *src, unsigned char *dest);
+void simpleEncode(const unsigned char *src, unsigned char *dest);
 //
 class NDDataPersist
 {

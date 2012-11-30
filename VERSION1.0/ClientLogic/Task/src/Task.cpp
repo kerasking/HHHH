@@ -11,8 +11,8 @@
 #include <sstream>
 #include "NDLocalization.h"
 
-std::string Task::START_STR = NDCommonCString("TaskNpc");
-std::string Task::FINISH_STR = NDCommonCString("TaskDest");
+#define START_STR  NDCommonCString("TaskNpc")//
+#define FINISH_STR NDCommonCString("TaskDest")//
 bool Task::BEGIN_FRESHMAN_TASK = false;
 
 Task::Task() 

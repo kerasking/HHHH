@@ -129,8 +129,6 @@ public:
 	/** 任务奖励的荣誉值 */
 	int award_honour;
 	
-	static std::string START_STR;
-	static std::string FINISH_STR;
 };
 
 

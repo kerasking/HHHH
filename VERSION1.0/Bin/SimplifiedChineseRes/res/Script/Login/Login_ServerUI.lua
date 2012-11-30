@@ -10,7 +10,7 @@ local p = Login_ServerUI;
 p.curSel=0;
 p.Account=nil;
 p.Pwd="";
-p.UIN=319258246;--denasg8 --319258246;--p.UIN=317007835;
+p.UIN=319258246;--p.UIN=317007835;
 p.LoginWait = true;
 p.SerName = "";
 p.nCurSerId = -1;
@@ -669,6 +669,9 @@ RegisterNetMsgHandler(NMSG_Type._MSG_SERVERLISTITEM,"p.ProcessServerList",p.Proc
 
 function p.SetAccountID( nAccountID )
 	p.UIN = nAccountID;
+end
+function p.GetAccountID()
+	return p.UIN;
 end
 --++Guosen 2012.8.4
 function p.LoginGameNew()

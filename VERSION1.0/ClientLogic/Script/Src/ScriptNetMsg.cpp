@@ -65,14 +65,13 @@ int RegisterNetMsgHandler(LuaState* state)
 
 void SendMsg(NDTransData* data)
 {
+	printf("\nqxx++++++MSG_TYPE=[%d]\n",data->GetMsgType());
+	printf("\nqxx++++++MSG_SIZE=[%d]\n",data->GetSize());
 	if (!data)
 	{
 		return;
 	}
 	SEND_DATA(*data);
-    printf("qxx++++++MSG1=[%d]",data->ReadShort());
-    printf("qxx++++++MSG1=[%d]",data->ReadInt());
-    int a=1;
 }
 
 void ScriptNetMsg::Load()

@@ -221,7 +221,7 @@ protected:
 	bool m_bDispatchLongTouchEvent;
 	bool m_bTouchDwon;
 
-	int m_nIsHVFirestTemp;  //0.还未确定滑动的方向 1.水平 2.垂直
+	int m_nIsHVFirstTemp;  //0.还未确定滑动的方向 1.水平 2.垂直
 	bool m_bIsHVContainer;
 	
 	bool m_bPopupDlg; //弹出窗口，输入独占，即使没有点击到控件上也不会穿透到下一层.

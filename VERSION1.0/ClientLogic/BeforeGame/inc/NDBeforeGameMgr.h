@@ -182,8 +182,9 @@ namespace NDEngine
 		};
 	public:
 		bool DownLoadServerList(bool switchNet=false);
-		
 		bool ConnectServer(const char* ip, unsigned int port, bool wapFlag,  bool switchNet=false);
+        void InitAccountTable();
+		void SaveAccountPwdToDB(const char* pszName, const char* pszPwd, int nType);
 	public:
 		vector<big_area>& GetServerList(){ return m_vecBigArea; }
 		//服务器列表相关end
@@ -222,9 +223,19 @@ namespace NDEngine
 			eLS_AccountList,
 		};
 		LoginState m_LoginState;
-        
-    public:
+	//
+	public:
+		bool CheckClientVersion( const char* szURL );
 		bool isWifiNetWork();
+		bool CheckFirstTimeRuning();
+		void SetDeviceToken( const char * szDeviceToken ){ if ( szDeviceToken ) m_szDeviceToken = szDeviceToken;}
+		std::string GetDeviceToken(){ return m_szDeviceToken;}
+			
+        static int CopyStatus;
+        static int GetCopyStatus();
+        void CopyRes();
+	protected:
+		std::string	m_szDeviceToken;
 	};
 
 	// 根据seed值，产生一个salt值，直接采用vc crt库的srand和rand算法

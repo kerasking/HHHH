@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\LuaPlus;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\OGLES&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\pthread&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\include&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\touch_dispatcher&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\tileMap_parallax_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\textures&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\text_input_node&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\support&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\sprite_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\script_support&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\particle_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\misc_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\menu_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\layers_scenes_transitions_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\label_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\keypad_dispatcher&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\effects&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\cocoa&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\base_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\win32&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\actions&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\kazmath\include&quot;;../UI/import/inc;../UI/inc;../System/inc;../MapData/inc;../Graphic/inc;../Framework/inc;../Utility/inc;../Script/inc;../TempClass/;../Common/inc;../DataTrans/inc;../Platform/inc;&quot;D:\work\test2\dhsgclient-x\cocos2d-x\cocos2dx\platform\third_party\win32\iconv&quot;;&quot;D:\work\test2\dhsgclient-x\VERSION1.0\cocos2d-x\cocos2dx\platform\third_party\win32\libxml2&quot;;..\..\tinyxml;..\..\..\VERSION1.0\ClientEngine\TempClass;..\..\..\VERSION1.0\LuaPlus;..\..\..\VERSION1.0\TinyXML\inc;..\..\NetWork\inc;..\DataTrans\INC;..\..\ClientLogic\module\battle\inc;..\..\ClientLogic\MapAndRole\inc;..\..\ClientLogic\Common\inc;..\..\ClientLogic\MsgDefine\inc;..\..\Include\C3\Win;../../ClientLogic/Script/inc;../../ClientLogic/GameScene/inc;../../Utility/inc"
+				AdditionalIncludeDirectories="..\..\LuaPlus;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\OGLES&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32\pthread&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\third_party\win32&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\include&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\touch_dispatcher&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\tileMap_parallax_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\textures&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\text_input_node&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\support&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\sprite_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\script_support&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\particle_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\misc_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\menu_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\layers_scenes_transitions_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\label_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\keypad_dispatcher&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\effects&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\cocoa&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\base_nodes&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\platform\win32&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\actions&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\&quot;;&quot;$(SolutionDir)cocos2d-x\cocos2dx\kazmath\include&quot;;../UI/import/inc;../UI/inc;../System/inc;../MapData/inc;../Graphic/inc;../Framework/inc;../Utility/inc;../Script/inc;../TempClass/;../Common/inc;../DataTrans/inc;../Platform/inc;../Update/inc;&quot;D:\work\test2\dhsgclient-x\cocos2d-x\cocos2dx\platform\third_party\win32\iconv&quot;;&quot;D:\work\test2\dhsgclient-x\VERSION1.0\cocos2d-x\cocos2dx\platform\third_party\win32\libxml2&quot;;..\..\tinyxml;..\..\..\VERSION1.0\ClientEngine\TempClass;..\..\..\VERSION1.0\LuaPlus;..\..\..\VERSION1.0\TinyXML\inc;..\..\NetWork\inc;..\DataTrans\INC;..\..\ClientLogic\module\battle\inc;..\..\ClientLogic\MapAndRole\inc;..\..\ClientLogic\Common\inc;..\..\ClientLogic\MsgDefine\inc;..\..\Include\C3\Win;../../ClientLogic/Script/inc;../../ClientLogic/GameScene/inc;../../Utility/inc"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_WINDOWS;_WINSOCKAPI_;PROFILE_ENCRYPT_C2S;USE_NDSDK"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -1201,6 +1201,50 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Update"
+			>
+			<Filter
+				Name="inc"
+				>
+				<File
+					RelativePath="..\Update\inc\DownloadPackage.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Update\inc\Reachability.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Update\inc\unzip.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Update\inc\ZipUnZip.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="src"
+				>
+				<File
+					RelativePath="..\Update\src\DownloadPackage.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Update\src\Reachability.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Update\src\unzip.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Update\src\ZipUnZip.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
 		<File
 			RelativePath="..\Utility\src\ImageNumber.cpp"
 			>
@@ -1238,11 +1282,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\TempClass\NDUITableLayer.h"
+			RelativePath="..\UI\inc\NDUITableLayer.h"
 			>
 		</File>
 		<File
-			RelativePath="..\UI\inc\NDUITableLayer.h"
+			RelativePath="..\TempClass\NDUITableLayer.h"
 			>
 		</File>
 		<File
