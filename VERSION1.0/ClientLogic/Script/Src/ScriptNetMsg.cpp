@@ -99,19 +99,3 @@ bool ScriptNetMsg::Process(MSGID msgID, NDTransData* data)
 	
 	return true;
 }
-
-// 网络数据处理类导出
-ETCLASSBEGIN(NDTransData)
-
-ETCONSTRUCTARG1("createNDTransData", int)
-ETDESTRUCT("Free")
-
-ETMEMBERFUNC("ReadByte", &NDTransData::ReadByte)
-ETMEMBERFUNC("ReadInt", &NDTransData::ReadInt)
-ETMEMBERFUNC("ReadShort", &NDTransData::ReadShort)
-ETMEMBERFUNC("ReadUnicodeString", (std::string (NDTransData::*)())&NDTransData::ReadUnicodeString)
-ETMEMBERFUNC("WriteByte", &NDTransData::WriteByte)
-ETMEMBERFUNC("WriteShort", &NDTransData::WriteShort)
-ETMEMBERFUNC("WriteInt", &NDTransData::WriteInt)
-ETMEMBERFUNC("WriteStr", (void (NDTransData::*)(const char*))&NDTransData::WriteUnicodeString)
-ETCLASSEND(NDTransData)

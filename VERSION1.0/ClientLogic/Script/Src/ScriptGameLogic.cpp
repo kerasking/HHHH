@@ -857,19 +857,6 @@ CSMLoginScene* pScene = (CSMLoginScene*)NDDirector::DefaultDirector()->GetSceneB
 		ETCFUNC("GetItemPicture", GetItemPicture);
         
         ETCFUNC("ConvertReset", ConvertReset);
-	}
-	
-	//地图层接口导出
-	ETSUBCLASSBEGIN(NDMapLayer,NDNode)
-	ETMEMBERFUNC("setStartRoadBlockTimer",						&NDMapLayer::setStartRoadBlockTimer)
-	ETMEMBERFUNC("setAutoBossFight",						&NDMapLayer::setAutoBossFight)	
-	//ETMEMBERFUNC("IsBattleBackground",						&NDMapLayer::IsBattleBackground)	
-	ETMEMBERFUNC("ShowTreasureBox",							&NDMapLayer::ShowTreasureBox)
-    
-    //** chh 2012-07-15 **//
-    ETMEMBERFUNC("AddChild",                                (void (NDMapLayer::*)(NDNode*, int, int))&NDMapLayer::AddChild)
-    ETMEMBERFUNC("RemoveChildByTag",                        (void (NDMapLayer::*)(int, bool))&NDMapLayer::RemoveChild)
-	ETCLASSEND(NDMapLayer)
-	
+	}	
 }
 

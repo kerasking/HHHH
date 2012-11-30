@@ -16,13 +16,16 @@
 template<typename T>
 class TSingleton
 {
-public:
+protected:
 	TSingleton() 
 	{
 		NDAsssert(NULL == ms_pkSingleton);
 		ms_pkSingleton = static_cast<T*> (this);
 	}
 	
+	TSingleton( const TSingleton& obj );
+
+public:
 	~TSingleton() 
 	{
 		NDAsssert(NULL != ms_pkSingleton);

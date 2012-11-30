@@ -29,6 +29,7 @@
 #include "NDBaseDirector.h"
 #include "WorldMapScene.h"
 #include "NDUILoad.h"
+#include "ScriptRegLua.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "Foundation/NSAutoreleasePool.h"
@@ -152,6 +153,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	return true;
 }
 
+//@init
 void NDGameApplication::MyInit()
 {
 	LOGD("Start MyInit");
@@ -211,6 +213,9 @@ void NDGameApplication::MyInit()
 	//pkGlobalEvent->OnLoad();
 	pkScriptUI->OnLoad();
 #endif
+
+	// ×¢²áLUA
+	NDScriptRegLua::doReg();
 
 	//kScriptManager.Load();
 	ScriptMgrObj.Load();

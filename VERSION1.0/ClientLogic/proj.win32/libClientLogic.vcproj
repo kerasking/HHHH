@@ -567,6 +567,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Script\Inc\ScriptRegLua.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Script\Inc\ScriptTask.h"
 					>
 				</File>
@@ -616,6 +620,10 @@
 				</File>
 				<File
 					RelativePath="..\Script\Src\ScriptNetMsg.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Script\Src\ScriptRegLua.cpp"
 					>
 				</File>
 				<File
