@@ -73,7 +73,7 @@ const string NDPath::GetAppPath()
 	return "/sdcard/dhlj/";
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	return "./";
+	return "../../Bin/";
 #endif
 }
 
@@ -91,7 +91,7 @@ const string NDPath::GetCashesPath()
 	return "/sdcard/dhlj/";
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	return "./";
+	return "../../Bin/";
 #endif
 }
 
