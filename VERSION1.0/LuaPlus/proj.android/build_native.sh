@@ -41,8 +41,9 @@ fi
 
 #HELLOWORLD_ROOT=/cygdrive/d/work/DHLJClient/VERSION1.0/luaplus/proj.android
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-COCOS2DX_ROOT="$DIR/../cocos2d-x/cocos2dx"
+COCOS2DX_ROOT="$DIR/../../cocos2d-x/cocos2dx"
 HELLOWORLD_ROOT="$DIR"
+CLIENT_LOCAL="$DIR/../../"
 echo "NDK_ROOT = $NDK_ROOT"
 echo "COCOS2DX_ROOT = $COCOS2DX_ROOT"
 echo "APP_ANDROID_ROOT = $HELLOWORLD_ROOT"
