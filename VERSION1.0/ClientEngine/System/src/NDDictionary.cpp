@@ -65,19 +65,14 @@ void NDDictionary::SetObject(NDObject* obj, const char* key)
 
 NDObject* NDDictionary::Object(const char* key)
 {
-	LOGD("entry NDDictionary::Object,key is %s",key);
-
 	DictionaryObject *dictObj =
 			(DictionaryObject *) m_nsDictionary->objectForKey(key);
-
-	LOGD("dictObj got,value is %d",(int)dictObj);
 
 	if (dictObj)
 	{
 		return dictObj->getNdObject();
 	}
 
-	LOGERROR("NDDictionary::Object(const char* key) return NULL!!!");
 	return NULL;
 }
 

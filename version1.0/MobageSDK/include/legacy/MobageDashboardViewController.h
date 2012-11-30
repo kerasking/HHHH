@@ -35,7 +35,7 @@
 
 - (void)launchDashboardWithHomePage;
 - (void)launchDashboardWithGamePage;
-- (void)launchDashboardWithGameRankingPage:(NSString*)rankingId;
+- (void)launchDashboardWithGameRankingPage;
 - (void)launchDashboardWithMessagePage;
 - (void)launchDashboardWithGroupPage:(NSString*)groupId;
 

@@ -181,7 +181,6 @@ bool GameSceneLoading::Login(bool failBackToMenu)
 
 void GameSceneLoading::DealNet()
 {
-#if 0
 	switch (m_curLoginType) 
 	{
 	case LoginTypeNone:
@@ -206,7 +205,6 @@ void GameSceneLoading::DealNet()
 	default:
 		break;
 	}
-#endif
 }
 
 void GameSceneLoading::CheckVersionSucess()

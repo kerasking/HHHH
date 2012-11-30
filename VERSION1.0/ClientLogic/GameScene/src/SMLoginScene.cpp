@@ -21,6 +21,8 @@
 #include "InstallSelf.h"
 #include "NDBeforeGameMgr.h"
 #include "NDTargetEvent.h"
+#include "NDLocalXmlString.h"
+#include "ScriptMgr.h"
 #include <iostream>
 #include <sstream>
 
@@ -164,18 +166,7 @@ void CSMLoginScene::Initialization(void)
 void CSMLoginScene::OnTimer( OBJID idTag )
 {
 	if ( idTag == TAG_TIMER_UPDATE ) 
-	{		
-//		if ([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithUTF8String:m_savePath.c_str()]]) 
-//		{
-//			NSError* err = nil;
-//			[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithUTF8String:m_savePath.c_str()] error:&err];
-//			if (err) 
-//			{
-//				ShowRequestError();
-//				m_pTimer->KillTimer(this, TAG_TIMER_UPDATE);
-//				return;
-//			}
-//		}
+	{
 		if ( !rename( m_savePath.c_str(), m_savePath.c_str() ) )
 		{
 			if ( remove( m_savePath.c_str() ) )
@@ -217,7 +208,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		PackageCount++;
 		//查找下载队列
 		if (deqUpdateUrl.size()>0)
-		{                
+		{
 		    //定义保存路径
 		    m_updateURL = *deqUpdateUrl.begin();
 		    //m_savePath = [[NSString stringWithFormat:@"%s/update%d.zip", m_cachPath.c_str(), PackageCount] UTF8String];
@@ -672,14 +663,17 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
 {
 	m_iAccountID = iAccountID;
 #ifdef USE_MGSDK
-	NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
-	if ( pImage )
-	{
-		NDPicture * pPicture = new NDPicture;
-        std::string str = SZ_UPDATE_BG_PNG_PATH;
-		pPicture->Initialization( NDPath::GetUIImgPath( str.c_str() ).c_str() );
-		pImage->SetPicture( pPicture, true );
-	}
+    if(m_pLayerUpdate)
+    {
+        NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
+        if ( pImage )
+        {
+            NDPicture * pPicture = new NDPicture;
+            std::string str = SZ_UPDATE_BG_PNG_PATH;
+            pPicture->Initialization( NDPath::GetUIImgPath( str.c_str() ).c_str() );
+            pImage->SetPicture( pPicture, true );
+        }
+    }
 #endif
 	
 #if UPDATE_ON == 0

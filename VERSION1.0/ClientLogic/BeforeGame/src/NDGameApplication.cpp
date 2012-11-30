@@ -220,11 +220,13 @@ void NDGameApplication::MyInit()
 
 	pkDirector->RunScene(CSMLoginScene::Scene(true));
 	LOGD("pkDirector->RunScene(CSMLoginScene::Scene()); Over");
-
 }
 
 void NDGameApplication::applicationDidEnterBackground()
 {
+#ifdef USE_MGSDK
+    [MBGPlatform pause];
+#endif
 	CCDirector::sharedDirector()->stopAnimation();
 
 	// if you use SimpleAudioEngine, it must be pause
@@ -233,6 +235,9 @@ void NDGameApplication::applicationDidEnterBackground()
 
 void NDGameApplication::applicationWillEnterForeground()
 {
+#ifdef USE_MGSDK
+    [MBGPlatform resume];
+#endif
 	CCDirector::sharedDirector()->startAnimation();
 
 	// if you use SimpleAudioEngine, it must resume here

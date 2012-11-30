@@ -10,7 +10,7 @@
 	UILabel* _currencyName;
 	UIImageView* _balanceImage;
 	UIImageView* _coinImage;
-	CCRect _mainRect;
+	CGRect _mainRect;
 	CGFloat _ratio;
 }
 @property(nonatomic, retain) UIView* button;

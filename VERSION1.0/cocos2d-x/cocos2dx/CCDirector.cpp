@@ -1023,11 +1023,8 @@ CCAccelerometer* CCDirector::getAccelerometer()
 CCDisplayLinkDirector::CCDisplayLinkDirector(void)
 	: m_bInvalid(false)
 {
-	LOGD("entry CCDisplayLinkDirector(),sm_pSharedDirector is %d",(int)sm_pSharedDirector);
-
-#pragma message( "!! CCDisplayLinkDirector !! comipled, ND_MOD=1" )
+#pragma message( "!! CCDisplayLinkDirector !! comipled, ND_MOD = 1" )
     sm_pSharedDirector = this;
-	LOGD("Leave CCDisplayLinkDirector(),sm_pSharedDirector is %d",(int)sm_pSharedDirector);
 }
 #endif
 

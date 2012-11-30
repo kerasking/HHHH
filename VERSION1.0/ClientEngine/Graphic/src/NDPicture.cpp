@@ -17,6 +17,20 @@
 #include <CCDrawingPrimitives.h>
 #include <UsePointPls.h>
 #include "CCCommon.h"
+#include "CCPlatformConfig.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
 
 using namespace cocos2d;
 
@@ -915,7 +929,6 @@ CCTexture2D* NDPicturePool::AddTexture( const char* pszImageFile )
 	return pkPicture->GetTextureRetain();
 }
 
-
 NDTexture::NDTexture()
 {
 	m_pkTexture = 0;
@@ -930,6 +943,7 @@ void NDTexture::Initialization( const char* pszImageFile )
 {
 	if (0 == pszImageFile || !*pszImageFile)
 	{
+		LOGERROR("pszIamgeFile is null");
 		return;
 	}
 

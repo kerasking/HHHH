@@ -480,7 +480,8 @@ public:
 		itemBtn->SetItemFrameRect(rect);
 		itemBtn->CloseItemFrame();
 
-		itemBtn->SetItemBackgroundPicture(GetNormalPicture(), NULL, false, CCRectZero, true);
+		itemBtn->SetItemBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);
+		itemBtn->SetItemTouchDownImage(GetSelectedPicture(), false, CCRectZero, true);
 		itemBtn->SetItemFocusImage(GetFocusPicture(), false, CCRectZero, true);
 
 // 		itemBtn->Initialization();
@@ -601,7 +602,8 @@ public:
 		equipBtn->SetItemFrameRect(rect);
 		equipBtn->CloseItemFrame();
 
-		equipBtn->SetItemBackgroundPicture(GetNormalPicture(), NULL, false, CCRectZero, true);
+		equipBtn->SetItemBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);
+		equipBtn->SetItemTouchDownImage(GetSelectedPicture(), false, CCRectZero, true);
 		equipBtn->SetItemFocusImage(GetFocusPicture(), false, CCRectZero, true);
 
 // 		equipBtn->SetBackgroundPicture(GetBackPicture(), NULL, false, CCRectZero, true);

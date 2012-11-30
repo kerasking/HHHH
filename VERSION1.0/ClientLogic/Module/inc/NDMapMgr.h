@@ -395,7 +395,9 @@ public:
     void ProcessOAuthTokenRet(NDTransData& data);
     void ProcessCreateTransactionRet(NDTransData& data);
     void ProcessCloseTransactionRet(NDTransData& data);
-    void sendVerifier(CCString *verifier);
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    void sendVerifier(NSString *verifier);
+#endif
     
 #ifdef USE_MGSDK
     void VerifierError(MBGError *error);

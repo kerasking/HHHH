@@ -106,8 +106,8 @@ void NDLocalXmlString::Init()
 	
 	std::string curkey;
 	
-	while ( !feof(fp_in) ) {
-	
+	while ( !feof(fp_in) )
+	{
 		char buf[1025] = { 0x00 };
 		
 		fgets(buf, 1024, fp_in);
@@ -138,10 +138,6 @@ void NDLocalXmlString::Init()
 	}
 	
 	fclose(fp_in);
-	
-// 	if ([fm fileExistsAtPath: tmpFileName] &&
-//         [fm removeItemAtPath: tmpFileName error:&error])
-//     {}
 	
 	NDLog("\n local string key size: %u", m_data.size());
 }

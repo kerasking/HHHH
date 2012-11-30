@@ -17,7 +17,7 @@
 #include "NDDirector.h"
 #include "BattleUtil.h"
 #include <sstream>
-//#include "ItemMgr.h"
+#include "ItemMgr.h"
 //#include "LearnSkillUILayer.h"
 //#include "DianhuaUILayer.h"
 #include "GameScene.h"

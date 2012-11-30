@@ -46,6 +46,9 @@ public:
 	virtual void SetItemBackgroundPictureCustom(NDPicture *pic, NDPicture *touchPic = NULL,
 		bool useCustomRect = false, CCRect customRect = CCRectZero);
 
+	virtual void SetItemTouchDownImage(NDPicture *pic, bool useCustomRect = false, CCRect customRect = CCRectZero, bool clearPicOnFree = false);
+	virtual void SetItemTouchDownImageCustom(NDPicture *pic, bool useCustomRect = false, CCRect customRect = CCRectZero);
+
 	virtual void SetItemFocusImage(NDPicture *pic, bool useCustomRect = false, CCRect customRect = CCRectZero, bool clearPicOnFree = false);
 	virtual void SetItemFocusImageCustom(NDPicture *pic, bool useCustomRect = false, CCRect customRect = CCRectZero);
 private:

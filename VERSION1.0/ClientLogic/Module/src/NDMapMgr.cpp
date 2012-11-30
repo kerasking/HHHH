@@ -1,3 +1,4 @@
+
 #include "NDMapMgr.h"
 #include "NDPlayer.h"
 #include "NDConstant.h"
@@ -40,6 +41,7 @@
 #import <Foundation/Foundation.h>
 #import  "MBGPlatform.h"
 #import  "MBGBankDebit.h"
+#include "MobageViewController.h"
 #endif
 
 NS_NDENGINE_BGN
@@ -280,11 +282,6 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 {
 	switch (usMsgID)
 	{
-		case _MSG_REQUEST_ACCESS_TOKEN_RET:
-		{
-			ProcessTempCredential(*pkData);
-		}
-			break;
 		case _MSG_ROADBLOCK:
 		{
 			processRoadBlock(*pkData);
@@ -688,6 +685,18 @@ bool NDMapMgr::process(MSGID usMsgID, NDEngine::NDTransData* pkData,
 			processNPC(*pkData);
 		}
 			break;
+        case _MSG_CREATE_TEMP_CREDENTIAL_RET:
+            this->ProcessTempCredential(*pkData);
+            break;
+        case _MSG_REQUEST_ACCESS_TOKEN_RET:
+            this->ProcessOAuthTokenRet(*pkData);
+            break;
+        case _MSG_CREATE_TRANSACTION_RET:
+            this->ProcessCreateTransactionRet(*pkData);
+            break;
+        case _MSG_CLOSE_TRANSACTION_RET:
+            this->ProcessCloseTransactionRet(*pkData);
+            break;
 		default:
 			break;
 	}
@@ -4010,13 +4019,68 @@ void NDMapMgr::ProcessTempCredential(NDTransData& kData)
     if(temporaryCredential == nil) return;
 	[MBGSocialAuth authorizeToken:temporaryCredential onSuccess:^(NSString *verifier)
 	{
-		//sendVerifier(verifier);
+		sendVerifier(verifier);
 	}onError:^(MBGError *error)
 	{
 		VerifierError(error);
 	}];
 #endif
 }
+
+
+void  NDMapMgr::ProcessOAuthTokenRet(NDTransData& data)
+{
+    NDBeforeGameMgr& mgr = NDBeforeGameMgrObj;
+    mgr.SetOAuthTokenOK();
+}
+
+void  NDMapMgr::ProcessCreateTransactionRet(NDTransData& data)
+{
+#ifdef USE_MGSDK
+    NSString* transactionId = data.ReadUTF8NString();
+    if (transactionId == nil)
+        return;
+    
+    NDBeforeGameMgr& mgr = NDBeforeGameMgrObj;
+    mgr.SetCurrentTransactionID(transactionId);
+    CloseProgressBar;
+    
+    [MBGBankDebit continueTransaction:transactionId onSuccess:^(MBGTransaction *transaction) {
+        CloseTransaction();
+    } onCancel:^{
+        CancelTransaction();
+        
+    } onError:^(MBGError *error) {
+        TransactionError(error);
+    }];
+#endif
+}
+void  NDMapMgr::ProcessCloseTransactionRet(NDTransData& data)
+{
+#ifdef USE_MGSDK
+    //to do add EMoney
+    MobageViewController* pMobageView = [MobageViewController sharedViewController];
+    [pMobageView showBalanceButton:CGRectMake(200, 70, 100, 36)];
+    ScriptMgrObj.excuteLuaFunc( "HandleNetMsg", "Agiotage", 0 );
+#endif
+}
+
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+void  NDMapMgr::sendVerifier(NSString *verifier)
+{
+    int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
+    if(idAccount <= 0)
+        return;
+    
+    const char* szVerifier = [verifier UTF8String];
+    const unsigned char* szUnSignedVerifier = (const unsigned char*)szVerifier;
+    
+    NDTransData bao(_MSG_REQUEST_ACCESS_TOKEN);
+    bao << idAccount;
+    bao.Write(szUnSignedVerifier, strlen(szVerifier));
+    SEND_DATA(bao);
+}
+#endif
 
 NDMonster* NDMapMgr::GetBoss()
 {

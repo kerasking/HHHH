@@ -28,27 +28,35 @@
 #define  LOGERROR(...)
 #endif
 
-KTcpClientSocket::KTcpClientSocket( const KData& hostName, bool blocking )
-					: _hostName( hostName ), _serverPort( -1 ), _blocking( blocking ), _bAddr(false)
+KTcpClientSocket::KTcpClientSocket( const KData& hostName, bool blocking ):
+_hostName( hostName ),
+_serverPort( -1 ),
+_blocking( blocking ),
+_bAddr(false)
 {
 
 }
 
-KTcpClientSocket::KTcpClientSocket( bool blocking/*=true*/ )
-						: _serverPort( -1 ), _blocking( blocking ), _bAddr(false)
+KTcpClientSocket::KTcpClientSocket( bool blocking/*=true*/ ):
+_serverPort( -1 ),
+_blocking( blocking ),
+_bAddr(false)
 {
 
 }
 
-KTcpClientSocket::KTcpClientSocket( const KData& hostName, int servPort, bool blocking )
-								: _hostName( hostName ), _serverPort( servPort ), _blocking( blocking ),_bAddr(false)
+KTcpClientSocket::KTcpClientSocket( const KData& hostName, int servPort, bool blocking ):
+_hostName( hostName ),
+_serverPort( servPort ),
+_blocking( blocking ),
+_bAddr(false)
 {
 
 }
 
 
-KTcpClientSocket::KTcpClientSocket( const KNetworkAddress& server, bool blocking )
-												: _blocking( blocking )
+KTcpClientSocket::KTcpClientSocket( const KNetworkAddress& server, bool blocking ):
+_blocking( blocking )
 {
     _hostName = server.getHostName();
     _serverPort = server.getPort();

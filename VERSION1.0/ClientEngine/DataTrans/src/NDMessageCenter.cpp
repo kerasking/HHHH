@@ -152,7 +152,6 @@ namespace NDEngine
 	
 	bool NDNetMsgMgr::AddNetRawData(const unsigned char* data, unsigned int uilen, bool net /*= true*/)
 	{
-		LOGD("AddNetRawData,uilen = %d",uilen);
 		if (!data || uilen == 0)
 			return true;
 			
@@ -228,14 +227,10 @@ namespace NDEngine
 	
 	bool NDNetMsgMgr::GetServerMsgPacket(NDTransData& data)
 	{
-		LOGD("Entry GetServerMsgPacket.");
-
 		unsigned char* pReadPtr = NULL;
 		unsigned int uiReadSize = 0;
 		
 		m_buffer.GetReadPtr(pReadPtr, uiReadSize);
-
-		LOGD("Entry m_buffer.GetReadPtr. uiReadSize = %d",uiReadSize);
 		
 		if (uiReadSize < ND_C_MSGID_BEGIN)
 		{
@@ -244,7 +239,6 @@ namespace NDEngine
 		
 #if (defined(USE_NDSDK) || defined(USE_MGSDK) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
 		unsigned int msgLen = (pReadPtr[0] & 0xff) + ((pReadPtr[1] & 0xff) << 8);
-		LOGD("unsigned int msgLen, msgLen = %d",msgLen);
 #else
 		while(0xff != pReadPtr[0] || 0xfe != pReadPtr[1])
 		{
