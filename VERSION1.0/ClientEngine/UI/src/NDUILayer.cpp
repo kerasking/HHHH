@@ -85,7 +85,7 @@ NDUILayer::NDUILayer()
 	m_bMoveOutListener = false;
 	m_bTouchDwon = false;
 
-	m_nIsHVFirestTemp = 0;
+	m_nIsHVFirstTemp = 0;
 	m_bIsHVContainer = false;
 	m_bPopupDlg = false;
 }
@@ -483,14 +483,14 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 		//return DispatchDragInEvent(m_beginTouch, m_endTouch, m_longTouch, true);
 	}
 
-	m_nIsHVFirestTemp = 0;
+	m_nIsHVFirstTemp = 0;
 
 	return false;
 }
 
 void NDUILayer::TouchCancelled(NDTouch* touch)
 {
-	m_nIsHVFirestTemp = 0;
+	m_nIsHVFirstTemp = 0;
 }
 
 bool NDUILayer::TouchMoved(NDTouch* touch)
@@ -1655,20 +1655,23 @@ bool NDUILayer::DispatchLayerMoveEvent(CCPoint beginPoint, NDTouch *moveTouch)
  		{
  			CUIScrollViewContainerM *svc = (CUIScrollViewContainerM*)pNode;
 
-			if(fabs(horizontal) > fabs((vertical)))
-			{
-				m_nIsHVFirestTemp = 1;
-			}
-			else
-			{
-				m_nIsHVFirestTemp = 2;
-			}
+// 			if(0 == m_nIsHVFirstTemp)
+// 			{
+				if(fabs(horizontal) > fabs((vertical)))
+				{
+					m_nIsHVFirstTemp = 1;
+				}
+				else
+				{
+					m_nIsHVFirstTemp = 2;
+				}
+/*			}*/
 
-			if(m_nIsHVFirestTemp == 1)
+			if(m_nIsHVFirstTemp == 1)
 			{
 				svc->OnScrollViewMove(this, 0, horizontal);
 			}
-			else if(m_nIsHVFirestTemp == 2)
+			else if(m_nIsHVFirstTemp == 2)
 			{
 				svc->OnScrollViewMove(this, vertical, 0);
 			}
