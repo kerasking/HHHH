@@ -32,6 +32,7 @@
 #include "NDUtility.h"
 #include <sstream>
 #include "time.h"
+#include "SqliteDBMgr.h"
 #include <stdlib.h>
 
 #ifdef USE_NDSDK
@@ -59,6 +60,19 @@ using namespace NDEngine;
 
 #define TIMER_CHECK_VERSION_TAG (12345678)
 #define TIMER_CHECK_VERSION (4*3600)
+
+//--
+#define SZ_VERINI_PATH					"version.ini"//版本文件相对路径/（"SimplifiedChineseRes"目录下）
+//资源类型
+enum 
+{
+  RES_TYPE_IPHONE	= 1,
+  RES_TYPE_IPAD		= 2,
+  RES_TYPE_NEWPAD	= 3,
+  RES_TYPE_ANDROID	= 4, 
+};
+//资源类型开关
+#define RES_TYPE	RES_TYPE_IPHONE;
 
 /////////////////////////////////////////////////////////////////////
 // 帐号注册
@@ -1693,4 +1707,179 @@ NDBeforeGameMgr::GetRecAccountPwdByIdx(int idx) //@bug
 int NDEngine::GetEncryptSalt(unsigned int seed)
 {
 	return (((seed * 214013L + 2531011L) >> 16) & 0x7fff);
+}
+
+
+////////////////////////////////////////////////////////////
+void NDBeforeGameMgr::InitAccountTable()
+{
+     //创建server数据表
+     if(!CSqliteDBMgr::shareInstance().IsExistTable("account")){
+         char *sql = "CREATE TABLE account(name text primary key,type integer,pwd blob,login_time integer)";
+         if(!CSqliteDBMgr::shareInstance().ExcuteSql(sql)){
+             NDLog(@"创建帐号表出错!");
+             return;
+         }
+         //发起快速注册
+         this->FastGameOrRegister(2);
+     }else{
+         //无纪录时发起快速注册
+        /*int nRowNum =*/ CSqliteDBMgr::shareInstance().SelectData("SELECT count(*) FROM account;",1);
+        int nCnt = CSqliteDBMgr::shareInstance().GetColDataN(0,0);
+         if(nCnt < 1){
+             //发起快速注册
+             this->FastGameOrRegister(2);
+         }
+     }
+}
+void NDBeforeGameMgr::SaveAccountPwdToDB(const char* pszName, const char* pszPwd, int nType)
+{
+     if(!pszName){
+         return;
+     }
+     unsigned char encPwd[1024] = {0x00};
+     if(pszPwd){
+         simpleEncode((const unsigned char*)pszPwd, encPwd);
+     }
+     char szValue[256]="";
+     char *sqlaccount = "REPLACE INTO account(name,type,pwd,login_time) VALUES";
+     sprintf(szValue,"(\'%s\',%d,\'%s\',%d);",pszName,nType,(const char*)encPwd,0);
+     std::string strSqlAccount = sqlaccount;
+     strSqlAccount+=szValue;
+     if(!CSqliteDBMgr::shareInstance().ExcuteSql(strSqlAccount.c_str())){
+         return;
+     }
+}
+
+////////////////////////////////////////////////////////////
+bool NDBeforeGameMgr::isWifiNetWork()
+{//待实现
+//    Reachability *r = [Reachability reachabilityWithHostName:@"www.baidu.com"];
+//    if (r == nil || [r currentReachabilityStatus] != ReachableViaWiFi) 
+//        return false;
+//    else 
+        return true;
+}
+
+bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
+{
+    static int version = 0;
+    unsigned char resType = RES_TYPE;
+    //取得当前客户端版本
+    bool bFile = true;
+    FILE* file;
+    char local_ver[5] = {0};
+    
+    //file = fopen(NDPath::GetResourceFilePath("version.ini").c_str(), "rb");
+    //从caches下取版本信息
+    string sVersion = NDPath::GetCashesPath()+"/SimplifiedChineseRes/version.ini";
+    file = fopen(sVersion.c_str(), "rb");
+    if (!file)
+    {
+		NDLog(@"读取CACHES目录下版本文件失败");
+		//return false;
+        bFile = false;
+    }
+    else
+    {
+        fread(local_ver, 1, 4, file);
+        fclose(file);
+        version = atoi(local_ver);
+    }        
+    //NDDataTransThread::DefaultThread()->Stop();
+    NDDataTransThread::ResetDefaultThread();
+    NDDataTransThread::DefaultThread()->Start( szURL, 9500 );//("192.168.65.77", 9500);//++Guosen
+	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
+	{
+		return false;
+	}
+	NDTransData data(_MSG_CLIENT_VERSION);
+    
+	data << version;
+    data << resType;
+	NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
+    
+    return true;
+}
+int NDBeforeGameMgr::CopyStatus = 0;
+//检测首次运行
+bool NDBeforeGameMgr::CheckFirstTimeRuning()
+{ 
+	bool bFirstTime	= false;
+	string installVersionIniPath	=  NDPath::GetRootResPath() + SZ_VERINI_PATH;
+    string copyVersionIniPath	= NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
+	//判断是不是第一次登录，如果是第一次登录，则移动资源文件LIBRARY/CACHES
+	FILE* file;
+	file = fopen(copyVersionIniPath.c_str(), "rb" );
+    //NSString *strIniPath = [NSString stringWithFormat:@"%s",copyVersionIniPath.c_str()];
+    //NSLog(@"qqqqq:%@",strIniPath);
+	if ( !file )
+	{
+		bFirstTime = true;
+	    NDLog( @"\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );
+		//std::rename( (NDPath::GetAppResFilePath(NDPath::GetRootResDirName())).c_str(), (NDPath::GetResourceFilePath(NDPath::GetRootResDirName())).c_str() );
+        CopyRes();
+	}
+	else
+	{ 
+        char copyResVersion[5] = {0};
+        char installResVersion[5] = {0};
+        fread(copyResVersion, 1, 4, file);
+        fclose( file );
+        //如果是原下载的版本安装的包导致version.ini等资源文件已经存在,而且版本号小于当前安装的版本号，则删除当前的资源目录，再重新拷贝
+        FILE* installFile;
+        installFile = fopen(installVersionIniPath.c_str(), "rb" );
+        if (installFile)
+        {
+            fread(installResVersion, 1, 4, installFile);
+            fclose(installFile);
+        }
+        if ( atol(copyResVersion) < atol(installResVersion))
+        {
+            bFirstTime = true;
+            CopyRes();
+        }
+		NDPath::SetResDirPos( 1 );
+	}
+	return bFirstTime;
+}
+
+void* CopyResThread(void* ptr)
+{//待实现
+//     string sSource = NDPath::GetAppResFilePath(NDPath::GetRootResDirName());
+//     string sTarget = NDPath::GetCashesPath()+"/"+NDPath::GetRootResDirName();
+//     NSFileManager *fm;
+//     fm = [NSFileManager defaultManager];
+//     signed char bIsDir = false;
+//     bool bExist = [fm fileExistsAtPath:[NSString stringWithUTF8String:sTarget.c_str()] isDirectory:(&bIsDir)];
+//     if (bExist&&bIsDir)
+//     {
+//         if([fm removeItemAtPath:[NSString stringWithUTF8String:sTarget.c_str()] error:NULL]==NO)
+//         {
+//             NDLog( @"remove failed~" );
+//         } 
+//     }
+//     
+//     NDBeforeGameMgr::CopyStatus = 0;
+//     if ([[NSFileManager defaultManager]copyItemAtPath:[NSString stringWithUTF8String:sSource.c_str()]toPath:[NSString stringWithUTF8String:sTarget.c_str()] error:NULL ] == YES)
+//     {
+//         NDBeforeGameMgr::CopyStatus = 1;
+//         NDPath::SetResDirPos( 1 );
+//     }
+//     else
+//     {
+//         NDBeforeGameMgr::CopyStatus = -1;
+//     }
+    
+	return NULL;
+}
+void NDBeforeGameMgr::CopyRes()
+{
+    pthread_t pid;
+	pthread_create(&pid, NULL, CopyResThread, this);	
+}
+int NDBeforeGameMgr::GetCopyStatus()
+{
+    return NDBeforeGameMgr::CopyStatus;
+    
 }

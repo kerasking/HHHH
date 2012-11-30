@@ -26,21 +26,21 @@
 #include "FarmMgr.h"
 //#include "BattleFieldMgr.h"
 #include "SMUpdate.h"
-//#include "DownloadPackage.h"
+#include "DownloadPackage.h"
 #include "NDTransData.h"
 #include "NDUIDialog.h"
-//#include "ZipUnZip.h"
+#include "ZipUnZip.h"
 
 #define ID_LOADING_PROCESS (90)
-class CSMLoginScene :
-public NDScene,
-//public DownloadPackageDelegate,
-public ITimerCallback,
-//public ISMUpdateEvent,
-//public ITQZipEvent,
-public NDUITargetDelegate,
-public NDUIDialogDelegate //,
-//public CZipUnZip
+class CSMLoginScene
+: public NDScene
+, public DownloadPackageDelegate
+, public ITimerCallback
+//, public ISMUpdateEvent
+//, public ITQZipEvent
+, public NDUITargetDelegate
+, public NDUIDialogDelegate
+, public CZipUnZip
 {
 	DECLARE_CLASS(CSMLoginScene)
 	
@@ -73,8 +73,8 @@ private:
     virtual void OnTimer(OBJID idTag);
 	
 public:// DownloadPackageDelegate//++Guosen 2012.8.7
-	//virtual void ReflashPercent( DownloadPackage* downer, int percent, int pos, int filelen ); override
-	//virtual void DidDownloadStatus( DownloadPackage* downer, DownloadStatus status ); override
+	virtual void ReflashPercent( DownloadPackage* downer, int percent, int pos, int filelen ); override
+	virtual void DidDownloadStatus( DownloadPackage* downer, DownloadStatus status ); override
 	
 public:
     //virtual int     OnProcess(int nPercent); //更新进度反馈//--Guosen 2012.8.7

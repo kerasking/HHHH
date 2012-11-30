@@ -49,9 +49,6 @@ static NDBaseDirector s_NDBaseDirector;
 #define  LOGERROR(...)
 #endif
 
-#if 0
-#include "HelloWorldScene.h" //@todo
-#endif
 #include "BattleMgr.h"
 #include "NDBaseBattleMgr.h"
 #include "NDNetMsg.h"
@@ -64,6 +61,8 @@ static NDBaseDirector s_NDBaseDirector;
 #include "UIEquipItem.h"
 #include "NDUIBaseItemButton.h"
 #include "UIItemButton.h"
+
+#include "SqliteDBMgr.h"
 
 NS_NDENGINE_BGN
 using namespace NDEngine;
@@ -174,147 +173,54 @@ void NDGameApplication::MyInit()
 	LOGD("kMapMgr get Over");
 	//ScriptMgr &kScriptManager = ScriptMgr::GetSingleton();
 	NDBeforeGameMgrObj;
-
 	LOGD("NDBeforeGameMgrObj Over");
 
 	NDDirector* pkDirector = NDDirector::DefaultDirector();
-
 	LOGD("pkDirector get Over,%d",(int)pkDirector);
-
 	pkDirector->Initialization();
-
 	LOGD("pkDirector Initialization Over");
-
-	pkDirector->RunScene(CSMLoginScene::Scene());
-
-	LOGD("pkDirector->RunScene(CSMLoginScene::Scene()); Over");
 
 //	kMapMgr.processChangeRoom(0,0);
 
-#if 0 //@todo
-	ScriptNetMsg* pkNetMsg = new ScriptNetMsg;
-	ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
-	NDScriptGameData* pkData = new NDScriptGameData;
-	//ScriptGlobalEvent* pkGlobalEvent = new ScriptGlobalEvent;
-	ScriptObjectCommon* pkCommon = new ScriptObjectCommon;
-	ScriptObjectUI* pkScriptUI = new ScriptObjectUI;
-	ScriptTimerMgr* pkTimerManager = new ScriptTimerMgr;
-	ScriptObjectDrama* pkDrama = new ScriptObjectDrama;
+//#if 0 //@todo
+//	ScriptNetMsg* pkNetMsg = new ScriptNetMsg;
+//	ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
+//	NDScriptGameData* pkData = new NDScriptGameData;
+//	//ScriptGlobalEvent* pkGlobalEvent = new ScriptGlobalEvent;
+//	ScriptObjectCommon* pkCommon = new ScriptObjectCommon;
+//	ScriptObjectUI* pkScriptUI = new ScriptObjectUI;
+//	ScriptTimerMgr* pkTimerManager = new ScriptTimerMgr;
+//	ScriptObjectDrama* pkDrama = new ScriptObjectDrama;
+//
+//	pkData->Load();
+//	pkTimerManager->OnLoad();
+//	pkNetMsg->OnLoad();
+//	pkLogic->OnLoad();
+//	pkDrama->OnLoad();
+//	pkCommon->OnLoad();
+//	ScriptGlobalEvent::Load();
+//	//pkGlobalEvent->OnLoad();
+//	pkScriptUI->OnLoad();
+//#endif
+//
+//	ScriptMgrObj.Load();
+//	LOGD("ScriptMgrObj.Load(); Over");
+//	
+//	LOGD("Start ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME)");
+//	ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
+//	LOGD("End MyInit");
 
-	pkData->Load();
-	pkTimerManager->OnLoad();
-	pkNetMsg->OnLoad();
-	pkLogic->OnLoad();
-	pkDrama->OnLoad();
-	pkCommon->OnLoad();
-	ScriptGlobalEvent::Load();
-	//pkGlobalEvent->OnLoad();
-	pkScriptUI->OnLoad();
-#endif
+//---init++Guosen 2012.11.29
+    CSqliteDBMgr::shareInstance().InitDataBase("DNSG.sqlite");
+    //GetLocalLanguage();
+    //BattleMgrObj;
+    NDColorPoolObj;
+    NDBeforeGameMgrObj.InitAccountTable();
+//---init
 
-	//kScriptManager.Load();
-	ScriptMgrObj.Load();
+	pkDirector->RunScene(CSMLoginScene::Scene(true));
+	LOGD("pkDirector->RunScene(CSMLoginScene::Scene()); Over");
 
-	LOGD("ScriptMgrObj.Load(); Over");
-
-	//CC_SAFE_DELETE(pkNetMsg);
-
-	//ScriptGlobalEvent::OnEvent (GE_GENERATE_GAMESCENE);
-	
-	LOGD("Start ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME)");
-	ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
-
-	LOGD("End MyInit");
-
-	//NDPlayer::pugeHero();
-	//NDPlayer& kPlayer = NDPlayer::defaultHero(1);
-
-	//int x = 100;
-	//int y = 100;
-
- // 	kPlayer.SetPosition(ccp(528, 512));		///< x * 32 + 16, y * 32 + 16
- // 	kPlayer.SetServerPositon(x, y);
- // 	kPlayer.m_nID = 1;
- // 	kPlayer.m_strName = "白富美";
- // 	kPlayer.SetLoadMapComplete();
- // 
- //  	CSMGameScene* pkScene = (CSMGameScene*)pkDirector->GetRunningScene();
- //  	NDNode* pkNode = pkScene->GetChild(MAPLAYER_TAG);
- //  
- //  	if (!pkNode->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
- //  	{
- //  		return false;
- //  	}
- //  
- //  	NDMapLayer* pkLayer = (NDMapLayer*) pkNode;
- //  	pkLayer->AddChild(&kPlayer, 111, 1000);
- //  	kPlayer.standAction(true);
- //  	//pkScene->setUpdatePlayer(&kPlayer);
- // 
- //  	//add by ZhangDi 120904
- //  	//DramaObj.Start();
- //  
- //   //	DramaCommandScene* commandScene = new DramaCommandScene;
- //   //	commandScene->InitWithLoadDrama(5);
- //  	//DramaObj.AddCommond(commandScene);
- //  
- //  
- //  	//DramaCommandSprite* commandSprite = new DramaCommandSprite;
- //  	//commandSprite->InitWithAdd(31000112, ST_NPC, FALSE, "华佗");
- //  	////commandSprite->InitWithSetPos(command->GetKey(), 9, 11);
- //  	//DramaObj.AddCommond(commandSprite);
- // 
- // 
- // 	for (int i = 0; i < 4; i++)
- // 	{
- // 		NDNpc* npc = new NDNpc;
- // 		npc->m_nID = 10001 + i;
- // 		//npc->col = 9;
- // 		//npc->row = 11;
- // 		//npc->look = 31000112;
- // 
- // 		switch (i)
- // 		{
- // 		case 0:
- // 			npc->m_strName = "郭嘉";
- // 			break;
- // 		case 1:
- // 			npc->m_strName = "华佗";
- // 			break;
- // 		case 2:
- // 			npc->m_strName = "袁绍";
- // 			break;
- // 		case 3:
- // 			npc->m_strName = "刘表";
- // 			break;
- // 		default:
- // 			npc->m_strName = "西门无名";
- // 			break;
- // 		}
- // 
- // 		npc->Initialization(111 + i);		//31000112
- // 		npc->SetPosition(
- // 				ccp((5 + i * 6) * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
- // 						11 * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
- // 
- // 		//npc->dataStr = "哈哈";
- // 		//npc->talkStr = "你想知道什么？";
- // 		npc->SetType(0);
- // 		//npc->SetActionOnRing(FALSE);
- // 		//npc->SetDirectOnTalk(FALSE);
- // 		//npc->initUnpassPoint();
- // 
- // 		if (!pkLayer->ContainChild(npc))
- // 		{
- // 			pkLayer->AddChild((NDNode *) npc, 100 + i, 10001 + i);
- // 			//npc->HandleNpcMask(TRUE);
- // 		}
- // 
- // 		NDPlayer::defaultHero().UpdateFocus();
- // 	}
-
-	// 现在这里登陆
-	// SwichKeyToServer("121.207.239.91", 9500/*9528*/, "285929910", "", "xx");
 }
 
 void NDGameApplication::applicationDidEnterBackground()

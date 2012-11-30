@@ -317,7 +317,6 @@ enum
 #define TIMER_AUTOFIGHT 4
 #define MAX_SKILL_NUM (20)
 
-const char* TEXT_VIEW_STATUS = NDCommonCString("ViewState");
 
 bool Battle::ms_bAuto = false;
 BattleAction Battle::ms_kLastTurnActionUser(BATTLE_ACT_PHY_ATK);

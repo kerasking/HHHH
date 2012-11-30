@@ -26,15 +26,13 @@ public:
 	
 	~NDLocalXmlString();
 	
-	//NSString *GetString(NSString nsKeyName);
 	const char* GetCString(const char* szKeyName);
+	//++Guosen 2012.8.10//改为在程序运行后加载数据，避免静态加载
+	bool LoadData();
 private:
 	NDLocalXmlString();
 	
 	void Init();
-	
-	//todo(zjh)
-	string GetDocumensDirectory();
 	
 	bool GetValue(const std::string str, bool& isKey, std::string& resValue);
 	

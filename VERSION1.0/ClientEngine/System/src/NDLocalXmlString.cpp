@@ -32,20 +32,6 @@ void NDLocalXmlString::purge()
 	CC_SAFE_DELETE(s_NDLocalXmlString);
 }
 
-// NSString NDLocalXmlString::GetString(NSString nsKeyName)
-// {
-// 	if (!nsKeyName)
-// 	{
-// 		return [NSString stringWithUTF8String:"error"];
-// 	}
-// 	
-// 	map_data_it it = m_data.find([nsKeyName UTF8String]);
-// 	
-// 	if (it == m_data.end())
-// 		return nsKeyName;
-// 	
-// 	return [NSString stringWithUTF8String:it->second.c_str()];
-// }
 
 const char* NDLocalXmlString::GetCString(const char* szKeyName)
 {
@@ -66,15 +52,21 @@ NDLocalXmlString::NDLocalXmlString()
 {
 	NDAsssert(s_NDLocalXmlString == NULL);
 	//CCAutoreleasePool* pPool = new CCAutoreleasePool();
-	
-	Init();
-	
+	//Init();
 	//pPool->release();
 }
 
 NDLocalXmlString::~NDLocalXmlString()
 {
 	s_NDLocalXmlString = NULL;
+}
+
+bool NDLocalXmlString::LoadData()
+{
+	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	Init();
+	//[pool release];
+	return true;
 }
 
 void NDLocalXmlString::Init()
@@ -85,7 +77,7 @@ void NDLocalXmlString::Init()
 	FILE *fp_in = fopen(pszTemp, "rb");
 	if (!fp_in) return;
 	
-	string document = GetDocumensDirectory();
+	string document = NDEngine::NDPath::GetDocumentPath();
 	tq::CString tmpFileName("%sxmltmp.txt", document.c_str());
 
 	FILE *p = fopen(tmpFileName, "a");
@@ -200,9 +192,4 @@ bool NDLocalXmlString::GetValue(const std::string str, bool& isKey, std::string&
 	isKey = resIsKey;
 	
 	return true;
-}
-
-string NDLocalXmlString::GetDocumensDirectory()
-{
-	return CCFileUtils::sharedFileUtils()->getWriteablePath();
 }
