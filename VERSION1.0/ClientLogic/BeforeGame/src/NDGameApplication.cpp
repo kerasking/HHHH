@@ -212,6 +212,9 @@ void NDGameApplication::MyInit()
 //	ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
 //	LOGD("End MyInit");
 
+	NDScriptRegLua::doReg(); //@reglua
+	ScriptMgrObj.Load();
+
 //---init++Guosen 2012.11.29
     CSqliteDBMgr::shareInstance().InitDataBase("DNSG.sqlite");
     //GetLocalLanguage();

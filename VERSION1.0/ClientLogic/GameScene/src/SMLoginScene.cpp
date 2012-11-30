@@ -25,7 +25,7 @@
 #include "ScriptMgr.h"
 #include <iostream>
 #include <sstream>
-
+#include "ScriptRegLua.h"
 ////////////////////////////////////////////////////////////
 
 //--------------------//
@@ -769,7 +769,7 @@ void CSMLoginScene::StartEntry()
 	ShowWaitingAni();
 	
 	NDLocalXmlString::GetSingleton().LoadData();
-    ScriptMgrObj.Load();
+
     ScriptMgrObj.excuteLuaFunc( "LoadData", "GameSetting" ); 
 	CloseUpdateUILayer();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)

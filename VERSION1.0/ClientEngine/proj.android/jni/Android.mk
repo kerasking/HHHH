@@ -27,6 +27,10 @@ LOCAL_SRC_FILES := \
 ../../Framework/src/NDUIBaseItemButton.cpp \
 ../../Framework/src/NDBaseGlobalDialog.cpp \
 ../../Framework/src/NDBaseScriptMgr.cpp \
+../../Update/src/DownloadPackage.cpp \
+../../Update/src/Reachability.cpp \
+../../Update/src/ZipUnzip.cpp \
+../../Update/src/Unzip.cpp \
 ../../Graphic/src/CCTexture2DExt.cpp \
 ../../Graphic/src/CCTextureCacheExt.cpp \
 ../../Graphic/src/NDAnimation.cpp \
@@ -116,6 +120,7 @@ LOCAL_SRC_FILES := \
 LOCAL_C_INCLUDES := \
 $(LOCAL_PATH)/../../DataTrans/inc \
 $(LOCAL_PATH)/../../Framework/inc \
+$(LOCAL_PATH)/../../Update/inc \
 $(LOCAL_PATH)/../../Graphic/inc \
 $(LOCAL_PATH)/../../MapData/inc \
 $(LOCAL_PATH)/../../Script/inc \
