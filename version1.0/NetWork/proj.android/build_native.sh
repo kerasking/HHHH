@@ -29,8 +29,23 @@ while getopts "s" OPTION; do
 done
 
 # try to get global variable
+if [ $NDK_ROOT"aaa" != "aaa" ]; then
+echo "use global definition of NDK_ROOT: $NDK_ROOT"
+NDK_ROOT_LOCAL=$NDK_ROOT
+fi
 
-HELLOWORLD_ROOT=/cygdrive/d/work/DHLJClient/VERSION1.0/NetWork/proj.android
+if [ $COCOS2DX_ROOT"aaa" != "aaa" ]; then
+echo "use global definition of COCOS2DX_ROOT: $COCOS2DX_ROOT"
+COCOS2DX_ROOT_LOCAL=$COCOS2DX_ROOT
+fi
+
+#HELLOWORLD_ROOT=/cygdrive/d/work/DHLJClient/VERSION1.0/NetWork/proj.android
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+COCOS2DX_ROOT="$DIR/../cocos2d-x/cocos2dx"
+HELLOWORLD_ROOT="$DIR"
+echo "NDK_ROOT = $NDK_ROOT"
+echo "COCOS2DX_ROOT = $COCOS2DX_ROOT"
+echo "APP_ANDROID_ROOT = $HELLOWORLD_ROOT"
 
 # make sure assets is exist
 if [ -d $HELLOWORLD_ROOT/assets ]; then
