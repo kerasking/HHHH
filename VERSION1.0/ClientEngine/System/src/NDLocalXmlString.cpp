@@ -204,5 +204,9 @@ bool NDLocalXmlString::GetValue(const std::string str, bool& isKey, std::string&
 
 string NDLocalXmlString::GetDocumensDirectory()
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	return "/sdcard/dhlj/";
+#else
 	return CCFileUtils::sharedFileUtils()->getWriteablePath();
+#endif
 }

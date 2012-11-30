@@ -25,6 +25,12 @@ using namespace LuaPlus;
 #define CC_TARGET_PLATFORM CC_PLATFORM_WIN32
 #endif
 
+//不要删除,留着跟踪全局变量初始化.
+struct XX { XX() {
+		int xx = 0;
+		xx++;
+	}} xx;
+
 int WINAPI WinMain (HINSTANCE hInstance, 
 					HINSTANCE hPrevInstance, 
 					PSTR szCmdLine, 
