@@ -55,6 +55,7 @@ LOCAL_SRC_FILES := \
 ../../Script/Src/ScriptTask.cpp \
 ../../Script/Src/ScriptTimer.cpp \
 ../../Script/Src/ScriptUI.cpp \
+../../Script/Src/ScriptRegLua.cpp \
 ../../Pet/src/CPet.cpp \
 ../../Pet/src/CPetNode.cpp \
 ../../UICommon/src/NDUILoad.cpp \
@@ -111,6 +112,7 @@ $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/tileMap_parallax_nodes \
 $(LOCAL_PATH)/../../../KUtil \
 $(LOCAL_PATH)/../../../ClientEngine/DataTrans/inc \
 $(LOCAL_PATH)/../../../ClientEngine/Framework/inc \
+$(LOCAL_PATH)/../../../ClientEngine/Update/inc \
 $(LOCAL_PATH)/../../../ClientEngine/Graphic/inc \
 $(LOCAL_PATH)/../../../ClientEngine/MapData/inc \
 $(LOCAL_PATH)/../../../ClientEngine/Script/inc \
