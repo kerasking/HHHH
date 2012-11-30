@@ -134,6 +134,8 @@ namespace NDEngine
 		
 		unsigned short GetCode();
 		void SetPackageSize();
+
+		unsigned short GetMsgType(){ return m_nMsgType; };
 	private:
         void SetSize(unsigned short newSize){ m_nSize = newSize;}
         bool SetBufSize(unsigned short newSize);
@@ -145,6 +147,8 @@ namespace NDEngine
 		unsigned short m_nReadPos;
 		unsigned short m_nWritePos;
 		unsigned char* m_pBuffer;
+
+		unsigned short m_nMsgType;
 		
 	};	
 }

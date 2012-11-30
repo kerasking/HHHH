@@ -38,6 +38,7 @@ NDTransData::NDTransData()
 //======================================================================
 NDTransData::NDTransData(unsigned short code)
 {
+	m_nMsgType = code;
 	m_pBuffer = NULL;
 	m_nSize = 0;
 	Clear();
