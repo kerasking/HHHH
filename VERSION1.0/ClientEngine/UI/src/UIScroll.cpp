@@ -188,7 +188,7 @@ bool CUIScroll::TouchEnd(NDTouch* touch)
 	
 	m_bUp = true;
 	
-	return bRet;
+	return true;
 }
 
 void CUIScroll::ResetMoveData()

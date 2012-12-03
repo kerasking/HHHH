@@ -64,6 +64,7 @@ static NDBaseDirector s_NDBaseDirector;
 #include "UIItemButton.h"
 
 #include "SqliteDBMgr.h"
+#include "NDUILoadEngine.h"
 
 
 ///////////////////////////////////////////
@@ -268,6 +269,7 @@ void NDGameApplication::MyInit()
 	//REGISTER_CLASS(CUIItemButton,CUIEquipItem);
 	REGISTER_CLASS(NDUIBaseItemButton,CUIItemButton);
 	REGISTER_CLASS(NDUIBaseItemButton,CUIEquipItem);
+	REGISTER_CLASS(NDUILoadEngine,NDUILoad);
 
 	LOGD("REGISTER_CLASS Over");
 
@@ -282,36 +284,6 @@ void NDGameApplication::MyInit()
 	LOGD("pkDirector get Over,%d",(int)pkDirector);
 	pkDirector->Initialization();
 	LOGD("pkDirector Initialization Over");
-
-//	kMapMgr.processChangeRoom(0,0);
-
-//#if 0 //@todo
-//	ScriptNetMsg* pkNetMsg = new ScriptNetMsg;
-//	ScriptObjectGameLogic* pkLogic = new ScriptObjectGameLogic;
-//	NDScriptGameData* pkData = new NDScriptGameData;
-//	//ScriptGlobalEvent* pkGlobalEvent = new ScriptGlobalEvent;
-//	ScriptObjectCommon* pkCommon = new ScriptObjectCommon;
-//	ScriptObjectUI* pkScriptUI = new ScriptObjectUI;
-//	ScriptTimerMgr* pkTimerManager = new ScriptTimerMgr;
-//	ScriptObjectDrama* pkDrama = new ScriptObjectDrama;
-//
-//	pkData->Load();
-//	pkTimerManager->OnLoad();
-//	pkNetMsg->OnLoad();
-//	pkLogic->OnLoad();
-//	pkDrama->OnLoad();
-//	pkCommon->OnLoad();
-//	ScriptGlobalEvent::Load();
-//	//pkGlobalEvent->OnLoad();
-//	pkScriptUI->OnLoad();
-//#endif
-//
-//	ScriptMgrObj.Load();
-//	LOGD("ScriptMgrObj.Load(); Over");
-//	
-//	LOGD("Start ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME)");
-//	ScriptGlobalEvent::OnEvent(GE_LOGIN_GAME);
-//	LOGD("End MyInit");
 
 	NDScriptRegLua::doReg(); //@reglua
 	ScriptMgrObj.Load();

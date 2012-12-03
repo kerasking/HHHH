@@ -16,7 +16,7 @@
 #define ISEQUAL(a,b)		(TAbs((a)-(b))<0.0001f)
 #define ISEQUAL_PT(pt,a,b)	(ISEQUAL(pt.x,a) && ISEQUAL(pt.y,b))
 
-IMPLEMENT_CLASS(NDUILoad, NDObject)
+IMPLEMENT_CLASS(NDUILoad, NDUILoadEngine)
 
 class NDUILoad_Util
 {
