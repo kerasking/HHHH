@@ -982,22 +982,26 @@ void CUIScrollViewContainerM::MoveClient(float fMove)
 	}
     this->SetDShowYPos(true);
     unsigned int childsize	= m_pClientUINodes.size();
-    for (size_t i = 0; i < childsize; i++) {
-        ContainerClientLayerM *m_pClientUINode = m_pClientUINodes[i];
-        CCRect rect     =   m_pClientUINode->GetFrameRect();
-        rect.origin.x	+=  fMove;
-        rect.origin.y   = 0;
-        
-        float fOverDistanceMin = 0.333 * m_sizeView.width + i*m_sizeView.width;
-        float fOverDistanceMax = -(0.333 * m_sizeView.width + (childsize-i-1)*m_sizeView.width);
-        
-        if(rect.origin.x>fOverDistanceMin){
-            rect.origin.x = fOverDistanceMin;
-        }else if(rect.origin.x<fOverDistanceMax){
-            rect.origin.x = fOverDistanceMax;
-        }
-        
-        m_pClientUINode->SetFrameRect(rect);
+    for (size_t i = 0; i < childsize; i++) 
+	{
+		ContainerClientLayerM *m_pClientUINode = m_pClientUINodes[i];
+		CCRect rect     =   m_pClientUINode->GetFrameRect();
+		rect.origin.x	+=  fMove;
+		rect.origin.y   = 0;
+ 
+		float fOverDistanceMin = 0.333 * m_sizeView.width + i*m_sizeView.width;
+		float fOverDistanceMax = -(0.333 * m_sizeView.width + (childsize-i-1)*m_sizeView.width);
+
+		if(rect.origin.x > fOverDistanceMin)
+		{
+			rect.origin.x = fOverDistanceMin;
+		}
+		else if(rect.origin.x<fOverDistanceMax)
+		{
+			rect.origin.x = fOverDistanceMax;
+		}
+
+		m_pClientUINode->SetFrameRect(rect);
     }
 }    
     
