@@ -33,7 +33,6 @@ private:
 
 	NDAnimationGroupPool();
 
-	//cocos2d::CCMutableDictionary<std::string, NDAnimationGroup*>* m_pkAnimationGroups;
 	cocos2d::CCDictionary* m_pkAnimationGroups;
 };
 
