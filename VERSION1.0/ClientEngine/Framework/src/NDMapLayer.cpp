@@ -1893,26 +1893,6 @@ bool NDMapLayer::TouchDoubleClick(NDTouch* touch)
 
 void NDMapLayer::ShowTreasureBox()
 {
-	if (!m_pkTreasureBox)
-	{
-		/***
-		 * NDPlayer 在 logic...
-		 * 郭浩
-		 */
-// 		m_eBoxStatus = BOX_SHOWING;
-// 		m_pkTreasureBox = new NDSprite;
-// 		string aniPath = NDPath::GetAnimationPath().c_str();
-// 		NSString pstrString = NSString::stringWithFormat("%streasure_box.spr",
-// 				aniPath.c_str());
-// 		m_pkTreasureBox->Initialization(pstrString->toStdString().c_str());
-// 		SAFE_DELETE(pstrString);
-// 		m_pkTreasureBox->SetPosition(
-// 				CCPointMake(NDPlayer::defaultHero().GetPosition().x + 64,
-// 						NDPlayer::defaultHero().GetPosition().y));
-// 		m_pkTreasureBox->SetScale(0.5f * SCREEN_SCALE);
-// 		m_pkTreasureBox->SetCurrentAnimation(0, false);
-// 		AddChild(m_pkTreasureBox);
-	}
 }
 
 void NDMapLayer::OpenTreasureBox()
@@ -1930,18 +1910,7 @@ void NDMapLayer::OpenTreasureBox()
 
 void NDMapLayer::debugDraw()
 {
-// #if 1
-// 	glLineWidth(2);
-// 	ccDrawColor4F(0,1,0,1);//green
-// // 	CCPoint lb = ccp(m_pfVertices[0],m_pfVertices[1]);
-// // 	CCPoint rt = ccp(m_pfVertices[9],m_pfVertices[10]);
-// // 	ccDrawRect( lb, rt );
-// // 	ccDrawLine( lb, rt );
-// 	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
-// 	ccDrawLine( ccp(0,0), ccp(winSize.width, winSize.height));
-// #endif
-
-#if 1 //@del
+#if 0 //@del
 	float w = CCDirector::sharedDirector()->getVisibleSize().width;
 	float h = CCDirector::sharedDirector()->getVisibleSize().height;
 	glLineWidth(2);
@@ -1950,8 +1919,12 @@ void NDMapLayer::debugDraw()
 	ccDrawLine( ccp(0,h), ccp(w,0));
 #endif
 
+
 	if (!NDDebugOpt::getDrawDebugEnabled() ||
-		!NDDebugOpt::getDrawCellEnabled()) return;
+		!NDDebugOpt::getDrawCellEnabled())
+	{
+		 return;
+	}
 
 	drawCell();
 }
@@ -1987,6 +1960,7 @@ void NDMapLayer::drawCell()
 
 void NDMapLayer::dumpRole()
 {
+//@del: 留着有用，暂时别删~
 // 	char str[1024] = "";
 // 	HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
 // 

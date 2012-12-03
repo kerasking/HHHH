@@ -49,9 +49,6 @@ m_Rotation(NDRotationEnumRotation0)//,
 
 NDTile::~NDTile()
 {
-// 	free (m_pfCoordinates);
-// 	free (m_pfVertices);
-
 	if(m_pkTexture->getContainerType() == NDEngine::ContainerTypeAddPic 
 		|| m_pkTexture->getContainerType() == NDEngine::ContainerTypeAddTexture) 
 	{
@@ -71,7 +68,6 @@ void NDTile::makeTex(float* pData)
 
 	//<-------------------ÎÆÀí×ø±ê
 	float *pfCoordinates = pData;
-	//CCSize texSize = ConvertUtil::getTextureSizeInPoints(*m_pkTexture); //@check
 	CCSize texSize = CCSizeMake( m_pkTexture->getPixelsWide(), m_pkTexture->getPixelsHigh());
 
 	//BOOL re=NO;
