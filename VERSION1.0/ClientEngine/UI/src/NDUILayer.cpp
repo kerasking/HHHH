@@ -1813,9 +1813,11 @@ void NDUILayer::debugDraw()
 
 	glLineWidth(2);
 	ccDrawColor4F(0,1,0,1);
-	CCPoint lb = ccp(l,t);
-	CCPoint rt = ccp(r,b);
-	ccDrawRect( lb, rt );
+	ccDrawRect( ccp(l,t), ccp(r,b));
+
+	glLineWidth(1);
+	ccDrawLine( ccp(l,b), ccp(r,t));
+	ccDrawLine( ccp(l,t), ccp(r,b));
 }
 
 //@priority

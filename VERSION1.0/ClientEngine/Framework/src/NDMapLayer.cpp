@@ -1940,10 +1940,12 @@ void NDMapLayer::debugDraw()
 // #endif
 
 #if 1 //@del
+	float w = CCDirector::sharedDirector()->getVisibleSize().width;
+	float h = CCDirector::sharedDirector()->getVisibleSize().height;
 	glLineWidth(2);
 	ccDrawColor4F(0,1,0,1);//green
-	ccDrawLine( ccp(0,0), ccp(480, 320));
-	ccDrawLine( ccp(0,320), ccp(480,0));
+	ccDrawLine( ccp(0,0), ccp(w,h));
+	ccDrawLine( ccp(0,h), ccp(w,0));
 #endif
 
 	if (!NDDebugOpt::getDrawDebugEnabled() ||

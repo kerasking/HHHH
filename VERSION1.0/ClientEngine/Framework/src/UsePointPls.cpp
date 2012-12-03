@@ -13,6 +13,7 @@
 
 #include "UsePointPls.h"
 #include "CCDirector.h"
+#include "NDDirector.h"
 
 USING_NS_CC;
 
@@ -21,26 +22,31 @@ NS_NDENGINE_BGN
 //Pixel -> Point
 void ConvertUtil::convertToPointCoord( CCPoint& pt )
 {
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
 	float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
 	if (fScale != 0) {
 		pt.x /= fScale;
 		pt.y /= fScale;
 	}
+#endif
 }
 
 //Pixel -> Point
 void ConvertUtil::convertToPointCoord( cocos2d::CCSize& sz )
 {
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
 	float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
 	if (fScale != 0) {
 		sz.width /= fScale;
 		sz.height /= fScale;
 	}
+#endif
 }
 
 //Pixel -> Point
 void ConvertUtil::convertToPointCoord( cocos2d::CCRect& rc )
 {
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
 	float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
 	if (fScale != 0) {
 		rc.origin.x /= fScale;
@@ -48,6 +54,7 @@ void ConvertUtil::convertToPointCoord( cocos2d::CCRect& rc )
 		rc.size.width /= fScale;
 		rc.size.height /= fScale;
 	}
+#endif
 }
 
 //Point -> Pixel
@@ -58,6 +65,9 @@ void ConvertUtil::convertToPixelCoord( CCPoint& pt )
 		pt.x *= fScale;
 		pt.y *= fScale;
 	}
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android //@todo
+#endif
 }
 
 //Point -> Pixel
@@ -68,6 +78,9 @@ void ConvertUtil::convertToPixelCoord( CCSize& sz )
 		sz.width *= fScale;
 		sz.height *= fScale;
 	}
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android //@todo
+#endif
 }
 
 //Point -> Pixel
@@ -80,6 +93,9 @@ void ConvertUtil::convertToPixelCoord( CCRect& rc )
 		rc.size.width *= fScale;
 		rc.size.height *= fScale;
 	}
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android //@todo
+#endif
 }
 
 //·µ»ØÌùÍ¼Âß¼­µã³ß´ç
@@ -90,5 +106,38 @@ CCSize ConvertUtil::getTextureSizeInPoints( /*const*/ cocos2d::CCTexture2D& tex 
 		tex.getPixelsWide() / fScale,
 		tex.getPixelsHigh() / fScale );
 }
+
+
+
+//Pixel -> Point
+void ConvertUtil::convertToPointCoord_Android( CCPoint& pt )
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
+	pt.x *= NDDirector::DefaultDirector()->getAndroidScale().x;
+	pt.y *= NDDirector::DefaultDirector()->getAndroidScale().y;
+#endif
+}
+
+//Pixel -> Point
+void ConvertUtil::convertToPointCoord_Android( cocos2d::CCSize& sz )
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
+	sz.width	*= NDDirector::DefaultDirector()->getAndroidScale().x;
+	sz.height	*= NDDirector::DefaultDirector()->getAndroidScale().y;
+#endif
+}
+
+//@android
+//Pixel -> Point
+void ConvertUtil::convertToPointCoord_Android( cocos2d::CCRect& rc )
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
+	rc.origin.x		*= NDDirector::DefaultDirector()->getAndroidScale().x;
+	rc.origin.y		*= NDDirector::DefaultDirector()->getAndroidScale().y;
+	rc.size.width	*= NDDirector::DefaultDirector()->getAndroidScale().x;
+	rc.size.height	*= NDDirector::DefaultDirector()->getAndroidScale().y;
+#endif
+}
+
 
 NS_NDENGINE_END

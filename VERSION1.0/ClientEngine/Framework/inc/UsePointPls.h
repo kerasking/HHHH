@@ -24,6 +24,11 @@ NS_NDENGINE_BGN
 class ConvertUtil
 {
 public:
+	// pixel -> point (仅用于android) 备注：分一套出来比较保险.
+	static void convertToPointCoord_Android( CCPoint& pt );
+	static void convertToPointCoord_Android( CCSize& sz );
+	static void convertToPointCoord_Android( CCRect& rc );
+
 	// pixel -> point
 	static void convertToPointCoord( CCPoint& pt );
 	static void convertToPointCoord( CCSize& sz );

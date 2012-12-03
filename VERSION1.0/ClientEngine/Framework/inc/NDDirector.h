@@ -198,6 +198,9 @@ public:
 		return m_pkDirector->getWinSizeInPixels(); 
 	}
 
+public: //@android
+	CCPoint getAndroidScale() const;
+	
 private:
 	typedef enum
 	{

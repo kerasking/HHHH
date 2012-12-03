@@ -165,7 +165,7 @@ local scene = GetSMGameScene();
 	     view:Init(false);
 	     view:SetViewId(rank);
 	     containter:AddView(view);
-		 --view:SetFrameRect(CGRectMake(0,0,640,640));
+		 --view:SetFrameRect(CGRectMake(0,0,640,640)); //@todo: use GetWinSize()!
 		-- LogInfo("2")
 	     local uiLoad = createNDUILoad();
 	     if uiLoad ~= nil then
