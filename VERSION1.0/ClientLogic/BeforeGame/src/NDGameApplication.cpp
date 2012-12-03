@@ -65,6 +65,106 @@ static NDBaseDirector s_NDBaseDirector;
 
 #include "SqliteDBMgr.h"
 
+
+///////////////////////////////////////////
+//@android: for test only
+void dumpCocos2dx()
+{
+	// 	CCPoint posScreen = NDPlayer::defaultHero().GetPosition();
+	// 	DWORD n = 0;
+	// 	char msg[500] = "";
+
+	CCLog( "@@------------------------------------------------------------{{\r\n" );
+
+	// dump NDDirector & CCDirector
+	{
+		CCLog( 
+			//			"hero pos(%d, %d)\r\n"
+			"[CCDirector] size in Points  (%d, %d)\r\n"
+			"[CCDirector] size in Pixels  (%d, %d)\r\n"
+			"[CCDirector] content scale = %.1f\r\n"
+			,
+			//			(int)posScreen.x, (int)posScreen.y, //screen pos in pixels.
+
+			(int)CCDirector::sharedDirector()->getWinSize().width,
+			(int)CCDirector::sharedDirector()->getWinSize().height,
+
+			(int)CCDirector::sharedDirector()->getWinSizeInPixels().width,
+			(int)CCDirector::sharedDirector()->getWinSizeInPixels().height,
+
+			CCDirector::sharedDirector()->getContentScaleFactor()
+			);
+	}
+
+	// dump EGL view
+	{
+		CCEGLView* eglView = CCDirector::sharedDirector()->getOpenGLView();
+		if (eglView)
+		{
+			CCLog(
+				"\r\n"
+				"[EGLVIEW] frame     size (%d, %d)\r\n"
+				"[EGLVIEW] designed  size (%d, %d)\r\n"
+				"[EGLVIEW] viewport  size (%d, %d)\r\n"
+				"[EGLVIEW] visible   org  (%d, %d)\r\n"
+				"[EGLVIEW] visible   size (%d, %d)\r\n"
+				"[EGLVIEW] scale (%.1f, %.1f)\r\n"
+				//"[EGLVIEW] resolution policy (%d)\r\n"
+				"[EGLVIEW] retina enabled (%d)\r\n"
+				,
+				/*frame*/	(int)eglView->getFrameSize().width,			(int)eglView->getFrameSize().height, 
+				/*designed*/(int)eglView->getSize().width,				(int)eglView->getSize().height, 
+				/*viewport*/(int)eglView->getViewPortRect().origin.x,	(int)eglView->getViewPortRect().origin.y, //in origin, not in size!
+				/*vis org*/	(int)eglView->getVisibleOrigin().x,			(int)eglView->getVisibleOrigin().y,
+				/*vis size*/(int)eglView->getVisibleSize().width,		(int)eglView->getVisibleSize().height,
+				/*scale*/	eglView->getScaleX(), eglView->getScaleY(),
+				/*policy*/
+				/*retina*/	(int)eglView->isRetinaEnabled()
+				);
+		}
+	}
+
+	// 	// dump map layer
+	// 	{
+	// 		extern NDMapLayer* g_pMapLayer; //for debug only.
+	// 		if (g_pMapLayer)
+	// 		{
+	// 			sprintf( msg, 
+	// 				"\r\n"
+	// 				"[NDMapLayer] content size (%d, %d)\r\n"
+	// 				"[NDMapLayer] screen center (%d, %d)\r\n", 
+	// 				(int)g_pMapLayer->GetContentSize().width,
+	// 				(int)g_pMapLayer->GetContentSize().height,
+	// 				(int)g_pMapLayer->GetScreenCenter().x,
+	// 				(int)g_pMapLayer->GetScreenCenter().y
+	// 				);
+	// 
+	// 			WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );	
+	// 		}
+	// 	}
+
+	// 	// dump world map layer
+	// 	{
+	// 		extern WorldMapLayer* g_pWorldMapLayer; //for debug only.
+	// 		if (g_pWorldMapLayer)
+	// 		{
+	// 			sprintf( msg, 
+	// 				"\r\n"
+	// 				"[WorldMapLayer] content size (%d, %d)\r\n", 
+	// 				(int)g_pWorldMapLayer->GetContentSize().width,
+	// 				(int)g_pWorldMapLayer->GetContentSize().height
+	// 				);
+	// 
+	// 			WriteConsoleA( hOut, msg, strlen(msg), &n, NULL );	
+	// 		}
+	// 	}
+
+	CCLog( "@@------------------------------------------------------------}}\r\n" );
+}
+
+
+
+
 NS_NDENGINE_BGN
 using namespace NDEngine;
 
@@ -113,7 +213,8 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	else if(target == kTargetAndroid)
 	{
 		CCLog("Entryu setDesignResolutionSize");
-		CCEGLView::sharedOpenGLView()->setDesignResolutionSize(1196, 720, kResolutionNoBorder);
+		CCEGLView::sharedOpenGLView()->setDesignResolutionSize(800, 480, kResolutionNoBorder);
+		//CCEGLView::sharedOpenGLView()->setDesignResolutionSize(960, 640, kResolutionNoBorder);
 	}
 	else 
 	{
@@ -224,7 +325,13 @@ void NDGameApplication::MyInit()
 //---init
 
 	pkDirector->RunScene(CSMLoginScene::Scene(true));
+
 	LOGD("pkDirector->RunScene(CSMLoginScene::Scene()); Over");
+
+	//-------------------------------------------------------------
+	dumpCocos2dx(); //@android //@del
+	NDDebugOpt::setDrawDebugEnabled(1);
+	//-------------------------------------------------------------
 }
 
 void NDGameApplication::applicationDidEnterBackground()
