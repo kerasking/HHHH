@@ -1939,7 +1939,7 @@ void NDMapLayer::debugDraw()
 // 	ccDrawLine( ccp(0,0), ccp(winSize.width, winSize.height));
 // #endif
 
-#if 1 //@del
+#if 0 //@del
 	glLineWidth(2);
 	ccDrawColor4F(0,1,0,1);//green
 	ccDrawLine( ccp(0,0), ccp(480, 320));

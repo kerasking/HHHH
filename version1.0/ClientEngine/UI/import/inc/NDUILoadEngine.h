@@ -11,40 +11,43 @@
 
 #include "NDUINode.h"
 #include "UIData.h"
+#include "define.h"
 
-using namespace NDEngine;
+NS_NDENGINE_BGN
 
 class NDUILoadEngine : public NDObject
 {
 	DECLARE_CLASS(NDUILoadEngine)
 	
-	bool Load(
+	virtual bool Load(
 		  const char* uiname,
 		  NDUINode *parent, 
 		  NDUITargetDelegate* delegate, 
 		  CCSize sizeOffset = CCSizeZero);
 		  
-	bool LoadLua(
+	virtual bool LoadLua(
 		  const char* uiname,
 		  NDUINode *parent, 
 		  LuaObject luaDelegate,
 		  float sizeOffsetW = 0.0f,
 		  float sizeOffsetH = 0.0f);
 
-private:
-	bool LoadAny( const char* uiname,
+protected:
+	virtual bool LoadAny( const char* uiname,
 		NDUINode *parent, 
 		NDUITargetDelegate* delegate, 
 		LuaObject* luaDelegate,
 		CCSize sizeOffset = CCSizeZero );
 
-	NDUINode* LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *parent, const CCSize& sizeOffset );
+	virtual NDUINode* LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *parent, const CCSize& sizeOffset );
 	
-	NDUINode* CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& ctrlTypeName );
+	virtual NDUINode* CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& ctrlTypeName );
 
-	void PostLoad(UIINFO& uiInfo);	
+	virtual void PostLoad(UIINFO& uiInfo);	
 
-	void AdjustCtrlPosByAnchor( UIINFO& uiInfo, const CCPoint& CtrlAnchorPos );
+	virtual void AdjustCtrlPosByAnchor( UIINFO& uiInfo, const CCPoint& CtrlAnchorPos );
 
-	bool IsAnchorValid( const float anchor );
+	virtual bool IsAnchorValid( const float anchor );
 };
+
+NS_NDENGINE_END
