@@ -184,8 +184,8 @@ void NDMonster::restorePosition()
 
 void NDMonster::SetMoveRect(CCPoint point, int size)
 {
-	m_nSelfMoveRectW = size * 2 * MAP_UNITSIZE;
-	m_nSelfMoveRectH = size * 2 * MAP_UNITSIZE;
+	m_nSelfMoveRectW = size * 2 * MAP_UNITSIZE_X;
+	m_nSelfMoveRectH = size * 2 * MAP_UNITSIZE_Y;
 
 // 	NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
 // 	NDMapData  *mapdata = NULL;
@@ -461,10 +461,10 @@ bool NDMonster::isUseAI()
 int NDMonster::getRandomAIDirect()
 {
 	// 0表上,1表下,2左, 3右 ,-1表无方向
-	int monsterRow = GetPosition().y / MAP_UNITSIZE;
-	int monsterCol = GetPosition().x / MAP_UNITSIZE;
-	int roleRow = NDPlayer::defaultHero().GetPosition().y / MAP_UNITSIZE;
-	int roleCol = NDPlayer::defaultHero().GetPosition().x / MAP_UNITSIZE;
+	int monsterRow = GetPosition().y / MAP_UNITSIZE_Y;
+	int monsterCol = GetPosition().x / MAP_UNITSIZE_X;
+	int roleRow = NDPlayer::defaultHero().GetPosition().y / MAP_UNITSIZE_Y;
+	int roleCol = NDPlayer::defaultHero().GetPosition().x / MAP_UNITSIZE_X;
 
 	int xDirect = dir_invalid; // -1表无方向
 	int yDirect = dir_invalid; // -1表无方向

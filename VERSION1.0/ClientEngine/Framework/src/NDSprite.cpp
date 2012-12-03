@@ -85,7 +85,10 @@ NDSprite::NDSprite()
 	m_nCloakQuality = 0;
 
 	m_bFaceRight = false;
-	m_fScale = 0.5f*(NDDirector::DefaultDirector()->GetScaleFactor());
+
+	//m_fScale = 0.5f*(NDDirector::DefaultDirector()->GetScaleFactor());
+	m_fScale = 1.0f;
+
 	m_bHightLight = false;
 
 	m_dBeginTime = 0.0;

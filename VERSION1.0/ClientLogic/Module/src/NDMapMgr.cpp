@@ -2123,7 +2123,7 @@ void NDMapMgr::processMonsterInfo(NDTransData* pkData, int nLength)
 
 			NDMonster* monster = new NDMonster;
 			monster->m_nID = idMonster;
-			monster->SetPosition(ccp(col * MAP_UNITSIZE, row * MAP_UNITSIZE));
+			monster->SetPosition(ccp(col * MAP_UNITSIZE_X, row * MAP_UNITSIZE_Y));
 			monster->Initialization(idType);
 			monster->SetType(MONSTER_ELITE);
 			if (idMonster > 0)
@@ -2220,7 +2220,7 @@ void NDMapMgr::processMonsterInfo(NDTransData* pkData, int nLength)
 			monster_type_info info;
 			NDMonster *monster = new NDMonster;
 			monster->m_nID = idMonster;
-			monster->SetPosition(ccp(col * MAP_UNITSIZE, row * MAP_UNITSIZE));
+			monster->SetPosition(ccp(col * MAP_UNITSIZE_X, row * MAP_UNITSIZE_Y));
 			monster->Initialization(idType);
 			monster->SetType(MONSTER_BOSS);
 			if (idMonster > 0)
@@ -2294,16 +2294,16 @@ void NDMapMgr::BattleEnd(int iResult)
 				NDPlayer& player = NDPlayer::defaultHero();
 
 				player.SetPosition(
-						ccp(monster->m_nSelfMoveRectX - 64,
+						ccp(monster->m_nSelfMoveRectX - 64,	//@todo:µ°ÌÛµÄÓ²±àÂë£¡
 								monster->GetPosition().y));
 				player.SetServerPositon(
-						(monster->m_nSelfMoveRectX - 64) / MAP_UNITSIZE,
-						(monster->GetPosition().y) / MAP_UNITSIZE);
+						(monster->m_nSelfMoveRectX - 64) / MAP_UNITSIZE_X,
+						(monster->GetPosition().y) / MAP_UNITSIZE_Y);
 
 				Battle* battle = BattleMgrObj.GetBattle();
 				if (battle)
 				{
-					battle->setSceneCetner(monster->m_nSelfMoveRectX - 64,
+					battle->setSceneCetner(monster->m_nSelfMoveRectX - 64, //@todo:µ°ÌÛµÄÓ²±àÂë£¡
 							monster->GetPosition().y);
 					player.stopMoving();
 				}
@@ -2315,7 +2315,7 @@ void NDMapMgr::BattleEnd(int iResult)
 					if (layer)
 					{
 						layer->SetScreenCenter(
-								ccp(monster->m_nSelfMoveRectX - 64,
+								ccp(monster->m_nSelfMoveRectX - 64, //@todo:µ°ÌÛµÄÓ²±àÂë£¡
 										monster->GetPosition().y));
 					}
 					player.stopMoving();
@@ -4450,7 +4450,7 @@ void NDMapMgr::NavigateTo(int mapX, int mapY, int mapId)
 			NDPlayer::defaultHero().OnMoveEnd();
 			return;
 		}
-		NDPlayer::defaultHero().Walk(CCPointMake(mapX * MAP_UNITSIZE, mapY * MAP_UNITSIZE), SpriteSpeedStep4, true);
+		NDPlayer::defaultHero().Walk(CCPointMake(mapX * MAP_UNITSIZE_X, mapY * MAP_UNITSIZE_Y), SpriteSpeedStep4, true);
 		AutoPathTipObj.work("");
 		return;
 	}

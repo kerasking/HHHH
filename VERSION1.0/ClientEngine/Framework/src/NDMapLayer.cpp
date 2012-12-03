@@ -1910,7 +1910,7 @@ void NDMapLayer::OpenTreasureBox()
 
 void NDMapLayer::debugDraw()
 {
-#if 0 //@del
+#if 1 //@del
 	float w = CCDirector::sharedDirector()->getVisibleSize().width;
 	float h = CCDirector::sharedDirector()->getVisibleSize().height;
 	glLineWidth(2);
@@ -1919,14 +1919,10 @@ void NDMapLayer::debugDraw()
 	ccDrawLine( ccp(0,h), ccp(w,0));
 #endif
 
-
 	if (!NDDebugOpt::getDrawDebugEnabled() ||
-		!NDDebugOpt::getDrawCellEnabled())
-	{
-		 return;
-	}
+		!NDDebugOpt::getDrawCellEnabled()) return;
 
-	drawCell();
+	//drawCell();
 }
 
 void NDMapLayer::drawCell()
@@ -1938,7 +1934,6 @@ void NDMapLayer::drawCell()
 
 	const int colAmount = pMapData->getColumns();
 	const int rowAmount = pMapData->getRows();
-	const int step = MAP_UNITSIZE;
 	const float pad = 0.25f;
 
 	ccDrawColor4F(1,1,1,1);
@@ -1947,12 +1942,12 @@ void NDMapLayer::drawCell()
 	{
 		for (int col = 0; col < colAmount; col++)
 		{
-			float x = col * step; //points
-			float y = row * step; //points
+			float x = col * MAP_UNITSIZE_X;
+			float y = row * MAP_UNITSIZE_Y;
 	
 			//@todo: check visible
 			CCPoint org = ccp(x + pad, y + pad);//left top
-			CCPoint dest = ccp(x + step - pad, y + step + - pad); //right bottom
+			CCPoint dest = ccp(x + MAP_UNITSIZE_X - pad, y + MAP_UNITSIZE_Y + - pad); //right bottom
 			ccDrawRect( org, dest );
 		}
 	}

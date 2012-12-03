@@ -97,11 +97,11 @@ bool NDAutoPath::autoFindPath(CCPoint kFromPosition, CCPoint kToPosition,
 	CMyPos kStartPos;
 	CMyPos kEndPos;
 
-	kStartPos.x = (int) kFromPosition.x / MAP_UNITSIZE;
-	kStartPos.y = (int) kFromPosition.y / MAP_UNITSIZE;
+	kStartPos.x = (int) kFromPosition.x / MAP_UNITSIZE_X;
+	kStartPos.y = (int) kFromPosition.y / MAP_UNITSIZE_Y;
 
-	kEndPos.x = (int) kToPosition.x / MAP_UNITSIZE;
-	kEndPos.y = (int) kToPosition.y / MAP_UNITSIZE;
+	kEndPos.x = (int) kToPosition.x / MAP_UNITSIZE_X;
+	kEndPos.y = (int) kToPosition.y / MAP_UNITSIZE_Y;
 
 	std::stringstream ss;
 
@@ -211,7 +211,7 @@ void NDAutoPath::GetPath()
 
 	do
 	{
-		int iTimes = MAP_UNITSIZE / m_nStep;
+		int iTimes = MAP_UNITSIZE_X / m_nStep; //@todo:这里先按x
 
 		CCPoint kPos;
 		NodeInfo* pkNode = kPath[0];

@@ -202,15 +202,15 @@ void NDManualRole::Update(unsigned long ulDiff)
 				kCurrentPosition.x -= DISPLAY_POS_X_OFFSET;
 				kCurrentPosition.y -= DISPLAY_POS_Y_OFFSET;
 
-				if (int(kCurrentPosition.x) % MAP_UNITSIZE != 0
-						|| int(kCurrentPosition.y) % MAP_UNITSIZE != 0)
+				if (int(kCurrentPosition.x) % int(MAP_UNITSIZE_X) != 0
+						|| int(kCurrentPosition.y) % int(MAP_UNITSIZE_Y) != 0)
 				{
 					//continue;
 					return;
 				}
 
-				int usOldRecordX = (kCurrentPosition.x) / MAP_UNITSIZE;
-				int usOldRecordY = (kCurrentPosition.y) / MAP_UNITSIZE;
+				int usOldRecordX = (kCurrentPosition.x) / MAP_UNITSIZE_X;
+				int usOldRecordY = (kCurrentPosition.y) / MAP_UNITSIZE_Y;
 				int usRecordX = usOldRecordX;
 				int usRecordY = usOldRecordY;
 

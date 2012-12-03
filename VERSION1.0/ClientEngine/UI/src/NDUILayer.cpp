@@ -1812,12 +1812,14 @@ void NDUILayer::debugDraw()
 	t += pad; b -= pad;
 
 	glLineWidth(2);
-	ccDrawColor4F(0,1,0,1);
+	ccDrawColor4F(0.5,0.5,0.5,1);
 	ccDrawRect( ccp(l,t), ccp(r,b));
 
+#if 0
 	glLineWidth(1);
 	ccDrawLine( ccp(l,b), ccp(r,t));
 	ccDrawLine( ccp(l,t), ccp(r,b));
+#endif
 }
 
 //@priority

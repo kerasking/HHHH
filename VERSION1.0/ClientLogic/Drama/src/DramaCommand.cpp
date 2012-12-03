@@ -631,7 +631,7 @@ void DramaCommandCamera::InitWithMove(int nToPosX, int nToPosY, int nStep)
 	m_kParam.type = DCT_MOVECAMERA;
 //	m_kParam.u1.nToPosX = nToPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;//@del
 	m_kParam.u1.nToPosX = ConvertUtil::convertCellToDisplayX(nToPosX);
-	m_kParam.u2.nToPosY = nToPosY * MAP_UNITSIZE;
+	m_kParam.u2.nToPosY = nToPosY * MAP_UNITSIZE_Y;
 	m_kParam.u3.nMoveStep = nStep;
 }
 

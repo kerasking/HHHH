@@ -511,8 +511,8 @@ void NDPlayer::Walk(CCPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 
 	// roundup kPos
 	CCPoint kPos = CCPointMake(
-			int(toPos.x) / MAP_UNITSIZE * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-			int(toPos.y) / MAP_UNITSIZE * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
+			int(toPos.x) / MAP_UNITSIZE_X * MAP_UNITSIZE_X + DISPLAY_POS_X_OFFSET,
+			int(toPos.y) / MAP_UNITSIZE_Y * MAP_UNITSIZE_Y + DISPLAY_POS_Y_OFFSET);
 
 	CCPoint kCurrentPosition = GetPosition();
 
@@ -520,8 +520,8 @@ void NDPlayer::Walk(CCPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 // 		(int)kCurrentPosition.x, (int)kCurrentPosition.y,
 // 		(int)kPos.x, (int)kPos.y );
 
-	if (((int) kCurrentPosition.x - DISPLAY_POS_X_OFFSET) % MAP_UNITSIZE != 0
-			|| ((int) kCurrentPosition.y - DISPLAY_POS_Y_OFFSET) % MAP_UNITSIZE != 0)
+	if (int(kCurrentPosition.x - DISPLAY_POS_X_OFFSET) % int(MAP_UNITSIZE_X) != 0
+	 || int(kCurrentPosition.y - DISPLAY_POS_Y_OFFSET) % int(MAP_UNITSIZE_Y) != 0)
 	{ // Cell没走完,又设置新的目标
 		m_kTargetPos = kPos;
 	}
@@ -653,11 +653,11 @@ void NDPlayer::Update(unsigned long ulDiff)
 // 	}
 
 	CCPoint pos = GetPosition();
-	if (int(m_kTargetPos.x) != 0 
-		&& int(m_kTargetPos.y) != 0
-		&& ( (int)pos.x-DISPLAY_POS_X_OFFSET) % 32 == 0 //@todo.这里硬编码32了，以后修改！
-		&& ( (int)pos.y-DISPLAY_POS_Y_OFFSET) % 32 == 0
-		)
+	if (
+		(int(m_kTargetPos.x) != 0)
+		&& (int(m_kTargetPos.y) != 0)
+		&& (int(pos.x-DISPLAY_POS_X_OFFSET) % 32 == 0 ) //@todo.这里硬编码32了，以后修改！
+		&& (int(pos.y-DISPLAY_POS_Y_OFFSET) % 32 == 0 ))
 	{
 		//if (this->GetParent()) 
 		//			{
