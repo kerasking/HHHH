@@ -197,7 +197,9 @@ void ScriptMgr::Load()
 	// make sure load lua file last;
 	string strPath = NDPath::GetScriptPath("entry.lua");
 
-	if (0 != LuaStateMgrObj.GetState()->DoFile("entry.lua"))
+	NDLog("The entry.lua full path is %s",strPath.c_str());
+
+	if (0 != LuaStateMgrObj.GetState()->DoFile(strPath.c_str()))
 	{
 		NDError("Exe entry.lua faild");
 		return;

@@ -128,8 +128,9 @@ namespace NDEngine
 //		参数：无
 //		返回值：无
 		void SetFocusImage(NDPicture *pic, bool useCustomRect = false, CGRect customRect = CGRectZero, bool clearPicOnFree = false);
-		void SetFocusImageCustom(NDPicture *pic, bool useCustomRect = false, CGRect customRect = CGRectZero) {
-			this->SetFocusImage(pic, useCustomRect, customRect, true);
+		void SetFocusImageCustom(NDPicture *pic, bool useCustomRect = false, CGRect customRect = CGRectZero)
+		{
+			SetFocusImage(pic, useCustomRect, customRect, true);
 		}
 		
 		void SetFocusImageLua(NDPicture *pic);

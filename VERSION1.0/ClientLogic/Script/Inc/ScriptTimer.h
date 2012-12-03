@@ -23,7 +23,7 @@ class ScriptTimerMgr:
 {
 public:
 	void OnLoad();
-	void OnTimer(OBJID tag);override
+	void OnTimer(OBJID tag);
 	unsigned int AddTimer(LuaObject func, float fInterval);
 	bool RemoveTimer(OBJID tag);
 	bool RemoveAllTimer();

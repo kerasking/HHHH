@@ -14,8 +14,6 @@
 #include "globaldef.h"
 #include "NDDebugOpt.h"
 
-#pragma mark 加载ui
-
 IMPLEMENT_CLASS(NDUILoad, NDObject)
 
 unsigned int inline findAndReplace(
