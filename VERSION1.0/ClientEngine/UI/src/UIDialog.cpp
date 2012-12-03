@@ -15,6 +15,7 @@
 #include "CCPointExtension.h"
 #include "NDPath.h"
 #include "NDAnimationGroup.h"
+#include "NDSharedPtr.h"
 
 using namespace cocos2d;
 
@@ -164,15 +165,9 @@ void CUIDialog::Initialization()
 {
 	NDUILayer::Initialization();
 	
-	NDUILoadEngine ui;
-	ui.Load("TaskChat.ini", this, this, CCSizeMake(0, 0));
-	
-// 	NDUINode* node = (NDUINode*)GetChild(ID_TASKCHAT_CTRL_PICTURE_9);
-// 	if (!node)
-// 	{
-// 		return;
-// 	}
-	
+	NDSharedPtr<NDUILoadEngine> spLoadEngine = CREATE_CLASS(NDUILoadEngine,"NDUILoad");
+	spLoadEngine->Load("TaskChat.ini", this, this, CCSizeMake(0, 0));
+
 	CCSize winsize	= CCDirector::sharedDirector()->getWinSizeInPixels();
 	CCRect rectNode = CCRectMake(0, 0, winsize.width, winsize.height);
 //	CCRect rectNode = node->GetFrameRect();
