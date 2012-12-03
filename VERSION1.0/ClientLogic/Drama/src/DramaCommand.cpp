@@ -188,8 +188,10 @@ void DramaCommandSprite::InitWithSetPos(int nKey, int nPosX, int nPosY)
 {
 	m_kParam.u3.nTargetKey = nKey;
 	m_kParam.type = DCT_SETSPRITEPOS;
-	m_kParam.u1.nPosX = nPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
-	m_kParam.u2.nPoxY = nPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
+// 	m_kParam.u1.nPosX = nPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;//@del
+// 	m_kParam.u2.nPoxY = nPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
+	m_kParam.u1.nPosX = ConvertUtil::convertCellToDisplayX(nPosX);
+	m_kParam.u2.nPoxY = ConvertUtil::convertCellToDisplayY(nPosY);
 }
 
 void DramaCommandSprite::InitWithMove(int nKey, int nToPosX, int nToPosY,
@@ -197,8 +199,10 @@ void DramaCommandSprite::InitWithMove(int nKey, int nToPosX, int nToPosY,
 {
 	m_kParam.nKey = nKey;
 	m_kParam.type = DCT_MOVESPRITE;
-	m_kParam.u1.nToPosX = nToPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
-	m_kParam.u2.nToPosY = nToPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
+// 	m_kParam.u1.nToPosX = nToPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;//@del
+// 	m_kParam.u2.nToPosY = nToPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
+	m_kParam.u1.nToPosX = ConvertUtil::convertCellToDisplayX(nToPosX);
+	m_kParam.u2.nToPosY = ConvertUtil::convertCellToDisplayY(nToPosY);
 	m_kParam.u3.nMoveStep = nStep;
 }
 void DramaCommandSprite::InitWithEffect(int nKey,int nEffectId)
@@ -616,14 +620,17 @@ void DramaCommandScene::ExcuteRemoveEraseScene()
 void DramaCommandCamera::InitWithSetPos(int nPosX, int nPosY)
 {
 	m_kParam.type = DCT_SETCAMERA;
-	m_kParam.u1.nPosX = nPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
-	m_kParam.u2.nPoxY = nPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
+// 	m_kParam.u1.nPosX = nPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;//@del
+// 	m_kParam.u2.nPoxY = nPosY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
+	m_kParam.u1.nPosX = ConvertUtil::convertCellToDisplayX(nPosX);
+	m_kParam.u2.nPoxY = ConvertUtil::convertCellToDisplayY(nPosY);
 }
 
 void DramaCommandCamera::InitWithMove(int nToPosX, int nToPosY, int nStep)
 {
 	m_kParam.type = DCT_MOVECAMERA;
-	m_kParam.u1.nToPosX = nToPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
+//	m_kParam.u1.nToPosX = nToPosX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;//@del
+	m_kParam.u1.nToPosX = ConvertUtil::convertCellToDisplayX(nToPosX);
 	m_kParam.u2.nToPosY = nToPosY * MAP_UNITSIZE;
 	m_kParam.u3.nMoveStep = nStep;
 }

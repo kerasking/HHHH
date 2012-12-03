@@ -868,9 +868,10 @@ void NDMapLayer::DrawScenesAndAnimations()
 
 			m_pkSwitchAniGroup->setReverse(false);
 
-			CCPoint kPos = ccp(
-					pkMapSwitch->getX() * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-					pkMapSwitch->getY() * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
+// 			CCPoint kPos = ccp(
+// 					pkMapSwitch->getX() * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+// 					pkMapSwitch->getY() * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);//@del
+			CCPoint kPos = ConvertUtil::convertCellToDisplay( pkMapSwitch->getX(), pkMapSwitch->getY());
 
 			m_pkSwitchAniGroup->setPosition(kPos);
 
@@ -1753,8 +1754,9 @@ void NDMapLayer::ShowRoadSign(bool bShow, int nX /*=0*/, int nY /*=0*/)
 	}
 
 	m_pkRoadSignLightEffect->SetPosition(
-			ccp(nX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-					nY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+		ConvertUtil::convertCellToDisplay( nX, nY ));
+// 			ccp(nX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+// 					nY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));//@del
 }
 
 bool NDMapLayer::GetMapDataAniParamReverse(int nIndex)

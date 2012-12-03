@@ -233,9 +233,10 @@ void NDManualRole::Update(unsigned long ulDiff)
 						m_bReverse = false;
 					}
 				}
-
-				kCurrentPosition = ccp(usRecordX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-						usRecordY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
+//@del
+// 				kCurrentPosition = ccp(usRecordX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+// 						usRecordY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
+				kCurrentPosition = ConvertUtil::convertCellToDisplay( usRecordX, usRecordY );
 
 				vPosition.push_back(kCurrentPosition);
 
@@ -1115,10 +1116,19 @@ void NDManualRole::SetPosition(CCPoint newPosition)
 	//}
 	//}
 
-	int nNewCol = (newPosition.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
-	int nNewRow = (newPosition.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
-	int nOldCol = (GetPosition().x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
-	int nOldRow = (GetPosition().y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
+//@del
+// 	int nNewCol = (newPosition.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
+// 	int nNewRow = (newPosition.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
+// 	int nOldCol = (GetPosition().x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
+// 	int nOldRow = (GetPosition().y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
+
+	CCPoint newCell = ConvertUtil::convertDisplayToCell( newPosition );
+	int nNewCol = newCell.x;
+	int nNewRow = newCell.y;
+
+	CCPoint oldCell = ConvertUtil::convertDisplayToCell( GetPosition() );
+	int nOldCol = oldCell.x;
+	int nOldRow = oldCell.y;
 
 	if (nNewCol != nOldCol || nNewRow != nOldRow)
 	{
@@ -1458,7 +1468,7 @@ void NDManualRole::OnDrawEnd(bool bDraw)
 			sizemap = node->GetContentSize();
 			CCPoint pos = GetPosition();
 			pos.x -= DISPLAY_POS_X_OFFSET + 8;
-			pos.y -= DISPLAY_POS_Y_OFFSET + 48;
+			pos.y -= DISPLAY_POS_Y_OFFSET + 48; //@todo:硬编码了！
 			CCSize szBattle = m_pkBattlePicture->GetSize();
 			m_pkBattlePicture->DrawInRect(
 					CCRectMake(pos.x, pos.y + 320 - sizemap.height,
@@ -1513,8 +1523,9 @@ void NDManualRole::stopMoving(bool bResetPos/*=true*/,
 	if (bResetPos)
 	{
 		NDManualRole::SetPosition(
-				ccp(m_nServerCol * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-						m_nServerRow * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+// 				ccp(m_nServerCol * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+// 						m_nServerRow * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));//@del
+		ConvertUtil::convertCellToDisplay( m_nServerCol, m_nServerRow ));
 	}
 
 	SetAction(false);
@@ -1557,7 +1568,7 @@ void NDManualRole::drawEffects(bool bDraw)
 		}
 		else
 		{
-			ty = kPosition.y - DISPLAY_POS_Y_OFFSET - getGravityY() + 46;
+			ty = kPosition.y - DISPLAY_POS_Y_OFFSET - getGravityY() + 46; //@todo:日了，这一堆的硬编码！？
 		}
 		int tx = kPosition.x - DISPLAY_POS_X_OFFSET + 4;
 		//if (getFace() == AnimationList.FACE_LEFT) {

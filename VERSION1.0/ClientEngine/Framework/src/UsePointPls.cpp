@@ -14,6 +14,7 @@
 #include "UsePointPls.h"
 #include "CCDirector.h"
 #include "NDDirector.h"
+#include "CCPointExtension.h"
 
 USING_NS_CC;
 
@@ -139,5 +140,42 @@ void ConvertUtil::convertToPointCoord_Android( cocos2d::CCRect& rc )
 #endif
 }
 
+//格子坐标 -> 显示坐标
+CCPoint ConvertUtil::convertCellToDisplay( const int cellX, const int cellY )
+{
+	return ccp( cellX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+				cellY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
+}
+
+//显示坐标 -> 格子坐标
+CCPoint ConvertUtil::convertDisplayToCell( const CCPoint& display )
+{
+	return ccp( (display.x - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE,
+				(display.y - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE);
+}
+
+//格子坐标 -> 屏幕坐标
+CCPoint ConvertUtil::convertCellToScreen( const int cellX, const int cellY )
+{
+	return ccp( cellX * MAP_UNITSIZE, cellY * MAP_UNITSIZE );
+}
+
+//屏幕坐标 -> 格子坐标
+CCPoint ConvertUtil::convertScreenToCell( const CCPoint& screen )
+{
+	return ccp( screen.x / MAP_UNITSIZE, screen.y / MAP_UNITSIZE );
+}
+
+//格子坐标 -> 显示坐标 （X）
+float ConvertUtil::convertCellToDisplayX( const int cellX )
+{
+	return (float) cellX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET;
+}
+
+//格子坐标 -> 显示坐标 （Y）
+float ConvertUtil::convertCellToDisplayY( const int cellY )
+{
+	return (float) cellY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET;
+}
 
 NS_NDENGINE_END
