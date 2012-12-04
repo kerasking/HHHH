@@ -42,7 +42,7 @@ void CUISpriteNode::Initialization()
 void CUISpriteNode::ChangeSprite(const char* sprfile)
 {
 	SAFE_DELETE_NODE(m_pSprite);
-    printf("SpriteFile[%s]", sprfile);
+    printf("SpriteFile[%s]\n", sprfile);
 	if (!m_pSpriteParentNode || !sprfile)
 	{
 		return;
