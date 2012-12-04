@@ -105,6 +105,8 @@ KTcpClientSocket::connect()
 
 	int socketid = ::socket( AF_INET, SOCK_STREAM, 0 );
 
+	_conn.setConnId(socketid);
+
 	if ( socketid == -1 )
 	{
 		int nError = errno;
