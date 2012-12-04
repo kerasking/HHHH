@@ -211,8 +211,9 @@ void ScriptMgr::DebugOutPut(const char* fmt, ...)
 void ScriptMgr::update()
 {
 	static unsigned int frameCount = 0;
-	if ( !ScriptMgrObj.IsLoadLuaOK() )//装载未完成则不执行下述语句
-		return;
+//	if ( !ScriptMgrObj.IsLoadLuaOK() )//装载未完成则不执行下述语句
+//		return;
+
  	if (++frameCount % 20 == 0) // 20帧更新一次
  	{
  		LuaStateMgrObj.GetState()->GC(LUA_GCCOLLECT, 0);
