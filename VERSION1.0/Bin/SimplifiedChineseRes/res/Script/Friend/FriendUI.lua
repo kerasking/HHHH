@@ -320,7 +320,7 @@ function p.OnAddFriendBtnClick()
 	layer:Init();
 	layer:SetTag(TAG_ADDFRIEND_LAYER);
 	--layer:SetFrameRect(RectFullScreenUILayer);
-	layer:SetFrameRect(CGRectMake(-150,0,960,640));
+	layer:SetFrameRect(CGRectMake(-150,0,960,640)); //@todo: use GetWinSize()!
 
 
 	if Bglayer == nil then

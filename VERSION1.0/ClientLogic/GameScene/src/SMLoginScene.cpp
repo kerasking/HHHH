@@ -101,8 +101,8 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
     
 	if ( bShowEntry )
     {
-		CCSize winSize = NDDirector::DefaultDirector()->getWinSizeInPixels_Lua();//GetWinSize();
-		
+		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+
 		NDUILayer * layer = new NDUILayer();
 		layer->Initialization();
 		layer->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
@@ -261,7 +261,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 	{
 		m_pTimer->KillTimer( this, TAG_TIMER_FIRST_RUN );
 		CreateUpdateUILayer();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 		OnEvent_LoginOKNormal(0);
 #else
 #ifdef USE_MGSDK
@@ -452,22 +452,28 @@ void CSMLoginScene::DidDownloadStatus( DownloadPackage* downer, DownloadStatus s
 	if (status == DownloadStatusResNotFound) 
 	{
 		//m_label->SetText( "抱歉，下载资源未找到，请联系GM" );
-		m_pLabelPromtp->SetText( SZ_ERROR_04 );
-		m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
-		//m_pLabelPromtp->SetFontSize( 20 );
-		//CCRect tRect = m_pLabelPromtp->GetFrameRect();
-		//m_pLabelPromtp->SetFrameRect( CCRectMake( tRect.origin.x, tRect.origin.y, tRect.size.width*3, tRect.size.height*2));
-		//m_pLabelPromtp->SetVisible( true );
+		if (m_pLabelPromtp)
+		{
+			m_pLabelPromtp->SetText( SZ_ERROR_04 );
+			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
+			//m_pLabelPromtp->SetFontSize( 20 );
+			//CCRect tRect = m_pLabelPromtp->GetFrameRect();
+			//m_pLabelPromtp->SetFrameRect( CCRectMake( tRect.origin.x, tRect.origin.y, tRect.size.width*3, tRect.size.height*2));
+			//m_pLabelPromtp->SetVisible( true );
+		}
 	}
 	else if (status == DownloadStatusFailed)
 	{
-		//m_label->SetText( "下载失败，请检查网络链接或者重启设备尝试" );
-		m_pLabelPromtp->SetText( SZ_ERROR_05 );
-		m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
-		//m_pLabelPromtp->SetFontSize( 20 );
-        //CCRect tRect = m_pLabelPromtp->GetFrameRect();
-		//m_pLabelPromtp->SetFrameRect( CCRectMake( tRect.origin.x/2, tRect.origin.y, tRect.size.width*3, tRect.size.height*2));
-		//m_pLabelPromtp->SetVisible( true );
+		if (m_pLabelPromtp)
+		{
+			//m_label->SetText( "下载失败，请检查网络链接或者重启设备尝试" );
+			m_pLabelPromtp->SetText( SZ_ERROR_05 );
+			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
+			//m_pLabelPromtp->SetFontSize( 20 );
+			//CCRect tRect = m_pLabelPromtp->GetFrameRect();
+			//m_pLabelPromtp->SetFrameRect( CCRectMake( tRect.origin.x/2, tRect.origin.y, tRect.size.width*3, tRect.size.height*2));
+			//m_pLabelPromtp->SetVisible( true );
+		}
 	}
 	else 
 	{
@@ -689,8 +695,11 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
 		return;
 	}
 		
-	m_pLabelPromtp->SetText( SZ_CONNECT_SERVER );
-	m_pLabelPromtp->SetVisible( true );
+	if (m_pLabelPromtp)
+	{
+		m_pLabelPromtp->SetText( SZ_CONNECT_SERVER );
+		m_pLabelPromtp->SetVisible( true );
+	}
 	if ( !NDBeforeGameMgrObj.CheckClientVersion( pszUpdateURL ) )
 	{
 		CloseWaitingAni();
@@ -764,15 +773,19 @@ void CSMLoginScene::SetProgress( int nPercent )
 //===========================================================================
 void CSMLoginScene::StartEntry()
 {
-	m_pLabelPromtp->SetText( SZ_INSTALL );
-	m_pLabelPromtp->SetVisible( true );
+	if (m_pLabelPromtp)
+	{
+		m_pLabelPromtp->SetText( SZ_INSTALL );
+		m_pLabelPromtp->SetVisible( true );
+	}
+
 	ShowWaitingAni();
 	
 	NDLocalXmlString::GetSingleton().LoadData();
 
     ScriptMgrObj.excuteLuaFunc( "LoadData", "GameSetting" ); 
 	CloseUpdateUILayer();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	//if ( m_iAccountID == 0 )
 		m_iAccountID = ScriptMgrObj.excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
 #endif

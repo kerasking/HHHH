@@ -11,14 +11,15 @@
 
 #include "NDUINode.h"
 #include "UIData.h"
+#include "NDUILoadEngine.h"
 
 using namespace NDEngine;
 
-class NDUILoad : public NDObject
+class NDUILoad : public NDUILoadEngine
 {
 	DECLARE_CLASS(NDUILoad)
 	
-	bool Load(
+	virtual bool Load(
 		  const char* uiname,
 		  NDUINode *parent, 
 		  NDUITargetDelegate* delegate, 
@@ -31,7 +32,7 @@ class NDUILoad : public NDObject
 		  float sizeOffsetW = 0.0f,
 		  float sizeOffsetH = 0.0f);
 
-private:
+protected:
 	bool LoadAny( const char* uiname,
 		NDUINode *parent, 
 		NDUITargetDelegate* delegate, 

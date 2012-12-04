@@ -16,7 +16,7 @@
 #define ISEQUAL(a,b)		(TAbs((a)-(b))<0.0001f)
 #define ISEQUAL_PT(pt,a,b)	(ISEQUAL(pt.x,a) && ISEQUAL(pt.y,b))
 
-IMPLEMENT_CLASS(NDUILoad, NDObject)
+IMPLEMENT_CLASS(NDUILoad, NDUILoadEngine)
 
 class NDUILoad_Util
 {
@@ -421,4 +421,18 @@ void NDUILoad::PostLoad(UIINFO& uiInfo)
 	uiInfo.CtrlPos.y *= scale;
 	uiInfo.nCtrlWidth *= scale;
 	uiInfo.nCtrlHeight *= scale;
+
+	//@android: 如果是android机型，则从960*640的基础上再适配为具体的分辨率
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	float sx = NDDirector::DefaultDirector()->getAndroidScale().x;
+	float sy = NDDirector::DefaultDirector()->getAndroidScale().y;
+
+	uiInfo.CtrlPos.x *= sx;
+	uiInfo.CtrlPos.y *= sy;
+	uiInfo.nCtrlWidth *= sx;
+	uiInfo.nCtrlHeight *= sy;	
+#endif
+
+	//举例：假设ini配置某控件(0,0,480,320)，则乘个scale(=2)变成(0,0,960,640)
+	//		假设android的分辨率是800*480，然后再适配为android，也就是(0,0,800,480).
 }
