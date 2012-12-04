@@ -1110,6 +1110,22 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="HeroStar"
+			>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\HeroStar\define.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\HeroStar\HeroStar.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\HeroStar\HeroStarUI.lua"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

@@ -91,6 +91,8 @@ CCSize getStringSize(const char* pszStr, unsigned int fontSize)
 
 CCSize getStringSizeMutiLine(const char* pszStr, unsigned int fontSize, CCSize contentSize)
 {
+
+
 	CGSize sz = CGSizeZero;
 	CCSize CCSz = CCSizeZero;
     
@@ -103,12 +105,48 @@ CCSize getStringSizeMutiLine(const char* pszStr, unsigned int fontSize, CCSize c
 		return CCSz;
 	}
 
+
+
 	fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	NSString *nstext = [NSString stringWithUTF8String:pszStr];
     NSString* strfont = [NSString stringWithUTF8String:FONT_NAME];
 	sz = [nstext sizeWithFont:[UIFont fontWithName:strfont size:fontSize] constrainedToSize:CGcontentSize];
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	int width = 0, height = 0;
+	if (CCImage::getStringSize( pszStr, CCImage::kAlignLeft, FONT_NAME, fontSize,
+		width, height ))
+	{
+		int rows = 1.0*width/contentSize.width + 1;
+
+		if(1 == rows)
+		{
+			sz.width = width;
+			if(contentSize.height > height)
+			{
+				sz.height =  height;
+			}
+			else
+			{
+				sz.height =  contentSize.height;
+			}
+		}
+		else
+		{
+			sz.width = contentSize.width;
+			if(contentSize.height > height*rows)
+			{
+				sz.height =  height*rows;
+			}
+			else
+			{
+				sz.height =  contentSize.height;
+			}
+		}
+	}
+#else
+	//
 #endif
     CCSz.width = sz.width;
     CCSz.height = sz.height;
