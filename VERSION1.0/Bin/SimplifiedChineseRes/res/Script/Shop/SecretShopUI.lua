@@ -104,6 +104,7 @@ function p.LoadUI(ShopType)
 	local layer = createNDUILayer();
 	layer:Init();
 	layer:SetTag(p.TagUiLayer);
+	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer,1);
 	layer:SetDestroyNotify(p.OnDestroy);

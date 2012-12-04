@@ -184,6 +184,7 @@ public:
 
 	float GetScaleFactor() { return m_pkDirector->getContentScaleFactor(); }
 //	float GetScaleFactorY() { CCDirector::sharedDirector()->getContentScaleFactor(); }
+	float GetScaleFactor_LUA(); //½öÓÃÓÚLUA
 
 	bool IsEnableRetinaDisplay() { return CCEGLView::sharedOpenGLView()->isRetinaEnabled(); }
 

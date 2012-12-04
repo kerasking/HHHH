@@ -57,6 +57,7 @@ function p.LoadUI()
     end
     layer:Init();
     layer:SetTag(NMAINSCENECHILDTAG.Levy);
+    layer:SetPopupDlgFlag( true );
     local winsize = GetWinSize();
     layer:SetFrameRect(RectFullScreenUILayer);
     --layer:SetBackgroundColor(ccc4(125,125,125,125));
