@@ -151,6 +151,7 @@ public:
 public:
 	void draw();override
 	bool IsVisibled();override
+	bool isTouchMoved( const int errorPixels = 3 );
 
 public:
 	CCPoint m_kBeginTouch;

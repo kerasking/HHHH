@@ -108,7 +108,7 @@ void ScriptGlobalEvent::OnEvent(GLOBALEVENT eEvent, int param1, int param2, int 
 	//cocos2d::CCLog("ScriptGlobalEvent::OnEvent, eEvent=%d", (int)eEvent);
 #endif
 
-	LOGD("Entry OnEvent,Event ID is %d",(int)eEvent);
+	//LOGD("Entry OnEvent,Event ID is %d",(int)eEvent);
 
 	std::pair<GLOBALEVENTCIT, GLOBALEVENTCIT> range;
 	range = mapGlobalEventHandler.equal_range(eEvent);

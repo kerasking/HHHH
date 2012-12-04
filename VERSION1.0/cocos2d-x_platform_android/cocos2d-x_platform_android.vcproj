@@ -118,31 +118,31 @@
 			Name="java"
 			>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\.classpath"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\.classpath"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\.project"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\.project"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\AndroidManifest.xml"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\AndroidManifest.xml"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\ant.properties"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\ant.properties"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\build.xml"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\build.xml"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\proguard-project.txt"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\proguard-project.txt"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\project.properties"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\project.properties"
 				>
 			</File>
 			<Filter
@@ -152,55 +152,55 @@
 					Name="org_cocos2dx_lib"
 					>
 					<File
-						RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxAccelerometer.java"
+						RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxAccelerometer.java"
 						>
 					</File>
 					<File
-						RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxActivity.java"
+						RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxActivity.java"
 						>
 					</File>
 					<File
-						RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxBitmap.java"
+						RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxBitmap.java"
 						>
 					</File>
 					<File
-						RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxEditBoxDialog.java"
+						RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxEditBoxDialog.java"
 						>
 					</File>
 					<File
-						RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxEditText.java"
+						RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxEditText.java"
 						>
 					</File>
 					<File
-						RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxGLSurfaceView.java"
+						RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxGLSurfaceView.java"
 						>
 					</File>
 					<File
-						RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxHandler.java"
+						RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxHandler.java"
 						>
 					</File>
 					<File
-						RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxHelper.java"
+						RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxHelper.java"
 						>
 					</File>
 					<File
-						RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxMusic.java"
+						RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxMusic.java"
 						>
 					</File>
 					<File
-						RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxRenderer.java"
+						RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxRenderer.java"
 						>
 					</File>
 					<File
-						RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxSound.java"
+						RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxSound.java"
 						>
 					</File>
 					<File
-						RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxTextInputWraper.java"
+						RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxTextInputWraper.java"
 						>
 					</File>
 					<File
-						RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxTypefaces.java"
+						RelativePath="..\cocos2d-x\cocos2dx\platform\android\java\src\org\cocos2dx\lib\Cocos2dxTypefaces.java"
 						>
 					</File>
 				</Filter>
@@ -210,96 +210,96 @@
 			Name="jni"
 			>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\jni\IMEJni.cpp"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\jni\IMEJni.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\jni\IMEJni.h"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\jni\IMEJni.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\jni\Java_org_cocos2dx_lib_Cocos2dxAccelerometer.cpp"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\jni\Java_org_cocos2dx_lib_Cocos2dxAccelerometer.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\jni\Java_org_cocos2dx_lib_Cocos2dxBitmap.cpp"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\jni\Java_org_cocos2dx_lib_Cocos2dxBitmap.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\jni\Java_org_cocos2dx_lib_Cocos2dxBitmap.h"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\jni\Java_org_cocos2dx_lib_Cocos2dxBitmap.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\jni\Java_org_cocos2dx_lib_Cocos2dxHelper.cpp"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\jni\Java_org_cocos2dx_lib_Cocos2dxHelper.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\jni\Java_org_cocos2dx_lib_Cocos2dxHelper.h"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\jni\Java_org_cocos2dx_lib_Cocos2dxHelper.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\jni\Java_org_cocos2dx_lib_Cocos2dxRenderer.cpp"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\jni\Java_org_cocos2dx_lib_Cocos2dxRenderer.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\jni\JniHelper.cpp"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\jni\JniHelper.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\jni\JniHelper.h"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\jni\JniHelper.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\jni\TouchesJni.cpp"
+				RelativePath="..\cocos2d-x\cocos2dx\platform\android\jni\TouchesJni.cpp"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\CCAccelerometer.cpp"
+			RelativePath="..\cocos2d-x\cocos2dx\platform\android\CCAccelerometer.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\CCAccelerometer.h"
+			RelativePath="..\cocos2d-x\cocos2dx\platform\android\CCAccelerometer.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\CCApplication.cpp"
+			RelativePath="..\cocos2d-x\cocos2dx\platform\android\CCApplication.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\CCApplication.h"
+			RelativePath="..\cocos2d-x\cocos2dx\platform\android\CCApplication.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\CCCommon.cpp"
+			RelativePath="..\cocos2d-x\cocos2dx\platform\android\CCCommon.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\CCEGLView.cpp"
+			RelativePath="..\cocos2d-x\cocos2dx\platform\android\CCEGLView.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\CCEGLView.h"
+			RelativePath="..\cocos2d-x\cocos2dx\platform\android\CCEGLView.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\CCFileUtils.cpp"
+			RelativePath="..\cocos2d-x\cocos2dx\platform\android\CCFileUtils.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\CCGL.h"
+			RelativePath="..\cocos2d-x\cocos2dx\platform\android\CCGL.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\CCImage.cpp"
+			RelativePath="..\cocos2d-x\cocos2dx\platform\android\CCImage.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\CCPlatformDefine.h"
+			RelativePath="..\cocos2d-x\cocos2dx\platform\android\CCPlatformDefine.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\cocos2d-x\cocos2dx\platform\android\CCStdC.h"
+			RelativePath="..\cocos2d-x\cocos2dx\platform\android\CCStdC.h"
 			>
 		</File>
 	</Files>

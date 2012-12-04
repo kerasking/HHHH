@@ -1926,7 +1926,10 @@ void NDMapLayer::OpenTreasureBox()
 
 void NDMapLayer::debugDraw()
 {
-#if 1 //@del
+	if (!NDDebugOpt::getDrawDebugEnabled() ||
+		!NDDebugOpt::getDrawCellEnabled()) return;
+
+#if 1
 	float w = CCDirector::sharedDirector()->getVisibleSize().width;
 	float h = CCDirector::sharedDirector()->getVisibleSize().height;
 	glLineWidth(2);
@@ -1934,9 +1937,6 @@ void NDMapLayer::debugDraw()
 	ccDrawLine( ccp(0,0), ccp(w,h));
 	ccDrawLine( ccp(0,h), ccp(w,0));
 #endif
-
-	if (!NDDebugOpt::getDrawDebugEnabled() ||
-		!NDDebugOpt::getDrawCellEnabled()) return;
 
 	//drawCell();
 }

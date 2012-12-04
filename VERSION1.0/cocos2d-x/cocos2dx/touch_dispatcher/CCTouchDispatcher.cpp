@@ -424,10 +424,12 @@ void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int u
                     {
                         pMutableTouches->removeObject(pTouch);
                     }
-#if ND_MOD
-					CCLog( "@@ CCTouchDispatcher::touches(), %s swallowed!! (priority=%d, subPriority=%d)\r\n", 
-						pHandler->getDelegate()->getDebugName(),
-						pHandler->getPriority(), pHandler->getDelegate()->getSubPriority());
+#if ND_MOD && 0
+					CCLog( "@@ CCTouchDispatcher::touches(), %s swallowed!! touchCount=%d, uIndex=%d, (priority=%d, subPriority=%d), handle=%08X, delegate=%08X\r\n", 
+						pHandler->getDelegate()->getDebugName(), 
+						pTouches->count(), uIndex,
+						pHandler->getPriority(), pHandler->getDelegate()->getSubPriority(),
+						pHandler, pHandler->getDelegate());
 #endif
                     break;
                 }
@@ -540,7 +542,7 @@ void CCTouchDispatcher::touchesBegan(CCSet *touches, CCEvent *pEvent)
 
 	if (m_bDispatchEvents)
 	{
-		CCLog( "@@ CCTouchDispatcher::touchesBegan( %d, %d )\r\n", int(m_curPos.x), int(m_curPos.y) );
+		//CCLog( "@@ CCTouchDispatcher::touchesBegan( %d, %d )\r\n", int(m_curPos.x), int(m_curPos.y) );
 
 		this->touches(touches, pEvent, CCTOUCHBEGAN);
 	}
@@ -586,7 +588,7 @@ void CCTouchDispatcher::touchesEnded(CCSet *touches, CCEvent *pEvent)
 
     if (m_bDispatchEvents)
 	{
-		CCLog( "@@ CCTouchDispatcher::touchesEnded( %d, %d )\r\n", int(m_curPos.x), int(m_curPos.y));
+		//CCLog( "@@ CCTouchDispatcher::touchesEnded( %d, %d )\r\n", int(m_curPos.x), int(m_curPos.y));
 
 		this->touches(touches, pEvent, CCTOUCHENDED);
 	}

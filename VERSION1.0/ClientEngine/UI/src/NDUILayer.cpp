@@ -41,7 +41,11 @@
 
 using namespace cocos2d;
 
-#define LONG_TOUCH_TIME (0.1f)
+//抖动容错
+#define MOVE_ERROR (5)
+
+//长按的时间判定太短会导致单击判定无效.
+#define LONG_TOUCH_TIME (0.4f)
 
 #define LONG_TOUCH_TIMER_TAG (6951)
 
@@ -380,9 +384,8 @@ bool NDUILayer::TouchBegin(NDTouch* touch)
 	{
 		m_bTouchDwon = true;
 		DispatchTouchBeginEvent(m_kBeginTouch);
-		//this->DispatchTouchEndEvent(m_beginTouch, m_beginTouch);
 
-		// 长按开始
+		// 开始定时器判定长按
 		if (m_pkTouchedNode && m_pkLongTouchTimer)
 		{
 			m_pkLongTouchTimer->SetTimer(this, LONG_TOUCH_TIMER_TAG, LONG_TOUCH_TIME);
@@ -421,8 +424,11 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 	}
 
 	// 长按
-	if (m_bLongTouch && !m_bDragOutFlag && !m_bLayerMoved)
+	//if (m_bLongTouch && !m_bDragOutFlag && !m_bLayerMoved)
+	if (m_bLongTouch && !m_bDragOutFlag && !isTouchMoved(MOVE_ERROR))
 	{
+		this->DispatchTouchEndEvent(m_kBeginTouch, m_kBeginTouch);
+
 		// 都取超始点是由于用户抬起点容易超出作用范围
 		if (DispatchLongTouchClickEvent(m_kBeginTouch, m_kBeginTouch))
 		{
@@ -430,7 +436,9 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 		}
 	}
 
-	if (m_bDispatchTouchEndEvent && !m_bLayerMoved)
+	// 单击
+	//if (m_bDispatchTouchEndEvent && !m_bLayerMoved)
+	if (m_bDispatchTouchEndEvent && !isTouchMoved(MOVE_ERROR))
 	{
 		if (this->DispatchTouchEndEvent(m_kBeginTouch, m_kBeginTouch))
 		{
@@ -439,13 +447,15 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 	}
 
 	// 拖出结束
-	if (m_bDragOutFlag && !m_bLayerMoved)
+	//if (m_bDragOutFlag && !m_bLayerMoved)
+	if (m_bDragOutFlag && !isTouchMoved(MOVE_ERROR))
 	{
 		DispatchDragOutCompleteEvent(m_kBeginTouch, m_kEndTouch, m_bLongTouch);
 	}
 
 	// 拖入
-	if (m_bDragOutFlag && !m_bLayerMoved)
+	//if (m_bDragOutFlag && !m_bLayerMoved)
+	if (m_bDragOutFlag && !isTouchMoved(MOVE_ERROR))
 	{
 		if (!DispatchDragInEvent(m_pkTouchedNode, m_kBeginTouch, m_kEndTouch,
 				m_bLongTouch, true))
@@ -499,6 +509,15 @@ void NDUILayer::TouchCancelled(NDTouch* touch)
 bool NDUILayer::TouchMoved(NDTouch* touch)
 {
 	CCPoint kMoveTouch = touch->GetLocation();
+
+	// if really moved, android like to send move event even when not moved.
+	if (m_bDispatchTouchEndEvent)
+	{
+		if (ccpDistanceSQ( m_kBeginTouch, kMoveTouch ) < MOVE_ERROR*MOVE_ERROR )
+		{
+			return true; //consume it.
+		}
+	}
 
 	if (m_pkTouchedNode && m_bDispatchTouchEndEvent)
 	{
@@ -1882,6 +1901,17 @@ void NDUILayer::setDebugName( const char* inName )
 		NDBaseLayer *layer = (NDBaseLayer *) m_ccNode;
 		layer->setDebugName( m_strDebugName.c_str() );
 	}
+}
+
+//防手抖（触摸屏很难准确单击，一般都会有像素移动）
+bool NDUILayer::isTouchMoved( const int errorPixels )
+{
+	if (m_bTouchMoved)
+	{
+		if (ccpDistanceSQ( m_kBeginTouch, m_kEndTouch ) >= errorPixels*errorPixels)
+			return true;
+	}
+	return false;
 }
 
 NS_NDENGINE_END
