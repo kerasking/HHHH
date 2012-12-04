@@ -81,6 +81,7 @@ function p.LoadUI()
 	end
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.Friend);
+	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect(RectFullScreenUILayer);
 
 	layer:SetTag( NMAINSCENECHILDTAG.Friend);
