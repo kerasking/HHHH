@@ -131,6 +131,7 @@ public:
 	void ShowUpdateOff();
 	
 protected:
+	static void * LoadTextAndLua( void * pScene );
 	void ShowWaitingAni();
 	void CloseWaitingAni();
 protected:

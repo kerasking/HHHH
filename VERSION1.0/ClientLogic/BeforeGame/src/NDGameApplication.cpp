@@ -213,7 +213,6 @@ void NDGameApplication::MyInit()
 //	LOGD("End MyInit");
 
 	NDScriptRegLua::doReg(); //@reglua
-	ScriptMgrObj.Load();
 
 //---init++Guosen 2012.11.29
     CSqliteDBMgr::shareInstance().InitDataBase("DNSG.sqlite");
