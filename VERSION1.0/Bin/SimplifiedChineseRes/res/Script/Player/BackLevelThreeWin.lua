@@ -73,7 +73,10 @@ function p.LoadUI(parent)
 	if equip_layer == nil then
 		return false;
 	end
+	
+	equip_layer:SetPopupDlgFlag( true );
 	equip_layer:Init();
+	equip_layer:bringToTop();
 	equip_layer:SetTag(EQUIP_LAYER);
     equip_layer:SetVisible(false);
 	equip_layer:SetFrameRect(RectFullScreenUILayer);
@@ -98,7 +101,10 @@ function p.LoadUI(parent)
 	if mate_layer == nil then
 		return false;
 	end
+	
+	mate_layer:SetPopupDlgFlag( true );
 	mate_layer:Init();
+	mate_layer:bringToTop();
 	mate_layer:SetTag(MATE_LAYER);
 	mate_layer:SetFrameRect(RectFullScreenUILayer);
     mate_layer:SetVisible(false);
@@ -124,7 +130,10 @@ function p.LoadUI(parent)
 	if gem_layer == nil then
 		return false;
 	end
+	
+	gem_layer:SetPopupDlgFlag( true );
 	gem_layer:Init();
+	gem_layer:bringToTop();
 	gem_layer:SetTag(GEM_LAYER);
 	gem_layer:SetFrameRect(RectFullScreenUILayer);
     gem_layer:SetVisible(false);
@@ -151,7 +160,10 @@ function p.LoadUI(parent)
 	if prop_layer == nil then
 		return false;
 	end
+	
+	prop_layer:SetPopupDlgFlag( true );
 	prop_layer:Init();
+	prop_layer:bringToTop();
 	prop_layer:SetTag(PROP_LAYER);
 	prop_layer:SetFrameRect(RectFullScreenUILayer);
     prop_layer:SetVisible(false);

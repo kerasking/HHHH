@@ -123,6 +123,7 @@ function p.LoadUI()
     end
 
     p.recvIndex = 0;
+    layer:SetPopupDlgFlag( true );
     layer:Init();
     layer:SetTag(NMAINSCENECHILDTAG.Login_ServerUI);
     layer:SetFrameRect(RectFullScreenUILayer);
