@@ -289,7 +289,6 @@ void NDGameApplication::MyInit()
 	LOGD("pkDirector Initialization Over");
 
 	NDScriptRegLua::doReg(); //@reglua
-	ScriptMgrObj.Load();
 
 //---init++Guosen 2012.11.29
     CSqliteDBMgr::shareInstance().InitDataBase("DNSG.sqlite");

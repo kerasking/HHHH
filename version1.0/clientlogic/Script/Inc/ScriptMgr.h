@@ -60,6 +60,7 @@ public:
 	void LoadLuaFile(const char* pszluaFile);
 	void WriteLog(const char* fmt, ...);
 
+	bool IsLoadLuaOK(){ return m_bLoadLuaOK; }
 private:
 	vec_regclass_func vRegClassFunc;
 	FILE* m_fDebugOutPut;
@@ -69,6 +70,7 @@ private:
 
 	LuaObject GetLuaFunc(const char* funcname, const char* modulename);
 
+	bool m_bLoadLuaOK;
 public:
 	void update();
 };

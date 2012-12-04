@@ -47,6 +47,7 @@
 #define TAG_TIMER_CHECK_UPDATE      10  // 检测UPDATE
 #define TAG_TIMER_CHECK_COPY        11  //
 #define TAG_TIMER_FIRST_RUN         12  // 
+#define TAG_TIMER_LOAD_RES_OK       13  // 装载文字和Lua完毕
 
 //----------------------------------------------------------
 //Update Layer 里
@@ -76,7 +77,7 @@
 #define SZ_UPDATE_OFF					"无法连接服务器,请检查网络"
 #define SZ_FIRST_INSTALL                "首次运行,初始化配置中……"
 #define SZ_CONNECT_SERVER               "连接服务器……"
-#define SZ_INSTALL						"初始化配置中……"
+#define SZ_INSTALL						"配置中……"
 
 
 
@@ -105,7 +106,7 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 		NDUILayer * layer = new NDUILayer();
 		layer->Initialization();
-		layer->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
+		layer->SetFrameRect(CGRectMake(0, 0, 480,320));//winSize.width, winSize.height));
 		scene->AddChild(layer);
 		scene->m_pLayerOld = layer;
 		
@@ -123,6 +124,8 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
     	    imgBack->SetPicture(pic, true);
     	}
 		layer->AddChild(imgBack);
+		//layer->SetFrameRect( CCRectMake(winSize.width*0.0, winSize.height*0.0, winSize.width*0.7, winSize.height*0.225f));
+		//layer->SetBackgroundColor( ccc4( 20,30,0,50) );
 
 		scene->m_pTimer->SetTimer( scene, TAG_TIMER_FIRST_RUN,0.5f );
     }
@@ -300,7 +303,19 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 #endif
     	//CreateUpdateUILayer();
 		//NDBeforeGameMgrObj.CheckClientVersion(SZ_UPDATE_URL);
-    }
+	}
+	else if ( TAG_TIMER_LOAD_RES_OK == idTag )
+	{
+		m_pTimer->KillTimer( this, TAG_TIMER_LOAD_RES_OK );
+		CloseWaitingAni();
+		CloseUpdateUILayer();
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		//if ( m_iAccountID == 0 )
+		m_iAccountID = ScriptMgrObj.excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
+#endif
+		ScriptMgrObj.excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
+		//    ScriptMgrObj.excuteLuaFunc("ProecssLocalNotification", "MsgLoginSuc");
+	}
 }
 
 //==========================================================
@@ -608,7 +623,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& data)
 			m_pLabelPromtp->SetText( SZ_ERROR_01 );
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
     		m_pLabelPromtp->SetVisible( true );
-    		m_pLabelPromtp->SetFontSize( 20 );
+    		//m_pLabelPromtp->SetFontSize( 20 );
 		}
 		return ;
 	}
@@ -621,7 +636,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& data)
 			m_pLabelPromtp->SetText( SZ_ERROR_02 );
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
     		m_pLabelPromtp->SetVisible( true );
-    		m_pLabelPromtp->SetFontSize( 20 );
+    		//m_pLabelPromtp->SetFontSize( 20 );
 		}
 		return ;
 	}
@@ -634,7 +649,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& data)
 			m_pLabelPromtp->SetText( SZ_ERROR_03 );
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
     		m_pLabelPromtp->SetVisible( true );
-    		m_pLabelPromtp->SetFontSize( 20 );
+    		//m_pLabelPromtp->SetFontSize( 20 );
 		}
 		return ;
 	}
@@ -777,24 +792,28 @@ void CSMLoginScene::SetProgress( int nPercent )
 //===========================================================================
 void CSMLoginScene::StartEntry()
 {
+//	NDLocalXmlString::GetSingleton().LoadData();
+//	ScriptMgrObj.Load();//
+//    ScriptMgrObj.excuteLuaFunc( "LoadData", "GameSetting" ); 
+//	CloseUpdateUILayer();
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//	//if ( m_iAccountID == 0 )
+//		m_iAccountID = ScriptMgrObj.excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
+//#endif
+//	ScriptMgrObj.excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
+////    ScriptMgrObj.excuteLuaFunc("ProecssLocalNotification", "MsgLoginSuc");
+//	return;
+
 	if (m_pLabelPromtp)
 	{
 		m_pLabelPromtp->SetText( SZ_INSTALL );
 		m_pLabelPromtp->SetVisible( true );
 	}
-
 	ShowWaitingAni();
-	
-	NDLocalXmlString::GetSingleton().LoadData();
-
-    ScriptMgrObj.excuteLuaFunc( "LoadData", "GameSetting" ); 
-	CloseUpdateUILayer();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	//if ( m_iAccountID == 0 )
-		m_iAccountID = ScriptMgrObj.excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
-#endif
-	ScriptMgrObj.excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
-//    ScriptMgrObj.excuteLuaFunc("ProecssLocalNotification", "MsgLoginSuc");
+	NDLocalXmlString::GetSingleton();
+	ScriptMgrObj;
+	pthread_t pid;
+	pthread_create(&pid, NULL, CSMLoginScene::LoadTextAndLua, (void*)this);	
 }
 
 //===========================================================================
@@ -873,6 +892,7 @@ void CSMLoginScene::UnzipStatus(bool bResult)
 }
 
 //===========================================================================
+//显示等待的转圈圈动画
 void CSMLoginScene::ShowWaitingAni()
 {
 	CUISpriteNode * pNode = (CUISpriteNode *)GetChild(TAG_SPRITE_NODE);
@@ -917,4 +937,18 @@ void CSMLoginScene::ShowUpdateOff()
 {
 	CreatConfirmDlg( SZ_UPDATE_OFF );
 	m_iState = 2;
+}
+
+//装载文本和Lua//多线程
+void * CSMLoginScene::LoadTextAndLua( void * pPointer )
+{
+	if ( pPointer )
+	{
+		CSMLoginScene * pScene = (CSMLoginScene*)pPointer;
+		NDLocalXmlString::GetSingleton().LoadData();
+		ScriptMgrObj.Load();//
+		ScriptMgrObj.excuteLuaFunc( "LoadData", "GameSetting" ); 
+		pScene->m_pTimer->SetTimer( pScene, TAG_TIMER_LOAD_RES_OK,0.05f );
+	}
+	return pPointer;
 }

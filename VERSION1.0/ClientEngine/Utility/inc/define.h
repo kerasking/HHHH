@@ -10,8 +10,6 @@
 #ifndef __DEFINE_H__
 #define __DEFINE_H__
 
-//typedef unsigned int OBJID;
-
 #include "../../../cocos2d-x/cocos2dx/cocoa/CCObject.h"
 #include "NDObject.h"
 

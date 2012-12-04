@@ -153,6 +153,7 @@ KConnection::readn( void *dataRead, int nchar, int timeout )
 #endif
 	if ( iRead <= 0 )
 	{
+		//int error = WSAGetLastError();
 		//cpLog(LOG_ERR, "QQ failed read: %d", iRead);
 		if (iRead == -1)
 		{
