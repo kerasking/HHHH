@@ -185,6 +185,8 @@ void ScriptMgr::WriteLog(const char* fmt, ...)
 		fwrite("\n", 1, 1, m_fTest);
 		fflush(m_fTest);
 	}
+
+	CCLog( "%s\r\n", buffer );
 }
 
 void ScriptMgr::DebugOutPut(const char* fmt, ...)

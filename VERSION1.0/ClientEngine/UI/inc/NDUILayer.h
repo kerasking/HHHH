@@ -79,12 +79,21 @@ class NDUILayer: public NDUINode, public ITimerCallback
 public:
 	NDUILayer();
 	~NDUILayer();
-public:
-	bool GetPopupDlgFlag() { m_bPopupDlg; }
-	void SetPopupDlgFlag( bool bPopup ) { m_bPopupDlg = bPopup; }
 
+	//----------------------------------------------------------------------------------------
+public: //@priority
 	virtual ND_LAYER_PRIORITY getPriority();
+	void bringToTop();
+	bool getPopupDlgFlag() { m_bPopupDlg; }
+	void setPopupDlgFlag( bool bPopup ) { m_bPopupDlg = bPopup; }
+	void setDebugName( const char* inName );
+	const char* getDebugName();
+protected:
+	bool m_bPopupDlg; //弹出窗口，输入独占，即使没有点击到控件上也不会穿透到下一层.
+	std::string m_strDebugName;
+	//----------------------------------------------------------------------------------------
 
+public:
 	void Initialization();override
 
 	void SetBackgroundImage(const char* imageFile);
@@ -224,8 +233,6 @@ protected:
 	int m_nIsHVFirstTemp;  //0.还未确定滑动的方向 1.水平 2.垂直
 	bool m_bIsHVContainer;
 	
-	bool m_bPopupDlg; //弹出窗口，输入独占，即使没有点击到控件上也不会穿透到下一层.
-
 private:
 
 	static bool ms_bPressing;

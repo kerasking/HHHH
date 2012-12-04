@@ -54,6 +54,8 @@ NDUILayer* NDUILayer::m_pkLayerPress = 0;
 
 NDUILayer::NDUILayer()
 {
+	m_strDebugName = "NDUILayer";
+
 	INIT_AUTOLINK (NDUILayer);
 	m_pkTouchedNode = NULL;
 	m_pkFocusNode = NULL;
@@ -126,6 +128,7 @@ void NDUILayer::Initialization()
 	NDBaseLayer *layer = (NDBaseLayer *) m_ccNode;
 	layer->SetUILayer(this);
 	layer->setTouchEnabled(true);
+	layer->setDebugName( m_strDebugName.c_str() );
 
 	this->SetFrameRect(CCRectZero);
 }
@@ -1811,8 +1814,23 @@ void NDUILayer::debugDraw()
 	l += pad; r -= pad;
 	t += pad; b -= pad;
 
+	if (m_bPopupDlg) 
+	{
+		ccDrawColor4F(0,0,0,1); //black for popup
+	}
+	else
+	{
+		NDBaseLayer *layer = (NDBaseLayer *) m_ccNode;
+		if (layer)
+		{
+			if (layer->getSubPriority() == 0)
+				ccDrawColor4F(1,1,1,1); //white for bringToTop
+			else
+				ccDrawColor4F(0.5,0.5,0.5,1);//gray for default
+		}
+	}
+
 	glLineWidth(2);
-	ccDrawColor4F(0.5,0.5,0.5,1);
 	ccDrawRect( ccp(l,t), ccp(r,b));
 
 #if 0
@@ -1825,13 +1843,45 @@ void NDUILayer::debugDraw()
 //@priority
 ND_LAYER_PRIORITY NDUILayer::getPriority()
 {
-#if 0 //@todo
 	return m_bPopupDlg
 		? E_LAYER_PRIORITY_POPUPDLG
 		: E_LAYER_PRIORITY_UILAYER;
-#else
-	return E_LAYER_PRIORITY_UILAYER;
-#endif
+}
+
+//@priority
+void NDUILayer::bringToTop()
+{
+	if (m_ccNode)
+	{
+		NDBaseLayer *layer = (NDBaseLayer *) m_ccNode;
+		layer->bringToTop();
+	}
+}
+
+const char* NDUILayer::getDebugName()
+{
+	if (m_ccNode)
+	{
+		NDBaseLayer *layer = (NDBaseLayer *) m_ccNode;
+		return layer->getDebugName();
+	}
+	else
+	{
+		return m_strDebugName.c_str();
+	}
+}
+
+void NDUILayer::setDebugName( const char* inName )
+{
+	if (!inName) return;
+
+	m_strDebugName = inName;
+
+	if (m_ccNode)
+	{
+		NDBaseLayer *layer = (NDBaseLayer *) m_ccNode;
+		layer->setDebugName( m_strDebugName.c_str() );
+	}
 }
 
 NS_NDENGINE_END

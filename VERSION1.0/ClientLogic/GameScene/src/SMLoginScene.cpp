@@ -107,6 +107,7 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		layer->Initialization();
 		layer->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
 		scene->AddChild(layer);
+		scene->m_pLayerOld = layer;
 		
 		NDPicturePool& pool		= *(NDPicturePool::DefaultPool());
 		NDUIImage* imgBack	= new NDUIImage;
@@ -131,11 +132,14 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 //===========================================================================
 CSMLoginScene::CSMLoginScene()
 : m_bUpdOk(false)
+, m_pLayerOld(NULL)
 , m_pLayerUpdate(NULL)
 , m_pTimer(NULL)
 , m_pCtrlProgress(NULL)
 , m_pLabelPromtp(NULL)
 , m_iAccountID(0)
+, m_iState(0)
+, m_pLayerCheckWIFI(NULL)
 {
 }
 
@@ -567,8 +571,8 @@ bool CSMLoginScene::CreateUpdateUILayer()
 		NDLog( "CSMLoginScene::CreateUpdateUILayer() m_pLabelPromtp is null" );
 		return false;
 	}
-	m_pLabelPromtp->SetVisible(false);
-	
+	if (m_pLabelPromtp) m_pLabelPromtp->SetVisible(false);
+	if (m_pLayerOld) m_pLayerOld->SetVisible(false);
 	return true;
 }
 

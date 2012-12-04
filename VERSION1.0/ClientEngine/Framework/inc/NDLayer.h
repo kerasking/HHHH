@@ -14,15 +14,15 @@
 //		最上面的层最先接收到系统事件(如：手指点击屏幕事件)，
 //		如果事件被处理了则屏蔽事件的分发，否则将往下面的层进行分发事件，直到事件被屏蔽为止。
 
-#ifndef __NDLayer_H
-#define __NDLayer_H
+#ifndef __NDLAYER_H
+#define __NDLAYER_H
 
 #include "NDNode.h"
 #include "NDTouch.h"
 #include <string>
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
+
 class NDLayer: public NDNode
 {
 DECLARE_CLASS(NDLayer)
@@ -50,5 +50,6 @@ public:
 DECLARE_AUTOLINK(NDLayer)
 INTERFACE_AUTOLINK(NDLayer)
 };
-}
-#endif
+
+NS_NDENGINE_END
+#endif //__NDLAYER_H
