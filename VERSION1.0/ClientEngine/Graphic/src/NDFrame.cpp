@@ -250,17 +250,19 @@ void NDFrame::run(float fScale)
 		GLfloat y = pkAnimationGroup->getPosition().y;
 
 #if 1 //@todo @check
+		float fScaleResult = fScale * ANDROID_SCALE;
+
 		if (pkAnimation->getMidX() != 0)
 		{
-			x -= (pkAnimation->getMidX() - pkAnimation->getX()) * fScale;
+			x -= (pkAnimation->getMidX() - pkAnimation->getX()) * fScaleResult;
 		}
 
 		if (pkAnimation->getBottomY() != 0)
 		{
-			y -= (pkAnimation->getBottomY() - pkAnimation->getY()) * fScale;
+			y -= (pkAnimation->getBottomY() - pkAnimation->getY()) * fScaleResult;
 		}
 
-		y = y + pkFrameTile->getY() * fScale - pkAnimation->getY() * fScale;
+		y += (pkFrameTile->getY() - pkAnimation->getY()) * fScaleResult;
 
 		if (pkAnimation->getReverse())
 		{
@@ -269,18 +271,19 @@ void NDFrame::run(float fScale)
 			int newX = pkAnimation->getMidX()
 				+ (pkAnimation->getMidX() - pkFrameTile->getX() - tileW);
 
-			x = x + newX * fScale - pkAnimation->getX() * fScale;
+			x += (newX - pkAnimation->getX()) * fScaleResult;
 		}
 		else
 		{
-			x = x + pkFrameTile->getX() * fScale - pkAnimation->getX() * fScale;
+			x += (pkFrameTile->getX() - pkAnimation->getX()) * fScaleResult;
 		}
 #endif
 
+		//android平台下，角色尺寸相应调整一下，角色位置已经是正确的不需要调整.
 		pkTile->setDrawRect(
 			CCRectMake(	x, y, 
-			pkTile->getCutRect().size.width * fScale,
-			pkTile->getCutRect().size.height * fScale));
+			pkTile->getCutRect().size.width * fScaleResult,
+			pkTile->getCutRect().size.height * fScaleResult)); //@android
 
 		pkTile->setMapSize(pkAnimationGroup->getRunningMapSize());
 		pkTile->make();

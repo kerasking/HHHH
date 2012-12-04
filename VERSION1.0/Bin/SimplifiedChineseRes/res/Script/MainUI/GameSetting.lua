@@ -85,6 +85,7 @@ function p.ShowUI()
 	end
 	pLayer:Init();
 	pLayer:SetTag( NMAINSCENECHILDTAG.GameSetting );
+	pLayer:SetPopupDlgFlag( true );
 	pLayer:SetFrameRect( RectFullScreenUILayer );
 	--layer:SetBackgroundColor( ccc4(125, 125, 125, 0) );
 	pScene:AddChild( pLayer );

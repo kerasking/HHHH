@@ -163,6 +163,7 @@ function p.LoadUI(bIsSMB)
 	end
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PetUI);
+	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer,1);
 

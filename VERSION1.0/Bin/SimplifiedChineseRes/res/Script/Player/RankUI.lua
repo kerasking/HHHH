@@ -508,7 +508,7 @@ function p.RankUpTip()
 		local btnHeight = btnrect.size.h;
 
 		pSpriteNode:Init();
-		pSpriteNode:SetFrameRect( CGRectMake(-btnWidth*0.255,0,btnWidth,btnHeight) );
+		pSpriteNode:SetFrameRect( CGRectMake(-btnWidth*0.15,0,btnWidth,btnHeight) );
 		local szAniPath		= NDPath_GetAnimationPath();
 		local szSprFile		= "gongn01.spr";
 		pSpriteNode:ChangeSprite( szAniPath .. szSprFile );

@@ -30,6 +30,8 @@
 #include "SystemSetMgr.h"
 #include "ItemImage.h"
 #include "ScriptMgr.h"
+#include "UsePointPls.h"
+
 #ifdef USE_MGSDK
 #import <Foundation/Foundation.h>
 #include "MBGSocialService.h"
@@ -93,7 +95,8 @@ namespace NDEngine {
 		player.InitRoleLookFace(lookface);
 		
 		player.stopMoving();
-		player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+		//player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));//@del
+		player.SetPositionEx( ConvertUtil::convertCellToDisplay( x,y ));
 		player.SetServerPositon(x, y);
 		player.m_nID = userid;
 		player.m_strName = name;
@@ -114,7 +117,8 @@ namespace NDEngine {
 		NDPlayer& player = NDPlayer::defaultHero(lookface, true);
 		player.ChangeModelWithMount( nRideStatus, nMountType );
 		player.stopMoving();
-		player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+		//player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));//@del
+		player.SetPositionEx( ConvertUtil::convertCellToDisplay( x,y ));
 		player.SetServerPositon(x, y);
 		player.m_nID = userid;
 		player.m_strName = name;

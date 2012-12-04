@@ -114,6 +114,7 @@ p.pLayerEditNotice		= nil;
 	end
 	layer:Init();
 	layer:SetTag( NMAINSCENECHILDTAG.ArmyGroup );
+	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect( RectFullScreenUILayer );
 	scene:AddChildZ( layer, 1 );
 	p.pLayerMainUI = layer;
@@ -535,6 +536,7 @@ function p.CreateArmyGroupMemberUI( pParentLayer )
 	end
 	layer:Init();
 	--layer:SetTag( NMAINSCENECHILDTAG.ArmyGroup );
+	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect( RectFullScreenUILayer );
 	pParentLayer:AddChildZ( layer, 1 );
 	Member.InitializeMemberUI( layer );

@@ -456,7 +456,7 @@ void BattleMgr::showBattleScene()
 {
 	if(m_pkBattle)
 	{
-		m_pkBattle->setBattleMap(m_nBattleMapId, m_nBattleX*MAP_UNITSIZE,m_nBattleY*MAP_UNITSIZE);
+		m_pkBattle->setBattleMap(m_nBattleMapId, m_nBattleX * MAP_UNITSIZE_X, m_nBattleY * MAP_UNITSIZE_Y);
 		NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
 		mapLayer->GetParent()->AddChild(m_pkBattle);
 		// 进入战斗,地图逻辑处理

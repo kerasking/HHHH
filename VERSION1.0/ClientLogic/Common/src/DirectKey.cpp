@@ -562,7 +562,9 @@ bool DirectKey::GetPosList(dk_vec_pos& vpos)
 		
 		if (CheckCell(tmpX, tmpY)) 
 		{
-			vpos.push_back(ccp(tmpX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, tmpY*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+			vpos.push_back(
+				//ccp(tmpX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, tmpY*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));//@del
+				ConvertUtil::convertCellToDisplay(tmpX, tmpY));
 			
 			//iCellX = tmpX; iCellY = tmpY;
 			

@@ -202,20 +202,24 @@ void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 	strName = m_strNameDesMap;
 
 	int tw = getStringSize(strName.c_str(), 15).width;
-	int tx = m_nX * pkMapdata->getUnitSize() + DISPLAY_POS_X_OFFSET - tw / 2;
-	int ty = m_nY * pkMapdata->getUnitSize() + DISPLAY_POS_Y_OFFSET
-			- 62 * fScaleFactor;
+// 	int tx = m_nX * MAP_UNITSIZE_X + DISPLAY_POS_X_OFFSET - tw / 2;
+// 	int ty = m_nY * MAP_UNITSIZE_Y + DISPLAY_POS_Y_OFFSET - 62 * fScaleFactor; //@del
+	int tx = int( ConvertUtil::convertCellToDisplayX( m_nX ) - tw / 2);
+	int ty = int( ConvertUtil::convertCellToDisplayY( m_nY ) - 62 * fScaleFactor);
 
 	if (!strDes.empty() && strDes != "")
 	{
-		int tx2 = m_nX * pkMapdata->getUnitSize() + 10 * fScaleFactor
+		int tx2 = m_nX * MAP_UNITSIZE_X + 10 * fScaleFactor
 				- (getStringSize(strDes.c_str(), 15).width / 2);
-		int ty2 = m_nY * pkMapdata->getUnitSize() - 52 * fScaleFactor;	//ty;
+
+		int ty2 = m_nY * MAP_UNITSIZE_Y - 52 * fScaleFactor;	//ty; //@todo:蛋碎的硬编码！
+		
 		//T.drawString2(g, introduce, tx2, ty2, 0xFFF5B4,0xC75900, 0);//后文字 0xFFF5B4, 0xC75900
 		this->SetLableByType(1, tx2, ty2, strDes.c_str(),
 				INTCOLORTOCCC4(0xFFF5B4), INTCOLORTOCCC4(0xC75900),
-				CCSizeMake(pkMapdata->getColumns() * pkMapdata->getUnitSize(),
-						pkMapdata->getRows() * pkMapdata->getUnitSize()));
+// 				CCSizeMake(pkMapdata->getColumns() * MAP_UNITSIZE_X,
+// 							pkMapdata->getRows() * MAP_UNITSIZE_Y)); //@del
+				pkMapdata->getMapDataSize());
 
 		ty -= 20 * fScaleFactor;
 	}
@@ -223,9 +227,9 @@ void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 	//T.drawString2(g, name, tx, ty, 0xFFFF00,0x2F4F4F,0);//0x2F4F4F
 	this->SetLableByType(0, tx, ty, strName.c_str(), INTCOLORTOCCC4(0xFFFF00),
 			INTCOLORTOCCC4(0x2F4F4F),
-			CCSizeMake(pkMapdata->getColumns() * pkMapdata->getUnitSize(),
-					pkMapdata->getRows() * pkMapdata->getUnitSize()));
-
+// 			CCSizeMake(pkMapdata->getColumns() * MAP_UNITSIZE_X,
+// 						pkMapdata->getRows() * MAP_UNITSIZE_Y)); //@del
+			pkMapdata->getMapDataSize());
 }
 
 void NDMapSwitch::SetLableByType(int eLableType, int x, int y, const char* pszText,
@@ -334,7 +338,7 @@ NDMapMonsterRange::NDMapMonsterRange() :
 }
 
 NDMapData::NDMapData() :
-		m_nLayerCount(0), m_nColumns(0), m_nRows(0), m_nUnitSize(0), m_nRoadBlockX(
+		m_nLayerCount(0), m_nColumns(0), m_nRows(0), /*m_nUnitSize(0), */m_nRoadBlockX(
 				-1), m_nRoadBlockY(-1), m_kMapTiles(NULL),
 		m_pkObstacles(NULL), m_pkSceneTiles(NULL), m_pkBackgroundTiles(NULL), m_pkSwitchs(
 				NULL), m_pkAnimationGroups(NULL), m_pkAniGroupParams(NULL)
@@ -378,19 +382,27 @@ void NDMapData::initWithFile(const char* mapFile)
 void NDMapData::decode(FILE* pkStream)
 {
 	FileOp kFileOp;
+
 	//<-------------------地图名
 	m_strName = kFileOp.readUTF8String(pkStream);//[self readUTF8String:stream];
 	CCLog(m_strName.c_str());
+	
 	//<-------------------单元格尺寸
-	m_nUnitSize = kFileOp.readByte(pkStream);
-	int nTileWidth = m_nUnitSize;
-	int nTileHeight = m_nUnitSize;
+	int nUnitSize_DontUseIt = kFileOp.readByte(pkStream); //not used.
+// 	int nTileWidth = m_nUnitSize;
+// 	int nTileHeight = m_nUnitSize; //@del
+	int nTileWidth = MAP_UNITSIZE_X;
+	int nTileHeight = MAP_UNITSIZE_Y;
+
 	//------------------->层数
 	m_nLayerCount = kFileOp.readByte(pkStream);
+	
 	//<-------------------列数
 	m_nColumns = kFileOp.readByte(pkStream);
+	
 	//------------------->行数
 	m_nRows = kFileOp.readByte(pkStream);
+	
 	//<-------------------使用到的图块资源
 	std::vector < std::string > kTileImages;
 	int nTileImageCount = kFileOp.readShort(pkStream);
@@ -561,7 +573,7 @@ void NDMapData::decode(FILE* pkStream)
 
 		pkTile->setMapSize(	CCSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
 		pkTile->setCutRect(	CCRectMake(0, 0, picWidth, picHeight));
-		pkTile->setDrawRect(CCRectMake(nX, nY, picWidth, picHeight));
+		pkTile->SetDrawRect_Android(CCRectMake(nX, nY, picWidth, picHeight)); //@android
 		pkTile->setReverse(nReverse);
 		pkTile->make();
 
@@ -636,7 +648,7 @@ void NDMapData::decode(FILE* pkStream)
 
 		pkTile->setMapSize( CCSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
 		pkTile->setCutRect(	CCRectMake(0, 0, nPicWidth, nPicHeight));
-		pkTile->setDrawRect(CCRectMake(x, y, nPicWidth, nPicHeight));
+		pkTile->SetDrawRect_Android(CCRectMake(x, y, nPicWidth, nPicHeight)); //@android
 		pkTile->setReverse(bReverse);
 		pkTile->make();
 
@@ -673,8 +685,8 @@ void NDMapData::decode(FILE* pkStream)
 		pkDict->insert(std::make_pair("reverse", 0));
 		pkDict->insert(std::make_pair("positionX", x));
 		pkDict->insert(std::make_pair("positionY", y));
-		pkDict->insert(std::make_pair("mapSizeW", m_nColumns * m_nUnitSize));
-		pkDict->insert(std::make_pair("mapSizeH", m_nRows * m_nUnitSize));
+		pkDict->insert(std::make_pair("mapSizeW", m_nColumns * MAP_UNITSIZE_X));
+		pkDict->insert(std::make_pair("mapSizeH", m_nRows * MAP_UNITSIZE_Y));
 		pkDict->insert(std::make_pair("orderId", nAniOrder));
 		pkDict->insert(std::make_pair("reverse", 0));
 		pkDict->insert(std::make_pair("reverse", 0));

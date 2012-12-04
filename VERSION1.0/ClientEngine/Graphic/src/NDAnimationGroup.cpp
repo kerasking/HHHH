@@ -153,12 +153,19 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 		int nMid = kFileOp.readShort(pkStream);
 		int nBottomY = kFileOp.readShort(pkStream);
 		int nType = kFileOp.readByte(pkStream);
-
+#if 0
 		pkAnimation->setX(0);
 		pkAnimation->setY(0);
 		pkAnimation->setW(136);
 		pkAnimation->setH(159);
 		pkAnimation->setMidX(59);
+#endif
+
+		pkAnimation->setX(nX);
+		pkAnimation->setY(nY);
+		pkAnimation->setW(nW);
+		pkAnimation->setH(nH);
+		pkAnimation->setMidX(nMid);
 		pkAnimation->setBottomY(nBottomY);
 		pkAnimation->setType(nType);
 		pkAnimation->setReverse(false);

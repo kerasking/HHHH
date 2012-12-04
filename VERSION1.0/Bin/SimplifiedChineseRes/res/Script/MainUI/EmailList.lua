@@ -100,6 +100,7 @@ function p.LoadUI()
 	end
 	layer:Init();
 	layer:SetTag( NMAINSCENECHILDTAG.EmailList );
+	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect( RectFullScreenUILayer );
 	scene:AddChildZ( layer, 1 );
 
