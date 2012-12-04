@@ -194,9 +194,10 @@ void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)
 	if (m_pkMapData)
 	{
 		SetContentSize(
-				CCSizeMake(
-						m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
-						m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
+// 				CCSizeMake(
+// 						m_pkMapData->getColumns() * MAP_UNITSIZE_X,
+// 						m_pkMapData->getRows() * MAP_UNITSIZE_Y)); //@del
+			m_pkMapData->getMapDataSize());
 
 		MakeOrdersOfMapscenesAndMapanimations();
 		MakeFrameRunRecords();
@@ -233,8 +234,10 @@ void NDMapLayer::Initialization(const char* mapFile)
 	ND_ASSERT_NO_RETURN(NULL == m_pkMapData);
 	m_pkMapData->initWithFile(mapFile);
 
-	SetContentSize(CCSizeMake(m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
-		                    m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
+	SetContentSize(
+// 		CCSizeMake(m_pkMapData->getColumns() * MAP_UNITSIZE_X,
+// 					m_pkMapData->getRows() * MAP_UNITSIZE_Y)); //@del
+		m_pkMapData->getMapDataSize());
 
 	MakeOrdersOfMapscenesAndMapanimations();
 	MakeFrameRunRecords();
@@ -1586,7 +1589,8 @@ void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 					(NDMapSwitch *) m_pkMapData->getSwitchs()->objectAtIndex(i);
 			//int orderId = mapSwitch.y * m_mapData.unitSize;
 
-			int orderId = pkMapSwitch->getY() * m_pkMapData->getUnitSize();	//+ 32 ;
+			//int orderId = pkMapSwitch->getY() * m_pkMapData->getUnitSize();	//+ 32 ;
+			int orderId = pkMapSwitch->getY() * MAP_UNITSIZE_Y;	//+ 32 ; //@todo: orderId和UnitSize有关系！？
 
 			MAP_ORDER *dict = new MAP_ORDER;
 

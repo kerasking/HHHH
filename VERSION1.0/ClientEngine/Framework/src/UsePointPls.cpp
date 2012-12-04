@@ -114,8 +114,8 @@ CCSize ConvertUtil::getTextureSizeInPoints( /*const*/ cocos2d::CCTexture2D& tex 
 void ConvertUtil::convertToPointCoord_Android( CCPoint& pt )
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
-	pt.x *= NDDirector::DefaultDirector()->getAndroidScale().x;
-	pt.y *= NDDirector::DefaultDirector()->getAndroidScale().y;
+	pt.x *= getAndroidScale().x;
+	pt.y *= getAndroidScale().y;
 #endif
 }
 
@@ -123,8 +123,8 @@ void ConvertUtil::convertToPointCoord_Android( CCPoint& pt )
 void ConvertUtil::convertToPointCoord_Android( cocos2d::CCSize& sz )
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
-	sz.width	*= NDDirector::DefaultDirector()->getAndroidScale().x;
-	sz.height	*= NDDirector::DefaultDirector()->getAndroidScale().y;
+	sz.width	*= getAndroidScale().x;
+	sz.height	*= getAndroidScale().y;
 #endif
 }
 
@@ -133,10 +133,10 @@ void ConvertUtil::convertToPointCoord_Android( cocos2d::CCSize& sz )
 void ConvertUtil::convertToPointCoord_Android( cocos2d::CCRect& rc )
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
-	rc.origin.x		*= NDDirector::DefaultDirector()->getAndroidScale().x;
-	rc.origin.y		*= NDDirector::DefaultDirector()->getAndroidScale().y;
-	rc.size.width	*= NDDirector::DefaultDirector()->getAndroidScale().x;
-	rc.size.height	*= NDDirector::DefaultDirector()->getAndroidScale().y;
+	rc.origin.x		*= getAndroidScale().x;
+	rc.origin.y		*= getAndroidScale().y;
+	rc.size.width	*= getAndroidScale().x;
+	rc.size.height	*= getAndroidScale().y;
 #endif
 }
 
@@ -182,13 +182,18 @@ float ConvertUtil::convertCellToDisplayY( const int cellY )
 CCSize ConvertUtil::getCellSize()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
-	float fSizeX = 32 * NDDirector::DefaultDirector()->getAndroidScale().x;	
-	float fSizeY = 32 * NDDirector::DefaultDirector()->getAndroidScale().y;	
-	return CCSizeMake( fSizeX, fSizeY );
+	float fScale = getAndroidScale().y; //以Y方向优先，维持高宽比，等比缩放
+	return CCSizeMake( 32 * fScale, 32 * fScale );
 #else
 	float fSize = 16 * CCDirector::sharedDirector()->getContentScaleFactor();
 	return CCSizeMake( fSize, fSize );
 #endif
+}
+
+//@android
+CCPoint ConvertUtil::getAndroidScale()
+{
+	return NDDirector::DefaultDirector()->getAndroidScale();
 }
 
 NS_NDENGINE_END
