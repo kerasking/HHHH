@@ -266,7 +266,11 @@ void NDUILayer::draw()
 // 
 // 			m_kBackgroudColor = kColor;
 			DrawSetup( kCCShader_PositionColor );
-			DrawRecttangle(scrRect, m_kBackgroudColor);
+			//DrawRecttangle(scrRect, m_kBackgroudColor);
+			//++ÐÞÕý×ø±êºÍ³ß´ç£¬Guosen 2012.12.4
+			float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
+			CCRect tRect = CCRectMake(scrRect.origin.x/fScaleFactor,scrRect.origin.y/fScaleFactor,scrRect.size.width/fScaleFactor,scrRect.size.height/fScaleFactor);
+			DrawRecttangle(tRect, m_kBackgroudColor);
 			
 			if (m_pkBackgroudTexture)
 			{
