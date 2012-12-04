@@ -130,9 +130,14 @@ void CUIRoleNode::draw()
 	CGFloat w = m_pRole->GetWidth();
 	CGFloat h = m_pRole->GetHeight();
 	CCRect scrRect	= this->GetScreenRect();
-	CCPoint pos		= ccpAdd(scrRect.origin, ccp(0,scrRect.size.height));
 
-	AdjustPos( pos );
+	CCPoint pos		= ccpAdd(scrRect.origin, 
+		ccp((scrRect.size.width - w) / 2 + m_pRole->getGravityX(),
+		(scrRect.size.height - h) / 2 + m_pRole->getGravityY()) );
+
+	//CCPoint pos		= ccpAdd(scrRect.origin, ccp(0,scrRect.size.height));
+
+	//AdjustPos( pos );
 	m_pRole->SetPositionEx(pos);
 	m_pRole->RunAnimation(true);
 

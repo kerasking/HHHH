@@ -59,6 +59,7 @@ function p.LoadUI()
     
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.DragonTactic);
+	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer,2);
 
@@ -869,7 +870,7 @@ function p.DTStarTip()
 		local szSprFile		= "gongn01.spr";
 		
 		pSpriteNode:ChangeSprite( szAniPath .. szSprFile );
-		pSpriteNode:SetFrameRect( CGRectMake(-btnWidth*0.26,0,btnWidth,btnHeight) );
+		pSpriteNode:SetFrameRect( CGRectMake(-btnWidth*0.1,0,btnWidth,btnHeight) );
 		pSpriteNode:SetScale(0.7);
 		
 		pSpriteNode:SetTag( 99 );

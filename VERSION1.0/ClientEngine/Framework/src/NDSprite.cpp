@@ -85,6 +85,8 @@ NDSprite::NDSprite()
 	m_nCloakQuality = 0;
 
 	m_bFaceRight = false;
+
+	//m_fScale = 0.5f*(NDDirector::DefaultDirector()->GetScaleFactor());
 	m_fScale = 1.0f;
 
 	m_bHightLight = false;
@@ -160,8 +162,8 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 		m_pkFrameRunRecord = new NDFrameRunRecord;
 
 		SetContentSize(
-			CCSizeMake(m_pkCurrentAnimation->getW(),
-			m_pkCurrentAnimation->getH()));
+			CCSizeMake(m_pkCurrentAnimation->getW() * ANDROID_SCALE,
+						m_pkCurrentAnimation->getH() * ANDROID_SCALE )); //@android
 	}
 }
 
@@ -921,12 +923,12 @@ CCTexture2D* NDSprite::getNpcLookfaceTexture(int imageIndex,
 
 int NDSprite::GetHeight()
 {
-	return m_pkCurrentAnimation->getH();
+	return m_pkCurrentAnimation->getH() * m_fScale;
 }
 
 int NDSprite::GetWidth()
 {
-	return m_pkCurrentAnimation->getW();
+	return m_pkCurrentAnimation->getW() * m_fScale;
 }
 
 int NDSprite::getGravityY()
@@ -936,7 +938,7 @@ int NDSprite::getGravityY()
 		return 0;
 	}
 
-	return m_pkCurrentAnimation->getBottomY() - m_pkCurrentAnimation->getY();
+	return (m_pkCurrentAnimation->getBottomY() - m_pkCurrentAnimation->getY()) * m_fScale;
 }
 
 int NDSprite::getGravityX()
@@ -945,7 +947,7 @@ int NDSprite::getGravityX()
 	{
 		return 0;
 	}
-	return m_pkCurrentAnimation->getMidX() - m_pkCurrentAnimation->getX();
+	return (m_pkCurrentAnimation->getMidX() - m_pkCurrentAnimation->getX()) * m_fScale;
 }
 
 bool NDSprite::GetLastPointOfPath(CCPoint& pos)

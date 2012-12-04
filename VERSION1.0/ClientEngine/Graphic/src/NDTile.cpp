@@ -49,9 +49,6 @@ m_Rotation(NDRotationEnumRotation0)//,
 
 NDTile::~NDTile()
 {
-// 	free (m_pfCoordinates);
-// 	free (m_pfVertices);
-
 	if(m_pkTexture->getContainerType() == NDEngine::ContainerTypeAddPic 
 		|| m_pkTexture->getContainerType() == NDEngine::ContainerTypeAddTexture) 
 	{
@@ -71,7 +68,6 @@ void NDTile::makeTex(float* pData)
 
 	//<-------------------ÎÆÀí×ø±ê
 	float *pfCoordinates = pData;
-	//CCSize texSize = ConvertUtil::getTextureSizeInPoints(*m_pkTexture); //@check
 	CCSize texSize = CCSizeMake( m_pkTexture->getPixelsWide(), m_pkTexture->getPixelsHigh());
 
 	//BOOL re=NO;
@@ -490,22 +486,14 @@ void NDTile::makeVetex(float* pData, CCRect kRect)
 
 CCRect NDTile::getDrawRectInPoints()
 {
-	const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
 	CCRect rectInPoints = m_kDrawRect;
-
-	rectInPoints.origin.x /= fScale;
-	rectInPoints.origin.y /= fScale;
-	rectInPoints.size.width /= fScale;
-	rectInPoints.size.height /= fScale;
-
+	ConvertUtil::convertToPointCoord( rectInPoints );
 	return rectInPoints;
 }
 
 void NDTile::make()
 {
-#if 1 //@check ÏñËØ->µã
 	CCRect rectInPoints = this->getDrawRectInPoints();
-#endif
 
 	makeTex(m_pfCoordinates);
 	//makeVetex(m_pfVertices, m_kDrawRect);
@@ -658,4 +646,15 @@ void NDTile::debugDraw()
 	CCPoint rt = ccp(m_pfVertices[9],m_pfVertices[10]);
 	ccDrawRect( lb, rt );
 	ccDrawLine( lb, rt );
+}
+
+void NDTile::SetDrawRect_Android( CCRect rect ) //@android
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	rect.origin.x *= ANDROID_SCALE;
+	rect.origin.y *= ANDROID_SCALE;
+	rect.size.width *= ANDROID_SCALE;
+	rect.size.height *= ANDROID_SCALE;
+#endif
+	m_kDrawRect = rect;
 }

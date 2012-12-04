@@ -12,6 +12,7 @@
 #include "ccMacros.h"
 #include "CCDrawingPrimitives.h"
 #include "NDDebugOpt.h"
+#include "UsePointPls.h"
 
 namespace NDEngine
 {	
@@ -101,21 +102,35 @@ namespace NDEngine
 	}
 	
 	void NDUINode::SetFrameRect(CCRect rect) //in pixels
-	{		
-		// 备注：从LUA或INI过来的分辨率都是960*640，这里做个特殊处理（和以前版本兼容）：
-		//	1）传给GL的用点坐标
-		//	2）NDUINode这套依旧用像素坐标
+	{	
+		// 备注：m_kFrameRect的取值在各种平台和分辨率的情况（目前暂未考虑iPhone3）：
+		//
+		//	1)	ios和window平台下，传入的参数总是基于960*640
+		//		底层GL基于480*320
+		//		上层m_kFrameRect基于960*640
+		//
+		//	2)	在android平台下，传入的参数是实际分辨率如：800*480,1280*800等.
+		//		这个值直接公用于底层GL和上层，不需要转换.
+		//		底层GL基于实际分辨率.
+		//		上层m_kFrameRect也是基于实际分辨率.
+		//
+		
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		//	这块机制比较晕,请不要随意修改！！！
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#if 1	// 不要修改这里！
-		const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
-		CCRect rectInPoints = CCRectMake( rect.origin.x / fScale, rect.origin.y / fScale,
-											rect.size.width / fScale, rect.size.height / fScale );
 
-		this->SetContentSize(CCSizeMake(rectInPoints.size.width, rectInPoints.size.height)); //in points
-#else
-		this->SetContentSize(CCSizeMake(rect.size.width, rect.size.height));
-#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
+		CCRect androidRect = rect;
+		this->SetContentSize(CCSizeMake(androidRect.size.width, androidRect.size.height));
+		m_kFrameRect = androidRect;
+
+#else //ios & mac & win &...
+		CCRect pointRect = rect;
+		ConvertUtil::convertToPointCoord( pointRect );
+		this->SetContentSize(CCSizeMake(pointRect.size.width, pointRect.size.height)); //in points
 		m_kFrameRect = rect; //in pixels
+#endif
 	}
 	
 	CCRect NDUINode::GetFrameRect() //in pixels

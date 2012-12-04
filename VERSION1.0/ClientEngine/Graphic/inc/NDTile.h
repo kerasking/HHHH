@@ -73,6 +73,7 @@ public:
 	void drawSubRect(CCRect kRect);
 	void makeTex(float* pData);
 	void makeVetex(float* pData, CCRect kRect);
+	virtual void SetDrawRect_Android( CCRect rect );
 
 public: //@shader
 	CC_SYNTHESIZE_RETAIN(CCGLProgram*, m_pShaderProgram, ShaderProgram);

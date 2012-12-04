@@ -14,9 +14,6 @@
 #include "NDDirector.h"
 #include "NDUtil.h"
 
-#define MAP_UNITSIZE_INPOINTS	(16)
-#define MAP_UNITSIZE_INPIXELS	MAP_UNITSIZE
-
 int GetNumBits(int num);
 bool VerifyUnsignedNum(const std::string strnum);
 std::string getStringTime(long nSeconds);

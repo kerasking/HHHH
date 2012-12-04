@@ -277,13 +277,13 @@ void NDNpc::OnDrawEnd(bool bDraw)
 
 	CCSize kSize = getStringSize(m_strName.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
 
-	int nShowX = kNPCPos.x - 30;		///< 临时性调整 郭浩
+	int nShowX = kNPCPos.x;		///< 临时性调整 郭浩
 	//高度临时调整，后续应该修改为在缩放时进行数据处理，否则坐标外部需要处理HJQ
 	int nShowY = kNPCPos.y - kSize.height
 			- ((m_pkCurrentAnimation ?
 					(m_pkCurrentAnimation->getBottomY()
 							- m_pkCurrentAnimation->getY()) : 0)
-											 * 0.5f * fScaleFactor + 45.0f);	///< 临时性调整 + 10.0f 郭浩
+											 * 0.5f * fScaleFactor + 20.0f);	///< 临时性调整 + 10.0f 郭浩
 
 	bool isEmemy = false;
 
@@ -451,7 +451,9 @@ void NDNpc::AddWalkPoint(int col, int row)
 	m_nCol = col;
 	m_nRow = row;
 
-	m_dequePos.push_back(ccp(col*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, row*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));
+	m_dequePos.push_back(
+		//ccp(col*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, row*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET)); //@del
+		ConvertUtil::convertCellToDisplay( col, row ));
 
 	if (!m_bIsMoving) 
 	{
@@ -527,7 +529,11 @@ void NDNpc::HandleNpcMask(bool bSet)
 	}
 
 	CCPoint point = this->GetPosition();
-	int iCellY = int((point.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), iCellX = int((point.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
+// 	int iCellY = int((point.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), //@del
+// 		iCellX = int((point.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
+ 	CCPoint cellPos = ConvertUtil::convertDisplayToCell( point );
+	int iCellX = (int) cellPos.x;
+	int iCellY = (int) cellPos.y;
 
 	vector<int>* unpass = m_pkAniGroup->getUnpassPoint();
 	int unpassCount = unpass->size();
@@ -721,7 +727,11 @@ bool NDNpc::getNearestPoint(CCPoint srcPoint, CCPoint& dstPoint)
 	
 	int resX = 0, resY = 0;
 	
-	int srcY = int((srcPoint.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), srcX = int((srcPoint.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE);
+// 	int srcY = int((srcPoint.y-DISPLAY_POS_Y_OFFSET)/MAP_UNITSIZE), 
+// 		srcX = int((srcPoint.x-DISPLAY_POS_X_OFFSET)/MAP_UNITSIZE); //@del
+	CCPoint srcCell = ConvertUtil::convertDisplayToCell( srcPoint );
+	int srcX = (int) srcCell.x;
+	int srcY = (int) srcCell.y;
 	
 	int maxDis = mapdata->getColumns()*mapdata->getColumns() + mapdata->getRows()*mapdata->getRows();
 	
@@ -811,7 +821,8 @@ bool NDNpc::getNearestPoint(CCPoint srcPoint, CCPoint& dstPoint)
 		resY = this->GetPosition().y;
 	}
 	
-	dstPoint = CCPointMake(resX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, resY*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET);
+	//dstPoint = CCPointMake(resX*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, resY*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET); //@del
+	dstPoint = ConvertUtil::convertCellToDisplay( resX, resY );
 
 	return true;
 }

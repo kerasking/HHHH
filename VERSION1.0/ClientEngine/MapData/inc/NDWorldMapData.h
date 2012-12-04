@@ -52,7 +52,7 @@ public:
 	CC_SYNTHESIZE(int, m_nLayerCount, LayerCount)
 	CC_SYNTHESIZE(unsigned int, m_nColumns, Columns)
 	CC_SYNTHESIZE(unsigned int, m_nRows, Rows)
-	CC_SYNTHESIZE(int, m_nUnitSize, UnitSize)
+	//CC_SYNTHESIZE(int, m_nUnitSize, UnitSize)
 	CC_SYNTHESIZE(CCSize, m_MapSize, MapSize)
 
 	CC_SYNTHESIZE(cocos2d::CCArray*/*<CCTexture2D*>**/, m_MapTiles, MapTiles)

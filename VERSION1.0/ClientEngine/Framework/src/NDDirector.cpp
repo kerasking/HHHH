@@ -16,6 +16,7 @@
 #include "NDAnimationGroupPool.h"
 #include "define.h"
 #include "CCTransition.h"
+#include "CCPointExtension.h"
 
 using namespace cocos2d;
 
@@ -421,6 +422,29 @@ NDScene* NDDirector::GetSceneByTag(int nSceneTag)
 		}
 	}
 	return NULL;
+}
+
+//@android
+//返回值：	x值存放x方向的缩放比例
+//			y值存放y放点的缩放比例
+//这个函数仅对android手机有效
+CCPoint NDDirector::getAndroidScale() const
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	CCSize sz = CCDirector::sharedDirector()->getVisibleSize();
+	return ccp( sz.width/960, sz.height/640 );
+#else
+	return ccp( 1,1 );
+#endif
+}
+
+float NDDirector::GetScaleFactor_LUA() //仅用于LUA
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	return 2.0f * getAndroidScale().y; //乘2是因为是参考960*640的，不要改成1
+#else
+	return m_pkDirector->getContentScaleFactor();
+#endif
 }
 
 NS_NDENGINE_END

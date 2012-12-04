@@ -42,7 +42,7 @@ NS_NDENGINE_BGN
 // #define NDPath_SoundPath			 "../SimplifiedChineseRes/res/sound/"
 // #define NDPath_UIPath			 "../SimplifiedChineseRes/res/UI/"
 // #define NDPath_ScriptPath		 "../SimplifiedChineseRes/res/Script/"
-#define NDPath_LogPath			 "./log/"
+#define NDPath_LogPath			 "../log/"
 #endif
 
 ////////////////////////////////////////////////////////////
@@ -251,6 +251,7 @@ const string NDPath::GetScriptPath(const char* filename)
 {
 	return GetScriptPath() + filename;
 }
+
 
 const string NDPath::GetScriptPath()
 {

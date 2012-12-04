@@ -99,21 +99,28 @@ namespace NDEngine
 
 		LOGD("m_socket->setServer(address, port, m_blocking);");
 
+
+		if (!m_socket->connect()) 
+		{		
+			//NDLog(@"connect server success! address:%s	port:%d", address, port);
+			return false;
+		}
+
 		if (!m_blocking) 
 		{
 			m_socket->getConn().setTimeout(0);
 
 			LOGD("m_socket->getConn().setTimeout(0);");
-			
+
 			int keepAlive = 1;
 			::setsockopt(m_socket->getConn().getConnId(), SOL_SOCKET, SO_KEEPALIVE, (const char*)&keepAlive, sizeof(keepAlive));	
-			
+
 			int nRecvBuf = 256 * 1024;
 			::setsockopt(m_socket->getConn().getConnId(), SOL_SOCKET, SO_RCVBUF, (const char*)&nRecvBuf, sizeof(int));
-			
+
 			int nSendBuf = 256 * 1024;
 			::setsockopt(m_socket->getConn().getConnId(), SOL_SOCKET, SO_SNDBUF, (const char*)&nSendBuf, sizeof(int));
-			
+
 			int connTimeOut = 30 * 1000;
 			::setsockopt(m_socket->getConn().getConnId(), SOL_SOCKET, SO_SNDTIMEO, (const char*)&connTimeOut, sizeof(int));			
 			::setsockopt(m_socket->getConn().getConnId(), SOL_SOCKET, SO_RCVTIMEO, (const char*)&connTimeOut, sizeof(int));
@@ -122,16 +129,8 @@ namespace NDEngine
 			::setsockopt(m_socket->getConn().getConnId(), SOL_SOCKET, SO_NOSIGPIPE, (char *) &optval, sizeof(optval));
 #endif
 		}
-		if (m_socket->connect()) 
-		{		
-			//NDLog(@"connect server success! address:%s	port:%d", address, port);
-			return true;
-		}
-		else 
-		{
-			//NDLog(@"connect server failed! address:%s	port:%d", address, port);
-			return false;
-		}
+		return true;
+
 	}
 	
 	bool NDSocket::Connected()
@@ -200,7 +199,6 @@ namespace NDEngine
             this->m_EncryptSnd->Encrypt((unsigned char*)data->GetBuffer(), usSize);
 #endif
         
-
 		int ret;
 		if (m_blocking) 
 			ret = m_socket->getConn().writeData(data->GetBuffer(), data->GetSize(), TCP_TIME_OUT);

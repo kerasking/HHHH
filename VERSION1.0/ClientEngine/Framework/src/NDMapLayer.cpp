@@ -194,9 +194,10 @@ void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)
 	if (m_pkMapData)
 	{
 		SetContentSize(
-				CCSizeMake(
-						m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
-						m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
+// 				CCSizeMake(
+// 						m_pkMapData->getColumns() * MAP_UNITSIZE_X,
+// 						m_pkMapData->getRows() * MAP_UNITSIZE_Y)); //@del
+			m_pkMapData->getMapDataSize());
 
 		MakeOrdersOfMapscenesAndMapanimations();
 		MakeFrameRunRecords();
@@ -233,8 +234,10 @@ void NDMapLayer::Initialization(const char* mapFile)
 	ND_ASSERT_NO_RETURN(NULL == m_pkMapData);
 	m_pkMapData->initWithFile(mapFile);
 
-	SetContentSize(CCSizeMake(m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
-		                    m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
+	SetContentSize(
+// 		CCSizeMake(m_pkMapData->getColumns() * MAP_UNITSIZE_X,
+// 					m_pkMapData->getRows() * MAP_UNITSIZE_Y)); //@del
+		m_pkMapData->getMapDataSize());
 
 	MakeOrdersOfMapscenesAndMapanimations();
 	MakeFrameRunRecords();
@@ -868,9 +871,10 @@ void NDMapLayer::DrawScenesAndAnimations()
 
 			m_pkSwitchAniGroup->setReverse(false);
 
-			CCPoint kPos = ccp(
-					pkMapSwitch->getX() * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-					pkMapSwitch->getY() * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);
+// 			CCPoint kPos = ccp(
+// 					pkMapSwitch->getX() * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+// 					pkMapSwitch->getY() * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET);//@del
+			CCPoint kPos = ConvertUtil::convertCellToDisplay( pkMapSwitch->getX(), pkMapSwitch->getY());
 
 			m_pkSwitchAniGroup->setPosition(kPos);
 
@@ -1585,7 +1589,8 @@ void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 					(NDMapSwitch *) m_pkMapData->getSwitchs()->objectAtIndex(i);
 			//int orderId = mapSwitch.y * m_mapData.unitSize;
 
-			int orderId = pkMapSwitch->getY() * m_pkMapData->getUnitSize();	//+ 32 ;
+			//int orderId = pkMapSwitch->getY() * m_pkMapData->getUnitSize();	//+ 32 ;
+			int orderId = pkMapSwitch->getY() * MAP_UNITSIZE_Y;	//+ 32 ; //@todo: orderId和UnitSize有关系！？
 
 			MAP_ORDER *dict = new MAP_ORDER;
 
@@ -1753,8 +1758,9 @@ void NDMapLayer::ShowRoadSign(bool bShow, int nX /*=0*/, int nY /*=0*/)
 	}
 
 	m_pkRoadSignLightEffect->SetPosition(
-			ccp(nX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
-					nY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));
+		ConvertUtil::convertCellToDisplay( nX, nY ));
+// 			ccp(nX * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
+// 					nY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));//@del
 }
 
 bool NDMapLayer::GetMapDataAniParamReverse(int nIndex)
@@ -1891,26 +1897,6 @@ bool NDMapLayer::TouchDoubleClick(NDTouch* touch)
 
 void NDMapLayer::ShowTreasureBox()
 {
-	if (!m_pkTreasureBox)
-	{
-		/***
-		 * NDPlayer 在 logic...
-		 * 郭浩
-		 */
-// 		m_eBoxStatus = BOX_SHOWING;
-// 		m_pkTreasureBox = new NDSprite;
-// 		string aniPath = NDPath::GetAnimationPath().c_str();
-// 		NSString pstrString = NSString::stringWithFormat("%streasure_box.spr",
-// 				aniPath.c_str());
-// 		m_pkTreasureBox->Initialization(pstrString->toStdString().c_str());
-// 		SAFE_DELETE(pstrString);
-// 		m_pkTreasureBox->SetPosition(
-// 				CCPointMake(NDPlayer::defaultHero().GetPosition().x + 64,
-// 						NDPlayer::defaultHero().GetPosition().y));
-// 		m_pkTreasureBox->SetScale(0.5f * SCREEN_SCALE);
-// 		m_pkTreasureBox->SetCurrentAnimation(0, false);
-// 		AddChild(m_pkTreasureBox);
-	}
 }
 
 void NDMapLayer::OpenTreasureBox()
@@ -1928,28 +1914,19 @@ void NDMapLayer::OpenTreasureBox()
 
 void NDMapLayer::debugDraw()
 {
-// #if 1
-// 	glLineWidth(2);
-// 	ccDrawColor4F(0,1,0,1);//green
-// // 	CCPoint lb = ccp(m_pfVertices[0],m_pfVertices[1]);
-// // 	CCPoint rt = ccp(m_pfVertices[9],m_pfVertices[10]);
-// // 	ccDrawRect( lb, rt );
-// // 	ccDrawLine( lb, rt );
-// 	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
-// 	ccDrawLine( ccp(0,0), ccp(winSize.width, winSize.height));
-// #endif
-
 #if 1 //@del
+	float w = CCDirector::sharedDirector()->getVisibleSize().width;
+	float h = CCDirector::sharedDirector()->getVisibleSize().height;
 	glLineWidth(2);
 	ccDrawColor4F(0,1,0,1);//green
-	ccDrawLine( ccp(0,0), ccp(480, 320));
-	ccDrawLine( ccp(0,320), ccp(480,0));
+	ccDrawLine( ccp(0,0), ccp(w,h));
+	ccDrawLine( ccp(0,h), ccp(w,0));
 #endif
 
 	if (!NDDebugOpt::getDrawDebugEnabled() ||
 		!NDDebugOpt::getDrawCellEnabled()) return;
 
-	drawCell();
+	//drawCell();
 }
 
 void NDMapLayer::drawCell()
@@ -1961,7 +1938,6 @@ void NDMapLayer::drawCell()
 
 	const int colAmount = pMapData->getColumns();
 	const int rowAmount = pMapData->getRows();
-	const int step = MAP_UNITSIZE;
 	const float pad = 0.25f;
 
 	ccDrawColor4F(1,1,1,1);
@@ -1970,12 +1946,12 @@ void NDMapLayer::drawCell()
 	{
 		for (int col = 0; col < colAmount; col++)
 		{
-			float x = col * step; //points
-			float y = row * step; //points
+			float x = col * MAP_UNITSIZE_X;
+			float y = row * MAP_UNITSIZE_Y;
 	
 			//@todo: check visible
 			CCPoint org = ccp(x + pad, y + pad);//left top
-			CCPoint dest = ccp(x + step - pad, y + step + - pad); //right bottom
+			CCPoint dest = ccp(x + MAP_UNITSIZE_X - pad, y + MAP_UNITSIZE_Y + - pad); //right bottom
 			ccDrawRect( org, dest );
 		}
 	}
@@ -1983,6 +1959,7 @@ void NDMapLayer::drawCell()
 
 void NDMapLayer::dumpRole()
 {
+//@del: 留着有用，暂时别删~
 // 	char str[1024] = "";
 // 	HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
 // 

@@ -11,6 +11,7 @@
 
 #include "NDTile.h"
 #include "NDUILabel.h"
+#include "UsePointPls.h"
 #include "cocoa/CCDictionary.h"
 
 class MapTexturePool: public cocos2d::CCObject
@@ -96,7 +97,7 @@ public:
 	CC_SYNTHESIZE(int, m_nLayerCount, LayerCount)
 	CC_SYNTHESIZE(unsigned int, m_nColumns, Columns)
 	CC_SYNTHESIZE(unsigned int, m_nRows, Rows)
-	CC_SYNTHESIZE(int, m_nUnitSize, UnitSize)
+	//CC_SYNTHESIZE(int, m_nUnitSize, UnitSize) //分辨率相关，非固定值
 	CC_SYNTHESIZE(unsigned int, m_nRoadBlockX, RoadBlockX)
 	CC_SYNTHESIZE(unsigned int, m_nRoadBlockY, RoadBlockY)
 
@@ -139,8 +140,14 @@ public:
 			const char* desc);	// 目标地图描述
 	void setRoadBlock(int x, int y);
 
+	CCSize getMapDataSize() const
+	{
+		return CCSizeMake(
+			this->getColumns() * MAP_UNITSIZE_X,
+			this->getRows() * MAP_UNITSIZE_Y
+			);
+	}
 private:
-
 	void decode(FILE* pkStream);
 };
 #endif
