@@ -277,13 +277,13 @@ void NDNpc::OnDrawEnd(bool bDraw)
 
 	CCSize kSize = getStringSize(m_strName.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
 
-	int nShowX = kNPCPos.x - 30;		///< 临时性调整 郭浩
+	int nShowX = kNPCPos.x;		///< 临时性调整 郭浩
 	//高度临时调整，后续应该修改为在缩放时进行数据处理，否则坐标外部需要处理HJQ
 	int nShowY = kNPCPos.y - kSize.height
 			- ((m_pkCurrentAnimation ?
 					(m_pkCurrentAnimation->getBottomY()
 							- m_pkCurrentAnimation->getY()) : 0)
-											 * 0.5f * fScaleFactor + 45.0f);	///< 临时性调整 + 10.0f 郭浩
+											 * 0.5f * fScaleFactor + 20.0f);	///< 临时性调整 + 10.0f 郭浩
 
 	bool isEmemy = false;
 
