@@ -71,12 +71,11 @@ namespace NDEngine
 			m_tileLeftTop->getTexture()->getMaxT()
 			* m_tileLeftTop->getTexture()->getPixelsHigh()));
 
-		m_tileLeftTop->setDrawRect(
-			CCRectMake(scrRect.origin.x, scrRect.origin.y,
-			m_tileLeftTop->getTexture()->getMaxS()
-			* m_tileLeftTop->getTexture()->getPixelsWide(),
-			m_tileLeftTop->getTexture()->getMaxT()
-			* m_tileLeftTop->getTexture()->getPixelsHigh()));
+		m_tileLeftTop->SetDrawRect_Android(
+			CCRectMake(scrRect.origin.x, 
+						scrRect.origin.y,
+						m_tileLeftTop->getTexture()->getMaxS() * m_tileLeftTop->getTexture()->getPixelsWide(),
+						m_tileLeftTop->getTexture()->getMaxT() * m_tileLeftTop->getTexture()->getPixelsHigh())); //@android
 
 		m_tileLeftTop->setReverse(false);
 		m_tileLeftTop->setRotation(NDRotationEnumRotation0);
@@ -96,16 +95,14 @@ namespace NDEngine
 			m_tileRightTop->getTexture()->getMaxT()
 			* m_tileRightTop->getTexture()->getPixelsHigh()));
 
-		m_tileRightTop->setDrawRect(
+		m_tileRightTop->SetDrawRect_Android(
 			CCRectMake(
 			scrRect.origin.x + scrRect.size.width
-			- m_tileRightTop->getTexture()->getMaxT()
-			* m_tileRightTop->getTexture()->getPixelsHigh(),
+				- m_tileRightTop->getTexture()->getMaxT() 
+					* m_tileRightTop->getTexture()->getPixelsHigh(),
 			scrRect.origin.y,
-			m_tileRightTop->getTexture()->getMaxT()
-			* m_tileRightTop->getTexture()->getPixelsHigh(),
-			m_tileRightTop->getTexture()->getMaxS()
-			* m_tileRightTop->getTexture()->getPixelsWide()));
+			m_tileRightTop->getTexture()->getMaxT() * m_tileRightTop->getTexture()->getPixelsHigh(),
+			m_tileRightTop->getTexture()->getMaxS() * m_tileRightTop->getTexture()->getPixelsWide())); //@android
 
 		m_tileRightTop->setReverse(false);
 		m_tileRightTop->setRotation(NDRotationEnumRotation90);
@@ -125,15 +122,15 @@ namespace NDEngine
 			m_tileLeftBottom->getTexture()->getMaxT()
 			* m_tileLeftBottom->getTexture()->getPixelsHigh()));
 
-		m_tileLeftBottom->setDrawRect(
+		m_tileLeftBottom->SetDrawRect_Android(
 			CCRectMake(scrRect.origin.x,
 			scrRect.origin.y + scrRect.size.height
-			- m_tileLeftBottom->getTexture()->getMaxS()
-			* m_tileLeftBottom->getTexture()->getPixelsWide(),
+				- m_tileLeftBottom->getTexture()->getMaxS()
+				* m_tileLeftBottom->getTexture()->getPixelsWide(),
 			m_tileLeftBottom->getTexture()->getMaxS()
-			* m_tileLeftBottom->getTexture()->getPixelsWide(),
+				* m_tileLeftBottom->getTexture()->getPixelsWide(),
 			m_tileLeftBottom->getTexture()->getMaxT()
-			* m_tileLeftBottom->getTexture()->getPixelsHigh()));
+				* m_tileLeftBottom->getTexture()->getPixelsHigh())); //@android
 
 		m_tileLeftBottom->setReverse(false);
 		m_tileLeftBottom->setRotation(NDRotationEnumRotation270);
@@ -153,18 +150,18 @@ namespace NDEngine
 			m_tileRightBottom->getTexture()->getMaxT()
 			* m_tileRightBottom->getTexture()->getPixelsHigh()));
 
-		m_tileRightBottom->setDrawRect(
+		m_tileRightBottom->SetDrawRect_Android(
 			CCRectMake(
 			scrRect.origin.x + scrRect.size.width
-			- m_tileRightBottom->getTexture()->getMaxS()
-			* m_tileRightBottom->getTexture()->getPixelsWide(),
+				- m_tileRightBottom->getTexture()->getMaxS()
+					* m_tileRightBottom->getTexture()->getPixelsWide(),
 			scrRect.origin.y + scrRect.size.height
-			- m_tileRightBottom->getTexture()->getMaxT()
-			* m_tileRightBottom->getTexture()->getPixelsHigh(),
+				- m_tileRightBottom->getTexture()->getMaxT()
+					* m_tileRightBottom->getTexture()->getPixelsHigh(),
 			m_tileRightBottom->getTexture()->getMaxT()
-			* m_tileRightBottom->getTexture()->getPixelsHigh(),
+				* m_tileRightBottom->getTexture()->getPixelsHigh(),
 			m_tileRightBottom->getTexture()->getMaxS()
-			* m_tileRightBottom->getTexture()->getPixelsWide()));
+				* m_tileRightBottom->getTexture()->getPixelsWide()));//@android
 
 		m_tileRightBottom->setReverse(false);
 		m_tileRightBottom->setRotation(NDRotationEnumRotation180);

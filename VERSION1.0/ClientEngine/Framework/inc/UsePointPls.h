@@ -62,6 +62,9 @@ public: //格子坐标相关转换 @cell
 
 public:
 	static CCSize getCellSize();
+
+public: //@android
+	static CCPoint getAndroidScale();
 };
 
 //之前的格子是方格（即等宽等高），考虑到android平台多分辨率，MAP_UNITSIZE应拆分为xy两个分量.
@@ -72,5 +75,8 @@ public:
 //角色显示时相对于Cell的偏移
 #define DISPLAY_POS_X_OFFSET		(MAP_UNITSIZE_X / 2)
 #define DISPLAY_POS_Y_OFFSET		(MAP_UNITSIZE_Y)
+
+//android缩放比例（以Y为主）
+#define ANDROID_SCALE				(ConvertUtil::getAndroidScale().y)
 
 NS_NDENGINE_END
