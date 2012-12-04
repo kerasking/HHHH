@@ -204,6 +204,7 @@ function p.LoadUI(page)
 	end
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.EquipUI);
+	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer,1);
 -----------------初始化ui添加到 layer 层上----------------------------------

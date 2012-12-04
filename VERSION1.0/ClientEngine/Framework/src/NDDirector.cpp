@@ -438,4 +438,13 @@ CCPoint NDDirector::getAndroidScale() const
 #endif
 }
 
+float NDDirector::GetScaleFactor_LUA() //仅用于LUA
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	return 2.0f * getAndroidScale().y; //乘2是因为是参考960*640的，不要改成1
+#else
+	return m_pkDirector->getContentScaleFactor();
+#endif
+}
+
 NS_NDENGINE_END
