@@ -792,19 +792,27 @@ void CSMLoginScene::SetProgress( int nPercent )
 //===========================================================================
 void CSMLoginScene::StartEntry()
 {
+	CCLOG( "@@ CSMLoginScene::StartEntry()\r\n" );
+
 #if 1 //取完代码android又崩溃了，先还原代码.
-	m_pLabelPromtp->SetText( SZ_INSTALL );
-	m_pLabelPromtp->SetVisible( true );
+	if (m_pLabelPromtp)
+	{
+		m_pLabelPromtp->SetText( SZ_INSTALL );
+		m_pLabelPromtp->SetVisible( true );
+	}
 	ShowWaitingAni();
 
 	NDLocalXmlString::GetSingleton().LoadData();
+	ScriptMgrObj.Load(); //加载LUA脚本
 
 	ScriptMgrObj.excuteLuaFunc( "LoadData", "GameSetting" ); 
 	CloseUpdateUILayer();
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	//if ( m_iAccountID == 0 )
 	m_iAccountID = ScriptMgrObj.excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
 #endif
+
 	ScriptMgrObj.excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
 	//    ScriptMgrObj.excuteLuaFunc("ProecssLocalNotification", "MsgLoginSuc");
 
@@ -821,6 +829,8 @@ void CSMLoginScene::StartEntry()
 	pthread_t pid;
 	pthread_create(&pid, NULL, CSMLoginScene::LoadTextAndLua, (void*)this);	
 #endif
+
+	CCLOG( "@@ CSMLoginScene::StartEntry() -- done.\r\n" );
 }
 
 //===========================================================================

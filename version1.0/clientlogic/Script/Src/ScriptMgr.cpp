@@ -229,14 +229,11 @@ void ScriptMgr::update()
 
 void ScriptMgr::Load()
 {
+	CCLog("@@ ScriptMgr::Load()\r\n");
+
 	PROFILE_REGLUA();
 
 	TIME_SLICE("ScriptMgr::Load()");
-
-	{
-		TIME_SLICE("LoadRegClassFuncs()");
-		LoadRegClassFuncs();
-	}
 	
 	{
 		TIME_SLICE("ScriptCommonLoad()");
@@ -313,7 +310,10 @@ void ScriptMgr::Load()
 
 	LuaStateMgrObj.SetExceptOutput(&luaExceptRunTimeOutPut);
 	m_bLoadLuaOK = true;
+
+	CCLog("@@ ScriptMgr::Load() -- done.\r\n");
 }
+
 ///////
 void ScriptMgr::LoadLuaFile(const char* pszluaFile)
 {
@@ -521,6 +521,8 @@ bool ScriptMgr::IsLuaFuncExist(const char* funcname, const char* modulename)
 
 void ScriptMgr::LoadRegClassFuncs()
 {
+	TIME_SLICE("LoadRegClassFuncs()");
+
 	vec_regclass_func_it it = vRegClassFunc.begin();
 	
 	for (; it != vRegClassFunc.end(); it++) 
