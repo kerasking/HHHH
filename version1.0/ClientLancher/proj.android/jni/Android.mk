@@ -51,7 +51,6 @@ $(LOCAL_PATH)/../../../ClientLogic/BeforeGame/inc \
 $(LOCAL_PATH)/../../../ClientLogic/Chat/inc \
 $(LOCAL_PATH)/../../../ClientLogic/Common/inc \
 $(LOCAL_PATH)/../../../ClientLogic/Drama/inc \
-$(LOCAL_PATH)/../../../ClientLogic/GameData/inc \
 $(LOCAL_PATH)/../../../ClientLogic/GameScene/inc \
 $(LOCAL_PATH)/../../../ClientLogic/Item/inc \
 $(LOCAL_PATH)/../../../ClientLogic/MapAndRole/inc \

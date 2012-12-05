@@ -16,6 +16,7 @@
 #include "Singleton.h"
 #include "typedef.h"
 
+//@loadini
 #define ScriptGameDataObj (NDScriptGameData::GetSingleton())
 
 //#pragma mark set role data 
