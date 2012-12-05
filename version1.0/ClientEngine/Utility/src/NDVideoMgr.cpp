@@ -1,10 +1,14 @@
 #include "NDVideoMgr.h"
 #include "CCPlatformConfig.h"
+#include <string>
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "android/jni/JniHelper.h"
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #endif
+
+using namespace std;
 
 NS_NDENGINE_BGN
 IMPLEMENT_CLASS(NDVideoMgr,NDObject)
@@ -31,11 +35,6 @@ NDVideoMgr* NDVideoMgr::GetVideoMgrSingleton()
 
 bool NDVideoMgr::PlayVideo( const char* pszFilename )
 {
-	if (0 == pszFilename || !*pszFilename)
-	{
-		return false;
-	}
-
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	return PlayVideoForAndroid(pszFilename);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -49,16 +48,37 @@ bool NDVideoMgr::PlayVideo( const char* pszFilename )
 
 bool NDVideoMgr::PlayVideoForAndroid( const char* pszFilename )
 {
+	if (0 == pszFilename)
+	{
+		return false;
+	}
+
+	string strRet = "";
+	JniMethodInfo kMethodInfo;
+	memset(&kMethodInfo,0,sizeof(JniMethodInfo));
+
+
+
 	return true;
 }
 
 bool NDVideoMgr::PlayVideoForWin32( const char* pszFilename )
 {
+	if (0 == pszFilename)
+	{
+		return false;
+	}
+
 	return true;
 }
 
 bool NDVideoMgr::PlayVideoForIOS( const char* pszFilename )
 {
+	if (0 == pszFilename)
+	{
+		return false;
+	}
+
 	return true;
 }
 
