@@ -1,22 +1,23 @@
 package org.DeNA.DHLJ;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
-import org.cocos2dx.lib.Cocos2dxEditText;
-import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
-
 import android.app.AlertDialog;
-import android.content.Context;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.KeyEvent;
 
-public class DaHuaLongJiang extends Cocos2dxActivity {
-	protected void onCreate(Bundle savedInstanceState) {
-		if (isSDCardCanUse()) {
+public class DaHuaLongJiang extends Cocos2dxActivity
+{
+	public static DaHuaLongJiang ms_pkDHLJ = null;
+	
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		if (isSDCardCanUse())
+		{
+			ms_pkDHLJ = this;
 			nativeInit(480, 320);
 			super.onCreate(savedInstanceState);
-		} else {
+		} else
+		{
 			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 			alertDialog.setTitle("Title");
 			alertDialog.setMessage("Message");
@@ -26,17 +27,42 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 		}
 	}
 
-	public boolean isSDCardCanUse() {
+	public boolean isSDCardCanUse()
+	{
 		String strState = Environment.getExternalStorageState();
 
-		if (Environment.MEDIA_MOUNTED.equals(strState)) {
+		if (Environment.MEDIA_MOUNTED.equals(strState))
+		{
 			return true;
 		}
 
 		return false;
 	}
 
-	static {
+	public static int playVideo(final String strFile)
+	{
+		if (strFile.length() == 0)
+		{
+			return -1;
+		}
+		
+		if(null == ms_pkDHLJ)
+		{
+			return -1;
+		}
+		
+		NDJavaVideoPlayer kVideoPlayer = new NDJavaVideoPlayer(ms_pkDHLJ.mGLSurfaceView);
+
+		if (0 != kVideoPlayer.loadVideo(strFile))
+		{
+			return -1;
+		}
+
+		return 0;
+	}
+
+	static
+	{
 		System.loadLibrary("luaplus");
 		System.loadLibrary("tinyxml");
 		System.loadLibrary("cocos2d");

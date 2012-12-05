@@ -3,15 +3,30 @@
 #include <string>
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "android/jni/JniHelper.h"
+#include "jni/JniHelper.h"
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
 #endif
 
 using namespace std;
+using namespace cocos2d;
 
 NS_NDENGINE_BGN
 IMPLEMENT_CLASS(NDVideoMgr,NDObject)
+
+NDVideoMgr* NDVideoMgr::ms_pkVideoManager = 0;
 
 NDVideoMgr::NDVideoMgr()
 {
@@ -20,17 +35,17 @@ NDVideoMgr::NDVideoMgr()
 
 NDVideoMgr::~NDVideoMgr()
 {
-	ms_spVideoManager = 0;
+	SAFE_DELETE(ms_pkVideoManager);
 }
 
 NDVideoMgr* NDVideoMgr::GetVideoMgrSingleton()
 {
-	if (0 == ms_spVideoManager)
+	if (0 == ms_pkVideoManager)
 	{
-		ms_spVideoManager = new NDVideoMgr;
+		ms_pkVideoManager = new NDVideoMgr;
 	}
 
-	return ms_spVideoManager;
+	return ms_pkVideoManager;
 }
 
 bool NDVideoMgr::PlayVideo( const char* pszFilename )
@@ -48,17 +63,34 @@ bool NDVideoMgr::PlayVideo( const char* pszFilename )
 
 bool NDVideoMgr::PlayVideoForAndroid( const char* pszFilename )
 {
+	LOGD("Entry PlayVideoForAndroid");
+
 	if (0 == pszFilename)
 	{
+		LOGERROR("pszFilename is null!");
 		return false;
 	}
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	string strRet = "";
 	JniMethodInfo kMethodInfo;
-	memset(&kMethodInfo,0,sizeof(JniMethodInfo));
 
+	if (JniHelper::getStaticMethodInfo(kMethodInfo, "org/DeNA/DHLJ/DaHuaLongJiang",
+		"playVideo",
+		"(Ljava/lang/String;)I"))
+	{
+		LOGD("the kMethodInfo value is:env = %d,classID = %d,methodID = %d",(int)kMethodInfo.env,(int)kMethodInfo.classID,(int)kMethodInfo.methodID);
 
+		jstring stringArg1;
+		stringArg1 = kMethodInfo.env->NewStringUTF(pszFilename);
 
+		jint retFromJava = (jint) kMethodInfo.env->CallStaticObjectMethod(kMethodInfo.classID,
+			kMethodInfo.methodID, stringArg1);
+	}
+
+#endif
+
+	LOGD("Leave PlayVideoForAndroid");
 	return true;
 }
 

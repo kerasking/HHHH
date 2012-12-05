@@ -33,7 +33,7 @@ protected:
 	NDVideoMgr();
 	NDVideoMgr(const NDVideoMgr&);
 
-	static NDSharedPtr<NDVideoMgr> ms_spVideoManager;
+	static NDVideoMgr* ms_pkVideoManager;
 
 	virtual bool PlayVideoForAndroid(const char* pszFilename);
 	virtual bool PlayVideoForWin32(const char* pszFilename);
