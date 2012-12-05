@@ -98,9 +98,10 @@ function p.LoadUI()
 		LogInfo( "EmailList: loadUserEmailList failed! layer is nil" );
 		return false;
 	end
+	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag( NMAINSCENECHILDTAG.EmailList );
-	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect( RectFullScreenUILayer );
 	scene:AddChildZ( layer, 1 );
 

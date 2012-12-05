@@ -38,6 +38,8 @@ IMPLEMENT_CLASS(WorldMapLayer, NDUILayer)
 
 WorldMapLayer::WorldMapLayer()
 {
+	m_strDebugName = "WorldMapLayer";
+
 	WriteCon( "WorldMapLayer::WorldMapLayer()\r\n");
 
 	m_mapData = NDWorldMapData::SharedData();
@@ -75,6 +77,7 @@ void WorldMapLayer::Initialization(int nMapId)
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
 
 	NDUILayer::Initialization();
+
 	SetTag(ScriptMgrObj.excuteLuaFuncRetN("GetWorldMapUITag", ""));
 
     //ScriptMgrObj.excuteLuaFunc("PlayWorldMusic", "Music");

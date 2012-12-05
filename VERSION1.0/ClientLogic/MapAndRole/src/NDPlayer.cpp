@@ -272,6 +272,8 @@ bool NDPlayer::CancelClickPointInSideNpc()
 
 bool NDPlayer::ClickPoint(CCPoint point, bool bLongTouch, bool bPath/*=true*/)
 {
+//	CCLog( "NDPlayer::ClickPoint(%d, %d), @0\r\n", (int)point.x, (int)point.y );
+
 	if (AutoPathTipObj.IsWorking())
 	{
 		AutoPathTipObj.Stop();
@@ -286,7 +288,8 @@ bool NDPlayer::ClickPoint(CCPoint point, bool bLongTouch, bool bPath/*=true*/)
 	if (bLongTouch && bPath)
 	{
 		//长按不执行其它操作
-		//WriteCon( "NDPlayer::ClickPoint(%d, %d), @1\r\n", (int)point.x, (int)point.y );
+//		CCLog( "NDPlayer::ClickPoint(%d, %d), @1\r\n", (int)point.x, (int)point.y );
+//		WriteCon( "NDPlayer::ClickPoint(%d, %d), @1\r\n", (int)point.x, (int)point.y );
 		NDPlayer::defaultHero().Walk(point, SpriteSpeedStep8);
 		return true;
 	}
@@ -429,7 +432,8 @@ bool NDPlayer::ClickPoint(CCPoint point, bool bLongTouch, bool bPath/*=true*/)
  		
 	if (bPath || bNpcPath)
 	{
-		//WriteCon( "NDPlayer::ClickPoint(%d, %d), @2\r\n", (int)point.x, (int)point.y );
+//		CCLog( "NDPlayer::ClickPoint(%d, %d), @2\r\n", (int)point.x, (int)point.y );
+//		WriteCon( "NDPlayer::ClickPoint(%d, %d), @2\r\n", (int)point.x, (int)point.y );
 		NDPlayer::defaultHero().Walk(point, SpriteSpeedStep8);
 	}
 
@@ -504,6 +508,8 @@ int NDPlayer::GetOrder()
 
 void NDPlayer::Walk(CCPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 {
+//	CCLog( "@@ NDPlayer::Walk(%d, %d)\r\n", int(toPos.x), int(toPos.y));
+
 	if (!isRoleCanMove())
 	{
 		return;
@@ -511,22 +517,27 @@ void NDPlayer::Walk(CCPoint toPos, SpriteSpeed speed, bool mustArrive/*=false*/)
 
 	// roundup kPos
 	CCPoint kPos = CCPointMake(
-			int(toPos.x) / MAP_UNITSIZE_X * MAP_UNITSIZE_X + DISPLAY_POS_X_OFFSET,
-			int(toPos.y) / MAP_UNITSIZE_Y * MAP_UNITSIZE_Y + DISPLAY_POS_Y_OFFSET);
+			int(toPos.x) / int(MAP_UNITSIZE_X) * int(MAP_UNITSIZE_X) + int(DISPLAY_POS_X_OFFSET),
+			int(toPos.y) / int(MAP_UNITSIZE_Y) * int(MAP_UNITSIZE_Y) + int(DISPLAY_POS_Y_OFFSET));
 
 	CCPoint kCurrentPosition = GetPosition();
 
-// 	WriteCon( "NDPlayer::Walk(), (%d, %d)->(%d, %d)\r\n",
-// 		(int)kCurrentPosition.x, (int)kCurrentPosition.y,
-// 		(int)kPos.x, (int)kPos.y );
+// 	CCLog( "NDPlayer::Walk(), (%d, %d)->(%d, %d)\r\n",
+// 		(int)kCurrentPosition.x, (int)kCurrentPosition.y, (int)kPos.x, (int)kPos.y );
+//	WriteCon( "NDPlayer::Walk(), (%d, %d)->(%d, %d)\r\n",
+//		(int)kCurrentPosition.x, (int)kCurrentPosition.y, (int)kPos.x, (int)kPos.y );
 
-	if (int(kCurrentPosition.x - DISPLAY_POS_X_OFFSET) % int(MAP_UNITSIZE_X) != 0
-	 || int(kCurrentPosition.y - DISPLAY_POS_Y_OFFSET) % int(MAP_UNITSIZE_Y) != 0)
-	{ // Cell没走完,又设置新的目标
+	if ((int(kCurrentPosition.x) - int(DISPLAY_POS_X_OFFSET)) % int(MAP_UNITSIZE_X) != 0
+	 || (int(kCurrentPosition.y) - int(DISPLAY_POS_Y_OFFSET)) % int(MAP_UNITSIZE_Y) != 0)
+	{ 
+		// Cell没走完,又设置新的目标
 		m_kTargetPos = kPos;
+//		CCLog( "NDPlayer, Not Finished, reset target !! (%d, %d)\r\n", int(kPos.x), int(kPos.y));
 	}
 	else
 	{
+//		CCLog( "NDPlayer, WalkToPosition(%d, %d)\r\n", int(kPos.x), int(kPos.y));
+
 		std::vector < CCPoint > vPos;
 		//kPos = ccpAdd(kPos,kPos);
 		vPos.push_back(kPos);

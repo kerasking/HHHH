@@ -123,6 +123,7 @@ const char* DataFilePath()
 }
 
 ScriptMgr::ScriptMgr()
+: m_bLoadLuaOK(false)
 {
 	#if 0
 char filename[256];
@@ -185,6 +186,8 @@ void ScriptMgr::WriteLog(const char* fmt, ...)
 		fwrite("\n", 1, 1, m_fTest);
 		fflush(m_fTest);
 	}
+
+	CCLog( "%s\r\n", buffer );
 }
 
 void ScriptMgr::DebugOutPut(const char* fmt, ...)
@@ -208,17 +211,20 @@ void ScriptMgr::DebugOutPut(const char* fmt, ...)
 void ScriptMgr::update()
 {
 	static unsigned int frameCount = 0;
-	if (++frameCount % 20 == 0) // 20帧更新一次
-	{
-		LuaStateMgrObj.GetState()->GC(LUA_GCCOLLECT, 0);
-	}
-	
-	if (++frameCount % 120 == 0) // 120帧打印一次lua当前使用的内存总量
-	{
-		ScriptGameDataObj.LogOutMemory();
-		TextureMonitorObj.BeforeTextureAdd();
-		TextureMonitorObj.Report();
-	}
+//	if ( !ScriptMgrObj.IsLoadLuaOK() )//装载未完成则不执行下述语句
+//		return;
+
+ 	if (++frameCount % 20 == 0) // 20帧更新一次
+ 	{
+ 		LuaStateMgrObj.GetState()->GC(LUA_GCCOLLECT, 0);
+ 	}
+ 	
+ 	if (++frameCount % 120 == 0) // 120帧打印一次lua当前使用的内存总量
+ 	{
+ 		ScriptGameDataObj.LogOutMemory();
+ 		TextureMonitorObj.BeforeTextureAdd();
+ 		TextureMonitorObj.Report();
+ 	}
 }
 
 void ScriptMgr::Load()
@@ -306,6 +312,7 @@ void ScriptMgr::Load()
 #endif
 
 	LuaStateMgrObj.SetExceptOutput(&luaExceptRunTimeOutPut);
+	m_bLoadLuaOK = true;
 }
 ///////
 void ScriptMgr::LoadLuaFile(const char* pszluaFile)

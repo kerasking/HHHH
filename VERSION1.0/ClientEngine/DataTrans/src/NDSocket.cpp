@@ -99,13 +99,6 @@ namespace NDEngine
 
 		LOGD("m_socket->setServer(address, port, m_blocking);");
 
-
-		if (!m_socket->connect()) 
-		{		
-			//NDLog(@"connect server success! address:%s	port:%d", address, port);
-			return false;
-		}
-
 		if (!m_blocking) 
 		{
 			m_socket->getConn().setTimeout(0);
@@ -129,8 +122,16 @@ namespace NDEngine
 			::setsockopt(m_socket->getConn().getConnId(), SOL_SOCKET, SO_NOSIGPIPE, (char *) &optval, sizeof(optval));
 #endif
 		}
-		return true;
-
+		if (m_socket->connect()) 
+		{		
+			//NDLog(@"connect server success! address:%s	port:%d", address, port);
+			return true;
+		}
+		else 
+		{
+			//NDLog(@"connect server failed! address:%s	port:%d", address, port);
+			return false;
+		}
 	}
 	
 	bool NDSocket::Connected()

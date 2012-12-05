@@ -1804,11 +1804,11 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
     
     //file = fopen(NDPath::GetResourceFilePath("version.ini").c_str(), "rb");
     //从caches下取版本信息
-    string sVersion = NDPath::GetCashesPath()+"/SimplifiedChineseRes/version.ini";
+    string sVersion = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
     file = fopen(sVersion.c_str(), "rb");
     if (!file)
     {
-		NDLog(@"读取CACHES目录下版本文件失败");
+		CCLog("读取CACHES目录下版本文件失败");
 		//return false;
         bFile = false;
     }
@@ -1848,7 +1848,7 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	if ( !file )
 	{
 		bFirstTime = true;
-	    NDLog( @"\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );
+	    CCLog( "\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );
 		//std::rename( (NDPath::GetAppResFilePath(NDPath::GetRootResDirName())).c_str(), (NDPath::GetResourceFilePath(NDPath::GetRootResDirName())).c_str() );
         CopyRes();
 	}

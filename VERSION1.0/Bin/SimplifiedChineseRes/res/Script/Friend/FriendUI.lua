@@ -79,9 +79,10 @@ function p.LoadUI()
 	if layer == nil then
 		return false;
 	end
+	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.Friend);
-	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect(RectFullScreenUILayer);
 
 	layer:SetTag( NMAINSCENECHILDTAG.Friend);

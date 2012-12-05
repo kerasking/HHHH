@@ -36,7 +36,7 @@ void NDLayer::Initialization()
 	m_ccNode = new NDBaseLayer();
 	NDBaseLayer *layer = (NDBaseLayer *) m_ccNode;
 	layer->SetLayer(this);
-
+	layer->setDebugName( "NDLayer" );
 	this->SetContentSize(CCSizeZero);
 }
 

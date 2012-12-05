@@ -118,9 +118,10 @@ function p.LoadUI()
 		LogInfo("scene = nil,2");
 		return  false;
 	end
+	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.GMProblemUI);
-	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect(CGRectMake(0, 0, winsize.w, winsize.h*0.1));
 	--layer:SetFrameRect(CGRectMake(winsize.w*0.08, winsize.h*0.08, winsize.w, winsize.h));
 	scene:AddChild(layer);	

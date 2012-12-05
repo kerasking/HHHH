@@ -125,7 +125,7 @@ void NDAnimationGroup::decodeSprtFile(FILE* pkStream)
 		m_pkTileTable->addObject(pkRecord);
 		pkRecord->release();
 
-		CCLog("the number is : %d",uiTemp);
+		//CCLog("the number is : %d",uiTemp);
 	}
 }
 

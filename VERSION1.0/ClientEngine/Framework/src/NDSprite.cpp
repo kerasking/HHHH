@@ -323,6 +323,8 @@ void NDSprite::MoveToPosition(std::vector<CCPoint> kToPos, SpriteSpeed speed,
 		return;
 	}
 
+	//CCLog( "@@ NDSprite::MoveToPosition(%d, %d)\r\n", (int)kToPos[0].x, int(kToPos[0].y));
+
 	if (GetParent())
 	{
 		NDNode* pkLayer = GetParent();

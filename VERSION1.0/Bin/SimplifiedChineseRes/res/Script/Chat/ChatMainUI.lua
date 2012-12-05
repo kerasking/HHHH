@@ -146,9 +146,10 @@ function p.LoadUI()
 		return  false;
 	end
 	--LogInfo("get layer");
+	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.ChatMainUI);
-	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect(CGRectMake(0, 0, winsize.w, winsize.h));
 	layer:SetBackgroundColor(ccc4(0,0,0,125));
 	

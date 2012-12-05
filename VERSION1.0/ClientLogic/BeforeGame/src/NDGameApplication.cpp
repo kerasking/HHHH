@@ -213,8 +213,11 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	}
 	else if(target == kTargetAndroid)
 	{
+		CCEGLView* eglView = CCDirector::sharedDirector()->getOpenGLView();
 		CCLog("Entryu setDesignResolutionSize");
-		CCEGLView::sharedOpenGLView()->setDesignResolutionSize(800, 480, kResolutionNoBorder);
+		CCLog( "@@ before setDesignResolutionSize(), frameSize=(%d,%d)\r\n", (int)eglView->getFrameSize().width, (int)eglView->getFrameSize().height );
+		CCEGLView::sharedOpenGLView()->setDesignResolutionSize( eglView->getFrameSize().width, eglView->getFrameSize().height, kResolutionNoBorder );
+		//CCEGLView::sharedOpenGLView()->setDesignResolutionSize(800, 480, kResolutionNoBorder);
 		//CCEGLView::sharedOpenGLView()->setDesignResolutionSize(960, 640, kResolutionNoBorder);
 	}
 	else 
@@ -286,7 +289,7 @@ void NDGameApplication::MyInit()
 	LOGD("pkDirector Initialization Over");
 
 	NDScriptRegLua::doReg(); //@reglua
-	ScriptMgrObj.Load();
+	ScriptMgrObj.Load(); //这行没了，android会崩溃！！！
 
 //---init++Guosen 2012.11.29
     CSqliteDBMgr::shareInstance().InitDataBase("DNSG.sqlite");
@@ -302,7 +305,7 @@ void NDGameApplication::MyInit()
 
 	//-------------------------------------------------------------
 	dumpCocos2dx(); //@android //@del
-	NDDebugOpt::setDrawDebugEnabled(1);
+	//NDDebugOpt::setDrawDebugEnabled(1);
 	//-------------------------------------------------------------
 }
 

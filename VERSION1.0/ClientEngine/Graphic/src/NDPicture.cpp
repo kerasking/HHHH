@@ -805,13 +805,13 @@ NDPicture* NDPicturePool::AddPicture(const char* imageFile, bool gray/*=false*/)
 {
 	//NDAsssert(imageFile != NULL);
 
-	cocos2d::CCLog("entry Addpicture,imageFile value is %s",imageFile);
+	//cocos2d::CCLog("entry Addpicture,imageFile value is %s",imageFile);
 
-	cocos2d::CCLog("ss << imageFile end,m_pkTextures value is %d",(int)m_pkTextures);
+	//cocos2d::CCLog("ss << imageFile end,m_pkTextures value is %d",(int)m_pkTextures);
 
 	NDPicture* pkPicture = (NDPicture *) m_pkTextures->Object(imageFile);
 
-	cocos2d::CCLog("NDPicture* pkPicture = (NDPicture *) m_pkTextures->Object(ss.str().c_str()); value %d",(int)pkPicture);
+	//cocos2d::CCLog("NDPicture* pkPicture = (NDPicture *) m_pkTextures->Object(ss.str().c_str()); value %d",(int)pkPicture);
 
 	if (!pkPicture)
 	{
