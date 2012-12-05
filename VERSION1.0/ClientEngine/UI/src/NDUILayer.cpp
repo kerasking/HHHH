@@ -269,7 +269,7 @@ void NDUILayer::draw()
 			//DrawRecttangle(scrRect, m_kBackgroudColor);
 			//++ÐÞÕý×ø±êºÍ³ß´ç£¬Guosen 2012.12.4
 			ConvertUtil::convertToPointCoord( scrRect );
-			CCRect tRect = CCRectMake(scrRect.origin.x,SCREEN2GL_Y(scrRect.origin.y),scrRect.size.width,scrRect.size.height);
+			CCRect tRect = CCRectMake(scrRect.origin.x,SCREEN2GL_Y(scrRect.origin.y)-scrRect.size.height,scrRect.size.width,scrRect.size.height);
 			DrawRecttangle(tRect, m_kBackgroudColor);
 			
 			if (m_pkBackgroudTexture)
