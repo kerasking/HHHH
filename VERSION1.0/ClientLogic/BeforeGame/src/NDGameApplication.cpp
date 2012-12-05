@@ -302,7 +302,7 @@ void NDGameApplication::MyInit()
 
 	//-------------------------------------------------------------
 	dumpCocos2dx(); //@android //@del
-	NDDebugOpt::setDrawDebugEnabled(1);
+	NDDebugOpt::setDrawDebugEnabled(0);
 	//-------------------------------------------------------------
 }
 
