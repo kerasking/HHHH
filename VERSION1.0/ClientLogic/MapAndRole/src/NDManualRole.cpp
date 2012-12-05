@@ -295,6 +295,7 @@ void NDManualRole::ReLoadLookface(int lookface)
 
 void NDManualRole::Walk(CCPoint toPos, SpriteSpeed speed)
 {
+	//CCLog( "NDManualRole::Walk(%d, %d)\r\n", (int)toPos.x, (int)toPos.y );
 	//WriteCon( "NDManualRole::Walk(%d, %d)\r\n", (int)toPos.x, (int)toPos.y );
 
 	std::vector < CCPoint > vec_pos;

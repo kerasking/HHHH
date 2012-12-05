@@ -10,7 +10,6 @@
 #include "define.h"
 #include "NDUISynLayer.h"
 #include "SMGameScene.h"
-#include "GameDataBase.h"
 #include "ItemMgr.h"
 #include "ScriptGlobalEvent.h"
 #include "NDNetMsg.h"

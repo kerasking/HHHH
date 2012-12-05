@@ -85,7 +85,9 @@ function p.ShowYesDlg(tip, callback, param, timeout,color,flag)
 		return 0;
 	end
 	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
+	layer:bringToTop();
 	layer:SetTag(nTag);
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer, p.OrderLayer);
@@ -190,7 +192,9 @@ function p.ShowYesOrNoDlg(tip, callback, param, timeout)
 		return 0;
 	end
 	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
+	layer:bringToTop();
 	layer:SetTag(nTag);
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer, p.OrderLayer);
@@ -278,7 +282,9 @@ function p.ShowNotHintDlg(tip, callback, param, timeout)
 		return 0;
 	end
 	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
+	layer:bringToTop();
 	layer:SetTag(nTag);
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer, p.OrderLayer);
@@ -369,7 +375,9 @@ function p.ShowInputDlg(tip, callback, param, nDefault, nMaxLength)
 		return 0;
 	end
 	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
+	layer:bringToTop();
 	layer:SetTag(nTag);
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer, p.OrderLayer);

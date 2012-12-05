@@ -94,6 +94,7 @@ function p.LoadUI()
 		return false;
 	end
 	layer:Init();
+	--layer:SetDebugName( "topBar" );
 	layer:SetFrameRect(RectTopUILayer);
 	layer:SetTag(NMAINSCENECHILDTAG.MainUITop );
     

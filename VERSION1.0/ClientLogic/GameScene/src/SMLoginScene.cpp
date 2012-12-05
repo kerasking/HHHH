@@ -106,8 +106,9 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 		NDUILayer * layer = new NDUILayer();
 		layer->Initialization();
-		layer->SetFrameRect(CGRectMake(0, 0, 480,320));//winSize.width, winSize.height));
+		layer->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));//不要硬编码！！
 		scene->AddChild(layer);
+		scene->m_pLayerOld = layer;
 		
 		NDPicturePool& pool		= *(NDPicturePool::DefaultPool());
 		NDUIImage* imgBack	= new NDUIImage;
@@ -134,11 +135,14 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 //===========================================================================
 CSMLoginScene::CSMLoginScene()
 : m_bUpdOk(false)
+, m_pLayerOld(NULL)
 , m_pLayerUpdate(NULL)
 , m_pTimer(NULL)
 , m_pCtrlProgress(NULL)
 , m_pLabelPromtp(NULL)
 , m_iAccountID(0)
+, m_iState(0)
+, m_pLayerCheckWIFI(NULL)
 {
 }
 
@@ -582,8 +586,8 @@ bool CSMLoginScene::CreateUpdateUILayer()
 		NDLog( "CSMLoginScene::CreateUpdateUILayer() m_pLabelPromtp is null" );
 		return false;
 	}
-	m_pLabelPromtp->SetVisible(false);
-	
+	if (m_pLabelPromtp) m_pLabelPromtp->SetVisible(false);
+	if (m_pLayerOld) m_pLayerOld->SetVisible(false);
 	return true;
 }
 
@@ -788,18 +792,32 @@ void CSMLoginScene::SetProgress( int nPercent )
 //===========================================================================
 void CSMLoginScene::StartEntry()
 {
-//	NDLocalXmlString::GetSingleton().LoadData();
-//	ScriptMgrObj.Load();//
-//    ScriptMgrObj.excuteLuaFunc( "LoadData", "GameSetting" ); 
-//	CloseUpdateUILayer();
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//	//if ( m_iAccountID == 0 )
-//		m_iAccountID = ScriptMgrObj.excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
-//#endif
-//	ScriptMgrObj.excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
-////    ScriptMgrObj.excuteLuaFunc("ProecssLocalNotification", "MsgLoginSuc");
-//	return;
+	CCLOG( "@@ CSMLoginScene::StartEntry()\r\n" );
 
+#if 1 //取完代码android又崩溃了，先还原代码.
+	if (m_pLabelPromtp)
+	{
+		m_pLabelPromtp->SetText( SZ_INSTALL );
+		m_pLabelPromtp->SetVisible( true );
+	}
+	ShowWaitingAni();
+
+	NDLocalXmlString::GetSingleton().LoadData();
+	ScriptMgrObj.Load(); //加载LUA脚本
+
+	ScriptMgrObj.excuteLuaFunc( "LoadData", "GameSetting" ); 
+	CloseUpdateUILayer();
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	//if ( m_iAccountID == 0 )
+	m_iAccountID = ScriptMgrObj.excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
+#endif
+
+	ScriptMgrObj.excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
+	//    ScriptMgrObj.excuteLuaFunc("ProecssLocalNotification", "MsgLoginSuc");
+
+#else //多线程不会有什么好处，反而是崩溃和不稳定，
+	  //实际上网络线程和控制台线程都是多余的！单线程足够了！
 	if (m_pLabelPromtp)
 	{
 		m_pLabelPromtp->SetText( SZ_INSTALL );
@@ -810,6 +828,9 @@ void CSMLoginScene::StartEntry()
 	ScriptMgrObj;
 	pthread_t pid;
 	pthread_create(&pid, NULL, CSMLoginScene::LoadTextAndLua, (void*)this);	
+#endif
+
+	CCLOG( "@@ CSMLoginScene::StartEntry() -- done.\r\n" );
 }
 
 //===========================================================================
@@ -942,7 +963,7 @@ void * CSMLoginScene::LoadTextAndLua( void * pPointer )
 	{
 		CSMLoginScene * pScene = (CSMLoginScene*)pPointer;
 		NDLocalXmlString::GetSingleton().LoadData();
-		ScriptMgrObj.Load();//
+		//ScriptMgrObj.Load();//
 		ScriptMgrObj.excuteLuaFunc( "LoadData", "GameSetting" ); 
 		pScene->m_pTimer->SetTimer( pScene, TAG_TIMER_LOAD_RES_OK,0.05f );
 	}

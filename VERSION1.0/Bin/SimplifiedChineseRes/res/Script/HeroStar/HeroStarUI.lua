@@ -305,9 +305,9 @@ local scene = GetSMGameScene();
 		return false;
 	end
 	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.HeroStarUI);
-	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect(RectFullScreenUILayer);
 	
 

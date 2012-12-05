@@ -36,9 +36,10 @@ function p.LoadUI()
 	if layer == nil then
 		return false;
 	end
+	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerGiftBagUI );
-	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer,1);
     

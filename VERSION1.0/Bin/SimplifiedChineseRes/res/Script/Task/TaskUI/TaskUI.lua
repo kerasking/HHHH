@@ -86,9 +86,10 @@ function p.LoadUI()
 	if layer == nil then
 		return false;
 	end
+	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerTask);
-	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect(RectUILayer);
 	--layer:SetBackgroundColor(ccc4(125, 125, 125, 125));
 	--scene:AddChild(layer);

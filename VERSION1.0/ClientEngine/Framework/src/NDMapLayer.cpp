@@ -41,6 +41,7 @@
 #include "TQPlatform.h"
 #include "NDUtil.h"
 #include "NDBaseBattleMgr.h"
+#include "NDBaseLayer.h"
 
 using namespace cocos2d;
 
@@ -226,6 +227,12 @@ void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)
 void NDMapLayer::Initialization(const char* mapFile)
 {
 	NDLayer::Initialization();
+
+	if (m_ccNode)
+	{
+		((NDBaseLayer*)m_ccNode)->setDebugName( "NDMapLayer" );
+	}
+
 	SetTouchEnabled(true);
 
 	m_pkSwitchAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithModelId(switch_ani_modelId);
@@ -278,7 +285,7 @@ void NDMapLayer::refreshTitle()
 			{
 				if(m_lbTitle && m_lbTitleBg)
 				{
-					int x = CCDirector::sharedDirector()->getWinSizeInPixels().width / 2 - 150;
+					int x = CCDirector::sharedDirector()->getWinSizeInPixels().width / 2 - 150; //@todo:µ°ËéµÄÓ²±àÂë£¬É¶ÊÇ150? É¶ÊÇ210?
 					int y = 60;
 					//NDLog("x:%d,y:%d",x,y);
 					m_lbTitleBg->SetFrameRect(CCRectMake(
@@ -311,7 +318,7 @@ void NDMapLayer::refreshTitle()
 			{
 				if(m_lbTitle && m_lbTitleBg)
 				{
-					int nX = CCDirector::sharedDirector()->getWinSizeInPixels().width / 2 - 150;
+					int nX = CCDirector::sharedDirector()->getWinSizeInPixels().width / 2 - 150; //@todo:µ°ËéµÄÓ²±àÂë£¬É¶ÊÇ150? É¶ÊÇ210?
 					int nY = 60;
 					//NDLog("x:%d,y:%d",x,y);
 					m_lbTitleBg->SetFrameRect(
@@ -1027,9 +1034,11 @@ void NDMapLayer::SetPosition(CCPoint kPosition)
 
 bool NDMapLayer::SetScreenCenter(CCPoint kPoint)
 {
- 		if(m_bBattleBackground){
- 			return false;
- 		}
+	//CCLog("@@ NDMapLayer::SetScreenCenter(%d, %d)\r\n", int(kPoint.x), int(kPoint.y));
+
+	if(m_bBattleBackground){
+		return false;
+	}
 
 	bool bOverBoder = false;
 	int width = GetContentSize().width;
@@ -1067,6 +1076,9 @@ bool NDMapLayer::SetScreenCenter(CCPoint kPoint)
 	//[m_mapData moveBackGround:backOff.x,backOff.y];
 
 	m_kScreenCenter = kPoint;
+
+	//CCLog("@@ NDMapLayer::m_kScreenCenter=(%d, %d)\r\n", int(m_kScreenCenter.x), int(m_kScreenCenter.y));
+
 	//NDLog("center:%f,%f",p.x,p.y);
 	SetPosition(
 			CCPointMake(winSize.width / 2 - kPoint.x,
@@ -1914,7 +1926,10 @@ void NDMapLayer::OpenTreasureBox()
 
 void NDMapLayer::debugDraw()
 {
-#if 1 //@del
+	if (!NDDebugOpt::getDrawDebugEnabled() ||
+		!NDDebugOpt::getDrawCellEnabled()) return;
+
+#if 1
 	float w = CCDirector::sharedDirector()->getVisibleSize().width;
 	float h = CCDirector::sharedDirector()->getVisibleSize().height;
 	glLineWidth(2);
@@ -1922,9 +1937,6 @@ void NDMapLayer::debugDraw()
 	ccDrawLine( ccp(0,0), ccp(w,h));
 	ccDrawLine( ccp(0,h), ccp(w,0));
 #endif
-
-	if (!NDDebugOpt::getDrawDebugEnabled() ||
-		!NDDebugOpt::getDrawCellEnabled()) return;
 
 	//drawCell();
 }

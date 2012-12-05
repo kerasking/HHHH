@@ -194,6 +194,7 @@ function p.LoadUI()
 		return false;
 	end
 	layer:Init();
+	--layer:SetDebugName( "bottomBar" );
 	layer:SetTag(NMAINSCENECHILDTAG.BottomSpeedBar );
 	layer:SetFrameRect(p.LayerRect);
 	scene:AddChild(layer);

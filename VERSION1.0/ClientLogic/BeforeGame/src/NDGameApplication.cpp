@@ -213,8 +213,11 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	}
 	else if(target == kTargetAndroid)
 	{
+		CCEGLView* eglView = CCDirector::sharedDirector()->getOpenGLView();
 		CCLog("Entryu setDesignResolutionSize");
-		CCEGLView::sharedOpenGLView()->setDesignResolutionSize(800, 480, kResolutionNoBorder);
+		CCLog( "@@ before setDesignResolutionSize(), frameSize=(%d,%d)\r\n", (int)eglView->getFrameSize().width, (int)eglView->getFrameSize().height );
+		CCEGLView::sharedOpenGLView()->setDesignResolutionSize( eglView->getFrameSize().width, eglView->getFrameSize().height, kResolutionNoBorder );
+		//CCEGLView::sharedOpenGLView()->setDesignResolutionSize(800, 480, kResolutionNoBorder);
 		//CCEGLView::sharedOpenGLView()->setDesignResolutionSize(960, 640, kResolutionNoBorder);
 	}
 	else 
@@ -257,6 +260,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 //@init
 void NDGameApplication::MyInit()
 {
+	CCLOG( "@@ NDGameApplication::MyInit()\r\n" );
 	LOGD("Start MyInit");
 
 	REGISTER_CLASS(NDBaseBattle,Battle);
@@ -286,6 +290,7 @@ void NDGameApplication::MyInit()
 	LOGD("pkDirector Initialization Over");
 
 	NDScriptRegLua::doReg(); //@reglua
+	ScriptMgrObj.LoadRegClassFuncs(); //注册C++接口到LUA（不涉及加载LUA）.
 
 //---init++Guosen 2012.11.29
     CSqliteDBMgr::shareInstance().InitDataBase("DNSG.sqlite");
@@ -301,8 +306,10 @@ void NDGameApplication::MyInit()
 
 	//-------------------------------------------------------------
 	dumpCocos2dx(); //@android //@del
-	NDDebugOpt::setDrawDebugEnabled(1);
+	//NDDebugOpt::setDrawDebugEnabled(1);
 	//-------------------------------------------------------------
+
+	CCLOG( "@@ NDGameApplication::MyInit() -- done.\r\n" );
 }
 
 void NDGameApplication::applicationDidEnterBackground()
