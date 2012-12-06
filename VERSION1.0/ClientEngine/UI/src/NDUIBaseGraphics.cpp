@@ -54,7 +54,6 @@ namespace NDEngine
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glEnable(GL_TEXTURE_2D);	
 #endif
-
 		//ccColor4F cr = ccc4FFromccc4B(color);
 		//ccDrawColor4F( cr.r, cr.g, cr.b, cr.a );
 
@@ -65,19 +64,19 @@ namespace NDEngine
 		//ConvertUtil::convertToPointCoord( rect.size );
 		//ccDrawRect( SCREEN2GL(rect.origin), SCREEN2GL(destination));
 
-if ( color.r == 0 && color.g == 0 && color.b == 0 && color.a == 0)
-{
-	return;
-}
+		if ( color.r == 0 && color.g == 0 && color.b == 0 && color.a == 0)
+		{
+			return;
+		}
  		ccVertex2F m_pSquareVertices[4];
  		m_pSquareVertices[0].x = rect.origin.x;
  		m_pSquareVertices[0].y = rect.origin.y;
- 		m_pSquareVertices[1].x = rect.size.width;
+ 		m_pSquareVertices[1].x = rect.origin.x+rect.size.width;
  		m_pSquareVertices[1].y = rect.origin.y;
  		m_pSquareVertices[2].x = rect.origin.x;
- 		m_pSquareVertices[2].y = rect.size.height;
- 		m_pSquareVertices[3].x = rect.size.width;
- 		m_pSquareVertices[3].y = rect.size.height;
+ 		m_pSquareVertices[2].y = rect.origin.y+rect.size.height;
+ 		m_pSquareVertices[3].x = rect.origin.x+rect.size.width;
+ 		m_pSquareVertices[3].y = rect.origin.y+rect.size.height;
  
  		ccColor4F  tSquareColors[4];
  		{
@@ -101,15 +100,13 @@ if ( color.r == 0 && color.g == 0 && color.b == 0 && color.a == 0)
  			//} while (0);
  
  			ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_Color );
- 
- 			glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, m_pSquareVertices);
+  			glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, m_pSquareVertices);
  			glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_FLOAT, GL_FALSE, 0, tSquareColors);
- 
- 			ccGLBlendFunc( tBlendFunc.src, tBlendFunc.dst );
- 
+  			ccGLBlendFunc( tBlendFunc.src, tBlendFunc.dst ); 
  			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
  
  		}
+// 		//≤‚ ‘√Ëœﬂ¥˙¬Î
 // 		ccDrawColor4F(1,1,0,0.5);
 // 		glLineWidth(2);
 // 		ccDrawLine( ccp(rect.origin.x,rect.origin.y), ccp(rect.origin.x+rect.size.width,rect.origin.y+rect.size.height));

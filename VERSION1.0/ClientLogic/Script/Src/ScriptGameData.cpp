@@ -11,6 +11,7 @@
 #include "globaldef.h"
 
 
+//@loadini
 unsigned int Get_VecScriptGameData_Size(VecScriptGameData& data)
 {
 	unsigned int nTotal	= 0;

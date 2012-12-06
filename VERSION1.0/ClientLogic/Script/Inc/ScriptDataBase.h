@@ -15,9 +15,10 @@
 #include <string>
 #include "typedef.h"
 
+//@loadini
 #define ScriptDBObj	NDEngine::ScriptDB::GetSingleton()
 
-namespace NDEngine {
+NS_NDENGINE_BGN
 	
 
 class ScriptDB: public TSingleton<ScriptDB>
@@ -44,6 +45,7 @@ public:
 	ScriptDB();
 	~ScriptDB();
 };
-}
+
+NS_NDENGINE_END
 
 #endif // _SCRIPT_DATA_BASE_H_

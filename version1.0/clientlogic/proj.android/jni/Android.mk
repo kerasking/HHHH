@@ -21,8 +21,6 @@ LOCAL_SRC_FILES := \
 ../../Drama/src/DramaScene.cpp \
 ../../Drama/src/DramaTransitionScene.cpp \
 ../../Drama/src/DramaUI.cpp \
-../../GameData/src/GameData.cpp \
-../../GameData/src/GameDataBase.cpp \
 ../../GameScene/src/GameScene.cpp \
 ../../GameScene/src/GameSceneLoading.cpp \
 ../../GameScene/src/SMBattleScene.cpp \
@@ -127,7 +125,6 @@ $(LOCAL_PATH)/../../BeforeGame/inc \
 $(LOCAL_PATH)/../../Chat/inc \
 $(LOCAL_PATH)/../../Common/inc \
 $(LOCAL_PATH)/../../Drama/inc \
-$(LOCAL_PATH)/../../GameData/inc \
 $(LOCAL_PATH)/../../GameScene/inc \
 $(LOCAL_PATH)/../../Item/inc \
 $(LOCAL_PATH)/../../MapAndRole/inc \
