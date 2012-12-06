@@ -28,6 +28,8 @@ IMPLEMENT_CLASS(NDUISynLayer, NDUILayer)
 
 NDUISynLayer::NDUISynLayer()
 {
+	m_strDebugName = "NDUISynLayer";
+
 	NDAsssert(NDUISynLayer_instances == NULL);
 	/*
 	m_texLine = [[CCTexture2D alloc] initWithImage:[UIImage imageWithContentsOfFile:[NSString stringWithUTF8String:GetImgPath("syn_track.png")]]];
@@ -87,9 +89,13 @@ bool NDUISynLayer::IsShown()
 
 void NDUISynLayer::Initialization()
 {
+	this->setPopupDlgFlag( true );
 	NDUILayer::Initialization();
+	this->bringToTop();
+
 	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	this->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
+	
 	
 	CUISpriteNode *node = new CUISpriteNode;
 	node->Initialization();
