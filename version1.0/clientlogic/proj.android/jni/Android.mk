@@ -10,6 +10,7 @@ LOCAL_SRC_FILES := \
 ../../BeforeGame/src/Main.cpp \
 ../../BeforeGame/src/NDBeforeGameMgr.cpp \
 ../../BeforeGame/src/NDGameApplication.cpp \
+../../BeforeGame/src/MobageSdkLoginAndroid.cpp \
 ../../Chat/src/ChatManager.cpp \
 ../../Common/src/DirectKey.cpp \
 ../../Common/src/GlobalDialog.cpp \

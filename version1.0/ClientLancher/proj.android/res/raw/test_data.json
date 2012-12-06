@@ -1,0 +1,65 @@
+{
+    "leaderboard_1": {
+        "id": "ID1",
+        "appId": "13000057",
+        "title": "test1",
+        "scoreFormat": "integer",
+        "scorePrecision": 2,
+        "iconUrl": "http://sb.app.mobage.cn/image/13000057/96d2667497b749e797ace19284942c01.png",
+        "allowLowerScore": true,
+        "reverse": false,
+        "archived": false,
+        "defaultScore": 100,
+        "published": "2012-07-11T03:18:30",
+        "updated": "2012-07-11T03:18:30"
+    },
+    "leaderboard_2": {
+        "id": "ID2",
+        "appId": "13000057",
+        "title": "test2",
+        "scoreFormat": "integer",
+        "scorePrecision": 2,
+        "iconUrl": "http://sb.app.mobage.cn/image/13000057/f04ecc17717b636061ff6acfec84066f.png",
+        "allowLowerScore": true,
+        "reverse": false,
+        "archived": false,
+        "defaultScore": 100,
+        "published": "2012-07-16T03:25:54",
+        "updated": "2012-07-16T03:25:54"
+    },
+    "leaderboard_3": {
+        "id": "money",
+        "appId": "12008734",
+        "title": "ｵｶﾈ",
+        "scoreFormat": "decimal",
+        "scorePrecision": 6,
+        "iconUrl": "http://developer.dena.jp/images/upload/smartphone/2/6/26463b03734fa608f39e10f20e6782e5.gif",
+        "allowLowerScore": true,
+        "reverse": false,
+        "archived": false,
+        "defaultScore": 1000,
+        "published": "2012-05-22T13:32:24",
+        "updated": "2012-05-24T02:19:14"
+    },
+    "user_1_login": "73637",
+    "user_2_noscore": "75783",
+    "user_3_other": "75785",
+    "score_leaderboard_1_you": {
+        "userId": "sb.mbga.jp:73637",
+        "displayValue": "999999999",
+        "rank": 1,
+        "value": 999999999
+    },
+    "score_leaderboard_1_other": {
+        "userId": "sb.mbga.jp:75785",
+        "displayValue": "300",
+        "rank": 2,
+        "value": 300
+    },
+    "score_leaderboard_1_friend": {
+        "userId": "sb.mbga.jp:73643",
+        "displayValue": "-1",
+        "rank": 3,
+        "value": -1
+    }
+}

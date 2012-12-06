@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="simiple_button_color">#FFF</color>
+  <color name="text_color">#FFF</color>
+  <color name="label_text_color">#33658d</color>
+  <color name="edit_text_color">#FFF</color>
+  <color name="go_register_color">#333333</color>
+  <color name="edit_text_color2">#4370a5</color>
+  <color name="edit_hint_text_color">#5380b1</color>
+  <color name="edit_hint_text_color2">#cce6ff</color>
+  <color name="gohelp_button_color">#33658d</color>
+  <color name="transparent">#00000000</color>
+  
+</resources>

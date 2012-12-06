@@ -61,6 +61,7 @@ int WINAPI WinMain (HINSTANCE hInstance,
 #include <android/log.h>
 #include "globaldef.h"
 #include "NDDebugOpt.h"
+#include "MobageSdkLoginAndroid.h"
 
 #define  LOG_TAG    "DaHua"
 #define  LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
@@ -112,7 +113,20 @@ extern "C"
 		spDirector = new NDBaseDirector;
 		LOGD("Leave Java_org_DeNA_DHLJ_DaHuaLongJiang_nativeInit,value is %d",(int)spDirector);
 	}
-
+    
+	void Java_org_DeNA_DHLJ_DaHuaLongJiang_onLoginComplete(JNIEnv*  env, jobject thiz, jint userid)
+	{
+		LOGD("Enter Java_org_DeNA_DHLJ_DaHuaLongJiang_onLoginComplete,value is %d",(int)userid);
+        MobageSdkLoginAndroid::onLoginComplete(userid);
+		LOGD("Leave Java_org_DeNA_DHLJ_DaHuaLongJiang_onLoginComplete,value is %d",(int)userid);
+	}
+    
+	void Java_org_DeNA_DHLJ_DaHuaLongJiang_onLoginError(JNIEnv*  env, jobject thiz, jstring error)
+	{
+		LOGD("Enter Java_org_DeNA_DHLJ_DaHuaLongJiang_onLoginError");
+        MobageSdkLoginAndroid::onLoginError();
+		LOGD("Leave Java_org_DeNA_DHLJ_DaHuaLongJiang_onLoginError");
+	}
 }
 
 #endif

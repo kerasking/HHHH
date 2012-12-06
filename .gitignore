@@ -6,7 +6,6 @@
 *.sdf
 *.db
 
-*.so
 
 debug/
 Debug/

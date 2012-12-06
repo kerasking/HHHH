@@ -23,11 +23,14 @@ THE SOFTWARE.
  ****************************************************************************/
 package org.cocos2dx.lib;
 
+import org.DeNA.DHLJ.R;
 import org.cocos2dx.lib.Cocos2dxHelper.Cocos2dxHelperListener;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
@@ -73,7 +76,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 		super.onResume();
 
 		Cocos2dxHelper.onResume();
-		this.mGLSurfaceView.onResume();
+//		this.mGLSurfaceView.onResume();
 	}
 
 	@Override
@@ -81,7 +84,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 		super.onPause();
 
 		Cocos2dxHelper.onPause();
-		this.mGLSurfaceView.onPause();
+//		this.mGLSurfaceView.onPause();
 	}
 
 	@Override
@@ -111,39 +114,44 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	public void init() {
 		
     	// FrameLayout
-        ViewGroup.LayoutParams framelayout_params =
-            new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
-                                       ViewGroup.LayoutParams.FILL_PARENT);
-        FrameLayout framelayout = new FrameLayout(this);
-        framelayout.setLayoutParams(framelayout_params);
+//        ViewGroup.LayoutParams framelayout_params =
+//            new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
+//                                       ViewGroup.LayoutParams.FILL_PARENT);
+//        FrameLayout framelayout = new FrameLayout(this);
+//        framelayout.setLayoutParams(framelayout_params);
+//		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//		FrameLayout framelayout =(FrameLayout)inflater.inflate(R.layout.dahualongjiang,null);
 
         // Cocos2dxEditText layout
-        ViewGroup.LayoutParams edittext_layout_params =
-            new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
-                                       ViewGroup.LayoutParams.WRAP_CONTENT);
-        Cocos2dxEditText edittext = new Cocos2dxEditText(this);
-        edittext.setLayoutParams(edittext_layout_params);
+//        ViewGroup.LayoutParams edittext_layout_params =
+//            new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
+//                                       ViewGroup.LayoutParams.WRAP_CONTENT);
+//        Cocos2dxEditText edittext = new Cocos2dxEditText(this);
+//        edittext.setLayoutParams(edittext_layout_params);
 
         // ...add to FrameLayout
-        framelayout.addView(edittext);
+//        framelayout.addView(edittext);
 
         // Cocos2dxGLSurfaceView
         this.mGLSurfaceView = this.onCreateView();
 
         // ...add to FrameLayout
-        framelayout.addView(this.mGLSurfaceView);
+//        framelayout.addView(this.mGLSurfaceView);
 
         this.mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
-        this.mGLSurfaceView.setCocos2dxEditText(edittext);
+//        this.mGLSurfaceView.setCocos2dxEditText(edittext);
 
         // Set framelayout as the content view
-		setContentView(framelayout);
+//		setContentView(framelayout);
 	}
 	
     public Cocos2dxGLSurfaceView onCreateView() {
     	return new Cocos2dxGLSurfaceView(this);
     }
 
+    public Cocos2dxGLSurfaceView getView() {
+    	return this.mGLSurfaceView;
+    }
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
