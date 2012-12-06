@@ -297,34 +297,6 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="GameData"
-			>
-			<Filter
-				Name="inc"
-				>
-				<File
-					RelativePath="..\GameData\inc\GameData.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GameData\inc\GameDataBase.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="src"
-				>
-				<File
-					RelativePath="..\GameData\src\GameData.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GameData\src\GameDataBase.cpp"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
 			Name="GameScene"
 			>
 			<Filter
@@ -539,15 +511,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\Script\Inc\ScriptDataBase.h"
-					>
-				</File>
-				<File
 					RelativePath="..\Script\Inc\ScriptDrama.h"
-					>
-				</File>
-				<File
-					RelativePath="..\Script\Inc\ScriptGameDataLua.h"
 					>
 				</File>
 				<File
@@ -591,19 +555,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\Script\Src\ScriptDataBase.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\Script\Src\ScriptDrama.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\Script\Src\ScriptGameData.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\Script\Src\ScriptGameDataLua.cpp"
 					>
 				</File>
 				<File
@@ -666,6 +618,34 @@
 						>
 					</File>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="loadini"
+				>
+				<File
+					RelativePath="..\Script\Src\ScriptDataBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Script\Inc\ScriptDataBase.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Script\Src\ScriptGameData.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Script\Inc\ScriptGameData.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Script\Src\ScriptGameDataLua.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Script\Inc\ScriptGameDataLua.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter

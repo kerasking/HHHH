@@ -260,6 +260,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 //@init
 void NDGameApplication::MyInit()
 {
+	CCLOG( "@@ NDGameApplication::MyInit()\r\n" );
 	LOGD("Start MyInit");
 
 	REGISTER_CLASS(NDBaseBattle,Battle);
@@ -289,7 +290,7 @@ void NDGameApplication::MyInit()
 	LOGD("pkDirector Initialization Over");
 
 	NDScriptRegLua::doReg(); //@reglua
-	ScriptMgrObj.Load(); //这行没了，android会崩溃！！！
+	ScriptMgrObj.LoadRegClassFuncs(); //注册C++接口到LUA（不涉及加载LUA）.
 
 //---init++Guosen 2012.11.29
     CSqliteDBMgr::shareInstance().InitDataBase("DNSG.sqlite");
@@ -307,6 +308,8 @@ void NDGameApplication::MyInit()
 	dumpCocos2dx(); //@android //@del
 	//NDDebugOpt::setDrawDebugEnabled(1);
 	//-------------------------------------------------------------
+
+	CCLOG( "@@ NDGameApplication::MyInit() -- done.\r\n" );
 }
 
 void NDGameApplication::applicationDidEnterBackground()
