@@ -43,7 +43,7 @@ public class NDJavaVideoPlayer implements OnBufferingUpdateListener,
 		try
 		{
 			mediaPlayer.reset();
-			mediaPlayer.setDataSource("/sdcard/dhlj/test.mp4");
+			mediaPlayer.setDataSource("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
 			mediaPlayer.prepare();
 			playVideo();
 	        videoWidth = mediaPlayer.getVideoWidth();  
@@ -64,9 +64,8 @@ public class NDJavaVideoPlayer implements OnBufferingUpdateListener,
 
 	public void playVideo()
 	{
-		surfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		mediaPlayer.start();
-		mediaPlayer.setDisplay(surfaceView.getHolder());
+	//	mediaPlayer.setDisplay();
 	}
 
 	@Override

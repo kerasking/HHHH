@@ -9,12 +9,12 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.MediaController;
 import android.widget.VideoView;
 
 public class DaHuaLongJiang extends Cocos2dxActivity
 {
 	public static DaHuaLongJiang ms_pkDHLJ = null;
-	public VideoView m_pkView;
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -37,9 +37,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public void changeViewToVideo()
 	{
-		setContentView(R.layout.activity_main);
-		m_pkView = (VideoView) findViewById(R.id.videoPlay);
-		setContentView(m_pkView);
 	}
 
 	public boolean isSDCardCanUse()
@@ -67,17 +64,16 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		}
 
 		ms_pkDHLJ.changeViewToVideo();
-		NDJavaVideoPlayer kVideoPlayer = new NDJavaVideoPlayer(
-				ms_pkDHLJ.m_pkView);
 
-		if (0 != kVideoPlayer.loadVideo(strFile))
-		{
-			return -1;
-		}
 
 		return 0;
 	}
 
+	public static int stopVideo(final String strFile)
+	{
+		return 0;
+	}
+	
 	static
 	{
 		System.loadLibrary("luaplus");

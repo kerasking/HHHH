@@ -219,7 +219,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	}
 	else if(target == kTargetAndroid)
 	{
-		CCLog("Entryu setDesignResolutionSize");
+		CCLog("Entry setDesignResolutionSize");
 		CCEGLView::sharedOpenGLView()->setDesignResolutionSize(800, 480, kResolutionNoBorder);
 		//CCEGLView::sharedOpenGLView()->setDesignResolutionSize(960, 640, kResolutionNoBorder);
 	}
@@ -243,6 +243,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 	// set FPS. the default value is 1.0/60 if you don't call this
 	//pDirector->setAnimationInterval(1.0 / 60);
+	LOGD("pDirector->setAnimationInterval() value is %d",(int)pDirector);
 	pDirector->setAnimationInterval(1.0 / 24);
 
 #if 0 //@todo @hello
@@ -253,7 +254,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
  	pDirector->runWithScene(pScene);
 	//////////////////////////////////////////////
 #else
-	//MyInit();
+	MyInit();
 #endif
 
 

@@ -25,7 +25,8 @@ public:
 	static NDVideoMgr* GetVideoMgrSingleton();
 
 	virtual bool PlayVideo(const char* pszFilename);
-	
+	virtual bool StopVideo();
+
 	bool RegisterVideoListener(NDVideoEventListener* pkVideoListener);
 
 protected:

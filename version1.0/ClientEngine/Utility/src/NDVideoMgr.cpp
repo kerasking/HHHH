@@ -127,4 +127,28 @@ bool NDVideoMgr::RegisterVideoListener( NDVideoEventListener* pkVideoListener )
 	return true;
 }
 
+bool NDVideoMgr::StopVideo()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	string strRet = "";
+	JniMethodInfo kMethodInfo;
+
+	if (JniHelper::getStaticMethodInfo(kMethodInfo, "org/DeNA/DHLJ/DaHuaLongJiang",
+		"playVideo",
+		"(Ljava/lang/String;)I"))
+	{
+		LOGD("the kMethodInfo value is:env = %d,classID = %d,methodID = %d",(int)kMethodInfo.env,(int)kMethodInfo.classID,(int)kMethodInfo.methodID);
+
+		jstring stringArg1;
+		stringArg1 = kMethodInfo.env->NewStringUTF("");
+
+		jint retFromJava = (jint) kMethodInfo.env->CallStaticObjectMethod(kMethodInfo.classID,
+			kMethodInfo.methodID, stringArg1);
+	}
+
+#endif
+
+	return true;
+}
+
 NS_NDENGINE_END

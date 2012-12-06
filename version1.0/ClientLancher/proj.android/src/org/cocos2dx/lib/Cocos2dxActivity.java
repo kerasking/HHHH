@@ -23,13 +23,19 @@ THE SOFTWARE.
  ****************************************************************************/
 package org.cocos2dx.lib;
 
+import org.DeNA.DHLJ.NDJavaVideoPlayer;
+import org.DeNA.DHLJ.NDVideoControl;
+import org.DeNA.DHLJ.R;
 import org.cocos2dx.lib.Cocos2dxHelper.Cocos2dxHelperListener;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
 public abstract class Cocos2dxActivity extends Activity implements
 		Cocos2dxHelperListener
@@ -47,7 +53,8 @@ public abstract class Cocos2dxActivity extends Activity implements
 	public Cocos2dxGLSurfaceView mGLSurfaceView;
 	public FrameLayout m_pkFrameView = null;
 	private Cocos2dxHandler mHandler;
-
+	public VideoView m_pkView = null;
+	
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -122,7 +129,6 @@ public abstract class Cocos2dxActivity extends Activity implements
 	// ===========================================================
 	public void init()
 	{
-
 		// FrameLayout
 		ViewGroup.LayoutParams framelayout_params = new ViewGroup.LayoutParams(
 				ViewGroup.LayoutParams.FILL_PARENT,
@@ -150,7 +156,30 @@ public abstract class Cocos2dxActivity extends Activity implements
 		mGLSurfaceView.setCocos2dxEditText(edittext);
 
 		// Set framelayout as the content view
-		setContentView(m_pkFrameView);
+		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.FILL_PARENT,
+                ViewGroup.LayoutParams.FILL_PARENT);
+		setContentView(R.layout.helloworld_demo);
+		//addContentView(m_pkFrameView,pkLayoutParams);
+
+		addContentView(m_pkFrameView,pkLayoutParams);
+		
+		NDVideoControl pkVideoControl = new NDVideoControl(Cocos2dxActivity.this);
+		pkVideoControl.setCocos2dxActivity(this);
+		
+		m_pkView = (VideoView)this.findViewById(R.id.videoPlay);
+		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
+		m_pkView.setMediaController(pkVideoControl);
+		m_pkView.setOnCompletionListener(pkVideoControl);
+		m_pkView.requestFocus();
+		
+        DisplayMetrics metrics = new DisplayMetrics(); getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) m_pkView.getLayoutParams();
+        params.width =  metrics.widthPixels;
+        params.height = metrics.heightPixels;
+        m_pkView.setLayoutParams(params);
+		
+		m_pkView.start();
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView()
