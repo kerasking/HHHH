@@ -45,6 +45,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	// ===========================================================
 
 	public Cocos2dxGLSurfaceView mGLSurfaceView;
+	public FrameLayout m_pkFrameView = null;
 	private Cocos2dxHandler mHandler;
 
 	// ===========================================================
@@ -126,8 +127,8 @@ public abstract class Cocos2dxActivity extends Activity implements
 		ViewGroup.LayoutParams framelayout_params = new ViewGroup.LayoutParams(
 				ViewGroup.LayoutParams.FILL_PARENT,
 				ViewGroup.LayoutParams.FILL_PARENT);
-		FrameLayout framelayout = new FrameLayout(this);
-		framelayout.setLayoutParams(framelayout_params);
+		m_pkFrameView = new FrameLayout(this);
+		m_pkFrameView.setLayoutParams(framelayout_params);
 
 		// Cocos2dxEditText layout
 		ViewGroup.LayoutParams edittext_layout_params = new ViewGroup.LayoutParams(
@@ -137,19 +138,19 @@ public abstract class Cocos2dxActivity extends Activity implements
 		edittext.setLayoutParams(edittext_layout_params);
 
 		// ...add to FrameLayout
-		framelayout.addView(edittext);
+		m_pkFrameView.addView(edittext);
 
 		// Cocos2dxGLSurfaceView
 		this.mGLSurfaceView = this.onCreateView();
 
 		// ...add to FrameLayout
-		framelayout.addView(this.mGLSurfaceView);
+		m_pkFrameView.addView(this.mGLSurfaceView);
 
 		mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
 		mGLSurfaceView.setCocos2dxEditText(edittext);
 
 		// Set framelayout as the content view
-		setContentView(framelayout);
+		setContentView(m_pkFrameView);
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView()
