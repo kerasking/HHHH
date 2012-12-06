@@ -85,6 +85,7 @@ function p.LoadUI( nBattleID )
 		return false;
 	end
     
+    layer:SetPopupDlgFlag(true);
 	layer:Init();
 	layer:SetTag( NMAINSCENECHILDTAG.AffixBossClearUp );
 	layer:SetFrameRect( RectFullScreenUILayer );

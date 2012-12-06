@@ -217,9 +217,11 @@ namespace NDEngine
 
 				CCRect nodeRect = node->GetScreenRect();
 
-				return CCRectMake(nodeRect.origin.x + m_kFrameRect.origin.x - (m_fBoundScale - 1)*m_kFrameRect.size.width*0.5, 
+				return CCRectMake(
+					nodeRect.origin.x + m_kFrameRect.origin.x - (m_fBoundScale - 1)*m_kFrameRect.size.width*0.5, 
 					nodeRect.origin.y + m_kFrameRect.origin.y - (m_fBoundScale - 1)*m_kFrameRect.size.height*0.5, 
-					m_kFrameRect.size.width*m_fBoundScale, m_kFrameRect.size.height*m_fBoundScale);
+					m_kFrameRect.size.width*m_fBoundScale, 
+					m_kFrameRect.size.height*m_fBoundScale);
 			}
 			return m_kFrameRect;
 		}	

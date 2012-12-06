@@ -57,9 +57,9 @@ function p.LoadUI()
 		return false;
 	end
     
+    layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.DragonTactic);
-	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer,2);
 
@@ -306,6 +306,7 @@ function p.AddViewItem(container, nIndex, uiFile)
     
     container:SetViewSize(TacticListSize);
     
+    view:SetPopupDlgFlag(true);
     view:Init(false);
     view:SetViewId(nIndex);
     view:SetTag(nIndex);  

@@ -29,6 +29,10 @@ THE SOFTWARE.
 #include "cocoa/CCObject.h"
 #include "ccConfig.h"
 
+#if ND_MOD
+#include <string>
+#endif
+
 NS_CC_BEGIN
 
 class CCTouch;
@@ -45,7 +49,11 @@ class CC_DLL CCTouchDelegate
 {
 public:
 
-    CCTouchDelegate() {}
+    CCTouchDelegate() {
+#if ND_MOD
+		memset(debugName,0,sizeof(debugName));
+#endif
+	}
 
     virtual ~CCTouchDelegate()
     {
@@ -64,6 +72,20 @@ public:
      virtual void ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent) {CC_UNUSED_PARAM(pTouches); CC_UNUSED_PARAM(pEvent);}
      virtual void ccTouchesCancelled(CCSet *pTouches, CCEvent *pEvent) {CC_UNUSED_PARAM(pTouches); CC_UNUSED_PARAM(pEvent);}
 
+#if ND_MOD //@dirty @priority
+	void bringToTop() { nSubPriority = 0; }
+
+	int getSubPriority() { return nSubPriority; }
+	void setSubPriority( int val = 0xff ) { nSubPriority = val; }
+	int nSubPriority;
+	
+	const char* getDebugName() { return debugName; }
+	void setDebugName( const char* str ) { 
+		strncpy(debugName, str, sizeof(debugName)-1); 
+		debugName[strlen(debugName)]=0; 
+	}
+	char debugName[20];
+#endif
 };
 /**
  @brief

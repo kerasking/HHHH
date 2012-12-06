@@ -246,6 +246,7 @@ function p.GenerateNoramlLayer( pScene )
 		return false;
 	end
     
+    layer:SetPopupDlgFlag(true);
 	layer:Init();
 	layer:SetTag( NMAINSCENECHILDTAG.AffixNormalBoss );
 	layer:SetFrameRect( RectFullScreenUILayer );
@@ -334,6 +335,7 @@ function p.InitializeNoramlLayer()
 			return false;
 		end
 
+		pListItem:SetPopupDlgFlag(true);
 		pListItem:Init( false );
 		pListItem:SetViewId( i );
 		pListItem:SetTag( i );
@@ -585,6 +587,7 @@ function p.GenerateEliteLayer( pParentLayer )
 		LogInfo( "NormalBossListUI: GenerateEliteLayer() failed! layer = nil" );
 		return false;
 	end
+	layer:SetPopupDlgFlag(true);
 	layer:Init();
 	--layer:SetTag( TAG_LAYER_ELITE );
 	layer:SetFrameRect( RectFullScreenUILayer );
@@ -677,6 +680,7 @@ function p.InitializeEliteLayer()
 			return false;
 		end
 
+		pListItem:SetPopupDlgFlag(true);
 		pListItem:Init( false );
 		pListItem:SetViewId( i );
 		pListItem:SetTag( i );
@@ -766,6 +770,7 @@ function p.GenerateConfirmDialog( pParentLayer )
 		LogInfo( "NormalBossListUI: GenerateConfirmDialog() failed! layer = nil" );
 		return false;
 	end
+	layer:SetPopupDlgFlag(true);
 	layer:Init();
 	--layer:SetTag( TAG_LAYER_CONFDLG );
 	layer:SetFrameRect( RectFullScreenUILayer );

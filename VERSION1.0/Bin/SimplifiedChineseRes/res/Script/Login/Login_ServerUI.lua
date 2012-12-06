@@ -10,8 +10,8 @@ local p = Login_ServerUI;
 p.curSel=0;
 p.Account=nil;
 p.Pwd="";
-p.UIN=319258246; 
---p.UIN=317007835;
+--p.UIN=319258246; 
+p.UIN=317007835;
 
 p.LoginWait = true;
 p.SerName = "";
@@ -123,6 +123,7 @@ function p.LoadUI()
     end
 
     p.recvIndex = 0;
+    layer:SetPopupDlgFlag( true );
     layer:Init();
     layer:SetTag(NMAINSCENECHILDTAG.Login_ServerUI);
     layer:SetFrameRect(RectFullScreenUILayer);

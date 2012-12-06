@@ -67,6 +67,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Android_ClientLogic", "proj
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Android_ClientEngine", "proj.android\Android_ClientEngine\Android_ClientEngine.vcproj", "{27D5CCE5-E0F1-4175-A9B6-C78FD39A00D1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cocos2d-x_platform_android", "cocos2d-x_platform_android\cocos2d-x_platform_android.vcproj", "{1F474F7C-B0EC-4A87-B1C8-89FC649103B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -129,6 +131,10 @@ Global
 		{27D5CCE5-E0F1-4175-A9B6-C78FD39A00D1}.Debug|Win32.Build.0 = Debug|Win32
 		{27D5CCE5-E0F1-4175-A9B6-C78FD39A00D1}.Release|Win32.ActiveCfg = Release|Win32
 		{27D5CCE5-E0F1-4175-A9B6-C78FD39A00D1}.Release|Win32.Build.0 = Release|Win32
+		{1F474F7C-B0EC-4A87-B1C8-89FC649103B8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1F474F7C-B0EC-4A87-B1C8-89FC649103B8}.Debug|Win32.Build.0 = Debug|Win32
+		{1F474F7C-B0EC-4A87-B1C8-89FC649103B8}.Release|Win32.ActiveCfg = Release|Win32
+		{1F474F7C-B0EC-4A87-B1C8-89FC649103B8}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,5 +143,6 @@ Global
 		{C4F9C455-B9A0-4597-9562-4D64F6DDE978} = {E5FCE131-AE84-46B3-805C-10DF78544913}
 		{DC5CBD0F-EDF3-425C-B042-D2891B44FF57} = {E5FCE131-AE84-46B3-805C-10DF78544913}
 		{27D5CCE5-E0F1-4175-A9B6-C78FD39A00D1} = {E5FCE131-AE84-46B3-805C-10DF78544913}
+		{1F474F7C-B0EC-4A87-B1C8-89FC649103B8} = {E5FCE131-AE84-46B3-805C-10DF78544913}
 	EndGlobalSection
 EndGlobal

@@ -202,9 +202,10 @@ function p.LoadUI(page)
 	if layer == nil then
 		return false;
 	end
+	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.EquipUI);
-	layer:SetPopupDlgFlag( true );
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer,1);
 -----------------初始化ui添加到 layer 层上----------------------------------
@@ -310,6 +311,7 @@ function p.LoadUI(page)
 	if layerGemView == nil then
 		return false;
 	end
+	layerGemView:SetPopupDlgFlag(true);
 	layerGemView:Init();
 	layerGemView:SetTag(GEMINFO);
 	layerGemView:SetFrameRect(RectFullScreenUILayer);
@@ -844,6 +846,7 @@ function p.AddPetEquipItem(petId)
         for j, v in ipairs(equipIdList) do
             local equipId = equipIdList[j];
             local view = createUIScrollViewM();
+            view:SetPopupDlgFlag(true);
             view:Init(false);
             view:SetViewId(equipId);
             
@@ -1777,6 +1780,7 @@ function p.LoadGemPageView()
 			LogInfo("p.LoadUI createUIScrollView failed");
 			return;
 		end
+		view:SetPopupDlgFlag(true);
 		view:Init(false);
 		view:SetViewId(i);
 		container:AddView(view);
@@ -1817,6 +1821,7 @@ function p.LoadGemBagView()
 			LogInfo("p.LoadUI createUIScrollView failed");
 			return;
 		end
+		view:SetPopupDlgFlag(true);
 		view:Init(false);
 		view:SetViewId(i);
 		container:AddView(view);

@@ -116,6 +116,7 @@ function p.LoadUI( nChosenPetID)
 		LogInfo( "RoleTrainUI: LoadUI() failed! layer = nil" );
 		return false;
 	end
+	layer:SetPopupDlgFlag(true);
 	layer:Init();
 	layer:SetTag( NMAINSCENECHILDTAG.RoleTrain );
 	layer:SetFrameRect( RectFullScreenUILayer );
@@ -506,7 +507,9 @@ function p.FillListContainer( pParentLayer, tPetTable )
 			return false;
 		end
 	
+	    pListItem:SetPopupDlgFlag(true);
 		pListItem:Init( false );
+		pListItem:bringToTop();
 		pListItem:SetScrollStyle( UIScrollStyle.Verical );
 		pListItem:SetViewId( i );
 		pListItem:SetTag( i );

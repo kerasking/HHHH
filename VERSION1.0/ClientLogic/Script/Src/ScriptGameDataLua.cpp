@@ -14,6 +14,7 @@
 #include "NDLocalization.h"
 #include "ScriptGameDataLua.h"
 
+//@loadini
 using namespace NDEngine;
 
 //#pragma mark 获取ID列表

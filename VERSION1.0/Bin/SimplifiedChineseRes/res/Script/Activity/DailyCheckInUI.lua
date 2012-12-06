@@ -44,6 +44,7 @@ function p.LoadUI()
 		return false;
 	end
     
+    layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.DailyCheckIn);
 	layer:SetFrameRect(RectFullScreenUILayer);

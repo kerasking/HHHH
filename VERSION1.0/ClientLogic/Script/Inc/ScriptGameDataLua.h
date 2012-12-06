@@ -8,9 +8,11 @@
  */
 #pragma once
 #include "ScriptInc.h"
+
+//@loadini
+
 NS_NDENGINE_BGN
 
 //std::string GetTxtPub(const char* pszTableName);
-
 
 NS_NDENGINE_END

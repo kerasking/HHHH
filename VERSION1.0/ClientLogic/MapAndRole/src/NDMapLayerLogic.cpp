@@ -77,6 +77,10 @@ bool NDMapLayerLogic::TouchBegin(NDTouch* touch)
 	m_kPosTouch = touch->GetLocation();
 	CCPoint touchPoint = this->ConvertToMapPoint( m_kPosTouch );
 	
+//	CCLog( "NDMapLayerLogic::TouchBegin(%d, %d) -> (%d, %d), ScreenCenter=(%d, %d)\r\n", 
+//		int(m_kPosTouch.x), int(m_kPosTouch.y), int(touchPoint.x), int(touchPoint.y),
+//		int(GetScreenCenter().x), int(GetScreenCenter().y));
+
 // 	if(isTouchTreasureBox(touchPoint))
 // 	{
 // 		NDLog("touch treasureBox");
@@ -99,6 +103,10 @@ void NDMapLayerLogic::TouchEnd(NDTouch* touch)
 
 	CCPoint posTouch = touch->GetLocation();
 	CCPoint touchPoint = this->ConvertToMapPoint( posTouch );
+
+//	CCLog( "NDMapLayerLogic::TouchEnd(%d, %d) -> (%d, %d), ScreenCenter=(%d, %d)\r\n", 
+//		int(posTouch.x), int(posTouch.y), int(touchPoint.x), int(touchPoint.y),
+//		int(GetScreenCenter().x), int(GetScreenCenter().y));
 
 	NDPlayer& kPlayer = NDPlayer::defaultHero();
 	if (!kPlayer.ClickPoint(touchPoint, false, IsPathing()))

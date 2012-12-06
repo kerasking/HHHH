@@ -40,6 +40,8 @@ public:
 	static ScriptMgr& GetScriptMgr();
 	
 	void Load();
+	void LoadRegClassFuncs();
+
 	bool AddRegClassFunc(RegisterClassFunc func);
 	bool excuteLuaFunc(const char* funcname, const char* modulename);
 	bool excuteLuaFunc(const char* funcname, const char* modulename, int param1);
@@ -60,15 +62,16 @@ public:
 	void LoadLuaFile(const char* pszluaFile);
 	void WriteLog(const char* fmt, ...);
 
+	bool IsLoadLuaOK(){ return m_bLoadLuaOK; }
 private:
 	vec_regclass_func vRegClassFunc;
 	FILE* m_fDebugOutPut;
 	FILE* m_fTest;	
-private:
-	void LoadRegClassFuncs();
 
+private:
 	LuaObject GetLuaFunc(const char* funcname, const char* modulename);
 
+	bool m_bLoadLuaOK;
 public:
 	void update();
 };

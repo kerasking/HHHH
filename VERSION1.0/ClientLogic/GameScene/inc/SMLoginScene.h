@@ -131,9 +131,11 @@ public:
 	void ShowUpdateOff();
 	
 protected:
+	static void * LoadTextAndLua( void * pScene );
 	void ShowWaitingAni();
 	void CloseWaitingAni();
 protected:
+	NDUILayer *		m_pLayerOld; //¾ÉµÄµÇÂ½½çÃæ
     NDUILayer *		m_pLayerUpdate;
     NDTimer *		m_pTimer;
 	CUIExp *		m_pCtrlProgress;

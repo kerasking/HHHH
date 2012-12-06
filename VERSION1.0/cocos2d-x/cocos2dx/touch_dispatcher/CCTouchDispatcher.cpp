@@ -44,12 +44,29 @@ NS_CC_BEGIN
  */
 static int less(const CCObject* p1, const CCObject* p2)
 {
-#if ND_MOD && 0
+#if ND_MOD
+	//备注：当多个同类型的Layer显示时，一个priority不够用，
+	//		因此加个subPriority，规则一样是数值小的优先处理.
+
 	CCTouchHandler* h1 = (CCTouchHandler*)p1;
 	CCTouchHandler* h2 = (CCTouchHandler*)p2;
-	if (h1->getPriority() < h2->getPriority()) return 1;
-	if (h1->getPriority() == h2->getPriority() && h1->IsNewerThan( h2 )) return 1;
+
+	if (h1->getPriority() < h2->getPriority())
+	{
+		return 1;
+	}
+
+	if (h1->getPriority() == h2->getPriority())
+	{
+		CCTouchDelegate* d1 = h1->getDelegate();
+		CCTouchDelegate* d2 = h2->getDelegate();
+		if (d1->getSubPriority() < d2->getSubPriority())
+		{
+			return 1;
+		}
+	}
 	return 0;
+
 #else
     return ((CCTouchHandler*)p1)->getPriority() < ((CCTouchHandler*)p2)->getPriority();
 #endif
@@ -407,7 +424,13 @@ void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int u
                     {
                         pMutableTouches->removeObject(pTouch);
                     }
-
+#if ND_MOD && 0
+					CCLog( "@@ CCTouchDispatcher::touches(), %s swallowed!! touchCount=%d, uIndex=%d, (priority=%d, subPriority=%d), handle=%08X, delegate=%08X\r\n", 
+						pHandler->getDelegate()->getDebugName(), 
+						pTouches->count(), uIndex,
+						pHandler->getPriority(), pHandler->getDelegate()->getSubPriority(),
+						pHandler, pHandler->getDelegate());
+#endif
                     break;
                 }
             }
@@ -519,6 +542,8 @@ void CCTouchDispatcher::touchesBegan(CCSet *touches, CCEvent *pEvent)
 
 	if (m_bDispatchEvents)
 	{
+		//CCLog( "@@ CCTouchDispatcher::touchesBegan( %d, %d )\r\n", int(m_curPos.x), int(m_curPos.y) );
+
 		this->touches(touches, pEvent, CCTOUCHBEGAN);
 	}
 }
@@ -563,6 +588,8 @@ void CCTouchDispatcher::touchesEnded(CCSet *touches, CCEvent *pEvent)
 
     if (m_bDispatchEvents)
 	{
+		//CCLog( "@@ CCTouchDispatcher::touchesEnded( %d, %d )\r\n", int(m_curPos.x), int(m_curPos.y));
+
 		this->touches(touches, pEvent, CCTOUCHENDED);
 	}
 }
