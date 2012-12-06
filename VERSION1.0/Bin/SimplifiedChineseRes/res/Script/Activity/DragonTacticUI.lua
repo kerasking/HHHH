@@ -306,6 +306,7 @@ function p.AddViewItem(container, nIndex, uiFile)
     
     container:SetViewSize(TacticListSize);
     
+    view:SetPopupDlgFlag(true);
     view:Init(false);
     view:SetViewId(nIndex);
     view:SetTag(nIndex);  

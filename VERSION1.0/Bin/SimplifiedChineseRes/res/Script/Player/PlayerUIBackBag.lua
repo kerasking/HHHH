@@ -530,6 +530,7 @@ function p.LoadBackBagUI()
 			LogInfo("p.LoadBackBagUI createUIScrollView failed");
 			return;
 		end
+		view:SetPopupDlgFlag(true);
 		view:Init(false);
 		view:SetViewId(i);
 		container:AddView(view);
@@ -1310,6 +1311,7 @@ function p.RefreshContainer()
 			LogInfo("view == nil");
 			return;
 		end
+		view:SetPopupDlgFlag( true );
 		view:Init(false);
 		view:SetViewId(v);
 		container:AddView(view);

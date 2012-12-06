@@ -337,7 +337,9 @@ local scene = GetSMGameScene();
 	for i,v in pairs(tStarPicINI) do
 		local view = createUIScrollView();
 	
+	     view:SetPopupDlgFlag(true);
 	     view:Init(false);
+	     view:bringToTop();
 	     view:SetViewId(i);
 	     containter:AddView(view);
 		 --view:SetFrameRect(CGRectMake(0,0,640,640));
@@ -368,7 +370,9 @@ local scene = GetSMGameScene();
 		picName:Cut(CGRectMake(0.0,60*(tStarTitleInd[i]-1),100.0, 60.0 ));
 		
 		local view = createUIScrollView();
+		view:SetPopupDlgFlag(true);
 		view:Init(false);
+		view:bringToTop();
 		view:SetViewId(i);
 		view:SetTouchEnabled(false);
 		

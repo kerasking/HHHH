@@ -555,7 +555,9 @@ function p.RefreshContainer()
 			LogInfo("view == nil");
 			return;
 		end
+		view:SetPopupDlgFlag( true );
 		view:Init(false);
+		view:bringToTop();
 		view:SetViewId(v);
 		container:AddView(view);
 		

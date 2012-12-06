@@ -406,7 +406,9 @@ function p.FillMemberList( pLayer, tArmyGroupMemberList )
 			return false;
 		end
 	
+		pListItem:SetPopupDlgFlag(true);
 		pListItem:Init( false );
+		pListItem:bringToTop();
 		pListItem:SetScrollStyle( UIScrollStyle.Verical );
 		pListItem:SetViewId( i );
 		pListItem:SetTag( i );
