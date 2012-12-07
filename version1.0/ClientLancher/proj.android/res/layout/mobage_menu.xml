@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayoutrr"
+    android:layout_width="fill_parent"
+    android:layout_height="42dp"
+   	android:background="@drawable/mobage_bar_bg"
+    android:clickable="true"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/menu_inner_rl"
+        android:layout_width="fill_parent"
+        android:layout_height="42dp" >
+
+        <ImageButton
+            android:id="@+id/btn_bar_back"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/bar_btn_back"
+            android:gravity="center_vertical"
+            android:scaleType="fitCenter" />
+
+        <FrameLayout
+            android:id="@+id/menu_inner_fl"
+            android:layout_width="fill_parent"
+            android:layout_height="42dp"
+            android:layout_gravity="center_vertical"
+            android:layout_toRightOf="@id/btn_bar_back"
+            
+            android:foreground="@drawable/mobage_bar_foreground"
+            android:gravity="center_vertical" >
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="fill_parent"
+                android:layout_height="42dp"
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+            </LinearLayout>
+        </FrameLayout>
+    </RelativeLayout>
+
+</LinearLayout>

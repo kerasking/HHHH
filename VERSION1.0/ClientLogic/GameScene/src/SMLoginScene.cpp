@@ -96,6 +96,7 @@ IMPLEMENT_CLASS(CSMLoginScene, NDScene)
 //===========================================================================
 CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 {
+
 	CSMLoginScene *scene = new CSMLoginScene;
     scene->Initialization();
     scene->SetTag(SMLOGINSCENE_TAG);
@@ -172,6 +173,7 @@ void CSMLoginScene::Initialization(void)
 //===========================================================================
 void CSMLoginScene::OnTimer( OBJID idTag )
 {
+
 	if ( idTag == TAG_TIMER_UPDATE ) 
 	{
 		if ( !rename( m_savePath.c_str(), m_savePath.c_str() ) )
@@ -181,13 +183,10 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 				m_pTimer->KillTimer(this, TAG_TIMER_UPDATE);
 				return;
 			}
-		}
-            
-//		DownloadPackage* downer = new DownloadPackage();
-//		downer->SetDelegate(this);
-//		downer->FromUrl(m_updateURL.c_str());
-//		downer->ToPath(m_savePath.c_str()); 
-//		downer->Download();
+		}     
+		this->FromUrl(m_updateURL.c_str());
+		this->ToPath(m_savePath.c_str()); 
+		this->Download();
 		m_pTimer->KillTimer(this, TAG_TIMER_UPDATE);
 	}
 	else if ( idTag == TAG_TIMER_DOWNLOAD_SUCCESS )
@@ -446,7 +445,7 @@ CSMLoginScene::OnError(ISMUpdateEvent::ERROR_CODE emErrCode,const char* pszErrMs
 }
 
 //===========================================================================
-void CSMLoginScene::ReflashPercent( DownloadPackage* downer, int percent, int pos, int filelen )
+void CSMLoginScene::ReflashPercent(int percent, int pos, int filelen )
 {
     /*
 	if (m_label) 
@@ -464,10 +463,8 @@ void CSMLoginScene::ReflashPercent( DownloadPackage* downer, int percent, int po
 }
 
 //===========================================================================
-void CSMLoginScene::DidDownloadStatus( DownloadPackage* downer, DownloadStatus status )
+void CSMLoginScene::DidDownloadStatus( DownloadStatus status )
 {
-	delete downer;
-	
 	if (status == DownloadStatusResNotFound) 
 	{
 		//m_label->SetText( "抱歉，下载资源未找到，请联系GM" );
@@ -807,7 +804,6 @@ void CSMLoginScene::StartEntry()
 
 	ScriptMgrObj.excuteLuaFunc( "LoadData", "GameSetting" ); 
 	CloseUpdateUILayer();
-
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	//if ( m_iAccountID == 0 )
 	m_iAccountID = ScriptMgrObj.excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
