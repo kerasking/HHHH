@@ -34,7 +34,7 @@
 #define ID_LOADING_PROCESS (90)
 class CSMLoginScene
 : public NDScene
-, public DownloadPackageDelegate
+, public DownloadPackage
 , public ITimerCallback
 //, public ISMUpdateEvent
 //, public ITQZipEvent
@@ -72,9 +72,9 @@ public://NDUIDialogDelegate
 private:
     virtual void OnTimer(OBJID idTag);
 	
-public:// DownloadPackageDelegate//++Guosen 2012.8.7
-	virtual void ReflashPercent( DownloadPackage* downer, int percent, int pos, int filelen ); override
-	virtual void DidDownloadStatus( DownloadPackage* downer, DownloadStatus status ); override
+public:// 
+	virtual void ReflashPercent( int percent, int pos, int filelen ); override
+	virtual void DidDownloadStatus(DownloadStatus status ); override
 	
 public:
     //virtual int     OnProcess(int nPercent); //更新进度反馈//--Guosen 2012.8.7
