@@ -278,7 +278,9 @@ function p.ShowWithConfirm(tip, callback)
 		return 0;
 	end
 	
+	layer:SetPopupDlgFlag(true);
 	layer:Init();
+	layer:bringToTop();
 	layer:SetTag(nTag);
 	layer:SetFrameRect(RectUILayerConfirm);
 	scene:AddChildZ(layer, 10000);

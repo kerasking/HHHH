@@ -1,26 +1,26 @@
 /****************************************************************************
-Copyright (c) 2010 cocos2d-x.org
+ Copyright (c) 2010 cocos2d-x.org
 
-http://www.cocos2d-x.org
+ http://www.cocos2d-x.org
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 #include "JniHelper.h"
 #include <android/log.h>
 #include <string.h>
@@ -39,144 +39,146 @@ using namespace std;
 extern "C"
 {
 
-    //////////////////////////////////////////////////////////////////////////
-    // java vm helper function
-    //////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+// java vm helper function
+//////////////////////////////////////////////////////////////////////////
 
-    static bool getEnv(JNIEnv **env)
-    {
-        bool bRet = false;
+static bool getEnv(JNIEnv **env)
+{
+	bool bRet = false;
 
-        do 
-        {
-            if (JAVAVM->GetEnv((void**)env, JNI_VERSION_1_4) != JNI_OK)
-            {
-                LOGD("Failed to get the environment using GetEnv()");
-                break;
-            }
+	do
+	{
+		if (JAVAVM->GetEnv((void**)env, JNI_VERSION_1_4) != JNI_OK)
+		{
+			LOGD("Failed to get the environment using GetEnv()");
+			break;
+		}
 
-            if (JAVAVM->AttachCurrentThread(env, 0) < 0)
-            {
-                LOGD("Failed to get the environment using AttachCurrentThread()");
-                break;
-            }
+		if (JAVAVM->AttachCurrentThread(env, 0) < 0)
+		{
+			LOGD("Failed to get the environment using AttachCurrentThread()");
+			break;
+		}
 
-            bRet = true;
-        } while (0);        
+		bRet = true;
+	} while (0);
 
-        return bRet;
-    }
+	return bRet;
+}
 
-    static jclass getClassID_(const char *className, JNIEnv *env)
-    {
-        JNIEnv *pEnv = env;
-        jclass ret = 0;
+static jclass getClassID_(const char *className, JNIEnv *env)
+{
+	JNIEnv *pEnv = env;
+	jclass ret = 0;
 
-        do 
-        {
-            if (! pEnv)
-            {
-                if (! getEnv(&pEnv))
-                {
-                    break;
-                }
-            }
-            
-            ret = pEnv->FindClass(className);
-            if (! ret)
-            {
-                 LOGD("Failed to find class of %s", className);
-                break;
-            }
-        } while (0);
+	do
+	{
+		if (!pEnv)
+		{
+			if (!getEnv(&pEnv))
+			{
+				break;
+			}
+		}
 
-        return ret;
-    }
+		ret = pEnv->FindClass(className);
+		if (!ret)
+		{
+			LOGD("Failed to find class of %s", className);
+			break;
+		}
+	} while (0);
 
-    static bool getStaticMethodInfo_(cocos2d::JniMethodInfo &methodinfo, const char *className, const char *methodName, const char *paramCode)
-    {
-        jmethodID methodID = 0;
-        JNIEnv *pEnv = 0;
-        bool bRet = false;
+	return ret;
+}
 
-        do 
-        {
-            if (! getEnv(&pEnv))
-            {
-                break;
-            }
+static bool getStaticMethodInfo_(cocos2d::JniMethodInfo &methodinfo,
+		const char *className, const char *methodName, const char *paramCode)
+{
+	jmethodID methodID = 0;
+	JNIEnv *pEnv = 0;
+	bool bRet = false;
 
-            jclass classID = getClassID_(className, pEnv);
+	do
+	{
+		if (!getEnv(&pEnv))
+		{
+			break;
+		}
 
-            methodID = pEnv->GetStaticMethodID(classID, methodName, paramCode);
-            if (! methodID)
-            {
-                LOGD("Failed to find static method id of %s", methodName);
-                break;
-            }
+		jclass classID = getClassID_(className, pEnv);
 
-            methodinfo.classID = classID;
-            methodinfo.env = pEnv;
-            methodinfo.methodID = methodID;
+		methodID = pEnv->GetStaticMethodID(classID, methodName, paramCode);
+		if (!methodID)
+		{
+			LOGD("Failed to find static method id of %s", methodName);
+			break;
+		}
 
-            bRet = true;
-        } while (0);
+		methodinfo.classID = classID;
+		methodinfo.env = pEnv;
+		methodinfo.methodID = methodID;
 
-        return bRet;
-    }
+		bRet = true;
+	} while (0);
 
-    static bool getMethodInfo_(cocos2d::JniMethodInfo &methodinfo, const char *className, const char *methodName, const char *paramCode)
-    {
-        jmethodID methodID = 0;
-        JNIEnv *pEnv = 0;
-        bool bRet = false;
+	return bRet;
+}
 
-        do 
-        {
-            if (! getEnv(&pEnv))
-            {
-                break;
-            }
+static bool getMethodInfo_(cocos2d::JniMethodInfo &methodinfo,
+		const char *className, const char *methodName, const char *paramCode)
+{
+	jmethodID methodID = 0;
+	JNIEnv *pEnv = 0;
+	bool bRet = false;
 
-            jclass classID = getClassID_(className, pEnv);
+	do
+	{
+		if (!getEnv(&pEnv))
+		{
+			break;
+		}
 
-            methodID = pEnv->GetMethodID(classID, methodName, paramCode);
-            if (! methodID)
-            {
-                LOGD("Failed to find method id of %s", methodName);
-                break;
-            }
+		jclass classID = getClassID_(className, pEnv);
 
-            methodinfo.classID = classID;
-            methodinfo.env = pEnv;
-            methodinfo.methodID = methodID;
+		methodID = pEnv->GetMethodID(classID, methodName, paramCode);
+		if (!methodID)
+		{
+			LOGD("Failed to find method id of %s", methodName);
+			break;
+		}
 
-            bRet = true;
-        } while (0);
+		methodinfo.classID = classID;
+		methodinfo.env = pEnv;
+		methodinfo.methodID = methodID;
 
-        return bRet;
-    }
+		bRet = true;
+	} while (0);
 
-    static string jstring2string_(jstring jstr)
-    {
-        if (jstr == NULL)
-        {
-            return "";
-        }
-        
-        JNIEnv *env = 0;
+	return bRet;
+}
 
-        if (! getEnv(&env))
-        {
-            return 0;
-        }
+static string jstring2string_(jstring jstr)
+{
+	if (jstr == NULL)
+	{
+		return "";
+	}
 
-        const char* chars = env->GetStringUTFChars(jstr, NULL);
-        string ret(chars);
-        env->ReleaseStringUTFChars(jstr, chars);
+	JNIEnv *env = 0;
 
-        return ret;
-    }
+	if (!getEnv(&env))
+	{
+		return 0;
+	}
+
+	const char* chars = env->GetStringUTFChars(jstr, NULL);
+	string ret(chars);
+	env->ReleaseStringUTFChars(jstr, chars);
+
+	return ret;
+}
 }
 
 NS_CC_BEGIN
@@ -185,42 +187,46 @@ JavaVM* JniHelper::m_psJavaVM = NULL;
 
 JavaVM* JniHelper::getJavaVM()
 {
-    return m_psJavaVM;
+	return m_psJavaVM;
 }
 
 void JniHelper::setJavaVM(JavaVM *javaVM)
 {
-    m_psJavaVM = javaVM;
+	m_psJavaVM = javaVM;
 }
 
 string JniHelper::m_externalAssetPath;
 
-const char* JniHelper::getExternalAssetPath() {
-    return m_externalAssetPath.c_str();
+const char* JniHelper::getExternalAssetPath()
+{
+	return m_externalAssetPath.c_str();
 }
 
-void JniHelper::setExternalAssetPath(const char * externalAssetPath) {
-    m_externalAssetPath = externalAssetPath;
+void JniHelper::setExternalAssetPath(const char * externalAssetPath)
+{
+	m_externalAssetPath = externalAssetPath;
 }
 
 jclass JniHelper::getClassID(const char *className, JNIEnv *env)
 {
-    return getClassID_(className, env);
+	return getClassID_(className, env);
 }
 
-bool JniHelper::getStaticMethodInfo(JniMethodInfo &methodinfo, const char *className, const char *methodName, const char *paramCode)
+bool JniHelper::getStaticMethodInfo(JniMethodInfo &methodinfo,
+		const char *className, const char *methodName, const char *paramCode)
 {
-    return getStaticMethodInfo_(methodinfo, className, methodName, paramCode);
+	return getStaticMethodInfo_(methodinfo, className, methodName, paramCode);
 }
 
-bool JniHelper::getMethodInfo(JniMethodInfo &methodinfo, const char *className, const char *methodName, const char *paramCode)
+bool JniHelper::getMethodInfo(JniMethodInfo &methodinfo, const char *className,
+		const char *methodName, const char *paramCode)
 {
-    return getMethodInfo_(methodinfo, className, methodName, paramCode);
+	return getMethodInfo_(methodinfo, className, methodName, paramCode);
 }
 
 string JniHelper::jstring2string(jstring str)
 {
-    return jstring2string_(str);
+	return jstring2string_(str);
 }
 
 NS_CC_END

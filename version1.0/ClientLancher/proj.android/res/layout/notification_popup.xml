@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:layout_gravity="center"
+    android:gravity="center"
+    >
+   <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:src="@drawable/mobage_tips_left"
+        android:scaleType="center"
+        />
+   <LinearLayout 
+       		android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:background="@drawable/mobage_tips_middle"
+            android:layout_gravity="center"
+            android:gravity="center"
+       >
+   
+    <Button
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_margin="10dp"
+            android:maxLines="3"
+            android:textColor="@color/text_color"
+            android:textStyle="bold"
+            android:textSize="14dp"
+            android:fadingEdge="horizontal"
+            android:fadingEdgeLength="10dip"
+            android:ellipsize="none"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+    />
+    
+    </LinearLayout> 
+        
+   <ImageView
+        android:id="@+id/control_next"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:src="@drawable/mobage_tips_right"
+        android:scaleType="center"
+        />
+
+</LinearLayout>

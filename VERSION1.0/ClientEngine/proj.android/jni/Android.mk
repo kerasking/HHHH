@@ -50,7 +50,6 @@ LOCAL_SRC_FILES := \
 ../../System/src/cocos2dExt.cpp \
 ../../System/src/JavaMethod.cpp \
 ../../System/src/NDAutoPath.cpp \
-../../System/src/NDClassFactory.cpp \
 ../../System/src/NDDictionary.cpp \
 ../../System/src/NDLocalXmlString.cpp \
 ../../System/src/NDPath.cpp \
@@ -96,14 +95,6 @@ LOCAL_SRC_FILES := \
 ../../UI/import/src/NDUILoadEngine.cpp \
 ../../UI/import/src/UIData.cpp \
 ../../UI/src/UIEdit.cpp \
-../../Utility/src/Des.cpp \
-../../Utility/src/MD5checksum.cpp \
-../../Utility/src/NDConsole.cpp \
-../../Utility/src/NDString.cpp \
-../../Utility/src/TQPlatform.cpp \
-../../Utility/src/WjcDes.cpp \
-../../Utility/src/XMLReader.cpp \
-../../Utility/src/NDUtil.cpp \
 ../../Script/src/LuaStateMgr.cpp \
 ../../Script/src/EngineScriptCommon.cpp \
 ../../DataTrans/src/NDDataTransThread.cpp \
@@ -114,6 +105,8 @@ LOCAL_SRC_FILES := \
 ../../Utility/src/ImageNumber.cpp \
 ../../Utility/src/NDDataSource.cpp \
 ../../Utility/src/NDRidePet.cpp \
+../../Utility/src/NDVideoEventListener.cpp \
+../../Utility/src/NDVideoMgr.cpp \
 ../../TempClass/NDUITableLayer.cpp \
 ../../Performance.cpp
 
@@ -161,7 +154,8 @@ $(LOCAL_PATH)/../../../include/C3/win \
 $(LOCAL_PATH)/../../../ClientLogic/MsgDefine/inc \
 $(LOCAL_PATH)/../../../ClientLogic/Script/inc \
 $(LOCAL_PATH)/../../../ClientLogic/GameScene/inc \
-$(LOCAL_PATH)/../../../NetWork/inc
+$(LOCAL_PATH)/../../../NetWork/inc \
+$(LOCAL_PATH)/../../../NDUtility/inc
 
 LOCAL_LDLIBS := -L$(call host-path, $(LOCAL_PATH)/../../proj.android/libs/$(TARGET_ARCH_ABI)) \
                 -L$(call host-path, $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/third_party/android/libraries/$(TARGET_ARCH_ABI)) \
@@ -171,6 +165,7 @@ LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += luaplus
 LOCAL_WHOLE_STATIC_LIBRARIES += tinyxml
 LOCAL_WHOLE_STATIC_LIBRARIES += NetWork
+LOCAL_WHOLE_STATIC_LIBRARIES += NDUtility
 
 include $(BUILD_SHARED_LIBRARY)
 
@@ -178,3 +173,4 @@ $(call import-module,LuaPlus/proj.android/jni)
 $(call import-module,cocos2dx)
 $(call import-module,tinyxml/proj.android/jni)
 $(call import-module,NetWork/proj.android/jni)
+$(call import-module,NDUtility/proj.android/jni)

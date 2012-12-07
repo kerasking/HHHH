@@ -162,7 +162,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\KCondition.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\KConnection.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\KDirectory.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\KFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\KHttp.cpp"
 				>
 			</File>
 			<File
@@ -175,6 +191,14 @@
 			</File>
 			<File
 				RelativePath="..\src\KTcpClientSocket.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\KThread.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\KTimeVal.cpp"
 				>
 			</File>
 			<File
@@ -192,7 +216,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\inc\KCondition.h"
+				>
+			</File>
+			<File
 				RelativePath="..\inc\KConnection.h"
+				>
+			</File>
+			<File
+				RelativePath="..\inc\KDirectory.h"
+				>
+			</File>
+			<File
+				RelativePath="..\inc\KFile.h"
+				>
+			</File>
+			<File
+				RelativePath="..\inc\KHttp.h"
 				>
 			</File>
 			<File
