@@ -639,6 +639,18 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Script\Src\ScriptGameData_New.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Script\Inc\ScriptGameData_New.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Script\Inc\ScriptGameData_NewUtil.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Script\Src\ScriptGameDataLua.cpp"
 					>
 				</File>

@@ -11,6 +11,7 @@
 #include "LuaStateMgr.h"
 #include "ScriptCommon.h"
 #include "ScriptGameData.h"
+#include "ScriptGameData_New.h"
 #include "ScriptNetMsg.h"
 #include "ScriptUI.h"
 #include "ScriptTask.h"

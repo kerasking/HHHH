@@ -24,6 +24,7 @@
 #include "SMGameScene.h"
 
 #include "ScriptGameData.h"
+#include "ScriptGameData_NewUtil.h"
 #include "ScriptDataBase.h"
 #include "ScriptTask.h"
 #include "TableDef.h"

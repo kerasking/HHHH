@@ -14,6 +14,7 @@
 #include "Singleton.h"
 #include "UINpcDlg.h"
 #include "ScriptGameData.h"
+#include "ScriptGameData_New.h"
 
 #include <sstream>
 #include "ScriptMgr.h"

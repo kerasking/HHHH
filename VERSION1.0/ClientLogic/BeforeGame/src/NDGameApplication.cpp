@@ -22,6 +22,7 @@
 #include "LuaStateMgr.h"
 #include "NDBeforeGameMgr.h"
 #include "ScriptGameData.h"
+#include "ScriptGameData_NewUtil.h"
 #include "NDDebugOpt.h"
 #include "NDClassFactory.h"
 #include "Battle.h"
