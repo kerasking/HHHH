@@ -25,6 +25,7 @@ package org.cocos2dx.lib;
 
 import org.DeNA.DHLJ.NDJavaVideoPlayer;
 import org.DeNA.DHLJ.NDVideoControl;
+import org.DeNA.DHLJ.NDVideoView;
 import org.DeNA.DHLJ.R;
 import org.cocos2dx.lib.Cocos2dxHelper.Cocos2dxHelperListener;
 
@@ -53,7 +54,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	public Cocos2dxGLSurfaceView mGLSurfaceView;
 	public FrameLayout m_pkFrameView = null;
 	private Cocos2dxHandler mHandler;
-	public VideoView m_pkView = null;
+	public NDVideoView m_pkView = null;
 	
 	// ===========================================================
 	// Constructors
@@ -167,7 +168,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 		NDVideoControl pkVideoControl = new NDVideoControl(Cocos2dxActivity.this);
 		pkVideoControl.setCocos2dxActivity(this);
 		
-		m_pkView = (VideoView)this.findViewById(R.id.videoPlay);
+		m_pkView = (NDVideoView)this.findViewById(R.id.videoPlay);
 		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
 		m_pkView.setMediaController(pkVideoControl);
 		m_pkView.setOnCompletionListener(pkVideoControl);
@@ -178,8 +179,6 @@ public abstract class Cocos2dxActivity extends Activity implements
         params.width =  metrics.widthPixels;
         params.height = metrics.heightPixels;
         m_pkView.setLayoutParams(params);
-		
-		m_pkView.start();
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView()

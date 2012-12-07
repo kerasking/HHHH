@@ -63,8 +63,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			return -1;
 		}
 
-		ms_pkDHLJ.changeViewToVideo();
-
+		ms_pkDHLJ.m_pkView.start();
 
 		return 0;
 	}
@@ -73,7 +72,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		return 0;
 	}
-	
+
 	static
 	{
 		System.loadLibrary("luaplus");
