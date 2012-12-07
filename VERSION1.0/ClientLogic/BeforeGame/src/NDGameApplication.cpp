@@ -188,6 +188,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	}
 
 	CCDirector* pDirector = CCDirector::sharedDirector();
+	CCDirector::sharedDirector()->stopAnimation();
 	CCAssert(pDirector, "applicationDidFinishLaunching");
 	pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
 
