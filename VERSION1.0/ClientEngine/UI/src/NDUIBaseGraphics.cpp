@@ -54,16 +54,69 @@ namespace NDEngine
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glEnable(GL_TEXTURE_2D);	
 #endif
+		//ccColor4F cr = ccc4FFromccc4B(color);
+		//ccDrawColor4F( cr.r, cr.g, cr.b, cr.a );
 
-		ccColor4F cr = ccc4FFromccc4B(color);
-		ccDrawColor4F( cr.r, cr.g, cr.b, cr.a );
+		//CCPoint destination = ccp( rect.origin.x + rect.size.width, 
+		//							rect.origin.y + rect.size.height );
+		//
+		//ConvertUtil::convertToPointCoord( rect.origin );
+		//ConvertUtil::convertToPointCoord( rect.size );
+		//ccDrawRect( SCREEN2GL(rect.origin), SCREEN2GL(destination));
 
-		CCPoint destination = ccp( rect.origin.x + rect.size.width, 
-									rect.origin.y + rect.size.height );
-		
-		ConvertUtil::convertToPointCoord( rect.origin );
-		ConvertUtil::convertToPointCoord( rect.size );
-		ccDrawRect( SCREEN2GL(rect.origin), SCREEN2GL(destination));
+		if ( color.r == 0 && color.g == 0 && color.b == 0 && color.a == 0)
+		{
+			return;
+		}
+ 		ccVertex2F m_pSquareVertices[4];
+ 		m_pSquareVertices[0].x = rect.origin.x;
+ 		m_pSquareVertices[0].y = rect.origin.y;
+ 		m_pSquareVertices[1].x = rect.origin.x+rect.size.width;
+ 		m_pSquareVertices[1].y = rect.origin.y;
+ 		m_pSquareVertices[2].x = rect.origin.x;
+ 		m_pSquareVertices[2].y = rect.origin.y+rect.size.height;
+ 		m_pSquareVertices[3].x = rect.origin.x+rect.size.width;
+ 		m_pSquareVertices[3].y = rect.origin.y+rect.size.height;
+ 
+ 		ccColor4F  tSquareColors[4];
+ 		{
+ 			for( unsigned int i=0; i < 4; i++ )
+ 			{
+ 				tSquareColors[i].r = color.r / 255.0f;
+ 				tSquareColors[i].g = color.g / 255.0f;
+ 				tSquareColors[i].b = color.b / 255.0f;
+ 				tSquareColors[i].a = color.a / 255.0f;
+ 			}
+ 		}
+ 
+ 		ccBlendFunc  tBlendFunc;
+ 		tBlendFunc.src = GL_SRC_ALPHA;
+ 		tBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
+ 		//ccGLServerState	tGLServerState(CC_GL_BLEND);
+ 		{
+ 			//do 
+ 			//{
+ 			//	ccGLEnable( tGLServerState );
+ 			//} while (0);
+ 
+ 			ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_Color );
+  			glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, m_pSquareVertices);
+ 			glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_FLOAT, GL_FALSE, 0, tSquareColors);
+  			ccGLBlendFunc( tBlendFunc.src, tBlendFunc.dst ); 
+ 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+ 
+ 		}
+// 		//²âÊÔÃèÏß´úÂë
+// 		ccDrawColor4F(1,1,0,0.5);
+// 		glLineWidth(2);
+// 		ccDrawLine( ccp(rect.origin.x,rect.origin.y), ccp(rect.origin.x+rect.size.width,rect.origin.y+rect.size.height));
+// 		ccDrawColor4F(1,0,0,1);
+// 		glPointSize(4);
+// 		//ccDrawPoint( ccp(rect.origin.x,rect.origin.y) );//r
+// 		ccDrawLine( ccp(rect.origin.x,rect.origin.y+rect.size.height), ccp(rect.origin.x+rect.size.width,rect.origin.y));
+// 		ccDrawColor4F(0,1,0,1);
+// 		//ccDrawPoint( ccp(rect.origin.x+rect.size.width,rect.origin.y+rect.size.height) );//g
+// 		ccDrawLine( ccp(rect.origin.x,rect.origin.y+rect.size.height), ccp(rect.origin.x+rect.size.width,rect.origin.y+rect.size.height));
 	}
 
 	void DrawPolygon(CCRect rect, ccColor4B color, GLuint lineWidth)

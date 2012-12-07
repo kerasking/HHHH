@@ -506,9 +506,9 @@ void CUIItemButton::draw()
                 
                 
                 //draw focus 
-                if (uiLayer->GetFocus() == this /*|| IsTabSel()*/) 
+                if (uiLayer->GetFocus() == this || IsTabSel()) 
                 {
-                    if (m_focusStatus == FocusColor /*&& m_bFocusEnable*/) 
+                    if (m_focusStatus == FocusColor && m_bFocusEnable) 
                     {
                         DrawRecttangle(scrRect, m_focusColor);
                         if (m_title) 
@@ -516,7 +516,7 @@ void CUIItemButton::draw()
                             m_title->SetFontColor(m_colorFocusTitle);
                         }
                     }
-                    else if (m_focusStatus == FocusRimImage /*&& m_bFocusEnable*/)
+                    else if (m_focusStatus == FocusRimImage && m_bFocusEnable)
                     {
                         DrawRecttangle(scrRect, ccc4(138, 8, 8, 255));
                         
@@ -586,7 +586,7 @@ void CUIItemButton::draw()
                                  ccc4(172, 159, 71, 255), 1);
 						
                     }
-                    else if (m_focusStatus == FocusImage && m_focusImage /*&& m_bFocusEnable*/)
+                    else if (m_focusStatus == FocusImage && m_focusImage && m_bFocusEnable)
                     {
                         if (m_bCustomFocusImageRect) 
                         {

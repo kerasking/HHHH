@@ -34,7 +34,10 @@ function p.LoadUI()
 		return  false;
 	end
 	--LogInfo("get layer");
+	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
+	layer:bringToTop();
 	layer:SetTag(NMAINSCENECHILDTAG.ChatMainBar);
 	local winsize = GetWinSize(); 
 	layer:SetFrameRect(CGRectMake(0, 0, winsize.w*0.8, winsize.h*0.1));

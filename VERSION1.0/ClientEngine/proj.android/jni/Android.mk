@@ -104,6 +104,8 @@ LOCAL_SRC_FILES := \
 ../../Utility/src/WjcDes.cpp \
 ../../Utility/src/XMLReader.cpp \
 ../../Utility/src/NDUtil.cpp \
+../../Utility/src/NDVideoMgr.cpp \
+../../Utility/src/NDVideoEventListener.cpp \
 ../../Script/src/LuaStateMgr.cpp \
 ../../Script/src/EngineScriptCommon.cpp \
 ../../DataTrans/src/NDDataTransThread.cpp \

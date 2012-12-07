@@ -153,8 +153,9 @@ function p.LoadUI(nPetId)
 	if layer == nil then
 		return false;
 	end
-	layer:Init();
+	
 	layer:SetPopupDlgFlag( true );
+	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerAttr);
 	layer:SetFrameRect(RectFullScreenUILayer);
 	--layer:SetBackgroundColor(ccc4(125, 125, 125, 125));
@@ -753,7 +754,9 @@ function p.RefreshContainer()
 		local view = createUIScrollView();
         
 		if view ~= nil then
+		    view:SetPopupDlgFlag( true );
             view:Init(false);
+			view:bringToTop();
             view:SetViewId(v);
             container:AddView(view);
 

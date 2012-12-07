@@ -65,6 +65,7 @@ static NDBaseDirector s_NDBaseDirector;
 
 #include "SqliteDBMgr.h"
 #include "NDUILoadEngine.h"
+#include "NDVideoMgr.h"
 
 
 ///////////////////////////////////////////
@@ -181,6 +182,11 @@ NDGameApplication::~NDGameApplication()
 
 bool NDGameApplication::applicationDidFinishLaunching()
 {
+	if (!VideoMgrPtr->PlayVideo("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4"))
+	{
+		LOGERROR("Playing video error");
+	}
+
 	CCDirector* pDirector = CCDirector::sharedDirector();
 	CCAssert(pDirector, "applicationDidFinishLaunching");
 	pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
@@ -213,8 +219,11 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	}
 	else if(target == kTargetAndroid)
 	{
+		CCEGLView* eglView = CCDirector::sharedDirector()->getOpenGLView();
 		CCLog("Entryu setDesignResolutionSize");
-		CCEGLView::sharedOpenGLView()->setDesignResolutionSize(800, 480, kResolutionNoBorder);
+		CCLog( "@@ before setDesignResolutionSize(), frameSize=(%d,%d)\r\n", (int)eglView->getFrameSize().width, (int)eglView->getFrameSize().height );
+		CCEGLView::sharedOpenGLView()->setDesignResolutionSize( eglView->getFrameSize().width, eglView->getFrameSize().height, kResolutionNoBorder );
+		//CCEGLView::sharedOpenGLView()->setDesignResolutionSize(800, 480, kResolutionNoBorder);
 		//CCEGLView::sharedOpenGLView()->setDesignResolutionSize(960, 640, kResolutionNoBorder);
 	}
 	else 
@@ -237,6 +246,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 	// set FPS. the default value is 1.0/60 if you don't call this
 	//pDirector->setAnimationInterval(1.0 / 60);
+	LOGD("pDirector->setAnimationInterval() value is %d",(int)pDirector);
 	pDirector->setAnimationInterval(1.0 / 24);
 
 #if 0 //@todo @hello
@@ -247,7 +257,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
  	pDirector->runWithScene(pScene);
 	//////////////////////////////////////////////
 #else
-	this->MyInit();
+	MyInit();
 #endif
 
 
@@ -257,6 +267,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 //@init
 void NDGameApplication::MyInit()
 {
+	CCLOG( "@@ NDGameApplication::MyInit()\r\n" );
 	LOGD("Start MyInit");
 
 	REGISTER_CLASS(NDBaseBattle,Battle);
@@ -286,7 +297,7 @@ void NDGameApplication::MyInit()
 	LOGD("pkDirector Initialization Over");
 
 	NDScriptRegLua::doReg(); //@reglua
-	ScriptMgrObj.Load();
+	ScriptMgrObj.LoadRegClassFuncs(); //注册C++接口到LUA（不涉及加载LUA）.
 
 //---init++Guosen 2012.11.29
     CSqliteDBMgr::shareInstance().InitDataBase("DNSG.sqlite");
@@ -302,8 +313,10 @@ void NDGameApplication::MyInit()
 
 	//-------------------------------------------------------------
 	dumpCocos2dx(); //@android //@del
-	NDDebugOpt::setDrawDebugEnabled(1);
+	//NDDebugOpt::setDrawDebugEnabled(1);
 	//-------------------------------------------------------------
+
+	CCLOG( "@@ NDGameApplication::MyInit() -- done.\r\n" );
 }
 
 void NDGameApplication::applicationDidEnterBackground()

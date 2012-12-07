@@ -211,7 +211,7 @@ void NDAutoPath::GetPath()
 
 	do
 	{
-		int iTimes = MAP_UNITSIZE_X / m_nStep; //@todo:这里先按x
+		int iTimes = MAP_UNITSIZE_X / m_nStep; //注意：android分辨率奇怪，可能不会整除！
 
 		CCPoint kPos;
 		NodeInfo* pkNode = kPath[0];
@@ -231,9 +231,15 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						kPos.y -= m_nStep;
-						kPos.x -= m_nStep;
-
+						if (j == iTimes - 1) //避免不能整除
+						{
+							kPos = ConvertUtil::convertCellToDisplay( second.nX, second.nY );
+						}
+						else
+						{
+							kPos.y -= m_nStep;
+							kPos.x -= m_nStep;
+						}
 						m_kPointVector.push_back(kPos);
 					}
 				}
@@ -242,8 +248,15 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						kPos.y += m_nStep;
-						kPos.x -= m_nStep;
+						if (j == iTimes - 1) //避免不能整除
+						{
+							kPos = ConvertUtil::convertCellToDisplay( second.nX, second.nY );
+						}
+						else
+						{
+							kPos.y += m_nStep;
+							kPos.x -= m_nStep;
+						}
 
 						m_kPointVector.push_back(kPos);
 					}
@@ -253,7 +266,14 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						kPos.x -= m_nStep;
+						if (j == iTimes - 1) //避免不能整除
+						{
+							kPos = ConvertUtil::convertCellToDisplay( second.nX, second.nY );
+						}
+						else
+						{
+							kPos.x -= m_nStep;
+						}
 
 						m_kPointVector.push_back(kPos);
 					}
@@ -266,8 +286,15 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						kPos.y -= m_nStep;
-						kPos.x += m_nStep;
+						if (j == iTimes - 1) //避免不能整除
+						{
+							kPos = ConvertUtil::convertCellToDisplay( second.nX, second.nY );
+						}
+						else
+						{
+							kPos.y -= m_nStep;
+							kPos.x += m_nStep;
+						}
 
 						m_kPointVector.push_back(kPos);
 					}
@@ -277,8 +304,15 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						kPos.y += m_nStep;
-						kPos.x += m_nStep;
+						if (j == iTimes - 1) //避免不能整除
+						{
+							kPos = ConvertUtil::convertCellToDisplay( second.nX, second.nY );
+						}
+						else
+						{
+							kPos.y += m_nStep;
+							kPos.x += m_nStep;
+						}
 
 						m_kPointVector.push_back(kPos);
 					}
@@ -288,7 +322,14 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						kPos.x += m_nStep;
+						if (j == iTimes - 1) //避免不能整除
+						{
+							kPos = ConvertUtil::convertCellToDisplay( second.nX, second.nY );
+						}
+						else
+						{
+							kPos.x += m_nStep;
+						}
 
 						m_kPointVector.push_back(kPos);
 					}
@@ -301,8 +342,14 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						kPos.y -= m_nStep;
-
+						if (j == iTimes - 1) //避免不能整除
+						{
+							kPos = ConvertUtil::convertCellToDisplay( second.nX, second.nY );
+						}
+						else
+						{
+							kPos.y -= m_nStep;
+						}
 						m_kPointVector.push_back(kPos);
 					}
 				}
@@ -311,7 +358,14 @@ void NDAutoPath::GetPath()
 					for (int j = 0; j < iTimes; j++)
 					{
 						// 加点
-						kPos.y += m_nStep;
+						if (j == iTimes - 1) //避免不能整除
+						{
+							kPos = ConvertUtil::convertCellToDisplay( second.nX, second.nY );
+						}
+						else
+						{
+							kPos.y += m_nStep;
+						}
 
 						m_kPointVector.push_back(kPos);
 					}
@@ -320,7 +374,7 @@ void NDAutoPath::GetPath()
 				{
 				}
 			}
-		}
+		}//for
 	} while (0);
 
 	return;

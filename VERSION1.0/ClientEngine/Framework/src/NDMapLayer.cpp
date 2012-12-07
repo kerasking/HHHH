@@ -41,6 +41,7 @@
 #include "TQPlatform.h"
 #include "NDUtil.h"
 #include "NDBaseBattleMgr.h"
+#include "NDBaseLayer.h"
 
 using namespace cocos2d;
 
@@ -194,9 +195,10 @@ void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)
 	if (m_pkMapData)
 	{
 		SetContentSize(
-				CCSizeMake(
-						m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
-						m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
+// 				CCSizeMake(
+// 						m_pkMapData->getColumns() * MAP_UNITSIZE_X,
+// 						m_pkMapData->getRows() * MAP_UNITSIZE_Y)); //@del
+			m_pkMapData->getMapDataSize());
 
 		MakeOrdersOfMapscenesAndMapanimations();
 		MakeFrameRunRecords();
@@ -225,6 +227,12 @@ void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)
 void NDMapLayer::Initialization(const char* mapFile)
 {
 	NDLayer::Initialization();
+
+	if (m_ccNode)
+	{
+		((NDBaseLayer*)m_ccNode)->setDebugName( "NDMapLayer" );
+	}
+
 	SetTouchEnabled(true);
 
 	m_pkSwitchAniGroup = NDAnimationGroupPool::defaultPool()->addObjectWithModelId(switch_ani_modelId);
@@ -233,8 +241,10 @@ void NDMapLayer::Initialization(const char* mapFile)
 	ND_ASSERT_NO_RETURN(NULL == m_pkMapData);
 	m_pkMapData->initWithFile(mapFile);
 
-	SetContentSize(CCSizeMake(m_pkMapData->getColumns() * m_pkMapData->getUnitSize(),
-		                    m_pkMapData->getRows() * m_pkMapData->getUnitSize()));
+	SetContentSize(
+// 		CCSizeMake(m_pkMapData->getColumns() * MAP_UNITSIZE_X,
+// 					m_pkMapData->getRows() * MAP_UNITSIZE_Y)); //@del
+		m_pkMapData->getMapDataSize());
 
 	MakeOrdersOfMapscenesAndMapanimations();
 	MakeFrameRunRecords();
@@ -275,7 +285,7 @@ void NDMapLayer::refreshTitle()
 			{
 				if(m_lbTitle && m_lbTitleBg)
 				{
-					int x = CCDirector::sharedDirector()->getWinSizeInPixels().width / 2 - 150;
+					int x = CCDirector::sharedDirector()->getWinSizeInPixels().width / 2 - 150; //@todo:蛋碎的硬编码，啥是150? 啥是210?
 					int y = 60;
 					//NDLog("x:%d,y:%d",x,y);
 					m_lbTitleBg->SetFrameRect(CCRectMake(
@@ -308,7 +318,7 @@ void NDMapLayer::refreshTitle()
 			{
 				if(m_lbTitle && m_lbTitleBg)
 				{
-					int nX = CCDirector::sharedDirector()->getWinSizeInPixels().width / 2 - 150;
+					int nX = CCDirector::sharedDirector()->getWinSizeInPixels().width / 2 - 150; //@todo:蛋碎的硬编码，啥是150? 啥是210?
 					int nY = 60;
 					//NDLog("x:%d,y:%d",x,y);
 					m_lbTitleBg->SetFrameRect(
@@ -1024,9 +1034,11 @@ void NDMapLayer::SetPosition(CCPoint kPosition)
 
 bool NDMapLayer::SetScreenCenter(CCPoint kPoint)
 {
- 		if(m_bBattleBackground){
- 			return false;
- 		}
+	//CCLog("@@ NDMapLayer::SetScreenCenter(%d, %d)\r\n", int(kPoint.x), int(kPoint.y));
+
+	if(m_bBattleBackground){
+		return false;
+	}
 
 	bool bOverBoder = false;
 	int width = GetContentSize().width;
@@ -1064,6 +1076,9 @@ bool NDMapLayer::SetScreenCenter(CCPoint kPoint)
 	//[m_mapData moveBackGround:backOff.x,backOff.y];
 
 	m_kScreenCenter = kPoint;
+
+	//CCLog("@@ NDMapLayer::m_kScreenCenter=(%d, %d)\r\n", int(m_kScreenCenter.x), int(m_kScreenCenter.y));
+
 	//NDLog("center:%f,%f",p.x,p.y);
 	SetPosition(
 			CCPointMake(winSize.width / 2 - kPoint.x,
@@ -1586,7 +1601,8 @@ void NDMapLayer::MakeOrdersOfMapscenesAndMapanimations()
 					(NDMapSwitch *) m_pkMapData->getSwitchs()->objectAtIndex(i);
 			//int orderId = mapSwitch.y * m_mapData.unitSize;
 
-			int orderId = pkMapSwitch->getY() * m_pkMapData->getUnitSize();	//+ 32 ;
+			//int orderId = pkMapSwitch->getY() * m_pkMapData->getUnitSize();	//+ 32 ;
+			int orderId = pkMapSwitch->getY() * MAP_UNITSIZE_Y;	//+ 32 ; //@todo: orderId和UnitSize有关系！？
 
 			MAP_ORDER *dict = new MAP_ORDER;
 
@@ -1910,7 +1926,10 @@ void NDMapLayer::OpenTreasureBox()
 
 void NDMapLayer::debugDraw()
 {
-#if 1 //@del
+	if (!NDDebugOpt::getDrawDebugEnabled() ||
+		!NDDebugOpt::getDrawCellEnabled()) return;
+
+#if 1
 	float w = CCDirector::sharedDirector()->getVisibleSize().width;
 	float h = CCDirector::sharedDirector()->getVisibleSize().height;
 	glLineWidth(2);
@@ -1918,9 +1937,6 @@ void NDMapLayer::debugDraw()
 	ccDrawLine( ccp(0,0), ccp(w,h));
 	ccDrawLine( ccp(0,h), ccp(w,0));
 #endif
-
-	if (!NDDebugOpt::getDrawDebugEnabled() ||
-		!NDDebugOpt::getDrawCellEnabled()) return;
 
 	//drawCell();
 }

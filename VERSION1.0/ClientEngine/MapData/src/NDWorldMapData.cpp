@@ -46,7 +46,7 @@ NDWorldMapData::NDWorldMapData() :
 m_nLayerCount(0),
 m_nColumns(0),
 m_nRows(0),
-m_nUnitSize(0),
+//m_nUnitSize(0),
 m_MapTiles(NULL),
 m_SceneTiles(NULL),
 m_BgTiles(NULL),
@@ -100,19 +100,29 @@ void NDWorldMapData::initWithFile(const char* mapFile)
 void NDWorldMapData::decode(FILE* stream)
 {
 	FileOp kFileOp;
+	
 	//<-------------------地图名
 	m_Name = kFileOp.readUTF8String(stream); //[self readUTF8String:stream];
+	
 	//<-------------------单元格尺寸
-	m_nUnitSize = kFileOp.readByte(stream);
-	int TileWidth = m_nUnitSize;
-	int TileHeight = m_nUnitSize;
+	int nUnitSize_DontUseIt = kFileOp.readByte(stream); //不使用！
+// 	int TileWidth = m_nUnitSize;
+// 	int TileHeight = m_nUnitSize; //@del
+	int TileWidth = MAP_UNITSIZE_X;
+	int TileHeight = MAP_UNITSIZE_Y;
+
 	//------------------->层数
 	m_nLayerCount = kFileOp.readByte(stream);
+
 	//<-------------------列数
 	m_nColumns = kFileOp.readByte(stream);
+	
 	//------------------->行数
 	m_nRows = kFileOp.readByte(stream);
-	m_MapSize = CCSizeMake(m_nColumns << 5, m_nRows << 5);
+	
+	//m_MapSize = CCSizeMake(m_nColumns << 5, m_nRows << 5);
+	m_MapSize = CCSizeMake( m_nColumns * MAP_UNITSIZE_X, m_nRows * MAP_UNITSIZE_Y ); //@android
+	
 	//<-------------------使用到的图块资源
 	std::vector < std::string > _tileImages;
 	int tileImageCount = kFileOp.readShort(stream);
@@ -241,8 +251,7 @@ void NDWorldMapData::decode(FILE* stream)
 
 		pkTile->setMapSize( CCSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
 		pkTile->setCutRect(CCRectMake(0, 0, picWidth, picHeight)); 
-		pkTile->setDrawRect(CCRectMake(x, y, picWidth, picHeight));
-
+		pkTile->SetDrawRect_Android(CCRectMake(x, y, picWidth, picHeight));//@android
 		pkTile->make();
 		m_BgTiles->addObject(pkTile);
 		pkTile->release();
@@ -304,7 +313,7 @@ void NDWorldMapData::decode(FILE* stream)
 
 		pkTile->setMapSize( CCSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
 		pkTile->setCutRect( CCRectMake(0, 0, picWidth, picHeight)); 
-		pkTile->setDrawRect( CCRectMake(x, y, picWidth, picHeight));
+		pkTile->SetDrawRect_Android( CCRectMake(x, y, picWidth, picHeight)); //@android
 		pkTile->setReverse(reverse);
 		pkTile->make();
 
@@ -341,8 +350,8 @@ void NDWorldMapData::decode(FILE* stream)
 		dict->insert(std::make_pair("reverse", 0));
 		dict->insert(std::make_pair("positionX", x));
 		dict->insert(std::make_pair("positionY", y));
-		dict->insert(std::make_pair("mapSizeW", m_nColumns * m_nUnitSize));
-		dict->insert(std::make_pair("mapSizeH", m_nRows * m_nUnitSize));
+		dict->insert(std::make_pair("mapSizeW", m_nColumns * MAP_UNITSIZE_X));
+		dict->insert(std::make_pair("mapSizeH", m_nRows * MAP_UNITSIZE_Y));
 		dict->insert(std::make_pair("orderId", aniOrder));
 		dict->insert(std::make_pair("reverse", 0));
 		dict->insert(std::make_pair("reverse", 0));

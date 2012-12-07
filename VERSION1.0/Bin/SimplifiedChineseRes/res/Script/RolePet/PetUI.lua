@@ -161,6 +161,8 @@ function p.LoadUI(bIsSMB)
 	if layer == nil then
 		return false;
 	end
+	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PetUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
@@ -181,6 +183,7 @@ function p.LoadUI(bIsSMB)
 	if layerIllsion == nil then
 		return false;
 	end
+	layerIllsion:SetPopupDlgFlag( true );
 	layerIllsion:Init();
 	layerIllsion:SetTag(p.TagIllsionLayer);
 	layerIllsion:SetFrameRect(RectFullScreenUILayer);
@@ -613,7 +616,9 @@ function p.refreshIllsion()
         if view == nil then
             return;
         end
+        view:SetPopupDlgFlag(true);
         view:Init(false);
+        view:bringToTop();
         view:SetScrollStyle(UIScrollStyle.Horzontal);
         view:SetViewId(v);
         view:SetTag(v);

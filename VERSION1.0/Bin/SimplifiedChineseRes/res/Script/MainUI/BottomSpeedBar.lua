@@ -40,12 +40,12 @@ function p.BtnCutRectMake(ind)
         LogInfo("p.BtnCutRectMake row col num fail!");
         return nil;
     end
-	local nor = CGRectMake(col*40.0*ScaleFactor,row*40.0*ScaleFactor,40.0*ScaleFactor, 40.0*ScaleFactor );
     
-    
-    local sel = CGRectMake(col*40.0*ScaleFactor,row*40*ScaleFactor+120*ScaleFactor,40.0*ScaleFactor, 40.0*ScaleFactor );
-    
-    
+    --原始图片资源的位置是固定的！
+	--local nor = CGRectMake(col*40.0*ScaleFactor,row*40.0*ScaleFactor,40.0*ScaleFactor, 40.0*ScaleFactor );
+    --local sel = CGRectMake(col*40.0*ScaleFactor,row*40*ScaleFactor+120*ScaleFactor,40.0*ScaleFactor, 40.0*ScaleFactor );
+	local nor = CGRectMake(col*80, row*80,		80, 80);
+    local sel = CGRectMake(col*80, row*80+240,	80, 80);
 	return nor,sel;
 end
 
@@ -194,6 +194,7 @@ function p.LoadUI()
 		return false;
 	end
 	layer:Init();
+	--layer:SetDebugName( "bottomBar" );
 	layer:SetTag(NMAINSCENECHILDTAG.BottomSpeedBar );
 	layer:SetFrameRect(p.LayerRect);
 	scene:AddChild(layer);

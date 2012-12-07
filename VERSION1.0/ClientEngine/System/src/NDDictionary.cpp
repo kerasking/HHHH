@@ -52,7 +52,7 @@ NDDictionary::~NDDictionary()
 
 void NDDictionary::SetObject(NDObject* obj, const char* key)
 {
-	LOGD("entry NDDictionary::SetObject,obj is %d",(int)obj);
+	//LOGD("entry NDDictionary::SetObject,obj is %d",(int)obj);
 
 	if (obj)
 	{

@@ -55,6 +55,8 @@ function p.LoadUI()
         LogInfo("scene = nil,2");
         return  false;
     end
+    
+    layer:SetPopupDlgFlag( true );
     layer:Init();
     layer:SetTag(NMAINSCENECHILDTAG.Levy);
     local winsize = GetWinSize();

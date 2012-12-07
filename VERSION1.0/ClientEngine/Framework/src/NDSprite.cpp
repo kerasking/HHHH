@@ -162,8 +162,8 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 		m_pkFrameRunRecord = new NDFrameRunRecord;
 
 		SetContentSize(
-			CCSizeMake(m_pkCurrentAnimation->getW(),
-			m_pkCurrentAnimation->getH()));
+			CCSizeMake(m_pkCurrentAnimation->getW() * ANDROID_SCALE,
+						m_pkCurrentAnimation->getH() * ANDROID_SCALE )); //@android
 	}
 }
 
@@ -322,6 +322,8 @@ void NDSprite::MoveToPosition(std::vector<CCPoint> kToPos, SpriteSpeed speed,
 	{
 		return;
 	}
+
+	//CCLog( "@@ NDSprite::MoveToPosition(%d, %d)\r\n", (int)kToPos[0].x, int(kToPos[0].y));
 
 	if (GetParent())
 	{

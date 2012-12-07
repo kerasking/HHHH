@@ -112,6 +112,8 @@ p.pLayerEditNotice		= nil;
 		LogInfo( "ArmyGroup: ShowArmyGroupMainUI failed! layer is nil" );
 		return false;
 	end
+	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag( NMAINSCENECHILDTAG.ArmyGroup );
 	layer:SetFrameRect( RectFullScreenUILayer );
@@ -404,7 +406,9 @@ function p.FillMemberList( pLayer, tArmyGroupMemberList )
 			return false;
 		end
 	
+		pListItem:SetPopupDlgFlag(true);
 		pListItem:Init( false );
+		pListItem:bringToTop();
 		pListItem:SetScrollStyle( UIScrollStyle.Verical );
 		pListItem:SetViewId( i );
 		pListItem:SetTag( i );
@@ -533,6 +537,8 @@ function p.CreateArmyGroupMemberUI( pParentLayer )
 		LogInfo( "ArmyGroup: ShowArmyGroupMemberUI failed! layer is nil" );
 		return false;
 	end
+	
+	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	--layer:SetTag( NMAINSCENECHILDTAG.ArmyGroup );
 	layer:SetFrameRect( RectFullScreenUILayer );

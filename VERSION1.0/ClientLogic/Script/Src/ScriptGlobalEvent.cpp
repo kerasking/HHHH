@@ -105,10 +105,10 @@ void ScriptGlobalEvent::Load()
 void ScriptGlobalEvent::OnEvent(GLOBALEVENT eEvent, int param1, int param2, int param3)
 {
 #ifdef _DEBUG
-	cocos2d::CCLog("ScriptGlobalEvent::OnEvent, eEvent=%d", (int)eEvent);
+	//cocos2d::CCLog("ScriptGlobalEvent::OnEvent, eEvent=%d", (int)eEvent);
 #endif
 
-	LOGD("Entry OnEvent,Event ID is %d",(int)eEvent);
+	//LOGD("Entry OnEvent,Event ID is %d",(int)eEvent);
 
 	std::pair<GLOBALEVENTCIT, GLOBALEVENTCIT> range;
 	range = mapGlobalEventHandler.equal_range(eEvent);

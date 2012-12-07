@@ -21,6 +21,8 @@ using namespace cocos2d;
 
 NDBaseLayer::NDBaseLayer()
 {
+	setSubPriority( 0xff ); //@priority
+	setDebugName("NDBaseLayer");
 	m_pkTouch = new NDTouch();
 	m_bPress = false;
 }
@@ -87,6 +89,8 @@ void NDBaseLayer::registerWithTouchDispatcher(void)
 
 bool NDBaseLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 {
+	if (!this->isVisible()) return false;
+
 	m_pkTouch->Initialization(pTouch);
 
 	//if (g_NDBaseLayerPress)
@@ -118,6 +122,8 @@ bool NDBaseLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 
 void NDBaseLayer::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 {
+	if (!this->isVisible()) return;
+
 	m_pkTouch->Initialization(pTouch);
 
 	//g_NDBaseLayerPress = false;
@@ -136,6 +142,8 @@ void NDBaseLayer::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 
 void NDBaseLayer::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 {
+	if (!this->isVisible()) return;
+
 	m_pkTouch->Initialization(pTouch);
 
 	//g_NDBaseLayerPress = false;
@@ -154,6 +162,8 @@ void NDBaseLayer::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 
 void NDBaseLayer::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 {
+	if (!this->isVisible()) return;
+
 	m_pkTouch->Initialization(pTouch);
 	if (m_kUILayerNode)
 	{
@@ -167,6 +177,8 @@ void NDBaseLayer::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 
 bool NDBaseLayer::ccTouchDoubleClick(CCTouch *pTouch, CCEvent *pEvent)
 {
+	if (!this->isVisible()) return false;
+
 //	g_NDBaseLayerPress = false;
 
 	m_pkTouch->Initialization(pTouch);

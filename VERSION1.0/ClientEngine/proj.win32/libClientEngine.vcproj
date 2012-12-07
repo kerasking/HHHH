@@ -1014,6 +1014,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Utility\inc\NDVideoEventListener.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Utility\inc\NDVideoMgr.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Utility\inc\platform.h"
 					>
 				</File>
@@ -1059,6 +1067,14 @@
 				</File>
 				<File
 					RelativePath="..\Utility\src\NDUtil.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Utility\src\NDVideoEventListener.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Utility\src\NDVideoMgr.cpp"
 					>
 				</File>
 				<File
@@ -1282,11 +1298,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\UI\inc\NDUITableLayer.h"
+			RelativePath="..\TempClass\NDUITableLayer.h"
 			>
 		</File>
 		<File
-			RelativePath="..\TempClass\NDUITableLayer.h"
+			RelativePath="..\UI\inc\NDUITableLayer.h"
 			>
 		</File>
 		<File

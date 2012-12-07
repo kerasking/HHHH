@@ -83,6 +83,8 @@ function p.ShowUI()
 		LogInfo( "GameSetting: ShowUI() failed! pLayer is nil" );
 		return false;
 	end
+	
+	pLayer:SetPopupDlgFlag( true );
 	pLayer:Init();
 	pLayer:SetTag( NMAINSCENECHILDTAG.GameSetting );
 	pLayer:SetFrameRect( RectFullScreenUILayer );
