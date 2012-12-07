@@ -268,7 +268,8 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		m_pTimer->KillTimer( this, TAG_TIMER_FIRST_RUN );
 		CreateUpdateUILayer();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-		OnEvent_LoginOKNormal(0);
+        m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
+		OnEvent_LoginOKNormal(m_iAccountID);
 #else
 #ifdef USE_MGSDK
 		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
@@ -310,7 +311,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		CloseUpdateUILayer();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 		//if ( m_iAccountID == 0 )
-		m_iAccountID = ScriptMgrObj.excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
+		m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();//ScriptMgrObj.excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
 #endif
 		ScriptMgrObj.excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
 		//    ScriptMgrObj.excuteLuaFunc("ProecssLocalNotification", "MsgLoginSuc");
@@ -806,7 +807,7 @@ void CSMLoginScene::StartEntry()
 	CloseUpdateUILayer();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	//if ( m_iAccountID == 0 )
-	m_iAccountID = ScriptMgrObj.excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
+	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();//ScriptMgrObj.excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
 #endif
 
 	ScriptMgrObj.excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );

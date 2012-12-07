@@ -131,56 +131,12 @@ public abstract class Cocos2dxActivity extends Activity implements
 	// ===========================================================
 	public void init()
 	{
-		// FrameLayout
-		ViewGroup.LayoutParams framelayout_params = new ViewGroup.LayoutParams(
-				ViewGroup.LayoutParams.FILL_PARENT,
-				ViewGroup.LayoutParams.FILL_PARENT);
-		m_pkFrameView = new FrameLayout(this);
-		m_pkFrameView.setLayoutParams(framelayout_params);
-
-		// Cocos2dxEditText layout
-		ViewGroup.LayoutParams edittext_layout_params = new ViewGroup.LayoutParams(
-				ViewGroup.LayoutParams.FILL_PARENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT);
-		Cocos2dxEditText edittext = new Cocos2dxEditText(this);
-		edittext.setLayoutParams(edittext_layout_params);
-
-		// ...add to FrameLayout
-		m_pkFrameView.addView(edittext);
-
 		// Cocos2dxGLSurfaceView
 		this.mGLSurfaceView = this.onCreateView();
 
-		// ...add to FrameLayout
-//		m_pkFrameView.addView(this.mGLSurfaceView);
-
 		mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
-		mGLSurfaceView.setCocos2dxEditText(edittext);
-
-		// Set framelayout as the content view
-//		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
-//                ViewGroup.LayoutParams.FILL_PARENT,
-//                ViewGroup.LayoutParams.FILL_PARENT);
-//		setContentView(R.layout.helloworld_demo);
-
-//		addContentView(m_pkFrameView,pkLayoutParams);
-//		
-//		NDVideoControl pkVideoControl = new NDVideoControl(Cocos2dxActivity.this);
-//		pkVideoControl.setCocos2dxActivity(this);
-//		
-//		m_pkView = (VideoView)this.findViewById(R.id.videoPlay);
-//		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
-//		m_pkView.setMediaController(pkVideoControl);
-//		m_pkView.setOnCompletionListener(pkVideoControl);
-//		m_pkView.requestFocus();
-//		
-//        DisplayMetrics metrics = new DisplayMetrics(); getWindowManager().getDefaultDisplay().getMetrics(metrics);
-//        ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) m_pkView.getLayoutParams();
-//        params.width =  metrics.widthPixels;
-//        params.height = metrics.heightPixels;
-//        m_pkView.setLayoutParams(params);
-//
-//		m_pkView.start();
+		
+//		this.setContentView(this.mGLSurfaceView);
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView()

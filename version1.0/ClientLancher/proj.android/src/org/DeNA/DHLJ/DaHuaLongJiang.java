@@ -38,6 +38,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewParent;
 import android.webkit.CookieSyncManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -113,10 +114,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 			menubar = new DynamicMenuBar(this);
 			menubar.setMenubarVisibility(View.VISIBLE);
 			menubar.setMenuIconGravity(Gravity.TOP|Gravity.LEFT);
-
-			View rootView =(View)getView();
-			
-			menubar.addView(rootView);
 		} else {
 			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 			alertDialog.setTitle("Title");
@@ -168,6 +165,15 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 	}
 	
 	public void setMain(){
+		View rootView =(View)getView();
+		FrameLayout parent = (FrameLayout)rootView.getParent();
+		if(parent != null)
+		{
+			parent.removeView(rootView);
+		}
+		menubar.removeAllViews();
+		menubar.addView(rootView);
+
 		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
 		this.setContentView(menubar,params);
 	}
