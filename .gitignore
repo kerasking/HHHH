@@ -6,6 +6,7 @@
 *.sdf
 *.db
 
+.settings/
 
 debug/
 Debug/

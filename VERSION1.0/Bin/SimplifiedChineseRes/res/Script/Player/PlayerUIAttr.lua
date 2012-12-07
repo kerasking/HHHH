@@ -754,7 +754,9 @@ function p.RefreshContainer()
 		local view = createUIScrollView();
         
 		if view ~= nil then
+		    view:SetPopupDlgFlag( true );
             view:Init(false);
+			view:bringToTop();
             view:SetViewId(v);
             container:AddView(view);
 

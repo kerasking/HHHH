@@ -116,7 +116,6 @@ public class SocialUtils {
 				mLoginCompleted = false;
 
 				Mobage.hideSplashScreen();
-				getmActivity().setMain();
 			}
 
 			public void onLoginComplete(String userId) {
@@ -128,8 +127,9 @@ public class SocialUtils {
 
 				if (checkComplete()) {
 					onCompleted();
-					getmActivity().LoginComplete(Integer.parseInt(mUserId));
 				}
+				getmActivity().setMain();
+				getmActivity().LoginComplete(Integer.parseInt(mUserId));
 			}
 
 			public void onLoginRequired() {

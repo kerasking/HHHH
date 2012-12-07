@@ -6,7 +6,6 @@
 #include "cocoa/CCString.h"
 #include "Java_org_cocos2dx_lib_Cocos2dxHelper.h"
 
-
 #define  LOG_TAG    "Java_org_cocos2dx_lib_Cocos2dxHelper.cpp"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 
@@ -18,159 +17,212 @@ static void* s_ctx = NULL;
 using namespace cocos2d;
 using namespace std;
 
-extern "C" {
-    string g_apkPath;
-    
-    void Java_org_cocos2dx_lib_Cocos2dxHelper_nativeSetApkPath(JNIEnv*  env, jobject thiz, jstring apkPath) {
-        g_apkPath = JniHelper::jstring2string(apkPath);
-    }
+extern "C"
+{
+	string g_apkPath;
 
-    const char * getApkPath() {
-        return g_apkPath.c_str();
-    }
+	void Java_org_cocos2dx_lib_Cocos2dxHelper_nativeSetApkPath(JNIEnv* env,
+		jobject thiz, jstring apkPath)
+	{
+		g_apkPath = JniHelper::jstring2string(apkPath);
+	}
 
-    void Java_org_cocos2dx_lib_Cocos2dxHelper_nativeSetExternalAssetPath(JNIEnv*  env, jobject thiz, jstring externalAssetPath) {
-        const char* externalAssetPathChars = env->GetStringUTFChars(externalAssetPath, NULL);
-        cocos2d::JniHelper::setExternalAssetPath(externalAssetPathChars);
-        env->ReleaseStringUTFChars(externalAssetPath, externalAssetPathChars);
-    }
+	const char * getApkPath()
+	{
+		return g_apkPath.c_str();
+	}
 
-    void showDialogJNI(const char * pszMsg, const char * pszTitle) {
-        if (!pszMsg) {
-            return;
-        }
+	void Java_org_cocos2dx_lib_Cocos2dxHelper_nativeSetExternalAssetPath(
+		JNIEnv* env, jobject thiz, jstring externalAssetPath)
+	{
+		const char* externalAssetPathChars = env->GetStringUTFChars(
+			externalAssetPath, NULL);
+		cocos2d::JniHelper::setExternalAssetPath(externalAssetPathChars);
+		env->ReleaseStringUTFChars(externalAssetPath, externalAssetPathChars);
+	}
 
-        JniMethodInfo t;
-        if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "showDialog", "(Ljava/lang/String;Ljava/lang/String;)V")) {
-            jstring stringArg1;
+	void showDialogJNI(const char * pszMsg, const char * pszTitle)
+	{
+		if (!pszMsg)
+		{
+			return;
+		}
 
-            if (!pszTitle) {
-                stringArg1 = t.env->NewStringUTF("");
-            } else {
-                stringArg1 = t.env->NewStringUTF(pszTitle);
-            }
+		JniMethodInfo t;
+		if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "showDialog",
+			"(Ljava/lang/String;Ljava/lang/String;)V"))
+		{
+			jstring stringArg1;
 
-            jstring stringArg2 = t.env->NewStringUTF(pszMsg);
-            t.env->CallStaticVoidMethod(t.classID, t.methodID, stringArg1, stringArg2);
+			if (!pszTitle)
+			{
+				stringArg1 = t.env->NewStringUTF("");
+			}
+			else
+			{
+				stringArg1 = t.env->NewStringUTF(pszTitle);
+			}
 
-            t.env->DeleteLocalRef(stringArg1);
-            t.env->DeleteLocalRef(stringArg2);
-            t.env->DeleteLocalRef(t.classID);
-        }
-    }
+			jstring stringArg2 = t.env->NewStringUTF(pszMsg);
+			t.env->CallStaticVoidMethod(t.classID, t.methodID, stringArg1,
+				stringArg2);
 
-    void showEditTextDialogJNI(const char* pszTitle, const char* pszMessage, int nInputMode, int nInputFlag, int nReturnType, int nMaxLength, EditTextCallback pfEditTextCallback, void* ctx) {
-        if (pszMessage == NULL) {
-            return;
-        }
+			t.env->DeleteLocalRef(stringArg1);
+			t.env->DeleteLocalRef(stringArg2);
+			t.env->DeleteLocalRef(t.classID);
+		}
+	}
 
-        s_pfEditTextCallback = pfEditTextCallback;
-        s_ctx = ctx;
+	void showEditTextDialogJNI(const char* pszTitle, const char* pszMessage,
+		int nInputMode, int nInputFlag, int nReturnType, int nMaxLength,
+		EditTextCallback pfEditTextCallback, void* ctx)
+	{
+		if (pszMessage == NULL)
+		{
+			return;
+		}
 
-        JniMethodInfo t;
-        if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "showEditTextDialog", "(Ljava/lang/String;Ljava/lang/String;IIII)V")) {
-            jstring stringArg1;
+		s_pfEditTextCallback = pfEditTextCallback;
+		s_ctx = ctx;
 
-            if (!pszTitle) {
-                stringArg1 = t.env->NewStringUTF("");
-            } else {
-                stringArg1 = t.env->NewStringUTF(pszTitle);
-            }
+		JniMethodInfo t;
+		if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "showEditTextDialog",
+			"(Ljava/lang/String;Ljava/lang/String;IIII)V"))
+		{
+			jstring stringArg1;
 
-            jstring stringArg2 = t.env->NewStringUTF(pszMessage);
+			if (!pszTitle)
+			{
+				stringArg1 = t.env->NewStringUTF("");
+			}
+			else
+			{
+				stringArg1 = t.env->NewStringUTF(pszTitle);
+			}
 
-            t.env->CallStaticVoidMethod(t.classID, t.methodID, stringArg1, stringArg2, nInputMode, nInputFlag, nReturnType, nMaxLength);
+			jstring stringArg2 = t.env->NewStringUTF(pszMessage);
 
-            t.env->DeleteLocalRef(stringArg1);
-            t.env->DeleteLocalRef(stringArg2);
-            t.env->DeleteLocalRef(t.classID);
-        }
-    }
+			t.env->CallStaticVoidMethod(t.classID, t.methodID, stringArg1,
+				stringArg2, nInputMode, nInputFlag, nReturnType, nMaxLength);
 
-    void Java_org_cocos2dx_lib_Cocos2dxHelper_nativeSetEditTextDialogResult(JNIEnv * env, jobject obj, jbyteArray text) {
-        jsize  size = env->GetArrayLength(text);
+			t.env->DeleteLocalRef(stringArg1);
+			t.env->DeleteLocalRef(stringArg2);
+			t.env->DeleteLocalRef(t.classID);
+		}
+	}
 
-        if (size > 0) {
-            jbyte * data = (jbyte*)env->GetByteArrayElements(text, 0);
-            char* pBuf = (char*)malloc(size+1);
-            if (pBuf != NULL) {
-                memcpy(pBuf, data, size);
-                pBuf[size] = '\0';
-                // pass data to edittext's delegate
-                if (s_pfEditTextCallback) s_pfEditTextCallback(pBuf, s_ctx);
-                free(pBuf);
-            }
-            env->ReleaseByteArrayElements(text, data, 0);
-        } else {
-            if (s_pfEditTextCallback) s_pfEditTextCallback("", s_ctx);
-        }
-    }
+	void Java_org_cocos2dx_lib_Cocos2dxHelper_nativeSetEditTextDialogResult(
+		JNIEnv * env, jobject obj, jbyteArray text)
+	{
+		jsize size = env->GetArrayLength(text);
 
-    void terminateProcessJNI() {
-        JniMethodInfo t;
+		if (size > 0)
+		{
+			jbyte * data = (jbyte*) env->GetByteArrayElements(text, 0);
+			char* pBuf = (char*) malloc(size + 1);
+			if (pBuf != NULL)
+			{
+				memcpy(pBuf, data, size);
+				pBuf[size] = '\0';
+				// pass data to edittext's delegate
+				if (s_pfEditTextCallback)
+					s_pfEditTextCallback(pBuf, s_ctx);
+				free(pBuf);
+			}
+			env->ReleaseByteArrayElements(text, data, 0);
+		}
+		else
+		{
+			if (s_pfEditTextCallback)
+				s_pfEditTextCallback("", s_ctx);
+		}
+	}
 
-        if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "terminateProcess", "()V")) {
-            t.env->CallStaticVoidMethod(t.classID, t.methodID);
-            t.env->DeleteLocalRef(t.classID);
-        }
-    }
+	void terminateProcessJNI()
+	{
+		JniMethodInfo t;
 
-   const char* getPackageNameJNI() {
-        JniMethodInfo t;
+		if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "terminateProcess",
+			"()V"))
+		{
+			t.env->CallStaticVoidMethod(t.classID, t.methodID);
+			t.env->DeleteLocalRef(t.classID);
+		}
+	}
 
-        if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "getCocos2dxPackageName", "()Ljava/lang/String;")) {
-            jstring str = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID);
-            t.env->DeleteLocalRef(t.classID);
-            CCString *ret = new CCString(JniHelper::jstring2string(str).c_str());
-            ret->autorelease();
-            t.env->DeleteLocalRef(str);
+	const char* getPackageNameJNI()
+	{
+		JniMethodInfo t;
 
-            return ret->m_sString.c_str();
-        }
+		if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "getCocos2dxPackageName",
+			"()Ljava/lang/String;"))
+		{
+			jstring str = (jstring) t.env->CallStaticObjectMethod(t.classID,
+				t.methodID);
+			t.env->DeleteLocalRef(t.classID);
+			CCString *ret = new CCString(JniHelper::jstring2string(str).c_str());
+			ret->autorelease();
+			t.env->DeleteLocalRef(str);
 
-        return 0;
-    }
+			return ret->m_sString.c_str();
+		}
 
-    const char* getCurrentLanguageJNI() {
-        JniMethodInfo t;
+		return 0;
+	}
 
-        if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "getCurrentLanguage", "()Ljava/lang/String;")) {
-            jstring str = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID);
-            t.env->DeleteLocalRef(t.classID);
-            CCString *ret = new CCString(JniHelper::jstring2string(str).c_str());
-            ret->autorelease();
-            t.env->DeleteLocalRef(str);
+	const char* getCurrentLanguageJNI()
+	{
+		JniMethodInfo t;
 
-            return ret->m_sString.c_str();
-        }
+		if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "getCurrentLanguage",
+			"()Ljava/lang/String;"))
+		{
+			jstring str = (jstring) t.env->CallStaticObjectMethod(t.classID,
+				t.methodID);
+			t.env->DeleteLocalRef(t.classID);
+			CCString *ret = new CCString(JniHelper::jstring2string(str).c_str());
+			ret->autorelease();
+			t.env->DeleteLocalRef(str);
 
-        return 0;
-    }
+			return ret->m_sString.c_str();
+		}
 
-    void enableAccelerometerJNI() {
-        JniMethodInfo t;
+		return 0;
+	}
 
-        if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "enableAccelerometer", "()V")) {
-            t.env->CallStaticVoidMethod(t.classID, t.methodID);
-            t.env->DeleteLocalRef(t.classID);
-        }
-    }
+	void enableAccelerometerJNI()
+	{
+		JniMethodInfo t;
 
-    void setAccelerometerIntervalJNI(float interval) {
-        JniMethodInfo t;
+		if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "enableAccelerometer",
+			"()V"))
+		{
+			t.env->CallStaticVoidMethod(t.classID, t.methodID);
+			t.env->DeleteLocalRef(t.classID);
+		}
+	}
 
-        if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "setAccelerometerInterval", "(I)V")) {
-            t.env->CallStaticVoidMethod(t.classID, t.methodID, interval);
-            t.env->DeleteLocalRef(t.classID);
-        }
-    }
+	void setAccelerometerIntervalJNI(float interval)
+	{
+		JniMethodInfo t;
 
-    void disableAccelerometerJNI() {
-        JniMethodInfo t;
+		if (JniHelper::getStaticMethodInfo(t, CLASS_NAME,
+			"setAccelerometerInterval", "(I)V"))
+		{
+			t.env->CallStaticVoidMethod(t.classID, t.methodID, interval);
+			t.env->DeleteLocalRef(t.classID);
+		}
+	}
 
-        if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "disableAccelerometer", "()V")) {
-            t.env->CallStaticVoidMethod(t.classID, t.methodID);
-            t.env->DeleteLocalRef(t.classID);
-        }
-    }
+	void disableAccelerometerJNI()
+	{
+		JniMethodInfo t;
+
+		if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "disableAccelerometer",
+			"()V"))
+		{
+			t.env->CallStaticVoidMethod(t.classID, t.methodID);
+			t.env->DeleteLocalRef(t.classID);
+		}
+	}
 }

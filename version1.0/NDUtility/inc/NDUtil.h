@@ -6,7 +6,6 @@
 #define NDUTIL_H
 
 #include "define.h"
-#include "NDPath.h"
 #include "CCGeometry.h"
 
 NS_NDENGINE_BGN

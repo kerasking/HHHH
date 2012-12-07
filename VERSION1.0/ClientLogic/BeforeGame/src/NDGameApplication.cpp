@@ -65,6 +65,7 @@ static NDBaseDirector s_NDBaseDirector;
 
 #include "SqliteDBMgr.h"
 #include "NDUILoadEngine.h"
+#include "NDVideoMgr.h"
 
 
 ///////////////////////////////////////////
@@ -181,6 +182,11 @@ NDGameApplication::~NDGameApplication()
 
 bool NDGameApplication::applicationDidFinishLaunching()
 {
+	if (!VideoMgrPtr->PlayVideo("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4"))
+	{
+		LOGERROR("Playing video error");
+	}
+
 	CCDirector* pDirector = CCDirector::sharedDirector();
 	CCAssert(pDirector, "applicationDidFinishLaunching");
 	pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
@@ -240,6 +246,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 	// set FPS. the default value is 1.0/60 if you don't call this
 	//pDirector->setAnimationInterval(1.0 / 60);
+	LOGD("pDirector->setAnimationInterval() value is %d",(int)pDirector);
 	pDirector->setAnimationInterval(1.0 / 24);
 
 #if 0 //@todo @hello
@@ -250,7 +257,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
  	pDirector->runWithScene(pScene);
 	//////////////////////////////////////////////
 #else
-	this->MyInit();
+	MyInit();
 #endif
 
 

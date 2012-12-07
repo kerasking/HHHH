@@ -807,7 +807,7 @@ void CSMLoginScene::StartEntry()
 
 	ScriptMgrObj.excuteLuaFunc( "LoadData", "GameSetting" ); 
 	CloseUpdateUILayer();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)// || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	//if ( m_iAccountID == 0 )
 	m_iAccountID = ScriptMgrObj.excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
 #endif

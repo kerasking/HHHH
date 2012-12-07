@@ -135,7 +135,7 @@ NDNetMsgPool* NDNetMsgPool::GetNetMsgPool()
 {
 	if (0 == ms_pkSingleton)
 	{
-		ms_pkSingleton = CREATE_CLASS(NDBaseNetMgr,"NDNetMsgPool");
+		ms_pkSingleton = new NDNetMsgPool;//CREATE_CLASS(NDBaseNetMgr,"NDNetMsgPool");
 	}
 
 	return (NDNetMsgPool*)ms_pkSingleton;

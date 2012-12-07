@@ -42,14 +42,26 @@ import android.webkit.CookieSyncManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.os.Bundle;
+import android.os.Environment;
+import android.text.Layout;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
 public class DaHuaLongJiang extends Cocos2dxActivity {
 	private static final String TAG = "DaHuaLongJiang";
+	public static DaHuaLongJiang ms_pkDHLJ = null;
 	private PlatformListener mPlatformListener;
 	private DynamicMenuBar menubar;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		if (isSDCardCanUse()) {
+			ms_pkDHLJ = this;
 			super.onCreate(savedInstanceState);
 			Log.e(TAG, "onCreate called");
 			
@@ -166,17 +178,47 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 	public void LoginError(String error){
 		onLoginError(error);
 	}
-	public boolean isSDCardCanUse() {
+
+	public void changeViewToVideo()
+	{
+	}
+
+	public boolean isSDCardCanUse()
+	{
 		String strState = Environment.getExternalStorageState();
 
-		if (Environment.MEDIA_MOUNTED.equals(strState)) {
+		if (Environment.MEDIA_MOUNTED.equals(strState))
+		{
 			return true;
 		}
 
 		return false;
 	}
 
-	static {
+	public static int playVideo(final String strFile)
+	{
+		if (strFile.length() == 0)
+		{
+			return -1;
+		}
+
+		if (null == ms_pkDHLJ)
+		{
+			return -1;
+		}
+
+		ms_pkDHLJ.changeViewToVideo();
+
+		return 0;
+	}
+
+	public static int stopVideo(final String strFile)
+	{
+		return 0;
+	}
+	
+	static
+	{
 		System.loadLibrary("mobage");
 		System.loadLibrary("luaplus");
 		System.loadLibrary("tinyxml");

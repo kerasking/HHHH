@@ -16,29 +16,17 @@
 #import "SMLoginScene.h"
 #import "SMGameScene.h"
 
+#include "platform/android/jni/JniHelper.h"
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHua"
+#define  LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+
 void MobageSdkLoginAndroid::onLoginComplete(int userId) {
-//	NDLog("app delegate onLoginComplete userId %d", userId);
-	NDBeforeGameMgr& mgr = NDBeforeGameMgrObj;
-	mgr.SetCurrentUser(userId);
-    //ScriptGlobalEvent::OnEvent(GE_LOGINOK_NORMAL, [userId intValue]);
-    CSMGameScene * pGameScene = (CSMGameScene *)NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
-    if ( pGameScene )
-    {
-        ScriptMgrObj.excuteLuaFunc( "SetAccountID", "Login_ServerUI", userId );
-        quitGame();
-        return;
-    }
-	CSMLoginScene* pScene = (CSMLoginScene*)NDDirector::DefaultDirector()->GetSceneByTag(SMLOGINSCENE_TAG);
-	if(pScene)
-	{
-        if( pScene->GetChild( 2068 ) )//Login_ServerUI
-        {
-            ScriptMgrObj.excuteLuaFunc( "LoginOK_Normal", "Login_ServerUI", userId );
-            return;
-        }
-        else
-			return pScene->OnEvent_LoginOKGuest(userId);
-	}
+	LOGD("app delegate onLoginComplete userId %d", userId);
+    ScriptMgrObj.excuteLuaFunc( "SetAccountID", "Login_ServerUI", userId );
+	LOGD("SetAccountID success!");
 }
 
 void MobageSdkLoginAndroid::onLoginError() {

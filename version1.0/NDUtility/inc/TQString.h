@@ -11,6 +11,7 @@
 #define _STRING_H_ZJH_
 
 #include <string>
+#include "stdlib.h"
 
 // 这里要求后续使用CString格式化后的字符串长度不能超过4096-1
 namespace tq {
