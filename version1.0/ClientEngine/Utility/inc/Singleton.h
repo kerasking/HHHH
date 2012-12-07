@@ -20,7 +20,7 @@ protected:
 	TSingleton() 
 	{
 		NDAsssert(NULL == ms_pkSingleton);
-//		ms_pkSingleton = static_cast<T*> (this);
+		ms_pkSingleton = static_cast<T*> (this);
 	}
 	
 	TSingleton( const TSingleton& obj );
