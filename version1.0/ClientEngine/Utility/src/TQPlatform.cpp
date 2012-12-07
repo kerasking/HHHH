@@ -10,6 +10,8 @@
 #include "TQPlatform.h"
 #include "CCImage.h"
 #include "CCGeometry.h"
+#include "basedefine.h"
+
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #import "Foundation/Foundation.h"

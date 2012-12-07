@@ -386,6 +386,7 @@ NDBeforeGameMgr::NDBeforeGameMgr()
 
 	m_bInSwithCMNetState = false;
 
+	m_CurrentUser_id = 0;
 	//m_sdkLogin = NULL;
 }
 
