@@ -6,6 +6,7 @@
 #include "NDNpcLogic.h"
 #include "NDNpc.h"
 #include "ScriptGameData.h"
+#include "ScriptGameData_NewUtil.h"
 #include "ScriptDataBase.h"
 #include "NDPlayer.h"
 #include "ScriptTask.h"

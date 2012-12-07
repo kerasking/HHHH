@@ -10,6 +10,7 @@
 #include "ItemUtil.h"
 #include "TableDef.h"
 #include "ScriptGameData.h"
+#include "ScriptGameData_NewUtil.h"
 #include "ScriptDataBase.h"
 
 unsigned int GetItemInfoN(unsigned int nItemId, unsigned int  nIndex)

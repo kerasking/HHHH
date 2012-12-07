@@ -5,11 +5,13 @@
  *  Created by jhzheng on 12-2-17.
  *  Copyright 2012 (网龙)DeNA. All rights reserved.
  *
+ *	说明：负责加载所有INI文件 @loader
  */
 
 #include "ScriptDataBase.h"
 #include "ScriptInc.h"
 #include "ScriptGameData.h"
+#include "ScriptGameData_NewUtil.h"
 #include "NDUtility.h"
 #include "NDPath.h"
 #include <stdio.h>
@@ -114,14 +116,17 @@ struct FileOp
 		{
 			return false;
 		}
+		tmp[len] = 0;
 		
 		strData = (char*)&tmp;
 		return true;
 	}
 
 	//@db
-	//return static read only pointer.
-	const char* ReadUtf8(FILE* f)
+	//	return static read only pointer.
+	//	only for tmp use.
+	//	DON'T save this pointer!
+	const char* ReadUtf8_Fast(FILE* f)
 	{
 		if (!f) return false;
 
@@ -154,9 +159,11 @@ struct FileOp
 
 
 /////////////////////////////////////////////////////////////////////////
-struct ScriptDBTable
+// 用来读取一张配置表
+struct NDTableLoader
 {
-	ScriptDBTable& ReadFieldsInfo(FILE* f)
+	//读字段信息
+	NDTableLoader& ReadFieldsInfo(FILE* f)
 	{
 		if (!f) 
 		{
@@ -185,12 +192,68 @@ struct ScriptDBTable
 		return *this;
 	}
 
-	ScriptDBTable& ReadFieldsData(FILE* f, unsigned int nKey, unsigned int nId)
+#if WITH_NEW_DB
+	//读一行记录
+	bool ReadRecord_New( FILE* f, NDRecord* pRecord )
 	{
-		if (!f)
+		if (!f || !pRecord) return false;
+
+		FileOp op;
+		size_t fieldCount = m_vType.size();
+		for (size_t fieldIndex = 0; fieldIndex < fieldCount; fieldIndex ++) 
 		{
-			return *this;
-		}
+			NDField* pField = pRecord->getAt( fieldIndex );
+			NDAsssert(pField);
+
+			switch (m_vType[fieldIndex]) 
+			{
+			case 0: //字符串
+				{
+					pField->setString( op.ReadUtf8_Fast(f));
+				}
+				break;
+			case 1: //UCHAR
+				{
+ 					unsigned char ucData = 0;
+ 					op.ReadUChar(f, ucData);
+					pField->setUChar( ucData );
+				}
+				break;
+			case 2: //USHORT
+				{
+					unsigned short usData = 0;
+					op.ReadUShort(f, usData);
+					pField->setUShort( usData );
+				}
+				break;
+			case 4: //UINT
+				{
+					unsigned int unData = 0;
+					op.ReadUInt(f, unData);
+					pField->setUInt( unData );
+				}
+				break;
+			case 8: //I64
+				{
+					unsigned long long bigData = 0;
+					op.ReadU64(f, bigData);
+					pField->setUBigInt( bigData );
+				}
+				break;
+			default:
+				NDAsssert(0); //居然不支持int!?
+			}//switch
+		}//for
+
+		return true;
+	}
+
+#else
+
+	//读一行记录
+	bool ReadRecord(FILE* f, unsigned int nKey, unsigned int nId)
+	{
+		if (!f) return false;
 
 		FileOp op;
 		size_t size = m_vType.size();
@@ -200,10 +263,9 @@ struct ScriptDBTable
 			{
 			case 0: //字符串
 				{
-					// 						std::string strData = "";
-					// 						op.ReadUtf8(f, strData);
-					// 						ScriptGameDataObj.SetData(eScriptDataDataBase, nKey, eRoleDataPet, nId, i, strData);
-					ScriptGameDataObj.SetData(eScriptDataDataBase, nKey, eRoleDataPet, nId, i, op.ReadUtf8(f));//@db
+					std::string strData;
+					op.ReadUtf8(f, strData);
+					ScriptGameDataObj.SetData(eScriptDataDataBase, nKey, eRoleDataPet, nId, i, strData);//@db
 				}
 				break;
 			case 1:
@@ -239,8 +301,12 @@ struct ScriptDBTable
 			}//switch
 		}//for
 
-		return *this;
+		return true;
 	}
+#endif //WITH_NEW_DB
+
+public:
+	int getFieldCount() { return m_vType.size(); }
 
 private:
 	std::vector<unsigned char> m_vType;
@@ -251,22 +317,7 @@ private:
 
 /////////////////////////////////////////////////////////////////////////
 
-bool LoadDataBaseTable(const char* inifilename, const char* indexfilename)
-{
-	return ScriptDBObj.LoadTable(inifilename, indexfilename);
-}
-
-int GetIniFileKey(const char* inifilename)
-{
-	return ScriptDBObj.GetKey(inifilename);
-}
-
-void ScriptDB::Load()
-{
-	ETCFUNC("LoadDataBaseTable", LoadDataBaseTable)
-	ETCFUNC("GetIniFileKey", GetIniFileKey)
-}
-
+//@loader
 bool ScriptDB::LoadTable(const char* inifilename, const char* indexfilename)
 {
 	char t[200] = ""; 
@@ -286,8 +337,8 @@ bool ScriptDB::LoadTable(const char* inifilename, const char* indexfilename)
 		NDPath::GetResPath((std::string("DBData/") + inifilename + ".ini").c_str());
 	
 	// open table file
-	FILE *fTable = fopen(tableFilePath.c_str(), "rb");
-	if (!fTable)
+	FILE *fpTable = fopen(tableFilePath.c_str(), "rb");
+	if (!fpTable)
 	{
 		std::stringstream ss;
 		ss << "load " << inifilename << "failed";
@@ -296,120 +347,79 @@ bool ScriptDB::LoadTable(const char* inifilename, const char* indexfilename)
 	}
 
 	// open index file
-	FILE *fIndex = fopen(indexFilePath.c_str(), "rb");
-	if (!fIndex)
+	FILE *fpIndex = fopen(indexFilePath.c_str(), "rb");
+	if (!fpIndex)
 	{
 		std::stringstream ss;
 		ss << "load " << indexfilename << "failed";
 		ScriptMgrObj.DebugOutPut(ss.str().c_str());
+		fclose(fpTable);
 		return false;
 	}
 
 	// read fields
-	ScriptDBTable table;
-	table.ReadFieldsInfo(fIndex);
+	NDTableLoader loader;
+	loader.ReadFieldsInfo(fpIndex);
 
-	if (feof(fIndex))
+	if (feof(fpIndex))
 	{
 		ScriptMgrObj.DebugOutPut("feof(fIndex)");
-		fclose(fIndex);
-		fclose(fTable);
+		fclose(fpIndex); fclose(fpTable);
 		return false;
 	}
 
+	// gen key
 	unsigned int nKey = GenerateKey();
-	m_mapData.insert(MAP_STR_INT_VT(std::string(inifilename), nKey));
+	m_mapFileKey.insert(MAP_STR_INT_VT(std::string(inifilename), nKey));
 
 	// read record count
 	FileOp op;
 
 	unsigned int unRecord = 0;
-	if (!op.ReadUInt(fIndex, unRecord))
+	if (!op.ReadUInt(fpIndex, unRecord))
 	{
 		ScriptMgrObj.DebugOutPut("!op.ReadUInt(fIndex, unRecord)");
+		fclose(fpIndex); fclose(fpTable);
 		return false;
 	}
 
-	// walk through each record
+#if WITH_NEW_DB
+	// 数据库中创建一张表
+	NDTableSetIni* pTableSetIni = NDGameDataUtil::Util::getTableSet_ini();
+	NDTable* pTable = pTableSetIni->addNew_INI( nKey, loader.getFieldCount() );
+#endif
+
+	// 读取每一条记录
 	for (unsigned int i = 0; i < unRecord; i++)
 	{
-		unsigned int nID = 0;
-		unsigned int nIndex = 0;
+		unsigned int idRecord = 0;
+		unsigned int offset = 0;
 
-		if (!op.ReadUInt(fIndex, nID))
+		if (!op.ReadUInt(fpIndex, idRecord))
 		{
 			break;
 		}
 
-		if (!op.ReadUInt(fIndex, nIndex))
+		if (!op.ReadUInt(fpIndex, offset))
 		{
 			break;
 		}
 
-		fseek(fTable, nIndex, SEEK_SET);
+		fseek(fpTable, offset, SEEK_SET);
 
-		table.ReadFieldsData(fTable, nKey, nID);
+#if WITH_NEW_DB
+		//添加一条记录
+		NDRecord* pRecord = pTable->addNew( idRecord );
+		loader.ReadRecord_New( fpTable, pRecord );
+#else
+		loader.ReadRecord( fpTable, nKey, idRecord );
+#endif
 	}
 
-	fclose(fIndex);
-	fclose(fTable);
-
+	fclose(fpIndex); fclose(fpTable);
 	return true;
 }
 
-bool ScriptDB::GetIdList(const char* inifilename, ID_VEC& idlist)
-{
-	int nKey = GetKey(inifilename);
-	if (0 == nKey)
-	{
-		if (std::string(inifilename) == "mapzone")
-		{
-			ScriptMgrObj.DebugOutPut("mapzone GetIdList failed");
-		}
-		return false;
-	}
-		
-	return ScriptGameDataObj.GetDataIdList(eScriptDataDataBase, nKey, eRoleDataPet, idlist);       
-}
-
-unsigned int ScriptDB::GetKey(const char* inifilename)
-{
-	if (!inifilename)
-	{
-		return 0;
-	}
-
-	MAP_STR_INT_IT it = m_mapData.find(inifilename);
-	if (m_mapData.end() != it)
-	{
-		return it->second;
-	}
-
-	return 0;
-}
-
-int ScriptDB::GetN(const char* inifilename, int nId, int nIndex)
-{
-	int nKey = GetKey(inifilename);
-	if (0 == nKey)
-	{
-		return 0;
-	}
-		
-	return ScriptGameDataObj.GetData<unsigned long long>(eScriptDataDataBase, nKey, eRoleDataPet, nId, nIndex);
-}
-	
-std::string ScriptDB::GetS(const char* inifilename, int nId, int nIndex)
-{
-	int nKey = GetKey(inifilename);
-	if (0 == nKey)
-	{
-		return "";
-	}
-	
-	return ScriptGameDataObj.GetData<std::string>(eScriptDataDataBase, nKey, eRoleDataPet, nId, nIndex);
-}
-	
 void ScriptDB::LogOut(const char* inifilename, int nId)
 {
 	int nKey = GetKey(inifilename);
@@ -427,13 +437,93 @@ unsigned int ScriptDB::GenerateKey()
 	return m_uiIdGenerator;
 }
 
-ScriptDB::ScriptDB()
+unsigned int ScriptDB::GetKey(const char* inifilename)
 {
-	m_uiIdGenerator = 0;
+	if (!inifilename)
+	{
+		return 0;
+	}
+
+	MAP_STR_INT_IT it = m_mapFileKey.find(inifilename);
+	if (m_mapFileKey.end() != it)
+	{
+		return it->second;
+	}
+
+	return 0;
 }
 
-ScriptDB::~ScriptDB()
+//for lua
+bool LoadDataBaseTable(const char* inifilename, const char* indexfilename)
 {
+	return ScriptDBObj.LoadTable(inifilename, indexfilename);
+}
+
+//for lua
+int GetIniFileKey(const char* inifilename)
+{
+	return ScriptDBObj.GetKey(inifilename);
+}
+
+//for lua
+void ScriptDB::Load()
+{
+	ETCFUNC("LoadDataBaseTable", LoadDataBaseTable)
+	ETCFUNC("GetIniFileKey", GetIniFileKey)
+}
+
+//仅用于读取ini
+bool ScriptDB::GetIdList(const char* inifilename, ID_VEC& idlist)
+{
+	if (!inifilename) return false;
+
+	int nKey = GetKey(inifilename);
+	if (0 == nKey)
+	{
+		if (std::string(inifilename) == "mapzone")
+		{
+			ScriptMgrObj.DebugOutPut("mapzone GetIdList failed");
+		}
+		return false;
+	}
+
+#if WITH_NEW_DB
+	NDGameDataUtil::Util::getDataIdList( MAKE_NDTABLEPTR_INI(nKey), idlist );
+#else
+	return ScriptGameDataObj.GetDataIdList(eScriptDataDataBase, nKey, eRoleDataPet, idlist);       
+#endif
+}
+
+//仅用于读取ini
+int ScriptDB::GetN(const char* inifilename, int nId, int nIndex)
+{
+	int nKey = GetKey(inifilename);
+	if (0 == nKey)
+	{
+		return 0;
+	}
+
+#if WITH_NEW_DB
+	NDGameDataUtil::Util::getDataULL( MAKE_NDTABLEPTR_INI(nKey), NDCellPtr(nId, nIndex ));
+#else
+	return ScriptGameDataObj.GetData<unsigned long long>(eScriptDataDataBase, nKey, eRoleDataPet, nId, nIndex);
+#endif
+}
+
+//仅用于读取ini
+std::string ScriptDB::GetS(const char* inifilename, int nId, int nIndex)
+{
+	int nKey = GetKey(inifilename);
+	if (0 == nKey)
+	{
+		return "";
+	}
+
+#if WITH_NEW_DB
+	NDGameDataUtil::Util::getDataS( MAKE_NDTABLEPTR_INI(nKey), NDCellPtr(nId, nIndex ));
+#else
+	return ScriptGameDataObj.GetData<std::string>(eScriptDataDataBase, nKey, eRoleDataPet, nId, nIndex);
+#endif
 }
 
 NS_NDENGINE_END
