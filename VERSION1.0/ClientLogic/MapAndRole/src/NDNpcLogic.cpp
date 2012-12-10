@@ -27,7 +27,13 @@ void NDHeroTaskLogic::refreshListAccepted()
 	if (idlistAccept)
 	{
 		idlistAccept->clear();
+
+#if WITH_NEW_DB
+		NDGameDataUtil::Util::getDataIdList( MAKE_NDTABLEPTR(eMJR_Role, getHeroID(), eMIN_Task), 
+												*idlistAccept ); //已接
+#else
 		ScriptGameDataObj.GetDataIdList( eScriptDataRole, getHeroID(), eRoleDataTask, *idlistAccept );
+#endif
 	}
 }
 
@@ -38,7 +44,12 @@ bool NDHeroTaskLogic::refreshCanAcceptList()
 	{
 		idCanAccept->clear();
 
+#if WITH_NEW_DB
+		if (!NDGameDataUtil::Util::getDataIdList( MAKE_NDTABLEPTR(eMJR_Role, getHeroID(), eMIN_TaskCanAccept), 
+													*idCanAccept )) //可接
+#else
 		if (!ScriptGameDataObj.GetDataIdList( eScriptDataRole, getHeroID(), eRoleDataTaskCanAccept, *idCanAccept))
+#endif
 		{
 			return false;
 		}
