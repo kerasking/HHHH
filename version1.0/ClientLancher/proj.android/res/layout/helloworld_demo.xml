@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:background="@null"/>
-
+
     <VideoView
         android:id="@+id/videoPlay"
         android:layout_width="fill_parent"

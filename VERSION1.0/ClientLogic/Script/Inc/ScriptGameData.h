@@ -5,6 +5,7 @@
  *  Created by jhzheng on 12-1-6.
  *  Copyright 2012 __MyCompanyName__. All rights reserved.
  *
+ *	说明：旧的数据库
  */
  
 #pragma once
@@ -22,96 +23,94 @@
 //#pragma mark set role data 
 //#pragma mark (设置角色数据,包括主角跟其它玩家)
 
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 设置角色基本数据
-#define SRDBasic(nRoleId, dataIndex, val) \
-NDScriptGameData::GetSingleton().SetRoleBasicData(nRoleId, dataIndex, val)
+//#define SRDBasic(nRoleId, dataIndex, val) \
+//NDScriptGameData::GetSingleton().SetRoleBasicData(nRoleId, dataIndex, val)
 
 // 设置角色技能数据
-#define SRDSkill(nRoleId, nSkillId, dataIndex, val) \
-NDScriptGameData::GetSingleton().SetRoleSkillData(nRoleId, nSkillId, dataIndex, val)
+//#define SRDSkill(nRoleId, nSkillId, dataIndex, val) \
+//NDScriptGameData::GetSingleton().SetRoleSkillData(nRoleId, nSkillId, dataIndex, val)
 
 // 设置角色状态数据
-#define SRDState(nRoleId, nStateId, dataIndex, val) \
-NDScriptGameData::GetSingleton().SetRoleStateData(nRoleId, nStateId, dataIndex, val)
+//#define SRDState(nRoleId, nStateId, dataIndex, val) \
+//NDScriptGameData::GetSingleton().SetRoleStateData(nRoleId, nStateId, dataIndex, val)
 
 // 设置角色物品数据
-#define SRDItem(nRoleId, nItemId, dataIndex, val) \
-NDScriptGameData::GetSingleton().SetRoleItemData(nRoleId, nItemId, dataIndex, val)
+//#define SRDItem(nRoleId, nItemId, dataIndex, val) \
+//NDScriptGameData::GetSingleton().SetRoleItemData(nRoleId, nItemId, dataIndex, val)
 
 // 设置角色宠物数据
-#define SRDPet(nRoleId, nPetId, dataIndex, val) \
-NDScriptGameData::GetSingleton().SetRolePetData(nRoleId, nPetId, dataIndex, val)
+//#define SRDPet(nRoleId, nPetId, dataIndex, val) \
+//NDScriptGameData::GetSingleton().SetRolePetData(nRoleId, nPetId, dataIndex, val)
 
 // 设置角色任务数据
-#define SRDTask(nRoleId, nTaskId, dataIndex, val) \
-NDScriptGameData::GetSingleton().SetRoleTaskData(nRoleId, nTaskId, dataIndex, val)
+//#define SRDTask(nRoleId, nTaskId, dataIndex, val) \
+//NDScriptGameData::GetSingleton().SetRoleTaskData(nRoleId, nTaskId, dataIndex, val)
 
 //#pragma mark get role data 
 //#pragma mark (获取角色数据,包括主角跟其它玩家)(以N结尾为数值型数据, 以F结尾为浮点型数据, 以S结尾为字符串型数据)
 
 // 获取角色基本数据
-#define GRDBasicN(nRoleId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRoleBasicData<unsigned long long>(nRoleId, dataIndex)
-#define GRDBasicF(nRoleId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRoleBasicData<double>(nRoleId, dataIndex)
-#define GRDBasicS(nRoleId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRoleBasicData<std::string>(nRoleId, dataIndex)
+//#define GRDBasicN(nRoleId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRoleBasicData<unsigned long long>(nRoleId, dataIndex)
+//#define GRDBasicF(nRoleId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRoleBasicData<double>(nRoleId, dataIndex)
+//#define GRDBasicS(nRoleId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRoleBasicData<std::string>(nRoleId, dataIndex)
 
 // 获取角色技能数据
-#define GRDSkillN(nRoleId, nSkillId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRoleSkillData<unsigned long long>(nRoleId, nSkillId, dataIndex)
-#define GRDSkillF(nRoleId, nSkillId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRoleSkillData<double>(nRoleId, nSkillId, dataIndex)
-#define GRDSkillS(nRoleId, nSkillId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRoleSkillData<std::string>(nRoleId, nSkillId, dataIndex)
+//#define GRDSkillN(nRoleId, nSkillId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRoleSkillData<unsigned long long>(nRoleId, nSkillId, dataIndex)
+//#define GRDSkillF(nRoleId, nSkillId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRoleSkillData<double>(nRoleId, nSkillId, dataIndex)
+//#define GRDSkillS(nRoleId, nSkillId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRoleSkillData<std::string>(nRoleId, nSkillId, dataIndex)
 
 // 获取角色状态数据
-#define GRDStateN(nRoleId, nStateId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRoleStateData<unsigned long long>(nRoleId, nStateId, dataIndex)
-#define GRDStateF(nRoleId, nStateId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRoleStateData<double>(nRoleId, nStateId, dataIndex)
-#define GRDStateS(nRoleId, nStateId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRoleStateData<std::string>(nRoleId, nStateId, dataIndex)
+//#define GRDStateN(nRoleId, nStateId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRoleStateData<unsigned long long>(nRoleId, nStateId, dataIndex)
+//#define GRDStateF(nRoleId, nStateId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRoleStateData<double>(nRoleId, nStateId, dataIndex)
+//#define GRDStateS(nRoleId, nStateId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRoleStateData<std::string>(nRoleId, nStateId, dataIndex)
 
 // 获取角色物品数据
-#define GRDItemN(nRoleId, nItemId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRoleItemData<unsigned long long>(nRoleId, nItemId, dataIndex)
-#define GRDItemF(nRoleId, nItemId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRoleItemData<double>(nRoleId, nItemId, dataIndex)
-#define GRDItemS(nRoleId, nItemId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRoleItemData<std::string>(nRoleId, nItemId, dataIndex)
+//#define GRDItemN(nRoleId, nItemId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRoleItemData<unsigned long long>(nRoleId, nItemId, dataIndex)
+//#define GRDItemF(nRoleId, nItemId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRoleItemData<double>(nRoleId, nItemId, dataIndex)
+//#define GRDItemS(nRoleId, nItemId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRoleItemData<std::string>(nRoleId, nItemId, dataIndex)
 
 // 获取角色宠物数据
-#define GRDPetN(nRoleId, nPetId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRolePetData<unsigned long long>(nRoleId, nPetId, dataIndex)
-#define GRDPetF(nRoleId, nPetId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRolePetData<double>(nRoleId, nPetId, dataIndex)
-#define GRDPetS(nRoleId, nPetId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRolePetData<std::string>(nRoleId, nPetId, dataIndex)
+//#define GRDPetN(nRoleId, nPetId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRolePetData<unsigned long long>(nRoleId, nPetId, dataIndex)
+//#define GRDPetF(nRoleId, nPetId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRolePetData<double>(nRoleId, nPetId, dataIndex)
+//#define GRDPetS(nRoleId, nPetId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRolePetData<std::string>(nRoleId, nPetId, dataIndex)
 
 // 获取角色任务数据
-#define GRDTaskN(nRoleId, nTaskId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRoleTaskData<unsigned long long>(nRoleId, nTaskId, dataIndex)
-#define GRDTaskF(nRoleId, nTaskId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRoleTaskData<double>(nRoleId, nTaskId, dataIndex)
-#define GRDTaskS(nRoleId, nTaskId, dataIndex) \
-NDScriptGameData::GetSingleton().GetRoleTaskData<std::string>(nRoleId, nTaskId, dataIndex)
+//#define GRDTaskN(nRoleId, nTaskId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRoleTaskData<unsigned long long>(nRoleId, nTaskId, dataIndex)
+//#define GRDTaskF(nRoleId, nTaskId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRoleTaskData<double>(nRoleId, nTaskId, dataIndex)
+//#define GRDTaskS(nRoleId, nTaskId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetRoleTaskData<std::string>(nRoleId, nTaskId, dataIndex)
 
 //#pragma mark del role data
 //#pragma mark 删除角色数据
 
-#define DRD(nRoleId) \
-NDScriptGameData::GetSingleton().DelRoleData(nRoleId)
+//#define DRD(nRoleId) \
+//NDScriptGameData::GetSingleton().DelRoleData(nRoleId)
 
 //#pragma mark set npc data
 //#pragma mark 设置NPC数据
 
 // 设置NPC基本数据
-#define SNPCDBasic(nNpcId, dataIndex, val) \
-NDScriptGameData::GetSingleton().SetData(eScriptDataNpc, nNpcId, eRoleDataBasic, 0, dataIndex, val)
+//#define SNPCDBasic(nNpcId, dataIndex, val) \
+//NDScriptGameData::GetSingleton().SetData(eScriptDataNpc, nNpcId, eRoleDataBasic, 0, dataIndex, val)
 
 // 设置NPC其它数据... ToDo
 
@@ -119,27 +118,27 @@ NDScriptGameData::GetSingleton().SetData(eScriptDataNpc, nNpcId, eRoleDataBasic,
 //#pragma mark 获取NPC数据
 
 // 获取NPC基本数据
-#define GNPCDBasicN(nNpcId, dataIndex) \
-NDScriptGameData::GetSingleton().GetData<unsigned long long>(eScriptDataNpc, nNpcId, eRoleDataBasic, 0, dataIndex)
-#define GNPCDBasicF(nNpcId, dataIndex) \
-NDScriptGameData::GetSingleton().GetData<double>(eScriptDataNpc, nNpcId, eRoleDataBasic, 0, dataIndex)
-#define GNPCDBasicS(nNpcId, dataIndex) \
-NDScriptGameData::GetSingleton().GetData<std::string>(eScriptDataNpc, nNpcId, eRoleDataBasic, 0, dataIndex)
+//#define GNPCDBasicN(nNpcId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetData<unsigned long long>(eScriptDataNpc, nNpcId, eRoleDataBasic, 0, dataIndex)
+//#define GNPCDBasicF(nNpcId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetData<double>(eScriptDataNpc, nNpcId, eRoleDataBasic, 0, dataIndex)
+//#define GNPCDBasicS(nNpcId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetData<std::string>(eScriptDataNpc, nNpcId, eRoleDataBasic, 0, dataIndex)
 
 //#pragma mark del npc data
 //#pragma mark 删除 npc 数据
 
 // 删除NPC数据
-#define DNPCD(nNpcId) \
-NDScriptGameData::GetSingleton().DelData(eScriptDataNpc, nNpcId)
+//#define DNPCD(nNpcId) \
+//NDScriptGameData::GetSingleton().DelData(eScriptDataNpc, nNpcId)
 
 
 //#pragma mark set monster data
 //#pragma mark 设置怪物数据
 
 // 设置怪物基本数据
-#define SMonsterDBasic(nMonsterId, dataIndex, val) \
-NDScriptGameData::GetSingleton().SetData(eScriptDataMonster, nMonsterId, eRoleDataBasic, 0, dataIndex, val)
+//#define SMonsterDBasic(nMonsterId, dataIndex, val) \
+//NDScriptGameData::GetSingleton().SetData(eScriptDataMonster, nMonsterId, eRoleDataBasic, 0, dataIndex, val)
 
 // 设置怪物其它数据... ToDo
 
@@ -147,19 +146,19 @@ NDScriptGameData::GetSingleton().SetData(eScriptDataMonster, nMonsterId, eRoleDa
 //#pragma mark 获取怪物数据
 
 // 获取怪物基本数据
-#define GMonsterDBasicN(nMonsterId, dataIndex) \
-NDScriptGameData::GetSingleton().GetData<unsigned long long>(eScriptDataMonster, nMonsterId, eRoleDataBasic, 0, dataIndex)
-#define GMonsterDBasicF(nMonsterId, dataIndex) \
-NDScriptGameData::GetSingleton().GetData<double>(eScriptDataMonster, nMonsterId, eRoleDataBasic, 0, dataIndex)
-#define GMonsterDBasicS(nMonsterId, dataIndex) \
-NDScriptGameData::GetSingleton().GetData<std::string>(eScriptDataMonster, nMonsterId, eRoleDataBasic, 0, dataIndex)
+//#define GMonsterDBasicN(nMonsterId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetData<unsigned long long>(eScriptDataMonster, nMonsterId, eRoleDataBasic, 0, dataIndex)
+//#define GMonsterDBasicF(nMonsterId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetData<double>(eScriptDataMonster, nMonsterId, eRoleDataBasic, 0, dataIndex)
+//#define GMonsterDBasicS(nMonsterId, dataIndex) \
+//NDScriptGameData::GetSingleton().GetData<std::string>(eScriptDataMonster, nMonsterId, eRoleDataBasic, 0, dataIndex)
 
 //#pragma mark del mosnter data
 //#pragma mark 删除 怪物 数据
 
 // 删除怪物数据
-#define DMonsterD(nMonsterId) \
-NDScriptGameData::GetSingleton().DelData(eScriptDataMonster, nMonsterId)
+//#define DMonsterD(nMonsterId) \
+//NDScriptGameData::GetSingleton().DelData(eScriptDataMonster, nMonsterId)
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

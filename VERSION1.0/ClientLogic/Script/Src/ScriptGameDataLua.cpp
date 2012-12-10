@@ -5,9 +5,11 @@
  *  Created by jhzheng on 12-1-13.
  *  Copyright 2012 __MyCompanyName__. All rights reserved.
  *
+ *	说明：注册数据库LUA接口
  */
 
 #include "ScriptGameData.h"
+#include "ScriptGameData_NewUtil.h"
 #include "ScriptInc.h"
 #include "ScriptDataBase.h"
 #include "SqliteDBMgr.h"
@@ -46,13 +48,21 @@ int GetGameDataIdList(LuaState* state)
 	}
 	
 	ID_VEC idVec;
-	if (!ScriptGameDataObj.GetDataIdList(
+
+#if WITH_NEW_DB
+	NDGameDataUtil::Util::getDataIdList( 
+		MAKE_NDTABLEPTR(
+					scriptdata.GetInteger(), 
+					key.GetInteger(), 
+					roledata.GetInteger()),
+		idVec);
+#else
+	ScriptGameDataObj.GetDataIdList(
 		(eScriptData)scriptdata.GetInteger(), 
 		key.GetInteger(), 
 		(eRoleData)roledata.GetInteger(), 
-		idVec))
-	{
-	}
+		idVec);
+#endif
 	
 	size_t size = idVec.size();
 	for (size_t i = 0; i < size; i++) 
@@ -65,130 +75,233 @@ int GetGameDataIdList(LuaState* state)
 }
 
 //#pragma mark 获取角色基本数据
+// 未使用，LUA实现了同名函数.
+// double GetRoleBasicDataN(int nRoleId, int dataIndex)
+// {
+// 	return GRDBasicN(nRoleId, dataIndex);
+// }
 
-double GetRoleBasicDataN(int nRoleId, int dataIndex)
-{
-	return GRDBasicN(nRoleId, dataIndex);
-}
+// 未使用
+// double GetRoleBasicDataF(int nRoleId, int dataIndex)
+// {
+// 	return GRDBasicF(nRoleId, dataIndex);
+// }
 
-double GetRoleBasicDataF(int nRoleId, int dataIndex)
-{
-	return GRDBasicF(nRoleId, dataIndex);
-}
+// 未使用
+// const char* GetRoleBasicDataS(int nRoleId, int dataIndex)
+// {
+// 	return GRDBasicS(nRoleId, dataIndex).c_str();
+// }
 
-const char* GetRoleBasicDataS(int nRoleId, int dataIndex)
-{
-	return GRDBasicS(nRoleId, dataIndex).c_str();
-}
+// 未使用
+// int GetRoleBasicDataBig(LuaState* state)
+// {
+// 	LuaStack args(state);
+// 	LuaObject nRoleId = args[1];
+// 	LuaObject nDataIndex = args[2];
+// 	
+// 	if ( !(nRoleId.IsNumber() && nDataIndex.IsNumber()) )
+// 	{
+// 		state->PushNumber(0);
+// 		state->PushNumber(0);
+// 	}
+// 	else
+// 	{
+// 		unsigned long long ull = 
+// 		GRDBasicN(nRoleId.GetNumber(), 
+// 				  nDataIndex.GetNumber());
+// 		
+// 		state->PushNumber(ull >> 32);
+// 		state->PushNumber(ull);
+// 	}
+// 	
+// 	return 2;
+// }
 
-int GetRoleBasicDataBig(LuaState* state)
+
+// 未使用！
+// //#pragma mark 设置角色基本数据
+// void SetRoleBasicDataN(int nRoleId, int dataIndex, double ulVal)
+// {
+// 	return SRDBasic(nRoleId, dataIndex, ulVal);
+// }
+// 
+// void SetRoleBasicDataF(int nRoleId, int dataIndex, double dVal)
+// {
+// 	return SRDBasic(nRoleId, dataIndex, dVal);
+// }
+// 
+// void SetRoleBasicDataS(int nRoleId, int dataIndex, const char* szVal)
+// {
+// 	return SRDBasic(nRoleId, dataIndex, szVal);
+// }
+
+#if WITH_NEW_DB
+void ModifyParam(int esd, unsigned int nKey, int& e)
 {
-	LuaStack args(state);
-	LuaObject nRoleId = args[1];
-	LuaObject nDataIndex = args[2];
-	
-	if ( !(nRoleId.IsNumber() && nDataIndex.IsNumber()) )
+	//说明：
+	//LUA传过来的参数，需要检查并稍作修改，之所以需要修改是因为LUA的调用很不规范：
+	//如：local nVal = GetGameDataN(NScriptData.eDataBase, nKey, NRoleData.ePet, nDataId, nDataIndex);
+	//上面这行是为了读取INI配置文件的一行，第3个参数本来应该是0，但是LUA传过来的NRoleData.ePet=1，后面在某个地方会-1变成0.
+
+	if (esd == (int)eMJR_DataBase ||
+		esd == (int)eMJR_TaskConfig)
 	{
-		state->PushNumber(0);
-		state->PushNumber(0);
+		e = 0;
 	}
-	else
-	{
-		unsigned long long ull = 
-		GRDBasicN(nRoleId.GetNumber(), 
-				  nDataIndex.GetNumber());
-		
-		state->PushNumber(ull >> 32);
-		state->PushNumber(ull);
-	}
-	
-	return 2;
 }
+#endif
 
-//#pragma mark 设置角色基本数据
-void SetRoleBasicDataN(int nRoleId, int dataIndex, double ulVal)
+void SetGameDataN(int esd, unsigned int nKey, int e,  int nId, unsigned short index, double dVal)
 {
-	return SRDBasic(nRoleId, dataIndex, ulVal);
-}
-
-void SetRoleBasicDataF(int nRoleId, int dataIndex, double dVal)
-{
-	return SRDBasic(nRoleId, dataIndex, dVal);
-}
-
-void SetRoleBasicDataS(int nRoleId, int dataIndex, const char* szVal)
-{
-	return SRDBasic(nRoleId, dataIndex, szVal);
-}
-
-void SetGameDataN(int esd, unsigned int nKey, int e,  int nId, unsigned short index, double uiVal)
-{
-	return ScriptGameDataObj.SetData((eScriptData)esd, nKey, (eRoleData)e, nId, index, uiVal);
+#if WITH_NEW_DB
+	ModifyParam(esd,nKey,e);
+	NDGameDataUtil::Util::setDataN( MAKE_NDTABLEPTR( esd, nKey, e), 
+									MAKE_CELLPTR( nId, index ), dVal );
+#else
+	return ScriptGameDataObj.SetData((eScriptData)esd, nKey, (eRoleData)e, nId, index, dVal);
+#endif
 }
 
 void SetGameDataF(int esd, unsigned int nKey, int e,  int nId, unsigned short index, float fVal)
 {
+#if WITH_NEW_DB
+	ModifyParam(esd,nKey,e);
+	NDGameDataUtil::Util::setDataF( MAKE_NDTABLEPTR( esd, nKey, e), 
+									MAKE_CELLPTR( nId, index ), fVal );
+#else
 	return ScriptGameDataObj.SetData((eScriptData)esd, nKey, (eRoleData)e, nId, index, fVal);
+#endif
 }
 
 void SetGameDataS(int esd, unsigned int nKey, int e,  int nId, unsigned short index, const char* szVal)
 {
+#if WITH_NEW_DB
+	ModifyParam(esd,nKey,e);
+	NDGameDataUtil::Util::setDataS( MAKE_NDTABLEPTR( esd, nKey, e ), 
+									MAKE_CELLPTR( nId, index ), szVal );
+#else
 	return ScriptGameDataObj.SetData((eScriptData)esd, nKey, (eRoleData)e, nId, index, szVal);
+#endif
 }
 
 double GetGameDataN(int esd, unsigned int nKey, int e,  int nId, unsigned short index)
 {
+#if WITH_NEW_DB
+	ModifyParam(esd,nKey,e);
+	return NDGameDataUtil::Util::getDataN( MAKE_NDTABLEPTR( esd, nKey, e ), 
+											MAKE_CELLPTR( nId, index ));
+#else
 	double ulVal = ScriptGameDataObj.GetData<double>((eScriptData)esd, nKey, (eRoleData)e, nId, index);
 	return ulVal;
+#endif
 }
 
 double GetGameDataF(int esd, unsigned int nKey, int e,  int nId, unsigned short index)
 {
+#if WITH_NEW_DB
+	ModifyParam(esd,nKey,e);
+	return NDGameDataUtil::Util::getDataF( MAKE_NDTABLEPTR( esd, nKey, e ), 
+											MAKE_CELLPTR( nId, index ));
+#else
 	float fVal = ScriptGameDataObj.GetData<double>((eScriptData)esd, nKey, (eRoleData)e, nId, index);
 	return fVal;
+#endif
 }
 
 std::string GetGameDataS(int esd, unsigned int nKey, int e,  int nId, unsigned short index)
 {
+#if WITH_NEW_DB
+	ModifyParam(esd,nKey,e);
+	return NDGameDataUtil::Util::getDataS( MAKE_NDTABLEPTR( esd, nKey, e ), 
+											MAKE_CELLPTR( nId, index ));
+#else
 	std::string strVal = ScriptGameDataObj.GetData<std::string>((eScriptData)esd, nKey, (eRoleData)e, nId, index);
 	return strVal;
+#endif
 }
 
+//删除一条记录
 void DelRoleSubGameDataById(int esd, unsigned int nKey, int e, int nId)
 {
+#if WITH_NEW_DB
+	NDGameDataUtil::Util::delRecordById( MAKE_NDTABLEPTR(esd, nKey, e), nId );
+#else
 	ScriptGameDataObj.DelData((eScriptData)esd, nKey, (eRoleData)e, nId);
+#endif
 }
 
+//删除一张表
 void DelRoleSubGameData(int esd, unsigned int nKey, int e)
 {
+#if WITH_NEW_DB
+	NDGameDataUtil::Util::delTable( MAKE_NDTABLEPTR(esd, nKey, e));
+#else
 	ScriptGameDataObj.DelData((eScriptData)esd, nKey, (eRoleData)e);
+#endif
 }
 
+//删除表集（如某个role/monster对应的的表集）
 void DelRoleGameDataById(int esd, unsigned int nKey)
 {
+#if WITH_NEW_DB
+	NDGameDataUtil::Util::delTableSet( (DATATYPE_MAJOR)esd, nKey );
+#else
 	ScriptGameDataObj.DelData((eScriptData)esd, nKey);
+#endif
 }
 
+//删除某个主类的所有表（删除表集群）
 void DelRoleGameData(int esd)
 {
+#if WITH_NEW_DB
+	NDGameDataUtil::Util::delTableSetGroup( (DATATYPE_MAJOR)esd );
+#else
 	ScriptGameDataObj.DelData((eScriptData)esd);
+#endif
 } 
 
+//删除所有数据
 void DelGameData()
 {
+#if WITH_NEW_DB
+	NDGameDataUtil::Util::destroyAll();
+#else
 	ScriptGameDataObj.DelAllData();
+#endif
 }
 
+//测试
 void DumpGameData(int esd, unsigned int nKey, int e, int nId)
 {
+#if WITH_NEW_DB
+	//@todo..
+#else
 	ScriptGameDataObj.LogOut((eScriptData)esd, nKey, (eRoleData)e, nId);
+#endif
 }
 
+//测试
 void DumpDataBaseData(const char* filename, int nId)
 {
+#if WITH_NEW_DB
+	//@todo..
+#else
 	ScriptDBObj.LogOut(filename, nId);
+#endif
 }
 
+//测试
+void LogOutRoleDataIdTable(int esd, unsigned int nKey, int e, int nRoleId, eIDList eList)
+{
+#if WITH_NEW_DB
+	//@todo..
+#else
+	ScriptGameDataObj.LogOutRoleDataIdList((eScriptData)esd, nKey, (eRoleData)e, nRoleId, (eIDList)eList);
+#endif
+}
+
+//获取角色id列表（这个角色所指的范围很广...）
 int GetRoleDataIdTable(LuaState* state)
 {
 	lua_State* L = state->GetCState();
@@ -223,10 +336,16 @@ int GetRoleDataIdTable(LuaState* state)
 	}
 	
 	ID_VEC idVec;
+
+#if WITH_NEW_DB
+	NDGameDataUtil::Util::getRoleDataIdList( MAKE_NDTABLEPTR(esd.GetInteger(),nKey.GetInteger(),e.GetInteger()), 
+					nRoleId.GetInteger(),(eIDList)eList.GetInteger(), idVec);
+#else
 	ScriptGameDataObj.GetRoleDataIdList((eScriptData)esd.GetInteger(), 
 					nKey.GetInteger(), (eRoleData)e.GetInteger(), 
 					nRoleId.GetInteger(),(eIDList)eList.GetInteger(), idVec);
-					
+#endif
+		
 	size_t size = idVec.size();
 	
 	for (size_t i = 0; i < size; i++) 
@@ -240,23 +359,34 @@ int GetRoleDataIdTable(LuaState* state)
 
 void AddRoleDataId(int esd, unsigned int nKey, int e, int nRoleId, int eList, int nId)
 {
+#if WITH_NEW_DB
+	NDGameDataUtil::Util::addRoleDataId( MAKE_NDTABLEPTR(esd,nKey,e), 
+											nRoleId, eList, nId );
+#else
 	ScriptGameDataObj.PushRoleDataId((eScriptData)esd, nKey, (eRoleData)e, nRoleId, (eIDList)eList, nId);
+#endif
 }
 
 void DelRoleDataId(int esd, unsigned int nKey, int e, int nRoleId, int eList, int nId)
 {
+#if WITH_NEW_DB
+	NDGameDataUtil::Util::delRoleDataId( MAKE_NDTABLEPTR(esd,nKey,e), 
+											nRoleId, eList, nId );
+#else
 	ScriptGameDataObj.PopRoleDataId((eScriptData)esd, nKey, (eRoleData)e, nRoleId, (eIDList)eList, nId);
+#endif
 }
 
 void DelRoleDataIdList(int esd, unsigned int nKey, int e, int nRoleId, int eList)
 {
+#if WITH_NEW_DB
+	NDGameDataUtil::Util::delRoleDataIdList( MAKE_NDTABLEPTR(esd,nKey,e), 
+												nRoleId, eList );
+#else
 	ScriptGameDataObj.DelRoleDataIdList((eScriptData)esd, nKey, (eRoleData)e, nRoleId, (eIDList)eList);
+#endif
 }
 
-void LogOutRoleDataIdTable(int esd, unsigned int nKey, int e, int nRoleId, eIDList eList)
-{
-	ScriptGameDataObj.LogOutRoleDataIdList((eScriptData)esd, nKey, (eRoleData)e, nRoleId, (eIDList)eList);
-}
 int Sqlite_SelectData(const char* pszSql, int nColNum)
 {
     return CSqliteDBMgr::shareInstance().SelectData(pszSql, nColNum);

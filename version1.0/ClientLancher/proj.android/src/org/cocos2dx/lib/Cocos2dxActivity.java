@@ -29,8 +29,10 @@ import org.DeNA.DHLJ.R;
 import org.cocos2dx.lib.Cocos2dxHelper.Cocos2dxHelperListener;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
+import android.view.LayoutInflater;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -85,7 +87,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 		super.onResume();
 
 		Cocos2dxHelper.onResume();
-		this.mGLSurfaceView.onResume();
+//		this.mGLSurfaceView.onResume();
 	}
 
 	@Override
@@ -94,7 +96,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 		super.onPause();
 
 		Cocos2dxHelper.onPause();
-		this.mGLSurfaceView.onPause();
+//		this.mGLSurfaceView.onPause();
 	}
 
 	@Override
@@ -129,57 +131,12 @@ public abstract class Cocos2dxActivity extends Activity implements
 	// ===========================================================
 	public void init()
 	{
-		// FrameLayout
-		ViewGroup.LayoutParams framelayout_params = new ViewGroup.LayoutParams(
-				ViewGroup.LayoutParams.FILL_PARENT,
-				ViewGroup.LayoutParams.FILL_PARENT);
-		m_pkFrameView = new FrameLayout(this);
-		m_pkFrameView.setLayoutParams(framelayout_params);
-
-		// Cocos2dxEditText layout
-		ViewGroup.LayoutParams edittext_layout_params = new ViewGroup.LayoutParams(
-				ViewGroup.LayoutParams.FILL_PARENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT);
-		Cocos2dxEditText edittext = new Cocos2dxEditText(this);
-		edittext.setLayoutParams(edittext_layout_params);
-
-		// ...add to FrameLayout
-		m_pkFrameView.addView(edittext);
-
 		// Cocos2dxGLSurfaceView
 		this.mGLSurfaceView = this.onCreateView();
 
-		// ...add to FrameLayout
-		m_pkFrameView.addView(this.mGLSurfaceView);
-
 		mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
-		mGLSurfaceView.setCocos2dxEditText(edittext);
-
-		// Set framelayout as the content view
-		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.FILL_PARENT,
-                ViewGroup.LayoutParams.FILL_PARENT);
-		setContentView(R.layout.helloworld_demo);
-		//addContentView(m_pkFrameView,pkLayoutParams);
-
-		addContentView(m_pkFrameView,pkLayoutParams);
 		
-		NDVideoControl pkVideoControl = new NDVideoControl(Cocos2dxActivity.this);
-		pkVideoControl.setCocos2dxActivity(this);
-		
-		m_pkView = (VideoView)this.findViewById(R.id.videoPlay);
-		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
-		m_pkView.setMediaController(pkVideoControl);
-		m_pkView.setOnCompletionListener(pkVideoControl);
-		m_pkView.requestFocus();
-		
-        DisplayMetrics metrics = new DisplayMetrics(); getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) m_pkView.getLayoutParams();
-        params.width =  metrics.widthPixels;
-        params.height = metrics.heightPixels;
-        m_pkView.setLayoutParams(params);
-		
-		m_pkView.start();
+//		this.setContentView(this.mGLSurfaceView);
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView()
@@ -187,6 +144,9 @@ public abstract class Cocos2dxActivity extends Activity implements
 		return new Cocos2dxGLSurfaceView(this);
 	}
 
+    public Cocos2dxGLSurfaceView getView() {
+    	return this.mGLSurfaceView;
+    }
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================

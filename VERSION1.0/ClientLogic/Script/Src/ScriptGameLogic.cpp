@@ -17,6 +17,7 @@
 #include "Chat.h"
 #include "NDMapMgr.h"
 #include "ScriptGameData.h"
+#include "ScriptGameData_New.h"
 #include "NewChatScene.h"
 #include "NDMapLayer.h"
 #include "SMGameScene.h"

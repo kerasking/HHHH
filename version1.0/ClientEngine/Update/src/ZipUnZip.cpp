@@ -30,57 +30,56 @@ bool CZipUnZip::Unzip(const char* lpszZip,const char* lpszDestDir,void* lpParam,
 		return false;
 	}
 	bool bUnzip = true;
-//´ýÊµÏÖ
-// 	char password[128]={0};
-// 	bool bGetPassword = false;
-// 	do{
-// 		if(bGetPassword)
-// 			bGetPassword = false;
-// 		HZIP hz = OpenZip(lpszZip,password);
-// 		if(hz == NULL)
-// 			return false;
-// 
-// 		if(lpszDestDir != NULL)
-// 		{
-// 			SetUnzipBaseDir(hz,lpszDestDir);
-// 		}
-// 
-// 		ZIPENTRY ze; 
-// 		GetZipItem(hz,-1,&ze);
-// 		int numitems=ze.index;
-// 		for (int zi=0; zi<numitems; zi++)
-// 		{
-// 			ZIPENTRY ze;
-// 			GetZipItem(hz,zi,&ze);
-// 			if( lpszPreName )
-// 			{
-// 				TCHAR szName[MAX_PATH]={0};
-// 				printf(szName, "%s%s", lpszPreName, ze.name);
-// 				strcpy(ze.name,szName);
-// 			}
-// 			if( pvtFile )
-// 			{
-// 				std::string strFile(ze.name);
-// 				pvtFile->push_back(strFile);
-// 			}
-// 			ZRESULT zres = UnzipItem(hz, zi, ze.name);
-// 			if(zres != ZR_OK && ze.comp_size)
-// 			{
-// 				//NDLog("UnZipFile Error %s", ze.name);
-// 				if(zres == ZR_PASSWORD)
-// 				{
-// 					if(InputZipPassword(password)){
-// 						bGetPassword = true;
-// 						break;
-// 					}
-// 				}
-// 				bUnzip = false;
-// 				break;
-// 			}
-//             UnzipPercent(numitems, zi);
-// 		}
-// 		CloseZip(hz);
-// 	}while(bGetPassword);
+	char password[128]={0};
+	bool bGetPassword = false;
+	do{
+		if(bGetPassword)
+			bGetPassword = false;
+		HZIP hz = OpenZip(lpszZip,password);
+		if(hz == NULL)
+			return false;
+
+		if(lpszDestDir != NULL)
+		{
+			SetUnzipBaseDir(hz,lpszDestDir);
+		}
+
+		ZIPENTRY ze; 
+		GetZipItem(hz,-1,&ze);
+		int numitems=ze.index;
+		for (int zi=0; zi<numitems; zi++)
+		{
+			ZIPENTRY ze;
+			GetZipItem(hz,zi,&ze);
+			if( lpszPreName )
+			{
+				TCHAR szName[MAX_PATH]={0};
+				printf(szName, "%s%s", lpszPreName, ze.name);
+				strcpy(ze.name,szName);
+			}
+			if( pvtFile )
+			{
+				std::string strFile(ze.name);
+				pvtFile->push_back(strFile);
+			}
+			ZRESULT zres = UnzipItem(hz, zi, ze.name);
+			if(zres != ZR_OK && ze.comp_size)
+			{
+				//NDLog("UnZipFile Error %s", ze.name);
+				if(zres == ZR_PASSWORD)
+				{
+					if(InputZipPassword(password)){
+						bGetPassword = true;
+						break;
+					}
+				}
+				bUnzip = false;
+				break;
+			}
+            UnzipPercent(numitems, zi);
+		}
+		CloseZip(hz);
+	}while(bGetPassword);
 	return bUnzip;
 }
 
@@ -141,7 +140,7 @@ void* UnzipThreadExcute(void* ptr)
 }
 void CZipUnZip::UnZipFile( const char* pszZipFileName, const char* pszDestDirName)
 {
-    if ((pszDestDirName==NULL)||(pszDestDirName==NULL) ) 
+    if ((pszZipFileName==NULL)||(pszDestDirName==NULL) ) 
     {
         return;
     }

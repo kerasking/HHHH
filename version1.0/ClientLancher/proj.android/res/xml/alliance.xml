@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<alliance>
+<yun appkey="3drenzhePPuZ6WRe" packagename="cn.mobage.g12000001" classname="com.denachina.packageapp.TicketActivity"/>
+<pay appid="300002456973" appkey="5A2AA780F31D49E4" itemPaycode1="30000245697301" itemPaycode2="30000245697302" itemPaycode5="30000245697303" itemPaycode10="30000245697304" itemPaycode15="30000245697305"/>
+</alliance>

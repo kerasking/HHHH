@@ -35,7 +35,7 @@ public:
 	static T& GetSingleton() 
 	{
 		if (NULL == ms_pkSingleton)
-			new T();
+			ms_pkSingleton = new T();
 
 		return *ms_pkSingleton;
 	}

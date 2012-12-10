@@ -8,15 +8,17 @@
  */
 
 #include "TQPlatform.h"
-#include "NDDirector.h"
 #include "CCImage.h"
+#include "CCGeometry.h"
+#include "basedefine.h"
+
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #import "Foundation/Foundation.h"
 #import "UIKit/UIFont.h"
 #import "UIKit/UIStringDrawing.h"
 #endif
-using namespace NDEngine;
+using namespace cocos2d;
 
 #ifdef WIN32
 static char g_GBKConvUTF8Buf_Again[5000] = {0};
@@ -107,7 +109,7 @@ CCSize getStringSizeMutiLine(const char* pszStr, unsigned int fontSize, CCSize c
 
 
 
-	fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
+	//fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	NSString *nstext = [NSString stringWithUTF8String:pszStr];

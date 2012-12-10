@@ -1222,6 +1222,14 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\Bin\SimplifiedChineseRes\res\Script\DBLoad.lua"
+			>
+		</File>
+		<File
+			RelativePath="..\Bin\SimplifiedChineseRes\res\Script\LogInClearData.lua"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

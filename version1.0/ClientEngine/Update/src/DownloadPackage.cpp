@@ -8,12 +8,13 @@
 
 #include "DownloadPackage.h"
 #include "KData.h"
-//#include "KDirectory.h"
+#include "KDirectory.h"
+#include "KHttp.h"
 
-//#include "Reachability.h"
+#include "Reachability.h"
 #include "pthread.h"
 
-//待实现
+//楼藵聽碌艙梅
 // bool isWifiNetWork()
 // {
 // 	Reachability *r = [Reachability reachabilityWithHostName:@"www.baidu.com"];
@@ -22,53 +23,27 @@
 // 	else 
 // 		return true;
 // }
-
-KData getHttpProxy()
+void Rstrchr(const char* src,char delimit,char* outFile)
 {
-	KData proxy = "";
-	
-//待实现
-// 	NSDictionary *dict = [[NSMutableDictionary alloc] 
-// 						  initWithContentsOfFile:[NSString stringWithUTF8String:"/private/var/preferences/SystemConfiguration/preferences.plist"]];
-// 	if (!dict)
-// 	{
-// 		return "";
-// 	}
-// 	NSDictionary *secondDict = [dict objectForKey:@"NetworkServices"];
-// 	if (!secondDict)
-// 	{
-// 		[dict release];
-// 		return "";
-// 	}
-// 	for (NSDictionary * key in [secondDict allValues])
-// 	{
-// 		if ([key objectForKey:@"Proxies"] && [key objectForKey:@"com.apple.CommCenter"])
-// 		{
-// 			NSDictionary *thirdDict = [[key objectForKey:@"com.apple.CommCenter"] objectForKey:@"Setup"];
-// 			if (!thirdDict)
-// 				continue;
-// 			
-// 			NSString *apnValue = [thirdDict valueForKey:@"apn"];
-// 			if (apnValue == nil)
-// 			{
-// 				continue;
-// 			}
-// 			
-// 			apnValue = [apnValue lowercaseString];
-// 			
-// 			if ([apnValue isEqualToString:@"cmwap"] || [apnValue isEqualToString:@"3GWAP"])
-// 			{
-// 				proxy = "10.0.0.172";;
-// 			}
-// 			else if ([apnValue isEqualToString:@"cmnet"] || [apnValue isEqualToString:@"3GNET"])
-// 			{
-// 				proxy = "";
-// 			}
-// 		}
-// 	}
-// 	[dict release];
-	
-	return proxy;
+	int i = strlen(src);
+	if (!(*src))
+	{
+		return ;
+	}
+	strcpy(outFile,src);
+	while (src[i-1])
+	{
+		if (strchr(src+(i-1),delimit))
+		{
+			outFile[i] = '\0';
+			return;
+		}
+		else
+		{
+			i--;
+		}
+	}
+    return;
 }
 
 void DownloadCallback(void *param, int percent, int pos, int filelen)
@@ -91,57 +66,19 @@ void* threadExcute(void* ptr)
 	return NULL;
 }
 
-//待实现
-// @implementation MainThreadSelector
-// 
-// - (void)runWithParam:(NSArray *)param
-// {
-// 	NSArray* ary = param;
-// 	NSString* cmd = [ary objectAtIndex:0];
-// 	if ([cmd isEqual:@"didDownloadStatus"]) 
-// 	{
-// 		DownloadPackage* downer = (DownloadPackage*)[[ary objectAtIndex:1] unsignedLongValue];
-// 		DownloadStatus status = (DownloadStatus)[[ary objectAtIndex:2] intValue];
-// 		DownloadPackageDelegate* delegate = dynamic_cast<DownloadPackageDelegate *> (downer->GetDelegate());
-// 		if (delegate) 
-// 		{
-// 			delegate->DidDownloadStatus(downer, status);
-// 		}
-// 		
-// 	}
-// 	else if ([cmd isEqual:@"reflashPercent"])
-// 	{
-// 		DownloadPackage* downer = (DownloadPackage*)[[ary objectAtIndex:1] unsignedLongValue];
-// 		int percent = [[ary objectAtIndex:2] intValue];
-// 		int pos = [[ary objectAtIndex:3] intValue];
-// 		int filelen = [[ary objectAtIndex:4] intValue];
-// 		DownloadPackageDelegate* delegate = dynamic_cast<DownloadPackageDelegate *> (downer->GetDelegate());
-// 		if (delegate) 
-// 		{
-// 			delegate->ReflashPercent(downer, percent, pos, filelen);
-// 		}
-// 	}
-// }
-// 
-// @end
 
-
-IMPLEMENT_CLASS(DownloadPackage, NDObject)
+//IMPLEMENT_CLASS(DownloadPackage, NDObject)
 
 DownloadPackage::DownloadPackage()
 {	
 	m_fileLen = 0;
-//待实现
-// 	m_selObj = [[MainThreadSelector alloc] init];
-// 	m_http = new KHttp();
-// 	m_http->setNotifyCallback(DownloadCallback, this, 1);
+ 	m_http = new KHttp();
+ 	m_http->setNotifyCallback(DownloadCallback, this, 1);
 }
 
 DownloadPackage::~DownloadPackage()
 {
-//待实现
-// 	[m_selObj release];
-// 	delete m_http;
+ 	delete m_http;
 }
 
 void DownloadPackage::FromUrl(const char* url)
@@ -154,78 +91,42 @@ void DownloadPackage::ToPath(const char* path)
 	m_path = path;
 }
 
-void DownloadPackage::DidDownloadStatus(DownloadStatus status)
-{
-//待实现
-// 	[m_selObj performSelectorOnMainThread:@selector(runWithParam:) 
-// 							   withObject:[NSArray arrayWithObjects:@"didDownloadStatus", 
-// 										  [NSNumber numberWithUnsignedLong:(unsigned long)this], 
-// 										  [NSNumber numberWithInt:(int)status],
-// 										  nil]
-// 							waitUntilDone:NO];
-}
-
-void DownloadPackage::ReflashPercent(int percent, int pos, int filelen)
-{
-//待实现
-// 	[m_selObj performSelectorOnMainThread:@selector(runWithParam:) 
-// 							   withObject:[NSArray arrayWithObjects:@"reflashPercent", 
-// 										  [NSNumber numberWithUnsignedLong:(unsigned long)this], 
-// 										  [NSNumber numberWithInt:percent],
-// 										  [NSNumber numberWithInt:pos],
-// 										  [NSNumber numberWithInt:filelen],
-// 										  nil]	
-// 							   waitUntilDone:NO];
-}
-
 void DownloadPackage::DownloadThreadExcute()
 {
-//待实现
-// 	if (m_url.empty() || m_path.empty()) 
-// 	{
-// 		DidDownloadStatus(DownloadStatusFailed);
-// 		return;
-// 	}
-// 	
-// 	NSString* saveDir = [[NSString stringWithUTF8String:m_path.c_str()] stringByDeletingLastPathComponent] ;
-// 	if (!KDirectory::isDirectoryExist([saveDir UTF8String])) 
-// 	{
-// 		if (!KDirectory::createDir([saveDir UTF8String]))
-// 		{
-// 			DidDownloadStatus(DownloadStatusFailed);
-// 			return;
-// 		}
-// 	}	
-// 	
-// 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-// 	
-// 	if (!isWifiNetWork())
-// 	{
-// 		KData proxy = getHttpProxy();
-// 		if (!proxy.isEmpty())
-// 		{
-// 			m_http->setHttpProxy(proxy);
-// 		}
-// 	}
-// 	
-// 	m_http->setTimeout(60 * 1000);
-// 	int donelen = m_http->getHttpFile(m_url.c_str(), m_path.c_str(), 0);
-// 	
-// 	if (m_http->getStatusCode() == 404) 
-// 	{
-// 		DidDownloadStatus(DownloadStatusResNotFound);
-// 	}	
-// 	else if ((donelen >= m_fileLen)&& (donelen>0)) 
-// 	{
-// 		DidDownloadStatus(DownloadStatusSuccess);
-// 	}
-// 	else 
-// 	{
-// 		DidDownloadStatus(DownloadStatusFailed);
-// 	}
-// 	
-// 	
-// 	[pool release];
+ 	if (m_url.empty() || m_path.empty()) 
+ 	{
+ 		DidDownloadStatus(DownloadStatusFailed);
+ 		return;
+ 	}
+	char tmpDir[100];
+	memset(tmpDir,0,100);
+ 	Rstrchr(m_path.c_str(),'/',tmpDir); 
+	string saveDir(tmpDir);
+ 	if (!KDirectory::isDirectoryExist(saveDir)) 
+ 	{
+ 		if (!KDirectory::createDir(saveDir))
+ 		{
+ 			DidDownloadStatus(DownloadStatusFailed);
+ 			return;
+ 		}
+ 	}	
+ 	
+ 	m_http->setTimeout(60 * 1000);
+ 	int donelen = m_http->getHttpFile(m_url.c_str(), m_path.c_str(), 0);
+ 	
+ 	if (m_http->getStatusCode() == 404) 
+ 	{
+ 		DidDownloadStatus(DownloadStatusResNotFound);
+ 	}	
+ 	else if ((donelen >= m_fileLen)&& (donelen>0)) 
+ 	{
+ 		DidDownloadStatus(DownloadStatusSuccess);
+ 	}
+ 	else 
+ 	{
+ 		DidDownloadStatus(DownloadStatusFailed);
+ 	}
+ 	
 }
 
 void DownloadPackage::Download()

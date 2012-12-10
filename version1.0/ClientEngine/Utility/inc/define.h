@@ -11,7 +11,6 @@
 #define __DEFINE_H__
 
 #include "../../../cocos2d-x/cocos2dx/cocoa/CCObject.h"
-#include "NDObject.h"
 
 #ifdef ANDROID
 #include <stdlib.h>

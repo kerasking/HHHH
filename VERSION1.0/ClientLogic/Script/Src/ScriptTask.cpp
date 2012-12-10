@@ -14,13 +14,14 @@
 #include "Singleton.h"
 #include "UINpcDlg.h"
 #include "ScriptGameData.h"
+#include "ScriptGameData_NewUtil.h"
 
 #include <sstream>
 #include "ScriptMgr.h"
 
 using namespace LuaPlus;
 
-namespace NDEngine {
+NS_NDENGINE_BGN
 
 //#pragma mark npc交互对话框与数据单例
 class ScriptNpcDlgData : 
@@ -197,8 +198,15 @@ void ScriptTaskLoad()
 int ScriptGetTaskState(int nTaskId)
 {
 	int nRoleId = NDPlayer::defaultHero().m_nID;
+
+#if WITH_NEW_DB
+	unsigned long ulVal = NDGameDataUtil::Util::getDataULL( MAKE_NDTABLEPTR( eMJR_Role, nRoleId, eMIN_Task ), 
+																MAKE_CELLPTR(nTaskId, 2));
+#else
 	unsigned long ulVal = ScriptGameDataObj.GetData<unsigned long long>(eScriptDataRole, nRoleId, eRoleDataTask, nTaskId, 2);
+#endif
+
 	return ulVal;
 }
 
-}
+NS_NDENGINE_END

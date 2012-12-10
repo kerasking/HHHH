@@ -144,7 +144,7 @@ void sendSynVoteComm(Byte msgAction,int idVote);
 
 void sendQueryAnnounce();
 
-void sendModifyNote(const string& str);
+void sendModifyNote(const std::string& str);
 
 void sendQueryPanelInfo();
 
@@ -152,11 +152,11 @@ void sendContributeSyn(Byte msgAction,int value);
 
 void sendUpGradeSyn();
 
-void sendInviteOther(const string& name);
+void sendInviteOther(const std::string& name);
 
 void sendQueryApprove(int queryPage);
 
-void sendApproveAccept(int roleId, const string& name);
+void sendApproveAccept(int roleId, const std::string& name);
 
 void sendApproveRefuse(int roleId);
 
@@ -170,8 +170,8 @@ void sendLeaveDemise(int roleId,int curPage);
 
 void sendSynDonate(int uMoney, int uEmoney, int uWood, int uStone, int uCoal, int uPaint);
 
-string getCampName(int type);
+std::string getCampName(int type);
 
-string getRankStr(int rank);
+std::string getRankStr(int rank);
 
 #endif

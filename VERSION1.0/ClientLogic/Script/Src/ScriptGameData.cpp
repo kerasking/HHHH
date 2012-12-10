@@ -5,9 +5,11 @@
  *  Created by jhzheng on 12-1-13.
  *  Copyright 2012 (网龙)DeNA. All rights reserved.
  *
+ *	说明：旧的数据库
  */
 
 #include "ScriptGameData.h"
+#include "ScriptGameData_New.h"
 #include "globaldef.h"
 
 
