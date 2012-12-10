@@ -33,7 +33,7 @@ public:
 	void setServer( struct sockaddr, bool blocking=true );
 
 	void close();
-
+	void initSocket();
 	inline KConnection& getConn()
 	{
 		return _conn;
