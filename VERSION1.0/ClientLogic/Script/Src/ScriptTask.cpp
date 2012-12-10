@@ -200,7 +200,7 @@ int ScriptGetTaskState(int nTaskId)
 	int nRoleId = NDPlayer::defaultHero().m_nID;
 
 #if WITH_NEW_DB
-	unsigned long ulVal = NDGameDataUtil::Util::getDataULL( MAKE_NDTABLEPTR( eMJR_Role, nRoleId, eMIN_Task ), 
+	unsigned long ulVal = NDGameDataUtil::getDataULL( MAKE_NDTABLEPTR( eMJR_Role, nRoleId, eMIN_Task ), 
 																MAKE_CELLPTR(nTaskId, 2));
 #else
 	unsigned long ulVal = ScriptGameDataObj.GetData<unsigned long long>(eScriptDataRole, nRoleId, eRoleDataTask, nTaskId, 2);

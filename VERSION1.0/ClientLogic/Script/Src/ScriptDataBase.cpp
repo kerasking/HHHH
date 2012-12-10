@@ -385,7 +385,7 @@ bool ScriptDB::LoadTable(const char* inifilename, const char* indexfilename)
 
 #if WITH_NEW_DB
 	// 数据库中创建一张表
-	NDTableSetIni* pTableSetIni = NDGameDataUtil::Util::getTableSet_ini();
+	NDTableSetIni* pTableSetIni = NDGameDataUtil::getTableSet_ini();
 	NDTable* pTable = pTableSetIni->addNew( nKey, loader.getFieldCount() );
 	pTable->setDbgName( inifilename );
 #endif
@@ -489,7 +489,7 @@ bool ScriptDB::GetIdList(const char* inifilename, ID_VEC& idlist)
 	}
 
 #if WITH_NEW_DB
-	NDGameDataUtil::Util::getDataIdList( MAKE_NDTABLEPTR_INI(nKey), idlist );
+	NDGameDataUtil::getDataIdList( MAKE_NDTABLEPTR_INI(nKey), idlist );
 #else
 	return ScriptGameDataObj.GetDataIdList(eScriptDataDataBase, nKey, eRoleDataPet, idlist);       
 #endif
@@ -505,7 +505,7 @@ int ScriptDB::GetN(const char* inifilename, int nId, int nIndex)
 	}
 
 #if WITH_NEW_DB
-	NDGameDataUtil::Util::getDataULL( MAKE_NDTABLEPTR_INI(nKey), NDCellPtr(nId, nIndex ));
+	NDGameDataUtil::getDataULL( MAKE_NDTABLEPTR_INI(nKey), NDCellPtr(nId, nIndex ));
 #else
 	return ScriptGameDataObj.GetData<unsigned long long>(eScriptDataDataBase, nKey, eRoleDataPet, nId, nIndex);
 #endif
@@ -521,7 +521,7 @@ std::string ScriptDB::GetS(const char* inifilename, int nId, int nIndex)
 	}
 
 #if WITH_NEW_DB
-	NDGameDataUtil::Util::getDataS( MAKE_NDTABLEPTR_INI(nKey), NDCellPtr(nId, nIndex ));
+	NDGameDataUtil::getDataS( MAKE_NDTABLEPTR_INI(nKey), NDCellPtr(nId, nIndex ));
 #else
 	return ScriptGameDataObj.GetData<std::string>(eScriptDataDataBase, nKey, eRoleDataPet, nId, nIndex);
 #endif
