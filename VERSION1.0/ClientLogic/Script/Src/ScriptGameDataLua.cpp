@@ -136,9 +136,26 @@ int GetGameDataIdList(LuaState* state)
 // 	return SRDBasic(nRoleId, dataIndex, szVal);
 // }
 
+#if WITH_NEW_DB
+void ModifyParam(int esd, unsigned int nKey, int& e)
+{
+	//说明：
+	//LUA传过来的参数，需要检查并稍作修改，之所以需要修改是因为LUA的调用很不规范：
+	//如：local nVal = GetGameDataN(NScriptData.eDataBase, nKey, NRoleData.ePet, nDataId, nDataIndex);
+	//上面这行是为了读取INI配置文件的一行，第3个参数本来应该是0，但是LUA传过来的NRoleData.ePet=1，后面在某个地方会-1变成0.
+
+	if (esd == (int)eMJR_DataBase ||
+		esd == (int)eMJR_TaskConfig)
+	{
+		e = 0;
+	}
+}
+#endif
+
 void SetGameDataN(int esd, unsigned int nKey, int e,  int nId, unsigned short index, double dVal)
 {
 #if WITH_NEW_DB
+	ModifyParam(esd,nKey,e);
 	NDGameDataUtil::Util::setDataN( MAKE_NDTABLEPTR( esd, nKey, e), 
 									MAKE_CELLPTR( nId, index ), dVal );
 #else
@@ -149,6 +166,7 @@ void SetGameDataN(int esd, unsigned int nKey, int e,  int nId, unsigned short in
 void SetGameDataF(int esd, unsigned int nKey, int e,  int nId, unsigned short index, float fVal)
 {
 #if WITH_NEW_DB
+	ModifyParam(esd,nKey,e);
 	NDGameDataUtil::Util::setDataF( MAKE_NDTABLEPTR( esd, nKey, e), 
 									MAKE_CELLPTR( nId, index ), fVal );
 #else
@@ -159,6 +177,7 @@ void SetGameDataF(int esd, unsigned int nKey, int e,  int nId, unsigned short in
 void SetGameDataS(int esd, unsigned int nKey, int e,  int nId, unsigned short index, const char* szVal)
 {
 #if WITH_NEW_DB
+	ModifyParam(esd,nKey,e);
 	NDGameDataUtil::Util::setDataS( MAKE_NDTABLEPTR( esd, nKey, e ), 
 									MAKE_CELLPTR( nId, index ), szVal );
 #else
@@ -169,6 +188,7 @@ void SetGameDataS(int esd, unsigned int nKey, int e,  int nId, unsigned short in
 double GetGameDataN(int esd, unsigned int nKey, int e,  int nId, unsigned short index)
 {
 #if WITH_NEW_DB
+	ModifyParam(esd,nKey,e);
 	return NDGameDataUtil::Util::getDataN( MAKE_NDTABLEPTR( esd, nKey, e ), 
 											MAKE_CELLPTR( nId, index ));
 #else
@@ -180,6 +200,7 @@ double GetGameDataN(int esd, unsigned int nKey, int e,  int nId, unsigned short 
 double GetGameDataF(int esd, unsigned int nKey, int e,  int nId, unsigned short index)
 {
 #if WITH_NEW_DB
+	ModifyParam(esd,nKey,e);
 	return NDGameDataUtil::Util::getDataF( MAKE_NDTABLEPTR( esd, nKey, e ), 
 											MAKE_CELLPTR( nId, index ));
 #else
@@ -191,6 +212,7 @@ double GetGameDataF(int esd, unsigned int nKey, int e,  int nId, unsigned short 
 std::string GetGameDataS(int esd, unsigned int nKey, int e,  int nId, unsigned short index)
 {
 #if WITH_NEW_DB
+	ModifyParam(esd,nKey,e);
 	return NDGameDataUtil::Util::getDataS( MAKE_NDTABLEPTR( esd, nKey, e ), 
 											MAKE_CELLPTR( nId, index ));
 #else

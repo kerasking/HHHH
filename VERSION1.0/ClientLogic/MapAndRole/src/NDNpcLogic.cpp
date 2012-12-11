@@ -27,7 +27,13 @@ void NDHeroTaskLogic::refreshListAccepted()
 	if (idlistAccept)
 	{
 		idlistAccept->clear();
+
+#if WITH_NEW_DB
+		NDGameDataUtil::Util::getDataIdList( MAKE_NDTABLEPTR(eMJR_Role, getHeroID(), eMIN_Task), 
+												*idlistAccept ); //已接
+#else
 		ScriptGameDataObj.GetDataIdList( eScriptDataRole, getHeroID(), eRoleDataTask, *idlistAccept );
+#endif
 	}
 }
 
@@ -38,7 +44,12 @@ bool NDHeroTaskLogic::refreshCanAcceptList()
 	{
 		idCanAccept->clear();
 
+#if WITH_NEW_DB
+		if (!NDGameDataUtil::Util::getDataIdList( MAKE_NDTABLEPTR(eMJR_Role, getHeroID(), eMIN_TaskCanAccept), 
+													*idCanAccept )) //可接
+#else
 		if (!ScriptGameDataObj.GetDataIdList( eScriptDataRole, getHeroID(), eRoleDataTaskCanAccept, *idCanAccept))
+#endif
 		{
 			return false;
 		}
@@ -169,16 +180,16 @@ bool NDNpcLogic::GetTaskListByNpc( ID_VEC& idVec )
 	if(idlist->empty())
 	{
 		ScriptDBObj.GetIdList("task_npc", *idlist);
+	}
 
-		for(ID_VEC::iterator it = idlist->begin(); it!= idlist->end(); it++)
+	for(ID_VEC::iterator it = idlist->begin(); it!= idlist->end(); it++)
+	{
+		int nNpcId = ScriptDBObj.GetN("task_npc", *it, NPC_ID); 
+		if(nNpcId == Owner->m_nID )
 		{
-			int nNpcId = ScriptDBObj.GetN("task_npc", *it, NPC_ID); 
-			if(nNpcId == Owner->m_nID )
-			{
-				int nTaskId = ScriptDBObj.GetN("task_npc", *it, TASK_ID); 
-				idVec.push_back(nTaskId);
-			}        
-		}
+			int nTaskId = ScriptDBObj.GetN("task_npc", *it, TASK_ID); 
+			idVec.push_back(nTaskId);
+		}        
 	}
 	
 	return !idVec.empty();

@@ -42,11 +42,7 @@ struct Util
 		NDTableSetGroup* pTableSetGroup = getTableSetGroup( majorType );
 		if (pTableSetGroup)
 		{
-			if (majorType == eMJR_DataBase) //INI
-			{
-				pTableSet = pTableSetGroup->getSingle( true );
-			}
-			else
+			if (majorType != eMJR_DataBase) //INI
 			{
 				pTableSet = pTableSetGroup->getById( id, true ); //autoAlloc
 			}
@@ -58,18 +54,17 @@ struct Util
 	//取表集（INI专用）
 	static NDTableSetIni* getTableSet_ini()
 	{
-		NDTableSetIni* pTableSetIni = NULL;
-		NDTableSet* pTableSet = getTableSet( eMJR_DataBase, 0 );
-		if (pTableSet)
+		NDTableSetGroup* pTableSetGroup = getTableSetGroup( eMJR_DataBase );
+		if (pTableSetGroup)
 		{
-			pTableSetIni = pTableSet->castIni();
+			return pTableSetGroup->getIni();
 		}
-		assert(pTableSetIni);
-		return pTableSetIni;
+		assert(0);
+		return NULL;
 	}
 
 	//取表
-	static NDTable* getTable( const NDTablePtr& tablePtr )
+	static NDTable* getTable( const NDTablePtr& tablePtr, bool autoAlloc = true )
 	{
 		// normal
 		if (tablePtr.majorType == eMJR_DataBase)
@@ -77,7 +72,7 @@ struct Util
 			NDTableSetIni* pTableSetIni = getTableSet_ini();
 			if (pTableSetIni)
 			{
-				return pTableSetIni->getAt_INI( tablePtr.id );
+				return pTableSetIni->getAt( tablePtr.id );
 			}
 		}
 		else
@@ -85,32 +80,32 @@ struct Util
 			NDTableSet* pTableSet = getTableSet( tablePtr.majorType, tablePtr.id );
 			if (pTableSet)
 			{
-				return pTableSet->getAt( tablePtr.minorType );
+				return pTableSet->getAt( tablePtr.minorType, autoAlloc );
 			}
 		}
 		return NULL;
 	}
 
 	//取记录
-	static NDRecord* getRecord( const NDTablePtr& tablePtr, const ID idRecord )
+	static NDRecord* getRecord( const NDTablePtr& tablePtr, const ID idRecord, bool autoAlloc = true )
 	{
 		// slow
-		NDTable* pTable = getTable( tablePtr );
+		NDTable* pTable = getTable( tablePtr, autoAlloc );
 		if (pTable)
 		{
-			return pTable->getById( idRecord );
+			return pTable->getById( idRecord, autoAlloc );
 		}
 		return NULL;
 	}
 
 	//取字段
-	static NDField* getField( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr )
+	static NDField* getField( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr, bool autoAlloc = true )
 	{
 		//very slow !
-		NDRecord* pRecord = getRecord( tablePtr, cellPtr.idRecord );
+		NDRecord* pRecord = getRecord( tablePtr, cellPtr.idRecord, autoAlloc );
 		if (pRecord)
 		{
-			return pRecord->getAt( cellPtr.fieldIndex );
+			return pRecord->getAt( cellPtr.fieldIndex, autoAlloc );
 		}
 		return NULL;
 	}
@@ -142,7 +137,7 @@ struct Util
 	}
 
 	//get string
-	static const string& getDataS( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr )
+	static string getDataS( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr )
 	{
 		//very slow !
 		NDField* pField = NDGameDataUtil::Util::getField( tablePtr, cellPtr );
@@ -160,9 +155,27 @@ struct Util
 		NDField* pField = getField( tablePtr, cellPtr );
 		if (pField)
 		{
-			pField->getBigInt();
+			return pField->getBigInt();
 		}
 		return 0L;
+	}
+
+	//get unsigned int
+	static unsigned int getDataUInt( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr )
+	{
+		//very slow !
+		NDField* pField = NDGameDataUtil::Util::getField( tablePtr, cellPtr );
+		if (pField)
+		{
+			return pField->getUInt();
+		}
+		return 0;
+	}
+
+	//get unsigned long
+	static unsigned long getDataULong( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr )
+	{
+		return getDataUInt( tablePtr, cellPtr );
 	}
 #endif 
 
@@ -172,7 +185,7 @@ struct Util
 							const double number )
 	{
 		//very slow !
-		NDField* pField = NDGameDataUtil::Util::getField( tablePtr, cellPtr );
+		NDField* pField = NDGameDataUtil::Util::getField( tablePtr, cellPtr, true );
 		if (pField)
 		{
 			pField->setDouble( number );
@@ -186,7 +199,7 @@ struct Util
 							const float fValue )
 	{
 		//very slow !
-		NDField* pField = NDGameDataUtil::Util::getField( tablePtr, cellPtr );
+		NDField* pField = NDGameDataUtil::Util::getField( tablePtr, cellPtr, true );
 		if (pField)
 		{
 			pField->setFloat( fValue );
@@ -200,7 +213,7 @@ struct Util
 							const char* str )
 	{
 		//very slow !
-		NDField* pField = NDGameDataUtil::Util::getField( tablePtr, cellPtr );
+		NDField* pField = NDGameDataUtil::Util::getField( tablePtr, cellPtr, true );
 		if (pField)
 		{
 			pField->setString( str );
@@ -291,7 +304,7 @@ struct Util
 			}
 			else
 			{
-				return pTable->extra.getIdList( idRole, idListIndex, out_idList );
+				return pTable->getExtra().getIdList( idRole, idListIndex, out_idList );
 			}
 		}
 		return false;
@@ -305,7 +318,7 @@ struct Util
 		NDTable* pTable = getTable( tablePtr );
 		if (pTable)
 		{
-			return pTable->extra.addId( idRole, idListIndex, addId );
+			return pTable->getExtra().addId( idRole, idListIndex, addId );
 		}
 		return false;
 	}
@@ -318,7 +331,7 @@ struct Util
 		NDTable* pTable = getTable( tablePtr );
 		if (pTable)
 		{
-			return pTable->extra.delId( idRole, idListIndex, delId );
+			return pTable->getExtra().delId( idRole, idListIndex, delId );
 		}
 		return false;
 	}
@@ -330,7 +343,7 @@ struct Util
 		NDTable* pTable = getTable( tablePtr );
 		if (pTable)
 		{
-			return pTable->extra.delIdList( idRole, idListIndex );
+			return pTable->getExtra().delIdList( idRole, idListIndex );
 		}
 		return false;
 	}

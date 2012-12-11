@@ -620,6 +620,11 @@ bool NDGameApplication::processPM(const char* cmd)
 			}
 		}
 	}
+	else if (stricmp(cmd, "gamedb") == 0) //don't del. for debuging.
+	{
+		NDGameData& pGameData = NDGameData::Instance();
+		int x = 0;
+	}
 	else
 	{
 		DWORD n = 0;

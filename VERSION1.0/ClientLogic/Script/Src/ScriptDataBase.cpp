@@ -386,7 +386,8 @@ bool ScriptDB::LoadTable(const char* inifilename, const char* indexfilename)
 #if WITH_NEW_DB
 	// 数据库中创建一张表
 	NDTableSetIni* pTableSetIni = NDGameDataUtil::Util::getTableSet_ini();
-	NDTable* pTable = pTableSetIni->addNew_INI( nKey, loader.getFieldCount() );
+	NDTable* pTable = pTableSetIni->addNew( nKey, loader.getFieldCount() );
+	pTable->setDbgName( inifilename );
 #endif
 
 	// 读取每一条记录

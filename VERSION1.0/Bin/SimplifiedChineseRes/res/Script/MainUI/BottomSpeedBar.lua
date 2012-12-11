@@ -132,10 +132,12 @@ p.BtnGm				= "button_gm.png";
 p.BtnOLGift			= "onlinegift.png";
 p.BtnRechargeGift	= "rechargegift.png";
 
+--[[
 p.BtnSayFindRect = {
     cutNor = CGRectMake(0.0,0.0,37*ScaleFactor, 40.0*ScaleFactor ),
     cutSel = CGRectMake(0.0,80.0,37*ScaleFactor, 40.0*ScaleFactor ),
 };
+
 
 p.BtnGMFindRect = {
     cutNor = CGRectMake(0.0,0.0,46*ScaleFactor, 40.0*ScaleFactor ),
@@ -151,9 +153,32 @@ p.BtnRechargeGiftRect = {
     cutNor = CGRectMake(0.0,0.0,40*ScaleFactor, 40.0*ScaleFactor ),
     cutSel = CGRectMake(0.0,0.0,40*ScaleFactor, 40.0*ScaleFactor ),
 };
+]]
 
 
-p.BtnSayRect = CGRectMake(25.0 ,winsize.h-p.BtnHeight-40*ScaleFactor ,80.0, 80.0);
+
+p.BtnSayFindRect = {
+    cutNor = CGRectMake(0.0,0.0,74, 80 ),
+    cutSel = CGRectMake(0.0,80.0,74, 80 ),
+};
+
+p.BtnGMFindRect = {
+    cutNor = CGRectMake(0.0,0.0,92, 80 ),
+    cutSel = CGRectMake(0.0,80.0,92, 80 ),
+};
+
+p.BtnOnlineGiftRect = {
+    cutNor = CGRectMake(0.0,0.0, 80, 80.0),
+    cutSel = CGRectMake(0.0,0.0, 80, 80.0),
+};
+
+p.BtnRechargeGiftRect = {
+    cutNor = CGRectMake(0.0,0.0, 80, 80 ),
+    cutSel = CGRectMake(0.0,0.0, 80, 80 ),
+};
+
+
+p.BtnSayRect = CGRectMake(25.0 ,winsize.h-p.BtnHeight-40*ScaleFactor ,40.0, 40.0);
 
 p.BtnGMRect = CGRectMake(0.0 , winsize.h*0.21 ,92.0, 80.0);
 
