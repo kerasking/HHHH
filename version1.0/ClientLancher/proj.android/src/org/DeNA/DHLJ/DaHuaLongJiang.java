@@ -226,11 +226,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 	static
 	{
 		System.loadLibrary("mobage");
-		System.loadLibrary("luaplus");
-		System.loadLibrary("tinyxml");
 		System.loadLibrary("cocos2d");
-		System.loadLibrary("ClientEngine");
-		System.loadLibrary("ClientLogic");
 		System.loadLibrary("GameLauncher");
 	}
 
