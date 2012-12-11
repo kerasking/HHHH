@@ -20,6 +20,7 @@ IMPLEMENT_CLASS(ClickLayer, NDUILayer)
 
 bool ClickLayer::TouchBegin(NDTouch* touch)
 {
+	if (!this->IsVisibled()) return false;
 	return true;
 }
 
