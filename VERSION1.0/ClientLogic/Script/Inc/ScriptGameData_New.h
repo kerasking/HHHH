@@ -16,10 +16,13 @@
 #include <map>
 using namespace std;
 
-#define WITH_NEW_DB	0 //开关：是否启用新的数据库机制
+#define WITH_NEW_DB	1 //开关：是否启用新的数据库机制
 
 typedef unsigned int ID;
 #define SAFE_DELETE(p) { if (p) delete p; p = NULL; }
+
+void WriteCon(const char * pszFormat, ...);
+#define LOGERR	WriteCon
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -90,16 +93,22 @@ enum DATATYPE_MINOR
 enum VAR_TYPE
 {
 	V_None,
+
 	V_Char,
 	V_UChar,
+
 	V_Short,
 	V_UShort,
+
 	V_Int,
 	V_UInt,
+
 	V_Float,
 	V_Double,
+
 	V_Int64,
 	V_UInt64,
+
 	V_String,
 	V_End,
 };
@@ -147,10 +156,11 @@ struct NDVariant
 {
 	NDVariant()
 		: type(V_None)
+		, str(NULL)
 		{ val.ubigVal = 0; }
 
 	VAR_TYPE type;
-	string  str;
+	string*  str;
 
 	union  
 	{
@@ -176,6 +186,15 @@ struct NDVariant
 		long long			bigVal;
 		unsigned long long	ubigVal;
 	} val;
+
+	void setStr( const char* in_str )
+	{
+		if (in_str) {
+			if (!str) str = new string();
+			*str = in_str;
+			type = V_String;
+		}
+	}
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -197,114 +216,247 @@ public: //getter
 
 	short getShort()
 	{
-		if (type == V_Short)
-			return val.sVal;
-
-		if (type == V_UShort)
-			return val.usVal;
-
-		return 0;
-	}
-
-	int	getInt()
-	{
 		switch (type)
 		{
-		case V_Int:		return val.iVal; break;
-		case V_UInt:	return val.uiVal; break;
-		
-		case V_Short:	return val.sVal; break;
-		case V_UShort:	return val.usVal; break;
-
-		case V_Char:	return val.cVal; break;
-		case V_UChar:	return val.ucVal; break;
+		case V_Short:	return (short) val.sVal; break;
+		case V_UShort:	return (short) val.usVal; break;
 		}
 		return 0;
 	}
 
-	long long getBigInt()
+	unsigned long getULong()
 	{
-		if (type == V_Int64	||
-			type == V_UInt64 )
-			return val.bigVal;	
+		return (unsigned long) getUInt();
+	}
+
+	//兼容各种格式
+	unsigned int getUInt()
+	{
+		switch (type)
+		{
+		case V_Char:	return (unsigned int) val.cVal; break;
+		case V_UChar:	return (unsigned int) val.ucVal; break;
+
+		case V_Short:	return (unsigned int) val.sVal; break;
+		case V_UShort:	return (unsigned int) val.usVal; break;
+
+		case V_Int:		return (unsigned int) val.iVal; break;
+		case V_UInt:	return (unsigned int) val.uiVal; break;
+
+		case V_Float:	return (unsigned int) val.fVal; break;
+		case V_Double:	return (unsigned int) val.dVal; break;
+
+		case V_Int64:	return (unsigned int) val.bigVal; break;
+		case V_UInt64:	return (unsigned int) val.ubigVal; break;
+		}
 		return 0;
 	}
 
+	//兼容各种格式
+	int	getInt()
+	{
+		switch (type)
+		{
+		case V_Char:	return (int) val.cVal; break;
+		case V_UChar:	return (int) val.ucVal; break;
+
+		case V_Short:	return (int) val.sVal; break;
+		case V_UShort:	return (int) val.usVal; break;
+
+		case V_Int:		return val.iVal; break;
+		case V_UInt:	return (int) val.uiVal; break;
+		
+		case V_Float:	return (int) val.fVal; break;
+		case V_Double:	return (int) val.dVal; break;
+
+		case V_Int64:	return (int) val.bigVal; break;
+		case V_UInt64:	return (int) val.ubigVal; break;
+		}
+		return 0;
+	}
+
+	//兼容各种格式
+	long long getBigInt()
+	{
+		switch (type)
+		{
+		case V_Char:	return (long long) val.cVal; break;
+		case V_UChar:	return (long long) val.ucVal; break;
+
+		case V_Short:	return (long long) val.sVal; break;
+		case V_UShort:	return (long long) val.usVal; break;
+
+		case V_Int:		return (long long) val.iVal; break;
+		case V_UInt:	return (long long) val.uiVal; break;
+
+		case V_Float:	return (long long) val.fVal; break;
+		case V_Double:	return (long long) val.dVal; break;
+
+		case V_Int64:	return (long long) val.bigVal; break;
+		case V_UInt64:	return (long long) val.ubigVal; break;
+		}
+		return 0L;
+	}
+
+	//兼容各种格式
 	float getFloat()
 	{
-		if (type == V_Float)
-			return val.fVal;
+		switch (type)
+		{
+		case V_Char:	return (float) val.cVal; break;
+		case V_UChar:	return (float) val.ucVal; break;
 
-		if (type == V_Double)
-			return val.dVal;
+		case V_Short:	return (float) val.sVal; break;
+		case V_UShort:	return (float) val.usVal; break;
 
+		case V_Int:		return (float) val.iVal; break;
+		case V_UInt:	return (float) val.uiVal; break;
+
+		case V_Float:	return (float) val.fVal; break;
+		case V_Double:	return (float) val.dVal; break;
+
+		case V_Int64:	return (float) val.bigVal; break;
+		case V_UInt64:	return (float) val.ubigVal; break;
+		}
 		return 0.0f;
 	}
 
+	//LUA的number对应这个
+	//兼容各种格式
 	double getDouble()
 	{
-		if (type == V_Double)
-			return val.dVal;
+		switch (type)
+		{
+		case V_Char:	return (double) val.cVal; break;
+		case V_UChar:	return (double) val.ucVal; break;
+
+		case V_Short:	return (double) val.sVal; break;
+		case V_UShort:	return (double) val.usVal; break;
+
+		case V_Int:		return (double) val.iVal; break;
+		case V_UInt:	return (double) val.uiVal; break;
+
+		case V_Float:	return (double) val.fVal; break;
+		case V_Double:	return (double) val.dVal; break;
+
+		case V_Int64:	return (double) val.bigVal; break;
+		case V_UInt64:	return (double) val.ubigVal; break;
+		}
 
 		return double(0.0f);
 	}
 
-	// by ref
-	const string& getStr()
-	{
-		if (type != V_String)
-			return "";
-
-		return str;
-	}
-
 	// by val
-	const string getStrCopy()
+	const string getStr()
 	{
-		if (type != V_String)
-			return "";
-
-		return str;
+		if (type == V_String)
+			return str ? *str : "";
+		return "";
 	}
 
 public: //setter
-	void setChar( const char c )					{ val.cVal = c; }
-	void setUChar( const unsigned char c )			{ val.ucVal = c; }
+	void setChar( const char c )					{ val.cVal = c;		type = V_Char; }
+	void setUChar( const unsigned char c )			{ val.ucVal = c;	type = V_UChar; }
 	
-	void setShort( const short s )					{ val.sVal = s; }
-	void setUShort( const unsigned short s )		{ val.usVal = s; }
+	void setShort( const short s )					{ val.sVal = s;		type = V_Short; }
+	void setUShort( const unsigned short s )		{ val.usVal = s;	type = V_UShort; }
 
-	void setInt( const int n )						{ val.iVal = n; }
-	void setUInt( const unsigned int n )			{ val.uiVal = n; }
+	void setInt( const int n )						{ val.iVal = n;		type = V_Int; }
+	void setUInt( const unsigned int n )			{ val.uiVal = n;	type = V_UInt; }
 
-	void setBigInt( const long long l )				{ val.bigVal = l; }
-	void setUBigInt( const unsigned long long l )	{ val.ubigVal = l; }
+	void setBigInt( const long long l )				{ val.bigVal = l;	type = V_Int64; }
+	void setUBigInt( const unsigned long long l )	{ val.ubigVal = l;	type = V_UInt64; }
 
-	void setFloat( const float f )					{ val.fVal = f; }
-	void setDouble( const double d )				{ val.dVal = d; }
-	void setString( const string& s )				{ str = s; }
-	void setString( const char* s )					{ str = (s ? s : ""); }
+	void setFloat( const float f )					{ val.fVal = f;		type = V_Float; }
+	void setDouble( const double d )				{ val.dVal = d;		type = V_Double; }
+
+	void setString( const string& s )				{ setString(s.c_str()); type = V_String; }
+	void setString( const char* s )					{ setStr(s);			type = V_String; }
 
 }; //NDField
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
+//@@ 记录接口
+class NDRecordInterface
+{
+public:
+	virtual ID getId() = 0;
+	virtual int getFieldCount() = 0;
+	virtual NDField* getAt( const int index, bool autoAlloc = true ) = 0;
+};
+
 //@@ 对应一条记录
-class NDRecord
+//		slow: use map
+class NDRecordSlow : public NDRecordInterface
 {
 private:
-	NDRecord();
+	NDRecordSlow();
 
 public:
-	NDRecord( ID in_idRecord, int in_fieldCount )
-		: idRecord( in_idRecord ) 
+	// field count is knowned!
+	NDRecordSlow( ID in_idRecord )
+		: idRecord( in_idRecord ) {}
+
+	~NDRecordSlow() { this->destroy(); }
+
+private:
+	ID					idRecord;	//记录id
+	map<int,NDField*>	mapData;	//记录的若干个字段值（用index索引，index非连续!）
+	typedef map<int,NDField*>::iterator ITER_FIELD;
+
+public:
+	ID getId() { return idRecord; }
+	int getFieldCount() { return mapData.size(); }
+
+	NDField* getAt( const int index, bool autoAlloc = true ) 
 	{
+		ITER_FIELD iter = mapData.find( index );
+		if (iter != mapData.end())
+			return iter->second;
+
+		if (autoAlloc)
+		{
+			NDField* pField = new NDField; 
+			mapData[index] = pField;
+			return pField;
+		}
+		LOGERR( "@@ NDRecord::getAt(%d), bad index: %d\r\n", index, index );
+		return NULL;
+	}
+
+private:
+	void destroy()
+	{
+		for (ITER_FIELD iter = mapData.begin(); iter != mapData.end(); ++iter)
+		{
+			SAFE_DELETE( iter->second );
+		}
+		mapData.clear();
+	}
+};
+
+//@@ 对应一条记录
+//		fast: use vector
+class NDRecordFast : public NDRecordInterface
+{
+private:
+	NDRecordFast();
+
+public:
+	// field count should be specified, and can't be 0.
+	NDRecordFast( ID in_idRecord, int in_fieldCount )
+		: idRecord( in_idRecord ) 
+		, fieldCount( in_fieldCount )
+	{
+		assert (in_fieldCount > 0);
 		vecData.resize( in_fieldCount );
 	}
 
-	~NDRecord() { this->destroy(); }
+	~NDRecordFast() { this->destroy(); }
 
 private:
+	int					fieldCount;	//字段个数
 	ID					idRecord;	//记录id
 	vector<NDField*>	vecData;	//记录的若干个字段值
 
@@ -317,6 +469,7 @@ public:
 		//fast
 		if (index >= 0 && index < vecData.size())
 		{
+			// auto alloc field obj
 			NDField*& ptr = vecData[index];
 			if (!ptr && autoAlloc)
 			{
@@ -324,6 +477,7 @@ public:
 			}
 			return ptr;
 		}
+		LOGERR( "@@ NDRecord::getAt(%d), bad index: %d\r\n", index, index );
 		return NULL;
 	}
 
@@ -336,6 +490,80 @@ private:
 		}
 		vecData.clear();
 	}
+};
+
+//@@ 对应一条记录
+class NDRecord
+{
+private:
+	NDRecord();
+
+	enum {
+		E_RECORD_FAST,
+		E_RECORD_SLOW,
+	} eRecordType;
+
+public:
+	// fast record!
+	NDRecord( ID in_idRecord, int in_fieldCount )
+	{
+		assert(in_fieldCount > 0);
+		slowRecord = NULL;
+		fastRecord = new NDRecordFast( in_idRecord, in_fieldCount ); //fast record!
+		eRecordType = E_RECORD_FAST;
+	}
+
+	// slow record!
+	NDRecord( ID in_idRecord )
+	{
+		slowRecord = new NDRecordSlow( in_idRecord );
+		fastRecord = NULL;
+		eRecordType = E_RECORD_SLOW;
+	}
+
+	~NDRecord() 
+	{ 
+		SAFE_DELETE( slowRecord );
+		SAFE_DELETE( fastRecord );
+	}
+
+public: //ctor helper
+	static NDRecord* createFast( ID in_idRecord, int in_fieldCount )
+	{
+		return new NDRecord( in_idRecord, in_fieldCount );
+	}
+
+	static NDRecord* createSlow( ID in_idRecord )
+	{
+		return new NDRecord( in_idRecord );
+	}
+
+public:
+	ID getId() 
+	{ 
+		return getRecordPtr()->getId();
+	}
+	
+	int getFieldCount() 
+	{
+		return getRecordPtr()->getFieldCount();
+	}
+
+	NDField* getAt( const int index, bool autoAlloc = true ) 
+	{
+		return getRecordPtr()->getAt( index, autoAlloc );
+	}
+
+private:
+	NDRecordInterface* getRecordPtr()
+	{
+		if (eRecordType == E_RECORD_FAST)	return fastRecord;
+		if (eRecordType == E_RECORD_SLOW)	return slowRecord;
+		return NULL;
+	}
+private:
+	NDRecordFast*	fastRecord;
+	NDRecordSlow*	slowRecord;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -354,7 +582,7 @@ private:
 	void init() {}
 
 public:
-	NDTableBase( const ID in_idTable, int in_fieldCount )
+	NDTableBase( const ID in_idTable, int in_fieldCount = 0)
 		: idTable(in_idTable)
 		, fieldCount( in_fieldCount ) 
 	{ 
@@ -370,16 +598,17 @@ public:
 
 	ID  getTableId() { return idTable; }
 
-	NDRecord* getById( const ID idRecord )
-	{
-		return this->find( idRecord );
-	}
-
-	NDRecord* find( const ID idRecord )
+	NDRecord* getById( const ID idRecord, bool autoAlloc = true )
 	{
 		ITER_RECORD iter = mapRecord.find( idRecord );
 		if (iter != mapRecord.end())
 			return iter->second;
+
+		if (autoAlloc)
+		{
+			NDRecord* pRecord = addNew( idRecord );
+			return pRecord;
+		}
 		return NULL;
 	}
 
@@ -387,7 +616,19 @@ public:
 	// find it, add new when not exist.
 	NDRecord* addNew( const ID idRecord )
 	{
-		NDRecord* pRecord = new NDRecord( idRecord, fieldCount );
+		NDRecord* pRecord = NULL;
+
+		if (fieldCount > 0)
+		{
+			// field count is known, we can use fast record.
+			pRecord = NDRecord::createFast( idRecord, fieldCount );
+		}
+		else
+		{
+			// field count is unknown, we can only use slow record.
+			pRecord = NDRecord::createSlow( idRecord );
+		}
+		
 		assert(pRecord);
 		mapRecord[ idRecord ] = pRecord;
 		return pRecord;
@@ -503,7 +744,7 @@ public:
 	//获取id列表
 	bool getIdList( const ID idOwner, const int index, vector<ID>& out_IdList )
 	{
-		FOUR_IDLIST* fourIdList = this->findbyOwner( idOwner );
+		FOUR_IDLIST* fourIdList = this->findbyOwner( idOwner, false );
 		if (fourIdList)
 		{
 			fourIdList->clone( index, out_IdList );
@@ -515,7 +756,7 @@ public:
 	//添加id到列表
 	bool addId( const ID idOwner, const int index, const ID id )
 	{
-		FOUR_IDLIST* fourIdList = this->findbyOwner( idOwner );
+		FOUR_IDLIST* fourIdList = this->findbyOwner( idOwner, true );
 		if (!fourIdList)
 		{
 			fourIdList = new FOUR_IDLIST();
@@ -530,15 +771,10 @@ public:
 		return false;
 	}
 
-	//从列表中删除id
+	//删除一个id
 	bool delId( const ID idOwner, const int index, const ID id )
 	{
-		FOUR_IDLIST* fourIdList = this->findbyOwner( idOwner );
-		if (fourIdList)
-		{
-			mapFourIdList[ idOwner ] = fourIdList;
-		}
-
+		FOUR_IDLIST* fourIdList = this->findbyOwner( idOwner, false );
 		if (fourIdList)
 		{
 			return fourIdList->delId( index, id );
@@ -546,10 +782,10 @@ public:
 		return false;
 	}
 
-	//删除角色列表
+	//删除一个id列表
 	bool delIdList( const ID idOwner, const int index )
 	{
-		FOUR_IDLIST* fourIdList = this->findbyOwner( idOwner );
+		FOUR_IDLIST* fourIdList = this->findbyOwner( idOwner, false );
 		if (fourIdList)
 		{
 			return fourIdList->delIdList( index );
@@ -558,12 +794,19 @@ public:
 	}
 
 private:
-	FOUR_IDLIST* findbyOwner( const ID idOwner )
+	FOUR_IDLIST* findbyOwner( const ID idOwner, bool autoAlloc = true )
 	{
 		ITER_FOUR_IDLIST iter = mapFourIdList.find( idOwner );
 		if (iter != mapFourIdList.end())
 		{
 			return iter->second;
+		}
+
+		if (autoAlloc)
+		{
+			FOUR_IDLIST* p = new FOUR_IDLIST;
+			mapFourIdList[ idOwner ] = p;
+			return p;
 		}
 		return NULL;
 	}
@@ -585,16 +828,44 @@ private:
 class NDTable : public NDTableBase
 {
 public:
-	NDTable( const ID in_idTable, int in_fieldCount )
-		: NDTableBase( in_idTable, in_fieldCount ) {}
+	NDTable( const ID in_idTable, int in_fieldCount = 0 )
+		: NDTableBase( in_idTable, in_fieldCount )
+		, extra(NULL)
+		, dbgName(NULL) {}
 public:
-	NDTableExtra extra;
+	NDTableExtra& getExtra() 
+	{
+		if (!extra)
+		{
+			extra = new NDTableExtra;
+		}
+		return *extra;
+	}
+private:
+	NDTableExtra* extra;
+
+public:
+	void setDbgName( const char* str )
+	{
+#if _WIN32 && _DEBUG
+		if (str && str[0])
+		{
+			if (!dbgName)
+			{
+				dbgName = new string();
+			}
+			*dbgName = str;
+		}
+#endif
+	}
+private:
+	string* dbgName;
 };
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
-//@@ 对应一堆表集合
+//@@ 对应一堆表集合（表数量是固定的）
 //		如角色数据有：技能表、任务表、物品表...
 //		表集里面的表数量是固定的(等于eMIN_COUNT)
 class NDTableSet
@@ -602,20 +873,13 @@ class NDTableSet
 public:
 	NDTableSet()
 	{
-		bIniOnly = false;
 		memset( arrTable, 0, sizeof(arrTable));
 	}
 
 	~NDTableSet() { this->destroy(); }
 
 public:
-	NDTableSetIni* castIni()
-	{
-		return bIniOnly ? (NDTableSetIni*) this : NULL;
-	}
-
-public:
-	NDTable* addNew( DATATYPE_MINOR minorType, const ID id, const int fieldCount )
+	NDTable* addNew( DATATYPE_MINOR minorType, const ID id, int fieldCount = 0 )
 	{
 		if (minorType >= 0 && minorType < tableCount)
 		{
@@ -630,12 +894,18 @@ public:
 		return NULL;
 	}
 
-	NDTable* getAt( const DATATYPE_MINOR minorType )
+	NDTable* getAt( const DATATYPE_MINOR minorType, bool autoAlloc = true )
 	{
 		if (minorType >= 0 && minorType < tableCount)
 		{
+			if (!arrTable[minorType])
+			{
+				arrTable[minorType] = addNew( minorType, ID(minorType));
+			}
 			return arrTable[minorType];
 		}
+
+		LOGERR( "@@ NDTableSet::getAt(%d), bad index: %d\r\n", (int)minorType, (int)minorType );
 		return NULL;
 	}
 
@@ -646,6 +916,8 @@ public:
 			SAFE_DELETE( arrTable[minorType] );
 			return true;
 		}
+
+		LOGERR( "@@ NDTableSet::delAt(%d), bad index: %d\r\n", (int)minorType, (int)minorType );
 		return false;
 	}
 
@@ -661,34 +933,31 @@ private:
 private:
 	NDTable* arrTable[eMIN_COUNT];	//固定表数量
 	static const int tableCount = eMIN_COUNT;	
-
-protected:
-	bool bIniOnly; //是否INI专用表集
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
 //@@ 对应一堆表集合（INI专用）
-//		与NDTableSet不同的是，表数量不是固定的，如INI有很多的表，超过eMIN_COUNT.
-class NDTableSetIni : public NDTableSet
+class NDTableSetIni
 {
 public:
-	NDTableSetIni() { bIniOnly = true; }
-	~NDTableSetIni() { this->destroy_Ini(); }
+	NDTableSetIni() {}
+	~NDTableSetIni() { this->destroy(); }
 
 public:
 	int getCount() { return mapTable.size(); }
 
-	NDTable* addNew_INI( const ID id, const int fieldCount )
+	//implement
+	NDTable* addNew( const ID id, const int fieldCount )
 	{
 		NDTable* newTable = new NDTable( id, fieldCount );
-		mapTable[id] = newTable;
+		mapTable.insert( map<ID,NDTable*>::value_type( id, newTable ));
 		
 		assert(newTable);
 		return newTable;
 	}
 
-	NDTable* getAt_INI( const ID id )
+	NDTable* getAt( const ID id )
 	{
 		ITER_TABLE iter = mapTable.find( id );
 		if (iter != mapTable.end())
@@ -697,7 +966,7 @@ public:
 	}
 
 private:
-	void destroy_Ini()
+	void destroy()
 	{
 		for (ITER_TABLE iter = mapTable.begin(); iter != mapTable.end(); ++iter)
 		{
@@ -719,7 +988,19 @@ private:
 class NDTableSetGroup
 {
 public:
+	NDTableSetGroup() : tableSetIni(NULL) {}
 	~NDTableSetGroup() { this->destroy(); }
+
+	//get the table set for ini
+	NDTableSetIni* getIni()
+	{
+		if (!tableSetIni)
+		{
+			tableSetIni = new NDTableSetIni;
+		}
+		assert(tableSetIni);
+		return tableSetIni;
+	}
 
 	//id: can be a role id, or npc id, or...
 	NDTableSet* getById( const ID id, bool autoAlloc = true )
@@ -747,29 +1028,10 @@ public:
 		return false;
 	}
 
-	//只有一个表集的情况（如INI，每个INI是一张表，所有INI用一个表集）
-	NDTableSet* getSingle( bool iniFlag )
-	{
-		if (mapTableSet.size() == 0)
-		{
-			return addNew(0, iniFlag);
-		}
-		return mapTableSet[0];
-	}
-
 private:
 	NDTableSet* addNew( ID id, bool iniFlag = false )
 	{
-		NDTableSet* tableSet = NULL;
-		if (iniFlag)
-		{
-			tableSet = new NDTableSetIni();
-		}
-		else
-		{
-			tableSet = new NDTableSet();
-		}
-
+		NDTableSet* tableSet = new NDTableSet();
 		assert(tableSet);
 		mapTableSet[id] = tableSet;
 		return tableSet;
@@ -784,9 +1046,12 @@ private:
 			SAFE_DELETE( iter->second );
 		}
 		mapTableSet.clear();
+
+		SAFE_DELETE(tableSetIni);
 	}
 
 private:
+	NDTableSetIni* tableSetIni; //INI专用
 	map<ID,NDTableSet*> mapTableSet;
 	typedef map<ID,NDTableSet*>::iterator ITER_TABLESET;
 };
@@ -825,7 +1090,12 @@ public:
 	{
 		if (majorType >= 0 && majorType < tableSetGroupCount)
 		{
-			return tableSetGroup[majorType];
+			NDTableSetGroup*& pTableSetGroup = tableSetGroup[majorType];
+			if (!pTableSetGroup)
+			{
+				pTableSetGroup = new NDTableSetGroup();
+			}
+			return pTableSetGroup;
 		}
 		return NULL;
 	}

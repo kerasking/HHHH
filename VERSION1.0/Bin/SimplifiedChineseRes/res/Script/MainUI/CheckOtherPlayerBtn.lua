@@ -9,8 +9,12 @@ local p = CheckOtherPlayerBtn;
 
 --UI坐标配置
 local winsize	= GetWinSize();
-local btnw		= 32*ScaleFactor;
-local btnh		= 40*ScaleFactor;
+--local btnw		= 32*ScaleFactor;
+--local btnh		= 40*ScaleFactor;
+
+local btnw		= 64;
+local btnh		= 80;
+
 p.LayerRect = CGRectMake(winsize.w-btnw*1.5, winsize.h-btnh-40*ScaleFactor, btnw, btnh); 
 
 

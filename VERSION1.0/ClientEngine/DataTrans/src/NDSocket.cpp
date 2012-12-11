@@ -115,8 +115,8 @@ namespace NDEngine
 			::setsockopt(m_socket->getConn().getConnId(), SOL_SOCKET, SO_SNDBUF, (const char*)&nSendBuf, sizeof(int));
 
 			int connTimeOut = 30 * 1000;
-			::setsockopt(m_socket->getConn().getConnId(), SOL_SOCKET, SO_SNDTIMEO, (const char*)&connTimeOut, sizeof(int));			
-			::setsockopt(m_socket->getConn().getConnId(), SOL_SOCKET, SO_RCVTIMEO, (const char*)&connTimeOut, sizeof(int));
+			//::setsockopt(m_socket->getConn().getConnId(), SOL_SOCKET, SO_SNDTIMEO, (const char*)&connTimeOut, sizeof(int));			
+			//::setsockopt(m_socket->getConn().getConnId(), SOL_SOCKET, SO_RCVTIMEO, (const char*)&connTimeOut, sizeof(int));
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 			int	optval=1;
 			::setsockopt(m_socket->getConn().getConnId(), SOL_SOCKET, SO_NOSIGPIPE, (char *) &optval, sizeof(optval));

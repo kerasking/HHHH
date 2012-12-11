@@ -34,7 +34,7 @@ _serverPort( -1 ),
 _blocking( blocking ),
 _bAddr(false)
 {
-
+	initSocket();
 }
 
 KTcpClientSocket::KTcpClientSocket( bool blocking/*=true*/ ):
@@ -42,7 +42,7 @@ _serverPort( -1 ),
 _blocking( blocking ),
 _bAddr(false)
 {
-
+	initSocket();
 }
 
 KTcpClientSocket::KTcpClientSocket( const KData& hostName, int servPort, bool blocking ):
@@ -51,7 +51,7 @@ _serverPort( servPort ),
 _blocking( blocking ),
 _bAddr(false)
 {
-
+	initSocket();
 }
 
 
@@ -60,6 +60,7 @@ _blocking( blocking )
 {
     _hostName = server.getHostName();
     _serverPort = server.getPort();
+	initSocket();
 }
 
 
@@ -69,7 +70,17 @@ KTcpClientSocket::KTcpClientSocket( const KTcpClientSocket& other )
 	_hostName = other._hostName;
 	_serverPort = other._serverPort;
 	_blocking = other._blocking;
+	initSocket();
 }
+
+
+
+void KTcpClientSocket::initSocket()
+{
+	int socketid = ::socket( AF_INET, SOCK_STREAM, 0 );
+	_conn.setConnId(socketid);
+}
+
 
 
 KTcpClientSocket&
@@ -96,16 +107,17 @@ bool
 KTcpClientSocket::connect()
 {
 	LOGD("Entry KTcpClientSocket::connect()");
-
+	#if 0
 	if ( _conn.isLive() )
 	{
 		LOGERROR("_conn.isLive() return false");
 		return false;
 	}
 
+
 	int socketid = ::socket( AF_INET, SOCK_STREAM, 0 );
 
-	//_conn.setConnId(socketid);
+	_conn.setConnId(socketid);
 
 	if ( socketid == -1 )
 	{
@@ -113,6 +125,8 @@ KTcpClientSocket::connect()
 		LOGERROR("socketid == -1,nError = %d",nError);
 		return false;
 	}
+#endif
+	int socketid = _conn.getConnId();
 
 	memset( &_conn._connAddr, 0, sizeof(_conn._connAddr) );
 
@@ -145,7 +159,7 @@ KTcpClientSocket::connect()
 //		return false;
 //  }
 
-	_conn._connId = socketid;
+	//_conn._connId = socketid;
 	_conn.setBlocking( false );
 
 	if(::connect( socketid, (SA*)&_conn._connAddr, sizeof(_conn._connAddr) ) == -1)
