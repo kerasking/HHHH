@@ -326,7 +326,7 @@ function p.LoadUI()
 	--刷新玩家列表
 	--p.RefreshInfo();
 	
-	--屏蔽鼓舞功能
+	--[[屏蔽鼓舞功能
 	local Moneybtn = RecursiveButton(layer, {ID_SCUFFLE_CTRL_BUTTON_INSPIRE1}); 
 	local Emoneybtn = RecursiveButton(layer, {ID_SCUFFLE_CTRL_BUTTON_INSPIRE2}); 
 	local labelBuffDesc = RecursiveLabel(layer, {22});
@@ -335,7 +335,8 @@ function p.LoadUI()
 	labelBuff:SetVisible(false);
 	Moneybtn:SetVisible(false);
 	Emoneybtn:SetVisible(false);
-
+	--]]
+	
 	--屏蔽自动参战
 	local labelAutoFight = RecursiveLabel(layer, {29});
 	local checkBoxAutoFight=RecursiveCheckBox(layer,{ID_SCUFFLE_CTRL_CHECK_BUTTON_31});
@@ -1201,9 +1202,9 @@ local TipTxt ={
 "	2、战败方将得到基本的银币和声望奖励；",
 "	3、轮空只获得基本银币奖励；",
 "	4、大乱斗积分前十玩家额外获得声望奖励；",
-"四、其他功能：（暂不开放）",
-"	1、鼓舞",
-"	2、自动战斗，达到vip6玩家可以选择自动战斗","，自动参战：战斗结束且冷却时间清零后，自动","加入参战队列，省去玩家手动点击参战的操作。",
+"四、其他功能：",
+"	1、鼓舞（功能开放）",
+"	2、自动战斗，达到vip6玩家可以选择自动战斗","，自动参战：战斗结束且冷却时间清零后，自动","加入参战队列，省去玩家手动点击参战的操作。（暂不开放）",
 }
 
 
@@ -1550,6 +1551,57 @@ end
 
 
 -----------------------------背景层事件处理---------------------------------
+p.bIsTipMoney = false;
+p.bIsTipEmoney = false;
+
+function p.EncourageMoney(nEventType, param, val)
+    if(nEventType == CommonDlgNew.BtnOk) then
+        p.bIsTipMoney = val;
+    elseif(nEventType == CommonDlgNew.BtnNo) then
+        p.bIsTipMoney = val;
+        return true;
+    end
+    
+	if g_EncourageLev >=  MsgBossBattle.GetCampBattleMaxEncourageCount() then
+		CommonDlgNew.ShowYesDlg("鼓舞等级已满！");
+		return true;
+	end
+	
+	local money = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_MONEY);
+	if money < MsgBossBattle.GetCampBattleSilverCount() then
+		CommonDlgNew.ShowYesDlg("抱歉,您的银币不足！");
+		return true;
+	end
+	
+	MsgCampBattle.SendCampBattleSilverEncourageAction();
+	return true;
+end
+
+function p.EncourageEmoney(nEventType, param, val)
+    if(nEventType == CommonDlgNew.BtnOk) then
+        p.bIsTipEmoney = val;
+    elseif(nEventType == CommonDlgNew.BtnNo) then
+        p.bIsTipEmoney = val;
+        return true;
+    end
+    
+	if g_EncourageLev >=  MsgBossBattle.GetCampBattleMaxEncourageCount() then
+		CommonDlgNew.ShowYesDlg("鼓舞等级已满！");
+		return true;
+	end			
+	
+	local nPlayerId = GetPlayerId();
+    local emoney = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);           
+     
+    if emoney < MsgBossBattle.GetCampBattleCoinCount() then
+		CommonDlgNew.ShowYesDlg("抱歉，您的金币不足！");
+		return true;
+	end
+	
+	MsgCampBattle.SendCampBattleGoldEncourageAction();
+	return true;
+end		
+
 function p.OnUIEvent(uiNode, uiEventType, param)
 
     local tag = uiNode:GetTag();
@@ -1592,13 +1644,22 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 			end
 			return true;
 		--银币鼓舞
-		elseif tag == ID_SCUFFLE_CTRL_BUTTON_INSPIRE1 then
-			MsgCampBattle.SendCampBattleSilverEncourageAction();
-			return true;
+		elseif tag == ID_SCUFFLE_CTRL_BUTTON_INSPIRE1 then	   
+		    if( p.bIsTipMoney ) then
+					return p.EncourageMoney();
+            else
+            		CommonDlgNew.ShowNotHintDlg(string.format("你是否花费 %d 银币鼓舞",MsgBossBattle.GetCampBattleSilverCount()), p.EncourageMoney);
+            		return true;
+            end
+
 		--金币鼓舞	
 		elseif tag == ID_SCUFFLE_CTRL_BUTTON_INSPIRE2 then
-			MsgCampBattle.SendCampBattleGoldEncourageAction();
-			return true;
+		    if( p.bIsTipEmoney ) then
+					return p.EncourageEmoney();
+            else
+            		CommonDlgNew.ShowNotHintDlg(string.format("你是否花费 %d 金币鼓舞",MsgBossBattle.GetCampBattleCoinCount()), p.EncourageEmoney);
+           			return true;
+            end
 		elseif tag == ID_SCUFFLE_CTRL_BUTTON_50 then
 			--scrollMainReport:SetVisible(true);
 			scrollUserReport:SetVisible(false);

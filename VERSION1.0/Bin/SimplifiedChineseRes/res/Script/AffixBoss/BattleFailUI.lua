@@ -39,7 +39,7 @@ function p.LoadUI()
 	layer:SetTag(NMAINSCENECHILDTAG.BattleFail);
 	local winsize = GetWinSize();
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChild(layer);
+	scene:AddChildZ(layer,2);
 	
 	local uiLoad=createNDUILoad();
 	if nil == uiLoad then
@@ -63,6 +63,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
         if ID_BATTLEFAIL_CTRL_BUTTON_COMFIRM == tag then         --退出副本
             Music.StopMusic();
             CloseBattle();
+            BattleUI_Title.CloseUI();--
             RemoveChildByTagNew(NMAINSCENECHILDTAG.BattleFail, true,true);
 			MsgAffixBoss.sendNmlLeave();
             WorldMap(NormalBossListUI.nCampaignID);  
@@ -71,6 +72,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             
 		elseif ID_BATTLEFAIL_CTRL_BUTTON_GOBACK == tag then   --返回主城
             CloseBattle();
+            BattleUI_Title.CloseUI();--
             RemoveChildByTagNew(NMAINSCENECHILDTAG.BattleFail, true, true);
             MsgAffixBoss.sendNmlLeave();
             NormalBossListUI.OnBtnBack();
@@ -100,6 +102,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             Music.StopMusic();
             local scene = GetSMGameScene();
             CloseBattle();
+            BattleUI_Title.CloseUI();--
             if scene~= nil then
                 scene:RemoveChildByTag(NMAINSCENECHILDTAG.MonsterReward,true);
             end	

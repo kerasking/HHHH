@@ -195,6 +195,7 @@ function p.OrderPets(pets,nPlayerId)
     end
     
     table.sort(pets,p.SortPetFunc);
+    p.nPlayerId = nil;
     return pets;
 end
 
@@ -211,11 +212,18 @@ function p.SortPetFunc(a, b)
     local nMarialA = p.IsMarial(a);
     local nMarialB = p.IsMarial(b);
     if(nMarialA==nMarialB) then
-        local nLevelA = RolePetFunc.GetPropDesc(a, PET_ATTR.PET_ATTR_LEVEL);
-        local nLevelB = RolePetFunc.GetPropDesc(b, PET_ATTR.PET_ATTR_LEVEL);
-        return nLevelA>nLevelB;
+        local nPetTypeA = RolePet.GetPetInfoN(a,PET_ATTR.PET_ATTR_TYPE);
+        local nPetTypeB = RolePet.GetPetInfoN(b,PET_ATTR.PET_ATTR_TYPE);
+        local nQualityA = GetDataBaseDataN("pet_config", nPetTypeA, DB_PET_CONFIG.QUALITY);
+        local nQualityB = GetDataBaseDataN("pet_config", nPetTypeB, DB_PET_CONFIG.QUALITY);
+        
+        if(nQualityA == nQualityB) then
+            local nLevelA = RolePetFunc.GetPropDesc(a, PET_ATTR.PET_ATTR_LEVEL);
+            local nLevelB = RolePetFunc.GetPropDesc(b, PET_ATTR.PET_ATTR_LEVEL);
+            return nLevelA>nLevelB;
+        end
+        return nQualityA>nQualityB;
     end
-    p.nPlayerId = nil;
     return nMarialA>nMarialB;
 end
 
@@ -225,10 +233,30 @@ function p.OrderSpeedPets(pets)
 end
 
 --** chh 2012-08-22 武将 速度排序**--
+--** chh 2012-11-1 修正武将出手速度，添加后军速度加层20%**--
 function p.SortSpeedPetFunc(a, b)
-    local nLevelA = RolePet.GetPetInfoN(a, PET_ATTR.PET_ATTR_SPEED);
-    local nLevelB = RolePet.GetPetInfoN(b, PET_ATTR.PET_ATTR_SPEED);
-    return nLevelA>nLevelB;
+    local nSpeedA = RolePet.GetPetInfoN(a, PET_ATTR.PET_ATTR_SPEED);
+    local nSpeedB = RolePet.GetPetInfoN(b, PET_ATTR.PET_ATTR_SPEED);
+    
+    local nPetTypeA = RolePet.GetPetInfoN(a,PET_ATTR.PET_ATTR_TYPE);
+    local nPetTypeB = RolePet.GetPetInfoN(b,PET_ATTR.PET_ATTR_TYPE);
+    
+    local nActTypeA = GetDataBaseDataN("pet_config", nPetTypeA, DB_PET_CONFIG.ATK_TYPE);
+    local nActTypeB = GetDataBaseDataN("pet_config", nPetTypeB, DB_PET_CONFIG.ATK_TYPE);
+    
+    
+    local nMainPetIdA = RolePetFunc.IsMainPet(a);
+    local nMainPetIdB = RolePetFunc.IsMainPet(b);
+    
+    if ( PROFESSION_TYPE.FIST == nActTypeA and not nMainPetIdA) then
+        nSpeedA = nSpeedA + nSpeedA*0.15;
+    end
+    
+    if ( PROFESSION_TYPE.FIST == nActTypeB and not nMainPetIdB ) then
+        nSpeedB = nSpeedB + nSpeedB*0.15;
+    end
+    
+    return nSpeedA>nSpeedB;
 end
 
 

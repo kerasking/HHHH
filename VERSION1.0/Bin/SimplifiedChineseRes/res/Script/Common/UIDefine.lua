@@ -180,7 +180,14 @@ NMAINSCENECHILDTAG =
 	ActivityNoticeUI		= NUITAG_BEGIN + 176,					-- 活动公告界面--
     LoginListUI          = NUITAG_BEGIN + 177,                    --登入等待界面
     MainPlayerListUI        = NUITAG_BEGIN + 178,                   --主城查看其它玩家
+    Banquet					= NUITAG_BEGIN + 179,                    --宴会界面
+    BattleUI_Title			= NUITAG_BEGIN + 180,                    --战斗TITLE界面
  	CampBattle              = 2015,                   --阵营战
+ 	
+ 	SyndicateBattleUI         =  2015,                   --军团战ui
+ 	SyndicateBattleSignUpUI           =  NUITAG_BEGIN + 180,                  --军团战报名ui
+ 	SyndicateBattleResultUI           =  NUITAG_BEGIN + 181,                   --军团战进程ui
+ 	
    
     CommonDlg				= NDLGTAG_BEGIN,						--通用对话框
 	CommonDlgNew              = NDLGTAGNEW_BEGIN,                     --新通用对话框
