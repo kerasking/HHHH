@@ -171,6 +171,8 @@ bool CUIScroll::TouchBegin(NDTouch* touch)
 	
 	if (CUIMovableLayer::TouchBegin(touch)) 
 	{
+		if (!this->IsVisibled()) return false;
+
 		ResetMove();
 		
 		if (IsCanAccerate())

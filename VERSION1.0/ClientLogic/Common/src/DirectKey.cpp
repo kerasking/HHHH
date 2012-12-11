@@ -728,6 +728,8 @@ void DirectKey::OnBattleEnd()
 
 bool DirectKey::TouchBegin(NDTouch* touch)
 {
+	if (!this->IsVisibled()) return false;
+
 	if (NDUILayer::TouchBegin(touch))
 	{
 		KeyDirect direct = GetPointAtDirect(touch->GetLocation());

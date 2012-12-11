@@ -84,6 +84,7 @@ public:
 public: //@priority
 	virtual ND_LAYER_PRIORITY getPriority();
 	void bringToTop();
+	void bringToBottom();
 	bool getPopupDlgFlag() { m_bPopupDlg; }
 	void setPopupDlgFlag( bool bPopup ) { m_bPopupDlg = bPopup; }
 	void setDebugName( const char* inName );
