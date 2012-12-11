@@ -12,7 +12,9 @@
 #include "NDPath.h"
 #include "NDSharedPtr.h"
 #include "CCFileUtils.h"
-#include "NDUtility.h"
+//#include "NDUtility.h"
+
+void WriteCon(const char * pszFormat, ...);
 
 const char* NDLocalXmlString::GetCString(const char* szKeyName)
 {
