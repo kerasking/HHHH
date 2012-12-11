@@ -38,6 +38,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.CookieSyncManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -168,8 +169,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 	}
 	
 	public void setMain(){
-		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
-		this.setContentView(menubar,params);
+		ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
+		setContentView(menubar,params);
 	}
 
 	public void LoginComplete(int userid){

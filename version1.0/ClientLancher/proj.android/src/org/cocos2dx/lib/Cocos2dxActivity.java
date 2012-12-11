@@ -26,7 +26,7 @@ package org.cocos2dx.lib;
 import org.DeNA.DHLJ.NDJavaVideoPlayer;
 import org.DeNA.DHLJ.NDVideoControl;
 import org.DeNA.DHLJ.NDVideoView;
-import org.DeNA.DHLJ.R;
+
 import org.cocos2dx.lib.Cocos2dxHelper.Cocos2dxHelperListener;
 
 import android.app.Activity;
@@ -34,9 +34,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.LayoutInflater;
+import android.view.ViewGroup.LayoutParams;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -57,7 +59,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	public FrameLayout m_pkFrameView = null;
 	private Cocos2dxHandler mHandler;
 	public NDVideoView m_pkView = null;
-	
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -88,7 +90,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 		super.onResume();
 
 		Cocos2dxHelper.onResume();
-//		this.mGLSurfaceView.onResume();
+		// this.mGLSurfaceView.onResume();
 	}
 
 	@Override
@@ -97,7 +99,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 		super.onPause();
 
 		Cocos2dxHelper.onPause();
-//		this.mGLSurfaceView.onPause();
+		// this.mGLSurfaceView.onPause();
 	}
 
 	@Override
@@ -136,19 +138,23 @@ public abstract class Cocos2dxActivity extends Activity implements
 		this.mGLSurfaceView = this.onCreateView();
 
 		mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
-		
-		NDVideoControl pkVideoControl = new NDVideoControl(Cocos2dxActivity.this);
+
+		NDVideoControl pkVideoControl = new NDVideoControl(
+				Cocos2dxActivity.this);
 		pkVideoControl.setCocos2dxActivity(this);
 		pkVideoControl.hide();
-		
+
+		LinearLayout tp = new LinearLayout(this.getApplicationContext());
+		LinearLayout.LayoutParams pkLayoutParams = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
 		m_pkView = new NDVideoView(this.getApplicationContext());
 		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
 		m_pkView.setBackgroundColor(0);
 		m_pkView.setMediaController(pkVideoControl);
 		m_pkView.setOnCompletionListener(pkVideoControl);
 		m_pkView.requestFocus();
+
+		setContentView(m_pkView);
 		
-        setContentView(m_pkView);
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView()
@@ -156,9 +162,10 @@ public abstract class Cocos2dxActivity extends Activity implements
 		return new Cocos2dxGLSurfaceView(this);
 	}
 
-    public Cocos2dxGLSurfaceView getView() {
-    	return this.mGLSurfaceView;
-    }
+	public Cocos2dxGLSurfaceView getView()
+	{
+		return this.mGLSurfaceView;
+	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
