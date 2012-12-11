@@ -7,6 +7,7 @@
 
 #include "NDWideString.h"
 #include "CCPlatformConfig.h"
+#include "TQPlatform.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "windows.h"
@@ -214,7 +215,7 @@ bool NDWideString::IsEqual_UTF8_Ansi( const char* utf8, const char* ansi )
         return true;
 #else
     // compare by both ansi
-    if (strcmp( utf8, ansi ) == 0)
+    if (strcmp( utf8, GBKToUTF8(ansi) ) == 0)
         return true;
 #endif
 	return false;
