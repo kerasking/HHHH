@@ -121,6 +121,11 @@ private:
 protected:
 	virtual bool TouchBegin(NDTouch* touch)
 	{
+		if (!this->IsVisibled())
+		{
+			return false;
+		}
+
 		if (CanDealEvent(touch->GetLocation()))
 		{
 			return NDUILayer::TouchBegin(touch);

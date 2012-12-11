@@ -306,6 +306,11 @@ int ContainerClientLayerM::WhichViewToScroll()
 }
 
 bool ContainerClientLayerM::TouchMoved(NDTouch* touch){
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
     CCPoint prePos = touch->GetPreviousLocation();
     CCPoint curPos = touch->GetLocation();
     
@@ -322,7 +327,11 @@ bool ContainerClientLayerM::TouchMoved(NDTouch* touch){
     return true;
 }
 bool ContainerClientLayerM::TouchEnd(NDTouch* touch){
-    
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
     NDNode *parent = this->GetParent();
     if(!parent->IsKindOfClass(RUNTIME_CLASS(CUIScrollViewContainerM))){
         return false;
@@ -1279,6 +1288,10 @@ bool CUIScrollViewContainerM::CanDestroyOnRemoveAllChildren(NDNode* pNode)
      
 }
 bool CUIScrollViewContainerM::TouchMoved(NDTouch* touch){
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
 
     if(m_pClientUINodes.size()>0){
         m_pClientUINodes[0]->TouchMoved(touch);
@@ -1286,6 +1299,11 @@ bool CUIScrollViewContainerM::TouchMoved(NDTouch* touch){
     return true;
 }
 bool CUIScrollViewContainerM::TouchEnd(NDTouch* touch){
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
     if(m_pClientUINodes.size()>0){
         m_pClientUINodes[0]->TouchEnd(touch);
     }

@@ -23,12 +23,10 @@
 //#include "BeatHeart.h"
 #include "NDDataPersist.h"
 // #include "Chat.h"
-// #include "NewChatScene.h"			///< 这俩包含需要汤哥和张迪的东西 郭浩
 #include "SMLoginScene.h"
 #include "GlobalDialog.h"
 #include "NDMonster.h"
 #include "NDSocket.h"
-//#include "GameUIRequest.h"			///< 需要合并后
 #include "AutoPathTip.h"
 #include "NDDataTransThread.h"
 #include "GameSceneLoading.h"

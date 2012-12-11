@@ -20,6 +20,8 @@ Thumbs.db
 *.cache
 *.ilk
 *.log
+gen/
+BuildConfig.java
 [Bb]in
 [Dd]ebug*/
 *.sbr
