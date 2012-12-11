@@ -519,9 +519,9 @@ void DramaShowTipDlg(std::string content)
 // 参数: nSoundEffectId: 音效的id
 void DramaPlaySoundEffect(int nSoundEffectId)
 {
-	DramaCommandSoundEffect* command = new DramaCommandSoundEffect;
-	command->InitWithSoundEffectId(nSoundEffectId);
-	DramaObj.AddCommond(command);
+	DramaCommandSoundEffect* pkCommand = new DramaCommandSoundEffect;
+	pkCommand->InitWithSoundEffectId(nSoundEffectId);
+	DramaObj.AddCommond(pkCommand);
 }
     
 void ScriptDramaLoad()

@@ -144,8 +144,6 @@ public abstract class Cocos2dxActivity extends Activity implements
 		pkVideoControl.setCocos2dxActivity(this);
 		pkVideoControl.hide();
 
-		LinearLayout tp = new LinearLayout(this.getApplicationContext());
-		LinearLayout.LayoutParams pkLayoutParams = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
 		m_pkView = new NDVideoView(this.getApplicationContext());
 		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
 		m_pkView.setBackgroundColor(0);

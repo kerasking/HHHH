@@ -67,6 +67,9 @@ static NDBaseDirector s_NDBaseDirector;
 #include "SqliteDBMgr.h"
 #include "NDUILoadEngine.h"
 #include "NDVideoMgr.h"
+#include "../CocosDenshion/include/SimpleAudioEngine.h"
+
+using namespace CocosDenshion;
 
 
 ///////////////////////////////////////////
@@ -338,7 +341,7 @@ void NDGameApplication::applicationWillEnterForeground()
 	CCDirector::sharedDirector()->startAnimation();
 
 	// if you use SimpleAudioEngine, it must resume here
-	// SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+	SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 }
 
 //@pm
