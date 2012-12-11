@@ -22,6 +22,7 @@
 #include "NDBeforeGameMgr.h"
 #include "NDTargetEvent.h"
 #include "NDLocalXmlString.h"
+#include "NDProfile.h"
 #include "ScriptMgr.h"
 #include <iostream>
 #include <sstream>
@@ -793,6 +794,7 @@ void CSMLoginScene::SetProgress( int nPercent )
 //===========================================================================
 void CSMLoginScene::StartEntry()
 {
+	WriteCon( "@@ CSMLoginScene::StartEntry()\r\n" );
 	CCLOG( "@@ CSMLoginScene::StartEntry()\r\n" );
 
 #if 1 //取完代码android又崩溃了，先还原代码.
@@ -803,15 +805,26 @@ void CSMLoginScene::StartEntry()
 	}
 	ShowWaitingAni();
 
-	NDLocalXmlString::GetSingleton().LoadData();
-	ScriptMgrObj.Load(); //加载LUA脚本
+	{
+		WriteCon( "@@ NDLocalXmlString::LoadData()...\r\n" );
+		TIME_SLICE("NDLocalXmlString::LoadData()");
+		NDLocalXmlString::GetSingleton().LoadData();
+	}
+
+	{
+		WriteCon( "@@ ScriptMgrObj.Load()...\r\n" );
+		TIME_SLICE("ScriptMgrObj.Load()");
+		ScriptMgrObj.Load(); //加载LUA脚本
+	}
 
 	ScriptMgrObj.excuteLuaFunc( "LoadData", "GameSetting" ); 
 	CloseUpdateUILayer();
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	//if ( m_iAccountID == 0 )
 	m_iAccountID = ScriptMgrObj.excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
 #endif
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
 #endif
