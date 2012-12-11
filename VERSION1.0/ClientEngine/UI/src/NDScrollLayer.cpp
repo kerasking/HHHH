@@ -97,6 +97,8 @@ void NDScrollLayer::draw()
 
 bool NDScrollLayer::TouchBegin(NDTouch* touch)
 {
+	if (!this->IsVisibled()) return false;
+
 	if (NDUILayer::TouchBegin(touch))
 	{
 		ResetMove();
@@ -109,6 +111,8 @@ bool NDScrollLayer::TouchBegin(NDTouch* touch)
 
 bool NDScrollLayer::TouchEnd(NDTouch* touch)
 {
+	if (!this->IsVisibled()) return false;
+
 	bool bRet = NDUILayer::TouchEnd(touch);
 
 	m_bUp = true;

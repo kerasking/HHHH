@@ -1891,6 +1891,16 @@ void NDUILayer::bringToTop()
 	}
 }
 
+//@priority
+void NDUILayer::bringToBottom()
+{
+	if (m_ccNode)
+	{
+		NDBaseLayer *layer = (NDBaseLayer *) m_ccNode;
+		layer->bringToBottom();
+	}
+}
+
 const char* NDUILayer::getDebugName()
 {
 	if (m_ccNode)

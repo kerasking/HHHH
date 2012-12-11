@@ -325,7 +325,6 @@ function p.LoadUI(tab,nPetId)
 		return false;
 	end
 	
-	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerBackBag);
 	layer:SetFrameRect(RectFullScreenUILayer);
@@ -355,7 +354,6 @@ function p.LoadUI(tab,nPetId)
 		return false;
 	end
 	
-	layerGrid:SetPopupDlgFlag( true );
 	layerGrid:Init();
 	layerGrid:SetTag(TAG_LAYER_GRID);
 	layerGrid:SetFrameRect(CGRectMake(ATTR_OFFSET_X, ATTR_OFFSET_Y, RectFullScreenUILayer.size.w / 2, RectFullScreenUILayer.size.h));
@@ -530,7 +528,7 @@ function p.LoadBackBagUI()
 			LogInfo("p.LoadBackBagUI createUIScrollView failed");
 			return;
 		end
-		view:SetPopupDlgFlag(true);
+
 		view:Init(false);
 		view:SetViewId(i);
 		container:AddView(view);
@@ -1311,7 +1309,7 @@ function p.RefreshContainer()
 			LogInfo("view == nil");
 			return;
 		end
-		view:SetPopupDlgFlag( true );
+
 		view:Init(false);
 		view:SetViewId(v);
 		container:AddView(view);

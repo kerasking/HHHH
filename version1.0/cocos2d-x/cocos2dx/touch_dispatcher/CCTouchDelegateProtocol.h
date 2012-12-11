@@ -74,6 +74,7 @@ public:
 
 #if ND_MOD //@dirty @priority
 	void bringToTop() { nSubPriority = 0; }
+	void bringToBottom() { nSubPriority = 0xff; }
 
 	int getSubPriority() { return nSubPriority; }
 	void setSubPriority( int val = 0xff ) { nSubPriority = val; }
