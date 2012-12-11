@@ -180,16 +180,16 @@ bool NDNpcLogic::GetTaskListByNpc( ID_VEC& idVec )
 	if(idlist->empty())
 	{
 		ScriptDBObj.GetIdList("task_npc", *idlist);
+	}
 
-		for(ID_VEC::iterator it = idlist->begin(); it!= idlist->end(); it++)
+	for(ID_VEC::iterator it = idlist->begin(); it!= idlist->end(); it++)
+	{
+		int nNpcId = ScriptDBObj.GetN("task_npc", *it, NPC_ID); 
+		if(nNpcId == Owner->m_nID )
 		{
-			int nNpcId = ScriptDBObj.GetN("task_npc", *it, NPC_ID); 
-			if(nNpcId == Owner->m_nID )
-			{
-				int nTaskId = ScriptDBObj.GetN("task_npc", *it, TASK_ID); 
-				idVec.push_back(nTaskId);
-			}        
-		}
+			int nTaskId = ScriptDBObj.GetN("task_npc", *it, TASK_ID); 
+			idVec.push_back(nTaskId);
+		}        
 	}
 	
 	return !idVec.empty();
