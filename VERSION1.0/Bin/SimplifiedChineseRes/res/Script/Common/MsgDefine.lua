@@ -172,12 +172,18 @@ NMSG_Type =
     _MSG_ACHIEVEMENT_INFO_LIST = _MSG_GENERAL + 6025,  --大话兵法中兵法状态改变信息
     _MSG_ACHIEVEMENT_GET_PRIZE = _MSG_GENERAL + 6026,  --大话兵法中获取成就奖励信息
     
+    _MSG_VIEW_PLAYER                    =   _MSG_GENERAL + 6035,        --主城查看其它玩家列表
+    _MSG_BATTLEUI_TITLE					= _MSG_GENERAL + 6036,	--战斗TITLE消息
+
+    _MSG_BANQUET						= _MSG_GENERAL+6050,	--宴会
+    
     _MSG_PLAYER_ACTION_INFO            =   _MSG_GENERAL + 7001,              --活动信息
     _MSG_PLAYER_ACTION_OPERATE   =   _MSG_GENERAL + 7002,               --活动操作
-    _MSG_VIEW_PLAYER                    =   _MSG_GENERAL + 6035,        --主城查看其它玩家列表
+
     _MSG_BATTLE_ENCOURAGE   =   _MSG_GENERAL + 7004,                    --鼓舞
 
 
+	--==================大乱斗=====================--
     _MSG_CHAOSBATTLE_BOARD				= _MSG_GENERAL+8000,	--大乱斗活动板信息
     _MSG_CHAOSBATTLE_ADDREPORT			= _MSG_GENERAL+8001,	--增加战报
     _MSG_CHAOSBATTLE_CAMPLIST			= _MSG_GENERAL+8002,	--阵营列表
@@ -186,10 +192,23 @@ NMSG_Type =
     _MSG_CHAOSBATTLE_RANKBOARD			= _MSG_GENERAL+8005,	--排行榜
     _MSG_CHAOSBATTLE_USERREPORT         = _MSG_GENERAL+8006,	--个人战报
     _MSG_CHAOSBATTLE_UPDATEPLAYERINFO	= _MSG_GENERAL+8007,	--更新玩家信息
-    
     _MSG_CHAOSBATTLE_ACTION             = _MSG_GENERAL+8050,	--大乱斗操作
     _MSG_CHAOSBATTLE_ACTION_RET         = _MSG_GENERAL+8051,	--大乱斗操作返回
 
+
+	--==================军团战=====================--
+    _MSG_SYNDICATEBATTLE_ACTION         = _MSG_GENERAL+8100,    --军团战动作
+    _MSG_SYNDICATEBATTLE_ACTION_RET     = _MSG_GENERAL+8101,    --军团战动作返回
+    _MSG_SYNDICATEBATTLE_SIGNUP_INFO    = _MSG_GENERAL+8102,    --军团战报名信息
+    _MSG_SYNDICATEBATTLE_STEPS_INFO     = _MSG_GENERAL+8103,    --各个阶段战况
+    _MSG_SYNDICATEBATTLE_BATTLE_RESULT  = _MSG_GENERAL+8104,    --具体对战结果
+    _MSG_SYNDICATEBATTLE_CAMP_LIST      = _MSG_GENERAL+8105,    --阵营列表
+    _MSG_SYNDICATEBATTLE_CHANGE_CAMP    = _MSG_GENERAL+8106,    --阵营列表改变
+    _MSG_SYNDICATEBATTLE_BATTLE_OVER    = _MSG_GENERAL+8107,    --一场对战结束
+    _MSG_SYNDICATEBATTLE_REPORT         = _MSG_GENERAL+8108,    --对战战报
+    _MSG_SYNDICATEBATTLE_PLAYERINFO     = _MSG_GENERAL+8109,    --玩家信息
+    
+    
 
     _MSG_PLAYER_ACTION_LIST   =   _MSG_GENERAL + 7003,               --下发活动列表
         

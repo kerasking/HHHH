@@ -50,7 +50,7 @@ int GetGameDataIdList(LuaState* state)
 	ID_VEC idVec;
 
 #if WITH_NEW_DB
-	NDGameDataUtil::Util::getDataIdList( 
+	NDGameDataUtil::getDataIdList( 
 		MAKE_NDTABLEPTR(
 					scriptdata.GetInteger(), 
 					key.GetInteger(), 
@@ -156,7 +156,7 @@ void SetGameDataN(int esd, unsigned int nKey, int e,  int nId, unsigned short in
 {
 #if WITH_NEW_DB
 	ModifyParam(esd,nKey,e);
-	NDGameDataUtil::Util::setDataN( MAKE_NDTABLEPTR( esd, nKey, e), 
+	NDGameDataUtil::setDataN( MAKE_NDTABLEPTR( esd, nKey, e), 
 									MAKE_CELLPTR( nId, index ), dVal );
 #else
 	return ScriptGameDataObj.SetData((eScriptData)esd, nKey, (eRoleData)e, nId, index, dVal);
@@ -167,7 +167,7 @@ void SetGameDataF(int esd, unsigned int nKey, int e,  int nId, unsigned short in
 {
 #if WITH_NEW_DB
 	ModifyParam(esd,nKey,e);
-	NDGameDataUtil::Util::setDataF( MAKE_NDTABLEPTR( esd, nKey, e), 
+	NDGameDataUtil::setDataF( MAKE_NDTABLEPTR( esd, nKey, e), 
 									MAKE_CELLPTR( nId, index ), fVal );
 #else
 	return ScriptGameDataObj.SetData((eScriptData)esd, nKey, (eRoleData)e, nId, index, fVal);
@@ -178,7 +178,7 @@ void SetGameDataS(int esd, unsigned int nKey, int e,  int nId, unsigned short in
 {
 #if WITH_NEW_DB
 	ModifyParam(esd,nKey,e);
-	NDGameDataUtil::Util::setDataS( MAKE_NDTABLEPTR( esd, nKey, e ), 
+	NDGameDataUtil::setDataS( MAKE_NDTABLEPTR( esd, nKey, e ), 
 									MAKE_CELLPTR( nId, index ), szVal );
 #else
 	return ScriptGameDataObj.SetData((eScriptData)esd, nKey, (eRoleData)e, nId, index, szVal);
@@ -189,7 +189,7 @@ double GetGameDataN(int esd, unsigned int nKey, int e,  int nId, unsigned short 
 {
 #if WITH_NEW_DB
 	ModifyParam(esd,nKey,e);
-	return NDGameDataUtil::Util::getDataN( MAKE_NDTABLEPTR( esd, nKey, e ), 
+	return NDGameDataUtil::getDataN( MAKE_NDTABLEPTR( esd, nKey, e ), 
 											MAKE_CELLPTR( nId, index ));
 #else
 	double ulVal = ScriptGameDataObj.GetData<double>((eScriptData)esd, nKey, (eRoleData)e, nId, index);
@@ -201,7 +201,7 @@ double GetGameDataF(int esd, unsigned int nKey, int e,  int nId, unsigned short 
 {
 #if WITH_NEW_DB
 	ModifyParam(esd,nKey,e);
-	return NDGameDataUtil::Util::getDataF( MAKE_NDTABLEPTR( esd, nKey, e ), 
+	return NDGameDataUtil::getDataF( MAKE_NDTABLEPTR( esd, nKey, e ), 
 											MAKE_CELLPTR( nId, index ));
 #else
 	float fVal = ScriptGameDataObj.GetData<double>((eScriptData)esd, nKey, (eRoleData)e, nId, index);
@@ -213,7 +213,7 @@ std::string GetGameDataS(int esd, unsigned int nKey, int e,  int nId, unsigned s
 {
 #if WITH_NEW_DB
 	ModifyParam(esd,nKey,e);
-	return NDGameDataUtil::Util::getDataS( MAKE_NDTABLEPTR( esd, nKey, e ), 
+	return NDGameDataUtil::getDataS( MAKE_NDTABLEPTR( esd, nKey, e ), 
 											MAKE_CELLPTR( nId, index ));
 #else
 	std::string strVal = ScriptGameDataObj.GetData<std::string>((eScriptData)esd, nKey, (eRoleData)e, nId, index);
@@ -225,7 +225,7 @@ std::string GetGameDataS(int esd, unsigned int nKey, int e,  int nId, unsigned s
 void DelRoleSubGameDataById(int esd, unsigned int nKey, int e, int nId)
 {
 #if WITH_NEW_DB
-	NDGameDataUtil::Util::delRecordById( MAKE_NDTABLEPTR(esd, nKey, e), nId );
+	NDGameDataUtil::delRecordById( MAKE_NDTABLEPTR(esd, nKey, e), nId );
 #else
 	ScriptGameDataObj.DelData((eScriptData)esd, nKey, (eRoleData)e, nId);
 #endif
@@ -235,7 +235,7 @@ void DelRoleSubGameDataById(int esd, unsigned int nKey, int e, int nId)
 void DelRoleSubGameData(int esd, unsigned int nKey, int e)
 {
 #if WITH_NEW_DB
-	NDGameDataUtil::Util::delTable( MAKE_NDTABLEPTR(esd, nKey, e));
+	NDGameDataUtil::delTable( MAKE_NDTABLEPTR(esd, nKey, e));
 #else
 	ScriptGameDataObj.DelData((eScriptData)esd, nKey, (eRoleData)e);
 #endif
@@ -245,7 +245,7 @@ void DelRoleSubGameData(int esd, unsigned int nKey, int e)
 void DelRoleGameDataById(int esd, unsigned int nKey)
 {
 #if WITH_NEW_DB
-	NDGameDataUtil::Util::delTableSet( (DATATYPE_MAJOR)esd, nKey );
+	NDGameDataUtil::delTableSet( (DATATYPE_MAJOR)esd, nKey );
 #else
 	ScriptGameDataObj.DelData((eScriptData)esd, nKey);
 #endif
@@ -255,7 +255,7 @@ void DelRoleGameDataById(int esd, unsigned int nKey)
 void DelRoleGameData(int esd)
 {
 #if WITH_NEW_DB
-	NDGameDataUtil::Util::delTableSetGroup( (DATATYPE_MAJOR)esd );
+	NDGameDataUtil::delTableSetGroup( (DATATYPE_MAJOR)esd );
 #else
 	ScriptGameDataObj.DelData((eScriptData)esd);
 #endif
@@ -265,7 +265,7 @@ void DelRoleGameData(int esd)
 void DelGameData()
 {
 #if WITH_NEW_DB
-	NDGameDataUtil::Util::destroyAll();
+	NDGameDataUtil::destroyAll();
 #else
 	ScriptGameDataObj.DelAllData();
 #endif
@@ -338,7 +338,7 @@ int GetRoleDataIdTable(LuaState* state)
 	ID_VEC idVec;
 
 #if WITH_NEW_DB
-	NDGameDataUtil::Util::getRoleDataIdList( MAKE_NDTABLEPTR(esd.GetInteger(),nKey.GetInteger(),e.GetInteger()), 
+	NDGameDataUtil::getRoleDataIdList( MAKE_NDTABLEPTR(esd.GetInteger(),nKey.GetInteger(),e.GetInteger()), 
 					nRoleId.GetInteger(),(eIDList)eList.GetInteger(), idVec);
 #else
 	ScriptGameDataObj.GetRoleDataIdList((eScriptData)esd.GetInteger(), 
@@ -360,7 +360,7 @@ int GetRoleDataIdTable(LuaState* state)
 void AddRoleDataId(int esd, unsigned int nKey, int e, int nRoleId, int eList, int nId)
 {
 #if WITH_NEW_DB
-	NDGameDataUtil::Util::addRoleDataId( MAKE_NDTABLEPTR(esd,nKey,e), 
+	NDGameDataUtil::addRoleDataId( MAKE_NDTABLEPTR(esd,nKey,e), 
 											nRoleId, eList, nId );
 #else
 	ScriptGameDataObj.PushRoleDataId((eScriptData)esd, nKey, (eRoleData)e, nRoleId, (eIDList)eList, nId);
@@ -370,7 +370,7 @@ void AddRoleDataId(int esd, unsigned int nKey, int e, int nRoleId, int eList, in
 void DelRoleDataId(int esd, unsigned int nKey, int e, int nRoleId, int eList, int nId)
 {
 #if WITH_NEW_DB
-	NDGameDataUtil::Util::delRoleDataId( MAKE_NDTABLEPTR(esd,nKey,e), 
+	NDGameDataUtil::delRoleDataId( MAKE_NDTABLEPTR(esd,nKey,e), 
 											nRoleId, eList, nId );
 #else
 	ScriptGameDataObj.PopRoleDataId((eScriptData)esd, nKey, (eRoleData)e, nRoleId, (eIDList)eList, nId);
@@ -380,7 +380,7 @@ void DelRoleDataId(int esd, unsigned int nKey, int e, int nRoleId, int eList, in
 void DelRoleDataIdList(int esd, unsigned int nKey, int e, int nRoleId, int eList)
 {
 #if WITH_NEW_DB
-	NDGameDataUtil::Util::delRoleDataIdList( MAKE_NDTABLEPTR(esd,nKey,e), 
+	NDGameDataUtil::delRoleDataIdList( MAKE_NDTABLEPTR(esd,nKey,e), 
 												nRoleId, eList );
 #else
 	ScriptGameDataObj.DelRoleDataIdList((eScriptData)esd, nKey, (eRoleData)e, nRoleId, (eIDList)eList);

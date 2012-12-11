@@ -27,20 +27,47 @@ local ID_LABEL_RANKING				= 10;	-- 军团排名签ID
 local ID_LABEL_MEMBER				= 11;	-- 军团人数标签ID
 local ID_LABEL_EXP					= 12;	-- 军团经验标签ID
 local ID_LABEL_NOTICE				= 21;	-- 军团公告标签ID
-local ID_LIST_MEMBER				= 28;	-- 成员列表控件ID
 local ID_BTN_QUIT					= 13;	-- 退出按钮ID
 local ID_BTN_EDIT					= 22;	-- 修改公告按钮ID
-local ID_BTN_STATION				= 24;	-- 军团驻地按钮ID
 local ID_LABEL_JOB					= 51;	-- “你的职务”标签
 local ID_LABEL_POSITION				= 52;	-- 军团内职务名标签
+--物品栏按钮
+local ID_BTN_ITEM_01				= 62;	-- 物品栏1
+local ID_BTN_ITEM_02				= 38;	-- 物品栏2
+local ID_BTN_ITEM_03				= 39;	-- 物品栏3
+local ID_BTN_ITEM_04				= 40;	-- 物品栏4
+local ID_BTN_ITEM_05				= 41;	-- 物品栏5
+local ID_BTN_ITEM_06				= 42;	-- 物品栏6
+local ID_BTN_ITEM_07				= 43;	-- 物品栏7
+local ID_BTN_ITEM_08				= 44;	-- 物品栏8
+
+local tItemBtnList = {
+	ID_BTN_ITEM_01,
+	ID_BTN_ITEM_02,
+	ID_BTN_ITEM_03,
+	ID_BTN_ITEM_04,
+	ID_BTN_ITEM_05,
+	ID_BTN_ITEM_06,
+	ID_BTN_ITEM_07,
+	ID_BTN_ITEM_08,
+};
+
+---------------------------------------------------
+-- 选择成员（分配奖励）界面控件ID
+local ID_BTN_CM_CLOSE				= 49;	-- X
+local ID_LIST_CM_MEMBER				= 50;	-- 成员列表控件
+
+local ID_LABEL_CM_NAME				= 79;	-- 成员名字
+local ID_LABEL_CM_CONTRIBUTE		= 84;	-- 成员贡献度
+local ID_BTN_CM_TOUCH				= 4;	-- 按钮
 
 ---------------------------------------------------
 -- 成员列表项的控件ID
-local ID_PIC_MEMBER_BORDER			= 1;	-- 高亮背景，当边框
-local ID_LABEL_MEMBER_NAME			= 3;	-- 成员名字
-local ID_LABEL_MEMBER_LEVEL			= 4;	-- 成员等级
-local ID_LABEL_MEMBER_CONTRIBUTE	= 5;	-- 成员贡献
-local ID_BTN_MEMBER_TOUCH			= 6;	-- 按钮
+--local ID_PIC_MEMBER_BORDER			= 1;	-- 高亮背景，当边框
+--local ID_LABEL_MEMBER_NAME			= 3;	-- 成员名字
+--local ID_LABEL_MEMBER_LEVEL			= 4;	-- 成员等级
+--local ID_LABEL_MEMBER_CONTRIBUTE	= 5;	-- 成员贡献
+--local ID_BTN_MEMBER_TOUCH			= 6;	-- 按钮
 
 ---------------------------------------------------
 -- 编辑公告窗口的控件ID
@@ -50,9 +77,16 @@ local ID_EDITNOTICEEDLG_BTN_EDIT			= 104;	-- 编辑框
 
 ---------------------------------------------------
 local AG_NOTICE_CHA_LIMIT				= 60;	-- 公告文字的字数限制
+local CONTRIBUTE_LIMIT					= 200000;-- 分配时成员贡献度需求
 
 local SZ_QUIT_ER						= "身为军团长，你的军团还有其他成员，不可擅自退出……";
 local SZ_QUIT_00						= "决定退出该军团？退出军团，所有的贡献信息都将归零……";
+local SZ_ER_01			= "不在线，不可分配哦";
+local SZ_ER_02			= "数量超过可分配数额";
+local SZ_ER_03			= "贡献度不足，不可分配";
+
+local TAG_ITEM_COUNT					= 34567;	--物品按钮里数量标签的TAG
+
 
 ---------------------------------------------------
 p.pLayerMainUI			= nil;
@@ -67,6 +101,10 @@ p.pBtnAGList			= nil;
 p.pChosenListItem		= nil;
 p.nArmyGroupID			= nil;	-- 当前界面查看的军团ID
 p.pLayerEditNotice		= nil;
+p.pLayerChooseMember	= nil;
+p.tStorage				= nil;	-- 军团仓库--{ nItemType, nNum }...
+p.nOrdinalChosenItem	= nil;	-- 仓库中选中的物品序号
+p.tChosenMember			= nil;	-- 选中给与物品的成员
 
 ---------------------------------------------------
 -- 进入
@@ -97,6 +135,10 @@ p.pBtnAGList			= nil;
 p.pChosenListItem		= nil;
 p.nArmyGroupID			= nil;
 p.pLayerEditNotice		= nil;
+p.pLayerChooseMember	= nil;
+p.tStorage				= nil;
+p.nOrdinalChosenItem	= nil;
+p.tChosenMember			= nil;
 	if ( nArmyGroupID == nil ) then
 		return false;
 	end
@@ -112,8 +154,6 @@ p.pLayerEditNotice		= nil;
 		LogInfo( "ArmyGroup: ShowArmyGroupMainUI failed! layer is nil" );
 		return false;
 	end
-	
-	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag( NMAINSCENECHILDTAG.ArmyGroup );
 	layer:SetFrameRect( RectFullScreenUILayer );
@@ -151,6 +191,7 @@ p.pLayerEditNotice		= nil;
 	MsgArmyGroup.SendMsgGetArmyGroupInformation( p.nArmyGroupID );
 	MsgArmyGroup.SendMsgGetArmyGroupMemberList( p.nArmyGroupID );
 	MsgArmyGroup.SendMsgGetArmyGroupApplicantList( p.nArmyGroupID );
+	MsgArmyGroup.SendMsgGetStorage( p.nArmyGroupID );
 end
 
 --
@@ -170,6 +211,10 @@ p.pBtnAGList			= nil;
 p.pChosenListItem		= nil;
 p.nArmyGroupID			= nil;
 p.pLayerEditNotice		= nil;
+p.pLayerChooseMember	= nil;
+p.tStorage				= nil;
+p.nOrdinalChosenItem	= nil;
+p.tChosenMember			= nil;
 	end
 end
 
@@ -277,11 +322,6 @@ function p.CreateArmyGroupInformationUI( pParentLayer )
 	uiLoad:Load( "ArmyGroup/ArmyGroupUI_Information.ini", layer, p.OnUIEventInformation, 0, 0 );
 	uiLoad:Free();
 	p.pLayerInformation = layer;
-	-- 隐藏
-	local pBtnStation = GetButton( layer, ID_BTN_STATION );
-	if ( pBtnStation ~= nil ) then
-		pBtnStation:SetVisible( false );
-	end
 	local pBtnQuit	= GetButton( layer, ID_BTN_QUIT );
 	local pBtnEdit	= GetButton( layer, ID_BTN_EDIT );
 	local pLabelJob	= GetLabel( layer, ID_LABEL_JOB );
@@ -303,11 +343,9 @@ function p.CreateArmyGroupInformationUI( pParentLayer )
 		local szPosition = MsgArmyGroup.GetPositionString( nPosition );
 		pLabelPosition:SetText( szPosition );
 	end
-	
-	--local tArmyGroupInformation = MsgArmyGroup.GetArmyGroupInformation( p.nArmyGroupID );
-	--p.FillInformation( layer, tArmyGroupInformation );
-	--local tArmyGroupMemberList = MsgArmyGroup.GetArmyGroupMemberList( p.nArmyGroupID );
-	--p.FillMemberList( layer, tArmyGroupMemberList )
+	-- 测试
+	--local tStorage = MsgArmyGroup.GetArmyGroupStorage( p.nArmyGroupID );
+	--p.RefreshStorage( tStorage );
 end
 
 ---------------------------------------------------
@@ -360,97 +398,12 @@ function p.RefreshInformation( tArmyGroupInformation )
 end
 
 ---------------------------------------------------
--- 填充成员列表
-function p.FillMemberList( pLayer, tArmyGroupMemberList )
-	if ( pLayer == nil ) then
-		LogInfo( "ArmyGroup: FillMemberList() failed! pLayer is nil" );
-		return false;
-	end
-	
-	local layer = createNDUILayer();
-	layer:Init();
-	local uiLoad=createNDUILoad();
-	uiLoad:Load( "ArmyGroup/ArmyGroupUI_MemberListItem0.ini", layer, nil, 0, 0 );
-	uiLoad:Free();
-	local pBorder = GetImage( layer, ID_PIC_MEMBER_BORDER );
-	local tSize = pBorder:GetFrameRect().size;
-	layer:Free();
-    
-	-- 获得滚屏容器
-	local pScrollViewContainer = GetScrollViewContainer( pLayer, ID_LIST_MEMBER );
-	if ( nil == pScrollViewContainer ) then
-		LogInfo( "ArmyGroup: FillMemberList() failed! pScrollViewContainer is nil" );
-		return false;
-	end
-    pScrollViewContainer:EnableScrollBar(true);
-	pScrollViewContainer:SetStyle( UIScrollStyle.Verical );
-	pScrollViewContainer:SetViewSize( tSize );
-	pScrollViewContainer:RemoveAllView();
-	
-	if ( tArmyGroupMemberList == nil ) then
-		LogInfo( "ArmyGroup: FillMemberList() failed! tArmyGroupMemberList is nil" );
-		return false;
-	end
-	
-	local nMemberAmount = table.getn( tArmyGroupMemberList );
-	if ( nMemberAmount == 0 ) then
-		LogInfo( "ArmyGroup: FillMemberList() failed! nMemberAmount is 0" );
-		return false;
-	end
-	local nUserID	= GetPlayerId();
-	for i = 1, nMemberAmount do
-		local pListItem = createUIScrollView();
-	
-		if not CheckP( pListItem ) then
-			LogInfo( "ArmyGroup: pListItem == nil" );
-			return false;
-		end
-	
-		pListItem:SetPopupDlgFlag(true);
-		pListItem:Init( false );
-		pListItem:bringToTop();
-		pListItem:SetScrollStyle( UIScrollStyle.Verical );
-		pListItem:SetViewId( i );
-		pListItem:SetTag( i );
-		pScrollViewContainer:AddView( pListItem );
-	
-		--初始化ui
-		local uiLoad = createNDUILoad();
-		if not CheckP(uiLoad) then
-			LogInfo( "ArmyGroup: FillMemberList failed! uiLoad is nil" );
-			return false;
-		end
-		uiLoad:Load( "ArmyGroup/ArmyGroupUI_MemberListItem0.ini", pListItem, p.OnUIEventMemberListItem, 0, 0 );
-		uiLoad:Free();
-		
-		local pLabelName		= GetLabel( pListItem, ID_LABEL_MEMBER_NAME );
-		local pLabelLevel		= GetLabel( pListItem, ID_LABEL_MEMBER_LEVEL );
-		local pLabelContribute	= GetLabel( pListItem, ID_LABEL_MEMBER_CONTRIBUTE );
-		pLabelName:SetText( tArmyGroupMemberList[i][ArmyGroupMemberIndex.AGMI_NAME] );
-		pLabelLevel:SetText( SafeN2S(tArmyGroupMemberList[i][ArmyGroupMemberIndex.AGMI_LEVEL]) );
-		pLabelContribute:SetText( SafeN2S(tArmyGroupMemberList[i][ArmyGroupMemberIndex.AGMI_CONTTOTAL]+tArmyGroupMemberList[i][ArmyGroupMemberIndex.AGMI_REPUTTOTAL]) );
-		local pBorder = GetImage( pListItem, ID_PIC_MEMBER_BORDER );
-		pBorder:SetVisible(false);
-		if ( nUserID == tArmyGroupMemberList[i][ArmyGroupMemberIndex.AGMI_USERID] ) then
-			pLabelName:SetFontColor( MsgArmyGroup.COLOR_YELLOW );
-			pLabelLevel:SetFontColor( MsgArmyGroup.COLOR_YELLOW );
-			pLabelContribute:SetFontColor( MsgArmyGroup.COLOR_YELLOW );
-		elseif ( tArmyGroupMemberList[i][ArmyGroupMemberIndex.AGMI_ISONLINE] == 0 ) then
-			pLabelName:SetFontColor( MsgArmyGroup.COLOR_GRAY );
-			pLabelLevel:SetFontColor( MsgArmyGroup.COLOR_GRAY );
-			pLabelContribute:SetFontColor( MsgArmyGroup.COLOR_GRAY );
-		end
-	end
-	return true;
-end
-
----------------------------------------------------
 -- 刷新成员列表
 function p.RefreshMemberlist( tArmyGroupMemberList, nArmyGroupID )
-	if ( p.pLayerInformation == nil ) then
-		LogInfo( "ArmyGroup: RefreshMemberlist failed! p.pLayerInformation is nil" );
-		return false;
-	end
+	--if ( p.pLayerInformation == nil ) then
+	--	LogInfo( "ArmyGroup: RefreshMemberlist failed! p.pLayerInformation is nil" );
+	--	return false;
+	--end
 	if ( tArmyGroupMemberList == nil ) then
 		LogInfo( "ArmyGroup: RefreshMemberlist failed! tArmyGroupMemberList is nil" );
 		return false;
@@ -462,7 +415,9 @@ function p.RefreshMemberlist( tArmyGroupMemberList, nArmyGroupID )
 	
 	if ( nArmyGroupID == p.nArmyGroupID ) then
 		Member.RefreshMemberlist( tArmyGroupMemberList );
-		p.FillMemberList( p.pLayerInformation, tArmyGroupMemberList );
+		if ( p.pLayerChooseMember ~= nil ) then
+			p.FillMemberListOnChooseMemberPanel( p.pLayerChooseMember, tArmyGroupMemberList );
+		end
 	end
 	if ( p.pLayerAGList:IsVisibled() ) then
 		return ArmyGroupInfor.RefreshMemberlist( tArmyGroupMemberList );
@@ -471,37 +426,13 @@ end
 
 
 ---------------------------------------------------
--- “军团信息”界面的成员列表项的事件响应
-function p.OnUIEventMemberListItem( uiNode, uiEventType, param )
-	local tag = uiNode:GetTag();
-	if ( uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK ) then
-        if ( ID_BTN_MEMBER_TOUCH == tag ) then
-        	if ( p.pChosenListItem ~= nil ) then
-        		local pPicHighLight = GetImage( p.pChosenListItem, ID_PIC_MEMBER_BORDER );
-				pPicHighLight:SetVisible(false);
-        	end
-        	p.pChosenListItem = uiNode:GetParent();
-        	local pPicHighLight = GetImage( p.pChosenListItem, ID_PIC_MEMBER_BORDER );
-			pPicHighLight:SetVisible(true);
-			--
-			local nIndex		= uiNode:GetParent():GetTag();
-			local tMemberList	= MsgArmyGroup.GetArmyGroupMemberList( p.nArmyGroupID );
-			local tMember		= tMemberList[nIndex];
-			HadleMember.CreateHandleMemberDlg( p.pLayerMainUI, p.nArmyGroupID, tMember );
-        end
-    end
-    return true;
-end
-
-
----------------------------------------------------
 -- “军团信息”界面的事件响应
 function p.OnUIEventInformation( uiNode, uiEventType, param )
 	local tag = uiNode:GetTag();
+	local nUserID	= GetPlayerId();
+	local nPosition	= MsgArmyGroup.GetUserArmyGroupPosition( nUserID );
 	if ( uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK ) then
         if ( ID_BTN_QUIT == tag ) then
-        	local nUserID	= GetPlayerId();
-			local nPosition	= MsgArmyGroup.GetUserArmyGroupPosition( nUserID );
 			if ( nPosition == ArmyGroupPositionGrade.AGPG_LEGATUS ) then
 				local nAGID 	= MsgArmyGroup.GetUserArmyGroupID( nUserID );
 				local tAGInfor	= MsgArmyGroup.GetArmyGroupInformation( nAGID );
@@ -514,7 +445,38 @@ function p.OnUIEventInformation( uiNode, uiEventType, param )
 		elseif ( ID_BTN_EDIT == tag ) then
 			local pLayer = uiNode:GetParent():GetParent();
 			p.CreateEditNoticeDlg( pLayer );
-		elseif ( ID_BTN_STATION == tag ) then
+		elseif ( ID_BTN_ITEM_01 == tag ) then
+			if ( nPosition == ArmyGroupPositionGrade.AGPG_LEGATUS ) then
+				p.ShowChooseMemberPanel( 1 );--
+			end
+		elseif ( ID_BTN_ITEM_02 == tag ) then
+			if ( nPosition == ArmyGroupPositionGrade.AGPG_LEGATUS ) then
+				p.ShowChooseMemberPanel( 2 );--
+			end
+		elseif ( ID_BTN_ITEM_03 == tag ) then
+			if ( nPosition == ArmyGroupPositionGrade.AGPG_LEGATUS ) then
+				p.ShowChooseMemberPanel( 3 );--
+			end
+		elseif ( ID_BTN_ITEM_04 == tag ) then
+			if ( nPosition == ArmyGroupPositionGrade.AGPG_LEGATUS ) then
+				p.ShowChooseMemberPanel( 4 );--
+			end
+		elseif ( ID_BTN_ITEM_05 == tag ) then
+			if ( nPosition == ArmyGroupPositionGrade.AGPG_LEGATUS ) then
+				p.ShowChooseMemberPanel( 5 );--
+			end
+		elseif ( ID_BTN_ITEM_06 == tag ) then
+			if ( nPosition == ArmyGroupPositionGrade.AGPG_LEGATUS ) then
+				p.ShowChooseMemberPanel( 6 );--
+			end
+		elseif ( ID_BTN_ITEM_07 == tag ) then
+			if ( nPosition == ArmyGroupPositionGrade.AGPG_LEGATUS ) then
+				p.ShowChooseMemberPanel( 7 );--
+			end
+		elseif ( ID_BTN_ITEM_08 == tag ) then
+			if ( nPosition == ArmyGroupPositionGrade.AGPG_LEGATUS ) then
+				p.ShowChooseMemberPanel( 8 );--
+			end
         end
     end
     return true;
@@ -522,7 +484,7 @@ end
 
 ---------------------------------------------------
 --
-function p.CallBack_Quit(nEvent, param )
+function p.CallBack_Quit( nEvent, param )
 	if ( CommonDlgNew.BtnOk == nEvent ) then
 		-- 发送退出军团消息
 		MsgArmyGroup.SendMsgQuit();
@@ -537,8 +499,6 @@ function p.CreateArmyGroupMemberUI( pParentLayer )
 		LogInfo( "ArmyGroup: ShowArmyGroupMemberUI failed! layer is nil" );
 		return false;
 	end
-	
-	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	--layer:SetTag( NMAINSCENECHILDTAG.ArmyGroup );
 	layer:SetFrameRect( RectFullScreenUILayer );
@@ -707,3 +667,286 @@ function p.RefreshAGUpgrade( tNetDataPackete )
 end
 
 
+---------------------------------------------------
+-- 刷新军团仓库
+function p.RefreshStorage( tStorage )
+	if ( p.pLayerInformation == nil ) then
+		return;
+	end
+	for i = 1, table.getn( tItemBtnList ) do
+		local pBtn = GetButton( p.pLayerInformation, tItemBtnList[i] );
+		p.ClearButton( pBtn );
+	end
+	p.tStorage = tStorage;
+	if ( p.tStorage == nil ) then
+		return;
+	end
+	local nItemAmount = table.getn( tStorage );
+	if ( nItemAmount == 0 ) then
+		return;
+	end
+	LogInfo( "ArmyGroup: RefreshStorage:"..nItemAmount );
+	if ( nItemAmount > table.getn( tItemBtnList ) ) then
+		nItemAmount = table.getn( tItemBtnList );
+	end
+	for i = 1, nItemAmount do
+		local pBtn		= GetButton( p.pLayerInformation, tItemBtnList[i] );
+		local nItemType	= p.tStorage[i][1];
+		local nAmount	= p.tStorage[i][2];
+		p.ShowItemButton( pBtn, nItemType, nAmount );
+	end
+end
+
+
+---------------------------------------------------
+-- 显示选择成员面板（分配奖励的）
+function p.ShowChooseMemberPanel( nOrdinal )
+	if ( p.pLayerMainUI == nil ) then
+		return false;
+	end
+	if ( p.tStorage == nil or nOrdinal == nil ) then
+		return false;
+	end
+	if ( nOrdinal < 1 or nOrdinal > table.getn( p.tStorage ) ) then
+		return false;
+	end
+	local layer = createNDUILayer();
+	if not CheckP(layer) then
+		LogInfo( "ArmyGroup: ShowChooseMemberPanel failed! layer is nil" );
+		return false;
+	end
+	layer:Init();
+	layer:SetTag( NMAINSCENECHILDTAG.ArmyGroup );
+	layer:SetFrameRect( RectFullScreenUILayer );
+	p.pLayerMainUI:AddChildZ( layer, 2 );
+
+	local uiLoad = createNDUILoad();
+	if ( nil == uiLoad ) then
+		layer:Free();
+		LogInfo( "ArmyGroup: ShowChooseMemberPanel failed! uiLoad is nil" );
+		return false;
+	end
+	uiLoad:Load( "ArmyGroup/ArmyGroupUI_ChooseMember.ini", layer, p.OnUIEventChooseMemberPanel, 0, 0 );
+	uiLoad:Free();
+	p.pLayerChooseMember	= layer;
+	p.nOrdinalChosenItem	= nOrdinal;
+	
+	local tMemberList		= MsgArmyGroup.GetArmyGroupMemberList( p.nArmyGroupID );
+	p.FillMemberListOnChooseMemberPanel( layer, tMemberList );
+	return true;
+end
+
+---------------------------------------------------
+-- 关闭选择成员面板
+function p.CloseChooseMemberPanel()
+	if ( p.pLayerChooseMember ~= nil ) then
+		p.pLayerChooseMember:RemoveFromParent( true );
+	end
+	p.pLayerChooseMember	= nil;
+	p.nOrdinalChosenItem	= nil;
+end
+
+
+---------------------------------------------------
+-- 成员界面事件响应
+function p.OnUIEventChooseMemberPanel( uiNode, uiEventType, param )
+	local tag = uiNode:GetTag();
+	if ( uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK ) then
+        if ( ID_BTN_CM_CLOSE == tag ) then
+			p.CloseChooseMemberPanel();
+		end
+	end
+	return true;
+end
+
+
+---------------------------------------------------
+-- 填充成员列表
+function p.FillMemberListOnChooseMemberPanel( pLayer, tArmyGroupMemberList )
+	if ( pLayer == nil ) then
+		LogInfo( "ArmyGroup: FillMemberList() failed! pLayer is nil" );
+		return false;
+	end
+	
+	local layer = createNDUILayer();
+	layer:Init();
+	local uiLoad=createNDUILoad();
+	uiLoad:Load( "ArmyGroup/ArmyGroupUI_MemberListItem2.ini", layer, nil, 0, 0 );
+	uiLoad:Free();
+	local pBorder = GetUiNode( layer, ID_BTN_CM_TOUCH );
+	local tSize = pBorder:GetFrameRect().size;
+	layer:Free();
+    
+	-- 获得滚屏容器
+	local pScrollViewContainer = GetScrollViewContainer( pLayer, ID_LIST_CM_MEMBER );
+	if ( nil == pScrollViewContainer ) then
+		LogInfo( "ArmyGroup: FillMemberList() failed! pScrollViewContainer is nil" );
+		return false;
+	end
+    pScrollViewContainer:EnableScrollBar(true);
+	pScrollViewContainer:SetStyle( UIScrollStyle.Verical );
+	pScrollViewContainer:SetViewSize( tSize );
+	pScrollViewContainer:RemoveAllView();
+	
+	if ( tArmyGroupMemberList == nil ) then
+		LogInfo( "ArmyGroup: FillMemberListOnChooseMemberPanel() failed! tArmyGroupMemberList is nil" );
+		return false;
+	end
+	
+	local nMemberAmount = table.getn( tArmyGroupMemberList );
+	if ( nMemberAmount == 0 ) then
+		LogInfo( "ArmyGroup: FillMemberListOnChooseMemberPanel() failed! nMemberAmount is 0" );
+		return false;
+	end
+	local nUserID	= GetPlayerId();
+	for i = 1, nMemberAmount do
+		local pListItem = createUIScrollView();
+	
+		if not CheckP( pListItem ) then
+			LogInfo( "ArmyGroup: pListItem == nil" );
+			return false;
+		end
+	
+		pListItem:Init( false );
+		pListItem:SetScrollStyle( UIScrollStyle.Verical );
+		pListItem:SetViewId( i );
+		pListItem:SetTag( i );
+		pScrollViewContainer:AddView( pListItem );
+	
+		--初始化ui
+		local uiLoad = createNDUILoad();
+		if not CheckP(uiLoad) then
+			LogInfo( "ArmyGroup: FillMemberListOnChooseMemberPanel failed! uiLoad is nil" );
+			return false;
+		end
+		uiLoad:Load( "ArmyGroup/ArmyGroupUI_MemberListItem2.ini", pListItem, p.OnUIEventMemberListItem, 0, 0 );
+		uiLoad:Free();
+		
+		local pLabelName		= GetLabel( pListItem, ID_LABEL_CM_NAME );
+		local pLabelCont		= GetLabel( pListItem, ID_LABEL_CM_CONTRIBUTE );
+		pLabelName:SetText( tArmyGroupMemberList[i][ArmyGroupMemberIndex.AGMI_NAME] );
+		pLabelCont:SetText( SafeN2S(tArmyGroupMemberList[i][ArmyGroupMemberIndex.AGMI_REPUTTOTAL]) );
+		if ( nUserID == tArmyGroupMemberList[i][ArmyGroupMemberIndex.AGMI_USERID] ) then
+			pLabelName:SetFontColor( MsgArmyGroup.COLOR_YELLOW );
+			pLabelCont:SetFontColor( MsgArmyGroup.COLOR_YELLOW );
+		elseif ( tArmyGroupMemberList[i][ArmyGroupMemberIndex.AGMI_ISONLINE] == 0 ) then
+			pLabelName:SetFontColor( MsgArmyGroup.COLOR_GRAY );
+			pLabelCont:SetFontColor( MsgArmyGroup.COLOR_GRAY );
+		end
+	end
+	return true;
+end
+
+
+---------------------------------------------------
+-- “选择成员”界面的成员列表项的事件响应
+function p.OnUIEventMemberListItem( uiNode, uiEventType, param )
+	local tag = uiNode:GetTag();
+	if ( uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK ) then
+        if ( ID_BTN_CM_TOUCH == tag ) then
+        	local nOrdinal		= uiNode:GetParent():GetTag();
+			local tMemberList	= MsgArmyGroup.GetArmyGroupMemberList( p.nArmyGroupID );
+			local tMember		= tMemberList[nOrdinal];
+			local szMemberName	= tMember[ArmyGroupMemberIndex.AGMI_NAME];
+			if ( tMember[ArmyGroupMemberIndex.AGMI_ISONLINE] == 0 ) then
+				-- 不在线
+				CommonDlgNew.ShowYesDlg( szMemberName..SZ_ER_01, nil, nil, 3 );
+				return true;
+			end
+			if ( tMember[ArmyGroupMemberIndex.AGMI_REPUTTOTAL] < CONTRIBUTE_LIMIT ) then
+				-- 贡献度不足
+				CommonDlgNew.ShowYesDlg( szMemberName..SZ_ER_03, nil, nil, 3 );
+				return true;
+			end
+        	local nItemType		= p.tStorage[p.nOrdinalChosenItem][1];
+        	local nAmount		= p.tStorage[p.nOrdinalChosenItem][2];
+			local szItemName	= ItemFunc.GetName( nItemType );
+			p.tChosenMember		= tMember;
+        	--local nDlgTag = CommonDlgNew.ShowInputDlg( "将"..szItemName.."("..nAmount..")\n".."分发给"..szMemberName, p.CallBack_DlgInput, nil, 1, 2 );
+        	local nDlgTag = CommonDlgNew.ShowInputDlg( szItemName.."("..nAmount..")", p.CallBack_DlgInput, nil, 1, 2 );
+        end
+    end
+    return true;
+end
+--
+function p.CallBack_DlgInput( nEvent, Param, szVal )
+	if ( nEvent == CommonDlgNew.BtnOk ) then
+		local nVal		= SafeS2N( szVal );
+        local nAmount	= p.tStorage[p.nOrdinalChosenItem][2];
+        if ( nVal < 1 ) then
+    	else
+    		if ( nVal > nAmount ) then
+				CommonDlgNew.ShowYesDlg( SZ_ER_02, nil, nil, 3 );
+    		else
+				local nPlayerID	= p.tChosenMember[ArmyGroupMemberIndex.AGMI_USERID];
+				local nItemType	= p.tStorage[p.nOrdinalChosenItem][1];
+				local nAmount	= nVal;
+				MsgArmyGroup.SendMsgDelivery( nPlayerID, nItemType, nAmount )
+			end
+		end
+	end
+end
+
+---------------------------------------------------
+-- 分发成功回调
+function p.RefreshDelivery()
+	p.CloseChooseMemberPanel();
+end
+
+---------------------------------------------------
+-- 显示某按钮
+function p.ShowItemButton( pBtn, nItemType, nAmount )
+	if ( pBtn == nil or nItemType == nil or nAmount == nil ) then
+		return;
+	end
+	if ( nAmount == 0 ) then
+		p.ClearButton( pBtn );
+		return;
+	end
+	p.ChangeItemType( pBtn, nItemType );
+	p.ChangeItemCount( pBtn, nAmount );
+end
+
+-- 清除某按钮
+function p.ClearButton( pBtn )
+	if ( pBtn == nil ) then
+		return;
+	end
+	pBtn:SetImage( nil );
+	local pLabelItemCount = GetLabel( pBtn, TAG_ITEM_COUNT );
+	if ( pLabelItemCount ~= nil ) then
+		--pLabelItemCount:SetText( " " );
+		pLabelItemCount:RemoveFromParent( true );
+	end
+end
+
+-- 改变某按钮显示物品类型
+function p.ChangeItemType( pBtn, nItemType )
+	if ( pBtn == nil or nItemType == nil ) then
+		return;
+	end
+	local pPic = GetGoodsPic( nItemType );
+	if ( pPic ~= nil ) then
+		pBtn:SetImage( pPic );
+	end
+end
+
+-- 改变某按钮显示的物品数量
+function p.ChangeItemCount( pBtn, nItemCount )
+	if ( pBtn == nil or nItemCount == nil ) then
+		return;
+	end
+	local pLabelItemCount = GetLabel( pBtn, TAG_ITEM_COUNT );
+	if ( pLabelCont == nil ) then
+		local tRect = pBtn:GetFrameRect();
+		pLabelItemCount = createNDUILabel();
+		pLabelItemCount:Init();
+		pLabelItemCount:SetTag( TAG_ITEM_COUNT );
+		pLabelItemCount:SetFontSize( 14 );
+		pLabelItemCount:SetTextAlignment( UITextAlignment.Right );
+		pLabelItemCount:SetFontColor(ccc4(255, 204, 120, 255));
+		pLabelItemCount:SetFrameRect( CGRectMake( 0.125 * tRect.size.w, 0.5 * tRect.size.h, 0.75 * tRect.size.w, 0.333 * tRect.size.h) );
+		pBtn:AddChild(pLabelItemCount);
+	end
+	pLabelItemCount:SetText( SafeN2S( nItemCount ) );
+end

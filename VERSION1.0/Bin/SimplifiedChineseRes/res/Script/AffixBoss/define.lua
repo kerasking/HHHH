@@ -17,3 +17,5 @@ DoFile("AffixBoss/BattleFailUI.lua")
 DoFile("AffixBoss/FighterInfo.lua")
 --DoFile("AffixBoss/TranscriptLoad.lua")
 DoFile("AffixBoss/RaidersLoad.lua")
+
+DoFile("AffixBoss/BattleUI_Title.lua")

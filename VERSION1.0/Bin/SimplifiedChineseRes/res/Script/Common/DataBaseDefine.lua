@@ -1295,7 +1295,8 @@ DB_SPORTS_PRIZE=
 	REPUTE	    = 3,        --声望
     STAMINA    = 4,        --军令
     ITEM           = 5,        --物品
-    EMONEY    = 6        --金币 
+    ITEMCOUNT    = 6,      --物品类型
+    EMONEY    = 7        --金币 
 };
 
 DB_SPORTS_REPORT=

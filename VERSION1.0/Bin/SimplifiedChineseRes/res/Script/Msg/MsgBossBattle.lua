@@ -37,6 +37,7 @@ ACTIVITY_TYPE = {
     BOSS    = 1,    --boss战
     GRAIN   = 2,    --运粮
     CHAOS   = 3,    --大乱斗
+    SYNDICATE_BATTLE = 4,  --军团战
 };
 
 local BOSS_BATTLE_ACT = {
@@ -288,14 +289,18 @@ function p.ProcessEncourage( netdata )
     LogInfo( "MsgBossBattle.ProcessEncourage" );
     
     local bIsSuccess = netdata:ReadByte();
-    
-    if( bIsSuccess > 0 ) then
-        CommonDlgNew.ShowTipDlg("鼓舞成功，加一星！");
-    else
-        CommonDlgNew.ShowTipDlg("鼓舞失败，你什么好处也没得到。");
+
+    if( bIsSuccess == 1 ) then
+        CommonDlgNew.ShowTipsDlg({{"鼓舞成功，加一星！",ccc4(28,237,93,255)}});
+    elseif bIsSuccess == 0  then
+        CommonDlgNew.ShowTipsDlg({{"鼓舞失败，你什么好处也没得到。",ccc4(255,15,15,255)}});
+    elseif bIsSuccess == 2  then
+        CommonDlgNew.ShowTipsDlg({{"鼓舞失败，鼓舞等级已满。",ccc4(255,15,15,255)}});
     end
-    
 end
+
+
+
 
 
 function p.GetBossBattleMaxEncourageCount()
@@ -312,6 +317,24 @@ function p.GetBossBattleSilverCount()
     local nCount = GetDataBaseDataN("encourage_config",ENCOURAGE_TYPE.BOSSBATTLE,DB_ENCOURAGE_CONFIG.COST_MONEY);
     return nCount;
 end
+
+--=========大乱斗=========--
+function p.GetCampBattleMaxEncourageCount()
+local nCount = GetDataBaseDataN("encourage_config",ENCOURAGE_TYPE.CHAOSBATTLE,DB_ENCOURAGE_CONFIG.MAX_TIMES);
+return nCount;
+end
+
+function p.GetCampBattleCoinCount()
+local nCount = GetDataBaseDataN("encourage_config",ENCOURAGE_TYPE.CHAOSBATTLE,DB_ENCOURAGE_CONFIG.COST_EMONEY);
+return nCount;
+end
+
+function p.GetCampBattleSilverCount()
+local nCount = GetDataBaseDataN("encourage_config",ENCOURAGE_TYPE.CHAOSBATTLE,DB_ENCOURAGE_CONFIG.COST_MONEY);
+return nCount;
+end
+--=========大乱斗=========--
+
 
 RegisterNetMsgHandler(NMSG_Type._MSG_BATTLE_ENCOURAGE, "MsgBossBattle.ProcessEncourage", p.ProcessEncourage);
 RegisterNetMsgHandler(NMSG_Type._MSG_PLAYER_ACTION_OPERATE, "MsgBossBattle.ProcessActivity", p.ProcessActivity);

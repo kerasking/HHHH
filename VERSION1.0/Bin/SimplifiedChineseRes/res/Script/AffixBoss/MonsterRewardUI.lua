@@ -81,7 +81,8 @@ function p.OnUIEvent(uiNode,uiEventType,param)
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		if ID_DYNMAPSUCCESS_CTRL_BUTTON_CONFIRM == tag then
             Music.StopMusic();
-			CloseBattle();
+            CloseBattle();
+            BattleUI_Title.CloseUI();--
 			local scene = GetSMGameScene();
 			if scene ~= nil then
 				scene:RemoveChildByTag(NMAINSCENECHILDTAG.MonsterReward,true);
@@ -92,7 +93,8 @@ function p.OnUIEvent(uiNode,uiEventType,param)
 			NormalBossListUI.Redisplay();
 			return true;
 		elseif ID_DYNMAPSUCCESS_CTRL_ANGIN_BATTLE == tag then
-			CloseBattle();
+            CloseBattle();
+            BattleUI_Title.CloseUI();--
 			local scene = GetSMGameScene();
             if scene ~= nil then
                 scene:RemoveChildByTag(NMAINSCENECHILDTAG.MonsterReward,true);
@@ -345,7 +347,7 @@ function p.LoadUI(money,repute)
 	local winsize = GetWinSize();
 	layer:SetFrameRect(RectFullScreenUILayer);
 	--layer:SetBackgroundColor(ccc4(125,125,125,125));
-	scene:AddChild(layer);
+	scene:AddChildZ(layer,2);
 	
 	local uiLoad=createNDUILoad();
 	if nil == uiLoad then

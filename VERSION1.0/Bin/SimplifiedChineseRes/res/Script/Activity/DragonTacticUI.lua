@@ -70,8 +70,6 @@ function p.LoadUI()
 	end
 	uiLoad:Load("achieve_BG.ini", layer, p.OnUIEvent, CONTAINTER_X, CONTAINTER_Y);
 
-
-
     local BtnEveryDay = GetButton(layer, CTR_BTN_26);
     BtnEveryDay:SetVisible(false);
     --初始化标签页面的基本信息
@@ -155,6 +153,7 @@ function p.LoadUI()
     --关闭音效
     --local closeBtn=GetButton(layer, CTR_BTN_CLOSE);
     --closeBtn:SetSoundEffect(Music.SoundEffect.CLOSEBTN);
+    
     return true;
 end
 

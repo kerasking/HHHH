@@ -23,12 +23,17 @@ typedef unsigned int ID;
 
 void WriteCon(const char * pszFormat, ...);
 #define LOGERR	WriteCon
+#define LOGINFO	WriteCon
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
 //前向声明（相关概念抽象）
 class NDVariant;			//值
 class NDField;				//字段
+
+class NDRecordInterface;	//记录接口
+class NDRecordFast;			//记录Fast
+class NDRecordSlow;			//记录Slow
 class NDRecord;				//记录
 
 class NDTableBase;			//表基类
@@ -156,11 +161,9 @@ struct NDVariant
 {
 	NDVariant()
 		: type(V_None)
-		, str(NULL)
 		{ val.ubigVal = 0; }
 
 	VAR_TYPE type;
-	string*  str;
 
 	union  
 	{
@@ -185,13 +188,16 @@ struct NDVariant
 		//long long
 		long long			bigVal;
 		unsigned long long	ubigVal;
+
+		//string
+		string*				str;
 	} val;
 
 	void setStr( const char* in_str )
 	{
 		if (in_str) {
-			if (!str) str = new string();
-			*str = in_str;
+			if (!val.str) val.str = new string();
+			*val.str = in_str;
 			type = V_String;
 		}
 	}
@@ -350,7 +356,7 @@ public: //getter
 	const string getStr()
 	{
 		if (type == V_String)
-			return str ? *str : "";
+			return val.str ? *val.str : "";
 		return "";
 	}
 
@@ -373,6 +379,14 @@ public: //setter
 	void setString( const string& s )				{ setString(s.c_str()); type = V_String; }
 	void setString( const char* s )					{ setStr(s);			type = V_String; }
 
+public:
+	int getBytesLen() const
+	{
+		int n = sizeof(val); 
+		if (type == V_String && val.str)
+			n += val.str->capacity(); //length()
+		return n;
+	}
 }; //NDField
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -384,6 +398,7 @@ public:
 	virtual ID getId() = 0;
 	virtual int getFieldCount() = 0;
 	virtual NDField* getAt( const int index, bool autoAlloc = true ) = 0;
+	virtual int getBytesLen() const = 0;
 };
 
 //@@ 对应一条记录
@@ -433,6 +448,20 @@ private:
 			SAFE_DELETE( iter->second );
 		}
 		mapData.clear();
+	}
+
+public:
+	int getBytesLen() const
+	{
+		int n = mapData.size() * 8 + 4;
+		for (map<int,NDField*>::const_iterator iter = mapData.begin();
+				iter != mapData.end(); ++iter)
+		{
+			NDField* pField = iter->second;
+			if (pField)
+				n += pField->getBytesLen();
+		}
+		return n;
 	}
 };
 
@@ -489,6 +518,19 @@ private:
 			SAFE_DELETE( vecData[i] );
 		}
 		vecData.clear();
+	}
+
+public:
+	int getBytesLen() const
+	{
+		int n = vecData.size() * 4 + 8;
+		for (int i = 0; i < vecData.size(); i++)
+		{
+			NDField* pField = vecData[i];
+			if (pField)
+				n += pField->getBytesLen();
+		}
+		return n;
 	}
 };
 
@@ -554,8 +596,14 @@ public:
 		return getRecordPtr()->getAt( index, autoAlloc );
 	}
 
+public:
+	int getBytesLen() const
+	{
+		return getRecordPtr()->getBytesLen();
+	}
+
 private:
-	NDRecordInterface* getRecordPtr()
+	NDRecordInterface* getRecordPtr() const
 	{
 		if (eRecordType == E_RECORD_FAST)	return fastRecord;
 		if (eRecordType == E_RECORD_SLOW)	return slowRecord;
@@ -670,6 +718,20 @@ private:
 		}
 		mapRecord.clear();
 	}
+
+public:
+	virtual int getBytesLen() const
+	{
+		int n = mapRecord.size() * 8 + 8;
+		for (map<ID,NDRecord*>::const_iterator iter = mapRecord.begin(); 
+				iter != mapRecord.end(); ++iter)
+		{
+			NDRecord* pRecord = iter->second;
+			if (pRecord)
+				n += pRecord->getBytesLen();
+		}
+		return n;
+	}
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -730,6 +792,14 @@ private:
 				return true;
 			}
 			return false;
+		}
+
+		int getBytesLen() const
+		{
+			int n = 0;
+			for (int i = 0; i < 4; i++)
+				n += vecId[i].size() * 4;
+			return n;
 		}
 	};
 
@@ -820,6 +890,19 @@ private:
 		}
 		mapFourIdList.clear();
 	}
+
+public:
+	int getBytesLen() const
+	{
+		int n = 0;
+		for (map<ID,FOUR_IDLIST*>::const_iterator iter = mapFourIdList.begin(); 
+				iter != mapFourIdList.end(); ++iter)
+		{
+			n += 4;
+			n += iter->second->getBytesLen();
+		}
+		return n;
+	}
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -860,6 +943,14 @@ public:
 	}
 private:
 	string* dbgName;
+
+public:
+	//override
+	int getBytesLen() const
+	{
+		return NDTableBase::getBytesLen() + 
+			(extra ? extra->getBytesLen() : 0);
+	}
 };
 
 
@@ -930,6 +1021,21 @@ private:
 		}
 	}
 
+public:
+	int getBytesLen() const
+	{
+		int n = 4 * tableCount;
+		for (int i = 0; i < tableCount; i++)
+		{
+			NDTable* pTable = arrTable[i];
+			if (pTable)
+			{
+				n += pTable->getBytesLen();
+			}
+		}
+		return n;
+	}
+
 private:
 	NDTable* arrTable[eMIN_COUNT];	//固定表数量
 	static const int tableCount = eMIN_COUNT;	
@@ -973,6 +1079,22 @@ private:
 			SAFE_DELETE( iter->second );
 		}
 		mapTable.clear();
+	}
+
+public:
+	int getBytesLen() const
+	{
+		int n = mapTable.size() * 8;
+		for (map<ID,NDTable*>::const_iterator iter = mapTable.begin();
+				iter != mapTable.end(); ++iter)
+		{
+			NDTable* pTable = iter->second;
+			if (pTable)
+			{
+				n += pTable->getBytesLen();
+			}
+		}
+		return n;
 	}
 
 private:
@@ -1048,6 +1170,26 @@ private:
 		mapTableSet.clear();
 
 		SAFE_DELETE(tableSetIni);
+	}
+
+public:
+	int getBytesLen() const
+	{
+		int n = 0;
+		if (tableSetIni)
+		{
+			n += tableSetIni->getBytesLen();
+		}
+		
+		n += mapTableSet.size() * 8;
+		for (map<ID,NDTableSet*>::const_iterator iter = mapTableSet.begin(); 
+				iter != mapTableSet.end(); ++iter)
+		{
+			NDTableSet* pTableSet = iter->second;
+			if (pTableSet)
+				n += pTableSet->getBytesLen();
+		}
+		return n;
 	}
 
 private:
@@ -1128,6 +1270,18 @@ public:
 		}
 
 		//the array is left with empty slots.
+	}
+
+public:
+	int getBytesLen() const
+	{
+		int n = 4 * tableSetGroupCount;
+		for (int i = 0; i < tableSetGroupCount; i++)
+		{
+			if (tableSetGroup[i])
+				n += tableSetGroup[i]->getBytesLen();
+		}
+		return n;
 	}
 
 private:

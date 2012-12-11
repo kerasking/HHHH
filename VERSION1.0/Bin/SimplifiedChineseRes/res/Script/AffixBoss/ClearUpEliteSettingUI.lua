@@ -637,21 +637,10 @@ function p.HandleNetMsg( nMsgID, param )
 		-- 副本奖励
 		--
 	elseif ( nMsgID == NMSG_Type._MSG_AFFIX_BOSS_NML_FINISH ) then
-		-- 结束(当前结束)
-		--local nBattleID			= param:ReadInt();
-		--local nServerFinishFlag	= param:ReadByte();--0正常完成，1用金币购买的完成
-		--p.nCrtIndex			= p.nCrtIndex + 1;
-		--if ( p.tEnemyID[p.nCrtIndex] and ( nServerFinishFlag == 1 ) ) then
-		--	MsgAffixBoss.sendNmlClean( p.tEnemyID[p.nCrtIndex], 1, true );
-		--else
-		--	-- 所有结束
-		--	local pBtnStop		= GetButton( p.pLayerFighting, ID_BTN_STOP );
-		--	local pBtnFinish	= GetButton( p.pLayerFighting, ID_BTN_FINISH );
-		--	local pBtnBack		= GetButton( p.pLayerFighting, ID_BTN_BACK );
-		--	pBtnStop:SetVisible( false );
-		--	pBtnFinish:SetVisible( false );
-		--	pBtnBack:SetVisible( true );
-		--end
+		p.nClearStage	= p.nFightNumber;
+		p.nEndMoment	= GetCurrentTime()  + ( p.nFightNumber - p.nClearStage ) * SECONDS_PER_FIGHT;
+		local pLabelClearStage	= GetLabel( p.pLayerFighting, ID_LABEL_CLEAR_STAGE );
+		pLabelClearStage:SetText( p.nClearStage .. "/" .. p.nFightNumber );
 		local pBtnStop		= GetButton( p.pLayerFighting, ID_BTN_STOP );
 		local pBtnFinish	= GetButton( p.pLayerFighting, ID_BTN_FINISH );
 		local pBtnBack		= GetButton( p.pLayerFighting, ID_BTN_BACK );

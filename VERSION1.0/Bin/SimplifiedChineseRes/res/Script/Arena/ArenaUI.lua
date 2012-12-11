@@ -81,6 +81,22 @@ local ID_ARENA_CTRL_BUTTON_ROLE_INFO_3	= 310;
 local ID_ARENA_CTRL_BUTTON_ROLE_INFO_4	= 311;
 local ID_ARENA_CTRL_BUTTON_ROLE_INFO_5	= 312;
 
+
+--chh 2012-12-06 --
+local TAG_RANKING_CONTRINER = 57;
+
+local TAG_RANKING_SIZE      = 4;
+local TAG_RANKING_NAME      = 149;  
+local TAG_RANKING_BTNPIC    = 308;
+local TAG_RANKING_RANK      = 151;
+
+
+p.infos = nil;
+local RANK_SHOW_COUNT   = 5;
+local TAG_BEGIN_ARROW = 1124;
+local TAG_END_ARROW = 1125;
+
+
 local awardTime=0;
 p.cdTime=0;
 local awardTimeTag=-1;
@@ -229,12 +245,20 @@ function p.OnUIEvent(uiNode,uiEventType,param)
 		elseif ID_ARENA_CTRL_BUTTON_ROLE_INFO_5 == tag then
 			p.StartChallenge(5);
 		end
-        
+    elseif uiEventType == NUIEventType.TE_TOUCH_SC_VIEW_IN_BEGIN then
+        if TAG_RANKING_CONTRINER == tag then 
+            SetArrow(p.GetParent(),p.GetRankContainer(),RANK_SHOW_COUNT,TAG_BEGIN_ARROW,TAG_END_ARROW);
+        end
 	end
 end
 
 function p.StartChallenge(index)
-	if p.challengeID[index][1]~=0 then
+
+    if(p.infos[index].id == GetPlayerId()) then
+        return;
+    end 
+
+	if p.infos[index].id~=0 then
 		if p.cdTime > 0 then
 			remove_cd_Dlg_id=CommonDlg.ShowWithConfirm("挑战时间CD中...", nil);
 			return;
@@ -246,18 +270,16 @@ function p.StartChallenge(index)
 		end
         
         p.CurChaIndex = index;
-        CommonDlgNew.ShowYesOrNoDlg("是否要挑战".. p.challengeID[index][3], p.onChallengeDlg, true);
+        CommonDlgNew.ShowYesOrNoDlg("是否要挑战".. p.infos[index].name, p.onChallengeDlg, p.infos[index].rank);
 		--_G.MsgArena.SendChallenge(p.challengeID[index][1]);
-		
 	end
 end
 
 
 function p.onChallengeDlg(nId, param)
     if ( CommonDlgNew.BtnOk == nId ) then
-       if p.CurChaIndex ~= nil then
-            _G.MsgArena.SendChallenge(p.challengeID[p.CurChaIndex][1]);
-       end
+        LogInfo("rank:[%d]",param);
+        _G.MsgArena.SendChallenge(param);
     end
 end
 
@@ -475,6 +497,125 @@ function p.CleanReport()
 	SetLabel(layer,ID_ARENA_CTRL_TEXT_NEWS_3,"");
 end
 
+
+
+
+function p.GetRankContainer()
+	local container = GetScrollViewContainer(p.GetParent(), TAG_RANKING_CONTRINER);
+	return container;
+end
+
+
+--刷新排行列表
+--{{index=,id=,name=,level=,rank=,lookfaceID=},{index=,id=,name=,level=,rank=,lookfaceID=}}
+function p.RefreshRankList(infos)
+    p.infos = infos;
+    local container = p.GetRankContainer();
+    
+    if(container == nil) then
+        LogInfo("p.RefreshRankList container == nil");
+        return;
+    end
+    
+    container:RemoveAllView();
+    
+    local nPos = -1;
+    for i,v in ipairs(infos)do
+        if(v.id == GetPlayerId()) then
+            nPos = i;
+            p.PlayerRank = v.rank;
+        end
+        p.CreateRankItem(v);
+    end
+    
+    nPos = nPos - 1;
+    --设置玩家在中心位置
+    local nMid = math.floor(RANK_SHOW_COUNT/2);
+    local nMaxIndex = #infos-nMid-1;
+    if(nPos>0) then
+        if(nPos > nMid and nPos<nMaxIndex) then
+            LogInfo("nPos > nMid and nPos<=nMaxIndex");
+            nPos = nPos - nMid;
+        elseif(nPos<=nMid) then
+            LogInfo("nPos<=nMid");
+            nPos = 0;
+        elseif(nPos>=nMaxIndex) then
+            LogInfo("nPos>=nMaxIndex");
+            nPos = nMaxIndex - nMid ;
+        end
+        container:ShowViewByIndex(nPos);
+    end
+    
+    LogInfo("nMid:[%d],nMaxIndex:[%d],nPos:[%d]",nMid,nMaxIndex,nPos);
+    
+    SetArrow(p.GetParent(),p.GetRankContainer(),RANK_SHOW_COUNT,TAG_BEGIN_ARROW,TAG_END_ARROW);
+    
+    p.RefreshUI();
+end
+
+
+function p.CreateRankItem(info)
+    local container = p.GetRankContainer();
+    local view = createUIScrollView();
+    
+    view:Init(false);
+    view:SetScrollStyle(UIScrollStyle.Horzontal);
+    view:SetViewId(info.id);
+    view:SetTag(info.index);
+    view:SetMovableViewer(container);
+    view:SetScrollViewer(container);
+    view:SetContainer(container);
+    
+    --初始化ui
+    local uiLoad = createNDUILoad();
+    if nil == uiLoad then
+        return false;
+    end
+
+    uiLoad:Load("SM_JJ_List.ini", view, p.OnUIRankItemEvent, 0, 0);
+       
+    --实例化每一项
+    p.RefreshRankItem(view,info);
+    
+    container:AddView(view);
+    uiLoad:Free();
+end
+
+function p.RefreshRankItem(view,info)  
+    local btn = GetButton(view, TAG_RANKING_BTNPIC);
+    btn:SetParam1(info.index);
+    local pic = GetArenaUIPlayerHeadPic(info.lookfaceID);  
+    if CheckP(btn) then
+        btn:SetImage(pic);
+    end   
+    
+    local l_name = SetLabel(view, TAG_RANKING_NAME, string.format("lv.%d %s",info.level,info.name));
+    local l_rank = SetLabel(view, TAG_RANKING_RANK, string.format("第%d名",info.rank));
+    
+    if(info.id == GetPlayerId()) then
+        l_name:SetFontColor(ccc4(255,15,15,255));
+        l_rank:SetFontColor(ccc4(255,15,15,255));
+    end
+    
+    --设置容器大小
+    local img = GetImage(view, TAG_RANKING_SIZE);
+    local container = p.GetRankContainer();
+    container:SetViewSize(img:GetFrameRect().size);
+end
+
+function p.OnUIRankItemEvent(uiNode, uiEventType, param)
+    local tag = uiNode:GetTag();
+	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+		if TAG_RANKING_BTNPIC == tag then
+            local btn = ConverToButton(uiNode);
+			p.StartChallenge(btn:GetParam1());
+        end
+        
+	end
+	return true;
+
+end
+    
 function p.SetChallengeList(index,id,name,level,rank,lookfaceID)
 	local layer=p.GetParent();
     local nPlayerId = GetPlayerId();
@@ -485,7 +626,12 @@ function p.SetChallengeList(index,id,name,level,rank,lookfaceID)
        p.PlayerRank = rank;
        p.RefreshUI();
     end
-       
+    
+    
+    
+    
+    
+    
 	if index == 1 then
         local lbLev = GetLabel(layer, ID_ARENA_CTRL_TEXT_PLAYER_NAME_1);  
         local lbRank = GetLabel(layer, ID_ARENA_CTRL_TEXT_TANK_1); 
@@ -681,6 +827,8 @@ function p.InitData()
         Record.nRank = GetDataBaseDataN("sports_prize", v, DB_SPORTS_PRIZE.RANKING);
         Record.nMoney = GetDataBaseDataN("sports_prize", v, DB_SPORTS_PRIZE.MONEY); 
         Record.nRepute = GetDataBaseDataN("sports_prize", v, DB_SPORTS_PRIZE.REPUTE); 
+        Record.nItem      = GetDataBaseDataN("sports_prize", v, DB_SPORTS_PRIZE.ITEM); 
+        Record.nItemCount = GetDataBaseDataN("sports_prize", v, DB_SPORTS_PRIZE.ITEMCOUNT); 
         Record.nEMoney = GetDataBaseDataN("sports_prize", v, DB_SPORTS_PRIZE.EMONEY);     
         table.insert(p.tbDbSportPrizeData, Record);
     end
@@ -695,30 +843,32 @@ function p.InitData()
 end
 
 function p.RefreshUI()
+    LogInfo("p.RefreshUI");
 	local layer = p.GetParent();
 	
 	local nPlayerId = GetPlayerId();
 	if nil == nPlayerId then
+        LogInfo("p.RefreshUI 2");
 		LogInfo("nil == nPlayerId");
 		return;
 	end
 	
     --显示排名奖励部分ui
     if p.PlayerRank == 0 then
+        LogInfo("p.RefreshUI 2");
         return;
     end
     
-    local nMoney 		=  GetRoleBasicDataN(nPlayerId, USER_ATTR.USER_ATTR_MONEY);
-    local nEMoney 	= GetRoleBasicDataN(nPlayerId, USER_ATTR.USER_ATTR_EMONEY);
-    SetLabel(layer, p.ctrId.ctrText.txtMoney, fomatBigNumber(nMoney));
-    SetLabel(layer, p.ctrId.ctrText.txtEMoney, fomatBigNumber(nEMoney)); 
+    p.RefreshMoney();
     
     if p.PlayerRank > 1000 then
+         LogInfo("p.RefreshUI 3");
         --显示银币,金币,声望
         SetLabel(layer, p.ctrId.ctrText.txtAwardMoney, SafeN2S(0));
         SetLabel(layer, p.ctrId.ctrText.txtAwardEMoney, SafeN2S(0));  
         SetLabel(layer, p.ctrId.ctrText.txtAwardRepute, SafeN2S(0));     
     else
+        LogInfo("p.RefreshUI 2");
         local tbInfo = {};
         for i, v in pairs(p.tbDbSportPrizeData) do
             if v.nRank >= p.PlayerRank then
@@ -726,11 +876,30 @@ function p.RefreshUI()
                 break;
             end
         end
-        --显示银币,金币,声望
+        --显示银币,声望,奖励
         SetLabel(layer, p.ctrId.ctrText.txtAwardMoney, SafeN2S(tbInfo.nMoney));
-        SetLabel(layer, p.ctrId.ctrText.txtAwardEMoney, SafeN2S(tbInfo.nEMoney));  
-        SetLabel(layer, p.ctrId.ctrText.txtAwardRepute, SafeN2S(tbInfo.nRepute));     
+        SetLabel(layer, p.ctrId.ctrText.txtAwardRepute, SafeN2S(tbInfo.nRepute));   
+        local str = "";
+        local ItemName = ItemFunc.GetName(tbInfo.nItem);
+        str = str .. ItemName.. "X" .. tbInfo.nItemCount;
+        SetLabel(layer, p.ctrId.ctrText.txtAwardEMoney, str);       
     end
 
     --LogInfo("p.RefreshUI  rank = %d, Money = %d, EMoney = %d", p.PlayerRank, tbInfo.nMoney, tbInfo.nEMoney);
 end
+
+function p.RefreshMoney()
+    local nPlayerId = GetPlayerId();
+	if nil == nPlayerId then
+		LogInfo("nil == nPlayerId");
+		return;
+	end
+    local layer = p.GetParent();
+    
+    local nMoney 		=  GetRoleBasicDataN(nPlayerId, USER_ATTR.USER_ATTR_MONEY);
+    local nEMoney 	= GetRoleBasicDataN(nPlayerId, USER_ATTR.USER_ATTR_EMONEY);
+    SetLabel(layer, p.ctrId.ctrText.txtMoney, fomatBigNumber(nMoney));
+    SetLabel(layer, p.ctrId.ctrText.txtEMoney, fomatBigNumber(nEMoney)); 
+end
+
+GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"ArenaUI.RefreshMoney",p.RefreshMoney);
