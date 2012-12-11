@@ -57,6 +57,30 @@ function p.ProcessTalkInfo(netdatas)
 end
 
 function p.SendPrivateTalk(tid,name,text)
+	local netdata = createNDTransData(NMSG_Type._MSG_TALK);
+	local time=GetCurrentTime();
+	netdata:WriteByte(0);
+	netdata:WriteByte(1);
+	netdata:WriteInt(time);
+	netdata:WriteByte(0);
+	netdata:WriteByte(2);
+	netdata:WriteStr(text);
+	netdata:WriteStr(name);
+	if nil == netdata then
+		return false;
+	end
+	SendMsg(netdata);
+	netdata:Free();
+	
+	local nPlayerId = GetPlayerId();
+	if nil == nPlayerId then
+		LogInfo("nil == nPlayerId");
+		return;
+	end
+	
+	local playername = GetRoleBasicDataS(nPlayerId,USER_ATTR.USER_ATTR_NAME);
+	
+	ChatDataFunc.AddChatRecord(nPlayerId,1,tid,"【"..playername.."】对【"..name.."】说",text);
 end
 
 function p.SendTalkMsg(channel,text)
@@ -88,4 +112,4 @@ function p.SendTalkMsg(channel,text)
 end
 
 
---RegisterNetMsgHandler(NMSG_Type._MSG_TALK,"p.ProcessTalkInfo",p.ProcessTalkInfo);
+RegisterNetMsgHandler(NMSG_Type._MSG_TALK,"p.ProcessTalkInfo",p.ProcessTalkInfo);

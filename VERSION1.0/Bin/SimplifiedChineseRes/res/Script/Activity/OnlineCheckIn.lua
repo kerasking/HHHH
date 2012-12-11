@@ -87,16 +87,17 @@ function p.updateCount(restCount)
 		
 	local CDlabel = p.GetCDLabel();
 	
-	if CDlabel ~= nil then
-		LogInfo("qboy CDlabel nil:"); 
-		if restCount <= 0 then
-			CDlabel:SetText("点击领取");
-		else
-			
-			CDlabel:SetText(FormatTime(restCount,1));
-		end	
-	end
-	
+    if CDlabel ~= nil then
+        LogInfo("qboy CDlabel nil:"); 
+        if restCount <= 0 then
+            CDlabel:SetText(GetTxtPri("OCI_ClickGet"));
+        else
+
+            CDlabel:SetText(FormatTime(restCount,1));
+        end	
+    end
+
+
 	if p.TimerTag ~= nil then
 		UnRegisterTimer(p.TimerTag);
 	end

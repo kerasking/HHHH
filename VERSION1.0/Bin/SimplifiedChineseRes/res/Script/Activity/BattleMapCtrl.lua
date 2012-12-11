@@ -14,10 +14,14 @@ RectLayer = CGRectMake(196*ScaleFactor, 285*ScaleFactor, 88*ScaleFactor, 27*Scal
 
 --加载战斗页面控件层
 function p.LoadUI()
-    
+    LogInfo("qboy setBattle CampBattle.SetBattle");  
     CampBattle.SetBattle();
+    LogInfo("qboy setBattle SyndicateBattleUI.SetBattle");  
+
+    SyndicateBattleUI.SetBattle();
     --boss战不使用快速战斗
-    if ArenaUI.isInChallenge == 3 or
+    if ArenaUI.isInChallenge == 6 or
+        ArenaUI.isInChallenge == 3 or
         ArenaUI.isInChallenge == 5 then
         return;
     end
