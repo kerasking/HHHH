@@ -31,6 +31,7 @@
 #include "ItemImage.h"
 #include "ScriptMgr.h"
 #include "UsePointPls.h"
+#include "../CocosDenshion/include/SimpleAudioEngine.h"
 
 #ifdef USE_MGSDK
 #import <Foundation/Foundation.h>
@@ -52,6 +53,8 @@
 #define  LOGD(...)
 #define  LOGERROR(...)
 #endif
+
+using namespace CocosDenshion;
 
 //#include "CCVideoPlayer.h"
 
@@ -117,15 +120,15 @@ void CreatePlayer(int lookface, int x, int y, int userid, std::string name)
 {
 	NDLog("CreatePlayer:%s", name.c_str());
 	NDPlayer::pugeHero();
-	NDPlayer& player = NDPlayer::defaultHero(lookface, true);
-	player.InitRoleLookFace(lookface);
+	NDPlayer& kPlayer = NDPlayer::defaultHero(lookface, true);
+	kPlayer.InitRoleLookFace(lookface);
 
-	player.stopMoving();
+	kPlayer.stopMoving();
 	//player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));//@del
-	player.SetPositionEx(ConvertUtil::convertCellToDisplay(x, y));
-	player.SetServerPositon(x, y);
-	player.m_nID = userid;
-	player.m_strName = name;
+	kPlayer.SetPositionEx(ConvertUtil::convertCellToDisplay(x, y));
+	kPlayer.SetServerPositon(x, y);
+	kPlayer.m_nID = userid;
+	kPlayer.m_strName = name;
 }
 void ReloadPlayer(int lookface)
 {
@@ -141,20 +144,20 @@ void CreatePlayerWithMount(int lookface, int x, int y, int userid,
 {
 	NDLog("CreatePlayer:%s", name.c_str());
 	NDPlayer::pugeHero();
-	NDPlayer& player = NDPlayer::defaultHero(lookface, true);
-	player.ChangeModelWithMount(nRideStatus, nMountType);
-	player.stopMoving();
+	NDPlayer& kPlayer = NDPlayer::defaultHero(lookface, true);
+	kPlayer.ChangeModelWithMount(nRideStatus, nMountType);
+	kPlayer.stopMoving();
 	//player.SetPositionEx(ccp(x*MAP_UNITSIZE+DISPLAY_POS_X_OFFSET, y*MAP_UNITSIZE+DISPLAY_POS_Y_OFFSET));//@del
-	player.SetPositionEx(ConvertUtil::convertCellToDisplay(x, y));
-	player.SetServerPositon(x, y);
-	player.m_nID = userid;
-	player.m_strName = name;
+	kPlayer.SetPositionEx(ConvertUtil::convertCellToDisplay(x, y));
+	kPlayer.SetServerPositon(x, y);
+	kPlayer.m_nID = userid;
+	kPlayer.m_strName = name;
 }
 //Íæ¼ÒÆï³è
 void PlayerRideMount(int nRideStatus, int nMountType)
 {
-	NDPlayer& player = NDPlayer::defaultHero();
-	player.ChangeModelWithMount(nRideStatus, nMountType);
+	NDPlayer& kPlayer = NDPlayer::defaultHero();
+	kPlayer.ChangeModelWithMount(nRideStatus, nMountType);
 }
 
 //++
@@ -218,12 +221,12 @@ bool RoleAddSMEffect(int nRoleId, std::string strEffectPath,
 }
 bool RoleRemoveSMEffect(int nRoleId, std::string strEffectPath)
 {
-	NDManualRole* role = NDMapMgrObj.GetManualRole(nRoleId);
-	if (!role)
+	NDManualRole* pkRole = NDMapMgrObj.GetManualRole(nRoleId);
+	if (!pkRole)
 	{
 		return false;
 	}
-	return role->RemoveSMEffect(strEffectPath);
+	return pkRole->RemoveSMEffect(strEffectPath);
 }
 unsigned long GetMapId()
 {
@@ -418,31 +421,42 @@ void CloseBattle()
 
 void SetSceneMusicNew(int idMusic)
 {
-#if 0
-	SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
-	NSString *musicPath = [NSString stringWithUTF8String:NDPath::GetSoundPath().c_str()];
-	NSString *musicFile = [NSString stringWithFormat:@"%@music_%d.aac", musicPath, idMusic];
-	[audioEngine playBackgroundMusic:musicFile loop:YES];
-#endif
+	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
+
+	if (0 == pkSimpleAudio)
+	{
+		return;
+	}
+	
+	string strMusicPath = NDPath::GetSoundPath();
+	CCString* pstrMusicFile = CCString::stringWithFormat("%smusic_%d.aac",strMusicPath.c_str(),idMusic);
+	pkSimpleAudio->playBackgroundMusic(pstrMusicFile->toStdString().c_str(),true);
 }
 
 void SetBgMusicVolume(int nVolune)
 {
-#if 0
-	SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
-	float fvol = (float)nVolune/100;
+	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
 
-	[audioEngine setBackgroundMusicVolume:fvol];
-#endif
+	if (0 == pkSimpleAudio)
+	{
+		return;
+	}
+
+	float fVol = (float)nVolune / 100.0f;
+	pkSimpleAudio->setBackgroundMusicVolume(fVol);
 }
 
 void SetEffectSoundVolune(int nVolune)
 {
-#if 0
-	SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
-	float fvol = (float)nVolune/100;
-	[audioEngine setEffectsVolume:fvol];
-#endif
+	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
+
+	if (0 == pkSimpleAudio)
+	{
+		return;
+	}
+
+	float fVol = (float)nVolune / 100.0f;
+	pkSimpleAudio->setEffectsVolume(fVol);
 }
 
 void StartBGMusic()
@@ -451,29 +465,39 @@ void StartBGMusic()
 }
 void StopBGMusic()
 {
-#if 0
-	SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
-	[audioEngine stopBackgroundMusic];
-#endif
+	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
+
+	if (0 == pkSimpleAudio)
+	{
+		return;
+	}
+
+	pkSimpleAudio->stopBackgroundMusic();
 }
 
 int StartEffectSound(int idMusic)
 {
-#if 0
+	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
 
-	NSString *musicPath = [NSString stringWithUTF8String:NDPath::GetSoundPath().c_str()];
-	NSString *musicFile = [NSString stringWithFormat:@"%@/effect/effect_%d.aac", musicPath, idMusic];
+	if (0 == pkSimpleAudio)
+	{
+		return -1;
+	}
 
-	SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
+	string strMusicPath = NDPath::GetSoundPath();
+	CCString* pstrMusicFile = CCString::stringWithFormat("%seffect/effect_%d.aac",strMusicPath.c_str(),idMusic);
 
-	return (int)[audioEngine playEffect:musicFile loop:NO];
-#endif
-	return 0;
+	return pkSimpleAudio->playEffect(pstrMusicFile->toStdString().c_str(),false);
 }
 
 void StopEffectSound()
 {
-	//SimpleAudioEngine *audioEngine=[SimpleAudioEngine sharedEngine];
+	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
+
+	if (0 == pkSimpleAudio)
+	{
+		return;
+	}
 }
 
 void WorldMapGoto(int nMapId, LuaObject tFilter)

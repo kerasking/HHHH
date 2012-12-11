@@ -171,6 +171,7 @@ LOCAL_LDLIBS := -L$(call host-path, $(LOCAL_PATH)/../../proj.android/libs/$(TARG
 				-L$(SYSROOT)/usr/lib -lGLESv2
 				
 LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
+LOCAL_WHOLE_STATIC_LIBRARIES += cocosdenshion_static
 LOCAL_WHOLE_STATIC_LIBRARIES += luaplus
 LOCAL_WHOLE_STATIC_LIBRARIES += tinyxml
 LOCAL_WHOLE_STATIC_LIBRARIES += NetWork
@@ -181,6 +182,7 @@ include $(BUILD_STATIC_LIBRARY)
 
 $(call import-module,LuaPlus/proj.android/jni)
 $(call import-module,cocos2dx)
+$(call import-module,CocosDenshion/android)
 $(call import-module,tinyxml/proj.android/jni)
 $(call import-module,NetWork/proj.android/jni)
 $(call import-module,KUtil/proj.android/jni)
