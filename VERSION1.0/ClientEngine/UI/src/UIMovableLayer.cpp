@@ -32,6 +32,8 @@ void CUIMovableLayer::Initialization()
 
 bool CUIMovableLayer::TouchEnd(NDTouch* touch)
 {
+	if (!this->IsVisibled()) return false;
+
 	bool bRet = NDUILayer::TouchEnd(touch);
 	
 	if (!bRet)

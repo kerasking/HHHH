@@ -166,8 +166,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 	}
 	
 	public void setMain(){
-		ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
-		setContentView(menubar,params);
 		View rootView =(View)getView();
 		FrameLayout parent = (FrameLayout)rootView.getParent();
 		if(parent != null)
@@ -229,6 +227,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 	static
 	{
 		System.loadLibrary("mobage");
+		System.loadLibrary("iconv");
 		System.loadLibrary("cocos2d");
 		System.loadLibrary("GameLauncher");
 	}

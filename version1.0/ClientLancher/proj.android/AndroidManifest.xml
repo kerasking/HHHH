@@ -7,20 +7,91 @@
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.SEND_SMS"></uses-permission>
+    <uses-permission android:name="android.permission.READ_SMS"></uses-permission>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"></uses-permission>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    
 
     <application android:label="@string/app_name"
-        android:icon="@drawable/ic_launcher" android:debuggable="false">
+        android:icon="@drawable/ic_launcher" android:debuggable="true">
 
         <activity android:name="DaHuaLongJiang"
-                  android:label="DaHuaLongJiang"
+                  android:label="@string/app_name"
                   android:screenOrientation="landscape"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+                  android:launchMode="standard"             
                   android:configChanges="orientation">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+            	<action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data  android:scheme="mobage-cn-13000314" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="cn.mobage.g13000314.RUN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
+         <activity android:name="com.mobage.android.MobageActivity"
+                  android:label="@string/app_name"
+                  android:launchMode="standard"
+                  android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+                  android:screenOrientation="portrait"
+                  android:configChanges="keyboardHidden|orientation"
+                  android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+            	<action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.denachina.account.weakaccount.WeakAccountActivity"
+            	  android:windowSoftInputMode="adjustPan"
+                android:label="WeakAccountLogin" 
+               >
+        </activity>
+        <service android:name="com.mobage.android.cn.autoupdate.DownloadService" />
+        
+        <receiver android:name="com.mobage.android.cn.autoupdate.InstallSDKReceiver">
+        	<intent-filter>
+                <action android:name="com.denachina.nativesdk.install.sdk" />
+            </intent-filter>
+        </receiver>
+            
+		<receiver android:name="com.mobage.android.C2DMBaseReceiver">
+			<intent-filter>
+				<action android:name="com.denachina.androidpn.client.SHOW_NOTIFICATION" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</receiver>
+		
+		<service android:enabled="true"
+			android:name="com.denachina.androidpn.client.NotificationService"
+			android:label="NotificationService">
+			<intent-filter>
+				<action android:name="com.denachina.androidpn.client.NotificationService" />
+			</intent-filter>
+		</service>
+		
+		<receiver android:name="com.denachina.androidpn.client.BootReceiver"
+		    >
+		    <intent-filter >
+		        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+		    </intent-filter>
+		</receiver>
+        
     </application>
     <supports-screens android:largeScreens="true"
                       android:smallScreens="true"

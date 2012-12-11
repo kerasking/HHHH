@@ -176,6 +176,7 @@ LOCAL_WHOLE_STATIC_LIBRARIES += luaplus
 LOCAL_WHOLE_STATIC_LIBRARIES += tinyxml
 LOCAL_WHOLE_STATIC_LIBRARIES += NetWork
 LOCAL_WHOLE_STATIC_LIBRARIES += KUtil
+LOCAL_WHOLE_STATIC_LIBRARIES += iconv
 
 include $(BUILD_STATIC_LIBRARY)
 
@@ -185,3 +186,4 @@ $(call import-module,CocosDenshion/android)
 $(call import-module,tinyxml/proj.android/jni)
 $(call import-module,NetWork/proj.android/jni)
 $(call import-module,KUtil/proj.android/jni)
+$(call import-module,libiconv/proj.android/jni)

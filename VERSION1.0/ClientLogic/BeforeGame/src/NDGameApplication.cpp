@@ -186,10 +186,10 @@ NDGameApplication::~NDGameApplication()
 
 bool NDGameApplication::applicationDidFinishLaunching()
 {
-	if (!VideoMgrPtr->PlayVideo("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4"))
-	{
-		LOGERROR("Playing video error");
-	}
+//	if (!VideoMgrPtr->PlayVideo("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4"))
+//	{
+//		LOGERROR("Playing video error");
+//	}
 
 	CCDirector* pDirector = CCDirector::sharedDirector();
 	CCDirector::sharedDirector()->stopAnimation();

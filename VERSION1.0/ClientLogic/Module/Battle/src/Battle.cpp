@@ -1935,6 +1935,11 @@ Fighter* Battle::GetTouchedFighter(VEC_FIGHTER& fighterList, CCPoint pt)
 
 bool Battle::TouchEnd(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	if (m_dlgStatus)
 	{
 		CloseStatusDlg();

@@ -22,7 +22,7 @@
 #define OBJID			unsigned int
 //#define ID_VEC			std::vector<OBJID>
 //#define FONT_NAME		"Arial-BoldMT"
-#define FONT_NAME		"LiSu" //JLiSu //@zwq
+#define FONT_NAME		"LiSu.ttf" //JLiSu //@zwq
 #define VERSION_IPHONE (40)
 
 #define SIN0 (0)

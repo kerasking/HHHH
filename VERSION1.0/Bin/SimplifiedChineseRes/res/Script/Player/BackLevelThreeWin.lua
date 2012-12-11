@@ -80,6 +80,7 @@ function p.LoadUI(parent)
 	equip_layer:SetTag(EQUIP_LAYER);
     equip_layer:SetVisible(false);
 	equip_layer:SetFrameRect(RectFullScreenUILayer);
+	equip_layer:SetDebugName("equip_layer");
 	p.parent:AddChildZ(equip_layer,1);
 	
 	--初始化ui
@@ -108,6 +109,7 @@ function p.LoadUI(parent)
 	mate_layer:SetTag(MATE_LAYER);
 	mate_layer:SetFrameRect(RectFullScreenUILayer);
     mate_layer:SetVisible(false);
+    mate_layer:SetDebugName("mate_layer");
     p.parent:AddChildZ(mate_layer,1);
 	
 	--初始化ui
@@ -137,6 +139,7 @@ function p.LoadUI(parent)
 	gem_layer:SetTag(GEM_LAYER);
 	gem_layer:SetFrameRect(RectFullScreenUILayer);
     gem_layer:SetVisible(false);
+    gem_layer:SetDebugName("gem_layer");
     p.parent:AddChildZ(gem_layer,1);
 	
 	--初始化ui
@@ -167,6 +170,7 @@ function p.LoadUI(parent)
 	prop_layer:SetTag(PROP_LAYER);
 	prop_layer:SetFrameRect(RectFullScreenUILayer);
     prop_layer:SetVisible(false);
+    prop_layer:SetDebugName("prop_layer");
     p.parent:AddChildZ(prop_layer,1);
 	
 	--初始化ui
@@ -885,6 +889,32 @@ end
 function p.layerShowOrHide(tag, flag)
     local layer = GetUiLayer(p.parent, tag);
     layer:SetVisible(flag);
+    
+    if flag then
+        p.exclusiveBringToTop(tag);
+    end
+end
+
+--独占提前
+function p.exclusiveBringToTop(tag)
+    
+    LogError("@@ exclusiveBringToTop(): "..tag);
+    
+    local lyr = GetUiLayer(p.parent, EQUIP_LAYER);
+    lyr:bringToBottom();
+    
+    lyr = GetUiLayer(p.parent, MATE_LAYER);
+    lyr:bringToBottom();
+
+    lyr = GetUiLayer(p.parent, GEM_LAYER);
+    lyr:bringToBottom();
+    
+    lyr = GetUiLayer(p.parent, PROP_LAYER);
+    lyr:bringToBottom();
+    
+    lyr = GetUiLayer(p.parent, tag);
+    lyr:bringToTop();    
+
 end
 
 function p.DestoryLayer()

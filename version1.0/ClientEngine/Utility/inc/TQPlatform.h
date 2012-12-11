@@ -41,6 +41,9 @@
 	#include "third_party/win32/iconv/iconv.h"
 	const char* GBKToUTF8(const char *strChar);
 #elif defined(ANDROID)
+#define UTEXT(str)			GBKToUTF8(str)
+#include "third_party/win32/iconv/iconv.h"
+const char* GBKToUTF8(const char *strChar);
 #else
 	#define UTEXT(str) str
 #endif

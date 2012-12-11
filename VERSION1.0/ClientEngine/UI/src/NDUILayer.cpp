@@ -402,6 +402,11 @@ bool NDUILayer::TouchBegin(NDTouch* touch)
 
 bool NDUILayer::TouchEnd(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	m_kEndTouch = touch->GetLocation();
 
 	m_bTouchDwon = false;
@@ -428,8 +433,8 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 	}
 
 	// 长按
-	//if (m_bLongTouch && !m_bDragOutFlag && !m_bLayerMoved)
-	if (m_bLongTouch && !m_bDragOutFlag && !isTouchMoved(MOVE_ERROR))
+	if (m_bLongTouch && !m_bDragOutFlag && !m_bLayerMoved)
+	//if (m_bLongTouch && !m_bDragOutFlag && !isTouchMoved(MOVE_ERROR))
 	{
 		this->DispatchTouchEndEvent(m_kBeginTouch, m_kBeginTouch);
 
@@ -441,8 +446,8 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 	}
 
 	// 单击
-	//if (m_bDispatchTouchEndEvent && !m_bLayerMoved)
-	if (m_bDispatchTouchEndEvent && !isTouchMoved(MOVE_ERROR))
+	if (m_bDispatchTouchEndEvent && !m_bLayerMoved)
+	//if (m_bDispatchTouchEndEvent && !isTouchMoved(MOVE_ERROR))
 	{
 		if (this->DispatchTouchEndEvent(m_kBeginTouch, m_kBeginTouch))
 		{
@@ -451,15 +456,15 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 	}
 
 	// 拖出结束
-	//if (m_bDragOutFlag && !m_bLayerMoved)
-	if (m_bDragOutFlag && !isTouchMoved(MOVE_ERROR))
+	if (m_bDragOutFlag && !m_bLayerMoved)
+	//if (m_bDragOutFlag && !isTouchMoved(MOVE_ERROR))
 	{
 		DispatchDragOutCompleteEvent(m_kBeginTouch, m_kEndTouch, m_bLongTouch);
 	}
 
 	// 拖入
-	//if (m_bDragOutFlag && !m_bLayerMoved)
-	if (m_bDragOutFlag && !isTouchMoved(MOVE_ERROR))
+	if (m_bDragOutFlag && !m_bLayerMoved)
+	//if (m_bDragOutFlag && !isTouchMoved(MOVE_ERROR))
 	{
 		if (!DispatchDragInEvent(m_pkTouchedNode, m_kBeginTouch, m_kEndTouch,
 				m_bLongTouch, true))
@@ -512,6 +517,11 @@ void NDUILayer::TouchCancelled(NDTouch* touch)
 
 bool NDUILayer::TouchMoved(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	CCPoint kMoveTouch = touch->GetLocation();
 
 	// if really moved, android like to send move event even when not moved.
@@ -1878,6 +1888,16 @@ void NDUILayer::bringToTop()
 	{
 		NDBaseLayer *layer = (NDBaseLayer *) m_ccNode;
 		layer->bringToTop();
+	}
+}
+
+//@priority
+void NDUILayer::bringToBottom()
+{
+	if (m_ccNode)
+	{
+		NDBaseLayer *layer = (NDBaseLayer *) m_ccNode;
+		layer->bringToBottom();
 	}
 }
 

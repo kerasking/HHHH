@@ -20,11 +20,17 @@ IMPLEMENT_CLASS(ClickLayer, NDUILayer)
 
 bool ClickLayer::TouchBegin(NDTouch* touch)
 {
+	if (!this->IsVisibled()) return false;
 	return true;
 }
 
 bool ClickLayer::TouchEnd(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	NDUITargetDelegate* delegate = GetTargetDelegate();
 
 	if (delegate)
