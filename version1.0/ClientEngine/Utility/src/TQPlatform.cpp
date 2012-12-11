@@ -70,45 +70,13 @@ CCSize getStringSize(const char* pszStr, unsigned int fontSize)
 		sz = [str sizeWithFont:[UIFont fontWithName:strfont size:fontSize]];
         CCSz.width = sz.width;
         CCSz.height = sz.height;
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 		int width = 0, height = 0;
 		if (CCImage::getStringSize( pszStr, CCImage::kAlignLeft, FONT_NAME, fontSize,
 										width, height ))
 		{
 			return CCSizeMake( width, height );
 		}
-#else
-//        JniMethodInfo t;
-//        
-//        if (JniHelper::getStaticMethodInfo(t
-//                                           
-//                                           , "org/cocos2dx/lib/Cocos2dxActivity"
-//                                           
-//                                           , "getStringSize"
-//                                           
-//                                           , "(Ljava/lang/String;)[I"))
-//            
-//        {
-//            jstring stringArg = t.env->NewStringUTF(pszStr);
-//            
-//            jintArray ret = (jintArray)t.env->CallStaticObjectMethod(t.classID, t.methodID, stringArg);
-//            t.env->DeleteLocalRef(stringArg);
-//            t.env->DeleteLocalRef(t.classID);
-//            if (ret)
-//            {
-//                // get array values
-//                jint *oarr = t.env->GetIntArrayElements(ret, NULL);
-//
-//                // assign array values to CCSize
-//                CCSz.width = (float)oarr[0];
-//                CCSz.height = (float)oarr[1];
-//            }
-//        }
-        CCSz = CCSizeMake(24.0f/2, 29.0f/2);
-
-        
-        return CCSz;
-
 #endif
 	}
     
@@ -139,7 +107,7 @@ CCSize getStringSizeMutiLine(const char* pszStr, unsigned int fontSize, CCSize c
 	NSString *nstext = [NSString stringWithUTF8String:pszStr];
     NSString* strfont = [NSString stringWithUTF8String:FONT_NAME];
 	sz = [nstext sizeWithFont:[UIFont fontWithName:strfont size:fontSize] constrainedToSize:CGcontentSize];
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	int width = 0, height = 0;
 	if (CCImage::getStringSize( pszStr, CCImage::kAlignLeft, FONT_NAME, fontSize,
 		width, height ))
@@ -171,8 +139,6 @@ CCSize getStringSizeMutiLine(const char* pszStr, unsigned int fontSize, CCSize c
 			}
 		}
 	}
-#else
-	//
 #endif
     CCSz.width = sz.width;
     CCSz.height = sz.height;
