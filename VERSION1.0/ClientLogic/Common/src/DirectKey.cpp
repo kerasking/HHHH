@@ -744,6 +744,11 @@ bool DirectKey::TouchBegin(NDTouch* touch)
 
 bool DirectKey::TouchMoved(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	if ( m_touchDown )
 	{
 		KeyDirect direct = GetPointAtDirect(touch->GetLocation());
@@ -770,6 +775,11 @@ bool DirectKey::TouchMoved(NDTouch* touch)
 
 bool DirectKey::TouchEnd(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	if (m_touchDown)
 	{
 		OnTouchUp();

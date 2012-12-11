@@ -227,6 +227,11 @@ void CUIScrollContainerExpand::CalculatePosition(){
 }
 bool CUIScrollContainerExpand::TouchMoved(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
     NDUILayer::TouchMoved(touch);
     
     if(!bIsMoveing){

@@ -108,6 +108,11 @@ protected:
     
 	virtual bool TouchBegin(NDTouch* touch)
 	{
+		if (!this->IsVisibled())
+		{
+			return false;
+		}
+
 		if (CanDealEvent(touch->GetLocation()))
 		{
            if(m_pScrollViewUINodes.size() == 0 && this->GetFrameRect().origin.x == 0)

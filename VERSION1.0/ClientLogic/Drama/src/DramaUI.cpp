@@ -25,6 +25,11 @@ bool ClickLayer::TouchBegin(NDTouch* touch)
 
 bool ClickLayer::TouchEnd(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	NDUITargetDelegate* delegate = GetTargetDelegate();
 
 	if (delegate)
