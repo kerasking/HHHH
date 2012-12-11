@@ -230,7 +230,9 @@ function p.AddItem(container, i)
     if i == 1 then
         container:SetViewSize(ServerItemSize);
     end
+	view:SetPopupDlgFlag(true);
     view:Init(false);
+	view:bringToTop();
     view:SetViewId(i);
     container:AddView(view);
     
