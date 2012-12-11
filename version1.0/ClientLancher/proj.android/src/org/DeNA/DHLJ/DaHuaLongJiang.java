@@ -38,6 +38,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.webkit.CookieSyncManager;
 import android.widget.FrameLayout;
@@ -165,6 +166,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 	}
 	
 	public void setMain(){
+		ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
+		setContentView(menubar,params);
 		View rootView =(View)getView();
 		FrameLayout parent = (FrameLayout)rootView.getParent();
 		if(parent != null)
@@ -174,8 +177,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 		menubar.removeAllViews();
 		menubar.addView(rootView);
 
-		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
-		this.setContentView(menubar,params);
+		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
+		this.setContentView(menubar,pkParams);
 	}
 
 	public void LoginComplete(int userid){
@@ -213,7 +216,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 			return -1;
 		}
 
-		ms_pkDHLJ.changeViewToVideo();
+		ms_pkDHLJ.m_pkView.start();
 
 		return 0;
 	}
@@ -222,10 +225,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 	{
 		return 0;
 	}
-	
+
 	static
 	{
 		System.loadLibrary("mobage");
+		System.loadLibrary("iconv");
 		System.loadLibrary("cocos2d");
 		System.loadLibrary("GameLauncher");
 	}

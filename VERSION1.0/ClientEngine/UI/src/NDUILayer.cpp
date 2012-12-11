@@ -402,6 +402,11 @@ bool NDUILayer::TouchBegin(NDTouch* touch)
 
 bool NDUILayer::TouchEnd(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	m_kEndTouch = touch->GetLocation();
 
 	m_bTouchDwon = false;
@@ -512,6 +517,11 @@ void NDUILayer::TouchCancelled(NDTouch* touch)
 
 bool NDUILayer::TouchMoved(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	CCPoint kMoveTouch = touch->GetLocation();
 
 	// if really moved, android like to send move event even when not moved.
@@ -1878,6 +1888,16 @@ void NDUILayer::bringToTop()
 	{
 		NDBaseLayer *layer = (NDBaseLayer *) m_ccNode;
 		layer->bringToTop();
+	}
+}
+
+//@priority
+void NDUILayer::bringToBottom()
+{
+	if (m_ccNode)
+	{
+		NDBaseLayer *layer = (NDBaseLayer *) m_ccNode;
+		layer->bringToBottom();
 	}
 }
 

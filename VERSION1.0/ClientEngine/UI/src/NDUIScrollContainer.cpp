@@ -197,6 +197,11 @@ bool NDUIScrollContainer::CanVerticalMove(NDObject* object, float& vDistance)
 
 bool NDUIScrollContainer::TouchBegin(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	const std::vector<NDNode*>& childlist	= this->GetChildren();
 	std::vector<NDNode*>::const_iterator it	= childlist.begin();
 	

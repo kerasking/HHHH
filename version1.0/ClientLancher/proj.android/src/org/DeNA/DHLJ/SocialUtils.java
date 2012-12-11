@@ -168,7 +168,7 @@ public class SocialUtils {
 
 			public void onDashboardClose() {
 				// TODO Auto-generated method stub
-//				Toast.makeText(mActivity, "å·²é€€å‡ºç¤¾åŒº", Toast.LENGTH_LONG).show();
+//				Toast.makeText(mActivity, "å·²é„1¤7„1¤7å‡ºç¤¾åŒ„1¤7", Toast.LENGTH_LONG).show();
 			}
 		};
 

@@ -158,6 +158,11 @@ void CUIScroll::draw()
 
 bool CUIScroll::TouchBegin(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	if (m_linkContainer &&
 		!cocos2d::CCRect::CCRectContainsPoint(m_linkContainer->GetScreenRect(), touch->GetLocation()))
 	{
@@ -166,6 +171,8 @@ bool CUIScroll::TouchBegin(NDTouch* touch)
 	
 	if (CUIMovableLayer::TouchBegin(touch)) 
 	{
+		if (!this->IsVisibled()) return false;
+
 		ResetMove();
 		
 		if (IsCanAccerate())
@@ -184,6 +191,11 @@ bool CUIScroll::TouchBegin(NDTouch* touch)
 
 bool CUIScroll::TouchEnd(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	bool bRet = CUIMovableLayer::TouchEnd(touch);
 	
 	m_bUp = true;
