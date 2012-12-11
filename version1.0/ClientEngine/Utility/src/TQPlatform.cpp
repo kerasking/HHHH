@@ -18,9 +18,13 @@
 #import "UIKit/UIFont.h"
 #import "UIKit/UIStringDrawing.h"
 #endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include "platform/android/jni/JniHelper.h"
+#endif
 using namespace cocos2d;
 
-#ifdef WIN32
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 static char g_GBKConvUTF8Buf_Again[5000] = {0};
 const char* GBKToUTF8(const char *strChar)
 {
@@ -74,16 +78,36 @@ CCSize getStringSize(const char* pszStr, unsigned int fontSize)
 			return CCSizeMake( width, height );
 		}
 #else
-		CCSz = CCSizeMake(24.0f, 29.0f);
+//        JniMethodInfo t;
+//        
+//        if (JniHelper::getStaticMethodInfo(t
+//                                           
+//                                           , "org/cocos2dx/lib/Cocos2dxActivity"
+//                                           
+//                                           , "getStringSize"
+//                                           
+//                                           , "(Ljava/lang/String;)[I"))
+//            
+//        {
+//            jstring stringArg = t.env->NewStringUTF(pszStr);
+//            
+//            jintArray ret = (jintArray)t.env->CallStaticObjectMethod(t.classID, t.methodID, stringArg);
+//            t.env->DeleteLocalRef(stringArg);
+//            t.env->DeleteLocalRef(t.classID);
+//            if (ret)
+//            {
+//                // get array values
+//                jint *oarr = t.env->GetIntArrayElements(ret, NULL);
+//
+//                // assign array values to CCSize
+//                CCSz.width = (float)oarr[0];
+//                CCSz.height = (float)oarr[1];
+//            }
+//        }
+        CCSz = CCSizeMake(24.0f/2, 29.0f/2);
+
         
         return CCSz;
-// 		string tmpStr(pszStr);
-// 		int strSize = tmpStr.size()/2;
-// 		float totalWidth = (fontSize)*strSize*1.0;
-// 		if(0 == strSize)
-// 			sz = CCSizeMake(0.0f, 0.0f);
-// 		else
-// 			sz = CCSizeMake(totalWidth, 29.0f);
 
 #endif
 	}
