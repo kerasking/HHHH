@@ -5,41 +5,61 @@
  *  Created by jhzheng on 11-12-23.
  *  Copyright 2011 (网龙)DeNA. All rights reserved.
  *
+ *	说明：加载lyol.strings.
  */
 
 #pragma once
 
 #include <map>
+#include <vector>
 #include <string>
-#include "CCString.h"
-#include "define.h"
-#include "CCString.h"
+using namespace std;
 
-using namespace cocos2d;
+
 
 class NDLocalXmlString
 {
+private:
+	NDLocalXmlString() {}
+
 public:
-	static NDLocalXmlString& GetSingleton();
+	static NDLocalXmlString& GetSingleton()
+	{
+		static NDLocalXmlString* s_NDLocalXmlString = NULL;
+		if (!s_NDLocalXmlString)
+		{
+			s_NDLocalXmlString = new NDLocalXmlString;
+		}
+		return *s_NDLocalXmlString;
+	}
 	
-	static void purge();
+	void destroy()
+	{
+		delete this;
+	}
 	
-	~NDLocalXmlString();
+	~NDLocalXmlString() {}
 	
-	const char* GetCString(const char* szKeyName);
-	//++Guosen 2012.8.10//改为在程序运行后加载数据，避免静态加载
+public:
 	bool LoadData();
-private:
-	NDLocalXmlString();
-	
-	void Init();
-	
-	bool GetValue(const std::string str, bool& isKey, std::string& resValue);
+
+	const char* GetCString(const char* szKeyName);
 	
 private:
-	typedef std::map<std::string, std::string>		map_data;
-	typedef map_data::iterator						map_data_it;
-	typedef std::pair<std::string, std::string>		pair_data_it;
+	bool readLines( vector<string>& vecLines );
+	bool parseLines( vector<string>& vecLines );
 	
-	map_data m_data;
+	bool addKeyValue( const string& keyLine, const string& valLine );
+	bool getMidString( const string& line, const string& left, const string& right, string& out_mid );
+
+	bool isKey( const char* testLine );
+	bool isVal( const char* testLine );
+
+	void logErr( const string& keyLine, const string& valLine );
+	void dump();
+	
+private:
+	typedef map<string, string>		MAP_DATA;
+	typedef map<string, string>::iterator ITER_MAP_DATA;
+	MAP_DATA mapData;
 };
