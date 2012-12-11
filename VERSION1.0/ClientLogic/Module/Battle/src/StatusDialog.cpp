@@ -278,6 +278,11 @@ void StatusDialog::draw()
 
 bool StatusDialog::TouchEnd(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	Battle* parent = (Battle*)this->GetParent();
 
 	if (parent) 

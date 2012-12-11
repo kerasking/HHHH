@@ -406,6 +406,11 @@ CCPoint WorldMapLayer::ConvertToScreenPoint(CCPoint mapPoint)
 //return true: 输入独占
 bool WorldMapLayer::TouchBegin(NDTouch* touch)
 {	
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	CCPoint m_Touch = touch->GetLocation();
 	CCPoint posMap = ConvertToMapPoint(m_Touch);
 	int iPlaceNodeNum = m_mapData->getPlaceNodes()->count();
@@ -433,6 +438,11 @@ bool WorldMapLayer::TouchBegin(NDTouch* touch)
 //return true: 输入独占
 bool WorldMapLayer::TouchEnd(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	NDUILayer::TouchEnd(touch);
 	return true;
 }

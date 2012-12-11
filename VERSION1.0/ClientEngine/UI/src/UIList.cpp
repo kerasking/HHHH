@@ -1139,6 +1139,11 @@ bool CUIList::DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch)
 
 bool CUIList::TouchEnd(NDTouch* touch)
 {
+	if (!this->IsVisibled())
+	{
+		return false;
+	}
+
 	NDUILayer::TouchEnd(touch);
 	
 	if (m_touchMoved && m_vecSection.size() > 0)
