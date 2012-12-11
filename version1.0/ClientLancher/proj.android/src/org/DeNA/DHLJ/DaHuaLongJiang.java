@@ -177,8 +177,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 		menubar.removeAllViews();
 		menubar.addView(rootView);
 
-		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
-		this.setContentView(menubar,params);
+		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
+		this.setContentView(menubar,pkParams);
 	}
 
 	public void LoginComplete(int userid){
