@@ -11,12 +11,12 @@ using namespace cocos2d;
 
 extern "C"
 {
-	jint JNI_OnLoad(JavaVM *vm, void *reserved)
-	{
-		JniHelper::setJavaVM(vm);
-
-		return JNI_VERSION_1_4;
-	}
+//	jint JNI_OnLoad(JavaVM *vm, void *reserved)
+//	{
+//		JniHelper::setJavaVM(vm);
+//
+//		return JNI_VERSION_1_4;
+//	}
 	
 	JNIEXPORT void JNICALL Java_org_DeNA_DHLJ_NDVideoControl_onCompletionCallback()
 	{

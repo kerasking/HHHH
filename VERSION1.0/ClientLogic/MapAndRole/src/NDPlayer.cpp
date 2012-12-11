@@ -183,7 +183,7 @@ NDPlayer& NDPlayer::defaultHero(int lookface, bool bSetLookFace)
 
 	if (!g_pkDefaultHero)
 	{
-		g_pkDefaultHero = CREATE_CLASS(NDSprite,"NDPlayer");
+		g_pkDefaultHero = new NDPlayer;//CREATE_CLASS(NDSprite,"NDPlayer");
 		g_pkDefaultHero->SetNodeLevel(NODE_LEVEL_MAIN_ROLE);
 		g_pkDefaultHero->InitializationFroLookFace(lookface, false);
 	}

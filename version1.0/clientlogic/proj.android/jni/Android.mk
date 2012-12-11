@@ -156,8 +156,7 @@ LOCAL_LDLIBS := -L$(call host-path, $(LOCAL_PATH)/../../proj.android/libs/$(TARG
                 -L$(call host-path, $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/third_party/android/libraries/$(TARGET_ARCH_ABI))
 
 LOCAL_WHOLE_STATIC_LIBRARIES += ClientEngine
-LOCAL_WHOLE_STATIC_LIBRARIES += KUtil
 
-include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_STATIC_LIBRARY)
 
 $(call import-module,ClientEngine/proj.android/jni)

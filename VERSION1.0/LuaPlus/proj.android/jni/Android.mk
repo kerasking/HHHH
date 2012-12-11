@@ -54,4 +54,4 @@ LOCAL_SRC_FILES := \
 ../../src/lzio.c \
 ../../src/print.c
 
-include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_STATIC_LIBRARY)

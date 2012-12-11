@@ -63,8 +63,6 @@ fi
 mkdir $HELLOWORLD_ROOT/assets
 mkdir $HELLOWORLD_ROOT/assets/SimplifiedChineseRes
 
-
-
 if [[ $buildexternalsfromsource ]]; then
     echo "Building external dependencies from source"
     $NDK_ROOT_LOCAL/ndk-build -C $HELLOWORLD_ROOT $* \
@@ -74,3 +72,6 @@ else
     $NDK_ROOT_LOCAL/ndk-build -C $HELLOWORLD_ROOT $* \
         NDK_MODULE_PATH=${CLIENT_LOCAL}:${COCOS2DX_ROOT_LOCAL}:${COCOS2DX_ROOT_LOCAL}/cocos2dx/platform/third_party/android/prebuilt
 fi
+
+cp libs/libmobage.so libs/armeabi/libmobage.so
+cp libs/LiSu.ttf assets/LiSu.ttf
