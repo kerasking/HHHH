@@ -343,5 +343,21 @@ struct NDGameDataUtil
 		return false;
 	}
 #endif
+
+#if 7
+	//内存占用
+	static int getBytesLen()
+	{
+		return NDGameData::Instance().getBytesLen();
+	}
+
+	//显示内存占用
+	static void showMemStat()
+	{
+		int bytesLen = NDGameData::Instance().getBytesLen();
+		float M_count = float(bytesLen) / (1024*1024);
+		LOGINFO( "@@ GameDB mem size: %.1fM\r\n", M_count );
+	}
+#endif
 };
 
