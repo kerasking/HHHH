@@ -9,11 +9,12 @@
 #include "DownloadPackage.h"
 #include "KData.h"
 #include "KDirectory.h"
+#include "KHttp.h"
 
 #include "Reachability.h"
 #include "pthread.h"
 
-//´ıÊµÏÖ
+//Â¥ËÂ ÂµÅ“Ã·
 // bool isWifiNetWork()
 // {
 // 	Reachability *r = [Reachability reachabilityWithHostName:@"www.baidu.com"];

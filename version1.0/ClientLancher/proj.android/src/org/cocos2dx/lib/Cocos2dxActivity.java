@@ -154,7 +154,6 @@ public abstract class Cocos2dxActivity extends Activity implements
 		m_pkView.requestFocus();
 
 		setContentView(m_pkView);
-		
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView()

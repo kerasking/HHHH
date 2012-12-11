@@ -7,14 +7,14 @@
  *
  */
 
-#import "MobageSdkLoginAndroid.h"
-#import "ScriptGlobalEvent.h"
-#import "NDDirector.h"
+#include "MobageSdkLoginAndroid.h"
+#include "ScriptGlobalEvent.h"
+#include "NDDirector.h"
 #include "ScriptMgr.h"
 
-#import "NDBeforeGameMgr.h"
-#import "SMLoginScene.h"
-#import "SMGameScene.h"
+#include "NDBeforeGameMgr.h"
+#include "SMLoginScene.h"
+#include "SMGameScene.h"
 
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
@@ -25,15 +25,13 @@
 
 void MobageSdkLoginAndroid::onLoginComplete(int userId) {
 	LOGD("app delegate onLoginComplete userId %d", userId);
-    ScriptMgrObj.excuteLuaFunc( "SetAccountID", "Login_ServerUI", userId );
+	NDBeforeGameMgr& mgr = NDBeforeGameMgrObj;
+	mgr.SetCurrentUser(userId);
+    //ScriptMgrObj.excuteLuaFunc( "SetAccountID", "Login_ServerUI", userId );
 	LOGD("SetAccountID success!");
 }
 
 void MobageSdkLoginAndroid::onLoginError() {
-	CSMLoginScene* pScene = (CSMLoginScene*)NDDirector::DefaultDirector()->GetSceneByTag(SMLOGINSCENE_TAG);
-	if(pScene)
-	{
-		return pScene->OnEvent_LoginError(0);
-	}
+    
 }
 

@@ -166,6 +166,8 @@ void CUIDialog::Initialization()
 	NDUILayer::Initialization();
 	
 	NDSharedPtr<NDUILoadEngine> spLoadEngine = CREATE_CLASS(NDUILoadEngine,"NDUILoad");
+    if(!spLoadEngine)
+        return;
 	spLoadEngine->Load("TaskChat.ini", this, this, CCSizeMake(0, 0));
 
 	CCSize winsize	= CCDirector::sharedDirector()->getWinSizeInPixels();

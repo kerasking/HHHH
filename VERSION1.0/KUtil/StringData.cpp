@@ -3,6 +3,7 @@
 #include "StringData.h"
 #include "KData.h"
 #include "Kathy.h"
+#include "stdlib.h"
 
 
 StringData::StringData()

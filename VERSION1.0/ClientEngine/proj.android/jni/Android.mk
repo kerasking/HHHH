@@ -57,6 +57,7 @@ LOCAL_SRC_FILES := \
 ../../System/src/NDTouch.cpp \
 ../../System/src/NDWideString.cpp \
 ../../System/src/SMString.cpp \
+../../System/src/NDClassFactory.cpp \
 ../../UI/src/Analyst.cpp \
 ../../UI/src/HyperLinkLabel.cpp \
 ../../UI/src/NDScrollLayer.cpp \
@@ -102,6 +103,14 @@ LOCAL_SRC_FILES := \
 ../../DataTrans/src/NDSocket.cpp \
 ../../DataTrans/src/NDTransData.cpp \
 ../../Platform/src/IphoneInput.cpp \
+../../Utility/src/Des.cpp \
+../../Utility/src/MD5checksum.cpp \
+../../Utility/src/NDConsole.cpp \
+../../Utility/src/NDString.cpp \
+../../Utility/src/NDUtil.cpp \
+../../Utility/src/TQPlatform.cpp \
+../../Utility/src/WjcDes.cpp \
+../../Utility/src/XMLReader.cpp \
 ../../Utility/src/ImageNumber.cpp \
 ../../Utility/src/NDDataSource.cpp \
 ../../Utility/src/NDRidePet.cpp \
@@ -155,7 +164,7 @@ $(LOCAL_PATH)/../../../ClientLogic/MsgDefine/inc \
 $(LOCAL_PATH)/../../../ClientLogic/Script/inc \
 $(LOCAL_PATH)/../../../ClientLogic/GameScene/inc \
 $(LOCAL_PATH)/../../../NetWork/inc \
-$(LOCAL_PATH)/../../../NDUtility/inc
+$(LOCAL_PATH)/../../../KUtil/inc
 
 LOCAL_LDLIBS := -L$(call host-path, $(LOCAL_PATH)/../../proj.android/libs/$(TARGET_ARCH_ABI)) \
                 -L$(call host-path, $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/third_party/android/libraries/$(TARGET_ARCH_ABI)) \
@@ -165,12 +174,12 @@ LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += luaplus
 LOCAL_WHOLE_STATIC_LIBRARIES += tinyxml
 LOCAL_WHOLE_STATIC_LIBRARIES += NetWork
-LOCAL_WHOLE_STATIC_LIBRARIES += NDUtility
+LOCAL_WHOLE_STATIC_LIBRARIES += KUtil
 
-include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_STATIC_LIBRARY)
 
 $(call import-module,LuaPlus/proj.android/jni)
 $(call import-module,cocos2dx)
 $(call import-module,tinyxml/proj.android/jni)
 $(call import-module,NetWork/proj.android/jni)
-$(call import-module,NDUtility/proj.android/jni)
+$(call import-module,KUtil/proj.android/jni)

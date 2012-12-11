@@ -24,6 +24,7 @@
 #include "SMGameScene.h"
 
 #include "ScriptGameData.h"
+#include "ScriptGameData_NewUtil.h"
 #include "ScriptDataBase.h"
 #include "ScriptTask.h"
 #include "TableDef.h"
@@ -834,8 +835,13 @@ int NDNpc::GetDataBaseData(int nIndex)
 	{
 		return 0;
 	}
+
+#if WITH_NEW_DB
+	return NDGameDataUtil::getDataULL( MAKE_NDTABLEPTR_INI(nKey), MAKE_CELLPTR(m_nID,nIndex));
+#else
 	return ScriptGameDataObj.GetData<unsigned long long>(eScriptDataDataBase,
 			nKey, eRoleDataPet, m_nID, nIndex);
+#endif
 }
 
 /*

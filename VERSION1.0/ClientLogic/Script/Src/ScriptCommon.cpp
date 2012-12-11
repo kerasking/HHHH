@@ -43,6 +43,7 @@ int LuaLogError(LuaState* state)
 	if (str.IsString())
 	{
 		ScriptMgrObj.DebugOutPut("Error:%s", str.GetString());
+		//WriteCon("@@lua: %s\r\n", str.GetString());
 	}
 	
 	return 0;

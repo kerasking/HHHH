@@ -22,6 +22,7 @@
 #include "LuaStateMgr.h"
 #include "NDBeforeGameMgr.h"
 #include "ScriptGameData.h"
+#include "ScriptGameData_NewUtil.h"
 #include "NDDebugOpt.h"
 #include "NDClassFactory.h"
 #include "Battle.h"
@@ -617,6 +618,12 @@ bool NDGameApplication::processPM(const char* cmd)
 				loader.Load( "test.ini", pLayer, NULL );
 			}
 		}
+	}
+	else if (stricmp(cmd, "gamedb") == 0) //don't del. for debuging.
+	{
+		NDGameDataUtil::showMemStat();
+		NDGameData& pGameData = NDGameData::Instance();
+		int x = 0;
 	}
 	else
 	{
