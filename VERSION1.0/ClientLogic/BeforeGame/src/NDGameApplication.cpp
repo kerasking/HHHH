@@ -189,6 +189,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	}
 
 	CCDirector* pDirector = CCDirector::sharedDirector();
+	CCDirector::sharedDirector()->stopAnimation();
 	CCAssert(pDirector, "applicationDidFinishLaunching");
 	pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
 
@@ -224,8 +225,6 @@ bool NDGameApplication::applicationDidFinishLaunching()
 		CCLog("Entryu setDesignResolutionSize");
 		CCLog( "@@ before setDesignResolutionSize(), frameSize=(%d,%d)\r\n", (int)eglView->getFrameSize().width, (int)eglView->getFrameSize().height );
 		CCEGLView::sharedOpenGLView()->setDesignResolutionSize( eglView->getFrameSize().width, eglView->getFrameSize().height, kResolutionNoBorder );
-		//CCEGLView::sharedOpenGLView()->setDesignResolutionSize(800, 480, kResolutionNoBorder);
-		//CCEGLView::sharedOpenGLView()->setDesignResolutionSize(960, 640, kResolutionNoBorder);
 	}
 	else 
 	{
