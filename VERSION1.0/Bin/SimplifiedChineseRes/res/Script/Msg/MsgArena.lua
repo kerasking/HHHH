@@ -71,21 +71,20 @@ function p.ProcessArenaInfo(netdatas)
 	ArenaUI.CleanChallengeList();
     LogInfo("p.ProcessArenaInfo %d",userCount);
     
+    local lst = {};
 	for i=1, userCount do
-		local id=netdatas:ReadInt();
-        LogInfo("+++++++++++++++id[%d]+++++++++++++++++",id);
-		local lookface=netdatas:ReadInt();
-        --LogInfo("+++++++++++++++lookface[%d]+++++++++++++++++",lookface);
-		local level=netdatas:ReadShort();
-        LogInfo("+++++++++++++++level[%d]+++++++++++++++++",level);
-		local rank=netdatas:ReadInt();
-        --LogInfo("+++++++++++++++rank[%d]+++++++++++++++++",rank);
-		local user_name=netdatas:ReadUnicodeString();
-        --LogInfo("+++++++++++++++user_name[%s]+++++++++++++++++",rank);
-		--LogInfo("%d,rank:%d"..user_name,i,rank)
-        LogInfo("p.ProcessArenaInfo %s",user_name);
-		ArenaUI.SetChallengeList(i,id,user_name,level,rank,lookface);
+        local obj = {};
+        obj.index=i;
+		obj.id=netdatas:ReadInt();
+		obj.lookfaceID=netdatas:ReadInt();
+		obj.level=netdatas:ReadShort();
+		obj.rank=netdatas:ReadInt();
+		obj.name=netdatas:ReadUnicodeString();
+        table.insert(lst,obj);
+		--ArenaUI.SetChallengeList(i,id,user_name,level,rank,lookface);
 	end
+    
+    ArenaUI.RefreshRankList(lst);
 	
 	ArenaUI.CleanReport()
 	for i=1, reportCount do

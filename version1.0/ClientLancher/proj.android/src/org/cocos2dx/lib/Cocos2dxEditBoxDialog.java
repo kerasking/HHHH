@@ -65,7 +65,7 @@ public class Cocos2dxEditBoxDialog extends Dialog
 
 	/**
 	 * The user is allowed to enter a phone number.
-	 */
+	 */ 
 	private final int kEditBoxInputModePhoneNumber = 3;
 
 	/**

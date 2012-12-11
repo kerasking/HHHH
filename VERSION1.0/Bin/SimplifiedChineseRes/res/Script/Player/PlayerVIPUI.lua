@@ -389,20 +389,18 @@ function p.GameDataUserInfoRefresh()
 	local nLeftTime = p.allowBuyCount(); --nAvailBuyTime - nBought;	--剩余军令购买次数
 	local nMilOrders = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_STAMINA);
 	local nGold =  GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
-	MOlabel:SetText(string.format("您今天还可以购买军令%d次。",nLeftTime));
 	
 	
-
-	
-	
-	
-	--local str = string.format("军令:(%d/%d)\n 剩余购买次数:%d\nvip等级:%d\n金币:%d",nMilOrders,MAX_MILORDERS,nLeftTime,nVipRank,nGold);
-	
-
-	
-	
-	
-
+	--
+	local nBought = GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_HAVE_BUY_STAMINA);
+	local sGoldTip = "";
+	if nLeftTime > 0 and nBought <=47 then
+	     sGoldTip = "当前购买需"..tGoldNeeded[nBought+1].."金币。";	     
+	end
+	    
+	--ffff00
+	--]]
+	MOlabel:SetText("今天还能购买军令"..nLeftTime.."次,"..sGoldTip);
 	
 
 end
@@ -419,11 +417,17 @@ end
 
 
 
-function p.BuyMilOrders(nEventType ,nEvent,param)	
-
-   
+function p.BuyMilOrders(nEventType, param, val)	
+    --[[
     if(CommonDlgNew.BtnOk == nEventType) then
         _G.MsgMilOrder.SendMsgBuyMilOrder();
+    end
+    ]]
+    if(nEventType == CommonDlgNew.BtnOk) then
+        _G.MsgMilOrder.SendMsgBuyMilOrder();
+        p.bTwiceConfirm = val;
+    elseif(nEventType == CommonDlgNew.BtnNo) then
+        p.bTwiceConfirm = val;
     end
 end
 
@@ -444,8 +448,14 @@ function p.OnClickBuyMilOrderBtn()
 		p.buyMilOrderTip(0);
 end	
 
+--是否消费提示
+p.bTwiceConfirm = false;
 
 p.battleId = nil;
+
+
+
+ 
 --购买军令提示         nType为0是每日活动中购买军令    1为副本战斗军令不足购买军令
 function p.buyMilOrderTip(nType)
     p.battleId = nType;
@@ -471,7 +481,12 @@ function p.buyMilOrderTip(nType)
     end
     
     if nType == 0 then
-        CommonDlgNew.ShowYesOrNoDlg("今日可购买"..nLeftTime.."次。花费"..tGoldNeeded[nBought+1].."金币购买1个军令",p.BuyMilOrders,true);
+        --CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("PLAYER_T76"),nLeftTime,tGoldNeeded[nBought+1]),p.BuyMilOrders,true);
+        if(p.bTwiceConfirm == false) then
+            CommonDlgNew.ShowNotHintDlg("今日可购买"..nLeftTime.."次。花费"..tGoldNeeded[nBought+1].."金币购买1个军令", p.BuyMilOrders);
+        else
+            _G.MsgMilOrder.SendMsgBuyMilOrder();
+        end
     else
         CommonDlgNew.ShowYesOrNoDlg("您当前的军令不足,是否花费"..tGoldNeeded[nBought+1].."金币购买1个军令", p.OnNormalBossBuyAtomatic,true);
     end

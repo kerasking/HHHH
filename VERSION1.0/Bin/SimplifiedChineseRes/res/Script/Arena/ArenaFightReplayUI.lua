@@ -70,6 +70,7 @@ function p.OnUIEvent(uiNode,uiEventType,param)
             LogInfo("p.OnUIEvent111111[%d]",tag);
             local scene = GetSMGameScene();
             CloseBattle();
+            BattleUI_Title.CloseUI();--
             --WorldMap(NormalBossListUI.nCampaignID);  
             --LogInfo("NormalBossListUI.nCampaignID111111  = %d", NormalBossListUI.nCampaignID);
             NormalBossListUI.RedisplayWorldMap();

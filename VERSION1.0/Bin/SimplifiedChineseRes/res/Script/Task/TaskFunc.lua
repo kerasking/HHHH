@@ -893,9 +893,12 @@ end
 
 --获取下一主线任务id
 function GetNextMainTaskId()
+    LogInfo("GetNextMainTaskId");
 	--获取可接任务列表
 	local tlist = GetCanAcceptTasks();
 	for i,taskid in ipairs(tlist) do	
+        LogInfo("taskid:[%d]",taskid);
+    
 		local tasktype = _G.math.floor(taskid/10000);
 		if tasktype == TASKTYPE.MAIN_TASK then
 			return taskid;

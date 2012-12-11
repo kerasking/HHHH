@@ -35,7 +35,7 @@ function p.LoadUI()
 	--layer:SetFrameRect(CGRectMake(0, 0, winsize.w, winsize.h));
 	layer:SetFrameRect( RectFullScreenUILayer );--++Guosen 2012.7.6
 	--layer:SetBackgroundColor(ccc4(125,125,125,125));
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,2);
 	--_G.AddChild(scene, layer, NMAINSCENECHILDTAG.RaidersLoad);
 		
         
@@ -72,6 +72,7 @@ function p.OnUIEvent(uiNode,uiEventType,param)
         if ID_FIGHTEVALUATE_CTRL_BUTTON_CONFIRM == tag then
             local scene = GetSMGameScene();
             CloseBattle();
+            BattleUI_Title.CloseUI();--
             if scene~= nil then
             scene:RemoveChildByTag(NMAINSCENECHILDTAG.RaidersLoad,true);
             MsgAffixBoss.sendNmlLeave();
@@ -99,6 +100,7 @@ function p.OnUIEvent(uiNode,uiEventType,param)
          LogInfo("p.OnUIEvent111111[%d]",tag);
             local scene = GetSMGameScene();
             CloseBattle();
+            BattleUI_Title.CloseUI();--
         if scene~= nil then
             --local layer = GetUiLayer(scene,NMAINSCENECHILDTAG.RaidersLoad);
             --layer:SetVisible(false);

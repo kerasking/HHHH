@@ -34,7 +34,7 @@ function p.LoadUI()
 	local ui_size=186*ScaleFactor;
 	layer:SetFrameRect(CGRectMake(0, 0, winsize.w, winsize.h));
 	--layer:SetBackgroundColor(ccc4(125,125,125,125));
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,2);
 	--_G.AddChild(scene, layer, NMAINSCENECHILDTAG.ArenaRewardUI);
 		
         

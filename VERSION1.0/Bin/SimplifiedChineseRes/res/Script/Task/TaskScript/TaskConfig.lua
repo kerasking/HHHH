@@ -1190,6 +1190,216 @@ TaskConfig[50198]["TASKOPTION1"]="看我的！"
 TaskConfig[50198]["NOTFINISH"] ="还没完成呢，你怎么回来啦？"
 TaskConfig[50198]["FINISHCONTENT"] ="毛玠、于禁已死，看你曹操还有何人能水战！"
 TaskConfig[50198]["FINISHOPTION"] ="领取奖励!"
+TaskConfig[50199]= {}
+TaskConfig[50199]["TASKCONTENT1"]="曹军敌船已经被烧光,在我们刘孙联军前面他们肯定不是对手,可以放手杀敌了"	
+TaskConfig[50199]["TASKOPTION1"]="没问题,这个我在行! "	
+TaskConfig[50199]["NOTFINISH"] ="赶紧去吧，看好你哦！"	
+TaskConfig[50199]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50199]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50200]= {}
+TaskConfig[50200]["TASKCONTENT1"]="我看曹军在我联合军的攻击下已经开始出现自乱阵型的迹象了,赶紧给他们加把火吧  "	
+TaskConfig[50200]["TASKOPTION1"]="我这就去办!"	
+TaskConfig[50200]["NOTFINISH"] ="你还没去吗？可要抓紧啊！"	
+TaskConfig[50200]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50200]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50201]= {}
+TaskConfig[50201]["TASKCONTENT1"]="在你的努力下,曹军已经阵型大乱~前方夏侯惇曾经是你的手下败将,就由你再次出手拿下他吧! "	
+TaskConfig[50201]["TASKOPTION1"]="没问题,这个我在行! "	
+TaskConfig[50201]["NOTFINISH"] ="还没完成呢，你怎么回来啦？"	
+TaskConfig[50201]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50201]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50202]= {}
+TaskConfig[50202]["TASKCONTENT1"]="曹军已经败退,让我们联手乘火打劫吧    "	
+TaskConfig[50202]["TASKOPTION1"]="我这就去办!"	
+TaskConfig[50202]["NOTFINISH"] ="还没完成哦，要加油啊！"	
+TaskConfig[50202]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50202]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50203]= {}
+TaskConfig[50203]["TASKCONTENT1"]="曹军已经被我们杀的阵型大乱了,仔细找找有没有大将在乱军中       "	
+TaskConfig[50203]["TASKOPTION1"]="没问题,这个我在行! "	
+TaskConfig[50203]["NOTFINISH"] ="赶紧去吧，看好你哦！"	
+TaskConfig[50203]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50203]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50204]= {}
+TaskConfig[50204]["TASKCONTENT1"]="前方是曹军大将曹洪在路中断后,赶紧上前除掉他 !"	
+TaskConfig[50204]["TASKOPTION1"]="我这就去办!"	
+TaskConfig[50204]["NOTFINISH"] ="你还没去吗？可要抓紧啊！"	
+TaskConfig[50204]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50204]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50205]= {}
+TaskConfig[50205]["TASKCONTENT1"]="我知道前方有一地方叫华容道,很适合做埋伏,怎么把曹军迫入这个地方就靠你了!"	
+TaskConfig[50205]["TASKOPTION1"]="没问题,这个我在行! "	
+TaskConfig[50205]["NOTFINISH"] ="还没完成呢，你怎么回来啦？"	
+TaskConfig[50205]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50205]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50206]= {}
+TaskConfig[50206]["TASKCONTENT1"]="我看曹军距离华容道已经很近了,加油! "
+TaskConfig[50206]["TASKOPTION1"]="我这就去办!"	
+TaskConfig[50206]["NOTFINISH"] ="赶紧去吧，看好你哦！"	
+TaskConfig[50206]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50206]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50207]= {}
+TaskConfig[50207]["TASKCONTENT1"]="曹军果然埋伏了,曹仁这你的手下败将又来了~       "	
+TaskConfig[50207]["TASKOPTION1"]="手下败将,就让我在看看他有没有什么长进没!     "	
+TaskConfig[50207]["NOTFINISH"] ="你还没去吗？可要抓紧啊！"	
+TaskConfig[50207]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50207]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50208]= {}
+TaskConfig[50208]["TASKCONTENT1"]="曹仁果然没多少长进,再次败在你的手下,赶紧乘机多杀些曹军吧       "	
+TaskConfig[50208]["TASKOPTION1"]="没问题,这个我在行!        "	
+TaskConfig[50208]["NOTFINISH"] ="还没完成呢，你怎么回来啦？"	
+TaskConfig[50208]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50208]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50209]= {}
+TaskConfig[50209]["TASKCONTENT1"]="在我军的绞杀下,曹军已经溃不成军了,看来这次能把他们弄死了"	
+TaskConfig[50209]["TASKOPTION1"]="好的,我这就去办! "	
+TaskConfig[50209]["NOTFINISH"] ="还没完成哦，要加油啊！"	
+TaskConfig[50209]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50209]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50210]= {}
+TaskConfig[50210]["TASKCONTENT1"]="又有一员曹军大将出来送死了,曹昂,留给你了           "	
+TaskConfig[50210]["TASKOPTION1"]="好的,我这就去办! "	
+TaskConfig[50210]["NOTFINISH"] ="赶紧去吧，看好你哦！"	
+TaskConfig[50210]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50210]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50211]= {}
+TaskConfig[50211]["TASKCONTENT1"]="经过一路绞杀,你终于杀到了曹操阵前了~   "	
+TaskConfig[50211]["TASKOPTION1"]="没问题,这个我在行!        "	
+TaskConfig[50211]["NOTFINISH"] ="你还没去吗？可要抓紧啊！"	
+TaskConfig[50211]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50211]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50212]= {}
+TaskConfig[50212]["TASKCONTENT1"]="先消灭旁边护卫在看曹贼是否在军中!        "	
+TaskConfig[50212]["TASKOPTION1"]="好的,我这就去办! "	
+TaskConfig[50212]["NOTFINISH"] ="还没完成呢，你怎么回来啦？"	
+TaskConfig[50212]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50212]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50213]= {}
+TaskConfig[50213]["TASKCONTENT1"]="没找到曹操出来个王朗,灭了他"	
+TaskConfig[50213]["TASKOPTION1"]="没问题,这个我在行! "	
+TaskConfig[50213]["NOTFINISH"] ="赶紧去吧，看好你哦！"	
+TaskConfig[50213]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50213]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50214]= {}
+TaskConfig[50214]["TASKCONTENT1"]="确认了,曹操就在前方的军中,被他的护卫保护着,赶紧上!       "	
+TaskConfig[50214]["TASKOPTION1"]="没问题,这个我在行!    "	
+TaskConfig[50214]["NOTFINISH"] ="你还没去吗？可要抓紧啊！"	
+TaskConfig[50214]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50214]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50215]= {}
+TaskConfig[50215]["TASKCONTENT1"]="加把劲,别让这奸雄跑了     "	
+TaskConfig[50215]["TASKOPTION1"]="没问题,这个我在行!        "	
+TaskConfig[50215]["NOTFINISH"] ="还没完成呢，你怎么回来啦？"	
+TaskConfig[50215]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50215]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50216]= {}
+TaskConfig[50216]["TASKCONTENT1"]="不用担心北方局势,曹操死了自然还有别人在,赶紧先把奸雄杀掉才是!      "	
+TaskConfig[50216]["TASKOPTION1"]="没问题,这个我在行!        "	
+TaskConfig[50216]["NOTFINISH"] ="还没完成哦，要加油啊！"	
+TaskConfig[50216]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50216]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50217]= {}
+TaskConfig[50217]["TASKCONTENT1"]="看到曹操危险,司马懿终于出来了     "	
+TaskConfig[50217]["TASKOPTION1"]="好的,我这就去办! "	
+TaskConfig[50217]["NOTFINISH"] ="赶紧去吧，看好你哦！"	
+TaskConfig[50217]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50217]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50218]= {}
+TaskConfig[50218]["TASKCONTENT1"]="司马懿要求你履行赌约,与他再战一场!   "	
+TaskConfig[50218]["TASKOPTION1"]="好吧,我这就去办!     "	
+TaskConfig[50218]["NOTFINISH"] ="你还没去吗？可要抓紧啊！"	
+TaskConfig[50218]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50218]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50219]= {}
+TaskConfig[50219]["TASKCONTENT1"]="第一场出列的是壮侯庞德,拿下他!   "	
+TaskConfig[50219]["TASKOPTION1"]="我等这场战斗很久了      "	
+TaskConfig[50219]["NOTFINISH"] ="还没完成呢，你怎么回来啦？"	
+TaskConfig[50219]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50219]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50220]= {}
+TaskConfig[50220]["TASKCONTENT1"]="看到庞德被你拿下,司马懿好像做了一些很奇怪的动作    "	
+TaskConfig[50220]["TASKOPTION1"]="没问题,这个我在行!      "	
+TaskConfig[50220]["NOTFINISH"] ="赶紧去吧，看好你哦！"	
+TaskConfig[50220]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50220]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50221]= {}
+TaskConfig[50221]["TASKCONTENT1"]="没想到司马懿竟然也会鬼神之道,多加小心!~   "
+TaskConfig[50221]["TASKOPTION1"]="没问题,这个我在行!     "	
+TaskConfig[50221]["NOTFINISH"] ="你还没去吗？可要抓紧啊！"	
+TaskConfig[50221]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50221]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50222]= {}
+TaskConfig[50222]["TASKCONTENT1"]="司马懿竟然把徐晃召唤出来了,他曾经是你的手下败将,就算成鬼神也一定是你的手下败将!        "	
+TaskConfig[50222]["TASKOPTION1"]="手下败将不足挂齿!  "	
+TaskConfig[50222]["NOTFINISH"] ="还没完成呢，你怎么回来啦？"	
+TaskConfig[50222]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50222]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50223]= {}
+TaskConfig[50223]["TASKCONTENT1"]="眼看司马懿召唤的鬼神幽魂越来越多,有点危险了~ 恩.我记得你能引发天狐相助,应该没问题   "	
+TaskConfig[50223]["TASKOPTION1"]="看我的!"	
+TaskConfig[50223]["NOTFINISH"] ="还没完成哦，要加油啊！"	
+TaskConfig[50223]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50223]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50224]= {}
+TaskConfig[50224]["TASKCONTENT1"]="看你有天狐相助,赶紧乘机多杀灭一些幽魂救下我军将士     "	
+TaskConfig[50224]["TASKOPTION1"]="没问题,这也是我正在做的!    "	
+TaskConfig[50224]["NOTFINISH"] ="赶紧去吧，看好你哦！"	
+TaskConfig[50224]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50224]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50225]= {}
+TaskConfig[50225]["TASKCONTENT1"]="司马懿果然精通鬼神之道,竟然把张辽都招出来了,上次是你大战张辽,这次他成鬼神了也继续靠你了"	
+TaskConfig[50225]["TASKOPTION1"]="没问题!    "	
+TaskConfig[50225]["NOTFINISH"] ="你还没去吗？可要抓紧啊！"	
+TaskConfig[50225]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50225]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50226]= {}
+TaskConfig[50226]["TASKCONTENT1"]="司马懿召唤的鬼神幽魂都被你消灭的差不多了.我看他还在继续有动作你要小心了           "	
+TaskConfig[50226]["TASKOPTION1"]="我晓得了!    "	
+TaskConfig[50226]["NOTFINISH"] ="还没完成呢，你怎么回来啦？"	
+TaskConfig[50226]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50226]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50227]= {}
+TaskConfig[50227]["TASKCONTENT1"]="没想到,司马懿竟然引动天狼出世,你的天狐有危险了~ "	
+TaskConfig[50227]["TASKOPTION1"]="果然司马懿就是黑色命轮拥有者了.."	
+TaskConfig[50227]["NOTFINISH"] ="还没完成哦，要加油啊！"	
+TaskConfig[50227]["FINISHCONTENT"] ="多谢相助    "	
+TaskConfig[50227]["FINISHOPTION"] ="不必客气"
+
+TaskConfig[50228]= {}
+TaskConfig[50228]["TASKCONTENT1"]="天狼加身,黑色命轮拥有者果然是司马懿,师弟,他是你此生的死敌啊,再次对战你要小心了 ! "	
+TaskConfig[50228]["TASKOPTION1"]="我与他,难免总有一战,这已经是不可避免的了!  "	
+TaskConfig[50228]["NOTFINISH"] ="赶紧去吧，看好你哦！"	
+TaskConfig[50228]["FINISHCONTENT"] ="金色命轮对黑色命轮,此次看看黑色命轮更加强大~  "	
+TaskConfig[50228]["FINISHOPTION"] ="看来我还需要加强了"
+
 
 TaskConfig[70001]={}
 TaskConfig[70001]["TASKCONTENT1"]="获得装备后放在背包里是无法增强自己实力的,赶紧穿上背包里的装备吧"

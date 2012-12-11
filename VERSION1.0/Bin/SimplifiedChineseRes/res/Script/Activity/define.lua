@@ -21,3 +21,4 @@ DoFile("Activity/CampBattle.lua")
 
 DoFile("Activity/TransportLoot.lua")
 
+DoFile("Activity/SyndicateBattle.lua")
