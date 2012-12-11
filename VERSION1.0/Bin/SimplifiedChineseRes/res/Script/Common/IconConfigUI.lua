@@ -15,6 +15,11 @@ function GetMountModelPotraitPic(id)
     return GetPotraitPic(id, "mount_model_config", DB_MOUNT_MODEL.ICON, "Mounts", 280, 280);
 end
 
+--获得坐骑头像
+function GetMountHeadPotraitPic(id)
+    return GetPotraitPic(id, "mount_model_config", DB_MOUNT_MODEL.ICON, "MountsHead", 100, 100);
+end
+
 
 --获得武将半身像
 function GetPetBodyPic(petTypeId)
@@ -41,15 +46,7 @@ function GetPetPotraitTranPic(petTypeId)
     return GetPotraitPic(petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_Portrait", 80, 80, -1, 0);
 end
 
---获得招募界面的武将头像
-function GetPetBigPotraitTranPic( petTypeId )
-    return GetPotraitPic( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigPortrait", 179, 215 );
-end
 
---获得招募界面的灰色武将头像
-function GetPetBigGrayPotraitTranPic( petTypeId )
-    return GetPotraitPic( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigGrayPortrait", 179, 215 );
-end
 
 --获得主角高清头像带背景
 function GetPlayerPotraitPic(petTypeId)
@@ -74,15 +71,6 @@ function GetArenaUIPlayerHeadPic(petTypeId)
 end
 
 
---取大地图的图标在副本里使用
-function GetMapPic(mapId)
-    return GetPotraitPic(mapId, "map", DB_DYNAMAP.TITLE, "Map", 178, 154);
-end
-
---取大地图的图标在副本里使用(精英副本由于要加灰色图片导致实现不同修改）
-function GetEliteGrayMapPic(mapId)
-    return GetPotraitPic(mapId, "map", DB_DYNAMAP.TITLE, "MapGray", 178, 154);
-end
 
 --获取物品图片
 function GetGoodsPic(id)
@@ -207,4 +195,123 @@ function GetBodyPotraitPicPath(nIndex)
 end	
 
 
- 
+
+
+-----======================获取副本图标,武将头像调整=======================-----
+--取大地图的图标在副本里使用
+--[[
+function GetMapPic(mapId)
+    return GetPotraitPic(mapId, "map", DB_DYNAMAP.TITLE, "Map", 178, 154);
+end
+--]]
+
+--取大地图的图标在副本里使用(精英副本由于要加灰色图片导致实现不同修改）
+function GetEliteGrayMapPic(mapId)
+    return GetPotraitPicMap(mapId, "map", DB_DYNAMAP.TITLE, "MapGray", 178, 154);
+end
+
+function GetMapPic(mapId)
+    return GetPotraitPicMap(mapId, "map", DB_DYNAMAP.TITLE, "Map",178, 154);
+end
+
+function GetPotraitPicMap(id, configfilename, index,sHead, w, h, offsetRows, offsetCols)
+    if not _G.CheckN(id) then
+        LogInfo("id not is num!");
+		return nil;
+	end
+    
+    if(offsetRows == nil) then
+        offsetRows = 0;
+    end
+    if(offsetCols == nil) then
+        offsetCols = 0;
+    end
+	
+	local nIcon = GetDataBaseDataN(configfilename, id, index);
+	if not _G.CheckN(nIcon) then
+		return nil;
+	end
+    LogInfo("GetPotraitPic:nIcon:[%d],id[%d],index:[%d]",nIcon, id, index);
+
+	--千位,百位标识图片资源文件编号
+	--十位标识所在文件行,个位标识所在文件列
+	local filename		= "Map/"..sHead..nIcon;
+
+	local pool = _G.DefaultPicPool();
+	local pic = pool:AddPicture(_G.GetSMImgPath("portrait/" .. filename .. ".png"), false);
+	if not _G.CheckP(pic) then
+        LogInfo("pic is null!");
+		return nil;
+	end
+
+	return pic;
+end
+
+
+--获得招募界面的武将头像
+--[[
+function GetPetBigPotraitTranPic( petTypeId )
+    return GetPotraitPic( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigPortrait", 179, 215 );
+end
+
+--获得招募界面的灰色武将头像
+function GetPetBigGrayPotraitTranPic( petTypeId )
+    return GetPotraitPic( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigGrayPortrait", 179, 215 );
+end
+--]]
+
+function GetPetBigPotraitTranPic( petTypeId )
+    return GetPotraitPicFigure( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigPortrait", 179, 215 );
+end
+
+--获得招募界面的灰色武将头像
+function GetPetBigGrayPotraitTranPic( petTypeId )
+    return GetPotraitPicFigure( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigGrayPortrait", 179, 215 );
+end
+
+
+function GetPotraitPicFigure(id, configfilename, index,sHead, w, h, offsetRows, offsetCols)
+    if not _G.CheckN(id) then
+        LogInfo("id not is num!");
+		return nil;
+	end
+    
+    if(offsetRows == nil) then
+        offsetRows = 0;
+    end
+    if(offsetCols == nil) then
+        offsetCols = 0;
+    end
+	
+	local nIcon = GetDataBaseDataN(configfilename, id, index);
+	if not _G.CheckN(nIcon) then
+		return nil;
+	end
+    LogInfo("GetPotraitPic:nIcon:[%d],id[%d],index:[%d]",nIcon, id, index);
+
+	--千位,百位标识图片资源文件编号
+	--十位标识所在文件行,个位标识所在文件列
+	local filename		= sHead.."/Figure_BigPortrait"..nIcon;
+
+	local pool = _G.DefaultPicPool();
+	local pic = pool:AddPicture(_G.GetSMImgPath("portrait/" .. filename .. ".png"), false);
+	if not _G.CheckP(pic) then
+        LogInfo("pic is null!");
+		return nil;
+	end
+
+	return pic;
+end
+
+
+
+
+
+
+
+
+
+
+
+
+

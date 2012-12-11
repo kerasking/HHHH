@@ -26,7 +26,9 @@ function SetUIVisible(visible)
 		for i, v in pairs(NMAINSCENECHILDTAG) do
 			local ui = GetUI(v)
 			if ui then
-				ui:SetVisible(false);
+				if ( v ~= NMAINSCENECHILDTAG.BattleUI_Title ) then--Guosen 2012.11.5--回放时不隐藏该UI
+					ui:SetVisible(false);
+				end
 			else
 				LogInfo("SetUIVisible can not find ui:[%d]",v);
 			end

@@ -149,7 +149,7 @@ local CONTAINTER_Y = 0;
 
 local Wait_Time    = 1200;
 
-local MAX_LEVEL     = 100;
+local MAX_LEVEL     = 120;
 
 local COLOR_RED     = ccc4(255,0,0,255);
 local COLOR_GREEN     = ccc4(14,182,22,255);
@@ -1248,7 +1248,7 @@ function p.GetStreangMoney(nItemId)
     
     LogInfo("reqMoney:[%d]",reqMoney);
     
-    reqMoney = reqMoney - reqMoney*GetVipVal(DB_VIP_CONFIG.ENHANCE_REDUCE_PECENT)/100;
+    reqMoney = reqMoney - math.ceil(reqMoney*GetVipVal(DB_VIP_CONFIG.ENHANCE_REDUCE_PECENT)/100.0);
     LogInfo("p.GetStreangMoney nItemId:[%d],nEquipLv:[%d],reqMoney:[%d],GetVipVal(DB_VIP_CONFIG.ENHANCE_REDUCE_PECENT):[%d]",nItemId,nEquipLv,reqMoney,GetVipVal(DB_VIP_CONFIG.ENHANCE_REDUCE_PECENT));
     return reqMoney;
 end

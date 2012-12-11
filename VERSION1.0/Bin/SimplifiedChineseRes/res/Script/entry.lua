@@ -155,4 +155,15 @@ endTimeSlice("Music/define.lua")
 bgnTimeSlice("ArmyGroup/define.lua")
 	DoFile("ArmyGroup/define.lua");
 endTimeSlice("ArmyGroup/define.lua")
+
+--军团战
+bgnTimeSlice("SyndicateBattle/define.lua")
+DoFile("SyndicateBattle/define.lua");
+endTimeSlice("SyndicateBattle/define.lua")
+
+--宴会
+bgnTimeSlice("Banquet/define.lua")
+DoFile("Banquet/define.lua");
+endTimeSlice("Banquet/define.lua")
+
 PrintLog("End Load");

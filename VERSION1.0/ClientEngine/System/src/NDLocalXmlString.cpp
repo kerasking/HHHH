@@ -12,26 +12,7 @@
 #include "NDPath.h"
 #include "NDSharedPtr.h"
 #include "CCFileUtils.h"
-
-static NDLocalXmlString* s_NDLocalXmlString = NULL;
-
-NDLocalXmlString& NDLocalXmlString::GetSingleton()
-{
-	if (s_NDLocalXmlString == NULL)
-	{
-		s_NDLocalXmlString = new NDLocalXmlString;
-	}
-	
-	return *s_NDLocalXmlString;
-}
-
-void NDLocalXmlString::purge()
-{
-	NDAsssert(s_NDLocalXmlString != NULL);
-	
-	CC_SAFE_DELETE(s_NDLocalXmlString);
-}
-
+#include "NDUtility.h"
 
 const char* NDLocalXmlString::GetCString(const char* szKeyName)
 {
@@ -40,152 +21,187 @@ const char* NDLocalXmlString::GetCString(const char* szKeyName)
 		return "error";
 	}
 	
-	map_data_it it = m_data.find(std::string(szKeyName));
+	ITER_MAP_DATA it = mapData.find(string(szKeyName));
 	
-	if (it == m_data.end())
+	if (it == mapData.end())
 		return szKeyName;
 		
 	return (it->second).c_str();
 }
 
-NDLocalXmlString::NDLocalXmlString()
-{
-	NDAsssert(s_NDLocalXmlString == NULL);
-	//CCAutoreleasePool* pPool = new CCAutoreleasePool();
-	//Init();
-	//pPool->release();
-}
-
-NDLocalXmlString::~NDLocalXmlString()
-{
-	s_NDLocalXmlString = NULL;
-}
-
 bool NDLocalXmlString::LoadData()
 {
-	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	Init();
-	//[pool release];
+	vector<string> vecLines;
+	if (this->readLines( vecLines ))
+	{
+		this->parseLines( vecLines );
+		//this->dump();
+		return true;
+	}
+	return false;
+}
+
+///////////////////////////////////////////////////////////////////////////
+bool NDLocalXmlString::readLines( vector<string>& vecLines )
+{
+	string strFile = NDEngine::NDPath::GetResPath("lyol.strings");
+
+	// open file
+	FILE *fp = fopen(strFile.c_str(), "r");
+	if (!fp) return false;
+	
+	// file len
+	fseek( fp, 0L, SEEK_END );
+	int fileLen = ftell(fp);
+	fseek( fp, 0L, SEEK_SET );
+
+	// alloc buf, and read file
+	char* buf = new char[fileLen + 1];
+	fread( buf, 1, fileLen, fp );
+	buf[fileLen] = 0;
+	fclose(fp);
+
+	// split buf into lines
+	char line[1024] = "";
+	char* pBuf = buf;
+	while (1)
+	{
+		// find line feed
+		char* pLineFeed = strchr( pBuf, '\r' );
+		if (!pLineFeed)
+			break;
+
+		// copy line
+		int lineLen = pLineFeed - pBuf;
+		memcpy( line, pBuf, lineLen );
+		line[ lineLen ] = 0;
+
+		// move to next
+		pBuf = pLineFeed + 1;
+		while (*pBuf == '\r' || *pBuf == '\n') pBuf++;
+
+		// save line
+		if (this->isKey(line) || this->isVal(line))
+			vecLines.push_back( line );	
+	}
+
+	SAFE_DELETE_ARRAY(buf);
 	return true;
 }
 
-void NDLocalXmlString::Init()
+bool NDLocalXmlString::parseLines( vector<string>& vecLines )
 {
-	string str = NDEngine::NDPath::GetResPath("lyol.strings");
-	const char* pszTemp = str.c_str();
+	if (vecLines.size() < 2) return false;
+	mapData.clear();
 
-	FILE *fp_in = fopen(pszTemp, "rb");
-	if (!fp_in) return;
-	
-	string document = NDEngine::NDPath::GetDocumentPath();
-	tq::CString tmpFileName("%sxmltmp.txt", document.c_str());
+	bool ok = true;
+	int index = 0;
+	while (index < vecLines.size() - 2)
+	{
+		const string& keyLine = vecLines[ index ];
+		const string& valLine = vecLines[ index + 1 ];
 
-	FILE *p = fopen(tmpFileName, "a");
-	if (!p) return;
-	
-	char tmp[1025]={0};
-	size_t read = 0;
-	while(!feof(fp_in) && (read = fread(tmp, 1, 1024, fp_in)))
-	{
-		for (size_t i = 0; i < read; i++) 
+		if (isKey(keyLine.c_str()) && isVal(valLine.c_str()))
 		{
-			if (tmp[i] == '\r')
-			{
-				tmp[i] = '\n';
-			}
+			index += 2;
+
+			ok &= addKeyValue( keyLine, valLine );
 		}
-		fwrite(tmp, 1, read, p);
+		else
+		{
+			index++;
+
+			//bad line!
+			logErr( keyLine, valLine );
+			ok = false;
+		}
 	}
-	fflush(p);
-	fclose(p);
-	fclose(fp_in);
-	
-	fp_in = fopen(tmpFileName, "rb");
-	
-	if (!fp_in) return;
-	
-	std::string curkey;
-	
-	while ( !feof(fp_in) )
-	{
-		char buf[1025] = { 0x00 };
-		
-		fgets(buf, 1024, fp_in);
-		
-		std::string line(buf);
-		
-		bool isKey = false;
-		
-		std::string resValue;
-		
-		if (!GetValue(line, isKey, resValue))
-			continue;
-			
-		if (isKey)
-		{
-			curkey = resValue;
-			
-			continue;
-		}
-		
-		if (m_data.find(curkey) != m_data.end())
-		{
-			NDLog("\n repeat key: %s", curkey.c_str());
-			continue;
-		}
-		
-		m_data.insert(pair_data_it(curkey, resValue));
-	}
-	
-	fclose(fp_in);
-	
-	NDLog("\n local string key size: %u", m_data.size());
+
+	return ok;
 }
 
-bool NDLocalXmlString::GetValue(const std::string str, bool& isKey, std::string& resValue)
-{	
-	if (str.empty()) return false;
-	
-	std::string line = str;
-	
-	bool resIsKey = true;
-	
-	string::size_type first = line.find("<key>", 0);
-	
-	if (string::npos == first)
+void NDLocalXmlString::logErr( const string& keyLine, const string& valLine )
+{
+	WriteCon( "@@ NDLocalXmlString::parseLines(), bad lines: \r\n");
+	WriteCon( "  errline: %s\r\n", keyLine.c_str());
+	WriteCon( "  errline: %s\r\n", valLine.c_str());
+}
+
+bool NDLocalXmlString::addKeyValue( const string& keyLine, const string& valLine )
+{
+	string strKey, strValue;
+	if (getMidString( keyLine, "<key>", "</key>", strKey )
+		&& getMidString( valLine, "<string>", "</string>", strValue ))
 	{
-		if ( string::npos == (first = line.find("<string>", 0)) )
-		{
-			return false;
-		}
-		
-		resIsKey = false;
-	}
-	
-	string::size_type second;
-	
-	if (resIsKey)
-	{
-		second = line.find("</key>", 0);
-		
-		first += strlen("<key>");
+		mapData[ strKey ] = strValue;
+		return true;
 	}
 	else
 	{
-		second = line.find("</string>", 0);
-		
-		first += strlen("<string>");
+		logErr( keyLine, valLine );
 	}
-	
-	if (first >= second)
+	return false;
+}
+
+bool NDLocalXmlString::getMidString( const string& line, const string& left, const string& right, string& out_mid )
+{
+	if (line.length() > 0 && left.length() > 0 && right.length() > 0)
 	{
-		NDLog("\nerror first >= second");
-		return false;
+		const char* p1 = strstr( line.c_str(), left.c_str() );
+		if (!p1) return false;
+		p1 += left.length();
+
+		const char* p2 = strstr( p1, right.c_str() );
+		if (!p2) return false;
+
+		static char buf[1024] = "";
+		int len = p2 - p1;
+		memcpy( buf, p1, len );
+		buf[len] = 0;
+		
+		out_mid = buf;
+		return true;
 	}
-	
-	resValue = line.substr(first, second - first);
-	
-	isKey = resIsKey;
-	
-	return true;
+	return false;
+}
+
+bool NDLocalXmlString::isKey( const char* testLine )
+{
+	int len = 5; //"<key>"
+	if (testLine && strlen(testLine) > len)
+	{
+		const char* p = testLine;
+		if (memcmp(p, "<key>", len) == 0)
+		{
+			p += len;
+			return strstr(p, "</key>") != 0;
+		}
+	}
+	return false;
+}
+
+bool NDLocalXmlString::isVal( const char* testLine )
+{
+	int len = 8; //"<string>"
+	if (testLine && strlen(testLine) > len)
+	{
+		const char* p = testLine;
+		if (memcmp(p, "<string>", len) == 0)
+		{
+			p += len; //<string>
+			return strstr( p, "</string>" ) != 0;
+		}
+	}
+	return false;
+}
+
+void NDLocalXmlString::dump()
+{
+	WriteCon( "-------------- NDLocalXmlString -------------- \r\n" );
+	WriteCon( "@@ has %d key/val\r\n", mapData.size());
+	for (ITER_MAP_DATA iter = mapData.begin(); iter != mapData.end(); ++iter)
+	{
+		WriteCon( "[%s]=%s\r\n", iter->first.c_str(), iter->second.c_str() );
+	}
+	WriteCon( "\r\n" );
 }
