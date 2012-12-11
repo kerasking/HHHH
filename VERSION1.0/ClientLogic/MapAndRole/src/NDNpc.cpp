@@ -837,7 +837,7 @@ int NDNpc::GetDataBaseData(int nIndex)
 	}
 
 #if WITH_NEW_DB
-	NDGameDataUtil::Util::getDataULL( MAKE_NDTABLEPTR_INI(nKey), MAKE_CELLPTR(m_nID,nIndex));
+	return NDGameDataUtil::getDataULL( MAKE_NDTABLEPTR_INI(nKey), MAKE_CELLPTR(m_nID,nIndex));
 #else
 	return ScriptGameDataObj.GetData<unsigned long long>(eScriptDataDataBase,
 			nKey, eRoleDataPet, m_nID, nIndex);

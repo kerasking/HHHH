@@ -15,16 +15,11 @@
 
 #include "ScriptGameData_New.h"
 
-#define NS_NDGAMEDATAUTIL_BGN	namespace NDGameDataUtil {
-#define NS_NDGAMEDATAUTIL_END	}
-
-NS_NDGAMEDATAUTIL_BGN
-
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
 //公用
-struct Util
+struct NDGameDataUtil
 {
 #if 1 //get table,record,field...
 	//取表集组
@@ -116,7 +111,7 @@ struct Util
 	static double getDataN( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr )
 	{
 		//very slow !
-		NDField* pField = NDGameDataUtil::Util::getField( tablePtr, cellPtr );
+		NDField* pField = NDGameDataUtil::getField( tablePtr, cellPtr );
 		if (pField)
 		{
 			return pField->getDouble();
@@ -128,7 +123,7 @@ struct Util
 	static float getDataF( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr )
 	{
 		//very slow !
-		NDField* pField = NDGameDataUtil::Util::getField( tablePtr, cellPtr );
+		NDField* pField = NDGameDataUtil::getField( tablePtr, cellPtr );
 		if (pField)
 		{
 			return pField->getFloat();
@@ -140,7 +135,7 @@ struct Util
 	static string getDataS( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr )
 	{
 		//very slow !
-		NDField* pField = NDGameDataUtil::Util::getField( tablePtr, cellPtr );
+		NDField* pField = NDGameDataUtil::getField( tablePtr, cellPtr );
 		if (pField)
 		{
 			return pField->getStr();
@@ -164,7 +159,7 @@ struct Util
 	static unsigned int getDataUInt( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr )
 	{
 		//very slow !
-		NDField* pField = NDGameDataUtil::Util::getField( tablePtr, cellPtr );
+		NDField* pField = NDGameDataUtil::getField( tablePtr, cellPtr );
 		if (pField)
 		{
 			return pField->getUInt();
@@ -185,7 +180,7 @@ struct Util
 							const double number )
 	{
 		//very slow !
-		NDField* pField = NDGameDataUtil::Util::getField( tablePtr, cellPtr, true );
+		NDField* pField = NDGameDataUtil::getField( tablePtr, cellPtr, true );
 		if (pField)
 		{
 			pField->setDouble( number );
@@ -199,7 +194,7 @@ struct Util
 							const float fValue )
 	{
 		//very slow !
-		NDField* pField = NDGameDataUtil::Util::getField( tablePtr, cellPtr, true );
+		NDField* pField = NDGameDataUtil::getField( tablePtr, cellPtr, true );
 		if (pField)
 		{
 			pField->setFloat( fValue );
@@ -213,7 +208,7 @@ struct Util
 							const char* str )
 	{
 		//very slow !
-		NDField* pField = NDGameDataUtil::Util::getField( tablePtr, cellPtr, true );
+		NDField* pField = NDGameDataUtil::getField( tablePtr, cellPtr, true );
 		if (pField)
 		{
 			pField->setString( str );
@@ -348,6 +343,21 @@ struct Util
 		return false;
 	}
 #endif
+
+#if 7
+	//内存占用
+	static int getBytesLen()
+	{
+		return NDGameData::Instance().getBytesLen();
+	}
+
+	//显示内存占用
+	static void showMemStat()
+	{
+		int bytesLen = NDGameData::Instance().getBytesLen();
+		float M_count = float(bytesLen) / (1024*1024);
+		LOGINFO( "@@ GameDB mem size: %.1fM\r\n", M_count );
+	}
+#endif
 };
 
-NS_NDGAMEDATAUTIL_END

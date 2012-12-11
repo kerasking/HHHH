@@ -16,7 +16,7 @@
 unsigned int GetItemInfoN(unsigned int nItemId, unsigned int  nIndex)
 {
 #if WITH_NEW_DB
-	return NDGameDataUtil::Util::getDataULong( MAKE_NDTABLEPTR( eMJR_ItemInfo, nItemId, eMIN_Basic), 
+	return NDGameDataUtil::getDataULong( MAKE_NDTABLEPTR( eMJR_ItemInfo, nItemId, eMIN_Basic), 
 												MAKE_CELLPTR(0, nIndex));
 #else
 	return ScriptGameDataObj.GetData<unsigned long>(eItemInfo, nItemId,
@@ -27,7 +27,7 @@ unsigned int GetItemInfoN(unsigned int nItemId, unsigned int  nIndex)
 const char* GetItemInfoS(unsigned int nItemId, unsigned int  nIndex)
 {
 #if WITH_NEW_DB
-	return NDGameDataUtil::Util::getDataS( MAKE_NDTABLEPTR( eMJR_ItemInfo, nItemId, eMIN_Basic), 
+	return NDGameDataUtil::getDataS( MAKE_NDTABLEPTR( eMJR_ItemInfo, nItemId, eMIN_Basic), 
 												MAKE_CELLPTR(0, nIndex)).c_str();
 #else
 	return ScriptGameDataObj.GetData<std::string>(eItemInfo, nItemId,

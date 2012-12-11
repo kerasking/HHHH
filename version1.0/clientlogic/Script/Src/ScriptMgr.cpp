@@ -234,7 +234,7 @@ void ScriptMgr::Load()
 
 	PROFILE_REGLUA();
 
-	TIME_SLICE("ScriptMgr::Load()");
+	//TIME_SLICE("ScriptMgr::Load()");
 	
 	{
 		TIME_SLICE("ScriptCommonLoad()");
