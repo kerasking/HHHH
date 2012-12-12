@@ -169,7 +169,7 @@ function p.SetFighterInfo( szName, szSkillName, nLevel )
 		return false;
 	end
 	nLevel = nLevel or 1;
-	SetLabel( pLayer, ID_LABEL_ROLE_NAME, szName .. "("..nLevel.."级)" );
+	SetLabel( pLayer, ID_LABEL_ROLE_NAME, szName .. "("..nLevel..GetTxtPub("Level")..")" );
 	SetLabel( pLayer, ID_LABEL_SKILL_NAME, szSkillName );
 	return true;
 end

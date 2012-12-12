@@ -28,8 +28,8 @@ p.sendContent =
 	strPlayerName = "",
 	textContent = "";
 	sendProType = 0;
-	gm = "游戏客服(GM): ";
-    gmTipsMsg = "请耐心等待游戏客服回复~~";
+	gm = GetTxtPri("GMPU_T1");
+    gmTipsMsg = GetTxtPri("GMPU_T2");
 }
 
 local isSelBug = false;
@@ -177,7 +177,7 @@ end
 
 function p.SetSendContent(scene)
 	if nil == p.sendContent.text or string.len(p.sendContent.text) <= 0 then
-		CommonDlg.ShowTipInfo("提示", "发送内容不能为空！", nil, 2);
+		CommonDlg.ShowTipInfo(GetTxtPub("tip"), GetTxtPri("GMPU_T9"), nil, 2);
 		return;
 	else
 		local strPlayerName = "";
@@ -188,16 +188,16 @@ function p.SetSendContent(scene)
 		local sendProType = 0;
 		if isSelBug then
 			LogInfo("isSelBug = true")
-			strProblemType = "[" .. "BUG".. "]: ";
+			strProblemType = GetTxtPri("GMPU_T4");
 			sendProType = 0;
 		elseif isSelTouSu then
-			strProblemType = "[" .. "投诉".. "]: ";
+			strProblemType = GetTxtPri("GMPU_T5");
 			sendProType = 1;
 		elseif isSelAdjest then
-			strProblemType = "[" .. "建议".. "]: ";
+			strProblemType = GetTxtPri("GMPU_T6");
 			sendProType = 2;
 		elseif isSelOther then
-			strProblemType = "[" .. "其他".. "]: ";
+			strProblemType = GetTxtPri("GMPU_T7");
 			sendProType = 3;
 		end
 		
@@ -212,7 +212,7 @@ function p.SetSendContent(scene)
 		
 		LogInfo("befor _G_Msg......")
 		if false == _G.MsgProFeedback.SendProFeedback(sendProType, textContent) then
-			CommonDlg.ShowTipInfo("提示", "提交失败，请稍后再试！", nil, 2);
+			CommonDlg.ShowTipInfo(GetTxtPub("tip"), GetTxtPri("GMPU_T8"), nil, 2);
 			return
 		end
 		scene:RemoveChildByTag(NMAINSCENECHILDTAG.ProblemUI, true);

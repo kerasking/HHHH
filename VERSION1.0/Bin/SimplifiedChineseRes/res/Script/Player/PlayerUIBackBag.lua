@@ -1936,9 +1936,9 @@ function p.SetPetLeaveText(btn, nPetId)
 	end
 	
 	if RolePetFunc.IsMainPet(nPetId) then
-		btn:SetTitle("伙伴");
+		btn:SetTitle(GetTxtPri("PLAYER_T18"));
 	else
-		btn:SetTitle("离队");
+		btn:SetTitle(GetTxtPri("PLAYER_T19"));
 	end
 end
 

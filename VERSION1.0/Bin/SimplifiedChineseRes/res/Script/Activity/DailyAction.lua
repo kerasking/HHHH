@@ -280,7 +280,7 @@ function p.refreshViewItem(view, nId)
         local pool = _G.DefaultPicPool();
         local CtrPic = GetImage(view, p.ViewCtrlId.pic);
         LogInfo("refresh icon = %d", info.Icon); 
-        local Pic = pool:AddPicture( _G.GetSMImgPath( "action/activity"..info.Icon..".png"), false);  
+        local Pic = pool:AddPicture( _G.GetSMImg00Path( "action/activity"..info.Icon..".png"), false);  
         CtrPic:SetPicture(Pic);
         local str = p.GetTimeStr(info);
         str = info.Name..str;

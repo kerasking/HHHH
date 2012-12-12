@@ -57,10 +57,10 @@ TRAIN_INFO = {
 };
 -- 各类训练简介-{ nGold, szIntro, nVIP, szDetail }
 local tTrainInfo = {
-	{ 5, "消耗5金币，该武将可获得24小时高级训练经验；若是上阵武将在训练时间内通关副本或完成任务获得经验将增加20%。", 0, "高级训练进行中……", 20 },
-	{ 10, "消耗10金币，该武将可获得24小时高级训练经验；若是上阵武将在训练时间内通关副本或完成任务获得经验将增加50%。需VIP1。", 1, "白金训练进行中……", 40 },
-	{ 20, "消耗20金币，该武将可获得24小时金钻训练经验；若是上阵武将在训练时间内通关副本或完成任务获得经验将增加100%。需VIP4。", 4, "金钻训练进行中……", 60 },
-	{ 50, "消耗50金币，该武将可获得24小时至尊训练经验；若是上阵武将在训练时间内通关副本或完成任务获得经验将增加150%。需VIP8。", 8, "至尊训练进行中……", 100 },
+	{ 5, GetTxtPri("RTUI_T1"), 0, GetTxtPri("RTUI_T5"), 20 },
+	{ 10, GetTxtPri("RTUI_T2"), 1, GetTxtPri("RTUI_T6"), 50 },
+	{ 20, GetTxtPri("RTUI_T3"), 4, GetTxtPri("RTUI_T7"), 100 },
+	{ 50, GetTxtPri("RTUI_T4"), 8, GetTxtPri("RTUI_T8"), 150 },
 };
 
 
@@ -96,7 +96,7 @@ function p.LoadUI( nChosenPetID)
 		return false;
 	end
 	if ( nChosenPetID == RolePetFunc.GetMainPetId( GetPlayerId() ) ) then
-		CommonDlgNew.ShowYesDlg( "主角不可哦！", nil, nil, 3 );
+		CommonDlgNew.ShowYesDlg( GetTxtPri("RTUI_T9"), nil, nil, 3 );
 		return false;
 	end
 	
@@ -116,7 +116,6 @@ function p.LoadUI( nChosenPetID)
 		LogInfo( "RoleTrainUI: LoadUI() failed! layer = nil" );
 		return false;
 	end
-	layer:SetPopupDlgFlag(true);
 	layer:Init();
 	layer:SetTag( NMAINSCENECHILDTAG.RoleTrain );
 	layer:SetFrameRect( RectFullScreenUILayer );
@@ -144,7 +143,7 @@ function p.LoadUI( nChosenPetID)
 	end
 	local nPetAmount		= table.getn( tPetIDsInTeam );
 	if ( nPetAmount == 0 ) then
-		CommonDlgNew.ShowYesDlg( "无武将！", nil, nil, 3 );
+		CommonDlgNew.ShowYesDlg( GetTxtPri("RTUI_T10"), nil, nil, 3 );
 		return false;
 	end
 	p.FillListContainer( layer, tPetIDsInTeam );
@@ -250,7 +249,7 @@ function p.RefreshRightZone( nPetID )
 		p.pLabelName:SetText( szPetName );
 		-- 等级
 		local nPetLevel	= RolePet.GetPetInfoN( nPetID, PET_ATTR.PET_ATTR_LEVEL );
-		p.pLabelLev:SetText( "等级:" .. SafeN2S(nPetLevel) );
+		p.pLabelLev:SetText( GetTxtPub("levels")..":" .. SafeN2S(nPetLevel) );
 		p.pLabelLev:SetVisible( true );
 		
 		p.pLabelExp:SetVisible( true );
@@ -264,7 +263,7 @@ function p.RefreshRightZone( nPetID )
 			p.ShowCheckBox( p.nPetTrainType );
 			--
 			local szDetail	= tTrainInfo[p.nPetTrainType][TRAIN_INFO.DETAIL]
-			szDetail		= szDetail .. "\n剩余时间：\n";
+			szDetail		= szDetail .. "\n"..GetTxtPri("RTUI_T11") .. "\n";
 			p.pLabelDetail:SetText( szDetail );
 			p.nEndMoment = tRecord.nEndMoment;
 			local nTime = p.nEndMoment - GetCurrentTime();
@@ -419,18 +418,18 @@ function p.OnBtnStartTrain()
 		local nPlayerVIPLv	= GetRoleBasicDataN( nPlayerID, USER_ATTR.USER_ATTR_VIP_RANK );
 		local nNeedVIPLv	= tTrainInfo[p.nCheckedTrainType][TRAIN_INFO.NEEDVIP];
 		if ( nPlayerVIPLv < nNeedVIPLv ) then
-			CommonDlgNew.ShowYesDlg( "VIP等级不够！", nil, nil, 3 );
+			CommonDlgNew.ShowYesDlg( GetTxtPri("RTUI_T12"), nil, nil, 3 );
 			return;
 		end
 		local nPlayerGold	= GetRoleBasicDataN( nPlayerID, USER_ATTR.USER_ATTR_EMONEY );
 		local nGold			= tTrainInfo[p.nCheckedTrainType][TRAIN_INFO.NEEDGOLD];
 		if ( nPlayerGold < nGold ) then
-			CommonDlgNew.ShowYesDlg( "金币不足！", nil, nil, 3 );
+			CommonDlgNew.ShowYesDlg( GetTxtPri("RTUI_T13"), nil, nil, 3 );
 			return;
 		end
 		local nPetType		= RolePet.GetPetInfoN( p.nCheckedPetID, PET_ATTR.PET_ATTR_TYPE );
 		local szPetName		= GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.NAME );
-		CommonDlgNew.ShowYesOrNoDlg( "您确定花费"..nGold.."金币训练『"..szPetName.."』？", p.CallBack_ConfirmStartTrain, true );
+		CommonDlgNew.ShowYesOrNoDlg( string.format(GetTxtPri("RTUI_T14"),nGold,szPetName), p.CallBack_ConfirmStartTrain, true );
 	end 
 end
 -- 对话框回调事件-确定消耗银币金币什么的来培养
@@ -451,7 +450,7 @@ function p.OnBtnStopTrain()
 		end
 		local nPetType		= RolePet.GetPetInfoN( p.nCheckedPetID, PET_ATTR.PET_ATTR_TYPE );
 		local szPetName		= GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.NAME );
-		CommonDlgNew.ShowYesOrNoDlg( "您确定要停止训练『"..szPetName.."』？", p.CallBack_ConfirmStopTrain, true );
+		CommonDlgNew.ShowYesOrNoDlg( string.format(GetTxtPri("RTUI_T15"),szPetName), p.CallBack_ConfirmStopTrain, true );
 	end
 end
 -- 对话框回调事件-确定停止培养

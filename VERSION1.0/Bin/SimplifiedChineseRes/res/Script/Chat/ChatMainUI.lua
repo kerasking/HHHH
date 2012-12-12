@@ -208,7 +208,7 @@ function p.LoadUI()
 	ChatDataFunc.AddAllChatRecord(ChatType.CHAT_CHANNEL_ALL);
 	container:ScrollToBottom();
 	
-	SetLabel(layer,ID_CHAT_DOWN_CTRL_TEXT_CHANNEL,"综合");
+	SetLabel(layer,ID_CHAT_DOWN_CTRL_TEXT_CHANNEL,GetTxtPri("CMUI_T1"));
 	
 
 	
@@ -429,13 +429,13 @@ function p.SetCurrentChatType(type)
  	local inputlayerB = RecursiveUILayer(layer, {TAG_INPUTB});
 	
 	if type==ChatType.CHAT_CHANNEL_ALL then
-		SetLabel(inputlayerA,ID_TALK_INPUT_A_CTRL_TEXT_CHANNEL,"【世界】");
+		SetLabel(inputlayerA,ID_TALK_INPUT_A_CTRL_TEXT_CHANNEL,GetTxtPri("CMUI_T2"));
 	elseif type==ChatType.CHAT_CHANNEL_WORLD then
-		SetLabel(inputlayerA,ID_TALK_INPUT_A_CTRL_TEXT_CHANNEL,"【世界】");
+		SetLabel(inputlayerA,ID_TALK_INPUT_A_CTRL_TEXT_CHANNEL,GetTxtPri("CMUI_T2"));
 	elseif type==ChatType.CHAT_CHANNEL_FACTION then
-		SetLabel(inputlayerA,ID_TALK_INPUT_A_CTRL_TEXT_CHANNEL,"【军团】");
+		SetLabel(inputlayerA,ID_TALK_INPUT_A_CTRL_TEXT_CHANNEL,GetTxtPri("CMUI_T3"));
 	elseif type==ChatType.CHAT_CHANNEL_PRIVATE then
-		--SetLabel(layer,ID_CHAT_DOWN_CTRL_TEXT_CHANNEL,"综合");
+		--SetLabel(layer,ID_CHAT_DOWN_CTRL_TEXT_CHANNEL,GetTxtPri("CMUI_T1"));
 	end
 end
 
@@ -472,7 +472,7 @@ function p.OnUIEventInputA(uiNode, uiEventType, param)
 				
 				if MsgArmyGroup.GetUserArmyGroupID(nPlayerId) == nil then
 					--无军团则提示
-					ChatDataFunc.AddChatRecord(nPlayerId,ChatDataFunc.GetChannelByChatType(currentChatType),0,"系统","您尚未加入军团！");
+					ChatDataFunc.AddChatRecord(nPlayerId,ChatDataFunc.GetChannelByChatType(currentChatType),0,GetTxtPub("system"),GetTxtPri("MCUI2_T1"));
 				else
 					_G.MsgChat.SendTalkMsg(ChatDataFunc.GetChannelByChatType(currentChatType),text);
 				end
@@ -542,7 +542,7 @@ function p.OnUIEventInputB(uiNode, uiEventType, param)
 				--_G.MsgChat.SendTalkMsg(ChatDataFunc.GetChannelByChatType(ChatType.CHAT_CHANNEL_WORLD),PMtext);
 				
 				if PMname == nil or PMname == "" then
-					 CommonDlgNew.ShowYesDlg("私聊：名字不能为空");
+					 CommonDlgNew.ShowYesDlg(GetTxtPri("CMUI_T6"));
 					 return;
 				end
 				
@@ -735,7 +735,7 @@ function p.OnUIEventInfoList(uiNode, uiEventType, param)
 		elseif tag == ID_TALK_LIST_CTRL_BUTTON_12 then
 			--加好友
 			if FriendFunc.IsExistFriend(nCheckPlayerId)  then
-				CommonDlgNew.ShowYesDlg("该玩家已经是您的好友！");
+				CommonDlgNew.ShowYesDlg(GetTxtPri("CMUI_T7"));
 			else
 				FriendFunc.AddFriend(nCheckPlayerId,sCheckPlayerName); --加为好友 
 			end

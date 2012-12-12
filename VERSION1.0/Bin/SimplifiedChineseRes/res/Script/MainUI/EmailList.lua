@@ -64,9 +64,9 @@ local ID_READ_BTN_BACK				= 13;	-- 返回
 local ID_READ_BTN_REPLY				= 35;	-- 回复
 
 ---------------------------------------------------
-local szSEND_ERROR_00				= "收件人不可为空！";
-local szSEND_ERROR_01				= "主题不可为空！"
-local szSEND_ERROR_02				= "内容不可为空！"
+local szSEND_ERROR_00				= GetTxtPri("EL2_T1");
+local szSEND_ERROR_01				= GetTxtPri("EL2_T2")
+local szSEND_ERROR_02				= GetTxtPri("EL2_T3")
 
 
 ---------------------------------------------------
@@ -472,7 +472,7 @@ function p.CreateListItem( pListContainer, tMail, nIndex, pCallbackFunction  )
 	local nEmailID		= tMail[EmailDataIndex.EDI_EMAILID];
 	local nTime			= nSendTime + 24*60*60*30;-- 失效时间为发送时间加上30天
 	local tTime			= os.date( "*t", nTime )
-	local szTime		= tTime["year"] .. "年" .. tTime["month"] .. "月" .. tTime["day"] .. "日  ";-- .. tTime["hour"] .. ":" .. tTime["min"];
+	local szTime		= tTime["year"] .. GetTxtPub("year") .. tTime["month"] .. GetTxtPub("month") .. tTime["day"] .. GetTxtPub("day") .."  ";-- .. tTime["hour"] .. ":" .. tTime["min"];
 
 	pListItem:Init( false );
 	pListItem:SetScrollStyle( UIScrollStyle.Verical );

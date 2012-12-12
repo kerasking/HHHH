@@ -33,6 +33,8 @@ THE SOFTWARE.
 #include <android/log.h>
 #include <string.h>
 #include <jni.h>
+#include "ccMacros.h"
+#include "CCDirector.h"
 
 
 NS_CC_BEGIN
@@ -64,6 +66,7 @@ public:
             CCLOG("%s %d: error to get methodInfo", __FILE__, __LINE__);
             return false;
         }
+        fontSize*= 2;//CC_CONTENT_SCALE_FACTOR();//临时解决,Android支持高清
 
         /**create bitmap
          * this method call Cococs2dx.createBitmap()(java code) to create the bitmap, the java code
@@ -136,6 +139,38 @@ bool CCImage::initWithString(
 
     return bRet;
 }
+
+#if ND_MOD
+bool CCImage::getStringSize( const char *    pText,
+                            ETextAlign      eAlignMask,
+                            const char *    pFontName,
+                            int             nSize,
+                            int&			outSizeWidth,
+                            int&			outSizeHeight)
+{
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t
+                                       
+                                       , "org/cocos2dx/lib/Cocos2dxActivity"
+                                       
+                                       , "getStringSize"
+                                       
+                                       , "(Ljava/lang/String;)I"))
+        
+    {
+        jstring stringArg = t.env->NewStringUTF(pText);
+        
+        jint ret = (jint)t.env->CallStaticObjectMethod(t.classID, t.methodID, stringArg);
+        t.env->DeleteLocalRef(stringArg);
+        t.env->DeleteLocalRef(t.classID);
+        
+        outSizeHeight = (int)ret/10000;
+        outSizeWidth =  (int)ret-outSizeHeight*10000;
+    }
+}
+
+#endif
 
 NS_CC_END
 

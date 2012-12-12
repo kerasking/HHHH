@@ -177,11 +177,11 @@ function p.Refresh()
         local isMain = RolePet.GetPetInfoN(v.nPetId, PET_ATTR.PET_ATTR_MAIN);
         if isMain == 1 then
             --排第一个
-            SetLabel(layer, TAG_PET_EXP[1],"经验+"..SafeN2S(v.nExp));
+            SetLabel(layer, TAG_PET_EXP[1],GetTxtPub("exp").."+"..SafeN2S(v.nExp));
             local btn = GetButton(layer, TAG_PET_HEAD[1]);
              btn:SetImage(p.getPetPicture(v.nPetId));
         else
-            SetLabel(layer, TAG_PET_EXP[nIndex], "经验+"..SafeN2S(v.nExp));
+            SetLabel(layer, TAG_PET_EXP[nIndex], GetTxtPub("exp").."+"..SafeN2S(v.nExp));
             local btn = GetButton(layer, TAG_PET_HEAD[nIndex]);
             btn:SetImage(p.getPetPicture(v.nPetId));
             nIndex = nIndex + 1;

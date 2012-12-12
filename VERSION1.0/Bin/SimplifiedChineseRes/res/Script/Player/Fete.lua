@@ -206,7 +206,7 @@ end
 function p.TwiceConfirm( data )
     LogInfo("p.TwiceConfirm");
     if(p.bTwiceConfirm == false) then
-        CommonDlgNew.ShowNotHintDlg(string.format("你是否花费 %d 金币完成祭祀",data.reqEMoney), p.TwiceConfirmCallBack, data.id);
+        CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("PLAYER_T4"),nEMoney), p.TwiceConfirmCallBack, nTypeId);
     else
         p.SendMsgFete(data.id);
     end

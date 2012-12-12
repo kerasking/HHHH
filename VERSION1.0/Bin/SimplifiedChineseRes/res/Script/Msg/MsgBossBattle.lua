@@ -139,7 +139,7 @@ function p.TimerCloseActivityWin()
         LogInfo("p.TimerCloseActivityWin layer != nil!");
         if( layer:IsVisibled() ) then
             LogInfo("p.TimerCloseActivityWin layer destory!");
-            CommonDlgNew.ShowYesDlg( "活动已结束" );
+            CommonDlgNew.ShowYesDlg(GetTxtPri("BB_T5") );
             Battle_Boss.UnLoadUI( 0 );
         end
     else
@@ -289,13 +289,13 @@ function p.ProcessEncourage( netdata )
     LogInfo( "MsgBossBattle.ProcessEncourage" );
     
     local bIsSuccess = netdata:ReadByte();
-
+     
     if( bIsSuccess == 1 ) then
-        CommonDlgNew.ShowTipsDlg({{"鼓舞成功，加一星！",ccc4(28,237,93,255)}});
+        CommonDlgNew.ShowTipDlg(GetTxtPri("MBB2_T1"));
     elseif bIsSuccess == 0  then
-        CommonDlgNew.ShowTipsDlg({{"鼓舞失败，你什么好处也没得到。",ccc4(255,15,15,255)}});
+        CommonDlgNew.ShowTipDlg(GetTxtPri("MBB2_T2"));
     elseif bIsSuccess == 2  then
-        CommonDlgNew.ShowTipsDlg({{"鼓舞失败，鼓舞等级已满。",ccc4(255,15,15,255)}});
+        CommonDlgNew.ShowTipDlg(GetTxtPri("MBB2_T3"));
     end
 end
 

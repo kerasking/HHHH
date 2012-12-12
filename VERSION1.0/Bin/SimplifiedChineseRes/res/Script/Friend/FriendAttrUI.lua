@@ -519,10 +519,10 @@ function p.RefreshBtnText()
 	--BagButton:SetVisible(false);
 	if FriendFunc.IsExistFriend(friendId) then
 
-		str = "删除好友"
+		str = GetTxtPri("FAUI_T1")
 	else 
 
-		str = "加为好友"	
+		str = GetTxtPri("FAUI_T2")
 	end	
 
 	BagButton:SetTitle(str);
@@ -589,12 +589,12 @@ function p.SetPetAttr(petView, nPetDataIndex, str)
       elseif nPetDataIndex == PET_ATTR.PET_ATTR_PHY_ATK then
 	--物理攻击
 		nTag	= ID_ROLEATTR_L_CTRL_TEXT_FORCE;    
-        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, "物理攻击");
+        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, GetTxtPri("FAUI_T3"));
         
    elseif nPetDataIndex == PET_ATTR.PET_ATTR_MAGIC_ATK then
 	--策略攻击
 		nTag	= ID_ROLEATTR_L_CTRL_TEXT_FORCE;    
-        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, "策略攻击");  
+        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, GetTxtPri("FAUI_T4"));  
     
     
     elseif nPetDataIndex == PET_ATTR.PET_ATTR_PHY_DEF	then
@@ -687,7 +687,7 @@ function p.UpdatePetAttrById(nPetId)
 	p.SetPetAttr(view, PET_ATTR.PET_ATTR_SPEED, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SPEED));
 	--SetLabel(view, 27, SafeN2S(99));
 	
-	p.SetPetAttr(view, PET_ATTR.PET_ATTR_LEVEL, "等级:"..RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LEVEL));
+	p.SetPetAttr(view, PET_ATTR.PET_ATTR_LEVEL, GetTxtPub("levels")..":"..RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LEVEL));
 	
 	local expUI	= RecursivUIExp(view, {ID_ROLEATTR_L_CTRL_EXP_ROLE});
 	if CheckP(expUI) then
@@ -819,7 +819,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 			end
 		elseif tag == ID_ROLEATTR_L_CTRL_BUTTON_BAG then
 			if FriendFunc.IsExistFriend(friendId) then
-				 CommonDlg.ShowNoPrompt(string.format("确定删除好友%s吗？",friendName), p.OnCommonDlgDelFriend, true);
+				 CommonDlg.ShowNoPrompt(string.format(GetTxtPri("FAUI_T5"),friendName), p.OnCommonDlgDelFriend, true);
 			else
 				FriendFunc.AddFriend(friendId,friendName); --加为好友 
 			end
@@ -842,7 +842,7 @@ function p.OnUIEventScroll(uiNode, uiEventType, param)
 			
 		elseif tag == ID_SM_JH_ROLEATTR_L_BG_CTRL_BUTTON_66 then
 		        if FriendUI.IsExistFriend(friendId)  then
-				    CommonDlg.ShowNoPrompt(string.format("确定删除好友%s吗？",friendName), p.OnCommonDlgDelFriend, true);
+				    CommonDlg.ShowNoPrompt(string.format(GetTxtPri("FAUI_T5"),friendName), p.OnCommonDlgDelFriend, true);
 				else
 				    FriendFunc.AddFriend(friendId,friendName); --加为好友 
 				end	

@@ -130,7 +130,7 @@ function p.InitPrepareUI( pLayerPrepare )
 	local pBtnMax		= GetButton( p.pLayerPrepare, ID_BTN_MAX );
 	--pBtnMax:SetVisible( false );
 	local nResetNumber	= RolePetFunc.GetResetNumber(p.nCampaignID);
-	local szTitle		= "重置";
+	local szTitle		= GetTxtPri("CUESU_Reset");
 	if ( nResetNumber > 0 ) then
 		szTitle			= szTitle .. "(" .. nResetNumber .. ")";
 	end
@@ -197,7 +197,7 @@ function p.InitPrepareUI( pLayerPrepare )
 	container:AddView(view);
 	local nWidthLimit = rectview.size.w;
 	local fontsize = 14;
-	local str = "<cffff00扫荡提示：\n<cffffff1、请保证背包有足够的空间来拾取战利品\n2、离线也可进行副本扫荡……";
+	local str = GetTxtPri("CUESU_T1_1").."\n"..GetTxtPri("CUESU_T1_2").."\n"..GetTxtPri("CUESU_T1_3");
 	local pLabelTips = _G.CreateColorLabel( str, fontsize, nWidthLimit );
 	
 	if CheckP(pLabelTips) then
@@ -251,7 +251,7 @@ end
 function p.OnBtnStart()
 	if ( p.nFightNumber < 1 ) then
 		LogInfo("ClearUpEliteSettingUI: OnBtnStart() failed! nFightNumber < 1");
-		CommonDlgNew.ShowYesDlg( "木有可以扫荡的副本，请等待复位！", nil, nil, 3 );
+		CommonDlgNew.ShowYesDlg( GetTxtPri("CUESU_T2"), nil, nil, 3 );
 		return;
 	end
 	
@@ -271,17 +271,18 @@ end
 function p.OnBtnReset()
 	--local nPlayerVIPLv	= GetRoleBasicDataN( GetPlayerId(), USER_ATTR.USER_ATTR_VIP_RANK );
 	--if ( nPlayerVIPLv < 3 ) then
-    if ( GetGetVipLevel_ELITE_MAP_RESET_NUM()<=0 ) then
-		CommonDlgNew.ShowYesDlg( "VIP等级3及以上才可以重置冷却时间哦……", nil, nil, 3 );
+    local nNeedLevel = GetGetVipLevel_ELITE_MAP_RESET_NUM();
+    if ( nNeedLevel<=0 ) then
+		CommonDlgNew.ShowYesDlg( string.format(GetTxtPri("CUESU_T3"),nNeedLevel), nil, nil, 3 );
 		return;
 	end
     local nResetCount	= GetRoleBasicDataN( GetPlayerId(), USER_ATTR.USER_ATTR_INSTANCING_RESET_COUNT );
     nResetCount = ConvertReset(nResetCount, p.nCampaignID);
 	local nResetNumber	= RolePetFunc.GetResetNumber(p.nCampaignID);
 	if ( nResetNumber > 0 ) then
-		CommonDlgNew.ShowYesOrNoDlg( "消耗"..N_GOLD_RESET[nResetCount].."金币重置精英副本？", p.Callback_CostGoldToReset, true );
+		CommonDlgNew.ShowYesOrNoDlg( GetTxtPri("CUESU_T4")..N_GOLD_RESET[nResetCount]..GetTxtPri("CUESU_T5"), p.Callback_CostGoldToReset, true );
 	else
-		CommonDlgNew.ShowYesDlg( "木有重置次数了……", nil, nil, 3 );
+		CommonDlgNew.ShowYesDlg( GetTxtPri("CUESU_T6"), nil, nil, 3 );
 	end
 end
 
@@ -296,7 +297,7 @@ function p.Callback_CostGoldToReset( nId, param )
         nResetCount = ConvertReset(nResetCount, p.nCampaignID);
 		local nResetNumber	= RolePetFunc.GetResetNumber(p.nCampaignID);
         if ( nPlayerGold < N_GOLD_RESET[nResetCount] ) then
-			CommonDlgNew.ShowYesDlg( "金币不足请充值……", nil, nil, nil );
+			CommonDlgNew.ShowYesDlg( GetTxtPri("CUESU_T7"), nil, nil, nil );
 		else
 		-- 发送重置精英副本的消息
 			MsgAffixBoss.sendNmlReset( p.nCampaignID );
@@ -355,7 +356,7 @@ function p.ShowFightingUI()
 	p.pLabelCoutDownCounter:SetText( p.GetTimeString( p.nEndMoment - GetCurrentTime() ) );
 	
 	--
-	p.AppendListItemLabel( "～开始扫荡～", ccc4(0x10,0x33,0xcc,255) );
+	p.AppendListItemLabel( GetTxtPri("CUESU_T8"), ccc4(0x10,0x33,0xcc,255) );
 	
 	-- 创建计时器，每1秒回调一次
 	p.nTimerID = RegisterTimer( p.OnTimerCoutDownCounter, 1 );
@@ -448,7 +449,7 @@ function p.OnUIEventFighting( uiNode, uiEventType, param )
 			if ( pBtnBack:IsVisibled() ) then
 				p.BackToPrepareUI();
 			else
-				CommonDlgNew.ShowYesOrNoDlg( "您确定要停止扫荡并返回？", p.Callback_StopAndBack, true );
+				CommonDlgNew.ShowYesOrNoDlg( GetTxtPri("CUESU_T9"), p.Callback_StopAndBack, true );
 			end
 		elseif ( ID_BTN_STOP == tag ) then
 			-- 点击“停止”
@@ -471,7 +472,7 @@ function p.BackToPrepareUI()
 	local pBtnMax		= GetButton( p.pLayerPrepare, ID_BTN_MAX );
 	--pBtnMax:SetVisible( false );
 	local nResetNumber	= RolePetFunc.GetResetNumber(p.nCampaignID);
-	local szTitle		= "重置";
+	local szTitle		= GetTxtPri("CUESU_Reset");
 	if ( nResetNumber > 0 ) then
 		szTitle			= szTitle .. "(" .. nResetNumber .. ")";
 	end
@@ -557,7 +558,7 @@ function p.OnBtnStop()
 	if ( pBtnBack:IsVisibled() ) then
 		return;
 	end
-	CommonDlgNew.ShowYesOrNoDlg( "您确定要停止扫荡？", p.Callback_StopAutoFight, true );
+	CommonDlgNew.ShowYesOrNoDlg( GetTxtPri("CUESU_T10"), p.Callback_StopAutoFight, true );
 end
 
 ---------------------------------------------------
@@ -588,7 +589,7 @@ function p.OnBtnFinish()
 	end
 	local nGold = ( nTime ) / 60;	-- 剩余时间转金币个数（每60秒1个）
 	nGold = math.ceil( nGold );
-	CommonDlgNew.ShowYesOrNoDlg( "消耗 "..nGold.." 金币直接完成扫荡？", p.Callback_CostGoldToFinish, true );
+	CommonDlgNew.ShowYesOrNoDlg( string.format(GetTxtPri("CUESU_T11"),nGold), p.Callback_CostGoldToFinish, true );
 end
 
 ---------------------------------------------------
@@ -606,7 +607,7 @@ function p.Callback_CostGoldToFinish( nId, param )
 		if ( nPlayerGold >= nGold ) then
 			MsgAffixBoss.sendNmlFinish( p.nCampaignID );--( p.tEnemyID[p.nCrtIndex] );--发送"_MSG_AFFIX_BOSS_NML_FINISH"消息
 		else
-			CommonDlgNew.ShowYesDlg( "金币不足请充值……", nil, nil, nil );
+			CommonDlgNew.ShowYesDlg( GetTxtPri("CUESU_T7"), nil, nil, nil );
 		end
 	end
 end
@@ -647,15 +648,15 @@ function p.HandleNetMsg( nMsgID, param )
 		pBtnStop:SetVisible( false );
 		pBtnFinish:SetVisible( false );
 		pBtnBack:SetVisible( true );
-		p.AppendListItemLabel( "～扫荡完毕～", ccc4(0x10,0x10,0xff,255) );
+		p.AppendListItemLabel( GetTxtPri("CUESU_T12"), ccc4(0x10,0x10,0xff,255) );
 	elseif ( nMsgID == NMSG_Type._MSG_AFFIX_BOSS_NML_CANCEL ) then
 		-- 取消
 		local nBattleID			= param:ReadInt();
 		local nServerCancelFlag	= param:ReadByte();--0普通，1背包满
 		if ( nServerCancelFlag == 1 ) then
-			p.AppendListItemLabel( "您的背包满咯～", ccc4(0xff,0x0,0x0,255) );
+			p.AppendListItemLabel( GetTxtPri("CUESU_T12"), ccc4(0xff,0x0,0x0,255) );
 		else
-			p.AppendListItemLabel( "～扫荡停止～", ccc4(0x10,0x10,0xff,255) );
+			p.AppendListItemLabel( GetTxtPri("CUESU_T13"), ccc4(0x10,0x10,0xff,255) );
 		end
 		p.nEndMoment		= GetCurrentTime();
 		local pBtnStop		= GetButton( p.pLayerFighting, ID_BTN_STOP );
@@ -705,9 +706,9 @@ end
 function p.ShowTotalReward_WithList()
 	local containerRight 	= GetScrollViewContainer( p.pLayerFighting, ID_LIST_LABEL_CONT );
 	containerRight:RemoveAllView();
-	local szTitle = "经验+" .. p.nExpAmount;
+	local szTitle = GetTxtPub("exp").."+" .. p.nExpAmount;
 	p.AppendRightItemLabel( containerRight, szTitle, ccc4(0,255,255,255) );
-	szTitle = "银币+" .. p.nMoneyAmount; 
+	szTitle = GetTxtPub("coin").."+" .. p.nMoneyAmount; 
 	p.AppendRightItemLabel( containerRight, szTitle, ccc4(0,255,255,255) );
 	for key, value in pairs( p.tItemsAmount ) do
 		szTitle = key .. " × " .. value ;
@@ -722,9 +723,9 @@ function p.ShowRewardOnce( tData )
 	local nExp			= tData.nExp;
 	local nMoney		= tData.nMoney;
 	local nItemCount	= table.getn( tData.tItems );
-	local szResult		= "战斗胜利！";
+	local szResult		= GetTxtPri("CUESU_T15");
 	p.AppendListItemLabel( szResult, ccc4(0x0,0xff,0x0,255) );
-	local szResult		= "获得：" .. nExp .. "经验，" .. nMoney .. "银币";
+	local szResult		=  GetTxtPri("CUESU_T16") .. nExp ..  GetTxtPub("exp").."，" .. nMoney .. GetTxtPub("coin");
 	p.AppendListItemLabel( szResult );
 	for i = 1, nItemCount do
 		local nItemType		= tData.tItems[i].nItemType;

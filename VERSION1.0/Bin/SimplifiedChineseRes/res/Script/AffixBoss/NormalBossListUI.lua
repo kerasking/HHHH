@@ -187,8 +187,9 @@ function p.OnBtnReset()
 	--local nPlayerVIPLv	= GetRoleBasicDataN( GetPlayerId(), USER_ATTR.USER_ATTR_VIP_RANK );
 	--if ( nPlayerVIPLv < 3 ) then
     
-    if ( GetGetVipLevel_ELITE_MAP_RESET_NUM()<=0 ) then
-		CommonDlgNew.ShowYesDlg( "VIP等级3及以上者才可以重置冷却时间哦……", nil, nil, 3 );
+    local nNeedLevel = GetGetVipLevel_ELITE_MAP_RESET_NUM();
+    if ( nNeedLevel<=0 ) then
+		CommonDlgNew.ShowYesDlg( string.format(GetTxtPri("CUESU_T3"),nNeedLevel), nil, nil, 3 );
 		return;
 	end
 	--获得可重置次数
@@ -198,9 +199,9 @@ function p.OnBtnReset()
     
     LogInfo("nResetCount:[%d],nResetNumber:[%d],p.nCampaignID:[%d]",nResetCount,nResetNumber,p.nCampaignID);
 	if ( nResetNumber > 0 ) then
-		CommonDlgNew.ShowYesOrNoDlg( "消耗"..N_GOLD_RESET[nResetCount].."金币重置精英副本？", p.Callback_CostGoldToReset, true );
+		CommonDlgNew.ShowYesOrNoDlg( GetTxtPri("CUESU_T4")..N_GOLD_RESET[nResetCount]..GetTxtPri("CUESU_T5"), p.Callback_CostGoldToReset, true );
 	else
-		CommonDlgNew.ShowYesDlg( "木有重置次数了……", nil, nil, 3 );
+		CommonDlgNew.ShowYesDlg( GetTxtPri("CUESU_T6"), nil, nil, 3 );
 	end
 end
 
@@ -214,7 +215,7 @@ function p.Callback_CostGoldToReset( nId, param )
         nResetCount = ConvertReset(nResetCount, p.nCampaignID);
         local nResetNumber	= RolePetFunc.GetResetNumber(p.nCampaignID);
         if ( nPlayerGold < N_GOLD_RESET[nResetCount] ) then
-			CommonDlgNew.ShowYesDlg( "金币不足请充值……", nil, nil, nil );
+			CommonDlgNew.ShowYesDlg( GetTxtPri("CUESU_T7"), nil, nil, nil );
 		else
 		-- 发送重置精英副本的消息
 			MsgAffixBoss.sendNmlReset( p.nCampaignID );
@@ -233,7 +234,7 @@ function p.OnBtnClear()
 			return;
 		end
 	end
-	CommonDlgNew.ShowYesDlg( "木有可扫荡的精英副本……", nil, nil, 3 );
+	CommonDlgNew.ShowYesDlg( GetTxtPri("CUESU_T2"), nil, nil, 3 );
 end
 
 ---------------------------------------------------
@@ -639,7 +640,7 @@ function p.InitializeEliteLayer()
 	local pBtnClear			= GetButton( p.pLayerElite, ID_BTN_CLEAR );
 	local pBtnReset			= GetButton( p.pLayerElite, ID_BTN_RESET );
 	local nResetNumber		= RolePetFunc.GetResetNumber(p.nCampaignID);
-	local szTitle			= "重置";
+	local szTitle			= GetTxtPri("CUESU_Reset");
     
     --扫荡功能开启之后才可以显示重置按钮以及扫荡按钮
     if IsFunctionOpen(StageFunc.RepeatCoyp) then
@@ -680,7 +681,6 @@ function p.InitializeEliteLayer()
 			return false;
 		end
 
-		pListItem:SetPopupDlgFlag(true);
 		pListItem:Init( false );
 		pListItem:SetViewId( i );
 		pListItem:SetTag( i );
@@ -770,7 +770,6 @@ function p.GenerateConfirmDialog( pParentLayer )
 		LogInfo( "NormalBossListUI: GenerateConfirmDialog() failed! layer = nil" );
 		return false;
 	end
-	layer:SetPopupDlgFlag(true);
 	layer:Init();
 	--layer:SetTag( TAG_LAYER_CONFDLG );
 	layer:SetFrameRect( RectFullScreenUILayer );
@@ -820,7 +819,7 @@ function p.OnUIEventConfirmDialog( uiNode, uiEventType, param )
 					ClearUpSettingUI.LoadUI( p.nChosenBattleID );
 					return true;
 				else
-					CommonDlgNew.ShowYesDlg( "军令不足", nil, nil, 3 );
+					CommonDlgNew.ShowYesDlg( GetTxtPri("CUSU_T2"), nil, nil, 3 );
 				end
             end
         --战斗
@@ -837,14 +836,16 @@ function p.OnUIEventConfirmDialog( uiNode, uiEventType, param )
                     if(allowBuyCount > 0) then
                         PlayerVIPUI.buyMilOrderTip( p.nChosenBattleID );
                     else
-                        CommonDlgNew.ShowYesDlg( "军令不足", nil, nil, 3);
+                        CommonDlgNew.ShowYesDlg( GetTxtPri("CUSU_T2"), nil, nil, 3);
                     end
                 end
             else
             	if ( tBattleInfo.time == 0 ) then
 					MsgAffixBoss.sendNmlEnter( p.nChosenBattleID );
 				else
-					CommonDlgNew.ShowYesDlg( "精英副本每日职能挑战一次，VIP3以上可以重置副本.", nil, nil, 3 );
+                    local nNeedLevel = GetGetVipLevel_ELITE_MAP_RESET_NUM();
+                
+					CommonDlgNew.ShowYesDlg(string.format(GetTxtPri("TPL2_T4"),nNeedLevel), nil, nil, 3 );
 				end
             end
 		end
@@ -1103,7 +1104,7 @@ function p.ShowPrompt( pBtnBattle, nPromptType )
 		local pImage	= createNDUIImage();
 		pImage:Init();
 		local pool		= DefaultPicPool();
-		local pPic		= pool:AddPicture( GetSMImgPath( "Current_Task_Copy.png" ), false );
+		local pPic		= pool:AddPicture( GetSMImg00Path( "Current_Task_Copy.png" ), false );
 		local tSize		= pPic:GetSize();
 		pImage:SetPicture( pPic, true );
 		pImage:SetFrameRect( CGRectMake( 0, -tSize.h/2, tSize.w, tSize.h ) );
@@ -1113,7 +1114,7 @@ function p.ShowPrompt( pBtnBattle, nPromptType )
 		local pImage	= createNDUIImage();
 		pImage:Init();
 		local pool		= DefaultPicPool();
-		local pPic		= pool:AddPicture( GetSMImgPath( "Material_Drop_Copy.png" ), false );
+		local pPic		= pool:AddPicture( GetSMImg00Path( "Material_Drop_Copy.png" ), false );
 		local tSize		= pPic:GetSize();
 		pImage:SetPicture( pPic, true );
 		pImage:SetFrameRect( CGRectMake( 0, -tSize.h/2, tSize.w, tSize.h ) );

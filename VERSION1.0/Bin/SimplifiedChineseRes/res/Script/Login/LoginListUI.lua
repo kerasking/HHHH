@@ -45,10 +45,10 @@ end
 function p.RefreshUI(sName, pNum, nTimes)
      local layer = p.GetParent();
      --p.ctrId = {btnClose = 101, txtName = 103, txtNum = 5, txtTime = 7,};
-     local name = "["..sName.."]".."服务器拥挤,请稍等";
+     local name = "["..sName.."]"..GetTxtPri("LLUI2_T1");
      SetLabel(layer, p.ctrId.txtName, name);
      SetLabel(layer, p.ctrId.txtNum, SafeN2S(pNum));  
-     SetLabel(layer, p.ctrId.txtTime, "大约 "..SafeN2S(nTimes).." 秒");    
+     SetLabel(layer, p.ctrId.txtTime, string.format(GetTxtPri("LLUI2_T1"),nTimes));    
      
      if nTimes > 0 then
         p.tbTimer.CountDownNum = nTimes;
@@ -79,7 +79,7 @@ function p.OnTimer(tag)
 			p.tbTimer.CountDownNum = p.tbTimer.CountDownNum - 1;
 		end
              
-        SetLabel(layer, p.ctrId.txtTime, "大约 "..SafeN2S(p.tbTimer.CountDownNum).." 秒");    
+        SetLabel(layer, p.ctrId.txtTime, string.format(GetTxtPri("LLUI2_T1"),p.tbTimer.CountDownNum));    
     end
 end
 

@@ -188,7 +188,7 @@ function p.initData()
               p.tbTimer.RefreshPlayerTimer.CountDownNum = 0;
         end
         local btn = GetButton(layer, p.ImmutableCtr.Btn.btnRefresh);
-        btn:SetTitle("刷新玩家");
+        btn:SetTitle(GetTxtPri("TRSP_T1"));
     end
     ]]
 
@@ -426,13 +426,13 @@ function p.OnTransLayerUIEvent(uiNode, uiEventType, param)
                 --弹出拦截提示框
                 local nPlayerId = GetPlayerId();
                 if v.nPlayerId == nPlayerId then 
-                    CommonDlgNew.ShowYesDlg("亲～您不可以拦截自己的粮车啊.",nil,nil,3);
+                    CommonDlgNew.ShowYesDlg(GetTxtPri("TRSP_T2"),nil,nil,3);
                 else
                    --p.tbPlayerInfo
                     LogInfo("v.nLooterId1 = %d, v.nLooterId2 = %d, nPlayerId = %d", v.nLooterId1, v.nLooterId2, nPlayerId); 
                    --if p.tbPlayerInfo == v.nPlayerId or  p.tbPlayerInfo == v.nPlayerId then
                     if v.nLooterId1 == nPlayerId or  v.nLooterId2 == nPlayerId then
-                        CommonDlgNew.ShowYesDlg("亲～您已经拦截过他了,请手下留情吧!",nil,nil,3);
+                        CommonDlgNew.ShowYesDlg(GetTxtPri("TRSP_T3"),nil,nil,3);
                         return true;
                     end   
 
@@ -440,14 +440,14 @@ function p.OnTransLayerUIEvent(uiNode, uiEventType, param)
                     local cdTime = p.tbTimer.LootTimer.CountDownNum;
                     LogInfo("p.tbTimer.LootTimer.CountDownNum = %d", p.tbTimer.LootTimer.CountDownNum); 
                     if cdTime > 0 then
-                        CommonDlgNew.ShowYesDlg("亲～您拦截的太凶狠了,请休息一会吧.!",nil,nil,3);
+                        CommonDlgNew.ShowYesDlg(GetTxtPri("TRSP_T4"),nil,nil,3);
                         return true;
                     end
                 
                     --获取还可以拦截别人的次数
                     local LootTime = p.tbGrainStatic.LootMax - p.tbPlayerInfo.nLootOtherNum;
                     if LootTime <= 0 then
-                        CommonDlgNew.ShowYesDlg("您今天不可以再进行拦截了!",nil,nil,3);
+                        CommonDlgNew.ShowYesDlg(GetTxtPri("TRSP_T5"),nil,nil,3);
                     else
                         --弹出拦截提示框
                         TransportLoot.LoadUI(v.nPlayerId);
@@ -534,14 +534,14 @@ function p.SetMutableCtrStatus(bFlag)
     local str = "";
     local TransTime = p.tbGrainStatic.EscortMax - p.tbPlayerInfo.nHasTransNum;
     LogInfo("TransTime = %d,  EscortMax = %d, HasTransNum = %d", TransTime, p.tbGrainStatic.EscortMax, p.tbPlayerInfo.nHasTransNum);
-    str = str.."你今天还可以运送粮草"..TransTime.."次";
+    str = string.format(GetTxtPri("TRSP_T6"),str,TransTime);
     SetLabel(layer, p.ImmutableCtr.Lable.txtTransTime, str);
     
     --显示还可拦截次数
     str = "";
     local LootTime = p.tbGrainStatic.LootMax - p.tbPlayerInfo.nLootOtherNum;
     LogInfo("LootTime = %d,  LootMax = %d, OtherNum = %d", LootTime, p.tbGrainStatic.LootMax, p.tbPlayerInfo.nLootOtherNum);
-    str = str.."你今天还可以拦截他人粮草"..LootTime.."次";
+    str = string.format(GetTxtPri("TRSP_T7"),str,LootTime);
     SetLabel(layer, p.ImmutableCtr.Lable.txtLootTime, str);
   
     --显示拦截冷却时间
@@ -734,7 +734,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             --获得今天还可以运送的次数
             local TransTime = p.tbGrainStatic.EscortMax - p.tbPlayerInfo.nHasTransNum;
             if TransTime <= 0 then
-                CommonDlgNew.ShowYesDlg("您今天不可以再进行运粮了!",nil,nil,3);
+                CommonDlgNew.ShowYesDlg(GetTxtPri("TRSP_T8"),nil,nil,3);
             else
                 TransportPrepare.LoadUI();
             end
@@ -748,9 +748,9 @@ function p.OnUIEvent(uiNode, uiEventType, param)
                  LogInfo("emoney = %d, num = %d, nPlayerId = %d", emoney, num, nPlayerId);  
                   
                 if emoney < num then
-                    CommonDlgNew.ShowYesDlg("金币不足,请充值,谢谢!",nil,nil,3);
+                    CommonDlgNew.ShowYesDlg(GetTxtPri("TRSP_T9"),nil,nil,3);
                 else
-                    CommonDlgNew.ShowYesOrNoDlg( "是否花费"..num.."金币快速运送粮车", p.onQuickTransCar, true );
+                    CommonDlgNew.ShowYesOrNoDlg( string.format(GetTxtPri("TRSP_T10"),num), p.onQuickTransCar, true );
                 end  
             end
         elseif p.MutableCtr.Btn.btnClearCdLoot == tag then --清除冷却时间
@@ -763,9 +763,9 @@ function p.OnUIEvent(uiNode, uiEventType, param)
                  LogInfo("emoney = %d, num = %d, nPlayerId = %d", emoney, num, nPlayerId);  
                   
                 if emoney < num then
-                    CommonDlgNew.ShowYesDlg("金币不足,请充值,谢谢!",nil,nil,3);
+                    CommonDlgNew.ShowYesDlg(GetTxtPri("TRSP_T9"),nil,nil,3);
                 else
-                    CommonDlgNew.ShowYesOrNoDlg( "是否花费"..num.."金币消除拦截冷却时间", p.onClearLootTime, true );
+                    CommonDlgNew.ShowYesOrNoDlg( string.format(GetTxtPri("TRSP_T11"),num), p.onClearLootTime, true );
                 end      
             end
         end

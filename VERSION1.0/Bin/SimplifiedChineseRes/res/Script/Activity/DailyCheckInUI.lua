@@ -214,23 +214,23 @@ function  p.GetAwardStr(nDayIndex)
     end
     --金币
     if Info.Emoney ~= 0 then
-        ShowText = ShowText .."金币".."X"..Info.Emoney.."\n";
+        ShowText = ShowText ..GetTxtPub("shoe").."X"..Info.Emoney.."\n";
     end
     --军令
     if Info.Stamina ~= 0 then
-        ShowText = ShowText .."军令".."X"..Info.Stamina.."\n";
+        ShowText = ShowText ..GetTxtPub("Stamina").."X"..Info.Stamina.."\n";
     end
     --银币
     if Info.Money ~= 0 then
-        ShowText = ShowText .."银币".."X"..Info.Money.."\n";
+        ShowText = ShowText ..GetTxtPub("coin").."X"..Info.Money.."\n";
     end
     --将魂
     if Info.Soph ~= 0 then
-        ShowText = ShowText .."将魂".."X"..Info.Soph.."\n";
+        ShowText = ShowText ..GetTxtPub("JianHun").."X"..Info.Soph.."\n";
     end
     --声望
     if Info.Repute ~= 0 then
-        ShowText = ShowText .."声望".."X"..Info.Repute.."\n";
+        ShowText = ShowText ..GetTxtPub("ShenWan").."X"..Info.Repute.."\n";
     end  
 
     return ShowText;
@@ -288,7 +288,7 @@ function  p.ShowVipContentAndPic()
     LogInfo("tangziqin showvip CurVipLev = %d, p.VipCheckInFlag = %d, btnId = %d", CurVipLev, p.VipCheckInFlag, p.CheckInImgIndex[6][1]);
     --vip为0级的默认显示
     if CurVipLev == 0 then  
-        SetLabel(layer, p.UiCtrId.VipText, "升级到VIP1级,可以额外领取奖励");
+        SetLabel(layer, p.UiCtrId.VipText, GetTxtPri("DCI_v1"));
         local nRow			= _G.Num2(p.CheckInImgIndex[6][2]);
         local nCol			= _G.Num1(p.CheckInImgIndex[6][2]);
         local nCutX		= N_W*(nCol - 1);
@@ -303,7 +303,7 @@ function  p.ShowVipContentAndPic()
     
     --有签到或者续签的时候
     if p.VipCheckInFlag == 1 then
-        SetLabel(layer, p.UiCtrId.VipText, "当前等级为VIP"..CurVipLev.."可以额外领取VIP"..CurVipLev.."签到大礼");
+        SetLabel(layer, p.UiCtrId.VipText, GetTxtPri("DCI_v2")..CurVipLev..GetTxtPri("DCI_v3")..CurVipLev..GetTxtPri("DCI_v4"));
         local nRow			= _G.Num2(p.CheckInImgIndex[6][3]);
         local nCol			= _G.Num1(p.CheckInImgIndex[6][3]);
         local nCutX		= N_W*(nCol - 1);
@@ -315,7 +315,7 @@ function  p.ShowVipContentAndPic()
         --btnPic:SetPicture(Pic);
         PicFinish:SetVisible(false);
     elseif p.VipCheckInFlag == 2 then
-        SetLabel(layer, p.UiCtrId.VipText, "当前等级为VIP"..CurVipLev.."可以额外领取VIP"..CurVipLev.."签到大礼");
+        SetLabel(layer, p.UiCtrId.VipText, GetTxtPri("DCI_v2")..CurVipLev..GetTxtPri("DCI_v3")..CurVipLev..GetTxtPri("DCI_v4"));
         local nRow			= _G.Num2(p.CheckInImgIndex[6][4]);
         local nCol			= _G.Num1(p.CheckInImgIndex[6][4]);
         local nCutX		= N_W*(nCol - 1);
@@ -360,7 +360,7 @@ function p.Refresh()
          end
 
          if v ~= 0 then
-            btn:SetTitle("已签到"); 
+            btn:SetTitle(GetTxtPri("DCI_AlertSign")); 
             btn:EnalbeGray(true); 
             local nRow			= _G.Num2(p.CheckInImgIndex[i][4]);
             local nCol			= _G.Num1(p.CheckInImgIndex[i][4]); 
@@ -372,7 +372,7 @@ function p.Refresh()
             PicFinish:SetVisible(true);
             p.VipCheckInFlag = 2;
          else
-            btn:SetTitle("未签到"); 
+            btn:SetTitle(GetTxtPri("DCI_NotSign")); 
             btn:EnalbeGray(true); 
             local nRow			= _G.Num2(p.CheckInImgIndex[i][2]);
             local nCol			= _G.Num1(p.CheckInImgIndex[i][2]);
@@ -395,7 +395,7 @@ function p.Refresh()
                   
             if iTimelast == 1 then
                 LogInfo("if iTimelast == 1 then");
-                btn:SetTitle("签到"); 
+                btn:SetTitle(GetTxtPri("DCI_Sign")); 
                 btn:EnalbeGray(false); 
                 
                 local nRow			= _G.Num2(p.CheckInImgIndex[i][3]);
@@ -411,7 +411,7 @@ function p.Refresh()
                 p.VipCheckInFlag = 1;
             elseif iTimelast == 2 then
                 LogInfo("if iTimelast == 2 then");
-                btn:SetTitle("续签"); 
+                btn:SetTitle(GetTxtPri("DCI_Renewal")); 
                 btn:EnalbeGray(false); 
                 local nRow			= _G.Num2(p.CheckInImgIndex[i][3]);
                 local nCol			= _G.Num1(p.CheckInImgIndex[i][3]);
@@ -431,7 +431,7 @@ function p.Refresh()
             
             if i == 1 then
                 if iTimelast == 0 then
-                    btn:SetTitle("签到"); 
+                    btn:SetTitle(GetTxtPri("DCI_Sign")); 
                     btn:EnalbeGray(false); 
                     local nRow			= _G.Num2(p.CheckInImgIndex[i][3]);
                     local nCol			= _G.Num1(p.CheckInImgIndex[i][3]);

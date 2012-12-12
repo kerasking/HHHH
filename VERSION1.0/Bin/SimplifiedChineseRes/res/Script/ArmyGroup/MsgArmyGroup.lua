@@ -19,60 +19,58 @@ p.COLOR_GRAY						= ccc4(158,158,158,255);
 p.COLOR_YELLOW						= ccc4(255,255,0,255);
 
 local tArmyGroupPositionString = {
-	"成员", "副军团长", "军团长",
+	GetTxtPri("MAG2_T1"), GetTxtPri("MAG2_T2"), GetTxtPri("MAG2_T3"),
 };
 
 local tArmyGroupErrorString = {
-	"很抱歉，您已加入了其他军团",--
-	"处于申请其他军团的状态",
-	"很抱歉，您输入的军团名称不合法,请重新输入",
-	"很抱歉，您输入的军团名称已存在，请重新输入",
-	"很抱歉，您身上携带的银币不足20万，无法创建军团",--
-	"很抱歉，您等级不足，无法创建军团",--
-	"很抱歉，你还未完成级需要完成的任务，不能创建军团",
-	"很抱歉，您查看的军团不存在",
-	"申请成功，请耐心等待军团审核",
-	"该玩家已是军团成员了",
-	"你最多只能同时申请5个帮派",
-	"你没有申请过该帮派",
-	"该申请已经失效",
-	"你没有权限执行该操作！",
-	"请先禅让军团长职位",
-	"很抱歉，您的军团的成员人数已达上限",
-	"很抱歉,您设置的公告内容不合法,请重新输入",
-	"您设置的公告内容过长...",
-    "您的军团最多只能设置2个副军团长",
-    "该成员不在线",
-    "分配数量超过上限",
+	GetTxtPri("MAG2_T4"),
+	GetTxtPri("MAG2_T5"),
+	GetTxtPri("MAG2_T6"),
+	GetTxtPri("MAG2_T7"),
+	GetTxtPri("MAG2_T8"),
+	GetTxtPri("MAG2_T9"),
+	GetTxtPri("MAG2_T10"),
+	GetTxtPri("MAG2_T11"),
+	GetTxtPri("MAG2_T12"),
+	GetTxtPri("MAG2_T13"),
+	GetTxtPri("MAG2_T14"),
+	GetTxtPri("MAG2_T15"),
+	GetTxtPri("MAG2_T16"),
+	GetTxtPri("MAG2_T17"),
+	GetTxtPri("MAG2_T18"),
+	GetTxtPri("MAG2_T19"),
+	GetTxtPri("MAG2_T20"),
+	GetTxtPri("MAG2_T21"),
+    GetTxtPri("MAG2_T22"),
     "该成员背包已满，不可分配",
     "该成员贡献度不足，不可分配",
 };
 
 local tArmyGroupOnlineString = {
-	"离线", "在线",
+	GetTxtPri("MAG2_T23"), GetTxtPri("MAG2_T24"),
 };
 
 --
-local SZ_QUIT_STRING	= "你退出了";
-local SZ_ENTRY_STRING	= "你成功加入了";
-local SZ_DISMISS_STRING	= "你被请出了";
+local SZ_QUIT_STRING	= GetTxtPri("MAG2_T25");
+local SZ_ENTRY_STRING	= GetTxtPri("MAG2_T26");
+local SZ_DISMISS_STRING	= GetTxtPri("MAG2_T27");
 
 
 ---------------------------------------------------
 function p.GetLogoutString( nTime )
 	local str="";
     if nTime < 60 then
-        str = str.."不久之";
+        str = str..GetTxtPri("AREAUI_T7");
 	elseif nTime < 1800 then
-		str=str..SafeN2S(getIntPart(nTime/60)).."分钟";
+		str=str..SafeN2S(getIntPart(nTime/60))..GetTxtPri("AREAUI_T8");
 	elseif nTime < 3600 then
 		str=str.."半小时";
 	elseif nTime < 86400 then
-		str=str..SafeN2S(getIntPart(nTime/3600)).."小时";
+		str=str..SafeN2S(getIntPart(nTime/3600))..GetTxtPri("AREAUI_T9");
 	else
-		str=str..SafeN2S(getIntPart(nTime/86400)).."天";
+		str=str..SafeN2S(getIntPart(nTime/86400))..GetTxtPri("AREAUI_T10");
 	end
-	str = str.. "前";
+	str = str.. GetTxtPri("AREAUI_T11");
 	return str;
 end
 

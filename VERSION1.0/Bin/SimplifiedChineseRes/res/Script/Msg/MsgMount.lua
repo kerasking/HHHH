@@ -74,19 +74,19 @@ function p.processMountInfo(netdata)
         
         local tips = {};
         if(tempstr1>0) then
-            table.insert(tips,{"力量 +"..tempstr1,FontColor.Text});
+            table.insert(tips,{string.format("%s +%d",GetTxtPri("HS_T1"),tempstr1),FontColor.Text});
         end
         if(tempstr2>0) then
-            table.insert(tips,{"敏捷 +"..tempstr2,FontColor.Text});
+            table.insert(tips,{string.format("%s +%d",GetTxtPri("HS_T2"),tempstr2),FontColor.Text});
         end
         if(tempstr3>0) then
-            table.insert(tips,{"智力 +"..tempstr3,FontColor.Text});
+            table.insert(tips,{string.format("%s +%d",GetTxtPri("HS_T3"),tempstr3),FontColor.Text});
         end
         if(tempstr4>0) then
-            table.insert(tips,{"生命 +"..tempstr4,FontColor.Text});
+            table.insert(tips,{string.format("%s +%d",GetTxtPri("HS_T4"),tempstr4),FontColor.Text});
         end
         if(tempstr5>0) then
-            table.insert(tips,{string.format("速度 +%d%s",tempstr5,"%"),FontColor.Text});
+            table.insert(tips,{string.format("%s +%d%s",GetTxtPri("HS_T13"),tempstr5,"%"),FontColor.Text});
         end
         
         CommonDlgNew.ShowTipsDlg(tips);
