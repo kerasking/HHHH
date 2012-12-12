@@ -62,6 +62,7 @@ int WINAPI WinMain (HINSTANCE hInstance,
 #include "globaldef.h"
 #include "NDDebugOpt.h"
 #include "MobageSdkLoginAndroid.h"
+#include "NDMapMgr.h"
 
 #define  LOG_TAG    "DaHua"
 #define  LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
@@ -71,6 +72,37 @@ using namespace NDEngine;
 
 extern "C"
 {
+    //jstring to char*
+    char* jstringTostring(JNIEnv* env, jstring jstr)
+    {
+        char* rtn = NULL;
+        jclass clsstring = env->FindClass("java/lang/String");
+        jstring strencode = env->NewStringUTF("utf-8");
+        jmethodID mid = env->GetMethodID(clsstring, "getBytes", "(Ljava/lang/String;)[B");
+        jbyteArray barr= (jbyteArray)env->CallObjectMethod(jstr, mid, strencode);
+        jsize alen = env->GetArrayLength(barr);
+        jbyte* ba = env->GetByteArrayElements(barr, JNI_FALSE);
+        if (alen > 0)
+        {
+            rtn = (char*)malloc(alen + 1);
+            memcpy(rtn, ba, alen);
+            rtn[alen] = 0;
+        }
+        env->ReleaseByteArrayElements(barr, ba, 0);
+        return rtn;
+    }
+    //char* to jstring
+    jstring stoJstring(JNIEnv* env, const char* pat)
+    {
+        //jclass strClass = env->FindClass("Ljava/lang/String;");
+        jclass strClass = env->FindClass("java/lang/String");
+        jmethodID ctorID = env->GetMethodID(strClass, "<init>", "([BLjava/lang/String;)V");
+        jbyteArray bytes = env->NewByteArray(strlen(pat));
+        env->SetByteArrayRegion(bytes, 0, strlen(pat), (jbyte*)pat);
+        jstring encoding = env->NewStringUTF("utf-8");
+        return (jstring)env->NewObject(strClass, ctorID, bytes, encoding);
+    }
+    
 	jint JNI_OnLoad(JavaVM *vm, void *reserved)
 	{
 		JniHelper::setJavaVM(vm);
@@ -127,6 +159,44 @@ extern "C"
         MobageSdkLoginAndroid::onLoginError();
 		LOGD("Leave Java_org_DeNA_DHLJ_DaHuaLongJiang_onLoginError");
 	}
+    
+    //auth
+	void Java_org_DeNA_DHLJ_SocialUtils_onAuthSuccess(JNIEnv*  env, jobject thiz, jstring verifier)
+	{
+        NDMapMgrObj.ProcessJavaonAuthSuccess(jstringTostring(env, verifier));
+    }
+    
+	void Java_org_DeNA_DHLJ_SocialUtils_onAuthError(JNIEnv*  env, jobject thiz, jstring error)
+	{
+        NDMapMgrObj.ProcessJavaonAuthError(jstringTostring(env, error));
+    }
+    
+    //continue transaction
+	void Java_org_DeNA_DHLJ_SocialUtils_onContinueTransactionSuccess(JNIEnv*  env, jobject thiz, jstring transid)
+	{
+        NDMapMgrObj.ProcessJavaonContinueTransactionSuccess(jstringTostring(env, transid));
+    }
+    
+	void Java_org_DeNA_DHLJ_SocialUtils_onContinueTransactionError(JNIEnv*  env, jobject thiz, jstring error)
+	{
+        NDMapMgrObj.ProcessJavaonContinueTransactionError(jstringTostring(env, error));
+    }
+    
+	void Java_org_DeNA_DHLJ_SocialUtils_onContinueTransactionCancel(JNIEnv*  env, jobject thiz)
+	{
+        NDMapMgrObj.ProcessJavaonContinueTransactionCancel();
+    }
+    
+    //cancel transaction
+	void Java_org_DeNA_DHLJ_SocialUtils_onCancelTransactionSuccess(JNIEnv*  env, jobject thiz, jstring transid)
+	{
+        NDMapMgrObj.ProcessJavaonCancelTransactionSuccess(jstringTostring(env, transid));
+    }
+    
+	void Java_org_DeNA_DHLJ_SocialUtils_onCancelTransactionError(JNIEnv*  env, jobject thiz, jstring error)
+	{
+        NDMapMgrObj.ProcessJavaonCancelTransactionError(jstringTostring(env, error));
+    }
 }
 
 #endif

@@ -162,6 +162,10 @@ const string NDPath::GetImagePath()
 {
     return GetResPath()+string("Image/");
 }
+const string NDPath::GetImage00Path()
+{
+	return GetResPath()+string("Image00/");
+}
 
 const string NDPath::GetMapPath()
 {
@@ -202,6 +206,11 @@ const string NDPath::GetImgPath(const char* filename)
 {
 	static string ret;
 	return ret = GetImagePath() + filename;
+}
+const string NDPath::GetImg00Path(const char* filename)
+{
+	static string ret;
+	return ret = GetImage00Path() + filename;
 }
 
 const string NDPath::GetImgPathBattleUI(const char* fileName)
@@ -246,6 +255,12 @@ const string NDPath::GetSMImgPath(const char* fileName)
 {
 	return GetImagePath() + "Res00/" + fileName;
 }
+
+const string NDPath::GetSMImg00Path(const char* fileName)
+{
+	return GetImage00Path() + "Res00/" + fileName;
+}
+
 
 const string NDPath::GetScriptPath(const char* filename)
 {

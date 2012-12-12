@@ -93,13 +93,13 @@ function p.ShowDlg(data)
 	p.data = data;
 	if CheckP(moneyDesV) then
 		if (m.money >= 0 ) then
-			moneyDesV:SetText(SafeN2S(m.money) .. "银币");
+			moneyDesV:SetText(SafeN2S(m.money) .. GetTxtPub("coin"));
 		end
 	end
 	
 	if (CheckP(goldDesV)) then
 		if (m.emoney >= 0 ) then
-			goldDesV:SetText(SafeN2S(m.emoney) .. "金币");
+			goldDesV:SetText(SafeN2S(m.emoney) .. GetTxtPub("shoe"));
 		end
 	end
 	
@@ -204,8 +204,8 @@ function p.showRaiseGroupDlg(data)
 	
 	data = {};
 	
-	local tip =  "生命值+" .. SafeN2S(data.health) .."\n武力+".. SafeN2S(data.phy) .. "\n技能+".. SafeN2S(data.skill).. "\n法术+"..SafeN2S(data.magic);
-	CommonDlg.ShowTipInfo("恭喜您的修为\n得到提升！",tip);
+	local tip =  GetTxtPri("ABBD_T1") .. SafeN2S(data.health) .."\n"..GetTxtPri("ABBD_T2").. SafeN2S(data.phy) .. "\n"..GetTxtPri("ABBD_T3").. SafeN2S(data.skill).. "\n"..GetTxtPri("ABBD_T4")..SafeN2S(data.magic);
+	CommonDlg.ShowTipInfo(GetTxtPri("ABBD_T5").."\n"..GetTxtPri("ABBD_T6"),tip);
 	--[[
 	data.health = health;
 	data.phy = phy;

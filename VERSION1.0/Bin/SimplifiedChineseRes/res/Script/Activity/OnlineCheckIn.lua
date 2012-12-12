@@ -136,10 +136,10 @@ function p.TimerTick(tag)
             LogInfo("qboy TimerTick UnRegisterTimer(p.TimerTag)"); 
 			UnRegisterTimer(p.TimerTag);
 			p.TimerTag = nil;
-			--CDLabel:SetText("点击领取");
+			--CDLabel:SetText(GetTxtPri("OCI_ClickGet"));
 			
 			if CDLabel ~= nil then
-				CDLabel:SetText("点击领取");
+				CDLabel:SetText(GetTxtPri("OCI_ClickGet"));
 			end
 		end		
 	end
@@ -194,7 +194,7 @@ function p.RefreshTimeLabel()
 		
 		
 		if g_Count <= 0 then
-			CDLabel:SetText("点击领取");
+			CDLabel:SetText(GetTxtPri("OCI_ClickGet"));
 		else
 			CDLabel:SetText(FormatTime(g_Count,1));
 		end	

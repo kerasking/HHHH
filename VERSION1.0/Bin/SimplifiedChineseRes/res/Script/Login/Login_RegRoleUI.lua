@@ -143,7 +143,7 @@ end
 
 function p.geZYPic(index)
 	local pool = DefaultPicPool();
-	return pool:AddPicture(GetSMImgPath("register/"..p.Pic[index]), false);
+	return pool:AddPicture(GetSMImg00Path("register/"..p.Pic[index]), false);
 end
 
 function p.getUiLayer()

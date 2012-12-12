@@ -55,35 +55,35 @@ end
 
 local tAttrTypeDesc = {}
 	tAttrTypeDesc[0] = "";
-	tAttrTypeDesc[1] = "力量";
-	tAttrTypeDesc[2] = "敏捷";
-	tAttrTypeDesc[3] = "智力";
-	tAttrTypeDesc[4] = "生命";
-	tAttrTypeDesc[5] = "力量成长率";
-	tAttrTypeDesc[6] = "敏捷成长率";
-	tAttrTypeDesc[7] = "智力成长率";
-	tAttrTypeDesc[8] = "生命成长率";
-	tAttrTypeDesc[9] = "物理攻击";
-	tAttrTypeDesc[10] = "物理防御";
-	tAttrTypeDesc[11] = "法术攻击";
-	tAttrTypeDesc[12] = "法术防御";
-	tAttrTypeDesc[13] = "速度";
-	tAttrTypeDesc[14] = "命中率";
-	tAttrTypeDesc[15] = "闪避率";
-	tAttrTypeDesc[16] = "暴击率";
-	tAttrTypeDesc[17] = "抗暴率";
-	tAttrTypeDesc[18] = "格挡率";
-	tAttrTypeDesc[19] = "破击率";
-	tAttrTypeDesc[20] = "合击率";
-	tAttrTypeDesc[21] = "求援率";
-	tAttrTypeDesc[22] = "士气";
+	tAttrTypeDesc[1] = GetTxtPri("HS_T1");
+	tAttrTypeDesc[2] = GetTxtPri("HS_T2");
+	tAttrTypeDesc[3] = GetTxtPri("HS_T3");
+	tAttrTypeDesc[4] = GetTxtPri("HS_T4");
+	tAttrTypeDesc[5] = GetTxtPri("HS_T5");
+	tAttrTypeDesc[6] = GetTxtPri("HS_T6");
+	tAttrTypeDesc[7] = GetTxtPri("HS_T7");
+	tAttrTypeDesc[8] = GetTxtPri("HS_T8");
+	tAttrTypeDesc[9] = GetTxtPri("HS_T9");
+	tAttrTypeDesc[10] = GetTxtPri("HS_T10");
+	tAttrTypeDesc[11] = GetTxtPri("HS_T11");
+	tAttrTypeDesc[12] = GetTxtPri("HS_T12");
+	tAttrTypeDesc[13] = GetTxtPri("HS_T13");
+	tAttrTypeDesc[14] = GetTxtPri("HS_T14");
+	tAttrTypeDesc[15] = GetTxtPri("HS_T15");
+	tAttrTypeDesc[16] = GetTxtPri("HS_T16");
+	tAttrTypeDesc[17] = GetTxtPri("HS_T17");
+	tAttrTypeDesc[18] = GetTxtPri("HS_T18");
+	tAttrTypeDesc[19] = GetTxtPri("HS_T19");
+	tAttrTypeDesc[20] = GetTxtPri("HS_T20");
+	tAttrTypeDesc[21] = GetTxtPri("HS_T21");
+	tAttrTypeDesc[22] = GetTxtPri("HS_T22");
 
 local tAttrAdjTypeDesc = {}
 	tAttrAdjTypeDesc[0] = "";
-	tAttrAdjTypeDesc[1] = "增加%s";
-	tAttrAdjTypeDesc[2] = "减少%s";
-	tAttrAdjTypeDesc[3] = "加成%s";
-	tAttrAdjTypeDesc[4] = "减成%s";
+	tAttrAdjTypeDesc[1] = GetTxtPri("HS_T23");
+	tAttrAdjTypeDesc[2] = GetTxtPri("HS_T24");
+	tAttrAdjTypeDesc[3] = GetTxtPri("HS_T25");
+	tAttrAdjTypeDesc[4] = GetTxtPri("HS_T26");
 
 
 --修正属性  增加和减少不做处理 
@@ -194,11 +194,11 @@ end
 
 local tStationDesc = {}
 	tStationDesc[0] ={"",""}
-	tStationDesc[1] ={"中军增伤",p.MidPosition}
-	tStationDesc[2] ={"前军生命",p.FrontPosition }
-	tStationDesc[3] ={"前军免伤",p.FrontPosition }
-	tStationDesc[4] ={"后军增速",p.BackPosition}
-	tStationDesc[5] ={"前军回血",p.FrontPosition}
+	tStationDesc[1] ={GetTxtPri("HS_T27"),p.MidPosition}
+	tStationDesc[2] ={GetTxtPri("HS_T28"),p.FrontPosition }
+	tStationDesc[3] ={GetTxtPri("HS_T29"),p.FrontPosition }
+	tStationDesc[4] ={GetTxtPri("HS_T30"),p.BackPosition}
+	tStationDesc[5] ={GetTxtPri("HS_T31"),p.FrontPosition}
 
 --获取阵型加成描述  返回 1描述，2位置
 function p.GetStationBuffDesc(nStationEffect)

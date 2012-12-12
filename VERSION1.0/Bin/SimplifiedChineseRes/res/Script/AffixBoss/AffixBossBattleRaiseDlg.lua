@@ -258,15 +258,15 @@ end
 
 function p.getScoreDes(score)
 	if not score or score < 70 then
-		return "您太弱了..."
+		return GetTxtPri("ABBR_T1")
 	elseif score < 90 then
-		return "百尺竿头，更进一步"
+		return GetTxtPri("ABBR_T2")
 	elseif	score < 110 then
-		return "霸气外露，君临天下"
+		return GetTxtPri("ABBR_T3")
 	elseif score < 130 then
-		return "破灭万古，震撼诸天"
+		return GetTxtPri("ABBR_T4")
 	else 
-		return "功参造化，无上永生"
+		return GetTxtPri("ABBR_T5")
 	end 
 end
 

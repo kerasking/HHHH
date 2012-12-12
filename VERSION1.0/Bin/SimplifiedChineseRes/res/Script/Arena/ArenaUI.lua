@@ -151,7 +151,7 @@ function p.onCommonDlg2(nId, param)
                      LogInfo("++++++++++SendClearTime++++++");
 					_G.MsgArena.SendClearTime();
 				else
-					CommonDlg.ShowWithConfirm("金币不足", p.onCommonDlg);
+					CommonDlg.ShowWithConfirm(GetTxtPri("RTUI_T13"), p.onCommonDlg);
 				end
 			end
 		end
@@ -188,7 +188,7 @@ function p.OnUIEvent(uiNode,uiEventType,param)
                 CommonDlg.ShowWithConfirm("金币不足", p.onCommonDlg);
             else
                 --add_Time_Dlg_id=CommonDlg.ShowNoPrompt("是否花费"..SafeN2S(cost).."金币，增加1次挑战次数？", p.onCommonDlg1, true);
-                CommonDlgNew.ShowYesOrNoDlg("是否花费"..SafeN2S(cost).."金币，增加1次挑战次数？", p.onCommonDlg1, true);
+                CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("AREAUI_T1"),SafeN2S(cost)), p.onCommonDlg1, true);
 			end
 		elseif ID_ARENA_CTRL_BUTTON_REMOVE_TIME == tag then
             LogInfo("+++++++++++ID_ARENA_CTRL_BUTTON_REMOVE_TIME+++++++");
@@ -204,7 +204,7 @@ function p.OnUIEvent(uiNode,uiEventType,param)
             end
             if restFightCount == 0 then
 				local cost=(addedCount+1)*2;
-                CommonDlgNew.ShowYesOrNoDlg("是否花费"..SafeN2S(cost).."金币，增加1次挑战次数？", p.onCommonDlg1, true);
+                CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("AREAUI_T1"),SafeN2S(cost)), p.onCommonDlg1, true);
                 
 			elseif p.cdTime>0 then
 				local n= p.cdTime%60;
@@ -215,7 +215,7 @@ function p.OnUIEvent(uiNode,uiEventType,param)
 				if cost > 0 then
 					--remove_cd_Dlg_id=CommonDlg.ShowNoPrompt("竞技场尚在冷却中，是否花费"..SafeN2S(cost).."金币取消冷却？", 
                     --p.onCommonDlg2, true);
-                             CommonDlgNew.ShowYesOrNoDlg("竞技场尚在冷却中，是否花费"..SafeN2S(cost).."金币取消冷却？",  p.onCommonDlg2, true);
+                             CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("AREAUI_T2"), SafeN2S(cost)), p.onCommonDlg2, true);
                 
 				end
 			end
@@ -260,17 +260,17 @@ function p.StartChallenge(index)
 
 	if p.infos[index].id~=0 then
 		if p.cdTime > 0 then
-			remove_cd_Dlg_id=CommonDlg.ShowWithConfirm("挑战时间CD中...", nil);
+			remove_cd_Dlg_id=CommonDlg.ShowWithConfirm(GetTxtPri("AREAUI_T3"), nil);
 			return;
 		end
 		
 		if restFightCount == 0 then
-			add_Time_Dlg_id=CommonDlg.ShowWithConfirm("挑战次数已用完...", nil);
+			add_Time_Dlg_id=CommonDlg.ShowWithConfirm(GetTxtPri("AREAUI_T4"), nil);
 			return;
 		end
         
         p.CurChaIndex = index;
-        CommonDlgNew.ShowYesOrNoDlg("是否要挑战".. p.infos[index].name, p.onChallengeDlg, p.infos[index].rank);
+        CommonDlgNew.ShowYesOrNoDlg(GetTxtPri("AREAUI_T6").. p.challengeID[index][3], p.onChallengeDlg, true);
 		--_G.MsgArena.SendChallenge(p.challengeID[index][1]);
 	end
 end
@@ -402,39 +402,39 @@ function p.SetReportInfo(index,name,battle_type,result,time,rank,id_battle)
 	local str="";
 	
     if time < 60 then
-        str = str.."不久之";
+        str = str..GetTxtPri("AREAUI_T7");
 	elseif time<1800 then
-		str=str..SafeN2S(getIntPart(time/60)).."分钟";
+		str=str..SafeN2S(getIntPart(time/60))..GetTxtPri("AREAUI_T8");
 	elseif time < 3600 then
-		str=str.."半小时";
+		str=str..GetTxtPri("AREAUI_T18");
 	elseif time < 86400 then
-		str=str..SafeN2S(getIntPart(time/3600)).."小时";
+		str=str..SafeN2S(getIntPart(time/3600))..GetTxtPri("AREAUI_T9");
 	else
-		str=str..SafeN2S(getIntPart(time/86400)).."天";
+		str=str..SafeN2S(getIntPart(time/86400))..GetTxtPri("AREAUI_T10");
 	end
 	
-	str=str.."前,";
+	str=str..GetTxtPri("AREAUI_T11");
 	
 	if battle_type == 0 then
-		str=str..name.."挑战你，你";
+		str=str..name..GetTxtPri("AREAUI_T12");
 	else
-		str=str.."你挑战"..name..",你";
+		str=str..string.format(GetTxtPri("AREAUI_T13"),name);
 	end
 	
 	if result==0 then
-		str=str.."失败了,";
+		str=str..GetTxtPri("AREAUI_T14");
 		if battle_type == 0 and rank ~= 0 then
-			str=str.."降至第"..SafeN2S(rank).."名";
+			str=str..string.format(GetTxtPri("AREAUI_T15"),rank);
 		else
-			str=str.."排名不变";
+			str=str..GetTxtPri("AREAUI_T16");
 		end
 	else
-		str=str.."获胜了,"
+		str=str..GetTxtPri("AREAUI_T17")
 		if battle_type == 0 or rank == 0  then
-			str=str.."排名不变";
+			str=str..GetTxtPri("AREAUI_T16");
 		else
             LogInfo("p.SetReportInfo rank = %d, rank = %s", rank, SafeN2S(rank));
-			str=str.."升至第"..SafeN2S(rank).."名";
+			str=str..string.format(GetTxtPri("AREAUI_T20"),rank);
             --str=str.."升至第"..rank.."名";
 		end
 	end
@@ -645,7 +645,7 @@ function p.SetChallengeList(index,id,name,level,rank,lookfaceID)
         end
         
 		SetLabel(layer,ID_ARENA_CTRL_TEXT_PLAYER_NAME_1,"lv."..SafeN2S(level).."  "..name);
-		SetLabel(layer,ID_ARENA_CTRL_TEXT_TANK_1,"第"..SafeN2S(rank).."名");
+		SetLabel(layer,ID_ARENA_CTRL_TEXT_TANK_1,string.format(GetTxtPri("AREAUI_T21"),rank));
         local roleBtn = GetButton(layer, ID_ARENA_CTRL_BUTTON_ROLE_INFO_1);
         local pic = GetArenaUIPlayerHeadPic(lookfaceID);      
         if CheckP(pic) then
@@ -665,7 +665,7 @@ function p.SetChallengeList(index,id,name,level,rank,lookfaceID)
         end
 
 		SetLabel(layer,ID_ARENA_CTRL_TEXT_PLAYER_NAME_2,"lv."..SafeN2S(level).."  "..name);
-		SetLabel(layer,ID_ARENA_CTRL_TEXT_TANK_2, "第"..SafeN2S(rank).."名");
+		SetLabel(layer,ID_ARENA_CTRL_TEXT_TANK_2, string.format(GetTxtPri("AREAUI_T21"),rank));
         
         local roleBtn = GetButton(layer, ID_ARENA_CTRL_BUTTON_ROLE_INFO_2);
         local pic = GetArenaUIPlayerHeadPic(lookfaceID);      
@@ -686,7 +686,7 @@ function p.SetChallengeList(index,id,name,level,rank,lookfaceID)
         end
 
 		SetLabel(layer,ID_ARENA_CTRL_TEXT_PLAYER_NAME_3,"lv."..SafeN2S(level).."  "..name);
-		SetLabel(layer,ID_ARENA_CTRL_TEXT_TANK_3, "第"..SafeN2S(rank).."名");
+		SetLabel(layer,ID_ARENA_CTRL_TEXT_TANK_3, string.format(GetTxtPri("AREAUI_T21"),rank));
         
         local roleBtn = GetButton(layer, ID_ARENA_CTRL_BUTTON_ROLE_INFO_3);
         local pic = GetArenaUIPlayerHeadPic(lookfaceID);      
@@ -706,7 +706,7 @@ function p.SetChallengeList(index,id,name,level,rank,lookfaceID)
         end
 
 		SetLabel(layer,ID_ARENA_CTRL_TEXT_PLAYER_NAME_4,"lv."..SafeN2S(level).."  "..name);
-		SetLabel(layer,ID_ARENA_CTRL_TEXT_TANK_4, "第"..SafeN2S(rank).."名");
+		SetLabel(layer,ID_ARENA_CTRL_TEXT_TANK_4, string.format(GetTxtPri("AREAUI_T21"),rank));
         
         local roleBtn = GetButton(layer, ID_ARENA_CTRL_BUTTON_ROLE_INFO_4);
         local pic = GetArenaUIPlayerHeadPic(lookfaceID);      
@@ -726,7 +726,7 @@ function p.SetChallengeList(index,id,name,level,rank,lookfaceID)
         end
         
 		SetLabel(layer,ID_ARENA_CTRL_TEXT_PLAYER_NAME_5,"lv."..SafeN2S(level).."  "..name);
-		SetLabel(layer,ID_ARENA_CTRL_TEXT_TANK_5, "第"..SafeN2S(rank).."名");
+		SetLabel(layer,ID_ARENA_CTRL_TEXT_TANK_5, string.format(GetTxtPri("AREAUI_T21"),rank));
     
         local roleBtn = GetButton(layer, ID_ARENA_CTRL_BUTTON_ROLE_INFO_5);
         local pic = GetArenaUIPlayerHeadPic(lookfaceID);   

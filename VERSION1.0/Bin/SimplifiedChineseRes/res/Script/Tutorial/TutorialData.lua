@@ -3893,21 +3893,21 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage000End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index=TutorialType.RIGHT,x=80,y=160}, EffectPos=nil, TxtPos = {Txt="点击对话"}, Begin=TutorialData.Stage00000Begin, End=TutorialData.Stage00000End, IsComplete=TutorialData.Stage00000IsComplete, ExitCond = TutorialData.Stage00000ExitCond, Order=0,},
+            {Dir={index=TutorialType.RIGHT,x=80,y=160}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T1")}, Begin=TutorialData.Stage00000Begin, End=TutorialData.Stage00000End, IsComplete=TutorialData.Stage00000IsComplete, ExitCond = TutorialData.Stage00000ExitCond, Order=0,},
             
-            {Dir={index=TutorialType.RIGHT,x=620,y=-25}, EffectPos=nil, TxtPos = {Txt="点击对话"},  Begin=TutorialData.Stage00001Begin, End=TutorialData.Stage00001End, IsComplete=TutorialData.Stage00001IsComplete, ExitCond = TutorialData.Stage00001ExitCond, Order=0,},
+            {Dir={index=TutorialType.RIGHT,x=620,y=-25}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T1")},  Begin=TutorialData.Stage00001Begin, End=TutorialData.Stage00001End, IsComplete=TutorialData.Stage00001IsComplete, ExitCond = TutorialData.Stage00001ExitCond, Order=0,},
             
-            {Dir={index=TutorialType.RIGHT,x=1335,y=160}, EffectPos=nil, TxtPos = {Txt="点击对话"},  Begin=TutorialData.Stage00002Begin, End=TutorialData.Stage00002End, IsComplete=TutorialData.Stage00002IsComplete, ExitCond = TutorialData.Stage00002ExitCond, Order=0,},
+            {Dir={index=TutorialType.RIGHT,x=1335,y=160}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T1")},  Begin=TutorialData.Stage00002Begin, End=TutorialData.Stage00002End, IsComplete=TutorialData.Stage00002IsComplete, ExitCond = TutorialData.Stage00002ExitCond, Order=0,},
             
-            {Dir={index=TutorialType.RIGHT,x=635,y=-40}, EffectPos=nil, TxtPos = {Txt="点击自动寻路战斗"},   Begin=TutorialData.Stage00003Begin, End=TutorialData.Stage00003End, IsComplete=TutorialData.Stage00003IsComplete, ExitCond = TutorialData.Stage00003ExitCond, Order=0,},
+            {Dir={index=TutorialType.RIGHT,x=635,y=-40}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T2")},   Begin=TutorialData.Stage00003Begin, End=TutorialData.Stage00003End, IsComplete=TutorialData.Stage00003IsComplete, ExitCond = TutorialData.Stage00003ExitCond, Order=0,},
             
             {Dir=nil, EffectPos=nil, Begin=TutorialData.Stage00004Begin, End=TutorialData.Stage00004End, IsComplete=TutorialData.Stage00004IsComplete, ExitCond = TutorialData.Stage00004ExitCond},
             
-            {Dir={index=TutorialType.DOWN,x=680,y=385}, EffectPos=nil, TxtPos = {Txt="点击返回主城"},  Begin=TutorialData.Stage00005Begin, End=TutorialData.Stage00005End, IsComplete=TutorialData.Stage00005IsComplete, ExitCond = TutorialData.Stage00005ExitCond},
+            {Dir={index=TutorialType.DOWN,x=680,y=385}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T3")},  Begin=TutorialData.Stage00005Begin, End=TutorialData.Stage00005End, IsComplete=TutorialData.Stage00005IsComplete, ExitCond = TutorialData.Stage00005ExitCond},
             
             {Dir=nil, EffectPos=nil, Begin=TutorialData.Stage00006Begin, End=TutorialData.Stage00006End, IsComplete=TutorialData.Stage00006IsComplete, ExitCond = TutorialData.Stage00006ExitCond},
             
-            {Dir={index=TutorialType.RIGHT,x=620,y=-25}, EffectPos=nil, TxtPos = {Txt="点击对话"}, Begin=TutorialData.Stage00007Begin, End=TutorialData.Stage00007End, IsComplete=TutorialData.Stage00007IsComplete, ExitCond = TutorialData.Stage00007ExitCond, Order=0,},
+            {Dir={index=TutorialType.RIGHT,x=620,y=-25}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T1")}, Begin=TutorialData.Stage00007Begin, End=TutorialData.Stage00007End, IsComplete=TutorialData.Stage00007IsComplete, ExitCond = TutorialData.Stage00007ExitCond, Order=0,},
         },
     },
     
@@ -3917,23 +3917,23 @@ p.DataInfo = {
         Task =  
         {
             --指引背包按钮
-            {Dir={index=TutorialType.DOWN,x=105,y=390}, EffectPos={index="xingong01.spr",x=110,y=430}, TxtPos = {Txt="点击行囊按钮"}, Begin=TutorialData.Stage02101Begin, End=TutorialData.Stage02101End, IsComplete=TutorialData.Stage02101IsComplete, ExitCond = TutorialData.Stage02101ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=105,y=390}, EffectPos={index="xingong01.spr",x=110,y=430}, TxtPos = {Txt=GetTxtPri("TD_T4")}, Begin=TutorialData.Stage02101Begin, End=TutorialData.Stage02101End, IsComplete=TutorialData.Stage02101IsComplete, ExitCond = TutorialData.Stage02101ExitCond, Order=0,},
             
             --礼包使用
-            {Dir={index=TutorialType.DOWN,x=750,y=416}, EffectPos=nil, TxtPos = {Txt="点击选择道具"}, Begin=TutorialData.Stage02102Begin, End=TutorialData.Stage02102End, IsComplete=TutorialData.Stage02102IsComplete, ExitCond = TutorialData.Stage02102ExitCond},
+            {Dir={index=TutorialType.DOWN,x=750,y=416}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T5")}, Begin=TutorialData.Stage02102Begin, End=TutorialData.Stage02102End, IsComplete=TutorialData.Stage02102IsComplete, ExitCond = TutorialData.Stage02102ExitCond},
             
-            {Dir={index=TutorialType.UP,x=420,y=130}, EffectPos=nil, TxtPos = {Txt="点击选择礼包"}, Begin=TutorialData.Stage02103Begin, End=TutorialData.Stage02103End, IsComplete=TutorialData.Stage02103IsComplete, ExitCond = TutorialData.Stage02103ExitCond},
+            {Dir={index=TutorialType.UP,x=420,y=130}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T8")}, Begin=TutorialData.Stage02103Begin, End=TutorialData.Stage02103End, IsComplete=TutorialData.Stage02103IsComplete, ExitCond = TutorialData.Stage02103ExitCond},
             
-            {Dir={index=TutorialType.DOWN,x=515,y=320}, EffectPos=nil, TxtPos = {Txt="点击使用"}, Begin=TutorialData.Stage02104Begin, End=TutorialData.Stage02104End, IsComplete=TutorialData.Stage02104IsComplete, ExitCond = TutorialData.Stage02104ExitCond},
+            {Dir={index=TutorialType.DOWN,x=515,y=320}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T7")}, Begin=TutorialData.Stage02104Begin, End=TutorialData.Stage02104End, IsComplete=TutorialData.Stage02104IsComplete, ExitCond = TutorialData.Stage02104ExitCond},
             
-            {Dir={index=TutorialType.DOWN,x=274,y=220}, EffectPos=nil, TxtPos = {Txt="点击确定"}, Begin=TutorialData.Stage02105Begin, End=TutorialData.Stage02105End, IsComplete=TutorialData.Stage02105IsComplete, ExitCond = TutorialData.Stage02105ExitCond},
+            {Dir={index=TutorialType.DOWN,x=274,y=220}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T9")}, Begin=TutorialData.Stage02105Begin, End=TutorialData.Stage02105End, IsComplete=TutorialData.Stage02105IsComplete, ExitCond = TutorialData.Stage02105ExitCond},
             
             --穿装备
-            {Dir={index=TutorialType.DOWN,x=430,y=416}, EffectPos=nil, TxtPos = {Txt="切换装备背包"}, Begin=TutorialData.Stage02106Begin, End=TutorialData.Stage02106End, IsComplete=TutorialData.Stage02106IsComplete, ExitCond = TutorialData.Stage02106ExitCond},
+            {Dir={index=TutorialType.DOWN,x=430,y=416}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T10")}, Begin=TutorialData.Stage02106Begin, End=TutorialData.Stage02106End, IsComplete=TutorialData.Stage02106IsComplete, ExitCond = TutorialData.Stage02106ExitCond},
             
-            {Dir={index=TutorialType.UP,x=420,y=130}, EffectPos=nil, TxtPos = {Txt="点击选择装备"},  Begin=TutorialData.Stage02107Begin, End=TutorialData.Stage02107End, IsComplete=TutorialData.Stage02107IsComplete, ExitCond = TutorialData.Stage02107ExitCond},
+            {Dir={index=TutorialType.UP,x=420,y=130}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T11")},  Begin=TutorialData.Stage02107Begin, End=TutorialData.Stage02107End, IsComplete=TutorialData.Stage02107IsComplete, ExitCond = TutorialData.Stage02107ExitCond},
             
-            {Dir={index=TutorialType.DOWN,x=515,y=320}, EffectPos=nil, TxtPos = {Txt="点击穿装备"}, Begin=TutorialData.Stage02108Begin, End=TutorialData.Stage02108End, IsComplete=TutorialData.Stage02108IsComplete, ExitCond = TutorialData.Stage02108ExitCond},
+            {Dir={index=TutorialType.DOWN,x=515,y=320}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T12")}, Begin=TutorialData.Stage02108Begin, End=TutorialData.Stage02108End, IsComplete=TutorialData.Stage02108IsComplete, ExitCond = TutorialData.Stage02108ExitCond},
         }
     },
     
@@ -3942,9 +3942,9 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage031End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index=TutorialType.DOWN,x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt="点击将星按钮"},  Begin=TutorialData.Stage03101Begin, End=TutorialData.Stage03101End, IsComplete=TutorialData.Stage03101IsComplete, ExitCond = TutorialData.Stage03101ExitCond, Order=0,},
-            {Dir=nil, EffectPos=nil, TxtPos = {Txt="点击修炼星图"}, Begin=TutorialData.Stage03102Begin, End=TutorialData.Stage03102End, IsComplete=TutorialData.Stage03102IsComplete, ExitCond = TutorialData.Stage03102ExitCond},
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage03103Begin, End=TutorialData.Stage03103End, IsComplete=TutorialData.Stage03103IsComplete, ExitCond = TutorialData.Stage03103ExitCond},
+            {Dir={index=TutorialType.DOWN,x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt=GetTxtPri("TD_T13")},  Begin=TutorialData.Stage03101Begin, End=TutorialData.Stage03101End, IsComplete=TutorialData.Stage03101IsComplete, ExitCond = TutorialData.Stage03101ExitCond, Order=0,},
+            {Dir=nil, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T41")}, Begin=TutorialData.Stage03102Begin, End=TutorialData.Stage03102End, IsComplete=TutorialData.Stage03102IsComplete, ExitCond = TutorialData.Stage03102ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")}, Begin=TutorialData.Stage03103Begin, End=TutorialData.Stage03103End, IsComplete=TutorialData.Stage03103IsComplete, ExitCond = TutorialData.Stage03103ExitCond},
         },
     },
     [41] = {
@@ -3952,21 +3952,21 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage041End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index=TutorialType.DOWN,x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt="点击阵法按钮"}, Begin=TutorialData.Stage04101Begin, End=TutorialData.Stage04101End, IsComplete=TutorialData.Stage04101IsComplete, ExitCond = TutorialData.Stage04101ExitCond, Order=0,},
-            {Dir={index=TutorialType.UP,x=-36,y=160}, EffectPos=nil, TxtPos = {Txt="点击选择武将"}, Begin=TutorialData.Stage04102Begin, End=TutorialData.Stage04102End, IsComplete=TutorialData.Stage04102IsComplete, ExitCond = TutorialData.Stage04102ExitCond},
-            {Dir={index=TutorialType.DOWN,x=350,y=360}, EffectPos=nil, TxtPos = {Txt="点击上阵"}, Begin=TutorialData.Stage04103Begin, End=TutorialData.Stage04103End, IsComplete=TutorialData.Stage04103IsComplete, ExitCond = TutorialData.Stage04103ExitCond},
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"},  Begin=TutorialData.Stage04104Begin, End=TutorialData.Stage04104End, IsComplete=TutorialData.Stage04104IsComplete, ExitCond = TutorialData.Stage04104ExitCond},
-            {Dir={index=TutorialType.DOWN,x=110,y=380}, EffectPos={index="xingong01.spr",x=110,y=430}, TxtPos = {Txt="点击行囊按钮"}, Begin=TutorialData.Stage04105Begin, End=TutorialData.Stage04105End, IsComplete=TutorialData.Stage04105IsComplete, ExitCond = TutorialData.Stage04105ExitCond, Order=0,},
-            {Dir={index=TutorialType.RIGHT,x=100,y=-10}, EffectPos=nil, TxtPos = {Txt="滑动选择武将周仓"}, Begin=TutorialData.Stage04106Begin, End=TutorialData.Stage04106End, IsComplete=TutorialData.Stage04106IsComplete, ExitCond = TutorialData.Stage04106ExitCond},
-            {Dir={index=TutorialType.DOWN,x=750,y=400}, EffectPos=nil, TxtPos = {Txt="切换道具背包"}, Begin=TutorialData.Stage04107Begin, End=TutorialData.Stage04107End, IsComplete=TutorialData.Stage04107IsComplete, ExitCond = TutorialData.Stage04107ExitCond},
+            {Dir={index=TutorialType.DOWN,x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt=GetTxtPri("TD_T40")}, Begin=TutorialData.Stage04101Begin, End=TutorialData.Stage04101End, IsComplete=TutorialData.Stage04101IsComplete, ExitCond = TutorialData.Stage04101ExitCond, Order=0,},
+            {Dir={index=TutorialType.UP,x=-36,y=160}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T53")}, Begin=TutorialData.Stage04102Begin, End=TutorialData.Stage04102End, IsComplete=TutorialData.Stage04102IsComplete, ExitCond = TutorialData.Stage04102ExitCond},
+            {Dir={index=TutorialType.DOWN,x=350,y=360}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T51")}, Begin=TutorialData.Stage04103Begin, End=TutorialData.Stage04103End, IsComplete=TutorialData.Stage04103IsComplete, ExitCond = TutorialData.Stage04103ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")},  Begin=TutorialData.Stage04104Begin, End=TutorialData.Stage04104End, IsComplete=TutorialData.Stage04104IsComplete, ExitCond = TutorialData.Stage04104ExitCond},
+            {Dir={index=TutorialType.DOWN,x=110,y=380}, EffectPos={index="xingong01.spr",x=110,y=430}, TxtPos = {Txt=GetTxtPri("TD_T4")}, Begin=TutorialData.Stage04105Begin, End=TutorialData.Stage04105End, IsComplete=TutorialData.Stage04105IsComplete, ExitCond = TutorialData.Stage04105ExitCond, Order=0,},
+            {Dir={index=TutorialType.RIGHT,x=100,y=-10}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T50")}, Begin=TutorialData.Stage04106Begin, End=TutorialData.Stage04106End, IsComplete=TutorialData.Stage04106IsComplete, ExitCond = TutorialData.Stage04106ExitCond},
+            {Dir={index=TutorialType.DOWN,x=750,y=400}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T49")}, Begin=TutorialData.Stage04107Begin, End=TutorialData.Stage04107End, IsComplete=TutorialData.Stage04107IsComplete, ExitCond = TutorialData.Stage04107ExitCond},
                         
-            {Dir={index=TutorialType.UP,x=425,y=150}, EffectPos=nil, TxtPos = {Txt="点击选择道具"}, Begin=TutorialData.Stage04108Begin, End=TutorialData.Stage28End, IsComplete=TutorialData.Stage04108IsComplete, ExitCond = TutorialData.Stage04108ExitCond},
+            {Dir={index=TutorialType.UP,x=425,y=150}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T5")}, Begin=TutorialData.Stage04108Begin, End=TutorialData.Stage28End, IsComplete=TutorialData.Stage04108IsComplete, ExitCond = TutorialData.Stage04108ExitCond},
             
-            {Dir={index=TutorialType.DOWN,x=510,y=320}, EffectPos=nil, TxtPos = {Txt="点击使用"}, Begin=TutorialData.Stage87Begin, End=TutorialData.Stage02108End, IsComplete=TutorialData.Stage87IsComplete, ExitCond = TutorialData.Stage87ExitCond},
+            {Dir={index=TutorialType.DOWN,x=510,y=320}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T7")}, Begin=TutorialData.Stage87Begin, End=TutorialData.Stage02108End, IsComplete=TutorialData.Stage87IsComplete, ExitCond = TutorialData.Stage87ExitCond},
             
-            {Dir={index=TutorialType.DOWN,x=274,y=220}, EffectPos=nil, TxtPos = {Txt="点击确定"}, Begin=TutorialData.Stage02105Begin, End=TutorialData.Stage02105End, IsComplete=TutorialData.Stage02105IsComplete, ExitCond = TutorialData.Stage02105ExitCond},
+            {Dir={index=TutorialType.DOWN,x=274,y=220}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T9")}, Begin=TutorialData.Stage02105Begin, End=TutorialData.Stage02105End, IsComplete=TutorialData.Stage02105IsComplete, ExitCond = TutorialData.Stage02105ExitCond},
             
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage04109Begin, End=TutorialData.Stage04109End, IsComplete=TutorialData.Stage04109IsComplete, ExitCond = TutorialData.Stage04109ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")}, Begin=TutorialData.Stage04109Begin, End=TutorialData.Stage04109End, IsComplete=TutorialData.Stage04109IsComplete, ExitCond = TutorialData.Stage04109ExitCond},
         },
     },
     
@@ -3976,21 +3976,21 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage071End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index=TutorialType.DOWN,x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt="点击强化按钮"},Begin=TutorialData.Stage07101Begin, End=TutorialData.Stage07101End, IsComplete=TutorialData.Stage07101IsComplete, ExitCond = TutorialData.Stage31ExitCond, Order=0,},
-            {Dir={index=TutorialType.LEFT,x=40,y=80}, EffectPos=nil, TxtPos = {Txt="点击选择装备"},  Begin=TutorialData.Stage07102Begin, End=TutorialData.Stage07102End, IsComplete=TutorialData.Stage07102IsComplete, ExitCond = TutorialData.Stage07102ExitCond},
-            {Dir={index=TutorialType.RIGHT,x=380,y=442}, EffectPos=nil, TxtPos = {Txt="点击强化装备"},   Begin=TutorialData.Stage07103Begin, End=TutorialData.Stage07103End, IsComplete=TutorialData.Stage07103IsComplete, ExitCond = TutorialData.Stage07103ExitCond},
+            {Dir={index=TutorialType.DOWN,x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt=GetTxtPri("TD_T25")},Begin=TutorialData.Stage07101Begin, End=TutorialData.Stage07101End, IsComplete=TutorialData.Stage07101IsComplete, ExitCond = TutorialData.Stage31ExitCond, Order=0,},
+            {Dir={index=TutorialType.LEFT,x=40,y=80}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T11")},  Begin=TutorialData.Stage07102Begin, End=TutorialData.Stage07102End, IsComplete=TutorialData.Stage07102IsComplete, ExitCond = TutorialData.Stage07102ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=380,y=442}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T54")},   Begin=TutorialData.Stage07103Begin, End=TutorialData.Stage07103End, IsComplete=TutorialData.Stage07103IsComplete, ExitCond = TutorialData.Stage07103ExitCond},
             
             --[[
             --新添加(加速功能)
-            {Dir={index=TutorialType.DOWN,x=650,y=160}, EffectPos=nil, TxtPos = {Txt="点击加速秒CD"}, Begin=TutorialData.Stage07105Begin, End=TutorialData.Stage07105End, IsComplete=TutorialData.Stage07105IsComplete, ExitCond = TutorialData.Stage07105ExitCond},
-            {Dir={index=TutorialType.DOWN,x=274,y=220}, EffectPos=nil, TxtPos = {Txt="点击确定"}, Begin=TutorialData.Stage07106Begin, End=TutorialData.Stage07106End, IsComplete=TutorialData.Stage07106IsComplete, ExitCond = TutorialData.Stage07106ExitCond},
+            {Dir={index=TutorialType.DOWN,x=650,y=160}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T55")}, Begin=TutorialData.Stage07105Begin, End=TutorialData.Stage07105End, IsComplete=TutorialData.Stage07105IsComplete, ExitCond = TutorialData.Stage07105ExitCond},
+            {Dir={index=TutorialType.DOWN,x=274,y=220}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T9")}, Begin=TutorialData.Stage07106Begin, End=TutorialData.Stage07106End, IsComplete=TutorialData.Stage07106IsComplete, ExitCond = TutorialData.Stage07106ExitCond},
             
-            {Dir={index=TutorialType.LEFT,x=40,y=190}, EffectPos=nil, TxtPos = {Txt="点击选择装备"},  Begin=TutorialData.Stage07102Begin, End=TutorialData.Stage07102End, IsComplete=TutorialData.Stage07102IsComplete, ExitCond = TutorialData.Stage07102ExitCond},
+            {Dir={index=TutorialType.LEFT,x=40,y=190}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T11")},  Begin=TutorialData.Stage07102Begin, End=TutorialData.Stage07102End, IsComplete=TutorialData.Stage07102IsComplete, ExitCond = TutorialData.Stage07102ExitCond},
             
-            {Dir={index=TutorialType.RIGHT,x=380,y=442}, EffectPos=nil, TxtPos = {Txt="点击强化装备"},   Begin=TutorialData.Stage07103Begin, End=TutorialData.Stage07103End, IsComplete=TutorialData.Stage07103IsComplete, ExitCond = TutorialData.Stage07103ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=380,y=442}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T54")},   Begin=TutorialData.Stage07103Begin, End=TutorialData.Stage07103End, IsComplete=TutorialData.Stage07103IsComplete, ExitCond = TutorialData.Stage07103ExitCond},
             
             ]]
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage07104Begin, End=TutorialData.Stage07104End, IsComplete=TutorialData.Stage07104IsComplete, ExitCond = TutorialData.Stage07104ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")}, Begin=TutorialData.Stage07104Begin, End=TutorialData.Stage07104End, IsComplete=TutorialData.Stage07104IsComplete, ExitCond = TutorialData.Stage07104ExitCond},
             
         },
     },
@@ -4000,15 +4000,15 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage081End,            --任务结束清理事件
         Task =  
         {
-            {Dir={index=TutorialType.DOWN,x=400,y=380}, EffectPos={index="xingong01.spr",x=400,y=430}, TxtPos = {Txt="点击将星按钮"},  Begin=TutorialData.Stage12101Begin, End=TutorialData.Stage12101End, IsComplete=TutorialData.Stage12101IsComplete, ExitCond = TutorialData.Stage12101ExitCond, Order=0,},
-            {Dir={index=TutorialType.DOWN,x=20,y=380}, EffectPos=nil, TxtPos = {Txt="点击修炼星图"}, Begin=TutorialData.Stage12102Begin, End=TutorialData.Stage12102End, IsComplete=TutorialData.Stage12102IsComplete, ExitCond = TutorialData.Stage12102ExitCond},
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage12103Begin, End=TutorialData.Stage12103End, IsComplete=TutorialData.Stage12103IsComplete, ExitCond = TutorialData.Stage12103ExitCond},
+            {Dir={index=TutorialType.DOWN,x=400,y=380}, EffectPos={index="xingong01.spr",x=400,y=430}, TxtPos = {Txt=GetTxtPri("TD_T13")},  Begin=TutorialData.Stage12101Begin, End=TutorialData.Stage12101End, IsComplete=TutorialData.Stage12101IsComplete, ExitCond = TutorialData.Stage12101ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=20,y=380}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T41")}, Begin=TutorialData.Stage12102Begin, End=TutorialData.Stage12102End, IsComplete=TutorialData.Stage12102IsComplete, ExitCond = TutorialData.Stage12102ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")}, Begin=TutorialData.Stage12103Begin, End=TutorialData.Stage12103End, IsComplete=TutorialData.Stage12103IsComplete, ExitCond = TutorialData.Stage12103ExitCond},
             
             
-            {Dir={index=TutorialType.DOWN,x=300,y=380}, EffectPos={index="xingong01.spr",x=300,y=430}, TxtPos = {Txt="点击阵法按钮"},  Begin=TutorialData.Stage08101Begin, End=TutorialData.Stage08101End, IsComplete=TutorialData.Stage08101IsComplete, ExitCond = TutorialData.Stage08101ExitCond, Order=0,},
-            {Dir={index=TutorialType.DOWN,x=380,y=350}, EffectPos=nil, TxtPos = {Txt="点击选择技能"}, Begin=TutorialData.Stage08102Begin, End=TutorialData.Stage08102End, IsComplete=TutorialData.Stage08102IsComplete, ExitCond = TutorialData.Stage08102ExitCond},
-            {Dir={index=TutorialType.DOWN,x=355,y=240}, EffectPos=nil, TxtPos = {Txt="点击更换技能"},  Begin=TutorialData.Stage08103Begin, End=TutorialData.Stage08103End, IsComplete=TutorialData.Stage08103IsComplete, ExitCond = TutorialData.Stage08103ExitCond},
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage08104Begin, End=TutorialData.Stage08104End, IsComplete=TutorialData.Stage08104IsComplete, ExitCond = TutorialData.Stage08104ExitCond},
+            {Dir={index=TutorialType.DOWN,x=300,y=380}, EffectPos={index="xingong01.spr",x=300,y=430}, TxtPos = {Txt=GetTxtPri("TD_T40")},  Begin=TutorialData.Stage08101Begin, End=TutorialData.Stage08101End, IsComplete=TutorialData.Stage08101IsComplete, ExitCond = TutorialData.Stage08101ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=380,y=350}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T39")}, Begin=TutorialData.Stage08102Begin, End=TutorialData.Stage08102End, IsComplete=TutorialData.Stage08102IsComplete, ExitCond = TutorialData.Stage08102ExitCond},
+            {Dir={index=TutorialType.DOWN,x=355,y=240}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T38")},  Begin=TutorialData.Stage08103Begin, End=TutorialData.Stage08103End, IsComplete=TutorialData.Stage08103IsComplete, ExitCond = TutorialData.Stage08103ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")}, Begin=TutorialData.Stage08104Begin, End=TutorialData.Stage08104End, IsComplete=TutorialData.Stage08104IsComplete, ExitCond = TutorialData.Stage08104ExitCond},
         }
     },
     
@@ -4018,18 +4018,18 @@ p.DataInfo = {
         Task =  
         {
     
-            {Dir={index=TutorialType.DOWN,x=300,y=380}, EffectPos={index="xingong01.spr",x=300,y=430}, TxtPos = {Txt="点击阵法按钮"}, Begin=TutorialData.Stage04101Begin, End=TutorialData.Stage04101End, IsComplete=TutorialData.Stage04101IsComplete, ExitCond = TutorialData.Stage04101ExitCond, Order=0,},
-            {Dir={index=TutorialType.UP,x=90,y=160}, EffectPos=nil, TxtPos = {Txt="点击选择武将"}, Begin=TutorialData.Stage04102Begin, End=TutorialData.Stage04102End, IsComplete=TutorialData.Stage04102IsComplete, ExitCond = TutorialData.Stage04102ExitCond},
-            {Dir={index=TutorialType.DOWN,x=350,y=360}, EffectPos=nil, TxtPos = {Txt="点击上阵"}, Begin=TutorialData.Stage04103Begin, End=TutorialData.Stage04103End, IsComplete=TutorialData.Stage04103IsComplete, ExitCond = TutorialData.Stage04103ExitCond},
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"},  Begin=TutorialData.Stage04104Begin, End=TutorialData.Stage04104End, IsComplete=TutorialData.Stage04104IsComplete, ExitCond = TutorialData.Stage04104ExitCond},
-            {Dir={index=TutorialType.DOWN,x=110,y=380}, EffectPos={index="xingong01.spr",x=110,y=430}, TxtPos = {Txt="点击行囊按钮"}, Begin=TutorialData.Stage04105Begin, End=TutorialData.Stage04105End, IsComplete=TutorialData.Stage04105IsComplete, ExitCond = TutorialData.Stage04105ExitCond, Order=0,},
-            {Dir={index=TutorialType.RIGHT,x=100,y=-10}, EffectPos=nil, TxtPos = {Txt="滑动选择武将马腾"}, Begin=TutorialData.Stage04106Begin, End=TutorialData.Stage04106End, IsComplete=TutorialData.Stage10106IsComplete, ExitCond = TutorialData.Stage04106ExitCond},
-            {Dir={index=TutorialType.DOWN,x=750,y=400}, EffectPos=nil, TxtPos = {Txt="切换道具背包"}, Begin=TutorialData.Stage04107Begin, End=TutorialData.Stage04107End, IsComplete=TutorialData.Stage04107IsComplete, ExitCond = TutorialData.Stage04107ExitCond},
+            {Dir={index=TutorialType.DOWN,x=300,y=380}, EffectPos={index="xingong01.spr",x=300,y=430}, TxtPos = {Txt=GetTxtPri("TD_T40")}, Begin=TutorialData.Stage04101Begin, End=TutorialData.Stage04101End, IsComplete=TutorialData.Stage04101IsComplete, ExitCond = TutorialData.Stage04101ExitCond, Order=0,},
+            {Dir={index=TutorialType.UP,x=90,y=160}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T53")}, Begin=TutorialData.Stage04102Begin, End=TutorialData.Stage04102End, IsComplete=TutorialData.Stage04102IsComplete, ExitCond = TutorialData.Stage04102ExitCond},
+            {Dir={index=TutorialType.DOWN,x=350,y=360}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T51")}, Begin=TutorialData.Stage04103Begin, End=TutorialData.Stage04103End, IsComplete=TutorialData.Stage04103IsComplete, ExitCond = TutorialData.Stage04103ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")},  Begin=TutorialData.Stage04104Begin, End=TutorialData.Stage04104End, IsComplete=TutorialData.Stage04104IsComplete, ExitCond = TutorialData.Stage04104ExitCond},
+            {Dir={index=TutorialType.DOWN,x=110,y=380}, EffectPos={index="xingong01.spr",x=110,y=430}, TxtPos = {Txt=GetTxtPri("TD_T4")}, Begin=TutorialData.Stage04105Begin, End=TutorialData.Stage04105End, IsComplete=TutorialData.Stage04105IsComplete, ExitCond = TutorialData.Stage04105ExitCond, Order=0,},
+            {Dir={index=TutorialType.RIGHT,x=100,y=-10}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T52")}, Begin=TutorialData.Stage04106Begin, End=TutorialData.Stage04106End, IsComplete=TutorialData.Stage10106IsComplete, ExitCond = TutorialData.Stage04106ExitCond},
+            {Dir={index=TutorialType.DOWN,x=750,y=400}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T49")}, Begin=TutorialData.Stage04107Begin, End=TutorialData.Stage04107End, IsComplete=TutorialData.Stage04107IsComplete, ExitCond = TutorialData.Stage04107ExitCond},
             
-            {Dir={index=TutorialType.UP,x=425,y=150}, EffectPos=nil, TxtPos = {Txt="点击选择道具"}, Begin=TutorialData.Stage04108Begin, End=TutorialData.Stage28End, IsComplete=TutorialData.Stage04108IsComplete, ExitCond = TutorialData.Stage04108ExitCond},
-            {Dir={index=TutorialType.DOWN,x=510,y=320}, EffectPos=nil, TxtPos = {Txt="点击使用"}, Begin=TutorialData.Stage87Begin, End=TutorialData.Stage02108End, IsComplete=TutorialData.Stage87IsComplete, ExitCond = TutorialData.Stage87ExitCond},
-            {Dir={index=TutorialType.DOWN,x=274,y=220}, EffectPos=nil, TxtPos = {Txt="点击确定"}, Begin=TutorialData.Stage02105Begin, End=TutorialData.Stage02105End, IsComplete=TutorialData.Stage02105IsComplete, ExitCond = TutorialData.Stage02105ExitCond},
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage04109Begin, End=TutorialData.Stage04109End, IsComplete=TutorialData.Stage04109IsComplete, ExitCond = TutorialData.Stage04109ExitCond},
+            {Dir={index=TutorialType.UP,x=425,y=150}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T5")}, Begin=TutorialData.Stage04108Begin, End=TutorialData.Stage28End, IsComplete=TutorialData.Stage04108IsComplete, ExitCond = TutorialData.Stage04108ExitCond},
+            {Dir={index=TutorialType.DOWN,x=510,y=320}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T7")}, Begin=TutorialData.Stage87Begin, End=TutorialData.Stage02108End, IsComplete=TutorialData.Stage87IsComplete, ExitCond = TutorialData.Stage87ExitCond},
+            {Dir={index=TutorialType.DOWN,x=274,y=220}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T9")}, Begin=TutorialData.Stage02105Begin, End=TutorialData.Stage02105End, IsComplete=TutorialData.Stage02105IsComplete, ExitCond = TutorialData.Stage02105ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")}, Begin=TutorialData.Stage04109Begin, End=TutorialData.Stage04109End, IsComplete=TutorialData.Stage04109IsComplete, ExitCond = TutorialData.Stage04109ExitCond},
             
         }
     },
@@ -4039,14 +4039,14 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage081End,            --任务结束清理事件
         Task =  
         {
-            {Dir={index=TutorialType.DOWN,x=400,y=380}, EffectPos={index="xingong01.spr",x=400,y=430}, TxtPos = {Txt="点击将星按钮"},  Begin=TutorialData.Stage12101Begin, End=TutorialData.Stage12101End, IsComplete=TutorialData.Stage12101IsComplete, ExitCond = TutorialData.Stage12101ExitCond, Order=0,},
-            {Dir={index=TutorialType.DOWN,x=20,y=380}, EffectPos=nil, TxtPos = {Txt="点击修炼星图"}, Begin=TutorialData.Stage12102Begin, End=TutorialData.Stage12102End, IsComplete=TutorialData.Stage12102IsComplete, ExitCond = TutorialData.Stage12102ExitCond},
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage12103Begin, End=TutorialData.Stage12103End, IsComplete=TutorialData.Stage12103IsComplete, ExitCond = TutorialData.Stage12103ExitCond},
+            {Dir={index=TutorialType.DOWN,x=400,y=380}, EffectPos={index="xingong01.spr",x=400,y=430}, TxtPos = {Txt=GetTxtPri("TD_T13")},  Begin=TutorialData.Stage12101Begin, End=TutorialData.Stage12101End, IsComplete=TutorialData.Stage12101IsComplete, ExitCond = TutorialData.Stage12101ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=20,y=380}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T41")}, Begin=TutorialData.Stage12102Begin, End=TutorialData.Stage12102End, IsComplete=TutorialData.Stage12102IsComplete, ExitCond = TutorialData.Stage12102ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")}, Begin=TutorialData.Stage12103Begin, End=TutorialData.Stage12103End, IsComplete=TutorialData.Stage12103IsComplete, ExitCond = TutorialData.Stage12103ExitCond},
             
-            {Dir={index=TutorialType.DOWN,x=300,y=380}, EffectPos={index="xingong01.spr",x=300,y=430}, TxtPos = {Txt="点击阵法按钮"},  Begin=TutorialData.Stage08101Begin, End=TutorialData.Stage08101End, IsComplete=TutorialData.Stage08101IsComplete, ExitCond = TutorialData.Stage08101ExitCond, Order=0,},
-            {Dir={index=TutorialType.DOWN,x=260,y=350}, EffectPos=nil, TxtPos = {Txt="点击选择技能"}, Begin=TutorialData.Stage08102Begin, End=TutorialData.Stage08102End, IsComplete=TutorialData.Stage08102IsComplete, ExitCond = TutorialData.Stage08102ExitCond},
-            {Dir={index=TutorialType.DOWN,x=355,y=240}, EffectPos=nil, TxtPos = {Txt="点击更换技能"},  Begin=TutorialData.Stage08103Begin, End=TutorialData.Stage08103End, IsComplete=TutorialData.Stage08103IsComplete, ExitCond = TutorialData.Stage08103ExitCond},
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage08104Begin, End=TutorialData.Stage08104End, IsComplete=TutorialData.Stage08104IsComplete, ExitCond = TutorialData.Stage08104ExitCond},
+            {Dir={index=TutorialType.DOWN,x=300,y=380}, EffectPos={index="xingong01.spr",x=300,y=430}, TxtPos = {Txt=GetTxtPri("TD_T40")},  Begin=TutorialData.Stage08101Begin, End=TutorialData.Stage08101End, IsComplete=TutorialData.Stage08101IsComplete, ExitCond = TutorialData.Stage08101ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=260,y=350}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T39")}, Begin=TutorialData.Stage08102Begin, End=TutorialData.Stage08102End, IsComplete=TutorialData.Stage08102IsComplete, ExitCond = TutorialData.Stage08102ExitCond},
+            {Dir={index=TutorialType.DOWN,x=355,y=240}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T38")},  Begin=TutorialData.Stage08103Begin, End=TutorialData.Stage08103End, IsComplete=TutorialData.Stage08103IsComplete, ExitCond = TutorialData.Stage08103ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")}, Begin=TutorialData.Stage08104Begin, End=TutorialData.Stage08104End, IsComplete=TutorialData.Stage08104IsComplete, ExitCond = TutorialData.Stage08104ExitCond},
         }
     },
     
@@ -4056,8 +4056,8 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage161End,         --任务结束清理事件
         Task =  
         {
-            {Dir={index=TutorialType.UP,x=600,y=70}, EffectPos=nil, TxtPos = {Txt="点击征收按钮"}, Begin=TutorialData.Stage16101Begin, End=TutorialData.Stage16101End, IsComplete=TutorialData.Stage16101IsComplete, ExitCond = TutorialData.Stage16101ExitCond, Order=0,},
-            {Dir={index=TutorialType.LEFT,x=500,y=396}, EffectPos=nil, TxtPos = {Txt="点击征收获得银币"},  Begin=TutorialData.Stage16102Begin, End=TutorialData.Stage16102End, IsComplete=TutorialData.Stage16102IsComplete, ExitCond = TutorialData.Stage16102ExitCond},
+            {Dir={index=TutorialType.UP,x=600,y=70}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T48")}, Begin=TutorialData.Stage16101Begin, End=TutorialData.Stage16101End, IsComplete=TutorialData.Stage16101IsComplete, ExitCond = TutorialData.Stage16101ExitCond, Order=0,},
+            {Dir={index=TutorialType.LEFT,x=500,y=396}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T47")},  Begin=TutorialData.Stage16102Begin, End=TutorialData.Stage16102End, IsComplete=TutorialData.Stage16102IsComplete, ExitCond = TutorialData.Stage16102ExitCond},
         },
     },
     
@@ -4067,13 +4067,13 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage171End,         --任务结束清理事件
         Task =  
         {
-            {Dir={index=TutorialType.LEFT,x=130,y=-50}, EffectPos=nil, TxtPos = {Txt="点击查看军衔信息"},  Begin=TutorialData.Stage17101Begin, End=TutorialData.Stage17101End, IsComplete=TutorialData.Stage17101IsComplete, ExitCond = TutorialData.Stage17101ExitCond, Order=0,},
+            {Dir={index=TutorialType.LEFT,x=130,y=-50}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T46")},  Begin=TutorialData.Stage17101Begin, End=TutorialData.Stage17101End, IsComplete=TutorialData.Stage17101IsComplete, ExitCond = TutorialData.Stage17101ExitCond, Order=0,},
             
             
-            {Dir=nil--[[{index=TutorialType.DOWN,x=360,y=360}]], EffectPos=nil, TxtPos = {Txt="点击可升级军衔"}, Begin=TutorialData.Stage17102Begin, End=TutorialData.Stage17102End, IsComplete=TutorialData.Stage17102IsComplete, ExitCond = TutorialData.Stage17102ExitCond},
+            {Dir=nil--[[{index=TutorialType.DOWN,x=360,y=360}]], EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T45")}, Begin=TutorialData.Stage17102Begin, End=TutorialData.Stage17102End, IsComplete=TutorialData.Stage17102IsComplete, ExitCond = TutorialData.Stage17102ExitCond},
             
             
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage17103Begin, End=TutorialData.Stage17103End, IsComplete=TutorialData.Stage17103IsComplete, ExitCond = TutorialData.Stage17103ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")}, Begin=TutorialData.Stage17103Begin, End=TutorialData.Stage17103End, IsComplete=TutorialData.Stage17103IsComplete, ExitCond = TutorialData.Stage17103ExitCond},
         },
     },
     
@@ -4083,14 +4083,14 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage181End,         --任务结束清理事件
         Task =  
         {
-            {Dir={index=TutorialType.UP,x=600,y=60}, EffectPos=nil, TxtPos = {Txt="点击竞技场按钮"},  Begin=TutorialData.Stage18101Begin, End=TutorialData.Stage18101End, IsComplete=TutorialData.Stage18101IsComplete, ExitCond = TutorialData.Stage18101ExitCond, Order=0,},
+            {Dir={index=TutorialType.UP,x=600,y=60}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T44")},  Begin=TutorialData.Stage18101Begin, End=TutorialData.Stage18101End, IsComplete=TutorialData.Stage18101IsComplete, ExitCond = TutorialData.Stage18101ExitCond, Order=0,},
             
-            {Dir={index=TutorialType.LEFT,x=290,y=60}, EffectPos=nil, TxtPos = {Txt="点击进行挑战"},  Begin=TutorialData.Stage18102Begin, End=TutorialData.Stage18102End, IsComplete=TutorialData.Stage18102IsComplete, ExitCond = TutorialData.Stage18102ExitCond},
+            {Dir={index=TutorialType.LEFT,x=290,y=60}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T43")},  Begin=TutorialData.Stage18102Begin, End=TutorialData.Stage18102End, IsComplete=TutorialData.Stage18102IsComplete, ExitCond = TutorialData.Stage18102ExitCond},
             
             --[[
-            {Dir={index=TutorialType.UP,x=716,y=290}, EffectPos=nil, TxtPos = {Txt="点击加速去除CD"},   Begin=TutorialData.Stage18103Begin, End=TutorialData.Stage18103End, IsComplete=TutorialData.Stage18103IsComplete, ExitCond = TutorialData.Stage18103ExitCond},
+            {Dir={index=TutorialType.UP,x=716,y=290}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T42")},   Begin=TutorialData.Stage18103Begin, End=TutorialData.Stage18103End, IsComplete=TutorialData.Stage18103IsComplete, ExitCond = TutorialData.Stage18103ExitCond},
             
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage18104Begin, End=TutorialData.Stage18104End, IsComplete=TutorialData.Stage18104IsComplete, ExitCond = TutorialData.Stage18104ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")}, Begin=TutorialData.Stage18104Begin, End=TutorialData.Stage18104End, IsComplete=TutorialData.Stage18104IsComplete, ExitCond = TutorialData.Stage18104ExitCond},
             ]]
         },
     },
@@ -4102,15 +4102,15 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage081End,            --任务结束清理事件
         Task =  
         {
-            {Dir={index=TutorialType.DOWN,x=400,y=380}, EffectPos={index="xingong01.spr",x=400,y=430}, TxtPos = {Txt="点击将星按钮"},  Begin=TutorialData.Stage12101Begin, End=TutorialData.Stage12101End, IsComplete=TutorialData.Stage12101IsComplete, ExitCond = TutorialData.Stage12101ExitCond, Order=0,},
-            {Dir={index=TutorialType.DOWN,x=20,y=380}, EffectPos=nil, TxtPos = {Txt="点击修炼星图"}, Begin=TutorialData.Stage12102Begin, End=TutorialData.Stage12102End, IsComplete=TutorialData.Stage12102IsComplete, ExitCond = TutorialData.Stage12102ExitCond},
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage12103Begin, End=TutorialData.Stage12103End, IsComplete=TutorialData.Stage12103IsComplete, ExitCond = TutorialData.Stage12103ExitCond},
+            {Dir={index=TutorialType.DOWN,x=400,y=380}, EffectPos={index="xingong01.spr",x=400,y=430}, TxtPos = {Txt=GetTxtPri("TD_T13")},  Begin=TutorialData.Stage12101Begin, End=TutorialData.Stage12101End, IsComplete=TutorialData.Stage12101IsComplete, ExitCond = TutorialData.Stage12101ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=20,y=380}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T41")}, Begin=TutorialData.Stage12102Begin, End=TutorialData.Stage12102End, IsComplete=TutorialData.Stage12102IsComplete, ExitCond = TutorialData.Stage12102ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")}, Begin=TutorialData.Stage12103Begin, End=TutorialData.Stage12103End, IsComplete=TutorialData.Stage12103IsComplete, ExitCond = TutorialData.Stage12103ExitCond},
             
             
-            {Dir={index=TutorialType.DOWN,x=300,y=380}, EffectPos={index="xingong01.spr",x=300,y=430}, TxtPos = {Txt="点击阵法按钮"},  Begin=TutorialData.Stage08101Begin, End=TutorialData.Stage08101End, IsComplete=TutorialData.Stage08101IsComplete, ExitCond = TutorialData.Stage08101ExitCond, Order=0,},
-            {Dir={index=TutorialType.DOWN,x=500,y=350}, EffectPos=nil, TxtPos = {Txt="点击选择技能"}, Begin=TutorialData.Stage08102Begin, End=TutorialData.Stage08102End, IsComplete=TutorialData.Stage08102IsComplete, ExitCond = TutorialData.Stage08102ExitCond},
-            {Dir={index=TutorialType.DOWN,x=355,y=240}, EffectPos=nil, TxtPos = {Txt="点击更换技能"},  Begin=TutorialData.Stage08103Begin, End=TutorialData.Stage08103End, IsComplete=TutorialData.Stage08103IsComplete, ExitCond = TutorialData.Stage08103ExitCond},
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage08104Begin, End=TutorialData.Stage08104End, IsComplete=TutorialData.Stage08104IsComplete, ExitCond = TutorialData.Stage08104ExitCond},
+            {Dir={index=TutorialType.DOWN,x=300,y=380}, EffectPos={index="xingong01.spr",x=300,y=430}, TxtPos = {Txt=GetTxtPri("TD_T40")},  Begin=TutorialData.Stage08101Begin, End=TutorialData.Stage08101End, IsComplete=TutorialData.Stage08101IsComplete, ExitCond = TutorialData.Stage08101ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=500,y=350}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T39")}, Begin=TutorialData.Stage08102Begin, End=TutorialData.Stage08102End, IsComplete=TutorialData.Stage08102IsComplete, ExitCond = TutorialData.Stage08102ExitCond},
+            {Dir={index=TutorialType.DOWN,x=355,y=240}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T38")},  Begin=TutorialData.Stage08103Begin, End=TutorialData.Stage08103End, IsComplete=TutorialData.Stage08103IsComplete, ExitCond = TutorialData.Stage08103ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")}, Begin=TutorialData.Stage08104Begin, End=TutorialData.Stage08104End, IsComplete=TutorialData.Stage08104IsComplete, ExitCond = TutorialData.Stage08104ExitCond},
         }
     },
     
@@ -4119,22 +4119,22 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage071End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index=TutorialType.DOWN,x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt="点击强化按钮"}, Begin=TutorialData.Stage07101Begin, End=TutorialData.Stage07101End, IsComplete=TutorialData.Stage07101IsComplete, ExitCond = TutorialData.Stage31ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt=GetTxtPri("TD_T25")}, Begin=TutorialData.Stage07101Begin, End=TutorialData.Stage07101End, IsComplete=TutorialData.Stage07101IsComplete, ExitCond = TutorialData.Stage31ExitCond, Order=0,},
             
             --切换选项卡
-            {Dir={index=TutorialType.UP,x=380,y=-25}, EffectPos=nil, TxtPos = {Txt="点击武器洗炼"}, Begin=TutorialData.Stage012Begin, End=TutorialData.Stage012End, IsComplete=TutorialData.Stage012IsComplete, ExitCond = TutorialData.Stage012ExitCond},
+            {Dir={index=TutorialType.UP,x=380,y=-25}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T37")}, Begin=TutorialData.Stage012Begin, End=TutorialData.Stage012End, IsComplete=TutorialData.Stage012IsComplete, ExitCond = TutorialData.Stage012ExitCond},
             
             --点击装备
-            {Dir={index=TutorialType.LEFT,x=40,y=80}, EffectPos=nil, TxtPos = {Txt="点击选择武器"}, Begin=TutorialData.Stage07102Begin, End=TutorialData.Stage07102End, IsComplete=TutorialData.Stage013IsComplete, ExitCond = TutorialData.Stage07102ExitCond},
+            {Dir={index=TutorialType.LEFT,x=40,y=80}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T23")}, Begin=TutorialData.Stage07102Begin, End=TutorialData.Stage07102End, IsComplete=TutorialData.Stage013IsComplete, ExitCond = TutorialData.Stage07102ExitCond},
             
             --点击洗练
-            {Dir={index=TutorialType.RIGHT,x=384,y=448}, EffectPos=nil, TxtPos = {Txt="点击进行洗炼"}, Begin=TutorialData.Stage07103Begin, End=TutorialData.Stage07103End, IsComplete=TutorialData.Stage014IsComplete, ExitCond = TutorialData.Stage07103ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=384,y=448}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T36")}, Begin=TutorialData.Stage07103Begin, End=TutorialData.Stage07103End, IsComplete=TutorialData.Stage014IsComplete, ExitCond = TutorialData.Stage07103ExitCond},
             
             --替换
-            {Dir={index=TutorialType.DOWN,x=634,y=380}, EffectPos=nil, TxtPos = {Txt="点击替换"},  Begin=TutorialData.Stage07103Begin, End=TutorialData.Stage07103End, IsComplete=TutorialData.Stage015IsComplete, ExitCond = TutorialData.Stage07103ExitCond},
+            {Dir={index=TutorialType.DOWN,x=634,y=380}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T35")},  Begin=TutorialData.Stage07103Begin, End=TutorialData.Stage07103End, IsComplete=TutorialData.Stage015IsComplete, ExitCond = TutorialData.Stage07103ExitCond},
             
             --退出
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"},   Begin=TutorialData.Stage07104Begin, End=TutorialData.Stage07104End, IsComplete=TutorialData.Stage07104IsComplete, ExitCond = TutorialData.Stage07104ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")},   Begin=TutorialData.Stage07104Begin, End=TutorialData.Stage07104End, IsComplete=TutorialData.Stage07104IsComplete, ExitCond = TutorialData.Stage07104ExitCond},
             
         },
     },
@@ -4145,10 +4145,10 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage241End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index=TutorialType.RIGHT,x=780,y=150}, EffectPos=nil, TxtPos = {Txt="点击出城"}, Begin=TutorialData.Stage2411Begin, End=TutorialData.Stage2411End, IsComplete=TutorialData.Stage2411IsComplete, ExitCond = TutorialData.Stage2411ExitCond, Order=0,},
-            {Dir={index=TutorialType.RIGHT,x=530,y=-50}, EffectPos=nil, TxtPos = {Txt="选择城池"},  Begin=TutorialData.Stage2412Begin, End=TutorialData.Stage2412End, IsComplete=TutorialData.Stage2412IsComplete, ExitCond = TutorialData.Stage2412ExitCond},
-            {Dir={index=TutorialType.UP,x=354,y=-20}, EffectPos=nil, TxtPos = {Txt="点击精英副本"},  Begin=TutorialData.Stage2413Begin, End=TutorialData.Stage2413End, IsComplete=TutorialData.Stage2413IsComplete, ExitCond = TutorialData.Stage2413ExitCond},
-            {Dir={index=TutorialType.DOWN,x=0,y=0}, EffectPos=nil, TxtPos = {Txt="点击精英副本关卡"},  Begin=TutorialData.Stage2414Begin, End=TutorialData.Stage2414End, IsComplete=TutorialData.Stage2414IsComplete, ExitCond = TutorialData.Stage2414ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=780,y=150}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T20")}, Begin=TutorialData.Stage2411Begin, End=TutorialData.Stage2411End, IsComplete=TutorialData.Stage2411IsComplete, ExitCond = TutorialData.Stage2411ExitCond, Order=0,},
+            {Dir={index=TutorialType.RIGHT,x=530,y=-50}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T19")},  Begin=TutorialData.Stage2412Begin, End=TutorialData.Stage2412End, IsComplete=TutorialData.Stage2412IsComplete, ExitCond = TutorialData.Stage2412ExitCond},
+            {Dir={index=TutorialType.UP,x=354,y=-20}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T34")},  Begin=TutorialData.Stage2413Begin, End=TutorialData.Stage2413End, IsComplete=TutorialData.Stage2413IsComplete, ExitCond = TutorialData.Stage2413ExitCond},
+            {Dir={index=TutorialType.DOWN,x=0,y=0}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T33")},  Begin=TutorialData.Stage2414Begin, End=TutorialData.Stage2414End, IsComplete=TutorialData.Stage2414IsComplete, ExitCond = TutorialData.Stage2414ExitCond},
         }
     },
         
@@ -4158,14 +4158,14 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage7End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index=TutorialType.DOWN,x=510,y=380}, EffectPos={index="xingong01.spr",x=510,y=430}, TxtPos = {Txt="点击坐骑"},  Begin=TutorialData.Stage71Begin, End=TutorialData.Stage71End, IsComplete=TutorialData.Stage71IsComplete, ExitCond = TutorialData.Stage71ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=510,y=380}, EffectPos={index="xingong01.spr",x=510,y=430}, TxtPos = {Txt=GetTxtPri("TD_T32")},  Begin=TutorialData.Stage71Begin, End=TutorialData.Stage71End, IsComplete=TutorialData.Stage71IsComplete, ExitCond = TutorialData.Stage71ExitCond, Order=0,},
             
-            {Dir={index=TutorialType.DOWN,x=450,y=400}, EffectPos=nil, TxtPos = {Txt="点击进行骑乘"}, Begin=TutorialData.Stage72Begin, End=TutorialData.Stage72End, IsComplete=TutorialData.Stage73IsComplete, ExitCond = TutorialData.Stage72ExitCond},
+            {Dir={index=TutorialType.DOWN,x=450,y=400}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T31")}, Begin=TutorialData.Stage72Begin, End=TutorialData.Stage72End, IsComplete=TutorialData.Stage73IsComplete, ExitCond = TutorialData.Stage72ExitCond},
             
-            {Dir={index=TutorialType.DOWN,x=660,y=400}, EffectPos=nil, TxtPos = {Txt="点击可培养坐骑"}, Begin=TutorialData.Stage72Begin, End=TutorialData.Stage72End, IsComplete=TutorialData.Stage72IsComplete, ExitCond = TutorialData.Stage72ExitCond},
+            {Dir={index=TutorialType.DOWN,x=660,y=400}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T30")}, Begin=TutorialData.Stage72Begin, End=TutorialData.Stage72End, IsComplete=TutorialData.Stage72IsComplete, ExitCond = TutorialData.Stage72ExitCond},
             
             --退出
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"},   Begin=TutorialData.Stage74Begin, End=TutorialData.Stage74End, IsComplete=TutorialData.Stage74IsComplete, ExitCond = TutorialData.Stage74ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")},   Begin=TutorialData.Stage74Begin, End=TutorialData.Stage74End, IsComplete=TutorialData.Stage74IsComplete, ExitCond = TutorialData.Stage74ExitCond},
         },
     },
     [321] = {
@@ -4174,43 +4174,43 @@ p.DataInfo = {
         Task =  
         {
             --宝石祭祀
-            {Dir={index=TutorialType.UP,x=440,y=70}, EffectPos=nil, TxtPos = {Txt="点击祭祀按钮"}, Begin=TutorialData.Stage81Begin, End=TutorialData.Stage81End, IsComplete=TutorialData.Stage81IsComplete, ExitCond = TutorialData.Stage81ExitCond, Order=0,},
-            {Dir={index=TutorialType.DOWN,x=680,y=40}, EffectPos=nil, TxtPos = {Txt="祭祀获得宝石"},  Begin=TutorialData.Stage82Begin, End=TutorialData.Stage82End, IsComplete=TutorialData.Stage82IsComplete, ExitCond = TutorialData.Stage82ExitCond},
+            {Dir={index=TutorialType.UP,x=440,y=70}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T29")}, Begin=TutorialData.Stage81Begin, End=TutorialData.Stage81End, IsComplete=TutorialData.Stage81IsComplete, ExitCond = TutorialData.Stage81ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=680,y=40}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T28")},  Begin=TutorialData.Stage82Begin, End=TutorialData.Stage82End, IsComplete=TutorialData.Stage82IsComplete, ExitCond = TutorialData.Stage82ExitCond},
             
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"},    Begin=TutorialData.Stage83Begin, End=TutorialData.Stage83End, IsComplete=TutorialData.Stage83IsComplete, ExitCond = TutorialData.Stage83ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")},    Begin=TutorialData.Stage83Begin, End=TutorialData.Stage83End, IsComplete=TutorialData.Stage83IsComplete, ExitCond = TutorialData.Stage83ExitCond},
             
             
             --宝石礼包使用
-            {Dir={index=TutorialType.DOWN,x=110,y=380}, EffectPos={index="xingong01.spr",x=110,y=430}, TxtPos = {Txt="点击行囊按钮"}, Begin=TutorialData.Stage04105Begin, End=TutorialData.Stage04105End, IsComplete=TutorialData.Stage04105IsComplete, ExitCond = TutorialData.Stage04105ExitCond, Order=0,},
+            {Dir={index=TutorialType.DOWN,x=110,y=380}, EffectPos={index="xingong01.spr",x=110,y=430}, TxtPos = {Txt=GetTxtPri("TD_T4")}, Begin=TutorialData.Stage04105Begin, End=TutorialData.Stage04105End, IsComplete=TutorialData.Stage04105IsComplete, ExitCond = TutorialData.Stage04105ExitCond, Order=0,},
             
             --背包选项卡切换
-            {Dir={index=TutorialType.DOWN,x=750,y=400}, EffectPos=nil, TxtPos = {Txt="点击道具背包"}, Begin=TutorialData.Stage04107Begin, End=TutorialData.Stage04107End, IsComplete=TutorialData.Stage04107IsComplete, ExitCond = TutorialData.Stage04107ExitCond},
+            {Dir={index=TutorialType.DOWN,x=750,y=400}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T27")}, Begin=TutorialData.Stage04107Begin, End=TutorialData.Stage04107End, IsComplete=TutorialData.Stage04107IsComplete, ExitCond = TutorialData.Stage04107ExitCond},
             
             --指向第一个道具
-            {Dir={index=TutorialType.UP,x=420,y=130}, EffectPos=nil, TxtPos = {Txt="选择宝石礼包"}, Begin=TutorialData.Stage86Begin, End=TutorialData.Stage28End, IsComplete=TutorialData.Stage86IsComplete, ExitCond = TutorialData.Stage04108ExitCond},
+            {Dir={index=TutorialType.UP,x=420,y=130}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T26")}, Begin=TutorialData.Stage86Begin, End=TutorialData.Stage28End, IsComplete=TutorialData.Stage86IsComplete, ExitCond = TutorialData.Stage04108ExitCond},
             
             --使用礼包
-            {Dir={index=TutorialType.DOWN,x=510,y=320}, EffectPos=nil, TxtPos = {Txt="点击使用"}, Begin=TutorialData.Stage87Begin, End=TutorialData.Stage02108End, IsComplete=TutorialData.Stage87IsComplete, ExitCond = TutorialData.Stage87ExitCond},
+            {Dir={index=TutorialType.DOWN,x=510,y=320}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T7")}, Begin=TutorialData.Stage87Begin, End=TutorialData.Stage02108End, IsComplete=TutorialData.Stage87IsComplete, ExitCond = TutorialData.Stage87ExitCond},
             
             --确认框
-            {Dir={index=TutorialType.DOWN,x=274,y=220}, EffectPos=nil, TxtPos = {Txt="点击确定"}, Begin=TutorialData.Stage88Begin, End=TutorialData.Stage88End, IsComplete=TutorialData.Stage88IsComplete, ExitCond = TutorialData.Stage88ExitCond},
+            {Dir={index=TutorialType.DOWN,x=274,y=220}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T9")}, Begin=TutorialData.Stage88Begin, End=TutorialData.Stage88End, IsComplete=TutorialData.Stage88IsComplete, ExitCond = TutorialData.Stage88ExitCond},
             
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"},  Begin=TutorialData.Stage04109Begin, End=TutorialData.Stage04109End, IsComplete=TutorialData.Stage04109IsComplete, ExitCond = TutorialData.Stage04109ExitCond},
-            
-            
-            {Dir={index=TutorialType.DOWN,x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt="点击强化按钮"}, Begin=TutorialData.Stage07101Begin, End=TutorialData.Stage07101End, IsComplete=TutorialData.Stage07101IsComplete, ExitCond = TutorialData.Stage31ExitCond, Order=0,},
-            
-            {Dir={index=TutorialType.UP,x=550,y=-30}, EffectPos=nil, TxtPos = {Txt="点击宝石镶嵌"}, Begin=TutorialData.Stage012Begin, End=TutorialData.Stage012End, IsComplete=TutorialData.Stage810IsComplete, ExitCond = TutorialData.Stage012ExitCond},
-            
-            {Dir={index=TutorialType.LEFT,x=40,y=80}, EffectPos=nil, TxtPos = {Txt="点击选择武器"}, Begin=TutorialData.Stage07102Begin, End=TutorialData.Stage07102End, IsComplete=TutorialData.Stage811IsComplete, ExitCond = TutorialData.Stage07102ExitCond},
-            
-            {Dir={index=TutorialType.DOWN,x=274,y=0}, EffectPos=nil, TxtPos = {Txt="点击宝石"}, Begin=TutorialData.Stage812Begin, End=TutorialData.Stage812End, IsComplete=TutorialData.Stage812IsComplete, ExitCond = TutorialData.Stage812ExitCond},
-            
-            {Dir={index=TutorialType.DOWN,x=430,y=330}, EffectPos=nil, TxtPos = {Txt="点击镶嵌"}, Begin=TutorialData.Stage813Begin, End=TutorialData.Stage813End, IsComplete=TutorialData.Stage813IsComplete, ExitCond = TutorialData.Stage813ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")},  Begin=TutorialData.Stage04109Begin, End=TutorialData.Stage04109End, IsComplete=TutorialData.Stage04109IsComplete, ExitCond = TutorialData.Stage04109ExitCond},
             
             
+            {Dir={index=TutorialType.DOWN,x=200,y=380}, EffectPos={index="xingong01.spr",x=200,y=430}, TxtPos = {Txt=GetTxtPri("TD_T25")}, Begin=TutorialData.Stage07101Begin, End=TutorialData.Stage07101End, IsComplete=TutorialData.Stage07101IsComplete, ExitCond = TutorialData.Stage31ExitCond, Order=0,},
             
-            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt="点击关闭"}, Begin=TutorialData.Stage07104Begin, End=TutorialData.Stage07104End, IsComplete=TutorialData.Stage07104IsComplete, ExitCond = TutorialData.Stage07104ExitCond},
+            {Dir={index=TutorialType.UP,x=550,y=-30}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T24")}, Begin=TutorialData.Stage012Begin, End=TutorialData.Stage012End, IsComplete=TutorialData.Stage810IsComplete, ExitCond = TutorialData.Stage012ExitCond},
+            
+            {Dir={index=TutorialType.LEFT,x=40,y=80}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T23")}, Begin=TutorialData.Stage07102Begin, End=TutorialData.Stage07102End, IsComplete=TutorialData.Stage811IsComplete, ExitCond = TutorialData.Stage07102ExitCond},
+            
+            {Dir={index=TutorialType.DOWN,x=274,y=0}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T22")}, Begin=TutorialData.Stage812Begin, End=TutorialData.Stage812End, IsComplete=TutorialData.Stage812IsComplete, ExitCond = TutorialData.Stage812ExitCond},
+            
+            {Dir={index=TutorialType.DOWN,x=430,y=330}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T21")}, Begin=TutorialData.Stage813Begin, End=TutorialData.Stage813End, IsComplete=TutorialData.Stage813IsComplete, ExitCond = TutorialData.Stage813ExitCond},
+            
+            
+            
+            {Dir={index=TutorialType.RIGHT,x=710,y=-110}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T6")}, Begin=TutorialData.Stage07104Begin, End=TutorialData.Stage07104End, IsComplete=TutorialData.Stage07104IsComplete, ExitCond = TutorialData.Stage07104ExitCond},
             
         },
     },
@@ -4221,13 +4221,13 @@ p.DataInfo = {
         EndFunc=TutorialData.Stage241End,        --任务结束清理事件
         Task =  
         {
-            {Dir={index=TutorialType.RIGHT,x=780,y=150}, EffectPos=nil, TxtPos = {Txt="点击出城"},Begin=TutorialData.Stage2411Begin, End=TutorialData.Stage2411End, IsComplete=TutorialData.Stage2411IsComplete, ExitCond = TutorialData.Stage2411ExitCond, Order=0,},
-            {Dir={index=TutorialType.RIGHT,x=530,y=-50}, EffectPos=nil, TxtPos = {Txt="选择城池"}, Begin=TutorialData.Stage2412Begin, End=TutorialData.Stage2412End, IsComplete=TutorialData.Stage2412IsComplete, ExitCond = TutorialData.Stage2412ExitCond},
-            {Dir={index=TutorialType.DOWN,x=0,y=0}, EffectPos=nil,TxtPos = {Txt="选择副本"},Begin=TutorialData.Stage2413Begin, End=TutorialData.Stage2413End, IsComplete=TutorialData.Stage5413IsComplete, ExitCond = TutorialData.Stage2413ExitCond},
-            {Dir={index=TutorialType.DOWN,x=350,y=200}, EffectPos=nil,TxtPos = {Txt="点击扫荡"},Begin=TutorialData.Stage5414Begin, End=TutorialData.Stage5414End, IsComplete=TutorialData.Stage5414IsComplete, ExitCond = TutorialData.Stage5414ExitCond},
-            {Dir={index=TutorialType.DOWN,x=630,y=380}, EffectPos=nil, TxtPos = {Txt="点击开始"},Begin=TutorialData.Stage6414Begin, End=TutorialData.Stage6414End, IsComplete=TutorialData.Stage6414IsComplete, ExitCond = TutorialData.Stage6414ExitCond},
+            {Dir={index=TutorialType.RIGHT,x=780,y=150}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T20")},Begin=TutorialData.Stage2411Begin, End=TutorialData.Stage2411End, IsComplete=TutorialData.Stage2411IsComplete, ExitCond = TutorialData.Stage2411ExitCond, Order=0,},
+            {Dir={index=TutorialType.RIGHT,x=530,y=-50}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T19")}, Begin=TutorialData.Stage2412Begin, End=TutorialData.Stage2412End, IsComplete=TutorialData.Stage2412IsComplete, ExitCond = TutorialData.Stage2412ExitCond},
+            {Dir={index=TutorialType.DOWN,x=0,y=0}, EffectPos=nil,TxtPos = {Txt=GetTxtPri("TD_T18")},Begin=TutorialData.Stage2413Begin, End=TutorialData.Stage2413End, IsComplete=TutorialData.Stage5413IsComplete, ExitCond = TutorialData.Stage2413ExitCond},
+            {Dir={index=TutorialType.DOWN,x=350,y=200}, EffectPos=nil,TxtPos = {Txt=GetTxtPri("TD_T16")},Begin=TutorialData.Stage5414Begin, End=TutorialData.Stage5414End, IsComplete=TutorialData.Stage5414IsComplete, ExitCond = TutorialData.Stage5414ExitCond},
+            {Dir={index=TutorialType.DOWN,x=630,y=380}, EffectPos=nil, TxtPos = {Txt=GetTxtPri("TD_T15")},Begin=TutorialData.Stage6414Begin, End=TutorialData.Stage6414End, IsComplete=TutorialData.Stage6414IsComplete, ExitCond = TutorialData.Stage6414ExitCond},
             --[[
-            {Dir={index=TutorialType.DOWN,x=710,y=380}, EffectPos=nil,TxtPos = {Txt="点击加速"},Begin=TutorialData.Stage7414Begin, End=TutorialData.Stage7414End, IsComplete=TutorialData.Stage7414IsComplete, ExitCond = TutorialData.Stage7414ExitCond},
+            {Dir={index=TutorialType.DOWN,x=710,y=380}, EffectPos=nil,TxtPos = {Txt=GetTxtPri("TD_T14")},Begin=TutorialData.Stage7414Begin, End=TutorialData.Stage7414End, IsComplete=TutorialData.Stage7414IsComplete, ExitCond = TutorialData.Stage7414ExitCond},
             ]]
             
         },

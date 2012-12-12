@@ -1006,7 +1006,7 @@ end
 function p.refreshPetInfoListItem(view,nPetId)
     local labelName = GetLabel(view, TAG_PET_NAME);
     if(nPetId == 0) then
-        labelName:SetText("背包");
+        labelName:SetText(GetTxtPub("bag"));
     else
         local strPetName = ConvertS(RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_NAME));
         labelName:SetText(strPetName);

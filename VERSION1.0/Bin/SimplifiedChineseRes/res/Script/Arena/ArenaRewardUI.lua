@@ -102,9 +102,9 @@ function p.SetResult(result,money,repute)
             --str = string.format("你消灭了boss, 获得银币: %d, 获得将魂: %d", money, repute);
             
             if(repute>0) then
-                str = string.format("你消灭了boss, 获得银币: %d, 获得: [%s]", money, ItemFunc.GetName(repute));
+                str = string.format(GetTxtPri("ARU2_T1"), money, ItemFunc.GetName(repute));
             else
-                str = string.format("你消灭了boss, 获得银币: %d", money);
+                str = string.format(GetTxtPri("ARU2_T2"), money);
             end
             
             Music.PlayEffectSound(1094);
@@ -112,9 +112,9 @@ function p.SetResult(result,money,repute)
             --str = string.format("战斗失败, 获得银币: %d, 获得将魂: %d", money, repute);
             
             if(repute>0) then
-                str = string.format("你战斗失败, 获得银币: %d, 获得: [%s]", money, ItemFunc.GetName(repute));
+                str = string.format(GetTxtPri("ARU2_T3"), money, ItemFunc.GetName(repute));
             else
-                str = string.format("战斗失败, 获得银币: %d", money);
+                str = string.format(GetTxtPri("ARU2_T4"), money);
             end
             
             
@@ -129,10 +129,10 @@ function p.SetResult(result,money,repute)
         
         local str = nil;
         if result ==1 then --胜利
-            str = string.format("你获胜了, 获得银币: %d, 获得声望: %d", money, repute);
+            str = string.format(GetTxtPri("ARU2_T5"), money, repute);
             Music.PlayEffectSound(1094);
         elseif result ==0 then --失败
-            str = string.format("战斗失败, 获得银币: %d, 获得声望: %d", money, repute);
+            str = string.format(GetTxtPri("ARU2_T6"), money, repute);
             Music.PlayEffectSound(1093);
         end
         
@@ -159,22 +159,22 @@ function p.SetResult(result,money,repute)
         
         if result ==1 then         
             if ArenaUI.isInChallenge == 1 then    
-                bg:SetPicture(pool:AddPicture(GetSMImgPath("battle/battle_icon4.png"), false), true);
+                bg:SetPicture(pool:AddPicture(GetSMImg00Path("battle/battle_icon4.png"), false), true);
             elseif ArenaUI.isInChallenge == 2 then
-                bg:SetPicture(pool:AddPicture(GetSMImgPath("transport/icon_transport3.png"), false), true);
+                bg:SetPicture(pool:AddPicture(GetSMImg00Path("transport/icon_transport3.png"), false), true);
             end
-            str = "强者为尊应让我，英雄只此敢争先.";
+            str = GetTxtPri("ARU_T1");
             SetLabel(layer,ID_FIGHTEVALUATE_CTRL_PICTURE_7,str);
             
             Music.PlayEffectSound(1094);
 
         elseif result ==0 then   
           if ArenaUI.isInChallenge == 1 then    
-                bg:SetPicture(pool:AddPicture(GetSMImgPath("battle/battle_icon5.png"), false),true);
+                bg:SetPicture(pool:AddPicture(GetSMImg00Path("battle/battle_icon5.png"), false),true);
           elseif  ArenaUI.isInChallenge == 2 then
-                bg:SetPicture(pool:AddPicture(GetSMImgPath("transport/icon_transport4.png"), false), true);
+                bg:SetPicture(pool:AddPicture(GetSMImg00Path("transport/icon_transport4.png"), false), true);
           end
-          str = "虽败犹荣望天叹,血染钢刀不回头.";
+          str = GetTxtPri("ARU_T2");
           SetLabel(layer,ID_FIGHTEVALUATE_CTRL_PICTURE_7,str);
 
           Music.PlayEffectSound(1093);
@@ -186,7 +186,7 @@ function p.SetResult(result,money,repute)
         str="";
 
         if money > 0 then
-            str="获得银币＋"..SafeN2S(money);
+            str=GetTxtPri("ARU_T3")..SafeN2S(money);
         end
 
         if repute > 0 then
@@ -195,7 +195,7 @@ function p.SetResult(result,money,repute)
             end
         
             if ArenaUI.isInChallenge == 1 then
-                str=str.."获得声望+"..SafeN2S(repute);
+                str=str..GetTxtPri("ARU_T4")..SafeN2S(repute);
             elseif ArenaUI.isInChallenge == 2 then 
                 str=str..ItemFunc.GetName(repute).."X1";
             end

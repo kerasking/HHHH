@@ -33,12 +33,19 @@
 #include "NDBeforeGameMgr.h"
 #include "ScriptGameLogic.h"
 #include "SocialElement.h"
+#include "NDTransData.h"
 
 #ifdef USE_MGSDK
 #import <Foundation/Foundation.h>
 #import  "MBGPlatform.h"
 #import  "MBGBankDebit.h"
 #include "MobageViewController.h"
+#endif
+
+#if defined(ANDROID)
+#include "platform/android/jni/JniHelper.h"
+#include <jni.h>
+#include <android/log.h>
 #endif
 
 NS_NDENGINE_BGN
@@ -3985,7 +3992,8 @@ void NDMapMgr::processRoadBlock(NDTransData& kData)
 
 	pkLayer->setStartRoadBlockTimer(uiTime, nX, nY);
 }
-#ifdef USE_MGSDK
+
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 void  NDMapMgr::VerifierError(MBGError *error)
 {
     NSLog(@"VerifierError:%d,%s", [error code], [error description] );
@@ -4007,6 +4015,7 @@ void  NDMapMgr::CloseTransaction()
     SEND_DATA(bao);
     CloseProgressBar;
 }
+
 void  NDMapMgr::CancelTransaction()
 {
     NSString* transactionId = NDBeforeGameMgrObj.GetCurrentTransactionID();
@@ -4017,19 +4026,73 @@ void  NDMapMgr::CancelTransaction()
     } onError:^(MBGError *error) {
     }];
 }
+
 void  NDMapMgr::TransactionError(MBGError *error)
 {
     NSLog(@"TransactionError:%d,%s", [error code], [error description] );
     CancelTransaction();
 }
 #endif
+
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+void  NDMapMgr::CloseTransaction()
+{
+    int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
+    if(idAccount <= 0)
+        return;
+    std::string transactionId = NDBeforeGameMgrObj.GetCurrentTransactionID();
+    if (transactionId.empty())
+        return;
+    const char* strTransactionID = transactionId.c_str();
+    const unsigned char* szUnSignedTransactionID = (const unsigned char*)strTransactionID;
+    NDTransData bao(_MSG_CLOSE_TRANSACTION);
+    bao << idAccount;
+    bao.Write(szUnSignedTransactionID, strlen(strTransactionID));
+    SEND_DATA(bao);
+    CloseProgressBar;
+}
+
+void  NDMapMgr::CancelTransaction()
+{
+    std::string transactionId = NDBeforeGameMgrObj.GetCurrentTransactionID();
+    if (transactionId.empty())
+        return;
+    
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t
+                                       , "org/DeNA/DHLJ/SocialUtils"
+                                       , "cancelTransaction"
+                                       , "(Ljava/lang/String;)V"))
+        
+    {
+        jstring stringArg = t.env->NewStringUTF(transactionId.c_str());
+        
+        t.env->CallStaticObjectMethod(t.classID, t.methodID, stringArg);
+        t.env->DeleteLocalRef(stringArg);
+        t.env->DeleteLocalRef(t.classID);
+    }
+}
+
+void NDMapMgr::ProcessJavaonCancelTransactionSuccess(std::string transid)
+{
+    NDLog(@"onCancelTransactionSuccessr:%s", transid.c_str());
+}
+
+void NDMapMgr::ProcessJavaonCancelTransactionError(std::string error)
+{
+    NDLog(@"onCancelTransactionError:%s", error.c_str());
+}
+#endif
+
 void NDMapMgr::ProcessTempCredential(NDTransData& kData)
 {
 	///< 这两行先注释掉 郭浩
 // 	NSString temporaryCredential = kData.ReadUTF8NString();
 // 	if(temporaryCredential == nil) return;
 
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     NSString* temporaryCredential = kData.ReadUTF8NString();
     if(temporaryCredential == nil) return;
 	[MBGSocialAuth authorizeToken:temporaryCredential onSuccess:^(NSString *verifier)
@@ -4040,7 +4103,38 @@ void NDMapMgr::ProcessTempCredential(NDTransData& kData)
 		VerifierError(error);
 	}];
 #endif
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    std::string temporaryCredential = kData.ReadUTF8StdString();
+    if(temporaryCredential.empty()) return;
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t
+                                       , "org/DeNA/DHLJ/SocialUtils"
+                                       , "authorizeToken"
+                                       , "(Ljava/lang/String;)V"))
+        
+    {
+        jstring stringArg = t.env->NewStringUTF(temporaryCredential.c_str());
+        
+        t.env->CallStaticObjectMethod(t.classID, t.methodID, stringArg);
+        t.env->DeleteLocalRef(stringArg);
+        t.env->DeleteLocalRef(t.classID);
+    }
+#endif
 }
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+void NDMapMgr::ProcessJavaonAuthSuccess(std::string verifier)
+{
+    sendVerifier(verifier);
+}
+
+void NDMapMgr::ProcessJavaonAuthError(std::string error)
+{
+    NDLog(@"onAuthError:%s", error.c_str() );
+}
+#endif
 
 
 void  NDMapMgr::ProcessOAuthTokenRet(NDTransData& data)
@@ -4051,7 +4145,7 @@ void  NDMapMgr::ProcessOAuthTokenRet(NDTransData& data)
 
 void  NDMapMgr::ProcessCreateTransactionRet(NDTransData& data)
 {
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     NSString* transactionId = data.ReadUTF8NString();
     if (transactionId == nil)
         return;
@@ -4069,13 +4163,75 @@ void  NDMapMgr::ProcessCreateTransactionRet(NDTransData& data)
         TransactionError(error);
     }];
 #endif
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    std::string transactionId = data.ReadUTF8StdString();
+    if (transactionId.empty())
+        return;
+    
+    NDBeforeGameMgr& mgr = NDBeforeGameMgrObj;
+    mgr.SetCurrentTransactionID(transactionId);
+    CloseProgressBar;
+    
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t
+                                       , "org/DeNA/DHLJ/SocialUtils"
+                                       , "continueTransaction"
+                                       , "(Ljava/lang/String;)V"))
+        
+    {
+        jstring stringArg = t.env->NewStringUTF(transactionId.c_str());
+        
+        t.env->CallStaticObjectMethod(t.classID, t.methodID, stringArg);
+        t.env->DeleteLocalRef(stringArg);
+        t.env->DeleteLocalRef(t.classID);
+    }
+#endif
 }
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+void NDMapMgr::ProcessJavaonContinueTransactionSuccess(std::string transid)
+{
+    NDLog(@"onContinueTransactionSuccessr:%s", transid.c_str());
+    CloseTransaction();
+}
+
+void NDMapMgr::ProcessJavaonContinueTransactionError(std::string error)
+{
+    NDLog(@"onContinueTransactionError:%s", error.c_str());
+    CancelTransaction();
+}
+
+void NDMapMgr::ProcessJavaonContinueTransactionCancel()
+{
+    NDLog(@"onContinueTransactionCancel");
+    CancelTransaction();
+}
+#endif
+
 void  NDMapMgr::ProcessCloseTransactionRet(NDTransData& data)
 {
-#ifdef USE_MGSDK
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     //to do add EMoney
     MobageViewController* pMobageView = [MobageViewController sharedViewController];
     [pMobageView showBalanceButton:CGRectMake(200, 70, 100, 36)];
+    ScriptMgrObj.excuteLuaFunc( "HandleNetMsg", "Agiotage", 0 );
+#endif
+    
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t
+                                       , "org/DeNA/DHLJ/DaHuaLongJiang"
+                                       , "showBalanceButton"
+                                       , "()V"))
+        
+    {
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
+    }
+    
     ScriptMgrObj.excuteLuaFunc( "HandleNetMsg", "Agiotage", 0 );
 #endif
 }
@@ -4088,6 +4244,23 @@ void  NDMapMgr::sendVerifier(NSString *verifier)
         return;
     
     const char* szVerifier = [verifier UTF8String];
+    const unsigned char* szUnSignedVerifier = (const unsigned char*)szVerifier;
+    
+    NDTransData bao(_MSG_REQUEST_ACCESS_TOKEN);
+    bao << idAccount;
+    bao.Write(szUnSignedVerifier, strlen(szVerifier));
+    SEND_DATA(bao);
+}
+#endif
+
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+void  NDMapMgr::sendVerifier(std::string verifier)
+{
+    int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
+    if(idAccount <= 0)
+        return;
+    
+    const char* szVerifier = verifier.c_str();
     const unsigned char* szUnSignedVerifier = (const unsigned char*)szVerifier;
     
     NDTransData bao(_MSG_REQUEST_ACCESS_TOKEN);

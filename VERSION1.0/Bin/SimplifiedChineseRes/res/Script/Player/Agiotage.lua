@@ -29,8 +29,8 @@ local ID_EDIT_INPUT						= 17;	-- 任意元宝值输入框控件ID
 local EXCHANGE_RATE						= 10;	-- 元宝对金币的汇率 1:10
 
 ---------------------------------------------------
-local szBalance		= "您目前拥有%d元宝。";
-local szDestGold	= "金币";
+local szBalance		= GetTxtPri("PLAYER_T1");
+local szDestGold	= GetTxtPub("shoe");
 
 
 ---------------------------------------------------
@@ -147,7 +147,7 @@ function p.AgiotageQuest( nMMoney )
 	-- 用户的元宝数量
 	local nUserMMoney	= 999999999;--
 	if ( nMMoney > nUserMMoney ) then
-		CommonDlgNew.ShowYesDlg( "账户元宝余额不足！", nil, nil, nil );
+		CommonDlgNew.ShowYesDlg( GetTxtPri("PLAYER_T2"), nil, nil, nil );
 		return;
 	end
 	-- 发送兑换请求

@@ -19,11 +19,11 @@ import com.mobage.android.Mobage;
 import com.mobage.android.Mobage.PlatformListener;
 import com.mobage.android.Mobage.ServerMode;
 import com.mobage.android.cn.dynamicmenubar.DynamicMenuBar;
+import com.mobage.android.social.BalanceButton;
 import com.mobage.android.social.common.RemoteNotification;
 import com.mobage.android.social.common.RemoteNotification.RemoteNotificationListener;
 
 import org.DeNA.DHLJ.SocialUtils;
-
 import android.R;
 import android.app.ActionBar.LayoutParams;
 import android.app.AlertDialog;
@@ -47,6 +47,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Layout;
@@ -196,9 +197,14 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		menubar.removeAllViews();
 		menubar.addView(rootView);
 
+<<<<<<< HEAD
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		this.setContentView(menubar, pkParams);
+=======
+		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.FILL_PARENT);
+		this.setContentView(menubar,pkParams);
+>>>>>>> 4d9047f4688e136e43d712938cdfdb526fa00a62
 	}
 
 	public void LoginComplete(int userid)
@@ -211,6 +217,14 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		onLoginError(error);
 	}
 
+	private void showBalanceButton() {
+		Log.v(TAG, "begin showBalanceButton");
+
+		Rect rect = new Rect(200, 70, 100, 36);
+		BalanceButton button = com.mobage.android.social.common.Service.getBalanceButton(rect); 
+//		LinearLayout layout = (LinearLayout)mActivity.findViewById(R.id.placeholder); layout.addView(button);
+	}
+	
 	public void changeViewToVideo()
 	{
 	}

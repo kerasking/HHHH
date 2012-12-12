@@ -35,10 +35,10 @@ local NAME_IS_NOT_EXSITED				= 2;
 local NAME_IS_SELF						= 3;
 local MAILBOX_IS_FULL					= 4;
 
-local szSEND_LETTER_SUCCESS				= "邮件发送成功！";
-local szNAME_IS_NOT_EXSITED				= "邮件发送失败，该收件人不存在。";
-local szNAME_IS_SELF					= "邮件发送失败，收件人名字是自己。";
-local szMAILBOX_IS_FULL					= "邮件发送失败，邮箱已满。";
+local szSEND_LETTER_SUCCESS				= GetTxtPri("MUE2_T1");
+local szNAME_IS_NOT_EXSITED				= GetTxtPri("MUE2_T2");
+local szNAME_IS_SELF					= GetTxtPri("MUE2_T3");
+local szMAILBOX_IS_FULL					= GetTxtPri("MUE2_T4");
 
 -- 邮件类型
 EmailType = {
