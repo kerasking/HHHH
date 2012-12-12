@@ -651,17 +651,15 @@ void doHideMobageBalance()
 
 void doExchangeEmoney(int nQuantity)
 {
-#ifdef USE_MGSDK
 	int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
 	if(idAccount <= 0)
-	return;
+        return;
 	if(!NDBeforeGameMgrObj.IsOAuthTokenOK())
-	return;
+        return;
 	NDTransData bao(_MSG_CREATE_TRANSACTION);
 	bao << idAccount;
 	bao << nQuantity;
 	SEND_DATA(bao);
-#endif
 }
 
 std::string Int2StrIP(int ip_Int)
@@ -691,7 +689,7 @@ void sendMsgConnect(const char* pszIp, int nPort, int idAccount)
 
 void sendMsgCreateTempCredential()
 {
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
 	if(idAccount <= 0)
 	return;
