@@ -12,6 +12,7 @@
 #include "NDObject.h"
 
 #include <string>
+#include "CCString.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #import <Foundation/Foundation.h>
@@ -80,6 +81,7 @@ namespace NDEngine
 		NSString* ReadUnicodeNString();
         NSString* ReadUTF8NString();
 #endif
+        std::string ReadUTF8StdString();
 		std::string ReadUnicodeString();
 		std::string ReadUnicodeString2(bool bCareCode=true);
 		bool		ReadUnicodeString(char* out, unsigned int& outLen);

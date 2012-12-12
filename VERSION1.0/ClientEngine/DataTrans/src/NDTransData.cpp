@@ -321,6 +321,37 @@ std::string NDTransData::ReadUnicodeString2(bool bCareCode)
 	return std::string(szStr);
 }
 #endif
+    
+    std::string NDTransData::ReadUTF8StdString()
+    {
+        char buf = 0x00;
+        if( !Read((unsigned char*)&buf, 1) || (int)buf != ND_C_SET_UTF8 ) return NULL;
+        
+        unsigned short nLen = 0;
+        nLen = ReadShort();
+        
+        if (nLen > 1024)
+        {
+            NDAsssert(0);
+            return NULL;
+        }
+        
+        if (nLen == 0)
+        {
+            return NULL;
+        }
+        
+        char tmp[1024]={0};
+        
+        if (!Read((unsigned char*)tmp, nLen))
+        {
+            NDAsssert(0);
+            return NULL;
+        }
+        
+        return std::string(tmp);
+    }
+
 
 //======================================================================
 //

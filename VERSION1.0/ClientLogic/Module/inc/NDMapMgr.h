@@ -397,13 +397,25 @@ public:
     void ProcessCloseTransactionRet(NDTransData& data);
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     void sendVerifier(NSString *verifier);
-#endif
-    
-#ifdef USE_MGSDK
     void VerifierError(MBGError *error);
+    void TransactionError(MBGError *error);
     void CloseTransaction();
     void CancelTransaction();
-    void TransactionError(MBGError *error);
+#endif
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    void sendVerifier(std::string verifier);
+    void CloseTransaction();
+    void CancelTransaction();
+    void ProcessJavaonAuthSuccess(std::string verifier);
+    void ProcessJavaonAuthError(std::string error);
+    
+    void ProcessJavaonContinueTransactionSuccess(std::string transid);
+    void ProcessJavaonContinueTransactionError(std::string error);
+    void ProcessJavaonContinueTransactionCancel();
+    
+    void ProcessJavaonCancelTransactionSuccess(std::string transid);
+    void ProcessJavaonCancelTransactionError(std::string error);
 #endif
 	void RegisProcessMsg();
 public:
