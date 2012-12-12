@@ -323,7 +323,7 @@ function p.FirePet(nEventType , nEvent, param)
 	
     --阵型中宠物不可下野
     if MatrixConfigFunc.ifIsInMatrix(p.FirePetId) then
-        CommonDlgNew.ShowYesDlg("上阵的武将无法下野！");
+        CommonDlgNew.ShowYesDlg(GetTxtPri("PLAYER_T17"));
         return;
     end
 
@@ -1068,7 +1068,7 @@ function p.UpdatePetAttrById(nPetId)
 	p.SetPetAttr(view, PET_ATTR.PET_ATTR_SPEED, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SPEED));
     
 	--等级
-	p.SetPetAttr(view, PET_ATTR.PET_ATTR_LEVEL, "等级:"..RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LEVEL));
+	p.SetPetAttr(view, PET_ATTR.PET_ATTR_LEVEL, GetTxtPub("levels")..":"..RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LEVEL));
 	
 	local expUI	= RecursivUIExp(view, {ID_ROLEATTR_L_CTRL_EXP_ROLE});
 	if CheckP(expUI) then
@@ -1217,9 +1217,9 @@ function p.SetPetLeaveText(btn, nPetId)
 	end
 	
 	if RolePetFunc.IsMainPet(nPetId) then
-		btn:SetTitle("伙伴");
+		btn:SetTitle(GetTxtPri("PLAYER_T18"));
 	else
-		btn:SetTitle("离队");
+		btn:SetTitle(GetTxtPri("PLAYER_T19"));
 	end
 end
 

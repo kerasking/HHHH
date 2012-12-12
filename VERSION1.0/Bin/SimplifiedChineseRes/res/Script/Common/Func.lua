@@ -183,16 +183,16 @@ function FormatChineseTime(second)
 	
 	if second>=3600 then
 		local hour=getIntPart(second/3600);
-		result=result..SafeN2S(hour).."小时";
+		result=result..SafeN2S(hour)..GetTxtPub("hours");
 	end
 	
 	if second>= 60 then
 		local mi=getIntPart((second%3600)/60);
-		result=result..SafeN2S(mi).."分";
+		result=result..SafeN2S(mi)..GetTxtPub("minute");
 	end
 	
 	local se = second%60;
-	result=result..SafeN2S(se).."秒";
+	result=result..SafeN2S(se)..GetTxtPub("second");
 	
 	return result;
 end
@@ -258,10 +258,10 @@ function fomatBigNumber(value)
 		return SafeN2S(value);
 	elseif value<100000000 then
 		local v1=getIntPart(value/10000);
-		return SafeN2S(v1).."万";
+		return SafeN2S(v1)..GetTxtPub("ten");
 	else 
 		local v1=getIntPart(value/100000000);
-		return SafeN2S(v1).."亿";
+		return SafeN2S(v1)..GetTxtPub("hm");
 	end
 end
 

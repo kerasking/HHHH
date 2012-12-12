@@ -163,7 +163,7 @@ function p.AddActivity(id,type,param,status,isAgent)
 	
 	local name=GetDataBaseDataS("daily_activity",id,DB_DAILY_ACTIVITY.NAME);
 	if type == BOSS_ACTIVITY then
-		name = name .. " "..SafeN2S(param) .. "级";
+		name = name .. " "..SafeN2S(param) .. GetTxtPub("Level");
 	end
 
 	SetLabel(view,ID_ACTIVITYFIXED_M_CTRL_TEXT_NAME,name);
@@ -188,9 +188,9 @@ function p.AddActivity(id,type,param,status,isAgent)
 	end
 	
 	if status == ACTIVITY_CLOSE then
-		SetLabel(view,ID_ACTIVITYFIXED_M_CTRL_TEXT_STATE,"未开启");
+		SetLabel(view,ID_ACTIVITYFIXED_M_CTRL_TEXT_STATE,GetTxtPri("AM_NotOpen"));
 	elseif status == ACTIVITY_OVER then
-		SetLabel(view,ID_ACTIVITYFIXED_M_CTRL_TEXT_STATE,"已结束");
+		SetLabel(view,ID_ACTIVITYFIXED_M_CTRL_TEXT_STATE,GetTxtPri("AM_AlertEnd"));
 	else
 		GetButton(view,ID_ACTIVITYFIXED_M_CTRL_BUTTON_JOIN):SetVisible(true);
 	end

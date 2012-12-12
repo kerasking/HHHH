@@ -1222,6 +1222,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Music"
+			>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Music\define.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Music\Music.lua"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\Bin\SimplifiedChineseRes\res\Script\DBLoad.lua"
 			>

@@ -125,7 +125,7 @@ function AttachTask(nNpcId)
 		LogInfo("task[%d], judge complete finish[%d], curnpc[%d]", n, nFinishTaskNpcId, nNpcId);
 		if nFinishTaskNpcId == nNpcId then
 			local taskname		= _G.ConvertS(_G.TASK.GetTaskName(n));
-			taskname = "<cffff00" .. taskname .. "/e" .. "<cffffff(完成)/e";
+			taskname =_G.string.format(_G.GetTxtPri("MPF_T1"),taskname);
 			AddOpt(taskname, n);
 			nTaskOpt = nTaskOpt - 1;
 		end
@@ -141,7 +141,7 @@ function AttachTask(nNpcId)
 				LogInfo("qbw1 task asdasd")
 				LogInfo("qbw1 task name ".._G.ConvertS(_G.TASK.GetTaskName(v) ) )
 				local taskname		= _G.ConvertS(_G.TASK.GetTaskName(v));
-				taskname = "<cffff00" .. taskname .. "/e" .. "<cffffff(可接)/e";
+				taskname = _G.string.format(_G.GetTxtPri("MPF_T2"),taskname);
 				LogInfo("qbw1 can accept [%d]", n);
 				AddOpt(taskname, n);
 				nTaskOpt = nTaskOpt - 1;
@@ -158,7 +158,7 @@ function AttachTask(nNpcId)
 		for m, n in ipairs(idlistUnComplete) do
 			if n == v then
 				local taskname		= _G.ConvertS(_G.TASK.GetTaskName(v));
-				taskname = "<cffff00" .. taskname .. "/e" .. "<cffffff(已接)/e";
+				taskname = _G.string.format(_G.GetTxtPri("MPF_T3"),taskname);
 				AddOpt(taskname, n);
 				nTaskOpt = nTaskOpt - 1;
 			end
@@ -172,7 +172,7 @@ function AttachTask(nNpcId)
 			if nFinishTaskNpcId == nNpcId then
 				
 					local taskname		= _G.ConvertS(_G.TASK.GetTaskName(n));
-					taskname = "<cffff00" .. taskname .. "/e" .. "<cffffff(已接)/e";
+					taskname = _G.string.format(_G.GetTxtPri("MPF_T3"),taskname);
 					AddOpt(taskname, n);
 					nTaskOpt = nTaskOpt - 1;
 				

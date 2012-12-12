@@ -136,6 +136,10 @@ namespace NDEngine
         void  SetCurrentTransactionID(NSString* idTransaction) { m_CurrentTransactionID = idTransaction; }
         NSString*   GetCurrentTransactionID() { return m_CurrentTransactionID; }
 #endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+        void  SetCurrentTransactionID(std::string idTransaction) { m_CurrentTransactionID = idTransaction; }
+        std::string   GetCurrentTransactionID() { return m_CurrentTransactionID; }
+#endif
 	private:
 		//void CheckFail(NDHttpErrCode errCode);
 		
@@ -149,6 +153,9 @@ namespace NDEngine
         unsigned int  m_CurrentUser_id;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         NSString*     m_CurrentTransactionID;
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+        std::string     m_CurrentTransactionID;
 #endif
 		//服务器列表相关
 	public:

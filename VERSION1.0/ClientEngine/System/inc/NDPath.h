@@ -34,6 +34,7 @@ public:
 	static const string GetResPath();
 	static const string GetResPath(const char* fileName);
 	static const string GetImagePath();  
+	static const string GetImage00Path();  
 	static const string GetMapPath();
 	static const string GetMapResPath();
 	static const string GetAnimationPath();
@@ -42,6 +43,7 @@ public:
 	static const string GetImgPathBattleUI(const char* fileName);
 	static const string GetImgPathBattleUI();
 	static const string GetImgPath(const char* fileName);
+	static const string GetImg00Path(const char* fileName);
 	static const string GetImgPathNew(const char* fileName);
 	static const string GetImgPathNewAdvance(const char* fileName);
 	static const string GetAniPath(const char* fileName);
@@ -50,6 +52,7 @@ public:
 	static const string GetUIImgPath(const char* uiFileNameWithPath);
 	
 	static const string GetSMImgPath(const char* fileName);
+	static const string GetSMImg00Path(const char* fileName);
 	static const string GetScriptPath(const char* filename);
 	static const string GetScriptPath();
 	static const string GetAppResFilePath(const char* filename);

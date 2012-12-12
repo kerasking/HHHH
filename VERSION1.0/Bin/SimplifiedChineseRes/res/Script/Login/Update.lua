@@ -188,21 +188,21 @@ function p.OnMsg_CheckVersion( tNetData )
 	local bNeedUpdate	= false;
 	if ( bForceUpdate ~= 0 ) then
 		LogInfo( "Update: OnMsg_CheckVersion() bForceUpdate is true" );
-		p.pLabelPromtp:SetText( "请用户到重新下载最新游戏版本" );
+		p.pLabelPromtp:SetText( GetTxtPri("LSUI_T2") );
 		p.pLabelPromtp:SetVisible(true);
 		return;
 	elseif ( (FromVersion == ToVersion) and ( bLatest ~= 0) ) then
 		LogInfo( "Update: OnMsg_CheckVersion() version is new" );
-		p.pLabelPromtp:SetText( "当前版本是最新游戏版本" );
+		p.pLabelPromtp:SetText( GetTxtPri("LSUI_T3") );
 		p.InitWaitingTouch();
 		return;
 	elseif ( (FromVersion == ToVersion) and (bLatest == 0) ) then
 		LogInfo( "Update: OnMsg_CheckVersion() version matching error" );
-		p.pLabelPromtp:SetText( "当前版本太旧，请更新最新版本" );
+		p.pLabelPromtp:SetText( GetTxtPri("LSUI_T4") );
 		return;
 	elseif ( (FromVersion == 0) and (ToVersion == 0) ) then
 		LogInfo( "Update: OnMsg_CheckVersion() version information error" );
-		p.pLabelPromtp:SetText( "版本信息被损坏，请重新下载" );
+		p.pLabelPromtp:SetText( GetTxtPri("LSUI_T5") );
 		return;
 	else
 		bNeedUpdate = true;
@@ -217,7 +217,7 @@ function p.OnMsg_CheckVersion( tNetData )
 			StartUpdate();
 		else
 			--
-			CommonDlgNew.ShowYesOrNoDlg( "未开启WIFI，继续？", p.Callback_Confirm, true );
+			CommonDlgNew.ShowYesOrNoDlg( GetTxtPri("LSUI_T6"), p.Callback_Confirm, true );
 		end
 	end
 	--return;

@@ -471,10 +471,10 @@ function p.refreshInfo()
     end
     
 	local l_turn = GetLabel(layer, p.TagMountLevel.TURN);
-    l_turn:SetText(p.GetTurn(p.MountInfo.star).."转");
+    l_turn:SetText(p.GetTurn(p.MountInfo.star)..GetTxtPri("PETUI_T1"));
 
 	local l_star = GetLabel(layer, p.TagMountLevel.STAR);
-    l_star:SetText(p.GetStar(p.MountInfo.star).."星");
+    l_star:SetText(p.GetStar(p.MountInfo.star)..GetTxtPri("PETUI_T2"));
     
     p.refreshMountAnimate(p.MountInfo.illusionId);
     

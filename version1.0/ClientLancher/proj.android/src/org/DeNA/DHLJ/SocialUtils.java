@@ -35,6 +35,12 @@ import com.mobage.android.Error;
 import com.mobage.android.Mobage;
 import com.mobage.android.Mobage.PlatformListener;
 import com.mobage.android.Mobage.ServerMode;
+import com.mobage.android.bank.Debit;
+import com.mobage.android.bank.Debit.OnProcessTransactionComplete;
+import com.mobage.android.bank.Debit.OnProcessTransactionWithDialogComplete;
+import com.mobage.android.bank.Debit.Transaction;
+import com.mobage.android.social.common.Auth;
+import com.mobage.android.social.common.Auth.OnAuthorizeTokenComplete;
 
 public class SocialUtils {
 	
@@ -168,7 +174,7 @@ public class SocialUtils {
 
 			public void onDashboardClose() {
 				// TODO Auto-generated method stub
-//				Toast.makeText(mActivity, "已�1�7�1�7出社匄1�7", Toast.LENGTH_LONG).show();
+//				Toast.makeText(mActivity, "已�1�7�1�7出社匄1�7", Toast.LENGTH_LONG).show();
 			}
 		};
 
@@ -253,4 +259,110 @@ public class SocialUtils {
 	public static String getmUserId() {
 		return mUserId;
 	}
+	
+	public static void authorizeToken(String token) {
+		Log.v(TAG, "begin authorizeToken:" + token);
+		Auth.authorizeToken(token, new OnAuthorizeTokenComplete() {
+
+			@Override
+			public void onSuccess(String verifier) {
+				Log.v(TAG, "AuthorizeToken Success:" + verifier);
+				SocialUtils.showConfirmDialog("AuthorizeToke status", "Successful:" + verifier, "OK");
+				
+				onAuthSuccess(verifier);
+			}
+
+			@Override
+			public void onError(Error error) {
+				Log.v(TAG, "AuthorizeToken Error:"
+						+ error.toJson().toString());
+
+				SocialUtils.showConfirmDialog("AuthorizeToken status", "Failed", "OK");
+				
+				onAuthError(error.toJson().toString());
+			}
+
+		});
+	}
+	private void continueTransaction(String transid) {
+		Log.v(TAG, "begin ContinueTransaition");
+
+		Debit.continueTransaction(transid,
+				new OnProcessTransactionWithDialogComplete() {
+
+					@Override
+					public void onSuccess(Transaction transaction) {
+						Log.v(TAG, "ContinueTransaction Success:"
+								+ transaction.getId());
+						SocialUtils.showConfirmDialog(
+								"ContinueTransaction status",
+								"Successful,transactionID:"
+										+ transaction.getId(), "OK");
+						
+						onContinueTransactionSuccess(transaction.getId());
+					}
+
+					@Override
+					public void onError(Error error) {
+						Log.v(TAG, "ContinueTransaction Error:"
+								+ error.toJson().toString());
+						SocialUtils.showConfirmDialog("ContinueTransaction status",
+								"Failed", "OK");
+						
+						onContinueTransactionError(error.toJson().toString());
+					}
+
+					@Override
+					public void onCancel() {
+						Log.v(TAG, "ContinueTransaction cancel");
+						SocialUtils.showConfirmDialog("ContinueTransaction status",
+								"Cancel", "OK");
+						
+						onContinueTransactionCancel();
+					}
+
+				});
+	}
+	
+
+	private void cancelTransaction(String transid) {
+		Log.v(TAG, "begin CancelTransaition");
+
+		Debit.cancelTransaction(transid,
+				new OnProcessTransactionComplete() {
+
+					@Override
+					public void onSuccess(Transaction transaction) {
+						Log.v(TAG, "CancelTransaction Success:"
+								+ transaction.getId());
+						SocialUtils.showConfirmDialog(
+								"CancelTransaction status",
+								"Successful,transactionID:"
+										+ transaction.getId(), "OK");
+						
+						onCancelTransactionSuccess(transaction.getId());
+					}
+
+					@Override
+					public void onError(Error error) {
+						Log.v(TAG, "CancelTransaction Error:"
+								+ error.toJson().toString());
+						SocialUtils.showConfirmDialog("CancelTransaction status",
+								"Failed", "OK");
+						
+						onCancelTransactionError(error.toJson().toString());
+					}
+
+				});
+	}
+
+	private static native void onAuthSuccess(String verifier);
+	private static native void onAuthError(String error);
+
+	private static native void onContinueTransactionSuccess(String transid);
+	private static native void onContinueTransactionError(String error);
+	private static native void onContinueTransactionCancel();
+	
+	private static native void onCancelTransactionSuccess(String transid);
+	private static native void onCancelTransactionError(String error);
 }

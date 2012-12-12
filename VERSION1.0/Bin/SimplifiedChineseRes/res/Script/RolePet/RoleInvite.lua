@@ -639,7 +639,7 @@ function p.OnListItemEvent( uiNode, uiEventType, param )
 		if ( p.tPetEnInvList[nPetIndex][tListElementIndex.LEI_ISGRAY] ) then
 			local nPetType		= p.tPetEnInvList[nPetIndex][tListElementIndex.LEI_PETTYPE];
 			local need_level	= GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.REQ_LEVEL );
-			CommonDlg.ShowWithConfirm( need_level.."级后方可招募该武将!", nil );
+			CommonDlg.ShowWithConfirm( need_level..GetTxtPri("RI_T1"), nil );
 		else
 			p.nChoosenPetIndex = nPetIndex;
 			p.CreatePetTipsLayer( nPetIndex );
@@ -708,13 +708,13 @@ function p.InitPetInfoUIWithPetID( pLayerTips, nPetID )
 	local nCamp = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.CAMP );
 	local szCamp = "";
 	if ( CAMP_NONE == nCamp ) then
-		szCamp = "(群雄)";
+		szCamp = GetTxtPri("RI_T2");
 	elseif ( CAMP_WEI == nCamp ) then
-		szCamp = "(魏国)";
+		szCamp = GetTxtPri("RI_T3");
 	elseif ( CAMP_SHU == nCamp ) then
-		szCamp = "(蜀国)";
+		szCamp = GetTxtPri("RI_T4");
 	elseif ( CAMP_WU == nCamp ) then
-		szCamp = "(吴国)";
+		szCamp = GetTxtPri("RI_T5");
 	end
 	-- 名称
 	local value = GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.NAME );
@@ -723,17 +723,17 @@ function p.InitPetInfoUIWithPetID( pLayerTips, nPetID )
 
 	-- 等级
 	value = RolePet.GetPetInfoN( nPetID, PET_ATTR.PET_ATTR_LEVEL );
-	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_LEVEL, SafeN2S(value).."级" );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_LEVEL, SafeN2S(value)..GetTxtPub("Level") );
 	
 	-- 站位类型
 	local nStandType = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.STAND_TYPE );
 	local szStandType = "(+)";
 	if ( 1 == nStandType ) then
-		szStandType = "(前军)";
+		szStandType = GetTxtPri("RI_T6");
 	elseif ( 2 == nStandType ) then
-		szStandType = "(中军)";
+		szStandType = GetTxtPri("RI_T7");
 	elseif ( 3 == nStandType ) then
-		szStandType = "(后军)";
+		szStandType = GetTxtPri("RI_T8");
 	end
 	-- 职业
 	value = GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.PRO_NAME );
@@ -818,13 +818,13 @@ function p.InitPetInfoUIWithPetType( pLayerTips, nPetType )
 	local nCamp = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.CAMP );
 	local szCamp = "";
 	if ( CAMP_NONE == nCamp ) then
-		szCamp = "(群雄)";
+		szCamp = GetTxtPri("RI_T2");
 	elseif ( CAMP_WEI == nCamp ) then
-		szCamp = "(魏国)";
+		szCamp = GetTxtPri("RI_T3");
 	elseif ( CAMP_SHU == nCamp ) then
-		szCamp = "(蜀国)";
+		szCamp = GetTxtPri("RI_T4");
 	elseif ( CAMP_WU == nCamp ) then
-		szCamp = "(吴国)";
+		szCamp = GetTxtPri("RI_T5");
 	end
 	-- 名称
 	local value = GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.NAME );
@@ -834,17 +834,17 @@ function p.InitPetInfoUIWithPetType( pLayerTips, nPetType )
 
 	-- 等级
 	value = 1;
-	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_LEVEL, value .."级" );
+	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_LEVEL, value ..GetTxtPub("Level") );
 	
 	-- 站位类型
 	local nStandType = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.STAND_TYPE );
 	local szStandType = "(+)";
 	if ( 1 == nStandType ) then
-		szStandType = "(前军)";
+		szStandType = GetTxtPri("RI_T6");
 	elseif ( 2 == nStandType ) then
-		szStandType = "(中军)";
+		szStandType = GetTxtPri("RI_T7");
 	elseif ( 3 == nStandType ) then
-		szStandType = "(后军)";
+		szStandType = GetTxtPri("RI_T8");
 	end
 	-- 职业
 	value = GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.PRO_NAME );
@@ -895,7 +895,7 @@ function p.InitPetInfoUIWithPetType( pLayerTips, nPetType )
 	value = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.REPUTE_LEV );
 	local szPlayerRank	= GetDataBaseDataS( "rank_config", value, DB_RANK_CONFIG.RANK_NAME );
 	if ( "" == szPlayerRank ) then
-		szPlayerRank = "帝王";
+		szPlayerRank = GetTxtPri("RI_T9");
 	end
 	SetLabel( pLayerTips, ID_TIPS_LABEL_PET_RANK, szPlayerRank);
 	
@@ -943,31 +943,31 @@ function p.OnPetInfoUIEvent( uiNode, uiEventType, param )
 			local nPetPos	= p.tPetEnInvList[p.nChoosenPetIndex][tListElementIndex.LEI_PETPOS];
 			if ( p.pet_num >= p.pet_limit ) then
 				-- 队伍满员
-				CommonDlg.ShowWithConfirm( "您的队伍满员了呀……", nil );
+				CommonDlg.ShowWithConfirm(GetTxtPri("RI_T10"), nil );
 			else
 				if ( p.nPlayerRank < GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.REPUTE_LEV ) ) then
 					-- 军衔低
-					CommonDlg.ShowWithConfirm( "您的军衔太低了呀……", nil );
+					CommonDlg.ShowWithConfirm( GetTxtPri("RI_T11"), nil );
 				else
 					local nPlayerSilver	= GetRoleBasicDataN( p.nPlayerID, USER_ATTR.USER_ATTR_MONEY );
 					local nPetSilver	= GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.MONEY );
 					--LogInfo( "RoleInvite: PlayerSilver:%d, PetSilver%d", nPlayerSilver, nPetSilver  );
 					if ( nPlayerSilver >= nPetSilver ) then
 						-- 银币足
-						CommonDlgNew.ShowYesOrNoDlg( "您确定要消耗"..nPetSilver.."银币招募这员武将？", p.InviteCallSilver);
+						CommonDlgNew.ShowYesOrNoDlg( string.format(GetTxtPri("RI_T12"),nPetSilver), p.InviteCallSilver);
 					else
 						-- 银币缺
 						local nPlayerVIPLv	= GetRoleBasicDataN( p.nPlayerID, USER_ATTR.USER_ATTR_VIP_RANK );
 						local nPetVIPLv		= GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.REQ_VIP );
 						--LogInfo( "RoleInvite: PetType:%d, PlayerVIP:%d, PetVIP%d", nPetType, nPlayerVIPLv, nPetVIPLv  );
 						if ( nPlayerVIPLv < nPetVIPLv ) then
-							CommonDlg.ShowWithConfirm( "您的银币不足，升级VIP后可以用金币招募……", nil );
+							CommonDlg.ShowWithConfirm( GetTxtPri("RI_T13"), nil );
 						else
 							local nPetGold = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.EMONEY );
 							local szName = GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.NAME );
 							local nGold = ( nPetSilver - nPlayerSilver ) * nPetGold / nPetSilver;
 							nGold = math.ceil( nGold );
-							CommonDlgNew.ShowYesOrNoDlg( "您的银币不足，您的VIP等级可以再消耗"..nGold.."金币招募"..szName.."？", p.InviteCallBackGold );
+							CommonDlgNew.ShowYesOrNoDlg( string.format(GetTxtPri("RI_T14"),nGold,szName), p.InviteCallBackGold );
 						end
 					end
 				end
@@ -980,7 +980,7 @@ function p.OnPetInfoUIEvent( uiNode, uiEventType, param )
 				-- 发送归队消息给服务端
 				_G.MsgRolePet.SendBuyBackPet( nPetID );
 			else
-				CommonDlg.ShowWithConfirm( "您的队伍满员了呀……", nil );
+				CommonDlg.ShowWithConfirm( GetTxtPri("RI_T10"), nil );
 			end 
 		elseif ID_TIPS_BTN_GOLD_INVITE == tag then
 			-- 金币招募
@@ -988,20 +988,20 @@ function p.OnPetInfoUIEvent( uiNode, uiEventType, param )
 			local nPetPos	= p.tPetEnInvList[p.nChoosenPetIndex][tListElementIndex.LEI_PETPOS];
 			if ( p.pet_num >= p.pet_limit ) then
 				-- 队伍满员
-				CommonDlg.ShowWithConfirm( "您的队伍满员了呀……", nil );
+				CommonDlg.ShowWithConfirm( GetTxtPri("RI_T10"), nil );
 			else
 				if ( p.nPlayerRank < GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.REPUTE_LEV ) ) then
 					-- 军衔低
-					CommonDlg.ShowWithConfirm( "您的军衔太低了呀……", nil );
+					CommonDlg.ShowWithConfirm( GetTxtPri("RI_T11"), nil );
 				else
 					local nPlayerVIPLv	= GetRoleBasicDataN( p.nPlayerID, USER_ATTR.USER_ATTR_VIP_RANK );
 					local nPetVIPLv		= GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.REQ_VIP );
 					if ( nPlayerVIPLv < nPetVIPLv ) then
-						CommonDlg.ShowWithConfirm( "您的VIP等级不足……", nil );
+						CommonDlg.ShowWithConfirm( GetTxtPri("RI_T19"), nil );
 					else
 						local nPetGold = GetDataBaseDataN( "pet_config", nPetType, DB_PET_CONFIG.EMONEY );
 						local szName = GetDataBaseDataS( "pet_config", nPetType, DB_PET_CONFIG.NAME );
-						CommonDlgNew.ShowYesOrNoDlg( "您确定要直接消耗"..nPetGold.."金币招募这员武将？", p.InviteCallBackOnlyGold );
+						CommonDlgNew.ShowYesOrNoDlg( string.format(GetTxtPri("RI_T20"),nPetGold), p.InviteCallBackOnlyGold );
 					end
 				end
 			end
@@ -1032,10 +1032,10 @@ function p.RefreshContainer( btAction, nPetID )
     
 	if ( 2 == btAction ) then
 		-- 归队
-		CommonDlg.ShowWithConfirm( szName.."再次为您效力!", 3 );
+		CommonDlg.ShowWithConfirm( szName..GetTxtPri("RI_T16"), 3 );
 	elseif ( 1 == btAction ) then
 		-- 招募
-		CommonDlg.ShowWithConfirm( szName.."现归您麾下!", 3 );
+		CommonDlg.ShowWithConfirm( szName..GetTxtPri("RI_T17"), 3 );
 		-- 播放招募成功光效
 		PlayEffectAnimation.ShowAnimation(6);
 	end
@@ -1074,7 +1074,7 @@ function p.InviteCallBackGold(nEvent, param )
 			_G.MsgRolePet.SendBuyPet( nPetType );
 		else
 			--金币不足-充值什么的
-			CommonDlgNew.ShowYesOrNoDlg( "您的金币不足，先去充值？", p.InviteCallBackRecharge );
+			CommonDlgNew.ShowYesOrNoDlg( GetTxtPri("RI_T18"), p.InviteCallBackRecharge );
 		end
 	end
 end
@@ -1147,10 +1147,10 @@ function p.InviteSucess( btAction, nPetID )
 		-- 没开启招募界面的回调
 		if ( 2 == btAction ) then
 			-- 归队
-			--CommonDlg.ShowWithConfirm( szName.."再次为您效力!", 3 );
+			--CommonDlg.ShowWithConfirm( szName..GetTxtPri("RI_T16"), 3 );
 		elseif ( 1 == btAction ) then
 			-- 招募
-			--CommonDlg.ShowWithConfirm( szName.."现归您麾下!", 3 );
+			--CommonDlg.ShowWithConfirm( szName..GetTxtPri("RI_T17"), 3 );
 			PlayEffectAnimation.ShowAnimation(6);
 		end
 	end

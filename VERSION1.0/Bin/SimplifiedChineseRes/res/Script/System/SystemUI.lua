@@ -83,10 +83,10 @@ function p.refreshSystemSetBtn()
 	local btn=GetButton(layer,ID_SYSSET_CTRL_BUTTON_467);
 	if CheckP(btn) then
 		if GetSystemSetB(SYSTEM_BG_MUSIC_KEY,true) then
-			p.InitShowStartOrCloseBtn(btn, "关闭");
+			p.InitShowStartOrCloseBtn(btn, GetTxtPri("SUI_T1"));
 			isBackMusic=true;
 		else
-			p.InitShowStartOrCloseBtn(btn, "开启");
+			p.InitShowStartOrCloseBtn(btn, GetTxtPri("SUI_T2"));
 			isBackMusic=false;
 		end
 	end
@@ -95,10 +95,10 @@ function p.refreshSystemSetBtn()
 	btn=GetButton(layer,ID_SYSSET_CTRL_BUTTON_468);
 	if CheckP(btn) then
 		if GetSystemSetB(SYSTEM_EF_SOUND_KEY,true) then
-			p.InitShowStartOrCloseBtn(btn, "关闭");
+			p.InitShowStartOrCloseBtn(btn, GetTxtPri("SUI_T1"));
 			isGameMusic=true;
 		else
-			p.InitShowStartOrCloseBtn(btn, "开启");
+			p.InitShowStartOrCloseBtn(btn, GetTxtPri("SUI_T2"));
 			isGameMusic=false;
 		end
 	end
@@ -107,10 +107,10 @@ function p.refreshSystemSetBtn()
 	btn=GetButton(layer,ID_SYSSET_CTRL_BUTTON_469);
 	if CheckP(btn) then
 		if GetSystemSetB(SYSTEM_SHOW_OTHER_KEY,true) then
-			p.InitShowStartOrCloseBtn(btn, "开启");
+			p.InitShowStartOrCloseBtn(btn, GetTxtPri("SUI_T2"));
 			isHidePlayer=false;
 		else
-			p.InitShowStartOrCloseBtn(btn, "关闭");
+			p.InitShowStartOrCloseBtn(btn, GetTxtPri("SUI_T1"));
 			isHidePlayer=true;
 		end
 	end
@@ -119,10 +119,10 @@ function p.refreshSystemSetBtn()
 	btn=GetButton(layer,ID_SYSSET_CTRL_BUTTON_470);
 	if CheckP(btn) then
 		if GetSystemSetB(SYSTEM_SHOW_NAME_KEY,true) then
-			p.InitShowStartOrCloseBtn(btn, "关闭");
+			p.InitShowStartOrCloseBtn(btn, GetTxtPri("SUI_T1"));
 			isShowPlayerName=true;
 		else
-			p.InitShowStartOrCloseBtn(btn, "开启");
+			p.InitShowStartOrCloseBtn(btn, GetTxtPri("SUI_T2"));
 			isShowPlayerName=false;
 		end
 	end
@@ -202,9 +202,9 @@ end
 
 function p.SetInitStartBtnStatus(uiNode, isBtnClick)
 	if false == isBtnClick then
-		p.InitShowStartOrCloseBtn(uiNode, "开启");
+		p.InitShowStartOrCloseBtn(uiNode, GetTxtPri("SUI_T2"));
 	elseif true == isBtnClick then
-		p.InitShowStartOrCloseBtn(uiNode, "关闭");
+		p.InitShowStartOrCloseBtn(uiNode, GetTxtPri("SUI_T1"));
 	end
 end
 

@@ -45,11 +45,11 @@ function p.ProcessTalkInfo(netdatas)
 	end
 	
 	if string.find(speaker,"SYSTEM")~=nil then
-		speaker="【系统】";
+		speaker=GetTxtPri("CMUI_T4");
 	end
 
-	if string.find(speaker,"系统")~=nil then
-		speaker="【系统】";
+	if string.find(speaker,GetTxtPub("system"))~=nil then
+		speaker=GetTxtPri("CMUI_T4");
 	end
 		
 	ChatDataFunc.AddChatRecord(speakerID,channel,0,speaker,text);
@@ -80,7 +80,7 @@ function p.SendPrivateTalk(tid,name,text)
 	
 	local playername = GetRoleBasicDataS(nPlayerId,USER_ATTR.USER_ATTR_NAME);
 	
-	ChatDataFunc.AddChatRecord(nPlayerId,1,tid,"【"..playername.."】对【"..name.."】说",text);
+	ChatDataFunc.AddChatRecord(nPlayerId,1,tid,string.format(GetTxtPri("MC_T1"),playername,name),text);
 end
 
 function p.SendTalkMsg(channel,text)

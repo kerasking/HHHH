@@ -318,6 +318,20 @@ std::string GetSMImgPath(const char* name) //@lua
 
 	return NDPath::GetSMImgPath(name);
 }
+
+std::string GetSMImg00Path(const char* name) 
+{
+	if (!name)
+	{
+		return "";
+	}
+
+	return NDPath::GetSMImg00Path(name);
+}
+
+
+
+
 std::string GetImgResPath(const char* name) //@lua
 {
 	if (!name)
@@ -637,17 +651,15 @@ void doHideMobageBalance()
 
 void doExchangeEmoney(int nQuantity)
 {
-#ifdef USE_MGSDK
 	int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
 	if(idAccount <= 0)
-	return;
+        return;
 	if(!NDBeforeGameMgrObj.IsOAuthTokenOK())
-	return;
+        return;
 	NDTransData bao(_MSG_CREATE_TRANSACTION);
 	bao << idAccount;
 	bao << nQuantity;
 	SEND_DATA(bao);
-#endif
 }
 
 std::string Int2StrIP(int ip_Int)
@@ -677,7 +689,7 @@ void sendMsgConnect(const char* pszIp, int nPort, int idAccount)
 
 void sendMsgCreateTempCredential()
 {
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	int idAccount = NDBeforeGameMgrObj.GetCurrentUser();
 	if(idAccount <= 0)
 	return;
@@ -849,6 +861,7 @@ void ScriptGameLogicLoad()
 	ETCFUNC("GetImgResPath", GetImgResPath);
 	ETCFUNC("GetAniResPath", GetAniResPath);
 	ETCFUNC("GetSMImgPath", GetSMImgPath);
+	ETCFUNC("GetSMImg00Path", GetSMImg00Path);
 	ETCFUNC("GetSMResPath", GetSMResPath);
 	ETCFUNC("GetMapLayer", GetMapLayer);
 	ETCFUNC("restartLastBattle", restartLastBattle);

@@ -25,7 +25,6 @@ package org.cocos2dx.lib;
 
 import org.DeNA.DHLJ.NDJavaVideoPlayer;
 import org.DeNA.DHLJ.NDVideoControl;
-import org.DeNA.DHLJ.R;
 import org.DeNA.DHLJ.NDVideoView;
 
 import org.cocos2dx.lib.Cocos2dxHelper.Cocos2dxHelperListener;

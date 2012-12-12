@@ -327,49 +327,49 @@ function p.GetAttrTypeDesc(nAttr)
 	end
     nAttr = math.floor(nAttr/10);
 	if nAttr == Item.ATTR_TYPE_POWER then
-		str = "力量";
+		str = GetTxtPri("HS_T1");
 	elseif nAttr == Item.ATTR_TYPE_AGILITY then
-		str = "敏捷";
+		str = GetTxtPri("HS_T2");
 	elseif nAttr == Item.ATTR_TYPE_INTEL then
-		str = "智力";
+		str = GetTxtPri("HS_T3");
 	elseif nAttr == Item.ATTR_TYPE_LIFE then
-		str = "生命";
+		str = GetTxtPri("HS_T4");
 	elseif nAttr == Item.ATTR_TYPE_POWER_RATE then
-		str = "力量成长率";
+		str = GetTxtPri("HS_T5");
 	elseif nAttr == Item.ATTR_TYPE_AGILITY_RATE then
-		str = "敏捷成长率";
+		str = GetTxtPri("HS_T6");
 	elseif nAttr == Item.ATTR_TYPE_INTEL_RATE then
-		str = "智力成长率";
+		str = GetTxtPri("HS_T7");
 	elseif nAttr == Item.ATTR_TYPE_LIFE_RATE then
-		str = "生命成长率";
+		str = GetTxtPri("HS_T8");
 	elseif nAttr == Item.ATTR_TYPE_PHY_ATK then
-		str = "物理攻击";
+		str = GetTxtPri("HS_T9");
 	elseif nAttr == Item.ATTR_TYPE_PHY_DEF then
-		str = "物理防御";
+		str = GetTxtPri("HS_T10");
 	elseif nAttr == Item.ATTR_TYPE_MAGIC_ATK then
-		str = "策略攻击";
+		str = GetTxtPri("HS_T11");
 	elseif nAttr == Item.ATTR_TYPE_MAGIC_DEF then
-		str = "策略防御";
+		str = GetTxtPri("HS_T12");
 	elseif nAttr == Item.ATTR_TYPE_SPEED then
-		str = "速度";
+		str = GetTxtPri("HS_T13");
 	elseif nAttr == Item.ATTR_TYPE_HIT then
-		str = "命中率";
+		str = GetTxtPri("HS_T14");
 	elseif nAttr == Item.ATTR_TYPE_DODGE then
-		str = "闪避率";
+		str = GetTxtPri("HS_T15");
 	elseif nAttr == Item.ATTR_TYPE_DRITICAL then
-		str = "暴击率";
+		str = GetTxtPri("HS_T16");
 	elseif nAttr == Item.ATTR_TYPE_TENACITY then
-		str = "格挡率";
+		str = GetTxtPri("HS_T17");
 	elseif nAttr == Item.ATTR_TYPE_BLOCK then
-		str = "格挡率";
+		str = GetTxtPri("HS_T18");
 	elseif nAttr == Item.ATTR_TYPE_WRECK then
-		str = "破击率";
+		str = GetTxtPri("HS_T19");
 	elseif nAttr == Item.ATTR_TYPE_UNION_ATK then
-		str = "合击率";
+		str = GetTxtPri("HS_T20");
     elseif nAttr == Item.ATTR_TYPE_HELP then
-		str = "求援率";
+		str = GetTxtPri("HS_T21");
     elseif nAttr == Item.ATTR_TYPE_MANA then
-		str = "士气";
+		str = GetTxtPri("HS_T22");
 	end
     
 	return str;

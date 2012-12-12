@@ -182,7 +182,7 @@ end--]]
 
 
 function p.ResFriendAdd(nFriendId)
-	CommonDlgNew.ShowYesDlg("添加好友成功!");
+	CommonDlgNew.ShowYesDlg(GetTxtPri("FUI_T1"));
 	if IsUIShow(NMAINSCENECHILDTAG.FriendAttr) then
 		FriendAttrUI.RefreshBtnText();
 	end	
@@ -206,7 +206,7 @@ function p.ResFriendAdd(nFriendId)
 end
 
 function p.ResFriendDel(nFriendId)
-	CommonDlgNew.ShowYesDlg("删除成功!");
+	CommonDlgNew.ShowYesDlg(GetTxtPri("FUI_T2"));
 	if IsUIShow(NMAINSCENECHILDTAG.Friend) then
 	    local container = p.GetFriendContainer();
 	    container:RemoveViewById(nFriendId);
@@ -234,7 +234,7 @@ function p.OnUIEventInfo(uiNode, uiEventType, param)
 			--info
 			MsgFriend.SendFriendSel(friendId,friendName);	
 		elseif tag ==  ID_FRIEND_CTRL_BUTTON_7 then	
-			CommonDlgNew.ShowYesOrNoDlg(string.format("确定删除好友 %s 吗？",friendName), p.OnCommonDlgDelFriend, true);
+			CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("FAUI_T5"),friendName), p.OnCommonDlgDelFriend, true);
 	   	
 	   	elseif ( ID_FRIEND_CTRL_BUTTON_6 == tag ) then	--++Guosen 2012.6.12 16:30
 			LogInfo("发送邮件:"..friendName);
@@ -321,7 +321,7 @@ function p.OnAddFriendBtnClick()
 	layer:Init();
 	layer:SetTag(TAG_ADDFRIEND_LAYER);
 	--layer:SetFrameRect(RectFullScreenUILayer);
-	layer:SetFrameRect(CGRectMake(-150,0,960,640)); --@todo: use GetWinSize()!
+	layer:SetFrameRect(CGRectMake(-150,0,960,640));
 
 
 	if Bglayer == nil then
@@ -364,13 +364,13 @@ function p.OnUIEventAddFriendLayer(uiNode, uiEventType, param)
 			--g_SearchName = pNameEdit:GetText();
 
 			if g_SearchName == "" then
-				 CommonDlgNew.ShowYesDlg("不能为空!");  	
+				 CommonDlgNew.ShowYesDlg(GetTxtPri("FUI_T3"));  	
 				 return;
 			end
 			LogInfo("QBW1 add friend name:"..g_SearchName);
             
            if true ==  FriendFunc.IsExistFriendByName(g_SearchName) then
-                 CommonDlgNew.ShowYesDlg("该玩家已经是您的好友!");  
+                 CommonDlgNew.ShowYesDlg(GetTxtPri("FUI_T4"));  
                 return;
            end
             
@@ -436,7 +436,7 @@ function p.RefreshFriendContainer()
         ItemPet.SetLabelByQuality(l_name,FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_QUALITY,friendItem[1]));
         
         
-		--SetLabel(view,ID_FRIEND_LIST_CTRL_HYPER_TEXT_LEVEL,string.format("等级:%d",friendItem[3]));
+		--SetLabel(view,ID_FRIEND_LIST_CTRL_HYPER_TEXT_LEVEL,string.format("%s:%d",GetTxtPub("levels"),friendItem[3]));
 		SetLabel(view,ID_FRIEND_LIST_CTRL_HYPER_TEXT_LEVEL,"");
 
 		--好友头像
@@ -526,7 +526,7 @@ function p.RefreshInfoLayer()
         ItemPet.SetLabelByQuality(l_name,FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_QUALITY,friendId));
         
          
-        SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_LEVEL,SafeN2S(FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_LEVEL,friendId)).."级");
+        SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_LEVEL,SafeN2S(FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_LEVEL,friendId))..GetTxtPub("Level"));
 	
         local nPetType = FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_PROFESSION,friendId) ;
         

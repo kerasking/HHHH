@@ -700,7 +700,7 @@ function p.OnUIEventProp(uiNode, uiEventType, param)
                     return;
                 end
                 local count = Item.GetItemInfoN(nItemId, Item.ITEM_AMOUNT);
-                p.nTagId = CommonDlgNew.ShowInputDlg("请输入使用的数量!", p.OnUIEventUseNum, {nItemId}, count,2);
+                p.nTagId = CommonDlgNew.ShowInputDlg(GetTxtPri("PLAYER_T3"), p.OnUIEventUseNum, {nItemId}, count,2);
                 
             elseif(nType == 2) then     --任务物品
             
@@ -733,7 +733,7 @@ function p.OnUIEventProp(uiNode, uiEventType, param)
                     count = 1;
                 end
                 
-                p.nTagId = CommonDlgNew.ShowInputDlg("请输入使用的数量!", p.OnUIEventUseNum, {nItemId,nCurrPetId},count,2);
+                p.nTagId = CommonDlgNew.ShowInputDlg(GetTxtPri("PLAYER_T3"), p.OnUIEventUseNum, {nItemId,nCurrPetId},count,2);
             elseif(nType == 5) then     --神铸
                 local btn = ConverToButton(uiNode);
                 local nItemId   = btn:GetParam1();

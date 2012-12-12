@@ -87,8 +87,8 @@
 #define SZ_UPDATE_URL					"121.207.239.91"//"192.168.65.77"//"121.207.239.91"//更新服务器的地址
 #define SZ_DEL_FILE						"del.txt"//包含待删除文件路径的配置文件/CACHES目录下
 
-#define SZ_MOBAGE_BG_PNG_PATH			"/res/image/Res00/Load/mobage_bg.png"
-#define SZ_UPDATE_BG_PNG_PATH			"/res/image/Res00/Load/entry_bg.png"
+#define SZ_MOBAGE_BG_PNG_PATH			"/res/image00/Res00/Load/mobage_bg.png"
+#define SZ_UPDATE_BG_PNG_PATH			"/res/image00/Res00/Load/entry_bg.png"
 
 ////////////////////////////////////////////////////////////
 //NSAutoreleasePool * globalPool = [[NSAutoreleasePool alloc] init];
@@ -119,7 +119,7 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 #ifdef USE_MGSDK
     	NDPicture* pic = pool.AddPicture( NDPath::GetImgPath("Res00/Load/mobage_bg.png") );
 #else
-    	NDPicture* pic = pool.AddPicture( NDPath::GetImgPath("Res00/Load/bg_load.png") );
+    	NDPicture* pic = pool.AddPicture( NDPath::GetImg00Path("Res00/Load/bg_load.png") );
 #endif
     	if (pic) 
     	{

@@ -249,10 +249,10 @@ function p.LoadUI()
     sayListBtn:SetVisible(true);
    
      --提交gm问题按钮
-    local gmPic	= pool:AddPicture(GetSMImgPath(p.BtnGm), true);
+    local gmPic	= pool:AddPicture(GetSMImg00Path(p.BtnGm), true);
     gmPic:Cut(p.BtnGMFindRect.cutNor);
     
-    local gmSelPic	= pool:AddPicture(GetSMImgPath(p.BtnGm), true);
+    local gmSelPic	= pool:AddPicture(GetSMImg00Path(p.BtnGm), true);
     gmSelPic:Cut(p.BtnGMFindRect.cutSel);
     
     local gmBtn = p.CreateSceneButton(gmPic,gmSelPic,p.BtnGMRect,NMAINSCENECHILDTAG.GMProblemBtn);
@@ -573,9 +573,9 @@ function p.refreshListItem(view,i)
 	local nor,sel,dis =  p.BtnCutRectMake(ind)
 	 LogInfo("BtnCutRectMake:"..ind);
 	 
-    local norpic		= pool:AddPicture(GetSMImgPath(p.BtnFilePath), false);
+    local norpic		= pool:AddPicture(GetSMImg00Path(p.BtnFilePath), false);
     norpic:Cut(nor);
-    local toupic        = pool:AddPicture(GetSMImgPath(p.BtnFilePath), false);
+    local toupic        = pool:AddPicture(GetSMImg00Path(p.BtnFilePath), false);
     toupic:Cut(sel);   
     
     local bgV = GetButton(view, TAG_CON_ITEM_BUTTON);

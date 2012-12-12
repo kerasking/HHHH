@@ -151,11 +151,11 @@ function p.LoadUI()
 		local btnAbandon = GetButton(layerDetail, ID_TASKLIST_D_CTRL_BUTTON_TASK_ABANDON);
 		if btnAbandon then
 			if i == 1 then
-				btnAbandon:SetTitle("放弃任务");
+				btnAbandon:SetTitle(GetTxtPri("TASKUI_T1"));
 			elseif i == 2 then
 				--屏蔽自动接任务功能
 				btnAbandon:SetVisible(false);
-				--btnAbandon:SetTitle("接受任务");
+				--btnAbandon:SetTitle(GetTxtPri("TASKUI_T2"));
 			end
 		end
 
@@ -655,7 +655,7 @@ function p.AddTask(bAccept, nTaskId)
 	end
 	
 	if bFinish then
-		taskName = taskName.."(完成)";	
+		taskName = taskName..GetTxtPri("TASKUI_T3");	
 	end
 	
 	
@@ -878,14 +878,14 @@ function p.SetTaskPrize(pParent, nTaskId)
 		
 		if TASK.GetTaskPrizeRepute(nTaskId) ~= 0 then
 		
-			SetLabel(pParent, ID_QUEST_CTRL_TEXT_22, "声望 "..SafeN2S(TASK.GetTaskPrizeRepute(nTaskId)) );
+			SetLabel(pParent, ID_QUEST_CTRL_TEXT_22, GetTxtPub("ShenWan").." "..SafeN2S(TASK.GetTaskPrizeRepute(nTaskId)) );
 		else
 			SetLabel(pParent, ID_QUEST_CTRL_TEXT_22, "");
 		end
 	
 		if TASK.GetTaskPrizeSoul(nTaskId) ~= 0 then
 		
-			SetLabel(pParent, ID_QUEST_CTRL_TEXT_23, "将魂 "..SafeN2S(TASK.GetTaskPrizeSoul(nTaskId)) );
+			SetLabel(pParent, ID_QUEST_CTRL_TEXT_23, GetTxtPub("JianHun").." "..SafeN2S(TASK.GetTaskPrizeSoul(nTaskId)) );
 	
 		else
 			SetLabel(pParent, ID_QUEST_CTRL_TEXT_23, "");
@@ -917,7 +917,7 @@ function p.GetTaskPrizeContent(nTaskId)
 	local coin = SafeN2S(TASK.GetTaskPrizeMoney(nTaskId));
 	local repute = SafeN2S(TASK.GetTaskPrizeRepute(nTaskId));
 	local soul =SafeN2S(TASK.GetTaskPrizeSoul(nTaskId));
-	local s = "获得任务奖励 经验:"..exp.."  银币:"..coin;
+	local s = string.format(GetTxtPri("TASKUI_T4"),exp,coin);
 	
 	local AWARD_ITEMTYPE1		= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE1));
 	local AWARD_ITEMTYPE1_NUM	= ConvertN(TASK.GetDataBaseN(nTaskId, _G.DB_TASK_TYPE.AWARD_ITEMTYPE1_NUM));
@@ -932,11 +932,11 @@ function p.GetTaskPrizeContent(nTaskId)
 	tAwardItem[3] = {AWARD_ITEMTYPE3,AWARD_ITEMTYPE3_NUM};
 	
 	if repute ~= "0" then
-		s = s.." 声望:"..repute;
+		s = s.." "..GetTxtPub("ShenWan")..":"..repute;
 	end
 
 	if soul ~= "0" then
-		s = s.." 将魂:"..soul;
+		s = s.." "..GetTxtPub("JianHun")..""..soul;
 	end		
 	
 	local strAward = "";
@@ -969,8 +969,8 @@ function p.GetTaskPrizeContentTable(nTaskId)
 	local repute = SafeN2S(TASK.GetTaskPrizeRepute(nTaskId));
 	local soul =SafeN2S(TASK.GetTaskPrizeSoul(nTaskId));
 	
-	tContent[1] ="获得经验:"..exp;
-	tContent[2] ="获得银币:"..coin;
+	tContent[1] =GetTxtPri("TASKUI_T5")..exp;
+	tContent[2] =GetTxtPri("TASKUI_T6")..coin;
 	
 	
 	
@@ -987,16 +987,16 @@ function p.GetTaskPrizeContentTable(nTaskId)
 	tAwardItem[3] = {AWARD_ITEMTYPE3,AWARD_ITEMTYPE3_NUM};
 	
 	if repute ~= "0" then
-		tContent[6] ="获得声望:"..repute;
+		tContent[6] =GetTxtPri("TASKUI_T7")..repute;
 	end
 
 	if soul ~= "0" then
-		tContent[7] ="获得将魂:"..soul;	
+		tContent[7] =GetTxtPri("TASKUI_T8")..soul;	
 	end		
 	
 	for i=1,3 do
 		if tAwardItem[i][1]~=0 and  tAwardItem[i][2]~=0 then
-			tContent[2+i] ="获得 "..TASK.GetDataBaseDataS("itemtype", tAwardItem[i][1], DB_ITEMTYPE.NAME).."  X" .. tAwardItem[i][2];
+			tContent[2+i] =GetTxtPri("TASKUI_T9")..TASK.GetDataBaseDataS("itemtype", tAwardItem[i][1], DB_ITEMTYPE.NAME).."  X" .. tAwardItem[i][2];
 		end
 	end	
 

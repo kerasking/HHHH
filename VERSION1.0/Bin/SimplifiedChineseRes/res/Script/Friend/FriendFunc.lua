@@ -24,7 +24,7 @@ function p.AddFriend(nPlayerId)
 	if p.CanAddFriend(GetPlayerId()) then
 		MsgFriend.SendFriendAdd(nPlayerId);
 	else
-	    CommonDlg.ShowTipInfo("提示", "好友列表已满!", nil, 0.5); 	
+	    CommonDlg.ShowTipInfo(GetTxtPri("FAUI_T6"), GetTxtPri("FAUI_T7"), nil, 0.5); 	
 	end
 end
 
