@@ -18,19 +18,19 @@
 #include "NDUtility.h"
 #endif
 
-const char* NDLocalXmlString::GetCString(const char* szKeyName)
+const string NDLocalXmlString::GetCString(string szKeyName)
 {
-	if (!szKeyName)
+	if (szKeyName.empty())
 	{
 		return "error";
 	}
 	
-	ITER_MAP_DATA it = mapData.find(string(szKeyName));
+	ITER_MAP_DATA it = mapData.find(szKeyName);
 	
 	if (it == mapData.end())
 		return szKeyName;
 		
-	return (it->second).c_str();
+	return it->second;
 }
 
 bool NDLocalXmlString::LoadData()

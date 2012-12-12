@@ -2064,13 +2064,13 @@ void GameScene::ShowRelieve(bool bShow)
 		NDUIButton *button = new NDUIButton;
 		button->Initialization();
 		button->SetFrameRect(CCRectMake(0, 0, 120, 30));
-		button->SetTitle(NDCommonCString("ReliveInCity"));
+		button->SetTitle(NDCommonCString("ReliveInCity").c_str());
 		section->AddCell(button);
 
 		button = new NDUIButton;
 		button->Initialization();
 		button->SetFrameRect(CCRectMake(0, 0, 120, 30));
-		button->SetTitle(NDCommonCString("ReliveUseItem"));
+		button->SetTitle(NDCommonCString("ReliveUseItem").c_str());
 		section->AddCell(button);
 
 		dataSource->AddSection(section);
@@ -2917,8 +2917,8 @@ void GameScene::processVersionMsg(const char* version, int flag,
 		dlg->SetTag(TAG_UPDATE_NOT_FORCE);
 	}
 
-	dlg->Show(NDCommonCString("VersionUpdate"), version,
-			NDCommonCString("Cancel"), NDCommonCString("Ok"), NULL);
+	dlg->Show(NDCommonCString("VersionUpdate").c_str(), version,
+			NDCommonCString("Cancel").c_str(), NDCommonCString("Ok").c_str(), NULL);
 }
 
 /***
