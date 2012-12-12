@@ -5,7 +5,7 @@
 *.old
 *.sdf
 *.db
-
+armeabi/
 .settings/
 
 debug/

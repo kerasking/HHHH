@@ -12,9 +12,11 @@
 #include "NDPath.h"
 #include "NDSharedPtr.h"
 #include "CCFileUtils.h"
-//#include "NDUtility.h"
+#include "CCPlatformConfig.h"
 
-void WriteCon(const char * pszFormat, ...);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#include "NDUtility.h"
+#endif
 
 const char* NDLocalXmlString::GetCString(const char* szKeyName)
 {
@@ -124,9 +126,11 @@ bool NDLocalXmlString::parseLines( vector<string>& vecLines )
 
 void NDLocalXmlString::logErr( const string& keyLine, const string& valLine )
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	WriteCon( "@@ NDLocalXmlString::parseLines(), bad lines: \r\n");
 	WriteCon( "  errline: %s\r\n", keyLine.c_str());
 	WriteCon( "  errline: %s\r\n", valLine.c_str());
+#endif
 }
 
 bool NDLocalXmlString::addKeyValue( const string& keyLine, const string& valLine )
@@ -199,6 +203,7 @@ bool NDLocalXmlString::isVal( const char* testLine )
 
 void NDLocalXmlString::dump()
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	WriteCon( "-------------- NDLocalXmlString -------------- \r\n" );
 	WriteCon( "@@ has %d key/val\r\n", mapData.size());
 	for (ITER_MAP_DATA iter = mapData.begin(); iter != mapData.end(); ++iter)
@@ -206,4 +211,5 @@ void NDLocalXmlString::dump()
 		WriteCon( "[%s]=%s\r\n", iter->first.c_str(), iter->second.c_str() );
 	}
 	WriteCon( "\r\n" );
+#endif
 }

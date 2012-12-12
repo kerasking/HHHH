@@ -25,21 +25,26 @@ package org.cocos2dx.lib;
 
 import org.DeNA.DHLJ.NDJavaVideoPlayer;
 import org.DeNA.DHLJ.NDVideoControl;
+import org.DeNA.DHLJ.R;
 import org.DeNA.DHLJ.NDVideoView;
 
 import org.cocos2dx.lib.Cocos2dxHelper.Cocos2dxHelperListener;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Paint;
+import android.graphics.Paint.FontMetricsInt;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.ViewGroup.LayoutParams;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 public abstract class Cocos2dxActivity extends Activity implements
@@ -50,6 +55,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	// ===========================================================
 
 	private static final String TAG = Cocos2dxActivity.class.getSimpleName();
+	private static Paint s_pPaint; 
 
 	// ===========================================================
 	// Fields
@@ -74,6 +80,8 @@ public abstract class Cocos2dxActivity extends Activity implements
 		this.init();
 
 		Cocos2dxHelper.init(this, this);
+		TextView textView = new TextView(this);  
+		s_pPaint = textView.getPaint(); 
 	}
 
 	// ===========================================================
@@ -139,21 +147,21 @@ public abstract class Cocos2dxActivity extends Activity implements
 
 		mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
 
-		NDVideoControl pkVideoControl = new NDVideoControl(
-				Cocos2dxActivity.this);
-		pkVideoControl.setCocos2dxActivity(this);
-		pkVideoControl.hide();
-
-		LinearLayout tp = new LinearLayout(this.getApplicationContext());
-		LinearLayout.LayoutParams pkLayoutParams = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
-		m_pkView = new NDVideoView(this.getApplicationContext());
-		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
-		m_pkView.setBackgroundColor(0);
-		m_pkView.setMediaController(pkVideoControl);
-		m_pkView.setOnCompletionListener(pkVideoControl);
-		m_pkView.requestFocus();
-
-		setContentView(m_pkView);
+//		NDVideoControl pkVideoControl = new NDVideoControl(
+//				Cocos2dxActivity.this);
+//		pkVideoControl.setCocos2dxActivity(this);
+//		pkVideoControl.hide();
+//
+//		LinearLayout tp = new LinearLayout(this.getApplicationContext());
+//		LinearLayout.LayoutParams pkLayoutParams = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
+//		m_pkView = new NDVideoView(this.getApplicationContext());
+//		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
+//		m_pkView.setBackgroundColor(0);
+//		m_pkView.setMediaController(pkVideoControl);
+//		m_pkView.setOnCompletionListener(pkVideoControl);
+//		m_pkView.requestFocus();
+//
+//		setContentView(m_pkView);
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView()
@@ -168,4 +176,13 @@ public abstract class Cocos2dxActivity extends Activity implements
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	private static int getStringSize(String pString)				
+	{
+//		Paint pPaint = new Paint();
+		int w = (int) Math.ceil(s_pPaint.measureText(pString)); 
+		final FontMetricsInt fm = s_pPaint.getFontMetricsInt();
+		int h = (int) Math.ceil(fm.bottom - fm.top);
+//		Log.e("Cocos2dxActivity", String.valueOf(w)+" " +String.valueOf(h));
+		return h*10000+w;
+	}
 }
