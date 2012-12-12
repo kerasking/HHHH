@@ -90,10 +90,15 @@ public class Cocos2dxMusic
 		}
 	}
 
-	public void playBackgroundMusic(final String pPath, final boolean isLoop)
+	public void playBackgroundMusic(final String bPath, final boolean isLoop)
 	{
+		String pPath = "/sdcard/dhlj/SimplifiedChineseRes/res/sound/test.mp3";
+		Log.i("DaHuaLongJiang", "Entry java playBackgroundMusic method");
+		
 		if (this.mCurrentPath == null)
 		{
+			Log.i("DaHuaLongJiang", "this.mCurrentPath == null");
+			Log.i("DaHuaLongJiang",pPath);
 			// it is the first time to play background music or end() was called
 			this.mBackgroundMediaPlayer = this
 					.createMediaplayerFromAssets(pPath);
@@ -102,6 +107,8 @@ public class Cocos2dxMusic
 		{
 			if (!this.mCurrentPath.equals(pPath))
 			{
+				Log.i("DaHuaLongJiang","!this.mCurrentPath.equals(pPath)");
+				Log.i("DaHuaLongJiang",pPath);
 				// play new background music
 
 				// release old resource and create a new one
@@ -119,11 +126,11 @@ public class Cocos2dxMusic
 
 		if (this.mBackgroundMediaPlayer == null)
 		{
-			Log.e(Cocos2dxMusic.TAG,
+			Log.e("DaHuaLongJiang",
 					"playBackgroundMusic: background media player is null");
 		} else
 		{
-			// if the music is playing or paused, stop it
+			Log.i("DaHuaLongJiang","if the music is playing or paused, stop it");
 			this.mBackgroundMediaPlayer.stop();
 
 			this.mBackgroundMediaPlayer.setLooping(isLoop);
@@ -137,7 +144,7 @@ public class Cocos2dxMusic
 				this.mPaused = false;
 			} catch (final Exception e)
 			{
-				Log.e(Cocos2dxMusic.TAG, "playBackgroundMusic: error state");
+				Log.e("DaHuaLongJiang", "playBackgroundMusic: error state");
 			}
 		}
 	}

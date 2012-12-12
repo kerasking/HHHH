@@ -36,148 +36,177 @@ import com.mobage.android.Mobage;
 import com.mobage.android.Mobage.PlatformListener;
 import com.mobage.android.Mobage.ServerMode;
 
-public class SocialUtils {
-	
+public class SocialUtils
+{
+
 	private static final String TAG = "SocialUtils";
-	
+
 	private static String mUserId;
 	private static PlatformListener mPlatformListener = null;
 	private static Cocos2dxActivity mActivity;
-	
-	public static void initializeMobage(Cocos2dxActivity activity) {
+
+	public static void initializeMobage(Cocos2dxActivity activity)
+	{
 		Log.d(TAG, "SocialUtils initializeMobage");
 		mActivity = activity;
 		initCN(activity);
 	}
 
-	private static void initCN(Cocos2dxActivity activity) {
-		try {
-			ServerMode serverMode = Mobage.getPlatformEnvironment(mActivity,
-					R.xml.init);
-			if (serverMode == ServerMode.SANDBOX) {
+	private static void initCN(Cocos2dxActivity activity)
+	{
+		try
+		{
+			ServerMode serverMode = null;
+			if (serverMode == ServerMode.SANDBOX)
+			{
 				Mobage.initialize(Mobage.Region.CN, Mobage.ServerMode.SANDBOX,
 						"sdk_app_id:13000314",
 						"0be0f1827fa82036ca1a569e341d015f", "13000314",
 						activity);
-			} else if (serverMode == ServerMode.PRODUCTION) {
+			} else if (serverMode == ServerMode.PRODUCTION)
+			{
 				Mobage.initialize(Mobage.Region.CN,
 						Mobage.ServerMode.PRODUCTION, "sdk_app_id:13000314",
 						"4e7aa408fbe3194bba7472fa859dc92d", "13000314",
 						activity);
 			}
-		} catch (NameNotFoundException e) {
+		} catch (NameNotFoundException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (XmlPullParserException e) {
+		} catch (XmlPullParserException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public static void showConfirmDialog(String title, String content,
-			String buttonText) {
+			String buttonText)
+	{
 		Activity activity = mActivity;
-		if (!activity.isFinishing()) {
+		if (!activity.isFinishing())
+		{
 			new AlertDialog.Builder(activity).setTitle(title)
 					.setMessage(content)
-					.setPositiveButton(buttonText, new OnClickListener() {
+					.setPositiveButton(buttonText, new OnClickListener()
+					{
 						@Override
 						public void onClick(DialogInterface dialog,
-								int whichButton) {
+								int whichButton)
+						{
 
 						}
 					}).show();
 		}
 	}
-	
-	public static PlatformListener createPlatformListener(boolean isShowSplash) {
 
-		if (mPlatformListener != null) {
+	public static PlatformListener createPlatformListener(boolean isShowSplash)
+	{
+
+		if (mPlatformListener != null)
+		{
 			return mPlatformListener;
 		}
 
-		mPlatformListener = new PlatformListener() {
+		mPlatformListener = new PlatformListener()
+		{
 
 			boolean mSplashCompleted = false;
 			boolean mLoginCompleted = false;
 
-			boolean checkComplete() {
+			boolean checkComplete()
+			{
 				return mSplashCompleted && mLoginCompleted;
 			}
 
-			void onCompleted() {
+			void onCompleted()
+			{
 				mSplashCompleted = false;
 				mLoginCompleted = false;
 
 				Mobage.hideSplashScreen();
 			}
 
-			public void onLoginComplete(String userId) {
+			public void onLoginComplete(String userId)
+			{
 				Log.i(TAG, "Login completed:" + userId);
 				mLoginCompleted = true;
 				mUserId = userId;
 
 				Mobage.registerTick();
 
-				if (checkComplete()) {
+				if (checkComplete())
+				{
 					onCompleted();
 				}
 				getmActivity().setMain();
 				getmActivity().LoginComplete(Integer.parseInt(mUserId));
 			}
 
-			public void onLoginRequired() {
+			public void onLoginRequired()
+			{
 				Log.i(TAG, "Login required.");
 
 			}
 
-			public void onLoginError(Error error) {
+			public void onLoginError(Error error)
+			{
 				Log.e(TAG, "Login failed.  " + error.toString());
 				Mobage.checkLoginStatus();
 				getmActivity().LoginError(error.toString());
 			}
 
 			@Override
-			public void onSplashComplete() {
+			public void onSplashComplete()
+			{
 				// TODO Auto-generated method stub
 				Log.e(TAG, "splash complete!.");
 				mSplashCompleted = true;
 
-				if (checkComplete()) {
+				if (checkComplete())
+				{
 					onCompleted();
 				}
 			}
 
 			@Override
-			public void onLoginCancel() {
+			public void onLoginCancel()
+			{
 				// TODO Auto-generated method stub
 
 			}
 
 			@Override
-			public void onSwitchAccount() {
+			public void onSwitchAccount()
+			{
 				// TODO Auto-generated method stub
 				mActivity.finish();
 			}
 
-			public void onDashboardClose() {
+			public void onDashboardClose()
+			{
 				// TODO Auto-generated method stub
-//				Toast.makeText(mActivity, "宸查��鍑虹ぞ鍖�", Toast.LENGTH_LONG).show();
+				// Toast.makeText(mActivity, "宸查��鍑虹ぞ鍖�",
+				// Toast.LENGTH_LONG).show();
 			}
 		};
 
 		return (mPlatformListener);
 
 	}
-	
-	public static String getHttpResponseString(String url,
-			String consumer_key, String consumer_secret) {
+
+	public static String getHttpResponseString(String url, String consumer_key,
+			String consumer_secret)
+	{
 
 		OAuthSupport support = new OAuthSupport(consumer_key, consumer_secret);
 		String header = support.getOAuthHeader("POST", url, null);
@@ -190,27 +219,32 @@ public class SocialUtils {
 		httppost.setHeader("Content-Type", "application/json; charset=utf8");
 
 		byte[] result = null;
-		try {
+		try
+		{
 			// Execute HTTP Post Request
 			HttpResponse response = httpclient.execute(httppost);
 			StatusLine statusLine = response.getStatusLine();
-			if (statusLine.getStatusCode() != HttpURLConnection.HTTP_OK) {
+			if (statusLine.getStatusCode() != HttpURLConnection.HTTP_OK)
+			{
 				result = EntityUtils.toByteArray(response.getEntity());
 				Log.e(TAG, "error response= " + new String(result, "UTF-8"));
 
 				Log.e(TAG, "statusCode is" + statusLine.getStatusCode()
 						+ ", json failed");
-			} else {
+			} else
+			{
 				result = EntityUtils.toByteArray(response.getEntity());
 			}
 			return new String(result, "UTF-8");
-		} catch (Throwable e) {
+		} catch (Throwable e)
+		{
 
 		}
 		return null;
 	}
-	
-	private static HttpClient initHttpClient2() {
+
+	private static HttpClient initHttpClient2()
+	{
 		HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
 		SchemeRegistry registry = new SchemeRegistry();
 		SSLSocketFactory socketFactory = SSLSocketFactory.getSocketFactory();
@@ -228,17 +262,22 @@ public class SocialUtils {
 		HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
 		return httpClient;
 	}
-	
-	public static Bundle decodeUrl(String s) {
+
+	public static Bundle decodeUrl(String s)
+	{
 		Bundle params = new Bundle();
-		if (s != null) {
+		if (s != null)
+		{
 			String array[] = s.split("&");
-			for (String parameter : array) {
+			for (String parameter : array)
+			{
 				String v[] = parameter.split("=");
-				if (v.length == 2) {
+				if (v.length == 2)
+				{
 					params.putString(URLDecoder.decode(v[0]),
 							URLDecoder.decode(v[1]));
-				} else if (v.length == 1) {
+				} else if (v.length == 1)
+				{
 					params.putString(URLDecoder.decode(v[0]), "");
 				}
 			}
@@ -246,11 +285,13 @@ public class SocialUtils {
 		return params;
 	}
 
-	public static DaHuaLongJiang getmActivity() {
+	public static DaHuaLongJiang getmActivity()
+	{
 		return (DaHuaLongJiang) mActivity;
 	}
 
-	public static String getmUserId() {
+	public static String getmUserId()
+	{
 		return mUserId;
 	}
 }

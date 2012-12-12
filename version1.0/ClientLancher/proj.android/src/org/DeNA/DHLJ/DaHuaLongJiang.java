@@ -24,6 +24,7 @@ import com.mobage.android.social.common.RemoteNotification.RemoteNotificationLis
 
 import org.DeNA.DHLJ.SocialUtils;
 
+import android.R;
 import android.app.ActionBar.LayoutParams;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -55,85 +56,100 @@ import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
-public class DaHuaLongJiang extends Cocos2dxActivity {
+public class DaHuaLongJiang extends Cocos2dxActivity
+{
 	private static final String TAG = "DaHuaLongJiang";
 	public static DaHuaLongJiang ms_pkDHLJ = null;
 	private PlatformListener mPlatformListener;
 	private DynamicMenuBar menubar;
-	
-	protected void onCreate(Bundle savedInstanceState) {
-		if (isSDCardCanUse()) {
+
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		if (isSDCardCanUse())
+		{
 			ms_pkDHLJ = this;
 			super.onCreate(savedInstanceState);
 			Log.e(TAG, "onCreate called");
-			
+
 			Mobage.registerMobageResource(this, "org.DeNA.DHLJ.R");
 			SocialUtils.initializeMobage(this);
 			mPlatformListener = SocialUtils.createPlatformListener(true);
 			Mobage.addPlatformListener(mPlatformListener);
 
-			RemoteNotification.setListener(new RemoteNotificationListener() {
+			RemoteNotification.setListener(new RemoteNotificationListener()
+			{
 
 				@Override
-				public void handleReceive(Context context, Intent intent) {
-					//You can use static method which performing a notification in status bar.
-					C2DMBaseReceiver.displayStatusBarNotification(context, intent);
-					
-					
-					//If you want to handle message yourself, below lists one of keys:
-					//"NOTIFICATION_MESSAGE"
-					//You should analysis the json string by yourself, keys are "style", "message", "iconUrl", "extras", etc,
+				public void handleReceive(Context context, Intent intent)
+				{
+					// You can use static method which performing a notification
+					// in status bar.
+					C2DMBaseReceiver.displayStatusBarNotification(context,
+							intent);
+
+					// If you want to handle message yourself, below lists one
+					// of keys:
+					// "NOTIFICATION_MESSAGE"
+					// You should analysis the json string by yourself, keys are
+					// "style", "message", "iconUrl", "extras", etc,
 					Bundle bundle = intent.getExtras();
 					String message = bundle.getString("NOTIFICATION_MESSAGE");
-					try {
+					try
+					{
 						JSONObject obj = new JSONObject(message);
 						String style = obj.getString("style");
-				        String iconUrl = obj.getString("iconUrl");
-				        String msg = obj.getString("message");
+						String iconUrl = obj.getString("iconUrl");
+						String msg = obj.getString("message");
 
-				        Map<String, String> extras = new HashMap<String, String>();
-				        JSONObject e = new JSONObject(obj.getString("extras"));
-				        Iterator<String> keys = e.keys();
-				        while (keys.hasNext()) {
-				            String key = keys.next();
-				            String val = e.optString(key);
-				            if (val != null) {
-				                extras.put(key, val);
-				            }
-				        }
-				    }catch (JSONException ex) {
-				        ex.printStackTrace();
-				    }        
+						Map<String, String> extras = new HashMap<String, String>();
+						JSONObject e = new JSONObject(obj.getString("extras"));
+						Iterator<String> keys = e.keys();
+						while (keys.hasNext())
+						{
+							String key = keys.next();
+							String val = e.optString(key);
+							if (val != null)
+							{
+								extras.put(key, val);
+							}
+						}
+					} catch (JSONException ex)
+					{
+						ex.printStackTrace();
+					}
 				}
 			});
 
 			nativeInit(480, 320);
-			
+
 			Mobage.checkLoginStatus();
 			Mobage.onCreate();
 
 			menubar = new DynamicMenuBar(this);
 			menubar.setMenubarVisibility(View.VISIBLE);
-			menubar.setMenuIconGravity(Gravity.TOP|Gravity.LEFT);
-		} else {
+			menubar.setMenuIconGravity(Gravity.TOP | Gravity.LEFT);
+		} else
+		{
 			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 			alertDialog.setTitle("Title");
 			alertDialog.setMessage("Message");
 
-			alertDialog.setIcon(R.drawable.dhlj_icon);
+			//alertDialog.setIcon(R.drawable.dhlj_icon);
 			alertDialog.show();
 		}
 	}
 
 	@Override
-	public void onPause() {
+	public void onPause()
+	{
 		Log.e(TAG, "onPause called");
 		super.onPause();
 		Mobage.onPause();
 	}
 
 	@Override
-	public void onResume() {
+	public void onResume()
+	{
 		Log.e(TAG, "onResume called");
 		Mobage.setCurrentActivity(this);
 		super.onResume();
@@ -141,48 +157,57 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 	}
 
 	@Override
-	public void onStop() {
+	public void onStop()
+	{
 		Log.e(TAG, "onStop called");
 		super.onStop();
 	}
 
 	@Override
-	public void onDestroy() {
+	public void onDestroy()
+	{
 		Log.e(TAG, "onDestroy called");
 		super.onDestroy();
 		Mobage.onStop();
 	}
 
 	@Override
-	public void onRestart() {
+	public void onRestart()
+	{
 		Log.e(TAG, "onRestart called");
 		super.onRestart();
 		Mobage.onRestart();
 	}
 
 	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
+	public void onConfigurationChanged(Configuration newConfig)
+	{
 		super.onConfigurationChanged(newConfig);
 	}
-	
-	public void setMain(){
-		View rootView =(View)getView();
-		FrameLayout parent = (FrameLayout)rootView.getParent();
-		if(parent != null)
+
+	public void setMain()
+	{
+		View rootView = (View) getView();
+		FrameLayout parent = (FrameLayout) rootView.getParent();
+		if (parent != null)
 		{
 			parent.removeView(rootView);
 		}
 		menubar.removeAllViews();
 		menubar.addView(rootView);
 
-		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
-		this.setContentView(menubar,pkParams);
+		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
+				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		this.setContentView(menubar, pkParams);
 	}
 
-	public void LoginComplete(int userid){
+	public void LoginComplete(int userid)
+	{
 		onLoginComplete(userid);
 	}
-	public void LoginError(String error){
+
+	public void LoginError(String error)
+	{
 		onLoginError(error);
 	}
 
@@ -233,6 +258,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 	}
 
 	private static native void nativeInit(int w, int h);
+
 	private static native void onLoginComplete(int userid);
+
 	private static native void onLoginError(String error);
 }
