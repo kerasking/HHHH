@@ -76,10 +76,6 @@ using namespace CocosDenshion;
 //@android: for test only
 void dumpCocos2dx()
 {
-	// 	CCPoint posScreen = NDPlayer::defaultHero().GetPosition();
-	// 	DWORD n = 0;
-	// 	char msg[500] = "";
-
 	CCLog( "@@------------------------------------------------------------{{\r\n" );
 
 	// dump NDDirector & CCDirector
@@ -186,11 +182,6 @@ NDGameApplication::~NDGameApplication()
 
 bool NDGameApplication::applicationDidFinishLaunching()
 {
-//	if (!VideoMgrPtr->PlayVideo("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4"))
-//	{
-//		LOGERROR("Playing video error");
-//	}
-
 	CCDirector* pDirector = CCDirector::sharedDirector();
 	CCDirector::sharedDirector()->stopAnimation();
 	CCAssert(pDirector, "applicationDidFinishLaunching");
@@ -205,7 +196,8 @@ bool NDGameApplication::applicationDidFinishLaunching()
 		CCFileUtils::sharedFileUtils()->setResourceDirectory("iphonehd");
 
 		// don't enable retina because we don't have ipad hd resource
-		CCEGLView::sharedOpenGLView()->setDesignResolutionSize(960, 640, kResolutionNoBorder);
+		CCEGLView::sharedOpenGLView()->setDesignResolutionSize(960, 640,
+			kResolutionNoBorder);
 	}
 	else if (target == kTargetIphone)
 	{
@@ -217,25 +209,29 @@ bool NDGameApplication::applicationDidFinishLaunching()
 			// iphone hd
 			CCFileUtils::sharedFileUtils()->setResourceDirectory("iphonehd");
 		}
-		else 
+		else
 		{
 			CCFileUtils::sharedFileUtils()->setResourceDirectory("iphone");
 		}
 	}
-	else if(target == kTargetAndroid)
+	else if (target == kTargetAndroid)
 	{
 		CCEGLView* eglView = CCDirector::sharedDirector()->getOpenGLView();
 		CCLog("Entryu setDesignResolutionSize");
-		CCLog( "@@ before setDesignResolutionSize(), frameSize=(%d,%d)\r\n", (int)eglView->getFrameSize().width, (int)eglView->getFrameSize().height );
-		CCEGLView::sharedOpenGLView()->setDesignResolutionSize( eglView->getFrameSize().width, eglView->getFrameSize().height, kResolutionNoBorder );
+		CCLog("@@ before setDesignResolutionSize(), frameSize=(%d,%d)\r\n",
+			(int) eglView->getFrameSize().width,
+			(int) eglView->getFrameSize().height);
+		CCEGLView::sharedOpenGLView()->setDesignResolutionSize(
+			eglView->getFrameSize().width, eglView->getFrameSize().height,
+			kResolutionNoBorder);
 	}
-	else 
+	else
 	{
 		// android, windows, blackberry, linux or mac
 		// use 960*640 resources as design resolution size
 		//CCFileUtils::sharedFileUtils()->setResourceDirectory("iphonehd");
 		//CCEGLView::sharedOpenGLView()->setDesignResolutionSize(480*2, 320*2, kResolutionNoBorder);//@todo
-		CCDirector::sharedDirector()->enableRetinaDisplay(true);//@retina
+		CCDirector::sharedDirector()->enableRetinaDisplay(true);	//@retina
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
@@ -249,20 +245,19 @@ bool NDGameApplication::applicationDidFinishLaunching()
 
 	// set FPS. the default value is 1.0/60 if you don't call this
 	//pDirector->setAnimationInterval(1.0 / 60);
-	LOGD("pDirector->setAnimationInterval() value is %d",(int)pDirector);
+	LOGD("pDirector->setAnimationInterval() value is %d", (int) pDirector);
 	pDirector->setAnimationInterval(1.0 / 24);
 
 #if 0 //@todo @hello
- 	// create a scene. it's an autorelease object
- 	CCScene *pScene = HelloWorld::scene();
- 
- 	// run
- 	pDirector->runWithScene(pScene);
+	// create a scene. it's an autorelease object
+	CCScene *pScene = HelloWorld::scene();
+
+	// run
+	pDirector->runWithScene(pScene);
 	//////////////////////////////////////////////
 #else
 	MyInit();
 #endif
-
 
 	return true;
 }
