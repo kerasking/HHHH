@@ -132,7 +132,6 @@ extern "C"
 	void playBackgroundMusicJNI(const char *path, bool isLoop)
 	{
 		JniMethodInfo methodInfo;
-		const char szTemp[] = "/sdcard/dhlj/SimplifiedChineseRes/res/sound/test.mp3";
 
 		if (!getStaticMethodInfo(methodInfo, "playBackgroundMusic",
 			"(Ljava/lang/String;Z)V"))
@@ -141,7 +140,7 @@ extern "C"
 			return;
 		}
 
-		jstring stringArg = methodInfo.env->NewStringUTF(szTemp);
+		jstring stringArg = methodInfo.env->NewStringUTF(path);
 		methodInfo.env->CallStaticVoidMethod(methodInfo.classID,
 			methodInfo.methodID, stringArg, isLoop);
 		methodInfo.env->DeleteLocalRef(stringArg);

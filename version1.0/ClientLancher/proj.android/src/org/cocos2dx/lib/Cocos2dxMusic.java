@@ -90,9 +90,8 @@ public class Cocos2dxMusic
 		}
 	}
 
-	public void playBackgroundMusic(final String bPath, final boolean isLoop)
+	public void playBackgroundMusic(final String pPath, final boolean isLoop)
 	{
-		String pPath = "/sdcard/dhlj/SimplifiedChineseRes/res/sound/test.mp3";
 		Log.i("DaHuaLongJiang", "Entry java playBackgroundMusic method");
 		
 		if (this.mCurrentPath == null)
@@ -105,9 +104,9 @@ public class Cocos2dxMusic
 			this.mCurrentPath = pPath;
 		} else
 		{
+			Log.i("DaHuaLongJiang",pPath);
 			if (!this.mCurrentPath.equals(pPath))
 			{
-				Log.i("DaHuaLongJiang","!this.mCurrentPath.equals(pPath)");
 				Log.i("DaHuaLongJiang",pPath);
 				// play new background music
 
@@ -131,17 +130,26 @@ public class Cocos2dxMusic
 		} else
 		{
 			Log.i("DaHuaLongJiang","if the music is playing or paused, stop it");
+			Log.i("DaHuaLongJiang",this.mCurrentPath);
 			this.mBackgroundMediaPlayer.stop();
 
 			this.mBackgroundMediaPlayer.setLooping(isLoop);
 
 			try
 			{
+				this.mBackgroundMediaPlayer.setVolume(7, 7);
 				this.mBackgroundMediaPlayer.prepare();
 				this.mBackgroundMediaPlayer.seekTo(0);
+				Log.i("DaHuaLongJiang","start the muisc");
 				this.mBackgroundMediaPlayer.start();
-
+				Log.i("DaHuaLongJiang","pass start the muisc");
 				this.mPaused = false;
+				
+				boolean bRes = isBackgroundMusicPlaying();
+				if (bRes)
+				{
+					Log.i("DaHuaLongJiang","ZhengZaiYunXing");
+				}
 			} catch (final Exception e)
 			{
 				Log.e("DaHuaLongJiang", "playBackgroundMusic: error state");
@@ -164,6 +172,7 @@ public class Cocos2dxMusic
 
 	public void pauseBackgroundMusic()
 	{
+		Log.i("DaHuaLongJiang","Pause the music");
 		if (this.mBackgroundMediaPlayer != null
 				&& this.mBackgroundMediaPlayer.isPlaying())
 		{
