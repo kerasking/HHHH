@@ -143,7 +143,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	@Override
 	public void onPause()
 	{
-		Log.e(TAG, "onPause called");
 		super.onPause();
 		Mobage.onPause();
 	}
@@ -151,7 +150,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	@Override
 	public void onResume()
 	{
-		Log.e(TAG, "onResume called");
 		Mobage.setCurrentActivity(this);
 		super.onResume();
 		Mobage.onResume();
@@ -197,14 +195,9 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		menubar.removeAllViews();
 		menubar.addView(rootView);
 
-<<<<<<< HEAD
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		this.setContentView(menubar, pkParams);
-=======
-		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.FILL_PARENT);
-		this.setContentView(menubar,pkParams);
->>>>>>> 4d9047f4688e136e43d712938cdfdb526fa00a62
 	}
 
 	public void LoginComplete(int userid)
