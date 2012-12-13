@@ -1,8 +1,17 @@
 #include "SimpleAudioEngineOpenSL.h"
 #include <dlfcn.h>
+#ifdef ANDROID
+#include <jni.h>
 #include <android/log.h>
 
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,"SIMPLEAUDIOENGINE_OPENSL", __VA_ARGS__)
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
 
 #define  LIBOPENSLES "libOpenSLES.so"
 
@@ -88,9 +97,17 @@ void SimpleAudioEngineOpenSL::setEffectsVolume(float volume)
 
 unsigned int SimpleAudioEngineOpenSL::playEffect(const char* pszFilePath, bool bLoop)
 {
-	unsigned int soundID;
-	do 
+	LOGD("Entry SimpleAudioEngineOpenSL::playEffect,path is %s",pszFilePath);
+
+	unsigned int soundID = 0;
+
+	do
 	{
+		if (0 == s_pOpenSL)
+		{
+			LOGERROR("s_pOpenSL is null");
+		}
+
 		soundID = s_pOpenSL->preloadEffect(pszFilePath);
 		if (soundID != FILE_NOT_FOUND)
 		{

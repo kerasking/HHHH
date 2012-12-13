@@ -445,7 +445,7 @@ void SetSceneMusicNew(int idMusic)
 	
 	string strMusicPath = NDPath::GetSoundPath();
 	CCString* pstrMusicFile = CCString::stringWithFormat("%smusic_%d.aac",strMusicPath.c_str(),idMusic);
-	pkSimpleAudio->playEffect(pstrMusicFile->toStdString().c_str(),true);
+	pkSimpleAudio->playBackgroundMusic(pstrMusicFile->toStdString().c_str(),true);
 }
 
 void SetBgMusicVolume(int nVolune)

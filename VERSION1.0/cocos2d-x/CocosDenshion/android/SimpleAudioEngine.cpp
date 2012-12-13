@@ -34,6 +34,7 @@
 #define  I9100_MODEL "GT-I9100"
 #define  LOG_TAG     "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
 static bool s_bI9100 = false;
 
@@ -171,7 +172,7 @@ SimpleAudioEngine::SimpleAudioEngine()
 	if (strcmp(I9100_MODEL, deviceModel) == 0)
 	{
 		LOGD("i9100 model\nSwitch to OpenSLES");
-		s_bI9100 = true;
+		s_bI9100 = false;
 	}
 }
 
@@ -286,11 +287,13 @@ unsigned int SimpleAudioEngine::playEffect(const char* pszFilePath, bool bLoop)
 
 	if (s_bI9100)
 	{
+		LOGERROR("It's I9100 phone!");
 		return SimpleAudioEngineOpenSL::sharedEngine()->playEffect(pszFilePath,
 				bLoop);
 	}
 	else
 	{
+		LOGD("ready to exe playEffectJNI");
 		return playEffectJNI(pszFilePath, bLoop);
 	}
 }
@@ -335,6 +338,7 @@ void SimpleAudioEngine::pauseEffect(unsigned int nSoundId)
 {
 	if (s_bI9100)
 	{
+		LOGERROR("pauseEffect i9100");
 		SimpleAudioEngineOpenSL::sharedEngine()->pauseEffect(nSoundId);
 	}
 	else

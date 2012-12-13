@@ -28,6 +28,7 @@
 #if 1
 #define  LOG_TAG    "JniHelper"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 #else
 #define  LOGD(...) 
 #endif
@@ -112,7 +113,7 @@ static bool getStaticMethodInfo_(cocos2d::JniMethodInfo &methodinfo,
 		methodID = pEnv->GetStaticMethodID(classID, methodName, paramCode);
 		if (!methodID)
 		{
-			LOGD("Failed to find static method id of %s", methodName);
+			LOGERROR("Failed to find static method id of %s", methodName);
 			break;
 		}
 
