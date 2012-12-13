@@ -15,6 +15,19 @@
 #include "ScriptNetMsg.h"
 #include "globaldef.h"
 
+#ifdef ANDROID
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+
 using namespace NDEngine;
 
 #define REG_MSG(ID, OBJ)													\
@@ -62,7 +75,7 @@ bool NDNetMsgPool::Process(NDTransData* data)
 
 bool NDNetMsgPool::Process(MSGID msgID, NDTransData* data, int len)
 {
-	cocos2d::CCLog(
+	LOGD(
 			"\n---------------------------------------------<--½ÓÊÕid[%d],len[%d]-----------------------",
 			msgID, len + ND_C_HEAD_SIZE);
 
