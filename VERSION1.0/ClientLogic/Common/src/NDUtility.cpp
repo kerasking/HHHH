@@ -721,55 +721,55 @@ std::string TimeConvertToStr(TIME_TYPE type, time_t long_time)
 	{
 	case TIME_SECOND:
 		sprintf(szOut, "%d%s%d%s%d%s%d%s%d%s%d%s", pTime->tm_year,
-				NDCommonCString("year"), pTime->tm_mon,
-				NDCommonCString("month"), pTime->tm_mday,
-				NDCommonCString("day"), pTime->tm_hour, NDCommonCString("hour"),
-				pTime->tm_min, NDCommonCString("minute"), pTime->tm_sec,
-				NDCommonCString("second"));
+				NDCommonCString("year").c_str(), pTime->tm_mon,
+				NDCommonCString("month").c_str(), pTime->tm_mday,
+				NDCommonCString("day").c_str(), pTime->tm_hour, NDCommonCString("hour").c_str(),
+				pTime->tm_min, NDCommonCString("minute").c_str(), pTime->tm_sec,
+				NDCommonCString("second").c_str());
 		break;
 	case TIME_MINUTE:
 	{
 		sprintf(szOut, "%d%s%d%s%d%s%d%s%d%s", pTime->tm_year,
-				NDCommonCString("year"), pTime->tm_mon,
-				NDCommonCString("month"), pTime->tm_mday,
-				NDCommonCString("day"), pTime->tm_hour, NDCommonCString("hour"),
-				pTime->tm_min, NDCommonCString("minute"));
+				NDCommonCString("year").c_str(), pTime->tm_mon,
+				NDCommonCString("month").c_str(), pTime->tm_mday,
+				NDCommonCString("day").c_str(), pTime->tm_hour, NDCommonCString("hour").c_str(),
+				pTime->tm_min, NDCommonCString("minute").c_str());
 	}
 		break;
 
 	case TIME_HOUR:
 	{
 		sprintf(szOut, "%d%s%d%s%d%s%d%s", pTime->tm_year,
-				NDCommonCString("year"), pTime->tm_mon,
-				NDCommonCString("month"), pTime->tm_mday,
-				NDCommonCString("day"), pTime->tm_hour,
-				NDCommonCString("hour"));
+				NDCommonCString("year").c_str(), pTime->tm_mon,
+				NDCommonCString("month").c_str(), pTime->tm_mday,
+				NDCommonCString("day").c_str(), pTime->tm_hour,
+				NDCommonCString("hour").c_str());
 	}
 		break;
 
 	case TIME_DAY:
 	{
-		sprintf(szOut, "%d%s%d%s%d%s", pTime->tm_year, NDCommonCString("year"),
-				pTime->tm_mon, NDCommonCString("month"), pTime->tm_mday,
-				NDCommonCString("day"));
+		sprintf(szOut, "%d%s%d%s%d%s", pTime->tm_year, NDCommonCString("year").c_str(),
+				pTime->tm_mon, NDCommonCString("month").c_str(), pTime->tm_mday,
+				NDCommonCString("day").c_str());
 	}
 		break;
 
 	case TIME_DAYTIME:
 	{
-		sprintf(szOut, "%d%s%d%s%d%s", pTime->tm_hour, NDCommonCString("hour"),
-				pTime->tm_min, NDCommonCString("minute"), pTime->tm_sec,
-				NDCommonCString("second"));
+		sprintf(szOut, "%d%s%d%s%d%s", pTime->tm_hour, NDCommonCString("hour").c_str(),
+				pTime->tm_min, NDCommonCString("minute").c_str(), pTime->tm_sec,
+				NDCommonCString("second").c_str());
 	}
 		break;
 
 	case TIME_STAMP:
 	{
 		sprintf(szOut, "%d%s%d%s%d%s%d%s%d%s", pTime->tm_mon,
-				NDCommonCString("month"), pTime->tm_mday,
-				NDCommonCString("day"), pTime->tm_hour, NDCommonCString("hour"),
-				pTime->tm_min, NDCommonCString("minute"), pTime->tm_sec,
-				NDCommonCString("second"));
+				NDCommonCString("month").c_str(), pTime->tm_mday,
+				NDCommonCString("day").c_str(), pTime->tm_hour, NDCommonCString("hour").c_str(),
+				pTime->tm_min, NDCommonCString("minute").c_str(), pTime->tm_sec,
+				NDCommonCString("second").c_str());
 	}
 		break;
 

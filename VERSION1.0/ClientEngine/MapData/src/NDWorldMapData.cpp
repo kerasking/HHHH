@@ -375,7 +375,7 @@ void NDWorldMapData::decode(FILE* stream)
 		{ 0 };
 
 		sprintf(imageName, "%so%d.png",
-				NDEngine::NDPath::GetImagePath().c_str(), imageIndex);
+				NDEngine::NDPath::GetImage00Path().c_str(), imageIndex);
 
 		FILE* pkFile = fopen(imageName, "rb");
 		if (pkFile)
