@@ -1451,7 +1451,7 @@ NDUIImage * GenerateIconImage( unsigned int nIconID )
 	{
 		stringstream	ssFile;
 		ssFile << "Res00/StatusIcons" << nFile << ".png";
-		pPicture->Initialization( NDPath::GetImgPath( ssFile.str().c_str()).c_str() );
+		pPicture->Initialization( NDPath::GetImg00Path( ssFile.str().c_str()).c_str() );
 		pPicture->Cut( CCRectMake( (nRow-1)*STATUS_ICON_WIDTH, (nCown-1)*STATUS_ICON_HEIGHT, STATUS_ICON_WIDTH, STATUS_ICON_HEIGHT ) );
 		NDUIImage *		pImage	= new NDUIImage;
 		if ( pImage )

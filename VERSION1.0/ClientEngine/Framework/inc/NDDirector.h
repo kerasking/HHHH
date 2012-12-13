@@ -195,7 +195,7 @@ public:
 	}
 
 	NDScene* GetSceneByTag(int nSceneTag);
-
+	
 	bool IsEnableRetinaDisplay() { return CCEGLView::sharedOpenGLView()->isRetinaEnabled(); }
 
 	void DisibleScissor();
