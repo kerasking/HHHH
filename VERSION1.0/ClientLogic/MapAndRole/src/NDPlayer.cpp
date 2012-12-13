@@ -1024,24 +1024,19 @@ bool NDPlayer::DirectSwitch(int iSwitchCellX, int iSwitchCellY, int iPassIndex)
 
 bool NDPlayer::CanSwitch(int iSwitchCellX, int iSwitchCellY)
 {
-// 	int x = (int(this->GetPosition().x) - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE;
-// 	int y = (int(this->GetPosition().y) - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE;
-// 
-// 	/*
-// 	 if (x == iSwitchCellX && y == iSwitchCellY)
-// 	 {
-// 	 return true;
-// 	 }
-// 	 */
-// 
-// 	if (abs(x - iSwitchCellX) <= 3 && abs(y - iSwitchCellY) <= 3)
-// 	{
-// 		return true;
-// 	}
-// 
-// 	return false;
+ 	int x = (int(this->GetPosition().x) - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE_X;
+ 	int y = (int(this->GetPosition().y) - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE_Y;
+ 
+ 	if (abs(x - iSwitchCellX) <= 3 && abs(y - iSwitchCellY) <= 3)
+ 	{
+ 		return true;
+ 	}
+ 
+ 	return false;
+
 	//++Guosen 2012.8.29//在主城地图上确定两点，这两点连线的右侧是切屏区域//两个主城的判定是一样一样的
-	int iX1 = 2283;
+	#if 0
+int iX1 = 2283;
 	int iY1 = 372;
 	int iX2 = 2596;
 	int iY2 = 582;
@@ -1053,6 +1048,7 @@ bool NDPlayer::CanSwitch(int iSwitchCellX, int iSwitchCellY)
 	if ( iX < this->GetPosition().x-DISPLAY_POS_X_OFFSET )
 		return true;
 	return false;
+#endif
 }
 
 void NDPlayer::processSwitch()

@@ -1386,7 +1386,7 @@ void Fighter::setOnline(bool bOnline)
 	}
 	else
 	{
-		showHoverMsg(NDCommonCString("leave"));
+		showHoverMsg(NDCommonCString("leave").c_str());
 	}
 }
 

@@ -486,7 +486,7 @@ std::string Item::makeCompareItemDes(Item* item, Item* otheritem,
 	if (tempInt1 >= 0 && tempInt1 < NDItemType::PINZHI_LEN() && tempInt2 >= 0
 			&& tempInt2 < NDItemType::PINZHI_LEN())
 	{
-		const char* pszTemp = __NDLOCAL_INNER_C_STRING("Common", "PingZhi");
+		const char* pszTemp = __NDLOCAL_INNER_C_STRING("Common", "PingZhi").c_str();
 
 		sb << NDCommonCString("PingZhi") << ":" << NDItemType::PINZHI(tempInt1)
 				<< "->";
@@ -2808,7 +2808,7 @@ NDEngine::NDUIDialog* Item::makeItemDialog(std::vector<std::string>& vec_str)
 
 	NDUIDialog *dlg = new NDUIDialog;
 	dlg->Initialization();
-	dlg->Show(name.str().c_str(), tempStr.c_str(), NDCommonCString("return"),
+	dlg->Show(name.str().c_str(), tempStr.c_str(), NDCommonCString("return").c_str(),
 			vec_str);
 	return dlg;
 }

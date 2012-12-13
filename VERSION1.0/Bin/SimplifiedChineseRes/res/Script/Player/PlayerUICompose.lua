@@ -340,7 +340,7 @@ function p.Compose()
 	 or formulaEmoney5 > 0 
 	 or formulaEmoney6 > 0 then
 	local needEmoney =  formulaEmoney1 + formulaEmoney2 + formulaEmoney3 + formulaEmoney4 + formulaEmoney5 + formulaEmoney6;
-	CommonDlg.ShowNoPrompt("将花费"..needEmoney.."金币弥补缺失的材料", p.OnCommonDlg,true);
+	CommonDlg.ShowNoPrompt(string.format(GetTxtPri("PLAYER_T10"),needEmoney), p.OnCommonDlg,true);
   else
     MsgCompose.SendComposeAction(formulaID);
   end
@@ -748,9 +748,9 @@ function p.SetPetLeaveText(btn, nPetId)
 	end
 	
 	if RolePetFunc.IsMainPet(nPetId) then
-		btn:SetTitle("伙伴");
+		btn:SetTitle(GetTxtPri("PLAYER_T18"));
 	else
-		btn:SetTitle("离队");
+		btn:SetTitle(GetTxtPri("PLAYER_T19"));
 	end
 end
 

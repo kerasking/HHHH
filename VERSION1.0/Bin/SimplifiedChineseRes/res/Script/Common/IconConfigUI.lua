@@ -135,7 +135,17 @@ function GetPotraitPic(id, configfilename, index, picfilename, w, h, offsetRows,
 	LogInfo("filename=[%s]",filename);
     
 	local pool = _G.DefaultPicPool();
-	local pic = pool:AddPicture(_G.GetSMImgPath("portrait/" .. filename .. ".png"), false);
+    
+    
+	local pic;
+    if(bIsLanguage) then
+        LogInfo("%s %s bIsLanguage true",configfilename,picfilename);
+        pic = pool:AddPicture(_G.GetSMImg00Path("portrait/" .. filename .. ".png"), false);
+    else
+        LogInfo("%s %s bIsLanguage false",configfilename,picfilename);
+        pic = pool:AddPicture(_G.GetSMImgPath("portrait/" .. filename .. ".png"), false);
+    end
+    
 	if not _G.CheckP(pic) then
         LogInfo("pic is null!");
 		return nil;

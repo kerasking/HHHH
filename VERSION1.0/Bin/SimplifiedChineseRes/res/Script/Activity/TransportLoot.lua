@@ -15,11 +15,11 @@ p.LootPlayerLev = 0;
 p.Ctrl = {Btn = {btnClose = 46, btnLoot = 45, btnRefresh = 23, btnCall = 18,},
                Lable = {txtName = 41, txtLev = 18, txtClass = 42, txtIsLoot = 47, txtClass = 19, txtCar = 21, txtRaise = 48, txtAward = 44,},};
                
-p.FoodCar = { {btnId = 11, name = "绿色粮车", isFocus = true},
-                        {btnId = 12, name = "蓝色粮车", isFocus = false},
-                        {btnId = 13, name = "紫色粮车", isFocus = false},
-                        {btnId = 14, name = "金色粮车", isFocus = false},
-                        {btnId = 15, name = "橙色粮车", isFocus = false},};
+p.FoodCar = { {btnId = 11, name = GetTxtPri("TL_T1"), isFocus = true},
+                        {btnId = 12, name = GetTxtPri("TL_T2"), isFocus = false},
+                        {btnId = 13, name = GetTxtPri("TL_T3"), isFocus = false},
+                        {btnId = 14, name = GetTxtPri("TL_T4"), isFocus = false},
+                        {btnId = 15, name = GetTxtPri("TL_T5"), isFocus = false},};
 
 
 
@@ -67,7 +67,7 @@ function p.RefreshUI()
     for i, v in pairs(Transport.tbOtherUserInfo) do
         if v.nPlayerId == p.LootPlayerId then
         	SetLabel(layer, p.Ctrl.Lable.txtName, v.strPlayerName);
-            SetLabel(layer, p.Ctrl.Lable.txtLev, "等级:"..SafeN2S(v.Level));
+            SetLabel(layer, p.Ctrl.Lable.txtLev, GetTxtPub("levels")..":"..SafeN2S(v.Level));
             p.LootPlayerLev = v.Level;
             --获取该玩家被成功拦截次数
             local beLoot = v.nSucBeenLootedNum;
@@ -75,16 +75,16 @@ function p.RefreshUI()
             LogInfo("beLoot = %d, total =%d", beLoot, total);  
             if beLoot < total then
                 p.IsCanBeLoot = true;
-                SetLabel(layer, p.Ctrl.Lable.txtIsLoot, "可以拦截");
+                SetLabel(layer, p.Ctrl.Lable.txtIsLoot, GetTxtPri("TL_T6"));
             else
                 p.IsCanBeLoot = false;
-                SetLabel(layer, p.Ctrl.Lable.txtIsLoot, "该玩家被截光了");
+                SetLabel(layer, p.Ctrl.Lable.txtIsLoot, GetTxtPri("TL_T7"));
             end
             
-            SetLabel(layer, p.Ctrl.Lable.txtClass, "无");
+            SetLabel(layer, p.Ctrl.Lable.txtClass, GetTxtPri("TL_T8"));
             local label = GetLabel(layer, p.Ctrl.Lable.txtRaise);
             label:SetVisible(false);
-            --SetLabel(layer, p.Ctrl.Lable.txtRaise, "无");
+            --SetLabel(layer, p.Ctrl.Lable.txtRaise, GetTxtPri("TL_T8"));
             SetLabel(layer, p.Ctrl.Lable.txtCar, Transport.tbGrainConfig[v.nGrain_config_id].Name);       
             
             local str = p.GetAwardStr(v.nGrain_config_id);    --获取要显示的奖励物品
@@ -113,14 +113,14 @@ function p.GetAwardStr(nIndex)
             num = math.floor(num/10);
             LogInfo("p.GetAwardStr nLev = %d, num = %d", nLev, num);     
         end
-        ShowText = ShowText .."将获得".."银币".."X"..num.."\n";
+        ShowText = string.format(GetTxtPri("TL_T9").."\n",ShowText,num);
     end
     
     if nIndex > 2 then
         --Info = Transport.tbGrainConfig[nIndex - 1];
         --奖励物品
         if (Info.ItemType ~= 0) and  (Info.ItemCount ~= 0) then
-            ShowText = ShowText .."有一定几率获得宝石礼包";
+            ShowText = ShowText ..GetTxtPri("TL_T10");
         end
     end
     
@@ -137,7 +137,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
         elseif (p.Ctrl.Btn.btnLoot == tag) then   --点击拦截按钮
             --判断要拦截的对象是否已经被拦截过两次
             if not p.IsCanBeLoot then
-                CommonDlgNew.ShowYesDlg("该玩家已经被截光了!",nil,nil,3); 
+                CommonDlgNew.ShowYesDlg(GetTxtPri("TL_T11"),nil,nil,3); 
             else
                 --向服务端发送拦截消息
                 MsgTransport.MsgSendLootInfo(MsgTransport.TransportActionType.LOOT, p.LootPlayerId);

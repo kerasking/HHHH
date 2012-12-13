@@ -83,13 +83,13 @@ function p.LoadUI(itemID)
 	 
 	 --不存在公式 
 	if formulaID == 0 then
-		CommonDlgNew.ShowYesDlg("该装备无法升阶！（无对应公式）"..g_ItemTypeId);
+		CommonDlgNew.ShowYesDlg(GetTxtPri("PLAYER_T14")..g_ItemTypeId);
 		return;
 	end
 	
 	--不存在卷子
 	if ItemFunc.GetItemCount(formulaID) <= 0 then
-		CommonDlgNew.ShowYesDlg("无法升阶，缺少卷轴:"..ItemFunc.GetName(formulaID));
+		CommonDlgNew.ShowYesDlg(GetTxtPri("PLAYER_T15")..ItemFunc.GetName(formulaID));
 		return;		
 	end
 	
@@ -267,11 +267,11 @@ function p.GetMatirialList()
 
 
 	local t ={}
-	t[nMaterialId2] = {ItemFunc.GetItemCount(nMaterialId2),nMaterialNum2,"副本掉落"} 
-	t[nMaterialId3] = {ItemFunc.GetItemCount(nMaterialId3),nMaterialNum3,"副本掉落"}
-	t[nMaterialId4] = {ItemFunc.GetItemCount(nMaterialId4),nMaterialNum4,"副本掉落"}
-	t[nMaterialId5] = {ItemFunc.GetItemCount(nMaterialId5),nMaterialNum5,"副本掉落"}
-	t[nMaterialId6] = {ItemFunc.GetItemCount(nMaterialId6),nMaterialNum6,"副本掉落"}
+	t[nMaterialId2] = {ItemFunc.GetItemCount(nMaterialId2),nMaterialNum2,GetTxtPri("PLAYER_T8")} 
+	t[nMaterialId3] = {ItemFunc.GetItemCount(nMaterialId3),nMaterialNum3,GetTxtPri("PLAYER_T8")}
+	t[nMaterialId4] = {ItemFunc.GetItemCount(nMaterialId4),nMaterialNum4,GetTxtPri("PLAYER_T8")}
+	t[nMaterialId5] = {ItemFunc.GetItemCount(nMaterialId5),nMaterialNum5,GetTxtPri("PLAYER_T8")}
+	t[nMaterialId6] = {ItemFunc.GetItemCount(nMaterialId6),nMaterialNum6,GetTxtPri("PLAYER_T8")}
 	
 	return t;
 end
@@ -352,7 +352,7 @@ function p.RefreshComposeInfoLayer()
 	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_32,""..nEquipLevNew );
 	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_33,""..nAdvanceLevNew);
 	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_34,""..nAttackNew 	);
-	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_36,""..nNeedMoney.."银币");
+	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_36,""..nNeedMoney..GetTxtPub("coin"));
 		
 	local l_name = SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_3,""..sItemName 	);
     
@@ -482,7 +482,7 @@ function p.IfUpStepMatrialEnough(nItemtype)
 	 or formulaEmoney5 > 0 
 	 or formulaEmoney6 > 0 then
 	local needEmoney =  formulaEmoney2 + formulaEmoney3 + formulaEmoney4 + formulaEmoney5 + formulaEmoney6;
-	--CommonDlgNew.ShowYesOrNoDlg("将花费"..needEmoney.."金币弥补缺失的材料", p.OnCommonDlg, true);
+	--CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("PLAYER_T10"),needEmoney), p.OnCommonDlg, true);
 		return false;
 	  else
     	--MsgCompose.SendUpstepAction(formulaID,g_ItemId);
@@ -505,7 +505,7 @@ function p.EquipUpStep()
 	--判断银币是否足够
 	local nNeedMoney 		= GetDataBaseDataN("formulatype",formulaID,DB_FORMULATYPE.FEE_MONEY);
 	if  PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_MONEY) < nNeedMoney  then
-		 CommonDlgNew.ShowTipDlg("升阶所需银币不足!"); 
+		 CommonDlgNew.ShowTipDlg(GetTxtPri("PLAYER_T16")); 
 		return;
 	end
 
@@ -514,7 +514,7 @@ function p.EquipUpStep()
     local needEmoney = p.NeedUpsterEMoney(formulaID);
   
     if needEmoney > 0 then
-        CommonDlgNew.ShowYesOrNoDlg("将花费"..needEmoney.."金币弥补缺失的材料", p.OnCommonDlg, true);
+        CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("PLAYER_T10"),needEmoney), p.OnCommonDlg, true);
     else
         MsgCompose.SendUpstepAction(formulaID,g_ItemId);
     end	
@@ -622,7 +622,7 @@ end
 --成功升阶
 function p.SuccGetProduct(nProductType)
 	local scene = GetSMGameScene();
-	CommonDlgNew.ShowYesDlg("制作成功:"..ItemFunc.GetName(nProductType));
+	CommonDlgNew.ShowYesDlg(GetTxtPri("PLAYER_T11")..ItemFunc.GetName(nProductType));
 	
 	--成功音效    
     Music.PlayEffectSound(Music.SoundEffect.EQ_UPSTEP);

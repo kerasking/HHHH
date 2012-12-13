@@ -272,7 +272,7 @@ function p.ConvertIntTimeToString(nBegin, nEnd)
         dayEnd = "0"..dayEnd;
     end
     
-    local time = year.."年"..month.."月"..day.."日".."00:00:00".."---"..yearEnd.."年"..monthEnd.."月"..dayEnd.."日".."23:59:59"
+    local time = year..GetTxtPub("year")..month..GetTxtPub("month")..day..GetTxtPub("day").."00:00:00".."---"..yearEnd..GetTxtPub("year")..monthEnd..GetTxtPub("month")..dayEnd..GetTxtPub("day").."23:59:59"
     return time;
 end
 ---------------------------设置左侧list控件焦点-------------------------------------
@@ -305,7 +305,7 @@ function p.SetLeftListFocus(nIndex)
     end
     SetLabel(layer, p.UiCtr.contText, Info.Content);
     SetLabel(layer, p.UiCtr.broadText, Info.Broad);    
-    SetLabel(layer, p.UiCtr.rightListTitleText, Info.Name .. "金币");     
+    SetLabel(layer, p.UiCtr.rightListTitleText, Info.Name .. GetTxtPub("shoe"));     
 
     local strTime = "";    
     LogInfo("TimeType = %d, InfoType = %d, First = %d, once = %d, total = %d", 
@@ -329,10 +329,10 @@ function p.SetLeftListFocus(nIndex)
         local iEndTime = iBeginTime + Info.BeginTime * 24 * 60 * 60 - 1;  
                     
         local tTime = os.date( "*t", iBeginTime)
-        strTime = strTime .. tTime["year"] .. "年" .. tTime["month"] .. "月" .. tTime["day"] .. "日";
+        strTime = strTime .. tTime["year"] .. GetTxtPub("year") .. tTime["month"] .. GetTxtPub("month") .. tTime["day"] .. GetTxtPub("day");
         strTime = strTime .. tTime["hour"] .. ":" .. tTime["min"] .. ":" .. tTime["sec"];     
         tTime = os.date( "*t", iEndTime)
-        strTime = strTime .. "---"..tTime["year"] .. "年" .. tTime["month"] .. "月" .. tTime["day"] .. "日";
+        strTime = strTime .. "---"..tTime["year"] .. GetTxtPub("year") .. tTime["month"] .. GetTxtPub("month") .. tTime["day"] .. GetTxtPub("day");
         strTime = strTime .. tTime["hour"] .. ":" .. tTime["min"] .. ":" .. tTime["sec"];     
         LogInfo("strTime = %s", strTime);
     end
@@ -408,23 +408,23 @@ function p.SetRightListFocus(nIndex)
     end
     --金币
     if Info.Emoney ~= 0 then
-        ShowText = ShowText .."  ".."金币".."X"..Info.Emoney.."\n";
+        ShowText = ShowText .."  "..GetTxtPub("shoe").."X"..Info.Emoney.."\n";
     end
     --军令
     if Info.Stamina ~= 0 then
-        ShowText = ShowText .."  ".."军令".."X"..Info.Stamina.."\n";
+        ShowText = ShowText .."  "..GetTxtPub("Stamina").."X"..Info.Stamina.."\n";
     end
     --银币
     if Info.Money ~= 0 then
-        ShowText = ShowText .."  ".."银币".."X"..Info.Money.."\n";
+        ShowText = ShowText .."  "..GetTxtPub("coin").."X"..Info.Money.."\n";
     end
     --将魂
     if Info.Soph ~= 0 then
-        ShowText = ShowText .."  ".."将魂".."X"..Info.Soph.."\n";
+        ShowText = ShowText .."  "..GetTxtPub("JianHun").."X"..Info.Soph.."\n";
     end
     --声望
     if Info.Repute ~= 0 then
-        ShowText = ShowText .."  ".."声望".."X"..Info.Repute.."\n";
+        ShowText = ShowText .."  "..GetTxtPub("ShenWan").."X"..Info.Repute.."\n";
     end  
     
     SetLabel(layer, p.UiCtr.awardText, ShowText);

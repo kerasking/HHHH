@@ -188,7 +188,7 @@ function p.SetChatPlayer(playerID,playerName)
 	
 	if CheckP(label) then
 		label:EnableLine(false);
-		label:SetLinkText("正在与<cff0000"..playerName.."/e聊天");
+		label:SetLinkText(string.format(GetTxtPri("CMUI_T8"),playerName));
 	end
 	if nil~=scroll then
 		scroll:RemoveAllChildren(true);

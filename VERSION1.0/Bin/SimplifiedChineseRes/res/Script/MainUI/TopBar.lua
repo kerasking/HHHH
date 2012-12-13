@@ -255,7 +255,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 			end
 		
 			nLev = nLev + 1;
-			CommonDlgNew.ShowTipDlg("升级到"..nLev.."级可接任务。征战副本可提升等级");
+			CommonDlgNew.ShowTipDlg(string.format(GetTxtPri("TB_T1"),nLev));
         end
     end	
 end
@@ -368,7 +368,7 @@ function p.Coinformat(nMoney)
 	end	
 
 	if nWan > 0 then
-		str = str..nWan.."万";
+		str = str..nWan..GetTxtPub("ten");
 	end	
 	
 	if str == "" then

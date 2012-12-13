@@ -46,7 +46,9 @@ function p.LoadUI()
 		LogInfo("scene = nil,2");
 		return  false;
 	end
+	layer:SetPopupDlgFlag(true);
 	layer:Init();
+	layer:bringToTop();
 	layer:SetTag(NMAINSCENECHILDTAG.DynMapGuide);
 	local winsize = GetWinSize();
 	--layer:SetFrameRect(RectUILayer);

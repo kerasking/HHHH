@@ -94,7 +94,7 @@ function p.LoadUI(nStoneId)
 	 local nStoneItemType = Item.GetItemInfoN(nStoneId,Item.ITEM_TYPE);
 	 --不是神石 
 	if Num7(nStoneItemType) ~= 5 then
-		CommonDlgNew.ShowYesDlg("该物品不是万金油！");
+		CommonDlgNew.ShowYesDlg(GetTxtPri("PLAYER_T7"));
 		return;
 	end
 
@@ -277,11 +277,11 @@ function p.GetMatirialList()
 
 
 	local t ={}
-	t[nMaterialId2] = {ItemFunc.GetItemCount(nMaterialId2),nMaterialNum2,"副本掉落"} 
-	t[nMaterialId3] = {ItemFunc.GetItemCount(nMaterialId3),nMaterialNum3,"副本掉落"}
-	t[nMaterialId4] = {ItemFunc.GetItemCount(nMaterialId4),nMaterialNum4,"副本掉落"}
-	t[nMaterialId5] = {ItemFunc.GetItemCount(nMaterialId5),nMaterialNum5,"副本掉落"}
-	t[nMaterialId6] = {ItemFunc.GetItemCount(nMaterialId6),nMaterialNum6,"副本掉落"}
+	t[nMaterialId2] = {ItemFunc.GetItemCount(nMaterialId2),nMaterialNum2,GetTxtPri("PLAYER_T8")} 
+	t[nMaterialId3] = {ItemFunc.GetItemCount(nMaterialId3),nMaterialNum3,GetTxtPri("PLAYER_T8")}
+	t[nMaterialId4] = {ItemFunc.GetItemCount(nMaterialId4),nMaterialNum4,GetTxtPri("PLAYER_T8")}
+	t[nMaterialId5] = {ItemFunc.GetItemCount(nMaterialId5),nMaterialNum5,GetTxtPri("PLAYER_T8")}
+	t[nMaterialId6] = {ItemFunc.GetItemCount(nMaterialId6),nMaterialNum6,GetTxtPri("PLAYER_T8")}
 	
 	return t;
 end
@@ -382,7 +382,7 @@ function p.RefreshComposeInfoLayer()
 	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_32,""..nEquipLevNew );
 	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_33,""..nAdvanceLevNew);
 	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_34,""..nAttackNew 	);
-	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_36,""..nNeedMoney.."银币");
+	SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_36,""..nNeedMoney..GetTxtPub("coin"));
 		
 	local l_name = SetLabel(Infolayer,ID_FOSTER_B_R_CTRL_TEXT_3,""..sItemName 	);
     
@@ -511,7 +511,7 @@ function p.EquipGlid()
    --金钱不足返回提示
    local nNeedMoney 		= GetDataBaseDataN("formulatype",formulaID,DB_FORMULATYPE.FEE_MONEY);
 	if  PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_MONEY) < nNeedMoney  then
-		 CommonDlgNew.ShowTipDlg("神铸所需银币不足!"); 
+		 CommonDlgNew.ShowTipDlg(GetTxtPri("PLAYER_T9")); 
 		return;
 	end
 
@@ -528,7 +528,7 @@ function p.EquipGlid()
 	 or formulaEmoney5 > 0 
 	 or formulaEmoney6 > 0 then
 	local needEmoney =  formulaEmoney1 + formulaEmoney2 + formulaEmoney3 + formulaEmoney4 + formulaEmoney5 + formulaEmoney6;
-	CommonDlg.ShowNoPrompt("将花费"..needEmoney.."金币弥补缺失的材料", p.OnCommonDlg,true);
+	CommonDlg.ShowNoPrompt(string.format(GetTxtPri("PLAYER_T10"),needEmoney), p.OnCommonDlg,true);
   else
     MsgCompose.SendGlidAction(formulaID,g_ItemId);
   end	
@@ -597,7 +597,7 @@ end
 function p.SuccGetProduct(nProductType)
 	local scene = GetSMGameScene();
 	p.initData();
-	CommonDlgNew.ShowYesDlg("制作成功:"..ItemFunc.GetName(nProductType));
+	CommonDlgNew.ShowYesDlg(GetTxtPri("PLAYER_T11")..ItemFunc.GetName(nProductType));
 	scene:RemoveChildByTag(NMAINSCENECHILDTAG.PlayerEquipGlidUI, true);
 	
     if(IsUIShow(NMAINSCENECHILDTAG.PlayerBackBag)) then
@@ -776,8 +776,8 @@ function p.refreshEquipInfoListItem(clientLayer,view,equipId)
     --set level
     local equipLv = Item.GetItemInfoN(equipId, Item.ITEM_ADDITION);
     local name = GetLabel(view, TAG_EQUIP_LEVEL);
-    local lv = "强化"..equipLv;
-    lv=lv.."级";
+    local lv = GetTxtPub("QiangHua")..equipLv;
+    lv=lv..GetTxtPub("Level");
     name:SetText(lv);
     
     local btn = GetButton(view, TAG_EQUIP_BUTTON);
@@ -802,9 +802,9 @@ function p.OnUIEventSelectEquipBtn(uiNode, uiEventType, param)
 
  	local reqLev = GetDataBaseDataN("itemtype", g_ItemTypeId, DB_ITEMTYPE.REQ_LEVEL);
 	if reqLev <  100 then
-		CommonDlgNew.ShowTipDlg("该装备无法神铸，只有100级以上装备才可以神铸！");
+		CommonDlgNew.ShowTipDlg(GetTxtPri("PLAYER_T12"));
 	elseif 	formulaID == 0 then
-		CommonDlgNew.ShowTipDlg("该物品无法神铸！");
+		CommonDlgNew.ShowTipDlg(GetTxtPri("PLAYER_T13"));
 	end
 	
 		
@@ -912,7 +912,7 @@ end
 function p.refreshPetInfoListItem(view,nPetId)
     local labelName = GetLabel(view, TAG_PET_NAME);
     if(nPetId == 0) then
-        labelName:SetText("背包");
+        labelName:SetText(GetTxtPub("bag"));
     else
         local strPetName = ConvertS(RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_NAME));
         labelName:SetText(strPetName);

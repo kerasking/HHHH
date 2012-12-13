@@ -398,9 +398,9 @@ function p.showItemInfoDlg(nBossId, nAim)
 	layer:RemoveChildByTag(TagTip, true);
 	local str = "";
 	if (nAim == TagAim_MATERIAL) then
-		str = "材料掉落地"
+		str = GetTxtPri("TPL2_T1")
 	elseif (nAim == TagAim_TASK) then
-		str = "当前任务副本"
+		str = GetTxtPri("TPL2_T2")
 	else
 	  return;
 	end
@@ -522,7 +522,7 @@ function p.refreshTitle()
 	local layer = p.getUiLayer();
 	local titleV = GetLabel(layer, p.TagTitle);
 	local name = AffixBossFunc.findName(p.mParentMap);
-	local title = "精英副本"
+	local title = GetTxtPri("TPL2_T3")
 	
 	local curpage = p.mCurrentPage or 1;
 	if (p.mCount and p.mCount > p.PerPageSize) then 
@@ -864,9 +864,9 @@ local rtn = nil;
 	local pool = DefaultPicPool();
 	
 	if (nTyp == TagAim_MATERIAL) then
-		rtn = pool:AddPicture(GetSMImgPath("Material_Drop_Copy.png"), false)
+		rtn = pool:AddPicture(GetSMImg00Path("Material_Drop_Copy.png"), false)
 	elseif (nTyp == TagAim_TASK) then
-		rtn = pool:AddPicture(GetSMImgPath("Current_Task_Copy.png"), false)
+		rtn = pool:AddPicture(GetSMImg00Path("Current_Task_Copy.png"), false)
 	end
 	
 	return rtn;

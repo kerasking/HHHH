@@ -43,7 +43,7 @@ public:
 public:
 	bool LoadData();
 
-	const char* GetCString(const char* szKeyName);
+	const string GetCString(const string szKeyName);
 	
 private:
 	bool readLines( vector<string>& vecLines );

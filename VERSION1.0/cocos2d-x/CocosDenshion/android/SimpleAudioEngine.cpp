@@ -1,26 +1,26 @@
 /****************************************************************************
-Copyright (c) 2010 cocos2d-x.org
+ Copyright (c) 2010 cocos2d-x.org
 
-http://www.cocos2d-x.org
+ http://www.cocos2d-x.org
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 
 #include "SimpleAudioEngine.h"
 #include "jni/SimpleAudioEngineJni.h"
@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include <jni.h>
 
 #define  I9100_MODEL "GT-I9100"
-#define  LOG_TAG     "Device Model"
+#define  LOG_TAG     "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 
 static bool s_bI9100 = false;
@@ -45,102 +45,109 @@ static bool s_bI9100 = false;
 
 typedef struct JniMethodInfo_
 {
-	JNIEnv *    env;
-	jclass      classID;
-	jmethodID   methodID;
+	JNIEnv * env;
+	jclass classID;
+	jmethodID methodID;
 } JniMethodInfo;
 
-extern "C" {
-	static JNIEnv* getJNIEnv(void)
-	{
+extern "C"
+{
+static JNIEnv* getJNIEnv(void)
+{
 
-		JavaVM* jvm = cocos2d::JniHelper::getJavaVM();
-		if (NULL == jvm) {
-			LOGD("Failed to get JNIEnv. JniHelper::getJavaVM() is NULL");
+	JavaVM* jvm = cocos2d::JniHelper::getJavaVM();
+	if (NULL == jvm)
+	{
+		LOGD("Failed to get JNIEnv. JniHelper::getJavaVM() is NULL");
+		return NULL;
+	}
+
+	JNIEnv *env = NULL;
+	// get jni environment
+	jint ret = jvm->GetEnv((void**) &env, JNI_VERSION_1_4);
+
+	switch (ret)
+	{
+	case JNI_OK:
+		// Success!
+		return env;
+
+	case JNI_EDETACHED:
+		// Thread not attached
+
+		// TODO : If calling AttachCurrentThread() on a native thread
+		// must call DetachCurrentThread() in future.
+		// see: http://developer.android.com/guide/practices/design/jni.html
+
+		if (jvm->AttachCurrentThread(&env, NULL) < 0)
+		{
+			LOGD("Failed to get the environment using AttachCurrentThread()");
 			return NULL;
 		}
-
-		JNIEnv *env = NULL;
-		// get jni environment
-		jint ret = jvm->GetEnv((void**)&env, JNI_VERSION_1_4);
-
-		switch (ret) {
-		case JNI_OK :
-			// Success!
+		else
+		{
+			// Success : Attached and obtained JNIEnv!
 			return env;
-
-		case JNI_EDETACHED :
-			// Thread not attached
-
-			// TODO : If calling AttachCurrentThread() on a native thread
-			// must call DetachCurrentThread() in future.
-			// see: http://developer.android.com/guide/practices/design/jni.html
-
-			if (jvm->AttachCurrentThread(&env, NULL) < 0)
-			{
-				LOGD("Failed to get the environment using AttachCurrentThread()");
-				return NULL;
-			} else {
-				// Success : Attached and obtained JNIEnv!
-				return env;
-			}
-
-		case JNI_EVERSION :
-			// Cannot recover from this error
-			LOGD("JNI interface version 1.4 not supported");
-		default :
-			LOGD("Failed to get the environment using GetEnv()");
-			return NULL;
-		}
-	}
-
-	static jclass getClassID(JNIEnv *pEnv)
-	{
-		jclass ret = pEnv->FindClass(CLASS_NAME);
-		if (! ret)
-		{
-			LOGD("Failed to find class of %s", CLASS_NAME);
 		}
 
-		return ret;
+	case JNI_EVERSION:
+		// Cannot recover from this error
+		LOGD("JNI interface version 1.4 not supported");
+	default:
+		LOGD("Failed to get the environment using GetEnv()");
+		return NULL;
 	}
+}
 
-	static bool getStaticMethodInfo(JniMethodInfo &methodinfo, const char *methodName, const char *paramCode)
+static jclass getClassID(JNIEnv *pEnv)
+{
+	jclass ret = pEnv->FindClass(CLASS_NAME);
+	if (!ret)
 	{
-		jmethodID methodID = 0;
-		JNIEnv *pEnv = 0;
-		bool bRet = false;
-
-		do 
-		{
-			pEnv = getJNIEnv();
-			if (! pEnv)
-			{
-				break;
-			}
-
-			jclass classID = getClassID(pEnv);
-
-			methodID = pEnv->GetStaticMethodID(classID, methodName, paramCode);
-			if (! methodID)
-			{
-				LOGD("Failed to find static method id of %s", methodName);
-				break;
-			}
-
-			methodinfo.classID = classID;
-			methodinfo.env = pEnv;
-			methodinfo.methodID = methodID;
-
-			bRet = true;
-		} while (0);
-
-		return bRet;
+		LOGD("Failed to find class of %s", CLASS_NAME);
 	}
-};
 
+	return ret;
+}
 
-namespace CocosDenshion {
+static bool getStaticMethodInfo(JniMethodInfo &methodinfo,
+		const char *methodName, const char *paramCode)
+{
+	jmethodID methodID = 0;
+	JNIEnv *pEnv = 0;
+	bool bRet = false;
+
+	do
+	{
+		pEnv = getJNIEnv();
+		if (!pEnv)
+		{
+			break;
+		}
+
+		jclass classID = getClassID(pEnv);
+
+		methodID = pEnv->GetStaticMethodID(classID, methodName, paramCode);
+		if (!methodID)
+		{
+			LOGD("Failed to find static method id of %s", methodName);
+			break;
+		}
+
+		methodinfo.classID = classID;
+		methodinfo.env = pEnv;
+		methodinfo.methodID = methodID;
+
+		bRet = true;
+	} while (0);
+
+	return bRet;
+}
+}
+;
+
+namespace CocosDenshion
+{
 
 static SimpleAudioEngine *s_pEngine = 0;
 
@@ -150,10 +157,11 @@ SimpleAudioEngine::SimpleAudioEngine()
 	jstring jstr;
 	if (getStaticMethodInfo(methodInfo, METHOD_NAME, "()Ljava/lang/String;"))
 	{
-		jstr = (jstring)methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID);
+		jstr = (jstring) methodInfo.env->CallStaticObjectMethod(
+				methodInfo.classID, methodInfo.methodID);
 	}
 	methodInfo.env->DeleteLocalRef(methodInfo.classID);
-	
+
 	const char* deviceModel = methodInfo.env->GetStringUTFChars(jstr, NULL);
 	methodInfo.env->ReleaseStringUTFChars(jstr, deviceModel);
 	methodInfo.env->DeleteLocalRef(jstr);
@@ -177,12 +185,12 @@ SimpleAudioEngine::~SimpleAudioEngine()
 
 SimpleAudioEngine* SimpleAudioEngine::sharedEngine()
 {
-    if (! s_pEngine)
-    {
-        s_pEngine = new SimpleAudioEngine();
-    }
-    
-    return s_pEngine;
+	if (!s_pEngine)
+	{
+		s_pEngine = new SimpleAudioEngine();
+	}
+
+	return s_pEngine;
 }
 
 void SimpleAudioEngine::end()
@@ -199,52 +207,53 @@ void SimpleAudioEngine::end()
 
 void SimpleAudioEngine::preloadBackgroundMusic(const char* pszFilePath)
 {
-    preloadBackgroundMusicJNI(pszFilePath);
+	preloadBackgroundMusicJNI(pszFilePath);
 }
 
 void SimpleAudioEngine::playBackgroundMusic(const char* pszFilePath, bool bLoop)
 {
-    playBackgroundMusicJNI(pszFilePath, bLoop);
+	LOGD("Play background music,file is %s", pszFilePath);
+	playBackgroundMusicJNI(pszFilePath, bLoop);
 }
 
 void SimpleAudioEngine::stopBackgroundMusic(bool bReleaseData)
 {
-    stopBackgroundMusicJNI();
+	stopBackgroundMusicJNI();
 }
 
 void SimpleAudioEngine::pauseBackgroundMusic()
 {
-    pauseBackgroundMusicJNI();
+	pauseBackgroundMusicJNI();
 }
 
 void SimpleAudioEngine::resumeBackgroundMusic()
 {
-    resumeBackgroundMusicJNI();
-} 
+	resumeBackgroundMusicJNI();
+}
 
 void SimpleAudioEngine::rewindBackgroundMusic()
 {
-    rewindBackgroundMusicJNI();
+	rewindBackgroundMusicJNI();
 }
 
 bool SimpleAudioEngine::willPlayBackgroundMusic()
 {
-    return true;
+	return true;
 }
 
 bool SimpleAudioEngine::isBackgroundMusicPlaying()
 {
-    return isBackgroundMusicPlayingJNI();
+	return isBackgroundMusicPlayingJNI();
 }
 
 float SimpleAudioEngine::getBackgroundMusicVolume()
 {
-    return getBackgroundMusicVolumeJNI();
+	return getBackgroundMusicVolumeJNI();
 }
 
 void SimpleAudioEngine::setBackgroundMusicVolume(float volume)
 {
-    setBackgroundMusicVolumeJNI(volume);
+	setBackgroundMusicVolumeJNI(volume);
 }
 
 float SimpleAudioEngine::getEffectsVolume()
@@ -273,11 +282,14 @@ void SimpleAudioEngine::setEffectsVolume(float volume)
 
 unsigned int SimpleAudioEngine::playEffect(const char* pszFilePath, bool bLoop)
 {
+	LOGD("Play Effect sound,file is %s", pszFilePath);
+
 	if (s_bI9100)
 	{
-		return SimpleAudioEngineOpenSL::sharedEngine()->playEffect(pszFilePath, bLoop);
+		return SimpleAudioEngineOpenSL::sharedEngine()->playEffect(pszFilePath,
+				bLoop);
 	}
-	else 
+	else
 	{
 		return playEffectJNI(pszFilePath, bLoop);
 	}

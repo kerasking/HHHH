@@ -10,8 +10,8 @@ local p = Login_ServerUI;
 p.curSel=0;
 p.Account=nil;
 p.Pwd="";
---p.UIN=319258246; 
-p.UIN=317007835;
+p.UIN=319258246; 
+--p.UIN=317007835;
 
 p.LoginWait = true;
 p.SerName = "";
@@ -293,7 +293,7 @@ function p.refreshServerListItem(view,i)
         local sRoleInfo = string.format("%s %s %d级",rInfo.sRoleName,RolePetFunc.GetJobDesc(rInfo.nProfession),rInfo.nLevel);
         SetLabel(view, TAG_CONTAINER_ROLE, sRoleInfo);
     else
-        SetLabel(view, TAG_CONTAINER_ROLE, "无角色");
+        SetLabel(view, TAG_CONTAINER_ROLE, GetTxtPri("LSUI_T1"));
     end
     
     local btn = GetButton(view, TAG_CONTAINER_BTN);

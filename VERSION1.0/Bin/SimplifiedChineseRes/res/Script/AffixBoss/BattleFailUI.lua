@@ -51,7 +51,7 @@ function p.LoadUI()
 
     --失败音效
     Music.PlayEffectSound(1093);
- 	CommonDlgNew.ShowTipDlg("请强化装备或切换技能后再挑战!");   
+ 	CommonDlgNew.ShowTipDlg(GetTxtPri("BFU_T1"));   
     GameDataEvent.OnEvent(GAMEDATAEVENT.BATTLE_LOSE_INFO, 0);
 end
 

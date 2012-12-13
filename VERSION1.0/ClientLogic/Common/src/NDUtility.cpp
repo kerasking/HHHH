@@ -300,7 +300,7 @@ void showDialog(const char* title, const char* content)
 
 void showDialog(const char* content)
 {
-	showDialog(NDCommonCString("error"), content);
+	showDialog(NDCommonCString("error").c_str(), content);
 }
 
 // 退出游戏,返回主界面时统一做释放及各模块初始化操作

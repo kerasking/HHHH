@@ -364,7 +364,7 @@ local scene = GetSMGameScene();
 	local pool = DefaultPicPool();
 	
 	for i,v in pairs(tStarPicINI) do
-		local picName = pool:AddPicture(GetSMImgPath("talent/title_talent1.png"), false);	
+		local picName = pool:AddPicture(GetSMImg00Path("talent/title_talent1.png"), false);	
 		
 		
 		picName:Cut(CGRectMake(0.0,60*(tStarTitleInd[i]-1),100.0, 60.0 ));
@@ -537,10 +537,10 @@ function p.GetHeroStarBuff()
 	for nAttrType,nVal in pairs(tAttrAll) do
 		if nVal > 0 then
 			nVal = nVal/1000;
-			strMainPet = strMainPet.."\n"..HeroStar.GetAttrName(nAttrType).."加成+"..nVal.."";
+			strMainPet = strMainPet.."\n"..HeroStar.GetAttrName(nAttrType)..GetTxtPri("HS_T32")..nVal.."";
 		elseif nVal <0 then
 			nVal = nVal/1000;
-			strMainPet = strMainPet.."\n"..HeroStar.GetAttrName(nAttrType).."减成-"..nVal.."";
+			strMainPet = strMainPet.."\n"..HeroStar.GetAttrName(nAttrType)..GetTxtPri("HS_T33")..nVal.."";
 		end
 	end
 	
@@ -719,7 +719,7 @@ function p.RefreshStarInfo()
 		
 		Soultxt:SetText("   "..GetRoleBasicDataN(nRoleId, USER_ATTR.USER_ATTR_SOPH));
 		
-		sShowText = "需要将魂:  "..nSoulNeed;--.."\n等级需求:  "..nLevNeed;
+		sShowText = GetTxtPri("HS_T34")..nSoulNeed;--.."\n"..GetTxtPri("HS_T35")..nLevNeed;
 		
 		
 		if sAttrDesc1 ~= nil  then
@@ -740,7 +740,7 @@ function p.RefreshStarInfo()
 		
 		if nStationeff >=1 and nStationeff <= 5 then
 			
-			local sStationDesc =  HeroStar.GetStationBuffDesc(nStationeff).."增加"..(nEffVal/1000).."";
+			local sStationDesc =  HeroStar.GetStationBuffDesc(nStationeff)..GetTxtPri("HS_T36")..(nEffVal/1000).."";
 			sShowText = sShowText.."\n"..sStationDesc;
 			
 			
@@ -764,7 +764,7 @@ function p.RefreshStarInfo()
 		Infotxt:SetText(sShowText);
 
 	else
-		Soultxt:SetText("将魂:"..GetRoleBasicDataN(nRoleId, USER_ATTR.USER_ATTR_SOPH));	
+		Soultxt:SetText(GetTxtPri("HS_T37")..GetRoleBasicDataN(nRoleId, USER_ATTR.USER_ATTR_SOPH));	
 	end
 end
 
@@ -820,7 +820,7 @@ function p.GetAttrDescByStar(nGrade,nLev)
 		
 		if nStationeff >=1 and nStationeff <= 5 then
 			
-			local sStationDesc =  HeroStar.GetStationBuffDesc(nStationeff).."增加"..(nEffVal/1000).."";
+			local sStationDesc =  HeroStar.GetStationBuffDesc(nStationeff)..GetTxtPri("HS_T36")..(nEffVal/1000).."";
 			sShowText = sShowText.."\n"..sStationDesc;
 			
 			
@@ -832,7 +832,7 @@ function p.GetAttrDescByStar(nGrade,nLev)
 			--sAttr1 = sAttrDesc1..nAttr1;
 			local sSkilldesc = GetDataBaseDataS("skill_config",nSkillId,DB_SKILL_CONFIG.NAME);
 			if sSkilldesc ~= nil then
-				sShowText = sShowText.."\n开启技能:"..sSkilldesc;
+				sShowText = sShowText.."\n"..GetTxtPri("HS_T38")..sSkilldesc;
 				
 			else
 				--LogInfo("sSkilldesc nil  nSkillId:"..nSkillId);
@@ -865,7 +865,7 @@ function p.GetSkillDescByStar(nGrade,nLev)
 		if nSkillId ~= nil and nSkillId ~= 0 then
 			local sSkilldesc = GetDataBaseDataS("skill_config",nSkillId,DB_SKILL_CONFIG.NAME);
 			if sSkilldesc ~= nil then
-				sShowText = "开启技能:"..sSkilldesc;
+				sShowText = GetTxtPri("HS_T38")..sSkilldesc;
 			end
 		end		
 		 
@@ -938,7 +938,7 @@ function p.LightStar()
 	--已经是点亮的星星	
 	if  g_Lev <= lev then
 		--LogInfo("already light star! return")
-		CommonDlgNew.ShowYesDlg("这是已经学习过的将星点！");
+		CommonDlgNew.ShowYesDlg(GetTxtPri("HS_T39"));
 		return;
 	end
 
@@ -956,7 +956,7 @@ function p.LightStar()
 	
 	
 	if nSoul < nSoulNeed then
-		CommonDlgNew.ShowYesDlg("将魂不足 无法升级！");
+		CommonDlgNew.ShowYesDlg(GetTxtPri("HS_T40"));
 		return;
 	end
 	
@@ -966,13 +966,13 @@ function p.LightStar()
 	local mainpetid 	= RolePetUser.GetMainPetId(nRoleId);
 	local nLevPlayer	= SafeS2N(RolePetFunc.GetPropDesc(mainpetid, PET_ATTR.PET_ATTR_LEVEL));
 	if nLevPlayer < nLevNeed then
-		CommonDlgNew.ShowYesDlg("等级不足 无法升级！");
+		CommonDlgNew.ShowYesDlg(GetTxtPri("HS_T41"));
 		return;
 	end
 
 
 	if g_Grade ~= nextGrade or  g_Lev ~= nextLev then
-		CommonDlgNew.ShowYesDlg("请先点击前置将星点！");
+		CommonDlgNew.ShowYesDlg(GetTxtPri("HS_T42"));
 		return;
 	end
 --]]

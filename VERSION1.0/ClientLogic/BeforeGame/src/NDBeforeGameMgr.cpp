@@ -554,7 +554,7 @@ void NDBeforeGameMgr::RegiserCallBack(int errCode, std::string strtip)/* errCode
 	SetUserName("");
 	SetPassWord("");
 
-	showDialog(NDCommonCString("tip"), strtip.c_str());
+	showDialog(NDCommonCString("tip").c_str(), strtip.c_str());
 
 	//NDDirector::DefaultDirector()->ReplaceScene(RegisterAccountScene::Scene());
 }
@@ -936,11 +936,11 @@ void NDBeforeGameMgr::processNotify(NDTransData* data, int len)
 			m_dlgWait = new NDUIDialog;
 			m_dlgWait->Initialization();
 			m_dlgWait->SetDelegate(this);
-			m_dlgWait->Show(NDCommonCString("LoginTip"),
+			m_dlgWait->Show(NDCommonCString("LoginTip").c_str(),
 					ss.str().empty() ?
-							NDCommonCString("WaitServerDeal") :
-							ss.str().c_str(), NDCommonCString("quit"),
-					NDCommonCString("ContinueWait"), NULL);
+							NDCommonCString("WaitServerDeal").c_str() :
+							ss.str().c_str(), NDCommonCString("quit").c_str(),
+					NDCommonCString("ContinueWait").c_str(), NULL);
 		}
 			break;
 		default: // µÇÂ¼<ÓÎÏ·>·þÎñÆ÷Ê§°Ü
@@ -1076,7 +1076,7 @@ void NDBeforeGameMgr::processNotifyClient(NDTransData* data, int len)
 
 	NDUIDialog *dialog = new NDUIDialog;
 	dialog->Initialization();
-	dialog->Show(NDCommonCString("tip"), strTip.c_str(), NULL, NULL);
+	dialog->Show(NDCommonCString("tip").c_str(), strTip.c_str(), NULL, NULL);
 	NDUISynLayer::Close (SYN_CREATE_ROLE);
 }
 

@@ -84,7 +84,7 @@ function TASK_FUNCTION_COMMON(nTaskId)
 			
 			
 		else
-			AddOpt("<cffff00完成任务/e", SM_TASK_OPTION_ACTION.FINISH);
+			AddOpt(GetTxtPri("TASK_T1"), SM_TASK_OPTION_ACTION.FINISH);
 		end
 			
 		return true;
@@ -116,7 +116,7 @@ function TASK_OPTION_COMMON(nTaskId, nAction)
 				_G.type(TaskConfig[nTaskId]["TASKCONTENT2"]) == "string" then
 				SetContent(TaskContentFormat(TaskConfig[nTaskId]["TASKCONTENT2"]));
 				SetTaskAward(GetTaskPrize(nTaskId));
-				AddOpt("<cffff00接受任务/e", SM_TASK_OPTION_ACTION.ACCEPT);
+				AddOpt(GetTxtPri("TASK_T2"), SM_TASK_OPTION_ACTION.ACCEPT);
 			else
 				AcceptTask(nTaskId);
 				CloseDlg();	

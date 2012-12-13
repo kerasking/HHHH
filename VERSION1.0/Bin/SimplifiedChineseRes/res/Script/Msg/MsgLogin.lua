@@ -48,36 +48,36 @@ LogInfo("未创建角色，需要创建角色!");
         --Login_ActAndServerUI.LoadUI();
     LogInfo("登录<游戏>服务器成功!");
     elseif ID_CHILED_ACTION_LOGIN_GAME_FAILED ==code then-- 登录<游戏>服务器失败
-        CommonDlgNew.ShowTipDlg("登录<游戏>服务器失败!");
+        CommonDlgNew.ShowTipDlg(GetTxtPri("ML_T1"));
         --Login_ServerUI.LoadUI();
     elseif ID_CHILED_ACTION_LOGIN_ACTSRV_FAILED==code then--连接<帐号>服务器失败
-        CommonDlgNew.ShowTipDlg("连接<帐号>服务器失败!");
+        CommonDlgNew.ShowTipDlg(GetTxtPri("ML_T2"));
         --Login_ServerUI.LoadUI();
     elseif ID_CHILED_ACTION_CONNECT_SERVER_FAILED==code then-- 连接<游戏>服务器失败
         --Login_ActAndServerUI.LoadUI();
-        CommonDlgNew.ShowTipDlg("连接<游戏>服务器失败!");
+        CommonDlgNew.ShowTipDlg(GetTxtPri("ML_T1"));
         --Login_ServerUI.LoadUI();
     elseif ID_CHILED_ACTION_LOGIN_ACTSRV_OVER_TIME==code then--登录<帐号>服务器超时
         --Login_ActAndServerUI.LoadUI();
-        CommonDlgNew.ShowTipDlg("登录<帐号>服务器超时!");
+        CommonDlgNew.ShowTipDlg(GetTxtPri("ML_T4"));
         --Login_ServerUI.LoadUI();
     elseif ID_CHILED_ACTION_LOGIN_SERVER_OVER_TIME==code then--// 登录<游戏>服务器超时
         --Login_ActAndServerUI.LoadUI();
-        CommonDlgNew.ShowTipDlg("登录<游戏>服务器超时!");
+        CommonDlgNew.ShowTipDlg(GetTxtPri("ML_T3"));
         --Login_ServerUI.LoadUI();
         
     elseif ID_CHILED_ACTION_LOGIN_GATE_OVER_TIME==code then--// <代理服务器>繁忙
         --Login_ActAndServerUI.LoadUI();
-        CommonDlgNew.ShowTipDlg("<代理服务器>繁忙!");
+        CommonDlgNew.ShowTipDlg(GetTxtPri("ML_T5"));
         --Login_ServerUI.LoadUI();
     elseif ID_CHILED_ACTION_LOGIN_SERVER_FULL==code then-- <代理服务器>已达到人数上限
         --Login_ActAndServerUI.LoadUI();
-        CommonDlgNew.ShowTipDlg("<代理服务器>已达到人数上限!");
+        CommonDlgNew.ShowTipDlg(GetTxtPri("ML_T6"));
         --Login_ServerUI.LoadUI();
     else
         --系统错误
         --Login_ActAndServerUI.LoadUI();
-        CommonDlgNew.ShowTipDlg("系统错误!");
+        CommonDlgNew.ShowTipDlg(GetTxtPri("ML_T7"));
         --Login_ServerUI.LoadUI();
     end
     
@@ -101,10 +101,10 @@ function p.ProcessNotifyClient(netdata)
     if ret == 0 then
         ---0：创建失败 1：创建成功 2：人物名已存在 3：人物名不合法
         --g_Create_Role_Reason = 1;
-        LogInfo("创建失败!");
+        LogInfo(GetTxtPri("ML_T8"));
         --Login_RegRoleUI.LoadUI();
         
-        CommonDlgNew.ShowTipDlg("创建失败!",2);
+        CommonDlgNew.ShowTipDlg(GetTxtPri("ML_T8"),2);
     elseif ret == 1 then
         --NDLog(@"创建成功");
         LogInfo("创建成功!");
@@ -123,13 +123,13 @@ function p.ProcessNotifyClient(netdata)
         --g_Create_Role_Reason = 1;
         --Login_RegRoleUI.LoadUI();
         LogInfo("重名!");
-        CommonDlgNew.ShowTipDlg("名称已存在!",2);
+        CommonDlgNew.ShowTipDlg(GetTxtPri("ML_T9"),2);
     elseif ret == 3 then
         --名字非法
         --g_Create_Role_Reason = 1;
         --Login_RegRoleUI.LoadUI();
         LogInfo("名字非法!");
-        CommonDlgNew.ShowTipDlg("名字非法!",2);
+        CommonDlgNew.ShowTipDlg(GetTxtPri("ML_T10"),2);
     end
     return true
 end

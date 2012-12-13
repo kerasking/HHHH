@@ -76,7 +76,7 @@ void GameSceneLoading::Initialization(bool connect/*=false*/, LoginType login/*=
 	NDUIImage* imgBack	= new NDUIImage;
 	imgBack->Initialization();
 	imgBack->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
-    NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture( NDPath::GetImgPath("Res00/Load/bg_load.png") );
+    NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture( NDPath::GetImg00Path("Res00/Load/bg_load.png") );
     if (pic) 
 	{
         //pic->Rotation(PictureRotation270);//--Guosem 2012.8.14 用资源目录下的图不旋转了
@@ -210,7 +210,7 @@ void GameSceneLoading::DealNet()
 void GameSceneLoading::CheckVersionSucess()
 {
 	if (m_lbTitle)
-		m_lbTitle->SetText(NDCommonCString("ConnectingServer"));
+		m_lbTitle->SetText(NDCommonCString("ConnectingServer").c_str());
 	
 	DealNet();
 }

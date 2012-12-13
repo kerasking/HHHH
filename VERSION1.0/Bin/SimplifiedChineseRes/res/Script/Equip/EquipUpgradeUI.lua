@@ -203,7 +203,7 @@ function p.LoadUI(page)
 		return false;
 	end
 	
-	layer:SetPopupDlgFlag( true );
+	--layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.EquipUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
@@ -846,7 +846,7 @@ function p.AddPetEquipItem(petId)
         for j, v in ipairs(equipIdList) do
             local equipId = equipIdList[j];
             local view = createUIScrollViewM();
-            view:SetPopupDlgFlag(true);
+            --view:SetPopupDlgFlag(true);
             view:Init(false);
             view:SetViewId(equipId);
             
@@ -1006,7 +1006,7 @@ end
 function p.refreshPetInfoListItem(view,nPetId)
     local labelName = GetLabel(view, TAG_PET_NAME);
     if(nPetId == 0) then
-        labelName:SetText("背包");
+        labelName:SetText(GetTxtPub("bag"));
     else
         local strPetName = ConvertS(RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_NAME));
         labelName:SetText(strPetName);
@@ -1780,7 +1780,7 @@ function p.LoadGemPageView()
 			LogInfo("p.LoadUI createUIScrollView failed");
 			return;
 		end
-		view:SetPopupDlgFlag(true);
+		--view:SetPopupDlgFlag(true);
 		view:Init(false);
 		view:SetViewId(i);
 		container:AddView(view);
@@ -1821,7 +1821,7 @@ function p.LoadGemBagView()
 			LogInfo("p.LoadUI createUIScrollView failed");
 			return;
 		end
-		view:SetPopupDlgFlag(true);
+		--view:SetPopupDlgFlag(true);
 		view:Init(false);
 		view:SetViewId(i);
 		container:AddView(view);

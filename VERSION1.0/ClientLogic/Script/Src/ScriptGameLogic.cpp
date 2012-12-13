@@ -319,6 +319,20 @@ std::string GetSMImgPath(const char* name) //@lua
 
 	return NDPath::GetSMImgPath(name);
 }
+
+std::string GetSMImg00Path(const char* name) 
+{
+	if (!name)
+	{
+		return "";
+	}
+
+	return NDPath::GetSMImg00Path(name);
+}
+
+
+
+
 std::string GetImgResPath(const char* name) //@lua
 {
 	if (!name)
@@ -875,6 +889,7 @@ void ScriptGameLogicLoad()
 	ETCFUNC("GetImgResPath", GetImgResPath);
 	ETCFUNC("GetAniResPath", GetAniResPath);
 	ETCFUNC("GetSMImgPath", GetSMImgPath);
+	ETCFUNC("GetSMImg00Path", GetSMImg00Path);
 	ETCFUNC("GetSMResPath", GetSMResPath);
 	ETCFUNC("GetMapLayer", GetMapLayer);
 	ETCFUNC("restartLastBattle", restartLastBattle);

@@ -34,7 +34,7 @@ function p.ProcessProFeedback(netdatas)
 	end
 	--scene:RemoveChildByTag(NMAINSCENECHILDTAG.ProblemUI, true);
 	--CommonDlg.ShowTipInfo("提示", "提交成功，感谢您的反馈！", nil, 2);
-	CommonDlgNew.ShowYesDlg( "提交成功，感谢您的反馈！", nil, nil, 2);
+	CommonDlgNew.ShowYesDlg( GetTxtPri("MPFB_T1"), nil, nil, 2);
 	
 	_G.MsgProFeedback.CheckProFeedback();
 									  

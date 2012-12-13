@@ -19,11 +19,11 @@ p.FoodCar = { {btnId = 11,  isFocus = true},
                         {btnId = 14,  isFocus = false},
                         {btnId = 15,  isFocus = false},};
                         
-p.CarPrompt = { [1] = "破旧的木板小车,只能运送很少粮草,可获得奖励:",
-                            [2] = "精铁打造的货车,运送少量粮草,可获得奖励:",
-                            [3] = "采用稀有紫铜打造,载重量较大,可获得奖励:",
-                            [4] = "诸葛制造,你懂得!可获得奖励:",
-                            [5] = "超豪华木牛流马升级版!运送大量粮草,可获得奖励:",};                        
+p.CarPrompt = { [1] = GetTxtPri("TPP_T1"),
+                            [2] = GetTxtPri("TPP_T2"),
+                            [3] = GetTxtPri("TPP_T3"),
+                            [4] = GetTxtPri("TPP_T4"),
+                            [5] = GetTxtPri("TPP_T5"),};                        
 
 
 
@@ -120,7 +120,7 @@ function p.GetAwardStr(nIndex, showFlag)
             num = num + nLev * Info.MoneyGrow;
             LogInfo("p.GetAwardStr nLev = %d, num = %d", nLev, num);     
         end
-        ShowText = ShowText .."银币".."X"..num.."\n";
+        ShowText = ShowText ..GetTxtPub("coin").."X"..num.."\n";
     end
 
     return ShowText;
@@ -159,7 +159,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
                 --获取当前粮车等级
                 local CarMax = table.getn(p.FoodCar);
                 if Transport.tbPlayerInfo.nGrain_config_id >= CarMax then
-                    CommonDlgNew.ShowYesDlg("当前粮车已为最高等级,不需要刷新了!",nil,nil,3);
+                    CommonDlgNew.ShowYesDlg(GetTxtPri("TPP_T6"),nil,nil,3);
                     return true;
                 end
                 
@@ -168,16 +168,16 @@ function p.OnUIEvent(uiNode, uiEventType, param)
                 local emoney = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);           
 
                 if emoney < num then
-                    CommonDlgNew.ShowYesDlg("金币不足,请充值,谢谢!",nil,nil,3);
+                    CommonDlgNew.ShowYesDlg(GetTxtPri("TRSP_T9"),nil,nil,3);
                 else
-                    CommonDlgNew.ShowYesOrNoDlg( "是否花费"..num.."金币刷新运送的粮车", p.onRefreshTransCar, true );
+                    CommonDlgNew.ShowYesOrNoDlg( string.format(GetTxtPri("TPP_T7"),num), p.onRefreshTransCar, true );
                 end
                 
         elseif (p.Ctrl.Btn.btnCall == tag) then   --点击召唤粮车按钮
                 --获取当前粮车等级
                 local CarMax = table.getn(p.FoodCar);
                 if Transport.tbPlayerInfo.nGrain_config_id >= CarMax then
-                    CommonDlgNew.ShowYesDlg("当前粮车已为最高等级,不需要召唤了!",nil,nil,3);
+                    CommonDlgNew.ShowYesDlg(GetTxtPri("TPP_T8"),nil,nil,3);
                     return true;
                 end
                 
@@ -187,13 +187,13 @@ function p.OnUIEvent(uiNode, uiEventType, param)
                 local emoney = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);           
 
                 if emoney < num then
-                    CommonDlgNew.ShowYesDlg("金币不足,请充值,谢谢!",nil,nil,3);
+                    CommonDlgNew.ShowYesDlg(GetTxtPri("TRSP_T9"),nil,nil,3);
                 else
-                    CommonDlgNew.ShowYesOrNoDlg( "是否花费200金币直接召唤"..Transport.tbGrainConfig[5].Name, p.CallBestTransCar, true );
+                    CommonDlgNew.ShowYesOrNoDlg( GetTxtPri("TPP_T9")..Transport.tbGrainConfig[5].Name, p.CallBestTransCar, true );
                 end
                 
         elseif (p.Ctrl.Btn.btnRaise == tag) then   --点击鼓舞士气
-                CommonDlgNew.ShowYesDlg("该功能暂未开启,谢谢!",nil,nil,3);
+                CommonDlgNew.ShowYesDlg(GetTxtPri("TPP_T10"),nil,nil,3);
  
         else
             --点击可以运送的粮车,提示奖励的物品

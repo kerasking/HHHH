@@ -9,7 +9,7 @@ local _G = _G;
 ChatTopBarUI={};
 local p=ChatTopBarUI;
 
-p.btn_txt={"综合","世界","军团","私聊",};
+p.btn_txt={GetTxtPri("CMUI_T1"),GetTxtPri("CMUI_T9"),GetTxtPri("CMUI_T10"),GetTxtPri("CMUI_T11"),};
 p.BtnTag={1,2,3,4,};
 
 

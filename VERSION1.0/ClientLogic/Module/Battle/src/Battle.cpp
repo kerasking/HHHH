@@ -2138,8 +2138,8 @@ void Battle::SendBattleAction(const BattleAction& action)
 		waiting->Initialization();
 		waiting->SetFontColor(ccc4(255, 255, 255, 255));
 		waiting->SetTag(TAG_WAITING);
-		waiting->SetText(NDCommonCString("wait"));
-		CCSize sizeText = getStringSize(NDCommonCString("wait"), 15);
+		waiting->SetText(NDCommonCString("wait").c_str());
+		CCSize sizeText = getStringSize(NDCommonCString("wait").c_str(), 15);
 		waiting->SetFrameRect(CCRectMake(pt.x - sizeText.width / 2, pt.y, sizeText.width, sizeText.height));
 		AddChild(waiting);
 	}
@@ -2546,19 +2546,19 @@ void Battle::showBattleComplete()
 	switch (battleCompleteResult)
 	{
 	case BATTLE_COMPLETE_WIN:
-		psz = NDCommonCString("BattleSucc");
+		psz = NDCommonCString("BattleSucc").c_str();
 		break;
 	case BATTLE_COMPLETE_LOSE:
-		psz = NDCommonCString("BattleFail");
+		psz = NDCommonCString("BattleFail").c_str();
 		break;
 	case BATTLE_COMPLETE_NO:
-		psz = NDCommonCString("BattleEnd");
+		psz = NDCommonCString("BattleEnd").c_str();
 		break;
 //		case BATTLE_COMPLETE_END:
 //			psz = NDCommonCString("BattleEnd");
 //			break;
 	default:
-		psz = NDCommonCString("BattleShouGong");
+		psz = NDCommonCString("BattleShouGong").c_str();
 		break;
 	}
 

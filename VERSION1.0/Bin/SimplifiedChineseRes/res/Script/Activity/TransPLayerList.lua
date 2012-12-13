@@ -110,11 +110,11 @@ function p.refreshViewItem(view, nId, info)
     
     if beLoot < total and nPlayerId ~= info.nLooterId1 and  nPlayerId ~= info.nLooterId2 then
         p.IsCanBeLoot = true;
-        SetLabel(view, p.CtrId.txtIsLoot, "可拦截");
+        SetLabel(view, p.CtrId.txtIsLoot, GetTxtPri("TPL2_T1"));
         btn:EnalbeGray(false);
     else
         p.IsCanBeLoot = false;
-        SetLabel(view, p.CtrId.txtIsLoot, "不可拦截");
+        SetLabel(view, p.CtrId.txtIsLoot, GetTxtPri("TPL2_T2"));
         btn:EnalbeGray(true);
     end
     
@@ -145,14 +145,14 @@ function p.OnUIEvent(uiNode, uiEventType, param)
                 --获取是否再拦截冷却当中
                 local cdTime = Transport.tbTimer.LootTimer.CountDownNum;
                 if cdTime > 0 then
-                    CommonDlgNew.ShowYesDlg("亲～您拦截的太凶狠了,请休息一会吧.!",nil,nil,3);
+                    CommonDlgNew.ShowYesDlg(GetTxtPri("TPL2_T3"),nil,nil,3);
                     return true;
                 end
             
                 --获取还可以拦截别人的次数
                 local LootTime = Transport.tbGrainStatic.LootMax - Transport.tbPlayerInfo.nLootOtherNum;
                 if LootTime <= 0 then
-                    CommonDlgNew.ShowYesDlg("您今天不可以再进行拦截了!",nil,nil,3);
+                    CommonDlgNew.ShowYesDlg(GetTxtPri("TPL2_T4"),nil,nil,3);
                     return true;
                 end
                 

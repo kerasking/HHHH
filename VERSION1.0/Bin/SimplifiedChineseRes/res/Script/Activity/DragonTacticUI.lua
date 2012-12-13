@@ -20,7 +20,7 @@ p.TabInfo = { TacticTabInfo      =     {LayerTag = 1001, tabBtnId = 24,  focusIn
 }
 
 --获取记录类型   1为大话兵法  2为没钱了怎么办  3为我要升级   4打不过敌军怎么办 5 如何获得装备  6其他功能说明
-p.TypeTitleDes = {"没钱了怎么办", "我要升级", "打不过敌军怎么办", "如何获得装备", "其他功能说明",};
+p.TypeTitleDes = {GetTxtPri("DT_T1"),GetTxtPri("DT_T2"), GetTxtPri("DT_T3"), GetTxtPri("DT_T4"), GetTxtPri("DT_T5"),};
 
 p.TacticInfoList = {};                 --大话兵法要显示的信息列表
 p.GameAssisInfoList = {};       --游戏助手要显示的信息列表

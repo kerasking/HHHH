@@ -28,7 +28,7 @@
 // 	return [NDLocalXmlString::GetSingleton().GetString(nsKeyName) UTF8String];
 // }
 
-inline const char* __NDLOCAL_INNER_C_STRING(const char* szModuleName, const char* szKeyName)
+inline const string __NDLOCAL_INNER_C_STRING(const char* szModuleName, const char* szKeyName)
 {
 	//return [NSLocalizedStringWithDefaultValue(nsKeyName, @"lyol", [NSBundle mainBundle], nsKeyName, NULL) UTF8String];
 	if (!szModuleName || !szKeyName)
@@ -39,7 +39,7 @@ inline const char* __NDLOCAL_INNER_C_STRING(const char* szModuleName, const char
 	std::string str		= szModuleName;
 	str					+= szKeyName;
 	
-	return NDLocalXmlString::GetSingleton().GetCString(str.c_str());
+	return NDLocalXmlString::GetSingleton().GetCString(str);
 }
 
 #define _NDLOCAL_INNER_NS_STRING( NSKeyFileName, NSKeyName) \
