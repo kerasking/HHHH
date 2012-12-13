@@ -61,6 +61,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 	public static DaHuaLongJiang ms_pkDHLJ = null;
 	private PlatformListener mPlatformListener;
 	private DynamicMenuBar menubar;
+	private BalanceButton balancebutton;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		if (isSDCardCanUse()) {
@@ -116,6 +117,10 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 			menubar = new DynamicMenuBar(this);
 			menubar.setMenubarVisibility(View.VISIBLE);
 			menubar.setMenuIconGravity(Gravity.TOP|Gravity.LEFT);
+
+			Rect rect = new Rect(0, 0, 300, 900);
+			balancebutton = com.mobage.android.social.common.Service.getBalanceButton(rect); 
+			
 		} else {
 			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 			alertDialog.setTitle("Title");
@@ -174,7 +179,12 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 			parent.removeView(rootView);
 		}
 		menubar.removeAllViews();
+		
 		menubar.addView(rootView);
+		menubar.addView(balancebutton);
+		
+//		ViewGroup.LayoutParams pkParamsButton = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.FILL_PARENT);
+//		balancebutton.setLayoutParams(pkParamsButton);
 
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.FILL_PARENT);
 		this.setContentView(menubar,pkParams);
@@ -187,12 +197,17 @@ public class DaHuaLongJiang extends Cocos2dxActivity {
 		onLoginError(error);
 	}
 
-	private void showBalanceButton() {
+	private static void showBalanceButton() {
 		Log.v(TAG, "begin showBalanceButton");
 
-		Rect rect = new Rect(200, 70, 100, 36);
-		BalanceButton button = com.mobage.android.social.common.Service.getBalanceButton(rect); 
 //		LinearLayout layout = (LinearLayout)mActivity.findViewById(R.id.placeholder); layout.addView(button);
+	}
+	public static void ShowBankUi() {
+		Log.v(TAG, "begin ShowBankUi");
+		com.mobage.android.social.common.Service.showBankUi(new com.mobage.android.social.common.Service.OnDialogComplete() {
+		@Override
+		public void onDismiss() { }
+		}); 
 	}
 	
 	public void changeViewToVideo()

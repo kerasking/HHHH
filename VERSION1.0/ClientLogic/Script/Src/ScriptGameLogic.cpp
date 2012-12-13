@@ -42,6 +42,7 @@
 #include "NDVideoMgr.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "platform/android/jni/JniHelper.h"
 #include <jni.h>
 #include <android/log.h>
 
@@ -606,30 +607,57 @@ bool doNDSdkChangeLogin()
 
 void HideMobageSplashScreen() //Guosen 2012.8.3
 {
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	[[MBGPlatform sharedPlatform] hideSplashScreen];
 #endif
 }
 void doGoToMobageVipPage()
 {
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	[MBGSocialService showBankUI:^
 	{
 	}];
+#endif
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t
+                                       , "org/DeNA/DHLJ/DaHuaLongJiang"
+                                       , "ShowBankUi"
+                                       , "()V"))
+        
+    {
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
+    }
 #endif
 }
 
 void doShowMobageBalance()
 {
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	MobageViewController* pMobageView = [MobageViewController sharedViewController];
 	[pMobageView showBalanceButton:CGRectMake(200, 70, 100, 36)];
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t
+                                       , "org/DeNA/DHLJ/DaHuaLongJiang"
+                                       , "showBalanceButton"
+                                       , "()V"))
+        
+    {
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
+    }
 #endif
 }
 
 void doHideMobageBalance()
 {
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	MobageViewController* pMobageView = [MobageViewController sharedViewController];
 	[pMobageView hideBalanceButton];
 #endif

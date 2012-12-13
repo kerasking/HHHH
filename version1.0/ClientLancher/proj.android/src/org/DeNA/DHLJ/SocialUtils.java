@@ -267,7 +267,7 @@ public class SocialUtils {
 			@Override
 			public void onSuccess(String verifier) {
 				Log.v(TAG, "AuthorizeToken Success:" + verifier);
-				SocialUtils.showConfirmDialog("AuthorizeToke status", "Successful:" + verifier, "OK");
+//				SocialUtils.showConfirmDialog("AuthorizeToke status", "Successful:" + verifier, "OK");
 				
 				onAuthSuccess(verifier);
 			}
