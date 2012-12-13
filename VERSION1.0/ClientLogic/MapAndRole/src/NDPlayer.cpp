@@ -57,7 +57,8 @@ NS_NDENGINE_BGN
 
 NDMapLayer* M_GetMapLayer()
 {
-	return NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene)));
+	return NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->
+		GetScene(RUNTIME_CLASS(CSMGameScene)));
 }
 
 IMPLEMENT_CLASS(NDPlayer, NDManualRole)
@@ -65,7 +66,6 @@ IMPLEMENT_CLASS(NDPlayer, NDManualRole)
 bool NDPlayer::ms_bFirstUse = true;
 
 NDPlayer::NDPlayer() :
-//money(0),
 m_nEMoney(0),
 m_nPhyPoint(0),
 m_nDexPoint(0),
