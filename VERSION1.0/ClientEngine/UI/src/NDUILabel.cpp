@@ -123,7 +123,7 @@ void NDUILabel::SetFontColor(ccColor4B fontColor)
 	
 void NDUILabel::SetFontSize(unsigned int fontSize)
 {
-	fontSize = (int)(float)fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
+	fontSize = (int)(float)fontSize * NDDirector::DefaultDirector()->GetScaleFont();
 
 	if (m_uiFontSize != fontSize)
 	{

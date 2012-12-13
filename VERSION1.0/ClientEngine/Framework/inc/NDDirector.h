@@ -184,13 +184,14 @@ public:
 
 	float GetScaleFactor() 
 	{ 
-		#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-			float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor_LUA();
-			return fScaleFactor;
-		#else
-			return m_pkDirector->getContentScaleFactor(); 
-		#endif
+		return m_pkDirector->getContentScaleFactor(); 
 	}
+
+	float GetScaleFont()
+	{
+		return this->GetScaleFactor_LUA();
+	}
+
 //	float GetScaleFactorY() { CCDirector::sharedDirector()->getContentScaleFactor(); }
 	float GetScaleFactor_LUA(); //½öÓÃÓÚLUA
 

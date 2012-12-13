@@ -2027,7 +2027,7 @@ void NDManualRole::DrawNameLabel(bool bDraw)
 		isEnemy = true;
 	}
 
-	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+	float fScale = NDDirector::DefaultDirector()->GetScaleFont();
 
 	iY = iY - FIGHTER_HEIGHT;// - 5 * fScale;
 
