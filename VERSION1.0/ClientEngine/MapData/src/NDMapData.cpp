@@ -338,10 +338,15 @@ NDMapMonsterRange::NDMapMonsterRange() :
 }
 
 NDMapData::NDMapData() :
-		m_nLayerCount(0), m_nColumns(0), m_nRows(0), /*m_nUnitSize(0), */m_nRoadBlockX(
-				-1), m_nRoadBlockY(-1), m_kMapTiles(NULL),
-		m_pkObstacles(NULL), m_pkSceneTiles(NULL), m_pkBackgroundTiles(NULL), m_pkSwitchs(
-				NULL), m_pkAnimationGroups(NULL), m_pkAniGroupParams(NULL)
+		m_nLayerCount(0), m_nColumns(0), m_nRows(0), /*m_nUnitSize(0), */
+		m_nRoadBlockX(-1), m_nRoadBlockY(-1), m_kMapTiles(NULL),
+		m_pkObstacles(NULL), 
+		m_pkSceneTiles(NULL), 
+		m_pkBackgroundTiles(NULL), 
+		m_pkSwitchs(NULL), 
+		m_pkAnimationGroups(NULL), 
+		m_pkAniGroupParams(NULL),
+		m_bBattleMapFlag(false)
 {
 }
 
