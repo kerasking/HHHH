@@ -343,7 +343,6 @@ void WorldMapLayer::SetRoleAtPlace(int placeId)
 	{
 		m_idMapCached = placeId;
 		float fScaleFactor = RESOURCE_SCALE;
-
 		CCRect rect = m_roleNode->GetFrameRect();
 		rect.origin = GetPlaceIdScreenPos(placeId);
 		rect.size = CCSizeMake(fScaleFactor*35, fScaleFactor*70);

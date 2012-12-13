@@ -796,8 +796,9 @@ NDUILabel* NDUITextBuilder::CreateLabel(const char* pszText,
 		pkResult->SetTag(idItem);
 		pkResult->SetFontSize(fontSize);
 		pkResult->SetFontColor(color);
-		pkResult->SetFrameRect(
-				CCRectMake(0, 0, kTextSize.width, kTextSize.height));
+
+		kTextSize.width = (kTextSize.width > kTextSize.height) ? kTextSize.height : kTextSize.width;
+		pkResult->SetFrameRect(CCRectMake(0, 0, kTextSize.width, kTextSize.height));
 	}
 	return pkResult;
 }
@@ -817,8 +818,9 @@ HyperLinkLabel* NDUITextBuilder::CreateLinkLabel(const char* pszText,
 		pkResultLabel->SetTag(nItemID);
 		pkResultLabel->SetFontSize(uiFontSize);
 		pkResultLabel->SetFontColor(kColor);
-		pkResultLabel->SetFrameRect(
-				CCRectMake(0, 0, kTextSize.width, kTextSize.height));
+
+		kTextSize.width = (kTextSize.width > kTextSize.height) ? kTextSize.height : kTextSize.width;
+		pkResultLabel->SetFrameRect(CCRectMake(0, 0, kTextSize.width, kTextSize.height));
 		pkResultLabel->SetIsLink(true);
 	}
 
