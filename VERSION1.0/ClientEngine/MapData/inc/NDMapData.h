@@ -91,8 +91,8 @@ class anigroup_param: public cocos2d::CCObject,
 
 class NDMapData: public cocos2d::CCObject
 {
-
 public:
+	CC_SYNTHESIZE(bool, m_bBattleMapFlag, BattleMapFlag)
 	CC_SYNTHESIZE(std::string, m_strName, Name)
 	CC_SYNTHESIZE(int, m_nLayerCount, LayerCount)
 	CC_SYNTHESIZE(unsigned int, m_nColumns, Columns)

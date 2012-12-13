@@ -73,7 +73,9 @@ public:
 	void drawSubRect(CCRect kRect);
 	void makeTex(float* pData);
 	void makeVetex(float* pData, CCRect kRect);
+
 	virtual void SetDrawRect_Android( CCRect rect );
+	virtual void SetCutRect_Android_BattleMap( CCRect rect, bool bBattleMap );
 
 public: //@shader
 	CC_SYNTHESIZE_RETAIN(CCGLProgram*, m_pShaderProgram, ShaderProgram);
