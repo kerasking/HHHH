@@ -430,7 +430,7 @@ unsigned int NDUITextBuilder::StringWidthAfterFilter(const char* text,
 	unsigned int result = 0;
 	if (text)
 	{
-		unsigned int fontHeight = getStringSize("a", fontSize*NDDirector::DefaultDirector()->GetScaleFactor()).height;
+		unsigned int fontHeight = getStringSize("a", fontSize * FONT_SCALE).height;
 		result += fontHeight;
 		unsigned int curWidth = 0;
 		BuildRule rule = BuildRuleNone;
@@ -485,7 +485,7 @@ unsigned int NDUITextBuilder::StringWidthAfterFilter(const char* text,
 				memcpy(word, text, 3);
 				text += 3;
 			}
-			unsigned int temp = getStringSize(word, fontSize*NDDirector::DefaultDirector()->GetScaleFactor()).width;
+			unsigned int temp = getStringSize(word, fontSize*FONT_SCALE).width;
 			if (curWidth + temp > textWidth)
 			{
 				if (fMaxWidth < curWidth)
@@ -509,7 +509,7 @@ unsigned int NDUITextBuilder::StringHeightAfterFilter(const char* text,
 	unsigned int result = 0;
 	if (text)
 	{
-		unsigned int fontHeight = getStringSize("a", fontSize*NDDirector::DefaultDirector()->GetScaleFactor()).height;
+		unsigned int fontHeight = getStringSize("a", fontSize*FONT_SCALE).height;
 		result += fontHeight;
 		unsigned int curWidth = 0;
 		BuildRule rule = BuildRuleNone;
@@ -554,7 +554,7 @@ unsigned int NDUITextBuilder::StringHeightAfterFilter(const char* text,
 				memcpy(word, text, 3);
 				text += 3;
 			}
-			unsigned int temp = getStringSize(word, fontSize*NDDirector::DefaultDirector()->GetScaleFactor()).width;
+			unsigned int temp = getStringSize(word, fontSize*FONT_SCALE).width;
 			if (curWidth + temp > textWidth)
 			{
 				curWidth = 0;
@@ -788,7 +788,7 @@ NDUILabel* NDUITextBuilder::CreateLabel(const char* pszText,
 	NDUILabel* pkResult = NULL;
 	if (pszText)
 	{
-		CCSize kTextSize = getStringSize(pszText, fontSize*NDDirector::DefaultDirector()->GetScaleFactor());
+		CCSize kTextSize = getStringSize(pszText, fontSize*FONT_SCALE);
 		pkResult = new NDUILabel();
 		pkResult->Initialization();
 		pkResult->SetRenderTimes(1);
@@ -809,7 +809,7 @@ HyperLinkLabel* NDUITextBuilder::CreateLinkLabel(const char* pszText,
 
 	if (pszText)
 	{
-		CCSize kTextSize = getStringSize(pszText, uiFontSize*NDDirector::DefaultDirector()->GetScaleFactor());
+		CCSize kTextSize = getStringSize(pszText, uiFontSize*FONT_SCALE);
 		pkResultLabel = new HyperLinkLabel();
 		pkResultLabel->Initialization();
 		pkResultLabel->SetRenderTimes(1);

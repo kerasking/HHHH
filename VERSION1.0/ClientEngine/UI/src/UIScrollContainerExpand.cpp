@@ -12,10 +12,11 @@
 #include "NDUIImage.h"
 #include "UISpriteNode.h"
 #include "ScriptUI.h"
+
 #define ANIMATE_ZOOM_MIN    0.7     //缩放比例下线
 #define ANIMATE_ZOOM_MAX    1.0     //缩放比例上线
-#define ANIMATE_POSITION    140*NDDirector::DefaultDirector()->GetScaleFactor()
-#define ANIMATE_YOFFSET     50*NDDirector::DefaultDirector()->GetScaleFactor()
+#define ANIMATE_POSITION    140*RESOURCE_SCALE
+#define ANIMATE_YOFFSET     50*RESOURCE_SCALE
 
 IMPLEMENT_CLASS(CUIScrollContainerExpand, NDUILayer)
 
@@ -27,7 +28,7 @@ CUIScrollContainerExpand::CUIScrollContainerExpand()
     bIsMoveing      = false;
     m_fTranValue    = 0;
     m_fScrollDistance       = 0;
-    m_fScrollToCenterSpeed  = 15*NDDirector::DefaultDirector()->GetScaleFactor();
+    m_fScrollToCenterSpeed  = 15*RESOURCE_SCALE;
     m_pScrollViewCurrent    = NULL;
 }
 

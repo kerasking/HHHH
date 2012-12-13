@@ -62,7 +62,7 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 	this->RemoveAllChildren(true);
 	textNodeList.clear();
 	this->speakerName = speaker;
-	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
+	float fScaleFactor = RESOURCE_SCALE;
 	int fontSize = fontSizelua * fScaleFactor;
 	text_style = style;
 
@@ -244,7 +244,7 @@ bool CUIChatText::OnTextClick(CCPoint touchPos)
 
 void CUIChatText::Combiner(std::vector<ChatNode>& textNodeList)
 {
-	int nScale = NDDirector::DefaultDirector()->GetScaleFactor();
+	int nScale = RESOURCE_SCALE;
     
 	int height_max=0;
 	float x = 0.0f, y = 0.0f;
@@ -325,7 +325,7 @@ NDUIImage* CUIChatText::CreateFaceImage(const char* strIndex)
 			result = new NDUIImage();
 			result->Initialization();
 			result->SetPicture(pic, true);
-			result->SetFrameRect(CCRectMake(0, 0, 30*NDDirector::DefaultDirector()->GetScaleFactor(), 30*NDDirector::DefaultDirector()->GetScaleFactor()));
+			result->SetFrameRect(CCRectMake(0, 0, 30*RESOURCE_SCALE, 30*RESOURCE_SCALE));
 		}			
 	}
 	return result;
