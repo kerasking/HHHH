@@ -238,6 +238,26 @@
 							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\DaHuaLongJiang.java"
 							>
 						</File>
+						<File
+							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\NDJavaVideoPlayer.java"
+							>
+						</File>
+						<File
+							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\NDVideoControl.java"
+							>
+						</File>
+						<File
+							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\NDVideoView.java"
+							>
+						</File>
+						<File
+							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\OAuthSupport.java"
+							>
+						</File>
+						<File
+							RelativePath="..\..\ClientLancher\proj.android\src\org\DeNA\DHLJ\SocialUtils.java"
+							>
+						</File>
 					</Filter>
 				</Filter>
 			</Filter>

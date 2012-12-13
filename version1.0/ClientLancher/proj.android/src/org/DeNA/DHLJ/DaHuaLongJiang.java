@@ -186,6 +186,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public void setMain()
 	{
+		Log.e(TAG, "DaHuaLongJiang::setMain()");
+		
 		View rootView = (View) getView();
 		FrameLayout parent = (FrameLayout) rootView.getParent();
 		if (parent != null)
@@ -193,6 +195,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			parent.removeView(rootView);
 		}
 		menubar.removeAllViews();
+		addEditView();
 		menubar.addView(rootView);
 
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
@@ -200,6 +203,23 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		this.setContentView(menubar, pkParams);
 	}
 
+	public void addEditView(){
+        // Cocos2dxEditText layout
+        ViewGroup.LayoutParams edittext_layout_params =
+            new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
+                                       ViewGroup.LayoutParams.WRAP_CONTENT);
+        Cocos2dxEditText edittext = new Cocos2dxEditText(this);
+        edittext.setLayoutParams(edittext_layout_params);
+        //edittext.setVisibility( View.INVISIBLE );
+
+		// add edit to layout
+		menubar.addView(edittext);
+
+		// set this edit to cocos2dx surface view
+		Cocos2dxGLSurfaceView surfaceView = getView();
+		surfaceView.setCocos2dxEditText(edittext);
+	}
+	
 	public void LoginComplete(int userid)
 	{
 		onLoginComplete(userid);

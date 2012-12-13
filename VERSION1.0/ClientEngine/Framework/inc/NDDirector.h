@@ -22,7 +22,7 @@
 #include "NDNode.h"
 #include "CCTouchDispatcher.h"
 
-#define FONT_SCALE (NDDirector::DefaultDirector()->GetScaleFactor())
+#define FONT_SCALE (NDDirector::DefaultDirector()->GetFontScale())
 
 NS_NDENGINE_BGN
 
@@ -193,6 +193,7 @@ public:
 	}
 //	float GetScaleFactorY() { CCDirector::sharedDirector()->getContentScaleFactor(); }
 	float GetScaleFactor_LUA(); //½öÓÃÓÚLUA
+	float GetFontScale();
 
 	bool IsEnableRetinaDisplay() { return CCEGLView::sharedOpenGLView()->isRetinaEnabled(); }
 

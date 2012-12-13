@@ -447,4 +447,10 @@ float NDDirector::GetScaleFactor_LUA() //仅用于LUA
 #endif
 }
 
+//返回字体缩放比例
+float NDDirector::GetFontScale()
+{
+	return GetScaleFactor_LUA();
+}
+
 NS_NDENGINE_END

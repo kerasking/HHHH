@@ -1587,9 +1587,9 @@ void NDBaseRole::debugDraw()
 	if (!NDDebugOpt::getDrawDebugEnabled())
 		return;
 
-	drawCoord (getFootPos() );drawCoord
-	(getHeadPos() );drawCoord
-	(GetPosition(), true, false);
+	drawCoord( getFootPos() );
+	drawCoord( getHeadPos() );
+	drawCoord( GetPosition(), true, false );
 }
 
 // for debug purpose.

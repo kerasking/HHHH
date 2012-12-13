@@ -16,12 +16,13 @@
 //#include "I_Analyst.h"
 
 CUIEdit* CUIEdit::g_pCurUIEdit = NULL;
+
 IMPLEMENT_CLASS(CUIEdit, NDUINode)
+
 CUIEdit::CUIEdit()
 {
 	m_picImage				= NULL;
 	m_picFocusImage			= NULL;
-	m_pPlatformInput		= NULL;
 	m_nMinLen				= 0;
 	m_nMaxLen				= 9999;
 	m_bPassword				= false;
@@ -30,6 +31,27 @@ CUIEdit::CUIEdit()
 	m_colorText				= ccc4(255, 255, 255, 255);
     //m_colorText				= ccc4(255, 0, 255, 255);
     m_iFlag                 = 0;
+
+#if WITH_OLD_IME
+	m_pPlatformInput		= NULL;
+#endif
+
+	m_bIMEOpen				= false;
+}
+
+void CUIEdit::Initialization()
+{
+	NDUINode::Initialization();
+
+	m_lbText	= new NDUILabel;
+	m_lbText->Initialization();
+	m_lbText->SetFontSize(14);
+	m_lbText->SetFontColor(ccc4(255, 255, 255, 255));
+
+	//m_lbText->SetTextAlignment(LabelTextAlignmentLeftCenter);
+	//m_lbText->SetHasFontBoderColor(false);
+
+	InitInput();
 }
 
 CUIEdit::~CUIEdit()
@@ -37,89 +59,94 @@ CUIEdit::~CUIEdit()
 	SAFE_DELETE(m_lbText);
 	SAFE_DELETE(m_picImage);
 	SAFE_DELETE(m_picFocusImage);
+
     if(g_pCurUIEdit == this)
-        g_pCurUIEdit = NULL;
+	{
+		g_pCurUIEdit = NULL;
+	}
+
+#if WITH_OLD_IME
 	SAFE_DELETE(m_pPlatformInput);
-}
-CUIEdit* CUIEdit::sharedCurEdit()
-{
-    return g_pCurUIEdit;
+#endif
 }
 
-void CUIEdit::Initialization()
+//文字改变了
+void CUIEdit::OnTextChanged()
 {
-	NDUINode::Initialization();
-	
-	m_lbText	= new NDUILabel;
-	m_lbText->Initialization();
-	//m_lbText->SetTextAlignment(LabelTextAlignmentLeftCenter);
-	m_lbText->SetFontSize(14);
-    //m_lbText->SetHasFontBoderColor(false);
-	m_lbText->SetFontColor(ccc4(255, 255, 255, 255));
-	InitInput();
+	if (!m_lbText) return;
+		
+	string labelText = "";
+	if (IsPassword())
+	{
+		int nStrLen	= m_strText.size();
+		for (int i = 0; i < nStrLen; i++) 
+		{
+			labelText += "*";
+		}
+	}
+	else
+	{
+		labelText = m_strText;
+	}
+
+	m_lbText->SetText( labelText.c_str() );
 }
+
+//设置字体大小
 void CUIEdit::SetTextSize(unsigned int nSize)
 {
-    m_nTextSize = nSize * NDDirector::DefaultDirector()->GetScaleFactor();
+    int curFontSize = int(nSize * FONT_SCALE);
     
-    m_lbText->SetFontSize(nSize);
+    if (m_lbText)
+		m_lbText->SetFontSize(curFontSize);
+
+#if WITH_OLD_IME
 	if (m_pPlatformInput)
 	{
 		m_pPlatformInput->SetFontSize(nSize);
 	}
-    
-    
+#endif
 }
+
+//设置文本
 void CUIEdit::SetText(const char* pszText)
 {
 	m_strText	= pszText ? pszText : "";
 	
+#if WITH_OLD_IME
 	if (m_pPlatformInput)
 	{
 		m_pPlatformInput->SetText(m_strText.c_str());
 	}
-	SetShowText(pszText);
+#endif
+
+	this->OnTextChanged();
 }
 
-const char* CUIEdit::GetText()
-{
-	return m_strText.c_str();
-}
-
+//设置是否显示为密码
 void CUIEdit::SetPassword(bool bSet)
 {
-	m_bPassword	= bSet;
-	this->SetShowText(m_strText.c_str());
+	if (m_bPassword != bSet)
+	{
+		m_bPassword	= bSet;
+		this->OnTextChanged();
+	}
 }
 
-bool CUIEdit::IsPassword()
-{
-	return m_bPassword;
-}
-
+//设置文本最大长度（字节数？）
 void CUIEdit::SetMaxLength(unsigned int nLen)
 {
 	m_nMaxLen	= nLen;
-    if(m_pPlatformInput){
+
+#if WITH_OLD_IME
+    if(m_pPlatformInput)
+	{
         m_pPlatformInput->SetLengthLimit(nLen);
     }
+#endif
 }
 
-unsigned CUIEdit::GetMaxLength()
-{
-	return m_nMaxLen;
-}
-
-void CUIEdit::SetMinLength(unsigned int nLen)
-{
-	m_nMinLen	= nLen;
-}
-
-unsigned CUIEdit::GetMinLength()
-{
-	return m_nMinLen;
-}
-
+//设置图像
 void CUIEdit::SetImage(NDPicture* pic)
 {
 	if (m_picImage)
@@ -130,6 +157,7 @@ void CUIEdit::SetImage(NDPicture* pic)
 	m_picImage	= pic;
 }
 
+//设置焦点图像
 void CUIEdit::SetFocusImage(NDPicture* pic)
 {
 	if (m_picFocusImage)
@@ -140,68 +168,23 @@ void CUIEdit::SetFocusImage(NDPicture* pic)
 	m_picFocusImage	= pic;
 }
 
-void CUIEdit::EnableAdjustView(bool bEnable)
-{
-	m_bEnableAjdustView	= bEnable;
-}
-
-bool CUIEdit::IsTextLessMinLen()
-{
-	return m_strText.size() < m_nMinLen;
-}
-
-bool CUIEdit::IsTextMoreMaxLen()
-{
-	return m_strText.size() > m_nMaxLen;
-}
-
+//设置文本颜色
 void CUIEdit::SetTextColor(ccColor4B color)
 {
 	m_colorText	= color;
+
+#if WITH_OLD_IME
 	if (!m_pPlatformInput)
 	{
 		return;
 	}
 	m_pPlatformInput->SetTextColor(color.r / 255, color.g / 255, color.b / 255, color.a / 255);
+#endif
+
 	SetShowTextColor(color);
 }
-void CUIEdit::InitInput()
-{
-	if (m_pPlatformInput)
-	{
-		return;
-	}
-	
-	// 加上平台处理,暂时先用iphone初始始 todo
-	m_pPlatformInput	= new CIphoneInput();
-	m_pPlatformInput->Init();
-	m_pPlatformInput->SetInputDelegate(this);
-	m_pPlatformInput->Hide();
-	this->SetTextColor(m_colorText);
-}
-void CUIEdit::SetShowText(const char* text)
-{
-	if (!m_lbText) 
-	{
-		return;
-	}
-	if (!text)
-	{
-		m_lbText->SetText("");
-		return;
-	}
-	std::string str		= text;
-	if (IsPassword())
-	{
-		int nStrLen		= str.size();
-		str				= "";
-		for (int i = 0; i < nStrLen; i++) 
-		{
-			str			+= "*";
-		}
-	}
-	m_lbText->SetText(str.c_str());
-}
+
+//设置显示文本颜色
 void CUIEdit::SetShowTextColor(ccColor4B color)
 {
 	if (m_lbText)
@@ -209,11 +192,15 @@ void CUIEdit::SetShowTextColor(ccColor4B color)
 		m_lbText->SetFontColor(color);
 	}
 }
+
+//设置显示文本尺寸
 void CUIEdit::SetShowTextFontSize(int nFontSize)
 {
+	int curFontSize = int(nFontSize * FONT_SCALE);
+
 	if (m_lbText)
 	{
-		m_lbText->SetFontSize(nFontSize);
+		m_lbText->SetFontSize(curFontSize);
 	}
 }
 
@@ -226,9 +213,28 @@ void CUIEdit::draw()
 	{
 		return;
 	}
+		
+#if WITH_NEW_IME
 	
-	CCRect	scrRect	= this->GetScreenRect();
-	
+	NDPicture* pic = m_picImage;
+	if (m_bIMEOpen && m_picFocusImage)
+	{
+		pic	= m_picFocusImage;
+	}
+
+	if (pic)
+	{
+		pic->DrawInRect( this->GetScreenRect() );
+	}
+
+	if (m_lbText)
+	{
+		m_lbText->draw();
+	}
+#endif
+
+
+#if WITH_OLD_IME
 	if (m_pPlatformInput)
 	{
         //** chh 2012-06-19 **//
@@ -272,12 +278,15 @@ void CUIEdit::draw()
         //m_lbText->SetFrameRect(scrRect);
 		m_lbText->draw();
 	}
+#endif //WITH_OLD_IME
 }
 
+//设置控件是否可见
 void CUIEdit::SetVisible(bool visible)
 {
 	NDUINode::SetVisible(visible);
 	
+#if WITH_OLD_IME
 	if (m_pPlatformInput)
 	{
 		if (visible)
@@ -289,19 +298,93 @@ void CUIEdit::SetVisible(bool visible)
 			m_pPlatformInput->Hide();
 		}
 	}
+#endif
 }
+
+//override: 设置控件区域大小
 void CUIEdit::SetFrameRect(CCRect rect)
 {
 	NDUINode::SetFrameRect(rect);
 	if (m_lbText)
 	{
-        CCRect rect = this->GetScreenRect();
-        rect.origin.x += TEXT_LEFT_BORDER;
-		m_lbText->SetFrameRect(rect);
+		CCRect rectLabel = CCRectMake( TEXT_LEFT_BORDER, 0, rect.size.width, rect.size.height );
+		m_lbText->SetFrameRect( rectLabel );
+		this->AddChild( m_lbText, 0x1 );
 	}
 	m_bRecacl	= true;
 }
 
+//?
+bool CUIEdit::AutoInputReturn() 
+{
+#if WITH_OLD_IME
+	if (!m_pPlatformInput)
+	{
+		return true;
+	}
+	//Is Hide Allready
+	if (!m_pPlatformInput->IsShow())
+	{
+		return true;
+	}
+	const char* text	= m_pPlatformInput->GetText();
+	m_strText			= text ? text : "";
+
+	this->OnTextChanged();
+	if (m_pPlatformInput)
+	{
+		m_pPlatformInput->Hide();
+	}
+#endif
+	return true; 
+}
+
+//初始化输入
+void CUIEdit::InitInput()
+{
+	//@todo...
+#if WITH_OLD_IME
+	if (m_pPlatformInput)
+	{
+		return;
+	}
+
+	// 加上平台处理,暂时先用iphone初始始 todo
+	m_pPlatformInput	= new CIphoneInput();
+	m_pPlatformInput->Init();
+	m_pPlatformInput->SetInputDelegate(this);
+	m_pPlatformInput->Hide();
+#endif
+
+	this->SetTextColor(m_colorText);
+}
+
+//点击打开/关闭输入法
+bool CUIEdit::OnClick(NDObject* object)
+{
+	CCLog( "CUIEdit::OnClick()\r\n" );
+
+#if WITH_NEW_IME
+	if (!m_bIMEOpen)
+	{
+		attachWithIME();
+	}
+#else
+	if (m_pPlatformInput)
+	{
+		g_pCurUIEdit = this;
+		m_pPlatformInput->Show();
+	}
+#endif
+
+	OnScriptUiEvent(this, TE_TOUCH_BTN_CLICK);//++Guosen 2012.8.1//点击时传递按钮点击事件给LUA脚本，
+
+	return true;
+}
+
+//////////////////////////////////////////////////////////////////////////////// 旧的输入法代码 {{
+#if WITH_OLD_IME
+//@oldime
 bool CUIEdit::OnInputReturn(CInputBase* base) 
 {
 	if (this != base)
@@ -322,28 +405,7 @@ bool CUIEdit::OnInputReturn(CInputBase* base)
 		return false;
 	}
 	
-	SetShowText(m_strText.c_str());
-	if (m_pPlatformInput)
-	{
-		m_pPlatformInput->Hide();
-	}
-	return true; 
-}
-bool CUIEdit::AutoInputReturn() 
-{
-	if (!m_pPlatformInput)
-	{
-		return true;
-	}
-    //Is Hide Allready
-	if (!m_pPlatformInput->IsShow())
-    {
-        return true;
-    }
-	const char* text	= m_pPlatformInput->GetText();
-	m_strText			= text ? text : "";
-	
-	SetShowText(m_strText.c_str());
+	this->OnTextChanged();
 	if (m_pPlatformInput)
 	{
 		m_pPlatformInput->Hide();
@@ -351,6 +413,7 @@ bool CUIEdit::AutoInputReturn()
 	return true; 
 }
 
+//@oldime
 bool CUIEdit::OnInputTextChange(CInputBase* base, const char* inputString)
 { 
 	if (this != base)
@@ -384,6 +447,8 @@ bool CUIEdit::OnInputTextChange(CInputBase* base, const char* inputString)
 	
 	return true; 
 }
+
+//@oldime
 void CUIEdit::OnInputFinish(CInputBase* base)
 {
     if (this != base)
@@ -399,7 +464,7 @@ void CUIEdit::OnInputFinish(CInputBase* base)
 	const char* text	= m_pPlatformInput->GetText();
 	m_strText			= text ? text : "";
 	
-	SetShowText(m_strText.c_str());
+	this->OnTextChanged();
     
 	if (!OnScriptUiEvent(this, TE_TOUCH_EDIT_INPUT_FINISH))
 	{
@@ -410,15 +475,179 @@ void CUIEdit::OnInputFinish(CInputBase* base)
 		m_pPlatformInput->Hide();
 	}
 }
-bool CUIEdit::OnClick(NDObject* object)
+#endif //WITH_OLD_IME
+//////////////////////////////////////////////////////////////////////////////// 旧的输入法代码 }}
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////// 新的输入法代码 {{
+#if WITH_NEW_IME
+bool CUIEdit::attachWithIME()
 {
-	if (m_pPlatformInput)
+	CCLog( "@@ CUIEdit::attachWithIME()\r\n" );
+
+	bool bRet = CCIMEDelegate::attachWithIME();
+	if (bRet)
 	{
-        g_pCurUIEdit = this;
-		m_pPlatformInput->Show();
+		CCLog( "@@ CUIEdit::attachWithIME(), call CCIMEDelegate::attachWithIME(), ret TRUE\r\n" );
+
+		// open keyboard
+		CCEGLView * pGlView = CCDirector::sharedDirector()->getOpenGLView();
+		if (pGlView)
+		{
+			CCLog( "@@ CCIMEDelegate::attachWithIME(), call pGlView->setIMEKeyboardState(true)\r\n" );
+
+			pGlView->setIMEKeyboardState(true);
+		}
 	}
-    
-	OnScriptUiEvent(this, TE_TOUCH_BTN_CLICK);//++Guosen 2012.8.1//点击时传递按钮点击事件给LUA脚本，
-    
-	return true;
+	return bRet;
 }
+
+bool CUIEdit::detachWithIME()
+{
+	CCLog( "@@ CUIEdit::detachWithIME()\r\n" );
+
+	bool bRet = CCIMEDelegate::detachWithIME();
+	if (bRet)
+	{
+		// close keyboard
+		CCEGLView * pGlView = CCDirector::sharedDirector()->getOpenGLView();
+		if (pGlView)
+		{
+			CCLog( "@@ CUIEdit::detachWithIME(), call pGlView->setIMEKeyboardState(false)\r\n" );
+
+			pGlView->setIMEKeyboardState(false);
+		}
+	}
+	return bRet;
+}
+
+bool CUIEdit::canAttachWithIME()
+{
+	return true;
+	//return CCIMEDelegate::canAttachWithIME();
+}
+
+bool CUIEdit::canDetachWithIME()
+{
+	return true;
+	//return CCIMEDelegate::canDetachWithIME();
+}
+
+void CUIEdit::insertText(const char * text, int len)
+{
+	CCLog( "@@ CUIEdit::insertText(): %s, len=%d\r\n", text, len );
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	m_strText += text ? text : "";
+#else
+	m_strText = text ? text : ""; //这个是=
+
+	for (int i = 0; i < 2; i++)
+	{
+		int len = m_strText.length();
+		if (len > 0)
+		{
+			const char c = m_strText[len - 1];
+			if (c == '\r' || c == '\n')
+			{
+				m_strText.erase( m_strText.end() - 1 );
+			}
+		}
+	}
+#endif
+
+	this->OnTextChanged();
+
+#if 0
+	std::string sInsert(text, len);
+#endif
+
+// 	// insert \n means input end
+// 	int nPos = sInsert.find('\n');
+// 	if ((int)sInsert.npos != nPos)
+// 	{
+// 		len = nPos;
+// 		sInsert.erase(nPos);
+// 	}
+
+#if 0
+	if (len > 0)
+	{
+		m_strText += text; //@todo...
+		this->OnTextChanged();
+	}
+#endif
+
+// 	if ((int)sInsert.npos == nPos) {
+// 		return;
+// 	}
+// 
+// 	// '\n' inserted, let delegate process first
+// 	if (m_pDelegate && m_pDelegate->onTextFieldInsertText(this, "\n", 1))
+// 	{
+// 		return;
+// 	}
+// 
+// 	// if delegate hasn't processed, detach from IME by default
+// 	detachWithIME();
+}
+
+void CUIEdit::deleteBackward()
+{
+	//android平台不需要理会deleteBackward(), ios没测试.
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	CCLog( "@@ CUIEdit::deleteBackward()\r\n" );
+
+	int nStrLen = m_strText.length();
+	if (! nStrLen)
+	{
+		// there is no string
+		return;
+	}
+
+	// get the delete byte number
+	int nDeleteLen = 1;    // default, erase 1 byte
+
+	while(0x80 == (0xC0 & m_strText.at(nStrLen - nDeleteLen)))
+	{
+		++nDeleteLen;
+	}
+
+	// if all text deleted, show placeholder string
+	if (nStrLen <= nDeleteLen)
+	{
+		m_strText = "";
+	}
+	else
+	{
+		// set new input text
+		string sText( m_strText.c_str(), nStrLen - nDeleteLen );
+		m_strText = sText;
+	}
+
+	this->OnTextChanged();
+#endif
+}
+
+const char* CUIEdit::getContentText()
+{
+	return m_strText.c_str();
+	//return m_pInputText->c_str();
+}
+
+void CUIEdit::keyboardDidShow(CCIMEKeyboardNotificationInfo& info)
+{
+	m_bIMEOpen = true;
+}
+
+void CUIEdit::keyboardDidHide(CCIMEKeyboardNotificationInfo& info)
+{
+	m_bIMEOpen = false;
+}
+
+#endif //WITH_NEW_IME
+//////////////////////////////////////////////////////////////////////////////// 新的输入法代码 }}
