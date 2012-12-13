@@ -210,7 +210,7 @@ void GameSceneLoading::DealNet()
 void GameSceneLoading::CheckVersionSucess()
 {
 	if (m_lbTitle)
-		m_lbTitle->SetText(NDCommonCString("ConnectingServer"));
+		m_lbTitle->SetText(NDCommonCString("ConnectingServer").c_str());
 	
 	DealNet();
 }

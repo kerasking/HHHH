@@ -80,7 +80,6 @@ function p.LoadUI()
 		return false;
 	end
 	
-	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.Friend);
 	layer:SetFrameRect(RectFullScreenUILayer);

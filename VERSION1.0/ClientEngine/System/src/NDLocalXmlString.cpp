@@ -18,19 +18,19 @@
 #include "NDUtility.h"
 #endif
 
-const char* NDLocalXmlString::GetCString(const char* szKeyName)
+const string NDLocalXmlString::GetCString(string szKeyName)
 {
-	if (!szKeyName)
+	if (szKeyName.empty())
 	{
 		return "error";
 	}
 	
-	ITER_MAP_DATA it = mapData.find(string(szKeyName));
+	ITER_MAP_DATA it = mapData.find(szKeyName);
 	
 	if (it == mapData.end())
 		return szKeyName;
 		
-	return (it->second).c_str();
+	return it->second;
 }
 
 bool NDLocalXmlString::LoadData()
@@ -61,7 +61,7 @@ bool NDLocalXmlString::readLines( vector<string>& vecLines )
 
 	// alloc buf, and read file
 	char* buf = new char[fileLen + 1];
-	fread( buf, 1, fileLen, fp );
+	int n = fread( buf, 1, fileLen, fp );
 	buf[fileLen] = 0;
 	fclose(fp);
 
@@ -80,13 +80,24 @@ bool NDLocalXmlString::readLines( vector<string>& vecLines )
 		memcpy( line, pBuf, lineLen );
 		line[ lineLen ] = 0;
 
-		// move to next
-		pBuf = pLineFeed + 1;
-		while (*pBuf == '\r' || *pBuf == '\n') pBuf++;
-
 		// save line
 		if (this->isKey(line) || this->isVal(line))
+		{
 			vecLines.push_back( line );	
+		}
+// 		else
+// 		{
+// 			WriteCon( "@@ read bad line:%s\r\n", line );
+// 		}
+
+// 		// trace line
+// 		static int index = 0;
+// 		CCLog( "xml line %d: %s\r\n", index++, line );
+
+		// move to next: trim line feed & spaces.
+		pBuf = pLineFeed + 1;
+		while (*pBuf == '\r' || *pBuf == '\n' 
+			|| *pBuf == 0x20 || *pBuf == '\t') pBuf++;
 	}
 
 	SAFE_DELETE_ARRAY(buf);

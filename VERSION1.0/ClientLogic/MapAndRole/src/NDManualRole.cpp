@@ -2591,7 +2591,7 @@ std::string NDManualRole::GetPeerageName(int nPeerage)
 	//NDString strKey;
 //		strKey.Format("Peerage%d", nPeerage);
 	//const char* pStr = NDCommonCString(strKey.getData());
-	const char* pStr = NDCommonCString(ss.str().c_str());
+	const char* pStr = NDCommonCString(ss.str().c_str()).c_str();
 
 	if (pStr)
 	{

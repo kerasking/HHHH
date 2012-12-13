@@ -416,7 +416,7 @@ void GameQuitDialog::DefaultShow(std::string title, std::string content,
 		ms_pkGameQuitDialog = new GameQuitDialog;
 		ms_pkGameQuitDialog->Initialization();
 		ms_pkGameQuitDialog->Show(title.c_str(), content.c_str(),
-				NDCommonCString("Ok"), NULL);
+				NDCommonCString("Ok").c_str(), NULL);
 		ms_pkGameQuitDialog->SetTime(seconds);
 	}
 	else if (replace)

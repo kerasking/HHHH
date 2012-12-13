@@ -135,7 +135,7 @@ void StatusDialog::Initialization(Fighter* f)
 		NDUILabel* lbStatus = new NDUILabel();
 		lbStatus->Initialization();
 		lbStatus->SetTextAlignment(LabelTextAlignmentCenter);
-		lbStatus->SetText(NDCommonCString("state"));
+		lbStatus->SetText(NDCommonCString("state").c_str());
 		lbStatus->SetFrameRect(CCRectMake(scrRect.origin.x,
 			scrRect.origin.y + nHeight, DIALOG_WIDTH, 20));
 		this->AddChild(lbStatus);

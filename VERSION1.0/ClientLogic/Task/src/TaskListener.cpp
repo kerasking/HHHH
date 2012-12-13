@@ -115,7 +115,7 @@ void showPrizeDialog(Task& task)
 //	}
 	if (!sbPrize.str().empty())
 	{
-		GlobalDialogObj.Show(NULL, NDCommonCString("TaskAward"),
+		GlobalDialogObj.Show(NULL, NDCommonCString("TaskAward").c_str(),
 				sbPrize.str().c_str(), NULL, NULL);
 		//showDialog("任务奖励", sbPrize.str().c_str());
 	}

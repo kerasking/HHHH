@@ -139,7 +139,6 @@ function p.LoadUI()
 		return false;
 	end
 	
-	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerMartial );
 	layer:SetFrameRect(RectFullScreenUILayer);
@@ -162,6 +161,7 @@ function p.LoadUI()
 	if petInfoLayer == nil then
 		return false;
 	end
+	petInfoLayer:SetPopupDlgFlag(true);
 	petInfoLayer:Init();
 	petInfoLayer:SetTag(TagPetInfoLayer);
 	petInfoLayer:SetFrameRect(RectFullScreenUILayer);
@@ -181,6 +181,7 @@ function p.LoadUI()
 	if skillInfoLayer == nil then
 		return false;
 	end
+	skillInfoLayer:SetPopupDlgFlag(true);
 	skillInfoLayer:Init();
 	skillInfoLayer:SetTag(TagSkillInfoLayer);
 	skillInfoLayer:SetFrameRect(RectFullScreenUILayer);
@@ -200,6 +201,7 @@ function p.LoadUI()
 	if descInfoLayer == nil then
 		return false;
 	end
+	descInfoLayer:SetPopupDlgFlag(true);
 	descInfoLayer:Init();
 	descInfoLayer:SetTag(p.TagMartialDescLayer);
 	descInfoLayer:SetFrameRect(RectFullScreenUILayer);
