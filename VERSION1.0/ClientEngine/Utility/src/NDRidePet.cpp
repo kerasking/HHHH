@@ -3,8 +3,6 @@
 #include "CCPointExtension.h"
 //#include "NDBaseRole.h"
 #include "EnumDef.h"
-//#include "NDPlayer.h"
-//#include "NDMapMgr.h"
 
 namespace NDEngine
 {
@@ -78,47 +76,7 @@ namespace NDEngine
 	{
 		NDSprite::SetPosition(newPosition);
 		return;
-		//		if (owner && owner->IsKindOfClass(RUNTIME_CLASS(NDManualRole)))
-		//		{
-		//			NDManualRole *role = (NDManualRole*)owner;
-		//			if (!role->IsInState(USERSTATE_SPEED_UP))
-		//			{
-		//				NDSprite::SetPosition(newPosition);
-		//				m_preSetPos = newPosition;
-		//				return;
-		//			}
-		//		}
 
-		//if (m_bMoveCorner)
-		//		{
-		//			if (m_bXTurnigToY)
-		//			{ 
-		//				if (m_bInc)
-		//				{ // down
-		//					NDSprite::SetPosition(ccp(newPosition.x,newPosition.y+8));
-		//				}
-		//				else
-		//				{ // up
-		//					NDSprite::SetPosition(ccp(newPosition.x,newPosition.y-8));
-		//				}
-		//			}
-		//			else
-		//			{
-		//				if (m_bInc)
-		//				{ // right
-		//					NDSprite::SetPosition(ccp(newPosition.x+8,newPosition.y));
-		//				}
-		//				else
-		//				{ // left
-		//					NDSprite::SetPosition(ccp(newPosition.x-8,newPosition.y));
-		//				}
-		//			}
-		//
-		//			//NDSprite::SetPosition(newPosition);
-		//			m_preSetPos = newPosition;
-		//			m_bMoveCorner = false;
-		//			return;
-		//		}
 		if(true) //(!m_bLastPos)
 		{
 			if (m_preSetPos.x == newPosition.x && m_preSetPos.y == newPosition.y)
@@ -159,16 +117,6 @@ namespace NDEngine
 			{
 				NDSprite::SetPosition(newPosition);
 			}
-
-
-			//if (m_faceRight)
-			//			{
-			//				NDSprite::SetPosition(CCPointMake(newPosition.x+8, newPosition.y));
-			//			}
-			//			else 
-			//			{
-			//				NDSprite::SetPosition(CCPointMake(newPosition.x-8, newPosition.y));
-			//			}
 		}
 		else 
 		{
@@ -198,18 +146,8 @@ namespace NDEngine
 		m_bInc = bInc;
 	}
 
-// 	void NDRidePet::SetOwner(NDBaseRole* role)
-// 	{
-// 		owner = role;
-// 	}
-
 	bool NDRidePet::IsOwnerPlayer()
 	{ 
-// 		if(owner && owner->IsKindOfClass(RUNTIME_CLASS(NDPlayer)))
-// 		{
-// 			return true; 
-// 		}
-
 		return false;
 	}
 }
