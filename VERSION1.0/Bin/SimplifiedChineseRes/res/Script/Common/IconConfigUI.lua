@@ -74,12 +74,12 @@ end
 
 --获取物品图片
 function GetGoodsPic(id)
-    return GetPotraitPic(id, "itemtype", DB_ITEMTYPE.ICONINDEX, "Goods", 80, 80, nil, nil, true);
+    return GetPotraitPic(id, "itemtype", DB_ITEMTYPE.ICONINDEX, "Goods", 80, 80);
 end
 
 --获取礼包图片
 function GetGiftPic(id)
-    return GetPotraitPic(id, "itemtype", DB_ITEMTYPE.ICONINDEX, "Goods", 80, 80, nil, nil, true);
+    return GetPotraitPic(id, "itemtype", DB_ITEMTYPE.ICONINDEX, "Goods", 80, 80);
     --return GetPotraitPic(id, "giftpack_config", DB_GIFTPACK_CONFIG.ICON, "Gifts", 80, 80);
 end
 
@@ -88,7 +88,7 @@ function GetBossTypePic( nActivity )
 	return GetPotraitPic( nActivity, "event_activity", DB_EVENT_ACTIVITY_CONFIG.ICON, "boss", 424, 430 );
 end
 
-function GetPotraitPic(id, configfilename, index, picfilename, w, h, offsetRows, offsetCols, blsLanguage)
+function GetPotraitPic(id, configfilename, index, picfilename, w, h, offsetRows, offsetCols)
     if not _G.CheckN(id) then
         LogInfo("id not is num!");
 		return nil;
@@ -135,15 +135,17 @@ function GetPotraitPic(id, configfilename, index, picfilename, w, h, offsetRows,
 	LogInfo("filename=[%s]",filename);
     
 	local pool = _G.DefaultPicPool();
-	
+    
+    
 	local pic;
-	if(blsLanguage) then
-		pic = pool:AddPicture(_G.GetSMImg00Path("portrait/" .. filename .. ".png"), false);
-	else
-		pic = pool:AddPicture(_G.GetSMImgPath("portrait/" .. filename .. ".png"), false);
-	end
-	
-	
+    if(bIsLanguage) then
+        LogInfo("%s %s bIsLanguage true",configfilename,picfilename);
+        pic = pool:AddPicture(_G.GetSMImg00Path("portrait/" .. filename .. ".png"), false);
+    else
+        LogInfo("%s %s bIsLanguage false",configfilename,picfilename);
+        pic = pool:AddPicture(_G.GetSMImgPath("portrait/" .. filename .. ".png"), false);
+    end
+    
 	if not _G.CheckP(pic) then
         LogInfo("pic is null!");
 		return nil;

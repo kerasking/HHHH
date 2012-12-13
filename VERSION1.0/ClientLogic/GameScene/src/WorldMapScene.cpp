@@ -344,6 +344,7 @@ void WorldMapLayer::SetRoleAtPlace(int placeId)
 	{
 		m_idMapCached = placeId;
 		float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
+
 		CCRect rect = m_roleNode->GetFrameRect();
 		rect.origin = GetPlaceIdScreenPos(placeId);
 		rect.size = CCSizeMake(fScaleFactor*35, fScaleFactor*70);
@@ -376,6 +377,7 @@ void WorldMapLayer::SetCenterAtPos(CCPoint pos)
 	m_screenCenter = pos;
 
 	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
+
 
 	if (!CompareEqualFloat(fScaleFactor, 0.0f))
 	{
