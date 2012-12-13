@@ -209,7 +209,7 @@ NDPicture* ItemImage::GetSMItem(int nIconVal)
     int bw = nIconVal / 100;
     char keyString[255];
     sprintf(keyString, "portrait/Goods%d.png",bw);
-    NDPicture *res = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImgPath(keyString), true);
+    NDPicture *res = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetSMImg00Path(keyString), true);
     if (!res)
 	{
 		return NULL;
