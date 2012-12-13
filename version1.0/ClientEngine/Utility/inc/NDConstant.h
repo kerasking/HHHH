@@ -231,8 +231,6 @@
 //战斗技能
 #define UILAYER_BATTLE_SKILL_TAG			11
 
-//地图单元格尺寸
-//#define MAP_UNITSIZE		(int)(32*(NDDirector::DefaultDirector()->GetScaleFactor()))
 //神魔主场景tag
 #define SMGAMESCENE_TAG							3000
 //神魔战斗场景tag

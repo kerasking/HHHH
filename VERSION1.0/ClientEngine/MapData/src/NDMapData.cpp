@@ -189,7 +189,7 @@ NDMapSwitch::~NDMapSwitch()
 
 void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 {
-	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
+	float fScaleFactor = RESOURCE_SCALE;
 
 	if (pkMapdata == NULL)
 	{
@@ -240,7 +240,7 @@ void NDMapSwitch::SetLableByType(int eLableType, int x, int y, const char* pszTe
 		return;
 	}
 
-	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
+	float fScaleFactor = RESOURCE_SCALE;
 
 	NDUILabel* pkLabels[2];
 	memset(pkLabels, 0, sizeof(pkLabels));

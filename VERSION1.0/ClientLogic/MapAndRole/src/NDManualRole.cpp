@@ -2027,7 +2027,7 @@ void NDManualRole::DrawNameLabel(bool bDraw)
 		isEnemy = true;
 	}
 
-	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+	float fScale = RESOURCE_SCALE;
 
 	iY = iY - FIGHTER_HEIGHT;// - 5 * fScale;
 
@@ -2142,7 +2142,7 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 
 	
 	CCSize fontSize = getStringSize(text.c_str(), lable[0]->GetFontSize());
-	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+	float fScale = RESOURCE_SCALE;
 	CCPoint posHead = this->getHeadPos();
 
 	int newX = posHead.x - 0.5 * fontSize.width;
@@ -2780,7 +2780,7 @@ void NDManualRole::RunSMEffect(int nDrawOrder)
 		return;
 	}
 	NDDirector* director		= NDDirector::DefaultDirector();
-	float fScaleFactor			= director->GetScaleFactor();
+	float fScaleFactor			= RESOURCE_SCALE;
 	CCSize sizeEffectParent		= pParent->GetContentSize();
 	CCPoint posRole				= this->GetPosition();
 	for (int j = eSM_EFFECT_ALIGNMENT_BEGIN; j < eSM_EFFECT_ALIGNMENT_END; j++) 

@@ -74,7 +74,7 @@ void WorldMapLayer::Initialization(int nMapId)
 
 	int width = m_mapData->getMapSize().width;
 	int height = m_mapData->getMapSize().height;
-	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
+	float fScaleFactor = RESOURCE_SCALE;
 
 	NDUILayer::Initialization();
 
@@ -343,7 +343,7 @@ void WorldMapLayer::SetRoleAtPlace(int placeId)
 	if (node && m_roleNode && node->getTexture())
 	{
 		m_idMapCached = placeId;
-		float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
+		float fScaleFactor = RESOURCE_SCALE;
 
 		CCRect rect = m_roleNode->GetFrameRect();
 		rect.origin = GetPlaceIdScreenPos(placeId);
@@ -376,8 +376,7 @@ void WorldMapLayer::SetCenterAtPos(CCPoint pos)
 	//m_posMapOffset	= posCenter;
 	m_screenCenter = pos;
 
-	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
-
+	float fScaleFactor = RESOURCE_SCALE;
 
 	if (!CompareEqualFloat(fScaleFactor, 0.0f))
 	{

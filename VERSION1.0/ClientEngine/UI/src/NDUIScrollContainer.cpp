@@ -277,10 +277,9 @@ void NDUIScrollContainer::DrawScrollBar()
 		CCRect rectself		= this->GetScreenRect();
 		CCRect rectClient	= rectScroll;
 		CCRect rect			= CCRectZero;
-		//float fScale		= NDDirector::DefaultDirector()->GetScaleFactor();
 		CCSize sizePic		= m_picScroll->GetSize();
 		rect.size.width		= sizePic.width;
-		rect.size.height	= rectself.size.height / rectClient.size.height * rectself.size.height;//sizePic.height * fScale;
+		rect.size.height	= rectself.size.height / rectClient.size.height * rectself.size.height;
 		rect.origin			= ccp(rectself.size.width - rect.size.width,
 								  -rectClient.origin.y / rectClient.size.height * rectself.size.height);
 		rect.origin			= ccpAdd(rect.origin, this->GetScreenRect().origin);
