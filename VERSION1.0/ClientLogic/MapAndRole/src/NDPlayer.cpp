@@ -57,7 +57,8 @@ NS_NDENGINE_BGN
 
 NDMapLayer* M_GetMapLayer()
 {
-	return NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(CSMGameScene)));
+	return NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->
+		GetScene(RUNTIME_CLASS(CSMGameScene)));
 }
 
 IMPLEMENT_CLASS(NDPlayer, NDManualRole)
@@ -65,7 +66,6 @@ IMPLEMENT_CLASS(NDPlayer, NDManualRole)
 bool NDPlayer::ms_bFirstUse = true;
 
 NDPlayer::NDPlayer() :
-//money(0),
 m_nEMoney(0),
 m_nPhyPoint(0),
 m_nDexPoint(0),
@@ -1024,29 +1024,22 @@ bool NDPlayer::DirectSwitch(int iSwitchCellX, int iSwitchCellY, int iPassIndex)
 
 bool NDPlayer::CanSwitch(int iSwitchCellX, int iSwitchCellY)
 {
-//  	int x = (int(this->GetPosition().x) - DISPLAY_POS_X_OFFSET) / MAP_UNITSIZE_X;
-//  	int y = (int(this->GetPosition().y) - DISPLAY_POS_Y_OFFSET) / MAP_UNITSIZE_Y;
-//  
-//  	if (abs(x - iSwitchCellX) <= 3 && abs(y - iSwitchCellY) <= 3)
-//  	{
-//  		return true;
-//  	}
-//  
-//  	return false;
-
-	//++Guosen 2012.8.29//在主城地图上确定两点，这两点连线的右侧是切屏区域//两个主城的判定是一样一样的
 #if 1
-int iX1 = 2283*ANDROID_SCALE;
-	int iY1 = 372*ANDROID_SCALE;
-	int iX2 = 2596*ANDROID_SCALE;
-	int iY2 = 582*ANDROID_SCALE;
-	
-	float k = (iX2-iX1)/(iY2-iY1);
+	int iX1 = 2283 * ANDROID_SCALE;
+	int iY1 = 372 * ANDROID_SCALE;
+	int iX2 = 2596 * ANDROID_SCALE;
+	int iY2 = 582 * ANDROID_SCALE;
+
+	float k = (iX2 - iX1) / (iY2 - iY1);
 	float b = iX1 - iY1 * k;
 	//
-	int iX = k * (this->GetPosition().y-DISPLAY_POS_Y_OFFSET) + b;
-	if ( iX < this->GetPosition().x-DISPLAY_POS_X_OFFSET )
+	int iX = k * (this->GetPosition().y - DISPLAY_POS_Y_OFFSET) + b;
+
+	if (iX < this->GetPosition().x - DISPLAY_POS_X_OFFSET)
+	{
 		return true;
+	}
+
 	return false;
 #endif
 }

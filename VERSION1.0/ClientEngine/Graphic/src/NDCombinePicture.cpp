@@ -34,25 +34,25 @@ void NDCombinePicture::AddPicture(NDPicture* pic, CombintPictureAligment aligmen
 		return;
 	}
 	
-	CCRect rectDraw = CCRectZero;
+	CCRect kDrawRect = CCRectZero;
 	
-	rectDraw.size = pic->GetSize();
+	kDrawRect.size = pic->GetSize();
 	
-	m_kRectLast.origin = rectDraw.origin = caclNext(m_kRectLast.origin,
-		aligment, m_kRectLast.size, rectDraw.size);
+	m_kRectLast.origin = kDrawRect.origin = caclNext(m_kRectLast.origin,
+		aligment, m_kRectLast.size, kDrawRect.size);
 	
-	m_kRectLast.size = rectDraw.size;
+	m_kRectLast.size = kDrawRect.size;
 	
-	m_vecCombinePic.push_back(CombinePicture(pic, aligment, rectDraw));
+	m_vecCombinePic.push_back(CombinePicture(pic, aligment, kDrawRect));
 	
-	if (rectDraw.origin.x + rectDraw.size.width > m_kSizeMax.width)
+	if (kDrawRect.origin.x + kDrawRect.size.width > m_kSizeMax.width)
 	{
-		m_kSizeMax.width = rectDraw.origin.x + rectDraw.size.width;
+		m_kSizeMax.width = kDrawRect.origin.x + kDrawRect.size.width;
 	}
 	
-	if (rectDraw.origin.y + rectDraw.size.height > m_kSizeMax.height)
+	if (kDrawRect.origin.y + kDrawRect.size.height > m_kSizeMax.height)
 	{
-		m_kSizeMax.height = rectDraw.origin.y + rectDraw.size.height;
+		m_kSizeMax.height = kDrawRect.origin.y + kDrawRect.size.height;
 	}
 }
 

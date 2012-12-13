@@ -363,14 +363,6 @@ void NDSprite::MoveToPosition(std::vector<CCPoint> kToPos, SpriteSpeed speed,
 					from = m_kPointList[m_kPointList.size() - 1];
 				}
 			}
-
-			// 			if (m_kPointList.empty())
-			// 			{
-			// 				m_bIsMoving = false;
-			// 			}
-
-			//m_pointList = NDAutoPath::sharedAutoPath()->getPathPointVetor();
-
 		}
 	}
 }
