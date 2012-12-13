@@ -1608,7 +1608,7 @@ void NDMapMgr::AddSwitch()
 			int nX = kScriptDB.GetN("portal", *it, DB_PORTAL_PORTALX);
 			int nY = kScriptDB.GetN("portal", *it, DB_PORTAL_PORTALY);
 
-			string strDesc = "³ÇéT";
+			string strDesc = NDCommonCString2("CityGate");
 
 			pkMapData->addMapSwitch(nX, nY, nIndex, nMapID, strDesc.c_str(),
 					"");

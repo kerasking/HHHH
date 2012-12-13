@@ -658,3 +658,36 @@ void NDTile::SetDrawRect_Android( CCRect rect ) //@android
 #endif
 	m_kDrawRect = rect;
 }
+
+//android平台下，战斗地图宽度不够会有黑边，解决方法如下：
+//	等比缩放战斗地图确保宽度足够，高度方面则从上面裁剪多余尺寸.
+void NDTile::SetCutRect_Android_BattleMap( CCRect rect, bool bBattleMap ) //@android
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	if (bBattleMap)
+	{
+		if (true) //是否启动android战斗地图缩放裁剪功能
+		{
+			CCLog( "@@ NDTile::SetCutRect_Android_BattleMap(): (%d, %d, %d, %d)\r\n", 
+				int(rect.origin.x), int(rect.origin.y), int(rect.size.width), int(rect.size.height));
+
+			CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
+			float screenAspect = visibleSize.width / visibleSize.height;
+			float picAspect = rect.size.width / rect.size.height;
+			
+			if (picAspect < screenAspect)
+			{
+				float newHeight = rect.size.width / screenAspect;
+				float newTop = rect.size.height - newHeight;
+				rect.origin.y = newTop;
+			}
+
+			CCLog( "@@ NDTile::SetCutRect_Android_BattleMap(): screenAspect=%.1f, picAspect=%.1f, needCut=%s, newTop=%d\r\n",
+				screenAspect, picAspect, 
+				(picAspect < screenAspect) ? "true" : "false",
+				rect.origin.y );
+		}
+	}
+#endif
+	m_kCutRect = rect;
+}

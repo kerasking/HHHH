@@ -633,4 +633,14 @@ bool NDGameApplication::processPM(const char* cmd)
 	return true;
 }
 
+bool NDGameApplication::PreLoadEffectSound(const char* pszFilesPath)
+{
+	if (0 == pszFilesPath || !*pszFilesPath)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 NS_NDENGINE_END

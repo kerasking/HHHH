@@ -338,10 +338,15 @@ NDMapMonsterRange::NDMapMonsterRange() :
 }
 
 NDMapData::NDMapData() :
-		m_nLayerCount(0), m_nColumns(0), m_nRows(0), /*m_nUnitSize(0), */m_nRoadBlockX(
-				-1), m_nRoadBlockY(-1), m_kMapTiles(NULL),
-		m_pkObstacles(NULL), m_pkSceneTiles(NULL), m_pkBackgroundTiles(NULL), m_pkSwitchs(
-				NULL), m_pkAnimationGroups(NULL), m_pkAniGroupParams(NULL)
+		m_nLayerCount(0), m_nColumns(0), m_nRows(0), /*m_nUnitSize(0), */
+		m_nRoadBlockX(-1), m_nRoadBlockY(-1), m_kMapTiles(NULL),
+		m_pkObstacles(NULL), 
+		m_pkSceneTiles(NULL), 
+		m_pkBackgroundTiles(NULL), 
+		m_pkSwitchs(NULL), 
+		m_pkAnimationGroups(NULL), 
+		m_pkAniGroupParams(NULL),
+		m_bBattleMapFlag(false)
 {
 }
 
@@ -572,7 +577,7 @@ void NDMapData::decode(FILE* pkStream)
 
 
 		pkTile->setMapSize(	CCSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
-		pkTile->setCutRect(	CCRectMake(0, 0, picWidth, picHeight));
+		pkTile->SetCutRect_Android_BattleMap( CCRectMake(0, 0, picWidth, picHeight), getBattleMapFlag() ); //@android
 		pkTile->SetDrawRect_Android(CCRectMake(nX, nY, picWidth, picHeight)); //@android
 		pkTile->setReverse(nReverse);
 		pkTile->make();
@@ -647,7 +652,7 @@ void NDMapData::decode(FILE* pkStream)
 				* pkTile->getTexture()->getMaxT();
 
 		pkTile->setMapSize( CCSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
-		pkTile->setCutRect(	CCRectMake(0, 0, nPicWidth, nPicHeight));
+		pkTile->SetCutRect_Android_BattleMap( CCRectMake(0, 0, nPicWidth, nPicHeight), getBattleMapFlag() ); //@android
 		pkTile->SetDrawRect_Android(CCRectMake(x, y, nPicWidth, nPicHeight)); //@android
 		pkTile->setReverse(bReverse);
 		pkTile->make();
