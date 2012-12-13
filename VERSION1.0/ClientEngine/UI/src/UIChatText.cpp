@@ -344,6 +344,8 @@ NDUILabel* CUIChatText::CreateLabel(const char* text, unsigned int fontSize, ccC
 		result->SetTag(idItem);
 		result->SetFontSize(fontSize);
 		result->SetFontColor(color);
+
+		textSize.width = textSize.width > textSize.height ? textSize.height : textSize.width;
 		result->SetFrameRect(CCRectMake(0, 0, textSize.width, textSize.height));
 	}
 	return result;

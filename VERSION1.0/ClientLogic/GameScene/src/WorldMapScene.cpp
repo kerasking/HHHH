@@ -74,7 +74,6 @@ void WorldMapLayer::Initialization(int nMapId)
 
 	int width = m_mapData->getMapSize().width;
 	int height = m_mapData->getMapSize().height;
-	float fScaleFactor = RESOURCE_SCALE;
 
 	NDUILayer::Initialization();
 
@@ -129,11 +128,11 @@ void WorldMapLayer::Initialization(int nMapId)
 	NDPicture* picCloseSelect	= NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("btn_close.png"));    
 	CCSize sizeClose	= picClose->GetSize();
 
-	int iFlag =  fScaleFactor < 1.5 ? 2 : 1;
+	// set close button
 	picClose->Cut(CCRectMake(0,  0,  sizeClose.width,  sizeClose.height/2 - 2));
 	picCloseSelect->Cut(CCRectMake(0,  sizeClose.height/2,  sizeClose.width,  sizeClose.height/2));
-	CCRect rectClose = CCRectMake((winsize.width - sizeClose.width/iFlag), 0,
-									 sizeClose.width/iFlag, sizeClose.height/2/iFlag);
+	CCRect rectClose = CCRectMake((winsize.width - sizeClose.width), 0,
+									 sizeClose.width, sizeClose.height/2);
 	// init close button
 	{
 		m_btnClose = new NDUIButton();
@@ -344,7 +343,6 @@ void WorldMapLayer::SetRoleAtPlace(int placeId)
 	{
 		m_idMapCached = placeId;
 		float fScaleFactor = RESOURCE_SCALE;
-
 		CCRect rect = m_roleNode->GetFrameRect();
 		rect.origin = GetPlaceIdScreenPos(placeId);
 		rect.size = CCSizeMake(fScaleFactor*35, fScaleFactor*70);

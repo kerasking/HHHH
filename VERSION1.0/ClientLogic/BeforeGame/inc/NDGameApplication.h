@@ -37,6 +37,9 @@ public:
 	virtual bool processPM( const char* pszCmd );
 
 protected:
+
+	virtual bool PreLoadEffectSound(const char* pszFilesPath);
+
 private:
 	virtual void MyInit(); //after applicationDidFinishLaunching() called.
 };

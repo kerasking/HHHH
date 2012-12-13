@@ -240,6 +240,7 @@ void NDMapLayer::Initialization(const char* mapFile)
 
 	m_pkMapData = new NDMapData;
 	ND_ASSERT_NO_RETURN(NULL == m_pkMapData);
+	m_pkMapData->setBattleMapFlag( IsBattleBackground() );
 	m_pkMapData->initWithFile(mapFile);
 
 	SetContentSize(
