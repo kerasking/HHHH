@@ -306,7 +306,7 @@ function GetPotraitPicFigure(id, configfilename, index,sHead, w, h, offsetRows, 
 	local filename		= sHead.."/Figure_BigPortrait"..nIcon;
 
 	local pool = _G.DefaultPicPool();
-	local pic = pool:AddPicture(_G.GetSMImgPath("portrait/" .. filename .. ".png"), false);
+	local pic = pool:AddPicture(_G.GetSMImg00Path("portrait/" .. filename .. ".png"), false);
 	if not _G.CheckP(pic) then
         LogInfo("pic is null!");
 		return nil;

@@ -1234,6 +1234,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Turorial"
+			>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Tutorial\define.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Tutorial\TutorialData.lua"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\Bin\SimplifiedChineseRes\res\Script\DBLoad.lua"
 			>

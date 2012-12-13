@@ -3663,16 +3663,16 @@ function p.BeginTemplete(layer)
         
         --添加提示文字
         if(taskItem.TxtPos) then
-            local nX,nY = p.GetJtRelativePos(taskItem.Dir.x, taskItem.Dir.y, taskItem.Dir.index);
+            local nX,nY = p.GetJtRelativePos(taskItem.Dir.x*ScaleFactor, taskItem.Dir.y*ScaleFactor, taskItem.Dir.index);
             p.CreateText(layer,taskItem.TxtPos.Txt,p.BoxTag,nX,nY,taskItem.Order);
         end
         
-        p.CreateAnimate(layer,taskItem.Dir.index,p.JtTag,taskItem.Dir.x,taskItem.Dir.y,taskItem.Order);
+        p.CreateAnimate(layer,taskItem.Dir.index,p.JtTag,taskItem.Dir.x*ScaleFactor,taskItem.Dir.y*ScaleFactor,taskItem.Order);
     end
     
     --添加光效
     if(taskItem.EffectPos) then
-        p.CreateAnimate(layer,taskItem.EffectPos.index,p.GxTag,taskItem.EffectPos.x,taskItem.EffectPos.y,taskItem.Order);
+        p.CreateAnimate(layer,taskItem.EffectPos.index,p.GxTag,taskItem.EffectPos.x*ScaleFactor,taskItem.EffectPos.y*ScaleFactor,taskItem.Order);
     end
     
 end
