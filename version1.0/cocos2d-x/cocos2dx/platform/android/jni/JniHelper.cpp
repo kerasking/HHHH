@@ -116,6 +116,8 @@ static bool getStaticMethodInfo_(cocos2d::JniMethodInfo &methodinfo,
 			break;
 		}
 
+		LOGD("Succeeded to find static method id of %s", methodName);
+
 		methodinfo.classID = classID;
 		methodinfo.env = pEnv;
 		methodinfo.methodID = methodID;

@@ -144,18 +144,25 @@ void SimpleAudioEngine::stopEffect(unsigned int nSoundId)
 
 void SimpleAudioEngine::preloadEffect(const char* pszFilePath)
 {
+	LOGD("Entry preloadEffect(\"%s\")",pszFilePath);
+
     int nRet = 0;
     do 
     {
         BREAK_IF(! pszFilePath);
 
         nRet = _Hash(pszFilePath);
+		LOGD("Hash the file path is %d",nRet);
 
         BREAK_IF(sharedList().end() != sharedList().find(nRet));
+
+		LOGD("finded the shared EffectList from nRet");
 
         sharedList().insert(Effect(nRet, new MciPlayer()));
         MciPlayer * pPlayer = sharedList()[nRet];
         pPlayer->Open(_FullPath(pszFilePath), nRet);
+
+		LOGD("Open the pszFilePath");
 
         BREAK_IF(nRet == pPlayer->GetSoundID());
 
@@ -270,10 +277,12 @@ const char * _FullPath(const char * szPath)
     if (0 != szPath[0] && ':' != szPath[1])
     {
         strcpy_s(s_szFullPath + s_dwRootLen, sizeof(s_szFullPath) - s_dwRootLen, szPath);
+		LOGD("Leave _FullPath, Full path is %s",s_szFullPath);
         return s_szFullPath;
     }
     else
     {
+		LOGD("Leave _FullPath, szPath is %s",szPath);
         return szPath;
     }
 }

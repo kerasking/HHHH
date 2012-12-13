@@ -111,12 +111,16 @@ public class Cocos2dxSound
 
 	public int preloadEffect(final String pPath)
 	{
+		String strShow = String.format("Entry java preloadEffect,path is %s", pPath);
+		Log.i("DaHuaLongJiang",strShow);
 		Integer soundID = this.mPathSoundIDMap.get(pPath);
 
 		if (soundID == null)
 		{
 			soundID = this.createSoundIDFromAsset(pPath);
 			this.mPathSoundIDMap.put(pPath, soundID);
+			String strShow1 = String.format("put the path and id into mPathSoundIDMap,path is %s,id is %d", pPath,soundID);
+			Log.i("DaHuaLongJiang",strShow1);
 		}
 
 		return soundID;
@@ -143,7 +147,11 @@ public class Cocos2dxSound
 
 	public int playEffect(final String pPath, final boolean pLoop)
 	{
+		Log.i("DaHuaLongJiang","Entry playEffect");
 		Integer soundID = this.mPathSoundIDMap.get(pPath);
+		String strID = new String();
+		strID = String.format("soundID == %d", soundID);
+		Log.i("DaHuaLongJiang",strID);
 		int streamID = Cocos2dxSound.INVALID_STREAM_ID;
 
 		if (soundID != null)
@@ -154,9 +162,11 @@ public class Cocos2dxSound
 		{
 			// the effect is not prepared
 			soundID = this.preloadEffect(pPath);
+			String strGetID = String.format("get the soundID == %d", soundID);
+			Log.i("DaHuaLongJiang",strGetID);
 			if (soundID == Cocos2dxSound.INVALID_SOUND_ID)
 			{
-				// can not preload effect
+				Log.e("DaHuaLongJiang","Cant preload the sound");
 				return Cocos2dxSound.INVALID_SOUND_ID;
 			}
 
@@ -164,6 +174,7 @@ public class Cocos2dxSound
 			// work correctly
 			synchronized (this.mSoundPool)
 			{
+				Log.i("DaHuaLongJiang","Entry synchronized (this.mSoundPool)");
 				// add this effect into mEffecToPlayWhenLoadedArray, and it will
 				// be played when loaded completely
 				mEffecToPlayWhenLoadedArray
@@ -172,17 +183,22 @@ public class Cocos2dxSound
 
 				try
 				{
+					Log.i("DaHuaLongJiang","this.mSemaphore.acquire();");
 					// wait OnloadedCompleteListener to set streamID
-					this.mSemaphore.acquire();
+					//this.mSemaphore.acquire();
 
+					Log.i("DaHuaLongJiang","streamID = this.mStreamIdSyn;");
 					streamID = this.mStreamIdSyn;
 				} catch (Exception e)
 				{
+					Log.e("DaHuaLongJiang","INVALID_SOUND_ID");
 					return Cocos2dxSound.INVALID_SOUND_ID;
 				}
 			}
 		}
 
+		String strResult = String.format("Leave playEffect,The streamID == %d",streamID);
+		Log.i("DaHuaLongJiang",strResult);
 		return streamID;
 	}
 
@@ -276,7 +292,7 @@ public class Cocos2dxSound
 			pVolume = 1;
 		}
 
-		this.mLeftVolume = this.mRightVolume = pVolume;
+		this.mLeftVolume = this.mRightVolume = 1.0f;
 
 		// change the volume of playing sounds
 		if (!this.mPathStreamIDsMap.isEmpty())
@@ -310,24 +326,30 @@ public class Cocos2dxSound
 
 	public int createSoundIDFromAsset(final String pPath)
 	{
+		String strShow = String.format("Entry java createSoundIDFromAsset,path is %s", pPath);
+		Log.i("DaHuaLongJiang",strShow);
 		int soundID = Cocos2dxSound.INVALID_SOUND_ID;
 
 		try
 		{
 			if (pPath.startsWith("/"))
 			{
+				Log.i("DaHuaLongJiang","Ready to run load(pPath,0)");
 				soundID = this.mSoundPool.load(pPath, 0);
 			} else
 			{
+				Log.i("DaHuaLongJiang","Ready to run load(mContext);");
 				soundID = this.mSoundPool.load(this.mContext.getAssets()
 						.openFd(pPath), 0);
 			}
 		} catch (final Exception e)
 		{
 			soundID = Cocos2dxSound.INVALID_SOUND_ID;
-			Log.e(Cocos2dxSound.TAG, "error: " + e.getMessage(), e);
+			Log.e("DaHuaLongJiang", "error: " + e.getMessage(), e);
 		}
 
+		String strRes = String.format("Leave java createSoundIDFromAsset,id is %d", soundID);
+		Log.i("DaHuaLongJiang",strRes);
 		return soundID;
 	}
 
@@ -401,7 +423,7 @@ public class Cocos2dxSound
 				mStreamIdSyn = Cocos2dxSound.INVALID_SOUND_ID;
 			}
 
-			mSemaphore.release();
+			//mSemaphore.release();
 		}
 	}
 }
