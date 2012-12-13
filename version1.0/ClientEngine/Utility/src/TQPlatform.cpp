@@ -60,8 +60,6 @@ CCSize getStringSize(const char* pszStr, unsigned int fontSize)
 {
     CCSize CCSz = CCSizeMake(0.0f, 0.0f);
 
-	//fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
-
 	if (pszStr) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         CGSize sz = CGSizeMake(0.0f, 0.0f);
@@ -98,10 +96,6 @@ CCSize getStringSizeMutiLine(const char* pszStr, unsigned int fontSize, CCSize c
 	{
 		return CCSz;
 	}
-
-
-
-	//fontSize = fontSize * NDDirector::DefaultDirector()->GetScaleFactor();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	NSString *nstext = [NSString stringWithUTF8String:pszStr];

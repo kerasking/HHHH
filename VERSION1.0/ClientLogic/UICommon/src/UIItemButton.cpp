@@ -174,7 +174,7 @@ void CUIItemButton::ChangeItemType(unsigned int unItemType)
 		NDPicture* pic	= ItemImage::GetSMItem(nIconIndex);
 		if (pic)
 		{
-           pic->setScale(0.5f*SCREEN_SCALE);
+           pic->setScale(0.5f*RESOURCE_SCALE);
 			if (!m_bShowAdapt)
 			{
 				CCSize size = pic->GetSize();
@@ -355,7 +355,7 @@ void CUIItemButton::draw()
                                                      m_customRect.size.width, m_customRect.size.height);
                             if (m_touched && NULL == m_touchDownImage && m_touchDownStatus == TouchDownImage)
                             {
-                                float fScale		= NDDirector::DefaultDirector()->GetScaleFactor();
+                                float fScale		= RESOURCE_SCALE;
                                 
                                 /*
                                 rect.origin.x		-= 5* fScale;
@@ -372,7 +372,7 @@ void CUIItemButton::draw()
                             CCRect rect		= scrRect;
                             if (m_touched && NULL == m_touchDownImage && m_touchDownStatus == TouchDownImage)
                             {
-                                float fScale		= NDDirector::DefaultDirector()->GetScaleFactor();
+                                float fScale		= RESOURCE_SCALE;
                                 /*
                                 
                                 rect.origin.x		-= 5* fScale;
@@ -446,7 +446,7 @@ void CUIItemButton::draw()
                 //draw touch down status
                 //if (m_touched && !m_longTouched) 
                 {
-                    float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+                    float scale = RESOURCE_SCALE;
                     CCRect scrRectBig = scrRect;
                     
                     //边框放大
@@ -619,7 +619,7 @@ void CUIItemButton::draw()
                     {
                         
                         pic->SetColor(ccc4(255, 255, 255, 255));
-                        float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+                        float fScale = RESOURCE_SCALE;
                         CCRect rect = CCRectMake(scrRect.origin.x - 3 * fScale, 
                                                  scrRect.origin.y - 3 * fScale, 
                                                  scrRect.size.width + 6 * fScale, 
@@ -637,7 +637,7 @@ void CUIItemButton::draw()
                         //边框放大（select）                   
 						   if(m_touchDownImage){
                             
-                            float scale = NDDirector::DefaultDirector()->GetScaleFactor();
+                            float scale = RESOURCE_SCALE;
                             CCRect scrRectBig = rect;
                             scrRectBig.origin.x -= 1*scale;
                             scrRectBig.origin.y -= 1*scale;

@@ -27,12 +27,12 @@ CUIScroll::CUIScroll()
 	
 	ResetMoveData();
 	
-	UI_ACCER_FIRST = -40.0f * NDDirector::DefaultDirector()->GetScaleFactor();
+	UI_ACCER_FIRST = -40.0f * RESOURCE_SCALE;
 	
-	UI_POSI_UP_SPEED_MIN = 300.0f * NDDirector::DefaultDirector()->GetScaleFactor();
-	UI_NEGA_UP_SPEED_MIN = -300.0f * NDDirector::DefaultDirector()->GetScaleFactor();
-	UI_POSI_UP_SPEED_MAX = 800.0f * NDDirector::DefaultDirector()->GetScaleFactor();
-	UI_NEGA_UP_SPEED_MAX = -800.0f * NDDirector::DefaultDirector()->GetScaleFactor();
+	UI_POSI_UP_SPEED_MIN = 300.0f * RESOURCE_SCALE;
+	UI_NEGA_UP_SPEED_MIN = -300.0f * RESOURCE_SCALE;
+	UI_POSI_UP_SPEED_MAX = 800.0f * RESOURCE_SCALE;
+	UI_NEGA_UP_SPEED_MAX = -800.0f * RESOURCE_SCALE;
 //	m_bTouchDown				= false;
 }
 
@@ -110,8 +110,7 @@ void CUIScroll::draw()
 		}
 		
 		float  fDistance = GetMoveDistance();
-		if (fDistance < 0.5f /** NDDirector::DefaultDirector()->GetScaleFactor()*/ && 
-			fDistance > -0.5f /* NDDirector::DefaultDirector()->GetScaleFactor()*/)
+		if (fDistance < 0.5f && fDistance > -0.5f)
 		{
 			SwitchStateTo(STATE_STOP);
 		}

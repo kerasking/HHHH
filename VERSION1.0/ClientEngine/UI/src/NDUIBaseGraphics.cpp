@@ -124,7 +124,7 @@ namespace NDEngine
 // 		//CCAssert(0,"crash me");//@todo: crash me!
 // 
 // 		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-// 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
+// 		float scale		= RESOURCE_SCALE;	
 // 
 // 		glLineWidth(lineWidth);
 // 		glColor4ub(color.r, color.g, color.b, color.a);
@@ -158,7 +158,7 @@ namespace NDEngine
 // 		//CCAssert(0, "crash me");//@todo: crash me!
 // 
 // 		CCSize winSize	= CCDirector::sharedDirector()->getWinSizeInPixels();
-// 		float scale		= NDDirector::DefaultDirector()->GetScaleFactor();
+// 		float scale		= RESOURCE_SCALE;
 // 
 // 		glLineWidth(lineWidth);
 // 		glColor4ub(color.r, color.g, color.b, color.a);

@@ -503,7 +503,6 @@ void NDUIButton::drawLongTouch()
 	if (pic)
 	{
 		pic->SetColor(ccc4(255, 255, 255, 255));
-		//float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
 
 		//** chh 2012-07-31 修改button放大效果 **//
 		/*
@@ -595,7 +594,7 @@ void NDUIButton::drawButtonImage()
 			if (m_touched && NULL == m_touchDownImage
 				&& m_touchDownStatus == TouchDownImage)
 			{
-				//float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+				//float fScale = RESOURCE_SCALE;
 
 				//** chh 2012-07-31 修改button放大效果 **//
 				/*
@@ -635,7 +634,7 @@ void NDUIButton::drawButtonImage()
 			if (m_touched && NULL == m_touchDownImage
 				&& m_touchDownStatus == TouchDownImage)
 			{
-				//float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+				//float fScale = RESOURCE_SCALE;
 				//** chh 2012-07-31 修改button放大效果 **//
 				/*
 				rect.origin.x		-= 5* fScale;
