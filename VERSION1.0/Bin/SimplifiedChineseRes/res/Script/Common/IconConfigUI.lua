@@ -221,7 +221,8 @@ function GetEliteGrayMapPic(mapId)
 end
 
 function GetMapPic(mapId)
-    return GetPotraitPicMap(mapId, "map", DB_DYNAMAP.TITLE, "Map",178, 154);
+    --return GetPotraitPicMap(mapId, "map", DB_DYNAMAP.TITLE, "Map",178, 154);
+    return GetPotraitPic(mapId, "map", DB_DYNAMAP.TITLE, "Map",178, 154, nil, nil, true);
 end
 
 function GetPotraitPicMap(id, configfilename, index,sHead, w, h, offsetRows, offsetCols)
