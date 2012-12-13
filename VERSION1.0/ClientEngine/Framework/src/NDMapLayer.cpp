@@ -183,13 +183,14 @@ void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)
 	m_pkOrders->retain();
 	//CC_SAFE_RELEASE(m_texMap);
 
-	delete m_pkPicMap;
+	SAFE_DELETE( m_pkPicMap );
 
 	char pszMapFile[256] =
 	{ 0 };
 	sprintf(pszMapFile, "%smap_%d.map", NDPath::GetMapPath().c_str(), mapId);
 
 	m_pkMapData = new NDMapData;
+	m_pkMapData->setBattleMapFlag( IsBattleBackground() );
 	m_pkMapData->initWithFile(pszMapFile);
 
 	if (m_pkMapData)
@@ -239,6 +240,7 @@ void NDMapLayer::Initialization(const char* mapFile)
 
 	m_pkMapData = new NDMapData;
 	ND_ASSERT_NO_RETURN(NULL == m_pkMapData);
+	m_pkMapData->setBattleMapFlag( IsBattleBackground() );
 	m_pkMapData->initWithFile(mapFile);
 
 	SetContentSize(
