@@ -74,12 +74,12 @@ end
 
 --获取物品图片
 function GetGoodsPic(id)
-    return GetPotraitPic(id, "itemtype", DB_ITEMTYPE.ICONINDEX, "Goods", 80, 80);
+    return GetPotraitPic(id, "itemtype", DB_ITEMTYPE.ICONINDEX, "Goods", 80, 80, nil, nil, true);
 end
 
 --获取礼包图片
 function GetGiftPic(id)
-    return GetPotraitPic(id, "itemtype", DB_ITEMTYPE.ICONINDEX, "Goods", 80, 80);
+    return GetPotraitPic(id, "itemtype", DB_ITEMTYPE.ICONINDEX, "Goods", 80, 80, nil, nil, true);
     --return GetPotraitPic(id, "giftpack_config", DB_GIFTPACK_CONFIG.ICON, "Gifts", 80, 80);
 end
 
@@ -88,7 +88,7 @@ function GetBossTypePic( nActivity )
 	return GetPotraitPic( nActivity, "event_activity", DB_EVENT_ACTIVITY_CONFIG.ICON, "boss", 424, 430 );
 end
 
-function GetPotraitPic(id, configfilename, index, picfilename, w, h, offsetRows, offsetCols)
+function GetPotraitPic(id, configfilename, index, picfilename, w, h, offsetRows, offsetCols, bIsLanguage)
     if not _G.CheckN(id) then
         LogInfo("id not is num!");
 		return nil;
@@ -217,7 +217,8 @@ end
 
 --取大地图的图标在副本里使用(精英副本由于要加灰色图片导致实现不同修改）
 function GetEliteGrayMapPic(mapId)
-    return GetPotraitPicMap(mapId, "map", DB_DYNAMAP.TITLE, "MapGray", 178, 154);
+    --return GetPotraitPicMap(mapId, "map", DB_DYNAMAP.TITLE, "MapGray", 178, 154);
+    return GetPotraitPic(mapId, "map", DB_DYNAMAP.TITLE, "Map",178, 154, nil, nil, true);
 end
 
 function GetMapPic(mapId)
@@ -272,12 +273,12 @@ end
 --]]
 
 function GetPetBigPotraitTranPic( petTypeId )
-    return GetPotraitPicFigure( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigPortrait", 179, 215 );
+    return GetPotraitPicFigure( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigPortrait", 179, 215, nil, nil, true);
 end
 
 --获得招募界面的灰色武将头像
 function GetPetBigGrayPotraitTranPic( petTypeId )
-    return GetPotraitPicFigure( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigGrayPortrait", 179, 215 );
+    return GetPotraitPicFigure( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigGrayPortrait", 179, 215, nil, nil, true);
 end
 
 
