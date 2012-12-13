@@ -364,13 +364,13 @@ void CIphoneInput::SetFrame(float fX, float fY, float fW, float fH)
 #if 0
 	NDDirector& director	= *(NDDirector::DefaultDirector());
 	CGSize winsize = director.GetWinPoint();
-    float fScale	= director.GetScaleFactor();
+    float fScale	= RESOURCE_SCALE;
 	
 	if (director.IsEnableRetinaDisplay())
 	{
 		/*
-		float fScale	= director.GetScaleFactor();
-		float fScaleY	= director.GetScaleFactorY();
+		float fScale	= RESOURCE_SCALE;
+		float fScaleY	= RESOURCE_SCALE;
 		
 		fX	/= fScale;
 		fY	/= fScaleY;

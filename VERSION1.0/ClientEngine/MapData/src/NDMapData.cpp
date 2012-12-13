@@ -189,7 +189,7 @@ NDMapSwitch::~NDMapSwitch()
 
 void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 {
-	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
+	float fScaleFactor = RESOURCE_SCALE;
 
 	if (pkMapdata == NULL)
 	{
@@ -240,7 +240,7 @@ void NDMapSwitch::SetLableByType(int eLableType, int x, int y, const char* pszTe
 		return;
 	}
 
-	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
+	float fScaleFactor = RESOURCE_SCALE;
 
 	NDUILabel* pkLabels[2];
 	memset(pkLabels, 0, sizeof(pkLabels));
@@ -572,7 +572,7 @@ void NDMapData::decode(FILE* pkStream)
 
 
 		pkTile->setMapSize(	CCSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
-		pkTile->setCutRect(	CCRectMake(0, 0, picWidth, picHeight));
+		pkTile->SetCutRect_Android_BattleMap( CCRectMake(0, 0, picWidth, picHeight), getBattleMapFlag() ); //@android
 		pkTile->SetDrawRect_Android(CCRectMake(nX, nY, picWidth, picHeight)); //@android
 		pkTile->setReverse(nReverse);
 		pkTile->make();
@@ -647,7 +647,7 @@ void NDMapData::decode(FILE* pkStream)
 				* pkTile->getTexture()->getMaxT();
 
 		pkTile->setMapSize( CCSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
-		pkTile->setCutRect(	CCRectMake(0, 0, nPicWidth, nPicHeight));
+		pkTile->SetCutRect_Android_BattleMap( CCRectMake(0, 0, nPicWidth, nPicHeight), getBattleMapFlag() ); //@android
 		pkTile->SetDrawRect_Android(CCRectMake(x, y, nPicWidth, nPicHeight)); //@android
 		pkTile->setReverse(bReverse);
 		pkTile->make();

@@ -681,6 +681,7 @@ function p.InitializeEliteLayer()
 			return false;
 		end
 
+		pListItem:SetPopupDlgFlag(true);
 		pListItem:Init( false );
 		pListItem:SetViewId( i );
 		pListItem:SetTag( i );
@@ -770,6 +771,7 @@ function p.GenerateConfirmDialog( pParentLayer )
 		LogInfo( "NormalBossListUI: GenerateConfirmDialog() failed! layer = nil" );
 		return false;
 	end
+	layer:SetPopupDlgFlag(true);
 	layer:Init();
 	--layer:SetTag( TAG_LAYER_CONFDLG );
 	layer:SetFrameRect( RectFullScreenUILayer );

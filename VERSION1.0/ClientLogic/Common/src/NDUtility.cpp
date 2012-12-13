@@ -92,7 +92,7 @@ bool VerifyUnsignedNum(const std::string strnum)
 // void DrawPolygon(CCRect rect, ccColor4B color, GLuint lineWidth)
 // {
 // 	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
-// 	float scale		= NDDirector::DefaultDirector()->GetScaleFactor();	
+// 	float scale		= RESOURCE_SCALE;	
 // 	
 // 	glLineWidth(lineWidth);
 // 	glColor4ub(color.r, color.g, color.b, color.a); 

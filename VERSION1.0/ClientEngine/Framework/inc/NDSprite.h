@@ -31,8 +31,8 @@
 #import <Foundation/Foundation.h>
 #endif
 
-#define FIGHTER_HEIGHT	70 * (NDDirector::DefaultDirector()->GetScaleFactor())
-#define FIGHTER_WIDTH	45 * (NDDirector::DefaultDirector()->GetScaleFactor())
+#define FIGHTER_HEIGHT	70 * RESOURCE_SCALE
+#define FIGHTER_WIDTH	45 * RESOURCE_SCALE
 
 class NDAnimationGroup;
 class NDSPrite;
@@ -194,13 +194,13 @@ public:
 
 	int GetCol()
 	{
-		int iUint = 16 * ((int)(NDDirector::DefaultDirector()->GetScaleFactor()));
+		int iUint = 16 * RESOURCE_SCALE_INT;
 		return (m_kPosition.x - iUint/2) / iUint;
 	}
 	
 	int GetRow()
 	{
-		int iUint = 16 * ((int)(NDDirector::DefaultDirector()->GetScaleFactor()));
+		int iUint = 16 * RESOURCE_SCALE_INT;
 		return (m_kPosition.y - iUint) / iUint;
 	}
 

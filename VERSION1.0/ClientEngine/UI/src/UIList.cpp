@@ -522,7 +522,7 @@ void CUIListSection::draw()
 		CCRect rect;
 		rect.size			= picState->GetSize();
 		rect.origin			= ccpAdd(scrRect.origin, 
-									 ccp(5 * NDDirector::DefaultDirector()->GetScaleFactor(),
+									 ccp(5 * RESOURCE_SCALE,
 										 (m_attrSec.unSectionHeight - rect.size.height) / 2) );
 		picState->DrawInRect(rect);
 	}

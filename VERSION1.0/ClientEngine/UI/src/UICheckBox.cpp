@@ -210,13 +210,7 @@ void CUICheckBox::draw()
 		
 		const char* str			= m_lbText->GetText().c_str();
 		unsigned int fontsize	= m_lbText->GetFontSize();
-		
-		//float fScaleFactor	= NDDirector::DefaultDirector()->GetScaleFactor();
-		//if (!CompareEqualFloat(fScaleFactor, 0.0f))
-		//{
-		//	fontsize	= fontsize / fScaleFactor; 
-		//}
-		
+				
 		CCSize textSize;
 		textSize.width	= fBoundWidth;
 		textSize.height = NDUITextBuilder::DefaultBuilder()->StringHeightAfterFilter(str, textSize.width, fontsize);

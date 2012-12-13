@@ -660,10 +660,11 @@ void doShowMobageBalance()
     if (JniHelper::getStaticMethodInfo(t
                                        , "org/DeNA/DHLJ/DaHuaLongJiang"
                                        , "showBalanceButton"
-                                       , "()V"))
+                                       , "(F)V"))
         
     {
-        t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        jfloat fscale = NDDirector::DefaultDirector()->GetScaleFactor_LUA();
+        t.env->CallStaticObjectMethod(t.classID, t.methodID, fscale);
         t.env->DeleteLocalRef(t.classID);
     }
 #endif
@@ -674,6 +675,20 @@ void doHideMobageBalance()
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	MobageViewController* pMobageView = [MobageViewController sharedViewController];
 	[pMobageView hideBalanceButton];
+#endif
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t
+                                       , "org/DeNA/DHLJ/DaHuaLongJiang"
+                                       , "hideBalanceButton"
+                                       , "()V"))
+        
+    {
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
+    }
 #endif
 }
 

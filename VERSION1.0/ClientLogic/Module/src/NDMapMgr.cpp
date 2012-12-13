@@ -1608,7 +1608,7 @@ void NDMapMgr::AddSwitch()
 			int nX = kScriptDB.GetN("portal", *it, DB_PORTAL_PORTALX);
 			int nY = kScriptDB.GetN("portal", *it, DB_PORTAL_PORTALY);
 
-			string strDesc = "³ÇéT";
+			string strDesc = NDCommonCString2("CityGate");
 
 			pkMapData->addMapSwitch(nX, nY, nIndex, nMapID, strDesc.c_str(),
 					"");
@@ -4225,10 +4225,11 @@ void  NDMapMgr::ProcessCloseTransactionRet(NDTransData& data)
     if (JniHelper::getStaticMethodInfo(t
                                        , "org/DeNA/DHLJ/DaHuaLongJiang"
                                        , "showBalanceButton"
-                                       , "()V"))
+                                       , "(F)V"))
         
     {
-        t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        jfloat fscale = NDDirector::DefaultDirector()->GetScaleFactor_LUA();
+        t.env->CallStaticObjectMethod(t.classID, t.methodID, fscale);
         t.env->DeleteLocalRef(t.classID);
     }
     

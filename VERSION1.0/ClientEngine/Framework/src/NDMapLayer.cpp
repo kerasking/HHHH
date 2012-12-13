@@ -49,8 +49,8 @@ using namespace cocos2d;
 				[NSString stringWithUTF8String:				\
 				NDEngine::NDPath::GetImagePath().c_str()]
 
-#define MAP_NAME_SIZE_BIG (30*NDDirector::DefaultDirector()->GetScaleFactor())
-#define MAP_NAME_SIZE_SMALL (15*NDDirector::DefaultDirector()->GetScaleFactor())
+#define MAP_NAME_SIZE_BIG	(30*RESOURCE_SCALE)
+#define MAP_NAME_SIZE_SMALL (15*RESOURCE_SCALE)
 
 
 extern NDMapLayer* g_pMapLayer = NULL; //for debug only.
@@ -183,13 +183,14 @@ void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)
 	m_pkOrders->retain();
 	//CC_SAFE_RELEASE(m_texMap);
 
-	delete m_pkPicMap;
+	SAFE_DELETE( m_pkPicMap );
 
 	char pszMapFile[256] =
 	{ 0 };
 	sprintf(pszMapFile, "%smap_%d.map", NDPath::GetMapPath().c_str(), mapId);
 
 	m_pkMapData = new NDMapData;
+	m_pkMapData->setBattleMapFlag( IsBattleBackground() );
 	m_pkMapData->initWithFile(pszMapFile);
 
 	if (m_pkMapData)
@@ -1765,7 +1766,7 @@ void NDMapLayer::ShowRoadSign(bool bShow, int nX /*=0*/, int nY /*=0*/)
 	{
 		m_pkRoadSignLightEffect = new NDLightEffect;
 		m_pkRoadSignLightEffect->Initialization(NDPath::GetAniPath("click.spr").c_str());
-		m_pkRoadSignLightEffect->setScale(0.5f*SCREEN_SCALE);
+		m_pkRoadSignLightEffect->setScale(0.5f*RESOURCE_SCALE);
 		m_pkRoadSignLightEffect->SetLightId(0, false);
 	}
 

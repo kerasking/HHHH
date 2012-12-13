@@ -86,7 +86,6 @@ NDSprite::NDSprite()
 
 	m_bFaceRight = false;
 
-	//m_fScale = 0.5f*(NDDirector::DefaultDirector()->GetScaleFactor());
 	m_fScale = 1.0f;
 
 	m_bHightLight = false;
@@ -364,14 +363,6 @@ void NDSprite::MoveToPosition(std::vector<CCPoint> kToPos, SpriteSpeed speed,
 					from = m_kPointList[m_kPointList.size() - 1];
 				}
 			}
-
-			// 			if (m_kPointList.empty())
-			// 			{
-			// 				m_bIsMoving = false;
-			// 			}
-
-			//m_pointList = NDAutoPath::sharedAutoPath()->getPathPointVetor();
-
 		}
 	}
 }

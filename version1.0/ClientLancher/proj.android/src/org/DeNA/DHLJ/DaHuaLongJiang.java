@@ -34,6 +34,7 @@ import android.content.res.Configuration;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -62,9 +63,27 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static final String TAG = "DaHuaLongJiang";
 	public static DaHuaLongJiang ms_pkDHLJ = null;
 	private PlatformListener mPlatformListener;
-	private DynamicMenuBar menubar;
-	private BalanceButton balancebutton;
+	private static DynamicMenuBar menubar;
+	private static BalanceButton balancebutton;
+	private static float s_fScale;
 	
+	 private static Handler BalanceHandler = new Handler();
+	 private static Runnable mUpdateBalance = new Runnable() {
+	        public void run() {
+	    		Float sizex = 100*s_fScale;
+	    		Float sizey = 75*s_fScale;
+	    		FrameLayout.LayoutParams pkParamsButton = new FrameLayout.LayoutParams(sizex.intValue(),sizey.intValue());
+	    		balancebutton.setLayoutParams(pkParamsButton);
+	    		balancebutton.setX(264*s_fScale);
+	    		balancebutton.setY(70*s_fScale);
+	        	balancebutton.setVisibility( View.VISIBLE );
+	        };
+	 };
+	 private static Runnable mHideBalance = new Runnable() {
+	        public void run() {
+	        	balancebutton.setVisibility( View.INVISIBLE );
+	        };
+	 };
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		if (isSDCardCanUse())
@@ -131,7 +150,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			menubar.setMenubarVisibility(View.VISIBLE);
 			menubar.setMenuIconGravity(Gravity.TOP|Gravity.LEFT);
 
-			Rect rect = new Rect(0, 0, 300, 900);
+			Rect rect = new Rect(0, 0, 200, 120);
 			balancebutton = com.mobage.android.social.common.Service.getBalanceButton(rect); 			
 		} else
 		{
@@ -190,6 +209,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public void setMain()
 	{
+		Log.e(TAG, "DaHuaLongJiang::setMain()");
+		
 		View rootView = (View) getView();
 		FrameLayout parent = (FrameLayout) rootView.getParent();
 		if (parent != null)
@@ -198,17 +219,34 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		}
 		menubar.removeAllViews();
 		
+		addEditView();
+
 		menubar.addView(rootView);
 		menubar.addView(balancebutton);
-		
-//		ViewGroup.LayoutParams pkParamsButton = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.FILL_PARENT);
-//		balancebutton.setLayoutParams(pkParamsButton);
+    	balancebutton.setVisibility( View.INVISIBLE );
 
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		this.setContentView(menubar, pkParams);
 	}
 
+	public void addEditView(){
+        // Cocos2dxEditText layout
+        ViewGroup.LayoutParams edittext_layout_params =
+            new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
+                                       ViewGroup.LayoutParams.WRAP_CONTENT);
+        Cocos2dxEditText edittext = new Cocos2dxEditText(this);
+        edittext.setLayoutParams(edittext_layout_params);
+        //edittext.setVisibility( View.INVISIBLE );
+
+		// add edit to layout
+		menubar.addView(edittext);
+
+		// set this edit to cocos2dx surface view
+		Cocos2dxGLSurfaceView surfaceView = getView();
+		surfaceView.setCocos2dxEditText(edittext);
+	}
+	
 	public void LoginComplete(int userid)
 	{
 		onLoginComplete(userid);
@@ -219,10 +257,15 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		onLoginError(error);
 	}
 
-	private static void showBalanceButton() {
+	private static void showBalanceButton(float fScale) {
 		Log.v(TAG, "begin showBalanceButton");
 
-//		LinearLayout layout = (LinearLayout)mActivity.findViewById(R.id.placeholder); layout.addView(button);
+		s_fScale = fScale;
+		BalanceHandler.post(mUpdateBalance);
+	}
+	private static void hideBalanceButton() {
+		Log.v(TAG, "begin showBalanceButton");
+		BalanceHandler.post(mHideBalance);
 	}
 	public static void ShowBankUi() {
 		Log.v(TAG, "begin ShowBankUi");

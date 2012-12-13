@@ -154,7 +154,7 @@ IMPLEMENT_CLASS(CUIDialog, NDUILayer)
 
 CUIDialog::CUIDialog()
 {
-	m_uiOptHeight	= 24 * NDDirector::DefaultDirector()->GetScaleFactor();
+	m_uiOptHeight	= 24 * RESOURCE_SCALE;
 }
 
 CUIDialog::~CUIDialog()

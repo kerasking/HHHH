@@ -22,7 +22,21 @@
 #include "NDNode.h"
 #include "CCTouchDispatcher.h"
 
-#define FONT_SCALE (NDDirector::DefaultDirector()->GetScaleFactor())
+//--------------------------------------------------------------------------------
+//	***	资源缩放比例 & 字体缩放比例	***
+//
+//	备注：这些比例已经考虑到了ios & android的差异.
+//	举例：
+//		分辨率480*320		scale=1
+//		分辨率960*640		scale=2
+//		分辨率800*480		scale=1.5（以Y为主）
+
+//字体缩放比例&资源缩放比例（一般相同）
+#define FONT_SCALE			(NDDirector::DefaultDirector()->GetFontScale())
+#define FONT_SCALE_INT		int(FONT_SCALE)	
+#define RESOURCE_SCALE		FONT_SCALE
+#define RESOURCE_SCALE_INT	int(RESOURCE_SCALE)
+//--------------------------------------------------------------------------------
 
 NS_NDENGINE_BGN
 
@@ -181,19 +195,7 @@ public:
 	}
 
 	NDScene* GetSceneByTag(int nSceneTag);
-
-	float GetScaleFactor() 
-	{ 
-		#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-			float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor_LUA();
-			return fScaleFactor;
-		#else
-			return m_pkDirector->getContentScaleFactor(); 
-		#endif
-	}
-//	float GetScaleFactorY() { CCDirector::sharedDirector()->getContentScaleFactor(); }
-	float GetScaleFactor_LUA(); //仅用于LUA
-
+	
 	bool IsEnableRetinaDisplay() { return CCEGLView::sharedOpenGLView()->isRetinaEnabled(); }
 
 	void DisibleScissor();
@@ -207,8 +209,12 @@ public:
 		return m_pkDirector->getWinSizeInPixels(); 
 	}
 
+#if 1 //相关缩放比例，适配的基础，请不要修改！
 public: //@android
 	CCPoint getAndroidScale() const;
+	float GetScaleFactor_LUA(); //仅用于LUA
+	float GetFontScale();
+#endif
 	
 private:
 	typedef enum

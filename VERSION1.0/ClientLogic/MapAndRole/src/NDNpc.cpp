@@ -274,7 +274,7 @@ void NDNpc::OnDrawEnd(bool bDraw)
 	kRectNPC = CCRectMake(kNPCPos.x, kNPCPos.y, 16, 16);
 	bool bCollides = cocos2d::CCRect::CCRectIntersectsRect(kRectRole, kRectNPC);
 
-	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
+	float fScaleFactor = RESOURCE_SCALE;
 
 	CCSize kSize = getStringSize(m_strName.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
 
@@ -443,7 +443,7 @@ void NDNpc::SetNpcState(NPC_STATE state)
 	}
 	if (m_pkPicState) {
 		//根据分辨率进行缩放
-		m_pkPicState->setScale(0.5f*NDDirector::DefaultDirector()->GetScaleFactor());
+		m_pkPicState->setScale(0.5f*RESOURCE_SCALE);
 	}
 }
 
@@ -599,7 +599,7 @@ void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text,
 
 #if 0
 	//CCSize fontSize = getStringSize(text.c_str(), lable[0]->GetFontSize());
-	float fScale = NDDirector::DefaultDirector()->GetScaleFactor();
+	float fScale = RESOURCE_SCALE;
 	CCSize fontSize = getStringSize(text.c_str(), NPC_NAME_FONT_SIZE*fScale);
 	CCPoint posHead = this->getHeadPos();
 
@@ -614,7 +614,7 @@ void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text,
 	kSizeMap = m_pkSubNode->GetContentSize();
 	
 	CCSize kSizeWin = CCDirector::sharedDirector()->getWinSizeInPixels();
-	float fScaleFactor = NDDirector::DefaultDirector()->GetScaleFactor();
+	float fScaleFactor = RESOURCE_SCALE;
 	CCSize kSize = getStringSize(text.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
 
 	lable[1]->SetFrameRect(
