@@ -92,8 +92,6 @@ public class Cocos2dxMusic
 
 	public void playBackgroundMusic(final String pPath, final boolean isLoop)
 	{
-		Log.i("DaHuaLongJiang", "Entry java playBackgroundMusic method");
-		
 		if (this.mCurrentPath == null)
 		{
 			Log.i("DaHuaLongJiang", "this.mCurrentPath == null");
@@ -129,8 +127,6 @@ public class Cocos2dxMusic
 					"playBackgroundMusic: background media player is null");
 		} else
 		{
-			Log.i("DaHuaLongJiang","if the music is playing or paused, stop it");
-			Log.i("DaHuaLongJiang",this.mCurrentPath);
 			this.mBackgroundMediaPlayer.stop();
 
 			this.mBackgroundMediaPlayer.setLooping(isLoop);
@@ -144,12 +140,7 @@ public class Cocos2dxMusic
 				this.mBackgroundMediaPlayer.start();
 				Log.i("DaHuaLongJiang","pass start the muisc");
 				this.mPaused = false;
-				
-				boolean bRes = isBackgroundMusicPlaying();
-				if (bRes)
-				{
-					Log.i("DaHuaLongJiang","ZhengZaiYunXing");
-				}
+
 			} catch (final Exception e)
 			{
 				Log.e("DaHuaLongJiang", "playBackgroundMusic: error state");
