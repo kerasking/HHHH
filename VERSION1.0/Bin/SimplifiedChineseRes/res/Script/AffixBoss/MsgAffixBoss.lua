@@ -542,7 +542,3 @@ RegisterNetMsgHandler(NMSG_Type._MSG_AFFIX_BOSS_CLEANUP_RAISE, "p.processCleanUp
 RegisterNetMsgHandler(NMSG_Type._MSG_AFFIX_BOSS_GROUP_RAISE, "p.processBossGroupRaise", p.processBossGroupRaise);
 RegisterNetMsgHandler(NMSG_Type._MSG_AFFIX_BOSS_GET_BOX_LST, "p.processBoxList", p.processBoxList);
 RegisterNetMsgHandler(NMSG_Type._MSG_AFFIX_BOSS_PICK_BOX_ITEM, "p.processPickBoxItem", p.processPickBoxItem);
-
-
-	
-	
