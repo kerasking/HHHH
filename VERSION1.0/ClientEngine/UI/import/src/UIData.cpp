@@ -95,8 +95,8 @@ bool CUIData::getCtrlData(char* szCtrlName)
 		return false;
 	sscanf(pszPos, "%f %f", &m_kInfo.CtrlAnchorPos.x, &m_kInfo.CtrlAnchorPos.y);
 
-	m_kInfo.nCtrlWidth = m_kINIFile.GetValueI(szCtrlName, CTRL_WIDTH_KEY);
-	m_kInfo.nCtrlHeight = m_kINIFile.GetValueI(szCtrlName, CTRL_HEIGHT_KEY);
+	m_kInfo.nCtrlWidth  = (float) m_kINIFile.GetValueI(szCtrlName, CTRL_WIDTH_KEY);
+	m_kInfo.nCtrlHeight = (float) m_kINIFile.GetValueI(szCtrlName, CTRL_HEIGHT_KEY);
 
 	//»°UV –≈œ¢
 	pszPos = m_kINIFile.GetValue(szCtrlName, NORMAL_FILE_UV_KEY);

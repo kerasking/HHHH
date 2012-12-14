@@ -347,6 +347,14 @@ void NDPicture::SetCoorinates()
 			m_coordinates[7] = m_coordinates[5];
 		}
 	}
+
+	//clamp
+	for (int i = 0; i < 8; i++)
+	{
+		float& f = m_coordinates[i];
+		if (f > 1.0f)		f = 1.0f;
+		else if (f < 0.0f)	f = 0.0f;
+	}
 }
 
 void NDPicture::SetVertices(CCRect drawRect)

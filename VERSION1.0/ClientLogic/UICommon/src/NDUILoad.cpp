@@ -171,24 +171,9 @@ NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *pa
 	//		}
 #endif
 
+	// 处理一下
 	PostLoad(uiInfo);
-
-	// check anchor pos
-	CCPoint CtrlAnchorPos = uiInfo.CtrlAnchorPos;
-	if (!IsAnchorValid(CtrlAnchorPos.x) || !IsAnchorValid(CtrlAnchorPos.y))
-	{
-		NDAsssert(0);
-		return false;
-	}
 	
-	// 上下对调一下（结果仍旧是像素单位，不是GL坐标，所以不能用SCREEN2GL转！）
-	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
-	uiInfo.CtrlPos.y = winsize.height - uiInfo.CtrlPos.y;
-
-	// 根据锚地调整控件位置
-	CtrlAnchorPos.y = 1.0f - CtrlAnchorPos.y;
-	AdjustCtrlPosByAnchor( uiInfo, CtrlAnchorPos );
-
 	// 创建控件
 	const char* ctrlTypeName = NULL;
 	NDUINode* node = this->CreateCtrl( uiInfo, sizeOffset, ctrlTypeName );
@@ -211,36 +196,6 @@ NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *pa
 bool NDUILoad::IsAnchorValid( const float anchor )
 {
 	return ISEQUAL(anchor,0.f) || ISEQUAL(anchor,1.f) || ISEQUAL(anchor,0.5f);
-}
-
-void NDUILoad::AdjustCtrlPosByAnchor( UIINFO& uiInfo, const CCPoint& CtrlAnchorPos )
-{
-	// adjust pos by anchor pos
-	if (ISEQUAL_PT(CtrlAnchorPos,0,0))
-	{ // [0,0]
-	}
-	else if (ISEQUAL_PT(CtrlAnchorPos,0,1))
-	{ // [0, 1]
-		uiInfo.CtrlPos.y -= (float)uiInfo.nCtrlHeight;
-	}
-	else if (ISEQUAL_PT(CtrlAnchorPos,1,0))
-	{ // [1, 0]
-		uiInfo.CtrlPos.x -= (float)uiInfo.nCtrlWidth;
-	}
-	else if (ISEQUAL_PT(CtrlAnchorPos,1,1))
-	{ // [1, 1]
-		uiInfo.CtrlPos.x -= (float)uiInfo.nCtrlWidth;
-		uiInfo.CtrlPos.y -= (float)uiInfo.nCtrlHeight;
-	}
-	else if (ISEQUAL_PT(CtrlAnchorPos,0.5,0.5))
-	{ // [.5, .5]
-		uiInfo.CtrlPos.x -= 0.5f * uiInfo.nCtrlWidth;
-		uiInfo.CtrlPos.y -= 0.5f * uiInfo.nCtrlHeight;
-	}
-	else
-	{
-		//treat as [0,0]
-	}
 }
 
 NDUINode* NDUILoad::CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& ctrlTypeName )
@@ -409,17 +364,78 @@ NDUINode* NDUILoad::CreateCtrl( UIINFO& uiInfo, CCSize sizeOffset, const char*& 
 	return node;
 }
 
+//重置锚点（统一到0,0点）
+//非(0,0)点的锚点，缩放后容易引起缝隙
+void NDUILoad::ResetAnchorPos( UIINFO& uiInfo )
+{
+	if (ISEQUAL_PT(uiInfo.CtrlAnchorPos,0,1))
+	{ // [0, 1]
+		uiInfo.CtrlPos.y -= (float)uiInfo.nCtrlHeight;
+	}
+	else if (ISEQUAL_PT(uiInfo.CtrlAnchorPos,1,0))
+	{ // [1, 0]
+		uiInfo.CtrlPos.x -= (float)uiInfo.nCtrlWidth;
+	}
+	else if (ISEQUAL_PT(uiInfo.CtrlAnchorPos,1,1))
+	{ // [1, 1]
+		uiInfo.CtrlPos.x -= (float)uiInfo.nCtrlWidth;
+		uiInfo.CtrlPos.y -= (float)uiInfo.nCtrlHeight;
+	}
+	else if (ISEQUAL_PT(uiInfo.CtrlAnchorPos,0.5,0.5))
+	{ // [.5, .5]
+		uiInfo.CtrlPos.x -= 0.5f * uiInfo.nCtrlWidth;
+		uiInfo.CtrlPos.y -= 0.5f * uiInfo.nCtrlHeight;
+	}
+
+	//统一为(0,0)即：左上角
+	uiInfo.CtrlAnchorPos = ccp(0,0);
+}
+
+void NDUILoad::AdjustCtrlPosByAnchor( UIINFO& uiInfo, const CCPoint& CtrlAnchorPos )
+{
+	// adjust pos by anchor pos
+	if (ISEQUAL_PT(CtrlAnchorPos,0,0))
+	{ // [0,0]
+	}
+	else if (ISEQUAL_PT(CtrlAnchorPos,0,1))
+	{ // [0, 1]
+		uiInfo.CtrlPos.y -= (float)uiInfo.nCtrlHeight;
+	}
+	else if (ISEQUAL_PT(CtrlAnchorPos,1,0))
+	{ // [1, 0]
+		uiInfo.CtrlPos.x -= (float)uiInfo.nCtrlWidth;
+	}
+	else if (ISEQUAL_PT(CtrlAnchorPos,1,1))
+	{ // [1, 1]
+		uiInfo.CtrlPos.x -= (float)uiInfo.nCtrlWidth;
+		uiInfo.CtrlPos.y -= (float)uiInfo.nCtrlHeight;
+	}
+	else if (ISEQUAL_PT(CtrlAnchorPos,0.5,0.5))
+	{ // [.5, .5]
+		uiInfo.CtrlPos.x -= 0.5f * uiInfo.nCtrlWidth;
+		uiInfo.CtrlPos.y -= 0.5f * uiInfo.nCtrlHeight;
+	}
+	else
+	{
+		//treat as [0,0]
+	}
+}
+
 void NDUILoad::PostLoad(UIINFO& uiInfo)
 {
 	//@check
 	// 备注：UI按480*320来配置的，LUA写脚本是按960*640的.
-	//			这里乘个Scale，统一到980*640!	
+	//			这里乘个2，统一到980*640!	
+	//
+	// 举例：假设ini配置某控件(0,0,480,320)，则乘个scale(=2)变成(0,0,960,640)
+	//		 假设android的分辨率是800*480，然后再适配为android，也就是(0,0,800,480).
 
-	float scale = 2.0f; //统一按960*640.
-	uiInfo.CtrlPos.x *= scale;
-	uiInfo.CtrlPos.y *= scale;
-	uiInfo.nCtrlWidth *= scale;
-	uiInfo.nCtrlHeight *= scale;
+	//统一到960*640
+	float scale = 2.0f;
+	uiInfo.CtrlPos.x	*= scale;
+	uiInfo.CtrlPos.y	*= scale;
+	uiInfo.nCtrlWidth	*= scale;
+	uiInfo.nCtrlHeight	*= scale;
 
 	//@android: 如果是android机型，则从960*640的基础上再适配为具体的分辨率
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -432,6 +448,11 @@ void NDUILoad::PostLoad(UIINFO& uiInfo)
 	uiInfo.nCtrlHeight *= sy;	
 #endif
 
-	//举例：假设ini配置某控件(0,0,480,320)，则乘个scale(=2)变成(0,0,960,640)
-	//		假设android的分辨率是800*480，然后再适配为android，也就是(0,0,800,480).
+	//重置锚点(0,0)
+	ResetAnchorPos( uiInfo );
+
+	// 上下对调一下（结果仍旧是像素单位，不是GL坐标，所以不能用SCREEN2GL转！）
+	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
+	uiInfo.CtrlPos.y = winsize.height - uiInfo.CtrlPos.y;
+	uiInfo.CtrlPos.y -= uiInfo.nCtrlHeight;
 }
