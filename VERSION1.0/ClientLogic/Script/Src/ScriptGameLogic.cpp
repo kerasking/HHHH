@@ -42,6 +42,7 @@
 #include "NDVideoMgr.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "platform/android/jni/JniHelper.h"
 #include <jni.h>
 #include <android/log.h>
 
@@ -444,7 +445,7 @@ void SetSceneMusicNew(int idMusic)
 	
 	string strMusicPath = NDPath::GetSoundPath();
 	CCString* pstrMusicFile = CCString::stringWithFormat("%smusic_%d.aac",strMusicPath.c_str(),idMusic);
-	pkSimpleAudio->playEffect(pstrMusicFile->toStdString().c_str(),true);
+	//pkSimpleAudio->playBackgroundMusic(pstrMusicFile->toStdString().c_str(),true);
 }
 
 void SetBgMusicVolume(int nVolune)
@@ -501,7 +502,7 @@ int StartEffectSound(int idMusic)
 	string strMusicPath = NDPath::GetSoundPath();
 	CCString* pstrMusicFile = CCString::stringWithFormat("%seffect/effect_%d.aac",strMusicPath.c_str(),idMusic);
 
-	return pkSimpleAudio->playEffect(pstrMusicFile->toStdString().c_str(),false);
+	return 0;//return pkSimpleAudio->playEffect(pstrMusicFile->toStdString().c_str(),false);
 }
 
 void StopEffectSound()
@@ -620,32 +621,73 @@ bool doNDSdkChangeLogin()
 
 void HideMobageSplashScreen() //Guosen 2012.8.3
 {
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	[[MBGPlatform sharedPlatform] hideSplashScreen];
 #endif
 }
 void doGoToMobageVipPage()
 {
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	[MBGSocialService showBankUI:^
 	{
 	}];
+#endif
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t
+                                       , "org/DeNA/DHLJ/DaHuaLongJiang"
+                                       , "ShowBankUi"
+                                       , "()V"))
+        
+    {
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
+    }
 #endif
 }
 
 void doShowMobageBalance()
 {
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	MobageViewController* pMobageView = [MobageViewController sharedViewController];
 	[pMobageView showBalanceButton:CGRectMake(200, 70, 100, 36)];
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t
+                                       , "org/DeNA/DHLJ/DaHuaLongJiang"
+                                       , "showBalanceButton"
+                                       , "(F)V"))
+        
+    {
+        t.env->CallStaticObjectMethod(t.classID, t.methodID, RESOURCE_SCALE);
+        t.env->DeleteLocalRef(t.classID);
+    }
 #endif
 }
 
 void doHideMobageBalance()
 {
-#ifdef USE_MGSDK
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	MobageViewController* pMobageView = [MobageViewController sharedViewController];
 	[pMobageView hideBalanceButton];
+#endif
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t
+                                       , "org/DeNA/DHLJ/DaHuaLongJiang"
+                                       , "hideBalanceButton"
+                                       , "()V"))
+        
+    {
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
+    }
 #endif
 }
 

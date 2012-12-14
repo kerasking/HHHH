@@ -101,6 +101,8 @@ extern "C"
 				break;
 			}
 
+			LOGD("Succeeded to find static method id of %s", methodName);
+
 			methodinfo.classID = classID;
 			methodinfo.env = pEnv;
 			methodinfo.methodID = methodID;
@@ -267,7 +269,7 @@ extern "C"
 
 	unsigned int playEffectJNI(const char* path, bool bLoop)
 	{
-		// int playEffect(String)
+		LOGD("Entry playEffectJNI,path is %s",path);
 
 		JniMethodInfo methodInfo;
 		int ret = 0;
@@ -275,6 +277,7 @@ extern "C"
 		if (!getStaticMethodInfo(methodInfo, "playEffect",
 			"(Ljava/lang/String;Z)I"))
 		{
+			LOGERROR("Can't find playEffect");
 			return ret;
 		}
 

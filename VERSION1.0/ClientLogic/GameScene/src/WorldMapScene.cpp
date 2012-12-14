@@ -343,7 +343,6 @@ void WorldMapLayer::SetRoleAtPlace(int placeId)
 	{
 		m_idMapCached = placeId;
 		float fScaleFactor = RESOURCE_SCALE;
-
 		CCRect rect = m_roleNode->GetFrameRect();
 		rect.origin = GetPlaceIdScreenPos(placeId);
 		rect.size = CCSizeMake(fScaleFactor*35, fScaleFactor*70);
@@ -423,6 +422,8 @@ bool WorldMapLayer::TouchBegin(NDTouch* touch)
 									 node->getTexture()->getContentSizeInPixels().width,
 									 node->getTexture()->getContentSizeInPixels().height);
 
+		ConvertUtil::convertToPointCoord_Android( btnRect );
+
 		if (cocos2d::CCRect::CCRectContainsPoint(btnRect, posMap))
 		{
 			WriteCon( "[WorldMapLayer] OnNodeClick(): index=%d, posMap(%d, %d)\r\n", i, (int)posMap.x, (int)posMap.y );
@@ -481,7 +482,7 @@ void WorldMapLayer::Goto( int nMapId )
 		
 		SetMove(true);
 		
-		SetRoleDirect(posTarget.x > m_roleNode->GetFrameRect().origin.x);
+		SetRoleDirect(posTarget.x > m_roleNode->GetFrameRect().origin.x*ANDROID_SCALE);
 		
 		m_posTarget = posTarget;
 		
@@ -531,7 +532,7 @@ CCPoint WorldMapLayer::GetPlaceIdScreenPos(int placeId)
 	}
 	if (node && m_roleNode && node->getTexture())
 	{
-		return ccp( node->getX(), node->getY() );
+		return ccp( node->getX()*ANDROID_SCALE, node->getY()*ANDROID_SCALE );
 	}
 
 	return posRet;

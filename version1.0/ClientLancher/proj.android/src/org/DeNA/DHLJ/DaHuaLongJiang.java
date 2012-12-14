@@ -34,6 +34,7 @@ import android.content.res.Configuration;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -62,8 +63,27 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static final String TAG = "DaHuaLongJiang";
 	public static DaHuaLongJiang ms_pkDHLJ = null;
 	private PlatformListener mPlatformListener;
-	private DynamicMenuBar menubar;
-
+	private static DynamicMenuBar menubar;
+	private static BalanceButton balancebutton;
+	private static float s_fScale;
+	
+	 private static Handler BalanceHandler = new Handler();
+	 private static Runnable mUpdateBalance = new Runnable() {
+	        public void run() {
+	    		Float sizex = 100*s_fScale;
+	    		Float sizey = 75*s_fScale;
+	    		FrameLayout.LayoutParams pkParamsButton = new FrameLayout.LayoutParams(sizex.intValue(),sizey.intValue());
+	    		balancebutton.setLayoutParams(pkParamsButton);
+	    		balancebutton.setX(264*s_fScale);
+	    		balancebutton.setY(70*s_fScale);
+	        	balancebutton.setVisibility( View.VISIBLE );
+	        };
+	 };
+	 private static Runnable mHideBalance = new Runnable() {
+	        public void run() {
+	        	balancebutton.setVisibility( View.INVISIBLE );
+	        };
+	 };
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		if (isSDCardCanUse())
@@ -128,7 +148,10 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 			menubar = new DynamicMenuBar(this);
 			menubar.setMenubarVisibility(View.VISIBLE);
-			menubar.setMenuIconGravity(Gravity.TOP | Gravity.LEFT);
+			menubar.setMenuIconGravity(Gravity.TOP|Gravity.LEFT);
+
+			Rect rect = new Rect(0, 0, 200, 120);
+			balancebutton = com.mobage.android.social.common.Service.getBalanceButton(rect); 			
 		} else
 		{
 			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -195,11 +218,15 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			parent.removeView(rootView);
 		}
 		menubar.removeAllViews();
+		
 		addEditView();
+
 		menubar.addView(rootView);
+		menubar.addView(balancebutton);
+    	balancebutton.setVisibility( View.INVISIBLE );
 
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+				ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
 		this.setContentView(menubar, pkParams);
 	}
 
@@ -230,12 +257,22 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		onLoginError(error);
 	}
 
-	private void showBalanceButton() {
+	private static void showBalanceButton(float fScale) {
 		Log.v(TAG, "begin showBalanceButton");
 
-		Rect rect = new Rect(200, 70, 100, 36);
-		BalanceButton button = com.mobage.android.social.common.Service.getBalanceButton(rect); 
-//		LinearLayout layout = (LinearLayout)mActivity.findViewById(R.id.placeholder); layout.addView(button);
+		s_fScale = fScale;
+		BalanceHandler.post(mUpdateBalance);
+	}
+	private static void hideBalanceButton() {
+		Log.v(TAG, "begin showBalanceButton");
+		BalanceHandler.post(mHideBalance);
+	}
+	public static void ShowBankUi() {
+		Log.v(TAG, "begin ShowBankUi");
+		com.mobage.android.social.common.Service.showBankUi(new com.mobage.android.social.common.Service.OnDialogComplete() {
+		@Override
+		public void onDismiss() { }
+		}); 
 	}
 	
 	public void changeViewToVideo()

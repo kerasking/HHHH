@@ -21,6 +21,9 @@
 USING_NS_CC;
 using namespace NDEngine;
 
+//是否开启android平台战斗地图缩放机制
+#define WITH_ANDROID_BATTLEMAP_SCALE 1
+
 typedef enum
 {
 	NDRotationEnumRotation0,
@@ -74,8 +77,9 @@ public:
 	void makeTex(float* pData);
 	void makeVetex(float* pData, CCRect kRect);
 
-	virtual void SetDrawRect_Android( CCRect rect );
-	virtual void SetCutRect_Android_BattleMap( CCRect rect, bool bBattleMap );
+	virtual void SetDrawRect_Android( CCRect rect, bool bBattleMap = false );
+	virtual void SetCutRect_Android( CCRect rect, bool bBattleMap = false );
+	bool cutHeightForAndroidBattleMap( CCRect& rect, float* cutHeight = NULL );
 
 public: //@shader
 	CC_SYNTHESIZE_RETAIN(CCGLProgram*, m_pShaderProgram, ShaderProgram);

@@ -75,9 +75,9 @@ bool NDNetMsgPool::Process(NDTransData* data)
 
 bool NDNetMsgPool::Process(MSGID msgID, NDTransData* data, int len)
 {
-	LOGD(
-			"\n---------------------------------------------<--接收id[%d],len[%d]-----------------------",
-			msgID, len + ND_C_HEAD_SIZE);
+// 	LOGD(
+// 			"\n---------------------------------------------<--接收id[%d],len[%d]-----------------------",
+// 			msgID, len + ND_C_HEAD_SIZE);
 
 	if (len + ND_C_HEAD_SIZE > 1024)
 	{

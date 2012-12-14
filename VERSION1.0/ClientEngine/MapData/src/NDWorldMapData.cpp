@@ -13,6 +13,7 @@
 #include "NDAnimationGroupPool.h"
 #include "NDPicture.h"
 #include "BaseType.h"
+#include "NDDirector.h"
 
 using namespace cocos2d;
 using namespace NDEngine;

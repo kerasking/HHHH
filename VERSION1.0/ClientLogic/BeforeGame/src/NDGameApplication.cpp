@@ -71,7 +71,6 @@ static NDBaseDirector s_NDBaseDirector;
 
 using namespace CocosDenshion;
 
-
 ///////////////////////////////////////////
 //@android: for test only
 void dumpCocos2dx()
@@ -265,6 +264,8 @@ bool NDGameApplication::applicationDidFinishLaunching()
 //@init
 void NDGameApplication::MyInit()
 {
+	SimpleAudioEngine::sharedEngine()->setEffectsVolume(7.0f);
+
 	CCLOG( "@@ NDGameApplication::MyInit()\r\n" );
 	LOGD("Start MyInit");
 

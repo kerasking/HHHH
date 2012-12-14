@@ -1,6 +1,17 @@
 #include "OpenSLEngine.h"
 
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,"OPENSL_ENGINE.CPP", __VA_ARGS__)
+#ifdef ANDROID
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
 
 using namespace std;
 
@@ -245,6 +256,7 @@ static SLObjectItf s_pOutputMixObject = NULL;
 
 bool createAudioPlayerBySource(AudioPlayer* player)
 {
+	LOGD("Entry createAudioPlayerBySource,player value is %d",(int)player);
 	// configure audio sink
 	SLDataLocator_OutputMix loc_outmix = {SL_DATALOCATOR_OUTPUTMIX, s_pOutputMixObject};
 	SLDataSink audioSnk = {&loc_outmix, NULL};
@@ -256,8 +268,11 @@ bool createAudioPlayerBySource(AudioPlayer* player)
 	SLresult result = (*s_pEngineEngine)->CreateAudioPlayer(s_pEngineEngine, &(player->fdPlayerObject), &(player->audioSrc), &audioSnk, 3, ids, req);
 	if (SL_RESULT_MEMORY_FAILURE == result)
 	{
+		LOGERROR("SL_RESULT_MEMORY_FAILURE == result");
 		return false;
 	}
+
+	LOGD("SL_RESULT_MEMORY_FAILURE != result");
 
 	// realize the player
 	result = (*(player->fdPlayerObject))->Realize(player->fdPlayerObject, SL_BOOLEAN_FALSE);
@@ -275,21 +290,27 @@ bool createAudioPlayerBySource(AudioPlayer* player)
 	result = (*(player->fdPlayerObject))->GetInterface(player->fdPlayerObject, getInterfaceID("SL_IID_SEEK"), &(player->fdPlayerSeek));
 	assert(SL_RESULT_SUCCESS == result);
 
+	LOGD("Leave createAudioPlayerBySource");
 	return true;
 }
 
 bool initAudioPlayer(AudioPlayer* player, const char* filename) 
 {
-	// configure audio source
-	off_t start, length;
+	LOGD("Entry initAudioPlayer");
+	off_t start = 0;
+	off_t length = 0;
 	int fd = getFileDescriptor(filename, start, length);
+	LOGD("fd = getFileDescriptor(filename, start, length); value is %d",fd);
 	if (FILE_NOT_FOUND == fd)
 	{
+		LOGERROR("FILE_NOT_FOUND == fd");
 		return false;
 	}
+
 	SLDataLocator_AndroidFD loc_fd = {SL_DATALOCATOR_ANDROIDFD, fd, start, length};
 	SLDataFormat_MIME format_mime = {SL_DATAFORMAT_MIME, NULL, SL_CONTAINERTYPE_UNSPECIFIED};
 	(player->audioSrc) = {&loc_fd, &format_mime};
+	LOGD("(player->audioSrc) = {&loc_fd, &format_mime};");
 
 	return createAudioPlayerBySource(player);
 }
@@ -500,27 +521,41 @@ bool OpenSLEngine::recreatePlayer(const char* filename)
 
 unsigned int OpenSLEngine::preloadEffect(const char * filename)
 {
+	LOGD("Entry OpenSLEngine::preloadEffect,path is %s",filename);
 	unsigned int nID = _Hash(filename);
+
+	LOGD("nID == _Hash %d",nID);
 	// if already exists
 	EffectList::iterator p = sharedList().find(nID);
 	if (p != sharedList().end())
 	{
+		LOGD("Finded nID effect list");
 		return nID;
 	}
 
 	AudioPlayer* player = new AudioPlayer();
+
+	LOGD("New AudioPlayer,player value is %d",(int)player);
+
 	if (!initAudioPlayer(player, filename))
 	{
+		LOGERROR("player init failed");
 		free(player);
 		return FILE_NOT_FOUND;
 	}
+
+	LOGD("player init succeeded");
 	
 	// set the new player's volume as others'
 	setSingleEffectVolume(player, m_effectVolume);
 
+	LOGD("setSingleEffectVolume succeeded,m_effectVolume = %d",(int)m_effectVolume);
+
 	vector<AudioPlayer*>* vec = new vector<AudioPlayer*>;
 	vec->push_back(player);
 	sharedList().insert(Effect(nID, vec));
+
+	LOGD("Leave OpenSLEngine::preloadEffect function");
 	return nID;
 }
 
