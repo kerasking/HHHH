@@ -226,7 +226,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
     	balancebutton.setVisibility( View.INVISIBLE );
 
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+				ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
 		this.setContentView(menubar, pkParams);
 	}
 

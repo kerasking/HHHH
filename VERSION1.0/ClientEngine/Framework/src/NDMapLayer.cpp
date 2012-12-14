@@ -491,7 +491,7 @@ void NDMapLayer::showSwitchSprite(MAP_SWITCH_TYPE type)
 					CCDirector::sharedDirector()->getWinSizeInPixels().height
 					)); //++Guosen 2012.7.6
 
-	m_pkSwitchSpriteNode->SetScale(2.0); //Ô­ 480¡Á320 => 960¡Á640 //@todo
+	m_pkSwitchSpriteNode->SetScale( RESOURCE_SCALE );
 	this->GetParent()->AddChild(m_pkSwitchSpriteNode, ZORDER_MASK_ANI);
 }
 

@@ -418,10 +418,11 @@ bool WorldMapLayer::TouchBegin(NDTouch* touch)
 	{
 		PlaceNode* node = (PlaceNode*) m_mapData->getPlaceNodes()->objectAtIndex(i);
 		
-		float fScaleFactor = ANDROID_SCALE;
-		CCRect btnRect = CCRectMake(node->getX()*ANDROID_SCALE, node->getY()*ANDROID_SCALE,
-									 node->getTexture()->getContentSizeInPixels().width*ANDROID_SCALE,
-									 node->getTexture()->getContentSizeInPixels().height*ANDROID_SCALE);
+		CCRect btnRect = CCRectMake(node->getX(), node->getY(),
+									 node->getTexture()->getContentSizeInPixels().width,
+									 node->getTexture()->getContentSizeInPixels().height);
+
+		ConvertUtil::convertToPointCoord_Android( btnRect );
 
 		if (cocos2d::CCRect::CCRectContainsPoint(btnRect, posMap))
 		{
