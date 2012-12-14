@@ -59,7 +59,9 @@ function p.LoadUI()
 		LogInfo( "Agiotage: LoadUI() failed! pLayer = nil" );
 		return false;
 	end
+	pLayer:SetPopupDlgFlag(true);
 	pLayer:Init();
+	pLayer:bringToTop();
 	pLayer:SetTag( NMAINSCENECHILDTAG.Agiotage );--
 	pLayer:SetFrameRect( RectFullScreenUILayer );
 	--pLayer:SetBackgroundColor( ccc4(125, 125, 125, 0) );
