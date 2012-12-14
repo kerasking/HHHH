@@ -103,7 +103,7 @@ function p.LoadUI(ShopType)
 	local scene = GetSMGameScene();
 	local layer = createNDUILayer();
 	
-	layer:SetPopupDlgFlag( true );
+	--layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(p.TagUiLayer);
 	layer:SetFrameRect(RectFullScreenUILayer);

@@ -249,6 +249,7 @@ function p.GenerateNoramlLayer( pScene )
     
     layer:SetPopupDlgFlag(true);
 	layer:Init();
+	layer:SetDebugName("NormalBoss_layer");
 	layer:SetTag( NMAINSCENECHILDTAG.AffixNormalBoss );
 	layer:SetFrameRect( RectFullScreenUILayer );
 	pScene:AddChild( layer );
@@ -338,6 +339,7 @@ function p.InitializeNoramlLayer()
 
 		pListItem:SetPopupDlgFlag(true);
 		pListItem:Init( false );
+		pListItem:SetDebugName("NormalBoss_Scroll_layer");
 		pListItem:SetViewId( i );
 		pListItem:SetTag( i );
 		pListContainer:AddView( pListItem );
@@ -590,6 +592,7 @@ function p.GenerateEliteLayer( pParentLayer )
 	end
 	layer:SetPopupDlgFlag(true);
 	layer:Init();
+	layer:SetDebugName("EliteBoss_layer");
 	--layer:SetTag( TAG_LAYER_ELITE );
 	layer:SetFrameRect( RectFullScreenUILayer );
 	--layer:SetBackgroundColor( ccc4(125, 125, 125, 0) );
@@ -683,6 +686,7 @@ function p.InitializeEliteLayer()
 
 		pListItem:SetPopupDlgFlag(true);
 		pListItem:Init( false );
+		pListItem:SetDebugName("EliteBoss_Scroll_layer");
 		pListItem:SetViewId( i );
 		pListItem:SetTag( i );
 		pListContainer:AddView( pListItem );
@@ -773,6 +777,7 @@ function p.GenerateConfirmDialog( pParentLayer )
 	end
 	layer:SetPopupDlgFlag(true);
 	layer:Init();
+	layer:SetDebugName("NormalBoss_ConfirmDialog");
 	--layer:SetTag( TAG_LAYER_CONFDLG );
 	layer:SetFrameRect( RectFullScreenUILayer );
 	--layer:SetBackgroundColor( ccc4(125, 125, 125, 0) );

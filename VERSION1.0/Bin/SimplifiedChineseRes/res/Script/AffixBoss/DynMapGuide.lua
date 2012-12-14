@@ -49,6 +49,7 @@ function p.LoadUI()
 	layer:SetPopupDlgFlag(true);
 	layer:Init();
 	layer:bringToTop();
+	layer:SetDebugName("Gonglue_layer");
 	layer:SetTag(NMAINSCENECHILDTAG.DynMapGuide);
 	local winsize = GetWinSize();
 	--layer:SetFrameRect(RectUILayer);

@@ -134,8 +134,7 @@ local scene = GetSMGameScene();
 	if layer == nil then
 		return false;
 	end
-	
-	layer:SetPopupDlgFlag( true );
+	layer:SetPopupDlgFlag(true);
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerVIPUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
@@ -162,6 +161,7 @@ local scene = GetSMGameScene();
 		--LogInfo("1:"..rank)
 		local view = createUIScrollView();
 	
+	     view:SetPopupDlgFlag(true);
 	     view:Init(false);
 	     view:SetViewId(rank);
 	     containter:AddView(view);
