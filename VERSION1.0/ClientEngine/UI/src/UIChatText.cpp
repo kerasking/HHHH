@@ -75,8 +75,11 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 
 	if (!channel_str.empty())
 	{
+		CCString str1 = "¡¾";
+		CCString str2 = "¡¿";
+
 		textNodeList.push_back(
-			ChatNode(false, CreateLabel("¡¾", fontSizelua, clr, 0), ChatNone, 0,
+			ChatNode(false, CreateLabel(str1.UTF8String(), fontSizelua, clr, 0), ChatNone, 0,
 			""));
 
 		textNodeList.push_back(
@@ -85,7 +88,7 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 			ChatNone, 0, ""));
 
 		textNodeList.push_back(
-			ChatNode(false, CreateLabel("¡¿", fontSizelua, clr, 0), ChatNone, 0,
+			ChatNode(false, CreateLabel(str2.UTF8String(), fontSizelua, clr, 0), ChatNone, 0,
 			""));
 	}
 
