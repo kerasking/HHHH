@@ -710,7 +710,7 @@ bool NDTile::cutHeightForAndroidBattleMap( CCRect& rect, float* cutHeight )
 		float newHeight = rect.size.width * screenAspect;
 		if (cutHeight)
 		{
-			cutHeight = rect.size.height - newHeight; //±»²Ã¼ôµôµÄ³ß´ç
+			*cutHeight = rect.size.height - newHeight; //±»²Ã¼ôµôµÄ³ß´ç
 		}
 		rect.size.height = newHeight; //²Ã¼ô¸ß¶È
 		return true;
