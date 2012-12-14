@@ -680,12 +680,13 @@ void NDTile::SetCutRect_Android_BattleMap( CCRect rect, bool bBattleMap ) //@and
 				float newHeight = rect.size.width / screenAspect;
 				float newTop = rect.size.height - newHeight;
 				rect.origin.y = newTop;
+				rect.size.height = newHeight;
 			}
 
-			CCLog( "@@ NDTile::SetCutRect_Android_BattleMap(): screenAspect=%.1f, picAspect=%.1f, needCut=%s, newTop=%d\r\n",
+			CCLog( "@@ NDTile::SetCutRect_Android_BattleMap(): screenAspect=%.1f, picAspect=%.1f, needCut=%s, newTop=%d, newHeight=%d\r\n",
 				screenAspect, picAspect, 
 				(picAspect < screenAspect) ? "true" : "false",
-				rect.origin.y );
+				int(rect.origin.y), int(rect.size.height));
 		}
 	}
 #endif

@@ -22,11 +22,10 @@
 
 using namespace NDEngine;
 
-//输入框左边距设置
-#define TEXT_LEFT_BORDER (5*NDDirector::DefaultDirector()->GetScaleFactor_LUA())    
-#define TEST_TEXT "测"                       //测试文字用于取文字大小
+#define TEXT_LEFT_BORDER	(5*RESOURCE_SCALE)	//输入框左边距设置
+#define TEST_TEXT			"测"				//测试文字用于取文字大小
 
-#define WITH_NEW_IME 1
+#define WITH_NEW_IME 1							//是否启用新的输入法机制
 #define WITH_OLD_IME (!WITH_NEW_IME)
 
 

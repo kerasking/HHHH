@@ -4228,8 +4228,7 @@ void  NDMapMgr::ProcessCloseTransactionRet(NDTransData& data)
                                        , "(F)V"))
         
     {
-        jfloat fscale = NDDirector::DefaultDirector()->GetScaleFactor_LUA();
-        t.env->CallStaticObjectMethod(t.classID, t.methodID, fscale);
+        t.env->CallStaticObjectMethod(t.classID, t.methodID, RESOURCE_SCALE);
         t.env->DeleteLocalRef(t.classID);
     }
     

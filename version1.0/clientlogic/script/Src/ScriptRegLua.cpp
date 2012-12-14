@@ -187,7 +187,7 @@ void NDScriptRegLua::doReg()
 	ETMEMBERFUNC("SetViewRect",						&NDDirector::SetViewRect)
 	ETMEMBERFUNC("ResumeViewRect",					&NDDirector::ResumeViewRect)
 	ETMEMBERFUNC("GetSceneByTag",					&NDDirector::GetSceneByTag)
-	ETMEMBERFUNC("GetScaleFactor",					&NDDirector::GetScaleFactor_LUA)
+	ETMEMBERFUNC("GetScaleFactor",					&NDDirector::getResourceScale)
 	ETMEMBERFUNC("IsEnableRetinaDisplay",			&NDDirector::IsEnableRetinaDisplay)
 	ETCLASSEND(NDDirector)
 	

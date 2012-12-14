@@ -31,11 +31,11 @@
 //		分辨率960*640		scale=2
 //		分辨率800*480		scale=1.5（以Y为主）
 
-//字体缩放比例&资源缩放比例（一般相同）
-#define FONT_SCALE			(NDDirector::DefaultDirector()->GetFontScale())
-#define FONT_SCALE_INT		int(FONT_SCALE)	
-#define RESOURCE_SCALE		FONT_SCALE
+//资源缩放比例&字体缩放比例（一般相同）
+#define RESOURCE_SCALE		(NDDirector::DefaultDirector()->getResourceScale())
 #define RESOURCE_SCALE_INT	int(RESOURCE_SCALE)
+#define FONT_SCALE			RESOURCE_SCALE
+#define FONT_SCALE_INT		int(FONT_SCALE)	
 //--------------------------------------------------------------------------------
 
 NS_NDENGINE_BGN
@@ -212,8 +212,7 @@ public:
 #if 1 //相关缩放比例，适配的基础，请不要修改！
 public: //@android
 	CCPoint getAndroidScale() const;
-	float GetScaleFactor_LUA(); //仅用于LUA
-	float GetFontScale();
+	float getResourceScale();
 #endif
 	
 private:
