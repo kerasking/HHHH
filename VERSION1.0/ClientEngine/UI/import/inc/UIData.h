@@ -99,8 +99,8 @@ struct UIINFO
 	unsigned long   nID;
 	unsigned long   nType;
 
-	unsigned long   nCtrlWidth;
-	unsigned long   nCtrlHeight;
+	float			nCtrlWidth;
+	float			nCtrlHeight;
 
 	std::string strText;
 	std::string strTextAlign;
@@ -128,8 +128,8 @@ struct UIINFO
 
 		nID = 0;
 		nType = 0;
-		nCtrlWidth = 0;
-		nCtrlHeight = 0;
+		nCtrlWidth = 0.0f;
+		nCtrlHeight = 0.0f;
 
 		strText = "";
 		strTextAlign = "";
@@ -138,6 +138,8 @@ struct UIINFO
 		nTextFontSize = 0;
 		nTextFontColor = 0;
 	}
+
+	UIINFO() { this->reset(); }
 };
 
 class CUIData
@@ -157,12 +159,12 @@ public:
 		return m_kInfo;
 	}
 
-	unsigned long getCtrlWidth()
+	float getCtrlWidth()
 	{
 		return m_kInfo.nCtrlWidth;
 	}
 
-	unsigned long getCtrlHeight()
+	float getCtrlHeight()
 	{
 		return m_kInfo.nCtrlHeight;
 	}
