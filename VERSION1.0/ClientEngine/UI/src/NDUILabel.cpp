@@ -123,8 +123,6 @@ void NDUILabel::SetFontColor(ccColor4B fontColor)
 	
 void NDUILabel::SetFontSize(unsigned int fontSize)
 {
-	fontSize = (int)(float)fontSize * FONT_SCALE;
-
 	if (m_uiFontSize != fontSize)
 	{
 		m_bNeedMakeTex = true;
@@ -192,7 +190,7 @@ void NDUILabel::MakeTexture()
 				eTextAlign,
 				kCCVerticalTextAlignmentCenter,
 				FONT_NAME,
-				m_uiFontSize
+				m_uiFontSize*FONT_SCALE
 				);
 }
 	

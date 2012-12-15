@@ -58,41 +58,51 @@ std::string CUIChatText::GetChannelStr(CHAT_CHANNEL_TYPE channel)
 void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 							 const char* text, int style, int fontSizelua, ccColor4B color)
 {
+	//备注：LUA传过来的字体大小是6，太小了！改成12.
+	fontSizelua = (fontSizelua == 6 ? 12 : fontSizelua);
+
+	if (!speaker) return;
 
 	this->RemoveAllChildren(true);
+	
 	textNodeList.clear();
 	this->speakerName = speaker;
-	float fScaleFactor = RESOURCE_SCALE;
-	int fontSize = fontSizelua * fScaleFactor;
 	text_style = style;
 
 	ChatTextType type = ChatNone;
 	ccColor4B clr = color;
 	std::string channel_str = GetChannelStr(CHAT_CHANNEL_TYPE(channel));
+
 	if (!channel_str.empty())
 	{
+		CCString str1 = "【";
+		CCString str2 = "】";
+
 		textNodeList.push_back(
-			ChatNode(false, CreateLabel("【", fontSize, clr, 0), ChatNone, 0,
-			""));
-		textNodeList.push_back(
-			ChatNode(false,
-			CreateLabel(channel_str.c_str(), fontSize, clr, 0),
-			ChatNone, 0, ""));
-		textNodeList.push_back(
-			ChatNode(false, CreateLabel("】", fontSize, clr, 0), ChatNone, 0,
+			ChatNode(false, CreateLabel(str1.UTF8String(), fontSizelua, clr, 0), ChatNone, 0,
 			""));
 
+		textNodeList.push_back(
+			ChatNode(false,
+			CreateLabel(channel_str.c_str(), fontSizelua, clr, 0),
+			ChatNone, 0, ""));
+
+		textNodeList.push_back(
+			ChatNode(false, CreateLabel(str2.UTF8String(), fontSizelua, clr, 0), ChatNone, 0,
+			""));
 	}
 
 	if (CHAT_CHANNEL_TYPE(channel) != CHAT_CHANNEL_SYS)
 	{
 		textNodeList.push_back(
-			ChatNode(false, CreateLabel(speaker, fontSize, clr, 0),
+			ChatNode(false, CreateLabel(speaker, fontSizelua, clr, 0),
 			ChatSpeaker, speakerID, ""));
+
 		textNodeList.push_back(
-			ChatNode(false, CreateLabel(":", fontSize, clr, 0), ChatSpeaker,
+			ChatNode(false, CreateLabel(":", fontSizelua, clr, 0), ChatSpeaker,
 			speakerID, ""));
 	}
+
 	if (!text)
 	{
 		return;
@@ -102,7 +112,6 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 
 	while (*text != '\0')
 	{
-
 		bool retAnalysis = false;
 
 		retAnalysis = AnalysisRuleEnd(text, type);
@@ -111,14 +120,14 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 			if (type == ChatItem)
 			{
 				textNodeList.push_back(
-					ChatNode(brk, CreateLabel("]", fontSize, clr, m_idItem),
+					ChatNode(brk, CreateLabel("]", fontSizelua, clr, m_idItem),
 					ChatItem, m_idItem, ""));
 			}
 
 			if (type == ChatRole)
 			{
 				textNodeList.push_back(
-					ChatNode(brk, CreateLabel("]", fontSize, clr, m_idRole),
+					ChatNode(brk, CreateLabel("]", fontSizelua, clr, m_idRole),
 					ChatRole, m_idRole, this->m_roleName));
 			}
 
@@ -150,14 +159,14 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 			if (type == ChatItem)
 			{
 				textNodeList.push_back(
-					ChatNode(brk, CreateLabel("[", fontSize, clr, m_idItem),
+					ChatNode(brk, CreateLabel("[", fontSizelua, clr, m_idItem),
 					ChatItem, m_idItem, ""));
 			}
 
 			if (type == ChatRole)
 			{
 				textNodeList.push_back(
-					ChatNode(brk, CreateLabel("[", fontSize, clr, m_idRole),
+					ChatNode(brk, CreateLabel("[", fontSizelua, clr, m_idRole),
 					ChatRole, m_idRole, this->m_roleName));
 			}
 			continue;
@@ -178,19 +187,19 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 		if (type == ChatItem)
 		{
 			textNodeList.push_back(
-				ChatNode(brk, CreateLabel(word, fontSize, clr, m_idItem),
+				ChatNode(brk, CreateLabel(word, fontSizelua, clr, m_idItem),
 				ChatItem, m_idItem, ""));
 		}
 		else if (type == ChatRole)
 		{
 			textNodeList.push_back(
-				ChatNode(brk, CreateLabel(word, fontSize, clr, m_idRole),
+				ChatNode(brk, CreateLabel(word, fontSizelua, clr, m_idRole),
 				ChatRole, m_idRole, this->m_roleName));
 		}
 		else
 		{
 			textNodeList.push_back(
-				ChatNode(brk, CreateLabel(word, fontSize, clr, 0), ChatNone,
+				ChatNode(brk, CreateLabel(word, fontSizelua, clr, 0), ChatNone,
 				0, ""));
 		}
 
@@ -203,6 +212,7 @@ bool CUIChatText::OnTextClick(CCPoint touchPos)
 {
 	int index = 0;
 	bool isfound = false;
+
 	std::vector<NDNode*> vChildren = this->GetChildren();
 	for (std::vector<NDNode*>::iterator it = vChildren.begin(); it != vChildren.end(); it++)
 	{
@@ -215,25 +225,31 @@ bool CUIChatText::OnTextClick(CCPoint touchPos)
 		}
 		index++;
 	}
+
 	if(!isfound)
 	{
 		return false;
 	}
-	ChatNode cnode = this->textNodeList.at(index);
+
+	ChatNode cnode = this->textNodeList[index];
+
 	if (cnode.textType==ChatSpeaker)
 	{
 		//NDLog(@"click on chat speaker:%d",cnode.content_id);
-		BaseScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",(int)cnode.textType,cnode.content_id,this->speakerName);
+		BaseScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",
+			(int)cnode.textType,cnode.content_id,this->speakerName);
 	}
 	else if(cnode.textType==ChatItem)
 	{
 		//NDLog(@"click on chat item:%d",cnode.content_id);
-		BaseScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",(int)cnode.textType,cnode.content_id,"");
+		BaseScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",
+			(int)cnode.textType,cnode.content_id,"");
 	}
 	else if (cnode.textType==ChatRole)
 	{
 		//NDLog(@"click on chat Role:%d",cnode.content_id);
-		BaseScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",(int)cnode.textType,cnode.content_id,cnode.content_str);
+		BaseScriptMgrObj.excuteLuaFunc<bool>("OnChatNodeClick", "ChatDataFunc",
+			(int)cnode.textType,cnode.content_id,cnode.content_str);
 	}
 	else
 	{
@@ -244,59 +260,60 @@ bool CUIChatText::OnTextClick(CCPoint touchPos)
 
 void CUIChatText::Combiner(std::vector<ChatNode>& textNodeList)
 {
-	int nScale = RESOURCE_SCALE;
-    
 	int height_max=0;
-	float x = 0.0f, y = 0.0f;
-	std::vector<ChatNode>::iterator iter;
 	int current_line=0;
+	float x = 0.0f, y = 0.0f;
+	contentHeight = 0;
+
+	std::vector<ChatNode>::iterator iter;
 	for (iter = textNodeList.begin(); iter != textNodeList.end(); iter++) 
 	{
-		ChatNode node = *iter;
-		CCRect uiNodeRect = node.uiNode->GetFrameRect();	
+		ChatNode curNode = *iter;
+		CCRect uiNodeRect = curNode.uiNode->GetFrameRect();	
 		
-		if (node.hasBreak || x + uiNodeRect.size.width > contentWidth) 
+		// 是否换行？
+		if (curNode.hasBreak || x + uiNodeRect.size.width > contentWidth) 
 		{
 			std::vector<ChatNode>::iterator line_iter;
 			if(iter != textNodeList.begin())
 			{
 				line_iter = iter - 1;
+
 				ChatNode line_node = *line_iter;
 				CCRect beforeRect = line_node.uiNode->GetFrameRect();
-				line_node.uiNode->SetFrameRect(CCRectMake(beforeRect.origin.x, beforeRect.origin.y+(height_max-beforeRect.size.height), beforeRect.size.width, beforeRect.size.height));
+
+				line_node.uiNode->SetFrameRect(CCRectMake(
+					beforeRect.origin.x, 
+					beforeRect.origin.y + (height_max - beforeRect.size.height), 
+					beforeRect.size.width, 
+					beforeRect.size.height
+					));
 			}
-// 			for (line_iter = textNodeList.begin(); line_iter != iter; line_iter++)
-// 			{
-// 				ChatNode line_node = *line_iter;
-// 				CCRect beforeRect = line_node.uiNode->GetFrameRect();
-// 				line_node.uiNode->SetFrameRect(CCRectMake(beforeRect.origin.x, beforeRect.origin.y+(height_max-beforeRect.size.height), beforeRect.size.width, beforeRect.size.height));
-// 			}
 			
 			x = 0.0f; 
 			y += height_max;
-			contentHeight+=height_max;
+			contentHeight += height_max;
 			height_max=0;
-		}
+		}//if
 		
-		if (height_max<uiNodeRect.size.height*nScale)
+		// 记住行高MAX
+		if (height_max < uiNodeRect.size.height)
 		{
-			height_max=uiNodeRect.size.height*nScale;
+			height_max = uiNodeRect.size.height;
 		}
-		//node->line_index=current_line;
-        node.uiNode->SetFrameRect(CCRectMake(x, y,uiNodeRect.size.width*nScale, uiNodeRect.size.height*nScale));
-		AddChild(node.uiNode);
-		
-		x += uiNodeRect.size.width*nScale;			
+
+		// 设置大小
+        curNode.uiNode->SetFrameRect(
+			CCRectMake(x, y, uiNodeRect.size.width, uiNodeRect.size.height));
+
+		// 加入
+		AddChild(curNode.uiNode);
+
+		// 下一个x
+		x += uiNodeRect.size.width;
 	}
-	
-	std::vector<ChatNode>::iterator line_iter;
-	for (line_iter = textNodeList.begin(); line_iter != textNodeList.end(); line_iter++)
-	{
-		ChatNode line_node = *line_iter;
-		CCRect beforeRect = line_node.uiNode->GetFrameRect();
-		line_node.uiNode->SetFrameRect(CCRectMake(beforeRect.origin.x, beforeRect.origin.y+(height_max-beforeRect.size.height), beforeRect.size.width, beforeRect.size.height));
-	}
-	contentHeight+=height_max;
+
+	contentHeight += height_max;
 }
 
 NDPicture* CUIChatText::CreateFacePicture(unsigned int index)
@@ -306,6 +323,7 @@ NDPicture* CUIChatText::CreateFacePicture(unsigned int index)
 	{
 		int row = index / 6;
 		int col = index % 6;
+
 		result = NDPicturePool::DefaultPool()->AddPicture(NDPath::GetImgPath("Res00/sm_face.png"));	
 		result->Cut(CCRectMake(80 * col, 80 * row , 80, 80));
 	}
@@ -326,29 +344,32 @@ NDUIImage* CUIChatText::CreateFaceImage(const char* strIndex)
 			result->Initialization();
 			result->SetPicture(pic, true);
 			result->SetFrameRect(CCRectMake(0, 0, 30*RESOURCE_SCALE, 30*RESOURCE_SCALE));
-		}			
+		}
 	}
 	return result;
 }
 
-NDUILabel* CUIChatText::CreateLabel(const char* text, unsigned int fontSize, ccColor4B color, int idItem/* = 0*/)
+NDUILabel* CUIChatText::CreateLabel(const char* utf8_text, unsigned int fontSize, ccColor4B color, int idItem/* = 0*/)
 {
-	NDUILabel* result = NULL;
-	if (text) 
-	{
-		CCSize textSize = getStringSize(text, fontSize);
-		result = new NDUILabel();
-		result->Initialization();
-		result->SetRenderTimes(1);
-		result->SetText(text);
-		result->SetTag(idItem);
-		result->SetFontSize(fontSize);
-		result->SetFontColor(color);
+	//注意：utf8_text传进来的格式是utf8的，计算string size之前要转成ansi，否则计算尺寸出错.
+	if (!utf8_text || !utf8_text[0]) return NULL;
 
-		textSize.width = textSize.width > textSize.height ? textSize.height : textSize.width;
-		result->SetFrameRect(CCRectMake(0, 0, textSize.width, textSize.height));
+	NDUILabel* label = NULL;
+	if (utf8_text) 
+	{
+		const char* ansiText = CCString::stringWithUTF8String( utf8_text )->getCString();
+		CCSize textSize = getStringSize(ansiText, fontSize*FONT_SCALE);
+
+		label = new NDUILabel();
+		label->Initialization();
+		label->SetRenderTimes(1);
+		label->SetText(utf8_text);
+		label->SetTag(idItem);
+		label->SetFontSize(fontSize); //Label内部自适应比例.
+		label->SetFontColor(color);
+		label->SetFrameRect(CCRectMake(0, 0, textSize.width, textSize.height));
 	}
-	return result;
+	return label;
 }
 
 unsigned char CUIChatText::unsignedCharToHex(const char* usChar)
