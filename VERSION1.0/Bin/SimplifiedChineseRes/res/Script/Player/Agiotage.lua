@@ -65,7 +65,7 @@ function p.LoadUI()
 	pLayer:SetTag( NMAINSCENECHILDTAG.Agiotage );--
 	pLayer:SetFrameRect( RectFullScreenUILayer );
 	--pLayer:SetBackgroundColor( ccc4(125, 125, 125, 0) );
-	pScene:AddChildZ(pLayer,2);--pScene:AddChild( pLayer );--VIP界面的ZOrder为1,so..
+	pScene:AddChildZ(pLayer,UILayerZOrder.NormalLayer+1);--pScene:AddChild( pLayer );--VIP界面的ZOrder为1,so..
 	--初始化ui
 	local uiLoad = createNDUILoad();
 	if not CheckP(uiLoad) then

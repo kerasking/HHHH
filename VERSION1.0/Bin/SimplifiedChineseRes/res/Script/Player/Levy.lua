@@ -62,7 +62,8 @@ function p.LoadUI()
     local winsize = GetWinSize();
     layer:SetFrameRect(RectFullScreenUILayer);
     --layer:SetBackgroundColor(ccc4(125,125,125,125));
-    scene:AddChild(layer);
+    --scene:AddChild(layer);
+    scene:AddChildZ(layer, UILayerZOrder.NormalLayer);
 
     local uiLoad=createNDUILoad();
     if nil == uiLoad then

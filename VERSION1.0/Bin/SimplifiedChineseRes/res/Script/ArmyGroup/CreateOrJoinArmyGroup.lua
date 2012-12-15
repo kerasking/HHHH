@@ -61,7 +61,7 @@ p.pLayerCreateOrJoinArmyGroup	= nil;
 	layer:Init();
 	layer:SetTag( NMAINSCENECHILDTAG.CreateOrJoinArmyGroup );
 	layer:SetFrameRect( RectFullScreenUILayer );
-	scene:AddChildZ( layer, 1 );
+	scene:AddChildZ( layer, UILayerZOrder.NormalLayer );
 
 	local uiLoad = createNDUILoad();
 	if ( nil == uiLoad ) then

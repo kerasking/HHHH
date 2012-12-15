@@ -22,6 +22,9 @@ local ID_ROLEATTR_L_BG_CTRL_PICTURE_132					= 132;
 local ID_ROLEATTR_L_BG_CTRL_PICTURE_BG					= 200;
 local ID_ROLEATTR_L_BG_CTRL_PICTURE_BG2					= 151;
 
+--占星背包
+local TAG_DESTINY_BAG = 14;     --占星背包
+
 
 --属性主界面tag
 local ID_ROLEATTR_L_CTRL_TEXT_HELP						= 100;
@@ -324,11 +327,10 @@ function p.LoadUI(tab,nPetId)
 	if layer == nil then
 		return false;
 	end
-	
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerBackBag);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 	
 	--初始化ui
 	local uiLoad = createNDUILoad();
@@ -338,7 +340,7 @@ function p.LoadUI(tab,nPetId)
 	end
 	
 	--bg
-	uiLoad:Load("RoleAttr_L_BG.ini", layer, nil, 0, 0);
+	uiLoad:Load("RoleAttr_L_BG.ini", layer, p.OnUIEventBG, 0, 0);
     --==End(初始化左边背景)===================================================================
     
     
@@ -353,7 +355,6 @@ function p.LoadUI(tab,nPetId)
 		layer:Free();
 		return false;
 	end
-	
 	layerGrid:Init();
 	layerGrid:SetTag(TAG_LAYER_GRID);
 	layerGrid:SetFrameRect(CGRectMake(ATTR_OFFSET_X, ATTR_OFFSET_Y, RectFullScreenUILayer.size.w / 2, RectFullScreenUILayer.size.h));
@@ -528,7 +529,6 @@ function p.LoadBackBagUI()
 			LogInfo("p.LoadBackBagUI createUIScrollView failed");
 			return;
 		end
-
 		view:Init(false);
 		view:SetViewId(i);
 		container:AddView(view);
@@ -582,11 +582,26 @@ function p.GetPetIdByEquipNode(uiNode)
 	return sv:GetViewId();
 end 
 
+function p.OnUIEventBG(uiNode, uiEventType, param)
+    local tag = uiNode:GetTag();
+    if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+    
+        if tag == TAG_DESTINY_BAG then
+            if(DestinyUI.LoadUI(p.GetCurPetId())) then
+                p.freeData();
+                CloseUI(NMAINSCENECHILDTAG.PlayerBackBag);
+            end
+        end
+    end
+    return true;
+end
+
 -- Ui事件处理开始
 function p.OnUIEventViewChange(uiNode, uiEventType, param)
 	local tag = uiNode:GetTag();
 	LogInfo("p.OnUIEventViewChange[%d]", tag);
-	if uiEventType == NUIEventType.TE_TOUCH_SC_VIEW_IN_BEGIN then
+    
+    if uiEventType == NUIEventType.TE_TOUCH_SC_VIEW_IN_BEGIN then
         LogInfo("param:[%d]",param);
 		local containter	= ConverToSVC(uiNode);
 		local nPetId		= 0;
@@ -1309,7 +1324,6 @@ function p.RefreshContainer()
 			LogInfo("view == nil");
 			return;
 		end
-
 		view:Init(false);
 		view:SetViewId(v);
 		container:AddView(view);

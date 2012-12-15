@@ -24,6 +24,9 @@ local ID_ROLEATTR_L_BG_CTRL_PICTURE_BG2					= 151;
 local ID_TASKBG_ARROWLEFT_CTRL_PICTURE					=10;
 local ID_TASKBG_ARROWRIGHT_CTRL_PICTURE					=9;
 
+--占星背包
+local TAG_DESTINY_BAG = 14;     --占星背包
+
 --属性主界面tag
 local ID_ROLEATTR_L_CTRL_TEXT_HELP						= 100;
 local ID_ROLEATTR_L_CTRL_EXP_ROLE						= 33;
@@ -153,13 +156,12 @@ function p.LoadUI(nPetId)
 	if layer == nil then
 		return false;
 	end
-	
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerAttr);
 	layer:SetFrameRect(RectFullScreenUILayer);
 	--layer:SetBackgroundColor(ccc4(125, 125, 125, 125));
 	--scene:AddChild(layer);
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 	LogInfo("chh 3")
     
 	--初始化ui
@@ -170,7 +172,7 @@ function p.LoadUI(nPetId)
 	end
 	
 	--bg 任务属性背景框
-	uiLoad:Load("RoleAttr_L_BG.ini", layer, nil, 0, 0);
+	uiLoad:Load("RoleAttr_L_BG.ini", layer, p.OnUIEventBG, 0, 0);
 	
    --重新生成一个层加载任务属性界面右半边
 	local layerAttr = createNDUILayer();
@@ -207,6 +209,13 @@ function p.LoadUI(nPetId)
     SetArrow(p.GetLayer(),p.GetPetNameSVC(),1,TAG_BEGIN_ARROW2,TAG_END_ARROW2);
     
     p.refreshMoney();
+    
+    --stage限制判断
+    if not MainUIBottomSpeedBar.GetFuncIsOpen(129) then
+        local btn = GetButton(layer, TAG_DESTINY_BAG);
+        btn:SetImage(nil);
+        btn:SetTouchDownImage(nil);
+    end
     
 	return true;
 end
@@ -510,6 +519,18 @@ function p.RefreshArrowPic(nIndex,nViewCount)
 	end--]]
 end
 
+function p.OnUIEventBG(uiNode, uiEventType, param)
+    local tag = uiNode:GetTag();
+    if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+    
+        if tag == TAG_DESTINY_BAG then
+            if(DestinyUI.LoadUI(p.GetCurPetId())) then
+                CloseUI(NMAINSCENECHILDTAG.PlayerAttr);
+            end
+        end
+    end
+    return true;
+end
 function p.OnUIEventViewChange(uiNode, uiEventType, param)
 	
     local tag = uiNode:GetTag();

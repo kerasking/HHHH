@@ -11,12 +11,15 @@ local p = FriendAttrUI;
 
 --bg tag
 local ID_ROLEATTR_L_BG_CTRL_LIST_LEFT			    = 51;
+local ID_ROLEATTR_L_BG_CTRL_LIST_LEFT_DESTINY       = 15;
 local ID_ROLEATTR_L_BG_CTRL_LIST_NAME			    = 50;
 local ID_SM_JH_ROLEATTR_L_BG_CTRL_BUTTON_67			= 67;
 local ID_SM_JH_ROLEATTR_L_BG_CTRL_BUTTON_66			= 66;
 local ID_SM_JH_ROLEATTR_L_BG_CTRL_LIST_LEFT			= 51;
 local ID_SM_JH_ROLEATTR_L_BG_CTRL_LIST_NAME			= 50;
 
+--占星背包
+local TAG_DESTINY_BAG = 14;     --占星背包
 
 --L
 local ID_ROLEATTR_R_CTRL_TEXT_SPEED						= 27;
@@ -161,6 +164,10 @@ local RectUILayer = CGRectMake(0, 0, winsize.w , winsize.h);
 local ATTR_OFFSET_X = RectUILayer.size.w / 2;
 local ATTR_OFFSET_Y = 0;
 
+local BAG_TYPE_NAME = {
+    "星运",
+    "装备",
+};
 
 local friendId;
 local friendName = "";
@@ -188,8 +195,10 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
 	end
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.FriendAttr);
-	layer:SetFrameRect(RectUILayer);
-	scene:AddChildZ(layer,5);
+	--layer:SetFrameRect(RectUILayer);
+	
+	layer:SetFrameRect(RectFullScreenUILayer);
+	scene:AddChildZ(layer,5005);
 	
 	--初始化ui
 	local uiLoad = createNDUILoad();
@@ -198,12 +207,20 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
 		return false;
 	end
 	
+    --三级窗口初始化
+    BackLevelThreeWin.LoadUI(layer);
+    
 	--bg
 	uiLoad:Load("RoleAttr_L_BG.ini", layer, p.OnUIEventScroll, 0, 0);
 	--local AddFriendBtn	= RecursiveButton(layer, ID_SM_JH_ROLEATTR_L_BG_CTRL_BUTTON_66);
 	--AddFriendBtn:SetVisible(false);ID_ROLEATTR_L_CTRL_BUTTON_FIRE
 	
-	
+    
+	local btn = GetButton(layer,TAG_DESTINY_BAG);
+    --查看它人星运功能暂时屏蔽
+    --btn:SetVisible(false);
+    btn:SetTitle(BAG_TYPE_NAME[1]);
+    
 	local layerAttr = createNDUILayer();
 	if not CheckP(layerAttr) then
 		uiLoad:Free();
@@ -238,11 +255,21 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
 		layer:Free();
 		return false;
 	end
-	
 
 	containter:SetViewSize(containter:GetFrameRect().size);
 	containter:SetLuaDelegate(p.OnUIEventViewChange);
-
+    
+    
+    --星运背包
+    local destinyBag = RecursiveSVC(layer, {ID_ROLEATTR_L_BG_CTRL_LIST_LEFT_DESTINY});
+	if not CheckP(destinyBag) then
+		layer:Free();
+		return false;
+	end
+    destinyBag:SetVisible(false);
+	destinyBag:SetViewSize(destinyBag:GetFrameRect().size);
+	destinyBag:SetLuaDelegate(p.OnUIEventViewChange);
+    
 	
 	local petNameContainer = p.GetPetNameSVC();
 	if CheckP(petNameContainer) then
@@ -256,10 +283,15 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
 		petNameContainer:SetViewSize(viewsize);
 		petNameContainer:SetLuaDelegate(p.OnUIEventViewChange);
 	end
-		
+    
+    
+    
+
+    
 
 		
 	p.RefreshContainer();
+    p.RefreshDestinyContainer();
 
 
 	local beginView	= containter:GetBeginView(0);
@@ -296,6 +328,55 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
 	return true;
 end
 
+--切换视图
+function p.ChangeView()
+    local layer = p.GetCurrLayer();
+    if(layer == nil) then
+        return;
+    end
+    local btn = GetButton(layer,TAG_DESTINY_BAG);
+    if(btn) then
+        if(btn:GetTitle() == BAG_TYPE_NAME[1]) then
+            btn:SetTitle(BAG_TYPE_NAME[2]);
+            p.DestinyView();
+        else
+            btn:SetTitle(BAG_TYPE_NAME[1]);
+            p.BagView();
+        end
+    end
+end
+
+--星运视图
+function p.DestinyView()
+    local petSVC = p.GetPetParent();
+    local desSVC = p.GetDestinyContainer();
+    local nameSVC	= p.GetPetNameSVC();
+    
+    if(petSVC) then
+        petSVC:SetVisible(false);
+    end
+    
+    if(desSVC) then
+        desSVC:ShowViewByIndex(nameSVC:GetBeginIndex());
+        desSVC:SetVisible(true);
+    end
+end
+
+--背包视图
+function p.BagView()
+    local petSVC = p.GetPetParent();
+    local desSVC = p.GetDestinyContainer();
+    local nameSVC	= p.GetPetNameSVC();
+    
+    if(petSVC) then
+        petSVC:ShowViewByIndex(nameSVC:GetBeginIndex());
+        petSVC:SetVisible(true);
+    end
+    
+    if(desSVC) then
+        desSVC:SetVisible(false);
+    end
+end
 
 ------------------获取数据---------------------------------
 
@@ -347,6 +428,20 @@ function p.GetDetailParent()
 	return layer;
 end
 
+function p.GetCurrLayer()
+    local scene = GetSMGameScene();
+	if nil == scene then
+		return nil;
+	end
+	
+	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.FriendAttr);
+	if nil == layer then
+		return nil;
+	end
+    
+    return layer;
+end
+
 function p.GetPetParent()
 	local scene = GetSMGameScene();
 	if nil == scene then
@@ -359,6 +454,16 @@ function p.GetPetParent()
 	end
 	
 	local containter = RecursiveSVC(layer, {ID_ROLEATTR_L_BG_CTRL_LIST_LEFT});
+	return containter;
+end
+
+function p.GetDestinyContainer()
+	local layer = p.GetCurrLayer();
+	if nil == layer then
+		return nil;
+	end
+	
+	local containter = RecursiveSVC(layer, {ID_ROLEATTR_L_BG_CTRL_LIST_LEFT_DESTINY});
 	return containter;
 end
 
@@ -443,6 +548,9 @@ function p.RefreshContainer()
             end
             --宠物Attr
             p.UpdatePetAttrById(v);
+            --宠物星云
+            p.UpdateDestinyById(v);
+            
             --宠物装备
             local idlist	= ItemPet.GetEquipItemList(friendId, v);
             LogInfo("pet装备id列表");
@@ -468,6 +576,247 @@ function p.RefreshContainer()
 	end
 end
 
+--刷新星运
+function p.RefreshDestinyContainer()
+    local nPlayerId = friendId;
+	if nil == nPlayerId then
+		LogInfo("nil == nPlayerId");
+		return;
+	end
+    
+    --玩家面板列表
+    local petContainer = p.GetDestinyContainer();
+	if nil == petContainer then
+		LogInfo("nil == petContainer");
+		return;
+	end
+	petContainer:RemoveAllView();
+	local petRectview = petContainer:GetFrameRect();
+	petContainer:SetViewSize(petRectview.size);
+    
+    --获取玩家宠物id列表
+	local idTable = RolePetUser.GetPetListPlayer(nPlayerId);
+    idTable = RolePet.OrderPets(idTable, friendId);
+    
+	for i, v in ipairs(idTable) do
+		local view = createUIScrollView();
+		if view == nil then
+			LogInfo("view == nil");
+			return;
+		end
+		view:Init(false);
+		view:SetViewId(v);
+		petContainer:AddView(view);
+		
+		local uiLoad = createNDUILoad();
+		if uiLoad ~= nil then
+			uiLoad:Load("destiny/DestinyBag_L.ini", view, p.OnUIEventBag, 0, 0);
+			uiLoad:Free();
+		else
+			return;
+		end
+		
+		p.RefreshPet(v);
+        p.RefreshPetEquip(v);
+	end
+    p.RefreshDestinyValue();
+end
+
+function p.OnUIEventBag(uiNode, uiEventType, param)
+    local tag = uiNode:GetTag();
+	LogInfo("p.OnUIEventBag[%d]", tag);
+	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+        local equipBtn = ConverToItemButton(uiNode);
+        if(equipBtn) then
+            local nItemId = equipBtn:GetItemId();
+            BackLevelThreeWin.ShowUIDestiny(nItemId, p.GetPetIdOnShow(), nil);
+        end
+    end
+    return true;
+end
+
+local TAG_PET_LEVEL         = 16;       --等级
+local TAG_PET_LUCK          = 235;      --星运
+
+local TAG_PET_ACT_DESC              = 19;   --攻击说明
+local TAG_PET_ACT					= 20;   --攻击
+local TAG_PET_SPEED					= 27;   --速度
+local TAG_PET_DEX					= 28;   --物防
+local TAG_PET_LIFE					= 22;   --生命
+local TAG_PET_MAGIC					= 29;   --策防
+local TAG_PET_SKILL                 = 24;   --技能
+local TAG_PET_ANIMATE               = 9;    --角色动画
+
+local TAG_EQUIP_LIST_1 = {--装备列表
+    [Item.POSITION_DAO_FA_1] = 201,
+    [Item.POSITION_DAO_FA_2] = 203,
+    [Item.POSITION_DAO_FA_3] = 205,
+    [Item.POSITION_DAO_FA_4] = 207,
+    [Item.POSITION_DAO_FA_5] = 202,
+    [Item.POSITION_DAO_FA_6] = 204,
+    [Item.POSITION_DAO_FA_7] = 206,
+    [Item.POSITION_DAO_FA_8] = 208,
+};
+
+local TAG_EQUIP_NAME_LIST_1 = {--装备列表名
+    [Item.POSITION_DAO_FA_1] = 146,
+    [Item.POSITION_DAO_FA_2] = 148,
+    [Item.POSITION_DAO_FA_3] = 150,
+    [Item.POSITION_DAO_FA_4] = 152,
+    [Item.POSITION_DAO_FA_5] = 147,
+    [Item.POSITION_DAO_FA_6] = 149,
+    [Item.POSITION_DAO_FA_7] = 151,
+    [Item.POSITION_DAO_FA_8] = 153,
+};	
+
+function p.RefreshPet( nPetId )
+    LogInfo("p.RefreshPet");
+    local petContainer = p.GetDestinyContainer();
+    local view = petContainer:GetViewById(nPetId);
+	if not CheckP(view) then
+        LogInfo("p.RefreshPetName nil == view");
+		return;
+	end
+    
+    --攻击说明
+    local nPetType = RolePet.GetPetInfoN(nPetId,PET_ATTR.PET_ATTR_TYPE);
+    local nActType = GetDataBaseDataN("pet_config", nPetType, DB_PET_CONFIG.ATK_TYPE);
+    if ( nActType == STAND_TYPE.THIRD) then
+        --策攻
+        SetLabel( view, TAG_PET_ACT_DESC, GetTxtPri("FAUI_T4") ); 
+        SetLabel( view, TAG_PET_ACT, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_MAGIC_ATK) );
+    else
+        --物攻
+        SetLabel( view, TAG_PET_ACT_DESC, GetTxtPri("FAUI_T3") );
+        SetLabel( view, TAG_PET_ACT, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_PHY_ATK) );
+    end
+    
+    --速度
+    SetLabel( view, TAG_PET_SPEED,  RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SPEED) );
+   
+    --物防
+    SetLabel( view, TAG_PET_DEX,  RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_PHY_DEF) );
+    
+    --生命
+    SetLabel( view, TAG_PET_LIFE,  RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LIFE) );
+    
+    --策防
+    SetLabel( view, TAG_PET_MAGIC,  RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_MAGIC_DEF) );
+    
+    --技能
+    SetLabel( view, TAG_PET_SKILL,  RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_SKILL) );
+    
+    --等级
+    SetLabel( view, TAG_PET_LEVEL,  RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LEVEL)..GetTxtPub("Level") );
+    
+    --角色动画
+    local pRoleForm = GetUiNode(view, TAG_PET_ANIMATE);
+    if nil ~= pRoleForm then
+        
+        --判断人物动画是否加载过
+        if( GetUiNode(pRoleForm, TAG_PET_ANIMATE) ) then
+            return;
+        end
+        
+        local rectForm	= pRoleForm:GetFrameRect();
+        local roleNode = createUIRoleNode();
+        if nil ~= roleNode then
+            roleNode:Init();
+            roleNode:SetFrameRect( CGRectMake(0, 0, rectForm.size.w, rectForm.size.h) );
+            roleNode:ChangeLookFace(RolePetFunc.GetLookFace( nPetId ));
+            pRoleForm:AddChildZTag( roleNode , 0, TAG_PET_ANIMATE);
+        end
+        
+    end
+end
+
+--刷新武将装备
+function p.RefreshPetEquip(nPetId)
+    local nPlayerId = friendId;
+	if nil == nPlayerId then
+		LogInfo("nil == nPlayerId");
+		return;
+	end
+    
+    local container = p.GetDestinyContainer();
+    if(container == nil) then
+        LogInfo("p.RefreshPetEquip container is nil");
+        return;
+    end
+    local view = container:GetViewById(nPetId);
+    if(view == nil) then
+        LogInfo("p.RefreshPetEquip view is nil");
+        return;
+    end
+    
+    --装备
+    local idlist	= ItemPet.GetDaoFaItemList(nPlayerId, nPetId);
+    for i, v in ipairs(idlist) do
+        local nPos	= Item.GetItemInfoN(v, Item.ITEM_POSITION);
+        local nTag1,nTag2	= p.GetEquipTag2(nPos);
+        LogInfo("nPos:[%d],nTag1[%d],nTag2:[%d]",nPos,nTag1,nTag2);
+        if nTag1 > 0 then
+            local equipBtn	= GetEquipButton(view, nTag1);
+            local equiplbl	= GetLabel(view, nTag2);
+            if CheckP(equipBtn) then
+                equipBtn:ChangeItem(v);
+                
+                local nItemType			= Item.GetItemInfoN(v, Item.ITEM_TYPE);
+                local strName			= ItemFunc.GetName(nItemType);
+                local levelLV           = Item.GetItemInfoN(v, Item.ITEM_ADDITION);
+                equiplbl:SetText(string.format("%s.Lv%d",strName,levelLV));
+                --设置物品颜色
+                ItemFunc.SetDaoFaLabelColor(equiplbl,nItemType);
+            end
+        end
+    end
+
+end
+
+function p.GetEquipTag2(nPos)
+	if not CheckT(TAG_EQUIP_LIST_1) or not CheckN(nPos) then
+		return 0;
+	end
+	return ConvertN(TAG_EQUIP_LIST_1[nPos]),ConvertN(TAG_EQUIP_NAME_LIST_1[nPos]);
+end
+
+function p.RefreshDestinyValue()
+    local petContainer = p.GetDestinyContainer();
+    
+    if(petContainer == nil) then
+        return;
+    end
+    
+    local nPlayerId = friendId;
+    local idTable = RolePetUser.GetPetListPlayer(nPlayerId);
+    
+	for i, v in ipairs(idTable) do
+		
+        local view = petContainer:GetViewById(v);
+        if not CheckP(view) then
+            LogInfo("p.RefreshDestinyValue nil == view");
+            return;
+        end
+        
+        SetLabel( view, TAG_PET_LUCK, p.GetLuckValue(v).."" ); 
+	end
+end
+
+--计算星运值
+function p.GetLuckValue(nPetId)
+    local val = 1;
+    local idlist	= ItemPet.GetDaoFaItemList(friendId, nPetId);
+    for i,v in ipairs(idlist) do
+        local nItemType = Item.GetItemInfoN(v, Item.ITEM_TYPE);
+        local nBaseExp = GetDataBaseDataN("daofa_static_config",Num1(nItemType)+1,DB_DAOFA_STATIC_CONFIG.VALUE);
+        local nExp = Item.GetItemInfoN(v, Item.ITEM_EXP);
+        val = val + nBaseExp + nExp;
+        --val = val + nExp;
+    end
+    
+    val = math.ceil(val / 10);
+    return val;
+end
 
 function p.ContainerAddPetName(nPetId)
 	if not CheckN(nPetId) then
@@ -696,6 +1045,11 @@ function p.UpdatePetAttrById(nPetId)
 	end
 end
 
+--宠物星云
+function p.UpdateDestinyById(nPetId)
+    --未完成
+
+end
 
 function p.ChangePetAttr(nPetId)
 	LogInfo("qbw:change attr"..nPetId)
@@ -846,6 +1200,9 @@ function p.OnUIEventScroll(uiNode, uiEventType, param)
 				else
 				    FriendFunc.AddFriend(friendId,friendName); --加为好友 
 				end	
+                
+        elseif tag == TAG_DESTINY_BAG then
+            p.ChangeView();
 		end
 	end
 	
@@ -913,14 +1270,14 @@ function p.OnUIEventViewChange(uiNode, uiEventType, param)
 			return true;
 		end
 	
-		if ID_ROLEATTR_L_BG_CTRL_LIST_LEFT == tag then
+		if ID_ROLEATTR_L_BG_CTRL_LIST_LEFT == tag or ID_ROLEATTR_L_BG_CTRL_LIST_LEFT_DESTINY == tag then
+            LogInfo("p.OnUIEventViewChange:nPetId:[%d]",nPetId);
 			containter	= p.GetPetNameSVC();
 			if CheckP(containter) then
 				containter:ShowViewById(nPetId);
 			end
 		elseif ID_ROLEATTR_L_BG_CTRL_LIST_NAME == tag then
-			LogInfo("ID_ROLEATTR_L_BG_CTRL_LIST_NAME == tag");
-			containter = p.GetPetParent();
+			containter = ConverToSVC(uiNode);
 			if CheckP(containter) then
 				containter:ShowViewById(nPetId);
 			end

@@ -165,5 +165,7 @@ endTimeSlice("SyndicateBattle/define.lua")
 bgnTimeSlice("Banquet/define.lua")
 DoFile("Banquet/define.lua");
 endTimeSlice("Banquet/define.lua")
+--Õ¼ÐÇ
+DoFile("Destiny/define.lua");
 
 PrintLog("End Load");

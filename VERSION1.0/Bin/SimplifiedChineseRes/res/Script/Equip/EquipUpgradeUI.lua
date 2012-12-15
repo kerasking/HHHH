@@ -207,7 +207,7 @@ function p.LoadUI(page)
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.EquipUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 -----------------初始化ui添加到 layer 层上----------------------------------
     local uiLoad = createNDUILoad();
 	if nil == uiLoad then

@@ -75,7 +75,7 @@ function p.DelItemInfo(nItemId)
 		return;
 	end
 	
-	_G.DelRoleGameDataById(NScriptData.eItemInfo, nItemId);
+	_G.DelRoleGameDataById(NScriptData.eRole, nItemId);
 end
 
 function p.LogOutItem(nItemId)
@@ -97,3 +97,24 @@ function p.SortItemFunc(a, b)
     return nItemTypeA < nItemTypeB;
 end
 
+--星运排序
+function p.OrderDestinys(items)
+    table.sort(items,p.SortDestinyFunc);
+    return items;
+end
+
+function p.SortDestinyFunc(a, b)
+    local nItemTypeA = Item.GetItemInfoN(a, Item.ITEM_TYPE);
+    local nItemTypeB = Item.GetItemInfoN(b, Item.ITEM_TYPE);
+    
+    local nQualityA = Num1(nItemTypeA);
+    local nQualityB = Num1(nItemTypeB);
+    
+    if(nQualityA ~= nQualityB) then
+        return nQualityA>nQualityB;
+    end
+   
+    local nExpA = Item.GetItemInfoN(a, Item.ITEM_EXP);
+    local nExpB = Item.GetItemInfoN(b, Item.ITEM_EXP);
+    return nExpA>nExpB;
+end

@@ -79,13 +79,12 @@ function p.LoadUI()
 	if layer == nil then
 		return false;
 	end
-	
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.Friend);
 	layer:SetFrameRect(RectFullScreenUILayer);
 
 	layer:SetTag( NMAINSCENECHILDTAG.Friend);
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 
 	--初始化ui
 	local uiLoad = createNDUILoad();
@@ -121,7 +120,7 @@ function p.LoadUI()
 	uiLoad:Load("friend/friend_A_R.ini", layerInfo, p.OnUIEventInfo, 0, 0);
 	uiLoad:Free();	
 	
-	layer:AddChildZ(layerInfo,1);
+	layer:AddChildZ(layerInfo,UILayerZOrder.NormalLayer);
 
 	--默认选定第一个玩家
 	p.ClearInfoLayer();

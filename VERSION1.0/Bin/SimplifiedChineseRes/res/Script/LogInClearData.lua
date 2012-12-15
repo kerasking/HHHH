@@ -12,6 +12,7 @@ function p.Clear()
     p.ClearBossBattle();
     MsgPlayerAction.ClearActionInfo();
     p.ClearBuyMilOrder();
+    p.ClearDestiny();
 end
 
 
@@ -60,6 +61,26 @@ end
 
 function p.ClearBossBattle()
     Battle_Boss.bIsTip = nil;
+end
+
+--清理占星数据
+function p.ClearDestiny()
+    DestinyUI.bFlagConfirm = false;
+    DestinyFeteUI.bFlagConfirm = false;
+    
+    _G.DelRoleGameData(NScriptData.eRole);
+    _G.DelRoleGameData(NScriptData.eItemInfo);
+    
+    MsgRealize.nCurrPetId = nil;
+    MsgRealize.nIsStopRefreshBag = false;
+    DestinyFeteUI.nCurrPetId = nil;
+    --[[
+    --删除道法背包数据
+    local idlist	= ItemUser.GetDaoFaItemList(GetPlayerId());
+    for i,v in ipairs(idlist) do
+        _G.DelRoleGameDataById(NScriptData.eRole, v);
+    end
+    ]]
 end
 
 RegisterGlobalEventHandler( GLOBALEVENT.GE_LOGIN_GAME,"LogInClearData.Clear", p.Clear );

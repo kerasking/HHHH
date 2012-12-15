@@ -54,71 +54,78 @@ for i=1,10 do
 	tVipInfo[i] = {}
 end
 
-tVipInfo[1][1] = GetTxtPri("PLAYER_T20")
-tVipInfo[1][2] = GetTxtPri("PLAYER_T21")
-tVipInfo[1][3] = GetTxtPri("PLAYER_T22")
-tVipInfo[1][4] = GetTxtPri("PLAYER_T23")
+tVipInfo[1][1] = "开启伙伴武将白金训练模式	"
+tVipInfo[1][2] = "每日可征收20次"
+tVipInfo[1][3] = "每日可购买20个额外军令"
+tVipInfo[1][4] = "背包容量增加至72格"
+tVipInfo[1][4] = "星运背包容量增加至5格"--添加多语言
 
-tVipInfo[2][1] = GetTxtPri("PLAYER_T24")
-tVipInfo[2][2] = GetTxtPri("PLAYER_T25")
-tVipInfo[2][3] = GetTxtPri("PLAYER_T26")
-tVipInfo[2][4] = GetTxtPri("PLAYER_T27")
+tVipInfo[2][1] = "开启速战速决功能"
+tVipInfo[2][2] = "可以使用金币购买30级紫色武将	"
+tVipInfo[2][3] = "背包容量增加至80格"
+tVipInfo[2][4] = "星运背包容量增加至6格"--添加多语言
 
-tVipInfo[3][1] = GetTxtPri("PLAYER_T28")
-tVipInfo[3][2] = GetTxtPri("PLAYER_T29")
-tVipInfo[3][3] = GetTxtPri("PLAYER_T30")
-tVipInfo[3][4] = GetTxtPri("PLAYER_T31")
-tVipInfo[3][5] = GetTxtPri("PLAYER_T32")
+tVipInfo[3][1] = "开启武器白金洗炼功能"
+tVipInfo[3][2] = "星运背包容量增加至7格"--添加多语言
+tVipInfo[3][3] = "开启强化装备暴击功能"
+tVipInfo[3][4] = "精英副本每日可用金币重置1次"
+tVipInfo[3][5] = "可以使用金币购买50级和70级紫色武将"
 
-tVipInfo[4][1] = GetTxtPri("PLAYER_T33")
-tVipInfo[4][2] = GetTxtPri("PLAYER_T34")
-tVipInfo[4][3] = GetTxtPri("PLAYER_T35")
-tVipInfo[4][4] = GetTxtPri("PLAYER_T36")
-tVipInfo[4][5] = GetTxtPri("PLAYER_T37")
-tVipInfo[4][6] = GetTxtPri("PLAYER_T38")
-tVipInfo[4][7] = GetTxtPri("PLAYER_T39")
-
-tVipInfo[5][1] = GetTxtPri("PLAYER_T40")
-tVipInfo[5][2] = GetTxtPri("PLAYER_T41")
-tVipInfo[5][3] = GetTxtPri("PLAYER_T42")
-tVipInfo[5][4] = GetTxtPri("PLAYER_T43")
-tVipInfo[5][5] = GetTxtPri("PLAYER_T44")
-tVipInfo[5][6] = GetTxtPri("PLAYER_T45")
-tVipInfo[5][7] = GetTxtPri("PLAYER_T46")
+tVipInfo[4][1] = "开启伙伴武将金钻训练模式	"
+tVipInfo[4][2] = "每日可征收30次"
+tVipInfo[4][3] = "背包容量增加至90格"
+tVipInfo[4][4] = "星运背包容量增加至8格"--添加多语言
+tVipInfo[4][5] = "开启批量征收功能"
+tVipInfo[4][6] = "开启金币购买70级金色武将"
+tVipInfo[4][7] = "降低装备强化费用10%"
 
 
-tVipInfo[6][1] = GetTxtPri("PLAYER_T47")
-tVipInfo[6][2] = GetTxtPri("PLAYER_T48")
-tVipInfo[6][3] = GetTxtPri("PLAYER_T49")
-tVipInfo[6][4] = GetTxtPri("PLAYER_T50")
-tVipInfo[6][5] = GetTxtPri("PLAYER_T51")
-tVipInfo[6][6] = GetTxtPri("PLAYER_T52")
+tVipInfo[5][1] = "背包容量增加至100格"
+tVipInfo[5][2] = "星运背包容量增加至9格"      --添加多语言
+tVipInfo[5][3] = "可召唤20次奇门遁甲"      --添加多语言
+tVipInfo[5][4] = "开启一键占星"--添加多语言
+tVipInfo[5][5] = "每日可购买25个额外军令"
+tVipInfo[5][6] = "精英副本每日可用金币重置2次"
+tVipInfo[5][7] = "开启金币购买80级金色武将"
+tVipInfo[5][8] = "永久取消强化冷却时间"
+tVipInfo[5][9] = "每日可以征收40次"
+
+tVipInfo[6][1] = "背包容量增加至110格"
+tVipInfo[6][2] = "星运背包容量增加至10格"      --添加多语言
+tVipInfo[6][3] = "每日可购买30个额外军令"
+tVipInfo[6][4] = "开启武器至尊洗炼功能"
+tVipInfo[6][5] = "开启金币购买90级金色武将"
+tVipInfo[6][6] = "降低装备强化费用12%"
 
 tVipInfo[7][1] = GetTxtPri("PLAYER_T53")
-tVipInfo[7][2] = GetTxtPri("PLAYER_T54")
-tVipInfo[7][3] = GetTxtPri("PLAYER_T55")
-tVipInfo[7][4] = GetTxtPri("PLAYER_T56")
-tVipInfo[7][5] = GetTxtPri("PLAYER_T57")
+tVipInfo[7][1] = "背包容量增加至120格"
+tVipInfo[7][2] = "星运背包容量增加至11格"      --添加多语言
+tVipInfo[7][3] = "可召唤40次奇门遁甲"      --添加多语言
+tVipInfo[7][4] = "每日可征收50次"
+tVipInfo[7][5] = "每日可购买35个额外军令"
+tVipInfo[7][6] = "开启金币购买100级金色武将"
 
 
-tVipInfo[8][1] = GetTxtPri("PLAYER_T58")
-tVipInfo[8][2] = GetTxtPri("PLAYER_T59")
-tVipInfo[8][3] = GetTxtPri("PLAYER_T60")
-tVipInfo[8][4] = GetTxtPri("PLAYER_T61")
-tVipInfo[8][5] = GetTxtPri("PLAYER_T62")
-tVipInfo[8][6] = GetTxtPri("PLAYER_T63")
+tVipInfo[8][1] = "背包容量增加至128格"
+tVipInfo[8][2] = "星运背包容量增加至12格"      --添加多语言
+tVipInfo[8][3] = "可召唤60次奇门遁甲"      --添加多语言
+tVipInfo[8][4] = "每日可征收70次"
+tVipInfo[8][5] = "每日可购买40个额外军令"
+tVipInfo[8][6] = "开启伙伴武将至尊训练模式"
+tVipInfo[8][7] = "降低装备强化费用15%"
 
 
-tVipInfo[9][1] = GetTxtPri("PLAYER_T64")
-tVipInfo[9][2] = GetTxtPri("PLAYER_T65")
-tVipInfo[9][3] = GetTxtPri("PLAYER_T66")
-tVipInfo[9][4] = GetTxtPri("PLAYER_T67")
+tVipInfo[9][1] = "背包容量增加至136格"
+tVipInfo[9][2] = "星运背包容量增加至14格"      --添加多语言
+tVipInfo[9][3] = "可召唤80次奇门遁甲"      --添加多语言
+tVipInfo[9][4] = "每日可征收100次"
+tVipInfo[9][5] = "每日可购买48个额外军令"
 
 
 tVipInfo[10][1] = GetTxtPri("PLAYER_T68")
-tVipInfo[10][2] = GetTxtPri("PLAYER_T69")
-tVipInfo[10][3] = GetTxtPri("PLAYER_T70")
-
+tVipInfo[10][2] = "星运背包容量增加至16格"      --添加多语言
+tVipInfo[10][3] = "可召唤100次奇门遁甲"      --添加多语言
+tVipInfo[10][4] = "降低装备强化费用20%"
 
 
 
@@ -140,7 +147,7 @@ local scene = GetSMGameScene();
 	layer:SetFrameRect(RectFullScreenUILayer);
 	
 
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 
 	--初始化ui
 	local uiLoad = createNDUILoad();
@@ -388,7 +395,6 @@ function p.GameDataUserInfoRefresh()
 	local nLeftTime = p.allowBuyCount(); --nAvailBuyTime - nBought;	--剩余军令购买次数
 	local nMilOrders = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_STAMINA);
 	local nGold =  GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
-	MOlabel:SetText(string.format(GetTxtPri("PLAYER_T72"),nLeftTime));
 	
 	
 	--

@@ -23,15 +23,22 @@ function SetUIVisible(visible)
 			LogInfo("CloseMainUI not CheckT(NMAINSCENECHILDTAG)");
 			return;
 		end
-		for i, v in pairs(NMAINSCENECHILDTAG) do
-			local ui = GetUI(v)
-			if ui then
-				if ( v ~= NMAINSCENECHILDTAG.BattleUI_Title ) then--Guosen 2012.11.5--回放时不隐藏该UI
-					ui:SetVisible(false);
+		for i, v in pairs(NMAINSCENECHILDTAG) do 
+
+			--聊天按钮
+			if i ~= "BottomMsgBtn" and
+			   i ~= "ChatMainBar" and
+               i ~= "ChatMainUI" then
+               
+				local ui = GetUI(v)
+				if ui then
+					if ( v ~= NMAINSCENECHILDTAG.BattleUI_Title ) then--Guosen 2012.11.5--回放时不隐藏该UI
+						ui:SetVisible(false);
+					end
+				else
+					LogInfo("SetUIVisible can not find ui:[%d]",v);
 				end
-			else
-				LogInfo("SetUIVisible can not find ui:[%d]",v);
-			end
+			end 
 		end
 	elseif visible == 1 then --显示所有UI
 		if not CheckT(NMAINSCENECHILDTAG) then

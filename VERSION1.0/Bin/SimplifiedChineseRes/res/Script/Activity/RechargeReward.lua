@@ -55,7 +55,7 @@ function p.LoadUI()
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.RechargeReward);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChild(layer);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer );
     
     local uiLoad = createNDUILoad();
 	if nil == uiLoad then

@@ -32,7 +32,7 @@ function p.AddAllChatRecordGameScene()
 	for i=list_head,list_end do
 		if IsUIShow(NMAINSCENECHILDTAG.ChatGameScene) then
 			if nil~=p.chatList[i] then
-					ChatGameScene.AddChatText(p.chatList[i][1],p.chatList[i][2],p.chatList[i][4],p.chatList[i][5]);
+					ChatGameScene.AddChatText(p.chatList[i][1],p.chatList[i][2],p.chatList[i][4],p.chatList[i][5],i);
 				
 			end
 		end
@@ -89,8 +89,13 @@ end
 
 function p.AddChatRecord(sID,cID,tID,spk,txt)
 	LogInfo("addChatRecord:%s:%s",spk,txt);
-	if (list_end-list_head)>100 then
+	if (list_end-list_head)>49 then
 		p.chatList[list_head]=nil;
+				
+        if IsUIShow(NMAINSCENECHILDTAG.ChatGameScene) then
+            ChatGameScene.RemoveChatText(list_head)
+        end
+		
 		list_head=list_head+1;
 	end
 	
@@ -113,7 +118,8 @@ function p.AddChatRecord(sID,cID,tID,spk,txt)
 		CommonDlgNew.ShowTipDlg(txt);
 	end
 	   
-    ChatGameScene.AddChatText(sID,cID,spk,txt);
+    ChatGameScene.AddChatText(sID,cID,spk,txt,list_end);
+    
     ChatGameScene.DelayShowUI();
     
 		
