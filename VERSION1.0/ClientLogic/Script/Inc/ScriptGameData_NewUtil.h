@@ -14,7 +14,7 @@
 #pragma once
 
 #include "ScriptGameData_New.h"
-
+#include "ScriptDataBase.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -359,5 +359,49 @@ struct NDGameDataUtil
 		LOGINFO( "@@ GameDB mem size: %.1fM\r\n", M_count );
 	}
 #endif
-};
 
+#if 8
+	//定制接口（效率优化）
+
+	//取某个Npc关联的任务id
+	static bool getTaskListByNpcId( const int idNpc, vector<ID>& idVec )
+	{
+		int nKey = ScriptDBObj.GetKey( "task_npc" );
+		if (nKey == 0) return false;
+
+		NDTable* pTable = getTable( MAKE_NDTABLEPTR_INI(nKey), false );
+		if (!pTable) return false;
+
+		idVec.clear();
+
+		const int INDEX_TASK_ID = 1;
+		const int INDEX_NPC_ID = 2;
+
+		// walk through each record
+		map<ID,NDRecord*>& mapRecord = pTable->getData();
+		for (map<ID,NDRecord*>::iterator iter = mapRecord.begin();
+				iter != mapRecord.end(); ++iter)
+		{
+			// get record
+			NDRecord* pRecord = iter->second;
+			if (!pRecord) continue;
+
+			// get field: NpcId
+			NDField* pField_NpcId = pRecord->getAt( INDEX_NPC_ID );
+			if (!pField_NpcId) continue;
+
+			// check npc id
+			if (idNpc == pField_NpcId->getInt())
+			{
+				// get field TaskId
+				NDField* pField_TaskId = pRecord->getAt( INDEX_TASK_ID );
+				if (!pField_TaskId) continue;
+
+				//add task id
+				idVec.push_back( pField_TaskId->getInt() ); 
+			}
+		}
+		return true;
+	}
+#endif
+};

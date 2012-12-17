@@ -30,7 +30,7 @@ LOCAL_SRC_FILES := \
 ../../Update/src/DownloadPackage.cpp \
 ../../Update/src/Reachability.cpp \
 ../../Update/src/ZipUnzip.cpp \
-../../Update/src/Unzip.cpp \
+../../Update/src/myunzip.cpp \
 ../../Graphic/src/CCTexture2DExt.cpp \
 ../../Graphic/src/CCTextureCacheExt.cpp \
 ../../Graphic/src/NDAnimation.cpp \

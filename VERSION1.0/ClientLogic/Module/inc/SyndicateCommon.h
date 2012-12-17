@@ -12,6 +12,7 @@
 
 #include "define.h"
 #include <string>
+#include "BaseType.h"
 
 enum SYNDICATE_ACTION {
 	APPLY_SYN = 0, // 申请加入帮派,需要尾随帮派id

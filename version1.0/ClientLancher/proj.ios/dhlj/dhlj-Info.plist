@@ -39,7 +39,7 @@
 	</array>
 	<key>UIAppFonts</key>
 	<array>
-		<string>LiSu.TTF</string>
+		<string>LiSu.ttf</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>

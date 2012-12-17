@@ -181,30 +181,43 @@ void NDNpcLogic::RefreshTaskState()
 // 取某个npc的任务列表
 bool NDNpcLogic::GetTaskListByNpc( ID_VEC& idVec )
 {
-	if (idlist == NULL) return false;
-	
-	int TASK_ID = 1;
-	int  NPC_ID = 2;
+// 	if (idlist == NULL) return false;
+// 	
+// 	int TASK_ID = 1;
+// 	int  NPC_ID = 2;
+// 
+// 	idVec.clear();
+// 
+// 	// init npc task idlist
+// 	if(idlist->empty())
+// 	{
+// 		ScriptDBObj.GetIdList("task_npc", *idlist);
+// 	}
+// 
+// 	for(ID_VEC::iterator it = idlist->begin(); it!= idlist->end(); it++)
+// 	{
+// 		int nNpcId = ScriptDBObj.GetN("task_npc", *it, NPC_ID); 
+// 		if(nNpcId == Owner->m_nID )
+// 		{
+// 			int nTaskId = ScriptDBObj.GetN("task_npc", *it, TASK_ID); 
+// 			idVec.push_back(nTaskId);
+// 		}        
+// 	}
+// 	
+// 	return !idVec.empty();
 
-	idVec.clear();
+	// query from cache
+	if (NDNpcTaskIdCache::getInstance().queryTaskList( Owner->m_nID, idVec ))
+		return true;
 
-	// init npc task idlist
-	if(idlist->empty())
+	// get from db and cache it.
+	if (NDGameDataUtil::getTaskListByNpcId( Owner->m_nID, idVec ))
 	{
-		ScriptDBObj.GetIdList("task_npc", *idlist);
+		NDNpcTaskIdCache::getInstance().addTaskList( Owner->m_nID, idVec );
+		return true;
 	}
 
-	for(ID_VEC::iterator it = idlist->begin(); it!= idlist->end(); it++)
-	{
-		int nNpcId = ScriptDBObj.GetN("task_npc", *it, NPC_ID); 
-		if(nNpcId == Owner->m_nID )
-		{
-			int nTaskId = ScriptDBObj.GetN("task_npc", *it, TASK_ID); 
-			idVec.push_back(nTaskId);
-		}        
-	}
-	
-	return !idVec.empty();
+	return false;
 }
 
 NS_NDENGINE_END

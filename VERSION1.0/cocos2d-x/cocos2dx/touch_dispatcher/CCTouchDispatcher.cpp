@@ -150,6 +150,16 @@ void CCTouchDispatcher::forceAddHandler(CCTouchHandler *pHandler, CCArray *pArra
                  ++u;
              }
  
+#if ND_MOD
+			 if (h->getPriority() == pHandler->getPriority())
+			 {
+				 if (h->getDelegate()->getSubPriority() < pHandler->getDelegate()->getSubPriority())
+				 {
+					 ++u;
+				 }
+			 }
+#endif
+
              if (h->getDelegate() == pHandler->getDelegate())
              {
                  CCAssert(0, "");
@@ -623,6 +633,62 @@ CCPoint CCTouchDispatcher::getPrePos()
 	return m_prePos;
 }
 
-#endif
+//for debug only.
+std::string CCTouchDispatcher::dump()
+{
+	std::string info;
+
+	int index = 0;
+
+	// remove handler from m_pStandardHandlers
+	CCObject* pObj = NULL;
+	CCARRAY_FOREACH(m_pStandardHandlers, pObj)
+	{
+		CCTouchHandler* pHandler = (CCTouchHandler*)pObj;
+		if (!pHandler) continue;
+
+		CCTouchDelegate* del = pHandler->getDelegate();
+		if (!del) continue;
+
+		int priority = pHandler->getPriority();
+		int subPriority = del->getSubPriority();
+
+		const char* dbgName = del->getDebugName();
+
+		char str[1024] = "";
+		sprintf( str, "standard handler[%d]: priority=%d, subPriority=%d, dbgName=%s\r\n", 
+			index++, priority, subPriority, dbgName?dbgName:"" );
+
+		//CCLog( str );
+		info+= str;
+	}
+
+	index = 0;
+
+	// remove handler from m_pTargetedHandlers
+	CCARRAY_FOREACH(m_pTargetedHandlers, pObj)
+	{
+		CCTouchHandler* pHandler = (CCTouchHandler*)pObj;
+		if (!pHandler) continue;
+
+		CCTouchDelegate* del = pHandler->getDelegate();
+		if (!del) continue;
+
+		int priority = pHandler->getPriority();
+		int subPriority = del->getSubPriority();
+
+		const char* dbgName = del->getDebugName();
+
+		char str[1024] = "";
+		sprintf( str, "target handler[%d]: priority=%d, subPriority=%d, dbgName=%s\r\n", 
+			index++, priority, subPriority, dbgName?dbgName:"" );
+
+		//CCLog( str );
+		info+= str;
+	}
+	return info;
+}
+
+#endif //ND_MOD
 
 NS_CC_END
