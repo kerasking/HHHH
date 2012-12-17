@@ -387,14 +387,14 @@ struct NDGameDataUtil
 			if (!pRecord) continue;
 
 			// get field: NpcId
-			NDField* pField_NpcId = pRecord->getAt( INDEX_TASK_ID );
+			NDField* pField_NpcId = pRecord->getAt( INDEX_NPC_ID );
 			if (!pField_NpcId) continue;
 
 			// check npc id
 			if (idNpc == pField_NpcId->getInt())
 			{
 				// get field TaskId
-				NDField* pField_TaskId = pRecord->getAt( INDEX_NPC_ID );
+				NDField* pField_TaskId = pRecord->getAt( INDEX_TASK_ID );
 				if (!pField_TaskId) continue;
 
 				//add task id

@@ -171,11 +171,14 @@ public:
 
 	void addTaskList( const int idNpc, TASK_LIST& vecTaskList )
 	{
-		TASK_LIST* newTaskList = new TASK_LIST;
-		if (newTaskList)
+		if (!queryTaskList( idNpc ))
 		{
-			*newTaskList = vecTaskList; //copy.
-			mapData[ idNpc ] = newTaskList;
+			TASK_LIST* newTaskList = new TASK_LIST;
+			if (newTaskList)
+			{
+				*newTaskList = vecTaskList; //copy.
+				mapData[ idNpc ] = newTaskList;
+			}
 		}
 	}
 
