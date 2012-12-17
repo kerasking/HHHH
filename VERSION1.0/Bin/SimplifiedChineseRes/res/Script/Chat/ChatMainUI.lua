@@ -481,7 +481,7 @@ function p.OnUIEventInputA(uiNode, uiEventType, param)
 				
 				if MsgArmyGroup.GetUserArmyGroupID(nPlayerId) == nil then
 					--无军团则提示
-					ChatDataFunc.AddChatRecord(nPlayerId,ChatDataFunc.GetChannelByChatType(currentChatType),0,GetTxtPub("system"),GetTxtPri("MCUI2_T1"));
+					ChatDataFunc.AddChatRecord(nPlayerId,ChatDataFunc.GetChannelByChatType(currentChatType),0,GetTxtPub("system"),GetTxtPri("CMUI_T12"));
 				else
 					_G.MsgChat.SendTalkMsg(ChatDataFunc.GetChannelByChatType(currentChatType),text);
 				end

@@ -189,7 +189,7 @@ function p.setContent(index,id,name,level)
 	local layer=p.GetParent();
 	
 	SetLabel(layer,text_tag,name);
-	SetLabel(layer,level_tag,"等级"..SafeN2S(level));
+	SetLabel(layer,level_tag,GetTxtPri("Common_level")..SafeN2S(level));
 end
 	
 	

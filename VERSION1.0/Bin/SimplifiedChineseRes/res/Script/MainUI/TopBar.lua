@@ -358,7 +358,7 @@ function p.Coinformat(nMoney)
 		nYi = math.floor(nMoneyTmp/100000000);
 	end
 	if nYi > 0 then
-		str = nYi.."亿";
+		str = nYi..GetTxtPri("Common_hm");
 	end
 	--]]
 		

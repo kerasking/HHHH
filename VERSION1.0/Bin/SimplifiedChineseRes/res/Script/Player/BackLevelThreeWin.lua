@@ -58,7 +58,6 @@ local TAG_GEM_USE          = 56;                --使用
 local TAG_GEM_SELL         = 55;                --出售
 local TAG_GEM_SYNTHESIS    = 501;               --合成
 
-
 local TAG_DESTINY_PIC         = 51;
 local TAG_DESTINY_NAME        = 401;
 local TAG_DESTINY_EXP           = 201;               --价钱
@@ -68,7 +67,7 @@ local TAG_DESTINY_SELL        = 65;                  --出售
 local TAG_DESTINY_ADD_DESC    = 20;                  --属性加层说明
 local TAG_DESTINY_PRICE         = 52;               
 
-local TAG_EQUIP_EQUIP_TIP   = {equip="装备",unsnatch="卸载",};
+local TAG_EQUIP_EQUIP_TIP   = {equip=GetTxtPri("Common_equip"),unsnatch=GetTxtPri("BLTW_T1"),};
 
 p.parent = nil;
 

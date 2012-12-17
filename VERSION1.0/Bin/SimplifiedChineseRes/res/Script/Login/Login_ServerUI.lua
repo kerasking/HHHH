@@ -323,7 +323,7 @@ function p.refreshServerListItem(i)
     local rInfo = p.GetRoleInfoByServerId(info.nServerID);
     
     if(rInfo) then
-        local sRoleInfo = string.format("%s %s %d级",rInfo.sRoleName,RolePetFunc.GetJobDesc(rInfo.nProfession),rInfo.nLevel);
+        local sRoleInfo = string.format("%s %s %d"..GetTxtPri("Common_Level"),rInfo.sRoleName,RolePetFunc.GetJobDesc(rInfo.nProfession),rInfo.nLevel);
         SetLabel(view, TAG_CONTAINER_ROLE, sRoleInfo);
     else
         SetLabel(view, TAG_CONTAINER_ROLE, GetTxtPri("LSUI_T1"));

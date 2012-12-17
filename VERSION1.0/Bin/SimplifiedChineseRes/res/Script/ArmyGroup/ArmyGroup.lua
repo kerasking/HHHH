@@ -79,11 +79,11 @@ local ID_EDITNOTICEEDLG_BTN_EDIT			= 104;	-- 编辑框
 local AG_NOTICE_CHA_LIMIT				= 60;	-- 公告文字的字数限制
 local CONTRIBUTE_LIMIT					= 200000;-- 分配时成员贡献度需求
 
-local SZ_QUIT_ER						= "身为军团长，你的军团还有其他成员，不可擅自退出……";
-local SZ_QUIT_00						= "决定退出该军团？退出军团，所有的贡献信息都将归零……";
-local SZ_ER_01			= "不在线，不可分配哦";
-local SZ_ER_02			= "数量超过可分配数额";
-local SZ_ER_03			= "贡献度不足，不可分配";
+local SZ_QUIT_ER						= GetTxtPri("AG2_T1");
+local SZ_QUIT_00						= GetTxtPri("AG2_T2");
+local SZ_ER_01			= GetTxtPri("AG2_T3");
+local SZ_ER_02			= GetTxtPri("AG2_T4");
+local SZ_ER_03			= GetTxtPri("AG2_T5");
 
 local TAG_ITEM_COUNT					= 34567;	--物品按钮里数量标签的TAG
 
