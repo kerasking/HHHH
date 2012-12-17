@@ -263,14 +263,13 @@ function p.StartChallenge(index)
 			remove_cd_Dlg_id=CommonDlg.ShowWithConfirm(GetTxtPri("AREAUI_T3"), nil);
 			return;
 		end
-		
+		LogInfo("p.OnUIEvent[%d]",index);
 		if restFightCount == 0 then
 			add_Time_Dlg_id=CommonDlg.ShowWithConfirm(GetTxtPri("AREAUI_T4"), nil);
 			return;
-		end
-        
+		end 
         p.CurChaIndex = index;
-        CommonDlgNew.ShowYesOrNoDlg(GetTxtPri("AREAUI_T6").. p.challengeID[index][3], p.onChallengeDlg, true);
+        CommonDlgNew.ShowYesOrNoDlg(GetTxtPri("AREAUI_T6").. p.infos[index].name, p.onChallengeDlg, p.infos[index].rank);
 		--_G.MsgArena.SendChallenge(p.challengeID[index][1]);
 	end
 end
@@ -605,9 +604,11 @@ end
 
 function p.OnUIRankItemEvent(uiNode, uiEventType, param)
     local tag = uiNode:GetTag();
+    LogInfo("OnUIRankItemEvent tag = %d", tag);
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		if TAG_RANKING_BTNPIC == tag then
-            local btn = ConverToButton(uiNode);
+           local btn = ConverToButton(uiNode);
+           LogInfo("StartChallenge tag = %d", tag);
 			p.StartChallenge(btn:GetParam1());
         end
         

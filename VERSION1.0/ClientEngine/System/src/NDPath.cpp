@@ -42,7 +42,7 @@ NS_NDENGINE_BGN
 // #define NDPath_SoundPath			 "../SimplifiedChineseRes/res/sound/"
 // #define NDPath_UIPath			 "../SimplifiedChineseRes/res/UI/"
 // #define NDPath_ScriptPath		 "../SimplifiedChineseRes/res/Script/"
-#define NDPath_LogPath			 "../log/"
+#define NDPath_LogPath			 "log/"
 #endif
 
 ////////////////////////////////////////////////////////////
@@ -139,7 +139,7 @@ const string NDPath::GetLogPath()
 	return NDPath_LogPath;
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	return NDPath_LogPath;
+	return NDPath::GetCashesPath() + NDPath_LogPath;
 #endif
 }
 

@@ -722,6 +722,9 @@ RegisterNetMsgHandler(NMSG_Type._MSG_SERVERLISTITEM,"p.ProcessServerList",p.Proc
 function p.SetAccountID( nAccountID )
 	p.UIN = nAccountID;
 end
+function p.GetAccountID()
+	return p.UIN;
+end
 --++Guosen 2012.8.4
 function p.LoginGameNew()
 		LogInfo( "Login_ServerUI: LoginGameNew()" );
