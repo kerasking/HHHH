@@ -1113,6 +1113,10 @@
 				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\UserState\UserStateUI.lua"
 				>
 			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\version.ini"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="HeroStar"
