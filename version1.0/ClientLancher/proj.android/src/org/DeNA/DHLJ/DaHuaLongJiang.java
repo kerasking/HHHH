@@ -91,6 +91,9 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			ms_pkDHLJ = this;
 			super.onCreate(savedInstanceState);
 			Log.e(TAG, "onCreate called");
+			
+			Context context = getApplication().getApplicationContext();
+			CookieSyncManager.createInstance(this);
 
 			Mobage.registerMobageResource(this, "org.DeNA.DHLJ.R");
 			SocialUtils.initializeMobage(this);

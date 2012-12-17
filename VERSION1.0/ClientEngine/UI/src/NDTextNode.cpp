@@ -309,14 +309,15 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLinkLabel(CCString("]").UTF8String(), uiFontSize, kColor,
+									CreateLinkLabel(GBKToUTF8("]"), uiFontSize, kColor,
 											m_nItemID), true));
+                    
 				}
 				else
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLabel(CCString("]").UTF8String(), uiFontSize, kColor,
+									CreateLabel(GBKToUTF8("]"), uiFontSize, kColor,
 											m_nItemID), true));
 				}
 			}

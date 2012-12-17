@@ -353,7 +353,7 @@ function p.AddChatText(speakerId,channel,speaker,text)
 		chatText:SetContentWidth(winsize.w*0.85);
 		
 		local color = p.ColorChannel[channel];
-		chatText:SetContent(speakerId,channel,speaker,text,1,16,color);
+		chatText:SetContent(speakerId,channel,speaker,text,1,12,color);
 		
 		--chatText:SetContent(speakerId,channel,speaker,text,1,9,ccc4(0,0,255,255));
 		

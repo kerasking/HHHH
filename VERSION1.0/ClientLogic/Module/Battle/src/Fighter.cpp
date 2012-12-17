@@ -317,7 +317,7 @@ void Fighter::updatePos()
 		m_pkFighterNameLabel->SetFrameRect(
 			CCRectMake(m_nX - sizeStr.width / 2, 
 				m_nY - m_nRoleInitialHeight - sizeStr.height - HP_BAR_HEIGHT - 2, 
-					sizeStr.width, sizeStr.height ));
+					sizeStr.width*FONT_SCALE, sizeStr.height ));
 	}
 
 	if (m_pkSkillNameLabel)
@@ -338,7 +338,7 @@ void Fighter::updatePos()
 		m_pkSkillNameLabel->SetFrameRect(
 			CCRectMake(m_nX-sizeStr.width/2 , 
 				m_nY - m_nRoleInitialHeight - HP_BAR_HEIGHT - 2 - sizeStr.height*2, 
-					sizeStr.width, sizeStr.height ));
+					sizeStr.width*FONT_SCALE, sizeStr.height ));
 		//++
 	}
 
@@ -864,7 +864,7 @@ void Fighter::showFighterName(bool b)
 			m_pkFighterNameLabel->SetFrameRect(
 					CCRectMake(pt.x - sizefighterName.width / 2,
 							pt.y - FIGHTER_HEIGHT - sizefighterName.height,
-							sizefighterName.width, sizefighterName.height));
+							sizefighterName.width*FONT_SCALE, sizefighterName.height));
 			m_pkParent->AddChild(m_pkFighterNameLabel);
 			//在此创建生命条及士气条空间++Guosen 2012.7.27
 			this->m_pHPBar	= new CUIExp;
@@ -919,7 +919,7 @@ void Fighter::showSkillName(bool b)
 		CCSize sizeSkillName = getStringSize(m_strSkillName.c_str(), DEFAULT_FONT_SIZE*FONT_SCALE);
 		//++Guosen 2012.6.28//设置技能名的显示位置
 		//lb_skillName->SetTag(TAG_SKILL_NAME);
-		m_pkSkillNameLabel->SetFrameRect(CCRectMake(pt.x-sizeSkillName.width/2 , pt.y-FIGHTER_HEIGHT-sizeSkillName.height*2, sizeSkillName.width, sizeSkillName.height));
+		m_pkSkillNameLabel->SetFrameRect(CCRectMake(pt.x-sizeSkillName.width/2 , pt.y-FIGHTER_HEIGHT-sizeSkillName.height*2, sizeSkillName.width*FONT_SCALE, sizeSkillName.height));
 		m_pkParent->AddChild(m_pkSkillNameLabel);
 	}
 	else
