@@ -10,6 +10,8 @@
 #include "ScriptDataBase.h"
 #include "NDPlayer.h"
 #include "ScriptTask.h"
+#include "NDDirector.h"
+#include "DramaScene.h"
 
 NS_NDENGINE_BGN
 
@@ -149,6 +151,16 @@ void NDHeroTaskLogic::tickNpc( NDNpcLogic* npcLogic )
 //wrapper for time control
 void NDNpcLogic::RefreshTaskState()
 {
+	//在剧情界面不刷新任务数据
+	if ( NDDirector::DefaultDirector()->GetRunningScene()->IsKindOfClass(RUNTIME_CLASS(DramaScene)))
+	{
+		return;
+	}
+	if ( NDDirector::DefaultDirector()->GetRunningScene()->IsKindOfClass(RUNTIME_CLASS(DramaTransitionScene)))
+	{
+		return;
+	}
+
     struct cc_timeval currentTime;
     if (CCTime::gettimeofdayCocos2d(&currentTime, NULL) != 0)
     {

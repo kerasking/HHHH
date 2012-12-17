@@ -304,7 +304,7 @@ void CUIDialog::AddOpt(const char* text, int nAction)
 	uiOpt->Initialization();  
 	uiOpt->SetFrameRect(rect);
 	uiOpt->SetBoundRect(rect);
-	uiOpt->SetLinkTextFontSize(13*fScale);
+	//uiOpt->SetLinkTextFontSize(13*fScale);
 	uiOpt->SetLinkTextFontSize(12);
 	uiOpt->SetLinkTextColor(ccc4(255, 255, 0, 255));
 	uiOpt->SetLinkText(text);
