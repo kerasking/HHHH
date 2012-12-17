@@ -13,6 +13,7 @@ NS_NDENGINE_BGN
 
 using namespace NDEngine;
 using namespace cocos2d;
+using namespace std;
 
 class NDNpc;
 class NDPlayer;
@@ -128,6 +129,65 @@ public:
 	NDNpc* Owner;
 	ID_VEC* idlist;
 	struct cc_timeval tickLastRefresh;
+};
+
+////////////////////////////////////////////////////////////////////////////
+// 将Npc关联的TaskId列表缓存一下，静态数据
+class NDNpcTaskIdCache
+{
+private:
+	typedef vector<unsigned int> TASK_LIST;
+	map<int,TASK_LIST*> mapData;
+	typedef map<int,TASK_LIST*>::iterator ITER_DATA;
+
+private:
+	NDNpcTaskIdCache() {}
+
+public:
+	static NDNpcTaskIdCache& getInstance()
+	{
+		static NDNpcTaskIdCache s_obj;
+		return s_obj;
+	}
+
+	TASK_LIST* queryTaskList( const int idNpc )
+	{
+		ITER_DATA iter = mapData.find( idNpc );
+		if (iter != mapData.end())
+			return iter->second;
+		return NULL;
+	}
+
+	bool queryTaskList( const int idNpc, TASK_LIST& taskList )
+	{
+		TASK_LIST* pTaskList = queryTaskList( idNpc );
+		if (pTaskList)
+		{
+			taskList = *pTaskList; //copy.
+			return true;
+		}
+		return false;
+	}
+
+	void addTaskList( const int idNpc, TASK_LIST& vecTaskList )
+	{
+		TASK_LIST* newTaskList = new TASK_LIST;
+		if (newTaskList)
+		{
+			*newTaskList = vecTaskList; //copy.
+			mapData[ idNpc ] = newTaskList;
+		}
+	}
+
+public:
+	void destroy()
+	{
+		for (ITER_DATA iter = mapData.begin(); iter != mapData.end(); ++iter)
+		{
+			SAFE_DELETE( iter->second );
+		}
+		mapData.clear();
+	}
 };
 
 NS_NDENGINE_END
