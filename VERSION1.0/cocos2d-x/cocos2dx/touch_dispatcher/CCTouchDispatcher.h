@@ -150,6 +150,7 @@ public:
 public:
 	CCPoint getCurPos();
 	CCPoint getPrePos();
+	std::string dump();
 private:
 	CCPoint m_curPos;
 	CCPoint m_prePos;
