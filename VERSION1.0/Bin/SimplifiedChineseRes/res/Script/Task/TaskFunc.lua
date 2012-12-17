@@ -696,19 +696,19 @@ function GetTaskPrize(nTaskId)
 	
 	local strAward = "";
 	if nExp > 0 then
-		strAward = strAward .. "<cffff00"..GetTxtPri("Common_exp")..": /e" .. "<cffffff" .. tostring(nExp) .. "/e";
+		strAward = strAward .. "<cffff00经验: /e" .. "<cffffff" .. tostring(nExp) .. "/e";
 	end
 	
 	if nMoney > 0 then
-		strAward = strAward .. "<cffff00"..GetTxtPri("Common_coin")..": /e" .. "<cffffff" .. tostring(nMoney) .. "/e";
+		strAward = strAward .. "<cffff00银币: /e" .. "<cffffff" .. tostring(nMoney) .. "/e";
 	end
 	
 	if repute > 0 then
-		strAward = strAward .. "<cffff00"..GetTxtPri("Common_ShenWan")..": /e" .. "<cffffff" .. tostring(repute) .. "/e";
+		strAward = strAward .. "<cffff00声望: /e" .. "<cffffff" .. tostring(repute) .. "/e";
 	end
 	
 	if soul > 0 then
-		strAward = strAward .. "<cffff00"..GetTxtPri("Common_JianHun")..": /e" .. "<cffffff" .. tostring(soul) .. "/e";
+		strAward = strAward .. "<cffff00将魂: /e" .. "<cffffff" .. tostring(soul) .. "/e";
 	end	
 	
 	local tAwardItem = {}
