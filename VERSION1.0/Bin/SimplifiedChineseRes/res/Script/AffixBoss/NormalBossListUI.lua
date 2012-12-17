@@ -252,7 +252,7 @@ function p.GenerateNoramlLayer( pScene )
 	layer:SetDebugName("NormalBoss_layer");
 	layer:SetTag( NMAINSCENECHILDTAG.AffixNormalBoss );
 	layer:SetFrameRect( RectFullScreenUILayer );
-	pScene:AddChild( layer );
+	pScene:AddChildZ( layer,UILayerZOrder.NormalLayer );
 	
 	--初始化ui
 	local uiLoad = createNDUILoad();

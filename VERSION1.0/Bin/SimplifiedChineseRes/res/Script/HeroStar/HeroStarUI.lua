@@ -311,7 +311,7 @@ local scene = GetSMGameScene();
 	layer:SetFrameRect(RectFullScreenUILayer);
 	
 
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 
 	--初始化ui
 	local uiLoad = createNDUILoad();
@@ -1225,7 +1225,7 @@ function p.SetAllStarBoundScale()
 			
 				if CheckP(StarBtn) then
 					----LogInfo("SetAllStarBoundScale "..nTag.." view:"..nGrade);
-					StarBtn:SetBoundScale(2);
+					StarBtn:SetBoundScale(200);
 				else
 				    --LogInfo("SetAllStarBoundScale fail nTag"..nTag.." view:"..nGrade);
 				end

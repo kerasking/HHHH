@@ -166,7 +166,7 @@ function p.LoadUI(bIsSMB)
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PetUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 
 
     local uiLoad = createNDUILoad();
@@ -239,8 +239,7 @@ function p.CreateMountDesc()
     local l_desc = GetLabel(layer, TAG_MOUNT_DESC);
     l_desc:SetVisible(false);
     
-    
-    local pLabelTips = _G.CreateColorLabel( GetTxtPri("PETUI_T3"), l_desc:GetFontSize()/2, l_desc:GetFrameRect().size.w );
+	local pLabelTips = _G.CreateColorLabel( GetTxtPri("PETUI_T3"), l_desc:GetFontSize()/2, l_desc:GetFrameRect().size.w );
    
      if CheckP(pLabelTips) then
 		pLabelTips:SetFrameRect(l_desc:GetFrameRect());

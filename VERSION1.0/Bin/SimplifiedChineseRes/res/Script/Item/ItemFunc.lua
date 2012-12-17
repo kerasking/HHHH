@@ -375,6 +375,24 @@ function p.GetAttrTypeDesc(nAttr)
 	return str;
 end
 
+function p.GetStatusAttrTypeDesc(nAttr)
+    local str = "";
+	if not CheckN(nAttr) then
+		return str;
+	end
+    LogInfo("p.GetStatusAttrTypeDesc nAttr:[%d]",nAttr);
+	if nAttr == Item.STATUS_ATTR_TYPE_CONTROL_ADD then
+		str = "控制概率增幅";
+    elseif nAttr == Item.STATUS_ATTR_TYPE_CONTROL_SUB then
+        str = "控制抗性增幅";
+    elseif nAttr == Item.STATUS_ATTR_TYPE_MORALE_ADD then
+        str = "减扣士气效果增幅";    
+	elseif nAttr == Item.STATUS_ATTR_TYPE_MORALE_SUB then
+		str = "减扣士气抗性增幅";
+    end
+    return str;
+end
+
 function p.GetAttrTypeValueDesc(nAttr, value)
     LogInfo("ItemFunc.GetAttrTypeValueDesc:nAttr:[%d],value:[%d]",nAttr, value);
     local str = "";
@@ -396,6 +414,17 @@ function p.GetAttrTypeValueDesc(nAttr, value)
     str = des..val;
     return str;
 end
+
+function p.GetStatusAttrTypeValueDesc(nAttr, value)
+    LogInfo("ItemFunc.GetStatusAttrTypeValueDesc:nAttr:[%d],value:[%d]",nAttr, value);
+    local str = "";
+    local des = p.GetStatusAttrTypeDesc(nAttr);
+    str = des.."+"..(value/10).."%";
+    return str;
+end
+
+
+
 
 --根据位置获得物品id(传入物品列表和位置索引)
 function p.GetItemIdByPosition(idlist,nPosition)
@@ -580,6 +609,20 @@ function p.IsBagFullGem(GemItemList, nGemTypeId)
     return false;
 end
 
+--判断占星背包是否已满
+function p.IsDestinyBagFull( nNum )
+    if(nNum == nil) then
+        nNum = 0;
+    end
+    local nPlayerId		= ConvertN(GetPlayerId());
+	local idlistItems	= ItemUser.GetDaoFaItemList(GetPlayerId());
+    
+    if(#idlistItems+nNum >= GetVipVal(DB_VIP_CONFIG.DESTINY_BAG_NUM)) then
+        CommonDlgNew.ShowTipsDlg({{GetTxtPub("BagFull2"),ccc4(255,15,15,255)}});
+        return true;
+    end
+    return false;
+end
 
 
 --** 获得物品颜色 **--
@@ -601,3 +644,56 @@ function p.SetLabelColor(label, nItemType)
 end
 
 
+--设置道法物品颜色
+function p.GetDaoFaItemColor(nItemType)
+    local nQuality = Num1(nItemType);
+    local cColor4 = DaoFaItemColor[nQuality];
+    if(cColor4 == nil) then
+        cColor4 = DaoFaItemColor[0];
+    end
+    return cColor4;
+end
+
+function p.SetDaoFaLabelColor(label, nItemType) 
+    if(label == nil) then
+        LogInfo("p.SetDaoFaLabelColor is nil!");
+        return;
+    end
+    label:SetFontColor(p.GetDaoFaItemColor(nItemType));
+end
+
+--获得星运加层
+function p.GetDestinyAdd(nItemId)
+    
+    local nItemTypeId =Item.GetItemInfoN(nItemId, Item.ITEM_TYPE); 
+    local equipLv       = Item.GetItemInfoN(nItemId, Item.ITEM_ADDITION)-1;
+    
+    local txt = "";
+    local attr_type_1 = GetDataBaseDataN("itemtype", nItemTypeId, DB_ITEMTYPE.ATTR_TYPE_1);
+    local status_attr_type_1 = GetDataBaseDataN("itemtype", nItemTypeId, DB_ITEMTYPE.STATUS_ATTR_TYPE1);
+    
+    if(attr_type_1 ~= 0) then
+        LogInfo("attr_type_1:[%d]",attr_type_1);
+        
+        local nt = math.floor(attr_type_1/10)*10;
+        if( Num3(nItemTypeId)<5 ) then
+            attr_type_1 = nt+1;
+        else
+            --百份比
+            attr_type_1 = nt+3;
+        end
+        LogInfo("attr_type_1:[%d]",attr_type_1);
+    
+        local attr_value_1 = GetDataBaseDataN("itemtype", nItemTypeId, DB_ITEMTYPE.ATTR_VALUE_1);
+        local attr_grow_1 = GetDataBaseDataN("itemtype", nItemTypeId, DB_ITEMTYPE.ATTR_GROW_1);
+        txt = p.GetAttrTypeValueDesc(attr_type_1,attr_value_1+attr_grow_1*equipLv);
+    else
+        local status_attr_value_1 = GetDataBaseDataN("itemtype", nItemTypeId, DB_ITEMTYPE.STATUS_ATTR_VALUE1);
+        local status_attr_grow_1 = GetDataBaseDataN("itemtype", nItemTypeId, DB_ITEMTYPE.STATUS_ATTR_GROW1);
+        txt = p.GetStatusAttrTypeValueDesc(status_attr_type_1,status_attr_value_1+status_attr_grow_1*equipLv);
+    end
+    
+    LogInfo("txt:[%s]",txt);
+    
+    return txt;
+end

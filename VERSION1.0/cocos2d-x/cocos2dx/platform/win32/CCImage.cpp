@@ -465,14 +465,15 @@ bool CCImage::initWithString(
 }
 
 #if ND_MOD
-bool CCImage::getStringSize( const char *    pText, 
+//约定：pAnsiText是Ansi格式
+bool CCImage::getStringSize( const char *    pAnsiText, 
 							 ETextAlign      eAlignMask,
 							 const char *    pFontName,
 							 int             nSize,
 							 int&			outSizeWidth,
 							 int&			outSizeHeight)
 {
-	if (pText && pFontName && nSize > 0)
+	if (pAnsiText && pFontName && nSize > 0)
 	{
 		DWORD dwFmt = DT_LEFT;
 		switch (eAlignMask)
@@ -487,7 +488,7 @@ bool CCImage::getStringSize( const char *    pText,
 		if (dc.setFont(pFontName, nSize))
 		{
 			int width = 0, height = 0;
-			dc.sizeWithText_Ansi( pText, dwFmt, 0, outSizeWidth, outSizeHeight );
+			dc.sizeWithText_Ansi( pAnsiText, dwFmt, 0, outSizeWidth, outSizeHeight );
 			return true;
 		}
 	}

@@ -63,7 +63,8 @@ function p.LoadUI ()
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.TransportUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer, 1);
+	--scene:AddChild(layer);
+    scene:AddChildZ(layer, UILayerZOrder.ActivityLayer);
     
     --添加背景图
     local pool = DefaultPicPool();

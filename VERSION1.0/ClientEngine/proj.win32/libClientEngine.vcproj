@@ -1232,7 +1232,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\Update\inc\unzip.h"
+					RelativePath="..\Update\inc\myunzip.h"
 					>
 				</File>
 				<File
@@ -1252,7 +1252,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\Update\src\unzip.cpp"
+					RelativePath="..\Update\src\myunzip.cpp"
 					>
 				</File>
 				<File

@@ -100,9 +100,12 @@ p.ATTR_TYPE_UNION_ATK			= p.ATTR_TYPE_NONE + 20;	--合击率
 p.ATTR_TYPE_HELP				= p.ATTR_TYPE_NONE + 21;	--求援率
 p.ATTR_TYPE_MANA				= p.ATTR_TYPE_NONE + 22;	--士气
 
-
-
-
+--** chh 2012-12-5 **--
+p.STATUS_ATTR_TYPE_NONE			= 0;
+p.STATUS_ATTR_TYPE_CONTROL_ADD	= p.STATUS_ATTR_TYPE_NONE + 11;  --增加控制几率
+p.STATUS_ATTR_TYPE_CONTROL_SUB	= p.STATUS_ATTR_TYPE_NONE + 12;  --抵抗控制几率
+p.STATUS_ATTR_TYPE_MORALE_ADD       = p.STATUS_ATTR_TYPE_NONE + 21;  --增加降低士气效果
+p.STATUS_ATTR_TYPE_MORALE_SUB       = p.STATUS_ATTR_TYPE_NONE + 22;  --抵抗降低士气效果
 
 --物品分类枚举
 p.TypeInvalid					= 0;
@@ -165,6 +168,17 @@ FontColor = {
     Soul = ccc4(36,255,0,255),             --将魂
     Silver = ccc4(237,240,0,255),          --银币
     Coin = ccc4(237,240,0,255),            --金币
+}
+
+--道法物品颜色
+DaoFaItemColor = 
+{
+    [0] = ccc4(99,99,99,255),       --灰色
+    [1] = ccc4(255,15,15,255),      --红色ff0f0f
+    [2] = ccc4(28,237,93,255),      --绿色1ced5d
+    [3] = ccc4(23,155,252,255),     --蓝色179bfc
+    [4] = ccc4(255,0,252,255),      --紫色ff00fc
+    [5] = ccc4(228,112,18,255),     --橙色e47012
 }
 
 --** 获得颜色 **--

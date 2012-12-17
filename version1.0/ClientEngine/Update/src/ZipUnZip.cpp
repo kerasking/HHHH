@@ -1,6 +1,6 @@
 #include <string>
 #include "ZipUnZip.h"
-#include "unzip.h"
+#include "myunzip.h"
 
 typedef struct tagDECOMPRESSPARAM{
 	void* pDlg;

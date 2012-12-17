@@ -11,8 +11,19 @@ local _G = _G;
 p.mUIListener = nil;
 p.mIdList = nil;
 p.mNpcList = nil;
-
+p.nQmdjCount = 0;--召唤次数
+p.nFreeCount = 0;--免费占星次数
 --=====逻辑
+
+--获得召唤奇门遁甲次数
+function p.GetQmdjCount()
+    return p.nQmdjCount;
+end
+
+function p.GetFreeCount()
+    return p.nFreeCount;
+end
+
 
 function p.getRealizeIdList()
 	if (p.mIdList) then
@@ -54,6 +65,8 @@ function p.sendRealizeMerge(id, id2)
 	SendMsg(netdata);
 	
 	netdata:Free();
+    
+    p.nIsStopRefreshBag = false;
 	
 	LogInfo("send id[%d],id2[%d] ", id,id2);
 	return true;
@@ -67,9 +80,47 @@ function p.processRealizeMerge(netdata)
 	if (p.mUIListener) then
 		p.mUIListener( NMSG_Type._MSG_REALIZE_MERGE, id);
 	end
+    CloseLoadBar();
 end
 
---悟道面板
+p.nCurrPetId = nil;
+
+--打开占星
+function p.sendRealizeOp( nCurrPetId )
+    --stage限制判断
+    if not MainUIBottomSpeedBar.GetFuncIsOpen(129) then
+        CommonDlgNew.ShowYesDlg(string.format(GetTxtPri("DU_T16")));
+        return false;
+    end
+    
+	local netdata = createNDTransData(NMSG_Type._MSG_REALIZE_OP);
+	if nil == netdata then
+		return false;
+	end
+	ShowLoadBar();
+	SendMsg(netdata);
+	netdata:Free();
+    
+    p.nCurrPetId = nCurrPetId;
+    
+	return true;
+end
+
+function p.processRealizeOp(netdata)
+    LogInfo("p.processRealizeOp");
+    
+    local nQmdjCount = netdata:ReadInt();
+    local nFreeCount = netdata:ReadInt();
+    p.nQmdjCount = nQmdjCount;
+    p.nFreeCount = nFreeCount;
+    LogInfo("nQmdjCount:[%d],nFreeCount:[%d]",nQmdjCount,nFreeCount);
+    
+    DestinyFeteUI.LoadUI(p.nCurrPetId);
+    DestinyUI.Close();
+    CloseLoadBar();
+end
+
+--获得占星NPC列表
 function p.processRealizeOpen(netdata)
 	local count = netdata:ReadByte();
 	LogInfo("process 4517 count:%d", count);
@@ -82,6 +133,17 @@ function p.processRealizeOpen(netdata)
 	if (p.mUIListener) then
 		p.mUIListener( NMSG_Type._MSG_REALIZE_OPEN, lst);
 	end
+end
+
+function p.sendCallQmdj()
+    local netdata = createNDTransData(NMSG_Type._MSG_REALIZE_QMDJ);
+	if nil == netdata then
+		return false;
+	end
+	
+	SendMsg(netdata);
+	netdata:Free();
+	return true;
 end
 
 --悟道
@@ -131,6 +193,17 @@ function p.sendRealizeBuyALL()
 	
 	LogInfo("send 4534 ");
 	return true;
+end
+
+function p.processRealizeBuyALL(netdata)
+    local count = netdata:ReadByte();
+    local lst = {};
+	for i = 1, count do
+		lst[i] = netdata:ReadInt();
+	end
+	if (p.mUIListener) then
+		p.mUIListener( NMSG_Type._MSG_REALIZE_BUY_ALL, lst);
+	end
 end
 
 -- 悟道List
@@ -184,6 +257,28 @@ function p.sendSaleAll()
 	return true;
 end
 
+--拾起
+function p.sendPickUp(nIndex)
+    if not CheckN(nIndex) then
+		return false;
+	end
+	
+	
+	local netdata = createNDTransData(NMSG_Type._MSG_REALIZE_PICKUP);
+	if nil == netdata then
+		return false;
+	end
+	netdata:WriteInt(nIndex);
+	
+	SendMsg(netdata);
+	
+	netdata:Free();
+	
+	LogInfo("send 4536 nIndex[%d] ", nIndex);
+	return true;
+end
+
+
 -- 一键拾起
 function p.sendPickUpAll()
 	local netdata = createNDTransData(NMSG_Type._MSG_REALIZE_PICKUP_ALL);
@@ -199,36 +294,20 @@ function p.sendPickUpAll()
 	return true;
 end
 
+--是否停止背包刷新
+p.nIsStopRefreshBag = false;
+
 --一键合成
-function p.sendMergeAll(idList)
-	if not idList then
-		return false;
-	end
-	
-	local lst = {}
-	local count = 0;
-	for k, v in pairs(idList) do
-		count = count + 1;
-		lst[count] = v;
-	end
-	
-	if (count == nil or count == 0) then
-		return false;
-	end
-	
+function p.sendMergeAll()
 	local netdata = createNDTransData(NMSG_Type._MSG_REALIZE_MERGE_ALL);
 	if nil == netdata then
 		return false;
 	end
-	netdata:WriteByte(count);
-	LogInfo("4533 count:%d", count);
-	for i= 1, count do
-		netdata:WriteInt(lst[i]);
-	end
-	
 	SendMsg(netdata);
 	
 	netdata:Free();
+    
+    p.nIsStopRefreshBag = true;
 	
 	LogInfo("send 4533 ");
 	return true;
@@ -246,6 +325,10 @@ function p.processRealizeMergeAll(netdata)
 	if (p.mUIListener) then
 		p.mUIListener( NMSG_Type._MSG_REALIZE_MERGE_ALL, id);
 	end
+    LogInfo("p.processRealizeMergeAll");
+    p.nIsStopRefreshBag = false;
+    DestinyUI.RefreshGoods();
+    CloseLoadBar();
 end
 
 --======消息注册
@@ -258,6 +341,8 @@ RegisterNetMsgHandler(NMSG_Type._MSG_REALIZE_LIST, "p.processRealizeList", p.pro
 --RegisterNetMsgHandler(NMSG_Type._MSG_REALIZE_PICKUP_ALL, "p.processRealizePickUpAll", p.processRealizePickUpAll);
 --RegisterNetMsgHandler(NMSG_Type._MSG_REALIZE_SALE_ALL, "p.processRealizeSaleAll", p.processRealizeSaleAll);
 RegisterNetMsgHandler(NMSG_Type._MSG_REALIZE_MERGE_ALL, "p.processRealizeMergeAll", p.processRealizeMergeAll);
+RegisterNetMsgHandler(NMSG_Type._MSG_REALIZE_BUY_ALL, "p.processRealizeBuyALL", p.processRealizeBuyALL);
+RegisterNetMsgHandler(NMSG_Type._MSG_REALIZE_OP, "p.processRealizeOp", p.processRealizeOp);
 
 
 

@@ -206,7 +206,7 @@ end
 function p.TwiceConfirm( data )
     LogInfo("p.TwiceConfirm");
     if(p.bTwiceConfirm == false) then
-        CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("PLAYER_T4"),nEMoney), p.TwiceConfirmCallBack, nTypeId);
+        CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("PLAYER_T4"),data.reqEMoney), p.TwiceConfirmCallBack, data.id);
     else
         p.SendMsgFete(data.id);
     end

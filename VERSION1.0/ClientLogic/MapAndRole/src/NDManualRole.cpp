@@ -2027,18 +2027,16 @@ void NDManualRole::DrawNameLabel(bool bDraw)
 		isEnemy = true;
 	}
 
-	float fScale = RESOURCE_SCALE;
+	iY = iY - FIGHTER_HEIGHT;
 
-	iY = iY - FIGHTER_HEIGHT;// - 5 * fScale;
-
-	int iNameW = getStringSizeMutiLine(names.c_str(), LABLESIZE, sizewin).width/2;
+	int iNameW = getStringSizeMutiLine(names.c_str(), LABLESIZE*FONT_SCALE, sizewin).width/2;
 	/*
 	 std::string strPeerage = GetPeerageName(m_nPeerage);
 	 int iPeerage = 0;
 	 if (strPeerage != "")
 	 {
 	 strPeerage = std::string("[") + strPeerage + std::string("]");
-	 iPeerage = getStringSizeMutiLine(strPeerage.c_str(), LABLESIZE, sizewin).width;
+	 iPeerage = getStringSizeMutiLine(strPeerage.c_str(), LABLESIZE*FONT_SCALE, sizewin).width;
 	 }
 
 	 if (iPeerage > 0)
@@ -2056,11 +2054,12 @@ void NDManualRole::DrawNameLabel(bool bDraw)
 		InitNameLable(m_lbSynName[0]);
 		InitNameLable(m_lbSynName[1]);
 
-		SetLableName(names, iX + 8 * fScale - iNameW, iY - LABLESIZE * fScale, isEnemy);
+		SetLableName(names, iX + 8 * RESOURCE_SCALE*FONT_SCALE - iNameW, 
+								iY - LABLESIZE*FONT_SCALE, isEnemy);
 
 		std::stringstream ss;
 		ss << m_strSynName << " [" << m_strSynRank << "]";
-		int iSynNameW = getStringSizeMutiLine(ss.str().c_str(), LABLESIZE,
+		int iSynNameW = getStringSizeMutiLine(ss.str().c_str(), LABLESIZE*FONT_SCALE,
 			sizewin).width / 2;
 
 		cocos2d::ccColor4B color = INTCOLORTOCCC4(0xffffff);
@@ -2070,9 +2069,12 @@ void NDManualRole::DrawNameLabel(bool bDraw)
 			color = INTCOLORTOCCC4(0x00ff00);
 		}
 
-		SetLable(eLabelSynName, iX + 8 * fScale - iSynNameW,
-			iY - LABLESIZE * fScale * 2, ss.str(), INTCOLORTOCCC4(0x00ff00),
-			INTCOLORTOCCC4(0x003300));
+		SetLable(eLabelSynName, 
+					iX + 8 * RESOURCE_SCALE - iSynNameW,
+					iY - LABLESIZE*RESOURCE_SCALE * 2, 
+					ss.str(), 
+					INTCOLORTOCCC4(0x00ff00),
+					INTCOLORTOCCC4(0x003300));
 
 		/*
 		if (iPeerage > 0)
@@ -2094,7 +2096,10 @@ void NDManualRole::DrawNameLabel(bool bDraw)
 		InitNameLable(m_lbName[1]);
 		InitNameLable(m_lbPeerage[0]);
 		InitNameLable(m_lbPeerage[1]);
-		SetLableName(names, iX + 8 * fScale - iNameW, iY - LABLESIZE * fScale,
+		
+		SetLableName(names, 
+			iX + 8 * RESOURCE_SCALE - iNameW, 
+			iY - LABLESIZE * RESOURCE_SCALE,
 			isEnemy);
 		/*
 		if (iPeerage >= 0)
@@ -2140,15 +2145,13 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 		return;
 	}
 
-	
-	CCSize fontSize = getStringSize(text.c_str(), lable[0]->GetFontSize());
-	float fScale = RESOURCE_SCALE;
+	CCSize fontSize = getStringSize(UTF8_TO_ANSI(text.c_str()), lable[0]->GetFontSize() * FONT_SCALE);
 	CCPoint posHead = this->getHeadPos();
 
 	int newX = posHead.x - 0.5 * fontSize.width;
 	int newY = posHead.y - 1.0 * fontSize.height;
 
-	float offset = 1.0f * fScale;
+	float offset = 1.0f * RESOURCE_SCALE;
 	lable[0]->SetFrameRect(CCRectMake(newX, newY, fontSize.width, fontSize.height));//ио
 	lable[1]->SetFrameRect(CCRectMake(newX + offset, newY + offset, fontSize.width, fontSize.height));//╣в
 

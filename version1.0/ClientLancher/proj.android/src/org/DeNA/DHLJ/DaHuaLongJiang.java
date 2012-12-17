@@ -274,6 +274,22 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		public void onDismiss() { }
 		}); 
 	}
+
+	private static void OpenUserProfile() {
+		Log.v(TAG, "begin testGetUserProfile");
+		String userId = SocialUtils.getmUserId();// Platform.getInstance().getUserId();
+		com.mobage.android.social.common.Service
+				.openUserProfile(
+						userId,
+						new com.mobage.android.social.common.Service.OnDialogComplete() {
+							@Override
+							public void onDismiss() {
+								SocialUtils.showConfirmDialog("openUserProfile status",
+										"Dismiss", "OK");
+							}
+						});
+	}
+
 	
 	public void changeViewToVideo()
 	{

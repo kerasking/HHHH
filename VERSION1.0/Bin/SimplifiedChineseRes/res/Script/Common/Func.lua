@@ -385,5 +385,31 @@ function MoneyFormat(nMoney)
     return nMoney.."";
 end
 
+--根据VIP
+function GetRequestVipLevel(nType)
+    local ids = GetDataBaseIdList("vip_config");
+    for i,v in ipairs(ids) do
+        local val = GetDataBaseDataN("vip_config",v,nType);
+        LogInfo("GetRequestVipLevel nType:[%d],val:[%d]",nType,val);
+        if(val > 0) then
+            return v;
+        end
+    end
+    return 0;
+end
+
+--获得召唤奇门遁甲金钱
+function GetDaoFaQMDJEMoney()
+    local nEMoney = GetDataBaseDataN("daofa_static_config",DB_DAOFA_STATIC_CONFIG_ID.QMDJ_COIN,DB_DAOFA_STATIC_CONFIG.VALUE);
+    
+    return nEMoney;
+end
+
+--获得占星开启条件
+function GetDaoFaOpenLevel()
+    local nEMoney = GetDataBaseDataN("daofa_static_config",DB_DAOFA_STATIC_CONFIG_ID.DAOFA_OPEN_LEVEL,DB_DAOFA_STATIC_CONFIG.VALUE);
+    
+    return nEMoney;
+end
 
 

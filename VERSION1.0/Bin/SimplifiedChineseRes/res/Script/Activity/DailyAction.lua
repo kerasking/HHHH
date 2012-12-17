@@ -48,7 +48,7 @@ function p.LoadUI()
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.DailyActionUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,UILayerZOrder.ActivityLayer);
     
     -----------------初始化ui添加到 layer 层上----------------------------------
     local uiLoad = createNDUILoad();

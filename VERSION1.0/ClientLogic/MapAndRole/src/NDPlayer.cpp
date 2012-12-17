@@ -1310,9 +1310,16 @@ void NDPlayer::RunAnimation(bool bDraw)
 	NDManualRole::RunAnimation(bDraw);
 }
 
+//override for debuging sake
 void NDPlayer::debugDraw()
 {
 	NDManualRole::debugDraw();
+}
+
+//override for debuging sake
+void NDPlayer::DrawNameLabel(bool bDraw)
+{
+	NDManualRole::DrawNameLabel(bDraw);
 }
 
 void NDPlayer::InitializationFroLookFace( int lookface, bool bSetLookFace /*= true*/ )
