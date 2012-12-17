@@ -418,6 +418,12 @@ struct CCStringCompare : public std::binary_function<CCString *, CCString *, boo
 // end of data_structure group
 /// @}
 
+#if ND_MOD
+#define UTF8_TO_ANSI(utf8_text)		CCString::stringWithUTF8String(utf8_text)->getCString()
+#define ANSI_TO_UTF8(ansi_text)		CCString(ansi_text).UTF8String()
+#endif //ND_MOD
+
+
 NS_CC_END
 
 #endif //__CCSTRING_H__

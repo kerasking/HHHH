@@ -238,7 +238,7 @@ public:
 	static std::string GetPeerageName(int nPeerage);
 	static unsigned int GetPeerageColor(int nPeerage);
 
-private:
+protected:
 	bool CheckToLastPos();
 	
 	enum LableType
@@ -255,7 +255,7 @@ private:
 
 	void InitNameLable(NDUILabel*& label);
 	void DrawLable(NDUILabel* label, bool bDraw);
-	void DrawNameLabel(bool bDraw);
+	virtual void DrawNameLabel(bool bDraw);
 
 protected:
 	void WalkToPosition(const std::vector<CCPoint>& kToPosVector,
