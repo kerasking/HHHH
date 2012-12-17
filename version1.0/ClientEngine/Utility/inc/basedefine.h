@@ -19,10 +19,16 @@
 #include <zlib/zconf.h>
 #endif
 
-#define OBJID			unsigned int
-//#define ID_VEC			std::vector<OBJID>
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 //#define FONT_NAME		"Arial-BoldMT"
 #define FONT_NAME		"LiSu.ttf" //JLiSu //@zwq
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#define FONT_NAME		"LiSu" //JLiSu //@zwq
+#endif
+
+#define OBJID			unsigned int
+//#define ID_VEC			std::vector<OBJID>
 #define VERSION_IPHONE (40)
 
 #define SIN0 (0)
