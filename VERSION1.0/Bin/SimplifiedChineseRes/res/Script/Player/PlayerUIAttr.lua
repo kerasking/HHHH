@@ -302,7 +302,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             PlayerUIBackBag.LoadUI(nil, nPetId);
 		elseif  ID_ROLEATTR_L_CTRL_BUTTON_FIRE == tag then  
 			p.FirePetId = ChosedPetId;
-			CommonDlgNew.ShowYesOrNoDlg("您确定要让［"..ConvertS(RolePetFunc.GetPropDesc(ChosedPetId,PET_ATTR.PET_ATTR_NAME)).."］下野吗？", p.FirePet, true);
+			CommonDlgNew.ShowYesOrNoDlg(GetTxtPri("PUIA_T1")..ConvertS(RolePetFunc.GetPropDesc(ChosedPetId,PET_ATTR.PET_ATTR_NAME))..GetTxtPri("PUIA_T2"), p.FirePet, true);
 			
 			--MsgRolePet.SendPetLeaveAction(ChosedPetId);
 		    --if RolePetFunc.IsMainPet()
@@ -968,12 +968,12 @@ function p.SetPetAttr(petView, nPetDataIndex, str)
     elseif nPetDataIndex == PET_ATTR.PET_ATTR_PHY_ATK then
 	--物理攻击
 		nTag	= ID_ROLEATTR_L_CTRL_TEXT_FORCE;    
-        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, "物理攻击");
+        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, GetTxtPri("FAUI_T3"));
         
    elseif nPetDataIndex == PET_ATTR.PET_ATTR_MAGIC_ATK then
 	--策略攻击
 		nTag	= ID_ROLEATTR_L_CTRL_TEXT_FORCE;    
-        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, "策略攻击");
+        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, GetTxtPri("FAUI_T4"));
         
     elseif nPetDataIndex == PET_ATTR.PET_ATTR_PHY_DEF	then
     --物理防御

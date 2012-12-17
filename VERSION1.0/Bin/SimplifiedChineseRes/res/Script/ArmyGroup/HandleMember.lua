@@ -18,11 +18,11 @@ local ID_BTN_ABDICATE				= 36;	-- “禅让”按钮ID
 local ID_LABEL_NAME					= 37;	-- 名字
 
 ---------------------------------------------------
-local SZ_PROMOTION					= "升职";
-local SZ_DEMOTION					= "降职";
-local SZ_CONFIRM_00					= "确定将军团长职务禅让给";
-local SZ_CONFIRM_01					= "确定将";
-local SZ_CONFIRM_02					= "开除";
+local SZ_PROMOTION					= GetTxtPri("HM2_T1");
+local SZ_DEMOTION					= GetTxtPri("HM2_T2");
+local SZ_CONFIRM_00					= GetTxtPri("HM2_T3");
+local SZ_CONFIRM_01					= GetTxtPri("HM2_T4");
+local SZ_CONFIRM_02					= GetTxtPri("HM2_T5");
 
 ---------------------------------------------------
 p.nMemberOrdinal	= nil;	-- 选中的玩家序号

@@ -1550,12 +1550,12 @@ function p.SetPetAttr(petView, nPetDataIndex, str)
     elseif nPetDataIndex == PET_ATTR.PET_ATTR_PHY_ATK then
 	--物理攻击
 		nTag	= ID_ROLEATTR_L_CTRL_TEXT_FORCE;    
-        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, "物理攻击");
+        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, GetTxtPri("FAUI_T3"));
         
    elseif nPetDataIndex == PET_ATTR.PET_ATTR_MAGIC_ATK then
 	--策略攻击
 		nTag	= ID_ROLEATTR_L_CTRL_TEXT_FORCE;    
-        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, "策略攻击"); 
+        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, GetTxtPri("FAUI_T4")); 
     
     elseif nPetDataIndex == PET_ATTR.PET_ATTR_PHY_DEF	then
     --物理防御
@@ -1643,7 +1643,7 @@ function p.UpdatePetAttrById(nPetId)
 	p.SetPetAttr(view, PET_ATTR.PET_ATTR_DEX, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_DEX));
 	]]    
     
-	p.SetPetAttr(view, PET_ATTR.PET_ATTR_LEVEL, "等级:"..RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LEVEL));
+	p.SetPetAttr(view, PET_ATTR.PET_ATTR_LEVEL, GetTxtPri("Common_levels")..":"..RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LEVEL));
 	
 	local expUI	= RecursivUIExp(view, {ID_ROLEATTR_L_CTRL_EXP_ROLE});
 	if CheckP(expUI) then

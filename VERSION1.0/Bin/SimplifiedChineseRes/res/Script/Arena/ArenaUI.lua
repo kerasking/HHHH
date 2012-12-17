@@ -185,7 +185,7 @@ function p.OnUIEvent(uiNode,uiEventType,param)
             local money = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
 			local cost=(addedCount+1)*2;
             if money<cost then
-                CommonDlg.ShowWithConfirm("金币不足", p.onCommonDlg);
+                CommonDlg.ShowWithConfirm(GetTxtPri("Common_JinBiBuZhu"), p.onCommonDlg);
             else
                 --add_Time_Dlg_id=CommonDlg.ShowNoPrompt("是否花费"..SafeN2S(cost).."金币，增加1次挑战次数？", p.onCommonDlg1, true);
                 CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("AREAUI_T1"),SafeN2S(cost)), p.onCommonDlg1, true);
@@ -200,7 +200,7 @@ function p.OnUIEvent(uiNode,uiEventType,param)
             local money = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
 			local cost=(addedCount+1)*2;
             if money<cost then
-                CommonDlg.ShowWithConfirm("金币不足", p.onCommonDlg);
+                CommonDlg.ShowWithConfirm(GetTxtPri("Common_JinBiBuZhu"), p.onCommonDlg);
             end
             if restFightCount == 0 then
 				local cost=(addedCount+1)*2;
@@ -590,7 +590,7 @@ function p.RefreshRankItem(view,info)
     end   
     
     local l_name = SetLabel(view, TAG_RANKING_NAME, string.format("lv.%d %s",info.level,info.name));
-    local l_rank = SetLabel(view, TAG_RANKING_RANK, string.format("第%d名",info.rank));
+    local l_rank = SetLabel(view, TAG_RANKING_RANK, string.format(GetTxtPri("AREAUI_T21"),info.rank));
     
     if(info.id == GetPlayerId()) then
         l_name:SetFontColor(ccc4(255,15,15,255));

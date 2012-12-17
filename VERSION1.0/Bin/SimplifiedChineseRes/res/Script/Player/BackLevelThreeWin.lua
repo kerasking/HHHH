@@ -57,7 +57,7 @@ local TAG_GEM_USE          = 56;                --使用
 local TAG_GEM_SELL         = 55;                --出售
 local TAG_GEM_SYNTHESIS    = 501;               --合成
 
-local TAG_EQUIP_EQUIP_TIP   = {equip="装备",unsnatch="卸载",};
+local TAG_EQUIP_EQUIP_TIP   = {equip=GetTxtPri("Common_equip"),unsnatch=GetTxtPri("BLTW_T1"),};
 
 p.parent = nil;
 

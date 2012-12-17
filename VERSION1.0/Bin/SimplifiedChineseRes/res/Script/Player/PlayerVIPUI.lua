@@ -377,7 +377,7 @@ function p.GameDataUserInfoRefresh()
 	
 	--充值提示信息
 	if nVipRank == 10 then
-		tipLabel:SetText("恭喜您成为VIP10会员!");
+		tipLabel:SetText(GetTxtPri("PVIPUI_T1"));
 	else
         tipLabel:SetText(string.format(GetTxtPri("PLAYER_T71"),VipCfg[nVipRank+1]-Recharge,nVipRank+1));
 	end
@@ -395,12 +395,12 @@ function p.GameDataUserInfoRefresh()
 	local nBought = GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_HAVE_BUY_STAMINA);
 	local sGoldTip = "";
 	if nLeftTime > 0 and nBought <=47 then
-	     sGoldTip = "当前购买需"..tGoldNeeded[nBought+1].."金币。";	     
+	     sGoldTip = GetTxtPri("PVIPUI_T2")..tGoldNeeded[nBought+1]..GetTxtPri("PVIPUI_T3");	     
 	end
 	    
 	--ffff00
 	--]]
-	MOlabel:SetText("今天还能购买军令"..nLeftTime.."次,"..sGoldTip);
+	MOlabel:SetText(GetTxtPri("PVIPUI_T4")..nLeftTime..GetTxtPri("PVIPUI_T5")..sGoldTip);
 	
 
 end

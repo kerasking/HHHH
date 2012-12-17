@@ -752,7 +752,7 @@ function p.RefreshStarInfo()
 			--sAttr1 = sAttrDesc1..nAttr1;
 			local sSkilldesc = GetDataBaseDataS("skill_config",nSkillId,DB_SKILL_CONFIG.NAME);
 			if sSkilldesc ~= nil then
-				sShowText = sShowText.."\n开启技能:"..sSkilldesc;
+				sShowText = sShowText.."\n"..GetTxtPri("HS_T38")..sSkilldesc;
 				
 			else
 				--LogInfo("sSkilldesc nil  nSkillId:"..nSkillId);

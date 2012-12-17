@@ -181,7 +181,7 @@ function p.LoadUI()
 	local mainpetid 	= RolePetUser.GetMainPetId(nRoleId);
 	local nLevPlayer	= SafeS2N(RolePetFunc.GetPropDesc(mainpetid, PET_ATTR.PET_ATTR_LEVEL));
 	if nLevPlayer < nLevNeed then
-		CommonDlgNew.ShowYesDlg("参加大乱斗需要达到40级！");
+		CommonDlgNew.ShowYesDlg(GetTxtPri("CB2_T43"));
 		return;
 	end	
 	
@@ -688,8 +688,8 @@ function p.refreshPlayerCount()
 	local AttkLabel 	=  RecursiveLabel(p.GetParent(),{ID_SCUFFLE_CTRL_TEXT_ATTACK});
 	local DefLabel 		=  RecursiveLabel(p.GetParent(),{ID_SCUFFLE_CTRL_TEXT_DEFENCE});
 	
-	AttkLabel:SetText(GetTxtPri("CB2_T5").."("..nCountAtt.."人)");
-	DefLabel:SetText(GetTxtPri("CB2_T6").."("..nCountDef.."人)");
+	AttkLabel:SetText(GetTxtPri("CB2_T5").."("..nCountAtt..GetTxtPri("Common_ren")..")");
+	DefLabel:SetText(GetTxtPri("CB2_T6").."("..nCountDef..GetTxtPri("Common_ren")..")");
 	
 	
 end
@@ -1572,13 +1572,13 @@ function p.EncourageMoney(nEventType, param, val)
     end
     
 	if g_EncourageLev >=  MsgBossBattle.GetCampBattleMaxEncourageCount() then
-		CommonDlgNew.ShowYesDlg("鼓舞等级已满！");
+		CommonDlgNew.ShowYesDlg(GetTxtPri("CB2_T44"));
 		return true;
 	end
 	
 	local money = PlayerFunc.GetUserAttr(GetPlayerId(),USER_ATTR.USER_ATTR_MONEY);
 	if money < MsgBossBattle.GetCampBattleSilverCount() then
-		CommonDlgNew.ShowYesDlg("抱歉,您的银币不足！");
+		CommonDlgNew.ShowYesDlg(GetTxtPri("CB2_T45"));
 		return true;
 	end
 	
@@ -1595,7 +1595,7 @@ function p.EncourageEmoney(nEventType, param, val)
     end
     
 	if g_EncourageLev >=  MsgBossBattle.GetCampBattleMaxEncourageCount() then
-		CommonDlgNew.ShowYesDlg("鼓舞等级已满！");
+		CommonDlgNew.ShowYesDlg(GetTxtPri("CB2_T44"));
 		return true;
 	end			
 	
@@ -1603,7 +1603,7 @@ function p.EncourageEmoney(nEventType, param, val)
     local emoney = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);           
      
     if emoney < MsgBossBattle.GetCampBattleCoinCount() then
-		CommonDlgNew.ShowYesDlg("抱歉，您的金币不足！");
+		CommonDlgNew.ShowYesDlg(GetTxtPri("CB2_T42"));
 		return true;
 	end
 	
@@ -1658,7 +1658,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 		    if( p.bIsTipMoney ) then
 					return p.EncourageMoney();
             else
-            		CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("BB2_T1"),MsgBossBattle.GetCampBattleSilverCount()), p.EncourageMoney);
+            		CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("BB_T6"),MsgBossBattle.GetCampBattleSilverCount()), p.EncourageMoney);
             		return true;
             end
 			--金币鼓舞	
@@ -1666,7 +1666,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 		    if( p.bIsTipEmoney ) then
 					return p.EncourageEmoney();
             else
-            		CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("BB2_T3"),MsgBossBattle.GetCampBattleCoinCount()), p.EncourageEmoney);
+            		CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("BB_T8"),MsgBossBattle.GetCampBattleCoinCount()), p.EncourageEmoney);
            			return true;
             end
 

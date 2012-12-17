@@ -240,7 +240,7 @@ function p.CreateMountDesc()
     l_desc:SetVisible(false);
     
     
-    local pLabelTips = _G.CreateColorLabel( "  坐骑加成的属性在竞技场、军团战等PVP活动中有效<cff0000(加成的属性受宝石加成)/e。每提升10个星级，坐骑即可转生。每转生一次，坐骑将解锁新的幻化造型。", l_desc:GetFontSize()/2, l_desc:GetFrameRect().size.w );
+    local pLabelTips = _G.CreateColorLabel( GetTxtPri("PETUI_T3"), l_desc:GetFontSize()/2, l_desc:GetFrameRect().size.w );
    
      if CheckP(pLabelTips) then
 		pLabelTips:SetFrameRect(l_desc:GetFrameRect());
