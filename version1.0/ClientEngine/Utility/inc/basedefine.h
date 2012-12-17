@@ -17,6 +17,7 @@
 #include "CCPlatformConfig.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include <zlib/zconf.h>
+#define FONT_NAME		"LiSu"
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)

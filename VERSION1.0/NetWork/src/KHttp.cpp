@@ -195,7 +195,7 @@ KHttp::getHttpFile( const KData& server, const KData& httpfile, const KData& sav
 		//cpLog( LOG_DEBUG, "Connect to Server:  %s", m_dtHttpProxy.getData() );
         m_clientSock.setServer( m_dtHttpProxy, 80 );
     }
-	
+	m_clientSock.initSocket();
 	if ( !m_clientSock.connect() )
 	{
 		return -1;
