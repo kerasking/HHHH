@@ -44,9 +44,12 @@ public:
 	bool LoadData();
 
 	const string GetCString(const string szKeyName);
+
+	//装入仅 smloginscene.cpp 用到的文本，
+	bool LoadLoginString();
 	
 private:
-	bool readLines( vector<string>& vecLines );
+	bool readLines( string & strFile, vector<string>& vecLines );
 	bool parseLines( vector<string>& vecLines );
 	
 	bool addKeyValue( const string& keyLine, const string& valLine );

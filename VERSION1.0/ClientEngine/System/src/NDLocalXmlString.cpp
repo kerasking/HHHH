@@ -35,8 +35,9 @@ const string NDLocalXmlString::GetCString(string szKeyName)
 
 bool NDLocalXmlString::LoadData()
 {
+	string strFile = NDEngine::NDPath::GetResPath("lyol.strings");
 	vector<string> vecLines;
-	if (this->readLines( vecLines ))
+	if ( this->readLines( strFile, vecLines ) )
 	{
 		this->parseLines( vecLines );
 		//this->dump();
@@ -45,11 +46,22 @@ bool NDLocalXmlString::LoadData()
 	return false;
 }
 
-///////////////////////////////////////////////////////////////////////////
-bool NDLocalXmlString::readLines( vector<string>& vecLines )
+//========================================================================
+bool NDLocalXmlString::LoadLoginString()
 {
-	string strFile = NDEngine::NDPath::GetResPath("lyol.strings");
+	string strFile = NDEngine::NDPath::GetResPath("Login.strings");
+	vector<string> vecLines;
+	if ( this->readLines( strFile, vecLines ) )
+	{
+		this->parseLines( vecLines );
+		return true;
+	}
+	return false;
+}
 
+///////////////////////////////////////////////////////////////////////////
+bool NDLocalXmlString::readLines( string & strFile, vector<string>& vecLines )
+{
 	// open file
 	FILE *fp = fopen(strFile.c_str(), "r");
 	if (!fp) return false;

@@ -31,7 +31,7 @@
 
 //--------------------//
 
-#define UPDATE_ON		0	//0关闭下载，1开启下载
+#define UPDATE_ON		1	//0关闭下载，1开启下载
 #define CACHE_MODE 		0	//发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
 
 //--------------------//
@@ -67,24 +67,21 @@
 #define TAG_SPRITE_NODE					200	//
 
 //----------------------------------------------------------
-#define SZ_ERROR_01						"大版本更新,请重新下载最新游戏版本"
-#define SZ_ERROR_02						"当前版本数据有误,请重新下载或者联系GM"
-#define SZ_ERROR_03						"版本信息损坏，请重新下载或者联系GM"
-#define SZ_ERROR_04						"抱歉,下载资源未找到,请联系GM"
-#define SZ_ERROR_05						"下载失败,请检查网络链接或者重启设备尝试"
-#define SZ_DOWNLOADING					"版本下载中……"
-#define SZ_INSTALLING					"正在安装更新……"
-#define SZ_WIFI_OFF						"必须下载更新包,但是未开启WIFI,是否继续？"
-#define SZ_UPDATE_OFF					"无法连接服务器,请检查网络"
-#define SZ_FIRST_INSTALL                "首次运行,初始化配置中……"
-#define SZ_CONNECT_SERVER               "连接服务器……"
-#define SZ_INSTALL						"配置中……"
+#define SZ_ERROR_01						"LOGIN_SZ_ERROR_01"			//"大版本更新,请重新下载最新游戏版本"
+#define SZ_ERROR_02						"LOGIN_SZ_ERROR_02"			//"当前版本数据有误,请重新下载或者联系GM"
+#define SZ_ERROR_03						"LOGIN_SZ_ERROR_03"			//"版本信息损坏，请重新下载或者联系GM"
+#define SZ_ERROR_04						"LOGIN_SZ_ERROR_04"			//"抱歉,下载资源未找到,请联系GM"
+#define SZ_ERROR_05						"LOGIN_SZ_ERROR_05"			//"下载失败,请检查网络链接或者重启设备尝试"
+#define SZ_DOWNLOADING					"LOGIN_SZ_DOWNLOADING"		//"版本下载中……"
+#define SZ_INSTALLING					"LOGIN_SZ_INSTALLING"		//"正在安装更新……"
+#define SZ_WIFI_OFF						"LOGIN_SZ_WIFI_OFF"			//"必须下载更新包,但是未开启WIFI,是否继续？"
+#define SZ_UPDATE_OFF					"LOGIN_SZ_UPDATE_OFF"		//"无法连接服务器,请检查网络"
+#define SZ_FIRST_INSTALL                "LOGIN_SZ_FIRST_INSTALL"    //"首次运行,初始化配置中……"
+#define SZ_CONNECT_SERVER               "LOGIN_SZ_CONNECT_SERVER"   //"连接服务器……"
+#define SZ_SETUP						"LOGIN_SZ_SETUP"			//"配置中……"
 
 
-
-//#define SZ_UPDATE_URL					"222.77.177.209"//"192.168.65.77"//"121.207.239.91"//更新服务器的地址
-//#define SZ_UPDATE_URL					"222.77.177.176"//"192.168.65.77"//"121.207.239.91"//更新服务器的地址
-#define SZ_UPDATE_URL					"121.207.239.91"//"192.168.65.77"//"121.207.239.91"//更新服务器的地址
+#define SZ_UPDATE_URL					"192.168.19.169"//更新服务器的地址
 #define SZ_DEL_FILE						"del.txt"//包含待删除文件路径的配置文件/CACHES目录下
 
 #define SZ_MOBAGE_BG_PNG_PATH			"/res/image00/Res00/Load/mobage_bg.png"
@@ -103,7 +100,9 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
     scene->SetTag(SMLOGINSCENE_TAG);
     
 	if ( bShowEntry )
-    {
+	{
+		NDLocalXmlString::GetSingleton().LoadLoginString();//
+
 		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 		NDUILayer * layer = new NDUILayer();
@@ -286,7 +285,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
         {
         	if ( m_pLabelPromtp )
             {
-        		m_pLabelPromtp->SetText( SZ_FIRST_INSTALL );
+        		m_pLabelPromtp->SetText( NDCommonCString2(SZ_FIRST_INSTALL).c_str() );
         		m_pLabelPromtp->SetVisible( true );
                 ShowWaitingAni();
 #ifdef USE_MGSDK
@@ -475,7 +474,7 @@ void CSMLoginScene::DidDownloadStatus( DownloadStatus status )
 		//m_label->SetText( "抱歉，下载资源未找到，请联系GM" );
 		if (m_pLabelPromtp)
 		{
-			m_pLabelPromtp->SetText( SZ_ERROR_04 );
+			m_pLabelPromtp->SetText( NDCommonCString2(SZ_ERROR_04).c_str() );
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
 			//m_pLabelPromtp->SetFontSize( 20 );
 			//CCRect tRect = m_pLabelPromtp->GetFrameRect();
@@ -488,7 +487,7 @@ void CSMLoginScene::DidDownloadStatus( DownloadStatus status )
 		if (m_pLabelPromtp)
 		{
 			//m_label->SetText( "下载失败，请检查网络链接或者重启设备尝试" );
-			m_pLabelPromtp->SetText( SZ_ERROR_05 );
+			m_pLabelPromtp->SetText( NDCommonCString2(SZ_ERROR_05).c_str() );
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
 			//m_pLabelPromtp->SetFontSize( 20 );
 			//CCRect tRect = m_pLabelPromtp->GetFrameRect();
@@ -622,7 +621,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& data)
 		//printf("请用户重新下载最新游戏版本");
 		if ( m_pLabelPromtp )
 		{
-			m_pLabelPromtp->SetText( SZ_ERROR_01 );
+			m_pLabelPromtp->SetText( NDCommonCString2(SZ_ERROR_01).c_str() );
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
     		m_pLabelPromtp->SetVisible( true );
     		//m_pLabelPromtp->SetFontSize( 20 );
@@ -635,7 +634,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& data)
 		//printf("当前版本数据有误,请重新下载或者联系GM");
 		if ( m_pLabelPromtp )
 		{
-			m_pLabelPromtp->SetText( SZ_ERROR_02 );
+			m_pLabelPromtp->SetText( NDCommonCString2(SZ_ERROR_02).c_str() );
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
     		m_pLabelPromtp->SetVisible( true );
     		//m_pLabelPromtp->SetFontSize( 20 );
@@ -648,7 +647,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& data)
 		//printf("版本信息损坏，请重新下载或者联系GM");
 		if ( m_pLabelPromtp )
 		{
-			m_pLabelPromtp->SetText( SZ_ERROR_03 );
+			m_pLabelPromtp->SetText( NDCommonCString2(SZ_ERROR_03).c_str() );
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
     		m_pLabelPromtp->SetVisible( true );
     		//m_pLabelPromtp->SetFontSize( 20 );
@@ -718,7 +717,7 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
 		
 	if (m_pLabelPromtp)
 	{
-		m_pLabelPromtp->SetText( SZ_CONNECT_SERVER );
+		m_pLabelPromtp->SetText( NDCommonCString2(SZ_CONNECT_SERVER).c_str() );
 		m_pLabelPromtp->SetVisible( true );
 	}
 	if ( !NDBeforeGameMgrObj.CheckClientVersion( pszUpdateURL ) )
@@ -759,7 +758,7 @@ void CSMLoginScene::StartDownload()
 {
 	if ( m_pLabelPromtp )
 	{
-		m_pLabelPromtp->SetText( SZ_DOWNLOADING );
+		m_pLabelPromtp->SetText( NDCommonCString2(SZ_DOWNLOADING).c_str() );
 		m_pLabelPromtp->SetVisible( true );
 	}
 	if ( m_pCtrlProgress )
@@ -773,7 +772,7 @@ void CSMLoginScene::StartInstall()
 {
 	if ( m_pLabelPromtp )
 	{
-		m_pLabelPromtp->SetText( SZ_INSTALLING );
+		m_pLabelPromtp->SetText( NDCommonCString2(SZ_INSTALLING).c_str() );
 		m_pLabelPromtp->SetVisible( true );
 	}
 	if ( m_pCtrlProgress )
@@ -800,7 +799,7 @@ void CSMLoginScene::StartEntry()
 #if 1 //取完代码android又崩溃了，先还原代码.
 	if (m_pLabelPromtp)
 	{
-		m_pLabelPromtp->SetText( SZ_INSTALL );
+		m_pLabelPromtp->SetText( NDCommonCString2(SZ_SETUP).c_str() );
 		m_pLabelPromtp->SetVisible( true );
 	}
 	ShowWaitingAni();
@@ -836,7 +835,7 @@ void CSMLoginScene::StartEntry()
 	  //实际上网络线程和控制台线程都是多余的！单线程足够了！
 	if (m_pLabelPromtp)
 	{
-		m_pLabelPromtp->SetText( SZ_INSTALL );
+		m_pLabelPromtp->SetText( NDCommonCString2(SZ_SETUP).c_str() );
 		m_pLabelPromtp->SetVisible( true );
 	}
 	ShowWaitingAni();
@@ -961,14 +960,14 @@ void CSMLoginScene::ShowCheckWIFIOff()
 	//m_pLayerCheckWIFI = pLayer;
 	//NDUILoad tmpUILoad;
 	//tmpUILoad.Load( "CheckWIFIDlg.ini", pLayer, this, CCSizeMake(0, 0) );
-	CreatConfirmDlg( SZ_WIFI_OFF );
+	CreatConfirmDlg( NDCommonCString2(SZ_WIFI_OFF).c_str() );
 	m_iState = 1;
 }
 
 //显示更新联接失败对话框
 void CSMLoginScene::ShowUpdateOff()
 {
-	CreatConfirmDlg( SZ_UPDATE_OFF );
+	CreatConfirmDlg( NDCommonCString2(SZ_UPDATE_OFF).c_str() );
 	m_iState = 2;
 }
 
