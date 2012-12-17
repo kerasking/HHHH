@@ -33,8 +33,8 @@ p.BtnTag =
 
 p.BtnText = 
 {
-	"离开副本",
-	"查看攻略",
+	GetTxtPri("DMTB2_T1"),
+	GetTxtPri("DMTB2_T2"),
 
 };
 

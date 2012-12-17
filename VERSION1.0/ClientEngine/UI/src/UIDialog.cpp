@@ -51,7 +51,7 @@ void CUIDlgOptBtn::Initialization()
 	NDUIImage *testimg = new NDUIImage;
 	testimg->Initialization();
 	testimg->SetPicture(test);
-	testimg->SetFrameRect(CCRectMake(0.0f, winsize.height*0.015, 72.0f, 32.0f));
+	testimg->SetFrameRect(CCRectMake(0.0f, winsize.height*0.015, 72.0f*ANDROID_SCALE, 32.0f*ANDROID_SCALE));
 
 	this->AddChild(testimg, 1000);
 
@@ -294,16 +294,18 @@ void CUIDialog::AddOpt(const char* text, int nAction)
 	
 	CCRect rectNode		= node->GetFrameRect();
 	//CCSize winsize		= CCDirector::sharedDirector()->getWinSizeInPixels();
-	
+	float fScale = ANDROID_SCALE;
 	CCRect rect;
+	cocos2d::CCLog("fScale = %05f, x = %05f, y = %05f, w = %05f, h = %05f, m_uiOptHeight = %05f", fScale, rectNode.origin.x, rectNode.origin.y, rectNode.size.width, rectNode.size.height, m_uiOptHeight);
 	rect.origin			= ccpAdd(rectNode.origin, ccp(0, m_vUiOpt.size() * m_uiOptHeight));
 	rect.size			= CCSizeMake(rectNode.size.width*1.1, m_uiOptHeight);
 	
 	CUIDlgOptBtn *uiOpt	= new CUIDlgOptBtn;
-	uiOpt->Initialization();
+	uiOpt->Initialization();  
 	uiOpt->SetFrameRect(rect);
 	uiOpt->SetBoundRect(rect);
-	uiOpt->SetLinkTextFontSize(13);
+	//uiOpt->SetLinkTextFontSize(13*fScale);
+	uiOpt->SetLinkTextFontSize(12);
 	uiOpt->SetLinkTextColor(ccc4(255, 255, 0, 255));
 	uiOpt->SetLinkText(text);
 	uiOpt->SetDelegate(this);

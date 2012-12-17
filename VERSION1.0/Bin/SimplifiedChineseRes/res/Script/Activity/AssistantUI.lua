@@ -261,7 +261,7 @@ function p.ShowGetGiftInfo(id)
             return;
         end
         
-        info = "获得了:";
+        info = GetTxtPri("ZS_Got");
         if(gift.param0>0) then
             info = string.format(GetTxtPri("ZS_YuanBao"),info,gift.param0);
         end

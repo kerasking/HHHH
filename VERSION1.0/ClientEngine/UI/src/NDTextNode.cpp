@@ -143,13 +143,13 @@ void NDUIText::SetFrameRect(CCRect rect)
 						PAGE_ARROW_SIZE.width, PAGE_ARROW_SIZE.height));
 	}
 
-	std::vector<NDUINode*>::iterator iter;
-	for (iter = m_pkPages.begin(); iter != m_pkPages.end(); iter++)
-	{
-		NDUINode* uiNode = *iter;
-		uiNode->SetFrameRect(
-				CCRectMake(0, 0, rect.size.width, rect.size.height));
-	}
+// 	std::vector<NDUINode*>::iterator iter;
+// 	for (iter = m_pkPages.begin(); iter != m_pkPages.end(); iter++)
+// 	{
+// 		NDUINode* uiNode = *iter;
+// 		uiNode->SetFrameRect(
+// 				CCRectMake(0, 0, rect.size.width, rect.size.height));
+// 	}
 }
 
 void NDUIText::SetVisible(bool visible)
@@ -309,14 +309,14 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLinkLabel("]", uiFontSize, kColor,
+									CreateLinkLabel(CCString("]").UTF8String(), uiFontSize, kColor,
 											m_nItemID), true));
 				}
 				else
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLabel("]", uiFontSize, kColor,
+									CreateLabel(CCString("]").UTF8String(), uiFontSize, kColor,
 											m_nItemID), true));
 				}
 			}
@@ -356,14 +356,14 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLinkLabel("[", uiFontSize, kColor,
+									CreateLinkLabel(CCString("[").UTF8String(), uiFontSize, kColor,
 											m_nItemID), true));
 				}
 				else
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLabel("[", uiFontSize, kColor,
+									CreateLabel(CCString("[").UTF8String(), uiFontSize, kColor,
 											m_nItemID), true));
 				}
 			}
@@ -782,25 +782,28 @@ NDUIImage* NDUITextBuilder::CreateFaceImage(const char* strIndex)
 	return pkResult;
 }
 
-NDUILabel* NDUITextBuilder::CreateLabel(const char* pszText,
+NDUILabel* NDUITextBuilder::CreateLabel(const char* utf8_text,
 		unsigned int fontSize, ccColor4B color, int idItem/* = 0*/)
 {
-	NDUILabel* pkResult = NULL;
-	if (pszText)
-	{
-		CCSize kTextSize = getStringSize(pszText, fontSize*FONT_SCALE);
-		pkResult = new NDUILabel();
-		pkResult->Initialization();
-		pkResult->SetRenderTimes(1);
-		pkResult->SetText(pszText);
-		pkResult->SetTag(idItem);
-		pkResult->SetFontSize(fontSize);
-		pkResult->SetFontColor(color);
+	//注意：utf8_text传进来的格式是utf8的，计算string size之前要转成ansi，否则计算尺寸出错.
+	if (!utf8_text || !utf8_text[0]) return NULL;
 
-		kTextSize.width = (kTextSize.width > kTextSize.height) ? kTextSize.height : kTextSize.width;
-		pkResult->SetFrameRect(CCRectMake(0, 0, kTextSize.width, kTextSize.height));
+	NDUILabel* label = NULL;
+	if (utf8_text)
+	{
+		const char* ansiText = CCString::stringWithUTF8String( utf8_text )->getCString();
+		CCSize kTextSize = getStringSize(ansiText, fontSize*FONT_SCALE);
+
+		label = new NDUILabel();
+		label->Initialization();
+		label->SetRenderTimes(1);
+		label->SetText(utf8_text);
+		label->SetTag(idItem);
+		label->SetFontSize(fontSize);
+		label->SetFontColor(color);
+		label->SetFrameRect(CCRectMake(0, 0, kTextSize.width, kTextSize.height));
 	}
-	return pkResult;
+	return label;
 }
 
 HyperLinkLabel* NDUITextBuilder::CreateLinkLabel(const char* pszText,
@@ -818,8 +821,6 @@ HyperLinkLabel* NDUITextBuilder::CreateLinkLabel(const char* pszText,
 		pkResultLabel->SetTag(nItemID);
 		pkResultLabel->SetFontSize(uiFontSize);
 		pkResultLabel->SetFontColor(kColor);
-
-		kTextSize.width = (kTextSize.width > kTextSize.height) ? kTextSize.height : kTextSize.width;
 		pkResultLabel->SetFrameRect(CCRectMake(0, 0, kTextSize.width, kTextSize.height));
 		pkResultLabel->SetIsLink(true);
 	}

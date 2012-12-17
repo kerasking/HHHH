@@ -107,14 +107,14 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 		NDUILayer * layer = new NDUILayer();
 		layer->Initialization();
-		layer->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));//²»ÒªÓ²±àÂë£¡£¡
+		layer->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));//²»ÒªÓ²±àÂë£¡£¡
 		scene->AddChild(layer);
 		scene->m_pLayerOld = layer;
 		
 		NDPicturePool& pool		= *(NDPicturePool::DefaultPool());
 		NDUIImage* imgBack	= new NDUIImage;
 		imgBack->Initialization();
-		imgBack->SetFrameRect(CGRectMake(0, 0, winSize.width, winSize.height));
+		imgBack->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
 #ifdef USE_MGSDK
     	NDPicture* pic = pool.AddPicture( NDPath::GetImgPath("Res00/Load/mobage_bg.png") );
 #else
@@ -276,7 +276,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		if ( pImage )
 		{
 			NDPicture * pPicture = new NDPicture;
-			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ) );
+			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ).c_str() );
 			pImage->SetPicture( pPicture, true );
 		}
 #endif

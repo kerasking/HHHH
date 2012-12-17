@@ -47,6 +47,15 @@ UITextAlignment =
 	Right = 2,		--右对齐
 };
 
+--z轴层级
+UILayerZOrder = 
+{
+    NormalLayer = 10;
+    ChatBtn = 9;
+    ActivityLayer = 5;
+}
+
+
 -- 脚本创建的每一个场景都需要在这边定义一个tag,不允许重复
 local NUISCENETAG_BEGIN = 1000;
 NSCENETAG =
@@ -187,7 +196,8 @@ NMAINSCENECHILDTAG =
  	SyndicateBattleUI         =  2015,                   --军团战ui
  	SyndicateBattleSignUpUI           =  NUITAG_BEGIN + 180,                  --军团战报名ui
  	SyndicateBattleResultUI           =  NUITAG_BEGIN + 181,                   --军团战进程ui
- 	
+ 	DestinyUI               = NUITAG_BEGIN + 182,                   --占星
+    DestinyFeteUI           = NUITAG_BEGIN + 183,                   --占星祭祀
    
     CommonDlg				= NDLGTAG_BEGIN,						--通用对话框
 	CommonDlgNew              = NDLGTAGNEW_BEGIN,                     --新通用对话框

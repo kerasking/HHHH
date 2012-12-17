@@ -112,7 +112,7 @@ function p.LoadUI(nStoneId)
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerEquipGlidUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer,2);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer+1);
 	
 	--初始化ui
 	local uiLoad = createNDUILoad();

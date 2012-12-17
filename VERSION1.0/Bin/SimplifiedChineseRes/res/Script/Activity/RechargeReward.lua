@@ -51,11 +51,11 @@ function p.LoadUI()
 		return false;
 	end
     
-    layer:SetPopupDlgFlag( true );
+    --layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.RechargeReward);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChild(layer);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer );
     
     local uiLoad = createNDUILoad();
 	if nil == uiLoad then

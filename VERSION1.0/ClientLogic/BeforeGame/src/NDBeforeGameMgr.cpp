@@ -42,6 +42,12 @@
 #import "MBGSocialService.h"
 #endif
 
+#if defined(ANDROID)
+#include "platform/android/jni/JniHelper.h"
+#include <jni.h>
+#include <android/log.h>
+#endif
+
 using namespace NDEngine;
 
 #define DES_KEY "n7=7=7d" //ÃÜÔ¿
@@ -1393,6 +1399,7 @@ bool NDBeforeGameMgr::doNDSdkLogin()
 
 bool NDBeforeGameMgr::doNDSdkChangeLogin()
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #ifdef USE_NDSDK
 	if (m_sdkLogin)
 	{
@@ -1409,6 +1416,21 @@ bool NDBeforeGameMgr::doNDSdkChangeLogin()
                                 onDismiss:^{
                                     
                                 }];
+    }
+#endif
+#endif
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t
+                                       , "org/DeNA/DHLJ/DaHuaLongJiang"
+                                       , "OpenUserProfile"
+                                       , "()V"))
+        
+    {
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
     }
 #endif
     return true;

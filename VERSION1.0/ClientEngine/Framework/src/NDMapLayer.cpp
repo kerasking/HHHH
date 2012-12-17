@@ -491,7 +491,11 @@ void NDMapLayer::showSwitchSprite(MAP_SWITCH_TYPE type)
 					CCDirector::sharedDirector()->getWinSizeInPixels().height
 					)); //++Guosen 2012.7.6
 
-	m_pkSwitchSpriteNode->SetScale( RESOURCE_SCALE );
+	float fScale = RESOURCE_SCALE;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
+	fScale *= 2; //@todo: ÁÙÊ±´¦Àí
+#endif
+	m_pkSwitchSpriteNode->SetScale( fScale );
 	this->GetParent()->AddChild(m_pkSwitchSpriteNode, ZORDER_MASK_ANI);
 }
 

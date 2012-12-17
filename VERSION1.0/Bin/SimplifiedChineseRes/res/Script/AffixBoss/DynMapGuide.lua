@@ -49,6 +49,7 @@ function p.LoadUI()
 	layer:SetPopupDlgFlag(true);
 	layer:Init();
 	layer:bringToTop();
+	layer:SetDebugName("Gonglue_layer");
 	layer:SetTag(NMAINSCENECHILDTAG.DynMapGuide);
 	local winsize = GetWinSize();
 	--layer:SetFrameRect(RectUILayer);
@@ -188,7 +189,7 @@ function p.setContent(index,id,name,level)
 	local layer=p.GetParent();
 	
 	SetLabel(layer,text_tag,name);
-	SetLabel(layer,level_tag,"等级"..SafeN2S(level));
+	SetLabel(layer,level_tag,GetTxtPri("Common_level")..SafeN2S(level));
 end
 	
 	

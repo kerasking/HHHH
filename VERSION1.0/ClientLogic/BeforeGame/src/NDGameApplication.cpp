@@ -624,6 +624,12 @@ bool NDGameApplication::processPM(const char* cmd)
 		NDGameData& pGameData = NDGameData::Instance();
 		int x = 0;
 	}
+	else if (stricmp(cmd, "dumptouch") == 0)
+	{
+		string str = CCDirector::sharedDirector()->getTouchDispatcher()->dump();
+		DWORD n = 0;
+		WriteConsoleA(  hOut, str.c_str(), str.length(), &n, NULL );
+	}
 	else
 	{
 		DWORD n = 0;

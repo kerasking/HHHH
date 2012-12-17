@@ -205,7 +205,7 @@ function p.LoadUI()
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.SyndicateBattleUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChild(layer);
+	scene:AddChildZ(layer,UILayerZOrder.ActivityLayer);
     
     local uiLoad = createNDUILoad();
 	if nil == uiLoad then

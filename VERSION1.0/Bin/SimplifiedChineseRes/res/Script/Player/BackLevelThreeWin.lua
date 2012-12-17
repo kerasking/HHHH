@@ -7,7 +7,7 @@
 BackLevelThreeWin = {}
 local p = BackLevelThreeWin;
 p.BEquip = false;
-
+p.BEquipDaoFa = false;
 
 
 --装备，材料，宝石，道具 TAG
@@ -15,6 +15,7 @@ local EQUIP_LAYER   = 1411;         --装备
 local MATE_LAYER    = 1412;         --材料
 local GEM_LAYER     = 1413;         --宝石
 local PROP_LAYER    = 1414;         --道具
+local DESTINY_LAYER = 1415;         --占星
 
 local TAG_CLOSE     = 533;          --关闭
 
@@ -57,7 +58,16 @@ local TAG_GEM_USE          = 56;                --使用
 local TAG_GEM_SELL         = 55;                --出售
 local TAG_GEM_SYNTHESIS    = 501;               --合成
 
-local TAG_EQUIP_EQUIP_TIP   = {equip="装备",unsnatch="卸载",};
+local TAG_DESTINY_PIC         = 51;
+local TAG_DESTINY_NAME        = 401;
+local TAG_DESTINY_EXP           = 201;               --价钱
+local TAG_DESTINY_DESC        = 402;
+local TAG_DESTINY_USE         = 501;                 --使用
+local TAG_DESTINY_SELL        = 65;                  --出售
+local TAG_DESTINY_ADD_DESC    = 20;                  --属性加层说明
+local TAG_DESTINY_PRICE         = 52;               
+
+local TAG_EQUIP_EQUIP_TIP   = {equip=GetTxtPri("Common_equip"),unsnatch=GetTxtPri("BLTW_T1"),};
 
 p.parent = nil;
 
@@ -184,8 +194,34 @@ function p.LoadUI(parent)
 	uiLoad:Load("Prop.ini", prop_layer, p.OnUIEventProp, 0, 0);
     uiLoad:Free();
     ----------------------------------------------------------------------
+            
     
     
+    
+    
+    ----------------------------------------------------------------------
+    local destiny_layer = createNDUILayer();
+	if destiny_layer == nil then
+		return false;
+	end
+	destiny_layer:Init();
+	destiny_layer:SetTag(DESTINY_LAYER);
+	destiny_layer:SetFrameRect(RectFullScreenUILayer);
+    destiny_layer:SetVisible(false);
+    p.parent:AddChildZ(destiny_layer,1);
+	
+	--初始化ui
+	local uiLoad = createNDUILoad();
+	if nil == uiLoad then
+		destiny_layer:Free();
+		return false;
+	end
+	
+	--bg
+	uiLoad:Load("destiny/Destiny_Info.ini", destiny_layer, p.OnUIEventDestiny, 0, 0);
+    uiLoad:Free();
+    ----------------------------------------------------------------------
+
 end
 
 --显示装备三级窗口
@@ -459,6 +495,131 @@ function p.ShowUIProp(nItemId, nCurrPetId)
     p.layerShowOrHide(PROP_LAYER, true);
 end
 
+--显示道具三级窗口
+--bEquipDaoFa:true 执行卸下操作，false 反之装备操作
+function p.ShowUIDestiny(nItemId, nCurrPetId, bEquipDaoFa)
+    if( nItemId == nil or nItemId == 0 )then
+        LogInfo("BackLevelThreeWin.ShowUIDestiny 参数错误");
+        return;
+    end
+    
+    p.BEquipDaoFa = bEquipDaoFa;
+    
+    LogInfo("nCurrPetId:[%d]",nCurrPetId);
+
+    local nItemType			= Item.GetItemInfoN(nItemId, Item.ITEM_TYPE);
+    local nQuality          = Num1(nItemType);
+    local strName			= ItemFunc.GetName(nItemType);
+    local levelLV           = Item.GetItemInfoN(nItemId, Item.ITEM_ADDITION);
+    local price             = ItemFunc.GetPrice(nItemType)*Item.GetItemInfoN(nItemId, Item.ITEM_AMOUNT);
+    local exp               = Item.GetItemInfoN(nItemId, Item.ITEM_EXP);
+    local desc              = ItemFunc.GetDesc(nItemType);
+
+    if(nQuality > DAOFA_QUALITY_DATA.RED) then 
+        strName = string.format("%s (%d%s)",strName,levelLV,GetTxtPub("Level"));
+    end
+    
+    local l_pic = RecursiveEquipBtn(p.parent,{DESTINY_LAYER,TAG_DESTINY_PIC});
+    l_pic:ChangeItem(nItemId);
+    
+    local l_name = RecursiveLabel(p.parent,{DESTINY_LAYER,TAG_DESTINY_NAME});
+    l_name:SetText(strName);
+    
+    local l_price = RecursiveLabel(p.parent,{DESTINY_LAYER,TAG_DESTINY_PRICE});
+    l_price:SetText(price.."");
+    
+    
+    --设置物品颜色
+    ItemFunc.SetDaoFaLabelColor(l_name,nItemType);
+    
+    
+    local sTip;
+    
+    if(nQuality == 1) then
+        local nExpFx = GetDataBaseDataN("daofa_static_config",DB_DAOFA_STATIC_CONFIG_ID.RED,DB_DAOFA_STATIC_CONFIG.VALUE);
+        sTip = string.format("%d",nExpFx);
+    else
+        sTip = string.format("%d/%d",exp,p.GetTotalByItemId(nItemId));
+    end
+    local l_exp = RecursiveLabel(p.parent,{DESTINY_LAYER,TAG_DESTINY_EXP});
+    l_exp:SetText(sTip); 
+    
+    
+    local s_add_desc = ItemFunc.GetDestinyAdd(nItemId);
+    local l_add_desc = RecursiveLabel(p.parent,{DESTINY_LAYER,TAG_DESTINY_ADD_DESC});
+    l_add_desc:SetText(GetTxtPri("DU_T26")..s_add_desc);
+    
+    
+    local l_desc = RecursiveLabel(p.parent,{DESTINY_LAYER,TAG_DESTINY_DESC});
+    l_desc:SetText(desc);
+    
+    local btn = RecursiveButton(p.parent,{DESTINY_LAYER,TAG_DESTINY_USE});  
+    btn:SetParam1(nItemId);
+    btn:SetParam2(nCurrPetId);
+    
+    local btnSale = RecursiveButton(p.parent,{DESTINY_LAYER,TAG_DESTINY_SELL});
+    btnSale:SetParam1(nItemId);
+    
+    if bEquipDaoFa then
+        btn:SetTitle(TAG_EQUIP_EQUIP_TIP.unsnatch);
+        btnSale:SetVisible(false);
+    else
+        btn:SetTitle(TAG_EQUIP_EQUIP_TIP.equip);
+        btnSale:SetVisible(true);
+    end
+    
+    if bEquipDaoFa == nil then
+        btn:SetVisible(false);
+        btnSale:SetVisible(false);
+    end
+    
+    p.layerShowOrHide(DESTINY_LAYER, true);
+end
+
+function p.GetTotalByItemId(nItemId)
+    local levelLV = Item.GetItemInfoN(nItemId, Item.ITEM_ADDITION)+1;
+    local quality = Item.GetItemInfoN(nItemId, Item.ITEM_TYPE)%10;
+    
+    local nMaxLevel = p.GetMaxLevelByQuality(quality);
+    if levelLV>nMaxLevel then
+        levelLV = nMaxLevel;
+    end
+    
+    local ids = GetDataBaseIdList("dao_levelup_exp");
+    for i,v in ipairs(ids) do
+        local nLevel = GetDataBaseDataN("dao_levelup_exp", v, DB_DAO_LEVELUP_EXP.LEVEL);
+        local nQuality = GetDataBaseDataN("dao_levelup_exp", v, DB_DAO_LEVELUP_EXP.QUALITY);
+        LogInfo("levelLV:[%d],quality:[%d],nLevel:[%d],nQuality:[%d]",levelLV,quality,nLevel,nQuality);
+        
+        if(nLevel == levelLV and nQuality == quality) then
+            return GetDataBaseDataN("dao_levelup_exp", v, DB_DAO_LEVELUP_EXP.EXP);
+        end
+    end
+    
+    return 0;
+end
+
+function p.GetMaxLevelByQuality(nQuality)
+    local level = nil;
+    local ids = GetDataBaseIdList("dao_levelup_exp");
+    for i,v in ipairs(ids) do
+        local nQualityV = GetDataBaseDataN("dao_levelup_exp", v, DB_DAO_LEVELUP_EXP.QUALITY);
+        if(nQuality == nQualityV) then
+            local nLevel = GetDataBaseDataN("dao_levelup_exp", v, DB_DAO_LEVELUP_EXP.LEVEL);
+            if(level) then
+                if(level<nLevel) then
+                    level = nLevel;
+                end
+            else
+                level = nLevel;
+            end
+        end
+    end
+    if(level == nil) then
+        return 0;
+    end
+    return level;
+end
 
 
 --装备窗口事件
@@ -756,6 +917,103 @@ function p.OnUIEventProp(uiNode, uiEventType, param)
 end
 
 
+
+
+function p.OnUIEventDestiny(uiNode, uiEventType, param)
+    local tag = uiNode:GetTag();
+	LogInfo("p.OnUIEventDestiny[%d]", tag);
+	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+        if(tag == TAG_CLOSE) then
+            p.layerShowOrHide(DESTINY_LAYER, false);
+        elseif(tag == TAG_DESTINY_USE) then            --使用
+            p.layerShowOrHide(PROP_LAYER, false);
+            
+            local btn = ConverToButton(uiNode);
+            local nItemId   = btn:GetParam1();
+            local nPetId    = btn:GetParam2();
+            local nPosition = DestinyUI.GetCanEquipPosition();
+            
+            p.DestinyEquipOperate(nItemId, nPetId, nPosition, p.BEquipDaoFa);
+            p.layerShowOrHide(DESTINY_LAYER, false);
+        elseif(tag == TAG_DESTINY_SELL) then           --出售
+            p.layerShowOrHide(DESTINY_LAYER, false);
+            
+            local btn = ConverToButton(uiNode);
+            local nItemId = btn:GetParam1();
+            p.SellItemTip(nItemId);
+            
+            p.layerShowOrHide(DESTINY_LAYER, false);
+        end
+    end
+     
+    return true;
+end
+
+function p.DestinyEquipOperate(nItemId, nPetId, nPosition, bIsEquip)
+    LogInfo("p.DestinyEquipOperate");
+    local nItemType	= Item.GetItemInfoN(nItemId, Item.ITEM_TYPE);
+    if( bIsEquip ) then    
+        --卸下
+        --判断背包是否已满
+        if(ItemFunc.IsDestinyBagFull()) then
+            return false;
+        end
+        
+        MsgItem.SendUnDaoFa(nPetId, nItemId);
+    else
+        local nPlayerId = GetPlayerId();
+        
+        local idlist	= ItemPet.GetDaoFaItemList(nPlayerId, nPetId);
+        LogInfo("#idlist:[%d],Item.POSITION_DAO_FA_8 - Item.POSITION_DAO_FA_1:[%d]",#idlist,Item.POSITION_DAO_FA_8 - Item.POSITION_DAO_FA_1);
+        
+        --不能装备福星
+        local nQuality = Num1(nItemType)
+        if(nQuality == 1) then
+            CommonDlgNew.ShowYesDlg(GetTxtPri("DU_T17"));
+            return false;
+        end
+        
+        
+        --装备栏满判断
+        if (#idlist >= (Item.POSITION_DAO_FA_8 - Item.POSITION_DAO_FA_1 + 1)) then
+            CommonDlgNew.ShowYesDlg(GetTxtPri("DU_T11"));
+            return false;
+        end
+        
+        --装备
+        if nPosition == 0 then
+            LogInfo("error nPosition == 0!");
+            return false;
+        end
+        
+        local nItemType1			= Item.GetItemInfoN(nItemId, Item.ITEM_TYPE);
+        local nType1 = GetDataBaseDataN("itemtype", nItemType1, DB_ITEMTYPE.ATTR_TYPE_1)/10;
+        local nStatusType1 = GetDataBaseDataN("itemtype", nItemType1, DB_ITEMTYPE.STATUS_ATTR_TYPE1);
+        --判断是否有相同占星存在
+        for i,v in ipairs(idlist) do
+            local nItemType2			= Item.GetItemInfoN(v, Item.ITEM_TYPE);
+            local nType2 = GetDataBaseDataN("itemtype", nItemType2, DB_ITEMTYPE.ATTR_TYPE_1)/10;
+            local nStatusType2 = GetDataBaseDataN("itemtype", nItemType2, DB_ITEMTYPE.STATUS_ATTR_TYPE1);
+            
+            if(nType1 == 0) then
+                if(nStatusType2 == nStatusType1) then
+                    CommonDlgNew.ShowYesDlg(GetTxtPri("BLTW_T2"));
+                    return false;
+                end
+            else
+                if(nType1 == nType2) then
+                    CommonDlgNew.ShowYesDlg(GetTxtPri("BLTW_T2"));
+                    return false;
+                end
+            end
+            
+        end
+        
+        MsgItem.SendPackDaoFa(nItemId, nPetId, nPosition);
+    end
+
+    ShowLoadBar();
+end
 
 function p.OnUIEventUseNum(nEventType, param, val)
     if(CommonDlgNew.BtnOk == nEventType) then

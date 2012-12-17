@@ -215,10 +215,10 @@ function p.addSophMoney(iSoph, iMoney)
 	if nil==layer then
 		return;
 	end
-    SetLabel(layer, ID_DYNMAPSUCCESS_CTRL_TEXT_MONEY, "银币: "..SafeN2S(iMoney));
+    SetLabel(layer, ID_DYNMAPSUCCESS_CTRL_TEXT_MONEY, GetTxtPri("Common_coin")..": "..SafeN2S(iMoney));
     
     if iSoph ~= 0 then
-        SetLabel(layer, ID_DYNMAPSUCCESS_CTRL_TEXT_SOPH,"将魂: "..SafeN2S(iSoph));  
+        SetLabel(layer, ID_DYNMAPSUCCESS_CTRL_TEXT_SOPH,GetTxtPri("Common_JianHun")..": "..SafeN2S(iSoph));  
     end
 end
 

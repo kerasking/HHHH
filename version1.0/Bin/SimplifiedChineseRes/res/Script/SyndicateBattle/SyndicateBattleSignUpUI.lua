@@ -102,7 +102,7 @@ function p.LoadUI(signUpList,nLeftTime,nArmyGroupLev)
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.SyndicateBattleSignUpUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChild(layer);
+	scene:AddChildZ(layer,UILayerZOrder.ActivityLayer);
     
     local uiLoad = createNDUILoad();
 	if nil == uiLoad then

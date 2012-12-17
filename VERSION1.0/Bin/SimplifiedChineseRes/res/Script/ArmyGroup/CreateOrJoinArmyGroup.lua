@@ -34,11 +34,11 @@ local ID_CREATEDLG_EDIT_INPUT			= 104;	-- 输入框
 local AG_CREATE_LEVEL					= 30;	-- 允许创建军团等级
 local AG_NAME_CHA_LIMIT					= 7;	-- 限制军团昵称字数
 local AG_CREATE_COST					= 200000;-- 创建军团费用-20万银币
-local SZ_CREATE_TIPS					= "创建军团需要消耗20万银币。";
-local SZ_CREATE_ER						= "创建军团需要消耗20万银币。您银币不足。";
-local SZ_CREATE_LEVEL					= "创建军团需要30级及以上";
-local SZ_CREATE_ER00					= "你已申请加入其他军团，请取消申请～";
-local SZ_APPLY_ER00						= "你已达到申请上限～";
+local SZ_CREATE_TIPS					= GetTxtPri("COJAG2_T1");
+local SZ_CREATE_ER						= GetTxtPri("COJAG2_T2");
+local SZ_CREATE_LEVEL					= GetTxtPri("COJAG2_T3");
+local SZ_CREATE_ER00					= GetTxtPri("COJAG2_T4");
+local SZ_APPLY_ER00						= GetTxtPri("COJAG2_T5");
 
 ---------------------------------------------------
 p.pLayerCreateOrJoinArmyGroup	= nil;
@@ -61,7 +61,7 @@ p.pLayerCreateOrJoinArmyGroup	= nil;
 	layer:Init();
 	layer:SetTag( NMAINSCENECHILDTAG.CreateOrJoinArmyGroup );
 	layer:SetFrameRect( RectFullScreenUILayer );
-	scene:AddChildZ( layer, 1 );
+	scene:AddChildZ( layer, UILayerZOrder.NormalLayer );
 
 	local uiLoad = createNDUILoad();
 	if ( nil == uiLoad ) then

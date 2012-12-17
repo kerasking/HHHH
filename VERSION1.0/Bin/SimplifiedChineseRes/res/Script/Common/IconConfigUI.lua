@@ -110,6 +110,8 @@ function GetPotraitPic(id, configfilename, index, picfilename, w, h, offsetRows,
 	--千位,百位标识图片资源文件编号
 	--十位标识所在文件行,个位标识所在文件列
 	local filename		= picfilename;
+    local nLac          = _G.Num6(nIcon);
+    local nTenThousand	= _G.Num5(nIcon);
 	local nThousand		= _G.Num4(nIcon);
 	local nHundred		= _G.Num3(nIcon);
 	local nRow			= _G.Num2(nIcon) - 1 + offsetRows; -- 索引从1开始
@@ -120,18 +122,54 @@ function GetPotraitPic(id, configfilename, index, picfilename, w, h, offsetRows,
 		return nil;
 	end
 	
-	_G.LogInfo("GetPotraitPic[%d][%d][%d][%d]", nThousand, nHundred, nRow, nCol);
+	_G.LogInfo("GetPotraitPic[%d][%d][%d][%d][%d][%d]", nLac, nTenThousand, nThousand, nHundred, nRow, nCol);
 	
-	if nThousand > 0 then
-		filename = filename .. nThousand;
+    
+    if nLac > 0 then
+        --十万
+        filename = filename .. nLac;
+        
+        --万
+        if(nTenThousand >= 0) then
+             filename = filename .. nTenThousand;
+        end
+        
+        --千
+        if(nThousand >= 0) then
+             filename = filename .. nThousand;
+        end
+        
+        --百
+        if(nHundred >= 0) then
+             filename = filename .. nHundred;
+        end
+        
+    elseif nTenThousand > 0 then
+        --万
+        filename = filename .. nTenThousand;
+        
+        --千
+        if(nThousand >= 0) then
+             filename = filename .. nThousand;
+        end
+        
+        --百
+        if(nHundred >= 0) then
+             filename = filename .. nHundred;
+        end
+    
+    elseif nThousand > 0 then
+        filename = filename .. nThousand;
 		if nHundred >= 0 then
 			filename = filename .. nHundred;
 		end
-	else
-		if nHundred > 0 then
+    else
+        if nHundred > 0 then
 			filename = filename .. nHundred;
 		end
-	end
+    end
+    
+    
 	LogInfo("filename=[%s]",filename);
     
 	local pool = _G.DefaultPicPool();
@@ -176,6 +214,8 @@ function GetBodyPotraitPicPath(nIndex)
 	--千位,百位标识图片资源文件编号
 	--十位标识所在文件行,个位标识所在文件列
 	local filename		= "Bust";
+    local nLac          = _G.Num6(nIcon);
+    local nTenThousand	= _G.Num5(nIcon);
 	local nThousand		= _G.Num4(nIcon);
 	local nHundred		= _G.Num3(nIcon);
 	local nRow			= _G.Num2(nIcon) - 1; -- 索引从1开始
@@ -185,18 +225,53 @@ function GetBodyPotraitPicPath(nIndex)
 		_G.LogError("%s GetPortraitPicPath row or col index err!",picfilename);
 		return nil;
 	end
-	
-	
-	if nThousand > 0 then
+    
+    
+    
+    if nLac > 0 then
+        --十万
+        filename = filename .. nLac;
+        
+        --万
+        if(nTenThousand >= 0) then
+             filename = filename .. nTenThousand;
+        end
+        
+        --千
+        if(nThousand >= 0) then
+             filename = filename .. nThousand;
+        end
+        
+        --百
+        if(nHundred >= 0) then
+             filename = filename .. nHundred;
+        end
+        
+    elseif nTenThousand > 0 then
+        --万
+        filename = filename .. nTenThousand;
+        
+        --千
+        if(nThousand >= 0) then
+             filename = filename .. nThousand;
+        end
+        
+        --百
+        if(nHundred >= 0) then
+             filename = filename .. nHundred;
+        end
+    
+    elseif nThousand > 0 then
 		filename = filename .. nThousand;
 		if nHundred >= 0 then
 			filename = filename .. nHundred;
 		end
-	else
-		if nHundred > 0 then
+    else
+        if nHundred > 0 then
 			filename = filename .. nHundred;
 		end
-	end
+    end
+    
 	LogInfo("filename=[%s]",filename);
     
 	local picPath = _G.GetSMImgPath("portrait/" .. filename .. ".png");
@@ -218,15 +293,15 @@ end
 --取大地图的图标在副本里使用(精英副本由于要加灰色图片导致实现不同修改）
 function GetEliteGrayMapPic(mapId)
     --return GetPotraitPicMap(mapId, "map", DB_DYNAMAP.TITLE, "MapGray", 178, 154);
-    return GetPotraitPic(mapId, "map", DB_DYNAMAP.TITLE, "Map",178, 154, nil, nil, true);
+    return GetPotraitPicMap(mapId, "map", DB_DYNAMAP.TITLE, "MapGray",178, 154, nil, nil, true);
 end
 
 function GetMapPic(mapId)
-    --return GetPotraitPicMap(mapId, "map", DB_DYNAMAP.TITLE, "Map",178, 154);
-    return GetPotraitPic(mapId, "map", DB_DYNAMAP.TITLE, "Map",178, 154, nil, nil, true);
+    LogInfo("GetMapPic mapId = %d", mapId);
+    return GetPotraitPicMap(mapId, "map", DB_DYNAMAP.TITLE, "Map",178, 154, nil, nil, true);
 end
 
-function GetPotraitPicMap(id, configfilename, index,sHead, w, h, offsetRows, offsetCols)
+function GetPotraitPicMap(id, configfilename, index,sHead, w, h, offsetRows, offsetCols, bLanguage)
     if not _G.CheckN(id) then
         LogInfo("id not is num!");
 		return nil;
@@ -250,7 +325,14 @@ function GetPotraitPicMap(id, configfilename, index,sHead, w, h, offsetRows, off
 	local filename		= "Map/"..sHead..nIcon;
 
 	local pool = _G.DefaultPicPool();
-	local pic = pool:AddPicture(_G.GetSMImgPath("portrait/" .. filename .. ".png"), false);
+	
+	local pic = nil;
+	
+	if (bLanguage) then
+		pic = pool:AddPicture(_G.GetSMImg00Path("portrait/" .. filename .. ".png"), false);
+	else
+		pic = pool:AddPicture(_G.GetSMImgPath("portrait/" .. filename .. ".png"), false);
+	end
 	if not _G.CheckP(pic) then
         LogInfo("pic is null!");
 		return nil;
@@ -273,12 +355,12 @@ end
 --]]
 
 function GetPetBigPotraitTranPic( petTypeId )
-    return GetPotraitPicFigure( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigPortrait", 179, 215, nil, nil, true);
+    return GetPotraitPic( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigPortrait", 179, 215, nil, nil, true);
 end
 
 --获得招募界面的灰色武将头像
 function GetPetBigGrayPotraitTranPic( petTypeId )
-    return GetPotraitPicFigure( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigGrayPortrait", 179, 215, nil, nil, true);
+    return GetPotraitPic( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigGrayPortrait", 179, 215, nil, nil, true);
 end
 
 

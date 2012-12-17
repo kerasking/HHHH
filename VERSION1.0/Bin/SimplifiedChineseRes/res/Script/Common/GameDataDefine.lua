@@ -291,5 +291,14 @@ HEROSTAR_DATA =
 {
 GRADE   = 1,--星图类型
 LEVEL	= 2,--星图等级
+}
 
+--道法（占星）数据
+DAOFA_QUALITY_DATA = {
+    GRAY                = 0,        --灰色品质
+    RED                 = 1,        --红色品质
+    GREEN               = 2,        --绿色
+    BLUE                = 3,        --蓝色
+    PURPLE              = 4,        --紫色
+    ORANGE              = 5,        --橙色
 }

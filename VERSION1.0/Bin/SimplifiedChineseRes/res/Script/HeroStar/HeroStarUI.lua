@@ -311,7 +311,7 @@ local scene = GetSMGameScene();
 	layer:SetFrameRect(RectFullScreenUILayer);
 	
 
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 
 	--初始化ui
 	local uiLoad = createNDUILoad();
@@ -752,7 +752,7 @@ function p.RefreshStarInfo()
 			--sAttr1 = sAttrDesc1..nAttr1;
 			local sSkilldesc = GetDataBaseDataS("skill_config",nSkillId,DB_SKILL_CONFIG.NAME);
 			if sSkilldesc ~= nil then
-				sShowText = sShowText.."\n开启技能:"..sSkilldesc;
+				sShowText = sShowText.."\n"..GetTxtPri("HS_T38")..sSkilldesc;
 				
 			else
 				--LogInfo("sSkilldesc nil  nSkillId:"..nSkillId);
@@ -1225,7 +1225,7 @@ function p.SetAllStarBoundScale()
 			
 				if CheckP(StarBtn) then
 					----LogInfo("SetAllStarBoundScale "..nTag.." view:"..nGrade);
-					StarBtn:SetBoundScale(2);
+					StarBtn:SetBoundScale(200);
 				else
 				    --LogInfo("SetAllStarBoundScale fail nTag"..nTag.." view:"..nGrade);
 				end
