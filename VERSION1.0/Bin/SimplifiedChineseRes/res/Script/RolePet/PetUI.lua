@@ -166,7 +166,7 @@ function p.LoadUI(bIsSMB)
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PetUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 
 
     local uiLoad = createNDUILoad();

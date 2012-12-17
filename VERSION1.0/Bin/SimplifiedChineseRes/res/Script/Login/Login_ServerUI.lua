@@ -53,6 +53,8 @@ local ID_SERVER_SELECT_PAGE_DOWN                    = 23;
 local ID_SERVER_BUTTON_START = 7;
 local ID_SERVER_BUTTON_END   = 22;
 
+local RECOMMEND_ID          = 10000;
+
 local ServerItemSize = CGSizeMake(470*ScaleFactor,45*ScaleFactor);
 
 --p.worldIP='192.168.64.32';--qbw
@@ -69,6 +71,8 @@ local ServerStatus = {
     {GetTxtPri("StateTuiJian"),ccc4(0,255,0,255)},
     {GetTxtPri("StateYongJi"),ccc4(255,255,0,255)},
     {GetTxtPri("StateBaoMan"),ccc4(255,0,0,255)},
+    {GetTxtPri("StateNoStart"),ccc4(138,138,138,255)},
+    {GetTxtPri("StateNewServer"),ccc4(0,255,0,255)},
 };
 
 local LastLoginInfo = {
@@ -221,7 +225,19 @@ function p.OnUIEventClose(uiNode, uiEventType, param)
 	return true;
 end
 
-function p.AddItem(container, i)
+function p.AddItem(i)
+    local container = p.GetViewContainer();
+    
+    if i == 1 then
+        container:SetViewSize(ServerItemSize);
+    end
+    local info = p.ServerListTag[i];
+
+    if(info.nServerID == RECOMMEND_ID ) then
+        LogInfo("p.AddItem info.nServerID == RECOMMEND_ID");
+        return;
+    end
+
     local view = createUIScrollView();
     if view == nil then
         LogInfo("p.LoadUI createUIScrollView failed");
@@ -244,7 +260,7 @@ function p.AddItem(container, i)
     end
 
     uiLoad:Load("login_2_L.ini", view, p.OnUIEvent, 0, 0);
-    p.refreshServerListItem(view,i);
+    p.refreshServerListItem(i);
 end
 
 function p.Refresh()
@@ -276,16 +292,33 @@ function p.Refresh()
 end
 
 
-function p.refreshServerListItem(view,i)
+function p.refreshServerListItem(i)
+    LogInfo("p.refreshServerListItem :i[%d]",i);
     if(i==0) then
         return;
     end
+    local container = p.GetViewContainer();
+    if(container==nil) then
+        return;
+    end
+    
+    local view  = container:GetViewById(i);
+    if(view==nil) then
+        return;
+    end
+    
     local info = p.ServerListTag[i];
+    if(info.nServerID == RECOMMEND_ID ) then
+        return;
+    end
+    
     SetLabel(view, TAG_CONTAINER_NAME, info.sServerName);
     
     local flag = GetLabel(view, TAG_NEW_SERVER_FLAG);
     flag:SetText(ServerStatus[info.nServerStatus+1][1]);
     flag:SetFontColor(ServerStatus[info.nServerStatus+1][2]);
+    
+    LogInfo("ServerStatus[info.nServerStatus+1][1]:[%s],info.nServerStatus:[%d]",ServerStatus[info.nServerStatus+1][1],info.nServerStatus);
     
     local rInfo = p.GetRoleInfoByServerId(info.nServerID);
     
@@ -330,11 +363,18 @@ function p.FindCurrServer()
         LogInfo("not exist role,exist server!");
         local nServerId = p.ServerListTag[1].nServerID;
         nServerIndex = 1;
+        local nServerStatus = 0;
         for i,v in ipairs(p.ServerListTag) do
-            if(1 == v.nServerStatus) then
-                nServerId = v.nServerID;
-                nServerIndex = i;
-                break;
+            if(1 == v.nServerStatus or 5 == v.nServerStatus) then
+                
+                if(v.nServerStatus > nServerStatus) then
+                    nServerStatus = v.nServerStatus;
+                    
+                    nServerStatus = v.nServerStatus;
+                    nServerId = v.nServerID;
+                    nServerIndex = i;
+                end
+                --break;
             end
         end
         title:SetText(LastLoginInfo[2]);
@@ -362,12 +402,6 @@ function p.SetCurrServer(nServerIndex)
     local flag = GetLabel(layer, TAG_CUR_SERVER_FLAG);
     flag:SetText(ServerStatus[CurrServerInfo.nServerStatus+1][1]);
     flag:SetFontColor(ServerStatus[CurrServerInfo.nServerStatus+1][2]);
-    
-    if(CurrServerInfo.nServerStatus == 1) then
-        LogInfo("tj:[%s]",CurrServerInfo.sRecommend);
-        local server_recommend = GetLabel(layer,TAG_CUR_SERVER_RECOMMEND);
-        server_recommend:SetText(CurrServerInfo.sRecommend);
-    end
     
     local btn = GetButton(layer, TAG_CUR_SERVER_BTN);
     btn:SetParam1(nServerIndex);
@@ -454,6 +488,11 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             return;
         end
         
+        if(info.nServerStatus == 0 or info.nServerStatus == 4) then 
+            CommonDlgNew.ShowYesDlg(info.sRecommend);
+            return true;
+        end
+        
         local sServerName = info.sServerName;
         --local sServerIp = StrInt2StrIP(info.nServerIP);
         local sServerIp = info.nServerIP;
@@ -498,19 +537,23 @@ function p.RunGetServerListTimer()
     if(p.nTimerID == nil) then
         LogInfo("p.RunGetServerListTimer send!");
         sendMsgConnect(p.worldIP, p.worldPort, p.UIN);
-        p.nTimerID = RegisterTimer( p.TimerGetServerList, 5 );
+        p.nTimerID = RegisterTimer( p.TimerGetServerList, 30 );
     end
 end
 
 --定时向服务器取列表
 function p.TimerGetServerList(nTimer)
-    if(#p.ServerListTag>0) then
-        if(p.nTimerID) then
-            UnRegisterTimer( p.nTimerID );
-            p.nTimerID = nil;
-            return;
+    --if(#p.ServerListTag>0) then
+    
+        if(p.getUiLayer() == nil) then
+            if(p.nTimerID) then
+                UnRegisterTimer( p.nTimerID );
+                p.nTimerID = nil;
+                return;
+            end
         end
-    end
+    
+    --end
     sendMsgConnect(p.worldIP, p.worldPort, p.UIN);
 end
 
@@ -551,42 +594,48 @@ function p.ProcessServerList(netdatas)
     
     record.nServerIP = Int2StrIP(record.nServerIP);
     
-    record.sRecommend   = "";
-    record.sUrl         = "";
-    if (record.nServerStatus == 1) then
-        
-        record.sRecommend   = netdatas:ReadUnicodeString();
-        record.sUrl         = netdatas:ReadUnicodeString();
-        
-        p.szGameForumURL    = record.sUrl;
-        
-        LogInfo("tj:[%s],[%s]",record.sRecommend,record.sUrl);
-    end
+    record.sRecommend   = netdatas:ReadUnicodeString();
+    record.sUrl         = netdatas:ReadUnicodeString();
     
     LogInfo("nServerID:[%d],nServerStatus[%d],nServerIP[%s],nServePort[%d],sServerName:[%s],sRecommend:[%s]",record.nServerID,record.nServerStatus,record.nServerIP,record.nServePort,record.sServerName,record.sRecommend);
     
-    --更新数据库
-    local bIsAdd = SqliteConfig.InsertServerList(record);
+    if(record.nServerID == RECOMMEND_ID ) then
+        local layer = p.getUiLayer();
+        if(layer == nil) then
+            return;
+        end
+        local server_recommend = GetLabel(layer,TAG_CUR_SERVER_RECOMMEND);
+        server_recommend:SetText(record.sRecommend);
+        p.szGameForumURL = record.sUrl;
+        return;
+    end
     
     --更新变量
     local nIndex = p.GetServerIndexByServerId(record.nServerID);
     if(nIndex == 0) then
+        LogInfo("nIndex == 0");
         nIndex = #p.ServerListTag + 1;
-    end
-    p.ServerListTag[nIndex] = record;
-    
-    --更新UI
-    local container = p.GetViewContainer();
-    if(container == nil) then
-        return;
-    end
-    --if(bIsAdd) then
-    if(true) then
-        p.AddItem(container, nIndex);
+        p.ServerListTag[nIndex] = record;
+        p.AddItem(nIndex);
     else
-        local view = container:GetViewById(nIndex);
-        p.refreshServerListItem(view,nIndex);
+        LogInfo("nIndex ~= 0:[%d]",nIndex);
+        
+        if(p.ServerListTag[nIndex] == nil) then
+            p.ServerListTag[nIndex] = {};
+        end
+        
+        p.ServerListTag[nIndex].nServerID = record.nServerID;
+        p.ServerListTag[nIndex].nServerStatus = record.nServerStatus;
+        p.ServerListTag[nIndex].nServerIP = record.nServerIP;
+        p.ServerListTag[nIndex].nServePort = record.nServePort;
+        p.ServerListTag[nIndex].sServerName = record.sServerName;
+        p.ServerListTag[nIndex].nServerIP = record.nServerIP;
+        p.ServerListTag[nIndex].sRecommend   = record.sRecommend;
+        p.ServerListTag[nIndex].sUrl         = record.sUrl;
+        
+        p.refreshServerListItem(nIndex);
     end
+    
 end
 
 function p.ProcessServerRole(netdatas)
@@ -636,7 +685,7 @@ function p.ProcessServerRole(netdatas)
     local view = container:GetViewById(nIndex);
     LogInfo("nIndex:[%d]",nIndex);
     
-    p.refreshServerListItem(view,nIndex);
+    p.refreshServerListItem(nIndex);
 end
 
 --退出游戏进行选帐号
@@ -662,8 +711,6 @@ function p.SetPreCurSerId(nPre, nCur)
     p.nCurSerId = nCur;
 end
 
-
-
 --_G.RegisterGlobalEventHandler(_G.GLOBALEVENT.GE_LOGINOK_GUEST,"Login_ServerUI.LoginGuest",p.LoginOK_Guest);--Guosen 2012.8.4
 --_G.RegisterGlobalEventHandler(_G.GLOBALEVENT.GE_LOGINOK_NORMAL,"Login_ServerUI.LoginNormal",p.LoginOK_Normal);
 --_G.RegisterGlobalEventHandler(_G.GLOBALEVENT.GE_LOGINOK_GUEST2NORMAL,"Login_ServerUI.LoginGuest2Normal",p.LoginOK_Guest2Normal);
@@ -686,3 +733,6 @@ function p.LoginGameNew()
 	p.LoginOK_Normal( p.UIN )
 end
 RegisterGlobalEventHandler( GLOBALEVENT.GE_LOGIN_GAME,"Login_ServerUI.LoginGame", p.LoginGameNew );
+
+
+

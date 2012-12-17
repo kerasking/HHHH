@@ -258,7 +258,7 @@ function p.LoadUI(nParentMapId, nPassway, nBossId, nAim)
 	layer:SetTag(p.TagUiLayer);
 	layer:SetFrameRect(RectUILayer);
 	layer:SetBackgroundColor(ccc4(125, 125, 125, 125));
-	scene:AddChild(layer);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 	
 	--初始化ui
 	local uiLoad = createNDUILoad();

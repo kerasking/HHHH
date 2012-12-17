@@ -157,7 +157,7 @@ p.tChosenMember			= nil;
 	layer:Init();
 	layer:SetTag( NMAINSCENECHILDTAG.ArmyGroup );
 	layer:SetFrameRect( RectFullScreenUILayer );
-	scene:AddChildZ( layer, 1 );
+	scene:AddChildZ( layer, UILayerZOrder.NormalLayer );
 	p.pLayerMainUI = layer;
 
 	local uiLoad = createNDUILoad();

@@ -92,7 +92,7 @@ function p.LoadUI()
 	layer:SetFrameRect(RectUILayer);
 	--layer:SetBackgroundColor(ccc4(125, 125, 125, 125));
 	--scene:AddChild(layer);
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 	
 	--初始化ui
 	local uiLoad = createNDUILoad();

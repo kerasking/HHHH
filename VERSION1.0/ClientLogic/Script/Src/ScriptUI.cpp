@@ -12,7 +12,6 @@
 #include "ScriptInc.h"
 #include "NDUILabel.h"
 #include "NDUIButton.h"
-//#include "NDUITableLayer.h"
 #include "NDUIImage.h"
 #include "NDScrollLayer.h"
 
