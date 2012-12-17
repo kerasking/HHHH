@@ -355,12 +355,12 @@ end
 --]]
 
 function GetPetBigPotraitTranPic( petTypeId )
-    return GetPotraitPic( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigPortrait", 179, 215, nil, nil, true);
+    return GetPotraitPicFigure( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigPortrait", 179, 215 );
 end
 
 --获得招募界面的灰色武将头像
 function GetPetBigGrayPotraitTranPic( petTypeId )
-    return GetPotraitPic( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigGrayPortrait", 179, 215, nil, nil, true);
+    return GetPotraitPicFigure( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigGrayPortrait", 179, 215 );
 end
 
 
