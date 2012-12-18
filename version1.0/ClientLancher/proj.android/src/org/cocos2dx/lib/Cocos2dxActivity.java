@@ -146,21 +146,21 @@ public abstract class Cocos2dxActivity extends Activity implements
 
 		mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
 
-//		NDVideoControl pkVideoControl = new NDVideoControl(
-//				Cocos2dxActivity.this);
-//		pkVideoControl.setCocos2dxActivity(this);
-//		pkVideoControl.hide();
+		NDVideoControl pkVideoControl = new NDVideoControl(
+				Cocos2dxActivity.this);
+		pkVideoControl.setCocos2dxActivity(this);
+		pkVideoControl.hide();
 //
 //		LinearLayout tp = new LinearLayout(this.getApplicationContext());
 //		LinearLayout.LayoutParams pkLayoutParams = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
-//		m_pkView = new NDVideoView(this.getApplicationContext());
-//		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
-//		m_pkView.setBackgroundColor(0);
-//		m_pkView.setMediaController(pkVideoControl);
-//		m_pkView.setOnCompletionListener(pkVideoControl);
-//		m_pkView.requestFocus();
+		m_pkView = new NDVideoView(this.getApplicationContext());
+		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
+		m_pkView.setBackgroundColor(0);
+		//m_pkView.setMediaController(pkVideoControl);
+		m_pkView.setOnCompletionListener(pkVideoControl);
+		m_pkView.requestFocus();
 //
-//		setContentView(m_pkView);
+		setContentView(m_pkView);
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView()

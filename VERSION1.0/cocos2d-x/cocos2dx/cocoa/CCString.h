@@ -241,59 +241,65 @@ public:
 		*/
 		static CCString* stringWithUTF8String(const char* pszUTF8)
         {
-    #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-                if (0 == pszUTF8 || !*pszUTF8)
-                {
-                    return new CCString("");
-                }
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+			if (0 == pszUTF8 || !*pszUTF8)
+			{
+				return new CCString("");
+			}
 
-                if (isUTF8ChineseCharacter(pszUTF8))
-                {
-                iconv_t pConvert = 0;
-                const char* pszInbuffer = pszUTF8;
-                char* pszOutBuffer = new char[2048];
+			if (isUTF8ChineseCharacter(pszUTF8))
+			{
+				iconv_t pConvert = 0;
+				const char* pszInbuffer = pszUTF8;
+				char* pszOutBuffer = new char[2048];
 
-                memset(pszOutBuffer,0,sizeof(char) * 2048);
+				memset(pszOutBuffer,0,sizeof(char) * 2048);
 
-                int nStatus = 0;
-                size_t sizOutBuffer = 2048;
-                size_t sizInBuffer = strlen(pszUTF8);
-                const char* pszInPtr = pszInbuffer;
-                size_t sizInSize = sizInBuffer;
-                char* pszOutPtr = pszOutBuffer;
-                size_t sizOutSize = sizOutBuffer;
+				int nStatus = 0;
+				size_t sizOutBuffer = 2048;
+				size_t sizInBuffer = strlen(pszUTF8);
+				const char* pszInPtr = pszInbuffer;
+				size_t sizInSize = sizInBuffer;
+				char* pszOutPtr = pszOutBuffer;
+				size_t sizOutSize = sizOutBuffer;
 
-                pConvert = iconv_open("GB2312","UTF-8");
+				pConvert = iconv_open("GB2312","UTF-8");
 
-                iconv(pConvert,0,0,0,0);
+				iconv(pConvert,0,0,0,0);
 
-                while (0 < sizInSize)
-                {
-                    size_t sizRes = iconv(pConvert,(const char**)&pszInPtr,
-                        &sizInSize,&pszOutPtr,&sizOutSize);
+				while (0 < sizInSize)
+				{
+					size_t sizRes = iconv(pConvert,(const char**)&pszInPtr,
+						&sizInSize,&pszOutPtr,&sizOutSize);
 
-                    if (pszOutPtr != pszOutBuffer)
-                    {
-                        strncpy(pszOutBuffer,pszOutBuffer,sizOutSize);
-                    }
+					if (pszOutPtr != pszOutBuffer)
+					{
+						strncpy(pszOutBuffer,pszOutBuffer,sizOutSize);
+					}
 
-                    if ((size_t)-1 == sizRes)
-                    {
-                        int nOne = 1;
-                        iconvctl(pConvert,ICONV_SET_DISCARD_ILSEQ,&nOne);
-                    }
-                }
+					if ((size_t)-1 == sizRes)
+					{
+						int nOne = 1;
+						iconvctl(pConvert,ICONV_SET_DISCARD_ILSEQ,&nOne);
+					}
+				}
 
-                iconv_close(pConvert);
+				iconv_close(pConvert);
 
-                return new CCString(pszOutBuffer);
-            }
+				CCString* pstrString = new CCString(pszOutBuffer);
+				pstrString->autorelease();
+				return pstrString;
+			}
 			else
 			{
-				return new CCString(pszUTF8);
+				CCString* pstrString = new CCString(pszUTF8);
+				pstrString->autorelease();
+				return pstrString;
 			}
 #else
-                return new CCString(pszUTF8);
+			CCString* pstrString = new CCString(pszUTF8);
+			pstrString->autorelease();
+			return pstrString;
 #endif
 		}
 
