@@ -541,18 +541,11 @@ void NDPicture::DrawInRect(CCRect kRect)
 		
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-// 		glBindTexture(GL_TEXTURE_2D, pkTempTexture->getName());
-// 
-// 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-// 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-// 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-// 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-// 
-// 		glVertexPointer(2, GL_FLOAT, 0, m_pfVertices);
-// 		glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_colors);
-// 		glTexCoordPointer(2, GL_FLOAT, 0, m_coordinates);
-// 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
+		// restore blend state
+		if(m_bIsTran)
+		{
+			ccGLBlendFunc( CC_BLEND_SRC, CC_BLEND_DST );
+		}
 	}
 
 	this->debugDraw();
