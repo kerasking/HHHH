@@ -11,7 +11,7 @@ p.curSel=0;
 p.Account=nil;
 p.Pwd="";
 p.UIN=319258246; 
---p.UIN=317007835;
+--p.UIN=317007836;
 
 p.LoginWait = true;
 p.SerName = "";
@@ -58,10 +58,11 @@ local RECOMMEND_ID          = 10000;
 local ServerItemSize = CGSizeMake(470*ScaleFactor,45*ScaleFactor);
 
 --p.worldIP='192.168.64.32';--qbw
-p.worldIP='121.207.239.91';--common
+p.worldIP = nil;--common
+p.worldPort= nil;
 --p.worldIP='192.168.65.7';--qbw
 --p.worldIP='222.77.177.209';--外网
-p.worldPort=9500;
+
 p.recvServerFlag=0;
 p.recvIndex=0;
 
