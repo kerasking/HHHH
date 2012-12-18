@@ -369,7 +369,17 @@ function p.CreateSceneButton(norPic, selPic, rect, tag,z)
 	if not CheckP(layer) then
 		return;
 	end
+	
+	if(NMAINSCENECHILDTAG.BottomMsgBtn == tag) then
+		layer:SetPopupDlgFlag(true);
+	end
+	
 	layer:Init();
+	
+	if(NMAINSCENECHILDTAG.BottomMsgBtn == tag) then
+		layer:bringToTop();
+	end
+	
 	layer:SetFrameRect(rect);
 
     layer:SetTag(tag);
