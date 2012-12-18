@@ -3657,22 +3657,23 @@ function p.BeginTemplete(layer)
     local taskItem = p.GetCurrTaskItem();
     
     p.ClearTemplete();
+    local fScaleFactor = ScaleFactor/2;
     
     --添加前头
     if(taskItem.Dir) then
         
         --添加提示文字
         if(taskItem.TxtPos) then
-            local nX,nY = p.GetJtRelativePos(taskItem.Dir.x*ScaleFactor, taskItem.Dir.y*ScaleFactor, taskItem.Dir.index);
+            local nX,nY = p.GetJtRelativePos(taskItem.Dir.x*fScaleFactor, taskItem.Dir.y*fScaleFactor, taskItem.Dir.index);
             p.CreateText(layer,taskItem.TxtPos.Txt,p.BoxTag,nX,nY,taskItem.Order);
         end
         
-        p.CreateAnimate(layer,taskItem.Dir.index,p.JtTag,taskItem.Dir.x*ScaleFactor,taskItem.Dir.y*ScaleFactor,taskItem.Order);
+        p.CreateAnimate(layer,taskItem.Dir.index,p.JtTag,taskItem.Dir.x*fScaleFactor,taskItem.Dir.y*fScaleFactor,taskItem.Order);
     end
     
     --添加光效
     if(taskItem.EffectPos) then
-        p.CreateAnimate(layer,taskItem.EffectPos.index,p.GxTag,taskItem.EffectPos.x*ScaleFactor,taskItem.EffectPos.y*ScaleFactor,taskItem.Order);
+        p.CreateAnimate(layer,taskItem.EffectPos.index,p.GxTag,taskItem.EffectPos.x*fScaleFactor,taskItem.EffectPos.y*fScaleFactor,taskItem.Order);
     end
     
 end
