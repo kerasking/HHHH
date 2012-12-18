@@ -62,6 +62,8 @@ NDConsole::~NDConsole()
 	}
 
 	ms_bIsExistent = false;
+
+	SAFE_DELETE(m_pkStringMap);
 }
 
 void NDConsole::Attach(SHORT ConsoleHeight, SHORT ConsoleWidth)
