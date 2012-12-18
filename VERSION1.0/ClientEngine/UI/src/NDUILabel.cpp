@@ -357,23 +357,6 @@ void NDUILabel::draw()
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
 
-#if 0
-	glTexCoordPointer(2, GL_FLOAT, 0, m_pfCoordinates);
-	if (m_bHasFontBoderColor) 
-	{
-		glVertexPointer(3, GL_FLOAT, 0, m_pfVerticesBoder);
-		glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_pbColorsBorder);
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	}
-
-	glVertexPointer(3, GL_FLOAT, 0, m_pfVertices);
-	glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_pbColors);
-
-	for (unsigned int i = 0; i < m_uiRenderTimes; i++) 
-	{
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	}
-#else
 	//
 	// Attributes
 	//
@@ -404,8 +387,13 @@ void NDUILabel::draw()
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	}
 
+	// restore blend state
+	if(m_kColor.a <255)
+	{
+		ccGLBlendFunc( CC_BLEND_SRC, CC_BLEND_DST );
+	}
+
 	CHECK_GL_ERROR_DEBUG();
-#endif
 }
 
 void NDUILabel::postDraw()

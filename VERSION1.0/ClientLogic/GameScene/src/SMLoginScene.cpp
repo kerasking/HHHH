@@ -518,7 +518,7 @@ void CSMLoginScene::ShowRequestError()
 	dlg->Initialization();
 	dlg->SetTag(TAG_REQUEST_URL_ERROR);
 	dlg->SetDelegate(this);
-	dlg->Show("错误", "向服务器请求下载地址失败，请重新启动程序", NULL, "确定", NULL);
+	dlg->Show(NDCommonCString2("Common_error").c_str(), NDCommonCString2("LOGIN_SZ_REQUEST_DOWNLOAD_FAIL").c_str(), NULL, NDCommonCString2("Common_Ok").c_str(), NULL);
 }
 
 //===========================================================================
