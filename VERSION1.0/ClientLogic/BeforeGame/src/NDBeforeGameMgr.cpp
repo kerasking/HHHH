@@ -56,6 +56,8 @@
 #endif
 #include "NDVideoMgr.h"
 #include "CCCommon.h"
+#include "ZipUnZip.h"
+#include "NDSharedPtr.h"
 
 using namespace NDEngine;
 
@@ -1835,41 +1837,42 @@ bool NDBeforeGameMgr::isWifiNetWork()
 
 bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
 {
-    static int version = 0;
-    unsigned char resType = RES_TYPE;
+    static int s_nVersion = 0;
+    unsigned char ucResType = RES_TYPE;
     //取得当前客户端版本
     bool bFile = true;
-    FILE* file;
-    char local_ver[5] = {0};
+    FILE* pkFile = 0;
+    char szLocalVersion[5] = {0};
     
     //file = fopen(NDPath::GetResourceFilePath("version.ini").c_str(), "rb");
     //从caches下取版本信息
     string sVersion = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
-    file = fopen(sVersion.c_str(), "rb");
-    if (!file)
+    pkFile = fopen(sVersion.c_str(), "rb");
+
+    if (!pkFile)
     {
 		CCLog("读取CACHES目录下版本文件失败");
-		//return false;
         bFile = false;
     }
     else
     {
-        fread(local_ver, 1, 4, file);
-        fclose(file);
-        version = atoi(local_ver);
+        fread(szLocalVersion, 1, 4, pkFile);
+        fclose(pkFile);
+        s_nVersion = atoi(szLocalVersion);
     }        
-    //NDDataTransThread::DefaultThread()->Stop();
+
     NDDataTransThread::ResetDefaultThread();
     NDDataTransThread::DefaultThread()->Start( szURL, 9500 );//("192.168.65.77", 9500);//++Guosen
+
 	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
 	{
 		return false;
 	}
-	NDTransData data(_MSG_CLIENT_VERSION);
+	NDTransData kData(_MSG_CLIENT_VERSION);
     
-	data << version;
-    data << resType;
-	NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
+	kData << s_nVersion;
+    kData << ucResType;
+	NDDataTransThread::DefaultThread()->GetSocket()->Send(&kData);
     
     return true;
 }
@@ -1878,35 +1881,34 @@ int NDBeforeGameMgr::CopyStatus = 0;
 bool NDBeforeGameMgr::CheckFirstTimeRuning()
 { 
 	bool bFirstTime	= false;
-	string installVersionIniPath	=  NDPath::GetRootResPath() + SZ_VERINI_PATH;
-    string copyVersionIniPath	= NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
+	string strInstallVersionINIPath	=  NDPath::GetRootResPath() + SZ_VERINI_PATH;
+    string strCopyVersionINIPath	= NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
 	//判断是不是第一次登录，如果是第一次登录，则移动资源文件LIBRARY/CACHES
-	FILE* file;
-	file = fopen(copyVersionIniPath.c_str(), "rb" );
-    //NSString *strIniPath = [NSString stringWithFormat:@"%s",copyVersionIniPath.c_str()];
-    //NSLog(@"qqqqq:%@",strIniPath);
-	if ( !file )
+	FILE* pkFile = 0;
+	pkFile = fopen(strCopyVersionINIPath.c_str(), "rb" );
+
+	if ( !pkFile )
 	{
 		bFirstTime = true;
 	    CCLog( "\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );
-		//std::rename( (NDPath::GetAppResFilePath(NDPath::GetRootResDirName())).c_str(), (NDPath::GetResourceFilePath(NDPath::GetRootResDirName())).c_str() );
         CopyRes();
 	}
 	else
 	{ 
-        char copyResVersion[5] = {0};
-        char installResVersion[5] = {0};
-        fread(copyResVersion, 1, 4, file);
-        fclose( file );
+        char szCopyResVersion[5] = {0};
+        char szInstallResVersion[5] = {0};
+        fread(szCopyResVersion, 1, 4, pkFile);
+        fclose( pkFile );
         //如果是原下载的版本安装的包导致version.ini等资源文件已经存在,而且版本号小于当前安装的版本号，则删除当前的资源目录，再重新拷贝
-        FILE* installFile;
-        installFile = fopen(installVersionIniPath.c_str(), "rb" );
-        if (installFile)
+        FILE* pkInstallFile = 0;
+        pkInstallFile = fopen(strInstallVersionINIPath.c_str(), "rb" );
+
+        if (pkInstallFile)
         {
-            fread(installResVersion, 1, 4, installFile);
-            fclose(installFile);
+            fread(szInstallResVersion, 1, 4, pkInstallFile);
+            fclose(pkInstallFile);
         }
-        if ( atol(copyResVersion) < atol(installResVersion))
+        if ( atol(szCopyResVersion) < atol(szInstallResVersion))
         {
             bFirstTime = true;
             CopyRes();
@@ -1917,7 +1919,12 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 }
 
 void* CopyResThread(void* ptr)
-{//待实现
+{
+	NDSharedPtr<CZipUnZip> spZip = 0;
+	spZip = new CZipUnZip;
+
+	spZip->UnZipFile("../../SimplifiedChineseRes.zip","dhlj/");
+
 //     string sSource = NDPath::GetAppResFilePath(NDPath::GetRootResDirName());
 //     string sTarget = NDPath::GetCashesPath()+"/"+NDPath::GetRootResDirName();
 //     NSFileManager *fm;
@@ -1953,5 +1960,4 @@ void NDBeforeGameMgr::CopyRes()
 int NDBeforeGameMgr::GetCopyStatus()
 {
     return NDBeforeGameMgr::CopyStatus;
-    
 }
