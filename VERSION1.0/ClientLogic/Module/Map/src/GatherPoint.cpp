@@ -19,6 +19,7 @@
 #include "NDPath.h"
 #include <sstream>
 #include <string>
+#include "ObjectTracker.h"
 
 using namespace std;
 
@@ -26,10 +27,13 @@ IMPLEMENT_CLASS(GatherPoint, NDBaseRole)
 
 GatherPoint::GatherPoint()
 {
+	INC_NDOBJ_RTCLS
 }
 
 GatherPoint::GatherPoint(int iID, int iTypeID, int xx, int yy,bool isBoss ,std::string name)
 {
+	INC_NDOBJ_RTCLS
+
 	m_state = MONSTER_STATE_NORMAL;
 	
 	x = xx;
@@ -99,6 +103,8 @@ GatherPoint::GatherPoint(int iID, int iTypeID, int xx, int yy,bool isBoss ,std::
 
 GatherPoint::~GatherPoint()
 {
+	DEC_NDOBJ_RTCLS
+
 	if (m_pic) 
 	{
 		delete m_pic;

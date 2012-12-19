@@ -14,6 +14,7 @@
 #include "CCPointExtension.h"
 #include "NDUtil.h"
 #include "NDDirector.h"
+#include "ObjectTracker.h"
 
 namespace NDEngine
 {
@@ -23,7 +24,13 @@ static NDAutoPath *shareAutoPath;
 
 NDAutoPath::NDAutoPath()
 {
+	INC_NDOBJ_RTCLS
 	init();
+}
+
+NDAutoPath::~NDAutoPath()
+{
+	DEC_NDOBJ_RTCLS
 }
 
 /* 获取共享的自动寻路实例,如果未创建则创建

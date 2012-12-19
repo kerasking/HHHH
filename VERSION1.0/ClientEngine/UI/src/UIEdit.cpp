@@ -14,6 +14,7 @@
 #include "NDUtil.h"
 #include "define.h"
 //#include "I_Analyst.h"
+#include "ObjectTracker.h"
 
 CUIEdit* CUIEdit::g_pCurUIEdit = NULL;
 
@@ -21,6 +22,8 @@ IMPLEMENT_CLASS(CUIEdit, NDUINode)
 
 CUIEdit::CUIEdit()
 {
+	INC_NDOBJ_RTCLS
+
 	m_picImage				= NULL;
 	m_picFocusImage			= NULL;
 	m_nMinLen				= 0;
@@ -56,6 +59,8 @@ void CUIEdit::Initialization()
 
 CUIEdit::~CUIEdit()
 {
+	DEC_NDOBJ_RTCLS
+
 	SAFE_DELETE(m_lbText);
 	SAFE_DELETE(m_picImage);
 	SAFE_DELETE(m_picFocusImage);

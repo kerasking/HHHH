@@ -12,12 +12,14 @@
 #include <sstream>
 #include "define.h"
 #include "NDUtil.h"
-//using namespace cocos2d;
+#include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(CUIExp, NDUINode)
 
 CUIExp::CUIExp()
 {
+	INC_NDOBJ_RTCLS
+
 	m_picBg				= NULL;
 	m_picProcess		= NULL;
 	m_lbText			= NULL;
@@ -31,6 +33,8 @@ CUIExp::CUIExp()
 
 CUIExp::~CUIExp()
 {
+	DEC_NDOBJ_RTCLS
+
 	SAFE_DELETE(m_picBg);
 	SAFE_DELETE(m_picProcess);
 	SAFE_DELETE_NODE(m_lbText);

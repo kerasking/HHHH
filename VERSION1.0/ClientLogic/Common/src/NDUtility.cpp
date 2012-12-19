@@ -890,7 +890,7 @@ void WriteCon(const char * pszFormat, ...)
 	if (!pszFormat) return;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
+	HANDLE hOut = NDConsole::instance().getOutputHandle();
 	if (!hOut) return;
 
 	static char szBuf[1024] = {0};

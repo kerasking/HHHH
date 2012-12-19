@@ -291,6 +291,14 @@
 				RelativePath="..\cocoa\CCZone.h"
 				>
 			</File>
+			<File
+				RelativePath="..\cocoa\ObjectTracker.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\cocoa\ObjectTracker.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="effects"

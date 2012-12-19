@@ -1,11 +1,12 @@
 #include "NDUITableLayer.h"
+#include "ObjectTracker.h"
 
 namespace NDEngine
 {
 	IMPLEMENT_CLASS(NDUITableLayer,NDUILayer);
 
-	NDUITableLayer::NDUITableLayer(){}
-	NDUITableLayer::~NDUITableLayer(){}
+	NDUITableLayer::NDUITableLayer(){ INC_NDOBJ_RTCLS }
+	NDUITableLayer::~NDUITableLayer(){ DEC_NDOBJ_RTCLS }
 	void NDUITableLayer::SetDataSource( NDDataSource* dataSource ){}
 	void NDUITableLayer::SetBackgroundColor( ccColor4B color ){}
 	void NDUITableLayer::ReflashData(){}

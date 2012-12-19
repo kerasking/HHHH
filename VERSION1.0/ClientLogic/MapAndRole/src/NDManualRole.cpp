@@ -31,6 +31,8 @@
 #include "NDDebugOpt.h"
 #include "NDSharedPtr.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
+
 
 /* 玩家寻路八个方向值,无效的方向值-1
     7  0  4
@@ -54,6 +56,8 @@ IMPLEMENT_CLASS(NDManualRole, NDBaseRole)
 NDManualRole::NDManualRole() :
 m_nState(0)
 {
+	INC_NDOBJ_RTCLS
+
 	m_pkAniGroupTransformed = NULL;
 	m_nIDTransformTo = 0;
 	m_nMoney = 0;								// 银两
@@ -122,6 +126,7 @@ m_nState(0)
 
 NDManualRole::~NDManualRole()
 {
+	DEC_NDOBJ_RTCLS
 	ResetShowPet();
 	SAFE_DELETE (m_pkRingPic);
 	delete m_pkNumberOneEffect;
@@ -2145,7 +2150,8 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 		return;
 	}
 
-	CCSize fontSize = getStringSize(UTF8_TO_ANSI(text.c_str()), lable[0]->GetFontSize() * FONT_SCALE);
+	CCStringRef strRef = CCString::stringWithUTF8String( text.c_str() );
+	CCSize fontSize = getStringSize( strRef->getCString(), lable[0]->GetFontSize() * FONT_SCALE);
 	CCPoint posHead = this->getHeadPos();
 
 	int newX = posHead.x - 0.5 * fontSize.width;

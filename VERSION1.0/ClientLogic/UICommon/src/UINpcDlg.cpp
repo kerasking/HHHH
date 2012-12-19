@@ -10,11 +10,14 @@
 #include "UINpcDlg.h"
 #include "ScriptMgr.h"
 #include <sstream>
+#include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(CUINpcDlg, CUIDialog)
 
 CUINpcDlg::CUINpcDlg()
 {
+	INC_NDOBJ_RTCLS
+
 	INIT_AUTOLINK(CUINpcDlg);
 	
 	m_bTaskState		= false;
@@ -23,6 +26,7 @@ CUINpcDlg::CUINpcDlg()
 
 CUINpcDlg::~CUINpcDlg()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CUINpcDlg::Initialization(int nNpcId)

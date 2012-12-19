@@ -13,15 +13,15 @@
 #include "NDConstant.h"
 #include "define.h"
 #include "ScriptMgr.h"
-
+#include "ObjectTracker.h"
 
 
 class DramaMapLayer : public NDMapLayer
 {
 	DECLARE_CLASS(DramaMapLayer);
 public:
-	DramaMapLayer()						{}
-	~DramaMapLayer()					{}
+	DramaMapLayer()		{ INC_NDOBJ_RTCLS }
+	~DramaMapLayer()	{ DEC_NDOBJ_RTCLS }
 	bool TouchBegin(NDTouch* touch) override
 	{
 		DispatchClickOfViewr(this);
@@ -35,6 +35,8 @@ IMPLEMENT_CLASS(DramaScene, NDScene)
 
 DramaScene::DramaScene()
 {
+	INC_NDOBJ_RTCLS
+
 	m_layerMap = NULL;
 	m_dlgConfirm = NULL;
 	m_chatlayerLeft = NULL;
@@ -44,6 +46,7 @@ DramaScene::DramaScene()
 
 DramaScene::~DramaScene()
 {
+	DEC_NDOBJ_RTCLS
 	if(m_layerMap != NULL)
 	{
 		delete (m_layerMap);

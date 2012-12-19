@@ -23,6 +23,7 @@
 #include "CCPointExtension.h"
 #include "ScriptGameLogic.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
 
 
 #define TAG_TIMER_MOVE		(1024)
@@ -38,6 +39,8 @@ IMPLEMENT_CLASS(WorldMapLayer, NDUILayer)
 
 WorldMapLayer::WorldMapLayer()
 {
+	INC_NDOBJ_RTCLS
+
 	m_strDebugName = "WorldMapLayer";
 
 	WriteCon( "WorldMapLayer::WorldMapLayer()\r\n");
@@ -62,6 +65,8 @@ WorldMapLayer::WorldMapLayer()
 
 WorldMapLayer::~WorldMapLayer()
 {
+	DEC_NDOBJ_RTCLS
+
 	WriteCon( "WorldMapLayer::~WorldMapLayer()\r\n");
 
 	m_buttons->release();

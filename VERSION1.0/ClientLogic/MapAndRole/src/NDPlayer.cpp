@@ -40,6 +40,7 @@
 #include "SMGameScene.h"
 #include "ScriptGlobalEvent.h"
 #include "Task.h"
+#include "ObjectTracker.h"
 
 NS_NDENGINE_BGN
 
@@ -83,6 +84,8 @@ m_nSynSelfContribute(0),
 m_nSynSelfContributeMoney(0),
 m_nCurMapID(0)
 {
+	INC_NDOBJ_RTCLS
+
 	phyAdd = 0;
 
 	/** √ÙΩ›∏Ωº” */
@@ -169,6 +172,8 @@ m_nCurMapID(0)
 
 NDPlayer::~NDPlayer()
 {
+	DEC_NDOBJ_RTCLS
+
 	g_pkDefaultHero = NULL;
 	
 	SAFE_DELETE(m_pkTimer);

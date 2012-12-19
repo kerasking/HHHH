@@ -9,6 +9,7 @@
 
 #include "UIScroll.h"
 #include "NDDirector.h"
+#include "ObjectTracker.h"
 
 float UI_ACCER_FIRST = -100.0f;
 
@@ -21,6 +22,8 @@ IMPLEMENT_CLASS(CUIScroll, CUIMovableLayer)
 
 CUIScroll::CUIScroll()
 {
+	INC_NDOBJ_RTCLS
+
 	m_style = UIScrollStyleVerical;
 	
 	m_bAccerate = false;
@@ -38,6 +41,7 @@ CUIScroll::CUIScroll()
 
 CUIScroll::~CUIScroll()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CUIScroll::Initialization(bool bAccerate/*=false*/)

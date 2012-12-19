@@ -29,6 +29,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "ObjectTracker.h"
 
 #define MONSTER_NAME_SIZE (12)
 using namespace NDEngine;
@@ -43,6 +44,7 @@ bool NDMonster::isRoleMonster(int lookface)
 NDMonster::NDMonster() :
 		m_nState(0)
 {
+	INC_NDOBJ_RTCLS
 	INIT_AUTOLINK (NDMonster);
 	m_nSelfMoveRectW = NORMAL_MOVE_RECTW;
 	m_nSelfMoveRectH = NORMAL_MOVE_RECTH;
@@ -93,6 +95,7 @@ NDMonster::NDMonster() :
 
 NDMonster::~NDMonster()
 {
+	DEC_NDOBJ_RTCLS
 	SafeClearEffect (m_pkBossRing);
 	m_lbName = NULL;
 }

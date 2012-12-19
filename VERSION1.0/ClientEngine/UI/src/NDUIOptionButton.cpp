@@ -12,6 +12,7 @@
 #include "CCPointExtension.h"
 #include "NDDirector.h"
 #include "NDUIBaseGraphics.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -23,6 +24,7 @@ IMPLEMENT_CLASS(NDUIOptionButton, NDUINode)
 
 NDUIOptionButton::NDUIOptionButton()
 {
+	INC_NDOBJ_RTCLS
 	m_clrBg = ccc4(255, 255, 255, 255);
 	m_optIndex = 0;
 	m_frameOpened = true;
@@ -52,6 +54,7 @@ NDUIOptionButton::NDUIOptionButton()
 
 NDUIOptionButton::~NDUIOptionButton()
 {
+	DEC_NDOBJ_RTCLS
 	CC_SAFE_RELEASE (m_leftArrow);
 	CC_SAFE_RELEASE (m_rightArrow);
 	if (m_title->GetParent())

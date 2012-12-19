@@ -14,17 +14,20 @@
 #include "NDUtil.h"
 #include "NDSprite.h"
 #include "NDDebugOpt.h"
+#include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(CUISpriteNode, NDUINode)
 
 CUISpriteNode::CUISpriteNode()
 {
+	INC_NDOBJ_RTCLS
 	m_pSpriteParentNode		= NULL;
 	m_pSprite				= NULL;
 }
 
 CUISpriteNode::~CUISpriteNode()
 {
+	DEC_NDOBJ_RTCLS
 	SAFE_DELETE_NODE(m_pSpriteParentNode);
 }
 

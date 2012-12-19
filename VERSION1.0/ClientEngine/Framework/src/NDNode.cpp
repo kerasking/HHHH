@@ -13,6 +13,7 @@
 #include "define.h"
 #include "shaders/CCShaderCache.h"
 #include "NDDebugOpt.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -24,6 +25,8 @@ NDNode::NDNode():
 m_nPosx(-1),
 m_nPosy(-1)
 {
+	INC_NDOBJ_RTCLS
+
 	m_pkParent = NULL;
 	m_ccNode = NULL;
 	m_bDrawEnabled = true;
@@ -36,6 +39,8 @@ m_nPosy(-1)
 
 NDNode::~NDNode()
 {
+	DEC_NDOBJ_RTCLS
+
 	this->RemoveAllChildren(true);
 	if (m_pkParent)
 	{

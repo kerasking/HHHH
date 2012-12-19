@@ -16,11 +16,13 @@
 #include "NDUINode.h"
 #include "CCGeometry.h"
 #include "platform.h"
+#include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(CUIScrollViewM, CUIScroll)
 
 CUIScrollViewM::CUIScrollViewM()
 {
+	INC_NDOBJ_RTCLS
 	INIT_AUTOLINK(CUIScrollViewM);
 	m_uiViewId					= 0;
     m_bIsHVContainer            = true;
@@ -28,6 +30,7 @@ CUIScrollViewM::CUIScrollViewM()
 
 CUIScrollViewM::~CUIScrollViewM()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CUIScrollViewM::Initialization(bool bAccerate/*=false*/)
@@ -105,6 +108,18 @@ void CUIScrollViewM::OnMoveStop()
 }
 
 IMPLEMENT_CLASS(ContainerClientLayerM, NDUILayer)
+
+ContainerClientLayerM::ContainerClientLayerM()
+{
+	INC_NDOBJ_RTCLS
+	m_rectEvent	= CCRectZero;
+}
+
+ContainerClientLayerM::~ContainerClientLayerM()
+{
+	DEC_NDOBJ_RTCLS
+}
+
 void ContainerClientLayerM::Initialization()
 {
 	NDUILayer::Initialization();
@@ -376,6 +391,8 @@ IMPLEMENT_CLASS(CUIScrollViewContainerM, NDUIScrollContainer)
 
 CUIScrollViewContainerM::CUIScrollViewContainerM()
 {
+	INC_NDOBJ_RTCLS
+
 	m_fScrollDistance				= 0.0f;
 	m_fScrollToCenterSpeed			= 100.0f;
 	m_bIsViewScrolling				= false;
@@ -389,6 +406,7 @@ CUIScrollViewContainerM::CUIScrollViewContainerM()
 
 CUIScrollViewContainerM::~CUIScrollViewContainerM()
 {
+	DEC_NDOBJ_RTCLS
 	//SAFE_DELETE_NODE(m_pClientUINode);
     
     unsigned int childsize					= m_pClientUINodes.size();

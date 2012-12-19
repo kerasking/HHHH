@@ -299,7 +299,7 @@ public:
 	{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 		DWORD n = 0;
-		HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
+		HANDLE hOut = NDConsole::instance().getOutputHandle();
 		WriteConsoleA( hOut, line.c_str(), line.length(), &n, NULL );
 #endif
 	}

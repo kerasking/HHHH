@@ -27,6 +27,7 @@
 #include <iostream>
 #include <sstream>
 #include "ScriptRegLua.h"
+#include "ObjectTracker.h"
 ////////////////////////////////////////////////////////////
 
 //--------------------//
@@ -145,11 +146,13 @@ CSMLoginScene::CSMLoginScene()
 , m_iState(0)
 , m_pLayerCheckWIFI(NULL)
 {
+	INC_NDOBJ_RTCLS
 }
 
 //===========================================================================
 CSMLoginScene::~CSMLoginScene()
 {
+	DEC_NDOBJ_RTCLS
     NDPicturePool::DefaultPool()->Recyle();
 	if ( m_pTimer )
     {

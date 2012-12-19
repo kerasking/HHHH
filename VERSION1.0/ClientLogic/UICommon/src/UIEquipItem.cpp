@@ -10,7 +10,7 @@
 #include "UIEquipItem.h"
 #include "NDPath.h"
 #include "NDDirector.h"
-
+#include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(CUIEquipItem, CUIItemButton)
 #define G_UPGRADE_SPRITE "shengjiejt01.spr"
@@ -21,6 +21,7 @@ IMPLEMENT_CLASS(CUIEquipItem, CUIItemButton)
 
 CUIEquipItem::CUIEquipItem()
 {
+	INC_NDOBJ_RTCLS
     m_nUpgradeIconPos   = 0;
     m_GUpgradeSprite    = NULL;
     m_RUpgradeSprite    = NULL;
@@ -29,13 +30,14 @@ CUIEquipItem::CUIEquipItem()
 
 CUIEquipItem::~CUIEquipItem()
 {
+	DEC_NDOBJ_RTCLS
     m_GUpgradeSprite = NULL;
     m_RUpgradeSprite = NULL;
 }
-void CUIEquipItem::Initialization(){
-    CUIItemButton::Initialization();
-    
-    
+
+void CUIEquipItem::Initialization()
+{
+    CUIItemButton::Initialization();    
 }
 
 void CUIEquipItem::AdjustPos()

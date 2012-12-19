@@ -39,6 +39,8 @@
 #include "GameScene.h"
 #include "GlobalDialog.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
+
 
 //===========================================================================
 typedef struct _tagEffectProp{
@@ -104,6 +106,8 @@ IMPLEMENT_CLASS(QuickTalkCell, NDUINode)
 
 QuickTalkCell::QuickTalkCell()
 {
+	INC_NDOBJ_RTCLS
+
 	m_clrFocus = ccc4(9, 54, 55, 255);
 	m_clrText = ccc4(155, 255, 255, 255);
 	m_clrFocusText = ccc4(249, 229, 64, 255);
@@ -112,7 +116,7 @@ QuickTalkCell::QuickTalkCell()
 
 QuickTalkCell::~QuickTalkCell()
 {
-
+	DEC_NDOBJ_RTCLS
 }
 
 void QuickTalkCell::Initialization(const char* pszText, const CCSize& size)
@@ -184,12 +188,14 @@ IMPLEMENT_CLASS(HighlightTip, NDUILayer)
 
 HighlightTip::HighlightTip()
 {
+	INC_NDOBJ_RTCLS
 	m_pkPicBubble = NULL;
 	m_hpBar = NULL;
 	m_mpBar = NULL;
 }
 HighlightTip::~HighlightTip()
 {
+	DEC_NDOBJ_RTCLS
 	CC_SAFE_DELETE (m_pkPicBubble);
 }
 
@@ -340,6 +346,7 @@ Battle::Battle()
 
 Battle::Battle(Byte btType)
 {
+	INC_NDOBJ_RTCLS
 	Init();
 	m_battleType = BATTLE_TYPE(btType);
 
@@ -354,6 +361,7 @@ void Battle::CloseChatInput()
 
 Battle::~Battle()
 {
+	DEC_NDOBJ_RTCLS
 	//	if (m_imgTurn) {
 	//		m_imgTurn->RemoveFromParent(false);
 	//		SAFE_DELETE(m_imgTurn);

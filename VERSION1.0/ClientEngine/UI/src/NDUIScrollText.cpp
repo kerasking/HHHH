@@ -9,6 +9,7 @@
 #include "NDUIScrollText.h"
 #include "NDDirector.h"
 #include "TQPlatform.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -19,6 +20,7 @@ namespace NDEngine
 	
 	NDUIScrollText::NDUIScrollText()
 	{
+		INC_NDOBJ_RTCLS
 		m_speed = 5;
 		m_scrollType = ScrollTextFromRightToLeft;
 		m_resetSize = false;
@@ -31,6 +33,7 @@ namespace NDEngine
 	
 	NDUIScrollText::~NDUIScrollText()
 	{
+		DEC_NDOBJ_RTCLS
 	}
 	
 	void NDUIScrollText::Initialization()

@@ -20,7 +20,7 @@
 #include "ScriptDataBase.h"
 #include "ScriptTimer.h"
 #include "ScriptDrama.h"
-
+#include "ObjectTracker.h"
 #include "NDDataPersist.h"
 #include "Des.h"
 #include <sys/stat.h>
@@ -126,6 +126,8 @@ const char* DataFilePath()
 ScriptMgr::ScriptMgr()
 : m_bLoadLuaOK(false)
 {
+	INC_NDOBJ_RTCLS
+
 	#if 0
 char filename[256];
 	memset(filename, 0, sizeof(filename));
@@ -144,6 +146,7 @@ char filename[256];
 
 ScriptMgr::~ScriptMgr()
 {
+	DEC_NDOBJ_RTCLS
 	if (m_fDebugOutPut)
 	{
 		fclose(m_fDebugOutPut);

@@ -10,6 +10,7 @@
 #include "NDUtil.h"
 #include "I_Analyst.h"
 #include "NDUIBaseGraphics.h"
+#include "ObjectTracker.h"
 
 namespace NDEngine
 {
@@ -17,13 +18,14 @@ namespace NDEngine
 	
 	NDUIProgressBar::NDUIProgressBar()
 	{
+		INC_NDOBJ_RTCLS
 		m_count = 100;
 		m_step = 0;
 	}
 	
 	NDUIProgressBar::~NDUIProgressBar()
 	{
-		
+		DEC_NDOBJ_RTCLS
 	}
 	
 	void NDUIProgressBar::SetStepCount(float count)

@@ -51,7 +51,6 @@ NDObject::NDObject()
 
 NDObject::~NDObject()
 {
-
 }
 
 NDObject* NDObject::CreateObject()
