@@ -63,27 +63,80 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static final String TAG = "DaHuaLongJiang";
 	public static DaHuaLongJiang ms_pkDHLJ = null;
 	private PlatformListener mPlatformListener;
-	private static DynamicMenuBar menubar;
+	public static DynamicMenuBar menubar;
 	private static BalanceButton balancebutton;
 	private static float s_fScale;
+	private View rootView = null;
+
+	private static Handler VideoViewHandler = new Handler();
+	private static Handler RootViewHandler = new Handler();
+	private static Handler BalanceHandler = new Handler();
+	private static Runnable mUpdateBalance = new Runnable()
+	{
+		public void run()
+		{
+			Float sizex = 100 * s_fScale;
+			Float sizey = 75 * s_fScale;
+			FrameLayout.LayoutParams pkParamsButton = new FrameLayout.LayoutParams(
+					sizex.intValue(), sizey.intValue());
+			balancebutton.setLayoutParams(pkParamsButton);
+			balancebutton.setX(264 * s_fScale);
+			balancebutton.setY(70 * s_fScale);
+			balancebutton.setVisibility(View.VISIBLE);
+		};
+	};
+	private static Runnable mHideBalance = new Runnable()
+	{
+		public void run()
+		{
+			balancebutton.setVisibility(View.INVISIBLE);
+		};
+	};
+	private static Runnable mShowVideoView = new Runnable()
+	{
+		public void run()
+		{
+			LinearLayout pkLinearLayout = new LinearLayout(ms_pkDHLJ);
+			pkLinearLayout.addView(m_pkView);
+			pkLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+			LinearLayout.LayoutParams pkParams = new LinearLayout.LayoutParams(
+					ViewGroup.LayoutParams.FILL_PARENT,
+					ViewGroup.LayoutParams.FILL_PARENT);
+			pkParams.gravity = Gravity.CENTER;
+			ms_pkDHLJ.setContentView(pkLinearLayout, pkParams);
+			m_pkView.setLayoutParams(pkParams);
+			// ms_pkDHLJ.rootView.setVisibility(View.INVISIBLE);
+			// ms_pkDHLJ.balancebutton.setVisibility(View.INVISIBLE);
+			// menubar.setVisibility(View.INVISIBLE);
+			m_pkView.start();
+			m_pkView.setVisibility(View.VISIBLE);
+		};
+	};
 	
-	 private static Handler BalanceHandler = new Handler();
-	 private static Runnable mUpdateBalance = new Runnable() {
-	        public void run() {
-	    		Float sizex = 100*s_fScale;
-	    		Float sizey = 75*s_fScale;
-	    		FrameLayout.LayoutParams pkParamsButton = new FrameLayout.LayoutParams(sizex.intValue(),sizey.intValue());
-	    		balancebutton.setLayoutParams(pkParamsButton);
-	    		balancebutton.setX(264*s_fScale);
-	    		balancebutton.setY(70*s_fScale);
-	        	balancebutton.setVisibility( View.VISIBLE );
-	        };
-	 };
-	 private static Runnable mHideBalance = new Runnable() {
-	        public void run() {
-	        	balancebutton.setVisibility( View.INVISIBLE );
-	        };
-	 };
+	private static Runnable mContinueRootView = new Runnable()
+	{
+		public void run()
+		{
+			ms_pkDHLJ.setMain();
+			ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
+					ViewGroup.LayoutParams.FILL_PARENT,
+					ViewGroup.LayoutParams.FILL_PARENT);
+			ms_pkDHLJ.nativeInit(100, 200);
+			//ms_pkDHLJ.setContentView(menubar, pkParams);
+			// ms_pkDHLJ.rootView.setVisibility(View.INVISIBLE);
+			// ms_pkDHLJ.balancebutton.setVisibility(View.INVISIBLE);
+			// menubar.setVisibility(View.INVISIBLE);
+			//m_pkView.start();
+			//m_pkView.setVisibility(View.INVISIBLE);
+		};
+	};
+	
+	public void continueRootView()
+	{
+		VideoViewHandler.post(mContinueRootView);
+		resumeBackgroundMusic();
+	}
+
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		if (isSDCardCanUse())
@@ -91,7 +144,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			ms_pkDHLJ = this;
 			super.onCreate(savedInstanceState);
 			Log.e(TAG, "onCreate called");
-			
+
 			Context context = getApplication().getApplicationContext();
 			CookieSyncManager.createInstance(this);
 
@@ -151,17 +204,18 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 			menubar = new DynamicMenuBar(this);
 			menubar.setMenubarVisibility(View.VISIBLE);
-			menubar.setMenuIconGravity(Gravity.TOP|Gravity.LEFT);
+			menubar.setMenuIconGravity(Gravity.TOP | Gravity.LEFT);
 
 			Rect rect = new Rect(0, 0, 200, 120);
-			balancebutton = com.mobage.android.social.common.Service.getBalanceButton(rect); 			
+			balancebutton = com.mobage.android.social.common.Service
+					.getBalanceButton(rect);
 		} else
 		{
 			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 			alertDialog.setTitle("Title");
 			alertDialog.setMessage("Message");
 
-			//alertDialog.setIcon(R.drawable.dhlj_icon);
+			// alertDialog.setIcon(R.drawable.dhlj_icon);
 			alertDialog.show();
 		}
 	}
@@ -213,34 +267,39 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	public void setMain()
 	{
 		Log.e(TAG, "DaHuaLongJiang::setMain()");
-		
-		View rootView = (View) getView();
+
+		rootView = (View) getView();
 		FrameLayout parent = (FrameLayout) rootView.getParent();
 		if (parent != null)
 		{
 			parent.removeView(rootView);
 		}
 		menubar.removeAllViews();
-		
+
 		addEditView();
 
+		m_pkView.setVisibility(View.INVISIBLE);
+		// menubar.addView(m_pkView);
 		menubar.addView(rootView);
 		menubar.addView(balancebutton);
-    	balancebutton.setVisibility( View.INVISIBLE );
+		balancebutton.setVisibility(View.INVISIBLE);
 
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
-				ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+				ViewGroup.LayoutParams.FILL_PARENT,
+				ViewGroup.LayoutParams.FILL_PARENT);
 		this.setContentView(menubar, pkParams);
+		menubar.setVisibility(View.VISIBLE);
 	}
 
-	public void addEditView(){
-        // Cocos2dxEditText layout
-        ViewGroup.LayoutParams edittext_layout_params =
-            new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
-                                       ViewGroup.LayoutParams.WRAP_CONTENT);
-        Cocos2dxEditText edittext = new Cocos2dxEditText(this);
-        edittext.setLayoutParams(edittext_layout_params);
-        //edittext.setVisibility( View.INVISIBLE );
+	public void addEditView()
+	{
+		// Cocos2dxEditText layout
+		ViewGroup.LayoutParams edittext_layout_params = new ViewGroup.LayoutParams(
+				ViewGroup.LayoutParams.FILL_PARENT,
+				ViewGroup.LayoutParams.WRAP_CONTENT);
+		Cocos2dxEditText edittext = new Cocos2dxEditText(this);
+		edittext.setLayoutParams(edittext_layout_params);
+		// edittext.setVisibility( View.INVISIBLE );
 
 		// add edit to layout
 		menubar.addView(edittext);
@@ -249,7 +308,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		Cocos2dxGLSurfaceView surfaceView = getView();
 		surfaceView.setCocos2dxEditText(edittext);
 	}
-	
+
 	public void LoginComplete(int userid)
 	{
 		onLoginComplete(userid);
@@ -260,40 +319,49 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		onLoginError(error);
 	}
 
-	private static void showBalanceButton(float fScale) {
+	private static void showBalanceButton(float fScale)
+	{
 		Log.v(TAG, "begin showBalanceButton");
 
 		s_fScale = fScale;
 		BalanceHandler.post(mUpdateBalance);
 	}
-	private static void hideBalanceButton() {
+
+	private static void hideBalanceButton()
+	{
 		Log.v(TAG, "begin showBalanceButton");
 		BalanceHandler.post(mHideBalance);
 	}
-	public static void ShowBankUi() {
+
+	public static void ShowBankUi()
+	{
 		Log.v(TAG, "begin ShowBankUi");
-		com.mobage.android.social.common.Service.showBankUi(new com.mobage.android.social.common.Service.OnDialogComplete() {
-		@Override
-		public void onDismiss() { }
-		}); 
+		com.mobage.android.social.common.Service
+				.showBankUi(new com.mobage.android.social.common.Service.OnDialogComplete()
+				{
+					@Override
+					public void onDismiss()
+					{
+					}
+				});
 	}
 
-	private static void OpenUserProfile() {
+	private static void OpenUserProfile()
+	{
 		Log.v(TAG, "begin testGetUserProfile");
 		String userId = SocialUtils.getmUserId();// Platform.getInstance().getUserId();
-		com.mobage.android.social.common.Service
-				.openUserProfile(
-						userId,
-						new com.mobage.android.social.common.Service.OnDialogComplete() {
-							@Override
-							public void onDismiss() {
-								SocialUtils.showConfirmDialog("openUserProfile status",
-										"Dismiss", "OK");
-							}
-						});
+		com.mobage.android.social.common.Service.openUserProfile(userId,
+				new com.mobage.android.social.common.Service.OnDialogComplete()
+				{
+					@Override
+					public void onDismiss()
+					{
+						SocialUtils.showConfirmDialog("openUserProfile status",
+								"Dismiss", "OK");
+					}
+				});
 	}
 
-	
 	public void changeViewToVideo()
 	{
 	}
@@ -312,18 +380,30 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public static int playVideo(final String strFile)
 	{
+		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
+				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+
+		pauseAllBackgroundMusic();
+		// ms_pkDHLJ.setContentView(m_pkView,pkLayoutParams);
+		VideoViewHandler.post(mShowVideoView);
+		// m_pkView.setVisibility(View.VISIBLE);
+		Log.i("DaHuaLongJiang", "Entry java playVideo");
+
 		if (strFile.length() == 0)
 		{
+			Log.e("DaHuaLongJiang", "strFile length == 0");
 			return -1;
 		}
 
 		if (null == ms_pkDHLJ)
 		{
+			Log.e("DaHuaLongJiang", "ms_pkDHLJ == 0");
 			return -1;
 		}
 
-		ms_pkDHLJ.m_pkView.start();
-
+		// ms_pkDHLJ.m_pkView.start();
+		// ms_pkDHLJ.setContentView(ms_pkDHLJ.m_pkView, pkLayoutParams);
+		Log.i("DaHuaLongJiang", "Leave java playVideo");
 		return 0;
 	}
 
@@ -340,6 +420,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		System.loadLibrary("GameLauncher");
 	}
 
+	private static native void pauseAllBackgroundMusic();
+	private static native void resumeBackgroundMusic();
 	private static native void nativeInit(int w, int h);
 
 	private static native void onLoginComplete(int userid);

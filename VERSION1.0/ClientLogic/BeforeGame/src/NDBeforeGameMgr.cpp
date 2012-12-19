@@ -35,7 +35,7 @@
 #include "SqliteDBMgr.h"
 #include <stdlib.h>
 
-#ifdef USE_NDSDK
+#if (defined(USE_NDSDK) && defined(__APPLE__))
 #import <NdComPlatform/NdComPlatform.h>
 #endif
 #if defined(USE_MGSDK)
@@ -46,7 +46,16 @@
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
 #include <android/log.h>
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
 #endif
+#include "NDVideoMgr.h"
+#include "CCCommon.h"
 
 using namespace NDEngine;
 
@@ -1376,7 +1385,7 @@ void NDBeforeGameMgr::Login()
 
 bool NDBeforeGameMgr::doNDSdkLogin()
 {
-#if defined(USE_NDSDK)
+#if (defined(USE_NDSDK) && defined(__APPLE__))
 	if (m_sdkLogin)
 	{
 		//[m_sdkLogin release];
@@ -1621,6 +1630,14 @@ bool NDBeforeGameMgr::SwichKeyToServer(const char* pszIp, int nPort,
 	{
 		return false;
 	}
+
+	if (!VideoMgrPtr->PlayVideo("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4"))
+	{
+		LOGD("PlayVideo failed!!");
+		int a = 10;
+	}
+
+	LOGD("PlayVideo succeeded!!");
 
 	//**chh 2012-08-27 启动线程时要先停止其它线程 **//
 	NDDataTransThread::DefaultThread()->Stop();
