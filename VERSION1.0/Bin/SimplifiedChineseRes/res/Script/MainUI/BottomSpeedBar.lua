@@ -222,7 +222,7 @@ function p.LoadUI()
     norPic:Cut(p.BtnSayFindRect.cutNor);
     
     --对话列表
-    --local sayListBtn = p.CreateSceneButton(norPic,nil,p.BtnSayRect,NMAINSCENECHILDTAG.BottomMsgBtn,UILayerZOrder.ChatBtn);
+    local sayListBtn = p.CreateSceneButton(norPic,nil,p.BtnSayRect,NMAINSCENECHILDTAG.BottomMsgBtn,UILayerZOrder.ChatBtn);
     sayListBtn:SetTag(p.BtnSayTag);
     sayListBtn:SetVisible(true);
     
