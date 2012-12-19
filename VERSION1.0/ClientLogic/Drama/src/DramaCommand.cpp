@@ -289,7 +289,7 @@ void DramaCommandSprite::ExcuteAddSprite()
 void DramaCommandSprite::ExcuteAddSpriteByFile()
 {
 	NDAsssert(DCT_ADDSPRITEBYFILE == m_kParam.type);
-
+	char sprFile[256] = { 0 };
 	SetFinish(true);
 
 	DramaScene* pkDramaScene = GetDramaScene();
@@ -299,7 +299,8 @@ void DramaCommandSprite::ExcuteAddSpriteByFile()
 		return;
 	}
 
-	pkDramaScene->AddSprite(m_kParam.nKey, m_kParam.str);
+	sprintf(sprFile, "%s", NDPath::GetAniPath(m_kParam.str.c_str()).c_str());
+	pkDramaScene->AddSprite(m_kParam.nKey, sprFile);
 
 	NDSprite* sprite = pkDramaScene->GetSprite(m_kParam.nKey);
 
