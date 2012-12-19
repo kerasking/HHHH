@@ -173,7 +173,6 @@ void CSMLoginScene::Initialization(void)
 //===========================================================================
 void CSMLoginScene::OnTimer( OBJID idTag )
 {
-
 	if ( idTag == TAG_TIMER_UPDATE ) 
 	{
 		if ( !rename( m_savePath.c_str(), m_savePath.c_str() ) )
@@ -268,6 +267,12 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		m_pTimer->KillTimer( this, TAG_TIMER_FIRST_RUN );
 		CreateUpdateUILayer();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+		if ( NDBeforeGameMgrObj.CheckFirstTimeRuning() )
+		{
+
+		}
+
         m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
 		OnEvent_LoginOKNormal(m_iAccountID);
 #else

@@ -1881,8 +1881,14 @@ int NDBeforeGameMgr::CopyStatus = 0;
 bool NDBeforeGameMgr::CheckFirstTimeRuning()
 { 
 	bool bFirstTime	= false;
-	string strInstallVersionINIPath	=  NDPath::GetRootResPath() + SZ_VERINI_PATH;
-    string strCopyVersionINIPath	= NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
+	string strInstallVersionINIPath	= "";
+	string strCopyVersionINIPath = "";
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	strInstallVersionINIPath = string("asset/") + SZ_VERINI_PATH;
+    strCopyVersionINIPath = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
+#else
+#endif
 	//判断是不是第一次登录，如果是第一次登录，则移动资源文件LIBRARY/CACHES
 	FILE* pkFile = 0;
 	pkFile = fopen(strCopyVersionINIPath.c_str(), "rb" );
@@ -1915,15 +1921,15 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
         }
 		NDPath::SetResDirPos( 1 );
 	}
+
 	return bFirstTime;
 }
 
 void* CopyResThread(void* ptr)
 {
-	NDSharedPtr<CZipUnZip> spZip = 0;
-	spZip = new CZipUnZip;
+	CZipUnZip kUnzip;
 
-	spZip->UnZipFile("../../SimplifiedChineseRes.zip","dhlj/");
+	kUnzip.UnZipFile("../SimplifiedChineseRes.zip","dhlj/");
 
 //     string sSource = NDPath::GetAppResFilePath(NDPath::GetRootResDirName());
 //     string sTarget = NDPath::GetCashesPath()+"/"+NDPath::GetRootResDirName();
@@ -1954,8 +1960,9 @@ void* CopyResThread(void* ptr)
 }
 void NDBeforeGameMgr::CopyRes()
 {
-    pthread_t pid;
-	pthread_create(&pid, NULL, CopyResThread, this);	
+	pthread_t pid = {0};
+	CopyResThread(0);
+	//pthread_create(&pid, NULL, CopyResThread, this);	
 }
 int NDBeforeGameMgr::GetCopyStatus()
 {
