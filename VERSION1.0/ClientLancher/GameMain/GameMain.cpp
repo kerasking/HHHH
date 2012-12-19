@@ -14,7 +14,7 @@
 #include "NDConsole.h"
 #include "NDBaseDirector.h"
 //#include "NDDetectMemLeak.h"
-#include "vld.h"
+//#include "vld.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
