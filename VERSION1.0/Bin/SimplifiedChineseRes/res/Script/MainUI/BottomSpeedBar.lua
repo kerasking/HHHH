@@ -222,28 +222,10 @@ function p.LoadUI()
     norPic:Cut(p.BtnSayFindRect.cutNor);
     
     --对话列表
-    local sayListBtn	= CreateButton(norPic,nil,"",p.BtnSayRect,12);
     --local sayListBtn = p.CreateSceneButton(norPic,nil,p.BtnSayRect,NMAINSCENECHILDTAG.BottomMsgBtn,UILayerZOrder.ChatBtn);
-   
     sayListBtn:SetTag(p.BtnSayTag);
     sayListBtn:SetVisible(true);
-    sayListBtn:SetImage(norPic);
     
-    
-    	
-	local btn	= CreateButton("button_look.png","button_look.png","",CGRectMake(0, 0, btnw, btnh),12);
-	
-	local norPic = pool:AddPicture(GetSMImgPath("button_look.png"), false);
- 	norPic:Cut(CGRectMake(0.0, 0.0, btnw, btnh));
-	btn:SetImage(norPic);
-	
-	local selpic = pool:AddPicture(GetSMImgPath("button_look.png"), false);
- 	selpic:Cut(CGRectMake(0.0, btnh, btnw, btnh));
-	btn:SetTouchDownImage(selpic);
-	
-	
-	
-   
      --提交gm问题按钮
     local gmPic	= pool:AddPicture(GetSMImg00Path(p.BtnGm), true);
     gmPic:Cut(p.BtnGMFindRect.cutNor);

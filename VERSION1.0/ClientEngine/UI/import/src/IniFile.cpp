@@ -4,11 +4,11 @@
 #include <stdlib.h>
 #include "IniFile.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
+// #ifdef _DEBUG
+// #undef THIS_FILE
+// static char THIS_FILE[]=__FILE__;
+// #define new DEBUG_NEW
+// #endif
 
 
 using namespace std;
