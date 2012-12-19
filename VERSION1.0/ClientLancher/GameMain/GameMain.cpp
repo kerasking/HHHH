@@ -13,6 +13,8 @@
 #include "XMLReader.h"
 #include "NDConsole.h"
 #include "NDBaseDirector.h"
+//#include "NDDetectMemLeak.h"
+#include "vld.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -38,6 +40,7 @@ int WINAPI WinMain (HINSTANCE hInstance,
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(szCmdLine);
+
 
 	//InitGameInstance();
 	NDConsole kConsole;
