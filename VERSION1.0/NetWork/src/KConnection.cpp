@@ -328,7 +328,7 @@ void
 KConnection::setState()
 {
 	closeMutex.lock();
-	useNum = new int;
+	useNum = new int; //@leak
 	*useNum = 1;
     _live = true;
 	setBlocking( _blocking );
