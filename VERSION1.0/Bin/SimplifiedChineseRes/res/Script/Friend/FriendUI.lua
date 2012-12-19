@@ -333,7 +333,7 @@ function p.OnAddFriendBtnClick()
 		return;
 	end
 	
-	Bglayer:AddChildZ(layer,2);
+	Bglayer:AddChildZ(layer,200);
 
 	--初始化ui
 	local uiLoad = createNDUILoad();

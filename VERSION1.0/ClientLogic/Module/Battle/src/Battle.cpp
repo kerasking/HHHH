@@ -3170,8 +3170,12 @@ BATTLE_COMPLETE Battle::battleComplete()
 //	if(getServerBattleResult() != -2) {
 //		result = BATTLE_COMPLETE(getServerBattleResult());
 //	}
-	monsterResult(GetEnemySideList());
-	monsterResult(GetOurSideList());
+	if(BATTLE_COMPLETE_WIN == result)
+	{
+		monsterResult(GetEnemySideList());
+		monsterResult(GetOurSideList());
+	}
+
 	return result;
 }
 
