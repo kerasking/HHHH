@@ -156,6 +156,11 @@ public:
 		if (data) delete data;
 	}
 
+	void destroy()
+	{
+		delete this;
+	}
+
 public:
 	void addTimeSlice( const string& name )
 	{
