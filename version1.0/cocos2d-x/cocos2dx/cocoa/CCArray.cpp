@@ -25,18 +25,28 @@ THE SOFTWARE.
 
 #include "CCArray.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 
 CCArray::CCArray()
 : data(NULL)
 {
+#if ND_MOD
+	INC_CCOBJ("CCArray");
+#endif
     init();
 }
 
 CCArray::CCArray(unsigned int capacity)
 : data(NULL)
 {
+#if ND_MOD
+	INC_CCOBJ("CCArray");
+#endif
     initWithCapacity(capacity);
 }
 
@@ -433,6 +443,9 @@ void CCArray::reduceMemoryFootprint()
 
 CCArray::~CCArray()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCArray");
+#endif
     ccArrayFree(data);
 }
 

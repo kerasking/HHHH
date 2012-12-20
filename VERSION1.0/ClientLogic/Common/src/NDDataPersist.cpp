@@ -15,6 +15,7 @@
 #include "tinyxml.h"
 #include "XMLReader.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #import <Foundation/Foundation.h>
@@ -109,6 +110,8 @@ m_pkAccountList(0),
 m_pkDataArray(0),
 m_pkAccountDeviceList(0)
 {
+	INC_NDOBJ("NDDataPersist");
+
 	this->LoadData();
 	this->LoadAccountList();
 	this->LoadAccountDeviceList();
@@ -116,6 +119,8 @@ m_pkAccountDeviceList(0)
 
 NDDataPersist::~NDDataPersist()
 {
+	DEC_NDOBJ("NDDataPersist");
+
 	SAFE_RELEASE(m_pkDataArray);
 	SAFE_RELEASE(m_pkAccountList);
 	SAFE_RELEASE(m_pkAccountDeviceList);

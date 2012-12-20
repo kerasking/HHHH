@@ -360,7 +360,7 @@ bool NDGameApplication::processPM(const char* cmd)
 	if (cmd == 0 || cmd[0] == 0) return false;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	int val = 0;
+	int n = 0, val = 0;
 	char szDebugOpt[50] = {0};
 
 	HANDLE hOut = NDConsole::instance().getOutputHandle();
@@ -631,13 +631,14 @@ bool NDGameApplication::processPM(const char* cmd)
 		DWORD n = 0;
 		WriteConsoleA(  hOut, str.c_str(), str.length(), &n, NULL );
 	}
-	else if (stricmp(cmd, "dumpobj") == 0)
+	else if (n = sscanf(cmd, "dumpobj %d", &val)) //n=
 	{
+		val = (n > 0 ? val : 0);
 		string info;
-		DUMP_OBJ(info);
+		DUMP_OBJ(info, val);
 
-		DWORD n = 0;
-		WriteConsoleA(  hOut, info.c_str(), info.length(), &n, NULL );
+		DWORD num = 0;
+		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
 	}
 	else
 	{

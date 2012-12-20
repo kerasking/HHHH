@@ -22,6 +22,8 @@
 #include "NDDirector.h"
 #include "NDPath.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
+
 using namespace NDEngine;
 
 // const int LEFT_BACK_X = 120; // ×ó±ßºóÅÅ x ×ø±ê
@@ -85,6 +87,8 @@ static int g_iYOffset[] = { //
 //===========================================================================
 Fighter::Fighter()
 {
+	INC_NDOBJ("Fighter");
+
 	m_pkActionWordImage = NULL;
 
 	m_kRoleInParentPoint = CCPointMake(0.0f, 0.0f);
@@ -170,6 +174,8 @@ void Fighter::releaseStatus()
 
 Fighter::~Fighter()
 {
+	DEC_NDOBJ("Fighter");
+
 	releaseStatus();
 
 	if (m_pkRole)

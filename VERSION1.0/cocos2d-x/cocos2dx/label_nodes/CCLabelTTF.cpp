@@ -28,6 +28,10 @@ THE SOFTWARE.
 #include "shaders/CCShaderCache.h"
 #include "CCApplication.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 #if CC_USE_LA88_LABELS
@@ -46,10 +50,16 @@ CCLabelTTF::CCLabelTTF()
 , m_fFontSize(0.0)
 , m_string("")
 {
+#if ND_MOD
+	INC_CCOBJ("CCLabelTTF");
+#endif
 }
 
 CCLabelTTF::~CCLabelTTF()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCLabelTTF");
+#endif
     CC_SAFE_DELETE(m_pFontName);
 }
 

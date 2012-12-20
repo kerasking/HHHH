@@ -49,6 +49,9 @@ NS_CC_BEGIN
 class CC_DLL  CCTouchHandler : public CCObject
 {
 public:
+#if ND_MOD
+	CCTouchHandler();
+#endif
     virtual ~CCTouchHandler(void);
 
     /** delegate */

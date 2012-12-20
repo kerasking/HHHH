@@ -36,6 +36,10 @@ THE SOFTWARE.
 // external
 #include "kazmath/GL/matrix.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 // implementation CCAtlasNode
@@ -53,10 +57,16 @@ CCAtlasNode::CCAtlasNode()
 , m_uQuadsToDraw(0)
 , m_nUniformColor(0)
 {
+#if ND_MOD
+	INC_CCOBJ("CCAtlasNode");
+#endif
 }
 
 CCAtlasNode::~CCAtlasNode()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCAtlasNode");
+#endif
     CC_SAFE_RELEASE(m_pTextureAtlas);
 }
 

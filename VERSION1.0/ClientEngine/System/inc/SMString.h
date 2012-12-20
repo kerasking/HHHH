@@ -12,6 +12,7 @@
 
 #include <string>
 #include <stdlib.h>
+#include "ObjectTracker.h"
 
 // 这里要求后续使用CString格式化后的字符串长度不能超过4096-1
 namespace tq
@@ -23,26 +24,32 @@ public:
 	CString();
 	CString(const std::string& str)
 	{
+		INC_NDOBJ("CString[tq]");
 		this->assign(str.c_str());
 	}
 	CString(const CString& str)
 	{
+		INC_NDOBJ("CString[tq]");
 		this->assign(str.c_str());
 	}
 	CString(int i)
 	{
+		INC_NDOBJ("CString[tq]");
 		this->Format("%d", i);
 	}
 	CString(unsigned int u)
 	{
+		INC_NDOBJ("CString[tq]");
 		this->Format("%u", u);
 	}
 	CString(float f)
 	{
+		INC_NDOBJ("CString[tq]");
 		this->Format("%f", f);
 	}
 	CString(double d)
 	{
+		INC_NDOBJ("CString[tq]");
 		this->Format("%f", d);
 	}
 

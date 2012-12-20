@@ -39,6 +39,10 @@ THE SOFTWARE.
 // extern
 #include "kazmath/GL/matrix.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 // CCLayer
@@ -48,12 +52,18 @@ CCLayer::CCLayer()
 ,m_bIsKeypadEnabled(false)
 ,m_pScriptHandlerEntry(NULL)
 {
+#if ND_MOD
+	INC_CCOBJ("CCLayer");
+#endif
     setAnchorPoint(ccp(0.5f, 0.5f));
     m_bIgnoreAnchorPointForPosition = true;
 }
 
 CCLayer::~CCLayer()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCLayer");
+#endif
     unregisterScriptTouchHandler();
 }
 

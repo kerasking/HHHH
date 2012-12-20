@@ -37,6 +37,10 @@ THE SOFTWARE.
 #include "cocoa/CCString.h"
 #include <stdlib.h>
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 //According to some tests GL_TRIANGLE_STRIP is slower, MUCH slower. Probably I'm doing something very wrong
 
 // implementation CCTextureAtlas
@@ -48,10 +52,18 @@ CCTextureAtlas::CCTextureAtlas()
     ,m_bDirty(false)
     ,m_pTexture(NULL)
     ,m_pQuads(NULL)
-{}
+{
+#if ND_MOD
+	INC_CCOBJ("CCTextureAtlas");
+#endif
+}
 
 CCTextureAtlas::~CCTextureAtlas()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCTextureAtlas");
+#endif
+
     CCLOGINFO("cocos2d: CCTextureAtlas deallocing %p.", this);
 
     CC_SAFE_FREE(m_pQuads);

@@ -10,6 +10,7 @@
 #include "NDPath.h"
 #include "JavaMethod.h"
 #include "UtilityInc.h"
+#include "ObjectTracker.h"
 
 using namespace NDEngine;
 using namespace cocos2d;
@@ -19,12 +20,14 @@ static NDAnimationGroupPool* gs_pkNDAnimationGroupPool_DefaultPool = NULL;
 NDAnimationGroupPool::NDAnimationGroupPool() :
 m_pkAnimationGroups(NULL)
 {
+	INC_NDOBJ("NDAnimationGroupPool");
 	NDAsssert(gs_pkNDAnimationGroupPool_DefaultPool == NULL);
 	m_pkAnimationGroups = new CCDictionary();
 }
 
 NDAnimationGroupPool::~NDAnimationGroupPool()
 {
+	DEC_NDOBJ("NDAnimationGroupPool");
 	CC_SAFE_RELEASE (m_pkAnimationGroups);
 }
 

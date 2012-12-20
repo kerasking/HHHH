@@ -158,6 +158,7 @@ void completeTask(int taskId)
 	//		Npc.refreshNpcStateInMap(); // 完成时要重新刷新整个地图npc的状怄1�7
 }
 
+//@leak
 std::string setTaskInfo(std::string strTask, Task& kTask, int nIndex,
 		std::vector<int> kDatas, int nMonCornIndex)
 {

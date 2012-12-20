@@ -36,6 +36,10 @@ THE SOFTWARE.
 #include <ctype.h>
 #include <cctype>
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 #define PVR_TEXTURE_FLAG_TYPE_MASK    0xff
@@ -136,10 +140,17 @@ CCTexturePVR::CCTexturePVR()
 , m_uName(0)
 , m_eFormat(kCCTexture2DPixelFormat_Default)
 {
+#if ND_MOD
+	INC_CCOBJ("CCTexturePVR");
+#endif
 }
 
 CCTexturePVR::~CCTexturePVR()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCTexturePVR");
+#endif
+
     CCLOGINFO( "cocos2d: deallocing CCTexturePVR" );
 
     if (m_uName != 0 && ! m_bRetainName)

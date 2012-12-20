@@ -8,15 +8,19 @@
  */
 
 #include "Drama.h"
+#include "ObjectTracker.h"
 
 #define TAG_DRAMA_UPDATE (1)
 
 Drama::Drama()
 {
+	INC_NDOBJ("Drama");
 }
 
 Drama::~Drama()
 {
+	DEC_NDOBJ("Drama");
+
 	End();
 }
 

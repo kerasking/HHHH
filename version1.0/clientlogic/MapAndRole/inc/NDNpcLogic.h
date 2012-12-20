@@ -8,6 +8,7 @@
 #include "define.h"
 #include "typedef.h"
 #include "platform.h"
+#include "ObjectTracker.h"
 
 NS_NDENGINE_BGN
 
@@ -99,6 +100,8 @@ private:
 public:
 	NDNpcLogic( NDNpc* inOwner )
 	{
+		INC_NDOBJ("NDNpcLogic");
+
 		Owner = inOwner;
 		idlist = new ID_VEC();
 		tickLastRefresh.tv_sec = 0;
@@ -107,6 +110,8 @@ public:
 
 	~NDNpcLogic()
 	{
+		DEC_NDOBJ("NDNpcLogic");
+
 		if (idlist)
 		{
 			idlist->clear();
@@ -190,6 +195,18 @@ public:
 			SAFE_DELETE( iter->second );
 		}
 		mapData.clear();
+	}
+
+	int getCnt()
+	{
+		return mapData.size();
+	}
+
+	string dump()
+	{
+		char line[100] = "";
+		sprintf( line, "NDNpcTaskIdCache has %d npc cached.\r\n", getCnt() );
+		return line;
 	}
 };
 

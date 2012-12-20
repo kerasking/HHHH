@@ -135,7 +135,11 @@ public:
     static void purgeSharedSpriteFrameCache(void);
 
 private:
+#if ND_MOD
+	CCSpriteFrameCache(void);
+#else
     CCSpriteFrameCache(void) : m_pSpriteFrames(NULL), m_pSpriteFramesAliases(NULL){}
+#endif
 protected:
     CCDictionary* m_pSpriteFrames;
     CCDictionary* m_pSpriteFramesAliases;

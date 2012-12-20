@@ -24,6 +24,10 @@ THE SOFTWARE.
 #define __CC_PLATFORM_IMAGE_CPP__
 #include "platform/CCImageCommon_cpp.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 /**

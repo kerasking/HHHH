@@ -1,14 +1,19 @@
 #include "XMLReader.h"
 #include "tinyxml.h"
+#include "ObjectTracker.h"
 
 XMLReader::XMLReader() :
 		m_pkFileDataMap(0)
 {
+	INC_NDOBJ("XMLReader");
+
 	m_pkFileDataMap = new FileData;
 }
 
 XMLReader::~XMLReader()
 {
+	DEC_NDOBJ("XMLReader");
+
 	m_pkFileDataMap->clear();
 	delete m_pkFileDataMap;
 }

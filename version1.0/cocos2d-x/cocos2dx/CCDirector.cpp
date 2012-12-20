@@ -56,6 +56,10 @@ THE SOFTWARE.
 #include "CCEGLView.h"
 #include <string>
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 #ifdef ANDROID
 #include <jni.h>
 #include <android/log.h>
@@ -128,6 +132,10 @@ CCDirector* CCDirector::sharedDirector(void)
 #if ND_MOD
 CCDirector::CCDirector(void) 
 {
+#if ND_MOD
+	INC_CCOBJ("CCDirector");
+#endif
+
 	m_pobOpenGLView = NULL;
 	m_dAnimationInterval = 0;
 	m_dOldAnimationInterval = 0;
@@ -225,6 +233,10 @@ bool CCDirector::init(void)
     
 CCDirector::~CCDirector(void)
 {
+#if ND_MOD
+	DEC_CCOBJ("CCDirector");
+#endif
+
     CCLOG("cocos2d: deallocing %p", this);
 
     CC_SAFE_RELEASE(m_pFPSLabel);
