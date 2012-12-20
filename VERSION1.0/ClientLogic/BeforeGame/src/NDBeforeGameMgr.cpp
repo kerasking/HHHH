@@ -60,6 +60,7 @@
 #include "NDSharedPtr.h"
 #include "CCFileUtils.h"
 #include "myunzip.h"
+#include "CCPlatformConfig.h"
 
 using namespace NDEngine;
 
@@ -1913,67 +1914,90 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 #else
 #endif
 	//判断是不是第一次登录，如果是第一次登录，则移动资源文件LIBRARY/CACHES
-	FILE* pkFile = 0;
-	unsigned long ulFileLength = 0;
 	//string strTemp = (char*)CCFileUtils::sharedFileUtils()->getFileData("SimplifiedChineseRes.zip/version.ini","rb",&ulFileLength);
-	LOGD("strTemp = %s",strTemp.c_str());
 
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	string strInstallResVersion = "";
 
-	string strAPKPath = "";
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+	string strAPKPath = getApkPath();
+
+	LOGD("strAPKPath is %s",strAPKPath.c_str());
+
 	HZIP pZip = 0;
+	char* pSimplifiedChineseResBuffer = 0;
+	char* pVersionINIBuffer = 0;
 	HZIP pSimplifiedChineseResZip = 0;
-	pZip = OpenZip("SimplifiedChineseRes.zip",0);
+	pZip = OpenZip(strAPKPath.c_str(),0);
 	ZIPENTRY kZipEntry = {0};
 	ZIPENTRY kSimplifiedChineseResZipEntry = {0};
-	size_t size = sizeof(ZIPENTRY);
-	int nApkIndex = 0;
+	int nSimplifiedChineseResIndex = 0;
 	int nVersionINIIndex = 0;
-	MyFindZipItem(pZip,"SimplifiedChineseRes.zip",true,&nApkIndex,&kZipEntry);
-	char *ibuf = new char[kZipEntry.unc_size];
-	UnzipItem(pZip,nApkIndex, ibuf, kZipEntry.unc_size);
+
+	FindZipItem(pZip,"SimplifiedChineseRes.zip",true,&nSimplifiedChineseResIndex,&kZipEntry);
+
+	pSimplifiedChineseResBuffer = new char[kZipEntry.unc_size];
+	memset(pSimplifiedChineseResBuffer,0,sizeof(char) * kZipEntry.unc_size);
+
+	UnzipItem(pZip,nSimplifiedChineseResIndex, pSimplifiedChineseResBuffer, kZipEntry.unc_size);
 	pSimplifiedChineseResZip = OpenZip(ibuf,kZipEntry.unc_size,0);
-	MyFindZipItem(pSimplifiedChineseResZip,"version.ini",true,&nVersionINIIndex,&kSimplifiedChineseResZipEntry);
-	UnzipItem(pZip,nVersionINIIndex,"ppp.ini");
-	delete[] ibuf;
+	FindZipItem(pSimplifiedChineseResZip,"version.ini",true,&nVersionINIIndex,&kSimplifiedChineseResZipEntry);
+
+	pVersionINIBuffer = new char[kSimplifiedChineseResZipEntry.unc_size];
+	memset(pVersionINIBuffer,0,sizeof(char) * kSimplifiedChineseResZipEntry.unc_size);
+
+	UnzipItem(pSimplifiedChineseResZip,nVersionINIIndex,pVersionINIBuffer,kSimplifiedChineseResZipEntry.unc_size);
+
+	unsigned long ulFileLen = 0;
+	strInstallResVersion = pVersionINIBuffer;
+	strInstallResVersion = strInstallResVersion.substr(0,4);
+
+	LOGD("The read text is %s",strInstallResVersion.c_str());
+
+	SAFE_DELETE(pSimplifiedChineseResBuffer);
+	SAFE_DELETE(pVersionINIBuffer);
+
+	CloseZip(pSimplifiedChineseResZip);
+	CloseZip(pZip);
 #endif
 
-// 	if ( !pkFile )
-// 	{
-// 		bFirstTime = true;
-// 	    LOGERROR( "\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );
-//         CopyRes();
-// 	}
-	//else
-	{ 
-        char szCopyResVersion[5] = {0};
-        char szInstallResVersion[5] = {0};
-        fread(szCopyResVersion, 1, 4, pkFile);
-        fclose( pkFile );
-        //如果是原下载的版本安装的包导致version.ini等资源文件已经存在,而且版本号小于当前安装的版本号，则删除当前的资源目录，再重新拷贝
-         FILE* pkInstallFile = 0;
-//         pkInstallFile = fopen(strInstallVersionINIPath.c_str(), "rb" );
+	FILE* pkFile = 0;
+	unsigned long ulFileLength = 0;
+	pkFile = fopen(strCopyVersionINIPath.c_str(), "rb" );
 
-		unsigned long ulFileLen = 0;
-		string strText = (char*)CCFileUtils::sharedFileUtils()->getFileData("version.ini","rt",&ulFileLen);
-		strText = strText.substr(0,4);
+ 	if ( !pkFile )
+ 	{
+ 		bFirstTime = true;
+ 	    LOGERROR( "\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );
+		CopyRes();
+ 	}
+	else
+	{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+		char szCopyResVersion[5] = {0};
+		char szInstallResVersion[5] = {0};
+		fread(szCopyResVersion, 1, 4, pkFile);
+		fclose( pkFile );
+		//如果是原下载的版本安装的包导致version.ini等资源文件已经存在,而且版本号小于当前安装的版本号，则删除当前的资源目录，再重新拷贝
+		FILE* pkInstallFile = 0;
+		pkInstallFile = fopen(strInstallVersionINIPath.c_str(), "rb" );
 
-		LOGD("The read text is %s",strText.c_str());
-
-        if (pkInstallFile)
-        {
-            fread(szInstallResVersion, 1, 4, pkInstallFile);
-            fclose(pkInstallFile);
-        }
+		if (pkInstallFile)
+		{
+			fread(szInstallResVersion, 1, 4, pkInstallFile);
+			strInstallResVersion = szInstallResVersion;
+			fclose(pkInstallFile);
+		}
 		else
 		{
 			LOGERROR("%s is can't open.",strInstallVersionINIPath.c_str());
 		}
+#endif
 
 		LOGD("szCopyResVersion(%d),szInstallResVersion(%d)",
-			atol(szCopyResVersion),atol(strText.c_str()));
+			atol(szCopyResVersion),atol(strInstallResVersion.c_str()));
 
-        if ( atol(szCopyResVersion) < atol(strText.c_str()))
+        if ( atol(szCopyResVersion) < atol(strInstallResVersion.c_str()))
         {
             bFirstTime = true;
             CopyRes();

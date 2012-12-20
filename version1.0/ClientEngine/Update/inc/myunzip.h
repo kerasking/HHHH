@@ -80,7 +80,7 @@ ZRESULT GetZipItem(HZIP hz, int index, ZIPENTRY *ze);
 // then then comp_size and sometimes unc_size as well may not be known until
 // after the item has been unzipped.
 
-ZRESULT MyFindZipItem(HZIP hz, const char *name, bool ic, int *index, ZIPENTRY *ze);
+ZRESULT FindZipItem(HZIP hz, const char *name, bool ic, int *index, ZIPENTRY *ze);
 // FindZipItem - finds an item by name. ic means 'insensitive to case'.
 // It returns the index of the item, and returns information about it.
 // If nothing was found, then index is set to -1 and the function returns
