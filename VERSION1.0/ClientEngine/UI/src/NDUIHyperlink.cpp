@@ -1,5 +1,5 @@
 /*
- *  UIHyperlink.cpp
+ *  NDUIHyperlink.cpp
  *  SMYS
  *
  *  Created by jhzheng on 12-2-23.
@@ -7,7 +7,7 @@
  *
  */
 
-#include "UIHyperlink.h"
+#include "NDUIHyperlink.h"
 #include "CCPointExtension.h"
 #include "NDUtil.h"
 #include "ObjectTracker.h"

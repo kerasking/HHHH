@@ -1,5 +1,5 @@
 /*
- *  UIChatText.mm
+ *  NDUIChatText.cpp
  *  SMYS
  *
  *  Created by jhzheng on 12-4-22.
@@ -7,7 +7,7 @@
  *
  */
 
-#include "UIChatText.h"
+#include "NDUIChatText.h"
 #include "NDUtil.h"
 #include "NDDirector.h"
 #include "NDPath.h"

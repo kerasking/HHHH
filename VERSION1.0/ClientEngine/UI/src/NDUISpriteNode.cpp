@@ -1,5 +1,5 @@
 /*
- *  UISpriteNode.cpp
+ *  NDUISpriteNode.cpp
  *  SMYS
  *
  *  Created by jhzheng on 12-2-22.
@@ -7,8 +7,7 @@
  *
  */
 
-#include "UISpriteNode.h"
-
+#include "NDUISpriteNode.h"
 #include "NDDirector.h"
 #include "CCPointExtension.h"
 #include "NDUtil.h"

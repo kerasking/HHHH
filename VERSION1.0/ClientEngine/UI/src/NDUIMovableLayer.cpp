@@ -1,5 +1,5 @@
 /*
- *  UIMovableLayer.mm
+ *  NDUIMovableLayer.cpp
  *  SMYS
  *
  *  Created by jhzheng on 12-2-10.
@@ -7,7 +7,7 @@
  *
  */
 
-#include "UIMovableLayer.h"
+#include "NDUIMovableLayer.h"
 #include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(CUIMovableLayer, NDUILayer)

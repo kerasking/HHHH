@@ -7,7 +7,7 @@
  *
  */
 
-#include "UIScroll.h"
+#include "NDUIScroll.h"
 #include "NDDirector.h"
 #include "ObjectTracker.h"
 

@@ -23,22 +23,22 @@
 #include "CCGeometry.h"
 #include "UITabLogic.h"
 #include "UIEdit.h"
-#include "UISpriteNode.h"
-#include "UIExp.h"
+#include "NDUISpriteNode.h"
+#include "NDUIExp.h"
 #include "UIRadioButton.h"
 #include "UICheckBox.h"
 #include "UIEquipItem.h"
 #include "UIItemButton.h"
-#include "UIHyperlink.h"
+#include "NDUIHyperlink.h"
 #include "UIRoleNode.h"
-#include "UIScrollViewExpand.h"
-#include "UIScrollViewMulHand.h"
-#include "UIScrollContainerExpand.h""
+#include "NDUIScrollViewExpand.h"
+#include "NDUIScrollViewMulHand.h"
+#include "NDUIScrollContainerExpand.h""
 #include "NDUIScrollView.h"
 #include "NDUIScrollContainer.h"
-#include "UIScroll.h"
-#include "UIMovableLayer.h"
-#include "UIChatText.h"
+#include "NDUIScroll.h"
+#include "NDUIMovableLayer.h"
+#include "NDUIChatText.h"
 #include "NDUIDialog.h"
 #include "NDUILabel.h"
 #include "NDUIImage.h"
@@ -332,7 +332,7 @@ void NDScriptRegLua::doReg()
 	ETMEMBERFUNC("SetContent",						&CUIChatText::SetContent)
 	ETMEMBERFUNC("GetContentHeight",				&CUIChatText::GetContentHeight)	
 	ETCLASSEND(CUIChatText)
-//#pragma mark 可移动层导出"UIMovableLayer.h"
+//#pragma mark 可移动层导出"NDUIMovableLayer.h"
 	ETSUBCLASSBEGIN(CUIMovableLayer, NDUILayer)
 	ETCONSTRUCT("createUIMovableLayer")
 	ETDESTRUCT("Free")
@@ -340,7 +340,7 @@ void NDScriptRegLua::doReg()
 	ETMEMBERFUNC("SetMovableViewer",				&CUIMovableLayer::SetMovableViewer)
 	ETCLASSEND(CUIMovableLayer)
 	
-//#pragma mark 滚动类导出"UIScroll.h"
+//#pragma mark 滚动类导出"NDUIScroll.h"
 	ETSUBCLASSBEGIN(CUIScroll, CUIMovableLayer)
 	ETCONSTRUCT("createUIScroll")
 	ETDESTRUCT("Free")
@@ -406,7 +406,7 @@ void NDScriptRegLua::doReg()
     
     
     //** chh 2012-06-15 **//
-//#pragma mark 滚动视图导出"UIScrollViewMulHand.h"
+//#pragma mark 滚动视图导出"NDUIScrollViewMulHand.h"
 	ETSUBCLASSBEGIN(CUIScrollViewM, CUIScroll)
 	ETCONSTRUCT("createUIScrollViewM")
 	ETDESTRUCT("Free")
@@ -489,7 +489,7 @@ void NDScriptRegLua::doReg()
 	ETMEMBERFUNC("SetRidePet",					&CUIRoleNode::SetRidePet)
 	ETCLASSEND(CUIRoleNode)
 	
-//#pragma mark 超链接文本导出"UIHyperLink.h"
+//#pragma mark 超链接文本导出"NDUIHyperLink.h"
 	ETSUBCLASSBEGIN(CUIHyperlinkText, NDUINode)
 	ETCONSTRUCT("createUIHyperLink")
 	ETDESTRUCT("Free")
@@ -502,7 +502,7 @@ void NDScriptRegLua::doReg()
 	ETMEMBERFUNC("SetLinkTextAlignment",			&CUIHyperlinkText::SetLinkTextAlignment)
 	ETCLASSEND(CUIHyperlinkText)
 	
-//#pragma mark 超链接按钮导出"UIHyperLink.h"
+//#pragma mark 超链接按钮导出"NDUIHyperLink.h"
 	ETSUBCLASSBEGIN(CUIHyperlinkButton, NDUIButton)
 	ETCONSTRUCT("createUIHyperlinkButton")
 	ETDESTRUCT("Free")
@@ -574,7 +574,7 @@ void NDScriptRegLua::doReg()
 	ETMEMBERFUNC("GetSelectedIndex",				&CUIRadioGroup::GetSelectedIndex)
 	ETCLASSEND(CUIRadioGroup)
 	
-//#pragma mark 经验条 "UIExp.h"
+//#pragma mark 经验条 "NDUIExp.h"
 	ETSUBCLASSBEGIN(CUIExp, NDUINode)
 	ETCONSTRUCT("createUIExp")
 	ETDESTRUCT("Free")
@@ -591,7 +591,7 @@ void NDScriptRegLua::doReg()
 	ETMEMBERFUNC("SetTextFontSize",					&CUIExp::SetTextFontSize)
 	ETCLASSEND(CUIExp)
 	
-//#pragma mark 动画控件 "UISpriteNode.h"
+//#pragma mark 动画控件 "NDUISpriteNode.h"
 	ETSUBCLASSBEGIN(CUISpriteNode, NDUINode)
 	ETCONSTRUCT("createUISpriteNode")
 	ETDESTRUCT("Free")

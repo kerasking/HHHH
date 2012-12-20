@@ -7,10 +7,10 @@
  *
  */
 
-#include "UIScrollContainerExpand.h"
+#include "NDUIScrollContainerExpand.h"
 #include "NDDirector.h"
 #include "NDUIImage.h"
-#include "UISpriteNode.h"
+#include "NDUISpriteNode.h"
 #include "ScriptUI.h"
 #include "ObjectTracker.h"
 

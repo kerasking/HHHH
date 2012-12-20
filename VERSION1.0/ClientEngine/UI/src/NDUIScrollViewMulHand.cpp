@@ -7,7 +7,7 @@
  *
  */
 
-#include "UIScrollViewMulHand.h"
+#include "NDUIScrollViewMulHand.h"
 #include "ScriptUI.h"
 #include "CCPointExtension.h"
 #include "NDDirector.h"

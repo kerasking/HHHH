@@ -10,7 +10,7 @@
 #ifndef _UI_SCROLL_VIEW_ZJH_
 #define _UI_SCROLL_VIEW_ZJH_
 
-#include "UIScroll.h"
+#include "NDUIScroll.h"
 #include "NDUIScrollContainer.h"
 
 using namespace NDEngine;

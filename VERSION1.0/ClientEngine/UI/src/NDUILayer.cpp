@@ -37,7 +37,7 @@
 #include "NDUIImage.h"
 #include "NDDebugOpt.h"
 #include "BaseType.h"
-#include "UIScrollViewMulHand.h"
+#include "NDUIScrollViewMulHand.h"
 #include "ObjectTracker.h"
 
 using namespace cocos2d;
