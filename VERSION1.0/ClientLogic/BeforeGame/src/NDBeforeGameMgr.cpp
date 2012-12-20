@@ -1926,8 +1926,14 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
         fread(szCopyResVersion, 1, 4, pkFile);
         fclose( pkFile );
         //如果是原下载的版本安装的包导致version.ini等资源文件已经存在,而且版本号小于当前安装的版本号，则删除当前的资源目录，再重新拷贝
-        FILE* pkInstallFile = 0;
-        pkInstallFile = fopen(strInstallVersionINIPath.c_str(), "rb" );
+         FILE* pkInstallFile = 0;
+//         pkInstallFile = fopen(strInstallVersionINIPath.c_str(), "rb" );
+
+		unsigned long ulFileLen = 0;
+		string strText = (char*)CCFileUtils::sharedFileUtils()->getFileData("version.ini","rt",&ulFileLen);
+		strText = strText.substr(0,4);
+
+		LOGD("The read text is %s",pszText);
 
         if (pkInstallFile)
         {
@@ -1942,7 +1948,7 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 		LOGD("szCopyResVersion(%d),szInstallResVersion(%d)",
 			atol(szCopyResVersion),atol(szInstallResVersion));
 
-        if ( atol(szCopyResVersion) < atol(szInstallResVersion))
+        if ( atol(szCopyResVersion) < atol(strText.c_str()))
         {
             bFirstTime = true;
             CopyRes();

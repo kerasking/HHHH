@@ -348,7 +348,7 @@ unsigned char* CCFileUtils::getFileDataFromZip(const char* pszZipFilePath, const
         CC_BREAK_IF(UNZ_OK != nRet);
 
 		char szFilePathA[260] = {0};
-        unz_file_info FileInfo;
+		unz_file_info FileInfo = {0};
         nRet = unzGetCurrentFileInfo(pFile, &FileInfo, szFilePathA, sizeof(szFilePathA), NULL, 0, NULL, 0);
         CC_BREAK_IF(UNZ_OK != nRet);
 
