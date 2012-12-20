@@ -913,22 +913,6 @@
 					RelativePath="..\UI\src\UIRadioButton.cpp"
 					>
 				</File>
-				<File
-					RelativePath="..\UI\src\UIScroll.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\src\UIScrollContainerExpand.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\src\UIScrollViewExpand.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\src\UIScrollViewMulHand.cpp"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="import"
