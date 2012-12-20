@@ -29,6 +29,19 @@ THE SOFTWARE.
 #include "CCDirector.h"
 #include "cocoa/CCDictionary.h"
 
+#ifdef ANDROID
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS && CC_TARGET_PLATFORM != CC_PLATFORM_MAC)
 
 #include "cocoa/CCString.h"
@@ -332,6 +345,8 @@ CCArray* ccFileUtils_arrayWithContentsOfFileThreadSafe(const char* pFileName)
 
 unsigned char* CCFileUtils::getFileDataFromZip(const char* pszZipFilePath, const char* pszFileName, unsigned long * pSize)
 {
+	LOGD("Entry getFileDataFromZip,pszZipFilePath = %s,pszFileName = %s",pszZipFilePath,pszFileName);
+
     unsigned char * pBuffer = NULL;
     unzFile pFile = NULL;
     *pSize = 0;

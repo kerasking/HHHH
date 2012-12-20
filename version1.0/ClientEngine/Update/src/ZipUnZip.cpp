@@ -63,7 +63,7 @@ bool CZipUnZip::Unzip(const char* lpszZip, const char* lpszDestDir,
 			GetZipItem(hz, zi, &ze);
 			if (lpszPreName)
 			{
-				TCHAR szName[MAX_PATH] =
+				char szName[MAX_PATH] =
 				{ 0 };
 				printf(szName, "%s%s", lpszPreName, ze.name);
 				strcpy(ze.name, szName);

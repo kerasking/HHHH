@@ -59,6 +59,7 @@
 #include "ZipUnZip.h"
 #include "NDSharedPtr.h"
 #include "CCFileUtils.h"
+#include "myunzip.h"
 
 using namespace NDEngine;
 
@@ -1907,19 +1908,43 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	strInstallVersionINIPath = string("sdcard/dhlj/SimplifiedChineseRes/") + SZ_VERINI_PATH;
     strCopyVersionINIPath = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
+// 	FILE* pkFile = 0;
+// 	pkFile = fopen(strCopyVersionINIPath.c_str(), "rb" );
 #else
 #endif
 	//判断是不是第一次登录，如果是第一次登录，则移动资源文件LIBRARY/CACHES
 	FILE* pkFile = 0;
-	pkFile = fopen(strCopyVersionINIPath.c_str(), "rb" );
+	unsigned long ulFileLength = 0;
+	//string strTemp = (char*)CCFileUtils::sharedFileUtils()->getFileData("SimplifiedChineseRes.zip/version.ini","rb",&ulFileLength);
+	LOGD("strTemp = %s",strTemp.c_str());
 
-	if ( !pkFile )
-	{
-		bFirstTime = true;
-	    LOGERROR( "\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );
-        CopyRes();
-	}
-	else
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+	string strAPKPath = "";
+	HZIP pZip = 0;
+	HZIP pSimplifiedChineseResZip = 0;
+	pZip = OpenZip("SimplifiedChineseRes.zip",0);
+	ZIPENTRY kZipEntry = {0};
+	ZIPENTRY kSimplifiedChineseResZipEntry = {0};
+	size_t size = sizeof(ZIPENTRY);
+	int nApkIndex = 0;
+	int nVersionINIIndex = 0;
+	MyFindZipItem(pZip,"SimplifiedChineseRes.zip",true,&nApkIndex,&kZipEntry);
+	char *ibuf = new char[kZipEntry.unc_size];
+	UnzipItem(pZip,nApkIndex, ibuf, kZipEntry.unc_size);
+	pSimplifiedChineseResZip = OpenZip(ibuf,kZipEntry.unc_size,0);
+	MyFindZipItem(pSimplifiedChineseResZip,"version.ini",true,&nVersionINIIndex,&kSimplifiedChineseResZipEntry);
+	UnzipItem(pZip,nVersionINIIndex,"ppp.ini");
+	delete[] ibuf;
+#endif
+
+// 	if ( !pkFile )
+// 	{
+// 		bFirstTime = true;
+// 	    LOGERROR( "\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );
+//         CopyRes();
+// 	}
+	//else
 	{ 
         char szCopyResVersion[5] = {0};
         char szInstallResVersion[5] = {0};
@@ -1933,7 +1958,7 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 		string strText = (char*)CCFileUtils::sharedFileUtils()->getFileData("version.ini","rt",&ulFileLen);
 		strText = strText.substr(0,4);
 
-		LOGD("The read text is %s",pszText);
+		LOGD("The read text is %s",strText.c_str());
 
         if (pkInstallFile)
         {
@@ -1946,7 +1971,7 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 		}
 
 		LOGD("szCopyResVersion(%d),szInstallResVersion(%d)",
-			atol(szCopyResVersion),atol(szInstallResVersion));
+			atol(szCopyResVersion),atol(strText.c_str()));
 
         if ( atol(szCopyResVersion) < atol(strText.c_str()))
         {
