@@ -235,7 +235,7 @@ public:
 		//		如果在函数调用中，多个参数用这个指针传递则会出错，会被覆盖掉！
 		const char* getUtf8String()
 		{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)  /*|| (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)*/
 			static char g_GBKConvUTF8Buf_XX[5000] = {0};
 			
 			//const char* GBKToUTF8(const char *strChar)
