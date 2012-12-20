@@ -1558,6 +1558,8 @@ void NDBaseRole::HandleShadow(CCSize parentsize)
 //动画+渲染，入口在这儿，重载方便测试
 void NDBaseRole::RunAnimation(bool bDraw)
 {
+	if (!NDDebugOpt::getRunAnimRoleEnabled()) return;
+
 	NDSprite::RunAnimation(bDraw);
 
 	this->debugDraw();

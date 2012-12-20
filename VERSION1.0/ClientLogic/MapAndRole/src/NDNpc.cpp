@@ -906,3 +906,11 @@ void NDNpc::ShowHightLight(bool bShow)
 
 	this->SetHightLight(bShow);
 }
+
+//override for debug
+void NDNpc::RunAnimation(bool bDraw)
+{
+	if (!NDDebugOpt::getRunAnimNpcEnabled()) return;
+
+	NDBaseRole::RunAnimation(bDraw);
+}

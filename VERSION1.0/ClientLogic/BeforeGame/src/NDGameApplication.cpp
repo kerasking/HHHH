@@ -387,6 +387,7 @@ bool NDGameApplication::processPM(const char* cmd)
 		else if (stricmp(szDebugOpt, "mainloop") == 0)
 			NDDebugOpt::setMainLoopEnabled( val != 0 );
 
+		//
 		else if (stricmp(szDebugOpt, "drawhud") == 0)
 			NDDebugOpt::setDrawHudEnabled( val != 0 );
 
@@ -399,6 +400,7 @@ bool NDGameApplication::processPM(const char* cmd)
 		else if (stricmp(szDebugOpt, "drawcell") == 0)
 			NDDebugOpt::setDrawCellEnabled( val != 0 );
 
+		//
 		else if (stricmp(szDebugOpt, "drawrole") == 0)
 			NDDebugOpt::setDrawRoleEnabled( val != 0 );
 
@@ -421,6 +423,24 @@ bool NDGameApplication::processPM(const char* cmd)
 					stricmp(szDebugOpt, "drawmanual") == 0)
 		{
 			NDDebugOpt::setDrawRoleManualEnabled( val != 0 );
+		}
+
+		//
+		else if (stricmp(szDebugOpt, "runanimmanual") == 0)
+		{
+			NDDebugOpt::setRunAnimManualEnabled( val != 0 );
+		}
+		else if (stricmp(szDebugOpt, "runanimplayer") == 0)
+		{
+			NDDebugOpt::setRunAnimPlayerEnabled( val != 0 );
+		}
+		else if (stricmp(szDebugOpt, "runanimnpc") == 0)
+		{
+			NDDebugOpt::setRunAnimNpcEnabled( val != 0 );
+		}
+		else if (stricmp(szDebugOpt, "runanimrole") == 0)
+		{
+			NDDebugOpt::setRunAnimRoleEnabled( val != 0 );
 		}
 	}
 	else if (sscanf(cmd, "openmap %d", &val) == 1)

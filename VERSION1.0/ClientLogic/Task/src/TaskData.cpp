@@ -9,9 +9,12 @@
 
 #include "TaskData.h"
 #include <sstream>
+#include "ObjectTracker.h"
 
 TaskData::TaskData()
 {
+	INC_NDOBJ("TaskData");
+
 	mId = 0; // 表itemType或者怪物id
     mSumCount = 0; // 表总数量
     mCurCount = 0; // 表当前数量
@@ -20,6 +23,11 @@ TaskData::TaskData()
 	mapId = 0;
 	mapX = 0;
 	mapY = 0;
+}
+
+TaskData::~TaskData()
+{
+	DEC_NDOBJ("TaskData");
 }
 
 int TaskData::getMId() { return mId; }

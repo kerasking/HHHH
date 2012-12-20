@@ -1192,13 +1192,6 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	if (!pkParent)
 		return true;
 
-	//if (!node
-//			|| !(node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)) 
-//			|| node->IsKindOfClass(RUNTIME_CLASS(NDUILayer))) )
-//		{
-//			return true;
-//		}
-
 	NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
 	if (!(pkScene->IsKindOfClass(RUNTIME_CLASS(GameScene))
 			|| pkScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene))
@@ -1206,15 +1199,6 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	{
 		return true;
 	}
-
-	/*
-	 if (!IsKindOfClass(RUNTIME_CLASS(NDPlayer))
-	 && !NDDataPersist::IsGameSettingOn(GS_SHOW_OTHER_PLAYER)
-	 && !(scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))))
-	 {
-	 return false;
-	 }
-	 */
 
 	if (pkScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene)))
 	{
@@ -1235,30 +1219,27 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	if (IsInState (USERSTATE_BOOTH))
 	{
 		// 摆摊不画骑宠
-		if (m_pkVendorPicture)
+		if (m_pkVendorPicture 
+			&& pkParent->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
-			CCSize sizemap;
-			if (pkParent->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
-			{
-				CCSize szVendor = m_pkVendorPicture->GetSize();
+			CCSize szVendor = m_pkVendorPicture->GetSize();
 
-				//把baserole坐标转成屏幕坐标
-				NDMapLayer* pkLayer = (NDMapLayer*) pkParent;
-				CCPoint screen = pkLayer->GetScreenCenter();
-				CCSize winSize =
-						CCDirector::sharedDirector()->getWinSizeInPixels();
+			//把baserole坐标转成屏幕坐标
+			NDMapLayer* pkLayer = (NDMapLayer*) pkParent;
+			CCPoint screen = pkLayer->GetScreenCenter();
+			CCSize winSize =
+				CCDirector::sharedDirector()->getWinSizeInPixels();
 
-				m_kScreenPosition = ccpSub(GetPosition(),
-						ccpSub(screen,
-								CCPointMake(winSize.width / 2,
-										winSize.height / 2)));
+			m_kScreenPosition = ccpSub(GetPosition(),
+				ccpSub(screen,
+				CCPointMake(winSize.width / 2,
+				winSize.height / 2)));
 
-				sizemap = pkLayer->GetContentSize();
-				m_pkVendorPicture->DrawInRect(
-						CCRectMake(pos.x - 13 - 8,
-								pos.y - 10 + 320 - sizemap.height,
-								szVendor.width, szVendor.height));
-			}
+			CCSize sizemap = pkLayer->GetContentSize();
+			m_pkVendorPicture->DrawInRect(
+				CCRectMake(pos.x - 13 - 8,
+				pos.y - 10 + 320 - sizemap.height,
+				szVendor.width, szVendor.height));
 		}
 
 		DrawRingImage(true);
@@ -1275,22 +1256,20 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 					NDPath::GetImgPath("s124.png"));
 		}
 
-		if (m_pkGraveStonePicture)
+		if (m_pkGraveStonePicture
+			&& pkParent->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
-			if (pkParent->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
-			{
-				CCSize sizemap;
-				NDMapLayer* pkLayer = (NDMapLayer*) pkParent;
-				sizemap = pkLayer->GetContentSize();
-				CCSize sizeGraveStone = m_pkGraveStonePicture->GetSize();
-				CCRect rect = CCRectMake(pos.x - 13 - 8,
-						pos.y - 10 + 320 - sizemap.height, sizeGraveStone.width,
-						sizeGraveStone.height);
+			CCSize sizemap;
+			NDMapLayer* pkLayer = (NDMapLayer*) pkParent;
+			sizemap = pkLayer->GetContentSize();
+			CCSize sizeGraveStone = m_pkGraveStonePicture->GetSize();
+			CCRect rect = CCRectMake(pos.x - 13 - 8,
+				pos.y - 10 + 320 - sizemap.height, sizeGraveStone.width,
+				sizeGraveStone.height);
 
-				m_pkGraveStonePicture->DrawInRect(rect);
+			m_pkGraveStonePicture->DrawInRect(rect);
 
-				return false;
-			}
+			return false;
 		}
 	}
 #endif 
@@ -1301,23 +1280,19 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	// 处理影子
 	if (IsInState (USERSTATE_STEALTH))
 	{
-		if (IsKindOfClass (RUNTIME_CLASS(NDPlayer))){
-		SetShadowOffset(0, 10);
-		ShowShadow(true);
-		HandleShadow(pkParent->GetContentSize());
+		if (IsKindOfClass (RUNTIME_CLASS(NDPlayer)))
+		{
+			SetShadowOffset(0, 10);
+			ShowShadow(true);
+			HandleShadow(pkParent->GetContentSize());
+		}
+		return true;
 	}
-	return true;
-}
-else
-{
-	SetShadowOffset(m_pkRidePet ? -8 : 0, 10);
-	ShowShadow(true, m_pkRidePet != NULL);
-}
-
-// 	if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
-// 	{
-// 		ShowShadow(false);
-// 	}
+	else
+	{
+		SetShadowOffset(m_pkRidePet ? -8 : 0, 10);
+		ShowShadow(true, m_pkRidePet != NULL);
+	}
 
 	if (pkParent->IsKindOfClass(RUNTIME_CLASS(Battle)))
 	{
@@ -1366,26 +1341,22 @@ else
 		m_pkRidePet->SetScale(this->GetScale());
 	}
 
-	//NDLog(@"draw pet1");
 	//画骑宠
 	if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)))
 	{
-		//NDLog(@"draw pet2");
 		if (AssuredRidePet())
 		{
 			bool isSit = BaseScriptMgrObj.excuteLuaFunc<bool>("IsInPractising",
 					"PlayerFunc");
-			//NDLog(@"user draw ridepet");
+
 			if (!isSit)
 			{
-				//NDLog(@"user not sit,draw ridepet");
 				m_pkRidePet->RunAnimation(bDraw);
 			}
 		}
 	}
 	else if (AssuredRidePet() && !IsInState(USERSTATE_PRACTISE))
 	{
-		//NDLog(@"draw pet3");
 		m_pkRidePet->RunAnimation(bDraw);
 	}
 #endif
@@ -1396,11 +1367,6 @@ else
 	{
 		bDraw = !IsInState(USERSTATE_STEALTH);
 		m_pkAniGroupTransformed->SetPosition(pos);
-
-// 		m_pkAniGroupTransformed->SetCurrentAnimation(
-// 				m_bIsMoving ? MONSTER_MAP_MOVE : MONSTER_MAP_STAND,
-// 				!m_bFaceRight);
-// 		m_pkAniGroupTransformed->SetSpriteDir(m_bFaceRight ? 2 : 0);
 		m_pkAniGroupTransformed->RunAnimation(bDraw);
 	}
 #endif 
@@ -1421,12 +1387,13 @@ else
 	{
 		DrawNameLabel(bDraw);
 	}
+#endif 
 
+#if 9
 	if (bDraw)
 	{
 		RunSMEffect (eSM_EFFECT_DRAW_ORDER_BACK);
 	}
-
 #endif
 
 	return !isTransformed();
@@ -2867,6 +2834,14 @@ bool NDManualRole::ChangeModelWithMount( int nRideStatus, int nMountType )
 	
 	SetCurrentAnimation( MANUELROLE_STAND, m_bFaceRight );
 	return true;
+}
+
+//override for debug
+void NDManualRole::RunAnimation(bool bDraw)
+{
+	if (!NDDebugOpt::getRunAnimManualEnabled()) return;
+
+	NDBaseRole::RunAnimation(bDraw);
 }
 
 void NDManualRole::debugDraw()
