@@ -11,6 +11,7 @@
 #include "NDUtility.h"
 #include "NDDirector.h"
 #include "NDUIBaseGraphics.h"
+#include "ObjectTracker.h"
 
 #define timer_tag (126482)
 
@@ -18,6 +19,8 @@ IMPLEMENT_CLASS(NDEraseInOutEffect, NDUINode)
 
 NDEraseInOutEffect::NDEraseInOutEffect()
 {
+	INC_NDOBJ_RTCLS
+
 	INIT_AUTOLINK(NDEraseInOutEffect);
 	
 	m_timer = NULL;
@@ -31,7 +34,10 @@ NDEraseInOutEffect::NDEraseInOutEffect()
 
 NDEraseInOutEffect::~NDEraseInOutEffect()
 {
-	if (m_timer) {
+	DEC_NDOBJ_RTCLS
+	
+	if (m_timer) 
+	{
 		m_timer->KillTimer(this, timer_tag);
 		delete m_timer;
 	}

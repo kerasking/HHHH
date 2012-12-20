@@ -13,6 +13,7 @@
 #include "NDDirector.h"
 #include "GameScene.h"
 #include "NDUtility.h"
+#include "ObjectTracker.h"
 
 using namespace NDEngine;
 
@@ -60,11 +61,13 @@ uint GlobalShowDlg(NDEngine::NDObject* delegate, const char* title,
 #define MAX_FACTORY_ID (2147483647) // (2^31-1)
 CIDFactory::CIDFactory()
 {
+	INC_NDOBJ_RTCLS
 	reset();
 }
 
 CIDFactory::~CIDFactory()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 unsigned int CIDFactory::GetID()
@@ -120,11 +123,13 @@ CGlobalDialog& CGlobalDialog::getSingleton()
 
 CGlobalDialog::CGlobalDialog()
 {
+	INC_NDOBJ_RTCLS
 	m_bInBattle = false;
 }
 
 CGlobalDialog::~CGlobalDialog()
 {
+	DEC_NDOBJ_RTCLS
 	quitGame();
 }
 
@@ -429,10 +434,12 @@ void GameQuitDialog::DefaultShow(std::string title, std::string content,
 
 GameQuitDialog::GameQuitDialog()
 {
+	INC_NDOBJ_RTCLS
 }
 
 GameQuitDialog::~GameQuitDialog()
 {
+	DEC_NDOBJ_RTCLS
 	ms_pkGameQuitDialog = NULL;
 }
 

@@ -10,6 +10,7 @@
 #include "NDAnimationGroupPool.h"
 #include "NDDebugOpt.h"
 #include "NDSprite.h"
+#include "ObjectTracker.h"
 
 namespace NDEngine
 {
@@ -17,6 +18,8 @@ IMPLEMENT_CLASS(NDLightEffect, NDNode)
 
 NDLightEffect::NDLightEffect()
 {
+	INC_NDOBJ_RTCLS
+
 	m_pkFrameRunRecord = NULL;
 	m_pkAniGroup = NULL;
 	m_nLightID = 0;
@@ -26,6 +29,8 @@ NDLightEffect::NDLightEffect()
 
 NDLightEffect::~NDLightEffect()
 {
+	DEC_NDOBJ_RTCLS
+
 	CC_SAFE_RELEASE (m_pkAniGroup);
 	CC_SAFE_RELEASE (m_pkFrameRunRecord);
 }

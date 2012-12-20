@@ -22,6 +22,7 @@ class NDAutoPath: NDObject
 	DECLARE_CLASS (NDAutoPath)
 public:
 	explicit NDAutoPath();
+	~NDAutoPath();
 
 	/* 获取共享的自动寻路实例,如果未创建则创建
 	 返回值: 地图数据池

@@ -15,6 +15,8 @@
 #include <stdlib.h>
 #include "NDLocalization.h"
 #include "NDBaseScriptMgr.h"
+#include "NDSharedPtr.h"
+#include "ObjectTracker.h"
 
 #ifdef ANDROID
 #include <jni.h>
@@ -31,10 +33,12 @@ IMPLEMENT_CLASS(CUIChatText, NDUINode)
 
 CUIChatText::CUIChatText()
 {
+	INC_NDOBJ_RTCLS
 }
 
 CUIChatText::~CUIChatText()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CUIChatText::Initialization()
@@ -365,7 +369,8 @@ NDUILabel* CUIChatText::CreateLabel(const char* utf8_text, unsigned int fontSize
 	NDUILabel* label = NULL;
 	if (utf8_text) 
 	{
-		const char* ansiText = CCString::stringWithUTF8String( utf8_text )->getCString();
+		CCStringRef strRef = CCString::stringWithUTF8String( utf8_text );
+		const char* ansiText = strRef->getCString();
 		CCSize textSize = getStringSize(ansiText, fontSize*FONT_SCALE);
 
 		label = new NDUILabel();

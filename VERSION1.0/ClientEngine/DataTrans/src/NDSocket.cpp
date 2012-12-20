@@ -73,7 +73,7 @@ namespace NDEngine
 	{
 		m_blocking = false;
 
-		m_socket = new KTcpClientSocket();
+		m_socket = new KTcpClientSocket(); //@leak
 
         m_EncryptSnd = new CEncryptor;
         m_EncryptRcv = new CEncryptor;

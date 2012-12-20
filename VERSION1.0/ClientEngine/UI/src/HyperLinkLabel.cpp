@@ -9,17 +9,19 @@
 
 #include "HyperLinkLabel.h"
 #include "NDUIBaseGraphics.h"
+#include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(HyperLinkLabel, NDUILabel)
 
 HyperLinkLabel::HyperLinkLabel()
 {
+	INC_NDOBJ_RTCLS
 	m_bIsLink = false;
 }
 
 HyperLinkLabel::~HyperLinkLabel()
 {
-
+	DEC_NDOBJ_RTCLS
 }
 
 void HyperLinkLabel::SetIsLink(bool isLink)

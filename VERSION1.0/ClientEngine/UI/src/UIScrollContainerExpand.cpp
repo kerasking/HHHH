@@ -12,6 +12,7 @@
 #include "NDUIImage.h"
 #include "UISpriteNode.h"
 #include "ScriptUI.h"
+#include "ObjectTracker.h"
 
 #define ANIMATE_ZOOM_MIN    0.7     //缩放比例下线
 #define ANIMATE_ZOOM_MAX    1.0     //缩放比例上线
@@ -22,6 +23,8 @@ IMPLEMENT_CLASS(CUIScrollContainerExpand, NDUILayer)
 
 CUIScrollContainerExpand::CUIScrollContainerExpand()
 {
+	INC_NDOBJ_RTCLS
+
 	m_sizeView      = CCSizeMake(0, 0);
     m_unBeginIndex  = 0 ;
     m_unPreIndex    = 0;
@@ -34,26 +37,34 @@ CUIScrollContainerExpand::CUIScrollContainerExpand()
 
 CUIScrollContainerExpand::~CUIScrollContainerExpand()
 {
-    
+    DEC_NDOBJ_RTCLS
 }
-void CUIScrollContainerExpand::Initialization(){
+
+void CUIScrollContainerExpand::Initialization()
+{
     NDUILayer::Initialization();
 }
-void CUIScrollContainerExpand::AddView(UIScrollViewExpand* pScrollViewCurrent){
+
+void CUIScrollContainerExpand::AddView(UIScrollViewExpand* pScrollViewCurrent)
+{
     this->AddChild(pScrollViewCurrent);
     m_pScrollViewUINodes.push_back(pScrollViewCurrent);
     CalculatePosition();
     ResetCurrViewBg();
 }
+
 void CUIScrollContainerExpand::SetSizeView(CCSize size){
     m_sizeView = size;
     m_fTranValue = m_fScrollToCenterSpeed/size.width;
 }
-UIScrollViewExpand* CUIScrollContainerExpand::GetViewById(unsigned int nViewId){
+
+UIScrollViewExpand* CUIScrollContainerExpand::GetViewById(unsigned int nViewId)
+{
     //计算出viewid的index
     int uViewIndex = -1;
     unsigned int nViewSize = GetViewCount();
-    for (unsigned int i=0; i<nViewSize; i++) {
+    for (unsigned int i=0; i<nViewSize; i++) 
+	{
         UIScrollViewExpand* sve = m_pScrollViewUINodes[i];
         if(sve->GetViewId() == nViewId){
             uViewIndex = i;
@@ -61,28 +72,39 @@ UIScrollViewExpand* CUIScrollContainerExpand::GetViewById(unsigned int nViewId){
         }
     }
     
-    if(uViewIndex<0){
+    if(uViewIndex<0)
+	{
         return NULL;
     }
     return GetViewByIndex(uViewIndex);
 }
-UIScrollViewExpand* CUIScrollContainerExpand::GetViewByIndex(unsigned int nViewIndex){
-    if(nViewIndex<GetViewCount()){
+
+UIScrollViewExpand* CUIScrollContainerExpand::GetViewByIndex(unsigned int nViewIndex)
+{
+    if(nViewIndex<GetViewCount())
+	{
         return m_pScrollViewUINodes[nViewIndex];
     }
     return NULL;
 }
-unsigned int CUIScrollContainerExpand::GetCurrentIndex(){
+
+unsigned int CUIScrollContainerExpand::GetCurrentIndex()
+{
     return m_unBeginIndex;
 }
-unsigned int CUIScrollContainerExpand::GetPreIndex(){
+
+unsigned int CUIScrollContainerExpand::GetPreIndex()
+{
     return m_unPreIndex;
 }
 
-unsigned int CUIScrollContainerExpand::GetViewCount(){
+unsigned int CUIScrollContainerExpand::GetViewCount()
+{
     return m_pScrollViewUINodes.size();
 }
-void CUIScrollContainerExpand::SetCurrentIndex(unsigned int unIndex){
+
+void CUIScrollContainerExpand::SetCurrentIndex(unsigned int unIndex)
+{
     m_unPreIndex = m_unBeginIndex;
     m_unBeginIndex = unIndex;
     
@@ -91,9 +113,12 @@ void CUIScrollContainerExpand::SetCurrentIndex(unsigned int unIndex){
     }
     OnScriptUiEvent(this, TE_TOUCH_SC_VIEW_IN_BEGIN, m_unBeginIndex);
 }
-void CUIScrollContainerExpand::MovePosition(int nDistance){
+
+void CUIScrollContainerExpand::MovePosition(int nDistance)
+{
     unsigned int nViewSize = GetViewCount();
-    for (unsigned int i=0; i<nViewSize; i++) {
+    for (unsigned int i=0; i<nViewSize; i++) 
+	{
         UIScrollViewExpand* sve = m_pScrollViewUINodes[i];
         CCRect rect = sve->GetFrameRect();
         rect.origin.x += nDistance;
@@ -101,8 +126,9 @@ void CUIScrollContainerExpand::MovePosition(int nDistance){
     }
     SetViewScale();
 }
-void CUIScrollContainerExpand::SetViewScale(){
-    
+
+void CUIScrollContainerExpand::SetViewScale()
+{
     UIScrollViewExpand *psve = m_pScrollViewUINodes[m_unPreIndex];
     vector<NDNode*> pnodes = psve->GetChildren();
     for (unsigned int i=0; i<pnodes.size(); i++) {
@@ -150,9 +176,10 @@ void CUIScrollContainerExpand::SetViewScale(){
             nSpriteNode->SetFrameRect(rect);
         }
     }
-
 }
-void CUIScrollContainerExpand::ResetCurrViewBg(){
+
+void CUIScrollContainerExpand::ResetCurrViewBg()
+{
     
     for (unsigned int i=0; i<m_pScrollViewUINodes.size(); i++) {
         UIScrollViewExpand *sve = m_pScrollViewUINodes[i];
@@ -196,17 +223,22 @@ void CUIScrollContainerExpand::ResetCurrViewBg(){
     }
 }
 
-void CUIScrollContainerExpand::AdjustToCenter(){
+void CUIScrollContainerExpand::AdjustToCenter()
+{
     
 }
-void CUIScrollContainerExpand::CalculateSlideDistance(){
+
+void CUIScrollContainerExpand::CalculateSlideDistance()
+{
     
 }
+
 void CUIScrollContainerExpand::CalculatePosition(){
     int size = m_pScrollViewUINodes.size();
     int sizeb = size/2;
     int k=0;
-    for (int i=m_unBeginIndex; i<size+m_unBeginIndex; i++,k++) {
+    for (int i=m_unBeginIndex; i<size+m_unBeginIndex; i++,k++) 
+	{
         
         int index = i%size;
         
@@ -226,6 +258,7 @@ void CUIScrollContainerExpand::CalculatePosition(){
         sve->SetFrameRect(rect);
     }
 }
+
 bool CUIScrollContainerExpand::TouchMoved(NDTouch* touch)
 {
 	if (!this->IsVisibled())
@@ -266,7 +299,9 @@ bool CUIScrollContainerExpand::TouchMoved(NDTouch* touch)
     
     return true;
 }
-void CUIScrollContainerExpand::draw(){
+
+void CUIScrollContainerExpand::draw()
+{
     NDUILayer::draw();
     
     NDDirector::DefaultDirector()->SetViewRect(this->GetScreenRect(), this);
@@ -294,5 +329,4 @@ void CUIScrollContainerExpand::draw(){
         MovePosition(m_fScrollToCenterSpeed);
         m_fScrollDistance += m_fScrollToCenterSpeed;
     }
-    
 }

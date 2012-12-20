@@ -132,6 +132,9 @@ private:
 
 class NDPictureDictionary: public NDDictionary
 {
+public:
+	NDPictureDictionary();
+	~NDPictureDictionary();
 	DECLARE_CLASS (NDPictureDictionary)
 public:
 	void Recyle();

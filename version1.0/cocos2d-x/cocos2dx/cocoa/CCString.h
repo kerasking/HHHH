@@ -163,69 +163,112 @@ public:
 			return m_sString;
 		}
 
-		/***
-		* @brief 去除路径中最后一个"\"之后的所有的东西，包括斜杠本身。
-		*
-		* @return CCString* 返回CCString类的指针
-		* @author (DeNA)郭浩
-		* @date 20120731
-		*/
-		CCString* stringByDeletingLastPathComponent()
+//@leak
+// 		/***
+// 		* @brief 去除路径中最后一个"\"之后的所有的东西，包括斜杠本身。
+// 		*
+// 		* @return CCString* 返回CCString类的指针
+// 		* @author (DeNA)郭浩
+// 		* @date 20120731
+// 		*/
+// 		CCString* stringByDeletingLastPathComponent()
+// 		{
+// 			int nPos = -1;
+// 			std::string strSubString = "";
+// 
+// 			if (-1 == (nPos = m_sString.find_last_of('\\')))
+// 			{
+// 				return new CCString(m_sString.c_str());
+// 			}
+// 
+// 			strSubString = m_sString.substr(0,nPos);
+// 
+// 			return new CCString(strSubString.c_str());
+// 		}
+
+//@leak
+// 		/***
+// 		* @brief 返回转换成UTF8格式的字符
+// 		*
+// 		* @return const unsigned char* 返回UTF8指针
+// 		* @retval 0 空指针即为无法转换
+// 		* @author (DeNA)郭浩
+// 		* @date 20120731
+// 		*/
+// 		const char* UTF8String()
+//     {
+// #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+// 			const char* strChar = m_sString.c_str();
+// 			iconv_t iconvH = 0;
+// 			iconvH = iconv_open("utf-8","gb2312");
+// 
+// 			if (iconvH == 0)
+// 			{
+// 				return NULL;
+// 			}
+// 
+// 			size_t strLength = strlen(strChar);
+// 			size_t outLength = strLength<<2;
+// 			size_t copyLength = outLength;
+// 			memset(g_GBKConvUTF8Buf, 0, 5000);
+// 
+// 			char* outbuf = (char*) malloc(outLength);
+// 			char* pBuff = outbuf;
+// 			memset( outbuf, 0, outLength);
+// 
+// 			if (-1 == iconv(iconvH, &strChar, &strLength, &outbuf, &outLength))
+// 			{
+// 				iconv_close(iconvH);
+// 				return NULL;
+// 			}
+// 			memcpy(g_GBKConvUTF8Buf,pBuff,copyLength);
+// 			free(pBuff);
+// 			iconv_close(iconvH);
+// 
+// 			return g_GBKConvUTF8Buf;
+// #else
+//         return m_sString.c_str();
+// #endif
+// 		}
+
+		//备注：返回的指针式全局静态指针，不要保存指针
+		//		如果在函数调用中，多个参数用这个指针传递则会出错，会被覆盖掉！
+		const char* getUtf8String()
 		{
-			int nPos = -1;
-			std::string strSubString = "";
-
-			if (-1 == (nPos = m_sString.find_last_of('\\')))
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+			static char g_GBKConvUTF8Buf_XX[5000] = {0};
+			
+			//const char* GBKToUTF8(const char *strChar)
+			const char* strChar = this->getCString();
 			{
-				return new CCString(m_sString.c_str());
-			}
+				iconv_t iconvH;
+				iconvH = iconv_open("utf-8","gb2312");
+				if (iconvH == 0)
+				{
+					return NULL;
+				}
+				size_t strLength = strlen(strChar);
+				size_t outLength = strLength<<2;
+				size_t copyLength = outLength;
+				memset(g_GBKConvUTF8Buf_XX, 0, sizeof(g_GBKConvUTF8Buf_XX));
 
-			strSubString = m_sString.substr(0,nPos);
+				char* outbuf = (char*) malloc(outLength);
+				char* pBuff = outbuf;
+				memset( outbuf, 0, outLength);
 
-			return new CCString(strSubString.c_str());
-		}
-
-		/***
-		* @brief 返回转换成UTF8格式的字符
-		*
-		* @return const unsigned char* 返回UTF8指针
-		* @retval 0 空指针即为无法转换
-		* @author (DeNA)郭浩
-		* @date 20120731
-		*/
-		const char* UTF8String()
-    {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-			const char* strChar = m_sString.c_str();
-			iconv_t iconvH = 0;
-			iconvH = iconv_open("utf-8","gb2312");
-
-			if (iconvH == 0)
-			{
-				return NULL;
-			}
-
-			size_t strLength = strlen(strChar);
-			size_t outLength = strLength<<2;
-			size_t copyLength = outLength;
-			memset(g_GBKConvUTF8Buf, 0, 5000);
-
-			char* outbuf = (char*) malloc(outLength);
-			char* pBuff = outbuf;
-			memset( outbuf, 0, outLength);
-
-			if (-1 == iconv(iconvH, &strChar, &strLength, &outbuf, &outLength))
-			{
+				if (-1 == iconv(iconvH, &strChar, &strLength, &outbuf, &outLength))
+				{
+					free( outbuf );
+					iconv_close(iconvH);
+					return NULL;
+				}
+				memcpy(g_GBKConvUTF8Buf_XX,pBuff,copyLength);
+				free(pBuff);
 				iconv_close(iconvH);
-				return NULL;
+				return g_GBKConvUTF8Buf_XX;
 			}
-			memcpy(g_GBKConvUTF8Buf,pBuff,copyLength);
-			free(pBuff);
-			iconv_close(iconvH);
-
-			return g_GBKConvUTF8Buf;
 #else
-        return m_sString.c_str();
+			return NULL;
 #endif
 		}
 
@@ -240,60 +283,60 @@ public:
 		* @date 20120731
 		*/
 		static CCString* stringWithUTF8String(const char* pszUTF8)
-        {
-    #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-                if (0 == pszUTF8 || !*pszUTF8)
-                {
-                    return new CCString("");
-                }
+		{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+			if (0 == pszUTF8 || !*pszUTF8)
+			{
+				return new CCString("");
+			}
 
-                if (isUTF8ChineseCharacter(pszUTF8))
-                {
-                iconv_t pConvert = 0;
-                const char* pszInbuffer = pszUTF8;
-                char* pszOutBuffer = new char[2048];
+			if (isUTF8ChineseCharacter(pszUTF8))
+			{
+				iconv_t pConvert = 0;
+				const char* pszInbuffer = pszUTF8;
+				char* pszOutBuffer = new char[2048];
 
-                memset(pszOutBuffer,0,sizeof(char) * 2048);
+				memset(pszOutBuffer,0,sizeof(char) * 2048);
 
-                int nStatus = 0;
-                size_t sizOutBuffer = 2048;
-                size_t sizInBuffer = strlen(pszUTF8);
-                const char* pszInPtr = pszInbuffer;
-                size_t sizInSize = sizInBuffer;
-                char* pszOutPtr = pszOutBuffer;
-                size_t sizOutSize = sizOutBuffer;
+				int nStatus = 0;
+				size_t sizOutBuffer = 2048;
+				size_t sizInBuffer = strlen(pszUTF8);
+				const char* pszInPtr = pszInbuffer;
+				size_t sizInSize = sizInBuffer;
+				char* pszOutPtr = pszOutBuffer;
+				size_t sizOutSize = sizOutBuffer;
 
-                pConvert = iconv_open("GB2312","UTF-8");
+				pConvert = iconv_open("GB2312","UTF-8");
 
-                iconv(pConvert,0,0,0,0);
+				iconv(pConvert,0,0,0,0);
 
-                while (0 < sizInSize)
-                {
-                    size_t sizRes = iconv(pConvert,(const char**)&pszInPtr,
-                        &sizInSize,&pszOutPtr,&sizOutSize);
+				while (0 < sizInSize)
+				{
+					size_t sizRes = iconv(pConvert,(const char**)&pszInPtr,
+						&sizInSize,&pszOutPtr,&sizOutSize);
 
-                    if (pszOutPtr != pszOutBuffer)
-                    {
-                        strncpy(pszOutBuffer,pszOutBuffer,sizOutSize);
-                    }
+					if (pszOutPtr != pszOutBuffer)
+					{
+						strncpy(pszOutBuffer,pszOutBuffer,sizOutSize);
+					}
 
-                    if ((size_t)-1 == sizRes)
-                    {
-                        int nOne = 1;
-                        iconvctl(pConvert,ICONV_SET_DISCARD_ILSEQ,&nOne);
-                    }
-                }
+					if ((size_t)-1 == sizRes)
+					{
+						int nOne = 1;
+						iconvctl(pConvert,ICONV_SET_DISCARD_ILSEQ,&nOne);
+					}
+				}
 
-                iconv_close(pConvert);
+				iconv_close(pConvert);
 
-                return new CCString(pszOutBuffer);
-            }
+				return new CCString(pszOutBuffer);
+			}
 			else
 			{
 				return new CCString(pszUTF8);
 			}
 #else
-                return new CCString(pszUTF8);
+			return new CCString(pszUTF8);
 #endif
 		}
 
@@ -417,11 +460,6 @@ struct CCStringCompare : public std::binary_function<CCString *, CCString *, boo
 
 // end of data_structure group
 /// @}
-
-#if ND_MOD
-#define UTF8_TO_ANSI(utf8_text)		CCString::stringWithUTF8String(utf8_text)->getCString()
-#define ANSI_TO_UTF8(ansi_text)		CCString(ansi_text).UTF8String()
-#endif //ND_MOD
 
 
 NS_CC_END

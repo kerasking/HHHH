@@ -9,8 +9,19 @@
 
 #include "UITabLogic.h"
 #include "NDUIButton.h"
+#include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(CUITabLogic, NDUINode)
+
+CUITabLogic::CUITabLogic()
+{
+	INC_NDOBJ_RTCLS
+}
+
+CUITabLogic::~CUITabLogic()
+{
+	DEC_NDOBJ_RTCLS
+}
 
 void CUITabLogic::AddTab(NDUIButton* tab, NDUINode* client)
 {

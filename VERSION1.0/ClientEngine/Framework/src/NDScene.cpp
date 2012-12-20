@@ -12,6 +12,7 @@
 #include "NDDirector.h"
 #include <sstream>
 #include "EngineScriptCommon.h"
+#include "ObjectTracker.h"
 
 using namespace std;
 
@@ -62,9 +63,13 @@ IMPLEMENT_CLASS(CTextLayer, NDUILayer)
 IMPLEMENT_CLASS(NDScene, NDNode)
 
 NDScene::NDScene()
-{}
+{
+	INC_NDOBJ_RTCLS
+}
+
 NDScene::~NDScene()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 NDScene* NDScene::Scene()

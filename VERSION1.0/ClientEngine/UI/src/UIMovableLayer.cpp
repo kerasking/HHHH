@@ -8,15 +8,18 @@
  */
 
 #include "UIMovableLayer.h"
+#include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(CUIMovableLayer, NDUILayer)
 
 CUIMovableLayer::CUIMovableLayer()
 {
+	INC_NDOBJ_RTCLS
 }
 
 CUIMovableLayer::~CUIMovableLayer()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CUIMovableLayer::Initialization()

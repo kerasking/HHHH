@@ -19,6 +19,7 @@
 #include "NDPath.h"
 #include <string>
 //#include "I_Analyst.h"
+#include "ObjectTracker.h"
 
 const int TAG_UITEXT	= 13869;
 
@@ -26,6 +27,8 @@ IMPLEMENT_CLASS(CUICheckBox, NDUINode)
 
 CUICheckBox::CUICheckBox()
 {
+	INC_NDOBJ_RTCLS
+
 	m_lbText		= NULL;
 	m_imgCheck		= NULL;
 	m_imgUnCheck	= NULL;
@@ -35,7 +38,7 @@ CUICheckBox::CUICheckBox()
 
 CUICheckBox::~CUICheckBox()
 {
-	
+	DEC_NDOBJ_RTCLS
 }
 
 # if 0

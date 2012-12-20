@@ -46,10 +46,8 @@ class ContainerClientLayerM : public NDUILayer
 {
 	DECLARE_CLASS(ContainerClientLayerM)
 	
-	ContainerClientLayerM()
-	{
-		m_rectEvent	= CCRectZero;
-	}
+	ContainerClientLayerM();
+	~ContainerClientLayerM();
 	
 public:
     void Initialization();

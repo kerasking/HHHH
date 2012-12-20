@@ -42,6 +42,7 @@
 #include "NDUtil.h"
 #include "NDBaseBattleMgr.h"
 #include "NDBaseLayer.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -96,6 +97,7 @@ IMPLEMENT_CLASS(NDMapLayer, NDLayer)
 
 NDMapLayer::NDMapLayer()
 {
+	INC_NDOBJ_RTCLS
 //	WriteCon( "NDMapLayer::NDMapLayer()\r\n"); ///< 调用Logic的东西 郭浩
 
 	m_pkMapData = NULL;
@@ -140,6 +142,7 @@ NDMapLayer::NDMapLayer()
 
 NDMapLayer::~NDMapLayer()
 {
+	DEC_NDOBJ_RTCLS
 //	WriteCon( "NDMapLayer::~NDMapLayer()\r\n"); ///< 调用Logic的东西 郭浩
 
 	CC_SAFE_RELEASE (m_pkOrders);
@@ -1979,7 +1982,7 @@ void NDMapLayer::dumpRole()
 {
 //@del: 留着有用，暂时别删~
 // 	char str[1024] = "";
-// 	HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
+// 	HANDLE hOut = NDConsole::instance().getOutputHandle();
 // 
 // 	int cnt = m_kChildrenList.size();
 // 	for (int i = 0; i < cnt; i++)

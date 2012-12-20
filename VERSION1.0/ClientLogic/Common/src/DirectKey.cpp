@@ -19,6 +19,7 @@
 #include "NDPlayer.h"
 #include "CCPointExtension.h"
 #include "NDPath.h"
+#include "ObjectTracker.h"
 
 #define DIRECTKEY_SHRINK_W (18)
 #define DIRECTKEY_SHRINK_H (18)
@@ -33,11 +34,13 @@ IMPLEMENT_CLASS(NDUIDirectKeyTop, NDUILayer)
 
 NDUIDirectKeyTop::NDUIDirectKeyTop()
 {
+	INC_NDOBJ_RTCLS
 	m_nodeObserver = NULL;
 }
 
 NDUIDirectKeyTop::~NDUIDirectKeyTop()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void NDUIDirectKeyTop::Initialization(NDNode* observer)
@@ -85,6 +88,8 @@ CCRect RectAdd(CCRect rect, int value)
 
 DirectKey::DirectKey()
 {
+	INC_NDOBJ_RTCLS
+
 	m_btnLeft = NULL;
 	m_btnRight = NULL; 
 	m_btnUp = NULL; 
@@ -107,6 +112,8 @@ DirectKey::DirectKey()
 
 DirectKey::~DirectKey()
 {
+	DEC_NDOBJ_RTCLS
+
 	s_Rect = GetFrameRect();
 	
 	SAFE_DELETE(m_picNormal);

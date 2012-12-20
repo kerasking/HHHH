@@ -16,7 +16,7 @@
 #include "basedefine.h"
 //#include "NDUtil.h"
 #include "CCGeometry.h"
-
+#include "ObjectTracker.h"
 #include <sstream>
 
 namespace NDEngine
@@ -34,6 +34,8 @@ IMPLEMENT_CLASS(NDUIDialog, NDUILayer)
 
 NDUIDialog::NDUIDialog()
 {
+	INC_NDOBJ_RTCLS
+
 	INIT_AUTOLINK(NDUIDialog);
 
 	m_contentScroll = NULL;
@@ -50,6 +52,7 @@ NDUIDialog::NDUIDialog()
 
 NDUIDialog::~NDUIDialog()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void NDUIDialog::Initialization()

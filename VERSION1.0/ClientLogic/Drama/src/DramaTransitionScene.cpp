@@ -9,6 +9,7 @@
 
 #include "DramaTransitionScene.h"
 #include "NDDirector.h"
+#include "ObjectTracker.h"
 
 #define TIMER_TAG_CLOSE (1)
 
@@ -16,6 +17,8 @@ IMPLEMENT_CLASS(DramaTransitionScene, NDScene)
 
 DramaTransitionScene::DramaTransitionScene()
 {
+	INC_NDOBJ_RTCLS
+
 	INIT_AUTOLINK(DramaTransitionScene);
 
 	m_pkLabelText = NULL;
@@ -24,6 +27,7 @@ DramaTransitionScene::DramaTransitionScene()
 
 DramaTransitionScene::~DramaTransitionScene()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void DramaTransitionScene::Init()

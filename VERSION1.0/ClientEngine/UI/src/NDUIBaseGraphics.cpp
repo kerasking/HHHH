@@ -12,6 +12,7 @@
 #include "CCDrawingPrimitives.h"
 #include "ccMacros.h"
 #include "UsePointPls.h"
+#include "ObjectTracker.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <GLES/gl.h>
@@ -294,6 +295,8 @@ namespace NDEngine
 	IMPLEMENT_CLASS(NDUILine, NDUINode)
 	NDUILine::NDUILine()
 	{
+		INC_NDOBJ_RTCLS
+
 		m_from = CCPointZero;
 		m_to = CCPointZero;
 		m_color = ccc4(255, 255, 255, 255);
@@ -302,6 +305,7 @@ namespace NDEngine
 	
 	NDUILine::~NDUILine()
 	{
+		DEC_NDOBJ_RTCLS
 	}
 	
 	void NDUILine::draw()
@@ -330,12 +334,14 @@ namespace NDEngine
 	IMPLEMENT_CLASS(NDUIPolygon, NDUINode)
 	NDUIPolygon::NDUIPolygon()
 	{
+		INC_NDOBJ_RTCLS
 		m_color = ccc4(0, 0, 0, 0);
 		m_lineWidth = 0;
 	}
 	
 	NDUIPolygon::~NDUIPolygon()
 	{
+		DEC_NDOBJ_RTCLS
 	}
 	
 	void NDUIPolygon::draw()
@@ -353,12 +359,13 @@ namespace NDEngine
 	IMPLEMENT_CLASS(NDUIRecttangle, NDUINode)
 	NDUIRecttangle::NDUIRecttangle()
 	{
+		INC_NDOBJ_RTCLS
 		m_color = ccc4(0, 0, 0, 0);
 	}
 	
 	NDUIRecttangle::~NDUIRecttangle()
 	{
-		
+		DEC_NDOBJ_RTCLS
 	}
 	
 	void NDUIRecttangle::draw()
@@ -376,6 +383,8 @@ namespace NDEngine
 	IMPLEMENT_CLASS(NDUICircleRect, NDUINode)
 	NDUICircleRect::NDUICircleRect()
 	{
+		INC_NDOBJ_RTCLS
+
 		m_colorFrame = ccc4(0, 0, 0, 0);
 		m_colorFill = ccc4(0, 0, 0, 0);
 		m_bFill = false;
@@ -385,6 +394,7 @@ namespace NDEngine
 	
 	NDUICircleRect::~NDUICircleRect()
 	{
+		DEC_NDOBJ_RTCLS
 	}
 	
 	void NDUICircleRect::SetRadius(unsigned int radius)
@@ -454,6 +464,8 @@ namespace NDEngine
 
 	NDUITriangle::NDUITriangle()
 	{
+		INC_NDOBJ_RTCLS
+
 		m_color = ccc4(255, 255, 255, 255);
 		for (int i = 0; i < 3; i++) 
 		{
@@ -465,6 +477,7 @@ namespace NDEngine
 	
 	NDUITriangle::~NDUITriangle()
 	{
+		DEC_NDOBJ_RTCLS
 	}
 	
 	void NDUITriangle::SetColor(ccColor4B color)

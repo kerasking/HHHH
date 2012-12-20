@@ -19,6 +19,7 @@
 #include "ccMacros.h"
 #include "TQPlatform.h"
 #include "CCCommon.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -32,6 +33,8 @@ IMPLEMENT_CLASS(NDUIButton, NDUIBaseItemButton)
 
 NDUIButton::NDUIButton()
 {
+	INC_NDOBJ_RTCLS
+
 	m_bTabSel = false;
 	m_image = NULL;
 	m_touchDownImage = NULL;
@@ -119,6 +122,8 @@ NDUIButton::NDUIButton()
 
 NDUIButton::~NDUIButton()
 {
+	DEC_NDOBJ_RTCLS
+
 	delete m_rimImageLT;
 	delete m_rimImageRT;
 	delete m_rimImageRB;

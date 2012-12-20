@@ -14,6 +14,7 @@
 #include "NDUILabel.h"
 #include "NDUIImage.h"
 #include "define.h"
+#include "ObjectTracker.h"
 
 ///////////////////////////////////////////////
 IMPLEMENT_CLASS(ClickLayer, NDUILayer)

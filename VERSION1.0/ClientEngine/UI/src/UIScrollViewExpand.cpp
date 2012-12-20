@@ -8,18 +8,21 @@
  */
 
 #include "UIScrollViewExpand.h"
-
+#include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(UIScrollViewExpand, NDUINode)
 
 UIScrollViewExpand::UIScrollViewExpand()
 {
+	INC_NDOBJ_RTCLS
 	m_nViewId = -1;
 }
 
 UIScrollViewExpand::~UIScrollViewExpand()
 {
+	DEC_NDOBJ_RTCLS
 }
+
 void UIScrollViewExpand::Initialization(){
     NDUINode::Initialization();
 }

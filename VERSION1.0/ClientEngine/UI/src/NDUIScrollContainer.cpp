@@ -14,11 +14,13 @@
 #include "NDUtil.h"
 #include "ScriptGameLogic.h"
 #include "NDPath.h"
+#include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(NDUIScrollContainer, NDUILayer)
 
 NDUIScrollContainer::NDUIScrollContainer()
 {
+	INC_NDOBJ_RTCLS
 	m_uiLeftDistance			= 0;
 	m_uiRightDistance			= 0;
 	m_uiLeftDistance			= 0;
@@ -31,6 +33,7 @@ NDUIScrollContainer::NDUIScrollContainer()
 
 NDUIScrollContainer::~NDUIScrollContainer()
 {
+	DEC_NDOBJ_RTCLS
 	SAFE_DELETE(m_picScroll);
     SAFE_DELETE(m_picScrollBg);
     m_picScroll = NULL;

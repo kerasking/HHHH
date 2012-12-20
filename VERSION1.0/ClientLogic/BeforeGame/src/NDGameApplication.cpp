@@ -31,6 +31,7 @@
 #include "WorldMapScene.h"
 #include "NDUILoad.h"
 #include "ScriptRegLua.h"
+#include "ObjectTracker.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "Foundation/NSAutoreleasePool.h"
@@ -172,7 +173,7 @@ using namespace NDEngine;
 NDGameApplication::NDGameApplication()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"script ");
+	NDConsole::instance().RegisterConsoleHandler(this,"script ");
 #endif
 }
 NDGameApplication::~NDGameApplication()
@@ -362,7 +363,7 @@ bool NDGameApplication::processPM(const char* cmd)
 	int val = 0;
 	char szDebugOpt[50] = {0};
 
-	HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
+	HANDLE hOut = NDConsole::instance().getOutputHandle();
 
 	if (stricmp(cmd, "opt help") == 0)
 	{
@@ -629,6 +630,14 @@ bool NDGameApplication::processPM(const char* cmd)
 		string str = CCDirector::sharedDirector()->getTouchDispatcher()->dump();
 		DWORD n = 0;
 		WriteConsoleA(  hOut, str.c_str(), str.length(), &n, NULL );
+	}
+	else if (stricmp(cmd, "dumpobj") == 0)
+	{
+		string info;
+		DUMP_OBJ(info);
+
+		DWORD n = 0;
+		WriteConsoleA(  hOut, info.c_str(), info.length(), &n, NULL );
 	}
 	else
 	{

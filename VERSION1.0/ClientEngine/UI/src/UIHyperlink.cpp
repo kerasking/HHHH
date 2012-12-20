@@ -10,11 +10,14 @@
 #include "UIHyperlink.h"
 #include "CCPointExtension.h"
 #include "NDUtil.h"
+#include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(CUIHyperlinkText, NDUINode)
 
 CUIHyperlinkText::CUIHyperlinkText()
 {
+	INC_NDOBJ_RTCLS
+
 	m_uiLinkText			= NULL;
 	m_uiLinkFontSize		= 14;
 	m_colorLinkFont			= ccc4(255, 255, 0, 255);
@@ -25,6 +28,7 @@ CUIHyperlinkText::CUIHyperlinkText()
 
 CUIHyperlinkText::~CUIHyperlinkText()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CUIHyperlinkText::Initialization()
@@ -137,12 +141,14 @@ IMPLEMENT_CLASS(CUIHyperlinkButton, NDUIButton)
 
 CUIHyperlinkButton::CUIHyperlinkButton()
 {	
+	INC_NDOBJ_RTCLS
 	m_hyperlinkText		= NULL;
 	m_rectLinkRect		= CCRectZero;
 }
 
 CUIHyperlinkButton::~CUIHyperlinkButton()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CUIHyperlinkButton::Initialization()

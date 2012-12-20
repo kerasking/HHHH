@@ -19,6 +19,7 @@
 #include "NDSharedPtr.h"
 #include "CCDrawingPrimitives.h"
 #include "UsePointPls.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -29,6 +30,8 @@ IMPLEMENT_CLASS(NDUILabel, NDUINode)
 	
 NDUILabel::NDUILabel()
 {
+	INC_NDOBJ_RTCLS
+
 	m_bNeedMakeTex = false;
 	m_bNeedMakeCoo = false;
 	m_bNeedMakeVer = false;
@@ -49,6 +52,7 @@ NDUILabel::NDUILabel()
 	
 NDUILabel::~NDUILabel()
 {
+	DEC_NDOBJ_RTCLS
 	CC_SAFE_DELETE(m_texture);
 }
 	
@@ -60,14 +64,13 @@ void NDUILabel::SetText(const char* text)
 	}
 
 	// convert to utf8 and compare again.
-	CCStringRef pstrString = 0;
-	pstrString = CCString::stringWithUTF8String(text);
-	if (pstrString->toStdString() == m_strText)
+	CCStringRef strRef = CCString::stringWithUTF8String(text);
+	if (strRef->toStdString() == m_strText)
 	{
 		return;
 	}
 
-	m_strText = pstrString->toStdString();
+	m_strText = strRef->toStdString();
 
 	// dirty.
 	m_bNeedMakeTex = true;
@@ -185,7 +188,7 @@ void NDUILabel::MakeTexture()
 	CCStringRef strString = new CCString(m_strText.c_str());
 
 	m_texture = new CCTexture2D;
-	m_texture->initWithString(strString->UTF8String(),
+	m_texture->initWithString(strString->getUtf8String(),
 				CCSizeMake(thisRect.size.width, thisRect.size.height),
 				eTextAlign,
 				kCCVerticalTextAlignmentCenter,

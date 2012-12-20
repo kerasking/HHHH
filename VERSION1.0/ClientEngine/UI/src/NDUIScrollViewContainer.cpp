@@ -14,17 +14,20 @@
 #include "NDUtil.h"
 #include "ScriptGameLogic.h"
 #include "NDBaseScriptMgr.h"
+#include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(CUIScrollView, CUIScroll)
 
 CUIScrollView::CUIScrollView()
 {
+	INC_NDOBJ_RTCLS
 	INIT_AUTOLINK(CUIScrollView);
 	m_uiViewId					= 0;
 }
 
 CUIScrollView::~CUIScrollView()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CUIScrollView::Initialization(bool bAccerate/*=false*/)
@@ -177,6 +180,7 @@ IMPLEMENT_CLASS(NDUIScrollViewContainer, NDUIScrollContainer)
 
 NDUIScrollViewContainer::NDUIScrollViewContainer()
 {
+	INC_NDOBJ_RTCLS
 	m_fScrollDistance				= 0.0f;
 	m_fScrollToCenterSpeed			= 100.0f;
 	m_bIsViewScrolling				= false;
@@ -190,6 +194,7 @@ NDUIScrollViewContainer::NDUIScrollViewContainer()
 
 NDUIScrollViewContainer::~NDUIScrollViewContainer()
 {
+	DEC_NDOBJ_RTCLS
 	SAFE_DELETE_NODE(m_pClientUINode);
 }
 
