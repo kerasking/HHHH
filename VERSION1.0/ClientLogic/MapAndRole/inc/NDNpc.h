@@ -41,11 +41,13 @@ class NDNpc: public NDBaseRole
 public:
 	NDNpc();
 	~NDNpc();
+
 	void Init(); override				
 	void OnMoving(bool bLastPos); override
 	void OnMoveEnd(); override
 	bool OnDrawBegin(bool bDraw); override
 	void OnDrawEnd(bool bDraw); override
+	override void RunAnimation(bool bDraw);
 
 	void BeforeRunAnimation(bool bDraw); override
 public:

@@ -360,7 +360,7 @@ bool NDGameApplication::processPM(const char* cmd)
 	if (cmd == 0 || cmd[0] == 0) return false;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	int val = 0;
+	int n = 0, val = 0;
 	char szDebugOpt[50] = {0};
 
 	HANDLE hOut = NDConsole::instance().getOutputHandle();
@@ -387,6 +387,7 @@ bool NDGameApplication::processPM(const char* cmd)
 		else if (stricmp(szDebugOpt, "mainloop") == 0)
 			NDDebugOpt::setMainLoopEnabled( val != 0 );
 
+		//
 		else if (stricmp(szDebugOpt, "drawhud") == 0)
 			NDDebugOpt::setDrawHudEnabled( val != 0 );
 
@@ -399,6 +400,7 @@ bool NDGameApplication::processPM(const char* cmd)
 		else if (stricmp(szDebugOpt, "drawcell") == 0)
 			NDDebugOpt::setDrawCellEnabled( val != 0 );
 
+		//
 		else if (stricmp(szDebugOpt, "drawrole") == 0)
 			NDDebugOpt::setDrawRoleEnabled( val != 0 );
 
@@ -421,6 +423,24 @@ bool NDGameApplication::processPM(const char* cmd)
 					stricmp(szDebugOpt, "drawmanual") == 0)
 		{
 			NDDebugOpt::setDrawRoleManualEnabled( val != 0 );
+		}
+
+		//
+		else if (stricmp(szDebugOpt, "runanimmanual") == 0)
+		{
+			NDDebugOpt::setRunAnimManualEnabled( val != 0 );
+		}
+		else if (stricmp(szDebugOpt, "runanimplayer") == 0)
+		{
+			NDDebugOpt::setRunAnimPlayerEnabled( val != 0 );
+		}
+		else if (stricmp(szDebugOpt, "runanimnpc") == 0)
+		{
+			NDDebugOpt::setRunAnimNpcEnabled( val != 0 );
+		}
+		else if (stricmp(szDebugOpt, "runanimrole") == 0)
+		{
+			NDDebugOpt::setRunAnimRoleEnabled( val != 0 );
 		}
 	}
 	else if (sscanf(cmd, "openmap %d", &val) == 1)
@@ -631,13 +651,14 @@ bool NDGameApplication::processPM(const char* cmd)
 		DWORD n = 0;
 		WriteConsoleA(  hOut, str.c_str(), str.length(), &n, NULL );
 	}
-	else if (stricmp(cmd, "dumpobj") == 0)
+	else if (n = sscanf(cmd, "dumpobj %d", &val)) //n=
 	{
+		val = (n > 0 ? val : 0);
 		string info;
-		DUMP_OBJ(info);
+		DUMP_OBJ(info, val);
 
-		DWORD n = 0;
-		WriteConsoleA(  hOut, info.c_str(), info.length(), &n, NULL );
+		DWORD num = 0;
+		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
 	}
 	else
 	{

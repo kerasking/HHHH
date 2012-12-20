@@ -40,6 +40,10 @@ THE SOFTWARE.
 #include <string>
 #include <ctype.h>
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 // premultiply alpha, or the effect will wrong when want to use other pixel format in CCTexture2D,
@@ -86,11 +90,16 @@ CCImage::CCImage()
 , m_bHasAlpha(false)
 , m_bPreMulti(false)
 {
-
+#if ND_MOD
+	INC_CCOBJ("CCImage");
+#endif
 }
 
 CCImage::~CCImage()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCImage");
+#endif
     CC_SAFE_DELETE_ARRAY(m_pData);
 }
 

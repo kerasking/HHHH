@@ -31,17 +31,27 @@ THE SOFTWARE.
 #include "CCDirector.h"
 #include "kazmath/GL/matrix.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 using namespace std;
 
 NS_CC_BEGIN
 
 CCCamera::CCCamera(void)
 {
+#if ND_MOD
+	INC_CCOBJ("CCCamera");
+#endif
     init();
 }
 
 CCCamera::~CCCamera(void)
 {
+#if ND_MOD
+	DEC_CCOBJ("CCCamera");
+#endif
 }
 
 const char* CCCamera::description(void)

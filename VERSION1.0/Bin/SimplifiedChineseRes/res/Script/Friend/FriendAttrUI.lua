@@ -1173,7 +1173,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 			end
 		elseif tag == ID_ROLEATTR_L_CTRL_BUTTON_BAG then
 			if FriendFunc.IsExistFriend(friendId) then
-				 CommonDlg.ShowNoPrompt(string.format(GetTxtPri("FAUI_T5"),friendName), p.OnCommonDlgDelFriend, true);
+				 CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("FAUI_T5"),friendName), p.OnCommonDlgDelFriend, true);
 			else
 				FriendFunc.AddFriend(friendId,friendName); --加为好友 
 			end
@@ -1188,15 +1188,11 @@ function p.OnUIEventScroll(uiNode, uiEventType, param)
 	LogInfo("p.OnUIEventScroll[%d]", tag);
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		if tag == ID_SM_JH_ROLEATTR_L_BG_CTRL_BUTTON_67 then
-		    --赠送鲜花 
-			
 			MsgFriend.SendOpenGiveFlower(friendId,friendName,NMAINSCENECHILDTAG.FriendAttr);
-		    --判断今天是否赠送过了
-		    --CommonDlg.ShowTipInfo("提示", "您今天已经赠送过鲜花了!", nil, 0.5); 
 			
 		elseif tag == ID_SM_JH_ROLEATTR_L_BG_CTRL_BUTTON_66 then
 		        if FriendUI.IsExistFriend(friendId)  then
-				    CommonDlg.ShowNoPrompt(string.format(GetTxtPri("FAUI_T5"),friendName), p.OnCommonDlgDelFriend, true);
+				    CommonDlg.ShowYesOrNoDlg(string.format(GetTxtPri("FAUI_T5"),friendName), p.OnCommonDlgDelFriend, true);
 				else
 				    FriendFunc.AddFriend(friendId,friendName); --加为好友 
 				end	
@@ -1289,13 +1285,19 @@ function p.OnUIEventViewChange(uiNode, uiEventType, param)
 end
 
 
-
+--[[
 function p.OnCommonDlgDelFriend(nId, nEvent, param)
 	if nEvent == CommonDlg.EventOK then
 			MsgFriend.SendFriendDel(friendId,friendName);--删除好友         
 	end
 end	
+]]
 
+function p.OnCommonDlgDelFriend(nEventType , nEvent, param)
+    if(CommonDlgNew.BtnOk == nEventType) then
+         MsgFriend.SendFriendDel(friendId);
+    end
+end	
 
 function p.ClickOtherPlayer(param1,param2,param3)
 	LogInfo("qbw:click other")

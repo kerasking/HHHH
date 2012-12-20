@@ -25,6 +25,10 @@ THE SOFTWARE.
 #include "CCKeypadDispatcher.h"
 #include "support/data_support/ccCArray.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 //------------------------------------------------------------------
@@ -37,6 +41,10 @@ CCKeypadDispatcher::CCKeypadDispatcher()
 , m_bToAdd(false)
 , m_bToRemove(false)
 {
+#if ND_MOD
+	INC_CCOBJ("CCKeypadDispatcher");
+#endif
+
     m_pDelegates = CCArray::create();
     m_pDelegates->retain();
 
@@ -46,6 +54,10 @@ CCKeypadDispatcher::CCKeypadDispatcher()
 
 CCKeypadDispatcher::~CCKeypadDispatcher()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCKeypadDispatcher");
+#endif
+
     CC_SAFE_RELEASE(m_pDelegates);
     if (m_pHandlersToAdd)
     {

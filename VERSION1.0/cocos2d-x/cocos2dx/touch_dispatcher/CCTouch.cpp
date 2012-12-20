@@ -26,7 +26,24 @@
 #include "CCTouch.h"
 #include "CCDirector.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
+
+#if ND_MOD
+CCTouch::CCTouch()
+	: m_nId(0)
+{
+	INC_CCOBJ("CCTouch");
+}
+
+CCTouch::~CCTouch()
+{
+	DEC_CCOBJ("CCTouch");
+}
+#endif
 
 // returns the current touch location in screen coordinates
 CCPoint CCTouch::getLocationInView() const 

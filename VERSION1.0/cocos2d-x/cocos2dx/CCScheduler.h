@@ -52,6 +52,9 @@ class CC_DLL CCTimer : public CCObject
 {
 public:
     CCTimer(void);
+#if ND_MOD
+	~CCTimer();
+#endif
 
     /** get interval in seconds */
     inline float getInterval(void) { return m_fInterval; }

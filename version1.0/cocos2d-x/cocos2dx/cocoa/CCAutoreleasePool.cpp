@@ -24,18 +24,28 @@ THE SOFTWARE.
 #include "CCAutoreleasePool.h"
 #include "ccMacros.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 static CCPoolManager* s_pPoolManager = NULL;
 
 CCAutoreleasePool::CCAutoreleasePool(void)
 {
+#if ND_MOD
+	INC_CCOBJ("CCAutoreleasePool");
+#endif
     m_pManagedObjectArray = new CCArray();
     m_pManagedObjectArray->init();
 }
 
 CCAutoreleasePool::~CCAutoreleasePool(void)
 {
+#if ND_MOD
+	DEC_CCOBJ("CCAutoreleasePool");
+#endif
     CC_SAFE_DELETE(m_pManagedObjectArray);
 }
 
@@ -103,6 +113,10 @@ void CCPoolManager::purgePoolManager()
 
 CCPoolManager::CCPoolManager()
 {
+#if ND_MOD
+	INC_CCOBJ("CCPoolManager");
+#endif
+
     m_pReleasePoolStack = new CCArray();    
     m_pReleasePoolStack->init();
     m_pCurReleasePool = 0;
@@ -110,7 +124,10 @@ CCPoolManager::CCPoolManager()
 
 CCPoolManager::~CCPoolManager()
 {
-    
+#if ND_MOD
+	DEC_CCOBJ("CCPoolManager");
+#endif
+
      finalize();
  
      // we only release the last autorelease pool here 

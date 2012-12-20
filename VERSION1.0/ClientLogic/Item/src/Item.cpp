@@ -22,20 +22,24 @@
 #include "SuitTypeObj.h"
 #include "ManualRoleEquipScene.h"
 #include <sstream>
+#include "ObjectTracker.h"
 
 Item::Item()
 {
+	INC_NDOBJ("Item");
 	init();
 }
 
 Item::Item(int iItemType)
 {
+	INC_NDOBJ("Item");
 	init();
 	m_nItemType = iItemType;
 }
 
 Item::Item(const Item& rhs)
 {
+	INC_NDOBJ("Item");
 	*this = rhs;
 }
 
@@ -93,6 +97,8 @@ void Item::init()
 
 Item::~Item()
 {
+	DEC_NDOBJ("Item");
+
 	for (std::vector<Item*>::iterator it = m_vStone.begin();
 			it != m_vStone.end(); it++)
 	{

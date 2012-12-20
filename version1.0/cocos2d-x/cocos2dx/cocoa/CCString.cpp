@@ -256,4 +256,181 @@ CCString* CCString::createWithContentsOfFile(const char* pszFileName)
     return pRet;
 }
 
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#if ND_MOD
+
+//备注：返回的指针式全局静态指针，不要保存指针
+//		如果在函数调用中，多个参数用这个指针传递则会出错，会被覆盖掉！
+const char* CCString::getUtf8String()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	static char g_GBKConvUTF8Buf_XX[5000] = {0};
+
+	//const char* GBKToUTF8(const char *strChar)
+	const char* strChar = this->getCString();
+	{
+		iconv_t iconvH;
+		iconvH = iconv_open("utf-8","gb2312");
+		if (iconvH == 0)
+		{
+			return NULL;
+		}
+		size_t strLength = strlen(strChar);
+		size_t outLength = strLength<<2;
+		size_t copyLength = outLength;
+		memset(g_GBKConvUTF8Buf_XX, 0, sizeof(g_GBKConvUTF8Buf_XX));
+
+		char* outbuf = (char*) malloc(outLength);
+		char* pBuff = outbuf;
+		memset( outbuf, 0, outLength);
+
+		if (-1 == iconv(iconvH, &strChar, &strLength, &outbuf, &outLength))
+		{
+			free( outbuf );
+			iconv_close(iconvH);
+			return NULL;
+		}
+
+		memcpy(g_GBKConvUTF8Buf_XX,pBuff,copyLength);
+		free(pBuff);
+		iconv_close(iconvH);
+		return g_GBKConvUTF8Buf_XX;
+	}
+#else
+	return NULL;
+#endif //CC_TARGET_PLATFORM
+}
+
+
+/***
+* @brief 根据UTF-8字符，转换成GB2312进行存储。
+*
+* @param pszUTF8 要传入的UTF8字符。
+* @return CCString* 返回CCString类的指针
+* @retval 0 空指针即为pszUTF8这个参数是有问题
+* @author (DeNA)郭浩
+* @date 20120731
+*/
+//备注：返回值指针必须用CCStringRef管理起来，否则内存泄露！
+CCString* CCString::stringWithUTF8String(const char* pszUTF8)
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	if (0 == pszUTF8 || !*pszUTF8)
+	{
+		return new CCString("");
+	}
+
+	if (isUTF8ChineseCharacter(pszUTF8))
+	{
+		iconv_t pConvert = 0;
+		const char* pszInbuffer = pszUTF8;
+
+		const int buflen = 2048;
+		char* pszOutBuffer = new char[buflen]; //!!
+
+		memset(pszOutBuffer,0,sizeof(char) * buflen);
+
+		int nStatus = 0;
+		size_t sizOutBuffer = buflen;
+		size_t sizInBuffer = strlen(pszUTF8);
+		const char* pszInPtr = pszInbuffer;
+		size_t sizInSize = sizInBuffer;
+		char* pszOutPtr = pszOutBuffer;
+		size_t sizOutSize = sizOutBuffer;
+
+		pConvert = iconv_open("GB2312","UTF-8");
+
+		iconv(pConvert,0,0,0,0);
+
+		while (0 < sizInSize)
+		{
+			size_t sizRes = iconv(pConvert,(const char**)&pszInPtr,
+				&sizInSize,&pszOutPtr,&sizOutSize);
+
+			if (pszOutPtr != pszOutBuffer)
+			{
+				strncpy(pszOutBuffer,pszOutBuffer,sizOutSize);
+			}
+
+			if ((size_t)-1 == sizRes)
+			{
+				int nOne = 1;
+				iconvctl(pConvert,ICONV_SET_DISCARD_ILSEQ,&nOne);
+			}
+		}
+
+		iconv_close(pConvert);
+
+		CCString* ret = new CCString(pszOutBuffer);
+		CC_SAFE_DELETE_ARRAY(pszOutBuffer); //!!
+		return ret;
+	}
+	else
+	{
+		return new CCString(pszUTF8);
+	}
+#else
+	return new CCString(pszUTF8);
+#endif //CC_TARGET_PLATFORM
+}
+
+bool CCString::isUTF8ChineseCharacter(const char* pszText)
+{
+	if (!pszText) return false;
+
+	unsigned int uiCharacterCodePage = 0;
+	int nLength = strlen(pszText);
+
+	if (3 <= nLength)
+	{
+		unsigned char ucCharacter_1 = 0;
+		unsigned char ucCharacter_2 = 0;
+		unsigned char ucCharacter_3 = 0;
+		int nNow = 0;
+
+		while (nNow < nLength)
+		{
+			ucCharacter_1 = (unsigned) pszText[nNow];
+			if ((ucCharacter_1 & 0x80) == 0x80)
+			{
+				if (nLength > nNow + 2)
+				{
+					ucCharacter_2 = (unsigned) pszText[nNow + 1];
+					ucCharacter_3 = (unsigned) pszText[nNow + 2];
+
+					if (((ucCharacter_1 & 0xE0) == 0XE0)
+						&& ((ucCharacter_2 & 0xC0) == 0x80)
+						&& ((ucCharacter_3 & 0xC0) == 0x80))
+					{
+						uiCharacterCodePage = 65001;
+						nNow = nNow + 3;
+
+						return true;
+					}
+					else
+					{
+						uiCharacterCodePage = 0;
+						break;
+					}
+				}
+				else
+				{
+					uiCharacterCodePage = 0;
+					break;
+				}
+			}
+			else
+			{
+				nNow++;
+			}
+		}//while
+	}//if
+
+	return false;
+}
+
+#endif //ND_MOD
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 NS_CC_END

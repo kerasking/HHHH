@@ -27,6 +27,10 @@ THE SOFTWARE.
 #include "CCDirector.h"
 #include "CCEGLView.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 static int _calcCharCount(const char * pszText)
@@ -56,11 +60,17 @@ CCTextFieldTTF::CCTextFieldTTF()
 , m_pInputText(new std::string)
 , m_pPlaceHolder(new std::string)   // prevent CCLabelTTF initWithString assertion
 {
+#if ND_MOD
+	INC_CCOBJ("CCTextFieldTTF");
+#endif
     m_ColorSpaceHolder.r = m_ColorSpaceHolder.g = m_ColorSpaceHolder.b = 127;
 }
 
 CCTextFieldTTF::~CCTextFieldTTF()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCTextFieldTTF");
+#endif
     CC_SAFE_DELETE(m_pInputText);
     CC_SAFE_DELETE(m_pPlaceHolder);
 }

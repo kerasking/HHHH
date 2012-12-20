@@ -12,7 +12,7 @@
 #include "NDDirector.h"
 #include "NDConstant.h"
 #include "CCPointExtension.h"
-#include "UISpriteNode.h"
+#include "NDUISpriteNode.h"
 #include "NDPath.h"
 #include "NDAnimationGroup.h"
 //#include "GameScene.h"

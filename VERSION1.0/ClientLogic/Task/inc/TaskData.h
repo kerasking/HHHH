@@ -33,6 +33,8 @@ public:
 	};
 public:
 	TaskData();
+
+	~TaskData();
 	
     int getMId();
 	

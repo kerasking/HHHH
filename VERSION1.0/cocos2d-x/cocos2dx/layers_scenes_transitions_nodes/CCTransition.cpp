@@ -38,6 +38,9 @@ THE SOFTWARE.
 #include "CCLayer.h"
 #include "misc_nodes/CCRenderTexture.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
 
 NS_CC_BEGIN
 
@@ -45,9 +48,15 @@ const unsigned int kSceneFade = 0xFADEFADE;
 
 CCTransitionScene::CCTransitionScene()
 {
+#if ND_MOD
+	INC_CCOBJ("CCTransitionScene");
+#endif
 }
 CCTransitionScene::~CCTransitionScene()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCTransitionScene");
+#endif
     m_pInScene->release();
     m_pOutScene->release();
 }

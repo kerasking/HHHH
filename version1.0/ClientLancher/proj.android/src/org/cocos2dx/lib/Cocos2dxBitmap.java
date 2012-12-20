@@ -112,6 +112,8 @@ public class Cocos2dxBitmap
 				bitmapTotalHeight, Bitmap.Config.ARGB_8888);
 		final Canvas canvas = new Canvas(bitmap);
 
+		
+         initNativeObject(bitmap);
 		/* Draw string. */
 		final FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
 		int x = 0;
@@ -136,14 +138,22 @@ public class Cocos2dxBitmap
 		paint.setColor(Color.WHITE);
 		paint.setTextSize(pFontSize);
 		paint.setAntiAlias(true);
-
+		
+		Log.d("newPaint", "pFontName = " + pFontName);
+		Log.d("newPaint", "pFontSize = " + pFontSize);
+		Log.d("newPaint", "pHorizontalAlignment = " + pHorizontalAlignment);
 		/* Set type face for paint, now it support .ttf file. */
 		if (pFontName.endsWith(".ttf"))
 		{
+			Log.d("newPaint", "pFontName" + pFontName);
+			Log.d("newPaint", "pFontSize" + pFontSize);
+			Log.d("newPaint", "pHorizontalAlignment" + pHorizontalAlignment);
+
 			try
 			{
 				final Typeface typeFace = Cocos2dxTypefaces.get(
 						Cocos2dxBitmap.sContext, pFontName);
+				
 				paint.setTypeface(typeFace);
 			} catch (final Exception e)
 			{
@@ -265,9 +275,18 @@ public class Cocos2dxBitmap
 		final String[] lines = pString.split("\\n");
 		String[] ret = null;
 		final FontMetricsInt fm = pPaint.getFontMetricsInt();
-		final int heightPerLine = (int) Math.ceil(fm.bottom - fm.top);
+		int heightPerLine = (int) Math.ceil(fm.bottom - fm.top);
+		Log.d("splitString", "fontBottom = " + fm.bottom);
+		Log.d("splitString", "fontTop = " + fm.top);
+		Log.d("splitString", "pMaxHeight = " + pMaxHeight);
+		Log.d("splitString", "fontName = " + pString);
+		if(heightPerLine == 0)
+		{
+			Log.e("splitString", "error to getFontMetricsInt fontName" + pString);
+			heightPerLine = 1;
+		}
 		final int maxLines = pMaxHeight / heightPerLine;
-
+		Log.d("splitString", "maxLines = " + maxLines);
 		if (pMaxWidth != 0)
 		{
 			final LinkedList<String> strList = new LinkedList<String>();

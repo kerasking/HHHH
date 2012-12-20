@@ -25,7 +25,7 @@ import com.mobage.android.social.common.RemoteNotification.RemoteNotificationLis
 
 import org.DeNA.DHLJ.SocialUtils;
 import android.R;
-import android.app.ActionBar.LayoutParams;
+//import android.app.ActionBar.LayoutParams;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -74,8 +74,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	    		Float sizey = 75*s_fScale;
 	    		FrameLayout.LayoutParams pkParamsButton = new FrameLayout.LayoutParams(sizex.intValue(),sizey.intValue());
 	    		balancebutton.setLayoutParams(pkParamsButton);
-	    		balancebutton.setX(264*s_fScale);
-	    		balancebutton.setY(70*s_fScale);
+	    		//balancebutton.setX(264*s_fScale);
+	    		//balancebutton.setY(70*s_fScale);
 	        	balancebutton.setVisibility( View.VISIBLE );
 	        };
 	 };

@@ -13,7 +13,7 @@
 #include "UsePointPls.h"
 #include "NDDebugOpt.h"
 #include "NDPicture.h"
-
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -30,12 +30,14 @@ bool IsTileHightLight()
 }
 
 NDTile::NDTile() :
-m_pkTexture(NULL),
-m_bReverse(false),
-m_Rotation(NDRotationEnumRotation0)//,
-// m_pfVertices(NULL),
-// m_pfCoordinates(NULL)
+	m_pkTexture(NULL),
+	m_bReverse(false),
+	m_Rotation(NDRotationEnumRotation0)//,
+	// m_pfVertices(NULL),
+	// m_pfCoordinates(NULL)
 {
+	INC_NDOBJ("NDTile");
+
 	m_kCutRect = CCRectMake(0, 0, 0, 0);
 	m_kDrawRect = CCRectMake(0, 0, 0, 0);
 	m_kMapSize = CCSizeMake(0, 0);
@@ -49,6 +51,8 @@ m_Rotation(NDRotationEnumRotation0)//,
 
 NDTile::~NDTile()
 {
+	DEC_NDOBJ("NDTile");
+
 	if(m_pkTexture->getContainerType() == NDEngine::ContainerTypeAddPic 
 		|| m_pkTexture->getContainerType() == NDEngine::ContainerTypeAddTexture) 
 	{

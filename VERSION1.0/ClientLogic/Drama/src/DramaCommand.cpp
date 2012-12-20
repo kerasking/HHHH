@@ -17,6 +17,7 @@
 #include "NDPath.h"
 #include "NDUtility.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
 
 ///////////////////////////////////////////////
 DramaScene* GetDramaScene()

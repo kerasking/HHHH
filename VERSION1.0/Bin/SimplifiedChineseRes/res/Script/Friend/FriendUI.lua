@@ -166,7 +166,7 @@ function p.OnUIEventInfo(uiNode, uiEventType, param)
 			--info
 			MsgFriend.SendFriendSel(friendId,"qbw:testid:"..friendId);	
 		elseif tag ==  ID_FRIEND_CTRL_BUTTON_7 then	
-			CommonDlg.ShowNoPrompt(string.format(GetTxtPri("FAUI_T5"),friendName), p.OnCommonDlgDelFriend, true);  
+			CommonDlg.ShowYesOrNoDlg(string.format(GetTxtPri("FAUI_T5"),friendName), p.OnCommonDlgDelFriend, true);  
 		elseif ( ID_FRIEND_CTRL_BUTTON_6 == tag ) then	--++Guosen 2012.6.12 16:30
 			LogInfo("发送邮件:"..friendName);
 			if ( friendName ~= "" ) then

@@ -1,6 +1,7 @@
 //#include "StdAfx.h"
 #include "UIData.h"
 #include <stdio.h>
+#include "ObjectTracker.h"
 
 #define NORMAL_FILE_KEY  "NormalFile"
 #define SELECTED_FILE_KEY  "SelectFile"
@@ -30,6 +31,8 @@
 
 CUIData::CUIData(void)
 {
+	INC_NDOBJ("CUIData"); 
+
 	m_kInfo.strNormalFile = "";
 	m_kInfo.strSelectedFile = "";
 	m_kInfo.strDisableFile = "";
@@ -50,7 +53,7 @@ CUIData::CUIData(void)
 
 CUIData::~CUIData(void)
 {
-
+	DEC_NDOBJ("CUIData"); 
 }
 
 bool CUIData::openUiFile(const char* pszIniFile)

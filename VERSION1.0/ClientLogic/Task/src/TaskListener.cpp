@@ -158,8 +158,9 @@ void completeTask(int taskId)
 	//		Npc.refreshNpcStateInMap(); // 完成时要重新刷新整个地图npc的状怄1�7
 }
 
-std::string setTaskInfo(std::string strTask, Task& kTask, int nIndex,
-		std::vector<int> kDatas, int nMonCornIndex)
+//@leak
+std::string setTaskInfo( const std::string& strTask, Task& kTask, int nIndex,
+							const std::vector<int>& kDatas, int nMonCornIndex)
 {
 	if (nIndex > 100)
 	{	// 防止无限递归
@@ -189,7 +190,6 @@ std::string setTaskInfo(std::string strTask, Task& kTask, int nIndex,
 			nFromIndex = nToIndex + 1;
 		}
 
-		//补上朄1�7后一丄1�7
 		kTaskArray.push_back(
 				strTaskStart.substr(nFromIndex, sBuffer.size() - nFromIndex));
 
@@ -223,7 +223,6 @@ std::string setTaskInfo(std::string strTask, Task& kTask, int nIndex,
 					// x
 					pkTaskElement->setMapY(atoi(kTaskArray[9].c_str())); // map
 					// Y
-
 				}
 
 				if (10 < kTaskArray.size())
@@ -243,21 +242,18 @@ std::string setTaskInfo(std::string strTask, Task& kTask, int nIndex,
 			}
 			else if (kTaskArray[0] == "item" && kTaskArray.size() >= 6)
 			{
-
 				// [item id name 格式 data 数量 mapid mapname X Y XXXX]
 
-				// 格式1表示要传逄1�7
 				//Array dataArray = task.taskDataArray;
 				TaskData* pkTaskElement = new TaskData();
 				pkTaskElement->setMId(atoi(kTaskArray[1].c_str())); // itemType
 				pkTaskElement->setElementName(kTaskArray[2]); // 物品名字
 				int nType = atoi(kTaskArray[3].c_str());
 				pkTaskElement->setMShowType(nType); // 显示格式					
-				// ,
-				// 表示要不要显示在功能厄1�7
-				pkTaskElement->setMSumCount(atoi(kTaskArray[5].c_str())); // 物品总数釄1�7
-				// ,
-				// 要先赋1儤7�最大1儤7�1�7
+				
+				// 表示要不要显示在功能
+				pkTaskElement->setMSumCount(atoi(kTaskArray[5].c_str())); // 物品总数
+
 				int nTempIndex = atoi(kTaskArray[4].c_str()) - 1;
 
 				if (nTempIndex >= 0 && nTempIndex < int(kDatas.size()))
@@ -325,7 +321,6 @@ std::string setTaskInfo(std::string strTask, Task& kTask, int nIndex,
 				sBuffer.replace(startIndex, endIndex - startIndex + 1,
 						pkTaskElement->getElementName());
 				kTask.taskDataArray.push_back(pkTaskElement);
-
 			}
 			else if (kTaskArray[0] == "pr" && kTaskArray.size() >= 3)
 			{

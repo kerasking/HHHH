@@ -658,6 +658,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\inc\NDUIChatText.h"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\inc\NDUICheckBox.h"
 					>
 				</File>
@@ -670,7 +674,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\inc\NDUIExp.h"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\inc\NDUIFrame.h"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\NDUIHyperlink.h"
 					>
 				</File>
 				<File
@@ -690,6 +702,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\inc\NDUIMovableLayer.h"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\inc\NDUINode.h"
 					>
 				</File>
@@ -706,11 +722,27 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\inc\NDUIScrollContainerExpand.h"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\inc\NDUIScrollText.h"
 					>
 				</File>
 				<File
 					RelativePath="..\UI\inc\NDUIScrollView.h"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\NDUIScrollViewExpand.h"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\NDUIScrollViewMulHand.h"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\inc\NDUISpriteNode.h"
 					>
 				</File>
 				<File
@@ -726,10 +758,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\UI\inc\UIChatText.h"
-					>
-				</File>
-				<File
 					RelativePath="..\UI\inc\UICheckBox.h"
 					>
 				</File>
@@ -738,43 +766,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\UI\inc\UIExp.h"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\inc\UIHyperlink.h"
-					>
-				</File>
-				<File
 					RelativePath="..\UI\inc\UIList.h"
 					>
 				</File>
 				<File
-					RelativePath="..\UI\inc\UIMovableLayer.h"
-					>
-				</File>
-				<File
 					RelativePath="..\UI\inc\UIRadioButton.h"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\inc\UIScroll.h"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\inc\UIScrollContainerExpand.h"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\inc\UIScrollViewExpand.h"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\inc\UIScrollViewMulHand.h"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\inc\UISpriteNode.h"
 					>
 				</File>
 			</Filter>
@@ -806,6 +802,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\src\NDUIChatText.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\src\NDUICheckBox.cpp"
 					>
 				</File>
@@ -818,7 +818,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\src\NDUIExp.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\src\NDUIFrame.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\src\NDUIHyperlink.cpp"
 					>
 				</File>
 				<File
@@ -834,6 +842,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\src\NDUIMovableLayer.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\src\NDUINode.cpp"
 					>
 				</File>
@@ -846,7 +858,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\src\NDUIScroll.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\src\NDUIScrollContainer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\src\NDUIScrollContainerExpand.cpp"
 					>
 				</File>
 				<File
@@ -858,15 +878,23 @@
 					>
 				</File>
 				<File
+					RelativePath="..\UI\src\NDUIScrollViewExpand.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\src\NDUIScrollViewMulHand.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\UI\src\NDUISpriteNode.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\UI\src\NDUISynLayer.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\UI\src\SysTimer.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\src\UIChatText.cpp"
 					>
 				</File>
 				<File
@@ -878,43 +906,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\UI\src\UIExp.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\src\UIHyperlink.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\UI\src\UIList.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\UI\src\UIMovableLayer.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\UI\src\UIRadioButton.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\src\UIScroll.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\src\UIScrollContainerExpand.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\src\UIScrollViewExpand.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\src\UIScrollViewMulHand.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\UI\src\UISpriteNode.cpp"
 					>
 				</File>
 			</Filter>

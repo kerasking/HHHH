@@ -74,4 +74,4 @@ else
 fi
 
 cp libs/libmobage.so libs/armeabi/libmobage.so
-cp libs/LiSu.ttf assets/LiSu.ttf
+#cp libs/LiSu.ttf assets/LiSu.ttf

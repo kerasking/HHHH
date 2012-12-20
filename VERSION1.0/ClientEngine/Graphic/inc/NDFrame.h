@@ -32,6 +32,7 @@ class NDFrameRunRecord: public cocos2d::CCObject
 public:
 
 	NDFrameRunRecord();
+	~NDFrameRunRecord();
 
 	void SetPlayRange(int nStartFrame, int nEndFrame);
 	void NextFrame(int nTotalFrames);

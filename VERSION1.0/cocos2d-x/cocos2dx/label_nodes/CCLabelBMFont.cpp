@@ -44,6 +44,10 @@ http://www.angelcode.com/products/bmfont/ (Free, Windows only)
 #include "textures/CCTextureCache.h"
 #include <stdlib.h>
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 using namespace std;
 
 
@@ -441,11 +445,17 @@ CCBMFontConfiguration::CCBMFontConfiguration()
     , m_nCommonHeight(0)
     , m_pKerningDictionary(NULL)
 {
-
+#if ND_MOD
+	INC_CCOBJ("CCBMFontConfiguration");
+#endif
 }
 
 CCBMFontConfiguration::~CCBMFontConfiguration()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCBMFontConfiguration");
+#endif
+
     CCLOGINFO( "cocos2d: deallocing CCBMFontConfiguration" );
     this->purgeFontDefDictionary();
     this->purgeKerningDictionary();
@@ -815,11 +825,17 @@ CCLabelBMFont::CCLabelBMFont()
 , m_bLineBreakWithoutSpaces(false)
 , m_tImageOffset(CCPointZero)
 {
-
+#if ND_MOD
+	INC_CCOBJ("CCLabelBMFont");
+#endif
 }
 
 CCLabelBMFont::~CCLabelBMFont()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCLabelBMFont");
+#endif
+
     CC_SAFE_DELETE(m_sString);
     CC_SAFE_RELEASE(m_pConfiguration);
 }
