@@ -98,8 +98,11 @@ bool CZipUnZip::Unzip(const char* lpszZip, const char* lpszDestDir,
 bool CZipUnZip::UnzipProc(void* lpParameter)
 {
 	PDECOMPRESSPARAM pDecompress = (PDECOMPRESSPARAM) lpParameter;
+
 	if (pDecompress == NULL)
+	{
 		return false;
+	}
 
 	if (Unzip(pDecompress->lpszDecompressFile, pDecompress->lpszDestDir,
 		pDecompress->pDlg, pDecompress->appData))

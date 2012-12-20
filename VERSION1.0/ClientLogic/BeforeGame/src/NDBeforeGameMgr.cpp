@@ -58,6 +58,7 @@
 #include "CCCommon.h"
 #include "ZipUnZip.h"
 #include "NDSharedPtr.h"
+#include "CCFileUtils.h"
 
 using namespace NDEngine;
 
@@ -1787,42 +1788,58 @@ int NDEngine::GetEncryptSalt(unsigned int seed)
 ////////////////////////////////////////////////////////////
 void NDBeforeGameMgr::InitAccountTable()
 {
-     //创建server数据表
-     if(!CSqliteDBMgr::shareInstance().IsExistTable("account")){
-         char *sql = "CREATE TABLE account(name text primary key,type integer,pwd blob,login_time integer)";
-         if(!CSqliteDBMgr::shareInstance().ExcuteSql(sql)){
-             NDLog(@"创建帐号表出错!");
-             return;
-         }
-         //发起快速注册
-         this->FastGameOrRegister(2);
-     }else{
-         //无纪录时发起快速注册
-        /*int nRowNum =*/ CSqliteDBMgr::shareInstance().SelectData("SELECT count(*) FROM account;",1);
-        int nCnt = CSqliteDBMgr::shareInstance().GetColDataN(0,0);
-         if(nCnt < 1){
-             //发起快速注册
-             this->FastGameOrRegister(2);
-         }
-     }
+	//创建server数据表
+	if (!CSqliteDBMgr::shareInstance().IsExistTable("account"))
+	{
+		char *sql =
+			"CREATE TABLE account(name text primary key,type integer,pwd blob,login_time integer)";
+		if (!CSqliteDBMgr::shareInstance().ExcuteSql(sql))
+		{
+			NDLog(@"创建帐号表出错!");
+			return;
+		}
+		//发起快速注册
+		this->FastGameOrRegister(2);
+	}
+	else
+	{
+		//无纪录时发起快速注册
+		/*int nRowNum =*/CSqliteDBMgr::shareInstance().SelectData(
+			"SELECT count(*) FROM account;", 1);
+		int nCnt = CSqliteDBMgr::shareInstance().GetColDataN(0, 0);
+		if (nCnt < 1)
+		{
+			//发起快速注册
+			this->FastGameOrRegister(2);
+		}
+	}
 }
-void NDBeforeGameMgr::SaveAccountPwdToDB(const char* pszName, const char* pszPwd, int nType)
+
+void NDBeforeGameMgr::SaveAccountPwdToDB(const char* pszName,
+										 const char* pszPwd, int nType)
 {
-     if(!pszName){
-         return;
-     }
-     unsigned char encPwd[1024] = {0x00};
-     if(pszPwd){
-         simpleEncode((const unsigned char*)pszPwd, encPwd);
-     }
-     char szValue[256]="";
-     char *sqlaccount = "REPLACE INTO account(name,type,pwd,login_time) VALUES";
-     sprintf(szValue,"(\'%s\',%d,\'%s\',%d);",pszName,nType,(const char*)encPwd,0);
-     std::string strSqlAccount = sqlaccount;
-     strSqlAccount+=szValue;
-     if(!CSqliteDBMgr::shareInstance().ExcuteSql(strSqlAccount.c_str())){
-         return;
-     }
+	if (!pszName)
+	{
+		return;
+	}
+	unsigned char encPwd[1024] = {0};
+
+	if (pszPwd)
+	{
+		simpleEncode((const unsigned char*) pszPwd, encPwd);
+	}
+
+	char szValue[256] = "";
+	char *sqlaccount = "REPLACE INTO account(name,type,pwd,login_time) VALUES";
+	sprintf(szValue, "(\'%s\',%d,\'%s\',%d);", pszName, nType,
+		(const char*) encPwd, 0);
+	std::string strSqlAccount = sqlaccount;
+	strSqlAccount += szValue;
+
+	if (!CSqliteDBMgr::shareInstance().ExcuteSql(strSqlAccount.c_str()))
+	{
+		return;
+	}
 }
 
 ////////////////////////////////////////////////////////////
@@ -1879,13 +1896,16 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
 int NDBeforeGameMgr::CopyStatus = 0;
 //检测首次运行
 bool NDBeforeGameMgr::CheckFirstTimeRuning()
-{ 
+{
+	LOGD("Entry NDBeforeGameMgr::CheckFirstTimeRuning()");
 	bool bFirstTime	= false;
 	string strInstallVersionINIPath	= "";
 	string strCopyVersionINIPath = "";
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	strInstallVersionINIPath = string("assets/") + SZ_VERINI_PATH;
+	strCopyVersionINIPath = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	strInstallVersionINIPath = string("asset/") + SZ_VERINI_PATH;
+	strInstallVersionINIPath = string("sdcard/dhlj/SimplifiedChineseRes/") + SZ_VERINI_PATH;
     strCopyVersionINIPath = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
 #else
 #endif
@@ -1896,7 +1916,7 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	if ( !pkFile )
 	{
 		bFirstTime = true;
-	    CCLog( "\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );
+	    LOGERROR( "\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );
         CopyRes();
 	}
 	else
@@ -1914,11 +1934,20 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
             fread(szInstallResVersion, 1, 4, pkInstallFile);
             fclose(pkInstallFile);
         }
+		else
+		{
+			LOGERROR("%s is can't open.",strInstallVersionINIPath.c_str());
+		}
+
+		LOGD("szCopyResVersion(%d),szInstallResVersion(%d)",
+			atol(szCopyResVersion),atol(szInstallResVersion));
+
         if ( atol(szCopyResVersion) < atol(szInstallResVersion))
         {
             bFirstTime = true;
             CopyRes();
         }
+
 		NDPath::SetResDirPos( 1 );
 	}
 
@@ -1927,9 +1956,14 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 
 void* CopyResThread(void* ptr)
 {
-	CZipUnZip kUnzip;
+	CZipUnZip* pkUnzip = new CZipUnZip;
 
-	kUnzip.UnZipFile("../SimplifiedChineseRes.zip","dhlj/");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	pkUnzip->UnZipFile("../SimplifiedChineseRes.zip","dhlj/");
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	pkUnzip->UnZipFile("assets/SimplifiedChineseRes.zip","/sdcard/dhlj/");
+#else
+#endif
 
 //     string sSource = NDPath::GetAppResFilePath(NDPath::GetRootResDirName());
 //     string sTarget = NDPath::GetCashesPath()+"/"+NDPath::GetRootResDirName();

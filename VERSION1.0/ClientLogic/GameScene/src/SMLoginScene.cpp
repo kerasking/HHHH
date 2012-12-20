@@ -27,6 +27,20 @@
 #include <iostream>
 #include <sstream>
 #include "ScriptRegLua.h"
+#include "CCPlatformConfig.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
 ////////////////////////////////////////////////////////////
 
 //--------------------//
@@ -94,27 +108,26 @@ IMPLEMENT_CLASS(CSMLoginScene, NDScene)
 //===========================================================================
 CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 {
-
-	CSMLoginScene *scene = new CSMLoginScene;
-    scene->Initialization();
-    scene->SetTag(SMLOGINSCENE_TAG);
+	CSMLoginScene* pkScene = new CSMLoginScene;
+    pkScene->Initialization();
+    pkScene->SetTag(SMLOGINSCENE_TAG);
     
 	if ( bShowEntry )
 	{
 		NDLocalXmlString::GetSingleton().LoadLoginString();//
 
-		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+		CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 		NDUILayer * layer = new NDUILayer();
 		layer->Initialization();
-		layer->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));//²»ÒªÓ²±àÂë£¡£¡
-		scene->AddChild(layer);
-		scene->m_pLayerOld = layer;
+		layer->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));//²»ÒªÓ²±àÂë£¡£¡
+		pkScene->AddChild(layer);
+		pkScene->m_pLayerOld = layer;
 		
 		NDPicturePool& pool		= *(NDPicturePool::DefaultPool());
 		NDUIImage* imgBack	= new NDUIImage;
 		imgBack->Initialization();
-		imgBack->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
+		imgBack->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
 #ifdef USE_MGSDK
     	NDPicture* pic = pool.AddPicture( NDPath::GetImgPath("Res00/Load/mobage_bg.png") );
 #else
@@ -128,9 +141,10 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		//layer->SetFrameRect( CCRectMake(winSize.width*0.0, winSize.height*0.0, winSize.width*0.7, winSize.height*0.225f));
 		//layer->SetBackgroundColor( ccc4( 20,30,0,50) );
 
-		scene->m_pTimer->SetTimer( scene, TAG_TIMER_FIRST_RUN,0.5f );
+		LOGD("TAG_TIMER_FIRST_RUN is register");
+		pkScene->m_pTimer->SetTimer( pkScene, TAG_TIMER_FIRST_RUN,0.5f );
     }
-	return scene;
+	return pkScene;
 }
 
 //===========================================================================
@@ -173,6 +187,15 @@ void CSMLoginScene::Initialization(void)
 //===========================================================================
 void CSMLoginScene::OnTimer( OBJID idTag )
 {
+	static bool bFirst = true;
+
+	if (bFirst)
+	{
+		LOGD("Entry First OnTimer");
+		idTag = TAG_TIMER_FIRST_RUN;
+		bFirst = false;
+	}
+
 	if ( idTag == TAG_TIMER_UPDATE ) 
 	{
 		if ( !rename( m_savePath.c_str(), m_savePath.c_str() ) )
@@ -183,9 +206,9 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 				return;
 			}
 		}     
-		this->FromUrl(m_updateURL.c_str());
-		this->ToPath(m_savePath.c_str()); 
-		this->Download();
+		FromUrl(m_updateURL.c_str());
+		ToPath(m_savePath.c_str()); 
+		Download();
 		m_pTimer->KillTimer(this, TAG_TIMER_UPDATE);
 	}
 	else if ( idTag == TAG_TIMER_DOWNLOAD_SUCCESS )
@@ -264,6 +287,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 	}
     else if ( TAG_TIMER_FIRST_RUN == idTag )
 	{
+		LOGD("Entry TAG_TIMER_FIRST_RUN == idTag");
 		m_pTimer->KillTimer( this, TAG_TIMER_FIRST_RUN );
 		CreateUpdateUILayer();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
