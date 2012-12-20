@@ -8,6 +8,7 @@
 
 #include "NDPath.h"
 #include "define.h"
+#include "ObjectTracker.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #import <Foundation/Foundation.h>
@@ -52,9 +53,11 @@ int NDPath::s_iResDirPos = 0;
 
 NDPath::NDPath()
 {
+	INC_NDOBJ_RTCLS
 }
 NDPath::~NDPath()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 const char* NDPath::GetRootResDirName()

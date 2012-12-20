@@ -76,6 +76,8 @@
 #include "NDPicture.h"
 #include "NDDataSource.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
+
 
 const int TAG_CV_SEND_QUESTION = 1;
 const int TAG_CV_CHANG_PWD = 2;
@@ -220,6 +222,8 @@ void GameScene::RefreshQuickInterationBar(NDBaseRole* target)
 
 GameScene::GameScene()
 {
+	INC_NDOBJ_RTCLS
+
 	s_curGameScene = this;
 
 //	m_userState = NULL; ///< 临时性注�?? 郭浩
@@ -322,6 +326,8 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
+	DEC_NDOBJ_RTCLS
+
 	if (s_curGameScene == this)
 	{
 		s_curGameScene = NULL;
@@ -3455,6 +3461,8 @@ GameSceneReleaseHelper* GameSceneReleaseHelper::s_instance = NULL;
 
 GameSceneReleaseHelper::GameSceneReleaseHelper()
 {
+	INC_NDOBJ_RTCLS
+
 	NDDirector::DefaultDirector()->AddDelegate(this);
 
 	m_bGameSceneRelease = false;
@@ -3462,6 +3470,7 @@ GameSceneReleaseHelper::GameSceneReleaseHelper()
 
 GameSceneReleaseHelper::~GameSceneReleaseHelper()
 {
+	DEC_NDOBJ_RTCLS
 	NDDirector::DefaultDirector()->RemoveDelegate(this);
 }
 

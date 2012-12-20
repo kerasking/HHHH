@@ -334,72 +334,8 @@ public:
 // 			return pstrString;
 // 		}
     
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+		static bool isUTF8ChineseCharacter(const char* pszText);
 
-		/***
-		* @brief 能够判断一个字符串中汉字是否是UTF-8
-		*
-		* @param pszFormat 动态参数。
-		* @return bool 返回结果
-		* @retval false 非UTF-8
-		* @retval true 是UTF-8
-		* @author (DeNA)郭浩
-		* @date 20121101
-		*/
-		static bool isUTF8ChineseCharacter(const char* pszText)
-		{
-			unsigned int uiCharacterCodePage = 0;
-			int nLength = strlen(pszText);
-
-			if (3 <= nLength)
-			{
-				unsigned char ucCharacter_1 = 0;
-				unsigned char ucCharacter_2 = 0;
-				unsigned char ucCharacter_3 = 0;
-				int nNow = 0;
-
-				while (nNow < nLength)
-				{
-					ucCharacter_1 = (unsigned) pszText[nNow];
-					if ((ucCharacter_1 & 0x80) == 0x80)
-					{
-						if (nLength > nNow + 2)
-						{
-							ucCharacter_2 = (unsigned) pszText[nNow + 1];
-							ucCharacter_3 = (unsigned) pszText[nNow + 2];
-
-							if (((ucCharacter_1 & 0xE0) == 0XE0)
-								&& ((ucCharacter_2 & 0xC0) == 0x80)
-								&& ((ucCharacter_3 & 0xC0) == 0x80))
-							{
-								uiCharacterCodePage = 65001;
-								nNow = nNow + 3;
-
-								return true;
-							}
-							else
-							{
-								uiCharacterCodePage = 0;
-								break;
-							}
-						}
-						else
-						{
-							uiCharacterCodePage = 0;
-							break;
-						}
-					}
-					else
-					{
-						nNow++;
-					}
-				}
-			}
-
-			return false;
-		}
-#endif
-		
 #endif //ND_MOD
 
 private:
@@ -423,11 +359,6 @@ struct CCStringCompare : public std::binary_function<CCString *, CCString *, boo
 
 // end of data_structure group
 /// @}
-
-#if ND_MOD
-#define UTF8_TO_ANSI(utf8_text)		CCString::stringWithUTF8String(utf8_text)->getCString()
-#define ANSI_TO_UTF8(ansi_text)		CCString(ansi_text).UTF8String()
-#endif //ND_MOD
 
 
 NS_CC_END

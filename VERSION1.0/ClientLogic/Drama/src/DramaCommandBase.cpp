@@ -8,6 +8,7 @@
  */
 
 #include "DramaCommandBase.h"
+#include "ObjectTracker.h"
 
 unsigned int DramaCommandBase::m_uiKeyGenerator = 0;
 
@@ -15,6 +16,8 @@ ID_VEC DramaCommandBase::m_vIdRecyle;
 
 DramaCommandBase::DramaCommandBase()
 {
+	INC_NDOBJ("DramaCommandBase");
+
 	m_bFinish = false;
 	m_bCanExcuteNextCommand = true;
 	m_bPreCommandsFinish = true;
@@ -22,6 +25,7 @@ DramaCommandBase::DramaCommandBase()
 
 DramaCommandBase::~DramaCommandBase()
 {
+	DEC_NDOBJ("DramaCommandBase");
 }
 
 bool DramaCommandBase::IsFinish()

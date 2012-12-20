@@ -11,8 +11,8 @@
 #define _UI_DIALOG_H_
 
 #include "NDUILayer.h"
-#include "UISpriteNode.h"
-#include "UIHyperlink.h"
+#include "NDUISpriteNode.h"
+#include "NDUIHyperlink.h"
 #include "NDUIScrollContainer.h"
 #include "typedef.h"
 

@@ -117,6 +117,7 @@ public:
 
 	bool OnDrawBegin(bool bDraw); override
 	void OnDrawEnd(bool bDraw); override
+	override void RunAnimation(bool bDraw);
 
 	virtual void stopMoving(bool bResetPos = true, bool bResetTeamPos = true);
 

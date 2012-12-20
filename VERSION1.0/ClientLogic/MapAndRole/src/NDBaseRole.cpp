@@ -28,6 +28,7 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "NDConsole.h"
 #endif
+#include "ObjectTracker.h"
 
 using namespace NDEngine;
 
@@ -37,6 +38,7 @@ bool NDBaseRole::ms_bGameSceneRelease = false;
 
 NDBaseRole::NDBaseRole()
 {
+	INC_NDOBJ_RTCLS
 	m_nMasterWeaponType = WEAPON_NONE;
 	m_nSecondWeaponType = WEAPON_NONE;
 	m_bIsRide = false;
@@ -95,6 +97,7 @@ NDBaseRole::NDBaseRole()
 
 NDBaseRole::~NDBaseRole()
 {
+	DEC_NDOBJ_RTCLS
 	SAFE_DELETE (m_pkSubNode);
 	SAFE_DELETE (m_pkRingPic);
 	SAFE_DELETE (m_pkPicShadow);
@@ -1555,6 +1558,8 @@ void NDBaseRole::HandleShadow(CCSize parentsize)
 //动画+渲染，入口在这儿，重载方便测试
 void NDBaseRole::RunAnimation(bool bDraw)
 {
+	if (!NDDebugOpt::getRunAnimRoleEnabled()) return;
+
 	NDSprite::RunAnimation(bDraw);
 
 	this->debugDraw();

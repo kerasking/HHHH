@@ -18,6 +18,7 @@
 #include <sstream>
 #include "NDPath.h"
 #include "NDUIBaseGraphics.h"
+#include "ObjectTracker.h"
 
 const float DIALOG_WIDTH = 200.0f;
 const float MAX_DIALOG_HEIGHT = 220.0f;
@@ -28,6 +29,7 @@ IMPLEMENT_CLASS(StatusDialog, NDUILayer)
 
 StatusDialog::StatusDialog()
 {
+	INC_NDOBJ_RTCLS
 	std::string bottomImage = NDPath::GetImgPath("bottom.png");
 	m_picLeftTop = NDPicturePool::DefaultPool()->AddPicture(bottomImage);
 	m_picLeftTop->SetReverse(true);
@@ -54,6 +56,7 @@ StatusDialog::StatusDialog()
 
 StatusDialog::~StatusDialog()
 {
+	DEC_NDOBJ_RTCLS
 	this->releaseElement();
 	delete m_picLeftTop;
 	delete m_picRightTop;

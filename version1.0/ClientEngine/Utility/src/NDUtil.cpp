@@ -1,5 +1,6 @@
 #include "NDUtil.h"
 #include<iostream>
+#include "ObjectTracker.h"
 
 #ifdef ANDROID
 #include <jni.h>
@@ -29,12 +30,12 @@ bool IsPointInside(cocos2d::CCPoint kPoint, cocos2d::CCRect kRect)
 
 NDUtil::NDUtil()
 {
-
+	INC_NDOBJ_RTCLS
 }
 
 NDUtil::~NDUtil()
 {
-
+	DEC_NDOBJ_RTCLS
 }
 
 STRING_VEC NDUtil::ErgodicFolderForSpceialFileExtName(const char* pszPath,

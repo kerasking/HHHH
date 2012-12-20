@@ -45,6 +45,10 @@ THE SOFTWARE.
 #include "shaders/ccGLStateCache.h"
 #include "shaders/CCShaderCache.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     #include "CCTextureCache.h"
 #endif
@@ -122,10 +126,17 @@ CCTexture2D::CCTexture2D()
 , m_uiWidth(0), m_uiHeight(0)
 #endif
 {
+#if ND_MOD
+	INC_CCOBJ("CCTexture2D");
+#endif
 }
 
 CCTexture2D::~CCTexture2D()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCTexture2D");
+#endif
+
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     VolatileTexture::removeTexture(this);
 #endif

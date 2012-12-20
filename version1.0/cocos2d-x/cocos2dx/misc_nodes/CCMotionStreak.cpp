@@ -32,6 +32,10 @@ THE SOFTWARE.
 #include "support/CCVertex.h"
 #include "support/CCPointExtension.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 CCMotionStreak::CCMotionStreak()
@@ -52,12 +56,18 @@ CCMotionStreak::CCMotionStreak()
 , m_pTexCoords(NULL)
 , m_bStartingPositionInitialized(false)
 {
+#if ND_MOD
+	INC_CCOBJ("CCMotionStreak");
+#endif
     m_tBlendFunc.src = GL_SRC_ALPHA;
     m_tBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
 }
 
 CCMotionStreak::~CCMotionStreak()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCMotionStreak");
+#endif
     CC_SAFE_RELEASE(m_pTexture);
     CC_SAFE_FREE(m_pPointState);
     CC_SAFE_FREE(m_pPointVertexes);

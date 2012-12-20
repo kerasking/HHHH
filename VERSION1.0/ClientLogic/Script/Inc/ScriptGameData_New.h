@@ -926,6 +926,15 @@ public:
 		}
 		return *extra;
 	}
+	
+	~NDTable() { destroy(); }
+	
+	void destroy()
+	{
+		SAFE_DELETE(extra);
+		SAFE_DELETE(dbgName);
+	}
+
 private:
 	NDTableExtra* extra;
 

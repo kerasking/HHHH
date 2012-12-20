@@ -34,6 +34,7 @@
 #include "ScriptGameLogic.h"
 #include "SocialElement.h"
 #include "NDTransData.h"
+#include "ObjectTracker.h"
 
 #ifdef USE_MGSDK
 #import <Foundation/Foundation.h>
@@ -137,19 +138,23 @@ bool GetCharData(char& t, string strValue, string strType)
 }
 
 NDMapMgr::NDMapMgr() :
-m_nCurrentMonsterBound(0),
-m_nRoadBlockX(0),
-m_nRoadBlockY(0),
-m_nSaveMapID(0),
-m_nMapID(0),
-m_nMapDocID(0),
-m_nCurrentMonsterRound(0)
+	m_nCurrentMonsterBound(0),
+	m_nRoadBlockX(0),
+	m_nRoadBlockY(0),
+	m_nSaveMapID(0),
+	m_nMapID(0),
+	m_nMapDocID(0),
+	m_nCurrentMonsterRound(0)
 {
+	INC_NDOBJ_RTCLS
+
 	m_iCurDlgNpcID = 0;
 	mapType = MAPTYPE_NORMAL;
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this, "sim ");
+	NDConsole::instance().RegisterConsoleHandler(this, "sim ");
 #endif
+
 	m_kTimer.SetTimer(this, 1, 0.1);
 	memset(zhengYing, 0, sizeof(zhengYing));
 	isShowName = true;
@@ -160,6 +165,7 @@ m_nCurrentMonsterRound(0)
 
 NDMapMgr::~NDMapMgr()
 {
+	DEC_NDOBJ_RTCLS
 	m_vNPC.clear();
 	m_mapManualRole.clear();
 }
@@ -1414,6 +1420,7 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 		pstrTemp = CCString::stringWithUTF8String(
 				pkData->ReadUnicodeString().c_str());
 		std::string dataStr = pstrTemp->toStdString();
+
 		pstrTemp = CCString::stringWithUTF8String(
 				pkData->ReadUnicodeString().c_str());
 		std::string talkStr = pstrTemp->toStdString();
@@ -1814,7 +1821,7 @@ bool NDMapMgr::processConsole(const char* pszInput)
 void NDMapMgr::OnTimer(OBJID tag)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	const char* pszCommand = NDConsole::GetSingletonPtr()->GetSpecialCommand(
+	const char* pszCommand = NDConsole::instance().GetSpecialCommand(
 			"sim ");
 
 	if (0 != pszCommand && *pszCommand)

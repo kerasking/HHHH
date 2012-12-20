@@ -51,6 +51,10 @@ A more flexible class is CCLabelBMFont. It supports variable width characters an
 class CC_DLL CCLabelAtlas : public CCAtlasNode, public CCLabelProtocol
 {
 public:
+#if ND_MOD
+	CCLabelAtlas();
+	virtual ~CCLabelAtlas();
+#else
     CCLabelAtlas()
         :m_sString("")
     {}
@@ -58,6 +62,7 @@ public:
     { 
         m_sString.clear(); 
     }
+#endif
     /** creates the CCLabelAtlas with a string, a char map file(the atlas), the width and height of each element and the starting char of the atlas 
     @deprecated: This interface will be deprecated sooner or later.
     */

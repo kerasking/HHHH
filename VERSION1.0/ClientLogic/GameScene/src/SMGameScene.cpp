@@ -15,6 +15,7 @@
 #include "WorldMapScene.h"
 #include "ScriptGameLogic.h"
 #include "NDConstant.h"
+#include "ObjectTracker.h"
 
 //#define TAG_WORLD_MAP_BTN_LAYER		(65534)
 #define TAG_WORLD_MAP_BTN			(1)
@@ -33,12 +34,14 @@ CSMGameScene* CSMGameScene::Scene()
 
 CSMGameScene::CSMGameScene()
 {
+	INC_NDOBJ_RTCLS
 //	m_miniMap	= NULL;	 ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	m_pkMapLayerLogic	= NULL;
 }
 
 CSMGameScene::~CSMGameScene()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CSMGameScene::Initialization(int mapID)

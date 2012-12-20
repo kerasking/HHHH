@@ -92,6 +92,9 @@ public:
     void setOffset(const CCPoint& offsets);
 
 public:
+#if ND_MOD
+	CCSpriteFrame();
+#endif
     ~CCSpriteFrame(void);
     virtual CCObject* copyWithZone(CCZone *pZone);
 

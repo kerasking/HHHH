@@ -27,6 +27,10 @@ THE SOFTWARE.
 #include "script_support/CCScriptSupport.h"
 #include <string>
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 using namespace std;
 
 NS_CC_BEGIN;
@@ -36,12 +40,18 @@ static CCNotificationCenter *s_sharedNotifCenter = NULL;
 CCNotificationCenter::CCNotificationCenter()
 : m_scriptHandler(0)
 {
+#if ND_MOD
+	INC_CCOBJ("CCNotificationCenter");
+#endif
     m_observers = CCArray::createWithCapacity(3);
     m_observers->retain();
 }
 
 CCNotificationCenter::~CCNotificationCenter()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCNotificationCenter");
+#endif
     unregisterScriptObserver();
     m_observers->release();
 }
@@ -164,6 +174,10 @@ CCNotificationObserver::CCNotificationObserver(CCObject *target,
                                                const char *name,
                                                CCObject *obj)
 {
+#if ND_MOD
+	INC_CCOBJ("CCNotificationObserver");
+#endif
+
     m_target = target;
     m_selector = selector;
     m_object = obj;
@@ -177,6 +191,10 @@ CCNotificationObserver::CCNotificationObserver(CCObject *target,
 
 CCNotificationObserver::~CCNotificationObserver()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCNotificationObserver");
+#endif
+
     CC_SAFE_DELETE_ARRAY(m_name);
 }
 

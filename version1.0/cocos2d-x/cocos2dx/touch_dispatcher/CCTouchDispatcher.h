@@ -102,6 +102,10 @@ class CC_DLL CCTouchDispatcher : public CCObject, public EGLTouchDelegate
 public:
     ~CCTouchDispatcher();
     bool init(void);
+
+#if ND_MOD
+	CCTouchDispatcher();
+#else
     CCTouchDispatcher() 
         : m_pTargetedHandlers(NULL)
         , m_pStandardHandlers(NULL)
@@ -109,6 +113,7 @@ public:
         , m_pHandlersToRemove(NULL)
         
     {}
+#endif
 
 public:
     /** Whether or not the events are going to be dispatched. Default: true */

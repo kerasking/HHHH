@@ -17,6 +17,7 @@
 #include "define.h"
 #include "CCTransition.h"
 #include "CCPointExtension.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -41,6 +42,8 @@ static NDDirector* gs_pkNDDirectorDefaultDirector = NULL;
 
 NDDirector::NDDirector()
 {
+	INC_NDOBJ_RTCLS;
+
 	NDAsssert(gs_pkNDDirectorDefaultDirector == NULL);
 
 	m_pkDirector = CCDirector::sharedDirector();
@@ -52,6 +55,8 @@ NDDirector::NDDirector()
 
 NDDirector::~NDDirector()
 {
+	DEC_NDOBJ_RTCLS;
+
 	SAFE_DELETE (m_pkTransitionSceneWait);
 
 	SAFE_RELEASE( m_pkDirector );

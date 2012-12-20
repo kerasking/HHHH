@@ -82,8 +82,9 @@ namespace NDEngine
 	NDSocket::~NDSocket()
 	{
 		Close();
-        delete m_EncryptSnd;
-        delete m_EncryptRcv;
+		SAFE_DELETE( m_socket );
+        SAFE_DELETE( m_EncryptSnd );
+        SAFE_DELETE( m_EncryptRcv );
 	}
 	
 	bool NDSocket::Connect(const char* address, unsigned short port, bool blocking)

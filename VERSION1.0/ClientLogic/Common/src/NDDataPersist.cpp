@@ -15,6 +15,7 @@
 #include "tinyxml.h"
 #include "XMLReader.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #import <Foundation/Foundation.h>
@@ -109,6 +110,8 @@ m_pkAccountList(0),
 m_pkDataArray(0),
 m_pkAccountDeviceList(0)
 {
+	INC_NDOBJ("NDDataPersist");
+
 	this->LoadData();
 	this->LoadAccountList();
 	this->LoadAccountDeviceList();
@@ -116,6 +119,8 @@ m_pkAccountDeviceList(0)
 
 NDDataPersist::~NDDataPersist()
 {
+	DEC_NDOBJ("NDDataPersist");
+
 	SAFE_RELEASE(m_pkDataArray);
 	SAFE_RELEASE(m_pkAccountList);
 	SAFE_RELEASE(m_pkAccountDeviceList);
@@ -162,7 +167,6 @@ void NDDataPersist::SetData(unsigned int index, CCString* key, const char* data)
 		//[dic setObject:nsObj forKey:key];
 		dic->setObject(nsObj,key->toStdString().c_str());
 	}
-	
 }
 
 const char* NDDataPersist::GetData(unsigned int index, CCString* key)
@@ -186,7 +190,7 @@ const char* NDDataPersist::GetData(unsigned int index, CCString* key)
 		if (NeedEncodeForKey(key)) 
 		{
 			//simpleDecode((const unsigned char*)[nsStr UTF8String], (unsigned char*)decData);
-			simpleDecode((const unsigned char*)nsStr->UTF8String(),(unsigned char*)decData);
+			simpleDecode((const unsigned char*)nsStr->getUtf8String(),(unsigned char*)decData);
 			return decData;
 		}
 		else 
@@ -516,7 +520,8 @@ void NDDataPersist::AddAccountDevice(const char* account)
 		{
 			CCStringRef tmpAccountNode = (CCString*)m_pkAccountList->objectAtIndex(i);
 
-			if (tmpAccountNode->isEqual(CCString::stringWithUTF8String((const char*)encAccount)))
+			CCStringRef strRef = CCString::stringWithUTF8String((const char*)encAccount);
+			if (tmpAccountNode->isEqual( strRef ))
 			{
 				return;
 			}
@@ -528,7 +533,8 @@ void NDDataPersist::AddAccountDevice(const char* account)
 		}
 		
 		//[accountDeviceList addObject:[NSString stringWithUTF8String:(const char*)encAccount]];
-		m_pkAccountDeviceList->addObject(CCString::stringWithUTF8String((const char*)encAccount));
+		CCStringRef strRef = CCString::stringWithUTF8String((const char*)encAccount);
+		m_pkAccountDeviceList->addObject( strRef );
 	}	
 }
 
@@ -554,12 +560,13 @@ bool NDDataPersist::HasAccountDevice(const char* account)
 
 	for (int i = 0;i < m_pkAccountDeviceList->count();i++)
 	{
-		string acc = ((CCString*)m_pkAccountDeviceList->objectAtIndex(i))->UTF8String();
+		string acc = ((CCString*)m_pkAccountDeviceList->objectAtIndex(i))->getUtf8String();
 		unsigned char decAcc[1024] = {0};
 
 		simpleDecode((const unsigned char*)acc.c_str(),decAcc);
 
-		if (tmpAccountNode->isEqual(CCString::stringWithUTF8String((const char*)decAcc)))
+		CCStringRef strRef = CCString::stringWithUTF8String((const char*)decAcc);
+		if (tmpAccountNode->isEqual( strRef ))
 		{
 			return true;
 		}
@@ -608,7 +615,7 @@ void NDDataPersist::SaveGameSetting()
 	CCStringRef strGameSetting = CCString::stringWithFormat("%d",ms_nGameSetting);
 
 	CCStringRef strTemp = new CCString(kGameSetting->toStdString().c_str());
-	SetData(kGameSettingData,strTemp,strGameSetting->UTF8String());
+	SetData(kGameSettingData,strTemp,strGameSetting->getUtf8String());
 	SaveData();
 
 	/***

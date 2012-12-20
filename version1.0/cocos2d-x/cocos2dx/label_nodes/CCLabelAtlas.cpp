@@ -38,7 +38,27 @@ THE SOFTWARE.
 // external
 #include "kazmath/GL/matrix.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
+
+CCLabelAtlas::CCLabelAtlas()
+	:m_sString("")
+{
+#if ND_MOD
+	INC_CCOBJ("CCLabelAtlas");
+#endif
+}
+
+CCLabelAtlas::~CCLabelAtlas()
+{ 
+#if ND_MOD
+	DEC_CCOBJ("CCLabelAtlas");
+#endif
+	m_sString.clear(); 
+}
 
 //CCLabelAtlas - Creation & Init
 CCLabelAtlas* CCLabelAtlas::labelWithString(const char *string, const char *charMapFile, unsigned int itemWidth, int unsigned itemHeight, unsigned int startCharMap)

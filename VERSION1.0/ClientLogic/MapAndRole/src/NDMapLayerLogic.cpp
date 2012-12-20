@@ -24,10 +24,11 @@
 //#include "cpLog.h"
 //#include "SimpleAudioEngine_objc.h"
 #include "NDPath.h"
-#include "UIChatText.h"
+#include "NDUIChatText.h"
 #include "ScriptInc.h"
 #include "WorldMapScene.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
 
 #define TAG_MAP_UPDTAE (2046)
 #define	TAG_MAP_LONGTOUCH (2047)
@@ -40,6 +41,8 @@ IMPLEMENT_CLASS(NDMapLayerLogic, NDMapLayer)
 
 NDMapLayerLogic::NDMapLayerLogic()
 {
+	INC_NDOBJ_RTCLS
+
 	m_dTimeStamp = time(NULL);
 
 	m_kTimer.SetTimer(this, TAG_MAP_UPDTAE, 0.01f);
@@ -53,6 +56,7 @@ NDMapLayerLogic::NDMapLayerLogic()
 
 NDMapLayerLogic::~NDMapLayerLogic()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void NDMapLayerLogic::DidFinishLaunching()

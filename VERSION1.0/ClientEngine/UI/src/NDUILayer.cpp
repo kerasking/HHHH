@@ -37,7 +37,8 @@
 #include "NDUIImage.h"
 #include "NDDebugOpt.h"
 #include "BaseType.h"
-#include "UIScrollViewMulHand.h"
+#include "NDUIScrollViewMulHand.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -58,6 +59,8 @@ NDUILayer* NDUILayer::m_pkLayerPress = 0;
 
 NDUILayer::NDUILayer()
 {
+	INC_NDOBJ_RTCLS
+
 	m_strDebugName = "NDUILayer";
 
 	INIT_AUTOLINK (NDUILayer);
@@ -98,6 +101,8 @@ NDUILayer::NDUILayer()
 
 NDUILayer::~NDUILayer()
 {
+	DEC_NDOBJ_RTCLS
+
 	CC_SAFE_RELEASE (m_pkBackgroudTexture);
 
 	if (m_bClearOnFree)

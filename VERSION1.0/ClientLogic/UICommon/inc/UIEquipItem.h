@@ -11,7 +11,7 @@
 #define _UI_EQUIP_ITEM_H_ZJH_
 
 #include "UIItemButton.h"
-#include "UISpriteNode.h"
+#include "NDUISpriteNode.h"
 
 class CUIEquipItem: public CUIItemButton
 {

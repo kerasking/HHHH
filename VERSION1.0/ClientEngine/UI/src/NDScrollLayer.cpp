@@ -11,6 +11,7 @@
 #include "NDDirector.h"
 //#include "NDUtil.h"
 #include "NDPath.h"
+#include "ObjectTracker.h"
 
 float ACCER_FIRST = -100.0f;
 
@@ -23,6 +24,8 @@ IMPLEMENT_CLASS(NDScrollLayer, NDUILayer)
 
 NDScrollLayer::NDScrollLayer()
 {
+	INC_NDOBJ_RTCLS
+
 	m_bHorizontal = false;
 
 	ResetMoveData();
@@ -30,6 +33,7 @@ NDScrollLayer::NDScrollLayer()
 
 NDScrollLayer::~NDScrollLayer()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void NDScrollLayer::Initialization()
@@ -493,6 +497,8 @@ IMPLEMENT_CLASS(NDUILabelScrollLayer, NDScrollLayer)
 
 NDUILabelScrollLayer::NDUILabelScrollLayer()
 {
+	INC_NDOBJ_RTCLS
+
 	m_lbText = NULL;
 
 	m_uiViewHeight = 0;
@@ -500,6 +506,7 @@ NDUILabelScrollLayer::NDUILabelScrollLayer()
 
 NDUILabelScrollLayer::~NDUILabelScrollLayer()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void NDUILabelScrollLayer::Initialization()
@@ -608,6 +615,8 @@ IMPLEMENT_CLASS(NDUIContainerScrollLayer, NDScrollLayer)
 
 NDUIContainerScrollLayer::NDUIContainerScrollLayer()
 {
+	INC_NDOBJ_RTCLS
+
 	INIT_AUTOLINK(NDUIContainerScrollLayer);
 
 	m_fMinY = m_fChange = m_fMaxChange = 0.0f;
@@ -619,6 +628,7 @@ NDUIContainerScrollLayer::NDUIContainerScrollLayer()
 
 NDUIContainerScrollLayer::~NDUIContainerScrollLayer()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void NDUIContainerScrollLayer::Initialization()
@@ -824,11 +834,13 @@ IMPLEMENT_CLASS(NDUIContainerHScrollLayer, NDScrollLayer)
 
 NDUIContainerHScrollLayer::NDUIContainerHScrollLayer()
 {
+	INC_NDOBJ_RTCLS
 	m_fChange = m_fMaxChange = 0.0f;
 }
 
 NDUIContainerHScrollLayer::~NDUIContainerHScrollLayer()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void NDUIContainerHScrollLayer::Initialization()

@@ -12,13 +12,14 @@
 #include "NDDirector.h"
 #include "NDConstant.h"
 #include "CCPointExtension.h"
-#include "UISpriteNode.h"
+#include "NDUISpriteNode.h"
 #include "NDPath.h"
 #include "NDAnimationGroup.h"
 //#include "GameScene.h"
 //#include "NDPlayer.h"
 #include "NDSprite.h"
 #include "NDLocalization.h"
+#include "ObjectTracker.h"
 
 using namespace NDEngine;
 
@@ -28,6 +29,8 @@ IMPLEMENT_CLASS(NDUISynLayer, NDUILayer)
 
 NDUISynLayer::NDUISynLayer()
 {
+	INC_NDOBJ_RTCLS
+
 	m_strDebugName = "NDUISynLayer";
 
 	NDAsssert(NDUISynLayer_instances == NULL);
@@ -43,6 +46,8 @@ NDUISynLayer::NDUISynLayer()
 
 NDUISynLayer::~NDUISynLayer()
 {
+	DEC_NDOBJ_RTCLS
+
 	// ¹Ø±ÕµÄÊ±ºò£¬»Ö¸´³õÊ¼×´Ì¬
 	NDUISynLayer_instances = NULL;
 //	[m_texLine release];

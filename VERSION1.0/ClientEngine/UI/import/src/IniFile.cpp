@@ -3,6 +3,7 @@
 #include <cassert>
 #include <stdlib.h>
 #include "IniFile.h"
+#include "ObjectTracker.h"
 
 // #ifdef _DEBUG
 // #undef THIS_FILE
@@ -21,18 +22,19 @@ using namespace std;
 */
  CIniFile::CIniFile()
  {
-   
+	INC_NDOBJ("CIniFile"); 
  }
  
  CIniFile::CIniFile(const char* inipath)
  {
+	 INC_NDOBJ("CIniFile"); 
  	m_strPath = inipath;
  }
  
  
  CIniFile::~CIniFile()
  {
- 
+	DEC_NDOBJ("CIniFile"); 
  }
  
  

@@ -38,6 +38,10 @@ THE SOFTWARE.
 
 #include <float.h>
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 #define kProgressTextureCoordsCount 4
@@ -54,7 +58,11 @@ CCProgressTimer::CCProgressTimer()
 ,m_tMidpoint(0,0)
 ,m_tBarChangeRate(0,0)
 ,m_bReverseDirection(false)
-{}
+{
+#if ND_MOD
+	INC_CCOBJ("CCProgressTimer");
+#endif
+}
 
 CCProgressTimer* CCProgressTimer::progressWithSprite(CCSprite* sp)
 {
@@ -96,6 +104,9 @@ bool CCProgressTimer::initWithSprite(CCSprite* sp)
 
 CCProgressTimer::~CCProgressTimer(void)
 {
+#if ND_MOD
+	DEC_CCOBJ("CCProgressTimer");
+#endif
     CC_SAFE_FREE(m_pVertexData);
     CC_SAFE_RELEASE(m_pSprite);
 }

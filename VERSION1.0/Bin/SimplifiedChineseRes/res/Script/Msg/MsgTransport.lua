@@ -87,6 +87,7 @@ function p.MsgReciveTransportInfo(netdatas)
         p.tbInfo.nHasTransNum = netdatas:ReadByte();             --已经运送了多少次
         p.tbInfo.Level = netdatas:ReadByte();                              --玩家等级          
         p.tbInfo.param2 = netdatas:ReadByte();   
+        p.tbInfo.strArmyGroup = netdatas:ReadUnicodeString();    --军团名称
         p.tbInfo.strPlayerName = netdatas:ReadUnicodeString();    --玩家的名字
         
         

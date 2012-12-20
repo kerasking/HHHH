@@ -8,6 +8,7 @@
 
 #include "NDLayer.h"
 #include "NDBaseLayer.h"
+#include "ObjectTracker.h"
 
 namespace NDEngine
 {
@@ -15,12 +16,13 @@ IMPLEMENT_CLASS(NDLayer, NDNode)
 
 NDLayer::NDLayer()
 {
+	INC_NDOBJ_RTCLS
 	INIT_AUTOLINK(NDLayer);
 }
 
 NDLayer::~NDLayer()
 {
-
+	DEC_NDOBJ_RTCLS
 }
 
 NDLayer* NDLayer::Layer()

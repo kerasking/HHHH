@@ -3,12 +3,15 @@
 #include "CCPointExtension.h"
 //#include "NDBaseRole.h"
 #include "EnumDef.h"
+#include "ObjectTracker.h"
 
 namespace NDEngine
 {
 	IMPLEMENT_CLASS(NDRidePet, NDSprite)
 		NDRidePet::NDRidePet()
 	{
+		INC_NDOBJ_RTCLS
+
 		iType = TYPE_RIDE;
 		quality = 0;
 		m_bLastPos = true;
@@ -21,6 +24,7 @@ namespace NDEngine
 
 	NDRidePet::~NDRidePet()
 	{
+		DEC_NDOBJ_RTCLS
 	}
 
 	void NDRidePet::OnMoving(bool bLastPos)

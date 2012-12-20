@@ -24,17 +24,28 @@ THE SOFTWARE.
 
 #include "CCSet.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 using namespace std;
 
 NS_CC_BEGIN
 
 CCSet::CCSet(void)
 {
+#if ND_MOD
+	INC_CCOBJ("CCSet");
+#endif
     m_pSet = new set<CCObject *>;
 }
 
 CCSet::CCSet(const CCSet &rSetObject)
 {
+#if ND_MOD
+	INC_CCOBJ("CCSet");
+#endif
+
     m_pSet = new set<CCObject *>(*rSetObject.m_pSet);
 
     // call retain of members
@@ -52,6 +63,10 @@ CCSet::CCSet(const CCSet &rSetObject)
 
 CCSet::~CCSet(void)
 {
+#if ND_MOD
+	DEC_CCOBJ("CCSet");
+#endif
+
     // call release() of elements
     CCSetIterator iter;
     for (iter = m_pSet->begin(); iter != m_pSet->end(); ++iter)

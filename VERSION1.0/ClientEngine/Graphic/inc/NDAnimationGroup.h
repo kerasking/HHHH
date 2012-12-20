@@ -33,6 +33,7 @@ class NDTileTableRecord : public cocos2d::CCObject
 	CC_SYNTHESIZE(int, m_nReplace, Replace)
 public:
 	NDTileTableRecord();
+	~NDTileTableRecord();
 };
 
 //////////////////////////////////////////////////////////////////////////

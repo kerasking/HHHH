@@ -10,6 +10,7 @@
 #include "NDCombinePicture.h"
 #include "platform.h"
 #include "CCPointExtension.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -18,12 +19,14 @@ IMPLEMENT_CLASS(NDCombinePicture, NDObject)
 
 NDCombinePicture::NDCombinePicture()
 {
+	INC_NDOBJ_RTCLS
 	m_kRectLast = CCRectZero;
 	m_kSizeMax = CCSizeZero;
 }
 
 NDCombinePicture::~NDCombinePicture()
 {
+	DEC_NDOBJ_RTCLS
 	Clear();
 }
 

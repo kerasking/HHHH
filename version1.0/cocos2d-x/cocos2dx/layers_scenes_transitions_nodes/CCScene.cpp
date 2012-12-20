@@ -28,16 +28,26 @@ THE SOFTWARE.
 #include "support/CCPointExtension.h"
 #include "CCDirector.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 CCScene::CCScene()
 {
+#if ND_MOD
+	INC_CCOBJ("CCScene");
+#endif
     m_bIgnoreAnchorPointForPosition = true;
     setAnchorPoint(ccp(0.5f, 0.5f));
 }
 
 CCScene::~CCScene()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCScene");
+#endif
 }
 
 bool CCScene::init()

@@ -11,6 +11,7 @@
 #include "NDDirector.h"
 #include "NDMapLayerLogic.h"
 #include "NDConstant.h"
+#include "ObjectTracker.h"
 
 
 IMPLEMENT_CLASS(CSMBattleScene, NDScene)
@@ -23,11 +24,13 @@ CSMBattleScene* CSMBattleScene::Scene()
 
 CSMBattleScene::CSMBattleScene()
 {
+	INC_NDOBJ_RTCLS
 	m_mapLayer	= NULL;
 }
 
 CSMBattleScene::~CSMBattleScene()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CSMBattleScene::Initialization(int mapID)

@@ -20,6 +20,7 @@
 #include "NDUtility.h"
 #include "NDPath.h"
 #include "NDUIBaseGraphics.h"
+#include "ObjectTracker.h"
 
 #define TAG_ITEM_COUNT (34567)
 #define TAG_ITEM_LOCK (34568)
@@ -28,6 +29,7 @@ IMPLEMENT_CLASS(CUIItemButton, NDUIButton)
 
 CUIItemButton::CUIItemButton()
 {
+	INC_NDOBJ_RTCLS
 	m_unItemId		= 0;
 	m_unItemType	= 0;
 	m_bLock			= false;
@@ -37,6 +39,7 @@ CUIItemButton::CUIItemButton()
 
 CUIItemButton::~CUIItemButton()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CUIItemButton::InitializationItem()

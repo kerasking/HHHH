@@ -16,7 +16,7 @@
 #include "NDDataTransThread.h"
 #include "InitMenuScene.h"
 #include "NDPath.h"
-
+#include "ObjectTracker.h"
 
 #define TIMER_TAG_NET (1)
 
@@ -32,6 +32,8 @@ GameSceneLoading* GameSceneLoading::Scene(bool connect/*=false*/, LoginType logi
 
 GameSceneLoading::GameSceneLoading()
 {
+	INC_NDOBJ_RTCLS
+
 	m_lbTitle = NULL;
 	m_tangRole = NULL;
 	m_suiRole = NULL;
@@ -49,6 +51,7 @@ GameSceneLoading::GameSceneLoading()
 
 GameSceneLoading::~GameSceneLoading()
 {
+	DEC_NDOBJ_RTCLS
 	if (m_timerNet)
 	{
 		m_timerNet->KillTimer(this, TIMER_TAG_NET);

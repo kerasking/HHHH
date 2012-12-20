@@ -41,6 +41,7 @@ THE SOFTWARE.
 
 #if ND_MOD
 	#include "CCDrawingPrimitives.h"
+	#include "ObjectTracker.h"
 #endif
 
 #if CC_NODE_RENDER_SUBPIXEL
@@ -88,6 +89,10 @@ CCNode::CCNode(void)
 , m_glServerState(CC_GL_BLEND)
 , m_bReorderChildDirty(false)
 {
+#if ND_MOD
+	INC_CCOBJ("CCNode");
+#endif
+
     // set default scheduler and actionManager
     CCDirector *director = CCDirector::sharedDirector();
     m_pActionManager = director->getActionManager();
@@ -101,6 +106,10 @@ CCNode::CCNode(void)
 
 CCNode::~CCNode(void)
 {
+#if ND_MOD
+	DEC_CCOBJ("CCNode");
+#endif
+
     CCLOGINFO( "cocos2d: deallocing" );
     
     unregisterScriptHandler();

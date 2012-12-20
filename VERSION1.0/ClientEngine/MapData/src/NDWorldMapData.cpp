@@ -14,25 +14,28 @@
 #include "NDPicture.h"
 #include "BaseType.h"
 #include "NDDirector.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
 
 PlaceNode::PlaceNode() :
-m_Texture(NULL),
-m_nPlaceId(0),
-m_nX(0),
-m_nY(0),
-m_nLDir(0),
-m_nRDir(0),
-m_nTDir(0),
-m_nBDir(0)
+	m_Texture(NULL),
+	m_nPlaceId(0),
+	m_nX(0),
+	m_nY(0),
+	m_nLDir(0),
+	m_nRDir(0),
+	m_nTDir(0),
+	m_nBDir(0)
 {
-
+	INC_NDOBJ("PlaceNode");
 }
 
 PlaceNode::~PlaceNode()
 {
+	DEC_NDOBJ("PlaceNode");
+
 	CC_SAFE_RELEASE (m_Texture);
 }
 
@@ -44,17 +47,19 @@ const int TileHeight = 16;
 std::vector<PassWay> m_passWayInfos;
 
 NDWorldMapData::NDWorldMapData() :
-m_nLayerCount(0),
-m_nColumns(0),
-m_nRows(0),
-//m_nUnitSize(0),
-m_MapTiles(NULL),
-m_SceneTiles(NULL),
-m_BgTiles(NULL),
-m_AnimationGroups(NULL),
-m_AniGroupParams(NULL),
-m_PlaceNodes(NULL)
+	m_nLayerCount(0),
+	m_nColumns(0),
+	m_nRows(0),
+	//m_nUnitSize(0),
+	m_MapTiles(NULL),
+	m_SceneTiles(NULL),
+	m_BgTiles(NULL),
+	m_AnimationGroups(NULL),
+	m_AniGroupParams(NULL),
+	m_PlaceNodes(NULL)
 {
+	INC_NDOBJ("NDWorldMapData");
+
 	m_MapSize = CCSizeZero;
 }
 
@@ -72,6 +77,8 @@ NDWorldMapData * NDWorldMapData::SharedData()
 
 NDWorldMapData::~NDWorldMapData()
 {
+	DEC_NDOBJ("NDWorldMapData");
+
 	CC_SAFE_RELEASE (m_MapTiles);
 	CC_SAFE_RELEASE (m_SceneTiles);
 	CC_SAFE_RELEASE (m_BgTiles);

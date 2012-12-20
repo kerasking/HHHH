@@ -24,6 +24,7 @@
 #include "NDUtil.h"
 #include "NDPicture.h"
 #include "NDSprite.h"
+#include "ObjectTracker.h"
 
 MapTexturePool* g_pkMapTexturePoolDefaultPool = NULL;
 
@@ -33,12 +34,16 @@ using namespace NDEngine;
 MapTexturePool::MapTexturePool() :
 m_pkDict(NULL)
 {
+	INC_NDOBJ("MapTexturePool");
+
 	NDAsssert(g_pkMapTexturePoolDefaultPool == NULL);
 	m_pkDict = new CCDictionary();
 }
 
 MapTexturePool::~MapTexturePool()
 {
+	DEC_NDOBJ("MapTexturePool");
+
 	NDAsssert(g_pkMapTexturePoolDefaultPool != NULL);
 	g_pkMapTexturePoolDefaultPool = NULL;
 	CC_SAFE_RELEASE (m_pkDict);
@@ -93,31 +98,21 @@ m_nY(0),
 m_nMapIndex(0),
 m_nPassIndex(0)
 {
+	INC_NDOBJ("NDMapSwitch");
+
 	memset(m_pkNameLabels, 0, sizeof(m_pkNameLabels));
 	memset(m_pkDesLabels, 0, sizeof(m_pkDesLabels));
 }
 
 NDMapSwitch::~NDMapSwitch()
 {
-	if (m_pkNameLabels[0])
-	{
-		delete m_pkNameLabels[0];
-	}
+	DEC_NDOBJ("NDMapSwitch");
 
-	if (m_pkNameLabels[1])
-	{
-		delete m_pkNameLabels[1];
-	}
+	SAFE_DELETE( m_pkNameLabels[0] );
+	SAFE_DELETE( m_pkNameLabels[1] );
 
-	if (m_pkDesLabels[0])
-	{
-		delete m_pkDesLabels[0];
-	}
-
-	if (m_pkDesLabels[1])
-	{
-		delete m_pkDesLabels[1];
-	}
+	SAFE_DELETE( m_pkDesLabels[0] );
+	SAFE_DELETE( m_pkDesLabels[1] );
 }
 
 // void NDMapSwitch::SetLabel(NDMapData* mapdata)
@@ -348,10 +343,13 @@ NDMapData::NDMapData() :
 		m_pkAniGroupParams(NULL),
 		m_bBattleMapFlag(false)
 {
+	INC_NDOBJ("NDMapData");
 }
 
 NDMapData::~NDMapData()
 {
+	DEC_NDOBJ("NDMapData");
+
 	CC_SAFE_RELEASE(m_kMapTiles);
 	CC_SAFE_DELETE (m_pkObstacles);
 	CC_SAFE_RELEASE (m_pkSceneTiles);

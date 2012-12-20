@@ -25,7 +25,7 @@ import com.mobage.android.social.common.RemoteNotification.RemoteNotificationLis
 
 import org.DeNA.DHLJ.SocialUtils;
 import android.R;
-import android.app.ActionBar.LayoutParams;
+//import android.app.ActionBar.LayoutParams;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;

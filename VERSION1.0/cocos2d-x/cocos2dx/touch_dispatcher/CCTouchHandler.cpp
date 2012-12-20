@@ -25,6 +25,9 @@ THE SOFTWARE.
 
 #include "CCTouchHandler.h"
 #include "ccMacros.h"
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
 
 NS_CC_BEGIN
 
@@ -101,8 +104,18 @@ bool CCTouchHandler::initWithDelegate(CCTouchDelegate *pDelegate, int nPriority)
     return true;
 }
 
+#if ND_MOD
+CCTouchHandler::CCTouchHandler()
+{
+	INC_CCOBJ("CCTouchHandler");
+}
+#endif
+
 CCTouchHandler::~CCTouchHandler(void)
 {
+#if ND_MOD
+	DEC_CCOBJ("CCTouchHandler");
+#endif
     if (m_pDelegate)
     {
         dynamic_cast<CCObject*>(m_pDelegate)->release();

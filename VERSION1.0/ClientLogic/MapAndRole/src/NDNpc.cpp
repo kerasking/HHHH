@@ -32,6 +32,7 @@
 #include "NDDebugOpt.h"
 #include "NDNpcLogic.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
 
 #define NPC_NAME_FONT_SIZE 14
 
@@ -62,6 +63,7 @@ IMPLEMENT_CLASS(NDNpc, NDBaseRole)
 NDNpc::NDNpc() :
 m_eNPCState(NPC_STATE_NO_MARK)
 {
+	INC_NDOBJ_RTCLS
 	m_bRoleNpc = false;
 	//ridepet = NULL;
 	memset(m_pkNameLabel, 0, sizeof(m_pkNameLabel));
@@ -90,6 +92,7 @@ m_eNPCState(NPC_STATE_NO_MARK)
 
 NDNpc::~NDNpc()
 {
+	DEC_NDOBJ_RTCLS
 	CC_SAFE_DELETE (m_pkPicBattle);
 	CC_SAFE_DELETE (m_pkPicState);
 }
@@ -902,4 +905,12 @@ void NDNpc::ShowHightLight(bool bShow)
 	}
 
 	this->SetHightLight(bShow);
+}
+
+//override for debug
+void NDNpc::RunAnimation(bool bDraw)
+{
+	if (!NDDebugOpt::getRunAnimNpcEnabled()) return;
+
+	NDBaseRole::RunAnimation(bDraw);
 }

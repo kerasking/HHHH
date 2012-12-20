@@ -13,8 +13,12 @@
 #include "XMLReader.h"
 #include "NDConsole.h"
 #include "NDBaseDirector.h"
-//#include "NDDetectMemLeak.h"
-//#include "vld.h"
+#include "VldHook.h"
+#include "LuaStateMgr.h"
+#include "ScriptDefine.h"
+#include "NDProfile.h"
+#include "ScriptGameData_NewUtil.h"
+#include "NDLocalXmlString.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -41,10 +45,10 @@ int WINAPI WinMain (HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(szCmdLine);
 
+	VLD_HOOK;
 
 	//InitGameInstance();
-	NDConsole kConsole;
-	kConsole.BeginReadLoop();
+	NDConsole::instance().BeginReadLoop();
 
 	// 手机平台堆栈会比较小, 以后要改用new
 	NDGameApplication kApp;
@@ -55,7 +59,17 @@ int WINAPI WinMain (HINSTANCE hInstance,
 	eglView->setFrameSize(480, 320); 
 	//eglView->setFrameSize(320, 480); 
 
+#if 0
 	return CCApplication::sharedApplication()->run();
+#else
+	int ret = CCApplication::sharedApplication()->run();
+	{
+		NDProfile::Instance().destroy();
+		NDGameDataUtil::destroyAll();
+		NDLocalXmlString::GetSingleton().destroy();
+	}
+	return ret;
+#endif
 }
 #elif defined(ANDROID)
 

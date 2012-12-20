@@ -7,6 +7,7 @@
 #include "NDUIBaseGraphics.h"
 #include "NDSharedPtr.h"
 #include "CCString.h"
+#include "ObjectTracker.h"
 
 CCStringRef side_image = new CCString(""); //NSString::stringWithFormat("%s",NDPath::GetImgPath("frame_coner.png"));///< ÕÒ²»µ½NDPath?? ¹ùºÆ
 
@@ -14,8 +15,10 @@ namespace NDEngine
 {
 	IMPLEMENT_CLASS(NDUIFrame, NDUILayer)
 
-		NDUIFrame::NDUIFrame()
+	NDUIFrame::NDUIFrame()
 	{
+		INC_NDOBJ_RTCLS
+
 		m_tileLeftTop = new NDTile;
 		m_tileRightTop = new NDTile;
 		m_tileLeftBottom = new NDTile;
@@ -24,6 +27,8 @@ namespace NDEngine
 
 	NDUIFrame::~NDUIFrame()
 	{
+		DEC_NDOBJ_RTCLS
+
 		SAFE_DELETE (m_tileLeftBottom);
 		SAFE_DELETE (m_tileLeftTop);
 		SAFE_DELETE (m_tileRightTop);

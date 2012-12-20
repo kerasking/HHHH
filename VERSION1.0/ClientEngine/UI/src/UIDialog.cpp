@@ -16,6 +16,7 @@
 #include "NDPath.h"
 #include "NDAnimationGroup.h"
 #include "NDSharedPtr.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -24,12 +25,15 @@ IMPLEMENT_CLASS(CUIDlgOptBtn, NDUIButton)
 
 CUIDlgOptBtn::CUIDlgOptBtn()
 {
+	INC_NDOBJ_RTCLS
+
 	m_textHpyerlink		= NULL;
 	m_sprTip			= NULL;
 }
 
 CUIDlgOptBtn::~CUIDlgOptBtn()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CUIDlgOptBtn::Initialization()
@@ -154,11 +158,14 @@ IMPLEMENT_CLASS(CUIDialog, NDUILayer)
 
 CUIDialog::CUIDialog()
 {
+	INC_NDOBJ_RTCLS
+
 	m_uiOptHeight	= 24 * RESOURCE_SCALE;
 }
 
 CUIDialog::~CUIDialog()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CUIDialog::Initialization()

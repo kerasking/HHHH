@@ -35,6 +35,7 @@ THE SOFTWARE.
 
 #if ND_MOD
 	#include "CCDirector.h"
+	#include "ObjectTracker.h"
 #endif
 
 NS_CC_BEGIN
@@ -122,8 +123,23 @@ bool CCTouchDispatcher::init(void)
 	return true;
 }
 
+#if ND_MOD
+CCTouchDispatcher::CCTouchDispatcher() 
+	: m_pTargetedHandlers(NULL)
+	, m_pStandardHandlers(NULL)
+	, m_pHandlersToAdd(NULL)
+	, m_pHandlersToRemove(NULL)
+{
+	INC_CCOBJ("CCTouchDispatcher");
+}
+#endif
+
 CCTouchDispatcher::~CCTouchDispatcher(void)
 {
+#if ND_MOD
+	DEC_CCOBJ("CCTouchDispatcher");
+#endif
+
      CC_SAFE_RELEASE(m_pTargetedHandlers);
      CC_SAFE_RELEASE(m_pStandardHandlers);
      CC_SAFE_RELEASE(m_pHandlersToAdd);

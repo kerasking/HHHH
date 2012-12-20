@@ -18,6 +18,7 @@
 #include <UsePointPls.h>
 #include "CCCommon.h"
 #include "CCPlatformConfig.h"
+#include "ObjectTracker.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -41,6 +42,8 @@ IMPLEMENT_CLASS(NDTexture,NDObject)
 
 NDPicture::NDPicture(bool canGray/*=false*/)
 {
+	INC_NDOBJ_RTCLS
+
 	m_pkTexture = NULL;
 	m_kCutRect = CCRectZero;
 	m_bReverse = false;
@@ -60,6 +63,8 @@ NDPicture::NDPicture(bool canGray/*=false*/)
 }
 NDPicture::~NDPicture()
 {
+	DEC_NDOBJ_RTCLS
+
 	CC_SAFE_RELEASE(m_pShaderProgram); //@shader
 	CC_SAFE_RELEASE (m_pkTexture);
 	if (m_bCanGray)
@@ -700,6 +705,16 @@ void NDPicture::debugDraw()
 
 /////////////////////////////
 IMPLEMENT_CLASS(NDPictureDictionary, NDDictionary)
+NDPictureDictionary::NDPictureDictionary()
+{
+	INC_NDOBJ_RTCLS
+}
+
+NDPictureDictionary::~NDPictureDictionary()
+{
+	DEC_NDOBJ_RTCLS
+}
+
 void NDPictureDictionary::Recyle()
 {
 	if (NULL == m_nsDictionary)
@@ -768,12 +783,14 @@ static NDPicturePool* NDPicturePool_DefaultPool = NULL;
 
 NDPicturePool::NDPicturePool()
 {
+	INC_NDOBJ_RTCLS
 	NDAsssert(NDPicturePool_DefaultPool == NULL);
 	m_pkTextures = new NDPictureDictionary();
 }
 
 NDPicturePool::~NDPicturePool()
 {
+	DEC_NDOBJ_RTCLS
 	NDPicturePool_DefaultPool = NULL;
 	delete m_pkTextures;
 }
@@ -932,11 +949,13 @@ CCTexture2D* NDPicturePool::AddTexture( const char* pszImageFile )
 
 NDTexture::NDTexture()
 {
+	INC_NDOBJ_RTCLS
 	m_pkTexture = 0;
 }
 
 NDTexture::~NDTexture()
 {
+	DEC_NDOBJ_RTCLS
 	m_pkTexture->release();
 }
 

@@ -1211,7 +1211,7 @@ void NDBeforeGameMgr::OnDialogButtonClick(NDUIDialog* dialog,
 			 char buff[100] = {0x00};
 			 sprintf(buff, "×îÐÂ°æ±¾£º%s", m_latestVersion.c_str());
 			 
-			 UpdateScene* scene = new UpdateScene();
+			 UpdateScene* scene = anew UpdateScene();
 			 scene->Initialization(m_fileUrl.c_str(), buff);
 			 NDDirector::DefaultDirector()->PushScene(scene);
 			 */
@@ -1674,7 +1674,7 @@ bool NDBeforeGameMgr::SwichKeyToServer(const char* pszIp, int nPort,
 //     loginData.SetData(kLoginData, &kLastServerName, NDBeforeGameMgrObj.GetServerDisplayName().c_str());	
 //     loginData.SetData(kLoginData, &kLastServerSendName, NDBeforeGameMgrObj.GetServerName().c_str());	
 // 	NSString strPort = CCString::stringWithFormat("%d", NDBeforeGameMgrObj.GetServerPort());
-//     loginData.SetData(kLoginData, &kLastServerPort, strPort->UTF8String());
+//     loginData.SetData(kLoginData, &kLastServerPort, strPort->getUtf8String());
 //     loginData.SaveLoginData();
 //     loginData.SaveAccountList();
 	return true;

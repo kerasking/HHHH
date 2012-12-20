@@ -13,6 +13,7 @@
 #include "CCDrawingPrimitives.h"
 #include "NDDebugOpt.h"
 #include "UsePointPls.h"
+#include "ObjectTracker.h"
 
 namespace NDEngine
 {	
@@ -40,6 +41,8 @@ namespace NDEngine
 	
 	NDUINode::NDUINode()
 	{
+		INC_NDOBJ_RTCLS
+
 		m_fStep = 0.0f;
 		m_nStepNum = 0;
 		m_kFrameRect = CCRectZero;		
@@ -52,6 +55,8 @@ namespace NDEngine
 	////////////////////////////////////////////////////////////
 	NDUINode::~NDUINode()
 	{
+		DEC_NDOBJ_RTCLS
+
 		//todo(zjh)
 		/*
 		NDUILayer* layer = (NDUILayer*)this->GetParent();
