@@ -28,6 +28,10 @@ THE SOFTWARE.
 #include "ccMacros.h"
 #include "script_support/CCScriptSupport.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 CCObject* CCCopying::copyWithZone(CCZone *pZone)
@@ -39,6 +43,10 @@ CCObject* CCCopying::copyWithZone(CCZone *pZone)
 
 CCObject::CCObject(void)
 {
+#if ND_MOD
+	INC_CCOBJ("CCObject");
+#endif
+
     static unsigned int uObjectCount = 0;
 
     m_uID = ++uObjectCount;
@@ -51,6 +59,10 @@ CCObject::CCObject(void)
 
 CCObject::~CCObject(void)
 {
+#if ND_MOD
+	DEC_CCOBJ("CCObject");
+#endif
+
     // if the object is managed, we should remove it
     // from pool manager
     if (m_bManaged)

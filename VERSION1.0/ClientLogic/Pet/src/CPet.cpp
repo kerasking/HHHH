@@ -9,13 +9,16 @@
 
 #include "CPet.h"
 #include "BattleMgr.h"
+#include "ObjectTracker.h"
 
 CPetMgr::CPetMgr()
 {
+	INC_NDOBJ("CPetMgr");
 }
 
 CPetMgr::~CPetMgr()
 {
+	DEC_NDOBJ("CPetMgr");
 }
 
 // 单纯取操作

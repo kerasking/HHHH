@@ -1,5 +1,5 @@
 //
-//  NDStyledNode.h
+//  NDUIChatText.h
 //  DragonDrive
 //
 //  Created by cl on 12-4-20.

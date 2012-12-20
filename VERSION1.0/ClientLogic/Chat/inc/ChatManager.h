@@ -15,7 +15,7 @@
 #include "EnumDef.h"
 #include "NDNetMsg.h"
 #include "NDTransData.h"
-#include "UIChatText.h"
+#include "NDUIChatText.h"
 
 using namespace NDEngine;
 

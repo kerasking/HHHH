@@ -22,7 +22,7 @@
 #include "NDLightEffect.h"
 #include "NDUIImage.h"
 #include "NDTimer.h"
-#include "UISpriteNode.h"
+#include "NDUISpriteNode.h"
 
 #define blockTimerTag	(5)
 #define titleTimerTag	(6)

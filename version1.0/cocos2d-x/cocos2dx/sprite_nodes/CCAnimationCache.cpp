@@ -31,6 +31,10 @@ THE SOFTWARE.
 #include "cocoa/CCString.h"
 #include "platform/CCFileUtils.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 using namespace std;
 
 NS_CC_BEGIN
@@ -62,10 +66,16 @@ bool CCAnimationCache::init()
 CCAnimationCache::CCAnimationCache()
 : m_pAnimations(NULL)
 {
+#if ND_MOD
+	INC_CCOBJ("CCAnimationCache");
+#endif
 }
 
 CCAnimationCache::~CCAnimationCache()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCAnimationCache");
+#endif
     CCLOGINFO("cocos2d: deallocing %p", this);
     CC_SAFE_RELEASE(m_pAnimations);
 }

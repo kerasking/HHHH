@@ -63,6 +63,9 @@ class CCSprite;
 class CC_DLL CCSpriteBatchNode : public CCNode, public CCTextureProtocol
 {
 public:
+#if ND_MOD
+	CCSpriteBatchNode();
+#endif
     ~CCSpriteBatchNode();
 
     // property

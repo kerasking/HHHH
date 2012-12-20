@@ -15,7 +15,7 @@
 #include "NDUIlayer.h"
 #include "NDTimer.h"
 #include "NDUILoad.h"
-#include "UIExp.h"
+#include "NDUIExp.h"
 #include "BattleMgr.h"
 #include "NDColorPool.h"
 #include "NDDataPersist.h"

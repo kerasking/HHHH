@@ -16,6 +16,7 @@
 #include "NDSprite.h"
 #include "NDPath.h"
 #include "NDConstant.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -24,18 +25,23 @@ using namespace NDEngine;
 int g_slowDownMul = 1;
 
 NDFrameRunRecord::NDFrameRunRecord() :
-m_nNextFrameIndex(0),
-m_nCurrentFrameIndex(0),
-m_nRunCount(0),
-m_bIsCompleted(false),
-m_nRepeatTimes(0),
-m_nStartFrame(0),
-m_nEndFrame(0),
-m_nEnduration(0),
-m_nTotalFrame(0),
-m_bSetPlayRange(false)
+	m_nNextFrameIndex(0),
+	m_nCurrentFrameIndex(0),
+	m_nRunCount(0),
+	m_bIsCompleted(false),
+	m_nRepeatTimes(0),
+	m_nStartFrame(0),
+	m_nEndFrame(0),
+	m_nEnduration(0),
+	m_nTotalFrame(0),
+	m_bSetPlayRange(false)
 {
+	INC_NDOBJ("NDFrameRunRecord");
+}
 
+NDFrameRunRecord::~NDFrameRunRecord()
+{
+	DEC_NDOBJ("NDFrameRunRecord");
 }
 
 void NDFrameRunRecord::SetPlayRange(int nStartFrame, int nEndFrame)
@@ -116,22 +122,23 @@ void NDFrameRunRecord::Clear()
 
 //////////////////////////////////////////////////////////////////////////
 NDFrameTile::NDFrameTile() :
-m_nX(0),
-m_nY(0),
-m_nRotation(0),
-m_nTableIndex(0)
+	m_nX(0),
+	m_nY(0),
+	m_nRotation(0),
+	m_nTableIndex(0)
 {
-
+	INC_NDOBJ("NDFrameTile");
 }
 
 //////////////////////////////////////////////////////////////////////////
 NDFrame::NDFrame() :
-m_nEnduration(0),
-m_pkBelongAnimation(NULL),
-m_pkSubAnimationGroups(NULL),
-m_pkFrameTiles(NULL),
-m_bNeedInitTitles(true)
+	m_nEnduration(0),
+	m_pkBelongAnimation(NULL),
+	m_pkSubAnimationGroups(NULL),
+	m_pkFrameTiles(NULL),
+	m_bNeedInitTitles(true)
 {
+	INC_NDOBJ("NDFrameTile");
 // 	m_pkSubAnimationGroups = new CCMutableArray<NDAnimationGroup*>();
 // 	m_pkFrameTiles = new CCMutableArray<NDFrameTile*>();
 // 	m_pkTiles = new CCMutableArray<NDTile*>();
@@ -142,6 +149,7 @@ m_bNeedInitTitles(true)
 
 NDFrame::~NDFrame()
 {
+	DEC_NDOBJ("NDFrameTile");
 	CC_SAFE_RELEASE (m_pkSubAnimationGroups);
 	CC_SAFE_RELEASE (m_pkFrameTiles);
 	CC_SAFE_RELEASE (m_pkTiles);

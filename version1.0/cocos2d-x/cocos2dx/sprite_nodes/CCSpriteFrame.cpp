@@ -27,6 +27,10 @@ THE SOFTWARE.
 #include "CCSpriteFrame.h"
 #include "CCDirector.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 // implementation of CCSpriteFrame
@@ -134,8 +138,19 @@ bool CCSpriteFrame::initWithTextureFilename(const char* filename, const CCRect& 
     return true;
 }
 
+#if ND_MOD
+CCSpriteFrame::CCSpriteFrame()
+	: m_pobTexture(NULL)
+{
+	INC_CCOBJ("CCSpriteFrame");
+}
+#endif
+
 CCSpriteFrame::~CCSpriteFrame(void)
 {
+#if ND_MOD
+	DEC_CCOBJ("CCSpriteFrame");
+#endif
     CCLOGINFO("cocos2d: deallocing %p", this);
     CC_SAFE_RELEASE(m_pobTexture);
 }

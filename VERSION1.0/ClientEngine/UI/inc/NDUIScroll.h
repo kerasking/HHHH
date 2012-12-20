@@ -10,7 +10,7 @@
 #ifndef _UI_SCROLL_H_ZJH_
 #define _UI_SCROLL_H_ZJH_
 
-#include "UIMovableLayer.h"
+#include "NDUIMovableLayer.h"
 
 using namespace NDEngine;
 

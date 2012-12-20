@@ -32,6 +32,10 @@ THE SOFTWARE.
 #include "cocoa/CCArray.h"
 #include "script_support/CCScriptSupport.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 using namespace std;
 
 NS_CC_BEGIN
@@ -83,8 +87,17 @@ CCTimer::CCTimer()
 , m_fDelay(0.0f)
 , m_nScriptHandler(0)
 {
-
+#if ND_MOD
+	INC_CCOBJ("CCTimer");
+#endif
 }
+
+#if ND_MOD
+CCTimer::~CCTimer()
+{
+	DEC_CCOBJ("CCTimer");
+}
+#endif
 
 CCTimer* CCTimer::timerWithTarget(CCObject *pTarget, SEL_SCHEDULE pfnSelector)
 {
@@ -239,11 +252,16 @@ CCScheduler::CCScheduler(void)
 , m_bTickEnabled(true)
 #endif
 {
-
+#if ND_MOD
+	INC_CCOBJ("CCScheduler");
+#endif
 }
 
 CCScheduler::~CCScheduler(void)
 {
+#if ND_MOD
+	DEC_CCOBJ("CCScheduler");
+#endif
     unscheduleAllSelectors();
     CC_SAFE_RELEASE(m_pScriptHandlerEntries);
 }

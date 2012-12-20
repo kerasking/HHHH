@@ -13,6 +13,7 @@
 #include "NDLocalization.h"
 #include <string>
 #include "globaldef.h"
+#include "ObjectTracker.h"
 using namespace std;
 
 enum ITME_TYPE {
@@ -26,7 +27,13 @@ namespace NDEngine
 	public:
 		NDItemType()
 		{
+			INC_NDOBJ("NDItemType");
 			::memset(&m_data, 0L, sizeof(m_data));
+		}
+
+		~NDItemType()
+		{
+			DEC_NDOBJ("NDItemType");
 		}
 	public:
 		enum  

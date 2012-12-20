@@ -10,6 +10,7 @@
 #include "NDTimer.h"
 #include "CCScheduler.h"
 #include "CCDirector.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -27,7 +28,7 @@ void Timer::onTimer(float elapsed)
 
 NDTimer::NDTimer()
 {
-
+	INC_NDOBJ("NDTimer");
 }
 
 CCScheduler* NDTimer::GetScheduler()
@@ -37,6 +38,8 @@ CCScheduler* NDTimer::GetScheduler()
 
 NDTimer::~NDTimer()
 {
+	DEC_NDOBJ("NDTimer");
+
 	CCScheduler *sch = GetScheduler();
 	MAP_TIMER::iterator it = m_mapTimer.begin();
 	for (; it != m_mapTimer.end(); it++)

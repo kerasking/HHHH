@@ -9,7 +9,7 @@
 
 #include "NDUIScrollContainer.h"
 #include "NDDirector.h"
-#include "UIScroll.h"
+#include "NDUIScroll.h"
 #include "CCPointExtension.h"
 #include "NDUtil.h"
 #include "ScriptGameLogic.h"

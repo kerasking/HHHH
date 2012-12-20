@@ -24,7 +24,7 @@
 //#include "cpLog.h"
 //#include "SimpleAudioEngine_objc.h"
 #include "NDPath.h"
-#include "UIChatText.h"
+#include "NDUIChatText.h"
 #include "ScriptInc.h"
 #include "WorldMapScene.h"
 #include "ScriptMgr.h"

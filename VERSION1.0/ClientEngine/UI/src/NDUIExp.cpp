@@ -1,5 +1,5 @@
 /*
- *  UIExp.cpp
+ *  NDUIExp.cpp
  *  SMYS
  *
  *  Created by jhzheng on 12-3-17.
@@ -7,7 +7,7 @@
  *
  */
 
-#include "UIExp.h"
+#include "NDUIExp.h"
 #include "SMString.h"
 #include <sstream>
 #include "define.h"

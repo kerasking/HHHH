@@ -1,5 +1,5 @@
 /*
- *  UIScrollViewExpand.mm
+ *  NDUIScrollViewExpand.cpp
  *  DeNA
  *
  *  Created by chh on 12-07-21.
@@ -7,7 +7,7 @@
  *
  */
 
-#include "UIScrollViewExpand.h"
+#include "NDUIScrollViewExpand.h"
 #include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(UIScrollViewExpand, NDUINode)

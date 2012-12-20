@@ -1,5 +1,5 @@
 /*
- *  UISpriteNode.h
+ *  NDUISpriteNode.h
  *  SMYS
  *
  *  Created by jhzheng on 12-2-22.

@@ -29,6 +29,7 @@
 #include "DramaScene.h"
 #include "NDConstant.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
 
 #define QUIT_BATTLE_TIMER_TAG (13621)
 #define QUIT_DRAMA_TIMER_TAG (13622)
@@ -40,6 +41,8 @@ using namespace NDEngine;
 BattleMgr::BattleMgr() :
 m_pkBattle(NULL)
 {
+	INC_NDOBJ("BattleMgr");
+
 	NDNetMsgPool* kPool = NDNetMsgPoolObj;
 	kPool->RegMsg(_MSG_BATTLE, this);
 	kPool->RegMsg(_MSG_CONTROLPOINT, this);
@@ -66,6 +69,8 @@ m_pkBattle(NULL)
 
 BattleMgr::~BattleMgr()
 {
+	DEC_NDOBJ("BattleMgr");
+
 	ReleaseAllBattleSkill();
 	if (m_pkBattleReward)
 	{

@@ -12,30 +12,39 @@
 #include "JavaMethod.h"
 #include "NDFrame.h"
 //#include "NDSprite.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
 NDTileTableRecord::NDTileTableRecord() :
-m_nImageIndex(0),
-m_nX(0),
-m_nY(0),
-m_nW(0),
-m_nH(0),
-m_nReplace(0)
+	m_nImageIndex(0),
+	m_nX(0),
+	m_nY(0),
+	m_nW(0),
+	m_nH(0),
+	m_nReplace(0)
 {
+	INC_NDOBJ("NDTileTableRecord");
+}
+
+NDTileTableRecord::~NDTileTableRecord()
+{
+	DEC_NDOBJ("NDTileTableRecord");
 }
 
 //////////////////////////////////////////////////////////////////////////
 NDAnimationGroup::NDAnimationGroup() :
-m_nType(0),
-m_nIdentifer(0),
-m_bReverse(false),
-m_pkAnimations(NULL),
-m_pkImages(NULL),
-m_pkTileTable(NULL),
-m_pkRuningSprite(NULL),
-m_pkUnpassPoint(NULL)
+	m_nType(0),
+	m_nIdentifer(0),
+	m_bReverse(false),
+	m_pkAnimations(NULL),
+	m_pkImages(NULL),
+	m_pkTileTable(NULL),
+	m_pkRuningSprite(NULL),
+	m_pkUnpassPoint(NULL)
 {
+	INC_NDOBJ("NDAnimationGroup");
+
 	m_kPosition = CCPointMake(0, 0);
 	m_kRunningMapSize = CCSizeMake(0, 0);
 	m_pkAnimations = CCArray::array();
@@ -49,6 +58,8 @@ m_pkUnpassPoint(NULL)
 
 NDAnimationGroup::~NDAnimationGroup()
 {
+	DEC_NDOBJ("NDAnimationGroup");
+
 	CC_SAFE_RELEASE (m_pkAnimations);
 	CC_SAFE_RELEASE (m_pkTileTable);
 	CC_SAFE_DELETE (m_pkImages);

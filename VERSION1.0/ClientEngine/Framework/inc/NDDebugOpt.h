@@ -38,6 +38,11 @@ class NDDebugOpt : private NDObject
 	DECL_STATIC_PROPERTY(bool, bDrawRolePlayer,	DrawRolePlayerEnabled);
 	DECL_STATIC_PROPERTY(bool, bDrawRoleManual,	DrawRoleManualEnabled);
 
+	DECL_STATIC_PROPERTY(bool, bRunAnimRole,	RunAnimRoleEnabled);
+	DECL_STATIC_PROPERTY(bool, bRunAnimNpc,		RunAnimNpcEnabled);
+	DECL_STATIC_PROPERTY(bool, bRunAnimManual,	RunAnimManualEnabled);
+	DECL_STATIC_PROPERTY(bool, bRunAnimPlayer,	RunAnimPlayerEnabled);
+
 	DECL_STATIC_PROPERTY(bool, bLightEffect,DrawLightEffectEnabled);
 	DECL_STATIC_PROPERTY(bool, bDebugDraw,DrawDebugEnabled);
 };

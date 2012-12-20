@@ -14,7 +14,7 @@
 #include "NDSprite.h"
 #include <map>
 #include "NDBaseFighter.h"
-#include "UIExp.h"
+#include "NDUIExp.h"
 
 using namespace std;
 using namespace NDEngine;

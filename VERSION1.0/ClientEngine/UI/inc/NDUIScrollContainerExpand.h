@@ -1,5 +1,5 @@
 /*
- *  UIScrollContainerExpand.h
+ *  NDUIScrollContainerExpand.h
  *  DeNA
  *
  *  Created by chh on 2012-07-21.
@@ -11,7 +11,7 @@
 #define _UI_SCROLL_CONTAINER_EXPAND_CHH_
 
 #include "NDUILayer.h"
-#include "UIScrollViewExpand.h"
+#include "NDUIScrollViewExpand.h"
 
 using namespace NDEngine;
 

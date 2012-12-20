@@ -45,6 +45,7 @@
 #include "ScriptGlobalEvent.h"
 #include "GameStorageScene.h"
 #include "NDUtility.h"
+#include "ObjectTracker.h"
 
 using std::stringstream;
 using namespace NDEngine;
@@ -53,6 +54,8 @@ const Byte ITEM_USE = 1;
 
 ItemMgr::ItemMgr()
 {
+	INC_NDOBJ("ItemMgr");
+
 	for (int i = Item::eEP_Begin; i<Item::eEP_End; i++) 
 	{
 		m_EquipList[i] = NULL;
@@ -91,6 +94,8 @@ ItemMgr::ItemMgr()
 
 ItemMgr::~ItemMgr()
 {
+	DEC_NDOBJ("ItemMgr");
+
 	for (int i = Item::eEP_Begin; i<Item::eEP_End; i++) 
 	{
 		SAFE_DELETE(m_EquipList[i]);

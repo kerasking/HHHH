@@ -8,6 +8,7 @@
 #include "NDWideString.h"
 #include "CCPlatformConfig.h"
 #include "TQPlatform.h"
+#include "ObjectTracker.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "windows.h"
@@ -18,9 +19,17 @@
 /////////////////////////////////////////////////////////////////////////////
 
 //===========================================================================
+
+NDWideString::~NDWideString()
+{
+	DEC_NDOBJ("NDWideString");
+}
+
 NDWideString::NDWideString( const UTF8CHR * szUTF8 )
 : m_bInit(false)
 {
+	INC_NDOBJ("NDWideString");
+
 	if ( szUTF8 )
 	{
 		m_szUTF8 = szUTF8;
@@ -32,6 +41,8 @@ NDWideString::NDWideString( const UTF8CHR * szUTF8 )
 NDWideString::NDWideString( const UTF8String & szUTF8 )
 : m_bInit(false)
 {
+	INC_NDOBJ("NDWideString");
+
 	m_szUTF8 = szUTF8;
 	ConvertUTF8ToUnicode();
 	m_bInit = true;
@@ -40,6 +51,8 @@ NDWideString::NDWideString( const UTF8String & szUTF8 )
 NDWideString::NDWideString( const UNICCHR * szUNICODE )
 : m_bInit(false)
 {
+	INC_NDOBJ("NDWideString");
+
 	if ( szUNICODE )
 	{
 		m_szUNICODE = szUNICODE;
@@ -51,6 +64,8 @@ NDWideString::NDWideString( const UNICCHR * szUNICODE )
 NDWideString::NDWideString( const UNICString & szUNICODE )
 : m_bInit(false)
 {
+	INC_NDOBJ("NDWideString");
+
 	m_szUNICODE = szUNICODE;
 	ConvertUnicodeToUTF8();
 	m_bInit = true;

@@ -1,5 +1,5 @@
 /*
- *  UIMovableLayer.h
+ *  NDUIMovableLayer.h
  *  SMYS
  *
  *  Created by jhzheng on 12-2-10.

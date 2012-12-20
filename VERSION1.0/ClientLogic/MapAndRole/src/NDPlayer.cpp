@@ -40,6 +40,7 @@
 #include "SMGameScene.h"
 #include "ScriptGlobalEvent.h"
 #include "Task.h"
+#include "NDDebugOpt.h"
 #include "ObjectTracker.h"
 
 NS_NDENGINE_BGN
@@ -1312,6 +1313,8 @@ int NDPlayer::GetCanUseRepute()
 //override for debuging sake
 void NDPlayer::RunAnimation(bool bDraw)
 {
+	if (!NDDebugOpt::getRunAnimPlayerEnabled()) return;
+
 	NDManualRole::RunAnimation(bDraw);
 }
 

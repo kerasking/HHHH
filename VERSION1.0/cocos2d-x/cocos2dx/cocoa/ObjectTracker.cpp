@@ -9,23 +9,26 @@
 
 #include "ObjectTracker.h"
 
-void ObjectTracker::inc_imp( const char* clsName, map<string,int>& curMap ) 
+void ObjectTracker::inc_imp( const char* clsName, map<string,TrackerData>& curMap ) 
 {
 	if (!clsName) return;
 
 	string name = clsName;
 	ITER_MAP_STAT iter = curMap.find( name );
+
 	if (iter == curMap.end())
 	{
-		curMap.insert( map<string,int>::value_type(name, 1 ));
+		TrackerData data;
+		data.getCur() = 1;
+		curMap.insert( map<string,TrackerData>::value_type(name, data ));
 	}
 	else
 	{
-		iter->second += 1;
+		iter->second.getCur() += 1;
 	}
 }
 
-void ObjectTracker::dec_imp( const char* clsName, map<string,int>& curMap ) 
+void ObjectTracker::dec_imp( const char* clsName, map<string,TrackerData>& curMap ) 
 {
 	if (!clsName) return;
 
@@ -34,44 +37,77 @@ void ObjectTracker::dec_imp( const char* clsName, map<string,int>& curMap )
 	
 	if (iter != curMap.end())
 	{
-		iter->second -= 1;
+		iter->second.getCur() -= 1;
 	}
 }
 
-void ObjectTracker::dump( string& info )
+void ObjectTracker::dump( string& info, int param )
+{
+	this->report( info, param );
+	this->flush();
+}
+
+void ObjectTracker::report_imp( map<string,TrackerData>& data, int param, 
+								int& total, string& info )
+{
+	char line[200] = "";
+
+	for (ITER_MAP_STAT iter = data.begin();
+		iter != data.end(); ++iter)
+	{
+		total += iter->second.getCur();
+
+		TrackerData& data = iter->second;
+		int diff = data.getCur() - data.getPrev();
+
+		if (diff != 0 ||
+			(data.getCur() > param || data.getPrev() > param))
+		{
+			char szDiff[100] = "";
+			if (diff != 0)
+			{
+				sprintf( szDiff, "%d", diff );
+			}
+
+			sprintf( line, "%-25s %-10d %-10d %s\r\n", 
+				iter->first.c_str(), data.getPrev(), data.getCur(), szDiff );
+			
+			info += line;
+		}
+	}
+}
+
+void ObjectTracker::report( string& info, int param )
 {	
 	info = "";
-	char line[1024] = "";
 	
 	//
 	int cc_obj = 0;	
 	info += "\r\n------------ CC Obj Tracker ----------------\r\n";
-	for (ITER_MAP_STAT iter = mapStatCC.begin();
-		iter != mapStatCC.end(); ++iter)
-	{
-		if (iter->second > 0)
-		{
-			cc_obj += iter->second;
-			sprintf( line, "%-25s %d\r\n", iter->first.c_str(), iter->second );
-			info += line;
-		}
-	}
+	this->report_imp( mapStatCC, param, cc_obj, info );
 
 	//
-	info += "\r\n------------ ND Obj Tracker ----------------\r\n";
-
 	int nd_obj = 0;	
-	for (ITER_MAP_STAT iter = mapStatND.begin();
-		iter != mapStatND.end(); ++iter)
-	{
-		if (iter->second > 0)
-		{
-			nd_obj += iter->second;
-			sprintf( line, "%-25s %d\r\n", iter->first.c_str(), iter->second );
-			info += line;
-		}
-	}
+	info += "\r\n------------ ND Obj Tracker ----------------\r\n";
+	this->report_imp( mapStatND, param, nd_obj, info );
 
+	//
+	char line[200] = "";
 	sprintf( line, "\r\n%d cc obj, %d nd obj, total %d\r\n", cc_obj, nd_obj, cc_obj + nd_obj );
 	info += line;
+}
+
+void ObjectTracker::flush()
+{
+	flush_imp( mapStatCC );
+	flush_imp( mapStatND );
+}
+
+void ObjectTracker::flush_imp( map<string,TrackerData>& curMap )
+{
+	for (ITER_MAP_STAT iter = curMap.begin();
+		iter != curMap.end(); ++iter)
+	{
+		iter->second.cur2prev();
+	}
 }

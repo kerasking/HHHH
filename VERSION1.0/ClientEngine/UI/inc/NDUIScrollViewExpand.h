@@ -1,5 +1,5 @@
 /*
- *  UIScrollViewExpand.h
+ *  NDUIScrollViewExpand.h
  *  DeNA
  *
  *  Created by chh on 2012-07-21.

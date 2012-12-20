@@ -39,6 +39,10 @@ THE SOFTWARE.
 #include "cocoa/CCDictionary.h"
 #include <vector>
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 using namespace std;
 
 NS_CC_BEGIN
@@ -69,8 +73,19 @@ bool CCSpriteFrameCache::init(void)
     return true;
 }
 
+#if ND_MOD
+CCSpriteFrameCache::CCSpriteFrameCache(void)
+	: m_pSpriteFrames(NULL), m_pSpriteFramesAliases(NULL)
+{
+	INC_CCOBJ("CCSpriteFrameCache");
+}
+#endif
+
 CCSpriteFrameCache::~CCSpriteFrameCache(void)
 {
+#if ND_MOD
+	DEC_CCOBJ("CCSpriteFrameCache");
+#endif
     CC_SAFE_RELEASE(m_pSpriteFrames);
     CC_SAFE_RELEASE(m_pSpriteFramesAliases);
     CC_SAFE_DELETE(m_pLoadedFileNames);
