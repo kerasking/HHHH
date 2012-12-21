@@ -15,7 +15,7 @@
 #endif
 
 #ifdef WIN32
-typedef unsigned long DWORD;
+typedef unsigned long unsigned int;
 #endif
 //typedef char char;
 typedef FILE* FHANDLE;
@@ -35,13 +35,13 @@ DECLARE_HANDLE(HZIP);
 #endif
 // An HZIP identifies a zip file that has been opened
 
-typedef DWORD ZRESULT;
+typedef unsigned int ZRESULT;
 // return codes from any of the zip functions. Listed later.
 
 typedef struct
 { int index;                 // index of this file within the zip
   char name[MAX_PATH];      // filename within the zip
-  DWORD attr;                // attributes, as in GetFileAttributes.
+  unsigned int attr;                // attributes, as in GetFileAttributes.
   time_t atime,ctime,mtime;// access, create, modify filetimes
   long comp_size;            // sizes of item, compressed and uncompressed. These
   long unc_size;             // may be -1 if not yet known (e.g. being streamed in)

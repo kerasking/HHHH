@@ -80,7 +80,7 @@ typedef struct tm_unz_s
 // ----------------------------------------------------------------------
 // some windows<->linux portability things
 #ifdef ZIP_STD
-DWORD GetFilePosU(FHANDLE hfout)
+unsigned int GetFilePosU(FHANDLE hfout)
 {
 	struct stat st;
 	fstat(fileno(hfout), &st);
@@ -122,15 +122,15 @@ time_t timet2filetime(const lutime_t t)
 
 #else
 // ----------------------------------------------------------------------
-DWORD GetFilePosU(FHANDLE hfout)
+unsigned int GetFilePosU(FHANDLE hfout)
 {	return SetFilePointer(hfout,0,0,FILE_CURRENT);
 }
 
 FILETIME timet2filetime(const lutime_t t)
 {	LONGLONG i = Int32x32To64(t,10000000) + 116444736000000000LL;
 	FILETIME ft;
-	ft.dwLowDateTime = (DWORD) i;
-	ft.dwHighDateTime = (DWORD)(i >>32);
+	ft.dwLowDateTime = (unsigned int) i;
+	ft.dwHighDateTime = (unsigned int)(i >>32);
 	return ft;
 }
 
@@ -3877,7 +3877,7 @@ typedef struct
 	unsigned int len, pos; // if it's a memory block
 } LUFILE;
 
-LUFILE *lufopen(void *z, unsigned int len, DWORD flags, ZRESULT *err)
+LUFILE *lufopen(void *z, unsigned int len, unsigned int flags, ZRESULT *err)
 {
 	if (flags != ZIP_HANDLE && flags != ZIP_FILENAME && flags != ZIP_MEMORY)
 	{
@@ -3919,7 +3919,7 @@ LUFILE *lufopen(void *z, unsigned int len, DWORD flags, ZRESULT *err)
 			mustclosehandle = true;
 		}
 		// test if we can seek on it. We can't use GetFileType(h)==FILE_TYPE_DISK since it's not on CE.
-		DWORD res = GetFilePosU(h);
+		unsigned int res = GetFilePosU(h);
 		canseek = (res != 0xFFFFFFFF);
 	}
 	LUFILE *lf = new LUFILE;
@@ -4016,7 +4016,7 @@ size_t lufread(void *ptr, size_t size, size_t n, LUFILE *stream)
 #ifdef ZIP_STD
 		return fread(ptr, size, n, stream->h);
 #else
-		DWORD red; BOOL res = ReadFile(stream->h,ptr,toread,&red,NULL);
+		unsigned int red; BOOL res = ReadFile(stream->h,ptr,toread,&red,NULL);
 		if (!res) stream->herr=true;
 		return red/size;
 #endif
@@ -4024,7 +4024,7 @@ size_t lufread(void *ptr, size_t size, size_t n, LUFILE *stream)
 	if (stream->pos + toread > stream->len)
 		toread = stream->len - stream->pos;
 	memcpy(ptr, (char*) stream->buf + stream->pos, toread);
-	DWORD red = toread;
+	unsigned int red = toread;
 	stream->pos += red;
 	return red / size;
 }
@@ -5157,15 +5157,15 @@ public:
 	char *unzbuf;            // lazily created and destroyed, used by Unzip
 	char rootdir[MAX_PATH]; // includes a trailing slash
 
-	ZRESULT Open(void *z, unsigned int len, DWORD flags);
+	ZRESULT Open(void *z, unsigned int len, unsigned int flags);
 	ZRESULT Get(int index, ZIPENTRY *ze);
 	ZRESULT Find(const char *name, bool ic, int *index, ZIPENTRY *ze);
-	ZRESULT Unzip(int index, void *dst, unsigned int len, DWORD flags);
+	ZRESULT Unzip(int index, void *dst, unsigned int len, unsigned int flags);
 	ZRESULT SetUnzipBaseDir(const char *dir);
 	ZRESULT Close();
 };
 
-ZRESULT TUnzip::Open(void *z, unsigned int len, DWORD flags)
+ZRESULT TUnzip::Open(void *z, unsigned int len, unsigned int flags)
 {
 	if (uf != 0 || currentfile != -1)
 		return ZR_NOTINITED;
@@ -5188,7 +5188,7 @@ ZRESULT TUnzip::Open(void *z, unsigned int len, DWORD flags)
 	//
 	if (flags == ZIP_HANDLE)
 	{ // test if we can seek on it. We can't use GetFileType(h)==FILE_TYPE_DISK since it's not on CE.
-		DWORD res = GetFilePosU((FHANDLE) z);
+		unsigned int res = GetFilePosU((FHANDLE) z);
 		bool canseek = (res != 0xFFFFFFFF);
 		if (!canseek)
 			return ZR_SEEK;
@@ -5524,7 +5524,7 @@ void EnsureDirectory(const char *rootdir, const char *dir)
 #endif
 }
 
-ZRESULT TUnzip::Unzip(int index, void *dst, unsigned int len, DWORD flags)
+ZRESULT TUnzip::Unzip(int index, void *dst, unsigned int len, unsigned int flags)
 {
 	if (flags != ZIP_MEMORY && flags != ZIP_FILENAME && flags != ZIP_HANDLE)
 		return ZR_ARGS;
@@ -5650,7 +5650,7 @@ ZRESULT TUnzip::Unzip(int index, void *dst, unsigned int len, DWORD flags)
 	unzOpenCurrentFile(uf, password);
 	if (unzbuf == 0)
 		unzbuf = new char[16384];
-	DWORD haderr = 0;
+	unsigned int haderr = 0;
 	//  
 
 	for (; haderr == 0;)
@@ -5679,7 +5679,7 @@ ZRESULT TUnzip::Unzip(int index, void *dst, unsigned int len, DWORD flags)
 		}
 #else
 		if (res>0)
-		{	DWORD writ; BOOL bres=WriteFile(h,unzbuf,res,&writ,NULL); if (!bres)
+		{	unsigned int writ; BOOL bres=WriteFile(h,unzbuf,res,&writ,NULL); if (!bres)
 			{	haderr=ZR_WRITE; break;}}
 #endif
 		if (reached_eof)
@@ -5810,11 +5810,11 @@ unsigned int FormatZipMessageU(ZRESULT code, char *buf, unsigned int len)
 
 typedef struct
 {
-	DWORD flag;
+	unsigned int flag;
 	TUnzip *unz;
 } TUnzipHandleData;
 
-HZIP OpenZipInternal(void *z, unsigned int len, DWORD flags,
+HZIP OpenZipInternal(void *z, unsigned int len, unsigned int flags,
 		const char *password)
 {
 	TUnzip *unz = new TUnzip(password);
@@ -5883,7 +5883,7 @@ ZRESULT FindZipItem(HZIP hz, const char *name, bool ic, int *index,
 }
 
 ZRESULT UnzipItemInternal(HZIP hz, int index, void *dst, unsigned int len,
-		DWORD flags)
+		unsigned int flags)
 {
 	if (hz == 0)
 	{
