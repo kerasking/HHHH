@@ -44,6 +44,7 @@
 
 #if defined(ANDROID)
 #include "platform/android/jni/JniHelper.h"
+#include "android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.h"
 #include <jni.h>
 #include <android/log.h>
 #define  LOG_TAG    "DaHuaLongJiang"
@@ -1928,11 +1929,13 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	char* pSimplifiedChineseResBuffer = 0;
 	char* pVersionINIBuffer = 0;
 	HZIP pSimplifiedChineseResZip = 0;
-	pZip = OpenZip(strAPKPath.c_str(),0);
 	ZIPENTRY kZipEntry = {0};
 	ZIPENTRY kSimplifiedChineseResZipEntry = {0};
+
 	int nSimplifiedChineseResIndex = 0;
 	int nVersionINIIndex = 0;
+
+	pZip = OpenZip(strAPKPath.c_str(),0);
 
 	FindZipItem(pZip,"SimplifiedChineseRes.zip",true,&nSimplifiedChineseResIndex,&kZipEntry);
 
@@ -1940,7 +1943,7 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	memset(pSimplifiedChineseResBuffer,0,sizeof(char) * kZipEntry.unc_size);
 
 	UnzipItem(pZip,nSimplifiedChineseResIndex, pSimplifiedChineseResBuffer, kZipEntry.unc_size);
-	pSimplifiedChineseResZip = OpenZip(ibuf,kZipEntry.unc_size,0);
+	pSimplifiedChineseResZip = OpenZip(pSimplifiedChineseResBuffer,kZipEntry.unc_size,0);
 	FindZipItem(pSimplifiedChineseResZip,"version.ini",true,&nVersionINIIndex,&kSimplifiedChineseResZipEntry);
 
 	pVersionINIBuffer = new char[kSimplifiedChineseResZipEntry.unc_size];
@@ -1959,6 +1962,7 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 
 	CloseZip(pSimplifiedChineseResZip);
 	CloseZip(pZip);
+
 #endif
 
 	FILE* pkFile = 0;
@@ -1973,11 +1977,11 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
  	}
 	else
 	{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 		char szCopyResVersion[5] = {0};
 		char szInstallResVersion[5] = {0};
 		fread(szCopyResVersion, 1, 4, pkFile);
 		fclose( pkFile );
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 		//如果是原下载的版本安装的包导致version.ini等资源文件已经存在,而且版本号小于当前安装的版本号，则删除当前的资源目录，再重新拷贝
 		FILE* pkInstallFile = 0;
 		pkInstallFile = fopen(strInstallVersionINIPath.c_str(), "rb" );

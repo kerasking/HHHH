@@ -5,7 +5,6 @@
 #undef UNICODE
 #endif
 
-
 #define ZIP_STD 1
 
 #ifdef ZIP_STD
@@ -14,7 +13,10 @@
 #ifndef MAX_PATH
 #define MAX_PATH 260
 #endif
+
+#ifdef WIN32
 typedef unsigned long DWORD;
+#endif
 //typedef char char;
 typedef FILE* FHANDLE;
 //typedef time_t FILETIME;
