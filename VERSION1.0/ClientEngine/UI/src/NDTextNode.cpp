@@ -18,6 +18,7 @@
 #include "NDSharedPtr.h"
 #include "ObjectTracker.h"
 #include "StringConvert.h"
+#include "ScriptGameDataLua.h"
 
 using namespace cocos2d;
 
@@ -320,7 +321,7 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLinkLabel(GBKToUTF8("]"), uiFontSize, kColor,
+									CreateLinkLabel(GetTxtPri("]").c_str(), uiFontSize, kColor,
 											m_nItemID), true));
                     
 				}
@@ -328,7 +329,7 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLabel(GBKToUTF8("]"), uiFontSize, kColor,
+									CreateLabel(GetTxtPri("]").c_str(), uiFontSize, kColor,
 											m_nItemID), true));
 				}
 			}
@@ -368,14 +369,14 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLinkLabel( CONVERT_GBK_TO_UTF8("["), uiFontSize, kColor,
+									CreateLinkLabel( GetTxtPri("[").c_str(), uiFontSize, kColor,
 											m_nItemID), true));
 				}
 				else
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLabel(CONVERT_GBK_TO_UTF8("["), uiFontSize, kColor,
+									CreateLabel(GetTxtPri("[").c_str(), uiFontSize, kColor,
 											m_nItemID), true));
 				}
 			}
@@ -442,7 +443,7 @@ unsigned int NDUITextBuilder::StringWidthAfterFilter(const char* text,
 	unsigned int result = 0;
 	if (text)
 	{
-		unsigned int fontHeight = getStringSize(CONVERT_GBK_TO_UTF8("a"), fontSize * FONT_SCALE).height;
+		unsigned int fontHeight = getStringSize(GetTxtPri("a").c_str(), fontSize * FONT_SCALE).height;
 		result += fontHeight;
 		unsigned int curWidth = 0;
 		BuildRule rule = BuildRuleNone;
@@ -521,7 +522,7 @@ unsigned int NDUITextBuilder::StringHeightAfterFilter(const char* text,
 	unsigned int result = 0;
 	if (text)
 	{
-		unsigned int fontHeight = getStringSize(CONVERT_GBK_TO_UTF8("a"), fontSize*FONT_SCALE).height;
+		unsigned int fontHeight = getStringSize(GetTxtPri("a").c_str(), fontSize*FONT_SCALE).height;
 		result += fontHeight;
 		unsigned int curWidth = 0;
 		BuildRule rule = BuildRuleNone;

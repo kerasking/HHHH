@@ -18,6 +18,7 @@
 #include "NDSharedPtr.h"
 #include "ObjectTracker.h"
 #include "StringConvert.h"
+#include "ScriptGameDataLua.h"
 
 #ifdef ANDROID
 #include <jni.h>
@@ -92,7 +93,7 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 	if (!channel_str.empty())
 	{
 		textNodeList.push_back(
-			ChatNode(false, CreateLabel( GBKToUTF8("¡¾"), fontSizelua, clr, 0), ChatNone, 0,
+			ChatNode(false, CreateLabel( GetTxtPri("[").c_str(), fontSizelua, clr, 0), ChatNone, 0,
 			""));
 
 		textNodeList.push_back(
@@ -101,7 +102,7 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 			ChatNone, 0, ""));
 
 		textNodeList.push_back(
-			ChatNode(false, CreateLabel( GBKToUTF8("¡¿"), fontSizelua, clr, 0), ChatNone, 0,
+			ChatNode(false, CreateLabel( GetTxtPri("]").c_str(), fontSizelua, clr, 0), ChatNone, 0,
 			""));
 	}
 
@@ -112,7 +113,7 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 			ChatSpeaker, speakerID, ""));
 
 		textNodeList.push_back(
-			ChatNode(false, CreateLabel(GBKToUTF8(":"), fontSizelua, clr, 0), ChatSpeaker,
+			ChatNode(false, CreateLabel(GetTxtPri(":").c_str(), fontSizelua, clr, 0), ChatSpeaker,
 			speakerID, ""));
 	}
 
@@ -133,14 +134,14 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 			if (type == ChatItem)
 			{
 				textNodeList.push_back(
-					ChatNode(brk, CreateLabel(GBKToUTF8("]"), fontSizelua, clr, m_idItem),
+					ChatNode(brk, CreateLabel(GetTxtPri("]").c_str(), fontSizelua, clr, m_idItem),
 					ChatItem, m_idItem, ""));
 			}
 
 			if (type == ChatRole)
 			{
 				textNodeList.push_back(
-					ChatNode(brk, CreateLabel(GBKToUTF8("]"), fontSizelua, clr, m_idRole),
+					ChatNode(brk, CreateLabel(GetTxtPri("]").c_str(), fontSizelua, clr, m_idRole),
 					ChatRole, m_idRole, this->m_roleName));
 			}
 
@@ -172,14 +173,14 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 			if (type == ChatItem)
 			{
 				textNodeList.push_back(
-					ChatNode(brk, CreateLabel(GBKToUTF8("["), fontSizelua, clr, m_idItem),
+					ChatNode(brk, CreateLabel(GetTxtPri("[").c_str(), fontSizelua, clr, m_idItem),
 					ChatItem, m_idItem, ""));
 			}
 
 			if (type == ChatRole)
 			{
 				textNodeList.push_back(
-					ChatNode(brk, CreateLabel(GBKToUTF8("["), fontSizelua, clr, m_idRole),
+					ChatNode(brk, CreateLabel(GetTxtPri("[").c_str(), fontSizelua, clr, m_idRole),
 					ChatRole, m_idRole, this->m_roleName));
 			}
 			continue;

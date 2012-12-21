@@ -199,7 +199,7 @@ const char* NDDataPersist::GetData(unsigned int index, CCString* key)
 		//simpleDecode((const unsigned char*)[nsStr UTF8String], (unsigned char*)decData);
 		//simpleDecode((const unsigned char*)nsStr->getUtf8String(),(unsigned char*)decData);
 		simpleDecode(
-			(const unsigned char*) CONVERT_GBK_TO_UTF8(str->getCString()),
+			(const unsigned char*) CONVERT_GBK_TO_UTF8(str->getCString()), //@todo:android转换有问题.
 			(unsigned char*)decData);
 
 		return decData;
@@ -631,7 +631,7 @@ bool NDDataPersist::IsGameSettingOn(GAME_SETTING type)
 void NDDataPersist::SaveGameSetting()
 {
 	CCString* strGameSetting = CCString::stringWithFormat("%d",ms_nGameSetting);
-	SetData( kGameSettingData, strGameSetting, CONVERT_GBK_TO_UTF8(strGameSetting->getCString()));
+	SetData( kGameSettingData, strGameSetting, CONVERT_GBK_TO_UTF8(strGameSetting->getCString()));//@todo:android转换有问题.
 	SaveData();
 
 	/***

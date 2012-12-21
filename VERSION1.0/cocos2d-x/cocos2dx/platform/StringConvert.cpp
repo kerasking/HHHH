@@ -25,6 +25,7 @@
 
 const char* StringConvert::convert( const char* fromcode, const char* tocode, const char* str )
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	if (!tocode || !fromcode || !str) return ""; //don't crash.
 	if (str[0] == 0) return str;
 	
@@ -58,6 +59,9 @@ const char* StringConvert::convert( const char* fromcode, const char* tocode, co
 		s_outbuf[0] = 0;
 	}
 	return s_outbuf;
+#else
+	return str; //unchanged.
+#endif
 }
 
 //slow

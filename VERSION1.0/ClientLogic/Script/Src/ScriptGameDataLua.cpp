@@ -1,5 +1,5 @@
 /*
- *  ScriptGameDataLua.mm
+ *  ScriptGameDataLua.cpp
  *  DragonDrive
  *
  *  Created by jhzheng on 12-1-13.
@@ -407,7 +407,7 @@ bool Sqlite_IsExistTable(const char* pszTableName)
 {
     return CSqliteDBMgr::shareInstance().IsExistTable(pszTableName);
 }
-std::string GetTxtPub(const char* pszTableName)
+std::string GetTxtPub_Common(const char* pszTableName)
 {
     return NDCommonCString(pszTableName);
 	//GetTxtPri(pszTableName);
@@ -449,6 +449,6 @@ void NDScriptGameData::Load()
 	ETCFUNC("Sqlite_GetColDataN", Sqlite_GetColDataN);
 	ETCFUNC("Sqlite_GetColDataS", Sqlite_GetColDataS);
 	ETCFUNC("Sqlite_IsExistTable", Sqlite_IsExistTable);
-	ETCFUNC("GetTxtPub", GetTxtPub);
+	ETCFUNC("GetTxtPub", GetTxtPub_Common);
 	ETCFUNC("GetTxtPri", GetTxtPri);
 }
