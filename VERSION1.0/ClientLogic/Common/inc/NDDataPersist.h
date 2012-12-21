@@ -115,7 +115,7 @@ public:
 	void SaveAccountList();
 	
 	void AddAccountDevice(const char* account);
-	bool HasAccountDevice(const char* account);
+	//bool HasAccountDevice(const char* account);
 	void SaveAccountDeviceList();
 	
 private:

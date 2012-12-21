@@ -683,6 +683,14 @@
 				RelativePath="..\platform\platform.h"
 				>
 			</File>
+			<File
+				RelativePath="..\platform\StringConvert.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\platform\StringConvert.h"
+				>
+			</File>
 			<Filter
 				Name="win32"
 				>

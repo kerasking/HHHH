@@ -129,7 +129,7 @@ void CreatePlayer(int lookface, int x, int y, int userid, std::string name)
 	kPlayer.SetPositionEx(ConvertUtil::convertCellToDisplay(x, y));
 	kPlayer.SetServerPositon(x, y);
 	kPlayer.m_nID = userid;
-	kPlayer.m_strName = name;
+	kPlayer.SetName( name );
 }
 void ReloadPlayer(int lookface)
 {
@@ -152,7 +152,7 @@ void CreatePlayerWithMount(int lookface, int x, int y, int userid,
 	kPlayer.SetPositionEx(ConvertUtil::convertCellToDisplay(x, y));
 	kPlayer.SetServerPositon(x, y);
 	kPlayer.m_nID = userid;
-	kPlayer.m_strName = name;
+	kPlayer.SetName( name );
 }
 //Íæ¼ÒÆï³è
 void PlayerRideMount(int nRideStatus, int nMountType)
@@ -445,7 +445,7 @@ void SetSceneMusicNew(int idMusic)
 	
 	string strMusicPath = NDPath::GetSoundPath();
 	CCString* pstrMusicFile = CCString::stringWithFormat("%smusic_%d.aac",strMusicPath.c_str(),idMusic);
-	pkSimpleAudio->playBackgroundMusic(pstrMusicFile->toStdString().c_str(),true);
+	pkSimpleAudio->playBackgroundMusic(pstrMusicFile->getCString(),true);
 }
 
 void SetBgMusicVolume(int nVolune)
@@ -501,8 +501,7 @@ int StartEffectSound(int idMusic)
 
 	string strMusicPath = NDPath::GetSoundPath();
 	CCString* pstrMusicFile = CCString::stringWithFormat("%seffect/effect_%d.aac",strMusicPath.c_str(),idMusic);
-
-	return pkSimpleAudio->playEffect(pstrMusicFile->toStdString().c_str(),false);
+	return pkSimpleAudio->playEffect(pstrMusicFile->getCString(),false);
 }
 
 void StopEffectSound()

@@ -24,117 +24,82 @@
 #endif
 using namespace cocos2d;
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-static char g_GBKConvUTF8Buf_Again[5000] = {0};
-const char* GBKToUTF8(const char *strChar)
+
+CCSize getStringSize(const char* in_utf8, unsigned int fontSize)
 {
+    CCSize outSize = CCSizeMake(0.0f, 0.0f);
+	if (in_utf8 == 0 || in_utf8[0] == 0) return outSize;
 
-	iconv_t iconvH;
-	iconvH = iconv_open("utf-8","gb2312");
-	if (iconvH == 0)
-	{
-		return NULL;
-	}
-	size_t strLength = strlen(strChar);
-	size_t outLength = strLength<<2;
-	size_t copyLength = outLength;
-	memset(g_GBKConvUTF8Buf_Again, 0, 5000);
-
-	char* outbuf = (char*) malloc(outLength);
-	char* pBuff = outbuf;
-	memset( outbuf, 0, outLength);
-
-	if (-1 == iconv(iconvH, &strChar, &strLength, &outbuf, &outLength))
-	{
-		iconv_close(iconvH);
-		return NULL;
-	}
-	memcpy(g_GBKConvUTF8Buf_Again,pBuff,copyLength);
-	free(pBuff);
-	iconv_close(iconvH);
-	return g_GBKConvUTF8Buf_Again;
-}
-#endif
-
-CCSize getStringSize(const char* pszStr, unsigned int fontSize)
-{
-    CCSize CCSz = CCSizeMake(0.0f, 0.0f);
-
-	if (pszStr) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        CGSize sz = CGSizeMake(0.0f, 0.0f);
-		NSString* str = [NSString stringWithUTF8String:pszStr];	
-        NSString* strfont = [NSString stringWithUTF8String:FONT_NAME];
+	{
+		CGSize sz = CGSizeMake(0.0f, 0.0f);
+		NSString* str = [NSString stringWithUTF8String:in_utf8];	
+		NSString* strfont = [NSString stringWithUTF8String:FONT_NAME];
 		sz = [str sizeWithFont:[UIFont fontWithName:strfont size:fontSize]];
-        CCSz.width = sz.width;
-        CCSz.height = sz.height;
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-		int width = 0, height = 0;
-		if (CCImage::getStringSize( pszStr, CCImage::kAlignLeft, FONT_NAME, fontSize,
-										width, height ))
-		{
-			return CCSizeMake( width, height );
-		}
-#endif
+		outSize.width = sz.width;
+		outSize.height = sz.height;
 	}
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	{
+		int width = 0, height = 0;
+		if (CCImage::getStringSize( in_utf8, 
+			CCImage::kAlignLeft, FONT_NAME, fontSize,
+			width, height ))
+		{
+			outSize.width = width;
+			outSize.height = height;
+		}
+	}
+#endif
     
-	return CCSz;     
+	return outSize;     
 }
 
-CCSize getStringSizeMutiLine(const char* pszStr, unsigned int fontSize, CCSize contentSize)
+CCSize getStringSizeMutiLine(const char* in_utf8, unsigned int fontSize, CCSize contentSize)
 {
+	CCSize outSize = CCSizeZero;
 
-
-	CGSize sz = CGSizeZero;
-	CCSize CCSz = CCSizeZero;
-    
-    CGSize CGcontentSize = CGSizeZero;
-    CGcontentSize.width = contentSize.width;
-    CGcontentSize.height = contentSize.height;
-
-	if (!pszStr)
+	if (!in_utf8 || in_utf8[0] == 0)
 	{
-		return CCSz;
+		return outSize;
 	}
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	NSString *nstext = [NSString stringWithUTF8String:pszStr];
+	NSString *nstext = [NSString stringWithUTF8String:in_utf8];
     NSString* strfont = [NSString stringWithUTF8String:FONT_NAME];
-	sz = [nstext sizeWithFont:[UIFont fontWithName:strfont size:fontSize] constrainedToSize:CGcontentSize];
+	outSize = [nstext sizeWithFont:[UIFont fontWithName:strfont size:fontSize] constrainedToSize:contentSize];
+
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	int width = 0, height = 0;
-	if (CCImage::getStringSize( pszStr, CCImage::kAlignLeft, FONT_NAME, fontSize,
-		width, height ))
+	if (CCImage::getStringSize( in_utf8, CCImage::kAlignLeft, FONT_NAME, fontSize, width, height ))
 	{
 		int rows = 1.0*width/contentSize.width + 1;
 
 		if(1 == rows)
 		{
-			sz.width = width;
+			outSize.width = width;
 			if(contentSize.height > height)
 			{
-				sz.height =  height;
+				outSize.height =  height;
 			}
 			else
 			{
-				sz.height =  contentSize.height;
+				outSize.height =  contentSize.height;
 			}
 		}
 		else
 		{
-			sz.width = contentSize.width;
+			outSize.width = contentSize.width;
 			if(contentSize.height > height*rows)
 			{
-				sz.height =  height*rows;
+				outSize.height =  height*rows;
 			}
 			else
 			{
-				sz.height =  contentSize.height;
+				outSize.height =  contentSize.height;
 			}
 		}
 	}
 #endif
-    CCSz.width = sz.width;
-    CCSz.height = sz.height;
-	return CCSz;
+	return outSize;
 }

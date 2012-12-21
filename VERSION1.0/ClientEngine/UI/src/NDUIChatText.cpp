@@ -17,6 +17,7 @@
 #include "NDBaseScriptMgr.h"
 #include "NDSharedPtr.h"
 #include "ObjectTracker.h"
+#include "StringConvert.h"
 
 #ifdef ANDROID
 #include <jni.h>
@@ -281,6 +282,7 @@ void CUIChatText::Combiner(std::vector<ChatNode>& textNodeList)
 	for (iter = textNodeList.begin(); iter != textNodeList.end(); iter++) 
 	{
 		ChatNode curNode = *iter;
+		if (!curNode.uiNode) continue;
 		CCRect uiNodeRect = curNode.uiNode->GetFrameRect();	
 		
 		// 是否换行？
@@ -363,15 +365,12 @@ NDUIImage* CUIChatText::CreateFaceImage(const char* strIndex)
 
 NDUILabel* CUIChatText::CreateLabel(const char* utf8_text, unsigned int fontSize, ccColor4B color, int idItem/* = 0*/)
 {
-	//注意：utf8_text传进来的格式是utf8的，计算string size之前要转成ansi，否则计算尺寸出错.
 	if (!utf8_text || !utf8_text[0]) return NULL;
 
 	NDUILabel* label = NULL;
 	if (utf8_text) 
 	{
-		CCStringRef strRef = CCString::stringWithUTF8String( utf8_text );
-		const char* ansiText = strRef->getCString();
-		CCSize textSize = getStringSize(ansiText, fontSize*FONT_SCALE);
+		CCSize textSize = getStringSize(utf8_text, fontSize*FONT_SCALE);
 
 		label = new NDUILabel();
 		label->Initialization();

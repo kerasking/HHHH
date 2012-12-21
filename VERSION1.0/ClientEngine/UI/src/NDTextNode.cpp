@@ -17,6 +17,7 @@
 #include "TQPlatform.h"
 #include "NDSharedPtr.h"
 #include "ObjectTracker.h"
+#include "StringConvert.h"
 
 using namespace cocos2d;
 
@@ -284,6 +285,8 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 		return 0;
 	}
 
+	uiFontSize = (uiFontSize == 6 ? 12 : uiFontSize);
+
 	std::vector < TextNode > kTextNodeList;
 	BuildRule eRule = BuildRuleNone;
 	ccColor4B kColor = kDefaultColor;
@@ -365,14 +368,14 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLinkLabel(CCString("[").getUtf8String(), uiFontSize, kColor,
+									CreateLinkLabel( CONVERT_GBK_TO_UTF8("["), uiFontSize, kColor,
 											m_nItemID), true));
 				}
 				else
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLabel(CCString("[").getUtf8String(), uiFontSize, kColor,
+									CreateLabel(CONVERT_GBK_TO_UTF8("["), uiFontSize, kColor,
 											m_nItemID), true));
 				}
 			}
@@ -439,7 +442,7 @@ unsigned int NDUITextBuilder::StringWidthAfterFilter(const char* text,
 	unsigned int result = 0;
 	if (text)
 	{
-		unsigned int fontHeight = getStringSize("a", fontSize * FONT_SCALE).height;
+		unsigned int fontHeight = getStringSize(CONVERT_GBK_TO_UTF8("a"), fontSize * FONT_SCALE).height;
 		result += fontHeight;
 		unsigned int curWidth = 0;
 		BuildRule rule = BuildRuleNone;
@@ -518,7 +521,7 @@ unsigned int NDUITextBuilder::StringHeightAfterFilter(const char* text,
 	unsigned int result = 0;
 	if (text)
 	{
-		unsigned int fontHeight = getStringSize("a", fontSize*FONT_SCALE).height;
+		unsigned int fontHeight = getStringSize(CONVERT_GBK_TO_UTF8("a"), fontSize*FONT_SCALE).height;
 		result += fontHeight;
 		unsigned int curWidth = 0;
 		BuildRule rule = BuildRuleNone;
@@ -800,9 +803,7 @@ NDUILabel* NDUITextBuilder::CreateLabel(const char* utf8_text,
 	NDUILabel* label = NULL;
 	if (utf8_text)
 	{
-		CCStringRef strRef = CCString::stringWithUTF8String( utf8_text );
-		const char* ansiText = strRef->getCString();
-		CCSize kTextSize = getStringSize(ansiText, fontSize*FONT_SCALE);
+		CCSize kTextSize = getStringSize(utf8_text, fontSize*FONT_SCALE);
 
 		label = new NDUILabel();
 		label->Initialization();
@@ -816,18 +817,18 @@ NDUILabel* NDUITextBuilder::CreateLabel(const char* utf8_text,
 	return label;
 }
 
-HyperLinkLabel* NDUITextBuilder::CreateLinkLabel(const char* pszText,
+HyperLinkLabel* NDUITextBuilder::CreateLinkLabel(const char* in_utf8,
 		unsigned int uiFontSize, ccColor4B kColor, int nItemID)
 {
 	HyperLinkLabel* pkResultLabel = NULL;
 
-	if (pszText)
+	if (in_utf8)
 	{
-		CCSize kTextSize = getStringSize(pszText, uiFontSize*FONT_SCALE);
+		CCSize kTextSize = getStringSize(in_utf8, uiFontSize*FONT_SCALE);
 		pkResultLabel = new HyperLinkLabel();
 		pkResultLabel->Initialization();
 		pkResultLabel->SetRenderTimes(1);
-		pkResultLabel->SetText(pszText);
+		pkResultLabel->SetText(in_utf8);
 		pkResultLabel->SetTag(nItemID);
 		pkResultLabel->SetFontSize(uiFontSize);
 		pkResultLabel->SetFontColor(kColor);

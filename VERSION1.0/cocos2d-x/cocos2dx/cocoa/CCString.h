@@ -158,13 +158,13 @@ public:
     static CCString* createWithContentsOfFile(const char* pszFileName);
 
 #if ND_MOD
-		const std::string& toStdString() { return m_sString; }
+		//const std::string& toStdString() { return m_sString; }
 
-		const char* getUtf8String();
+		//const char* getUtf8String();
 
-		static CCString* stringWithUTF8String(const char* pszUTF8);
+		//static CCString* stringWithUTF8String(const char* pszUTF8);
     
-		static bool isUTF8ChineseCharacter(const char* pszText);
+		//static bool isUTF8ChineseCharacter(const char* pszText);
 
 #endif //ND_MOD
 

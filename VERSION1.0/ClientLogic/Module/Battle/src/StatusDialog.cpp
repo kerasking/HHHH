@@ -98,7 +98,7 @@ void StatusDialog::Initialization(Fighter* f)
 	m_fighter = f;
 	
 	stringstream ssTitle;
-	ssTitle << f->GetRole()->m_strName << "("
+	ssTitle << f->GetRole()->GetName() << "("
 	<< f->GetRole()->m_nLevel << NDCommonCString("Ji") << ")";
 	
 	if(f->m_kInfo.fighterType==Fighter_TYPE_RARE_MONSTER){

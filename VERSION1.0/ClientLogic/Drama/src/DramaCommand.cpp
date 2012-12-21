@@ -279,7 +279,7 @@ void DramaCommandSprite::ExcuteAddSprite()
 
 	if (sprite && sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)))
 	{
-		((NDBaseRole*) sprite)->m_strName = m_kParam.str;
+		((NDBaseRole*) sprite)->SetName( m_kParam.str );
 	}
 	if (sprite && sprite->IsKindOfClass(RUNTIME_CLASS(NDMonster)))
 	{

@@ -159,7 +159,7 @@ void WorldMapLayer::Initialization(int nMapId)
  		NDPlayer& hero = NDPlayer::defaultHero();
 		if (m_roleNode->GetRole())
 		{
-			m_roleNode->GetRole()->m_strName = hero.m_strName;
+			m_roleNode->GetRole()->SetName( hero.GetName() );
 			m_roleNode->GetRole()->enableShowLabel( false );
 			m_roleNode->GetRole()->ChangeModelWithMount( hero.m_nRideStatus, hero.m_nMountType );
 			AddChild(m_roleNode);
