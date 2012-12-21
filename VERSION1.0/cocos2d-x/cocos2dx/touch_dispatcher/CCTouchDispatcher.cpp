@@ -45,7 +45,7 @@ NS_CC_BEGIN
  */
 static int less(const CCObject* p1, const CCObject* p2)
 {
-#if ND_MOD
+#if 0
 	//备注：当多个同类型的Layer显示时，一个priority不够用，
 	//		因此加个subPriority，规则一样是数值小的优先处理.
 
@@ -166,7 +166,7 @@ void CCTouchDispatcher::forceAddHandler(CCTouchHandler *pHandler, CCArray *pArra
                  ++u;
              }
  
-#if ND_MOD
+#if 0
 			 if (h->getPriority() == pHandler->getPriority())
 			 {
 				 if (h->getDelegate()->getSubPriority() < pHandler->getDelegate()->getSubPriority())
