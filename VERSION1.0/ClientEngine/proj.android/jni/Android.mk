@@ -139,7 +139,6 @@ $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/cocoa \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/android \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/kazmath/include \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform \
-$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/cocoa \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/base_nodes \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/touch_dispatcher \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/layers_scenes_transitions_nodes \
