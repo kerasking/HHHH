@@ -1926,42 +1926,65 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	LOGD("strAPKPath is %s",strAPKPath.c_str());
 
 	HZIP pZip = 0;
-	char* pSimplifiedChineseResBuffer = 0;
-	char* pVersionINIBuffer = 0;
 	HZIP pSimplifiedChineseResZip = 0;
+	char* pSimplifiedChineseResBuffer = 0;
+	unsigned char* pVersionINIBuffer = 0;
 	ZIPENTRY kZipEntry = {0};
 	ZIPENTRY kSimplifiedChineseResZipEntry = {0};
-
+	unsigned long ulSize = 0;
 	int nSimplifiedChineseResIndex = 0;
 	int nVersionINIIndex = 0;
 
-	pZip = OpenZip(strAPKPath.c_str(),0);
+	unsigned char* pszData = CCFileUtils::sharedFileUtils()->
+		getFileDataFromZip(strAPKPath.c_str(),"assets/SimplifiedChineseRes.zip",&ulSize);
 
-	FindZipItem(pZip,"SimplifiedChineseRes.zip",true,&nSimplifiedChineseResIndex,&kZipEntry);
+	LOGD("ulSize is %d",ulSize);
+
+	pZip = OpenZip((void*)pszData,ulSize,0);
+
+	if (0 == pZip)
+	{
+		LOGERROR("pZip is null");
+	}
+
+	//pSimplifiedChineseResZip = OpenZip(strAPKPath.c_str(),0);
+
+	if (ZR_OK != FindZipItem(pZip,"version.ini",
+		true,&nSimplifiedChineseResIndex,&kZipEntry))
+	{
+		LOGERROR("FindZipItem Error");
+	}
+
+	LOGD("nSimplifiedChineseResIndex is %d,unc_size is %d,comp_size is %d",
+		nSimplifiedChineseResIndex,kZipEntry.unc_size,kZipEntry.comp_size);
 
 	pSimplifiedChineseResBuffer = new char[kZipEntry.unc_size];
 	memset(pSimplifiedChineseResBuffer,0,sizeof(char) * kZipEntry.unc_size);
 
 	UnzipItem(pZip,nSimplifiedChineseResIndex, pSimplifiedChineseResBuffer, kZipEntry.unc_size);
-	pSimplifiedChineseResZip = OpenZip(pSimplifiedChineseResBuffer,kZipEntry.unc_size,0);
-	FindZipItem(pSimplifiedChineseResZip,"version.ini",true,&nVersionINIIndex,&kSimplifiedChineseResZipEntry);
 
-	pVersionINIBuffer = new char[kSimplifiedChineseResZipEntry.unc_size];
-	memset(pVersionINIBuffer,0,sizeof(char) * kSimplifiedChineseResZipEntry.unc_size);
+	LOGD("pSimplifiedChineseResBuffer is %s",pSimplifiedChineseResBuffer);
 
-	UnzipItem(pSimplifiedChineseResZip,nVersionINIIndex,pVersionINIBuffer,kSimplifiedChineseResZipEntry.unc_size);
-
-	unsigned long ulFileLen = 0;
-	strInstallResVersion = pVersionINIBuffer;
-	strInstallResVersion = strInstallResVersion.substr(0,4);
-
-	LOGD("The read text is %s",strInstallResVersion.c_str());
-
-	SAFE_DELETE(pSimplifiedChineseResBuffer);
-	SAFE_DELETE(pVersionINIBuffer);
-
-	CloseZip(pSimplifiedChineseResZip);
-	CloseZip(pZip);
+// 	pSimplifiedChineseResZip = OpenZip(pSimplifiedChineseResBuffer,kZipEntry.unc_size,0);
+// 	FindZipItem(pSimplifiedChineseResZip,"version.ini",true,&nVersionINIIndex,&kSimplifiedChineseResZipEntry);
+// 
+// 	pVersionINIBuffer = new unsigned char[kSimplifiedChineseResZipEntry.unc_size];
+// 	memset(pVersionINIBuffer,0,sizeof(unsigned char) * kSimplifiedChineseResZipEntry.unc_size);
+// 
+// 	UnzipItem(pSimplifiedChineseResZip,nVersionINIIndex,pVersionINIBuffer,kSimplifiedChineseResZipEntry.unc_size);
+// 
+// 	unsigned long ulFileLen = 0;
+// 	LOGD("(char*)pVersionINIBuffer is %s,Index is %d",(char*)pVersionINIBuffer,nVersionINIIndex);
+// 	strInstallResVersion = (char*)pVersionINIBuffer;
+// 	strInstallResVersion = strInstallResVersion.substr(0,4);
+// 
+// 	LOGD("The read text is %s",strInstallResVersion.c_str());
+// 
+// 	SAFE_DELETE_ARRAY(pSimplifiedChineseResBuffer);
+// 	SAFE_DELETE_ARRAY(pVersionINIBuffer);
+// 
+// 	CloseZip(pSimplifiedChineseResZip);
+// 	CloseZip(pZip);
 
 #endif
 
