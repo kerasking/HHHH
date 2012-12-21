@@ -1935,39 +1935,45 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	int nSimplifiedChineseResIndex = 0;
 	int nVersionINIIndex = 0;
 
+// 	unsigned char* pszData = CCFileUtils::sharedFileUtils()->
+// 		getFileDataFromZip(strAPKPath.c_str(),"assets/SimplifiedChineseRes.zip",&ulSize);
+
 	unsigned char* pszData = CCFileUtils::sharedFileUtils()->
-		getFileDataFromZip(strAPKPath.c_str(),"assets/SimplifiedChineseRes.zip",&ulSize);
+		getFileDataFromZip(strAPKPath.c_str(),"assets/version.ini",&ulSize);
+
+	strInstallResVersion = (char*)pszData;
+	strInstallResVersion = strInstallResVersion.substr(0,4);
 
 	LOGD("ulSize is %d",ulSize);
 
-	pZip = OpenZip((void*)pszData,ulSize,0);
-
-	if (0 == pZip)
-	{
-		LOGERROR("pZip is null");
-	}
-
-	//pSimplifiedChineseResZip = OpenZip(strAPKPath.c_str(),0);
-
-	if (ZR_OK != FindZipItem(pZip,"version.ini",
-		true,&nSimplifiedChineseResIndex,&kZipEntry))
-	{
-		LOGERROR("FindZipItem Error");
-	}
-
-	LOGD("file name is %s,unc_size is %d,comp_size is %d",
-		kZipEntry.name,kZipEntry.unc_size,kZipEntry.comp_size);
-
-	pSimplifiedChineseResBuffer = new char[kZipEntry.unc_size];
-	memset(pSimplifiedChineseResBuffer,0,sizeof(char) * kZipEntry.unc_size);
-
-	if (ZR_OK != UnzipItem(pZip,nSimplifiedChineseResIndex, "/sdcard/temp.ini"))
-	{
-		LOGERROR("UnzipItem(pZip,nSimplifiedChineseResIndex, /sdcard/temp.ini ERROR");
-		return false;
-	}
-
-	LOGD("pSimplifiedChineseResBuffer is %s",pSimplifiedChineseResBuffer);
+// 	pZip = OpenZip((void*)pszData,ulSize,0);
+// 
+// 	if (0 == pZip)
+// 	{
+// 		LOGERROR("pZip is null");
+// 	}
+// 
+// 	//pSimplifiedChineseResZip = OpenZip(strAPKPath.c_str(),0);
+// 
+// 	if (ZR_OK != FindZipItem(pZip,"version.ini",
+// 		true,&nSimplifiedChineseResIndex,&kZipEntry))
+// 	{
+// 		LOGERROR("FindZipItem Error");
+// 	}
+// 
+// 	LOGD("file name is %s,unc_size is %d,comp_size is %d",
+// 		kZipEntry.name,kZipEntry.unc_size,kZipEntry.comp_size);
+// 
+// 	pSimplifiedChineseResBuffer = new char[kZipEntry.unc_size];
+// 	memset(pSimplifiedChineseResBuffer,0,sizeof(char) * kZipEntry.unc_size);
+// 
+// 	if (ZR_OK != UnzipItem(pZip,nSimplifiedChineseResIndex, "/sdcard/temp.ini"))
+// 	{
+// 		LOGERROR("UnzipItem(pZip,nSimplifiedChineseResIndex, /sdcard/temp.ini ERROR");
+// 		return false;
+// 	}
+// 
+// 	LOGD("pSimplifiedChineseResBuffer is %s",pSimplifiedChineseResBuffer);
 
 // 	pSimplifiedChineseResZip = OpenZip(pSimplifiedChineseResBuffer,kZipEntry.unc_size,0);
 // 	FindZipItem(pSimplifiedChineseResZip,"version.ini",true,&nVersionINIIndex,&kSimplifiedChineseResZipEntry);
@@ -1984,11 +1990,11 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 // 
 // 	LOGD("The read text is %s",strInstallResVersion.c_str());
 // 
-// 	SAFE_DELETE_ARRAY(pSimplifiedChineseResBuffer);
-// 	SAFE_DELETE_ARRAY(pVersionINIBuffer);
+	SAFE_DELETE_ARRAY(pSimplifiedChineseResBuffer);
+	SAFE_DELETE_ARRAY(pVersionINIBuffer);
 // 
 // 	CloseZip(pSimplifiedChineseResZip);
-// 	CloseZip(pZip);
+ 	CloseZip(pZip);
 
 #endif
 
@@ -2042,12 +2048,77 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 
 void* CopyResThread(void* ptr)
 {
+	LOGD("Entry CopyResThread");
+
 	CZipUnZip* pkUnzip = new CZipUnZip;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	pkUnzip->UnZipFile("../SimplifiedChineseRes.zip","dhlj/");
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	pkUnzip->UnZipFile("assets/SimplifiedChineseRes.zip","/sdcard/dhlj/");
+	//pkUnzip->UnZipFile("assets/SimplifiedChineseRes.zip","/sdcard/dhlj/");
+
+	unsigned char* pszZipData = 0;
+	unsigned long ulZipLength = 0;
+	string strApkPath = getApkPath();
+	HZIP pZipHandle = 0;
+	ZIPENTRY kZipEntry = {0};
+	int nMaxIndex = 0;
+
+	if (strApkPath.length() == 0)
+	{
+		LOGERROR("strApkPath.length() == 0");
+		return 0;
+	}
+
+	pszZipData = CCFileUtils::sharedFileUtils()->getFileDataFromZip(strApkPath.c_str(),
+		"assets/SimplifiedChineseRes.zip",&ulZipLength);
+
+	if (0 == pszZipData)
+	{
+		LOGERROR("0 == pszZipData");
+		return 0;
+	}
+
+	pZipHandle = OpenZip((void*)pszZipData,ulZipLength,0);
+
+	if (0 == pZipHandle)
+	{
+		LOGERROR("0 == pZipHandle");
+		return 0;
+	}
+
+	if (ZR_OK != GetZipItem(pZipHandle,-1,&kZipEntry))
+	{
+		LOGERROR("ZR_OK != GetZipItem(pZipHandle,-1,&kZipEntry)");
+		return 0;
+	}
+
+	nMaxIndex = kZipEntry.index;
+
+	LOGD("nMaxIndex = %d",kZipEntry.index);
+	string strPath = "/sdcard/dhlj/";
+
+	for (int i = 0;i < nMaxIndex;i++)
+	{
+		ZIPENTRY kTempZipEntry = {0};
+		GetZipItem(pZipHandle,i,&kTempZipEntry);
+		string strFilename = strPath + string(kTempZipEntry.name);
+		LOGD("Unzipping the %s file.",strFilename.c_str());
+		UnzipItem(pZipHandle,i,strFilename.c_str());
+	}
+
+	CloseZip(pZipHandle);
+
+	// FHANDLE hread,hwrite; CreatePipe(&hread,&hwrite,0,0);
+	// CreateZipWriterThread(hwrite);
+	// HZIP hz = OpenZipHandle(hread,0);
+	// for (int i=0; ; i++)
+	// { ZIPENTRY ze;
+	//   ZRESULT zr=GetZipItem(hz,i,&ze); if (zr!=ZR_OK) break; // no more
+	//   UnzipItem(hz,i, ze.name);
+	// }
+	// CloseZip(hz);
+
 #else
 #endif
 
