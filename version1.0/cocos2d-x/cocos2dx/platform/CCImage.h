@@ -130,7 +130,7 @@ public:
     CC_SYNTHESIZE_READONLY(int,     m_nBitsPerComponent,   BitsPerComponent);
 
 #if ND_MOD
-	static bool getStringSize( const char *    pText, 
+	static bool getStringSize( const char *    in_utf8, 
 								ETextAlign      eAlignMask,
 								const char *    pFontName,
 								int             nSize,

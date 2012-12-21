@@ -40,7 +40,7 @@
 #include "GlobalDialog.h"
 #include "ScriptMgr.h"
 #include "ObjectTracker.h"
-
+#include "StringConvert.h"
 
 //===========================================================================
 typedef struct _tagEffectProp{
@@ -296,14 +296,13 @@ void HighlightTip::SetFighter(Fighter* pkFighter)
 		pkNameLabel->SetTag(TAG_NAME);
 		AddChild(pkNameLabel);
 	}
+
 	std::stringstream kStringStream;
-	kStringStream << pkRole->m_strName << "Lv" << pkRole->m_nLevel;
-	//	if (f->m_kInfo.fighterType == Fighter_TYPE_RARE_MONSTER)
-	//	{
-	//		ss << "¡¾" << NDCommonCString("xiyou") << "¡¿"; 
-	//	}
+	kStringStream << pkRole->GetName() << "Lv" << pkRole->m_nLevel;
+
 	pkNameLabel->SetText(kStringStream.str().c_str());
 	CCSize sizeName = getStringSize(kStringStream.str().c_str(), 15);
+
 	pkNameLabel->SetFrameRect(
 			CCRectMake((kRect.size.width - sizeName.width) / 2, 0,
 					sizeName.width, sizeName.height));
@@ -1722,14 +1721,13 @@ void Battle::HighlightFighter(Fighter* f)
 		name->SetTag(TAG_NAME);
 		AddChild(name);
 	}
+
 	std::stringstream ss;
-	ss << role->m_strName << "Lv" << role->m_nLevel;
-	//	if (f->m_kInfo.fighterType == Fighter_TYPE_RARE_MONSTER)
-	//	{
-	//		ss << "¡¾" << NDCommonCString("xiyou") << "¡¿"; 
-	//	}
+	ss << role->GetName() << "Lv" << role->m_nLevel;
+
 	name->SetText(ss.str().c_str());
 	CCSize sizeName = getStringSize(ss.str().c_str(), 15);
+
 	name->SetFrameRect(
 			CCRectMake(pt.x - sizeName.width / 2,
 					pt.y - role->getGravityY() - sizeName.height,
@@ -2000,7 +1998,7 @@ bool Battle::TouchEnd(NDTouch* touch)
 			NDLog(@"fighter have no skill");
 		}
 		BaseScriptMgrObj.excuteLuaFunc<bool>("SetFighterInfo", "FighterInfo",
-			f->GetRole()->m_strName, skillName, f->m_kInfo.level);
+			f->GetRole()->GetName(), skillName, f->m_kInfo.level);
 
 		BaseScriptMgrObj.excuteLuaFunc("UpdateHp", "FighterInfo",
 			f->m_kInfo.nLife, f->m_kInfo.nLifeMax);

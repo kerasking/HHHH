@@ -35,6 +35,7 @@
 #include "SocialElement.h"
 #include "NDTransData.h"
 #include "ObjectTracker.h"
+#include "StringConvert.h"
 
 #ifdef USE_MGSDK
 #import <Foundation/Foundation.h>
@@ -862,7 +863,7 @@ void NDMapMgr::processPlayer(NDTransData* pkData, int nLength)
 	pkRole->setSynRank(synRank);
 	pkRole->m_nPKPoint = dwPkPoint;
 	pkRole->SetCamp((CAMP_TYPE) btCamp);
-	pkRole->m_strName = name;
+	pkRole->SetName( name );
 	pkRole->m_strRank = strRank;
 	pkRole->m_strSynName = synName;
 	pkRole->m_nTeamID = dwArmorType;
@@ -967,7 +968,7 @@ NDManualRole* NDMapMgr::GetManualRole(const char* pszName)
 	{
 		NDManualRole* pkRole = it->second;
 
-		if (0 == strcmp(pkRole->m_strName.c_str(), pszName))
+		if (0 == strcmp(pkRole->GetName().c_str(), pszName))
 		{
 			pkResult = it->second;
 			break;
@@ -1413,18 +1414,13 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 		std::string dataStr = pkData->ReadUnicodeString();
 		std::string talkStr = pkData->ReadUnicodeString();
 #else
-		CCStringRef pstrTemp = CCString::stringWithUTF8String(
-				pkData->ReadUnicodeString().c_str());
-		std::string strName = pstrTemp->toStdString();
-
-		pstrTemp = CCString::stringWithUTF8String(
-				pkData->ReadUnicodeString().c_str());
-		std::string dataStr = pstrTemp->toStdString();
-
-		pstrTemp = CCString::stringWithUTF8String(
-				pkData->ReadUnicodeString().c_str());
-		std::string talkStr = pstrTemp->toStdString();
+	
+		// all in utf8
+		string strName = pkData->ReadUnicodeString().c_str();
+		string dataStr = pkData->ReadUnicodeString().c_str();
+		string talkStr = pkData->ReadUnicodeString().c_str();
 #endif
+
 		NDNpc *pkNPC = new NDNpc;
 		pkNPC->m_nID = nID;
 		pkNPC->m_nCol = usCellX;
@@ -1434,11 +1430,11 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 
 		if (uitype == 6)
 		{
-			pkNPC->m_strName = "";
+			pkNPC->SetName("");
 		}
 		else
 		{
-			pkNPC->m_strName = strName;
+			pkNPC->SetName(strName);
 		}
 
 		pkNPC->SetPosition(
@@ -1446,8 +1442,8 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 // 						usCellY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));//@del
 				ConvertUtil::convertCellToDisplay( usCellX, usCellY ));
 
-		pkNPC->m_strData = dataStr;
-		pkNPC->m_strTalk = talkStr;
+		pkNPC->setData( dataStr );
+		pkNPC->setTalk( talkStr );
 		pkNPC->SetType(uitype);
 		pkNPC->Initialization(usLook);
 
@@ -2868,7 +2864,7 @@ void NDMapMgr::processNPCInfo(NDTransData& kData)
 	pkNPC->m_nCol = col;
 	pkNPC->m_nRow = row;
 	pkNPC->m_nLook = usLook;
-	pkNPC->m_strName = strName;
+	pkNPC->SetName( strName );
 	pkNPC->SetPosition(
 // 			ccp(col * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
 // 				row * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));//@del
@@ -2876,8 +2872,8 @@ void NDMapMgr::processNPCInfo(NDTransData& kData)
 
 	pkNPC->SetCamp(CAMP_TYPE(btCamp));
 	pkNPC->SetNpcState(NPC_STATE(btState));
-	pkNPC->m_strData = strData;
-	pkNPC->m_strTalk = strTalk;
+	pkNPC->setData( strData );
+	pkNPC->setTalk( strTalk );
 	pkNPC->SetType(uctype);
 	pkNPC->Initialization(usLook);
 	pkNPC->initUnpassPoint();
@@ -3125,7 +3121,7 @@ void NDMapMgr::processRehearse(NDTransData& kData)
 		if (role != NULL)
 		{
 			std::stringstream ss;
-			ss << role->m_strName << NDCommonCString("RejectRefraseTip");
+			ss << role->GetName() << NDCommonCString("RejectRefraseTip");
 			//Chat::DefaultChat()->AddMessage(ChatTypeSystem, ss.str().c_str()); ///< ÒÀÀµÕÅµÏChat ¹ùºÆ
 		}
 		break;
@@ -4665,7 +4661,7 @@ void NDMapMgr::NavigateToNpc(int nNpcId)
 	}
 	else
 	{
-		AutoPathTipObj.work(pkNPC->m_strName);
+		AutoPathTipObj.work(pkNPC->GetName());
 		player.Walk(kDstPoint, SpriteSpeedStep4, true);
 	}
 
@@ -4761,7 +4757,7 @@ void NDMapMgr::processMsgDlg(NDTransData& kData)
 				NDNpc *focusNpc = player.GetFocusNpc();
 				if (focusNpc)
 				{
-					title = focusNpc->m_strName;
+					title = focusNpc->GetName();
 				}
 			}
 
@@ -5161,7 +5157,7 @@ string NDMapMgr::changeNpcString(string str)
 	NDString ndstrtmp(str);
 
 	ndstrtmp.replace(NDString("&n"),
-			NDString(NDPlayer::defaultHero().m_strName));
+			NDString(NDPlayer::defaultHero().GetName()));
 	switch (NDPlayer::defaultHero().m_nSex)
 	{
 	case SpriteSexMale:

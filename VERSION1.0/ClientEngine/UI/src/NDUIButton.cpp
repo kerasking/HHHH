@@ -1202,8 +1202,11 @@ void NDUIButton::SetTwoTitle()
 	}
 
 	CCRect rect = this->GetFrameRect();
+
 	CCSize size1 = getStringSize(m_lbTitle1->GetText().c_str(),
-			m_lbTitle1->GetFontSize()), size2 = getStringSize(
+			m_lbTitle1->GetFontSize());
+
+	CCSize size2 = getStringSize(
 			m_lbTitle2->GetText().c_str(), m_lbTitle2->GetFontSize());
 
 	int iStartX = (rect.size.width - size1.width - size2.width

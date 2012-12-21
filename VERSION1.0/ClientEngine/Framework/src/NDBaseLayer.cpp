@@ -15,7 +15,7 @@
 
 using namespace cocos2d;
 
-//#define PRIORITY_ADJUST (100)
+#define PRIORITY_ADJUST (100)
 
 NDBaseLayer::NDBaseLayer()
 {
@@ -52,7 +52,7 @@ void NDBaseLayer::SetLayer(NDLayer* layer)
 
 void NDBaseLayer::registerWithTouchDispatcher(void)
 {
-//	int iPriority = INT_MAX - PRIORITY_ADJUST;
+	int iPriority = INT_MAX - PRIORITY_ADJUST;
 
 	NDNode* pkNode = NULL;
 	if (m_kUILayerNode.Pointer())
@@ -63,26 +63,28 @@ void NDBaseLayer::registerWithTouchDispatcher(void)
 	{
 		pkNode = m_kLayerNode.Pointer();
 	}
-	CCAssert(pkNode, "NDBaseLayer::m_k??Node NULL");
+	//CCAssert(pkNode, "NDBaseLayer::m_kNode NULL");
 
-//	while (pkNode)
-//	{
-//		iPriority -= pkNode->GetzOrder();
-//		pkNode = pkNode->GetParent();
-//	}
+	while (pkNode)
+	{
+		iPriority -= pkNode->GetzOrder();
+		pkNode = pkNode->GetParent();
+	}
+
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, iPriority, true);
 
 	// ×¢²átouch·Ö·¢ //@priority
-	CCTouchDispatcher* touchDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
-	if (m_kUILayerNode.Pointer())
-	{
-		NDUILayer* Layer = m_kUILayerNode.Pointer();
-		touchDispatcher->addTargetedDelegate(this, Layer->getPriority(), true);
-	}
-	else if (m_kLayerNode.Pointer())
-	{
-		NDLayer* Layer = m_kLayerNode.Pointer();
-		touchDispatcher->addTargetedDelegate(this, Layer->getPriority(), true);
-	}
+// 	CCTouchDispatcher* touchDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+// 	if (m_kUILayerNode.Pointer())
+// 	{
+// 		NDUILayer* Layer = m_kUILayerNode.Pointer();
+// 		touchDispatcher->addTargetedDelegate(this, Layer->getPriority(), true);
+// 	}
+// 	else if (m_kLayerNode.Pointer())
+// 	{
+// 		NDLayer* Layer = m_kLayerNode.Pointer();
+// 		touchDispatcher->addTargetedDelegate(this, Layer->getPriority(), true);
+// 	}
 }
 
 bool NDBaseLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)

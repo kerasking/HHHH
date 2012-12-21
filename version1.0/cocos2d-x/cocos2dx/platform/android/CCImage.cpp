@@ -141,7 +141,7 @@ bool CCImage::initWithString(
 }
 
 #if ND_MOD
-bool CCImage::getStringSize( const char *    pText,
+bool CCImage::getStringSize( const char *    in_utf8,
                             ETextAlign      eAlignMask,
                             const char *    pFontName,
                             int             nSize,
@@ -159,7 +159,7 @@ bool CCImage::getStringSize( const char *    pText,
                                        , "(Ljava/lang/String;)I"))
         
     {
-        jstring stringArg = t.env->NewStringUTF(pText);
+        jstring stringArg = t.env->NewStringUTF(in_utf8);
         
         jint ret = (jint)t.env->CallStaticObjectMethod(t.classID, t.methodID, stringArg);
         t.env->DeleteLocalRef(stringArg);

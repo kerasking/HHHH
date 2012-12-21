@@ -417,7 +417,7 @@ void DramaScene::SetChatTitleBySpriteKey(bool bLeft, int nKey, int nFontSize,
 
 	if (sprite && sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)))
 	{
-		title = ((NDBaseRole*) sprite)->m_strName;
+		title = ((NDBaseRole*) sprite)->GetName();
 	}
 
 	SetChatTitle(bLeft, title, nFontSize, nFontColor);

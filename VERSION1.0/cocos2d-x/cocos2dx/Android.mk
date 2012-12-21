@@ -37,6 +37,7 @@ cocoa/CCSet.cpp \
 cocoa/CCString.cpp \
 cocoa/CCZone.cpp \
 cocoa/CCArray.cpp \
+cocoa/ObjectTracker.cpp \
 cocos2d.cpp \
 CCDirector.cpp \
 effects/CCGrabber.cpp \
@@ -73,6 +74,7 @@ particle_nodes/CCParticleExamples.cpp \
 particle_nodes/CCParticleSystem.cpp \
 particle_nodes/CCParticleBatchNode.cpp \
 particle_nodes/CCParticleSystemQuad.cpp \
+platform/StringConvert.cpp \
 platform/CCSAXParser.cpp \
 platform/CCThread.cpp \
 platform/platform.cpp \
@@ -158,6 +160,7 @@ LOCAL_EXPORT_LDLIBS := -llog\
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
                     $(LOCAL_PATH)/include \
+					$(LOCAL_PATH)/cocoa \
                     $(LOCAL_PATH)/kazmath/include \
                     $(LOCAL_PATH)/platform/android \
 					$(LOCAL_PATH)/../libpng

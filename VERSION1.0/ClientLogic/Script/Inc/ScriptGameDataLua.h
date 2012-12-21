@@ -1,5 +1,5 @@
 /*
- *  ScriptUI.h
+ *  ScriptGameDataLua.h
  *  DragonDrive
  *
  *  Created by jhzheng on 12-1-6.
@@ -9,11 +9,10 @@
  */
 #pragma once
 #include "ScriptInc.h"
+#include <string>
+using namespace std;
 
-//@loadini
 
-NS_NDENGINE_BGN
-
-//std::string GetTxtPub(const char* pszTableName);
-
-NS_NDENGINE_END
+//lyol.strings都是utf8格式
+std::string GetTxtPub_Common(const char* pszTableName);	//"Common_"前缀
+std::string GetTxtPri(const char* pszTableName);

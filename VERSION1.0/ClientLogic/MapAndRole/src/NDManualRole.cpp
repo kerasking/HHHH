@@ -277,9 +277,15 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 	//根据lookface获取人物图像
 	int nModelID = lookface % 1000;
 
-	CCStringRef pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
-	CCStringRef pString = CCString::stringWithFormat("%smodel_%d.spr", pstrAniPath->toStdString().c_str(), nModelID);
-	NDSprite::Initialization(pString->toStdString().c_str());
+	//@del
+	//CCStringRef pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
+	//CCStringRef pString = CCString::stringWithFormat("%smodel_%d.spr", pstrAniPath->getCString(), nModelID);
+	//NDSprite::Initialization( pString->getCString());
+
+	char spriteFile[200] = "";
+	sprintf( spriteFile, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(), nModelID );	
+	NDSprite::Initialization( spriteFile );
+	
 	m_bFaceRight = m_nDirect == 2;
 	m_nLookface = lookface;
 
@@ -2087,7 +2093,7 @@ void NDManualRole::DrawNameLabel(bool bDraw)
 
 //@label
 void NDManualRole::SetLable(LableType eLableType, int x, int y,
-		const std::string& text, cocos2d::ccColor4B color1, cocos2d::ccColor4B color2)
+		const std::string& in_utf8, cocos2d::ccColor4B color1, cocos2d::ccColor4B color2)
 {
 	if (!m_pkSubNode)
 	{
@@ -2117,8 +2123,7 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 		return;
 	}
 
-	CCStringRef strRef = CCString::stringWithUTF8String( text.c_str() );
-	CCSize fontSize = getStringSize( strRef->getCString(), lable[0]->GetFontSize() * FONT_SCALE);
+	CCSize fontSize = getStringSize( in_utf8.c_str(), lable[0]->GetFontSize() * FONT_SCALE);
 	CCPoint posHead = this->getHeadPos();
 
 	int newX = posHead.x - 0.5 * fontSize.width;
@@ -2134,31 +2139,31 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 // 		//lable[1]->SetFontColor(cColor4);
 // 	}
 
-	lable[0]->SetText(text.c_str());
-	lable[1]->SetText(text.c_str());
+	lable[0]->SetText(in_utf8.c_str());
+	lable[1]->SetText(in_utf8.c_str());
 
 	lable[0]->SetFontColor(color1);
 	lable[1]->SetFontColor(color2);
 }
 
-void NDManualRole::SetLableName( const std::string& text, int x, int y, bool isEnemy)
+void NDManualRole::SetLableName( const std::string& utf8_text, int x, int y, bool isEnemy)
 {
 	if (isEnemy)
 	{
-		SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xFF0000),
+		SetLable(eLableName, x, y, utf8_text, INTCOLORTOCCC4(0xFF0000),
 				INTCOLORTOCCC4(0x003300));
 	}
 	else
 	{
 		/*
 		if (pkPoint < 1) {// 白色
-		SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xffffff), INTCOLORTOCCC4(0x003300));
+		SetLable(eLableName, x, y, utf8_text, INTCOLORTOCCC4(0xffffff), INTCOLORTOCCC4(0x003300));
 		} else if (pkPoint <= 500) {// 黄色
-		SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xfd7e0d), INTCOLORTOCCC4(0x003300));
+		SetLable(eLableName, x, y, utf8_text, INTCOLORTOCCC4(0xfd7e0d), INTCOLORTOCCC4(0x003300));
 		} else if (pkPoint <= 2000) {// 红色
-		SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xe30318), INTCOLORTOCCC4(0x003300));
+		SetLable(eLableName, x, y, utf8_text, INTCOLORTOCCC4(0xe30318), INTCOLORTOCCC4(0x003300));
 		} else {// 紫色
-		SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0x760387), INTCOLORTOCCC4(0x003300));
+		SetLable(eLableName, x, y, utf8_text, INTCOLORTOCCC4(0x760387), INTCOLORTOCCC4(0x003300));
 		}
 		*/
 
@@ -2168,7 +2173,7 @@ void NDManualRole::SetLableName( const std::string& text, int x, int y, bool isE
 			color = ccc4(243, 144, 27, 255);
 		}
 
-		SetLable(eLableName, x, y, text, color, INTCOLORTOCCC4(0x003300));
+		SetLable(eLableName, x, y, utf8_text, color, INTCOLORTOCCC4(0x003300));
 	}
 }
 

@@ -614,10 +614,11 @@ void NDMapLayer::DrawLabelRoadBlockTime()
 		}
 
 		CCStringRef str_time = CCString::stringWithFormat("%s:%s",
-			str_mi->toStdString().c_str(),str_se->toStdString().c_str());
-		m_lbTime->SetText(str_time->toStdString().c_str());
+			str_mi->getCString(),str_se->getCString());
 
-		CCSize size = getStringSize(str_time->toStdString().c_str(), 30);
+		m_lbTime->SetText(str_time->getCString());
+
+		CCSize size = getStringSize(str_time->getCString(), 30);//Ó²±àÂë£¡
 
 		if (!m_lbTime->GetParent() && m_pkSubNode)
 		{

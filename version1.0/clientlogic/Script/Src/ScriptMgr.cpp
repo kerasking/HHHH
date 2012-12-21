@@ -30,6 +30,8 @@
 #include "NDPath.h"
 #include "NDUtil.h"
 #include "NDProfile.h"
+#include "ScriptRegLua.h"
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "direct.h"
 #endif
