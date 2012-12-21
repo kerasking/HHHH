@@ -106,6 +106,8 @@ using namespace std;
   
  	//helper
  	void GetPos(const char* keyname, const char* valuename, int* x, int* y);
+
+	bool DecryptIniFile(char *strBuf, int iBufSize);
  };
 
 #endif  
