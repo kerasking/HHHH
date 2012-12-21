@@ -1955,13 +1955,17 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 		LOGERROR("FindZipItem Error");
 	}
 
-	LOGD("nSimplifiedChineseResIndex is %d,unc_size is %d,comp_size is %d",
-		nSimplifiedChineseResIndex,kZipEntry.unc_size,kZipEntry.comp_size);
+	LOGD("file name is %s,unc_size is %d,comp_size is %d",
+		kZipEntry.name,kZipEntry.unc_size,kZipEntry.comp_size);
 
 	pSimplifiedChineseResBuffer = new char[kZipEntry.unc_size];
 	memset(pSimplifiedChineseResBuffer,0,sizeof(char) * kZipEntry.unc_size);
 
-	UnzipItem(pZip,nSimplifiedChineseResIndex, pSimplifiedChineseResBuffer, kZipEntry.unc_size);
+	if (ZR_OK != UnzipItem(pZip,nSimplifiedChineseResIndex, "/sdcard/temp.ini"))
+	{
+		LOGERROR("UnzipItem(pZip,nSimplifiedChineseResIndex, /sdcard/temp.ini ERROR");
+		return false;
+	}
 
 	LOGD("pSimplifiedChineseResBuffer is %s",pSimplifiedChineseResBuffer);
 
