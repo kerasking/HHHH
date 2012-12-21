@@ -9,8 +9,15 @@
 
 #include "ObjectTracker.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#define ENABLE_OBJ_TRACKER 1
+#endif
+
+#define ENABLE_OBJ_TRACKER 0 //×Ü¿ª¹Ø
+
 void ObjectTracker::inc_imp( const char* clsName, map<string,TrackerData>& curMap ) 
 {
+#if ENABLE_OBJ_TRACKER
 	if (!clsName) return;
 
 	string name = clsName;
@@ -26,10 +33,12 @@ void ObjectTracker::inc_imp( const char* clsName, map<string,TrackerData>& curMa
 	{
 		iter->second.getCur() += 1;
 	}
+#endif
 }
 
 void ObjectTracker::dec_imp( const char* clsName, map<string,TrackerData>& curMap ) 
 {
+#if ENABLE_OBJ_TRACKER
 	if (!clsName) return;
 
 	string name = clsName;
@@ -39,17 +48,21 @@ void ObjectTracker::dec_imp( const char* clsName, map<string,TrackerData>& curMa
 	{
 		iter->second.getCur() -= 1;
 	}
+#endif
 }
 
 void ObjectTracker::dump( string& info, int param )
 {
+#if ENABLE_OBJ_TRACKER
 	this->report( info, param );
 	this->flush();
+#endif
 }
 
 void ObjectTracker::report_imp( map<string,TrackerData>& data, int param, 
 								int& total, string& info )
 {
+#if ENABLE_OBJ_TRACKER
 	char line[200] = "";
 
 	for (ITER_MAP_STAT iter = data.begin();
@@ -75,10 +88,12 @@ void ObjectTracker::report_imp( map<string,TrackerData>& data, int param,
 			info += line;
 		}
 	}
+#endif
 }
 
 void ObjectTracker::report( string& info, int param )
 {	
+#if ENABLE_OBJ_TRACKER
 	info = "";
 	
 	//
@@ -95,19 +110,24 @@ void ObjectTracker::report( string& info, int param )
 	char line[200] = "";
 	sprintf( line, "\r\n%d cc obj, %d nd obj, total %d\r\n", cc_obj, nd_obj, cc_obj + nd_obj );
 	info += line;
+#endif
 }
 
 void ObjectTracker::flush()
 {
+#if ENABLE_OBJ_TRACKER
 	flush_imp( mapStatCC );
 	flush_imp( mapStatND );
+#endif
 }
 
 void ObjectTracker::flush_imp( map<string,TrackerData>& curMap )
 {
+#if ENABLE_OBJ_TRACKER
 	for (ITER_MAP_STAT iter = curMap.begin();
 		iter != curMap.end(); ++iter)
 	{
 		iter->second.cur2prev();
 	}
+#endif
 }
