@@ -196,7 +196,7 @@ void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 	std::string strDes = m_strDescDesMap;
 	strName = m_strNameDesMap;
 
-	int tw = getStringSize(strName.c_str(), 15).width;
+	int tw = getStringSize(strName.c_str(), 15).width;//Ó²±àÂë£¡
 // 	int tx = m_nX * MAP_UNITSIZE_X + DISPLAY_POS_X_OFFSET - tw / 2;
 // 	int ty = m_nY * MAP_UNITSIZE_Y + DISPLAY_POS_Y_OFFSET - 62 * fScaleFactor; //@del
 	int tx = int( ConvertUtil::convertCellToDisplayX( m_nX ) - tw / 2);
@@ -205,7 +205,7 @@ void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 	if (!strDes.empty() && strDes != "")
 	{
 		int tx2 = m_nX * MAP_UNITSIZE_X + 10 * fScaleFactor
-				- (getStringSize(strDes.c_str(), 15).width / 2);
+				- (getStringSize(strDes.c_str(), 15).width / 2);//Ó²±àÂë£¡
 
 		int ty2 = m_nY * MAP_UNITSIZE_Y - 52 * fScaleFactor;	//ty; //@todo:µ°ËéµÄÓ²±àÂë£¡
 		

@@ -64,7 +64,7 @@ namespace NDEngine
 		CCRect scrRect = GetScreenRect();
 
 		NDPicture* ptexpic = NDPicturePool::DefaultPool()->AddPicture(
-			side_image->toStdString().c_str());
+			side_image->getCString());
 
 		m_tileLeftTop->setTexture(ptexpic->GetTexture());
 		SAFE_DELETE(ptexpic);
@@ -88,7 +88,8 @@ namespace NDEngine
 		m_tileLeftTop->make();
 
 		NDPicture* ppic = NDPicturePool::DefaultPool()->AddPicture(
-			side_image->toStdString().c_str());
+			side_image->getCString());
+
 		m_tileLeftTop->setTexture(ppic->GetTexture());
 
 		SAFE_DELETE(ppic);
@@ -115,7 +116,8 @@ namespace NDEngine
 		m_tileRightTop->make();
 
 		NDPicture* pleftpic = NDPicturePool::DefaultPool()->AddPicture(
-			side_image->toStdString().c_str());
+			side_image->getCString());
+
 		m_tileLeftBottom->setTexture(pleftpic->GetTexture());
 
 		SAFE_DELETE(pleftpic);
@@ -143,7 +145,8 @@ namespace NDEngine
 		m_tileLeftBottom->make();
 
 		NDPicture* prightpic = NDPicturePool::DefaultPool()->AddPicture(
-			side_image->toStdString().c_str());
+			side_image->getCString());
+
 		m_tileRightBottom->setTexture(prightpic->GetTexture());
 
 		SAFE_DELETE(prightpic);

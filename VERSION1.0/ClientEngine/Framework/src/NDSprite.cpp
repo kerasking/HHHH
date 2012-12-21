@@ -1186,7 +1186,7 @@ void NDSprite::SetNormalAniGroup(int nLookface)
 	CCStringRef strString = CCString::stringWithFormat("%smodel_%d%s",
 			NDPath::GetAnimationPath().c_str(), ".spr");
 
-	Initialization(strString->toStdString().c_str());
+	Initialization(strString->getCString());
 
 	m_bFaceRight = true;
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);

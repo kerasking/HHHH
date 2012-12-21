@@ -56,21 +56,14 @@ NDUILabel::~NDUILabel()
 	CC_SAFE_DELETE(m_texture);
 }
 	
-void NDUILabel::SetText(const char* text)
+void NDUILabel::SetText(const char* utf8_text)
 {
-	if (0 == strcmp(text, m_strText.c_str())) 
+	if (0 == strcmp(utf8_text, m_strText.c_str())) 
 	{
 		return;
 	}
 
-	// convert to utf8 and compare again.
-	CCStringRef strRef = CCString::stringWithUTF8String(text);
-	if (strRef->toStdString() == m_strText)
-	{
-		return;
-	}
-
-	m_strText = strRef->toStdString();
+	m_strText = utf8_text;
 
 	// dirty.
 	m_bNeedMakeTex = true;
@@ -185,10 +178,8 @@ void NDUILabel::MakeTexture()
 	}
 
 	// init texture with string
-	CCStringRef strString = new CCString(m_strText.c_str());
-
 	m_texture = new CCTexture2D;
-	m_texture->initWithString(strString->getUtf8String(),
+	m_texture->initWithString( m_strText.c_str(),
 				CCSizeMake(thisRect.size.width, thisRect.size.height),
 				eTextAlign,
 				kCCVerticalTextAlignmentCenter,

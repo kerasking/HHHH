@@ -34,18 +34,7 @@ THE SOFTWARE.
 #include "CCObject.h"
 //#include "CCFileUtils.h"
 
-#if ND_MOD
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-#include "..\platform\third_party\win32\iconv\iconv.h"
-#endif
-#include <stdarg.h>
-#endif
-
 NS_CC_BEGIN
-
-#if ND_MOD
-	static char g_GBKConvUTF8Buf[5000] = {0};
-#endif
 
 /**
  * @addtogroup data_structures
@@ -156,17 +145,6 @@ public:
      *          it means that you needn't do a release operation unless you retain it.
      */
     static CCString* createWithContentsOfFile(const char* pszFileName);
-
-#if ND_MOD
-		const std::string& toStdString() { return m_sString; }
-
-		const char* getUtf8String();
-
-		static CCString* stringWithUTF8String(const char* pszUTF8);
-    
-		static bool isUTF8ChineseCharacter(const char* pszText);
-
-#endif //ND_MOD
 
 private:
 

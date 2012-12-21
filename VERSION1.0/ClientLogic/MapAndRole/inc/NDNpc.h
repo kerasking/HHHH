@@ -19,6 +19,7 @@
 NS_NDENGINE_BGN
 
 using namespace NDEngine;
+using namespace std;
 
 class NDNpcLogic;
 
@@ -47,9 +48,10 @@ public:
 	void OnMoveEnd(); override
 	bool OnDrawBegin(bool bDraw); override
 	void OnDrawEnd(bool bDraw); override
-	override void RunAnimation(bool bDraw);
 
+	override void RunAnimation(bool bDraw);
 	void BeforeRunAnimation(bool bDraw); override
+
 public:
 	//以下方法供逻辑层使用－－－begin
 	//......
@@ -92,7 +94,7 @@ public:
 	{
 		eLableName, eLabelDataStr,
 	};
-	void SetLable(LableType eLableType, int x, int y, std::string text,
+	void SetLable(LableType eLableType, int x, int y, const string& utf8_text,
 			cocos2d::ccColor4B color1, cocos2d::ccColor4B color2);
 
 	bool IsRoleNpc()
@@ -117,6 +119,16 @@ public:
 	bool getNearestPoint(CCPoint srcPoint, CCPoint& dstPoint);
 
 	void ShowHightLight(bool bShow);
+
+public:
+	const string& getData() { return m_strData; }
+	const string& getTalk() { return m_strTalk; }
+	void setData( const string& data ) {
+		m_strData = data;
+	}
+	void setTalk( const string& talk ) {
+		m_strTalk = talk;
+	}
 public:
 	int m_nCol;
 	int m_nRow;
@@ -125,11 +137,12 @@ public:
 
 private:
 	NPC_STATE m_eNPCState;
-public:
+	
+protected:
 	// 骑宠相关
 	//NDRidePet	*ridepet;
-	std::string m_strData;
-	std::string m_strTalk;
+	string m_strData; //utf8
+	string m_strTalk; //utf8
 
 private:
 	NDUILabel *m_pkNameLabel[2];
@@ -137,7 +150,7 @@ private:
 	NDPicture *m_pkPicBattle;
 	NDPicture *m_pkPicState;
 
-	std::deque<CCPoint> m_dequePos;
+	deque<CCPoint> m_dequePos;
 
 	bool m_bActionOnRing;
 	bool m_bDirectOnTalk;
@@ -152,7 +165,7 @@ private:
 
 	bool m_bFarmNpc;
 
-	std::vector<CCRect> m_vUnpassRect;
+	vector<CCRect> m_vUnpassRect;
 
 	bool m_bUnpassTurn;
 

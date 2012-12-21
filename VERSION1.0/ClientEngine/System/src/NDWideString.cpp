@@ -9,6 +9,7 @@
 #include "CCPlatformConfig.h"
 #include "TQPlatform.h"
 #include "ObjectTracker.h"
+#include "StringConvert.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "windows.h"

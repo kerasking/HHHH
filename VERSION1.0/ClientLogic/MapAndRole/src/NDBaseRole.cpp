@@ -489,7 +489,7 @@ void NDBaseRole::InitRoleLookFace(int lookface)
 //	SetFaceImageWithEquipmentId(skinColor);
 }
 
-void NDBaseRole::InitNonRoleData(std::string name, int lookface, int lev)
+void NDBaseRole::InitNonRoleData( const std::string& name, int lookface, int lev )
 {
 	m_strName = name;
 	m_nLevel = lev;
@@ -1232,7 +1232,7 @@ void NDBaseRole::unpakcAllEquip()
 	}
 }
 
-void NDBaseRole::addTalkMsg(std::string msg, int timeForTalkMsg)
+void NDBaseRole::addTalkMsg( const std::string& msg, int timeForTalkMsg )
 {
 	NDScene *pkScene = NDDirector::DefaultDirector()->GetRunningScene();
 	if (!pkScene || !pkScene->IsKindOfClass(RUNTIME_CLASS(GameScene)))
@@ -1292,7 +1292,7 @@ void NDBaseRole::SafeClearEffect(NDSprite*& sprite)
 	}
 }
 
-void NDBaseRole::SafeAddEffect(NDSprite*& sprite, std::string file)
+void NDBaseRole::SafeAddEffect(NDSprite*& sprite, const std::string& file)
 {
 	if (sprite == NULL && !file.empty())
 	{
@@ -1613,4 +1613,14 @@ void NDBaseRole::drawCoord(const CCPoint& posScreen, bool bRightUp /*= true*/,
 
 	ccDrawLine(pos, ccpAdd(pos, ccp(ofs, 0)));
 	ccDrawLine(pos, ccpAdd(pos, ccp(0, ofs * (bRightUp ? 1 : -1))));
+}
+
+void NDBaseRole::SetName( const std::string& strName )
+{
+	m_strName = strName;
+}
+
+void NDBaseRole::SetRank( const std::string& strRank )
+{
+	m_strRank = strRank;
 }

@@ -332,7 +332,7 @@ bool NDPlayer::ClickPoint(CCPoint point, bool bLongTouch, bool bPath/*=true*/)
 						{
 							point = ccpAdd(pos, CCPointMake(0, 30));
 
-							AutoPathTipObj.work(npc->m_strName);
+							AutoPathTipObj.work(npc->GetName());
 							bDealed = true;
 							bNpcPath = true;
 							break;
