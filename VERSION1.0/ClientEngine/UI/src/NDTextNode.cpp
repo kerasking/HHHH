@@ -365,25 +365,25 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLinkLabel(CCString("[").getUtf8String(), uiFontSize, kColor,
+									CreateLinkLabel(GBKToUTF8("["), uiFontSize, kColor,
 											m_nItemID), true));
 				}
 				else
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLabel(CCString("[").getUtf8String(), uiFontSize, kColor,
+									CreateLabel(GBKToUTF8("["), uiFontSize, kColor,
 											m_nItemID), true));
 				}
 			}
 			continue;
 		}
 
-		char szWord[4] =
-		{ 0x00 };
+		char szWord[4] = { 0x00 };
 		if ((unsigned char) *pszText < 0x80)
 		{
-			memcpy(szWord, pszText, 1);
+			char szChar = *pszText;
+			memcpy(szWord, GBKToUTF8(&szChar), 1);
 			pszText++;
 		}
 		else
