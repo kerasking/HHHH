@@ -20,18 +20,22 @@
 #include <string.h>
 #include <stdlib.h>
 #include "StringConvert.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "third_party/win32/iconv/iconv.h"
+#else
+#include "iconv.h"
+#endif
 
 
 const char* StringConvert::convert( const char* fromcode, const char* tocode, const char* str )
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	if (!tocode || !fromcode || !str) return ""; //don't crash.
 	if (str[0] == 0) return str;
 	
 	// open iconv
 	iconv_t iconvH = iconv_open( tocode, fromcode );
-	if (iconvH == 0) return "";
+	if (iconvH == (iconv_t)-1) return "";
 	iconv(iconvH,0,0,0,0);
 
 	// static buf
@@ -39,18 +43,23 @@ const char* StringConvert::convert( const char* fromcode, const char* tocode, co
 	static char s_outbuf[buflen] = {0};
 	memset(s_outbuf, 0, buflen);
 	
-	const char* in_buf = str;
+	char* in_buf = (char*)str;
 	char* out_buf = s_outbuf;
 
 	size_t in_len = strlen(in_buf);
 	size_t out_len = buflen;
 
 	// convert
+	// 备注：windows平台和android平台iconv()函数声明不一致.
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	int result = iconv( iconvH, 
+		(const char**)&in_buf, &in_len, 
+		&out_buf, &out_len );
+#else
 	int result = iconv( iconvH, 
 		&in_buf, &in_len, 
 		&out_buf, &out_len );
-
-	iconv_close(iconvH);
+#endif
 
 	if (result == (size_t)-1)
 	{
@@ -58,10 +67,10 @@ const char* StringConvert::convert( const char* fromcode, const char* tocode, co
 		iconvctl(iconvH,ICONV_SET_DISCARD_ILSEQ,&nOne);
 		s_outbuf[0] = 0;
 	}
+
+	iconv_close(iconvH);
+
 	return s_outbuf;
-#else
-	return str; //unchanged.
-#endif
 }
 
 //slow

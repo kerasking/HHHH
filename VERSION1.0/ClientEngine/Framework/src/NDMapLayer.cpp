@@ -194,6 +194,7 @@ void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)
 
 	m_pkMapData = new NDMapData;
 	m_pkMapData->setBattleMapFlag( IsBattleBackground() );
+	m_pkMapData->setDramaMapFlag( IsDramaLayer());
 	m_pkMapData->initWithFile(pszMapFile);
 
 	if (m_pkMapData)
@@ -244,6 +245,7 @@ void NDMapLayer::Initialization(const char* mapFile)
 	m_pkMapData = new NDMapData;
 	ND_ASSERT_NO_RETURN(NULL == m_pkMapData);
 	m_pkMapData->setBattleMapFlag( IsBattleBackground() );
+	m_pkMapData->setDramaMapFlag( IsDramaLayer());
 	m_pkMapData->initWithFile(mapFile);
 
 	SetContentSize(
@@ -2016,6 +2018,14 @@ void NDMapLayer::dumpRole()
 // 			}
 // 		}
 // 	}
+}
+
+bool NDMapLayer::IsDramaLayer()
+{
+	const char* clsName = GetRuntimeClass()->className;
+	if (clsName && strstr( clsName, "DramaMapLayer") != NULL)
+		return true;
+	return false;
 }
 
 NS_NDENGINE_END

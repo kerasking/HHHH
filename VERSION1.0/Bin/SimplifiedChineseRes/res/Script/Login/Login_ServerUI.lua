@@ -452,7 +452,7 @@ end
 
 
 function p.LoginGame(strServerName,strServerIp,strServerPort)
-    LogInfo("strServerName[%s],strServerIp[%s],strServerPort[%d],p.UIN[%d]",strServerName,strServerIp,strServerPort,p.UIN);
+    LogInfo("@@login10: Login_ServerUI::LoginGame(), strServerName[%s],strServerIp[%s],strServerPort[%d],p.UIN[%d]",strServerName,strServerIp,strServerPort,p.UIN);
     --发起登陆
     local bSucc=SwichKeyToServer(strServerIp,strServerPort,SafeN2S(p.UIN),p.Pwd,strServerName);
     
@@ -520,6 +520,7 @@ end
 function p.LoginOK_Normal(param)
     p.UIN = param;
     LogInfo("p.LoginOK_Normal uin:[%d]",param);
+    
     p.ChangeUserLogin(p.UIN);
     p.RunGetServerListTimer();
     LogInfo("p.LoginOK_Normal p.worldIP:[%s]",p.worldIP);
@@ -536,7 +537,7 @@ end
 p.nTimerID = nil;
 function p.RunGetServerListTimer()
     if(p.nTimerID == nil) then
-        LogInfo("p.RunGetServerListTimer send!");
+        LogInfo("@@login06: Login_ServerUI::RunGetServerListTimer(), sendMsgConnect! [%s, %d, %d]", p.worldIP, p.worldPort, p.UIN);
         sendMsgConnect(p.worldIP, p.worldPort, p.UIN);
         p.nTimerID = RegisterTimer( p.TimerGetServerList, 30 );
     end
@@ -583,7 +584,7 @@ function p.RefreshServer(nEventType)
 end
 
 function p.ProcessServerList(netdatas)
-	LogInfo("receive_serverlist");
+	LogInfo("@@login08: receive_serverlist");
     
     
     local record = {};
@@ -598,7 +599,7 @@ function p.ProcessServerList(netdatas)
     record.sRecommend   = netdatas:ReadUnicodeString();
     record.sUrl         = netdatas:ReadUnicodeString();
     
-    LogInfo("nServerID:[%d],nServerStatus[%d],nServerIP[%s],nServePort[%d],sServerName:[%s],sRecommend:[%s]",record.nServerID,record.nServerStatus,record.nServerIP,record.nServePort,record.sServerName,record.sRecommend);
+    LogInfo("@@login08: nServerID:[%d],nServerStatus[%d],nServerIP[%s],nServePort[%d],sServerName:[%s],sRecommend:[%s]",record.nServerID,record.nServerStatus,record.nServerIP,record.nServePort,record.sServerName,record.sRecommend);
     
     if(record.nServerID == RECOMMEND_ID ) then
         local layer = p.getUiLayer();
@@ -614,12 +615,12 @@ function p.ProcessServerList(netdatas)
     --更新变量
     local nIndex = p.GetServerIndexByServerId(record.nServerID);
     if(nIndex == 0) then
-        LogInfo("nIndex == 0");
+        --LogInfo("nIndex == 0");
         nIndex = #p.ServerListTag + 1;
         p.ServerListTag[nIndex] = record;
         p.AddItem(nIndex);
     else
-        LogInfo("nIndex ~= 0:[%d]",nIndex);
+        --LogInfo("nIndex ~= 0:[%d]",nIndex);
         
         if(p.ServerListTag[nIndex] == nil) then
             p.ServerListTag[nIndex] = {};
@@ -640,7 +641,7 @@ function p.ProcessServerList(netdatas)
 end
 
 function p.ProcessServerRole(netdatas)
-	LogInfo("receive_serverrole");
+	LogInfo("@@login09: receive_serverrole");
     local record = {};
     
     record.nIdAccount = netdatas:ReadInt();
@@ -659,7 +660,7 @@ function p.ProcessServerRole(netdatas)
     end
     
     
-    LogInfo("nIdAccount:[%d],nServerID:[%d],nServerStatus:[%d],nProfession:[%d],nLevel:[%d],nLastLogin:[%d],sRoleName:[%s]",record.nIdAccount,record.nServerID,record.nServerStatus,record.nProfession,record.nLevel,record.nLastLogin,record.sRoleName);
+    LogInfo("@@login09: nIdAccount:[%d],nServerID:[%d],nServerStatus:[%d],nProfession:[%d],nLevel:[%d],nLastLogin:[%d],sRoleName:[%s]",record.nIdAccount,record.nServerID,record.nServerStatus,record.nProfession,record.nLevel,record.nLastLogin,record.sRoleName);
     
     
     
@@ -677,7 +678,7 @@ function p.ProcessServerRole(netdatas)
     
     
     --更新UI
-    LogInfo("record.nServerID:[%d]",record.nServerID);
+    --LogInfo("record.nServerID:[%d]",record.nServerID);
     local nIndex = p.GetServerIndexByServerId(record.nServerID);
     local container = p.GetViewContainer();
     if(container == nil) then

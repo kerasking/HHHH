@@ -508,6 +508,8 @@ void NDBeforeGameMgr::sendClientKey()
 
 void NDBeforeGameMgr::sendMsgConnect(int idAccount)
 {
+	CCLog( "@@login07: NDBeforeGameMgr::sendMsgConnect(%d)\r\n", idAccount );
+
 	NDTransData data(_MSG_CONNECT);
 
 	int dwAuthorize = 0;

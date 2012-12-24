@@ -199,43 +199,5 @@ void NDWideString::ConvertUnicodeToUTF8()
 		iter++;
 	}
 }
-
-//@zwq: 对比两个串是否相同（一个utf8编码，一个ansi）
-bool NDWideString::IsEqual_UTF8_Ansi( const char* utf8, const char* ansi )
-{
-	// early out
-	if (!utf8 || !ansi) return false;
-	if (utf8[0] == 0 && ansi[0] == 0) return true;
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	static wchar_t wbuf[1024] = {0};
-	static char buf[1024] = {0};
-	
-	// multiBytes -> wide
-	if (MultiByteToWideChar( CP_UTF8, 0, (LPCSTR)utf8, -1, wbuf, sizeof(wbuf)/sizeof(wchar_t)) > 0)
-	{
-		// wide -> ansi
-		if (WideCharToMultiByte( CP_ACP, 0, wbuf, -1, buf, sizeof(buf), NULL, NULL ) > 0)
-		{
-			// compare by both ansi
-			if (strcmp( buf, ansi ) == 0) 
-				return true;
-		}
-	}
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    NSString *sCompareUtf8 = [NSString stringWithUTF8String:utf8];
-    NSStringEncoding enc=CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
-    NSString *sAnsi2Utf8 = [NSString stringWithCString:ansi encoding:enc];
-
-    if([sCompareUtf8 isEqualToString:sAnsi2Utf8])
-        return true;
-#else
-    // compare by both ansi
-    if (strcmp( utf8, GBKToUTF8(ansi) ) == 0)
-        return true;
-#endif
-	return false;
-}
-
 //===========================================================================
 

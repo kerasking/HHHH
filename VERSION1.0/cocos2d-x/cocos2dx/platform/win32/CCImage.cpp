@@ -495,7 +495,12 @@ bool CCImage::getStringSize( const char *    in_utf8,
 	}
 
 	const char* str_gbk = CONVERT_UTF8_TO_GBK(in_utf8);
-	if (!str_gbk) return false;
+	if (!str_gbk || str_gbk[0] == 0)
+	{
+		outSizeWidth = 0;
+		outSizeHeight = 0;
+		return true;
+	}
 
 	DWORD dwFmt = DT_LEFT;
 	switch (eAlignMask)

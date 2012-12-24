@@ -46,7 +46,8 @@ end
 ---------------------------------------------------
 --装载UI并显示
 function p.ShowUI( nAccountID )
-	LogInfo( "Entry: ShowUI() nAccountID:%d",nAccountID );
+	LogInfo( "@@login05: Entry::ShowUI(), nAccountID=%d",nAccountID );
+	
     local pScene = p.GetCurrentScene();
     if ( pScene == nil ) then
 		LogInfo( "Entry: ShowUI() failed! pScene is nil" );

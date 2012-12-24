@@ -44,6 +44,7 @@
 
 #include "define.h"
 
+using namespace cocos2d;
 /////////////////////////////////////////////////////////////////////////////
 
 #define BLOCK_SOCKET (0)
@@ -112,17 +113,20 @@ void NDDataTransThread::WaitStatus(ThreadStatus status)
 //===========================================================================
 void NDDataTransThread::Start(const char* ipAddr, int port)
 {
+	CCLog( "@@login6.2: NDDataTransThread::Start()");
+
 	if (m_status == ThreadStatusRunning)
 	{
-		cocos2d::CCLog("the thread is running, can't start again!");
+		CCLog("@@login6.3: the thread is running, can't start again!");
 	}
 	else if (m_status == ThreadStatusPaused)
 	{
-		cocos2d::CCLog(
-				"the thread is paused, can't start, you can call resume methord!");
+		CCLog("@@login6.4: the thread is paused, can't start, you can call resume methord!");
 	}
 	else
 	{
+		CCLog("@@login6.5: try to connect..." );
+
 #if BLOCK_SOCKET == 1
 		bool ret = m_socket->Connect(ipAddr, port, true);
 #else
@@ -134,19 +138,18 @@ void NDDataTransThread::Start(const char* ipAddr, int port)
 			pthread_t pid;
 			if(pthread_create(&pid, NULL, execThread, this) != 0)
 			{
-				cocos2d::CCLog("create thread error, maybe memory not enough!");
+				CCLog("@@login6.6: create thread error, maybe memory not enough!");
 			}
 			else
 			{
 				m_operate = ThreadStatusRunning;
 				m_status = ThreadStatusRunning;
-				cocos2d::CCLog("thread running now.......");
+				CCLog("@@login6.7: thread running now.......");
 			}
 		}
 		else
 		{
-			cocos2d::CCLog(
-					"connect server failed, maybe the socket is connected!");
+			CCLog("@@login6.8: connect server failed, maybe the socket is connected!");
 			return;
 		}
 	}
@@ -163,7 +166,7 @@ void NDDataTransThread::Stop()
 #endif
 
 	//NDNetMsgMgr::GetSingleton().purge();	//???????????????
-	cocos2d::CCLog("user operate to stop the thread!");
+	CCLog("user operate to stop the thread!");
 }
 
 //===========================================================================
@@ -206,8 +209,7 @@ void NDDataTransThread::Execute()
 
 	m_socket->Close();
 	m_status = ThreadStatusStoped;
-	cocos2d::CCLog("thread stop");
-
+	CCLog("thread stop");
 }
 
 //===========================================================================
@@ -242,7 +244,7 @@ void NDDataTransThread::BlockDeal()
 			{
 				//NDNetMsgMgr::GetSingleton().AddBackToMenuPacket();	//???????????????
 				m_operate = ThreadStatusStoped;
-				cocos2d::CCLog("quit when recive 0xfe");
+				CCLog("quit when recive 0xfe");
 				continue;
 			}
 			else
@@ -279,7 +281,7 @@ void NDDataTransThread::BlockDeal()
 					{
 						//NDNetMsgMgr::GetSingleton().AddBackToMenuPacket();	//???????????????
 						m_operate = ThreadStatusStoped;
-						cocos2d::CCLog("quit when recive size and len");
+						CCLog("quit when recive size and len");
 						break;
 					}
 
@@ -293,7 +295,7 @@ void NDDataTransThread::BlockDeal()
 
 				if (hasRead != 4)
 				{
-					cocos2d::CCLog("read size and len error");
+					CCLog("read size and len error");
 					continue;
 				}
 
@@ -301,7 +303,7 @@ void NDDataTransThread::BlockDeal()
 
 				int code = int(ucbuffer[2] + (ucbuffer[3] << 8));
 
-				cocos2d::CCLog("ready for read msg, msgid[%d], msglen[%d]",
+				CCLog("ready for read msg, msgid[%d], msglen[%d]",
 						code, len);
 
 				do
@@ -318,7 +320,7 @@ void NDDataTransThread::BlockDeal()
 						{
 							//NDNetMsgMgr::GetSingleton().AddBackToMenuPacket();	//???????????????
 							m_operate = ThreadStatusStoped;
-							cocos2d::CCLog("quit when recive msg");
+							CCLog("quit when recive msg");
 							break;
 						}
 
@@ -332,7 +334,7 @@ void NDDataTransThread::BlockDeal()
 
 					if (hasRead != len - 6)
 					{
-						cocos2d::CCLog("read msg error, msgid[%d], msglen[%d]",
+						CCLog("read msg error, msgid[%d], msglen[%d]",
 								code, len);
 						continue;
 					}
