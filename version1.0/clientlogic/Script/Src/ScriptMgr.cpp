@@ -174,7 +174,7 @@ void ScriptMgr::DebugOutPut(const char* str)
 
 void ScriptMgr::WriteLog(const char* fmt, ...)
 {
-	if (!fmt || !m_fTest)
+	if (!fmt)
 	{
 		return;
 	}
@@ -186,7 +186,7 @@ void ScriptMgr::WriteLog(const char* fmt, ...)
 	sprintf(buffer, "%s\0", buffer);
 	va_end(argumentList);
 
-	if(strstr(buffer, "tzq") != NULL)
+	if(strstr(buffer, "tzq") != NULL && m_fTest)
 	{
 		fwrite(buffer, 1, strlen(buffer) + 1, m_fTest);
 		fwrite("\n", 1, 1, m_fTest);

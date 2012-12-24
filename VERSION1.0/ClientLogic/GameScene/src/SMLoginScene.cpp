@@ -107,7 +107,7 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 		NDUILayer * layer = new NDUILayer();
 		layer->Initialization();
-		layer->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));//不要硬编码！！
+		layer->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
 		scene->AddChild(layer);
 		scene->m_pLayerOld = layer;
 		
@@ -127,6 +127,8 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		layer->AddChild(imgBack);
 		//layer->SetFrameRect( CCRectMake(winSize.width*0.0, winSize.height*0.0, winSize.width*0.7, winSize.height*0.225f));
 		//layer->SetBackgroundColor( ccc4( 20,30,0,50) );
+
+		CCLog( "@@login01: open CSMLoginScene\r\n" );
 
 		scene->m_pTimer->SetTimer( scene, TAG_TIMER_FIRST_RUN,0.5f );
     }
@@ -270,6 +272,8 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		m_pTimer->KillTimer( this, TAG_TIMER_FIRST_RUN );
 		CreateUpdateUILayer();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );
+
         m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
 		OnEvent_LoginOKNormal(m_iAccountID);
 #else
@@ -689,6 +693,8 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& data)
 
 void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
 {
+	CCLog( "@@login03: OnEvent_LoginOKNormal()\r\n" );
+
 	m_iAccountID = iAccountID;
 #ifdef USE_MGSDK
     if(m_pLayerUpdate)
@@ -796,9 +802,9 @@ void CSMLoginScene::SetProgress( int nPercent )
 void CSMLoginScene::StartEntry()
 {
 	WriteCon( "@@ CSMLoginScene::StartEntry()\r\n" );
-	CCLOG( "@@ CSMLoginScene::StartEntry()\r\n" );
+	CCLog( "@@login04: StartEntry()\r\n" );
 
-#if 1 //取完代码android又崩溃了，先还原代码.
+#if 1
 	if (m_pLabelPromtp)
 	{
 		m_pLabelPromtp->SetText( NDCommonCString2(SZ_SETUP).c_str() );

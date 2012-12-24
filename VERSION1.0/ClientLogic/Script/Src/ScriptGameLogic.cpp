@@ -717,6 +717,8 @@ std::string Int2StrIP(int ip_Int)
 
 void sendMsgConnect(const char* pszIp, int nPort, int idAccount)
 {
+	CCLog( "@@login6.1: sendMsgConnect(%s, %d, %d)", pszIp, nPort, idAccount);
+
 	NDDataTransThread::DefaultThread()->Stop();
 	NDDataTransThread::ResetDefaultThread();
 	NDDataTransThread::DefaultThread()->Start(pszIp, nPort);
@@ -725,6 +727,7 @@ void sendMsgConnect(const char* pszIp, int nPort, int idAccount)
 	{
 		return;
 	}
+
 	NDBeforeGameMgrObj.sendMsgConnect(idAccount);
 }
 
