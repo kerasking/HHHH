@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := iconv  
+LOCAL_MODULE := libiconv_static
 LOCAL_MODULE_FILENAME := libiconv
 
 
@@ -19,4 +19,4 @@ LOCAL_C_INCLUDES += \
   $(LOCAL_PATH)/../../libcharset/include \
   $(LOCAL_PATH)/../../srclib
  
-include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_STATIC_LIBRARY)

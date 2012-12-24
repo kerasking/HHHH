@@ -64,9 +64,6 @@ public:
 protected:
 	void ConvertUTF8ToUnicode();
 	void ConvertUnicodeToUTF8();
-
-public:
-	static bool IsEqual_UTF8_Ansi( const char* utf8, const char* ansi ); //@zwq
 };
 
 /////////////////////////////////////////////////////////////////////////////
