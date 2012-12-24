@@ -67,7 +67,13 @@ CCSize getStringSizeMutiLine(const char* in_utf8, unsigned int fontSize, CCSize 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	NSString *nstext = [NSString stringWithUTF8String:in_utf8];
     NSString* strfont = [NSString stringWithUTF8String:FONT_NAME];
-	outSize = [nstext sizeWithFont:[UIFont fontWithName:strfont size:fontSize] constrainedToSize:contentSize];
+    CGSize cInSize;
+	CGSize cOutSize = CGSizeZero;
+    cInSize.width = contentSize.width;
+    cInSize.height = contentSize.height;
+	cOutSize = [nstext sizeWithFont:[UIFont fontWithName:strfont size:fontSize] constrainedToSize:cInSize];
+    outSize.width = cOutSize.width;
+    outSize.height = cOutSize.height;
 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	int width = 0, height = 0;
