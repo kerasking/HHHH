@@ -54,13 +54,13 @@ public:
 	//下载操作
 	void Download();
 public:
-	int m_fileLen;
+	int m_nFileLen;
 	//一下三个方法可看作是私有方法，外部无需关心
 	void DownloadThreadExcute();
 	virtual void DidDownloadStatus(DownloadStatus status){};
 	virtual void ReflashPercent(int percent, int pos, int filelen){};
 public:	
-	KHttp* m_http;
+	KHttp* m_pkHttp;
 	std::string m_strDownloadURL, m_strDownloadPath;
 	//MainThreadSelector *m_selObj;
 	

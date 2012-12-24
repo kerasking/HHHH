@@ -205,7 +205,8 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 				m_pTimer->KillTimer(this, TAG_TIMER_UPDATE);
 				return;
 			}
-		}     
+		}
+
 		FromUrl(m_strUpdateURL.c_str());
 		ToPath(m_strSavePath.c_str()); 
 		Download();

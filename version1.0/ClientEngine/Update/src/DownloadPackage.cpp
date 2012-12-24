@@ -123,7 +123,7 @@ void DownloadPackage::DownloadThreadExcute()
  	{
  		DidDownloadStatus(DownloadStatusResNotFound);
  	}	
- 	else if ((nDoneLength >= m_nFileLen)&& (nDoneLength>0)) 
+ 	else if ((nDoneLength >= m_nFileLen) && (nDoneLength > 0)) 
  	{
  		DidDownloadStatus(DownloadStatusSuccess);
  	}
@@ -136,6 +136,6 @@ void DownloadPackage::DownloadThreadExcute()
 
 void DownloadPackage::Download()
 {	
-	pthread_t pid = {0};
-	pthread_create(&pid, NULL, threadExcute, this);	
+	pthread_t kPId = {0};
+	pthread_create(&kPId, NULL, threadExcute, this);	
 }
