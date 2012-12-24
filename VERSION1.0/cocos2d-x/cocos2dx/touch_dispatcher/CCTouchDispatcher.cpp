@@ -1,67 +1,67 @@
-
+/****************************************************************************
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2009      Valentin Milea
 
-httpwww.cocos2d-x.org
+http://www.cocos2d-x.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the Software), to deal
+of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, andor sell
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions
+furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+****************************************************************************/
 
-
-#include CCTouchDispatcher.h
-#include CCTouchHandler.h
-#include cocoaCCArray.h
-#include cocoaCCSet.h
-#include CCTouch.h
-#include texturesCCTexture2D.h
-#include supportdata_supportccCArray.h
-#include ccMacros.h
-#include algorithm
+#include "CCTouchDispatcher.h"
+#include "CCTouchHandler.h"
+#include "cocoa/CCArray.h"
+#include "cocoa/CCSet.h"
+#include "CCTouch.h"
+#include "textures/CCTexture2D.h"
+#include "support/data_support/ccCArray.h"
+#include "ccMacros.h"
+#include <algorithm>
 
 #if ND_MOD
-	#include CCDirector.h
-	#include ObjectTracker.h
+	#include "CCDirector.h"
+	#include "ObjectTracker.h"
 #endif
 
 NS_CC_BEGIN
 
-
-  Used for sort
- 
-static int less(const CCObject p1, const CCObject p2)
+/**
+ * Used for sort
+ */
+static int less(const CCObject* p1, const CCObject* p2)
 {
 #if 0
-	备注：当多个同类型的Layer显示时，一个priority不够用，
-			因此加个subPriority，规则一样是数值小的优先处理.
+	//备注：当多个同类型的Layer显示时，一个priority不够用，
+	//		因此加个subPriority，规则一样是数值小的优先处理.
 
-	CCTouchHandler h1 = (CCTouchHandler)p1;
-	CCTouchHandler h2 = (CCTouchHandler)p2;
+	CCTouchHandler* h1 = (CCTouchHandler*)p1;
+	CCTouchHandler* h2 = (CCTouchHandler*)p2;
 
-	if (h1-getPriority()  h2-getPriority())
+	if (h1->getPriority() < h2->getPriority())
 	{
 		return 1;
 	}
 
-	if (h1-getPriority() == h2-getPriority())
+	if (h1->getPriority() == h2->getPriority())
 	{
-		CCTouchDelegate d1 = h1-getDelegate();
-		CCTouchDelegate d2 = h2-getDelegate();
-		if (d1-getSubPriority()  d2-getSubPriority())
+		CCTouchDelegate* d1 = h1->getDelegate();
+		CCTouchDelegate* d2 = h2->getDelegate();
+		if (d1->getSubPriority() < d2->getSubPriority())
 		{
 			return 1;
 		}
@@ -69,40 +69,40 @@ static int less(const CCObject p1, const CCObject p2)
 	return 0;
 
 #else
-    return ((CCTouchHandler)p1)-getPriority()  ((CCTouchHandler)p2)-getPriority();
+    return ((CCTouchHandler*)p1)->getPriority() < ((CCTouchHandler*)p2)->getPriority();
 #endif
 }
 
-bool CCTouchDispatcherisDispatchEvents(void)
+bool CCTouchDispatcher::isDispatchEvents(void)
 {
     return m_bDispatchEvents;
 }
 
-void CCTouchDispatchersetDispatchEvents(bool bDispatchEvents)
+void CCTouchDispatcher::setDispatchEvents(bool bDispatchEvents)
 {
     m_bDispatchEvents = bDispatchEvents;
 }
 
-
-+(id) allocWithZone(CCZone )zone
+/*
++(id) allocWithZone:(CCZone *)zone
 {
     @synchronized(self) {
-        CCAssert(sharedDispatcher == nil, @Attempted to allocate a second instance of a singleton.);
-        return [super allocWithZonezone];
+        CCAssert(sharedDispatcher == nil, @"Attempted to allocate a second instance of a singleton.");
+        return [super allocWithZone:zone];
     }
-    return nil;  on subsequent allocation attempts return nil
+    return nil; // on subsequent allocation attempts return nil
 }
+*/
 
-
-bool CCTouchDispatcherinit(void)
+bool CCTouchDispatcher::init(void)
 {
     m_bDispatchEvents = true;
-    m_pTargetedHandlers = CCArraycreateWithCapacity(8);
-    m_pTargetedHandlers-retain();
-     m_pStandardHandlers = CCArraycreateWithCapacity(4);
-    m_pStandardHandlers-retain();
-    m_pHandlersToAdd = CCArraycreateWithCapacity(8);
-    m_pHandlersToAdd-retain();
+    m_pTargetedHandlers = CCArray::createWithCapacity(8);
+    m_pTargetedHandlers->retain();
+     m_pStandardHandlers = CCArray::createWithCapacity(4);
+    m_pStandardHandlers->retain();
+    m_pHandlersToAdd = CCArray::createWithCapacity(8);
+    m_pHandlersToAdd->retain();
     m_pHandlersToRemove = ccCArrayNew(8);
 
     m_bToRemove = false;
@@ -124,20 +124,20 @@ bool CCTouchDispatcherinit(void)
 }
 
 #if ND_MOD
-CCTouchDispatcherCCTouchDispatcher() 
-	 m_pTargetedHandlers(NULL)
+CCTouchDispatcher::CCTouchDispatcher() 
+	: m_pTargetedHandlers(NULL)
 	, m_pStandardHandlers(NULL)
 	, m_pHandlersToAdd(NULL)
 	, m_pHandlersToRemove(NULL)
 {
-	INC_CCOBJ(CCTouchDispatcher);
+	INC_CCOBJ("CCTouchDispatcher");
 }
 #endif
 
-CCTouchDispatcher~CCTouchDispatcher(void)
+CCTouchDispatcher::~CCTouchDispatcher(void)
 {
 #if ND_MOD
-	DEC_CCOBJ(CCTouchDispatcher);
+	DEC_CCOBJ("CCTouchDispatcher");
 #endif
 
      CC_SAFE_RELEASE(m_pTargetedHandlers);
@@ -148,122 +148,122 @@ CCTouchDispatcher~CCTouchDispatcher(void)
     m_pHandlersToRemove = NULL;    
 }
 
-
- handlers management
-
-void CCTouchDispatcherforceAddHandler(CCTouchHandler pHandler, CCArray pArray)
+//
+// handlers management
+//
+void CCTouchDispatcher::forceAddHandler(CCTouchHandler *pHandler, CCArray *pArray)
 {
     unsigned int u = 0;
 
-    CCObject pObj = NULL;
+    CCObject* pObj = NULL;
     CCARRAY_FOREACH(pArray, pObj)
      {
-         CCTouchHandler h = (CCTouchHandler )pObj;
+         CCTouchHandler *h = (CCTouchHandler *)pObj;
          if (h)
          {
-             if (h-getPriority()  pHandler-getPriority())
+             if (h->getPriority() < pHandler->getPriority())
              {
                  ++u;
              }
  
 #if 0
-			 if (h-getPriority() == pHandler-getPriority())
+			 if (h->getPriority() == pHandler->getPriority())
 			 {
-				 if (h-getDelegate()-getSubPriority()  pHandler-getDelegate()-getSubPriority())
+				 if (h->getDelegate()->getSubPriority() < pHandler->getDelegate()->getSubPriority())
 				 {
 					 ++u;
 				 }
 			 }
 #endif
 
-             if (h-getDelegate() == pHandler-getDelegate())
+             if (h->getDelegate() == pHandler->getDelegate())
              {
-                 CCAssert(0, );
+                 CCAssert(0, "");
                  return;
              }
          }
      }
 
-    pArray-insertObject(pHandler, u);
+    pArray->insertObject(pHandler, u);
 }
 
-void CCTouchDispatcheraddStandardDelegate(CCTouchDelegate pDelegate, int nPriority)
+void CCTouchDispatcher::addStandardDelegate(CCTouchDelegate *pDelegate, int nPriority)
 {    
-    CCTouchHandler pHandler = CCStandardTouchHandlerhandlerWithDelegate(pDelegate, nPriority);
+    CCTouchHandler *pHandler = CCStandardTouchHandler::handlerWithDelegate(pDelegate, nPriority);
     if (! m_bLocked)
     {
         forceAddHandler(pHandler, m_pStandardHandlers);
     }
     else
     {
-         If pHandler is contained in m_pHandlersToRemove, if so remove it from m_pHandlersToRemove and return.
-          Refer issue #752(cocos2d-x)
-         
+        /* If pHandler is contained in m_pHandlersToRemove, if so remove it from m_pHandlersToRemove and return.
+         * Refer issue #752(cocos2d-x)
+         */
         if (ccCArrayContainsValue(m_pHandlersToRemove, pDelegate))
         {
             ccCArrayRemoveValue(m_pHandlersToRemove, pDelegate);
             return;
         }
 
-        m_pHandlersToAdd-addObject(pHandler);
+        m_pHandlersToAdd->addObject(pHandler);
         m_bToAdd = true;
     }
 }
 
-void CCTouchDispatcheraddTargetedDelegate(CCTouchDelegate pDelegate, int nPriority, bool bSwallowsTouches)
+void CCTouchDispatcher::addTargetedDelegate(CCTouchDelegate *pDelegate, int nPriority, bool bSwallowsTouches)
 {    
-    CCTouchHandler pHandler = CCTargetedTouchHandlerhandlerWithDelegate(pDelegate, nPriority, bSwallowsTouches);
+    CCTouchHandler *pHandler = CCTargetedTouchHandler::handlerWithDelegate(pDelegate, nPriority, bSwallowsTouches);
     if (! m_bLocked)
     {
         forceAddHandler(pHandler, m_pTargetedHandlers);
     }
     else
     {
-         If pHandler is contained in m_pHandlersToRemove, if so remove it from m_pHandlersToRemove and return.
-          Refer issue #752(cocos2d-x)
-         
+        /* If pHandler is contained in m_pHandlersToRemove, if so remove it from m_pHandlersToRemove and return.
+         * Refer issue #752(cocos2d-x)
+         */
         if (ccCArrayContainsValue(m_pHandlersToRemove, pDelegate))
         {
             ccCArrayRemoveValue(m_pHandlersToRemove, pDelegate);
             return;
         }
         
-        m_pHandlersToAdd-addObject(pHandler);
+        m_pHandlersToAdd->addObject(pHandler);
         m_bToAdd = true;
     }
 }
 
-void CCTouchDispatcherforceRemoveDelegate(CCTouchDelegate pDelegate)
+void CCTouchDispatcher::forceRemoveDelegate(CCTouchDelegate *pDelegate)
 {
-    CCTouchHandler pHandler;
+    CCTouchHandler *pHandler;
 
-     XXX remove it from both handlers 
+    // XXX: remove it from both handlers ???
     
-     remove handler from m_pStandardHandlers
-    CCObject pObj = NULL;
+    // remove handler from m_pStandardHandlers
+    CCObject* pObj = NULL;
     CCARRAY_FOREACH(m_pStandardHandlers, pObj)
     {
-        pHandler = (CCTouchHandler)pObj;
-        if (pHandler && pHandler-getDelegate() == pDelegate)
+        pHandler = (CCTouchHandler*)pObj;
+        if (pHandler && pHandler->getDelegate() == pDelegate)
         {
-            m_pStandardHandlers-removeObject(pHandler);
+            m_pStandardHandlers->removeObject(pHandler);
             break;
         }
     }
 
-     remove handler from m_pTargetedHandlers
+    // remove handler from m_pTargetedHandlers
     CCARRAY_FOREACH(m_pTargetedHandlers, pObj)
     {
-        pHandler = (CCTouchHandler)pObj;
-        if (pHandler && pHandler-getDelegate() == pDelegate)
+        pHandler = (CCTouchHandler*)pObj;
+        if (pHandler && pHandler->getDelegate() == pDelegate)
         {
-            m_pTargetedHandlers-removeObject(pHandler);
+            m_pTargetedHandlers->removeObject(pHandler);
             break;
         }
     }
 }
 
-void CCTouchDispatcherremoveDelegate(CCTouchDelegate pDelegate)
+void CCTouchDispatcher::removeDelegate(CCTouchDelegate *pDelegate)
 {
     if (pDelegate == NULL)
     {
@@ -276,13 +276,13 @@ void CCTouchDispatcherremoveDelegate(CCTouchDelegate pDelegate)
     }
     else
     {
-         If pHandler is contained in m_pHandlersToAdd, if so remove it from m_pHandlersToAdd and return.
-          Refer issue #752(cocos2d-x)
-         
-        CCTouchHandler pHandler = findHandler(m_pHandlersToAdd, pDelegate);
+        /* If pHandler is contained in m_pHandlersToAdd, if so remove it from m_pHandlersToAdd and return.
+         * Refer issue #752(cocos2d-x)
+         */
+        CCTouchHandler *pHandler = findHandler(m_pHandlersToAdd, pDelegate);
         if (pHandler)
         {
-            m_pHandlersToAdd-removeObject(pHandler);
+            m_pHandlersToAdd->removeObject(pHandler);
             return;
         }
 
@@ -291,13 +291,13 @@ void CCTouchDispatcherremoveDelegate(CCTouchDelegate pDelegate)
     }
 }
 
-void CCTouchDispatcherforceRemoveAllDelegates(void)
+void CCTouchDispatcher::forceRemoveAllDelegates(void)
 {
-     m_pStandardHandlers-removeAllObjects();
-     m_pTargetedHandlers-removeAllObjects();
+     m_pStandardHandlers->removeAllObjects();
+     m_pTargetedHandlers->removeAllObjects();
 }
 
-void CCTouchDispatcherremoveAllDelegates(void)
+void CCTouchDispatcher::removeAllDelegates(void)
 {
     if (! m_bLocked)
     {
@@ -309,13 +309,13 @@ void CCTouchDispatcherremoveAllDelegates(void)
     }
 }
 
-CCTouchHandler CCTouchDispatcherfindHandler(CCTouchDelegate pDelegate)
+CCTouchHandler* CCTouchDispatcher::findHandler(CCTouchDelegate *pDelegate)
 {
-    CCObject pObj = NULL;
+    CCObject* pObj = NULL;
     CCARRAY_FOREACH(m_pTargetedHandlers, pObj)
     {
-        CCTouchHandler pHandler = (CCTouchHandler)pObj;
-        if (pHandler-getDelegate() == pDelegate)
+        CCTouchHandler* pHandler = (CCTouchHandler*)pObj;
+        if (pHandler->getDelegate() == pDelegate)
         {
             return pHandler;
         }
@@ -323,8 +323,8 @@ CCTouchHandler CCTouchDispatcherfindHandler(CCTouchDelegate pDelegate)
 
     CCARRAY_FOREACH(m_pStandardHandlers, pObj)
     {
-        CCTouchHandler pHandler = (CCTouchHandler)pObj;
-        if (pHandler-getDelegate() == pDelegate)
+        CCTouchHandler* pHandler = (CCTouchHandler*)pObj;
+        if (pHandler->getDelegate() == pDelegate)
         {
             return pHandler;
         }
@@ -333,15 +333,15 @@ CCTouchHandler CCTouchDispatcherfindHandler(CCTouchDelegate pDelegate)
     return NULL;
 }
 
-CCTouchHandler CCTouchDispatcherfindHandler(CCArray pArray, CCTouchDelegate pDelegate)
+CCTouchHandler* CCTouchDispatcher::findHandler(CCArray* pArray, CCTouchDelegate *pDelegate)
 {
-    CCAssert(pArray != NULL && pDelegate != NULL, );
+    CCAssert(pArray != NULL && pDelegate != NULL, "");
 
-    CCObject pObj = NULL;
+    CCObject* pObj = NULL;
     CCARRAY_FOREACH(pArray, pObj)
     {
-        CCTouchHandler pHandle = (CCTouchHandler)pObj;
-        if (pHandle-getDelegate() == pDelegate)
+        CCTouchHandler* pHandle = (CCTouchHandler*)pObj;
+        if (pHandle->getDelegate() == pDelegate)
         {
             return pHandle;
         }
@@ -350,63 +350,63 @@ CCTouchHandler CCTouchDispatcherfindHandler(CCArray pArray, CCTouchDelegate pDel
     return NULL;
 }
 
-void CCTouchDispatcherrearrangeHandlers(CCArray pArray)
+void CCTouchDispatcher::rearrangeHandlers(CCArray *pArray)
 {
-    stdsort(pArray-data-arr, pArray-data-arr + pArray-data-num, less);
+    std::sort(pArray->data->arr, pArray->data->arr + pArray->data->num, less);
 }
 
-void CCTouchDispatchersetPriority(int nPriority, CCTouchDelegate pDelegate)
+void CCTouchDispatcher::setPriority(int nPriority, CCTouchDelegate *pDelegate)
 {
-    CCAssert(pDelegate != NULL, );
+    CCAssert(pDelegate != NULL, "");
 
-    CCTouchHandler handler = NULL;
+    CCTouchHandler *handler = NULL;
 
-    handler = this-findHandler(pDelegate);
+    handler = this->findHandler(pDelegate);
 
-    CCAssert(handler != NULL, );
+    CCAssert(handler != NULL, "");
 	
-    if (handler-getPriority() != nPriority)
+    if (handler->getPriority() != nPriority)
     {
-        handler-setPriority(nPriority);
-        this-rearrangeHandlers(m_pTargetedHandlers);
-        this-rearrangeHandlers(m_pStandardHandlers);
+        handler->setPriority(nPriority);
+        this->rearrangeHandlers(m_pTargetedHandlers);
+        this->rearrangeHandlers(m_pStandardHandlers);
     }
 }
 
-
- dispatch events
-
-void CCTouchDispatchertouches(CCSet pTouches, CCEvent pEvent, unsigned int uIndex)
+//
+// dispatch events
+//
+void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int uIndex)
 {
-    CCAssert(uIndex = 0 && uIndex  4, );
+    CCAssert(uIndex >= 0 && uIndex < 4, "");
 
-    CCSet pMutableTouches;
+    CCSet *pMutableTouches;
     m_bLocked = true;
 
-     optimization to prevent a mutable copy when it is not necessary
-     unsigned int uTargetedHandlersCount = m_pTargetedHandlers-count();
-     unsigned int uStandardHandlersCount = m_pStandardHandlers-count();
+    // optimization to prevent a mutable copy when it is not necessary
+     unsigned int uTargetedHandlersCount = m_pTargetedHandlers->count();
+     unsigned int uStandardHandlersCount = m_pStandardHandlers->count();
     bool bNeedsMutableSet = (uTargetedHandlersCount && uStandardHandlersCount);
 
-    pMutableTouches = (bNeedsMutableSet  pTouches-mutableCopy()  pTouches);
+    pMutableTouches = (bNeedsMutableSet ? pTouches->mutableCopy() : pTouches);
 
     struct ccTouchHandlerHelperData sHelper = m_sHandlerHelperData[uIndex];
-    
-     process the target handlers 1st
-    
-    if (uTargetedHandlersCount  0)
+    //
+    // process the target handlers 1st
+    //
+    if (uTargetedHandlersCount > 0)
     {
-        CCTouch pTouch;
+        CCTouch *pTouch;
         CCSetIterator setIter;
-        for (setIter = pTouches-begin(); setIter != pTouches-end(); ++setIter)
+        for (setIter = pTouches->begin(); setIter != pTouches->end(); ++setIter)
         {
-            pTouch = (CCTouch )(setIter);
+            pTouch = (CCTouch *)(*setIter);
 
-            CCTargetedTouchHandler pHandler = NULL;
-            CCObject pObj = NULL;
+            CCTargetedTouchHandler *pHandler = NULL;
+            CCObject* pObj = NULL;
             CCARRAY_FOREACH(m_pTargetedHandlers, pObj)
             {
-                pHandler = (CCTargetedTouchHandler )(pObj);
+                pHandler = (CCTargetedTouchHandler *)(pObj);
 
                 if (! pHandler)
                 {
@@ -416,46 +416,46 @@ void CCTouchDispatchertouches(CCSet pTouches, CCEvent pEvent, unsigned int uInde
                 bool bClaimed = false;
                 if (uIndex == CCTOUCHBEGAN)
                 {
-                    bClaimed = pHandler-getDelegate()-ccTouchBegan(pTouch, pEvent);
+                    bClaimed = pHandler->getDelegate()->ccTouchBegan(pTouch, pEvent);
 
                     if (bClaimed)
                     {
-                        pHandler-getClaimedTouches()-addObject(pTouch);
+                        pHandler->getClaimedTouches()->addObject(pTouch);
                     }
                 } else
-                if (pHandler-getClaimedTouches()-containsObject(pTouch))
+                if (pHandler->getClaimedTouches()->containsObject(pTouch))
                 {
-                     moved ended canceled
+                    // moved ended canceled
                     bClaimed = true;
 
                     switch (sHelper.m_type)
                     {
-                    case CCTOUCHMOVED
-                        pHandler-getDelegate()-ccTouchMoved(pTouch, pEvent);
+                    case CCTOUCHMOVED:
+                        pHandler->getDelegate()->ccTouchMoved(pTouch, pEvent);
                         break;
-                    case CCTOUCHENDED
-                        pHandler-getDelegate()-ccTouchEnded(pTouch, pEvent);
-                        pHandler-getClaimedTouches()-removeObject(pTouch);
+                    case CCTOUCHENDED:
+                        pHandler->getDelegate()->ccTouchEnded(pTouch, pEvent);
+                        pHandler->getClaimedTouches()->removeObject(pTouch);
                         break;
-                    case CCTOUCHCANCELLED
-                        pHandler-getDelegate()-ccTouchCancelled(pTouch, pEvent);
-                        pHandler-getClaimedTouches()-removeObject(pTouch);
+                    case CCTOUCHCANCELLED:
+                        pHandler->getDelegate()->ccTouchCancelled(pTouch, pEvent);
+                        pHandler->getClaimedTouches()->removeObject(pTouch);
                         break;
                     }
                 }
 
-                if (bClaimed && pHandler-isSwallowsTouches())
+                if (bClaimed && pHandler->isSwallowsTouches())
                 {
                     if (bNeedsMutableSet)
                     {
-                        pMutableTouches-removeObject(pTouch);
+                        pMutableTouches->removeObject(pTouch);
                     }
 #if ND_MOD && 0
-					CCLog( @@ CCTouchDispatchertouches(), %s swallowed!! touchCount=%d, uIndex=%d, (priority=%d, subPriority=%d), handle=%08X, delegate=%08Xrn, 
-						pHandler-getDelegate()-getDebugName(), 
-						pTouches-count(), uIndex,
-						pHandler-getPriority(), pHandler-getDelegate()-getSubPriority(),
-						pHandler, pHandler-getDelegate());
+					CCLog( "@@ CCTouchDispatcher::touches(), %s swallowed!! touchCount=%d, uIndex=%d, (priority=%d, subPriority=%d), handle=%08X, delegate=%08X\r\n", 
+						pHandler->getDelegate()->getDebugName(), 
+						pTouches->count(), uIndex,
+						pHandler->getPriority(), pHandler->getDelegate()->getSubPriority(),
+						pHandler, pHandler->getDelegate());
 #endif
                     break;
                 }
@@ -463,16 +463,16 @@ void CCTouchDispatchertouches(CCSet pTouches, CCEvent pEvent, unsigned int uInde
         }
     }
 
-    
-     process standard handlers 2nd
-    
-    if (uStandardHandlersCount  0 && pMutableTouches-count()  0)
+    //
+    // process standard handlers 2nd
+    //
+    if (uStandardHandlersCount > 0 && pMutableTouches->count() > 0)
     {
-        CCStandardTouchHandler pHandler = NULL;
-        CCObject pObj = NULL;
+        CCStandardTouchHandler *pHandler = NULL;
+        CCObject* pObj = NULL;
         CCARRAY_FOREACH(m_pStandardHandlers, pObj)
         {
-            pHandler = (CCStandardTouchHandler)(pObj);
+            pHandler = (CCStandardTouchHandler*)(pObj);
 
             if (! pHandler)
             {
@@ -481,17 +481,17 @@ void CCTouchDispatchertouches(CCSet pTouches, CCEvent pEvent, unsigned int uInde
 
             switch (sHelper.m_type)
             {
-            case CCTOUCHBEGAN
-                pHandler-getDelegate()-ccTouchesBegan(pMutableTouches, pEvent);
+            case CCTOUCHBEGAN:
+                pHandler->getDelegate()->ccTouchesBegan(pMutableTouches, pEvent);
                 break;
-            case CCTOUCHMOVED
-                pHandler-getDelegate()-ccTouchesMoved(pMutableTouches, pEvent);
+            case CCTOUCHMOVED:
+                pHandler->getDelegate()->ccTouchesMoved(pMutableTouches, pEvent);
                 break;
-            case CCTOUCHENDED
-                pHandler-getDelegate()-ccTouchesEnded(pMutableTouches, pEvent);
+            case CCTOUCHENDED:
+                pHandler->getDelegate()->ccTouchesEnded(pMutableTouches, pEvent);
                 break;
-            case CCTOUCHCANCELLED
-                pHandler-getDelegate()-ccTouchesCancelled(pMutableTouches, pEvent);
+            case CCTOUCHCANCELLED:
+                pHandler->getDelegate()->ccTouchesCancelled(pMutableTouches, pEvent);
                 break;
             }
         }
@@ -499,20 +499,20 @@ void CCTouchDispatchertouches(CCSet pTouches, CCEvent pEvent, unsigned int uInde
 
     if (bNeedsMutableSet)
     {
-        pMutableTouches-release();
+        pMutableTouches->release();
     }
 
-    
-     Optimization. To prevent a [handlers copy] which is expensive
-     the addremovesquit is done after the iterations
-    
+    //
+    // Optimization. To prevent a [handlers copy] which is expensive
+    // the add/removes/quit is done after the iterations
+    //
     m_bLocked = false;
     if (m_bToRemove)
     {
         m_bToRemove = false;
-        for (unsigned int i = 0; i  m_pHandlersToRemove-num; ++i)
+        for (unsigned int i = 0; i < m_pHandlersToRemove->num; ++i)
         {
-            forceRemoveDelegate((CCTouchDelegate)m_pHandlersToRemove-arr[i]);
+            forceRemoveDelegate((CCTouchDelegate*)m_pHandlersToRemove->arr[i]);
         }
         ccCArrayRemoveAllValues(m_pHandlersToRemove);
     }
@@ -520,17 +520,17 @@ void CCTouchDispatchertouches(CCSet pTouches, CCEvent pEvent, unsigned int uInde
     if (m_bToAdd)
     {
         m_bToAdd = false;
-        CCTouchHandler pHandler = NULL;
-        CCObject pObj = NULL;
+        CCTouchHandler* pHandler = NULL;
+        CCObject* pObj = NULL;
         CCARRAY_FOREACH(m_pHandlersToAdd, pObj)
          {
-             pHandler = (CCTouchHandler)pObj;
+             pHandler = (CCTouchHandler*)pObj;
             if (! pHandler)
             {
                 break;
             }
 
-            if (dynamic_castCCTargetedTouchHandler(pHandler) != NULL)
+            if (dynamic_cast<CCTargetedTouchHandler*>(pHandler) != NULL)
             {                
                 forceAddHandler(pHandler, m_pTargetedHandlers);
             }
@@ -540,7 +540,7 @@ void CCTouchDispatchertouches(CCSet pTouches, CCEvent pEvent, unsigned int uInde
             }
          }
  
-         m_pHandlersToAdd-removeAllObjects();    
+         m_pHandlersToAdd->removeAllObjects();    
     }
 
     if (m_bToQuit)
@@ -550,161 +550,161 @@ void CCTouchDispatchertouches(CCSet pTouches, CCEvent pEvent, unsigned int uInde
     }
 }
 
-void CCTouchDispatchertouchesBegan(CCSet touches, CCEvent pEvent)
+void CCTouchDispatcher::touchesBegan(CCSet *touches, CCEvent *pEvent)
 {
 #if ND_MOD
-	CCSize winSize = CCDirectorsharedDirector()-getWinSize();
-	CCTouch touch = (CCTouch ) touches-anyObject();
-	CCPoint curPos = touch-locationInView();
-	CCPoint prePos = touch-previousLocationInView();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+	CCTouch *touch = (CCTouch *) touches->anyObject();
+	CCPoint curPos = touch->locationInView();
+	CCPoint prePos = touch->previousLocationInView();
 
-	m_curPos = CCPointMake(curPos.y, winSize.height - curPos.x);
-	m_prePos = CCPointMake(prePos.y, winSize.height - prePos.x);
-	 	m_curPos = CCPointMake(curPos.x, winSize.height - curPos.y);
-	 	m_prePos = CCPointMake(prePos.x, winSize.height - prePos.y);
+	//m_curPos = CCPointMake(curPos.y, winSize.height - curPos.x);
+	//m_prePos = CCPointMake(prePos.y, winSize.height - prePos.x);
+	// 	m_curPos = CCPointMake(curPos.x, winSize.height - curPos.y);
+	// 	m_prePos = CCPointMake(prePos.x, winSize.height - prePos.y);
 	m_curPos = curPos;
 	m_prePos = prePos;
 #endif
 
 	if (m_bDispatchEvents)
 	{
-		CCLog( @@ CCTouchDispatchertouchesBegan( %d, %d )rn, int(m_curPos.x), int(m_curPos.y) );
+		//CCLog( "@@ CCTouchDispatcher::touchesBegan( %d, %d )\r\n", int(m_curPos.x), int(m_curPos.y) );
 
-		this-touches(touches, pEvent, CCTOUCHBEGAN);
+		this->touches(touches, pEvent, CCTOUCHBEGAN);
 	}
 }
 
-void CCTouchDispatchertouchesMoved(CCSet touches, CCEvent pEvent)
+void CCTouchDispatcher::touchesMoved(CCSet *touches, CCEvent *pEvent)
 {
 #if ND_MOD
-	CCSize winSize = CCDirectorsharedDirector()-getWinSize();
-	CCTouch touch = (CCTouch ) touches-anyObject();
-	CCPoint curPos = touch-locationInView();
-	CCPoint prePos = touch-previousLocationInView();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+	CCTouch *touch = (CCTouch *) touches->anyObject();
+	CCPoint curPos = touch->locationInView();
+	CCPoint prePos = touch->previousLocationInView();
 
-	 	m_curPos = CCPointMake(curPos.y, winSize.height - curPos.x);
-	 	m_prePos = CCPointMake(prePos.y, winSize.height - prePos.x);
-	 	m_curPos = CCPointMake(curPos.x, winSize.height - curPos.y);
-	 	m_prePos = CCPointMake(prePos.x, winSize.height - prePos.y);
+	// 	m_curPos = CCPointMake(curPos.y, winSize.height - curPos.x);
+	// 	m_prePos = CCPointMake(prePos.y, winSize.height - prePos.x);
+	// 	m_curPos = CCPointMake(curPos.x, winSize.height - curPos.y);
+	// 	m_prePos = CCPointMake(prePos.x, winSize.height - prePos.y);
 	m_curPos = curPos;
 	m_prePos = prePos;
 #endif
 
     if (m_bDispatchEvents)
 	{
-		this-touches(touches, pEvent, CCTOUCHMOVED);
+		this->touches(touches, pEvent, CCTOUCHMOVED);
 	}
 }
 
-void CCTouchDispatchertouchesEnded(CCSet touches, CCEvent pEvent)
+void CCTouchDispatcher::touchesEnded(CCSet *touches, CCEvent *pEvent)
 {
 #if ND_MOD
-	CCSize winSize = CCDirectorsharedDirector()-getWinSize();
-	CCTouch touch = (CCTouch ) touches-anyObject();
-	CCPoint curPos = touch-locationInView();
-	CCPoint prePos = touch-previousLocationInView();
+	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+	CCTouch *touch = (CCTouch *) touches->anyObject();
+	CCPoint curPos = touch->locationInView();
+	CCPoint prePos = touch->previousLocationInView();
 
-	 	m_curPos = CCPointMake(curPos.y, winSize.height - curPos.x);
-	 	m_prePos = CCPointMake(prePos.y, winSize.height - prePos.x);
-	 	m_curPos = CCPointMake(curPos.x, winSize.height - curPos.y);
-	 	m_prePos = CCPointMake(prePos.x, winSize.height - prePos.y);
+	// 	m_curPos = CCPointMake(curPos.y, winSize.height - curPos.x);
+	// 	m_prePos = CCPointMake(prePos.y, winSize.height - prePos.x);
+	// 	m_curPos = CCPointMake(curPos.x, winSize.height - curPos.y);
+	// 	m_prePos = CCPointMake(prePos.x, winSize.height - prePos.y);
 	m_curPos = curPos;
 	m_prePos = prePos;
 #endif
 
     if (m_bDispatchEvents)
 	{
-		CCLog( @@ CCTouchDispatchertouchesEnded( %d, %d )rn, int(m_curPos.x), int(m_curPos.y));
+		//CCLog( "@@ CCTouchDispatcher::touchesEnded( %d, %d )\r\n", int(m_curPos.x), int(m_curPos.y));
 
-		this-touches(touches, pEvent, CCTOUCHENDED);
+		this->touches(touches, pEvent, CCTOUCHENDED);
 	}
 }
 
-void CCTouchDispatchertouchesCancelled(CCSet touches, CCEvent pEvent)
+void CCTouchDispatcher::touchesCancelled(CCSet *touches, CCEvent *pEvent)
 {
 #if ND_MOD
- 	CCSize winSize = CCDirectorsharedDirector()-getWinSize();
- 	CCTouch touch = (CCTouch )touches-anyObject();
- 	CCPoint curPos = touch-locationInView();
- 	CCPoint prePos = touch-previousLocationInView();
- 
- 	m_curPos = CCPointMake(curPos.y, winSize.height - curPos.x);
- 	m_prePos = CCPointMake(prePos.y, winSize.height - prePos.x);
+ 	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+ 	CCTouch *touch = (CCTouch *)touches->anyObject();
+ 	CCPoint curPos = touch->locationInView();
+ 	CCPoint prePos = touch->previousLocationInView();
+// 
+// 	m_curPos = CCPointMake(curPos.y, winSize.height - curPos.x);
+// 	m_prePos = CCPointMake(prePos.y, winSize.height - prePos.x);
 #endif
 
     if (m_bDispatchEvents)
 	{
-		this-touches(touches, pEvent, CCTOUCHCANCELLED);
+		this->touches(touches, pEvent, CCTOUCHCANCELLED);
 	}
 }
 
 #if ND_MOD
-CCPoint CCTouchDispatchergetCurPos()
+CCPoint CCTouchDispatcher::getCurPos()
 {
 	return m_curPos;
 }
 
-CCPoint CCTouchDispatchergetPrePos()
+CCPoint CCTouchDispatcher::getPrePos()
 {
 	return m_prePos;
 }
 
-for debug only.
-stdstring CCTouchDispatcherdump()
+//for debug only.
+std::string CCTouchDispatcher::dump()
 {
-	stdstring info;
+	std::string info;
 
 	int index = 0;
 
-	 remove handler from m_pStandardHandlers
-	CCObject pObj = NULL;
+	// remove handler from m_pStandardHandlers
+	CCObject* pObj = NULL;
 	CCARRAY_FOREACH(m_pStandardHandlers, pObj)
 	{
-		CCTouchHandler pHandler = (CCTouchHandler)pObj;
+		CCTouchHandler* pHandler = (CCTouchHandler*)pObj;
 		if (!pHandler) continue;
 
-		CCTouchDelegate del = pHandler-getDelegate();
+		CCTouchDelegate* del = pHandler->getDelegate();
 		if (!del) continue;
 
-		int priority = pHandler-getPriority();
-		int subPriority = del-getSubPriority();
+		int priority = pHandler->getPriority();
+		int subPriority = del->getSubPriority();
 
-		const char dbgName = del-getDebugName();
+		const char* dbgName = del->getDebugName();
 
-		char str[1024] = ;
-		sprintf( str, standard handler[%d] priority=%d, subPriority=%d, dbgName=%srn, 
-			index++, priority, subPriority, dbgNamedbgName );
+		char str[1024] = "";
+		sprintf( str, "standard handler[%d]: priority=%d, subPriority=%d, dbgName=%s\r\n", 
+			index++, priority, subPriority, dbgName?dbgName:"" );
 
-		CCLog( str );
+		//CCLog( str );
 		info+= str;
 	}
 
 	index = 0;
 
-	 remove handler from m_pTargetedHandlers
+	// remove handler from m_pTargetedHandlers
 	CCARRAY_FOREACH(m_pTargetedHandlers, pObj)
 	{
-		CCTouchHandler pHandler = (CCTouchHandler)pObj;
+		CCTouchHandler* pHandler = (CCTouchHandler*)pObj;
 		if (!pHandler) continue;
 
-		CCTouchDelegate del = pHandler-getDelegate();
+		CCTouchDelegate* del = pHandler->getDelegate();
 		if (!del) continue;
 
-		int priority = pHandler-getPriority();
-		int subPriority = del-getSubPriority();
+		int priority = pHandler->getPriority();
+		int subPriority = del->getSubPriority();
 
-		const char dbgName = del-getDebugName();
+		const char* dbgName = del->getDebugName();
 
-		char str[1024] = ;
-		sprintf( str, target handler[%d] priority=%d, subPriority=%d, dbgName=%srn, 
-			index++, priority, subPriority, dbgNamedbgName );
+		char str[1024] = "";
+		sprintf( str, "target handler[%d]: priority=%d, subPriority=%d, dbgName=%s\r\n", 
+			index++, priority, subPriority, dbgName?dbgName:"" );
 
-		CCLog( str );
+		//CCLog( str );
 		info+= str;
 	}
 	return info;
 }
 
-#endif ND_MOD
+#endif //ND_MOD
 
 NS_CC_END
