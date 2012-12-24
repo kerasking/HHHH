@@ -61,7 +61,7 @@ public:
 	virtual void ReflashPercent(int percent, int pos, int filelen){};
 public:	
 	KHttp* m_http;
-	std::string m_url, m_path;
+	std::string m_strDownloadURL, m_strDownloadPath;
 	//MainThreadSelector *m_selObj;
 	
 };

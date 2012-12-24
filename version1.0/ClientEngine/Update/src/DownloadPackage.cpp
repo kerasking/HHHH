@@ -43,6 +43,7 @@ void Rstrchr(const char* src,char delimit,char* outFile)
 			i--;
 		}
 	}
+
     return;
 }
 
@@ -51,7 +52,7 @@ void DownloadCallback(void *param, int percent, int pos, int filelen)
 	DownloadPackage* downer = (DownloadPackage*)param;
 	if (downer) 
 	{
-		downer->m_fileLen = filelen;
+		downer->m_nFileLen = filelen;
 		downer->ReflashPercent(percent, pos, filelen);
 	}	
 }
@@ -59,49 +60,52 @@ void DownloadCallback(void *param, int percent, int pos, int filelen)
 void* threadExcute(void* ptr)
 {
 	DownloadPackage* downer = (DownloadPackage*)ptr;
+
 	if (downer) 
 	{
 		downer->DownloadThreadExcute();
 	}
+
 	return NULL;
 }
 
 
 //IMPLEMENT_CLASS(DownloadPackage, NDObject)
 
-DownloadPackage::DownloadPackage()
+DownloadPackage::DownloadPackage():
+m_pkHttp(0)
 {	
-	m_fileLen = 0;
- 	m_http = new KHttp();
- 	m_http->setNotifyCallback(DownloadCallback, this, 1);
+	m_nFileLen = 0;
+ 	m_pkHttp = new KHttp;
+ 	m_pkHttp->setNotifyCallback(DownloadCallback, this, 1);
 }
 
 DownloadPackage::~DownloadPackage()
 {
- 	delete m_http;
+ 	delete m_pkHttp;
 }
 
 void DownloadPackage::FromUrl(const char* url)
 {
-	m_url = url;
+	m_strDownloadURL = url;
 }
 
 void DownloadPackage::ToPath(const char* path)
 {
-	m_path = path;
+	m_strDownloadPath = path;
 }
 
 void DownloadPackage::DownloadThreadExcute()
 {
- 	if (m_url.empty() || m_path.empty()) 
+ 	if (m_strDownloadURL.empty() || m_strDownloadPath.empty()) 
  	{
  		DidDownloadStatus(DownloadStatusFailed);
  		return;
  	}
-	char tmpDir[100];
-	memset(tmpDir,0,100);
- 	Rstrchr(m_path.c_str(),'/',tmpDir); 
-	string saveDir(tmpDir);
+	char szTempDir[100] = {0};
+ 	Rstrchr(m_strDownloadPath.c_str(),'/',szTempDir); 
+	string saveDir(szTempDir);
+
  	if (!KDirectory::isDirectoryExist(saveDir)) 
  	{
  		if (!KDirectory::createDir(saveDir))
@@ -111,14 +115,15 @@ void DownloadPackage::DownloadThreadExcute()
  		}
  	}	
  	
- 	m_http->setTimeout(60 * 1000);
- 	int donelen = m_http->getHttpFile(m_url.c_str(), m_path.c_str(), 0);
+ 	m_pkHttp->setTimeout(60 * 1000);
+ 	int nDoneLength = m_pkHttp->getHttpFile(m_strDownloadURL.c_str(),
+		m_strDownloadPath.c_str(), 0);
  	
- 	if (m_http->getStatusCode() == 404) 
+ 	if (m_pkHttp->getStatusCode() == 404) 
  	{
  		DidDownloadStatus(DownloadStatusResNotFound);
  	}	
- 	else if ((donelen >= m_fileLen)&& (donelen>0)) 
+ 	else if ((nDoneLength >= m_nFileLen)&& (nDoneLength>0)) 
  	{
  		DidDownloadStatus(DownloadStatusSuccess);
  	}
@@ -131,7 +136,6 @@ void DownloadPackage::DownloadThreadExcute()
 
 void DownloadPackage::Download()
 {	
-	pthread_t pid;
+	pthread_t pid = {0};
 	pthread_create(&pid, NULL, threadExcute, this);	
 }
-

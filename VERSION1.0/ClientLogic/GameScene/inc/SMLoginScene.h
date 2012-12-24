@@ -92,7 +92,7 @@ public:// twt
     DEQSTR deqUpdateUrl;
     vector<string> split(std::string& src, std::string delimit);
     std::string trim(std::string &s);
-    std::string m_savePath, m_updateURL,m_doucumentPath,m_resPath,m_cachPath;
+    std::string m_strSavePath, m_strUpdateURL,m_doucumentPath,m_resPath,m_cachPath;
     void InitDownload( std::string & szUpdatePath );
     int  PackageCount ;
     bool ReadFile( const char* file, int begin, int end, char* buf );
@@ -109,7 +109,7 @@ public:
 	void CloseUpdateUILayer();
 	
 	//œÏ”¶"_MSG_CLIENT_VERSION"œ˚œ¢ 
-	void OnMsg_ClientVersion(NDTransData& data);
+	void OnMsg_ClientVersion(NDTransData& kData);
 	
 	void OnEvent_LoginOKNormal( int iAccountID );
 	void OnEvent_LoginOKGuest( int iAccountID );

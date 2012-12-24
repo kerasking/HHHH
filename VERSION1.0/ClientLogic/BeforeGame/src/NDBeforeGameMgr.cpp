@@ -1825,18 +1825,18 @@ void NDBeforeGameMgr::SaveAccountPwdToDB(const char* pszName,
 	{
 		return;
 	}
-	unsigned char encPwd[1024] = {0};
+	unsigned char szEncPwd[1024] = {0};
 
 	if (pszPwd)
 	{
-		simpleEncode((const unsigned char*) pszPwd, encPwd);
+		simpleEncode((const unsigned char*) pszPwd, szEncPwd);
 	}
 
 	char szValue[256] = "";
-	char *sqlaccount = "REPLACE INTO account(name,type,pwd,login_time) VALUES";
+	char* pkSQLAccount = "REPLACE INTO account(name,type,pwd,login_time) VALUES";
 	sprintf(szValue, "(\'%s\',%d,\'%s\',%d);", pszName, nType,
-		(const char*) encPwd, 0);
-	std::string strSqlAccount = sqlaccount;
+		(const char*) szEncPwd, 0);
+	std::string strSqlAccount = pkSQLAccount;
 	strSqlAccount += szValue;
 
 	if (!CSqliteDBMgr::shareInstance().ExcuteSql(strSqlAccount.c_str()))
