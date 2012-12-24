@@ -72,16 +72,12 @@ public://NDUIDialogDelegate
 private:
     virtual void OnTimer(OBJID idTag);
 	
-public:// 
+public:
 	virtual void ReflashPercent( int percent, int pos, int filelen ); override
 	virtual void DidDownloadStatus(DownloadStatus status ); override
 	
+public:    
 public:
-    //virtual int     OnProcess(int nPercent); //更新进度反馈//--Guosen 2012.8.7
-    //virtual int     OnFail(const char* pszStrErr);//更新失败//--Guosen 2012.8.7
-    //virtual int		OnComplete(void); //更新完成//--Guosen 2012.8.7
-    
-public://NDUITargetDelegate
 	virtual bool OnTargetBtnEvent( NDUINode * uiNode, int targetEvent ); override
 	
 private:

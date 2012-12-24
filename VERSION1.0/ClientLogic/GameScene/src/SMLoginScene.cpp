@@ -224,7 +224,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		m_pTimer->KillTimer(this, TAG_TIMER_UNZIP_SUCCESS);
 		if ( remove(m_strSavePath.c_str()) )
 		{
-		    NDLog("delete:%s failed",m_strSavePath.c_str());//printf("É¾³ýÑ¹Ëõ°ü:%sÊ§°Ü",m_savePath.c_str());
+		    NDLog("delete:%s failed",m_strSavePath.c_str());
 		    //return;
 		}
         std::string szListFile = NDPath::GetCashesPath() + SZ_DEL_FILE;
