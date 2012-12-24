@@ -14,6 +14,19 @@
 #include "Reachability.h"
 #include "pthread.h"
 
+#ifdef ANDROID
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+
 //¥˝ µœ÷
 // bool isWifiNetWork()
 // {
@@ -102,14 +115,19 @@ void DownloadPackage::DownloadThreadExcute()
  		DidDownloadStatus(DownloadStatusFailed);
  		return;
  	}
+
+	LOGD("Download path is %s,Download URL is %s",
+		m_strDownloadPath.c_str(),m_strDownloadURL.c_str());
+
 	char szTempDir[100] = {0};
  	Rstrchr(m_strDownloadPath.c_str(),'/',szTempDir); 
-	string saveDir(szTempDir);
+	string strSaveDir(szTempDir);
 
- 	if (!KDirectory::isDirectoryExist(saveDir)) 
+ 	if (!KDirectory::isDirectoryExist(strSaveDir)) 
  	{
- 		if (!KDirectory::createDir(saveDir))
+ 		if (!KDirectory::createDir(strSaveDir))
  		{
+			LOGERROR("Create dir failed");
  			DidDownloadStatus(DownloadStatusFailed);
  			return;
  		}
@@ -118,17 +136,22 @@ void DownloadPackage::DownloadThreadExcute()
  	m_pkHttp->setTimeout(60 * 1000);
  	int nDoneLength = m_pkHttp->getHttpFile(m_strDownloadURL.c_str(),
 		m_strDownloadPath.c_str(), 0);
+
+	LOGD("Download length is %d,File length is %d",nDoneLength,m_nFileLen);
  	
  	if (m_pkHttp->getStatusCode() == 404) 
  	{
+		LOGERROR("Download DownloadStatusResNotFound!");
  		DidDownloadStatus(DownloadStatusResNotFound);
  	}	
  	else if ((nDoneLength >= m_nFileLen) && (nDoneLength > 0)) 
  	{
+		LOGD("Download succeeded!");
  		DidDownloadStatus(DownloadStatusSuccess);
  	}
  	else 
  	{
+		LOGERROR("DownloadStatusFailed,Status code is %d",m_pkHttp->getStatusCode());
  		DidDownloadStatus(DownloadStatusFailed);
  	}
  	

@@ -5,7 +5,18 @@
 #include "KCondition.h"
 #include "cpLog.h"
 
+#ifdef ANDROID
+#include <jni.h>
+#include <android/log.h>
 
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
 
 const static int MTU = 1500;
 const KData CRLF = "\r\n"; 
@@ -76,21 +87,26 @@ KHttp::getHttpFile( const KData& fullUrl, const KData& savefile, int startpos )
 {
 	KData dtServer;
 	KData dtFile;
-	KData dtFullUrl = fullUrl;
-	if ( isEqualNoCase(dtFullUrl.substr(0,7),"http://") )
+	KData kDTFullUrl = fullUrl;
+
+	LOGD("kDTFullUrl is %s",kDTFullUrl.getDataBuf());
+
+	if ( isEqualNoCase(kDTFullUrl.substr(0,7),"http://") )
 	{
-		dtFullUrl = dtFullUrl.substr( 7 );
+		kDTFullUrl = kDTFullUrl.substr( 7 );
 	}
 
-	int pos = dtFullUrl.find( "/"  );
-	if ( pos == -1 )
+	int nPos = kDTFullUrl.find( "/"  );
+
+	if ( nPos == -1 )
 	{
+		LOGERROR("nPos = -1");
 		return 0;
 	}
 	else
 	{
-		dtServer = dtFullUrl.substr( 0, pos );
-		dtFile = dtFullUrl.substr( pos );
+		dtServer = kDTFullUrl.substr( 0, nPos );
+		dtFile = kDTFullUrl.substr( nPos );
 	}
 	return getHttpFile( dtServer, dtFile, savefile, startpos );
 }
@@ -105,6 +121,7 @@ void KHttp::setUserAgent( const KData& agent )
 int
 KHttp::getHttpFile( const KData& server, const KData& httpfile, const KData& savefile, int startpos )
 {
+	LOGD("Entry getHttpFile");
 	m_dtHttpServer = server;
 	m_dtHttpFile = httpfile;
 	m_bChunked = false;
@@ -187,17 +204,18 @@ KHttp::getHttpFile( const KData& server, const KData& httpfile, const KData& sav
 
 	if ( m_dtHttpProxy.isEmpty() )
     {
-		//cpLog( LOG_DEBUG, "Connect to Server:  %s", server.getData() );
+		LOGD("Connect to Server:  %s", server.getData() );
 	    m_clientSock.setServer( server, 80 );
     }
     else
     {
-		//cpLog( LOG_DEBUG, "Connect to Server:  %s", m_dtHttpProxy.getData() );
+		LOGD("Connect to Server:  %s", m_dtHttpProxy.getData() );
         m_clientSock.setServer( m_dtHttpProxy, 80 );
     }
 	m_clientSock.initSocket();
 	if ( !m_clientSock.connect() )
 	{
+		LOGERROR("m_clientSock.connect() failed");
 		return -1;
 	}
 
@@ -205,13 +223,21 @@ KHttp::getHttpFile( const KData& server, const KData& httpfile, const KData& sav
 	m_conn.setTimeout( m_timeout );
 
 	if ( m_conn.writeData(httpRequest) != (int)httpRequest.length() )
+	{
+		LOGERROR(" m_conn.writeData(httpRequest) != (int)httpRequest.length() failed");
 		return -1;
+	}
+
 	m_iWritedBytes += httpRequest.length();
 
 	if ( !bGet )
 	{
 		if ( m_conn.writeData(dtPost) != (int)dtPost.length() )
+		{
+			LOGERROR("m_conn.writeData(dtPost) != (int)dtPost.length() failed");
 			return -1;
+		}
+
 		m_iWritedBytes += dtPost.length();
 	}
 
@@ -223,7 +249,7 @@ KHttp::getHttpFile( const KData& server, const KData& httpfile, const KData& sav
 	memset( buff, 0, MTU );
 	if ( (iRead=m_conn.readLine(buff,MTU)) <= 0 )
 	{
-		//cpLog( LOG_ERR, "Read command line err: %d", iRead );
+		LOGERROR( "Read command line err: %d", iRead );
 		m_iReadedBytes += iRead;
 		return 0;
 	}
@@ -232,20 +258,22 @@ KHttp::getHttpFile( const KData& server, const KData& httpfile, const KData& sav
 	KData dtLine( buff, iRead );
 	if ( dtLine.match(SP,&dtKData,true) == NOT_FOUND )
 	{
-		//cpLog( LOG_ERR, "Read command line mactch space err" );
+		LOGERROR("Read command line mactch space err" );
 		return 0;
 	}
 	if ( dtKData!="HTTP/1.1" && dtKData!="HTTP/1.0" )
 	{
-		//cpLog( LOG_ERR, "GET HTTP HEAD ERR" );
+		LOGERROR( "GET HTTP HEAD ERR" );
 		return 0;
 	}
 	if ( dtLine.match(SP,&dtKData,true) == NOT_FOUND )
 	{
-		//cpLog( LOG_ERR, "Read command line mactch space 2 err" );
+		LOGERROR("Read command line mactch space 2 err" );
 		return 0;
 	}
 	m_iStatusCode = (int)dtKData;
+
+	LOGD("Ready to while ( (iRead=m_conn.readLine(buff,MTU)) > 0 )");
 
 	while ( (iRead=m_conn.readLine(buff,MTU)) > 0 )
 	{
@@ -276,7 +304,7 @@ KHttp::getHttpFile( const KData& server, const KData& httpfile, const KData& sav
 
 	if ( iRead < 0 )
 	{
-		//cpLog( LOG_ERR, "read err" );
+		LOGERROR("read err" );
 		return -1;
 	}
 
@@ -285,8 +313,11 @@ KHttp::getHttpFile( const KData& server, const KData& httpfile, const KData& sav
 		if ( m_iStatusCode == 302 )
 		{
 			KData dtRedirectUrl = getRespFieldValue( "Location" );
+			LOGD("Ready to return getHttpFile( dtRedirectUrl, savefile, startpos );");
 			return getHttpFile( dtRedirectUrl, savefile, startpos );
 		}
+
+		LOGERROR(" m_iStatusCode!=200 && m_iStatusCode!=206");
 		return 0;
 	}
 
@@ -294,7 +325,7 @@ KHttp::getHttpFile( const KData& server, const KData& httpfile, const KData& sav
 	{
 		if ( !file.setFile(savefile,KFile::KFILE_READWRITE) )
 		{
-			//cpLog( LOG_ERR, "open file %s err", savefile.getData() );
+			LOGERROR("open file %s err", savefile.getData() );
 			return 0;
 		}
 	}
@@ -302,7 +333,7 @@ KHttp::getHttpFile( const KData& server, const KData& httpfile, const KData& sav
 	{
 		if ( !file.setFile(savefile,KFile::KFILE_MODIFY) )
 		{
-			//cpLog( LOG_ERR, "open file %s err", savefile.getData() );
+			LOGERROR("open file %s err", savefile.getData() );
 			return 0;
 		}
 		file.seekTo( startpos, SEEK_SET );
@@ -315,7 +346,7 @@ KHttp::getHttpFile( const KData& server, const KData& httpfile, const KData& sav
 		while( (iRead=m_conn.readLine(buff,MTU)) > 0 )
 		{
 			m_iReadedBytes += iRead;
-			if ( iRead>8 )
+			if ( iRead > 8 )
 			{
 				return -1;
 			}
@@ -366,8 +397,10 @@ KHttp::getHttpFile( const KData& server, const KData& httpfile, const KData& sav
 	}
 	else
 	{
+		LOGD("Entry if ( m_bChunked ) else ...");
 		while ( (iRead=m_conn.readn(buff,MTU)) > 0 && bRun )
 		{
+			LOGD("m_iReadedBytes += iRead; %d",iRead);
 			m_iReadedBytes += iRead;
 			file.write( (unsigned char*)buff, iRead );
 			m_iWriteLen += iRead;

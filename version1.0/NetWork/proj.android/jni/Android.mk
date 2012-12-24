@@ -13,7 +13,8 @@ LOCAL_SRC_FILES := \
 ../../src/KMutex.cpp \
 ../../src/KNetworkAddress.cpp \
 ../../src/KTcpClientSocket.cpp \
-../../src/StringData.cpp
+../../src/StringData.cpp \
+../../src/KHTTP.cpp
 
 LOCAL_C_INCLUDES := \
 $(LOCAL_PATH)/../../inc \
