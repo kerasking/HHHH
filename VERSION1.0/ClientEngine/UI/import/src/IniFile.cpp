@@ -103,15 +103,17 @@ bool CIniFile::DecryptIniFile(char *strBuf, int iBufSize)
     }
 }
 
+#define USE_INI_ENCRYPT        //定义这个宏代表使用ini加密功能
+//#undef USE_INI_ENCRYPT
 
 bool CIniFile::ReadFile()
 {
 	//先判断文件是否加密，加密的话先解密，存储在strbuffer中
+#ifdef USE_INI_ENCRYPT
 	int iBufSize = 512*1024;
 	char *strBuffer = new char[iBufSize];
 	DecryptIniFile(strBuffer, iBufSize);
-
- #if 0
+#else
 	FILE* inifile = fopen(m_strPath.c_str(), "r");
  	int curkey = -1, curval = -1;
  	if (inifile == NULL)
@@ -125,21 +127,26 @@ bool CIniFile::ReadFile()
  	std::string temp;
  	bool bNote = false;
 
-	#if 0
-char buf[2048] = {0};
- 	while (fgets(buf, 2048, inifile))
-#endif
-
+#ifdef USE_INI_ENCRYPT
 	char *p = strtok(strBuffer, "\r\n");
 	while(p)
+#else
+	char buf[2048] = {0};
+ 	while (fgets(buf, 2048, inifile))
+#endif
  	{
-		std::string readinfo = p;
-		p = strtok(NULL,  "\r\n");
-		//std::string readinfo = buf;
+		#ifdef USE_INI_ENCRYPT
+			std::string readinfo = p;
+			p = strtok(NULL,  "\r\n");
+		#else
+			std::string readinfo = buf;
+		#endif
 
  		if (readinfo != "")
  		{
- 			//TrimLeftRight( readinfo );
+			#ifndef USE_INI_ENCRYPT
+ 				TrimLeftRight( readinfo );
+			#endif
  			if( readinfo.empty() )
  				continue;
  			
@@ -178,7 +185,9 @@ char buf[2048] = {0};
  
  				readinfo = readinfo.substr( 1, pos-1 );
  				keyname = readinfo;
- 				//TrimLeftRight(keyname);
+				#ifndef USE_INI_ENCRYPT
+					TrimLeftRight( keyname );
+				#endif
  			}
  			else if( !readinfo.empty() )
  			{
@@ -191,8 +200,14 @@ char buf[2048] = {0};
  						valueline = readinfo.substr( 0, pos );
  					}
  					else
+					{
  						valueline = readinfo;
- 					//TrimLeftRight(valueline);
+					}
+
+					#ifndef USE_INI_ENCRYPT
+						TrimLeftRight( valueline );
+					#endif
+
  					if(!valueline.empty())
  						SetValueLine(keyname.c_str(), valueline.c_str());
  				}
@@ -211,19 +226,24 @@ char buf[2048] = {0};
  					{
  						value = readinfo.substr( pos+1 );
  					}
- 					//TrimLeftRight(valuename);
- 				
- 					//TrimLeftRight(value);
+
+					#ifndef USE_INI_ENCRYPT
+						TrimLeftRight(valuename);
+						TrimLeftRight(value);
+					#endif
  				
  					SetValue(keyname.c_str(),valuename.c_str(),value.c_str());
  				}
  			}
  		}
  	}
- 	//fclose(inifile);
 
-	//未解密释放内存,已解密需重写文件
-	SAFE_DELETE(strBuffer);
+	#ifdef USE_INI_ENCRYPT
+		//未解密释放内存,已解密需重写文件
+		SAFE_DELETE(strBuffer);
+	#else
+		fclose(inifile);
+	#endif
 
  	return 1;
 }
