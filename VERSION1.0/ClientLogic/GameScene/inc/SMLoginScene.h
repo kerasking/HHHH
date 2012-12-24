@@ -89,10 +89,12 @@ private:
     
 public:// twt
     typedef deque<string> DEQSTR;
-    DEQSTR deqUpdateUrl;
+    DEQSTR kDeqUpdateUrl;
     vector<string> split(std::string& src, std::string delimit);
     std::string trim(std::string &s);
-    std::string m_strSavePath, m_strUpdateURL,m_doucumentPath,m_resPath,m_cachPath;
+	std::string m_strSavePath;
+	std::string m_strUpdateURL;
+	std::string m_strCachePath;
     void InitDownload( std::string & szUpdatePath );
     int  PackageCount ;
     bool ReadFile( const char* file, int begin, int end, char* buf );

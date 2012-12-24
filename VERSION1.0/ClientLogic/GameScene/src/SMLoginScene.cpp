@@ -177,8 +177,8 @@ void CSMLoginScene::Initialization(void)
 {
 	NDScene::Initialization();
 	//m_doucumentPath = NDPath::GetDocumentPath();
-	m_cachPath = NDPath::GetCashesPath();
-	m_strSavePath = m_cachPath + "supdate.zip";
+	m_strCachePath = NDPath::GetCashesPath();
+	m_strSavePath = m_strCachePath + "supdate.zip";
 	//m_resPath = NDPath::GetResPath();
 	PackageCount = 0;
 	m_pTimer = new NDTimer();
@@ -217,7 +217,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		m_pTimer->KillTimer(this, TAG_TIMER_DOWNLOAD_SUCCESS);
         
 		//下载成功后解压文件
-		UnZipFile( m_strSavePath.c_str(), m_cachPath.c_str());
+		UnZipFile( m_strSavePath.c_str(), m_strCachePath.c_str());
 	}
     else if ( idTag == TAG_TIMER_UNZIP_SUCCESS )
 	{
@@ -227,19 +227,20 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		    NDLog("delete:%s failed",m_strSavePath.c_str());//printf("删除压缩包:%s失败",m_savePath.c_str());
 		    //return;
 		}
-        std::string szListFile = NDPath::GetCashesPath()+SZ_DEL_FILE;
+        std::string szListFile = NDPath::GetCashesPath() + SZ_DEL_FILE;
 		DeleteFileFromFile( szListFile );
     
-		if(deqUpdateUrl.size()>0)
+		if(kDeqUpdateUrl.size() > 0)
 		{
-		    deqUpdateUrl.pop_front();
+		    kDeqUpdateUrl.pop_front();
 		}
+
 		PackageCount++;
 		//查找下载队列
-		if (deqUpdateUrl.size()>0)
+		if (kDeqUpdateUrl.size() > 0)
 		{
 		    //定义保存路径
-		    m_strUpdateURL = *deqUpdateUrl.begin();
+		    m_strUpdateURL = *kDeqUpdateUrl.begin();
 		    //m_savePath = [[NSString stringWithFormat:@"%s/update%d.zip", m_cachPath.c_str(), PackageCount] UTF8String];
 		    m_pTimer->SetTimer( this, TAG_TIMER_UPDATE, 0.5f );
 		    StartDownload();
@@ -377,12 +378,12 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 // 开启更新
 bool CSMLoginScene::StartUpdate()
 {
-	if ( deqUpdateUrl.empty() )
+	if ( kDeqUpdateUrl.empty() )
 	{
 		return false;
 	}
 	//请求第一个包
-	std::string url = *deqUpdateUrl.begin();
+	std::string url = *kDeqUpdateUrl.begin();
 	m_strUpdateURL	= url;
 	m_pTimer->SetTimer( this, TAG_TIMER_UPDATE, 0.5f );	
 	StartDownload();
@@ -533,7 +534,7 @@ void CSMLoginScene::DidDownloadStatus( DownloadStatus status )
 // 初始化更新队列
 void CSMLoginScene::InitDownload( std::string & szUpdatePath )
 {
-	deqUpdateUrl.push_back(szUpdatePath);
+	kDeqUpdateUrl.push_back(szUpdatePath);
 }
 
 //++Guosen2012.8.7
@@ -561,7 +562,7 @@ bool CSMLoginScene::DeleteFileFromFile( std::string & szDelListFile )
 	std::string  lineStr;
 	while ( getline( tmpFile, lineStr ) )
 	{
-		std::string DelFile = m_cachPath + lineStr;
+		std::string DelFile = m_strCachePath + lineStr;
  		if ( remove( DelFile.c_str() ) )
 		{
 			NDLog( "删除文件失败：%s",DelFile.c_str() );
@@ -692,7 +693,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 	}
 	    
 	NDLog("URL:%s",UpdatePath.c_str());
-	deqUpdateUrl.push_back(UpdatePath);
+	kDeqUpdateUrl.push_back(UpdatePath);
 	if (bUpdate)
 	{
 		if (!bLatest) 
