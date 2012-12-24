@@ -311,7 +311,7 @@ void CUIItemButton::draw()
                 else if (m_combinePicBG)
                     m_combinePicBG->DrawInRect(scrRect);
                 else
-                  //  DrawRecttangle(scrRect, m_backgroundColor);
+					DrawRecttangle(scrRect, m_backgroundColor);
                 
                 
                 if (m_bScrollTitle && m_scrtTitle && m_scrtTitle->GetParent() == this) 
@@ -440,7 +440,7 @@ void CUIItemButton::draw()
                 
                 if (m_pSprite)
                 {
-                    //m_pSprite->SetPosition(ccpAdd(scrRect.origin, m_posSprite));
+                    m_pSprite->SetPosition(ccpAdd(scrRect.origin, m_posSprite));
                     m_pSprite->Run( CCDirector::sharedDirector()->getWinSizeInPixels() );
                 }             
                 
