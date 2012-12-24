@@ -181,12 +181,15 @@ void NDConsole::ProcessInput(const char* pszInput)
 
 			if (pkListener)
 			{
-				char* pszTemp = new char[2048];
-				memset(pszTemp,0,sizeof(char) * 2048);
+				static char cmdbuf[2048] = {0};
+				memset(cmdbuf,0,sizeof(cmdbuf));
+
 				string strResult = strInput.substr(strListenerKey.length(),
 						strInput.length());
-				strcpy_s(pszTemp,2048,strResult.c_str());
-				m_pkStringMap->insert(make_pair(strListenerKey,pszTemp));
+
+				strcpy_s(cmdbuf,sizeof(cmdbuf)-1,strResult.c_str());
+				
+				m_pkStringMap->insert(make_pair(strListenerKey,cmdbuf));
 				pkListener->processConsole(strResult.c_str());
 			}
 		}
