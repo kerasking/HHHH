@@ -10,7 +10,6 @@
 #include "NDDirector.h"
 #include "ScriptGlobalEvent.h"
 #include "ScriptInc.h"
-//#include <iconv.h>
 //#include "SimpleAudioEngine_objc.h"
 #include "NDPath.h"
 #include "SMUpdate.h"

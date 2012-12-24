@@ -30,6 +30,7 @@
 #include "NDUIScrollViewMulHand.h"
 #include "NDUIScrollContainerExpand.h"
 #include "NDUIBaseItemButton.h"
+#include "ScriptGameDataLua.h"
 
 #ifdef ANDROID
 #include <jni.h>
@@ -152,20 +153,20 @@ protected:
 		
 		LabelTextAlignment align = LabelTextAlignmentLeft;
 		
-		if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "左对齐" ))
+		if (stricmp( m_info.strTextAlign.c_str(), GetTxtPri("LeftAlign").c_str()) == 0) //左对齐
 			align = LabelTextAlignmentLeft;
 
-		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "右对齐" ))
+		else if (stricmp( m_info.strTextAlign.c_str(), GetTxtPri("RightAlign").c_str()) == 0) //右对齐
 			align = LabelTextAlignmentRight;
 
-		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "居中" ))
-			align = LabelTextAlignmentCenter;
-
-		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "水平居中" ))
+		else if (stricmp( m_info.strTextAlign.c_str(), GetTxtPri("HorzCenterAlign").c_str()) == 0) //水平居中对齐
 			align = LabelTextAlignmentHorzCenter;
 
-		else if (NDWideString::IsEqual_UTF8_Ansi( m_info.strTextAlign.c_str(), "竖直居中" ))
+		else if (stricmp( m_info.strTextAlign.c_str(), GetTxtPri("VertCenterAlign").c_str()) == 0) //竖直居中对齐
 			align = LabelTextAlignmentVertCenter;
+
+		else if (stricmp( m_info.strTextAlign.c_str(), GetTxtPri("CenterAlign").c_str()) == 0) //居中对齐
+			align = LabelTextAlignmentCenter;
 
 		return align;
 	}
