@@ -35,7 +35,7 @@ const char* StringConvert::convert( const char* fromcode, const char* tocode, co
 	
 	// open iconv
 	iconv_t iconvH = iconv_open( tocode, fromcode );
-	if (iconvH == 0) return "";
+	if (iconvH == (iconv_t)-1) return "";
 	iconv(iconvH,0,0,0,0);
 
 	// static buf
@@ -61,14 +61,15 @@ const char* StringConvert::convert( const char* fromcode, const char* tocode, co
 		&out_buf, &out_len );
 #endif
 
-	iconv_close(iconvH);
-
 	if (result == (size_t)-1)
 	{
 		int nOne = 1;
 		iconvctl(iconvH,ICONV_SET_DISCARD_ILSEQ,&nOne);
 		s_outbuf[0] = 0;
 	}
+
+	iconv_close(iconvH);
+
 	return s_outbuf;
 }
 

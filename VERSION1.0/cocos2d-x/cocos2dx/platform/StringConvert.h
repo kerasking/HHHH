@@ -27,7 +27,7 @@ public:
 	static bool isUTF8ChineseCharacter( const char* str );
 };
 
-#define CONVERT_GBK_TO_UTF8(gbk)		StringConvert::convert("gb2312", "utf-8", gbk)
-#define CONVERT_UTF8_TO_GBK(utf8)		StringConvert::convert("utf-8", "gb2312", utf8)
+#define CONVERT_GBK_TO_UTF8(gbk)		StringConvert::convert("GBK", "UTF-8", gbk)
+#define CONVERT_UTF8_TO_GBK(utf8)		StringConvert::convert("UTF-8", "GBK", utf8)
 
 #define GBKToUTF8						CONVERT_GBK_TO_UTF8 
