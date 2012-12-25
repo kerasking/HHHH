@@ -66,7 +66,7 @@ public:
             CCLOG("%s %d: error to get methodInfo", __FILE__, __LINE__);
             return false;
         }
-        //fontSize*= 2;//CC_CONTENT_SCALE_FACTOR();//涓存椂瑙ｅ喅,Android鏀寔楂樻竻
+        //fontSize*= 2;//CC_CONTENT_SCALE_FACTOR();//临时解决,Android支持高清
 
         /**create bitmap
          * this method call Cococs2dx.createBitmap()(java code) to create the bitmap, the java code

@@ -2309,12 +2309,6 @@ void Battle::drawSubAniGroup()
 
 	if (bErase)
 	{
-		struct IsSubAniGroupComplete {
-			bool operator()(NDSubAniGroup& sag) {
-				return sag.bComplete;
-			}
-		};
-
 		m_vSubAniGroup.erase(
 			remove_if(m_vSubAniGroup.begin(), m_vSubAniGroup.end(), IsSubAniGroupComplete()), 
 			m_vSubAniGroup.end());

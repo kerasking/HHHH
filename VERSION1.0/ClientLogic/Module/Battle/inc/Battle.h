@@ -86,6 +86,11 @@ enum BATTLE_COMPLETE
 	BATTLE_COMPLETE_END = 3,
 };
 
+struct IsSubAniGroupComplete {
+	bool operator()(NDSubAniGroup& sag) {
+		return sag.bComplete;
+	}
+};
 
 //------------------------------------------------------------------
 class HighlightTipStatusBar: public NDUINode
