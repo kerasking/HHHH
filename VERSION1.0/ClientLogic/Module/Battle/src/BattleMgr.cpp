@@ -34,6 +34,22 @@
 #define QUIT_BATTLE_TIMER_TAG (13621)
 #define QUIT_DRAMA_TIMER_TAG (13622)
 
+//输出测试
+#define ENABLE_DUMP_MSG 1
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) && ENABLE_DUMP_MSG
+	#define DUMP_WRITE_CON(a)			WriteCon(a)
+	#define DUMP_WRITE_CON2(a,b)		WriteCon(a,b)
+	#define DUMP_WRITE_CON3(a,b,c)		WriteCon(a,b,c)
+	#define DUMP_WRITE_CON4(a,b,c,d)	WriteCon(a,b,c,d)
+	#define DUMP_WRITE_CON5(a,b,c,d,e)	WriteCon(a,b,c,d,e)
+#else
+	#define DUMP_WRITE_CON
+	#define DUMP_WRITE_CON2(a,b)
+	#define DUMP_WRITE_CON3(a,b,c)
+	#define DUMP_WRITE_CON4(a,b,c,d)
+	#define DUMP_WRITE_CON5(a,b,c,d,e)
+#endif
+
 using std::stringstream;
 using namespace NDEngine;
 
@@ -250,8 +266,45 @@ void BattleMgr::loadRewardUI()
 	}      
 }
 
+//用于测试
+void BattleMgr::dumpBao(MSGID msgID, NDEngine::NDTransData* bao, int len)
+{
+	//return;
+	switch (msgID)
+	{
+	case _MSG_BATTLE:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_BATTLE\r\n" );
+		break;
+	case _MSG_CONTROLPOINT:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_CONTROLPOINT\r\n" );
+		break;
+	case _MSG_EFFECT:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_EFFECT\r\n" );
+		break;
+	case _MSG_BATTLEEND:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_BATTLEEND\r\n" );
+		break;
+	case _MSG_SKILLINFO:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_SKILLINFO\r\n" );
+		break;
+	case _MSG_BATTLE_SKILL_LIST:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_BATTLE_SKILL_LIST\r\n" );
+		break;
+	case _MSG_PLAYER_RECON:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_PLAYER_RECON\r\n" );
+		break;
+	case _MSG_PLAYER_EXT_RECON:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_PLAYER_EXT_RECON\r\n" );
+		break;
+	default:
+		break;
+	}
+}
+
 bool BattleMgr::process(MSGID msgID, NDEngine::NDTransData* bao, int len)
 {
+	this->dumpBao(msgID, bao, len);
+
 	switch (msgID)
 	{
 	case _MSG_BATTLE:
@@ -851,6 +904,8 @@ void BattleMgr::processBattleEffect(NDEngine::NDTransData& bao)
 		m_pkBeforeCommand = NULL;
 	}
 
+	DUMP_WRITE_CON3( "@@ battle effect: flag=%d, num=%d\r\n", int(btPackFlag), int(btEffectNum));
+
 	int idSkillActor = 0;
 	int idSkillTarget = 0;
 	for (int i = 0; i < btEffectNum; i++)
@@ -858,6 +913,9 @@ void BattleMgr::processBattleEffect(NDEngine::NDTransData& bao)
 		BATTLE_EFFECT_TYPE btEffectType = BATTLE_EFFECT_TYPE(bao.ReadShort());
 		int idActor = bao.ReadInt();
 		long data = bao.ReadLong();
+
+		DUMP_WRITE_CON5( "@@ battle effect[%02d]: type=%-20s, actor=%d, data=%d\r\n", 
+			i, this->getEffectName(btEffectType).c_str(), int(idActor), int(data));
 
 		int lookface;
 
@@ -1103,11 +1161,10 @@ void BattleMgr::processBattleEffect(NDEngine::NDTransData& bao)
 
 	if ((btPackFlag & 2) > 0)
 	{
-		BOOL bIsDramaPlaying = ScriptMgrObj.excuteLuaFunc("IfDramaPlaying","Drama",0);
-		if (bIsDramaPlaying == true)
+		NDScene* runningScene = NDDirector::DefaultDirector()->GetRunningScene();
+		if (runningScene && runningScene->IsKindOfClass(RUNTIME_CLASS(DramaScene)))
 		{
-			//m_pkBattle->StartFight();
-			return;
+			;//不打断剧情
 		}
 		else
 		{
@@ -1592,4 +1649,44 @@ BattleMgr& BattleMgr::GetBattleMgr()
 	}
 
 	return *((BattleMgr*)ms_pkSingleton);
+}
+
+string BattleMgr::getEffectName( BATTLE_EFFECT_TYPE eType )
+{
+	switch( eType )
+	{
+		case BATTLE_EFFECT_TYPE_NONE:			return "NONE";
+		
+		case BATTLE_EFFECT_TYPE_ATK:			return "ATK";	// 攻击/反击
+		case BATTLE_EFFECT_TYPE_SKILL:			return "SKILL"; // 技能(施放者)立即效果
+		case BATTLE_EFFECT_TYPE_SKILL_TARGET:	return "SKILL_TARGET"; // 技能(承受者)立即效果
+		case BATTLE_EFFECT_TYPE_LIFE:			return "LIFE"; // 生命
+		case BATTLE_EFFECT_TYPE_MANA:			return "MANA"; // 气势
+		case BATTLE_EFFECT_TYPE_DODGE:			return "DODGE"; // 闪避
+		case BATTLE_EFFECT_TYPE_DRITICAL:		return "CRITICAL"; // 暴击
+		case BATTLE_EFFECT_TYPE_BLOCK:			return "BLOCK"; // 格挡
+		case BATTLE_EFFECT_TYPE_COMBO:			return "COMBO"; // 连击
+		case BATTLE_EFFECT_TYPE_STATUS_ADD:		return "STATUS_ADD"; // 加状态
+		case BATTLE_EFFECT_TYPE_STATUS_LOST:	return "STATUS_LOST"; 	// 取消状态
+		case BATTLE_EFFECT_TYPE_STATUS_LIFE:	return "STATUS_LIFE"; // 状态去血
+		case BATTLE_EFFECT_TYPE_DEAD:			return "DEAD"; //死亡
+
+		case EFFECT_TYPE_TURN_END:				return "TURN_END"; // 回合结束
+		case EFFECT_TYPE_BATTLE_BEGIN:			return "BATTLE_BEGIN"; // 战斗开始
+		case EFFECT_TYPE_BATTLE_END:			return "BATTLE_END"; // 战斗结束
+
+		case BATTLE_EFFECT_TYPE_CTRL:			return "CTRL"; //受控--暂不处理
+		case BATTLE_EFFECT_TYPE_ESCORTING:		return "ESCORTING"; //护驾//--显示文字特效而已
+		case BATTLE_EFFECT_TYPE_COOPRATION_HIT:	return "COOPRATION_HIT"; //合击//--显示文字特效而已
+		case BATTLE_EFFECT_TYPE_CHANGE_POSTION:	return "CHANGE_POSTION"; //移位//中军移动到后军==
+
+		case BATTLE_EFFECT_TYPE_SKILL_EFFECT_TARGET:	return "EFFECT_TARGET"; // 技能附加效果目标
+		case BATTLE_EFFECT_TYPE_SKILL_EFFECT:			return "EFFECT"; // 技能附加效果
+		case BATTLE_EFFECT_TYPE_STATUS_MANA:			return "STATUS_MANA"; // 状态去气
+		case BATTLE_EFFECT_TYPE_RESIST:					return "RESIST"; // 免疫
+
+		//目前仅客户端--2002-7-24
+		case BATTLE_EFFECT_TYPE_PLAY_ANIMATION:			return "PLAY_ANIMATION"; //仅播放子动画
+	};
+	return "";
 }

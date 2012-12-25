@@ -262,6 +262,7 @@ public:
 
 public:
 	virtual bool process(MSGID msgID, NDEngine::NDTransData* bao, int len);
+	void dumpBao(MSGID msgID, NDEngine::NDTransData* bao, int len);
 
 	// 退出战斗
 	void quitBattle(bool bEraseOut = true);
@@ -293,6 +294,8 @@ public:
 	void BattleContinue();//剧情返回 战斗继续
 
 	void SetBattleOver(void);
+
+	string getEffectName( BATTLE_EFFECT_TYPE eType );
 
 private:
 	void processBattleStart(NDEngine::NDTransData& bao);
