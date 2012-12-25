@@ -53,8 +53,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	// Constants
 	// ===========================================================
 
-	private static final String TAG = Cocos2dxActivity.class.getSimpleName();
-	private static Paint s_pPaint; 
+	private static final String TAG = Cocos2dxActivity.class.getSimpleName(); 
 
 	// ===========================================================
 	// Fields
@@ -80,7 +79,6 @@ public abstract class Cocos2dxActivity extends Activity implements
 
 		Cocos2dxHelper.init(this, this);
 		TextView textView = new TextView(this);  
-		s_pPaint = textView.getPaint(); 
 	}
 
 	// ===========================================================
@@ -175,13 +173,4 @@ public abstract class Cocos2dxActivity extends Activity implements
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-	private static int getStringSize(String pString)				
-	{
-//		Paint pPaint = new Paint();
-		int w = (int) Math.ceil(s_pPaint.measureText(pString)); 
-		final FontMetricsInt fm = s_pPaint.getFontMetricsInt();
-		int h = (int) Math.ceil(fm.bottom - fm.top);
-//		Log.e("Cocos2dxActivity", String.valueOf(w)+" " +String.valueOf(h));
-		return h*10000+w;
-	}
 }

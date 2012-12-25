@@ -66,7 +66,7 @@ public:
             CCLOG("%s %d: error to get methodInfo", __FILE__, __LINE__);
             return false;
         }
-        //fontSize*= 2;//CC_CONTENT_SCALE_FACTOR();//涓存椂瑙ｅ喅,Android鏀寔楂樻竻
+        //fontSize*= 2;//CC_CONTENT_SCALE_FACTOR();//临时解决,Android支持高清
 
         /**create bitmap
          * this method call Cococs2dx.createBitmap()(java code) to create the bitmap, the java code
@@ -77,7 +77,7 @@ public:
         jstring jstrText = methodInfo.env->NewStringUTF(text);
         jstring jstrFont = methodInfo.env->NewStringUTF(pFontName);
 
-        methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, jstrText, 
+        methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, jstrText,
             jstrFont, (int)fontSize, eAlignMask, nWidth, nHeight);
 
         methodInfo.env->DeleteLocalRef(jstrText);
@@ -152,21 +152,24 @@ bool CCImage::getStringSize( const char *    in_utf8,
     
     if (JniHelper::getStaticMethodInfo(t
                                        
-                                       , "org/cocos2dx/lib/Cocos2dxActivity"
+                                       , "org/cocos2dx/lib/Cocos2dxBitmap"
                                        
                                        , "getStringSize"
                                        
-                                       , "(Ljava/lang/String;)I"))
+                                       , "(Ljava/lang/String;Ljava/lang/String;II)Ljava/lang/String;"))
         
     {
-        jstring stringArg = t.env->NewStringUTF(in_utf8);
+        jstring stringArg1 = t.env->NewStringUTF(in_utf8);
+        jstring stringArg2 = t.env->NewStringUTF(pFontName);
         
-        jint ret = (jint)t.env->CallStaticObjectMethod(t.classID, t.methodID, stringArg);
-        t.env->DeleteLocalRef(stringArg);
+        jstring ret = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID, stringArg1,stringArg2,eAlignMask,nSize);
+        sscanf(JniHelper::jstring2string(ret).c_str(), "%d %d", &outSizeWidth, &outSizeHeight);
+        
+        //outSizeHeight = (int)ret/10000;
+        //outSizeWidth =  (int)ret-outSizeHeight*10000;
+        t.env->DeleteLocalRef(stringArg1);
+        t.env->DeleteLocalRef(stringArg2);
         t.env->DeleteLocalRef(t.classID);
-        
-        outSizeHeight = (int)ret/10000;
-        outSizeWidth =  (int)ret-outSizeHeight*10000;
     }
 }
 

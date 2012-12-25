@@ -11,6 +11,7 @@
 #include "ScriptInc.h"
 #include "DramaCommand.h"
 #include "Drama.h"
+#include "NDPlayer.h"
 
 namespace NDEngine {
 
@@ -440,6 +441,7 @@ void DramaRemoveEraseInOutScene(int nKey)
 //		nPosY: 地图坐标Y(以Cell为单位)
 void DramaSetCameraPos(int nPosX, int nPosY)
 {
+	return;//@todo:暂屏蔽，错误的位置导致黑边！
 	DramaCommandCamera* command = new DramaCommandCamera;
 	command->InitWithSetPos(nPosX, nPosY);
 	DramaObj.AddCommond(command);
@@ -523,7 +525,36 @@ void DramaPlaySoundEffect(int nSoundEffectId)
 	pkCommand->InitWithSoundEffectId(nSoundEffectId);
 	DramaObj.AddCommond(pkCommand);
 }
-    
+
+//测试用
+void TestDrama()
+{
+#define GetPlayerLookFace()	NDPlayer::defaultHero().GetLookface()
+
+	DramaStart();
+	DramaLoadScene(5);
+	DramaSetCameraPos(10, 10);
+	//DramaSetCameraPos(13, 16);
+
+	//--张角
+	int nZJKey = DramaAddSprite(21300009, 2, false, "张角");
+	DramaSetSpritePosition(nZJKey, 15, 12);
+	DramaSetSpriteAni(nZJKey, 2);
+
+	//--周仓
+	int	nZCKey = DramaAddSprite(21400029, 2, true, "周仓");
+	DramaSetSpritePosition(nZCKey, 4, 10);
+	DramaSetSpriteAni(nZCKey, 2);	
+	
+	//--马腾
+	int nMTKey = DramaAddSprite(21100019, 2, true, "马腾");
+	DramaSetSpritePosition(nMTKey, 4, 14);
+	DramaSetSpriteAni(nMTKey, 2);
+
+	DramaWaitPrevActionFinishAndClick();
+	DramaFinish();
+}
+
 void ScriptDramaLoad()
 {
 	ETCFUNC("DramaPlaySoundEffect", DramaPlaySoundEffect);

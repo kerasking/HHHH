@@ -42,6 +42,8 @@ enum FIGHT_ACTION_STATUS
 	ACTION_STATUS_FINISH,
 };
 
+
+//----------------------------------------------------------------------
 //战斗奖励
 class BattleReward
 {
@@ -53,6 +55,7 @@ public:
 		m_nRepute = 0;
 		m_nEXP = 0;
 		m_nSoph = 0;
+		m_nBattleResult = 0;
 
 		for (int i = 0; i < 5; i++)
 		{
@@ -86,6 +89,7 @@ public:
 		{
 			return *this;
 		}
+
 		m_nMoney   = other.m_nMoney;
 		m_nEMoney = other.m_nEMoney;
 		m_nRepute   = other.m_nRepute;
@@ -122,6 +126,8 @@ public:
 
 	int m_nBattleResult;
 };
+//----------------------------------------------------------------------
+
 
 enum FIGHTER_ROLE_ANI
 {
@@ -148,7 +154,6 @@ struct FIGHTER_CMD
 	int actor;
 	FighterStatus* status;
 	int data;
-
 };
 
 typedef vector<FIGHTER_CMD*> VEC_FIGHTERCOMMAND;
@@ -157,6 +162,7 @@ typedef VEC_FIGHTERCOMMAND::iterator VEC_FIGHTERCOMMAND_IT;
 typedef vector<Fighter*> VEC_FIGHTER;
 typedef VEC_FIGHTER::iterator VEC_FIGHTER_IT;
 
+//----------------------------------------------------------------------
 class FightAction
 {
 public:
@@ -165,15 +171,41 @@ public:
 
 	Fighter* m_pkActor;
 	Fighter* m_pkTarget;
+
 	BATTLE_EFFECT_TYPE m_eEffectType;
 	FIGHT_ACTION_STATUS m_eActionStatus;
+	
 	int m_nData;
 	bool m_bIsCombo;
 	bool m_bIsCriticalHurt;
 	bool m_bIsDritical;
+	
+	BattleSkill* m_pkSkill;
+	FighterStatus* m_pkStatus;
+	
 	VEC_FIGHTER m_kFighterList;
+	VEC_FIGHTERCOMMAND m_vCmdList;
+
+	void init()
+	{
+		m_nTeamAttack = 0;
+		m_nTeamDefense = 0;
+		m_pkActor = NULL;
+		m_pkTarget = NULL;
+		m_eEffectType = BATTLE_EFFECT_TYPE_NONE;
+		m_eActionStatus = ACTION_STATUS_NONE;
+		m_nData = 0;
+		m_bIsCombo = false;
+		m_bIsCriticalHurt = false;
+		m_bIsDritical = false;
+		m_pkSkill = NULL;
+		m_pkStatus = NULL;
+	}
+
 	FightAction(Fighter* f1, Fighter* f2, BATTLE_EFFECT_TYPE type)
 	{
+		this->init();
+
 		m_pkActor = f1;
 		m_pkTarget = f2;
 		m_eEffectType = type;
@@ -184,6 +216,8 @@ public:
 
 	FightAction(int team1, int team2, BATTLE_EFFECT_TYPE type)
 	{
+		this->init();
+
 		m_pkActor = NULL;
 		m_pkTarget = NULL;
 		m_nTeamAttack = team1;
@@ -195,33 +229,35 @@ public:
 		m_bIsDritical = false;
 		m_pkSkill = NULL;
 	}
-	VEC_FIGHTERCOMMAND m_vCmdList;
+
 	void addCommand(FIGHTER_CMD* cmd)
 	{
-		m_vCmdList.push_back(cmd);
+		if (cmd)
+			m_vCmdList.push_back(cmd);
 	}
-	BattleSkill* m_pkSkill;
-	FighterStatus* m_pkStatus;
 };
 
 typedef vector<FightAction*> VEC_FIGHTACTION;
 typedef VEC_FIGHTACTION::iterator VEC_FIGHTACTION_IT;
 
-class BattleMgr: public NDBaseBattleMgr
+
+//----------------------------------------------------------------------
+class BattleMgr : public NDBaseBattleMgr
 {
 public:
 	BattleMgr();
 	~BattleMgr();
-
-	virtual bool process(MSGID msgID, NDEngine::NDTransData* bao, int len);
-
 	static BattleMgr& GetBattleMgr();
+
+public:
+	virtual bool process(MSGID msgID, NDEngine::NDTransData* bao, int len);
 
 	// 退出战斗
 	void quitBattle(bool bEraseOut = true);
 	void loadRewardUI();
 	BattleSkill* GetBattleSkill(OBJID idSkill);
 	void ReleaseAllBattleSkill();
+
 	MAP_BATTLE_SKILL& GetBattleSkills()
 	{
 		return m_mapBattleSkill;
@@ -231,26 +267,23 @@ public:
 	{
 		return this->m_pkBattle;
 	}
+
 	void showBattleScene();
 	void OnTimer(OBJID tag);override
 	void OnDramaFinish(); override
 	void restartLastBattle();
 	void showBattleResult();
+
 	BattleReward* GetBattleReward()
 	{
 		return m_pkBattleReward;
 	}
-	VEC_FIGHTACTION m_vActionList1; //1队战斗指令
-	VEC_FIGHTACTION m_vActionList2; //2队战斗指令
-	VEC_FIGHTACTION m_vActionList3; //3队战斗指令
-
-
+	
 	void BattleContinue();//剧情返回 战斗继续
 
-public:   
 	void SetBattleOver(void);
-private:
 
+private:
 	void processBattleStart(NDEngine::NDTransData& bao);
 	void processControlPoint(NDEngine::NDTransData& bao);
 	void processBattleEffect(NDEngine::NDTransData& bao);
@@ -260,22 +293,38 @@ private:
 	void closeUI();
 	void ReleaseActionList();
 	void RestoreActionList();
+
 private:
-	Battle* m_pkBattle;
-	ScriptDB* m_pkDatabase;
-	Command* m_pkBeforeCommand;
-	// 技能配置信息
-	MAP_BATTLE_SKILL m_mapBattleSkill;
+	//处理显示战斗胜利的结果 （包括副本战斗以及竞技场战斗）
+	void ShowBattleWinResult(int nBattleType);
+
+	//处理显示战斗失败的结果 （包括副本战斗以及竞技场战斗）
+	void ShowBattleLoseResult(int nBattleType);	
+
+	//处理显示战斗胜利回放的结果 （包括副本战斗以及竞技场战斗）
+	void ShowReplayWinResult(int nBattleType);	
+
+	//处理显示战斗失败回放的结果 （包括副本战斗以及竞技场战斗）
+	void ShowReplayLoseResult(int nBattleType);
+
+public:
+	VEC_FIGHTACTION m_vActionList1; //1队战斗指令
+	VEC_FIGHTACTION m_vActionList2; //2队战斗指令
+	VEC_FIGHTACTION m_vActionList3; //3队战斗指令
+
+private:
+	Battle*			m_pkBattle;
+	ScriptDB*		m_pkDatabase;
+	Command*		m_pkBeforeCommand;
+
 	CSMBattleScene* m_pkBattleScene;
-	NDTimer* m_pkQuitTimer;
-	NDTimer *m_pkStartDramaTimer;
+	NDTimer*		m_pkQuitTimer;
+	NDTimer*		m_pkStartDramaTimer;
+
+	BattleReward*	m_pkBattleReward;
+	BattleReward*	m_pkPrebattleReward;   //记录最近一次的信息
+
 	int m_nCurrentTeamId;
-
-	BattleReward* m_pkBattleReward;
-	BattleReward* m_pkPrebattleReward;   //记录最近一次的信息
-
-	VEC_FIGHTER m_vFighter;
-
 	int m_nBattleMapId;
 	int m_nBattleX;
 	int m_nBattleY;
@@ -287,15 +336,9 @@ private:
 	int m_nLastSceneScreenX;
 	int m_nLastSceneScreenY;
 
-private:
-	//处理显示战斗胜利的结果 （包括副本战斗以及竞技场战斗）
-	void ShowBattleWinResult(int nBattleType);
-	//处理显示战斗失败的结果 （包括副本战斗以及竞技场战斗）
-	void ShowBattleLoseResult(int nBattleType);	
-	//处理显示战斗胜利回放的结果 （包括副本战斗以及竞技场战斗）
-	void ShowReplayWinResult(int nBattleType);	
-	//处理显示战斗失败回放的结果 （包括副本战斗以及竞技场战斗）
-	void ShowReplayLoseResult(int nBattleType);
+	// 技能配置信息
+	MAP_BATTLE_SKILL	m_mapBattleSkill;
+	VEC_FIGHTER			m_vFighter;
 };
 
 #endif

@@ -97,6 +97,8 @@ public class Cocos2dxBitmap
 	{
 		final int horizontalAlignment = pAlignment & 0x0F;
 		final int verticalAlignment = (pAlignment >> 4) & 0x0F;
+		Log.d("createTextBitmap", "pWidth = " + pWidth);
+		Log.d("createTextBitmap", "pHeight = " + pHeight);
 
 		pString = Cocos2dxBitmap.refactorString(pString);
 		final Paint paint = Cocos2dxBitmap.newPaint(pFontName, pFontSize,
@@ -191,6 +193,9 @@ public class Cocos2dxBitmap
 		final FontMetricsInt fm = pPaint.getFontMetricsInt();
 		final int h = (int) Math.ceil(fm.bottom - fm.top);
 		int maxContentWidth = 0;
+		Log.d("computeTextProperty", "fm.bottom = " + fm.bottom);
+		Log.d("computeTextProperty", "fm.top = " + fm.top);
+		Log.d("computeTextProperty", "h = " + h);
 
 		final String[] lines = Cocos2dxBitmap.splitString(pString, pWidth,
 				pHeight, pPaint);
@@ -278,8 +283,9 @@ public class Cocos2dxBitmap
 		int heightPerLine = (int) Math.ceil(fm.bottom - fm.top);
 		Log.d("splitString", "fontBottom = " + fm.bottom);
 		Log.d("splitString", "fontTop = " + fm.top);
+		Log.d("splitString", "heightPerLine = " + heightPerLine);
 		Log.d("splitString", "pMaxHeight = " + pMaxHeight);
-		Log.d("splitString", "fontName = " + pString);
+		Log.d("splitString", "pString = " + pString);
 		if(heightPerLine == 0)
 		{
 			Log.e("splitString", "error to getFontMetricsInt fontName" + pString);
@@ -527,5 +533,24 @@ public class Cocos2dxBitmap
 			this.mTotalHeight = pHeightPerLine * pLines.length;
 			this.mLines = pLines;
 		}
+	}
+	
+
+	private static String getStringSize(String pString, final String pFontName,
+			final int pFontSize, final int pAlignment)				
+	{
+		final int horizontalAlignment = pAlignment & 0x0F;
+		final int verticalAlignment = (pAlignment >> 4) & 0x0F;
+		pString = Cocos2dxBitmap.refactorString(pString);
+		final Paint paint = Cocos2dxBitmap.newPaint(pFontName, pFontSize,
+				horizontalAlignment);
+//		Paint pPaint = new Paint();
+		int w = (int) Math.ceil(paint.measureText(pString)); 
+		final FontMetricsInt fm = paint.getFontMetricsInt();
+		int h = (int) Math.ceil(fm.bottom - fm.top);
+		Log.e("Cocos2dxActivity", String.valueOf(w)+" " +String.valueOf(h) + " " + pFontName+" " +String.valueOf(pFontSize));
+		int combine = h*10000+w;
+		Log.e("Cocos2dxActivity", String.valueOf(combine));
+		return String.valueOf(w)+" " +String.valueOf(h);
 	}
 }
