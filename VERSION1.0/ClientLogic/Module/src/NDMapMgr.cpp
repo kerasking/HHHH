@@ -3872,7 +3872,7 @@ void NDMapMgr::processVersionMsg(NDTransData& kData)
 					SMLOGINSCENE_TAG);
 	if (pkScene)
 	{
-		return pkScene->OnMsg_ClientVersion(kData); ///< ÒÀÀµÌÀ×ÔÇÚµÄCSMLoginScene ¹ùºÆ
+		return pkScene->OnMsg_ClientVersion(kData);
 	}
 }
 

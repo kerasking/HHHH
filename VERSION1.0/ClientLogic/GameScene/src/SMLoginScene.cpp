@@ -27,12 +27,26 @@
 #include <sstream>
 #include "ScriptRegLua.h"
 #include "ObjectTracker.h"
+#include "CCPlatformConfig.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
 ////////////////////////////////////////////////////////////
 
 //--------------------//
 
-#define UPDATE_ON		0	//0关闭下载，1开启下载
-#define CACHE_MODE 		0	//发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
+#define UPDATE_ON		1	//0关闭下载，1开启下载
+#define CACHE_MODE 		1   //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
 
 //--------------------//
 
@@ -94,27 +108,26 @@ IMPLEMENT_CLASS(CSMLoginScene, NDScene)
 //===========================================================================
 CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 {
-
-	CSMLoginScene *scene = new CSMLoginScene;
-    scene->Initialization();
-    scene->SetTag(SMLOGINSCENE_TAG);
+	CSMLoginScene* pkScene = new CSMLoginScene;
+    pkScene->Initialization();
+    pkScene->SetTag(SMLOGINSCENE_TAG);
     
 	if ( bShowEntry )
 	{
 		NDLocalXmlString::GetSingleton().LoadLoginString();//
 
-		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+		CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
 		NDUILayer * layer = new NDUILayer();
 		layer->Initialization();
-		layer->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
-		scene->AddChild(layer);
-		scene->m_pLayerOld = layer;
+		layer->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));//不要硬编码！！
+		pkScene->AddChild(layer);
+		pkScene->m_pLayerOld = layer;
 		
 		NDPicturePool& pool		= *(NDPicturePool::DefaultPool());
 		NDUIImage* imgBack	= new NDUIImage;
 		imgBack->Initialization();
-		imgBack->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
+		imgBack->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
 #ifdef USE_MGSDK
     	NDPicture* pic = pool.AddPicture( NDPath::GetImgPath("Res00/Load/mobage_bg.png") );
 #else
@@ -127,12 +140,11 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		layer->AddChild(imgBack);
 		//layer->SetFrameRect( CCRectMake(winSize.width*0.0, winSize.height*0.0, winSize.width*0.7, winSize.height*0.225f));
 		//layer->SetBackgroundColor( ccc4( 20,30,0,50) );
-
 		CCLog( "@@login01: open CSMLoginScene\r\n" );
-
-		scene->m_pTimer->SetTimer( scene, TAG_TIMER_FIRST_RUN,0.5f );
+		LOGD("TAG_TIMER_FIRST_RUN is register");
+		pkScene->m_pTimer->SetTimer( pkScene, TAG_TIMER_FIRST_RUN,0.5f );
     }
-	return scene;
+	return pkScene;
 }
 
 //===========================================================================
@@ -167,8 +179,8 @@ void CSMLoginScene::Initialization(void)
 {
 	NDScene::Initialization();
 	//m_doucumentPath = NDPath::GetDocumentPath();
-	m_cachPath = NDPath::GetCashesPath();
-	m_savePath = m_cachPath + "supdate.zip";
+	m_strCachePath = NDPath::GetCashesPath();
+	m_strSavePath = m_strCachePath + "supdate.zip";
 	//m_resPath = NDPath::GetResPath();
 	PackageCount = 0;
 	m_pTimer = new NDTimer();
@@ -177,50 +189,60 @@ void CSMLoginScene::Initialization(void)
 //===========================================================================
 void CSMLoginScene::OnTimer( OBJID idTag )
 {
+	static bool bFirst = true;
+
+	if (bFirst)
+	{
+		LOGD("Entry First OnTimer");
+		//idTag = TAG_TIMER_UPDATE;
+		bFirst = false;
+	}
 
 	if ( idTag == TAG_TIMER_UPDATE ) 
 	{
-		if ( !rename( m_savePath.c_str(), m_savePath.c_str() ) )
+		if ( !rename( m_strSavePath.c_str(), m_strSavePath.c_str() ) )
 		{
-			if ( remove( m_savePath.c_str() ) )
+			if ( remove( m_strSavePath.c_str() ) )
 			{ 
 				m_pTimer->KillTimer(this, TAG_TIMER_UPDATE);
 				return;
 			}
-		}     
-		this->FromUrl(m_updateURL.c_str());
-		this->ToPath(m_savePath.c_str()); 
-		this->Download();
+		}
+
+		FromUrl(m_strUpdateURL.c_str());
+		ToPath(m_strSavePath.c_str()); 
+		Download();
 		m_pTimer->KillTimer(this, TAG_TIMER_UPDATE);
 	}
 	else if ( idTag == TAG_TIMER_DOWNLOAD_SUCCESS )
 	{
 		m_pTimer->KillTimer(this, TAG_TIMER_DOWNLOAD_SUCCESS);
         
-		//下载成功后解压文件
-		UnZipFile( m_savePath.c_str(), m_cachPath.c_str());
+		LOGD("Entry TAG_TIMER_DOWNLOAD_SUCCESS process.");
+		UnZipFile( m_strSavePath.c_str(), m_strCachePath.c_str());
 	}
     else if ( idTag == TAG_TIMER_UNZIP_SUCCESS )
 	{
 		m_pTimer->KillTimer(this, TAG_TIMER_UNZIP_SUCCESS);
-		if ( remove(m_savePath.c_str()) )
+		if ( remove(m_strSavePath.c_str()) )
 		{
-		    NDLog("delete:%s failed",m_savePath.c_str());//printf("删除压缩包:%s失败",m_savePath.c_str());
+		    NDLog("delete:%s failed",m_strSavePath.c_str());
 		    //return;
 		}
-        std::string szListFile = NDPath::GetCashesPath()+SZ_DEL_FILE;
+        std::string szListFile = NDPath::GetCashesPath() + SZ_DEL_FILE;
 		DeleteFileFromFile( szListFile );
     
-		if(deqUpdateUrl.size()>0)
+		if(kDeqUpdateUrl.size() > 0)
 		{
-		    deqUpdateUrl.pop_front();
+		    kDeqUpdateUrl.pop_front();
 		}
+
 		PackageCount++;
 		//查找下载队列
-		if (deqUpdateUrl.size()>0)
+		if (kDeqUpdateUrl.size() > 0)
 		{
 		    //定义保存路径
-		    m_updateURL = *deqUpdateUrl.begin();
+		    m_strUpdateURL = *kDeqUpdateUrl.begin();
 		    //m_savePath = [[NSString stringWithFormat:@"%s/update%d.zip", m_cachPath.c_str(), PackageCount] UTF8String];
 		    m_pTimer->SetTimer( this, TAG_TIMER_UPDATE, 0.5f );
 		    StartDownload();
@@ -269,6 +291,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 	}
     else if ( TAG_TIMER_FIRST_RUN == idTag )
 	{
+		LOGD("Entry TAG_TIMER_FIRST_RUN == idTag");
 		m_pTimer->KillTimer( this, TAG_TIMER_FIRST_RUN );
 		CreateUpdateUILayer();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -358,13 +381,13 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 // 开启更新
 bool CSMLoginScene::StartUpdate()
 {
-	if ( deqUpdateUrl.empty() )
+	if ( kDeqUpdateUrl.empty() )
 	{
 		return false;
 	}
 	//请求第一个包
-	std::string url = *deqUpdateUrl.begin();
-	m_updateURL	= url;
+	std::string url = *kDeqUpdateUrl.begin();
+	m_strUpdateURL	= url;
 	m_pTimer->SetTimer( this, TAG_TIMER_UPDATE, 0.5f );	
 	StartDownload();
 	return true;
@@ -514,7 +537,7 @@ void CSMLoginScene::DidDownloadStatus( DownloadStatus status )
 // 初始化更新队列
 void CSMLoginScene::InitDownload( std::string & szUpdatePath )
 {
-	deqUpdateUrl.push_back(szUpdatePath);
+	kDeqUpdateUrl.push_back(szUpdatePath);
 }
 
 //++Guosen2012.8.7
@@ -542,7 +565,7 @@ bool CSMLoginScene::DeleteFileFromFile( std::string & szDelListFile )
 	std::string  lineStr;
 	while ( getline( tmpFile, lineStr ) )
 	{
-		std::string DelFile = m_cachPath + lineStr;
+		std::string DelFile = m_strCachePath + lineStr;
  		if ( remove( DelFile.c_str() ) )
 		{
 			NDLog( "删除文件失败：%s",DelFile.c_str() );
@@ -611,15 +634,15 @@ void CSMLoginScene::CloseUpdateUILayer()
 }
 
 //===========================================================================
-void CSMLoginScene::OnMsg_ClientVersion(NDTransData& data)
+void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 {
 	bool bUpdate = false;
 	
-	int bLatest				= data.ReadByte();
-	int bForceUpdate		= data.ReadByte();
-	int FromVersion			= data.ReadInt();
-	int ToVersion			= data.ReadInt();
-	std::string UpdatePath	= data.ReadUnicodeString();
+	int bLatest				= kData.ReadByte();
+	int bForceUpdate		= kData.ReadByte();
+	int FromVersion			= kData.ReadInt();
+	int ToVersion			= kData.ReadInt();
+	std::string UpdatePath	= kData.ReadUnicodeString();
 	
 	if ( bForceUpdate )
 	{
@@ -658,6 +681,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& data)
     		m_pLabelPromtp->SetVisible( true );
     		//m_pLabelPromtp->SetFontSize( 20 );
 		}
+
 		return ;
 	}
 	else if ( ( FromVersion == ToVersion ) && (bLatest) )
@@ -667,13 +691,15 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& data)
 		return;
 	}
 	else
+	{
 		bUpdate = true;
+	}
 	    
 	NDLog("URL:%s",UpdatePath.c_str());
-	deqUpdateUrl.push_back(UpdatePath);
+	kDeqUpdateUrl.push_back(UpdatePath);
 	if (bUpdate)
 	{
-		if (bLatest) 
+		if (!bLatest) 
 		{
 			CloseWaitingAni();
 			//if ( !NDBeforeGameMgrObj.isWifiNetWork() )//关闭掉坑爹的WIFI监测
@@ -925,7 +951,7 @@ void CSMLoginScene::UnzipStatus(bool bResult)
 {
 	if (!bResult) 
     {
-        NDLog("UnZipFile:%s failed",m_savePath.c_str());
+        NDLog("UnZipFile:%s failed",m_strSavePath.c_str());
         //return;
     }
 	m_pTimer->SetTimer( this, TAG_TIMER_UNZIP_SUCCESS, 0.5f );	
