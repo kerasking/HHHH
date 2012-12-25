@@ -329,6 +329,7 @@ function p.LoadUI(tab,nPetId)
 	end
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerBackBag);
+	layer:SetDebugName( "PlayerBackBag" ); --@opt
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 	

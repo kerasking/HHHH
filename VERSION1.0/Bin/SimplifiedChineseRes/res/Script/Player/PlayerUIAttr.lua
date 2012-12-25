@@ -159,6 +159,7 @@ function p.LoadUI(nPetId)
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerAttr);
 	layer:SetFrameRect(RectFullScreenUILayer);
+	layer:SetDebugName( "PlayerUI" ); --@opt
 	--layer:SetBackgroundColor(ccc4(125, 125, 125, 125));
 	--scene:AddChild(layer);
 	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
