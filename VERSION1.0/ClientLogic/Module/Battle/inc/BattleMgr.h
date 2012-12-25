@@ -32,7 +32,7 @@ using namespace NDEngine;
 typedef map<OBJID, BattleSkill*> MAP_BATTLE_SKILL;
 typedef MAP_BATTLE_SKILL::iterator MAP_BATTLE_SKILL_IT;
 
-class Battle;
+class BattleUILayer;
 struct Command;
 
 enum FIGHT_ACTION_STATUS
@@ -274,7 +274,7 @@ public:
 		return m_mapBattleSkill;
 	}
 
-	Battle* GetBattle()
+	BattleUILayer* GetBattle()
 	{
 		return this->m_pkBattle;
 	}
@@ -324,7 +324,7 @@ public:
 	VEC_FIGHTACTION m_vActionList3; //3∂”’Ω∂∑÷∏¡Ó
 
 private:
-	Battle*			m_pkBattle;
+	BattleUILayer*	m_pkBattle;
 	ScriptDB*		m_pkDatabase;
 	Command*		m_pkBeforeCommand;
 

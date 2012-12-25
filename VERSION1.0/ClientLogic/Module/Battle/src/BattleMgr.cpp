@@ -522,11 +522,11 @@ void BattleMgr::restartLastBattle()
 		int battleType = this->m_nLastBattleType;
 		if(BATTLE_TYPE_MONSTER == battleType)
 		{
-			m_pkBattle = new Battle(BATTLE_TYPE_MONSTER_PLAYBACK);
+			m_pkBattle = new BattleUILayer(BATTLE_TYPE_MONSTER_PLAYBACK);
 		}
 		else if(BATTLE_TYPE_SPORTS == battleType || BATTLE_TYPE_BOSS == battleType)
 		{
-			m_pkBattle = new Battle(BATTLE_TYPE_SPORTS_PLAYBACK);
+			m_pkBattle = new BattleUILayer(BATTLE_TYPE_SPORTS_PLAYBACK);
 		}
 
 		m_pkBattle->Initialization(BATTLE_STAGE_START);
@@ -595,7 +595,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 	//		if (m_battle && m_battle->IsWatch()) {
 	//			m_battle->setServerBattleResult(BATTLE_COMPLETE_END);
 	//			if (m_battle->IsPracticeBattle()) {
-	//				m_battle->setBattleStatus(Battle::BS_FIGHTER_SHOW_PAS);
+	//				m_battle->setBattleStatus(BattleUILayer::BS_FIGHTER_SHOW_PAS);
 	//			} else {
 	//				quitBattle();
 	//			}
@@ -622,7 +622,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 	// 初始化战斗对象
 	if (!m_pkBattle)
 	{
-		m_pkBattle = new Battle(btBattleType);
+		m_pkBattle = new BattleUILayer(btBattleType);
 		m_pkBattle->Initialization(BATTLE_STAGE_START);
 		m_pkBattle->StartEraseOutEffect();
 	}

@@ -1300,7 +1300,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 		ShowShadow(true, m_pkRidePet != NULL);
 	}
 
-	if (pkParent->IsKindOfClass(RUNTIME_CLASS(Battle)))
+	if (pkParent->IsKindOfClass(RUNTIME_CLASS(BattleUILayer)))
 	{
 		HandleShadow(pkParent->GetContentSize());
 		return true;

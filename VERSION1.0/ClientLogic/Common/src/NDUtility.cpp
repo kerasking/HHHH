@@ -308,10 +308,13 @@ void quitGame(bool bTipNet/*=false*/)
 {
 	ScriptGlobalEvent::OnEvent (GE_QUITGAME);
 	CloseProgressBar;
-	Battle::ResetLastTurnBattleAction();
+	
+	BattleUILayer::ResetLastTurnBattleAction();
 	DramaObj.QuitGame();
+	
 	/*BeatHeartMgrObj.Stop();*/
 	//NDMapMgrObj.quitGame(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	
 	BattleMgrObj.ReleaseAllBattleSkill();
 	NDMapMgrObj.ClearManualRole();
 	NDMapMgrObj.ClearNPC();

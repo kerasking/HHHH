@@ -248,12 +248,12 @@ private:
 };
 
 //------------------------------------------------------------------
-class Battle :	public NDUILayer,
-				public NDBaseBattle,
-				public NDUIDialogDelegate,
-				public NDUIButtonDelegate
+class BattleUILayer :	public NDUILayer,
+						public NDBaseBattle,
+						public NDUIDialogDelegate,
+						public NDUIButtonDelegate
 {
-	DECLARE_CLASS (Battle)
+	DECLARE_CLASS (BattleUILayer)
 public:
 	enum BATTLE_STATUS
 	{
@@ -285,10 +285,19 @@ public:
 		BS_WAITING_SERVER_MESSAGE,	// 等待服务端消息
 	};
 
-	Battle();
-	Battle(Byte btType);
-	~Battle();
+private:
+	BattleUILayer(const BattleUILayer& rhs) { }
+	BattleUILayer& operator =(const BattleUILayer& rhs)
+	{
+		return *this;
+	}
 
+public:
+	BattleUILayer();
+	BattleUILayer(Byte btType);
+	~BattleUILayer();
+
+public:
 	static void ResetLastTurnBattleAction();
 
 	void InitSpeedBar();
@@ -576,14 +585,6 @@ private:
 	void AddTurnDealOfCooldown();
 
 private:
-	Battle(const Battle& rhs)
-	{
-	}
-	Battle& operator =(const Battle& rhs)
-	{
-		return *this;
-	}
-
 	static bool ms_bAuto;
 	static BattleAction ms_kLastTurnActionUser;
 	static BattleAction ms_kLastTurnActionEudemon;

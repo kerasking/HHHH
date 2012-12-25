@@ -33,7 +33,7 @@ enum LOOKFACE_TYPE
 	LOOKFACE_MONSTER,
 };
 
-class Battle;
+class BattleUILayer;
 
 class FighterStatus
 {
@@ -407,7 +407,7 @@ public:
 
 	void setWillBeAtk(bool bSet);
 
-	void setBattle(Battle* parent)
+	void setBattle(BattleUILayer* parent)
 	{
 		this->m_pkParent = parent;
 	}
@@ -529,7 +529,7 @@ private:
 	NDSprite* dodge_ani;
 	NDSprite* block_ani;
 
-	Battle* m_pkParent;
+	BattleUILayer* m_pkParent;
 	bool m_bIsCriticalHurt;
 	bool m_bIsAtkDritical;
 	bool m_bIsDodge;

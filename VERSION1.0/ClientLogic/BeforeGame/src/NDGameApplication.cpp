@@ -270,7 +270,7 @@ void NDGameApplication::MyInit()
 	CCLOG( "@@ NDGameApplication::MyInit()\r\n" );
 	LOGD("Start MyInit");
 
-	REGISTER_CLASS(NDBaseBattle,Battle);
+	REGISTER_CLASS(NDBaseBattle,BattleUILayer);
 	REGISTER_CLASS(NDBaseFighter,Fighter);
 	REGISTER_CLASS(NDBaseBattleMgr,BattleMgr);
 	REGISTER_CLASS(NDSprite,NDPlayer);

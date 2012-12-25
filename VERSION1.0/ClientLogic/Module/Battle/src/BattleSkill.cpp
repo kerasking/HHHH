@@ -200,7 +200,7 @@ string BattleSkill::getSimpleDes(bool bIncludeName)
 	{
 		ss << NDCommonCString("CoolTurn") << ": " << getCd() << "\n";
 
-		Battle* battle = BattleMgrObj.GetBattle();
+		BattleUILayer* battle = BattleMgrObj.GetBattle();
 		if (!IsSkillOwnByPlayer() && battle && battle->CanPetFreeUseSkill())
 		{
 			ss << NDCommonCString("BattleNoLimit");
