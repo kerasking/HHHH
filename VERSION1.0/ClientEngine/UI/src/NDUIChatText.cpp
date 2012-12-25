@@ -319,7 +319,7 @@ void CUIChatText::Combiner(std::vector<ChatNode>& textNodeList)
 
 		// 设置大小
         curNode.uiNode->SetFrameRect(
-			CCRectMake(x, y, uiNodeRect.size.width*FONT_SCALE, uiNodeRect.size.height));
+			CCRectMake(x, y, uiNodeRect.size.width, uiNodeRect.size.height));
 
 		// 加入
 		AddChild(curNode.uiNode);

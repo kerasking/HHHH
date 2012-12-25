@@ -328,6 +328,231 @@ LuaObject LuaState::GetRegistry()
 	return LuaObject(this, LUA_REGISTRYINDEX);  //{  lua_getregistry(m_state);
 }
 
+int LuaState::DoFile( const char *filename)
+{
+	if (IsLuaFile(filename))
+	{
+		return DoLoadFile(filename);
+	}
+	else
+	{
+		return LoadFileBuf(filename);     
+	}
+	return 0;
+}
+/************************************************************************************************************
+ Function:         DoLoadFile
+ Description:	   lua通过文件名加载文件
+ Input:            filename文件名字
+ Output:     
+ return:            
+ other:
+ version:  1. add by tangziqin  2012.8.27   新建函数   
+ 2.
+ ************************************************************************************************************/
+int LuaState::DoLoadFile( const char *filename)
+{
+ 	int status = luaL_loadfile(this->GetCState(), filename);
+	if (status)
+	{
+		bool isnil = lua_isnil(this->GetCState(), -1);
+		if (!isnil)
+		{
+			const char* errorString = lua_tostring(this->GetCState(), -1);
+			if (GetExceptInfoOutHandler())
+			{
+				GetExceptInfoOutHandler()(this, errorString);
+			}
+		}
+		return 1;
+	}
+	
+	lua_State *L = this->GetCState();
+    
+	if (docall(L, 0, LUA_MULTRET) != 0)
+	{
+		const char* errorString = lua_tostring(L, -1);
+        
+		if (GetExceptInfoOutHandler())
+		{
+			GetExceptInfoOutHandler()(this, errorString);
+		}
+	}
+    
+	return 0;   
+}  
+/************************************************************************************************************
+ Function:         IsLuaFile
+ Description:    
+ Input:            判断输入文件是否为.lua文件
+ Output:     
+ other:
+ version:  1. add by tangziqin  2012.8.22    
+ 2.
+ ************************************************************************************************************/
+bool LuaState::IsLuaFile(const char* pszluaFile)
+{
+    int iFileTileLen = strlen(pszluaFile); 
+    
+    // 读取后缀名字
+    if (iFileTileLen > 3)
+    {
+        char strTemp[8];  
+        memset(strTemp, 0, sizeof(strTemp));
+        
+        strcpy(strTemp, (pszluaFile + iFileTileLen - 3));
+        if (strcmp(strTemp, "lua") == 0)
+        {
+            FILE *FileHandle = fopen(pszluaFile, "rb");
+            if (FileHandle != NULL)
+            {
+                fclose(FileHandle);
+                return true;
+            }
+        }
+        else if (strcmp(strTemp, "bin") == 0)
+        {
+            return false;
+        }
+    }
+    return false;
+}   
+/************************************************************************************************************
+ Function:         LoadFileBuf
+ Description:      以加载buf方式加载文件
+ Input:            pszluaFile文件的名字
+ Output:     
+ other:
+ version:  1. add by tangziqin  2012.8.22  新建函数  
+ 2.
+ ************************************************************************************************************/
+int LuaState::LoadFileBuf(const char* pszluaFile)
+{
+    char *strBuf = new char[1024*1024];
+    size_t size = 0;
+    FILE *FileHandle = NULL;
+    FileHandle = fopen(pszluaFile, "rb");
+    
+    //如果读取不到文件更换文件后缀再试
+    if ( FileHandle == NULL) 
+    { 
+        int iFileTileLen = strlen(pszluaFile); 
+        
+        //读取后缀名字
+        if (iFileTileLen > 3)
+        {
+            char *strNewFileName = new char[1024]; 
+            char strTemp[8];  
+            char strAddName[8];  
+            memset(strTemp, 0, sizeof(strTemp));
+            memset(strAddName, 0, sizeof(strAddName));    
+            memset(strNewFileName, 0, 1024);
+            
+            strcpy(strTemp, (pszluaFile + iFileTileLen - 3));
+            if (strcmp(strTemp, "bin") == 0)
+            {
+                strcpy(strAddName, "lua");
+            }
+            else if (strcmp(strTemp, "lua") == 0)
+            {
+                strcpy(strAddName, "bin");
+            }
+            strncpy(strNewFileName, pszluaFile, iFileTileLen - 3);
+            strncpy(strNewFileName + iFileTileLen - 3, strAddName, 3);
+          //  strcat(strNewFileName, strAddName);
+            FileHandle = fopen(strNewFileName, "rb");
+            delete []strNewFileName;
+        }
+        
+        if (FileHandle == NULL)
+        {
+            delete []strBuf;
+            strBuf = NULL;
+            return 0;
+        }
+    } 
+    
+    fseek (FileHandle, 0, SEEK_END);
+    size = ftell(FileHandle);
+    fseek(FileHandle, 0, SEEK_SET);
+    
+    size_t nReadNum = fread(strBuf, 1, 1024*1024, FileHandle);
+    
+    if( nReadNum != size ) 
+    { 
+        delete []strBuf;
+        strBuf = NULL;
+        return 0;
+    }
+    
+    nReadNum = DecryptString((unsigned char* )strBuf, nReadNum);
+    
+    DoBuffer((const char*)strBuf, nReadNum, pszluaFile); 
+    
+    fclose(FileHandle);
+    return 1;
+}  
+/************************************************************************************************************
+ Function:         DecryptString
+ Description:	   文本解密代码
+ Input:            buf要解密的buffer, len buffer的长度
+ Output:     
+ return:           int文本解密后的长度
+ other:
+ version:  1. add by tangziqin  2012.8.22   新建函数     
+ 2.
+ ************************************************************************************************************/
+//static const char ENCRYPT_STR[] = "tqdigital";
+
+static const char STR_CAT[] = "denadhlj";
+static char ENCRYPT_STR[11] ;
+int LuaState::DecryptString(unsigned char* buf, int len)
+{
+    int iRet = len;
+    ENCRYPT_STR[0] = 'd';
+    ENCRYPT_STR[1] = 'e';
+    ENCRYPT_STR[2] = 'n';
+    ENCRYPT_STR[3] = 'a';
+    ENCRYPT_STR[4] = 'b';
+    ENCRYPT_STR[5] = 'y';
+    ENCRYPT_STR[6] = 'w';
+    ENCRYPT_STR[7] = 'x';
+    ENCRYPT_STR[8] = 'n';
+    ENCRYPT_STR[9] = 'b';
+    ENCRYPT_STR[10] = '\0';
+
+    //获取文本后面strlen(ENCRYPT_STR)的长度比较是否与ENCRYPT_STR一致
+    int iENum = strlen(STR_CAT);
+    if (len <= iENum)
+    {
+        return iRet;
+    }
+    
+    char strTemp[64];
+    memset(strTemp, 0, sizeof(strTemp));
+    strncpy(strTemp, ( const char *)(buf + len - iENum - 1), iENum);
+    
+    //需要解密
+    if ( strcmp(strTemp, STR_CAT) == 0)
+    {
+        iRet = len - strlen(STR_CAT);
+         //iRet = len - sizeof(STR_CAT);
+        memset((buf + iRet), 0, sizeof(STR_CAT));
+ 
+        for (int i = 0; i < iRet; ++i)
+        {
+            unsigned char cXor = ENCRYPT_STR[ i % sizeof(ENCRYPT_STR) ];
+            unsigned char cOpt = buf[i];
+            int num = buf[i];
+            cOpt = (cOpt << 4) | (cOpt >> 4);
+            buf[i] = cOpt ^ cXor;
+            num = buf[i];
+        }
+    }
+
+    return iRet;
+}
+
 
 int LuaState::DoFile( const char *filename, LuaObject& fenvObj )
 {
