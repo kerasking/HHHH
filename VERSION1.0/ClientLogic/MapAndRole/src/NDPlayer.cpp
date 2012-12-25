@@ -276,6 +276,8 @@ bool NDPlayer::CancelClickPointInSideNpc()
 
 }
 
+void TestDrama(); //@del
+
 bool NDPlayer::ClickPoint(CCPoint point, bool bLongTouch, bool bPath/*=true*/)
 {
 //	CCLog( "NDPlayer::ClickPoint(%d, %d), @0\r\n", (int)point.x, (int)point.y );
@@ -325,6 +327,7 @@ bool NDPlayer::ClickPoint(CCPoint point, bool bLongTouch, bool bPath/*=true*/)
 
 						if ( dis < FOCUS_JUDGE_DISTANCE )
 						{
+							//TestDrama();//@del
 							SendNpcInteractionMessage(npc->m_nID);
 							return false;
 						}
