@@ -35,36 +35,42 @@
 #define QUIT_DRAMA_TIMER_TAG (13622)
 
 using std::stringstream;
-
 using namespace NDEngine;
 
-BattleMgr::BattleMgr() :
-m_pkBattle(NULL)
+
+BattleMgr::BattleMgr() 
+	: m_pkBattle(NULL)
+	, m_pkDatabase(NULL)
+	, m_pkBeforeCommand(NULL)
+	, m_pkBattleScene(NULL)
+	, m_pkQuitTimer(NULL)
+	, m_pkStartDramaTimer(NULL)
+	, m_pkBattleReward(NULL)
+	, m_pkPrebattleReward(NULL)
+	, m_nCurrentTeamId(0)
+	, m_nBattleMapId(0)
+	, m_nBattleX(0)
+	, m_nBattleY(0)
+	, m_nLastBattleTeamCount(0)
+	, m_nLastSceneMapDocID(0)
+	, m_nLastSceneScreenX(0)
+	, m_nLastSceneScreenY(0)
+	, m_nLastBattleType(0)
 {
 	INC_NDOBJ("BattleMgr");
 
 	NDNetMsgPool* kPool = NDNetMsgPoolObj;
-	kPool->RegMsg(_MSG_BATTLE, this);
-	kPool->RegMsg(_MSG_CONTROLPOINT, this);
-	kPool->RegMsg(_MSG_EFFECT, this);
-	kPool->RegMsg(_MSG_BATTLEEND, this);
-	kPool->RegMsg(_MSG_SKILLINFO, this);
-	kPool->RegMsg(_MSG_BATTLE_SKILL_LIST, this);
-	kPool->RegMsg(_MSG_PLAYER_RECON, this);
-	kPool->RegMsg(_MSG_PLAYER_EXT_RECON, this);
-	//	m_Db=new ScriptDB();
-	m_pkQuitTimer = NULL;
-	m_pkBattleReward = NULL;
-	m_pkPrebattleReward = NULL;
-	m_nBattleMapId = 0;
-	m_nBattleX = 0;
-	m_nBattleY = 0;
-	m_nLastBattleTeamCount = 0;
-	m_nLastSceneMapDocID	= 0;
-	m_nLastSceneScreenX		= 0;
-	m_nLastSceneScreenY		= 0;
-	//
-	m_pkStartDramaTimer = NULL;
+	if (kPool)
+	{
+		kPool->RegMsg(_MSG_BATTLE, this);
+		kPool->RegMsg(_MSG_CONTROLPOINT, this);
+		kPool->RegMsg(_MSG_EFFECT, this);
+		kPool->RegMsg(_MSG_BATTLEEND, this);
+		kPool->RegMsg(_MSG_SKILLINFO, this);
+		kPool->RegMsg(_MSG_BATTLE_SKILL_LIST, this);
+		kPool->RegMsg(_MSG_PLAYER_RECON, this);
+		kPool->RegMsg(_MSG_PLAYER_EXT_RECON, this);
+	}
 }
 
 BattleMgr::~BattleMgr()
@@ -121,9 +127,7 @@ void BattleMgr::RestoreActionList()
 		{
 			action->m_eActionStatus = ACTION_STATUS_WAIT;
 		}
-
 	}
-
 }
 
 void BattleMgr::ReleaseActionList()
@@ -135,10 +139,12 @@ void BattleMgr::ReleaseActionList()
 		//CC_SAFE_DELETE((*it)->skill);
 		VEC_FIGHTERCOMMAND_IT fm_it = (*it)->m_vCmdList.begin();
 		CC_SAFE_DELETE((*it)->m_pkSkill);
+
 		for (; fm_it != (*it)->m_vCmdList.end(); fm_it++)
 		{
 			CC_SAFE_DELETE(*fm_it);
 		}
+		
 		(*it)->m_vCmdList.clear();
 		CC_SAFE_DELETE(*it);
 
@@ -156,6 +162,7 @@ void BattleMgr::ReleaseActionList()
 		{
 			CC_SAFE_DELETE(*fm_it);
 		}
+
 		(*it2)->m_vCmdList.clear();
 		CC_SAFE_DELETE(*it2);
 
@@ -173,9 +180,9 @@ void BattleMgr::ReleaseActionList()
 		{
 			CC_SAFE_DELETE(*fm_it);
 		}
+
 		(*it3)->m_vCmdList.clear();
 		CC_SAFE_DELETE(*it3);
-
 	}
 
 	m_vActionList3.clear();
@@ -220,7 +227,6 @@ void BattleMgr::OnTimer(OBJID tag)
 
 		m_pkStartDramaTimer->KillTimer(this, QUIT_DRAMA_TIMER_TAG);
 		loadRewardUI();
-
 	}
 }
 
@@ -235,8 +241,9 @@ void BattleMgr::loadRewardUI()
 		if(m_pkBattleReward->m_nItemTypes[i] != 0)
 		{
 			NDLog(@"addRewardItem:%d",m_pkBattleReward->m_nItemTypes[i]);
-			ScriptMgrObj.excuteLuaFunc("addRewardItem", "MonsterRewardUI",i+1,m_pkBattleReward->m_nItemTypes[i],m_pkBattleReward->m_nItemAmount[i]);
 
+			ScriptMgrObj.excuteLuaFunc("addRewardItem", "MonsterRewardUI",
+				i+1,m_pkBattleReward->m_nItemTypes[i],m_pkBattleReward->m_nItemAmount[i]);
 		}
 	}
 
@@ -244,8 +251,11 @@ void BattleMgr::loadRewardUI()
 	{
 		if(m_pkBattleReward->m_nPetId[i] !=0)
 		{
-			NDLog(@"iPetId :%d;  iPetGainExp : %d", m_pkBattleReward->m_nItemTypes[i], m_pkBattleReward->m_nPetGainExp[i]);
-			ScriptMgrObj.excuteLuaFunc("SetRewardExp", "MonsterRewardUI", m_pkBattleReward->m_nPetId[i], m_pkBattleReward->m_nPetGainExp[i]);
+			NDLog(@"iPetId :%d;  iPetGainExp : %d", 
+				m_pkBattleReward->m_nItemTypes[i], m_pkBattleReward->m_nPetGainExp[i]);
+
+			ScriptMgrObj.excuteLuaFunc("SetRewardExp", "MonsterRewardUI", 
+				m_pkBattleReward->m_nPetId[i], m_pkBattleReward->m_nPetGainExp[i]);
 		}
 	}
 
@@ -262,36 +272,36 @@ bool BattleMgr::process(MSGID msgID, NDEngine::NDTransData* bao, int len)
 {
 	switch (msgID)
 	{
-		case _MSG_BATTLE:
-			processBattleStart(*bao);
-			break;
-		case _MSG_CONTROLPOINT:
-			processControlPoint(*bao);
-			break;
-		case _MSG_EFFECT:
-			processBattleEffect(*bao);
-			break;
-		case _MSG_BATTLEEND:
-			processBattleEnd(*bao);
-			break;
-		case _MSG_SKILLINFO:
-			processSkillInfo(*bao, len);
-			break;
-		case _MSG_BATTLE_SKILL_LIST:
-			processBattleSkillList(*bao, len);
-			break;
-		case _MSG_PLAYER_RECON:
+	case _MSG_BATTLE:
+		processBattleStart(*bao);
+		break;
+	case _MSG_CONTROLPOINT:
+		processControlPoint(*bao);
+		break;
+	case _MSG_EFFECT:
+		processBattleEffect(*bao);
+		break;
+	case _MSG_BATTLEEND:
+		processBattleEnd(*bao);
+		break;
+	case _MSG_SKILLINFO:
+		processSkillInfo(*bao, len);
+		break;
+	case _MSG_BATTLE_SKILL_LIST:
+		processBattleSkillList(*bao, len);
+		break;
+	case _MSG_PLAYER_RECON:
 		{
 			NDMapMgrObj.processPlayer(bao, len);
 		}
-			break;
-		case _MSG_PLAYER_EXT_RECON:
+		break;
+	case _MSG_PLAYER_EXT_RECON:
 		{
 			NDMapMgrObj.processPlayerExt(bao, len);
 		}
-			break;
-		default:
-			break;
+		break;
+	default:
+		break;
 	}
 	return true;
 }
@@ -309,6 +319,7 @@ void BattleMgr::processSkillInfo(NDTransData& data, int len)
 	int btAction = data.ReadByte();
 	int btCnt = data.ReadByte();
 	int idPet = data.ReadInt();
+
 	for (int i = 0; i < btCnt; i++)
 	{
 		if (btAction <= 2)
@@ -334,12 +345,15 @@ void BattleMgr::processSkillInfo(NDTransData& data, int len)
 			string name = data.ReadUnicodeString();
 			string des = data.ReadUnicodeString();
 			string update_required;
+
 			if (depFlag == 1)
 			{
 				update_required = data.ReadUnicodeString();
 			}
+
 			BattleSkill* pkSkill = GetBattleSkill(idSkill);
 			NDPlayer& kPlayer = NDPlayer::defaultHero();
+
 			// 技能信息已存在
 			if (pkSkill)
 			{
@@ -464,19 +478,24 @@ void BattleMgr::showBattleScene()
 		m_pkBattle->setBattleMap(m_nBattleMapId, m_nBattleX * MAP_UNITSIZE_X, m_nBattleY * MAP_UNITSIZE_Y);
 		NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
 		mapLayer->GetParent()->AddChild(m_pkBattle);
+
 		// 进入战斗,地图逻辑处理
 		NDMapMgrObj.BattleStart();
 		ScriptGlobalEvent::OnEvent(GE_BATTLE_BEGIN);
+		
 		//++Guosen 2012.7.6
 		NDScene*  pGameScene = NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
+		
 		if ( pGameScene )
 		{//此时隐藏下述三个UI
 			NDUILayer * pLayer	= (NDUILayer *)pGameScene->GetChild(2010);//AffixNormalBoss//副本界面
 			if ( pLayer )
 				pLayer->SetVisible( false );
+			
 			pLayer	= (NDUILayer *)pGameScene->GetChild(2015);//Arena//竞技场界面
 			if ( pLayer )
 				pLayer->SetVisible( false );
+			
 			pLayer	= (NDUILayer *)pGameScene->GetChild(2035);//DynMapGuide//查看攻略界面
 			if ( pLayer )
 				pLayer->SetVisible( false );
@@ -536,7 +555,9 @@ void BattleMgr::restartLastBattle()
 	NDMapLayer* mapLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
 	mapLayer->showSwitchSprite(SWITCH_TO_BATTLE);
 	//mapLayer->SetBattleBackground(true);
+	
 	RestoreActionList();
+	
 	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	m_pkBattle->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
 
@@ -550,7 +571,6 @@ void BattleMgr::restartLastBattle()
 
 void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 {
-
 	CloseProgressBar;
 	ScriptMgrObj.excuteLuaFunc("PlayBattleMusic", "Music");
 
@@ -617,10 +637,12 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 	{
 		m_pkBattle->setTeamAmout(btTeamAmout);
 		m_nLastBattleTeamCount = btTeamAmout;
+
 		for (VEC_FIGHTER_IT it = m_vFighter.begin(); it != m_vFighter.end(); it++)
 		{
 			CC_SAFE_DELETE(*it);
 		}
+
 		m_vFighter.clear();
 		ReleaseActionList();
 	}
@@ -668,6 +690,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		bao >> btGroup >> btBattleTeam >> btStations >> btEquipAmount >> nQuality;
 		std::string strName;
 		strName = bao.ReadUnicodeString();
+
 		for (Byte i = 0; i < btEquipAmount; i++)
 		{
 			// 人物装备
@@ -700,7 +723,10 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		info.btStations = btStations;
 		info.atk_type		= atk_type;
 		info.nQuality       = nQuality;
-		NDLog(@"id:%d,type:%d,fighterType,%d,group:%d,team:%d,pos:%d,life:%d", idObj,idType,nFighterType,btGroup,btBattleTeam,btStations,nLife);
+
+		NDLog(@"id:%d,type:%d,fighterType,%d,group:%d,team:%d,pos:%d,life:%d", 
+			idObj,idType,nFighterType,btGroup,btBattleTeam,btStations,nLife);
+
 		Fighter* fighter = new Fighter();
 		fighter->setFighterInfo(info);
 		fighter->setBattle(m_pkBattle);
@@ -737,14 +763,17 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 //			//				string name = bao.ReadUnicodeString();
 //			fighter->LoadMonster(idlookface, level, strName);
 //		}
+
 		fighter->GetRole()->m_nLife = nLife;
 		fighter->GetRole()->m_nMaxLife = nLifeMax;
 		fighter->GetRole()->m_nMana = nMana;
 		fighter->GetRole()->m_nMaxMana = nManaMax;
+
 		if(weapon_id != 0)
 		{
 			fighter->GetRole()->SetWeaponImage(weapon_id);
 		}
+
 		// 服务端下发的状态
 		//			for (int j = 0; j < statusNum; j++) {
 		//				int idStatus = bao.ReadInt();
@@ -754,6 +783,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		//				string des = bao.ReadUnicodeString();
 		//				fighter->addAStatus(new FighterStatus(idStatus, idEffect, num, name, des));
 		//			}
+
 		m_vFighter.push_back(fighter);
 		m_pkBattle->AddFighter(fighter);
 
@@ -776,17 +806,22 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		m_nBattleMapId = map_id;
 		m_nBattleX = posX;
 		m_nBattleY = posY;
+
 		ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",0);//隐藏UI（不销毁）,//竞技场界面或副本界面及攻略界面要在装载好地图后再隐藏
+
 		//++Guosen 2012.7.6
 		NDScene*  pGameScene = NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
+
 		if ( pGameScene )
 		{//此时不隐藏掉下述三个UI
 			NDUILayer * pLayer	= (NDUILayer *)pGameScene->GetChild(2010);//AffixNormalBoss//副本界面
 			if ( pLayer )
 				pLayer->SetVisible( true );
+			
 			pLayer	= (NDUILayer *)pGameScene->GetChild(2015);//Arena//竞技场界面
 			if ( pLayer )
 				pLayer->SetVisible( true );
+			
 			pLayer	= (NDUILayer *)pGameScene->GetChild(2035);//DynMapGuide//查看攻略界面
 			if ( pLayer )
 				pLayer->SetVisible( true );
@@ -798,6 +833,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 			ScriptMgrObj.excuteLuaFunc("CloseMainUI", "",0);
 
 		}
+
 		NDDirector* director = NDDirector::DefaultDirector();
 		NDMapLayer* mapLayer = mapMgr.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
 
@@ -814,9 +850,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		m_pkBattle->InitSpeedBar();
 		//m_battle->SetVisible(false);
 		director->EnableDispatchEvent(false);
-
 	}
-	//}
 }
 
 void BattleMgr::processControlPoint(NDEngine::NDTransData& bao)
@@ -858,16 +892,15 @@ void BattleMgr::processBattleEffect(NDEngine::NDTransData& bao)
 			cmd->idActor = idActor;
 		}
 
-		switch(btEffectType){
+		switch(btEffectType)
+		{
 			case BATTLE_EFFECT_TYPE_ATK:
-				//cmd->idTarget=(int) data;
-				//cmdBefore=cmd;
-				//NDLog(@"%d ATK %d", idActor,cmd->idTarget);
 				{
 					Command* pCmd = new Command();
 					pCmd->btEffectType	= BATTLE_EFFECT_TYPE_PLAY_ANIMATION;
 					pCmd->idActor		= idActor;
 					pCmd->idTarget		= 48;	//播放“反击”文字动画
+				
 					if ( m_pkBeforeCommand )
 					{
 						m_pkBattle->AddCommand(pCmd);
@@ -877,14 +910,17 @@ void BattleMgr::processBattleEffect(NDEngine::NDTransData& bao)
 						m_pkBeforeCommand->cmdNext = pCmd;
 						m_pkBeforeCommand = pCmd;
 					}
+
 					cmd->idTarget		= (int)data;
 					m_pkBeforeCommand			= cmd;
 				}
 				break;
+
 			case BATTLE_EFFECT_TYPE_SKILL:
 				NDLog(@"%d SKILL ", idActor);
 				cmd->skill=new BattleSkill();
 				cmd->skill->setName(ScriptDBObj.GetS("skill_config",(unsigned int) data, DB_SKILL_CONFIG_NAME));
+
 				if(data == 999999)//特指普通攻击
 				{
 					//
@@ -914,11 +950,12 @@ void BattleMgr::processBattleEffect(NDEngine::NDTransData& bao)
 					cmd->skill->setSelfEffect(ScriptDBObj.GetN("skill_config",(unsigned int) data, DB_SKILL_CONFIG_LOOKFACE_ID));
 					cmd->skill->setTargetEffect(ScriptDBObj.GetN("skill_config",(unsigned int) data, DB_SKILL_CONFIG_LOOKFACE_TARGET_ID));
 				}
-				cmd->skill->SetActId(MANUELROLE_ATTACK);
 
+				cmd->skill->SetActId(MANUELROLE_ATTACK);
 				cmd->skill->setId((unsigned int) data);
 				m_pkBeforeCommand=cmd;
 				break;
+
 			case BATTLE_EFFECT_TYPE_SKILL_TARGET:
 				cmd->idTarget = (int) data;
 				NDLog(@"SKILL atk:%d, target:%d", cmd->idActor, cmd->idTarget);
@@ -930,6 +967,7 @@ void BattleMgr::processBattleEffect(NDEngine::NDTransData& bao)
 				idSkillActor = idActor;//记住技能攻击目标
 				idSkillTarget = (int) data;
 				break;
+
 			case BATTLE_EFFECT_TYPE_SKILL_EFFECT:
 				if(idSkillActor && idSkillTarget)
 				{
@@ -966,86 +1004,107 @@ void BattleMgr::processBattleEffect(NDEngine::NDTransData& bao)
 					idSkillTarget = 0;
 				}
 				break;
+
 			case BATTLE_EFFECT_TYPE_LIFE:
 				NDLog(@"%d HURT", idActor);
 				cmd->nHpLost=(int)data;
 				break;
+
 			case BATTLE_EFFECT_TYPE_MANA: // 气势
 				NDLog(@"%d MANA", idActor);
 				cmd->nMpLost=(int)data;
 				break;
+
 			case BATTLE_EFFECT_TYPE_DODGE:  // 闪避
 				NDLog(@"%d DODGE", idActor);
 				break;
+
 			case BATTLE_EFFECT_TYPE_DRITICAL: // 暴击
 				NDLog(@"%d DRITICAL", idActor);
 				cmd->nHpLost=(int)data;
 				break;
+
 			case BATTLE_EFFECT_TYPE_BLOCK:  // 格挡
 				NDLog(@"%d BLOCK", idActor);
 				break;
+
 			case BATTLE_EFFECT_TYPE_COMBO:  // 连击
 				NDLog(@"%d COMBO", idActor);
 				cmd->nHpLost=(int)data;
 				break;
+
 			case BATTLE_EFFECT_TYPE_STATUS_ADD: // 加状态，
 				NDLog(@"%d STATUS_ADD", idActor);
 				cmd->idTarget	= (int)data;// skill_result_cfg 的 ID
 				break;
+
 			case BATTLE_EFFECT_TYPE_STATUS_LOST: // 取消状态
 				NDLog(@"%d STATUS_CANCEL", idActor);
 				cmd->idTarget	= (int)data;// skill_result_cfg 的 ID
 				break;
+
 			case BATTLE_EFFECT_TYPE_CTRL:
 				break;
+
 			case BATTLE_EFFECT_TYPE_ESCORTING://护驾/援护
 				NDLog(@"%d ESCORTING", idActor);
 				break;
+
 			case BATTLE_EFFECT_TYPE_COOPRATION_HIT://合击
 				NDLog(@"%d COOPRATION_HIT", idActor);
 				break;
+
 			case BATTLE_EFFECT_TYPE_CHANGE_POSTION://移位
 				NDLog(@"%d CHANGE_POSTION", idActor);
 				cmd->idTarget	= (int)data;//pos
 				//cmdBefore = NULL;
 				break;
+
 			case BATTLE_EFFECT_TYPE_STATUS_LIFE: // 状态去血
 				NDLog(@"%d STATUS_LIFE", idActor);
 				cmd->nHpLost=(int)data;
 				break;
+
 			case BATTLE_EFFECT_TYPE_STATUS_MANA: // 状态去气
 				NDLog(@"%d STATUS_MANA", idActor);
 				cmd->nMpLost=(int)data;
 				break;
+
 			case BATTLE_EFFECT_TYPE_RESIST: // 免疫
 				NDLog(@"%d STATUS_RESIST", idActor);
 				break;
+
 			case EFFECT_TYPE_TURN_END:   // 回合结束
 				NDLog(@"%d TURN_END", idActor);
 				m_pkBeforeCommand=NULL;
 				break;
+
 			case EFFECT_TYPE_BATTLE_BEGIN:  // 战斗开始
 				NDLog(@"%d BEGIN BATTLE", idActor);
 				m_nCurrentTeamId=idActor;
 				cmd->idTarget	= (int)data;
 				break;
+
 			case EFFECT_TYPE_BATTLE_END:   // 战斗结束
 				NDLog(@"%d END BATTLE", idActor);
 				cmd->idActor	= m_nCurrentTeamId;
 				m_pkBeforeCommand = NULL;
 				break;
+
 			case BATTLE_EFFECT_TYPE_DEAD:
 				NDLog(@"%d DIE", idActor);
 				break;
+
 			case BATTLE_EFFECT_TYPE_PLAY_ANIMATION: // 对象身上播放指定动画
 				NDLog(@"%d PLAY_ANIMATION", idActor);
 				cmd->idTarget = (int) data;
 				//cmdBefore = cmd;
 				break;
+
 			default:
 				NDLog(@"%d NONE", idActor);
 				break;
-		}
+		}//switch
 
 		if (btEffectType == BATTLE_EFFECT_TYPE_ATK
 				|| btEffectType == BATTLE_EFFECT_TYPE_SKILL
@@ -1089,11 +1148,15 @@ string getStrItemsFromIntArray(vector<OBJID>& items)
 {
 	stringstream ss;
 	ItemMgr& itemMgr = ItemMgrObj;
-	while (items.size() > 0) {
+
+	while (items.size() > 0) 
+	{
 		OBJID idItemType = items.at(0);
 		int count = 0;
 		NDItemType* pItem = itemMgr.QueryItemType(idItemType);
-		if (NULL == pItem) {
+	
+		if (NULL == pItem) 
+		{
 			NDLog("未找到物品类型：[%d]", idItemType);
 			items.erase(items.begin());
 			continue;
@@ -1213,9 +1276,12 @@ void BattleMgr::ShowBattleWinResult(int nBattleType)
     else if (BATTLE_TYPE_SPORTS == nBattleType ||  BATTLE_TYPE_BOSS == nBattleType)
     {
         NDLog(@"result,sports");
+
         ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
-        ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", BATTLE_COMPLETE_WIN, m_pkBattleReward->m_nMoney, m_pkBattleReward->m_nRepute);
-        //结果页面显示之后释放奖励物品
+        ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", 
+			BATTLE_COMPLETE_WIN, m_pkBattleReward->m_nMoney, m_pkBattleReward->m_nRepute);
+        
+		//结果页面显示之后释放奖励物品
         if (m_pkBattleReward != NULL)
         {
             SAFE_DELETE (m_pkBattleReward);
@@ -1244,14 +1310,12 @@ void BattleMgr::ShowBattleLoseResult(int nBattleType)
     else if (BATTLE_TYPE_SPORTS == nBattleType ||  BATTLE_TYPE_BOSS == nBattleType)
     {
         ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
-        ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", BATTLE_COMPLETE_LOSE, m_pkBattleReward->m_nMoney, m_pkBattleReward->m_nRepute);
+        ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", 
+			BATTLE_COMPLETE_LOSE, m_pkBattleReward->m_nMoney, m_pkBattleReward->m_nRepute);
     }
     
     //结果页面显示之后释放奖励物品
-    if (m_pkBattleReward != NULL)
-    {
-        SAFE_DELETE (m_pkBattleReward);
-    }
+	SAFE_DELETE (m_pkBattleReward);
 }
 /************************************************************************************************************
  Function:         ShowReplayWinResult
@@ -1270,7 +1334,8 @@ void BattleMgr::ShowReplayWinResult(int nBattleType)
     {
         ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
         NDLog(@"money:%d--repute:%d",prebattleReward->money,prebattleReward->repute);
-        ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", BATTLE_COMPLETE_WIN, m_pkPrebattleReward->m_nMoney, m_pkPrebattleReward->m_nRepute);
+        ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", 
+			BATTLE_COMPLETE_WIN, m_pkPrebattleReward->m_nMoney, m_pkPrebattleReward->m_nRepute);
     }
     
     //副本战斗成功回放 显示  DynMapSuccess.ini
@@ -1279,15 +1344,16 @@ void BattleMgr::ShowReplayWinResult(int nBattleType)
         NDLog(@"type:%d",m_pkBattle->GetBattleType());
         ScriptMgrObj.excuteLuaFunc("LoadUI", "MonsterRewardUI",0);
        // ScriptMgrObj.excuteLuaFunc("SetRewardExp", "MonsterRewardUI",prebattleReward->exp);
-        ScriptMgrObj.excuteLuaFunc("addSophMoney", "MonsterRewardUI", m_pkPrebattleReward->m_nSoph, m_pkPrebattleReward->m_nMoney);	
+        ScriptMgrObj.excuteLuaFunc("addSophMoney", "MonsterRewardUI", 
+			m_pkPrebattleReward->m_nSoph, m_pkPrebattleReward->m_nMoney);	
         
         for(int i=0;i<5;i++)
         {
             if(m_pkPrebattleReward->m_nItemTypes[i]!=0)
             {
                 NDLog("addRewardItem:%d",m_pkPrebattleReward->m_nItemTypes[i]);
-                ScriptMgrObj.excuteLuaFunc("addRewardItem", "MonsterRewardUI", i+1, m_pkPrebattleReward->m_nItemTypes[i], m_pkPrebattleReward->m_nItemAmount[i]);
-                
+                ScriptMgrObj.excuteLuaFunc("addRewardItem", "MonsterRewardUI", 
+					i+1, m_pkPrebattleReward->m_nItemTypes[i], m_pkPrebattleReward->m_nItemAmount[i]);
             }
         }	
         
@@ -1295,8 +1361,11 @@ void BattleMgr::ShowReplayWinResult(int nBattleType)
         {
             if(m_pkPrebattleReward->m_nPetId[i] !=0)
             {
-                NDLog(@"iPetId :%d;  iPetGainExp : %d", m_pkPrebattleReward->m_ntemtype[i], m_pkPrebattleReward->m_nPetGainExp[i]);
-                ScriptMgrObj.excuteLuaFunc("SetRewardExp", "MonsterRewardUI", m_pkPrebattleReward->m_nPetId[i], m_pkPrebattleReward->m_nPetGainExp[i]);
+                NDLog(@"iPetId :%d;  iPetGainExp : %d", 
+					m_pkPrebattleReward->m_ntemtype[i], m_pkPrebattleReward->m_nPetGainExp[i]);
+
+                ScriptMgrObj.excuteLuaFunc("SetRewardExp", "MonsterRewardUI", 
+					m_pkPrebattleReward->m_nPetId[i], m_pkPrebattleReward->m_nPetGainExp[i]);
             }
         }
         
@@ -1320,7 +1389,8 @@ void BattleMgr::ShowReplayLoseResult(int nBattleType)
     if (BATTLE_TYPE_SPORTS_PLAYBACK == nBattleType)
     {
         ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
-        ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", BATTLE_COMPLETE_LOSE, m_pkPrebattleReward->m_nMoney, m_pkPrebattleReward->m_nRepute);
+        ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", 
+			BATTLE_COMPLETE_LOSE, m_pkPrebattleReward->m_nMoney, m_pkPrebattleReward->m_nRepute);
     }
     //副本战斗失败回放 显示  BattleFailUI.ini
     else if (BATTLE_TYPE_MONSTER_PLAYBACK == nBattleType)
@@ -1435,8 +1505,10 @@ void BattleMgr::quitBattle(bool bEraseOut/*=true*/)
 
 		BATTLE_COMPLETE battle_result = BATTLE_COMPLETE(
 				m_pkBattle->getServerBattleResult());
+
 		int battleType = m_pkBattle->GetBattleType();
 		m_pkBattle->RemoveFromParent(true);
+
 		//++Guosen 2012.7.2
 		NDScene*  pGameScene = NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
 		if ( pGameScene )
@@ -1444,16 +1516,20 @@ void BattleMgr::quitBattle(bool bEraseOut/*=true*/)
 			NDUILayer * pLayerAffixNormalBoss = (NDUILayer *)pGameScene->GetChild(2010);//AffixNormalBoss//副本界面
 			NDUILayer * pLayerArena = (NDUILayer *)pGameScene->GetChild(2015);//Arena//竞技场界面
 			NDUILayer * pLayerDynMapGuide = (NDUILayer *)pGameScene->GetChild(2035);//DynMapGuide//查看攻略界面
+			
 			if ( pLayerAffixNormalBoss || pLayerArena || pLayerDynMapGuide )
 			{
 				ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",1);
+
 				//还原地图--Guosen 2012.7.5
-				NDMapLayer * pMapLayer = NDMapMgrObj.getMapLayerOfScene(pGameScene);//(NDDirector::DefaultDirector()->GetRunningScene());
+				NDMapLayer * pMapLayer = NDMapMgrObj.getMapLayerOfScene(pGameScene);
+				
 				if ( pMapLayer && m_nLastSceneMapDocID )
-				{//
+				{
 					pMapLayer->SetBattleBackground(false);
 					pMapLayer->replaceMapData( m_nLastSceneMapDocID, m_nLastSceneScreenX, m_nLastSceneScreenY );
 					NDMapMgrObj.AddSwitch();
+
 					m_nLastSceneMapDocID	= 0;
 					m_nLastSceneScreenX		= 0;
 					m_nLastSceneScreenY		= 0;
