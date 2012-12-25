@@ -38,9 +38,9 @@ public:
 	int getFileLen();
 	
 protected:
-	NotifyCallback m_notifyCallback;
+	NotifyCallback m_pNotifyCallback;
 	KTcpClientSocket m_clientSock;
-	void*	m_notifyParam;
+	void*	m_pNotifyParam;
 	KData	m_dtCookie;
 	KData	m_dtUserAgent;
 	KData    m_dtHttpProxy;
@@ -58,7 +58,7 @@ protected:
 	long	m_timeout;
 	unsigned int	m_iReadedBytes;
 	unsigned int	m_iWritedBytes;
-	KConnection m_conn;
+	KConnection m_kCnnect;
 
 public:
 	void clearParam();
