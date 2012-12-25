@@ -95,6 +95,7 @@ NDNpc::~NDNpc()
 	DEC_NDOBJ_RTCLS
 	CC_SAFE_DELETE (m_pkPicBattle);
 	CC_SAFE_DELETE (m_pkPicState);
+	CC_SAFE_DELETE (m_npcLogic);
 }
 
 void NDNpc::Init()

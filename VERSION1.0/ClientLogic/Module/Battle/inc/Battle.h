@@ -334,9 +334,13 @@ public:
 
 	void dealWithCommand();
 
+	void dealWithAction( Command* cmd, FightAction* action );
+
+	FightAction* CreateFightAction( Command* cmd );
+
 	void AddCommand(Command* cmd);
 
-	void AddActionCommand(FightAction* action);
+	void AddFighterAction(FightAction* action);
 
 	void SetIsPlayBack(bool isPlayBack)
 	{
@@ -583,6 +587,8 @@ private:
 	void UseSkillDealOfCooldown(int skillID);
 
 	void AddTurnDealOfCooldown();
+
+	void removeFighters();
 
 private:
 	static bool ms_bAuto;

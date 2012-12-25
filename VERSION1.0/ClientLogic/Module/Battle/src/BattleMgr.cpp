@@ -82,7 +82,21 @@ BattleMgr::~BattleMgr()
 	CC_SAFE_DELETE (m_pkBattleReward);
 	CC_SAFE_DELETE (m_pkPrebattleReward);
 
+	this->destroyFighters();
+
 	ReleaseActionList();
+}
+
+
+//@@
+void BattleMgr::destroyFighters()
+{
+	for (VEC_FIGHTER_IT it = m_vFighter.begin(); it != m_vFighter.end(); it++)
+	{
+		CC_SAFE_DELETE(*it);
+	}
+
+	m_vFighter.clear();
 }
 
 void BattleMgr::RestoreActionList()
@@ -91,7 +105,6 @@ void BattleMgr::RestoreActionList()
 
 	for (; it != m_vActionList1.end(); it++)
 	{
-		//CC_SAFE_DELETE((*it)->skill);
 		FightAction* action = (*it);
 		if(action)
 		{
@@ -103,20 +116,17 @@ void BattleMgr::RestoreActionList()
 
 	for (; it2 != m_vActionList2.end(); it2++)
 	{
-		//CC_SAFE_DELETE((*it)->skill);
 		FightAction* action = (*it);
 		if(action)
 		{
 			action->m_eActionStatus = ACTION_STATUS_WAIT;
 		}
-
 	}
 
 	VEC_FIGHTACTION_IT it3 = m_vActionList3.begin();
 
 	for (; it3 != m_vActionList3.end(); it3++)
 	{
-		//CC_SAFE_DELETE((*it)->skill);
 		FightAction* action = (*it);
 		if(action)
 		{
@@ -125,62 +135,39 @@ void BattleMgr::RestoreActionList()
 	}
 }
 
+//@@
+void BattleMgr::ReleaseActionList_Imp( VEC_FIGHTACTION& vecFightAction )
+{
+	for (VEC_FIGHTACTION_IT it = vecFightAction.begin(); 
+			it != vecFightAction.end(); it++)
+	{
+		FightAction* fightAction = *it;
+		if (!fightAction) continue;
+
+		// cleanup skill
+		CC_SAFE_DELETE(fightAction->m_pkSkill);
+
+		// cleanup cmd list
+		for (VEC_FIGHTERCOMMAND_IT fm_it = fightAction->m_vCmdList.begin(); 
+				fm_it != fightAction->m_vCmdList.end(); fm_it++)
+		{
+			CC_SAFE_DELETE(*fm_it);
+		}
+		fightAction->m_vCmdList.clear();
+
+		//
+		CC_SAFE_DELETE(fightAction);
+	}
+
+	vecFightAction.clear();
+}
+
+//@@
 void BattleMgr::ReleaseActionList()
 {
-	VEC_FIGHTACTION_IT it = m_vActionList1.begin();
-
-	for (; it != m_vActionList1.end(); it++)
-	{
-		//CC_SAFE_DELETE((*it)->skill);
-		VEC_FIGHTERCOMMAND_IT fm_it = (*it)->m_vCmdList.begin();
-		CC_SAFE_DELETE((*it)->m_pkSkill);
-
-		for (; fm_it != (*it)->m_vCmdList.end(); fm_it++)
-		{
-			CC_SAFE_DELETE(*fm_it);
-		}
-		
-		(*it)->m_vCmdList.clear();
-		CC_SAFE_DELETE(*it);
-
-	}
-
-	m_vActionList1.clear();
-
-	VEC_FIGHTACTION_IT it2 = m_vActionList2.begin();
-
-	for (; it2 != m_vActionList2.end(); it2++)
-	{
-		//CC_SAFE_DELETE((*it)->skill);
-		VEC_FIGHTERCOMMAND_IT fm_it = (*it2)->m_vCmdList.begin();
-		for (; fm_it != (*it2)->m_vCmdList.end(); fm_it++)
-		{
-			CC_SAFE_DELETE(*fm_it);
-		}
-
-		(*it2)->m_vCmdList.clear();
-		CC_SAFE_DELETE(*it2);
-
-	}
-
-	m_vActionList2.clear();
-
-	VEC_FIGHTACTION_IT it3 = m_vActionList3.begin();
-
-	for (; it3 != m_vActionList3.end(); it3++)
-	{
-		//CC_SAFE_DELETE((*it)->skill);
-		VEC_FIGHTERCOMMAND_IT fm_it = (*it)->m_vCmdList.begin();
-		for (; fm_it != (*it3)->m_vCmdList.end(); fm_it++)
-		{
-			CC_SAFE_DELETE(*fm_it);
-		}
-
-		(*it3)->m_vCmdList.clear();
-		CC_SAFE_DELETE(*it3);
-	}
-
-	m_vActionList3.clear();
+	ReleaseActionList_Imp( m_vActionList1 );
+	ReleaseActionList_Imp( m_vActionList2 );
+	ReleaseActionList_Imp( m_vActionList3 );
 }
 
 BattleSkill* BattleMgr::GetBattleSkill(OBJID idSkill)
@@ -632,12 +619,8 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		m_pkBattle->setTeamAmout(btTeamAmout);
 		m_nLastBattleTeamCount = btTeamAmout;
 
-		for (VEC_FIGHTER_IT it = m_vFighter.begin(); it != m_vFighter.end(); it++)
-		{
-			CC_SAFE_DELETE(*it);
-		}
+		this->destroyFighters();
 
-		m_vFighter.clear();
 		ReleaseActionList();
 	}
 
@@ -1475,61 +1458,63 @@ void BattleMgr::showBattleResult()
 	}
 }
 
+//@@
 void BattleMgr::quitBattle(bool bEraseOut/*=true*/)
 {
-	if (m_pkBattle)
+	if (!m_pkBattle) return;
+	
+	if (bEraseOut)
 	{
-		if (bEraseOut)
+		if (!m_pkQuitTimer)
 		{
-			if (!m_pkQuitTimer)
-			{
-				m_pkQuitTimer = new NDTimer;
-				m_pkQuitTimer->SetTimer(this, QUIT_BATTLE_TIMER_TAG, 0.1f);
-				m_pkBattle->StartEraseInEffect();
-			}
-			return;
+			m_pkQuitTimer = new NDTimer;
+			m_pkQuitTimer->SetTimer(this, QUIT_BATTLE_TIMER_TAG, 0.1f);
+			m_pkBattle->StartEraseInEffect();
 		}
+		return;
+	}
 
-		if (m_pkQuitTimer)
+	if (m_pkQuitTimer)
+	{
+		m_pkQuitTimer->KillTimer(this, QUIT_BATTLE_TIMER_TAG);
+		delete m_pkQuitTimer;
+		m_pkQuitTimer = NULL;
+	}
+
+	BATTLE_COMPLETE battle_result = BATTLE_COMPLETE(
+			m_pkBattle->getServerBattleResult());
+
+	int battleType = m_pkBattle->GetBattleType();
+	m_pkBattle->RemoveFromParent(true);
+	m_pkBattle = NULL;
+
+	//++Guosen 2012.7.2
+	NDScene*  pGameScene = NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
+	if ( pGameScene )
+	{
+		NDUILayer * pLayerAffixNormalBoss = (NDUILayer *)pGameScene->GetChild(2010);//AffixNormalBoss//副本界面
+		NDUILayer * pLayerArena = (NDUILayer *)pGameScene->GetChild(2015);//Arena//竞技场界面
+		NDUILayer * pLayerDynMapGuide = (NDUILayer *)pGameScene->GetChild(2035);//DynMapGuide//查看攻略界面
+		
+		if ( pLayerAffixNormalBoss || pLayerArena || pLayerDynMapGuide )
 		{
-			m_pkQuitTimer->KillTimer(this, QUIT_BATTLE_TIMER_TAG);
-			delete m_pkQuitTimer;
-			m_pkQuitTimer = NULL;
-		}
+			ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",1);
 
-		BATTLE_COMPLETE battle_result = BATTLE_COMPLETE(
-				m_pkBattle->getServerBattleResult());
-
-		int battleType = m_pkBattle->GetBattleType();
-		m_pkBattle->RemoveFromParent(true);
-
-		//++Guosen 2012.7.2
-		NDScene*  pGameScene = NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
-		if ( pGameScene )
-		{
-			NDUILayer * pLayerAffixNormalBoss = (NDUILayer *)pGameScene->GetChild(2010);//AffixNormalBoss//副本界面
-			NDUILayer * pLayerArena = (NDUILayer *)pGameScene->GetChild(2015);//Arena//竞技场界面
-			NDUILayer * pLayerDynMapGuide = (NDUILayer *)pGameScene->GetChild(2035);//DynMapGuide//查看攻略界面
+			//还原地图--Guosen 2012.7.5
+			NDMapLayer * pMapLayer = NDMapMgrObj.getMapLayerOfScene(pGameScene);
 			
-			if ( pLayerAffixNormalBoss || pLayerArena || pLayerDynMapGuide )
+			if ( pMapLayer && m_nLastSceneMapDocID )
 			{
-				ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",1);
+				pMapLayer->SetBattleBackground(false);
+				pMapLayer->replaceMapData( m_nLastSceneMapDocID, m_nLastSceneScreenX, m_nLastSceneScreenY );
+				NDMapMgrObj.AddSwitch();
 
-				//还原地图--Guosen 2012.7.5
-				NDMapLayer * pMapLayer = NDMapMgrObj.getMapLayerOfScene(pGameScene);
-				
-				if ( pMapLayer && m_nLastSceneMapDocID )
-				{
-					pMapLayer->SetBattleBackground(false);
-					pMapLayer->replaceMapData( m_nLastSceneMapDocID, m_nLastSceneScreenX, m_nLastSceneScreenY );
-					NDMapMgrObj.AddSwitch();
-
-					m_nLastSceneMapDocID	= 0;
-					m_nLastSceneScreenX		= 0;
-					m_nLastSceneScreenY		= 0;
-				} 
-			}
+				m_nLastSceneMapDocID	= 0;
+				m_nLastSceneScreenX		= 0;
+				m_nLastSceneScreenY		= 0;
+			} 
 		}
+	}
 
 //		NDLog("result:%d",battle_result);
 //		if(battleReward&&battle_result == BATTLE_COMPLETE_WIN)
@@ -1565,19 +1550,32 @@ void BattleMgr::quitBattle(bool bEraseOut/*=true*/)
 //				ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI",battle_result,battleReward->money,battleReward->repute);
 //			}
 //		}
-		m_pkBattle = NULL;
 
-		if (NDMapMgrObj.isMonsterClear()&&battleType==BATTLE_TYPE_MONSTER){
-			NDLog("dynmap cleared");
-			//ScriptMgrObj.excuteLuaFunc("OnBattleFinish","AffixBossFunc",NDMapMgrObj.GetMotherMapID(), 1);
-		}
+	if (NDMapMgrObj.isMonsterClear()&&battleType==BATTLE_TYPE_MONSTER){
+		NDLog("dynmap cleared");
+		//ScriptMgrObj.excuteLuaFunc("OnBattleFinish","AffixBossFunc",NDMapMgrObj.GetMotherMapID(), 1);
+	}
 
-		NDPlayer::defaultHero().SetLocked(false);
+	NDPlayer::defaultHero().SetLocked(false);
 //		GameScene* gs = (GameScene*)NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene));
 //		if (gs) {
 //			gs->SetUIShow(false);
 //		}
-	}
+
+	// cleanup
+	this->cleanup();
+}
+
+//@@
+void BattleMgr::cleanup()
+{
+	ReleaseAllBattleSkill();
+
+	CC_SAFE_DELETE (m_pkBattleReward);
+	CC_SAFE_DELETE (m_pkPrebattleReward);
+
+	this->ReleaseActionList();
+	this->destroyFighters();
 }
 
 void BattleMgr::OnDramaFinish()

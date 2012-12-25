@@ -171,12 +171,6 @@ public:
 	int m_nTeamAttack;
 	int m_nTeamDefense;
 
-	Fighter* m_pkActor;
-	Fighter* m_pkTarget;
-	
-	BattleSkill* m_pkSkill;
-	FighterStatus* m_pkStatus;
-
 	BATTLE_EFFECT_TYPE m_eEffectType;
 	FIGHT_ACTION_STATUS m_eActionStatus;
 	
@@ -184,9 +178,15 @@ public:
 	bool m_bIsCombo;
 	bool m_bIsCriticalHurt;
 	bool m_bIsDritical;
-	
+
+	Fighter* m_pkActor;
+	Fighter* m_pkTarget;
+
+	BattleSkill* m_pkSkill; //@free
+	FighterStatus* m_pkStatus;
+
 	VEC_FIGHTER m_kFighterList;
-	VEC_FIGHTERCOMMAND m_vCmdList;
+	VEC_FIGHTERCOMMAND m_vCmdList; //@free
 
 	void init()
 	{
@@ -303,7 +303,10 @@ private:
 	void processBattleSkillList(NDTransData& data, int len);
 	void closeUI();
 	void ReleaseActionList();
+	void ReleaseActionList_Imp( VEC_FIGHTACTION& vecFightAction );
 	void RestoreActionList();
+	void destroyFighters();
+	void cleanup();
 
 private:
 	//处理显示战斗胜利的结果 （包括副本战斗以及竞技场战斗）
