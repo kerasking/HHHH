@@ -216,7 +216,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 	{
 		m_pTimer->KillTimer(this, TAG_TIMER_DOWNLOAD_SUCCESS);
         
-		//下载成功后解压文件
+		LOGD("Entry TAG_TIMER_DOWNLOAD_SUCCESS process.");
 		UnZipFile( m_strSavePath.c_str(), m_strCachePath.c_str());
 	}
     else if ( idTag == TAG_TIMER_UNZIP_SUCCESS )

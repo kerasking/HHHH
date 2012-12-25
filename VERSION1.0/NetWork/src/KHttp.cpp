@@ -136,71 +136,70 @@ int KHttp::getHttpFile(const KData& server, const KData& httpfile,
 	m_iStatusCode = 0;
 	bool bGet = (_paramMap.size() == 0);
 
-	KFile file;
-	KData httpRequest;
-	KData dtPost;
+	KFile kFile;
+	KData kHttpRequest;
+	KData kDataPost;
 
 	if (bGet)
 	{
-		httpRequest = "GET ";
+		kHttpRequest = "GET ";
 	}
 	else
 	{
-		httpRequest = "POST ";
+		kHttpRequest = "POST ";
 		map<KData, KData>::iterator iter;
 		for (iter = _paramMap.begin(); iter != _paramMap.end(); iter++)
 		{
 			if (iter != _paramMap.begin())
-				dtPost += "&";
-			dtPost += iter->first;
-			dtPost += "=";
-			dtPost += iter->second;
+				kDataPost += "&";
+			kDataPost += iter->first;
+			kDataPost += "=";
+			kDataPost += iter->second;
 		}
 	}
 
-	httpRequest += httpfile;
-	httpRequest += " HTTP/1.1";
-	httpRequest += CRLF;
-	httpRequest += "Host: ";
-	httpRequest += server;
-	httpRequest += CRLF;
-	httpRequest += "Accept: */*";
-	httpRequest += CRLF;
+	kHttpRequest += httpfile;
+	kHttpRequest += " HTTP/1.1";
+	kHttpRequest += CRLF;
+	kHttpRequest += "Host: ";
+	kHttpRequest += server;
+	kHttpRequest += CRLF;
+	kHttpRequest += "Accept: */*";
+	kHttpRequest += CRLF;
 	if (!m_dtUserAgent.isEmpty())
 	{
-		httpRequest += "User-Agent: ";
-		httpRequest += m_dtUserAgent;
-		httpRequest += CRLF;
+		kHttpRequest += "User-Agent: ";
+		kHttpRequest += m_dtUserAgent;
+		kHttpRequest += CRLF;
 	}
 
 	if (startpos > 0)
 	{
-		httpRequest += "RANGE: bytes=";
-		httpRequest += startpos;
-		httpRequest += "-";
-		httpRequest += CRLF;
+		kHttpRequest += "RANGE: bytes=";
+		kHttpRequest += startpos;
+		kHttpRequest += "-";
+		kHttpRequest += CRLF;
 	}
 
-	httpRequest += "Pragma: no-cache";
-	httpRequest += CRLF;
-	httpRequest += "Cache-Control: no-cache";
-	httpRequest += CRLF;
-	httpRequest += "Connection: close";
-	httpRequest += CRLF;
+	kHttpRequest += "Pragma: no-cache";
+	kHttpRequest += CRLF;
+	kHttpRequest += "Cache-Control: no-cache";
+	kHttpRequest += CRLF;
+	kHttpRequest += "Connection: close";
+	kHttpRequest += CRLF;
 
 	if (!bGet)
 	{
-		httpRequest += "Content-Type: application/x-www-form-urlencoded";
-		httpRequest += CRLF;
-		httpRequest += "Content-Length: ";
-		httpRequest += KData((int) dtPost.length());
-		httpRequest += CRLF;
+		kHttpRequest += "Content-Type: application/x-www-form-urlencoded";
+		kHttpRequest += CRLF;
+		kHttpRequest += "Content-Length: ";
+		kHttpRequest += KData((int) kDataPost.length());
+		kHttpRequest += CRLF;
 	}
 
-	httpRequest += CRLF;
+	kHttpRequest += CRLF;
 
-	char buff[MTU] =
-	{ 0, };
+	char szBuffer[MTU] = {0};
 
 	if (m_dtHttpProxy.isEmpty())
 	{
@@ -222,32 +221,32 @@ int KHttp::getHttpFile(const KData& server, const KData& httpfile,
 	m_kCnnect = m_clientSock.getConn();
 	m_kCnnect.setTimeout(m_timeout);
 
-	if (m_kCnnect.writeData(httpRequest) != (int) httpRequest.length())
+	if (m_kCnnect.writeData(kHttpRequest) != (int) kHttpRequest.length())
 	{
 		LOGERROR(" m_conn.writeData(httpRequest) != (int)httpRequest.length() failed");
 		return -1;
 	}
 
-	m_iWritedBytes += httpRequest.length();
+	m_iWritedBytes += kHttpRequest.length();
 
 	if (!bGet)
 	{
-		if (m_kCnnect.writeData(dtPost) != (int) dtPost.length())
+		if (m_kCnnect.writeData(kDataPost) != (int) kDataPost.length())
 		{
 			LOGERROR("m_conn.writeData(dtPost) != (int)dtPost.length() failed");
 			return -1;
 		}
 
-		m_iWritedBytes += dtPost.length();
+		m_iWritedBytes += kDataPost.length();
 	}
 
-	int iRead;
+	int iRead = 0;
 
 	m_iStatusCode = 0;
 	bool bRun = true;
 
-	memset(buff, 0, MTU);
-	if ((iRead = m_kCnnect.readLine(buff, MTU)) <= 0)
+	memset(szBuffer, 0, MTU);
+	if ((iRead = m_kCnnect.readLine(szBuffer, MTU)) <= 0)
 	{
 		LOGERROR( "Read command line err: %d", iRead );
 		m_iReadedBytes += iRead;
@@ -255,7 +254,7 @@ int KHttp::getHttpFile(const KData& server, const KData& httpfile,
 	}
 
 	KData dtKData;
-	KData dtLine(buff, iRead);
+	KData dtLine(szBuffer, iRead);
 
 	if (dtLine.match(SP, &dtKData, true) == NOT_FOUND)
 	{
@@ -276,10 +275,10 @@ int KHttp::getHttpFile(const KData& server, const KData& httpfile,
 
 	LOGD("Ready to while ( (iRead = m_conn.readLine(buff,MTU)) > 0 )");
 
-	while ((iRead = m_kCnnect.readLine(buff, MTU)) > 0)
+	while ((iRead = m_kCnnect.readLine(szBuffer, MTU)) > 0)
 	{
 		m_iReadedBytes += iRead;
-		KData dtLine(buff, iRead);
+		KData dtLine(szBuffer, iRead);
 
 		KData dtBefVal;
 		if (FOUND == dtLine.match(":", &dtBefVal, true))
@@ -299,7 +298,9 @@ int KHttp::getHttpFile(const KData& server, const KData& httpfile,
 			else if (isEqualNoCase(dtBefVal, "Transfer-Encoding"))
 			{
 				if (isEqualNoCase(dtLine, "chunked"))
+				{
 					m_bChunked = true;
+				}
 			}
 			_respHeadMap[dtBefVal] = dtLine;
 		}
@@ -326,7 +327,7 @@ int KHttp::getHttpFile(const KData& server, const KData& httpfile,
 
 	if (startpos <= 0)
 	{
-		if (!file.setFile(savefile, KFile::KFILE_READWRITE))
+		if (!kFile.setFile(savefile, KFile::KFILE_READWRITE))
 		{
 			LOGERROR("open file %s err", savefile.getData() );
 			return 0;
@@ -334,12 +335,12 @@ int KHttp::getHttpFile(const KData& server, const KData& httpfile,
 	}
 	else
 	{
-		if (!file.setFile(savefile, KFile::KFILE_MODIFY))
+		if (!kFile.setFile(savefile, KFile::KFILE_MODIFY))
 		{
 			LOGERROR("open file %s err", savefile.getData() );
 			return 0;
 		}
-		file.seekTo(startpos, SEEK_SET);
+		kFile.seekTo(startpos, SEEK_SET);
 	}
 
 	if (m_bChunked)
@@ -347,58 +348,63 @@ int KHttp::getHttpFile(const KData& server, const KData& httpfile,
 		unsigned char* pBuff = new unsigned char[MTU];
 		int iBuffLen = MTU;
 
-		while ((iRead = m_kCnnect.readLine(buff, MTU)) > 0)
+		while ((iRead = m_kCnnect.readLine(szBuffer, MTU)) > 0)
 		{
 			m_iReadedBytes += iRead;
 			if (iRead > 8)
 			{
 				return -1;
 			}
-			int len = KData(buff, iRead).HexToInt();
-			if (len <= 0)
+
+			int nLength = KData(szBuffer, iRead).HexToInt();
+
+			if (nLength <= 0)
 			{
 				delete[] pBuff;
 				return m_iWriteLen;
 			}
 
-			if (len > iBuffLen)
+			if (nLength > iBuffLen)
 			{
 				delete[] pBuff;
-				iBuffLen = len;
+				iBuffLen = nLength;
 				pBuff = new unsigned char[iBuffLen];
 			}
 
 			int iReaded = 0;
-			memset(pBuff, 0, len);
-			m_kCnnect.readData(pBuff, len, iReaded);
+			memset(pBuff, 0, nLength);
+			m_kCnnect.readData(pBuff, nLength, iReaded);
 			m_iReadedBytes += iReaded;
-			file.write(pBuff, iReaded);
+			kFile.write(pBuff, iReaded);
 			m_iWriteLen += iReaded;
 			if (m_iLength > 0)
 			{
 				if (m_iWriteLen >= m_iLength)
 				{
 					if (m_iNotifyGap > 0)
+					{
 						m_pNotifyCallback(m_pNotifyParam, 100, m_iWriteLen,
-								m_iLength);
+							m_iLength);
+					}
+
 					break;
 				}
 				if (m_iNotifyGap > 0 && m_iWriteLen > m_iNotifyPos)
 				{
-					int percent = int((m_iWriteLen / (float) m_iLength) * 100);
+					int nPercent = int((m_iWriteLen / (float) m_iLength) * 100);
 					m_iNotifyPos += m_iNotifyGap;
-					m_pNotifyCallback(m_pNotifyParam, percent, m_iWriteLen,
+					m_pNotifyCallback(m_pNotifyParam, nPercent, m_iWriteLen,
 							m_iLength);
 				}
 			}
 
-			if (iReaded != len)
+			if (iReaded != nLength)
 			{
 				delete[] pBuff;
 				return m_iWriteLen;
 			}
 
-			if (m_kCnnect.readLine(buff, MTU) != 0)
+			if (m_kCnnect.readLine(szBuffer, MTU) != 0)
 			{
 				return m_iWriteLen;
 			}
@@ -410,11 +416,11 @@ int KHttp::getHttpFile(const KData& server, const KData& httpfile,
 	else
 	{
 		LOGD("Entry if ( m_bChunked ) else ...");
-		while ((iRead = m_kCnnect.readn(buff, MTU)) > 0 && bRun)
+		while ((iRead = m_kCnnect.readn(szBuffer, MTU)) > 0 && bRun)
 		{
 			LOGD("m_iReadedBytes += iRead; %d",iRead);
 			m_iReadedBytes += iRead;
-			file.write((unsigned char*) buff, iRead);
+			kFile.write((unsigned char*) szBuffer, iRead);
 			m_iWriteLen += iRead;
 
 			if (m_iLength > 0)
@@ -445,7 +451,8 @@ int KHttp::getHttpFile(const KData& server, const KData& httpfile,
 	}
 
 	m_kCnnect.close();
-	file.closeFile();
+	kFile.closeFile();
+
 	return m_iWriteLen;
 }
 
