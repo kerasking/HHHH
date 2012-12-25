@@ -22,6 +22,7 @@
 #include "SMBattleScene.h"
 #include "Fighter.h"
 #include "NDBaseBattleMgr.h"
+#include "ObjectTracker.h"
 
 using namespace std;
 using namespace NDEngine;
@@ -141,12 +142,13 @@ struct FIGHTER_CMD
 {
 	FIGHTER_CMD()
 	{
+		INC_NDOBJ("FIGHTER_CMD");
 		memset(this, 0L, sizeof(FIGHTER_CMD));
 	}
 
 	~FIGHTER_CMD()
 	{
-
+		DEC_NDOBJ("FIGHTER_CMD");
 	}
 
 	BATTLE_EFFECT_TYPE effect_type;
@@ -171,6 +173,9 @@ public:
 
 	Fighter* m_pkActor;
 	Fighter* m_pkTarget;
+	
+	BattleSkill* m_pkSkill;
+	FighterStatus* m_pkStatus;
 
 	BATTLE_EFFECT_TYPE m_eEffectType;
 	FIGHT_ACTION_STATUS m_eActionStatus;
@@ -179,9 +184,6 @@ public:
 	bool m_bIsCombo;
 	bool m_bIsCriticalHurt;
 	bool m_bIsDritical;
-	
-	BattleSkill* m_pkSkill;
-	FighterStatus* m_pkStatus;
 	
 	VEC_FIGHTER m_kFighterList;
 	VEC_FIGHTERCOMMAND m_vCmdList;
@@ -202,8 +204,15 @@ public:
 		m_pkStatus = NULL;
 	}
 
+	~FightAction()
+	{
+		DEC_NDOBJ("FightAction");
+	}
+
 	FightAction(Fighter* f1, Fighter* f2, BATTLE_EFFECT_TYPE type)
 	{
+		INC_NDOBJ("FightAction");
+
 		this->init();
 
 		m_pkActor = f1;
@@ -216,6 +225,8 @@ public:
 
 	FightAction(int team1, int team2, BATTLE_EFFECT_TYPE type)
 	{
+		INC_NDOBJ("FightAction");
+
 		this->init();
 
 		m_pkActor = NULL;

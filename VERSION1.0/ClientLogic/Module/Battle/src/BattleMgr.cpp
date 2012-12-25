@@ -78,14 +78,9 @@ BattleMgr::~BattleMgr()
 	DEC_NDOBJ("BattleMgr");
 
 	ReleaseAllBattleSkill();
-	if (m_pkBattleReward)
-	{
-		CC_SAFE_DELETE (m_pkBattleReward);
-	}
-	if(m_pkPrebattleReward)
-	{
-		CC_SAFE_DELETE (m_pkPrebattleReward);
-	}
+
+	CC_SAFE_DELETE (m_pkBattleReward);
+	CC_SAFE_DELETE (m_pkPrebattleReward);
 
 	ReleaseActionList();
 }
@@ -630,7 +625,6 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		m_pkBattle = new Battle(btBattleType);
 		m_pkBattle->Initialization(BATTLE_STAGE_START);
 		m_pkBattle->StartEraseOutEffect();
-
 	}
 
 	if (btPackageType & 1 > 0)

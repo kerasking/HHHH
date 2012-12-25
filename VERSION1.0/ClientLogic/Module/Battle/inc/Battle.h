@@ -34,6 +34,7 @@
 #include "SMBattleScene.h"
 #include "BattleMgr.h"
 #include "NDBaseBattle.h"
+#include "ObjectTracker.h"
 
 #define BTN_ATTATCK 1
 #define BTN_ITEM 2
@@ -99,6 +100,7 @@ class HighlightTipStatusBar: public NDUINode
 public:
 	HighlightTipStatusBar()
 	{
+		INC_NDOBJ_RTCLS;
 		m_nNum = 0;
 		m_nNumMax = 0;
 		m_color = 0;
@@ -106,13 +108,14 @@ public:
 
 	HighlightTipStatusBar(int nColor)
 	{
+		INC_NDOBJ_RTCLS;
 		m_nNum = 0;
 		m_nNumMax = 0;
 		m_color = nColor;
 	}
 	~HighlightTipStatusBar()
 	{
-
+		DEC_NDOBJ_RTCLS;
 	}
 	void draw()
 	{
@@ -183,12 +186,13 @@ struct Command
 {
 	Command()
 	{
+		INC_NDOBJ("Command");
 		memset(this, 0L, sizeof(Command));
 	}
 
 	~Command()
 	{
-
+		DEC_NDOBJ("Command");
 	}
 
 	int btEffectType;
