@@ -19,6 +19,7 @@
 #include "ObjectTracker.h"
 #include "StringConvert.h"
 #include "ScriptGameDataLua.h"
+#include "utf8.h"
 
 using namespace cocos2d;
 
@@ -369,32 +370,33 @@ NDUIText* NDUITextBuilder::Build(const char* pszText, unsigned int uiFontSize,
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLinkLabel(GBKToUTF8("["), uiFontSize, kColor,
+									CreateLinkLabel(GetTxtPri("[").c_str(), uiFontSize, kColor,
 											m_nItemID), true));
 				}
 				else
 				{
 					kTextNodeList.push_back(
 							TextNode(bHasBreak,
-									CreateLabel(GBKToUTF8("["), uiFontSize, kColor,
+									CreateLabel(GetTxtPri("[").c_str(), uiFontSize, kColor,
 											m_nItemID), true));
 				}
 			}
 			continue;
 		}
 
-		char szWord[4] = { 0x00 };
-		if ((unsigned char) *pszText < 0x80)
-		{
-			char szChar = *pszText;
-			memcpy(szWord, GBKToUTF8(&szChar), 1);
-			pszText++;
-		}
-		else
-		{
-			memcpy(szWord, pszText, 3);
-			pszText += 3;
-		}
+// 		char szWord[4] = { 0x00 };
+// 		if ((unsigned char) *pszText < 0x80)
+// 		{
+// 			char szChar = *pszText;
+// 			memcpy(szWord, GBKToUTF8(&szChar), 1);
+// 			pszText++;
+// 		}
+// 		else
+// 		{
+// 			memcpy(szWord, pszText, 3);
+// 			pszText += 3;
+// 		}
+		char* szWord = UTF8::getNextChar( pszText );
 
 		if (eRule == BuildRuleItem)
 		{
@@ -486,18 +488,20 @@ unsigned int NDUITextBuilder::StringWidthAfterFilter(const char* text,
 				continue;
 			}
 
-			char word[4] =
-			{ 0x00 };
-			if ((unsigned char) *text < 0x80)
-			{
-				memcpy(word, text, 1);
-				text++;
-			}
-			else
-			{
-				memcpy(word, text, 3);
-				text += 3;
-			}
+// 			char word[4] =
+// 			{ 0x00 };
+// 			if ((unsigned char) *text < 0x80)
+// 			{
+// 				memcpy(word, text, 1);
+// 				text++;
+// 			}
+// 			else
+// 			{
+// 				memcpy(word, text, 3);
+// 				text += 3;
+// 			}
+			char* word = UTF8::getNextChar( text );
+
 			unsigned int temp = getStringSize(word, fontSize*FONT_SCALE).width;
 			if (curWidth + temp > textWidth)
 			{
@@ -555,18 +559,20 @@ unsigned int NDUITextBuilder::StringHeightAfterFilter(const char* text,
 				continue;
 			}
 
-			char word[4] =
-			{ 0x00 };
-			if ((unsigned char) *text < 0x80)
-			{
-				memcpy(word, text, 1);
-				text++;
-			}
-			else
-			{
-				memcpy(word, text, 3);
-				text += 3;
-			}
+// 			char word[4] =
+// 			{ 0x00 };
+// 			if ((unsigned char) *text < 0x80)
+// 			{
+// 				memcpy(word, text, 1);
+// 				text++;
+// 			}
+// 			else
+// 			{
+// 				memcpy(word, text, 3);
+// 				text += 3;
+// 			}
+			char* word = UTF8::getNextChar( text );
+
 			unsigned int temp = getStringSize(word, fontSize*FONT_SCALE).width;
 			if (curWidth + temp > textWidth)
 			{

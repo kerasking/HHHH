@@ -162,7 +162,7 @@ bool CCImage::getStringSize( const char *    in_utf8,
         jstring stringArg1 = t.env->NewStringUTF(in_utf8);
         jstring stringArg2 = t.env->NewStringUTF(pFontName);
         
-        jstring ret = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID, stringArg1,stringArg2,eAlignMask,nSize);
+        jstring ret = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID, stringArg1,stringArg2,nSize,eAlignMask);
         sscanf(JniHelper::jstring2string(ret).c_str(), "%d %d", &outSizeWidth, &outSizeHeight);
         
         //outSizeHeight = (int)ret/10000;
