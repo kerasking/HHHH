@@ -250,7 +250,7 @@ bool NDDirector::PopScene(bool cleanUp)
 
 void NDDirector::PurgeCachedData()
 {
-	NDPicturePool::PurgeDefaultPool();
+	NDPicturePool::DefaultPool()->PurgeDefaultPool();
 	CCTextureCache::sharedTextureCache()->removeAllTextures();
 	NDAnimationGroupPool::purgeDefaultPool();
 }

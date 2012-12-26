@@ -19,6 +19,7 @@
 #include "CCCommon.h"
 #include "CCPlatformConfig.h"
 #include "ObjectTracker.h"
+#include "NDUtility.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -38,7 +39,6 @@ using namespace cocos2d;
 NS_NDENGINE_BGN
 
 IMPLEMENT_CLASS(NDPicture, NDObject)
-IMPLEMENT_CLASS(NDTexture,NDObject)
 
 NDPicture::NDPicture(bool canGray/*=false*/)
 {
@@ -61,37 +61,38 @@ NDPicture::NDPicture(bool canGray/*=false*/)
 	m_pShaderProgram = NULL; //@shader
 	m_glServerState = CC_GL_BLEND;
 }
+
 NDPicture::~NDPicture()
 {
 	DEC_NDOBJ_RTCLS
-
-	CC_SAFE_RELEASE(m_pShaderProgram); //@shader
-	CC_SAFE_RELEASE (m_pkTexture);
-	if (m_bCanGray)
-	{
-		CC_SAFE_RELEASE (m_pkTextureGray);
-	}
+	
+	destroy();
 }
 
-#if 0
-void NDPicture::SetScale(float fScale)
+void NDPicture::destroy()
 {
-	m_fScale = fScale;
+	CC_SAFE_RELEASE (m_pShaderProgram); //@shader
+ 	CC_SAFE_RELEASE (m_pkTexture);
+ 	CC_SAFE_RELEASE (m_pkTextureGray);
+	m_pkTexture = NULL;
+	m_pkTextureGray = NULL;
 }
-#endif
 
+//@@
 void NDPicture::Initialization(const char* imageFile)
 {
-	CC_SAFE_RELEASE_NULL (m_pkTexture);
-	CC_SAFE_RELEASE_NULL (m_pkTextureGray);
+	if (!imageFile) return;
 
+	this->destroy();
+
+	// init image
 	CCImage image;
-
 	if (!image.initWithImageFile(imageFile) && imageFile)
 	{
-		//ScriptMgrObj.DebugOutPut("picture [%s] not exist", imageFile);
+		return;
 	}
 
+	// init tex
 	m_pkTexture = new CCTexture2D;
 	m_pkTexture->initWithImage(&image);
 	//m_pkTexture->initWithPalettePNG(imageFile);
@@ -105,14 +106,111 @@ void NDPicture::Initialization(const char* imageFile)
 	 }
 	 */
 
-	m_kCutRect = CCRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
+	// set cut rect
+	m_kCutRect = CCRectMake(0, 0, 
+		m_pkTexture->getContentSizeInPixels().width,
 			m_pkTexture->getContentSizeInPixels().height);
+
 	SetCoorinates();
 	SetColor(ccc4(255, 255, 255, 255));
 
 	if (imageFile)
 	{
 		m_strfile = imageFile;
+	}
+}
+
+//@@
+void NDPicture::Initialization(const char* imageFile, int hrizontalPixel, int verticalPixel/*=0*/)
+{
+	if (!imageFile) return;
+
+	this->destroy();
+
+	// init image
+	CCImage image;
+	bool bLoadImageSucess = true;
+	if (!image.initWithImageFile(imageFile) && imageFile)
+	{
+		bLoadImageSucess = false;
+		return;
+	}
+
+	bool bLoadStretchImageSucess = false;
+	if ((!(hrizontalPixel < 0 || verticalPixel < 0)) && bLoadImageSucess)
+	{		// todo
+		// 			CCSize sizeImg = image.getSize();
+		// 			
+		// 			//if (hrizontalPixel > sizeImg.width || verticalPixel > sizeImg.height) 
+		// 			{
+		// 				int leftCapWidth = hrizontalPixel == 0 ? 0 : sizeImg.width/2;
+		// 				
+		// 				int topCapHeight = verticalPixel == 0 ? 0 : sizeImg.height/2;
+		// 				
+		// 				if (hrizontalPixel <= sizeImg.width)
+		// 				{
+		// 					leftCapWidth = 0;
+		// 				}
+		// 				
+		// 				if (verticalPixel <= sizeImg. height)
+		// 				{
+		// 					topCapHeight = 0;
+		// 				}
+		// 				
+		// 				UIImage *tmpImg = [image stretchableImageWithLeftCapWidth:leftCapWidth topCapHeight:topCapHeight];
+		// 				
+		// 				if (tmpImg)
+		// 				{
+		// 					if (hrizontalPixel == 0) hrizontalPixel = sizeImg.width;
+		// 					
+		// 					if (verticalPixel == 0) verticalPixel = sizeImg.height;
+		// 					
+		// 					CCSize newSize = CCSizeMake(hrizontalPixel, verticalPixel);
+		// 					
+		// 					UIGraphicsBeginImageContext(newSize);
+		// 					
+		// 					[tmpImg drawInRect:CCRectMake(0, 0, newSize.width, newSize.height)];
+		// 					
+		// 					stretchImage = UIGraphicsGetImageFromCurrentImageContext();
+		// 					
+		// 					if (stretchImage != NULL) 
+		// 					{
+		// 						m_texture = [[CCTexture2D alloc] initWithImage:stretchImage];
+		// 						/*
+		// 						 if (m_canGray) 
+		// 						 {
+		// 						 m_textureGray = [[CCTexture2D alloc] initWithImage:[stretchImage convertToGrayscale]];
+		// 						 }
+		// 						 */
+		// 					}
+		// 					
+		// 					UIGraphicsEndImageContext();
+		// 				}
+		// 			}
+	}
+
+	// init tex
+	if (!bLoadStretchImageSucess)
+	{
+		m_pkTexture = new CCTexture2D;
+		m_pkTexture->initWithImage(&image);
+		//m_pkTexture->initWithPalettePNG(imageFile);
+	}
+
+	m_kCutRect = CCRectMake(0, 0, 
+		m_pkTexture->getContentSizeInPixels().width,
+		m_pkTexture->getContentSizeInPixels().height);
+
+	SetCoorinates();
+	SetColor(ccc4(255, 255, 255, 255));
+
+	//[pool release];
+
+	if (imageFile)
+	{
+		m_strfile = imageFile;
+		m_hrizontalPixel = hrizontalPixel;
+		m_verticalPixel = verticalPixel;
 	}
 }
 
@@ -148,7 +246,7 @@ void NDPicture::Initialization(vector<const char*>& vImgFiles)
 // 		[img release];
 // 	}
 	
-	CCImage* resultImg = 0;//UIGraphicsGetImageFromCurrentImageContext(); 郭浩
+//	CCImage* resultImg = 0;//UIGraphicsGetImageFromCurrentImageContext(); 郭浩
 	
 	//UIGraphicsEndImageContext();
 	
@@ -198,97 +296,6 @@ void NDPicture::Initialization(vector<const char*>& vImgFiles, vector<CCRect>& v
 	
 }
 
-void NDPicture::Initialization(const char* imageFile, int hrizontalPixel,
-		int verticalPixel/*=0*/)
-{
-	CC_SAFE_RELEASE_NULL (m_pkTexture);
-	CC_SAFE_RELEASE_NULL (m_pkTextureGray);
-
-	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-	CCImage image;
-	bool bLoadImageSucess = true;
-	if (!image.initWithImageFile(imageFile) && imageFile)
-	{
-		//ScriptMgrObj.DebugOutPut("picture [%s] not exist", imageFile);
-		bLoadImageSucess = false;
-	}
-
-	bool bLoadStretchImageSucess = false;
-	if ((!(hrizontalPixel < 0 || verticalPixel < 0)) && bLoadImageSucess)
-	{		// todo
-// 			CCSize sizeImg = image.getSize();
-// 			
-// 			//if (hrizontalPixel > sizeImg.width || verticalPixel > sizeImg.height) 
-// 			{
-// 				int leftCapWidth = hrizontalPixel == 0 ? 0 : sizeImg.width/2;
-// 				
-// 				int topCapHeight = verticalPixel == 0 ? 0 : sizeImg.height/2;
-// 				
-// 				if (hrizontalPixel <= sizeImg.width)
-// 				{
-// 					leftCapWidth = 0;
-// 				}
-// 				
-// 				if (verticalPixel <= sizeImg. height)
-// 				{
-// 					topCapHeight = 0;
-// 				}
-// 				
-// 				UIImage *tmpImg = [image stretchableImageWithLeftCapWidth:leftCapWidth topCapHeight:topCapHeight];
-// 				
-// 				if (tmpImg)
-// 				{
-// 					if (hrizontalPixel == 0) hrizontalPixel = sizeImg.width;
-// 					
-// 					if (verticalPixel == 0) verticalPixel = sizeImg.height;
-// 					
-// 					CCSize newSize = CCSizeMake(hrizontalPixel, verticalPixel);
-// 					
-// 					UIGraphicsBeginImageContext(newSize);
-// 					
-// 					[tmpImg drawInRect:CCRectMake(0, 0, newSize.width, newSize.height)];
-// 					
-// 					stretchImage = UIGraphicsGetImageFromCurrentImageContext();
-// 					
-// 					if (stretchImage != NULL) 
-// 					{
-// 						m_texture = [[CCTexture2D alloc] initWithImage:stretchImage];
-// 						/*
-// 						 if (m_canGray) 
-// 						 {
-// 						 m_textureGray = [[CCTexture2D alloc] initWithImage:[stretchImage convertToGrayscale]];
-// 						 }
-// 						 */
-// 					}
-// 					
-// 					UIGraphicsEndImageContext();
-// 				}
-// 			}
-	}
-
-	if (!bLoadStretchImageSucess)
-	{
-		m_pkTexture = new CCTexture2D;
-		m_pkTexture->initWithImage(&image);
-		//m_pkTexture->initWithPalettePNG(imageFile);
-	}
-
-	m_kCutRect = CCRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
-			m_pkTexture->getContentSizeInPixels().height);
-	SetCoorinates();
-	SetColor(ccc4(255, 255, 255, 255));
-
-	//[pool release];
-
-	if (imageFile)
-	{
-		m_strfile = imageFile;
-		m_hrizontalPixel = hrizontalPixel;
-		m_verticalPixel = verticalPixel;
-	}
-}
-
 //@shader
 void NDPicture::DrawSetup( const char* shaderType /*=kCCShader_PositionTexture_uColor*/ )
 {
@@ -304,19 +311,19 @@ void NDPicture::DrawSetup( const char* shaderType /*=kCCShader_PositionTexture_u
 	getShaderProgram()->setUniformForModelViewProjectionMatrix();
 }
 
-
-CCTexture2D *NDPicture::GetTexture()
-{
-	return m_pkTexture;
-}
-
 void NDPicture::SetTexture(CCTexture2D* tex)
 {
+	if (!tex) return;
+
 	CC_SAFE_RETAIN(tex);
-	CC_SAFE_RELEASE (m_pkTexture);
+	CC_SAFE_RELEASE(m_pkTexture);
+
 	m_pkTexture = tex;
-	m_kCutRect = CCRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
+
+	m_kCutRect = CCRectMake(0, 0, 
+		m_pkTexture->getContentSizeInPixels().width,
 			m_pkTexture->getContentSizeInPixels().height);
+
 	SetCoorinates();
 	SetColor(ccc4(255, 255, 255, 255));
 }
@@ -475,6 +482,7 @@ NDPicture* NDPicture::Copy()
 {
 	NDPicture* pkPicture = new NDPicture();
 	CC_SAFE_RETAIN (m_pkTexture);
+
 	pkPicture->m_pkTexture = m_pkTexture;
 	pkPicture->m_bReverse = m_bReverse;
 	pkPicture->m_kCutRect = m_kCutRect;
@@ -482,6 +490,7 @@ NDPicture* NDPicture::Copy()
 	pkPicture->m_bAdvance = m_bAdvance;
 	pkPicture->m_hrizontalPixel = m_hrizontalPixel;
 	pkPicture->m_verticalPixel = m_verticalPixel;
+
 	memcpy(pkPicture->m_coordinates, m_coordinates, sizeof(GLfloat) * 8);
 	memcpy(pkPicture->m_colors, m_colors, sizeof(GLbyte) * 16);
 	memcpy(pkPicture->m_pfVertices, m_pfVertices, sizeof(GLfloat) * 8);
@@ -490,6 +499,7 @@ NDPicture* NDPicture::Copy()
 	pkPicture->m_bCanGray = m_bCanGray;
 	pkPicture->m_bStateGray = m_bStateGray;
 	pkPicture->m_strfile = m_strfile;
+
 	if (m_bCanGray)
 	{
 		CC_SAFE_RETAIN (m_pkTextureGray);
@@ -715,6 +725,7 @@ NDPictureDictionary::~NDPictureDictionary()
 	DEC_NDOBJ_RTCLS
 }
 
+//图片资源垃圾回收
 void NDPictureDictionary::Recyle()
 {
 	if (NULL == m_nsDictionary)
@@ -779,79 +790,74 @@ void NDPictureDictionary::Recyle()
 /////////////////////////////
 IMPLEMENT_CLASS(NDPicturePool, NDObject)
 
-static NDPicturePool* NDPicturePool_DefaultPool = NULL;
-
 NDPicturePool::NDPicturePool()
 {
-	INC_NDOBJ_RTCLS
-	NDAsssert(NDPicturePool_DefaultPool == NULL);
-	m_pkTextures = new NDPictureDictionary();
-}
+	INC_NDOBJ_RTCLS;
 
-NDPicturePool::~NDPicturePool()
-{
-	DEC_NDOBJ_RTCLS
-	NDPicturePool_DefaultPool = NULL;
-	delete m_pkTextures;
+	m_pkPicturesDict = new NDPictureDictionary();
 }
 
 NDPicturePool* NDPicturePool::DefaultPool()
 {
-	if (NDPicturePool_DefaultPool == NULL)
-	{
-		NDPicturePool_DefaultPool = new NDPicturePool();
-	}
-	return NDPicturePool_DefaultPool;
+	static NDPicturePool s_obj;
+	return &s_obj;
+}
+
+NDPicturePool::~NDPicturePool()
+{
+	DEC_NDOBJ_RTCLS;
+
+	PurgeDefaultPool();
 }
 
 void NDPicturePool::PurgeDefaultPool()
-{
-	delete NDPicturePool_DefaultPool;
-}
-void NDPicturePool::RemoveTexture(CCTexture2D* tex)
-{
-	std::map<CCTexture2D*, std::string>::iterator it = m_mapTex2Str.find(tex);
-	if(it != m_mapTex2Str.end())
+{	
+	// clear tex cache
+// 	for (map<CCTexture2D*,string>::iterator iter = m_mapTexture.begin();
+// 			iter != m_mapTexture.end(); ++iter)
+// 	{
+// 		CCTexture2D* tex = iter->first;
+// 		SAFE_RELEASE( tex );
+// 		//SAFE_DELETE(tex);
+// 	}
+	m_mapTexture.clear();
+
+	// reCreate dict
+	if (m_pkPicturesDict)
 	{
-		std::string str = it->second;
-		m_mapTex2Str.erase(it);
-		RemovePicture(str.c_str());
+		m_pkPicturesDict->RemoveAllObjects();
+// 		SAFE_DELETE(m_pkPicturesDict);
+// 		m_pkPicturesDict = new NDPictureDictionary();
 	}
 }
 
+//@@
 NDPicture* NDPicturePool::AddPicture(const char* imageFile, bool gray/*=false*/)
 {
-	//NDAsssert(imageFile != NULL);
+	if (!imageFile) return NULL;
+	NDPicture* pic = (NDPicture *) m_pkPicturesDict->Object(imageFile);
 
-	//cocos2d::CCLog("entry Addpicture,imageFile value is %s",imageFile);
-
-	//cocos2d::CCLog("ss << imageFile end,m_pkTextures value is %d",(int)m_pkTextures);
-
-	NDPicture* pkPicture = (NDPicture *) m_pkTextures->Object(imageFile);
-
-	//cocos2d::CCLog("NDPicture* pkPicture = (NDPicture *) m_pkTextures->Object(ss.str().c_str()); value %d",(int)pkPicture);
-
-	if (!pkPicture)
+	if (!pic)
 	{
-		pkPicture = new NDPicture(gray);
-		pkPicture->Initialization(imageFile);
+		pic = new NDPicture(gray);
+		pic->Initialization(imageFile);
+		m_pkPicturesDict->SetObject(pic, imageFile);
 
-		m_pkTextures->SetObject(pkPicture, imageFile);
-
-		CCTexture2D* tex = pkPicture->GetTexture();
-		tex->setContainerType(ContainerTypeAddPic);
-		m_mapTex2Str.insert(std::map<CCTexture2D*, std::string>::value_type(tex, imageFile));
+		CCTexture2D* tex = pic->GetTexture();
+		m_mapTexture.insert(std::map<CCTexture2D*, std::string>::value_type(tex, imageFile));
 	}
 
-	return pkPicture->Copy();
+	return pic->Copy();
 }
 
+//@@
 NDPicture* NDPicturePool::AddPicture(const char* imageFile, int hrizontalPixel,
 		int verticalPixel/*=0*/, bool gray/*=false*/)
 {
-	NDAsssert(imageFile != NULL);
+	if (!imageFile || !imageFile[0]) return NULL;
+	
 
-	CCSize sizeImg = GetImageSize(imageFile ? imageFile : "");
+	CCSize sizeImg = GetImageSize(imageFile);
 
 	if (int(sizeImg.width) != 0 && int(sizeImg.height)
 			&& int(sizeImg.width) == hrizontalPixel
@@ -863,50 +869,57 @@ NDPicture* NDPicturePool::AddPicture(const char* imageFile, int hrizontalPixel,
 	std::stringstream ss;
 	ss << imageFile << "_" << hrizontalPixel << "_" << verticalPixel;
 
-	NDPicture* pic = (NDPicture *) m_pkTextures->Object(ss.str().c_str());
+	NDPicture* pic = (NDPicture *) m_pkPicturesDict->Object(ss.str().c_str());
 
 	if (!pic)
 	{
 		pic = new NDPicture(gray);
 		pic->Initialization(imageFile, hrizontalPixel, verticalPixel);
-		m_pkTextures->SetObject(pic, ss.str().c_str());
-		CCTexture2D* tex = pic->GetTexture();
-		tex->setContainerType(ContainerTypeAddPic);	
-		m_mapTex2Str.insert(std::map<CCTexture2D*, std::string>::value_type(tex, imageFile));
+		m_pkPicturesDict->SetObject(pic, ss.str().c_str());
 
+		CCTexture2D* tex = pic->GetTexture();
+		m_mapTexture.insert(std::map<CCTexture2D*, std::string>::value_type(tex, imageFile));
 	}
 
 	return pic->Copy();
 }
 
-void NDPicturePool::RemovePicture(const char* imageFile)
+//通过tex删除pic
+void NDPicturePool::RemovePictureByTex(CCTexture2D* tex)
 {
-	NDAsssert(imageFile != NULL);
-
-	m_pkTextures->RemoveObject(imageFile);
-}
-
-void NDPicturePool::Recyle()
-{
-	if (m_pkTextures)
+	if (!tex) return;
+	std::map<CCTexture2D*, std::string>::iterator it = m_mapTexture.find(tex);
+	if(it != m_mapTexture.end())
 	{
-		m_pkTextures->Recyle();
+		RemovePicture( it->second.c_str());
+		m_mapTexture.erase(it);
 	}
 }
 
-CCSize NDPicturePool::GetImageSize(std::string filename)
+//从字典删除pic，内部调用delete.
+void NDPicturePool::RemovePicture(const char* imageFile)
+{
+	if (imageFile)
+	{
+		m_pkPicturesDict->RemoveObject(imageFile);
+	}
+}
+
+//取缓存下来的图片尺寸（按需加载图片）
+CCSize NDPicturePool::GetImageSize( const std::string& filename )
 {
 	if (filename.empty())
 	{
 		return CCSizeZero;
 	}
 
-	std::map<std::string, CCSize>::iterator it = m_mapStr2Size.find(filename);
+	std::map<std::string, CCSize>::iterator it = m_mapImageSize.find(filename);
 
-	if (it != m_mapStr2Size.end())
+	if (it != m_mapImageSize.end())
 	{
 		return it->second;
 	}
+
 	CCImage image;
 
 	if (!image.initWithImageFile(filename.c_str()))
@@ -914,70 +927,27 @@ CCSize NDPicturePool::GetImageSize(std::string filename)
 		return CCSizeZero;
 	}
 
-	//todo(zjh)
 	CCSize size = CCSizeZero;
-	size.width			= image.getWidth();
-	size.height			= image.getHeight();
+	size.width		= image.getWidth();
+	size.height		= image.getHeight();
 
-	m_mapStr2Size.insert(std::make_pair(filename, size));
+	m_mapImageSize.insert(std::make_pair(filename, size));
 
 	return size;
 }
 
-CCTexture2D* NDPicturePool::AddTexture( const char* pszImageFile )
+void NDPicturePool::dump()
 {
-	NDAsssert(0 != pszImageFile);
-
-	stringstream kStream;
-	kStream << pszImageFile;
-
-	NDTexture* pkPicture = (NDTexture*)m_pkTextures->Object(kStream.str().c_str());
-
-	if (0 == pkPicture)
+	int index = 0;
+	for (map<CCTexture2D*,string>::iterator iter = m_mapTexture.begin();
+			iter != m_mapTexture.end(); ++iter)
 	{
-		NDTexture* pkNewPicture = new NDTexture();
-		pkNewPicture->Initialization(pszImageFile);
-		m_pkTextures->SetObject(pkNewPicture,kStream.str().c_str());
-		CCTexture2D* pkTexture = pkNewPicture->getTexture();
-		pkTexture->setContainerType(ContainerTypeAddPic);
-		m_mapTex2Str.insert(MAP_STRING::value_type(pkTexture,string(pszImageFile)));
-		pkPicture->GetTextureRetain();
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+		WriteCon( "@@ NDPicturePool[%02d]: %s\r\n", index++, iter->second.c_str());
+#else
+		CCLog( "@@ NDPicturePool[%02d], %s\r\n", index++, iter->second.c_str());
+#endif
 	}
-
-	return pkPicture->GetTextureRetain();
-}
-
-NDTexture::NDTexture()
-{
-	INC_NDOBJ_RTCLS
-	m_pkTexture = 0;
-}
-
-NDTexture::~NDTexture()
-{
-	DEC_NDOBJ_RTCLS
-	m_pkTexture->release();
-}
-
-void NDTexture::Initialization( const char* pszImageFile )
-{
-	if (0 == pszImageFile || !*pszImageFile)
-	{
-		LOGERROR("pszIamgeFile is null");
-		return;
-	}
-
-	if (m_pkTexture)
-	{
-		m_pkTexture->release();
-		m_pkTexture = 0;
-	}
-}
-
-CCTexture2D* NDTexture::GetTextureRetain()
-{
-	m_pkTexture->retain();
-	return m_pkTexture;
 }
 
 NS_NDENGINE_END

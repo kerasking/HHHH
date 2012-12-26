@@ -33,6 +33,7 @@
 #include "ScriptRegLua.h"
 #include "ObjectTracker.h"
 #include "CCTextureCache.h"
+#include "NDPicture.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "Foundation/NSAutoreleasePool.h"
@@ -665,6 +666,10 @@ bool NDGameApplication::processPM(const char* cmd)
 				|| stricmp( cmd, "dumptexture" ) == 0)
 	{
 		CCTextureCache::sharedTextureCache()->dumpCachedTextureInfo();
+	}
+	else if (stricmp( cmd, "dumppic" ) == 0)
+	{
+		NDPicturePool::DefaultPool()->dump();
 	}
 	else
 	{

@@ -15,11 +15,13 @@
 #include "NDObject.h"
 #include "NDDictionary.h"
 #include "CCTexture2D.h"
+#include "CCGeometry.h"
 #include "ccTypes.h"
 #include "shaders/ccGLStateCache.h"
 #include "shaders/ccGLProgram.h"
 #include <vector>
 #include <map>
+#include <string>
 
 using namespace cocos2d;
 using namespace std;
@@ -34,79 +36,57 @@ typedef enum
 	PictureRotation270
 } PictureRotation;
 
-typedef enum
-{
-	ContainerTypeNormal,
-	ContainerTypeAddPic,
-	ContainerTypeAddTexture
-}ContainerTypeOfTexture;
 
-class NDTexture:public NDObject
-{
-	DECLARE_CLASS(NDTexture);
-public:
-
-	NDTexture();
-	virtual ~NDTexture();
-
-	virtual void Initialization(const char* pszImageFile);
-
-	CC_SYNTHESIZE_READONLY(CCTexture2D*,m_pkTexture,Texture);
-	
-	CCTexture2D* GetTextureRetain();
-
-protected:
-private:
-};
-
-class NDPicture: public NDObject
+//-------------------------------------------------------------------------
+//图片资源：对应一张贴图，或者贴图中的裁剪部分.
+class NDPicture : public NDObject
 {
 	DECLARE_CLASS (NDPicture)
 	NDPicture(bool canGray = false);
 	~NDPicture();
+
 public:
-
-	void Initialization(const char* imageFile);
-	void Initialization(vector<const char*>& vImgFiles);
-	void Initialization(vector<const char*>& vImgFiles, vector<CCRect>& vImgCustomRect, vector<CCPoint>&vOffsetPoint);
-	void Initialization(const char* imageFile, int hrizontalPixel,
-			int verticalPixel = 0);
-
-	void Cut(CCRect kRect);
-
-	void SetReverse(bool reverse);
-
-	void Rotation(PictureRotation rotation);
-
-	void SetColor(cocos2d::ccColor4B color);
-
-	void DrawInRect(CCRect kRect);
-
-	CCSize GetSize();
-
-	NDPicture* Copy();
-
-	bool SetGrayState(bool gray);
-
-	bool IsGrayState();
-	//void SetScale(float fScale);
 	CC_SYNTHESIZE(float,m_fScale,Scale);
 	CC_SYNTHESIZE(bool,m_bIsTran,IsTran);
 
-public:
-	cocos2d::CCTexture2D *GetTexture();
-
-	void SetTexture(cocos2d::CCTexture2D* tex);
-
-public: //@shader
+	//@shader
 	CC_SYNTHESIZE_RETAIN(CCGLProgram*, m_pShaderProgram, ShaderProgram);
 	CC_SYNTHESIZE(ccGLServerState, m_glServerState, GLServerState);
+
+public:
+	void Initialization(const char* imageFile);
+	void Initialization(vector<const char*>& vImgFiles);
+	void Initialization(vector<const char*>& vImgFiles, vector<CCRect>& vImgCustomRect, vector<CCPoint>&vOffsetPoint);
+	void Initialization(const char* imageFile, int hrizontalPixel,int verticalPixel = 0);
+
+	void DrawInRect(CCRect kRect);
+	void Cut(CCRect kRect);
+
+	void SetReverse(bool reverse);
+	void Rotation(PictureRotation rotation);
+	void SetColor(cocos2d::ccColor4B color);
+	CCSize GetSize();
+	
+	bool SetGrayState(bool gray);
+	bool IsGrayState();
+
+public:
+	cocos2d::CCTexture2D *GetTexture() { return m_pkTexture; }
+	void SetTexture(cocos2d::CCTexture2D* tex);
+
+public:
+	NDPicture* Copy();
+
 protected:
 	void DrawSetup( const char* shaderType = kCCShader_PositionTexture_uColor );
 	virtual void debugDraw();
 
 private:
-	//float m_fScale;
+	void SetCoorinates();
+	void SetVertices(CCRect drawRect);
+	void destroy();
+
+private:
 	cocos2d::CCTexture2D* m_pkTexture;
 	CCRect m_kCutRect;
 	bool m_bReverse;
@@ -122,14 +102,13 @@ private:
 	GLubyte m_colors[16];
 	GLfloat m_pfVertices[8];
 
-	std::string m_strfile;
+	string m_strfile;
 	int m_hrizontalPixel;
 	int m_verticalPixel;
-
-	void SetCoorinates();
-	void SetVertices(CCRect drawRect);
 };
 
+
+//-------------------------------------------------------------------------
 class NDPictureDictionary: public NDDictionary
 {
 public:
@@ -140,21 +119,18 @@ public:
 	void Recyle();
 };
 
-class NDPicturePool: public NDObject
+
+//-------------------------------------------------------------------------
+class NDPicturePool : public NDObject
 {
 	DECLARE_CLASS (NDPicturePool)
 	NDPicturePool();
 	~NDPicturePool();
 
 public:
-
-	typedef map<CCTexture2D*,string> MAP_STRING;
-
 	static NDPicturePool* DefaultPool();
-
-	static void PurgeDefaultPool();
-
-#if 1  // for simple use
+	
+public:
 	NDPicture* AddPicture(const string& imageFile, bool gray = false) {
 		return AddPicture(imageFile.c_str(), gray);
 	}
@@ -162,26 +138,33 @@ public:
 	NDPicture* AddPicture(const string& imageFile, int hrizontalPixel, int verticalPixel = 0, bool gray = false) {
 		return 	AddPicture(imageFile.c_str(), hrizontalPixel, verticalPixel, gray );
 	}
-#endif 
 
+public:
 	NDPicture* AddPicture(const char* imageFile, bool gray = false);
-	NDPicture* AddPicture(const char* imageFile, int hrizontalPixel,
-			int verticalPixel = 0, bool gray = false);
-	CCTexture2D* AddTexture(const char* pszImageFile);
-	void RemoveTexture(CCTexture2D* tex);
+	NDPicture* AddPicture(const char* imageFile, int hrizontalPixel,int verticalPixel = 0, bool gray = false);
+
+public:
 	void RemovePicture(const char* imageFile);
+	void RemovePictureByTex(CCTexture2D* tex);
 
-	void Recyle();
+public:
+	void PurgeDefaultPool();
+	void Recyle()
+	{
+		if (m_pkPicturesDict)
+			m_pkPicturesDict->Recyle();
+	}
+
+public:
+	void dump();
 
 private:
+	NDPictureDictionary*			m_pkPicturesDict;	//缓存NDPicture*
+	map<CCTexture2D*,string>		m_mapTexture;	//缓存CCTexture2D*
 
-	NDPictureDictionary* m_pkTextures;
-
-	std::map<std::string, CCSize> m_mapStr2Size;
-	MAP_STRING m_mapTex2Str;
-
-private:
-	CCSize GetImageSize(std::string filename);
+private: //缓冲图片尺寸
+	map<string, CCSize>	m_mapImageSize;
+	CCSize GetImageSize( const string& filename );
 };
 
 NS_NDENGINE_END

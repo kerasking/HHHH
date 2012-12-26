@@ -956,11 +956,12 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int nImageIndex,
 			return pkTexture;
 		}
 
-		if (pkSprite->IsNonRole())
-		{
-			pkTexture = NDPicturePool::DefaultPool()->AddTexture(
-				pkAnimationGroup->getImages()->at(nImageIndex).c_str());
-		}
+//@del: never goes in.
+// 		if (pkSprite->IsNonRole())
+// 		{
+// 			pkTexture = NDPicturePool::DefaultPool()->AddTexture(
+// 				pkAnimationGroup->getImages()->at(nImageIndex).c_str());
+// 		}
 
 		if (pkTexture)
 		{

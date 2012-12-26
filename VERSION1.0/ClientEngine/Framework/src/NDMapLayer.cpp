@@ -390,14 +390,17 @@ void NDMapLayer::ShowTitle(int name_row, int name_col)
 {
 	m_bShowTitle = true;
 	m_nTitleAlpha = 0;
+
 	if (!m_lbTitle)
 	{
 		m_lbTitle = new NDUIImage;
 		m_lbTitle->Initialization();
+
 		NDPicture* picture = NDPicturePool::DefaultPool()->AddPicture(
 				tq::CString("%smap_title.png",
 						NDEngine::NDPath::GetImagePath().c_str()));
 		//picture->SetColor(ccc4(0, 0, 0,0));
+
 		int col = name_col;
 		int row = name_row;
 		picture->Cut(CCRectMake(col * 300, row * 60, 300, 60));
@@ -408,9 +411,11 @@ void NDMapLayer::ShowTitle(int name_row, int name_col)
 	{
 		m_lbTitleBg = new NDUIImage;
 		m_lbTitleBg->Initialization();
+		
 		NDPicture* bg = NDPicturePool::DefaultPool()->AddPicture(
 				tq::CString("%smap_title_bg.png",
 						NDEngine::NDPath::GetImagePath().c_str()));
+
 		m_lbTitleBg->SetPicture(bg, true);
 	}
 

@@ -455,31 +455,32 @@ void NDMapData::decode(FILE* pkStream)
 					nImageIndex = 0;
 				}
 
-				if (kTileImages.size() > nImageIndex)
-				{
-					std::string strImageName = kTileImages[nImageIndex];
-
-					NDTile* pkTile = new NDTile;
-					pkTile->setTexture(
-							NDPicturePool::DefaultPool()->AddTexture(
-									strImageName.c_str()));
-
-					int nPicParts = pkTile->getTexture()->getPixelsWide()
-							* pkTile->getTexture()->getMaxS() / nTileWidth;
-
-					pkTile->setCutRect(
-							CCRectMake(nTileWidth * (nTileIndex % nPicParts),
-									nTileHeight * (nTileIndex / nPicParts),
-									nTileWidth, nTileHeight));
-
-					pkTile->setDrawRect(
-							CCRectMake(nTileWidth * c, nTileHeight * r,
-									nTileWidth, nTileHeight));
-
-					pkTile->setReverse(reverse);
-					m_kMapTiles->addObject(pkTile);
-					pkTile->release();
-				}
+//@del: never goes in
+// 				if (kTileImages.size() > nImageIndex)
+// 				{
+// 					std::string strImageName = kTileImages[nImageIndex];
+// 
+// 					NDTile* pkTile = new NDTile;
+// 					pkTile->setTexture(
+// 							NDPicturePool::DefaultPool()->AddTexture(
+// 									strImageName.c_str()));
+// 
+// 					int nPicParts = pkTile->getTexture()->getPixelsWide()
+// 							* pkTile->getTexture()->getMaxS() / nTileWidth;
+// 
+// 					pkTile->setCutRect(
+// 							CCRectMake(nTileWidth * (nTileIndex % nPicParts),
+// 									nTileHeight * (nTileIndex / nPicParts),
+// 									nTileWidth, nTileHeight));
+// 
+// 					pkTile->setDrawRect(
+// 							CCRectMake(nTileWidth * c, nTileHeight * r,
+// 									nTileWidth, nTileHeight));
+// 
+// 					pkTile->setReverse(reverse);
+// 					m_kMapTiles->addObject(pkTile);
+// 					pkTile->release();
+// 				}
 			}
 		}
 	}

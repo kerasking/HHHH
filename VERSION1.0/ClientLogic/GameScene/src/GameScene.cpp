@@ -697,6 +697,7 @@ layer->AddChild(btn); \
 
 	NDPicture* pic = NDPicturePool::DefaultPool()->AddPicture(
 			NDPath::GetImgPathBattleUI("scenerolehandle.png"), false);
+
 	m_pkHeadShowImage = new NDUIImage;
 	m_pkHeadShowImage->Initialization();
 	m_pkHeadShowImage->SetPicture(pic, true);
@@ -707,9 +708,11 @@ layer->AddChild(btn); \
 	m_btnHeadShow->Initialization();
 	m_picHeadShow = NDPicturePool::DefaultPool()->AddPicture(
 			NDPath::GetImgPathBattleUI("handlearraw.png"), false);
+
 	m_picHeadShow->Rotation(PictureRotation180);
 	m_btnHeadShow->SetImage(m_picHeadShow, true, CCRectMake(10, 13, 9, 16),
 			true);
+
 	m_btnHeadShow->SetFrameRect(CCRectMake(0, 0, 27, 46));
 	m_btnHeadShow->SetDelegate(this);
 	pkLayer->AddChild(m_btnHeadShow);

@@ -53,11 +53,7 @@ NDTile::~NDTile()
 {
 	DEC_NDOBJ("NDTile");
 
-	if(m_pkTexture->getContainerType() == NDEngine::ContainerTypeAddPic 
-		|| m_pkTexture->getContainerType() == NDEngine::ContainerTypeAddTexture) 
-	{
-		NDEngine::NDPicturePool::DefaultPool()->RemoveTexture(m_pkTexture);
-	}
+	NDEngine::NDPicturePool::DefaultPool()->RemovePictureByTex(m_pkTexture);
 
 #if 0
 	CC_SAFE_FREE (m_pkTexture);
