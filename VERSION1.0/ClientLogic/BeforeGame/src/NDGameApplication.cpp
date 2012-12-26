@@ -32,6 +32,7 @@
 #include "NDUILoad.h"
 #include "ScriptRegLua.h"
 #include "ObjectTracker.h"
+#include "CCTextureCache.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "Foundation/NSAutoreleasePool.h"
@@ -659,6 +660,11 @@ bool NDGameApplication::processPM(const char* cmd)
 
 		DWORD num = 0;
 		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
+	}
+	else if (stricmp( cmd, "dumptex" ) == 0 
+				|| stricmp( cmd, "dumptexture" ) == 0)
+	{
+		CCTextureCache::sharedTextureCache()->dumpCachedTextureInfo();
 	}
 	else
 	{
