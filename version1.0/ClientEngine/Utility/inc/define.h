@@ -111,16 +111,15 @@ do \
 #define USING_NS_ND			using namespace NDEngine;
 
 #define ND_ASSERT_NO_RETURN(bValue) \
-	if (bValue) \
-	{ \
-		return; \
-	}
+if (bValue) \
+{ \
+	return; \
+}
 
 #define ND_ASSERT_HAS_RETURN(bValue, returnValue) \
-	if (bValue) \
-	{ \
-		return returnValue; \
-	}
-
+if (bValue) \
+{ \
+	return returnValue; \
+}
 
 #endif // __DEFINE_H__
