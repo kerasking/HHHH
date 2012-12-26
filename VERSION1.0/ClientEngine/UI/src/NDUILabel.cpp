@@ -53,7 +53,7 @@ NDUILabel::NDUILabel()
 NDUILabel::~NDUILabel()
 {
 	DEC_NDOBJ_RTCLS
-	CC_SAFE_DELETE(m_texture);
+	CC_SAFE_RELEASE_NULL(m_texture);
 }
 	
 void NDUILabel::SetText(const char* utf8_text)
@@ -154,7 +154,7 @@ void NDUILabel::MakeTexture()
 	dim.width = dim.width;
 	dim.height = dim.height;
 	*/
-	CC_SAFE_DELETE(m_texture);
+	CC_SAFE_RELEASE_NULL(m_texture);
 
 	if ("" == m_strText)
 	{
@@ -178,7 +178,8 @@ void NDUILabel::MakeTexture()
 	}
 
 	// init texture with string
-	m_texture = new CCTexture2D;
+	//m_texture = new CCTexture2D;
+	m_texture = CCTexture2D::create();
 	m_texture->initWithString( m_strText.c_str(),
 				CCSizeMake(thisRect.size.width, thisRect.size.height),
 				eTextAlign,

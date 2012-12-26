@@ -34,6 +34,7 @@
 #include "ObjectTracker.h"
 #include "CCTextureCache.h"
 #include "NDPicture.h"
+#include "TextureList.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "Foundation/NSAutoreleasePool.h"
@@ -653,6 +654,8 @@ bool NDGameApplication::processPM(const char* cmd)
 		DWORD n = 0;
 		WriteConsoleA(  hOut, str.c_str(), str.length(), &n, NULL );
 	}
+
+	//dump obj
 	else if (n = sscanf(cmd, "dumpobj %d", &val)) //n=
 	{
 		val = (n > 0 ? val : 0);
@@ -662,14 +665,30 @@ bool NDGameApplication::processPM(const char* cmd)
 		DWORD num = 0;
 		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
 	}
+
+	//dump tex
 	else if (stricmp( cmd, "dumptex" ) == 0 
 				|| stricmp( cmd, "dumptexture" ) == 0)
 	{
-		CCTextureCache::sharedTextureCache()->dumpCachedTextureInfo();
+		string info = CCTextureCache::sharedTextureCache()->dumpCachedTextureInfo();
+		DWORD num = 0;
+		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
 	}
+
+	//dump pic
 	else if (stricmp( cmd, "dumppic" ) == 0)
 	{
-		NDPicturePool::DefaultPool()->dump();
+		string info = NDPicturePool::DefaultPool()->dump();
+		DWORD num = 0;
+		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
+	}
+
+	//dump texlist
+	else if (stricmp( cmd, "dumptexlist" ) == 0)
+	{
+		string info = TextureList::instance().dump();
+		DWORD num = 0;
+		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
 	}
 	else
 	{

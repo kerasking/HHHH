@@ -19,6 +19,8 @@
 #include "ccTypes.h"
 #include "shaders/ccGLStateCache.h"
 #include "shaders/ccGLProgram.h"
+#include "NDTimer.h"
+
 #include <vector>
 #include <map>
 #include <string>
@@ -122,6 +124,7 @@ public:
 
 //-------------------------------------------------------------------------
 class NDPicturePool : public NDObject
+					, public ITimerCallback
 {
 	DECLARE_CLASS (NDPicturePool)
 	NDPicturePool();
@@ -156,7 +159,10 @@ public:
 	}
 
 public:
-	void dump();
+	virtual void OnTimer(OBJID tag);
+
+public:
+	string dump();
 
 private:
 	NDPictureDictionary*			m_pkPicturesDict;	//ª∫¥ÊNDPicture*
@@ -165,6 +171,9 @@ private:
 private: //ª∫≥ÂÕº∆¨≥ﬂ¥Á
 	map<string, CCSize>	m_mapImageSize;
 	CCSize GetImageSize( const string& filename );
+
+private:
+	NDTimer* m_timer;
 };
 
 NS_NDENGINE_END

@@ -963,6 +963,14 @@
 				RelativePath="..\textures\CCTexturePVR.h"
 				>
 			</File>
+			<File
+				RelativePath="..\textures\TextureList.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\textures\TextureList.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="tilemap_parallax_nodes"

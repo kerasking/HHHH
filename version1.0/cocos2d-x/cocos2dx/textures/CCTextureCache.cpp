@@ -685,8 +685,13 @@ void CCTextureCache::reloadAllTextures()
 #endif
 }
 
-void CCTextureCache::dumpCachedTextureInfo()
+//ND_MOD
+//void CCTextureCache::dumpCachedTextureInfo()
+std::string CCTextureCache::dumpCachedTextureInfo()
 {
+	string total;
+	char line[500] = "";
+
     unsigned int count = 0;
     unsigned int totalBytes = 0;
 
@@ -703,15 +708,18 @@ void CCTextureCache::dumpCachedTextureInfo()
 #if ND_MOD
 		const char* name = strstr( pElement->getStrKey(), "/Bin/" );
 		if (!name) name = pElement->getStrKey();
-
-		CCLog("@@ tex: %-90s rc=%lu, id=%lu, %lu x %lu, %ld bpp => %lu KB",
-			name,
-			(long)tex->retainCount(),
-			(long)tex->getName(),
-			(long)tex->getPixelsWide(),
-			(long)tex->getPixelsHigh(),
-			(long)bpp,
-			(long)bytes / 1024);
+		
+		sprintf( line, "@@ tex: %-90s rc=%lu, id=%lu, %lu x %lu, %ld bpp => %lu KB\r\n",
+					name,
+					(long)tex->retainCount(),
+					(long)tex->getName(),
+					(long)tex->getPixelsWide(),
+					(long)tex->getPixelsHigh(),
+					(long)bpp,
+					(long)bytes / 1024);
+		
+		CCLog( line );
+		total += line;
 #else
         CCLOG("cocos2d: \"%s\" rc=%lu id=%lu %lu x %lu @ %ld bpp => %lu KB",
                pElement->getStrKey(),
@@ -725,10 +733,15 @@ void CCTextureCache::dumpCachedTextureInfo()
     }
 
 #if ND_MOD
-    CCLog("@@ CCTextureCache total: %ld textures, for %lu KB (%.2f MB)", (long)count, (long)totalBytes / 1024, totalBytes / (1024.0f*1024.0f));
+    sprintf( line, "@@ CCTextureCache total: %ld textures, for %lu KB (%.2f MB)\r\n", 
+		(long)count, (long)totalBytes / 1024, totalBytes / (1024.0f*1024.0f));
+
+	CCLog( line );
+	total += line;
 #else
 	CCLOG("cocos2d: CCTextureCache dumpDebugInfo: %ld textures, for %lu KB (%.2f MB)", (long)count, (long)totalBytes / 1024, totalBytes / (1024.0f*1024.0f));
 #endif
+	return total;
 }
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA

@@ -47,6 +47,7 @@ THE SOFTWARE.
 
 #if ND_MOD
 #include "ObjectTracker.h"
+#include "TextureList.h"
 #endif
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
@@ -128,6 +129,7 @@ CCTexture2D::CCTexture2D()
 {
 #if ND_MOD
 	INC_CCOBJ("CCTexture2D");
+	TextureList::instance().add_tex(this);
 #endif
 }
 
@@ -135,6 +137,7 @@ CCTexture2D::~CCTexture2D()
 {
 #if ND_MOD
 	DEC_CCOBJ("CCTexture2D");
+	TextureList::instance().del_tex(this);
 #endif
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA

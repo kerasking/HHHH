@@ -58,6 +58,7 @@ THE SOFTWARE.
 
 #if ND_MOD
 #include "ObjectTracker.h"
+#include "textures/TextureList.h"
 #endif
 
 #ifdef ANDROID
@@ -482,6 +483,7 @@ void CCDirector::purgeCachedData(void)
     CCLabelBMFont::purgeCachedData();
     CCTextureCache::sharedTextureCache()->removeUnusedTextures();
     CCFileUtils::sharedFileUtils()->purgeCachedEntries();
+	TextureList::instance().purge();
 }
 
 float CCDirector::getZEye(void)

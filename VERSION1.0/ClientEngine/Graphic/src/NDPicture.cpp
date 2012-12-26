@@ -19,7 +19,7 @@
 #include "CCCommon.h"
 #include "CCPlatformConfig.h"
 #include "ObjectTracker.h"
-#include "NDUtility.h"
+
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -93,7 +93,8 @@ void NDPicture::Initialization(const char* imageFile)
 	}
 
 	// init tex
-	m_pkTexture = new CCTexture2D;
+	//m_pkTexture = new CCTexture2D;
+	m_pkTexture = CCTexture2D::create();
 	m_pkTexture->initWithImage(&image);
 	//m_pkTexture->initWithPalettePNG(imageFile);
 
@@ -192,7 +193,8 @@ void NDPicture::Initialization(const char* imageFile, int hrizontalPixel, int ve
 	// init tex
 	if (!bLoadStretchImageSucess)
 	{
-		m_pkTexture = new CCTexture2D;
+		//m_pkTexture = new CCTexture2D;
+		m_pkTexture = CCTexture2D::create();
 		m_pkTexture->initWithImage(&image);
 		//m_pkTexture->initWithPalettePNG(imageFile);
 	}
@@ -775,7 +777,6 @@ void NDPictureDictionary::Recyle()
 			{
 				//printf("\nfile name[%s] retaincount[%d]", [key UTF8String], [texture retainCount]);
 			}
-
 		}
 	}
 
@@ -795,6 +796,9 @@ NDPicturePool::NDPicturePool()
 	INC_NDOBJ_RTCLS;
 
 	m_pkPicturesDict = new NDPictureDictionary();
+
+	m_timer = new NDTimer;
+	m_timer->SetTimer(this, 1, 1.0f);
 }
 
 NDPicturePool* NDPicturePool::DefaultPool()
@@ -806,6 +810,12 @@ NDPicturePool* NDPicturePool::DefaultPool()
 NDPicturePool::~NDPicturePool()
 {
 	DEC_NDOBJ_RTCLS;
+
+//@todo: too late.
+// 	if (m_timer)
+// 	{
+// 		m_timer->KillTimer(this, 1);
+// 	}
 
 	PurgeDefaultPool();
 }
@@ -936,18 +946,54 @@ CCSize NDPicturePool::GetImageSize( const std::string& filename )
 	return size;
 }
 
-void NDPicturePool::dump()
+void NDPicturePool::OnTimer(OBJID tag)
+{
+	if (tag == 1)
+	{
+		this->Recyle();
+	}
+}
+
+string NDPicturePool::dump()
 {
 	int index = 0;
+	int totalBytes = 0;
+	int count = 0;
+	
+	string total;
+	char line[200] = "";
+
 	for (map<CCTexture2D*,string>::iterator iter = m_mapTexture.begin();
 			iter != m_mapTexture.end(); ++iter)
 	{
+		CCTexture2D* tex = iter->first;
+		if (!tex) continue;
+
+		// Each texture takes up width * height * bytesPerPixel bytes.
+		unsigned int bpp = tex->bitsPerPixelForFormat();
+		unsigned int bytes = tex->getPixelsWide() * tex->getPixelsHigh() * bpp / 8;
+		totalBytes += bytes;
+		count++;
+
+		// format file size
+		char picSize[20] = "";
+		sprintf( picSize, "[%.1fK]", float(bytes)/1024 );
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-		WriteCon( "@@ NDPicturePool[%02d]: %s\r\n", index++, iter->second.c_str());
+		sprintf( line, "@@ NDPicturePool[%02d]: %-10s ref=%d %s\r\n", index++, picSize, tex->retainCount(), iter->second.c_str());
+		total += line;
 #else
-		CCLog( "@@ NDPicturePool[%02d], %s\r\n", index++, iter->second.c_str());
+		CCLog( "@@ NDPicturePool[%02d]: %-10s %s", index++, picSize, iter->second.c_str());
 #endif
 	}
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	sprintf( line, "@@ NDPicturePool, total %d tex, total %.1fM.\r\n", count, float(totalBytes)/(1024*1024));
+	total += line;
+#else
+	CCLog( "@@ NDPicturePool, total %d tex, total %.1fM.", count, float(totalBytes)/(1024*1024));
+#endif
+	return total;
 }
 
 NS_NDENGINE_END

@@ -141,7 +141,12 @@ public:
 			int nHeight,CCSize kSize,unsigned int uiSizeOfData);
 			
 	bool initWithPalettePNG(const char* pszPNGFile);	
+
+	static CCTexture2D* create() {
+		return new CCTexture2D();
+	}
 #endif
+
     /**
     Drawing extensions to make it easy to draw basic quads using a CCTexture2D object.
     These functions require GL_TEXTURE_2D and both GL_VERTEX_ARRAY and GL_TEXTURE_COORD_ARRAY client states to be enabled.

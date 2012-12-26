@@ -103,7 +103,7 @@ NDUILayer::~NDUILayer()
 {
 	DEC_NDOBJ_RTCLS
 
-	CC_SAFE_RELEASE (m_pkBackgroudTexture);
+	CC_SAFE_RELEASE_NULL (m_pkBackgroudTexture);
 
 	if (m_bClearOnFree)
 	{
@@ -182,7 +182,8 @@ void NDUILayer::SetBackgroundImage(const char* imageFile)
 
 	CCImage image;
 	image.initWithImageFile(imageFile);
-	m_pkBackgroudTexture = new CCTexture2D;
+	//m_pkBackgroudTexture = new CCTexture2D;
+	m_pkBackgroudTexture = CCTexture2D::create();
 	m_pkBackgroudTexture->initWithImage(&image);
 }
 

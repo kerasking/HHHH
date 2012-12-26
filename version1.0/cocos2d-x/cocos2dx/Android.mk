@@ -122,6 +122,7 @@ textures/CCTexture2D.cpp \
 textures/CCTextureAtlas.cpp \
 textures/CCTextureCache.cpp \
 textures/CCTexturePVR.cpp \
+textures/TextureList.cpp \
 ../libpng/png.c \
 ../libpng/pngerror.c \
 ../libpng/pngget.c \

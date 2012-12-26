@@ -147,7 +147,8 @@ public:
     *
     * @since v1.0
     */
-    void dumpCachedTextureInfo();
+    //void dumpCachedTextureInfo();
+	std::string dumpCachedTextureInfo();//ND_MOD
 
 #ifdef CC_SUPPORT_PVRTC
     /** Returns a Texture2D object given an PVRTC RAW filename

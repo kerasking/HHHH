@@ -57,6 +57,25 @@ NS_NDENGINE_BGN
 //战场中对立方判断距离( (cellX1-cellX2)^2+(cellY1-cellY2)^2 )
 #define BATTLEFIELD_DISTANCE (1)
 
+///////////////////////////////////////////////////////////////////////////////////////
+//@del
+void TestDrama();
+
+//测试：android平台下点NPC打log
+void dumpLog()
+{
+#if 0
+	CCTextureCache::sharedTextureCache()->dumpCachedTextureInfo();
+	
+	string info;
+	DUMP_OBJ(info, 0);
+	CCLog(info.c_str());
+#endif
+}
+///////////////////////////////////////////////////////////////////////////////////////
+
+
+
 NDMapLayer* M_GetMapLayer()
 {
 	return NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->
@@ -276,8 +295,6 @@ bool NDPlayer::CancelClickPointInSideNpc()
 
 }
 
-void TestDrama(); //@del
-
 bool NDPlayer::ClickPoint(CCPoint point, bool bLongTouch, bool bPath/*=true*/)
 {
 //	CCLog( "NDPlayer::ClickPoint(%d, %d), @0\r\n", (int)point.x, (int)point.y );
@@ -327,7 +344,7 @@ bool NDPlayer::ClickPoint(CCPoint point, bool bLongTouch, bool bPath/*=true*/)
 
 						if ( dis < FOCUS_JUDGE_DISTANCE )
 						{
-							//TestDrama();//@del
+							dumpLog();//@del
 							SendNpcInteractionMessage(npc->m_nID);
 							return false;
 						}
