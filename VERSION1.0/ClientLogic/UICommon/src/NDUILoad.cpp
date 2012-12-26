@@ -432,9 +432,6 @@ void NDUILoad::PostLoad(UIINFO& uiInfo)
 
 	//Í³Ò»µ½960*640
     float scale = 2.0f;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	scale = CC_CONTENT_SCALE_FACTOR();
-#endif
 	uiInfo.CtrlPos.x	*= scale;
 	uiInfo.CtrlPos.y	*= scale;
 	uiInfo.nCtrlWidth	*= scale;

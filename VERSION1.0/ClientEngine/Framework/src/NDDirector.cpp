@@ -433,17 +433,11 @@ NDScene* NDDirector::GetSceneByTag(int nSceneTag)
 //返回值：	x值存放x方向的缩放比例
 //			y值存放y放点的缩放比例
 //这个函数仅对android手机有效
-CCPoint NDDirector::getAndroidScale()
+CCPoint NDDirector::getAndroidScale() const
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	CCSize sz = CCDirector::sharedDirector()->getVisibleSize();
 	return ccp( sz.width/960, sz.height/640 );
-#endif
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if(IsEnableRetinaDisplay())
-        return ccp( 1,1 );
-    else
-        return ccp( 0.5,0.5 );
 #else
 	return ccp( 1,1 );
 #endif
