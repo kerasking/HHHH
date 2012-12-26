@@ -1382,7 +1382,7 @@ void NDBaseRole::HandleShadow(CCSize parentsize)
 // 
 // void NDEngine::NDBaseRole::RunBattleSubAnimation(Fighter* pkFighter)
 // {
-// 	Battle* pkBattle = 0;
+// 	BattleUILayer* pkBattle = 0;
 // 
 // 	if (!pkBattle)
 // 	{

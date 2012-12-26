@@ -22,6 +22,7 @@
 #include "SMBattleScene.h"
 #include "Fighter.h"
 #include "NDBaseBattleMgr.h"
+#include "ObjectTracker.h"
 
 using namespace std;
 using namespace NDEngine;
@@ -31,7 +32,7 @@ using namespace NDEngine;
 typedef map<OBJID, BattleSkill*> MAP_BATTLE_SKILL;
 typedef MAP_BATTLE_SKILL::iterator MAP_BATTLE_SKILL_IT;
 
-class Battle;
+class BattleUILayer;
 struct Command;
 
 enum FIGHT_ACTION_STATUS
@@ -141,12 +142,13 @@ struct FIGHTER_CMD
 {
 	FIGHTER_CMD()
 	{
+		INC_NDOBJ("FIGHTER_CMD");
 		memset(this, 0L, sizeof(FIGHTER_CMD));
 	}
 
 	~FIGHTER_CMD()
 	{
-
+		DEC_NDOBJ("FIGHTER_CMD");
 	}
 
 	BATTLE_EFFECT_TYPE effect_type;
@@ -169,9 +171,6 @@ public:
 	int m_nTeamAttack;
 	int m_nTeamDefense;
 
-	Fighter* m_pkActor;
-	Fighter* m_pkTarget;
-
 	BATTLE_EFFECT_TYPE m_eEffectType;
 	FIGHT_ACTION_STATUS m_eActionStatus;
 	
@@ -179,12 +178,15 @@ public:
 	bool m_bIsCombo;
 	bool m_bIsCriticalHurt;
 	bool m_bIsDritical;
-	
-	BattleSkill* m_pkSkill;
+
+	Fighter* m_pkActor;
+	Fighter* m_pkTarget;
+
+	BattleSkill* m_pkSkill; //@free
 	FighterStatus* m_pkStatus;
-	
+
 	VEC_FIGHTER m_kFighterList;
-	VEC_FIGHTERCOMMAND m_vCmdList;
+	VEC_FIGHTERCOMMAND m_vCmdList; //@free
 
 	void init()
 	{
@@ -202,8 +204,15 @@ public:
 		m_pkStatus = NULL;
 	}
 
+	~FightAction()
+	{
+		DEC_NDOBJ("FightAction");
+	}
+
 	FightAction(Fighter* f1, Fighter* f2, BATTLE_EFFECT_TYPE type)
 	{
+		INC_NDOBJ("FightAction");
+
 		this->init();
 
 		m_pkActor = f1;
@@ -216,6 +225,8 @@ public:
 
 	FightAction(int team1, int team2, BATTLE_EFFECT_TYPE type)
 	{
+		INC_NDOBJ("FightAction");
+
 		this->init();
 
 		m_pkActor = NULL;
@@ -251,6 +262,7 @@ public:
 
 public:
 	virtual bool process(MSGID msgID, NDEngine::NDTransData* bao, int len);
+	void dumpBao(MSGID msgID, NDEngine::NDTransData* bao, int len);
 
 	// 退出战斗
 	void quitBattle(bool bEraseOut = true);
@@ -263,7 +275,7 @@ public:
 		return m_mapBattleSkill;
 	}
 
-	Battle* GetBattle()
+	BattleUILayer* GetBattle()
 	{
 		return this->m_pkBattle;
 	}
@@ -283,6 +295,8 @@ public:
 
 	void SetBattleOver(void);
 
+	string getEffectName( BATTLE_EFFECT_TYPE eType );
+
 private:
 	void processBattleStart(NDEngine::NDTransData& bao);
 	void processControlPoint(NDEngine::NDTransData& bao);
@@ -292,7 +306,10 @@ private:
 	void processBattleSkillList(NDTransData& data, int len);
 	void closeUI();
 	void ReleaseActionList();
+	void ReleaseActionList_Imp( VEC_FIGHTACTION& vecFightAction );
 	void RestoreActionList();
+	void destroyFighters();
+	void cleanup();
 
 private:
 	//处理显示战斗胜利的结果 （包括副本战斗以及竞技场战斗）
@@ -313,7 +330,7 @@ public:
 	VEC_FIGHTACTION m_vActionList3; //3队战斗指令
 
 private:
-	Battle*			m_pkBattle;
+	BattleUILayer*	m_pkBattle;
 	ScriptDB*		m_pkDatabase;
 	Command*		m_pkBeforeCommand;
 

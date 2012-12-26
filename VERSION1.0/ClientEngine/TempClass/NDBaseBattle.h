@@ -36,7 +36,7 @@ public:
 	virtual void dealWithCommand(){}
 	//virtual void AddCommand(Command* cmd) = 0;
 
-	virtual void AddActionCommand(FightAction* action){}
+	virtual void AddFighterAction(FightAction* action){}
 	virtual void InitSpeedBar(){}
 	virtual void InitEudemonOpt(){}
 	virtual void Initialization(int action){}

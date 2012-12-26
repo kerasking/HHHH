@@ -427,7 +427,7 @@ void FinishBattle(void)
 
 void CloseBattle()
 {
-	Battle* battle = BattleMgrObj.GetBattle();
+	BattleUILayer* battle = BattleMgrObj.GetBattle();
 	if (battle)
 	{
 		battle->FinishBattle();

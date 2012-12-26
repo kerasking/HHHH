@@ -10,12 +10,15 @@
 #include "BattleSkill.h"
 #include "BattleMgr.h"
 #include "Battle.h"
+#include "ObjectTracker.h"
 #include <sstream>
 
 using namespace std;
 
 BattleSkill::BattleSkill()
 {
+	INC_NDOBJ("BattleSkill");
+
 	type = SKILL_TYPE_NONE;// 技能类型
 	
 	lvRequire = 0;
@@ -92,7 +95,7 @@ BattleSkill::BattleSkill()
 
 BattleSkill::~BattleSkill()
 {
-	
+	DEC_NDOBJ("BattleSkill");
 }
 
 string BattleSkill::getFullDes()
@@ -197,7 +200,7 @@ string BattleSkill::getSimpleDes(bool bIncludeName)
 	{
 		ss << NDCommonCString("CoolTurn") << ": " << getCd() << "\n";
 
-		Battle* battle = BattleMgrObj.GetBattle();
+		BattleUILayer* battle = BattleMgrObj.GetBattle();
 		if (!IsSkillOwnByPlayer() && battle && battle->CanPetFreeUseSkill())
 		{
 			ss << NDCommonCString("BattleNoLimit");

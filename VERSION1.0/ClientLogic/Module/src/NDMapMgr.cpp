@@ -1014,7 +1014,7 @@ void NDMapMgr::Update(unsigned long ulDiff)
 			if (role)
 			{
 				NDNode* parent = role->GetParent();
-				if (parent && !parent->IsKindOfClass(RUNTIME_CLASS(Battle)))
+				if (parent && !parent->IsKindOfClass(RUNTIME_CLASS(BattleUILayer)))
 				{
 					role->Update(ulDiff);
 				}
@@ -1187,7 +1187,7 @@ void NDMapMgr::processPlayerExt(NDTransData* pkData, int nLength)
 	}
 
 	if (pkRole->GetParent() != 0
-			&& !pkRole->GetParent()->IsKindOfClass(RUNTIME_CLASS(Battle)))
+			&& !pkRole->GetParent()->IsKindOfClass(RUNTIME_CLASS(BattleUILayer)))
 	{
 		pkRole->SetAction(pkRole->isMoving(), true);
 	}
@@ -2307,7 +2307,7 @@ void NDMapMgr::BattleEnd(int iResult)
 						(monster->m_nSelfMoveRectX - 64) / MAP_UNITSIZE_X,
 						(monster->GetPosition().y) / MAP_UNITSIZE_Y);
 
-				Battle* battle = BattleMgrObj.GetBattle();
+				BattleUILayer* battle = BattleMgrObj.GetBattle();
 				if (battle)
 				{
 					battle->setSceneCetner(monster->m_nSelfMoveRectX - 64, //@todo:µ°ÌÛµÄÓ²±àÂë£¡
@@ -2408,7 +2408,7 @@ void NDMapMgr::processKickBack(NDTransData* pkData, int nLength)
 		player.teamSetServerPosition(usRecordX, usRecordY);
 	}
 
-	Battle* battle = BattleMgrObj.GetBattle();
+	BattleUILayer* battle = BattleMgrObj.GetBattle();
 	NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(
 			NDDirector::DefaultDirector()->GetRunningScene());
 	player.stopMoving();
@@ -3128,7 +3128,7 @@ void NDMapMgr::processRehearse(NDTransData& kData)
 	}
 	case REHEARSE_LOGOUT:
 	{
-		Battle* battle = BattleMgrObj.GetBattle();
+		BattleUILayer* battle = BattleMgrObj.GetBattle();
 		if (battle)
 		{
 			battle->SetFighterOnline(idTarget, false);
@@ -3137,7 +3137,7 @@ void NDMapMgr::processRehearse(NDTransData& kData)
 		break;
 	case REHEARSE_LOGIN:
 	{
-		Battle* battle = BattleMgrObj.GetBattle();
+		BattleUILayer* battle = BattleMgrObj.GetBattle();
 		if (battle)
 		{
 			battle->SetFighterOnline(idTarget, true);

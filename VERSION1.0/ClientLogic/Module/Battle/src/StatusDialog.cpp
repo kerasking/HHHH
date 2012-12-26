@@ -286,7 +286,7 @@ bool StatusDialog::TouchEnd(NDTouch* touch)
 		return false;
 	}
 
-	Battle* parent = (Battle*)this->GetParent();
+	BattleUILayer* parent = (BattleUILayer*)this->GetParent();
 
 	if (parent) 
 	{

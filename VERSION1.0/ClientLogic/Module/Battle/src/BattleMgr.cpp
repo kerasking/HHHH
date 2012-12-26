@@ -34,6 +34,22 @@
 #define QUIT_BATTLE_TIMER_TAG (13621)
 #define QUIT_DRAMA_TIMER_TAG (13622)
 
+//输出测试
+#define ENABLE_DUMP_MSG 1
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) && ENABLE_DUMP_MSG
+	#define DUMP_WRITE_CON(a)			WriteCon(a)
+	#define DUMP_WRITE_CON2(a,b)		WriteCon(a,b)
+	#define DUMP_WRITE_CON3(a,b,c)		WriteCon(a,b,c)
+	#define DUMP_WRITE_CON4(a,b,c,d)	WriteCon(a,b,c,d)
+	#define DUMP_WRITE_CON5(a,b,c,d,e)	WriteCon(a,b,c,d,e)
+#else
+	#define DUMP_WRITE_CON
+	#define DUMP_WRITE_CON2(a,b)
+	#define DUMP_WRITE_CON3(a,b,c)
+	#define DUMP_WRITE_CON4(a,b,c,d)
+	#define DUMP_WRITE_CON5(a,b,c,d,e)
+#endif
+
 using std::stringstream;
 using namespace NDEngine;
 
@@ -78,16 +94,25 @@ BattleMgr::~BattleMgr()
 	DEC_NDOBJ("BattleMgr");
 
 	ReleaseAllBattleSkill();
-	if (m_pkBattleReward)
-	{
-		CC_SAFE_DELETE (m_pkBattleReward);
-	}
-	if(m_pkPrebattleReward)
-	{
-		CC_SAFE_DELETE (m_pkPrebattleReward);
-	}
+
+	CC_SAFE_DELETE (m_pkBattleReward);
+	CC_SAFE_DELETE (m_pkPrebattleReward);
+
+	this->destroyFighters();
 
 	ReleaseActionList();
+}
+
+
+//@@
+void BattleMgr::destroyFighters()
+{
+	for (VEC_FIGHTER_IT it = m_vFighter.begin(); it != m_vFighter.end(); it++)
+	{
+		CC_SAFE_DELETE(*it);
+	}
+
+	m_vFighter.clear();
 }
 
 void BattleMgr::RestoreActionList()
@@ -96,7 +121,6 @@ void BattleMgr::RestoreActionList()
 
 	for (; it != m_vActionList1.end(); it++)
 	{
-		//CC_SAFE_DELETE((*it)->skill);
 		FightAction* action = (*it);
 		if(action)
 		{
@@ -108,20 +132,17 @@ void BattleMgr::RestoreActionList()
 
 	for (; it2 != m_vActionList2.end(); it2++)
 	{
-		//CC_SAFE_DELETE((*it)->skill);
 		FightAction* action = (*it);
 		if(action)
 		{
 			action->m_eActionStatus = ACTION_STATUS_WAIT;
 		}
-
 	}
 
 	VEC_FIGHTACTION_IT it3 = m_vActionList3.begin();
 
 	for (; it3 != m_vActionList3.end(); it3++)
 	{
-		//CC_SAFE_DELETE((*it)->skill);
 		FightAction* action = (*it);
 		if(action)
 		{
@@ -130,62 +151,39 @@ void BattleMgr::RestoreActionList()
 	}
 }
 
+//@@
+void BattleMgr::ReleaseActionList_Imp( VEC_FIGHTACTION& vecFightAction )
+{
+	for (VEC_FIGHTACTION_IT it = vecFightAction.begin(); 
+			it != vecFightAction.end(); it++)
+	{
+		FightAction* fightAction = *it;
+		if (!fightAction) continue;
+
+		// cleanup skill
+		CC_SAFE_DELETE(fightAction->m_pkSkill);
+
+		// cleanup cmd list
+		for (VEC_FIGHTERCOMMAND_IT fm_it = fightAction->m_vCmdList.begin(); 
+				fm_it != fightAction->m_vCmdList.end(); fm_it++)
+		{
+			CC_SAFE_DELETE(*fm_it);
+		}
+		fightAction->m_vCmdList.clear();
+
+		//
+		CC_SAFE_DELETE(fightAction);
+	}
+
+	vecFightAction.clear();
+}
+
+//@@
 void BattleMgr::ReleaseActionList()
 {
-	VEC_FIGHTACTION_IT it = m_vActionList1.begin();
-
-	for (; it != m_vActionList1.end(); it++)
-	{
-		//CC_SAFE_DELETE((*it)->skill);
-		VEC_FIGHTERCOMMAND_IT fm_it = (*it)->m_vCmdList.begin();
-		CC_SAFE_DELETE((*it)->m_pkSkill);
-
-		for (; fm_it != (*it)->m_vCmdList.end(); fm_it++)
-		{
-			CC_SAFE_DELETE(*fm_it);
-		}
-		
-		(*it)->m_vCmdList.clear();
-		CC_SAFE_DELETE(*it);
-
-	}
-
-	m_vActionList1.clear();
-
-	VEC_FIGHTACTION_IT it2 = m_vActionList2.begin();
-
-	for (; it2 != m_vActionList2.end(); it2++)
-	{
-		//CC_SAFE_DELETE((*it)->skill);
-		VEC_FIGHTERCOMMAND_IT fm_it = (*it2)->m_vCmdList.begin();
-		for (; fm_it != (*it2)->m_vCmdList.end(); fm_it++)
-		{
-			CC_SAFE_DELETE(*fm_it);
-		}
-
-		(*it2)->m_vCmdList.clear();
-		CC_SAFE_DELETE(*it2);
-
-	}
-
-	m_vActionList2.clear();
-
-	VEC_FIGHTACTION_IT it3 = m_vActionList3.begin();
-
-	for (; it3 != m_vActionList3.end(); it3++)
-	{
-		//CC_SAFE_DELETE((*it)->skill);
-		VEC_FIGHTERCOMMAND_IT fm_it = (*it)->m_vCmdList.begin();
-		for (; fm_it != (*it3)->m_vCmdList.end(); fm_it++)
-		{
-			CC_SAFE_DELETE(*fm_it);
-		}
-
-		(*it3)->m_vCmdList.clear();
-		CC_SAFE_DELETE(*it3);
-	}
-
-	m_vActionList3.clear();
+	ReleaseActionList_Imp( m_vActionList1 );
+	ReleaseActionList_Imp( m_vActionList2 );
+	ReleaseActionList_Imp( m_vActionList3 );
 }
 
 BattleSkill* BattleMgr::GetBattleSkill(OBJID idSkill)
@@ -268,8 +266,45 @@ void BattleMgr::loadRewardUI()
 	}      
 }
 
+//用于测试
+void BattleMgr::dumpBao(MSGID msgID, NDEngine::NDTransData* bao, int len)
+{
+	//return;
+	switch (msgID)
+	{
+	case _MSG_BATTLE:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_BATTLE\r\n" );
+		break;
+	case _MSG_CONTROLPOINT:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_CONTROLPOINT\r\n" );
+		break;
+	case _MSG_EFFECT:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_EFFECT\r\n" );
+		break;
+	case _MSG_BATTLEEND:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_BATTLEEND\r\n" );
+		break;
+	case _MSG_SKILLINFO:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_SKILLINFO\r\n" );
+		break;
+	case _MSG_BATTLE_SKILL_LIST:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_BATTLE_SKILL_LIST\r\n" );
+		break;
+	case _MSG_PLAYER_RECON:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_PLAYER_RECON\r\n" );
+		break;
+	case _MSG_PLAYER_EXT_RECON:
+		DUMP_WRITE_CON( "@@ battle msg: _MSG_PLAYER_EXT_RECON\r\n" );
+		break;
+	default:
+		break;
+	}
+}
+
 bool BattleMgr::process(MSGID msgID, NDEngine::NDTransData* bao, int len)
 {
+	this->dumpBao(msgID, bao, len);
+
 	switch (msgID)
 	{
 	case _MSG_BATTLE:
@@ -527,11 +562,11 @@ void BattleMgr::restartLastBattle()
 		int battleType = this->m_nLastBattleType;
 		if(BATTLE_TYPE_MONSTER == battleType)
 		{
-			m_pkBattle = new Battle(BATTLE_TYPE_MONSTER_PLAYBACK);
+			m_pkBattle = new BattleUILayer(BATTLE_TYPE_MONSTER_PLAYBACK);
 		}
 		else if(BATTLE_TYPE_SPORTS == battleType || BATTLE_TYPE_BOSS == battleType)
 		{
-			m_pkBattle = new Battle(BATTLE_TYPE_SPORTS_PLAYBACK);
+			m_pkBattle = new BattleUILayer(BATTLE_TYPE_SPORTS_PLAYBACK);
 		}
 
 		m_pkBattle->Initialization(BATTLE_STAGE_START);
@@ -600,7 +635,7 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 	//		if (m_battle && m_battle->IsWatch()) {
 	//			m_battle->setServerBattleResult(BATTLE_COMPLETE_END);
 	//			if (m_battle->IsPracticeBattle()) {
-	//				m_battle->setBattleStatus(Battle::BS_FIGHTER_SHOW_PAS);
+	//				m_battle->setBattleStatus(BattleUILayer::BS_FIGHTER_SHOW_PAS);
 	//			} else {
 	//				quitBattle();
 	//			}
@@ -627,10 +662,9 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 	// 初始化战斗对象
 	if (!m_pkBattle)
 	{
-		m_pkBattle = new Battle(btBattleType);
+		m_pkBattle = new BattleUILayer(btBattleType);
 		m_pkBattle->Initialization(BATTLE_STAGE_START);
 		m_pkBattle->StartEraseOutEffect();
-
 	}
 
 	if (btPackageType & 1 > 0)
@@ -638,12 +672,8 @@ void BattleMgr::processBattleStart(NDEngine::NDTransData& bao)
 		m_pkBattle->setTeamAmout(btTeamAmout);
 		m_nLastBattleTeamCount = btTeamAmout;
 
-		for (VEC_FIGHTER_IT it = m_vFighter.begin(); it != m_vFighter.end(); it++)
-		{
-			CC_SAFE_DELETE(*it);
-		}
+		this->destroyFighters();
 
-		m_vFighter.clear();
 		ReleaseActionList();
 	}
 
@@ -874,6 +904,8 @@ void BattleMgr::processBattleEffect(NDEngine::NDTransData& bao)
 		m_pkBeforeCommand = NULL;
 	}
 
+	DUMP_WRITE_CON3( "@@ battle effect: flag=%d, num=%d\r\n", int(btPackFlag), int(btEffectNum));
+
 	int idSkillActor = 0;
 	int idSkillTarget = 0;
 	for (int i = 0; i < btEffectNum; i++)
@@ -881,6 +913,9 @@ void BattleMgr::processBattleEffect(NDEngine::NDTransData& bao)
 		BATTLE_EFFECT_TYPE btEffectType = BATTLE_EFFECT_TYPE(bao.ReadShort());
 		int idActor = bao.ReadInt();
 		long data = bao.ReadLong();
+
+		DUMP_WRITE_CON5( "@@ battle effect[%02d]: type=%-20s, actor=%d, data=%d\r\n", 
+			i, this->getEffectName(btEffectType).c_str(), int(idActor), int(data));
 
 		int lookface;
 
@@ -1126,11 +1161,10 @@ void BattleMgr::processBattleEffect(NDEngine::NDTransData& bao)
 
 	if ((btPackFlag & 2) > 0)
 	{
-		BOOL bIsDramaPlaying = ScriptMgrObj.excuteLuaFunc("IfDramaPlaying","Drama",0);
-		if (bIsDramaPlaying == true)
+		NDScene* runningScene = NDDirector::DefaultDirector()->GetRunningScene();
+		if (runningScene && runningScene->IsKindOfClass(RUNTIME_CLASS(DramaScene)))
 		{
-			//m_pkBattle->StartFight();
-			return;
+			;//不打断剧情
 		}
 		else
 		{
@@ -1481,61 +1515,63 @@ void BattleMgr::showBattleResult()
 	}
 }
 
+//@@
 void BattleMgr::quitBattle(bool bEraseOut/*=true*/)
 {
-	if (m_pkBattle)
+	if (!m_pkBattle) return;
+	
+	if (bEraseOut)
 	{
-		if (bEraseOut)
+		if (!m_pkQuitTimer)
 		{
-			if (!m_pkQuitTimer)
-			{
-				m_pkQuitTimer = new NDTimer;
-				m_pkQuitTimer->SetTimer(this, QUIT_BATTLE_TIMER_TAG, 0.1f);
-				m_pkBattle->StartEraseInEffect();
-			}
-			return;
+			m_pkQuitTimer = new NDTimer;
+			m_pkQuitTimer->SetTimer(this, QUIT_BATTLE_TIMER_TAG, 0.1f);
+			m_pkBattle->StartEraseInEffect();
 		}
+		return;
+	}
 
-		if (m_pkQuitTimer)
+	if (m_pkQuitTimer)
+	{
+		m_pkQuitTimer->KillTimer(this, QUIT_BATTLE_TIMER_TAG);
+		delete m_pkQuitTimer;
+		m_pkQuitTimer = NULL;
+	}
+
+	BATTLE_COMPLETE battle_result = BATTLE_COMPLETE(
+			m_pkBattle->getServerBattleResult());
+
+	int battleType = m_pkBattle->GetBattleType();
+	m_pkBattle->RemoveFromParent(true);
+	m_pkBattle = NULL;
+
+	//++Guosen 2012.7.2
+	NDScene*  pGameScene = NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
+	if ( pGameScene )
+	{
+		NDUILayer * pLayerAffixNormalBoss = (NDUILayer *)pGameScene->GetChild(2010);//AffixNormalBoss//副本界面
+		NDUILayer * pLayerArena = (NDUILayer *)pGameScene->GetChild(2015);//Arena//竞技场界面
+		NDUILayer * pLayerDynMapGuide = (NDUILayer *)pGameScene->GetChild(2035);//DynMapGuide//查看攻略界面
+		
+		if ( pLayerAffixNormalBoss || pLayerArena || pLayerDynMapGuide )
 		{
-			m_pkQuitTimer->KillTimer(this, QUIT_BATTLE_TIMER_TAG);
-			delete m_pkQuitTimer;
-			m_pkQuitTimer = NULL;
-		}
+			ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",1);
 
-		BATTLE_COMPLETE battle_result = BATTLE_COMPLETE(
-				m_pkBattle->getServerBattleResult());
-
-		int battleType = m_pkBattle->GetBattleType();
-		m_pkBattle->RemoveFromParent(true);
-
-		//++Guosen 2012.7.2
-		NDScene*  pGameScene = NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
-		if ( pGameScene )
-		{
-			NDUILayer * pLayerAffixNormalBoss = (NDUILayer *)pGameScene->GetChild(2010);//AffixNormalBoss//副本界面
-			NDUILayer * pLayerArena = (NDUILayer *)pGameScene->GetChild(2015);//Arena//竞技场界面
-			NDUILayer * pLayerDynMapGuide = (NDUILayer *)pGameScene->GetChild(2035);//DynMapGuide//查看攻略界面
+			//还原地图--Guosen 2012.7.5
+			NDMapLayer * pMapLayer = NDMapMgrObj.getMapLayerOfScene(pGameScene);
 			
-			if ( pLayerAffixNormalBoss || pLayerArena || pLayerDynMapGuide )
+			if ( pMapLayer && m_nLastSceneMapDocID )
 			{
-				ScriptMgrObj.excuteLuaFunc("SetUIVisible", "",1);
+				pMapLayer->SetBattleBackground(false);
+				pMapLayer->replaceMapData( m_nLastSceneMapDocID, m_nLastSceneScreenX, m_nLastSceneScreenY );
+				NDMapMgrObj.AddSwitch();
 
-				//还原地图--Guosen 2012.7.5
-				NDMapLayer * pMapLayer = NDMapMgrObj.getMapLayerOfScene(pGameScene);
-				
-				if ( pMapLayer && m_nLastSceneMapDocID )
-				{
-					pMapLayer->SetBattleBackground(false);
-					pMapLayer->replaceMapData( m_nLastSceneMapDocID, m_nLastSceneScreenX, m_nLastSceneScreenY );
-					NDMapMgrObj.AddSwitch();
-
-					m_nLastSceneMapDocID	= 0;
-					m_nLastSceneScreenX		= 0;
-					m_nLastSceneScreenY		= 0;
-				} 
-			}
+				m_nLastSceneMapDocID	= 0;
+				m_nLastSceneScreenX		= 0;
+				m_nLastSceneScreenY		= 0;
+			} 
 		}
+	}
 
 //		NDLog("result:%d",battle_result);
 //		if(battleReward&&battle_result == BATTLE_COMPLETE_WIN)
@@ -1571,19 +1607,32 @@ void BattleMgr::quitBattle(bool bEraseOut/*=true*/)
 //				ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI",battle_result,battleReward->money,battleReward->repute);
 //			}
 //		}
-		m_pkBattle = NULL;
 
-		if (NDMapMgrObj.isMonsterClear()&&battleType==BATTLE_TYPE_MONSTER){
-			NDLog("dynmap cleared");
-			//ScriptMgrObj.excuteLuaFunc("OnBattleFinish","AffixBossFunc",NDMapMgrObj.GetMotherMapID(), 1);
-		}
+	if (NDMapMgrObj.isMonsterClear()&&battleType==BATTLE_TYPE_MONSTER){
+		NDLog("dynmap cleared");
+		//ScriptMgrObj.excuteLuaFunc("OnBattleFinish","AffixBossFunc",NDMapMgrObj.GetMotherMapID(), 1);
+	}
 
-		NDPlayer::defaultHero().SetLocked(false);
+	NDPlayer::defaultHero().SetLocked(false);
 //		GameScene* gs = (GameScene*)NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene));
 //		if (gs) {
 //			gs->SetUIShow(false);
 //		}
-	}
+
+	// cleanup
+	this->cleanup();
+}
+
+//@@
+void BattleMgr::cleanup()
+{
+	ReleaseAllBattleSkill();
+
+	CC_SAFE_DELETE (m_pkBattleReward);
+	CC_SAFE_DELETE (m_pkPrebattleReward);
+
+	this->ReleaseActionList();
+	this->destroyFighters();
 }
 
 void BattleMgr::OnDramaFinish()
@@ -1600,4 +1649,44 @@ BattleMgr& BattleMgr::GetBattleMgr()
 	}
 
 	return *((BattleMgr*)ms_pkSingleton);
+}
+
+string BattleMgr::getEffectName( BATTLE_EFFECT_TYPE eType )
+{
+	switch( eType )
+	{
+		case BATTLE_EFFECT_TYPE_NONE:			return "NONE";
+		
+		case BATTLE_EFFECT_TYPE_ATK:			return "ATK";	// 攻击/反击
+		case BATTLE_EFFECT_TYPE_SKILL:			return "SKILL"; // 技能(施放者)立即效果
+		case BATTLE_EFFECT_TYPE_SKILL_TARGET:	return "SKILL_TARGET"; // 技能(承受者)立即效果
+		case BATTLE_EFFECT_TYPE_LIFE:			return "LIFE"; // 生命
+		case BATTLE_EFFECT_TYPE_MANA:			return "MANA"; // 气势
+		case BATTLE_EFFECT_TYPE_DODGE:			return "DODGE"; // 闪避
+		case BATTLE_EFFECT_TYPE_DRITICAL:		return "CRITICAL"; // 暴击
+		case BATTLE_EFFECT_TYPE_BLOCK:			return "BLOCK"; // 格挡
+		case BATTLE_EFFECT_TYPE_COMBO:			return "COMBO"; // 连击
+		case BATTLE_EFFECT_TYPE_STATUS_ADD:		return "STATUS_ADD"; // 加状态
+		case BATTLE_EFFECT_TYPE_STATUS_LOST:	return "STATUS_LOST"; 	// 取消状态
+		case BATTLE_EFFECT_TYPE_STATUS_LIFE:	return "STATUS_LIFE"; // 状态去血
+		case BATTLE_EFFECT_TYPE_DEAD:			return "DEAD"; //死亡
+
+		case EFFECT_TYPE_TURN_END:				return "TURN_END"; // 回合结束
+		case EFFECT_TYPE_BATTLE_BEGIN:			return "BATTLE_BEGIN"; // 战斗开始
+		case EFFECT_TYPE_BATTLE_END:			return "BATTLE_END"; // 战斗结束
+
+		case BATTLE_EFFECT_TYPE_CTRL:			return "CTRL"; //受控--暂不处理
+		case BATTLE_EFFECT_TYPE_ESCORTING:		return "ESCORTING"; //护驾//--显示文字特效而已
+		case BATTLE_EFFECT_TYPE_COOPRATION_HIT:	return "COOPRATION_HIT"; //合击//--显示文字特效而已
+		case BATTLE_EFFECT_TYPE_CHANGE_POSTION:	return "CHANGE_POSTION"; //移位//中军移动到后军==
+
+		case BATTLE_EFFECT_TYPE_SKILL_EFFECT_TARGET:	return "EFFECT_TARGET"; // 技能附加效果目标
+		case BATTLE_EFFECT_TYPE_SKILL_EFFECT:			return "EFFECT"; // 技能附加效果
+		case BATTLE_EFFECT_TYPE_STATUS_MANA:			return "STATUS_MANA"; // 状态去气
+		case BATTLE_EFFECT_TYPE_RESIST:					return "RESIST"; // 免疫
+
+		//目前仅客户端--2002-7-24
+		case BATTLE_EFFECT_TYPE_PLAY_ANIMATION:			return "PLAY_ANIMATION"; //仅播放子动画
+	};
+	return "";
 }

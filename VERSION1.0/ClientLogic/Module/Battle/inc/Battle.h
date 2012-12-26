@@ -34,6 +34,7 @@
 #include "SMBattleScene.h"
 #include "BattleMgr.h"
 #include "NDBaseBattle.h"
+#include "ObjectTracker.h"
 
 #define BTN_ATTATCK 1
 #define BTN_ITEM 2
@@ -99,6 +100,7 @@ class HighlightTipStatusBar: public NDUINode
 public:
 	HighlightTipStatusBar()
 	{
+		INC_NDOBJ_RTCLS;
 		m_nNum = 0;
 		m_nNumMax = 0;
 		m_color = 0;
@@ -106,13 +108,14 @@ public:
 
 	HighlightTipStatusBar(int nColor)
 	{
+		INC_NDOBJ_RTCLS;
 		m_nNum = 0;
 		m_nNumMax = 0;
 		m_color = nColor;
 	}
 	~HighlightTipStatusBar()
 	{
-
+		DEC_NDOBJ_RTCLS;
 	}
 	void draw()
 	{
@@ -183,12 +186,13 @@ struct Command
 {
 	Command()
 	{
+		INC_NDOBJ("Command");
 		memset(this, 0L, sizeof(Command));
 	}
 
 	~Command()
 	{
-
+		DEC_NDOBJ("Command");
 	}
 
 	int btEffectType;
@@ -244,12 +248,12 @@ private:
 };
 
 //------------------------------------------------------------------
-class Battle :	public NDUILayer,
-				public NDBaseBattle,
-				public NDUIDialogDelegate,
-				public NDUIButtonDelegate
+class BattleUILayer :	public NDUILayer,
+						public NDBaseBattle,
+						public NDUIDialogDelegate,
+						public NDUIButtonDelegate
 {
-	DECLARE_CLASS (Battle)
+	DECLARE_CLASS (BattleUILayer)
 public:
 	enum BATTLE_STATUS
 	{
@@ -281,10 +285,19 @@ public:
 		BS_WAITING_SERVER_MESSAGE,	// 等待服务端消息
 	};
 
-	Battle();
-	Battle(Byte btType);
-	~Battle();
+private:
+	BattleUILayer(const BattleUILayer& rhs) { }
+	BattleUILayer& operator =(const BattleUILayer& rhs)
+	{
+		return *this;
+	}
 
+public:
+	BattleUILayer();
+	BattleUILayer(Byte btType);
+	~BattleUILayer();
+
+public:
 	static void ResetLastTurnBattleAction();
 
 	void InitSpeedBar();
@@ -321,9 +334,13 @@ public:
 
 	void dealWithCommand();
 
+	void dealWithAction( Command* cmd, FightAction* action );
+
+	FightAction* CreateFightAction( Command* cmd );
+
 	void AddCommand(Command* cmd);
 
-	void AddActionCommand(FightAction* action);
+	void AddFighterAction(FightAction* action);
 
 	void SetIsPlayBack(bool isPlayBack)
 	{
@@ -571,15 +588,9 @@ private:
 
 	void AddTurnDealOfCooldown();
 
-private:
-	Battle(const Battle& rhs)
-	{
-	}
-	Battle& operator =(const Battle& rhs)
-	{
-		return *this;
-	}
+	void removeFighters();
 
+private:
 	static bool ms_bAuto;
 	static BattleAction ms_kLastTurnActionUser;
 	static BattleAction ms_kLastTurnActionEudemon;

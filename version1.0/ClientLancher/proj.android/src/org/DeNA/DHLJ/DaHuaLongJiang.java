@@ -46,6 +46,7 @@ import android.view.ViewParent;
 import android.webkit.CookieSyncManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -71,21 +72,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	private static Handler VideoViewHandler = new Handler();
 	private static Handler RootViewHandler = new Handler();
-	private static Handler BalanceHandler = new Handler();
-	private static Runnable mUpdateBalance = new Runnable()
-	{
-		public void run()
-		{
-			Float sizex = 100 * s_fScale;
-			Float sizey = 75 * s_fScale;
-			FrameLayout.LayoutParams pkParamsButton = new FrameLayout.LayoutParams(
-					sizex.intValue(), sizey.intValue());
-			balancebutton.setLayoutParams(pkParamsButton);
-			balancebutton.setX(264 * s_fScale);
-			balancebutton.setY(70 * s_fScale);
-			balancebutton.setVisibility(View.VISIBLE);
-		};
-	};
 	private static Runnable mHideBalance = new Runnable()
 	{
 		public void run()
@@ -113,7 +99,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			m_pkView.setVisibility(View.VISIBLE);
 		};
 	};
-	
+
 	private static Runnable mContinueRootView = new Runnable()
 	{
 		public void run()
@@ -123,20 +109,39 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 					ViewGroup.LayoutParams.FILL_PARENT,
 					ViewGroup.LayoutParams.FILL_PARENT);
 			ms_pkDHLJ.nativeInit(100, 200);
-			//ms_pkDHLJ.setContentView(menubar, pkParams);
+			// ms_pkDHLJ.setContentView(menubar, pkParams);
 			// ms_pkDHLJ.rootView.setVisibility(View.INVISIBLE);
 			// ms_pkDHLJ.balancebutton.setVisibility(View.INVISIBLE);
 			// menubar.setVisibility(View.INVISIBLE);
-			//m_pkView.start();
-			//m_pkView.setVisibility(View.INVISIBLE);
+			// m_pkView.start();
+			// m_pkView.setVisibility(View.INVISIBLE);
 		};
 	};
-	
+
 	public void continueRootView()
 	{
 		VideoViewHandler.post(mContinueRootView);
 		resumeBackgroundMusic();
 	}
+
+	private static Handler BalanceHandler = new Handler();
+	private static Runnable mUpdateBalance = new Runnable()
+	{
+		public void run()
+		{
+			Float x = 264 * s_fScale;
+			Float y = 70 * s_fScale;
+			Float sizex = 100 * s_fScale;
+			Float sizey = 75 * s_fScale;
+			FrameLayout.LayoutParams pkParamsButton = new FrameLayout.LayoutParams(
+					sizex.intValue(), sizey.intValue());
+			pkParamsButton.topMargin = y.intValue();
+			pkParamsButton.leftMargin = x.intValue();
+			balancebutton.setLayoutParams(pkParamsButton);
+
+			balancebutton.setVisibility(View.VISIBLE);
+		};
+	};
 
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -422,7 +427,9 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	}
 
 	private static native void pauseAllBackgroundMusic();
+
 	private static native void resumeBackgroundMusic();
+
 	private static native void nativeInit(int w, int h);
 
 	private static native void onLoginComplete(int userid);

@@ -60,8 +60,8 @@ public class Cocos2dxTypefaces
 	public static synchronized Typeface get(final Context pContext,
 			final String pAssetName)
 	{
-		Log.d("Typeface get", "Context: " + pContext);
-		Log.d("Typeface get", "pAssetName: " + pAssetName);
+// 		Log.d("Typeface get", "Context: " + pContext);
+// 		Log.d("Typeface get", "pAssetName: " + pAssetName);
 		
 		if (!Cocos2dxTypefaces.sTypefaceCache.containsKey(pAssetName))
 		{

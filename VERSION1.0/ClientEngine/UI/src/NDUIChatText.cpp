@@ -19,6 +19,8 @@
 #include "ObjectTracker.h"
 #include "StringConvert.h"
 #include "ScriptGameDataLua.h"
+#include "utf8.h"
+
 
 #ifdef ANDROID
 #include <jni.h>
@@ -128,6 +130,7 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 	{
 		bool retAnalysis = false;
 
+		// is rule end?
 		retAnalysis = AnalysisRuleEnd(text, type);
 		if (retAnalysis)
 		{
@@ -150,6 +153,7 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 			continue;
 		}
 
+		// is rule head?
 		retAnalysis = AnalysisRuleHead(text, type, clr);
 		if (type == ChatFace)
 		{
@@ -168,6 +172,7 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 			}
 		}
 
+		// is rule item or role?
 		if (retAnalysis)
 		{
 			if (type == ChatItem)
@@ -185,18 +190,20 @@ void CUIChatText::SetContent(int speakerID, int channel, const char* speaker,
 			}
 			continue;
 		}
-		char word[4] =
-		{ 0x00 };
-		if ((unsigned char) *text < 0x80)
-		{
-			memcpy(word, text, 1);
-			text++;
-		}
-		else
-		{
-			memcpy(word, text, 3);
-			text += 3;
-		}
+
+// 		char word[4] =
+// 		{ 0x00 };
+// 		if ((unsigned char) *text < 0x80)
+// 		{
+// 			memcpy(word, text, 1);
+// 			text++;
+// 		}
+// 		else
+// 		{
+// 			memcpy(word, text, 3);
+// 			text += 3;
+// 		}
+		char* word = UTF8::getNextChar( text );
 
 		if (type == ChatItem)
 		{
