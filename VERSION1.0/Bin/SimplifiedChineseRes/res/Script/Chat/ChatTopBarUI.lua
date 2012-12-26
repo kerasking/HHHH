@@ -42,7 +42,7 @@ function p.LoadUI()
 	local winsize = GetWinSize(); 
 	layer:SetFrameRect(CGRectMake(0, 0, winsize.w*0.8, winsize.h*0.1));
 	--layer:SetBackgroundColor(ccc4(0,0,0,125));
-	scene:AddChildZ(layer,3);
+	scene:AddChildZ(layer,5000);
 
 	local uiLoad=createNDUILoad();
 	if nil == uiLoad then

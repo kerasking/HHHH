@@ -7,6 +7,7 @@
 #include "NDUIBaseGraphics.h"
 #include "NDSharedPtr.h"
 #include "CCString.h"
+#include "ObjectTracker.h"
 
 CCStringRef side_image = new CCString(""); //NSString::stringWithFormat("%s",NDPath::GetImgPath("frame_coner.png"));///< ÕÒ²»µ½NDPath?? ¹ùºÆ
 
@@ -14,8 +15,10 @@ namespace NDEngine
 {
 	IMPLEMENT_CLASS(NDUIFrame, NDUILayer)
 
-		NDUIFrame::NDUIFrame()
+	NDUIFrame::NDUIFrame()
 	{
+		INC_NDOBJ_RTCLS
+
 		m_tileLeftTop = new NDTile;
 		m_tileRightTop = new NDTile;
 		m_tileLeftBottom = new NDTile;
@@ -24,6 +27,8 @@ namespace NDEngine
 
 	NDUIFrame::~NDUIFrame()
 	{
+		DEC_NDOBJ_RTCLS
+
 		SAFE_DELETE (m_tileLeftBottom);
 		SAFE_DELETE (m_tileLeftTop);
 		SAFE_DELETE (m_tileRightTop);
@@ -59,7 +64,7 @@ namespace NDEngine
 		CCRect scrRect = GetScreenRect();
 
 		NDPicture* ptexpic = NDPicturePool::DefaultPool()->AddPicture(
-			side_image->toStdString().c_str());
+			side_image->getCString());
 
 		m_tileLeftTop->setTexture(ptexpic->GetTexture());
 		SAFE_DELETE(ptexpic);
@@ -83,7 +88,8 @@ namespace NDEngine
 		m_tileLeftTop->make();
 
 		NDPicture* ppic = NDPicturePool::DefaultPool()->AddPicture(
-			side_image->toStdString().c_str());
+			side_image->getCString());
+
 		m_tileLeftTop->setTexture(ppic->GetTexture());
 
 		SAFE_DELETE(ppic);
@@ -110,7 +116,8 @@ namespace NDEngine
 		m_tileRightTop->make();
 
 		NDPicture* pleftpic = NDPicturePool::DefaultPool()->AddPicture(
-			side_image->toStdString().c_str());
+			side_image->getCString());
+
 		m_tileLeftBottom->setTexture(pleftpic->GetTexture());
 
 		SAFE_DELETE(pleftpic);
@@ -138,7 +145,8 @@ namespace NDEngine
 		m_tileLeftBottom->make();
 
 		NDPicture* prightpic = NDPicturePool::DefaultPool()->AddPicture(
-			side_image->toStdString().c_str());
+			side_image->getCString());
+
 		m_tileRightBottom->setTexture(prightpic->GetTexture());
 
 		SAFE_DELETE(prightpic);

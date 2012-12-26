@@ -40,6 +40,10 @@ THE SOFTWARE.
 // external
 #include "kazmath/GL/matrix.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 /*
@@ -122,8 +126,20 @@ bool CCSpriteBatchNode::initWithFile(const char* fileImage, unsigned int capacit
     return initWithTexture(pTexture2D, capacity);
 }
 
+#if ND_MOD
+CCSpriteBatchNode::CCSpriteBatchNode()
+	: m_pobTextureAtlas(NULL)
+	, m_pobDescendants(NULL)
+{
+	INC_CCOBJ("CCSpriteBatchNode");
+}
+#endif
+
 CCSpriteBatchNode::~CCSpriteBatchNode()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCSpriteBatchNode");
+#endif
     CC_SAFE_RELEASE(m_pobTextureAtlas);
     CC_SAFE_RELEASE(m_pobDescendants);
 }

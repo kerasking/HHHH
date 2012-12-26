@@ -12,7 +12,6 @@
 #include "ScriptInc.h"
 #include "NDUILabel.h"
 #include "NDUIButton.h"
-//#include "NDUITableLayer.h"
 #include "NDUIImage.h"
 #include "NDScrollLayer.h"
 
@@ -33,27 +32,27 @@
 #include "NDUIDialog.h"
 
 // smys begin
-#include "UIScroll.h"
+#include "NDUIScroll.h"
 #include "NDUIScrollView.h"
-#include "UIScrollViewMulHand.h"
+#include "NDUIScrollViewMulHand.h"
 #include "UIRoleNode.h"
-#include "UIHyperlink.h"
+#include "NDUIHyperlink.h"
 #include "UIItemButton.h"
 #include "UIEquipItem.h"
 #include "UICheckBox.h"
 #include "UIRadioButton.h"
-#include "UIExp.h"
+#include "NDUIExp.h"
 #include "UIEdit.h"
-#include "UISpriteNode.h"
-#include "UIChatText.h"
+#include "NDUISpriteNode.h"
+#include "NDUIChatText.h"
 #include "UIList.h"
 #include "UITabLogic.h"
 //...
 // smys end
 #include "NDPath.h"
 
-#include "UIScrollContainerExpand.h"
-#include "UIScrollViewExpand.h"
+#include "NDUIScrollContainerExpand.h"
+#include "NDUIScrollViewExpand.h"
 #include "CCGeometry.h"
 #include "ScriptMgr.h"
 #include "NDUITableLayer.h"

@@ -1,6 +1,7 @@
 //#include "StdAfx.h"
 #include "UIData.h"
 #include <stdio.h>
+#include "ObjectTracker.h"
 
 #define NORMAL_FILE_KEY  "NormalFile"
 #define SELECTED_FILE_KEY  "SelectFile"
@@ -30,6 +31,8 @@
 
 CUIData::CUIData(void)
 {
+	INC_NDOBJ("CUIData"); 
+
 	m_kInfo.strNormalFile = "";
 	m_kInfo.strSelectedFile = "";
 	m_kInfo.strDisableFile = "";
@@ -50,7 +53,7 @@ CUIData::CUIData(void)
 
 CUIData::~CUIData(void)
 {
-
+	DEC_NDOBJ("CUIData"); 
 }
 
 bool CUIData::openUiFile(const char* pszIniFile)
@@ -95,8 +98,8 @@ bool CUIData::getCtrlData(char* szCtrlName)
 		return false;
 	sscanf(pszPos, "%f %f", &m_kInfo.CtrlAnchorPos.x, &m_kInfo.CtrlAnchorPos.y);
 
-	m_kInfo.nCtrlWidth = m_kINIFile.GetValueI(szCtrlName, CTRL_WIDTH_KEY);
-	m_kInfo.nCtrlHeight = m_kINIFile.GetValueI(szCtrlName, CTRL_HEIGHT_KEY);
+	m_kInfo.nCtrlWidth  = (float) m_kINIFile.GetValueI(szCtrlName, CTRL_WIDTH_KEY);
+	m_kInfo.nCtrlHeight = (float) m_kINIFile.GetValueI(szCtrlName, CTRL_HEIGHT_KEY);
 
 	//»°UV –≈œ¢
 	pszPos = m_kINIFile.GetValue(szCtrlName, NORMAL_FILE_UV_KEY);

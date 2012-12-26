@@ -209,7 +209,7 @@ struct NDVariant
 class NDField : NDVariant
 {
 public: //getter
-	char getChar()
+	char getChar() const
 	{
 		if (type == V_Char)
 			return val.cVal;
@@ -220,7 +220,7 @@ public: //getter
 		return 0;
 	}
 
-	short getShort()
+	short getShort() const
 	{
 		switch (type)
 		{
@@ -230,13 +230,13 @@ public: //getter
 		return 0;
 	}
 
-	unsigned long getULong()
+	unsigned long getULong() const
 	{
 		return (unsigned long) getUInt();
 	}
 
 	//兼容各种格式
-	unsigned int getUInt()
+	unsigned int getUInt() const
 	{
 		switch (type)
 		{
@@ -259,7 +259,7 @@ public: //getter
 	}
 
 	//兼容各种格式
-	int	getInt()
+	int	getInt() const
 	{
 		switch (type)
 		{
@@ -282,7 +282,7 @@ public: //getter
 	}
 
 	//兼容各种格式
-	long long getBigInt()
+	long long getBigInt() const
 	{
 		switch (type)
 		{
@@ -305,7 +305,7 @@ public: //getter
 	}
 
 	//兼容各种格式
-	float getFloat()
+	float getFloat() const
 	{
 		switch (type)
 		{
@@ -329,7 +329,7 @@ public: //getter
 
 	//LUA的number对应这个
 	//兼容各种格式
-	double getDouble()
+	double getDouble() const
 	{
 		switch (type)
 		{
@@ -353,7 +353,7 @@ public: //getter
 	}
 
 	// by val
-	const string getStr()
+	const string getStr() const
 	{
 		if (type == V_String)
 			return val.str ? *val.str : "";
@@ -646,6 +646,8 @@ public:
 
 	ID  getTableId() { return idTable; }
 
+	map<ID,NDRecord*>& getData() { return mapRecord; }
+
 	NDRecord* getById( const ID idRecord, bool autoAlloc = true )
 	{
 		ITER_RECORD iter = mapRecord.find( idRecord );
@@ -924,6 +926,15 @@ public:
 		}
 		return *extra;
 	}
+	
+	~NDTable() { destroy(); }
+	
+	void destroy()
+	{
+		SAFE_DELETE(extra);
+		SAFE_DELETE(dbgName);
+	}
+
 private:
 	NDTableExtra* extra;
 

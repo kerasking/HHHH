@@ -32,6 +32,7 @@ protected:
 	bool				m_bInit;			//是否已成功初始化
 
 public:
+	~NDWideString();
 	explicit NDWideString():m_bInit(false){}
 	explicit NDWideString( const UTF8CHR * szUTF8 );
 	explicit NDWideString( const UTF8String & szUTF8 );
@@ -63,9 +64,6 @@ public:
 protected:
 	void ConvertUTF8ToUnicode();
 	void ConvertUnicodeToUTF8();
-
-public:
-	static bool IsEqual_UTF8_Ansi( const char* utf8, const char* ansi ); //@zwq
 };
 
 /////////////////////////////////////////////////////////////////////////////

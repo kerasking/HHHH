@@ -37,6 +37,7 @@ cocoa/CCSet.cpp \
 cocoa/CCString.cpp \
 cocoa/CCZone.cpp \
 cocoa/CCArray.cpp \
+cocoa/ObjectTracker.cpp \
 cocos2d.cpp \
 CCDirector.cpp \
 effects/CCGrabber.cpp \
@@ -73,6 +74,7 @@ particle_nodes/CCParticleExamples.cpp \
 particle_nodes/CCParticleSystem.cpp \
 particle_nodes/CCParticleBatchNode.cpp \
 particle_nodes/CCParticleSystemQuad.cpp \
+platform/StringConvert.cpp \
 platform/CCSAXParser.cpp \
 platform/CCThread.cpp \
 platform/platform.cpp \
@@ -149,7 +151,8 @@ LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH) \
                     $(LOCAL_PATH)/include \
                     $(LOCAL_PATH)/kazmath/include \
                     $(LOCAL_PATH)/platform/android \
-					$(LOCAL_PATH)/../libpng
+					$(LOCAL_PATH)/../libpng \
+					$(LOCAL_PATH)/../../libiconv/include 
 
 
 LOCAL_EXPORT_LDLIBS := -llog\
@@ -158,9 +161,11 @@ LOCAL_EXPORT_LDLIBS := -llog\
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
                     $(LOCAL_PATH)/include \
+					$(LOCAL_PATH)/cocoa \
                     $(LOCAL_PATH)/kazmath/include \
                     $(LOCAL_PATH)/platform/android \
-					$(LOCAL_PATH)/../libpng
+					$(LOCAL_PATH)/../libpng \
+					$(LOCAL_PATH)/../../libiconv/include 
 
 LOCAL_LDLIBS := -lGLESv2 \
                 -L$(SYSROOT)/usr/lib -lGLESv2\
@@ -170,6 +175,7 @@ LOCAL_LDLIBS := -lGLESv2 \
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos_jpeg_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos_libxml2_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos_libtiff_static
+LOCAL_WHOLE_STATIC_LIBRARIES += libiconv_static
 
 # define the macro to compile through support/zip_support/ioapi.c                
 LOCAL_CFLAGS := -DUSE_FILE32API
@@ -180,3 +186,4 @@ include $(BUILD_SHARED_LIBRARY)
 $(call import-module,libjpeg)
 $(call import-module,libxml2)
 $(call import-module,libtiff)
+$(call import-module,libiconv/proj.android/jni)

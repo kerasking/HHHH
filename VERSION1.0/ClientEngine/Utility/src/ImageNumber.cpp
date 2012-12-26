@@ -3,6 +3,7 @@
 #include "NDPath.h"
 #include "define.h"
 #include "NDSharedPtr.h"
+#include "ObjectTracker.h"
 
 #define title_image (NDPath::GetImgPath("titles.png"))
 //#define title_image ([[NSString stringWithFormat:@"%s", NDPath::GetImgPath("titles.png")] UTF8String])
@@ -294,10 +295,12 @@ IMPLEMENT_CLASS(ImageNumber, NDUILayer)
 
 ImageNumber::ImageNumber()
 {
+	INC_NDOBJ_RTCLS
 }
 
 ImageNumber::~ImageNumber()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void ImageNumber::Initialization()

@@ -134,6 +134,12 @@ end
 
 
 function p.LoadUI()
+	--如果已经打开则返回
+	if IsUIShow(NMAINSCENECHILDTAG.ChatMainUI) then
+		LogInfo("已经打开则返回");
+		return;
+	end
+	
 	local scene=GetSMGameScene();
 	if scene == nil then
 		LogInfo("scene = nil,load chatui failed!");
@@ -150,10 +156,11 @@ function p.LoadUI()
 	layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.ChatMainUI);
+
 	layer:SetFrameRect(CGRectMake(0, 0, winsize.w, winsize.h));
-	layer:SetBackgroundColor(ccc4(0,0,0,125));
+	--layer:SetBackgroundColor(ccc4(0,0,0,125));
 	
-	scene:AddChildZ(layer,2);
+	scene:AddChildZ(layer,5000);
 
 	
 	local uiLoad=createNDUILoad();
@@ -170,7 +177,7 @@ function p.LoadUI()
 	local rectX = winsize.w*0.05;
 	local rectW	= winsize.w*0.95;
 
-	local rect  = CGRectMake(rectX, winsize.h*0.12, rectW, winsize.h*0.65); 
+	local rect  = CGRectMake(rectX, winsize.h*0.12, rectW, winsize.h*0.75); 
 	
 	container = createUIScrollContainer();
 	if container == nil then
@@ -185,7 +192,7 @@ function p.LoadUI()
 	layer:AddChild(container);
 	
 		
-	local scrollrect = CGRectMake(0.0, 0.0, rectW, winsize.h*0.65);
+	local scrollrect = CGRectMake(0.0, 0.0, rectW, winsize.h*0.75);
 	scroll = createUIScroll();
 	if (scroll == nil) then
 		LogInfo("scroll == nil,load ChatMainUI failed!");
@@ -199,8 +206,10 @@ function p.LoadUI()
 	scroll:SetMovableViewer(container);
 	scroll:SetContainer(container);
 	scroll:SetLuaDelegate(p.OnUIEventContainer);
-	container:AddChild(scroll);
 	
+	
+	container:AddChild(scroll);
+	container:EnableScrollBar(true);
 	
 	contentHight=0;
 	
@@ -221,7 +230,7 @@ function p.LoadUI()
 
 	layerInputA:Init();
 	layerInputA:SetTag(TAG_INPUTA);
-	layerInputA:SetFrameRect(CGRectMake( 0, winsize.h*0.85, winsize.w, winsize.h*0.2));
+	layerInputA:SetFrameRect(CGRectMake( 0, winsize.h*0.88, winsize.w, winsize.h*0.2));
 	--layerInputA:SetBackgroundColor(ccc4(0,0,0,125));
 	layer:AddChildZ(layerInputA,2);
 	
@@ -242,7 +251,7 @@ function p.LoadUI()
 	--私聊对话框
 	layerInputB:Init();
 	layerInputB:SetTag(TAG_INPUTB);
-	layerInputB:SetFrameRect(CGRectMake( 0, winsize.h*0.85, winsize.w, winsize.h*0.2));
+	layerInputB:SetFrameRect(CGRectMake( 0, winsize.h*0.88, winsize.w, winsize.h*0.2));
 	layer:AddChildZ(layerInputB,2);
 	local uiLoad=createNDUILoad();
 	uiLoad:Load("talk/talk_input_B.ini",layerInputB,p.OnUIEventInputB,0,0);
@@ -344,7 +353,7 @@ function p.AddChatText(speakerId,channel,speaker,text)
 		chatText:SetContentWidth(winsize.w*0.85);
 		
 		local color = p.ColorChannel[channel];
-		chatText:SetContent(speakerId,channel,speaker,text,1,9,color);
+		chatText:SetContent(speakerId,channel,speaker,text,1,12,color);
 		
 		--chatText:SetContent(speakerId,channel,speaker,text,1,9,ccc4(0,0,255,255));
 		
@@ -472,7 +481,7 @@ function p.OnUIEventInputA(uiNode, uiEventType, param)
 				
 				if MsgArmyGroup.GetUserArmyGroupID(nPlayerId) == nil then
 					--无军团则提示
-					ChatDataFunc.AddChatRecord(nPlayerId,ChatDataFunc.GetChannelByChatType(currentChatType),0,GetTxtPub("system"),GetTxtPri("MCUI2_T1"));
+					ChatDataFunc.AddChatRecord(nPlayerId,ChatDataFunc.GetChannelByChatType(currentChatType),0,GetTxtPub("system"),GetTxtPri("CMUI_T12"));
 				else
 					_G.MsgChat.SendTalkMsg(ChatDataFunc.GetChannelByChatType(currentChatType),text);
 				end
@@ -727,11 +736,12 @@ function p.OnUIEventInfoList(uiNode, uiEventType, param)
 			--私聊
 			p.CloseChatUI();
 			p.LoadUIbyFriendName(sCheckPlayerName);
-			
+			p.CloseInfoLayer();
 		elseif tag == ID_TALK_LIST_CTRL_BUTTON_11 then
 			--查看资料
 			CheckOtherPlayerBtn.LoadUI(nCheckPlayerId);
 			MsgFriend.SendFriendSel(nCheckPlayerId,sCheckPlayerName);
+			p.CloseInfoLayer();
 		elseif tag == ID_TALK_LIST_CTRL_BUTTON_12 then
 			--加好友
 			if FriendFunc.IsExistFriend(nCheckPlayerId)  then
@@ -739,6 +749,7 @@ function p.OnUIEventInfoList(uiNode, uiEventType, param)
 			else
 				FriendFunc.AddFriend(nCheckPlayerId,sCheckPlayerName); --加为好友 
 			end
+			p.CloseInfoLayer();
 		end
 				
 	

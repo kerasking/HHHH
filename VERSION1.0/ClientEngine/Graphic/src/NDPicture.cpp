@@ -18,6 +18,7 @@
 #include <UsePointPls.h>
 #include "CCCommon.h"
 #include "CCPlatformConfig.h"
+#include "ObjectTracker.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -41,6 +42,8 @@ IMPLEMENT_CLASS(NDTexture,NDObject)
 
 NDPicture::NDPicture(bool canGray/*=false*/)
 {
+	INC_NDOBJ_RTCLS
+
 	m_pkTexture = NULL;
 	m_kCutRect = CCRectZero;
 	m_bReverse = false;
@@ -60,6 +63,8 @@ NDPicture::NDPicture(bool canGray/*=false*/)
 }
 NDPicture::~NDPicture()
 {
+	DEC_NDOBJ_RTCLS
+
 	CC_SAFE_RELEASE(m_pShaderProgram); //@shader
 	CC_SAFE_RELEASE (m_pkTexture);
 	if (m_bCanGray)
@@ -347,6 +352,14 @@ void NDPicture::SetCoorinates()
 			m_coordinates[7] = m_coordinates[5];
 		}
 	}
+
+	//clamp
+	for (int i = 0; i < 8; i++)
+	{
+		float& f = m_coordinates[i];
+		if (f > 1.0f)		f = 1.0f;
+		else if (f < 0.0f)	f = 0.0f;
+	}
 }
 
 void NDPicture::SetVertices(CCRect drawRect)
@@ -533,18 +546,11 @@ void NDPicture::DrawInRect(CCRect kRect)
 		
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-// 		glBindTexture(GL_TEXTURE_2D, pkTempTexture->getName());
-// 
-// 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-// 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-// 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-// 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-// 
-// 		glVertexPointer(2, GL_FLOAT, 0, m_pfVertices);
-// 		glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_colors);
-// 		glTexCoordPointer(2, GL_FLOAT, 0, m_coordinates);
-// 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
+		// restore blend state
+		if(m_bIsTran)
+		{
+			ccGLBlendFunc( CC_BLEND_SRC, CC_BLEND_DST );
+		}
 	}
 
 	this->debugDraw();
@@ -699,6 +705,16 @@ void NDPicture::debugDraw()
 
 /////////////////////////////
 IMPLEMENT_CLASS(NDPictureDictionary, NDDictionary)
+NDPictureDictionary::NDPictureDictionary()
+{
+	INC_NDOBJ_RTCLS
+}
+
+NDPictureDictionary::~NDPictureDictionary()
+{
+	DEC_NDOBJ_RTCLS
+}
+
 void NDPictureDictionary::Recyle()
 {
 	if (NULL == m_nsDictionary)
@@ -767,12 +783,14 @@ static NDPicturePool* NDPicturePool_DefaultPool = NULL;
 
 NDPicturePool::NDPicturePool()
 {
+	INC_NDOBJ_RTCLS
 	NDAsssert(NDPicturePool_DefaultPool == NULL);
 	m_pkTextures = new NDPictureDictionary();
 }
 
 NDPicturePool::~NDPicturePool()
 {
+	DEC_NDOBJ_RTCLS
 	NDPicturePool_DefaultPool = NULL;
 	delete m_pkTextures;
 }
@@ -931,11 +949,13 @@ CCTexture2D* NDPicturePool::AddTexture( const char* pszImageFile )
 
 NDTexture::NDTexture()
 {
+	INC_NDOBJ_RTCLS
 	m_pkTexture = 0;
 }
 
 NDTexture::~NDTexture()
 {
+	DEC_NDOBJ_RTCLS
 	m_pkTexture->release();
 }
 

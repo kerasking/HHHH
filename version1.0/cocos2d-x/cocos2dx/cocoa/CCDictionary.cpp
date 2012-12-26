@@ -2,6 +2,10 @@
 #include "CCString.h"
 #include "CCInteger.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 using namespace std;
 
 NS_CC_BEGIN
@@ -11,11 +15,16 @@ CCDictionary::CCDictionary()
 , m_eDictType(kCCDictUnknown)
 , m_eOldDictType(kCCDictUnknown)
 {
-
+#if ND_MOD
+	INC_CCOBJ("CCDictionary");
+#endif
 }
 
 CCDictionary::~CCDictionary()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCDictionary");
+#endif
     removeAllObjects();
 }
 

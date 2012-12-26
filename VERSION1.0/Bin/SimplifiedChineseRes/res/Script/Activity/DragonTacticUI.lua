@@ -61,7 +61,7 @@ function p.LoadUI()
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.DragonTactic);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer,2);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 
     local uiLoad = createNDUILoad();
 	if nil == uiLoad then

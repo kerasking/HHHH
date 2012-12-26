@@ -8,6 +8,7 @@
 
 #include "NDPath.h"
 #include "define.h"
+#include "ObjectTracker.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #import <Foundation/Foundation.h>
@@ -42,7 +43,7 @@ NS_NDENGINE_BGN
 // #define NDPath_SoundPath			 "../SimplifiedChineseRes/res/sound/"
 // #define NDPath_UIPath			 "../SimplifiedChineseRes/res/UI/"
 // #define NDPath_ScriptPath		 "../SimplifiedChineseRes/res/Script/"
-#define NDPath_LogPath			 "../log/"
+#define NDPath_LogPath			 "log/"
 #endif
 
 ////////////////////////////////////////////////////////////
@@ -52,9 +53,11 @@ int NDPath::s_iResDirPos = 0;
 
 NDPath::NDPath()
 {
+	INC_NDOBJ_RTCLS
 }
 NDPath::~NDPath()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 const char* NDPath::GetRootResDirName()
@@ -139,7 +142,7 @@ const string NDPath::GetLogPath()
 	return NDPath_LogPath;
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	return NDPath_LogPath;
+	return NDPath::GetCashesPath() + NDPath_LogPath;
 #endif
 }
 

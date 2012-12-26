@@ -8,6 +8,7 @@ LOCAL_SRC_FILES := \
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../cocos2dx \
                     $(LOCAL_PATH)/../../cocos2dx/platform \
                     $(LOCAL_PATH)/../../cocos2dx/include \
+                    $(LOCAL_PATH)/../../cocos2dx/cocoa \
                     $(LOCAL_PATH)/../../CocosDenshion/include \
                     $(LOCAL_PATH)/../../cocos2dx/lua_support 
 

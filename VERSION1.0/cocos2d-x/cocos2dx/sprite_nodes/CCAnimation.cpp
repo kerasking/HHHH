@@ -30,6 +30,10 @@ THE SOFTWARE.
 #include "sprite_nodes/CCSpriteFrame.h"
 #include "cocoa/CCZone.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 CCAnimationFrame::CCAnimationFrame()
@@ -37,7 +41,9 @@ CCAnimationFrame::CCAnimationFrame()
 , m_fDelayUnits(0.0f)
 , m_pUserInfo(NULL)
 {
-
+#if ND_MOD
+	INC_CCOBJ("CCAnimationFrame");
+#endif
 }
 
 bool CCAnimationFrame::initWithSpriteFrame(CCSpriteFrame* spriteFrame, float delayUnits, CCDictionary* userInfo)
@@ -51,6 +57,9 @@ bool CCAnimationFrame::initWithSpriteFrame(CCSpriteFrame* spriteFrame, float del
 
 CCAnimationFrame::~CCAnimationFrame()
 {    
+#if ND_MOD
+	DEC_CCOBJ("CCAnimationFrame");
+#endif
     CCLOGINFO( "cocos2d: deallocing %s", this);
 
     CC_SAFE_RELEASE(m_pSpriteFrame);
@@ -180,11 +189,16 @@ CCAnimation::CCAnimation()
 , m_bRestoreOriginalFrame(false)
 , m_uLoops(0)
 {
-
+#if ND_MOD
+	INC_CCOBJ("CCAnimation");
+#endif
 }
 
 CCAnimation::~CCAnimation(void)
 {
+#if ND_MOD
+	DEC_CCOBJ("CCAnimation");
+#endif
     CCLOGINFO("cocos2d, deallocing %p", this);
     CC_SAFE_RELEASE(m_pFrames);
 }

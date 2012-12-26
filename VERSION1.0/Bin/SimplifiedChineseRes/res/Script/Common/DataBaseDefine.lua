@@ -756,7 +756,11 @@ DB_ITEMTYPE=
 	ORIGIN_MAP	=31,
 	ENHANCED_ID	=32,
 	SOCKET_LIMIT = 33,
-    QUALITY     = 34
+    QUALITY     = 34,
+    DAOFA_ASTROLOGY_LEVEL = 35,
+    STATUS_ATTR_TYPE1 = 36,
+    STATUS_ATTR_VALUE1 = 37,
+    STATUS_ATTR_GROW1 = 38,
 };
 
 DB_LEAVEWORD=
@@ -1851,6 +1855,10 @@ DB_VIP_CONFIG=
     ENHANCE_CRIT_FLAG       =13,    --是否开启暴击功能
     ENHANCE_REDUCE_PECENT   =14,    --节约强化费的百分比
     FIGHT_AUTO              =15,    --自动战斗（boss战，大乱斗等自动战斗开启）
+    DESTINY_BAG_NUM         =16,    --
+    DESTINY_CALL_QIMEN      =17,    --
+    DESTINY_ASTROLOGY_AUTO  =18,    --
+
 };
 
 DB_VIP_CONFIG_EQUIP_EDU = {
@@ -2040,3 +2048,31 @@ DB_ENCOURAGE_CONFIG = {
     MODIFY_VALUE4   = 13,
 }
 
+DB_DAOFA_STATIC_CONFIG = {
+    ID      = 0,
+    VALUE   = 1,
+    COMMENT = 2,
+}
+ 
+DB_DAOFA_STATIC_CONFIG_ID = {
+    GRAY                = 1,
+    RED                 = 2,
+    GREEN               = 3,
+    BLUE                = 4,
+    PURPLE              = 5,
+    ORANGE              = 6,
+    DAOFA_OPEN_LEVEL    = 7,    --
+    QMDJ_COIN           = 8,    --
+}
+
+DB_DAOFA_CONFIG = {
+    ID                  = 0,
+    NAME                = 1,
+    REQ_MONEY           = 2,
+    GRAY                = 3,
+    GREEN               = 4,
+    BLUE                = 5,
+    PURPLE              = 6,
+    GOLD                = 7,
+    UPLEV_CHANCE        = 8,
+};

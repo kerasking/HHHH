@@ -10,7 +10,7 @@ local CONTAINTER_X  = 0;
 local CONTAINTER_Y  = 0;
 
 p.CtrId = {listId = 50, btnClose = 49, btnLoot= 7, txtName = 70, txtLev = 72, txtCarLev = 75, txtIsLoot = 71, 
-                 ViewSize = CGSizeMake(305*ScaleFactor, 25*ScaleFactor),};
+                 ViewSize = CGSizeMake(400*ScaleFactor, 25*ScaleFactor),};
 
 function p.LoadUI ()
     --------------------获得游戏主场景------------------------------------------
@@ -26,7 +26,7 @@ function p.LoadUI ()
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.TransPlayerListUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer, 1);
+	scene:AddChildZ(layer, UILayerZOrder.ActivityLayer);
     -----------------初始化ui添加到 layer 层上----------------------------------
     local uiLoad = createNDUILoad();
 	if nil == uiLoad then
@@ -108,17 +108,22 @@ function p.refreshViewItem(view, nId, info)
     local total     = Transport.tbGrainStatic.BeLootMax;
     local btn = GetButton(view, p.CtrId.btnLoot);
     
+    SetLabel(view, p.CtrId.txtIsLoot, info.strArmyGroup);
+	
     if beLoot < total and nPlayerId ~= info.nLooterId1 and  nPlayerId ~= info.nLooterId2 then
         p.IsCanBeLoot = true;
-        SetLabel(view, p.CtrId.txtIsLoot, GetTxtPri("TPL2_T1"));
+        --SetLabel(view, p.CtrId.txtIsLoot, GetTxtPri("TPL2_T1"));
         btn:EnalbeGray(false);
     else
         p.IsCanBeLoot = false;
-        SetLabel(view, p.CtrId.txtIsLoot, GetTxtPri("TPL2_T2"));
+        --SetLabel(view, p.CtrId.txtIsLoot, GetTxtPri("TPL2_T2"));
         btn:EnalbeGray(true);
     end
     
-    SetLabel(view, p.CtrId.txtCarLev, Transport.tbGrainConfig[info.nGrain_config_id].Name);            
+    local l_CarLev = SetLabel(view, p.CtrId.txtCarLev, Transport.tbGrainConfig[info.nGrain_config_id].Name);   
+    LogInfo("chh_info.nGrain_config_id:[%d]",info.nGrain_config_id);
+    l_CarLev:SetFontColor(Item.GetTransportCarQuality(info.nGrain_config_id)); 
+	
     return;
 end
 

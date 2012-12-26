@@ -17,6 +17,7 @@
 #include "NDPath.h"
 #include "NDUtility.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
 
 ///////////////////////////////////////////////
 DramaScene* GetDramaScene()
@@ -102,47 +103,47 @@ void DramaCommandDlg::excute()
 {
 	SetFinish(true);
 
-	DramaScene* dramaScene = GetDramaScene();
+	DramaScene* pkDramaScene = GetDramaScene();
 
-	if (!dramaScene)
+	if (!pkDramaScene)
 	{
 		return;
 	}
 
 	if (DCT_OPEN == m_kParam.type)
 	{
-		dramaScene->OpenChat(m_kParam.u3.bLeft);
+		pkDramaScene->OpenChat(m_kParam.u3.bLeft);
 	}
 	else if (DCT_CLOSE == m_kParam.type)
 	{
-		dramaScene->CloseChat(m_kParam.u3.bLeft);
+		pkDramaScene->CloseChat(m_kParam.u3.bLeft);
 	}
 	else if (DCT_SETDLGFIG == m_kParam.type)
 	{
-		dramaScene->SetChatFigure(m_kParam.u3.bLeft, m_kParam.str, m_kParam.u1.bReverse,
+		pkDramaScene->SetChatFigure(m_kParam.u3.bLeft, m_kParam.str, m_kParam.u1.bReverse,
 			                    m_kParam.m_Pic_CellX, m_kParam.m_Pic_CellY);
 	}
 	else if (DCT_SETDLGTITLE == m_kParam.type)
 	{
 		if (0 == m_kParam.nKey)
 		{
-			dramaScene->SetChatTitle(m_kParam.u3.bLeft, m_kParam.str,
+			pkDramaScene->SetChatTitle(m_kParam.u3.bLeft, m_kParam.str,
 					m_kParam.u2.nFontSize, m_kParam.u1.nFontColor);
 		}
 		else
 		{
-			dramaScene->SetChatTitleBySpriteKey(m_kParam.u3.bLeft, m_kParam.nKey,
+			pkDramaScene->SetChatTitleBySpriteKey(m_kParam.u3.bLeft, m_kParam.nKey,
 					m_kParam.u2.nFontSize, m_kParam.u1.nFontColor);
 		}
 	}
 	else if (DCT_SETDLGCONTENT == m_kParam.type)
 	{
-		dramaScene->SetChatContent(m_kParam.u3.bLeft, m_kParam.str,
+		pkDramaScene->SetChatContent(m_kParam.u3.bLeft, m_kParam.str,
 				m_kParam.u2.nFontSize, m_kParam.u1.nFontColor);
 	}
 	else if (DCT_SHOWTIPDLG == m_kParam.type)
 	{
-		dramaScene->ShowTipDlg(m_kParam.str);
+		pkDramaScene->ShowTipDlg(m_kParam.str);
 	}
 }
 
@@ -278,7 +279,7 @@ void DramaCommandSprite::ExcuteAddSprite()
 
 	if (sprite && sprite->IsKindOfClass(RUNTIME_CLASS(NDBaseRole)))
 	{
-		((NDBaseRole*) sprite)->m_strName = m_kParam.str;
+		((NDBaseRole*) sprite)->SetName( m_kParam.str );
 	}
 	if (sprite && sprite->IsKindOfClass(RUNTIME_CLASS(NDMonster)))
 	{
@@ -289,7 +290,7 @@ void DramaCommandSprite::ExcuteAddSprite()
 void DramaCommandSprite::ExcuteAddSpriteByFile()
 {
 	NDAsssert(DCT_ADDSPRITEBYFILE == m_kParam.type);
-
+	
 	SetFinish(true);
 
 	DramaScene* pkDramaScene = GetDramaScene();
@@ -299,7 +300,9 @@ void DramaCommandSprite::ExcuteAddSpriteByFile()
 		return;
 	}
 
-	pkDramaScene->AddSprite(m_kParam.nKey, m_kParam.str);
+	char sprFile[256] = { 0 };
+	sprintf(sprFile, "%s", NDPath::GetAniPath(m_kParam.str.c_str()).c_str());
+	pkDramaScene->AddSprite(m_kParam.nKey, sprFile);
 
 	NDSprite* sprite = pkDramaScene->GetSprite(m_kParam.nKey);
 

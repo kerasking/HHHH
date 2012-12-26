@@ -87,6 +87,22 @@ function p.ReviveCallbackCampBattleFail(nEventType, param)
     end
 end
 
+--军团战胜利
+function p.ReviveCallbackArmyBattleSucc(nEventType, param)
+    if(CommonDlgNew.BtnOk == nEventType) then
+    	SyndicateBattleUI.AutoJoinNextBattle();
+        p.CloseBattle();
+    end
+end
+
+--军团战失败
+function p.ReviveCallbackArmyBattleFail(nEventType, param)
+    if(CommonDlgNew.BtnOk == nEventType) then
+    	SyndicateBattleUI.FailInBattle();
+        p.CloseBattle();	        
+    end
+end
+
 --local nTag
 
 function p.SetResult(result,money,repute)
@@ -146,6 +162,30 @@ function p.SetResult(result,money,repute)
         else
         	CommonDlgNew.ShowYesDlg(str, p.ReviveCallbackCampBattleFail, nil,3);
         end
+    
+    elseif  ArenaUI.isInChallenge == 6 then
+    --军团战
+        local layer=p.GetParent();
+        if layer then
+            layer:SetVisible(false);
+        end
+        
+        local str = nil;
+        if result ==1 then --胜利
+            str = string.format("恭喜你获胜了！");
+            Music.PlayEffectSound(1094);
+        elseif result ==0 then --失败
+            str = string.format("可惜呀！战斗失败了。");
+            Music.PlayEffectSound(1093);
+        end
+        
+        if result == 1 then
+        	CommonDlgNew.ShowYesDlg(str, p.ReviveCallbackArmyBattleSucc, nil,3);
+        else
+        	CommonDlgNew.ShowYesDlg(str, p.ReviveCallbackArmyBattleFail, nil,3);
+        end
+        
+                
     else
         LogInfo("+++++++++++result[%d]+++++++++++",result);
         local layer=p.GetParent();

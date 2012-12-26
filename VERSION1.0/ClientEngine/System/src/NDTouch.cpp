@@ -11,6 +11,7 @@
 #include "CCTouchDispatcher.h"
 #include "ccMacros.h"
 #include "UsePointPls.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -20,6 +21,8 @@ namespace NDEngine
 	
 	NDTouch::NDTouch()
 	{
+		INC_NDOBJ_RTCLS
+
 		m_tapCount = 0;
 		m_location = CCPointMake(0, 0);
 		m_previousLocation = CCPointMake(0, 0);
@@ -27,6 +30,7 @@ namespace NDEngine
 	
 	NDTouch::~NDTouch()
 	{
+		DEC_NDOBJ_RTCLS
 	}
 	
 	unsigned int NDTouch::GetTapCount()

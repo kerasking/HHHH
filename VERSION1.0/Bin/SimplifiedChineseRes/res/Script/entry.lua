@@ -1,5 +1,4 @@
 --数据库数据加载
-PrintLog("Begin Load");
 bgnTimeSlice("DBLoad.lua")
 	DoFile("DBLoad.lua");
 endTimeSlice("DBLoad.lua")
@@ -165,5 +164,5 @@ endTimeSlice("SyndicateBattle/define.lua")
 bgnTimeSlice("Banquet/define.lua")
 DoFile("Banquet/define.lua");
 endTimeSlice("Banquet/define.lua")
-
-PrintLog("End Load");
+--占星
+DoFile("Destiny/define.lua");

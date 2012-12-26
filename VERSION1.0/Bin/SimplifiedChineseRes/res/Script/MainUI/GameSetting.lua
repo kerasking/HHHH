@@ -226,14 +226,14 @@ end
 
 
 function p.TestButtonClick()
-	CommonDlgNew.ShowYesOrNoDlg("警告，确定要删除角色吗？", p.SendMsgDelPlayer1, true);	
+	CommonDlgNew.ShowYesOrNoDlg(GetTxtPri("GS2_T1"), p.SendMsgDelPlayer1, true);	
 end
 
 function p.SendMsgDelPlayer1(nEventType , nEvent, param)
 	if(CommonDlgNew.BtnOk == nEventType) then
 		LogInfo("p.SendMsgDelPlayer1")	
 		
-   		CommonDlgNew.ShowYesOrNoDlg("删除帐号后将不能找回？", p.SendMsgDelPlayer2, true);	
+   		CommonDlgNew.ShowYesOrNoDlg(GetTxtPri("GS2_T2"), p.SendMsgDelPlayer2, true);	
    	end
 end
 

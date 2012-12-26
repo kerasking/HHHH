@@ -127,7 +127,7 @@ public:
 	virtual void LoadEudemon(){}
 
 	virtual void setWillBeAtk(bool bSet){}
-	//virtual void setBattle(Battle* parent){}
+	//virtual void setBattle(BattleUILayer* parent){}
 
 	virtual void setSkillName(std::string name){}
 	//virtual void addAStatus(FighterStatus* fs){}

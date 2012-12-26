@@ -27,6 +27,7 @@ import java.util.HashMap;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 
 public class Cocos2dxTypefaces
 {
@@ -59,10 +60,24 @@ public class Cocos2dxTypefaces
 	public static synchronized Typeface get(final Context pContext,
 			final String pAssetName)
 	{
+// 		Log.d("Typeface get", "Context: " + pContext);
+// 		Log.d("Typeface get", "pAssetName: " + pAssetName);
+		
 		if (!Cocos2dxTypefaces.sTypefaceCache.containsKey(pAssetName))
 		{
-			final Typeface typeface = Typeface.createFromAsset(
-					pContext.getAssets(), pAssetName);
+			Typeface typeface;
+			try
+			{
+				typeface = Typeface.createFromAsset(pContext.getAssets(), pAssetName);
+				
+			}
+			catch (final Exception e)
+			{
+				Log.d("Typeface get", "error get typeface:");
+				typeface = Typeface.createFromFile("/sdcard/dhlj/SimplifiedChineseRes/res/fonts/LiSu.ttf");
+			}
+			//final Typeface typeface = Typeface.createFromAsset(pContext.getAssets(), pAssetName);
+			//Log.d("Typeface get", "typeface: " + typeface);
 			Cocos2dxTypefaces.sTypefaceCache.put(pAssetName, typeface);
 		}
 

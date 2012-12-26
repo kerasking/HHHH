@@ -7,6 +7,7 @@
 //
 
 #include "NDUIImage.h"
+#include "ObjectTracker.h"
 
 namespace NDEngine
 {
@@ -14,6 +15,7 @@ namespace NDEngine
 	
 	NDUIImage::NDUIImage()
 	{
+		INC_NDOBJ_RTCLS
 		m_pic = NULL;
 		m_combinePic = NULL;
 		m_clearPicOnFree = false;
@@ -21,6 +23,7 @@ namespace NDEngine
 	
 	NDUIImage::~NDUIImage()
 	{
+		DEC_NDOBJ_RTCLS
 		if (m_clearPicOnFree) 
 		{
 			delete m_pic;

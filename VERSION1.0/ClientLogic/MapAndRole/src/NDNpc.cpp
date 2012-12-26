@@ -32,6 +32,7 @@
 #include "NDDebugOpt.h"
 #include "NDNpcLogic.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
 
 #define NPC_NAME_FONT_SIZE 14
 
@@ -62,6 +63,7 @@ IMPLEMENT_CLASS(NDNpc, NDBaseRole)
 NDNpc::NDNpc() :
 m_eNPCState(NPC_STATE_NO_MARK)
 {
+	INC_NDOBJ_RTCLS
 	m_bRoleNpc = false;
 	//ridepet = NULL;
 	memset(m_pkNameLabel, 0, sizeof(m_pkNameLabel));
@@ -90,8 +92,10 @@ m_eNPCState(NPC_STATE_NO_MARK)
 
 NDNpc::~NDNpc()
 {
+	DEC_NDOBJ_RTCLS
 	CC_SAFE_DELETE (m_pkPicBattle);
 	CC_SAFE_DELETE (m_pkPicState);
+	CC_SAFE_DELETE (m_npcLogic);
 }
 
 void NDNpc::Init()
@@ -339,8 +343,14 @@ void NDNpc::OnDrawEnd(bool bDraw)
 	}
 //	}
 
-	if (!m_strTalk.empty() && m_strTalk.size() > 3 && abs(kPlayer.GetCol()-m_nCol) <= 2 && abs(kPlayer.GetRow()-m_nRow) <= 2) 
+	if (!m_strTalk.empty() 
+		&& m_strTalk.size() > 3 
+		&& abs(kPlayer.GetCol()-m_nCol) <= 2 
+		&& abs(kPlayer.GetRow()-m_nRow) <= 2) 
+	{
 		addTalkMsg(m_strTalk, 0);
+	}
+
 // 	else if (m_pkTalkBox)
 // 		SAFE_DELETE_NODE(m_talkBox);
 
@@ -570,7 +580,7 @@ int NDNpc::GetType()
 }
 
 //@label
-void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text,
+void NDNpc::SetLable(LableType eLableType, int x, int y, const std::string& utf8_text,
 		cocos2d::ccColor4B color1, cocos2d::ccColor4B color2)
 {
 	if (!m_pkSubNode)
@@ -597,25 +607,12 @@ void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text,
 		return;
 	}
 
-#if 0
-	//CCSize fontSize = getStringSize(text.c_str(), lable[0]->GetFontSize());
-	float fScale = RESOURCE_SCALE;
-	CCSize fontSize = getStringSize(text.c_str(), NPC_NAME_FONT_SIZE*fScale);
-	CCPoint posHead = this->getHeadPos();
-
-	int newX = posHead.x - 0.5 * fontSize.width;
-	int newY = posHead.y - 1.0 * fontSize.height;
-
-	float offset = 1.0f * fScale;
-	lable[0]->SetFrameRect(CCRectMake(newX + offset, newY, fontSize.width, fontSize.height));
-	lable[1]->SetFrameRect(CCRectMake(newX, newY, fontSize.width, fontSize.height));
-#else
 	CCSize kSizeMap;
 	kSizeMap = m_pkSubNode->GetContentSize();
 	
 	CCSize kSizeWin = CCDirector::sharedDirector()->getWinSizeInPixels();
 	float fScaleFactor = RESOURCE_SCALE;
-	CCSize kSize = getStringSize(text.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
+	CCSize kSize = getStringSize(utf8_text.c_str(), NPC_NAME_FONT_SIZE*fScaleFactor);
 
 	lable[1]->SetFrameRect(
 			CCRectMake(
@@ -632,10 +629,9 @@ void NDNpc::SetLable(LableType eLableType, int x, int y, std::string text,
 					kSizeWin.width,
 					30 * fScaleFactor
 					));
-#endif
 
-	lable[0]->SetText(text.c_str());
-	lable[1]->SetText(text.c_str());
+	lable[0]->SetText(utf8_text.c_str());
+	lable[1]->SetText(utf8_text.c_str());
 
 	lable[0]->SetFontColor(color1);
 	lable[1]->SetFontColor(color2);
@@ -902,4 +898,12 @@ void NDNpc::ShowHightLight(bool bShow)
 	}
 
 	this->SetHightLight(bShow);
+}
+
+//override for debug
+void NDNpc::RunAnimation(bool bDraw)
+{
+	if (!NDDebugOpt::getRunAnimNpcEnabled()) return;
+
+	NDBaseRole::RunAnimation(bDraw);
 }

@@ -34,18 +34,7 @@
 #define ccc4f					cocos2d::ccc4f
 
 #ifdef WIN32
-#define uint				unsigned int
-
-	#define UTEXT(str)			GBKToUTF8(str)
-
-	#include "third_party/win32/iconv/iconv.h"
-	const char* GBKToUTF8(const char *strChar);
-#elif defined(ANDROID)
-#define UTEXT(str)			GBKToUTF8(str)
-#include "third_party/win32/iconv/iconv.h"
-const char* GBKToUTF8(const char *strChar);
-#else
-	#define UTEXT(str) str
+#define uint					unsigned int	
 #endif
 
 cocos2d::CCSize getStringSize(const char* pszStr, unsigned int fontSize);

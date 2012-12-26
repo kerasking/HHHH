@@ -12,17 +12,20 @@
 #include "CCPointExtension.h"
 #include "NDUtility.h"
 #include "NDConstant.h"
+#include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(CUIRoleNode, NDUINode)
 
 CUIRoleNode::CUIRoleNode()
 {
+	INC_NDOBJ_RTCLS
 	m_pRoleParentNode		= NULL;
 	m_pRole					= NULL;
 }
 
 CUIRoleNode::~CUIRoleNode()
 {
+	DEC_NDOBJ_RTCLS
 	SAFE_DELETE_NODE(m_pRoleParentNode);
 }
 

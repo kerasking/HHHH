@@ -71,7 +71,7 @@ public:
 	void InitRoleLookFace(int lookface);
 
 	// NPC与怪物的初始化
-	void InitNonRoleData(std::string name, int lookface, int lev);
+	void InitNonRoleData( const std::string& name, int lookface, int lev );
 
 	void SetHair(int style, int color = 1);
 
@@ -96,7 +96,8 @@ public:
 	//适用于没有保存装备数据的角色
 	virtual void unpakcAllEquip();
 
-	void addTalkMsg(std::string msg, int timeForTalkMsg);
+	void addTalkMsg( const std::string& msg, int timeForTalkMsg );
+
 public:
 	void DrawHead(const CCPoint& pos);
 	void SetWeaponType(int weaponType);
@@ -149,6 +150,14 @@ public:
 	virtual CCRect GetFocusRect();
 
 	int getFlagId(int index);
+
+	void SetName( const std::string& strName );
+	void SetRank( const std::string& strRank );
+	
+	const std::string& GetName() { return m_strName; }
+	const std::string& GetRank() { return m_strRank; }
+
+public:
 	// 勿用，如需获取请直接访问ridePet
 	NDRidePet* GetRidePet();
 
@@ -161,7 +170,7 @@ public:
 
 protected:
 	void SafeClearEffect(NDSprite*& sprite);
-	void SafeAddEffect(NDSprite*& sprite, std::string file);
+	void SafeAddEffect(NDSprite*& sprite, const std::string& file);
 
 	void ShowShadow(bool bShow, bool bBig = false);
 	void SetShadowOffset(int iX, int iY);
@@ -206,16 +215,22 @@ public:
 	int m_nLevel;				//等级
 
 	CAMP_TYPE m_eCamp;			//阵营
-	std::string m_strName;
-	std::string m_strRank;		// 军衔
+
+protected:
+	std::string m_strName; //utf8
+	std::string m_strRank; //utf8 // 军衔
+
 public:
 	// 骑宠相关
 	NDRidePet* m_pkRidePet;
+
 private:
 	bool m_bFocus;
+
 public:
 	NDNode* m_pkSubNode; // 角色对象的其它动画节点都挂在这个节点上
 	CCPoint m_kScreenPosition;
+
 protected:
 	NDPicture* m_pkRingPic;
 	NDSprite* m_pkEffectFlagAniGroup;

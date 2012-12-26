@@ -49,7 +49,7 @@ function p.LoadUI()
 	layer:SetTag(NMAINSCENECHILDTAG.DailyCheckIn);
 	layer:SetFrameRect(RectFullScreenUILayer);
 	--scene:AddChildZ(layer, 2);
-	scene:AddChild(layer);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer );
     
     local uiLoad = createNDUILoad();
 	if nil == uiLoad then

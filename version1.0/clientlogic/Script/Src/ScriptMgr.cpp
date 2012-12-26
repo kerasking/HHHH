@@ -20,7 +20,7 @@
 #include "ScriptDataBase.h"
 #include "ScriptTimer.h"
 #include "ScriptDrama.h"
-
+#include "ObjectTracker.h"
 #include "NDDataPersist.h"
 #include "Des.h"
 #include <sys/stat.h>
@@ -30,6 +30,8 @@
 #include "NDPath.h"
 #include "NDUtil.h"
 #include "NDProfile.h"
+#include "ScriptRegLua.h"
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "direct.h"
 #endif
@@ -126,6 +128,8 @@ const char* DataFilePath()
 ScriptMgr::ScriptMgr()
 : m_bLoadLuaOK(false)
 {
+	INC_NDOBJ_RTCLS
+
 	#if 0
 char filename[256];
 	memset(filename, 0, sizeof(filename));
@@ -144,6 +148,7 @@ char filename[256];
 
 ScriptMgr::~ScriptMgr()
 {
+	DEC_NDOBJ_RTCLS
 	if (m_fDebugOutPut)
 	{
 		fclose(m_fDebugOutPut);
@@ -169,7 +174,7 @@ void ScriptMgr::DebugOutPut(const char* str)
 
 void ScriptMgr::WriteLog(const char* fmt, ...)
 {
-	if (!fmt || !m_fTest)
+	if (!fmt)
 	{
 		return;
 	}
@@ -181,7 +186,7 @@ void ScriptMgr::WriteLog(const char* fmt, ...)
 	sprintf(buffer, "%s\0", buffer);
 	va_end(argumentList);
 
-	if(strstr(buffer, "tzq") != NULL)
+	if(strstr(buffer, "tzq") != NULL && m_fTest)
 	{
 		fwrite(buffer, 1, strlen(buffer) + 1, m_fTest);
 		fwrite("\n", 1, 1, m_fTest);

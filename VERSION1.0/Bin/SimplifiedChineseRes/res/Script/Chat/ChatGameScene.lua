@@ -45,7 +45,7 @@ function p.LoadUI()
 	layer:SetFrameRect(CGRectMake(winsize.w*0.1, winsize.h*0.6, winsize.w*0.7, winsize.h*gRectScaleY));
 	layer:SetBackgroundColor(ccc4(0,0,0,30));
 	
-	scene:AddChild(layer);
+	scene:AddChildZ(layer,4999);
 
 
 	local rectX = winsize.w*0.1;
@@ -113,14 +113,14 @@ function p.GetParent()
 	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.ChatGameScene);
 	
 	if nil == layer then
-		LogInfo("DelayShowUI GetParent return parent nil")
+		--LogInfo("DelayShowUI GetParent return parent nil")
 		return nil;
 	end
 
 	return layer;
 end
 
-function p.AddChatText(speakerId,channel,speaker,text)
+function p.AddChatText(speakerId,channel,speaker,text,nindex)
 	LogInfo("gamescene chat AddChatText speaker"..speaker)
 	if p.currentChatType==channel
 		or p.currentChatType==ChatType.CHAT_CHANNEL_ALL then
@@ -141,7 +141,7 @@ function p.AddChatText(speakerId,channel,speaker,text)
 		
 		local color = ChatMainUI.ColorChannel[channel];
 		chatText:SetContent(speakerId,channel,speaker,text,1,6,color);
-		
+		chatText:SetTag(nindex);
 		--chatText:SetContent(speakerId,channel,speaker,text,1,6,ccc4(0,0,255,255));
 		local rect  = CGRectMake(0, contentHight, winsize.w*0.7, winsize.h*0.05); 
 		chatText:SetFrameRect(rect);
@@ -166,6 +166,14 @@ function p.AddChatText(speakerId,channel,speaker,text)
 	return true;
 end
 
+function p.RemoveChatText(nindex)
+	if scroll ~= nil then
+		scroll:RemoveChildByTag(nindex, true);
+	end
+end
+
+
+
 local gCount =0;
 function p.DelayShowUI()
 	
@@ -176,10 +184,10 @@ function p.DelayShowUI()
 		p.LoadUI()		
 	else
 		local Chatlayer = p.GetParent();
-		if OnlineCheckIn.InInCity()  then
+		--if OnlineCheckIn.InInCity()  then
 		--不在主城则不显示
 			Chatlayer:SetVisible(true);	
-		end	
+		--end	
 	end
 	
 	if (p.mTimerTaskTag) then
@@ -199,10 +207,10 @@ function p.SetUIInvisible()
 	end
 	local Chatlayer = p.GetParent();
 	
-	if OnlineCheckIn.InInCity() == false then
-		Chatlayer:SetVisible(false);
-		return;				
-	end
+	--if OnlineCheckIn.InInCity() == false then
+	--	Chatlayer:SetVisible(false);
+	--	return;				
+	--end
 	
 	
 	gCount = gCount +1;
@@ -223,5 +231,5 @@ function p.SetUIInvisible()
 end
 
 
-RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "ChatGameScene.LoadUI", p.DelayShowUI);
+--RegisterGlobalEventHandler(GLOBALEVENT.GE_GENERATE_GAMESCENE, "ChatGameScene.LoadUI", p.DelayShowUI);
 

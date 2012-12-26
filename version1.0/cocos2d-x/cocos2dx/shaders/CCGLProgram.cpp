@@ -35,6 +35,10 @@ THE SOFTWARE.
 #include "kazmath/GL/matrix.h"
 #include "kazmath/kazmath.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 typedef struct _hashUniformEntry
@@ -50,11 +54,18 @@ CCGLProgram::CCGLProgram()
 , m_uFragShader(0)
 , m_pHashForUniforms(NULL)
 {
+#if ND_MOD
+	INC_CCOBJ("CCGLProgram");
+#endif
     memset(m_uUniforms, 0, sizeof(m_uUniforms));
 }
 
 CCGLProgram::~CCGLProgram()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCGLProgram");
+#endif
+
     CCLOGINFO("cocos2d: %s %d deallocing 0x%X", __FUNCTION__, __LINE__, this);
 
     // there is no need to delete the shaders. They should have been already deleted.

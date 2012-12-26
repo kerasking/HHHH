@@ -42,8 +42,8 @@ local tArmyGroupErrorString = {
 	GetTxtPri("MAG2_T20"),
 	GetTxtPri("MAG2_T21"),
     GetTxtPri("MAG2_T22"),
-    "该成员背包已满，不可分配",
-    "该成员贡献度不足，不可分配",
+    GetTxtPri("MAG2_T28"),
+    GetTxtPri("MAG2_T29"),
 };
 
 local tArmyGroupOnlineString = {
@@ -64,7 +64,7 @@ function p.GetLogoutString( nTime )
 	elseif nTime < 1800 then
 		str=str..SafeN2S(getIntPart(nTime/60))..GetTxtPri("AREAUI_T8");
 	elseif nTime < 3600 then
-		str=str.."半小时";
+		str=str..GetTxtPri("AREAUI_T18");
 	elseif nTime < 86400 then
 		str=str..SafeN2S(getIntPart(nTime/3600))..GetTxtPri("AREAUI_T9");
 	else

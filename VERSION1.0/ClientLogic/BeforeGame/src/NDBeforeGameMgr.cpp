@@ -35,12 +35,33 @@
 #include "SqliteDBMgr.h"
 #include <stdlib.h>
 
-#ifdef USE_NDSDK
+#if (defined(USE_NDSDK) && defined(__APPLE__))
 #import <NdComPlatform/NdComPlatform.h>
 #endif
 #if defined(USE_MGSDK)
 #import "MBGSocialService.h"
 #endif
+
+#if defined(ANDROID)
+#include "platform/android/jni/JniHelper.h"
+#include "android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.h"
+#include <jni.h>
+#include <android/log.h>
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+#include "NDVideoMgr.h"
+#include "CCCommon.h"
+#include "ZipUnZip.h"
+#include "NDSharedPtr.h"
+#include "CCFileUtils.h"
+#include "myunzip.h"
+#include "CCPlatformConfig.h"
 
 using namespace NDEngine;
 
@@ -493,6 +514,8 @@ void NDBeforeGameMgr::sendClientKey()
 
 void NDBeforeGameMgr::sendMsgConnect(int idAccount)
 {
+	CCLog( "@@login07: NDBeforeGameMgr::sendMsgConnect(%d)\r\n", idAccount );
+
 	NDTransData data(_MSG_CONNECT);
 
 	int dwAuthorize = 0;
@@ -1196,7 +1219,7 @@ void NDBeforeGameMgr::OnDialogButtonClick(NDUIDialog* dialog,
 			 char buff[100] = {0x00};
 			 sprintf(buff, "最新版本：%s", m_latestVersion.c_str());
 			 
-			 UpdateScene* scene = new UpdateScene();
+			 UpdateScene* scene = anew UpdateScene();
 			 scene->Initialization(m_fileUrl.c_str(), buff);
 			 NDDirector::DefaultDirector()->PushScene(scene);
 			 */
@@ -1370,7 +1393,7 @@ void NDBeforeGameMgr::Login()
 
 bool NDBeforeGameMgr::doNDSdkLogin()
 {
-#if defined(USE_NDSDK)
+#if (defined(USE_NDSDK) && defined(__APPLE__))
 	if (m_sdkLogin)
 	{
 		//[m_sdkLogin release];
@@ -1393,6 +1416,7 @@ bool NDBeforeGameMgr::doNDSdkLogin()
 
 bool NDBeforeGameMgr::doNDSdkChangeLogin()
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #ifdef USE_NDSDK
 	if (m_sdkLogin)
 	{
@@ -1409,6 +1433,21 @@ bool NDBeforeGameMgr::doNDSdkChangeLogin()
                                 onDismiss:^{
                                     
                                 }];
+    }
+#endif
+#endif
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t
+                                       , "org/DeNA/DHLJ/DaHuaLongJiang"
+                                       , "OpenUserProfile"
+                                       , "()V"))
+        
+    {
+        t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
     }
 #endif
     return true;
@@ -1600,6 +1639,14 @@ bool NDBeforeGameMgr::SwichKeyToServer(const char* pszIp, int nPort,
 		return false;
 	}
 
+	if (!VideoMgrPtr->PlayVideo("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4"))
+	{
+		LOGD("PlayVideo failed!!");
+		int a = 10;
+	}
+
+	LOGD("PlayVideo succeeded!!");
+
 	//**chh 2012-08-27 启动线程时要先停止其它线程 **//
 	NDDataTransThread::DefaultThread()->Stop();
 	NDDataTransThread::ResetDefaultThread();
@@ -1635,7 +1682,7 @@ bool NDBeforeGameMgr::SwichKeyToServer(const char* pszIp, int nPort,
 //     loginData.SetData(kLoginData, &kLastServerName, NDBeforeGameMgrObj.GetServerDisplayName().c_str());	
 //     loginData.SetData(kLoginData, &kLastServerSendName, NDBeforeGameMgrObj.GetServerName().c_str());	
 // 	NSString strPort = CCString::stringWithFormat("%d", NDBeforeGameMgrObj.GetServerPort());
-//     loginData.SetData(kLoginData, &kLastServerPort, strPort->UTF8String());
+//     loginData.SetData(kLoginData, &kLastServerPort, strPort->getUtf8String());
 //     loginData.SaveLoginData();
 //     loginData.SaveAccountList();
 	return true;
@@ -1746,42 +1793,58 @@ int NDEngine::GetEncryptSalt(unsigned int seed)
 ////////////////////////////////////////////////////////////
 void NDBeforeGameMgr::InitAccountTable()
 {
-     //创建server数据表
-     if(!CSqliteDBMgr::shareInstance().IsExistTable("account")){
-         char *sql = "CREATE TABLE account(name text primary key,type integer,pwd blob,login_time integer)";
-         if(!CSqliteDBMgr::shareInstance().ExcuteSql(sql)){
-             NDLog(@"创建帐号表出错!");
-             return;
-         }
-         //发起快速注册
-         this->FastGameOrRegister(2);
-     }else{
-         //无纪录时发起快速注册
-        /*int nRowNum =*/ CSqliteDBMgr::shareInstance().SelectData("SELECT count(*) FROM account;",1);
-        int nCnt = CSqliteDBMgr::shareInstance().GetColDataN(0,0);
-         if(nCnt < 1){
-             //发起快速注册
-             this->FastGameOrRegister(2);
-         }
-     }
+	//创建server数据表
+	if (!CSqliteDBMgr::shareInstance().IsExistTable("account"))
+	{
+		char *sql =
+			"CREATE TABLE account(name text primary key,type integer,pwd blob,login_time integer)";
+		if (!CSqliteDBMgr::shareInstance().ExcuteSql(sql))
+		{
+			NDLog(@"创建帐号表出错!");
+			return;
+		}
+		//发起快速注册
+		this->FastGameOrRegister(2);
+	}
+	else
+	{
+		//无纪录时发起快速注册
+		/*int nRowNum =*/CSqliteDBMgr::shareInstance().SelectData(
+			"SELECT count(*) FROM account;", 1);
+		int nCnt = CSqliteDBMgr::shareInstance().GetColDataN(0, 0);
+		if (nCnt < 1)
+		{
+			//发起快速注册
+			this->FastGameOrRegister(2);
+		}
+	}
 }
-void NDBeforeGameMgr::SaveAccountPwdToDB(const char* pszName, const char* pszPwd, int nType)
+
+void NDBeforeGameMgr::SaveAccountPwdToDB(const char* pszName,
+										 const char* pszPwd, int nType)
 {
-     if(!pszName){
-         return;
-     }
-     unsigned char encPwd[1024] = {0x00};
-     if(pszPwd){
-         simpleEncode((const unsigned char*)pszPwd, encPwd);
-     }
-     char szValue[256]="";
-     char *sqlaccount = "REPLACE INTO account(name,type,pwd,login_time) VALUES";
-     sprintf(szValue,"(\'%s\',%d,\'%s\',%d);",pszName,nType,(const char*)encPwd,0);
-     std::string strSqlAccount = sqlaccount;
-     strSqlAccount+=szValue;
-     if(!CSqliteDBMgr::shareInstance().ExcuteSql(strSqlAccount.c_str())){
-         return;
-     }
+	if (!pszName)
+	{
+		return;
+	}
+	unsigned char szEncPwd[1024] = {0};
+
+	if (pszPwd)
+	{
+		simpleEncode((const unsigned char*) pszPwd, szEncPwd);
+	}
+
+	char szValue[256] = "";
+	char* pkSQLAccount = "REPLACE INTO account(name,type,pwd,login_time) VALUES";
+	sprintf(szValue, "(\'%s\',%d,\'%s\',%d);", pszName, nType,
+		(const char*) szEncPwd, 0);
+	std::string strSqlAccount = pkSQLAccount;
+	strSqlAccount += szValue;
+
+	if (!CSqliteDBMgr::shareInstance().ExcuteSql(strSqlAccount.c_str()))
+	{
+		return;
+	}
 }
 
 ////////////////////////////////////////////////////////////
@@ -1796,89 +1859,271 @@ bool NDBeforeGameMgr::isWifiNetWork()
 
 bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
 {
-    static int version = 0;
-    unsigned char resType = RES_TYPE;
+    static int s_nVersion = 0;
+    unsigned char ucResType = RES_TYPE;
     //取得当前客户端版本
     bool bFile = true;
-    FILE* file;
-    char local_ver[5] = {0};
+    FILE* pkFile = 0;
+    char szLocalVersion[5] = {0};
     
     //file = fopen(NDPath::GetResourceFilePath("version.ini").c_str(), "rb");
     //从caches下取版本信息
     string sVersion = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
-    file = fopen(sVersion.c_str(), "rb");
-    if (!file)
+    pkFile = fopen(sVersion.c_str(), "rb");
+
+    if (!pkFile)
     {
 		CCLog("读取CACHES目录下版本文件失败");
-		//return false;
         bFile = false;
     }
     else
     {
-        fread(local_ver, 1, 4, file);
-        fclose(file);
-        version = atoi(local_ver);
+        fread(szLocalVersion, 1, 4, pkFile);
+        fclose(pkFile);
+        s_nVersion = atoi(szLocalVersion);
     }        
-    //NDDataTransThread::DefaultThread()->Stop();
+
     NDDataTransThread::ResetDefaultThread();
     NDDataTransThread::DefaultThread()->Start( szURL, 9500 );//("192.168.65.77", 9500);//++Guosen
+
 	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
 	{
 		return false;
 	}
-	NDTransData data(_MSG_CLIENT_VERSION);
+	NDTransData kData(_MSG_CLIENT_VERSION);
     
-	data << version;
-    data << resType;
-	NDDataTransThread::DefaultThread()->GetSocket()->Send(&data);
+	kData << s_nVersion;
+    kData << ucResType;
+	NDDataTransThread::DefaultThread()->GetSocket()->Send(&kData);
     
     return true;
 }
 int NDBeforeGameMgr::CopyStatus = 0;
 //检测首次运行
 bool NDBeforeGameMgr::CheckFirstTimeRuning()
-{ 
+{
+	LOGD("Entry NDBeforeGameMgr::CheckFirstTimeRuning()");
 	bool bFirstTime	= false;
-	string installVersionIniPath	=  NDPath::GetRootResPath() + SZ_VERINI_PATH;
-    string copyVersionIniPath	= NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
+	string strInstallVersionINIPath	= "";
+	string strCopyVersionINIPath = "";
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	strInstallVersionINIPath = string("assets/") + SZ_VERINI_PATH;
+	strCopyVersionINIPath = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	strInstallVersionINIPath = string("sdcard/dhlj/SimplifiedChineseRes/") + SZ_VERINI_PATH;
+    strCopyVersionINIPath = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
+// 	FILE* pkFile = 0;
+// 	pkFile = fopen(strCopyVersionINIPath.c_str(), "rb" );
+#else
+#endif
 	//判断是不是第一次登录，如果是第一次登录，则移动资源文件LIBRARY/CACHES
-	FILE* file;
-	file = fopen(copyVersionIniPath.c_str(), "rb" );
-    //NSString *strIniPath = [NSString stringWithFormat:@"%s",copyVersionIniPath.c_str()];
-    //NSLog(@"qqqqq:%@",strIniPath);
-	if ( !file )
-	{
-		bFirstTime = true;
-	    CCLog( "\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );
-		//std::rename( (NDPath::GetAppResFilePath(NDPath::GetRootResDirName())).c_str(), (NDPath::GetResourceFilePath(NDPath::GetRootResDirName())).c_str() );
-        CopyRes();
-	}
+	//string strTemp = (char*)CCFileUtils::sharedFileUtils()->getFileData("SimplifiedChineseRes.zip/version.ini","rb",&ulFileLength);
+
+	string strInstallResVersion = "";
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+	string strAPKPath = getApkPath();
+
+	LOGD("strAPKPath is %s",strAPKPath.c_str());
+
+	HZIP pZip = 0;
+	HZIP pSimplifiedChineseResZip = 0;
+	char* pSimplifiedChineseResBuffer = 0;
+	unsigned char* pVersionINIBuffer = 0;
+	ZIPENTRY kZipEntry = {0};
+	ZIPENTRY kSimplifiedChineseResZipEntry = {0};
+	unsigned long ulSize = 0;
+	int nSimplifiedChineseResIndex = 0;
+	int nVersionINIIndex = 0;
+
+// 	unsigned char* pszData = CCFileUtils::sharedFileUtils()->
+// 		getFileDataFromZip(strAPKPath.c_str(),"assets/SimplifiedChineseRes.zip",&ulSize);
+
+	unsigned char* pszData = CCFileUtils::sharedFileUtils()->
+		getFileDataFromZip(strAPKPath.c_str(),"assets/version.ini",&ulSize);
+
+	strInstallResVersion = (char*)pszData;
+	strInstallResVersion = strInstallResVersion.substr(0,4);
+
+	LOGD("ulSize is %d",ulSize);
+
+// 	pZip = OpenZip((void*)pszData,ulSize,0);
+// 
+// 	if (0 == pZip)
+// 	{
+// 		LOGERROR("pZip is null");
+// 	}
+// 
+// 	//pSimplifiedChineseResZip = OpenZip(strAPKPath.c_str(),0);
+// 
+// 	if (ZR_OK != FindZipItem(pZip,"version.ini",
+// 		true,&nSimplifiedChineseResIndex,&kZipEntry))
+// 	{
+// 		LOGERROR("FindZipItem Error");
+// 	}
+// 
+// 	LOGD("file name is %s,unc_size is %d,comp_size is %d",
+// 		kZipEntry.name,kZipEntry.unc_size,kZipEntry.comp_size);
+// 
+// 	pSimplifiedChineseResBuffer = new char[kZipEntry.unc_size];
+// 	memset(pSimplifiedChineseResBuffer,0,sizeof(char) * kZipEntry.unc_size);
+// 
+// 	if (ZR_OK != UnzipItem(pZip,nSimplifiedChineseResIndex, "/sdcard/temp.ini"))
+// 	{
+// 		LOGERROR("UnzipItem(pZip,nSimplifiedChineseResIndex, /sdcard/temp.ini ERROR");
+// 		return false;
+// 	}
+// 
+// 	LOGD("pSimplifiedChineseResBuffer is %s",pSimplifiedChineseResBuffer);
+
+// 	pSimplifiedChineseResZip = OpenZip(pSimplifiedChineseResBuffer,kZipEntry.unc_size,0);
+// 	FindZipItem(pSimplifiedChineseResZip,"version.ini",true,&nVersionINIIndex,&kSimplifiedChineseResZipEntry);
+// 
+// 	pVersionINIBuffer = new unsigned char[kSimplifiedChineseResZipEntry.unc_size];
+// 	memset(pVersionINIBuffer,0,sizeof(unsigned char) * kSimplifiedChineseResZipEntry.unc_size);
+// 
+// 	UnzipItem(pSimplifiedChineseResZip,nVersionINIIndex,pVersionINIBuffer,kSimplifiedChineseResZipEntry.unc_size);
+// 
+// 	unsigned long ulFileLen = 0;
+// 	LOGD("(char*)pVersionINIBuffer is %s,Index is %d",(char*)pVersionINIBuffer,nVersionINIIndex);
+// 	strInstallResVersion = (char*)pVersionINIBuffer;
+// 	strInstallResVersion = strInstallResVersion.substr(0,4);
+// 
+// 	LOGD("The read text is %s",strInstallResVersion.c_str());
+// 
+	SAFE_DELETE_ARRAY(pSimplifiedChineseResBuffer);
+	SAFE_DELETE_ARRAY(pVersionINIBuffer);
+// 
+// 	CloseZip(pSimplifiedChineseResZip);
+ 	CloseZip(pZip);
+
+#endif
+
+	FILE* pkFile = 0;
+	unsigned long ulFileLength = 0;
+	pkFile = fopen(strCopyVersionINIPath.c_str(), "rb" );
+
+ 	if ( !pkFile )
+ 	{
+ 		bFirstTime = true;
+ 	    LOGERROR( "\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );
+		CopyRes();
+ 	}
 	else
-	{ 
-        char copyResVersion[5] = {0};
-        char installResVersion[5] = {0};
-        fread(copyResVersion, 1, 4, file);
-        fclose( file );
-        //如果是原下载的版本安装的包导致version.ini等资源文件已经存在,而且版本号小于当前安装的版本号，则删除当前的资源目录，再重新拷贝
-        FILE* installFile;
-        installFile = fopen(installVersionIniPath.c_str(), "rb" );
-        if (installFile)
-        {
-            fread(installResVersion, 1, 4, installFile);
-            fclose(installFile);
-        }
-        if ( atol(copyResVersion) < atol(installResVersion))
+	{
+		char szCopyResVersion[5] = {0};
+		char szInstallResVersion[5] = {0};
+		fread(szCopyResVersion, 1, 4, pkFile);
+		fclose( pkFile );
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+		//如果是原下载的版本安装的包导致version.ini等资源文件已经存在,而且版本号小于当前安装的版本号，则删除当前的资源目录，再重新拷贝
+		FILE* pkInstallFile = 0;
+		pkInstallFile = fopen(strInstallVersionINIPath.c_str(), "rb" );
+
+		if (pkInstallFile)
+		{
+			fread(szInstallResVersion, 1, 4, pkInstallFile);
+			strInstallResVersion = szInstallResVersion;
+			fclose(pkInstallFile);
+		}
+		else
+		{
+			LOGERROR("%s is can't open.",strInstallVersionINIPath.c_str());
+		}
+#endif
+
+		LOGD("szCopyResVersion(%d),szInstallResVersion(%d)",
+			atol(szCopyResVersion),atol(strInstallResVersion.c_str()));
+
+        if ( atol(szCopyResVersion) < atol(strInstallResVersion.c_str()))
         {
             bFirstTime = true;
             CopyRes();
         }
+
 		NDPath::SetResDirPos( 1 );
 	}
+
 	return bFirstTime;
 }
 
 void* CopyResThread(void* ptr)
-{//待实现
+{
+	LOGD("Entry CopyResThread");
+
+	CZipUnZip* pkUnzip = new CZipUnZip;
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	pkUnzip->UnZipFile("../SimplifiedChineseRes.zip","dhlj/");
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	//pkUnzip->UnZipFile("assets/SimplifiedChineseRes.zip","/sdcard/dhlj/");
+
+	unsigned char* pszZipData = 0;
+	unsigned long ulZipLength = 0;
+	string strApkPath = getApkPath();
+	HZIP pZipHandle = 0;
+	ZIPENTRY kZipEntry = {0};
+	int nMaxIndex = 0;
+
+	if (strApkPath.length() == 0)
+	{
+		LOGERROR("strApkPath.length() == 0");
+		return 0;
+	}
+
+	pszZipData = CCFileUtils::sharedFileUtils()->getFileDataFromZip(strApkPath.c_str(),
+		"assets/SimplifiedChineseRes.zip",&ulZipLength);
+
+	if (0 == pszZipData)
+	{
+		LOGERROR("0 == pszZipData");
+		return 0;
+	}
+
+	pZipHandle = OpenZip((void*)pszZipData,ulZipLength,0);
+
+	if (0 == pZipHandle)
+	{
+		LOGERROR("0 == pZipHandle");
+		return 0;
+	}
+
+	if (ZR_OK != GetZipItem(pZipHandle,-1,&kZipEntry))
+	{
+		LOGERROR("ZR_OK != GetZipItem(pZipHandle,-1,&kZipEntry)");
+		return 0;
+	}
+
+	nMaxIndex = kZipEntry.index;
+
+	LOGD("nMaxIndex = %d",kZipEntry.index);
+	string strPath = "/sdcard/dhlj/";
+
+	for (int i = 0;i < nMaxIndex;i++)
+	{
+		ZIPENTRY kTempZipEntry = {0};
+		GetZipItem(pZipHandle,i,&kTempZipEntry);
+		string strFilename = strPath + string(kTempZipEntry.name);
+		LOGD("Unzipping the %s file.",strFilename.c_str());
+		UnzipItem(pZipHandle,i,strFilename.c_str());
+	}
+
+	CloseZip(pZipHandle);
+
+	// FHANDLE hread,hwrite; CreatePipe(&hread,&hwrite,0,0);
+	// CreateZipWriterThread(hwrite);
+	// HZIP hz = OpenZipHandle(hread,0);
+	// for (int i=0; ; i++)
+	// { ZIPENTRY ze;
+	//   ZRESULT zr=GetZipItem(hz,i,&ze); if (zr!=ZR_OK) break; // no more
+	//   UnzipItem(hz,i, ze.name);
+	// }
+	// CloseZip(hz);
+
+#else
+#endif
+
 //     string sSource = NDPath::GetAppResFilePath(NDPath::GetRootResDirName());
 //     string sTarget = NDPath::GetCashesPath()+"/"+NDPath::GetRootResDirName();
 //     NSFileManager *fm;
@@ -1908,11 +2153,11 @@ void* CopyResThread(void* ptr)
 }
 void NDBeforeGameMgr::CopyRes()
 {
-    pthread_t pid;
-	pthread_create(&pid, NULL, CopyResThread, this);	
+	pthread_t pid = {0};
+	CopyResThread(0);
+	//pthread_create(&pid, NULL, CopyResThread, this);	
 }
 int NDBeforeGameMgr::GetCopyStatus()
 {
     return NDBeforeGameMgr::CopyStatus;
-    
 }

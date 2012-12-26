@@ -15,6 +15,8 @@
 #include "tinyxml.h"
 #include "XMLReader.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
+#include "StringConvert.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #import <Foundation/Foundation.h>
@@ -109,6 +111,8 @@ m_pkAccountList(0),
 m_pkDataArray(0),
 m_pkAccountDeviceList(0)
 {
+	INC_NDOBJ("NDDataPersist");
+
 	this->LoadData();
 	this->LoadAccountList();
 	this->LoadAccountDeviceList();
@@ -116,6 +120,8 @@ m_pkAccountDeviceList(0)
 
 NDDataPersist::~NDDataPersist()
 {
+	DEC_NDOBJ("NDDataPersist");
+
 	SAFE_RELEASE(m_pkDataArray);
 	SAFE_RELEASE(m_pkAccountList);
 	SAFE_RELEASE(m_pkAccountDeviceList);
@@ -142,27 +148,32 @@ bool NDDataPersist::NeedEncodeForKey(CCString* key)
 
 void NDDataPersist::SetData(unsigned int index, CCString* key, const char* data)
 {
+	if (!key || !data) return;
+
 	//CCMutableDictionary<const char*>* dic = LoadDataDiction(index);
 	CCDictionary* dic = LoadDataDiction(index);
 
 	NDAsssert(dic != nil);
-	if (data) 
-	{
+
+//@del
 //		NSString *nsObj = [NSString stringWithUTF8String:data];
-		CCStringRef nsObj = CCString::stringWithUTF8String(data);
-		
-		if (NeedEncodeForKey(key)) 
-		{
-			unsigned char encData[1024] = {0x00};
-			simpleEncode((const unsigned char*)data, encData);
-			nsObj = CCString::stringWithUTF8String((const char*)encData);
-			//nsObj = [NSString stringWithUTF8String:(const char*)encData];
-		}
-		
-		//[dic setObject:nsObj forKey:key];
-		dic->setObject(nsObj,key->toStdString().c_str());
+	//CCStringRef nsObj = CCString::stringWithUTF8String(data);
+	CCString* nsObj = CCString::stringWithCString( CONVERT_UTF8_TO_GBK( data ));
+	
+	if (NeedEncodeForKey(key)) 
+	{
+		unsigned char encData[1024] = {0x00};
+		simpleEncode((const unsigned char*)data, encData);
+
+		CCString* nsObj = CCString::stringWithCString( CONVERT_UTF8_TO_GBK((const char*)encData ));
+
+		//@del
+		//nsObj = CCString::stringWithUTF8String((const char*)encData);
+		//nsObj = [NSString stringWithUTF8String:(const char*)encData];
 	}
 	
+	//[dic setObject:nsObj forKey:key];
+	dic->setObject(nsObj,key->getCString());
 }
 
 const char* NDDataPersist::GetData(unsigned int index, CCString* key)
@@ -172,28 +183,31 @@ const char* NDDataPersist::GetData(unsigned int index, CCString* key)
 	
 	//CCMutableDictionary<const char*>* dic = LoadDataDiction(index);
 	CCDictionary* dic = LoadDataDiction(index);
-
 	NDAsssert(dic != nil);
-	CCStringRef nsStr = (CCString*)dic->objectForKey(key->toStdString().c_str());
 
-	if (nsStr == nil) // 键值对不存在, 加入
+	CCString* str = (CCString*)dic->objectForKey(key->getCString());
+
+	if (str == NULL) // 键值对不存在, 加入
 	{ 
 		SetData(index, key, "");
 		return decData;
 	}
-	else
+
+	if (NeedEncodeForKey(key)) 
 	{
-		if (NeedEncodeForKey(key)) 
-		{
-			//simpleDecode((const unsigned char*)[nsStr UTF8String], (unsigned char*)decData);
-			simpleDecode((const unsigned char*)nsStr->UTF8String(),(unsigned char*)decData);
-			return decData;
-		}
-		else 
-		{
-			return nsStr->toStdString().c_str();
-		}
-	}	
+		//@del
+		//simpleDecode((const unsigned char*)[nsStr UTF8String], (unsigned char*)decData);
+		//simpleDecode((const unsigned char*)nsStr->getUtf8String(),(unsigned char*)decData);
+		simpleDecode(
+			(const unsigned char*) CONVERT_GBK_TO_UTF8(str->getCString()), //@todo:android转换有问题.
+			(unsigned char*)decData);
+
+		return decData;
+	}
+	else 
+	{
+		return str->getCString();
+	}
 }
 
 void NDDataPersist::SaveData()
@@ -243,10 +257,10 @@ void NDDataPersist::LoadData()
 
 	XMLReader kReader;
 
-	//m_pkDataArray = new CCMutableArray<CCObject*>;
+	//m_pkDataArray = new CCMutableArray<CCObject*>;//@del
 	m_pkDataArray = new CCArray();
 	
-	if (!kReader.initWithFile(filePath->toStdString().c_str()))
+	if (!kReader.initWithFile(filePath->getCString()))
 	{
 		return;
 	}
@@ -261,7 +275,7 @@ void NDDataPersist::LoadData()
 	for (XMLReader::FileData::iterator it = pkMap->begin();
 		it != pkMap->end();it++)
 	{
-		//CCMutableDictionary<CCObject*,CCObject*>* pkDic =  new CCMutableDictionary<CCObject*,CCObject*>;
+		//CCMutableDictionary<CCObject*,CCObject*>* pkDic =  new CCMutableDictionary<CCObject*,CCObject*>;//@del
 		CCDictionary* pkDic =  new CCDictionary();
 
 		string strKey = "";
@@ -275,6 +289,7 @@ void NDDataPersist::LoadData()
 		m_pkDataArray->addObject(pkDic);
 	}
 
+//@del
 // 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
 // 	{ 
 // 		dataArray = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
@@ -413,19 +428,19 @@ void NDDataPersist::GetAccount(VEC_ACCOUNT& vAccount)
 	for (int i = 0;i < m_pkAccountList->count();i++)
 	{
 		account = (CCArray*)m_pkAccountList->objectAtIndex(i);
-		string acc = ((CCString*)(account->objectAtIndex(0)))->toStdString();
-		string pwd = "";
+		CCString* acc = (CCString*)account->objectAtIndex(0);
+		CCString* pwd = 0;
 
 		if (account->count() > 1)
 		{
-			pwd = ((CCString*)(account->objectAtIndex(1)))->toStdString();
+			pwd = (CCString*)account->objectAtIndex(1);
 		}
 
 		unsigned char decAcc[1024] = {0x00};
 		unsigned char decPwd[1024] = {0x00};
 
-		simpleDecode((const unsigned char*)acc.c_str(), decAcc);
-		simpleDecode((const unsigned char*)pwd.c_str(), decPwd);
+		simpleDecode((const unsigned char*)acc->getCString(), decAcc);
+		simpleDecode((const unsigned char*)pwd->getCString(), decPwd);
 
 		vAccount.push_back(PAIR_ACCOUNT((const char*)decAcc, (const char*)decPwd));
 	}
@@ -514,24 +529,32 @@ void NDDataPersist::AddAccountDevice(const char* account)
 		
 		for (NSUInteger i = 0; i < m_pkAccountList->count(); i++) 
 		{
-			CCStringRef tmpAccountNode = (CCString*)m_pkAccountList->objectAtIndex(i);
+			CCString* tmpAccountNode = (CCString*)m_pkAccountList->objectAtIndex(i);
+			if (!tmpAccountNode) continue;
 
-			if (tmpAccountNode->isEqual(CCString::stringWithUTF8String((const char*)encAccount)))
+			//CCStringRef strRef = CCString::stringWithUTF8String((const char*)encAccount);//@del
+			CCString* strAccount = CCString::stringWithCString( CONVERT_UTF8_TO_GBK( (const char*)encAccount ));
+			if (tmpAccountNode->isEqual( strAccount ))
 			{
 				return;
 			}
 
+//@del
 // 			if ([tmpAccountNode isEqual:[NSString stringWithUTF8String:(const char*)encAccount]]) 
 // 			{
 // 				return;
 // 			}
 		}
 		
+		//@del
 		//[accountDeviceList addObject:[NSString stringWithUTF8String:(const char*)encAccount]];
-		m_pkAccountDeviceList->addObject(CCString::stringWithUTF8String((const char*)encAccount));
+		//CCStringRef strRef = CCString::stringWithUTF8String((const char*)encAccount);//@del
+		CCString* str = CCString::stringWithCString( CONVERT_UTF8_TO_GBK((const char*)encAccount));
+		m_pkAccountDeviceList->addObject( str );
 	}	
 }
 
+#if 0
 bool NDDataPersist::HasAccountDevice(const char* account)
 {
 	/***
@@ -554,12 +577,13 @@ bool NDDataPersist::HasAccountDevice(const char* account)
 
 	for (int i = 0;i < m_pkAccountDeviceList->count();i++)
 	{
-		string acc = ((CCString*)m_pkAccountDeviceList->objectAtIndex(i))->UTF8String();
+		string acc = ((CCString*)m_pkAccountDeviceList->objectAtIndex(i))->getUtf8String();
 		unsigned char decAcc[1024] = {0};
 
 		simpleDecode((const unsigned char*)acc.c_str(),decAcc);
 
-		if (tmpAccountNode->isEqual(CCString::stringWithUTF8String((const char*)decAcc)))
+		CCStringRef strRef = CCString::stringWithUTF8String((const char*)decAcc);
+		if (tmpAccountNode->isEqual( strRef ))
 		{
 			return true;
 		}
@@ -580,6 +604,7 @@ bool NDDataPersist::HasAccountDevice(const char* account)
 	
 	return false;
 }
+#endif
 
 void NDDataPersist::SaveAccountDeviceList()
 {
@@ -605,10 +630,8 @@ bool NDDataPersist::IsGameSettingOn(GAME_SETTING type)
 
 void NDDataPersist::SaveGameSetting()
 {
-	CCStringRef strGameSetting = CCString::stringWithFormat("%d",ms_nGameSetting);
-
-	CCStringRef strTemp = new CCString(kGameSetting->toStdString().c_str());
-	SetData(kGameSettingData,strTemp,strGameSetting->UTF8String());
+	CCString* strGameSetting = CCString::stringWithFormat("%d",ms_nGameSetting);
+	SetData( kGameSettingData, strGameSetting, CONVERT_GBK_TO_UTF8(strGameSetting->getCString()));//@todo:android转换有问题.
 	SaveData();
 
 	/***

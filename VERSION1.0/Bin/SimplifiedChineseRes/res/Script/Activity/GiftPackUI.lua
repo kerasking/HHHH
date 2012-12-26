@@ -37,7 +37,7 @@ function p.LoadUI()
 		return false;
 	end
 	
-	layer:SetPopupDlgFlag( true );
+	--layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerGiftBagUI );
 	layer:SetFrameRect(RectFullScreenUILayer);
@@ -189,7 +189,7 @@ function p.ShowGetGiftInfo(id)
             return;
         end
         
-        info = "获得了:";
+        info = GetTxtPri("ZS_Got");
         if(gift.param0>0) then
             info = string.format(GetTxtPri("FF_YuanBao"),info,gift.param0);
         end

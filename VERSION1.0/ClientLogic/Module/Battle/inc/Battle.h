@@ -34,6 +34,7 @@
 #include "SMBattleScene.h"
 #include "BattleMgr.h"
 #include "NDBaseBattle.h"
+#include "ObjectTracker.h"
 
 #define BTN_ATTATCK 1
 #define BTN_ITEM 2
@@ -86,12 +87,20 @@ enum BATTLE_COMPLETE
 	BATTLE_COMPLETE_END = 3,
 };
 
+struct IsSubAniGroupComplete {
+	bool operator()(NDSubAniGroup& sag) {
+		return sag.bComplete;
+	}
+};
+
+//------------------------------------------------------------------
 class HighlightTipStatusBar: public NDUINode
 {
 	DECLARE_CLASS (HighlightTipStatusBar)
 public:
 	HighlightTipStatusBar()
 	{
+		INC_NDOBJ_RTCLS;
 		m_nNum = 0;
 		m_nNumMax = 0;
 		m_color = 0;
@@ -99,13 +108,14 @@ public:
 
 	HighlightTipStatusBar(int nColor)
 	{
+		INC_NDOBJ_RTCLS;
 		m_nNum = 0;
 		m_nNumMax = 0;
 		m_color = nColor;
 	}
 	~HighlightTipStatusBar()
 	{
-
+		DEC_NDOBJ_RTCLS;
 	}
 	void draw()
 	{
@@ -125,12 +135,14 @@ private:
 	int m_color;
 };
 
-class HighlightTip: public NDUILayer
+
+//------------------------------------------------------------------
+class HighlightTipLayer: public NDUILayer
 {
-	DECLARE_CLASS (HighlightTip)
+	DECLARE_CLASS (HighlightTipLayer)
 public:
-	HighlightTip();
-	~HighlightTip();
+	HighlightTipLayer();
+	~HighlightTipLayer();
 
 	void Initialization();
 	void SetFighter(Fighter* pkFighter);
@@ -145,6 +157,8 @@ private:
 	ImageNumber* m_imgNumMp;
 };
 
+
+//------------------------------------------------------------------
 class NDAnimationGroup;
 class BattleAction
 {
@@ -166,16 +180,19 @@ enum TEAM_STATUS
 	TEAM_OVER,
 };
 
+
+//------------------------------------------------------------------
 struct Command
 {
 	Command()
 	{
+		INC_NDOBJ("Command");
 		memset(this, 0L, sizeof(Command));
 	}
 
 	~Command()
 	{
-
+		DEC_NDOBJ("Command");
 	}
 
 	int btEffectType;
@@ -201,14 +218,6 @@ class ImageNumber;
 typedef vector<NDSubAniGroup> VEC_SUB_ANI_GROUP;
 typedef VEC_SUB_ANI_GROUP::iterator VEC_SUB_ANI_GROUP_IT;
 
-class IsSubAniGroupComplete
-{
-public:
-	bool operator()(NDSubAniGroup& sag)
-	{
-		return sag.bComplete;
-	}
-};
 
 typedef int CoolDownID;
 typedef int CoolDownData;
@@ -216,16 +225,35 @@ typedef std::map<CoolDownID, CoolDownData> CoolDownRecord;
 typedef CoolDownRecord::iterator CoolDownRecord_IT;
 typedef std::pair<CoolDownID, CoolDownData> CoolDownRecord_Pair;
 
-class Battle:
-	public NDUILayer,
-	public NDBaseBattle,
-//public NDUITableLayerDelegate, ///< 临时性注释 郭浩
-		public NDUIDialogDelegate,
-//public NDUISpeedBarDelegate,
-		public NDUIButtonDelegate
-//public GameUIItemConfigDelegate
+
+//------------------------------------------------------------------
+class QuickTalkCell: public NDUINode
 {
-	DECLARE_CLASS (Battle)
+	DECLARE_CLASS (QuickTalkCell)
+public:
+	QuickTalkCell();
+	~QuickTalkCell();
+
+	void Initialization(const char* pszText, const CCSize& size);
+
+	void draw();
+
+	string GetText();
+
+private:
+	NDUILabel* m_lbText;
+	cocos2d::ccColor4B m_clrFocus;			// 焦点背景色
+	cocos2d::ccColor4B m_clrText;
+	cocos2d::ccColor4B m_clrFocusText;		// 焦点文本色
+};
+
+//------------------------------------------------------------------
+class BattleUILayer :	public NDUILayer,
+						public NDBaseBattle,
+						public NDUIDialogDelegate,
+						public NDUIButtonDelegate
+{
+	DECLARE_CLASS (BattleUILayer)
 public:
 	enum BATTLE_STATUS
 	{
@@ -257,10 +285,19 @@ public:
 		BS_WAITING_SERVER_MESSAGE,	// 等待服务端消息
 	};
 
-	Battle();
-	Battle(Byte btType);
-	~Battle();
+private:
+	BattleUILayer(const BattleUILayer& rhs) { }
+	BattleUILayer& operator =(const BattleUILayer& rhs)
+	{
+		return *this;
+	}
 
+public:
+	BattleUILayer();
+	BattleUILayer(Byte btType);
+	~BattleUILayer();
+
+public:
 	static void ResetLastTurnBattleAction();
 
 	void InitSpeedBar();
@@ -297,9 +334,13 @@ public:
 
 	void dealWithCommand();
 
+	void dealWithAction( Command* cmd, FightAction* action );
+
+	FightAction* CreateFightAction( Command* cmd );
+
 	void AddCommand(Command* cmd);
 
-	void AddActionCommand(FightAction* action);
+	void AddFighterAction(FightAction* action);
 
 	void SetIsPlayBack(bool isPlayBack)
 	{
@@ -384,156 +425,14 @@ public:
 	void FinishBattle();
 	Fighter* GetFighter(int idFighter);
 	void SetBattleOver(void);
-private:
-	Battle(const Battle& rhs)
-	{
-	}
-	Battle& operator =(const Battle& rhs)
-	{
-		return *this;
-	}
-
-	static bool ms_bAuto;
-	static BattleAction ms_kLastTurnActionUser;
-	static BattleAction ms_kLastTurnActionEudemon;
-
-	bool m_bTurnStart;
-	bool m_bTurnStartPet;
-	BATTLE_ACTION m_defaultActionUser;
-	Fighter* m_pkDefaultTargetUser;
-	int m_nDefaultSkillID;
-	BATTLE_ACTION m_defaultActionEudemon;
-	Fighter* m_defaultTargetEudemon;
-	int m_defaultSkillIDEudemon;
-	int m_nLastSkillPageUser;
-	int m_nLastSkillPageEudemon;
-	NDAnimationGroup* dieAniGroup;
-	typedef vector<Command*> VEC_COMMAND;
-	typedef VEC_COMMAND::iterator VEC_COMMAND_IT;
-
-	typedef pair<int/*idItem*/, int/*num*/> PAIR_ID_NUM;
-	typedef map<OBJID/*idItemType*/, PAIR_ID_NUM> MAP_USEITEM;
-	typedef MAP_USEITEM::iterator MAP_USEITEM_IT;
-
-	MAP_USEITEM m_mapUseItem;
-
-	VEC_FIGHTER m_vAttaker;	// 进攻方
-	VEC_FIGHTER m_vDefencer;	// 防御方
-
-	Fighter* m_mainFighter; // 玩家自己
-	Fighter* m_mainEudemon; // 玩家的宠物
-
-	Fighter* theActor;
-	Fighter* theTarget;
-	int currentShowFighter;
-
-//	NDPicture *m_picTalk; NDUIButton *m_btnTalk;
-//	NDPicture *m_picQuickTalk; NDUIButton *m_btnQuickTalk;NDUILayer *m_layerBtnQuitTalk;
-//	NDPicture *m_picLeave; NDUIButton* m_btnLeave;
-//	NDPicture *m_picAuto; NDPicture *m_picAutoCancel; NDUIButton *m_btnAuto;
-
-	//HighlightTip* m_highlightTip;
-
-	bool m_bSendCurTurnUserAction;
-
-	BATTLE_GROUP m_ourGroup;
-	int m_orignalMapId;
-	CCPoint m_orignalPos;
-	NDMapLayer* m_mapLayer;
-	int m_turn;
-	int m_startWait;
-	//ImageNumber* m_imgTurn;
-//	NDUILabel* m_lbTurnTitle;
-//	NDUILabel* m_lbTurn;
-
-	int m_timeLeft;
-	int m_timeLeftMax;
-	int m_autoCount;
-	int m_teamAmout;
-	//ImageNumber* m_imgTimer;
-//	NDUILabel* m_lbTimerTitle;
-//	NDUILabel* m_lbTimer;
-
-	//NDUILabel* m_lbAuto;
-	//ImageNumber* m_imgAutoCount;
-	NDTimer m_timer;
-//	NDPicture* m_picWhoAmI;
-//	NDPicture* m_picLingPai;
-//	NDUIImage* m_imgWhoAmI;
-
-	NDPicture* m_picActionWordDef;
-	NDPicture* m_picActionWordDodge;
-	NDPicture* m_picActionWordFlee;
-
-//	NDUIImage* m_imgQuickTalkBg;
-//	NDUITableLayer* m_tlQuickTalk;
-	//NDUITableLayer* m_battleOpt;
-	//NDUITableLayer* m_eudemonOpt;
-
-	//NDUITableLayer* m_itemOpt;
-	//NDUITableLayer* m_skillOpt;
-
-	BATTLE_STATUS m_battleStatus;
-
-	Fighter* m_highlightFighter;
-
-	VEC_COMMAND m_vCmdList;
-
-	int m_currentActionIndex1;	//1队当前战斗指令序列
-	int m_currentActionIndex2;	//2队当前战斗指令序列
-	int m_currentActionIndex3;	//3队当前战斗指令序列
-
-	VEC_FIGHTER m_vActionFighterList;
-
-	int m_actionFighterPoint;
-	int m_foreBattleStatus;
-
-	BATTLE_TYPE m_battleType;
-
-	bool watchBattle;
-
-	//NDPicture* m_picBaoJi;
-
-	BATTLE_COMPLETE battleCompleteResult;
-
-	int serverBattleResult;	// 服务器返回的战斗结果
-	bool m_bIsBattlePlayBack;
-	NDUIDialog* m_dlgBattleResult;
-	//NDUIDialog* m_dlgHint; // 提示对话框
-	StatusDialog* m_dlgStatus;
-
-	bool bActionSet;
-
-	BattleAction* m_curBattleAction;
-
-	// 每回合可用技能
-	SET_BATTLE_SKILL_LIST m_setBattleSkillList;
-
-	string m_rewardContent; // 战斗结果
-
-	VEC_SUB_ANI_GROUP m_vSubAniGroup; // 技能子动画
-
-	NDUILayer* m_battleBg;
-
-//	PlayerHead* m_playerHead;
-//	PetHead* m_petHead;
-
-	bool m_bWatch; // 是否观战
-
-	TEAM_STATUS m_Team1_status;
-	TEAM_STATUS m_Team2_status;
-	TEAM_STATUS m_Team3_status;
-
-	int sceneMapId;
-	int sceneCenterX;
-	int sceneCenterY;
-	//NDUIButton* m_btnCancleAutoFight;
 
 private:
 	void CloseChatInput();
 
 	void Init();
-	void addSkillEffectToFighter(Fighter* fighter, const char* sprfile,int delay,int pos, bool bRevers = true);//++Guosen 2012.6,28//bRevers特效动画是否更随角色翻转而翻转
+	void addSkillEffectToFighter(Fighter* fighter, const char* sprfile,
+		int delay,int pos, bool bRevers = true);//++Guosen 2012.6,28//bRevers特效动画是否更随角色翻转而翻转
+
 	void battleRefresh();
 
 	bool sideRightAtk();
@@ -629,6 +528,7 @@ private:
 //	void RemoveCancleAutoFightButton();
 
 	CAutoLink<NDEraseInOutEffect> eraseInOutEffect;
+
 public:
 	void StartEraseInEffect()
 	{
@@ -664,26 +564,8 @@ public:
 	{
 		return m_recordCoolDown;
 	}
+
 private:
-	// 战斗快捷栏
-//	FighterBottom			*m_fighterBottom;
-//	FighterLeft				*m_fighterLeft;
-//	FighterRight				*m_fighterRight;
-
-	//ChatTextFieldDelegate *m_chatDelegate;
-	bool m_bShowChatTextField;
-	bool m_bChatTextFieldShouldShow;
-//	NDUIImage* m_imgChat;
-//	NDUIButton* m_btnSendChat;
-//	
-//	NDUIImage* m_imgTurn;
-//	NDUIImage* m_imgTimer;
-
-	bool m_bShrinkRight;
-	bool m_bShrinkLeft;
-	bool m_bShrinkBottom;
-
-	CoolDownRecord m_recordCoolDown;
 
 	void RefreshItemBar();
 	void RefreshSkillBar();
@@ -705,26 +587,166 @@ private:
 	void UseSkillDealOfCooldown(int skillID);
 
 	void AddTurnDealOfCooldown();
-};
 
-class QuickTalkCell: public NDUINode
-{
-	DECLARE_CLASS (QuickTalkCell)
-public:
-	QuickTalkCell();
-	~QuickTalkCell();
-
-	void Initialization(const char* pszText, const CCSize& size);
-
-	void draw();
-
-	string GetText();
+	void removeFighters();
 
 private:
-	NDUILabel* m_lbText;
-	cocos2d::ccColor4B m_clrFocus;			// 焦点背景色
-	cocos2d::ccColor4B m_clrText;
-	cocos2d::ccColor4B m_clrFocusText;		// 焦点文本色
+	static bool ms_bAuto;
+	static BattleAction ms_kLastTurnActionUser;
+	static BattleAction ms_kLastTurnActionEudemon;
+
+	bool m_bTurnStart;
+	bool m_bTurnStartPet;
+	BATTLE_ACTION m_defaultActionUser;
+	Fighter* m_pkDefaultTargetUser;
+	int m_nDefaultSkillID;
+	BATTLE_ACTION m_defaultActionEudemon;
+	Fighter* m_defaultTargetEudemon;
+	int m_defaultSkillIDEudemon;
+	int m_nLastSkillPageUser;
+	int m_nLastSkillPageEudemon;
+	NDAnimationGroup* dieAniGroup;
+	typedef vector<Command*> VEC_COMMAND;
+	typedef VEC_COMMAND::iterator VEC_COMMAND_IT;
+
+	typedef pair<int/*idItem*/, int/*num*/> PAIR_ID_NUM;
+	typedef map<OBJID/*idItemType*/, PAIR_ID_NUM> MAP_USEITEM;
+	typedef MAP_USEITEM::iterator MAP_USEITEM_IT;
+
+	MAP_USEITEM m_mapUseItem;
+
+	VEC_FIGHTER m_vAttaker;	// 进攻方
+	VEC_FIGHTER m_vDefencer;	// 防御方
+
+	Fighter* m_mainFighter; // 玩家自己
+	Fighter* m_mainEudemon; // 玩家的宠物
+
+	Fighter* theActor;
+	Fighter* theTarget;
+	int currentShowFighter;
+
+	//	NDPicture *m_picTalk; NDUIButton *m_btnTalk;
+	//	NDPicture *m_picQuickTalk; NDUIButton *m_btnQuickTalk;NDUILayer *m_layerBtnQuitTalk;
+	//	NDPicture *m_picLeave; NDUIButton* m_btnLeave;
+	//	NDPicture *m_picAuto; NDPicture *m_picAutoCancel; NDUIButton *m_btnAuto;
+
+	//HighlightTipLayer* m_highlightTip;
+
+	bool m_bSendCurTurnUserAction;
+
+	BATTLE_GROUP m_ourGroup;
+	int m_orignalMapId;
+	CCPoint m_orignalPos;
+	NDMapLayer* m_mapLayer;
+	int m_turn;
+	int m_startWait;
+	//ImageNumber* m_imgTurn;
+	//	NDUILabel* m_lbTurnTitle;
+	//	NDUILabel* m_lbTurn;
+
+	int m_timeLeft;
+	int m_timeLeftMax;
+	int m_autoCount;
+	int m_teamAmout;
+	//ImageNumber* m_imgTimer;
+	//	NDUILabel* m_lbTimerTitle;
+	//	NDUILabel* m_lbTimer;
+
+	//NDUILabel* m_lbAuto;
+	//ImageNumber* m_imgAutoCount;
+	NDTimer m_timer;
+	//	NDPicture* m_picWhoAmI;
+	//	NDPicture* m_picLingPai;
+	//	NDUIImage* m_imgWhoAmI;
+
+	NDPicture* m_picActionWordDef;
+	NDPicture* m_picActionWordDodge;
+	NDPicture* m_picActionWordFlee;
+
+	//	NDUIImage* m_imgQuickTalkBg;
+	//	NDUITableLayer* m_tlQuickTalk;
+	//NDUITableLayer* m_battleOpt;
+	//NDUITableLayer* m_eudemonOpt;
+
+	//NDUITableLayer* m_itemOpt;
+	//NDUITableLayer* m_skillOpt;
+
+	BATTLE_STATUS m_battleStatus;
+
+	Fighter* m_highlightFighter;
+
+	VEC_COMMAND m_vCmdList;
+
+	int m_currentActionIndex1;	//1队当前战斗指令序列
+	int m_currentActionIndex2;	//2队当前战斗指令序列
+	int m_currentActionIndex3;	//3队当前战斗指令序列
+
+	VEC_FIGHTER m_vActionFighterList;
+
+	int m_actionFighterPoint;
+	int m_foreBattleStatus;
+
+	BATTLE_TYPE m_battleType;
+
+	bool watchBattle;
+
+	//NDPicture* m_picBaoJi;
+
+	BATTLE_COMPLETE battleCompleteResult;
+
+	int serverBattleResult;	// 服务器返回的战斗结果
+	bool m_bIsBattlePlayBack;
+	NDUIDialog* m_dlgBattleResult;
+	//NDUIDialog* m_dlgHint; // 提示对话框
+	StatusDialog* m_dlgStatus;
+
+	bool bActionSet;
+
+	BattleAction* m_curBattleAction;
+
+	// 每回合可用技能
+	SET_BATTLE_SKILL_LIST m_setBattleSkillList;
+
+	string m_rewardContent; // 战斗结果
+
+	VEC_SUB_ANI_GROUP m_vSubAniGroup; // 技能子动画
+
+	NDUILayer* m_battleBg;
+
+	//	PlayerHead* m_playerHead;
+	//	PetHead* m_petHead;
+
+	bool m_bWatch; // 是否观战
+
+	TEAM_STATUS m_Team1_status;
+	TEAM_STATUS m_Team2_status;
+	TEAM_STATUS m_Team3_status;
+
+	int sceneMapId;
+	int sceneCenterX;
+	int sceneCenterY;
+	//NDUIButton* m_btnCancleAutoFight;
+
+	// 战斗快捷栏
+	//	FighterBottom			*m_fighterBottom;
+	//	FighterLeft				*m_fighterLeft;
+	//	FighterRight				*m_fighterRight;
+
+	//ChatTextFieldDelegate *m_chatDelegate;
+	bool m_bShowChatTextField;
+	bool m_bChatTextFieldShouldShow;
+	//	NDUIImage* m_imgChat;
+	//	NDUIButton* m_btnSendChat;
+	//	
+	//	NDUIImage* m_imgTurn;
+	//	NDUIImage* m_imgTimer;
+
+	bool m_bShrinkRight;
+	bool m_bShrinkLeft;
+	bool m_bShrinkBottom;
+
+	CoolDownRecord m_recordCoolDown;
 };
+
 
 #endif

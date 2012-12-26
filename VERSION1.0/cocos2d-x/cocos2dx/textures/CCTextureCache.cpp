@@ -44,6 +44,10 @@ THE SOFTWARE.
 #include <pthread.h>
 #include <semaphore.h>
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 using namespace std;
 
 NS_CC_BEGIN
@@ -210,6 +214,10 @@ CCTextureCache * CCTextureCache::sharedTextureCache()
 
 CCTextureCache::CCTextureCache()
 {
+#if ND_MOD
+	INC_CCOBJ("CCTextureCache");
+#endif
+
     CCAssert(g_sharedTextureCache == NULL, "Attempted to allocate a second instance of a singleton.");
     
     m_pTextures = new CCDictionary();
@@ -217,6 +225,10 @@ CCTextureCache::CCTextureCache()
 
 CCTextureCache::~CCTextureCache()
 {
+#if ND_MOD
+	DEC_CCOBJ("CCTextureCache");
+#endif
+
     CCLOGINFO("cocos2d: deallocing CCTextureCache.");
     need_quit = true;
     if (s_pSem != NULL)

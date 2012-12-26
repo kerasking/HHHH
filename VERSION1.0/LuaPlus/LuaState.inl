@@ -300,6 +300,7 @@ LUAPLUS_INLINE int LuaState::LoadFile(const char* filename)
 	return luaL_loadfile(m_state, filename);
 }
 
+#if 0
 LUAPLUS_INLINE int LuaState::DoFile(const char *filename)
 {
 // modify by jhzheng 2012.1.19
@@ -333,6 +334,7 @@ LUAPLUS_INLINE int LuaState::DoFile(const char *filename)
 	return 0;
 	//return luaL_dofile(m_state, filename);
 }
+#endif 
 
 LUAPLUS_INLINE void callalert (lua_State *L, int status) {
   if (status != 0) {

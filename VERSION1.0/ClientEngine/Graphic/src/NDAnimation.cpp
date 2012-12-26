@@ -10,29 +10,32 @@
 #include "NDTile.h"
 #include "NDAnimationGroup.h"
 #include "NDFrame.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
 NDAnimation::NDAnimation() :
-m_pkFrames(NULL),
-m_nX(0),
-m_nY(0),
-m_nW(0),
-m_nH(0),
-m_nMidX(0),
-m_nBottomY(0),
-m_nType(0),
-m_bReverse(false),
-m_pkBelongAnimationGroup(NULL),
-m_nCurIndexInAniGroup(-1),
-m_nPlayCount(0)
+	m_pkFrames(NULL),
+	m_nX(0),
+	m_nY(0),
+	m_nW(0),
+	m_nH(0),
+	m_nMidX(0),
+	m_nBottomY(0),
+	m_nType(0),
+	m_bReverse(false),
+	m_pkBelongAnimationGroup(NULL),
+	m_nCurIndexInAniGroup(-1),
+	m_nPlayCount(0)
 {
+	INC_NDOBJ("NDAnimation");
 	//m_pkFrames = new cocos2d::CCMutableArray<NDFrame*>();
 	m_pkFrames = new cocos2d::CCArray();
 }
 
 NDAnimation::~NDAnimation()
 {
+	DEC_NDOBJ("NDAnimation");
 	CC_SAFE_RELEASE (m_pkFrames);
 }
 

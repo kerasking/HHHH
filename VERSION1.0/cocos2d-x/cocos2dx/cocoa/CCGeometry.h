@@ -46,6 +46,9 @@ public:
     float y;
 
 public:
+#if ND_MOD
+	~CCPoint();
+#endif
     CCPoint();
     CCPoint(float x, float y);
     CCPoint(const CCPoint& other);
@@ -67,6 +70,9 @@ public:
     float height;
 
 public:
+#if ND_MOD
+	~CCSize();
+#endif
     CCSize();
     CCSize(float width, float height);
     CCSize(const CCSize& other);
@@ -87,6 +93,9 @@ public:
     CCSize  size;
 
 public:
+#if ND_MOD
+	~CCRect();
+#endif
     CCRect();    
     CCRect(float x, float y, float width, float height);
     CCRect(const CCRect& other);

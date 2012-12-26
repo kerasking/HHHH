@@ -7,6 +7,7 @@
 //
 
 #include "NDDictionary.h"
+#include "ObjectTracker.h"
 
 using namespace NDEngine;
 using namespace cocos2d;
@@ -27,7 +28,6 @@ using namespace cocos2d;
 DictionaryObject::DictionaryObject() :
 m_NdObject(NULL)
 {
-
 }
 
 DictionaryObject::~DictionaryObject()
@@ -41,11 +41,13 @@ IMPLEMENT_CLASS(NDDictionary, NDObject)
 
 NDDictionary::NDDictionary()
 {
+	INC_NDOBJ_RTCLS
 	m_nsDictionary = new CCDictionary();
 }
 
 NDDictionary::~NDDictionary()
 {
+	DEC_NDOBJ_RTCLS
 	this->RemoveAllObjects();
 	CC_SAFE_RELEASE (m_nsDictionary);
 }

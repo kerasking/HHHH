@@ -22,6 +22,8 @@
 #include "NDDirector.h"
 #include "NDPath.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
+
 using namespace NDEngine;
 
 // const int LEFT_BACK_X = 120; // 左边后排 x 坐标
@@ -85,6 +87,8 @@ static int g_iYOffset[] = { //
 //===========================================================================
 Fighter::Fighter()
 {
+	INC_NDOBJ("Fighter");
+
 	m_pkActionWordImage = NULL;
 
 	m_kRoleInParentPoint = CCPointMake(0.0f, 0.0f);
@@ -170,6 +174,8 @@ void Fighter::releaseStatus()
 
 Fighter::~Fighter()
 {
+	DEC_NDOBJ("Fighter");
+
 	releaseStatus();
 
 	if (m_pkRole)
@@ -317,7 +323,7 @@ void Fighter::updatePos()
 		m_pkFighterNameLabel->SetFrameRect(
 			CCRectMake(m_nX - sizeStr.width / 2, 
 				m_nY - m_nRoleInitialHeight - sizeStr.height - HP_BAR_HEIGHT - 2, 
-					sizeStr.width, sizeStr.height ));
+					sizeStr.width*FONT_SCALE, sizeStr.height ));
 	}
 
 	if (m_pkSkillNameLabel)
@@ -338,7 +344,7 @@ void Fighter::updatePos()
 		m_pkSkillNameLabel->SetFrameRect(
 			CCRectMake(m_nX-sizeStr.width/2 , 
 				m_nY - m_nRoleInitialHeight - HP_BAR_HEIGHT - 2 - sizeStr.height*2, 
-					sizeStr.width, sizeStr.height ));
+					sizeStr.width*FONT_SCALE, sizeStr.height ));
 		//++
 	}
 
@@ -427,7 +433,7 @@ void Fighter::LoadRole(int nLookFace, int lev, const string& name)
 	role->InitRoleLookFace(nLookFace);
 	role->SetCurrentAnimation(MANUELROLE_BATTLE_STAND, role->m_bFaceRight);
 	m_pkRole = role;
-	m_pkRole->m_strName = name;
+	m_pkRole->SetName( name );
 	m_pkRole->m_nLevel = lev;
 	role->SetNonRole(false);
 	m_nRoleInitialHeight = m_pkRole->GetHeight();
@@ -452,7 +458,7 @@ void Fighter::LoadMonster(int nLookFace, int lev, const string& name)
 	m_eLookfaceType = LOOKFACE_MANUAL;
 
 	m_strFighterName = name;
-	m_pkRole->m_strName = name;
+	m_pkRole->SetName( name );
 	m_pkRole->m_nLevel = lev;
 
 	//this->m_kInfo.bRoleMonster = role->m_bRoleMonster;
@@ -857,29 +863,35 @@ void Fighter::showFighterName(bool b)
 			ccColor4B cColor4 = ScriptMgrObj.excuteLuaFuncRetColor4("GetColor", "Item", m_kInfo.nQuality);
 			m_pkFighterNameLabel->SetFontColor(cColor4);
 
-			m_pkFighterNameLabel->SetText(GetRole()->m_strName.c_str());
+			m_pkFighterNameLabel->SetText(GetRole()->GetName().c_str());
 			m_pkFighterNameLabel->SetFontSize(DEFAULT_FONT_SIZE);
-			CCSize sizefighterName = getStringSize(GetRole()->m_strName.c_str(), DEFAULT_FONT_SIZE*FONT_SCALE);
+			CCSize sizefighterName = getStringSize(GetRole()->GetName().c_str(), DEFAULT_FONT_SIZE*FONT_SCALE);
+
 			//fighterName->SetTag(TAG_FIGHTER_NAME);
 			m_pkFighterNameLabel->SetFrameRect(
 					CCRectMake(pt.x - sizefighterName.width / 2,
 							pt.y - FIGHTER_HEIGHT - sizefighterName.height,
-							sizefighterName.width, sizefighterName.height));
+							sizefighterName.width*FONT_SCALE, sizefighterName.height));
+			
 			m_pkParent->AddChild(m_pkFighterNameLabel);
+			
 			//在此创建生命条及士气条空间++Guosen 2012.7.27
 			this->m_pHPBar	= new CUIExp;
 			std::string szBGImage = NDPath::GetImgPath( HPMP_BAR_BG_IMAGE );
 			std::string szHPImage = NDPath::GetImgPath( HP_BAR_FRO_IMAGE );
 			std::string szMPImage = NDPath::GetImgPath( MP_BAR_FRO_IMAGE );
+			
 			//this->m_pHPBar->Initialization( NDPath::GetImgPath( HPMP_BAR_BG_IMAGE ).c_str(), NDPath::GetImgPath( HP_BAR_FRO_IMAGE ).c_str() );
 			this->m_pHPBar->Initialization( szBGImage.c_str(), szHPImage.c_str() );
 			this->m_pHPBar->SetStyle( 2 );
 			this->m_pMPBar	= new CUIExp;
+			
 			//this->m_pMPBar->Initialization( NDPath::GetImgPath( HPMP_BAR_BG_IMAGE ).c_str(), NDPath::GetImgPath( MP_BAR_FRO_IMAGE ).c_str() );
 			this->m_pMPBar->Initialization( szBGImage.c_str(), szMPImage.c_str() );
 			this->m_pMPBar->SetStyle( 2 );
 			m_pkParent->AddChild(m_pHPBar);
 			m_pkParent->AddChild(m_pMPBar);
+			
 			drawHPMP();
 		}
 	}
@@ -911,15 +923,18 @@ void Fighter::showSkillName(bool b)
 	if (b)
 	{
 		CCPoint pt = m_pkRole->GetPosition();
+		
 		m_pkSkillNameLabel = new NDUILabel;
 		m_pkSkillNameLabel->Initialization();
 		m_pkSkillNameLabel->SetFontColor(ccc4(0xff, 0xd7, 0, 255));//(ccc4(254, 3, 9, 255));//++Guosen 2012.6.28//设置技能名字体颜色
 		m_pkSkillNameLabel->SetText(m_strSkillName.c_str());
 		m_pkSkillNameLabel->SetFontSize(DEFAULT_FONT_SIZE);
+		
 		CCSize sizeSkillName = getStringSize(m_strSkillName.c_str(), DEFAULT_FONT_SIZE*FONT_SCALE);
+		
 		//++Guosen 2012.6.28//设置技能名的显示位置
 		//lb_skillName->SetTag(TAG_SKILL_NAME);
-		m_pkSkillNameLabel->SetFrameRect(CCRectMake(pt.x-sizeSkillName.width/2 , pt.y-FIGHTER_HEIGHT-sizeSkillName.height*2, sizeSkillName.width, sizeSkillName.height));
+		m_pkSkillNameLabel->SetFrameRect(CCRectMake(pt.x-sizeSkillName.width/2 , pt.y-FIGHTER_HEIGHT-sizeSkillName.height*2, sizeSkillName.width*FONT_SCALE, sizeSkillName.height));
 		m_pkParent->AddChild(m_pkSkillNameLabel);
 	}
 	else
@@ -1399,6 +1414,7 @@ void Fighter::showHoverMsg(const char* str)
 		lbHover = new NDUILabel;
 		lbHover->Initialization();
 		lbHover->SetFontColor(ccc4(0, 255, 100, 255));
+		
 		CCSize sizeStr = getStringSize(str, DEFAULT_FONT_SIZE*FONT_SCALE);
 		lbHover->SetTag(TAG_HOVER_MSG);
 		lbHover->SetFrameRect(CCRectMake(pt.x - sizeStr.width / 2, pt.y - m_nRoleInitialHeight, sizeStr.width, sizeStr.height));//++Guosen 2012.6.29 //lbHover->SetFrameRect(CCRectMake(pt.x - sizeStr.width / 2, pt.y - m_role->GetHeight(), sizeStr.width, sizeStr.height));

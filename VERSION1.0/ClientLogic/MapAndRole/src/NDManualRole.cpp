@@ -31,6 +31,8 @@
 #include "NDDebugOpt.h"
 #include "NDSharedPtr.h"
 #include "ScriptMgr.h"
+#include "ObjectTracker.h"
+
 
 /* 玩家寻路八个方向值,无效的方向值-1
     7  0  4
@@ -54,6 +56,8 @@ IMPLEMENT_CLASS(NDManualRole, NDBaseRole)
 NDManualRole::NDManualRole() :
 m_nState(0)
 {
+	INC_NDOBJ_RTCLS
+
 	m_pkAniGroupTransformed = NULL;
 	m_nIDTransformTo = 0;
 	m_nMoney = 0;								// 银两
@@ -122,6 +126,7 @@ m_nState(0)
 
 NDManualRole::~NDManualRole()
 {
+	DEC_NDOBJ_RTCLS
 	ResetShowPet();
 	SAFE_DELETE (m_pkRingPic);
 	delete m_pkNumberOneEffect;
@@ -272,9 +277,15 @@ void NDManualRole::Initialization(int lookface, bool bSetLookFace/*=true*/)
 	//根据lookface获取人物图像
 	int nModelID = lookface % 1000;
 
-	CCStringRef pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
-	CCStringRef pString = CCString::stringWithFormat("%smodel_%d.spr", pstrAniPath->toStdString().c_str(), nModelID);
-	NDSprite::Initialization(pString->toStdString().c_str());
+	//@del
+	//CCStringRef pstrAniPath = new CCString(NDPath::GetAnimationPath().c_str());
+	//CCStringRef pString = CCString::stringWithFormat("%smodel_%d.spr", pstrAniPath->getCString(), nModelID);
+	//NDSprite::Initialization( pString->getCString());
+
+	char spriteFile[200] = "";
+	sprintf( spriteFile, "%smodel_%d.spr", NDPath::GetAnimationPath().c_str(), nModelID );	
+	NDSprite::Initialization( spriteFile );
+	
 	m_bFaceRight = m_nDirect == 2;
 	m_nLookface = lookface;
 
@@ -1187,13 +1198,6 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	if (!pkParent)
 		return true;
 
-	//if (!node
-//			|| !(node->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)) 
-//			|| node->IsKindOfClass(RUNTIME_CLASS(NDUILayer))) )
-//		{
-//			return true;
-//		}
-
 	NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
 	if (!(pkScene->IsKindOfClass(RUNTIME_CLASS(GameScene))
 			|| pkScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene))
@@ -1201,15 +1205,6 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	{
 		return true;
 	}
-
-	/*
-	 if (!IsKindOfClass(RUNTIME_CLASS(NDPlayer))
-	 && !NDDataPersist::IsGameSettingOn(GS_SHOW_OTHER_PLAYER)
-	 && !(scene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))))
-	 {
-	 return false;
-	 }
-	 */
 
 	if (pkScene->IsKindOfClass(RUNTIME_CLASS(CSMGameScene)))
 	{
@@ -1230,30 +1225,27 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	if (IsInState (USERSTATE_BOOTH))
 	{
 		// 摆摊不画骑宠
-		if (m_pkVendorPicture)
+		if (m_pkVendorPicture 
+			&& pkParent->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
-			CCSize sizemap;
-			if (pkParent->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
-			{
-				CCSize szVendor = m_pkVendorPicture->GetSize();
+			CCSize szVendor = m_pkVendorPicture->GetSize();
 
-				//把baserole坐标转成屏幕坐标
-				NDMapLayer* pkLayer = (NDMapLayer*) pkParent;
-				CCPoint screen = pkLayer->GetScreenCenter();
-				CCSize winSize =
-						CCDirector::sharedDirector()->getWinSizeInPixels();
+			//把baserole坐标转成屏幕坐标
+			NDMapLayer* pkLayer = (NDMapLayer*) pkParent;
+			CCPoint screen = pkLayer->GetScreenCenter();
+			CCSize winSize =
+				CCDirector::sharedDirector()->getWinSizeInPixels();
 
-				m_kScreenPosition = ccpSub(GetPosition(),
-						ccpSub(screen,
-								CCPointMake(winSize.width / 2,
-										winSize.height / 2)));
+			m_kScreenPosition = ccpSub(GetPosition(),
+				ccpSub(screen,
+				CCPointMake(winSize.width / 2,
+				winSize.height / 2)));
 
-				sizemap = pkLayer->GetContentSize();
-				m_pkVendorPicture->DrawInRect(
-						CCRectMake(pos.x - 13 - 8,
-								pos.y - 10 + 320 - sizemap.height,
-								szVendor.width, szVendor.height));
-			}
+			CCSize sizemap = pkLayer->GetContentSize();
+			m_pkVendorPicture->DrawInRect(
+				CCRectMake(pos.x - 13 - 8,
+				pos.y - 10 + 320 - sizemap.height,
+				szVendor.width, szVendor.height));
 		}
 
 		DrawRingImage(true);
@@ -1270,22 +1262,20 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 					NDPath::GetImgPath("s124.png"));
 		}
 
-		if (m_pkGraveStonePicture)
+		if (m_pkGraveStonePicture
+			&& pkParent->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
 		{
-			if (pkParent->IsKindOfClass(RUNTIME_CLASS(NDMapLayer)))
-			{
-				CCSize sizemap;
-				NDMapLayer* pkLayer = (NDMapLayer*) pkParent;
-				sizemap = pkLayer->GetContentSize();
-				CCSize sizeGraveStone = m_pkGraveStonePicture->GetSize();
-				CCRect rect = CCRectMake(pos.x - 13 - 8,
-						pos.y - 10 + 320 - sizemap.height, sizeGraveStone.width,
-						sizeGraveStone.height);
+			CCSize sizemap;
+			NDMapLayer* pkLayer = (NDMapLayer*) pkParent;
+			sizemap = pkLayer->GetContentSize();
+			CCSize sizeGraveStone = m_pkGraveStonePicture->GetSize();
+			CCRect rect = CCRectMake(pos.x - 13 - 8,
+				pos.y - 10 + 320 - sizemap.height, sizeGraveStone.width,
+				sizeGraveStone.height);
 
-				m_pkGraveStonePicture->DrawInRect(rect);
+			m_pkGraveStonePicture->DrawInRect(rect);
 
-				return false;
-			}
+			return false;
 		}
 	}
 #endif 
@@ -1296,25 +1286,21 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 	// 处理影子
 	if (IsInState (USERSTATE_STEALTH))
 	{
-		if (IsKindOfClass (RUNTIME_CLASS(NDPlayer))){
-		SetShadowOffset(0, 10);
-		ShowShadow(true);
-		HandleShadow(pkParent->GetContentSize());
+		if (IsKindOfClass (RUNTIME_CLASS(NDPlayer)))
+		{
+			SetShadowOffset(0, 10);
+			ShowShadow(true);
+			HandleShadow(pkParent->GetContentSize());
+		}
+		return true;
 	}
-	return true;
-}
-else
-{
-	SetShadowOffset(m_pkRidePet ? -8 : 0, 10);
-	ShowShadow(true, m_pkRidePet != NULL);
-}
+	else
+	{
+		SetShadowOffset(m_pkRidePet ? -8 : 0, 10);
+		ShowShadow(true, m_pkRidePet != NULL);
+	}
 
-// 	if (pkScene->IsKindOfClass(RUNTIME_CLASS(GameSceneLoading))) 
-// 	{
-// 		ShowShadow(false);
-// 	}
-
-	if (pkParent->IsKindOfClass(RUNTIME_CLASS(Battle)))
+	if (pkParent->IsKindOfClass(RUNTIME_CLASS(BattleUILayer)))
 	{
 		HandleShadow(pkParent->GetContentSize());
 		return true;
@@ -1361,26 +1347,22 @@ else
 		m_pkRidePet->SetScale(this->GetScale());
 	}
 
-	//NDLog(@"draw pet1");
 	//画骑宠
 	if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)))
 	{
-		//NDLog(@"draw pet2");
 		if (AssuredRidePet())
 		{
 			bool isSit = BaseScriptMgrObj.excuteLuaFunc<bool>("IsInPractising",
 					"PlayerFunc");
-			//NDLog(@"user draw ridepet");
+
 			if (!isSit)
 			{
-				//NDLog(@"user not sit,draw ridepet");
 				m_pkRidePet->RunAnimation(bDraw);
 			}
 		}
 	}
 	else if (AssuredRidePet() && !IsInState(USERSTATE_PRACTISE))
 	{
-		//NDLog(@"draw pet3");
 		m_pkRidePet->RunAnimation(bDraw);
 	}
 #endif
@@ -1391,11 +1373,6 @@ else
 	{
 		bDraw = !IsInState(USERSTATE_STEALTH);
 		m_pkAniGroupTransformed->SetPosition(pos);
-
-// 		m_pkAniGroupTransformed->SetCurrentAnimation(
-// 				m_bIsMoving ? MONSTER_MAP_MOVE : MONSTER_MAP_STAND,
-// 				!m_bFaceRight);
-// 		m_pkAniGroupTransformed->SetSpriteDir(m_bFaceRight ? 2 : 0);
 		m_pkAniGroupTransformed->RunAnimation(bDraw);
 	}
 #endif 
@@ -1416,12 +1393,13 @@ else
 	{
 		DrawNameLabel(bDraw);
 	}
+#endif 
 
+#if 9
 	if (bDraw)
 	{
 		RunSMEffect (eSM_EFFECT_DRAW_ORDER_BACK);
 	}
-
 #endif
 
 	return !isTransformed();
@@ -2027,18 +2005,16 @@ void NDManualRole::DrawNameLabel(bool bDraw)
 		isEnemy = true;
 	}
 
-	float fScale = RESOURCE_SCALE;
+	iY = iY - FIGHTER_HEIGHT;
 
-	iY = iY - FIGHTER_HEIGHT;// - 5 * fScale;
-
-	int iNameW = getStringSizeMutiLine(names.c_str(), LABLESIZE, sizewin).width/2;
+	int iNameW = getStringSizeMutiLine(names.c_str(), LABLESIZE*FONT_SCALE, sizewin).width/2;
 	/*
 	 std::string strPeerage = GetPeerageName(m_nPeerage);
 	 int iPeerage = 0;
 	 if (strPeerage != "")
 	 {
 	 strPeerage = std::string("[") + strPeerage + std::string("]");
-	 iPeerage = getStringSizeMutiLine(strPeerage.c_str(), LABLESIZE, sizewin).width;
+	 iPeerage = getStringSizeMutiLine(strPeerage.c_str(), LABLESIZE*FONT_SCALE, sizewin).width;
 	 }
 
 	 if (iPeerage > 0)
@@ -2056,11 +2032,12 @@ void NDManualRole::DrawNameLabel(bool bDraw)
 		InitNameLable(m_lbSynName[0]);
 		InitNameLable(m_lbSynName[1]);
 
-		SetLableName(names, iX + 8 * fScale - iNameW, iY - LABLESIZE * fScale, isEnemy);
+		SetLableName(names, iX + 8 * RESOURCE_SCALE*FONT_SCALE - iNameW, 
+								iY - LABLESIZE*FONT_SCALE, isEnemy);
 
 		std::stringstream ss;
 		ss << m_strSynName << " [" << m_strSynRank << "]";
-		int iSynNameW = getStringSizeMutiLine(ss.str().c_str(), LABLESIZE,
+		int iSynNameW = getStringSizeMutiLine(ss.str().c_str(), LABLESIZE*FONT_SCALE,
 			sizewin).width / 2;
 
 		cocos2d::ccColor4B color = INTCOLORTOCCC4(0xffffff);
@@ -2070,9 +2047,12 @@ void NDManualRole::DrawNameLabel(bool bDraw)
 			color = INTCOLORTOCCC4(0x00ff00);
 		}
 
-		SetLable(eLabelSynName, iX + 8 * fScale - iSynNameW,
-			iY - LABLESIZE * fScale * 2, ss.str(), INTCOLORTOCCC4(0x00ff00),
-			INTCOLORTOCCC4(0x003300));
+		SetLable(eLabelSynName, 
+					iX + 8 * RESOURCE_SCALE - iSynNameW,
+					iY - LABLESIZE*RESOURCE_SCALE * 2, 
+					ss.str(), 
+					INTCOLORTOCCC4(0x00ff00),
+					INTCOLORTOCCC4(0x003300));
 
 		/*
 		if (iPeerage > 0)
@@ -2094,7 +2074,10 @@ void NDManualRole::DrawNameLabel(bool bDraw)
 		InitNameLable(m_lbName[1]);
 		InitNameLable(m_lbPeerage[0]);
 		InitNameLable(m_lbPeerage[1]);
-		SetLableName(names, iX + 8 * fScale - iNameW, iY - LABLESIZE * fScale,
+		
+		SetLableName(names, 
+			iX + 8 * RESOURCE_SCALE - iNameW, 
+			iY - LABLESIZE * RESOURCE_SCALE,
 			isEnemy);
 		/*
 		if (iPeerage >= 0)
@@ -2110,7 +2093,7 @@ void NDManualRole::DrawNameLabel(bool bDraw)
 
 //@label
 void NDManualRole::SetLable(LableType eLableType, int x, int y,
-		const std::string& text, cocos2d::ccColor4B color1, cocos2d::ccColor4B color2)
+		const std::string& in_utf8, cocos2d::ccColor4B color1, cocos2d::ccColor4B color2)
 {
 	if (!m_pkSubNode)
 	{
@@ -2140,15 +2123,13 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 		return;
 	}
 
-	
-	CCSize fontSize = getStringSize(text.c_str(), lable[0]->GetFontSize());
-	float fScale = RESOURCE_SCALE;
+	CCSize fontSize = getStringSize( in_utf8.c_str(), lable[0]->GetFontSize() * FONT_SCALE);
 	CCPoint posHead = this->getHeadPos();
 
 	int newX = posHead.x - 0.5 * fontSize.width;
 	int newY = posHead.y - 1.0 * fontSize.height;
 
-	float offset = 1.0f * fScale;
+	float offset = 1.0f * RESOURCE_SCALE;
 	lable[0]->SetFrameRect(CCRectMake(newX, newY, fontSize.width, fontSize.height));//上
 	lable[1]->SetFrameRect(CCRectMake(newX + offset, newY + offset, fontSize.width, fontSize.height));//底
 
@@ -2158,31 +2139,31 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 // 		//lable[1]->SetFontColor(cColor4);
 // 	}
 
-	lable[0]->SetText(text.c_str());
-	lable[1]->SetText(text.c_str());
+	lable[0]->SetText(in_utf8.c_str());
+	lable[1]->SetText(in_utf8.c_str());
 
 	lable[0]->SetFontColor(color1);
 	lable[1]->SetFontColor(color2);
 }
 
-void NDManualRole::SetLableName( const std::string& text, int x, int y, bool isEnemy)
+void NDManualRole::SetLableName( const std::string& utf8_text, int x, int y, bool isEnemy)
 {
 	if (isEnemy)
 	{
-		SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xFF0000),
+		SetLable(eLableName, x, y, utf8_text, INTCOLORTOCCC4(0xFF0000),
 				INTCOLORTOCCC4(0x003300));
 	}
 	else
 	{
 		/*
 		if (pkPoint < 1) {// 白色
-		SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xffffff), INTCOLORTOCCC4(0x003300));
+		SetLable(eLableName, x, y, utf8_text, INTCOLORTOCCC4(0xffffff), INTCOLORTOCCC4(0x003300));
 		} else if (pkPoint <= 500) {// 黄色
-		SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xfd7e0d), INTCOLORTOCCC4(0x003300));
+		SetLable(eLableName, x, y, utf8_text, INTCOLORTOCCC4(0xfd7e0d), INTCOLORTOCCC4(0x003300));
 		} else if (pkPoint <= 2000) {// 红色
-		SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0xe30318), INTCOLORTOCCC4(0x003300));
+		SetLable(eLableName, x, y, utf8_text, INTCOLORTOCCC4(0xe30318), INTCOLORTOCCC4(0x003300));
 		} else {// 紫色
-		SetLable(eLableName, x, y, text, INTCOLORTOCCC4(0x760387), INTCOLORTOCCC4(0x003300));
+		SetLable(eLableName, x, y, utf8_text, INTCOLORTOCCC4(0x760387), INTCOLORTOCCC4(0x003300));
 		}
 		*/
 
@@ -2192,7 +2173,7 @@ void NDManualRole::SetLableName( const std::string& text, int x, int y, bool isE
 			color = ccc4(243, 144, 27, 255);
 		}
 
-		SetLable(eLableName, x, y, text, color, INTCOLORTOCCC4(0x003300));
+		SetLable(eLableName, x, y, utf8_text, color, INTCOLORTOCCC4(0x003300));
 	}
 }
 
@@ -2858,6 +2839,14 @@ bool NDManualRole::ChangeModelWithMount( int nRideStatus, int nMountType )
 	
 	SetCurrentAnimation( MANUELROLE_STAND, m_bFaceRight );
 	return true;
+}
+
+//override for debug
+void NDManualRole::RunAnimation(bool bDraw)
+{
+	if (!NDDebugOpt::getRunAnimManualEnabled()) return;
+
+	NDBaseRole::RunAnimation(bDraw);
 }
 
 void NDManualRole::debugDraw()

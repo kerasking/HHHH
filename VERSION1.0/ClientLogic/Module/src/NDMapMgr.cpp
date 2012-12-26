@@ -34,6 +34,8 @@
 #include "ScriptGameLogic.h"
 #include "SocialElement.h"
 #include "NDTransData.h"
+#include "ObjectTracker.h"
+#include "StringConvert.h"
 
 #ifdef USE_MGSDK
 #import <Foundation/Foundation.h>
@@ -137,19 +139,23 @@ bool GetCharData(char& t, string strValue, string strType)
 }
 
 NDMapMgr::NDMapMgr() :
-m_nCurrentMonsterBound(0),
-m_nRoadBlockX(0),
-m_nRoadBlockY(0),
-m_nSaveMapID(0),
-m_nMapID(0),
-m_nMapDocID(0),
-m_nCurrentMonsterRound(0)
+	m_nCurrentMonsterBound(0),
+	m_nRoadBlockX(0),
+	m_nRoadBlockY(0),
+	m_nSaveMapID(0),
+	m_nMapID(0),
+	m_nMapDocID(0),
+	m_nCurrentMonsterRound(0)
 {
+	INC_NDOBJ_RTCLS
+
 	m_iCurDlgNpcID = 0;
 	mapType = MAPTYPE_NORMAL;
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this, "sim ");
+	NDConsole::instance().RegisterConsoleHandler(this, "sim ");
 #endif
+
 	m_kTimer.SetTimer(this, 1, 0.1);
 	memset(zhengYing, 0, sizeof(zhengYing));
 	isShowName = true;
@@ -160,6 +166,7 @@ m_nCurrentMonsterRound(0)
 
 NDMapMgr::~NDMapMgr()
 {
+	DEC_NDOBJ_RTCLS
 	m_vNPC.clear();
 	m_mapManualRole.clear();
 }
@@ -856,7 +863,7 @@ void NDMapMgr::processPlayer(NDTransData* pkData, int nLength)
 	pkRole->setSynRank(synRank);
 	pkRole->m_nPKPoint = dwPkPoint;
 	pkRole->SetCamp((CAMP_TYPE) btCamp);
-	pkRole->m_strName = name;
+	pkRole->SetName( name );
 	pkRole->m_strRank = strRank;
 	pkRole->m_strSynName = synName;
 	pkRole->m_nTeamID = dwArmorType;
@@ -961,7 +968,7 @@ NDManualRole* NDMapMgr::GetManualRole(const char* pszName)
 	{
 		NDManualRole* pkRole = it->second;
 
-		if (0 == strcmp(pkRole->m_strName.c_str(), pszName))
+		if (0 == strcmp(pkRole->GetName().c_str(), pszName))
 		{
 			pkResult = it->second;
 			break;
@@ -1007,7 +1014,7 @@ void NDMapMgr::Update(unsigned long ulDiff)
 			if (role)
 			{
 				NDNode* parent = role->GetParent();
-				if (parent && !parent->IsKindOfClass(RUNTIME_CLASS(Battle)))
+				if (parent && !parent->IsKindOfClass(RUNTIME_CLASS(BattleUILayer)))
 				{
 					role->Update(ulDiff);
 				}
@@ -1180,7 +1187,7 @@ void NDMapMgr::processPlayerExt(NDTransData* pkData, int nLength)
 	}
 
 	if (pkRole->GetParent() != 0
-			&& !pkRole->GetParent()->IsKindOfClass(RUNTIME_CLASS(Battle)))
+			&& !pkRole->GetParent()->IsKindOfClass(RUNTIME_CLASS(BattleUILayer)))
 	{
 		pkRole->SetAction(pkRole->isMoving(), true);
 	}
@@ -1407,17 +1414,13 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 		std::string dataStr = pkData->ReadUnicodeString();
 		std::string talkStr = pkData->ReadUnicodeString();
 #else
-		CCStringRef pstrTemp = CCString::stringWithUTF8String(
-				pkData->ReadUnicodeString().c_str());
-		std::string strName = pstrTemp->toStdString();
-
-		pstrTemp = CCString::stringWithUTF8String(
-				pkData->ReadUnicodeString().c_str());
-		std::string dataStr = pstrTemp->toStdString();
-		pstrTemp = CCString::stringWithUTF8String(
-				pkData->ReadUnicodeString().c_str());
-		std::string talkStr = pstrTemp->toStdString();
+	
+		// all in utf8
+		string strName = pkData->ReadUnicodeString().c_str();
+		string dataStr = pkData->ReadUnicodeString().c_str();
+		string talkStr = pkData->ReadUnicodeString().c_str();
 #endif
+
 		NDNpc *pkNPC = new NDNpc;
 		pkNPC->m_nID = nID;
 		pkNPC->m_nCol = usCellX;
@@ -1427,11 +1430,11 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 
 		if (uitype == 6)
 		{
-			pkNPC->m_strName = "";
+			pkNPC->SetName("");
 		}
 		else
 		{
-			pkNPC->m_strName = strName;
+			pkNPC->SetName(strName);
 		}
 
 		pkNPC->SetPosition(
@@ -1439,8 +1442,8 @@ void NDMapMgr::processNPCInfoList(NDTransData* pkData, int nLength)
 // 						usCellY * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));//@del
 				ConvertUtil::convertCellToDisplay( usCellX, usCellY ));
 
-		pkNPC->m_strData = dataStr;
-		pkNPC->m_strTalk = talkStr;
+		pkNPC->setData( dataStr );
+		pkNPC->setTalk( talkStr );
 		pkNPC->SetType(uitype);
 		pkNPC->Initialization(usLook);
 
@@ -1814,7 +1817,7 @@ bool NDMapMgr::processConsole(const char* pszInput)
 void NDMapMgr::OnTimer(OBJID tag)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	const char* pszCommand = NDConsole::GetSingletonPtr()->GetSpecialCommand(
+	const char* pszCommand = NDConsole::instance().GetSpecialCommand(
 			"sim ");
 
 	if (0 != pszCommand && *pszCommand)
@@ -2304,7 +2307,7 @@ void NDMapMgr::BattleEnd(int iResult)
 						(monster->m_nSelfMoveRectX - 64) / MAP_UNITSIZE_X,
 						(monster->GetPosition().y) / MAP_UNITSIZE_Y);
 
-				Battle* battle = BattleMgrObj.GetBattle();
+				BattleUILayer* battle = BattleMgrObj.GetBattle();
 				if (battle)
 				{
 					battle->setSceneCetner(monster->m_nSelfMoveRectX - 64, //@todo:µ°ÌÛµÄÓ²±àÂë£¡
@@ -2405,7 +2408,7 @@ void NDMapMgr::processKickBack(NDTransData* pkData, int nLength)
 		player.teamSetServerPosition(usRecordX, usRecordY);
 	}
 
-	Battle* battle = BattleMgrObj.GetBattle();
+	BattleUILayer* battle = BattleMgrObj.GetBattle();
 	NDMapLayer *layer = NDMapMgrObj.getMapLayerOfScene(
 			NDDirector::DefaultDirector()->GetRunningScene());
 	player.stopMoving();
@@ -2861,7 +2864,7 @@ void NDMapMgr::processNPCInfo(NDTransData& kData)
 	pkNPC->m_nCol = col;
 	pkNPC->m_nRow = row;
 	pkNPC->m_nLook = usLook;
-	pkNPC->m_strName = strName;
+	pkNPC->SetName( strName );
 	pkNPC->SetPosition(
 // 			ccp(col * MAP_UNITSIZE + DISPLAY_POS_X_OFFSET,
 // 				row * MAP_UNITSIZE + DISPLAY_POS_Y_OFFSET));//@del
@@ -2869,8 +2872,8 @@ void NDMapMgr::processNPCInfo(NDTransData& kData)
 
 	pkNPC->SetCamp(CAMP_TYPE(btCamp));
 	pkNPC->SetNpcState(NPC_STATE(btState));
-	pkNPC->m_strData = strData;
-	pkNPC->m_strTalk = strTalk;
+	pkNPC->setData( strData );
+	pkNPC->setTalk( strTalk );
 	pkNPC->SetType(uctype);
 	pkNPC->Initialization(usLook);
 	pkNPC->initUnpassPoint();
@@ -3118,14 +3121,14 @@ void NDMapMgr::processRehearse(NDTransData& kData)
 		if (role != NULL)
 		{
 			std::stringstream ss;
-			ss << role->m_strName << NDCommonCString("RejectRefraseTip");
+			ss << role->GetName() << NDCommonCString("RejectRefraseTip");
 			//Chat::DefaultChat()->AddMessage(ChatTypeSystem, ss.str().c_str()); ///< ÒÀÀµÕÅµÏChat ¹ùºÆ
 		}
 		break;
 	}
 	case REHEARSE_LOGOUT:
 	{
-		Battle* battle = BattleMgrObj.GetBattle();
+		BattleUILayer* battle = BattleMgrObj.GetBattle();
 		if (battle)
 		{
 			battle->SetFighterOnline(idTarget, false);
@@ -3134,7 +3137,7 @@ void NDMapMgr::processRehearse(NDTransData& kData)
 		break;
 	case REHEARSE_LOGIN:
 	{
-		Battle* battle = BattleMgrObj.GetBattle();
+		BattleUILayer* battle = BattleMgrObj.GetBattle();
 		if (battle)
 		{
 			battle->SetFighterOnline(idTarget, true);
@@ -3869,7 +3872,7 @@ void NDMapMgr::processVersionMsg(NDTransData& kData)
 					SMLOGINSCENE_TAG);
 	if (pkScene)
 	{
-		return pkScene->OnMsg_ClientVersion(kData); ///< ÒÀÀµÌÀ×ÔÇÚµÄCSMLoginScene ¹ùºÆ
+		return pkScene->OnMsg_ClientVersion(kData);
 	}
 }
 
@@ -4658,7 +4661,7 @@ void NDMapMgr::NavigateToNpc(int nNpcId)
 	}
 	else
 	{
-		AutoPathTipObj.work(pkNPC->m_strName);
+		AutoPathTipObj.work(pkNPC->GetName());
 		player.Walk(kDstPoint, SpriteSpeedStep4, true);
 	}
 
@@ -4754,7 +4757,7 @@ void NDMapMgr::processMsgDlg(NDTransData& kData)
 				NDNpc *focusNpc = player.GetFocusNpc();
 				if (focusNpc)
 				{
-					title = focusNpc->m_strName;
+					title = focusNpc->GetName();
 				}
 			}
 
@@ -5154,7 +5157,7 @@ string NDMapMgr::changeNpcString(string str)
 	NDString ndstrtmp(str);
 
 	ndstrtmp.replace(NDString("&n"),
-			NDString(NDPlayer::defaultHero().m_strName));
+			NDString(NDPlayer::defaultHero().GetName()));
 	switch (NDPlayer::defaultHero().m_nSex)
 	{
 	case SpriteSexMale:

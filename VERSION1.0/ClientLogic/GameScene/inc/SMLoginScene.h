@@ -15,7 +15,7 @@
 #include "NDUIlayer.h"
 #include "NDTimer.h"
 #include "NDUILoad.h"
-#include "UIExp.h"
+#include "NDUIExp.h"
 #include "BattleMgr.h"
 #include "NDColorPool.h"
 #include "NDDataPersist.h"
@@ -72,16 +72,12 @@ public://NDUIDialogDelegate
 private:
     virtual void OnTimer(OBJID idTag);
 	
-public:// 
+public:
 	virtual void ReflashPercent( int percent, int pos, int filelen ); override
 	virtual void DidDownloadStatus(DownloadStatus status ); override
 	
+public:    
 public:
-    //virtual int     OnProcess(int nPercent); //更新进度反馈//--Guosen 2012.8.7
-    //virtual int     OnFail(const char* pszStrErr);//更新失败//--Guosen 2012.8.7
-    //virtual int		OnComplete(void); //更新完成//--Guosen 2012.8.7
-    
-public://NDUITargetDelegate
 	virtual bool OnTargetBtnEvent( NDUINode * uiNode, int targetEvent ); override
 	
 private:
@@ -89,10 +85,12 @@ private:
     
 public:// twt
     typedef deque<string> DEQSTR;
-    DEQSTR deqUpdateUrl;
+    DEQSTR kDeqUpdateUrl;
     vector<string> split(std::string& src, std::string delimit);
     std::string trim(std::string &s);
-    std::string m_savePath, m_updateURL,m_doucumentPath,m_resPath,m_cachPath;
+	std::string m_strSavePath;
+	std::string m_strUpdateURL;
+	std::string m_strCachePath;
     void InitDownload( std::string & szUpdatePath );
     int  PackageCount ;
     bool ReadFile( const char* file, int begin, int end, char* buf );
@@ -109,7 +107,7 @@ public:
 	void CloseUpdateUILayer();
 	
 	//响应"_MSG_CLIENT_VERSION"消息 
-	void OnMsg_ClientVersion(NDTransData& data);
+	void OnMsg_ClientVersion(NDTransData& kData);
 	
 	void OnEvent_LoginOKNormal( int iAccountID );
 	void OnEvent_LoginOKGuest( int iAccountID );

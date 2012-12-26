@@ -1,5 +1,6 @@
 #include "NDUtil.h"
 #include<iostream>
+#include "ObjectTracker.h"
 
 #ifdef ANDROID
 #include <jni.h>
@@ -9,7 +10,7 @@
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 #define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 #else
-#include <io.h>
+//#include <io.h>
 #define  LOG_TAG    "DaHuaLongJiang"
 #define  LOGD(...)
 #define  LOGERROR(...)
@@ -29,12 +30,12 @@ bool IsPointInside(cocos2d::CCPoint kPoint, cocos2d::CCRect kRect)
 
 NDUtil::NDUtil()
 {
-
+	INC_NDOBJ_RTCLS
 }
 
 NDUtil::~NDUtil()
 {
-
+	DEC_NDOBJ_RTCLS
 }
 
 STRING_VEC NDUtil::ErgodicFolderForSpceialFileExtName(const char* pszPath,

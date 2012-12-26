@@ -19,6 +19,7 @@
 #include "NDSharedPtr.h"
 #include "CCDrawingPrimitives.h"
 #include "UsePointPls.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -29,6 +30,8 @@ IMPLEMENT_CLASS(NDUILabel, NDUINode)
 	
 NDUILabel::NDUILabel()
 {
+	INC_NDOBJ_RTCLS
+
 	m_bNeedMakeTex = false;
 	m_bNeedMakeCoo = false;
 	m_bNeedMakeVer = false;
@@ -49,25 +52,18 @@ NDUILabel::NDUILabel()
 	
 NDUILabel::~NDUILabel()
 {
+	DEC_NDOBJ_RTCLS
 	CC_SAFE_DELETE(m_texture);
 }
 	
-void NDUILabel::SetText(const char* text)
+void NDUILabel::SetText(const char* utf8_text)
 {
-	if (0 == strcmp(text, m_strText.c_str())) 
+	if (0 == strcmp(utf8_text, m_strText.c_str())) 
 	{
 		return;
 	}
 
-	// convert to utf8 and compare again.
-	CCStringRef pstrString = 0;
-	pstrString = CCString::stringWithUTF8String(text);
-	if (pstrString->toStdString() == m_strText)
-	{
-		return;
-	}
-
-	m_strText = pstrString->toStdString();
+	m_strText = utf8_text;
 
 	// dirty.
 	m_bNeedMakeTex = true;
@@ -123,8 +119,6 @@ void NDUILabel::SetFontColor(ccColor4B fontColor)
 	
 void NDUILabel::SetFontSize(unsigned int fontSize)
 {
-	fontSize = (int)(float)fontSize * FONT_SCALE;
-
 	if (m_uiFontSize != fontSize)
 	{
 		m_bNeedMakeTex = true;
@@ -184,15 +178,13 @@ void NDUILabel::MakeTexture()
 	}
 
 	// init texture with string
-	CCStringRef strString = new CCString(m_strText.c_str());
-
 	m_texture = new CCTexture2D;
-	m_texture->initWithString(strString->UTF8String(),
+	m_texture->initWithString( m_strText.c_str(),
 				CCSizeMake(thisRect.size.width, thisRect.size.height),
 				eTextAlign,
 				kCCVerticalTextAlignmentCenter,
 				FONT_NAME,
-				m_uiFontSize
+				m_uiFontSize*FONT_SCALE
 				);
 }
 	
@@ -359,23 +351,6 @@ void NDUILabel::draw()
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
 
-#if 0
-	glTexCoordPointer(2, GL_FLOAT, 0, m_pfCoordinates);
-	if (m_bHasFontBoderColor) 
-	{
-		glVertexPointer(3, GL_FLOAT, 0, m_pfVerticesBoder);
-		glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_pbColorsBorder);
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	}
-
-	glVertexPointer(3, GL_FLOAT, 0, m_pfVertices);
-	glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_pbColors);
-
-	for (unsigned int i = 0; i < m_uiRenderTimes; i++) 
-	{
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	}
-#else
 	//
 	// Attributes
 	//
@@ -406,8 +381,13 @@ void NDUILabel::draw()
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	}
 
+	// restore blend state
+	if(m_kColor.a <255)
+	{
+		ccGLBlendFunc( CC_BLEND_SRC, CC_BLEND_DST );
+	}
+
 	CHECK_GL_ERROR_DEBUG();
-#endif
 }
 
 void NDUILabel::postDraw()

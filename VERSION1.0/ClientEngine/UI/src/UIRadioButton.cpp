@@ -10,16 +10,19 @@
 #include "UIRadioButton.h"
 #include "ScriptUI.h"
 #include "NDUtil.h"
+#include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(CUIRadioButton,CUICheckBox)
 
 CUIRadioButton::CUIRadioButton()
 {
+	INC_NDOBJ_RTCLS
 	INIT_AUTOLINK(CUIRadioButton);
 }
 
 CUIRadioButton::~CUIRadioButton()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CUIRadioButton::Initialization(const char* imgUnCheck, const char* imgCheck)
@@ -46,10 +49,12 @@ IMPLEMENT_CLASS(CUIRadioGroup, NDUINode)
 	
 CUIRadioGroup::CUIRadioGroup()
 {
+	INC_NDOBJ_RTCLS
 }
 
 CUIRadioGroup::~CUIRadioGroup()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CUIRadioGroup::AddRadio(CUIRadioButton* radio)

@@ -64,6 +64,7 @@ public:
 	void OnMoveEnd();
 
 	void OnDrawEnd(bool bDraw);
+	void DrawNameLabel(bool bDraw);
 
 	void SetLoadMapComplete()
 	{

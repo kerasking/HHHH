@@ -38,9 +38,14 @@ NS_CC_BEGIN
 class CC_DLL CCTouch : public CCObject
 {
 public:
+#if ND_MOD
+	CCTouch();
+	~CCTouch();
+#else
     CCTouch() 
         : m_nId(0)
     {}
+#endif
 
     /** returns the current touch location in OpenGL coordinates */
     CCPoint getLocation() const;

@@ -103,11 +103,11 @@ function p.LoadUI(ShopType)
 	local scene = GetSMGameScene();
 	local layer = createNDUILayer();
 	
-	layer:SetPopupDlgFlag( true );
+	--layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(p.TagUiLayer);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 	layer:SetDestroyNotify(p.OnDestroy);
 	
     --加载UI
@@ -495,7 +495,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             if(itemBtn:GetItemType()==0) then
                 return;
             end
-            CommonDlgNew.ShowInputDlg("请输入购买数量!", p.OnUIEventBuyNum,nil,1,3);
+            CommonDlgNew.ShowInputDlg(GetTxtPri("SSUI_T1"), p.OnUIEventBuyNum,nil,1,3);
         end
     end
     return true;

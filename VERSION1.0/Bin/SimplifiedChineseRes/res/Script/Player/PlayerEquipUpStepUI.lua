@@ -109,7 +109,7 @@ function p.LoadUI(itemID)
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerEquipUpStepUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 	
 	--初始化ui
 	local uiLoad = createNDUILoad();

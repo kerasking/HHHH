@@ -185,7 +185,7 @@ function p.OnUIEvent(uiNode,uiEventType,param)
             local money = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
 			local cost=(addedCount+1)*2;
             if money<cost then
-                CommonDlg.ShowWithConfirm("金币不足", p.onCommonDlg);
+                CommonDlg.ShowWithConfirm(GetTxtPri("Common_JinBiBuZhu"), p.onCommonDlg);
             else
                 --add_Time_Dlg_id=CommonDlg.ShowNoPrompt("是否花费"..SafeN2S(cost).."金币，增加1次挑战次数？", p.onCommonDlg1, true);
                 CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("AREAUI_T1"),SafeN2S(cost)), p.onCommonDlg1, true);
@@ -200,7 +200,7 @@ function p.OnUIEvent(uiNode,uiEventType,param)
             local money = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
 			local cost=(addedCount+1)*2;
             if money<cost then
-                CommonDlg.ShowWithConfirm("金币不足", p.onCommonDlg);
+                CommonDlg.ShowWithConfirm(GetTxtPri("Common_JinBiBuZhu"), p.onCommonDlg);
             end
             if restFightCount == 0 then
 				local cost=(addedCount+1)*2;
@@ -263,14 +263,13 @@ function p.StartChallenge(index)
 			remove_cd_Dlg_id=CommonDlg.ShowWithConfirm(GetTxtPri("AREAUI_T3"), nil);
 			return;
 		end
-		
+		LogInfo("p.OnUIEvent[%d]",index);
 		if restFightCount == 0 then
 			add_Time_Dlg_id=CommonDlg.ShowWithConfirm(GetTxtPri("AREAUI_T4"), nil);
 			return;
-		end
-        
+		end 
         p.CurChaIndex = index;
-        CommonDlgNew.ShowYesOrNoDlg(GetTxtPri("AREAUI_T6").. p.challengeID[index][3], p.onChallengeDlg, true);
+        CommonDlgNew.ShowYesOrNoDlg(GetTxtPri("AREAUI_T6").. p.infos[index].name, p.onChallengeDlg, p.infos[index].rank);
 		--_G.MsgArena.SendChallenge(p.challengeID[index][1]);
 	end
 end
@@ -590,7 +589,7 @@ function p.RefreshRankItem(view,info)
     end   
     
     local l_name = SetLabel(view, TAG_RANKING_NAME, string.format("lv.%d %s",info.level,info.name));
-    local l_rank = SetLabel(view, TAG_RANKING_RANK, string.format("第%d名",info.rank));
+    local l_rank = SetLabel(view, TAG_RANKING_RANK, string.format(GetTxtPri("AREAUI_T21"),info.rank));
     
     if(info.id == GetPlayerId()) then
         l_name:SetFontColor(ccc4(255,15,15,255));
@@ -605,9 +604,11 @@ end
 
 function p.OnUIRankItemEvent(uiNode, uiEventType, param)
     local tag = uiNode:GetTag();
+    LogInfo("OnUIRankItemEvent tag = %d", tag);
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		if TAG_RANKING_BTNPIC == tag then
-            local btn = ConverToButton(uiNode);
+           local btn = ConverToButton(uiNode);
+           LogInfo("StartChallenge tag = %d", tag);
 			p.StartChallenge(btn:GetParam1());
         end
         
@@ -796,7 +797,7 @@ function p.LoadUI()
 	local winsize = GetWinSize(); 
 	layer:SetFrameRect(CGRectMake(0, 0, winsize.w, winsize.h));
 	--layer:SetBackgroundColor(ccc4(125,125,125,125));
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 	--_G.AddChild(scene, layer, NMAINSCENECHILDTAG.Arena);
 	local uiLoad=createNDUILoad();
 	if nil == uiLoad then

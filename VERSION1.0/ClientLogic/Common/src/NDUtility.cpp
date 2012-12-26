@@ -308,10 +308,13 @@ void quitGame(bool bTipNet/*=false*/)
 {
 	ScriptGlobalEvent::OnEvent (GE_QUITGAME);
 	CloseProgressBar;
-	Battle::ResetLastTurnBattleAction();
+	
+	BattleUILayer::ResetLastTurnBattleAction();
 	DramaObj.QuitGame();
+	
 	/*BeatHeartMgrObj.Stop();*/
 	//NDMapMgrObj.quitGame(); ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
+	
 	BattleMgrObj.ReleaseAllBattleSkill();
 	NDMapMgrObj.ClearManualRole();
 	NDMapMgrObj.ClearNPC();
@@ -890,7 +893,7 @@ void WriteCon(const char * pszFormat, ...)
 	if (!pszFormat) return;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
+	HANDLE hOut = NDConsole::instance().getOutputHandle();
 	if (!hOut) return;
 
 	static char szBuf[1024] = {0};

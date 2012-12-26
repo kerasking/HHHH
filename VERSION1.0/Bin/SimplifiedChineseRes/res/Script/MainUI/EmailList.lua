@@ -99,11 +99,11 @@ function p.LoadUI()
 		return false;
 	end
 	
-	layer:SetPopupDlgFlag( true );
+	--layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag( NMAINSCENECHILDTAG.EmailList );
 	layer:SetFrameRect( RectFullScreenUILayer );
-	scene:AddChildZ( layer, 1 );
+	scene:AddChildZ( layer, 5010 );
 
 	local uiLoad = createNDUILoad();
 	if ( nil == uiLoad ) then

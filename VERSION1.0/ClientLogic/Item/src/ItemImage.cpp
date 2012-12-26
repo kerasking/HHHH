@@ -14,6 +14,7 @@
 #include "ItemMgr.h"
 #include "ScriptGameLogic.h"
 #include "NDPath.h"
+#include "ObjectTracker.h"
 
 #define ITEM_SIZE_W	(80)
 #define ITEM_SIZE_H (80)
@@ -26,10 +27,12 @@
 
 ItemImage::ItemImage()
 {
+	INC_NDOBJ("ItemImage");
 }
 
 ItemImage::~ItemImage()
 {
+	DEC_NDOBJ("ItemImage");
 }
 
 NDPicture*  ItemImage::GetItemPicByType(int iItemType, bool gray,

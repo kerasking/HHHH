@@ -63,7 +63,8 @@ function p.LoadUI ()
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.TransportUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer, 1);
+	--scene:AddChild(layer);
+    scene:AddChildZ(layer, UILayerZOrder.ActivityLayer);
     
     --添加背景图
     local pool = DefaultPicPool();
@@ -643,7 +644,7 @@ function p.OnTimer(tag)
             p.tbTimer.RefreshPlayerTimer.TimerTag = -1;
             if  IsUIShow(NMAINSCENECHILDTAG.TransportUI) then
                 local btn = GetButton(layer, p.ImmutableCtr.Btn.btnRefresh);
-                btn:SetTitle("刷新玩家");
+                btn:SetTitle(GetTxtPri("TRSP_T1"));
             end
             
         else

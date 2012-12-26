@@ -45,7 +45,7 @@ echo "use global definition of COCOS2DX_ROOT: $COCOS2DX_ROOT"
 COCOS2DX_ROOT_LOCAL=$COCOS2DX_ROOT
 fi
 
-#HELLOWORLD_ROOT=/cygdrive/d/work/DHLJClient/VERSION1.0/ClientLancher/proj.android
+#HELLOWORLD_ROOT=/cygdrive/e/work/dhsgclient-x/VERSION1.0/ClientLancher/proj.android
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 COCOS2DX_ROOT="$DIR/../../cocos2d-x/cocos2dx"
 HELLOWORLD_ROOT="$DIR"
@@ -74,4 +74,4 @@ else
 fi
 
 cp libs/libmobage.so libs/armeabi/libmobage.so
-cp libs/LiSu.ttf assets/LiSu.ttf
+#cp libs/LiSu.ttf assets/LiSu.ttf

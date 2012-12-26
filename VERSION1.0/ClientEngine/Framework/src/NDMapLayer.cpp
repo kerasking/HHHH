@@ -42,6 +42,7 @@
 #include "NDUtil.h"
 #include "NDBaseBattleMgr.h"
 #include "NDBaseLayer.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -96,6 +97,7 @@ IMPLEMENT_CLASS(NDMapLayer, NDLayer)
 
 NDMapLayer::NDMapLayer()
 {
+	INC_NDOBJ_RTCLS
 //	WriteCon( "NDMapLayer::NDMapLayer()\r\n"); ///< 调用Logic的东西 郭浩
 
 	m_pkMapData = NULL;
@@ -140,6 +142,7 @@ NDMapLayer::NDMapLayer()
 
 NDMapLayer::~NDMapLayer()
 {
+	DEC_NDOBJ_RTCLS
 //	WriteCon( "NDMapLayer::~NDMapLayer()\r\n"); ///< 调用Logic的东西 郭浩
 
 	CC_SAFE_RELEASE (m_pkOrders);
@@ -191,6 +194,7 @@ void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)
 
 	m_pkMapData = new NDMapData;
 	m_pkMapData->setBattleMapFlag( IsBattleBackground() );
+	m_pkMapData->setDramaMapFlag( IsDramaLayer());
 	m_pkMapData->initWithFile(pszMapFile);
 
 	if (m_pkMapData)
@@ -241,6 +245,7 @@ void NDMapLayer::Initialization(const char* mapFile)
 	m_pkMapData = new NDMapData;
 	ND_ASSERT_NO_RETURN(NULL == m_pkMapData);
 	m_pkMapData->setBattleMapFlag( IsBattleBackground() );
+	m_pkMapData->setDramaMapFlag( IsDramaLayer());
 	m_pkMapData->initWithFile(mapFile);
 
 	SetContentSize(
@@ -491,7 +496,11 @@ void NDMapLayer::showSwitchSprite(MAP_SWITCH_TYPE type)
 					CCDirector::sharedDirector()->getWinSizeInPixels().height
 					)); //++Guosen 2012.7.6
 
-	m_pkSwitchSpriteNode->SetScale( RESOURCE_SCALE );
+	float fScale = RESOURCE_SCALE;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
+	fScale *= 2; //@todo: 临时处理
+#endif
+	m_pkSwitchSpriteNode->SetScale( fScale );
 	this->GetParent()->AddChild(m_pkSwitchSpriteNode, ZORDER_MASK_ANI);
 }
 
@@ -607,10 +616,11 @@ void NDMapLayer::DrawLabelRoadBlockTime()
 		}
 
 		CCStringRef str_time = CCString::stringWithFormat("%s:%s",
-			str_mi->toStdString().c_str(),str_se->toStdString().c_str());
-		m_lbTime->SetText(str_time->toStdString().c_str());
+			str_mi->getCString(),str_se->getCString());
 
-		CCSize size = getStringSize(str_time->toStdString().c_str(), 30);
+		m_lbTime->SetText(str_time->getCString());
+
+		CCSize size = getStringSize(str_time->getCString(), 30);//硬编码！
 
 		if (!m_lbTime->GetParent() && m_pkSubNode)
 		{
@@ -1975,7 +1985,7 @@ void NDMapLayer::dumpRole()
 {
 //@del: 留着有用，暂时别删~
 // 	char str[1024] = "";
-// 	HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
+// 	HANDLE hOut = NDConsole::instance().getOutputHandle();
 // 
 // 	int cnt = m_kChildrenList.size();
 // 	for (int i = 0; i < cnt; i++)
@@ -2008,6 +2018,14 @@ void NDMapLayer::dumpRole()
 // 			}
 // 		}
 // 	}
+}
+
+bool NDMapLayer::IsDramaLayer()
+{
+	const char* clsName = GetRuntimeClass()->className;
+	if (clsName && strstr( clsName, "DramaMapLayer") != NULL)
+		return true;
+	return false;
 }
 
 NS_NDENGINE_END

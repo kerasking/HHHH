@@ -3,12 +3,14 @@
 #include <cassert>
 #include <stdlib.h>
 #include "IniFile.h"
+#include "ObjectTracker.h"
+#include "define.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
+// #ifdef _DEBUG
+// #undef THIS_FILE
+// static char THIS_FILE[]=__FILE__;
+// #define new DEBUG_NEW
+// #endif
 
 
 using namespace std;
@@ -21,18 +23,19 @@ using namespace std;
 */
  CIniFile::CIniFile()
  {
-   
+	INC_NDOBJ("CIniFile"); 
  }
  
  CIniFile::CIniFile(const char* inipath)
  {
+	 INC_NDOBJ("CIniFile"); 
  	m_strPath = inipath;
  }
  
  
  CIniFile::~CIniFile()
  {
- 
+	DEC_NDOBJ("CIniFile"); 
  }
  
  
@@ -54,9 +57,201 @@ using namespace std;
  	if (end != string::npos)
  		s = s.substr( begin, end-begin+1 );
  }
+
+/************************************************************************************************************
+ Function:         DecryptIniFile
+ Description:      先判断ini文件是否加密,如果加密的话解密该文件
+ Input:            iBufSize保存未加密的数据buf的大小
+ Output:           FileBuf获取未加密前的数据buf
+ return:           bool返回是否加密
+ other:
+ version:  1. add by tangziqin  2012.8.27   新建函数    
+ 2.
+ ************************************************************************************************************/
+#include "LuaStateMgr.h"
+using namespace NDEngine;
+bool CIniFile::DecryptIniFile(char *strBuf, int iBufSize)
+{
+    size_t size = 0;
+    FILE *FileHandle = NULL;
+    FileHandle = fopen(m_strPath.c_str(), "rb");
+    if ( FileHandle == NULL) 
+    { 
+        return false;
+    } 
+    fseek (FileHandle, 0, SEEK_END);
+    size = ftell(FileHandle);
+    fseek(FileHandle, 0, SEEK_SET);
+   
+    memset(strBuf, 0, iBufSize);
+    size_t nReadNum = fread(strBuf, 1, iBufSize, FileHandle);
+    if( nReadNum != size ) 
+    { 
+        return false;
+    }
+    
+    size_t nResultNum = LuaStateMgrObj.GetState()->DecryptString((unsigned char* )strBuf, nReadNum);
+    fclose(FileHandle);   
+    
+    if (nResultNum != nReadNum)
+    {
+        return true;
+    }
+    else 
+    {
+        return false;
+    }
+}
+
+#define USE_INI_ENCRYPT        //定义这个宏代表使用ini加密功能
+//#undef USE_INI_ENCRYPT
+
+bool CIniFile::ReadFile()
+{
+	//先判断文件是否加密，加密的话先解密，存储在strbuffer中
+#ifdef USE_INI_ENCRYPT
+	int iBufSize = 512*1024;
+	char *strBuffer = new char[iBufSize];
+	DecryptIniFile(strBuffer, iBufSize);
+#else
+	FILE* inifile = fopen(m_strPath.c_str(), "r");
+ 	int curkey = -1, curval = -1;
+ 	if (inifile == NULL)
+ 	{
+ 		error = "Unable to open ini file.";
+ 		return 0;
+ 	}
+#endif
+
+ 	std::string keyname, valuename, value, valueline;
+ 	std::string temp;
+ 	bool bNote = false;
+
+#ifdef USE_INI_ENCRYPT
+	char *p = strtok(strBuffer, "\r\n");
+	while(p)
+#else
+	char buf[2048] = {0};
+ 	while (fgets(buf, 2048, inifile))
+#endif
+ 	{
+		#ifdef USE_INI_ENCRYPT
+			std::string readinfo = p;
+			p = strtok(NULL,  "\r\n");
+		#else
+			std::string readinfo = buf;
+		#endif
+
+ 		if (readinfo != "")
+ 		{
+			#ifndef USE_INI_ENCRYPT
+ 				TrimLeftRight( readinfo );
+			#endif
+ 			if( readinfo.empty() )
+ 				continue;
+ 			
+ 			if (std::string::npos != readinfo.find("//"))
+ 			{
+ 				continue;
+ 			}
  
+ 			if(bNote)
+ 			{
+ 				if( std::string::npos != readinfo.find("*/") )
+ 				{
+ 					bNote = false;
+ 				}
+ 				continue;
+ 			}
+ 
+ 			if(!bNote)
+ 			{
+ 				if( std::string::npos != readinfo.find("/*") )
+ 				{
+ 					bNote = true;
+ 					continue;
+ 				}
+ 			}
+ 
+ 			
+ 
+ 			if (readinfo[0] == '[')
+ 			{
+ 				int pos = readinfo.find_first_of("]");
+ 				if ( std::string::npos == pos )
+ 				{
+ 					continue;
+ 				}
+ 
+ 				readinfo = readinfo.substr( 1, pos-1 );
+ 				keyname = readinfo;
+				#ifndef USE_INI_ENCRYPT
+					TrimLeftRight( keyname );
+				#endif
+ 			}
+ 			else if( !readinfo.empty() )
+ 			{
+ 				int pos = readinfo.find_first_of("=");
+ 				if( std::string::npos == pos )
+ 				{
+ 					pos = readinfo.find_first_of("/");
+ 					if( std::string::npos != pos )
+ 					{
+ 						valueline = readinfo.substr( 0, pos );
+ 					}
+ 					else
+					{
+ 						valueline = readinfo;
+					}
+
+					#ifndef USE_INI_ENCRYPT
+						TrimLeftRight( valueline );
+					#endif
+
+ 					if(!valueline.empty())
+ 						SetValueLine(keyname.c_str(), valueline.c_str());
+ 				}
+ 				else
+ 				{
+ 					valuename = readinfo.substr( 0, pos );
+ 
+ 					std::string::size_type pos2 = readinfo.find("//", pos);
+ 					if(pos2 != string::npos)
+ 					{
+ 						value = readinfo.substr( pos+1, pos2-pos-1 );
+ 						if(value=="http:"||value=="ftp:")
+ 							value = readinfo.substr( pos+1 );
+ 					}
+ 					else
+ 					{
+ 						value = readinfo.substr( pos+1 );
+ 					}
+
+					#ifndef USE_INI_ENCRYPT
+						TrimLeftRight(valuename);
+						TrimLeftRight(value);
+					#endif
+ 				
+ 					SetValue(keyname.c_str(),valuename.c_str(),value.c_str());
+ 				}
+ 			}
+ 		}
+ 	}
+
+	#ifdef USE_INI_ENCRYPT
+		//未解密释放内存,已解密需重写文件
+		SAFE_DELETE(strBuffer);
+	#else
+		fclose(inifile);
+	#endif
+
+ 	return 1;
+}
+
+#if 0
  bool CIniFile::ReadFile()
  {
+
  	FILE* inifile = fopen(m_strPath.c_str(), "r");
  	int curkey = -1, curval = -1;
  	if (inifile == NULL)
@@ -157,6 +352,7 @@ using namespace std;
  	fclose(inifile);
  	return 1;
  }
+#endif
  bool CIniFile::ReadFile(const char* newpath)
  {
  	SetPath(newpath);

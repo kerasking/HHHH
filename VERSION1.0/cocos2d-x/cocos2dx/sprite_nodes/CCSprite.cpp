@@ -48,6 +48,10 @@ THE SOFTWARE.
 #include "kazmath/GL/matrix.h"
 #include <string.h>
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 using namespace std;
 
 NS_CC_BEGIN
@@ -329,10 +333,16 @@ CCSprite::CCSprite(void)
 : m_pobTexture(NULL)
 , m_bShouldBeHidden(false)
 {
+#if ND_MOD
+	INC_CCOBJ("CCSprite");
+#endif
 }
 
 CCSprite::~CCSprite(void)
 {
+#if ND_MOD
+	DEC_CCOBJ("CCSprite");
+#endif
     CC_SAFE_RELEASE(m_pobTexture);
 }
 

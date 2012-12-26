@@ -25,21 +25,42 @@ THE SOFTWARE.
 #include "CCGeometry.h"
 #include "ccMacros.h"
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#include "CCInteger.h"
+#endif
+
 // implementation of CCPoint
 NS_CC_BEGIN
 
+CCPoint::~CCPoint()
+{
+#if ND_MOD
+	DEC_CCOBJ("CCPoint");
+#endif
+}
+
 CCPoint::CCPoint(void)
 {
+#if ND_MOD
+	INC_CCOBJ("CCPoint");
+#endif
     setPoint(0.0f, 0.0f);
 }
 
 CCPoint::CCPoint(float x, float y)
 {
+#if ND_MOD
+	INC_CCOBJ("CCPoint");
+#endif
     setPoint(x, y);
 }
 
 CCPoint::CCPoint(const CCPoint& other)
 {
+#if ND_MOD
+	INC_CCOBJ("CCPoint");
+#endif
     setPoint(other.x, other.y);
 }
 
@@ -74,18 +95,34 @@ bool CCPoint::CCPointEqualToPoint(const CCPoint& point1, const CCPoint& point2)
 
 // implementation of CCSize
 
+CCSize::~CCSize()
+{
+#if ND_MOD
+	DEC_CCOBJ("CCSize");
+#endif
+}
+
 CCSize::CCSize(void)
 {
+#if ND_MOD
+	INC_CCOBJ("CCSize");
+#endif
     setSize(0.0f, 0.0f);
 }
 
 CCSize::CCSize(float width, float height)
 {
+#if ND_MOD
+	INC_CCOBJ("CCSize");
+#endif
     setSize(width, height);
 }
 
 CCSize::CCSize(const CCSize& other)
 {
+#if ND_MOD
+	INC_CCOBJ("CCSize");
+#endif
     setSize(other.width, other.height);
 }
 
@@ -121,18 +158,34 @@ bool CCSize::CCSizeEqualToSize(const CCSize& size1, const CCSize& size2)
 
 // implementation of CCRect
 
+CCRect::~CCRect()
+{
+#if ND_MOD
+	DEC_CCOBJ("CCRect");
+#endif
+}
+
 CCRect::CCRect(void)
 {
+#if ND_MOD
+	INC_CCOBJ("CCRect");
+#endif
     setRect(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
 CCRect::CCRect(float x, float y, float width, float height)
 {
+#if ND_MOD
+	INC_CCOBJ("CCRect");
+#endif
     setRect(x, y, width, height);
 }
 
 CCRect::CCRect(const CCRect& other)
 {
+#if ND_MOD
+	INC_CCOBJ("CCRect");
+#endif
     setRect(other.origin.x, other.origin.y, other.size.width, other.size.height);
 }
 

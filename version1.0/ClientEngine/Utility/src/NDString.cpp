@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <ctype.h>
 #include <stdarg.h>
+#include "ObjectTracker.h"
 
 // #include "KData.h"
 // #include "Kathy.h"
@@ -63,26 +64,30 @@ namespace NDEngine
 {
 NDString::NDString()
 {
+	INC_NDOBJ("NDString");
 }
 
 NDString::NDString(const char* str, int length) :
 		buf(str, length)
 {
-
+	INC_NDOBJ("NDString");
 }
 
 NDString::NDString(const char* str)
 {
+	INC_NDOBJ("NDString");
 	buf = str;
 }
 
 NDString::NDString(const char ch)
 {
+	INC_NDOBJ("NDString");
 	buf = ch;
 }
 
 NDString::NDString(unsigned int value)
 {
+	INC_NDOBJ("NDString");
 	char buff[16];
 	sprintf(buff, "%u", value);
 	buf = buff;
@@ -90,6 +95,7 @@ NDString::NDString(unsigned int value)
 
 NDString::NDString(float fvalue)
 {
+	INC_NDOBJ("NDString");
 	char buff[16];
 	sprintf(buff, "%f", fvalue);
 	buf = buff;
@@ -97,11 +103,13 @@ NDString::NDString(float fvalue)
 
 NDString::NDString(const string& str)
 {
+	INC_NDOBJ("NDString");
 	buf = str.c_str();
 }
 
 NDString::NDString(int value)
 {
+	INC_NDOBJ("NDString");
 	char str[256] = {0};
 	sprintf(str, "%d", value);
 	buf = str;
@@ -109,6 +117,7 @@ NDString::NDString(int value)
 
 NDString::NDString(const NDString& data)
 {
+	INC_NDOBJ("NDString");
 	buf = data.buf;
 }
 
@@ -381,6 +390,7 @@ void NDString::operator+=(unsigned int val)
 
 NDString::~NDString()
 {
+	DEC_NDOBJ("NDString");
 }
 
 void NDString::erase()

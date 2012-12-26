@@ -45,6 +45,8 @@ protected:
 
 	void PostLoad(UIINFO& uiInfo);	
 
+	void ResetAnchorPos( UIINFO& uiInfo );
+
 	void AdjustCtrlPosByAnchor( UIINFO& uiInfo, const CCPoint& CtrlAnchorPos );
 
 	bool IsAnchorValid( const float anchor );

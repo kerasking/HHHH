@@ -24,6 +24,7 @@
 #include "NDUtil.h"
 #include "NDPicture.h"
 #include "NDSprite.h"
+#include "ObjectTracker.h"
 
 MapTexturePool* g_pkMapTexturePoolDefaultPool = NULL;
 
@@ -33,12 +34,16 @@ using namespace NDEngine;
 MapTexturePool::MapTexturePool() :
 m_pkDict(NULL)
 {
+	INC_NDOBJ("MapTexturePool");
+
 	NDAsssert(g_pkMapTexturePoolDefaultPool == NULL);
 	m_pkDict = new CCDictionary();
 }
 
 MapTexturePool::~MapTexturePool()
 {
+	DEC_NDOBJ("MapTexturePool");
+
 	NDAsssert(g_pkMapTexturePoolDefaultPool != NULL);
 	g_pkMapTexturePoolDefaultPool = NULL;
 	CC_SAFE_RELEASE (m_pkDict);
@@ -93,31 +98,21 @@ m_nY(0),
 m_nMapIndex(0),
 m_nPassIndex(0)
 {
+	INC_NDOBJ("NDMapSwitch");
+
 	memset(m_pkNameLabels, 0, sizeof(m_pkNameLabels));
 	memset(m_pkDesLabels, 0, sizeof(m_pkDesLabels));
 }
 
 NDMapSwitch::~NDMapSwitch()
 {
-	if (m_pkNameLabels[0])
-	{
-		delete m_pkNameLabels[0];
-	}
+	DEC_NDOBJ("NDMapSwitch");
 
-	if (m_pkNameLabels[1])
-	{
-		delete m_pkNameLabels[1];
-	}
+	SAFE_DELETE( m_pkNameLabels[0] );
+	SAFE_DELETE( m_pkNameLabels[1] );
 
-	if (m_pkDesLabels[0])
-	{
-		delete m_pkDesLabels[0];
-	}
-
-	if (m_pkDesLabels[1])
-	{
-		delete m_pkDesLabels[1];
-	}
+	SAFE_DELETE( m_pkDesLabels[0] );
+	SAFE_DELETE( m_pkDesLabels[1] );
 }
 
 // void NDMapSwitch::SetLabel(NDMapData* mapdata)
@@ -201,7 +196,7 @@ void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 	std::string strDes = m_strDescDesMap;
 	strName = m_strNameDesMap;
 
-	int tw = getStringSize(strName.c_str(), 15).width;
+	int tw = getStringSize(strName.c_str(), 15).width;//Ó²±àÂë£¡
 // 	int tx = m_nX * MAP_UNITSIZE_X + DISPLAY_POS_X_OFFSET - tw / 2;
 // 	int ty = m_nY * MAP_UNITSIZE_Y + DISPLAY_POS_Y_OFFSET - 62 * fScaleFactor; //@del
 	int tx = int( ConvertUtil::convertCellToDisplayX( m_nX ) - tw / 2);
@@ -210,7 +205,7 @@ void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 	if (!strDes.empty() && strDes != "")
 	{
 		int tx2 = m_nX * MAP_UNITSIZE_X + 10 * fScaleFactor
-				- (getStringSize(strDes.c_str(), 15).width / 2);
+				- (getStringSize(strDes.c_str(), 15).width / 2);//Ó²±àÂë£¡
 
 		int ty2 = m_nY * MAP_UNITSIZE_Y - 52 * fScaleFactor;	//ty; //@todo:µ°ËéµÄÓ²±àÂë£¡
 		
@@ -346,12 +341,16 @@ NDMapData::NDMapData() :
 		m_pkSwitchs(NULL), 
 		m_pkAnimationGroups(NULL), 
 		m_pkAniGroupParams(NULL),
-		m_bBattleMapFlag(false)
+		m_bBattleMapFlag(false),
+		m_bDramaMapFlag(false)
 {
+	INC_NDOBJ("NDMapData");
 }
 
 NDMapData::~NDMapData()
 {
+	DEC_NDOBJ("NDMapData");
+
 	CC_SAFE_RELEASE(m_kMapTiles);
 	CC_SAFE_DELETE (m_pkObstacles);
 	CC_SAFE_RELEASE (m_pkSceneTiles);
@@ -577,8 +576,8 @@ void NDMapData::decode(FILE* pkStream)
 
 
 		pkTile->setMapSize(	CCSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
-		pkTile->SetCutRect_Android( CCRectMake(0, 0, picWidth, picHeight), getBattleMapFlag() ); //@android
-		pkTile->SetDrawRect_Android(CCRectMake(nX, nY, picWidth, picHeight), getBattleMapFlag()); //@android
+		pkTile->SetCutRect_Android( CCRectMake(0, 0, picWidth, picHeight), getBattleMapFlag() || getDramaMapFlag()); //@android
+		pkTile->SetDrawRect_Android(CCRectMake(nX, nY, picWidth, picHeight), getBattleMapFlag() || getDramaMapFlag()); //@android
 		pkTile->setReverse(nReverse);
 		pkTile->make();
 
@@ -652,8 +651,8 @@ void NDMapData::decode(FILE* pkStream)
 				* pkTile->getTexture()->getMaxT();
 
 		pkTile->setMapSize( CCSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
-		pkTile->SetCutRect_Android( CCRectMake(0, 0, nPicWidth, nPicHeight), getBattleMapFlag() ); //@android
-		pkTile->SetDrawRect_Android( CCRectMake(x, y, nPicWidth, nPicHeight), getBattleMapFlag() ); //@android
+		pkTile->SetCutRect_Android( CCRectMake(0, 0, nPicWidth, nPicHeight), getBattleMapFlag() || getDramaMapFlag()); //@android
+		pkTile->SetDrawRect_Android( CCRectMake(x, y, nPicWidth, nPicHeight), getBattleMapFlag() || getDramaMapFlag()); //@android
 		pkTile->setReverse(bReverse);
 		pkTile->make();
 

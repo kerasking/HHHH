@@ -17,6 +17,7 @@
 //#include "NDUtil.h"
 #include "NDPicture.h"
 #include "NDPath.h"
+#include "ObjectTracker.h"
 
 using namespace NDEngine;
 
@@ -29,6 +30,8 @@ using namespace NDEngine;
 IMPLEMENT_CLASS(NDUICheckBox, NDUINode)
 NDUICheckBox::NDUICheckBox()
 {
+	INC_NDOBJ_RTCLS
+
 	m_bChecked		= false;
 	m_focusColor = cocos2d::ccc3(0, 0, 255);	
 	
@@ -43,6 +46,8 @@ NDUICheckBox::NDUICheckBox()
 
 NDUICheckBox::~NDUICheckBox()
 {
+	DEC_NDOBJ_RTCLS
+
 	if (m_bClearOnFree) 
 	{
 		delete m_picCheck;

@@ -6,7 +6,7 @@
 #include "I_Analyst.h"
 #include "NDUIBaseGraphics.h"
 #include "NDUILayer.h"
-
+#include "ObjectTracker.h"
 
 namespace NDEngine
 {
@@ -17,6 +17,8 @@ namespace NDEngine
 	
 	NDUIEdit::NDUIEdit()
 	{		
+		INC_NDOBJ_RTCLS
+
 		m_password = false;
 		m_frameOpened = true;
 		m_focusRunCount = 0;
@@ -32,6 +34,8 @@ namespace NDEngine
 	
 	NDUIEdit::~NDUIEdit()
 	{
+		DEC_NDOBJ_RTCLS
+
 		if (m_bClearPicOnFree) 
 		{
 			delete m_picImg;

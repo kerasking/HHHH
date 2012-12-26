@@ -23,6 +23,9 @@ class CUITabLogic
 	DECLARE_CLASS(CUITabLogic)
 	
 public:
+	CUITabLogic();
+	~CUITabLogic();
+
 	void AddTab(NDUIButton* tab, NDUINode* client);
 	
 	void Select(NDUIButton* tab);

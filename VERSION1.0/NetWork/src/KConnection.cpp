@@ -328,8 +328,11 @@ void
 KConnection::setState()
 {
 	closeMutex.lock();
+
+	if (useNum) delete useNum;
 	useNum = new int;
 	*useNum = 1;
+
     _live = true;
 	setBlocking( _blocking );
 	closeMutex.unlock();

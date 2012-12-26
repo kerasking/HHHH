@@ -44,24 +44,32 @@ class DownloadPackage
 {
 	//DECLARE_CLASS(DownloadPackage)
 public:
+
 	DownloadPackage();
 	~DownloadPackage();
+
 public:
+
 	//被下载的文件http地址
 	void FromUrl(const char* url);
 	//被下载的文件保存路径
 	void ToPath(const char* path);
 	//下载操作
 	void Download();
+
 public:
-	int m_fileLen;
+
+	int m_nFileLen;
 	//一下三个方法可看作是私有方法，外部无需关心
 	void DownloadThreadExcute();
 	virtual void DidDownloadStatus(DownloadStatus status){};
 	virtual void ReflashPercent(int percent, int pos, int filelen){};
-public:	
-	KHttp* m_http;
-	std::string m_url, m_path;
+
+public:
+
+	KHttp* m_pkHttp;
+	std::string m_strDownloadURL;
+	std::string m_strDownloadPath;
 	//MainThreadSelector *m_selObj;
 	
 };

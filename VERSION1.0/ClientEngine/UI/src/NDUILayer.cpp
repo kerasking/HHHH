@@ -37,7 +37,8 @@
 #include "NDUIImage.h"
 #include "NDDebugOpt.h"
 #include "BaseType.h"
-#include "UIScrollViewMulHand.h"
+#include "NDUIScrollViewMulHand.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 
@@ -58,6 +59,8 @@ NDUILayer* NDUILayer::m_pkLayerPress = 0;
 
 NDUILayer::NDUILayer()
 {
+	INC_NDOBJ_RTCLS
+
 	m_strDebugName = "NDUILayer";
 
 	INIT_AUTOLINK (NDUILayer);
@@ -98,6 +101,8 @@ NDUILayer::NDUILayer()
 
 NDUILayer::~NDUILayer()
 {
+	DEC_NDOBJ_RTCLS
+
 	CC_SAFE_RELEASE (m_pkBackgroudTexture);
 
 	if (m_bClearOnFree)
@@ -436,7 +441,7 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 	if (m_bLongTouch && !m_bDragOutFlag && !m_bLayerMoved)
 	//if (m_bLongTouch && !m_bDragOutFlag && !isTouchMoved(MOVE_ERROR))
 	{
-		this->DispatchTouchEndEvent(m_kBeginTouch, m_kBeginTouch);
+		//this->DispatchTouchEndEvent(m_kBeginTouch, m_kBeginTouch);
 
 		// 都取超始点是由于用户抬起点容易超出作用范围
 		if (DispatchLongTouchClickEvent(m_kBeginTouch, m_kBeginTouch))

@@ -124,7 +124,7 @@ function p.LoadUI()
 	layer:SetTag(NMAINSCENECHILDTAG.GMProblemUI);
 	layer:SetFrameRect(CGRectMake(0, 0, winsize.w, winsize.h*0.1));
 	--layer:SetFrameRect(CGRectMake(winsize.w*0.08, winsize.h*0.08, winsize.w, winsize.h));
-	scene:AddChild(layer);	
+	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);	
 	
 	local uiLoad=createNDUILoad();
 	if nil == uiLoad then

@@ -34,21 +34,29 @@ protected:
 private:
 };
 
-class NDConsole:
-	public NDObject,
-	public TSingleton<NDConsole>
+class NDConsole : public NDObject
 {
 	DECLARE_CLASS(NDConsole);
 
-public:
-
-	typedef map<string,NDConsoleListener*> MAP_LISTENER;
-	typedef map<string,const char*> MAP_STRING;
-
+private:
 	NDConsole();
+
+#if 0
 	NDConsole(LPCTSTR lpszTitle, SHORT ConsoleHeight = 300,
 		SHORT ConsoleWidth = 80);
+#endif
+
+public:
 	virtual ~NDConsole();
+
+	static NDConsole& instance() {
+		static NDConsole s_obj;
+		return s_obj;
+	}
+
+public:
+	typedef map<string,NDConsoleListener*> MAP_LISTENER;
+	typedef map<string,const char*> MAP_STRING;
 
 	void Attach(SHORT ConsoleHeight, SHORT ConsoleWidth);
 	void BeginReadLoop();
@@ -76,8 +84,6 @@ protected:
 
 	MAP_LISTENER m_kListenerMap;
 	MAP_STRING* m_pkStringMap;
-
-private:
 };
 
 #endif

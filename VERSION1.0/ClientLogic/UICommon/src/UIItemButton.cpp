@@ -20,6 +20,7 @@
 #include "NDUtility.h"
 #include "NDPath.h"
 #include "NDUIBaseGraphics.h"
+#include "ObjectTracker.h"
 
 #define TAG_ITEM_COUNT (34567)
 #define TAG_ITEM_LOCK (34568)
@@ -28,6 +29,7 @@ IMPLEMENT_CLASS(CUIItemButton, NDUIButton)
 
 CUIItemButton::CUIItemButton()
 {
+	INC_NDOBJ_RTCLS
 	m_unItemId		= 0;
 	m_unItemType	= 0;
 	m_bLock			= false;
@@ -37,6 +39,7 @@ CUIItemButton::CUIItemButton()
 
 CUIItemButton::~CUIItemButton()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CUIItemButton::InitializationItem()
@@ -308,7 +311,7 @@ void CUIItemButton::draw()
                 else if (m_combinePicBG)
                     m_combinePicBG->DrawInRect(scrRect);
                 else
-                  //  DrawRecttangle(scrRect, m_backgroundColor);
+					DrawRecttangle(scrRect, m_backgroundColor);
                 
                 
                 if (m_bScrollTitle && m_scrtTitle && m_scrtTitle->GetParent() == this) 
@@ -437,7 +440,7 @@ void CUIItemButton::draw()
                 
                 if (m_pSprite)
                 {
-                    //m_pSprite->SetPosition(ccpAdd(scrRect.origin, m_posSprite));
+                    m_pSprite->SetPosition(ccpAdd(scrRect.origin, m_posSprite));
                     m_pSprite->Run( CCDirector::sharedDirector()->getWinSizeInPixels() );
                 }             
                 

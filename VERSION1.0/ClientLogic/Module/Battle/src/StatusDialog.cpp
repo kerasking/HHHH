@@ -18,6 +18,7 @@
 #include <sstream>
 #include "NDPath.h"
 #include "NDUIBaseGraphics.h"
+#include "ObjectTracker.h"
 
 const float DIALOG_WIDTH = 200.0f;
 const float MAX_DIALOG_HEIGHT = 220.0f;
@@ -28,6 +29,7 @@ IMPLEMENT_CLASS(StatusDialog, NDUILayer)
 
 StatusDialog::StatusDialog()
 {
+	INC_NDOBJ_RTCLS
 	std::string bottomImage = NDPath::GetImgPath("bottom.png");
 	m_picLeftTop = NDPicturePool::DefaultPool()->AddPicture(bottomImage);
 	m_picLeftTop->SetReverse(true);
@@ -54,6 +56,7 @@ StatusDialog::StatusDialog()
 
 StatusDialog::~StatusDialog()
 {
+	DEC_NDOBJ_RTCLS
 	this->releaseElement();
 	delete m_picLeftTop;
 	delete m_picRightTop;
@@ -95,7 +98,7 @@ void StatusDialog::Initialization(Fighter* f)
 	m_fighter = f;
 	
 	stringstream ssTitle;
-	ssTitle << f->GetRole()->m_strName << "("
+	ssTitle << f->GetRole()->GetName() << "("
 	<< f->GetRole()->m_nLevel << NDCommonCString("Ji") << ")";
 	
 	if(f->m_kInfo.fighterType==Fighter_TYPE_RARE_MONSTER){
@@ -283,7 +286,7 @@ bool StatusDialog::TouchEnd(NDTouch* touch)
 		return false;
 	}
 
-	Battle* parent = (Battle*)this->GetParent();
+	BattleUILayer* parent = (BattleUILayer*)this->GetParent();
 
 	if (parent) 
 	{

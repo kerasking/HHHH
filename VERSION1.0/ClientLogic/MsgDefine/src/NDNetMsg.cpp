@@ -57,8 +57,7 @@ bool NDNetMsgPool::Process(NDTransData* data)
 
 	int nMsgLen = data->GetSize();
 
-
-	if (nMsgLen<ND_C_HEAD_SIZE)  //if (nMsgLen < 6)
+	if (nMsgLen < ND_C_HEAD_SIZE)  //if (nMsgLen < 6)
 	{
 		return false;
 	}
@@ -75,10 +74,6 @@ bool NDNetMsgPool::Process(NDTransData* data)
 
 bool NDNetMsgPool::Process(MSGID msgID, NDTransData* data, int len)
 {
-// 	LOGD(
-// 			"\n---------------------------------------------<--½ÓÊÕid[%d],len[%d]-----------------------",
-// 			msgID, len + ND_C_HEAD_SIZE);
-
 	if (len + ND_C_HEAD_SIZE > 1024)
 	{
 		NDAsssert(0);

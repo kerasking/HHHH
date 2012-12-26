@@ -8,6 +8,7 @@
 #include <winbase.h>
 #include <fcntl.h>
 #include "NDDebugOpt.h"
+#include "ObjectTracker.h"
 
 BEGIN_ND_NAMESPACE
 
@@ -22,10 +23,12 @@ bool NDConsole::ms_bContinueThread = false;
 char* NDConsole::ms_pszBuffer = 0;
 
 NDConsole::NDConsole() :
-m_hOutputHandle(0),
-m_hInputHandle(0),
-m_pkStringMap(0)
+	m_hOutputHandle(0),
+	m_hInputHandle(0),
+	m_pkStringMap(0)
 {
+	INC_NDOBJ_RTCLS
+
 	if (ms_bIsExistent)
 	{
 		return;
@@ -37,6 +40,7 @@ m_pkStringMap(0)
 	m_pkStringMap = new MAP_STRING;
 }
 
+#if 0
 NDConsole::NDConsole(LPCTSTR lpszTitle, SHORT ConsoleHeight /*= 300*/,
 		SHORT ConsoleWidth /*= 80*/) :
 		m_hOutputHandle(0)
@@ -51,9 +55,12 @@ NDConsole::NDConsole(LPCTSTR lpszTitle, SHORT ConsoleHeight /*= 300*/,
 	Attach(ConsoleHeight, ConsoleWidth);
 	ms_bIsExistent = true;
 }
+#endif
 
 NDConsole::~NDConsole()
 {
+	DEC_NDOBJ_RTCLS
+
 	ms_bContinueThread = false;
 
 	if (ms_bIsExistent)
@@ -62,6 +69,8 @@ NDConsole::~NDConsole()
 	}
 
 	ms_bIsExistent = false;
+
+	SAFE_DELETE(m_pkStringMap);
 }
 
 void NDConsole::Attach(SHORT ConsoleHeight, SHORT ConsoleWidth)
@@ -117,13 +126,13 @@ void* NDConsole::ReadGameConsole(void* pData)
 		DWORD dwReadCount = 0;
 		CONSOLE_READCONSOLE_CONTROL kControl =
 		{ 0 };
-		ReadConsoleA(NDConsole::GetSingletonPtr()->getInputHandle(),
+		ReadConsoleA(NDConsole::instance().getInputHandle(),
 				(void*) ms_pszBuffer, 2048, &dwReadCount, &kControl);
 		pthread_mutex_unlock(&ms_pkAsyncStructQueueMutex);
 
 		if (*ms_pszBuffer)
 		{
-			NDConsole::GetSingletonPtr()->ProcessInput(ms_pszBuffer);
+			NDConsole::instance().ProcessInput(ms_pszBuffer);
 			memset(ms_pszBuffer, 0, sizeof(char) * 2048);
 		}
 	}
@@ -172,12 +181,15 @@ void NDConsole::ProcessInput(const char* pszInput)
 
 			if (pkListener)
 			{
-				char* pszTemp = new char[2048];
-				memset(pszTemp,0,sizeof(char) * 2048);
+				static char cmdbuf[2048] = {0};
+				memset(cmdbuf,0,sizeof(cmdbuf));
+
 				string strResult = strInput.substr(strListenerKey.length(),
 						strInput.length());
-				strcpy_s(pszTemp,2048,strResult.c_str());
-				m_pkStringMap->insert(make_pair(strListenerKey,pszTemp));
+
+				strcpy_s(cmdbuf,sizeof(cmdbuf)-1,strResult.c_str());
+				
+				m_pkStringMap->insert(make_pair(strListenerKey,cmdbuf));
 				pkListener->processConsole(strResult.c_str());
 			}
 		}

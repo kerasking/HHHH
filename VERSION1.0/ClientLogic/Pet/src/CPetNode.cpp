@@ -12,18 +12,20 @@
 #include "CPet.h"
 //#include "CCPointExtension.h"
 #include "CCGeometry.h"
+#include "ObjectTracker.h"
 
 IMPLEMENT_CLASS(CPetNode, NDUILayer)
 
 CPetNode::CPetNode()
 {
+	INC_NDOBJ_RTCLS
 	m_role = NULL;
-	
 	m_pos = CCPointZero;
 }
 
 CPetNode::~CPetNode()
 {
+	DEC_NDOBJ_RTCLS
 }
 
 void CPetNode::Initialization()

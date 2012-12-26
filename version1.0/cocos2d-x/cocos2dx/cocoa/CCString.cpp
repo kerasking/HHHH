@@ -4,28 +4,51 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#if ND_MOD
+#include "ObjectTracker.h"
+#endif
+
 NS_CC_BEGIN
 
 #define kMaxStringLen (1024*100)
 
 CCString::CCString()
     :m_sString("")
-{}
+{
+#if ND_MOD
+	INC_CCOBJ("CCString");
+#endif
+}
 
 CCString::CCString(const char * str)
     :m_sString(str)
-{}
+{
+#if ND_MOD
+	INC_CCOBJ("CCString");
+#endif
+}
 
 CCString::CCString(const std::string& str)
     :m_sString(str)
-{}
+{
+#if ND_MOD
+	INC_CCOBJ("CCString");
+#endif
+}
 
 CCString::CCString(const CCString& str)
     :m_sString(str.getCString())
-{}
+{
+#if ND_MOD
+	INC_CCOBJ("CCString");
+#endif
+}
 
 CCString::~CCString()
 { 
+#if ND_MOD
+	DEC_CCOBJ("CCString");
+#endif
     m_sString.clear();
 }
 

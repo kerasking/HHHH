@@ -9,7 +9,7 @@ ItemPet = {};
 local p = ItemPet;
 
 local eEquipItem					= 1;	--宠物装备物品
-local eDaoFaItem					= 1;	--宠物道法物品
+local eDaoFaItem					= 2;	--宠物道法物品
 
 --宠物装备(Item.POSITION_EQUIP_1 ~ Item.POSITION_EQUIP_6)
 function p.AddEquipItem(nRoleId, nPetId, nItemId)

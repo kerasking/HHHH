@@ -28,6 +28,7 @@
 #include "NDUtil.h"
 #include "platform.h"
 #include "TQString.h"
+#include "ObjectTracker.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -40,6 +41,8 @@ IMPLEMENT_CLASS(NDSprite, NDNode)
 
 NDSprite::NDSprite()
 {
+	INC_NDOBJ_RTCLS
+
 	m_pkAniGroup = NULL;
 	m_pkCurrentAnimation = NULL;
 	m_pkFrameRunRecord = NULL;
@@ -95,6 +98,8 @@ NDSprite::NDSprite()
 
 NDSprite::~NDSprite()
 {
+	DEC_NDOBJ_RTCLS
+
 	CC_SAFE_RELEASE (m_pkAniGroup);
 	CC_SAFE_RELEASE (m_pkFrameRunRecord);
 }
@@ -1181,7 +1186,7 @@ void NDSprite::SetNormalAniGroup(int nLookface)
 	CCStringRef strString = CCString::stringWithFormat("%smodel_%d%s",
 			NDPath::GetAnimationPath().c_str(), ".spr");
 
-	Initialization(strString->toStdString().c_str());
+	Initialization(strString->getCString());
 
 	m_bFaceRight = true;
 	SetCurrentAnimation(MANUELROLE_STAND, m_bFaceRight);

@@ -59,7 +59,7 @@ function p.LoadUI( nActivityId )
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.BattleBossUI );
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer,1);
+	scene:AddChildZ(layer,UILayerZOrder.ActivityLayer);
     
 
 -----------------初始化ui添加到 layer 层上----------------------------------
@@ -115,10 +115,10 @@ function p.OnUIEvent(uiNode, uiEventType, param)
                     p.SendSilverGuWu();
                 else
                     local nRequestCoin = MsgBossBattle.GetBossBattleSilverCount();
-                    CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("BB2_T1"),nRequestCoin), p.SilverGuwuConfirmCallBack);
+                    CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("BB_T6"),nRequestCoin), p.SilverGuwuConfirmCallBack);
                 end
             else
-                CommonDlgNew.ShowYesDlg(GetTxtPri("BB2_T2"), nil, nil, 2);
+                CommonDlgNew.ShowYesDlg(GetTxtPri("BB_T7"), nil, nil, 2);
             end
             
             
@@ -132,10 +132,10 @@ function p.OnUIEvent(uiNode, uiEventType, param)
                     p.SendCoinGuWu();
                 else
                     local nRequestCoin = MsgBossBattle.GetBossBattleCoinCount();
-                    CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("BB2_T3"),nRequestCoin), p.CoinGuwuConfirmCallBack);
+                    CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("BB_T8"),nRequestCoin), p.CoinGuwuConfirmCallBack);
                 end
             else
-                CommonDlgNew.ShowYesDlg(GetTxtPri("BB2_T2"), nil, nil, 2);
+                CommonDlgNew.ShowYesDlg(GetTxtPri("BB_T7"), nil, nil, 2);
             end
             
         elseif tag == TAG_START_BATTLE then         --开始战斗
@@ -150,7 +150,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
                 if( not bFightAuto ) then
                     pCheckAuto:SetSelect( false );
                     
-                    CommonDlgNew.ShowYesDlg(string.format(GetTxtPri("BB2_T4"),GetGetVipLevel_FIGHT_AUTO()), nil, nil, 2);
+                    CommonDlgNew.ShowYesDlg(string.format(GetTxtPri("BB_T9"),GetGetVipLevel_FIGHT_AUTO()), nil, nil, 2);
                 end
             end
         end
@@ -315,7 +315,7 @@ function p.RefreshUI( data )
     
     -- 控件赋值
     SetLabel( layer, TAG_BOSS_TYPE_NAME, nBossTypeName );
-    SetLabel( layer, TAG_FIGHTING_CAPACITY, data.nUpData..GetTxtPri("BB2_T5") );
+    SetLabel( layer, TAG_FIGHTING_CAPACITY, data.nUpData..GetTxtPri("BB_T10") );
     SetLabel( layer, TAG_COOLING_TIME, string.format("%d%s",data.nCDTime,GetTxtPub("second")) );
     SetLabel( layer, TAG_BOSS_ENDTIME, FormatTime( data.nLeftTime, 0 ) );
     SetLabel( layer, TAG_HURT_LIFT, data.nDamage.."" );

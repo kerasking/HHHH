@@ -1,6 +1,7 @@
 #include "NDVideoMgr.h"
 #include "CCPlatformConfig.h"
 #include <string>
+#include "ObjectTracker.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "jni/JniHelper.h"
@@ -30,11 +31,13 @@ NDVideoMgr* NDVideoMgr::ms_pkVideoManager = 0;
 
 NDVideoMgr::NDVideoMgr()
 {
+	INC_NDOBJ_RTCLS
 	m_vecVideoListener.clear();
 }
 
 NDVideoMgr::~NDVideoMgr()
 {
+	DEC_NDOBJ_RTCLS
 	SAFE_DELETE(ms_pkVideoManager);
 }
 

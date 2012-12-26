@@ -170,7 +170,7 @@ function p.ShowBanquetMainUI()
 	layer:Init();
 	layer:SetTag( NMAINSCENECHILDTAG.Banquet );
 	layer:SetFrameRect( RectFullScreenUILayer );
-	scene:AddChildZ( layer, 1 );
+	scene:AddChildZ( layer, UILayerZOrder.ActivityLayer );
 
 	local uiLoad = createNDUILoad();
 	if ( nil == uiLoad ) then

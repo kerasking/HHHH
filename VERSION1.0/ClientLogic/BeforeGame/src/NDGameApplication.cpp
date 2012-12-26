@@ -31,6 +31,7 @@
 #include "WorldMapScene.h"
 #include "NDUILoad.h"
 #include "ScriptRegLua.h"
+#include "ObjectTracker.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "Foundation/NSAutoreleasePool.h"
@@ -172,7 +173,7 @@ using namespace NDEngine;
 NDGameApplication::NDGameApplication()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	NDConsole::GetSingletonPtr()->RegisterConsoleHandler(this,"script ");
+	NDConsole::instance().RegisterConsoleHandler(this,"script ");
 #endif
 }
 NDGameApplication::~NDGameApplication()
@@ -269,7 +270,7 @@ void NDGameApplication::MyInit()
 	CCLOG( "@@ NDGameApplication::MyInit()\r\n" );
 	LOGD("Start MyInit");
 
-	REGISTER_CLASS(NDBaseBattle,Battle);
+	REGISTER_CLASS(NDBaseBattle,BattleUILayer);
 	REGISTER_CLASS(NDBaseFighter,Fighter);
 	REGISTER_CLASS(NDBaseBattleMgr,BattleMgr);
 	REGISTER_CLASS(NDSprite,NDPlayer);
@@ -359,10 +360,10 @@ bool NDGameApplication::processPM(const char* cmd)
 	if (cmd == 0 || cmd[0] == 0) return false;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	int val = 0;
+	int n = 0, val = 0;
 	char szDebugOpt[50] = {0};
 
-	HANDLE hOut = NDConsole::GetSingletonPtr()->getOutputHandle();
+	HANDLE hOut = NDConsole::instance().getOutputHandle();
 
 	if (stricmp(cmd, "opt help") == 0)
 	{
@@ -386,6 +387,7 @@ bool NDGameApplication::processPM(const char* cmd)
 		else if (stricmp(szDebugOpt, "mainloop") == 0)
 			NDDebugOpt::setMainLoopEnabled( val != 0 );
 
+		//
 		else if (stricmp(szDebugOpt, "drawhud") == 0)
 			NDDebugOpt::setDrawHudEnabled( val != 0 );
 
@@ -398,6 +400,7 @@ bool NDGameApplication::processPM(const char* cmd)
 		else if (stricmp(szDebugOpt, "drawcell") == 0)
 			NDDebugOpt::setDrawCellEnabled( val != 0 );
 
+		//
 		else if (stricmp(szDebugOpt, "drawrole") == 0)
 			NDDebugOpt::setDrawRoleEnabled( val != 0 );
 
@@ -420,6 +423,24 @@ bool NDGameApplication::processPM(const char* cmd)
 					stricmp(szDebugOpt, "drawmanual") == 0)
 		{
 			NDDebugOpt::setDrawRoleManualEnabled( val != 0 );
+		}
+
+		//
+		else if (stricmp(szDebugOpt, "runanimmanual") == 0)
+		{
+			NDDebugOpt::setRunAnimManualEnabled( val != 0 );
+		}
+		else if (stricmp(szDebugOpt, "runanimplayer") == 0)
+		{
+			NDDebugOpt::setRunAnimPlayerEnabled( val != 0 );
+		}
+		else if (stricmp(szDebugOpt, "runanimnpc") == 0)
+		{
+			NDDebugOpt::setRunAnimNpcEnabled( val != 0 );
+		}
+		else if (stricmp(szDebugOpt, "runanimrole") == 0)
+		{
+			NDDebugOpt::setRunAnimRoleEnabled( val != 0 );
 		}
 	}
 	else if (sscanf(cmd, "openmap %d", &val) == 1)
@@ -623,6 +644,21 @@ bool NDGameApplication::processPM(const char* cmd)
 		NDGameDataUtil::showMemStat();
 		NDGameData& pGameData = NDGameData::Instance();
 		int x = 0;
+	}
+	else if (stricmp(cmd, "dumptouch") == 0)
+	{
+		string str = CCDirector::sharedDirector()->getTouchDispatcher()->dump();
+		DWORD n = 0;
+		WriteConsoleA(  hOut, str.c_str(), str.length(), &n, NULL );
+	}
+	else if (n = sscanf(cmd, "dumpobj %d", &val)) //n=
+	{
+		val = (n > 0 ? val : 0);
+		string info;
+		DUMP_OBJ(info, val);
+
+		DWORD num = 0;
+		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
 	}
 	else
 	{

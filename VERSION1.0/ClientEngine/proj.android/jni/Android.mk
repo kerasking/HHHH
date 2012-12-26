@@ -30,7 +30,7 @@ LOCAL_SRC_FILES := \
 ../../Update/src/DownloadPackage.cpp \
 ../../Update/src/Reachability.cpp \
 ../../Update/src/ZipUnzip.cpp \
-../../Update/src/Unzip.cpp \
+../../Update/src/myunzip.cpp \
 ../../Graphic/src/CCTexture2DExt.cpp \
 ../../Graphic/src/CCTextureCacheExt.cpp \
 ../../Graphic/src/NDAnimation.cpp \
@@ -79,19 +79,19 @@ LOCAL_SRC_FILES := \
 ../../UI/src/NDUIScrollViewContainer.cpp \
 ../../UI/src/NDUISynLayer.cpp \
 ../../UI/src/SysTimer.cpp \
-../../UI/src/UIChatText.cpp \
+../../UI/src/NDUIChatText.cpp \
 ../../UI/src/UICheckBox.cpp \
 ../../UI/src/UIDialog.cpp \
-../../UI/src/UIExp.cpp \
-../../UI/src/UIHyperlink.cpp \
+../../UI/src/NDUIExp.cpp \
+../../UI/src/NDUIHyperlink.cpp \
 ../../UI/src/UIList.cpp \
-../../UI/src/UIMovableLayer.cpp \
+../../UI/src/NDUIMovableLayer.cpp \
 ../../UI/src/UIRadioButton.cpp \
-../../UI/src/UIScroll.cpp \
-../../UI/src/UIScrollContainerExpand.cpp \
-../../UI/src/UIScrollViewExpand.cpp \
-../../UI/src/UIScrollViewMulHand.cpp \
-../../UI/src/UISpriteNode.cpp \
+../../UI/src/NDUIScroll.cpp \
+../../UI/src/NDUIScrollContainerExpand.cpp \
+../../UI/src/NDUIScrollViewExpand.cpp \
+../../UI/src/NDUIScrollViewMulHand.cpp \
+../../UI/src/NDUISpriteNode.cpp \
 ../../UI/import/src/IniFile.cpp \
 ../../UI/import/src/NDUILoadEngine.cpp \
 ../../UI/import/src/UIData.cpp \
@@ -135,10 +135,10 @@ $(LOCAL_PATH)/../../Utility/inc \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/third_party/win32 \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/include \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx \
+$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/cocoa \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/android \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/kazmath/include \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform \
-$(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/cocoa \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/base_nodes \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/touch_dispatcher \
 $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/layers_scenes_transitions_nodes \
@@ -176,7 +176,6 @@ LOCAL_WHOLE_STATIC_LIBRARIES += luaplus
 LOCAL_WHOLE_STATIC_LIBRARIES += tinyxml
 LOCAL_WHOLE_STATIC_LIBRARIES += NetWork
 LOCAL_WHOLE_STATIC_LIBRARIES += KUtil
-LOCAL_WHOLE_STATIC_LIBRARIES += iconv
 
 include $(BUILD_STATIC_LIBRARY)
 
@@ -186,4 +185,3 @@ $(call import-module,CocosDenshion/android)
 $(call import-module,tinyxml/proj.android/jni)
 $(call import-module,NetWork/proj.android/jni)
 $(call import-module,KUtil/proj.android/jni)
-$(call import-module,libiconv/proj.android/jni)

@@ -22,7 +22,7 @@
 #include "NDLightEffect.h"
 #include "NDUIImage.h"
 #include "NDTimer.h"
-#include "UISpriteNode.h"
+#include "NDUISpriteNode.h"
 
 #define blockTimerTag	(5)
 #define titleTimerTag	(6)
@@ -139,6 +139,9 @@ public:
 	void MapSwitchRefresh();
 
 	void ShowRoadSign(bool bShow, int nX = 0, int nY = 0);
+
+	bool IsDramaLayer();
+
 public:
 	virtual void draw();
 	virtual void debugDraw();

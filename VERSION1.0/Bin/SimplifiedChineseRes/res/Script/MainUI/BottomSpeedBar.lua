@@ -61,6 +61,7 @@ p.BtnTag =
     114,    --阵法
     115,    --将星
     117,    --坐骑
+    129,    --占星
     116,    --军团
     119,    --助手
     123,    --好友
@@ -103,10 +104,11 @@ p.BtnFunc =
     126,    --决斗
     127,    --征收
     128,    --祭祀
-    129,    --GM
+    129,    --占星
     131,    --删号
     132,    --退出
     133,    --神秘商人
+    
 };
 
 
@@ -132,30 +134,6 @@ p.BtnGm				= "button_gm.png";
 p.BtnOLGift			= "onlinegift.png";
 p.BtnRechargeGift	= "rechargegift.png";
 
---[[
-p.BtnSayFindRect = {
-    cutNor = CGRectMake(0.0,0.0,37*ScaleFactor, 40.0*ScaleFactor ),
-    cutSel = CGRectMake(0.0,80.0,37*ScaleFactor, 40.0*ScaleFactor ),
-};
-
-
-p.BtnGMFindRect = {
-    cutNor = CGRectMake(0.0,0.0,46*ScaleFactor, 40.0*ScaleFactor ),
-    cutSel = CGRectMake(0.0,80.0,46*ScaleFactor, 40.0*ScaleFactor ),
-};
-
-p.BtnOnlineGiftRect = {
-    cutNor = CGRectMake(0.0,0.0,40*ScaleFactor, 40.0*ScaleFactor ),
-    cutSel = CGRectMake(0.0,0.0,40*ScaleFactor, 40.0*ScaleFactor ),
-};
-
-p.BtnRechargeGiftRect = {
-    cutNor = CGRectMake(0.0,0.0,40*ScaleFactor, 40.0*ScaleFactor ),
-    cutSel = CGRectMake(0.0,0.0,40*ScaleFactor, 40.0*ScaleFactor ),
-};
-]]
-
-
 
 p.BtnSayFindRect = {
     cutNor = CGRectMake(0.0,0.0,74, 80 ),
@@ -178,7 +156,7 @@ p.BtnRechargeGiftRect = {
 };
 
 
-p.BtnSayRect = CGRectMake(25.0 ,winsize.h-p.BtnHeight-40*ScaleFactor ,40.0, 40.0);
+p.BtnSayRect = CGRectMake(25.0 ,winsize.h-p.BtnHeight-40*ScaleFactor ,40.0*ScaleFactor, 40.0*ScaleFactor);
 
 p.BtnGMRect = CGRectMake(0.0 , winsize.h*0.21 ,92.0, 80.0);
 
@@ -244,10 +222,10 @@ function p.LoadUI()
     norPic:Cut(p.BtnSayFindRect.cutNor);
     
     --对话列表
-    local sayListBtn = p.CreateSceneButton(norPic,nil,p.BtnSayRect,NMAINSCENECHILDTAG.BottomMsgBtn);
+    local sayListBtn = p.CreateSceneButton(norPic,nil,p.BtnSayRect,NMAINSCENECHILDTAG.BottomMsgBtn,UILayerZOrder.ChatBtn);
     sayListBtn:SetTag(p.BtnSayTag);
     sayListBtn:SetVisible(true);
-   
+    
      --提交gm问题按钮
     local gmPic	= pool:AddPicture(GetSMImg00Path(p.BtnGm), true);
     gmPic:Cut(p.BtnGMFindRect.cutNor);
@@ -263,7 +241,7 @@ function p.LoadUI()
 
     --显示隐藏底
     local upPic	= pool:AddPicture(GetSMImgPath(p.BtnControlBtnDown), true);
-    local ControlBtn = p.CreateSceneButton(upPic,nil,p.ControlBtnRect,NMAINSCENECHILDTAG.BottomControlBtn);
+    local ControlBtn = p.CreateSceneButton(upPic,nil,p.ControlBtnRect,NMAINSCENECHILDTAG.BottomControlBtn,0);
    
      
     tt = ControlBtn;
@@ -350,7 +328,12 @@ function p.GetFuncIsOpen(nTag)
 end
 
 
-function p.CreateSceneButton(norPic, selPic, rect, tag)
+function p.CreateSceneButton(norPic, selPic, rect, tag,z)
+	local zlev = 1;
+	if z ~= nil then
+		zlev = z;
+	end
+	
     local scene = GetSMGameScene();
 	if not CheckP(scene) then
 		LogInfo("scene == nil,load MainUI Button failed!");
@@ -368,7 +351,17 @@ function p.CreateSceneButton(norPic, selPic, rect, tag)
 	if not CheckP(layer) then
 		return;
 	end
+	
+	if(NMAINSCENECHILDTAG.BottomMsgBtn == tag) then
+		layer:SetPopupDlgFlag(true);
+	end
+	
 	layer:Init();
+	
+	if(NMAINSCENECHILDTAG.BottomMsgBtn == tag) then
+		layer:bringToTop();
+	end
+	
 	layer:SetFrameRect(rect);
 
     layer:SetTag(tag);
@@ -388,16 +381,19 @@ function p.CreateSceneButton(norPic, selPic, rect, tag)
 	btn:SetFrameRect(CGRectMake(0, 0, sizeBtn.w, sizeBtn.h));
 	btn:SetLuaDelegate(p.OnUIEvent);
 	layer:AddChild(btn);
-    scene:AddChild(layer);
+    scene:AddChildZ(layer,zlev);
     return btn;
 end
+
 
 function p.OnUIEvent(uiNode, uiEventType, param)
 	local tag = uiNode:GetTag();
 	LogInfo("chh_mainui p.OnUIEvent[%d],uiEventType:[%d]", tag,uiEventType);
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
         
-        CloseMainUI();
+        if p.BtnSayTag	~= tag then  
+            CloseMainUI();
+        end
         
         if( p.BtnFunc[1] == tag ) then       --人物
             PlayerUIAttr.LoadUI();
@@ -434,8 +430,9 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             Levy.LoadUI();
         elseif( p.BtnFunc[17] == tag ) then  --祭祀
             Fete.LoadUI();
-        elseif( p.BtnFunc[18] == tag ) then  --GM问题
-            GMProblemUI.LoadUI();
+        elseif( p.BtnFunc[18] == tag ) then  --占星--GM问题
+            --GMProblemUI.LoadUI();
+            MsgRealize.sendRealizeOp();
         elseif( p.BtnFunc[19] == tag ) then  --删号
             p.TestButtonClick();
         elseif( p.BtnFunc[20] == tag ) then  --退出

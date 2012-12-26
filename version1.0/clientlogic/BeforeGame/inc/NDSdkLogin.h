@@ -7,14 +7,14 @@
  *
  */
 
-#import <Foundation/Foundation.h>
-
-@interface NDSdkLogin : NSObject
-{
-	
-}
-
-- (void)LoginWithUser;
-- (void)LoginWith;
-
-@end
+//#import <Foundation/Foundation.h>
+//
+//@interface NDSdkLogin : NSObject
+//{
+//	
+//}
+//
+//- (void)LoginWithUser;
+//- (void)LoginWith;
+//
+//@end
