@@ -144,6 +144,7 @@ void NDWorldMapData::decode(FILE* stream)
 		FILE* f = fopen(imageName, "rb");
 		if (f)
 		{
+			fclose(f);
 			_tileImages.push_back(imageName);
 		}
 		else
@@ -217,6 +218,7 @@ void NDWorldMapData::decode(FILE* stream)
 		FILE* f = fopen(imageName, "rb");
 		if (f)
 		{
+			fclose(f);
 			kImages.push_back(imageName);
 		}
 		else
@@ -278,6 +280,7 @@ void NDWorldMapData::decode(FILE* stream)
 		FILE* f = fopen(imageName, "rb");
 		if (f)
 		{
+			fclose(f);
 			_sceneImages.push_back(imageName);
 		}
 		else
@@ -388,6 +391,7 @@ void NDWorldMapData::decode(FILE* stream)
 		FILE* pkFile = fopen(imageName, "rb");
 		if (pkFile)
 		{
+			fclose(pkFile);
 			NDPicture *pTile_pic = NDPicturePool::DefaultPool()->AddPicture(imageName);
 			pkPlaceNode->setTexture(pTile_pic->GetTexture());
 

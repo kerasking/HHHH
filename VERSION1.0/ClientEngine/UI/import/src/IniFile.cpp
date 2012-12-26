@@ -85,13 +85,13 @@ bool CIniFile::DecryptIniFile(char *strBuf, int iBufSize)
    
     memset(strBuf, 0, iBufSize);
     size_t nReadNum = fread(strBuf, 1, iBufSize, FileHandle);
+	fclose(FileHandle);
     if( nReadNum != size ) 
     { 
         return false;
     }
     
     size_t nResultNum = LuaStateMgrObj.GetState()->DecryptString((unsigned char* )strBuf, nReadNum);
-    fclose(FileHandle);   
     
     if (nResultNum != nReadNum)
     {
