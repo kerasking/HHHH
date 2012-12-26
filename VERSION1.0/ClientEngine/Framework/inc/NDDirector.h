@@ -215,8 +215,8 @@ public: //@android
 	float getResourceScale();
 
 	//只能用来缩放坐标
-	float getCoordScaleX() const;
-	float getCoordScaleY() const;
+	float getCoordScaleX();
+	float getCoordScaleY();
 
 #endif
 	
