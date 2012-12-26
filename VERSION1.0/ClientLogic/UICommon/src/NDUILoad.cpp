@@ -431,7 +431,10 @@ void NDUILoad::PostLoad(UIINFO& uiInfo)
 	//		 假设android的分辨率是800*480，然后再适配为android，也就是(0,0,800,480).
 
 	//统一到960*640
-	float scale = 2.0f;
+    float scale = 2.0f;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	scale = CC_CONTENT_SCALE_FACTOR();
+#endif
 	uiInfo.CtrlPos.x	*= scale;
 	uiInfo.CtrlPos.y	*= scale;
 	uiInfo.nCtrlWidth	*= scale;
