@@ -503,12 +503,12 @@ function p.DragEnd(itemBtnA, itemBtnB)
                 
                 if(nType1 == 0) then
                     if(nStatusType1 == nItemType2 and v ~= nId1 and v ~= nId2) then
-                        CommonDlgNew.ShowYesDlg(GetTxtPri("FAUI_T2"));
+                        CommonDlgNew.ShowYesDlg(GetTxtPri("DU_T27"));
                         return false;
                     end
                 else
                     if(nType1 == nType2 and v ~= nId1 and v ~= nId2) then
-                        CommonDlgNew.ShowYesDlg(GetTxtPri("FAUI_T2"));
+                        CommonDlgNew.ShowYesDlg(GetTxtPri("DU_T27"));
                         return false;
                     end
                 end

@@ -1293,13 +1293,11 @@ function p.OnUIEventViewChange(uiNode, uiEventType, param)
 end
 
 
-
-function p.OnCommonDlgDelFriend(nId, nEvent, param)
-	if nEvent == CommonDlg.EventOK then
-			MsgFriend.SendFriendDel(friendId,friendName);--删除好友         
-	end
+function p.OnCommonDlgDelFriend(nEventType , nEvent, param)
+    if(CommonDlgNew.BtnOk == nEventType) then
+         MsgFriend.SendFriendDel(friendId);  --删除好友  
+    end
 end	
-
 
 function p.ClickOtherPlayer(param1,param2,param3)
 	LogInfo("qbw:click other")

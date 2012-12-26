@@ -1254,6 +1254,22 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Destiny"
+			>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Destiny\define.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Destiny\DestinyFeteUI.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\Destiny\DestinyUI.lua"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\Bin\SimplifiedChineseRes\res\Script\DBLoad.lua"
 			>

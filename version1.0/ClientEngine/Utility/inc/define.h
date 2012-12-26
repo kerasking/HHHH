@@ -122,5 +122,7 @@ do \
 		return returnValue; \
 	}
 
+//是否为繁体版本的宏控制
+#define TRADITION
 
 #endif // __DEFINE_H__

@@ -164,11 +164,9 @@ NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *pa
 
 	NDUILoad_Util::FilterStringName(uiInfo);
 
+	//是否是繁体版的宏
 #ifdef TRADITION		
-	//		if (IsTraditionalChinese())
-	//		{
 	uiInfo.strText = uiInfo.strTextTradition;
-	//		}
 #endif
 
 	// 处理一下
