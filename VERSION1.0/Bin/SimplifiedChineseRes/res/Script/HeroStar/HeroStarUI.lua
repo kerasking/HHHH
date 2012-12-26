@@ -1226,7 +1226,7 @@ function p.SetAllStarBoundScale()
 			
 				if CheckP(StarBtn) then
 					----LogInfo("SetAllStarBoundScale "..nTag.." view:"..nGrade);
-					StarBtn:SetBoundScale(200);
+					StarBtn:SetBoundScale(1.5);
 				else
 				    --LogInfo("SetAllStarBoundScale fail nTag"..nTag.." view:"..nGrade);
 				end
