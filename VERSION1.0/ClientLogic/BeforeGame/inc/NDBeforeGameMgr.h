@@ -215,7 +215,7 @@ namespace NDEngine
 		
 		NDSocket m_SynSocket;
 		
-#if defined(USE_NDSDK)
+#if (defined(USE_NDSDK) && defined(__APPLE__))
 		NDSdkLogin *m_sdkLogin;
 #endif
 #if defined(USE_MGSDK)

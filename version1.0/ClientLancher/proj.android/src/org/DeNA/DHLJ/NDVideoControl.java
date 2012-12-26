@@ -10,7 +10,7 @@ import android.widget.MediaController;
 
 public class NDVideoControl extends MediaController implements OnCompletionListener
 {
-	protected Cocos2dxActivity m_pkCocos2dxActivity = null;
+	protected DaHuaLongJiang m_pkCocos2dxActivity = null;
 	
 	public NDVideoControl(Context context)
 	{
@@ -21,14 +21,14 @@ public class NDVideoControl extends MediaController implements OnCompletionListe
 	
 	public void setCocos2dxActivity(Cocos2dxActivity pkActivity)
 	{
-		m_pkCocos2dxActivity = pkActivity;
+		m_pkCocos2dxActivity = (DaHuaLongJiang)pkActivity;
 	}
 
 	public void onCompletion(MediaPlayer mp)
 	{
 		if (null != m_pkCocos2dxActivity)
 		{
-			m_pkCocos2dxActivity.m_pkView.setVisibility(View.GONE);
+			m_pkCocos2dxActivity.continueRootView();
 		}
 	}
 }
