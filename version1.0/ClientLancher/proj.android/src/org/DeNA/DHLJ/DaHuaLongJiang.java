@@ -79,6 +79,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	    		pkParamsButton.topMargin = y.intValue();
 	    		pkParamsButton.leftMargin = x.intValue();
 	    		balancebutton.setLayoutParams(pkParamsButton);
+	    		balancebutton.update();
 	    	    
 	        	balancebutton.setVisibility( View.VISIBLE );
 	        };   

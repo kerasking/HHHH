@@ -653,7 +653,7 @@ void NDTile::debugDraw()
 
 void NDTile::SetDrawRect_Android( CCRect rect, bool bBattleMap ) //@android
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
 	//android默认情况下以Y为主等比缩放
 	float fScaleAndroid = ANDROID_SCALE;
