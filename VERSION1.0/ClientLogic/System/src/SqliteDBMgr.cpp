@@ -59,14 +59,12 @@ CSqliteDBMgr::InitDataBase(const char* pszDBName)
 int  
 CSqliteDBMgr::SelectData(const char* pszSelectSql, int nColNum)
 {
-#if 0
-	tangziqin暂时注释
     m_setRowData.clear();
     if (!m_database) {
         return 0;
     }
     //连接数据库    
-    sqlite3_stmt *statement = nil;
+    sqlite3_stmt *statement = 0;
     if (sqlite3_prepare_v2(m_database, pszSelectSql, -1, &statement, NULL)!=SQLITE_OK) {
         return 0;
     }
@@ -83,11 +81,6 @@ CSqliteDBMgr::SelectData(const char* pszSelectSql, int nColNum)
     }
     sqlite3_finalize(statement);
     return nRowNum;
-#endif
-
-	return 0;
-
-
 }
 
 /////////////////////////////////////////////////////////
