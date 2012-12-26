@@ -172,6 +172,8 @@ void WorldMapLayer::Initialization(int nMapId)
 
 void WorldMapLayer::draw()
 {
+	if (!NDMapLayerLogic::canDrawWorldMapLayer()) return; //@opt
+
 	NDUILayer::draw();
 	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
@@ -483,6 +485,17 @@ void WorldMapLayer::Goto( int nMapId )
 	}
 	if (node && m_roleNode )//Guosen 2012.11.22可响应脚下节点//if (node && m_roleNode && m_curBtn != node)
 	{
+		if(m_curBtn == node)
+		{
+			//如果是脚下的点直接退出至主城
+			if(nMapId==1 || nMapId == 2)
+			{
+				m_bArrive = true;
+				NDMapMgrObj.WorldMapSwitch( nMapId );
+				return;
+			}
+		}
+
 		CCPoint posTarget = GetTargetPos(nMapId);
 		
 		SetMove(true);

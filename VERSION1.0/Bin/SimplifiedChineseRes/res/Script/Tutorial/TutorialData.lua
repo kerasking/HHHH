@@ -3666,16 +3666,16 @@ function p.BeginTemplete(layer)
         
         --添加提示文字
         if(taskItem.TxtPos) then
-            local nX,nY = p.GetJtRelativePos(taskItem.Dir.x*fScaleFactorX, taskItem.Dir.y*fScaleFactorY, taskItem.Dir.index);
+            local nX,nY = p.GetJtRelativePos(taskItem.Dir.x*CoordScaleX, taskItem.Dir.y*CoordScaleY, taskItem.Dir.index);
             p.CreateText(layer,taskItem.TxtPos.Txt,p.BoxTag,nX,nY,taskItem.Order);
         end
         
-        p.CreateAnimate(layer,taskItem.Dir.index,p.JtTag,taskItem.Dir.x*fScaleFactorX,taskItem.Dir.y*fScaleFactorY,taskItem.Order);
+        p.CreateAnimate(layer,taskItem.Dir.index,p.JtTag,taskItem.Dir.x*CoordScaleX,taskItem.Dir.y*CoordScaleY,taskItem.Order);
     end
     
     --添加光效
     if(taskItem.EffectPos) then
-        p.CreateAnimate(layer,taskItem.EffectPos.index,p.GxTag,taskItem.EffectPos.x*fScaleFactorX,taskItem.EffectPos.y*fScaleFactorY,taskItem.Order);
+        p.CreateAnimate(layer,taskItem.EffectPos.index,p.GxTag,taskItem.EffectPos.x*CoordScaleX,taskItem.EffectPos.y*CoordScaleY,taskItem.Order);
     end
     
 end

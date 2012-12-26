@@ -422,6 +422,7 @@ void NDMapData::decode(FILE* pkStream)
 
 		if (pkFile)
 		{
+			fclose(pkFile);
 			kTileImages.push_back(pszImageName);
 		}
 		else
@@ -531,6 +532,7 @@ void NDMapData::decode(FILE* pkStream)
 		FILE* pkFile = fopen(imageName, "rb");
 		if (pkFile)
 		{
+			fclose(pkFile);
 			kBackGroundImages.push_back(imageName);
 		}
 		else
@@ -601,6 +603,7 @@ void NDMapData::decode(FILE* pkStream)
 
 		if (pkFile)
 		{
+			fclose(pkFile);
 			kSceneImages.push_back(szImageName);
 		}
 		else
@@ -689,8 +692,8 @@ void NDMapData::decode(FILE* pkStream)
 		pkDict->insert(std::make_pair("reverse", 0));
 		pkDict->insert(std::make_pair("positionX", x));
 		pkDict->insert(std::make_pair("positionY", y));
-		pkDict->insert(std::make_pair("mapSizeW", m_nColumns * MAP_UNITSIZE_X));
-		pkDict->insert(std::make_pair("mapSizeH", m_nRows * MAP_UNITSIZE_Y));
+		pkDict->insert(std::make_pair("mapSizeW", int(m_nColumns * MAP_UNITSIZE_X)));
+		pkDict->insert(std::make_pair("mapSizeH", int(m_nRows * MAP_UNITSIZE_Y)));
 		pkDict->insert(std::make_pair("orderId", nAniOrder));
 		pkDict->insert(std::make_pair("reverse", 0));
 		pkDict->insert(std::make_pair("reverse", 0));
