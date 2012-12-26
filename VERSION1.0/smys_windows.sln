@@ -77,6 +77,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "more mk", "more mk", "{0A4E
 		cocos2d-x\CocosDenshion\android\Android.mk = cocos2d-x\CocosDenshion\android\Android.mk
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLite3", "SQLite3\proj.win32\libSQLite3.vcproj", "{0287C976-21E6-477F-960E-DD271E10F084}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -143,6 +145,10 @@ Global
 		{1F474F7C-B0EC-4A87-B1C8-89FC649103B8}.Debug|Win32.Build.0 = Debug|Win32
 		{1F474F7C-B0EC-4A87-B1C8-89FC649103B8}.Release|Win32.ActiveCfg = Release|Win32
 		{1F474F7C-B0EC-4A87-B1C8-89FC649103B8}.Release|Win32.Build.0 = Release|Win32
+		{0287C976-21E6-477F-960E-DD271E10F084}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0287C976-21E6-477F-960E-DD271E10F084}.Debug|Win32.Build.0 = Debug|Win32
+		{0287C976-21E6-477F-960E-DD271E10F084}.Release|Win32.ActiveCfg = Release|Win32
+		{0287C976-21E6-477F-960E-DD271E10F084}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
