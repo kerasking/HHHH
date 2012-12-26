@@ -453,26 +453,17 @@ float NDDirector::getResourceScale()
 #endif
 }
 
-//返回x方向资源缩放比例
-float NDDirector::getResourceScaleX()
+//返回x方向坐标缩放比例
+float NDDirector::getCoordScaleX()
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	return getAndroidScale().x; 
-#else
-	return 1;
-#endif
+	return getAndroidScale().x;
 }
 
-//返回y方向资源缩放比例
-float NDDirector::getResourceScaleY()
+//返回y方向坐标缩放比例
+float NDDirector::getCoordScaleY()
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	return  getAndroidScale().y; 
-#else
-	return 1;
-#endif
+	return getAndroidScale().y;
 }
-
 
 
 NS_NDENGINE_END
