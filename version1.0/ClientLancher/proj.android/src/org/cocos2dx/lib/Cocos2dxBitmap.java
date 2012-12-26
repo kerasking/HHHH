@@ -141,15 +141,16 @@ public class Cocos2dxBitmap
 		paint.setTextSize(pFontSize);
 		paint.setAntiAlias(true);
 		
-		Log.d("newPaint", "pFontName = " + pFontName);
-		Log.d("newPaint", "pFontSize = " + pFontSize);
-		Log.d("newPaint", "pHorizontalAlignment = " + pHorizontalAlignment);
+// 		Log.d("newPaint", "pFontName = " + pFontName);
+// 		Log.d("newPaint", "pFontSize = " + pFontSize);
+// 		Log.d("newPaint", "pHorizontalAlignment = " + pHorizontalAlignment);
+
 		/* Set type face for paint, now it support .ttf file. */
 		if (pFontName.endsWith(".ttf"))
 		{
-			Log.d("newPaint", "pFontName" + pFontName);
-			Log.d("newPaint", "pFontSize" + pFontSize);
-			Log.d("newPaint", "pHorizontalAlignment" + pHorizontalAlignment);
+// 			Log.d("newPaint", "pFontName" + pFontName);
+// 			Log.d("newPaint", "pFontSize" + pFontSize);
+// 			Log.d("newPaint", "pHorizontalAlignment" + pHorizontalAlignment);
 
 			try
 			{
@@ -159,8 +160,7 @@ public class Cocos2dxBitmap
 				paint.setTypeface(typeFace);
 			} catch (final Exception e)
 			{
-				Log.e("Cocos2dxBitmap", "error to create ttf type face: "
-						+ pFontName);
+//				Log.e("Cocos2dxBitmap", "error to create ttf type face: " + pFontName);
 
 				/* The file may not find, use system font. */
 				paint.setTypeface(Typeface.create(pFontName, Typeface.NORMAL));
@@ -548,9 +548,10 @@ public class Cocos2dxBitmap
 		int w = (int) Math.ceil(paint.measureText(pString)); 
 		final FontMetricsInt fm = paint.getFontMetricsInt();
 		int h = (int) Math.ceil(fm.bottom - fm.top);
-		Log.e("Cocos2dxActivity", String.valueOf(w)+" " +String.valueOf(h) + " " + pFontName+" " +String.valueOf(pFontSize));
+
+		//Log.e("Cocos2dxActivity", String.valueOf(w)+" " +String.valueOf(h) + " " + pFontName+" " +String.valueOf(pFontSize));
 		int combine = h*10000+w;
-		Log.e("Cocos2dxActivity", String.valueOf(combine));
+		//Log.e("Cocos2dxActivity", String.valueOf(combine));
 		return String.valueOf(w)+" " +String.valueOf(h);
 	}
 }

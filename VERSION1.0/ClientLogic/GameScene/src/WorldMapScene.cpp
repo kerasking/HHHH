@@ -172,6 +172,8 @@ void WorldMapLayer::Initialization(int nMapId)
 
 void WorldMapLayer::draw()
 {
+	if (!NDMapLayerLogic::canDrawWorldMapLayer()) return; //@opt
+
 	NDUILayer::draw();
 	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 

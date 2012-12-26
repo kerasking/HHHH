@@ -61,6 +61,7 @@ function p.LoadUI()
     layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.DragonTactic);
+	layer:SetDebugName( "DragonTactic" ); --@opt
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 

@@ -24,6 +24,7 @@ class NDMapLayerLogic:
 public:
 	NDMapLayerLogic();
 	~NDMapLayerLogic();
+
 public:
 	void DidFinishLaunching();
 
@@ -33,6 +34,17 @@ public:
 	void TouchMoved(NDTouch* touch);
 	void Update(unsigned long ulDiff);
 	void OnTimer(OBJID uiTag);
+
+	virtual void draw();
+
+	//@opt: 性能优化相关，暂时放这儿.
+public:
+	static bool IsWorldMapVisible();
+	static bool hasFullScreenOpaqueUI();
+	static bool isFullScreenOpaqueUI( const char* layerName );
+	static bool canDrawMapLayer();
+	static bool canDrawWorldMapLayer();
+
 private:
 
 	NDTimer m_kTimer;
@@ -46,7 +58,6 @@ private:
 	bool IsLongTouch();
 	void SetPathing(bool bPathing);
 	bool IsPathing();
-	bool IsWorldMapVisible();
 };
 
 NS_NDENGINE_END
