@@ -328,6 +328,7 @@ LuaObject LuaState::GetRegistry()
 	return LuaObject(this, LUA_REGISTRYINDEX);  //{  lua_getregistry(m_state);
 }
 
+//ND_MOD
 int LuaState::DoFile( const char *filename)
 {
 	if (IsLuaFile(filename))
@@ -340,6 +341,8 @@ int LuaState::DoFile( const char *filename)
 	}
 	return 0;
 }
+
+//ND_MOD
 /************************************************************************************************************
  Function:         DoLoadFile
  Description:	   lua通过文件名加载文件
@@ -381,6 +384,8 @@ int LuaState::DoLoadFile( const char *filename)
     
 	return 0;   
 }  
+
+//ND_MOD
 /************************************************************************************************************
  Function:         IsLuaFile
  Description:    
@@ -417,6 +422,8 @@ bool LuaState::IsLuaFile(const char* pszluaFile)
     }
     return false;
 }   
+
+//ND_MOD
 /************************************************************************************************************
  Function:         LoadFileBuf
  Description:      以加载buf方式加载文件
@@ -428,10 +435,9 @@ bool LuaState::IsLuaFile(const char* pszluaFile)
  ************************************************************************************************************/
 int LuaState::LoadFileBuf(const char* pszluaFile)
 {
-    char *strBuf = new char[1024*1024];
-    size_t size = 0;
-    FILE *FileHandle = NULL;
-    FileHandle = fopen(pszluaFile, "rb");
+	if (!pszluaFile || pszluaFile[0] == 0) return 0;
+    FILE *FileHandle = fopen(pszluaFile, "rb");
+	
     
     //如果读取不到文件更换文件后缀再试
     if ( FileHandle == NULL) 
@@ -441,9 +447,9 @@ int LuaState::LoadFileBuf(const char* pszluaFile)
         //读取后缀名字
         if (iFileTileLen > 3)
         {
-            char *strNewFileName = new char[1024]; 
-            char strTemp[8];  
-            char strAddName[8];  
+			char strNewFileName[1024] = {0};
+			char strTemp[8] = {0};  
+			char strAddName[8] = {0};  
             memset(strTemp, 0, sizeof(strTemp));
             memset(strAddName, 0, sizeof(strAddName));    
             memset(strNewFileName, 0, 1024);
@@ -461,37 +467,41 @@ int LuaState::LoadFileBuf(const char* pszluaFile)
             strncpy(strNewFileName + iFileTileLen - 3, strAddName, 3);
           //  strcat(strNewFileName, strAddName);
             FileHandle = fopen(strNewFileName, "rb");
-            delete []strNewFileName;
-        }
-        
-        if (FileHandle == NULL)
-        {
-            delete []strBuf;
-            strBuf = NULL;
-            return 0;
         }
     } 
     
+	if (FileHandle == NULL)
+	{
+		return 0;
+	}
+
+	// get file len
     fseek (FileHandle, 0, SEEK_END);
-    size = ftell(FileHandle);
+    size_t filesize = ftell(FileHandle);
     fseek(FileHandle, 0, SEEK_SET);
     
-    size_t nReadNum = fread(strBuf, 1, 1024*1024, FileHandle);
-    
-    if( nReadNum != size ) 
+	// read file
+	int buflen = filesize + 1;
+	char *strBuf = new char[buflen];
+    size_t nReadNum = fread(strBuf, 1, filesize, FileHandle);
+    fclose(FileHandle);
+
+    if( nReadNum != filesize ) 
     { 
         delete []strBuf;
         strBuf = NULL;
         return 0;
     }
     
-    nReadNum = DecryptString((unsigned char* )strBuf, nReadNum);
-    
+	//DecryptString
+    nReadNum = DecryptString((unsigned char* )strBuf, filesize);
     DoBuffer((const char*)strBuf, nReadNum, pszluaFile); 
+    delete []strBuf;
     
-    fclose(FileHandle);
     return 1;
 }  
+
+//ND_MOD
 /************************************************************************************************************
  Function:         DecryptString
  Description:	   文本解密代码

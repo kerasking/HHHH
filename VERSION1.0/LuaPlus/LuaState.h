@@ -249,11 +249,14 @@ public:
 	LuaStackObject GetDefaultMetaTable(int type);
 	void SetDefaultMetaTable(int type);
 
-public:
+	//ND_MOD
+	//----------------------------------------------------<<
+public: 
 	int DecryptString(unsigned char* buf, int len);
 	int LoadFileBuf(const char* pszluaFile);
 	int DoLoadFile( const char *filename);
 	bool IsLuaFile(const char* pszluaFile);
+	//---------------------------------------------------->>
 
 protected:
 	friend class LuaObject;
