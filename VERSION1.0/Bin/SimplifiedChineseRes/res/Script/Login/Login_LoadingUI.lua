@@ -72,6 +72,7 @@ end
 function p.SetProcess(nPercent)
     local LoadingProcess = p.GetProcessCtrl();
     if CheckP(LoadingProcess) then
+        LogInfo("nPercent:[%d]",nPercent);
         LoadingProcess:SetProcess(nPercent);
     end
 end
@@ -93,10 +94,10 @@ function p.OnProcessTimer(nTag)
 		return;
 	end
 	
-	local nCurProcess	= ConvertN(LoadingProcess:GetProcess());
+    local nCurProcess	= ConvertN(LoadingProcess:GetProcess());
 	local nTotal		= ConvertN(LoadingProcess:GetTotal());
-	--LogInfo("Login_LoadingUI: OnProcessTimer() nCurProcess:%d",nCurProcess);
-	nCurProcess			= nCurProcess + 5;--(nCurProcess + 5) % nTotal
+	--LogInfo("Login_LoadingUI: OnProcessTimer() nCurProcess:%d,nTotal:[%d]",nCurProcess,nTotal);
+	nCurProcess			= nCurProcess + 4;--(nCurProcess + 5) % nTotal
 	if ( nCurProcess > nTotal ) then
 		nCurProcess = nTotal;
 	end

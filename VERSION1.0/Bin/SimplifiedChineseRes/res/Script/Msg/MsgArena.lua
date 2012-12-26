@@ -12,7 +12,7 @@ local MSG_SPORTS_ACT_QUERY_FRONT=2;
 local MSG_SPORTS_ACT_CHALLENGE=3;
 local MSG_SPORTS_ACT_CLEAR_TIME = 4;
 local MSG_SPORTS_ACT_ADD_NUM = 5;
-
+local MSG_SPORTS_ACT_REPOR = 6;
 
 --** chh 2012-07-11 **--
 p.areaPkCount = 0;
@@ -32,43 +32,32 @@ end
 
 function p.ProcessArenaInfo(netdatas)
 	local rank=netdatas:ReadInt();
-    --LogInfo("+++++++++++++++rank[%d]+++++++++++++++++",rank);
 	local restCount=netdatas:ReadByte();
-    --LogInfo("+++++++++++++++restCount[%d]+++++++++++++++++",restCount);
 	local addedCount=netdatas:ReadShort();
-    LogInfo("+++++++++++++++addedCount[%d]+++++++++++++++++",addedCount);
 	local cdTime=netdatas:ReadInt();
-    LogInfo("+++++++++++++++cdTime[%d]+++++++++++++++++",cdTime);
 	local awardTime=netdatas:ReadInt();
-    --LogInfo("+++++++++++++++awardTime[%d]+++++++++++++++++",awardTime);
 	netdatas:ReadInt();
 	netdatas:ReadInt();
     local winCount=netdatas:ReadInt();
-    --LogInfo("+++++++++++++++winCount[%d]+++++++++++++++++",winCount);
 	local userCount=netdatas:ReadByte();
-    --LogInfo("+++++++++++++++userCount[%d]+++++++++++++++++",userCount);
 	local reportCount=netdatas:ReadByte();
-   --LogInfo("+++++++++++++++reportCount[%d]+++++++++++++++++",reportCount);
-	local name=netdatas:ReadUnicodeString();
-    --LogInfo("+++++++++++++++name[%s]+++++++++++++++++",name);
-    
-    --成功进入竞技场战斗
-    if cdTime == 180 then
-    	--引导任务事件触发
-		GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.SPORT);
-    end
+    if(userCount>0) then
+        --成功进入竞技场战斗
+        if cdTime == 180 then
+            --引导任务事件触发
+            GlobalEvent.OnEvent(GLOBALEVENT.GE_GUIDETASK_ACTION,TASK_GUIDE_PARAM.SPORT);
+        end
         
-	if not IsUIShow(NMAINSCENECHILDTAG.Arena) then
-        CloseLoadBar();
-		ArenaUI.LoadUI();		
+        if not IsUIShow(NMAINSCENECHILDTAG.Arena) then
+            CloseLoadBar();
+            ArenaUI.LoadUI();		
+        end
+        
+        ArenaUI.RefreshUI();
+        ArenaUI.SetTimerNum(awardTime);
+        ArenaUI.SetSelfInfo(rank,restCount,addedCount,cdTime,winCount);
 	end
-	
-    ArenaUI.RefreshUI();
-	ArenaUI.SetTimerNum(awardTime);
-	
-	ArenaUI.SetSelfInfo(rank,restCount,addedCount,cdTime,winCount);
-	
-	ArenaUI.CleanChallengeList();
+    
     LogInfo("p.ProcessArenaInfo %d",userCount);
     
     local lst = {};
@@ -83,28 +72,50 @@ function p.ProcessArenaInfo(netdatas)
         table.insert(lst,obj);
 		--ArenaUI.SetChallengeList(i,id,user_name,level,rank,lookface);
 	end
-    
-    ArenaUI.RefreshRankList(lst);
-	
-	ArenaUI.CleanReport()
-	for i=1, reportCount do
-		local id_user=netdatas:ReadInt();
-		local id_battle=netdatas:ReadInt();
-		local time=netdatas:ReadInt();
-		local rankChange=netdatas:ReadInt();
-		local win=netdatas:ReadByte();--0为失败，1为胜利
-		local battle_type=netdatas:ReadByte();--0为被挑战方，非0为挑战方
-		local user_name=netdatas:ReadUnicodeString();
-		LogInfo("showReport:%d",id_battle);
-		ArenaUI.SetReportInfo(i,user_name,battle_type,win,time,rankChange,id_battle);
-	end
-    
-    ArenaUI.SetButtonVisible(reportCount);
-    
 
+    if(userCount>0) then
+        ArenaUI.CleanChallengeList();
+        ArenaUI.RefreshRankList(lst);
+    end
+    
+    local report_lst = {};
+    LogInfo("reportCount:[%d]",reportCount);
+	for i=1, reportCount do
+        local report = {};
+		report.id_user=netdatas:ReadInt();
+		report.id_battle=netdatas:ReadInt();
+		report.time=netdatas:ReadInt();
+		report.rankChange=netdatas:ReadInt();
+		report.win=netdatas:ReadByte();--0为失败，1为胜利
+		report.battle_type=netdatas:ReadByte();--0为被挑战方，非0为挑战方
+		LogInfo("report.id_user:[%d],report.id_battle:[%d],report.time:[%d],report.rankChange:[%d],report.win:[%d],report.battle_type:[%d]",report.id_user,report.id_battle,report.time,report.rankChange,report.win,report.battle_type);
+        report.user_name=netdatas:ReadUnicodeString();
+        table.insert(report_lst,report);
+		--ArenaUI.SetReportInfo(i,user_name,battle_type,win,time,rankChange,id_battle);
+	end
+    ArenaUI.RefreshRefresh( report_lst );
+    
+    --前一争夺战
     
 end
 
+
+function p.ProcessRecord(netdatas)
+    LogInfo("p.ProcessRecord");
+    local report_lst = {};
+    local nCount=netdatas:ReadByte();
+    LogInfo("p.ProcessRecord:nCount:[%d]",nCount);
+    for i=1, nCount do
+        local report = {};
+		report.id_battle=netdatas:ReadInt();
+		report.time=netdatas:ReadInt();
+        netdatas:ReadByte();
+        report.user_name1=netdatas:ReadUnicodeString();
+        report.user_name2=netdatas:ReadUnicodeString();
+        table.insert(report_lst,report);
+	end
+    ArenaUI.RefreshRecord( report_lst );
+end
 
 function p.ProcessArenaRankInfo(netdatas)
      LogInfo("+++++++++++++++p.ProcessArenaRankInfop.ProcessArenaRankInfo+++++++++++++++++")
@@ -194,6 +205,19 @@ function p.SendWatchBattle(battle_id)
 	netdata:Free();
 end
 
+--打开我的战报
+function p.SendOpenReport()
+	local netdata = createNDTransData(NMSG_Type._MSG_SPORTS);
+	if nil == netdata then
+		return false;
+	end
+	netdata:WriteByte(MSG_SPORTS_ACT_REPOR);
+	netdata:WriteInt(0);
+	SendMsg(netdata);
+    ShowLoadBar();
+	netdata:Free();
+end
+
 function p.ProcessArenaUpdate(netdatas)
   LogInfo("+++++++++++++++p.ProcessArenaUpdatep.ProcessArenaUpdate+++++++++++++++++")
  local action = netdatas:ReadByte();
@@ -207,6 +231,11 @@ function p.ProcessArenaUpdate(netdatas)
 	if IsUIShow(NMAINSCENECHILDTAG.Arena) then
 		ArenaUI.updateCount(netdatas:ReadByte());
 	end
+ elseif action == MSG_SPORTS_ACT_REPOR then
+	if IsUIShow(NMAINSCENECHILDTAG.Arena) then
+		ArenaUI.OpenReport();
+        CloseLoadBar();
+	end
  end
 end
 
@@ -216,3 +245,4 @@ RegisterNetMsgHandler(NMSG_Type._MSG_SPORTS_COUNT,"p.ProcessArenaPKCount",p.Proc
 RegisterNetMsgHandler(NMSG_Type._MSG_SPORTS,"p.ProcessArenaUpdate",p.ProcessArenaUpdate);
 RegisterNetMsgHandler(NMSG_Type._MSG_SPORTS_INFO, "p.ProcessArenaInfo", p.ProcessArenaInfo);
 RegisterNetMsgHandler(NMSG_Type._MSG_SPORTS_FRONT_INFO, "p.ProcessArenaRankInfo", p.ProcessArenaRankInfo);
+RegisterNetMsgHandler(NMSG_Type._MSG_SPORTS_FRONT_RECORD, "p.ProcessRecord", p.ProcessRecord);

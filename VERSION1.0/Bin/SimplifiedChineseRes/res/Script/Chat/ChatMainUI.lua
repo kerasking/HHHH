@@ -134,7 +134,7 @@ end
 
 
 function p.LoadUI()
-	--如果已经打开则返回
+    --如果已经打开则返回
 	if IsUIShow(NMAINSCENECHILDTAG.ChatMainUI) then
 		LogInfo("已经打开则返回");
 		return;
@@ -208,7 +208,7 @@ function p.LoadUI()
 	scroll:SetLuaDelegate(p.OnUIEventContainer);
 	
 	
-	container:AddChild(scroll);
+    container:AddChild(scroll);
 	container:EnableScrollBar(true);
 	
 	contentHight=0;
@@ -353,7 +353,7 @@ function p.AddChatText(speakerId,channel,speaker,text)
 		chatText:SetContentWidth(winsize.w*0.85);
 		
 		local color = p.ColorChannel[channel];
-		chatText:SetContent(speakerId,channel,speaker,text,1,12,color);
+		chatText:SetContent(speakerId,channel,speaker,text,1,8,color);
 		
 		--chatText:SetContent(speakerId,channel,speaker,text,1,9,ccc4(0,0,255,255));
 		
@@ -481,7 +481,7 @@ function p.OnUIEventInputA(uiNode, uiEventType, param)
 				
 				if MsgArmyGroup.GetUserArmyGroupID(nPlayerId) == nil then
 					--无军团则提示
-					ChatDataFunc.AddChatRecord(nPlayerId,ChatDataFunc.GetChannelByChatType(currentChatType),0,GetTxtPub("system"),GetTxtPri("CMUI_T12"));
+					ChatDataFunc.AddChatRecord(nPlayerId,ChatDataFunc.GetChannelByChatType(currentChatType),0,GetTxtPub("system"),GetTxtPri("MCUI2_T1"));
 				else
 					_G.MsgChat.SendTalkMsg(ChatDataFunc.GetChannelByChatType(currentChatType),text);
 				end
@@ -741,7 +741,7 @@ function p.OnUIEventInfoList(uiNode, uiEventType, param)
 			--查看资料
 			CheckOtherPlayerBtn.LoadUI(nCheckPlayerId);
 			MsgFriend.SendFriendSel(nCheckPlayerId,sCheckPlayerName);
-			p.CloseInfoLayer();
+            p.CloseInfoLayer();
 		elseif tag == ID_TALK_LIST_CTRL_BUTTON_12 then
 			--加好友
 			if FriendFunc.IsExistFriend(nCheckPlayerId)  then
@@ -749,7 +749,7 @@ function p.OnUIEventInfoList(uiNode, uiEventType, param)
 			else
 				FriendFunc.AddFriend(nCheckPlayerId,sCheckPlayerName); --加为好友 
 			end
-			p.CloseInfoLayer();
+            p.CloseInfoLayer();
 		end
 				
 	

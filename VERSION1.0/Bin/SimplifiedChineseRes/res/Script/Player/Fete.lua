@@ -73,6 +73,7 @@ function p.refreshBtn()
      
 end
 
+
 --获得祭祀ID根据类型
 function p.GetFeteIdByType( nType )
     for i,v in ipairs(p.mList) do
@@ -141,7 +142,6 @@ function p.getUiLayer()
 
     return layer;
 end
-
 function p.processSacrificeList(netdata)
     local nAction = netdata:ReadByte(); --类型：1.取列表 2.返回结果
     
@@ -164,8 +164,8 @@ function p.processSacrificeList(netdata)
         local nEMoney       = netdata:ReadInt();    --暴击金额
         local nType         = netdata:ReadInt();    --祭祀类型:1,2,3,4
         
-        local sTxt1 = "倍暴击，获得";
-        local sTxt2 = "获得";
+        local sTxt1 = GetTxtPri("PLAYER_T5");
+        local sTxt2 = GetTxtPri("PLAYER_T6");
         local sTxt3;
         if nType == 1 then
             sTxt3 = GetTxtPub("coin");
@@ -174,7 +174,7 @@ function p.processSacrificeList(netdata)
         elseif nType == 3 then
             sTxt3 = GetTxtPub("ShenWan");
         elseif nType == 4 then
-            sTxt3 = "个宝石";
+            sTxt3 = GetTxtPri("PUIA_T8");
         end
         
         local sTxt;
@@ -241,4 +241,3 @@ function p.refresh()
 end
 
 RegisterNetMsgHandler(NMSG_Type._MSG_SACRIFICE_INFO_LIST, "p.processSacrificeList", p.processSacrificeList);
-

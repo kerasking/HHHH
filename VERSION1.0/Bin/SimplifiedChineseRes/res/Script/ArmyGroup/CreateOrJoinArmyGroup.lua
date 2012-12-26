@@ -34,11 +34,11 @@ local ID_CREATEDLG_EDIT_INPUT			= 104;	-- 输入框
 local AG_CREATE_LEVEL					= 30;	-- 允许创建军团等级
 local AG_NAME_CHA_LIMIT					= 7;	-- 限制军团昵称字数
 local AG_CREATE_COST					= 200000;-- 创建军团费用-20万银币
-local SZ_CREATE_TIPS					= GetTxtPri("COJAG2_T1");
-local SZ_CREATE_ER						= GetTxtPri("COJAG2_T2");
-local SZ_CREATE_LEVEL					= GetTxtPri("COJAG2_T3");
-local SZ_CREATE_ER00					= GetTxtPri("COJAG2_T4");
-local SZ_APPLY_ER00						= GetTxtPri("COJAG2_T5");
+local SZ_CREATE_TIPS					= GetTxtPri("COAG_T1");
+local SZ_CREATE_ER						= GetTxtPri("COAG_T2");
+local SZ_CREATE_LEVEL					= GetTxtPri("COAG_T3");
+local SZ_CREATE_ER00					= GetTxtPri("COAG_T4");
+local SZ_APPLY_ER00						= GetTxtPri("COAG_T5");
 
 ---------------------------------------------------
 p.pLayerCreateOrJoinArmyGroup	= nil;

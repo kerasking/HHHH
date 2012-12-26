@@ -172,10 +172,10 @@ function p.SetResult(result,money,repute)
         
         local str = nil;
         if result ==1 then --胜利
-            str = string.format("恭喜你获胜了！");
+            str = string.format(GetTxtPri("ARU2_T7"));
             Music.PlayEffectSound(1094);
         elseif result ==0 then --失败
-            str = string.format("可惜呀！战斗失败了。");
+            str = string.format(GetTxtPri("ARU2_T8"));
             Music.PlayEffectSound(1093);
         end
         
@@ -185,7 +185,7 @@ function p.SetResult(result,money,repute)
         	CommonDlgNew.ShowYesDlg(str, p.ReviveCallbackArmyBattleFail, nil,3);
         end
         
-                
+
     else
         LogInfo("+++++++++++result[%d]+++++++++++",result);
         local layer=p.GetParent();
@@ -253,6 +253,7 @@ end
 function p.CloseBattle()
     local scene = GetSMGameScene();
     CloseBattle();
+	BattleUI_Title.CloseUI();--
     if scene~= nil then
         scene:RemoveChildByTag(NMAINSCENECHILDTAG.ArenaRewardUI,true);
         return true;
@@ -267,7 +268,7 @@ function p.OnUIEvent(uiNode,uiEventType,param)
         if ID_FIGHTEVALUATE_CTRL_BUTTON_CONFIRM == tag then
             LogInfo("on event tag = %d",tag);
             p.CloseBattle();
-
+            
 
     	elseif ID_FIGHTEVALUATE_CTRL_BUTTON_PLAYBACK == tag then
 

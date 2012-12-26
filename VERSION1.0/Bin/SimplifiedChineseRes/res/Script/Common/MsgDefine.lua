@@ -54,7 +54,7 @@ NMSG_Type =
     _MSG_REALIZE_OP                 = _MSG_GENERAL + 3537,  -- 打开
     
 
-	_MSG_ROLE_TRAIN_GET				= _MSG_GENERAL + 3506,
+    _MSG_ROLE_TRAIN_GET				= _MSG_GENERAL + 3506,
 	_MSG_ROLE_TRAIN_TRAIN			= _MSG_GENERAL + 3507,
 	_MSG_ROLE_TRAIN_COMMIT			= _MSG_GENERAL + 3508,
 	_MSG_EQUIP_UPD_CD_LST			= _MSG_GENERAL + 3522,
@@ -92,6 +92,7 @@ NMSG_Type =
 	_MSG_SPORTS_FRONT_INFO			= _MSG_GENERAL + 3004,
 	_MSG_SPORTS_WATCH_BATTLE		= _MSG_GENERAL + 3010,
     _MSG_SPORTS_COUNT               = _MSG_GENERAL + 3013,  --获得PK剩余次数 chh 2012-07-11
+    _MSG_SPORTS_FRONT_RECORD        = _MSG_GENERAL + 3014,  --第一名争夺战
 	_MSG_DAILY_ACTIVITY_LIST		= _MSG_GENERAL + 3557,
 	_MSG_START_BOSS_BATTLE			= _MSG_GENERAL + 3558,
 	_MSG_INSANCING_LEAVE			= _MSG_GENERAL + 3545,
@@ -167,7 +168,10 @@ NMSG_Type =
 
     
     _MSG_AG_USERINFO					= 2338,		-- 玩家的军团的属性更改
-    _MSG_ARMYGROUP					= 2302,		-- 军团消息
+    _MSG_ARMYGROUP						= 2302,		-- 军团消息
+    --
+    _MSG_GetDistributeHistory			= 2339,
+    _MSG_DistributeHistory				= 2340,
     --
 	_MSG_CLIENT_VERSION				= 60008,	--版本验证
 	_MSG_MPF_VERSION				= 60009,	--新版本验证
@@ -186,7 +190,7 @@ NMSG_Type =
     _MSG_PLAYER_ACTION_OPERATE   =   _MSG_GENERAL + 7002,               --活动操作
 
     _MSG_BATTLE_ENCOURAGE   =   _MSG_GENERAL + 7004,                    --鼓舞
-
+    _MSG_ADDTION            =   _MSG_GENERAL + 7005,                    --pvp属性加成查询
 
 	--==================大乱斗=====================--
     _MSG_CHAOSBATTLE_BOARD				= _MSG_GENERAL+8000,	--大乱斗活动板信息
@@ -199,9 +203,9 @@ NMSG_Type =
     _MSG_CHAOSBATTLE_UPDATEPLAYERINFO	= _MSG_GENERAL+8007,	--更新玩家信息
     _MSG_CHAOSBATTLE_ACTION             = _MSG_GENERAL+8050,	--大乱斗操作
     _MSG_CHAOSBATTLE_ACTION_RET         = _MSG_GENERAL+8051,	--大乱斗操作返回
-
-
-	--==================军团战=====================--
+    
+    
+    --==================军团战=====================--
     _MSG_SYNDICATEBATTLE_ACTION         = _MSG_GENERAL+8100,    --军团战动作
     _MSG_SYNDICATEBATTLE_ACTION_RET     = _MSG_GENERAL+8101,    --军团战动作返回
     _MSG_SYNDICATEBATTLE_SIGNUP_INFO    = _MSG_GENERAL+8102,    --军团战报名信息

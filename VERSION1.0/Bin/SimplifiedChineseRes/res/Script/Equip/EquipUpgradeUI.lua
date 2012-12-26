@@ -202,8 +202,6 @@ function p.LoadUI(page)
 	if layer == nil then
 		return false;
 	end
-	
-	--layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.EquipUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
@@ -315,7 +313,7 @@ function p.LoadUI(page)
 	layerGemView:Init();
 	layerGemView:SetTag(GEMINFO);
 	layerGemView:SetFrameRect(RectFullScreenUILayer);
-    layerGemView:SetVisible(false);
+    	layerGemView:SetVisible(false);
 	layer:AddChildZ(layerGemView,1);
     
     local uiLoad = createNDUILoad();
@@ -371,7 +369,6 @@ function p.LoadGemInfo(nGemId, nType)
     if(nGemId==0) then
         return;
     end
-    
     local layer             = p.GetGemInfoLayer();
     if(layer == nil) then
         LogInfo("p.LoadGemInfo layer is nil!");
@@ -846,7 +843,6 @@ function p.AddPetEquipItem(petId)
         for j, v in ipairs(equipIdList) do
             local equipId = equipIdList[j];
             local view = createUIScrollViewM();
-            --view:SetPopupDlgFlag(true);
             view:Init(false);
             view:SetViewId(equipId);
             
@@ -1780,7 +1776,6 @@ function p.LoadGemPageView()
 			LogInfo("p.LoadUI createUIScrollView failed");
 			return;
 		end
-		--view:SetPopupDlgFlag(true);
 		view:Init(false);
 		view:SetViewId(i);
 		container:AddView(view);
@@ -1821,7 +1816,6 @@ function p.LoadGemBagView()
 			LogInfo("p.LoadUI createUIScrollView failed");
 			return;
 		end
-		--view:SetPopupDlgFlag(true);
 		view:Init(false);
 		view:SetViewId(i);
 		container:AddView(view);
@@ -2221,5 +2215,3 @@ GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"EquipUpgradeUI.refreshMoney",p.re
 GameDataEvent.Register(GAMEDATAEVENT.ITEMINFO,"EquipUpgradeUI.RestartRefreshGemList",p.RestartRefreshGemList);
 GameDataEvent.Register(GLOBALEVENT.GE_ITEM_UPDATE,"EquipUpgradeUI.RestartRefreshGemList",p.RestartRefreshGemList);
 GameDataEvent.Register(GAMEDATAEVENT.ITEMATTR,"EquipUpgradeUI.RestartRefreshGemList",p.RestartRefreshGemList);
-
-

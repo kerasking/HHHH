@@ -416,5 +416,3 @@ RegisterNetMsgHandler( NMSG_Type._MSG_RECEIED_LETTER, "p.ProcessReceiedLetter", 
 RegisterNetMsgHandler( NMSG_Type._MSG_LETTER_INFO, "p.ProcessLetterInfo", p.ProcessLetterInfo );
 RegisterNetMsgHandler( NMSG_Type._MSG_LETTER_REQUEST, "p.ProcessLetterRequest", p.ProcessLetterRequest );
 RegisterNetMsgHandler( NMSG_Type._MSG_SENDLETTER, "p.ProcessSendLetter", p.ProcessSendLetter );
-
-

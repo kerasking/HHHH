@@ -94,7 +94,6 @@ function p.LoadUI()
 		return false;
 	end
 	layer:Init();
-	--layer:SetDebugName( "topBar" );
 	layer:SetFrameRect(RectTopUILayer);
 	layer:SetTag(NMAINSCENECHILDTAG.MainUITop );
     
@@ -157,7 +156,7 @@ function p.LoadUI()
     end
     
     --p.SetTimerShowTrackTip()	
-  
+     
 	return;
 end
 
@@ -358,7 +357,7 @@ function p.Coinformat(nMoney)
 		nYi = math.floor(nMoneyTmp/100000000);
 	end
 	if nYi > 0 then
-		str = nYi..GetTxtPri("Common_hm");
+		str = nYi.."亿";
 	end
 	--]]
 		

@@ -213,6 +213,11 @@ public:
 public: //@android
 	CCPoint getAndroidScale() const;
 	float getResourceScale();
+
+	//新加两个函数用于lua中新手指引
+	float getResourceScaleX();
+	float getResourceScaleY();
+
 #endif
 	
 private:

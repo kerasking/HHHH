@@ -503,12 +503,12 @@ function p.DragEnd(itemBtnA, itemBtnB)
                 
                 if(nType1 == 0) then
                     if(nStatusType1 == nItemType2 and v ~= nId1 and v ~= nId2) then
-                        CommonDlgNew.ShowYesDlg(GetTxtPri("BLTW_T2"));
+                        CommonDlgNew.ShowYesDlg(GetTxtPri("FAUI_T2"));
                         return false;
                     end
                 else
                     if(nType1 == nType2 and v ~= nId1 and v ~= nId2) then
-                        CommonDlgNew.ShowYesDlg(GetTxtPri("BLTW_T2"));
+                        CommonDlgNew.ShowYesDlg(GetTxtPri("FAUI_T2"));
                         return false;
                     end
                 end
@@ -1276,7 +1276,11 @@ function p.LoadBackBagUI()
 		LogInfo("p.LoadBackBagUI nil == rectview");
 		return;
 	end
-	
+	    
+    --禁止滚动框滚动
+	container:SetLeftReserveDistance(10000);
+    container:SetRightReserveDistance(10000);
+    
 	container:SetViewSize(rectview.size);
     container:ShowViewByIndex(0);
     

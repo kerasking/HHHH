@@ -2,3 +2,5 @@
 DoFile("CommonDlg/CommonDlg.lua");
 
 DoFile("CommonDlg/CommonDlgNew.lua");
+
+DoFile("CommonDlg/CommonScrollDlg.lua");

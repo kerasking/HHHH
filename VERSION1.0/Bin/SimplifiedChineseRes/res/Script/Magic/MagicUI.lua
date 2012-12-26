@@ -366,9 +366,9 @@ function p.refreshMatrixItem(matrix, view, viewIds)
 	
 		local sName = MatrixConfigFunc.GetDataBaseS(type,DB_MATRIX_CONFIG.NAME);
 		local sDes = MatrixConfigFunc.GetDataBaseS(type, DB_MATRIX_CONFIG.DESCRIPT);
-		local sLevel = string.format(" %d"..GetTxtPri("Common_Level"), MatrixConfigFunc.GetUpLevelN(level, DB_MATRIX_UP_LEVEL.LEVEL));
+		local sLevel = string.format(" %d级", MatrixConfigFunc.GetUpLevelN(level, DB_MATRIX_UP_LEVEL.LEVEL));
 		local uLevel = MatrixConfigFunc.GetUpLevelN(level + 1, DB_MATRIX_UP_LEVEL.USER_LEVEL);
-		local suLevel = string.format("%d"..GetTxtPri("Common_Level"), uLevel);
+		local suLevel = string.format("%d级", uLevel);
 		local nSopth = MatrixConfigFunc.GetUpLevelN(level + 1, DB_MATRIX_UP_LEVEL.REQ_SOPH);
 		local sSopth = string.format("%d", nSopth);
 		local uSop = p.getUserSoph();
@@ -429,8 +429,8 @@ function p.refreshAttackItem(item, view, viewIds)
 	
 		local sName = AttackConfigFunc.GetDataBaseS(type,DB_MARTIALTYPE.NAME);
 		local sDes = AttackConfigFunc.GetDataBaseS(type, DB_MARTIALTYPE.DESCRIPT);
-		local sLevel = string.format(" %d"..GetTxtPri("Common_Level"),item.level);
-		local suLevel = string.format("%d"..GetTxtPri("Common_Level"), level);
+		local sLevel = string.format(" %d级",item.level);
+		local suLevel = string.format("%d级", level);
 		local nSopth = AttackConfigFunc.GetDataBaseN(level, DB_MARTIALTYPE.UP_SOPH);
 		local sSopth = string.format("%d", nSopth);
 		local uSop = p.getUserSoph();
@@ -505,7 +505,7 @@ function p.clickCoolDown()
 		local curTime = GetCurrentTime();
 		local time = cool - curTime;
 		local money = MatrixConfigFunc.getEmoneyForCleanCoolDown(time);
-		local tip = GetTxtPri("MUI2_T1").. SafeN2S(money) .. GetTxtPri("MUI2_T2");
+		local tip = "消除冷却时间需消耗".. SafeN2S(money) .. "金币，是否继续？";
 		CommonDlg.ShowNoPrompt(tip, p.onConfirmCoolDown);
 	else
 		p.sendMatrixCoolDown();

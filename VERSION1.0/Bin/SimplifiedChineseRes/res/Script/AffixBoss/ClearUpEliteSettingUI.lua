@@ -638,10 +638,15 @@ function p.HandleNetMsg( nMsgID, param )
 		-- 副本奖励
 		--
 	elseif ( nMsgID == NMSG_Type._MSG_AFFIX_BOSS_NML_FINISH ) then
-		p.nClearStage	= p.nFightNumber;
+        p.nClearStage	= p.nFightNumber;
 		p.nEndMoment	= GetCurrentTime()  + ( p.nFightNumber - p.nClearStage ) * SECONDS_PER_FIGHT;
 		local pLabelClearStage	= GetLabel( p.pLayerFighting, ID_LABEL_CLEAR_STAGE );
 		pLabelClearStage:SetText( p.nClearStage .. "/" .. p.nFightNumber );
+        p.nClearStage	= p.nFightNumber;
+		p.nEndMoment	= GetCurrentTime()  + ( p.nFightNumber - p.nClearStage ) * SECONDS_PER_FIGHT;
+		local pLabelClearStage	= GetLabel( p.pLayerFighting, ID_LABEL_CLEAR_STAGE );
+		pLabelClearStage:SetText( p.nClearStage .. "/" .. p.nFightNumber );
+        
 		local pBtnStop		= GetButton( p.pLayerFighting, ID_BTN_STOP );
 		local pBtnFinish	= GetButton( p.pLayerFighting, ID_BTN_FINISH );
 		local pBtnBack		= GetButton( p.pLayerFighting, ID_BTN_BACK );

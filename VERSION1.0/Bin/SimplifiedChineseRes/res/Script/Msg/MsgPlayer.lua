@@ -12,6 +12,31 @@ local MSG_GRID_ACT_STORAGE				= 0; --仓库
 local MSG_GRID_ACT_BAG					= 1; --背包
 local MSG_GRID_ACT_END					= 2;
 
+--发送查看pvp属性加成消息
+local ADDTION_ACTION_TYPE  = 
+{
+	ADDTION_ACTION_REQUEST = 1,--pvp属性查询
+	ADDTION_ACTION_PVP = 2,--pvp加值
+}
+
+function p.SendCheckPVPAddtion(nPetId)
+	if not CheckN(nPetId) then
+		LogInfo("无宠物id！");
+		return;
+	end
+	
+	local netdata = createNDTransData(NMSG_Type._MSG_ADDTION);
+	if nil == netdata then
+		LogInfo("发送开格子消息失败,内存不够");
+		return false;
+	end	
+	netdata:WriteShort(ADDTION_ACTION_TYPE.ADDTION_ACTION_REQUEST);
+	netdata:WriteInt(nPetId);
+	SendMsg(netdata);
+	netdata:Free();
+	ShowLoadBar();
+end
+
 --发送开玩家背包消息
 function p.SendOpenBagGrid(nNum)
 	p.SendOpenGrid(MSG_GRID_ACT_BAG, nNum);
@@ -206,6 +231,22 @@ function p.ProcessUserInfoUpdate(netdata)
    
 end
 
+
+function p.ProcessPVPInfo(netdata)
+	CloseLoadBar();
+	local nAction      = netdata:ReadShort();
+
+	local life = netdata:ReadInt();
+	local strength = netdata:ReadInt();
+	local dex = netdata:ReadInt();
+	local intel = netdata:ReadInt();
+	local speed = netdata:ReadInt();	
+	LogInfo("qbw: life"..life.."  strength:"..strength.." dex"..dex.." intel"..intel.." speed"..speed);
+	PlayerUIAttr.LoadPVPAttrUI(life,strength,dex,intel,speed);
+end
+
 RegisterNetMsgHandler(NMSG_Type._MSG_USERINFO, "p.ProcessUserInfo", p.ProcessUserInfo);
 
 RegisterNetMsgHandler(NMSG_Type._MSG_USERINFO_UPDATE, "p.ProcessUserInfoUpdate", p.ProcessUserInfoUpdate);
+
+RegisterNetMsgHandler(NMSG_Type._MSG_ADDTION, "p.ProcessPVPInfo", p.ProcessPVPInfo);

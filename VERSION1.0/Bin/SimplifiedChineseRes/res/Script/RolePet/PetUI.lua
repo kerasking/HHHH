@@ -56,6 +56,8 @@ p.TagRadioGroud = {
     JIN50   = 403,
 };
 
+local TAG_RADIO_TXTS = {36,37,38};
+
 p.TagMountPic	= 100;
 
 local IllsionSize = CGSizeMake((120+10)*ScaleFactor, 140*ScaleFactor);
@@ -78,11 +80,11 @@ p.TagCurrProp	= {
 p.MaxStarLevel = 0;
 
 --金钱不足
-function p.MoneyNotEnough()
+function p.MoneyNotEnough(nMoney)
     local nPlayerId     = GetPlayerId();
     local money         = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_MONEY);
     
-    if(money<15000) then
+    if(money<nMoney) then
         CommonDlgNew.ShowYesDlg(GetTxtPub("TongQianBuZhu"));
         return false;
     end
@@ -166,7 +168,7 @@ function p.LoadUI(bIsSMB)
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PetUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
+    scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 
 
     local uiLoad = createNDUILoad();
@@ -213,7 +215,13 @@ function p.LoadUI(bIsSMB)
     --坐骑文字说明
     p.CreateMountDesc();
     
-    
+    --设置培养文字
+    for i,v in ipairs(TAG_RADIO_TXTS) do
+        local l_txt = GetLabel(layer, v);
+        local sTxt = GetDataBaseDataS("mount_train_config",i,DB_MOUNT_TRAIN_CONFIG.DESCRIPT);
+        l_txt:SetText(sTxt);
+    end
+
     local TAG_C_SPEED_TXT   = 24;
     local TAG_N_SPEED_TXT   = 25;
     
@@ -239,7 +247,8 @@ function p.CreateMountDesc()
     local l_desc = GetLabel(layer, TAG_MOUNT_DESC);
     l_desc:SetVisible(false);
     
-	local pLabelTips = _G.CreateColorLabel( GetTxtPri("PETUI_T3"), l_desc:GetFontSize()/2, l_desc:GetFrameRect().size.w );
+    
+    local pLabelTips = _G.CreateColorLabel( GetTxtPri("PETUI_T3"), l_desc:GetFontSize()/2, l_desc:GetFrameRect().size.w );
    
      if CheckP(pLabelTips) then
 		pLabelTips:SetFrameRect(l_desc:GetFrameRect());
@@ -365,6 +374,21 @@ function p.clickTrain()
     
     --金钱的判断
     local selectid = p.getSelectRadio();
+        
+    local nType = GetDataBaseDataN("mount_train_config",selectid,DB_MOUNT_TRAIN_CONFIG.TYPE);
+    local nMoney = GetDataBaseDataN("mount_train_config",selectid,DB_MOUNT_TRAIN_CONFIG.PIRICE);
+    
+    if(nType == DB_MOUNT_TRAIN_TYPE_DESC.MONEY) then
+        if(p.MoneyNotEnough(nMoney) == false) then
+            return;
+        end
+    elseif(nType == DB_MOUNT_TRAIN_TYPE_DESC.EMONEY) then
+        if(p.EoneyNotEnough(nMoney-p.GetSMBCount()*10) == false) then
+           return;
+        end
+    end
+    
+    --[[
     if(selectid==1)then
         if(p.MoneyNotEnough() == false) then
             return;
@@ -379,6 +403,8 @@ function p.clickTrain()
            return;
         end
     end
+    ]]
+
     --tx
     MsgMount.sendTrain(p.getSelectRadio());
 end

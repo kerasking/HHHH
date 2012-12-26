@@ -81,17 +81,11 @@ function p.RefreshUI()
                 SetLabel(layer, p.Ctrl.Lable.txtIsLoot, GetTxtPri("TL_T7"));
             end
             
-			--**chh 2012-12-12**--
-            --SetLabel(layer, p.Ctrl.Lable.txtClass, GetTxtPri("TL_T8"));
-            SetLabel(layer, p.Ctrl.Lable.txtClass, v.strArmyGroup); 
-
+            SetLabel(layer, p.Ctrl.Lable.txtClass, GetTxtPri("TL_T8"));
             local label = GetLabel(layer, p.Ctrl.Lable.txtRaise);
             label:SetVisible(false);
             --SetLabel(layer, p.Ctrl.Lable.txtRaise, GetTxtPri("TL_T8"));
-            local l_CarLev = SetLabel(layer, p.Ctrl.Lable.txtCar, Transport.tbGrainConfig[v.nGrain_config_id].Name);  
-            l_CarLev:SetFontColor(Item.GetTransportCarQuality(v.nGrain_config_id));
-            LogInfo("v.nGrain_config_id:[%d]",v.nGrain_config_id);
-       
+            SetLabel(layer, p.Ctrl.Lable.txtCar, Transport.tbGrainConfig[v.nGrain_config_id].Name);       
             
             local str = p.GetAwardStr(v.nGrain_config_id);    --获取要显示的奖励物品
             SetLabel(layer, p.Ctrl.Lable.txtAward, str);  --显示运送的奖励     

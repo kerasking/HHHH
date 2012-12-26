@@ -412,4 +412,3 @@ function GetDaoFaOpenLevel()
     return nEMoney;
 end
 
-

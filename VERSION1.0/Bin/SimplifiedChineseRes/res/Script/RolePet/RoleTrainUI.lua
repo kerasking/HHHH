@@ -121,7 +121,7 @@ function p.LoadUI( nChosenPetID)
 	layer:SetTag( NMAINSCENECHILDTAG.RoleTrain );
 	layer:SetFrameRect( RectFullScreenUILayer );
 	layer:SetBackgroundColor( ccc4(125, 125, 125, 0) );
-	pScene:AddChildZ( layer, UILayerZOrder.NormalLayer+1 );--pScene:AddChild( layer );--
+    pScene:AddChildZ( layer, UILayerZOrder.NormalLayer+1 );--pScene:AddChild( layer );--
 	
 	--初始化ui
 	local uiLoad = createNDUILoad();

@@ -27,6 +27,36 @@ local ID_VIP_CTRL_PICTURE_1						= 1;
 local ID_BTN_AGIOTAGE							= 89;	-- 兑换金币
 local ID_LABEL_GOLD_COIN						= 49;	-- 金币数量
 
+
+--新增按钮
+local ID_VIP_CTRL_BUTTON_62						= 62;
+local ID_VIP_CTRL_BUTTON_61						= 61;
+local ID_VIP_CTRL_BUTTON_60						= 60;
+local ID_VIP_CTRL_BUTTON_59						= 59;
+local ID_VIP_CTRL_BUTTON_58						= 58;
+local ID_VIP_CTRL_BUTTON_57						= 57;
+local ID_VIP_CTRL_BUTTON_56						= 56;
+local ID_VIP_CTRL_BUTTON_55						= 55;
+local ID_VIP_CTRL_BUTTON_54						= 54;
+local ID_VIP_CTRL_BUTTON_53						= 53;
+local ID_VIP_CTRL_BUTTON_52						= 52;
+local ID_VIP_CTRL_BUTTON_51						= 51;
+
+local tVipTagLev = {}
+		tVipTagLev[ID_VIP_CTRL_BUTTON_62] =12;
+		tVipTagLev[ID_VIP_CTRL_BUTTON_61] =11;
+		tVipTagLev[ID_VIP_CTRL_BUTTON_60] =10;
+		tVipTagLev[ID_VIP_CTRL_BUTTON_59] =9 ;
+		tVipTagLev[ID_VIP_CTRL_BUTTON_58] =8 ;
+		tVipTagLev[ID_VIP_CTRL_BUTTON_57] =7 ;
+		tVipTagLev[ID_VIP_CTRL_BUTTON_56] =6 ;
+		tVipTagLev[ID_VIP_CTRL_BUTTON_55] =5 ;
+		tVipTagLev[ID_VIP_CTRL_BUTTON_54] =4 ;
+		tVipTagLev[ID_VIP_CTRL_BUTTON_53] =3 ;
+		tVipTagLev[ID_VIP_CTRL_BUTTON_52] =2 ;
+		tVipTagLev[ID_VIP_CTRL_BUTTON_51] =1 ;
+
+
 --scroll
 local ID_VIP_L_CTRL_TEXT_2						= 2;
 
@@ -54,80 +84,83 @@ for i=1,10 do
 	tVipInfo[i] = {}
 end
 
-tVipInfo[1][1] = "开启伙伴武将白金训练模式	"
-tVipInfo[1][2] = "每日可征收20次"
-tVipInfo[1][3] = "每日可购买20个额外军令"
-tVipInfo[1][4] = "背包容量增加至72格"
-tVipInfo[1][5] = "星运背包容量增加至5格"--添加多语言
+tVipInfo[1][1] = GetTxtPri("PLAYER_T20")
+tVipInfo[1][2] = GetTxtPri("PLAYER_T21")
+tVipInfo[1][3] = GetTxtPri("PLAYER_T22")
+tVipInfo[1][4] = GetTxtPri("PLAYER_T23")
+tVipInfo[1][4] = GetTxtPri("PUIA_T9")--添加多语言
 
-tVipInfo[2][1] = "开启速战速决功能"
-tVipInfo[2][2] = "可以使用金币购买30级紫色武将	"
-tVipInfo[2][3] = "背包容量增加至80格"
-tVipInfo[2][4] = "星运背包容量增加至6格"--添加多语言
+tVipInfo[2][1] = GetTxtPri("PLAYER_T24")
+tVipInfo[2][2] = GetTxtPri("PLAYER_T25")
+tVipInfo[2][3] = GetTxtPri("PLAYER_T26")
+tVipInfo[2][4] = GetTxtPri("PUIA_T10")--添加多语言
 
-tVipInfo[3][1] = "开启武器白金洗炼功能"
-tVipInfo[3][2] = "星运背包容量增加至7格"--添加多语言
-tVipInfo[3][3] = "开启强化装备暴击功能"
-tVipInfo[3][4] = "精英副本每日可用金币重置1次"
-tVipInfo[3][5] = "可以使用金币购买50级和70级紫色武将"
+tVipInfo[3][1] = GetTxtPri("PLAYER_T28")
+tVipInfo[3][2] = GetTxtPri("PUIA_T11")--添加多语言
+tVipInfo[3][3] = GetTxtPri("PLAYER_T29")
+tVipInfo[3][4] = GetTxtPri("PLAYER_T30")
+tVipInfo[3][5] = GetTxtPri("PLAYER_T31")
 
-tVipInfo[4][1] = "开启伙伴武将金钻训练模式	"
-tVipInfo[4][2] = "每日可征收30次"
-tVipInfo[4][3] = "背包容量增加至90格"
-tVipInfo[4][4] = "星运背包容量增加至8格"--添加多语言
-tVipInfo[4][5] = "开启批量征收功能"
-tVipInfo[4][6] = "开启金币购买70级金色武将"
-tVipInfo[4][7] = "降低装备强化费用10%"
+tVipInfo[4][1] = GetTxtPri("PLAYER_T33")
+tVipInfo[4][2] = GetTxtPri("PLAYER_T34")
+tVipInfo[4][3] = GetTxtPri("PLAYER_T35")
+tVipInfo[4][4] = GetTxtPri("PUIA_T12")--添加多语言
+tVipInfo[4][5] = GetTxtPri("PLAYER_T36")
+tVipInfo[4][6] = GetTxtPri("PLAYER_T37")
+tVipInfo[4][7] = GetTxtPri("PLAYER_T38")
 
+tVipInfo[5][1] = GetTxtPri("PLAYER_T40")
+tVipInfo[5][2] = GetTxtPri("PUIA_T13")         --添加多语言
+tVipInfo[5][3] = GetTxtPri("PUIA_T14")           --添加多语言
+tVipInfo[5][4] = GetTxtPri("PUIA_T15")                --添加多语言
+tVipInfo[5][5] = GetTxtPri("PLAYER_T41")
+tVipInfo[5][6] = GetTxtPri("PLAYER_T42")
+tVipInfo[5][7] = GetTxtPri("PLAYER_T43")
+tVipInfo[5][8] = GetTxtPri("PLAYER_T44")
+tVipInfo[5][9] = GetTxtPri("PLAYER_T45")
 
-tVipInfo[5][1] = "背包容量增加至100格"
-tVipInfo[5][2] = "星运背包容量增加至9格"      --添加多语言
-tVipInfo[5][3] = "可召唤20次奇门遁甲"      --添加多语言
-tVipInfo[5][4] = "开启一键占星"--添加多语言
-tVipInfo[5][5] = "每日可购买25个额外军令"
-tVipInfo[5][6] = "精英副本每日可用金币重置2次"
-tVipInfo[5][7] = "开启金币购买80级金色武将"
-tVipInfo[5][8] = "永久取消强化冷却时间"
-tVipInfo[5][9] = "每日可以征收40次"
-
-tVipInfo[6][1] = "背包容量增加至110格"
-tVipInfo[6][2] = "星运背包容量增加至10格"      --添加多语言
-tVipInfo[6][3] = "每日可购买30个额外军令"
-tVipInfo[6][4] = "开启武器至尊洗炼功能"
-tVipInfo[6][5] = "开启金币购买90级金色武将"
-tVipInfo[6][6] = "降低装备强化费用12%"
+tVipInfo[6][1] = GetTxtPri("PLAYER_T47")
+tVipInfo[6][2] = GetTxtPri("PUIA_T16")      --添加多语言
+tVipInfo[6][3] = GetTxtPri("PLAYER_T48")
+tVipInfo[6][4] = GetTxtPri("PLAYER_T49")
+tVipInfo[6][5] = GetTxtPri("PLAYER_T50")
+tVipInfo[6][6] = GetTxtPri("PLAYER_T51")
 
 tVipInfo[7][1] = GetTxtPri("PLAYER_T53")
-tVipInfo[7][1] = "背包容量增加至120格"
-tVipInfo[7][2] = "星运背包容量增加至11格"      --添加多语言
-tVipInfo[7][3] = "可召唤40次奇门遁甲"      --添加多语言
-tVipInfo[7][4] = "每日可征收50次"
-tVipInfo[7][5] = "每日可购买35个额外军令"
-tVipInfo[7][6] = "开启金币购买100级金色武将"
+tVipInfo[7][2] = GetTxtPri("PUIA_T17")      --添加多语言
+tVipInfo[7][3] = GetTxtPri("PUIA_T18")      --添加多语言
+tVipInfo[7][4] = GetTxtPri("PLAYER_T54")
+tVipInfo[7][5] = GetTxtPri("PLAYER_T55")
+tVipInfo[7][6] = GetTxtPri("PLAYER_T57")
 
+tVipInfo[8][1] = GetTxtPri("PLAYER_T58")
+tVipInfo[8][2] = GetTxtPri("PUIA_T19")      --添加多语言
+tVipInfo[8][3] = GetTxtPri("PUIA_T20")      --添加多语言
+tVipInfo[8][4] = GetTxtPri("PLAYER_T59")
+tVipInfo[8][5] = GetTxtPri("PLAYER_T60")
+tVipInfo[8][6] = GetTxtPri("PLAYER_T61")
+tVipInfo[8][7] = GetTxtPri("PLAYER_T62")
 
-tVipInfo[8][1] = "背包容量增加至128格"
-tVipInfo[8][2] = "星运背包容量增加至12格"      --添加多语言
-tVipInfo[8][3] = "可召唤60次奇门遁甲"      --添加多语言
-tVipInfo[8][4] = "每日可征收70次"
-tVipInfo[8][5] = "每日可购买40个额外军令"
-tVipInfo[8][6] = "开启伙伴武将至尊训练模式"
-tVipInfo[8][7] = "降低装备强化费用15%"
-
-
-tVipInfo[9][1] = "背包容量增加至136格"
-tVipInfo[9][2] = "星运背包容量增加至14格"      --添加多语言
-tVipInfo[9][3] = "可召唤80次奇门遁甲"      --添加多语言
-tVipInfo[9][4] = "每日可征收100次"
-tVipInfo[9][5] = "每日可购买48个额外军令"
-
+tVipInfo[9][1] = GetTxtPri("PLAYER_T64")
+tVipInfo[9][2] = GetTxtPri("PUIA_T21")      --添加多语言
+tVipInfo[9][3] = GetTxtPri("PUIA_T22")      --添加多语言
+tVipInfo[9][4] = GetTxtPri("PLAYER_T65")
+tVipInfo[9][5] = GetTxtPri("PLAYER_T66")
 
 tVipInfo[10][1] = GetTxtPri("PLAYER_T68")
-tVipInfo[10][2] = "星运背包容量增加至16格"      --添加多语言
-tVipInfo[10][3] = "可召唤100次奇门遁甲"      --添加多语言
-tVipInfo[10][4] = "降低装备强化费用20%"
+tVipInfo[10][2] = GetTxtPri("PUIA_T23")      --添加多语言
+tVipInfo[10][3] = GetTxtPri("PUIA_T24")      --添加多语言
+tVipInfo[10][4] = GetTxtPri("PLAYER_T69")
 
+--[[
+tVipInfo[11][1] = "背包容量增加至144格"
+tVipInfo[11][2] = "星运背包容量增加至16格"      --添加多语言
+tVipInfo[11][3] = "降低装备强化费用20%"
 
+tVipInfo[12][1] = "背包容量增加至144格"
+tVipInfo[12][2] = "星运背包容量增加至16格"      --添加多语言
+tVipInfo[12][3] = "降低装备强化费用20%"
+--]]
 
 function p.LoadUI()
 local scene = GetSMGameScene();	
@@ -159,40 +192,21 @@ local scene = GetSMGameScene();
 	--bg
 	uiLoad:Load("VIP.ini", layer, p.OnUIEventBg, 0, 0);
 	
-
-	local containter = RecursiveSVC(layer, {VIP_CTRL_LIST_1});
-	containter:SetViewSize(containter:GetFrameRect().size);
-	containter:SetLuaDelegate(p.OnUIEventSVC)
-
-	for rank,v in pairs(tVipInfo) do
-		--LogInfo("1:"..rank)
-		local view = createUIScrollView();
 	
-	     view:SetPopupDlgFlag(true);
-	     view:Init(false);
-	     view:SetViewId(rank);
-	     containter:AddView(view);
-		 --view:SetFrameRect(CGRectMake(0,0,640,640)); //@todo: use GetWinSize()!
-		-- LogInfo("2")
-	     local uiLoad = createNDUILoad();
-	     if uiLoad ~= nil then
-		     uiLoad:Load("VIP_L.ini",view,nil,0,0);
-		     uiLoad:Free();
-	     end
-	     
-	     local label =  RecursiveLabel(view,{ID_VIP_L_CTRL_TEXT_2});
-	     local str = p.GetTipbyVIPRank(rank);
-		label:SetText("VIP"..rank..":\n"..str)
-	    	
-	end	
+	
+	--屏蔽11 12级vip按钮
+	local btn11 = RecursiveButton(layer, {61});
+	local btn12 = RecursiveButton(layer, {62});
+	btn11:SetChecked( true );
+	btn12:SetChecked( true );
+	
+
 	
 	
 	--local nVIPRank = p.GetPlayerVipRank();
 	local nPlayerId = GetPlayerId();
 	local nVIPRank 		= GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_VIP_RANK);
-	if tVipInfo[nVIPRank] ~= nil then
-		containter:ShowViewById(nVIPRank);
-	end
+	
 	
 	p.GameDataUserInfoRefresh();	
 	GameDataEvent.Register(GAMEDATAEVENT.USERATTR,"p.GameDataUserInfoRefresh",p.GameDataUserInfoRefresh);
@@ -220,7 +234,7 @@ local scene = GetSMGameScene();
     
     --** chh 2012-09-02 **--
     --设置箭头显示
-    SetArrow(p.GetBgLayer(),p.GetVipViewList(),1,ID_VIP_CTRL_PICTURE_12,ID_VIP_CTRL_PICTURE_13);
+    --SetArrow(p.GetBgLayer(),p.GetVipViewList(),1,ID_VIP_CTRL_PICTURE_12,ID_VIP_CTRL_PICTURE_13);
     
 	return true;
 end
@@ -253,6 +267,10 @@ function p.OnUIEventBg(uiNode, uiEventType, param)
 			p.OnClickBuyMilOrderBtn();
 		elseif ( tag == ID_BTN_AGIOTAGE ) then
 			Agiotage.LoadUI();
+			
+		elseif tag >= 51 and tag<= 62 then
+			local nVipLev = tVipTagLev[tag];
+			p.LoadUIVIPDesc(nVipLev);
 		end	
 	end
 end
@@ -384,7 +402,7 @@ function p.GameDataUserInfoRefresh()
 	
 	--充值提示信息
 	if nVipRank == 10 then
-		tipLabel:SetText(GetTxtPri("PVIPUI_T1"));
+		tipLabel:SetText("恭喜您成为VIP10会员!");
 	else
         tipLabel:SetText(string.format(GetTxtPri("PLAYER_T71"),VipCfg[nVipRank+1]-Recharge,nVipRank+1));
 	end
@@ -401,12 +419,13 @@ function p.GameDataUserInfoRefresh()
 	local nBought = GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_HAVE_BUY_STAMINA);
 	local sGoldTip = "";
 	if nLeftTime > 0 and nBought <=47 then
-	     sGoldTip = GetTxtPri("PVIPUI_T2")..tGoldNeeded[nBought+1]..GetTxtPri("PVIPUI_T3");	     
+        local nEMoney = GetDataBaseDataN("stamina_config", (nBought+1), DB_STAMINA_CONFIG.REQ_EMONEY);
+	     sGoldTip = ",当前购买需"..nEMoney.."金币。";	     
 	end
 	    
 	--ffff00
 	--]]
-	MOlabel:SetText(GetTxtPri("PVIPUI_T4")..nLeftTime..GetTxtPri("PVIPUI_T5")..sGoldTip);
+	MOlabel:SetText("今天还能购买军令"..nLeftTime.."次"..sGoldTip);
 	
 
 end
@@ -473,8 +492,9 @@ function p.buyMilOrderTip(nType)
         return;
     end
     
+    local nEMoney = GetDataBaseDataN("stamina_config", (nBought+1), DB_STAMINA_CONFIG.REQ_EMONEY);
     if nType == 0 then
-        if tGoldNeeded[nBought+1] >  GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_EMONEY) then
+        if nEMoney >  GetRoleBasicDataN(GetPlayerId(),USER_ATTR.USER_ATTR_EMONEY) then
             CommonDlgNew.ShowYesDlg(GetTxtPri("PLAYER_T74"));
             return;
         end
@@ -535,10 +555,95 @@ function p.GetPlayerVipRank()
 end
 
 
+--===========================加载提示层============================--
+local g_TipLayerTag = 12345;
+
+function p.LoadUIVIPDesc(nVipLev)
+     local layer = createNDUILayer();
+     local bglayer = p.GetBgLayer();
+	if layer == nil then
+		return false;
+	end
+    
+	layer:Init();
+	layer:SetTag(g_TipLayerTag);
+	layer:SetFrameRect(RectFullScreenUILayer);
+	bglayer:AddChild(layer);
+    
+    local uiLoad = createNDUILoad();
+	if nil == uiLoad then
+		layer:Free();
+		return false;
+	end
+	uiLoad:Load("VIP_L.ini", layer, p.OnUIEventTiplayer, 0, 0);
 
 
+	local title =  RecursiveLabel(layer,{3});
+	local firsttip =  RecursiveLabel(layer,{151});
 
+	title:SetText("VIP"..nVipLev.."特权");
+	firsttip:SetText("累计充值"..VipCfg[nVipLev].."金币可达到VIP"..nVipLev);
+	----------------------------容器---------------------------------------
+	local rectX = winsize.w*0.25;
+	local rectW	= winsize.w*0.5;
+	local rect  = CGRectMake(rectX, winsize.h*0.25, rectW, winsize.h*0.65); 
+	
 
+	tipcontainer = createUIScrollViewContainer();
+	if tipcontainer == nil then
+		LogInfo("tipcontainer == nil,load ui failed!");
+		return;
+	end
+	tipcontainer:Init();
+	tipcontainer:SetFrameRect(rect);
+	layer:AddChild(tipcontainer);
+	
+	local rectview = tipcontainer:GetFrameRect();
+	tipcontainer:SetStyle(UIScrollStyle.Verical);
+	tipcontainer:SetViewSize(CGSizeMake(rectview.size.w, rectview.size.h / 10));
+	tipcontainer:EnableScrollBar(true);
+	
+	
+	
+	local rectview		= tipcontainer:GetFrameRect();
+	local nWidthLimit = rectview.size.w;
+	
+	for nIndex=1,#tVipInfo[nVipLev] do
+	
+		local view = createUIScrollView();
+
+		if view ~= nil then
+			view:Init(false);
+			view:SetViewId(nIndex);
+		
+			tipcontainer:AddView(view);
+			local sizeview		= view:GetFrameRect().size;
+			local str = "";
+			local pLabelTips = nil;
+			local pLabelScore = nil;
+			
+			
+		  	pLabelTips = _G.CreateColorLabel( nIndex.."."..tVipInfo[nVipLev][nIndex], 11, nWidthLimit );
+			pLabelTips:SetFrameRect(CGRectMake(0, 0, nWidthLimit, 20 * ScaleFactor));
+			view:AddChild(pLabelTips);
+		end
+	end	
+end
+
+--提示层背景事件
+function p.OnUIEventTiplayer(uiNode, uiEventType, param)
+	local tag = uiNode:GetTag();
+	LogInfo("p.OnUIEventTiplayer[%d]", tag);
+	
+	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
+	
+		if tag == 533 then
+    		local layer = p.GetBgLayer();          	
+			layer:RemoveChildByTag(g_TipLayerTag, true);           
+		end	
+	end
+	return true;
+end
 
 
 

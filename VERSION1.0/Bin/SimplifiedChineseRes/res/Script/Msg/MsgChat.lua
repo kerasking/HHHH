@@ -36,6 +36,10 @@ function p.ProcessTalkInfo(netdatas)
         CommonDlgNew.ShowYesDlg(text,nil,nil,3);
         return;
     end
+    if channel == 22 then
+        CommonScrollDlg.ShowTipDlg({text,ccc4(255,255,255,255)});
+        channel = 5;
+    end
     CloseLoadBar();
     
 	local speakerID=netdatas:ReadInt();

@@ -86,13 +86,12 @@ function p.LoadUI()
 	if layer == nil then
 		return false;
 	end
-	
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerTask);
 	layer:SetFrameRect(RectUILayer);
 	--layer:SetBackgroundColor(ccc4(125, 125, 125, 125));
 	--scene:AddChild(layer);
-	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
+    scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 	
 	--初始化ui
 	local uiLoad = createNDUILoad();

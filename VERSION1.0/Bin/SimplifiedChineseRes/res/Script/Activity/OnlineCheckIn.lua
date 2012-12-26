@@ -103,12 +103,49 @@ function p.updateCount(restCount)
 	end
 	
 	if restCount > 0 then
-		LogInfo("qboy RegisterTimer TimerTick"); 
 		p.TimerTag=RegisterTimer(p.TimerTick,1, "OnlineCheckIn.TimerTick");
+		
 	end
 
 end
 
+--[[
+function p.TimerTick(tag)
+	if tag == p.TimerTag then
+		g_Count = g_Count - 1;
+		
+		--非游戏场景返回
+		if p.InInCity() == false then
+			return;
+		end
+		
+		LogInfo("qboy TimerTick 1"); 
+		
+		--刷新计数文字
+		if g_Count <= 0 then
+			g_Count = 0;
+		end
+			LogInfo("qboy TimerTick 2"); 
+		if g_GiftMark >= 127 then
+			g_bIfShow = false;
+		else
+			g_bIfShow = true;
+		end
+		
+		local CDLabel = p.GetCDLabel();
+		
+		CDLabel:SetText(FormatTime(g_Count,1));
+		
+		
+		if g_Count <= 0 then
+            LogInfo("qboy TimerTick UnRegisterTimer(p.TimerTag)"); 
+			UnRegisterTimer(p.TimerTag);
+			p.TimerTag = nil;
+			CDLabel:SetText(GetTxtPri("OCI_ClickGet"));
+		end		
+	end
+end
+--]]
 
 function p.TimerTick(tag)
 	if tag == p.TimerTag then
@@ -126,11 +163,10 @@ function p.TimerTick(tag)
 		end
 		
 		local CDLabel = p.GetCDLabel();
-
+		
 		if CDLabel ~= nil then
 			CDLabel:SetText(FormatTime(g_Count,1));
 		end
-		
 		
 		if g_Count <= 0 then
             LogInfo("qboy TimerTick UnRegisterTimer(p.TimerTag)"); 

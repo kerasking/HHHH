@@ -93,7 +93,7 @@ p.ATTR_TYPE_SPEED				= p.ATTR_TYPE_NONE + 13;	--速度
 p.ATTR_TYPE_HIT                 = p.ATTR_TYPE_NONE + 14;	--命中率
 p.ATTR_TYPE_DODGE				= p.ATTR_TYPE_NONE + 15;	--闪避率
 p.ATTR_TYPE_DRITICAL			= p.ATTR_TYPE_NONE + 16;	--暴击率
-p.ATTR_TYPE_TENACITY			= p.ATTR_TYPE_NONE + 17;	--格挡率
+p.ATTR_TYPE_TENACITY            = p.ATTR_TYPE_NONE + 17;    --韧性
 p.ATTR_TYPE_BLOCK				= p.ATTR_TYPE_NONE + 18;	--格挡率
 p.ATTR_TYPE_WRECK				= p.ATTR_TYPE_NONE + 19;	--破击率
 p.ATTR_TYPE_UNION_ATK			= p.ATTR_TYPE_NONE + 20;	--合击率
@@ -169,6 +169,23 @@ FontColor = {
     Silver = ccc4(237,240,0,255),          --银币
     Coin = ccc4(237,240,0,255),            --金币
 }
+
+--粮车品质
+TransportColor = {
+    ccc4(36,255,0,255),
+    ccc4(126,192,238,255),
+    ccc4(128,00,128,255),
+    ccc4(237,240,00,255),
+    ccc4(251,165,46,255),
+}
+
+function p.GetTransportCarQuality(nQuality)
+    local color = TransportColor[nQuality];
+    if(color == nil) then
+        color = TransportColor[1];
+    end
+    return color;
+end
 
 --道法物品颜色
 DaoFaItemColor = 

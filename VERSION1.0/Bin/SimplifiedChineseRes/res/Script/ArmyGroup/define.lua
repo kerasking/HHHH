@@ -7,3 +7,4 @@ DoFile("ArmyGroup/Member.lua");
 DoFile("ArmyGroup/HandleMember.lua");
 DoFile("ArmyGroup/CreateOrJoinArmyGroup.lua");
 DoFile("ArmyGroup/ArmyGroupInfor.lua");
+DoFile("ArmyGroup/DistributeRecordDlg.lua");

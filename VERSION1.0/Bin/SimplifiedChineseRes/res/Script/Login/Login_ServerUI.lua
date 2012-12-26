@@ -67,6 +67,7 @@ p.recvServerFlag=0;
 p.recvIndex=0;
 
 p.szGameForumURL = "";
+
 local ServerStatus = {
     {GetTxtPri("StateWeiHu"),ccc4(138,138,138,255)},
     {GetTxtPri("StateTuiJian"),ccc4(0,255,0,255)},
@@ -128,7 +129,6 @@ function p.LoadUI()
     end
 
     p.recvIndex = 0;
-    --layer:SetPopupDlgFlag( true );
     layer:Init();
     layer:SetTag(NMAINSCENECHILDTAG.Login_ServerUI);
     layer:SetFrameRect(RectFullScreenUILayer);
@@ -244,10 +244,7 @@ function p.AddItem(i)
         LogInfo("p.LoadUI createUIScrollView failed");
         return;
     end
-    if i == 1 then
-        container:SetViewSize(ServerItemSize);
-    end
-	--view:SetPopupDlgFlag(true);
+    
     view:Init(false);
 	view:bringToTop();
     view:SetViewId(i);
@@ -307,24 +304,23 @@ function p.refreshServerListItem(i)
     if(view==nil) then
         return;
     end
-    
+
     local info = p.ServerListTag[i];
     if(info.nServerID == RECOMMEND_ID ) then
         return;
     end
-    
+
     SetLabel(view, TAG_CONTAINER_NAME, info.sServerName);
     
     local flag = GetLabel(view, TAG_NEW_SERVER_FLAG);
     flag:SetText(ServerStatus[info.nServerStatus+1][1]);
     flag:SetFontColor(ServerStatus[info.nServerStatus+1][2]);
-    
     LogInfo("ServerStatus[info.nServerStatus+1][1]:[%s],info.nServerStatus:[%d]",ServerStatus[info.nServerStatus+1][1],info.nServerStatus);
-    
+
     local rInfo = p.GetRoleInfoByServerId(info.nServerID);
     
     if(rInfo) then
-        local sRoleInfo = string.format("%s %s %d"..GetTxtPri("Common_Level"),rInfo.sRoleName,RolePetFunc.GetJobDesc(rInfo.nProfession),rInfo.nLevel);
+        local sRoleInfo = string.format("%s %s %d%s",rInfo.sRoleName,RolePetFunc.GetJobDesc(rInfo.nProfession),rInfo.nLevel,GetTxtPub("Level"));
         SetLabel(view, TAG_CONTAINER_ROLE, sRoleInfo);
     else
         SetLabel(view, TAG_CONTAINER_ROLE, GetTxtPri("LSUI_T1"));
@@ -452,7 +448,7 @@ end
 
 
 function p.LoginGame(strServerName,strServerIp,strServerPort)
-    LogInfo("@@login10: Login_ServerUI::LoginGame(), strServerName[%s],strServerIp[%s],strServerPort[%d],p.UIN[%d]",strServerName,strServerIp,strServerPort,p.UIN);
+    LogInfo("strServerName[%s],strServerIp[%s],strServerPort[%d],p.UIN[%d]",strServerName,strServerIp,strServerPort,p.UIN);
     --发起登陆
     local bSucc=SwichKeyToServer(strServerIp,strServerPort,SafeN2S(p.UIN),p.Pwd,strServerName);
     
@@ -520,7 +516,6 @@ end
 function p.LoginOK_Normal(param)
     p.UIN = param;
     LogInfo("p.LoginOK_Normal uin:[%d]",param);
-    
     p.ChangeUserLogin(p.UIN);
     p.RunGetServerListTimer();
     LogInfo("p.LoginOK_Normal p.worldIP:[%s]",p.worldIP);
@@ -537,7 +532,7 @@ end
 p.nTimerID = nil;
 function p.RunGetServerListTimer()
     if(p.nTimerID == nil) then
-        LogInfo("@@login06: Login_ServerUI::RunGetServerListTimer(), sendMsgConnect! [%s, %d, %d]", p.worldIP, p.worldPort, p.UIN);
+        LogInfo("p.RunGetServerListTimer send!");
         sendMsgConnect(p.worldIP, p.worldPort, p.UIN);
         p.nTimerID = RegisterTimer( p.TimerGetServerList, 30 );
     end
@@ -584,7 +579,7 @@ function p.RefreshServer(nEventType)
 end
 
 function p.ProcessServerList(netdatas)
-	LogInfo("@@login08: receive_serverlist");
+	LogInfo("receive_serverlist");
     
     
     local record = {};
@@ -598,8 +593,8 @@ function p.ProcessServerList(netdatas)
     
     record.sRecommend   = netdatas:ReadUnicodeString();
     record.sUrl         = netdatas:ReadUnicodeString();
-    
-    LogInfo("@@login08: nServerID:[%d],nServerStatus[%d],nServerIP[%s],nServePort[%d],sServerName:[%s],sRecommend:[%s]",record.nServerID,record.nServerStatus,record.nServerIP,record.nServePort,record.sServerName,record.sRecommend);
+
+    LogInfo("nServerID:[%d],nServerStatus[%d],nServerIP[%s],nServePort[%d],sServerName:[%s],sRecommend:[%s]",record.nServerID,record.nServerStatus,record.nServerIP,record.nServePort,record.sServerName,record.sRecommend);
     
     if(record.nServerID == RECOMMEND_ID ) then
         local layer = p.getUiLayer();
@@ -611,16 +606,16 @@ function p.ProcessServerList(netdatas)
         p.szGameForumURL = record.sUrl;
         return;
     end
-    
+
     --更新变量
     local nIndex = p.GetServerIndexByServerId(record.nServerID);
     if(nIndex == 0) then
-        --LogInfo("nIndex == 0");
+        LogInfo("nIndex == 0");
         nIndex = #p.ServerListTag + 1;
         p.ServerListTag[nIndex] = record;
         p.AddItem(nIndex);
     else
-        --LogInfo("nIndex ~= 0:[%d]",nIndex);
+        LogInfo("nIndex ~= 0:[%d]",nIndex);
         
         if(p.ServerListTag[nIndex] == nil) then
             p.ServerListTag[nIndex] = {};
@@ -641,7 +636,7 @@ function p.ProcessServerList(netdatas)
 end
 
 function p.ProcessServerRole(netdatas)
-	LogInfo("@@login09: receive_serverrole");
+	LogInfo("receive_serverrole");
     local record = {};
     
     record.nIdAccount = netdatas:ReadInt();
@@ -660,7 +655,7 @@ function p.ProcessServerRole(netdatas)
     end
     
     
-    LogInfo("@@login09: nIdAccount:[%d],nServerID:[%d],nServerStatus:[%d],nProfession:[%d],nLevel:[%d],nLastLogin:[%d],sRoleName:[%s]",record.nIdAccount,record.nServerID,record.nServerStatus,record.nProfession,record.nLevel,record.nLastLogin,record.sRoleName);
+    LogInfo("nIdAccount:[%d],nServerID:[%d],nServerStatus:[%d],nProfession:[%d],nLevel:[%d],nLastLogin:[%d],sRoleName:[%s]",record.nIdAccount,record.nServerID,record.nServerStatus,record.nProfession,record.nLevel,record.nLastLogin,record.sRoleName);
     
     
     
@@ -678,7 +673,7 @@ function p.ProcessServerRole(netdatas)
     
     
     --更新UI
-    --LogInfo("record.nServerID:[%d]",record.nServerID);
+    LogInfo("record.nServerID:[%d]",record.nServerID);
     local nIndex = p.GetServerIndexByServerId(record.nServerID);
     local container = p.GetViewContainer();
     if(container == nil) then

@@ -42,8 +42,10 @@ local tArmyGroupErrorString = {
 	GetTxtPri("MAG2_T20"),
 	GetTxtPri("MAG2_T21"),
     GetTxtPri("MAG2_T22"),
-    GetTxtPri("MAG2_T28"),
-    GetTxtPri("MAG2_T29"),
+    GetTxtPri("MAG2_T36"),
+    GetTxtPri("MAG2_T37"),
+    GetTxtPri("MAG2_T38"),
+    GetTxtPri("MAG2_T39"),
 };
 
 local tArmyGroupOnlineString = {
@@ -64,7 +66,7 @@ function p.GetLogoutString( nTime )
 	elseif nTime < 1800 then
 		str=str..SafeN2S(getIntPart(nTime/60))..GetTxtPri("AREAUI_T8");
 	elseif nTime < 3600 then
-		str=str..GetTxtPri("AREAUI_T18");
+		str=str.."半小时";
 	elseif nTime < 86400 then
 		str=str..SafeN2S(getIntPart(nTime/3600))..GetTxtPri("AREAUI_T9");
 	else
@@ -144,9 +146,9 @@ ArmyGroupMsgAction = {
 	AGMA_Abdicate				= 17,	-- 禅让军团长
 	AGMA_MemberList				= 18,	-- 成员列表
 	AGMA_AGUpgrade				= 19,	-- 军团信息变更
-	AGMA_GetStorage				= 20,	-- 军团仓库
+    AGMA_GetStorage				= 20,	-- 军团仓库
 	AGMA_Delivery				= 21,	-- 发放
-	--AGMA_BeLegatus				= 19,	-- 莫名就成为军团长……
+    --AGMA_BeLegatus				= 19,	-- 莫名就成为军团长……
 	--AGMA_BeDeputy				= 100,	-- 被任命副军团长
 	--AGMA_BeRemoval				= 100,	-- 被解除副军团长
 	--AGMA_BeMember				= 100,	-- 成为某军团成员了……
@@ -251,7 +253,7 @@ p.tAGInformation	= nil;		-- 军团信息--当前玩家所在军团的军团信�
 p.tAGMemberList		= nil;		-- 成员列表--当前玩家所在军团的成员列表
 p.tAGApplicantList	= nil;		-- 申请者列表--当前玩家所在军团的申请者列表
 p.tmpMemberList		= nil;		-- 临时数据
-p.tStorage			= nil;		-- 
+p.tStorage            = nil;        -- 
 
 function p.ClearBuffer()
 	p.tUserInfor		= nil;
@@ -260,7 +262,7 @@ function p.ClearBuffer()
 	p.tAGMemberList		= nil;
 	p.tAGApplicantList	= nil;
 	p.tmpMemberList		= nil;
-	p.tStorage			= nil;
+    p.tStorage            = nil;
 end
 
 ---------------------------------------------------
@@ -1504,7 +1506,7 @@ function p.HandleNetMessage( tNetDataPackete )
 		p.HandleMsgSetNotice( tNetDataPackete );
 	elseif ( nActionID == ArmyGroupMsgAction.AGMA_AGUpgrade ) then
 		p.HandleMsgAGUpgrade( tNetDataPackete );
-	elseif ( nActionID == ArmyGroupMsgAction.AGMA_GetStorage ) then
+    	elseif ( nActionID == ArmyGroupMsgAction.AGMA_GetStorage ) then
 		p.HandleMsgGetStorage( tNetDataPackete );
 	elseif ( nActionID == ArmyGroupMsgAction.AGMA_Delivery ) then
 		p.HandleMsgDelivery( tNetDataPackete );
@@ -1516,3 +1518,67 @@ end
 RegisterNetMsgHandler( NMSG_Type._MSG_AG_USERINFO, "MsgArmyGroup.UserInformation", p.UserInformation );
 RegisterNetMsgHandler( NMSG_Type._MSG_ARMYGROUP, "MsgArmyGroup.HandleNetMessage", p.HandleNetMessage );
 
+
+--#################################################
+-- nTime, szOName, szTName, nItemType, nItemAmount
+DistributeRecordIndex = {
+	DRI_TIME		= 1,
+	DRI_ONAME		= 2,	-- 操作者名字
+	DRI_TNAME		= 3,	-- 目标者名字
+	DRI_OID			= 4,	-- 操作者ID
+	DRI_TID			= 5,	-- 目标者ID
+	DRI_ITEMTYPE	= 6,
+	DRI_ITEMAMOUNT	= 7,
+};
+
+---------------------------------------------------
+-- 获取分配记录
+function p.SendMsgGetDistributeHistory( usFrom, usCount )
+	LogInfo( "MsgArmyGroup: SendMsgGetDistributeHistory" );
+	local netdata = createNDTransData(NMSG_Type._MSG_GetDistributeHistory);
+	if nil == netdata then
+		LogInfo("memory is not enough");
+		return false;
+	end
+	netdata:WriteShort( usFrom );
+	netdata:WriteShort( usCount );
+	SendMsg( netdata );
+	netdata:Free();
+	return true;
+end
+
+---------------------------------------------------
+-- 分配记录消息
+function p.HandleMsgDistributeHistory( tNetDataPackete )
+	LogInfo( "MsgArmyGroup: HandleMsgDistributeHistory" );
+	local unFrom		= tNetDataPackete:ReadShort();
+	local usCount		= tNetDataPackete:ReadShort();
+	local btIsLasted	= tNetDataPackete:ReadByte();
+	LogInfo( "MsgArmyGroup: unFrom:%d, usCount:%d, btIsLasted:%d",unFrom,usCount,btIsLasted );
+	local tRecordList   = {};
+	for i=1, usCount do
+		local nLegatusID	= tNetDataPackete:ReadInt();
+		local nTargetID		= tNetDataPackete:ReadInt();
+		local nItemType		= tNetDataPackete:ReadInt();
+		local nItemAmount	= tNetDataPackete:ReadInt();
+		local nTime			= tNetDataPackete:ReadInt();
+		local szOName		= tNetDataPackete:ReadUnicodeString();--操作人员名字
+		local szTName		= tNetDataPackete:ReadUnicodeString();--目标人员名字
+		--LogInfo( "MsgArmyGroup: nTime:%d, szOName:%s, szTName:%s, nItemType:%d nItemAmount:%d ",nTime,szOName,szTName,nItemType,nItemAmount );
+        local tRecord		= {};
+		tRecord[DistributeRecordIndex.DRI_OID] 			= nLegatusID;
+		tRecord[DistributeRecordIndex.DRI_TID] 			= nTargetID;
+		tRecord[DistributeRecordIndex.DRI_ITEMTYPE]		= nItemType;
+		tRecord[DistributeRecordIndex.DRI_ITEMAMOUNT]	= nItemAmount;
+		tRecord[DistributeRecordIndex.DRI_TIME]			= nTime;
+		tRecord[DistributeRecordIndex.DRI_ONAME]		= szOName;
+		tRecord[DistributeRecordIndex.DRI_TNAME]		= szTName;
+		table.insert( tRecordList, tRecord );
+	end
+	if IsUIShow( NMAINSCENECHILDTAG.ArmyGroup ) then
+		DistributeRecordDlg.Callback_FillRecordList( tRecordList, btIsLasted );
+	end
+end
+
+---------------------------------------------------
+RegisterNetMsgHandler( NMSG_Type._MSG_DistributeHistory, "MsgArmyGroup.HandleMsgDistributeHistory", p.HandleMsgDistributeHistory );

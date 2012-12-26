@@ -2076,3 +2076,24 @@ DB_DAOFA_CONFIG = {
     GOLD                = 7,
     UPLEV_CHANCE        = 8,
 };
+
+
+DB_STAMINA_CONFIG = {
+    ID          = 0,
+    BUY_NUM     = 1,
+    REQ_EMONEY  = 2,
+}
+
+
+DB_MOUNT_TRAIN_CONFIG = {
+    ID          = 0,
+    NAME        = 1,
+    TYPE        = 2,
+    PIRICE      = 3,
+    DESCRIPT    = 4,
+}
+
+DB_MOUNT_TRAIN_TYPE_DESC = {
+    MONEY   = 0,    
+    EMONEY  = 1,   
+}

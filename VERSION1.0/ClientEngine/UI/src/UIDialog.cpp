@@ -303,7 +303,7 @@ void CUIDialog::AddOpt(const char* text, int nAction)
 	//CCSize winsize		= CCDirector::sharedDirector()->getWinSizeInPixels();
 	float fScale = ANDROID_SCALE;
 	CCRect rect;
-	cocos2d::CCLog("tzq fScale = %05f, x = %05f, y = %05f, w = %05f, h = %05f, m_uiOptHeight = %u", 
+	cocos2d::CCLog("fScale = %05f, x = %05f, y = %05f, w = %05f, h = %05f, m_uiOptHeight = %u", 
 		              fScale, rectNode.origin.x, rectNode.origin.y, rectNode.size.width, rectNode.size.height, m_uiOptHeight);
 	rect.origin			= ccpAdd(rectNode.origin, ccp(0, m_vUiOpt.size() * m_uiOptHeight));
 	rect.size			= CCSizeMake(rectNode.size.width*1.1, m_uiOptHeight);

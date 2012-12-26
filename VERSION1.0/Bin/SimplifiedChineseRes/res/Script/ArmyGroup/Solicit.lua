@@ -25,7 +25,7 @@ local ID_LABEL_REPUTATION			= 15;	-- 声望
 local ID_BTN_TOUCH					= 16;	-- 按钮
 
 ---------------------------------------------------
-local SZ_ERROR_00					= GetTxtPri("Solicit2_T1");
+local SZ_ERROR_00					= GetTxtPri("MAG2_T35");
 
 ---------------------------------------------------
 p.pChosenListItem		= nil;

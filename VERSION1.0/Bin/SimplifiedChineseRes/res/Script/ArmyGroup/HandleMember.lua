@@ -18,11 +18,11 @@ local ID_BTN_ABDICATE				= 36;	-- “禅让”按钮ID
 local ID_LABEL_NAME					= 37;	-- 名字
 
 ---------------------------------------------------
-local SZ_PROMOTION					= GetTxtPri("HM2_T1");
-local SZ_DEMOTION					= GetTxtPri("HM2_T2");
-local SZ_CONFIRM_00					= GetTxtPri("HM2_T3");
-local SZ_CONFIRM_01					= GetTxtPri("HM2_T4");
-local SZ_CONFIRM_02					= GetTxtPri("HM2_T5");
+local SZ_PROMOTION					= GetTxtPri("MAG2_T30");
+local SZ_DEMOTION					= GetTxtPri("MAG2_T31");
+local SZ_CONFIRM_00					= GetTxtPri("MAG2_T32");
+local SZ_CONFIRM_01					= GetTxtPri("MAG2_T33");
+local SZ_CONFIRM_02					= GetTxtPri("MAG2_T34");
 
 ---------------------------------------------------
 p.nMemberOrdinal	= nil;	-- 选中的玩家序号
@@ -58,7 +58,7 @@ p.pLayerHandleMemberDlg		= nil;
 	local uiLoad = createNDUILoad();
 	if ( nil == uiLoad ) then
 		layer:Free();
-		LogInfo( "ArmyGroup: CreateHadleMemberDlg failed! uiLoad is nil" );
+		LogInfo( "HadleMember: CreateHadleMemberDlg failed! uiLoad is nil" );
 		return false;
 	end
 	uiLoad:Load( "ArmyGroup/ArmyGroupUI_HandleMemberPanel.ini", layer, p.OnUIEventHandleMemberDlg, 0, 0 );

@@ -284,7 +284,7 @@ public class SocialUtils {
 
 		});
 	}
-	public static void continueTransaction(String transid) {
+	private void continueTransaction(String transid) {
 		Log.v(TAG, "begin ContinueTransaition");
 
 		Debit.continueTransaction(transid,
@@ -294,10 +294,10 @@ public class SocialUtils {
 					public void onSuccess(Transaction transaction) {
 						Log.v(TAG, "ContinueTransaction Success:"
 								+ transaction.getId());
-//						SocialUtils.showConfirmDialog(
-//								"ContinueTransaction status",
-//								"Successful,transactionID:"
-//										+ transaction.getId(), "OK");
+						SocialUtils.showConfirmDialog(
+								"ContinueTransaction status",
+								"Successful,transactionID:"
+										+ transaction.getId(), "OK");
 						
 						onContinueTransactionSuccess(transaction.getId());
 					}
@@ -325,7 +325,7 @@ public class SocialUtils {
 	}
 	
 
-	public static void cancelTransaction(String transid) {
+	private void cancelTransaction(String transid) {
 		Log.v(TAG, "begin CancelTransaition");
 
 		Debit.cancelTransaction(transid,
@@ -335,10 +335,10 @@ public class SocialUtils {
 					public void onSuccess(Transaction transaction) {
 						Log.v(TAG, "CancelTransaction Success:"
 								+ transaction.getId());
-//						SocialUtils.showConfirmDialog(
-//								"CancelTransaction status",
-//								"Successful,transactionID:"
-//										+ transaction.getId(), "OK");
+						SocialUtils.showConfirmDialog(
+								"CancelTransaction status",
+								"Successful,transactionID:"
+										+ transaction.getId(), "OK");
 						
 						onCancelTransactionSuccess(transaction.getId());
 					}

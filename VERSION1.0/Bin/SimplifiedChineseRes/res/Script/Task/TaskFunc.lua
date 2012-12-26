@@ -696,19 +696,23 @@ function GetTaskPrize(nTaskId)
 	
 	local strAward = "";
 	if nExp > 0 then
-		strAward = strAward .. "<cffff00经验: /e" .. "<cffffff" .. tostring(nExp) .. "/e";
+		--strAward = strAward .. "<cffff00经验: /e" .. "<cffffff" .. tostring(nExp) .. "/e";
+        strAward = _G.string.format("%s<cffff00%s: /e<cffffff%d",strAward,_G.GetTxtPub("exp"),nExp);
 	end
 	
 	if nMoney > 0 then
-		strAward = strAward .. "<cffff00银币: /e" .. "<cffffff" .. tostring(nMoney) .. "/e";
+		--strAward = strAward .. "<cffff00银币: /e" .. "<cffffff" .. tostring(nMoney) .. "/e";
+        strAward = _G.string.format("%s<cffff00%s: /e<cffffff%d",strAward,_G.GetTxtPub("coin"),nMoney);
 	end
 	
 	if repute > 0 then
-		strAward = strAward .. "<cffff00声望: /e" .. "<cffffff" .. tostring(repute) .. "/e";
+		--strAward = strAward .. "<cffff00声望: /e" .. "<cffffff" .. tostring(repute) .. "/e";
+        strAward = _G.string.format("%s<cffff00%s: /e<cffffff%d",strAward,_G.GetTxtPub("ShenWan"),repute);
 	end
 	
 	if soul > 0 then
-		strAward = strAward .. "<cffff00将魂: /e" .. "<cffffff" .. tostring(soul) .. "/e";
+		--strAward = strAward .. "<cffff00将魂: /e" .. "<cffffff" .. tostring(soul) .. "/e";
+        strAward = _G.string.format("%s<cffff00%s: /e<cffffff%d",strAward,_G.GetTxtPub("JianHun"),soul);
 	end	
 	
 	local tAwardItem = {}
@@ -893,12 +897,9 @@ end
 
 --获取下一主线任务id
 function GetNextMainTaskId()
-    LogInfo("GetNextMainTaskId");
 	--获取可接任务列表
 	local tlist = GetCanAcceptTasks();
 	for i,taskid in ipairs(tlist) do	
-        LogInfo("taskid:[%d]",taskid);
-    
 		local tasktype = _G.math.floor(taskid/10000);
 		if tasktype == TASKTYPE.MAIN_TASK then
 			return taskid;

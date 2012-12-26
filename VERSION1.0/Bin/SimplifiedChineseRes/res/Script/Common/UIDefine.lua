@@ -45,8 +45,8 @@ UITextAlignment =
 	Left = 0,		--左对齐
 	Center = 1,		--居中
 	Right = 2,		--右对齐
+    LeftRCenter = 3,
 };
-
 --z轴层级
 UILayerZOrder = 
 {
@@ -191,14 +191,15 @@ NMAINSCENECHILDTAG =
     MainPlayerListUI        = NUITAG_BEGIN + 178,                   --主城查看其它玩家
     Banquet					= NUITAG_BEGIN + 179,                    --宴会界面
     BattleUI_Title			= NUITAG_BEGIN + 180,                    --战斗TITLE界面
- 	CampBattle              = 2015,                   --阵营战
- 	
+    CampBattle              = 2015,                   --阵营战
+     	
  	SyndicateBattleUI         =  2015,                   --军团战ui
  	SyndicateBattleSignUpUI           =  NUITAG_BEGIN + 180,                  --军团战报名ui
  	SyndicateBattleResultUI           =  NUITAG_BEGIN + 181,                   --军团战进程ui
+ 	PVPADDUI           =  NUITAG_BEGIN + 184,                   --PVP属性界面
+
  	DestinyUI               = NUITAG_BEGIN + 182,                   --占星
     DestinyFeteUI           = NUITAG_BEGIN + 183,                   --占星祭祀
-   
     CommonDlg				= NDLGTAG_BEGIN,						--通用对话框
 	CommonDlgNew              = NDLGTAGNEW_BEGIN,                     --新通用对话框
 	--后面都被对话框占用了,请不要使用
@@ -211,3 +212,5 @@ RectUILayer = CGRectMake(winsize.w * (1 - 0.954167) / 2, winsize.h * (1 - 0.8875
 RectFullScreenUILayer = CGRectMake(0, 0, winsize.w, winsize.h);
 --缩放系数
 ScaleFactor = DefaultDirector():GetScaleFactor();
+fScaleFactorX = DefaultDirector():GetScaleFactorX();
+fScaleFactorY = DefaultDirector():GetScaleFactorY();

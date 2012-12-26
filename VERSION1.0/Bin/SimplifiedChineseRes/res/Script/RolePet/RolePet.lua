@@ -198,7 +198,6 @@ function p.OrderPets(pets,nPlayerId)
     p.nPlayerId = nil;
     return pets;
 end
-
 function p.SortPetFunc(a, b)
     
     local nMainPetId = ConvertN(RolePetFunc.GetMainPetId(p.nPlayerId));

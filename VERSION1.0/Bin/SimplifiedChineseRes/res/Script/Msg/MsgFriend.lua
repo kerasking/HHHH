@@ -209,7 +209,7 @@ function p.ProcessGoodFriendInfo(netdata)
 				  --
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_LEVEL,0,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_REPUTE	,0,idFriend) 
-				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_SYNDYCATE,0,idFriend) 
+				  SetRoleFriendDataS(nRoleId, FRIEND_DATA.FRIEND_SYNDYCATE,"",idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_SPORTS	,0,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_CAPACITY,0,idFriend) 
 				  --]]
@@ -231,14 +231,14 @@ function p.ProcessGoodFriendInfo(netdata)
 				 
 				  local lv     = netdata:ReadInt(); 
 				   local repute    = netdata:ReadInt(); 
-				  local syndycate = netdata:ReadInt(); 
+				  local syndycate = netdata:ReadUnicodeString();  
 				  local sports 	  = netdata:ReadInt(); 
 				  local capacity  = netdata:ReadInt(); 
                   
                   
                   
                   
-				  LogInfo("_FRIEND_INFO_UPDATE:[%d],name:[%s],lv:[%d],online:[%d],pro[%d]",idFriend,name,lv,online,pro)
+				  LogInfo("_FRIEND_INFO_UPDATE:[%d],name:[%s],lv:[%d],online:[%d],pro[%d],syndycate:[%s]",idFriend,name,lv,online,pro,syndycate)
 				  
 				  --新添加的好友
 				  if not FriendFunc.IsExistFriend(idFriend) then
@@ -250,7 +250,7 @@ function p.ProcessGoodFriendInfo(netdata)
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_ONLINE,online,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_PROFESSION,pro,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_REPUTE	,repute,idFriend) 
-				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_SYNDYCATE,syndycate,idFriend) 
+				  SetRoleFriendDataS(nRoleId, FRIEND_DATA.FRIEND_SYNDYCATE,syndycate,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_SPORTS	,sports,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_CAPACITY,capacity,idFriend) 
                   SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_QUALITY,nQuality,idFriend) 
@@ -282,13 +282,13 @@ function p.ProcessGoodFriendInfo(netdata)
 				  
                   local lv     = netdata:ReadInt(); 
 				  local repute    = netdata:ReadInt(); 
-				  local syndycate = netdata:ReadInt(); 
+				  local syndycate = netdata:ReadUnicodeString(); 
 				  local sports 	  = netdata:ReadInt(); 
 				  local capacity  = netdata:ReadInt(); 
 				  			
 			
 			
-			LogInfo("idFriend:[%d],name:[%s],lv:[%d],online:[%d],pro[%d]",idFriend,name,lv,online,pro)
+			LogInfo("idFriend:[%d],name:[%s],lv:[%d],online:[%d],pro[%d],syndycate:[%s]",idFriend,name,lv,online,pro,syndycate)
 			nRoleId = GetPlayerId();
 			--新添加的好友
 			if FriendFunc.IsExistFriend(idFriend) or playerId ~= idFriend then
@@ -302,7 +302,7 @@ function p.ProcessGoodFriendInfo(netdata)
 			SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_QUALITY,nQuality,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_PROFESSION,pro,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_REPUTE	,repute,idFriend) 
-				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_SYNDYCATE,syndycate,idFriend) 
+				  SetRoleFriendDataS(nRoleId, FRIEND_DATA.FRIEND_SYNDYCATE,syndycate,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_SPORTS	,sports,idFriend) 
 				  SetRoleFriendDataN(nRoleId, FRIEND_DATA.FRIEND_CAPACITY,capacity,idFriend) 
 				  

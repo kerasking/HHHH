@@ -382,13 +382,13 @@ function p.GetStatusAttrTypeDesc(nAttr)
 	end
     LogInfo("p.GetStatusAttrTypeDesc nAttr:[%d]",nAttr);
 	if nAttr == Item.STATUS_ATTR_TYPE_CONTROL_ADD then
-		str = "控制概率增幅";
+		str = GetTxtPri("PUIA_T4");
     elseif nAttr == Item.STATUS_ATTR_TYPE_CONTROL_SUB then
-        str = "控制抗性增幅";
+        str = GetTxtPri("PUIA_T5");
     elseif nAttr == Item.STATUS_ATTR_TYPE_MORALE_ADD then
-        str = "减扣士气效果增幅";    
+        str = GetTxtPri("PUIA_T6");    
 	elseif nAttr == Item.STATUS_ATTR_TYPE_MORALE_SUB then
-		str = "减扣士气抗性增幅";
+		str = GetTxtPri("PUIA_T7");
     end
     return str;
 end
@@ -409,7 +409,7 @@ function p.GetAttrTypeValueDesc(nAttr, value)
         val = val.."%";
     elseif(nAttr == 4) then
         val = "-"..(value/10);
-        val = (val/10).."%";
+        val = val.."%";
     end
     str = des..val;
     return str;
@@ -642,7 +642,6 @@ function p.SetLabelColor(label, nItemType)
     end
     label:SetFontColor(p.GetItemColor(nItemType));
 end
-
 
 --设置道法物品颜色
 function p.GetDaoFaItemColor(nItemType)

@@ -51,7 +51,6 @@ function p.LoadUI()
 		return false;
 	end
     
-    --layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.RechargeReward);
 	layer:SetFrameRect(RectFullScreenUILayer);

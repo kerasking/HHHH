@@ -53,9 +53,9 @@ p.BtnTag =
 
 p.BtnText = 
 {
-	GetTxtPri("TASB2_T1"),
-	GetTxtPri("Common_active"),
-	GetTxtPri("Common_Stamina"),
+	"竞技场",
+	"活动",
+	"军令",
 	--"日常",
 
 };
@@ -70,16 +70,16 @@ p.BtnFile =
 
 function p.ShowGiftDialog(gift,index)
 	if index==1 then
-		local tip=GetTxtPri("TASB2_T2")..SafeN2S(gift[4])..","..GetTxtPri("TASB2_T3")..SafeN2S(gift[2]);
+		local tip="你在竞技场排名"..SafeN2S(gift[4])..",获得银币＋"..SafeN2S(gift[2]);
 		CommonDlg.ShowWithConfirm(tip, nill);
 	elseif index==2 then
-		local tip=GetTxtPri("TASB2_T4")..SafeN2S(gift[4])..","..GetTxtPri("TASB2_T5")..SafeN2S(gift[2]);
+		local tip="你的等级为"..SafeN2S(gift[4])..",获得声望＋"..SafeN2S(gift[2]);
 		CommonDlg.ShowWithConfirm(tip, nill);
 	elseif index==3 then
-		local tip=GetTxtPri("TASB2_T6")..SafeN2S(gift[4])..","..GetTxtPri("PLAYER_T6")..ItemFunc.GetName(gift[2]);
+		local tip="在世界BOSS击杀中，你排名"..SafeN2S(gift[4])..",获得"..ItemFunc.GetName(gift[2]);
 		CommonDlg.ShowWithConfirm(tip, nill);
 	elseif index==4 then
-		local tip=GetTxtPri("TASB2_T7")..SafeN2S(gift[4])..","..GetTxtPri("PLAYER_T6")..ItemFunc.GetName(gift[2]);
+		local tip="在帮派BOSS击杀中，你排名"..SafeN2S(gift[4])..",获得"..ItemFunc.GetName(gift[2]);
 		CommonDlg.ShowWithConfirm(tip, nill);		
 	end
 	
@@ -304,7 +304,7 @@ function p.LoadUI()
 
 	layer:SetTag(NMAINSCENECHILDTAG.MilOrdersDisPTxt);
 	layer:SetFrameRect(rect);
-	local MilOrderstxt = CreateLabel(GetTxtPri("Common_Stamina")..":",CGRectMake(0,0,300,150),12,ccc4(255,255,255,255));
+	local MilOrderstxt = CreateLabel("军令:",CGRectMake(0,0,300,150),12,ccc4(255,255,255,255));
 	MilOrderstxt:SetTag(1);
 	layer:AddChild(MilOrderstxt);
 	scene:AddChild(layer);
@@ -363,7 +363,7 @@ function p.GameDataUserInfoRefresh(uiNode, uiEventType, param)
 
 	local nMilOrders = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_STAMINA);
 	local nGold =  GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);
-	local str = string.format(GetTxtPri("Common_Stamina")..":(%d/%d)\n "..GetTxtPri("TASB2_T8")..":%d\n"..GetTxtPri("TASB2_T9")..":%d\n"..GetTxtPri("Common_shoe")..":%d",nMilOrders,MAX_MILORDERS,nLeftTime,nVipRank,nGold);
+	local str = string.format("军令:(%d/%d)\n 剩余购买次数:%d\nvip等级:%d\n金币:%d",nMilOrders,MAX_MILORDERS,nLeftTime,nVipRank,nGold);
 
 	SetLabel(layer,1,str);--..GetRoleBasicDataN(nPlayerId,USER_ATTR_MONEY));
 	
@@ -397,20 +397,20 @@ function p.OnClickBuyMilOrderBtn()
 		local nLeftTime = nAvailBuyTime - nBought;
 		LogInfo("qbwqbwqbw21:"..nAvailBuyTime.." "..nBought)
 		if nLeftTime <= 0 then
-			CommonDlg.ShowTipInfo(GetTxtPri("Common_tip"),GetTxtPri("TASB2_T10"),nil,2);
+			CommonDlg.ShowTipInfo("提示","剩余购买次数不足！",nil,2);
 			return;
 		end
 		if tGoldNeeded[nBought+1] >  GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY) then
-			CommonDlg.ShowTipInfo(GetTxtPri("Common_tip"),GetTxtPri("ZZ_JINBIBUZHU"),nil,2);
+			CommonDlg.ShowTipInfo("提示","金币不足！",nil,2);
 			return;
 		end
 		if   GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_STAMINA) >= 48 then
-			CommonDlg.ShowTipInfo(GetTxtPri("Common_tip"),GetTxtPri("PLAYER_T75"),nil,2);
+			CommonDlg.ShowTipInfo("提示","您的军令数已经达到上限！",nil,2);
 			return;
 		end
 		
 		
-		CommonDlg.ShowNoPrompt(GetTxtPri("TASB2_T11")..nLeftTime..GetTxtPri("TASB2_T12")..tGoldNeeded[nBought+1]..GetTxtPri("TASB2_T13"),p.BuyMilOrders,true)
+		CommonDlg.ShowNoPrompt("今日可购买"..nLeftTime.."次。花费"..tGoldNeeded[nBought+1].."金币购买1个军令",p.BuyMilOrders,true)
 
 
 end

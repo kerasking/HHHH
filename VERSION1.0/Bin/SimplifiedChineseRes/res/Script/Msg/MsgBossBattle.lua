@@ -289,13 +289,13 @@ function p.ProcessEncourage( netdata )
     LogInfo( "MsgBossBattle.ProcessEncourage" );
     
     local bIsSuccess = netdata:ReadByte();
-     
+
     if( bIsSuccess == 1 ) then
-        CommonDlgNew.ShowTipDlg(GetTxtPri("MBB2_T1"));
+        CommonDlgNew.ShowTipsDlg({{"鼓舞成功，加一星！",ccc4(28,237,93,255)}});
     elseif bIsSuccess == 0  then
-        CommonDlgNew.ShowTipDlg(GetTxtPri("MBB2_T2"));
+        CommonDlgNew.ShowTipsDlg({{"鼓舞失败，你什么好处也没得到。",ccc4(255,15,15,255)}});
     elseif bIsSuccess == 2  then
-        CommonDlgNew.ShowTipDlg(GetTxtPri("MBB2_T3"));
+        CommonDlgNew.ShowTipsDlg({{"鼓舞失败，鼓舞等级已满。",ccc4(255,15,15,255)}});
     end
 end
 
@@ -334,7 +334,6 @@ local nCount = GetDataBaseDataN("encourage_config",ENCOURAGE_TYPE.CHAOSBATTLE,DB
 return nCount;
 end
 --=========大乱斗=========--
-
 
 RegisterNetMsgHandler(NMSG_Type._MSG_BATTLE_ENCOURAGE, "MsgBossBattle.ProcessEncourage", p.ProcessEncourage);
 RegisterNetMsgHandler(NMSG_Type._MSG_PLAYER_ACTION_OPERATE, "MsgBossBattle.ProcessActivity", p.ProcessActivity);

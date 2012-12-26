@@ -113,7 +113,7 @@ function p.GetParent()
 	local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.ChatGameScene);
 	
 	if nil == layer then
-		--LogInfo("DelayShowUI GetParent return parent nil")
+		LogInfo("DelayShowUI GetParent return parent nil")
 		return nil;
 	end
 

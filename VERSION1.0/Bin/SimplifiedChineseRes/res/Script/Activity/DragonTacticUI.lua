@@ -42,6 +42,7 @@ local CTR_TEXT_21       = 21;
 local CTRL_SPRITE_87    = 87;
 local CTR_BTN_26 = 26;
 
+
 --加载龙将兵法主界面
 function p.LoadUI()
    

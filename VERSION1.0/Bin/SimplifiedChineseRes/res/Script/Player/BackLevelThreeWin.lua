@@ -67,7 +67,7 @@ local TAG_DESTINY_SELL        = 65;                  --出售
 local TAG_DESTINY_ADD_DESC    = 20;                  --属性加层说明
 local TAG_DESTINY_PRICE         = 52;               
 
-local TAG_EQUIP_EQUIP_TIP   = {equip=GetTxtPri("Common_equip"),unsnatch=GetTxtPri("BLTW_T1"),};
+local TAG_EQUIP_EQUIP_TIP   = {equip=GetTxtPri("BLTW_T1"),unsnatch=GetTxtPri("BLTW_T2"),};
 
 p.parent = nil;
 
@@ -194,11 +194,11 @@ function p.LoadUI(parent)
 	uiLoad:Load("Prop.ini", prop_layer, p.OnUIEventProp, 0, 0);
     uiLoad:Free();
     ----------------------------------------------------------------------
-            
     
     
     
     
+        
     ----------------------------------------------------------------------
     local destiny_layer = createNDUILayer();
 	if destiny_layer == nil then
@@ -838,9 +838,11 @@ function p.OnUIEventProp(uiNode, uiEventType, param)
         	LogInfo("qbw glid id"..nItemId);
             
             
+            
+            
+            
+            
             local nType = ItemFunc.GetPropType(nItemType);
-            
-            
             
             if(nType == 1) then     --礼包使用
                 
@@ -915,8 +917,6 @@ function p.OnUIEventProp(uiNode, uiEventType, param)
     end
     return true;
 end
-
-
 
 
 function p.OnUIEventDestiny(uiNode, uiEventType, param)
@@ -997,12 +997,12 @@ function p.DestinyEquipOperate(nItemId, nPetId, nPosition, bIsEquip)
             
             if(nType1 == 0) then
                 if(nStatusType2 == nStatusType1) then
-                    CommonDlgNew.ShowYesDlg(GetTxtPri("FAUI_T2"));
+                    CommonDlgNew.ShowYesDlg(GetTxtPri("BLTW_T2"));
                     return false;
                 end
             else
                 if(nType1 == nType2) then
-                    CommonDlgNew.ShowYesDlg(GetTxtPri("FAUI_T2"));
+                    CommonDlgNew.ShowYesDlg(GetTxtPri("BLTW_T2"));
                     return false;
                 end
             end
@@ -1042,6 +1042,12 @@ function p.OnUIEventUseNum(nEventType, param, val)
                     return;
                 end
                 
+                --****--
+                --判断宠物等级是否到达物品要求等级
+                if(p.equipMinimumLevel(param[2], param[1]) == false) then
+                    return;
+                end
+
                 --****--
                 --判断宠物等级是否到达物品要求等级
                 if(p.equipMinimumLevel(param[2], param[1]) == false) then
@@ -1147,32 +1153,6 @@ end
 function p.layerShowOrHide(tag, flag)
     local layer = GetUiLayer(p.parent, tag);
     layer:SetVisible(flag);
-    
-    if flag then
-        p.exclusiveBringToTop(tag);
-    end
-end
-
---独占提前
-function p.exclusiveBringToTop(tag)
-    
-    LogError("@@ exclusiveBringToTop(): "..tag);
-    
-    local lyr = GetUiLayer(p.parent, EQUIP_LAYER);
-    lyr:bringToBottom();
-    
-    lyr = GetUiLayer(p.parent, MATE_LAYER);
-    lyr:bringToBottom();
-
-    lyr = GetUiLayer(p.parent, GEM_LAYER);
-    lyr:bringToBottom();
-    
-    lyr = GetUiLayer(p.parent, PROP_LAYER);
-    lyr:bringToBottom();
-    
-    lyr = GetUiLayer(p.parent, tag);
-    lyr:bringToTop();    
-
 end
 
 function p.DestoryLayer()

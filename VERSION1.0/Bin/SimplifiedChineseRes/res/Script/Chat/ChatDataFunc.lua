@@ -91,7 +91,7 @@ function p.AddChatRecord(sID,cID,tID,spk,txt)
 	LogInfo("addChatRecord:%s:%s",spk,txt);
 	if (list_end-list_head)>49 then
 		p.chatList[list_head]=nil;
-				
+        				
         if IsUIShow(NMAINSCENECHILDTAG.ChatGameScene) then
             ChatGameScene.RemoveChatText(list_head)
         end
@@ -117,7 +117,7 @@ function p.AddChatRecord(sID,cID,tID,spk,txt)
 		--ChatMainUI.AddChatText(sID,cID,spk,txt);
 		CommonDlgNew.ShowTipDlg(txt);
 	end
-	   
+    
     ChatGameScene.AddChatText(sID,cID,spk,txt,list_end);
     
     ChatGameScene.DelayShowUI();
@@ -264,6 +264,8 @@ function p.GetChatTypeFromChannel(channel)
 	elseif channel==9 then
 		type = ChatType.CHAT_CHANNEL_WORLD;
 	elseif channel==5 then
+		type = ChatType.CHAT_CHANNEL_SYS;
+    elseif channel==22 then
 		type = ChatType.CHAT_CHANNEL_SYS;
 	elseif channel==3 then
 		type = ChatType.CHAT_CHANNEL_WORLD;

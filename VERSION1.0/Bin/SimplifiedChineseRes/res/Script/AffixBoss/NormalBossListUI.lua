@@ -883,7 +883,7 @@ function p.ShowConfirmDialog( nBattleID )
         local bIsCanShow = p.IsBattleCanShow(tBattleInfo.typeid );
 		--if ( nUserStage <= nNeedStage ) then
         if ( bIsCanShow ~= true ) then
-			CommonDlgNew.ShowYesDlg( GetTxtPri("TPL2_T5"), nil, nil, 3 );
+			CommonDlgNew.ShowYesDlg( "温馨提示：要完成前面任务关卡才可解锁哦，亲……", nil, nil, 3 );
 			return false;
 		end
         

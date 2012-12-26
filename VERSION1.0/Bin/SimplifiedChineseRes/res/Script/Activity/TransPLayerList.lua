@@ -26,7 +26,7 @@ function p.LoadUI ()
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.TransPlayerListUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer, UILayerZOrder.ActivityLayer);
+	scene:AddChildZ(layer, UILayerZOrder.ActivityLayer+1);
     -----------------初始化ui添加到 layer 层上----------------------------------
     local uiLoad = createNDUILoad();
 	if nil == uiLoad then
@@ -42,7 +42,7 @@ end
 
 -----------------------------初始化数据---------------------------------
 function p.RefreshUI()
-    LogInfo("RefreshUI begin"); 
+    LogInfo("tzq RefreshUI begin"); 
 
     local layer = p.GetParent();
     local ListContainer  = GetScrollViewContainer(layer, p.CtrId.listId);
@@ -55,11 +55,11 @@ function p.RefreshUI()
     ListContainer:EnableScrollBar(true);
     ListContainer:RemoveAllView();
     
-    LogInfo("RefreshUI show"); 
+    LogInfo("tzq RefreshUI show"); 
     --设置当前要显示的说明信息
     local nPlayerId = GetPlayerId();  
     for i, v in pairs(Transport.tbOtherUserInfo) do
-        LogInfo("p.RefreshUI i = %d", i);   
+        LogInfo("tzq p.RefreshUI i = %d", i);   
         if v.nPlayerId ~= nPlayerId then
             p.AddViewItem(ListContainer, v.nPlayerId, "transport/Transport_playerList_L.ini", v);
         end
@@ -89,7 +89,7 @@ function p.AddViewItem(container, nId, uiFile, info)
         return false;
     end
     
-    LogInfo("p.AddViewItem uiFile = %s", uiFile); 
+    LogInfo("tzq p.AddViewItem uiFile = %s", uiFile); 
     uiLoad:Load(uiFile, view, p.OnUIEvent, 0, 0);
     
     p.refreshViewItem(view, nId, info);
@@ -108,8 +108,9 @@ function p.refreshViewItem(view, nId, info)
     local total     = Transport.tbGrainStatic.BeLootMax;
     local btn = GetButton(view, p.CtrId.btnLoot);
     
+    
     SetLabel(view, p.CtrId.txtIsLoot, info.strArmyGroup);
-	
+    
     if beLoot < total and nPlayerId ~= info.nLooterId1 and  nPlayerId ~= info.nLooterId2 then
         p.IsCanBeLoot = true;
         --SetLabel(view, p.CtrId.txtIsLoot, GetTxtPri("TPL2_T1"));
@@ -123,7 +124,7 @@ function p.refreshViewItem(view, nId, info)
     local l_CarLev = SetLabel(view, p.CtrId.txtCarLev, Transport.tbGrainConfig[info.nGrain_config_id].Name);   
     LogInfo("chh_info.nGrain_config_id:[%d]",info.nGrain_config_id);
     l_CarLev:SetFontColor(Item.GetTransportCarQuality(info.nGrain_config_id)); 
-	
+
     return;
 end
 

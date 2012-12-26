@@ -5,25 +5,20 @@ function GetSkillPotraitPic(skillId)
 	return GetPotraitPic(skillId, "skill_config", DB_SKILL_CONFIG.ICONINDEX, "Skill", 80, 80);
 end
 
---获得物品图片
-function GetHeadPotraitPic(headId)
-	return GetPotraitPic(headId, "itemtype", DB_ITEMTYPE.ICONINDEX, "Goods", 80, 80);
-end
-
 --获得坐骑图片
 function GetMountModelPotraitPic(id)
     return GetPotraitPic(id, "mount_model_config", DB_MOUNT_MODEL.ICON, "Mounts", 280, 280);
-end
-
---获得坐骑头像
-function GetMountHeadPotraitPic(id)
-    return GetPotraitPic(id, "mount_model_config", DB_MOUNT_MODEL.ICON, "MountsHead", 100, 100);
 end
 
 
 --获得武将半身像
 function GetPetBodyPic(petTypeId)
     return GetPotraitPic(petTypeId, "pet_config", DB_PET_CONFIG.BODY_PIC, "Bust", 256, 256);
+end
+
+--获得坐骑头像
+function GetMountHeadPotraitPic(id)
+    return GetPotraitPic(id, "mount_model_config", DB_MOUNT_MODEL.ICON, "MountsHead", 100, 100);
 end
 
 --获得武将任务圆头像
@@ -41,24 +36,6 @@ function GetPetPotraitPic(petTypeId)
     return GetPotraitPic(petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_Portrait", 80, 80);
 end
 
---获得主角头像不带背景
-function GetPetPotraitTranPic(petTypeId)
-    return GetPotraitPic(petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_Portrait", 80, 80, -1, 0);
-end
-
-
-
---获得主角高清头像带背景
-function GetPlayerPotraitPic(petTypeId)
-    return GetPotraitPic(petTypeId, "pet_config", DB_PET_CONFIG.ICON, "PlayerHeadNew", 120, 120);
-end
-
---获得主角高清头像不带背景
-function GetPlayerPotraitTranPic(petTypeId)
-    return GetPotraitPic(petTypeId, "pet_config", DB_PET_CONFIG.ICON, "PlayerHeadNew", 120, 118, -1, 0);
-end
-
-
 --获得主角高清主界面头像
 function GetPlayerMainUIPotraitPic(petTypeId)
 return GetPotraitPic(petTypeId, "pet_config", DB_PET_CONFIG.ICON, "PlayerHeadMainUI", 150, 126, -1, 0);
@@ -74,13 +51,13 @@ end
 
 --获取物品图片
 function GetGoodsPic(id)
-    return GetPotraitPic(id, "itemtype", DB_ITEMTYPE.ICONINDEX, "Goods", 80, 80, nil, nil, true);
+    return GetPotraitPic(id, "itemtype", DB_ITEMTYPE.ICONINDEX, "Goods", 80, 80, nil,nil, true);
 end
 
 --获取礼包图片
 function GetGiftPic(id)
-    return GetPotraitPic(id, "itemtype", DB_ITEMTYPE.ICONINDEX, "Goods", 80, 80, nil, nil, true);
-    --return GetPotraitPic(id, "giftpack_config", DB_GIFTPACK_CONFIG.ICON, "Gifts", 80, 80);
+    return GetPotraitPic(id, "itemtype", DB_ITEMTYPE.ICONINDEX, "Goods", 80, 80, nil,nil, true);
+    --return GetPotraitPic(id, "giftpack_config", DB_GIFTPACK_CONFIG.ICON, "Gifts", 80, 80, nil,nil, true);
 end
 
 --获得boss战图片
@@ -122,7 +99,7 @@ function GetPotraitPic(id, configfilename, index, picfilename, w, h, offsetRows,
 		return nil;
 	end
 	
-	_G.LogInfo("GetPotraitPic[%d][%d][%d][%d][%d][%d]", nLac, nTenThousand, nThousand, nHundred, nRow, nCol);
+	_G.LogInfo("GetPotraitPic[%d][%d][%d][%d]", nThousand, nHundred, nRow, nCol);
 	
     
     if nLac > 0 then
@@ -262,7 +239,7 @@ function GetBodyPotraitPicPath(nIndex)
         end
     
     elseif nThousand > 0 then
-		filename = filename .. nThousand;
+        filename = filename .. nThousand;
 		if nHundred >= 0 then
 			filename = filename .. nHundred;
 		end
@@ -281,7 +258,6 @@ end
 
 
 
-
 -----======================获取副本图标,武将头像调整=======================-----
 --取大地图的图标在副本里使用
 --[[
@@ -292,27 +268,18 @@ end
 
 --取大地图的图标在副本里使用(精英副本由于要加灰色图片导致实现不同修改）
 function GetEliteGrayMapPic(mapId)
-    --return GetPotraitPicMap(mapId, "map", DB_DYNAMAP.TITLE, "MapGray", 178, 154);
-    return GetPotraitPicMap(mapId, "map", DB_DYNAMAP.TITLE, "MapGray",178, 154, nil, nil, true);
+    return GetPotraitPicMap(mapId, "map", DB_DYNAMAP.TITLE, "MapGray", 178, 154);
 end
 
 function GetMapPic(mapId)
-    LogInfo("GetMapPic mapId = %d", mapId);
-    return GetPotraitPicMap(mapId, "map", DB_DYNAMAP.TITLE, "Map",178, 154, nil, nil, true);
+    return GetPotraitPicMap(mapId, "map", DB_DYNAMAP.TITLE, "Map", true);
 end
 
-function GetPotraitPicMap(id, configfilename, index,sHead, w, h, offsetRows, offsetCols, bLanguage)
+function GetPotraitPicMap(id, configfilename, index,sHead, bIsLanguage)
     if not _G.CheckN(id) then
         LogInfo("id not is num!");
 		return nil;
 	end
-    
-    if(offsetRows == nil) then
-        offsetRows = 0;
-    end
-    if(offsetCols == nil) then
-        offsetCols = 0;
-    end
 	
 	local nIcon = GetDataBaseDataN(configfilename, id, index);
 	if not _G.CheckN(nIcon) then
@@ -325,14 +292,14 @@ function GetPotraitPicMap(id, configfilename, index,sHead, w, h, offsetRows, off
 	local filename		= "Map/"..sHead..nIcon;
 
 	local pool = _G.DefaultPicPool();
-	
-	local pic = nil;
-	
-	if (bLanguage) then
-		pic = pool:AddPicture(_G.GetSMImg00Path("portrait/" .. filename .. ".png"), false);
-	else
-		pic = pool:AddPicture(_G.GetSMImgPath("portrait/" .. filename .. ".png"), false);
-	end
+	local pic;
+    
+    if(bIsLanguage) then
+        pic = pool:AddPicture(_G.GetSMImg00Path("portrait/" .. filename .. ".png"), false);
+    else
+        pic = pool:AddPicture(_G.GetSMImgPath("portrait/" .. filename .. ".png"), false);
+    end
+    
 	if not _G.CheckP(pic) then
         LogInfo("pic is null!");
 		return nil;
@@ -342,40 +309,21 @@ function GetPotraitPicMap(id, configfilename, index,sHead, w, h, offsetRows, off
 end
 
 
---获得招募界面的武将头像
---[[
 function GetPetBigPotraitTranPic( petTypeId )
-    return GetPotraitPic( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigPortrait", 179, 215 );
+    return GetPotraitPicFigure( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigPortrait", true);
 end
 
 --获得招募界面的灰色武将头像
 function GetPetBigGrayPotraitTranPic( petTypeId )
-    return GetPotraitPic( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigGrayPortrait", 179, 215 );
-end
---]]
-
-function GetPetBigPotraitTranPic( petTypeId )
-    return GetPotraitPicFigure( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigPortrait", 179, 215 );
-end
-
---获得招募界面的灰色武将头像
-function GetPetBigGrayPotraitTranPic( petTypeId )
-    return GetPotraitPicFigure( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigGrayPortrait", 179, 215 );
+    return GetPotraitPicFigure( petTypeId, "pet_config", DB_PET_CONFIG.ICON, "Figure_BigGrayPortrait", true);
 end
 
 
-function GetPotraitPicFigure(id, configfilename, index,sHead, w, h, offsetRows, offsetCols)
+function GetPotraitPicFigure(id, configfilename, index, sHead, bIsLanguage)
     if not _G.CheckN(id) then
         LogInfo("id not is num!");
 		return nil;
 	end
-    
-    if(offsetRows == nil) then
-        offsetRows = 0;
-    end
-    if(offsetCols == nil) then
-        offsetCols = 0;
-    end
 	
 	local nIcon = GetDataBaseDataN(configfilename, id, index);
 	if not _G.CheckN(nIcon) then
@@ -388,7 +336,14 @@ function GetPotraitPicFigure(id, configfilename, index,sHead, w, h, offsetRows, 
 	local filename		= sHead.."/Figure_BigPortrait"..nIcon;
 
 	local pool = _G.DefaultPicPool();
-	local pic = pool:AddPicture(_G.GetSMImg00Path("portrait/" .. filename .. ".png"), false);
+    local pic;
+    if(bIsLanguage) then
+        pic = pool:AddPicture(_G.GetSMImg00Path("portrait/" .. filename .. ".png"), false);
+    else
+        pic = pool:AddPicture(_G.GetSMImgPath("portrait/" .. filename .. ".png"), false);
+    end
+    
+    
 	if not _G.CheckP(pic) then
         LogInfo("pic is null!");
 		return nil;

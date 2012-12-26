@@ -43,8 +43,6 @@ function p.LoadUI()
 	if layer == nil then
 		return false;
 	end
-	
-	--layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.DailyActionUI);
 	layer:SetFrameRect(RectFullScreenUILayer);
@@ -286,6 +284,15 @@ function p.refreshViewItem(view, nId)
         str = info.Name..str;
         SetLabel(view, p.ViewCtrlId.txtTime, str); 
         SetLabel(view, p.ViewCtrlId.txtContent, info.Describe); 
+        
+        
+        --[[
+        --隐藏自动参战UI
+        local checkBox = RecursiveCheckBox(view,{7});
+        checkBox:SetVisible(false);
+        local labelTxt = GetLabel(view, 8);
+        labelTxt:SetVisible(false);
+        ]]
     end
     
     return;

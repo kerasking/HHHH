@@ -107,7 +107,7 @@ function p.LoadUI(ShopType)
 	layer:Init();
 	layer:SetTag(p.TagUiLayer);
 	layer:SetFrameRect(RectFullScreenUILayer);
-	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
+    scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 	layer:SetDestroyNotify(p.OnDestroy);
 	
     --加载UI

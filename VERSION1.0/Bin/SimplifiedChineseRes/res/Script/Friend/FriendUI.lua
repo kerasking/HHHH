@@ -540,8 +540,13 @@ function p.RefreshInfoLayer()
 		
 		
 		--帮派不显示
-		--SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_15,SafeN2S(FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_SYNDYCATE,friendId)));
-	 	SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_15,"");
+        local sArmyGroupName = FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_SYNDYCATE,friendId);
+        LogInfo("sArmyGroupName:[%s]",sArmyGroupName);
+        if(sArmyGroupName == nil or sArmyGroupName == "") then
+            sArmyGroupName = GetTxtPub("wu");
+        end
+        SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_15,sArmyGroupName);
+	 	--SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_15,"");
 	 	
 	 	SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_16,SafeN2S(FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_SPORTS	,friendId)));
 		SetLabel(layer, ID_FRIEND_INFO_CTRL_TEXT_17,SafeN2S(FriendFunc.GetAttrDesc(nPlayerid,FRIEND_DATA.FRIEND_CAPACITY	,friendId)));	

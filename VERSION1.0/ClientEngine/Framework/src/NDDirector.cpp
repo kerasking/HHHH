@@ -453,4 +453,26 @@ float NDDirector::getResourceScale()
 #endif
 }
 
+//返回x方向资源缩放比例
+float NDDirector::getResourceScaleX()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	return getAndroidScale().x; 
+#else
+	return 1;
+#endif
+}
+
+//返回y方向资源缩放比例
+float NDDirector::getResourceScaleY()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	return  getAndroidScale().y; 
+#else
+	return 1;
+#endif
+}
+
+
+
 NS_NDENGINE_END

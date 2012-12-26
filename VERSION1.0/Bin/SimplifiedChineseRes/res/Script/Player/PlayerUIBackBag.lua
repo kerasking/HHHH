@@ -380,6 +380,8 @@ function p.LoadUI(tab,nPetId)
 	containter:SetViewSize(containter:GetFrameRect().size);
 	containter:SetLuaDelegate(p.OnUIEventViewChange);
 	
+    containter:Set13Move(true);
+    
 	local petNameContainer = p.GetPetNameSVC();
 	if CheckP(petNameContainer) then
 		petNameContainer:SetCenterAdjust(true);
@@ -581,7 +583,6 @@ function p.GetPetIdByEquipNode(uiNode)
 	end
 	return sv:GetViewId();
 end 
-
 function p.OnUIEventBG(uiNode, uiEventType, param)
     local tag = uiNode:GetTag();
     if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
@@ -595,12 +596,10 @@ function p.OnUIEventBG(uiNode, uiEventType, param)
     end
     return true;
 end
-
 -- Ui事件处理开始
 function p.OnUIEventViewChange(uiNode, uiEventType, param)
 	local tag = uiNode:GetTag();
 	LogInfo("p.OnUIEventViewChange[%d]", tag);
-    
     if uiEventType == NUIEventType.TE_TOUCH_SC_VIEW_IN_BEGIN then
         LogInfo("param:[%d]",param);
 		local containter	= ConverToSVC(uiNode);
@@ -1564,12 +1563,12 @@ function p.SetPetAttr(petView, nPetDataIndex, str)
     elseif nPetDataIndex == PET_ATTR.PET_ATTR_PHY_ATK then
 	--物理攻击
 		nTag	= ID_ROLEATTR_L_CTRL_TEXT_FORCE;    
-        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, GetTxtPri("FAUI_T3"));
+        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, GetTxtPri("HS_T9"));
         
    elseif nPetDataIndex == PET_ATTR.PET_ATTR_MAGIC_ATK then
 	--策略攻击
 		nTag	= ID_ROLEATTR_L_CTRL_TEXT_FORCE;    
-        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, GetTxtPri("FAUI_T4")); 
+        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, GetTxtPri("HS_T11")); 
     
     elseif nPetDataIndex == PET_ATTR.PET_ATTR_PHY_DEF	then
     --物理防御
@@ -1657,7 +1656,7 @@ function p.UpdatePetAttrById(nPetId)
 	p.SetPetAttr(view, PET_ATTR.PET_ATTR_DEX, RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_DEX));
 	]]    
     
-	p.SetPetAttr(view, PET_ATTR.PET_ATTR_LEVEL, GetTxtPri("Common_levels")..":"..RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LEVEL));
+	p.SetPetAttr(view, PET_ATTR.PET_ATTR_LEVEL, GetTxtPub("levels")..":"..RolePetFunc.GetPropDesc(nPetId, PET_ATTR.PET_ATTR_LEVEL));
 	
 	local expUI	= RecursivUIExp(view, {ID_ROLEATTR_L_CTRL_EXP_ROLE});
 	if CheckP(expUI) then
@@ -2126,7 +2125,7 @@ end
 function p.freeData()
     MsgCompose.mUIListener    = nil;
     p.TAG_BAG_BTNS = nil;
-    BackLevelThreeWin.DestoryLayer();
+    --BackLevelThreeWin.DestoryLayer();
 end
 
 function p.IsEquipTag(nTag)

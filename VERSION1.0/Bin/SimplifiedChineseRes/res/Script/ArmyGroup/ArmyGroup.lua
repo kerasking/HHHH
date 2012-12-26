@@ -52,6 +52,8 @@ local tItemBtnList = {
 	ID_BTN_ITEM_08,
 };
 
+local ID_BTN_DISTRIBUTE_RECORD		= 199;	-- “分配信息”按钮
+
 ---------------------------------------------------
 -- 选择成员（分配奖励）界面控件ID
 local ID_BTN_CM_CLOSE				= 49;	-- X
@@ -77,13 +79,13 @@ local ID_EDITNOTICEEDLG_BTN_EDIT			= 104;	-- 编辑框
 
 ---------------------------------------------------
 local AG_NOTICE_CHA_LIMIT				= 60;	-- 公告文字的字数限制
-local CONTRIBUTE_LIMIT					= 200000;-- 分配时成员贡献度需求
+local CONTRIBUTE_LIMIT                    = 200000;-- 分配时成员贡献度需求
 
-local SZ_QUIT_ER						= GetTxtPri("AG2_T1");
-local SZ_QUIT_00						= GetTxtPri("AG2_T2");
-local SZ_ER_01			= GetTxtPri("AG2_T3");
-local SZ_ER_02			= GetTxtPri("AG2_T4");
-local SZ_ER_03			= GetTxtPri("AG2_T5");
+local SZ_QUIT_ER						= GetTxtPri("MAG2_T28");
+local SZ_QUIT_00						= GetTxtPri("MAG2_T29");
+local SZ_ER_01			= "不在线，不可分配哦";
+local SZ_ER_02			= "数量超过可分配数额";
+local SZ_ER_03			= "贡献度不足，不可分配";
 
 local TAG_ITEM_COUNT					= 34567;	--物品按钮里数量标签的TAG
 
@@ -139,7 +141,7 @@ p.pLayerChooseMember	= nil;
 p.tStorage				= nil;
 p.nOrdinalChosenItem	= nil;
 p.tChosenMember			= nil;
-	if ( nArmyGroupID == nil ) then
+    if ( nArmyGroupID == nil ) then
 		return false;
 	end
 	--LogInfo( "ArmyGroup: LoadUI()" );
@@ -191,7 +193,7 @@ p.tChosenMember			= nil;
 	MsgArmyGroup.SendMsgGetArmyGroupInformation( p.nArmyGroupID );
 	MsgArmyGroup.SendMsgGetArmyGroupMemberList( p.nArmyGroupID );
 	MsgArmyGroup.SendMsgGetArmyGroupApplicantList( p.nArmyGroupID );
-	MsgArmyGroup.SendMsgGetStorage( p.nArmyGroupID );
+    MsgArmyGroup.SendMsgGetStorage( p.nArmyGroupID );
 end
 
 --
@@ -215,7 +217,7 @@ p.pLayerChooseMember	= nil;
 p.tStorage				= nil;
 p.nOrdinalChosenItem	= nil;
 p.tChosenMember			= nil;
-	end
+    end
 end
 
 ---------------------------------------------------
@@ -343,7 +345,7 @@ function p.CreateArmyGroupInformationUI( pParentLayer )
 		local szPosition = MsgArmyGroup.GetPositionString( nPosition );
 		pLabelPosition:SetText( szPosition );
 	end
-	-- 测试
+    -- 测试
 	--local tStorage = MsgArmyGroup.GetArmyGroupStorage( p.nArmyGroupID );
 	--p.RefreshStorage( tStorage );
 end
@@ -400,7 +402,7 @@ end
 ---------------------------------------------------
 -- 刷新成员列表
 function p.RefreshMemberlist( tArmyGroupMemberList, nArmyGroupID )
-	--if ( p.pLayerInformation == nil ) then
+    --if ( p.pLayerInformation == nil ) then
 	--	LogInfo( "ArmyGroup: RefreshMemberlist failed! p.pLayerInformation is nil" );
 	--	return false;
 	--end
@@ -415,7 +417,7 @@ function p.RefreshMemberlist( tArmyGroupMemberList, nArmyGroupID )
 	
 	if ( nArmyGroupID == p.nArmyGroupID ) then
 		Member.RefreshMemberlist( tArmyGroupMemberList );
-		if ( p.pLayerChooseMember ~= nil ) then
+        if ( p.pLayerChooseMember ~= nil ) then
 			p.FillMemberListOnChooseMemberPanel( p.pLayerChooseMember, tArmyGroupMemberList );
 		end
 	end
@@ -429,11 +431,11 @@ end
 -- “军团信息”界面的事件响应
 function p.OnUIEventInformation( uiNode, uiEventType, param )
 	local tag = uiNode:GetTag();
-	local nUserID	= GetPlayerId();
+    local nUserID	= GetPlayerId();
 	local nPosition	= MsgArmyGroup.GetUserArmyGroupPosition( nUserID );
 	if ( uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK ) then
         if ( ID_BTN_QUIT == tag ) then
-			if ( nPosition == ArmyGroupPositionGrade.AGPG_LEGATUS ) then
+        	if ( nPosition == ArmyGroupPositionGrade.AGPG_LEGATUS ) then
 				local nAGID 	= MsgArmyGroup.GetUserArmyGroupID( nUserID );
 				local tAGInfor	= MsgArmyGroup.GetArmyGroupInformation( nAGID );
 				if ( tAGInfor.nMember > 1 ) then
@@ -445,7 +447,7 @@ function p.OnUIEventInformation( uiNode, uiEventType, param )
 		elseif ( ID_BTN_EDIT == tag ) then
 			local pLayer = uiNode:GetParent():GetParent();
 			p.CreateEditNoticeDlg( pLayer );
-		elseif ( ID_BTN_ITEM_01 == tag ) then
+        elseif ( ID_BTN_ITEM_01 == tag ) then
 			if ( nPosition == ArmyGroupPositionGrade.AGPG_LEGATUS ) then
 				p.ShowChooseMemberPanel( 1 );--
 			end
@@ -477,6 +479,8 @@ function p.OnUIEventInformation( uiNode, uiEventType, param )
 			if ( nPosition == ArmyGroupPositionGrade.AGPG_LEGATUS ) then
 				p.ShowChooseMemberPanel( 8 );--
 			end
+		elseif ( ID_BTN_DISTRIBUTE_RECORD == tag ) then
+			DistributeRecordDlg.CreateDistributeRecordDlg( p.pLayerMainUI );
         end
     end
     return true;
@@ -944,7 +948,7 @@ function p.ChangeItemCount( pBtn, nItemCount )
 		pLabelItemCount:SetTag( TAG_ITEM_COUNT );
 		pLabelItemCount:SetFontSize( 14 );
 		pLabelItemCount:SetTextAlignment( UITextAlignment.Right );
-		pLabelItemCount:SetFontColor(ccc4(255, 204, 120, 255));
+		pLabelItemCount:SetFontColor( ccc4(255, 204, 120, 255) );
 		pLabelItemCount:SetFrameRect( CGRectMake( 0.125 * tRect.size.w, 0.5 * tRect.size.h, 0.75 * tRect.size.w, 0.333 * tRect.size.h) );
 		pBtn:AddChild(pLabelItemCount);
 	end

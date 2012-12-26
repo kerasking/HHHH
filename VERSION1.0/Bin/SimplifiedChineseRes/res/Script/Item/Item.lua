@@ -75,7 +75,7 @@ function p.DelItemInfo(nItemId)
 		return;
 	end
 	
-	_G.DelRoleGameDataById(NScriptData.eRole, nItemId);
+    _G.DelRoleGameDataById(NScriptData.eRole, nItemId);
 end
 
 function p.LogOutItem(nItemId)

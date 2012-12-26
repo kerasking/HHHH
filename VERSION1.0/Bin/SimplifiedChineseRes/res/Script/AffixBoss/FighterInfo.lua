@@ -126,7 +126,7 @@ function p.UpdateHp(hp,maxHp)
 		LogInfo("lifeBar not find");
 	end
     
-    
+    --[[
     if( ArenaUI.isInChallenge == 3 and maxHp >= 24000000 and MsgBossBattle.TempCurLift >= 24000000) then
         lifeBar:SetProcess(MsgBossBattle.TempMaxLift/24000000.0 * hp);
         -- todo
@@ -137,8 +137,11 @@ function p.UpdateHp(hp,maxHp)
         -- todo
         lifeBar:SetTotal(maxHp);
     end
+    ]]
     
-    
+    lifeBar:SetProcess(hp);
+    -- todo
+    lifeBar:SetTotal(maxHp);
     
 end
 

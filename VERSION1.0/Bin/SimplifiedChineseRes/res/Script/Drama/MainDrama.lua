@@ -47,61 +47,12 @@ local FILE_SPRITE = GetSMResPath("animation/button.spr");
 
 --local NAME_MAN = "李道纯";
 --local NAME_WOMAN = "方子晴";
-local NAME_MONSTER1 = "眼镜蛇";
-local NAME_MONSTER2 = "银环蛇";
-local NAME_MONSTER3 = "银环蛇王";
-local NAME_MONSTER4 = "幼年熊妖";
-local NAME_MONSTER5 = "成年熊妖";
-local NAME_MONSTER6 = "厚背熊王";
-local NAME_MONSTER7 = "疾风狼";
-local NAME_MONSTER8 = "剑齿狼";
-local NAME_MONSTER9 = "银狼";
-local NAME_MONSTER10 = "银狼王";
-local NAME_MONSTER11 = "枯木树妖";
-local NAME_MONSTER12 = "铁枝树妖";
-local NAME_MONSTER13 = "剧毒蜂妖";
-local NAME_MONSTER14 = "蜂妖首领";
-local NAME_MONSTER15 = "冥煞狂狼";
-local NAME_MONSTER16 = "离火刺客";
-local NAME_MONSTER17 = "离火统领";
-local NAME_MONSTER18 = "影之歌";
-local NAME_MONSTER19 = "精锐燎天卫";
-local NAME_MONSTER20 = "燎天统领";
-local NAME_MONSTER21 = "烈焰傀儡";
-local NAME_MONSTER22 = "赤炎傀儡";
-local NAME_MONSTER23 = "巫君";
-local NAME_MONSTER24 = "暗黑蜂后";
-local NAME_MONSTER25 = "刚背赤熊皇";
-local NAME_MONSTER26 = "游荡沙匪";
-local NAME_MONSTER27 = "灭星";
-local NAME_MONSTER28 = "刺月";
-local NAME_MONSTER29 = "邪月王子";
-local NAME_MONSTER30 = "魔皇";
-local NAME_MONSTER31 = "阎";
-local NAME_MONSTER32 = "万连山";
-local NAME_MONSTER33 = "万归剑使";
-local NAME_MONSTER34 = "万玉山";
-local NAME_MONSTER35 = "万归长老";
-local NAME_MONSTER36 = "神仙茶树";
 
-local NAME_MONSTER1001 = "华佗";
-local NAME_MONSTER1002 = "周仓";
-local NAME_MONSTER1003 = "马腾";
-local NAME_MONSTER1004 = "韩忠";
-local NAME_MONSTER1005 = "珈蓝";
-local NAME_MONSTER1006 = "星云宝宝";
-local NAME_MONSTER1007 = "魔帅应天情";
-local NAME_MONSTER1008 = "血夜之王";
-local NAME_MONSTER1009 = "英彩";
-local NAME_MONSTER1010 = "诛仙";
-local NAME_MONSTER1011 = "烟水一";
-local NAME_MONSTER1012 = "龙道人";
-local NAME_MONSTER1013 = "木道人";
-local NAME_MONSTER1014 = "人皇笔";
-local NAME_MONSTER1015 = "七公主";
-local NAME_MONSTER1016 = "弥宝";
-local NAME_MONSTER1017 = "风白羽";
-local NAME_MONSTER1018 = "风瑶光";
+local NAME_MONSTER1001 = GetTxtPri("MD_T1");
+local NAME_MONSTER1002 = GetTxtPri("MD_T2");
+local NAME_MONSTER1003 = GetTxtPri("MD_T3");
+local NAME_MONSTER1004 = GetTxtPri("MD_T4");
+
 
 local SPRITE_MOVE_STEP = 8;
 
@@ -137,10 +88,10 @@ end
 
 p.TITLE_STR = 
 {
-	{ "少侠", "女侠" },
-	{ "哥哥", "姐姐" },
-	{ "公子", "姑娘" },
-	{ "师兄", "师姐" },
+	{ GetTxtPri("MD_T5"), GetTxtPri("MD_T6") },
+	{ GetTxtPri("MD_T7"), GetTxtPri("MD_T8") },
+	{ GetTxtPri("MD_T9"), GetTxtPri("MD_T10") },
+	{ GetTxtPri("MD_T11"), GetTxtPri("MD_T12") },
 };
 
 function p.GetTitle(title_type)
@@ -212,43 +163,43 @@ function p.MainDrama_6()
 	DramaSetSpriteAni(nNpcKey, 0);
 	
 	DramaOpenLChatDlg();
-	DramaSetLChatName("貂蝉MM", 9, 0xffde00);
-	DramaSetLChatContent("救命啊，救命啊！", 7, 0xffffff);
+	DramaSetLChatName(GetTxtPri("MD_T13"), 9, 0xffde00);
+	DramaSetLChatContent(GetTxtPri("MD_T14"), 7, 0xffffff);
 	p.DramaSetLChatHead(111);
 	DramaWaitPrevActionFinishAndClick();
 	
 	DramaCloseLChatDlg();
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("是貂蝉MM！厚背熊王，放开貂蝉MM，饶你不死！", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T15"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 
 	DramaCloseLChatDlg();
 	DramaOpenRChatDlg();
-	DramaSetRChatName("厚背熊王", 14, 0xff0000);
-	DramaSetRChatContent("什么，放开她？这貂蝉MM是仙鹤成灵，吃了她可以益寿延年，我好不容易才抓到的，怎么可能放开她？", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T16"), 14, 0xff0000);
+	DramaSetRChatContent(GetTxtPri("MD_T17"), 7, 0xffffff);
 	p.DramaSetRChatHead(111);
 	DramaWaitPrevActionFinishAndClick();
 
 	DramaCloseRChatDlg();
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("我最后警告你一次，快放开貂蝉MM！", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T18"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 	
 	DramaCloseLChatDlg();
 	DramaOpenRChatDlg();
-	DramaSetRChatName("厚背熊王", 14, 0xff0000);
-	DramaSetRChatContent("好大的口气，竟然还敢警告我？赶紧给我滚，别怪我没提醒你，要是再来坏我好事，我将你一同煮着吃！", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T16"), 14, 0xff0000);
+	DramaSetRChatContent(GetTxtPri("MD_T19"), 7, 0xffffff);
 	p.DramaSetRChatHead(111);
 	DramaWaitPrevActionFinishAndClick();
 	
 	DramaCloseRChatDlg();
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("这可是你自找的！", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T20"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 	
@@ -282,7 +233,7 @@ function p.MainDrama_7()
 	
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("貂蝉MM，你没事吧？", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T21"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 
@@ -309,7 +260,7 @@ function p.MainDrama_7()
 
 	
 	DramaOpenRChatDlg();
-	DramaSetRChatName("貂蝉", 9, 0xffde00);
+	DramaSetRChatName(GetTxtPri("MD_T22"), 9, 0xffde00);
 	DramaSetRChatContent("走开，走开，你个臭熊怪……", 7, 0xffffff);
 	p.DramaSetRChatHead(413);
 	DramaWaitPrevActionFinishAndClick();
@@ -321,14 +272,14 @@ function p.MainDrama_7()
 	DramaCloseRChatDlg();
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("貂蝉MM，你误会了，是婆婆让我来救你的，厚背熊妖已经被我杀死了！", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T23"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 	
 	DramaCloseLChatDlg();
 	DramaOpenRChatDlg();
-	DramaSetRChatName("貂蝉", 9, 0xffde00);
-	DramaSetRChatContent("你是婆婆派来的？我就知道婆婆一定会救我的！多谢你了！", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T22"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T24"), 7, 0xffffff);
 	p.DramaSetRChatHead(413);
 	DramaWaitPrevActionFinishAndClick();
 	
@@ -341,14 +292,14 @@ function p.MainDrama_7()
 	DramaCloseRChatDlg();
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("不必客气！啊，你受伤啦？", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T25"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 	
 	DramaCloseLChatDlg();
 	DramaOpenRChatDlg();
-	DramaSetRChatName("貂蝉", 9, 0xffde00);
-	DramaSetRChatContent("不碍事的，只是小伤……", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T22"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T26"), 7, 0xffffff);
 	p.DramaSetRChatHead(413);
 	DramaWaitPrevActionFinishAndClick();
 	
@@ -357,14 +308,14 @@ function p.MainDrama_7()
 	DramaWaitPrevActionFinish()
 	
 	--======淡入淡出场景======--
-	local nTransitionKey = DramaLoadEraseInOutScene("突然，美女晕倒在地上......", 11, 0xffffff);
+	local nTransitionKey = DramaLoadEraseInOutScene(GetTxtPri("MD_T27"), 11, 0xffffff);
 	DramaSetWaitTime(3.0);
 	DramaRemoveEraseInOutScene(nTransitionKey);
 	--======淡入淡出场景======--	
 	
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("小蝉，小蝉……看来她伤的不轻，我得赶紧把她送回去。", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T28"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 
 	
@@ -415,7 +366,7 @@ function p.MainDrama_8()
 	
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("师傅,真是天助我也,我还打算自己冒着危险去救回妹妹,现在有刘表来请,待我击败那黄巾贼闯出名堂 有一定的实力再去救妹妹,胜算更大,妹妹身上承受的苦,定要让那老贼加倍奉还!", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T29"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 
@@ -430,8 +381,8 @@ function p.MainDrama_8()
 
 	
 	DramaOpenRChatDlg();
-	DramaSetRChatName("华佗", 9, 0xffde00);
-	DramaSetRChatContent("好徒儿,这或许就是传言中的天命难违了,你这一生注定不平凡啊!", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T30"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T41"), 7, 0xffffff);
 	p.DramaSetRChatHead(434);
 	DramaWaitPrevActionFinishAndClick();
 	
@@ -439,14 +390,14 @@ function p.MainDrama_8()
 	DramaCloseRChatDlg();
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("天命难违?难道师傅已经知道了什么?", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T42"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 	
 	DramaCloseLChatDlg();
 	DramaOpenRChatDlg();
-	DramaSetRChatName("华佗", 9, 0xffde00);
-	DramaSetRChatContent("此事以后再议,相信等你遇到的时候就会明白为师所言,到时为师自会与你详细说明!", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T30"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T43"), 7, 0xffffff);
 	p.DramaSetRChatHead(434);
 	DramaWaitPrevActionFinishAndClick();
 	
@@ -454,19 +405,19 @@ function p.MainDrama_8()
 	DramaCloseRChatDlg();
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("是,师傅!", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T44"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 	
 	DramaCloseLChatDlg();
 	DramaOpenRChatDlg();
-	DramaSetRChatName("华佗", 9, 0xffde00);
-	DramaSetRChatContent("我已经派你师兄郭嘉提前下山前往颖川助你,如你有遇到难解的问题可以问你师兄,相信以你们师兄弟两人的实力此次颖川之战定能大获全胜!", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T30"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T45"), 7, 0xffffff);
 	p.DramaSetRChatHead(434);
 	DramaWaitPrevActionFinishAndClick();
 
 	--======淡入淡出场景======--
-	local nTransitionKey = DramaLoadEraseInOutScene("于是,"..p.GetPlayerName().."带上行囊随左中郎刘表下山去了", 11, 0xffffff);
+	local nTransitionKey = DramaLoadEraseInOutScene(string.format(GetTxtPri("MD_T46"),p.GetPlayerName()), 11, 0xffffff);
 	DramaSetWaitTime(2.0);
 	DramaRemoveEraseInOutScene(nTransitionKey);
 	--======淡入淡出场景======--
@@ -495,14 +446,14 @@ function p.MainDrama_9()
 	
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("咦,前方有一个人躺着的身影,看起来有几分眼熟,难道还有黄巾军埋伏在此处,赶紧去看看!", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T47"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 
 	DramaCloseLChatDlg();
 
 	--======淡入淡出场景======--
-	local nTransitionKey = DramaLoadEraseInOutScene("靠近后发现原来是我军一个身受重伤的将士,你将背起后护送回城….", 11, 0xffffff);
+	local nTransitionKey = DramaLoadEraseInOutScene(GetTxtPri("MD_T48"), 11, 0xffffff);
 	DramaSetWaitTime(2.0);
 	DramaRemoveEraseInOutScene(nTransitionKey);
 	--======淡入淡出场景======--
@@ -522,8 +473,8 @@ function p.MainDrama_9()
 	DramaSetSpriteAni(nNpcKey, 0);
 	
 	DramaOpenRChatDlg();
-	DramaSetRChatName("周仓", 9, 0xffde00);
-	DramaSetRChatContent("我是周仓,原本是颖川城中守将.... 此次颖川城准备不足,防守力量薄弱被黄巾军攻破,全城将士死的只剩下我一人!", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T49"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T50"), 7, 0xffffff);
 	p.DramaSetRChatHead(811);
 	DramaWaitPrevActionFinishAndClick();
 
@@ -531,21 +482,21 @@ function p.MainDrama_9()
 	DramaCloseRChatDlg();
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("你怎么会这么狼狈,受伤这么严重,到底发生什么事? 左中郎刘表已经率兵前来平乱,我受师傅华佗嘱咐.下山助他退敌!", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T51"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 	
 	DramaCloseLChatDlg();
 	DramaOpenRChatDlg();
-	DramaSetRChatName("周仓", 9, 0xffde00);
-	DramaSetRChatContent("竟然是隐者华佗之徒吗,怪不得首战如此轻易获胜..看来我颖川城有救了.全靠将军此次我才能脱困,如若将军不嫌弃,愿追随将军一同征战沙场,也好为我一帮军中兄弟报这血海深仇!", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T49"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T52"), 7, 0xffffff);
 	p.DramaSetRChatHead(811);
 	DramaWaitPrevActionFinishAndClick();
 	
 	DramaCloseRChatDlg();
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("且先随疗伤再做打算! 能与周将军如此重情重义之人一同征战沙场是在下的荣幸!", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T53"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 	
@@ -636,8 +587,8 @@ function p.MainDrama_10()
 	
 	
 	DramaOpenRChatDlg();
-	DramaSetRChatName("黄巾军士兵", 9, 0xffde00);
-	DramaSetRChatContent("太厉害了！ 大家逃命啊！", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T54"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T55"), 7, 0xffffff);
 	p.DramaSetRChatHead(213);
 	
 	DramaWaitPrevActionFinishAndClick();
@@ -645,19 +596,19 @@ function p.MainDrama_10()
 	DramaCloseRChatDlg();
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("阁下得实力令人佩服,我看阁下不像其他黄巾将士,为何要为那乱党卖命!", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T56"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 
 	DramaCloseLChatDlg();
 	DramaOpenRChatDlg();
-	DramaSetRChatName("马腾", 9, 0xffde00);
-	DramaSetRChatContent("我随黄巾军征战沙场,只因董卓扰乱朝纲祸国殃民…阁下实力出众,此战是我败了,但求能放过我手下这帮穷苦兄弟,作为首领我任由阁下处置!", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T57"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T58"), 7, 0xffffff);
 	p.DramaSetRChatHead(814);
 	DramaWaitPrevActionFinishAndClick();
 
 	--======淡入淡出场景======--
-	local nTransitionKey = DramaLoadEraseInOutScene("你放了马腾的手下", 11, 0xffffff);
+	local nTransitionKey = DramaLoadEraseInOutScene(GetTxtPri("MD_T59"), 11, 0xffffff);
 	DramaSetWaitTime(2.0);
 	DramaRemoveEraseInOutScene(nTransitionKey);
 	--======淡入淡出场景======--
@@ -676,14 +627,14 @@ function p.MainDrama_10()
 
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("既然是马将军兄弟,自当放行,你看这颖川之战中黄巾军屠杀百姓,已与董贼无异,我乃当世隐者华佗之徒,此次下山助刘表击破黄巾乱军,马将军不如随我一起为天下百姓苍生讨伐董贼!", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T60"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 	
 	DramaCloseLChatDlg();
 	DramaOpenRChatDlg();
-	DramaSetRChatName("马腾", 9, 0xffde00);
-	DramaSetRChatContent("多谢将军成全,原来是传奇人士华佗门下,既然将军放过我手下那帮兄弟,我自愿追随将军征战四方!", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T57"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T61"), 7, 0xffffff);
 	p.DramaSetRChatHead(814);
 	DramaWaitPrevActionFinishAndClick();
 
@@ -723,28 +674,28 @@ function p.MainDrama_11()
 	
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("久仰韩将军大名,今日一见果然名不虚传,不过我为将军现在所受到的待遇感到可惜啊! 将军实力出众,而黄巾军中所有好处都让张梁三兄弟拿了,实在为将军感到可惜啊!", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T62"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 
 	DramaCloseLChatDlg();
 	DramaOpenRChatDlg();
-	DramaSetRChatName("韩忠", 9, 0xffde00);
-	DramaSetRChatContent("谁让这黄巾军本来就是张梁他们三兄弟带领的,我又有什么办法!", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T63"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T64"), 7, 0xffffff);
 	p.DramaSetRChatHead(213);
 	DramaWaitPrevActionFinishAndClick();
 
 	DramaCloseRChatDlg();
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("非也非也,眼下正好有一条光明大道等着将军! 左中郎刘表说了,大汉皇帝为了平这黄巾之乱,悬赏能人异士,只要能帮忙剿灭黄巾军,赐一品官,赏黄金万两?", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T65"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 	
 	DramaCloseLChatDlg();
 	DramaOpenRChatDlg();
-	DramaSetRChatName("韩忠", 9, 0xffde00);
-	DramaSetRChatContent("什么?竟然有这等好事,人不为己天诛地灭,为了老子的美好未来,拼了!赶紧帮我介绍介绍,这黄巾军的各种机密消息我都知道!", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T63"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T66"), 7, 0xffffff);
 	p.DramaSetRChatHead(213);
 	DramaWaitPrevActionFinishAndClick();
 	
@@ -752,12 +703,12 @@ function p.MainDrama_11()
 	DramaCloseRChatDlg();
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("哈哈,韩将军果然是明白人,我肯定不会让将军失望的!", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T67"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 
 	--======淡入淡出场景======--
-	local nTransitionKey = DramaLoadEraseInOutScene("经过一番劝说,韩忠被高官厚禄吸引,答应反叛为你做内应", 11, 0xffffff);
+	local nTransitionKey = DramaLoadEraseInOutScene(GetTxtPri("MD_T68"), 11, 0xffffff);
 	DramaSetWaitTime(2.0);
 	DramaRemoveEraseInOutScene(nTransitionKey);
 	--======淡入淡出场景======--
@@ -789,16 +740,16 @@ function p.MainDrama_12()
 
 
 	--张角
-	nZJKey = DramaAddSprite(21300009, Drama.SpriteTypeNpc, false, "张角");
+	nZJKey = DramaAddSprite(21300009, Drama.SpriteTypeNpc, false, GetTxtPri("MD_T69"));
 	DramaSetSpritePosition(nZJKey, 15, 12);
 	DramaSetSpriteAni(nZJKey, 2);
 	
 	--周仓
-	nZCKey = DramaAddSprite(21400029, Drama.SpriteTypeNpc, true, "周仓");
+	nZCKey = DramaAddSprite(21400029, Drama.SpriteTypeNpc, true, GetTxtPri("MD_T49"));
 	DramaSetSpritePosition(nZCKey, 4, 10);
 	DramaSetSpriteAni(nZCKey, 2);	
 	--马腾
-	nMTKey = DramaAddSprite(21100019, Drama.SpriteTypeNpc, true, "马腾");
+	nMTKey = DramaAddSprite(21100019, Drama.SpriteTypeNpc, true, GetTxtPri("MD_T57"));
 	DramaSetSpritePosition(nMTKey, 4, 14);
 	DramaSetSpriteAni(nMTKey, 2);
 	
@@ -876,14 +827,14 @@ function p.MainDrama_12()
 	
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("贼人张角,你的黄巾军已被剿灭,还不速速受死!", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T70"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 
 	DramaCloseLChatDlg();
 	DramaOpenRChatDlg();
-	DramaSetRChatName("张角", 9, 0xffde00);
-	DramaSetRChatContent("哼,此次是我小看了你～不过我天公将军自会让你们为此付出代价的!", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T69"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T71"), 7, 0xffffff);
 	p.DramaSetRChatHead(421);
 	DramaWaitPrevActionFinishAndClick();
 	DramaCloseRChatDlg();
@@ -943,21 +894,21 @@ function p.MainDrama_12()
 
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("怎么回事, 手心突然火烧般疼痛，眼前幻想突生，冲天的火光，无边的杀戮，手心中多了一个五芒星状的金色印记,这是怎么回事!", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T72"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 	
 	DramaCloseLChatDlg();
 	DramaOpenLChatDlg();
-	DramaSetLChatName("郭嘉", 9, 0xffde00);
-	DramaSetLChatContent("妖道张角，临死前以20万黄巾军士兵魂魄为引引动天象，中天之上紫薇星光被破军掩去，这下不好了……看来这就是师傅所说的天命了,此番事了之后你赶紧去找师傅了解详情", 7, 0xffffff);
+	DramaSetLChatName(GetTxtPri("MD_T73"), 9, 0xffde00);
+	DramaSetLChatContent(GetTxtPri("MD_T74"), 7, 0xffffff);
 	p.DramaSetLChatHead(612)
 	DramaWaitPrevActionFinishAndClick();
 
 	DramaCloseLChatDlg();
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("是了,我在下山之前师傅好像隐约说过天命此事,此番事了之后我马上去找师傅!", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T75"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 
@@ -989,19 +940,19 @@ function p.MainDrama_13()
 
 
 	--关羽
-	--nGYKey = DramaAddSprite(21100038, Drama.SpriteTypeNpc, true, "关羽");
+	--nGYKey = DramaAddSprite(21100038, Drama.SpriteTypeNpc, true, GetTxtPri("MD_T76"));
 	--DramaSetSpritePosition(nGYKey, 5, 11);
 	--DramaSetSpriteAni(nGYKey, 2);
 	
 	--华雄
-	nHXKey = DramaAddSprite(21400010, Drama.SpriteTypeNpc, false, "华雄");
+	nHXKey = DramaAddSprite(21400010, Drama.SpriteTypeNpc, false, GetTxtPri("MD_T77"));
 	DramaSetSpritePosition(nHXKey, 24, 13);
 	DramaSetSpriteAni(nHXKey, 0);
 
 
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("华雄小儿,还不速速受死…", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T78"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 	DramaCloseLChatDlg();
@@ -1055,15 +1006,15 @@ function p.MainDrama_13()
 	
 	
 	DramaOpenRChatDlg();
-	DramaSetRChatName("华雄", 9, 0xffde00);
-	DramaSetRChatContent("哼,无知小儿,看起来就是一副弱不禁风的模样,不配死在我刀下~换个人来!", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T77"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T79"), 7, 0xffffff);
 	p.DramaSetRChatHead(414);
 	DramaWaitPrevActionFinishAndClick();
 	DramaCloseRChatDlg();	
 	
 	--关羽出现
 	--关羽
-	nGYKey = DramaAddSprite(21100038, Drama.SpriteTypeNpc, true, "关羽");
+	nGYKey = DramaAddSprite(21100038, Drama.SpriteTypeNpc, true, GetTxtPri("MD_T76"));
 	DramaSetSpritePosition(nGYKey, 0, 11);
 	DramaMoveSprite(nGYKey, 6, 12, 10);
 	 DramaSetWaitTime(0.5);
@@ -1071,8 +1022,8 @@ function p.MainDrama_13()
     --DramaSetSpriteReverse(nGYKey , true);  
 
 	DramaOpenLChatDlg();
-	DramaSetLChatName("关羽", 9, 0xffde00);
-	DramaSetLChatContent("关某前来领教", 7, 0xffffff);
+	DramaSetLChatName(GetTxtPri("MD_T76"), 9, 0xffde00);
+	DramaSetLChatContent(GetTxtPri("MD_T80"), 7, 0xffffff);
 	p.DramaSetLChatHead(431)
 	DramaWaitPrevActionFinishAndClick();
 	DramaCloseLChatDlg();
@@ -1112,14 +1063,14 @@ function p.MainDrama_13()
 	
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("关将军威猛,一刀就斩下那华雄首级…", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T81"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 	DramaCloseLChatDlg();
 
 	DramaOpenLChatDlg();
-	DramaSetLChatName("关羽", 9, 0xffde00);
-	DramaSetLChatContent("能和将军联手作战真是人生一大乐事!", 7, 0xffffff);
+	DramaSetLChatName(GetTxtPri("MD_T76"), 9, 0xffde00);
+	DramaSetLChatContent(GetTxtPri("MD_T82"), 7, 0xffffff);
 	p.DramaSetLChatHead(431)
 	DramaWaitPrevActionFinishAndClick();
 	DramaCloseLChatDlg();
@@ -1127,7 +1078,7 @@ function p.MainDrama_13()
 		
 					
 	--======淡入淡出场景======--
-	local nTransitionKey = DramaLoadEraseInOutScene("你和关羽提着华雄首级回营复命", 11, 0xffffff);
+	local nTransitionKey = DramaLoadEraseInOutScene(GetTxtPri("MD_T83"), 11, 0xffffff);
 	DramaSetWaitTime(2.0);
 	DramaRemoveEraseInOutScene(nTransitionKey);
 	--======淡入淡出场景======--	
@@ -1159,22 +1110,22 @@ function p.MainDrama_14()
 
 
 	--关羽
-	nGYKey = DramaAddSprite(21100038, Drama.SpriteTypeNpc, true, "关羽");
+	nGYKey = DramaAddSprite(21100038, Drama.SpriteTypeNpc, true, GetTxtPri("MD_T76"));
 	DramaSetSpritePosition(nGYKey, 9, 11);
 	DramaSetSpriteAni(nGYKey, 2);
 
 	--张飞
-	nZFKey = DramaAddSprite(21100036, Drama.SpriteTypeNpc, true, "张飞");
+	nZFKey = DramaAddSprite(21100036, Drama.SpriteTypeNpc, true, GetTxtPri("MD_T84"));
 	DramaSetSpritePosition(nZFKey, 9, 17);
 	DramaSetSpriteAni(nZFKey, 2);
 
 	--刘备
-	nLiuBKey = DramaAddSprite(21100037, Drama.SpriteTypeNpc, true, "刘备");
+	nLiuBKey = DramaAddSprite(21100037, Drama.SpriteTypeNpc, true, GetTxtPri("MD_T85"));
 	DramaSetSpritePosition(nLiuBKey, 11, 14);
 	DramaSetSpriteAni(nLiuBKey, 2);
 	
 	--吕布
-	nLvBKey = DramaAddSprite(21100027, Drama.SpriteTypeNpc, false, "吕布");
+	nLvBKey = DramaAddSprite(21100027, Drama.SpriteTypeNpc, false, GetTxtPri("MD_T86"));
 	DramaSetSpritePosition(nLvBKey, 24, 14);
 	DramaSetSpriteAni(nLvBKey, 0);
 	
@@ -1220,8 +1171,8 @@ function p.MainDrama_14()
 
 
 	DramaOpenRChatDlg();
-	DramaSetRChatName("吕布", 9, 0xffde00);
-	DramaSetRChatContent("你们也许能侥幸击败华雄,但是想凭借这种实力击败我吕布,那就是自不量力了!", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T86"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T87"), 7, 0xffffff);
 	p.DramaSetRChatHead(412);
 	DramaWaitPrevActionFinishAndClick();
 	DramaCloseRChatDlg();
@@ -1232,8 +1183,8 @@ function p.MainDrama_14()
 	DramaSetSpriteAni(nLiuBKey, 2);
 
 	DramaOpenLChatDlg();
-	DramaSetLChatName("刘备", 9, 0xffde00);
-	DramaSetLChatContent("我兄弟三人愿领教你的实力!", 7, 0xffffff);
+	DramaSetLChatName(GetTxtPri("MD_T85"), 9, 0xffde00);
+	DramaSetLChatContent(GetTxtPri("MD_T88"), 7, 0xffffff);
 	p.DramaSetLChatHead(424)
 	DramaWaitPrevActionFinishAndClick();
 	DramaCloseLChatDlg();
@@ -1253,7 +1204,7 @@ function p.MainDrama_14()
 
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("有刘关张三英在,岂容你如此放肆!", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T89"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 	DramaCloseLChatDlg();
@@ -1347,14 +1298,14 @@ function p.MainDrama_14()
 	
 					
 	--======淡入淡出场景======--
-	local nTransitionKey = DramaLoadEraseInOutScene("你手上的金色命轮突然散发出耀眼的光芒…", 11, 0xffffff);
+	local nTransitionKey = DramaLoadEraseInOutScene(GetTxtPri("MD_T90"), 11, 0xffffff);
 	DramaSetWaitTime(2.0);
 	DramaRemoveEraseInOutScene(nTransitionKey);
 	--======淡入淡出场景======--		
 	
 	DramaOpenRChatDlg();
-	DramaSetRChatName("吕布", 9, 0xffde00);
-	DramaSetRChatContent("这…这是什么情况,撤,快撤…", 7, 0xffffff);
+	DramaSetRChatName(GetTxtPri("MD_T86"), 9, 0xffde00);
+	DramaSetRChatContent(GetTxtPri("MD_T91"), 7, 0xffffff);
 	p.DramaSetRChatHead(412);
 	DramaWaitPrevActionFinishAndClick();
 	DramaCloseRChatDlg();
@@ -1371,15 +1322,15 @@ function p.MainDrama_14()
 	
 	DramaOpenLChatDlg();
 	DramaSetLChatNameBySpriteKey(nManKey, 9, 0xffde00);
-	DramaSetLChatContent("战神吕布果然勇猛,有你们三兄弟相助才能侥幸获胜", 7, 0xffffff);
+	DramaSetLChatContent(GetTxtPri("MD_T92"), 7, 0xffffff);
 	p.DramaSetLChatHead(p.GetPlayerPetBodypic())
 	DramaWaitPrevActionFinishAndClick();
 	DramaCloseLChatDlg();
 			
 	
 	DramaOpenLChatDlg();
-	DramaSetLChatName("关羽", 9, 0xffde00);
-	DramaSetLChatContent("将军过谦了,此次能获胜全靠将军…", 7, 0xffffff);
+	DramaSetLChatName(GetTxtPri("MD_T76"), 9, 0xffde00);
+	DramaSetLChatContent(GetTxtPri("MD_T93"), 7, 0xffffff);
 	p.DramaSetLChatHead(431)
 	DramaWaitPrevActionFinishAndClick();
 	DramaCloseLChatDlg();

@@ -17,7 +17,7 @@ local ID_BTN_LOCAL_SERVER				= 2;	-- 内服按钮控件ID
 local LOCAL_WORLD_SERVER_IP				= "121.207.239.91"	-- 内网世界服务器IP
 --local EXTERNAL_WORLD_SERVER_IP			= "222.77.177.209"	-- 外网世界服务器IP
 local EXTERNAL_WORLD_SERVER_IP				= "192.168.19.169"	-- 内网世界服务器IP
-local EXTERNAL_WORLD_SERVER_PORT				= 9600	-- 世界服务器PORT
+local EXTERNAL_WORLD_SERVER_PORT				= 9700	-- 世界服务器PORT
 --local EXTERNAL_WORLD_SERVER_IP			= "222.77.177.176"	-- 外网世界服务器IP mobage测试
 ---------------------------------------------------
 p.nAccountID	= nil;
@@ -46,8 +46,7 @@ end
 ---------------------------------------------------
 --装载UI并显示
 function p.ShowUI( nAccountID )
-	LogInfo( "@@login05: Entry::ShowUI(), nAccountID=%d",nAccountID );
-	
+	LogInfo( "Entry: ShowUI() nAccountID:%d",nAccountID );
     local pScene = p.GetCurrentScene();
     if ( pScene == nil ) then
 		LogInfo( "Entry: ShowUI() failed! pScene is nil" );

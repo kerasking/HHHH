@@ -98,7 +98,6 @@ local tState = {
 
 local bIfAutoJoinNextBattle = tState.LOSEOutBattle; 
 
-
 --[INDEX] ={玩家名字,玩家阵营(1 攻击,2 防御),玩家是否入场(1是 0否),玩家id}
 local tPlayerList ={}
 local g_nPlayerListHead = 1;
@@ -326,7 +325,7 @@ function p.LoadUI()
 	--刷新玩家列表
 	--p.RefreshInfo();
 	
-	--[[屏蔽鼓舞功能
+    --[[屏蔽鼓舞功能
 	local Moneybtn = RecursiveButton(layer, {ID_SCUFFLE_CTRL_BUTTON_INSPIRE1}); 
 	local Emoneybtn = RecursiveButton(layer, {ID_SCUFFLE_CTRL_BUTTON_INSPIRE2}); 
 	local labelBuffDesc = RecursiveLabel(layer, {22});
@@ -335,8 +334,8 @@ function p.LoadUI()
 	labelBuff:SetVisible(false);
 	Moneybtn:SetVisible(false);
 	Emoneybtn:SetVisible(false);
-	--]]
-	
+    --]]
+    
 	--屏蔽自动参战
 	local labelAutoFight = RecursiveLabel(layer, {29});
 	local checkBoxAutoFight=RecursiveCheckBox(layer,{ID_SCUFFLE_CTRL_CHECK_BUTTON_31});
@@ -485,7 +484,7 @@ function p.TimerTick(tag)
 			
 
 			
-		elseif g_Count <= 30 then	
+        elseif g_Count <= 30 then
 			if bIfAutoJoinNextBattle == tState.WINOutBattle then
 				CDLabel:SetChecked( true );
 				CDLabel:SetTitle(GetTxtPri("CB2_T2").." "..g_Count);
@@ -617,7 +616,7 @@ function p.updateCount(restCount)
 			
 			
 
-		elseif restCount <=30 then
+        elseif restCount <=30 then
 			
 			CDlabel:SetTitle(FormatTime(restCount,1));
 			CDlabel:SetChecked( false );
@@ -688,8 +687,8 @@ function p.refreshPlayerCount()
 	local AttkLabel 	=  RecursiveLabel(p.GetParent(),{ID_SCUFFLE_CTRL_TEXT_ATTACK});
 	local DefLabel 		=  RecursiveLabel(p.GetParent(),{ID_SCUFFLE_CTRL_TEXT_DEFENCE});
 	
-	AttkLabel:SetText(GetTxtPri("CB2_T5").."("..nCountAtt..GetTxtPri("Common_ren")..")");
-	DefLabel:SetText(GetTxtPri("CB2_T6").."("..nCountDef..GetTxtPri("Common_ren")..")");
+	AttkLabel:SetText(GetTxtPri("CB2_T5").."("..nCountAtt..GetTxtPub("ren")..")");
+	DefLabel:SetText(GetTxtPri("CB2_T6").."("..nCountDef..GetTxtPub("ren")..")");
 	
 	
 end
@@ -1611,6 +1610,8 @@ function p.EncourageEmoney(nEventType, param, val)
 	return true;
 end		
 
+
+
 function p.OnUIEvent(uiNode, uiEventType, param)
 
     local tag = uiNode:GetTag();
@@ -1653,24 +1654,22 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 			end
 			return true;
 		--银币鼓舞
-		elseif tag == ID_SCUFFLE_CTRL_BUTTON_INSPIRE1 then
-		   
-		    if( p.bIsTipMoney ) then
-					return p.EncourageMoney();
+        elseif tag == ID_SCUFFLE_CTRL_BUTTON_INSPIRE1 then	   
+            if( p.bIsTipMoney ) then
+                    return p.EncourageMoney();
             else
-            		CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("BB_T6"),MsgBossBattle.GetCampBattleSilverCount()), p.EncourageMoney);
-            		return true;
+                    CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("BB2_T1"),MsgBossBattle.GetCampBattleSilverCount()), p.EncourageMoney);
+                    return true;
             end
-			--金币鼓舞	
+
+        --金币鼓舞	
 		elseif tag == ID_SCUFFLE_CTRL_BUTTON_INSPIRE2 then
-		    if( p.bIsTipEmoney ) then
+            if( p.bIsTipEmoney ) then
 					return p.EncourageEmoney();
             else
-            		CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("BB_T8"),MsgBossBattle.GetCampBattleCoinCount()), p.EncourageEmoney);
+            		CommonDlgNew.ShowNotHintDlg(string.format(GetTxtPri("BB2_T3"),MsgBossBattle.GetCampBattleCoinCount()), p.EncourageEmoney);
            			return true;
             end
-
-
 		elseif tag == ID_SCUFFLE_CTRL_BUTTON_50 then
 			--scrollMainReport:SetVisible(true);
 			scrollUserReport:SetVisible(false);

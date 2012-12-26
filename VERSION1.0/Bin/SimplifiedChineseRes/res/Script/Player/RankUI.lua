@@ -67,8 +67,6 @@ function p.LoadUI()
 	if layer == nil then
 		return false;
 	end
-	
-	--layer:SetPopupDlgFlag( true );
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.RankUI );
 	layer:SetFrameRect(RectFullScreenUILayer);

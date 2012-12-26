@@ -29,6 +29,10 @@ DoFile("Common/IconConfigUI.lua");
 --初始化数据库
 DoFile("Common/SqliteConfig.lua");
 
+--战斗活动层处理
+DoFile("Common/BattleProcess.lua");
+
+
 
 
 

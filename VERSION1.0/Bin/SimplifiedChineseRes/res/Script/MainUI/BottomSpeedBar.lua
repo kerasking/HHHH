@@ -79,7 +79,7 @@ p.BtnTag =
     126,    --决斗
     127,    --征收
     128,    --祭祀
-    129,    --GM
+    129,    --占星
     131,    --删号
     132,    --退出
     133,    --神秘商人
@@ -108,7 +108,7 @@ p.BtnFunc =
     131,    --删号
     132,    --退出
     133,    --神秘商人
-    
+
 };
 
 
@@ -197,7 +197,6 @@ function p.LoadUI()
 		return false;
 	end
 	layer:Init();
-	--layer:SetDebugName( "bottomBar" );
 	layer:SetTag(NMAINSCENECHILDTAG.BottomSpeedBar );
 	layer:SetFrameRect(p.LayerRect);
 	scene:AddChild(layer);
@@ -225,7 +224,7 @@ function p.LoadUI()
     local sayListBtn = p.CreateSceneButton(norPic,nil,p.BtnSayRect,NMAINSCENECHILDTAG.BottomMsgBtn,UILayerZOrder.ChatBtn);
     sayListBtn:SetTag(p.BtnSayTag);
     sayListBtn:SetVisible(true);
-    
+   
      --提交gm问题按钮
     local gmPic	= pool:AddPicture(GetSMImg00Path(p.BtnGm), true);
     gmPic:Cut(p.BtnGMFindRect.cutNor);
@@ -397,6 +396,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
         
         if( p.BtnFunc[1] == tag ) then       --人物
             PlayerUIAttr.LoadUI();
+            --CommonScrollDlg.ShowTipDlg({"由于服务器维护，3点关服，请大家通知大家！",ccc4(255,255,255,255)});
         elseif( p.BtnFunc[2] == tag ) then   --背包
             PlayerUIBackBag.LoadUI();
         elseif( p.BtnFunc[3] == tag ) then   --强化
@@ -428,11 +428,11 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             MsgArena.SendOpenArena();
         elseif( p.BtnFunc[16] == tag ) then  --征收
             Levy.LoadUI();
-        elseif( p.BtnFunc[17] == tag ) then  --祭祀
-            Fete.LoadUI();
         elseif( p.BtnFunc[18] == tag ) then  --占星--GM问题
             --GMProblemUI.LoadUI();
             MsgRealize.sendRealizeOp();
+        elseif( p.BtnFunc[18] == tag ) then  --GM问题
+            GMProblemUI.LoadUI();
         elseif( p.BtnFunc[19] == tag ) then  --删号
             p.TestButtonClick();
         elseif( p.BtnFunc[20] == tag ) then  --退出

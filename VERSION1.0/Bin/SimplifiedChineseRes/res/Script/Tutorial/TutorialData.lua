@@ -3659,21 +3659,23 @@ function p.BeginTemplete(layer)
     p.ClearTemplete();
     local fScaleFactor = ScaleFactor/2;
     
+    
+    
     --添加前头
     if(taskItem.Dir) then
         
         --添加提示文字
         if(taskItem.TxtPos) then
-            local nX,nY = p.GetJtRelativePos(taskItem.Dir.x*fScaleFactor, taskItem.Dir.y*fScaleFactor, taskItem.Dir.index);
+            local nX,nY = p.GetJtRelativePos(taskItem.Dir.x*fScaleFactorX, taskItem.Dir.y*fScaleFactorY, taskItem.Dir.index);
             p.CreateText(layer,taskItem.TxtPos.Txt,p.BoxTag,nX,nY,taskItem.Order);
         end
         
-        p.CreateAnimate(layer,taskItem.Dir.index,p.JtTag,taskItem.Dir.x*fScaleFactor,taskItem.Dir.y*fScaleFactor,taskItem.Order);
+        p.CreateAnimate(layer,taskItem.Dir.index,p.JtTag,taskItem.Dir.x*fScaleFactorX,taskItem.Dir.y*fScaleFactorY,taskItem.Order);
     end
     
     --添加光效
     if(taskItem.EffectPos) then
-        p.CreateAnimate(layer,taskItem.EffectPos.index,p.GxTag,taskItem.EffectPos.x*fScaleFactor,taskItem.EffectPos.y*fScaleFactor,taskItem.Order);
+        p.CreateAnimate(layer,taskItem.EffectPos.index,p.GxTag,taskItem.EffectPos.x*fScaleFactorX,taskItem.EffectPos.y*fScaleFactorY,taskItem.Order);
     end
     
 end
@@ -3739,6 +3741,7 @@ end
 
 --城市ID
 p.RuoYanCityId = 1;
+p.ChanAnCityId = 2;
 
 p.RuoYanCity = {
     NMAINSCENECHILDTAG.AffixNormalBoss,
@@ -3750,7 +3753,7 @@ p.RuoYanCity = {
 
 --在洛阳城
 function p.InRuoYanCity()
-    if(p.RuoYanCityId == GetMapId()) then
+    if(p.RuoYanCityId == GetMapId() or p.ChanAnCityId == GetMapId()) then
         if(p.IsShowLayer(p.RuoYanCity)) then
             return false;
         else

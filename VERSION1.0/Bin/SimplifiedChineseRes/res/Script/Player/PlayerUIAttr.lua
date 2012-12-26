@@ -140,6 +140,78 @@ local CONTAINTER_Y = 0;
 local ATTR_OFFSET_X = RectUILayer.size.w / 2;
 local ATTR_OFFSET_Y = 0;
 
+
+
+--===================新增pvp查看功能=========================--
+local ID_ROLEATTR_PVPATR_CTRL_TEXT_23						= 23;
+local ID_ROLEATTR_PVPATR_CTRL_TEXT_22						= 22;
+local ID_ROLEATTR_PVPATR_CTRL_TEXT_21						= 21;
+local ID_ROLEATTR_PVPATR_CTRL_TEXT_20						= 20;
+local ID_ROLEATTR_PVPATR_CTRL_TEXT_19						= 19;
+local ID_ROLEATTR_PVPATR_CTRL_TEXT_18						= 18;
+local ID_ROLEATTR_PVPATR_CTRL_TEXT_17						= 17;
+local ID_ROLEATTR_PVPATR_CTRL_TEXT_16						= 16;
+local ID_ROLEATTR_PVPATR_CTRL_TEXT_15						= 15;
+local ID_ROLEATTR_PVPATR_CTRL_TEXT_14						= 14;
+local ID_ROLEATTR_PVPATR_CTRL_BUTTON_5						= 533;
+local ID_ROLEATTR_PVPATR_CTRL_TEXT_3						= 3;
+local ID_ROLEATTR_PVPATR_CTRL_PICTURE_69					= 69;
+local ID_ROLEATTR_PVPATR_CTRL_PICTURE_68					= 68;
+local ID_ROLEATTR_PVPATR_CTRL_PICTURE_67					= 67;
+local ID_ROLEATTR_PVPATR_CTRL_PICTURE_66					= 66;
+local ID_ROLEATTR_PVPATR_CTRL_PICTURE_65					= 65;
+local ID_ROLEATTR_PVPATR_CTRL_PICTURE_64					= 64;
+local ID_ROLEATTR_PVPATR_CTRL_PICTURE_63					= 63;
+local ID_ROLEATTR_PVPATR_CTRL_PICTURE_62					= 62;
+local ID_ROLEATTR_PVPATR_CTRL_PICTURE_61					= 61;
+
+function p.LoadPVPAttrUI(life,strength,dex,intel,speed)
+	local scene = GetSMGameScene();
+	--local bglayer = p.GetPetParent();
+	
+	local layer = createNDUILayer();
+	layer:Init();
+	layer:SetTag(NMAINSCENECHILDTAG.PVPADDUI);	
+	
+	layer:SetFrameRect(RectFullScreenUILayer);
+	--初始化ui
+	local uiLoad = createNDUILoad();
+	if nil == uiLoad then
+		layer:Free();
+		return false;
+	end
+	
+	uiLoad:Load("RoleAttr_PVPatr.ini", layer, p.OnUIEventPVPLayer, 0, 0);	
+	uiLoad:Free();
+	SetLabel(layer, 19,  ""..strength);
+	SetLabel(layer, 20,  ""..dex);
+	SetLabel(layer, 21,  ""..intel);
+	SetLabel(layer, 22,  ""..life);
+	SetLabel(layer, 23,  ""..speed);
+	
+	scene:AddChildZ(layer,5006);
+end
+
+
+function p.OnUIEventPVPLayer(uiNode, uiEventType, param)
+ 	--local bglayer = p.GetPetParent();
+ 	local scene = GetSMGameScene();
+	local tag = uiNode:GetTag();
+	LogInfo("p.OnUIEventPVPLayer[%d]", tag);
+	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK  then
+		if ID_ROLEATTR_PVPATR_CTRL_BUTTON_5 == tag then
+		--关闭界面
+			scene:RemoveChildByTag(NMAINSCENECHILDTAG.PVPADDUI,true);
+		end
+	elseif uiEventType == NUIEventType.TE_TOUCH_TABLE_FOCUS then
+	end
+	return true;
+end
+--=========================================================--
+
+
+
+
 --任务属性界面
 function p.LoadUI(nPetId)
 	LogInfo("chh 1")
@@ -216,8 +288,8 @@ function p.LoadUI(nPetId)
         btn:SetImage(nil);
         btn:SetTouchDownImage(nil);
     end
-    
-	return true;
+
+    return true;
 end
 
 
@@ -311,13 +383,15 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             PlayerUIBackBag.LoadUI(nil, nPetId);
 		elseif  ID_ROLEATTR_L_CTRL_BUTTON_FIRE == tag then  
 			p.FirePetId = ChosedPetId;
-			CommonDlgNew.ShowYesOrNoDlg(GetTxtPri("PUIA_T1")..ConvertS(RolePetFunc.GetPropDesc(ChosedPetId,PET_ATTR.PET_ATTR_NAME))..GetTxtPri("PUIA_T2"), p.FirePet, true);
-			
+			CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("PUIA_T1"),ConvertS(RolePetFunc.GetPropDesc(ChosedPetId,PET_ATTR.PET_ATTR_NAME))), p.FirePet, true);
 			--MsgRolePet.SendPetLeaveAction(ChosedPetId);
 		    --if RolePetFunc.IsMainPet()
        	elseif  ID_ROLEATTR_L_CTRL_BUTTON_TRAIN	 == tag then   --快速训练
             RoleTrainUI.LoadUI( ChosedPetId );
-		end 
+        elseif tag == 91 then
+           local nPetId = ChosedPetId;
+           MsgPlayer.SendCheckPVPAddtion(nPetId);   
+        end 
         
 	elseif uiEventType == NUIEventType.TE_TOUCH_TABLE_FOCUS then
 	end
@@ -519,6 +593,7 @@ function p.RefreshArrowPic(nIndex,nViewCount)
 	end--]]
 end
 
+
 function p.OnUIEventBG(uiNode, uiEventType, param)
     local tag = uiNode:GetTag();
     if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
@@ -531,6 +606,7 @@ function p.OnUIEventBG(uiNode, uiEventType, param)
     end
     return true;
 end
+
 function p.OnUIEventViewChange(uiNode, uiEventType, param)
 	
     local tag = uiNode:GetTag();
@@ -738,7 +814,7 @@ function p.RefreshContainer()
 		return;
 	end
 	container:RemoveAllView();
-	
+    
 	local petNameContainer = p.GetPetNameSVC();
 	if CheckP(petNameContainer) then
 		petNameContainer:RemoveAllView();
@@ -989,12 +1065,12 @@ function p.SetPetAttr(petView, nPetDataIndex, str)
     elseif nPetDataIndex == PET_ATTR.PET_ATTR_PHY_ATK then
 	--物理攻击
 		nTag	= ID_ROLEATTR_L_CTRL_TEXT_FORCE;    
-        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, GetTxtPri("FAUI_T3"));
+        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, GetTxtPri("HS_T9"));
         
    elseif nPetDataIndex == PET_ATTR.PET_ATTR_MAGIC_ATK then
 	--策略攻击
 		nTag	= ID_ROLEATTR_L_CTRL_TEXT_FORCE;    
-        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, GetTxtPri("FAUI_T4"));
+        SetLabel(petView, ID_ROLEATTR_L_CTRL_TEXT_19, GetTxtPri("HS_T11"));
         
     elseif nPetDataIndex == PET_ATTR.PET_ATTR_PHY_DEF	then
     --物理防御

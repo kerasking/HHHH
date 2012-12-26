@@ -165,14 +165,14 @@ local ATTR_OFFSET_X = RectUILayer.size.w / 2;
 local ATTR_OFFSET_Y = 0;
 
 local BAG_TYPE_NAME = {
-    "星运",
-    "装备",
+    GetTxtPri("PUIA_T2"),
+    GetTxtPri("PUIA_T3"),
 };
-
 local friendId;
 local friendName = "";
 local parentLayerTag;
 local TAG_EQUIP_LIST = {};--装备Tag列表
+local ChosedPetId = 0;
 -----------------------
 -----------------------
 
@@ -195,10 +195,11 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
 	end
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.FriendAttr);
-	--layer:SetFrameRect(RectUILayer);
+    --layer:SetFrameRect(RectUILayer);
 	
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer,5005);
+
 	
 	--初始化ui
 	local uiLoad = createNDUILoad();
@@ -206,7 +207,6 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
 		layer:Free();
 		return false;
 	end
-	
     --三级窗口初始化
     BackLevelThreeWin.LoadUI(layer);
     
@@ -215,7 +215,7 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
 	--local AddFriendBtn	= RecursiveButton(layer, ID_SM_JH_ROLEATTR_L_BG_CTRL_BUTTON_66);
 	--AddFriendBtn:SetVisible(false);ID_ROLEATTR_L_CTRL_BUTTON_FIRE
 	
-    
+	    
 	local btn = GetButton(layer,TAG_DESTINY_BAG);
     --查看它人星运功能暂时屏蔽
     --btn:SetVisible(false);
@@ -236,7 +236,7 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
 	layerAttr:SetFrameRect(CGRectMake(ATTR_OFFSET_X, ATTR_OFFSET_Y, RectUILayer.size.w / 2, RectUILayer.size.h));
 	layer:AddChild(layerAttr);
 	
-	uiLoad:Load("RoleAttr_R.ini", layerAttr, p.OnUIEvent, 0, 0);
+	uiLoad:Load("friend/friend_Attr.ini", layerAttr, p.OnUIEvent, 0, 0);
 	
 	uiLoad:Free();	
 	
@@ -259,6 +259,7 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
 	containter:SetViewSize(containter:GetFrameRect().size);
 	containter:SetLuaDelegate(p.OnUIEventViewChange);
     
+        
     
     --星运背包
     local destinyBag = RecursiveSVC(layer, {ID_ROLEATTR_L_BG_CTRL_LIST_LEFT_DESTINY});
@@ -270,7 +271,7 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
 	destinyBag:SetViewSize(destinyBag:GetFrameRect().size);
 	destinyBag:SetLuaDelegate(p.OnUIEventViewChange);
     
-	
+    
 	local petNameContainer = p.GetPetNameSVC();
 	if CheckP(petNameContainer) then
 
@@ -283,7 +284,7 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
 		petNameContainer:SetViewSize(viewsize);
 		petNameContainer:SetLuaDelegate(p.OnUIEventViewChange);
 	end
-    
+	    
     
     
 
@@ -292,7 +293,6 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
 		
 	p.RefreshContainer();
     p.RefreshDestinyContainer();
-
 
 	local beginView	= containter:GetBeginView(0);
 
@@ -327,6 +327,8 @@ function p.LoadUI(nPlayerId,nPlayerName,nTag)
     
 	return true;
 end
+
+
 
 --切换视图
 function p.ChangeView()
@@ -427,7 +429,6 @@ function p.GetDetailParent()
 	local layer = RecursiveUILayer(scene, {NMAINSCENECHILDTAG.FriendAttr, TAG_LAYER_ATTR});
 	return layer;
 end
-
 function p.GetCurrLayer()
     local scene = GetSMGameScene();
 	if nil == scene then
@@ -550,7 +551,7 @@ function p.RefreshContainer()
             p.UpdatePetAttrById(v);
             --宠物星云
             p.UpdateDestinyById(v);
-            
+
             --宠物装备
             local idlist	= ItemPet.GetEquipItemList(friendId, v);
             LogInfo("pet装备id列表");
@@ -889,8 +890,8 @@ function p.SetPetAttr(petView, nPetDataIndex, str)
 	--隐藏按钮
 	
 	local scene = GetSMGameScene();
-	local FireButton	= RecursiveButton(scene, {NMAINSCENECHILDTAG.FriendAttr,TAG_LAYER_ATTR,ID_ROLEATTR_L_CTRL_BUTTON_FIRE});
-	FireButton:SetVisible(false);
+	--local FireButton	= RecursiveButton(scene, {NMAINSCENECHILDTAG.FriendAttr,TAG_LAYER_ATTR,ID_ROLEATTR_L_CTRL_BUTTON_FIRE});
+	--FireButton:SetVisible(false);
 
 
 
@@ -1056,7 +1057,7 @@ function p.ChangePetAttr(nPetId)
 	if not CheckN(nPetId) then
 		return;
 	end
-	
+	ChosedPetId = nPetId;
 	if not RolePet.IsExistPet(nPetId) then
 		LogInfo("not RolePet.IsExistPet[%d]", nPetId);
 	end
@@ -1177,7 +1178,10 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 			else
 				FriendFunc.AddFriend(friendId,friendName); --加为好友 
 			end
-			
+        elseif tag == 91 then
+         
+           LogInfo("nPetId"..ChosedPetId);
+           MsgPlayer.SendCheckPVPAddtion(ChosedPetId);
 	    end
 	end	
 	return true;
@@ -1188,7 +1192,11 @@ function p.OnUIEventScroll(uiNode, uiEventType, param)
 	LogInfo("p.OnUIEventScroll[%d]", tag);
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		if tag == ID_SM_JH_ROLEATTR_L_BG_CTRL_BUTTON_67 then
+		    --赠送鲜花 
+			
 			MsgFriend.SendOpenGiveFlower(friendId,friendName,NMAINSCENECHILDTAG.FriendAttr);
+		    --判断今天是否赠送过了
+		    --CommonDlg.ShowTipInfo("提示", "您今天已经赠送过鲜花了!", nil, 0.5); 
 			
 		elseif tag == ID_SM_JH_ROLEATTR_L_BG_CTRL_BUTTON_66 then
 		        if FriendUI.IsExistFriend(friendId)  then
@@ -1196,10 +1204,10 @@ function p.OnUIEventScroll(uiNode, uiEventType, param)
 				else
 				    FriendFunc.AddFriend(friendId,friendName); --加为好友 
 				end	
-                
+		                
         elseif tag == TAG_DESTINY_BAG then
             p.ChangeView();
-		end
+        end
 	end
 	
 	return true;
@@ -1266,7 +1274,7 @@ function p.OnUIEventViewChange(uiNode, uiEventType, param)
 			return true;
 		end
 	
-		if ID_ROLEATTR_L_BG_CTRL_LIST_LEFT == tag or ID_ROLEATTR_L_BG_CTRL_LIST_LEFT_DESTINY == tag then
+        if ID_ROLEATTR_L_BG_CTRL_LIST_LEFT == tag or ID_ROLEATTR_L_BG_CTRL_LIST_LEFT_DESTINY == tag then
             LogInfo("p.OnUIEventViewChange:nPetId:[%d]",nPetId);
 			containter	= p.GetPetNameSVC();
 			if CheckP(containter) then
@@ -1285,19 +1293,13 @@ function p.OnUIEventViewChange(uiNode, uiEventType, param)
 end
 
 
---[[
+
 function p.OnCommonDlgDelFriend(nId, nEvent, param)
 	if nEvent == CommonDlg.EventOK then
 			MsgFriend.SendFriendDel(friendId,friendName);--删除好友         
 	end
 end	
-]]
 
-function p.OnCommonDlgDelFriend(nEventType , nEvent, param)
-    if(CommonDlgNew.BtnOk == nEventType) then
-         MsgFriend.SendFriendDel(friendId);
-    end
-end	
 
 function p.ClickOtherPlayer(param1,param2,param3)
 	LogInfo("qbw:click other")
