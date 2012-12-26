@@ -352,6 +352,7 @@ void ScriptMgr::LoadLuaFile(const char* pszluaFile)
     int nDataLen = fread(btData+nPlainLen, 1, sb.st_size-nCiptextLen, fp);
     LuaStateMgrObj.GetState()->DoBuffer((const char*)btData,nDataLen+nPlainLen,pszluaFile); 
     delete []btData;
+	fclose(fp);
 }
 
 bool ScriptMgr::AddRegClassFunc(RegisterClassFunc func)

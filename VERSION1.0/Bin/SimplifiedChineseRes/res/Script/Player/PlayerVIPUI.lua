@@ -177,6 +177,7 @@ local scene = GetSMGameScene();
 	layer:SetPopupDlgFlag(true);
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerVIPUI);
+	layer:SetDebugName( "VIP" ); --@opt
 	layer:SetFrameRect(RectFullScreenUILayer);
 	
 
