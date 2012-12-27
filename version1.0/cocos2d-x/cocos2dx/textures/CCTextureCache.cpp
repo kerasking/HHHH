@@ -446,6 +446,7 @@ CCTexture2D * CCTextureCache::addImage(const char * path)
                     eImageFormat = CCImage::kFmtTiff;
                 }
                 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
                 CCImage image;                
                 unsigned long nSize = 0;
                 unsigned char* pBuffer = CCFileUtils::sharedFileUtils()->getFileData(fullpath.c_str(), "rb", &nSize);
@@ -457,13 +458,18 @@ CCTexture2D * CCTextureCache::addImage(const char * path)
                 else
                 {
                     CC_SAFE_DELETE_ARRAY(pBuffer);
-                }                
+                }
+#endif
 
 				image.dbgInfo = fullpath; //ND_MOD
                 texture = new CCTexture2D();
                 
                 if( texture &&
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
                     texture->initWithImage(&image) )
+#else
+                   texture->initWithPalettePNG(fullpath.c_str()) )
+#endif
                 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
                     // cache the texture file name

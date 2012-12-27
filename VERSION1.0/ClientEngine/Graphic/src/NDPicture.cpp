@@ -84,19 +84,22 @@ void NDPicture::Initialization(const char* imageFile)
 	if (!imageFile) return;
 
 	this->destroy();
-
-	// init image
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	CCImage image;
+
 	if (!image.initWithImageFile(imageFile) && imageFile)
 	{
-		return;
+		//ScriptMgrObj.DebugOutPut("picture [%s] not exist", imageFile);
 	}
-
-	// init tex
+#endif
 	//m_pkTexture = new CCTexture2D;
 	m_pkTexture = CCTexture2D::create();
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	m_pkTexture->initWithImage(&image);
-	//m_pkTexture->initWithPalettePNG(imageFile);
+#else
+	m_pkTexture->initWithPalettePNG(imageFile);
+#endif
 
 	/*
 	 if (m_canGray && image)
@@ -127,15 +130,17 @@ void NDPicture::Initialization(const char* imageFile, int hrizontalPixel, int ve
 	if (!imageFile) return;
 
 	this->destroy();
-
+    
+	bool bLoadImageSucess = true;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	// init image
 	CCImage image;
-	bool bLoadImageSucess = true;
 	if (!image.initWithImageFile(imageFile) && imageFile)
 	{
 		bLoadImageSucess = false;
 		return;
 	}
+#endif
 
 	bool bLoadStretchImageSucess = false;
 	if ((!(hrizontalPixel < 0 || verticalPixel < 0)) && bLoadImageSucess)
@@ -195,11 +200,14 @@ void NDPicture::Initialization(const char* imageFile, int hrizontalPixel, int ve
 	{
 		//m_pkTexture = new CCTexture2D;
 		m_pkTexture = CCTexture2D::create();
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 		m_pkTexture->initWithImage(&image);
-		//m_pkTexture->initWithPalettePNG(imageFile);
+#else
+		m_pkTexture->initWithPalettePNG(imageFile);
+#endif
 	}
 
-	m_kCutRect = CCRectMake(0, 0, 
+	m_kCutRect = CCRectMake(0, 0,
 		m_pkTexture->getContentSizeInPixels().width,
 		m_pkTexture->getContentSizeInPixels().height);
 

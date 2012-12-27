@@ -2129,6 +2129,16 @@ void NDManualRole::SetLable(LableType eLableType, int x, int y,
 	int newX = posHead.x - 0.5 * fontSize.width;
 	int newY = posHead.y - 1.0 * fontSize.height;
 
+
+	#if 0  //人物骑马需要另算坐标 
+NDPlayer& player = NDPlayer::defaultHero();
+	//判断人物是否在骑马
+	if(player.m_nRideStatus == 1)
+	{
+		newY += 13 * RESOURCE_SCALE;
+	}
+#endif
+
 	float offset = 1.0f * RESOURCE_SCALE;
 	lable[0]->SetFrameRect(CCRectMake(newX, newY, fontSize.width, fontSize.height));//上
 	lable[1]->SetFrameRect(CCRectMake(newX + offset, newY + offset, fontSize.width, fontSize.height));//底

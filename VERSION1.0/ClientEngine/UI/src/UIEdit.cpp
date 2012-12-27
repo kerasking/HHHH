@@ -524,6 +524,7 @@ bool CUIEdit::detachWithIME()
 		{
 			CCLog( "@@ CUIEdit::detachWithIME(), call pGlView->setIMEKeyboardState(false)\r\n" );
 
+			OnScriptUiEvent(this, TE_TOUCH_EDIT_INPUT_FINISH);
 			pGlView->setIMEKeyboardState(false);
 		}
 	}

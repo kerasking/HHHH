@@ -33,7 +33,7 @@
 #define BTN_H				(20)
 #define REACH_X				(8)
 #define REACH_Y				(8)
-#define MOVE_STEP			(6) //@tune
+#define MOVE_STEP			(8) //@tune
 
 extern WorldMapLayer* g_pWorldMapLayer = NULL; //for debug only.
 

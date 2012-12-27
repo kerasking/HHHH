@@ -1,7 +1,7 @@
 {
     "leaderboard_1": {
         "id": "ID1",
-        "appId": "13000057",
+        "appId": "23000052",
         "title": "test1",
         "scoreFormat": "integer",
         "scorePrecision": 2,
@@ -15,7 +15,7 @@
     },
     "leaderboard_2": {
         "id": "ID2",
-        "appId": "13000057",
+        "appId": "23000052",
         "title": "test2",
         "scoreFormat": "integer",
         "scorePrecision": 2,

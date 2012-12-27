@@ -37,10 +37,10 @@
             	<action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data  android:scheme="mobage-cn-13000314" />
+                <data  android:scheme="mobage-cn-23000052" />
             </intent-filter>
             <intent-filter>
-                <action android:name="cn.mobage.g13000314.RUN" />
+                <action android:name="cn.mobage.g23000052.RUN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

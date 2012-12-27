@@ -33,17 +33,28 @@
     <string name="mbga_DownloadService_pdTitle">Connecting to......</string>
     <string name="mbga_DownloadService_pdTitle2">Downloading......</string>
     <string name="mbga_DownloadService_pdMsg">Downloading file</string>
-    <string name="mbga_DownloadService_cancel">Cancel the download task, please retry later</string>
-    <string name="mbga_DownloadService_error">Network disconnects, cancel the download task, please retry later</string>
+    <string name="mbga_DownloadService_cancel">Cancel the download task, please retry later</string>    
+    <string name="mbga_DownloadService_error">Network disconnects, the download will start automatically after the network is restored</string>
+    <string name="mbga_DownloadService_md5error">File checksum failure, began to re-download</string>
     <string name="mbga_NotificationHelper_downloading">Downloading, wait a minute</string>
     <string name="mbga_NotificationHelper_text">Downloaded：%1$s ,Size：%2$s kb</string>
-    <string name="mbga_NotificationHelper_status">Download status</string>
+    <string name="mbga_NotificationHelper_status">Update package is downloading</string>
+    <string name="mbga_NotificationHelper_done">Update package download is complete</string>
+    <string name="mbga_NotificationHelper_install">Click Install</string>
     <string name="mbga_SDKHelper_update">Detect a new version, update or not?</string>
     <string name="mbga_SDKHelper_title">Upgrade notification</string>
+    <string name="mbga_SDKHelper_ForceDone">Update package download is complete, click OK to install</string>
+    <string name="mbga_SDKHelper_ForceDownloading">Update package is downloading</string>
+    <string name="mbga_SDKHelper_ForceError">An exception occurs, please check the network status</string>
     <string name="mbga_APKDownloadTask_download">Start downloading</string>
     <string name="mbga_APKDownloadTask_error">Download fails, please check sdcard and network status</string>
     <string name="mbga_CNBalanceButton_MCoin">MCoin</string>
     <string name="mbga_CNWebViewClient_progress">Loading, wait a minute</string>
     <string name="mbga_CNWebViewClient_error">Server Connection error</string>
     <string name="mbga_CNWebViewClient_message">Please check network connection. If OK, please wait for a while</string>
+    <string name="mbga_SharedUtil_share">Share</string>
+    <string name="mbga_SharedUtil_choices">Ways to Share</string>
+    <string name="mbga_SharedUtil_others">Others</string>
+    <string name="mbga_SharedUtil_choose">Choose</string>
+    
 </resources>
