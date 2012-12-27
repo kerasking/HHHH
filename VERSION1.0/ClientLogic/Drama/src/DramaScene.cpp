@@ -52,11 +52,11 @@ DramaScene::~DramaScene()
 
 	WriteCon( "%08X: DramaScene::~DramaScene()\r\n", this);
 
-	if(m_layerMap != NULL)
-	{
-		delete (m_layerMap);
-		m_layerMap = NULL;
-	}
+// 	if(m_layerMap != NULL)
+// 	{
+// 		delete (m_layerMap);
+// 		m_layerMap = NULL;
+// 	}
 }
 
 void DramaScene::Init(int nMapId)

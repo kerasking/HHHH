@@ -29,10 +29,10 @@ namespace NDEngine
 	{
 		DEC_NDOBJ_RTCLS
 
-		SAFE_DELETE (m_tileLeftBottom);
-		SAFE_DELETE (m_tileLeftTop);
-		SAFE_DELETE (m_tileRightTop);
-		SAFE_DELETE (m_tileRightBottom);
+		SAFE_RELEASE (m_tileLeftBottom);
+		SAFE_RELEASE (m_tileLeftTop);
+		SAFE_RELEASE (m_tileRightTop);
+		SAFE_RELEASE (m_tileRightBottom);
 	}
 
 	void NDUIFrame::draw()

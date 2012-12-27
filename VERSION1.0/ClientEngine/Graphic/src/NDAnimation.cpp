@@ -149,7 +149,8 @@ void NDAnimation::SlowDown(unsigned int multi)
 		for (unsigned int i = 0; i < m_pkFrames->count(); i++)
 		{
 			NDFrame *pkFrame = (NDFrame*) m_pkFrames->objectAtIndex(i);
-			pkFrame->setEnduration(pkFrame->getEnduration() * multi);
+			if (pkFrame)
+				pkFrame->setEnduration(pkFrame->getEnduration() * multi);
 		}
 	}
 }
@@ -158,8 +159,9 @@ bool NDAnimation::lastFrameEnd( NDFrameRunRecord* pkRunRecord )
 {
 	if (pkRunRecord->isThisFrameEnd())
 	{
-		return pkRunRecord->getCurrentFrameIndex() ==
-			pkRunRecord->getTotalFrame() - 1 && pkRunRecord->getRepeatTimes() <= 1;
+		return 
+			(pkRunRecord->getCurrentFrameIndex() == pkRunRecord->getTotalFrame() - 1)
+			&& pkRunRecord->getRepeatTimes() <= 1;
 	}
 
 	return false;

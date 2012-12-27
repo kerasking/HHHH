@@ -35,7 +35,7 @@
 #define TAG_MAP_LONGTOUCH_STATE (2048)
 #define LONG_TOUCH_INTERVAL 0.1f
 
-#define ENABLE_OPT 1 //是否启用性能优化
+#define ENABLE_OPT 0 //是否启用性能优化
 
 using namespace NDEngine;
 

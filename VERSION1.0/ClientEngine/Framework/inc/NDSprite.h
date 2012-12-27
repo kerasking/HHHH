@@ -91,9 +91,9 @@ public:
 	}
 
 	NDSprite* role;
-	NDAnimationGroup* aniGroup;
 	NDBaseFighter* fighter;
-	NDFrameRunRecord* frameRec;
+	NDAnimationGroup* aniGroup; //引用
+	NDFrameRunRecord* frameRec; //引用
 
 	OBJID idAni;
 	short x;

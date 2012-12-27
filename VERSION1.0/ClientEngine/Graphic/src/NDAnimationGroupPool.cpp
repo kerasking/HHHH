@@ -47,29 +47,26 @@ void NDAnimationGroupPool::purgeDefaultPool()
 	CC_SAFE_RELEASE_NULL (gs_pkNDAnimationGroupPool_DefaultPool);
 }
 
+//引用计数+1
 NDAnimationGroup* NDAnimationGroupPool::addObjectWithSpr(const char*sprFile)
 {
 	NDAnimationGroup *pkGroup = NULL;
 
+	// find existing
 	pkGroup = (NDAnimationGroup*) m_pkAnimationGroups->objectForKey(sprFile);
-
-	if (!pkGroup)
+	if (pkGroup)
 	{
-		pkGroup = new NDAnimationGroup;
-		pkGroup->initWithSprFile(sprFile);
-
-		if (pkGroup)
-		{
-			m_pkAnimationGroups->setObject(pkGroup, sprFile);
-			//[group release];
-		}
+		pkGroup->retain();
+		return pkGroup;
 	}
 	else
 	{
-		pkGroup->retain();
+		// add new
+		pkGroup = new NDAnimationGroup;
+		pkGroup->initWithSprFile(sprFile);
+		m_pkAnimationGroups->setObject(pkGroup, sprFile);
+		return pkGroup;
 	}
-
-	return pkGroup;
 }
 
 NDAnimationGroup* NDAnimationGroupPool::addObjectWithModelId(int ModelId)
@@ -113,17 +110,12 @@ void NDAnimationGroupPool::Recyle()
 		return;
 	}
 
-	//std::vector < std::string > kAllKeys = m_pkAnimationGroups->allKeys();
 	CCArray* kAllKeys = m_pkAnimationGroups->allKeys();
 
 	if (!kAllKeys || kAllKeys->count() == 0)
 	{
 		return;
 	}
-
-	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-	std::vector < std::string > kRecyle;
 
 	for (unsigned int i = 0; i < kAllKeys->count(); i++)
 	{
@@ -139,16 +131,9 @@ void NDAnimationGroupPool::Recyle()
 
 		if (1 >= pkAnimationGroup->retainCount())
 		{
-			kRecyle.push_back(strKey);
+			m_pkAnimationGroups->removeObjectForKey( strKey );
 		}
 	}
-
-	for (unsigned int i = 0; i < kRecyle.size(); i++)
-	{
-		m_pkAnimationGroups->removeObjectForKey(kRecyle[i]);
-	}
-
-	//[pool release];
 }
 
 //测试用

@@ -87,12 +87,6 @@ enum BATTLE_COMPLETE
 	BATTLE_COMPLETE_END = 3,
 };
 
-struct IsSubAniGroupComplete {
-	bool operator()(NDSubAniGroup& sag) {
-		return sag.bComplete;
-	}
-};
-
 //------------------------------------------------------------------
 class HighlightTipStatusBar: public NDUINode
 {
@@ -215,7 +209,7 @@ typedef VEC_COMMAND::iterator VEC_COMMAND_IT;
 
 class ImageNumber;
 
-typedef vector<NDSubAniGroup> VEC_SUB_ANI_GROUP;
+typedef vector<NDSubAniGroup*> VEC_SUB_ANI_GROUP;
 typedef VEC_SUB_ANI_GROUP::iterator VEC_SUB_ANI_GROUP_IT;
 
 
