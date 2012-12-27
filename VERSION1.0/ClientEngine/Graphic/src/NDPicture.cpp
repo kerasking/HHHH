@@ -85,18 +85,17 @@ void NDPicture::Initialization(const char* imageFile)
 
 	this->destroy();
 
-	// init image
-	CCImage image;
-	if (!image.initWithImageFile(imageFile) && imageFile)
-	{
-		return;
-	}
+//	CCImage image;
+//
+//	if (!image.initWithImageFile(imageFile) && imageFile)
+//	{
+//		//ScriptMgrObj.DebugOutPut("picture [%s] not exist", imageFile);
+//	}
 
-	// init tex
 	//m_pkTexture = new CCTexture2D;
 	m_pkTexture = CCTexture2D::create();
-	m_pkTexture->initWithImage(&image);
-	//m_pkTexture->initWithPalettePNG(imageFile);
+//	m_pkTexture->initWithImage(&image);
+	m_pkTexture->initWithPalettePNG(imageFile);
 
 	/*
 	 if (m_canGray && image)

@@ -74,9 +74,9 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	    		Float sizey = 75*s_fScale;
 	    		FrameLayout.LayoutParams pkParamsButton = new FrameLayout.LayoutParams(sizex.intValue(),sizey.intValue());
 	    		balancebutton.setLayoutParams(pkParamsButton);
-	    		//balancebutton.setX(264*s_fScale);
-	    		//balancebutton.setY(70*s_fScale);
-	        	balancebutton.setVisibility( View.VISIBLE );
+	    		balancebutton.update();
+	    	    
+	        balancebutton.setVisibility( View.VISIBLE );
 	        };
 	 };
 	 private static Runnable mHideBalance = new Runnable() {
