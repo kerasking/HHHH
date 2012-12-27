@@ -7,7 +7,8 @@ LOCAL_MODULE := Sqlite3
 LOCAL_MODULE_FILENAME := libSqlite3
 
 LOCAL_SRC_FILES := \
-../../src/sqlite3.c
+../../src/sqlite3.c \
+../../src/codecext.c
 
 LOCAL_C_INCLUDES := \
 $(LOCAL_PATH)/../../inc
