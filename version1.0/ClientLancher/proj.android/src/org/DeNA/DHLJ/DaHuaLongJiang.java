@@ -43,6 +43,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.webkit.CookieSyncManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -55,6 +56,7 @@ import android.os.Environment;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.VideoView;
@@ -67,6 +69,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static DynamicMenuBar menubar;
 	private static BalanceButton balancebutton;
 	private static float s_fScale;
+	private static Button button1;
 	
 	 private static Handler BalanceHandler = new Handler();
 	 private static Runnable mUpdateBalance = new Runnable() {
@@ -159,7 +162,28 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			menubar.setMenuIconGravity(Gravity.TOP|Gravity.LEFT);
 
 			Rect rect = new Rect(0, 0, 200, 120);
-			balancebutton = com.mobage.android.social.common.Service.getBalanceButton(rect); 			
+			balancebutton = com.mobage.android.social.common.Service.getBalanceButton(rect); 
+			
+//			button1 = new Button(this);
+//			button1.setText("aaaaaaaaa".toCharArray(), 1, 6);
+//    		FrameLayout.LayoutParams pkParamsButton = new FrameLayout.LayoutParams(200,200);
+//    		pkParamsButton.topMargin = 10;
+//    		pkParamsButton.leftMargin = 10;
+//    		button1.setLayoutParams(pkParamsButton);
+//			
+//			button1.setOnClickListener(new OnClickListener() {
+//				@Override
+//				public void onClick(View view) {
+//					FeedsView.openActivityFeeds();
+////					RemoteNotificationView.SendRemoteNotification("500002013");
+////					RemoteNotificationView.SendRemoteNotification("500001919");
+////					PeopleView.getFriendsWithGame();
+////					PeopleView.getFriends();
+////					PeopleView.getUsers();
+////					PeopleView.getCurrentUser();
+////					PeopleView.getUser();
+//				}
+//			});
 		} else
 		{
 			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -232,6 +256,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		menubar.addView(rootView);
 		menubar.addView(balancebutton);
     	balancebutton.setVisibility( View.INVISIBLE );
+//		menubar.addView(button1);
 
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
 				ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
