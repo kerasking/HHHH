@@ -277,14 +277,33 @@ public:
 	//void SetChecked( bool bChecked ){ m_bChecked = bChecked; m_bGray = bChecked; }
 	void SetChecked( bool bChecked ){ m_bTabSel = bChecked; m_bFocusEnable = bChecked; m_bChecked = bChecked; m_bGray = bChecked;}
 	bool CanDestroyOnRemoveAllChildren(NDNode* pNode);
+
 public:
 	void SetTitle();
 	void SetTwoTitle();
-protected:
-	NDPicture* m_image, *m_touchDownImage, *m_rimImageLT, *m_rimImageRT, *m_rimImageLB, *m_rimImageRB;
+
+protected: //pic
+	NDPicture* m_image, *m_touchDownImage;
+	NDPicture* m_rimImageLT, *m_rimImageRT, *m_rimImageLB, *m_rimImageRB;
 	NDPicture* m_focusImage;
 	NDPicture* m_disImage;
 	NDUILabel* m_title;	
+
+protected:
+	NDCombinePicture *m_combinepicImg, *m_combinepicTouchDownImg;
+	NDCombinePicture *m_combinePicBG, *m_combinePicTouchBG;
+	NDPicture		 *m_picBG,  *m_picTouchBG;
+	bool			 m_bClearBgOnFree;
+	bool			 m_bArrow;
+	//NDLightEffect	 *m_spriteArrow;
+
+protected:
+	//显示两个标签相关
+	NDUILabel *m_lbTitle1, *m_lbTitle2;
+	bool m_bNeedSetTwoTitle;
+	unsigned m_uiTwoTitleInter;
+
+protected:
 	cocos2d::ccColor4B m_touchDownColor;
 	cocos2d::ccColor4B m_focusColor;
 	cocos2d::ccColor4B m_backgroundColor;
@@ -325,6 +344,7 @@ protected:
 	FocusStatus m_focusStatus;
 	bool m_bFocusEnable;
 
+protected: //scroll text
 	NDUIScrollText* m_scrtTitle;
 	bool m_bAutoScroll, m_bForce;
 	std::string m_strTitle;
@@ -332,20 +352,7 @@ protected:
 	cocos2d::ccColor4B m_colorTitle, m_colorFocusTitle;
 	bool m_bNeedSetTitle;
 	bool m_bScrollTitle;
-	
-	//显示两个标签相关
-	NDUILabel *m_lbTitle1, *m_lbTitle2;
-	bool m_bNeedSetTwoTitle;
-	unsigned m_uiTwoTitleInter;
-	
-	NDCombinePicture *m_combinepicImg, *m_combinepicTouchDownImg;
-	
-	NDCombinePicture *m_combinePicBG, *m_combinePicTouchBG;
-	NDPicture		 *m_picBG,  *m_picTouchBG;
-	bool			 m_bClearBgOnFree;
-	bool			 m_bArrow;
-	//NDLightEffect	 *m_spriteArrow;
-	
+			
 	unsigned int	 m_uiTitleLeftWidth;
 	unsigned int m_uiTitleRightWidth;
 	bool			 m_bGray;

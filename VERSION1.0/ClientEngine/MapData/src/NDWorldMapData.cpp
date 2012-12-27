@@ -331,10 +331,11 @@ void NDWorldMapData::decode(FILE* stream)
 		NDSceneTile *pkTile = new NDSceneTile;
 		pkTile->setOrderID(_sceneOrders[resourceIndex] + y);
 
+		//注意引用计数
 		NDPicture *pTile_pic = NDPicturePool::DefaultPool()->AddPicture(_sceneImages[resourceIndex].c_str());
 		pkTile->setTexture(pTile_pic->GetTexture());
+		delete pTile_pic;
 				
-
 		int picWidth = pkTile->getTexture()->getPixelsWide()
 				* pkTile->getTexture()->getMaxS();
 
@@ -411,8 +412,11 @@ void NDWorldMapData::decode(FILE* stream)
 		if (pkFile)
 		{
 			fclose(pkFile);
+
+			//注意引用计数
 			NDPicture *pTile_pic = NDPicturePool::DefaultPool()->AddPicture(imageName);
 			pkPlaceNode->setTexture(pTile_pic->GetTexture());
+			delete pTile_pic;
 
 			//pkPlaceNode->setTexture(CCTextureCache::sharedTextureCache()->addImage(imageName));
 		}

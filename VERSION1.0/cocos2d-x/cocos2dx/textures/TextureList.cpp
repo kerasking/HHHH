@@ -13,6 +13,7 @@
 #include "CCTexture2D.h"
 #include "CCTexturePVR.h"
 
+#include <algorithm>
 using namespace cocos2d;
 
 #define ENABLE_TEX_LIST 1
@@ -77,33 +78,52 @@ void TextureList::purge()
 // #endif
 }
 
-string TextureList::dump()
+string TextureList::dump( const string& out_file )
 {
 #if ENABLE_TEX_LIST
+
+	vector<void*> vecTex;
+	sortTex( vecTex );
+
 	string total;
-	char str1[20] = "";
-	char str2[20] = "";
-	char str3[20] = "";
+	char szName[20] = "";
+	char szSize[20] = "";
+	char szBytes[20] = "";
 	char line[200] = "";
 
 	int index = 0;
 	int ref1_count = 0, ref2_count = 0;
 	int totalBytes = 0;
 
-	for (ITER_MAPTEX iter = mapTex.begin(); iter != mapTex.end(); ++iter)
+	for (vector<void*>::iterator iter = vecTex.begin(); iter != vecTex.end(); ++iter)
 	{
-		CCTexture2D* tex = (CCTexture2D*) iter->first;
+		CCTexture2D* tex = (CCTexture2D*) *iter;
 		if (!tex) continue;
 
 		unsigned int bpp = tex->bitsPerPixelForFormat();
 		unsigned int bytes = tex->getPixelsWide() * tex->getPixelsHigh() * bpp / 8;
 		totalBytes += bytes;
 
+		// make dbgInfo shorter
+		char* res = "/SimplifiedChineseRes/";
+		char* dbgInfo = (char*)tex->getDbgInfo().c_str();
+		char* dbg = strstr(dbgInfo, res);
+		if (dbg)
+		{
+			dbg += strlen(res);
+			if (*dbg == '/') dbg++;
+		}
+		else
+		{
+			dbg = dbgInfo;
+		}
+
 		int ref = tex->retainCount();
-		sprintf( str1, "tex[%d]", index++);
-		sprintf( str2, "%d*%d", (long)tex->getPixelsWide(), (long)tex->getPixelsHigh());
-		sprintf( str3, "%.1fK", float(bytes)/1024);
-		sprintf( line, "%-10s %-10s %-10s [id=%03d ref=%d]\r\n", str1, str2, str3, (long)tex->getName(), ref );
+		sprintf( szName, "tex[%d]", index++);
+		sprintf( szSize, "%d*%d", (long)tex->getPixelsWide(), (long)tex->getPixelsHigh());
+		sprintf( szBytes, "%.1fK", float(bytes)/1024);
+		//sprintf( line, "%-10s %-10s %-10s [id=%03d ref=%02d] %s\r\n", szName, szSize, szBytes, (long)tex->getName(), ref, tex->getDbgInfo().c_str() );
+		sprintf( line, "%-10s %-10s %-10s [id=%03d]  => %s\r\n", szName, szSize, szBytes, (long)tex->getName(), dbg );
 		total += line;
 
 		if (ref == 1)
@@ -115,7 +135,50 @@ string TextureList::dump()
 	total += "\r\n";
 	sprintf( line, "total %d tex, %.1fM, ref1_count=%d, ref2_count=%d\r\n", mapTex.size(), float(totalBytes)/(1024*1024), ref1_count, ref2_count );
 	total += line;
+
+	// output to file
+	if (out_file.length() > 0)
+	{
+		char path[100] = "";
+		sprintf( path, "c:/%s.txt", out_file.c_str());
+		FILE* fp = fopen( path, "w" );
+		if (fp)
+		{
+			fwrite( total.c_str(), 1, total.length(), fp );
+			fclose(fp);
+		}
+	}
 	return total;
 #endif
 	return "";
+}
+
+bool pr( void* tex1, void* tex2 )
+{
+	CCTexture2D* t1 = (CCTexture2D*) tex1;
+	CCTexture2D* t2 = (CCTexture2D*) tex2;
+
+	if (t1 && t2)
+	{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+		return stricmp( t1->getDbgInfo().c_str(), t2->getDbgInfo().c_str() ) < 0;
+#else
+		return t1->getName() < t2->getName();
+#endif	
+	}
+	return false;
+};
+
+void TextureList::sortTex( vector<void*>& vecTex )
+{
+	vecTex.clear();
+
+	for (ITER_MAPTEX iter = mapTex.begin(); iter != mapTex.end(); ++iter)
+	{
+		CCTexture2D* tex = (CCTexture2D*) iter->first;
+		if (!tex) continue;
+		vecTex.push_back( tex );
+	}
+
+	sort( vecTex.begin(), vecTex.end(), pr );
 }

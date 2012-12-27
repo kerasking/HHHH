@@ -15,6 +15,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 using namespace std;
 #include "platform/CCPlatformMacros.h"
 
@@ -39,7 +40,10 @@ public:
 
 	void purge();
 
-	string dump();
+	string dump( const string& out_file );
+
+private:
+	void sortTex( vector<void*>& vecTex );
 
 private:
 	map<void*,int> mapTex;

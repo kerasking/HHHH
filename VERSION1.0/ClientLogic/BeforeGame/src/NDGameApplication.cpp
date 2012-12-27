@@ -685,9 +685,12 @@ bool NDGameApplication::processPM(const char* cmd)
 	}
 
 	//dump texlist
-	else if (stricmp( cmd, "dumptexlist" ) == 0)
+	//else if (stricmp( cmd, "dumptexlist" ) == 0)
+	else if (n = sscanf(cmd, "dumptexlist %s", szDebugOpt))
 	{
-		string info = TextureList::instance().dump();
+		if (n == 0) strcpy( szDebugOpt, "" );
+		string info = TextureList::instance().dump( szDebugOpt );
+		
 		DWORD num = 0;
 		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
 	}

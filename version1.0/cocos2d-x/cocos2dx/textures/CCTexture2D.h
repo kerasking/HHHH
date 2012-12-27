@@ -145,7 +145,9 @@ public:
 	static CCTexture2D* create() {
 		return new CCTexture2D();
 	}
-#endif
+
+	const std::string& getDbgInfo() { return dbgInfo; }
+#endif //ND_MOD
 
     /**
     Drawing extensions to make it easy to draw basic quads using a CCTexture2D object.
@@ -309,6 +311,10 @@ private:
 
 	CC_SYNTHESIZE(unsigned int,m_uiWidth,Width);
 	CC_SYNTHESIZE(unsigned int,m_uiHeight,Height);
+
+	std::string dbgInfo;
+	void setDbgInfo( const char* text );
+	void setDbgInfo(CCImage* uiImage);
 #endif	
 };
 

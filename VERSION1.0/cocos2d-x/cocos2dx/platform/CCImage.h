@@ -27,6 +27,11 @@ THE SOFTWARE.
 
 #include "cocoa/CCObject.h"
 
+#if ND_MOD
+#include <string>
+using namespace std;
+#endif
+
 NS_CC_BEGIN
 
 /**
@@ -136,6 +141,8 @@ public:
 								int             nSize,
 								int&			outSizeWidth,
 								int&			outSizeHeight);
+
+	string dbgInfo;
 #endif
 
 protected:

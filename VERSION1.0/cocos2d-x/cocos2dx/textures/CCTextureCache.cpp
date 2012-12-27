@@ -459,6 +459,7 @@ CCTexture2D * CCTextureCache::addImage(const char * path)
                     CC_SAFE_DELETE_ARRAY(pBuffer);
                 }                
 
+				image.dbgInfo = fullpath; //ND_MOD
                 texture = new CCTexture2D();
                 
                 if( texture &&

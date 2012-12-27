@@ -134,12 +134,12 @@ void WorldMapLayer::Initialization(int nMapId)
 
 	// load pictures for button
 	NDPicture* picClose	= NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("btn_close.png"));
-	NDPicture* picCloseSelect	= NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("btn_close.png"));    
+	//NDPicture* picCloseSelect	= NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("btn_close.png"));    
 	CCSize sizeClose	= picClose->GetSize();
 
 	// set close button
 	picClose->Cut(CCRectMake(0,  0,  sizeClose.width,  sizeClose.height/2 - 2));
-	picCloseSelect->Cut(CCRectMake(0,  sizeClose.height/2,  sizeClose.width,  sizeClose.height/2));
+	//picCloseSelect->Cut(CCRectMake(0,  sizeClose.height/2,  sizeClose.width,  sizeClose.height/2));
 	CCRect rectClose = CCRectMake((winsize.width - sizeClose.width), 0,
 									 sizeClose.width, sizeClose.height/2);
 	// init close button
@@ -147,7 +147,7 @@ void WorldMapLayer::Initialization(int nMapId)
 		m_btnClose = new NDUIButton();
 		m_btnClose->Initialization();
 		m_btnClose->SetDelegate(this);
-		m_btnClose->SetImage(picClose);
+		m_btnClose->SetImage(picClose, false, CCRectZero, true); //clear pic.
 		m_btnClose->SetFrameRect(rectClose);
 		AddChild(m_btnClose);
 	}
