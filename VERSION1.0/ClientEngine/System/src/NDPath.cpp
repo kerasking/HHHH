@@ -291,7 +291,12 @@ void NDPath::SetResDirPos( int iPos )
 {
 	NDPath::s_iResDirPos = iPos;
 }
-	
+
+const string NDPath::GetDBPath()
+{
+	 return GetResPath("DBData/");
+}
+
 ///////////////////////////>>>
 
 NS_NDENGINE_END

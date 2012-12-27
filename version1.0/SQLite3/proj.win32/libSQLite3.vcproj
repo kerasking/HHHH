@@ -160,6 +160,10 @@
 				RelativePath="..\src\sqlite3.c"
 				>
 			</File>
+			<File
+				RelativePath="..\src\sqlite3secure.c"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
