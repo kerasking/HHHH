@@ -446,24 +446,29 @@ CCTexture2D * CCTextureCache::addImage(const char * path)
                     eImageFormat = CCImage::kFmtTiff;
                 }
                 
-//                CCImage image;                
-//                unsigned long nSize = 0;
-//                unsigned char* pBuffer = CCFileUtils::sharedFileUtils()->getFileData(fullpath.c_str(), "rb", &nSize);
-//                if (! image.initWithImageData((void*)pBuffer, nSize, eImageFormat))
-//                {
-//                    CC_SAFE_DELETE_ARRAY(pBuffer);
-//                    break;
-//                }
-//                else
-//                {
-//                    CC_SAFE_DELETE_ARRAY(pBuffer);
-//                }                
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+                CCImage image;                
+                unsigned long nSize = 0;
+                unsigned char* pBuffer = CCFileUtils::sharedFileUtils()->getFileData(fullpath.c_str(), "rb", &nSize);
+                if (! image.initWithImageData((void*)pBuffer, nSize, eImageFormat))
+                {
+                    CC_SAFE_DELETE_ARRAY(pBuffer);
+                    break;
+                }
+                else
+                {
+                    CC_SAFE_DELETE_ARRAY(pBuffer);
+                }
+#endif
 
                 texture = new CCTexture2D();
                 
                 if( texture &&
-                    texture->initWithPalettePNG(fullpath.c_str()) )
-//                    texture->initWithImage(&image) )
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+                    texture->initWithImage(&image) )
+#else
+                   texture->initWithPalettePNG(fullpath.c_str()) )
+#endif
                 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
                     // cache the texture file name

@@ -179,13 +179,16 @@ void NDUILayer::SetBackgroundImage(const char* imageFile)
 	{
 		return;
 	}
-
-	CCImage image;
-//	image.initWithImageFile(imageFile);
+    
 	//m_pkBackgroudTexture = new CCTexture2D;
 	m_pkBackgroudTexture = CCTexture2D::create();
-//	m_pkBackgroudTexture->initWithImage(&image);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	CCImage image;
+	image.initWithImageFile(imageFile);
+	m_pkBackgroudTexture->initWithImage(&image);
+#else
     m_pkBackgroudTexture->initWithPalettePNG(imageFile);
+#endif
 }
 
 void NDUILayer::SetBackgroundImageLua(NDPicture *pic)
