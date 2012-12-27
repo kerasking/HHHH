@@ -1,6 +1,6 @@
 # set params
 NDK_ROOT_LOCAL=/cygdrive/d/android-ndk-r8b
-COCOS2DX_ROOT_LOCAL=/cygdrive/d/work/DHLJClient/VERSION1.0/cocos2d-x
+COCOS2DX_ROOT_LOCAL=/cygdrive/d/work/DHLJ_Work/VERSION1.0/cocos2d-x
 
 buildexternalsfromsource=
 

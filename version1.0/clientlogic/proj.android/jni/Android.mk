@@ -121,6 +121,7 @@ $(LOCAL_PATH)/../../../ClientEngine/UI/inc \
 $(LOCAL_PATH)/../../../ClientEngine/Platform/inc \
 $(LOCAL_PATH)/../../../ClientEngine/UI/import/inc \
 $(LOCAL_PATH)/../../../ClientEngine/Utility/inc \
+$(LOCAL_PATH)/../../../Sqlite3/inc \
 $(LOCAL_PATH)/../../BeforeGame/inc \
 $(LOCAL_PATH)/../../Chat/inc \
 $(LOCAL_PATH)/../../Common/inc \
@@ -156,7 +157,9 @@ LOCAL_LDLIBS := -L$(call host-path, $(LOCAL_PATH)/../../proj.android/libs/$(TARG
                 -L$(call host-path, $(LOCAL_PATH)/../../../cocos2d-x/cocos2dx/platform/third_party/android/libraries/$(TARGET_ARCH_ABI))
 
 LOCAL_WHOLE_STATIC_LIBRARIES += ClientEngine
+LOCAL_WHOLE_STATIC_LIBRARIES += Sqlite3
 
 include $(BUILD_STATIC_LIBRARY)
 
 $(call import-module,ClientEngine/proj.android/jni)
+$(call import-module,Sqlite3/proj.android/jni)

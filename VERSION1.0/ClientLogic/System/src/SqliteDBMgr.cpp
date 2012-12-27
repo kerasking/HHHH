@@ -35,7 +35,7 @@ CSqliteDBMgr& CSqliteDBMgr::shareInstance()
 
 /////////////////////////////////////////////////////////
 CSqliteDBMgr::CSqliteDBMgr() :
-m_database(NULL)
+m_pkDatabase(NULL)
 {
 
 }
@@ -43,9 +43,9 @@ m_database(NULL)
 CSqliteDBMgr::~CSqliteDBMgr()
 {
 	m_setRowData.clear();
-	if (m_database)
+	if (m_pkDatabase)
 	{
-		sqlite3_close (m_database);
+		sqlite3_close (m_pkDatabase);
 	}
 }
 /////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ void CSqliteDBMgr::InitDataBase(const char* pszDBName)
 {
 	if (0 == pszDBName || !*pszDBName)
 	{
-
+		LOGERROR("0 == pszDBName || !*pszDBName");
 		return;
 	}
 
@@ -62,7 +62,12 @@ void CSqliteDBMgr::InitDataBase(const char* pszDBName)
 	m_strDBName = pszDBName;
 	m_strPath = GetDBPath(pszDBName);
 
-	if (sqlite3_open(m_strPath.c_str(), &m_database) != SQLITE_OK)
+	if (sqlite3_open(m_strPath.c_str(), &m_pkDatabase) != SQLITE_OK)
+	{
+		return;
+	}
+
+	if (SQLITE_OK != sqlite3_rekey(m_pkDatabase,"1234",4))
 	{
 		return;
 	}
@@ -72,39 +77,39 @@ void CSqliteDBMgr::InitDataBase(const char* pszDBName)
 int CSqliteDBMgr::SelectData(const char* pszSelectSql, int nColNum)
 {
 	m_setRowData.clear();
-	if (!m_database)
+	if (!m_pkDatabase)
 	{
 		return 0;
 	}
 
-	sqlite3_stmt *statement = 0;
-	if (sqlite3_prepare_v2(m_database, pszSelectSql, -1, &statement, NULL)
+	sqlite3_stmt* pkStatement = 0;
+	if (sqlite3_prepare_v2(m_pkDatabase, pszSelectSql, -1, &pkStatement, NULL)
 			!= SQLITE_OK)
 	{
 		return 0;
 	}
 
 	int nRowNum = 0;
-	while (sqlite3_step(statement) == SQLITE_ROW)
+	while (sqlite3_step(pkStatement) == SQLITE_ROW)
 	{
 		VEC_COL_DATA setColData;
 		for (int nCol = 0; nCol < nColNum; nCol++)
 		{
-			std::string strData = (const char*) sqlite3_column_text(statement,
+			std::string strData = (const char*) sqlite3_column_text(pkStatement,
 					nCol);
 			setColData.push_back(strData);
 		}
 		m_setRowData.push_back(setColData);
 		nRowNum++;
 	}
-	sqlite3_finalize(statement);
+	sqlite3_finalize(pkStatement);
 	return nRowNum;
 }
 
 /////////////////////////////////////////////////////////
 bool CSqliteDBMgr::IsExistTable(const char* pszTableName)
 {
-	if (!m_database)
+	if (!m_pkDatabase)
 	{
 		return false;
 	}
@@ -112,7 +117,7 @@ bool CSqliteDBMgr::IsExistTable(const char* pszTableName)
 	std::string strSelectSql = "select * from ";
 	strSelectSql += pszTableName;
 	char* szErrMsg = NULL;
-	if (sqlite3_exec(m_database, strSelectSql.c_str(), 0, 0, &szErrMsg)
+	if (sqlite3_exec(m_pkDatabase, strSelectSql.c_str(), 0, 0, &szErrMsg)
 			!= SQLITE_OK)
 	{
 		return false;
@@ -141,13 +146,13 @@ bool CSqliteDBMgr::ExcuteSql(const char* pszSql)
 		return false;
 	}
 
-	if (!m_database)
+	if (!m_pkDatabase)
 	{
 		return false;
 	}
 
 	char* szErrMsg = NULL;
-	if (sqlite3_exec(m_database, pszSql, 0, 0, &szErrMsg) != SQLITE_OK)
+	if (sqlite3_exec(m_pkDatabase, pszSql, 0, 0, &szErrMsg) != SQLITE_OK)
 	{
 		return false;
 	}
