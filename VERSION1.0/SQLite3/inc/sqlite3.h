@@ -41,7 +41,7 @@
 extern "C" {
 #endif
 
-#define SQLITE_HAS_CODEC 1 ///< Add by guohao
+#define SQLITE_HAS_CODEC 0 ///< Add by guohao
 
 /*
 ** Add the ability to override 'extern'

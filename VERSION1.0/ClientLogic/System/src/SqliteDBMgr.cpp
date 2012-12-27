@@ -66,11 +66,6 @@ void CSqliteDBMgr::InitDataBase(const char* pszDBName)
 	{
 		return;
 	}
-
-	if (SQLITE_OK != sqlite3_rekey(m_pkDatabase,"1234",4))
-	{
-		return;
-	}
 }
 
 /////////////////////////////////////////////////////////
