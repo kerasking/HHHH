@@ -13,10 +13,7 @@
 #include "NDSharedPtr.h"
 #include "CCFileUtils.h"
 #include "CCPlatformConfig.h"
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-#include "NDUtility.h"
-#endif
+#include "NDUtil.h"
 
 const string NDLocalXmlString::GetCString(string szKeyName)
 {

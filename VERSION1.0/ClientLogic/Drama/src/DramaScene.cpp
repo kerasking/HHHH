@@ -14,7 +14,7 @@
 #include "define.h"
 #include "ScriptMgr.h"
 #include "ObjectTracker.h"
-
+#include "NDUtil.h"
 
 class DramaMapLayer : public NDMapLayer
 {
@@ -42,11 +42,16 @@ DramaScene::DramaScene()
 	m_chatlayerLeft = NULL;
 	m_chatlayerRight = NULL;
 	m_bProductClick = false;
+
+	WriteCon( "%08X: DramaScene::DramaScene()\r\n", this);
 }
 
 DramaScene::~DramaScene()
 {
 	DEC_NDOBJ_RTCLS
+
+	WriteCon( "%08X: DramaScene::~DramaScene()\r\n", this);
+
 	if(m_layerMap != NULL)
 	{
 		delete (m_layerMap);

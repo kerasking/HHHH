@@ -43,6 +43,7 @@
 #include "NDBaseBattleMgr.h"
 #include "NDBaseLayer.h"
 #include "ObjectTracker.h"
+#include "NDUtil.h"
 
 using namespace cocos2d;
 
@@ -97,8 +98,8 @@ IMPLEMENT_CLASS(NDMapLayer, NDLayer)
 
 NDMapLayer::NDMapLayer()
 {
-	INC_NDOBJ_RTCLS
-//	WriteCon( "NDMapLayer::NDMapLayer()\r\n"); ///< 调用Logic的东西 郭浩
+	INC_NDOBJ_RTCLS;
+	WriteCon( "%08X: NDMapLayer::NDMapLayer()\r\n", this);
 
 	m_pkMapData = NULL;
 	m_nMapIndex = -1;
@@ -143,7 +144,7 @@ NDMapLayer::NDMapLayer()
 NDMapLayer::~NDMapLayer()
 {
 	DEC_NDOBJ_RTCLS
-//	WriteCon( "NDMapLayer::~NDMapLayer()\r\n"); ///< 调用Logic的东西 郭浩
+	WriteCon( "%08X: NDMapLayer::~NDMapLayer()\r\n", this);
 
 	CC_SAFE_RELEASE (m_pkOrders);
 	CC_SAFE_RELEASE (m_pkOrdersOfMapscenesAndMapanimations);
@@ -175,6 +176,8 @@ NDMapLayer::~NDMapLayer()
 	CC_SAFE_DELETE (m_pkRoadSignLightEffect);
 
 	g_pMapLayer = NULL;
+
+	NDDirector::DefaultDirector()->Recyle();
 }
 
 void NDMapLayer::replaceMapData(int mapId, int center_x, int center_y)

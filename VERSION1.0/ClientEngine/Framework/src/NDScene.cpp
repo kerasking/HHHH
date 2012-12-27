@@ -13,6 +13,7 @@
 #include <sstream>
 #include "EngineScriptCommon.h"
 #include "ObjectTracker.h"
+#include "NDUtil.h"
 
 using namespace std;
 
@@ -65,11 +66,15 @@ IMPLEMENT_CLASS(NDScene, NDNode)
 NDScene::NDScene()
 {
 	INC_NDOBJ_RTCLS
+
+	WriteCon( "%08X: NDScene::NDScene()\r\n", this);
 }
 
 NDScene::~NDScene()
 {
 	DEC_NDOBJ_RTCLS
+
+	WriteCon( "%08X: NDScene::~NDScene()\r\n", this);
 }
 
 NDScene* NDScene::Scene()

@@ -715,77 +715,38 @@ void NDPicture::debugDraw()
 	ccDrawRect( lb, rt );
 }
 
-/////////////////////////////
-IMPLEMENT_CLASS(NDPictureDictionary, NDDictionary)
-NDPictureDictionary::NDPictureDictionary()
-{
-	INC_NDOBJ_RTCLS
-}
-
-NDPictureDictionary::~NDPictureDictionary()
-{
-	DEC_NDOBJ_RTCLS
-}
+//////////////////////////////////////////////////////////////////////////////////
 
 //图片资源垃圾回收
-void NDPictureDictionary::Recyle()
+void NDPicturePool::Recyle()
 {
-	if (NULL == m_nsDictionary)
+	if (NULL == m_pkPicturesDict)
 	{
 		return;
 	}
 
-	//std::vector<std::string> allKeys = m_nsDictionary->allKeys();
-	CCArray* allKeys = m_nsDictionary->allKeys();
-
-	if (allKeys && allKeys->count() == 0)
+	// get all keys
+	CCArray* allKeys = m_pkPicturesDict->AllKeys();
+	if (!allKeys || allKeys->count() == 0)
 	{
 		return;
 	}
 
-	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-	//NSMutableArray *recyle = [[NSMutableArray alloc] init];
-	std::vector<std::string> kRecyle;
-
-	for (unsigned int i = 0; i < kRecyle.size(); i++)
+	// walk through all keys 
+	for (unsigned int i = 0; i < allKeys->count(); i++)
 	{
-		std::string key = kRecyle[i];
+		CCString* strKey = (CCString*)allKeys->objectAtIndex(i);
+		if (NULL == strKey) continue;
 
-		DictionaryObject *dictObj = (DictionaryObject*)m_nsDictionary->objectForKey(key);
-		if (NULL == dictObj)
-		{
-			continue;
-		}
+		NDPicture* pic = (NDPicture*)m_pkPicturesDict->Object( strKey->getCString());
+		if (!pic) continue;
 
-		NDObject *object = dictObj->getNdObject();
-		if (object && object->IsKindOfClass(RUNTIME_CLASS(NDPicture)))
+		CCTexture2D *texture = pic->GetTexture();
+		if (texture && 1 >= texture->retainCount())
 		{
-			NDPicture* pic = (NDPicture*)object;
-			CCTexture2D *texture = pic->GetTexture();
-#ifdef DEBUG
-			if (texture)
-			{
-				//printf("\nfile name[%s] retaincount[%d]", [key UTF8String], [texture retainCount]);
-			}
-#endif
-			if (texture && 1 >= texture->retainCount())
-			{
-				kRecyle.push_back(key);
-			}
-			else
-			{
-				//printf("\nfile name[%s] retaincount[%d]", [key UTF8String], [texture retainCount]);
-			}
+			m_pkPicturesDict->RemoveObject( strKey->getCString() );
 		}
 	}
-
-	for (unsigned int i = 0; i < kRecyle.size(); i++)
-	{
-		m_nsDictionary->removeObjectForKey(kRecyle[i]);
-	}
-
-	//[pool release];
 }
 
 /////////////////////////////
@@ -795,10 +756,7 @@ NDPicturePool::NDPicturePool()
 {
 	INC_NDOBJ_RTCLS;
 
-	m_pkPicturesDict = new NDPictureDictionary();
-
-	m_timer = new NDTimer;
-	m_timer->SetTimer(this, 1, 1.0f);
+	m_pkPicturesDict = new NDDictionary();
 }
 
 NDPicturePool* NDPicturePool::DefaultPool()
@@ -811,33 +769,18 @@ NDPicturePool::~NDPicturePool()
 {
 	DEC_NDOBJ_RTCLS;
 
-//@todo: too late.
-// 	if (m_timer)
-// 	{
-// 		m_timer->KillTimer(this, 1);
-// 	}
-
 	PurgeDefaultPool();
 }
 
 void NDPicturePool::PurgeDefaultPool()
 {	
-	// clear tex cache
-// 	for (map<CCTexture2D*,string>::iterator iter = m_mapTexture.begin();
-// 			iter != m_mapTexture.end(); ++iter)
-// 	{
-// 		CCTexture2D* tex = iter->first;
-// 		SAFE_RELEASE( tex );
-// 		//SAFE_DELETE(tex);
-// 	}
+	//m_mapTexture不会增加引用计数
 	m_mapTexture.clear();
 
-	// reCreate dict
+	//字典会增加引用计数
 	if (m_pkPicturesDict)
 	{
 		m_pkPicturesDict->RemoveAllObjects();
-// 		SAFE_DELETE(m_pkPicturesDict);
-// 		m_pkPicturesDict = new NDPictureDictionary();
 	}
 }
 
@@ -944,14 +887,6 @@ CCSize NDPicturePool::GetImageSize( const std::string& filename )
 	m_mapImageSize.insert(std::make_pair(filename, size));
 
 	return size;
-}
-
-void NDPicturePool::OnTimer(OBJID tag)
-{
-	if (tag == 1)
-	{
-		this->Recyle();
-	}
 }
 
 string NDPicturePool::dump()

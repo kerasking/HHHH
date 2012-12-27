@@ -12,6 +12,10 @@
 #include "NDAnimationGroup.h"
 #include "cocoa/CCDictionary.h"
 
+#include <string>
+using namespace std;
+using namespace NDEngine;
+
 class NDAnimationGroupPool: public cocos2d::CCObject
 {
 public:
@@ -21,6 +25,7 @@ public:
 	static NDAnimationGroupPool* defaultPool();
 	static void purgeDefaultPool();
 
+public:
 	NDAnimationGroup* addObjectWithSpr(const char*sprFile);
 	NDAnimationGroup* addObjectWithSceneAnimationId(int nSceneAnimationId);
 	NDAnimationGroup* addObjectWithModelId(int ModelId);
@@ -28,6 +33,7 @@ public:
 	void removeObjectWithSpr(const char* sprFile);
 	void removeObjectWithSceneAnimationId(int SceneAnimationId);
 	void Recyle();
+	string dump();
 
 private:
 

@@ -19,13 +19,14 @@
 #include "NDUIDialog.h"
 #include "NDUIButton.h"
 //#include "SimpleAudioEngine_objc.h"
-#include "NDWorldMapData.h"
 #include "UIRoleNode.h"
 #include "typedef.h"
 
 using namespace NDEngine;
 
 #define TAG_WORLD_MAP		(2021)
+
+class PlaceNode;
 
 class WorldMapLayer: public NDUILayer, public NDUIButtonDelegate
 {
@@ -67,20 +68,21 @@ private:
 	void debugDraw();
 
 private:
-	NDWorldMapData* m_mapData;
+	cocos2d::CCArray *m_arrBtnTiles;
 	PlaceNode* m_curBtn;
+	NDUIButton *m_btnClose;
+	CUIRoleNode *m_roleNode;
+//	NDUIButton *m_btnRet;
+
 	NDTimer m_timer;
-	cocos2d::CCArray *m_buttons;
+	
 	CCPoint m_screenCenter, m_posMapOffset;
 	ID_VEC m_vIdFilter;
-	CUIRoleNode *m_roleNode;
-	NDUIButton *m_btnClose;
-	NDUIButton *m_btnRet;
+	
 	CCPoint m_posTarget;
 	int m_nTargetMapId;
 	bool m_bInMoving;
 	struct cc_timeval m_tmStartMoving;
-	//std::map<int, std::string> m_mapFilename;
 	int m_idMapCached;
 	bool m_bArrive;
 };

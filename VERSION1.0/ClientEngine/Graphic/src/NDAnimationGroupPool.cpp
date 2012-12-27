@@ -11,6 +11,7 @@
 #include "JavaMethod.h"
 #include "UtilityInc.h"
 #include "ObjectTracker.h"
+#include "NDDictionary.h"
 
 using namespace NDEngine;
 using namespace cocos2d;
@@ -115,7 +116,7 @@ void NDAnimationGroupPool::Recyle()
 	//std::vector < std::string > kAllKeys = m_pkAnimationGroups->allKeys();
 	CCArray* kAllKeys = m_pkAnimationGroups->allKeys();
 
-	if (kAllKeys && kAllKeys->count() == 0)
+	if (!kAllKeys || kAllKeys->count() == 0)
 	{
 		return;
 	}
@@ -148,4 +149,50 @@ void NDAnimationGroupPool::Recyle()
 	}
 
 	//[pool release];
+}
+
+//²âÊÔÓÃ
+string NDAnimationGroupPool::dump()
+{
+	if (!m_pkAnimationGroups) return "";
+
+	string total;
+	char line[512] = "";
+	int totoal_anims = 0;
+
+	// get all keys
+	CCArray* allKeys = m_pkAnimationGroups->allKeys();
+	if (!allKeys || allKeys->count() == 0)
+	{
+		return "";
+	}
+
+	// walk through all keys
+	std::vector<std::string> kRecyle;
+	for (unsigned int i = 0; i < allKeys->count(); i++)
+	{
+		// get key
+		CCString* strKey = (CCString*) allKeys->objectAtIndex(i);
+		if (!strKey) continue;
+
+		// get obj
+		const std::string& key = strKey->getCString();
+		CCObject *obj = m_pkAnimationGroups->objectForKey(key);
+		if (!obj) continue;
+
+		// cast anim group
+		NDAnimationGroup* animGroup = (NDAnimationGroup*)obj;
+		if (animGroup)
+		{
+			int animCount = animGroup->getAnimations()->count();
+			totoal_anims += animCount;
+
+			sprintf( line, "@@ animGroup[%02d]: has %d animations, %s\r\n", i, animCount, key.c_str() );
+			total += line;
+		}
+	}
+
+	sprintf( line, "total %d animGroup, total %d anims\r\n", allKeys->count(), totoal_anims );
+	total += line;
+	return total;
 }

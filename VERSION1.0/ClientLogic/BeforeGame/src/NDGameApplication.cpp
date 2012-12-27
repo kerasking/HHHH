@@ -35,6 +35,7 @@
 #include "CCTextureCache.h"
 #include "NDPicture.h"
 #include "TextureList.h"
+#include "NDAnimationGroupPool.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "Foundation/NSAutoreleasePool.h"
@@ -687,6 +688,14 @@ bool NDGameApplication::processPM(const char* cmd)
 	else if (stricmp( cmd, "dumptexlist" ) == 0)
 	{
 		string info = TextureList::instance().dump();
+		DWORD num = 0;
+		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
+	}
+
+	//dump anim group pool
+	else if (stricmp( cmd, "dumpanim" ) == 0)
+	{
+		string info = NDAnimationGroupPool::defaultPool()->dump();
 		DWORD num = 0;
 		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
 	}

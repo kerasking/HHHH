@@ -35,6 +35,7 @@ void CUIRoleNode::Initialization()
 	
 	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
+	SAFE_DELETE_NODE(m_pRoleParentNode);
 	m_pRoleParentNode	= new NDUINode;
 	m_pRoleParentNode->Initialization();
 	m_pRoleParentNode->SetFrameRect(CCRectMake(0, 0, winsize.width, winsize.height));
@@ -42,8 +43,6 @@ void CUIRoleNode::Initialization()
 
 void CUIRoleNode::ChangeLookFace(int nLookFace)
 {
-	SAFE_DELETE_NODE(m_pRole);
-	
 	if (0 >= nLookFace)
 	{
 		return;
@@ -53,7 +52,8 @@ void CUIRoleNode::ChangeLookFace(int nLookFace)
 	{
 		return;
 	}
-	
+
+	SAFE_DELETE_NODE(m_pRole);
 	m_pRole		= new NDManualRole;
 	m_pRole->Initialization(nLookFace);
 	m_pRole->SetCurrentAnimation(MANUELROLE_STAND, false);
@@ -69,7 +69,8 @@ void CUIRoleNode::SetRidePet(int pet_look,int stand_action,int run_action)
 }
 void CUIRoleNode::SetRoleScale(float scale)
 {
-	if(m_pRole){
+	if(m_pRole)
+	{
 		m_pRole->SetScale(scale);
 	}
 }
@@ -117,28 +118,17 @@ CCPoint& CUIRoleNode::AdjustPos( CCPoint& pos )
 
 void CUIRoleNode::draw()
 {
-	if (!this->IsVisibled())
-	{
-		return;
-	}
-	
+	if (!this->IsVisibled()) return;
 	NDUINode::draw();
-	
-	if (!m_pRole)
-	{
-		return;
-	}
-	
-	
+	if (!m_pRole) return;
+		
 	CGFloat w = m_pRole->GetWidth();
 	CGFloat h = m_pRole->GetHeight();
-	CCRect scrRect	= this->GetScreenRect();
+	CCRect scrRect = this->GetScreenRect();
 
-	CCPoint pos		= ccpAdd(scrRect.origin, 
+	CCPoint pos	= ccpAdd(scrRect.origin, 
 		ccp((scrRect.size.width - w) / 2 + m_pRole->getGravityX(),
-		(scrRect.size.height - h) / 2 + m_pRole->getGravityY()) );
-
-	//CCPoint pos		= ccpAdd(scrRect.origin, ccp(0,scrRect.size.height));
+			(scrRect.size.height - h) / 2 + m_pRole->getGravityY()) );
 
 	//AdjustPos( pos );
 	m_pRole->SetPositionEx(pos);

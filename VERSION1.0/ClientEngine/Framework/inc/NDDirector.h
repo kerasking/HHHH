@@ -188,6 +188,10 @@ public:
 //		∑µªÿ÷µ£∫Œﬁ	
 	void RemoveDelegate(NDObject* receiver);
 
+
+public:
+	void Recyle();
+
 	void TransitionAnimateComplete();
 
 	void EnableDispatchEvent(bool enable) {

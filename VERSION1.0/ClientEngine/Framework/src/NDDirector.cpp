@@ -18,6 +18,9 @@
 #include "CCTransition.h"
 #include "CCPointExtension.h"
 #include "ObjectTracker.h"
+#include "NDPicture.h"
+#include "NDMapData.h"
+#include "NDAnimationGroupPool.h"
 
 using namespace cocos2d;
 
@@ -250,9 +253,14 @@ bool NDDirector::PopScene(bool cleanUp)
 
 void NDDirector::PurgeCachedData()
 {
-	NDPicturePool::DefaultPool()->PurgeDefaultPool();
 	CCTextureCache::sharedTextureCache()->removeAllTextures();
+
+	NDPicturePool::DefaultPool()->PurgeDefaultPool();
+
 	NDAnimationGroupPool::purgeDefaultPool();
+
+//  	if (m_pkDirector)
+//  		m_pkDirector->purgeCachedData();
 }
 
 void NDDirector::Stop()
@@ -427,6 +435,14 @@ NDScene* NDDirector::GetSceneByTag(int nSceneTag)
 		}
 	}
 	return NULL;
+}
+
+//@gc
+void NDDirector::Recyle()
+{
+	NDPicturePool::DefaultPool()->Recyle();
+	NDMapTexturePool::defaultPool()->Recyle();
+	NDAnimationGroupPool::defaultPool()->Recyle();
 }
 
 //@android

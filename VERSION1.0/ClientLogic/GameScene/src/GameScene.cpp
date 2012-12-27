@@ -224,6 +224,8 @@ GameScene::GameScene()
 {
 	INC_NDOBJ_RTCLS
 
+	WriteCon( "%08X: GameScene::GameScene()\r\n", this);
+
 	s_curGameScene = this;
 
 //	m_userState = NULL; ///< 临时性注�?? 郭浩
@@ -327,6 +329,8 @@ GameScene::GameScene()
 GameScene::~GameScene()
 {
 	DEC_NDOBJ_RTCLS
+
+	WriteCon( "%08X: GameScene::~GameScene()\r\n", this);
 
 	if (s_curGameScene == this)
 	{

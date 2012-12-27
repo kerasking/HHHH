@@ -46,6 +46,9 @@ const int TileHeight = 16;
 
 std::vector<PassWay> m_passWayInfos;
 
+
+
+///////////////////////////////////////////////////////////////////
 NDWorldMapData::NDWorldMapData() :
 	m_nLayerCount(0),
 	m_nColumns(0),
@@ -56,36 +59,52 @@ NDWorldMapData::NDWorldMapData() :
 	m_BgTiles(NULL),
 	m_AnimationGroups(NULL),
 	m_AniGroupParams(NULL),
-	m_PlaceNodes(NULL)
+	m_PlaceNodes(NULL),
+	m_init(false)
 {
 	INC_NDOBJ("NDWorldMapData");
 
 	m_MapSize = CCSizeZero;
 }
 
-NDWorldMapData *NDWorldMapData_SharedData = NULL;
-NDWorldMapData * NDWorldMapData::SharedData()
+NDWorldMapData& NDWorldMapData::instance()
 {
-	if (NDWorldMapData_SharedData == NULL)
+	static NDWorldMapData* s_obj = NULL;
+	
+	if (s_obj == NULL)
 	{
-		std::string mapFile = NDPath::GetMapPath() + "map_99999.map";
-		NDWorldMapData_SharedData = new NDWorldMapData;
-		NDWorldMapData_SharedData->initWithFile(mapFile.c_str());
+		s_obj = new NDWorldMapData;
 	}
-	return NDWorldMapData_SharedData;
+
+	s_obj->init();
+	return *s_obj;
+}
+
+void NDWorldMapData::init()
+{
+	if (!getInit())
+	{
+		std::string mapFile = NDPath::GetMapPath() + "map_99999.map";	
+		this->initWithFile(mapFile.c_str());
+		this->setInit( true );
+	}
 }
 
 NDWorldMapData::~NDWorldMapData()
 {
 	DEC_NDOBJ("NDWorldMapData");
+}
 
+void NDWorldMapData::destroy()
+{
 	CC_SAFE_RELEASE (m_MapTiles);
 	CC_SAFE_RELEASE (m_SceneTiles);
 	CC_SAFE_RELEASE (m_BgTiles);
 	CC_SAFE_RELEASE (m_AnimationGroups);
 	CC_SAFE_RELEASE (m_AniGroupParams);
 	CC_SAFE_RELEASE (m_PlaceNodes);
-	CC_SAFE_DELETE(NDWorldMapData_SharedData);
+
+	this->setInit( false );
 }
 
 
@@ -182,7 +201,7 @@ void NDWorldMapData::decode(FILE* stream)
 					pkTile->setMapSize(m_MapSize);
 
 					pkTile->setTexture(
-							MapTexturePool::defaultPool()->addImage(
+							NDMapTexturePool::defaultPool()->addImage(
 									imageName.c_str(), true));
 
 					int PicParts = pkTile->getTexture()->getPixelsWide()
@@ -361,8 +380,8 @@ void NDWorldMapData::decode(FILE* stream)
 		dict->insert(std::make_pair("reverse", 0));
 		dict->insert(std::make_pair("positionX", x));
 		dict->insert(std::make_pair("positionY", y));
-		dict->insert(std::make_pair("mapSizeW", m_nColumns * MAP_UNITSIZE_X));
-		dict->insert(std::make_pair("mapSizeH", m_nRows * MAP_UNITSIZE_Y));
+		dict->insert(std::make_pair("mapSizeW", int(m_nColumns * MAP_UNITSIZE_X)));
+		dict->insert(std::make_pair("mapSizeH", int(m_nRows * MAP_UNITSIZE_Y)));
 		dict->insert(std::make_pair("orderId", aniOrder));
 		dict->insert(std::make_pair("reverse", 0));
 		dict->insert(std::make_pair("reverse", 0));

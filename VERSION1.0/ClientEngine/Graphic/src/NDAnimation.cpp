@@ -65,6 +65,8 @@ CCRect NDAnimation::getRect()
 void NDAnimation::runWithRunFrameRecord(NDFrameRunRecord* pkRunFrameRecord,
 		bool bNeedDraw, float fDrawScale)
 {
+	if (!pkRunFrameRecord || !m_pkFrames) return;
+
 	unsigned int uiFrameCount = m_pkFrames->count();
 
 	if (uiFrameCount)

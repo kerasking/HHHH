@@ -11,6 +11,9 @@
 
 #include "NDObject.h"
 #include "cocoa/CCDictionary.h"
+#include "cocoa/CCArray.h"
+
+using namespace cocos2d;
 
 class DictionaryObject: public cocos2d::CCObject
 {
@@ -32,6 +35,7 @@ public:
 	NDObject* Object(const char* key);
 	void RemoveObject(const char* key);
 	void RemoveAllObjects();
+	CCArray* AllKeys();
 
 protected:
 	cocos2d::CCDictionary* m_nsDictionary;

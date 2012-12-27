@@ -1337,9 +1337,7 @@ void NDMapMgr::processChangeRoom(NDTransData* pkData, int nLength)
 
 	while (NDDirector::DefaultDirector()->PopScene());
 
-	NDMapMgrObj.ClearNPC();
-	NDMapMgrObj.ClearMonster();
-	NDMapMgrObj.ClearGP();
+	NDMapMgrObj.preLoadScene();
 	NDMapMgrObj.loadSceneByMapDocID(nMapDocID);
 
 	NDMapLayer* pkLayer = NDMapMgrObj.getMapLayerOfScene(NDDirector::DefaultDirector()->GetRunningScene());
@@ -5250,5 +5248,14 @@ bool NDMapMgr::isMonsterClear()
 // {
 // 
 // }
+
+//加载新地图之前先清一下
+void NDMapMgr::preLoadScene()
+{
+	this->ClearNPC();
+	this->ClearMonster();
+	this->ClearGP();
+	this->ClearManualRole();
+}
 
 NS_NDENGINE_END

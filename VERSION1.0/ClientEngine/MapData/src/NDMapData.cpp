@@ -26,52 +26,66 @@
 #include "NDSprite.h"
 #include "ObjectTracker.h"
 
-MapTexturePool* g_pkMapTexturePoolDefaultPool = NULL;
 
 using namespace cocos2d;
 using namespace NDEngine;
 
-MapTexturePool::MapTexturePool() :
-m_pkDict(NULL)
+NDMapTexturePool::NDMapTexturePool()
 {
-	INC_NDOBJ("MapTexturePool");
+	INC_NDOBJ("NDMapTexturePool");
 
-	NDAsssert(g_pkMapTexturePoolDefaultPool == NULL);
 	m_pkDict = new CCDictionary();
 }
 
-MapTexturePool::~MapTexturePool()
+NDMapTexturePool::~NDMapTexturePool()
 {
-	DEC_NDOBJ("MapTexturePool");
+	DEC_NDOBJ("NDMapTexturePool");
 
-	NDAsssert(g_pkMapTexturePoolDefaultPool != NULL);
-	g_pkMapTexturePoolDefaultPool = NULL;
 	CC_SAFE_RELEASE (m_pkDict);
 }
 
-MapTexturePool* MapTexturePool::defaultPool()
+NDMapTexturePool* NDMapTexturePool::defaultPool()
 {
-	if (!g_pkMapTexturePoolDefaultPool)
-		g_pkMapTexturePoolDefaultPool = new MapTexturePool;
-
-	return g_pkMapTexturePoolDefaultPool;
+	static NDMapTexturePool s_obj;
+	return &s_obj;
 }
 
-void MapTexturePool::purgeDefaultPool()
+void NDMapTexturePool::purgeDefaultPool()
 {
-	CC_SAFE_RELEASE_NULL (g_pkMapTexturePoolDefaultPool);
+	CC_SAFE_RELEASE (m_pkDict);
 }
 
-CCTexture2D* MapTexturePool::addImage(const char* path, bool keep)
+void NDMapTexturePool::Recyle()
 {
-	NDAsssert(path != NULL);
+	if (NULL == m_pkDict) return;
 
-	CCTexture2D* pkTexture = NULL;
+	CCArray* kAllKeys = m_pkDict->allKeys();
 
-	// MUTEX:
-	// Needed since addImageAsync calls this method from a different thread
+	if (!kAllKeys || kAllKeys->count() == 0)
+	{
+		return;
+	}
 
-	pkTexture = (CCTexture2D*)m_pkDict->objectForKey(path);
+	for (unsigned int i = 0; i < kAllKeys->count(); i++)
+	{
+		CCString* strKey1 = (CCString*) kAllKeys->objectAtIndex(i);
+		if (!strKey1) continue;
+
+		std::string strKey = strKey1->getCString();
+		CCTexture2D *tex = (CCTexture2D*) m_pkDict->objectForKey(strKey);
+
+		if (tex && tex->retainCount() == 1)
+		{
+			tex->release();
+		}
+	}
+}
+
+CCTexture2D* NDMapTexturePool::addImage(const char* path, bool keep)
+{
+	if (!path || !path[0]) return NULL;
+
+	CCTexture2D* pkTexture = (CCTexture2D*)m_pkDict->objectForKey(path);
 
 	if (!pkTexture)
 	{
@@ -93,10 +107,10 @@ CCTexture2D* MapTexturePool::addImage(const char* path, bool keep)
 }
 
 NDMapSwitch::NDMapSwitch() :
-m_nX(0),
-m_nY(0),
-m_nMapIndex(0),
-m_nPassIndex(0)
+	m_nX(0),
+	m_nY(0),
+	m_nMapIndex(0),
+	m_nPassIndex(0)
 {
 	INC_NDOBJ("NDMapSwitch");
 
@@ -114,73 +128,6 @@ NDMapSwitch::~NDMapSwitch()
 	SAFE_DELETE( m_pkDesLabels[0] );
 	SAFE_DELETE( m_pkDesLabels[1] );
 }
-
-// void NDMapSwitch::SetLabel(NDMapData* mapdata)
-// {
-// 	if (mapdata == NULL) 
-// 	{
-// 		return;
-// 	}
-// 	//std::string name = NDCString("notopen"), des = "";
-// 	std::string name = "";
-// 	int destMapId = NDWorldMapData::SharedData()->getDestMapIdWithSourceMapId(NDMapMgrObj.m_iMapDocID, m_nPassIndex);
-// 	if (destMapId > 0) 
-// 	{
-// 		PlaceNode *placeNode = NDWorldMapData::SharedData()->getPlaceNodeWithMapId(destMapId);
-// 		if (placeNode) 
-// 		{
-// 			name = placeNode->getName();
-// 			des  = placeNode->getDescription();
-// 			
-// 			int idx = des.find("（", 0);
-// 			if (idx == -1) 
-// 			{
-// 				idx = des.find(NDCString("lianjiquyu"));
-// 				if (idx != -1) 
-// 				{
-// 					des.erase(idx, des.size() - idx);
-// 				}
-// 			}
-// 			else 
-// 			{
-// 				des.erase(idx, des.size() - idx);
-// 			}
-// 		}
-// 		else 
-// 		{
-// 			name = NDCString("minyuecun");
-// 			des  = NDCString("xinshou");
-// 		}
-// 		
-// 		int tw = getStringSize(name.c_str(), 15).width;
-// 		int tx = _x*mapdata.unitSize + 10 - tw / 2;			
-// 		int ty = _y*mapdata.unitSize- 52;
-// 		
-// 		if (!des.empty() && des != "") {				
-// 			int tx2 = _x*mapdata.unitSize  + 10 - (getStringSize(des.c_str(), 15).width / 2);
-// 			int ty2 = _y*mapdata.unitSize - 52;//ty;
-// 			//T.drawString2(g, introduce, tx2, ty2, 0xFFF5B4,0xC75900, 0);//后文字 0xFFF5B4, 0xC75900
-// 			this->SetLableByType(1,
-// 							   tx2,
-// 							   ty2,
-// 								des.c_str(),
-// 						 INTCOLORTOCCC4(0xFFF5B4),
-// 						 INTCOLORTOCCC4(0xC75900),
-// 					 CCSizeMake(mapdata->getColumns()*mapdata.unitSize, mapdata->getRows()*mapdata.unitSize)
-// 					 );
-// 			ty -= 20;
-// 		}
-// 		//T.drawString2(g, name, tx, ty, 0xFFFF00,0x2F4F4F,0);//0x2F4F4F
-// 		this->SetLableByType(0
-// 						   tx,
-// 						   ty,
-// 						name.c_str(),
-// 					  INTCOLORTOCCC4(0xFFFF00),
-// 					  INTCOLORTOCCC4(0x2F4F4F),
-// 				 CCSizeMake(mapdata->getColumns()*mapdata.unitSize, mapdata->getRows()*mapdata.unitSize)
-// 		 );
-// 	}
-// }
 
 void NDMapSwitch::SetLabelNew(NDMapData* pkMapdata)
 {
@@ -345,11 +292,15 @@ NDMapData::NDMapData() :
 		m_bDramaMapFlag(false)
 {
 	INC_NDOBJ("NDMapData");
+
+	WriteCon( "%08X: NDMapData::NDMapData()\r\n", this );
 }
 
 NDMapData::~NDMapData()
 {
 	DEC_NDOBJ("NDMapData");
+
+	WriteCon( "%08X: NDMapData::~NDMapData()\r\n", this );
 
 	CC_SAFE_RELEASE(m_kMapTiles);
 	CC_SAFE_DELETE (m_pkObstacles);
@@ -358,7 +309,8 @@ NDMapData::~NDMapData()
 	CC_SAFE_RELEASE (m_pkSwitchs);
 	CC_SAFE_RELEASE (m_pkAnimationGroups);
 	CC_SAFE_RELEASE (m_pkAniGroupParams);
-	MapTexturePool::defaultPool()->release();
+
+	NDDirector::DefaultDirector()->Recyle();
 }
 
 /*通过地图文件(不包含路径)加载地图数据

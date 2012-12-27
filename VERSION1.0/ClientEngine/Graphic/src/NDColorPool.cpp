@@ -10,8 +10,8 @@
 #include "NDColorPool.h"
 #include "ObjectTracker.h"
 
-NDColorPool::NDColorPool(){ INC_CCOBJ("NDColorPool"); }
-NDColorPool::~NDColorPool(){ DEC_CCOBJ("NDColorPool"); }
+NDColorPool::NDColorPool(){ INC_NDOBJ("NDColorPool"); }
+NDColorPool::~NDColorPool(){ DEC_NDOBJ("NDColorPool"); }
 
 bool NDColorPool::GetColorFromPool(const char* colorFile, 
 								   unsigned int colorIndex,

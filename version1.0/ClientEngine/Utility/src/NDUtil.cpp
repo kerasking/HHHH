@@ -1,6 +1,7 @@
 #include "NDUtil.h"
 #include<iostream>
 #include "ObjectTracker.h"
+#include "NDConsole.h"
 
 #ifdef ANDROID
 #include <jni.h>
@@ -17,6 +18,7 @@
 #endif
 
 using namespace std;
+using namespace NDEngine;
 
 NS_NDENGINE_BGN
 IMPLEMENT_CLASS(NDUtil, NDObject)
@@ -52,3 +54,23 @@ STRING_VEC NDUtil::ErgodicFolderForSpceialFileExtName(const char* pszPath,
 }
 
 NS_NDENGINE_END
+
+
+void WriteCon(const char * pszFormat, ...)
+{
+	if (!pszFormat) return;
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	HANDLE hOut = NDConsole::instance().getOutputHandle();
+	if (!hOut) return;
+
+	static char szBuf[1024] = {0};
+	va_list ap;
+	va_start(ap, pszFormat);
+	vsnprintf_s(szBuf, 1024, 1024, pszFormat, ap);
+	va_end(ap);
+
+	DWORD n = 0;
+	WriteConsoleA( hOut, szBuf, strlen(szBuf), &n, NULL );
+#endif
+}

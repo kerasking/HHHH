@@ -62,6 +62,7 @@ NDAnimationGroup::~NDAnimationGroup()
 
 	CC_SAFE_RELEASE (m_pkAnimations);
 	CC_SAFE_RELEASE (m_pkTileTable);
+
 	CC_SAFE_DELETE (m_pkImages);
 	CC_SAFE_DELETE (m_pkUnpassPoint);
 }
@@ -109,6 +110,8 @@ bool NDAnimationGroup::getReverse()
 
 void NDAnimationGroup::decodeSprtFile(FILE* pkStream)
 {
+	if (!pkStream) return;
+
 	FileOp kFileOp;
 	int nCount = kFileOp.readByte(pkStream);
 
@@ -142,7 +145,10 @@ void NDAnimationGroup::decodeSprtFile(FILE* pkStream)
 
 void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 {
+	if (!pkStream) return;
+
 	FileOp kFileOp;
+
 	//动画用到的图片数目		
 	int nImageCount = kFileOp.readByte(pkStream);
 	for (int i = 0; i < nImageCount; i++)
@@ -260,7 +266,15 @@ void NDAnimationGroup::decodeSprFile(FILE* pkStream)
 
 void NDAnimationGroup::drawHeadAt(CCPoint pos)
 {
+	if (!m_pkAnimations) return;
+
 	NDAnimation* pkFirstAni = (NDAnimation*) m_pkAnimations->objectAtIndex(0);
-	NDFrame* pkFirstFrame = (NDFrame*)pkFirstAni->getFrames()->objectAtIndex(0);
-	pkFirstFrame->drawHeadAt(pos);
+	if (pkFirstAni)
+	{
+		NDFrame* pkFirstFrame = (NDFrame*)pkFirstAni->getFrames()->objectAtIndex(0);
+		if (pkFirstFrame)
+		{
+			pkFirstFrame->drawHeadAt(pos);
+		}
+	}
 }

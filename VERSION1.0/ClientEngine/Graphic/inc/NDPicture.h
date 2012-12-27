@@ -111,20 +111,7 @@ private:
 
 
 //-------------------------------------------------------------------------
-class NDPictureDictionary: public NDDictionary
-{
-public:
-	NDPictureDictionary();
-	~NDPictureDictionary();
-	DECLARE_CLASS (NDPictureDictionary)
-public:
-	void Recyle();
-};
-
-
-//-------------------------------------------------------------------------
 class NDPicturePool : public NDObject
-					, public ITimerCallback
 {
 	DECLARE_CLASS (NDPicturePool)
 	NDPicturePool();
@@ -152,28 +139,18 @@ public:
 
 public:
 	void PurgeDefaultPool();
-	void Recyle()
-	{
-		if (m_pkPicturesDict)
-			m_pkPicturesDict->Recyle();
-	}
-
-public:
-	virtual void OnTimer(OBJID tag);
+	void Recyle();
 
 public:
 	string dump();
 
 private:
-	NDPictureDictionary*			m_pkPicturesDict;	//ª∫¥ÊNDPicture*
-	map<CCTexture2D*,string>		m_mapTexture;	//ª∫¥ÊCCTexture2D*
+	NDDictionary*				m_pkPicturesDict;	//ª∫¥ÊNDPicture* [NDPicture*,string]
+	map<CCTexture2D*,string>	m_mapTexture;		//ª∫¥ÊCCTexture2D*
 
 private: //ª∫≥ÂÕº∆¨≥ﬂ¥Á
 	map<string, CCSize>	m_mapImageSize;
 	CCSize GetImageSize( const string& filename );
-
-private:
-	NDTimer* m_timer;
 };
 
 NS_NDENGINE_END

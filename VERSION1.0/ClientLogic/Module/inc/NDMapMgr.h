@@ -34,8 +34,7 @@ using namespace std;
 #define NDMapMgrObj NDEngine::NDMapMgr::GetSingleton()
 #define NDMapMgrPtr NDEngine::NDMapMgr::GetSingletonPtr()
 
-namespace NDEngine
-{
+NS_NDENGINE_BGN
 
 class NDBaseRole;
 class NDNpc;
@@ -190,7 +189,7 @@ int getDiscount(int v);
 struct s_team_info
 {
 	int team[eTeamLen];
-	s_team_info() { memset(this, 0, sizeof(*this)); }
+	s_team_info() { memset(this, 0, sizeof(s_team_info)); }
 };
 
 
@@ -281,28 +280,19 @@ public:
 	NDMapMgr();
 	virtual ~NDMapMgr();
 
-
-
-
 public:
-	typedef vector<NDNpc*> VEC_NPC;
-	typedef vector<NDMonster*> VEC_MONSTER;
-	typedef VEC_NPC::iterator vec_npc_it;
-	typedef VEC_MONSTER::iterator vec_monster_it;
-	typedef map<int,NDManualRole*> map_manualrole;
-	typedef map_manualrole::iterator map_manualrole_it;
-	typedef pair<int,NDManualRole*> map_manualrole_pair;
+	typedef vector<NDNpc*>				VEC_NPC;
+	typedef VEC_NPC::iterator			vec_npc_it;
+
+	typedef vector<NDMonster*>			VEC_MONSTER;
+	typedef VEC_MONSTER::iterator		vec_monster_it;
+
+	typedef map<int,NDManualRole*>		map_manualrole;
+	typedef map_manualrole::iterator	map_manualrole_it;
+	typedef pair<int,NDManualRole*>		map_manualrole_pair;
 
 	//typedef vector<RequsetInfo> VEC_REQUST; ///< 依赖汤自勤的GameUIRequest 郭浩
-
-
-
-
-	virtual void Update(unsigned long ulDiff);
-	NDMonster* GetMonster(int nID);
-
-	bool isMonsterClear();
-
+public:
 	bool canChangeMap()
 	{
 		return (mapType & MAPTYPE_CHGMAP_DISABLE) == 0;
@@ -333,10 +323,18 @@ public:
 		return false;
 	}
 
+public:
+	virtual void Update(unsigned long ulDiff);
+	NDMonster* GetMonster(int nID);
+	bool isMonsterClear();
+
+public:
 	NDManualRole* NearestDacoityManualrole(NDManualRole& role, int iDis);
 	NDManualRole* NearestBattleFieldManualrole(NDManualRole& role, int iDis);
 	int getDistBetweenRole(NDBaseRole *firstrole, NDBaseRole *secondrole);
 
+public: //处理网络消息
+	void RegisProcessMsg();
 	virtual bool process( MSGID usMsgID, NDEngine::NDTransData* pkData, int nLength );
 	void processMsgCommonList(NDTransData& kData);
 	void processSee(NDTransData& kData);
@@ -386,15 +384,21 @@ public:
 	void processDigout(NDTransData& kData);
 	void processDisappear(NDTransData* pkData, int nLength);
 	void processSyndicate(NDTransData& kData);
+	void ProcessOAuthTokenRet(NDTransData& data);
+	void ProcessCreateTransactionRet(NDTransData& data);
+	void ProcessCloseTransactionRet(NDTransData& data);
+
+public: //战斗
 	void BattleStart();
 	void BattleEnd(int iResult);
+
+public:
 	void throughMap(int mapX, int mapY, int mapId);
 	//void addRequst(RequsetInfo& request);		///< RequestInfo需要合并后 郭浩
 	void NavigateTo(int mapX, int mapY, int mapId); 
 	void NavigateToNpc(int nNpcId);
-    void ProcessOAuthTokenRet(NDTransData& data);
-    void ProcessCreateTransactionRet(NDTransData& data);
-    void ProcessCloseTransactionRet(NDTransData& data);
+
+public: //IOS
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     void sendVerifier(NSString *verifier);
     void VerifierError(MBGError *error);
@@ -403,6 +407,7 @@ public:
     void CancelTransaction();
 #endif
     
+public: //ANDROID
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     void sendVerifier(std::string verifier);
     void CloseTransaction();
@@ -417,64 +422,87 @@ public:
     void ProcessJavaonCancelTransactionSuccess(std::string transid);
     void ProcessJavaonCancelTransactionError(std::string error);
 #endif
-	void RegisProcessMsg();
-public:
 
-	bool Hack_loadSceneByMapDocID(int nMapID) { return loadSceneByMapDocID(nMapID); }; //for debug purpose only.
-	NDBaseRole* GetNextTarget(int iDistance);
-	NDBaseRole* GetRoleNearstPlayer(int iDistance);
 	
-public:
+public: //NPC商店
 	typedef map<int/*idNpc*/, VEC_BATTLE_SKILL> MAP_NPC_SKILL_STORE;
 	typedef MAP_NPC_SKILL_STORE::iterator MAP_NPC_SKILL_STORE_IT;
 
 	MAP_NPC_SKILL_STORE m_mapNpcSkillStore;
+
+public: //加载地图
+	void preLoadScene();
 	void LoadSceneMonster();
+	bool loadSceneByMapDocID(int nMapID);
+	void WorldMapSwitch(int mapId);  //世界地图中地图切换
+	bool Hack_loadSceneByMapDocID(int nMapID) { return loadSceneByMapDocID(nMapID); }; //仅测试用
+	NDMapLayer* getMapLayerOfScene(NDScene* pkScene);
+
+public:	//角色相关
+	//manual
 	void AddManualRole(int nID,NDManualRole* pkRole);
 	NDManualRole* GetManualRole(int nID);
 	NDManualRole* GetManualRole(const char* pszName);
 	map_manualrole& GetManualRoles() { return m_mapManualRole; }
 	void ClearManualRole();
-	void AddAllNPCToMap();
+	void DelManualRole(int nID);
+	std::vector<NDManualRole*> GetPlayerTeamList();
+
+	//boss
 	NDMonster* GetBoss();
+
+	//monster
 	void AddAllMonsterToMap();
 	bool GetMonsterInfo(monster_type_info& kInfo, int nType);
-	void DelManualRole(int nID);
+	void ClearMonster();
+
+	//battle monster?
+	virtual NDMonster* GetBattleMonster();
+	void SetBattleMonster(NDMonster* pkMonster);
+	CC_SYNTHESIZE(int,m_nCurrentMonsterRound,CurrentMonsterRound);
+	int GetCurrentMonsterRound(){return m_nCurrentMonsterRound;}
+
+	
+	//npc
+	void AddAllNPCToMap();
 	void ClearNPC();
 	NDNpc* GetNpc(int nID);
-	void ClearMonster();
-	void setNpcTaskStateById(int nNPCID,int nState);
-	//void addRequst(RequsetInfo& kRequest);	///< 依赖汤自勤的RequsetInfo 郭浩
 	void DelNpc(int nID);
 	void AddOneNPC(NDNpc* pkNpc);
-	bool DelRequest(int nID);
+
+	void setNpcTaskStateById(int nNPCID,int nState);
+	string changeNpcString(string str);
+	NDNpc* GetNpcByID(int nID);
+	void ClearNPCChat();
 	void ClearGP();
-	bool loadSceneByMapDocID(int nMapID);
+	
+	//请求？
+	//void addRequst(RequsetInfo& kRequest);	///< 依赖汤自勤的RequsetInfo 郭浩
+	bool DelRequest(int nID);
+
+	//切屏点
 	void AddSwitch();
 	int GetMapID();
 	int GetMotherMapID();
 	//LifeSkill* getLifeSkill(OBJID idSkill);
-	std::vector<NDManualRole*> GetPlayerTeamList();
-
-	string changeNpcString(string str);
-	void WorldMapSwitch(int mapId);  //世界地图中地图切换
-	NDNpc* GetNpcByID(int nID);
-	void ClearNPCChat();
-	NDMapLayer* getMapLayerOfScene(NDScene* pkScene);
-
+	
+public:
+	virtual bool processConsole( const char* pszInput );
+	virtual bool processPM(const char* pszCmd) { return true; }
+	virtual void OnTimer( OBJID tag );
+	
+public:
 	virtual void OnCustomViewRadioButtonSelected( NDUICustomView* customView,
 		unsigned int radioButtonIndex, int ortherButtonTag );
 
-	virtual bool processConsole( const char* pszInput );
-	virtual bool processPM(const char* pszCmd) { return true; }
+	NDBaseRole* GetNextTarget(int iDistance);
+	NDBaseRole* GetRoleNearstPlayer(int iDistance);
 
-	virtual void OnTimer( OBJID tag );
-	virtual NDMonster* GetBattleMonster();
-	void SetBattleMonster(NDMonster* pkMonster);
+public: //getter
+	bool getIsShowOther() { return isShowOther; }
+	bool getIsShowName() { return isShowName; }
 
-	CC_SYNTHESIZE(int,m_nCurrentMonsterRound,CurrentMonsterRound);		///< 貌似此变量没有什么引用，废弃掉？ 郭浩
-    int GetCurrentMonsterRound(){return m_nCurrentMonsterRound;}
-
+private:
 	static bool m_bFirstCreate;
 	static bool m_bVerifyVersion;
 
@@ -482,12 +510,15 @@ public:
 
 	int zhengYing[CAMP_TYPE_END];
 
-	map_manualrole m_mapManualRole;
-	monster_info m_mapMonsterInfo;
-	map_npc_store m_mapNpcStore;
-	VEC_NPC m_vNPC;
-	VEC_MONSTER m_vMonster;
+public: //角色相关
+	map_manualrole	m_mapManualRole;
+	monster_info	m_mapMonsterInfo;
+	map_npc_store	m_mapNpcStore;
+	VEC_NPC			m_vNPC;
+	VEC_MONSTER		m_vMonster;
+	CAutoLink<NDMonster> m_apWaitBattleMonster;
 
+private:
 	NDTimer m_kTimer;
 
 	int m_nCurrentMonsterBound;
@@ -510,13 +541,8 @@ public:
 
 	CCSize m_kMapSize;
 
-	struct st_npc_op
-	{
-		int idx; string str; bool bArrow;
-		st_npc_op() { bArrow = false; }
-	};
-
 	string m_strMapName;
+
 	/**npc聊天相关*/
 	unsigned short usData;
 	string strLeaveMsg;
@@ -524,16 +550,18 @@ public:
 	string strNPCText;
 	string m_strNoteTitle; // 公告
 	string m_strNoteContent;
-
-	vector<st_npc_op> vecNPCOPText;
-
-	CAutoLink<NDMonster> m_apWaitBattleMonster;
+	
 //	VEC_REQUST m_vecRequest;		///< 依赖汤自勤的GameUIRequest 郭浩
 	CIDFactory m_idAlloc;
 
-private:
+	struct st_npc_op
+	{
+		int idx; string str; bool bArrow;
+		st_npc_op() { idx = 0; bArrow = false; }
+	};
+	vector<st_npc_op> vecNPCOPText;
 };
 
-}
+NS_NDENGINE_END
 
 #endif
