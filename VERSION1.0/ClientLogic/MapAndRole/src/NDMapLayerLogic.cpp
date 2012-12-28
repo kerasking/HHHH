@@ -35,6 +35,8 @@
 #define TAG_MAP_LONGTOUCH_STATE (2048)
 #define LONG_TOUCH_INTERVAL 0.1f
 
+#define ENABLE_OPT 1 //是否启用性能优化
+
 using namespace NDEngine;
 
 IMPLEMENT_CLASS(NDMapLayerLogic, NDMapLayer)
@@ -216,6 +218,7 @@ bool NDMapLayerLogic::IsPathing()
 	return m_bPathing;
 }
 
+//@opt
 bool NDMapLayerLogic::IsWorldMapVisible()
 {
 	NDScene* pScene = NDDirector::DefaultDirector()->GetRunningScene();
@@ -226,6 +229,107 @@ bool NDMapLayerLogic::IsWorldMapVisible()
 		{
 			WorldMapLayer* pWorld = (WorldMapLayer*)pNode;
 			return pWorld && pWorld->IsVisibled();
+		}
+	}
+	return false;
+}
+
+//@opt
+void NDMapLayerLogic::draw()
+{
+	if (!canDrawMapLayer()) return;
+
+	NDMapLayer::draw();
+}
+
+//@opt
+bool NDMapLayerLogic::canDrawMapLayer()
+{
+#if ENABLE_OPT
+	if (IsWorldMapVisible()) return false;
+	if (hasFullScreenOpaqueUI()) return false;
+#endif
+	return true;
+}
+
+//@opt
+bool NDMapLayerLogic::canDrawWorldMapLayer()
+{
+#if ENABLE_OPT
+	if (hasFullScreenOpaqueUI()) return false;
+#endif
+	return true;
+}
+
+//@@ opt
+bool NDMapLayerLogic::hasFullScreenOpaqueUI()
+{
+	NDScene* pScene = NDDirector::DefaultDirector()->GetSceneByTag(SMGAMESCENE_TAG);
+	if (!pScene) return false;
+
+	const vector<NDNode*>& vecChildren = pScene->GetChildren();
+	for (int i = 0; i < vecChildren.size(); i++)
+	{
+		NDNode* pNode = vecChildren[i];
+		if (pNode && pNode->IsKindOfClass( RUNTIME_CLASS(NDUILayer)))
+		{
+			NDUILayer* pLayer = (NDUILayer*)pNode;
+			const char* layerName = pLayer->getDebugName();
+			if (isFullScreenOpaqueUI( layerName ))
+				return true;
+		}
+	}
+
+	return false;
+}
+
+//@opt
+bool NDMapLayerLogic::isFullScreenOpaqueUI( const char* layerName )
+{
+	if (!layerName || layerName[0] == 0) return false;
+	
+	//early out.
+	int len = strlen(layerName);
+	if (len < 3) return false;
+
+	//early out.
+	const char* p = layerName;
+	if (p[0] == 'N' && p[1] == 'D' && p[2] == 'U' && p[3] == 'I') return false;
+
+	//early out.
+	if (len == 3 && p[0] == 'V' && p[1] == 'I' && p[2] == 'P' ) return true;
+	if (len < 6) return false;
+
+	//这些串和LUA脚本设置的SetDebugName()名称对应.
+	const char* opaqueLayers[] = 
+	{
+		//"VIP",
+		"DailyAction",
+		"DragonTactic",
+		"Friend",
+		"HeroStar",
+		"EmailList",
+		"PlayerUI",
+		"PlayerBackBag",
+		"TaskUI",
+		"NormalBoss_Layer",
+	};
+
+	int count = sizeof(opaqueLayers) / sizeof(opaqueLayers[0]);
+	for (int i = 0; i < count; i++)
+	{
+		const char* q = opaqueLayers[i];
+
+		// faster check.
+		if (p[0] == q[0]
+			&& p[1] == q[1]
+			&& p[2] == q[2]
+			&& p[3] == q[3]
+			&& p[4] == q[4]
+			&& p[5] == q[5])
+		{
+			if (strcmp( p + 6, q +6 ) == 0)
+				return true;
 		}
 	}
 	return false;

@@ -85,16 +85,16 @@ void NDPicture::Initialization(const char* imageFile)
 	CC_SAFE_RELEASE_NULL (m_pkTexture);
 	CC_SAFE_RELEASE_NULL (m_pkTextureGray);
 
-	CCImage image;
-
-	if (!image.initWithImageFile(imageFile) && imageFile)
-	{
-		//ScriptMgrObj.DebugOutPut("picture [%s] not exist", imageFile);
-	}
+//	CCImage image;
+//
+//	if (!image.initWithImageFile(imageFile) && imageFile)
+//	{
+//		//ScriptMgrObj.DebugOutPut("picture [%s] not exist", imageFile);
+//	}
 
 	m_pkTexture = new CCTexture2D;
-	m_pkTexture->initWithImage(&image);
-	//m_pkTexture->initWithPalettePNG(imageFile);
+//	m_pkTexture->initWithImage(&image);
+	m_pkTexture->initWithPalettePNG(imageFile);
 
 	/*
 	 if (m_canGray && image)
@@ -270,8 +270,8 @@ void NDPicture::Initialization(const char* imageFile, int hrizontalPixel,
 	if (!bLoadStretchImageSucess)
 	{
 		m_pkTexture = new CCTexture2D;
-		m_pkTexture->initWithImage(&image);
-		//m_pkTexture->initWithPalettePNG(imageFile);
+//		m_pkTexture->initWithImage(&image);
+		m_pkTexture->initWithPalettePNG(imageFile);
 	}
 
 	m_kCutRect = CCRectMake(0, 0, m_pkTexture->getContentSizeInPixels().width,
@@ -939,7 +939,7 @@ CCTexture2D* NDPicturePool::AddTexture( const char* pszImageFile )
 		pkNewPicture->Initialization(pszImageFile);
 		m_pkTextures->SetObject(pkNewPicture,kStream.str().c_str());
 		CCTexture2D* pkTexture = pkNewPicture->getTexture();
-		pkTexture->setContainerType(ContainerTypeAddPic);
+		pkTexture->setContainerType(ContainerTypeAddTexture);
 		m_mapTex2Str.insert(MAP_STRING::value_type(pkTexture,string(pszImageFile)));
 		pkPicture->GetTextureRetain();
 	}

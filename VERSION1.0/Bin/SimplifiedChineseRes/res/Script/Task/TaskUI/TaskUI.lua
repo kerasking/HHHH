@@ -89,6 +89,7 @@ function p.LoadUI()
 	
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerTask);
+	layer:SetDebugName( "TaskUI" ); --@opt
 	layer:SetFrameRect(RectUILayer);
 	--layer:SetBackgroundColor(ccc4(125, 125, 125, 125));
 	--scene:AddChild(layer);

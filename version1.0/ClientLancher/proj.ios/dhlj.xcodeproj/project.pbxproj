@@ -814,6 +814,7 @@
 		5A5FF1FE167B2B6500E897F9 /* NDVideoMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5FF1FC167B2B6500E897F9 /* NDVideoMgr.cpp */; };
 		5A5FF202167B2D9100E897F9 /* ZipUnZip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5FF200167B2D9100E897F9 /* ZipUnZip.cpp */; };
 		5A5FF205167B2D9B00E897F9 /* ZipUnZip.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A5FF203167B2D9B00E897F9 /* ZipUnZip.h */; };
+		5A6302C21689DE2C002CA289 /* UTF8.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A6302C11689DE2C002CA289 /* UTF8.h */; };
 		5A8D3B611667149D00BBDCAA /* icon_SNS.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A8D3B5D1667149D00BBDCAA /* icon_SNS.png */; };
 		5A8D3B621667149D00BBDCAA /* icon_SNS@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A8D3B5E1667149D00BBDCAA /* icon_SNS@2x.png */; };
 		5A8D3B631667149D00BBDCAA /* NdComPlatform_SNS_Resources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5A8D3B5F1667149D00BBDCAA /* NdComPlatform_SNS_Resources.bundle */; };
@@ -2109,6 +2110,7 @@
 		5A5FF1FC167B2B6500E897F9 /* NDVideoMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDVideoMgr.cpp; sourceTree = "<group>"; };
 		5A5FF200167B2D9100E897F9 /* ZipUnZip.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ZipUnZip.cpp; sourceTree = "<group>"; };
 		5A5FF203167B2D9B00E897F9 /* ZipUnZip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipUnZip.h; sourceTree = "<group>"; };
+		5A6302C11689DE2C002CA289 /* UTF8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UTF8.h; sourceTree = "<group>"; };
 		5A8D3B5D1667149D00BBDCAA /* icon_SNS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_SNS.png; sourceTree = "<group>"; };
 		5A8D3B5E1667149D00BBDCAA /* icon_SNS@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_SNS@2x.png"; sourceTree = "<group>"; };
 		5A8D3B5F1667149D00BBDCAA /* NdComPlatform_SNS_Resources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NdComPlatform_SNS_Resources.bundle; path = ../../OtherRes/NdComPlatform_SNS_Resources.bundle; sourceTree = "<group>"; };
@@ -3009,6 +3011,7 @@
 		5A1B405B164AB5C100C94D7F /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				5A6302C11689DE2C002CA289 /* UTF8.h */,
 				5A5FF1F7167B2B5700E897F9 /* NDVideoEventListener.h */,
 				5A5FF1F8167B2B5700E897F9 /* NDVideoMgr.h */,
 				5AF6F52416636452006834AF /* NDUtil.h */,
@@ -5381,6 +5384,7 @@
 				5AEA3B6B1687F9BD00456B97 /* NDUIScrollViewMulHand.h in Headers */,
 				5AEA3B6C1687F9BD00456B97 /* NDUISpriteNode.h in Headers */,
 				5AEA3B861687FE4E00456B97 /* NDUICustomView.h in Headers */,
+				5A6302C21689DE2C002CA289 /* UTF8.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -81,6 +81,7 @@ function p.LoadUI()
 	end
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.Friend);
+	layer:SetDebugName( "Friend" ); --@opt
 	layer:SetFrameRect(RectFullScreenUILayer);
 
 	layer:SetTag( NMAINSCENECHILDTAG.Friend);

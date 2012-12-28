@@ -44,6 +44,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewParent;
 import android.webkit.CookieSyncManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -56,6 +57,7 @@ import android.os.Environment;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.VideoView;
@@ -138,11 +140,12 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			pkParamsButton.topMargin = y.intValue();
 			pkParamsButton.leftMargin = x.intValue();
 			balancebutton.setLayoutParams(pkParamsButton);
+			balancebutton.update();
 
 			balancebutton.setVisibility(View.VISIBLE);
 		};
 	};
-
+	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		if (isSDCardCanUse())
