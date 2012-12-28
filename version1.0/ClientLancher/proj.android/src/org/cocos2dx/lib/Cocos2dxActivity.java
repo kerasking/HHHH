@@ -62,7 +62,6 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	public static NDVideoView m_pkView = null;
 	
 	public FrameLayout m_pkFrameView = null;
-	public NDVideoView m_pkView = null;
 
 	// ===========================================================
 	// Constructors
