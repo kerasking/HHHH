@@ -92,6 +92,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	@Override
 	protected void onResume()
 	{
+		Log.i("DaHuaLongJiang","Entry Cocos2dxActivity onResume");
 		super.onResume();
 
 		Cocos2dxHelper.onResume();
@@ -101,6 +102,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	@Override
 	protected void onPause()
 	{
+		Log.i("DaHuaLongJiang","Entry Cocos2dxActivity onPause");
 		super.onPause();
 
 		Cocos2dxHelper.onPause();

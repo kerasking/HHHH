@@ -240,6 +240,9 @@ public class Cocos2dxHelper
 
 	public static void onResume()
 	{
+		resumeAllEffects();
+		resumeBackgroundMusic();
+		
 		if (Cocos2dxHelper.sAccelerometerEnabled)
 		{
 			Cocos2dxHelper.sCocos2dxAccelerometer.enable();
@@ -248,6 +251,9 @@ public class Cocos2dxHelper
 
 	public static void onPause()
 	{
+		pauseAllEffects();
+		pauseBackgroundMusic();
+		
 		if (Cocos2dxHelper.sAccelerometerEnabled)
 		{
 			Cocos2dxHelper.sCocos2dxAccelerometer.disable();
