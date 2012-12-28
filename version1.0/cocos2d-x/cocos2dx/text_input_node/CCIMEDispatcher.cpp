@@ -239,6 +239,21 @@ void CCIMEDispatcher::dispatchDeleteBackward()
     } while (0);
 }
 
+#if ND_MOD
+void CCIMEDispatcher::dispatchOnAction( int action )
+{
+	do 
+	{
+		CC_BREAK_IF(! m_pImpl);
+
+		// there is no delegate attached to IME
+		CC_BREAK_IF(! m_pImpl->m_DelegateWithIme);
+
+		m_pImpl->m_DelegateWithIme->onAction( action );
+	} while (0);
+}
+#endif
+
 const char * CCIMEDispatcher::getContentText()
 {
     const char * pszContentText = 0;

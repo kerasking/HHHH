@@ -655,5 +655,20 @@ void CUIEdit::keyboardDidHide(CCIMEKeyboardNotificationInfo& info)
 	m_bIMEOpen = false;
 }
 
+void CUIEdit::onAction( int action )
+{
+	CCLog( "@@ CUIEdit::onAction(%d)\r\n", action );
+
+	if (action == 0)
+	{
+		//action=enter
+	}
+	else if (action == 6)
+	{
+		//action=done
+		this->detachWithIME();
+	}
+}
+
 #endif //WITH_NEW_IME
 //////////////////////////////////////////////////////////////////////////////// 新的输入法代码 }}
