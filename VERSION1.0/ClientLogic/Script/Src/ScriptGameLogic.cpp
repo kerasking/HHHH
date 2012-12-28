@@ -45,6 +45,7 @@
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
 #include <android/log.h>
+#include "ScriptDataBase.h"
 
 #define  LOG_TAG    "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
@@ -333,9 +334,6 @@ std::string GetSMImg00Path(const char* name)
 	return NDPath::GetSMImg00Path(name);
 }
 
-
-
-
 std::string GetImgResPath(const char* name) //@lua
 {
 	if (!name)
@@ -439,6 +437,8 @@ void CloseBattle()
 
 void SetSceneMusicNew(int idMusic)
 {
+	LOGD("Entry SetSceneMusicNew,id is %d",idMusic);
+
 	if (!gs_bIsMusic)
 	{
 		return;
@@ -485,8 +485,13 @@ void SetEffectSoundVolune(int nVolune)
 void StartBGMusic()
 {
 	gs_bIsMusic = true;
-	//NDMapMgrObj.LoadMapMusic();
-	SetSceneMusicNew(99);
+
+	int nTheID = NDMapMgrObj.GetMotherMapID();
+	int nMusicID = ScriptDBObj.GetN("map",nTheID,DB_MAP_MUSIC);
+
+	LOGD("Start the music,id is %d",nMusicID);
+
+	SetSceneMusicNew(1);
 }
 
 void StopBGMusic()
@@ -517,7 +522,8 @@ int StartEffectSound(int idMusic)
 	}
 
 	string strMusicPath = NDPath::GetSoundPath();
-	CCString* pstrMusicFile = CCString::stringWithFormat("%seffect/effect_%d.aac",strMusicPath.c_str(),idMusic);
+	CCString* pstrMusicFile = CCString::stringWithFormat("%seffect/effect_%d.aac",
+		strMusicPath.c_str(),idMusic);
 	return pkSimpleAudio->playEffect(pstrMusicFile->getCString(),false);
 }
 
