@@ -57,6 +57,7 @@ public:
         if (m_pData)
         {
             delete [] m_pData;
+			m_pData = NULL; //ND_MOD
         }
     }
 
@@ -188,6 +189,11 @@ extern "C"
     */
     void Java_org_cocos2dx_lib_Cocos2dxBitmap_nativeInitBitmapDC(JNIEnv*  env, jobject thiz, int width, int height, jbyteArray pixels)
     {
+//#if ND_MOD
+// 		unsigned char*& pData = cocos2d::sharedBitmapDC().m_pData;
+// 		CC_SAFE_DELETE_ARRAY( pData );
+//#endif
+
         int size = width * height * 4;
         cocos2d::sharedBitmapDC().m_nWidth = width;
         cocos2d::sharedBitmapDC().m_nHeight = height;
