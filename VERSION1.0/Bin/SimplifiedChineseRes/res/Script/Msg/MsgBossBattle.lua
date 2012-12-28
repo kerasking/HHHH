@@ -291,11 +291,11 @@ function p.ProcessEncourage( netdata )
     local bIsSuccess = netdata:ReadByte();
 
     if( bIsSuccess == 1 ) then
-        CommonDlgNew.ShowTipsDlg({{"鼓舞成功，加一星！",ccc4(28,237,93,255)}});
+        CommonDlgNew.ShowTipsDlg({{GetTxtPri("MBB2_T1"),ccc4(28,237,93,255)}});
     elseif bIsSuccess == 0  then
-        CommonDlgNew.ShowTipsDlg({{"鼓舞失败，你什么好处也没得到。",ccc4(255,15,15,255)}});
+        CommonDlgNew.ShowTipsDlg({{GetTxtPri("MBB2_T2"),ccc4(255,15,15,255)}});
     elseif bIsSuccess == 2  then
-        CommonDlgNew.ShowTipsDlg({{"鼓舞失败，鼓舞等级已满。",ccc4(255,15,15,255)}});
+        CommonDlgNew.ShowTipsDlg({{GetTxtPri("MBB2_T3"),ccc4(255,15,15,255)}});
     end
 end
 
