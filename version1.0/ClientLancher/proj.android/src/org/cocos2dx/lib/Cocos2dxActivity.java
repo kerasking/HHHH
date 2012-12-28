@@ -146,8 +146,8 @@ public abstract class Cocos2dxActivity extends Activity implements
 
 		mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
 
-//		NDVideoControl pkVideoControl = new NDVideoControl(
-//				Cocos2dxActivity.this);
+		NDVideoControl pkVideoControl = new NDVideoControl(
+				Cocos2dxActivity.this);
 //		pkVideoControl.setCocos2dxActivity(this);
 //		pkVideoControl.hide();
 //

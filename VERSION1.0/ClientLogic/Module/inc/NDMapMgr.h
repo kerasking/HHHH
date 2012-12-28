@@ -500,8 +500,8 @@ public:
 	NDBaseRole* GetRoleNearstPlayer(int iDistance);
 
 public: //getter
-	bool getIsShowOther() { return isShowOther; }
-	bool getIsShowName() { return isShowName; }
+	bool getIsShowOther() { return m_bIsShowOther; }
+	bool getIsShowName() { return m_bIsShowName; }
 
 private:
 	static bool m_bFirstCreate;
