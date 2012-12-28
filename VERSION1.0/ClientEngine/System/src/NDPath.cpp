@@ -291,7 +291,16 @@ void NDPath::SetResDirPos( int iPos )
 {
 	NDPath::s_iResDirPos = iPos;
 }
-	
+
+const string NDPath::GetDBPath()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	return "/sdcard/dhlj/";
+#else
+	return "";
+#endif
+}
+
 ///////////////////////////>>>
 
 NS_NDENGINE_END

@@ -9,7 +9,6 @@ LOCAL_MODULE_FILENAME := libKUtil
 LOCAL_SRC_FILES := \
 ../../KBase64.cpp \
 ../../KDirectory.cpp \
-../../KHttp.cpp \
 ../../KTcpServerSocket.cpp \
 ../../KUdpStack.cpp \
 ../../KCondition.cpp \

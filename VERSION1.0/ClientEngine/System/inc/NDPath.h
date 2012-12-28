@@ -32,6 +32,7 @@ public:
 	
 	// res path
 	static const string GetResPath();
+	static const string GetDBPath();
 	static const string GetResPath(const char* fileName);
 	static const string GetImagePath();  
 	static const string GetImage00Path();  

@@ -62,7 +62,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	public Cocos2dxGLSurfaceView mGLSurfaceView;
 	public FrameLayout m_pkFrameView = null;
 	private Cocos2dxHandler mHandler;
-	public NDVideoView m_pkView = null;
+	public static NDVideoView m_pkView = null;
 
 	// ===========================================================
 	// Constructors
@@ -92,6 +92,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	@Override
 	protected void onResume()
 	{
+		Log.i("DaHuaLongJiang","Entry Cocos2dxActivity onResume");
 		super.onResume();
 
 		Cocos2dxHelper.onResume();
@@ -101,6 +102,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	@Override
 	protected void onPause()
 	{
+		Log.i("DaHuaLongJiang","Entry Cocos2dxActivity onPause");
 		super.onPause();
 
 		Cocos2dxHelper.onPause();
@@ -149,16 +151,16 @@ public abstract class Cocos2dxActivity extends Activity implements
 //		pkVideoControl.setCocos2dxActivity(this);
 //		pkVideoControl.hide();
 //
-//		LinearLayout tp = new LinearLayout(this.getApplicationContext());
-//		LinearLayout.LayoutParams pkLayoutParams = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
-//		m_pkView = new NDVideoView(this.getApplicationContext());
-//		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
-//		m_pkView.setBackgroundColor(0);
-//		m_pkView.setMediaController(pkVideoControl);
-//		m_pkView.setOnCompletionListener(pkVideoControl);
-//		m_pkView.requestFocus();
-//
-//		setContentView(m_pkView);
+	//	ViewGroup.LayoutParams tp = new LinearLayout(this.getApplicationContext());
+		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
+		m_pkView = new NDVideoView(this.getApplicationContext());
+		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
+		m_pkView.setBackgroundColor(0);
+		//m_pkView.setMediaController(pkVideoControl);
+		m_pkView.setOnCompletionListener(pkVideoControl);
+		m_pkView.requestFocus();
+		//m_pkView.start();
+		//setContentView(m_pkView,pkLayoutParams);
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView()

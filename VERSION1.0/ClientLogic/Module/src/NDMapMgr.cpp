@@ -49,6 +49,9 @@
 #include <jni.h>
 #include <android/log.h>
 #endif
+#include "../CocosDenshion/include/SimpleAudioEngine.h"
+
+using namespace CocosDenshion;
 
 NS_NDENGINE_BGN
 
@@ -157,9 +160,9 @@ NDMapMgr::NDMapMgr() :
 #endif
 
 	m_kTimer.SetTimer(this, 1, 0.1);
-	memset(zhengYing, 0, sizeof(zhengYing));
-	isShowName = true;
-	isShowOther = true;
+	memset(m_nCampType, 0, sizeof(int) * CAMP_TYPE_END);
+	m_bIsShowName = true;
+	m_bIsShowOther = true;
 
 	RegisProcessMsg();
 }
@@ -3870,7 +3873,7 @@ void NDMapMgr::processVersionMsg(NDTransData& kData)
 					SMLOGINSCENE_TAG);
 	if (pkScene)
 	{
-		return pkScene->OnMsg_ClientVersion(kData); ///< 依赖汤自勤的CSMLoginScene 郭浩
+		return pkScene->OnMsg_ClientVersion(kData);
 	}
 }
 
@@ -4420,34 +4423,34 @@ void NDMapMgr::BattleStart()
 
 NDBaseRole* NDMapMgr::GetNextTarget(int iDistance)
 {
-	NDPlayer *player = &NDPlayer::defaultHero();
+	NDPlayer* pkPlayer = &NDPlayer::defaultHero();
 
 	NDBaseRole * resrole = NULL;
 
-	if (!player)
+	if (!pkPlayer)
 	{
 		return resrole;
 	}
 
-	if (player->m_nTargetIndex >= int(m_vNPC.size() + m_mapManualRole.size()))
+	if (pkPlayer->m_nTargetIndex >= int(m_vNPC.size() + m_mapManualRole.size()))
 	{
-		player->m_nTargetIndex = 0;
+		pkPlayer->m_nTargetIndex = 0;
 	}
 
-	if (player->m_nTargetIndex < int(m_vNPC.size()))
+	if (pkPlayer->m_nTargetIndex < int(m_vNPC.size()))
 	{
-		VEC_NPC::iterator it = m_vNPC.begin() + player->m_nTargetIndex;
+		VEC_NPC::iterator it = m_vNPC.begin() + pkPlayer->m_nTargetIndex;
 		for (; it != m_vNPC.end(); it++)
 		{
-			player->m_nTargetIndex++;
+			pkPlayer->m_nTargetIndex++;
 			NDNpc* npc = *it;
 
-			if (npc->m_nID == player->GetFocusNpcID())
+			if (npc->m_nID == pkPlayer->GetFocusNpcID())
 			{
 				continue;
 			}
 
-			int dis = getDistBetweenRole(player, npc);
+			int dis = getDistBetweenRole(pkPlayer, npc);
 			if (dis < iDistance)
 			{
 				resrole = npc;
@@ -4456,7 +4459,7 @@ NDBaseRole* NDMapMgr::GetNextTarget(int iDistance)
 		}
 	}
 
-	int iIndexManuRole = player->m_nTargetIndex - m_vNPC.size();
+	int iIndexManuRole = pkPlayer->m_nTargetIndex - m_vNPC.size();
 
 	if (iIndexManuRole < 0)
 	{
@@ -4473,16 +4476,16 @@ NDBaseRole* NDMapMgr::GetNextTarget(int iDistance)
 
 		for (; it != m_mapManualRole.end(); it++)
 		{
-			player->m_nTargetIndex++;
+			pkPlayer->m_nTargetIndex++;
 
 			NDManualRole *otherplayer = it->second;
 
-			if (otherplayer->m_nID == player->m_iFocusManuRoleID)
+			if (otherplayer->m_nID == pkPlayer->m_iFocusManuRoleID)
 			{
 				continue;
 			}
 
-			int dis = getDistBetweenRole(player, otherplayer);
+			int dis = getDistBetweenRole(pkPlayer, otherplayer);
 			if (dis < iDistance)
 			{
 				resrole = otherplayer;
@@ -4567,49 +4570,6 @@ void NDMapMgr::throughMap(int mapX, int mapY, int mapId)
 		<< mapId << (unsigned short)_POSITION_TRANS_FLY << int(0);
 	SEND_DATA(bao);
 }
-
-//void NDMapMgr::addRequst( RequsetInfo& request )
-//{
-///< 汤自勤已经完成 需要我这边合并后 郭浩
-// 	std::stringstream strBuf;
-// 	strBuf << NDCommonCString("YouHaveNew") << request.info << "," << NDCommonCString("OpenRequestList");
-// 	Chat::DefaultChat()->AddMessage(ChatTypeSystem, strBuf.str().c_str());
-// 
-// 	std::vector<RequsetInfo>::iterator it = m_vecRequest.begin();
-// 	for (; it != m_vecRequest.end(); it++)
-// 	{
-// 		RequsetInfo& info = *it;
-// 		if (info.iRoleID == request.iRoleID &&
-// 			info.iAction == request.iAction &&
-// 			(info.iAction != RequsetInfo::ACTION_NEWMAIL ||
-// 			info.iAction != RequsetInfo::ACTION_NEWCHAT))
-// 		{
-// 			DelRequest(info.iID);
-// 			break;
-// 		}
-// 	}
-// 	request.iID = m_idAlloc.GetID();
-// 	m_vecRequest.push_back(request);
-// 
-// 	NewGameUIRequest::refreshQuestList();
-// 
-// 	NDScene *scene = NDDirector::DefaultDirector()->GetScene(RUNTIME_CLASS(GameScene));
-// 	if (scene) 
-// 	{
-// 		GameScene* gamescene = (GameScene*)scene;
-// 		gamescene->flashAniLayer(0, true);
-// 
-// 		NDNode *node = gamescene->GetChild(UILAYER_REQUEST_LIST_TAG);
-// 		if (node && node->IsKindOfClass(RUNTIME_CLASS(GameUIRequest)))
-// 		{
-// 			GameUIRequest *request = (GameUIRequest*)node;
-// 			if (request->IsVisibled())
-// 			{
-// 				request->UpdateMainUI();
-// 			}
-// 		}
-// 	}
-//}
 
 void NDMapMgr::NavigateTo(int mapX, int mapY, int mapId)
 {
@@ -4784,7 +4744,7 @@ void NDMapMgr::processMsgDlg(NDTransData& kData)
 			int npcCamp = npc->GetCamp();
 			if (npcCamp - 1 >= 0 && npcCamp - 1 < 7)
 			{
-				int discount = getDiscount(zhengYing[npcCamp - 1]);
+				int discount = getDiscount(m_nCampType[npcCamp - 1]);
 				if (discount != 100)
 				{
 					std::stringstream ss;
@@ -5242,6 +5202,23 @@ bool NDMapMgr::isMonsterClear()
 	}
 
 	return bRet;
+}
+
+void NDMapMgr::LoadMapMusic()
+{
+	int nTheID = GetMotherMapID();
+	int nMusicID = ScriptDBObj.GetN("map",nTheID,DB_MAP_MUSIC);
+
+	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
+
+	if (0 == pkSimpleAudio)
+	{
+		return;
+	}
+
+	CCString* pstrMusicPath = CCString::create(NDPath::GetSoundPath());
+	CCString* pstrMusicFile = CCString::stringWithFormat("%smusic_%d.aac",pstrMusicPath->getCString(),nMusicID);
+	pkSimpleAudio->playBackgroundMusic(pstrMusicFile->getCString(),true);
 }
 
 // LifeSkill* NDMapMgr::getLifeSkill( OBJID idSkill )

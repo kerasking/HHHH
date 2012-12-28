@@ -122,7 +122,7 @@ unsigned char* CCFileUtils::getFileData(const char* pszFileName, const char* psz
             if (pSize)
             {
                 *pSize = size;
-            }            
+            }
         } while (0);        
     }
 
