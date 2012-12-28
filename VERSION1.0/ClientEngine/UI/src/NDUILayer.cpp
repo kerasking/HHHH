@@ -447,11 +447,14 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 	if (m_bLongTouch && !m_bDragOutFlag && !m_bLayerMoved)
 	//if (m_bLongTouch && !m_bDragOutFlag && !isTouchMoved(MOVE_ERROR))
 	{
-		//this->DispatchTouchEndEvent(m_kBeginTouch, m_kBeginTouch);
-
 		// 都取超始点是由于用户抬起点容易超出作用范围
 		if (DispatchLongTouchClickEvent(m_kBeginTouch, m_kBeginTouch))
 		{
+			// 长按会抢了单击事件，导致手机操作感比较差，先兼容一下.
+			if (m_bDispatchTouchEndEvent && !m_bLayerMoved)
+			{
+				this->DispatchTouchEndEvent(m_kBeginTouch, m_kBeginTouch);
+			}
 			return true;
 		}
 	}
