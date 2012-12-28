@@ -485,7 +485,8 @@ BattleUILayer::~BattleUILayer()
 	for (VEC_SUB_ANI_GROUP_IT it = m_vSubAniGroup.begin();
 			it != m_vSubAniGroup.end(); it++)
 	{
-		(*it)->frameRec->release();
+		if (*it)
+			(*it)->frameRec->release();
 	}
 
 	NDPlayer& player = NDPlayer::defaultHero();

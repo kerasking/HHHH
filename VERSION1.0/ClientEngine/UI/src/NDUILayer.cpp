@@ -182,7 +182,8 @@ void NDUILayer::SetBackgroundImage(const char* imageFile)
     
 	//m_pkBackgroudTexture = new CCTexture2D;
 	m_pkBackgroudTexture = CCTexture2D::create();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
 	CCImage image;
 	image.initWithImageFile(imageFile);
 	m_pkBackgroudTexture->initWithImage(&image);
