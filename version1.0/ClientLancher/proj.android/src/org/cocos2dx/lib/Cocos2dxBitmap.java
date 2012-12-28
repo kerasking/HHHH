@@ -108,6 +108,7 @@ public class Cocos2dxBitmap {
 		int y = Cocos2dxBitmap.computeY(fontMetricsInt, pHeight, textProperty.mTotalHeight, verticalAlignment);
 		final String[] lines = textProperty.mLines;
 		for (final String line : lines) {
+			//Log.d( "lj", "@@ java bmp, draw line: " + line );
 			x = Cocos2dxBitmap.computeX(line, textProperty.mMaxWidth, horizontalAlignment);
 			canvas.drawText(line, x, y, paint);
 			y += textProperty.mHeightPerLine;
@@ -294,9 +295,11 @@ public class Cocos2dxBitmap {
 					}
 				}
 
+				//ND_MOD
 				/* Remove spaces at the beginning of a new line. */
-				while (pString.indexOf(i++) == ' ') {
-					;
+				//while (pString.indexOf(i++) == ' ') {
+				while (pString.indexOf(i) == ' ') {
+					i++;
 				}
 
 				start = i;
