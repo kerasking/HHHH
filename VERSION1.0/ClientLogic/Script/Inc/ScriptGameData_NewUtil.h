@@ -108,10 +108,10 @@ struct NDGameDataUtil
 
 #if 2 //getter
 	//get number
-	static double getDataN( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr )
+	static double getDataN( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr, bool autoAlloc = true  )
 	{
 		//very slow !
-		NDField* pField = NDGameDataUtil::getField( tablePtr, cellPtr );
+		NDField* pField = NDGameDataUtil::getField( tablePtr, cellPtr, autoAlloc );
 		if (pField)
 		{
 			return pField->getDouble();
@@ -120,10 +120,10 @@ struct NDGameDataUtil
 	}
 
 	//get float
-	static float getDataF( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr )
+	static float getDataF( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr, bool autoAlloc = true  )
 	{
 		//very slow !
-		NDField* pField = NDGameDataUtil::getField( tablePtr, cellPtr );
+		NDField* pField = NDGameDataUtil::getField( tablePtr, cellPtr, autoAlloc );
 		if (pField)
 		{
 			return pField->getFloat();
@@ -132,10 +132,10 @@ struct NDGameDataUtil
 	}
 
 	//get string
-	static string getDataS( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr )
+	static string getDataS( const NDTablePtr& tablePtr, const NDCellPtr& cellPtr, bool autoAlloc = true  )
 	{
 		//very slow !
-		NDField* pField = NDGameDataUtil::getField( tablePtr, cellPtr );
+		NDField* pField = NDGameDataUtil::getField( tablePtr, cellPtr, autoAlloc );
 		if (pField)
 		{
 			return pField->getStr();
