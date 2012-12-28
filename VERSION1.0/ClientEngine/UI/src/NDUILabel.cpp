@@ -145,7 +145,7 @@ void NDUILabel::MakeTexture()
 	CCLog( "@NDUILabel::MakeTexture(): %s", m_strText.c_str());
 #endif
 
-	if ("" == m_strText) return;
+	//if ("" == m_strText) return;
 
 	// get horz text alignment
 	CCTextAlignment eTextAlign = kCCTextAlignmentLeft;
