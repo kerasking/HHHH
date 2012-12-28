@@ -46,9 +46,7 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-public abstract class Cocos2dxActivity extends Activity implements
-		Cocos2dxHelperListener
-{
+public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelperListener {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -60,8 +58,9 @@ public abstract class Cocos2dxActivity extends Activity implements
 	// ===========================================================
 
 	public Cocos2dxGLSurfaceView mGLSurfaceView;
-	public FrameLayout m_pkFrameView = null;
 	private Cocos2dxHandler mHandler;
+	
+	public FrameLayout m_pkFrameView = null;
 	public NDVideoView m_pkView = null;
 
 	// ===========================================================
@@ -69,8 +68,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	// ===========================================================
 
 	@Override
-	protected void onCreate(final Bundle savedInstanceState)
-	{
+	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		this.mHandler = new Cocos2dxHandler(this);
@@ -90,8 +88,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	// ===========================================================
 
 	@Override
-	protected void onResume()
-	{
+	protected void onResume() {
 		super.onResume();
 
 		Cocos2dxHelper.onResume();
@@ -99,8 +96,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	}
 
 	@Override
-	protected void onPause()
-	{
+	protected void onPause() {
 		super.onPause();
 
 		Cocos2dxHelper.onPause();
@@ -108,8 +104,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	}
 
 	@Override
-	public void showDialog(final String pTitle, final String pMessage)
-	{
+	public void showDialog(final String pTitle, final String pMessage) {
 		Message msg = new Message();
 		msg.what = Cocos2dxHandler.HANDLER_SHOW_DIALOG;
 		msg.obj = new Cocos2dxHandler.DialogMessage(pTitle, pMessage);
@@ -117,20 +112,15 @@ public abstract class Cocos2dxActivity extends Activity implements
 	}
 
 	@Override
-	public void showEditTextDialog(final String pTitle, final String pContent,
-			final int pInputMode, final int pInputFlag, final int pReturnType,
-			final int pMaxLength)
-	{
+	public void showEditTextDialog(final String pTitle, final String pContent, final int pInputMode, final int pInputFlag, final int pReturnType, final int pMaxLength) { 
 		Message msg = new Message();
 		msg.what = Cocos2dxHandler.HANDLER_SHOW_EDITBOX_DIALOG;
-		msg.obj = new Cocos2dxHandler.EditBoxMessage(pTitle, pContent,
-				pInputMode, pInputFlag, pReturnType, pMaxLength);
+		msg.obj = new Cocos2dxHandler.EditBoxMessage(pTitle, pContent, pInputMode, pInputFlag, pReturnType, pMaxLength);
 		this.mHandler.sendMessage(msg);
 	}
-
+	
 	@Override
-	public void runOnGLThread(final Runnable pRunnable)
-	{
+	public void runOnGLThread(final Runnable pRunnable) {
 		this.mGLSurfaceView.queueEvent(pRunnable);
 	}
 
