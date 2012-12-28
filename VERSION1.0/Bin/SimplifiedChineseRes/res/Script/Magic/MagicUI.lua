@@ -366,9 +366,9 @@ function p.refreshMatrixItem(matrix, view, viewIds)
 	
 		local sName = MatrixConfigFunc.GetDataBaseS(type,DB_MATRIX_CONFIG.NAME);
 		local sDes = MatrixConfigFunc.GetDataBaseS(type, DB_MATRIX_CONFIG.DESCRIPT);
-		local sLevel = string.format(" %d级", MatrixConfigFunc.GetUpLevelN(level, DB_MATRIX_UP_LEVEL.LEVEL));
+		local sLevel = string.format(" %d"..GetTxtPub("Level"), MatrixConfigFunc.GetUpLevelN(level, DB_MATRIX_UP_LEVEL.LEVEL));
 		local uLevel = MatrixConfigFunc.GetUpLevelN(level + 1, DB_MATRIX_UP_LEVEL.USER_LEVEL);
-		local suLevel = string.format("%d级", uLevel);
+		local suLevel = string.format("%d"..GetTxtPub("Level"), uLevel);
 		local nSopth = MatrixConfigFunc.GetUpLevelN(level + 1, DB_MATRIX_UP_LEVEL.REQ_SOPH);
 		local sSopth = string.format("%d", nSopth);
 		local uSop = p.getUserSoph();

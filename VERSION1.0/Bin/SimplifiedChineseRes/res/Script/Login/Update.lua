@@ -27,10 +27,10 @@ local UpdateUIStatus = {
 --
 local szUpdateURL						= "192.168.9.47"--"192.168.9.47";--"192.168.65.77";	-- 更新服务器的地址
 
-local szDownloading						= "版本下载中……";
-local szInstalling						= "正在安装更新……";
-local szTouch							= "点击屏幕进入游戏";
-local szError							= "连接网络失败……";
+local szDownloading						= GetTxtPri("UP_T1");
+local szInstalling						= GetTxtPri("UP_T2");
+local szTouch							= GetTxtPri("UP_T3");
+local szError							= GetTxtPri("UP_T4");
 
 local nTimeInterval						= 1/24;	-- 时间间隔
 local nTotal							= 100;
