@@ -300,7 +300,7 @@ LUAPLUS_INLINE int LuaState::LoadFile(const char* filename)
 	return luaL_loadfile(m_state, filename);
 }
 
-#if 0
+#if 0 //ND_MOD
 LUAPLUS_INLINE int LuaState::DoFile(const char *filename)
 {
 // modify by jhzheng 2012.1.19

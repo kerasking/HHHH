@@ -52,6 +52,13 @@ NDDictionary::~NDDictionary()
 	CC_SAFE_RELEASE (m_nsDictionary);
 }
 
+CCArray* NDDictionary::AllKeys()
+{
+	if (m_nsDictionary)	
+		return m_nsDictionary->allKeys();
+	return NULL;
+}
+
 void NDDictionary::SetObject(NDObject* obj, const char* key)
 {
 	//LOGD("entry NDDictionary::SetObject,obj is %d",(int)obj);

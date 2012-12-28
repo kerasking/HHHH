@@ -41,12 +41,15 @@ NDTimer::~NDTimer()
 	DEC_NDOBJ("NDTimer");
 
 	CCScheduler *sch = GetScheduler();
-	MAP_TIMER::iterator it = m_mapTimer.begin();
-	for (; it != m_mapTimer.end(); it++)
+	if (sch)
 	{
-		Timer *timer = it->second;
-		sch->unscheduleSelector(schedule_selector(Timer::onTimer), timer);
-		timer->release();
+		MAP_TIMER::iterator it = m_mapTimer.begin();
+		for (; it != m_mapTimer.end(); it++)
+		{
+			Timer *timer = it->second;
+			sch->unscheduleSelector(schedule_selector(Timer::onTimer), timer);
+			timer->release();
+		}
 	}
 }
 

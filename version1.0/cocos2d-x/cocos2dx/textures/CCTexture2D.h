@@ -123,6 +123,8 @@ public:
 
 #if ND_MOD
 	typedef unsigned char  BYTE;  /* 8 bits */
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
 	typedef struct tagRGBQUAD
 	{
 		BYTE	rgbBlue;
@@ -130,6 +132,15 @@ public:
 		BYTE	rgbRed;
 		BYTE	rgbReserved;
 	}	RGBQUAD;
+#else
+	typedef struct tagRGBQUAD
+	{
+		BYTE	rgbRed;
+		BYTE	rgbGreen;
+		BYTE	rgbBlue;
+		BYTE	rgbReserved;
+	}	RGBQUAD;
+#endif
 
 	void SaveToBitmap(const char* pszPngFile,unsigned char** pBMPColorBuf,int rowByteWidth,
 		int width,int height,int colorDepth,RGBQUAD* pPalette,int nPaletteLen);
@@ -141,7 +152,14 @@ public:
 			int nHeight,CCSize kSize,unsigned int uiSizeOfData);
 			
 	bool initWithPalettePNG(const char* pszPNGFile);	
-#endif
+
+	static CCTexture2D* create() {
+		return new CCTexture2D();
+	}
+
+	const std::string& getDbgInfo() { return dbgInfo; }
+#endif //ND_MOD
+
     /**
     Drawing extensions to make it easy to draw basic quads using a CCTexture2D object.
     These functions require GL_TEXTURE_2D and both GL_VERTEX_ARRAY and GL_TEXTURE_COORD_ARRAY client states to be enabled.
@@ -304,6 +322,10 @@ private:
 
 	CC_SYNTHESIZE(unsigned int,m_uiWidth,Width);
 	CC_SYNTHESIZE(unsigned int,m_uiHeight,Height);
+
+	std::string dbgInfo;
+	void setDbgInfo( const char* text );
+	void setDbgInfo(CCImage* uiImage);
 #endif	
 };
 

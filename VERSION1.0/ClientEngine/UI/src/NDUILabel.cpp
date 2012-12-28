@@ -53,7 +53,7 @@ NDUILabel::NDUILabel()
 NDUILabel::~NDUILabel()
 {
 	DEC_NDOBJ_RTCLS
-	CC_SAFE_DELETE(m_texture);
+	CC_SAFE_RELEASE_NULL(m_texture);
 }
 	
 void NDUILabel::SetText(const char* utf8_text)
@@ -145,21 +145,7 @@ void NDUILabel::MakeTexture()
 	CCLog( "@NDUILabel::MakeTexture(): %s", m_strText.c_str());
 #endif
 
-	CCRect thisRect = GetFrameRect();	
-	/*
-	CCSize dim = [text sizeWithFont:[UIFont fontWithName:FONT_NAME size:m_fontSize] 
-				  constrainedToSize:CCSizeMake(thisRect.size.width, thisRect.size.height)];		
-		
-	//--test
-	dim.width = dim.width;
-	dim.height = dim.height;
-	*/
-	CC_SAFE_DELETE(m_texture);
-
-	if ("" == m_strText)
-	{
-		return;
-	}
+	//if ("" == m_strText) return;
 
 	// get horz text alignment
 	CCTextAlignment eTextAlign = kCCTextAlignmentLeft;
@@ -177,8 +163,13 @@ void NDUILabel::MakeTexture()
 		eTextAlign = kCCTextAlignmentRight;
 	}
 
+	//
+	CCRect thisRect = GetFrameRect();
+	CC_SAFE_RELEASE_NULL(m_texture);
+
 	// init texture with string
-	m_texture = new CCTexture2D;
+	//m_texture = new CCTexture2D;
+	m_texture = CCTexture2D::create();
 	m_texture->initWithString( m_strText.c_str(),
 				CCSizeMake(thisRect.size.width, thisRect.size.height),
 				eTextAlign,

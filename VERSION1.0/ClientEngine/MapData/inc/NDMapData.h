@@ -14,12 +14,12 @@
 #include "UsePointPls.h"
 #include "cocoa/CCDictionary.h"
 
-class MapTexturePool: public cocos2d::CCObject
+class NDMapTexturePool : public cocos2d::CCObject
 {
 public:
-
-	static MapTexturePool* defaultPool();
+	static NDMapTexturePool* defaultPool();
 	void purgeDefaultPool();
+	void Recyle();
 
 	cocos2d::CCTexture2D* addImage(const char* path, bool keep);
 
@@ -27,9 +27,9 @@ private:
 	cocos2d::CCDictionary*	m_pkDict;
 
 private:
-	MapTexturePool();
+	NDMapTexturePool();
 public:
-	~MapTexturePool();
+	~NDMapTexturePool();
 };
 
 class NDMapData;

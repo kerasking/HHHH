@@ -141,28 +141,13 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 
 		m_bReverse = bReverse;
 
-// 		if (m_pkCurrentAnimation == NULL
-// 			|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_END
-// 			|| m_pkCurrentAnimation->getType() == ANIMATION_TYPE_ONCE_START
-// 			|| m_pkCurrentAnimation->getCurIndexInAniGroup() != 1)
-// 		{
-// 			m_pkCurrentAnimation =
-// 				(NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(
-// 				nAnimationIndex);
-// 
-// 			m_pkCurrentAnimation->setCurIndexInAniGroup(nAnimationIndex);
-// 			CC_SAFE_RELEASE_NULL (m_pkFrameRunRecord);
-// 			SAFE_RELEASE(m_pkFrameRunRecord);
-// 			m_pkFrameRunRecord = new NDFrameRunRecord;
-// 		}
-
 		m_pkCurrentAnimation =
 			(NDAnimation*) m_pkAniGroup->getAnimations()->objectAtIndex(
 			nAnimationIndex);
 
 		m_pkCurrentAnimation->setCurIndexInAniGroup(nAnimationIndex);
+
 		CC_SAFE_RELEASE_NULL (m_pkFrameRunRecord);
-		SAFE_RELEASE(m_pkFrameRunRecord);
 		m_pkFrameRunRecord = new NDFrameRunRecord;
 
 		SetContentSize(

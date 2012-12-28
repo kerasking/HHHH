@@ -29,10 +29,10 @@ namespace NDEngine
 	{
 		DEC_NDOBJ_RTCLS
 
-		SAFE_DELETE (m_tileLeftBottom);
-		SAFE_DELETE (m_tileLeftTop);
-		SAFE_DELETE (m_tileRightTop);
-		SAFE_DELETE (m_tileRightBottom);
+		SAFE_RELEASE (m_tileLeftBottom);
+		SAFE_RELEASE (m_tileLeftTop);
+		SAFE_RELEASE (m_tileRightTop);
+		SAFE_RELEASE (m_tileRightBottom);
 	}
 
 	void NDUIFrame::draw()
@@ -63,9 +63,7 @@ namespace NDEngine
 		CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 		CCRect scrRect = GetScreenRect();
 
-		NDPicture* ptexpic = NDPicturePool::DefaultPool()->AddPicture(
-			side_image->getCString());
-
+		NDPicture* ptexpic = NDPicturePool::DefaultPool()->AddPicture( side_image->getCString());
 		m_tileLeftTop->setTexture(ptexpic->GetTexture());
 		SAFE_DELETE(ptexpic);
 
@@ -87,11 +85,8 @@ namespace NDEngine
 		m_tileLeftTop->setMapSize(CCSizeMake(winSize.width, winSize.height));
 		m_tileLeftTop->make();
 
-		NDPicture* ppic = NDPicturePool::DefaultPool()->AddPicture(
-			side_image->getCString());
-
+		NDPicture* ppic = NDPicturePool::DefaultPool()->AddPicture( side_image->getCString());
 		m_tileLeftTop->setTexture(ppic->GetTexture());
-
 		SAFE_DELETE(ppic);
 
 		m_tileRightTop->setCutRect(
@@ -115,11 +110,8 @@ namespace NDEngine
 		m_tileRightTop->setMapSize(CCSizeMake(winSize.width, winSize.height));
 		m_tileRightTop->make();
 
-		NDPicture* pleftpic = NDPicturePool::DefaultPool()->AddPicture(
-			side_image->getCString());
-
+		NDPicture* pleftpic = NDPicturePool::DefaultPool()->AddPicture( side_image->getCString());
 		m_tileLeftBottom->setTexture(pleftpic->GetTexture());
-
 		SAFE_DELETE(pleftpic);
 
 		m_tileLeftBottom->setCutRect(
@@ -144,11 +136,8 @@ namespace NDEngine
 		m_tileLeftBottom->setMapSize(CCSizeMake(winSize.width, winSize.height));
 		m_tileLeftBottom->make();
 
-		NDPicture* prightpic = NDPicturePool::DefaultPool()->AddPicture(
-			side_image->getCString());
-
+		NDPicture* prightpic = NDPicturePool::DefaultPool()->AddPicture(side_image->getCString());
 		m_tileRightBottom->setTexture(prightpic->GetTexture());
-
 		SAFE_DELETE(prightpic);
 
 		m_tileRightBottom->setCutRect(

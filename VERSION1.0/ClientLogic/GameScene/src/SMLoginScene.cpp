@@ -14,7 +14,8 @@
 #include "NDPath.h"
 #include "SMUpdate.h"
 #include "GameApp.h"
-#include "NDUtility.h"
+//#include "NDUtility.h"
+#include "NDUtil.h"
 #include "sys/stat.h"
 #include "SystemSetMgr.h"
 #include "InstallSelf.h"
@@ -148,18 +149,20 @@ CSMLoginScene::CSMLoginScene()
 , m_pLayerCheckWIFI(NULL)
 {
 	INC_NDOBJ_RTCLS
+
+	WriteCon( "%08X: CSMLoginScene::CSMLoginScene()\r\n", this);
 }
 
 //===========================================================================
 CSMLoginScene::~CSMLoginScene()
 {
 	DEC_NDOBJ_RTCLS
-    NDPicturePool::DefaultPool()->Recyle();
-	if ( m_pTimer )
-    {
-    	delete m_pTimer;
-    	m_pTimer = NULL;
-    }
+   
+	WriteCon( "%08X: CSMLoginScene::~CSMLoginScene()\r\n", this);
+
+   	SAFE_DELETE( m_pTimer );
+
+	NDDirector::DefaultDirector()->Recyle();
 }
 
 //===========================================================================

@@ -11,7 +11,8 @@
 #include "NDDirector.h"
 #include "NDMapLayerLogic.h"
 #include "NDMiniMap.h"
-#include "NDUtility.h"
+//#include "NDUtility.h"
+#include "NDUtil.h"
 #include "WorldMapScene.h"
 #include "ScriptGameLogic.h"
 #include "NDConstant.h"
@@ -37,11 +38,15 @@ CSMGameScene::CSMGameScene()
 	INC_NDOBJ_RTCLS
 //	m_miniMap	= NULL;	 ///< ÁÙÊ±ÐÔ×¢ÊÍ ¹ùºÆ
 	m_pkMapLayerLogic	= NULL;
+
+	WriteCon( "%08X: CSMGameScene::CSMGameScene()\r\n", this);
 }
 
 CSMGameScene::~CSMGameScene()
 {
 	DEC_NDOBJ_RTCLS
+
+	WriteCon( "%08X: CSMGameScene::~CSMGameScene()\r\n", this);
 }
 
 void CSMGameScene::Initialization(int mapID)

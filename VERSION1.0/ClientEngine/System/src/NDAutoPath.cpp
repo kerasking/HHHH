@@ -218,7 +218,14 @@ void NDAutoPath::GetPath()
 
 	do
 	{
-		int iTimes = MAP_UNITSIZE_X / m_nStep; //注意：android分辨率奇怪，可能不会整除！
+		int iTimes = MAP_UNITSIZE_X / m_nStep;  //@注意：android分辨率奇怪，可能不会整除！
+		//modified by ZhangDi
+// 		float tmpFactor = 1.0*MAP_UNITSIZE_X / m_nStep; //@注意：android分辨率奇怪，可能不会整除！
+// 		int iTimes = (int)tmpFactor;
+// 		if(tmpFactor < 1.0)  //@zd 注意：这里这么处理，是为了兼容3GS以及其他安卓机器的分辨率，玩家走路是根据iTimes这个数值进行位置采样的
+// 			iTimes = 1;
+// 		else if(tmpFactor < 2.0 && tmpFactor > 1.1)  
+// 			iTimes = 2;
 
 		CCPoint kPos;
 		NodeInfo* pkNode = kPath[0];

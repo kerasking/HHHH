@@ -446,6 +446,7 @@ CCTexture2D * CCTextureCache::addImage(const char * path)
                     eImageFormat = CCImage::kFmtTiff;
                 }
                 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || !ENABLE_PAL_MODE
                 CCImage image;                
                 unsigned long nSize = 0;
                 unsigned char* pBuffer = CCFileUtils::sharedFileUtils()->getFileData(fullpath.c_str(), "rb", &nSize);
@@ -457,12 +458,18 @@ CCTexture2D * CCTextureCache::addImage(const char * path)
                 else
                 {
                     CC_SAFE_DELETE_ARRAY(pBuffer);
-                }                
+                }
+				image.dbgInfo = fullpath; //ND_MOD
+#endif
 
                 texture = new CCTexture2D();
                 
                 if( texture &&
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
                     texture->initWithImage(&image) )
+#else
+                   texture->initWithPalettePNG(fullpath.c_str()) )
+#endif
                 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
                     // cache the texture file name
@@ -685,8 +692,13 @@ void CCTextureCache::reloadAllTextures()
 #endif
 }
 
-void CCTextureCache::dumpCachedTextureInfo()
+//ND_MOD
+//void CCTextureCache::dumpCachedTextureInfo()
+std::string CCTextureCache::dumpCachedTextureInfo()
 {
+	string total;
+	char line[500] = "";
+
     unsigned int count = 0;
     unsigned int totalBytes = 0;
 
@@ -699,6 +711,23 @@ void CCTextureCache::dumpCachedTextureInfo()
         unsigned int bytes = tex->getPixelsWide() * tex->getPixelsHigh() * bpp / 8;
         totalBytes += bytes;
         count++;
+
+#if ND_MOD
+		const char* name = strstr( pElement->getStrKey(), "/Bin/" );
+		if (!name) name = pElement->getStrKey();
+		
+		sprintf( line, "@@ tex: %-90s rc=%lu, id=%lu, %lu x %lu, %ld bpp => %lu KB\r\n",
+					name,
+					(long)tex->retainCount(),
+					(long)tex->getName(),
+					(long)tex->getPixelsWide(),
+					(long)tex->getPixelsHigh(),
+					(long)bpp,
+					(long)bytes / 1024);
+		
+		CCLog( line );
+		total += line;
+#else
         CCLOG("cocos2d: \"%s\" rc=%lu id=%lu %lu x %lu @ %ld bpp => %lu KB",
                pElement->getStrKey(),
                (long)tex->retainCount(),
@@ -707,9 +736,19 @@ void CCTextureCache::dumpCachedTextureInfo()
                (long)tex->getPixelsHigh(),
                (long)bpp,
                (long)bytes / 1024);
+#endif
     }
 
-    CCLOG("cocos2d: CCTextureCache dumpDebugInfo: %ld textures, for %lu KB (%.2f MB)", (long)count, (long)totalBytes / 1024, totalBytes / (1024.0f*1024.0f));
+#if ND_MOD
+    sprintf( line, "@@ CCTextureCache total: %ld textures, for %lu KB (%.2f MB)\r\n", 
+		(long)count, (long)totalBytes / 1024, totalBytes / (1024.0f*1024.0f));
+
+	CCLog( line );
+	total += line;
+#else
+	CCLOG("cocos2d: CCTextureCache dumpDebugInfo: %ld textures, for %lu KB (%.2f MB)", (long)count, (long)totalBytes / 1024, totalBytes / (1024.0f*1024.0f));
+#endif
+	return total;
 }
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA

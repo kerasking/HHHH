@@ -45,6 +45,7 @@ function p.LoadUI()
 	end
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.DailyActionUI);
+	layer:SetDebugName( "DailyAction" ); --@opt
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer,UILayerZOrder.ActivityLayer);
     

@@ -235,8 +235,8 @@ unsigned long GetMapId()
 }
 int GetMapInstanceId()
 {
-	int a = NDMapMgrObj.m_nMapID;
-	if (NDMapMgrObj.m_nMapID / 100000000 > 0)
+	int a = NDMapMgrObj.GetMapID();
+	if (NDMapMgrObj.GetMapID() / 100000000 > 0)
 	{
 		return NDMapMgrObj.GetMotherMapID();
 	}

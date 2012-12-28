@@ -107,7 +107,5 @@ bool IsTraditionalChinese();
 
 NDLANGUAGE GetLocalLanguage();
 
-void WriteCon(const char * pszFormat, ...);
-
 #endif
 

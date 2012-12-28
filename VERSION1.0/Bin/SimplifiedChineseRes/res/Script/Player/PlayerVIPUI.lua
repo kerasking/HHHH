@@ -177,6 +177,7 @@ local scene = GetSMGameScene();
 	layer:SetPopupDlgFlag(true);
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerVIPUI);
+	layer:SetDebugName( "VIP" ); --@opt
 	layer:SetFrameRect(RectFullScreenUILayer);
 	
 
@@ -402,7 +403,7 @@ function p.GameDataUserInfoRefresh()
 	
 	--充值提示信息
 	if nVipRank == 10 then
-		tipLabel:SetText("恭喜您成为VIP10会员!");
+		tipLabel:SetText(GetTxtPri("PV_T1"));
 	else
         tipLabel:SetText(string.format(GetTxtPri("PLAYER_T71"),VipCfg[nVipRank+1]-Recharge,nVipRank+1));
 	end
@@ -420,12 +421,12 @@ function p.GameDataUserInfoRefresh()
 	local sGoldTip = "";
 	if nLeftTime > 0 and nBought <=47 then
         local nEMoney = GetDataBaseDataN("stamina_config", (nBought+1), DB_STAMINA_CONFIG.REQ_EMONEY);
-	     sGoldTip = ",当前购买需"..nEMoney.."金币。";	     
+	     sGoldTip = string.format(GetTxtPri("PLAYER_T81"),nEMoney);	          
 	end
 	    
 	--ffff00
 	--]]
-	MOlabel:SetText("今天还能购买军令"..nLeftTime.."次"..sGoldTip);
+	MOlabel:SetText(string.format(GetTxtPri("PLAYER_T82"),nLeftTime,sGoldTip));
 	
 
 end
@@ -581,8 +582,8 @@ function p.LoadUIVIPDesc(nVipLev)
 	local title =  RecursiveLabel(layer,{3});
 	local firsttip =  RecursiveLabel(layer,{151});
 
-	title:SetText("VIP"..nVipLev.."特权");
-	firsttip:SetText("累计充值"..VipCfg[nVipLev].."金币可达到VIP"..nVipLev);
+	title:SetText(string.format(GetTxtPri("PLAYER_T79"),nVipLev));
+	firsttip:SetText(string.format(GetTxtPri("PLAYER_T80"),VipCfg[nVipLev],nVipLev));
 	----------------------------容器---------------------------------------
 	local rectX = winsize.w*0.25;
 	local rectW	= winsize.w*0.5;

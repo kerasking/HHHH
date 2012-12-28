@@ -485,7 +485,8 @@ BattleUILayer::~BattleUILayer()
 	for (VEC_SUB_ANI_GROUP_IT it = m_vSubAniGroup.begin();
 			it != m_vSubAniGroup.end(); it++)
 	{
-		it->frameRec->release();
+		if (*it)
+			(*it)->frameRec->release();
 	}
 
 	NDPlayer& player = NDPlayer::defaultHero();
@@ -2290,44 +2291,53 @@ void BattleUILayer::drawSubAniGroup()
 	for (VEC_SUB_ANI_GROUP_IT it = m_vSubAniGroup.begin();
 			it != m_vSubAniGroup.end(); it++)
 	{
-		NDSprite* role = it->role;
-		if (!role)
-		{
-			continue;
-		}
+		NDSubAniGroup* sag = *it;
+		if (!sag) continue;
 
-// 		if (!(it->isCanStart))
+		NDSprite* role = sag->role;
+		if (!role) continue;
+
+// 		if (!(sag->isCanStart))
 // 		{
-// 			it->isCanStart = true;
+// 			sag->isCanStart = true;
 // 		}
-// 		if (!(it->isCanStart))
+// 		if (!(sag->isCanStart))
 // 		{
 // 			continue;
 // 		}
-		if(it->startFrame>0){
-			it->startFrame--;
+
+		if(sag->startFrame>0)
+		{
+			sag->startFrame--;
 			continue;
 		}
+
 		//NDLog("draw subanigroup");
-		it->bComplete = role->DrawSubAnimation(*it);
-		if (it->bComplete)
+		sag->bComplete = role->DrawSubAnimation(*sag);
+		if (sag->bComplete)
 		{
 /*			NDLog("subanigroup complete");*/
 			bErase = true;
-			if (it->isFromOut)
+			if (sag->isFromOut)
 			{
-				it->aniGroup->release();
+				CC_SAFE_RELEASE_NULL(sag->aniGroup);
 			}
-			it->frameRec->release();
-			it->frameRec = NULL;
+			CC_SAFE_RELEASE_NULL(sag->frameRec);
 		}
 	}
 
 	if (bErase)
 	{
-		m_vSubAniGroup.erase(
-			remove_if(m_vSubAniGroup.begin(), m_vSubAniGroup.end(), IsSubAniGroupComplete()), 
-			m_vSubAniGroup.end());
+		for (int i = 0; i < m_vSubAniGroup.size(); i++)
+		{
+			NDSubAniGroup* sag = m_vSubAniGroup[i];
+			if (sag && sag->bComplete)
+			{
+				delete sag;
+				m_vSubAniGroup.erase( m_vSubAniGroup.begin() + i );
+				break;;
+			}
+		}
 	}
 }
 
@@ -4782,18 +4792,16 @@ void BattleUILayer::addSkillEffectToFighter(Fighter* fighter, const char* sprfil
 	NDAnimationGroup* effect = new NDAnimationGroup;
 	effect->initWithSprFile(sprfile);
 	
-	NDSubAniGroup sa;
-	sa.role = fighter->GetRole();
-	sa.fighter = fighter;
-	sa.aniGroup = effect;//
-	sa.frameRec = new NDFrameRunRecord;
-	sa.isFromOut = true;
-	sa.startFrame = delay;
-	sa.reverse = bRevers;
-	sa.pos = pos;
+	NDSubAniGroup* sa = new NDSubAniGroup;
+	sa->role = fighter->GetRole();
+	sa->fighter = fighter;
+	sa->aniGroup = effect;
+	sa->frameRec = new NDFrameRunRecord;
+	sa->isFromOut = true; //这个标志表示负责释放
+	sa->startFrame = delay;
+	sa->reverse = bRevers;
+	sa->pos = pos;
 	m_vSubAniGroup.push_back(sa);
-
-	//effect->release();
 }
 
 void BattleUILayer::addSkillEffect(Fighter& theActor, bool user/*=false*/)
@@ -5497,13 +5505,12 @@ VEC_FIGHTER& BattleUILayer::getHighlightList()
 
 void BattleUILayer::addSubAniGroup(NDSprite* role, NDAnimationGroup* group, Fighter* f)
 {
-	NDSubAniGroup subAniGroup;
-	subAniGroup.role = role;
-	subAniGroup.aniGroup = group;
-	subAniGroup.fighter = f;
-	subAniGroup.frameRec = new NDFrameRunRecord;
-
-	m_vSubAniGroup.push_back(subAniGroup);
+	NDSubAniGroup* sa = new NDSubAniGroup;
+	sa->role = role;
+	sa->aniGroup = group;
+	sa->fighter = f;
+	sa->frameRec = new NDFrameRunRecord;
+	m_vSubAniGroup.push_back(sa);
 }
 
 void BattleUILayer::handleStatusActions(VEC_STATUS_ACTION& statusActions)

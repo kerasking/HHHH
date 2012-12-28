@@ -524,6 +524,7 @@ bool CUIEdit::detachWithIME()
 		{
 			CCLog( "@@ CUIEdit::detachWithIME(), call pGlView->setIMEKeyboardState(false)\r\n" );
 
+			OnScriptUiEvent(this, TE_TOUCH_EDIT_INPUT_FINISH);
 			pGlView->setIMEKeyboardState(false);
 		}
 	}
@@ -652,6 +653,21 @@ void CUIEdit::keyboardDidShow(CCIMEKeyboardNotificationInfo& info)
 void CUIEdit::keyboardDidHide(CCIMEKeyboardNotificationInfo& info)
 {
 	m_bIMEOpen = false;
+}
+
+void CUIEdit::onAction( int action )
+{
+	CCLog( "@@ CUIEdit::onAction(%d)\r\n", action );
+
+	if (action == 0)
+	{
+		//action=enter
+	}
+	else if (action == 6)
+	{
+		//action=done
+		this->detachWithIME();
+	}
 }
 
 #endif //WITH_NEW_IME

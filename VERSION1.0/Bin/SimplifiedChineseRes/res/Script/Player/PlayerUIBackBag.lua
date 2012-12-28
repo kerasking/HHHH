@@ -329,6 +329,7 @@ function p.LoadUI(tab,nPetId)
 	end
 	layer:Init();
 	layer:SetTag(NMAINSCENECHILDTAG.PlayerBackBag);
+	layer:SetDebugName( "PlayerBackBag" ); --@opt
 	layer:SetFrameRect(RectFullScreenUILayer);
 	scene:AddChildZ(layer,UILayerZOrder.NormalLayer);
 	
@@ -380,7 +381,7 @@ function p.LoadUI(tab,nPetId)
 	containter:SetViewSize(containter:GetFrameRect().size);
 	containter:SetLuaDelegate(p.OnUIEventViewChange);
 	
-    containter:Set13Move(true);
+    --containter:Set13Move(true);
     
 	local petNameContainer = p.GetPetNameSVC();
 	if CheckP(petNameContainer) then

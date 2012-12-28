@@ -33,8 +33,11 @@ THE SOFTWARE.
 #include <android/log.h>
 #include <string.h>
 #include <jni.h>
+
+#if ND_MOD
 #include "ccMacros.h"
 #include "CCDirector.h"
+#endif
 
 
 NS_CC_BEGIN

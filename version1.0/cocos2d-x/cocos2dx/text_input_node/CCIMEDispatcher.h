@@ -62,6 +62,10 @@ public:
     */
     void dispatchDeleteBackward();
 
+#if ND_MOD
+	void dispatchOnAction( int action );
+#endif
+
     /**
     @brief Get the content text from CCIMEDelegate, retrieved previously from IME.
     */

@@ -32,6 +32,10 @@
 #include "NDUILoad.h"
 #include "ScriptRegLua.h"
 #include "ObjectTracker.h"
+#include "CCTextureCache.h"
+#include "NDPicture.h"
+#include "TextureList.h"
+#include "NDAnimationGroupPool.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "Foundation/NSAutoreleasePool.h"
@@ -246,7 +250,7 @@ bool NDGameApplication::applicationDidFinishLaunching()
 	// set FPS. the default value is 1.0/60 if you don't call this
 	//pDirector->setAnimationInterval(1.0 / 60);
 	LOGD("pDirector->setAnimationInterval() value is %d", (int) pDirector);
-	pDirector->setAnimationInterval(1.0 / 24);
+	pDirector->setAnimationInterval(1.0 / 24.0);
 
 #if 0 //@todo @hello
 	// create a scene. it's an autorelease object
@@ -651,12 +655,50 @@ bool NDGameApplication::processPM(const char* cmd)
 		DWORD n = 0;
 		WriteConsoleA(  hOut, str.c_str(), str.length(), &n, NULL );
 	}
+
+	//dump obj
 	else if (n = sscanf(cmd, "dumpobj %d", &val)) //n=
 	{
 		val = (n > 0 ? val : 0);
 		string info;
 		DUMP_OBJ(info, val);
 
+		DWORD num = 0;
+		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
+	}
+
+	//dump tex
+	else if (stricmp( cmd, "dumptex" ) == 0 
+				|| stricmp( cmd, "dumptexture" ) == 0)
+	{
+		string info = CCTextureCache::sharedTextureCache()->dumpCachedTextureInfo();
+		DWORD num = 0;
+		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
+	}
+
+	//dump pic
+	else if (stricmp( cmd, "dumppic" ) == 0)
+	{
+		string info = NDPicturePool::DefaultPool()->dump();
+		DWORD num = 0;
+		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
+	}
+
+	//dump texlist
+	//else if (stricmp( cmd, "dumptexlist" ) == 0)
+	else if (n = sscanf(cmd, "dumptexlist %s", szDebugOpt))
+	{
+		if (n == 0) strcpy( szDebugOpt, "" );
+		string info = TextureList::instance().dump( szDebugOpt );
+		
+		DWORD num = 0;
+		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
+	}
+
+	//dump anim group pool
+	else if (stricmp( cmd, "dumpanim" ) == 0)
+	{
+		string info = NDAnimationGroupPool::defaultPool()->dump();
 		DWORD num = 0;
 		WriteConsoleA(  hOut, info.c_str(), info.length(), &num, NULL );
 	}

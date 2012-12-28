@@ -645,7 +645,7 @@ function p.OnTimer(tag)
             p.tbTimer.RefreshPlayerTimer.TimerTag = -1;
             if  IsUIShow(NMAINSCENECHILDTAG.TransportUI) then
                 local btn = GetButton(layer, p.ImmutableCtr.Btn.btnRefresh);
-                btn:SetTitle("刷新玩家");
+                btn:SetTitle(GetTxtPri("TRSP_T1"));
             end
             
         else

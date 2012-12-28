@@ -130,6 +130,11 @@ NDFrameTile::NDFrameTile() :
 	INC_NDOBJ("NDFrameTile");
 }
 
+NDFrameTile::~NDFrameTile()
+{
+	DEC_NDOBJ("NDFrameTile");
+}
+
 //////////////////////////////////////////////////////////////////////////
 NDFrame::NDFrame() :
 	m_nEnduration(0),
@@ -138,7 +143,7 @@ NDFrame::NDFrame() :
 	m_pkFrameTiles(NULL),
 	m_bNeedInitTitles(true)
 {
-	INC_NDOBJ("NDFrameTile");
+	INC_NDOBJ("NDFrame");
 // 	m_pkSubAnimationGroups = new CCMutableArray<NDAnimationGroup*>();
 // 	m_pkFrameTiles = new CCMutableArray<NDFrameTile*>();
 // 	m_pkTiles = new CCMutableArray<NDTile*>();
@@ -149,7 +154,7 @@ NDFrame::NDFrame() :
 
 NDFrame::~NDFrame()
 {
-	DEC_NDOBJ("NDFrameTile");
+	DEC_NDOBJ("NDFrame");
 	CC_SAFE_RELEASE (m_pkSubAnimationGroups);
 	CC_SAFE_RELEASE (m_pkFrameTiles);
 	CC_SAFE_RELEASE (m_pkTiles);
@@ -956,11 +961,12 @@ CCTexture2D* NDFrame::getTileTextureWithImageIndex(int nImageIndex,
 			return pkTexture;
 		}
 
-		if (pkSprite->IsNonRole())
-		{
-			pkTexture = NDPicturePool::DefaultPool()->AddTexture(
-				pkAnimationGroup->getImages()->at(nImageIndex).c_str());
-		}
+//@del: never goes in.
+// 		if (pkSprite->IsNonRole())
+// 		{
+// 			pkTexture = NDPicturePool::DefaultPool()->AddTexture(
+// 				pkAnimationGroup->getImages()->at(nImageIndex).c_str());
+// 		}
 
 		if (pkTexture)
 		{

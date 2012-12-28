@@ -47,6 +47,7 @@ THE SOFTWARE.
 
 #if ND_MOD
 #include "ObjectTracker.h"
+#include "TextureList.h"
 #endif
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
@@ -128,6 +129,7 @@ CCTexture2D::CCTexture2D()
 {
 #if ND_MOD
 	INC_CCOBJ("CCTexture2D");
+	TextureList::instance().add_tex(this);
 #endif
 }
 
@@ -135,6 +137,7 @@ CCTexture2D::~CCTexture2D()
 {
 #if ND_MOD
 	DEC_CCOBJ("CCTexture2D");
+	TextureList::instance().del_tex(this);
 #endif
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
@@ -312,6 +315,8 @@ const char* CCTexture2D::description(void)
 
 bool CCTexture2D::initWithImage(CCImage *uiImage)
 {
+	setDbgInfo( uiImage ); //ND_MOD
+
     if (uiImage == NULL)
     {
         CCLOG("cocos2d: CCTexture2D. Can't create Texture. UIImage is nil");
@@ -338,6 +343,8 @@ bool CCTexture2D::initWithImage(CCImage *uiImage)
 
 bool CCTexture2D::initPremultipliedATextureWithImage(CCImage *image, unsigned int width, unsigned int height)
 {
+	setDbgInfo( image ); //ND_MOD
+
     unsigned char*            tempData = image->getData();
     unsigned int*             inPixel32 = NULL;
     unsigned char*            inPixel8 = NULL;
@@ -478,6 +485,7 @@ bool CCTexture2D::initPremultipliedATextureWithImage(CCImage *image, unsigned in
 // implementation CCTexture2D (Text)
 bool CCTexture2D::initWithString(const char *text, const char *fontName, float fontSize)
 {
+	setDbgInfo( text ); //ND_MOD
     return initWithString(text, CCSizeMake(0,0), kCCTextAlignmentCenter, kCCVerticalTextAlignmentTop, fontName, fontSize);
 }
 
@@ -487,6 +495,8 @@ bool CCTexture2D::initWithString(const char *text, const CCSize& dimensions, CCT
     // cache the texture data
     VolatileTexture::addStringTexture(this, text, dimensions, hAlignment, vAlignment, fontName, fontSize);
 #endif
+
+	setDbgInfo( text ); //ND_MOD
 
     CCImage image;
 
@@ -619,6 +629,8 @@ bool CCTexture2D::initWithPVRTCData(const void *data, int level, int bpp, bool h
 
 bool CCTexture2D::initWithPVRFile(const char* file)
 {
+	setDbgInfo( file ); //ND_MOD
+
     bool bRet = false;
     // nothing to do with CCObject::init
     
@@ -907,6 +919,8 @@ CCTexture2D* CCTexture2D::initWithPaletteData(const void* pData,
 
 bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 {
+	setDbgInfo( pszPNGFile ); //ND_MOD
+
 	if (0 == pszPNGFile || !*pszPNGFile)
 	{
 		return false;
@@ -1102,6 +1116,7 @@ bool CCTexture2D::initWithPalettePNG(const char* pszPNGFile)
 	}
 
 	//SaveToBitmap(pszPNGFile, s_pProwPointers,nRowBytes,dwWidth,dwHeight,pkPNGPointer->pixel_depth,pBmiColors,nNumberPalette);
+
 	kImageSize = CCSizeMake(static_cast<float>(dwWidth), static_cast<float>(dwHeight));
 
 	initWithPaletteData(s_pData, ePixelFormat, nPOTWide,nPOTHigh,
@@ -1191,6 +1206,24 @@ void CCTexture2D::WriteToBMPFile(char* pFileName, BYTE* pBmpBuf, int nBmplen)
 	fwrite(pBmpBuf, nBmplen, 1, pkFile);
 	fclose(pkFile);
 }
+
+void CCTexture2D::setDbgInfo( const char* text ) 
+{
+	if (dbgInfo.length() == 0 && text && text[0] != 0) 
+	{
+		dbgInfo = text;
+	}
+}
+
+void CCTexture2D::setDbgInfo(CCImage* uiImage) 
+{
+	if (dbgInfo.length() == 0 
+		&& uiImage && uiImage->dbgInfo.length() > 0)
+	{
+		dbgInfo = uiImage->dbgInfo;
+	}
+}
+
 #endif //ND_MOD
 
 NS_CC_END

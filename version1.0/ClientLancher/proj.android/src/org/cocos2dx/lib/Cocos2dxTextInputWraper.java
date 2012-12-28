@@ -166,10 +166,13 @@ public class Cocos2dxTextInputWraper implements TextWatcher,
 
 			final String insertText = text;
 			this.mCocos2dxGLSurfaceView.insertText(insertText);
+			this.mCocos2dxGLSurfaceView.onAction( pActionID ); //ND_MOD
+			
 			/*
 			 * if (BuildConfig.DEBUG) { Log.d(TAG, "insertText(" + insertText +
 			 * ")"); }
 			 */
+			//Log.d( "lj","@@ ime action=" + pActionID );
 		}
 		return false;
 	}

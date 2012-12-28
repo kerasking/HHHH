@@ -31,8 +31,9 @@ private:
 };
 
 //const char* GetSMImgPath(const char* name);
-
-
 NS_NDENGINE_END
+
+
+void WriteCon(const char * pszFormat, ...);
 
 #endif

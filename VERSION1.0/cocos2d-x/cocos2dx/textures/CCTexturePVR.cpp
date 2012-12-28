@@ -38,6 +38,7 @@ THE SOFTWARE.
 
 #if ND_MOD
 #include "ObjectTracker.h"
+#include "TextureList.h"
 #endif
 
 NS_CC_BEGIN
@@ -142,6 +143,7 @@ CCTexturePVR::CCTexturePVR()
 {
 #if ND_MOD
 	INC_CCOBJ("CCTexturePVR");
+	TextureList::instance().add_tex_pvr(this);
 #endif
 }
 
@@ -149,6 +151,7 @@ CCTexturePVR::~CCTexturePVR()
 {
 #if ND_MOD
 	DEC_CCOBJ("CCTexturePVR");
+	TextureList::instance().del_tex_pvr(this);
 #endif
 
     CCLOGINFO( "cocos2d: deallocing CCTexturePVR" );

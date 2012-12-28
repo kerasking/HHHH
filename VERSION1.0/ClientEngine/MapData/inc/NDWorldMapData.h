@@ -48,6 +48,7 @@ typedef struct PASS_WAY
 class NDWorldMapData: public cocos2d::CCObject
 {
 public:
+	CC_SYNTHESIZE(bool, m_init, Init)
 	CC_SYNTHESIZE(std::string, m_Name, Name)
 	CC_SYNTHESIZE(int, m_nLayerCount, LayerCount)
 	CC_SYNTHESIZE(unsigned int, m_nColumns, Columns)
@@ -62,21 +63,22 @@ public:
 	CC_SYNTHESIZE(cocos2d::CCArray*/*<anigroup_param*>**/, m_AniGroupParams, AniGroupParams)
 	CC_SYNTHESIZE(cocos2d::CCArray*/*<PlaceNode*>**/, m_PlaceNodes, PlaceNodes)
 
-public:
-	static NDWorldMapData* SharedData();
-
-	NDTile * getTileAtRow(unsigned int row, unsigned int column);
-	int getDestMapIdWithSourceMapId(int mapId, int passwayIndex);
-	PlaceNode * getPlaceNodeWithMapId(int mapId);
-
-private:
-	void initWithFile(const char* mapFile);
-	void decode(FILE* stream);
-
 private:
 	NDWorldMapData();
 public:
 	~NDWorldMapData();
+	static NDWorldMapData& instance();
+	
+public:
+	int getDestMapIdWithSourceMapId(int mapId, int passwayIndex);
+	NDTile * getTileAtRow(unsigned int row, unsigned int column);
+	PlaceNode * getPlaceNodeWithMapId(int mapId);
+	void destroy();
+
+private:
+	void init();
+	void initWithFile(const char* mapFile);
+	void decode(FILE* stream);
 };
 
 #endif

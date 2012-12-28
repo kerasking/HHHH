@@ -57,6 +57,7 @@ class NDFrameTile: public cocos2d::CCObject
 
 public:
 	NDFrameTile();
+	~NDFrameTile();
 };
 
 //////////////////////////////////////////////////////////////////////////

@@ -413,6 +413,20 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView
 		});
 	}
 
+	//ND_MOD
+	public void onAction( final int action )
+	{
+		this.queueEvent(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				Cocos2dxGLSurfaceView.this.mCocos2dxRenderer
+						.handleOnAction( action );
+			}
+		});
+	}
+
 	private static void dumpMotionEvent(final MotionEvent event)
 	{
 		final String names[] =

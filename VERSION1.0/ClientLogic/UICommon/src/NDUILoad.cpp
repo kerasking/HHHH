@@ -164,11 +164,9 @@ NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *pa
 
 	NDUILoad_Util::FilterStringName(uiInfo);
 
+	//是否是繁体版的宏
 #ifdef TRADITION		
-	//		if (IsTraditionalChinese())
-	//		{
 	uiInfo.strText = uiInfo.strTextTradition;
-	//		}
 #endif
 
 	// 处理一下
@@ -189,6 +187,12 @@ NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *pa
 	if (parent)
 	{
 		parent->AddChild(node);
+	}
+
+	//优化关闭按钮手感
+	if (this->IsCloseButton( uiInfo ))
+	{
+		node->SetBoundScale(2);
 	}
 	return node;
 }
@@ -431,7 +435,7 @@ void NDUILoad::PostLoad(UIINFO& uiInfo)
 	//		 假设android的分辨率是800*480，然后再适配为android，也就是(0,0,800,480).
 
 	//统一到960*640
-	float scale = 2.0f;
+    float scale = 2.0f;
 	uiInfo.CtrlPos.x	*= scale;
 	uiInfo.CtrlPos.y	*= scale;
 	uiInfo.nCtrlWidth	*= scale;
@@ -455,4 +459,26 @@ void NDUILoad::PostLoad(UIINFO& uiInfo)
 	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	uiInfo.CtrlPos.y = winsize.height - uiInfo.CtrlPos.y;
 	uiInfo.CtrlPos.y -= uiInfo.nCtrlHeight;
+}
+
+//是否关闭按钮
+bool NDUILoad::IsCloseButton(const UIINFO& uiInfo)
+{
+	const char* p = uiInfo.strText.c_str();
+	if (strstr( p, "close" ) 
+		|| strstr( p, "CLOSE" ) 
+		|| strstr( p, "Close" ))
+	{
+		return true;
+	}
+
+	p = uiInfo.strNormalFile.c_str();
+	if (strstr( p, "close" ) 
+		|| strstr( p, "CLOSE" ) 
+		|| strstr( p, "Close" ))
+	{
+		return true;
+	}
+
+	return false;
 }

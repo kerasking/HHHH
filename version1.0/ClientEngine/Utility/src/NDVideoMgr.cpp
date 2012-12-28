@@ -76,19 +76,22 @@ bool NDVideoMgr::PlayVideoForAndroid( const char* pszFilename )
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	string strRet = "";
-	JniMethodInfo kMethodInfo;
+	JniMethodInfo t;
 
-	if (JniHelper::getStaticMethodInfo(kMethodInfo, "org/DeNA/DHLJ/DaHuaLongJiang",
+	if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
 		"playVideo",
 		"(Ljava/lang/String;)I"))
 	{
-		LOGD("the kMethodInfo value is:env = %d,classID = %d,methodID = %d",(int)kMethodInfo.env,(int)kMethodInfo.classID,(int)kMethodInfo.methodID);
+		LOGD("the t value is:env = %d,classID = %d,methodID = %d",(int)t.env,(int)t.classID,(int)t.methodID);
 
 		jstring stringArg1;
-		stringArg1 = kMethodInfo.env->NewStringUTF(pszFilename);
+		stringArg1 = t.env->NewStringUTF(pszFilename);
 
-		jint retFromJava = (jint) kMethodInfo.env->CallStaticObjectMethod(kMethodInfo.classID,
-			kMethodInfo.methodID, stringArg1);
+		jint retFromJava = (jint) t.env->CallStaticObjectMethod(t.classID,
+			t.methodID, stringArg1);
+
+		t.env->DeleteLocalRef(stringArg1);
+		t.env->DeleteLocalRef(t.classID);
 	}
 
 #endif
@@ -134,19 +137,22 @@ bool NDVideoMgr::StopVideo()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	string strRet = "";
-	JniMethodInfo kMethodInfo;
+	JniMethodInfo t;
 
-	if (JniHelper::getStaticMethodInfo(kMethodInfo, "org/DeNA/DHLJ/DaHuaLongJiang",
+	if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
 		"playVideo",
 		"(Ljava/lang/String;)I"))
 	{
-		LOGD("the kMethodInfo value is:env = %d,classID = %d,methodID = %d",(int)kMethodInfo.env,(int)kMethodInfo.classID,(int)kMethodInfo.methodID);
+		LOGD("the t value is:env = %d,classID = %d,methodID = %d",(int)t.env,(int)t.classID,(int)t.methodID);
 
 		jstring stringArg1;
-		stringArg1 = kMethodInfo.env->NewStringUTF("");
+		stringArg1 = t.env->NewStringUTF("");
 
-		jint retFromJava = (jint) kMethodInfo.env->CallStaticObjectMethod(kMethodInfo.classID,
-			kMethodInfo.methodID, stringArg1);
+		jint retFromJava = (jint) t.env->CallStaticObjectMethod(t.classID,
+			t.methodID, stringArg1);
+
+		t.env->DeleteLocalRef(stringArg1);
+		t.env->DeleteLocalRef(t.classID);
 	}
 
 #endif

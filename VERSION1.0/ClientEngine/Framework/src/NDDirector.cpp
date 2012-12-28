@@ -18,6 +18,9 @@
 #include "CCTransition.h"
 #include "CCPointExtension.h"
 #include "ObjectTracker.h"
+#include "NDPicture.h"
+#include "NDMapData.h"
+#include "NDAnimationGroupPool.h"
 
 using namespace cocos2d;
 
@@ -250,9 +253,14 @@ bool NDDirector::PopScene(bool cleanUp)
 
 void NDDirector::PurgeCachedData()
 {
-	NDPicturePool::PurgeDefaultPool();
 	CCTextureCache::sharedTextureCache()->removeAllTextures();
+
+	NDPicturePool::DefaultPool()->PurgeDefaultPool();
+
 	NDAnimationGroupPool::purgeDefaultPool();
+
+//  	if (m_pkDirector)
+//  		m_pkDirector->purgeCachedData();
 }
 
 void NDDirector::Stop()
@@ -429,6 +437,14 @@ NDScene* NDDirector::GetSceneByTag(int nSceneTag)
 	return NULL;
 }
 
+//@gc
+void NDDirector::Recyle()
+{
+	NDPicturePool::DefaultPool()->Recyle();
+	NDMapTexturePool::defaultPool()->Recyle();
+	NDAnimationGroupPool::defaultPool()->Recyle();
+}
+
 //@android
 //返回值：	x值存放x方向的缩放比例
 //			y值存放y放点的缩放比例
@@ -453,26 +469,17 @@ float NDDirector::getResourceScale()
 #endif
 }
 
-//返回x方向资源缩放比例
-float NDDirector::getResourceScaleX()
+//返回x方向坐标缩放比例
+float NDDirector::getCoordScaleX()
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	return getAndroidScale().x; 
-#else
-	return 1;
-#endif
+	return getAndroidScale().x;
 }
 
-//返回y方向资源缩放比例
-float NDDirector::getResourceScaleY()
+//返回y方向坐标缩放比例
+float NDDirector::getCoordScaleY()
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	return  getAndroidScale().y; 
-#else
-	return 1;
-#endif
+	return getAndroidScale().y;
 }
-
 
 
 NS_NDENGINE_END

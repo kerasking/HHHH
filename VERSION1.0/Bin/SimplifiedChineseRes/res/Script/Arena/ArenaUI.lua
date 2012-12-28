@@ -750,7 +750,7 @@ function p.RefreshRankItem(view,info)
     end   
     
     local l_name = SetLabel(view, TAG_RANKING_NAME, string.format("lv.%d %s",info.level,info.name));
-    local l_rank = SetLabel(view, TAG_RANKING_RANK, string.format("第%d名",info.rank));
+    local l_rank = SetLabel(view, TAG_RANKING_RANK, string.format(GetTxtPri("AREAUI_T21"),info.rank));
     
     if(info.id == GetPlayerId()) then
         l_name:SetFontColor(ccc4(255,15,15,255));

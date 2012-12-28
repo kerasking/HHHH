@@ -39,6 +39,7 @@ import com.mobage.android.bank.Debit;
 import com.mobage.android.bank.Debit.OnProcessTransactionComplete;
 import com.mobage.android.bank.Debit.OnProcessTransactionWithDialogComplete;
 import com.mobage.android.bank.Debit.Transaction;
+import com.mobage.android.cn.GlobalVAR;
 import com.mobage.android.social.common.Auth;
 import com.mobage.android.social.common.Auth.OnAuthorizeTokenComplete;
 
@@ -50,6 +51,9 @@ public class SocialUtils {
 	private static PlatformListener mPlatformListener = null;
 	private static Cocos2dxActivity mActivity;
 	
+	public static Mobage.Region mRegion;
+	public static ServerMode mServerMode ;
+
 	public static void initializeMobage(Cocos2dxActivity activity) {
 		Log.d(TAG, "SocialUtils initializeMobage");
 		mActivity = activity;
@@ -60,15 +64,17 @@ public class SocialUtils {
 		try {
 			ServerMode serverMode = Mobage.getPlatformEnvironment(mActivity,
 					R.xml.init);
+			mServerMode =  serverMode ;
+
 			if (serverMode == ServerMode.SANDBOX) {
-				Mobage.initialize(Mobage.Region.CN, Mobage.ServerMode.SANDBOX,
-						"sdk_app_id:13000314",
-						"0be0f1827fa82036ca1a569e341d015f", "13000314",
+				Mobage.initialize(Mobage.Region.TW, Mobage.ServerMode.SANDBOX,
+						"sdk_app_id:23000052",
+						"7512ae70a3bb19ecb6c6ddf87611b6aa", "23000052",
 						activity);
 			} else if (serverMode == ServerMode.PRODUCTION) {
-				Mobage.initialize(Mobage.Region.CN,
-						Mobage.ServerMode.PRODUCTION, "sdk_app_id:13000314",
-						"4e7aa408fbe3194bba7472fa859dc92d", "13000314",
+				Mobage.initialize(Mobage.Region.TW,
+						Mobage.ServerMode.PRODUCTION, "sdk_app_id:23000052",
+						"e25f32276192dca071e175771f02c78b", "23000052",
 						activity);
 			}
 		} catch (NameNotFoundException e) {
@@ -84,6 +90,9 @@ public class SocialUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		mRegion = GlobalVAR.REGION;
+        
 	}
 
 	public static void showConfirmDialog(String title, String content,
@@ -174,7 +183,7 @@ public class SocialUtils {
 
 			public void onDashboardClose() {
 				// TODO Auto-generated method stub
-//				Toast.makeText(mActivity, "å·²ï¿½1ï¿½7ï¿½1ï¿½7å‡ºç¤¾åŒ„1ï¿½7", Toast.LENGTH_LONG).show();
+//				Toast.makeText(mActivity, "å·²ï¿½1ï¿„1¤7„1¤7„1¤7ºç¤¾åŒ„1¤7„1¤7, Toast.LENGTH_LONG).show();
 			}
 		};
 

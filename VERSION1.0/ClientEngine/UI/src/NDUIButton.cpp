@@ -124,34 +124,40 @@ NDUIButton::~NDUIButton()
 {
 	DEC_NDOBJ_RTCLS
 
-	delete m_rimImageLT;
-	delete m_rimImageRT;
-	delete m_rimImageRB;
-	delete m_rimImageLB;
+	SAFE_DELETE( m_rimImageLT );
+	SAFE_DELETE( m_rimImageRT );
+	SAFE_DELETE( m_rimImageRB );
+	SAFE_DELETE( m_rimImageLB );
+
+	if (m_ClearDisImageOnFree)
+	{
+		SAFE_DELETE( m_disImage );
+	}
 
 	if (m_clearUpPicOnFree)
 	{
-		delete m_image;
-		delete m_combinepicImg;
+		SAFE_DELETE( m_image );
+		SAFE_DELETE( m_combinepicImg );
 	}
+
 	if (m_clearDownPicOnFree)
 	{
-		delete m_touchDownImage;
-		delete m_combinepicTouchDownImg;
+		SAFE_DELETE( m_touchDownImage );
+		SAFE_DELETE( m_combinepicTouchDownImg );
 	}
 
 	//if (m_spriteArrow) delete m_spriteArrow;
 
 	if (m_ClearFocusImageOnFree && m_focusImage)
 	{
-		delete m_focusImage;
+		SAFE_DELETE( m_focusImage );
 	}
 
 	if (m_bClearBgOnFree)
 	{
-		delete m_picBG;
+		SAFE_DELETE( m_picBG );
 
-		delete m_picTouchBG;
+		SAFE_DELETE( m_picTouchBG );
 	}
 
 	SAFE_DELETE(m_pSprite);
@@ -1229,7 +1235,9 @@ void NDUIButton::SetDisImage(NDPicture *pic, bool useCustomRect /*= false*/,
 		CCRect customRect /*= CCRectZero*/, bool clearPicOnFree /*= false*/)
 {
 	if (m_ClearDisImageOnFree && m_disImage)
-	delete m_disImage;
+	{
+		delete m_disImage;
+	}
 	m_disImage = pic;
 	m_bCustomDisImageRect = useCustomRect;
 	m_customDisImageRect = customRect;

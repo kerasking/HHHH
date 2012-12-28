@@ -8,7 +8,8 @@
 
 #include "WorldMapScene.h"
 #include "CCPointExtension.h"
-#include "NDUtility.h"
+//#include "NDUtility.h"
+#include "NDUtil.h"
 #include "NDDirector.h"
 #include "ItemMgr.h"
 #include "NDPlayer.h"
@@ -20,6 +21,7 @@
 #include "CCTextureCache.h"
 #include "NDDebugOpt.h"
 
+#include "NDWorldMapData.h"
 #include "CCPointExtension.h"
 #include "ScriptGameLogic.h"
 #include "ScriptMgr.h"
@@ -31,7 +33,7 @@
 #define BTN_H				(20)
 #define REACH_X				(8)
 #define REACH_Y				(8)
-#define MOVE_STEP			(6) //@tune
+#define MOVE_STEP			(8) //@tune
 
 extern WorldMapLayer* g_pWorldMapLayer = NULL; //for debug only.
 
@@ -43,15 +45,13 @@ WorldMapLayer::WorldMapLayer()
 
 	m_strDebugName = "WorldMapLayer";
 
-	WriteCon( "WorldMapLayer::WorldMapLayer()\r\n");
+	WriteCon( "%08X: WorldMapLayer::WorldMapLayer()\r\n", this);
 
-	m_mapData = NDWorldMapData::SharedData();
 	m_curBtn = NULL;
-	m_buttons = NULL;
+	m_arrBtnTiles = NULL;
 	m_screenCenter = CCPointZero;
 	m_roleNode = NULL;
 	m_btnClose = NULL;
-	m_btnRet = NULL;
 	m_posTarget = CCPointZero;
 	m_bInMoving = false;
 	m_posMapOffset = CCPointZero;
@@ -67,9 +67,14 @@ WorldMapLayer::~WorldMapLayer()
 {
 	DEC_NDOBJ_RTCLS
 
-	WriteCon( "WorldMapLayer::~WorldMapLayer()\r\n");
+	WriteCon( "%08X: WorldMapLayer::~WorldMapLayer()\r\n", this);
 
-	m_buttons->release();
+	SAFE_RELEASE(m_arrBtnTiles);
+
+	NDWorldMapData::instance().destroy();
+
+	NDDirector::DefaultDirector()->Recyle();
+
 	g_pWorldMapLayer = NULL;
 }
 
@@ -77,8 +82,9 @@ void WorldMapLayer::Initialization(int nMapId)
 {
 	g_pWorldMapLayer = this;
 
-	int width = m_mapData->getMapSize().width;
-	int height = m_mapData->getMapSize().height;
+	NDWorldMapData& mapData = NDWorldMapData::instance();
+	int width = mapData.getMapSize().width;
+	int height = mapData.getMapSize().height;
 
 	NDUILayer::Initialization();
 
@@ -88,18 +94,16 @@ void WorldMapLayer::Initialization(int nMapId)
 	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	SetFrameRect(CCRectMake(0, 0, width, height));
 
-	m_buttons = cocos2d::CCArray::array();
-	m_buttons->retain();
+	SAFE_RELEASE(m_arrBtnTiles);
+	m_arrBtnTiles = cocos2d::CCArray::array();
+	m_arrBtnTiles->retain();
 
-	int iNodeNum = m_mapData->getPlaceNodes()->count();
+	// create placeNode button (tiles)
+	int iNodeNum = mapData.getPlaceNodes()->count();
 	for (unsigned int i = 0; i < iNodeNum; i++)
 	{
-		PlaceNode* pkNode =(PlaceNode*) m_mapData->getPlaceNodes()->objectAtIndex(i);
-		if (NULL == pkNode)
-		{
-			continue;
-		}
-		if (NULL == (pkNode->getTexture()))
+		PlaceNode* pkNode =(PlaceNode*) mapData.getPlaceNodes()->objectAtIndex(i);
+		if (!pkNode || !pkNode->getTexture())
 		{
 			continue;
 		}
@@ -118,24 +122,24 @@ void WorldMapLayer::Initialization(int nMapId)
 		pkTile->setReverse((bool)NO);
 		pkTile->setRotation(NDRotationEnumRotation0);
 		
-		iWidth = m_mapData->getMapSize().width;
-		iHeight = m_mapData->getMapSize().height;
+		iWidth = mapData.getMapSize().width;
+		iHeight = mapData.getMapSize().height;
 		
 		pkTile->setMapSize(CCSizeMake(iWidth, iHeight));
 		pkTile->make();
 		
-		m_buttons->addObject(pkTile);
+		m_arrBtnTiles->addObject(pkTile);
 		pkTile->release();
 	}
 
 	// load pictures for button
 	NDPicture* picClose	= NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("btn_close.png"));
-	NDPicture* picCloseSelect	= NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("btn_close.png"));    
+	//NDPicture* picCloseSelect	= NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("btn_close.png"));    
 	CCSize sizeClose	= picClose->GetSize();
 
 	// set close button
 	picClose->Cut(CCRectMake(0,  0,  sizeClose.width,  sizeClose.height/2 - 2));
-	picCloseSelect->Cut(CCRectMake(0,  sizeClose.height/2,  sizeClose.width,  sizeClose.height/2));
+	//picCloseSelect->Cut(CCRectMake(0,  sizeClose.height/2,  sizeClose.width,  sizeClose.height/2));
 	CCRect rectClose = CCRectMake((winsize.width - sizeClose.width), 0,
 									 sizeClose.width, sizeClose.height/2);
 	// init close button
@@ -143,11 +147,10 @@ void WorldMapLayer::Initialization(int nMapId)
 		m_btnClose = new NDUIButton();
 		m_btnClose->Initialization();
 		m_btnClose->SetDelegate(this);
-		m_btnClose->SetImage(picClose);
+		m_btnClose->SetImage(picClose, false, CCRectZero, true); //clear pic.
 		m_btnClose->SetFrameRect(rectClose);
 		AddChild(m_btnClose);
 	}
-	
 
 	// init role node
 	{
@@ -172,13 +175,16 @@ void WorldMapLayer::Initialization(int nMapId)
 
 void WorldMapLayer::draw()
 {
+	if (!NDMapLayerLogic::canDrawWorldMapLayer()) return; //@opt
+
 	NDUILayer::draw();
 	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
-	int iNum = m_mapData->getBgTiles()->count();
+	NDWorldMapData& mapData = NDWorldMapData::instance();
+	int iNum = mapData.getBgTiles()->count();
 	for (unsigned int i = 0; i < iNum; i++)
 	{
-		NDSceneTile* bgTile = (NDSceneTile*) (m_mapData->getBgTiles()->objectAtIndex(i));
+		NDSceneTile* bgTile = (NDSceneTile*) (mapData.getBgTiles()->objectAtIndex(i));
 		if (bgTile)
 		{
 			bgTile->draw();
@@ -186,17 +192,17 @@ void WorldMapLayer::draw()
 	}
 
 	//scenes
-	iNum = m_mapData->getSceneTiles()->count();
+	iNum = mapData.getSceneTiles()->count();
 	for (unsigned int i = 0; i < iNum; i++)
 	{
-		NDSceneTile* sceneTile = (NDSceneTile*) (m_mapData->getSceneTiles()->objectAtIndex(i));
+		NDSceneTile* sceneTile = (NDSceneTile*) (mapData.getSceneTiles()->objectAtIndex(i));
 		if (sceneTile)
 		{
 			sceneTile->draw();
 		}
 	}
 
-	iNum = m_buttons->count();
+	iNum = m_arrBtnTiles->count();
 	//places
 	for (unsigned int i = 0; i < iNum; i++)
 	{
@@ -205,7 +211,7 @@ void WorldMapLayer::draw()
 			continue;
 		}
 
-		NDTile* tile = (NDTile*) m_buttons->objectAtIndex(i);
+		NDTile* tile = (NDTile*) m_arrBtnTiles->objectAtIndex(i);
 		if (NULL != tile)
 		{
 			tile->draw();
@@ -248,10 +254,11 @@ bool WorldMapLayer::IsInFilterList(int nMapId)
 PlaceNode *WorldMapLayer::GetPlaceNodeWithId(int placeId)
 {
 	PlaceNode *result = NULL;
-	for (unsigned int i = 0; i < m_mapData->getPlaceNodes()->count(); i++)
+	NDWorldMapData& mapData = NDWorldMapData::instance();
+	for (unsigned int i = 0; i < mapData.getPlaceNodes()->count(); i++)
 	{
 		PlaceNode* node =
-				(PlaceNode*) m_mapData->getPlaceNodes()->objectAtIndex(i);
+				(PlaceNode*) mapData.getPlaceNodes()->objectAtIndex(i);
 		if (node->getPlaceId() == placeId)
 		{
 			result = node;
@@ -264,10 +271,11 @@ PlaceNode *WorldMapLayer::GetPlaceNodeWithId(int placeId)
 
 int WorldMapLayer::GetCurPlaceIndex()
 {
-	for (unsigned int i = 0; i < m_mapData->getPlaceNodes()->count(); i++)
+	NDWorldMapData& mapData = NDWorldMapData::instance();
+	for (unsigned int i = 0; i < mapData.getPlaceNodes()->count(); i++)
 	{
 		PlaceNode* node =
-				(PlaceNode*) m_mapData->getPlaceNodes()->objectAtIndex(i);
+				(PlaceNode*) mapData.getPlaceNodes()->objectAtIndex(i);
 		if (node == m_curBtn)
 		{
 			return i;
@@ -279,7 +287,8 @@ int WorldMapLayer::GetCurPlaceIndex()
 
 int WorldMapLayer::GetPlaceIdByIndex(int nIndex)
 {
-	PlaceNode* node = (PlaceNode*) m_mapData->getPlaceNodes()->objectAtIndex(
+	NDWorldMapData& mapData = NDWorldMapData::instance();
+	PlaceNode* node = (PlaceNode*) mapData.getPlaceNodes()->objectAtIndex(
 			nIndex);
 	if (node)
 	{
@@ -358,8 +367,9 @@ void WorldMapLayer::SetRoleAtPlace(int placeId)
 
 void WorldMapLayer::SetCenterAtPos(CCPoint pos)
 {
-	int width = m_mapData->getMapSize().width;
-	int height = m_mapData->getMapSize().height;
+	NDWorldMapData& mapData = NDWorldMapData::instance();
+	int width = mapData.getMapSize().width;
+	int height = mapData.getMapSize().height;
 
 	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
@@ -374,7 +384,7 @@ void WorldMapLayer::SetCenterAtPos(CCPoint pos)
 		pos.y = winSize.height / 2;
 
 	CCPoint posCenter = ccp(winSize.width / 2 - pos.x,
-			winSize.height / 2 + pos.y - m_mapData->getMapSize().height);
+			winSize.height / 2 + pos.y - mapData.getMapSize().height);
 
 	//m_posMapOffset	= posCenter;
 	m_screenCenter = pos;
@@ -415,13 +425,15 @@ bool WorldMapLayer::TouchBegin(NDTouch* touch)
 		return false;
 	}
 
+	NDWorldMapData& mapData = NDWorldMapData::instance();
+
 	CCPoint m_Touch = touch->GetLocation();
 	CCPoint posMap = ConvertToMapPoint(m_Touch);
-	int iPlaceNodeNum = m_mapData->getPlaceNodes()->count();
+	int iPlaceNodeNum = mapData.getPlaceNodes()->count();
 
 	for (unsigned int i = 0; i < iPlaceNodeNum; i++)
 	{
-		PlaceNode* node = (PlaceNode*) m_mapData->getPlaceNodes()->objectAtIndex(i);
+		PlaceNode* node = (PlaceNode*) mapData.getPlaceNodes()->objectAtIndex(i);
 		
 		CCRect btnRect = CCRectMake(node->getX(), node->getY(),
 									 node->getTexture()->getContentSizeInPixels().width,
@@ -462,9 +474,10 @@ void WorldMapLayer::OnNodeClick(PlaceNode* button)
 	}
 }
 
+//关闭
 void WorldMapLayer::OnButtonClick(NDUIButton* button)
 {
-	if (button == m_btnRet || button == m_btnClose)
+	if (button == m_btnClose)
 	{
 		WriteCon( "[WorldMapLayer] click close button\r\n" );
 		RemoveFromParent(true);
@@ -483,6 +496,17 @@ void WorldMapLayer::Goto( int nMapId )
 	}
 	if (node && m_roleNode )//Guosen 2012.11.22可响应脚下节点//if (node && m_roleNode && m_curBtn != node)
 	{
+		if(m_curBtn == node)
+		{
+			//如果是脚下的点直接退出至主城
+			if(nMapId==1 || nMapId == 2)
+			{
+				m_bArrive = true;
+				NDMapMgrObj.WorldMapSwitch( nMapId );
+				return;
+			}
+		}
+
 		CCPoint posTarget = GetTargetPos(nMapId);
 		
 		SetMove(true);

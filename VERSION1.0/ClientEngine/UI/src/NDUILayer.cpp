@@ -103,7 +103,7 @@ NDUILayer::~NDUILayer()
 {
 	DEC_NDOBJ_RTCLS
 
-	CC_SAFE_RELEASE (m_pkBackgroudTexture);
+	CC_SAFE_RELEASE_NULL (m_pkBackgroudTexture);
 
 	if (m_bClearOnFree)
 	{
@@ -179,11 +179,17 @@ void NDUILayer::SetBackgroundImage(const char* imageFile)
 	{
 		return;
 	}
+    
+	//m_pkBackgroudTexture = new CCTexture2D;
+	m_pkBackgroudTexture = CCTexture2D::create();
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
 	CCImage image;
 	image.initWithImageFile(imageFile);
-	m_pkBackgroudTexture = new CCTexture2D;
 	m_pkBackgroudTexture->initWithImage(&image);
+#else
+    m_pkBackgroudTexture->initWithPalettePNG(imageFile);
+#endif
 }
 
 void NDUILayer::SetBackgroundImageLua(NDPicture *pic)
@@ -441,11 +447,14 @@ bool NDUILayer::TouchEnd(NDTouch* touch)
 	if (m_bLongTouch && !m_bDragOutFlag && !m_bLayerMoved)
 	//if (m_bLongTouch && !m_bDragOutFlag && !isTouchMoved(MOVE_ERROR))
 	{
-		//this->DispatchTouchEndEvent(m_kBeginTouch, m_kBeginTouch);
-
 		// 都取超始点是由于用户抬起点容易超出作用范围
 		if (DispatchLongTouchClickEvent(m_kBeginTouch, m_kBeginTouch))
 		{
+			// 长按会抢了单击事件，导致手机操作感比较差，先兼容一下.
+			if (m_bDispatchTouchEndEvent && !m_bLayerMoved)
+			{
+				this->DispatchTouchEndEvent(m_kBeginTouch, m_kBeginTouch);
+			}
 			return true;
 		}
 	}

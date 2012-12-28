@@ -11,6 +11,7 @@
 #include "JavaMethod.h"
 #include "UtilityInc.h"
 #include "ObjectTracker.h"
+#include "NDDictionary.h"
 
 using namespace NDEngine;
 using namespace cocos2d;
@@ -46,29 +47,26 @@ void NDAnimationGroupPool::purgeDefaultPool()
 	CC_SAFE_RELEASE_NULL (gs_pkNDAnimationGroupPool_DefaultPool);
 }
 
+//引用计数+1
 NDAnimationGroup* NDAnimationGroupPool::addObjectWithSpr(const char*sprFile)
 {
 	NDAnimationGroup *pkGroup = NULL;
 
+	// find existing
 	pkGroup = (NDAnimationGroup*) m_pkAnimationGroups->objectForKey(sprFile);
-
-	if (!pkGroup)
+	if (pkGroup)
 	{
-		pkGroup = new NDAnimationGroup;
-		pkGroup->initWithSprFile(sprFile);
-
-		if (pkGroup)
-		{
-			m_pkAnimationGroups->setObject(pkGroup, sprFile);
-			//[group release];
-		}
+		pkGroup->retain();
+		return pkGroup;
 	}
 	else
 	{
-		pkGroup->retain();
+		// add new
+		pkGroup = new NDAnimationGroup;
+		pkGroup->initWithSprFile(sprFile);
+		m_pkAnimationGroups->setObject(pkGroup, sprFile);
+		return pkGroup;
 	}
-
-	return pkGroup;
 }
 
 NDAnimationGroup* NDAnimationGroupPool::addObjectWithModelId(int ModelId)
@@ -112,17 +110,12 @@ void NDAnimationGroupPool::Recyle()
 		return;
 	}
 
-	//std::vector < std::string > kAllKeys = m_pkAnimationGroups->allKeys();
 	CCArray* kAllKeys = m_pkAnimationGroups->allKeys();
 
-	if (kAllKeys && kAllKeys->count() == 0)
+	if (!kAllKeys || kAllKeys->count() == 0)
 	{
 		return;
 	}
-
-	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-	std::vector < std::string > kRecyle;
 
 	for (unsigned int i = 0; i < kAllKeys->count(); i++)
 	{
@@ -138,14 +131,53 @@ void NDAnimationGroupPool::Recyle()
 
 		if (1 >= pkAnimationGroup->retainCount())
 		{
-			kRecyle.push_back(strKey);
+			m_pkAnimationGroups->removeObjectForKey( strKey );
+		}
+	}
+}
+
+//测试用
+string NDAnimationGroupPool::dump()
+{
+	if (!m_pkAnimationGroups) return "";
+
+	string total;
+	char line[512] = "";
+	int totoal_anims = 0;
+
+	// get all keys
+	CCArray* allKeys = m_pkAnimationGroups->allKeys();
+	if (!allKeys || allKeys->count() == 0)
+	{
+		return "";
+	}
+
+	// walk through all keys
+	std::vector<std::string> kRecyle;
+	for (unsigned int i = 0; i < allKeys->count(); i++)
+	{
+		// get key
+		CCString* strKey = (CCString*) allKeys->objectAtIndex(i);
+		if (!strKey) continue;
+
+		// get obj
+		const std::string& key = strKey->getCString();
+		CCObject *obj = m_pkAnimationGroups->objectForKey(key);
+		if (!obj) continue;
+
+		// cast anim group
+		NDAnimationGroup* animGroup = (NDAnimationGroup*)obj;
+		if (animGroup)
+		{
+			int animCount = animGroup->getAnimations()->count();
+			totoal_anims += animCount;
+
+			sprintf( line, "@@ animGroup[%02d]: has %d animations, %s\r\n", i, animCount, key.c_str() );
+			total += line;
 		}
 	}
 
-	for (unsigned int i = 0; i < kRecyle.size(); i++)
-	{
-		m_pkAnimationGroups->removeObjectForKey(kRecyle[i]);
-	}
-
-	//[pool release];
+	sprintf( line, "total %d animGroup, total %d anims\r\n", allKeys->count(), totoal_anims );
+	total += line;
+	return total;
 }
