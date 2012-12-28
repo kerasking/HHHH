@@ -18,17 +18,31 @@
 #include "ScriptDefine.h"
 #include "ScriptMgr.h"
 
+#ifdef ANDROID
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaScriptMsg"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
+
 using namespace LuaPlus;
 namespace NDEngine {
 
 int LuaLogInfo(LuaState* state)
 {
 	LuaStack args(state);
-	LuaObject str = args[1];
+	LuaObject kString = args[1];
 	
-	if (str.IsString())
+	if (kString.IsString())
 	{
-		ScriptMgrObj.WriteLog("[lua] %s", str.GetString());
+		LOGERROR("kString.GetString()");
+		ScriptMgrObj.WriteLog("[lua] %s", kString.GetString());
 		//ScriptMgrObj.DebugOutPut("%s", str.GetString());
 	}
 	

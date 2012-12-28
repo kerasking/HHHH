@@ -61,6 +61,9 @@ using namespace CocosDenshion;
 
 namespace NDEngine
 {
+	static bool gs_bIsMusic = true;
+	static bool gs_bIsSound = true;
+
 void PlayVideo(const char* videofilepath, bool bSkip)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -436,6 +439,11 @@ void CloseBattle()
 
 void SetSceneMusicNew(int idMusic)
 {
+	if (!gs_bIsMusic)
+	{
+		return;
+	}
+
 	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
 
 	if (0 == pkSimpleAudio)
@@ -476,11 +484,15 @@ void SetEffectSoundVolune(int nVolune)
 
 void StartBGMusic()
 {
+	gs_bIsMusic = true;
 	//NDMapMgrObj.LoadMapMusic();
+	SetSceneMusicNew(99);
 }
+
 void StopBGMusic()
 {
 	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
+	gs_bIsMusic = false;
 
 	if (0 == pkSimpleAudio)
 	{
@@ -492,6 +504,11 @@ void StopBGMusic()
 
 int StartEffectSound(int idMusic)
 {
+	if (!gs_bIsSound)
+	{
+		return 2;
+	}
+
 	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
 
 	if (0 == pkSimpleAudio)
@@ -504,7 +521,7 @@ int StartEffectSound(int idMusic)
 	return pkSimpleAudio->playEffect(pstrMusicFile->getCString(),false);
 }
 
-void StopEffectSound()
+void ResumeAllEffectSound()
 {
 	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
 
@@ -512,28 +529,45 @@ void StopEffectSound()
 	{
 		return;
 	}
+
+	pkSimpleAudio->resumeAllEffects();
+	gs_bIsSound = true;
 }
 
-void WorldMapGoto(int nMapId, LuaObject tFilter)
+void StopEffectSound()
 {
-	NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
-	if (!scene)
+	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
+	gs_bIsSound = false;
+
+	if (0 == pkSimpleAudio)
 	{
 		return;
 	}
 
-	WorldMapLayer* world = NULL;
-	NDNode* node = scene->GetChild(TAG_WORLD_MAP);
-	if (node && node->IsKindOfClass(RUNTIME_CLASS(WorldMapLayer)))
+	pkSimpleAudio->pauseAllEffects();
+}
+
+void WorldMapGoto(int nMapId, LuaObject tFilter)
+{
+	NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
+
+	if (!pkScene)
 	{
-		world = (WorldMapLayer*) node;
+		return;
+	}
+
+	WorldMapLayer* pkWorldLayer = NULL;
+	NDNode* pkNode = pkScene->GetChild(TAG_WORLD_MAP);
+	if (pkNode && pkNode->IsKindOfClass(RUNTIME_CLASS(WorldMapLayer)))
+	{
+		pkWorldLayer = (WorldMapLayer*) pkNode;
 	}
 	else
 	{
-		world = new WorldMapLayer;
-		world->Initialization(GetMapId());
-		world->SetTag(TAG_WORLD_MAP);
-		scene->AddChild(world);
+		pkWorldLayer = new WorldMapLayer;
+		pkWorldLayer->Initialization(GetMapId());
+		pkWorldLayer->SetTag(TAG_WORLD_MAP);
+		pkScene->AddChild(pkWorldLayer);
 	}
 
 	if (tFilter.IsTable())
@@ -551,10 +585,10 @@ void WorldMapGoto(int nMapId, LuaObject tFilter)
 				}
 			}
 		}
-		world->SetFilter(vId);
+		pkWorldLayer->SetFilter(vId);
 	}
 
-	world->Goto(nMapId);
+	pkWorldLayer->Goto(nMapId);
 }
 
 void WorldMap(int nMapId, LuaObject tFilter)
@@ -962,6 +996,7 @@ void ScriptGameLogicLoad()
 	ETCFUNC("StopBGMusic", StopBGMusic);
 	ETCFUNC("StartEffectSound", StartEffectSound);
 	ETCFUNC("StopEffectSound", StopEffectSound);
+	ETCFUNC("ResumeAllEffectSound",ResumeAllEffectSound);
 	ETCFUNC("SetBgMusicVolume", SetBgMusicVolume);
 	ETCFUNC("SetEffectSoundVolune", SetEffectSoundVolune);
 	ETCFUNC("ShowRoleName", ShowRoleName);

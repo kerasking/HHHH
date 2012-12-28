@@ -104,13 +104,13 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		public void run()
 		{
-			ms_pkDHLJ.setMain();
+			//ms_pkDHLJ.setMain();
 			ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
 					ViewGroup.LayoutParams.FILL_PARENT,
 					ViewGroup.LayoutParams.FILL_PARENT);
-			ms_pkDHLJ.nativeInit(100, 200);
-			// ms_pkDHLJ.setContentView(menubar, pkParams);
-			// ms_pkDHLJ.rootView.setVisibility(View.INVISIBLE);
+			//ms_pkDHLJ.nativeInit(100, 200);
+			ms_pkDHLJ.setContentView(menubar, pkParams);
+			ms_pkDHLJ.rootView.setVisibility(View.VISIBLE);
 			// ms_pkDHLJ.balancebutton.setVisibility(View.INVISIBLE);
 			// menubar.setVisibility(View.INVISIBLE);
 			// m_pkView.start();
@@ -120,6 +120,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public void continueRootView()
 	{
+		Log.i("DaHuaLongJiang","continueRootView");
 		VideoViewHandler.post(mContinueRootView);
 		resumeBackgroundMusic();
 	}
@@ -294,7 +295,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 				ViewGroup.LayoutParams.FILL_PARENT,
 				ViewGroup.LayoutParams.FILL_PARENT);
 		this.setContentView(menubar, pkParams);
-		menubar.setVisibility(View.VISIBLE);
+		menubar.setMenubarVisibility(View.VISIBLE);
 	}
 
 	public void addEditView()
@@ -386,6 +387,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public static int playVideo(final String strFile)
 	{
+		if(true)
+		{
+			return 0;
+		}
+		
 		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 

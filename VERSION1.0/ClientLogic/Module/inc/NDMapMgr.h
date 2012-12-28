@@ -281,10 +281,8 @@ public:
 	NDMapMgr();
 	virtual ~NDMapMgr();
 
-
-
-
 public:
+
 	typedef vector<NDNpc*> VEC_NPC;
 	typedef vector<NDMonster*> VEC_MONSTER;
 	typedef VEC_NPC::iterator vec_npc_it;
@@ -447,6 +445,7 @@ public:
 	//void addRequst(RequsetInfo& kRequest);	///< ÒÀÀµÌÀ×ÔÇÚµÄRequsetInfo ¹ùºÆ
 	void DelNpc(int nID);
 	void AddOneNPC(NDNpc* pkNpc);
+	void LoadMapMusic();
 	bool DelRequest(int nID);
 	void ClearGP();
 	bool loadSceneByMapDocID(int nMapID);
@@ -479,8 +478,7 @@ public:
 	static bool m_bVerifyVersion;
 
 	int m_iCurDlgNpcID;
-
-	int zhengYing[CAMP_TYPE_END];
+	int m_nCampType[CAMP_TYPE_END];
 
 	map_manualrole m_mapManualRole;
 	monster_info m_mapMonsterInfo;
@@ -505,8 +503,8 @@ public:
 	OBJID m_idDialogDemarry;
 	OBJID m_idDialogMarry;
 
-	bool isShowName;
-	bool isShowOther;
+	bool m_bIsShowName;
+	bool m_bIsShowOther;
 
 	CCSize m_kMapSize;
 

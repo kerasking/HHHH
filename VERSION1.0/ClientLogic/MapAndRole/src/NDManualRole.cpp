@@ -1212,7 +1212,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 		if (GetParent() == layer)
 		{
 			if (!this->IsKindOfClass(RUNTIME_CLASS(NDPlayer))
-					&& !NDMapMgrObj.isShowOther)
+					&& !NDMapMgrObj.m_bIsShowOther)
 			{
 				return false;
 			}
@@ -1389,7 +1389,7 @@ bool NDManualRole::OnDrawBegin(bool bDraw)
 #endif
 
 #if 8
-	if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) || NDMapMgrObj.isShowName)
+	if (this->IsKindOfClass(RUNTIME_CLASS(NDPlayer)) || NDMapMgrObj.m_bIsShowName)
 	{
 		DrawNameLabel(bDraw);
 	}

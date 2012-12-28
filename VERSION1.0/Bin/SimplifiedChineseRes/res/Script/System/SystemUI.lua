@@ -130,6 +130,7 @@ end
 
 function p.OnUIEvent(uiNode, uiEventType, param)
 	local tag = uiNode:GetTag();
+	PrintLog("Entry p.OnUIEvent");
 	LogInfo("p.OnUIEvent[%d]", tag)
 	if uiEventType == NUIEventType.TE_TOUCH_BTN_CLICK then
 		local scene = GetSMGameScene();
@@ -138,11 +139,13 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 		elseif ID_SYSSET_CTRL_BUTTON_467 == tag then   --背景音乐
 			if false == isBackMusic then
 				SetSystemSetB(SYSTEM_BG_MUSIC_KEY,true);
+				PrintLog("StartBGMusic");
 				StartBGMusic();
 				p.SetInitStartBtnStatus(uiNode, true);
 				isBackMusic = true;
 			else
 				SetSystemSetB(SYSTEM_BG_MUSIC_KEY,false);
+				PrintLog("StartBGMusic");
 				StopBGMusic();
 				p.SetInitStartBtnStatus(uiNode, false);
 				isBackMusic = false;
@@ -214,6 +217,3 @@ function p.InitShowStartOrCloseBtn(uiNode, strBtName)
 		button:SetTitle(strBtName)
 	end
 end
-
-
-
