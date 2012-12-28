@@ -446,7 +446,7 @@ CCTexture2D * CCTextureCache::addImage(const char * path)
                     eImageFormat = CCImage::kFmtTiff;
                 }
                 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || !ENABLE_PAL_MODE
                 CCImage image;                
                 unsigned long nSize = 0;
                 unsigned char* pBuffer = CCFileUtils::sharedFileUtils()->getFileData(fullpath.c_str(), "rb", &nSize);
@@ -465,7 +465,7 @@ CCTexture2D * CCTextureCache::addImage(const char * path)
                 texture = new CCTexture2D();
                 
                 if( texture &&
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
                     texture->initWithImage(&image) )
 #else
                    texture->initWithPalettePNG(fullpath.c_str()) )

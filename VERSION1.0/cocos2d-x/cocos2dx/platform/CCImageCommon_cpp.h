@@ -105,7 +105,7 @@ CCImage::~CCImage()
 
 bool CCImage::initWithImageFile(const char * strPath, EImageFormat eImgFmt/* = eFmtPng*/)
 {
-	dbgInfo = strPath; //ND_MOD
+	dbgInfo = strPath?strPath:""; //ND_MOD
 
     bool bRet = false;
     unsigned long nSize = 0;
@@ -120,7 +120,7 @@ bool CCImage::initWithImageFile(const char * strPath, EImageFormat eImgFmt/* = e
 
 bool CCImage::initWithImageFileThreadSafe(const char *fullpath, EImageFormat imageType)
 {
-	dbgInfo = fullpath; //ND_MOD
+	dbgInfo = fullpath?fullpath:""; //ND_MOD
 
     bool bRet = false;
     unsigned long nSize = 0;
@@ -618,7 +618,7 @@ bool CCImage::_initWithRawData(void * pData, int nDatalen, int nWidth, int nHeig
 
 bool CCImage::saveToFile(const char *pszFilePath, bool bIsToRGB)
 {
-	dbgInfo = pszFilePath; //ND_MOD
+	dbgInfo = pszFilePath?pszFilePath:""; //ND_MOD
 
     bool bRet = false;
 
@@ -656,7 +656,7 @@ bool CCImage::saveToFile(const char *pszFilePath, bool bIsToRGB)
 
 bool CCImage::_saveImageToPNG(const char * pszFilePath, bool bIsToRGB)
 {
-	dbgInfo = pszFilePath; //ND_MOD
+	dbgInfo = pszFilePath?pszFilePath:""; //ND_MOD
     bool bRet = false;
     do 
     {
@@ -800,7 +800,7 @@ bool CCImage::_saveImageToPNG(const char * pszFilePath, bool bIsToRGB)
 }
 bool CCImage::_saveImageToJPG(const char * pszFilePath)
 {
-	dbgInfo = pszFilePath; //ND_MOD
+	dbgInfo = pszFilePath?pszFilePath:""; //ND_MOD
     bool bRet = false;
     do 
     {

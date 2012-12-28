@@ -248,4 +248,6 @@ public: virtual void set##funName(varType var)   \
 //#if ND_MOD //to be searched.
 #define ND_MOD 1	//@zwq
 
+#define ENABLE_PAL_MODE 0	//开关：是否启用调色板方式加载
+
 #endif // __CC_PLATFORM_MACROS_H__

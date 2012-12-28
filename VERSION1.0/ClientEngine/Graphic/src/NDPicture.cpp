@@ -85,7 +85,7 @@ void NDPicture::Initialization(const char* imageFile)
 
 	this->destroy();
     
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
 	CCImage image;
 
 	if (!image.initWithImageFile(imageFile) && imageFile)
@@ -93,9 +93,11 @@ void NDPicture::Initialization(const char* imageFile)
 		//ScriptMgrObj.DebugOutPut("picture [%s] not exist", imageFile);
 	}
 #endif
+
 	//m_pkTexture = new CCTexture2D;
 	m_pkTexture = CCTexture2D::create();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
 	m_pkTexture->initWithImage(&image);
 #else
 	m_pkTexture->initWithPalettePNG(imageFile);
@@ -132,8 +134,8 @@ void NDPicture::Initialization(const char* imageFile, int hrizontalPixel, int ve
 	this->destroy();
     
 	bool bLoadImageSucess = true;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	// init image
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
 	CCImage image;
 	if (!image.initWithImageFile(imageFile) && imageFile)
 	{
@@ -200,7 +202,8 @@ void NDPicture::Initialization(const char* imageFile, int hrizontalPixel, int ve
 	{
 		//m_pkTexture = new CCTexture2D;
 		m_pkTexture = CCTexture2D::create();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
 		m_pkTexture->initWithImage(&image);
 #else
 		m_pkTexture->initWithPalettePNG(imageFile);

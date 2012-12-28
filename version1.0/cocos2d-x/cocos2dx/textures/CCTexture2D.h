@@ -123,6 +123,16 @@ public:
 
 #if ND_MOD
 	typedef unsigned char  BYTE;  /* 8 bits */
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || !ENABLE_PAL_MODE)
+	typedef struct tagRGBQUAD
+	{
+		BYTE	rgbBlue;
+		BYTE	rgbGreen;
+		BYTE	rgbRed;
+		BYTE	rgbReserved;
+	}	RGBQUAD;
+#else
 	typedef struct tagRGBQUAD
 	{
 		BYTE	rgbRed;
@@ -130,6 +140,7 @@ public:
 		BYTE	rgbBlue;
 		BYTE	rgbReserved;
 	}	RGBQUAD;
+#endif
 
 	void SaveToBitmap(const char* pszPngFile,unsigned char** pBMPColorBuf,int rowByteWidth,
 		int width,int height,int colorDepth,RGBQUAD* pPalette,int nPaletteLen);
