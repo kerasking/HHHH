@@ -211,7 +211,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             
             local bFlag = p.LegalStrCheck(p.Name);
             if(bFlag == false) then
-                CommonDlgNew.ShowTipDlg("违法的角色名称", 2);
+                CommonDlgNew.ShowTipDlg(GetTxtPri("LR_T1"), 2);
             end
             
             local roleContainer = p.GetRoleListContainer();

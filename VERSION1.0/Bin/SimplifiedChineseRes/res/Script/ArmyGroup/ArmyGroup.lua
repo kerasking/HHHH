@@ -83,9 +83,9 @@ local CONTRIBUTE_LIMIT                    = 200000;-- 分配时成员贡献度�
 
 local SZ_QUIT_ER						= GetTxtPri("MAG2_T28");
 local SZ_QUIT_00						= GetTxtPri("MAG2_T29");
-local SZ_ER_01			= "不在线，不可分配哦";
-local SZ_ER_02			= "数量超过可分配数额";
-local SZ_ER_03			= "贡献度不足，不可分配";
+local SZ_ER_01			= GetTxtPri("MAG2_T40");
+local SZ_ER_02			= GetTxtPri("MAG2_T41");
+local SZ_ER_03			= GetTxtPri("MAG2_T42");
 
 local TAG_ITEM_COUNT					= 34567;	--物品按钮里数量标签的TAG
 

@@ -45,6 +45,7 @@
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
 #include <android/log.h>
+#include "ScriptDataBase.h"
 
 #define  LOG_TAG    "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
@@ -61,6 +62,9 @@ using namespace CocosDenshion;
 
 namespace NDEngine
 {
+	static bool gs_bIsMusic = true;
+	static bool gs_bIsSound = true;
+
 void PlayVideo(const char* videofilepath, bool bSkip)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -330,9 +334,6 @@ std::string GetSMImg00Path(const char* name)
 	return NDPath::GetSMImg00Path(name);
 }
 
-
-
-
 std::string GetImgResPath(const char* name) //@lua
 {
 	if (!name)
@@ -436,6 +437,13 @@ void CloseBattle()
 
 void SetSceneMusicNew(int idMusic)
 {
+	LOGD("Entry SetSceneMusicNew,id is %d",idMusic);
+
+	if (!gs_bIsMusic)
+	{
+		return;
+	}
+
 	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
 
 	if (0 == pkSimpleAudio)
@@ -476,11 +484,20 @@ void SetEffectSoundVolune(int nVolune)
 
 void StartBGMusic()
 {
-	//NDMapMgrObj.LoadMapMusic();
+	gs_bIsMusic = true;
+
+	int nTheID = NDMapMgrObj.GetMotherMapID();
+	int nMusicID = ScriptDBObj.GetN("map",nTheID,DB_MAP_MUSIC);
+
+	LOGD("Start the music,id is %d",nMusicID);
+
+	SetSceneMusicNew(1);
 }
+
 void StopBGMusic()
 {
 	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
+	gs_bIsMusic = false;
 
 	if (0 == pkSimpleAudio)
 	{
@@ -492,6 +509,11 @@ void StopBGMusic()
 
 int StartEffectSound(int idMusic)
 {
+	if (!gs_bIsSound)
+	{
+		return 2;
+	}
+
 	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
 
 	if (0 == pkSimpleAudio)
@@ -500,11 +522,12 @@ int StartEffectSound(int idMusic)
 	}
 
 	string strMusicPath = NDPath::GetSoundPath();
-	CCString* pstrMusicFile = CCString::stringWithFormat("%seffect/effect_%d.aac",strMusicPath.c_str(),idMusic);
+	CCString* pstrMusicFile = CCString::stringWithFormat("%seffect/effect_%d.aac",
+		strMusicPath.c_str(),idMusic);
 	return pkSimpleAudio->playEffect(pstrMusicFile->getCString(),false);
 }
 
-void StopEffectSound()
+void ResumeAllEffectSound()
 {
 	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
 
@@ -512,28 +535,45 @@ void StopEffectSound()
 	{
 		return;
 	}
+
+	pkSimpleAudio->resumeAllEffects();
+	gs_bIsSound = true;
 }
 
-void WorldMapGoto(int nMapId, LuaObject tFilter)
+void StopEffectSound()
 {
-	NDScene* scene = NDDirector::DefaultDirector()->GetRunningScene();
-	if (!scene)
+	SimpleAudioEngine* pkSimpleAudio = SimpleAudioEngine::sharedEngine();
+	gs_bIsSound = false;
+
+	if (0 == pkSimpleAudio)
 	{
 		return;
 	}
 
-	WorldMapLayer* world = NULL;
-	NDNode* node = scene->GetChild(TAG_WORLD_MAP);
-	if (node && node->IsKindOfClass(RUNTIME_CLASS(WorldMapLayer)))
+	pkSimpleAudio->pauseAllEffects();
+}
+
+void WorldMapGoto(int nMapId, LuaObject tFilter)
+{
+	NDScene* pkScene = NDDirector::DefaultDirector()->GetRunningScene();
+
+	if (!pkScene)
 	{
-		world = (WorldMapLayer*) node;
+		return;
+	}
+
+	WorldMapLayer* pkWorldLayer = NULL;
+	NDNode* pkNode = pkScene->GetChild(TAG_WORLD_MAP);
+	if (pkNode && pkNode->IsKindOfClass(RUNTIME_CLASS(WorldMapLayer)))
+	{
+		pkWorldLayer = (WorldMapLayer*) pkNode;
 	}
 	else
 	{
-		world = new WorldMapLayer;
-		world->Initialization(GetMapId());
-		world->SetTag(TAG_WORLD_MAP);
-		scene->AddChild(world);
+		pkWorldLayer = new WorldMapLayer;
+		pkWorldLayer->Initialization(GetMapId());
+		pkWorldLayer->SetTag(TAG_WORLD_MAP);
+		pkScene->AddChild(pkWorldLayer);
 	}
 
 	if (tFilter.IsTable())
@@ -551,10 +591,10 @@ void WorldMapGoto(int nMapId, LuaObject tFilter)
 				}
 			}
 		}
-		world->SetFilter(vId);
+		pkWorldLayer->SetFilter(vId);
 	}
 
-	world->Goto(nMapId);
+	pkWorldLayer->Goto(nMapId);
 }
 
 void WorldMap(int nMapId, LuaObject tFilter)
@@ -962,6 +1002,7 @@ void ScriptGameLogicLoad()
 	ETCFUNC("StopBGMusic", StopBGMusic);
 	ETCFUNC("StartEffectSound", StartEffectSound);
 	ETCFUNC("StopEffectSound", StopEffectSound);
+	ETCFUNC("ResumeAllEffectSound",ResumeAllEffectSound);
 	ETCFUNC("SetBgMusicVolume", SetBgMusicVolume);
 	ETCFUNC("SetEffectSoundVolune", SetEffectSoundVolune);
 	ETCFUNC("ShowRoleName", ShowRoleName);

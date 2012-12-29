@@ -188,6 +188,12 @@ NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *pa
 	{
 		parent->AddChild(node);
 	}
+
+	//优化关闭按钮手感
+	if (this->IsCloseButton( uiInfo ))
+	{
+		node->SetBoundScale(2);
+	}
 	return node;
 }
 
@@ -453,4 +459,26 @@ void NDUILoad::PostLoad(UIINFO& uiInfo)
 	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	uiInfo.CtrlPos.y = winsize.height - uiInfo.CtrlPos.y;
 	uiInfo.CtrlPos.y -= uiInfo.nCtrlHeight;
+}
+
+//是否关闭按钮
+bool NDUILoad::IsCloseButton(const UIINFO& uiInfo)
+{
+	const char* p = uiInfo.strText.c_str();
+	if (strstr( p, "close" ) 
+		|| strstr( p, "CLOSE" ) 
+		|| strstr( p, "Close" ))
+	{
+		return true;
+	}
+
+	p = uiInfo.strNormalFile.c_str();
+	if (strstr( p, "close" ) 
+		|| strstr( p, "CLOSE" ) 
+		|| strstr( p, "Close" ))
+	{
+		return true;
+	}
+
+	return false;
 }

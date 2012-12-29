@@ -28,8 +28,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLSurfaceView;
 
-public class Cocos2dxRenderer implements GLSurfaceView.Renderer
-{
+public class Cocos2dxRenderer implements GLSurfaceView.Renderer {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -55,14 +54,11 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer
 	// Getter & Setter
 	// ===========================================================
 
-	public static void setAnimationInterval(final double pAnimationInterval)
-	{
+	public static void setAnimationInterval(final double pAnimationInterval) {
 		Cocos2dxRenderer.sAnimationInterval = (long) (pAnimationInterval * Cocos2dxRenderer.NANOSECONDSPERSECOND);
 	}
 
-	public void setScreenWidthAndHeight(final int pSurfaceWidth,
-			final int pSurfaceHeight)
-	{
+	public void setScreenWidthAndHeight(final int pSurfaceWidth, final int pSurfaceHeight) {
 		this.mScreenWidth = pSurfaceWidth;
 		this.mScreenHeight = pSurfaceHeight;
 	}
@@ -72,21 +68,17 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer
 	// ===========================================================
 
 	@Override
-	public void onSurfaceCreated(final GL10 pGL10, final EGLConfig pEGLConfig)
-	{
+	public void onSurfaceCreated(final GL10 pGL10, final EGLConfig pEGLConfig) {
 		Cocos2dxRenderer.nativeInit(this.mScreenWidth, this.mScreenHeight);
 		this.mLastTickInNanoSeconds = System.nanoTime();
 	}
 
 	@Override
-	public void onSurfaceChanged(final GL10 pGL10, final int pWidth,
-			final int pHeight)
-	{
+	public void onSurfaceChanged(final GL10 pGL10, final int pWidth, final int pHeight) {
 	}
 
 	@Override
-	public void onDrawFrame(final GL10 gl)
-	{
+	public void onDrawFrame(final GL10 gl) {
 		final long nowInNanoSeconds = System.nanoTime();
 		final long interval = nowInNanoSeconds - this.mLastTickInNanoSeconds;
 
@@ -95,16 +87,11 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer
 		Cocos2dxRenderer.nativeRender();
 
 		// fps controlling
-		if (interval < Cocos2dxRenderer.sAnimationInterval)
-		{
-			try
-			{
-				// because we render it before, so we should sleep twice time
-				// interval
-				Thread.sleep((Cocos2dxRenderer.sAnimationInterval - interval)
-						* 2 / Cocos2dxRenderer.NANOSECONDSPERMICROSECOND);
-			} catch (final Exception e)
-			{
+		if (interval < Cocos2dxRenderer.sAnimationInterval) {
+			try {
+				// because we render it before, so we should sleep twice time interval
+				Thread.sleep((Cocos2dxRenderer.sAnimationInterval - interval) * 2 / Cocos2dxRenderer.NANOSECONDSPERMICROSECOND);
+			} catch (final Exception e) {
 			}
 		}
 
@@ -115,83 +102,64 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer
 	// Methods
 	// ===========================================================
 
-	private static native void nativeTouchesBegin(final int pID,
-			final float pX, final float pY);
-
-	private static native void nativeTouchesEnd(final int pID, final float pX,
-			final float pY);
-
-	private static native void nativeTouchesMove(final int[] pIDs,
-			final float[] pXs, final float[] pYs);
-
-	private static native void nativeTouchesCancel(final int[] pIDs,
-			final float[] pXs, final float[] pYs);
-
+	private static native void nativeTouchesBegin(final int pID, final float pX, final float pY);
+	private static native void nativeTouchesEnd(final int pID, final float pX, final float pY);
+	private static native void nativeTouchesMove(final int[] pIDs, final float[] pXs, final float[] pYs);
+	private static native void nativeTouchesCancel(final int[] pIDs, final float[] pXs, final float[] pYs);
 	private static native boolean nativeKeyDown(final int pKeyCode);
-
 	private static native void nativeRender();
-
 	private static native void nativeInit(final int pWidth, final int pHeight);
-
 	private static native void nativeOnPause();
-
 	private static native void nativeOnResume();
 
-	public void handleActionDown(final int pID, final float pX, final float pY)
-	{
+	public void handleActionDown(final int pID, final float pX, final float pY) {
 		Cocos2dxRenderer.nativeTouchesBegin(pID, pX, pY);
 	}
 
-	public void handleActionUp(final int pID, final float pX, final float pY)
-	{
+	public void handleActionUp(final int pID, final float pX, final float pY) {
 		Cocos2dxRenderer.nativeTouchesEnd(pID, pX, pY);
 	}
 
-	public void handleActionCancel(final int[] pIDs, final float[] pXs,
-			final float[] pYs)
-	{
+	public void handleActionCancel(final int[] pIDs, final float[] pXs, final float[] pYs) {
 		Cocos2dxRenderer.nativeTouchesCancel(pIDs, pXs, pYs);
 	}
 
-	public void handleActionMove(final int[] pIDs, final float[] pXs,
-			final float[] pYs)
-	{
+	public void handleActionMove(final int[] pIDs, final float[] pXs, final float[] pYs) {
 		Cocos2dxRenderer.nativeTouchesMove(pIDs, pXs, pYs);
 	}
 
-	public void handleKeyDown(final int pKeyCode)
-	{
+	public void handleKeyDown(final int pKeyCode) {
 		Cocos2dxRenderer.nativeKeyDown(pKeyCode);
 	}
 
-	public void handleOnPause()
-	{
+	public void handleOnPause() {
 		Cocos2dxRenderer.nativeOnPause();
 	}
 
-	public void handleOnResume()
-	{
+	public void handleOnResume() {
 		Cocos2dxRenderer.nativeOnResume();
 	}
 
+	private static native void nativeOnAction( int action ); //ND_MOD
+
 	private static native void nativeInsertText(final String pText);
-
 	private static native void nativeDeleteBackward();
-
 	private static native String nativeGetContentText();
 
-	public void handleInsertText(final String pText)
-	{
+	public void handleInsertText(final String pText) {
 		Cocos2dxRenderer.nativeInsertText(pText);
 	}
 
-	public void handleDeleteBackward()
-	{
+	public void handleDeleteBackward() {
 		Cocos2dxRenderer.nativeDeleteBackward();
 	}
 
-	public String getContentText()
-	{
+	//ND_MOD
+	public void handleOnAction( int action ) {
+		Cocos2dxRenderer.nativeOnAction( action );
+	}
+
+	public String getContentText(){
 		return Cocos2dxRenderer.nativeGetContentText();
 	}
 

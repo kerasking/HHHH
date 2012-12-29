@@ -46,9 +46,7 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-public abstract class Cocos2dxActivity extends Activity implements
-		Cocos2dxHelperListener
-{
+public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelperListener {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -60,17 +58,17 @@ public abstract class Cocos2dxActivity extends Activity implements
 	// ===========================================================
 
 	public Cocos2dxGLSurfaceView mGLSurfaceView;
-	public FrameLayout m_pkFrameView = null;
 	private Cocos2dxHandler mHandler;
-	public NDVideoView m_pkView = null;
+	public static NDVideoView m_pkView = null;
+	
+	public FrameLayout m_pkFrameView = null;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
 	@Override
-	protected void onCreate(final Bundle savedInstanceState)
-	{
+	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		this.mHandler = new Cocos2dxHandler(this);
@@ -92,6 +90,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	@Override
 	protected void onResume()
 	{
+		Log.i("DaHuaLongJiang","Entry Cocos2dxActivity onResume");
 		super.onResume();
 
 		Cocos2dxHelper.onResume();
@@ -101,6 +100,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	@Override
 	protected void onPause()
 	{
+		Log.i("DaHuaLongJiang","Entry Cocos2dxActivity onPause");
 		super.onPause();
 
 		Cocos2dxHelper.onPause();
@@ -108,8 +108,7 @@ public abstract class Cocos2dxActivity extends Activity implements
 	}
 
 	@Override
-	public void showDialog(final String pTitle, final String pMessage)
-	{
+	public void showDialog(final String pTitle, final String pMessage) {
 		Message msg = new Message();
 		msg.what = Cocos2dxHandler.HANDLER_SHOW_DIALOG;
 		msg.obj = new Cocos2dxHandler.DialogMessage(pTitle, pMessage);
@@ -117,20 +116,15 @@ public abstract class Cocos2dxActivity extends Activity implements
 	}
 
 	@Override
-	public void showEditTextDialog(final String pTitle, final String pContent,
-			final int pInputMode, final int pInputFlag, final int pReturnType,
-			final int pMaxLength)
-	{
+	public void showEditTextDialog(final String pTitle, final String pContent, final int pInputMode, final int pInputFlag, final int pReturnType, final int pMaxLength) { 
 		Message msg = new Message();
 		msg.what = Cocos2dxHandler.HANDLER_SHOW_EDITBOX_DIALOG;
-		msg.obj = new Cocos2dxHandler.EditBoxMessage(pTitle, pContent,
-				pInputMode, pInputFlag, pReturnType, pMaxLength);
+		msg.obj = new Cocos2dxHandler.EditBoxMessage(pTitle, pContent, pInputMode, pInputFlag, pReturnType, pMaxLength);
 		this.mHandler.sendMessage(msg);
 	}
-
+	
 	@Override
-	public void runOnGLThread(final Runnable pRunnable)
-	{
+	public void runOnGLThread(final Runnable pRunnable) {
 		this.mGLSurfaceView.queueEvent(pRunnable);
 	}
 
@@ -144,21 +138,21 @@ public abstract class Cocos2dxActivity extends Activity implements
 
 		mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
 
-//		NDVideoControl pkVideoControl = new NDVideoControl(
-//				Cocos2dxActivity.this);
+		NDVideoControl pkVideoControl = new NDVideoControl(
+				Cocos2dxActivity.this);
 //		pkVideoControl.setCocos2dxActivity(this);
 //		pkVideoControl.hide();
 //
-//		LinearLayout tp = new LinearLayout(this.getApplicationContext());
-//		LinearLayout.LayoutParams pkLayoutParams = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
-//		m_pkView = new NDVideoView(this.getApplicationContext());
-//		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
-//		m_pkView.setBackgroundColor(0);
-//		m_pkView.setMediaController(pkVideoControl);
-//		m_pkView.setOnCompletionListener(pkVideoControl);
-//		m_pkView.requestFocus();
-//
-//		setContentView(m_pkView);
+	//	ViewGroup.LayoutParams tp = new LinearLayout(this.getApplicationContext());
+		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
+		m_pkView = new NDVideoView(this.getApplicationContext());
+		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
+		m_pkView.setBackgroundColor(0);
+		//m_pkView.setMediaController(pkVideoControl);
+		m_pkView.setOnCompletionListener(pkVideoControl);
+		m_pkView.requestFocus();
+		//m_pkView.start();
+		//setContentView(m_pkView,pkLayoutParams);
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView()

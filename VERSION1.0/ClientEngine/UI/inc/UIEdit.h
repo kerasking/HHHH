@@ -116,6 +116,7 @@ protected:
 	virtual void keyboardDidShow(CCIMEKeyboardNotificationInfo& info); 
 	virtual void keyboardDidHide(CCIMEKeyboardNotificationInfo& info); 
 
+	virtual void onAction( int action );
 	virtual void insertText(const char * text, int len);
 	virtual void deleteBackward();
 	virtual const char * getContentText();

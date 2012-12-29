@@ -8,7 +8,7 @@
 
 #ifndef SMYS_SqliteDBMgr_h
 #define SMYS_SqliteDBMgr_h
-//#include <sqlite3.h>
+#include <sqlite3.h>
 #include <vector>
 #include <string>
 
@@ -40,7 +40,7 @@ private:
     VEC_ROW_DATA    m_setRowData;
     std::string m_strPath;
     std::string m_strDBName;
-    //sqlite3 *m_database;
+    sqlite3* m_pkDatabase;
 };
 
 

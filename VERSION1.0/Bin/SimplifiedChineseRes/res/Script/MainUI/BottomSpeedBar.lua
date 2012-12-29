@@ -398,6 +398,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             PlayerUIAttr.LoadUI();
             --CommonScrollDlg.ShowTipDlg({"由于服务器维护，3点关服，请大家通知大家！",ccc4(255,255,255,255)});
         elseif( p.BtnFunc[2] == tag ) then   --背包
+            --p.TestButtonClick(); --删除角色测试 郭浩
             PlayerUIBackBag.LoadUI();
         elseif( p.BtnFunc[3] == tag ) then   --强化
             EquipUpgradeUI.LoadUI();

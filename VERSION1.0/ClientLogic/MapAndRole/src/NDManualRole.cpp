@@ -2887,8 +2887,7 @@ CCPoint NDManualRole::getHeadPos()
 	if (m_nRideStatus == 1)
 	{
 		int sign = (m_bFaceRight ? -1 : 1);
-		const float fScale = CCDirector::sharedDirector()->getContentScaleFactor();
-		pos.x += DISPLAY_POS_X_OFFSET * fScale * sign;
+		pos.x += DISPLAY_POS_X_OFFSET * RESOURCE_SCALE * sign;
 		pos.y -= DISPLAY_POS_Y_OFFSET;
 	}
 

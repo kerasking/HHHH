@@ -151,8 +151,6 @@ extern "C"
 
 	void stopBackgroundMusicJNI()
 	{
-		// void stopBackgroundMusic()
-
 		JniMethodInfo methodInfo;
 
 		if (!getStaticMethodInfo(methodInfo, "stopBackgroundMusic", "()V"))

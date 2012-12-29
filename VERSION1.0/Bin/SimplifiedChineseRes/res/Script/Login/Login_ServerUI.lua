@@ -10,7 +10,7 @@ local p = Login_ServerUI;
 p.curSel=0;
 p.Account=nil;
 p.Pwd="";
-p.UIN=319258246; 
+p.UIN=317007836;--319258246; 
 --p.UIN=317007836;
 
 p.LoginWait = true;
@@ -730,6 +730,3 @@ function p.LoginGameNew()
 	p.LoginOK_Normal( p.UIN )
 end
 RegisterGlobalEventHandler( GLOBALEVENT.GE_LOGIN_GAME,"Login_ServerUI.LoginGame", p.LoginGameNew );
-
-
-

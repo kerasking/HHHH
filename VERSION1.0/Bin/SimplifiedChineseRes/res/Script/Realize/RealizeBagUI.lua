@@ -928,7 +928,7 @@ function p.ChangeItemInfo(nItemId, bEquip)
 		local nPetId	= p.mCurrentPetId
 		if not bEquip then
 			if nPetId > 0 then
-				local equipBtn = CreateButton("btn_normal.png", "btn_select.png", "装备",
+				local equipBtn = CreateButton("btn_normal.png", "btn_select.png", GetTxtPri("BLTW_T1"),
 										CGRectMake(nStartX, nHeight, nBtnW, nBtnH), 12);
 				if CheckP(equipBtn) then
 					nStartX		= nBtn2StartX;
@@ -939,7 +939,7 @@ function p.ChangeItemInfo(nItemId, bEquip)
 				end
 			end
 			
-			local drogBtn = CreateButton("btn_normal.png", "btn_select.png", "丢弃",
+			local drogBtn = CreateButton("btn_normal.png", "btn_select.png", GetTxtPub("drop"),
 									CGRectMake(nStartX, nHeight, nBtnW, nBtnH), 12);
 			if CheckP(drogBtn) then
 				nStartX	= nBtn1StartX;
@@ -951,7 +951,7 @@ function p.ChangeItemInfo(nItemId, bEquip)
 			end
 		else
 			if nPetId > 0 then
-				local unequipBtn = CreateButton("btn_normal.png", "btn_select.png", "卸下",
+				local unequipBtn = CreateButton("btn_normal.png", "btn_select.png", GetTxtPub("PetDisboard"),
 										CGRectMake(nStartX, nHeight, nBtnW, nBtnH), 12);
 				if CheckP(unequipBtn) then
 					nStartX		= nBtn2StartX;
@@ -964,7 +964,7 @@ function p.ChangeItemInfo(nItemId, bEquip)
 			end
 		end
 		
-		local sendBtn = CreateButton("btn_normal.png", "btn_select.png", "展示",
+		local sendBtn = CreateButton("btn_normal.png", "btn_select.png", GetTxtPub("PetShow"),
 								CGRectMake(nStartX, nHeight, nBtnW, nBtnH), 12);
 		if CheckP(sendBtn) then
 			sendBtn:SetTag(ITEM_OPERATE_EQUIP_SEND);

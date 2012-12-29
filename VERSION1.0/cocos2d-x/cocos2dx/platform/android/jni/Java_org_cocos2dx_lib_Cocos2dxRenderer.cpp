@@ -45,4 +45,10 @@ extern "C" {
         const char * pszText = cocos2d::CCIMEDispatcher::sharedDispatcher()->getContentText();
         return env->NewStringUTF(pszText);
     }
+
+#if ND_MOD
+	JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnAction(JNIEnv* env, jobject thiz, int action ) {
+		cocos2d::CCIMEDispatcher::sharedDispatcher()->dispatchOnAction( action );
+	}
+#endif
 }

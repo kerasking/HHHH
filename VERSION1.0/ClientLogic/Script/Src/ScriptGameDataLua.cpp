@@ -190,7 +190,7 @@ double GetGameDataN(int esd, unsigned int nKey, int e,  int nId, unsigned short 
 #if WITH_NEW_DB
 	ModifyParam(esd,nKey,e);
 	return NDGameDataUtil::getDataN( MAKE_NDTABLEPTR( esd, nKey, e ), 
-											MAKE_CELLPTR( nId, index ));
+											MAKE_CELLPTR( nId, index ),false);
 #else
 	double ulVal = ScriptGameDataObj.GetData<double>((eScriptData)esd, nKey, (eRoleData)e, nId, index);
 	return ulVal;
@@ -202,7 +202,7 @@ double GetGameDataF(int esd, unsigned int nKey, int e,  int nId, unsigned short 
 #if WITH_NEW_DB
 	ModifyParam(esd,nKey,e);
 	return NDGameDataUtil::getDataF( MAKE_NDTABLEPTR( esd, nKey, e ), 
-											MAKE_CELLPTR( nId, index ));
+											MAKE_CELLPTR( nId, index ),false);
 #else
 	float fVal = ScriptGameDataObj.GetData<double>((eScriptData)esd, nKey, (eRoleData)e, nId, index);
 	return fVal;
@@ -214,7 +214,7 @@ std::string GetGameDataS(int esd, unsigned int nKey, int e,  int nId, unsigned s
 #if WITH_NEW_DB
 	ModifyParam(esd,nKey,e);
 	return NDGameDataUtil::getDataS( MAKE_NDTABLEPTR( esd, nKey, e ), 
-											MAKE_CELLPTR( nId, index ));
+											MAKE_CELLPTR( nId, index ),false);
 #else
 	std::string strVal = ScriptGameDataObj.GetData<std::string>((eScriptData)esd, nKey, (eRoleData)e, nId, index);
 	return strVal;

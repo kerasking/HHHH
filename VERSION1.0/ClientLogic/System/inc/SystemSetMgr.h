@@ -24,6 +24,7 @@
 class SystemSetMgr : public TSingleton<SystemSetMgr>
 {
 public:
+
 	SystemSetMgr();
 	~SystemSetMgr();
 	
@@ -31,9 +32,9 @@ public:
 	bool Set(const char *key,int value);
 	bool Set(const char *key,bool value);
 	bool Set(const char *key,const char *value);
-	int GetNumber(const char *key,int default_value=0);
-	bool GetBoolean(const char *key,bool default_value=false);
-	const char *GetString(const char *key,const char *default_value=NULL);
+	int GetNumber(const char* szKey, int nDefaultValue = 0);
+	bool GetBoolean(const char *key,bool default_value = false);
+	const char *GetString(const char *key,const char *default_value = NULL);
 };
 
 #endif

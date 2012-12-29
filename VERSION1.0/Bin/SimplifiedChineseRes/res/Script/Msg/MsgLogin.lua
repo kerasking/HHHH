@@ -96,6 +96,7 @@ function p.PlayVideoIntro()
 end
 
 function p.ProcessNotifyClient(netdata)
+	PrintLog("function p.ProcessNotifyClient(netdata)");
     CloseLoadBar();
     local ret = netdata:ReadByte();
     if ret == 0 then

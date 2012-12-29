@@ -29,8 +29,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.util.Log;
 
-public class Cocos2dxTypefaces
-{
+public class Cocos2dxTypefaces {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -57,9 +56,7 @@ public class Cocos2dxTypefaces
 	// Methods
 	// ===========================================================
 
-	public static synchronized Typeface get(final Context pContext,
-			final String pAssetName)
-	{
+	public static synchronized Typeface get(final Context pContext, final String pAssetName) {
 // 		Log.d("Typeface get", "Context: " + pContext);
 // 		Log.d("Typeface get", "pAssetName: " + pAssetName);
 		
@@ -73,7 +70,7 @@ public class Cocos2dxTypefaces
 			}
 			catch (final Exception e)
 			{
-				Log.d("Typeface get", "error get typeface:");
+				//Log.d("Typeface get", "error get typeface:");
 				typeface = Typeface.createFromFile("/sdcard/dhlj/SimplifiedChineseRes/res/fonts/LiSu.ttf");
 			}
 			//final Typeface typeface = Typeface.createFromAsset(pContext.getAssets(), pAssetName);

@@ -171,9 +171,11 @@ function p.OnUIEvent( uiNode, uiEventType, param )
 			p.SaveData();
 			-- 设置音乐音量
 			if ( p.iPlayBGMEnable == 1 ) then
-				SetBgMusicVolume( MUSIC_VOLUME_MAX );
+				StartBGMusic();
+				--SetBgMusicVolume( MUSIC_VOLUME_MAX );
 			else
-				SetBgMusicVolume( 0 );
+				StopBGMusic();
+				--SetBgMusicVolume( 0 );
 			end
 		elseif ( ID_CHECK_PLAY_EFFECT == tag ) then
 			local pCheckBox = ConverToCheckBox( uiNode );
@@ -185,9 +187,11 @@ function p.OnUIEvent( uiNode, uiEventType, param )
 			p.SaveData();
 			-- 设置音效音量
 			if ( p.iPlayEffectEnable == 1 ) then
+				ResumeAllEffectSound();
 				SetEffectSoundVolune( EFFECT_VOLUME_MAX );
 			else
-				SetEffectSoundVolune( 0 );
+				StopEffectSound();
+				--SetEffectSoundVolune( 0 );
 			end
 		elseif ( ID_CHECK_SHOW_OTHER_PLAYER == tag ) then
 			local pCheckBox = ConverToCheckBox( uiNode );
@@ -263,6 +267,7 @@ end
 ---------------------------------------------------
 function p.LoadData()
     local isExists = Sqlite_IsExistTable(szGameSettingTableName);
+    LogInfo("guohao %s",szGameSettingTableName);
     if not isExists then
 		LogInfo( "GameSetting: CreateTable:" .. szGameSettingTableName );
 		Sqlite_ExcuteSql(szGameSettingCreate);
@@ -276,19 +281,21 @@ function p.LoadData()
 		p.iPlayBGMEnable			= Sqlite_GetColDataN(0,1);
 		p.iPlayEffectEnable			= Sqlite_GetColDataN(0,2);
 		p.iShowOtherPlayerEnable	= Sqlite_GetColDataN(0,3);
-		--LogInfo( "GameSetting: LoadData() Exists [%d], [%d], [%d]", p.iPlayBGMEnable, p.iPlayEffectEnable, p.iShowOtherPlayerEnable );
+		LogInfo( "GameSetting: LoadData() Exists [%d], [%d], [%d]", p.iPlayBGMEnable, p.iPlayEffectEnable, p.iShowOtherPlayerEnable );
     end
     -- 设置音乐音量
 	if ( p.iPlayBGMEnable == 1 ) then
 		SetBgMusicVolume( MUSIC_VOLUME_MAX );
 	else
-		SetBgMusicVolume( 0 );
+		StopBGMusic();
+		--SetBgMusicVolume( 0 );
 	end
     -- 设置音效音量
 	if ( p.iPlayEffectEnable == 1 ) then
 		SetEffectSoundVolune( EFFECT_VOLUME_MAX );
 	else
-		SetEffectSoundVolune( 0 );
+		StopEffectSound();
+		--SetEffectSoundVolune( 0 );
 	end
     ShowOtherRole( p.iShowOtherPlayerEnable == 1 );
 end
