@@ -53,6 +53,11 @@ STRING_VEC NDUtil::ErgodicFolderForSpceialFileExtName(const char* pszPath,
 	return kStringVec;
 }
 
+void NDUtil::QuitGameToServerList()
+{
+
+}
+
 NS_NDENGINE_END
 
 

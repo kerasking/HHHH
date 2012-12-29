@@ -20,7 +20,7 @@
 #include "NDSprite.h"
 #include "NDLocalization.h"
 #include "ObjectTracker.h"
-#include "NDUtility.h"
+#include "NDUtil.h"
 
 using namespace NDEngine;
 
@@ -147,7 +147,7 @@ void NDUISynLayer::OnTimer(OBJID tag)
 		dlgOverTime->Show(NDCommonCString("ConnectFail"), NDCommonCString("ConnectFailTip"), NULL, NULL);
 		*/
 
-		quitGame();
+		g_pUtil.QuitGameToServerList();
 
 		BaseScriptMgrObj.excuteLuaFunc<bool>("ShowYesDlg",
 			"CommonDlgNew", NDCommonCString("ConnectFailTip"));
