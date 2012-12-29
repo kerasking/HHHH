@@ -20,6 +20,7 @@
 #include "NDSprite.h"
 #include "NDLocalization.h"
 #include "ObjectTracker.h"
+#include "NDUtility.h"
 
 using namespace NDEngine;
 
@@ -68,7 +69,7 @@ void NDUISynLayer::Show(SYN_TAG tag)
 	// 当前已经显示, 更新tag
 	if (NDUISynLayer_instances)
 	{
-		NDUISynLayer_instances->m_tag = tag;
+		NDUISynLayer_instances->m_eTag = tag;
 	}
 	else
 	{
@@ -76,7 +77,7 @@ void NDUISynLayer::Show(SYN_TAG tag)
 		if (parentScene) {
 			NDUISynLayer_instances = new NDUISynLayer();
 			NDUISynLayer_instances->Initialization();
-			NDUISynLayer_instances->m_tag = tag;
+			NDUISynLayer_instances->m_eTag = tag;
 			NDUISynLayer_instances->SetTimeOut(15);
 			
             //** chh 2012-0-17 **//
@@ -102,11 +103,11 @@ void NDUISynLayer::Initialization()
 	this->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
 	
 	
-	CUISpriteNode *node = new CUISpriteNode;
-	node->Initialization();
-	node->ChangeSprite(NDPath::GetAniPath("busy.spr").c_str());//"loading.spr"//“程序忙碌”动画
-	node->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
-	this->AddChild(node);
+	CUISpriteNode* pkNode = new CUISpriteNode;
+	pkNode->Initialization();
+	pkNode->ChangeSprite(NDPath::GetAniPath("busy.spr").c_str());//"loading.spr"//“程序忙碌”动画
+	pkNode->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
+	AddChild(pkNode);
 	/*
 	this->m_ptLine = CCPointMake((winSize.width - 135) / 2, (winSize.height - 9) / 2);
 	this->m_ptBlock = this->m_ptLine;
@@ -145,7 +146,11 @@ void NDUISynLayer::OnTimer(OBJID tag)
 		dlgOverTime->Initialization();
 		dlgOverTime->Show(NDCommonCString("ConnectFail"), NDCommonCString("ConnectFailTip"), NULL, NULL);
 		*/
-		BaseScriptMgrObj.excuteLuaFunc<bool>("ShowYesDlg", "CommonDlgNew", NDCommonCString("ConnectFailTip"));
+
+		quitGame();
+
+		BaseScriptMgrObj.excuteLuaFunc<bool>("ShowYesDlg",
+			"CommonDlgNew", NDCommonCString("ConnectFailTip"));
 		Close(CLOSE);
 		
 //		NDDataTransThread::DefaultThread()->GetSocket()->Close();
@@ -161,7 +166,7 @@ void NDUISynLayer::Close(SYN_TAG tag)
 	// 正在显示
 	if (NDUISynLayer_instances)
 	{
-		if (tag == NDUISynLayer_instances->m_tag || tag == CLOSE)
+		if (tag == NDUISynLayer_instances->m_eTag || tag == CLOSE)
 		{
 			NDUISynLayer_instances->RemoveFromParent(true);
 		}
