@@ -15,7 +15,7 @@ local winsize	= GetWinSize();
 local btnw		= 64;
 local btnh		= 80;
 
-p.LayerRect = CGRectMake(winsize.w-btnw*1.5, winsize.h-btnh-40*ScaleFactor, btnw, btnh); 
+p.LayerRect = CGRectMake(winsize.w-btnw*1.5, winsize.h-btnh*CoordScaleY-40*ScaleFactor, btnw, btnh); 
 
 
 local nOtherPlayerId = -1;
@@ -49,7 +49,7 @@ function p.LoadUI(param1)
 	layer:SetFrameRect(p.LayerRect);
 	layer:SetTag(NMAINSCENECHILDTAG.MilOrdersBtn);
 	
-	local btn	= CreateButton("button_look.png","button_look.png","",CGRectMake(0, 0, btnw, btnh),12);
+	local btn	= CreateButton("button_look.png","button_look.png","",CGRectMake(0, 0, btnw*CoordScaleY, btnh*CoordScaleY),12);
 	
 	local norPic = pool:AddPicture(GetSMImgPath("button_look.png"), false);
  	norPic:Cut(CGRectMake(0.0, 0.0, btnw, btnh));

@@ -137,9 +137,14 @@ void WorldMapLayer::Initialization(int nMapId)
 	//NDPicture* picCloseSelect	= NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("btn_close.png"));    
 	CCSize sizeClose	= picClose->GetSize();
 
+	CCLog("tzq sizeClose.width = %05f, height = %05f", sizeClose.width, sizeClose.height);
+
 	// set close button
 	picClose->Cut(CCRectMake(0,  0,  sizeClose.width,  sizeClose.height/2 - 2));
 	//picCloseSelect->Cut(CCRectMake(0,  sizeClose.height/2,  sizeClose.width,  sizeClose.height/2));
+
+	sizeClose.width *= NDDirector::DefaultDirector()->getCoordScaleX();
+	sizeClose.height *= NDDirector::DefaultDirector()->getCoordScaleY();
 	CCRect rectClose = CCRectMake((winsize.width - sizeClose.width), 0,
 									 sizeClose.width, sizeClose.height/2);
 	// init close button
@@ -503,6 +508,11 @@ void WorldMapLayer::Goto( int nMapId )
 			{
 				m_bArrive = true;
 				NDMapMgrObj.WorldMapSwitch( nMapId );
+				return;
+			}
+			else
+			{
+				ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", nMapId);
 				return;
 			}
 		}

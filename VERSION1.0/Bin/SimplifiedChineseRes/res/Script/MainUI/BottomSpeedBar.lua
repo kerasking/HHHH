@@ -377,7 +377,7 @@ function p.CreateSceneButton(norPic, selPic, rect, tag,z)
 	btn:SetImage(norPic);
     
     
-	btn:SetFrameRect(CGRectMake(0, 0, sizeBtn.w, sizeBtn.h));
+	btn:SetFrameRect(CGRectMake(0, 0, sizeBtn.w*CoordScaleY, sizeBtn.h*CoordScaleY));
 	btn:SetLuaDelegate(p.OnUIEvent);
 	layer:AddChild(btn);
     scene:AddChildZ(layer,zlev);
