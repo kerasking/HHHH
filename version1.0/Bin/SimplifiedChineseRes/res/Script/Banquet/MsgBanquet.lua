@@ -231,7 +231,7 @@ function p.HandleMsgPrepareBanquet( tNetDataPackete )
 			Banquet.CallBack_PrepareSucceed();
 		end
 	else
-		CommonDlgNew.ShowYesDlg( "举办失败", nil, nil, 3 );
+		CommonDlgNew.ShowYesDlg( GetTxtPri("MB_T1"), nil, nil, 3 );
 	end
 end
 
@@ -291,7 +291,7 @@ function p.HandleMsgStartBanquet( tNetDataPackete )
 			Banquet.CallBack_StartSucceed();
 		end
 	else
-		CommonDlgNew.ShowYesDlg( "开席失败", nil, nil, 3 );
+		CommonDlgNew.ShowYesDlg( GetTxtPri("MB_T2"), nil, nil, 3 );
 	end
 end
 
@@ -321,7 +321,7 @@ function p.HandleMsgGoldStart( tNetDataPackete )
 			Banquet.CallBack_GoldStartSucceed();
 		end
 	else
-		CommonDlgNew.ShowYesDlg( "金币开席失败", nil, nil, 3 );
+		CommonDlgNew.ShowYesDlg( GetTxtPri("MB_T3"), nil, nil, 3 );
 	end
 end
 
@@ -355,7 +355,7 @@ function p.HandleMsgShowTheDoor( tNetDataPackete )
 			Banquet.CallBack_ShowTheDoorSucceed( nPlayerID );--
 		end
 	else
-		CommonDlgNew.ShowYesDlg( "驱逐失败", nil, nil, 3 );
+		CommonDlgNew.ShowYesDlg( GetTxtPri("MB_T4"), nil, nil, 3 );
 	end
 end
 
