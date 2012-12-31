@@ -13,6 +13,7 @@
 #include "globaldef.h"
 #include "NDDirector.h"
 #include "NDUtil.h"
+#include "define.h"
 
 int GetNumBits(int num);
 bool VerifyUnsignedNum(const std::string strnum);
@@ -39,6 +40,25 @@ void showDialog(const char* content);
 // CCSize getStringSize(const char* pszStr, uint fontSize);
 // 
 // CCSize getStringSizeMutiLine(const char* pszStr, uint fontSize, CCSize contentSize = CCSizeMake(480, 320));
+
+NS_NDENGINE_BGN
+
+class NDUtility:public NDUtil
+{
+	DECLARE_CLASS(NDUtility)
+
+public:
+
+	NDUtility();
+	virtual ~NDUtility();
+
+	virtual void QuitGameToServerList();
+
+protected:
+private:
+};
+
+NS_NDENGINE_END
 
 void quitGame(bool bTipNet = false);
 

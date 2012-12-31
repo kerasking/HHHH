@@ -23,9 +23,9 @@ std::map<MSGID, LuaObject> mapNetMsgHandler;
 // lua回调函数原型(LuaCallBack) : bool (NDTransData*);
 // lua注册函数原型: bool RegisterNetMsgHandler(MSGID, char*, LuaCallBack)
 
-int RegisterNetMsgHandler(LuaState* state)
+int RegisterNetMsgHandler(LuaState* pkLuaState)
 {
-	LuaStack args(state);
+	LuaStack args(pkLuaState);
 	LuaObject loId = args[1];
 	LuaObject loStr = args[2];
 	LuaObject loLuaFunc = args[3];
@@ -34,7 +34,7 @@ int RegisterNetMsgHandler(LuaState* state)
 		!loStr.IsString()	||
 		!loLuaFunc.IsFunction())
 	{
-		state->PushBoolean(false);
+		pkLuaState->PushBoolean(false);
 		
 		return 1;
 	}
@@ -49,7 +49,7 @@ int RegisterNetMsgHandler(LuaState* state)
 	{
 		NDAsssert(0);
 	
-		state->PushBoolean(false);
+		pkLuaState->PushBoolean(false);
 		
 		return 1;
 	}
@@ -63,20 +63,20 @@ int RegisterNetMsgHandler(LuaState* state)
 	std::pair<MSGID, LuaObject>(
 	loId.GetNumber(), loLuaFunc) );
 	
-	state->PushBoolean(true);
+	pkLuaState->PushBoolean(true);
 	
 	return 1;
 }
 
-void SendMsg(NDTransData* data)
+void SendMsg(NDTransData* pkData)
 {
-	printf("\nqxx++++++MSG_TYPE=[%d]\n",data->GetMsgType());
-	printf("\nqxx++++++MSG_SIZE=[%d]\n",data->GetSize());
-	if (!data)
+	printf("\nqxx++++++MSG_TYPE=[%d]\n",pkData->GetMsgType());
+	printf("\nqxx++++++MSG_SIZE=[%d]\n",pkData->GetSize());
+	if (!pkData)
 	{
 		return;
 	}
-	SEND_DATA(*data);
+	SEND_DATA(*pkData);
 }
 
 void ScriptNetMsg::Load()
@@ -85,7 +85,7 @@ void ScriptNetMsg::Load()
 	ETCFUNC("SendMsg", SendMsg)
 }
 
-bool ScriptNetMsg::Process(MSGID msgID, NDTransData* data)
+bool ScriptNetMsg::Process(MSGID msgID, NDTransData* pkData)
 {
 	std::map<MSGID, LuaObject>::iterator 
 	itFun = mapNetMsgHandler.find(msgID);
@@ -99,7 +99,7 @@ bool ScriptNetMsg::Process(MSGID msgID, NDTransData* data)
 	
 	LuaFunction<int> luaFunc(fun);
 	
-	/*int nRet = */luaFunc(data);
+	/*int nRet = */luaFunc(pkData);
 	
 	return true;
 }

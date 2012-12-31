@@ -48,7 +48,7 @@ namespace NDEngine
 		virtual void OnTimer(OBJID tag);
 		
 	public:
-		SYN_TAG m_tag;
+		SYN_TAG m_eTag;
 		void Initialization(); override
 		void draw(); override
 		

@@ -96,6 +96,7 @@ namespace NDEngine
 			void Report();
 			
 		private:
+
 			CRingBuffer<unsigned char, 1046 * 256, 1046> m_buffer;
 			
 			unsigned int m_uiTotalValidRecv, m_uiTotalInvalidRecv;

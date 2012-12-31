@@ -150,7 +150,8 @@ namespace NDEngine
 		s_NDNetMsgMgr = NULL;
 	}
 	
-	bool NDNetMsgMgr::AddNetRawData(const unsigned char* data, unsigned int uilen, bool net /*= true*/)
+	bool NDNetMsgMgr::AddNetRawData(const unsigned char* data,
+		unsigned int uilen, bool net /*= true*/)
 	{
 		if (!data || uilen == 0)
 			return true;
@@ -215,14 +216,14 @@ namespace NDEngine
 			return false;
 		}
 		
-		bool sucess = m_buffer.PushData(data, uilen);
+		bool bSucceeded = m_buffer.PushData(data, uilen);
 		
-		if (!sucess)
+		if (!bSucceeded)
 		{
 			//NDLog(@"\nDNetMsgMgr::AddNetRawData PushData failed!!!");
 		}
 		
-		return sucess;
+		return bSucceeded;
 	}
 	
 	bool NDNetMsgMgr::GetServerMsgPacket(NDTransData& data)

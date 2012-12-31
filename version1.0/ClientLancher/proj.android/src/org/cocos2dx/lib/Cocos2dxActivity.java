@@ -35,6 +35,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.FontMetricsInt;
 import android.os.Bundle;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup.LayoutParams;
 import android.util.DisplayMetrics;
@@ -121,6 +122,15 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 		msg.what = Cocos2dxHandler.HANDLER_SHOW_EDITBOX_DIALOG;
 		msg.obj = new Cocos2dxHandler.EditBoxMessage(pTitle, pContent, pInputMode, pInputFlag, pReturnType, pMaxLength);
 		this.mHandler.sendMessage(msg);
+	}
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event)
+	{		
+		return super.onKeyDown(keyCode, event);
+	}
+	
+	public void onBackPressed() {  
+	    finish();  
 	}
 	
 	@Override
