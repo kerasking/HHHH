@@ -455,6 +455,13 @@ function p.LoadUI(tab,nPetId)
         p.ShowPetInfo(nPetId);
     end
     
+    --stage限制判断
+    if not MainUIBottomSpeedBar.GetFuncIsOpen(129) then
+        local btn = GetButton(layer, TAG_DESTINY_BAG);
+        btn:SetImage(nil);
+        btn:SetTouchDownImage(nil);
+    end
+    
     p.refreshMoney();
 	return true;
 end
