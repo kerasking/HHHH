@@ -6,15 +6,18 @@
  *  Copyright 2011 __MyCompanyName__. All rights reserved.
  *
  */
+#include "ccPlatformConfig.h"
 
-//#import <Foundation/Foundation.h>
-//
-//@interface NDSdkLogin : NSObject
-//{
-//	
-//}
-//
-//- (void)LoginWithUser;
-//- (void)LoginWith;
-//
-//@end
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#import <Foundation/Foundation.h>
+
+@interface NDSdkLogin : NSObject
+{
+
+}
+
+- (void)LoginWithUser;
+- (void)LoginWith;
+#endif
+
+@end
