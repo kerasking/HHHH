@@ -40,6 +40,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -71,6 +72,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static BalanceButton balancebutton;
 	private static float s_fScale;
 	private View rootView = null;
+	private static boolean m_bIsStartingVideo = false;
 
 	private static Handler VideoViewHandler = new Handler();
 	private static Handler RootViewHandler = new Handler();
@@ -412,16 +414,17 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public static int playVideo(final String strFile)
 	{
-		if (true)
-		{
-			return 0;
-		}
+//		if (true)
+//		{
+//			return 0;
+//		}
 
 		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 
 		pauseAllBackgroundMusic();
 		// ms_pkDHLJ.setContentView(m_pkView,pkLayoutParams);
+		m_bIsStartingVideo = true;
 		VideoViewHandler.post(mShowVideoView);
 		// m_pkView.setVisibility(View.VISIBLE);
 		Log.i("DaHuaLongJiang", "Entry java playVideo");
@@ -472,6 +475,17 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	public boolean onTouchEvent(MotionEvent event)
+	{
+		if(m_bIsStartingVideo)
+		{
+			m_pkView.stopPlayback();
+			continueRootView();
+		}
+		
+		return true;		
 	}
 
 	static

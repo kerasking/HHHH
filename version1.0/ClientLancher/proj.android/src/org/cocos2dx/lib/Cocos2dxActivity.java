@@ -47,12 +47,14 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelperListener {
+public abstract class Cocos2dxActivity extends Activity implements
+		Cocos2dxHelperListener
+{
 	// ===========================================================
 	// Constants
 	// ===========================================================
 
-	private static final String TAG = Cocos2dxActivity.class.getSimpleName(); 
+	private static final String TAG = Cocos2dxActivity.class.getSimpleName();
 
 	// ===========================================================
 	// Fields
@@ -61,7 +63,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	public Cocos2dxGLSurfaceView mGLSurfaceView;
 	private Cocos2dxHandler mHandler;
 	public static NDVideoView m_pkView = null;
-	
+
 	public FrameLayout m_pkFrameView = null;
 
 	// ===========================================================
@@ -69,7 +71,8 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	// ===========================================================
 
 	@Override
-	protected void onCreate(final Bundle savedInstanceState) {
+	protected void onCreate(final Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 
 		this.mHandler = new Cocos2dxHandler(this);
@@ -77,7 +80,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 		this.init();
 
 		Cocos2dxHelper.init(this, this);
-		TextView textView = new TextView(this);  
+		TextView textView = new TextView(this);
 	}
 
 	// ===========================================================
@@ -91,7 +94,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	@Override
 	protected void onResume()
 	{
-		Log.i("DaHuaLongJiang","Entry Cocos2dxActivity onResume");
+		Log.i("DaHuaLongJiang", "Entry Cocos2dxActivity onResume");
 		super.onResume();
 
 		Cocos2dxHelper.onResume();
@@ -101,7 +104,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	@Override
 	protected void onPause()
 	{
-		Log.i("DaHuaLongJiang","Entry Cocos2dxActivity onPause");
+		Log.i("DaHuaLongJiang", "Entry Cocos2dxActivity onPause");
 		super.onPause();
 
 		Cocos2dxHelper.onPause();
@@ -109,7 +112,8 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	}
 
 	@Override
-	public void showDialog(final String pTitle, final String pMessage) {
+	public void showDialog(final String pTitle, final String pMessage)
+	{
 		Message msg = new Message();
 		msg.what = Cocos2dxHandler.HANDLER_SHOW_DIALOG;
 		msg.obj = new Cocos2dxHandler.DialogMessage(pTitle, pMessage);
@@ -117,24 +121,30 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	}
 
 	@Override
-	public void showEditTextDialog(final String pTitle, final String pContent, final int pInputMode, final int pInputFlag, final int pReturnType, final int pMaxLength) { 
+	public void showEditTextDialog(final String pTitle, final String pContent,
+			final int pInputMode, final int pInputFlag, final int pReturnType,
+			final int pMaxLength)
+	{
 		Message msg = new Message();
 		msg.what = Cocos2dxHandler.HANDLER_SHOW_EDITBOX_DIALOG;
-		msg.obj = new Cocos2dxHandler.EditBoxMessage(pTitle, pContent, pInputMode, pInputFlag, pReturnType, pMaxLength);
+		msg.obj = new Cocos2dxHandler.EditBoxMessage(pTitle, pContent,
+				pInputMode, pInputFlag, pReturnType, pMaxLength);
 		this.mHandler.sendMessage(msg);
 	}
-	
+
 	public boolean onKeyDown(int keyCode, KeyEvent event)
-	{		
+	{
 		return super.onKeyDown(keyCode, event);
 	}
-	
-	public void onBackPressed() {  
-	    finish();  
+
+	public void onBackPressed()
+	{
+		finish();
 	}
-	
+
 	@Override
-	public void runOnGLThread(final Runnable pRunnable) {
+	public void runOnGLThread(final Runnable pRunnable)
+	{
 		this.mGLSurfaceView.queueEvent(pRunnable);
 	}
 
@@ -150,19 +160,21 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 
 		NDVideoControl pkVideoControl = new NDVideoControl(
 				Cocos2dxActivity.this);
-//		pkVideoControl.setCocos2dxActivity(this);
-//		pkVideoControl.hide();
-//
-	//	ViewGroup.LayoutParams tp = new LinearLayout(this.getApplicationContext());
-		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
+		// pkVideoControl.setCocos2dxActivity(this);
+		// pkVideoControl.hide();
+		//
+		// ViewGroup.LayoutParams tp = new
+		// LinearLayout(this.getApplicationContext());
+		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
+				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		m_pkView = new NDVideoView(this.getApplicationContext());
 		m_pkView.setVideoPath("/sdcard/dhlj/SimplifiedChineseRes/res/Video/480_0.mp4");
 		m_pkView.setBackgroundColor(0);
-		//m_pkView.setMediaController(pkVideoControl);
+		// m_pkView.setMediaController(pkVideoControl);
 		m_pkView.setOnCompletionListener(pkVideoControl);
 		m_pkView.requestFocus();
-		//m_pkView.start();
-		//setContentView(m_pkView,pkLayoutParams);
+		// m_pkView.start();
+		// setContentView(m_pkView,pkLayoutParams);
 	}
 
 	public Cocos2dxGLSurfaceView onCreateView()
