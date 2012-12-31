@@ -1,7 +1,9 @@
 #include "NDUtil.h"
 #include<iostream>
 #include "ObjectTracker.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "NDConsole.h"
+#endif
 
 #ifdef ANDROID
 #include <jni.h>

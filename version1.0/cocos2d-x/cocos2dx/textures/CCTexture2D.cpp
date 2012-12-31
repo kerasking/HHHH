@@ -892,7 +892,8 @@ CCTexture2D* CCTexture2D::initWithPaletteData(const void* pData,
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, (GLsizei) nWidth,
 				(GLsizei) nHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, pData);
 		break;
-	case kCCTexture2DPixelFormat_RGBA8:
+        case kCCTexture2DPixelFormat_RGBA8:
+#define GL_PALETTE8_RGBA8_OES             0x8B96
 		glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_PALETTE8_RGBA8_OES, nWidth,
 				nHeight, 0, uiSizeOfData, pData);
 		break;

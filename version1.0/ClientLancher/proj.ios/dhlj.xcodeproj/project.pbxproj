@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		20E23701169169A1008FB048 /* TextureList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E236FF169169A1008FB048 /* TextureList.cpp */; };
+		20E2370B16916DFB008FB048 /* cpLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E2370316916DFB008FB048 /* cpLog.cpp */; };
+		20E2370C16916DFB008FB048 /* KCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E2370416916DFB008FB048 /* KCondition.cpp */; };
+		20E2370D16916DFB008FB048 /* KDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E2370516916DFB008FB048 /* KDirectory.cpp */; };
+		20E2370E16916DFB008FB048 /* KFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E2370616916DFB008FB048 /* KFile.cpp */; };
+		20E2370F16916DFB008FB048 /* KHttp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E2370716916DFB008FB048 /* KHttp.cpp */; };
+		20E2371016916DFB008FB048 /* KThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E2370816916DFB008FB048 /* KThread.cpp */; };
+		20E2371116916DFB008FB048 /* KTimeVal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E2370916916DFB008FB048 /* KTimeVal.cpp */; };
+		20E2371216916DFB008FB048 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20E2370A16916DFB008FB048 /* Main.cpp */; };
 		5A150D90164BCAAF00B1D1C3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A150D8F164BCAAF00B1D1C3 /* OpenGLES.framework */; };
 		5A1A41A51653804800BD1510 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A1A41A01653804600BD1510 /* AppController.mm */; };
 		5A1A41A61653804800BD1510 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1A41A11653804600BD1510 /* AppDelegate.cpp */; };
@@ -27,7 +36,6 @@
 		5A1B38DB1649F33800C94D7F /* KDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B38BA1649F33800C94D7F /* KDirectory.cpp */; };
 		5A1B38DC1649F33800C94D7F /* KFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B38BC1649F33800C94D7F /* KFile.cpp */; };
 		5A1B38DD1649F33800C94D7F /* KFtpClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B38BE1649F33800C94D7F /* KFtpClient.cpp */; };
-		5A1B38DE1649F33800C94D7F /* KHttp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B38C01649F33800C94D7F /* KHttp.cpp */; };
 		5A1B38DF1649F33800C94D7F /* KIniFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B38C21649F33800C94D7F /* KIniFile.cpp */; };
 		5A1B38E01649F33800C94D7F /* KMD5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B38C41649F33800C94D7F /* KMD5.cpp */; };
 		5A1B38E11649F33800C94D7F /* KMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B38C61649F33800C94D7F /* KMutex.cpp */; };
@@ -1062,6 +1070,21 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		20E236FF169169A1008FB048 /* TextureList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureList.cpp; sourceTree = "<group>"; };
+		20E23700169169A1008FB048 /* TextureList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureList.h; sourceTree = "<group>"; };
+		20E2370316916DFB008FB048 /* cpLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cpLog.cpp; sourceTree = "<group>"; };
+		20E2370416916DFB008FB048 /* KCondition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KCondition.cpp; sourceTree = "<group>"; };
+		20E2370516916DFB008FB048 /* KDirectory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KDirectory.cpp; sourceTree = "<group>"; };
+		20E2370616916DFB008FB048 /* KFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KFile.cpp; sourceTree = "<group>"; };
+		20E2370716916DFB008FB048 /* KHttp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KHttp.cpp; sourceTree = "<group>"; };
+		20E2370816916DFB008FB048 /* KThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KThread.cpp; sourceTree = "<group>"; };
+		20E2370916916DFB008FB048 /* KTimeVal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KTimeVal.cpp; sourceTree = "<group>"; };
+		20E2370A16916DFB008FB048 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Main.cpp; sourceTree = "<group>"; };
+		20E2371316916E09008FB048 /* KCondition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCondition.h; sourceTree = "<group>"; };
+		20E2371416916E09008FB048 /* KDirectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KDirectory.h; sourceTree = "<group>"; };
+		20E2371516916E09008FB048 /* KHttp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KHttp.h; sourceTree = "<group>"; };
+		20E2371616916E09008FB048 /* KThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KThread.h; sourceTree = "<group>"; };
+		20E2371716916E09008FB048 /* KTimeVal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTimeVal.h; sourceTree = "<group>"; };
 		5A150D8F164BCAAF00B1D1C3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		5A1A419F1653804500BD1510 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		5A1A41A01653804600BD1510 /* AppController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppController.mm; sourceTree = "<group>"; };
@@ -1098,7 +1121,6 @@
 		5A1B38BD1649F33800C94D7F /* KFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KFile.h; path = ../../../KUtil/KFile.h; sourceTree = "<group>"; };
 		5A1B38BE1649F33800C94D7F /* KFtpClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KFtpClient.cpp; path = ../../../KUtil/KFtpClient.cpp; sourceTree = "<group>"; };
 		5A1B38BF1649F33800C94D7F /* KFtpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KFtpClient.h; path = ../../../KUtil/KFtpClient.h; sourceTree = "<group>"; };
-		5A1B38C01649F33800C94D7F /* KHttp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KHttp.cpp; path = ../../../KUtil/KHttp.cpp; sourceTree = "<group>"; };
 		5A1B38C11649F33800C94D7F /* KHttp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KHttp.h; path = ../../../KUtil/KHttp.h; sourceTree = "<group>"; };
 		5A1B38C21649F33800C94D7F /* KIniFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KIniFile.cpp; path = ../../../KUtil/KIniFile.cpp; sourceTree = "<group>"; };
 		5A1B38C31649F33800C94D7F /* KIniFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KIniFile.h; path = ../../../KUtil/KIniFile.h; sourceTree = "<group>"; };
@@ -2497,7 +2519,6 @@
 				5A1B38BD1649F33800C94D7F /* KFile.h */,
 				5A1B38BE1649F33800C94D7F /* KFtpClient.cpp */,
 				5A1B38BF1649F33800C94D7F /* KFtpClient.h */,
-				5A1B38C01649F33800C94D7F /* KHttp.cpp */,
 				5A1B38C11649F33800C94D7F /* KHttp.h */,
 				5A1B38C21649F33800C94D7F /* KIniFile.cpp */,
 				5A1B38C31649F33800C94D7F /* KIniFile.h */,
@@ -3935,6 +3956,11 @@
 		5A2D17D6164800C00052EBAD /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				20E2371316916E09008FB048 /* KCondition.h */,
+				20E2371416916E09008FB048 /* KDirectory.h */,
+				20E2371516916E09008FB048 /* KHttp.h */,
+				20E2371616916E09008FB048 /* KThread.h */,
+				20E2371716916E09008FB048 /* KTimeVal.h */,
 				5A2D17D7164800C00052EBAD /* cpLog.h */,
 				5A2D17D8164800C00052EBAD /* Kathy.h */,
 				5A2D17D9164800C00052EBAD /* KConnection.h */,
@@ -3953,6 +3979,14 @@
 		5A2D17E1164800C00052EBAD /* src */ = {
 			isa = PBXGroup;
 			children = (
+				20E2370316916DFB008FB048 /* cpLog.cpp */,
+				20E2370416916DFB008FB048 /* KCondition.cpp */,
+				20E2370516916DFB008FB048 /* KDirectory.cpp */,
+				20E2370616916DFB008FB048 /* KFile.cpp */,
+				20E2370716916DFB008FB048 /* KHttp.cpp */,
+				20E2370816916DFB008FB048 /* KThread.cpp */,
+				20E2370916916DFB008FB048 /* KTimeVal.cpp */,
+				20E2370A16916DFB008FB048 /* Main.cpp */,
 				5A2D17E2164800C00052EBAD /* Kathy.cpp */,
 				5A2D17E3164800C00052EBAD /* KConnection.cpp */,
 				5A2D17E4164800C00052EBAD /* KMutex.cpp */,
@@ -4521,6 +4555,8 @@
 		5A3FC0A2165279D1002166DD /* textures */ = {
 			isa = PBXGroup;
 			children = (
+				20E236FF169169A1008FB048 /* TextureList.cpp */,
+				20E23700169169A1008FB048 /* TextureList.h */,
 				5A3FC0A3165279D1002166DD /* CCTexture2D.cpp */,
 				5A3FC0A4165279D1002166DD /* CCTexture2D.h */,
 				5A3FC0A5165279D1002166DD /* CCTextureAtlas.cpp */,
@@ -5904,7 +5940,6 @@
 				5A1B38DB1649F33800C94D7F /* KDirectory.cpp in Sources */,
 				5A1B38DC1649F33800C94D7F /* KFile.cpp in Sources */,
 				5A1B38DD1649F33800C94D7F /* KFtpClient.cpp in Sources */,
-				5A1B38DE1649F33800C94D7F /* KHttp.cpp in Sources */,
 				5A1B38DF1649F33800C94D7F /* KIniFile.cpp in Sources */,
 				5A1B38E01649F33800C94D7F /* KMD5.cpp in Sources */,
 				5A1B38E11649F33800C94D7F /* KMutex.cpp in Sources */,
@@ -6141,6 +6176,14 @@
 				5A2D17EB164800C00052EBAD /* KNetworkAddress.cpp in Sources */,
 				5A2D17EC164800C00052EBAD /* KTcpClientSocket.cpp in Sources */,
 				5A2D17ED164800C00052EBAD /* StringData.cpp in Sources */,
+				20E2370B16916DFB008FB048 /* cpLog.cpp in Sources */,
+				20E2370C16916DFB008FB048 /* KCondition.cpp in Sources */,
+				20E2370D16916DFB008FB048 /* KDirectory.cpp in Sources */,
+				20E2370E16916DFB008FB048 /* KFile.cpp in Sources */,
+				20E2370F16916DFB008FB048 /* KHttp.cpp in Sources */,
+				20E2371016916DFB008FB048 /* KThread.cpp in Sources */,
+				20E2371116916DFB008FB048 /* KTimeVal.cpp in Sources */,
+				20E2371216916DFB008FB048 /* Main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6309,6 +6352,7 @@
 				5AD25BCA167F3B8000EEA44B /* SimpleAudioEngine_objc.m in Sources */,
 				5AEA3B571687F91F00456B97 /* ObjectTracker.cpp in Sources */,
 				5AEA3B891688003800456B97 /* StringConvert.cpp in Sources */,
+				20E23701169169A1008FB048 /* TextureList.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
