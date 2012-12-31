@@ -150,8 +150,8 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 
 		NDVideoControl pkVideoControl = new NDVideoControl(
 				Cocos2dxActivity.this);
-//		pkVideoControl.setCocos2dxActivity(this);
-//		pkVideoControl.hide();
+		pkVideoControl.setCocos2dxActivity(this);
+		pkVideoControl.hide();
 //
 	//	ViewGroup.LayoutParams tp = new LinearLayout(this.getApplicationContext());
 		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
