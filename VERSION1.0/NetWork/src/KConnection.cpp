@@ -311,7 +311,7 @@ KConnection::close()
 	(*useNum)--;
 	if ( *useNum == 0 )
 	{
-		assert( _connId >= 0 );
+		//assert( _connId >= 0 );
 #ifdef WIN32
             closesocket(_connId);
 #elif defined(__IOS_PLATFORM__) || defined(__ANDROID_PALTFORM__) || defined(ANDROID)
