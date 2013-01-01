@@ -45,11 +45,17 @@
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
 #include <android/log.h>
+#include "jni/JniHelper.h"
 #include "ScriptDataBase.h"
 
 #define  LOG_TAG    "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 #define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#include <shellapi.h>
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
 #else
 #define  LOG_TAG    "DaHuaLongJiang"
 #define  LOGD(...)
@@ -167,12 +173,40 @@ void PlayerRideMount(int nRideStatus, int nMountType)
 
 //++
 //打开网页-系统自带浏览器
-bool OpenURL(std::string szURL)
+bool OpenURL(std::string strURL)
 {
-#if 0
-	return [ [UIApplication sharedApplication] openURL: [ NSURL URLWithString: [NSString stringWithUTF8String: szURL.c_str()] ] ];
+	if (0 == strURL.length())
+	{
+		return false;
+	}
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	return [ [UIApplication sharedApplication] openURL: [ NSURL URLWithString: [NSString stringWithUTF8String: strURL.c_str()] ] ];
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	ShellExecuteA(NULL,"open",strURL.c_str(),NULL,NULL,SW_SHOWNORMAL);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+	JniMethodInfo t;
+
+	if (JniHelper::getStaticMethodInfo(t, "org/DeNA/DHLJ/DaHuaLongJiang",
+		"openUrl",
+		"(Ljava/lang/String;)I"))
+	{
+		LOGD("the t value is:env = %d,classID = %d,methodID = %d",(int)t.env,(int)t.classID,(int)t.methodID);
+
+		jstring stringArg1;
+		stringArg1 = t.env->NewStringUTF(strURL.c_str());
+
+		jint retFromJava = (jint) t.env->CallStaticObjectMethod(t.classID,
+			t.methodID, stringArg1);
+
+		t.env->DeleteLocalRef(stringArg1);
+		t.env->DeleteLocalRef(t.classID);
+	}
+
 #endif
-	return false;
+
+	return true;
 }
 //++
 

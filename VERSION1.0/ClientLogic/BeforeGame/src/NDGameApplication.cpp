@@ -73,6 +73,8 @@ static NDBaseDirector s_NDBaseDirector;
 #include "NDUILoadEngine.h"
 #include "NDVideoMgr.h"
 #include "../CocosDenshion/include/SimpleAudioEngine.h"
+#include "NDUtil.h"
+#include "NDUtility.h"
 
 using namespace CocosDenshion;
 
@@ -278,6 +280,7 @@ void NDGameApplication::MyInit()
 	REGISTER_CLASS(NDBaseFighter,Fighter);
 	REGISTER_CLASS(NDBaseBattleMgr,BattleMgr);
 	REGISTER_CLASS(NDSprite,NDPlayer);
+	REGISTER_CLASS(NDUtil,NDUtility);
 	REGISTER_CLASS(NDBaseNetMgr,NDNetMsgPool);
 	REGISTER_CLASS(NDBaseScriptMgr,ScriptMgr);
 	REGISTER_CLASS(NDBaseGlobalDialog,CIDFactory);
@@ -340,6 +343,13 @@ void NDGameApplication::applicationWillEnterForeground()
     [MBGPlatform resume];
 #endif
 	CCDirector::sharedDirector()->startAnimation();
+
+	if (NDDataTransThread::DefaultThread()->GetQuitGame())
+	{
+		quitGame();
+		NDDataTransThread::DefaultThread()->Stop();
+		NDDataTransThread::ResetDefaultThread();
+	}
 
 	// if you use SimpleAudioEngine, it must resume here
 	SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();

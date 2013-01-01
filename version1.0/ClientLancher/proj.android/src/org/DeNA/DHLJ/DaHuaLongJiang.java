@@ -31,6 +31,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Environment;
@@ -39,6 +40,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -70,6 +72,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static BalanceButton balancebutton;
 	private static float s_fScale;
 	private View rootView = null;
+	private static boolean m_bIsStartingVideo = false;
 
 	private static Handler VideoViewHandler = new Handler();
 	private static Handler RootViewHandler = new Handler();
@@ -105,11 +108,11 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	{
 		public void run()
 		{
-			//ms_pkDHLJ.setMain();
+			// ms_pkDHLJ.setMain();
 			ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
 					ViewGroup.LayoutParams.FILL_PARENT,
 					ViewGroup.LayoutParams.FILL_PARENT);
-			//ms_pkDHLJ.nativeInit(100, 200);
+			// ms_pkDHLJ.nativeInit(100, 200);
 			ms_pkDHLJ.setContentView(menubar, pkParams);
 			ms_pkDHLJ.rootView.setVisibility(View.VISIBLE);
 			// ms_pkDHLJ.balancebutton.setVisibility(View.INVISIBLE);
@@ -121,7 +124,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public void continueRootView()
 	{
-		Log.i("DaHuaLongJiang","continueRootView");
+		Log.i("DaHuaLongJiang", "continueRootView");
 		VideoViewHandler.post(mContinueRootView);
 		resumeBackgroundMusic();
 	}
@@ -144,7 +147,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			balancebutton.setVisibility(View.VISIBLE);
 		};
 	};
-	
+
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		if (isSDCardCanUse())
@@ -215,28 +218,30 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			menubar.setMenuIconGravity(Gravity.TOP | Gravity.LEFT);
 
 			Rect rect = new Rect(0, 0, 200, 120);
-			//balancebutton = com.mobage.android.social.common.Service.getBalanceButton(rect); 			
+			// balancebutton =
+			// com.mobage.android.social.common.Service.getBalanceButton(rect);
 
-//			button1 = new Button(this);
-//			button1.setText("aaaaaaaaa".toCharArray(), 1, 6);
-//    		FrameLayout.LayoutParams pkParamsButton = new FrameLayout.LayoutParams(200,200);
-//    		pkParamsButton.topMargin = 10;
-//    		pkParamsButton.leftMargin = 10;
-//    		button1.setLayoutParams(pkParamsButton);
-//			
-//			button1.setOnClickListener(new OnClickListener() {
-//				@Override
-//				public void onClick(View view) {
-//					FeedsView.openActivityFeeds();
-////					RemoteNotificationView.SendRemoteNotification("500002013");
-////					RemoteNotificationView.SendRemoteNotification("500001919");
-////					PeopleView.getFriendsWithGame();
-////					PeopleView.getFriends();
-////					PeopleView.getUsers();
-////					PeopleView.getCurrentUser();
-////					PeopleView.getUser();
-//				}
-//			});
+			// button1 = new Button(this);
+			// button1.setText("aaaaaaaaa".toCharArray(), 1, 6);
+			// FrameLayout.LayoutParams pkParamsButton = new
+			// FrameLayout.LayoutParams(200,200);
+			// pkParamsButton.topMargin = 10;
+			// pkParamsButton.leftMargin = 10;
+			// button1.setLayoutParams(pkParamsButton);
+			//
+			// button1.setOnClickListener(new OnClickListener() {
+			// @Override
+			// public void onClick(View view) {
+			// FeedsView.openActivityFeeds();
+			// // RemoteNotificationView.SendRemoteNotification("500002013");
+			// // RemoteNotificationView.SendRemoteNotification("500001919");
+			// // PeopleView.getFriendsWithGame();
+			// // PeopleView.getFriends();
+			// // PeopleView.getUsers();
+			// // PeopleView.getCurrentUser();
+			// // PeopleView.getUser();
+			// }
+			// });
 		} else
 		{
 			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -310,8 +315,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		// menubar.addView(m_pkView);
 		menubar.addView(rootView);
 
-		//menubar.addView(balancebutton);
-    	//balancebutton.setVisibility( View.INVISIBLE );
+		// menubar.addView(balancebutton);
+		// balancebutton.setVisibility( View.INVISIBLE );
 
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
 				ViewGroup.LayoutParams.FILL_PARENT,
@@ -409,16 +414,17 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public static int playVideo(final String strFile)
 	{
-		if(true)
-		{
-			return 0;
-		}
-		
+//		if (true)
+//		{
+//			return 0;
+//		}
+
 		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 
 		pauseAllBackgroundMusic();
 		// ms_pkDHLJ.setContentView(m_pkView,pkLayoutParams);
+		m_bIsStartingVideo = true;
 		VideoViewHandler.post(mShowVideoView);
 		// m_pkView.setVisibility(View.VISIBLE);
 		Log.i("DaHuaLongJiang", "Entry java playVideo");
@@ -444,6 +450,42 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	public static int stopVideo(final String strFile)
 	{
 		return 0;
+	}
+
+	public static int openUrl(final String strFile)
+	{
+		if (ms_pkDHLJ == null)
+		{
+			return -1;
+		}
+
+		Intent it = new Intent(Intent.ACTION_VIEW, Uri.parse(strFile));
+		it.setClassName("com.android.browser",
+				"com.android.browser.BrowserActivity");
+		ms_pkDHLJ.startActivity(it);
+
+		return 0;
+	}
+
+	public boolean onKeyDown(int keyCode, KeyEvent event)
+	{
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
+		{
+			event.startTracking();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+	
+	public boolean onTouchEvent(MotionEvent event)
+	{
+		if(m_bIsStartingVideo)
+		{
+			m_pkView.stopPlayback();
+			continueRootView();
+		}
+		
+		return true;		
 	}
 
 	static

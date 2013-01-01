@@ -873,6 +873,8 @@ std::string getStringTime(long nSeconds)
 
 NS_NDENGINE_BGN
 
+IMPLEMENT_CLASS(NDUtility,NDUtil)
+
 void showDialog( const char* title, const char* content )
 {
 	NDUIDialog *dialog = new NDUIDialog;
@@ -883,6 +885,22 @@ void showDialog( const char* title, const char* content )
 void showDialog( const char* content )
 {
 	//showDialog("error", content);
+}
+
+
+NDUtility::NDUtility()
+{
+
+}
+
+NDUtility::~NDUtility()
+{
+
+}
+
+void NDUtility::QuitGameToServerList()
+{
+	quitGame();
 }
 
 NS_NDENGINE_END

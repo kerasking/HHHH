@@ -96,7 +96,10 @@ void NDDataTransThread::WaitStatus(ThreadStatus status)
 	while (true)
 	{
 		if (m_status == status)
+		{
 			break;
+		}
+
 		//usleep(100);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 		Sleep(1);
@@ -113,6 +116,7 @@ void NDDataTransThread::WaitStatus(ThreadStatus status)
 //===========================================================================
 void NDDataTransThread::Start(const char* ipAddr, int port)
 {
+	m_bQuitGame = false;
 	CCLog( "@@login6.2: NDDataTransThread::Start()");
 
 	if (m_status == ThreadStatusRunning)
@@ -209,6 +213,7 @@ void NDDataTransThread::Execute()
 
 	m_socket->Close();
 	m_status = ThreadStatusStoped;
+	m_bQuitGame = true;
 	CCLog("thread stop");
 }
 
@@ -265,7 +270,9 @@ void NDDataTransThread::BlockDeal()
 				}
 
 				if (buffer != 0xfe)
+				{
 					continue;
+				}
 
 				//读大小及code
 				unsigned char ucbuffer[4] =
@@ -308,8 +315,8 @@ void NDDataTransThread::BlockDeal()
 
 				do
 				{
-					unsigned char ucbuffer[1046] =
-					{ 0x0 };
+					unsigned char ucbuffer[1046] = { 0x0 };
+
 					int hasRead = 0;
 					unsigned char * ptr = (unsigned char*) ucbuffer;
 					readedLen = len - 6;
@@ -357,7 +364,9 @@ void NDDataTransThread::BlockDeal()
 void NDDataTransThread::ChangeCode(DWORD dwCode)
 {
     if(m_socket)
-        m_socket->ChangeCode(dwCode);
+	{
+		m_socket->ChangeCode(dwCode);
+	}
 }
 
 //===========================================================================
@@ -387,7 +396,7 @@ void NDDataTransThread::NotBlockDeal()
 			int readedLen = 0;
 			if (!m_socket->Receive(buffer, readedLen))
 			{
-				//NDNetMsgMgr::GetSingleton().AddBackToMenuPacket();	//???????????????
+				//NDNetMsgMgr::GetSingleton().AddBackToMenuPacket();	//已废弃
 				m_operate = ThreadStatusStoped;
 			}
 			else if (readedLen)
@@ -417,4 +426,3 @@ void NDDataTransThread::NotBlockDeal()
 }
 
 //===========================================================================
-

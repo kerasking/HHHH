@@ -997,12 +997,12 @@ function p.DestinyEquipOperate(nItemId, nPetId, nPosition, bIsEquip)
             
             if(nType1 == 0) then
                 if(nStatusType2 == nStatusType1) then
-                    CommonDlgNew.ShowYesDlg(GetTxtPri("BLTW_T2"));
+                    CommonDlgNew.ShowYesDlg(GetTxtPri("DU_T27"));
                     return false;
                 end
             else
                 if(nType1 == nType2) then
-                    CommonDlgNew.ShowYesDlg(GetTxtPri("BLTW_T2"));
+                    CommonDlgNew.ShowYesDlg(GetTxtPri("DU_T27"));
                     return false;
                 end
             end

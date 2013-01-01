@@ -84,7 +84,7 @@ namespace NDEngine
 		//		作用：获取断线标志
 		//		参数：无
 		//		返回值：是否断线 
-        bool GetQuitGame();
+		bool GetQuitGame() {return m_bQuitGame;}
         
         //      函数：SetQuitGame
         //      作用：设置断线标志
@@ -100,9 +100,12 @@ namespace NDEngine
 		//		返回值：屏幕大小
 		void Execute();
         void ChangeCode(DWORD dwCode);
+
 	private:
+
 		NDSocket* m_socket;
-		ThreadStatus m_status, m_operate;	
+		ThreadStatus m_status;
+		ThreadStatus m_operate;	
         bool m_bQuitGame;
 		void WaitStatus(ThreadStatus status);
 		void BlockDeal();

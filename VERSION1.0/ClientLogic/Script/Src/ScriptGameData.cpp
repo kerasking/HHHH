@@ -159,7 +159,8 @@ void NDScriptGameData::LogOut(eScriptData esd, unsigned int nKey, eRoleData e, i
 
 //#pragma mark 角色数据id列表管理
 bool 
-NDScriptGameData::GetRoleDataIdList(eScriptData esd, unsigned int nKey, eRoleData e, int nRoleId, eIDList eList, ID_VEC& idVec)
+NDScriptGameData::GetRoleDataIdList(eScriptData esd, unsigned int nKey, eRoleData e,
+									int nRoleId, eIDList eList, ID_VEC& idVec)
 {
 	if (esd < eScriptDataBegin || e <= eRoleDataBasic || eList < eIDList_Begin)
 	{
@@ -184,7 +185,7 @@ NDScriptGameData::GetRoleDataIdList(eScriptData esd, unsigned int nKey, eRoleDat
 	
 	VecMapScriptGameData& vMSGD = gsds.extradata;
 	
-	size_t eIndex = e - 1;	
+	size_t eIndex = e - 1;
 	
 	if ( eIndex >= vMSGD.size() )
 	{
@@ -226,7 +227,8 @@ NDScriptGameData::GetRoleDataIdList(eScriptData esd, unsigned int nKey, eRoleDat
 }
 
 bool			
-NDScriptGameData::DelRoleDataIdList(eScriptData esd, unsigned int nKey, eRoleData e, int nRoleId, eIDList eList)
+NDScriptGameData::DelRoleDataIdList(eScriptData esd, unsigned int nKey,
+									eRoleData e, int nRoleId, eIDList eList)
 {
 	if (esd < eScriptDataBegin || e <= eRoleDataBasic || eList < eIDList_Begin)
 	{
@@ -277,7 +279,7 @@ NDScriptGameData::DelRoleDataIdList(eScriptData esd, unsigned int nKey, eRoleDat
 		return false;
 	}
 	
-	STSCRIPTGAMEDATA& st	= *itMapSGD;
+	STSCRIPTGAMEDATA& st = *itMapSGD;
 	
 	std::map<int, ID_VEC>& mapIdList			= st.mapIDList;
 	std::map<int, ID_VEC>::iterator itIDList	= mapIdList.find(eList);

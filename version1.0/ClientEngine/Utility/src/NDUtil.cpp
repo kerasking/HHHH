@@ -1,7 +1,9 @@
 #include "NDUtil.h"
 #include<iostream>
 #include "ObjectTracker.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "NDConsole.h"
+#endif
 
 #ifdef ANDROID
 #include <jni.h>
@@ -51,6 +53,11 @@ STRING_VEC NDUtil::ErgodicFolderForSpceialFileExtName(const char* pszPath,
 	}
 
 	return kStringVec;
+}
+
+void NDUtil::QuitGameToServerList()
+{
+
 }
 
 NS_NDENGINE_END
