@@ -79,6 +79,10 @@ CUIEdit::~CUIEdit()
 void CUIEdit::OnTextChanged()
 {
 	if (!m_lbText) return;
+
+	int strCount = m_strText.length();
+	if(strCount > m_nMaxLen)
+		return;
 		
 	string labelText = "";
 	if (IsPassword())

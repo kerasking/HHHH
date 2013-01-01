@@ -2139,21 +2139,23 @@ NDPlayer& player = NDPlayer::defaultHero();
 	}
 #endif
 
-	float offset = 1.0f * RESOURCE_SCALE;
-	lable[0]->SetFrameRect(CCRectMake(newX, newY, fontSize.width, fontSize.height));//ио
-	lable[1]->SetFrameRect(CCRectMake(newX + offset, newY + offset, fontSize.width, fontSize.height));//╣в
-
-// 	if(m_nQuality>-1){
-// 		ccColor4B cColor4 = BaseScriptMgrObj.excuteLuaFuncRetColor4("GetColor", "Item",m_nQuality);
-// 		lable[0]->SetFontColor(cColor4);
-// 		//lable[1]->SetFontColor(cColor4);
-// 	}
-
 	lable[0]->SetText(in_utf8.c_str());
 	lable[1]->SetText(in_utf8.c_str());
 
 	lable[0]->SetFontColor(color1);
 	lable[1]->SetFontColor(color2);
+
+	float offset = 1.0f * RESOURCE_SCALE;
+	lable[0]->SetFrameRect(CCRectMake(newX, newY, fontSize.width, fontSize.height));//ио
+	lable[1]->SetFrameRect(CCRectMake(newX + offset, newY + offset, fontSize.width, fontSize.height));//╣в
+	lable[1]->SetVisible(false);
+
+	if(m_nQuality > -1)
+	{
+		ccColor4B cColor4 = ScriptMgrObj.excuteLuaFuncRetColor4("GetColor", "Item", m_nQuality);
+		lable[0]->SetFontColor(cColor4);
+		//lable[1]->SetFontColor(cColor4);
+	}
 }
 
 void NDManualRole::SetLableName( const std::string& utf8_text, int x, int y, bool isEnemy)

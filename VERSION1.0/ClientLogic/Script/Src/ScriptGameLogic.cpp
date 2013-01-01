@@ -411,11 +411,11 @@ bool SetSystemSetS(const char* key, const char* value)
 }
 void ShowRoleName(bool isShow)
 {
-	//NDMapMgrObj.isShowName=isShow;
+	NDMapMgrObj.setIsShowName(isShow);
 }
 void ShowOtherRole(bool isShow)
 {
-	//NDMapMgrObj.isShowOther=isShow;
+	NDMapMgrObj.setIsShowOther(isShow);
 }
 void restartLastBattle()
 {
