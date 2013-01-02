@@ -56,32 +56,32 @@ local GOLD_LIMIT					= 10;	-- 金币开席的金币需求
 local AMOUNT_LIMIT					= 3;	-- 开席的人数需求
 
 ---------------------------------------------------
-local SZ_ERROR_00				= "您的等级不足，不能创建（参加）宴会";
-local SZ_ERROR_01				= "您没有邀请牌，不能创建（参加）宴会";
-local SZ_ERROR_02				= "您的声望不足，不能创建（参加）宴会";
-local SZ_ERROR_03				= "您的将魂不足，不能创建（参加）宴会";
-local SZ_ERROR_04				= "您的金币不足，不能金币开席，请充值。";
-local SZ_ERROR_05				= "出席者至少3人才可以开席";
-local SZ_ERROR_06				= "宴会人数已满";
+local SZ_ERROR_00				= GetTxtPri("MB_T5");
+local SZ_ERROR_01				= GetTxtPri("MB_T6");
+local SZ_ERROR_02				= GetTxtPri("MB_T7");
+local SZ_ERROR_03				= GetTxtPri("MB_T8");
+local SZ_ERROR_04				= GetTxtPri("MB_T9");
+local SZ_ERROR_05				= GetTxtPri("MB_T10");
+local SZ_ERROR_06				= GetTxtPri("MB_T11");
 
 ---------------------------------------------------
-local SZ_TIPS_GUEST				= "您已在宴席上，关闭即离开宴席。"
-local SZ_TIPS_HOST				= "您已在宴席上，关闭即离开宴席，且该宴席将被取消。"
-local SZ_TIPS_5					= "如果参加人数满5个人，奖励会更丰富，您是否确定要开席？"
-local SZ_TIPS_10				= "消耗10金币，获得5人开席奖励效果，是否确认？"
+local SZ_TIPS_GUEST				= GetTxtPri("MB_T12")
+local SZ_TIPS_HOST				= GetTxtPri("MB_T13")
+local SZ_TIPS_5					= GetTxtPri("MB_T14")
+local SZ_TIPS_10				= GetTxtPri("MB_T15")
 
 ---------------------------------------------------
-local SZ_PLAYER_INFO_00			= "您";
-local SZ_PLAYER_INFO_01			= "有%d次免费宴会机会，";--
-local SZ_PLAYER_INFO_02			= "持有%d张宴会邀请牌，";--
-local SZ_PLAYER_INFO_03			= "每次宴会成功将消耗500声望和100将魂，同场宴会人数越多奖励越丰富。";
+local SZ_PLAYER_INFO_00			= GetTxtPri("MB_T16");
+local SZ_PLAYER_INFO_01			= GetTxtPri("MB_T17");--
+local SZ_PLAYER_INFO_02			= GetTxtPri("MB_T18");--
+local SZ_PLAYER_INFO_03			= GetTxtPri("MB_T19");
 
 ---------------------------------------------------
-local SZ_START_SUCCEED			= "成功开席";
-local SZ_GOLD_START_SUCCEED		= "成功金币开席";
-local SZ_CANCEL_SUCCEED			= "宴会取消";
-local SZ_TIME_OUT				= "非宴会时段";
-local SZ_SHOW_THE_DOOR			= "您被请出宴会";
+local SZ_START_SUCCEED			= GetTxtPri("MB_T20");
+local SZ_GOLD_START_SUCCEED		= GetTxtPri("MB_T21");
+local SZ_CANCEL_SUCCEED			= GetTxtPri("MB_T22");
+local SZ_TIME_OUT				= GetTxtPri("MB_T23");
+local SZ_SHOW_THE_DOOR			= GetTxtPri("MB_T24");
 
 ---------------------------------------------------
 
