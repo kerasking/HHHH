@@ -60,7 +60,7 @@ WorldMapLayer::WorldMapLayer()
 	m_tmStartMoving.tv_usec = 0;
 
 	m_idMapCached = 0;
-	m_bArrive = false;
+	m_bArrive = true;
 }
 
 WorldMapLayer::~WorldMapLayer()
@@ -492,8 +492,6 @@ void WorldMapLayer::OnButtonClick(NDUIButton* button)
 
 void WorldMapLayer::Goto( int nMapId )
 {
-	m_bArrive = false;
-
 	PlaceNode* node = GetPlaceNodeWithId(nMapId);
 	if (!node)
 	{
@@ -501,7 +499,7 @@ void WorldMapLayer::Goto( int nMapId )
 	}
 	if (node && m_roleNode )//Guosen 2012.11.22可响应脚下节点//if (node && m_roleNode && m_curBtn != node)
 	{
-		if(m_curBtn == node)
+		if((m_curBtn == node) && (m_bArrive))
 		{
 			//如果是脚下的点直接退出至主城
 			if(nMapId==1 || nMapId == 2)
@@ -512,11 +510,13 @@ void WorldMapLayer::Goto( int nMapId )
 			}
 			else
 			{
+				m_bArrive = true;
 				ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", nMapId);
 				return;
 			}
 		}
 
+		m_bArrive = false;
 		CCPoint posTarget = GetTargetPos(nMapId);
 		
 		SetMove(true);
