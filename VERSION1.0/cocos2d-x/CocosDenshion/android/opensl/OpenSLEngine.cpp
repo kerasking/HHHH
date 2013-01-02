@@ -3,6 +3,7 @@
 #ifdef ANDROID
 #include <jni.h>
 #include <android/log.h>
+#include "../../../cocos2dx/platform/android/jni/JniHelper.h"
 
 #define  LOG_TAG    "DaHuaLongJiang"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
@@ -14,11 +15,11 @@
 #endif
 
 using namespace std;
+using namespace cocos2d;
 
-
-OpenSLEngine::OpenSLEngine()
- :m_musicVolume(0),
-  m_effectVolume(0)
+OpenSLEngine::OpenSLEngine():
+m_musicVolume(0),
+m_effectVolume(0)
 {}
 
 OpenSLEngine::~OpenSLEngine()
@@ -31,12 +32,12 @@ OpenSLEngine::~OpenSLEngine()
  **********************************************************************************/
 #define  CLASS_NAME "org/cocos2dx/lib/Cocos2dxActivity"
 
-typedef struct JniMethodInfo_
-{
-	JNIEnv *    env;
-	jclass      classID;
-	jmethodID   methodID;
-} JniMethodInfo;
+// typedef struct JniMethodInfo_
+// {
+// 	JNIEnv *    env;
+// 	jclass      classID;
+// 	jmethodID   methodID;
+// } JniMethodInfo;
 
 extern "C" {
 	static JNIEnv* getJNIEnv(void)
@@ -206,14 +207,23 @@ void* getFuncPtr(const char *value)
 
 int getFileDescriptor(const char * filename, off_t & start, off_t & length)
 {
+	LOGD("Entry getFileDescriptor,filename is %s",filename);
+
 	JniMethodInfo methodInfo;
-	if (! getStaticMethodInfo(methodInfo, ASSET_MANAGER_GETTER, "()Landroid/content/res/AssetManager;"))
+	if (! JniHelper::getStaticMethodInfo(methodInfo,"org/cocos2dx/lib/Cocos2dxHelper", ASSET_MANAGER_GETTER, "()Landroid/content/res/AssetManager;"))
 	{
+		LOGERROR("getStaticMethodInfo(...) failed");
 		methodInfo.env->DeleteLocalRef(methodInfo.classID);
 		return FILE_NOT_FOUND;
 	}
+
 	jobject assetManager = methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID);
+
+	LOGD("jobject assetManager = methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID);");
+
 	methodInfo.env->DeleteLocalRef(methodInfo.classID);
+
+	LOGD("jobject assetManager = methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID); end");
 
 	AAssetManager* (*AAssetManager_fromJava)(JNIEnv* env, jobject assetManager);
 	AAssetManager_fromJava = (AAssetManager* (*)(JNIEnv* env, jobject assetManager))
@@ -221,13 +231,18 @@ int getFileDescriptor(const char * filename, off_t & start, off_t & length)
 	AAssetManager* mgr = AAssetManager_fromJava(methodInfo.env, assetManager);
 	assert(NULL != mgr);
 
+	LOGD("assert(NULL != mgr); end");
+
 	AAsset* (*AAssetManager_open)(AAssetManager* mgr, const char* filename, int mode);
 	AAssetManager_open = (AAsset* (*)(AAssetManager* mgr, const char* filename, int mode))
 		dlsym(s_pAndroidHandle, "AAssetManager_open");
 	AAsset* Asset = AAssetManager_open(mgr, filename, AASSET_MODE_UNKNOWN);
+
+	LOGD("AAsset* Asset = AAssetManager_open(mgr, filename, AASSET_MODE_UNKNOWN); end");
+
 	if (NULL == Asset)
 	{
-		LOGD("file not found! Stop preload file: %s", filename);
+		LOGERROR("file not found! Stop preload file: %s", filename);
 		return FILE_NOT_FOUND;
 	}
 
@@ -238,11 +253,14 @@ int getFileDescriptor(const char * filename, off_t & start, off_t & length)
 	int fd = AAsset_openFileDescriptor(Asset, &start, &length);
 	assert(0 <= fd);
 
+	LOGD("open asset as file descriptor");
+
 	void (*AAsset_close)(AAsset* asset);
 	AAsset_close = (void (*)(AAsset* asset))
 		dlsym(s_pAndroidHandle, "AAsset_close");
 	AAsset_close(Asset);
 
+	LOGD("Leave getFileDescriptor");
 	return fd;
 }
 

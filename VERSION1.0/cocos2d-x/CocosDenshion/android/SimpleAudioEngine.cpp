@@ -145,7 +145,6 @@ static bool getStaticMethodInfo(JniMethodInfo &methodinfo,
 	return bRet;
 }
 }
-;
 
 namespace CocosDenshion
 {
@@ -164,16 +163,17 @@ SimpleAudioEngine::SimpleAudioEngine()
 	methodInfo.env->DeleteLocalRef(methodInfo.classID);
 
 	const char* deviceModel = methodInfo.env->GetStringUTFChars(jstr, NULL);
-	methodInfo.env->ReleaseStringUTFChars(jstr, deviceModel);
-	methodInfo.env->DeleteLocalRef(jstr);
 
 	LOGD(deviceModel);
 
 	if (strcmp(I9100_MODEL, deviceModel) == 0)
 	{
 		LOGD("i9100 model\nSwitch to OpenSLES");
-		s_bI9100 = false;
+		s_bI9100 = true;
 	}
+
+	methodInfo.env->ReleaseStringUTFChars(jstr, deviceModel);
+	methodInfo.env->DeleteLocalRef(jstr);
 }
 
 SimpleAudioEngine::~SimpleAudioEngine()

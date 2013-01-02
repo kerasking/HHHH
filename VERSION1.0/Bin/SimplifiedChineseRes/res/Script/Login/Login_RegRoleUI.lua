@@ -18,7 +18,8 @@ local ID_ROLE_ANIMATE       = 3;    --选人动画
 local CONTAINTER_X = 0;
 local CONTAINTER_Y = 0;
 
-local RoleViewSize = CGSizeMake(140*ScaleFactor,180*ScaleFactor);
+local RoleViewSize = CGSizeMake(140*CoordScaleX*2,180*CoordScaleY*2);
+
 
 local AnimateGroups = {Stand = 0, CheckShow = 1, CheckStand = 2,}   --动画组说明 0.未选中    1.选中姿势    2.选中站立
 
