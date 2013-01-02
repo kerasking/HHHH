@@ -234,7 +234,12 @@ function p.OnUIEventInfo(uiNode, uiEventType, param)
 			--info
 			MsgFriend.SendFriendSel(friendId,friendName);	
 		elseif tag ==  ID_FRIEND_CTRL_BUTTON_7 then	
-			CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("FAUI_T5"),friendName), p.OnCommonDlgDelFriend, true);
+			local friendList = {}
+			friendList = FriendFunc.GetFriendIdList(GetPlayerId());
+			local nLength = #friendList;
+			if nLength ~= 0 then
+				CommonDlgNew.ShowYesOrNoDlg(string.format(GetTxtPri("FAUI_T5"),friendName), p.OnCommonDlgDelFriend, true);
+			end
 	   	
 	   	elseif ( ID_FRIEND_CTRL_BUTTON_6 == tag ) then	--++Guosen 2012.6.12 16:30
 			LogInfo("发送邮件:"..friendName);

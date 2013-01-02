@@ -125,7 +125,7 @@ function p.MsgRecivePLayerInfo(netdatas)
     p.PlayerInfo = "";
     p.PlayerInfo = netdatas:ReadUnicodeString();  
         LogInfo("rec  p.PlayerInfo = %s", p.PlayerInfo);    
-    if IsUIShow(NMAINSCENECHILDTAG.TransportUI) then
+    if IsUIShow(NMAINSCENECHILDTAG.TransportUI) and not IsUIShow(NMAINSCENECHILDTAG.TransportPrepareUI) then
         Transport.SetPlayerInfo(p.PlayerInfo);
     end
 end
