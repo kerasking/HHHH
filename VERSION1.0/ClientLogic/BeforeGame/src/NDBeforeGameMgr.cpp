@@ -1898,7 +1898,9 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
     
     return true;
 }
-int NDBeforeGameMgr::CopyStatus = 0;
+
+int NDBeforeGameMgr::ms_nCopyStatus = 0;
+int NDBeforeGameMgr::ms_nCopyLoginResStatus = 0;
 //检测首次运行
 bool NDBeforeGameMgr::CheckFirstTimeRuning()
 {
@@ -2000,6 +2002,76 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	return bFirstTime;
 }
 
+void* CopyLoginResThread(void* ptr)
+{
+	LOGD("Entry CopyResThread");
+
+	CZipUnZip* pkUnzip = new CZipUnZip;
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	pkUnzip->UnZipFile("../SimplifiedChineseRes.zip","dhlj/");
+	NDBeforeGameMgr::ms_nCopyStatus = 1;
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+	unsigned char* pszZipData = 0;
+	unsigned long ulZipLength = 0;
+	string strApkPath = getApkPath();
+	HZIP pZipHandle = 0;
+	ZIPENTRY kZipEntry = {0};
+	int nMaxIndex = 0;
+
+	if (strApkPath.length() == 0)
+	{
+		LOGERROR("strApkPath.length() == 0");
+		return 0;
+	}
+
+	pszZipData = CCFileUtils::sharedFileUtils()->getFileDataFromZip(strApkPath.c_str(),
+		"assets/LoginImage.zip",&ulZipLength);
+
+	if (0 == pszZipData)
+	{
+		LOGERROR("0 == pszZipData");
+		return 0;
+	}
+
+	pZipHandle = OpenZip((void*)pszZipData,ulZipLength,0);
+
+	if (0 == pZipHandle)
+	{
+		LOGERROR("0 == pZipHandle");
+		return 0;
+	}
+
+	if (ZR_OK != GetZipItem(pZipHandle,-1,&kZipEntry))
+	{
+		LOGERROR("ZR_OK != GetZipItem(pZipHandle,-1,&kZipEntry)");
+		return 0;
+	}
+
+	nMaxIndex = kZipEntry.index;
+
+	LOGD("nMaxIndex = %d",kZipEntry.index);
+	string strPath = "/sdcard/dhlj/";
+
+	for (int i = 0;i < nMaxIndex;i++)
+	{
+		ZIPENTRY kTempZipEntry = {0};
+		GetZipItem(pZipHandle,i,&kTempZipEntry);
+		string strFilename = strPath + string(kTempZipEntry.name);
+		LOGD("Unzipping the %s file.",strFilename.c_str());
+		UnzipItem(pZipHandle,i,strFilename.c_str());
+	}
+
+	CloseZip(pZipHandle);
+	NDBeforeGameMgr::ms_nCopyLoginResStatus = 1;
+
+#else
+#endif
+
+	return NULL;
+}
+
 void* CopyResThread(void* ptr)
 {
 	LOGD("Entry CopyResThread");
@@ -2008,7 +2080,7 @@ void* CopyResThread(void* ptr)
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	pkUnzip->UnZipFile("../SimplifiedChineseRes.zip","dhlj/");
-	NDBeforeGameMgr::CopyStatus = 1;
+	NDBeforeGameMgr::ms_nCopyStatus = 1;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	//pkUnzip->UnZipFile("assets/SimplifiedChineseRes.zip","/sdcard/dhlj/");
 
@@ -2058,50 +2130,14 @@ void* CopyResThread(void* ptr)
 		ZIPENTRY kTempZipEntry = {0};
 		GetZipItem(pZipHandle,i,&kTempZipEntry);
 		string strFilename = strPath + string(kTempZipEntry.name);
-		LOGD("Unzipping the %s file.",strFilename.c_str());
 		UnzipItem(pZipHandle,i,strFilename.c_str());
 	}
 
 	CloseZip(pZipHandle);
-	NDBeforeGameMgr::CopyStatus = 1;
-
-	// FHANDLE hread,hwrite; CreatePipe(&hread,&hwrite,0,0);
-	// CreateZipWriterThread(hwrite);
-	// HZIP hz = OpenZipHandle(hread,0);
-	// for (int i=0; ; i++)
-	// { ZIPENTRY ze;
-	//   ZRESULT zr=GetZipItem(hz,i,&ze); if (zr!=ZR_OK) break; // no more
-	//   UnzipItem(hz,i, ze.name);
-	// }
-	// CloseZip(hz);
+	NDBeforeGameMgr::ms_nCopyStatus = 1;
 
 #else
 #endif
-
-//     string sSource = NDPath::GetAppResFilePath(NDPath::GetRootResDirName());
-//     string sTarget = NDPath::GetCashesPath()+"/"+NDPath::GetRootResDirName();
-//     NSFileManager *fm;
-//     fm = [NSFileManager defaultManager];
-//     signed char bIsDir = false;
-//     bool bExist = [fm fileExistsAtPath:[NSString stringWithUTF8String:sTarget.c_str()] isDirectory:(&bIsDir)];
-//     if (bExist&&bIsDir)
-//     {
-//         if([fm removeItemAtPath:[NSString stringWithUTF8String:sTarget.c_str()] error:NULL]==NO)
-//         {
-//             NDLog( @"remove failed~" );
-//         } 
-//     }
-//     
-//     NDBeforeGameMgr::CopyStatus = 0;
-//     if ([[NSFileManager defaultManager]copyItemAtPath:[NSString stringWithUTF8String:sSource.c_str()]toPath:[NSString stringWithUTF8String:sTarget.c_str()] error:NULL ] == YES)
-//     {
-//         NDBeforeGameMgr::CopyStatus = 1;
-//         NDPath::SetResDirPos( 1 );
-//     }
-//     else
-//     {
-//         NDBeforeGameMgr::CopyStatus = -1;
-//     }
 
 	return NULL;
 }
@@ -2113,5 +2149,16 @@ void NDBeforeGameMgr::CopyRes()
 }
 int NDBeforeGameMgr::GetCopyStatus()
 {
-    return NDBeforeGameMgr::CopyStatus;
+    return NDBeforeGameMgr::ms_nCopyStatus;
+}
+
+int NDEngine::NDBeforeGameMgr::GetLoginCopyStatus()
+{
+	return NDBeforeGameMgr::ms_nCopyLoginResStatus; 
+}
+
+void NDEngine::NDBeforeGameMgr::CopyLoginRes()
+{
+	pthread_t pid = {0};
+	CopyLoginResThread(0);
 }

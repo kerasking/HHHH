@@ -238,9 +238,15 @@ namespace NDEngine
 		void SetDeviceToken( const char * szDeviceToken ){ if ( szDeviceToken ) m_szDeviceToken = szDeviceToken;}
 		std::string GetDeviceToken(){ return m_szDeviceToken;}
 			
-        static int CopyStatus;
+        static int ms_nCopyStatus;
+		static int ms_nCopyLoginResStatus;
+
         static int GetCopyStatus();
+		static int GetLoginCopyStatus();
+
         void CopyRes();
+		void CopyLoginRes();
+
 	protected:
 		std::string	m_szDeviceToken;
 	};

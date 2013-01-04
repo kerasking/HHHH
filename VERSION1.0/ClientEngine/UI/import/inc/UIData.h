@@ -148,7 +148,9 @@ public:
 	CUIData(void);
 	~CUIData(void);
 public:
-	bool openUiFile(const char* pszIniFile);
+
+	bool openUiFile(const char* pszIniFile,bool bAsset = false);
+
 	int  GetCtrlAmount();
 	std::string getCtrlName(int nIndex);
 	bool getCtrlData(char* szCtrlName);

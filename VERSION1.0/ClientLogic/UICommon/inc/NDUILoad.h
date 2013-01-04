@@ -23,7 +23,8 @@ class NDUILoad : public NDUILoadEngine
 		  const char* uiname,
 		  NDUINode *parent, 
 		  NDUITargetDelegate* delegate, 
-		  CCSize sizeOffset = CCSizeZero);
+		  CCSize sizeOffset = CCSizeZero,
+		  bool bAsset = false);
 
 	bool LoadLua(
 		  const char* uiname,
@@ -37,7 +38,8 @@ protected:
 		NDUINode *parent, 
 		NDUITargetDelegate* delegate, 
 		LuaObject* luaDelegate,
-		CCSize sizeOffset = CCSizeZero );
+		CCSize sizeOffset = CCSizeZero,
+		bool bAsset = false);
 
 	NDUINode* LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *parent, const CCSize& sizeOffset );
 	

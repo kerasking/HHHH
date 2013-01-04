@@ -98,9 +98,10 @@ bool NDUILoad::Load(
 		  const char* uiname,
 		  NDUINode *parent, 
 		  NDUITargetDelegate* delegate, 
-		  CCSize sizeOffset /*= CCSizeZero*/)
+		  CCSize sizeOffset /*= CCSizeZero*/,
+		  bool bAsset)
 {
-	return LoadAny( uiname, parent, delegate, NULL, sizeOffset );
+	return LoadAny( uiname, parent, delegate, NULL, sizeOffset,bAsset );
 }
 
 //for LUA
@@ -117,36 +118,52 @@ bool NDUILoad::LoadLua(
 // forCpp & forLua都转这儿处理
 bool NDUILoad::LoadAny( const char* uiname, NDUINode *parent, 
 					   NDUITargetDelegate* delegate, LuaObject* luaDelegate,
-					   CCSize sizeOffset /*= CCSizeZero*/ )
+					   CCSize sizeOffset /*= CCSizeZero*/,
+					   bool bAsset)
 {
+	LOGD("Entry NDUILoad::LoadAny,uiname is %s",uiname);
 	if (!uiname || !parent)
 	{
+		LOGERROR("uiname is null or parent is null");
 		return false;
 	}
 
 	// open ui file
 	CUIData uiData;	
 
-	if ( !uiData.openUiFile(NDPath::GetUIConfigPath(uiname).c_str()) )
+	if (bAsset)
 	{
-		NDAsssert(0);
-		return false;
+		if ( !uiData.openUiFile(uiname,true))
+		{
+			NDAsssert(0);
+			return false;
+		}
+	}
+	else
+	{
+		if ( !uiData.openUiFile(NDPath::GetUIConfigPath(uiname).c_str()) )
+		{
+			NDAsssert(0);
+			return false;
+		}
 	}
 
 	// load all controlls
 	int nCtrlAmount = uiData.GetCtrlAmount();
+
 	for(int i = 0; i < nCtrlAmount; i++)
 	{
-		NDUINode* node = this->LoadCtrl( uiData, i, parent, sizeOffset );
-		if (node)
+		NDUINode* pkNode = LoadCtrl( uiData, i, parent, sizeOffset );
+
+		if (pkNode)
 		{
 			if (delegate)
 			{
-				node->SetTargetDelegate(delegate);
+				pkNode->SetTargetDelegate(delegate);
 			}
 			else if (luaDelegate && luaDelegate->IsFunction())
 			{
-				node->SetLuaDelegate( *luaDelegate );
+				pkNode->SetLuaDelegate( *luaDelegate );
 			}
 		}
 	}
@@ -178,27 +195,27 @@ NDUINode* NDUILoad::LoadCtrl( CUIData& uiData, const int ctrlIndex, NDUINode *pa
 	
 	// 创建控件
 	const char* ctrlTypeName = NULL;
-	NDUINode* node = this->CreateCtrl( uiInfo, sizeOffset, ctrlTypeName );
+	NDUINode* pkNode = CreateCtrl( uiInfo, sizeOffset, ctrlTypeName );
 
-	if (!node)
+	if (!pkNode)
 	{
 		CCLog( "@@ CreateCtrl() failed: type=%d\r\n", uiInfo.nType );
 		//NDAsssert(0);
 		return false;
 	}
 
-	node->SetTag(uiInfo.nID);
+	pkNode->SetTag(uiInfo.nID);
 	if (parent)
 	{
-		parent->AddChild(node);
+		parent->AddChild(pkNode);
 	}
 
 	//优化关闭按钮手感
-	if (this->IsCloseButton( uiInfo ))
+	if (IsCloseButton( uiInfo ))
 	{
-		node->SetBoundScale(2);
+		pkNode->SetBoundScale(2);
 	}
-	return node;
+	return pkNode;
 }
 
 bool NDUILoad::IsAnchorValid( const float anchor )

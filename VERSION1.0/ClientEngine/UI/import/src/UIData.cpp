@@ -56,10 +56,11 @@ CUIData::~CUIData(void)
 	DEC_NDOBJ("CUIData"); 
 }
 
-bool CUIData::openUiFile(const char* pszIniFile)
+bool CUIData::openUiFile(const char* pszIniFile,bool bAsset)
 {
 	m_kINIFile.SetPath(pszIniFile);
-	return m_kINIFile.ReadFile();
+
+	return m_kINIFile.ReadFile(bAsset);
 }
 
 int CUIData::GetCtrlAmount()

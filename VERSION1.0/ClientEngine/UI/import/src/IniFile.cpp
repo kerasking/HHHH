@@ -5,6 +5,20 @@
 #include "IniFile.h"
 #include "ObjectTracker.h"
 #include "define.h"
+#include "CCFileUtils.h"
+
+#ifdef ANDROID
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
 
 // #ifdef _DEBUG
 // #undef THIS_FILE
@@ -13,13 +27,11 @@
 // #endif
 
 using namespace std;
+using namespace cocos2d;
+
 /////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 /////////////////////////////////////////////////////////////////////
-/***
- * 临时性注释 郭浩
- * all
- */
 CIniFile::CIniFile()
 {
 	INC_NDOBJ("CIniFile");
@@ -50,9 +62,13 @@ static void TrimLeftRight(std::string& s)
 		s = "";
 		return;
 	}
+
 	std::string::size_type end = s.find_last_not_of(whitespace);
+
 	if (end != string::npos)
+	{
 		s = s.substr(begin, end - begin + 1);
+	}
 }
 
 /************************************************************************************************************
@@ -104,14 +120,22 @@ bool CIniFile::DecryptIniFile(char *strBuf, int iBufSize)
 #define USE_INI_ENCRYPT        //定义这个宏代表使用ini加密功能
 //#undef USE_INI_ENCRYPT
 
-bool CIniFile::ReadFile()
+bool CIniFile::ReadFile(bool bReadFromAsset)
 {
 	//先判断文件是否加密，加密的话先解密，存储在strbuffer中
 #ifdef USE_INI_ENCRYPT
 	int iBufSize = 512 * 1024;
 	char* strBuffer = new char[iBufSize];
 	memset(strBuffer, 0, sizeof(char) * iBufSize);
-	DecryptIniFile(strBuffer, iBufSize);
+
+	if (bReadFromAsset)
+	{
+		DecryptAssetIniFile(strBuffer, iBufSize);
+	}
+	else
+	{
+		DecryptIniFile(strBuffer, iBufSize);
+	}
 #else
 	FILE* inifile = fopen(m_strPath.c_str(), "r");
 	int curkey = -1, curval = -1;
@@ -674,7 +698,32 @@ void CIniFile::GetPos(const char* keyname, const char* valuename, int* x,int* y)
 	sscanf(pPos, "%d,%d", x, y);
 }
 
-bool CIniFile::ReadFileFromAsset()
+bool CIniFile::DecryptAssetIniFile(char *strBuf, int iBufSize)
 {
+	LOGD("Entry DecryptAssetIniFile,size is %d",iBufSize);
+
+	unsigned long ulSize = 0;
+	unsigned char* pszData = CCFileUtils::sharedFileUtils()->
+		getFileData(m_strPath.c_str(),"rb",&ulSize);
+
+	if (0 == pszData)
+	{
+		LOGERROR("pszData is null");
+		return false;
+	}
+
+	size_t nResultNum = LuaStateMgrObj.GetState()->DecryptString(
+		pszData, ulSize);
+
+	if (0 == nResultNum)
+	{
+		LOGERROR("DecryptString failed!");
+		return false;
+	}
+
+	LOGD("nResultNum is %d,Read data is %s",nResultNum,(const char*)pszData);
+
+	memcpy(strBuf,pszData,ulSize);
+
 	return true;
 }

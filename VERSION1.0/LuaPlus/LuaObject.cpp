@@ -2095,11 +2095,6 @@ inline void LuaObject::AddToUsedList(LuaState* state)
 
 inline void LuaObject::AddToUsedList(LuaState* state, const lua_TValue& obj)
 {
-	if (state == 0)
-	{
-		int a = 10;
-	}
-
 	luaplus_assert(state);
     lua_lock(state->m_state);
 	m_state = state;

@@ -79,9 +79,9 @@ using namespace std;
  	void SetPath(const char* newpath);
  	const char* GetPath() { return m_strPath.c_str(); }
  	
- 	bool ReadFile();
+ 	bool ReadFile(bool bReadFromAsset = false);
  	bool ReadFile(const char* newpath);
-	bool ReadFileFromAsset();
+	bool DecryptAssetIniFile(char *strBuf, int iBufSize);
  	void WriteFile();
  	void Reset();
  
