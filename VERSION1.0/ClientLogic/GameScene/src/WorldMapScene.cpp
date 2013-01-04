@@ -118,7 +118,7 @@ void WorldMapLayer::Initialization(int nMapId)
 		int iX = pkNode->getX();
 		int iY = pkNode->getY();
 		
-		pkTile->SetDrawRect_Android(CCRectMake(iX, iY, iWidth, iHeight));//@android
+		pkTile->SetDrawRect(CCRectMake(iX, iY, iWidth, iHeight));//@android
 		pkTile->setReverse((bool)NO);
 		pkTile->setRotation(NDRotationEnumRotation0);
 		

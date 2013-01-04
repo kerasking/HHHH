@@ -646,7 +646,7 @@ void NDTile::debugDraw()
 	ccDrawLine( lb, rt );
 }
 
-void NDTile::SetDrawRect_Android( CCRect rect, bool bBattleMap ) //@android
+void NDTile::SetDrawRect( CCRect rect, bool bBattleMap ) //@android
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	//android默认情况下以Y为主等比缩放
@@ -682,9 +682,10 @@ void NDTile::SetDrawRect_Android( CCRect rect, bool bBattleMap ) //@android
 	m_kDrawRect = rect;
 }
 
-//android平台下，战斗地图宽度不够会有黑边，解决方法如下：
-//	等比缩放战斗地图确保宽度足够，高度方面则从上面裁剪多余尺寸.
-void NDTile::SetCutRect_Android( CCRect rect, bool bBattleMap ) //@android
+//android平台：	战斗地图宽度不够会有黑边，解决方法如下：
+//				等比缩放战斗地图确保宽度足够，高度方面则从上面裁剪多余尺寸.
+//其他平台：	保持不变
+void NDTile::SetCutRect( CCRect rect, bool bBattleMap ) //@android
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) && WITH_ANDROID_BATTLEMAP_SCALE
 	if (bBattleMap)

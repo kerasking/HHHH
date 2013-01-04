@@ -280,7 +280,7 @@ void NDWorldMapData::decode(FILE* stream)
 
 		pkTile->setMapSize( CCSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
 		pkTile->setCutRect(CCRectMake(0, 0, picWidth, picHeight)); 
-		pkTile->SetDrawRect_Android(CCRectMake(x, y, picWidth, picHeight));//@android
+		pkTile->SetDrawRect(CCRectMake(x, y, picWidth, picHeight));//@android
 		pkTile->make();
 		m_BgTiles->addObject(pkTile);
 		pkTile->release();
@@ -344,7 +344,7 @@ void NDWorldMapData::decode(FILE* stream)
 
 		pkTile->setMapSize( CCSizeMake(m_nColumns * TileWidth, m_nRows * TileHeight));
 		pkTile->setCutRect( CCRectMake(0, 0, picWidth, picHeight)); 
-		pkTile->SetDrawRect_Android( CCRectMake(x, y, picWidth, picHeight)); //@android
+		pkTile->SetDrawRect( CCRectMake(x, y, picWidth, picHeight)); //@android
 		pkTile->setReverse(reverse);
 		pkTile->make();
 
