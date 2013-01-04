@@ -22,6 +22,7 @@ import com.mobage.android.cn.dynamicmenubar.DynamicMenuBar;
 import com.mobage.android.social.BalanceButton;
 import com.mobage.android.social.common.RemoteNotification;
 import com.mobage.android.social.common.RemoteNotification.RemoteNotificationListener;
+import org.DeNA.DHLJ.PushService;
 
 import org.DeNA.DHLJ.SocialUtils;
 import android.R;
@@ -29,6 +30,7 @@ import android.R;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -55,6 +57,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings.Secure;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +68,7 @@ import android.widget.VideoView;
 
 public class DaHuaLongJiang extends Cocos2dxActivity
 {
+	private String mDeviceID;
 	private static final String TAG = "DaHuaLongJiang";
 	public static DaHuaLongJiang ms_pkDHLJ = null;
 	private PlatformListener mPlatformListener;
@@ -212,6 +216,12 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 			Mobage.checkLoginStatus();
 			Mobage.onCreate();
+			
+	        mDeviceID = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);   
+	    	Editor editor = getSharedPreferences(PushService.TAG, MODE_PRIVATE).edit();
+	    	editor.putString(PushService.PREF_DEVICE_ID, mDeviceID);
+	    	editor.commit();
+			PushService.actionStart(context);	
 
 			menubar = new DynamicMenuBar(this);
 			menubar.setMenubarVisibility(View.VISIBLE);

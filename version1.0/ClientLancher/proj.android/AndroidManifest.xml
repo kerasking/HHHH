@@ -85,6 +85,8 @@
 			</intent-filter>
 		</service>
 		
+		<service android:name=".PushService" android:label="DHLJ Push Notifications Service"></service>
+		
 		<receiver android:name="com.denachina.androidpn.client.BootReceiver"
 		    >
 		    <intent-filter >
