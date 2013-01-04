@@ -53,6 +53,8 @@ CLIENT_LOCAL="$DIR/../../"
 echo "NDK_ROOT = $NDK_ROOT"
 echo "COCOS2DX_ROOT = $COCOS2DX_ROOT"
 echo "APP_ANDROID_ROOT = $HELLOWORLD_ROOT"
+RES_LOCAL="$HELLOWORLD_ROOT/../../Bin/copy"
+echo "RES_PATH = $RES_LOCAL"
 
 
 # make sure assets is exist
@@ -61,7 +63,18 @@ if [ -d $HELLOWORLD_ROOT/assets ]; then
 fi
 
 mkdir $HELLOWORLD_ROOT/assets
-mkdir $HELLOWORLD_ROOT/assets/SimplifiedChineseRes
+#mkdir $HELLOWORLD_ROOT/assets/SimplifiedChineseRes
+
+for file in $RES_LOCAL/*
+do
+if [ -d "$file" ]; then
+    cp -rf "$file" "$HELLOWORLD_ROOT"/assets
+fi
+
+if [ -f "$file" ]; then
+    cp "$file" "$HELLOWORLD_ROOT"/assets
+fi
+done
 
 if [[ $buildexternalsfromsource ]]; then
     echo "Building external dependencies from source"

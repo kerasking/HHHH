@@ -17,10 +17,10 @@
 using namespace std;
 using namespace cocos2d;
 
-OpenSLEngine::OpenSLEngine():
-m_musicVolume(0),
-m_effectVolume(0)
-{}
+OpenSLEngine::OpenSLEngine() :
+		m_musicVolume(0), m_effectVolume(0)
+{
+}
 
 OpenSLEngine::~OpenSLEngine()
 {
@@ -39,95 +39,101 @@ OpenSLEngine::~OpenSLEngine()
 // 	jmethodID   methodID;
 // } JniMethodInfo;
 
-extern "C" {
-	static JNIEnv* getJNIEnv(void)
-	{
+extern "C"
+{
+static JNIEnv* getJNIEnv(void)
+{
 
-		JavaVM* jvm = cocos2d::JniHelper::getJavaVM();
-		if (NULL == jvm) {
-			LOGD("Failed to get JNIEnv. JniHelper::getJavaVM() is NULL");
+	JavaVM* jvm = cocos2d::JniHelper::getJavaVM();
+	if (NULL == jvm)
+	{
+		LOGD("Failed to get JNIEnv. JniHelper::getJavaVM() is NULL");
+		return NULL;
+	}
+
+	JNIEnv *env = NULL;
+	// get jni environment
+	jint ret = jvm->GetEnv((void**) &env, JNI_VERSION_1_4);
+
+	switch (ret)
+	{
+	case JNI_OK:
+		// Success!
+		return env;
+
+	case JNI_EDETACHED:
+		// Thread not attached
+
+		// TODO : If calling AttachCurrentThread() on a native thread
+		// must call DetachCurrentThread() in future.
+		// see: http://developer.android.com/guide/practices/design/jni.html
+
+		if (jvm->AttachCurrentThread(&env, NULL) < 0)
+		{
+			LOGD("Failed to get the environment using AttachCurrentThread()");
 			return NULL;
 		}
-
-		JNIEnv *env = NULL;
-		// get jni environment
-		jint ret = jvm->GetEnv((void**)&env, JNI_VERSION_1_4);
-
-		switch (ret) {
-		case JNI_OK :
-			// Success!
+		else
+		{
+			// Success : Attached and obtained JNIEnv!
 			return env;
-
-		case JNI_EDETACHED :
-			// Thread not attached
-
-			// TODO : If calling AttachCurrentThread() on a native thread
-			// must call DetachCurrentThread() in future.
-			// see: http://developer.android.com/guide/practices/design/jni.html
-
-			if (jvm->AttachCurrentThread(&env, NULL) < 0)
-			{
-				LOGD("Failed to get the environment using AttachCurrentThread()");
-				return NULL;
-			} else {
-				// Success : Attached and obtained JNIEnv!
-				return env;
-			}
-
-		case JNI_EVERSION :
-			// Cannot recover from this error
-			LOGD("JNI interface version 1.4 not supported");
-		default :
-			LOGD("Failed to get the environment using GetEnv()");
-			return NULL;
-		}
-	}
-
-	static jclass getClassID(JNIEnv *pEnv)
-	{
-		jclass ret = pEnv->FindClass(CLASS_NAME);
-		if (! ret)
-		{
-			LOGD("Failed to find class of %s", CLASS_NAME);
 		}
 
-		return ret;
+	case JNI_EVERSION:
+		// Cannot recover from this error
+		LOGD("JNI interface version 1.4 not supported");
+	default:
+		LOGD("Failed to get the environment using GetEnv()");
+		return NULL;
 	}
+}
 
-	static bool getStaticMethodInfo(JniMethodInfo &methodinfo, const char *methodName, const char *paramCode)
+static jclass getClassID(JNIEnv *pEnv)
+{
+	jclass ret = pEnv->FindClass(CLASS_NAME);
+	if (!ret)
 	{
-		jmethodID methodID = 0;
-		JNIEnv *pEnv = 0;
-		bool bRet = false;
-
-		do 
-		{
-			pEnv = getJNIEnv();
-			if (! pEnv)
-			{
-				break;
-			}
-
-			jclass classID = getClassID(pEnv);
-
-			methodID = pEnv->GetStaticMethodID(classID, methodName, paramCode);
-			if (! methodID)
-			{
-				LOGD("Failed to find static method id of %s", methodName);
-				break;
-			}
-
-			methodinfo.classID = classID;
-			methodinfo.env = pEnv;
-			methodinfo.methodID = methodID;
-
-			bRet = true;
-		} while (0);
-
-		return bRet;
+		LOGD("Failed to find class of %s", CLASS_NAME);
 	}
-};
 
+	return ret;
+}
+
+static bool getStaticMethodInfo(JniMethodInfo &methodinfo,
+		const char *methodName, const char *paramCode)
+{
+	jmethodID methodID = 0;
+	JNIEnv *pEnv = 0;
+	bool bRet = false;
+
+	do
+	{
+		pEnv = getJNIEnv();
+		if (!pEnv)
+		{
+			break;
+		}
+
+		jclass classID = getClassID(pEnv);
+
+		methodID = pEnv->GetStaticMethodID(classID, methodName, paramCode);
+		if (!methodID)
+		{
+			LOGD("Failed to find static method id of %s", methodName);
+			break;
+		}
+
+		methodinfo.classID = classID;
+		methodinfo.env = pEnv;
+		methodinfo.methodID = methodID;
+
+		bRet = true;
+	} while (0);
+
+	return bRet;
+}
+}
+;
 
 /*********************************************************************************
  *   helper
@@ -151,10 +157,10 @@ struct AudioPlayer
 	SLVolumeItf fdPlayerVolume;
 } musicPlayer; /* for background music */
 
-typedef map<unsigned int, vector<AudioPlayer*>* > EffectList;
-typedef pair<unsigned int, vector<AudioPlayer*>* > Effect;
+typedef map<unsigned int, vector<AudioPlayer*>*> EffectList;
+typedef pair<unsigned int, vector<AudioPlayer*>*> Effect;
 
-void* s_pAndroidHandle  = NULL;
+void* s_pAndroidHandle = NULL;
 void* s_pOpenSLESHandle = NULL;
 
 static EffectList& sharedList()
@@ -166,7 +172,7 @@ static EffectList& sharedList()
 unsigned int _Hash(const char *key)
 {
 	unsigned int len = strlen(key);
-	const char *end=key+len;
+	const char *end = key + len;
 	unsigned int hash;
 
 	for (hash = 0; key < end; key++)
@@ -181,7 +187,7 @@ SLInterfaceID getInterfaceID(const char *value)
 {
 	// clear the error stack
 	dlerror();
-	SLInterfaceID* IID = (SLInterfaceID*)dlsym(s_pOpenSLESHandle, value);
+	SLInterfaceID* IID = (SLInterfaceID*) dlsym(s_pOpenSLESHandle, value);
 	const char* errorInfo = dlerror();
 	if (errorInfo)
 	{
@@ -210,14 +216,17 @@ int getFileDescriptor(const char * filename, off_t & start, off_t & length)
 	LOGD("Entry getFileDescriptor,filename is %s",filename);
 
 	JniMethodInfo methodInfo;
-	if (! JniHelper::getStaticMethodInfo(methodInfo,"org/cocos2dx/lib/Cocos2dxHelper", ASSET_MANAGER_GETTER, "()Landroid/content/res/AssetManager;"))
+	if (!JniHelper::getStaticMethodInfo(methodInfo,
+			"org/cocos2dx/lib/Cocos2dxHelper", ASSET_MANAGER_GETTER,
+			"()Landroid/content/res/AssetManager;"))
 	{
 		LOGERROR("getStaticMethodInfo(...) failed");
 		methodInfo.env->DeleteLocalRef(methodInfo.classID);
 		return FILE_NOT_FOUND;
 	}
 
-	jobject assetManager = methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID);
+	jobject assetManager = methodInfo.env->CallStaticObjectMethod(
+			methodInfo.classID, methodInfo.methodID);
 
 	LOGD("jobject assetManager = methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID);");
 
@@ -226,17 +235,19 @@ int getFileDescriptor(const char * filename, off_t & start, off_t & length)
 	LOGD("jobject assetManager = methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID); end");
 
 	AAssetManager* (*AAssetManager_fromJava)(JNIEnv* env, jobject assetManager);
-	AAssetManager_fromJava = (AAssetManager* (*)(JNIEnv* env, jobject assetManager))
-		dlsym(s_pAndroidHandle, "AAssetManager_fromJava");
+	AAssetManager_fromJava = (AAssetManager* (*)(JNIEnv* env,
+			jobject assetManager))dlsym(s_pAndroidHandle, "AAssetManager_fromJava");
 	AAssetManager* mgr = AAssetManager_fromJava(methodInfo.env, assetManager);
 	assert(NULL != mgr);
 
 	LOGD("assert(NULL != mgr); end");
 
-	AAsset* (*AAssetManager_open)(AAssetManager* mgr, const char* filename, int mode);
-	AAssetManager_open = (AAsset* (*)(AAssetManager* mgr, const char* filename, int mode))
-		dlsym(s_pAndroidHandle, "AAssetManager_open");
-	AAsset* Asset = AAssetManager_open(mgr, filename, AASSET_MODE_UNKNOWN);
+	AAsset* (*AAssetManager_open)(AAssetManager* mgr, const char* filename,
+			int mode);
+	AAssetManager_open = (AAsset* (*)(AAssetManager* mgr, const char* filename,
+			int mode))
+			dlsym(s_pAndroidHandle, "AAssetManager_open");AAsset
+	* Asset = AAssetManager_open(mgr, filename, AASSET_MODE_UNKNOWN);
 
 	LOGD("AAsset* Asset = AAssetManager_open(mgr, filename, AASSET_MODE_UNKNOWN); end");
 
@@ -247,23 +258,24 @@ int getFileDescriptor(const char * filename, off_t & start, off_t & length)
 	}
 
 	// open asset as file descriptor
-	int (*AAsset_openFileDescriptor)(AAsset* asset, off_t* outStart, off_t* outLength);
-	AAsset_openFileDescriptor = (int (*)(AAsset* asset, off_t* outStart, off_t* outLength))
-		dlsym(s_pAndroidHandle, "AAsset_openFileDescriptor");
-	int fd = AAsset_openFileDescriptor(Asset, &start, &length);
+	int (*AAsset_openFileDescriptor)(AAsset* asset, off_t* outStart,
+			off_t* outLength);
+	AAsset_openFileDescriptor = (int (*)(AAsset* asset, off_t* outStart,
+			off_t* outLength))
+			dlsym(s_pAndroidHandle, "AAsset_openFileDescriptor");int
+	fd = AAsset_openFileDescriptor(Asset, &start, &length);
 	assert(0 <= fd);
 
 	LOGD("open asset as file descriptor");
 
 	void (*AAsset_close)(AAsset* asset);
 	AAsset_close = (void (*)(AAsset* asset))
-		dlsym(s_pAndroidHandle, "AAsset_close");
+	dlsym(s_pAndroidHandle, "AAsset_close");
 	AAsset_close(Asset);
 
 	LOGD("Leave getFileDescriptor");
 	return fd;
 }
-
 
 /**********************************************************************************
  *   engine
@@ -276,14 +288,20 @@ bool createAudioPlayerBySource(AudioPlayer* player)
 {
 	LOGD("Entry createAudioPlayerBySource,player value is %d",(int)player);
 	// configure audio sink
-	SLDataLocator_OutputMix loc_outmix = {SL_DATALOCATOR_OUTPUTMIX, s_pOutputMixObject};
-	SLDataSink audioSnk = {&loc_outmix, NULL};
+	SLDataLocator_OutputMix loc_outmix =
+	{ SL_DATALOCATOR_OUTPUTMIX, s_pOutputMixObject };
+	SLDataSink audioSnk =
+	{ &loc_outmix, NULL };
 
 	// create audio player
-	const SLInterfaceID ids[3] = {
-		getInterfaceID("SL_IID_SEEK"), getInterfaceID("SL_IID_MUTESOLO"), getInterfaceID("SL_IID_VOLUME")};
-	const SLboolean req[3] = {SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE};
-	SLresult result = (*s_pEngineEngine)->CreateAudioPlayer(s_pEngineEngine, &(player->fdPlayerObject), &(player->audioSrc), &audioSnk, 3, ids, req);
+	const SLInterfaceID ids[3] =
+	{ getInterfaceID("SL_IID_SEEK"), getInterfaceID("SL_IID_MUTESOLO"),
+			getInterfaceID("SL_IID_VOLUME") };
+	const SLboolean req[3] =
+	{ SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE };
+	SLresult result = (*s_pEngineEngine)->CreateAudioPlayer(s_pEngineEngine,
+			&(player->fdPlayerObject), &(player->audioSrc), &audioSnk, 3, ids,
+			req);
 	if (SL_RESULT_MEMORY_FAILURE == result)
 	{
 		LOGERROR("SL_RESULT_MEMORY_FAILURE == result");
@@ -293,31 +311,36 @@ bool createAudioPlayerBySource(AudioPlayer* player)
 	LOGD("SL_RESULT_MEMORY_FAILURE != result");
 
 	// realize the player
-	result = (*(player->fdPlayerObject))->Realize(player->fdPlayerObject, SL_BOOLEAN_FALSE);
+	result = (*(player->fdPlayerObject))->Realize(player->fdPlayerObject,
+			SL_BOOLEAN_FALSE);
 	assert(SL_RESULT_SUCCESS == result);
 
 	// get the play interface
-	result = (*(player->fdPlayerObject))->GetInterface(player->fdPlayerObject, getInterfaceID("SL_IID_PLAY"), &(player->fdPlayerPlay));
+	result = (*(player->fdPlayerObject))->GetInterface(player->fdPlayerObject,
+			getInterfaceID("SL_IID_PLAY"), &(player->fdPlayerPlay));
 	assert(SL_RESULT_SUCCESS == result);
 
 	// get the volume interface
-	result = (*(player->fdPlayerObject))->GetInterface(player->fdPlayerObject, getInterfaceID("SL_IID_VOLUME"), &(player->fdPlayerVolume));
+	result = (*(player->fdPlayerObject))->GetInterface(player->fdPlayerObject,
+			getInterfaceID("SL_IID_VOLUME"), &(player->fdPlayerVolume));
 	assert(SL_RESULT_SUCCESS == result);
 
 	// get the seek interface
-	result = (*(player->fdPlayerObject))->GetInterface(player->fdPlayerObject, getInterfaceID("SL_IID_SEEK"), &(player->fdPlayerSeek));
+	result = (*(player->fdPlayerObject))->GetInterface(player->fdPlayerObject,
+			getInterfaceID("SL_IID_SEEK"), &(player->fdPlayerSeek));
 	assert(SL_RESULT_SUCCESS == result);
 
 	LOGD("Leave createAudioPlayerBySource");
 	return true;
 }
 
-bool initAudioPlayer(AudioPlayer* player, const char* filename) 
+bool initAudioPlayer(AudioPlayer* player, const char* filename)
 {
 	LOGD("Entry initAudioPlayer");
 	off_t start = 0;
 	off_t length = 0;
-	int fd = getFileDescriptor(filename, start, length);
+	int fd = 0;
+	//getFileDescriptor(filename, start, length);
 	LOGD("fd = getFileDescriptor(filename, start, length); value is %d",fd);
 	if (FILE_NOT_FOUND == fd)
 	{
@@ -325,9 +348,12 @@ bool initAudioPlayer(AudioPlayer* player, const char* filename)
 		return false;
 	}
 
-	SLDataLocator_AndroidFD loc_fd = {SL_DATALOCATOR_ANDROIDFD, fd, start, length};
-	SLDataFormat_MIME format_mime = {SL_DATAFORMAT_MIME, NULL, SL_CONTAINERTYPE_UNSPECIFIED};
-	(player->audioSrc) = {&loc_fd, &format_mime};
+	SLDataLocator_AndroidFD loc_fd =
+	{ SL_DATALOCATOR_ANDROIDFD, fd, start, length };
+	SLDataFormat_MIME format_mime =
+	{ SL_DATAFORMAT_MIME, NULL, SL_CONTAINERTYPE_UNSPECIFIED };
+	(player->audioSrc) =
+	{	&loc_fd, &format_mime};
 	LOGD("(player->audioSrc) = {&loc_fd, &format_mime};");
 
 	return createAudioPlayerBySource(player);
@@ -338,7 +364,8 @@ void destroyAudioPlayer(AudioPlayer * player)
 	if (player && player->fdPlayerObject != NULL)
 	{
 		SLresult result;
-		result = (*(player->fdPlayerPlay))->SetPlayState(player->fdPlayerPlay, SL_PLAYSTATE_STOPPED);
+		result = (*(player->fdPlayerPlay))->SetPlayState(player->fdPlayerPlay,
+				SL_PLAYSTATE_STOPPED);
 		assert(SL_RESULT_SUCCESS == result);
 
 		(*(player->fdPlayerObject))->Destroy(player->fdPlayerObject);
@@ -368,10 +395,16 @@ void OpenSLEngine::createEngine(void* pHandle)
 	if (s_pEngineObject == NULL)
 	{
 		// create engine
-		SLresult (*slCreateEngine)(SLObjectItf *pEngine, SLuint32 numOptions, const SLEngineOption *pEngineOptions, SLuint32 numInterfaces, const SLInterfaceID *pInterfaceIds, const SLboolean * pInterfaceRequired );
-		slCreateEngine = (SLresult (*)(SLObjectItf *pEngine, SLuint32 numOptions, const SLEngineOption *pEngineOptions, SLuint32 numInterfaces, const SLInterfaceID *pInterfaceIds, const SLboolean * pInterfaceRequired ))
-			getFuncPtr("slCreateEngine");
-		result = slCreateEngine(&s_pEngineObject, 0, NULL, 0, NULL, NULL);
+		SLresult (*slCreateEngine)(SLObjectItf *pEngine, SLuint32 numOptions,
+				const SLEngineOption *pEngineOptions, SLuint32 numInterfaces,
+				const SLInterfaceID *pInterfaceIds,
+				const SLboolean * pInterfaceRequired);
+		slCreateEngine = (SLresult (*)(SLObjectItf *pEngine,
+				SLuint32 numOptions, const SLEngineOption *pEngineOptions,
+				SLuint32 numInterfaces, const SLInterfaceID *pInterfaceIds,
+				const SLboolean * pInterfaceRequired))
+				getFuncPtr("slCreateEngine");result
+		= slCreateEngine(&s_pEngineObject, 0, NULL, 0, NULL, NULL);
 		assert(SL_RESULT_SUCCESS == result);
 
 		// realize the engine
@@ -379,17 +412,22 @@ void OpenSLEngine::createEngine(void* pHandle)
 		assert(SL_RESULT_SUCCESS == result);
 
 		// get the engine interface, which is needed in order to create other objects
-		result = (*s_pEngineObject)->GetInterface(s_pEngineObject, getInterfaceID("SL_IID_ENGINE"), &s_pEngineEngine);
+		result = (*s_pEngineObject)->GetInterface(s_pEngineObject,
+				getInterfaceID("SL_IID_ENGINE"), &s_pEngineEngine);
 		assert(SL_RESULT_SUCCESS == result);
 
 		// create output mix
-		const SLInterfaceID ids[1] = {getInterfaceID("SL_IID_ENVIRONMENTALREVERB")};
-		const SLboolean req[1] = {SL_BOOLEAN_FALSE};
-		result = (*s_pEngineEngine)->CreateOutputMix(s_pEngineEngine, &s_pOutputMixObject, 1, ids, req);
+		const SLInterfaceID ids[1] =
+		{ getInterfaceID("SL_IID_ENVIRONMENTALREVERB") };
+		const SLboolean req[1] =
+		{ SL_BOOLEAN_FALSE };
+		result = (*s_pEngineEngine)->CreateOutputMix(s_pEngineEngine,
+				&s_pOutputMixObject, 1, ids, req);
 		assert(SL_RESULT_SUCCESS == result);
 
 		// realize the output mix object in sync. mode
-		result = (*s_pOutputMixObject)->Realize(s_pOutputMixObject, SL_BOOLEAN_FALSE);
+		result = (*s_pOutputMixObject)->Realize(s_pOutputMixObject,
+				SL_BOOLEAN_FALSE);
 		assert(SL_RESULT_SUCCESS == result);
 	}
 }
@@ -397,7 +435,7 @@ void OpenSLEngine::createEngine(void* pHandle)
 void OpenSLEngine::closeEngine()
 {
 	// destroy background players
-	destroyAudioPlayer(&musicPlayer);
+	destroyAudioPlayer (&musicPlayer);
 
 	// destroy effect players
 	vector<AudioPlayer*>* vec;
@@ -405,7 +443,8 @@ void OpenSLEngine::closeEngine()
 	while (p != sharedList().end())
 	{
 		vec = p->second;
-		for (vector<AudioPlayer*>::iterator iter = vec->begin() ; iter != vec->end() ; ++ iter)
+		for (vector<AudioPlayer*>::iterator iter = vec->begin();
+				iter != vec->end(); ++iter)
 		{
 			destroyAudioPlayer(*iter);
 		}
@@ -432,7 +471,6 @@ void OpenSLEngine::closeEngine()
 	LOGD("engine destory");
 }
 
-
 /**********************************************************************************
  *   sound effect
  **********************************************************************************/
@@ -444,11 +482,12 @@ typedef struct _CallbackContext
 
 void PlayOverEvent(SLPlayItf caller, void* pContext, SLuint32 playEvent)
 {
-	CallbackContext* context = (CallbackContext*)pContext;
+	CallbackContext* context = (CallbackContext*) pContext;
 	if (playEvent == SL_PLAYEVENT_HEADATEND)
 	{
 		vector<AudioPlayer*>::iterator iter;
-		for (iter = (context->vec)->begin() ; iter != (context->vec)->end() ; ++ iter)
+		for (iter = (context->vec)->begin(); iter != (context->vec)->end();
+				++iter)
 		{
 			if (*iter == context->player)
 			{
@@ -464,7 +503,8 @@ void PlayOverEvent(SLPlayItf caller, void* pContext, SLuint32 playEvent)
 void setSingleEffectVolume(AudioPlayer* player, SLmillibel volume)
 {
 	SLresult result;
-	result = (*(player->fdPlayerVolume))->SetVolumeLevel(player->fdPlayerVolume, volume);
+	result = (*(player->fdPlayerVolume))->SetVolumeLevel(player->fdPlayerVolume,
+			volume);
 	assert(result == SL_RESULT_SUCCESS);
 }
 
@@ -472,10 +512,11 @@ int getSingleEffectState(AudioPlayer * player)
 {
 	SLuint32 state = 0;
 	SLresult result;
-	result = (*(player->fdPlayerPlay))->GetPlayState(player->fdPlayerPlay, &state);
+	result = (*(player->fdPlayerPlay))->GetPlayState(player->fdPlayerPlay,
+			&state);
 	assert(result == SL_RESULT_SUCCESS);
 
-	return (int)state;
+	return (int) state;
 }
 
 void setSingleEffectState(AudioPlayer * player, int state)
@@ -489,7 +530,8 @@ void setSingleEffectState(AudioPlayer * player, int state)
 		{
 			return;
 		}
-		result = (*(player->fdPlayerPlay))->SetPlayState(player->fdPlayerPlay, state);
+		result = (*(player->fdPlayerPlay))->SetPlayState(player->fdPlayerPlay,
+				state);
 		assert(SL_RESULT_SUCCESS == result);
 	}
 }
@@ -522,10 +564,12 @@ bool OpenSLEngine::recreatePlayer(const char* filename)
 	CallbackContext* context = new CallbackContext();
 	context->vec = vec;
 	context->player = newPlayer;
-	result = (*(newPlayer->fdPlayerPlay))->RegisterCallback(newPlayer->fdPlayerPlay, PlayOverEvent, (void*)context);
+	result = (*(newPlayer->fdPlayerPlay))->RegisterCallback(
+			newPlayer->fdPlayerPlay, PlayOverEvent, (void*) context);
 	assert(SL_RESULT_SUCCESS == result);
 
-	result = (*(newPlayer->fdPlayerPlay))->SetCallbackEventsMask(newPlayer->fdPlayerPlay, SL_PLAYEVENT_HEADATEND);
+	result = (*(newPlayer->fdPlayerPlay))->SetCallbackEventsMask(
+			newPlayer->fdPlayerPlay, SL_PLAYEVENT_HEADATEND);
 	assert(SL_RESULT_SUCCESS == result);
 
 	// set volume 
@@ -563,7 +607,7 @@ unsigned int OpenSLEngine::preloadEffect(const char * filename)
 	}
 
 	LOGD("player init succeeded");
-	
+
 	// set the new player's volume as others'
 	setSingleEffectVolume(player, m_effectVolume);
 
@@ -585,7 +629,8 @@ void OpenSLEngine::unloadEffect(const char * filename)
 	if (p != sharedList().end())
 	{
 		vector<AudioPlayer*>* vec = p->second;
-		for (vector<AudioPlayer*>::iterator iter = vec->begin() ; iter != vec->end() ; ++ iter)
+		for (vector<AudioPlayer*>::iterator iter = vec->begin();
+				iter != vec->end(); ++iter)
 		{
 			destroyAudioPlayer(*iter);
 		}
@@ -608,7 +653,8 @@ int OpenSLEngine::getEffectState(unsigned int effectID)
 	return state;
 }
 
-void OpenSLEngine::setEffectState(unsigned int effectID, int state, bool isClear)
+void OpenSLEngine::setEffectState(unsigned int effectID, int state,
+		bool isClear)
 {
 	EffectList::iterator p = sharedList().find(effectID);
 	if (p != sharedList().end())
@@ -621,17 +667,17 @@ void OpenSLEngine::setEffectState(unsigned int effectID, int state, bool isClear
 			{
 				setSingleEffectState(*(vec->begin()), state);
 				vector<AudioPlayer*>::reverse_iterator r_iter = vec->rbegin();
-				for (int i = 1, size = vec->size() ; i < size ; ++ i)
+				for (int i = 1, size = vec->size(); i < size; ++i)
 				{
 					destroyAudioPlayer(*r_iter);
-					r_iter ++;
+					r_iter++;
 					vec->pop_back();
 				}
 			}
 			else
 			{
 				vector<AudioPlayer*>::iterator iter;
-				for (iter = vec->begin() ; iter != vec->end() ; ++ iter)
+				for (iter = vec->begin(); iter != vec->end(); ++iter)
 				{
 					setSingleEffectState(*iter, state);
 				}
@@ -647,10 +693,11 @@ void OpenSLEngine::setEffectState(unsigned int effectID, int state, bool isClear
 void OpenSLEngine::setAllEffectState(int state)
 {
 	EffectList::iterator p;
-	for (p = sharedList().begin(); p != sharedList().end(); p ++)
+	for (p = sharedList().begin(); p != sharedList().end(); p++)
 	{
 		vector<AudioPlayer*>* vec = p->second;
-		for (vector<AudioPlayer*>::iterator iter = vec->begin() ; iter != vec->end() ; ++ iter)
+		for (vector<AudioPlayer*>::iterator iter = vec->begin();
+				iter != vec->end(); ++iter)
 		{
 			setSingleEffectState(*iter, state);
 		}
@@ -663,7 +710,8 @@ void OpenSLEngine::resumeEffect(unsigned int effectID)
 	if (p != sharedList().end())
 	{
 		vector<AudioPlayer*>* vec = p->second;
-		for (vector<AudioPlayer*>::iterator iter = vec->begin() ; iter != vec->end() ; ++ iter)
+		for (vector<AudioPlayer*>::iterator iter = vec->begin();
+				iter != vec->end(); ++iter)
 		{
 			resumeSingleEffect(*iter);
 		}
@@ -674,10 +722,11 @@ void OpenSLEngine::resumeAllEffects()
 {
 	int state;
 	EffectList::iterator p;
-	for (p = sharedList().begin(); p != sharedList().end() ; ++ p)
+	for (p = sharedList().begin(); p != sharedList().end(); ++p)
 	{
 		vector<AudioPlayer*>* vec = p->second;
-		for (vector<AudioPlayer*>::iterator iter = vec->begin() ; iter != vec->end() ; ++ iter)
+		for (vector<AudioPlayer*>::iterator iter = vec->begin();
+				iter != vec->end(); ++iter)
 		{
 			resumeSingleEffect(*iter);
 		}
@@ -694,9 +743,10 @@ void OpenSLEngine::setEffectLooping(unsigned int effectID, bool isLooping)
 	vector<AudioPlayer*>::iterator iter = vec->begin();
 	AudioPlayer * player = *iter;
 
-	if (player && player->fdPlayerSeek) 
+	if (player && player->fdPlayerSeek)
 	{
-		result = (*(player->fdPlayerSeek))->SetLoop(player->fdPlayerSeek, (SLboolean) isLooping, 0, SL_TIME_UNKNOWN);
+		result = (*(player->fdPlayerSeek))->SetLoop(player->fdPlayerSeek,
+				(SLboolean) isLooping, 0, SL_TIME_UNKNOWN);
 		assert(SL_RESULT_SUCCESS == result);
 	}
 }
@@ -704,18 +754,20 @@ void OpenSLEngine::setEffectLooping(unsigned int effectID, bool isLooping)
 void OpenSLEngine::setEffectsVolume(float volume)
 {
 	assert(volume <= 1.0f && volume >= 0.0f);
-	m_effectVolume = int (RANGE_VOLUME_MILLIBEL * volume) + MIN_VOLUME_MILLIBEL;
-	
+	m_effectVolume = int(RANGE_VOLUME_MILLIBEL * volume) + MIN_VOLUME_MILLIBEL;
+
 	SLresult result;
 	EffectList::iterator p;
 	AudioPlayer * player;
-	for (p = sharedList().begin() ; p != sharedList().end() ; ++ p)
+	for (p = sharedList().begin(); p != sharedList().end(); ++p)
 	{
 		vector<AudioPlayer*>* vec = p->second;
-		for (vector<AudioPlayer*>::iterator iter = vec->begin() ; iter != vec->end() ; ++ iter)
+		for (vector<AudioPlayer*>::iterator iter = vec->begin();
+				iter != vec->end(); ++iter)
 		{
 			player = *iter;
-			result = (*(player->fdPlayerVolume))->SetVolumeLevel(player->fdPlayerVolume, m_effectVolume);
+			result = (*(player->fdPlayerVolume))->SetVolumeLevel(
+					player->fdPlayerVolume, m_effectVolume);
 			assert(SL_RESULT_SUCCESS == result);
 		}
 	}
@@ -723,6 +775,7 @@ void OpenSLEngine::setEffectsVolume(float volume)
 
 float OpenSLEngine::getEffectsVolume()
 {
-	float volume = (m_effectVolume - MIN_VOLUME_MILLIBEL) / (1.0f * RANGE_VOLUME_MILLIBEL);
+	float volume = (m_effectVolume - MIN_VOLUME_MILLIBEL)
+			/ (1.0f * RANGE_VOLUME_MILLIBEL);
 	return volume;
 }

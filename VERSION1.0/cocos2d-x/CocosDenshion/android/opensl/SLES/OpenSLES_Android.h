@@ -213,7 +213,8 @@ struct SLAndroidSimpleBufferQueueItf_ {
 #define SL_DATALOCATOR_ANDROIDFD_USE_FILE_SIZE ((SLAint64) 0xFFFFFFFFFFFFFFFFll)
 
 /** File Descriptor-based data locator definition, locatorType must be SL_DATALOCATOR_ANDROIDFD */
-typedef struct SLDataLocator_AndroidFD_ {
+typedef struct SLDataLocator_AndroidFD_
+{
     SLuint32        locatorType;
     SLint32         fd;
     SLAint64        offset;
@@ -229,7 +230,8 @@ typedef struct SLDataLocator_AndroidFD_ {
 #define SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE ((SLuint32) 0x800007BD)
 
 /** BufferQueue-based data locator definition where locatorType must be SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE*/
-typedef struct SLDataLocator_AndroidSimpleBufferQueue {
+typedef struct SLDataLocator_AndroidSimpleBufferQueue
+{
 	SLuint32	locatorType;
 	SLuint32	numBuffers;
 } SLDataLocator_AndroidSimpleBufferQueue;

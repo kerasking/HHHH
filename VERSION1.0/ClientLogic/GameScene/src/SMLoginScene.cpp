@@ -47,7 +47,7 @@
 //--------------------//
 
 #define UPDATE_ON		0	//0关闭下载，1开启下载
-#define CACHE_MODE 		0   //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
+#define CACHE_MODE 		1   //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
 
 //--------------------//
 
@@ -297,20 +297,19 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		LOGD("Entry TAG_TIMER_FIRST_RUN == idTag");
 		m_pTimer->KillTimer( this, TAG_TIMER_FIRST_RUN );
 		CreateUpdateUILayer();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );
-
-        m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
-		OnEvent_LoginOKNormal(m_iAccountID);
-#else
+// #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+ 		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );
+		m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
+		OnEvent_LoginOKNormal(m_iAccountID);
+// #else
 #ifdef USE_MGSDK
-		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
-		if ( pImage )
-		{
-			NDPicture * pPicture = new NDPicture;
-			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ).c_str() );
-			pImage->SetPicture( pPicture, true );
-		}
+// 		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
+// 		if ( pImage )
+// 		{
+// 			NDPicture * pPicture = new NDPicture;
+// 			pPicture->Initialization( NDPath::GetUIImgPath( SZ_MOBAGE_BG_PNG_PATH ).c_str() );
+// 			pImage->SetPicture( pPicture, true );
+// 		}
 #endif
 #if CACHE_MODE == 1
     	if ( NDBeforeGameMgrObj.CheckFirstTimeRuning() )
@@ -330,9 +329,9 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 #endif
         {
             NDBeforeGameMgrObj.doNDSdkLogin();
-            ShowWaitingAni();
+           // ShowWaitingAni();
 		}
-#endif
+//#endif
     	//CreateUpdateUILayer();
 		//NDBeforeGameMgrObj.CheckClientVersion(SZ_UPDATE_URL);
 	}
@@ -597,7 +596,7 @@ bool CSMLoginScene::CreateUpdateUILayer()
 	pLayer->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height) );
 	pLayer->SetTag( TAG_UPDATE_LAYER );
 	AddChild(pLayer);
-	m_pLayerUpdate		= pLayer;
+	m_pLayerUpdate = pLayer;
 	
 	NDUILoad tmpUILoad;
 	tmpUILoad.Load( "UpdateUI.ini", pLayer, this, CCSizeMake(0, 0) );
@@ -849,23 +848,23 @@ void CSMLoginScene::StartEntry()
 
 	{
 		WriteCon( "@@ ScriptMgrObj.Load()...\r\n" );
-		TIME_SLICE("ScriptMgrObj.Load()");
-		ScriptMgrObj.Load(); //加载LUA脚本
+		//TIME_SLICE("ScriptMgrObj.Load()");
+		//ScriptMgrObj.Load(); //加载LUA脚本 ///< 谁改的……这里会死循环！ 郭浩
 	}
 
-	ScriptMgrObj.excuteLuaFunc( "LoadData", "GameSetting" ); 
+	//ScriptMgrPtr->excuteLuaFunc( "LoadData", "GameSetting" ); 
 	CloseUpdateUILayer();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	//if ( m_iAccountID == 0 )
-	m_iAccountID = ScriptMgrObj.excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
+	m_iAccountID = ScriptMgrPtr->excuteLuaFuncRetN( "GetAccountID", "Login_ServerUI" );
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	m_iAccountID = NDBeforeGameMgrObj.GetCurrentUser();
 #endif
 
-	ScriptMgrObj.excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
+	ScriptMgrPtr->excuteLuaFunc( "ShowUI", "Entry", m_iAccountID );
 	//    ScriptMgrObj.excuteLuaFunc("ProecssLocalNotification", "MsgLoginSuc");
 
 #else //多线程不会有什么好处，反而是崩溃和不稳定，
@@ -878,7 +877,7 @@ void CSMLoginScene::StartEntry()
 	ShowWaitingAni();
 	NDLocalXmlString::GetSingleton();
 	ScriptMgrObj;
-	pthread_t pid;
+	pthread_t pid = {0};
 	pthread_create(&pid, NULL, CSMLoginScene::LoadTextAndLua, (void*)this);	
 #endif
 

@@ -287,7 +287,6 @@ unsigned int SimpleAudioEngine::playEffect(const char* pszFilePath, bool bLoop)
 
 	if (s_bI9100)
 	{
-		LOGERROR("It's I9100 phone!");
 		return SimpleAudioEngineOpenSL::sharedEngine()->playEffect(pszFilePath,
 				bLoop);
 	}

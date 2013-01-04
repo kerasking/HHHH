@@ -18,6 +18,7 @@
 
 const char* DataFilePath();
 #define ScriptMgrObj	NDEngine::ScriptMgr::GetScriptMgr()
+#define ScriptMgrPtr	NDEngine::ScriptMgr::GetScriptMgrPtr()
 using namespace cocos2d;
 
 namespace NDEngine
@@ -38,6 +39,7 @@ public:
 	~ScriptMgr();
 
 	static ScriptMgr& GetScriptMgr();
+	static ScriptMgr* GetScriptMgrPtr();
 	
 	void Load();
 	void LoadRegClassFuncs();

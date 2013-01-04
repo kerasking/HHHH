@@ -32,6 +32,10 @@
 #include "NDProfile.h"
 #include "ScriptRegLua.h"
 
+#ifndef UPDATE_RES
+#define UPDATE_RES 1
+#endif
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "direct.h"
 #endif
@@ -140,7 +144,7 @@ char filename[256];
     printf(filename);
 #endif
 
-	char filename[256];
+	char filename[256] = {0};
 	memset(filename, 0, sizeof(filename));
 	snprintf(filename, sizeof(filename), "%s/name.txt", NDPath::GetLogPath().c_str());
 	m_fTest = fopen(filename, "w+");
@@ -310,7 +314,7 @@ void ScriptMgr::Load()
 #else
 	{
 		TIME_SLICE("LoadLuaFile(entry.lua)");
-		this->LoadLuaFile(NDPath::GetScriptPath("entry.lua"));
+		LoadLuaFile(NDPath::GetScriptPath("entry.lua").c_str());
 	}
 #endif
 
@@ -548,4 +552,14 @@ ScriptMgr& NDEngine::ScriptMgr::GetScriptMgr()
 	}
 
 	return *((ScriptMgr*)ms_pkSingleton);
+}
+
+ScriptMgr* NDEngine::ScriptMgr::GetScriptMgrPtr()
+{
+	if (0 == ms_pkSingleton)
+	{
+		ms_pkSingleton = new ScriptMgr;
+	}
+
+	return (ScriptMgr*)ms_pkSingleton;
 }

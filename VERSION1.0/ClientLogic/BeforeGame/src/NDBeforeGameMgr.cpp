@@ -1937,9 +1937,6 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	int nSimplifiedChineseResIndex = 0;
 	int nVersionINIIndex = 0;
 
-// 	unsigned char* pszData = CCFileUtils::sharedFileUtils()->
-// 		getFileDataFromZip(strAPKPath.c_str(),"assets/SimplifiedChineseRes.zip",&ulSize);
-
 	unsigned char* pszData = CCFileUtils::sharedFileUtils()->
 		getFileDataFromZip(strAPKPath.c_str(),"assets/version.ini",&ulSize);
 
@@ -1948,54 +1945,9 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 
 	LOGD("ulSize is %d",ulSize);
 
-// 	pZip = OpenZip((void*)pszData,ulSize,0);
-// 
-// 	if (0 == pZip)
-// 	{
-// 		LOGERROR("pZip is null");
-// 	}
-// 
-// 	//pSimplifiedChineseResZip = OpenZip(strAPKPath.c_str(),0);
-// 
-// 	if (ZR_OK != FindZipItem(pZip,"version.ini",
-// 		true,&nSimplifiedChineseResIndex,&kZipEntry))
-// 	{
-// 		LOGERROR("FindZipItem Error");
-// 	}
-// 
-// 	LOGD("file name is %s,unc_size is %d,comp_size is %d",
-// 		kZipEntry.name,kZipEntry.unc_size,kZipEntry.comp_size);
-// 
-// 	pSimplifiedChineseResBuffer = new char[kZipEntry.unc_size];
-// 	memset(pSimplifiedChineseResBuffer,0,sizeof(char) * kZipEntry.unc_size);
-// 
-// 	if (ZR_OK != UnzipItem(pZip,nSimplifiedChineseResIndex, "/sdcard/temp.ini"))
-// 	{
-// 		LOGERROR("UnzipItem(pZip,nSimplifiedChineseResIndex, /sdcard/temp.ini ERROR");
-// 		return false;
-// 	}
-// 
-// 	LOGD("pSimplifiedChineseResBuffer is %s",pSimplifiedChineseResBuffer);
-
-// 	pSimplifiedChineseResZip = OpenZip(pSimplifiedChineseResBuffer,kZipEntry.unc_size,0);
-// 	FindZipItem(pSimplifiedChineseResZip,"version.ini",true,&nVersionINIIndex,&kSimplifiedChineseResZipEntry);
-// 
-// 	pVersionINIBuffer = new unsigned char[kSimplifiedChineseResZipEntry.unc_size];
-// 	memset(pVersionINIBuffer,0,sizeof(unsigned char) * kSimplifiedChineseResZipEntry.unc_size);
-// 
-// 	UnzipItem(pSimplifiedChineseResZip,nVersionINIIndex,pVersionINIBuffer,kSimplifiedChineseResZipEntry.unc_size);
-// 
-// 	unsigned long ulFileLen = 0;
-// 	LOGD("(char*)pVersionINIBuffer is %s,Index is %d",(char*)pVersionINIBuffer,nVersionINIIndex);
-// 	strInstallResVersion = (char*)pVersionINIBuffer;
-// 	strInstallResVersion = strInstallResVersion.substr(0,4);
-// 
-// 	LOGD("The read text is %s",strInstallResVersion.c_str());
-// 
 	SAFE_DELETE_ARRAY(pSimplifiedChineseResBuffer);
 	SAFE_DELETE_ARRAY(pVersionINIBuffer);
-// 
-// 	CloseZip(pSimplifiedChineseResZip);
+
  	CloseZip(pZip);
 
 #endif
@@ -2004,7 +1956,7 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	unsigned long ulFileLength = 0;
 	pkFile = fopen(strCopyVersionINIPath.c_str(), "rb" );
 
- 	if ( !pkFile )
+ 	if ( true)
  	{
  		bFirstTime = true;
  	    LOGERROR( "\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );
@@ -2056,6 +2008,7 @@ void* CopyResThread(void* ptr)
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	pkUnzip->UnZipFile("../SimplifiedChineseRes.zip","dhlj/");
+	NDBeforeGameMgr::CopyStatus = 1;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	//pkUnzip->UnZipFile("assets/SimplifiedChineseRes.zip","/sdcard/dhlj/");
 
@@ -2110,6 +2063,7 @@ void* CopyResThread(void* ptr)
 	}
 
 	CloseZip(pZipHandle);
+	NDBeforeGameMgr::CopyStatus = 1;
 
 	// FHANDLE hread,hwrite; CreatePipe(&hread,&hwrite,0,0);
 	// CreateZipWriterThread(hwrite);
@@ -2148,7 +2102,7 @@ void* CopyResThread(void* ptr)
 //     {
 //         NDBeforeGameMgr::CopyStatus = -1;
 //     }
-    
+
 	return NULL;
 }
 void NDBeforeGameMgr::CopyRes()

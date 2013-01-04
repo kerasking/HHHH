@@ -12,11 +12,16 @@
 #include "NDPath.h"
 #include "NDUtility.h"
 #include <sstream>
+#include <string>
 #include <map>
 #include "NDPicture.h"
 #include "CCTextureCacheExt.h"
 #include "ScriptDefine.h"
 #include "ScriptMgr.h"
+
+#ifndef UPDATE_RES
+#define UPDATE_RES 1
+#endif
 
 #ifdef ANDROID
 #include <jni.h>
@@ -32,6 +37,8 @@
 #endif
 
 using namespace LuaPlus;
+using namespace std;
+
 namespace NDEngine {
 
 int LuaLogInfo(LuaState* state)
@@ -76,7 +83,9 @@ int DoFile(LuaState* state)
 #endif
 		nRet = state->DoFile(NDPath::GetScriptPath(str.GetString()).c_str());
 #else
-        nRet = ScriptMgrObj.LoadLuaFile(NDPath::GetScriptPath(str.GetString()));
+		string strTemp = NDPath::GetScriptPath(str.GetString());
+		const char* szTemp = strTemp.c_str();
+        ScriptMgrObj.LoadLuaFile(strTemp.c_str());
 #endif
 	}
 	
