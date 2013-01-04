@@ -204,6 +204,7 @@ void NDUIScrollViewContainer::Initialization()
 	
 	m_pClientUINode = new ContainerClientLayer;
 	m_pClientUINode->Initialization();
+	m_pClientUINode->setDebugName( "ContainerClientLayer" );
 	//m_pClientUINode->EnableEvent(false);
 	this->AddChild(m_pClientUINode);
 	
