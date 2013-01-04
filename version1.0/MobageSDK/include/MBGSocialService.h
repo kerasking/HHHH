@@ -21,14 +21,17 @@
  */
 + (void) launchPortalApp:( void (^)( ) )dismissCB;
 
-+ (void) openHomePage:( void (^)( ) )dismissCB;
+/*!
+ * @abstract open home page
+ * @param 
+ */
++ (void) openHomePage;
 
 /*!
  * @abstract shows User Profile Page of Mobage 
- * @param dismissCB The callback interface to notify dismissing alert dialog
+ * @param 
  */
-+ (void) openUserProfile:(NSString *)userId 
-			   onDismiss:( void (^)( ) )dismissCB;
++ (void) openUserProfile:(NSString *)userId;
 
 /*!
  * @abstract shows friend picker Dialog

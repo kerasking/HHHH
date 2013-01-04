@@ -38,6 +38,7 @@
 - (void)launchDashboardWithGameRankingPage;
 - (void)launchDashboardWithMessagePage;
 - (void)launchDashboardWithGroupPage:(NSString*)groupId;
+- (void)launchDashboardWithUserProfile:(NSString *)userid;
 
 - (void)launchImagePicker:(NSString*) url;
 @end

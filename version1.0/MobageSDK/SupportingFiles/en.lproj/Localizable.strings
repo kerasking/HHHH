@@ -1,0 +1,57 @@
+/* 
+  Localizable.strings
+  MyNativeTest
+
+  Created by panzaofeng on 7/23/12.
+  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+*/
+
+
+
+"AM" = "AM";
+"PM" = "PM";
+"year" = "Year";
+"month" = "Month";
+"day" = "Day";
+"hour" = "Hour";
+"minute" = "Minute";
+"second" = "Second";
+"Yes" = "Yes";
+"No" = "No";
+"OK" = "OK";
+"Cancel" = "Cancel";
+"Initializing" = "Initializing...";
+"Error prompt" = "Wrong";
+"Failed to Connect" = "Unable to connect to the server, please check your network and try again";
+"Retry" = "Retry";
+"Exit" = "Exit";
+"Try again" = "Try again";
+"Has a Update now" = "Has a Update now";
+"Update immediately" = "Update immediately?";
+"Update Now" = "Update Now";
+"Update later" = "Update later";
+"Fore to update immediately" = "Fore to update immediately";
+"Pass" = "Pass";
+"Purchase" = "Purchase";
+"Prepare to purchase" = "Preparing";
+"Purchase failed! Your account was invalid, please contact the customer service" = "Purchase failed! Your account was invalid, please contact the customer service.";
+"Unable to get product information, please contact custom service" = "Unable to get product information, please contact custom service";
+"Unknown error when purchasing, please verify the network status and try again" = "Unknown error when purchasing, please verify the network status and try again";
+"Purchasing failed, please verify the network status and try again" = "Purchasing failed, please verify the network status and try again";
+"Sending purchasing data" = "Sending purchasing data...";
+"Unable to get product information, please check your network and try again" = "Unable to get product information, please check your network and try again";
+"Unable to send product information, please check your network and try again" = "Unable to send product information, please check your network and try again";
+"There is an unfinised purchasing request, now send it again to complete the request" = "There is an unfinised purchasing request, now send it again to complete the request?";
+"Account switching success" = "Account switching success!";
+"Select from the album" = "Select from the album";
+"Turn on the camera" = "Turn on the camera";
+"Welcome" = "Welcome!";
+"The device does not have text-messaging capabilities" = "The device does not have text-messaging capabilities";
+"Send cancel" = "Send cancel";
+"Send success" = "Send success";
+"Send failed" = "Send failed";
+"No available updates" = "No available updates";
+"Downloading force update is canceled" = "Downloading force update is canceled";
+"Downloading normal update is canceled" = "Downloading normal update is canceled";
+"Download the new version failed" = "Download the new version failed";
+"Detect the new version information failed" = "Detect the new version information failed";

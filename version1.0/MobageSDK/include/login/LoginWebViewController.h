@@ -16,8 +16,8 @@
 
 
 //Charlene
-@property (nonatomic,retain) NSString* view_url;
-@property (nonatomic,retain) NSString* btn_url;
+@property (nonatomic,copy) NSString* view_url;
+@property (nonatomic,copy) NSString* btn_url;
 
 @property (nonatomic, retain) UIButton *buttonBgView;
 @property (nonatomic, retain) UIButton *passButton;

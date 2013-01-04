@@ -1429,10 +1429,7 @@ bool NDBeforeGameMgr::doNDSdkChangeLogin()
 #if defined(USE_MGSDK)
     if(m_CurrentUser_id > 0) {
         NSString* strUserID = [NSString stringWithFormat:@"%ld",m_CurrentUser_id];
-        [MBGSocialService openUserProfile:strUserID
-                                onDismiss:^{
-                                    
-                                }];
+        [MBGSocialService openUserProfile:strUserID];
     }
 #endif
 #endif

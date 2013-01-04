@@ -28,8 +28,6 @@
 +(CheckViewController*) shareInstance;
 
 -(void)initialWithGameId:(NSString*)gameId withAffCode:(NSString*)affCode;
-
--(void) checkAccountStatus;
--(void) handleAccountStatus:(NSString*) status;
+-(void)closeViewController;
 
 @end

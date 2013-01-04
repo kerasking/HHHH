@@ -16,6 +16,5 @@
 + (TokenUtility*) shareInstance;
 
 - (void) checkLoginStatus;
-- (void) getAccessToken;
 
 @end

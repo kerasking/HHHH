@@ -17,7 +17,8 @@
 enum MBG_REGION {
 	MBG_REGION_US, //unsupported for now
 	MBG_REGION_JP,  
-	MBG_REGION_CN //unsupported for now
+	MBG_REGION_CN, //unsupported for now
+    MBG_REGION_TW //unsupported for now
 };
 
 /*!
@@ -147,6 +148,9 @@ enum MBG_SERVER_TYPE {
  */
 - (void) setDelegate:(id)delegate withWindow:(UIWindow *) gameWindow withRootViewController:(UIViewController *) controller;
 
-
+/*!
+ * @abstract notifies the mobage sdk of a successful application registration with Apple Push Service (APS).
+ */
++(void)registerForRemoteNotification:(NSData*)deviceToken;
 @end
 
