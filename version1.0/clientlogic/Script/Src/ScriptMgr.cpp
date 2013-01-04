@@ -32,9 +32,9 @@
 #include "NDProfile.h"
 #include "ScriptRegLua.h"
 
-#ifndef UPDATE_RES
-#define UPDATE_RES 1
-#endif
+// #ifndef UPDATE_RES
+// #define UPDATE_RES 1
+// #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "direct.h"
@@ -297,19 +297,19 @@ void ScriptMgr::Load()
 
 #ifndef UPDATE_RES 
 	{
-		TIME_SLICE("DoFile(entry.lua)");
-		const string strPath = NDPath::GetScriptPath("entry.lua");
-		LOGD("ready to load script,%s",strPath.c_str());
-		
-		if (0 == LuaStateMgrObj.GetState()->DoFile(strPath.c_str()))
-		{
-			LOGD("Load %s succeeded!",strPath.c_str());
-		}
-		else
-		{
-			LOGERROR("Load %s failed!",strPath.c_str());
-
-		}
+ 		TIME_SLICE("DoFile(entry.lua)");
+ 		const string strPath = NDPath::GetScriptPath("entry.lua");
+ 		LOGD("ready to load script,%s",strPath.c_str());
+ 		
+ 		if (0 == LuaStateMgrObj.GetState()->DoFile(strPath.c_str()))
+ 		{
+ 			LOGD("Load %s succeeded!",strPath.c_str());
+ 		}
+ 		else
+ 		{
+ 			LOGERROR("Load %s failed!",strPath.c_str());
+ 
+ 		}
 	}
 #else
 	{

@@ -119,10 +119,14 @@ bool NDUILoad::LoadAny( const char* uiname, NDUINode *parent,
 					   NDUITargetDelegate* delegate, LuaObject* luaDelegate,
 					   CCSize sizeOffset /*= CCSizeZero*/ )
 {
-	if (!uiname || !parent) return false;
+	if (!uiname || !parent)
+	{
+		return false;
+	}
 
 	// open ui file
-	CUIData  uiData;	
+	CUIData uiData;	
+
 	if ( !uiData.openUiFile(NDPath::GetUIConfigPath(uiname).c_str()) )
 	{
 		NDAsssert(0);

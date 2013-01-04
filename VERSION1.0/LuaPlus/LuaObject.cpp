@@ -2093,7 +2093,6 @@ inline void LuaObject::AddToUsedList(LuaState* state)
 	m_prev = &headObject;
 }
 
-
 inline void LuaObject::AddToUsedList(LuaState* state, const lua_TValue& obj)
 {
 	if (state == 0)

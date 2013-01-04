@@ -847,12 +847,12 @@ void CSMLoginScene::StartEntry()
 	}
 
 	{
-		WriteCon( "@@ ScriptMgrObj.Load()...\r\n" );
+		//WriteCon( "@@ ScriptMgrObj.Load()...\r\n" );
 		//TIME_SLICE("ScriptMgrObj.Load()");
-		//ScriptMgrObj.Load(); //加载LUA脚本 ///< 谁改的……这里会死循环！ 郭浩
+		ScriptMgrObj.Load(); //加载LUA脚本 ///< 谁改的……这里会死循环！ 郭浩
 	}
 
-	//ScriptMgrPtr->excuteLuaFunc( "LoadData", "GameSetting" ); 
+	ScriptMgrPtr->excuteLuaFunc( "LoadData", "GameSetting" ); 
 	CloseUpdateUILayer();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)

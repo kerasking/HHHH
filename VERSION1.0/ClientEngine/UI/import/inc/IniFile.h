@@ -81,6 +81,7 @@ using namespace std;
  	
  	bool ReadFile();
  	bool ReadFile(const char* newpath);
+	bool ReadFileFromAsset();
  	void WriteFile();
  	void Reset();
  

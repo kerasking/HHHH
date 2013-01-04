@@ -19,9 +19,9 @@
 #include "ScriptDefine.h"
 #include "ScriptMgr.h"
 
-#ifndef UPDATE_RES
-#define UPDATE_RES 1
-#endif
+// #ifndef UPDATE_RES
+// #define UPDATE_RES 1
+// #endif
 
 #ifdef ANDROID
 #include <jni.h>
