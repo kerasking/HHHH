@@ -649,32 +649,35 @@ void NDTile::debugDraw()
 void NDTile::SetDrawRect_Android( CCRect rect, bool bBattleMap ) //@android
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-
 	//android默认情况下以Y为主等比缩放
-	float fScaleAndroid = ANDROID_SCALE;
+	float fScale = ANDROID_SCALE;
 
 #if WITH_ANDROID_BATTLEMAP_SCALE
 	if (bBattleMap)
 	{
 		//android战斗地图下以X为主等比缩放
-		fScaleAndroid = ConvertUtil::getAndroidScale().x;
+		fScale = ConvertUtil::getAndroidScale().x;
 	}
 #endif
 	
-	//等比缩放
-	rect.origin.x	*= fScaleAndroid;	
-	rect.origin.y	*= fScaleAndroid;
-	rect.size.width *= fScaleAndroid;
-	rect.size.height*= fScaleAndroid;
+#else 
+	//非android的都走这里:ios,mac,win....
+	float fScale = IOS_SCALE;
+#endif //CC_TARGET_PLATFORM
 
-#if WITH_ANDROID_BATTLEMAP_SCALE
+	//等比缩放
+	rect.origin.x	*= fScale;	
+	rect.origin.y	*= fScale;
+	rect.size.width *= fScale;
+	rect.size.height*= fScale;
+
+	//如果是android战斗地图（或剧情地图）则再裁剪一下Y.
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) && WITH_ANDROID_BATTLEMAP_SCALE
 	if (bBattleMap)
 	{
 		cutHeightForAndroidBattleMap( rect );
 	}
 #endif
-
-#endif //CC_TARGET_PLATFORM
 
 	m_kDrawRect = rect;
 }

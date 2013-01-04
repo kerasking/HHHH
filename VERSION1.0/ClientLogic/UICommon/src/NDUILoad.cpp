@@ -428,14 +428,18 @@ void NDUILoad::AdjustCtrlPosByAnchor( UIINFO& uiInfo, const CCPoint& CtrlAnchorP
 void NDUILoad::PostLoad(UIINFO& uiInfo)
 {
 	//@check
-	// 备注：UI按480*320来配置的，LUA写脚本是按960*640的.
-	//			这里乘个2，统一到980*640!	
-	//
-	// 举例：假设ini配置某控件(0,0,480,320)，则乘个scale(=2)变成(0,0,960,640)
-	//		 假设android的分辨率是800*480，然后再适配为android，也就是(0,0,800,480).
+	// 备注：UI按480*320来配置的.
+	// 假设INI配置(0,0,480,320)，转换后的结果如下：
+	// ios retina:	(0,0,960,640)
+	// ios:			(0,0,480,320)
+	// android:		(0,0,800,480) //假设android的分辨率是800*600.
+	
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    float scale = 2.0f; //先转到960*640，后面会乘个scale(基于960*640)
+#else
+	float scale = CCDirector::sharedDirector()->getContentScaleFactor();
+#endif
 
-	//统一到960*640
-    float scale = 2.0f;
 	uiInfo.CtrlPos.x	*= scale;
 	uiInfo.CtrlPos.y	*= scale;
 	uiInfo.nCtrlWidth	*= scale;
@@ -455,7 +459,7 @@ void NDUILoad::PostLoad(UIINFO& uiInfo)
 	//重置锚点(0,0)
 	ResetAnchorPos( uiInfo );
 
-	// 上下对调一下（结果仍旧是像素单位，不是GL坐标，所以不能用SCREEN2GL转！）
+	// 上下对调一下（像素单位）
 	CCSize winsize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	uiInfo.CtrlPos.y = winsize.height - uiInfo.CtrlPos.y;
 	uiInfo.CtrlPos.y -= uiInfo.nCtrlHeight;

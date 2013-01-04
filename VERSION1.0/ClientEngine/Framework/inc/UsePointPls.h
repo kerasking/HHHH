@@ -65,6 +65,7 @@ public:
 
 public: //@android
 	static CCPoint getAndroidScale();
+	static float getIosScale();
 };
 
 //之前的格子是方格（即等宽等高），考虑到android平台多分辨率，MAP_UNITSIZE应拆分为xy两个分量.
@@ -78,5 +79,7 @@ public: //@android
 
 //android缩放比例（以Y为主）
 #define ANDROID_SCALE				(ConvertUtil::getAndroidScale().y)
+
+#define IOS_SCALE					(ConvertUtil::getIosScale())
 
 NS_NDENGINE_END

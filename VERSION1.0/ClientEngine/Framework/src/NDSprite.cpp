@@ -151,8 +151,8 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 		m_pkFrameRunRecord = new NDFrameRunRecord;
 
 		SetContentSize(
-			CCSizeMake(m_pkCurrentAnimation->getW() * ANDROID_SCALE,
-						m_pkCurrentAnimation->getH() * ANDROID_SCALE )); //@android
+			CCSizeMake(m_pkCurrentAnimation->getW() * ANDROID_SCALE * IOS_SCALE,
+						m_pkCurrentAnimation->getH() * ANDROID_SCALE * IOS_SCALE )); //@android
 	}
 }
 

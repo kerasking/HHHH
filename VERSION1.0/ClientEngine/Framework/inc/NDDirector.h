@@ -215,6 +215,7 @@ public:
 
 #if 1 //相关缩放比例，适配的基础，请不要修改！
 public: //@android
+	float getIosScale() const;
 	CCPoint getAndroidScale() const;
 	float getResourceScale();
 

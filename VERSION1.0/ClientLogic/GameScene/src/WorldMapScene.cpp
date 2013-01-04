@@ -521,7 +521,7 @@ void WorldMapLayer::Goto( int nMapId )
 		
 		SetMove(true);
 		
-		SetRoleDirect(posTarget.x > m_roleNode->GetFrameRect().origin.x*ANDROID_SCALE);
+		SetRoleDirect(posTarget.x > m_roleNode->GetFrameRect().origin.x*ANDROID_SCALE*IOS_SCALE);
 		
 		m_posTarget = posTarget;
 		
@@ -571,7 +571,7 @@ CCPoint WorldMapLayer::GetPlaceIdScreenPos(int placeId)
 	}
 	if (node && m_roleNode && node->getTexture())
 	{
-		return ccp( node->getX()*ANDROID_SCALE, node->getY()*ANDROID_SCALE );
+		return ccp( node->getX()*ANDROID_SCALE*IOS_SCALE, node->getY()*ANDROID_SCALE*IOS_SCALE );
 	}
 
 	return posRet;

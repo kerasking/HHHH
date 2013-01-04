@@ -66,9 +66,6 @@ void ConvertUtil::convertToPixelCoord( CCPoint& pt )
 		pt.x *= fScale;
 		pt.y *= fScale;
 	}
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android //@todo
-#endif
 }
 
 //Point -> Pixel
@@ -79,9 +76,6 @@ void ConvertUtil::convertToPixelCoord( CCSize& sz )
 		sz.width *= fScale;
 		sz.height *= fScale;
 	}
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android //@todo
-#endif
 }
 
 //Point -> Pixel
@@ -94,9 +88,6 @@ void ConvertUtil::convertToPixelCoord( CCRect& rc )
 		rc.size.width *= fScale;
 		rc.size.height *= fScale;
 	}
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android //@todo
-#endif
 }
 
 //·µ»ØÌùÍ¼Âß¼­µã³ß´ç
@@ -114,13 +105,8 @@ CCSize ConvertUtil::getTextureSizeInPoints( /*const*/ cocos2d::CCTexture2D& tex 
 void ConvertUtil::convertToPointCoord_Android( CCPoint& pt )
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
-#if 0
-	pt.x *= getAndroidScale().x;
-	pt.y *= getAndroidScale().y;
-#else
 	pt.x *= ANDROID_SCALE;
 	pt.y *= ANDROID_SCALE;
-#endif
 #endif
 }
 
@@ -128,13 +114,8 @@ void ConvertUtil::convertToPointCoord_Android( CCPoint& pt )
 void ConvertUtil::convertToPointCoord_Android( cocos2d::CCSize& sz )
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
-#if 0
-	sz.width	*= getAndroidScale().x;
-	sz.height	*= getAndroidScale().y;
-#else
 	sz.width	*= ANDROID_SCALE;
 	sz.height	*= ANDROID_SCALE;
-#endif
 #endif
 }
 
@@ -143,17 +124,10 @@ void ConvertUtil::convertToPointCoord_Android( cocos2d::CCSize& sz )
 void ConvertUtil::convertToPointCoord_Android( cocos2d::CCRect& rc )
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
-#if 0
-	rc.origin.x		*= getAndroidScale().x;
-	rc.origin.y		*= getAndroidScale().y;
-	rc.size.width	*= getAndroidScale().x;
-	rc.size.height	*= getAndroidScale().y;
-#else
 	rc.origin.x		*= ANDROID_SCALE;
 	rc.origin.y		*= ANDROID_SCALE;
 	rc.size.width	*= ANDROID_SCALE;
 	rc.size.height	*= ANDROID_SCALE;
-#endif
 #endif
 }
 
@@ -211,6 +185,12 @@ CCSize ConvertUtil::getCellSize()
 CCPoint ConvertUtil::getAndroidScale()
 {
 	return NDDirector::DefaultDirector()->getAndroidScale();
+}
+
+//@ios
+float ConvertUtil::getIosScale()
+{
+	return NDDirector::DefaultDirector()->getIosScale();
 }
 
 NS_NDENGINE_END
