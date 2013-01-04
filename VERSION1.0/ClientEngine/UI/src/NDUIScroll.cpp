@@ -10,6 +10,7 @@
 #include "NDUIScroll.h"
 #include "NDDirector.h"
 #include "ObjectTracker.h"
+#include "UsePointPls.h"
 
 float UI_ACCER_FIRST = -100.0f;
 

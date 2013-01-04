@@ -450,8 +450,9 @@ void CCTouchDispatcher::touches(CCSet *pTouches, CCEvent *pEvent, unsigned int u
                     {
                         pMutableTouches->removeObject(pTouch);
                     }
-#if ND_MOD && 0
-					CCLog( "@@ CCTouchDispatcher::touches(), %s swallowed!! touchCount=%d, uIndex=%d, (priority=%d, subPriority=%d), handle=%08X, delegate=%08X\r\n", 
+#if ND_MOD && 1
+					CCLog( 
+						"@@ CCTouchDispatcher::touches(), %s swallowed!! touchCount=%d, uIndex=%d, (priority=%d, subPriority=%d), handle=%08X, delegate=%08X\r\n", 
 						pHandler->getDelegate()->getDebugName(), 
 						pTouches->count(), uIndex,
 						pHandler->getPriority(), pHandler->getDelegate()->getSubPriority(),

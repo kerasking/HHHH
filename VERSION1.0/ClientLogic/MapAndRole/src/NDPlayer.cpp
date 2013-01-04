@@ -1051,10 +1051,10 @@ bool NDPlayer::DirectSwitch(int iSwitchCellX, int iSwitchCellY, int iPassIndex)
 bool NDPlayer::CanSwitch(int iSwitchCellX, int iSwitchCellY)
 {
 #if 1
-	int iX1 = 2283 * ANDROID_SCALE;
-	int iY1 = 372 * ANDROID_SCALE;
-	int iX2 = 2596 * ANDROID_SCALE;
-	int iY2 = 582 * ANDROID_SCALE;
+	int iX1 = 2283	* RESOURCE_SCALE_960;
+	int iY1 = 372	* RESOURCE_SCALE_960;
+	int iX2 = 2596	* RESOURCE_SCALE_960;
+	int iY2 = 582	* RESOURCE_SCALE_960;
 
 	float k = (iX2 - iX1) / (iY2 - iY1);
 	float b = iX1 - iY1 * k;

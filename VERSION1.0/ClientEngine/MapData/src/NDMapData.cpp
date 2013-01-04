@@ -531,8 +531,8 @@ void NDMapData::decode(FILE* pkStream)
 
 
 		pkTile->setMapSize(	CCSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
-		pkTile->SetCutRect_Android( CCRectMake(0, 0, picWidth, picHeight), getBattleMapFlag() || getDramaMapFlag()); //@android
-		pkTile->SetDrawRect_Android(CCRectMake(nX, nY, picWidth, picHeight), getBattleMapFlag() || getDramaMapFlag()); //@android
+		pkTile->SetCutRect( CCRectMake(0, 0, picWidth, picHeight), getBattleMapFlag() || getDramaMapFlag()); //@android
+		pkTile->SetDrawRect(CCRectMake(nX, nY, picWidth, picHeight), getBattleMapFlag() || getDramaMapFlag()); //@android
 		pkTile->setReverse(nReverse);
 		pkTile->make();
 
@@ -607,8 +607,8 @@ void NDMapData::decode(FILE* pkStream)
 				* pkTile->getTexture()->getMaxT();
 
 		pkTile->setMapSize( CCSizeMake(m_nColumns * nTileWidth, m_nRows * nTileHeight));
-		pkTile->SetCutRect_Android( CCRectMake(0, 0, nPicWidth, nPicHeight), getBattleMapFlag() || getDramaMapFlag()); //@android
-		pkTile->SetDrawRect_Android( CCRectMake(x, y, nPicWidth, nPicHeight), getBattleMapFlag() || getDramaMapFlag()); //@android
+		pkTile->SetCutRect( CCRectMake(0, 0, nPicWidth, nPicHeight), getBattleMapFlag() || getDramaMapFlag()); //@android
+		pkTile->SetDrawRect( CCRectMake(x, y, nPicWidth, nPicHeight), getBattleMapFlag() || getDramaMapFlag()); //@android
 		pkTile->setReverse(bReverse);
 		pkTile->make();
 
