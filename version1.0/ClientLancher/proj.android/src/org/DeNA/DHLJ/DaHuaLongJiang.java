@@ -218,8 +218,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			menubar.setMenuIconGravity(Gravity.TOP | Gravity.LEFT);
 
 			Rect rect = new Rect(0, 0, 200, 120);
-			// balancebutton =
-			// com.mobage.android.social.common.Service.getBalanceButton(rect);
+			balancebutton = com.mobage.android.social.common.Service.getBalanceButton(rect);
 
 			// button1 = new Button(this);
 			// button1.setText("aaaaaaaaa".toCharArray(), 1, 6);
@@ -315,8 +314,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		// menubar.addView(m_pkView);
 		menubar.addView(rootView);
 
-		// menubar.addView(balancebutton);
-		// balancebutton.setVisibility( View.INVISIBLE );
+		menubar.addView(balancebutton);
+		balancebutton.setVisibility( View.INVISIBLE );
 
 		ViewGroup.LayoutParams pkParams = new ViewGroup.LayoutParams(
 				ViewGroup.LayoutParams.FILL_PARENT,
