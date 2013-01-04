@@ -648,22 +648,16 @@ void NDTile::debugDraw()
 
 void NDTile::SetDrawRect( CCRect rect, bool bBattleMap ) //@android
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	//android默认情况下以Y为主等比缩放
-	float fScale = ANDROID_SCALE;
+	//传入的尺寸都是基于960*640的
+	float fScale = RESOURCE_SCALE_960;
 
-#if WITH_ANDROID_BATTLEMAP_SCALE
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) && WITH_ANDROID_BATTLEMAP_SCALE
 	if (bBattleMap)
 	{
 		//android战斗地图下以X为主等比缩放
 		fScale = ConvertUtil::getAndroidScale().x;
 	}
 #endif
-	
-#else 
-	//非android的都走这里:ios,mac,win....
-	float fScale = IOS_SCALE;
-#endif //CC_TARGET_PLATFORM
 
 	//等比缩放
 	rect.origin.x	*= fScale;	

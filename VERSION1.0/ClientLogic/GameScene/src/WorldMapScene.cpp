@@ -440,10 +440,10 @@ bool WorldMapLayer::TouchBegin(NDTouch* touch)
 									 node->getTexture()->getContentSizeInPixels().height);
 
 		//PlaceNode的尺寸基于960*640，适配一下
-		btnRect.origin.x	*= ANDROID_SCALE*IOS_SCALE;
-		btnRect.origin.y	*= ANDROID_SCALE*IOS_SCALE;
-		btnRect.size.width	*= ANDROID_SCALE*IOS_SCALE;
-		btnRect.size.height *= ANDROID_SCALE*IOS_SCALE;
+		btnRect.origin.x	*= RESOURCE_SCALE_960;
+		btnRect.origin.y	*= RESOURCE_SCALE_960;
+		btnRect.size.width	*= RESOURCE_SCALE_960;
+		btnRect.size.height *= RESOURCE_SCALE_960;
 
 		if (cocos2d::CCRect::CCRectContainsPoint(btnRect, posMap))
 		{
@@ -520,7 +520,7 @@ void WorldMapLayer::Goto( int nMapId )
 		
 		SetMove(true);
 		
-		SetRoleDirect(posTarget.x > m_roleNode->GetFrameRect().origin.x*ANDROID_SCALE*IOS_SCALE);
+		SetRoleDirect(posTarget.x > m_roleNode->GetFrameRect().origin.x*RESOURCE_SCALE_960);
 		
 		m_posTarget = posTarget;
 		
@@ -570,7 +570,7 @@ CCPoint WorldMapLayer::GetPlaceIdScreenPos(int placeId)
 	}
 	if (node && m_roleNode && node->getTexture())
 	{
-		return ccp( node->getX()*ANDROID_SCALE*IOS_SCALE, node->getY()*ANDROID_SCALE*IOS_SCALE );
+		return ccp( node->getX()*RESOURCE_SCALE_960, node->getY()*RESOURCE_SCALE_960 );
 	}
 
 	return posRet;

@@ -29,6 +29,7 @@
 #include "platform.h"
 #include "TQString.h"
 #include "ObjectTracker.h"
+#include "UsePointPls.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -151,8 +152,8 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 		m_pkFrameRunRecord = new NDFrameRunRecord;
 
 		SetContentSize(
-			CCSizeMake(m_pkCurrentAnimation->getW() * ANDROID_SCALE * IOS_SCALE,
-						m_pkCurrentAnimation->getH() * ANDROID_SCALE * IOS_SCALE )); //@android
+			CCSizeMake(m_pkCurrentAnimation->getW() * RESOURCE_SCALE_960,
+						m_pkCurrentAnimation->getH() * RESOURCE_SCALE_960 ));
 	}
 }
 

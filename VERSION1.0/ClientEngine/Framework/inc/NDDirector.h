@@ -22,22 +22,6 @@
 #include "NDNode.h"
 #include "CCTouchDispatcher.h"
 
-//--------------------------------------------------------------------------------
-//	***	资源缩放比例 & 字体缩放比例	***
-//
-//	备注：这些比例已经考虑到了ios & android的差异.
-//	举例：
-//		分辨率480*320		scale=1
-//		分辨率960*640		scale=2
-//		分辨率800*480		scale=1.5（以Y为主）
-
-//资源缩放比例&字体缩放比例（一般相同）
-#define RESOURCE_SCALE		(NDDirector::DefaultDirector()->getResourceScale())
-#define RESOURCE_SCALE_INT	int(RESOURCE_SCALE)
-#define FONT_SCALE			RESOURCE_SCALE
-#define FONT_SCALE_INT		int(FONT_SCALE)	
-//--------------------------------------------------------------------------------
-
 NS_NDENGINE_BGN
 
 class NDDirector;

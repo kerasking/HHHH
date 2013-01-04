@@ -1581,7 +1581,7 @@ CCPoint NDBaseRole::getHeadPos()
 	{
 		CCRect animRect = anim->getRect();
 		CCPoint posHead = ccp(GetPosition().x,
-				GetPosition().y - ANDROID_SCALE*IOS_SCALE*animRect.size.height);
+				GetPosition().y - RESOURCE_SCALE_960*animRect.size.height);
 		return posHead;
 	}
 

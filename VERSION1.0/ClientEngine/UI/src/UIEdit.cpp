@@ -15,6 +15,7 @@
 #include "define.h"
 //#include "I_Analyst.h"
 #include "ObjectTracker.h"
+#include "UsePointPls.h"
 
 CUIEdit* CUIEdit::g_pCurUIEdit = NULL;
 

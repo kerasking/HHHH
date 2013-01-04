@@ -19,6 +19,7 @@
 #include "ObjectTracker.h"
 #include "StringConvert.h"
 #include "ScriptGameDataLua.h"
+#include "UsePointPls.h"
 #include "utf8.h"
 
 
