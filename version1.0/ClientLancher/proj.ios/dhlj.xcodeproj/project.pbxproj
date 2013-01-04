@@ -838,6 +838,7 @@
 		5A47A73516972B99004C1EB1 /* MobageNativeSDK.VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 5A47A71B16972B99004C1EB1 /* MobageNativeSDK.VERSION */; };
 		5A47A73616972B99004C1EB1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A47A71D16972B99004C1EB1 /* Localizable.strings */; };
 		5A47BAA1169730BE0092C259 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A47BAA0169730BE0092C259 /* AdSupport.framework */; };
+		5A47BAA4169742850092C259 /* LiSu.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A47BAA3169742850092C259 /* LiSu.ttf */; };
 		5A5FF1E4167B243B00E897F9 /* DownloadPackage.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A5FF1DB167B243B00E897F9 /* DownloadPackage.h */; };
 		5A5FF1E5167B243B00E897F9 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A5FF1DC167B243B00E897F9 /* Reachability.h */; };
 		5A5FF1E8167B243B00E897F9 /* DownloadPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5FF1E0167B243B00E897F9 /* DownloadPackage.cpp */; };
@@ -2194,6 +2195,7 @@
 		5A47A71F16972B99004C1EB1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		5A47A72016972B99004C1EB1 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		5A47BAA0169730BE0092C259 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		5A47BAA3169742850092C259 /* LiSu.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = LiSu.ttf; path = ../../Bin/SimplifiedChineseRes/res/fonts/LiSu.ttf; sourceTree = "<group>"; };
 		5A5FF1DB167B243B00E897F9 /* DownloadPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadPackage.h; sourceTree = "<group>"; };
 		5A5FF1DC167B243B00E897F9 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		5A5FF1E0167B243B00E897F9 /* DownloadPackage.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = DownloadPackage.cpp; sourceTree = "<group>"; };
@@ -2296,7 +2298,6 @@
 		5AD25B78167F3B8000EEA44B /* SimpleAudioEngine_objc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleAudioEngine_objc.m; sourceTree = "<group>"; };
 		5AD25BDB167F414700EEA44B /* myunzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myunzip.h; sourceTree = "<group>"; };
 		5AD25BDD167F414D00EEA44B /* myunzip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = myunzip.cpp; sourceTree = "<group>"; };
-		5AD25BDF167F440200EEA44B /* LiSu.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = LiSu.ttf; path = ../../OtherRes/LiSu.ttf; sourceTree = "<group>"; };
 		5AD6019E16514F3C00369185 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		5AD601A016514F5C00369185 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		5AD601A216514FA600369185 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -4551,7 +4552,7 @@
 		5A3FC1AC1652A8B8002166DD /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				5AD25BDF167F440200EEA44B /* LiSu.ttf */,
+				5A47BAA3169742850092C259 /* LiSu.ttf */,
 				5A3FC1A91652A8A6002166DD /* SimplifiedChineseRes */,
 			);
 			name = Resources;
@@ -4819,7 +4820,6 @@
 		5AC4562C1643D6F90014B2E7 = {
 			isa = PBXGroup;
 			children = (
-				5A47BAA0169730BE0092C259 /* AdSupport.framework */,
 				5A47A6A416972B99004C1EB1 /* MobageSDK */,
 				5AC456411643D6FA0014B2E7 /* dhlj */,
 				5AC4778C1643DA550014B2E7 /* cocos2dx */,
@@ -4854,6 +4854,7 @@
 		5AC4563A1643D6FA0014B2E7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5A47BAA0169730BE0092C259 /* AdSupport.framework */,
 				5AD601C01651514C00369185 /* libz.dylib */,
 				5AD601BE1651512F00369185 /* AVFoundation.framework */,
 				5AD601BC1651511200369185 /* AudioToolbox.framework */,
@@ -5799,6 +5800,7 @@
 				5A47A73416972B99004C1EB1 /* icon.png in Resources */,
 				5A47A73516972B99004C1EB1 /* MobageNativeSDK.VERSION in Resources */,
 				5A47A73616972B99004C1EB1 /* Localizable.strings in Resources */,
+				5A47BAA4169742850092C259 /* LiSu.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
