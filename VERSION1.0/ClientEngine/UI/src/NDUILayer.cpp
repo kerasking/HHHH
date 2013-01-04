@@ -39,6 +39,7 @@
 #include "BaseType.h"
 #include "NDUIScrollViewMulHand.h"
 #include "ObjectTracker.h"
+#include "NDUIChatText.h"
 
 using namespace cocos2d;
 
@@ -903,6 +904,12 @@ bool NDUILayer::DispatchTouchEndEvent(CCPoint beginTouch, CCPoint endTouch)
 // 						uiText->OnTextClick(endTouch);
 // 						return false;
 // 					}
+					else if (uiNode->IsKindOfClass(RUNTIME_CLASS(CUIChatText)))
+					{
+						CUIChatText *uiText = (CUIChatText *)uiNode;
+						uiText->OnTextClick(endTouch);
+						return false;
+					}
 // 					else if (uiNode->IsKindOfClass(RUNTIME_CLASS(NDUIVerticalScrollBar)))
 // 					{
 // 						NDUIVerticalScrollBar* scrollBar = (NDUIVerticalScrollBar*)uiNode;

@@ -91,6 +91,9 @@ private:
     int                         m_iFlag;
 	bool						m_bIMEOpen; //输入法是否打开状态
 
+	int							m_curInputCount;
+	int							m_curStrCount;
+
 private:
 	void InitInput();
 	void SetShowTextColor(ccColor4B color);
