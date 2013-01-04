@@ -1914,9 +1914,8 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 // 	FILE* pkFile = 0;
 // 	pkFile = fopen(strCopyVersionINIPath.c_str(), "rb" );
 #else
+	///< IOS未作 郭浩
 #endif
-	//判断是不是第一次登录，如果是第一次登录，则移动资源文件LIBRARY/CACHES
-	//string strTemp = (char*)CCFileUtils::sharedFileUtils()->getFileData("SimplifiedChineseRes.zip/version.ini","rb",&ulFileLength);
 
 	string strInstallResVersion = "";
 
