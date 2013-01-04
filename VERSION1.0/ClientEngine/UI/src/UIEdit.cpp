@@ -15,6 +15,7 @@
 #include "define.h"
 //#include "I_Analyst.h"
 #include "ObjectTracker.h"
+#include "UsePointPls.h"
 
 CUIEdit* CUIEdit::g_pCurUIEdit = NULL;
 
@@ -34,6 +35,9 @@ CUIEdit::CUIEdit()
 	m_colorText				= ccc4(255, 255, 255, 255);
     //m_colorText				= ccc4(255, 0, 255, 255);
     m_iFlag                 = 0;
+
+	m_curInputCount			= 0;
+	m_curStrCount			= 0;
 
 #if WITH_OLD_IME
 	m_pPlatformInput		= NULL;
@@ -81,7 +85,19 @@ void CUIEdit::OnTextChanged()
 	if (!m_lbText) return;
 
 	int strCount = m_strText.length();
-	if(strCount > m_nMaxLen)
+	if(strCount > m_curStrCount)
+	{
+		m_curInputCount++;
+	}
+	else if(strCount < m_curStrCount)
+	{
+		m_curInputCount--;
+		if(m_curInputCount < 0)
+			m_curInputCount = 0;
+	}
+	m_curStrCount = strCount;
+
+	if(m_curInputCount > m_nMaxLen)
 		return;
 		
 	string labelText = "";

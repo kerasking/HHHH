@@ -55,7 +55,12 @@ void CUIDlgOptBtn::Initialization()
 	NDUIImage *testimg = new NDUIImage;
 	testimg->Initialization();
 	testimg->SetPicture(test);
-	testimg->SetFrameRect(CCRectMake(0.0f, winsize.height*0.015, 72.0f*ANDROID_SCALE, 32.0f*ANDROID_SCALE));
+	testimg->SetFrameRect(CCRectMake(
+		0.0f, 
+		winsize.height*0.015, 
+		72.0f*RESOURCE_SCALE_960, 
+		32.0f*RESOURCE_SCALE_960
+		));
 
 	this->AddChild(testimg, 1000);
 
@@ -301,7 +306,7 @@ void CUIDialog::AddOpt(const char* text, int nAction)
 	
 	CCRect rectNode		= node->GetFrameRect();
 	//CCSize winsize		= CCDirector::sharedDirector()->getWinSizeInPixels();
-	float fScale = ANDROID_SCALE;
+	float fScale = RESOURCE_SCALE_960;
 	CCRect rect;
 	cocos2d::CCLog("fScale = %05f, x = %05f, y = %05f, w = %05f, h = %05f, m_uiOptHeight = %u", 
 		              fScale, rectNode.origin.x, rectNode.origin.y, rectNode.size.width, rectNode.size.height, m_uiOptHeight);

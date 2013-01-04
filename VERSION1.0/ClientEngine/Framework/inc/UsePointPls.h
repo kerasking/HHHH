@@ -17,19 +17,33 @@
 #include "CCGeometry.h"
 #include "CCTexture2D.h"
 #include "NDUtil.h"
+#include "NDDirector.h"
 
 USING_NS_CC;
 
-NS_NDENGINE_BGN
+//-----------------------------------------------------------------------------------------------------------
+//	***	资源缩放比例 & 字体缩放比例	***
+//
+//	备注：这些比例已经考虑到了ios & android的差异.
+//	举例：
+//		分辨率480*320		scale=1
+//		分辨率960*640		scale=2
+//		分辨率800*480		scale=1.5（以Y为主）
 
+//资源缩放比例&字体缩放比例（一般相同）
+#define RESOURCE_SCALE		(NDDirector::DefaultDirector()->getResourceScale())		//基于480*320
+#define RESOURCE_SCALE_INT	int(RESOURCE_SCALE)										//基于480*320
+#define FONT_SCALE			RESOURCE_SCALE											//基于480*320
+#define FONT_SCALE_INT		int(FONT_SCALE)											//基于480*320
+
+#define RESOURCE_SCALE_960	(0.5f*RESOURCE_SCALE)									//基于960*640
+//-----------------------------------------------------------------------------------------------------------
+
+
+NS_NDENGINE_BGN
 class ConvertUtil
 {
 public:
-	// pixel -> point (仅用于android) 备注：分一套出来比较保险.
-	static void convertToPointCoord_Android( CCPoint& pt );
-	static void convertToPointCoord_Android( CCSize& sz );
-	static void convertToPointCoord_Android( CCRect& rc );
-
 	// pixel -> point
 	static void convertToPointCoord( CCPoint& pt );
 	static void convertToPointCoord( CCSize& sz );
@@ -65,18 +79,19 @@ public:
 
 public: //@android
 	static CCPoint getAndroidScale();
+	static float getIosScale();
 };
 
-//之前的格子是方格（即等宽等高），考虑到android平台多分辨率，MAP_UNITSIZE应拆分为xy两个分量.
+//-----------------------------------------------------------------------------------------------------------
 
+//之前的格子是方格（即等宽等高），考虑到android平台多分辨率，MAP_UNITSIZE应拆分为xy两个分量.
 #define MAP_UNITSIZE_X				(ConvertUtil::getCellSize().width)
 #define MAP_UNITSIZE_Y				(ConvertUtil::getCellSize().height)
 
 //角色显示时相对于Cell的偏移
 #define DISPLAY_POS_X_OFFSET		(MAP_UNITSIZE_X / 2)
 #define DISPLAY_POS_Y_OFFSET		(MAP_UNITSIZE_Y)
+//-----------------------------------------------------------------------------------------------------------
 
-//android缩放比例（以Y为主）
-#define ANDROID_SCALE				(ConvertUtil::getAndroidScale().y)
 
 NS_NDENGINE_END

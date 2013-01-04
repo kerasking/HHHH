@@ -29,6 +29,7 @@
 #include "platform.h"
 #include "TQString.h"
 #include "ObjectTracker.h"
+#include "UsePointPls.h"
 
 using namespace cocos2d;
 using namespace NDEngine;
@@ -151,8 +152,8 @@ void NDSprite::SetCurrentAnimation(int nAnimationIndex, bool bReverse)
 		m_pkFrameRunRecord = new NDFrameRunRecord;
 
 		SetContentSize(
-			CCSizeMake(m_pkCurrentAnimation->getW() * ANDROID_SCALE,
-						m_pkCurrentAnimation->getH() * ANDROID_SCALE )); //@android
+			CCSizeMake(m_pkCurrentAnimation->getW() * RESOURCE_SCALE_960,
+						m_pkCurrentAnimation->getH() * RESOURCE_SCALE_960 ));
 	}
 }
 
@@ -352,6 +353,19 @@ void NDSprite::MoveToPosition(std::vector<CCPoint> kToPos, SpriteSpeed speed,
 						kPointList.end());
 					from = m_kPointList[m_kPointList.size() - 1];
 				}
+			}
+
+			//玩家已经在终点上
+			CCPoint diff = ccpSub(m_kPosition, kToPos[0]);
+			if(kToPos.size() == 1 && diff.x == 0 && diff.y == 0)
+			{
+				m_bIsMoving = true;
+				return;
+			}
+
+			if(m_kPointList.empty())
+			{
+				m_bIsMoving = false;
 			}
 		}
 	}

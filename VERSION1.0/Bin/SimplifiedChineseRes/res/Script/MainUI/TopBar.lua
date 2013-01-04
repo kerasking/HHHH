@@ -12,16 +12,19 @@ local RectTopUILayer = CGRectMake(0, 0, winsize.w, 120.0*ScaleFactor);
 
 local CONTAINTER_X  = 0;
 local CONTAINTER_Y  = 0;
+local fScalex = CoordScaleX;
+local fScaley = CoordScaleY;
+
 
 local TOOL_BTN = {
-    {Tag=14,Rect=CGRectMake(345*ScaleFactor,30*ScaleFactor,40*ScaleFactor,40*ScaleFactor)},--竞技场
-    {Tag=20,Rect=CGRectMake(305*ScaleFactor,30*ScaleFactor,40*ScaleFactor,40*ScaleFactor)},--征收
-    {Tag=35,Rect=CGRectMake(265*ScaleFactor,30*ScaleFactor,40*ScaleFactor,40*ScaleFactor)},--祭祀 
-    {Tag=19,Rect=CGRectMake(225*ScaleFactor,30*ScaleFactor,40*ScaleFactor,40*ScaleFactor)},--礼包
-    {Tag=29,Rect=CGRectMake(185*ScaleFactor,30*ScaleFactor,40*ScaleFactor,40*ScaleFactor)},--每日签到  
-    {Tag=38,Rect=CGRectMake(345*ScaleFactor,70*ScaleFactor,40*ScaleFactor,40*ScaleFactor)},--充值礼包  
-    {Tag=39,Rect=CGRectMake(305*ScaleFactor,70*ScaleFactor,40*ScaleFactor,40*ScaleFactor)},--在线礼包 
-    {Tag=40,Rect=CGRectMake(265*ScaleFactor,70*ScaleFactor,40*ScaleFactor,40*ScaleFactor)},--运粮活动   
+    {Tag=14,Rect=CGRectMake(345*fScalex,30*fScaley,40*fScalex,40*fScaley)},--竞技场
+    {Tag=20,Rect=CGRectMake(305*fScalex,30*fScaley,40*fScalex,40*fScaley)},--征收
+    {Tag=35,Rect=CGRectMake(265*fScalex,30*fScaley,40*fScalex,40*fScaley)},--祭祀 
+    {Tag=19,Rect=CGRectMake(225*fScalex,30*fScaley,40*fScalex,40*fScaley)},--礼包
+    {Tag=29,Rect=CGRectMake(185*fScalex,30*fScaley,40*fScalex,40*fScaley)},--每日签到  
+    {Tag=38,Rect=CGRectMake(345*fScalex,70*fScaley,40*fScalex,40*fScaley)},--充值礼包  
+    {Tag=39,Rect=CGRectMake(305*fScalex,70*fScaley,40*fScalex,40*fScaley)},--在线礼包 
+    {Tag=40,Rect=CGRectMake(265*fScalex,70*fScaley,40*fScalex,40*fScaley)},--运粮活动   
 };
 
 local MAIN_UI_BUTTON_TOPUP = 17; 

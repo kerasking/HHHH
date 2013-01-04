@@ -25,8 +25,8 @@ p.TabInfo = { WorldInfo      =     {LayerTag = 1001, tabBtnId = 24,  focusIndex 
 p.CtrlId = {btnClose = 5, };
 p.ViewCtrlId = {pic = 110, txtTime = 104, txtContent = 105, btnCtr = 100,};
 
-local RectSubUILayer = CGRectMake(0, 39*ScaleFactor, 480*ScaleFactor, 275.0*ScaleFactor);
-local ListViewSize = CGSizeMake(430*ScaleFactor, 50*ScaleFactor);
+local RectSubUILayer = CGRectMake(0, 39*CoordScaleY, 480*CoordScaleX, 275.0*CoordScaleY);
+local ListViewSize = CGSizeMake(430*CoordScaleX, 50*CoordScaleY);
 
 local CONTAINTER_X  = 0;
 local CONTAINTER_Y  = 0;
@@ -241,6 +241,7 @@ function p.AddViewItem(container, nId, uiFile)
     view:Init(false);
     view:SetViewId(nId);
     view:SetTag(nId);  
+    view:SetDebugName( "UIScrollView_" .. nId );
     container:AddView(view);
     
     --初始化ui
@@ -399,6 +400,7 @@ function p.WorldRefresh()
     ListContainer:SetViewSize(ListViewSize);
     ListContainer:EnableScrollBar(true);
     ListContainer:RemoveAllView();
+    ListContainer:SetDebugName( "ScrollViewContainer" );
     
     --设置当前要显示的说明信息
     for i, v in pairs(p.WorldActions) do

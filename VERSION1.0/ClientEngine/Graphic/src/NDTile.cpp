@@ -646,42 +646,40 @@ void NDTile::debugDraw()
 	ccDrawLine( lb, rt );
 }
 
-void NDTile::SetDrawRect_Android( CCRect rect, bool bBattleMap ) //@android
+void NDTile::SetDrawRect( CCRect rect, bool bBattleMap ) //@android
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	//传入的尺寸都是基于960*640的
+	float fScale = RESOURCE_SCALE_960;
 
-	//android默认情况下以Y为主等比缩放
-	float fScaleAndroid = ANDROID_SCALE;
-
-#if WITH_ANDROID_BATTLEMAP_SCALE
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) && WITH_ANDROID_BATTLEMAP_SCALE
 	if (bBattleMap)
 	{
 		//android战斗地图下以X为主等比缩放
-		fScaleAndroid = ConvertUtil::getAndroidScale().x;
+		fScale = ConvertUtil::getAndroidScale().x;
 	}
 #endif
-	
-	//等比缩放
-	rect.origin.x	*= fScaleAndroid;	
-	rect.origin.y	*= fScaleAndroid;
-	rect.size.width *= fScaleAndroid;
-	rect.size.height*= fScaleAndroid;
 
-#if WITH_ANDROID_BATTLEMAP_SCALE
+	//等比缩放
+	rect.origin.x	*= fScale;	
+	rect.origin.y	*= fScale;
+	rect.size.width *= fScale;
+	rect.size.height*= fScale;
+
+	//如果是android战斗地图（或剧情地图）则再裁剪一下Y.
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) && WITH_ANDROID_BATTLEMAP_SCALE
 	if (bBattleMap)
 	{
 		cutHeightForAndroidBattleMap( rect );
 	}
 #endif
 
-#endif //CC_TARGET_PLATFORM
-
 	m_kDrawRect = rect;
 }
 
-//android平台下，战斗地图宽度不够会有黑边，解决方法如下：
-//	等比缩放战斗地图确保宽度足够，高度方面则从上面裁剪多余尺寸.
-void NDTile::SetCutRect_Android( CCRect rect, bool bBattleMap ) //@android
+//android平台：	战斗地图宽度不够会有黑边，解决方法如下：
+//				等比缩放战斗地图确保宽度足够，高度方面则从上面裁剪多余尺寸.
+//其他平台：	保持不变
+void NDTile::SetCutRect( CCRect rect, bool bBattleMap ) //@android
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) && WITH_ANDROID_BATTLEMAP_SCALE
 	if (bBattleMap)

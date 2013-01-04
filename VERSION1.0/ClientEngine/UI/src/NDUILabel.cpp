@@ -145,25 +145,38 @@ void NDUILabel::MakeTexture()
 	CCLog( "@NDUILabel::MakeTexture(): %s", m_strText.c_str());
 #endif
 
-	//if ("" == m_strText) return;
-
-	// get horz text alignment
+    //默认竖直方向向上靠齐
+	CCVerticalTextAlignment eVAlignMent = kCCVerticalTextAlignmentTop;
 	CCTextAlignment eTextAlign = kCCTextAlignmentLeft;
-	if (m_eTextAlignment == LabelTextAlignmentLeft)
+	
+	if (m_eTextAlignment == LabelTextAlignmentLeft)   //左对齐
 	{
+		//左对齐则水平左对齐竖直向上对齐
 		eTextAlign = kCCTextAlignmentLeft;
 	}
-	else if (m_eTextAlignment == LabelTextAlignmentCenter 
-				|| m_eTextAlignment == LabelTextAlignmentHorzCenter)
+	else if(m_eTextAlignment == LabelTextAlignmentRight) //右对齐
 	{
-		eTextAlign = kCCTextAlignmentCenter;
-	}
-	else if (m_eTextAlignment == LabelTextAlignmentRight)
-	{
+		//右对齐则水平右对齐竖直向上对齐
 		eTextAlign = kCCTextAlignmentRight;
 	}
+	else if(m_eTextAlignment == LabelTextAlignmentHorzCenter)  //水平居中
+	{
+		//水平居中则水平居中竖直向上对齐
+		eTextAlign = kCCTextAlignmentCenter;
+	}
+	else if(m_eTextAlignment == LabelTextAlignmentVertCenter)  //竖直居中
+	{
+		//竖直居中则水平左对齐，竖直居中
+		eVAlignMent = kCCVerticalTextAlignmentCenter;
+	}
+	else if(m_eTextAlignment == LabelTextAlignmentCenter)  //居中
+	{
+		//居中则水平竖直都居中
+		eTextAlign = kCCTextAlignmentCenter;
+		eVAlignMent = kCCVerticalTextAlignmentCenter;
 
-	//
+	}
+
 	CCRect thisRect = GetFrameRect();
 	CC_SAFE_RELEASE_NULL(m_texture);
 
@@ -173,7 +186,8 @@ void NDUILabel::MakeTexture()
 	m_texture->initWithString( m_strText.c_str(),
 				CCSizeMake(thisRect.size.width, thisRect.size.height),
 				eTextAlign,
-				kCCVerticalTextAlignmentCenter,
+				//kCCVerticalTextAlignmentCenter,
+				eVAlignMent,
 				FONT_NAME,
 				m_uiFontSize*FONT_SCALE
 				);

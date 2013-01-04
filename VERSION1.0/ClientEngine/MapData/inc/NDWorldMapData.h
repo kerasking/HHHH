@@ -11,6 +11,7 @@
 
 #include "NDMapData.h"
 
+//±¸×¢£ºm_nX,m_nY»ùÓÚ960*640
 class PlaceNode: public cocos2d::CCObject
 {
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCTexture2D*, m_Texture, Texture)

@@ -60,7 +60,7 @@ WorldMapLayer::WorldMapLayer()
 	m_tmStartMoving.tv_usec = 0;
 
 	m_idMapCached = 0;
-	m_bArrive = false;
+	m_bArrive = true;
 }
 
 WorldMapLayer::~WorldMapLayer()
@@ -111,20 +111,15 @@ void WorldMapLayer::Initialization(int nMapId)
 		NDTile* pkTile = new NDTile;
 		pkTile->setTexture(pkNode->getTexture());
 
+		int iX = pkNode->getX();
+		int iY = pkNode->getY();
  		int iWidth = pkNode->getTexture()->getContentSizeInPixels().width;
  		int iHeight = pkNode->getTexture()->getContentSizeInPixels().height;
 		
 		pkTile->setCutRect(CCRectMake(0, 0, iWidth, iHeight));
-		int iX = pkNode->getX();
-		int iY = pkNode->getY();
-		
-		pkTile->SetDrawRect_Android(CCRectMake(iX, iY, iWidth, iHeight));//@android
+		pkTile->SetDrawRect(CCRectMake(iX, iY, iWidth, iHeight));
 		pkTile->setReverse((bool)NO);
 		pkTile->setRotation(NDRotationEnumRotation0);
-		
-		iWidth = mapData.getMapSize().width;
-		iHeight = mapData.getMapSize().height;
-		
 		pkTile->setMapSize(CCSizeMake(iWidth, iHeight));
 		pkTile->make();
 		
@@ -137,9 +132,14 @@ void WorldMapLayer::Initialization(int nMapId)
 	//NDPicture* picCloseSelect	= NDPicturePool::DefaultPool()->AddPicture(GetSMImgPath("btn_close.png"));    
 	CCSize sizeClose	= picClose->GetSize();
 
+	CCLog("tzq sizeClose.width = %05f, height = %05f", sizeClose.width, sizeClose.height);
+
 	// set close button
 	picClose->Cut(CCRectMake(0,  0,  sizeClose.width,  sizeClose.height/2 - 2));
 	//picCloseSelect->Cut(CCRectMake(0,  sizeClose.height/2,  sizeClose.width,  sizeClose.height/2));
+
+	sizeClose.width *= NDDirector::DefaultDirector()->getCoordScaleX();
+	sizeClose.height *= NDDirector::DefaultDirector()->getCoordScaleY();
 	CCRect rectClose = CCRectMake((winsize.width - sizeClose.width), 0,
 									 sizeClose.width, sizeClose.height/2);
 	// init close button
@@ -439,7 +439,11 @@ bool WorldMapLayer::TouchBegin(NDTouch* touch)
 									 node->getTexture()->getContentSizeInPixels().width,
 									 node->getTexture()->getContentSizeInPixels().height);
 
-		ConvertUtil::convertToPointCoord_Android( btnRect );
+		//PlaceNode的尺寸基于960*640，适配一下
+		btnRect.origin.x	*= RESOURCE_SCALE_960;
+		btnRect.origin.y	*= RESOURCE_SCALE_960;
+		btnRect.size.width	*= RESOURCE_SCALE_960;
+		btnRect.size.height *= RESOURCE_SCALE_960;
 
 		if (cocos2d::CCRect::CCRectContainsPoint(btnRect, posMap))
 		{
@@ -487,8 +491,6 @@ void WorldMapLayer::OnButtonClick(NDUIButton* button)
 
 void WorldMapLayer::Goto( int nMapId )
 {
-	m_bArrive = false;
-
 	PlaceNode* node = GetPlaceNodeWithId(nMapId);
 	if (!node)
 	{
@@ -496,7 +498,7 @@ void WorldMapLayer::Goto( int nMapId )
 	}
 	if (node && m_roleNode )//Guosen 2012.11.22可响应脚下节点//if (node && m_roleNode && m_curBtn != node)
 	{
-		if(m_curBtn == node)
+		if((m_curBtn == node) && (m_bArrive))
 		{
 			//如果是脚下的点直接退出至主城
 			if(nMapId==1 || nMapId == 2)
@@ -505,13 +507,20 @@ void WorldMapLayer::Goto( int nMapId )
 				NDMapMgrObj.WorldMapSwitch( nMapId );
 				return;
 			}
+			else
+			{
+				m_bArrive = true;
+				ScriptMgrObj.excuteLuaFunc("showBattleMapUI", "", nMapId);
+				return;
+			}
 		}
 
+		m_bArrive = false;
 		CCPoint posTarget = GetTargetPos(nMapId);
 		
 		SetMove(true);
 		
-		SetRoleDirect(posTarget.x > m_roleNode->GetFrameRect().origin.x*ANDROID_SCALE);
+		SetRoleDirect(posTarget.x > m_roleNode->GetFrameRect().origin.x*RESOURCE_SCALE_960);
 		
 		m_posTarget = posTarget;
 		
@@ -561,7 +570,7 @@ CCPoint WorldMapLayer::GetPlaceIdScreenPos(int placeId)
 	}
 	if (node && m_roleNode && node->getTexture())
 	{
-		return ccp( node->getX()*ANDROID_SCALE, node->getY()*ANDROID_SCALE );
+		return ccp( node->getX()*RESOURCE_SCALE_960, node->getY()*RESOURCE_SCALE_960 );
 	}
 
 	return posRet;

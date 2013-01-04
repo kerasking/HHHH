@@ -15,34 +15,34 @@
     
 }
 
+@property (nonatomic, assign) BOOL isLogin;
 @property (nonatomic, retain) UIWindow* mainWindow;
 @property (nonatomic, retain) UIView* welcomeView;
 
-@property (nonatomic, retain) NSMutableSet* viewSets;
-
 //about user id, user name, refractor it as class later
-@property (nonatomic, retain) NSString* userId;
-@property (nonatomic, retain) NSString* userName;
-@property (nonatomic, retain) NSString* gameId;
-@property (nonatomic, retain) NSString* affCode;
-@property UIInterfaceOrientation restoreOrient;
+@property (nonatomic, copy) NSString* userId;
+@property (nonatomic, copy) NSString* userName;
+@property (nonatomic, copy) NSString* gameId;
+@property (nonatomic, copy) NSString* affCode;
 
 + (LoginUtility*) shareInstance;
-
-- (NSMutableSet *) getViewSets;
 
 - (void) ssoLogOut;
 
 + (BOOL) isIPad;
-+ (NSString *) get_mac;
+
 + (NSString *) platform;
 + (NSString *) platformString;
 + (NSString *) getOsVersion;
++ (NSString *) getMacAddress;
++ (NSString *) getUniqueIdentifier;
++ (NSString *) getAdvertisingIdentifier;
++ (NSString *) getIdentifierForVendor;
 
-+ (NSString *) get_home_page;
-+ (NSString *) getHomePageNoSSL;
-+ (NSString *) get_host;
-+ (NSString *) get_unique_id;
++ (NSString *) getHostDomain;
++ (NSString *) getHostBaseUrl;
++ (NSString *) getIapApiUrl;
++ (NSString *) getHomePage;
 
 - (NSString *) checkNetworkStatus;
 
@@ -57,5 +57,4 @@
 - (void) viewToFrontFromLeft:(UIView *) view;
 - (void) viewToFrontFade:(UIView *) view;
 - (void) popWelcomeView:(NSString*)name;
-
 @end

@@ -275,8 +275,8 @@ void NDScriptRegLua::doReg()
     ETMEMBERFUNC("SetFocus",                        &NDUIButton::SetFocus)
     ETMEMBERFUNC("SetSoundEffect",                  &NDUIButton::SetSoundEffect)
     ETMEMBERFUNC("SetChecked",                      &NDUIButton::SetChecked)
-    //** chh 2012-07-19 **//
-    ETMEMBERFUNC("TabSel",                          &NDUIButton::TabSel)//&NDUIButton::TabSel)//Guosen 2012.11.22 按钮模拟选项卡...
+    //ETMEMBERFUNC("TabSel",                          &NDUIButton::TabSel)//&NDUIButton::TabSel)//Guosen 2012.11.22 按钮模拟选项卡...
+	ETMEMBERFUNC("TabSel",                          &NDUIButton::SetChecked)//&NDUIButton::TabSel)//Guosen 2012.11.22 按钮模拟选项卡...
 	ETCLASSEND(NDUIButton)
 	
 //#pragma mark 图片类导出"NDUIImage.h"

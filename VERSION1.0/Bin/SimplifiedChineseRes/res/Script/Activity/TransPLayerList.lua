@@ -10,7 +10,7 @@ local CONTAINTER_X  = 0;
 local CONTAINTER_Y  = 0;
 
 p.CtrId = {listId = 50, btnClose = 49, btnLoot= 7, txtName = 70, txtLev = 72, txtCarLev = 75, txtIsLoot = 71, 
-                 ViewSize = CGSizeMake(400*ScaleFactor, 25*ScaleFactor),};
+                 ViewSize = CGSizeMake(400*CoordScaleX, 25*CoordScaleY),};
 
 function p.LoadUI ()
     --------------------获得游戏主场景------------------------------------------

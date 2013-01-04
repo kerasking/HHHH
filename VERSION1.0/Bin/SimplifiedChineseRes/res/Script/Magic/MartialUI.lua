@@ -94,8 +94,8 @@ local TagPetInfBtn = 30;
 
 --排序
 local NUMBER_FILE = "/number/num_1.png";
-local N_W = 21*ScaleFactor;
-local N_H = 17*ScaleFactor;
+local N_W = 42;
+local N_H = 34;
 local Numbers_Rect = {
     CGRectMake(N_W*0,0.0,N_W,N_H),
     CGRectMake(N_W*1,0.0,N_W,N_H),

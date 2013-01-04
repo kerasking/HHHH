@@ -212,5 +212,5 @@ RectUILayer = CGRectMake(winsize.w * (1 - 0.954167) / 2, winsize.h * (1 - 0.8875
 RectFullScreenUILayer = CGRectMake(0, 0, winsize.w, winsize.h);
 --缩放系数
 ScaleFactor = DefaultDirector():GetScaleFactor();
-CoordScaleX = DefaultDirector():GetCoordScaleX();
-CoordScaleY = DefaultDirector():GetCoordScaleY();
+CoordScaleX = DefaultDirector():GetCoordScaleX()*2;
+CoordScaleY = DefaultDirector():GetCoordScaleY()*2;

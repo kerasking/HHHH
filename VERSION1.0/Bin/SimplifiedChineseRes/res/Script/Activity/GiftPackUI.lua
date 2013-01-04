@@ -21,7 +21,7 @@ local TAG_LIST_ITEMSIZE       = 5;
 
 p.GiftBackList = {};    --礼包列表
 
-p.GifeItemSize = CGSizeMake(260*ScaleFactor, 42*ScaleFactor);
+p.GifeItemSize = CGSizeMake(260*CoordScaleX, 42*CoordScaleY);
 
 function p.LoadUI()
 --------------------获得游戏主场景------------------------------------------

@@ -275,7 +275,9 @@ public:
 	void OnTouchDown(bool touched);
 	void OnLongTouchDown(bool touched);
 	//void SetChecked( bool bChecked ){ m_bChecked = bChecked; m_bGray = bChecked; }
-	void SetChecked( bool bChecked ){ m_bTabSel = bChecked; m_bFocusEnable = bChecked; m_bChecked = bChecked; m_bGray = bChecked;}
+	void SetChecked( bool bChecked ){ m_bTabSel = bChecked; m_bFocusEnable = bChecked; m_bChecked = bChecked;}
+
+	
 	bool CanDestroyOnRemoveAllChildren(NDNode* pNode);
 
 public:

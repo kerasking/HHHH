@@ -37,9 +37,9 @@
     [[MBGPlatform sharedPlatform] setDelegate:self withWindow:viewController.window withRootViewController:viewController];
     
     if ([MBGPlatform isProductionEnv]) {
-        [MBGPlatform initialize:MBG_REGION_CN serverType:MBG_PRODUCTION consumerKey:@"sdk_app_id:13000194" consumerSecret:@"c966082ce0ffed1dc4d73b757c35a00a" appId:@"13000194"];
+        [MBGPlatform initialize:MBG_REGION_TW serverType:MBG_PRODUCTION consumerKey:@"sdk_app_id:23000052" consumerSecret:@"e25f32276192dca071e175771f02c78b" appId:@"23000052"];
     }else {
-        [MBGPlatform initialize:MBG_REGION_CN serverType:MBG_SANDBOX consumerKey:@"sdk_app_id:13000194" consumerSecret:@"2fb0c33d5b1461cf1ae70e3fe7c9d79b" appId:@"13000194"];
+        [MBGPlatform initialize:MBG_REGION_TW serverType:MBG_SANDBOX consumerKey:@"sdk_app_id:23000052" consumerSecret:@"7512ae70a3bb19ecb6c6ddf87611b6aa" appId:@"23000052"];
     }
     
     [MBGPlatform registerTick];

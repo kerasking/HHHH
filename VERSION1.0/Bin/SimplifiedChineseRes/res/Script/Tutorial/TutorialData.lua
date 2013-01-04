@@ -31,7 +31,7 @@ p.JtTag     = 4784321;--前头Tag
 p.GxTag     = 4784322;--光效Tag
 p.BoxTag    = 4784323;--文本框
 p.TxtTag    = 2;    
-p.TipSize   = CGSizeMake(80*ScaleFactor,40*ScaleFactor);
+p.TipSize   = CGSizeMake(80*CoordScaleX,40*CoordScaleY);
 
 TutorialType = {
     UP = "jiants03.spr",
@@ -3640,42 +3640,39 @@ function p.Stage7414ExitCond()
 end
 
 -------------------------------------引导 14 结束-----------------------------------------------
-
-
-
-
-
 function p.BeginTemplete(layer)
+	local fXScale = CoordScaleX/2;
+	local fYScale = CoordScaleY/2;
     if(layer == nil) then
         local scene = GetSMGameScene();
         if(scene == nil) then
             return;
         end
         layer = scene;
+    else
+		fXScale = CoordScaleY/2;
+		fYScale = CoordScaleY/2;
     end
 
     local taskItem = p.GetCurrTaskItem();
     
     p.ClearTemplete();
-    local fScaleFactor = ScaleFactor/2;
-    
-    
-    
+
     --添加前头
     if(taskItem.Dir) then
         
         --添加提示文字
         if(taskItem.TxtPos) then
-            local nX,nY = p.GetJtRelativePos(taskItem.Dir.x*CoordScaleX, taskItem.Dir.y*CoordScaleY, taskItem.Dir.index);
+            local nX,nY = p.GetJtRelativePos(taskItem.Dir.x*fXScale, taskItem.Dir.y*fYScale, taskItem.Dir.index);
             p.CreateText(layer,taskItem.TxtPos.Txt,p.BoxTag,nX,nY,taskItem.Order);
         end
         
-        p.CreateAnimate(layer,taskItem.Dir.index,p.JtTag,taskItem.Dir.x*CoordScaleX,taskItem.Dir.y*CoordScaleY,taskItem.Order);
+        p.CreateAnimate(layer,taskItem.Dir.index,p.JtTag,taskItem.Dir.x*fXScale,taskItem.Dir.y*fYScale,taskItem.Order);
     end
     
     --添加光效
     if(taskItem.EffectPos) then
-        p.CreateAnimate(layer,taskItem.EffectPos.index,p.GxTag,taskItem.EffectPos.x*CoordScaleX,taskItem.EffectPos.y*CoordScaleY,taskItem.Order);
+        p.CreateAnimate(layer,taskItem.EffectPos.index,p.GxTag,taskItem.EffectPos.x*fXScale,taskItem.EffectPos.y*fYScale,taskItem.Order);
     end
     
 end
@@ -3722,18 +3719,18 @@ function p.GetJtRelativePos(nX, nY, nType)
     x=0;y=0;
     LogInfo("nType:[%s]",nType);
     if(nType == TutorialType.UP) then
-        x = nX + 25*ScaleFactor;
-        y = nY + 80*ScaleFactor;
+        x = nX + 25*CoordScaleX;
+        y = nY + 80*CoordScaleY;
     elseif(nType == TutorialType.DOWN) then
          LogInfo("nTypedown:[%s]",nType);
-        x = nX + 25*ScaleFactor;
-        y = nY - 0*ScaleFactor;
+        x = nX + 25*CoordScaleX;
+        y = nY - 0*CoordScaleY;
     elseif(nType == TutorialType.LEFT) then
-        x = nX + 80*ScaleFactor;
-        y = nY + 45*ScaleFactor;
+        x = nX + 80*CoordScaleX;
+        y = nY + 45*CoordScaleY;
     elseif(nType == TutorialType.RIGHT) then
-        x = nX - 35*ScaleFactor;
-        y = nY + 45*ScaleFactor;
+        x = nX - 35*CoordScaleX;
+        y = nY + 45*CoordScaleY;
     end
     return x,y;
 end

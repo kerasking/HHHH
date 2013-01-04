@@ -1,0 +1,57 @@
+/* 
+  Localizable.strings
+  MyNativeTest
+
+  Created by panzaofeng on 7/23/12.
+  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+*/
+
+
+
+"AM" = "上午";
+"PM" = "下午";
+"year" = "年";
+"month" = "月";
+"day" = "日";
+"hour" = "时";
+"minute" = "分";
+"second" = "秒";
+"Yes" = "是";
+"No" = "否";
+"OK" = "确定";
+"Cancel" = "取消";
+"Initializing" = "登陆梦宝谷...";
+"Error prompt" = "出错了";
+"Failed to Connect" = "连接服务器失败了，请检查网络连接是否正常";
+"Retry" = "重试";
+"Exit" = "退出";
+"Try again" = "再试一次";
+"Has a Update now" = "升级提示";
+"Update immediately" = "现在有新的更新了，是否马上升级？";
+"Update Now" = "马上升级";
+"Update later" = "暂不升级";
+"Fore to update immediately" = "现在有新的更新了";
+"Pass" = "跳过";
+"Purchase" = "购买";
+"Prepare to purchase" = "准备购买中";
+"Purchase failed! Your account was invalid, please contact the customer service" = "购买失败！系统检测到您的帐户存在问题，请联系客服获取帮助";
+"Unable to get product information, please contact custom service" = "无法获取商品信息,请联系客服人员";
+"Unknown error while purchasing, please verify the network status and try again" = "购买出现了未知错误,请确认网络状态并重试";
+"Purchasing failed, please verify the network status and try again" = "购买失败了,请检查网络后重试";
+"Sending purchasing data" = "正在发送购买信息...";
+"Unable to get product information, please check your network and try again" = "无法获取商品信息,请检查网络后重试";
+"Unable to send product information, please check your network and try again" = "购买数据不能发送,请检查网络后重试";
+"There is an unfinised purchasing request, now send it again to complete the request" = "有未完成的购买请求,现在就再次发送以完成请求吗?";
+"Account switching success" = "帐号切换成功!";
+"Select from the album" = "从相册选取";
+"Turn on the camera" = "开启照相机";
+"Welcome" = "欢迎您, ";
+"The device does not have text-messaging capabilities" = "该设备没有短信功能";
+"Send cancel" = "发送取消";
+"Send success" = "发送成功";
+"Send failed" = "发送失败";
+"No available updates" = "无可用更新";
+"Downloading force update is canceled" = "下载强制更新被取消";
+"Downloading normal update is canceled" = "下载普通更新被取消";
+"Download the new version failed" = "下载新版本失败";
+"Detect the new version information failed" = "检测新版本信息失败";
