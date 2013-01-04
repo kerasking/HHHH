@@ -445,6 +445,20 @@ void NDDirector::Recyle()
 	NDAnimationGroupPool::defaultPool()->Recyle();
 }
 
+//@ios
+//这个比例参考960*640
+//备注：这个函数适用于所有非android平台
+float NDDirector::getIosScale() const
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	return 0.5f * CCDirector::sharedDirector()->getContentScaleFactor();
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	return 0.5f * CCDirector::sharedDirector()->getContentScaleFactor();
+#else
+	return 1.0f;
+#endif
+}
+
 //@android
 //返回值：	x值存放x方向的缩放比例
 //			y值存放y放点的缩放比例

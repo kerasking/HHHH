@@ -77,8 +77,8 @@ public:
 	void makeTex(float* pData);
 	void makeVetex(float* pData, CCRect kRect);
 
-	virtual void SetDrawRect_Android( CCRect rect, bool bBattleMap = false );
-	virtual void SetCutRect_Android( CCRect rect, bool bBattleMap = false );
+	virtual void SetDrawRect( CCRect rect, bool bBattleMap = false );
+	virtual void SetCutRect( CCRect rect, bool bBattleMap = false );
 	bool cutHeightForAndroidBattleMap( CCRect& rect, float* cutHeight = NULL );
 
 public: //@shader

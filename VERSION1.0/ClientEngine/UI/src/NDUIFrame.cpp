@@ -74,7 +74,7 @@ namespace NDEngine
 			m_tileLeftTop->getTexture()->getMaxT()
 			* m_tileLeftTop->getTexture()->getPixelsHigh()));
 
-		m_tileLeftTop->SetDrawRect_Android(
+		m_tileLeftTop->SetDrawRect(
 			CCRectMake(scrRect.origin.x, 
 						scrRect.origin.y,
 						m_tileLeftTop->getTexture()->getMaxS() * m_tileLeftTop->getTexture()->getPixelsWide(),
@@ -96,7 +96,7 @@ namespace NDEngine
 			m_tileRightTop->getTexture()->getMaxT()
 			* m_tileRightTop->getTexture()->getPixelsHigh()));
 
-		m_tileRightTop->SetDrawRect_Android(
+		m_tileRightTop->SetDrawRect(
 			CCRectMake(
 			scrRect.origin.x + scrRect.size.width
 				- m_tileRightTop->getTexture()->getMaxT() 
@@ -121,7 +121,7 @@ namespace NDEngine
 			m_tileLeftBottom->getTexture()->getMaxT()
 			* m_tileLeftBottom->getTexture()->getPixelsHigh()));
 
-		m_tileLeftBottom->SetDrawRect_Android(
+		m_tileLeftBottom->SetDrawRect(
 			CCRectMake(scrRect.origin.x,
 			scrRect.origin.y + scrRect.size.height
 				- m_tileLeftBottom->getTexture()->getMaxS()
@@ -147,7 +147,7 @@ namespace NDEngine
 			m_tileRightBottom->getTexture()->getMaxT()
 			* m_tileRightBottom->getTexture()->getPixelsHigh()));
 
-		m_tileRightBottom->SetDrawRect_Android(
+		m_tileRightBottom->SetDrawRect(
 			CCRectMake(
 			scrRect.origin.x + scrRect.size.width
 				- m_tileRightBottom->getTexture()->getMaxS()

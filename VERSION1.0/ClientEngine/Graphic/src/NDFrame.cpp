@@ -263,7 +263,7 @@ void NDFrame::run(float fScale)
 		GLfloat y = pkAnimationGroup->getPosition().y;
 
 #if 1 //@todo @check
-		float fScaleResult = fScale * ANDROID_SCALE;
+		float fScaleResult = fScale * RESOURCE_SCALE_960;
 
 		if (pkAnimation->getMidX() != 0)
 		{

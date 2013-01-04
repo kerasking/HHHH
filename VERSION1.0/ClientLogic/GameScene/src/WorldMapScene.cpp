@@ -111,20 +111,15 @@ void WorldMapLayer::Initialization(int nMapId)
 		NDTile* pkTile = new NDTile;
 		pkTile->setTexture(pkNode->getTexture());
 
+		int iX = pkNode->getX();
+		int iY = pkNode->getY();
  		int iWidth = pkNode->getTexture()->getContentSizeInPixels().width;
  		int iHeight = pkNode->getTexture()->getContentSizeInPixels().height;
 		
 		pkTile->setCutRect(CCRectMake(0, 0, iWidth, iHeight));
-		int iX = pkNode->getX();
-		int iY = pkNode->getY();
-		
-		pkTile->SetDrawRect_Android(CCRectMake(iX, iY, iWidth, iHeight));//@android
+		pkTile->SetDrawRect(CCRectMake(iX, iY, iWidth, iHeight));
 		pkTile->setReverse((bool)NO);
 		pkTile->setRotation(NDRotationEnumRotation0);
-		
-		iWidth = mapData.getMapSize().width;
-		iHeight = mapData.getMapSize().height;
-		
 		pkTile->setMapSize(CCSizeMake(iWidth, iHeight));
 		pkTile->make();
 		
@@ -444,7 +439,11 @@ bool WorldMapLayer::TouchBegin(NDTouch* touch)
 									 node->getTexture()->getContentSizeInPixels().width,
 									 node->getTexture()->getContentSizeInPixels().height);
 
-		ConvertUtil::convertToPointCoord_Android( btnRect );
+		//PlaceNode的尺寸基于960*640，适配一下
+		btnRect.origin.x	*= RESOURCE_SCALE_960;
+		btnRect.origin.y	*= RESOURCE_SCALE_960;
+		btnRect.size.width	*= RESOURCE_SCALE_960;
+		btnRect.size.height *= RESOURCE_SCALE_960;
 
 		if (cocos2d::CCRect::CCRectContainsPoint(btnRect, posMap))
 		{
@@ -521,7 +520,7 @@ void WorldMapLayer::Goto( int nMapId )
 		
 		SetMove(true);
 		
-		SetRoleDirect(posTarget.x > m_roleNode->GetFrameRect().origin.x*ANDROID_SCALE);
+		SetRoleDirect(posTarget.x > m_roleNode->GetFrameRect().origin.x*RESOURCE_SCALE_960);
 		
 		m_posTarget = posTarget;
 		
@@ -571,7 +570,7 @@ CCPoint WorldMapLayer::GetPlaceIdScreenPos(int placeId)
 	}
 	if (node && m_roleNode && node->getTexture())
 	{
-		return ccp( node->getX()*ANDROID_SCALE, node->getY()*ANDROID_SCALE );
+		return ccp( node->getX()*RESOURCE_SCALE_960, node->getY()*RESOURCE_SCALE_960 );
 	}
 
 	return posRet;
