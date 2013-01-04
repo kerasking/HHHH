@@ -99,38 +99,6 @@ CCSize ConvertUtil::getTextureSizeInPoints( /*const*/ cocos2d::CCTexture2D& tex 
 		tex.getPixelsHigh() / fScale );
 }
 
-
-
-//Pixel -> Point
-void ConvertUtil::convertToPointCoord_Android( CCPoint& pt )
-{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
-	pt.x *= ANDROID_SCALE;
-	pt.y *= ANDROID_SCALE;
-#endif
-}
-
-//Pixel -> Point
-void ConvertUtil::convertToPointCoord_Android( cocos2d::CCSize& sz )
-{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
-	sz.width	*= ANDROID_SCALE;
-	sz.height	*= ANDROID_SCALE;
-#endif
-}
-
-//@android
-//Pixel -> Point
-void ConvertUtil::convertToPointCoord_Android( cocos2d::CCRect& rc )
-{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //@android
-	rc.origin.x		*= ANDROID_SCALE;
-	rc.origin.y		*= ANDROID_SCALE;
-	rc.size.width	*= ANDROID_SCALE;
-	rc.size.height	*= ANDROID_SCALE;
-#endif
-}
-
 //格子坐标 -> 显示坐标
 CCPoint ConvertUtil::convertCellToDisplay( const int cellX, const int cellY )
 {

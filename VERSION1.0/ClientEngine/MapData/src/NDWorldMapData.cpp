@@ -421,6 +421,7 @@ void NDWorldMapData::decode(FILE* stream)
 			//pkPlaceNode->setTexture(CCTextureCache::sharedTextureCache()->addImage(imageName));
 		}
 
+		//备注：读取的x,y基于960*640
 		pkPlaceNode->setX(kFileOp.readShort(stream));
 		pkPlaceNode->setY(kFileOp.readShort(stream));
 		pkPlaceNode->setLDir(kFileOp.readShort(stream));
