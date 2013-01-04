@@ -360,6 +360,8 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 #endif
         {
             NDBeforeGameMgrObj.doNDSdkLogin();
+			CloseWaitingAni();
+			StartEntry();
            // ShowWaitingAni();
 		}
 //#endif
@@ -779,9 +781,9 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
     }
 #endif
 	
-#if UPDATE_ON == 0
+#if (UPDATE_ON == 0 && CACHE_MODE == 0)
 		CloseWaitingAni();
-		//StartEntry();
+		StartEntry();
 #endif
 #if UPDATE_ON == 1
 	const char*	pszUpdateURL	= SZ_UPDATE_URL;//ScriptMgrObj.excuteLuaFuncRetS( "GetUpdateURL", "Update" );//此时Lua脚本未加载……
@@ -938,7 +940,7 @@ void CSMLoginScene::OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonI
 //===========================================================================
 bool CSMLoginScene::OnTargetBtnEvent( NDUINode * uiNode, int targetEvent )
 {
-	int	iTag	= uiNode->GetTag();
+	int	iTag = uiNode->GetTag();
 	if ( TE_TOUCH_BTN_CLICK == targetEvent )
 	{
 		if ( TAG_BTN_OK == iTag ) 

@@ -1909,7 +1909,7 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	strInstallVersionINIPath = string("assets/") + SZ_VERINI_PATH;
 	strCopyVersionINIPath = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	strInstallVersionINIPath = string("sdcard/dhlj/SimplifiedChineseRes/") + SZ_VERINI_PATH;
+	strInstallVersionINIPath = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
     strCopyVersionINIPath = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
 // 	FILE* pkFile = 0;
 // 	pkFile = fopen(strCopyVersionINIPath.c_str(), "rb" );
@@ -1993,6 +1993,7 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
             CopyRes();
         }
 
+		NDBeforeGameMgr::ms_nCopyStatus = 1;
 		NDPath::SetResDirPos( 1 );
 	}
 
