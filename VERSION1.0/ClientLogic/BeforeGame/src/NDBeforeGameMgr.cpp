@@ -1955,7 +1955,7 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 	unsigned long ulFileLength = 0;
 	pkFile = fopen(strCopyVersionINIPath.c_str(), "rb" );
 
- 	if ( true)
+ 	if (0 == pkFile)
  	{
  		bFirstTime = true;
  	    LOGERROR( "\"Library/Caches/SimplifiedChineseRes/version.ini\" is not exist" );

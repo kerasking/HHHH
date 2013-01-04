@@ -804,66 +804,6 @@ bool IsTraditionalChinese()
 NDLANGUAGE GetLocalLanguage()
 {
 	return localNdLunguage;
-	//todo(zjh)
-// 	if (localNdLunguage != NDLANGUAGE_None)
-// 		return localNdLunguage;
-// 	
-// 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-// 	
-// 	if (defaults == NULL)
-// 	{
-// 		localNdLunguage = NDLANGUAGE_SimplifiedChinese;
-// 		
-// 		return localNdLunguage;
-// 	}
-// 	
-// 	NSArray *languages = [defaults objectForKey:@"AppleLanguages"];
-// 	
-// 	if (languages == NULL)
-// 	{
-// 		localNdLunguage = NDLANGUAGE_SimplifiedChinese;
-// 		
-// 		return localNdLunguage;
-// 	}
-// 	
-// 	NSString *currentLanguage = [languages objectAtIndex:0];
-// 	
-// 	if (currentLanguage == NULL)
-// 	{
-// 		localNdLunguage = NDLANGUAGE_SimplifiedChinese;
-// 		
-// 		return localNdLunguage;
-// 	}
-// 	
-// #ifdef DEBUG
-// 	if ([currentLanguage isEqualToString:@"zh-Hans"])
-// 	{
-// 		localNdLunguage = NDLANGUAGE_SimplifiedChinese;
-// 	}
-// 	else if ([currentLanguage isEqualToString:@"zh-Hant"])
-// 	{
-// 		localNdLunguage = NDLANGUAGE_TraditionalChinese;
-// 	}
-// 	else
-// 	{
-// 		localNdLunguage = NDLANGUAGE_SimplifiedChinese;
-// 	}
-// #else
-// 	if ([currentLanguage isEqualToString:@"zh_Cn"])
-// 	{
-// 		localNdLunguage = NDLANGUAGE_SimplifiedChinese;
-// 	}
-// 	else if ([currentLanguage isEqualToString:@"zh_TW"])
-// 	{
-// 		localNdLunguage = NDLANGUAGE_TraditionalChinese;
-// 	}
-// 	else
-// 	{
-// 		localNdLunguage = NDLANGUAGE_SimplifiedChinese;
-// 	}
-// #endif
-// 	
-// 	return localNdLunguage;
 }
 
 std::string getStringTime(long nSeconds)
