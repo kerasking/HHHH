@@ -31,6 +31,12 @@ NS_CC_BEGIN
 
 #include "platform/CCCommon.h"
 #include "jni/Java_org_cocos2dx_lib_Cocos2dxHelper.h"
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
 // record the resource path
 static string s_strResourcePath = "";
@@ -91,13 +97,15 @@ unsigned char* CCFileUtils::getFileData(const char* pszFileName, const char* psz
     {
         // read from apk
         string pathWithoutDirectory = fullPath;
+		string strResDirectory = fullPath;
         
         fullPath.insert(0, m_obDirectory.c_str());
         fullPath.insert(0, "assets/");
-        pData =  CCFileUtils::getFileDataFromZip(s_strResourcePath.c_str(), fullPath.c_str(), pSize);
-        
+        pData = CCFileUtils::getFileDataFromZip(s_strResourcePath.c_str(), fullPath.c_str(), pSize);
+
         if (! pData && m_obDirectory.size() > 0)
         {
+			LOGD("Search assets folder,pathWithoutDirectory is %s",pathWithoutDirectory.c_str());
             // search from root
             pathWithoutDirectory.insert(0, "assets/");
             pData =  CCFileUtils::getFileDataFromZip(s_strResourcePath.c_str(), pathWithoutDirectory.c_str(), pSize);

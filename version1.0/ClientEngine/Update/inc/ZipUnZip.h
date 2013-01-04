@@ -21,11 +21,23 @@ public:
 	virtual void UnzipPercent(int FileNum, int nFileIndex)
 	{
 	}
-	;
+
 	virtual void UnzipStatus(bool bResult)
 	{
+		m_bResult = bResult;
 	}
-	;
+
+	virtual bool GetUnzipStatus()
+	{
+		return m_bResult;
+	}
+
+	virtual void SetExtStatus(int* pnStatus)
+	{
+		m_pnStatus = pnStatus;
+	}
+
+	int* m_pnStatus;
 
 protected:
 

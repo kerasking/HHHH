@@ -180,6 +180,7 @@ bool CZipUnZip::DecompressZipSync(const char* lpszZip, const char* lpszDestDir,
 CZipUnZip::CZipUnZip(void)
 {
 	m_bResult = false;
+	m_pnStatus = 0;
 }
 
 CZipUnZip::~CZipUnZip(void)
@@ -199,6 +200,11 @@ void* CZipUnZip::UnzipThreadExcute( void* ptr )
 		bResult = pkUnZip->DecompressZipSync(pkUnZip->m_pszZipFileName.c_str(),
 			pkUnZip->m_pszDestDirName.c_str());
 		pkUnZip->UnzipStatus(bResult);
+
+		if (pkUnZip->m_pnStatus)
+		{
+			*(pkUnZip->m_pnStatus) = bResult ? 1 : -1;
+		}
 	}
 
 	return NULL;

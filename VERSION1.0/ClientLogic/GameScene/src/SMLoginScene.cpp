@@ -116,11 +116,38 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
     
 	if ( bShowEntry )
 	{
-		NDLocalXmlString::GetSingleton().LoadLoginString();//
+		NDLocalXmlString::GetSingleton().LoadLoginString();
 
 		CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 
-		OnCompleteCopyLoginRes(pkScene);
+		NDUILayer* pkLayer = new NDUILayer();
+
+		pkLayer->Initialization();
+		pkLayer->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
+		pkScene->AddChild(pkLayer);
+		pkScene->m_pLayerOld = pkLayer;
+
+		NDPicturePool& kPool = *(NDPicturePool::DefaultPool());
+		NDUIImage* pkBackgroundImage = new NDUIImage;
+
+		pkBackgroundImage->Initialization();
+		pkBackgroundImage->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
+
+#ifdef USE_MGSDK
+		NDPicture* pic = kPool.AddPicture( NDPath::GetImgPath("Res00/Load/mobage_bg.png") );
+#else
+#if CACHE_MODE
+		NDPicture* pic = kPool.AddPicture("bg_load.png");
+#else
+		NDPicture* pic = kPool.AddPicture( NDPath::GetImg00Path("Res00/Load/bg_load.png") );
+#endif
+#endif
+		if (pic) 
+		{
+			pkBackgroundImage->SetPicture(pic, true);
+		}
+
+		pkLayer->AddChild(pkBackgroundImage);
 
 		//layer->SetFrameRect( CCRectMake(winSize.width*0.0, winSize.height*0.0, winSize.width*0.7, winSize.height*0.225f));
 		//layer->SetBackgroundColor( ccc4( 20,30,0,50) );
@@ -256,20 +283,22 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 	}
 	else if ( TAG_TIMER_CHECK_COPY == idTag )
 	{
-        int copyStatus = NDBeforeGameMgr::GetCopyStatus();
-        switch (copyStatus) 
+        int nCopyStatus = NDBeforeGameMgr::GetCopyStatus();
+        switch (nCopyStatus) 
         {
             case -1:
                 m_pTimer->KillTimer( this, TAG_TIMER_CHECK_COPY );
-                //NSLog( @"Copy files error!" );
+                LOGERROR("Copy files error!");
                 exit(0);
                 break;
             case 0:
                 break;
             case 1:
+				LOGD("Copy files succeeded!");
                 m_pTimer->KillTimer( this, TAG_TIMER_CHECK_COPY );
                 NDBeforeGameMgrObj.doNDSdkLogin();
                 ShowWaitingAni();
+				StartEntry();
                 break;
             default:
                 break;
@@ -296,12 +325,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 		LOGD("Entry TAG_TIMER_FIRST_RUN == idTag");
 		m_pTimer->KillTimer( this, TAG_TIMER_FIRST_RUN );
 		
-#if (CACHE_MODE == 1)
-		LOGD("Ready to set timer TAG_TIMER_CHECK_LOGIN_COPY");
-		m_pTimer->SetTimer( this, TAG_TIMER_CHECK_LOGIN_COPY, 0.5f );
-#else
 		CreateUpdateUILayer();
-#endif
 
 // #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
  		CCLog( "@@login02: to call OnEvent_LoginOKNormal()\r\n" );
@@ -596,7 +620,7 @@ bool CSMLoginScene::CreateUpdateUILayer()
 		return false;
 	}
 	
-	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+	CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
 	NDUILayer *	pLayer = new NDUILayer();
 
@@ -607,18 +631,15 @@ bool CSMLoginScene::CreateUpdateUILayer()
 	}
 
 	pLayer->Initialization();
-	pLayer->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height) );
+	pLayer->SetFrameRect( CCRectMake(0, 0, kWinSize.width, kWinSize.height) );
 	pLayer->SetTag( TAG_UPDATE_LAYER );
 	AddChild(pLayer);
 	m_pLayerUpdate = pLayer;
 	
 	NDUILoad tmpUILoad;
-#if ((CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) && (CACHE_MODE == 1))
+
 	LOGD("Ready to load update.ini file");
-	tmpUILoad.Load( "UpdateUI.ini", pLayer, this, CCSizeMake(0, 0),true );
-#else
 	tmpUILoad.Load( "UpdateUI.ini", pLayer, this, CCSizeMake(0, 0));
-#endif
 	
 	m_pCtrlProgress	= (CUIExp*)pLayer->GetChild( TAG_CTRL_PROGRESS );
 	if ( !m_pCtrlProgress )
@@ -760,7 +781,7 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
 	
 #if UPDATE_ON == 0
 		CloseWaitingAni();
-		StartEntry();
+		//StartEntry();
 #endif
 #if UPDATE_ON == 1
 	const char*	pszUpdateURL	= SZ_UPDATE_URL;//ScriptMgrObj.excuteLuaFuncRetS( "GetUpdateURL", "Update" );//此时Lua脚本未加载……
@@ -1044,28 +1065,4 @@ void * CSMLoginScene::LoadTextAndLua( void * pPointer )
 		pScene->m_pTimer->SetTimer( pScene, TAG_TIMER_LOAD_RES_OK,0.05f );
 	}
 	return pPointer;
-}
-
-void CSMLoginScene::OnCompleteCopyLoginRes(CSMLoginScene* pkScene)
-{
-	NDUILayer* pkLayer = new NDUILayer();
-	pkLayer->Initialization();
-	pkLayer->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));//不要硬编码！！
-	pkScene->AddChild(pkLayer);
-	pkScene->m_pLayerOld = pkLayer;
-
-	NDPicturePool& pool		= *(NDPicturePool::DefaultPool());
-	NDUIImage* imgBack	= new NDUIImage;
-	imgBack->Initialization();
-	imgBack->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
-#ifdef USE_MGSDK
-	NDPicture* pic = pool.AddPicture( NDPath::GetImgPath("Res00/Load/mobage_bg.png") );
-#else
-	NDPicture* pic = pool.AddPicture( NDPath::GetImg00Path("Res00/Load/bg_load.png") );
-#endif
-	if (pic) 
-	{
-		imgBack->SetPicture(pic, true);
-	}
-	pkLayer->AddChild(imgBack);
 }

@@ -48,7 +48,6 @@ class CSMLoginScene
 	~CSMLoginScene();
 	
 	static CSMLoginScene* Scene( bool bShowEntry = false );//参数是否显示进入页面，
-	static void OnCompleteCopyLoginRes(CSMLoginScene* pkScene);
 
 public:
 	void Initialization(); override

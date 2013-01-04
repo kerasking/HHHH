@@ -147,7 +147,7 @@ void NDUISynLayer::OnTimer(OBJID tag)
 		dlgOverTime->Show(NDCommonCString("ConnectFail"), NDCommonCString("ConnectFailTip"), NULL, NULL);
 		*/
 
-		g_pUtil.QuitGameToServerList();
+		//g_pUtil.QuitGameToServerList();
 
 		BaseScriptMgrObj.excuteLuaFunc<bool>("ShowYesDlg",
 			"CommonDlgNew", NDCommonCString("ConnectFailTip"));

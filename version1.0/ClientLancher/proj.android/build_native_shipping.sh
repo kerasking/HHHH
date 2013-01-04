@@ -65,6 +65,17 @@ fi
 mkdir $HELLOWORLD_ROOT/assets
 #mkdir $HELLOWORLD_ROOT/assets/SimplifiedChineseRes
 
+for file in $RES_LOCAL/*
+do
+if [ -d "$file" ]; then
+    cp -rf "$file" "$HELLOWORLD_ROOT"/assets
+fi
+
+if [ -f "$file" ]; then
+    cp "$file" "$HELLOWORLD_ROOT"/assets
+fi
+done
+
 if [[ $buildexternalsfromsource ]]; then
     echo "Building external dependencies from source"
     $NDK_ROOT_LOCAL/ndk-build -C $HELLOWORLD_ROOT $* \

@@ -2079,8 +2079,8 @@ void* CopyResThread(void* ptr)
 	CZipUnZip* pkUnzip = new CZipUnZip;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	pkUnzip->UnZipFile("../SimplifiedChineseRes.zip","dhlj/");
-	NDBeforeGameMgr::ms_nCopyStatus = 1;
+	pkUnzip->UnZipFile("../copy/SimplifiedChineseRes.zip","../");
+	pkUnzip->SetExtStatus(&NDBeforeGameMgr::ms_nCopyStatus);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	//pkUnzip->UnZipFile("assets/SimplifiedChineseRes.zip","/sdcard/dhlj/");
 
