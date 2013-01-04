@@ -241,6 +241,7 @@ function p.AddViewItem(container, nId, uiFile)
     view:Init(false);
     view:SetViewId(nId);
     view:SetTag(nId);  
+    view:SetDebugName( "UIScrollView_" .. nId );
     container:AddView(view);
     
     --初始化ui
@@ -399,6 +400,7 @@ function p.WorldRefresh()
     ListContainer:SetViewSize(ListViewSize);
     ListContainer:EnableScrollBar(true);
     ListContainer:RemoveAllView();
+    ListContainer:SetDebugName( "ScrollViewContainer" );
     
     --设置当前要显示的说明信息
     for i, v in pairs(p.WorldActions) do

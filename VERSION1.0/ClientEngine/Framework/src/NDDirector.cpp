@@ -449,6 +449,7 @@ void NDDirector::Recyle()
 //返回值：	x值存放x方向的缩放比例
 //			y值存放y放点的缩放比例
 //这个函数仅对android手机有效
+//参考960*640
 CCPoint NDDirector::getAndroidScale() const
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -460,6 +461,7 @@ CCPoint NDDirector::getAndroidScale() const
 }
 
 //返回资源缩放比例
+//参考480*320
 float NDDirector::getResourceScale()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -470,16 +472,25 @@ float NDDirector::getResourceScale()
 }
 
 //返回x方向坐标缩放比例
+//参考960*640
 float NDDirector::getCoordScaleX()
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	return getAndroidScale().x;
+#else
+	return 0.5f * m_pkDirector->getContentScaleFactor();
+#endif
 }
 
 //返回y方向坐标缩放比例
+//参考960*640
 float NDDirector::getCoordScaleY()
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	return getAndroidScale().y;
+#else
+	return 0.5f * m_pkDirector->getContentScaleFactor();
+#endif
 }
-
 
 NS_NDENGINE_END
