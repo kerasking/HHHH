@@ -19,7 +19,7 @@ p.AssistantList = {};    --助手列表
 
 p.GiftBackList = {};     --礼包列表
 
-p.GifeItemSize = CGSizeMake(480*ScaleFactor, 45*ScaleFactor);
+p.GifeItemSize = CGSizeMake(480*CoordScaleX, 45*CoordScaleY);
 
 
 p.Infos = {};

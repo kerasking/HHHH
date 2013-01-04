@@ -27,8 +27,8 @@ p.GameAssisInfoList = {};       --游戏助手要显示的信息列表
 --p.EveryDayActList = {};           --日常活动要显示的信息列表
 
 p.TacticStatusList = {};                 --大话兵法列表项更新状态表
-local RectSubUILayer = CGRectMake(0, 39*ScaleFactor, 480*ScaleFactor, 275.0*ScaleFactor);
-local TacticListSize = CGSizeMake(230*ScaleFactor, 36*ScaleFactor);
+local RectSubUILayer = CGRectMake(0, 39*CoordScaleY, 480*CoordScaleX, 275.0*CoordScaleY);
+local TacticListSize = CGSizeMake(230*CoordScaleX, 36*CoordScaleY);
 
 local CONTAINTER_X = 0;
 local CONTAINTER_Y = 0;

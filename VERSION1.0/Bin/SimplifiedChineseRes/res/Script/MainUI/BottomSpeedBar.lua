@@ -264,7 +264,7 @@ function p.refreshScroll()
     container:RemoveAllView();
     local rectview = container:GetFrameRect();
     --container:SetViewSize(CGSizeMake(rectview.size.h+p.Btninner, rectview.size.h));
-    container:SetViewSize(CGSizeMake(100*CoordScaleX, rectview.size.h));
+    container:SetViewSize(CGSizeMake(50*CoordScaleX, rectview.size.h));
     
     local bIsSkip = false;
     p.nTotalFunc = 0;
@@ -378,7 +378,7 @@ function p.CreateSceneButton(norPic, selPic, rect, tag,z)
 	btn:SetImage(norPic);
     
     
-	btn:SetFrameRect(CGRectMake(0, 0, sizeBtn.w*CoordScaleY, sizeBtn.h*CoordScaleY));
+	btn:SetFrameRect(CGRectMake(0, 0, sizeBtn.w*CoordScaleY/2, sizeBtn.h*CoordScaleY/2));
 	btn:SetLuaDelegate(p.OnUIEvent);
 	layer:AddChild(btn);
     scene:AddChildZ(layer,zlev);

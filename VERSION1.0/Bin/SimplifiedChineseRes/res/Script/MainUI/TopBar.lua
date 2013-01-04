@@ -12,8 +12,8 @@ local RectTopUILayer = CGRectMake(0, 0, winsize.w, 120.0*ScaleFactor);
 
 local CONTAINTER_X  = 0;
 local CONTAINTER_Y  = 0;
-local fScalex = CoordScaleX*2;
-local fScaley = CoordScaleY*2;
+local fScalex = CoordScaleX;
+local fScaley = CoordScaleY;
 
 
 local TOOL_BTN = {

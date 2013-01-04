@@ -809,9 +809,11 @@ function p.MainDrama_12()
 	DramaSetWaitTime(0.1);
 	--死亡光效
 	local tDieEffect = {}
+	
 	for  i=1,3 do 
 		tDieEffect[i]= DramaAddSpriteWithFile("die_action.spr");
 		DramaSetSpritePosition(tDieEffect[i], 18, 9 + 2*(i%3));
+		DramaSetSpriteAni(tDieEffect[i], 0);
 	end
 	
 	DramaSetWaitTime(0.6);
@@ -847,6 +849,7 @@ function p.MainDrama_12()
 		for j= 1 ,nRandomTime do
 			tKeyThunder[j] = DramaAddSpriteWithFile("sm_effect_16.spr");
 			DramaSetSpritePosition(tKeyThunder[j], 15+math.random(-3,3), 12+math.random(-2,2));
+			DramaSetSpriteAni(tKeyThunder[j], 0);
 			
 			--随机雷击音效
 			if math.random(1,3) ==1 then
@@ -868,6 +871,7 @@ function p.MainDrama_12()
 			DramaRemoveSprite(nZJKey);
 			nDieEffect= DramaAddSpriteWithFile("die_action.spr");
 			DramaSetSpritePosition(nDieEffect, 15, 11);
+			DramaSetSpriteAni(nDieEffect, 0);
 		end
 		
 		if i == 5 then
@@ -881,6 +885,7 @@ function p.MainDrama_12()
 	--主角被雷劈
 	nEffectKeyThunder = DramaAddSpriteWithFile("sm_effect_16.spr");
 	DramaSetSpritePosition(nEffectKeyThunder, 7, 12);
+	DramaSetSpriteAni(nEffectKeyThunder, 0);
 	DramaSetWaitTime(0.5);
 	DramaSetWaitTime(0.5);
 	DramaSetSpriteAni(nManKey, 5);
@@ -986,6 +991,7 @@ function p.MainDrama_13()
 	for i =1,5 do
 		tEffect[i] = DramaAddSpriteWithFile("sm_effect_2.spr");
 		DramaSetSpritePosition(tEffect[i], 22+(i-3)*(i-3), 11);
+		DramaSetSpriteAni(tEffect[i], 0);
 		DramaMoveSprite(tEffect[i], 7, 6+i*2, 28);
 	end
 
@@ -1037,6 +1043,7 @@ function p.MainDrama_13()
 	for i =1,5 do
 		tEffect[i] = DramaAddSpriteWithFile("sm_effect_6.spr");
 		DramaSetSpritePosition(tEffect[i], 6+(i-3)*(i-3), 11);
+		DramaSetSpriteAni(tEffect[i], 0);
 		DramaMoveSprite(tEffect[i], 28, 6+i*2, 28);
 	end
 
@@ -1056,6 +1063,7 @@ function p.MainDrama_13()
 	--华雄死亡
 	local nDieEffect= DramaAddSpriteWithFile("die_action.spr");
 	DramaSetSpritePosition(nDieEffect, 24, 12);
+	DramaSetSpriteAni(nDieEffect, 0);
 	DramaRemoveSprite(nHXKey);
 	
 	DramaSetWaitTime(0.3);
@@ -1139,6 +1147,7 @@ function p.MainDrama_14()
 	for i =1,3 do
 		tEffect[i] = DramaAddSpriteWithFile("sm_effect_5.spr");
 		DramaSetSpritePosition(tEffect[i], 22+(i-2)*(i-2), 12);
+		DramaSetSpriteAni(tEffect[i], 0);
 		DramaMoveSprite(tEffect[i], 7, 6+i*3, 35);
 	end
 
@@ -1218,6 +1227,7 @@ function p.MainDrama_14()
 	for i =1,5 do
 		tEffect[i] = DramaAddSpriteWithFile("sm_effect_5.spr");
 		DramaSetSpritePosition(tEffect[i], 22+(i-3)*(i-3), 12+math.random(-5,5));
+		DramaSetSpriteAni(tEffect[i], 0);
 		DramaMoveSprite(tEffect[i], 7, 12+math.random(-5,5), 35);
 	end
 	DramaPlaySoundEffect(1005);
@@ -1239,6 +1249,7 @@ function p.MainDrama_14()
 	for i =1,7 do
 		tEffect[i] = DramaAddSpriteWithFile("sm_effect_5.spr");
 		DramaSetSpritePosition(tEffect[i], 22+(i-4)*(i-4), 12+math.random(-5,5));
+		DramaSetSpriteAni(tEffect[i], 0);
 		DramaMoveSprite(tEffect[i], 7, 12+math.random(-5,5), 35);
 	end
 	DramaPlaySoundEffect(1005);
@@ -1257,6 +1268,7 @@ function p.MainDrama_14()
 	for i =1,9 do
 		tEffect[i] = DramaAddSpriteWithFile("sm_effect_6.spr");
 		DramaSetSpritePosition(tEffect[i], 22+(i-5)*(i-5), 12+math.random(-5,5));
+		DramaSetSpriteAni(tEffect[i], 0);
 		DramaMoveSprite(tEffect[i], 7, 12+math.random(-5,5), 35);
 	end
 	
@@ -1288,6 +1300,7 @@ function p.MainDrama_14()
 			
 	nEffectKeyThunder = DramaAddSpriteWithFile("sm_effect_16.spr");
 	DramaSetSpritePosition(nEffectKeyThunder, 15, 5);
+	DramaSetSpriteAni(nEffectKeyThunder, 0);
 	DramaMoveSprite(nEffectKeyThunder, 15, 12, 100);
 	DramaSetWaitTime(0.1);
 	DramaRemoveSprite(nEffectKeyThunder);

@@ -423,10 +423,10 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public static int playVideo(final String strFile)
 	{
-//		if (true)
-//		{
-//			return 0;
-//		}
+		if (true)
+		{
+			return 0;
+		}
 
 		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);

@@ -14,8 +14,8 @@ p.UiList = {ListLeft = {ListContaner = nil, ListCtrId = 20, btnId = 2, crtlText 
                    ListRight = {ListContaner = nil, ListCtrId = 30, btnId = 4, crtlText = 3, CurFocus = 1, listTitle = 31, }};
                                       
                                       
-local LeftListSize = CGSizeMake(110*ScaleFactor, 40*ScaleFactor);              
-local RightListSize = CGSizeMake(100*ScaleFactor, 28*ScaleFactor);                      
+local LeftListSize = CGSizeMake(110*CoordScaleX, 40*CoordScaleY);              
+local RightListSize = CGSizeMake(100*CoordScaleX, 28*CoordScaleY);                      
                    
 p.LeftTitleLIst = {};   --存储左边列表数据
 

@@ -17,7 +17,7 @@ p.MutableCtr = { Btn          = {btnTransport = 8, btnClearCdLoot = 12, btnClear
 p.ImmutableCtr = { Btn          = {btnClose = 3, btnRefresh = 7,},
                                  Lable       = {txtTransTime = 4, txtLootTime = 5, txtPlayerInfo = 6}, 
                                  List          = {listMsg = 24, txtInfo = 2, viewIni = "transport/Transport_Text.ini",
-                                                      ViewSize = CGSizeMake(420*ScaleFactor, 20*ScaleFactor),} };
+                                                      ViewSize = CGSizeMake(420*CoordScaleX, 20*CoordScaleY),} };
                           
                                         
 p.tbTimer = { LootTimer    = {LableTime = 13, CountDownNum = 0, TimerTag = -1, },    --拦截冷却倒计时
@@ -41,8 +41,8 @@ p.TotalMsgNum = 30;  --显示的总的消息条数
                       
 --layerTag层tag, btnNum运粮界面要显示的按钮数, btnTagStar按钮tag的开始点
 p.tbTransLayer =  {layerTag = 1001, btnNum = 30, btnTagStar = 100, btnW = 60*ScaleFactor, btnH = 60*ScaleFactor, 
-                                 layerWidth = 480*ScaleFactor;
-                                 layerRect = CGRectMake(0, 75*ScaleFactor, 480*ScaleFactor, 145*ScaleFactor),};                                                    
+                                 layerWidth = 480*CoordScaleX;
+                                 layerRect = CGRectMake(0, 75*CoordScaleY, 480*CoordScaleX, 145*CoordScaleY),};                                                    
                                 
 p.tbTransBtns = {}; 
 p.randomYpos = {};

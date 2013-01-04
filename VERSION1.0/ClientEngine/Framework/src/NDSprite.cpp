@@ -354,6 +354,19 @@ void NDSprite::MoveToPosition(std::vector<CCPoint> kToPos, SpriteSpeed speed,
 					from = m_kPointList[m_kPointList.size() - 1];
 				}
 			}
+
+			//玩家已经在终点上
+			CCPoint diff = ccpSub(m_kPosition, kToPos[0]);
+			if(kToPos.size() == 1 && diff.x == 0 && diff.y == 0)
+			{
+				m_bIsMoving = true;
+				return;
+			}
+
+			if(m_kPointList.empty())
+			{
+				m_bIsMoving = false;
+			}
 		}
 	}
 }

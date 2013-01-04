@@ -153,7 +153,7 @@ local MAX_LEVEL     = 120;
 
 local COLOR_RED     = ccc4(255,0,0,255);
 local COLOR_GREEN     = ccc4(14,182,22,255);
-local RectRightUILayer = CGRectMake(160.0*CoordScaleX*2, 42.5*CoordScaleY*2, 320.0*CoordScaleX*2, 275.0*CoordScaleY*2);
+local RectRightUILayer = CGRectMake(160.0*CoordScaleX, 42.5*CoordScaleY, 320.0*CoordScaleX, 275.0*CoordScaleY);
 
 
 
