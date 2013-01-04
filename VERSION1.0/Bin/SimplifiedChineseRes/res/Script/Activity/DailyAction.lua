@@ -25,8 +25,8 @@ p.TabInfo = { WorldInfo      =     {LayerTag = 1001, tabBtnId = 24,  focusIndex 
 p.CtrlId = {btnClose = 5, };
 p.ViewCtrlId = {pic = 110, txtTime = 104, txtContent = 105, btnCtr = 100,};
 
-local RectSubUILayer = CGRectMake(0, 39*CoordScaleY*2, 480*CoordScaleX*2, 275.0*CoordScaleY*2);
-local ListViewSize = CGSizeMake(430*CoordScaleX*2, 50*CoordScaleY*2);
+local RectSubUILayer = CGRectMake(0, 39*CoordScaleY, 480*CoordScaleX, 275.0*CoordScaleY);
+local ListViewSize = CGSizeMake(430*CoordScaleX, 50*CoordScaleY);
 
 local CONTAINTER_X  = 0;
 local CONTAINTER_Y  = 0;

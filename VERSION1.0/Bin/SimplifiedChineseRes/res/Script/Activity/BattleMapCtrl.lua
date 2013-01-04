@@ -8,8 +8,8 @@ local p = BattleMapCtrl;
 
 
 local CTRL_BTN_1  = 1;        --速战速决
-RectFastBtn = CGRectMake(0,  0, 88*ScaleFactor, 27*ScaleFactor);  
-RectLayer = CGRectMake(196*ScaleFactor, 285*ScaleFactor, 88*ScaleFactor, 27*ScaleFactor);  --速战速决按钮
+RectFastBtn = CGRectMake(0,  0, 88*CoordScaleX, 27*CoordScaleY);  
+RectLayer = CGRectMake(196*CoordScaleX, 285*CoordScaleY, 88*CoordScaleX, 27*CoordScaleY);  --速战速决按钮
 
 
 --加载战斗页面控件层

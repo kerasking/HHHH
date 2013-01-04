@@ -264,7 +264,7 @@ function p.refreshScroll()
     container:RemoveAllView();
     local rectview = container:GetFrameRect();
     --container:SetViewSize(CGSizeMake(rectview.size.h+p.Btninner, rectview.size.h));
-    container:SetViewSize(CGSizeMake(100*CoordScaleX, rectview.size.h));
+    container:SetViewSize(CGSizeMake(50*CoordScaleX, rectview.size.h));
     
     local bIsSkip = false;
     p.nTotalFunc = 0;
