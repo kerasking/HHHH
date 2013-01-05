@@ -142,7 +142,7 @@ void NDUILabel::SetTextAlignment(int alignment)
 void NDUILabel::MakeTexture()
 {
 #ifdef _DEBUG
-	CCLog( "@NDUILabel::MakeTexture(): %s", m_strText.c_str());
+	//CCLog( "@NDUILabel::MakeTexture(): %s", m_strText.c_str());
 #endif
 
     //默认竖直方向向上靠齐

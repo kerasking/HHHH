@@ -351,7 +351,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	public void LoginComplete(int userid)
 	{
-		onLoginComplete(userid);
+		onLoginComplete(userid, mDeviceID);
 	}
 
 	public void LoginError(String error)
@@ -507,7 +507,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 	private static native void nativeInit(int w, int h);
 
-	private static native void onLoginComplete(int userid);
+	private static native void onLoginComplete(int userid, String DeviceToken);
 
 	private static native void onLoginError(String error);
 }

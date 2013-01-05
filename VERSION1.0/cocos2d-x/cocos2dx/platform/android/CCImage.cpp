@@ -42,6 +42,39 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
+#if ND_MOD
+struct FONT_UTIL
+{
+	static bool isPureAscii( const string& text )
+	{
+		if (text.length() == 0) return true;
+		const char* p = text.c_str();
+		while (*p != 0)
+		{
+			const char c = *p++;
+			if (!(c >= 0 && c <= 0x7f))
+				return false;
+		}
+		return true;
+	}
+
+	static const char* changeFontName( const char* fontName, const jstring& jstrText ) 
+	{	
+		static const char arialFontName[] = "Arial-BoldMT";
+
+		string text = JniHelper::jstring2string( jstrText );
+
+		if (isPureAscii(text))
+		{
+			return arialFontName;
+		}
+
+		return fontName;
+	}
+};
+#endif
+
+
 class BitmapDC
 {
 public:
@@ -79,6 +112,11 @@ public:
          * use this approach to decrease the jni call number
         */
         jstring jstrText = methodInfo.env->NewStringUTF(text);
+
+#if ND_MOD
+		pFontName = FONT_UTIL::changeFontName( pFontName, jstrText ); 
+#endif
+
         jstring jstrFont = methodInfo.env->NewStringUTF(pFontName);
 
         methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, jstrText,
@@ -164,6 +202,11 @@ bool CCImage::getStringSize( const char *    in_utf8,
         
     {
         jstring stringArg1 = t.env->NewStringUTF(in_utf8);
+
+#if ND_MOD
+		pFontName = FONT_UTIL::changeFontName( pFontName, stringArg1 ); 
+#endif
+
         jstring stringArg2 = t.env->NewStringUTF(pFontName);
         
         jstring ret = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID, stringArg1,stringArg2,nSize,eAlignMask);
