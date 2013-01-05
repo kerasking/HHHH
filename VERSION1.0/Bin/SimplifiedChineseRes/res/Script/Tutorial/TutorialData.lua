@@ -1922,7 +1922,7 @@ function p.Stage08103Begin()
         LogInfo("error:p.Stage08103Begin MartialUI.GetSkillInfoLayer() is nil!");
         return;
     end
-    p.BeginTemplete(skillInfo);
+    p.BeginTemplete(skillInfo, 1);
     
 end
 
@@ -2537,7 +2537,7 @@ function p.Stage18103Begin()
         return;
     end
     
-    p.BeginTemplete(layer);
+    p.BeginTemplete(layer, 1);
 end
 
 function p.Stage18103End()
@@ -3301,7 +3301,7 @@ end
 ---------01------------
 function p.Stage2411Begin()
     LogInfo("p.Stage2411Begin");
-    p.BeginTemplete();
+    p.BeginTemplete(nil, nil, 1);
 end
 
 function p.Stage2411End()
@@ -3390,7 +3390,7 @@ function p.Stage2413Begin()
     end
     
     local layer = GetUiLayer(scene, NMAINSCENECHILDTAG.AffixNormalBoss);
-    p.BeginTemplete(layer);
+    p.BeginTemplete(layer, 1);
 end
 
 function p.Stage2413End()
@@ -3439,7 +3439,7 @@ end
 function p.Stage2414Begin()
     LogInfo("p.Stage2414Begin");
     if(NormalBossListUI.pLayerElite) then
-        p.BeginTemplete(NormalBossListUI.pLayerElite);
+        p.BeginTemplete(NormalBossListUI.pLayerElite, 1);
     end
 end
 
@@ -3512,8 +3512,9 @@ end
 ---------04------------
 function p.Stage5414Begin()
     LogInfo("p.Stage5414Begin");
+    local flag = 1;
     if(NormalBossListUI.pLayerConfDlg) then
-        p.BeginTemplete(NormalBossListUI.pLayerConfDlg);
+        p.BeginTemplete(NormalBossListUI.pLayerConfDlg, flag);
     end
 end
 
@@ -3559,7 +3560,7 @@ end
 function p.Stage6414Begin()
     LogInfo("p.Stage6414Begin");
     if(ClearUpSettingUI.pLayerPrepare) then
-        p.BeginTemplete(ClearUpSettingUI.pLayerPrepare);
+        p.BeginTemplete(ClearUpSettingUI.pLayerPrepare, 1);
     end
 end
 
@@ -3596,7 +3597,7 @@ end
 function p.Stage7414Begin()
     LogInfo("p.Stage7414Begin");
     if(ClearUpSettingUI.pLayerFighting) then
-        p.BeginTemplete(ClearUpSettingUI.pLayerFighting);
+        p.BeginTemplete(ClearUpSettingUI.pLayerFighting, 1);
     end
 end
 
@@ -3640,7 +3641,7 @@ function p.Stage7414ExitCond()
 end
 
 -------------------------------------引导 14 结束-----------------------------------------------
-function p.BeginTemplete(layer)
+function p.BeginTemplete(layer, flag, flag2)
 	local fXScale = CoordScaleX_960;
 	local fYScale = CoordScaleY_960;
     if(layer == nil) then
@@ -3649,9 +3650,14 @@ function p.BeginTemplete(layer)
             return;
         end
         layer = scene;
-    else
+    elseif flag ~= 1 then
 		fXScale = CoordScaleY_960;
 		fYScale = CoordScaleY_960;
+    end
+    
+    if flag2 == 1 then
+ 		fXScale = CoordScaleY_960;
+		fYScale = CoordScaleY_960;   
     end
 
     local taskItem = p.GetCurrTaskItem();

@@ -84,21 +84,21 @@ void CUIEdit::OnTextChanged()
 {
 	if (!m_lbText) return;
 
-	int strCount = m_strText.length();
-	if(strCount > m_curStrCount)
-	{
-		m_curInputCount++;
-	}
-	else if(strCount < m_curStrCount)
-	{
-		m_curInputCount--;
-		if(m_curInputCount < 0)
-			m_curInputCount = 0;
-	}
-	m_curStrCount = strCount;
-
-	if(m_curInputCount > m_nMaxLen)
-		return;
+// 	int strCount = m_strText.length();
+// 	if(strCount > m_curStrCount)
+// 	{
+// 		m_curInputCount++;
+// 	}
+// 	else if(strCount < m_curStrCount)
+// 	{
+// 		m_curInputCount--;
+// 		if(m_curInputCount < 0)
+// 			m_curInputCount = 0;
+// 	}
+// 	m_curStrCount = strCount;
+// 
+// 	if(m_curInputCount > m_nMaxLen)
+// 		return;
 		
 	string labelText = "";
 	if (IsPassword())
@@ -565,25 +565,50 @@ bool CUIEdit::canDetachWithIME()
 
 void CUIEdit::insertText(const char * text, int len)
 {
-	CCLog( "@@ CUIEdit::insertText(): %s, len=%d\r\n", text, len );
+	CCLog( "@@ CUIEdit::insertText() text=%s\r\n", text);
+	CCLog( "@@ CUIEdit::insertText() length=%d \r\n", len);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	m_strText += text ? text : "";
 #else
-	m_strText = text ? text : ""; //这个是=
+	std::string	tmpStr = text ? text : ""; //这个是=
 
 	for (int i = 0; i < 2; i++)
 	{
-		int len = m_strText.length();
+		int len = tmpStr.length();
 		if (len > 0)
 		{
-			const char c = m_strText[len - 1];
+			const char c = tmpStr[len - 1];
 			if (c == '\r' || c == '\n')
 			{
-				m_strText.erase( m_strText.end() - 1 );
+				tmpStr.erase( tmpStr.end() - 1 );
 			}
 		}
 	}
+
+	int inputCount = 0;
+	const char *tmpPointer = tmpStr.c_str();
+	while (*tmpPointer != '\0')
+	{
+		if ((unsigned char) *tmpPointer < 0x80)
+		{
+			tmpPointer++;
+			inputCount++;
+		}
+		else
+		{
+			tmpPointer += 3;
+			inputCount++;
+		}
+	}
+	CCLog( "@@ CUIEdit::insertText() inputCount=%d \r\n", inputCount);
+	CCLog( "@@ CUIEdit::insertText() m_nMaxLen=%d \r\n", m_nMaxLen);
+
+	if(inputCount > m_nMaxLen)
+		return;
+
+	m_strText = tmpStr;
+
 #endif
 
 	this->OnTextChanged();
@@ -682,6 +707,7 @@ void CUIEdit::onAction( int action )
 	if (action == 0)
 	{
 		//action=enter
+		this->detachWithIME();
 	}
 	else if (action == 6)
 	{
