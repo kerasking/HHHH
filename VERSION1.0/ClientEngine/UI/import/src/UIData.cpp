@@ -56,11 +56,10 @@ CUIData::~CUIData(void)
 	DEC_NDOBJ("CUIData"); 
 }
 
-bool CUIData::openUiFile(const char* pszIniFile,bool bAsset)
+bool CUIData::openUiFile(const char* pszIniFile)
 {
 	m_kINIFile.SetPath(pszIniFile);
-
-	return m_kINIFile.ReadFile(bAsset);
+	return m_kINIFile.ReadFile();
 }
 
 int CUIData::GetCtrlAmount()
@@ -95,12 +94,8 @@ bool CUIData::getCtrlData(char* szCtrlName)
 	sscanf(pszPos, "%f %f", &m_kInfo.CtrlPos.x, &m_kInfo.CtrlPos.y);
 
 	pszPos = m_kINIFile.GetValue(szCtrlName, CTRL_ANCHORPOS_KEY);
-
 	if (!pszPos)
-	{
 		return false;
-	}
-
 	sscanf(pszPos, "%f %f", &m_kInfo.CtrlAnchorPos.x, &m_kInfo.CtrlAnchorPos.y);
 
 	m_kInfo.nCtrlWidth  = (float) m_kINIFile.GetValueI(szCtrlName, CTRL_WIDTH_KEY);
