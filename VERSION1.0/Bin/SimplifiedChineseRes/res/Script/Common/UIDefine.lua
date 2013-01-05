@@ -210,7 +210,14 @@ local winsize = GetWinSize();
 RectUILayer = CGRectMake(winsize.w * (1 - 0.954167) / 2, winsize.h * (1 - 0.8875) / 2, winsize.w * 0.954167, winsize.h * 0.8875);
 
 RectFullScreenUILayer = CGRectMake(0, 0, winsize.w, winsize.h);
---缩放系数
+
+--缩放系数（基于480*320）
 ScaleFactor = DefaultDirector():GetScaleFactor();
 CoordScaleX = DefaultDirector():GetCoordScaleX()*2;
 CoordScaleY = DefaultDirector():GetCoordScaleY()*2;
+
+
+--缩放系数（基于960*640）
+ScaleFactor_960 = DefaultDirector():GetScaleFactor()*0.5;
+CoordScaleX_960 = DefaultDirector():GetCoordScaleX();
+CoordScaleY_960 = DefaultDirector():GetCoordScaleY();
