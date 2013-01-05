@@ -218,9 +218,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			Mobage.onCreate();
 			
 	        mDeviceID = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);   
-	    	Editor editor = getSharedPreferences(PushService.TAG, MODE_PRIVATE).edit();
-	    	editor.putString(PushService.PREF_DEVICE_ID, mDeviceID);
-	    	editor.commit();
 			PushService.actionStart(context);	
 
 			menubar = new DynamicMenuBar(this);
