@@ -1887,6 +1887,7 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
 	{
 		return false;
 	}
+
 	NDTransData kData(_MSG_CLIENT_VERSION);
     
 	kData << s_nVersion;

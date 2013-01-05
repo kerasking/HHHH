@@ -663,8 +663,17 @@ bool CSMLoginScene::CreateUpdateUILayer()
 		NDLog( "CSMLoginScene::CreateUpdateUILayer() m_pLabelPromtp is null" );
 		return false;
 	}
-	if (m_pLabelPromtp) m_pLabelPromtp->SetVisible(false);
-	if (m_pLayerOld) m_pLayerOld->SetVisible(false);
+
+	if (m_pLabelPromtp)
+	{
+		m_pLabelPromtp->SetVisible(false);
+	}
+
+	if (m_pLayerOld)
+	{
+		m_pLayerOld->SetVisible(false);
+	}
+
 	return true;
 }
 
@@ -687,7 +696,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 	
 	int bLatest				= kData.ReadByte();
 	int bForceUpdate		= kData.ReadByte();
-	int FromVersion			= kData.ReadInt();
+	int FromVersion			= 6999;//kData.ReadInt();
 	int ToVersion			= kData.ReadInt();
 	std::string UpdatePath	= kData.ReadUnicodeString();
 	
@@ -700,20 +709,19 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 			m_pLabelPromtp->SetText( NDCommonCString2(SZ_ERROR_01).c_str() );
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
     		m_pLabelPromtp->SetVisible( true );
-    		//m_pLabelPromtp->SetFontSize( 20 );
 		}
 		return ;
 	}
 	else if ( ( FromVersion ==  ToVersion ) &&  ( !bLatest ) )
 	{
         CloseWaitingAni();
-		//printf("当前版本数据有误,请重新下载或者联系GM");
+		LOGERROR("当前版本数据有误,请重新下载或者联系GM");
+
 		if ( m_pLabelPromtp )
 		{
 			m_pLabelPromtp->SetText( NDCommonCString2(SZ_ERROR_02).c_str() );
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
     		m_pLabelPromtp->SetVisible( true );
-    		//m_pLabelPromtp->SetFontSize( 20 );
 		}
 		return ;
 	}
@@ -726,14 +734,13 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 			m_pLabelPromtp->SetText( NDCommonCString2(SZ_ERROR_03).c_str() );
 			m_pLabelPromtp->SetFontColor( ccc4(0xFF,0x0,0x0,255) );
     		m_pLabelPromtp->SetVisible( true );
-    		//m_pLabelPromtp->SetFontSize( 20 );
 		}
 
 		return ;
 	}
 	else if ( ( FromVersion == ToVersion ) && (bLatest) )
 	{
-		//printf("当前版本是最新游戏版本");
+		LOGD("Current version is newest");
 		StartEntry();
 		return;
 	}
@@ -744,6 +751,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 	    
 	NDLog("URL:%s",UpdatePath.c_str());
 	kDeqUpdateUrl.push_back(UpdatePath);
+
 	if (bUpdate)
 	{
 		if (!bLatest) 

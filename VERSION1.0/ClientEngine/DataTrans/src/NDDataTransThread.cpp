@@ -139,7 +139,8 @@ void NDDataTransThread::Start(const char* ipAddr, int port)
 
 		if (ret)
 		{
-			pthread_t pid;
+			pthread_t pid = {0};
+
 			if(pthread_create(&pid, NULL, execThread, this) != 0)
 			{
 				CCLog("@@login6.6: create thread error, maybe memory not enough!");
