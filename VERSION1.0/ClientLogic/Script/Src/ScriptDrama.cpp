@@ -233,7 +233,7 @@ void DramaSetLChatFigure(std::string strFileName, bool bReverse, int nCol, int n
 
 void DramaSetLChatName(std::string strName, int nFontSize, int nFontColor)
 {
-	nFontSize = (float)nFontSize*NDDirector::DefaultDirector()->getCoordScaleX()*2;
+	nFontSize *= FONT_SCALE_DRAMA;
 	DramaCommandDlg* command = new DramaCommandDlg;
 	command->InitWithSetTitle(true, strName, nFontSize, nFontColor);
 	DramaObj.AddCommond(command);
@@ -246,7 +246,7 @@ void DramaSetLChatName(std::string strName, int nFontSize, int nFontColor)
 //		nFontcolor: 颜色(默认nil)
 void DramaSetLChatNameBySpriteKey(int nKey, int nFontSize, int nFontColor)
 {
-	nFontSize = (float)nFontSize*NDDirector::DefaultDirector()->getCoordScaleX()*2;
+	nFontSize *= FONT_SCALE_DRAMA;
 	DramaCommandDlg* command = new DramaCommandDlg;
 	command->InitWithSetTitleBySpriteKey(true, nKey, nFontSize, nFontColor);
 	DramaObj.AddCommond(command);
@@ -259,7 +259,7 @@ void DramaSetLChatNameBySpriteKey(int nKey, int nFontSize, int nFontColor)
 //		nFontcolor: 颜色(默认nil)
 void DramaSetLChatContent(std::string strContent, int nFontSize, int nFontColor)
 {
-	nFontSize = (float)nFontSize*NDDirector::DefaultDirector()->getCoordScaleX()*2;
+	nFontSize *= FONT_SCALE_DRAMA;
 	DramaCommandDlg* command = new DramaCommandDlg;
 	command->InitWithSetContent(true, strContent, nFontSize, nFontColor);
 	DramaObj.AddCommond(command);
@@ -278,7 +278,7 @@ void DramaSetRChatFigure(std::string strFileName, bool bReverse, int nCol, int n
 // 功能: 设置剧情右边聊天名字
 void DramaSetRChatName(std::string strName, int nFontSize, int nFontColor)
 {
-	nFontSize = (float)nFontSize*NDDirector::DefaultDirector()->getCoordScaleX()*2;
+	nFontSize *= FONT_SCALE_DRAMA;
 	DramaCommandDlg* command = new DramaCommandDlg;
 	command->InitWithSetTitle(false, strName, nFontSize, nFontColor);
 	DramaObj.AddCommond(command);
@@ -291,7 +291,7 @@ void DramaSetRChatName(std::string strName, int nFontSize, int nFontColor)
 //		nFontcolor: 颜色(默认nil)
 void DramaSetRChatNameBySpriteKey(int nKey, int nFontSize, int nFontColor)
 {
-	nFontSize = (float)nFontSize*NDDirector::DefaultDirector()->getCoordScaleX()*2;
+	nFontSize *= FONT_SCALE_DRAMA;
 	DramaCommandDlg* command = new DramaCommandDlg;
 	command->InitWithSetTitleBySpriteKey(false, nKey, nFontSize, nFontColor);
 	DramaObj.AddCommond(command);
@@ -301,7 +301,7 @@ void DramaSetRChatNameBySpriteKey(int nKey, int nFontSize, int nFontColor)
 // 功能: 设置剧情右边聊天内容
 void DramaSetRChatContent(std::string strContent, int nFontSize, int nFontColor)
 {
-	nFontSize = (float)nFontSize*NDDirector::DefaultDirector()->getCoordScaleX()*2;
+	nFontSize *= FONT_SCALE_DRAMA;
 	DramaCommandDlg* command = new DramaCommandDlg;
 	command->InitWithSetContent(false, strContent, nFontSize, nFontColor);
 	DramaObj.AddCommond(command);
@@ -415,7 +415,7 @@ void DramaLoadScene(int nMapID)
 // 返回值: key(用于后续操作例如删除场景)
 double DramaLoadEraseInOutScene(string centerText, int nFontsize, int nFontColor)
 {
-	nFontsize = (float)nFontsize*NDDirector::DefaultDirector()->getCoordScaleX()*2;
+	nFontsize *= FONT_SCALE_DRAMA;
 	DramaCommandScene* command = new DramaCommandScene;
 	command->InitWithLoad(centerText, nFontsize, nFontColor);
 	DramaObj.AddCommond(command);

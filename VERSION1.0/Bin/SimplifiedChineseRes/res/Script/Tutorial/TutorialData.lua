@@ -3641,8 +3641,8 @@ end
 
 -------------------------------------引导 14 结束-----------------------------------------------
 function p.BeginTemplete(layer)
-	local fXScale = CoordScaleX/2;
-	local fYScale = CoordScaleY/2;
+	local fXScale = CoordScaleX_960;
+	local fYScale = CoordScaleY_960;
     if(layer == nil) then
         local scene = GetSMGameScene();
         if(scene == nil) then
@@ -3650,8 +3650,8 @@ function p.BeginTemplete(layer)
         end
         layer = scene;
     else
-		fXScale = CoordScaleY/2;
-		fYScale = CoordScaleY/2;
+		fXScale = CoordScaleY_960;
+		fYScale = CoordScaleY_960;
     end
 
     local taskItem = p.GetCurrTaskItem();

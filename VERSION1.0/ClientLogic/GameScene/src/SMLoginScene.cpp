@@ -47,7 +47,7 @@
 //--------------------//
 
 #define UPDATE_ON		0	//0关闭下载，1开启下载
-#define CACHE_MODE 		0   //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
+#define CACHE_MODE 		1   //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
 
 //--------------------//
 
@@ -357,14 +357,16 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 			m_pTimer->SetTimer( this, TAG_TIMER_CHECK_COPY, 0.5f );
         }
         else
-#endif
         {
             NDBeforeGameMgrObj.doNDSdkLogin();
 			CloseWaitingAni();
-			//StartEntry();
+			StartEntry();
            // ShowWaitingAni();
 		}
-//#endif
+#else
+		NDBeforeGameMgrObj.doNDSdkLogin();
+		CloseWaitingAni();
+#endif
     	//CreateUpdateUILayer();
 		//NDBeforeGameMgrObj.CheckClientVersion(SZ_UPDATE_URL);
 	}
