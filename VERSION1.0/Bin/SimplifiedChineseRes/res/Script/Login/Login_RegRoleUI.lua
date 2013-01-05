@@ -213,6 +213,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             local bFlag = p.LegalStrCheck(p.Name);
             if(bFlag == false) then
                 CommonDlgNew.ShowTipDlg(GetTxtPri("LR_T1"), 2);
+                return true;
             end
             
             local roleContainer = p.GetRoleListContainer();
