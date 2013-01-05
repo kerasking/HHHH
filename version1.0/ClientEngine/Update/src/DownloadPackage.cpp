@@ -72,11 +72,11 @@ void DownloadCallback(void *param, int percent, int pos, int filelen)
 
 void* threadExcute(void* ptr)
 {
-	DownloadPackage* downer = (DownloadPackage*)ptr;
+	DownloadPackage* pkDownloader = (DownloadPackage*)ptr;
 
-	if (downer) 
+	if (pkDownloader) 
 	{
-		downer->DownloadThreadExcute();
+		pkDownloader->DownloadThreadExcute();
 	}
 
 	return NULL;
@@ -112,6 +112,7 @@ void DownloadPackage::DownloadThreadExcute()
 {
  	if (m_strDownloadURL.empty() || m_strDownloadPath.empty()) 
  	{
+		LOGERROR("DownloadStatusFailed!!");
  		DidDownloadStatus(DownloadStatusFailed);
  		return;
  	}
@@ -158,7 +159,8 @@ void DownloadPackage::DownloadThreadExcute()
 }
 
 void DownloadPackage::Download()
-{	
+{
+	LOGD("Entry Download");
 	pthread_t kPId = {0};
 	pthread_create(&kPId, NULL, threadExcute, this);	
 }

@@ -127,11 +127,14 @@ public:
 	void ShowCheckWIFIOff();
 	//
 	void ShowUpdateOff();
+
+	NDUILabel*      m_pkProgressTextLabel;
 	
 protected:
 	static void * LoadTextAndLua( void * pScene );
 	void ShowWaitingAni();
 	void CloseWaitingAni();
+	void OnProcessUpdate();
 protected:
 	NDUILayer *		m_pLayerOld; //¾ÉµÄµÇÂ½½çÃæ
     NDUILayer *		m_pLayerUpdate;

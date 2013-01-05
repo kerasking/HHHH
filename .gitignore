@@ -9,6 +9,7 @@ armeabi/
 .settings/
 
 debug/
+VERSION1.0/Bin/copy/
 Debug/
 release/
 Release/
