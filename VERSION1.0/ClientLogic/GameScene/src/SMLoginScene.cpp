@@ -357,14 +357,16 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 			m_pTimer->SetTimer( this, TAG_TIMER_CHECK_COPY, 0.5f );
         }
         else
-#endif
         {
             NDBeforeGameMgrObj.doNDSdkLogin();
 			CloseWaitingAni();
-			//StartEntry();
+			StartEntry();
            // ShowWaitingAni();
 		}
-//#endif
+#else
+		NDBeforeGameMgrObj.doNDSdkLogin();
+		CloseWaitingAni();
+#endif
     	//CreateUpdateUILayer();
 		//NDBeforeGameMgrObj.CheckClientVersion(SZ_UPDATE_URL);
 	}

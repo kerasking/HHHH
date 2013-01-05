@@ -33,7 +33,7 @@ void GlobalShowDlg(NDEngine::NDObject* delegate, std::string title,
 }
 
 uint GlobalShowDlg(NDEngine::NDObject* delegate, const char* title,
-		const char* text, uint second,				// second-倒计�??,若为0则无倒计�??
+		const char* text, uint second,
 		const char* ortherButtons, .../*must NULL end*/
 		)
 {

@@ -2886,12 +2886,12 @@ CCPoint NDManualRole::getHeadPos()
 {
 	CCPoint pos = NDBaseRole::getHeadPos();
 
-	if (m_nRideStatus == 1)
-	{
-		int sign = (m_bFaceRight ? -1 : 1);
-		pos.x += DISPLAY_POS_X_OFFSET * RESOURCE_SCALE * sign;
-		pos.y -= DISPLAY_POS_Y_OFFSET;
-	}
+// 	if (m_nRideStatus == 1)
+// 	{
+// 		int sign = (m_bFaceRight ? -1 : 1);
+// 		pos.x += DISPLAY_POS_X_OFFSET * RESOURCE_SCALE * sign;
+// 		pos.y -= DISPLAY_POS_Y_OFFSET;
+// 	}
 
 	return pos;
 }

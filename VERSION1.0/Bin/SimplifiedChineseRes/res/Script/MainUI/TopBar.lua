@@ -52,10 +52,10 @@ local ID_MAINUI_BUTTON_MISSION2					= 98;
 local ID_MAINUI_BTN_NEW_EMAIL						= 36;	--新邮件提示按钮ID
 local ID_MAINUI_BTN_ACTIVITY						= 43;	--活动按钮ID
 
-
+--图片裁剪不要用缩放比例!
 local NUMBER_FILE = "/number/num_2.png";
-local N_W = 42*ScaleFactor;
-local N_H = 32*ScaleFactor;
+local N_W = 42*2;
+local N_H = 32*2;
 local Numbers_Rect = {
     CGRectMake(N_W*0,0.0,N_W,N_H),
     CGRectMake(N_W*1,0.0,N_W,N_H),

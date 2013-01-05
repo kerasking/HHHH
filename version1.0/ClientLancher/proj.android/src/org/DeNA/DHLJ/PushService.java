@@ -20,9 +20,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
+import android.provider.Settings.Secure;
 import android.util.Log;
 
 /* 
@@ -83,6 +85,7 @@ public class PushService extends Service
 
 	// Preferences instance 
 	private SharedPreferences 		mPrefs;
+	private String					mDeviceID;
 	// We store in the preferences, whether or not the service has been started
 	public static final String		PREF_STARTED = "isStarted";
 	// We also store the deviceID (target)
@@ -136,10 +139,15 @@ public class PushService extends Service
 		}
 
 		// Get instances of preferences, connectivity manager and notification manager
+        mDeviceID = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);   
 		mPrefs = getSharedPreferences(TAG, MODE_PRIVATE);
 		mConnMan = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
 		mNotifMan = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-	
+
+    	Editor editor = mPrefs.edit();
+    	editor.putString(PREF_DEVICE_ID, mDeviceID);
+    	editor.commit();
+    	
 		/* If our process was reaped by the system for any reason we need
 		 * to restore our state with merely a call to onCreate.  We record
 		 * the last "started" value and restore it here if necessary. */
@@ -177,10 +185,13 @@ public class PushService extends Service
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-		log("Service started with intent=" + intent);
+		log("Service started with intent=" + intent + " startId=" + Integer.toString(startId));
 
 		// Do an appropriate action based on the intent.
-		if (intent.getAction().equals(ACTION_STOP) == true) {
+		if (intent == null) {
+			log("intent here!");
+			start();
+		} else if (intent.getAction().equals(ACTION_STOP) == true) {
 			stop();
 			stopSelf();
 		} else if (intent.getAction().equals(ACTION_START) == true) {
@@ -272,7 +283,7 @@ public class PushService extends Service
 	private synchronized void connect() {		
 		log("Connecting...");
 		// fetch the device ID from the preferences.
-		String deviceID = mPrefs.getString(PREF_DEVICE_ID, null);
+		String deviceID = mDeviceID;//mPrefs.getString(PREF_DEVICE_ID, null);
 		// Create a new connection only if the device id is not NULL
 		if (deviceID == null) {
 			log("Device ID not found.");
@@ -442,7 +453,7 @@ public class PushService extends Service
 		 n.when = System.currentTimeMillis();
 		 Intent intent = new Intent(this, DaHuaLongJiang.class); 
 		 intent.addCategory(Intent.CATEGORY_LAUNCHER); 
-		 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+		 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		 PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
 		 //String text1 = this.changeCharset(text, "UTF-8");
 		 n.setLatestEventInfo(this, NOTIF_TITLE, text, pi);
@@ -545,7 +556,7 @@ public class PushService extends Service
 		 */
 		public void publishArrived(String topicName, byte[] payload, int qos, boolean retained) throws UnsupportedEncodingException {
 			// Show a notification
-			String s = new String(payload);
+			String s = new String(payload, "UTF-8");
 			showNotification(s);	
 			log("Got message: " + s);
 		}   

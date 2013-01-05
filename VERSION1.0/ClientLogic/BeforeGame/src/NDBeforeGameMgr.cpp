@@ -1911,8 +1911,6 @@ bool NDBeforeGameMgr::CheckFirstTimeRuning()
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	strInstallVersionINIPath = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
     strCopyVersionINIPath = NDPath::GetCashesPath() + NDPath::GetRootResDirName() + SZ_VERINI_PATH;
-// 	FILE* pkFile = 0;
-// 	pkFile = fopen(strCopyVersionINIPath.c_str(), "rb" );
 #else
 	///< IOSÎ´×÷ ¹ùºÆ
 #endif
@@ -2127,6 +2125,7 @@ void* CopyResThread(void* ptr)
 		ZIPENTRY kTempZipEntry = {0};
 		GetZipItem(pZipHandle,i,&kTempZipEntry);
 		string strFilename = strPath + string(kTempZipEntry.name);
+		LOGD("Unzipping the file:%s",strFilename.c_str());
 		UnzipItem(pZipHandle,i,strFilename.c_str());
 	}
 
