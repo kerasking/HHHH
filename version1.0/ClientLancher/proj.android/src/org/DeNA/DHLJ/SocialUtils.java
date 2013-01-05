@@ -183,7 +183,7 @@ public class SocialUtils {
 
 			public void onDashboardClose() {
 				// TODO Auto-generated method stub
-//				Toast.makeText(mActivity, "å·²ï¿½1ï¿„1¤7„1¤7„1¤7ºç¤¾åŒ„1¤7„1¤7, Toast.LENGTH_LONG).show();
+//				Toast.makeText(mActivity, "å·²ï¿½1ï¿„1ï¿½7ï¿½1ï¿½7ï¿½1ï¿½7ï¿½ç¤¾åŒ„1ï¿½7ï¿½1ï¿½7, Toast.LENGTH_LONG).show();
 			}
 		};
 
@@ -286,14 +286,14 @@ public class SocialUtils {
 				Log.v(TAG, "AuthorizeToken Error:"
 						+ error.toJson().toString());
 
-				SocialUtils.showConfirmDialog("AuthorizeToken status", "Failed", "OK");
+//				SocialUtils.showConfirmDialog("AuthorizeToken status", "Failed", "OK");
 				
 				onAuthError(error.toJson().toString());
 			}
 
 		});
 	}
-	private void continueTransaction(String transid) {
+	public static void continueTransaction(String transid) {
 		Log.v(TAG, "begin ContinueTransaition");
 
 		Debit.continueTransaction(transid,
@@ -303,10 +303,10 @@ public class SocialUtils {
 					public void onSuccess(Transaction transaction) {
 						Log.v(TAG, "ContinueTransaction Success:"
 								+ transaction.getId());
-						SocialUtils.showConfirmDialog(
-								"ContinueTransaction status",
-								"Successful,transactionID:"
-										+ transaction.getId(), "OK");
+//						SocialUtils.showConfirmDialog(
+//								"ContinueTransaction status",
+//								"Successful,transactionID:"
+//										+ transaction.getId(), "OK");
 						
 						onContinueTransactionSuccess(transaction.getId());
 					}
@@ -315,8 +315,8 @@ public class SocialUtils {
 					public void onError(Error error) {
 						Log.v(TAG, "ContinueTransaction Error:"
 								+ error.toJson().toString());
-						SocialUtils.showConfirmDialog("ContinueTransaction status",
-								"Failed", "OK");
+//						SocialUtils.showConfirmDialog("ContinueTransaction status",
+//								"Failed", "OK");
 						
 						onContinueTransactionError(error.toJson().toString());
 					}
@@ -324,8 +324,8 @@ public class SocialUtils {
 					@Override
 					public void onCancel() {
 						Log.v(TAG, "ContinueTransaction cancel");
-						SocialUtils.showConfirmDialog("ContinueTransaction status",
-								"Cancel", "OK");
+//						SocialUtils.showConfirmDialog("ContinueTransaction status",
+//								"Cancel", "OK");
 						
 						onContinueTransactionCancel();
 					}
@@ -334,7 +334,7 @@ public class SocialUtils {
 	}
 	
 
-	private void cancelTransaction(String transid) {
+	public static void cancelTransaction(String transid) {
 		Log.v(TAG, "begin CancelTransaition");
 
 		Debit.cancelTransaction(transid,
@@ -344,10 +344,10 @@ public class SocialUtils {
 					public void onSuccess(Transaction transaction) {
 						Log.v(TAG, "CancelTransaction Success:"
 								+ transaction.getId());
-						SocialUtils.showConfirmDialog(
-								"CancelTransaction status",
-								"Successful,transactionID:"
-										+ transaction.getId(), "OK");
+//						SocialUtils.showConfirmDialog(
+//								"CancelTransaction status",
+//								"Successful,transactionID:"
+//										+ transaction.getId(), "OK");
 						
 						onCancelTransactionSuccess(transaction.getId());
 					}
@@ -356,8 +356,8 @@ public class SocialUtils {
 					public void onError(Error error) {
 						Log.v(TAG, "CancelTransaction Error:"
 								+ error.toJson().toString());
-						SocialUtils.showConfirmDialog("CancelTransaction status",
-								"Failed", "OK");
+//						SocialUtils.showConfirmDialog("CancelTransaction status",
+//								"Failed", "OK");
 						
 						onCancelTransactionError(error.toJson().toString());
 					}
