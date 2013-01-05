@@ -329,6 +329,8 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 				ViewGroup.LayoutParams.FILL_PARENT);
 		this.setContentView(menubar, pkParams);
 		menubar.setMenubarVisibility(View.VISIBLE);
+		
+		//getAndroidVer();
 	}
 
 	public void addEditView()
@@ -492,6 +494,30 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 		}
 		
 		return true;		
+	}
+
+	private void getAndroidVer()
+	{
+// 		Log.d( "getAndroidVer" , "@@ ver SDK: " + android.os.Build.VERSION.SDK );
+// 		Log.d( "getAndroidVer" , "@@ ver release: " + android.os.Build.VERSION.RELEASE );
+// 		Log.d( "getAndroidVer" , "@@ ver codename: " + android.os.Build.VERSION.CODENAME );
+// 		Log.d( "getAndroidVer" , "@@ ver incremental: " + android.os.Build.VERSION.INCREMENTAL );
+// 		Log.d( "getAndroidVer" , "@@ ver SDK: " + android.os.Build.VERSION.SDK );
+//		isVerOlder(0);
+	}
+
+	//是否古老系统
+	public static int isVerOlder(int n)
+	{
+		String osVer = android.os.Build.VERSION.RELEASE;
+		final String[] ver = osVer.split("\\.");
+		
+// 		for (String v : ver)
+// 		{
+// 			Log.d( "ver", "@@ v: " + v );
+// 		}
+
+		return (ver[0].compareTo("2") == 0) ? 1 : 0;
 	}
 
 	static
