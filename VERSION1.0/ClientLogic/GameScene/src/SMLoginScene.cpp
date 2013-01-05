@@ -184,8 +184,6 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 			//pkLayer->AddChild(pkUILoadingImage);
 		}
 
-		//layer->SetFrameRect( CCRectMake(winSize.width*0.0, winSize.height*0.0, winSize.width*0.7, winSize.height*0.225f));
-		//layer->SetBackgroundColor( ccc4( 20,30,0,50) );
 		CCLog( "@@login01: open CSMLoginScene\r\n" );
 		LOGD("TAG_TIMER_FIRST_RUN is register");
 		pkScene->m_pTimer->SetTimer( pkScene, TAG_TIMER_FIRST_RUN,0.5f );
