@@ -40,7 +40,7 @@ p.tbMsgInfo = {};
 p.TotalMsgNum = 30;  --显示的总的消息条数
                       
 --layerTag层tag, btnNum运粮界面要显示的按钮数, btnTagStar按钮tag的开始点
-p.tbTransLayer =  {layerTag = 1001, btnNum = 30, btnTagStar = 100, btnW = 60*ScaleFactor, btnH = 60*ScaleFactor, 
+p.tbTransLayer =  {layerTag = 1001, btnNum = 30, btnTagStar = 100, btnW = 120, btnH = 120, 
                                  layerWidth = 480*CoordScaleX;
                                  layerRect = CGRectMake(0, 75*CoordScaleY, 480*CoordScaleX, 145*CoordScaleY),};                                                    
                                 
