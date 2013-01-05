@@ -2129,12 +2129,18 @@ void* CopyResThread(void* ptr)
 		ZIPENTRY kTempZipEntry = {0};
 		GetZipItem(pZipHandle,i,&kTempZipEntry);
 		string strFilename = strPath + string(kTempZipEntry.name);
+
+		float fCur = i;
+		float fMax = nMaxIndex;
+
+		NDBeforeGameMgr::ms_nCopyStatus = (int)(fCur / fMax * 100.0f);
 	//	LOGD("Unzipping the file:%s",strFilename.c_str());
 		UnzipItem(pZipHandle,i,strFilename.c_str());
 	}
 
+	NDBeforeGameMgr::ms_nCopyStatus = 100;
+
 	CloseZip(pZipHandle);
-	NDBeforeGameMgr::ms_nCopyStatus = 1;
 
 #else
 #endif
@@ -2144,8 +2150,11 @@ void* CopyResThread(void* ptr)
 void NDBeforeGameMgr::CopyRes()
 {
 	pthread_t pid = {0};
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	CopyResThread(0);
-	//pthread_create(&pid, NULL, CopyResThread, this);	
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	pthread_create(&pid, NULL, CopyResThread, this);
+#endif
 }
 int NDBeforeGameMgr::GetCopyStatus()
 {

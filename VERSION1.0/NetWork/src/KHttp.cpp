@@ -415,10 +415,9 @@ int KHttp::getHttpFile(const KData& server, const KData& httpfile,
 	}
 	else
 	{
-		LOGD("Entry if ( m_bChunked ) else ...");
 		while ((iRead = m_kCnnect.readn(szBuffer, MTU)) > 0 && bRun)
 		{
-			LOGD("m_iReadedBytes += iRead; %d",iRead);
+			//LOGD("m_iReadedBytes += iRead; %d",iRead);
 			m_iReadedBytes += iRead;
 			kFile.write((unsigned char*) szBuffer, iRead);
 			m_iWriteLen += iRead;
