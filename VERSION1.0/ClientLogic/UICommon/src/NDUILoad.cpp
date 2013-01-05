@@ -12,6 +12,18 @@
 #include "UIData.h"
 #include "NDDirector.h"
 
+#ifdef ANDROID
+#include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#else
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)
+#define  LOGERROR(...)
+#endif
 
 #define ISEQUAL(a,b)		(TAbs((a)-(b))<0.0001f)
 #define ISEQUAL_PT(pt,a,b)	(ISEQUAL(pt.x,a) && ISEQUAL(pt.y,b))
@@ -119,31 +131,42 @@ bool NDUILoad::LoadAny( const char* uiname, NDUINode *parent,
 					   NDUITargetDelegate* delegate, LuaObject* luaDelegate,
 					   CCSize sizeOffset /*= CCSizeZero*/ )
 {
-	if (!uiname || !parent) return false;
+	if (!uiname || !parent)
+	{
+		return false;
+	}
 
 	// open ui file
-	CUIData  uiData;	
-	if ( !uiData.openUiFile(NDPath::GetUIConfigPath(uiname).c_str()) )
+	CUIData kUIData;
+
+	LOGD("Ready to load ui file: %s",NDPath::GetUIConfigPath(uiname).c_str());
+
+	if ( !kUIData.openUiFile(NDPath::GetUIConfigPath(uiname).c_str()) )
 	{
-		NDAsssert(0);
+		LOGERROR("kUIData openUIFile faild,file is %s",NDPath::GetUIConfigPath(uiname).c_str());
 		return false;
 	}
 
 	// load all controlls
-	int nCtrlAmount = uiData.GetCtrlAmount();
+	int nCtrlAmount = kUIData.GetCtrlAmount();
 	for(int i = 0; i < nCtrlAmount; i++)
 	{
-		NDUINode* node = this->LoadCtrl( uiData, i, parent, sizeOffset );
-		if (node)
+		NDUINode* pkNode = LoadCtrl( kUIData, i, parent, sizeOffset );
+
+		if (pkNode)
 		{
 			if (delegate)
 			{
-				node->SetTargetDelegate(delegate);
+				pkNode->SetTargetDelegate(delegate);
 			}
 			else if (luaDelegate && luaDelegate->IsFunction())
 			{
-				node->SetLuaDelegate( *luaDelegate );
+				pkNode->SetLuaDelegate( *luaDelegate );
 			}
+		}
+		else
+		{
+			LOGERROR("LoadCtrl( kUIData, i, parent, sizeOffset ) is null");
 		}
 	}
 

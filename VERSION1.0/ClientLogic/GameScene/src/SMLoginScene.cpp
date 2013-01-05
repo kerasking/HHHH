@@ -298,11 +298,37 @@ void CSMLoginScene::OnTimer( OBJID idTag )
             case 0:
                 break;
             case 1:
-				LOGD("Copy files succeeded!");
-                m_pTimer->KillTimer( this, TAG_TIMER_CHECK_COPY );
-                NDBeforeGameMgrObj.doNDSdkLogin();
-                ShowWaitingAni();
-				StartEntry();
+				{
+					LOGD("Copy files succeeded!");
+					m_pTimer->KillTimer( this, TAG_TIMER_CHECK_COPY );
+					NDBeforeGameMgrObj.doNDSdkLogin();
+					ShowWaitingAni();
+#if UPDATE_ON
+					const char*	pszUpdateURL	= SZ_UPDATE_URL;//ScriptMgrObj.excuteLuaFuncRetS( "GetUpdateURL", "Update" );//此时Lua脚本未加载……
+					CreateUpdateUILayer();
+					if ( !pszUpdateURL )
+					{
+						CloseWaitingAni();
+						StartEntry();
+						return;
+					}
+
+					if (m_pLabelPromtp)
+					{
+						m_pLabelPromtp->SetText( NDCommonCString2(SZ_CONNECT_SERVER).c_str() );
+						m_pLabelPromtp->SetVisible( true );
+					}
+
+					if ( !NDBeforeGameMgrObj.CheckClientVersion( pszUpdateURL ) )
+					{
+						CloseWaitingAni();
+						StartEntry();
+						return;
+					}
+#else
+					StartEntry();
+#endif
+				}
                 break;
             default:
                 break;
@@ -633,26 +659,26 @@ bool CSMLoginScene::CreateUpdateUILayer()
 	
 	CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
-	NDUILayer *	pLayer = new NDUILayer();
+	NDUILayer*	pkLayer = new NDUILayer();
 
-	if ( !pLayer )
+	if ( !pkLayer )
 	{
 		LOGERROR( "CSMLoginScene::CreateUpdateUILayer() pLayer is null" );
 		return false;
 	}
 
-	pLayer->Initialization();
-	pLayer->SetFrameRect( CCRectMake(0, 0, kWinSize.width, kWinSize.height) );
-	pLayer->SetTag( TAG_UPDATE_LAYER );
-	AddChild(pLayer);
-	m_pLayerUpdate = pLayer;
+	pkLayer->Initialization();
+	pkLayer->SetFrameRect( CCRectMake(0, 0, kWinSize.width, kWinSize.height) );
+	pkLayer->SetTag( TAG_UPDATE_LAYER );
+	AddChild(pkLayer);
+	m_pLayerUpdate = pkLayer;
 	
-	NDUILoad tmpUILoad;
+	NDUILoad kTempUILoad;
 
 	LOGD("Ready to load update.ini file");
-	tmpUILoad.Load( "UpdateUI.ini", pLayer, this, CCSizeMake(0, 0));
+	kTempUILoad.Load( "UpdateUI.ini", pkLayer, this, CCSizeMake(0, 0));
 	
-	m_pCtrlProgress	= (CUIExp*)pLayer->GetChild( TAG_CTRL_PROGRESS );
+	m_pCtrlProgress	= (CUIExp*)pkLayer->GetChild( TAG_CTRL_PROGRESS );
 	if ( !m_pCtrlProgress )
 	{
 		NDLog( "CSMLoginScene::CreateUpdateUILayer() m_pCtrlProgress is null" );
@@ -664,7 +690,7 @@ bool CSMLoginScene::CreateUpdateUILayer()
 	m_pCtrlProgress->SetStyle(2);
 	m_pCtrlProgress->SetVisible(false);
 	
-	m_pLabelPromtp	= (NDUILabel*)pLayer->GetChild( TAG_LABEL_PROMPT );
+	m_pLabelPromtp	= (NDUILabel*)pkLayer->GetChild( TAG_LABEL_PROMPT );
 	if ( !m_pLabelPromtp )
 	{
 		NDLog( "CSMLoginScene::CreateUpdateUILayer() m_pLabelPromtp is null" );
@@ -742,7 +768,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 	{
         CloseWaitingAni();
 		LOGERROR("Version info is broken,Please call GM!");
-		//printf("版本信息损坏，请重新下载或者联系GM");
+
 		if ( m_pLabelPromtp )
 		{
 			m_pLabelPromtp->SetText( NDCommonCString2(SZ_ERROR_03).c_str() );
@@ -768,7 +794,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 
 	if (bUpdate)
 	{
-		LOGD("Pass bUpdate,value is",bUpdate ? "true" : false);
+		LOGD("Pass bUpdate,value is",bUpdate ? "true" : "false");
 
 		if (!bLatest)
 		{
@@ -814,24 +840,6 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
 		StartEntry();
 #endif
 #if UPDATE_ON == 1
-	const char*	pszUpdateURL	= SZ_UPDATE_URL;//ScriptMgrObj.excuteLuaFuncRetS( "GetUpdateURL", "Update" );//此时Lua脚本未加载……
-	if ( !pszUpdateURL )
-	{
-		CloseWaitingAni();
-		StartEntry();
-		return;
-	}
-		
-	if (m_pLabelPromtp)
-	{
-		m_pLabelPromtp->SetText( NDCommonCString2(SZ_CONNECT_SERVER).c_str() );
-		m_pLabelPromtp->SetVisible( true );
-	}
-	if ( !NDBeforeGameMgrObj.CheckClientVersion( pszUpdateURL ) )
-	{
-		CloseWaitingAni();
-		StartEntry();
-	}
 #endif
 }
 

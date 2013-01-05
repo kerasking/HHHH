@@ -1856,6 +1856,7 @@ bool NDBeforeGameMgr::isWifiNetWork()
 
 bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
 {
+	LOGD("NDBeforeGameMgr::CheckClientVersion");
     static int s_nVersion = 0;
     unsigned char ucResType = RES_TYPE;
     //取得当前客户端版本
@@ -1890,6 +1891,8 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
 
 	NDTransData kData(_MSG_CLIENT_VERSION);
     
+	LOGD("Send the _MSG_CLIENT_VERSION message to server!");
+
 	kData << s_nVersion;
     kData << ucResType;
 	NDDataTransThread::DefaultThread()->GetSocket()->Send(&kData);
