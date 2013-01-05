@@ -27,8 +27,9 @@
                   android:label="@string/app_name"
                   android:screenOrientation="landscape"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-                  android:launchMode="standard"             
-                  android:configChanges="orientation">
+                  android:launchMode="singleTask"             
+                  android:configChanges="keyboardHidden|orientation"
+                  android:windowSoftInputMode="adjustPan">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -40,7 +41,11 @@
                 <data  android:scheme="mobage-cn-23000052" />
             </intent-filter>
             <intent-filter>
-                <action android:name="cn.mobage.g23000052.RUN" />
+                <action android:name="tw.mobage.g23000052.RUN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="tw.mobage.g23000052.RUN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -85,8 +90,6 @@
 			</intent-filter>
 		</service>
 		
-		<service android:name=".PushService" android:label="DHLJ Push Notifications Service"></service>
-		
 		<receiver android:name="com.denachina.androidpn.client.BootReceiver"
 		    >
 		    <intent-filter >
@@ -94,6 +97,15 @@
 		    </intent-filter>
 		</receiver>
         
+		<receiver android:name=".BootReceiver"
+		    android:process=":pushservice_dhlj">
+		    <intent-filter >
+		        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+		    </intent-filter>
+		</receiver>
+		<service android:name=".PushService" android:label="DHLJ Push Notifications Service"
+		    android:process=":pushservice_dhlj">
+		</service>
     </application>
     <supports-screens android:largeScreens="true"
                       android:smallScreens="true"
