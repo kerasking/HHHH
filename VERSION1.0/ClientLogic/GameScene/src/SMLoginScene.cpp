@@ -234,7 +234,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 	else if ( idTag == TAG_TIMER_DOWNLOAD_SUCCESS )
 	{
 		m_pTimer->KillTimer(this, TAG_TIMER_DOWNLOAD_SUCCESS);
-        
+
 		LOGD("Entry TAG_TIMER_DOWNLOAD_SUCCESS process.");
 		UnZipFile( m_strSavePath.c_str(), m_strCachePath.c_str());
 	}
@@ -711,7 +711,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 
 	LOGD("Client Version:FromVersion is %d,ToVersion is %d",nFromVersion,nToVersion);
 
-	std::string strUpdatePath	= kData.ReadUnicodeString();
+	std::string strUpdatePath = "http://222.77.177.219/twt/android/6999_7000_in_dhljupdate.zip";//kData.ReadUnicodeString();
 	
 	if ( bForceUpdate )
 	{
