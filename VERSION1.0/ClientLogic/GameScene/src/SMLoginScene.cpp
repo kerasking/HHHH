@@ -213,6 +213,8 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 
 	if ( idTag == TAG_TIMER_UPDATE ) 
 	{
+		LOGD("TAG_TIMER_UPDATE process entry");
+
 		if ( !rename( m_strSavePath.c_str(), m_strSavePath.c_str() ) )
 		{
 			if ( remove( m_strSavePath.c_str() ) )
@@ -221,6 +223,8 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 				return;
 			}
 		}
+
+		LOGD("m_strUpdateURL is %s,m_strSavePath is %s",m_strUpdateURL.c_str(),m_strSavePath.c_str());
 
 		FromUrl(m_strUpdateURL.c_str());
 		ToPath(m_strSavePath.c_str()); 
@@ -418,13 +422,16 @@ void CSMLoginScene::OnTimer( OBJID idTag )
 // 开启更新
 bool CSMLoginScene::StartUpdate()
 {
+	LOGD("Entry StartUpdate");
+
 	if ( kDeqUpdateUrl.empty() )
 	{
+		LOGERROR("kDeqUpdateUrl is empty");
 		return false;
 	}
 	//请求第一个包
-	std::string url = *kDeqUpdateUrl.begin();
-	m_strUpdateURL	= url;
+	std::string strURL = *kDeqUpdateUrl.begin();
+	m_strUpdateURL	= strURL;
 	m_pTimer->SetTimer( this, TAG_TIMER_UPDATE, 0.5f );	
 	StartDownload();
 	return true;
@@ -692,18 +699,24 @@ void CSMLoginScene::CloseUpdateUILayer()
 //===========================================================================
 void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 {
+	LOGD("Entry OnMsg_ClientVersion");
+
 	bool bUpdate = false;
 	
 	int bLatest				= kData.ReadByte();
 	int bForceUpdate		= kData.ReadByte();
-	int FromVersion			= 6999;//kData.ReadInt();
-	int ToVersion			= kData.ReadInt();
-	std::string UpdatePath	= kData.ReadUnicodeString();
+	kData.ReadInt();
+	int nFromVersion		= 6999;//kData.ReadInt();
+	int nToVersion			= 7000;//kData.ReadInt();
+
+	LOGD("Client Version:FromVersion is %d,ToVersion is %d",nFromVersion,nToVersion);
+
+	std::string strUpdatePath	= kData.ReadUnicodeString();
 	
 	if ( bForceUpdate )
 	{
         CloseWaitingAni();
-		//printf("请用户重新下载最新游戏版本");
+		LOGD("Redown the game client please!");
 		if ( m_pLabelPromtp )
 		{
 			m_pLabelPromtp->SetText( NDCommonCString2(SZ_ERROR_01).c_str() );
@@ -712,10 +725,10 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 		}
 		return ;
 	}
-	else if ( ( FromVersion ==  ToVersion ) &&  ( !bLatest ) )
+	else if ( ( nFromVersion ==  nToVersion ) &&  ( !bLatest ) )
 	{
         CloseWaitingAni();
-		LOGERROR("当前版本数据有误,请重新下载或者联系GM");
+		LOGERROR("Current version error!!,Please call GM!");
 
 		if ( m_pLabelPromtp )
 		{
@@ -725,9 +738,10 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 		}
 		return ;
 	}
-	else if ( ( FromVersion == 0 ) && ( ToVersion == 0 ) )
+	else if ( ( nFromVersion == 0 ) && ( nToVersion == 0 ) )
 	{
         CloseWaitingAni();
+		LOGERROR("Version info is broken,Please call GM!");
 		//printf("版本信息损坏，请重新下载或者联系GM");
 		if ( m_pLabelPromtp )
 		{
@@ -738,7 +752,7 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 
 		return ;
 	}
-	else if ( ( FromVersion == ToVersion ) && (bLatest) )
+	else if ( ( nFromVersion == nToVersion ) && (bLatest) )
 	{
 		LOGD("Current version is newest");
 		StartEntry();
@@ -748,13 +762,15 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 	{
 		bUpdate = true;
 	}
-	    
-	NDLog("URL:%s",UpdatePath.c_str());
-	kDeqUpdateUrl.push_back(UpdatePath);
+
+	LOGD("Res update URL:%s",strUpdatePath.c_str());
+	kDeqUpdateUrl.push_back(strUpdatePath);
 
 	if (bUpdate)
 	{
-		if (!bLatest) 
+		LOGD("Pass bUpdate,value is",bUpdate ? "true" : false);
+
+		if (!bLatest)
 		{
 			CloseWaitingAni();
 			//if ( !NDBeforeGameMgrObj.isWifiNetWork() )//关闭掉坑爹的WIFI监测
@@ -768,6 +784,8 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 			}
 		}
 	}
+
+	LOGD("Leave OnMsg_ClientVersion");
 }
 
 //===========================================================================
@@ -845,6 +863,8 @@ void CSMLoginScene::OnEvent_LoginError( int iError )
 //===========================================================================
 void CSMLoginScene::StartDownload()
 {
+	LOGD("Entry StartDownload");
+
 	if ( m_pLabelPromtp )
 	{
 		m_pLabelPromtp->SetText( NDCommonCString2(SZ_DOWNLOADING).c_str() );

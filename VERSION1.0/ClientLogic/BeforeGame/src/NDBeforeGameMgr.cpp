@@ -2055,7 +2055,7 @@ void* CopyLoginResThread(void* ptr)
 		ZIPENTRY kTempZipEntry = {0};
 		GetZipItem(pZipHandle,i,&kTempZipEntry);
 		string strFilename = strPath + string(kTempZipEntry.name);
-		LOGD("Unzipping the %s file.",strFilename.c_str());
+		//LOGD("Unzipping the %s file.",strFilename.c_str());
 		UnzipItem(pZipHandle,i,strFilename.c_str());
 	}
 
@@ -2126,7 +2126,7 @@ void* CopyResThread(void* ptr)
 		ZIPENTRY kTempZipEntry = {0};
 		GetZipItem(pZipHandle,i,&kTempZipEntry);
 		string strFilename = strPath + string(kTempZipEntry.name);
-		LOGD("Unzipping the file:%s",strFilename.c_str());
+	//	LOGD("Unzipping the file:%s",strFilename.c_str());
 		UnzipItem(pZipHandle,i,strFilename.c_str());
 	}
 

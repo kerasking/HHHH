@@ -158,7 +158,8 @@ void DownloadPackage::DownloadThreadExcute()
 }
 
 void DownloadPackage::Download()
-{	
+{
+	LOGD("Entry Download");
 	pthread_t kPId = {0};
 	pthread_create(&kPId, NULL, threadExcute, this);	
 }
