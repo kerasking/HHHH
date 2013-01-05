@@ -31,12 +31,27 @@ USING_NS_CC;
 //		分辨率800*480		scale=1.5（以Y为主）
 
 //资源缩放比例&字体缩放比例（一般相同）
-#define RESOURCE_SCALE		(NDDirector::DefaultDirector()->getResourceScale())		//基于480*320
-#define RESOURCE_SCALE_INT	int(RESOURCE_SCALE)										//基于480*320
-#define FONT_SCALE			RESOURCE_SCALE											//基于480*320
-#define FONT_SCALE_INT		int(FONT_SCALE)											//基于480*320
+//备注：以"_960"结尾的宏，表示基于960*640，否则基于480*320
+//		提供两套宏，避免在代码中出现乘2除2的.
 
-#define RESOURCE_SCALE_960	(0.5f*RESOURCE_SCALE)									//基于960*640
+/** 【资源缩放比例】 */
+#define RESOURCE_SCALE		(NDDirector::DefaultDirector()->getResourceScale())			//基于480*320
+#define RESOURCE_SCALE_INT	int(RESOURCE_SCALE)											//基于480*320
+#define RESOURCE_SCALE_960	(0.5f*RESOURCE_SCALE)										//基于960*640
+
+/** 【坐标缩放比例】 */
+#define COORD_SCALE_X_960	(NDDirector::DefaultDirector()->getCoordScaleX())			//基于960*640
+#define COORD_SCALE_Y_960	(NDDirector::DefaultDirector()->getCoordScaleY())			//基于960*640
+#define COORD_SCALE_X		(COORD_SCALE_X_960*2.0f)									//基于480*320
+#define COORD_SCALE_Y		(COORD_SCALE_Y_960*2.0f)									//基于480*320
+
+/** 【字体缩放比例】 */
+#define FONT_SCALE			RESOURCE_SCALE												//基于480*320
+#define FONT_SCALE_INT		int(FONT_SCALE)												//基于480*320
+
+#define FONT_SCALE_X		(COORD_SCALE_X*2.0)											//基于480*320（字体缩放以X方向为基准）
+#define FONT_SCALE_DRAMA	(FONT_SCALE_X)												//基于480*320
+
 //-----------------------------------------------------------------------------------------------------------
 
 

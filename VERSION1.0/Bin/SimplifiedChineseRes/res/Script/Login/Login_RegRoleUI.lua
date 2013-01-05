@@ -18,7 +18,7 @@ local ID_ROLE_ANIMATE       = 3;    --选人动画
 local CONTAINTER_X = 0;
 local CONTAINTER_Y = 0;
 
-local RoleViewSize = CGSizeMake(140*CoordScaleX*2,180*CoordScaleY*2);
+local RoleViewSize = CGSizeMake(140*CoordScaleX,180*CoordScaleY);
 
 
 local AnimateGroups = {Stand = 0, CheckShow = 1, CheckStand = 2,}   --动画组说明 0.未选中    1.选中姿势    2.选中站立
@@ -213,6 +213,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
             local bFlag = p.LegalStrCheck(p.Name);
             if(bFlag == false) then
                 CommonDlgNew.ShowTipDlg(GetTxtPri("LR_T1"), 2);
+                return true;
             end
             
             local roleContainer = p.GetRoleListContainer();

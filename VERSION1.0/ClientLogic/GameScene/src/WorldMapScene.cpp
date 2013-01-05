@@ -138,8 +138,8 @@ void WorldMapLayer::Initialization(int nMapId)
 	picClose->Cut(CCRectMake(0,  0,  sizeClose.width,  sizeClose.height/2 - 2));
 	//picCloseSelect->Cut(CCRectMake(0,  sizeClose.height/2,  sizeClose.width,  sizeClose.height/2));
 
-	sizeClose.width *= NDDirector::DefaultDirector()->getCoordScaleX();
-	sizeClose.height *= NDDirector::DefaultDirector()->getCoordScaleY();
+	sizeClose.width *= COORD_SCALE_X_960;
+	sizeClose.height *= COORD_SCALE_Y_960;
 	CCRect rectClose = CCRectMake((winsize.width - sizeClose.width), 0,
 									 sizeClose.width, sizeClose.height/2);
 	// init close button
