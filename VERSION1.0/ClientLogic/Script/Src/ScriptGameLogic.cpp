@@ -832,8 +832,7 @@ std::string SimpleDecode(const char* pszPwd)
 ///////////////////////////////////////////////
 std::string GetDeviceToken()
 {
-	//return NDBeforeGameMgrObj.GetDeviceToken();
-	return "";
+	return NDBeforeGameMgrObj.GetDeviceToken();
 }
 
 ///////////////////////////////////////////////
