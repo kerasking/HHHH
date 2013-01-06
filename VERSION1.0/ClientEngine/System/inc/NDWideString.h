@@ -59,7 +59,7 @@ public:
 	//得到UTF8编码字符串所占的字节数
 	unsigned int GetLengthOfBytesUsingUTF8(){ return m_szUTF8.size() * sizeof(UTF8CHR); }
 	//得到UNICODE编码字符串所占的字节数
-	unsigned int GetLengthOfBytesUsingUnicode(){ return m_szUNICODE.size() * sizeof(wchar_t); }
+	unsigned int GetLengthOfBytesUsingUnicode(){ return m_szUNICODE.size() * sizeof(unsigned short); }
 
 protected:
 	void ConvertUTF8ToUnicode();
