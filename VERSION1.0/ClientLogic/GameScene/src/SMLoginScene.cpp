@@ -75,7 +75,7 @@
 #define TAG_CTRL_PIC_BG					1	//背景图片控件tag
 #define TAG_LABEL_PROMPT				4	//文字标签控件tag
 #define TAG_CTRL_PROGRESS				2	//进度条控件tag
-#define TAG_UPDATE_LAYER				(2000+167)	//层Tag
+#define TAG_UPDATE_LAYER				(2000 + 167)	//层Tag
 
 #define TAG_DLG_CONFIRM					100	//确认对话框tag
 
@@ -1117,7 +1117,7 @@ void* CSMLoginScene::LoadTextAndLua( void * pPointer )
 
 void CSMLoginScene::OnProcessUpdate()
 {
-#if UPDATE_ON
+#if UPDATE_ON == 1
 	const char*	pszUpdateURL	= SZ_UPDATE_URL;//ScriptMgrObj.excuteLuaFuncRetS( "GetUpdateURL", "Update" );//此时Lua脚本未加载……
 	CreateUpdateUILayer();
 
