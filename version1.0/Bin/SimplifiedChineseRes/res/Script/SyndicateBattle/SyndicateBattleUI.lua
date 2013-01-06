@@ -177,6 +177,7 @@ end
 
 --加载每日签到主界面
 function p.LoadUI()
+    LogInfo("qboy function p.LoadUI()");
 	scrollResultReport = nil;
 	 p.bIfComplete = false;
 	local nRoleId =  GetPlayerId();
@@ -553,7 +554,7 @@ function p.updateCount(restCount)
 			if p.IfIsInBattle() then
 				LogInfo("qboy 已经在战斗中");
 			else
-				CDlabel:SetTitle("参战");
+				CDlabel:SetTitle(GetTxtPri("SYN_D27"));
 				CDlabel:SetChecked( false );		
 			end
 			
@@ -564,7 +565,7 @@ function p.updateCount(restCount)
 			CDlabel:SetTitle(FormatTime(restCount,1));
 			CDlabel:SetChecked( false );
 		else
-			CDlabel:SetTitle("战斗中...");
+			CDlabel:SetTitle(GetTxtPri("SYN_D28"));
 			CDlabel:SetChecked( true );
 		end
 	end
@@ -755,7 +756,7 @@ function p.AddPlayerToList(nUserId,nCamp,sName)
 		local CDLabel = p.GetCDLabel();
 
 		if CDLabel ~= nil then
-			CDLabel:SetTitle("等待战斗...");
+			CDLabel:SetTitle("等待戰鬥...");
 			CDLabel:SetChecked( true );
 		end
 	end	
@@ -900,14 +901,14 @@ function p.AddPlayer(container, nIndex)
 						12,
 						NameColor.GREEN);--]]
 						
-			hyperlinkBtn   = CreateLabel("[待]"..sUserName,CGRectMake(0, 0, sizeview.w , sizeview.h),12,NameColor.GREEN);
+			hyperlinkBtn   = CreateLabel(GetTxtPri("SYN_D36")..sUserName,CGRectMake(0, 0, sizeview.w , sizeview.h),12,NameColor.GREEN);
 
 		else
 			 --[[hyperlinkBtn	= CreateHyperlinkButton("[待]"..sUserName, 
 						CGRectMake(0, 0, sizeview.w , sizeview.h),
 						12,
 						NameColor.YELLOW);	--]]
-			hyperlinkBtn   = CreateLabel("[待]"..sUserName,CGRectMake(0, 0, sizeview.w , sizeview.h),12,NameColor.YELLOW);									
+			hyperlinkBtn   = CreateLabel(GetTxtPri("SYN_D36")..sUserName,CGRectMake(0, 0, sizeview.w , sizeview.h),12,NameColor.YELLOW);									
 		end		
 		--]]
 		
@@ -1022,19 +1023,19 @@ function p.AddMainReport(report)
 	
 	
 	if nIdWin == nIdLost then
-		str = "<c"..wincolor.."【"..sWinName.."】此回合轮空,"
+		str = "<c"..wincolor.."【"..sWinName.."】此回合輪空,"
 	else
-		str = "<c"..wincolor.."【"..sWinName.."】/e击败了".."<c"..losecolor.."【"..sLostName.."】/e,"
+		str = "<c"..wincolor.."【"..sWinName.."】/e擊敗了".."<c"..losecolor.."【"..sLostName.."】/e,"
 	end
 	
 	
 	
 	if nWinCombo > 0 then
-		str = str.."取得了"..nWinCombo.."<cfefc2a".."连胜,/e"
+		str = str.."取得了"..nWinCombo.."<cfefc2a".."連勝,/e"
 	end
 	
 	if nLoseCombo > 0 then
-		str = str.."终结了<c"..losecolor.."【"..sLostName.."】/e的<cfefc2a"..nLoseCombo.."/e连胜,"
+		str = str.."終結了<c"..losecolor.."【"..sLostName.."】/e的<cfefc2a"..nLoseCombo.."/e連勝,"
 	end
 	
 	
@@ -1209,7 +1210,7 @@ end
 
 
 --===============================xxxxxxxx====================================----
-
+--[[
 local TipTxt ={
 "战斗规则:",
 "1.军团战分为8强赛、4强赛、半决赛和决","赛，一共4轮",
@@ -1223,6 +1224,23 @@ local TipTxt ={
 "5.战斗失败者获得战败奖励，退出战斗队","列，等待比赛结束",
 "",
 "6.连胜5场的军团成员、被击败的军团成员","将退出战斗队列 (中途掉线的玩家视为被","击败)",
+"",
+}
+]]
+
+local TipTxt ={
+"戰鬥規則:",
+"1.軍團戰分為8強賽、4強賽、半決賽和決","賽，一共4輪",
+"",
+"2.每輪戰鬥開始，軍團成員自行點擊【參","加戰鬥】進入等待佇列，1分30秒等待時","間過後，系統將開始配對戰鬥（未進入","等待介面的成員將無法參加戰鬥）",
+"",
+"3.配對戰對手由系統隨機分配",
+"",
+"4.戰鬥勝利者獲得勝利獎勵，連勝次數+1","，不回復HP，繼續等待系統匹配（輪空","不記錄連勝）",
+"",
+"5.戰鬥失敗者獲得戰敗獎勵，退出戰鬥隊","列，等待比賽結束",
+"",
+"6.連勝5場的軍團成員、被擊敗的軍團成員","將退出戰鬥佇列 (中途掉線的玩家視為被","擊敗)",
 "",
 }
 --[[
@@ -1259,7 +1277,7 @@ function p.ShowTip()
 	end
 	uiLoad:Load("scuffle/scuffle_L_3.ini", layer, p.OnUIEventTip, 0, 0);
 	local titlelabel = RecursiveLabel(layer, {3});
-	titlelabel:SetText("军团战规则");
+	titlelabel:SetText("軍團戰規則");
 	
 	----------------------------容器---------------------------------------
 	local rectX = winsize.w*0.25;
@@ -1409,7 +1427,7 @@ function p.RefreshBoard()
 			local pLabelScore = RecursiveLabel(view, {5});
 
 			if nIndex == 0 then
-				pLabelScore:SetText("连胜");
+				pLabelScore:SetText("連勝");
 			else
 				pLabelRank:SetText(""..nIndex);
 				pLabelName:SetText(""..tRankBoardStreak[nIndex][1]);
@@ -1604,7 +1622,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
                     
 			
 			if  p.bIfComplete == false and SyndicateBattleResultUI.GetEnterEndTime() <= 0 then
-				CommonDlgNew.ShowYesOrNoDlg("退出后将会无法再次加入这场战斗，确定退出吗？", p.CloseSyndicateBattleUI, true );			
+				CommonDlgNew.ShowYesOrNoDlg("退出后將會無法再次加入這場戰鬥，確定退出嗎？", p.CloseSyndicateBattleUI, true );			
 			else
 				p.QuitBattle();
 				p.CloseUI();			
@@ -1615,7 +1633,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 		--参战/退出	
 		elseif tag == ID_ARMYGROUPBATTLE_CTRL_BUTTON_BATTLE then
 			if  p.ActivityState == 3 then
-				CommonDlgNew.ShowYesDlg("您已退出，请重新打开界面！");
+				CommonDlgNew.ShowYesDlg("您已退出，請重新打開介面！");
 				return;
 			end
 
@@ -1625,7 +1643,7 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 				LogInfo("qboy sign up战斗 ");
 				--cd未冷却
 				if g_Count > 0 then
-					CommonDlgNew.ShowYesOrNoDlg( "是否花费2金币清除冷却时间", p.ClearCDTime, true );
+					CommonDlgNew.ShowYesOrNoDlg( "是否話費2金幣清除冷卻時間", p.ClearCDTime, true );
 					return true;
 				end
 				
@@ -1742,7 +1760,7 @@ function p.OnUIEventInfoList(uiNode, uiEventType, param)
 		elseif tag == ID_TALK_LIST_CTRL_BUTTON_12 then
 			--加好友
 			if FriendFunc.IsExistFriend(nCheckPlayerId)  then
-				CommonDlgNew.ShowYesDlg("该玩家已经是您的好友！");
+				CommonDlgNew.ShowYesDlg("該玩家已近是您的好友！");
 			else
 				FriendFunc.AddFriend(nCheckPlayerId,sCheckPlayerName); --加为好友 
 			end
@@ -1798,7 +1816,7 @@ function p.ClearCDTime(nId, param)
     	local emoney = GetRoleBasicDataN(nPlayerId,USER_ATTR.USER_ATTR_EMONEY);           
                
     	if emoney < 2 then
-			CommonDlgNew.ShowYesDlg("抱歉，您的金币不足！");
+			CommonDlgNew.ShowYesDlg("抱歉，您的金幣不足！");
 			return;
 		end
 	

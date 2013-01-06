@@ -935,13 +935,13 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 		--参战
 			--军团战还未开始
 			if g_BattleType == 5 then
-				CommonDlgNew.ShowTipDlg("军团战尚未开始！");
+				CommonDlgNew.ShowTipDlg("軍團戰尚未開始！");
 				return true;
 			end
 			
 			--军团战已结束
 			if g_BattleType == 0 then
-				CommonDlgNew.ShowTipDlg("本次军团战已经结束！");
+				CommonDlgNew.ShowTipDlg("本次軍團戰已經結束！");
 				return true;
 			end			
 		
@@ -953,17 +953,17 @@ function p.OnUIEvent(uiNode, uiEventType, param)
 			
 			
 			if nbattleid == -1 then
-				CommonDlgNew.ShowTipDlg("抱歉！您未参加这次活动！");
+				CommonDlgNew.ShowTipDlg("抱歉！您未參加這次活動！");
 				 LogInfo("qboy 无军团 或 军团未参加");
 			elseif nbattleid == -2 then	
 				 LogInfo("qboy 已淘汰");
-				 CommonDlgNew.ShowTipDlg("您的军团已战败！");
+				 CommonDlgNew.ShowTipDlg("您的軍團已淘汰！");
 			elseif g_EnterEndTime <= 0 then
-				CommonDlgNew.ShowTipDlg("本轮准备时间已过，无法参加战斗。");
+				CommonDlgNew.ShowTipDlg("本輪準備時間已過，無法參加戰鬥。");
 			else
 				--轮空了
 				if tBattleIdToBattleType[nbattleid] ~= g_BattleType then
-					CommonDlgNew.ShowTipDlg("您的军团当前轮空。");
+					CommonDlgNew.ShowTipDlg("您的軍團當前輪空。");
 					return true;
 				end
 			

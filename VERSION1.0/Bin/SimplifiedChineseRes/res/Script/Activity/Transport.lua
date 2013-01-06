@@ -209,7 +209,7 @@ function p.initTransLayerInfo()
     p.randomYpos = {};
     local count = 120/10;
     for i = 1, count do
-        p.randomYpos[i] = ((i - 1)*8)*ScaleFactor;
+        p.randomYpos[i] = ((i - 1)*8)*CoordScaleY;
         LogInfo("i = %d, p.randomYpos = %d", i, p.randomYpos[i]);
     end
     
@@ -316,11 +316,11 @@ function p.RefreshTransLayerUI()
                         m.nLooterId2 = v.nLooterId2;    
                         local  nTimeLast = nTotalTime - v.nCarArriveCdTime;
                         local nTotalLenth = p.tbTransLayer.layerWidth;
-                        local nHasWalk = math.floor((nTimeLast*(nTotalLenth - 30*ScaleFactor))/nTotalTime);
+                        local nHasWalk = math.floor((nTimeLast*(nTotalLenth - 30*CoordScaleX))/nTotalTime);
                         
                         LogInfo("i = %d, nTotalTime = %d, nTimeLast = %d  nTotalLenth = %d, nHasWalk = %d, m.startY = %d, btnW = %d, btnH = %d", i, nTotalTime, nTimeLast, nTotalLenth, nHasWalk, m.startY, p.tbTransLayer.btnW, p.tbTransLayer.btnH);
                         
-                        m.btn:SetFrameRect(CGRectMake(nHasWalk, m.startY, p.tbTransLayer.btnW, p.tbTransLayer.btnH));
+                        m.btn:SetFrameRect(CGRectMake(nHasWalk, m.startY, p.tbTransLayer.btnW*CoordScaleY_960, p.tbTransLayer.btnH*CoordScaleY_960));
                         m.btn:SetVisible(true);
                     end
                     bHasBtnStorPlayer = true;
@@ -346,14 +346,14 @@ function p.RefreshTransLayerUI()
                         m.nLooterId2 = v.nLooterId2;    
                         local  nTimeLast = nTotalTime - v.nCarArriveCdTime;
                         local nTotalLenth = p.tbTransLayer.layerWidth;
-                        local nHasWalk = math.floor((nTimeLast*(nTotalLenth - 30*ScaleFactor))/nTotalTime);
+                        local nHasWalk = math.floor((nTimeLast*(nTotalLenth - 30*CoordScaleX))/nTotalTime);
                         --nHasWalk = (i - 1)/10*nTotalLenth - 80;
                         LogInfo("i = %d, nTotalTime = %d, nTimeLast = %d  nTotalLenth = %d, nHasWalk = %d, m.startY = %d, btnW = %d, btnH = %d", i, nTotalTime, nTimeLast, nTotalLenth, nHasWalk, m.startY, p.tbTransLayer.btnW, p.tbTransLayer.btnH);
                         
                         LogInfo("refresh nHasWalk = %d, nTimeLast = %d, nTotalLenth = %d, nTotalTime = %d", nHasWalk,    
                                         nTimeLast, nTotalLenth, nTotalTime);
                         
-                        m.btn:SetFrameRect(CGRectMake(nHasWalk, m.startY, p.tbTransLayer.btnW, p.tbTransLayer.btnH));
+                        m.btn:SetFrameRect(CGRectMake(nHasWalk, m.startY, p.tbTransLayer.btnW*CoordScaleY_960, p.tbTransLayer.btnH*CoordScaleY_960));
                         --m.btn:SetFrameRect(CGRectMake(nHasWalk, 240, p.tbTransLayer.btnW, p.tbTransLayer.btnH));
                         local pic = nil;
                         if v.nPlayerId ~= GetPlayerId() then
@@ -408,7 +408,7 @@ function GetTransCarPic(type)
         nCutY = nHeight;
     end
     
-    LogInfo("type = %d, nCutX = %d, nCutY = %d, nWidth = %d, nHeight = %d", type, nCutX, nCutY, nWidth, nHeight);
+    LogInfo("tzqtzq type = %d, nCutX = %d, nCutY = %d, nWidth = %d, nHeight = %d", type, nCutX, nCutY, nWidth, nHeight);
     Pic:Cut( _G.CGRectMake( nCutX, nCutY, nWidth, nHeight) );
     
     return Pic;
@@ -627,10 +627,10 @@ function p.OnTimer(tag)
                 
                 local  nTimeLast = v.nTotalTime - v.nCdTime;
                 local nTotalLenth = p.tbTransLayer.layerWidth;
-                local nHasWalk = math.floor((nTimeLast*(nTotalLenth - 30*ScaleFactor))/v.nTotalTime);
+                local nHasWalk = math.floor((nTimeLast*(nTotalLenth - 30*CoordScaleX))/v.nTotalTime);
                 LogInfo("timer nHasWalk = %d, nTimeLast = %d, nTotalLenth = %d, nTotalTime = %d", nHasWalk,    
                                         nTimeLast, nTotalLenth, v.nTotalTime);
-                v.btn:SetFrameRect(CGRectMake(nHasWalk, v.startY, p.tbTransLayer.btnW, p.tbTransLayer.btnH));
+                v.btn:SetFrameRect(CGRectMake(nHasWalk, v.startY, p.tbTransLayer.btnW*CoordScaleY_960, p.tbTransLayer.btnH*CoordScaleY_960));
             end
         end
         
