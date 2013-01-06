@@ -50,8 +50,8 @@
 
 //--------------------//
 
-#define UPDATE_ON		0	//0关闭下载，1开启下载
-#define CACHE_MODE 		0  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
+#define UPDATE_ON		1	//0关闭下载，1开启下载
+#define CACHE_MODE 		1  //发布模式//0关闭拷贝；1开启将资源拷贝至cache目录来访问
 //--------------------//
 
 #define TAG_INSTALL_SUCCESS			1
@@ -143,7 +143,7 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		pkScene->m_pkProgressTextLabel = new NDUILabel();
 		pkScene->m_pkProgressTextLabel->Initialization();
 		pkScene->m_pkProgressTextLabel->SetRenderTimes(1);
-		pkScene->m_pkProgressTextLabel->SetText(strText.c_str());
+	//	pkScene->m_pkProgressTextLabel->SetText(strText.c_str());
 		pkScene->m_pkProgressTextLabel->SetTag(0);
 		pkScene->m_pkProgressTextLabel->SetFontSize(15);
 		pkScene->m_pkProgressTextLabel->SetFontColor(kColor);
@@ -182,6 +182,8 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 				kPicSize.width, kPicSize.height));
 			pkUILoadingImage->SetPicture(pkLoadingPic,true);
 		}
+
+		pkLayer->AddChild(pkScene->m_pkProgressTextLabel,10,0);
 #else
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImg00Path("Res00/Load/bg_load.png") );
 #endif
@@ -191,7 +193,6 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		}
 
 		pkLayer->AddChild(pkBackgroundImage);
-		pkLayer->AddChild(pkScene->m_pkProgressTextLabel,10,0);
 		
 		if (pkUILoadingImage)
 		{
@@ -743,6 +744,7 @@ bool CSMLoginScene::CreateUpdateUILayer()
 	m_pCtrlProgress->SetTotal(100);
 	m_pCtrlProgress->SetStyle(1);
 	m_pCtrlProgress->SetVisible(false);
+	m_pCtrlProgress->SetTextFontColor( ccc4(255,255,255,255) );
 	
 	m_pLabelPromtp	= (NDUILabel*)pkLayer->GetChild( TAG_LABEL_PROMPT );
 	if ( !m_pLabelPromtp )
