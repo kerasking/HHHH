@@ -12,6 +12,12 @@
 	<string>tw.mobage.a23000052</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>zh_TW</string>
+		<string>zh_CN</string>
+		<string>en</string>
+	</array>
 	<key>CFBundleName</key>
 	<string>${PRODUCT_NAME}</string>
 	<key>CFBundlePackageType</key>
@@ -26,7 +32,7 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>LiSu.ttf</string>
+		<string>SimplifiedChineseRes/res/fonts/LiSu.ttf</string>
 	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>

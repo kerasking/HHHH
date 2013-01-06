@@ -34,6 +34,10 @@ THE SOFTWARE.
 #include <string.h>
 #include <jni.h>
 
+#define  LOG_TAG    "DaHuaLongJiang"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGERROR(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+
 #if ND_MOD
 #include "ccMacros.h"
 #include "CCDirector.h"
@@ -43,6 +47,8 @@ NS_CC_BEGIN
 
 //--------------------------------------------------------------------------------------------------<<
 #if ND_MOD
+
+static bool gs_bIsSystemFont = false;
 
 struct FONT_UTIL
 {
@@ -87,8 +93,9 @@ struct FONT_UTIL
 	{	
 		static const char arialFontName[] = "Arial-BoldMT";
 
-		if (isVerOlder())
+		if (isVerOlder() || gs_bIsSystemFont)
 		{
+			//LOGD("gs_bIsSystemFont is %s",gs_bIsSystemFont ? "true" : "false");
 			string text = JniHelper::jstring2string( jstrText );
 
 			if (isPureAscii(text))
@@ -246,6 +253,12 @@ bool CCImage::getStringSize( const char *    in_utf8,
         t.env->DeleteLocalRef(stringArg2);
         t.env->DeleteLocalRef(t.classID);
     }
+}
+
+void CCImage::changeSystemFont( bool bSystemFont )
+{
+	LOGD("Set bSystemFont");
+	gs_bIsSystemFont = bSystemFont;
 }
 
 #endif

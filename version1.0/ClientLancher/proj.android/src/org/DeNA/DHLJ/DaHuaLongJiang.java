@@ -28,12 +28,14 @@ import org.DeNA.DHLJ.SocialUtils;
 import android.R;
 //import android.app.ActionBar.LayoutParams;
 import android.app.AlertDialog;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Environment;
@@ -77,6 +79,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	private static float s_fScale;
 	private View rootView = null;
 	private static boolean m_bIsStartingVideo = false;
+	private static Context s_context;
 
 	private static Handler VideoViewHandler = new Handler();
 	private static Handler RootViewHandler = new Handler();
@@ -162,6 +165,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 
 			Context context = getApplication().getApplicationContext();
 			CookieSyncManager.createInstance(this);
+			s_context = context;
 
 			Mobage.registerMobageResource(this, "org.DeNA.DHLJ.R");
 			SocialUtils.initializeMobage(this);
@@ -427,9 +431,6 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 			return 0;
 		}
 
-		ViewGroup.LayoutParams pkLayoutParams = new ViewGroup.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-
 		pauseAllBackgroundMusic();
 		// ms_pkDHLJ.setContentView(m_pkView,pkLayoutParams);
 		m_bIsStartingVideo = true;
@@ -504,6 +505,13 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 // 		Log.d( "getAndroidVer" , "@@ ver incremental: " + android.os.Build.VERSION.INCREMENTAL );
 // 		Log.d( "getAndroidVer" , "@@ ver SDK: " + android.os.Build.VERSION.SDK );
 //		isVerOlder(0);
+	}
+
+	public static int isWifiConnected() {
+		WifiManager wifiManger=(WifiManager)s_context.getSystemService(Service.WIFI_SERVICE);
+		if(WifiManager.WIFI_STATE_ENABLED == wifiManger.getWifiState())
+			return 1;
+		return 0;
 	}
 
 	//是否古老系统

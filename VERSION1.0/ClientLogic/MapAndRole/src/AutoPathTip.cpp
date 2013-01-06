@@ -29,8 +29,6 @@ void AutoPathTip::work(std::string des)
 	
 	if (m_bWork) 
 	{
-		
-		//kStringStream << NDCommonCString("AutoPathTipGo") << "[";
 	}
 	else
 	{

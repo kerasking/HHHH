@@ -75,33 +75,39 @@ public class Cocos2dxTextInputWraper implements TextWatcher, OnEditorActionListe
 
 	@Override
 	public void afterTextChanged(final Editable s) {
-		if (this.isFullScreenEdit()) {
-			return;
-		}
+// 		if (this.isFullScreenEdit()) {
+// 			return;
+// 		}
 
 		//if (BuildConfig.DEBUG) {
 			//Log.d(TAG, "afterTextChanged: " + s);
 		//}
-		int nModified = s.length() - this.mText.length();
-		if (nModified > 0) {
-			final String insertText = s.subSequence(this.mText.length(), s.length()).toString();
-			this.mCocos2dxGLSurfaceView.insertText(insertText);
-			/*
-			if (BuildConfig.DEBUG) {
-				Log.d(TAG, "insertText(" + insertText + ")");
-			}
-			*/
-		} else {
-			for (; nModified < 0; ++nModified) {
-				this.mCocos2dxGLSurfaceView.deleteBackward();
-				/*
-				if (BuildConfig.DEBUG) {
-					Log.d(TAG, "deleteBackward");
-				}
-				*/
-			}
-		}
+		//Log.d(TAG, "afterTextChanged1 s.length()=" + s.length());
+//		int nModified = s.length() - this.mText.length();
+//		if (nModified > 0) {
+//			//final String insertText = s.subSequence(this.mText.length(), s.length()).toString();
+//			//Log.d(TAG, "afterTextChanged2");
+//			/*
+//			if (BuildConfig.DEBUG) {
+//				Log.d(TAG, "insertText(" + insertText + ")");
+//			}
+//			*/
+//		} else {
+////			for (; nModified < 0; ++nModified) {
+////				this.mCocos2dxGLSurfaceView.deleteBackward();
+////				/*
+////				if (BuildConfig.DEBUG) {
+////					Log.d(TAG, "deleteBackward");
+////				}
+////				*/
+////			}
+//		}
+		
+		String insertText = s.toString();
+		this.mCocos2dxGLSurfaceView.insertText(insertText);
+		
 		this.mText = s.toString();
+		//Log.d(TAG, "afterTextChanged6 cur text=" + this.mText);
 	}
 
 	@Override
@@ -131,19 +137,19 @@ public class Cocos2dxTextInputWraper implements TextWatcher, OnEditorActionListe
 				}
 				*/
 			}
-			String text = pTextView.getText().toString();
-
-			/* If user input nothing, translate "\n" to engine. */
-			if (text.compareTo("") == 0) {
-				text = "\n";
-			}
-
-			if ('\n' != text.charAt(text.length() - 1)) {
-				text += '\n';
-			}
-
-			final String insertText = text;
-			this.mCocos2dxGLSurfaceView.insertText(insertText);
+//			String text = pTextView.getText().toString();
+//
+//			/* If user input nothing, translate "\n" to engine. */
+//			if (text.compareTo("") == 0) {
+//				text = "\n";
+//			}
+//
+//			if ('\n' != text.charAt(text.length() - 1)) {
+//				text += '\n';
+//			}
+//
+//			final String insertText = text;
+//			this.mCocos2dxGLSurfaceView.insertText(insertText);
 			this.mCocos2dxGLSurfaceView.onAction( pActionID ); //ND_MOD
 			
 			/*
@@ -154,7 +160,7 @@ public class Cocos2dxTextInputWraper implements TextWatcher, OnEditorActionListe
 		}
 		return false;
 	}
-
+	
 	// ===========================================================
 	// Methods
 	// ===========================================================

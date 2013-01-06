@@ -11,7 +11,6 @@
 #include "KDirectory.h"
 #include "KHttp.h"
 
-#include "Reachability.h"
 #include "pthread.h"
 
 #ifdef ANDROID

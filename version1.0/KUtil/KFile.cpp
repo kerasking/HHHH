@@ -454,5 +454,3 @@ KFile::getCreateTimeStr( const KData& path )
 {
 	return "";
 }
-
-
