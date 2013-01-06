@@ -749,13 +749,12 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 	
 	int bLatest				= kData.ReadByte();
 	int bForceUpdate		= kData.ReadByte();
-	kData.ReadInt();
-	int nFromVersion		= 6999;//kData.ReadInt();
-	int nToVersion			= 7000;//kData.ReadInt();
+	int nFromVersion		= kData.ReadInt();
+	int nToVersion			= kData.ReadInt();
 
 	LOGD("Client Version:FromVersion is %d,ToVersion is %d",nFromVersion,nToVersion);
 
-	std::string strUpdatePath = "http://222.77.177.219/twt/android/6999_7000_in_dhljupdate.zip";//kData.ReadUnicodeString();
+	std::string strUpdatePath = kData.ReadUnicodeString();//"http://222.77.177.219/twt/android/6999_7000_in_dhljupdate.zip"
 	
 	if ( bForceUpdate )
 	{
@@ -812,9 +811,9 @@ void CSMLoginScene::OnMsg_ClientVersion(NDTransData& kData)
 
 	if (bUpdate)
 	{
-		LOGD("Pass bUpdate,value is",bUpdate ? "true" : "false");
+		LOGD("Pass bUpdate,value is %s",bUpdate ? "true" : "false");
 
-		if (!bLatest)
+		if (bLatest)
 		{
 			CloseWaitingAni();
 			//if ( !NDBeforeGameMgrObj.isWifiNetWork() )//¹Ø±Õµô¿ÓµùµÄWIFI¼à²â
