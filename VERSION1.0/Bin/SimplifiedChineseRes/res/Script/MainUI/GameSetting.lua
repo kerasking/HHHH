@@ -27,7 +27,8 @@ local szGameSettingCreate			= "CREATE TABLE GameSetting ( SettingID INTEGER, BGM
 local szGameSettingUpdate			= "UPDATE GameSetting SET SettingID=1, BGMusic=%d, SoundEffect=%d, ViewOtherPlayer=%d WHERE SettingID=1";
 local szGameSettingInsert			= "INSERT INTO GameSetting VALUES(1, %d, %d, %d)";
 local szGameSettingSelect			= "Select * From GameSetting";
-local szGameForumURL				= "http://bbs.18183.com/forum-54-1.html"--"http://mobage.com.cn/";--论坛地址，先测试
+local szGameForumURL				= "http://www.facebook.com/loctw"  --"http://bbs.18183.com/forum-54-1.html"--"http://mobage.com.cn/";--论坛地址，先测试
+
 
 ---------------------------------------------------
 local DEFAULT_BGMUSIC				= 1;	-- 缺省设置播放背景音乐
