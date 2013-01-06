@@ -143,9 +143,10 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 		pkScene->m_pkProgressTextLabel->SetRenderTimes(1);
 		pkScene->m_pkProgressTextLabel->SetText(strText.c_str());
 		pkScene->m_pkProgressTextLabel->SetTag(0);
-		pkScene->m_pkProgressTextLabel->SetFontSize(10);
+		pkScene->m_pkProgressTextLabel->SetFontSize(15);
 		pkScene->m_pkProgressTextLabel->SetFontColor(kColor);
-		pkScene->m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2 - 100, kWinSize.height - 40, kTextSize.width, kTextSize.height));
+		pkScene->m_pkProgressTextLabel->SetFrameRect(CCRectMake(kWinSize.width / 2 - 150,
+			kWinSize.height - 50, kTextSize.width, kTextSize.height));
 
 		pkBackgroundImage->Initialization();
 		pkBackgroundImage->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
@@ -154,21 +155,32 @@ CSMLoginScene* CSMLoginScene::Scene( bool bShowEntry /*= false*/  )
 
 #ifdef USE_MGSDK
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImgPath("Res00/Load/mobage_bg.png") );
-#else
-#if CACHE_MODE
+#elif ((CACHE_MODE == 1) && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
 		NDPicture* pkPicture = kPool.AddPicture("res/drawable/mobage_splash.png");
+
+		if (pkPicture)
+		{
+			CCSize kPictureSize = pkPicture->GetSize();
+			CCDirector::sharedDirector()->setGLDefaultValues(1.0f,1.0f,1.0f);
+			pkBackgroundImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0 - kPictureSize.width / 4,
+				kWinSize.height / 2.0f - kPictureSize.height / 4,
+				kPictureSize.width / 2, kPictureSize.height / 2));
+		}
+
 		pkLoadingPic = kPool.AddPicture("res/drawable/mbga_mobage_loading.png");
-		pkUILoadingImage = new NDUIImage;
-		pkUILoadingImage->Initialization();
-		pkUILoadingImage->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
 
 		if (pkLoadingPic)
 		{
+			CCSize kPicSize = pkLoadingPic->GetSize();
+
+			pkUILoadingImage = new NDUIImage;
+			pkUILoadingImage->Initialization();
+			pkUILoadingImage->SetFrameRect(CCRectMake(kWinSize.width / 2.0f, kWinSize.height / 2.0f,
+				kPicSize.width, kPicSize.height));
 			pkUILoadingImage->SetPicture(pkLoadingPic,true);
 		}
 #else
 		NDPicture* pkPicture = kPool.AddPicture( NDPath::GetImg00Path("Res00/Load/bg_load.png") );
-#endif
 #endif
 		if (pkPicture) 
 		{
@@ -335,6 +347,7 @@ void CSMLoginScene::OnTimer( OBJID idTag )
             case 100:
 				{
 					LOGD("Copy files succeeded!");
+					CCDirector::sharedDirector()->setGLDefaultValues();
 					m_pTimer->KillTimer( this, TAG_TIMER_CHECK_COPY );
 					m_pkProgressTextLabel->SetVisible(false);
 					NDBeforeGameMgrObj.doNDSdkLogin();
@@ -839,17 +852,17 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
 
 	m_iAccountID = iAccountID;
 #ifdef USE_MGSDK
-    if(m_pLayerUpdate)
-    {
-        NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
-        if ( pImage )
-        {
-            NDPicture * pPicture = new NDPicture;
-            std::string str = SZ_UPDATE_BG_PNG_PATH;
-            pPicture->Initialization( NDPath::GetUIImgPath( str.c_str() ).c_str() );
-            pImage->SetPicture( pPicture, true );
-        }
-    }
+	if(m_pLayerUpdate)
+	{
+		NDUIImage * pImage = (NDUIImage *)m_pLayerUpdate->GetChild( TAG_CTRL_PIC_BG);
+		if ( pImage )
+		{
+			NDPicture * pPicture = new NDPicture;
+			std::string str = SZ_UPDATE_BG_PNG_PATH;
+			pPicture->Initialization( NDPath::GetUIImgPath( str.c_str() ).c_str() );
+			pImage->SetPicture( pPicture, true );
+		}
+}
 #endif
 	
 #if (UPDATE_ON == 0 && CACHE_MODE == 0)
@@ -875,14 +888,14 @@ void CSMLoginScene::OnEvent_LoginOKGuest2Normal( int iAccountID )
 //---------------------------------------------------------------------------
 void CSMLoginScene::OnEvent_LoginError( int iError )
 {
-    std::stringstream  tmpSS;
-    tmpSS << "Error:" << iError;
+	std::stringstream  tmpSS;
+	tmpSS << "Error:" << iError;
 	if ( m_pLabelPromtp )
-    {
+	{
 		m_pLabelPromtp->SetVisible( true );
 		m_pLabelPromtp->SetText( tmpSS.str().c_str() );
 		m_pLabelPromtp->SetVisible( true );
-    }
+	}
 }
 
 //===========================================================================
@@ -988,7 +1001,7 @@ void CSMLoginScene::OnDialogButtonClick(NDUIDialog* dialog, unsigned int buttonI
 {
 	if (dialog->GetTag() == TAG_DLG_CONFIRM)
 	{
-    	NDBeforeGameMgrObj.doNDSdkLogin();
+		NDBeforeGameMgrObj.doNDSdkLogin();
 	}
 }
 
@@ -1011,29 +1024,27 @@ bool CSMLoginScene::OnTargetBtnEvent( NDUINode * uiNode, int targetEvent )
 	return true;
 }
 
-
-
 //===========================================================================
 bool CSMLoginScene::CreatConfirmDlg( const char * szTip )
 {
-	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();
+	CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();
 	
-	NDUILayer *	pLayer	= new NDUILayer();
+	NDUILayer* pkLayer = new NDUILayer();
 
-	if (!pLayer)
+	if (!pkLayer)
 	{
 		return false;
 	}
 
-	pLayer->Initialization();
-	pLayer->SetFrameRect( CCRectMake(0, 0, winSize.width, winSize.height) );
-	pLayer->SetTag( TAG_DLG_CONFIRM );
-	AddChild(pLayer);	
+	pkLayer->Initialization();
+	pkLayer->SetFrameRect( CCRectMake(0, 0, kWinSize.width, kWinSize.height) );
+	pkLayer->SetTag( TAG_DLG_CONFIRM );
+	AddChild(pkLayer);	
 	
-	NDUILoad tmpUILoad2;
-	tmpUILoad2.Load( "ShowYesOrNoDlg.ini", pLayer, this, CCSizeMake(0, 0) );
+	NDUILoad kTempUILoad2;
+	kTempUILoad2.Load( "ShowYesOrNoDlg.ini", pkLayer, this, CCSizeMake(0, 0) );
 	
-	NDUILabel * pLabelTip	= (NDUILabel*)pLayer->GetChild( TAG_LABEL_TIP );
+	NDUILabel * pLabelTip	= (NDUILabel*)pkLayer->GetChild( TAG_LABEL_TIP );
 	if ( pLabelTip && szTip )
 	{
 		pLabelTip->SetText( szTip );
@@ -1066,18 +1077,19 @@ void CSMLoginScene::UnzipStatus(bool bResult)
 //显示等待的转圈圈动画
 void CSMLoginScene::ShowWaitingAni()
 {
-	CUISpriteNode * pNode = (CUISpriteNode *)GetChild(TAG_SPRITE_NODE);
-	if ( pNode )
+	CUISpriteNode* pkCheckNode = (CUISpriteNode *)GetChild(TAG_SPRITE_NODE);
+
+	if ( pkCheckNode )
 	{
 		return;
 	}
-	CCSize winSize = CCDirector::sharedDirector()->getWinSizeInPixels();	
-	CUISpriteNode *node = new CUISpriteNode;
-	node->Initialization();
-	node->ChangeSprite(NDPath::GetAniPath("busy.spr").c_str());
-	node->SetTag( TAG_SPRITE_NODE );
-	node->SetFrameRect(CCRectMake(0, 0, winSize.width, winSize.height));
-	AddChild(node);
+	CCSize kWinSize = CCDirector::sharedDirector()->getWinSizeInPixels();	
+	CUISpriteNode* pkUIScriptNode = new CUISpriteNode;
+	pkUIScriptNode->Initialization();
+	pkUIScriptNode->ChangeSprite(NDPath::GetAniPath("busy.spr").c_str());
+	pkUIScriptNode->SetTag( TAG_SPRITE_NODE );
+	pkUIScriptNode->SetFrameRect(CCRectMake(0, 0, kWinSize.width, kWinSize.height));
+	AddChild(pkUIScriptNode);
 }
 void CSMLoginScene::CloseWaitingAni()
 {

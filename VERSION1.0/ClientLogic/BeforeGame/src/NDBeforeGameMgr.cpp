@@ -2134,7 +2134,6 @@ void* CopyResThread(void* ptr)
 		float fMax = nMaxIndex;
 
 		NDBeforeGameMgr::ms_nCopyStatus = (int)(fCur / fMax * 100.0f);
-	//	LOGD("Unzipping the file:%s",strFilename.c_str());
 		UnzipItem(pZipHandle,i,strFilename.c_str());
 	}
 
