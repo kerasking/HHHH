@@ -115,6 +115,7 @@ void CUIEdit::OnTextChanged()
 	}
 
 	m_lbText->SetText( labelText.c_str() );
+	OnScriptUiEvent(this, TE_TOUCH_EDIT_INPUT_FINISH);
 }
 
 //设置字体大小
@@ -136,8 +137,49 @@ void CUIEdit::SetTextSize(unsigned int nSize)
 //设置文本
 void CUIEdit::SetText(const char* pszText)
 {
-	m_strText	= pszText ? pszText : "";
-	
+// 	CCLog( "@@ CUIEdit::SetText() text=%s\r\n", pszText);
+// 
+// 	std::string	tmpStr = pszText ? pszText : "";//这个是=
+// 
+// 	for (int i = 0; i < 2; i++)
+// 	{
+// 		int len = tmpStr.length();
+// 		if (len > 0)
+// 		{
+// 			const char c = tmpStr[len - 1];
+// 			if (c == '\r' || c == '\n')
+// 			{
+// 				tmpStr.erase( tmpStr.end() - 1 );
+// 			}
+// 		}
+// 	}
+// 
+// 	int inputCount = 0;
+// 	const char *tmpPointer = tmpStr.c_str();
+// 	while (*tmpPointer != '\0')
+// 	{
+// 		if ((unsigned char) *tmpPointer < 0x80)
+// 		{
+// 			tmpPointer++;
+// 			inputCount++;
+// 		}
+// 		else
+// 		{
+// 			tmpPointer += 3;
+// 			inputCount++;
+// 		}
+// 	}
+// 
+// 	CCLog( "@@ CUIEdit::SetText() inputCount=%d \r\n", inputCount);
+// 	CCLog( "@@ CUIEdit::SetText() m_nMaxLen=%d \r\n", m_nMaxLen);
+// 
+// 	if(inputCount > m_nMaxLen)
+// 		return;
+// 
+// 	m_strText = tmpStr;
+
+	m_strText = pszText ? pszText : "";
+
 #if WITH_OLD_IME
 	if (m_pPlatformInput)
 	{
@@ -543,8 +585,6 @@ bool CUIEdit::detachWithIME()
 		if (pGlView)
 		{
 			CCLog( "@@ CUIEdit::detachWithIME(), call pGlView->setIMEKeyboardState(false)\r\n" );
-
-			OnScriptUiEvent(this, TE_TOUCH_EDIT_INPUT_FINISH);
 			pGlView->setIMEKeyboardState(false);
 		}
 	}
@@ -565,13 +605,15 @@ bool CUIEdit::canDetachWithIME()
 
 void CUIEdit::insertText(const char * text, int len)
 {
-	CCLog( "@@ CUIEdit::insertText() text=%s\r\n", text);
-	CCLog( "@@ CUIEdit::insertText() length=%d \r\n", len);
+	//CCLog( "@@ CUIEdit::insertText() text=%s\r\n", text);
+	//CCLog( "@@ CUIEdit::insertText() length=%d \r\n", len);
+
+	bool enterDown = false;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	m_strText += text ? text : "";
 #else
-	std::string	tmpStr = text ? text : ""; //这个是=
+	std::string	tmpStr = text ? text : "";//这个是=
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -582,6 +624,7 @@ void CUIEdit::insertText(const char * text, int len)
 			if (c == '\r' || c == '\n')
 			{
 				tmpStr.erase( tmpStr.end() - 1 );
+				enterDown = true;
 			}
 		}
 	}
@@ -601,8 +644,8 @@ void CUIEdit::insertText(const char * text, int len)
 			inputCount++;
 		}
 	}
-	CCLog( "@@ CUIEdit::insertText() inputCount=%d \r\n", inputCount);
-	CCLog( "@@ CUIEdit::insertText() m_nMaxLen=%d \r\n", m_nMaxLen);
+	//CCLog( "@@ CUIEdit::insertText() inputCount=%d \r\n", inputCount);
+	//CCLog( "@@ CUIEdit::insertText() m_nMaxLen=%d \r\n", m_nMaxLen);
 
 	if(inputCount > m_nMaxLen)
 		return;
@@ -612,6 +655,11 @@ void CUIEdit::insertText(const char * text, int len)
 #endif
 
 	this->OnTextChanged();
+
+	if(enterDown)
+	{
+		detachWithIME();
+	}
 
 #if 0
 	std::string sInsert(text, len);
@@ -707,7 +755,6 @@ void CUIEdit::onAction( int action )
 	if (action == 0)
 	{
 		//action=enter
-		this->detachWithIME();
 	}
 	else if (action == 6)
 	{
