@@ -194,10 +194,58 @@ void* getFuncPtr(const char *value)
 	return funcPtr;
 }
 
+//ND_MOD
+int getFileDescriptor_LJ(const char * filename, off_t & start, off_t & length)
+{
+	if (!filename || !filename[0]) return -1;
+	LOGD( "@@ getFileDescriptor_LJ(%s)\r\n", filename);//ND_MOD
+
+	start = 0, length = 0;
+
+	// replace ".aac" to ".ogg"
+	char fname[200] = "";
+	strcpy( fname, filename );
+	char* p = strstr( fname, ".aac" );
+	if (p)
+	{
+		strcpy( p, "_new.ogg" );
+		filename = fname;
+	}
+	//
+
+	JniMethodInfo t;
+	if (getStaticMethodInfo(t, "getFileDescriptor", "(Ljava/lang/String;)Ljava/lang/String;"))
+	{
+		//LOGD("@@ getFileDescriptor_LJ() get method ok\r\n");
+		
+		// call java methold
+		jstring stringArg1;
+		stringArg1 = t.env->NewStringUTF(filename);
+		jstring retFromJava = (jstring) t.env->CallStaticObjectMethod(t.classID, t.methodID, stringArg1);
+		const char* str = t.env->GetStringUTFChars(retFromJava, 0);
+
+		// parse
+		int fd = 0;
+		bool ok = (2 == sscanf( str, "%d,%d", &fd, &length));
+
+		// release
+		t.env->ReleaseStringUTFChars(retFromJava, str);
+		t.env->DeleteLocalRef(stringArg1);
+		t.env->DeleteLocalRef(t.classID);
+
+		if (ok)
+		{
+			LOGD("@@ getFileDescriptor_LJ(%s) ok: fd=%d, len=%d\r\n", filename, fd, length);
+			return fd;
+		}
+	}
+
+	LOGD("@@ getFileDescriptor_LJ(%s) failed\r\n", filename);
+	return -1;
+}
+
 int getFileDescriptor(const char * filename, off_t & start, off_t & length)
 {
-	LOGD("@@ getFileDescriptor(%s)\r\n", filename);//@mod
-
 	JniMethodInfo methodInfo;
 	if (! getStaticMethodInfo(methodInfo, ASSET_MANAGER_GETTER, "()Landroid/content/res/AssetManager;"))
 	{
@@ -285,7 +333,11 @@ bool initAudioPlayer(AudioPlayer* player, const char* filename)
 {
 	// configure audio source
 	off_t start, length;
-	int fd = getFileDescriptor(filename, start, length);
+
+	//ND_MOD
+	//int fd = getFileDescriptor(filename, start, length);
+	int fd = getFileDescriptor_LJ(filename, start, length);
+
 	if (FILE_NOT_FOUND == fd)
 	{
 		return false;

@@ -4,12 +4,6 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>zh_CN</string>
-	<key>CFBundleLocalizations</key>
-	<array>
-		<string>zh_TW</string>
-		<string>zh_CN</string>
-		<string>en</string>
-	</array>
 	<key>CFBundleDisplayName</key>
 	<string>大話龍將</string>
 	<key>CFBundleExecutable</key>
@@ -18,6 +12,12 @@
 	<string>tw.mobage.a23000052</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>zh_TW</string>
+		<string>zh_CN</string>
+		<string>en</string>
+	</array>
 	<key>CFBundleName</key>
 	<string>${PRODUCT_NAME}</string>
 	<key>CFBundlePackageType</key>
