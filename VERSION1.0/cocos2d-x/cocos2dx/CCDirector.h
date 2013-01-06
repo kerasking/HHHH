@@ -279,6 +279,7 @@ public:
     // OpenGL Helper
 
     /** sets the OpenGL default values */
+	void setGLDefaultValues(float fR,float fG,float fB,float fA = 1.0f);
     void setGLDefaultValues(void);
 
     /** enables/disables OpenGL alpha blending */
