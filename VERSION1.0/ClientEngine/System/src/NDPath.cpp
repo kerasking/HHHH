@@ -163,11 +163,11 @@ const string NDPath::GetResPath(const char* fileName)
 
 const string NDPath::GetImagePath()
 {
-    return GetResPath()+string("Image/");
+    return GetResPath()+string("image/");
 }
 const string NDPath::GetImage00Path()
 {
-	return GetResPath()+string("Image00/");
+	return GetResPath()+string("image00/");
 }
 
 const string NDPath::GetMapPath()

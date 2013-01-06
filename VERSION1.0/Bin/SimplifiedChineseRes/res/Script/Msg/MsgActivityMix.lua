@@ -73,23 +73,34 @@ function p.SendGetGift(id)
 end
 
 function p.ProcessGiftPackList(netdatas)
-    local m = {};
+    
 	local count = netdatas:ReadByte();
-	LogInfo("gift count:%d",count);
-	for i=1,count do
-        m[i] = {};
-		m[i].id=netdatas:ReadInt();
-		m[i].type=netdatas:ReadInt();
-		m[i].param0=netdatas:ReadInt();
-		m[i].param1=netdatas:ReadInt();
-		m[i].aux_param0=netdatas:ReadInt();
-		m[i].aux_param1=netdatas:ReadInt();
-		m[i].gift_desc=netdatas:ReadUnicodeString();
-		LogInfo("GIFT id=%d,type=%d,des=%s",m[i].id,m[i].type,m[i].gift_desc);
+	local btFlag = netdatas:ReadByte();
+	LogInfo("gift count:%d,btFlag:[%d]",count,btFlag);
+	
+	if btFlag == 0 or btFlag == 3 then
+		p.giftBackList = {};
 	end
-	p.giftBackList = m;
-    if (p.mUIListener) then
-		p.mUIListener( NMSG_Type._MSG_GIFTPACK_LIST, m);
+	
+	for i=1,count do
+		local m = {};
+        m = {};
+		m.id=netdatas:ReadInt();
+		m.type=netdatas:ReadInt();
+		m.param0=netdatas:ReadInt();
+		m.param1=netdatas:ReadInt();
+		m.aux_param0=netdatas:ReadInt();
+		m.aux_param1=netdatas:ReadInt();
+		m.gift_desc=netdatas:ReadUnicodeString();
+		
+		table.insert(p.giftBackList, m);
+		LogInfo("GIFT id=%d,type=%d,des=%s",m.id,m.type,m.gift_desc);
+	end
+	
+	if(btFlag==3 or btFlag==2) then
+		if (p.mUIListener) then
+			p.mUIListener( NMSG_Type._MSG_GIFTPACK_LIST, p.giftBackList);
+		end
 	end
     
     MainUI.RefreshFuncIsOpen();

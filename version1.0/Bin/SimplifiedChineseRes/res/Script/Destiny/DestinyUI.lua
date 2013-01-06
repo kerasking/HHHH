@@ -139,6 +139,7 @@ function p.AddItem(idItem)
                 local strName			= ItemFunc.GetName(nItemType);
                 local levelLV           = Item.GetItemInfoN(idItem, Item.ITEM_ADDITION);
                 itemlbl:SetText(string.format("%sL%d",strName,levelLV));
+
                 --设置物品颜色
                 ItemFunc.SetDaoFaLabelColor(itemlbl,nItemType);
                 
@@ -243,7 +244,9 @@ function p.AddEquip(idPet, idItem, nPostion)
     local nItemType			= Item.GetItemInfoN(idItem, Item.ITEM_TYPE);
     local strName			= ItemFunc.GetName(nItemType);
     local levelLV           = Item.GetItemInfoN(idItem, Item.ITEM_ADDITION);
+
     equiplbl:SetText(string.format("%sL%d",strName,levelLV));
+
     --设置物品颜色
     ItemFunc.SetDaoFaLabelColor(equiplbl,nItemType);
 end
@@ -1127,7 +1130,7 @@ function p.RefreshPetEquip(nPetId)
                 local nItemType			= Item.GetItemInfoN(v, Item.ITEM_TYPE);
                 local strName			= ItemFunc.GetName(nItemType);
                 local levelLV           = Item.GetItemInfoN(v, Item.ITEM_ADDITION);
-                equiplbl:SetText(string.format("%s.Lv%d",strName,levelLV));
+                equiplbl:SetText(string.format("%sL%d",strName,levelLV));
                 --设置物品颜色
                 ItemFunc.SetDaoFaLabelColor(equiplbl,nItemType);
             end
@@ -1378,7 +1381,7 @@ function p.FullBackBagUI()
                             local nItemType			= Item.GetItemInfoN(nItemId, Item.ITEM_TYPE);
                             local strName			= ItemFunc.GetName(nItemType);
                             local levelLV           = Item.GetItemInfoN(nItemId, Item.ITEM_ADDITION);
-                            itemlbl:SetText(string.format("%s.Lv%d",strName,levelLV));
+                            itemlbl:SetText(string.format("%sL%d",strName,levelLV));
                             --设置物品颜色
                             ItemFunc.SetDaoFaLabelColor(itemlbl,nItemType);
                         end

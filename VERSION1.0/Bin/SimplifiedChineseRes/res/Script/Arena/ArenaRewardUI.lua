@@ -105,7 +105,7 @@ end
 
 --local nTag
 
-function p.SetResult(result,money,repute)
+function p.SetResult(result,money,repute,soph,emoney)
 
     if( ArenaUI.isInChallenge == 3 ) then   --boss战 战斗结算
         local layer=p.GetParent();
@@ -118,9 +118,9 @@ function p.SetResult(result,money,repute)
             --str = string.format("你消灭了boss, 获得银币: %d, 获得将魂: %d", money, repute);
             
             if(repute>0) then
-                str = string.format(GetTxtPri("ARU2_T1"), money, ItemFunc.GetName(repute));
+                str = string.format(GetTxtPri("ARU2_T1"), money,soph, ItemFunc.GetName(repute));
             else
-                str = string.format(GetTxtPri("ARU2_T2"), money);
+                str = string.format(GetTxtPri("ARU2_T2"), money,soph);
             end
             
             Music.PlayEffectSound(1094);
@@ -128,9 +128,9 @@ function p.SetResult(result,money,repute)
             --str = string.format("战斗失败, 获得银币: %d, 获得将魂: %d", money, repute);
             
             if(repute>0) then
-                str = string.format(GetTxtPri("ARU2_T3"), money, ItemFunc.GetName(repute));
+                str = string.format(GetTxtPri("ARU2_T3"), money,soph, ItemFunc.GetName(repute));
             else
-                str = string.format(GetTxtPri("ARU2_T4"), money);
+                str = string.format(GetTxtPri("ARU2_T4"), money,soph);
             end
             
             

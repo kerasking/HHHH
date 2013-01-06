@@ -54,6 +54,7 @@ public:
 	bool excuteLuaFunc(const char* funcname, const char* modulename, const char* param1, const char* param2);
 	bool excuteLuaFunc(const char* funcname, const char* modulename, const char* param1, const char* param2, const char* param3);
     bool excuteLuaFunc(const char* funcname, const char* modulename, int param1, int param2, int param3,int param4);
+	bool excuteLuaFunc(const char* funcname, const char* modulename, int param1, int param2, int param3,int param4,int param5);
 	bool IsLuaFuncExist(const char* funcname, const char* modulename);
 	
 	int excuteLuaFuncRetN(const char* funcname, const char* modulename);

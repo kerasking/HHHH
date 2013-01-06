@@ -74,10 +74,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "more mk", "more mk", "{0A4E
 	ProjectSection(SolutionItems) = preProject
 		Android.mk = Android.mk
 		libiconv\proj.android\jni\Android.mk = libiconv\proj.android\jni\Android.mk
+		cocos2d-x\cocos2dx\Android.mk = cocos2d-x\cocos2dx\Android.mk
 		cocos2d-x\CocosDenshion\android\Android.mk = cocos2d-x\CocosDenshion\android\Android.mk
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libSQLite3", "SQLite3\proj.win32\libSQLite3.vcproj", "{0287C976-21E6-477F-960E-DD271E10F084}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Android_CocosDenshion", "cocos2d-x\CocosDenshion\android\vcproj\Android_CocosDenshion.vcproj", "{0DDBECDC-DA66-41C2-80AA-5E90439CA5B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,6 +152,10 @@ Global
 		{0287C976-21E6-477F-960E-DD271E10F084}.Debug|Win32.Build.0 = Debug|Win32
 		{0287C976-21E6-477F-960E-DD271E10F084}.Release|Win32.ActiveCfg = Release|Win32
 		{0287C976-21E6-477F-960E-DD271E10F084}.Release|Win32.Build.0 = Release|Win32
+		{0DDBECDC-DA66-41C2-80AA-5E90439CA5B4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0DDBECDC-DA66-41C2-80AA-5E90439CA5B4}.Debug|Win32.Build.0 = Debug|Win32
+		{0DDBECDC-DA66-41C2-80AA-5E90439CA5B4}.Release|Win32.ActiveCfg = Release|Win32
+		{0DDBECDC-DA66-41C2-80AA-5E90439CA5B4}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -159,5 +166,6 @@ Global
 		{27D5CCE5-E0F1-4175-A9B6-C78FD39A00D1} = {E5FCE131-AE84-46B3-805C-10DF78544913}
 		{1F474F7C-B0EC-4A87-B1C8-89FC649103B8} = {E5FCE131-AE84-46B3-805C-10DF78544913}
 		{0A4E712C-224D-4099-B940-36B43DE1112B} = {E5FCE131-AE84-46B3-805C-10DF78544913}
+		{0DDBECDC-DA66-41C2-80AA-5E90439CA5B4} = {E5FCE131-AE84-46B3-805C-10DF78544913}
 	EndGlobalSection
 EndGlobal

@@ -32,6 +32,7 @@
 #import "MBGPlatform.h"
 #import "MBGSocialService.h"
 #endif
+#include "NDBeforeGameMgr.h"
 
 @implementation AppController
 
@@ -42,6 +43,15 @@
 static AppDelegate s_sharedApplication;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
+    
+    //游戏启动把图标badge标志置空
+    [application setApplicationIconBadgeNumber:nil];
+    //定义接收push类型
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+     (UIRemoteNotificationType)(UIRemoteNotificationTypeBadge |UIRemoteNotificationTypeSound |UIRemoteNotificationTypeAlert)];
+    //注销所有的本地通知
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    application.applicationIconBadgeNumber = 0;
     
     // Override point for customization after application launch.
 
@@ -88,6 +98,22 @@ static AppDelegate s_sharedApplication;
     return YES;
 }
 
+//iphone从apns服务器获取devicetoken后激活该方法
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+    //NSLog(@"My token is: %@", deviceToken);
+    NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]]; //去掉"<>"
+    token = [[token description] stringByReplacingOccurrencesOfString:@" " withString:@""];//去掉中间空格
+    //const char *szTokenDevice = (char*) [token UTF8String];
+    //ScriptMgrObj.excuteLuaFunc( "setMobileKey", "MsgLoginSuc" ,szTokenDevice);//++Guosen 2012.8.15 登录成功后发送消息放在
+    NDBeforeGameMgrObj.SetDeviceToken( [token UTF8String] );
+    NSLog(@"deviceToken: %@", token);
+}
+//注册push失败后返回错误信息，执行相应处理
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+{
+    NSLog(@"Failed to get token, error: %@", error);
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     /*

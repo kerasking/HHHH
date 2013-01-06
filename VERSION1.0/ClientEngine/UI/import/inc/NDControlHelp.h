@@ -152,7 +152,7 @@ protected:
 		 */
 		
 		LabelTextAlignment align = LabelTextAlignmentLeft;
-		
+		CCLog("test %s", m_info.strTextAlign.c_str());
 		if (stricmp( m_info.strTextAlign.c_str(), GetTxtPri("LeftAlign").c_str()) == 0) //×ó¶ÔÆë
 			align = LabelTextAlignmentLeft;
 

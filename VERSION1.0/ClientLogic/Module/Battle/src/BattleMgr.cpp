@@ -1313,7 +1313,7 @@ void BattleMgr::ShowBattleWinResult(int nBattleType)
 
         ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
         ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", 
-			BATTLE_COMPLETE_WIN, m_pkBattleReward->m_nMoney, m_pkBattleReward->m_nRepute);
+			BATTLE_COMPLETE_WIN, m_pkBattleReward->m_nMoney, m_pkBattleReward->m_nRepute,m_pkBattleReward->m_nSoph,m_pkBattleReward->m_nEMoney);
         
 		//结果页面显示之后释放奖励物品
         if (m_pkBattleReward != NULL)
@@ -1345,7 +1345,7 @@ void BattleMgr::ShowBattleLoseResult(int nBattleType)
     {
         ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
         ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", 
-			BATTLE_COMPLETE_LOSE, m_pkBattleReward->m_nMoney, m_pkBattleReward->m_nRepute);
+			BATTLE_COMPLETE_LOSE, m_pkBattleReward->m_nMoney, m_pkBattleReward->m_nRepute,m_pkBattleReward->m_nSoph,m_pkBattleReward->m_nEMoney);
     }
     
     //结果页面显示之后释放奖励物品
@@ -1369,7 +1369,7 @@ void BattleMgr::ShowReplayWinResult(int nBattleType)
         ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
         NDLog(@"money:%d--repute:%d",prebattleReward->money,prebattleReward->repute);
         ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", 
-			BATTLE_COMPLETE_WIN, m_pkPrebattleReward->m_nMoney, m_pkPrebattleReward->m_nRepute);
+			BATTLE_COMPLETE_WIN, m_pkPrebattleReward->m_nMoney, m_pkPrebattleReward->m_nRepute,m_pkPrebattleReward->m_nSoph,m_pkPrebattleReward->m_nEMoney);
     }
     
     //副本战斗成功回放 显示  DynMapSuccess.ini
@@ -1424,7 +1424,7 @@ void BattleMgr::ShowReplayLoseResult(int nBattleType)
     {
         ScriptMgrObj.excuteLuaFunc("LoadUI", "ArenaRewardUI",0);
         ScriptMgrObj.excuteLuaFunc("SetResult","ArenaRewardUI", 
-			BATTLE_COMPLETE_LOSE, m_pkPrebattleReward->m_nMoney, m_pkPrebattleReward->m_nRepute);
+			BATTLE_COMPLETE_LOSE, m_pkPrebattleReward->m_nMoney, m_pkPrebattleReward->m_nRepute,m_pkPrebattleReward->m_nSoph,m_pkPrebattleReward->m_nEMoney);
     }
     //副本战斗失败回放 显示  BattleFailUI.ini
     else if (BATTLE_TYPE_MONSTER_PLAYBACK == nBattleType)
