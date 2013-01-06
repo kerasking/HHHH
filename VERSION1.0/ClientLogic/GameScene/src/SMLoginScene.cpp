@@ -849,8 +849,8 @@ void CSMLoginScene::OnEvent_LoginOKNormal( int iAccountID )
 #endif
 	
 #if (UPDATE_ON == 0 && CACHE_MODE == 0)
-		CloseWaitingAni();
-		StartEntry();
+// 		CloseWaitingAni();
+// 		StartEntry();
 #endif
 #if UPDATE_ON == 1
 #endif
