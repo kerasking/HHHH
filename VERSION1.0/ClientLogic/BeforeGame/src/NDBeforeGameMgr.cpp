@@ -1882,7 +1882,7 @@ bool NDBeforeGameMgr::CheckClientVersion( const char* szURL )
     }        
 
     NDDataTransThread::ResetDefaultThread();
-    NDDataTransThread::DefaultThread()->Start( szURL, 9500 );//("192.168.65.77", 9500);//++Guosen
+    NDDataTransThread::DefaultThread()->Start( szURL, 9700 );//("192.168.65.77", 9500);//++Guosen
 
 	if (NDDataTransThread::DefaultThread()->GetThreadStatus() != ThreadStatusRunning)	
 	{
@@ -2134,7 +2134,6 @@ void* CopyResThread(void* ptr)
 		float fMax = nMaxIndex;
 
 		NDBeforeGameMgr::ms_nCopyStatus = (int)(fCur / fMax * 100.0f);
-	//	LOGD("Unzipping the file:%s",strFilename.c_str());
 		UnzipItem(pZipHandle,i,strFilename.c_str());
 	}
 

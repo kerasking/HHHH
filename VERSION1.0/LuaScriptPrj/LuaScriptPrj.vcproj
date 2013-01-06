@@ -1270,6 +1270,34 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="SyndicateBattle"
+			>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\SyndicateBattle\define.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\SyndicateBattle\MsgSyndicateBattle.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\SyndicateBattle\SyndicateBattle.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\SyndicateBattle\SyndicateBattleResultUI.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\SyndicateBattle\SyndicateBattleSignUpUI.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\Bin\SimplifiedChineseRes\res\Script\SyndicateBattle\SyndicateBattleUI.lua"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\Bin\SimplifiedChineseRes\res\Script\DBLoad.lua"
 			>

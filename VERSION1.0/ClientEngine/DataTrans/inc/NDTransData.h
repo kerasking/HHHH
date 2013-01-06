@@ -21,12 +21,12 @@
 
 namespace NDEngine
 {	
-#if (defined(USE_NDSDK) || defined(USE_MGSDK) || defined(ANDROID)) ///< 需要修改 郭浩
+#if (defined(USE_NDSDK) || defined(USE_MGSDK) || defined(ANDROID) || defined(WIN32) ) ///< 需要修改 郭浩
 	const int ND_C_MSGID_BEGIN  = 2;
 	const int ND_C_HEAD_SIZE   = 4;
 #else
-	const int ND_C_MSGID_BEGIN  = 4;
-	const int ND_C_HEAD_SIZE   = 6;
+	//const int ND_C_MSGID_BEGIN  = 4;
+	//const int ND_C_HEAD_SIZE   = 6;
 #endif
 
 	class NDTransData : public NDObject 
