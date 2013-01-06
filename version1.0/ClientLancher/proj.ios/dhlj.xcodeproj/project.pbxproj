@@ -1653,7 +1653,7 @@
 		5A1B4780164ABC9800C94D7F /* GameScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = GameScene.cpp; sourceTree = "<group>"; };
 		5A1B4782164ABC9800C94D7F /* SMBattleScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = SMBattleScene.cpp; sourceTree = "<group>"; };
 		5A1B4783164ABC9800C94D7F /* SMGameScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = SMGameScene.cpp; sourceTree = "<group>"; };
-		5A1B4784164ABC9800C94D7F /* SMLoginScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; lineEnding = 2; path = SMLoginScene.cpp; sourceTree = "<group>"; };
+		5A1B4784164ABC9800C94D7F /* SMLoginScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 2147483673; lineEnding = 2; path = SMLoginScene.cpp; sourceTree = "<group>"; };
 		5A1B4785164ABC9800C94D7F /* WorldMapScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = WorldMapScene.cpp; sourceTree = "<group>"; };
 		5A1B4788164ABC9800C94D7F /* AuctionUILayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = AuctionUILayer.h; sourceTree = "<group>"; };
 		5A1B4789164ABC9800C94D7F /* EnhancedObj.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = EnhancedObj.h; sourceTree = "<group>"; };
