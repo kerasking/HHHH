@@ -91,7 +91,7 @@ struct FONT_UTIL
 
 		if (isVerOlder() || gs_bIsSystemFont)
 		{
-			LOGD("gs_bIsSystemFont is %s",gs_bIsSystemFont ? "true" : "false");
+			//LOGD("gs_bIsSystemFont is %s",gs_bIsSystemFont ? "true" : "false");
 			string text = JniHelper::jstring2string( jstrText );
 
 			if (isPureAscii(text))

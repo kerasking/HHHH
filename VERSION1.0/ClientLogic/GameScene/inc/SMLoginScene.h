@@ -144,7 +144,7 @@ protected:
 	CUIExp *		m_pCtrlProgress;
 	NDUILabel *		m_pLabelPromtp;
 	int				m_iAccountID;
-	int				m_iState;//
+	int				m_iState;
     NDUILayer *		m_pLayerCheckWIFI;
 	CC_SYNTHESIZE(bool,m_bIsLoadingLocalString,IsLoadLocalString);
 };

@@ -144,6 +144,7 @@ void NDUILabel::MakeTexture()
 #ifdef _DEBUG
 	//CCLog( "@NDUILabel::MakeTexture(): %s", m_strText.c_str());
 #endif
+	CCLog("test m_eTextAlignment = %d", m_eTextAlignment);
 
     //默认竖直方向向上靠齐
 	CCVerticalTextAlignment eVAlignMent = kCCVerticalTextAlignmentTop;
@@ -171,6 +172,7 @@ void NDUILabel::MakeTexture()
 	}
 	else if(m_eTextAlignment == LabelTextAlignmentCenter)  //居中
 	{
+		CCLog("test m_eTextAlignment = %d", m_eTextAlignment);
 		//居中则水平竖直都居中
 		eTextAlign = kCCTextAlignmentCenter;
 		eVAlignMent = kCCVerticalTextAlignmentCenter;

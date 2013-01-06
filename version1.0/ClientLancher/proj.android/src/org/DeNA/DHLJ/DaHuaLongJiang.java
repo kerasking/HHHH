@@ -427,7 +427,7 @@ public class DaHuaLongJiang extends Cocos2dxActivity
 	public static int playVideo(final String strFile)
 	{
 		if (true)
-		{
+	8
 			return 0;
 		}
 
